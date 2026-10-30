@@ -1,8 +1,8 @@
 {
  "updated": "2026-10-30",
- "session": "S259",
- "next_session": "S260",
- "source": "Linear (30/10/2026, S259 close) + docs/backlog/README.md + docs/audits/2026-10-30-S259-session-close/state-snapshot.md + .tmp-session/S259-checklist.md + docs/sessions/2026-10-30-S258-aws-blueprint-report-catalog-auto-apply-llm-gateway.md + docs/audits/2026-10-30-S258-session-close/state-snapshot.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
+ "session": "S260",
+ "next_session": "S261",
+ "source": "Linear (30/10/2026, S260 close: comment S260 trên AA-952, AA-955, AA-967, AA-961, AA-1002, AA-1003, AA-994, AA-997, AA-922, AA-855) + docs/backlog/README.md + .tmp-session/S260-checklist.md + docs/audits/2026-10-30-S260-evidence/README.md + docs/audits/2026-10-30-S260-aa997-interim/ + docs/audits/2026-10-30-S259-session-close/state-snapshot.md + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
  "projects": {
   "data": "Data Platform",
   "core": "CIS Core",
@@ -50,7 +50,7 @@
   {
    "id": "M1b",
    "name": "SDLC / FinOps",
-   "window": "S248–S260 (AA-896 theo ngày ≥01/11; AA-998 đóng đầu tháng 12; AA-993 Done S259)",
+   "window": "S248–S261 (AA-896 theo ngày ≥01/11; AA-998 đóng đầu tháng 12; AA-993 Done S259)",
    "status": "active",
    "criteria": [
     {
@@ -250,7 +250,7 @@
   {
    "id": "M4",
    "name": "UAT video",
-   "window": "sau M2a và sau toàn bộ kỹ thuật (>S262)",
+   "window": "sau M2a và sau toàn bộ kỹ thuật (>S262); chạy thử nội bộ từ S261 (S260 tech lead chốt)",
    "status": "later",
    "criteria": [
     {
@@ -333,7 +333,7 @@
   {
    "due": "đầu mỗi phiên",
    "issue": "AA-1002",
-   "text": "S259 (30/10 11:20): mọi model sinh văn bản bị từ chối — acc3 Bedrock Error 002, OpenAI trực tiếp 429 \"no credits remaining\"; chỉ Cohere Embed v4 (acc2) chạy. Probe 1 lần đầu phiên; tới khi có đường LLM: không chạy writer / judge / eval, việc cần LLM chỉ làm phần code (AA-919, AA-790, AA-1000, AA-900). Trước đó (S257): acc3 rời AWS Organization 06:50 UTC 29/10, judge luna AccessDenied"
+   "text": "S260 (15:14 + 15:30): vẫn chặn hết — acc3 Bedrock Error 002 (khoá cấp tài khoản, case AWS ~04–06/11), acc2 Bedrock \"channel program\", OpenAI 429 hết credit, anthropic-direct chưa có secret; chỉ Cohere Embed v4 (acc2) chạy. Probe 1 lần đầu phiên; tới khi có đường LLM: không chạy writer / judge / eval, việc LLM chỉ làm phần code"
   },
   {
    "due": "xong S259",
@@ -346,14 +346,14 @@
    "text": "AA-979 Done S256: dọn §4.5 chạy sớm (Infra #484, Partner #115, CIS #1126 xoá portal/ đông lạnh + /trip 308, xoá project Vercel aa-cis-portal + 3 secret + 1 biến, token Vercel aa-partner-ci do tech lead thu hồi, root #316); redirect URI Google cho portal. đã có sẵn, Connect Gmail tới bước Google đúng redirect. Theo sau: kiểm cta-check bằng user studio vai viewer riêng (CIS #1127)"
   },
   {
-   "due": "hằng ngày (credit Geoapify) → xong ~31/10, kiểm đầu S260",
+   "due": "31/10 00:12Z (job dac718c6) → kiểm đầu S261",
    "issue": "AA-997",
-   "text": "S259: chuỗi apply d1c6446d (aa997.3 + v2 cho 2.221 dòng llm, 3.018 request, $0, ~3 ngày) đang chạy; dòng place_relocate trong shared.job là cố ý, không huỷ. Xong → audit lại (≥ 90 %) → AA-990 recheck_14 (S260 #1). S257: audit giữa chừng 77,7 %; S258: aa997.3 P4 1,2 %"
+   "text": "S260: chuỗi relocate còn 1.005 dòng llm (job dac718c6 queued 31/10 00:12Z; dòng place_relocate trong shared.job là cố ý, không huỷ). Xong → chạy lại báo cáo hide_flagged + audit (giữa chừng 78,4 %, dự phóng ~80 % < 90 %) → sửa điểm 16 tour AA-990 → recheck_14 → confirm hide_flagged (docs/audits/2026-10-30-S260-aa997-interim/RUNBOOK.md)"
   },
   {
-   "due": "phiên đầu ≥01/11 (S260 nếu chạy từ 01/11)",
+   "due": "phiên đầu ≥01/11 (S261 nếu chạy từ 01/11)",
    "issue": "AA-896",
-   "text": "Audit cost tháng 8/9/10 theo tag App + dịch vụ (acc2) + acc3 Bedrock + credits, giải thích từng bước nhảy; cùng AA-838 + AA-665. S255 đã có budget + anomaly (AA-896), trang Cost Operations (AA-665), capacity review đầu (AA-838); acc2 ~8,7 USD/ngày ≈ 260 USD/tháng từ tháng 11. Kèm rà soát dung lượng + chi phí tháng (C8)"
+   "text": "S260: chưa tới hạn (30/10). Audit cost tháng 8/9/10 theo tag App + dịch vụ (acc2) + acc3 Bedrock + credits, giải thích từng bước nhảy; cùng AA-838 + AA-665. S255 đã có budget + anomaly (AA-896), trang Cost Operations (AA-665), capacity review đầu (AA-838); acc2 ~8,7 USD/ngày ≈ 260 USD/tháng từ tháng 11. Kèm rà soát dung lượng + chi phí tháng (C8)"
   },
   {
    "due": "hằng tuần (W45 từ 02/11)",
@@ -404,18 +404,28 @@
  "waiting": [
   {
    "who": "Tech lead",
-   "text": "Đường LLM (S259): từ 30/10 11:20 mọi model sinh văn bản bị từ chối (acc3 Bedrock Error 002; OpenAI trực tiếp 429 hết credit), chỉ Cohere Embed v4 (acc2) chạy. Chọn: nạp credit OpenAI API, hoặc tạo khoá Anthropic API (gateway AA-1002 nhận cả hai), hoặc chờ AWS mở lại acc3 / Bedrock qua org mới (AA-1004). Chặn AA-919 kappa, AA-790, AA-1000, eval AA-900 và mọi lần chạy writer / judge",
+   "text": "Đường LLM (S260): acc3 Error 002 = khoá cấp tài khoản sau khi acc3 rời org của reseller ngày 29/10 (call thành công cuối 29/10 07:11Z; mọi model kể cả Amazon Nova, cả IAM admin, us-west-1 + us-east-1). Case AWS Support 179326606700328 đang mở: service team gỡ hạn chế, 3–5 ngày làm việc (~04–06/11). Đối chứng acc1 (16:00): Bedrock chạy trên một tài khoản standalone khác (Nova Pro, Claude Haiku 4.5 OK) → khoá là riêng acc3; không route gì vào acc1 (AA-998). OpenAI trực tiếp 429 hết credit; khoá Anthropic đã revoke trên Console và gỡ khỏi ~/.zshrc. Probe lại mỗi phiên. Chặn AA-919 kappa, AA-790, AA-1000, eval AA-900, phần LLM của AA-921 / AA-922 và mọi lần chạy writer / judge",
    "issue": "AA-1002"
   },
   {
    "who": "Tech lead",
-   "text": "AA-1004: quyết billing trước khi mời acc2 / acc3 vào organization aa-management (TrueIDC cho acc2, lịch sử eCloudvalley của acc3); sau đó đường AI qua org + thử SCP. ADR 0018 (mô hình AWS gọn) đang Proposed",
+   "text": "AA-1004: quyết billing trước khi mời acc2 / acc3 vào organization aa-management (TrueIDC cho acc2, lịch sử eCloudvalley của acc3); S260 15:25: chưa làm, chờ tài khoản có billing. Sau đó đường AI qua org + thử SCP. ADR 0018 (mô hình AWS gọn) đang Proposed",
    "issue": "AA-1004"
   },
   {
    "who": "Tech lead",
-   "text": "Duyệt nháp Jira S258 + S259 một lần lúc chốt S259 (docs/audits/2026-10-30-S259-session-close/jira-drafts.md; nháp S258 PR-22, PR-24, PR-26 gom sang, bỏ PR-27)",
+   "text": "Duyệt nháp Jira S258 + S259 + S260 một lần lúc chốt S260 (docs/audits/2026-10-30-S260-session-close/jira-drafts.md; gồm link video giới thiệu TripPlanner EN + VI)",
    "issue": ""
+  },
+  {
+   "who": "Tech lead",
+   "text": "Câu hỏi cho Sunny Cloud (Hân): bản nháp 2 (tình hình + nhu cầu) sẵn sàng để tech lead gửi (.tmp-session/S260/vendor/); chưa gửi, chưa có trả lời",
+   "issue": "AA-1004"
+  },
+  {
+   "who": "Tech lead",
+   "text": "Kéo gói TripPlanner-intro_20261030.zip (73 MB: video EN + VI, MP3, SRT/VTT, script, README) lên Drive để gắn link vào nháp Jira",
+   "issue": "AA-855"
   },
   {
    "who": "Tech lead",
@@ -479,7 +489,7 @@
   },
   {
    "who": "Nghiệp",
-   "text": "Tín hiệu bắt đầu UAT video (sau phần kỹ thuật)",
+   "text": "UAT video: S260 tech lead chốt thứ tự — chạy thử nội bộ từ S261; vòng 1 chính thức khi AA-994 xong (UI ổn định) + có đường LLM + quyền ghi UAT cho E2E CIS admin; lời đọc chỉ TTS local miễn phí",
    "issue": "AA-855"
   },
   {
@@ -489,6 +499,21 @@
   }
  ],
  "log": [
+  {
+   "session": "S260",
+   "date": "30/10/2026",
+   "closed": [],
+   "canceled": [],
+   "created": [],
+   "reopened": [],
+   "notes": [
+    "S260 (Claude Code, Ultracode; 30/10 15:15 →, ≤ 3 lane): 20 việc. Done-candidate đã verify live (điều phối chốt trạng thái sau quyết Linear): AA-955 e-sign v1 (crm-025, KMS RSASSA-PSS), AA-967 portability + xoá (crm-026), AA-961 duty of care + lịch (crm-027, ICS); bằng chứng docs/audits/2026-10-30-S260-evidence/ 8/8 PASS, F1–F4 (F2 → Partner #141, F3 → CIS #1192, F4 → Partner #142; F1 hydration #418 còn)",
+    "Ship, chưa đóng: AA-1002 gateway S5 (#1180, mig 311) + S6 (#1181, mig 312) live, S10 (#1190) + S9 (#1191 041ba9a2, schema 317); AA-1003 R4 phần 2 (CIS #1182 + Infra #521 + root #371, 6/6 succeeded) + R5 checklist; AA-994 biến thể nút kit core (#1177) + S6d xong (Booking #158, 66 → 0) + S6b PR2 (#1183); AA-952 lát 2 hoá đơn + lát 3 thanh toán / hoàn (crm-024, #130–#132); AA-921 / AA-922 / AA-923 Writing memory P3 (CIS #1186–#1189, mig 313–316); AA-788 #1184; AA-997 hide_flagged #1178 + reader ẩn điểm nghi ngờ (#1185, Booking #160, TP #195); TP #197 bản đồ planner bay tới quốc gia",
+    "Chặn: LLM — acc3 Error 002 = khoá cấp tài khoản sau khi rời org reseller 29/10; case AWS 179326606700328, service team 3–5 ngày làm việc (~04–06/11); acc1 đối chứng Bedrock chạy (không route vào acc1); OpenAI hết credit; khoá Anthropic đã revoke. AA-1004 chờ billing. AA-997 audit giữa chừng 78,4 % (FAIL 90 %), confirm ẩn sau chuỗi 31/10. LLM $0. Không tạo issue Linear mới",
+    "Ngoài issue: UAT video — kế hoạch + video thử PORTAL-PUB-01 6/6, TP-PUB-01 v2 7/7 (TTS local miễn phí, giọng Nam 'Thục Đoan'); video giới thiệu TripPlanner EN + VI (zip chờ tech lead lên Drive); nháp câu hỏi Sunny Cloud sẵn sàng để tech lead gửi; lập lại kế hoạch CRM W5–W8 theo nhịp thật (S261–S266, go-real ≥S267)",
+    "Thứ tự S261: (1) AA-997 sau chuỗi 31/10: báo cáo + audit, sửa 16 tour, AA-990 recheck_14, confirm hide_flagged; (2) CRM S261: AA-952 lát 4, AA-953, AA-966, AA-962; (3) AA-994 các dòng S6 còn lại + S6f; (4) AA-1002 S7 + lát còn lại, AA-1003 R6–R7; (5) AA-788 đọc replay hold-rate; (6) UAT chạy thử nội bộ (AA-855); (7) AA-896 + C8 nếu ≥01/11; probe LLM đầu phiên, nếu acc3 mở: AA-919 kappa, AA-790, AA-1000, eval AA-900"
+   ]
+  },
   {
    "session": "S259",
    "date": "30/10/2026",
@@ -1099,10 +1124,10 @@
    "priority": "High",
    "project": "data",
    "milestone": "M1b",
-   "session": "S260",
+   "session": "S261",
    "size": "L",
-   "next": "L7 · S258: bản quy hoạch đầy đủ + bản gọn khuyến nghị (4 tài khoản, 2 môi trường) + kế hoạch LLM gateway 12 lát, root #346 (docs/audits/2026-10-29-S258-aws-org-blueprint/); gateway S1 CIS #1158 (mig 304) + #1159. S259: S2 adapter Anthropic #1164 + mig 306 live; S3 CIS #1168 b7cd4cfa live (api :924 / worker :490, schema 307 qua chuỗi bot Infra #516, 0 log lỗi); S4 CIS #1176 (mig 309 expand + 310 contract) trong merge queue sau review. Tiếp: kiểm live S4 (ảnh tab Connections), rồi S5",
-   "needs": "Đường LLM: nạp credit OpenAI hoặc tạo khoá Anthropic (tech lead)"
+   "next": "L7 · S258: bản quy hoạch đầy đủ + bản gọn khuyến nghị (4 tài khoản, 2 môi trường) + kế hoạch LLM gateway 12 lát, root #346 (docs/audits/2026-10-29-S258-aws-org-blueprint/); gateway S1 CIS #1158 (mig 304) + #1159. S259: S2 adapter Anthropic #1164 + mig 306 live; S3 CIS #1168 b7cd4cfa live (api :924 / worker :490, schema 307 qua chuỗi bot Infra #516, 0 log lỗi); S4 CIS #1176 (mig 309 expand + 310 contract) trong merge queue sau review. S260: S5 CIS #1180 459d4cda (mig 311: phạm vi dữ liệu theo stage thành dữ liệu — 38 stage, 8 vendor_direct, 30 aws_only, 0 null) + S6 CIS #1181 6d721cfc (mig 312: giá ngang AWS, prompt caching Converse, mỗi reply ghi cache / pricing_mode / connection), live PASS (ảnh tab Connections, docs/audits/2026-10-30-S260-evidence/ 03-*); S10 CIS #1190 0be32ff8 (budget tháng mỗi connection + đối soát chi phí nightly, root #382) + S9 CIS #1191 041ba9a2 (client OpenAI / Azure OpenAI theo connection, key OpenAI từ secret runtime), deploy xanh, schema 317. Tiếp: S7 batch + các lát còn lại của kế hoạch 12 lát; bật một đường LLM khi acc3 mở lại",
+   "needs": "Đường LLM: acc3 chờ AWS Support gỡ khoá (~04–06/11); OpenAI hết credit"
   },
   {
    "id": "AA-1003",
@@ -1111,9 +1136,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M1b",
-   "session": "S260",
+   "session": "S261",
    "size": "XL",
-   "next": "L7 · S258: R0 CIS #1157, R1 root #348 + CIS #1161 (mig 305), R2 CIS #1162 + root #351 / #353. S259: R1/R2 live (GET /admin/reports 200, 63; lịch 02:03Z sinh EX-04 12 KPI 0 đỏ, EX-06, TP-03, OPS-12); R3 CIS #1169 + root #361 live 8/8 (EX-01 144,05 USD tuần, FI-03 LLM T9 42,79 USD); R4 phần 1 CIS #1174 02b1f4f3 + root #366 live (EX-01 892 tour, CIS-01/06/07, OPS-13/14). Tiếp: R4 phần 2 (gồm KPI nightly_probes bị timeout khi tìm CloudWatch)",
+   "next": "L7 · S258: R0 CIS #1157, R1 root #348 + CIS #1161 (mig 305), R2 CIS #1162 + root #351 / #353. S259: R1/R2 live (GET /admin/reports 200, 63; lịch 02:03Z sinh EX-04 12 KPI 0 đỏ, EX-06, TP-03, OPS-12); R3 CIS #1169 + root #361 live 8/8 (EX-01 144,05 USD tuần, FI-03 LLM T9 42,79 USD); R4 phần 1 CIS #1174 02b1f4f3 + root #366 live (EX-01 892 tour, CIS-01/06/07, OPS-13/14). S260: R4 phần 2 CIS #1182 55828c5b + Infra #521 9f303846 (TF apply 41041898649, quyền DescribeLogStreams) + root #371: KPI nightly_probes đọc theo stream; chạy tay 6 báo cáo mới 11:18Z → 6/6 succeeded (TP-01, SEC-03, SEC-08, DEV-01, DEV-03, OPS-15), sổ đăng ký 63 báo cáo. R5: checklist OPS-17 + SEC-10 (root #371). Tiếp: R6–R7; phần còn lại của R5 theo ngày go-live",
    "needs": ""
   },
   {
@@ -1123,9 +1148,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M1b",
-   "session": "S260",
+   "session": "chờ billing",
    "size": "L",
-   "next": "L7 · S259 ngày 1: TK quản trị aa-management (ID không ghi vào repo) — Organization, 3 OU, 3 SCP, org CloudTrail, budget, Identity Center (Single-Region, tech lead đã đăng nhập), CI OIDC Infra #515 (review fix) + apply + env / secret org; drift root quản trị exit 0; role bootstrap đã xoá; ADR 0018 (mô hình AWS gọn) Proposed. ~1–1,5 USD/tháng. Còn: mời acc2 / acc3 (chờ quyết billing), đường AI qua org, thử SCP",
+   "next": "L7 · S259 ngày 1: TK quản trị aa-management (ID không ghi vào repo) — Organization, 3 OU, 3 SCP, org CloudTrail, budget, Identity Center (Single-Region, tech lead đã đăng nhập), CI OIDC Infra #515 (review fix) + apply + env / secret org; drift root quản trị exit 0; role bootstrap đã xoá; ADR 0018 (mô hình AWS gọn) Proposed. ~1–1,5 USD/tháng. S260: không làm — tech lead 15:25: chờ tài khoản có billing; lane dừng, worktree đã dọn. Còn: mời acc2 / acc3 (sau quyết billing), đường AI qua org, thử SCP; ADR 0018 vẫn Proposed",
    "needs": "Quyết billing khi mời acc2 / acc3 vào org (tech lead)"
   },
   {
@@ -1135,9 +1160,9 @@
    "priority": "Low",
    "project": "core",
    "milestone": "M2a",
-   "session": "S260",
+   "session": "khi có LLM (case AWS ~04–06/11)",
    "size": "M",
-   "next": "L1 · Phần LLM tách từ AA-789 (S259). S259: CIS #1172 a38b3dc5 live, mig 308 (Infra #517 + DB Migrate apply 40999747238), chế độ off. Tiếp: hiệu chuẩn + shadow khi có đường LLM",
+   "next": "L1 · Phần LLM tách từ AA-789 (S259). S259: CIS #1172 a38b3dc5 live, mig 308 (Infra #517 + DB Migrate apply 40999747238), chế độ off. S260: không chạy — không có đường LLM (acc3 Error 002, case AWS ~04–06/11). Tiếp: hiệu chuẩn + shadow khi có đường LLM",
    "needs": "Đường LLM (tech lead)"
   },
   {
@@ -1173,7 +1198,7 @@
    "milestone": "M1b",
    "session": "≥01/11",
    "size": "S",
-   "next": "L7 · S255: budget tổng 300 USD + cảnh báo FORECASTED, budget identity; acc3 SNS aa3-cost-alerts + anomaly IMMEDIATE ≥ 15 USD; tư vấn FinOps docs/audits/2026-10-28-S255-finops-security/ (acc2 ~8,7 USD/ngày ≈ 260 USD/tháng từ tháng 11). S259: chưa tới hạn (30/10); thêm budget trên TK quản trị mới (AA-1004). Tiếp: báo cáo tháng 8/9/10 theo tag App + dịch vụ + chi phí đơn vị + rà soát C8 ở phiên đầu ≥01/11 (S260 nếu chạy từ 01/11)",
+   "next": "L7 · S255: budget tổng 300 USD + cảnh báo FORECASTED, budget identity; acc3 SNS aa3-cost-alerts + anomaly IMMEDIATE ≥ 15 USD; tư vấn FinOps docs/audits/2026-10-28-S255-finops-security/ (acc2 ~8,7 USD/ngày ≈ 260 USD/tháng từ tháng 11). S259: chưa tới hạn (30/10); thêm budget trên TK quản trị mới (AA-1004). S260: chưa tới hạn (30/10, tháng 10 chưa đóng). Tiếp: báo cáo tháng 8/9/10 + C8 ở phiên đầu ≥01/11",
    "needs": "Decision list"
   },
   {
@@ -1195,9 +1220,9 @@
    "priority": "Low",
    "project": "data",
    "milestone": "M2a",
-   "session": "S260",
+   "session": "khi có LLM (case AWS ~04–06/11)",
    "size": "M",
-   "next": "L1 · S258: CIS #1148 (phân loại lỗi, dừng sớm llm_access_denied, thẻ khả dụng LLM) + #1160 (cũ > 6 h → unknown), live từ deploy S259; S259 CIS #1173 xếp 'no credits' của OpenAI = quota_exhausted. Còn: 1 lần chạy eval theo Done-when — cần đường LLM",
+   "next": "L1 · S258: CIS #1148 (phân loại lỗi, dừng sớm llm_access_denied, thẻ khả dụng LLM) + #1160 (cũ > 6 h → unknown), live từ deploy S259; S259 CIS #1173 xếp 'no credits' của OpenAI = quota_exhausted. S260: không chạy — không có đường LLM. Còn: 1 lần chạy eval theo Done-when khi acc3 mở lại",
    "needs": "Đường LLM (tech lead)"
   },
   {
@@ -1231,10 +1256,10 @@
    "priority": "Medium",
    "project": "portal",
    "milestone": "M4",
-   "session": "after M2a",
+   "session": "S261 (chạy thử)",
    "size": "L",
-   "next": "L7 · UAT videos for all apps after all technical work (>S260), Cognito login, bilingual guides",
-   "needs": "Go signal"
+   "next": "L7 · S260: kế hoạch UAT video + audit thiết kế tổng thể (docs/audits/2026-10-30-S260-uat-video-plan/); video thử PORTAL-PUB-01 6/6 + TP-PUB-01 v2 (EN + VI) 7/7 PASS, TTS local miễn phí (Kokoro EN; VieNeu-TTS 'Thục Đoan' giọng Nam); video giới thiệu TripPlanner EN 3:57 + VI 4:14. Quyết tech lead: chạy thử nội bộ từ S261 (kịch bản = test hồi quy); vòng 1 chính thức khi AA-994 xong + có đường LLM + quyền ghi UAT cho E2E CIS admin",
+   "needs": "Vòng 1 chính thức: 3 điều kiện ở trên"
   },
   {
    "id": "AA-804",
@@ -1315,9 +1340,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S260",
+   "session": "khi có LLM (case AWS ~04–06/11)",
    "size": "L",
-   "next": "L1 · S257 vòng 10 FAIL (reader_value −0,25), cờ tắt, vòng 6 giữ. S258: mẫu cố định ≥ 20 bài sẵn (CIS #1154 + root #341, docs/audits/2026-10-29-S258-aa790-fixed-sample/). S259: không chạy (không có đường LLM). Tiếp: hiệu chuẩn judge + chạy mẫu cố định khi có LLM",
+   "next": "L1 · S257 vòng 10 FAIL (reader_value −0,25), cờ tắt, vòng 6 giữ. S258: mẫu cố định ≥ 20 bài sẵn (CIS #1154 + root #341, docs/audits/2026-10-29-S258-aa790-fixed-sample/). S259: không chạy (không có đường LLM). S260: không chạy (không có đường LLM). Tiếp: hiệu chuẩn judge + chạy mẫu cố định khi acc3 mở lại",
    "needs": "Đường LLM (tech lead)"
   },
   {
@@ -1327,9 +1352,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "later",
+   "session": "S261",
    "size": "S",
-   "next": "L1 · Promote F12_scope / F9_brand_style to blocking (after AA-924)",
+   "next": "L1 · S260: CIS #1184 484e0924 — chế độ theo từng check để nâng F12_scope / F9_brand_style lên chặn, seed fact chưa dùng cho viết lại sàn F14 (golden guard sửa 2 lần: fixture hư cấu, bỏ định dạng violation SUMMARY_OFF_BRAND), deploy xanh. Tiếp: đọc kết quả replay hold-rate rồi mới bật chế độ chặn",
    "needs": ""
   },
   {
@@ -1387,9 +1412,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S260",
+   "session": "khi có LLM (case AWS ~04–06/11)",
    "size": "L",
-   "next": "L1 · S258: chuẩn bị vòng hiệu chuẩn (CIS #1154 + root #341). S259: golden set 1.3.0 apply live (134 mục; t9_social 32 cặp hiệu chuẩn, đo được); CIS #1171 vân tay (merge queue); census Facebook = 1 (tầng Facebook chờ LLM); picker 38 → đóng băng 34 mẫu (addendum 1.2.0; t2 10 / t9_blog 5 / t9_linkedin 18 / t9f 1). Tiếp: kappa cần LLM (không có đường LLM từ 30/10 11:20)",
+   "next": "L1 · S258: chuẩn bị vòng hiệu chuẩn (CIS #1154 + root #341). S259: golden set 1.3.0 apply live (134 mục; t9_social 32 cặp hiệu chuẩn, đo được); CIS #1171 vân tay (merge queue); census Facebook = 1 (tầng Facebook chờ LLM); picker 38 → đóng băng 34 mẫu (addendum 1.2.0; t2 10 / t9_blog 5 / t9_linkedin 18 / t9f 1). S260: không chạy kappa (không có đường LLM). Tiếp: kappa trên golden 1.3.0 khi acc3 mở lại",
    "needs": "Each release; đường LLM (tech lead)"
   },
   {
@@ -1411,9 +1436,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S260",
+   "session": "khi có LLM (case AWS ~04–06/11)",
    "size": "M",
-   "next": "L1 · Writing Memory P3 at S260 if go",
+   "next": "L1 · S260: CIS #1186 a70bb7a3 — ví dụ mẫu ghim + tóm tắt sở thích tenant (đường LLM TẮT), tab Exemplars; mig 313 expand tự áp; sửa guard billed_fields của gateway S6 ở call site mới; live PASS (07-*: summary / exemplars 200, 1440/390 sáng/tối, 0 lỗi console). Còn: sinh tóm tắt sở thích thật cần đường LLM",
    "needs": ""
   },
   {
@@ -1423,9 +1448,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S260",
+   "session": "khi có LLM (case AWS ~04–06/11)",
    "size": "M",
-   "next": "L1 · Writing Memory P3 at S260 if go",
+   "next": "L1 · S260: CIS #1187 5e3e2b3d — KPI tuần, soft-stop rollback, keep, hàng bất đồng; mig 314 expand tự áp; review: cửa sổ soft-stop sau rollback đúng + test hồi quy; live PASS (07-*: metrics 1 báo cáo tuần, KPI theo writer; disagreements 200). F3 (tab Metrics tràn khung ở 1440) sửa bằng CIS #1192 ec1ff899. Còn: soft-stop đầu tiên trên lượt ghi thật cần đường LLM",
    "needs": ""
   },
   {
@@ -1435,9 +1460,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S260",
+   "session": "S261",
    "size": "M",
-   "next": "L1 · Writing Memory P3 at S260 if go",
+   "next": "L1 · S260: CIS #1188 0928e759 (mig 315 expand: nhãn người trên bản T2 và bản viết lại A1, bằng chứng xoá khi offboard, gỡ vòng lessons + /v1/rules) + #1189 ed422a2f (mig 316 contract: cách ly shared.pipeline_lessons + acp_shared.acp_output_rules vào schema retired) + Infra #527 + root #378 (compliance register + Dead Table Registry); form nhãn live PASS (07-*). Còn: xoá hẳn 2 bảng đã cách ly theo Dead Table Registry (DRY RUN trước) — điều phối chốt trạng thái cuối",
    "needs": ""
   },
   {
@@ -1497,7 +1522,7 @@
    "milestone": "C-M3",
    "session": "S261",
    "size": "L",
-   "next": "L6 · kế hoạch lại S260 · W5 · S259 lát 1 confirm (C-M3); S260 lát 2 hoá đơn (Partner #130/#131, crm-024) + lát 3 thanh toán / hoàn tiền (#132), proof live PASS. S261: lát 4 = chuyển khoản `payment_claimed` → gia hạn hold → task kiểm, nhắc hạn, `paid_unfulfillable`. Stripe Connect (lát 5) chỉ khi tech lead có tài khoản Stripe test-mode (B4 a); không chặn các issue khác",
+   "next": "L6 · kế hoạch lại S260 · W5 · S259 lát 1 confirm (C-M3); S260 lát 2 hoá đơn (Partner #130/#131, crm-024) + lát 3 thanh toán / hoàn tiền (#132 8525a211), proof live PASS (04-*: INV-000001, 409 invoice_issued_for_row; trả 200 + 340 → paid, Booked; hoàn 50 duyệt + executed). S261: lát 4 = chuyển khoản `payment_claimed` → gia hạn hold → task kiểm, nhắc hạn, `paid_unfulfillable`. Stripe Connect (lát 5) chỉ khi tech lead có tài khoản Stripe test-mode (B4 a); không chặn các issue khác. Ghi nhận S260: hạn hoá đơn cọc = ngày dòng lịch thanh toán (không phải ngày phát hành + 7 ngày) — xác nhận đúng thiết kế; lỗi hydration React #418 trang trip CRM (F1, có từ trước, trang vẫn chạy)",
    "needs": ""
   },
   {
@@ -1533,7 +1558,7 @@
    "milestone": "later",
    "session": "S260",
    "size": "M",
-   "next": "L6 · W5 · Done-candidate S260 (đã verify live): e-sign v1 — root #376, Partner #135 (crm-025) + #136, Infra #525/#526, crm-api :83; proof live PASS (guardian ký thay, sai mã 422, sửa hash 409, seal.verified=true). Chưa làm: PDF PAdES (v1.1, thêm cạnh phong bì văn bản, không di chuyển dữ liệu) — điều phối chốt trạng thái cuối",
+   "next": "L6 · W5 · Done-candidate S260 (đã verify live): e-sign v1 — root #376, Partner #135 (crm-025) + #136, Infra #525/#526, crm-api :83; proof live PASS (guardian ký thay, sai mã 422, sửa hash 409, seal.verified=true). Chưa làm: PDF PAdES (v1.1, thêm cạnh phong bì văn bản, không di chuyển dữ liệu). Ghi nhận nhỏ: sự kiện reveal không hiện trong log ký; log ký hiện mã thô (code_invalid) — điều phối chốt trạng thái cuối",
    "needs": ""
   },
   {
@@ -1605,7 +1630,7 @@
    "milestone": "later",
    "session": "S260",
    "size": "M",
-   "next": "L6 · W6 · đang merge S260: duty of care + lịch — root #385 → Partner #139 (crm-027) → bot copy → DB Migrate → Infra #533 → #140 code (feed ICS mỗi thành viên). Phần còn lại: nháp WhatsApp khi có sự cố → cùng AA-958; đồng bộ lịch OAuth (Google / Graph qua tài khoản của đại lý) để sau, Graph cần app M365 của AA-945 — điều phối chốt trạng thái cuối",
+   "next": "L6 · W6 · Done-candidate S260 (đã verify live): duty of care + lịch — root #385, Partner #139 82ce4aa6 (crm-027) → Infra bot #534 → DB Migrate 41073608653 / 41073903296 → #140 3718242a deploy xanh, Infra #533 (probe cách ly phủ crm.calendar_feed); proof live PASS (08-*: travelling / reach / reveal có lý do + audit, lịch Oct–Dec khớp API, ICS 62 VEVENT không tên / số tiền, revoke → 404). F4 giờ lịch theo UTC → sửa Partner #142 3a116512. Chưa thấy live: banner sự cố AA (Dev không có incident). Phần còn lại: nháp WhatsApp khi có sự cố → cùng AA-958; đồng bộ lịch OAuth để sau (Graph cần app M365 của AA-945) — điều phối chốt trạng thái cuối",
    "needs": ""
   },
   {
@@ -1677,7 +1702,7 @@
    "milestone": "later",
    "session": "S260",
    "size": "M",
-   "next": "L6 · W7 · Done-candidate S260 (đã verify live): portability + xoá — root #380, Partner #137 (crm-026) + #138 7e9d8db0; proof live PASS (export 24/24, link dùng 1 lần, SHA khớp, erasure dry run) — điều phối chốt trạng thái cuối",
+   "next": "L6 · W7 · Done-candidate S260 (đã verify live): portability + xoá — root #380, Partner #137 (crm-026) + #138 7e9d8db0; proof live PASS (06-*: export 24/24, link dùng 1 lần, SHA khớp, erasure dry run). F2 (câu từ chối xoá khách nói 'huỷ chuyến' trong khi chuyến đã huỷ vẫn chặn) → sửa Partner #141 80870f8 — điều phối chốt trạng thái cuối",
    "needs": ""
   },
   {
@@ -1747,9 +1772,9 @@
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M2a",
-   "session": "S260",
+   "session": "S261",
    "size": "M",
-   "next": "L5 · S257: recheck_14 chỉ đọc trong audit AA-997: route 13/16, xác nhận hết 1/16. S258–S259: chưa chạy — chờ chuỗi relocate AA-997 (aa997.3 + v2, xong ~31/10). Tiếp: recheck_14 ngay sau audit lại AA-997 (S260 #1)",
+   "next": "L5 · S257: recheck_14 chỉ đọc trong audit AA-997: route 13/16, xác nhận hết 1/16. S258–S259: chưa chạy — chờ chuỗi relocate AA-997 (aa997.3 + v2, xong ~31/10). S260: recheck_14 giữa chừng (chỉ đọc): route 13/16, xác nhận hết 0/16 (loose 3/16); chuỗi relocate AA-997 còn 1.005 dòng llm (job dac718c6, 31/10 00:12Z). Tiếp: sau chuỗi — sửa điểm của 16 tour trước, rồi recheck_14 lại",
    "needs": ""
   },
   {
@@ -1759,9 +1784,9 @@
    "priority": "High",
    "project": "portal",
    "milestone": "M4",
-   "session": "S260",
+   "session": "S261",
    "size": "XL",
-   "next": "LP · S258: S5a/S5b token TripPlanner (TP #189), S6a form controls CIS #1155. S259: S6b PR1 CIS #1175 5f162b5c merge (UI smoke công khai xanh); S6d + 2 gap Figma Booking #156 45de036 live (layout 281/281; lưới ảnh Hotels, menu dòng hoá đơn / thanh toán). Tiếp: biến thể nút trong kit core, rồi xong nút S6d + S6b PR2; H3",
+   "next": "LP · S258: S5a/S5b token TripPlanner (TP #189), S6a form controls CIS #1155. S259: S6b PR1 CIS #1175 5f162b5c merge (UI smoke công khai xanh); S6d + 2 gap Figma Booking #156 45de036 live (layout 281/281; lưới ảnh Hotels, menu dòng hoá đơn / thanh toán). S260: biến thể nút trong kit core CIS #1177 539fc587 (LinkButton, IconButton, SegmentedControl, ChipButton, Switch…; Kit Sync Booking #157, Partner #129, TP #194); S6d xong Booking #158 048c4981 (suppression 66 → 0, layout-mock 282/282); S6b PR2 CIS #1183 14c63eb9 (13 file rời adminUi, 672 → 659; sync Booking #159, Partner #134); live PASS (01-*, 02-*). Tiếp: các dòng S6 còn lại, S6f (role Tabs), H3",
    "needs": "H3 branch protection (tech lead)"
   },
   {
@@ -1771,9 +1796,9 @@
    "priority": "High",
    "project": "tpbk",
    "milestone": "M2b",
-   "session": "S260",
+   "session": "S261",
    "size": "L",
-   "next": "L2 · S258: aa997.3 CIS #1147 + root #340 — P4 sai-từ-chối 34/251 → 3/251 (1,2 %); census 3.842 dòng: aa997.2 từ chối 259, aa997.3 33. S259: đọc 33 mẫu (6 từ chối đúng: 2 sân bay + 4 Irkutsk; 21 từ chối sai do tuyến ngày bay; 6 nửa đúng) → aa997.3 + v2 cho dòng llm của chuỗi relocate, không recheck nhóm confirmed (dry run 5f570b90); chuỗi apply d1c6446d đang chạy (2.221 dòng llm, 3.018 request, $0, ~3 ngày theo credit, xong ~31/10); 2 sân bay sai (Hanoi, Urumqi) rà ở /admin/places. Tiếp: audit lại (≥ 90 %), rồi AA-990 recheck_14",
+   "next": "L2 · S258: aa997.3 CIS #1147 + root #340 — P4 sai-từ-chối 34/251 → 3/251 (1,2 %); census 3.842 dòng: aa997.2 từ chối 259, aa997.3 33. S259: đọc 33 mẫu (6 từ chối đúng: 2 sân bay + 4 Irkutsk; 21 từ chối sai do tuyến ngày bay; 6 nửa đúng) → aa997.3 + v2 cho dòng llm của chuỗi relocate, không recheck nhóm confirmed (dry run 5f570b90); chuỗi apply d1c6446d đang chạy (2.221 dòng llm, 3.018 request, $0, ~3 ngày theo credit, xong ~31/10); 2 sân bay sai (Hanoi, Urumqi) rà ở /admin/places. S260: audit giữa chừng 78,4 % ±4,0 (S254 75,4 %), dự phóng ~80 % khi xong chuỗi → FAIL mốc 90 %; CIS #1178 b1dbfca0 place_relocate hide_flagged (báo cáo trước, confirm gắn id + digest của báo cáo, hạn 6 h, chặn khi còn apply relocate, có audit, unhide được) + CIS #1185 2b5b3712 / Booking #160 636df62c / TP #195 26c2c976 (reader ẩn điểm nghi ngờ, id đã gộp), deploy api :929 / worker :495; báo cáo 31b5617a = 2.017 dòng (1.015 gắn tour), confirm → 409 đúng khi chuỗi còn queued; pin phục vụ 80,6 % → 86,6 % nếu ẩn → 88,7 % thêm non_place (docs/audits/2026-10-30-S260-aa997-interim/). Tiếp: sau job dac718c6 (31/10 00:12Z) chạy lại báo cáo + audit, sửa điểm 16 tour AA-990, rồi confirm hide_flagged; quyết ẩn non_place",
    "needs": ""
   }
  ]
