@@ -102,6 +102,7 @@ free slots; **blocks** = `deploy_blocking` in the registry.
 | `data_erasure` | `services/jobs/erasure_job.py` (inventory `services/erasure/inventory.py`) | 1 | 1 | 900 | yes | **yes** (an apply uses up its single-use DRY RUN approval) | - (manual only, DRY RUN by default; apply off unless `ERASURE_APPLY_ENABLED=true`; an apply is never retried (409), AA-839, [runbook](../legal/dsar-erasure-runbook.md)) |
 | `staff_invite_email` | `services/jobs/staff_invite_email_job.py` | 2 | 5 | 60 | no | no | SES |
 | `ops_alert_email` | `services/jobs/ops_alert_email_job.py` | 1 | 5 | 60 | no | no | SES |
+| `llm_cost_reconcile` | `services/jobs/llm_cost_reconcile_job.py` (logic `services/llm_cost/reconcile.py`) | 1 | 2 | 300 | yes | no | - (nightly from 02:00 UTC by the ops metrics sampler, last 3 days, switch `LLM_COST_RECONCILE`; reads the stored Cost Explorer snapshot, never a live CE call; the Anthropic / OpenAI usage APIs only for a connection that names a read-only usage key, not billed; AA-1002 S10) |
 | `noop_sleep` | `services/jobs/noop_sleep_job.py` | - | - | - | - | no (gate-exempt) | - (test-only, registered only when `JOB_TEST_KINDS=1`, Dev; AA-993 G1) |
 
 Kinds with `max_attempts = 1` are not retried after a failure. A deploy drain is not a failure: the released attempt is
