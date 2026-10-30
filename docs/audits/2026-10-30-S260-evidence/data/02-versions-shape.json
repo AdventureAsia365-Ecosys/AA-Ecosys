@@ -1,0 +1,116 @@
+{
+  "status": 200,
+  "top_level_keys": [
+    "items",
+    "total",
+    "limit",
+    "offset"
+  ],
+  "row_keys": [
+    "id",
+    "version_number",
+    "title",
+    "notes",
+    "total_price",
+    "currency",
+    "channel",
+    "valid_until",
+    "is_sent_to_customer",
+    "sent_at",
+    "sent_by",
+    "is_approved",
+    "approved_at",
+    "approved_by",
+    "approval_note",
+    "created_by",
+    "created_at",
+    "updated_by",
+    "updated_at",
+    "badge",
+    "trip_case_id",
+    "trip_case_code",
+    "trip_case_status",
+    "start_date",
+    "sales_id",
+    "fx_locked",
+    "customer",
+    "leg_titles",
+    "trip_title",
+    "duration_days",
+    "end_date"
+  ],
+  "rows": [
+    {
+      "code": "TC-000025",
+      "n": 1,
+      "badge": "approved",
+      "case_status": "confirmed"
+    },
+    {
+      "code": "TC-000022",
+      "n": 1,
+      "badge": "approved",
+      "case_status": "payment_pending"
+    },
+    {
+      "code": "TC-000023",
+      "n": 1,
+      "badge": "approved",
+      "case_status": "invoice_sent"
+    },
+    {
+      "code": "TC-000015",
+      "n": 1,
+      "badge": "approved",
+      "case_status": "supplier_confirming"
+    },
+    {
+      "code": "TC-000013",
+      "n": 1,
+      "badge": "approved",
+      "case_status": "cancelled"
+    },
+    {
+      "code": "TC-000012",
+      "n": 1,
+      "badge": "approved",
+      "case_status": "cancelled"
+    },
+    {
+      "code": "TC-000011",
+      "n": 1,
+      "badge": "approved",
+      "case_status": "pre_departure"
+    },
+    {
+      "code": "TC-000008",
+      "n": 2,
+      "badge": "draft",
+      "case_status": "new_inquiry"
+    },
+    {
+      "code": "TC-000008",
+      "n": 1,
+      "badge": "draft",
+      "case_status": "new_inquiry"
+    },
+    {
+      "code": "TC-000007",
+      "n": 1,
+      "badge": "draft",
+      "case_status": "discovery"
+    },
+    {
+      "code": "TC-000003",
+      "n": 2,
+      "badge": "approved",
+      "case_status": "confirmed"
+    },
+    {
+      "code": "TC-000003",
+      "n": 1,
+      "badge": "superseded",
+      "case_status": "confirmed"
+    }
+  ]
+}

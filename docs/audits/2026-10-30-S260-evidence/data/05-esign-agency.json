@@ -1,0 +1,214 @@
+{
+  "steps": [
+    {
+      "step": "GET trips/{id}/agreements",
+      "status": 200,
+      "waiver_required": true,
+      "all_signed": true,
+      "travellers": [
+        {
+          "role": "lead",
+          "waiver_signed": true,
+          "signature": {
+            "signer_role": "self",
+            "insurance_choice": null,
+            "seal_alg": "kms-rsassa-pss-sha256",
+            "envelope_sha256": "d58f78f8ceba1efa41bd269090f7f1b00d9969d76828d3051d53d95f1b5c5367",
+            "signed_at": "2026-10-30T13:38:15.720451+00:00",
+            "keys": [
+              "request_id",
+              "signed_at",
+              "signer_role",
+              "signer_traveler_id",
+              "insurance_choice",
+              "envelope_sha256",
+              "seal_alg",
+              "with_terms",
+              "with_declination"
+            ]
+          }
+        },
+        {
+          "role": "companion",
+          "waiver_signed": true,
+          "signature": {
+            "signer_role": "guardian",
+            "insurance_choice": null,
+            "seal_alg": "kms-rsassa-pss-sha256",
+            "envelope_sha256": "5d7d25c1ac86dac38b98e61d85dadad6694f23182373236c382826838ee63507",
+            "signed_at": "2026-10-30T13:38:47.777749+00:00",
+            "keys": [
+              "request_id",
+              "signed_at",
+              "signer_role",
+              "signer_traveler_id",
+              "insurance_choice",
+              "envelope_sha256",
+              "seal_alg",
+              "with_terms",
+              "with_declination"
+            ]
+          }
+        }
+      ],
+      "terms": {
+        "published": "e2e-mvp3tg5i",
+        "reaccept_required": false,
+        "acceptances": [
+          {
+            "source": "envelope",
+            "version": "e2e-mvp3tg5i",
+            "keys": [
+              "acceptance_id",
+              "source",
+              "doc_id",
+              "version_label",
+              "proposal_id",
+              "traveler_id",
+              "request_id",
+              "accepted_at",
+              "doc_sha256",
+              "price_hash",
+              "evidence_sha256"
+            ]
+          },
+          {
+            "source": "envelope",
+            "version": "e2e-mvp3tg5i",
+            "keys": [
+              "acceptance_id",
+              "source",
+              "doc_id",
+              "version_label",
+              "proposal_id",
+              "traveler_id",
+              "request_id",
+              "accepted_at",
+              "doc_sha256",
+              "price_hash",
+              "evidence_sha256"
+            ]
+          }
+        ]
+      },
+      "events": [
+        {
+          "kind": "signed",
+          "reason": null
+        },
+        {
+          "kind": "code_sent",
+          "reason": null
+        },
+        {
+          "kind": "signed",
+          "reason": null
+        },
+        {
+          "kind": "code_refused",
+          "reason": "code_invalid"
+        },
+        {
+          "kind": "code_sent",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "step": "NEG reveal with an unknown reason",
+      "status": 422,
+      "detail": "reason_required"
+    },
+    {
+      "step": "open sealed envelope row 1",
+      "ui_verdict": "Seal checked: valid."
+    },
+    {
+      "step": "open sealed envelope row 2",
+      "ui_verdict": "Seal checked: valid."
+    },
+    {
+      "step": "signing log after reveals",
+      "events": [
+        {
+          "kind": "signed",
+          "reason": null
+        },
+        {
+          "kind": "code_sent",
+          "reason": null
+        },
+        {
+          "kind": "signed",
+          "reason": null
+        },
+        {
+          "kind": "code_refused",
+          "reason": "code_invalid"
+        },
+        {
+          "kind": "code_sent",
+          "reason": null
+        }
+      ]
+    },
+    {
+      "step": "390",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    }
+  ],
+  "reveals": [
+    {
+      "status": 422,
+      "envelope_text": null,
+      "seal": null,
+      "detail": "reason_required"
+    },
+    {
+      "status": 200,
+      "envelope_sha256": "d58f78f8ceba1efa41bd269090f7f1b00d9969d76828d3051d53d95f1b5c5367",
+      "evidence_sha256": "49374f9c7582ac30b0332a039eae6501e78d62db467599fe79d6b445f161f03d",
+      "signed_at": "2026-10-30T13:38:15.720451+00:00",
+      "envelope_text": {
+        "chars": 2837,
+        "first_line": "aa-partner-envelope/1"
+      },
+      "seal": {
+        "alg": "kms-rsassa-pss-sha256",
+        "key_ref": "arn:aws:kms:us-west-1:<account>:key/<uuid>",
+        "value_b64_len": 512,
+        "verified": true
+      }
+    },
+    {
+      "status": 200,
+      "envelope_sha256": "5d7d25c1ac86dac38b98e61d85dadad6694f23182373236c382826838ee63507",
+      "evidence_sha256": "601bc18b84264f81d83ee6ff6e5555f7a8a5972e48e4885c379aa4ef22004069",
+      "signed_at": "2026-10-30T13:38:47.777749+00:00",
+      "envelope_text": {
+        "chars": 2855,
+        "first_line": "aa-partner-envelope/1"
+      },
+      "seal": {
+        "alg": "kms-rsassa-pss-sha256",
+        "key_ref": "arn:aws:kms:us-west-1:<account>:key/<uuid>",
+        "value_b64_len": 512,
+        "verified": true
+      }
+    }
+  ],
+  "failing": [
+    {
+      "method": "POST",
+      "path": "/bff/signatures/<uuid>/envelope",
+      "status": 422
+    }
+  ],
+  "console": [
+    "Failed to load resource: the server responded with a status of 422 ()",
+    "pageerror: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the"
+  ]
+}

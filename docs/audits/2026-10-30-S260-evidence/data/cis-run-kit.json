@@ -1,0 +1,444 @@
+{
+  "started": "2026-10-30T10:43:15.404Z",
+  "steps": [
+    {
+      "step": "session",
+      "url": "/admin/settings",
+      "me": null
+    },
+    {
+      "step": "kit-buttons",
+      "file": "01-kit-buttons-1440-light.png",
+      "page": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      },
+      "entry": {
+        "scrollWidth": 1132,
+        "clientWidth": 1132
+      }
+    },
+    {
+      "step": "kit-buttons",
+      "file": "01-kit-buttons-390-light.png",
+      "page": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      },
+      "entry": {
+        "scrollWidth": 358,
+        "clientWidth": 358
+      }
+    },
+    {
+      "step": "kit-buttons",
+      "file": "01-kit-buttons-1440-dark.png",
+      "page": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      },
+      "entry": {
+        "scrollWidth": 1132,
+        "clientWidth": 1132
+      }
+    },
+    {
+      "step": "kit-buttons",
+      "file": "01-kit-buttons-390-dark.png",
+      "page": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      },
+      "entry": {
+        "scrollWidth": 358,
+        "clientWidth": 358
+      }
+    },
+    {
+      "step": "focus",
+      "kind": "Button",
+      "file": "01-focus-Button-light.png",
+      "text": "Save",
+      "role": null,
+      "ariaChecked": null,
+      "focusVisible": true,
+      "outline": "solid 2px rgb(135, 93, 18)"
+    },
+    {
+      "step": "focus",
+      "kind": "IconButton",
+      "file": "01-focus-IconButton-light.png",
+      "text": "Edit notes",
+      "role": null,
+      "ariaChecked": null,
+      "focusVisible": true,
+      "outline": "solid 2px rgb(135, 93, 18)"
+    },
+    {
+      "step": "focus",
+      "kind": "SegmentedControl",
+      "file": "01-focus-SegmentedControl-light.png",
+      "text": "Waiting",
+      "role": "radio",
+      "ariaChecked": "true",
+      "focusVisible": true,
+      "outline": "solid 2px rgb(135, 93, 18)"
+    },
+    {
+      "step": "focus",
+      "kind": "Switch-off",
+      "file": "01-focus-Switch-off-light.png",
+      "text": "Email me when a payment arrives",
+      "role": "switch",
+      "ariaChecked": "false",
+      "focusVisible": true,
+      "outline": "solid 2px rgb(135, 93, 18)"
+    },
+    {
+      "step": "focus",
+      "kind": "Tabs-underline",
+      "file": "01-focus-Tabs-underline-light.png",
+      "text": "Overview",
+      "role": "tab",
+      "ariaChecked": null,
+      "focusVisible": true,
+      "outline": "solid 2px rgb(135, 93, 18)"
+    },
+    {
+      "step": "tab-arrow",
+      "after": {
+        "text": "Proposals2",
+        "selected": "true"
+      }
+    },
+    {
+      "step": "focus",
+      "kind": "ListButton",
+      "file": "01-focus-ListButton-light.png",
+      "text": "Hoan Kiem Lake",
+      "role": "option",
+      "ariaChecked": null,
+      "focusVisible": true,
+      "outline": "solid 2px rgb(135, 93, 18)"
+    },
+    {
+      "step": "focus-summary",
+      "scheme": "light",
+      "found": [
+        "Button",
+        "IconButton",
+        "SegmentedControl",
+        "Switch-off",
+        "Tabs-underline",
+        "ListButton"
+      ]
+    },
+    {
+      "step": "focus",
+      "kind": "Button",
+      "file": "01-focus-Button-dark.png",
+      "text": "Save",
+      "role": null,
+      "ariaChecked": null,
+      "focusVisible": true,
+      "outline": "solid 2px rgb(240, 192, 112)"
+    },
+    {
+      "step": "focus",
+      "kind": "IconButton",
+      "file": "01-focus-IconButton-dark.png",
+      "text": "Edit notes",
+      "role": null,
+      "ariaChecked": null,
+      "focusVisible": true,
+      "outline": "solid 2px rgb(240, 192, 112)"
+    },
+    {
+      "step": "focus",
+      "kind": "SegmentedControl",
+      "file": "01-focus-SegmentedControl-dark.png",
+      "text": "Waiting",
+      "role": "radio",
+      "ariaChecked": "true",
+      "focusVisible": true,
+      "outline": "solid 2px rgb(240, 192, 112)"
+    },
+    {
+      "step": "focus",
+      "kind": "Switch-off",
+      "file": "01-focus-Switch-off-dark.png",
+      "text": "Email me when a payment arrives",
+      "role": "switch",
+      "ariaChecked": "false",
+      "focusVisible": true,
+      "outline": "solid 2px rgb(240, 192, 112)"
+    },
+    {
+      "step": "focus",
+      "kind": "Tabs-underline",
+      "file": "01-focus-Tabs-underline-dark.png",
+      "text": "Overview",
+      "role": "tab",
+      "ariaChecked": null,
+      "focusVisible": true,
+      "outline": "solid 2px rgb(240, 192, 112)"
+    },
+    {
+      "step": "tab-arrow",
+      "after": {
+        "text": "Proposals2",
+        "selected": "true"
+      }
+    },
+    {
+      "step": "focus",
+      "kind": "ListButton",
+      "file": "01-focus-ListButton-dark.png",
+      "text": "Hoan Kiem Lake",
+      "role": "option",
+      "ariaChecked": null,
+      "focusVisible": true,
+      "outline": "solid 2px rgb(240, 192, 112)"
+    },
+    {
+      "step": "focus-summary",
+      "scheme": "dark",
+      "found": [
+        "Button",
+        "IconButton",
+        "SegmentedControl",
+        "Switch-off",
+        "Tabs-underline",
+        "ListButton"
+      ]
+    },
+    {
+      "step": "s6b-page",
+      "page": "/admin/platform-stats",
+      "scheme": "light",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "s6b-page",
+      "page": "/admin/platform-stats",
+      "scheme": "dark",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "s6b-page",
+      "page": "/admin/jobs",
+      "scheme": "light",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "s6b-page",
+      "page": "/admin/jobs",
+      "scheme": "dark",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "s6b-page",
+      "page": "/admin/tenant-activity",
+      "scheme": "light",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "s6b-page",
+      "page": "/admin/tenant-activity",
+      "scheme": "dark",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    }
+  ],
+  "console": [],
+  "failing": [],
+  "api": [
+    {
+      "method": "GET",
+      "path": "/api/admin/notifications/count",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/review-queue",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/settings",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/notifications/count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/settings",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/review-queue",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/notifications/count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/settings",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/review-queue",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/notifications/count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/review-queue",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/settings",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/notifications/count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/a4/platform-stats",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/tenants",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/a4/review-log",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/a4/gate-telemetry",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/review-queue",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/notifications/count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/job-runner/workers",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/job-runner/jobs",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/review-queue",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/job-runner/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/notifications/count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/review-queue",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/tenants",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/a4/content-log",
+      "status": 200
+    }
+  ]
+}

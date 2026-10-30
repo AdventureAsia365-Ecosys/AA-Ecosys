@@ -1,0 +1,61 @@
+{
+  "status": 200,
+  "top_level_keys": [
+    "schema_ready",
+    "routing_uses_registry",
+    "connections"
+  ],
+  "row_keys": [
+    "connection_key",
+    "kind",
+    "auth_mode",
+    "label",
+    "enabled",
+    "data_scope",
+    "account_id",
+    "region",
+    "role_name",
+    "credential_source",
+    "secret_name",
+    "credential_env",
+    "credential_env_set",
+    "base_url",
+    "timeout_s",
+    "max_retries",
+    "max_concurrency",
+    "rpm_limit",
+    "monthly_budget_usd",
+    "policy_problems",
+    "notes",
+    "updated_at",
+    "updated_by",
+    "deployments"
+  ],
+  "rows": [
+    {
+      "connection_key": "acc2",
+      "enabled": true,
+      "health": null
+    },
+    {
+      "connection_key": "acc3",
+      "enabled": true,
+      "health": null
+    },
+    {
+      "connection_key": "anthropic-direct",
+      "enabled": false,
+      "health": null
+    },
+    {
+      "connection_key": "bedrock-llm-org",
+      "enabled": false,
+      "health": null
+    },
+    {
+      "connection_key": "openai-direct",
+      "enabled": true,
+      "health": null
+    }
+  ]
+}

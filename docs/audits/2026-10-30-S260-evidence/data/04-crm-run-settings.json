@@ -1,0 +1,62 @@
+{
+  "started": "2026-10-30T11:12:45.692Z",
+  "trip": "<trip id redacted>",
+  "steps": [
+    {
+      "step": "owner-session",
+      "status": 200,
+      "role": "owner"
+    },
+    {
+      "step": "manual-method-save",
+      "status": 200
+    },
+    {
+      "step": "settings-payments-390",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    }
+  ],
+  "responses": [
+    {
+      "who": "crm",
+      "method": "PUT",
+      "path": "/bff/settings/payment-methods/manual",
+      "status": 200,
+      "body": {
+        "accounts": [
+          {
+            "account_id": "<uuid>",
+            "provider": "manual",
+            "status": "active",
+            "display_name": "<str>",
+            "instructions": "<str>",
+            "external_account_id": null,
+            "default_currency": null,
+            "charges_enabled": false,
+            "connected_at": "2026-10-30T11:12:54.990230+00:00",
+            "disconnected_at": null
+          }
+        ],
+        "providers": [
+          {
+            "provider": "manual",
+            "available": true
+          },
+          {
+            "provider": "stripe",
+            "available": false
+          },
+          {
+            "provider": "vn_gateway",
+            "available": false
+          }
+        ]
+      }
+    }
+  ],
+  "console": [],
+  "failing": []
+}

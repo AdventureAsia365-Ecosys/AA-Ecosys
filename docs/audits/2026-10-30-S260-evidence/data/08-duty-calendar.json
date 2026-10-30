@@ -1,0 +1,1060 @@
+{
+  "started_at": "2026-10-30T15:02:59.449Z",
+  "steps": [
+    {
+      "step": "8a /travelling (default 7 days) UI",
+      "text": "Travelling now\n\nWho is away or leaving soon, and where. Names stay hidden until you open them; every opened name is logged.\n\nToday\nNext 7 days\nNext 14 days\nNobody travelling\nNo booked or travelling trip falls in this period."
+    },
+    {
+      "step": "8a shots /travelling",
+      "shots": [
+        {
+          "file": "08a-travelling-1440-light.png",
+          "doc": [
+            1440,
+            1440
+          ],
+          "main": [
+            1200,
+            1200
+          ],
+          "theme": "light"
+        },
+        {
+          "file": "08a-travelling-1440-dark.png",
+          "doc": [
+            1440,
+            1440
+          ],
+          "main": [
+            1200,
+            1200
+          ],
+          "theme": "dark"
+        },
+        {
+          "file": "08a-travelling-390-light.png",
+          "doc": [
+            390,
+            390
+          ],
+          "main": [
+            390,
+            390
+          ],
+          "theme": "light"
+        },
+        {
+          "file": "08a-travelling-390-dark.png",
+          "doc": [
+            390,
+            390
+          ],
+          "main": [
+            390,
+            390
+          ],
+          "theme": "dark"
+        }
+      ]
+    },
+    {
+      "step": "8a /travelling?days=14 UI",
+      "text": "Travelling now\n\nWho is away or leaving soon, and where. Names stay hidden until you open them; every opened name is logged.\n\nToday\nNext 7 days\nNext 14 days\nNobody travelling\nNo booked or travelling trip falls in this period."
+    },
+    {
+      "step": "8a shots 14 days",
+      "shots": [
+        {
+          "file": "08a-travelling-14d-1440-light.png",
+          "doc": [
+            1440,
+            1440
+          ],
+          "main": [
+            1200,
+            1200
+          ],
+          "theme": "light"
+        }
+      ]
+    },
+    {
+      "step": "8a GET duty/travelling?days=7",
+      "status": 200,
+      "keys": [
+        "today",
+        "timezone",
+        "from",
+        "to",
+        "regions",
+        "travellers",
+        "incidents",
+        "truncated"
+      ],
+      "today": "2026-10-30",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "from": "2026-10-30",
+      "to": "2026-11-05",
+      "regions": [],
+      "trip_keys": [],
+      "traveller_keys": [],
+      "travellers": 0,
+      "incidents": [],
+      "truncated": false,
+      "name_or_contact_keys_present": null
+    },
+    {
+      "step": "8a GET duty/travelling?days=14",
+      "status": 200,
+      "keys": [
+        "today",
+        "timezone",
+        "from",
+        "to",
+        "regions",
+        "travellers",
+        "incidents",
+        "truncated"
+      ],
+      "today": "2026-10-30",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "from": "2026-10-30",
+      "to": "2026-11-12",
+      "regions": [],
+      "trip_keys": [],
+      "traveller_keys": [],
+      "travellers": 0,
+      "incidents": [],
+      "truncated": false,
+      "name_or_contact_keys_present": null
+    },
+    {
+      "step": "8a GET duty/travelling?days=31",
+      "status": 200,
+      "keys": [
+        "today",
+        "timezone",
+        "from",
+        "to",
+        "regions",
+        "travellers",
+        "incidents",
+        "truncated"
+      ],
+      "today": "2026-10-30",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "from": "2026-10-30",
+      "to": "2026-11-29",
+      "regions": [
+        {
+          "region": "VN",
+          "traveller_count": 3,
+          "trips": [
+            {
+              "stage": "booked",
+              "start_date": "2026-11-29",
+              "end_date": "2026-12-02",
+              "on_date": "2026-11-29",
+              "day_no": 1,
+              "place": null,
+              "lines": 0,
+              "travellers": 1,
+              "incident_flag_id": null,
+              "is_mine": true
+            },
+            {
+              "stage": "booked",
+              "start_date": "2026-11-29",
+              "end_date": "2026-12-02",
+              "on_date": "2026-11-29",
+              "day_no": 1,
+              "place": null,
+              "lines": 0,
+              "travellers": 2,
+              "incident_flag_id": null,
+              "is_mine": true
+            }
+          ]
+        }
+      ],
+      "trip_keys": [
+        "trip_id",
+        "title",
+        "stage",
+        "start_date",
+        "end_date",
+        "owner_member_id",
+        "is_mine",
+        "on_date",
+        "day_no",
+        "place",
+        "lines",
+        "traveler_ids",
+        "incident_flag_id"
+      ],
+      "traveller_keys": [
+        "traveler_id",
+        "trip_ids",
+        "regions",
+        "has_phone",
+        "has_email",
+        "has_emergency_contact",
+        "has_health_info"
+      ],
+      "travellers": 3,
+      "incidents": [],
+      "truncated": false,
+      "name_or_contact_keys_present": null
+    },
+    {
+      "step": "8a GET duty/travelling?from=2026-11-29&days=7",
+      "status": 200,
+      "keys": [
+        "today",
+        "timezone",
+        "from",
+        "to",
+        "regions",
+        "travellers",
+        "incidents",
+        "truncated"
+      ],
+      "today": "2026-10-30",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "from": "2026-11-29",
+      "to": "2026-12-05",
+      "regions": [
+        {
+          "region": "VN",
+          "traveller_count": 3,
+          "trips": [
+            {
+              "stage": "booked",
+              "start_date": "2026-11-29",
+              "end_date": "2026-12-02",
+              "on_date": "2026-11-29",
+              "day_no": 1,
+              "place": null,
+              "lines": 0,
+              "travellers": 1,
+              "incident_flag_id": null,
+              "is_mine": true
+            },
+            {
+              "stage": "booked",
+              "start_date": "2026-11-29",
+              "end_date": "2026-12-02",
+              "on_date": "2026-11-29",
+              "day_no": 1,
+              "place": null,
+              "lines": 0,
+              "travellers": 2,
+              "incident_flag_id": null,
+              "is_mine": true
+            }
+          ]
+        }
+      ],
+      "trip_keys": [
+        "trip_id",
+        "title",
+        "stage",
+        "start_date",
+        "end_date",
+        "owner_member_id",
+        "is_mine",
+        "on_date",
+        "day_no",
+        "place",
+        "lines",
+        "traveler_ids",
+        "incident_flag_id"
+      ],
+      "traveller_keys": [
+        "traveler_id",
+        "trip_ids",
+        "regions",
+        "has_phone",
+        "has_email",
+        "has_emergency_contact",
+        "has_health_info"
+      ],
+      "travellers": 3,
+      "incidents": [],
+      "truncated": false,
+      "name_or_contact_keys_present": null
+    },
+    {
+      "step": "8a GET duty/reach?region=VN",
+      "status": 200,
+      "keys": [
+        "region",
+        "on_date",
+        "trips",
+        "travellers",
+        "incidents"
+      ],
+      "region": "VN",
+      "on_date": "2026-10-30",
+      "trips": 0,
+      "travellers": 0,
+      "traveller_keys": [],
+      "incidents": []
+    },
+    {
+      "step": "8a GET duty/reach?region=VN&on=2026-11-29",
+      "status": 200,
+      "keys": [
+        "region",
+        "on_date",
+        "trips",
+        "travellers",
+        "incidents"
+      ],
+      "region": "VN",
+      "on_date": "2026-11-29",
+      "trips": 2,
+      "travellers": 3,
+      "traveller_keys": [
+        "traveler_id",
+        "trip_ids",
+        "regions",
+        "has_phone",
+        "has_email",
+        "has_emergency_contact",
+        "has_health_info"
+      ],
+      "incidents": []
+    },
+    {
+      "step": "8a GET duty/reach?region=vn",
+      "status": 422,
+      "keys": [
+        "detail"
+      ],
+      "traveller_keys": [],
+      "detail": [
+        {
+          "type": "string_pattern_mismatch",
+          "loc": [
+            "query",
+            "region"
+          ],
+          "msg": "String should match pattern '^([A-Z]{2}|unknown)$'",
+          "input": "vn",
+          "ctx": {
+            "pattern": "^([A-Z]{2}|unknown)$"
+          }
+        }
+      ]
+    },
+    {
+      "step": "8a POST duty/reveal (1 traveller, display_name, no reason)",
+      "status": 200,
+      "reason": "duty_of_care",
+      "fields": [
+        "display_name"
+      ],
+      "travellers": 1,
+      "traveller_keys": [
+        "traveler_id",
+        "display_name"
+      ],
+      "display_name": "<str>"
+    },
+    {
+      "step": "8a GET audit/events (reveal of that traveller)",
+      "status": 200,
+      "keys": [
+        "events",
+        "next_cursor",
+        "retention_months",
+        "oldest",
+        "actor_groups"
+      ],
+      "n": 1,
+      "newest": {
+        "event_id": "<uuid>",
+        "at": "2026-10-30T15:03:28.406305+00:00",
+        "actor_kind": "user",
+        "actor_group": "user",
+        "actor_ref": "member:<uuid>",
+        "member_id": "<uuid>",
+        "member_role": "owner",
+        "action": "reveal",
+        "outcome": "allowed",
+        "object_kind": "traveler",
+        "object_id": "<uuid>",
+        "fields": [
+          "display_name"
+        ],
+        "reason": "duty_of_care",
+        "object_ids": []
+      }
+    },
+    {
+      "step": "8a NEG POST duty/reveal (6 travellers, no reason)",
+      "n_ids": 6,
+      "status": 422,
+      "body": {
+        "detail": "reason_required",
+        "message": "opening more than 5 travellers needs a reason",
+        "reasons": [
+          "duty_of_care",
+          "incident_response",
+          "contact_client",
+          "ops_handoff",
+          "client_request"
+        ],
+        "threshold": 5
+      }
+    },
+    {
+      "step": "8a NEG POST duty/reveal (6 travellers, unknown reason)",
+      "status": 422,
+      "code": {
+        "detail": "reason_required",
+        "message": "opening more than 5 travellers needs a reason",
+        "reasons": [
+          "duty_of_care",
+          "incident_response",
+          "contact_client",
+          "ops_handoff",
+          "client_request"
+        ],
+        "threshold": 5
+      }
+    },
+    {
+      "step": "8b GET trips/{id}/incidents",
+      "status": 200,
+      "body": {
+        "trip_id": "<uuid>",
+        "incidents": []
+      }
+    },
+    {
+      "step": "8b GET trips/{id}/incidents",
+      "status": 200,
+      "body": {
+        "trip_id": "<uuid>",
+        "incidents": []
+      }
+    },
+    {
+      "step": "8b trip page banner present",
+      "banner": 0
+    },
+    {
+      "step": "8c GET calendar?from=2026-10-01&to=2026-10-31&scope=mine",
+      "status": 200,
+      "keys": [
+        "from",
+        "to",
+        "today",
+        "timezone",
+        "scope",
+        "events",
+        "truncated"
+      ],
+      "today": "2026-10-30",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "scope": "mine",
+      "n": 6,
+      "kinds": {
+        "task": 6
+      },
+      "truncated": false
+    },
+    {
+      "step": "8c GET calendar?from=2026-10-01&to=2026-10-31&scope=agency",
+      "status": 200,
+      "keys": [
+        "from",
+        "to",
+        "today",
+        "timezone",
+        "scope",
+        "events",
+        "truncated"
+      ],
+      "today": "2026-10-30",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "scope": "agency",
+      "n": 48,
+      "kinds": {
+        "task": 45,
+        "call": 3
+      },
+      "truncated": false,
+      "sample_per_kind": {
+        "task": {
+          "kind": "task",
+          "id": "task-<uuid>",
+          "date": "2026-10-24",
+          "starts_at": "2026-10-24T13:02:14.799460+07:00",
+          "all_day": false,
+          "trip_id": "<uuid>",
+          "title": "<str>",
+          "task_id": "<uuid>",
+          "task_kind": "reply_inquiry",
+          "priority": "normal"
+        },
+        "call": {
+          "kind": "call",
+          "id": "call-<uuid>",
+          "date": "2026-10-26",
+          "starts_at": "2026-10-26T08:00:00+07:00",
+          "ends_at": "2026-10-26T08:30:00+07:00",
+          "all_day": false,
+          "trip_id": "<uuid>",
+          "title": "<str>",
+          "call_status": "requested"
+        }
+      }
+    },
+    {
+      "step": "8c GET calendar?from=2026-11-01&to=2026-11-30&scope=agency",
+      "status": 200,
+      "keys": [
+        "from",
+        "to",
+        "today",
+        "timezone",
+        "scope",
+        "events",
+        "truncated"
+      ],
+      "today": "2026-10-30",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "scope": "agency",
+      "n": 10,
+      "kinds": {
+        "task": 4,
+        "signing_deadline": 1,
+        "payment_due": 3,
+        "departure": 2
+      },
+      "truncated": false,
+      "sample_per_kind": {
+        "task": {
+          "kind": "task",
+          "id": "task-<uuid>",
+          "date": "2026-11-01",
+          "starts_at": "2026-11-01T00:09:08.932570+07:00",
+          "all_day": false,
+          "trip_id": "<uuid>",
+          "title": "<str>",
+          "task_id": "<uuid>",
+          "task_kind": "get_planning_info",
+          "priority": "normal"
+        },
+        "signing_deadline": {
+          "kind": "signing_deadline",
+          "id": "signing-<uuid>",
+          "date": "2026-11-08",
+          "all_day": true,
+          "trip_id": "<uuid>",
+          "title": "<str>",
+          "pending_signatures": 1
+        },
+        "payment_due": {
+          "kind": "payment_due",
+          "id": "payment-<uuid>",
+          "date": "2026-11-09",
+          "all_day": true,
+          "trip_id": "<uuid>",
+          "title": "<str>",
+          "payment_kind": "balance",
+          "amount": {
+            "amount": "1260.00",
+            "currency": "USD"
+          }
+        },
+        "departure": {
+          "trip_id": "<uuid>",
+          "title": "<str>",
+          "stage": "booked",
+          "all_day": true,
+          "kind": "departure",
+          "id": "departure-<uuid>",
+          "date": "2026-11-29"
+        }
+      }
+    },
+    {
+      "step": "8c GET calendar?from=2026-12-01&to=2026-12-31&scope=agency",
+      "status": 200,
+      "keys": [
+        "from",
+        "to",
+        "today",
+        "timezone",
+        "scope",
+        "events",
+        "truncated"
+      ],
+      "today": "2026-10-30",
+      "timezone": "Asia/Ho_Chi_Minh",
+      "scope": "agency",
+      "n": 4,
+      "kinds": {
+        "return": 3,
+        "departure": 1
+      },
+      "truncated": false
+    },
+    {
+      "step": "8c GET calendar?from=2026-01-01&to=2027-03-01&scope=agency",
+      "status": 422,
+      "keys": [
+        "detail",
+        "message"
+      ],
+      "kinds": {},
+      "detail": {
+        "detail": "invalid_range",
+        "message": "at most 400 days"
+      }
+    },
+    {
+      "step": "8c page /calendar",
+      "month": "October 2026",
+      "ui_event_kinds": {
+        "task": 6
+      },
+      "days": 3,
+      "feed_card": 1
+    },
+    {
+      "step": "8c shots 08c-calendar-oct-mine",
+      "shots": [
+        {
+          "file": "08c-calendar-oct-mine-1440-light.png",
+          "doc": [
+            1440,
+            1440
+          ],
+          "main": [
+            1200,
+            1200
+          ],
+          "theme": "light"
+        }
+      ]
+    },
+    {
+      "step": "8c page /calendar?month=2026-10&scope=agency",
+      "month": "October 2026",
+      "ui_event_kinds": {
+        "task": 45,
+        "call": 3
+      },
+      "days": 7,
+      "feed_card": 1
+    },
+    {
+      "step": "8c shots 08c-calendar-oct-agency",
+      "shots": [
+        {
+          "file": "08c-calendar-oct-agency-1440-light.png",
+          "doc": [
+            1440,
+            1440
+          ],
+          "main": [
+            1200,
+            1200
+          ],
+          "theme": "light"
+        },
+        {
+          "file": "08c-calendar-oct-agency-1440-dark.png",
+          "doc": [
+            1440,
+            1440
+          ],
+          "main": [
+            1200,
+            1200
+          ],
+          "theme": "dark"
+        },
+        {
+          "file": "08c-calendar-oct-agency-390-light.png",
+          "doc": [
+            390,
+            390
+          ],
+          "main": [
+            390,
+            390
+          ],
+          "theme": "light"
+        },
+        {
+          "file": "08c-calendar-oct-agency-390-dark.png",
+          "doc": [
+            390,
+            390
+          ],
+          "main": [
+            390,
+            390
+          ],
+          "theme": "dark"
+        }
+      ]
+    },
+    {
+      "step": "8c page /calendar?month=2026-11&scope=agency",
+      "month": "November 2026",
+      "ui_event_kinds": {
+        "task": 4,
+        "signing_deadline": 1,
+        "payment_due": 3,
+        "departure": 2
+      },
+      "days": 5,
+      "feed_card": 1
+    },
+    {
+      "step": "8c shots 08c-calendar-nov-agency",
+      "shots": [
+        {
+          "file": "08c-calendar-nov-agency-1440-light.png",
+          "doc": [
+            1440,
+            1440
+          ],
+          "main": [
+            1200,
+            1200
+          ],
+          "theme": "light"
+        },
+        {
+          "file": "08c-calendar-nov-agency-1440-dark.png",
+          "doc": [
+            1440,
+            1440
+          ],
+          "main": [
+            1200,
+            1200
+          ],
+          "theme": "dark"
+        },
+        {
+          "file": "08c-calendar-nov-agency-390-light.png",
+          "doc": [
+            390,
+            390
+          ],
+          "main": [
+            390,
+            390
+          ],
+          "theme": "light"
+        },
+        {
+          "file": "08c-calendar-nov-agency-390-dark.png",
+          "doc": [
+            390,
+            390
+          ],
+          "main": [
+            390,
+            390
+          ],
+          "theme": "dark"
+        }
+      ]
+    },
+    {
+      "step": "8d POST calendar/feed (UI, scope agency)",
+      "status": 201,
+      "body": {
+        "feed": {
+          "calendar_feed_id": "<uuid>",
+          "member_id": "<uuid>",
+          "scope": "agency",
+          "status": "active",
+          "created_at": "2026-10-30T15:03:57.667436+00:00",
+          "expires_at": "2027-10-30T15:03:57.667436+00:00",
+          "revoked_at": null,
+          "revoked_by_owner": false,
+          "last_fetched_at": null,
+          "fetch_count": 0
+        },
+        "url": "https://portal.lumiguides.it.com/crm/public/v1/calendar/<token 43 chars>.ics"
+      },
+      "token_len": 43,
+      "url_host": "portal.lumiguides.it.com",
+      "url_path_shape": "/crm/public/v1/calendar/<token>.ics"
+    },
+    {
+      "step": "8d GET calendar/feed after create",
+      "status": 200,
+      "body": {
+        "feed": {
+          "calendar_feed_id": "<uuid>",
+          "member_id": "<uuid>",
+          "scope": "agency",
+          "status": "active",
+          "created_at": "2026-10-30T15:03:57.667436+00:00",
+          "expires_at": "2027-10-30T15:03:57.667436+00:00",
+          "revoked_at": null,
+          "revoked_by_owner": false,
+          "last_fetched_at": null,
+          "fetch_count": 0
+        }
+      }
+    },
+    {
+      "step": "8d GET calendar/feeds (owner)",
+      "status": 200,
+      "n": 1,
+      "statuses": [
+        "active"
+      ]
+    },
+    {
+      "step": "8d GET public .ics (no cookies)",
+      "status": 200,
+      "content_type": "text/calendar; charset=utf-8",
+      "cache_control": "private, max-age=300",
+      "bytes": 27005,
+      "starts": "BEGIN:VCALENDAR",
+      "ends": "END:VCALENDAR",
+      "crlf_only": true,
+      "longest_line_octets": 75,
+      "version": "2.0",
+      "prodid": "-//Adventure Asia//Partner CRM calendar//EN",
+      "calname": "<agency name> CRM",
+      "vevents": 62,
+      "vevent_ends": 62,
+      "uids": 62,
+      "dtstamps": 62,
+      "categories": {
+        "TASK": 49,
+        "CALL": 3,
+        "SIGNING_DEADLINE": 1,
+        "PAYMENT_DUE": 3,
+        "DEPARTURE": 3,
+        "RETURN": 3
+      },
+      "summaries_distinct": [
+        "Task due: reply inquiry · trip <ref8>",
+        "Client call · trip <ref8>",
+        "Task due: call scheduled · trip <ref8>",
+        "Task due: get planning info · trip <ref8>",
+        "Task due: proposal follow up · trip <ref8>",
+        "Signatures due (1 pending) · trip <ref8>",
+        "Balance due · trip <ref8>",
+        "Departure · trip <ref8>",
+        "Return · trip <ref8>"
+      ],
+      "unknown_property_lines": 0,
+      "personal_or_money_hits": {
+        "revealed_name": false,
+        "trip_titles": [],
+        "amounts": [],
+        "currency_codes": [],
+        "emails": [],
+        "phone_like": []
+      },
+      "sample_event": [
+        "UID:task-<uuid>@crm",
+        "DTSTAMP:20261030T150400Z",
+        "DTSTART:20261024T060214Z",
+        "DTEND:20261024T061714Z",
+        "SUMMARY:Task due: reply inquiry · trip <ref8>",
+        "URL:https://portal.lumiguides.it.com/pipeline/<uuid>",
+        "DESCRIPTION:Open the trip in the CRM: https://portal.lumiguides.it.com/pipeline/<uuid>",
+        "CATEGORIES:TASK"
+      ]
+    },
+    {
+      "step": "agent GET duty/travelling?days=31",
+      "status": 200,
+      "regions": [
+        [
+          "VN",
+          3
+        ]
+      ]
+    },
+    {
+      "step": "agent GET calendar (this month, scope mine)",
+      "status": 200,
+      "n": 0,
+      "scope": "mine"
+    },
+    {
+      "step": "agent NEG GET calendar/feeds (owner only)",
+      "status": 403,
+      "body": {
+        "detail": "role_forbidden",
+        "message": "only an owner sees the team's calendar feeds"
+      }
+    },
+    {
+      "step": "agent NEG POST revoke the owner's feed",
+      "status": 403,
+      "body": {
+        "detail": "not_own_feed",
+        "message": "only the member or an owner revokes a calendar feed"
+      }
+    },
+    {
+      "step": "agent /travelling page renders",
+      "ok": true
+    },
+    {
+      "step": "8d public .ics still 200 after the agent's refused revoke",
+      "status": 200
+    },
+    {
+      "step": "8d feed card before revoke",
+      "active": 1,
+      "text": "Add your CRM dates to Google Calendar, Outlook or Apple Calendar with a private link. The feed shows dates and a trip reference only, never client names or amounts.\n\nActive since 30 Oct 2026 · Whole agency · Last read by your calendar 30 Oct 2026\n\nInclude\nMy trips\nWhole agency\nCreate a new link\nStop"
+    },
+    {
+      "step": "8d POST calendar/feeds/{id}/revoke (UI confirm)",
+      "status": 200,
+      "body": {
+        "feed": {
+          "calendar_feed_id": "<uuid>",
+          "member_id": "<uuid>",
+          "scope": "agency",
+          "status": "revoked",
+          "created_at": "2026-10-30T15:03:57.667436+00:00",
+          "expires_at": "2027-10-30T15:03:57.667436+00:00",
+          "revoked_at": "2026-10-30T15:04:25.667562+00:00",
+          "revoked_by_owner": false,
+          "last_fetched_at": "2026-10-30T15:04:00.762708+00:00",
+          "fetch_count": 1
+        }
+      }
+    },
+    {
+      "step": "8d GET public .ics after revoke",
+      "status": 404,
+      "content_type": "application/json",
+      "body": "{\"detail\":\"feed_not_found\",\"message\":\"feed_not_found\"}"
+    },
+    {
+      "step": "8d page after reload: revoked banner",
+      "banner": 1,
+      "banner_text": "Your calendar link was stopped on 30 Oct 2026. Calendars subscribed to it no longer update; your trips and bookings are unchanged. Create a new link to resume."
+    },
+    {
+      "step": "8d GET calendar/feed after revoke",
+      "status": 200,
+      "body": {
+        "feed": {
+          "calendar_feed_id": "<uuid>",
+          "member_id": "<uuid>",
+          "scope": "agency",
+          "status": "revoked",
+          "created_at": "2026-10-30T15:03:57.667436+00:00",
+          "expires_at": "2027-10-30T15:03:57.667436+00:00",
+          "revoked_at": "2026-10-30T15:04:25.667562+00:00",
+          "revoked_by_owner": false,
+          "last_fetched_at": "2026-10-30T15:04:00.762708+00:00",
+          "fetch_count": 1
+        }
+      }
+    },
+    {
+      "step": "8d GET audit/events action=calendar_feed",
+      "status": 200,
+      "events": [
+        {
+          "action": "calendar_feed",
+          "outcome": "allowed",
+          "reason": "revoked",
+          "object_kind": "calendar_feed",
+          "at": "2026-10-30T15:04:25.684575+00:00"
+        },
+        {
+          "action": "calendar_feed",
+          "outcome": "denied",
+          "reason": "not_own_feed",
+          "object_kind": "calendar_feed",
+          "at": "2026-10-30T15:04:15.587044+00:00"
+        },
+        {
+          "action": "calendar_feed",
+          "outcome": "denied",
+          "reason": "owner_only",
+          "object_kind": "calendar_feed",
+          "at": "2026-10-30T15:04:15.276832+00:00"
+        },
+        {
+          "action": "calendar_feed",
+          "outcome": "allowed",
+          "reason": "created_agency",
+          "object_kind": "calendar_feed",
+          "at": "2026-10-30T15:03:57.683725+00:00"
+        }
+      ]
+    }
+  ],
+  "owner1": {
+    "failing": [
+      {
+        "method": "GET",
+        "path": "/bff/duty/reach",
+        "status": 422
+      },
+      {
+        "method": "POST",
+        "path": "/bff/duty/reveal",
+        "status": 422
+      },
+      {
+        "method": "POST",
+        "path": "/bff/duty/reveal",
+        "status": 422
+      },
+      {
+        "method": "GET",
+        "path": "/bff/calendar",
+        "status": 422
+      }
+    ],
+    "console": [
+      "Failed to load resource: the server responded with a status of 422 ()",
+      "Failed to load resource: the server responded with a status of 422 ()",
+      "Failed to load resource: the server responded with a status of 422 ()",
+      "pageerror: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified de",
+      "Failed to load resource: the server responded with a status of 422 ()"
+    ]
+  },
+  "agent": {
+    "failing": [
+      {
+        "method": "GET",
+        "path": "/bff/calendar/feeds",
+        "status": 403
+      },
+      {
+        "method": "POST",
+        "path": "/bff/calendar/feeds/<uuid>/revoke",
+        "status": 403
+      }
+    ],
+    "console": [
+      "Failed to load resource: the server responded with a status of 403 ()",
+      "Failed to load resource: the server responded with a status of 403 ()"
+    ]
+  },
+  "owner2": {
+    "failing": [],
+    "console": []
+  },
+  "finished_at": "2026-10-30T15:04:31.968Z"
+}

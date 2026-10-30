@@ -1,0 +1,1124 @@
+{
+  "steps": [
+    {
+      "who": "minor",
+      "step": "sign-in code",
+      "echoed": true
+    },
+    {
+      "step": "minor home",
+      "status": 200,
+      "guardian_signs_for_me": true,
+      "envelopes": [],
+      "documents": [
+        "booking_terms",
+        "waiver"
+      ]
+    },
+    {
+      "step": "minor sees guardian line",
+      "visible": true
+    },
+    {
+      "step": "shot",
+      "file": "05b-portal-minor-guardian-signs-1440.png",
+      "side": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "step": "shot",
+      "file": "05b-portal-minor-guardian-signs-390.png",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "NEG minor signs own envelope",
+      "status": 403,
+      "detail": "guardian_signs"
+    },
+    {
+      "who": "lead",
+      "step": "sign-in code",
+      "echoed": true
+    },
+    {
+      "step": "lead home",
+      "status": 200,
+      "envelopes": [
+        {
+          "for": "self",
+          "minor_number": null,
+          "signed": false
+        },
+        {
+          "for": "minor",
+          "minor_number": 1,
+          "signed": false
+        }
+      ],
+      "documents": [
+        {
+          "kind": "booking_terms",
+          "version": "e2e-mvp3tg5i",
+          "sha": "664133d782ebe875ff101c8871413c53a4af40d4e7ed5856f779c784252ca125"
+        },
+        {
+          "kind": "waiver",
+          "version": "e2e-mvp3tg5i",
+          "sha": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0"
+        }
+      ],
+      "insurance_declination": false
+    },
+    {
+      "step": "shot",
+      "file": "05c-portal-lead-before-sign-1440.png",
+      "side": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "step": "shot",
+      "file": "05c-portal-lead-before-sign-390.png",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "NEG tampered document hash",
+      "status": 409,
+      "detail": "document_changed",
+      "returned_documents": 2
+    },
+    {
+      "step": "form for",
+      "for": "self"
+    },
+    {
+      "step": "NEG wrong signing code (form)",
+      "status": 422,
+      "detail": "code_invalid",
+      "attempts_left": 4,
+      "ui": [
+        "That code is not right. Tries left: 4.",
+        ""
+      ]
+    },
+    {
+      "step": "sign self",
+      "status": 200,
+      "body": {
+        "status": "signed",
+        "signed_at": "2026-10-30T13:38:15.720451+00:00",
+        "traveler_id": "<uuid>",
+        "signer_role": "self",
+        "envelope_sha256": "d58f78f8ceba1efa41bd269090f7f1b00d9969d76828d3051d53d95f1b5c5367",
+        "seal_alg": "kms-rsassa-pss-sha256"
+      }
+    },
+    {
+      "step": "form after self",
+      "for": "minor"
+    },
+    {
+      "step": "shot",
+      "file": "05e-portal-lead-self-signed-1440.png",
+      "side": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "step": "shot",
+      "file": "05e-portal-lead-self-signed-390.png",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "sign as guardian for minor 1",
+      "status": 200,
+      "body": {
+        "status": "signed",
+        "signed_at": "2026-10-30T13:38:47.777749+00:00",
+        "traveler_id": "<uuid>",
+        "signer_role": "guardian",
+        "envelope_sha256": "5d7d25c1ac86dac38b98e61d85dadad6694f23182373236c382826838ee63507",
+        "seal_alg": "kms-rsassa-pss-sha256"
+      }
+    },
+    {
+      "step": "lead home after",
+      "envelopes": [
+        {
+          "for": "self",
+          "signed": true,
+          "signer_role": "self"
+        },
+        {
+          "for": "minor",
+          "signed": true,
+          "signer_role": "guardian"
+        }
+      ]
+    },
+    {
+      "step": "re-sign own envelope with a used code",
+      "status": 200,
+      "detail": "already_signed"
+    },
+    {
+      "step": "shot",
+      "file": "05f-portal-lead-all-signed-1440.png",
+      "side": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    {
+      "step": "shot",
+      "file": "05f-portal-lead-all-signed-390.png",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    }
+  ],
+  "responses": [
+    {
+      "who": "minor",
+      "method": "GET",
+      "path": "/crm/public/v1/portal/<token>",
+      "status": 200,
+      "body": {
+        "agency_name": "<str>",
+        "signed_in": false
+      }
+    },
+    {
+      "who": "minor",
+      "method": "POST",
+      "path": "/crm/public/v1/portal/<token>/code",
+      "status": 202,
+      "body": {
+        "sent": true,
+        "to_hint": "<str>",
+        "expires_in_s": 600,
+        "dev_code": "<code>"
+      }
+    },
+    {
+      "who": "minor",
+      "method": "POST",
+      "path": "/crm/public/v1/portal/<token>/session",
+      "status": 200,
+      "body": {
+        "signed_in": true,
+        "session_expires_at": "2026-10-31T01:36:20.774228+00:00"
+      }
+    },
+    {
+      "who": "minor",
+      "method": "GET",
+      "path": "/crm/public/v1/portal/<token>",
+      "status": 200,
+      "body": {
+        "agency_name": "<str>",
+        "signed_in": true,
+        "role": "companion",
+        "trip": {
+          "title": "<str>",
+          "start_date": "2026-11-29",
+          "end_date": "2026-12-02",
+          "stage": "<str>"
+        },
+        "stage3": {
+          "locked": false,
+          "fields": [
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>"
+          ],
+          "missing": [
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>"
+          ],
+          "done": false,
+          "submitted_at": null
+        },
+        "waiver": {
+          "doc_id": "<uuid>",
+          "version_label": "e2e-mvp3tg5i",
+          "body_text": "<text 38 chars>",
+          "body_sha256": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0",
+          "signed": false,
+          "signed_at": null
+        },
+        "agreements": {
+          "documents": [
+            {
+              "kind": "booking_terms",
+              "doc_id": "<uuid>",
+              "version_label": "e2e-mvp3tg5i",
+              "body_text": "<text 52 chars>",
+              "body_sha256": "664133d782ebe875ff101c8871413c53a4af40d4e7ed5856f779c784252ca125"
+            },
+            {
+              "kind": "waiver",
+              "doc_id": "<uuid>",
+              "version_label": "e2e-mvp3tg5i",
+              "body_text": "<text 38 chars>",
+              "body_sha256": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0"
+            }
+          ],
+          "insurance_declination": null,
+          "envelopes": [],
+          "guardian_signs_for_me": true
+        }
+      }
+    },
+    {
+      "who": "minor",
+      "method": "GET",
+      "path": "/crm/public/v1/portal/<token>",
+      "status": 200,
+      "body": {
+        "agency_name": "<str>",
+        "signed_in": true,
+        "role": "companion",
+        "trip": {
+          "title": "<str>",
+          "start_date": "2026-11-29",
+          "end_date": "2026-12-02",
+          "stage": "<str>"
+        },
+        "stage3": {
+          "locked": false,
+          "fields": [
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>"
+          ],
+          "missing": [
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>"
+          ],
+          "done": false,
+          "submitted_at": null
+        },
+        "waiver": {
+          "doc_id": "<uuid>",
+          "version_label": "e2e-mvp3tg5i",
+          "body_text": "<text 38 chars>",
+          "body_sha256": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0",
+          "signed": false,
+          "signed_at": null
+        },
+        "agreements": {
+          "documents": [
+            {
+              "kind": "booking_terms",
+              "doc_id": "<uuid>",
+              "version_label": "e2e-mvp3tg5i",
+              "body_text": "<text 52 chars>",
+              "body_sha256": "664133d782ebe875ff101c8871413c53a4af40d4e7ed5856f779c784252ca125"
+            },
+            {
+              "kind": "waiver",
+              "doc_id": "<uuid>",
+              "version_label": "e2e-mvp3tg5i",
+              "body_text": "<text 38 chars>",
+              "body_sha256": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0"
+            }
+          ],
+          "insurance_declination": null,
+          "envelopes": [],
+          "guardian_signs_for_me": true
+        }
+      }
+    },
+    {
+      "who": "minor",
+      "method": "POST",
+      "path": "/crm/public/v1/portal/<token>/sign",
+      "status": 403,
+      "body": {
+        "detail": "guardian_signs",
+        "message": "the lead traveller signs for you as your guardian"
+      }
+    },
+    {
+      "who": "lead",
+      "method": "GET",
+      "path": "/crm/public/v1/portal/<token>",
+      "status": 200,
+      "body": {
+        "agency_name": "<str>",
+        "signed_in": false
+      }
+    },
+    {
+      "who": "lead",
+      "method": "POST",
+      "path": "/crm/public/v1/portal/<token>/code",
+      "status": 202,
+      "body": {
+        "sent": true,
+        "to_hint": "<str>",
+        "expires_in_s": 600,
+        "dev_code": "<code>"
+      }
+    },
+    {
+      "who": "lead",
+      "method": "POST",
+      "path": "/crm/public/v1/portal/<token>/session",
+      "status": 200,
+      "body": {
+        "signed_in": true,
+        "session_expires_at": "2026-10-31T01:37:09.495022+00:00"
+      }
+    },
+    {
+      "who": "lead",
+      "method": "GET",
+      "path": "/crm/public/v1/portal/<token>",
+      "status": 200,
+      "body": {
+        "agency_name": "<str>",
+        "signed_in": true,
+        "role": "lead",
+        "trip": {
+          "title": "<str>",
+          "start_date": "2026-11-29",
+          "end_date": "2026-12-02",
+          "stage": "<str>"
+        },
+        "stage3": {
+          "locked": false,
+          "fields": [
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>"
+          ],
+          "missing": [
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>"
+          ],
+          "done": false,
+          "submitted_at": null
+        },
+        "waiver": {
+          "doc_id": "<uuid>",
+          "version_label": "e2e-mvp3tg5i",
+          "body_text": "<text 38 chars>",
+          "body_sha256": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0",
+          "signed": false,
+          "signed_at": null
+        },
+        "agreements": {
+          "documents": [
+            {
+              "kind": "booking_terms",
+              "doc_id": "<uuid>",
+              "version_label": "e2e-mvp3tg5i",
+              "body_text": "<text 52 chars>",
+              "body_sha256": "664133d782ebe875ff101c8871413c53a4af40d4e7ed5856f779c784252ca125"
+            },
+            {
+              "kind": "waiver",
+              "doc_id": "<uuid>",
+              "version_label": "e2e-mvp3tg5i",
+              "body_text": "<text 38 chars>",
+              "body_sha256": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0"
+            }
+          ],
+          "insurance_declination": null,
+          "envelopes": [
+            {
+              "traveler_id": "<uuid>",
+              "for": "self",
+              "minor_number": null,
+              "signed": false,
+              "signed_at": null,
+              "signer_role": "self",
+              "insurance_choice": null
+            },
+            {
+              "traveler_id": "<uuid>",
+              "for": "minor",
+              "minor_number": 1,
+              "signed": false,
+              "signed_at": null,
+              "signer_role": "self",
+              "insurance_choice": null
+            }
+          ],
+          "guardian_signs_for_me": false
+        },
+        "party": [
+          {
+            "role": "lead",
+            "details_done": false,
+            "waiver_signed": false,
+            "me": true
+          },
+          {
+            "role": "companion",
+            "details_done": false,
+            "waiver_signed": false,
+            "me": false
+          }
+        ],
+        "payments": [
+          {
+            "kind": "deposit",
+            "amount": "<str>",
+            "currency": "<str>",
+            "due_on": "<str>",
+            "status": "paid"
+          },
+          {
+            "kind": "balance",
+            "amount": "<str>",
+            "currency": "<str>",
+            "due_on": "<str>",
+            "status": "due"
+          }
+        ]
+      }
+    },
+    {
+      "who": "lead",
+      "method": "GET",
+      "path": "/crm/public/v1/portal/<token>",
+      "status": 200,
+      "body": {
+        "agency_name": "<str>",
+        "signed_in": true,
+        "role": "lead",
+        "trip": {
+          "title": "<str>",
+          "start_date": "2026-11-29",
+          "end_date": "2026-12-02",
+          "stage": "<str>"
+        },
+        "stage3": {
+          "locked": false,
+          "fields": [
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>"
+          ],
+          "missing": [
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>"
+          ],
+          "done": false,
+          "submitted_at": null
+        },
+        "waiver": {
+          "doc_id": "<uuid>",
+          "version_label": "e2e-mvp3tg5i",
+          "body_text": "<text 38 chars>",
+          "body_sha256": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0",
+          "signed": false,
+          "signed_at": null
+        },
+        "agreements": {
+          "documents": [
+            {
+              "kind": "booking_terms",
+              "doc_id": "<uuid>",
+              "version_label": "e2e-mvp3tg5i",
+              "body_text": "<text 52 chars>",
+              "body_sha256": "664133d782ebe875ff101c8871413c53a4af40d4e7ed5856f779c784252ca125"
+            },
+            {
+              "kind": "waiver",
+              "doc_id": "<uuid>",
+              "version_label": "e2e-mvp3tg5i",
+              "body_text": "<text 38 chars>",
+              "body_sha256": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0"
+            }
+          ],
+          "insurance_declination": null,
+          "envelopes": [
+            {
+              "traveler_id": "<uuid>",
+              "for": "self",
+              "minor_number": null,
+              "signed": false,
+              "signed_at": null,
+              "signer_role": "self",
+              "insurance_choice": null
+            },
+            {
+              "traveler_id": "<uuid>",
+              "for": "minor",
+              "minor_number": 1,
+              "signed": false,
+              "signed_at": null,
+              "signer_role": "self",
+              "insurance_choice": null
+            }
+          ],
+          "guardian_signs_for_me": false
+        },
+        "party": [
+          {
+            "role": "lead",
+            "details_done": false,
+            "waiver_signed": false,
+            "me": true
+          },
+          {
+            "role": "companion",
+            "details_done": false,
+            "waiver_signed": false,
+            "me": false
+          }
+        ],
+        "payments": [
+          {
+            "kind": "deposit",
+            "amount": "<str>",
+            "currency": "<str>",
+            "due_on": "<str>",
+            "status": "paid"
+          },
+          {
+            "kind": "balance",
+            "amount": "<str>",
+            "currency": "<str>",
+            "due_on": "<str>",
+            "status": "due"
+          }
+        ]
+      }
+    },
+    {
+      "who": "lead",
+      "method": "POST",
+      "path": "/crm/public/v1/portal/<token>/sign",
+      "status": 409,
+      "body": {
+        "detail": "document_changed",
+        "message": "the documents changed; read them again",
+        "documents": [
+          {
+            "kind": "booking_terms",
+            "doc_id": "<uuid>",
+            "version_label": "e2e-mvp3tg5i",
+            "body_text": "<text 52 chars>",
+            "body_sha256": "664133d782ebe875ff101c8871413c53a4af40d4e7ed5856f779c784252ca125"
+          },
+          {
+            "kind": "waiver",
+            "doc_id": "<uuid>",
+            "version_label": "e2e-mvp3tg5i",
+            "body_text": "<text 38 chars>",
+            "body_sha256": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0"
+          }
+        ]
+      }
+    },
+    {
+      "who": "lead",
+      "method": "POST",
+      "path": "/crm/public/v1/portal/<token>/code",
+      "status": 202,
+      "body": {
+        "sent": true,
+        "to_hint": "<str>",
+        "expires_in_s": 600,
+        "dev_code": "<code>"
+      }
+    },
+    {
+      "who": "lead",
+      "method": "POST",
+      "path": "/crm/public/v1/portal/<token>/sign",
+      "status": 422,
+      "body": {
+        "detail": "code_invalid",
+        "attempts_left": 4
+      }
+    },
+    {
+      "who": "lead",
+      "method": "POST",
+      "path": "/crm/public/v1/portal/<token>/sign",
+      "status": 200,
+      "body": {
+        "status": "signed",
+        "signed_at": "2026-10-30T13:38:15.720451+00:00",
+        "traveler_id": "<uuid>",
+        "signer_role": "self",
+        "envelope_sha256": "d58f78f8ceba1efa41bd269090f7f1b00d9969d76828d3051d53d95f1b5c5367",
+        "seal_alg": "kms-rsassa-pss-sha256"
+      }
+    },
+    {
+      "who": "lead",
+      "method": "GET",
+      "path": "/crm/public/v1/portal/<token>",
+      "status": 200,
+      "body": {
+        "agency_name": "<str>",
+        "signed_in": true,
+        "role": "lead",
+        "trip": {
+          "title": "<str>",
+          "start_date": "2026-11-29",
+          "end_date": "2026-12-02",
+          "stage": "<str>"
+        },
+        "stage3": {
+          "locked": false,
+          "fields": [
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>"
+          ],
+          "missing": [
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>"
+          ],
+          "done": false,
+          "submitted_at": null
+        },
+        "waiver": {
+          "doc_id": "<uuid>",
+          "version_label": "e2e-mvp3tg5i",
+          "body_text": "<text 38 chars>",
+          "body_sha256": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0",
+          "signed": true,
+          "signed_at": "2026-10-30T13:38:15.720451+00:00"
+        },
+        "agreements": {
+          "documents": [
+            {
+              "kind": "booking_terms",
+              "doc_id": "<uuid>",
+              "version_label": "e2e-mvp3tg5i",
+              "body_text": "<text 52 chars>",
+              "body_sha256": "664133d782ebe875ff101c8871413c53a4af40d4e7ed5856f779c784252ca125"
+            },
+            {
+              "kind": "waiver",
+              "doc_id": "<uuid>",
+              "version_label": "e2e-mvp3tg5i",
+              "body_text": "<text 38 chars>",
+              "body_sha256": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0"
+            }
+          ],
+          "insurance_declination": null,
+          "envelopes": [
+            {
+              "traveler_id": "<uuid>",
+              "for": "self",
+              "minor_number": null,
+              "signed": true,
+              "signed_at": "2026-10-30T13:38:15.720451+00:00",
+              "signer_role": "self",
+              "insurance_choice": null
+            },
+            {
+              "traveler_id": "<uuid>",
+              "for": "minor",
+              "minor_number": 1,
+              "signed": false,
+              "signed_at": null,
+              "signer_role": "self",
+              "insurance_choice": null
+            }
+          ],
+          "guardian_signs_for_me": false
+        },
+        "party": [
+          {
+            "role": "lead",
+            "details_done": false,
+            "waiver_signed": true,
+            "me": true
+          },
+          {
+            "role": "companion",
+            "details_done": false,
+            "waiver_signed": false,
+            "me": false
+          }
+        ],
+        "payments": [
+          {
+            "kind": "deposit",
+            "amount": "<str>",
+            "currency": "<str>",
+            "due_on": "<str>",
+            "status": "paid"
+          },
+          {
+            "kind": "balance",
+            "amount": "<str>",
+            "currency": "<str>",
+            "due_on": "<str>",
+            "status": "due"
+          }
+        ]
+      }
+    },
+    {
+      "who": "lead",
+      "method": "POST",
+      "path": "/crm/public/v1/portal/<token>/code",
+      "status": 202,
+      "body": {
+        "sent": true,
+        "to_hint": "<str>",
+        "expires_in_s": 600,
+        "dev_code": "<code>"
+      }
+    },
+    {
+      "who": "lead",
+      "method": "POST",
+      "path": "/crm/public/v1/portal/<token>/sign",
+      "status": 200,
+      "body": {
+        "status": "signed",
+        "signed_at": "2026-10-30T13:38:47.777749+00:00",
+        "traveler_id": "<uuid>",
+        "signer_role": "guardian",
+        "envelope_sha256": "5d7d25c1ac86dac38b98e61d85dadad6694f23182373236c382826838ee63507",
+        "seal_alg": "kms-rsassa-pss-sha256"
+      }
+    },
+    {
+      "who": "lead",
+      "method": "GET",
+      "path": "/crm/public/v1/portal/<token>",
+      "status": 200,
+      "body": {
+        "agency_name": "<str>",
+        "signed_in": true,
+        "role": "lead",
+        "trip": {
+          "title": "<str>",
+          "start_date": "2026-11-29",
+          "end_date": "2026-12-02",
+          "stage": "<str>"
+        },
+        "stage3": {
+          "locked": false,
+          "fields": [
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>"
+          ],
+          "missing": [
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>"
+          ],
+          "done": false,
+          "submitted_at": null
+        },
+        "waiver": {
+          "doc_id": "<uuid>",
+          "version_label": "e2e-mvp3tg5i",
+          "body_text": "<text 38 chars>",
+          "body_sha256": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0",
+          "signed": true,
+          "signed_at": "2026-10-30T13:38:15.720451+00:00"
+        },
+        "agreements": {
+          "documents": [
+            {
+              "kind": "booking_terms",
+              "doc_id": "<uuid>",
+              "version_label": "e2e-mvp3tg5i",
+              "body_text": "<text 52 chars>",
+              "body_sha256": "664133d782ebe875ff101c8871413c53a4af40d4e7ed5856f779c784252ca125"
+            },
+            {
+              "kind": "waiver",
+              "doc_id": "<uuid>",
+              "version_label": "e2e-mvp3tg5i",
+              "body_text": "<text 38 chars>",
+              "body_sha256": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0"
+            }
+          ],
+          "insurance_declination": null,
+          "envelopes": [
+            {
+              "traveler_id": "<uuid>",
+              "for": "self",
+              "minor_number": null,
+              "signed": true,
+              "signed_at": "2026-10-30T13:38:15.720451+00:00",
+              "signer_role": "self",
+              "insurance_choice": null
+            },
+            {
+              "traveler_id": "<uuid>",
+              "for": "minor",
+              "minor_number": 1,
+              "signed": true,
+              "signed_at": "2026-10-30T13:38:47.777749+00:00",
+              "signer_role": "guardian",
+              "insurance_choice": null
+            }
+          ],
+          "guardian_signs_for_me": false
+        },
+        "party": [
+          {
+            "role": "lead",
+            "details_done": false,
+            "waiver_signed": true,
+            "me": true
+          },
+          {
+            "role": "companion",
+            "details_done": false,
+            "waiver_signed": true,
+            "me": false
+          }
+        ],
+        "payments": [
+          {
+            "kind": "deposit",
+            "amount": "<str>",
+            "currency": "<str>",
+            "due_on": "<str>",
+            "status": "paid"
+          },
+          {
+            "kind": "balance",
+            "amount": "<str>",
+            "currency": "<str>",
+            "due_on": "<str>",
+            "status": "due"
+          }
+        ]
+      }
+    },
+    {
+      "who": "lead",
+      "method": "GET",
+      "path": "/crm/public/v1/portal/<token>",
+      "status": 200,
+      "body": {
+        "agency_name": "<str>",
+        "signed_in": true,
+        "role": "lead",
+        "trip": {
+          "title": "<str>",
+          "start_date": "2026-11-29",
+          "end_date": "2026-12-02",
+          "stage": "<str>"
+        },
+        "stage3": {
+          "locked": false,
+          "fields": [
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>"
+          ],
+          "missing": [
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>",
+            "<str>"
+          ],
+          "done": false,
+          "submitted_at": null
+        },
+        "waiver": {
+          "doc_id": "<uuid>",
+          "version_label": "e2e-mvp3tg5i",
+          "body_text": "<text 38 chars>",
+          "body_sha256": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0",
+          "signed": true,
+          "signed_at": "2026-10-30T13:38:15.720451+00:00"
+        },
+        "agreements": {
+          "documents": [
+            {
+              "kind": "booking_terms",
+              "doc_id": "<uuid>",
+              "version_label": "e2e-mvp3tg5i",
+              "body_text": "<text 52 chars>",
+              "body_sha256": "664133d782ebe875ff101c8871413c53a4af40d4e7ed5856f779c784252ca125"
+            },
+            {
+              "kind": "waiver",
+              "doc_id": "<uuid>",
+              "version_label": "e2e-mvp3tg5i",
+              "body_text": "<text 38 chars>",
+              "body_sha256": "38e024188720d922d2b543e5ca7934bc6887a349b7b192d03c9fb103ce8a98c0"
+            }
+          ],
+          "insurance_declination": null,
+          "envelopes": [
+            {
+              "traveler_id": "<uuid>",
+              "for": "self",
+              "minor_number": null,
+              "signed": true,
+              "signed_at": "2026-10-30T13:38:15.720451+00:00",
+              "signer_role": "self",
+              "insurance_choice": null
+            },
+            {
+              "traveler_id": "<uuid>",
+              "for": "minor",
+              "minor_number": 1,
+              "signed": true,
+              "signed_at": "2026-10-30T13:38:47.777749+00:00",
+              "signer_role": "guardian",
+              "insurance_choice": null
+            }
+          ],
+          "guardian_signs_for_me": false
+        },
+        "party": [
+          {
+            "role": "lead",
+            "details_done": false,
+            "waiver_signed": true,
+            "me": true
+          },
+          {
+            "role": "companion",
+            "details_done": false,
+            "waiver_signed": true,
+            "me": false
+          }
+        ],
+        "payments": [
+          {
+            "kind": "deposit",
+            "amount": "<str>",
+            "currency": "<str>",
+            "due_on": "<str>",
+            "status": "paid"
+          },
+          {
+            "kind": "balance",
+            "amount": "<str>",
+            "currency": "<str>",
+            "due_on": "<str>",
+            "status": "due"
+          }
+        ]
+      }
+    },
+    {
+      "who": "lead",
+      "method": "POST",
+      "path": "/crm/public/v1/portal/<token>/sign",
+      "status": 200,
+      "body": {
+        "status": "already_signed",
+        "signed_at": "2026-10-30T13:38:15.720451+00:00"
+      }
+    }
+  ],
+  "failing": [
+    {
+      "method": "POST",
+      "path": "/crm/public/v1/portal/<token>/sign",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/crm/public/v1/portal/<token>/sign",
+      "status": 422
+    }
+  ],
+  "console": [
+    "Failed to load resource: the server responded with a status of 409 ()",
+    "Failed to load resource: the server responded with a status of 422 ()"
+  ]
+}
