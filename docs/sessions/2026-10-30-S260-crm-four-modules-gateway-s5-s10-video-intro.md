@@ -76,6 +76,10 @@ PR-26 #10564 (9 ảnh; bỏ ảnh lịch chụp trước bản sửa giờ), PR-
 
 ## Việc cần làm đầu phiên sau (S261)
 
+0. **Dọn In Progress trước mọi việc mới** (tech lead, 30/10 ~23:15: "phiên sau nên xử lý các inprogress quá nhiều rồi").
+   Kế hoạch: `docs/audits/2026-10-30-S260-inprogress-triage/` — 31 issue: 0 đóng thẳng, 9 làm nốt, 13 bị chặn (về
+   Backlog/Todo kèm blocker + trigger), 9 chia lại (Done-with-scope, câu chữ + follow-up gom vào **một trang quyết định**).
+   Chưa nhận issue mới tới khi mọi issue In Progress đã đóng / làm xong / về Backlog.
 1. AA-997: sau lượt relocate 31/10 → chạy lại báo cáo `hide_flagged` + audit → sửa điểm của 16 tour AA-990 → confirm ẩn;
    AA-990 recheck_14.
 2. Lượt kiểm cuối S260 (mục 9, 22:38) đã PASS: AA-961 429 giới hạn reveal + giờ lịch theo đại lý, AA-923 `/v1/rules` 404,
