@@ -24,12 +24,14 @@ AA-933) the first tables, and the slices after it the rest (78 tables and 6 view
 
 **Not in sync with the live schema yet** (28/10/2026, table names only; the drift check stays report only; group F
 redrawn for crm-024, AA-952, 30/10/2026: `invoice`, `invoice_line`, `invoice_sequence`, `payment`, `refund_request`
-and `payment_provider_account` match the migration once it is applied):
+and `payment_provider_account` match the migration once it is applied; the agreements part of group E redrawn for
+crm-025, AA-955, 30/10/2026: `agreement_doc`, `terms_acceptance`, `signature_request` and `signature_event` match the
+migration once it is applied):
 
 - On this page, not live: `ai_draft`, `calendar_connection`, `campaign`, `campaign_recipient`, `commission`,
   `export_job`, `incident_flag`, `insight_aggregate`, `insight_fact`, `metric_daily`, `ops_release`,
-  `outbox`, `release_note`, `signature_event`, `spend_budget`,
-  `supplier_manifest_export`, `support_grant`, `support_session`, `tag`, `tag_link`, `terms_acceptance`,
+  `outbox`, `release_note`, `spend_budget`,
+  `supplier_manifest_export`, `support_grant`, `support_session`, `tag`, `tag_link`,
   `traveler_flight`, `trip_stage_transition`, `unsubscribe_token`, `voice_profile`, `workflow_rule`, `workflow_run`,
   `workflow_template` (slices not built yet, or renamed).
 - Live, not on this page: `aa_catalog_state`, `aa_catalog_tour`, `aa_content` (described in text only), `aa_request`,
@@ -471,32 +473,62 @@ erDiagram
         uuid proposal_id FK "one builder version (crm-022)"
     }
     agreement_doc {
-        uuid agreement_doc_id PK
+        uuid doc_id PK
         uuid tenant_id FK
-        uuid published_by FK
-        text kind
-        int version
-    }
-    terms_acceptance {
-        uuid terms_acceptance_id PK
-        uuid tenant_id FK
-        uuid trip_id FK
-        uuid traveler_id FK
-        uuid agreement_doc_id FK
-        uuid proposal_id FK
-    }
-    signature_request {
-        uuid signature_request_id PK
-        uuid tenant_id FK
-        uuid trip_id FK
-        uuid traveler_id FK
-        uuid signed_pdf_document_id FK
+        text kind "booking_terms | waiver | insurance_declination"
+        text version_label UK
+        bytea body_sha256
         text status
     }
-    signature_event {
-        uuid signature_event_id PK
+    terms_acceptance {
+        uuid acceptance_id PK
         uuid tenant_id FK
-        uuid signature_request_id FK
+        uuid trip_id "no FK: claim-period exception"
+        uuid proposal_id
+        uuid traveler_id
+        uuid link_id
+        uuid request_id
+        text source "proposal | reaccept | envelope"
+        uuid doc_id FK
+        bytea doc_sha256
+        bytea price_hash
+        bytea client_ip_enc "pii:online_id"
+        bytea user_agent_enc "pii:online_id"
+        date keep_until
+    }
+    signature_request {
+        uuid request_id PK
+        uuid tenant_id FK
+        uuid trip_id FK
+        uuid traveler_id
+        uuid access_id FK
+        uuid signer_traveler_id "guardian of a minor"
+        uuid access_traveler_id FK "generated"
+        uuid doc_id FK
+        uuid terms_doc_id FK
+        uuid declination_doc_id FK
+        uuid otp_id FK
+        text status
+        text signer_role "self | guardian"
+        text insurance_choice "insured | declined"
+        bytea signed_name_enc "pii:name"
+        bytea envelope_sha256
+    }
+    signature_event {
+        uuid event_id PK
+        uuid tenant_id FK
+        uuid request_id "no FK: claim-period exception"
+        uuid trip_id
+        uuid traveler_id
+        uuid access_id
+        text kind "code_sent | code_refused | signed"
+        text reason
+        bytea envelope_enc "pii:name, docs DEK"
+        bytea seal_value
+        text seal_key_ref
+        bytea client_ip_enc "pii:online_id"
+        bytea user_agent_enc "pii:online_id"
+        date keep_until
     }
     trip ||--o{ client_link : "trip_id"
     traveler |o--o{ client_link : "traveler_id"
@@ -506,16 +538,23 @@ erDiagram
     traveler ||--o{ otp_challenge : "traveler_id"
     trip ||--o{ prep_pack_selection : "trip_id"
     proposal ||--o{ prep_pack_selection : "proposal_id"
-    member |o--o{ agreement_doc : "published_by"
-    trip ||--o{ terms_acceptance : "trip_id"
-    traveler ||--o{ terms_acceptance : "traveler_id"
-    agreement_doc ||--o{ terms_acceptance : "agreement_doc_id"
-    proposal ||--o{ terms_acceptance : "proposal_id"
-    trip ||--o{ signature_request : "trip_id"
-    traveler ||--o{ signature_request : "traveler_id"
-    document |o--o{ signature_request : "signed_pdf_document_id"
-    signature_request ||--o{ signature_event : "signature_request_id"
+    agreement_doc ||--o{ terms_acceptance : "tenant_id, doc_id"
+    traveler_access ||--o{ signature_request : "tenant_id, access_id, trip_id, access_traveler_id"
+    agreement_doc ||--o{ signature_request : "tenant_id, doc_id"
+    agreement_doc |o--o{ signature_request : "tenant_id, terms_doc_id"
+    agreement_doc |o--o{ signature_request : "tenant_id, declination_doc_id"
+    otp_challenge |o--o{ signature_request : "tenant_id, otp_id"
 ```
+
+E-sign v1 (crm-025, AA-955): `signature_request` is one envelope per traveller (booking terms, waiver and, when the
+traveller declines insurance, the insurance declination); a guardian (the adult lead) signs a minor's envelope from
+their own portal access (`signer_traveler_id`, `signer_role = guardian`; the access key names `access_traveler_id`).
+`terms_acceptance` (every acceptance of a booking terms version: at the proposal accept, a re-accept before the
+deposit, inside an envelope) and `signature_event` (the signing log: code sent, code refused, signed with the sealed
+envelope) are append-only and carry **no foreign key** on trip, proposal, traveller, link or request: they are the
+DM-7 signed-agreement evidence and outlive a trip or traveller erasure until `keep_until` (trip end + 3 years, est.),
+then `crm.lifecycle_purge_expired` deletes them; the agency offboarding deletes them with everything else.
+`signature_request` itself still leaves with its trip or traveller.
 
 ## F. Money (M6, M7, M13, M15)
 
