@@ -3,7 +3,7 @@
 | Người | Vai trò | Kênh | Giọng |
 |---|---|---|---|
 | Chị Thư — Ms. Thu (Jira `@thule`) | Chủ doanh nghiệp: yêu cầu nghiệp vụ, quyết định kinh doanh / pháp lý, quyền duyệt; admin org | Jira PR/KAN/CON (kênh chính, kể cả link trang làm cho chị xem); Zalo cho câu hỏi nhanh; DOCX cho tài liệu chính thức | Xem dưới |
-| TrueIDC (Jade - Hoài) | Vendor quản lý payer/organization AWS chứa acc2 (billing, cost allocation tag) | Zalo | Mở "Chào @Jade - Hoài,", xưng "bên mình"; ngắn, đường bấm cụ thể + danh sách đánh số, một dòng phương án dự phòng; đóng "Mình cảm ơn." |
+| Đại lý AWS / reseller (TrueIDC, eCloudvalley, Sunny Cloud…) | Payer/organization AWS, billing, bán lại model Bedrock | Zalo / nhóm chat | Xem "Viết cho đại lý / nhà cung cấp" |
 | Leigh | Commercial lead | Email / báo cáo | Tiếng Anh, số liệu trước, không rào đón |
 | Trang | Nội dung nội bộ | | Tiếng Việt, theo quy trình |
 
@@ -19,8 +19,38 @@
   nhắc Nghiệp, không mã nội bộ.
 - **Việc pháp lý / kinh doanh:** đưa đề xuất bình tĩnh (phương án + khuyến nghị) để chị quyết; không tạo áp lực hạn
   chót, không mặc định cần luật sư. Phần kỹ thuật của việc đó vẫn làm như thường.
+  Chọn nhà cung cấp / đại lý: đưa **đủ mọi phương án** cạnh nhau, văn trung tính (thời gian, chi phí, phí, cọc, ràng
+  buộc, có cần hợp đồng mới không) để chị chọn. Hợp đồng TrueIDC đã ký: tech chỉ tư vấn phương án kỹ thuật tốt nhất,
+  không đẩy ký thêm, không làm tăng chi phí. Đã đưa khuyến nghị thì giữ, không sửa tới sửa lui.
 - **Guide cho chị Thư và guide theo vai trò:** song ngữ EN–VI, hai bản đủ ý như nhau.
 - **Tài liệu chính thức:** trang trọng, tiêu đề rõ, không viết tắt.
+
+## Viết cho đại lý / nhà cung cấp
+
+Tin chat (Zalo, nhóm với đại lý), Nghiệp đứng tên:
+
+- **Khung:** Tình hình (2–3 dòng, lời thường) → Nhu cầu của bên mình → câu hỏi đánh số; cần gọn thì đánh dấu nhóm ưu tiên.
+- **Lời:** chat đời thường, câu ngắn, "mình / bên mình / bên bạn". Chủ doanh nghiệp gọi là "sếp mình", không tên, không
+  chức danh. Text thuần, dòng đánh số được. Đóng "Mình cảm ơn.". TrueIDC: mở "Chào @Jade - Hoài,", kèm đường bấm cụ thể.
+- **Chỉ dán thông tin công khai được:** link artifact claude.ai chỉ người trong tổ chức mở được và chứa account/org ID,
+  chi phí, đề xuất nội bộ (ví dụ mua trực tiếp) → tóm lại bằng lời. Account ID, mã Linear, số chi phí nội bộ cũng vậy.
+
+Checklist câu hỏi chuẩn cho đại lý AWS / Bedrock (mỗi ý một câu, điền số của lần hỏi):
+
+1. Bán lại model của hãng nào trên Bedrock ở region của mình; xác nhận bằng văn bản.
+2. Có SCP / Private Marketplace nào chặn model hay dịch vụ.
+3. Giữ organization riêng (Billing Transfer) hay phải vào org của họ; quyền root/IAM.
+4. Chuyển 2–3 tài khoản: quy trình, thời gian, gián đoạn.
+5. Phí tính trên gì (gồm Bedrock/Marketplace?), phí tối thiểu, cọc, cam kết.
+6. Hoá đơn: tiền tệ, tỷ giá, VAT, hạn thanh toán.
+7. Đề cử credit AWS; credit có dùng cho model bên thứ ba không.
+8. "Miễn phí dịch vụ" gồm gì; có mở case AWS thay mình không, thời gian phản hồi.
+9. Rời đi: báo trước, phí; tài khoản và quyền truy cập model còn nguyên không.
+10. Tự xem chi phí/budget được không; dịch vụ AWS nào họ không hỗ trợ.
+
+Bộ câu hỏi đầy đủ + nghiên cứu đối tác: `docs/audits/2026-10-29-S257-llm-access-options/angle1-aws-partners-vn.md` §5.
+Mẫu đã gửi (Sunny Cloud, S260): bản nháp lưu trong `docs/audits/2026-10-30-S260-session-close/`. Comment Jira:
+`aa-jira-update`. Dịch vụ AWS trả phí mới: `aa-lessons/lessons.md` mục Vận hành.
 
 ## Review tiếng Anh (khi Nghiệp viết English)
 

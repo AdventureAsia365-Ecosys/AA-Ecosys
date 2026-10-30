@@ -1,6 +1,6 @@
 ---
 name: ai-nghiep
-description: Nền tảng làm việc với Nghiệp trên chương trình AA_Ecosys (AA-CIS, TripPlanner, AA-Booking, AA-Partner trên AWS acc2) — luật cứng, phân công công cụ (Chat / Claude Code / Kiro, điều phối / subagent), nguồn sự thật, AWS account và profile, cách viết ADR, giọng văn với người liên quan, template giao việc, và bản đồ load skill AA nào khi nào. Dùng khi bắt đầu một việc AA_Ecosys chưa rõ skill nào, khi cần luật cứng / AWS account / Bedrock satellite / quyết định kiến trúc hay ADR, khi review tiếng Anh hoặc soạn tin Zalo/email cho người ngoài nhóm kỹ thuật (comment Jira thuộc aa-jira-update), hoặc khi viết prompt giao việc cho Claude Code/Kiro.
+description: Nền tảng làm việc với Nghiệp trên chương trình AA_Ecosys (AA-CIS, TripPlanner, AA-Booking, AA-Partner trên AWS acc2) — luật cứng, phân công công cụ (Chat / Claude Code / Kiro, điều phối / subagent), nguồn sự thật, AWS account và profile, cách viết ADR, giọng văn với người liên quan, template giao việc, và bản đồ load skill AA nào khi nào. Dùng khi bắt đầu một việc AA_Ecosys chưa rõ skill nào, khi cần luật cứng / AWS account / Bedrock satellite / quyết định kiến trúc hay ADR, khi review tiếng Anh hoặc soạn tin Zalo/email cho người ngoài nhóm kỹ thuật hay tin cho đại lý/reseller AWS (comment Jira thuộc aa-jira-update), hoặc khi viết prompt giao việc cho Claude Code/Kiro.
 ---
 
 # ai-nghiep — làm việc với Nghiệp (AA_Ecosys)
@@ -102,7 +102,7 @@ Khi hai nguồn lệch nhau: repo > Notion trang canonical > memory > skill. Bá
 
 - `references/aws.md` — account map, profile, runtime acc2, LLM routing, môi trường chạy liên tục, CLI / ECS exec / Terraform
 - `references/adr.md` — khi nào viết ADR, đặt ở repo nào, đánh số, format, các quyết định đã khoá
-- `references/stakeholders-english.md` — người liên quan, giọng văn theo người đọc, review tiếng Anh
+- `references/stakeholders-english.md` — người liên quan, giọng văn theo người đọc, tin cho đại lý/nhà cung cấp (checklist câu hỏi AWS/Bedrock), review tiếng Anh
 - `references/handoff-prompt.md` — template giao việc cho Claude Code/Kiro
 
 ## Bảo trì skill này
