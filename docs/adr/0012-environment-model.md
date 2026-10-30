@@ -4,6 +4,9 @@
   starts only when a go-live date is set (D-16). Proposed 2026-10-28 (S256), drafted ahead of the prod blueprint so
   that CRM Go-real (AA-980) and the other prod-bound work can plan against it. Decisions 1–12 are in force; nothing
   in them is built yet.
+- **Superseded in part (proposed):** [ADR 0018](0018-lean-aws-account-model.md) (Proposed 2026-10-30, S259) would
+  supersede decisions 1, 2 and 5 (prod in its own account, two environments, one root per account); until it is
+  accepted, this ADR stands as written.
 - **Reserving issue:** AA-880 (number 0012 was reserved for it in the ADR index, AA-928).
 - **Scope:** AA-CIS-Infra (Terraform layout, state, GitHub environments, OIDC roles, DB Migrate `environment`
   input), every app repo (Deploy Prod workflow, environment-scoped configuration, Vercel prod projects), root (data
