@@ -1,6 +1,6 @@
 ---
 name: aa-ui-verify
-description: Kiểm tra giao diện trước khi báo xong — admin AA-CIS (frontend/), tenant portal / Content studio (AA-Partner portal/) và CRM web (AA-Partner web/), Next.js với UI kit app/_kit — build, Vercel preview, UI smoke, mở trang bằng browser, screenshot desktop/mobile/light/dark, console và network lỗi, dữ liệu thật, tuân thủ kit. Dùng mỗi khi sửa hoặc thêm trang, component, bảng, drawer, khi rà ảnh toàn portal, hoặc khi Nghiệp báo "UI không hiện / sai". Merge, deploy backend và đánh Done thuộc aa-ship.
+description: Kiểm tra giao diện trước khi báo xong — admin AA-CIS (frontend/), tenant portal / Content studio (AA-Partner portal/) và CRM web (AA-Partner web/), Next.js với UI kit app/_kit — build, Vercel preview, UI smoke, mở trang bằng browser, screenshot desktop/mobile/light/dark, console và network lỗi, dữ liệu thật, tuân thủ kit. Dùng mỗi khi sửa hoặc thêm trang, component, bảng, drawer, khi rà ảnh toàn portal, hoặc khi Nghiệp báo "UI không hiện / sai". Merge, deploy backend và đánh Done thuộc aa-ship. Video UAT / video giới thiệu thuộc aa-uat-video.
 ---
 
 # aa-ui-verify
@@ -99,7 +99,9 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
    - Network: API của trang 2xx. Có 401/403/500 → đọc response body, đừng đoán (500 thật từng bị tưởng là 401).
    - Dữ liệu: bảng có dòng thật, hoặc đúng empty state. Số đếm khớp với query DB. Dữ liệu > 1 trang → đổi page size,
      sang trang 2, đếm option filter.
-   - Mobile 390px: không tràn ngang (`scrollWidth <= clientWidth` của cả trang lẫn khung cuộn chứa bảng).
+   - Mobile 390px: không tràn ngang (`scrollWidth <= clientWidth` của cả trang lẫn khung cuộn chứa bảng). Shell admin
+     và CRM cuộn trong `main`: đo trên `main`, không chỉ trên document — document = viewport vẫn có thể giấu một tab
+     rộng hơn `main` (S260 F3). Portal: §3b.
    - Hành động chính (nút, filter, drawer, bulk) bấm được và có tác dụng; sau thao tác, chờ trạng thái server (đọc lại
      API hoặc phần tử đích), không chờ chữ thông báo tạm.
 5. Nút hay panel phụ thuộc trạng thái (ví dụ Live view chỉ hiện với job do trang tự kích) → thử cả trạng thái có và không.
@@ -139,6 +141,9 @@ UI verify <trang> — <PR #n>, deploy <xanh / READY>
 - Đã thử: <hành động>
 - Còn thiếu / ngoài phạm vi: <…>
 ```
+
+Lane bằng chứng live nhiều mục (mỗi mục = issue + PR, PASS/FAIL từng mục con, findings F1..Fn) → khung và luật ở
+`references/evidence-report.md`.
 
 Không có ảnh hoặc chưa mở được trang → không báo "xong"; nói rõ còn thiếu bước nào. Câu "chạy được" chỉ cho đúng kênh/
 vai đã thử thật, có ảnh.
