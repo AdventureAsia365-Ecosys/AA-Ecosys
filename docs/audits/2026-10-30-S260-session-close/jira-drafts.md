@@ -12,7 +12,7 @@ review_every_days: 30
 related: [AA-952, AA-994, AA-997, AA-955, AA-967, AA-961, AA-855]
 ---
 
-# S260 — nháp Jira (chờ duyệt, CHƯA đăng)
+# S260 — nháp Jira (đã duyệt + đăng 30/10/2026 ~22:50)
 
 Soạn 30/10/2026 ~20:30 +07, cập nhật ~22:30 (PR-26 thêm ký điện tử, dữ liệu, lịch theo bằng chứng mục 5, 6, 8; PR-24 thêm sửa bản đồ). Gộp nháp S258 + S259 (tech lead bảo gom sang S260) với việc S260: mỗi issue Jira đúng
 **một** nháp. Đã đọc comment mới nhất của PR-22…PR-26 trên Jira (connector Atlassian chạy được, 30/10 ~20:20) để không
@@ -331,12 +331,21 @@ Ghi chú cho tech lead (chọn trước khi đăng):
 
 ## Placeholder còn mở
 
-- `<LINK DRIVE>` ở PR-24 (gói video giới thiệu TripPlanner): gói đã lên thư mục Drive; link nằm trong tin nhắn cuối
-  phiên S260 (link: see session message), không ghi vào repo vì repo gốc còn public tới tháng 11. Thay vào nháp lúc
-  đăng.
+- `<LINK DRIVE>` ở PR-24: đã thay bằng link thư mục Drive lúc đăng (link nằm trong comment Jira, không ghi vào repo
+  vì repo gốc còn public tới tháng 11).
 - PR-26: dòng ký điện tử đã điền theo proof live PASS (bằng chứng mục 5), không còn placeholder.
 
 ## Kết quả đăng
 
-**Chưa đăng.** Chờ tech lead duyệt nguyên văn trong tin nhắn cuối phiên S260. Sau khi đăng: ghi comment id / link vào
-đây và vào log phiên.
+Tech lead duyệt "ok đăng hết" (30/10 ~22:45), theo đề xuất ở 3 chỗ chọn: giữ câu "3–5 ngày làm việc" (PR-22), giữ đoạn
+trình lên lịch (PR-24), **bỏ ảnh 10** lịch tháng 11 của PR-26 (chụp trước bản sửa giờ) và bỏ câu nhắc ảnh 10 trong thân.
+Thân đăng = nguyên văn nháp ở trên trừ các chỗ đó.
+
+| Issue | Comment id | Ảnh nhúng | Link |
+|---|---|---|---|
+| PR-25 Booking | 10563 | 3 | https://adventure-asia.atlassian.net/browse/PR-25?focusedCommentId=10563 |
+| PR-26 CRM | 10564 | 9 (ảnh 1–9) | https://adventure-asia.atlassian.net/browse/PR-26?focusedCommentId=10564 |
+| PR-24 TripPlanner | 10565 | 0 (link Drive) | https://adventure-asia.atlassian.net/browse/PR-24?focusedCommentId=10565 |
+| PR-22 CIS | 10566 | 0 | https://adventure-asia.atlassian.net/browse/PR-22?focusedCommentId=10566 |
+
+Ảnh đăng nằm trong `evidence/` cạnh file này (cùng tên đăng).

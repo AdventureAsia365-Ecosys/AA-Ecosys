@@ -71,7 +71,8 @@ Geoapify: chuỗi relocate theo credit ngày miễn phí. AWS: không thêm dị
 ## Jira
 
 Nháp gộp S258 + S259 + S260: `docs/audits/2026-10-30-S260-session-close/jira-drafts.md` (PR-25 Booking, PR-26 CRM,
-PR-24 TripPlanner kèm link Drive video, PR-22 CIS) — **chờ tech lead duyệt** lúc chốt phiên.
+PR-24 TripPlanner kèm link Drive video, PR-22 CIS) — tech lead duyệt ~22:45, **đã đăng** 4 comment: PR-25 #10563 (3 ảnh),
+PR-26 #10564 (9 ảnh; bỏ ảnh lịch chụp trước bản sửa giờ), PR-24 #10565, PR-22 #10566.
 
 ## Việc cần làm đầu phiên sau (S261)
 
