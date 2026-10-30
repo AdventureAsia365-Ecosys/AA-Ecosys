@@ -92,3 +92,4 @@ Nhật ký từng phiên làm việc (Kiro / Claude Code / phiên khác) để b
 | 2026-09-15 | AA-Ecosys restructure (đổi tên org, gom multi-repo, OIDC transitional) | [2026-09-15-aa-ecosys-restructure.md](2026-09-15-aa-ecosys-restructure.md) |
 
 <!-- Thêm dòng mới lên đầu bảng cho mỗi phiên. -->
+- [2026-10-30 S258](2026-10-30-S258-aws-blueprint-report-catalog-auto-apply-llm-gateway.md) — Claude Code: quy hoạch AWS gọn (AA-1002/1004), danh mục 63 báo cáo (AA-1001 Done) + R0–R2 (AA-1003), migration tự áp lần đầu (bk-034, 305), LLM gateway S1/S2, ảnh bìa 302→444, LCP Bhutan 2,49 s, mốc C-M2/C-M3/P-M1. Jira: nháp PR-22/24/26 gom sang S259.

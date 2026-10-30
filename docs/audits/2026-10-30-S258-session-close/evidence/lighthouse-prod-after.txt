@@ -1,0 +1,5 @@
+Lighthouse 12.6.1 mobile (default emulation, simulated throttling), production https://aa-tripplanner.vercel.app, 5 runs per page, 30/10/2026 ~00:35 +07, after TripPlanner #188 (25e80647).
+page           runs  perf  LCP s  FCP s  TBT ms    CLS  LCP runs (s)
+bhutan            5    97   2.49   1.18      22  0.002  [2.78, 2.49, 1.82, 1.74, 2.78]  (before S258: 3.95 s)
+destinations      5    99   1.38   0.93      18  0.000  [1.38, 1.44, 1.38, 1.37, 1.6]   (before S258: 2.46 s)
+LCP element: bhutan img.tp-hero-img (960 w webp, 108 KB); destinations img.tp-lift-img (600 w webp, 41 KB).

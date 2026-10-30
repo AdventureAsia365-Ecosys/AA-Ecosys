@@ -181,6 +181,13 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - **Push sau rebase phải nối bằng `&&` và kiểm `git status` sạch (không còn rebase dở)** — S257 push nhánh giữa lúc rebase còn xung đột, chỉ commit đầu lên GitHub (S257, CIS #1144). Bắt bằng: `git rebase origin/main && git status --porcelain=v2 --branch` rồi mới push; ứng viên guard: helper push từ chối khi có `.git/rebase-merge`.
 - **So `calls` của `pg_stat_statements` giữa hai lần rà C4.3 trước khi kết luận xu hướng** — số liệu cộng dồn từ `stats_reset`; hai lần "trượt liên tiếp" có thể là cùng một số cũ (stats_reset 07/10, calls 4.140 → 4.141) (S257, C4.3 W44). Bắt bằng: ghi `stats_reset` + `calls` trong đoạn C4.3 của log phiên; câu trượt chỉ tính khi `calls` tăng đáng kể.
 
+- **Workflow gọi workflow (reusable) không tự nhận secret của environment ở job được gọi** — probe sau tự áp chạy không có `role-to-assume`, đỏ ở bước OIDC → nguyên nhân: thiếu `secrets: inherit` ở job gọi (S258, AA-993 Infra #507). Bắt bằng: bước "Role secret present" trong db-isolation-probe.yml.
+- **Test giả định trạng thái tạm thời ("chưa có copy nào mang header X") sẽ đỏ đúng lúc tính năng chạy thật** — copy expand đầu tiên (bk-034) chặn PR bot (S258, Infra #503). Bắt bằng: test kiểm điều kiện thật, không kiểm "chưa ai dùng".
+- **Bot đọc check run theo tên phải lấy lần MỚI NHẤT** — gitleaks huỷ + gitleaks xanh trên cùng commit làm `merge-check` từ chối copy tp-022 (S258, #510). Bắt bằng: (cần sửa `db/migration_sync.py merge-check`).
+- **Migration tách PR riêng thì test của migration phải đi cùng PR đó, và không import code của PR sau** — #1163 rơi khỏi merge queue 2 lần (S258, AA-1002).
+- **Cổng deploy (schema-gate) chặn mọi deploy khi lần tự áp gần nhất đỏ probe; chạy lại run cũ dùng workflow cũ** — cần một lần tự áp expand mới xanh (S258, AA-993).
+- **Kiểm "trang đọc được không" phải không theo redirect** — `curl -L` theo 302 sang vercel.com/sso-api đọc 200, Visual chụp 40 ảnh trang đăng nhập (S258, TP #189).
+
 ## Pipeline và chất lượng
 - **Script adhoc chạy lâu (>5′) không chạy trong task api/worker khi còn PR backend chờ merge** — S234 replay F9 v2 chạy `nohup` trong task api, deploy #687/#688 thay task → chết giữa chừng 2 lần, phí ≈ $0,37 (335 lời gọi cho 172 lời gọi cần). `ecs execute-command` chạy nền (không TTY) cũng tự ngắt ("Cannot perform start session: EOF"). Bắt bằng: chạy adhoc dài bằng one-off ECS task (`run-task`, như DB Migrate) hoặc merge xong hết rồi mới chạy; script ghi kết quả ra S3 + có trần chi phí.
 - **Chọn model cho bước enrichment phải A/B cả hãng khác, không dừng ở model rẻ nhất cùng hãng** — S234 place card: Haiku trượt (24/28 identity, 23 fact sai), định giữ Sonnet; Nghiệp hỏi "chưa thử Luna à" → gpt-5.6-luna 27/27, 2 sai, rẻ hơn Sonnet ≈12×. Soạn/kiểm khác hãng → cả hai stage là `validate` (ADR 0008), đổi hãng phải qua migration (admin PATCH chặn đổi vendor). Bắt bằng: A/B mọi tier rẻ có trong catalog trước khi kết luận.
@@ -279,6 +286,9 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - Ảnh catalog trùng nội dung nhưng khác id (mỗi thư mục tour trên Drive một bản; Dev: 2.629 dòng matched, 1.120 sha256) — triệu chứng: luật bỏ ảnh trùng theo URL của TripPlanner không bắt được, một ảnh Bhutan hiện 4 lần (S253, AA-995) → nguyên nhân: so sánh theo URL/id thay vì nội dung. Bắt bằng: dedupe theo `place_photo.sha256` (mig 290 đưa `path` về dòng chuẩn).
 - Migration của app (Booking/CIS/CRM) phải qua lint của Infra (`db/run_migration.py`, luật X1) TRƯỚC khi merge PR migration ở repo app — triệu chứng: bk-028 đã merge ở Booking (#111) nhưng PR copy Infra #441 đỏ "DEFERRABLE / INITIALLY DEFERRED constraint trigger fires at COMMIT" → phải sửa lại migration đã merge (S253, AA-682) → nguyên nhân: CI của repo app không chạy lint của DB Migrate. Bắt bằng: chạy `--inspect`/lint của Infra trên file migration trong worktree trước khi mở PR migration; về lâu dài cho CI repo app gọi lint đó.
 - **Đếm dữ liệu nguồn trước khi xây đường đọc dự phòng** — fallback ảnh bìa pool (CIS #1131) dựa vào `shared.v_destination_photos` nhưng view 0 dòng vì 0/3.232 `shared.place_photo` có `destination_id` → deploy xong vẫn 162/892 tour có ảnh bìa (S257, AA-671 follow-up; sửa bằng job khớp ảnh ↔ điểm đến, mig 303 + CIS #1144). Bắt bằng: brief/PR có đường đọc mới kèm một câu đếm (count của view/bảng dự phòng) trước khi code.
+
+- **Dump toạ độ ít chữ số hơn DB thì so tuyến phải có dung sai** — 130/281 "lệch" chỉ do làm tròn 6 vs 7 chữ số (S258, AA-997 p4_tune).
+- **Repo public: chuỗi mẫu trong test cũng không được có 12 chữ số dạng account** (`000000000000` bị guard chặn 2 lần) — dùng `<account>` (S258, CIS #1148, #1159).
 
 ## Frontend
 
