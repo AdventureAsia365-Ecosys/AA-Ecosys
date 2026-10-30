@@ -54,7 +54,7 @@ thoại), header Given/When/Then, danh sách `steps`.
 - **Giọng của chính người đọc:** chỉ khi người đó đồng ý (ghi rõ trong báo cáo phiên), mẫu ≤ 8 s; hướng dẫn thu và
   script: `tools/uat/own-voice/README.vi.md` + `clone.py`.
 - **Chỉ TTS miễn phí chạy local.** Giọng chưa đủ hay → thử model mã nguồn mở khác. Piper `vi_VN-vais1000` (giọng Bắc)
-  đã bị loại. Dịch vụ TTS trả tiền nằm ngoài phạm vi (luật dịch vụ trả tiền: `ai-nghiep` §2).
+  đã bị loại. Dịch vụ TTS trả tiền nằm ngoài phạm vi (luật dịch vụ trả tiền: `aa-lessons/lessons.md` mục Cách làm việc).
 - **Luật giấy phép:** code, trọng số và giọng preset đều phải cho phép dùng thương mại. Danh sách đã loại (NC / CPML /
   không rõ) và cách kiểm một model mới: `references/voices-licences.md` — đọc trước khi thêm giọng.
 

@@ -10,8 +10,8 @@ applies_to: [aa-cis-worker, aa-cis-api, tripplanner-lambda]
 last_reviewed: 2026-10-30
 review_every_days: 90
 last_tested: 2026-10-30
-tested_where: dev-acc3 (real incident, 29-30/10/2026)
-tested_evidence: docs/ops/postmortems/2026-10-29-acc3-bedrock-access-refusal.md; S260 session log docs/sessions/2026-10-30-S260-*.md (probes with tools/llm/llm_last_ok.py and tools/llm/llm_connections_probe.py)
+tested_where: incident
+tested_evidence: real incident on the LLM account 29-30/10/2026; docs/ops/postmortems/2026-10-29-acc3-bedrock-access-refusal.md; probes with tools/llm/llm_last_ok.py and tools/llm/llm_connections_probe.py
 related: [OPS-04, OPS-04-llm-cost-spike, OPS-04-pm-2026-10-29-acc3-bedrock-access, APP-06-anthropic-key, OPS-05-ecs-exec, AA-900, AA-1002, AA-1003]
 ---
 
@@ -81,7 +81,7 @@ log.
 
 9. **AWS Support case.** Basic support can open an **Account and billing** case (no paid plan needed). Text:
 
-   ```
+   ```text
    Subject: Bedrock refuses all model access on account <account-id> since <first-refusal-time UTC>
 
    Since <first-refusal-time UTC>, every Bedrock Runtime call from account <account-id> in <region> fails with

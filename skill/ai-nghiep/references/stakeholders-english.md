@@ -50,7 +50,7 @@ Checklist câu hỏi chuẩn cho đại lý AWS / Bedrock (mỗi ý một câu, 
 
 Bộ câu hỏi đầy đủ + nghiên cứu đối tác: `docs/audits/2026-10-29-S257-llm-access-options/angle1-aws-partners-vn.md` §5.
 Mẫu đã gửi (Sunny Cloud, S260): bản nháp lưu trong `docs/audits/2026-10-30-S260-session-close/`. Comment Jira:
-`aa-jira-update`. Dịch vụ AWS trả phí mới: `aa-lessons/lessons.md` mục Vận hành.
+`aa-jira-update`. Dịch vụ AWS trả phí mới: `aa-lessons/lessons.md` mục Cách làm việc.
 
 ## Review tiếng Anh (khi Nghiệp viết English)
 
