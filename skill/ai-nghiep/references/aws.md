@@ -42,6 +42,7 @@ Vendor rule: stage **writer** chạy Anthropic, stage **judge** chạy vendor kh
 stage **validate** (trích xuất / kiểm mà judge không chấm) được dùng bất kỳ model nào trong catalog (CIS ADR 0008).
 Đọc route thật trong DB, không ghi model vào skill (đổi theo A/B). Script adhoc gọi LLM phải qua `LLMClient` và ghi
 `shared.llm_call_log` (steering `session-workflow.md`).
+LLM bị từ chối (`llm_access_denied`, "Error 002") → playbook `docs/ops/playbooks/llm-access-denied.md` (tìm nguyên nhân cấp account trước).
 
 ## Môi trường — CHẠY LIÊN TỤC
 
