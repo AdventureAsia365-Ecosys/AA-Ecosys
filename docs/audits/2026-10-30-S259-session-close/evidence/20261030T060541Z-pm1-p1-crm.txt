@@ -1,0 +1,5 @@
+ecsx: script shipped through a presigned S3 URL
+ecsx: run id 20261030T060544-3064331-pm1_p1_crm_ecs
+{"feed_state": {"has_cursor": "True", "last_ok_at": "2026-10-30 06:06:00.390003+00:00", "last_error_class": "cis_timeout", "failures": "0"}}
+{"tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146", "events": [{"event_id": "cd9e03b8-bce9-4c93-9ead-f456af3934ff", "in_inbox": true, "event_type": "membership.role_changed", "outcome": "ignored", "reason_code": "informational", "lag_s": 4.7, "within_1_min": true}, {"event_id": "be0f2b03-ceeb-4457-aaa6-145ac00e483f", "in_inbox": true, "event_type": "membership.role_changed", "outcome": "ignored", "reason_code": "informational", "lag_s": 37.9, "within_1_min": true}], "crm_role_of_that_person": "not a CRM member", "ok": true}
+ecsx: rc=0 bytes=673

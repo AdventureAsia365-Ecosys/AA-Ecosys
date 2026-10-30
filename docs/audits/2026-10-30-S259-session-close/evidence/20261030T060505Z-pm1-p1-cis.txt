@@ -1,0 +1,5 @@
+ecsx: started (session output not seen, normal when SSM drops it); waiting for the result
+{"recovery": "tools/ecs/ecsx.sh .tmp-session/S259/pm1/pm1_p1_cis_ecs.py MODE=restore MEMBERSHIP_ID=cdc8456f-e2fb-4e48-a2a5-56c4d46e793e ROLE=editor"}
+{"ok": true, "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146", "membership_id": "cdc8456f-e2fb-4e48-a2a5-56c4d46e793e", "fp": "5d7d3fa03692", "role_restored_to": "editor", "events": [{"event_id": "cd9e03b8-bce9-4c93-9ead-f456af3934ff", "type": "membership.role_changed", "occurred_at": "2026-10-30T06:05:17.466701+00:00", "role_to": "owner"}, {"event_id": "be0f2b03-ceeb-4457-aaa6-145ac00e483f", "type": "membership.role_changed", "occurred_at": "2026-10-30T06:05:22.482400+00:00", "role_to": "editor"}]}
+{"next": "ECSX_SERVICE=aa-crm-dev-api tools/ecs/ecsx.sh .tmp-session/S259/pm1/pm1_p1_crm_ecs.py TENANT_ID=9149d3c6-fcaf-4400-8e7a-4ed5e557e146 FP=5d7d3fa03692 EVENTS=cd9e03b8-bce9-4c93-9ead-f456af3934ff@2026-10-30T06:05:17.466701+00:00,be0f2b03-ceeb-4457-aaa6-145ac00e483f@2026-10-30T06:05:22.482400+00:00"}
+ecsx: rc=0 bytes=966

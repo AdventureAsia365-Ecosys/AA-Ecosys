@@ -1,0 +1,313 @@
+{
+  "proof": "cm3-confirm",
+  "started_at": "20261030T043644Z",
+  "steps": [
+    {
+      "label": "who am I",
+      "method": "GET",
+      "path": "/crm/v1/me",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "inquiry form",
+      "method": "POST",
+      "path": "/crm/public/v1/forms/cSyR3Pp6y9euRM-mX2yifw/submissions",
+      "status": 202,
+      "detail": null
+    },
+    {
+      "label": "trip at Inquiry",
+      "method": "GET",
+      "path": "/crm/v1/trips/9ea4f816-d128-460e-a225-487e1079d5ac",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "take the trip",
+      "method": "POST",
+      "path": "/crm/v1/trips/9ea4f816-d128-460e-a225-487e1079d5ac/owner",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "dates",
+      "method": "PATCH",
+      "path": "/crm/v1/trips/9ea4f816-d128-460e-a225-487e1079d5ac",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "to Qualifying",
+      "method": "POST",
+      "path": "/crm/v1/trips/9ea4f816-d128-460e-a225-487e1079d5ac/stage",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "to Proposal (Stage 2 by phone)",
+      "method": "POST",
+      "path": "/crm/v1/trips/9ea4f816-d128-460e-a225-487e1079d5ac/stage",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "start the builder",
+      "method": "POST",
+      "path": "/crm/v1/trips/9ea4f816-d128-460e-a225-487e1079d5ac/builder",
+      "status": 201,
+      "detail": null
+    },
+    {
+      "label": "settings",
+      "method": "PATCH",
+      "path": "/crm/v1/proposals/b487b438-7c37-4db7-ab4d-bda7f1ed6d21/builder",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "agency lodging option",
+      "method": "POST",
+      "path": "/crm/v1/proposals/b487b438-7c37-4db7-ab4d-bda7f1ed6d21/blocks/c69a6c9d-30ea-42c9-9cde-568e51906b90/options",
+      "status": 201,
+      "detail": null
+    },
+    {
+      "label": "AA product",
+      "method": "GET",
+      "path": "/crm/v1/aa/products/000e3340-d9f5-4b7b-8609-4cdaa9c272dc?currency=USD",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "a day tour block",
+      "method": "POST",
+      "path": "/crm/v1/proposals/b487b438-7c37-4db7-ab4d-bda7f1ed6d21/days/e0ab4a9a-d726-4a26-8ec9-8c86416fb136/blocks",
+      "status": 201,
+      "detail": null
+    },
+    {
+      "label": "AA option from a live quote",
+      "method": "POST",
+      "path": "/crm/v1/proposals/b487b438-7c37-4db7-ab4d-bda7f1ed6d21/blocks/a6bda630-6e74-4b81-bd1f-116d9dba0899/aa-options",
+      "status": 201,
+      "detail": null
+    },
+    {
+      "label": "publish v1",
+      "method": "POST",
+      "path": "/crm/v1/proposals/b487b438-7c37-4db7-ab4d-bda7f1ed6d21/publish",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "send to the client",
+      "method": "POST",
+      "path": "/crm/v1/proposals/b487b438-7c37-4db7-ab4d-bda7f1ed6d21/send",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "client opens the proposal",
+      "method": "GET",
+      "path": "/crm/public/v1/proposal",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "client: check availability (hold)",
+      "method": "POST",
+      "path": "/crm/public/v1/proposal/hold",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "client re-reads the page",
+      "method": "GET",
+      "path": "/crm/public/v1/proposal",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "client accepts",
+      "method": "POST",
+      "path": "/crm/public/v1/proposal/accept",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "agency: the trip's AA lines after the accept (poll 1)",
+      "method": "GET",
+      "path": "/crm/v1/trips/9ea4f816-d128-460e-a225-487e1079d5ac/lines",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "agency: the trip's AA lines after the accept (poll 2)",
+      "method": "GET",
+      "path": "/crm/v1/trips/9ea4f816-d128-460e-a225-487e1079d5ac/lines",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "agency: the trip's payment schedule",
+      "method": "GET",
+      "path": "/crm/v1/trips/9ea4f816-d128-460e-a225-487e1079d5ac/lifecycle",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "agent: mark the deposit received (bank transfer)",
+      "method": "POST",
+      "path": "/crm/v1/schedule/261590a1-6832-4d47-822d-229945f31d6b/mark-paid",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "agency: the AA lines after the deposit (poll 1)",
+      "method": "GET",
+      "path": "/crm/v1/trips/9ea4f816-d128-460e-a225-487e1079d5ac/lines",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "agency: the AA lines after the deposit (poll 2)",
+      "method": "GET",
+      "path": "/crm/v1/trips/9ea4f816-d128-460e-a225-487e1079d5ac/lines",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "agency: the trip after the confirm",
+      "method": "GET",
+      "path": "/crm/v1/trips/9ea4f816-d128-460e-a225-487e1079d5ac/lifecycle",
+      "status": 200,
+      "detail": null
+    }
+  ],
+  "checks": [
+    {
+      "check": "the inquiry is received (202)",
+      "ok": true,
+      "status": 202
+    },
+    {
+      "check": "the inquiry becomes a card on the board",
+      "ok": true,
+      "waited_s": 7
+    },
+    {
+      "check": "the trip starts at Inquiry",
+      "ok": true,
+      "stage": "inquiry"
+    },
+    {
+      "check": "the AA product has a trip plan component",
+      "ok": true
+    },
+    {
+      "check": "quoted: the AA option carries Booking's live net (owner view)",
+      "ok": true,
+      "net_amount": "158.54",
+      "availability": "on_request"
+    },
+    {
+      "check": "the version is published",
+      "ok": true,
+      "status": "published"
+    },
+    {
+      "check": "before the check the hold box asks for it",
+      "ok": true,
+      "hold": "missing"
+    },
+    {
+      "check": "held: Booking holds the AA item for the client",
+      "ok": true,
+      "status": 200,
+      "hold": "active",
+      "expires_at": "2026-11-01T04:37:10.051208+00:00"
+    },
+    {
+      "check": "accepted with the hold in place",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "check": "the sync wrote the AA lines of the accepted hold set (held, one hold)",
+      "ok": true,
+      "lines": 1,
+      "sub_status": [
+        "held"
+      ],
+      "hold_id": "c7ae4ed9-0a57-44d5-988e-168865f44abd"
+    },
+    {
+      "check": "owner view: each AA line carries Booking's net (cost) and the agency's sell",
+      "ok": true,
+      "costs": [
+        "158.54"
+      ],
+      "fx": [
+        "aa_quote_lock"
+      ]
+    },
+    {
+      "check": "the AA lines are read-only for the agency",
+      "ok": true
+    },
+    {
+      "check": "a due deposit row of the accepted proposal",
+      "ok": true,
+      "deposit": {
+        "schedule_id": "261590a1-6832-4d47-822d-229945f31d6b",
+        "proposal_id": "b487b438-7c37-4db7-ab4d-bda7f1ed6d21",
+        "kind": "deposit",
+        "amount": "540.00",
+        "currency": "USD",
+        "due_on": "2026-10-30",
+        "status": "due",
+        "paid_at": null
+      }
+    },
+    {
+      "check": "the deposit moves the trip to Booked",
+      "ok": true,
+      "trip_moved": {
+        "from_stage": "proposal",
+        "stage": "booked",
+        "waiting_on": "aa"
+      }
+    },
+    {
+      "check": "Booking confirmed the set: every AA line confirmed (or on request) under one Booking booking",
+      "ok": true,
+      "status": [
+        "planning"
+      ],
+      "sub_status": [
+        "on_request"
+      ],
+      "result_code": [
+        null
+      ],
+      "booking_id": "963177e5-d188-4746-abdf-57a70cd5930b"
+    },
+    {
+      "check": "the trip stays Booked (no stage regression)",
+      "ok": true,
+      "stage": "booked"
+    }
+  ],
+  "run": "1030043644",
+  "tenant_id": "bab16039-a064-517f-a99f-172b729ad3c4",
+  "partner": "https://portal.lumiguides.it.com",
+  "client": "https://go-dev.lumiguides.it.com",
+  "passed": true,
+  "trip_id": "9ea4f816-d128-460e-a225-487e1079d5ac",
+  "proposal_id": "b487b438-7c37-4db7-ab4d-bda7f1ed6d21",
+  "hold_id": "c7ae4ed9-0a57-44d5-988e-168865f44abd",
+  "booking_id": "963177e5-d188-4746-abdf-57a70cd5930b",
+  "finished_at": "20261030T043745Z"
+}
