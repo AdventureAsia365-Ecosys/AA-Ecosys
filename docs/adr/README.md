@@ -31,7 +31,7 @@ An amendment is a separate file `<nnnn>a-<slug>.md` and the amended ADR carries 
 | [0014](0014-repo-visibility-and-github-plan.md) | Repo visibility and GitHub plan: app repos public, root and Infra private, GitHub Free | Proposed (amended S247: root + Infra public for now; S248: switch precondition, AA-981) |
 | [0015](0015-tour-liveness-and-retirement-propagation.md) | Tour liveness and retirement propagation: one CIS-owned served state per catalog key, one write service, a tombstone/outbox for the other apps (AA-986; design: [S248 audit memo](../audits/2026-10-23-S248-tour-deletion-propagation/memo.md)) | Accepted (Q1–Q10 decided S248; Q11 proposed) |
 | [0016](0016-one-design-system-guarded-kit-copies.md) | One design system for the ecosystem frontends: a canonical kit core in AA-CIS-App, guarded byte copies, one token set for all five apps (AA-994; closes AA-655) | Accepted |
-| [0017](0017-migrations-in-app-pr-expand-auto-apply.md) | Migrations ship in the app PR; expand files are auto-applied on Dev by an Infra pipeline before deploy (AA-993 D2; design: [S252 audit](../audits/2026-10-26-S252-aa993-delivery-pipeline/design.md)) | Proposed |
+| [0017](0017-migrations-in-app-pr-expand-auto-apply.md) | Migrations ship in the app PR; expand files are auto-applied on Dev by an Infra pipeline before deploy (AA-993 D2; design: [S252 audit](../audits/2026-10-26-S252-aa993-delivery-pipeline/design.md)) | Accepted (S259) |
 | [0018](0018-lean-aws-account-model.md) | Lean AWS account model: an AA-owned organization (management account), prod in its own account, two environments; supersedes ADR 0012 decisions 1, 2 and 5 on acceptance (AA-1004; design: [S258 blueprint](../audits/2026-10-29-S258-aws-org-blueprint/README.md) §0) | Proposed |
 
 ## Numbering
