@@ -38,6 +38,7 @@ Tái cấu trúc lần đầu ở AA-733 (S215, 06/10/2026); rà soát toàn b�
 | `aa-ecosys-repos` §6–7 pipeline, gates | `references/pipeline.md` |
 | `aa-ecosys-repos` §8–9 chưa xác nhận, dọn dẹp 27/08 | **xoá** (lịch sử) |
 | — | Mới: `aa-ship`, `aa-ui-verify`, `aa-linear-issue`, `aa-jira-update`, `aa-wave-rerun` |
+| pilot quay video `.tmp-session/S260/uat/` | Mới: `aa-uat-video` (S260); script → `tools/uat/` |
 
 ## Cấu trúc
 
@@ -50,6 +51,7 @@ aa-ui-verify/     SKILL.md + references/evidence-report.md
 aa-linear-issue/  SKILL.md
 aa-jira-update/   SKILL.md
 aa-wave-rerun/    SKILL.md
+aa-uat-video/     SKILL.md + references/voices-licences.md (script: tools/uat/)
 aa-cis-schema/    SKILL.md + references/{ecs-exec, gotchas, destructive-ops}.md
 aa-ecosys-repos/  SKILL.md + references/{cis-app, pipeline, infra, tripplanner, booking}.md
 ```
@@ -69,5 +71,5 @@ Không có zip gộp: claude.ai chỉ nhận đúng một skill mỗi zip (S247)
 upload từng zip ở claude.ai → Settings → Capabilities → Skills (thay bản cũ cùng tên).
 
 **Đổi tài khoản claude.ai** (S251: tài khoản hiện tại `info@adventure.asia`): skill không theo tài khoản → đóng gói
-**toàn bộ** (`tools/skills/package_skills.sh`, không tham số) sau khi PR skill đã merge vào `master`, rồi upload đủ 10
+**toàn bộ** (`tools/skills/package_skills.sh`, không tham số) sau khi PR skill đã merge vào `master`, rồi upload đủ 11
 zip vào tài khoản mới. Connector (Notion/Linear/Jira) báo lỗi sau khi đổi tài khoản → mở lại phiên Claude Code.
