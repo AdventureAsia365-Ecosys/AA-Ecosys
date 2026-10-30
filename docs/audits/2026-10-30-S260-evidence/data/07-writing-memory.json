@@ -1,0 +1,560 @@
+{
+  "steps": [
+    {
+      "step": "GET /summary",
+      "status": 200,
+      "shape": {
+        "signals": {
+          "total": "number",
+          "writer": {
+            "t2": "number",
+            "a1": "number",
+            "t9_social": "number",
+            "t9_blog": "number"
+          },
+          "scope": {
+            "tenant": "number",
+            "platform": "number"
+          },
+          "fact_status": {
+            "fail": "number",
+            "pass": "number"
+          },
+          "action": {
+            "sentence_cut": "number",
+            "reject": "number",
+            "regenerate": "number",
+            "tenant_edit": "number",
+            "field_edit": "number",
+            "sentence_rewrite": "number",
+            "sentence_manual": "number"
+          },
+          "actor_type": {
+            "admin": "number",
+            "system": "number",
+            "tenant": "number"
+          }
+        },
+        "rules": {
+          "rejected": {
+            "tenant": "number"
+          }
+        },
+        "budget": {
+          "month_cap_usd": "number",
+          "month_spent_usd": "number",
+          "run_cap_usd": "number",
+          "max_calls_per_run": "number"
+        },
+        "mine_trigger": {
+          "auto_refused": "string",
+          "runs_this_month": "number",
+          "auto_runs_this_month": "number",
+          "new_pass": "number",
+          "open_waves": "number",
+          "auto_enabled": "boolean",
+          "last_run_at": "string",
+          "thresholds": {
+            "min_new_pass": "number",
+            "max_auto_runs_per_month": "number",
+            "max_runs_per_month": "number"
+          }
+        },
+        "last_jobs": {
+          "writing_memory_mine": {
+            "job_id": "string",
+            "status": "string",
+            "created_at": "string",
+            "finished_at": "string",
+            "result": "string"
+          },
+          "writing_memory_r0": {
+            "job_id": "string",
+            "status": "string",
+            "created_at": "string",
+            "finished_at": "string",
+            "result": "string"
+          },
+          "writing_signal_backfill": {
+            "job_id": "string",
+            "status": "string",
+            "created_at": "string",
+            "finished_at": "string",
+            "result": "string"
+          },
+          "writing_signal_fact_filter": {
+            "job_id": "string",
+            "status": "string",
+            "created_at": "string",
+            "finished_at": "string",
+            "result": "string"
+          }
+        }
+      },
+      "counts": {}
+    },
+    {
+      "step": "GET /exemplars?limit=200",
+      "status": 200,
+      "shape": {
+        "items": [],
+        "total": "number",
+        "limit": "number",
+        "offset": "number"
+      },
+      "counts": {
+        "items": 0
+      }
+    },
+    {
+      "step": "GET /writers",
+      "status": 200,
+      "shape": {
+        "items": [
+          {
+            "writer": "string",
+            "memory_enabled": "boolean",
+            "train_closed_month": "object",
+            "updated_by": "string",
+            "updated_at": "string"
+          },
+          "\u20264"
+        ]
+      },
+      "counts": {
+        "items": 4
+      }
+    },
+    {
+      "step": "GET /metrics",
+      "status": 200,
+      "shape": {
+        "items": [
+          {
+            "report_id": "string",
+            "week_start": "string",
+            "trigger": "string",
+            "kpis": {
+              "window": "{\u2026}",
+              "missing": "{\u2026}",
+              "writers": "{\u2026}",
+              "learning_spend": "{\u2026}"
+            },
+            "soft_stops": [],
+            "actions": [],
+            "rules": {
+              "expired": [],
+              "reconfirmed": [],
+              "stale_candidates": "number"
+            },
+            "project_stop": {
+              "rule": "string",
+              "flagged": [],
+              "per_writer": "{\u2026}"
+            },
+            "disagreements": "number",
+            "job_id": "string",
+            "created_by": "string",
+            "created_at": "string"
+          },
+          "\u20261"
+        ],
+        "soft_stop_codes": [
+          "string",
+          "\u20265"
+        ]
+      },
+      "counts": {
+        "items": 1,
+        "soft_stop_codes": 5
+      }
+    },
+    {
+      "step": "GET /disagreements?status=open",
+      "status": 200,
+      "shape": {
+        "items": [],
+        "queue_max": "number",
+        "queue_min": "number"
+      },
+      "counts": {
+        "items": 0
+      }
+    },
+    {
+      "step": "GET /exemplars/selection?writer=t2",
+      "status": 200,
+      "shape": {
+        "writer": "string",
+        "scope": "string",
+        "tenant_id": "object",
+        "per_channel": "number",
+        "items": []
+      }
+    },
+    {
+      "step": "versions rows",
+      "n": 50
+    },
+    {
+      "step": "GET tour-versions/{id}/label",
+      "status": 200,
+      "shape": {
+        "subject_type": "string",
+        "subject_id": "string",
+        "status": "string",
+        "labels": [],
+        "mine": "object",
+        "labellable": "boolean",
+        "choices": {
+          "label": [
+            "string",
+            "\u20264"
+          ],
+          "defect_classes": [
+            "string",
+            "\u20264"
+          ],
+          "defect_levels": [
+            "string",
+            "\u20263"
+          ]
+        }
+      },
+      "testid": "cq-subject-label-t2_version"
+    }
+  ],
+  "failing": [],
+  "console": [],
+  "tab_rerun": [
+    {
+      "tab": "Exemplars",
+      "aria_selected": true,
+      "marker": 1
+    },
+    {
+      "file": "07-wm-exemplars-1440-light.png",
+      "side": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      },
+      "still_selected": true
+    },
+    {
+      "file": "07-wm-exemplars-390-light.png",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      },
+      "still_selected": true
+    },
+    {
+      "file": "07-wm-exemplars-1440-dark.png",
+      "side": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      },
+      "still_selected": true
+    },
+    {
+      "file": "07-wm-exemplars-390-dark.png",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      },
+      "still_selected": true
+    },
+    {
+      "tab": "Exemplars",
+      "panel_text": [
+        "SUCCEEDED 26 Oct 2026, 08:23",
+        "Signals",
+        "Candidates",
+        "Releases",
+        "Exemplars",
+        "Metrics",
+        "Guide",
+        "Voice examples for T2 and T9 (never A1). A rules release pins at most two per writer and channel, chosen when it is drafted: pinned ones fir",
+        "Find candidates (dry run)",
+        "ADD CANDIDATES",
+        "Next draft",
+        "Pick a writer and an owner to preview the next draft.",
+        "Every writer",
+        "t2",
+        "t9_blog",
+        "t9_social",
+        "Every status",
+        "candidate",
+        "pinned",
+        "never use",
+        "Owner",
+        "Every owner",
+        "Adventure Asia Internal (aa_internal)",
+        "Atlas & Hearth (atlas-hearth)",
+        "Terra Family Expeditions (terra-family)",
+        "Trail Pulse (trail-pulse)",
+        "WildKind Travel (wildkind-travel)",
+        "Platform",
+        "Columns",
+        "No examples yet"
+      ]
+    },
+    {
+      "tab": "Metrics",
+      "aria_selected": true,
+      "marker": 1
+    },
+    {
+      "file": "07-wm-metrics-1440-light.png",
+      "side": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      },
+      "still_selected": true
+    },
+    {
+      "file": "07-wm-metrics-390-light.png",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      },
+      "still_selected": true
+    },
+    {
+      "file": "07-wm-metrics-1440-dark.png",
+      "side": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      },
+      "still_selected": true
+    },
+    {
+      "file": "07-wm-metrics-390-dark.png",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      },
+      "still_selected": true
+    },
+    {
+      "tab": "Metrics",
+      "panel_text": [
+        "SUCCEEDED 26 Oct 2026, 08:23",
+        "Signals",
+        "Candidates",
+        "Releases",
+        "Exemplars",
+        "Metrics",
+        "Guide",
+        "Measured every Monday for the week before, $0 (no model call). A soft stop takes a release out of service unless someone recorded a reason t",
+        "Measure now (dry run)",
+        "RUN THE WEEKLY JOB NOW",
+        "Week of 2026-10-19",
+        "Learning-loop spend this month",
+        "$1.51",
+        "/ $25.00",
+        "Columns",
+        "a1",
+        "WRITES",
+        "813",
+        "RE-FLAG (95% INTERVAL)",
+        "\u2014",
+        "REPEAT ERRORS",
+        "\u2014",
+        "LIGHT-EDIT SHARE",
+        "\u2014",
+        "MINUTES TO FIX",
+        "\u2014",
+        "TENANT EDITS / WRITE",
+        "\u2014",
+        "REASONS CAPTURED",
+        "0%"
+      ]
+    },
+    {
+      "failing": [],
+      "console": []
+    }
+  ],
+  "overflow_check": {
+    "metrics": {
+      "390": {
+        "main_right": 390,
+        "main_scroll": {
+          "sw": 400,
+          "cw": 390
+        },
+        "scrollers": [
+          {
+            "tag": "SPAN",
+            "cls": "",
+            "sw": 114,
+            "cw": 44,
+            "ox": "hidden"
+          },
+          {
+            "tag": "MAIN",
+            "cls": "aa-admin-main",
+            "sw": 400,
+            "cw": 390,
+            "ox": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "",
+            "sw": 563,
+            "cw": 358,
+            "ox": "auto"
+          }
+        ],
+        "beyond_main": []
+      },
+      "1440": {
+        "main_right": 1440,
+        "main_scroll": {
+          "sw": 1449,
+          "cw": 1204
+        },
+        "scrollers": [
+          {
+            "tag": "MAIN",
+            "cls": "aa-admin-main",
+            "sw": 1449,
+            "cw": 1204,
+            "ox": "auto"
+          }
+        ],
+        "beyond_main": [
+          {
+            "tag": "DIV",
+            "cls": "",
+            "right": 1685,
+            "w": 1413,
+            "text": "Measured every Monday for the week befor"
+          },
+          {
+            "tag": "DIV",
+            "cls": "",
+            "right": 1685,
+            "w": 466,
+            "text": "Measure now (dry run) Run the weekly job"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "aa-kit-btn aa-kit-btn--secondary",
+            "right": 1685,
+            "w": 248,
+            "text": "Run the weekly job now"
+          },
+          {
+            "tag": "svg",
+            "cls": "[object SVGAnimatedString]",
+            "right": 1467,
+            "w": 14,
+            "text": ""
+          },
+          {
+            "tag": "path",
+            "cls": "[object SVGAnimatedString]",
+            "right": 1466,
+            "w": 9,
+            "text": ""
+          },
+          {
+            "tag": "DIV",
+            "cls": "",
+            "right": 1685,
+            "w": 1413,
+            "text": "Week of 2026-10-19"
+          },
+          {
+            "tag": "DIV",
+            "cls": "",
+            "right": 1685,
+            "w": 1413,
+            "text": "Learning-loop spend this month$1.51/ $25"
+          },
+          {
+            "tag": "DIV",
+            "cls": "",
+            "right": 1685,
+            "w": 1413,
+            "text": "Learning-loop spend this month$1.51/ $25"
+          }
+        ]
+      }
+    },
+    "exemplars": {
+      "390": {
+        "main_right": 390,
+        "main_scroll": {
+          "sw": 400,
+          "cw": 390
+        },
+        "scrollers": [
+          {
+            "tag": "SPAN",
+            "cls": "",
+            "sw": 114,
+            "cw": 44,
+            "ox": "hidden"
+          },
+          {
+            "tag": "MAIN",
+            "cls": "aa-admin-main",
+            "sw": 400,
+            "cw": 390,
+            "ox": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "",
+            "sw": 563,
+            "cw": 358,
+            "ox": "auto"
+          },
+          {
+            "tag": "LABEL",
+            "cls": "",
+            "sw": 53,
+            "cw": 1,
+            "ox": "hidden"
+          }
+        ],
+        "beyond_main": [
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "right": 455,
+            "w": 79,
+            "text": "Metrics"
+          },
+          {
+            "tag": "BUTTON",
+            "cls": "",
+            "right": 530,
+            "w": 71,
+            "text": "Guide"
+          }
+        ]
+      },
+      "1440": {
+        "main_right": 1440,
+        "main_scroll": {
+          "sw": 1204,
+          "cw": 1204
+        },
+        "scrollers": [
+          {
+            "tag": "LABEL",
+            "cls": "",
+            "sw": 53,
+            "cw": 1,
+            "ox": "hidden"
+          }
+        ],
+        "beyond_main": []
+      }
+    }
+  }
+}

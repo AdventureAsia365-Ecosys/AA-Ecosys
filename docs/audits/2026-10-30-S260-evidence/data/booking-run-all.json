@@ -1,0 +1,304 @@
+{
+  "started": "2026-10-30T10:48:18.595Z",
+  "steps": [
+    {
+      "step": "staff-me",
+      "status": 200,
+      "role": "admin",
+      "preview_viewer": false
+    },
+    {
+      "step": "versions",
+      "status": 200,
+      "n": 12,
+      "pick": {
+        "code": "TC-000007",
+        "n": 1,
+        "case_status": "discovery"
+      }
+    },
+    {
+      "step": "case-tabs",
+      "code": "TC-000007",
+      "tabs": [
+        {
+          "text": "Overview",
+          "selected": "true"
+        },
+        {
+          "text": "Proposals1",
+          "selected": "false"
+        },
+        {
+          "text": "Suppliers",
+          "selected": "false"
+        },
+        {
+          "text": "Billing",
+          "selected": "false"
+        },
+        {
+          "text": "Checks",
+          "selected": "false"
+        },
+        {
+          "text": "Activity",
+          "selected": "false"
+        }
+      ]
+    },
+    {
+      "step": "case-390",
+      "scheme": "light",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      },
+      "strip": {
+        "scrollWidth": 438,
+        "clientWidth": 334
+      }
+    },
+    {
+      "step": "case-390",
+      "scheme": "dark",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      },
+      "strip": {
+        "scrollWidth": 438,
+        "clientWidth": 334
+      }
+    },
+    {
+      "step": "case-arrow-right",
+      "before": {
+        "text": "Overview",
+        "url": ""
+      },
+      "after": {
+        "text": "Proposals1",
+        "selected": "true",
+        "url": "?tab=proposals"
+      }
+    },
+    {
+      "step": "change-status-menu",
+      "opened": true,
+      "items": [
+        "Building",
+        "Cancel case…"
+      ],
+      "expandedAfterEscape": "false",
+      "closedByEscape": true
+    },
+    {
+      "step": "builder",
+      "code": "TC-000007",
+      "version": 1,
+      "days": 3,
+      "dashed": [
+        "Add item on day 1",
+        "Add item on day 2",
+        "Add item on day 3",
+        "Add another day"
+      ],
+      "itemIcons": 2,
+      "svgInItems": 63
+    },
+    {
+      "step": "builder-390",
+      "scheme": "light",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "builder-390",
+      "scheme": "dark",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "builder-collapse",
+      "day": "Collapse day 1",
+      "ariaExpandedWhenCollapsed": "false",
+      "reExpanded": true
+    },
+    {
+      "step": "settings-390",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "theme-chips",
+      "themes": [
+        {
+          "text": "Light",
+          "checked": "false"
+        },
+        {
+          "text": "Dark",
+          "checked": "false"
+        },
+        {
+          "text": "System",
+          "checked": "true"
+        }
+      ],
+      "startTheme": "System",
+      "afterDark": {
+        "theme": "dark",
+        "cls": ""
+      },
+      "restored": "System"
+    },
+    {
+      "step": "notifications-390",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "notify-switch",
+      "label": "New inquiry",
+      "before": "true",
+      "afterToggle": "true",
+      "afterBack": "true",
+      "write": {
+        "method": "PUT",
+        "path": "/api/booking/staff/me/preferences",
+        "status": 403,
+        "body": {
+          "detail": "e2e_read_only"
+        }
+      },
+      "write2": null,
+      "messages": [
+        "You do not have access to this.",
+        "Settings"
+      ]
+    }
+  ],
+  "console": [
+    {
+      "url": "https://booking.lumiguides.it.com/cases/TC-000007/proposals/1",
+      "text": "Failed to load resource: the server responded with a status of 403 ()"
+    },
+    {
+      "url": "https://booking.lumiguides.it.com/settings",
+      "text": "Failed to load resource: the server responded with a status of 403 ()"
+    }
+  ],
+  "failing": [
+    {
+      "method": "POST",
+      "path": "/api/booking/pricing/quote-preview",
+      "status": 403
+    },
+    {
+      "method": "PUT",
+      "path": "/api/booking/staff/me/preferences",
+      "status": 403
+    }
+  ],
+  "api": [
+    {
+      "method": "GET",
+      "path": "/api/booking/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/booking/settings",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/booking/staff/me",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/booking/versions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/booking/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/booking/trip-cases/TC-000007",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/booking/countries",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/booking/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/booking/trip-cases/TC-000007",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/booking/countries",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/booking/trip-cases/TC-000007/versions/1/items",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/booking/trip-cases/TC-000007",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/booking/notifications",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/booking/pricing/quote-preview",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/booking/settings",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/booking/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/booking/staff/me/preferences",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/api/booking/staff/me/preferences",
+      "status": 403
+    }
+  ]
+}

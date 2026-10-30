@@ -1,0 +1,653 @@
+{
+  "steps": [
+    {
+      "step": "GET data/requests",
+      "status": 200,
+      "keys": [
+        "requests",
+        "kinds",
+        "channels",
+        "outcomes",
+        "default_due_days",
+        "max_due_days",
+        "today"
+      ],
+      "kinds": [
+        "access",
+        "portability",
+        "erasure",
+        "rectification",
+        "restriction",
+        "objection",
+        "other"
+      ],
+      "channels": [
+        "email",
+        "phone",
+        "in_person",
+        "post",
+        "client_portal",
+        "aa_forwarded",
+        "other"
+      ],
+      "default_due_days": 30,
+      "max_due_days": 92,
+      "n": 1
+    },
+    {
+      "step": "log portability request (UI)",
+      "status": "reused (logged at the first try of this run)",
+      "body": {
+        "data_request_id": "<uuid>",
+        "kind": "portability",
+        "channel": "email",
+        "traveler_id": "<uuid>",
+        "received_on": "2026-10-30",
+        "due_on": "2026-11-29",
+        "status": "open",
+        "overdue": false,
+        "max_due_on": "2027-01-30",
+        "outcome": null,
+        "closed_at": null,
+        "erasure_request_id": null,
+        "exports": [],
+        "created_at": "2026-10-30T13:42:50.625412+00:00"
+      }
+    },
+    {
+      "step": "queue one-client export (UI)",
+      "status": 201,
+      "body": {
+        "export_id": "<uuid>",
+        "scope": "traveler",
+        "subject_id": "<uuid>",
+        "status": "queued",
+        "schema_version": 1,
+        "progress": {
+          "done": 0,
+          "total": 0
+        },
+        "rows": 0,
+        "tables": 0,
+        "documents_included": 0,
+        "documents_skipped": 0,
+        "size_bytes": null,
+        "content_sha256": null,
+        "created_at": "2026-10-30T13:43:48.480284+00:00",
+        "completed_at": null,
+        "expires_at": null,
+        "downloaded_at": null,
+        "download_count": 0,
+        "failure_class": null,
+        "data_request_id": "<uuid>"
+      }
+    },
+    {
+      "step": "export progress",
+      "seen": [
+        {
+          "t": 0,
+          "status": "queued",
+          "progress": {
+            "done": 0,
+            "total": 0
+          }
+        },
+        {
+          "t": 5,
+          "status": "ready",
+          "progress": {
+            "done": 24,
+            "total": 24
+          }
+        }
+      ],
+      "final": {
+        "export_id": "<uuid>",
+        "scope": "traveler",
+        "subject_id": "<uuid>",
+        "status": "ready",
+        "schema_version": 1,
+        "progress": {
+          "done": 24,
+          "total": 24
+        },
+        "rows": 41,
+        "tables": 24,
+        "documents_included": 0,
+        "documents_skipped": 0,
+        "size_bytes": 44773,
+        "content_sha256": "4245860da12bf09f990978a6dc02fc200a8a3bc69bcfe4eda70ae794dea08f37",
+        "created_at": "2026-10-30T13:43:48.480284+00:00",
+        "completed_at": "2026-10-30T13:43:49.362553+00:00",
+        "expires_at": "2026-11-06T13:43:49.362553+00:00",
+        "downloaded_at": null,
+        "download_count": 0,
+        "failure_class": null,
+        "data_request_id": "<uuid>"
+      }
+    },
+    {
+      "step": "download via UI",
+      "status": 200
+    },
+    {
+      "step": "zip",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_listed_checksum": false,
+      "starts_PK": false
+    },
+    {
+      "step": "NEG replay the used link",
+      "status": 403,
+      "detail": "link_invalid"
+    },
+    {
+      "step": "NEG a made-up token",
+      "status": 403,
+      "detail": "link_invalid"
+    },
+    {
+      "step": "log erasure request (UI)",
+      "status": 201,
+      "body": {
+        "data_request_id": "<uuid>",
+        "kind": "erasure",
+        "channel": "email",
+        "traveler_id": "<uuid>",
+        "received_on": "2026-10-30",
+        "due_on": "2026-11-29",
+        "status": "open",
+        "overdue": false,
+        "max_due_on": "2027-01-30",
+        "outcome": null,
+        "closed_at": null,
+        "erasure_request_id": null,
+        "exports": [],
+        "created_at": "2026-10-30T13:44:07.491370+00:00"
+      }
+    },
+    {
+      "step": "erasure DRY RUN (UI)",
+      "request_body": {
+        "dry_run": true
+      },
+      "status": 409,
+      "body": {
+        "detail": "traveler_on_trip",
+        "message": "traveler_on_trip"
+      }
+    },
+    {
+      "error": "locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('data-requests').getByTestId('data-request').filter({ hasText: '9c94bbf2' }).first().getByTestId('data-erasure-preview') to be visible\u001b[22m\n"
+    },
+    {
+      "step": "NEG erasure dry run of a client on a booked trip: UI message",
+      "ui": [
+        "The client is on a live trip. Cancel or delete the trip first."
+      ]
+    },
+    {
+      "step": "export after the UI download",
+      "downloaded_at": "2026-10-30T13:44:00.440236+00:00",
+      "download_count": 1,
+      "content_sha256": "4245860da12bf09f990978a6dc02fc200a8a3bc69bcfe4eda70ae794dea08f37",
+      "size_bytes": 44773
+    },
+    {
+      "step": "second link: download + verify",
+      "link_status": 200,
+      "link_expires_at": "2026-10-30T13:50:29.127335+00:00",
+      "status": 200,
+      "type": "application/zip",
+      "bytes": 44773,
+      "sha256": "4245860da12bf09f990978a6dc02fc200a8a3bc69bcfe4eda70ae794dea08f37",
+      "head": "PK",
+      "names": [
+        "json/client_link.json",
+        "csv/client_link.csv",
+        "json/consent.json",
+        "csv/consent.csv",
+        "json/conversation.json",
+        "csv/conversation.csv",
+        "json/data_request.json",
+        "csv/data_request.csv",
+        "json/dispatch_attempt.json",
+        "csv/dispatch_attempt.csv",
+        "json/dispatch_queue.json",
+        "csv/dispatch_queue.csv",
+        "json/document.json",
+        "csv/document.csv",
+        "json/form_submission.json",
+        "csv/form_submission.csv",
+        "json/meeting_slot.json",
+        "csv/meeting_slot.csv",
+        "json/message.json",
+        "csv/message.csv",
+        "json/note.json",
+        "csv/note.csv",
+        "json/profile_history.json",
+        "csv/profile_history.csv",
+        "json/proposal.json",
+        "csv/proposal.csv",
+        "json/signature_event.json",
+        "csv/signature_event.csv",
+        "json/signature_request.json",
+        "csv/signature_request.csv",
+        "json/terms_acceptance.json",
+        "csv/terms_acceptance.csv",
+        "json/traveler.json",
+        "csv/traveler.csv",
+        "json/traveler_access.json",
+        "csv/traveler_access.csv",
+        "json/traveler_health.json",
+        "csv/traveler_health.csv",
+        "json/traveler_profile.json",
+        "csv/traveler_profile.csv",
+        "json/traveler_relation.json",
+        "csv/traveler_relation.csv",
+        "json/trip.json",
+        "csv/trip.csv",
+        "json/trip_party.json",
+        "csv/trip_party.csv",
+        "json/trip_traveler.json",
+        "csv/trip_traveler.csv",
+        "documents/manifest.csv",
+        "manifest.json",
+        "SHA256SUMS"
+      ],
+      "second_use": {
+        "status": 403,
+        "detail": "link_invalid"
+      },
+      "matches_listed_checksum": true
+    },
+    {
+      "step": "erasure subject (synthetic prospect, trips)",
+      "trips": [
+        "cancelled"
+      ]
+    },
+    {
+      "step": "log erasure request (UI)",
+      "status": 201
+    },
+    {
+      "step": "erasure DRY RUN (UI)",
+      "request_body": {
+        "dry_run": true
+      },
+      "status": 409,
+      "body": {
+        "detail": "traveler_on_trip",
+        "message": "traveler_on_trip"
+      }
+    },
+    {
+      "error": "locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('data-requests').getByTestId('data-request').filter({ hasText: '72d04ad3' }).first().getByTestId('data-erasure-preview') to be visible\u001b[22m\n"
+    },
+    {
+      "step": "erasure subject (synthetic prospect, trips)",
+      "trips": []
+    },
+    {
+      "step": "log erasure request (UI)",
+      "status": 201
+    },
+    {
+      "step": "erasure DRY RUN (UI)",
+      "request_body": {
+        "dry_run": true
+      },
+      "status": 200,
+      "body": {
+        "traveler_id": "<uuid>",
+        "counts": {
+          "note": 0,
+          "consent": 2,
+          "message": 0,
+          "document": 0,
+          "traveler": 1,
+          "trip_party": 1,
+          "client_link": 0,
+          "conversation": 0,
+          "meeting_slot": 0,
+          "otp_challenge": 0,
+          "trip_traveler": 1,
+          "dispatch_queue": 0,
+          "form_submission": 1,
+          "profile_history": 0,
+          "traveler_access": 0,
+          "traveler_health": 0,
+          "dispatch_attempt": 0,
+          "traveler_profile": 1,
+          "signature_request": 0,
+          "traveler_relation": 0,
+          "signature_event_kept": 0,
+          "terms_acceptance_kept": 0,
+          "traveler_referrer_unlinked": 0,
+          "proposal_acceptance_name_erased": 0,
+          "document_object": 0
+        },
+        "kept": {
+          "signature_event": 0,
+          "terms_acceptance": 0
+        },
+        "exceptions": [],
+        "exports_withdrawn": 0,
+        "dry_run": true
+      }
+    },
+    {
+      "step": "preview lines",
+      "lines": [
+        "Erasing removes 7 records now; the trash is skipped."
+      ]
+    },
+    {
+      "step": "390 side",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "client still on file after the dry run",
+      "status": 200
+    },
+    {
+      "step": "390 page",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "data/requests after",
+      "rows": [
+        {
+          "kind": "erasure",
+          "status": "open",
+          "due_on": "2026-11-29",
+          "outcome": null,
+          "exports": 0
+        },
+        {
+          "kind": "portability",
+          "status": "open",
+          "due_on": "2026-11-29",
+          "outcome": null,
+          "exports": 1
+        },
+        {
+          "kind": "erasure",
+          "status": "open",
+          "due_on": "2026-11-29",
+          "outcome": null,
+          "exports": 0
+        },
+        {
+          "kind": "erasure",
+          "status": "open",
+          "due_on": "2026-11-29",
+          "outcome": null,
+          "exports": 0
+        }
+      ]
+    }
+  ],
+  "responses": [
+    {
+      "method": "GET",
+      "path": "/bff/data/requests",
+      "status": 200,
+      "body": {
+        "requests": [
+          {
+            "data_request_id": "<uuid>",
+            "kind": "portability",
+            "channel": "email",
+            "traveler_id": "<uuid>",
+            "received_on": "2026-10-30",
+            "due_on": "2026-11-29",
+            "status": "open",
+            "overdue": false,
+            "max_due_on": "2027-01-30",
+            "outcome": null,
+            "closed_at": null,
+            "erasure_request_id": null,
+            "exports": [],
+            "created_at": "2026-10-30T13:42:50.625412+00:00"
+          }
+        ],
+        "kinds": [
+          "access",
+          "portability",
+          "erasure",
+          "rectification",
+          "restriction",
+          "objection",
+          "other"
+        ],
+        "channels": [
+          "email",
+          "phone",
+          "in_person",
+          "post",
+          "client_portal",
+          "aa_forwarded",
+          "other"
+        ],
+        "outcomes": {
+          "done": [
+            "fulfilled",
+            "partly_fulfilled",
+            "no_data"
+          ],
+          "refused": [
+            "identity_not_verified",
+            "exempt",
+            "manifestly_unfounded"
+          ],
+          "withdrawn": [
+            "withdrawn_by_subject"
+          ]
+        },
+        "default_due_days": 30,
+        "max_due_days": 92,
+        "today": "2026-10-30"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bff/data/exports",
+      "status": 201,
+      "body": {
+        "export_id": "<uuid>",
+        "scope": "traveler",
+        "subject_id": "<uuid>",
+        "status": "queued",
+        "schema_version": 1,
+        "progress": {
+          "done": 0,
+          "total": 0
+        },
+        "rows": 0,
+        "tables": 0,
+        "documents_included": 0,
+        "documents_skipped": 0,
+        "size_bytes": null,
+        "content_sha256": null,
+        "created_at": "2026-10-30T13:43:48.480284+00:00",
+        "completed_at": null,
+        "expires_at": null,
+        "downloaded_at": null,
+        "download_count": 0,
+        "failure_class": null,
+        "data_request_id": "<uuid>"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bff/data/exports",
+      "status": 200,
+      "body": {
+        "exports": [
+          {
+            "export_id": "<uuid>",
+            "scope": "traveler",
+            "subject_id": "<uuid>",
+            "status": "queued",
+            "schema_version": 1,
+            "progress": {
+              "done": 0,
+              "total": 0
+            },
+            "rows": 0,
+            "tables": 0,
+            "documents_included": 0,
+            "documents_skipped": 0,
+            "size_bytes": null,
+            "content_sha256": null,
+            "created_at": "2026-10-30T13:43:48.480284+00:00",
+            "completed_at": null,
+            "expires_at": null,
+            "downloaded_at": null,
+            "download_count": 0,
+            "failure_class": null,
+            "data_request_id": "<uuid>"
+          }
+        ],
+        "link_minutes": 5,
+        "file_days": 7,
+        "schema_version": 1
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bff/data/exports",
+      "status": 200,
+      "body": {
+        "exports": [
+          {
+            "export_id": "<uuid>",
+            "scope": "traveler",
+            "subject_id": "<uuid>",
+            "status": "ready",
+            "schema_version": 1,
+            "progress": {
+              "done": 24,
+              "total": 24
+            },
+            "rows": 41,
+            "tables": 24,
+            "documents_included": 0,
+            "documents_skipped": 0,
+            "size_bytes": 44773,
+            "content_sha256": "4245860da12bf09f990978a6dc02fc200a8a3bc69bcfe4eda70ae794dea08f37",
+            "created_at": "2026-10-30T13:43:48.480284+00:00",
+            "completed_at": "2026-10-30T13:43:49.362553+00:00",
+            "expires_at": "2026-11-06T13:43:49.362553+00:00",
+            "downloaded_at": null,
+            "download_count": 0,
+            "failure_class": null,
+            "data_request_id": "<uuid>"
+          }
+        ],
+        "link_minutes": 5,
+        "file_days": 7,
+        "schema_version": 1
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bff/data/exports/<uuid>/link",
+      "status": 200,
+      "body": {
+        "export_id": "<uuid>",
+        "token": "<token>",
+        "expires_at": "2026-10-30T13:49:00.201106+00:00",
+        "path": "<single-use path>"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/bff/data/exports/<uuid>/download",
+      "status": 200,
+      "bytes": 0,
+      "x_content_sha256": null,
+      "content_type": "application/zip"
+    },
+    {
+      "method": "GET",
+      "path": "/bff/data/exports/<uuid>/download",
+      "status": 403,
+      "bytes": 96,
+      "x_content_sha256": null,
+      "content_type": "application/json"
+    },
+    {
+      "method": "GET",
+      "path": "/bff/data/exports/<uuid>/download",
+      "status": 403,
+      "bytes": 96,
+      "x_content_sha256": null,
+      "content_type": "application/json"
+    },
+    {
+      "method": "POST",
+      "path": "/bff/data/requests",
+      "status": 201,
+      "body": {
+        "data_request_id": "<uuid>",
+        "kind": "erasure",
+        "channel": "email",
+        "traveler_id": "<uuid>",
+        "received_on": "2026-10-30",
+        "due_on": "2026-11-29",
+        "status": "open",
+        "overdue": false,
+        "max_due_on": "2027-01-30",
+        "outcome": null,
+        "closed_at": null,
+        "erasure_request_id": null,
+        "exports": [],
+        "created_at": "2026-10-30T13:44:07.491370+00:00"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bff/travelers/<uuid>/erasure",
+      "status": 409,
+      "body": {
+        "detail": "traveler_on_trip",
+        "message": "traveler_on_trip"
+      }
+    }
+  ],
+  "failing": [
+    {
+      "method": "GET",
+      "path": "/bff/data/exports/<uuid>/download",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/bff/data/exports/<uuid>/download",
+      "status": 403
+    },
+    {
+      "method": "POST",
+      "path": "/bff/travelers/<uuid>/erasure",
+      "status": 409
+    }
+  ],
+  "console": [
+    "Failed to load resource: the server responded with a status of 403 ()",
+    "Failed to load resource: the server responded with a status of 403 ()",
+    "Failed to load resource: the server responded with a status of 409 ()"
+  ],
+  "failing2": [],
+  "console2": []
+}

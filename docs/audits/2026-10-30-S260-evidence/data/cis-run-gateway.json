@@ -1,0 +1,175 @@
+{
+  "started": "2026-10-30T11:08:05.172Z",
+  "steps": [
+    {
+      "step": "session",
+      "url": "/admin/settings",
+      "me": null
+    },
+    {
+      "step": "llm-config",
+      "status": 200,
+      "topKeys": [
+        "stages"
+      ],
+      "n": 38
+    },
+    {
+      "step": "llm-connections",
+      "status": 200,
+      "n": 5
+    },
+    {
+      "step": "scope-line",
+      "tag": "aws-only",
+      "stage": "a0_column_map",
+      "allowed_scopes": [
+        "aws_only"
+      ],
+      "text": "Data: AWS only",
+      "file": "03-route-editor-aws-only-a0_column_map-light.png"
+    },
+    {
+      "step": "scope-line",
+      "tag": "aws-only",
+      "stage": "a0_column_map",
+      "allowed_scopes": [
+        "aws_only"
+      ],
+      "text": "Data: AWS only",
+      "file": "03-route-editor-aws-only-a0_column_map-dark.png"
+    },
+    {
+      "step": "scope-line",
+      "tag": "both",
+      "stage": "t2_judge",
+      "allowed_scopes": [
+        "aws_only",
+        "vendor_direct"
+      ],
+      "text": "Data: AWS, vendor API as last resort",
+      "file": "03-route-editor-both-t2_judge-light.png"
+    },
+    {
+      "step": "scope-line",
+      "tag": "both",
+      "stage": "t2_judge",
+      "allowed_scopes": [
+        "aws_only",
+        "vendor_direct"
+      ],
+      "text": "Data: AWS, vendor API as last resort",
+      "file": "03-route-editor-both-t2_judge-dark.png"
+    },
+    {
+      "step": "connections",
+      "scheme": "light",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "connections",
+      "scheme": "dark",
+      "side": {
+        "scrollWidth": 390,
+        "innerWidth": 390
+      }
+    },
+    {
+      "step": "conn-drawer",
+      "open": true,
+      "testButtonClicked": false
+    }
+  ],
+  "console": [],
+  "failing": [],
+  "api": [
+    {
+      "method": "GET",
+      "path": "/api/auth/refresh",
+      "status": 303
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/notifications/count",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/review-queue",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/settings",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/review-queue",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/notifications/count",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/settings",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/llm-config",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/llm-connections",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/llm-config",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/aws-accounts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/llm-availability",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/decisions/summary",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/llm-connections",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/llm-catalog",
+      "status": 200
+    }
+  ]
+}

@@ -1,0 +1,990 @@
+{
+  "run": "S260 lane 4 (final checks), 30/10/2026 22:38-22:55 +07, headless Chromium (one browser), VN egress",
+  "deployed": {
+    "crm_api_git_sha": "3718242a",
+    "crm_api_schema": "crm-027",
+    "crm_web_git_sha": "3a116512 (Partner #142)",
+    "cis_api_git_sha": "041ba9a2",
+    "cis_schema": "317 (required 315)",
+    "cis_vercel_production": "aa-cis.lumiguides.it.com aliased to the production deployment created 2026-10-30T15:23:28Z = GitHub deployment 'release' of 041ba9a2 (descendant of ec1ff899 / CIS #1192)",
+    "ecs": "aa-crm-dev-api 1/1 task (one uvicorn process, so the per-process reveal meter is exact), rollout COMPLETED"
+  },
+  "9a_reveal_limit": {
+    "identity": "e2e agent of Sen Vang",
+    "calls_made": 61,
+    "ok_200": 60,
+    "first_non_200": {
+      "n": 61,
+      "status": 429,
+      "body": {
+        "detail": "reveal_rate_limited",
+        "message": "60 travellers an hour; 0 left"
+      },
+      "retry_after": null
+    },
+    "first_at": "15:47:34",
+    "last_at": "15:48:52",
+    "after_limit": {
+      "step": "9a one more after the limit",
+      "status": 429,
+      "code": "reveal_rate_limited"
+    },
+    "calls": [
+      {
+        "n": 1,
+        "status": 200,
+        "at": "15:47:34"
+      },
+      {
+        "n": 2,
+        "status": 200,
+        "at": "15:47:35"
+      },
+      {
+        "n": 3,
+        "status": 200,
+        "at": "15:47:36"
+      },
+      {
+        "n": 4,
+        "status": 200,
+        "at": "15:47:38"
+      },
+      {
+        "n": 5,
+        "status": 200,
+        "at": "15:47:39"
+      },
+      {
+        "n": 6,
+        "status": 200,
+        "at": "15:47:40"
+      },
+      {
+        "n": 7,
+        "status": 200,
+        "at": "15:47:41"
+      },
+      {
+        "n": 8,
+        "status": 200,
+        "at": "15:47:43"
+      },
+      {
+        "n": 9,
+        "status": 200,
+        "at": "15:47:44"
+      },
+      {
+        "n": 10,
+        "status": 200,
+        "at": "15:47:45"
+      },
+      {
+        "n": 11,
+        "status": 200,
+        "at": "15:47:46"
+      },
+      {
+        "n": 12,
+        "status": 200,
+        "at": "15:47:48"
+      },
+      {
+        "n": 13,
+        "status": 200,
+        "at": "15:47:49"
+      },
+      {
+        "n": 14,
+        "status": 200,
+        "at": "15:47:50"
+      },
+      {
+        "n": 15,
+        "status": 200,
+        "at": "15:47:51"
+      },
+      {
+        "n": 16,
+        "status": 200,
+        "at": "15:47:53"
+      },
+      {
+        "n": 17,
+        "status": 200,
+        "at": "15:47:54"
+      },
+      {
+        "n": 18,
+        "status": 200,
+        "at": "15:47:55"
+      },
+      {
+        "n": 19,
+        "status": 200,
+        "at": "15:47:56"
+      },
+      {
+        "n": 20,
+        "status": 200,
+        "at": "15:47:58"
+      },
+      {
+        "n": 21,
+        "status": 200,
+        "at": "15:47:59"
+      },
+      {
+        "n": 22,
+        "status": 200,
+        "at": "15:48:00"
+      },
+      {
+        "n": 23,
+        "status": 200,
+        "at": "15:48:02"
+      },
+      {
+        "n": 24,
+        "status": 200,
+        "at": "15:48:03"
+      },
+      {
+        "n": 25,
+        "status": 200,
+        "at": "15:48:04"
+      },
+      {
+        "n": 26,
+        "status": 200,
+        "at": "15:48:05"
+      },
+      {
+        "n": 27,
+        "status": 200,
+        "at": "15:48:08"
+      },
+      {
+        "n": 28,
+        "status": 200,
+        "at": "15:48:09"
+      },
+      {
+        "n": 29,
+        "status": 200,
+        "at": "15:48:11"
+      },
+      {
+        "n": 30,
+        "status": 200,
+        "at": "15:48:12"
+      },
+      {
+        "n": 31,
+        "status": 200,
+        "at": "15:48:13"
+      },
+      {
+        "n": 32,
+        "status": 200,
+        "at": "15:48:14"
+      },
+      {
+        "n": 33,
+        "status": 200,
+        "at": "15:48:16"
+      },
+      {
+        "n": 34,
+        "status": 200,
+        "at": "15:48:17"
+      },
+      {
+        "n": 35,
+        "status": 200,
+        "at": "15:48:18"
+      },
+      {
+        "n": 36,
+        "status": 200,
+        "at": "15:48:19"
+      },
+      {
+        "n": 37,
+        "status": 200,
+        "at": "15:48:21"
+      },
+      {
+        "n": 38,
+        "status": 200,
+        "at": "15:48:22"
+      },
+      {
+        "n": 39,
+        "status": 200,
+        "at": "15:48:23"
+      },
+      {
+        "n": 40,
+        "status": 200,
+        "at": "15:48:24"
+      },
+      {
+        "n": 41,
+        "status": 200,
+        "at": "15:48:26"
+      },
+      {
+        "n": 42,
+        "status": 200,
+        "at": "15:48:27"
+      },
+      {
+        "n": 43,
+        "status": 200,
+        "at": "15:48:28"
+      },
+      {
+        "n": 44,
+        "status": 200,
+        "at": "15:48:29"
+      },
+      {
+        "n": 45,
+        "status": 200,
+        "at": "15:48:30"
+      },
+      {
+        "n": 46,
+        "status": 200,
+        "at": "15:48:32"
+      },
+      {
+        "n": 47,
+        "status": 200,
+        "at": "15:48:33"
+      },
+      {
+        "n": 48,
+        "status": 200,
+        "at": "15:48:34"
+      },
+      {
+        "n": 49,
+        "status": 200,
+        "at": "15:48:36"
+      },
+      {
+        "n": 50,
+        "status": 200,
+        "at": "15:48:37"
+      },
+      {
+        "n": 51,
+        "status": 200,
+        "at": "15:48:38"
+      },
+      {
+        "n": 52,
+        "status": 200,
+        "at": "15:48:39"
+      },
+      {
+        "n": 53,
+        "status": 200,
+        "at": "15:48:42"
+      },
+      {
+        "n": 54,
+        "status": 200,
+        "at": "15:48:43"
+      },
+      {
+        "n": 55,
+        "status": 200,
+        "at": "15:48:45"
+      },
+      {
+        "n": 56,
+        "status": 200,
+        "at": "15:48:46"
+      },
+      {
+        "n": 57,
+        "status": 200,
+        "at": "15:48:47"
+      },
+      {
+        "n": 58,
+        "status": 200,
+        "at": "15:48:48"
+      },
+      {
+        "n": 59,
+        "status": 200,
+        "at": "15:48:50"
+      },
+      {
+        "n": 60,
+        "status": 200,
+        "at": "15:48:51"
+      },
+      {
+        "n": 61,
+        "status": 429,
+        "at": "15:48:52"
+      }
+    ],
+    "audit_owner_view": {
+      "action=reveal&from=2026-10-30&limit=50": {
+        "status": 200,
+        "n": 50,
+        "by": {
+          "denied/rate_limited/agent": 2,
+          "allowed/duty_of_care/agent": 48
+        },
+        "denied": [
+          {
+            "event_id": "<uuid>",
+            "at": "2026-10-30T15:48:53.208713+00:00",
+            "actor_kind": "user",
+            "actor_group": "user",
+            "actor_ref": "member:<uuid>",
+            "member_id": "<uuid>",
+            "member_role": "agent",
+            "action": "reveal",
+            "outcome": "denied",
+            "object_kind": "traveler",
+            "object_id": null,
+            "fields": [
+              "display_name"
+            ],
+            "reason": "rate_limited",
+            "object_ids": [
+              "<uuid>"
+            ]
+          },
+          {
+            "event_id": "<uuid>",
+            "at": "2026-10-30T15:48:52.961330+00:00",
+            "actor_kind": "user",
+            "actor_group": "user",
+            "actor_ref": "member:<uuid>",
+            "member_id": "<uuid>",
+            "member_role": "agent",
+            "action": "reveal",
+            "outcome": "denied",
+            "object_kind": "traveler",
+            "object_id": null,
+            "fields": [
+              "display_name"
+            ],
+            "reason": "rate_limited",
+            "object_ids": [
+              "<uuid>"
+            ]
+          }
+        ]
+      },
+      "action=reveal&outcome=denied&limit=20": {
+        "status": 200,
+        "n": 2,
+        "by": {
+          "denied/rate_limited/agent": 2
+        },
+        "denied": [
+          {
+            "event_id": "<uuid>",
+            "at": "2026-10-30T15:48:53.208713+00:00",
+            "actor_kind": "user",
+            "actor_group": "user",
+            "actor_ref": "member:<uuid>",
+            "member_id": "<uuid>",
+            "member_role": "agent",
+            "action": "reveal",
+            "outcome": "denied",
+            "object_kind": "traveler",
+            "object_id": null,
+            "fields": [
+              "display_name"
+            ],
+            "reason": "rate_limited",
+            "object_ids": [
+              "<uuid>"
+            ]
+          },
+          {
+            "event_id": "<uuid>",
+            "at": "2026-10-30T15:48:52.961330+00:00",
+            "actor_kind": "user",
+            "actor_group": "user",
+            "actor_ref": "member:<uuid>",
+            "member_id": "<uuid>",
+            "member_role": "agent",
+            "action": "reveal",
+            "outcome": "denied",
+            "object_kind": "traveler",
+            "object_id": null,
+            "fields": [
+              "display_name"
+            ],
+            "reason": "rate_limited",
+            "object_ids": [
+              "<uuid>"
+            ]
+          }
+        ]
+      },
+      "action=reveal&limit=100": {
+        "status": 200,
+        "n": 80,
+        "by": {
+          "denied/rate_limited/agent": 2,
+          "allowed/duty_of_care/agent": 60,
+          "allowed/duty_of_care/owner": 1,
+          "allowed/client_request/owner": 3,
+          "allowed/contact_client/owner": 13,
+          "allowed/null/owner": 1
+        },
+        "denied": [
+          {
+            "event_id": "<uuid>",
+            "at": "2026-10-30T15:48:53.208713+00:00",
+            "actor_kind": "user",
+            "actor_group": "user",
+            "actor_ref": "member:<uuid>",
+            "member_id": "<uuid>",
+            "member_role": "agent",
+            "action": "reveal",
+            "outcome": "denied",
+            "object_kind": "traveler",
+            "object_id": null,
+            "fields": [
+              "display_name"
+            ],
+            "reason": "rate_limited",
+            "object_ids": [
+              "<uuid>"
+            ]
+          },
+          {
+            "event_id": "<uuid>",
+            "at": "2026-10-30T15:48:52.961330+00:00",
+            "actor_kind": "user",
+            "actor_group": "user",
+            "actor_ref": "member:<uuid>",
+            "member_id": "<uuid>",
+            "member_role": "agent",
+            "action": "reveal",
+            "outcome": "denied",
+            "object_kind": "traveler",
+            "object_id": null,
+            "fields": [
+              "display_name"
+            ],
+            "reason": "rate_limited",
+            "object_ids": [
+              "<uuid>"
+            ]
+          }
+        ]
+      }
+    },
+    "note": "Retry-After is not forwarded by the CRM BFF (header null in the browser); the API sets it (unit test retry_after_s == 3600). The audit page of 50 shows 48 allowed + 2 denied (page limit); 60 calls answered 200."
+  },
+  "9a_calendar_tz": {
+    "status": 200,
+    "timezone": "Asia/Ho_Chi_Minh",
+    "n": 10,
+    "timed": 4,
+    "kinds_timed": [
+      "task",
+      "task",
+      "task",
+      "task"
+    ],
+    "page": {
+      "month": "November 2026",
+      "compare": [
+        {
+          "kind": "task",
+          "date": "2026-11-01",
+          "starts_at_utc": "2026-11-01T00:09:08.932570+07:00",
+          "expected_local": "00:09 (+07)",
+          "utc_would_be": "17:09",
+          "rendered_times_on_that_day": [
+            "12:09 am",
+            "12:10 am",
+            "12:12 am",
+            "11:37 am"
+          ],
+          "local_shown": true,
+          "utc_shown": false
+        },
+        {
+          "kind": "task",
+          "date": "2026-11-01",
+          "starts_at_utc": "2026-11-01T00:10:38.054763+07:00",
+          "expected_local": "00:10 (+07)",
+          "utc_would_be": "17:10",
+          "rendered_times_on_that_day": [
+            "12:09 am",
+            "12:10 am",
+            "12:12 am",
+            "11:37 am"
+          ],
+          "local_shown": true,
+          "utc_shown": false
+        },
+        {
+          "kind": "task",
+          "date": "2026-11-01",
+          "starts_at_utc": "2026-11-01T00:12:19.082849+07:00",
+          "expected_local": "00:12 (+07)",
+          "utc_would_be": "17:12",
+          "rendered_times_on_that_day": [
+            "12:09 am",
+            "12:10 am",
+            "12:12 am",
+            "11:37 am"
+          ],
+          "local_shown": true,
+          "utc_shown": false
+        },
+        {
+          "kind": "task",
+          "date": "2026-11-01",
+          "starts_at_utc": "2026-11-01T11:37:02.510908+07:00",
+          "expected_local": "11:37 (+07)",
+          "utc_would_be": "04:37",
+          "rendered_times_on_that_day": [
+            "12:09 am",
+            "12:10 am",
+            "12:12 am",
+            "11:37 am"
+          ],
+          "local_shown": true,
+          "utc_shown": false
+        }
+      ],
+      "signing_label": [
+        "1 signature pending"
+      ]
+    },
+    "shots": [
+      "09a-calendar-nov-agency-1440-light.png",
+      "09a-calendar-nov-agency-1440-dark.png"
+    ],
+    "note": "starts_at comes with the +07:00 offset; e.g. 2026-11-01T00:09:08+07:00 = 2026-10-31T17:09Z renders '12:09 am' under 1 Nov (UTC would show 05:09 pm)."
+  },
+  "9b_v1_rules": {
+    "rows": [
+      {
+        "method": "GET",
+        "path": "/v1/rules",
+        "no_credentials": {
+          "status": 404,
+          "body": "{\"detail\":\"Not Found\"}",
+          "server": null,
+          "apigw": true
+        },
+        "e2e_admin_bearer": {
+          "status": 404,
+          "body": "{\"detail\":\"Not Found\"}",
+          "server": null,
+          "apigw": true
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/v1/rules/x",
+        "no_credentials": {
+          "status": 404,
+          "body": "{\"detail\":\"Not Found\"}",
+          "server": null,
+          "apigw": true
+        },
+        "e2e_admin_bearer": {
+          "status": 404,
+          "body": "{\"detail\":\"Not Found\"}",
+          "server": null,
+          "apigw": true
+        }
+      },
+      {
+        "method": "PATCH",
+        "path": "/v1/rules/x",
+        "no_credentials": {
+          "status": 404,
+          "body": "{\"detail\":\"Not Found\"}",
+          "server": null,
+          "apigw": true
+        },
+        "e2e_admin_bearer": {
+          "status": 403,
+          "body": "{\"detail\":\"e2e_read_only\"}",
+          "server": null,
+          "apigw": true
+        }
+      },
+      {
+        "method": "PATCH",
+        "path": "/v1/rules",
+        "no_credentials": {
+          "status": 404,
+          "body": "{\"detail\":\"Not Found\"}",
+          "server": null,
+          "apigw": true
+        },
+        "e2e_admin_bearer": {
+          "status": 403,
+          "body": "{\"detail\":\"e2e_read_only\"}",
+          "server": null,
+          "apigw": true
+        }
+      }
+    ],
+    "control_live_staff_get": {
+      "status": 200
+    },
+    "control_live_staff_get_no_creds": {
+      "status": 403,
+      "body": "{\"detail\":\"Invalid admin secret\"}"
+    },
+    "admin_site": {
+      "GET /api/v1/rules": 404,
+      "PATCH /api/v1/rules/x": 404
+    }
+  },
+  "9c_metrics_layout": [
+    {
+      "width": 1440,
+      "file": "09c-wm-metrics-1440-light.png",
+      "main_selector": "main.aa-admin-main",
+      "main_scrollWidth": 1204,
+      "main_clientWidth": 1204,
+      "fits": true,
+      "doc": [
+        1440,
+        1440
+      ],
+      "button": {
+        "found": true,
+        "left": 490,
+        "right": 738,
+        "main_left": 236,
+        "main_right": 1440,
+        "inside": true
+      },
+      "beyond_main": [
+        {
+          "tag": "TABLE",
+          "right": 1684,
+          "text": "WriterWritesRe-flag (95% inter"
+        },
+        {
+          "tag": "THEAD",
+          "right": 1684,
+          "text": "WriterWritesRe-flag (95% inter"
+        },
+        {
+          "tag": "TR",
+          "right": 1684,
+          "text": "WriterWritesRe-flag (95% inter"
+        },
+        {
+          "tag": "TH",
+          "right": 1450,
+          "text": "Cost / write"
+        },
+        {
+          "tag": "TH",
+          "right": 1580,
+          "text": "Replay hit rate"
+        },
+        {
+          "tag": "SPAN",
+          "right": 1570,
+          "text": "Replay hit rate"
+        }
+      ],
+      "metrics_header": "Week of 2026-10-19"
+    },
+    {
+      "width": 390,
+      "file": "09c-wm-metrics-390-light.png",
+      "main_selector": "main.aa-admin-main",
+      "main_scrollWidth": 390,
+      "main_clientWidth": 390,
+      "fits": true,
+      "doc": [
+        390,
+        390
+      ],
+      "button": {
+        "found": true,
+        "left": 16,
+        "right": 264,
+        "main_left": 0,
+        "main_right": 390,
+        "inside": true
+      },
+      "beyond_main": [],
+      "metrics_header": "Week of 2026-10-19"
+    }
+  ],
+  "9d_connections": {
+    "connections": {
+      "step": "9d GET /api/admin/llm-connections",
+      "status": 200,
+      "top_keys": [
+        "schema_ready",
+        "routing_uses_registry",
+        "connections",
+        "cost_policy_ready"
+      ],
+      "n": 5,
+      "budget_fields": [
+        "monthly_budget_usd",
+        "cost_policy"
+      ],
+      "per_connection": [
+        {
+          "kind": "bedrock",
+          "monthly_budget_usd": null,
+          "cost_policy": {
+            "alert_pct": 80,
+            "hard_stop": true,
+            "usage_secret_name": null,
+            "usage_scope_id": null,
+            "stored": false,
+            "updated_at": null,
+            "updated_by": null
+          },
+          "budget": null
+        },
+        {
+          "kind": "bedrock",
+          "monthly_budget_usd": null,
+          "cost_policy": {
+            "alert_pct": 80,
+            "hard_stop": true,
+            "usage_secret_name": null,
+            "usage_scope_id": null,
+            "stored": false,
+            "updated_at": null,
+            "updated_by": null
+          },
+          "budget": null
+        },
+        {
+          "kind": "anthropic",
+          "monthly_budget_usd": null,
+          "cost_policy": {
+            "alert_pct": 80,
+            "hard_stop": true,
+            "usage_secret_name": null,
+            "usage_scope_id": null,
+            "stored": false,
+            "updated_at": null,
+            "updated_by": null
+          },
+          "budget": null
+        },
+        {
+          "kind": "bedrock",
+          "monthly_budget_usd": null,
+          "cost_policy": {
+            "alert_pct": 80,
+            "hard_stop": true,
+            "usage_secret_name": null,
+            "usage_scope_id": null,
+            "stored": false,
+            "updated_at": null,
+            "updated_by": null
+          },
+          "budget": null
+        },
+        {
+          "kind": "openai",
+          "monthly_budget_usd": null,
+          "cost_policy": {
+            "alert_pct": 80,
+            "hard_stop": true,
+            "usage_secret_name": null,
+            "usage_scope_id": null,
+            "stored": false,
+            "updated_at": null,
+            "updated_by": null
+          },
+          "budget": null
+        }
+      ]
+    },
+    "costs": {
+      "step": "9d GET /api/admin/llm-connections/costs",
+      "status": 200,
+      "top_keys": [
+        "schema_ready",
+        "connections",
+        "tolerance",
+        "window_days"
+      ],
+      "schema_ready": true,
+      "shape": {
+        "schema_ready": "boolean",
+        "connections": [
+          {
+            "connection_key": "string",
+            "kind": "string",
+            "label": "string",
+            "enabled": "boolean",
+            "budget": "object",
+            "reconcile": {
+              "source": "string",
+              "configured": "boolean",
+              "last": "object",
+              "days": []
+            }
+          },
+          "…5"
+        ],
+        "tolerance": {
+          "usd": "number",
+          "pct": "number"
+        },
+        "window_days": "number"
+      },
+      "connections": [
+        {
+          "budget": null,
+          "reconcile": {
+            "source": "aws_cost_explorer",
+            "rows": 0,
+            "last": null
+          }
+        },
+        {
+          "budget": null,
+          "reconcile": {
+            "source": "aws_cost_explorer",
+            "rows": 0,
+            "last": null
+          }
+        },
+        {
+          "budget": null,
+          "reconcile": {
+            "source": "anthropic_cost_report",
+            "rows": 0,
+            "last": null
+          }
+        },
+        {
+          "budget": null,
+          "reconcile": {
+            "source": "aws_cost_explorer",
+            "rows": 0,
+            "last": null
+          }
+        },
+        {
+          "budget": null,
+          "reconcile": {
+            "source": "openai_costs",
+            "rows": 0,
+            "last": null
+          }
+        }
+      ]
+    },
+    "tab": {
+      "step": "9d Connections tab",
+      "headers": [
+        "CONNECTION",
+        "KIND",
+        "CREDENTIAL",
+        "LIMITS",
+        "HEALTH",
+        "BUDGET",
+        "ENABLED",
+        ""
+      ],
+      "budget_column": [
+        "No budget",
+        "No budget",
+        "No budget",
+        "No budget",
+        "No budget"
+      ]
+    },
+    "drawer": {
+      "step": "9d drawer 'Budget and cost check'",
+      "heading_found": 1,
+      "conn_costs_text": [
+        "Spend this month (UTC) on this connection against its monthly budget, and the nightly check of the cost we logged against the provider's own figure.",
+        "BUDGET",
+        "No budget",
+        "PROVIDER FIGURE FROM",
+        "AWS Cost Explorer (stored snapshot)",
+        "LAST CHECK",
+        "Not checked yet",
+        "A day differs when the gap is above $0.05 or 5% of the provider's figure. Provisional days (the provider may still revise them) never raise an alert.",
+        "Check now"
+      ],
+      "test_connection_clicked": false,
+      "reconcile_clicked": false
+    }
+  },
+  "console_and_failing": {
+    "cis": {
+      "console": [
+        {
+          "url": "https://aa-cis.lumiguides.it.com/admin/writing-memory",
+          "text": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "url": "https://aa-cis.lumiguides.it.com/admin/writing-memory",
+          "text": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "failing": [
+        {
+          "method": "GET",
+          "path": "/api/v1/rules",
+          "status": 404
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/v1/rules/x",
+          "status": 404
+        }
+      ]
+    },
+    "crm_agent": {
+      "failing": {
+        "POST /bff/duty/reveal 429": 2,
+        "GET /bff/audit/events 422": 1
+      },
+      "console_n": 3,
+      "console_first": [
+        "Failed to load resource: the server responded with a status of 429 ()",
+        "Failed to load resource: the server responded with a status of 429 ()",
+        "Failed to load resource: the server responded with a status of 422 ()"
+      ]
+    },
+    "crm_owner": {
+      "failing": [
+        {
+          "method": "GET",
+          "path": "/bff/audit/events",
+          "status": 422
+        }
+      ],
+      "console": [
+        "Failed to load resource: the server responded with a status of 422 ()"
+      ]
+    }
+  }
+}

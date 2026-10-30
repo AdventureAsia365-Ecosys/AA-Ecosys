@@ -1,0 +1,49 @@
+{
+  "paidFilterUrl": "?status=paid",
+  "rows": [
+    "Paid",
+    "INV-000001",
+    "0.00 USD"
+  ],
+  "side390": {
+    "scrollWidth": 390,
+    "innerWidth": 390
+  },
+  "invoicesPaid": {
+    "status": 200,
+    "keys": [
+      "today",
+      "status",
+      "invoices"
+    ],
+    "rows": [
+      {
+        "number": "INV-000001",
+        "kind": "deposit",
+        "status": "paid",
+        "total": "540.00",
+        "currency": "USD"
+      }
+    ]
+  },
+  "refundsExecuted": {
+    "status": 200,
+    "rows": [
+      {
+        "status": "executed",
+        "amount": "50.00",
+        "currency": "USD"
+      }
+    ]
+  },
+  "refundsDefault": {
+    "status": 200,
+    "n": 0,
+    "filter": null
+  },
+  "untouchedTripConsole": [
+    "pageerror: Minified React error #418; visit https://react.dev/errors/418?args[]="
+  ],
+  "pipelineConsole": [],
+  "failing": []
+}
