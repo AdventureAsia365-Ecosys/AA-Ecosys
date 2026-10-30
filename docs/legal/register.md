@@ -50,6 +50,7 @@ Data classes are the DM-6.1 classes of [`02-data-management.md`](../architecture
 | 6 | AI content generation and review | None identified: no identifying PII may be sent (DM-6.4) | tour and tenant content; `travel` for TripPlanner narration | `shared.llm_call_log` (no PII by rule, DM-6.4); prompts are not stored. DM-6.4 is enforced by code review only: no automated PII check exists | `llm_call_log` 180 days (approved; retention kind scheduled, see the retention log) | Bedrock on acc2 (native: Cohere embeddings) and acc3 (Claude and GPT models; no cross-account fallback since AA-998); OpenAI API (last resort for some judges); Jev (content decisions, allowlisted tenants only) | US; `global.` profiles on acc3 may process outside the US |
 | 7 | Operational alert mail | AA staff and operators | `contact` | `shared.alert_recipient` (`email`, `subscription_arn`, `note`); addresses are shape-checked only, no domain rule (CIS `shared/alert_recipients.py:98-108`) | No window yet | SNS e-mail subscriptions (INF `accounts/aa365/observability.tf:53`, CIS `api/services/alert_recipients.py`); SES ops mail (CIS `services/jobs/ops_alert_email_job.py:1-22`) | US (us-west-1) |
 | 8 | Supplier contacts (hotels, transport, local partners) | Supplier staff | `name`, `contact`, `profile` (job title), `address` (business address, untagged) | `booking.suppliers` (`contact_name`, `contact_title`, `contact_email`, `contact_phone`, `address`; `company_name` is business data) | No window yet | AA staff (Booking admin); AWS acc2 (RDS); Vercel (Booking admin) | US (us-west-1) |
+| 9 | Writing memory: what the writers learn from edits and labels (CIS app ADR 0010) | None identified: tenant and AA marketing text; an edit may quote a name the tenant typed | `free_text`, `online_id` (labeller ids) | `shared.writing_signal` (`before_text`, `after_text`, `problem`); `shared.writing_rule` (`rule_text`, `replacement`, `match_phrases`; tenant rules and preference summaries); `shared.writing_exemplar` (`masked_text`, numbers, prices, times, links and names masked); `shared.writing_memory_release` (`notes`, `retired_reason`, `rejected_reason`; ids, no text); `shared.writing_memory_shadow` (`output`); `shared.eval_golden_item` (`input`, `control_output`, `pipeline_verdict`, `label`); `shared.eval_item_result` (`output`); `shared.eval_golden_set` (`label_history`). Labels on T2 versions and A1 rewrites: `acp_shared.content_label` (`reason`, CIS 315). Retention exception (D16): before/after text of admin and tenant edits written to `acp_shared.audit_log` before AA-916 stays there (append-only hash chain; the erasure keeps the audit row); new edits keep only ids and hashes in the audit log | Tenant rows: while the tenant account is active, then deleted with the tenant by the AA-839 `data_erasure` job (CIS `services/erasure/inventory.py`; proven per store by CIS `tests/integration/test_aa839_erasure_job.py`, AA-923 WM-33). Platform rows (no tenant): kept, no window yet. The D16 audit-log text: kept with the audit log, window set before prod; its wording in tenant terms is `[to be confirmed]` by the business owner (with AA-820) | AA admins (Writing memory and Content Quality pages); the writer and judge models of row 6 receive released rules and masked examples inside prompts | US (us-west-1) |
 
 The consent chain of rows 1 and 2 was checked on Dev on 2026-10-20 (DM-6.5): see the
 [consent capture check](consent-capture-query.md).
@@ -58,7 +59,7 @@ The consent chain of rows 1 and 2 was checked on Dev on 2026-10-20 (DM-6.5): see
 
 ### Column inventory (from pii tags)
 
-Generated from the *Personal and confidential data tags (DM-6.1)* section of [`db-schema-reference.md`](../architecture/db-schema-reference.md) (Verified 2026-10-28 04:28 UTC): 145 personal-data column(s) and 12 credential column(s) over every schema. `conf:commercial` columns are business data and are left out. "RoPA row" is the row of the table above that names the column; **none** marks a new processing line.
+Generated from the *Personal and confidential data tags (DM-6.1)* section of [`db-schema-reference.md`](../architecture/db-schema-reference.md) (Verified 2026-10-30 10:59 UTC): 145 personal-data column(s) and 12 credential column(s) over every schema. `conf:commercial` columns are business data and are left out. "RoPA row" is the row of the table above that names the column; **none** marks a new processing line.
 
 | Schema | Relation | Column | Tag | Also | RoPA row |
 |---|---|---|---|---|---|
@@ -187,25 +188,25 @@ Generated from the *Personal and confidential data tags (DM-6.1)* section of [`d
 | `shared` | `admin_users` | `cognito_iss` | `pii:online_id` |  | 4 |
 | `shared` | `admin_users` | `cognito_sub` | `pii:online_id` |  | 4 |
 | `shared` | `alert_recipient` | `email` | `pii:contact` |  | 7 |
-| `shared` | `eval_golden_item` | `input` | `pii:free_text` |  | **none** |
-| `shared` | `eval_golden_item` | `control_output` | `pii:free_text` |  | **none** |
-| `shared` | `eval_golden_item` | `pipeline_verdict` | `pii:free_text` |  | **none** |
-| `shared` | `eval_golden_item` | `label` | `pii:free_text` |  | **none** |
-| `shared` | `eval_golden_set` | `label_history` | `pii:online_id` |  | **none** |
-| `shared` | `eval_item_result` | `output` | `pii:free_text` |  | **none** |
+| `shared` | `eval_golden_item` | `input` | `pii:free_text` |  | 9 |
+| `shared` | `eval_golden_item` | `control_output` | `pii:free_text` |  | 9 |
+| `shared` | `eval_golden_item` | `pipeline_verdict` | `pii:free_text` |  | 9 |
+| `shared` | `eval_golden_item` | `label` | `pii:free_text` |  | 9 |
+| `shared` | `eval_golden_set` | `label_history` | `pii:online_id` |  | 9 |
+| `shared` | `eval_item_result` | `output` | `pii:free_text` |  | 9 |
 | `shared` | `tenant_members` | `cognito_iss` | `pii:online_id` |  | 5 |
 | `shared` | `tenant_members` | `cognito_sub` | `pii:online_id` |  | 5 |
 | `shared` | `tenant_membership_event` | `membership` | `pii:online_id` |  | 5 |
-| `shared` | `writing_memory_release` | `retired_reason` | `pii:free_text` |  | **none** |
-| `shared` | `writing_memory_release` | `rejected_reason` | `pii:free_text` |  | **none** |
-| `shared` | `writing_memory_release` | `notes` | `pii:free_text` |  | **none** |
-| `shared` | `writing_memory_shadow` | `output` | `pii:free_text` |  | **none** |
-| `shared` | `writing_rule` | `rule_text` | `pii:free_text` |  | **none** |
-| `shared` | `writing_rule` | `replacement` | `pii:free_text` |  | **none** |
-| `shared` | `writing_rule` | `match_phrases` | `pii:free_text` |  | **none** |
-| `shared` | `writing_signal` | `before_text` | `pii:free_text` |  | **none** |
-| `shared` | `writing_signal` | `after_text` | `pii:free_text` |  | **none** |
-| `shared` | `writing_signal` | `problem` | `pii:free_text` |  | **none** |
+| `shared` | `writing_memory_release` | `retired_reason` | `pii:free_text` |  | 9 |
+| `shared` | `writing_memory_release` | `rejected_reason` | `pii:free_text` |  | 9 |
+| `shared` | `writing_memory_release` | `notes` | `pii:free_text` |  | 9 |
+| `shared` | `writing_memory_shadow` | `output` | `pii:free_text` |  | 9 |
+| `shared` | `writing_rule` | `rule_text` | `pii:free_text` |  | 9 |
+| `shared` | `writing_rule` | `replacement` | `pii:free_text` |  | 9 |
+| `shared` | `writing_rule` | `match_phrases` | `pii:free_text` |  | 9 |
+| `shared` | `writing_signal` | `before_text` | `pii:free_text` |  | 9 |
+| `shared` | `writing_signal` | `after_text` | `pii:free_text` |  | 9 |
+| `shared` | `writing_signal` | `problem` | `pii:free_text` |  | 9 |
 | `tripplanner` | `customers` | `name` | `pii:name` |  | 1 |
 | `tripplanner` | `customers` | `phone` | `pii:contact` |  | 1 |
 | `tripplanner` | `customers` | `email` | `pii:contact` |  | 1 |
