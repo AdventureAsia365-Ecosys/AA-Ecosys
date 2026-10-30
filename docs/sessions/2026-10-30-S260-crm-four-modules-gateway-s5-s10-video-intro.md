@@ -50,7 +50,7 @@ cuối: `docs/audits/2026-10-30-S260-session-close/state-snapshot.md`.
 - **UAT video:** kế hoạch `docs/audits/2026-10-30-S260-uat-video-plan/` (EN + VI); thử PORTAL-PUB-01 6/6, TP-PUB-01 7/7 (v2 giọng Nam).
 - **Video giới thiệu TripPlanner:** EN 3:57 + VI 4:14, 23 cảnh, quay trên app thật; gói zip 73 MB; đã đẩy lên Drive
   `01 Video/Giới thiệu sản phẩm/TripPlanner video giới thiệu (30-10-2026)/` bằng rclone, `rclone check` 14/14 khớp.
-- **Bằng chứng live:** 4 lượt, `docs/audits/2026-10-30-S260-evidence/` (mục 1–9, finding F1–F4).
+- **Bằng chứng live:** 5 lượt, `docs/audits/2026-10-30-S260-evidence/` (mục 1–9, finding F1–F4; F3, F4 đã sửa live).
 - **Kế hoạch CRM W5–W8** lập lại theo nhịp thật (3–4 issue CRM/phiên); **bài học** chuyển vào `aa-lessons`.
 
 ## LLM / chi phí
@@ -78,7 +78,10 @@ PR-26 #10564 (9 ảnh; bỏ ảnh lịch chụp trước bản sửa giờ), PR-
 
 1. AA-997: sau lượt relocate 31/10 → chạy lại báo cáo `hide_flagged` + audit → sửa điểm của 16 tour AA-990 → confirm ẩn;
    AA-990 recheck_14.
-2. Kiểm live còn thiếu: AA-961 (429 giới hạn reveal, banner sự cố), AA-1002 S9/S10, AA-923 (`/v1/rules` 404, nhãn, offboarding), AA-922 (tab Metrics sau #1192) — phần nào lượt kiểm cuối S260 chưa kịp.
+2. Lượt kiểm cuối S260 (mục 9, 22:38) đã PASS: AA-961 429 giới hạn reveal + giờ lịch theo đại lý, AA-923 `/v1/rules` 404,
+   AA-922 tab Metrics không tràn, AA-1002 cột budget + bảng chi phí. Còn cho Done: AA-961 banner khi token đồng bộ lịch
+   bị thu hồi + banner sự cố; AA-955 mã hết hạn bị từ chối + ghi log; AA-967 xoá thật trong thời hạn khiếu nại (giữ bằng
+   chứng ký) + AA staff tải 403; AA-1002 dòng chi phí đối soát thật khi có LLM. Ghi chú: BFF CRM không chuyển `Retry-After`.
 3. AA-855: chuyển công cụ UAT vào `tools/uat/`, ~20 kịch bản chạy thử nội bộ; tạo client id OAuth riêng cho rclone.
 4. CRM theo kế hoạch mới: AA-952 lát 4, AA-953, AA-966, AA-962.
 5. Đến hạn ≥ 01/11: AA-896 báo cáo chi phí tháng + C8 capacity review; C4.3 W45 từ 02/11.

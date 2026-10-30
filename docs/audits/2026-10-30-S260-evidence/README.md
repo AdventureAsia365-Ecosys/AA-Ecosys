@@ -1,7 +1,7 @@
 ---
 id: OPS-08-s260-live-evidence
-title: "S260 live evidence: kit, Booking S6d, LLM gateway, CRM invoices, e-sign, portability, writing memory, duty of care + calendar (30/10/2026)"
-description: "Agent-run Playwright evidence on the Dev hosts for work merged and deployed on 30/10/2026 (AA-994, AA-1002, AA-952, AA-955, AA-967, AA-921, AA-922, AA-961)."
+title: "S260 live evidence: kit, Booking, LLM gateway, CRM modules, writing memory, final checks"
+description: "Agent-run Playwright evidence on the Dev hosts for work merged and deployed on 30/10/2026 (AA-994, AA-1002, AA-952, AA-955, AA-967, AA-921, AA-922, AA-961, AA-923)."
 type: report
 status: active
 owner: nghiep
@@ -9,7 +9,7 @@ audience: [engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-10-30
 review_every_days: 30
-related: [AA-994, AA-1002, AA-952, AA-955, AA-967, AA-921, AA-922, AA-961]
+related: [AA-994, AA-1002, AA-952, AA-955, AA-967, AA-921, AA-922, AA-961, AA-923]
 ---
 
 # S260 live evidence (30/10/2026, 17:40–18:20 +07)
@@ -43,6 +43,7 @@ app origin. Raw per-step records are in [`data/`](data/) (ids replaced by `<uuid
 | 6 | AA-967 CRM portability + deletion (Partner #138, schema crm-026) | **PASS** (dry run only; finding F2) |
 | 7 | AA-921 / AA-922 Writing memory (CIS #1186 + #1187) and the #1188 label form | **PASS** (data and reads; layout finding F3 on the Metrics tab) |
 | 8 | AA-961 CRM duty of care + calendar (Partner #140, schema crm-027) | **PASS** on the API and the calendar / feed; the Travelling-now page shows only its empty state (no live trip within 14 days) and no AA incident exists for the agency (third lane, see below; finding F4) |
+| 9 | Final checks: AA-961 reveal limit + calendar timezone (Partner #142), AA-923 `/v1/rules` gone, AA-922 Metrics tab layout (CIS #1192), AA-1002 S9/S10 budgets and costs | **PASS** ×4 (fourth lane, see below; F3 and F4 fixed live) |
 
 ### 1. Kit buttons — Settings › UI Kit › Gallery, entry `data-kit-gallery="buttons"`
 
@@ -341,3 +342,95 @@ the known React #418 on the trip page (F1). No 5xx. Owner second session: 0 cons
 - One **revoked** ICS feed of the owner (scope agency, read once), with its audit events.
 - One logged `reveal` of one traveller's display name (reason `duty_of_care`).
 - Nothing else changed: no trip dates, stages or travellers were edited.
+
+## Fourth lane (30/10/2026, 22:38–22:55 +07): item 9, final checks
+
+Same rules and helpers as above (headless Chromium, one browser at a time; codes and tokens read at run time and never
+written down; VN egress checked first). Raw records: [`data/09-final-checks.json`](data/09-final-checks.json) (ids
+`<uuid>`, account ids `<account>`, no names, no token).
+
+Deployed check at 22:38: CRM `/crm/health` `git_sha 3718242a` (Partner #140), `/crm/health/ready` schema **crm-027**;
+CRM web `/healthz` `git_sha 3a116512` (Partner #142); CIS `/health/ready` `git_sha 041ba9a2` (#1191), schema **317**
+(required 315). CIS admin `aa-cis.` is aliased to the Vercel production deployment created 15:23:28 UTC, which is the
+GitHub `release` deployment of `041ba9a2` (it contains `ec1ff899`, CIS #1192). ECS: `aa-crm-dev-api` runs 1 task with
+one uvicorn process, so the per-process reveal meter is exact.
+
+### 9a. AA-961 hourly reveal limit and calendar timezone
+
+**Reveal limit (e2e agent of Sen Vàng, who had made no reveal this hour).** `POST /crm/v1/duty/reveal` through the BFF,
+1 traveller, `fields [display_name]`, no reason, one call a second (no other limiter applies to agency routes; the
+public and intake limiters are on the client host only):
+
+| Calls | Answer |
+|---|---|
+| 1–60 (22:47:34–22:48:51) | **200** each, `reason duty_of_care`, 1 traveller |
+| 61 | **429** `{"detail":"reveal_rate_limited","message":"60 travellers an hour; 0 left"}` |
+| 62 (one more) | **429** `reveal_rate_limited` |
+| Audit (owner, `GET audit/events?action=reveal`) | the two refusals are `outcome denied`, `reason rate_limited`, `member_role agent`, `fields [display_name]`, with `object_ids`; the allowed ones are `duty_of_care / agent` |
+
+62 calls in all, inside the 70-call budget. `Retry-After` does not reach the browser: the BFF does not forward it (the
+API sets 3600 s, see its unit test). That is only a note: the UI maps the 429 to its own message.
+
+**Calendar timezone (owner, `/calendar?month=2026-11&scope=agency`).** `GET calendar` answers `timezone
+Asia/Ho_Chi_Minh`; 4 November events have a time (tasks). Each one's time is shown in agency time:
+
+| `starts_at` (API) | Same instant in UTC | Rendered under 1 Nov 2026 |
+|---|---|---|
+| `2026-11-01T00:09:08+07:00` | 31 Oct 17:09 Z | **12:09 am** |
+| `2026-11-01T00:10:38+07:00` | 31 Oct 17:10 Z | **12:10 am** |
+| `2026-11-01T00:12:19+07:00` | 31 Oct 17:12 Z | **12:12 am** |
+| `2026-11-01T11:37:02+07:00` | 1 Nov 04:37 Z | **11:37 am** |
+
+No UTC time is shown, and the day list now reads in time order. The signing deadline reads "1 signature pending"
+(singular). `09a-calendar-nov-agency-1440-{light,dark}.png` (no sideways scroll: document 1,440 = 1,440, `main` 1,200
+= 1,200). **F4 is fixed live.**
+
+### 9b. AA-923 `/v1/rules` is gone
+
+| Request on `api-cis.` | No credentials | E2E CIS admin Bearer (read-only) |
+|---|---|---|
+| `GET /v1/rules` | **404** `{"detail":"Not Found"}` | **404** `{"detail":"Not Found"}` |
+| `GET /v1/rules/x` | **404** | **404** |
+| `PATCH /v1/rules/x` | **404** | **403** `{"detail":"e2e_read_only"}` |
+| `PATCH /v1/rules` | **404** | **403** `e2e_read_only` |
+| Control: `GET /admin/writing-memory/writers` (a live staff route) | **403** `Invalid admin secret` (the route's guard) | **200** |
+
+Why: the `{"detail":"Not Found"}` body is FastAPI's, so each request reached the API through API Gateway, and no route
+answers. `/v1/rules` is still a staff prefix (`STAFF_PATH_PREFIXES`, kept on purpose by AA-923). The staff middleware
+passes a request with no Bearer through untouched, so with no route the answer is 404. A live route would answer 401
+or 403 from its own guard, as the control shows. With the E2E Bearer, the middleware verifies the token and refuses
+every non-GET method from this read-only identity with 403 `e2e_read_only` **before routing**. A GET goes on to the
+router and gets 404. Through the admin site (`/api/v1/rules`, browser session) both methods answer **404**, because the
+BFF has no route for it. So the route is removed, and the prefix stays closed to writes.
+
+### 9c. AA-922 Metrics tab inside the admin frame (CIS #1192)
+
+`/admin/writing-memory` › Metrics, light, measured on `main.aa-admin-main`:
+
+| Width | `main` scrollWidth / clientWidth | "Run the weekly job now" | Shot |
+|---|---|---|---|
+| 1440 | **1,204 / 1,204** (was 1,449 / 1,204 in F3) | x 490–738, inside `main` (236–1,440) | `09c-wm-metrics-1440-light.png` |
+| 390 | **390 / 390** (was 400) | x 16–264, inside `main` (0–390) | `09c-wm-metrics-390-light.png` |
+
+The document does not scroll sideways at either width. At 1440 the KPI table is wider than its card (last column "Cost /
+write" and "Replay hit rate" sit past the right edge). It scrolls inside its own table frame, as kit tables do; the
+page and `main` do not scroll. **F3 is fixed live.**
+
+### 9d. AA-1002 S9/S10 budgets and cost check (CIS `041ba9a2`, schema 317)
+
+| Check | API (`/api/admin/…`, E2E CIS admin, read-only) | Result |
+|---|---|---|
+| `GET llm-connections` | **200** `{schema_ready, routing_uses_registry, connections, cost_policy_ready}`, 5 connections | budget fields on each: `monthly_budget_usd` (null on all 5: no budget set), `cost_policy {alert_pct 80, hard_stop true, usage_secret_name null, usage_scope_id null, stored false}` (the defaults, no policy row yet) |
+| `GET llm-connections/costs` | **200** `{schema_ready: true, connections, tolerance {usd, pct}, window_days}` | 5 rows: `budget null`; `reconcile.source` `aws_cost_explorer` ×3, `anthropic_cost_report` ×1, `openai_costs` ×1; `last null`, `days []` (no reconciliation has run yet: empty, as allowed) |
+| Connections tab | — | columns Connection, Kind, Credential, Limits, Health, **Budget**, Enabled; Budget reads "No budget" on all 5. `09d-connections-budget-1440-{light,dark}.png` |
+| Drawer, first connection | — | section **"Budget and cost check"** (`conn-costs`): intro text, Budget "No budget", Provider figure from "AWS Cost Explorer (stored snapshot)", Last check "Not checked yet", the tolerance line ($0.05 or 5 %; provisional days never alert), and a "Check now" button. `09d-drawer-budget-cost-1440-{light,dark}.png`, section alone `09d-drawer-budget-cost-section-{light,dark}.png` |
+
+**"Test connection" and "Check now" (reconcile) were not clicked.** No POST was sent. Console / failing requests on
+`aa-cis.`: only this run's two deliberate `/api/v1/rules` probes (404). The admin screenshots show AWS account ids where
+the admin UI shows them by design; this README and `data/` contain none.
+
+### Test data written by the fourth lane (Dev, agency Sen Vàng)
+
+- 60 logged `reveal` events of one traveller's display name by the e2e **agent** (`duty_of_care`) and 2 denied
+  `rate_limited` events. The agent's bulk reveal stays blocked until about 23:48 +07 (the meter's sliding hour; an
+  API restart clears it). Nothing else changed.
