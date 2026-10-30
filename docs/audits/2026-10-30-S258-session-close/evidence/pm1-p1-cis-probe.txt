@@ -1,0 +1,4 @@
+ecsx: started (session output not seen, normal when SSM drops it); waiting for the result
+{"synthetic_agencies_in_cis": {"sen-vang": {"tenant_id": "bab16039-a064-517f-a99f-172b729ad3c4", "cis_tenant": null, "members": []}, "southern-cross": {"tenant_id": "b9fa1635-3182-5e42-94b6-cf8648f2240d", "cis_tenant": null, "members": []}, "harbour-lights": {"tenant_id": "c3b8585f-9728-50c7-90d8-6f71e2591c89", "cis_tenant": null, "members": []}}}
+{"cis_refuses_crm_roles": {"a_role_set_to_crm_agent": {"refused": null, "skipped": "no membership row to try it on"}, "b_hand_written_event_with_crm_role": {"refused": true, "sqlstate": "23001", "expected_sqlstate": "23001", "as_expected": true, "error": "RestrictViolationError", "constraint": null}, "c_events_with_crm_role": {"count": 0, "of_events": 7}}, "ok": false}
+ecsx: rc=0 bytes=722

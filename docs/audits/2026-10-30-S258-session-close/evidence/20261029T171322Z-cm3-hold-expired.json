@@ -1,0 +1,57 @@
+{
+  "proof": "cm3-hold-expired",
+  "started_at": "20261029T171322Z",
+  "steps": [
+    {
+      "label": "client opens the page after the expiry",
+      "method": "GET",
+      "path": "/crm/public/v1/proposal",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "client accepts after the expiry",
+      "method": "POST",
+      "path": "/crm/public/v1/proposal/accept",
+      "status": 409,
+      "detail": "hold_expired"
+    },
+    {
+      "label": "agency: the version stays not accepted",
+      "method": "GET",
+      "path": "/crm/v1/proposals/71617004-5ac6-48e7-afb6-3a39447ce1fd/builder",
+      "status": 200,
+      "detail": null
+    }
+  ],
+  "checks": [
+    {
+      "check": "the page shows the hold expired",
+      "ok": true,
+      "hold": "expired",
+      "rechecks_left": 3
+    },
+    {
+      "check": "card R: 409 hold_expired with the re-quote offer (forced expiry)",
+      "ok": true,
+      "status": 409,
+      "detail": "hold_expired",
+      "requote": true
+    },
+    {
+      "check": "nothing was accepted",
+      "ok": true,
+      "status": "sent"
+    }
+  ],
+  "run": "1029171322",
+  "tenant_id": "bab16039-a064-517f-a99f-172b729ad3c4",
+  "partner": "https://portal.lumiguides.it.com",
+  "client": "https://go-dev.lumiguides.it.com",
+  "trip_id": "0a80c471-2ca3-4bbf-894b-e40b2742027f",
+  "proposal_id": "71617004-5ac6-48e7-afb6-3a39447ce1fd",
+  "prep_evidence": "/home/nghiep/projects/AA-Ecosys/.tmp-session/S258/crm-proofs/evidence/20261029T171200Z-cm3-expiry-prep.json",
+  "expiry": "FORCED: cm3_expire_hold_ecs.py moved crm.proposal.hold_expires_at 1 minute into the past; Booking's own hold did not run out (it holds 48 h)",
+  "passed": true,
+  "finished_at": "20261029T171336Z"
+}

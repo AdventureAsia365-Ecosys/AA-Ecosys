@@ -1,0 +1,190 @@
+{
+ "probe": "S258 AA-814 admin facts",
+ "fact_id": "fact_40b5240afa",
+ "checks": [
+  {
+   "name": "GET /admin/facts (admin) before",
+   "expected": "200",
+   "actual": "200",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "leftover probe facts cleaned",
+   "expected": "0 left after cleanup",
+   "actual": "found=0",
+   "pass": true,
+   "strict": false
+  },
+  {
+   "name": "POST /admin/facts as reviewer",
+   "expected": "403",
+   "actual": "403",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "POST /admin/facts as content",
+   "expected": "403",
+   "actual": "403",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "POST /admin/facts as viewer",
+   "expected": "403",
+   "actual": "403",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "POST /admin/facts as machine (no role)",
+   "expected": "403",
+   "actual": "403",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "POST /admin/facts as admin",
+   "expected": "201 scope=platform tenant_id=null fact_<10 hex> expired=true",
+   "actual": "201 {\"fact_id\": \"fact_40b5240afa\", \"scope\": \"platform\", \"tenant_id\": null, \"expired\": true}",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "create records updated_by",
+   "expected": "admin:claude-code-s258-aa814",
+   "actual": "admin:claude-code-s258-aa814",
+   "pass": true,
+   "strict": false
+  },
+  {
+   "name": "POST with tenant_id in the body",
+   "expected": "422 (extra field forbidden)",
+   "actual": "422",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "GET /admin/facts/{id} as viewer",
+   "expected": "200 same fact",
+   "actual": "200 S258-AA814-PROBE best season",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "GET /admin/facts?q=marker lists it",
+   "expected": "200 with the probe id",
+   "actual": "200 ['fact_40b5240afa']",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "writer read skips the expired fact",
+   "expected": "probe not offered",
+   "actual": "[]",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "PATCH with a stale expected_updated_at",
+   "expected": "409",
+   "actual": "409",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "PATCH as viewer",
+   "expected": "403",
+   "actual": "403",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "PATCH as admin",
+   "expected": "200 body changed, valid_until moved, updated_at moved, expired=false",
+   "actual": "200 {\"body\": \"Dry season runs from 3 to 4 March.\", \"valid_until\": \"2026-11-28\", \"updated_at\": \"2026-10-29T16:53:07.847854+00:00\", \"expired\": false}",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "PATCH valid_until before stated_on",
+   "expected": "422",
+   "actual": "422",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "writer read offers it for its country once valid",
+   "expected": "probe offered",
+   "actual": "['fact_40b5240afa']",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "writer read never offers it for another country",
+   "expected": "probe not offered",
+   "actual": "[]",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "GET history after edit",
+   "expected": "200 fact.updated + fact.created, actor admin:<id>, changes body/valid_until",
+   "actual": "200 ['fact.updated', 'fact.created'] actor=admin:claude-code-s258-aa814 changes=['body', 'valid_until']",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "DELETE as reviewer",
+   "expected": "403",
+   "actual": "403",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "DELETE as admin",
+   "expected": "200 deleted=true",
+   "actual": "200 {'fact_id': 'fact_40b5240afa', 'deleted': True}",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "GET after delete",
+   "expected": "404",
+   "actual": "404",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "DELETE again",
+   "expected": "404",
+   "actual": "404",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "history keeps the trail after delete",
+   "expected": "fact.deleted, fact.updated, fact.created",
+   "actual": "['fact.deleted', 'fact.updated', 'fact.created']",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "writer read after delete",
+   "expected": "probe not offered",
+   "actual": "[]",
+   "pass": true,
+   "strict": true
+  },
+  {
+   "name": "cleanup: no probe fact left",
+   "expected": "0",
+   "actual": "200 left=[]",
+   "pass": true,
+   "strict": true
+  }
+ ],
+ "strict_failures": [],
+ "verdict": "PASS"
+}
