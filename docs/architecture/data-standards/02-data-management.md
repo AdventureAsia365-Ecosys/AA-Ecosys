@@ -257,8 +257,8 @@ These meanings are binding. A new column MUST NOT reuse a name below with a diff
 | `booking.inbox_events` payload | Booking | PII redacted after **90 days**; row + `idempotency_key` kept | — | After redaction |
 | `shared.decision_log` | CIS | Decided in N4 after the cache TTL in code is confirmed (180 days is cited but not found in `181_jev_decision_layer.sql`) | `decision_cache_hits_daily` | Yes |
 | `shared.cost_explorer_snapshot` | CIS | latest snapshot per day kept; intra-day rows deleted | — | No |
-| `shared.llm_cost_reconcile` | CIS | proposed: **400 days**, deleted by the job kind `llm_cost_reconcile` itself on every run (one row per LLM connection and UTC day: logged cost next to the provider's figure, no tenant column, no personal data, a few thousand rows a year; AA-1002 S10, CIS 316) | — | No |
-| `shared.llm_connection_cost_policy` | CIS | kept while its connection exists (configuration: budget alert percent, hard stop, the NAME of a read-only usage key; deleted with the connection, FK CASCADE; AA-1002 S10, CIS 316) | — | No |
+| `shared.llm_cost_reconcile` | CIS | proposed: **400 days**, deleted by the job kind `llm_cost_reconcile` itself on every run (one row per LLM connection and UTC day: logged cost next to the provider's figure, no tenant column, no personal data, a few thousand rows a year; AA-1002 S10, CIS 317) | — | No |
+| `shared.llm_connection_cost_policy` | CIS | kept while its connection exists (configuration: budget alert percent, hard stop, the NAME of a read-only usage key; deleted with the connection, FK CASCADE; AA-1002 S10, CIS 317) | — | No |
 | `shared.dfs_call_log`, `geo.geocode_call` | CIS | 180 days (proposed, same as `llm_call_log`) | daily cost rollup (proposed, N4) | Yes |
 | `shared.dfs_balance_snapshot` | CIS | latest per day kept (proposed) | — | No |
 | `acp_contract.atom_ranking`, `acp_contract.route` (superseded rows, `superseded_at IS NOT NULL`) | CIS | proposed: superseded rows older than 90 days deleted; current rows never | — | No |
