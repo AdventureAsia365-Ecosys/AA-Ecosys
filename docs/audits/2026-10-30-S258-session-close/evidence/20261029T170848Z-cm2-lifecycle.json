@@ -1,0 +1,349 @@
+{
+  "proof": "cm2-lifecycle",
+  "started_at": "20261029T170848Z",
+  "steps": [
+    {
+      "label": "who am I",
+      "method": "GET",
+      "path": "/crm/v1/me",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "inquiry form",
+      "method": "POST",
+      "path": "/crm/public/v1/forms/cSyR3Pp6y9euRM-mX2yifw/submissions",
+      "status": 202,
+      "detail": null
+    },
+    {
+      "label": "trip at Inquiry",
+      "method": "GET",
+      "path": "/crm/v1/trips/7103d4d0-9754-4434-a19d-a071f97f1776",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "take the trip",
+      "method": "POST",
+      "path": "/crm/v1/trips/7103d4d0-9754-4434-a19d-a071f97f1776/owner",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "dates",
+      "method": "PATCH",
+      "path": "/crm/v1/trips/7103d4d0-9754-4434-a19d-a071f97f1776",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "to Qualifying",
+      "method": "POST",
+      "path": "/crm/v1/trips/7103d4d0-9754-4434-a19d-a071f97f1776/stage",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "to Proposal (Stage 2 by phone)",
+      "method": "POST",
+      "path": "/crm/v1/trips/7103d4d0-9754-4434-a19d-a071f97f1776/stage",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "text proposal",
+      "method": "POST",
+      "path": "/crm/v1/trips/7103d4d0-9754-4434-a19d-a071f97f1776/proposals",
+      "status": 201,
+      "detail": null
+    },
+    {
+      "label": "send to the client",
+      "method": "POST",
+      "path": "/crm/v1/proposals/958b50e9-32ca-417e-8547-0fd915cd42fc/send",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "client opens the proposal",
+      "method": "GET",
+      "path": "/crm/public/v1/p/<token>",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "client accepts",
+      "method": "POST",
+      "path": "/crm/public/v1/p/<token>/accept",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "proposal tab",
+      "method": "GET",
+      "path": "/crm/v1/trips/7103d4d0-9754-4434-a19d-a071f97f1776/lifecycle",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "mark the deposit paid",
+      "method": "POST",
+      "path": "/crm/v1/schedule/e2ab7ca8-d6f5-45ee-8478-b463d374329a/mark-paid",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "trip after the deposit",
+      "method": "GET",
+      "path": "/crm/v1/trips/7103d4d0-9754-4434-a19d-a071f97f1776",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "own supplier",
+      "method": "POST",
+      "path": "/crm/v1/suppliers",
+      "status": 201,
+      "detail": null
+    },
+    {
+      "label": "agency line",
+      "method": "POST",
+      "path": "/crm/v1/trips/7103d4d0-9754-4434-a19d-a071f97f1776/lines",
+      "status": 201,
+      "detail": null
+    },
+    {
+      "label": "line money",
+      "method": "PUT",
+      "path": "/crm/v1/lines/ab0f5dde-25ad-49d9-96ec-4a57b6490559/money",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "confirm the line",
+      "method": "POST",
+      "path": "/crm/v1/lines/ab0f5dde-25ad-49d9-96ec-4a57b6490559/confirm",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "to Travelling",
+      "method": "POST",
+      "path": "/crm/v1/trips/7103d4d0-9754-4434-a19d-a071f97f1776/stage",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "to Completed",
+      "method": "POST",
+      "path": "/crm/v1/trips/7103d4d0-9754-4434-a19d-a071f97f1776/stage",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "trip at the end",
+      "method": "GET",
+      "path": "/crm/v1/trips/7103d4d0-9754-4434-a19d-a071f97f1776",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "owner vs assistant",
+      "method": "GET",
+      "path": "/crm/v1/trips/7103d4d0-9754-4434-a19d-a071f97f1776",
+      "status": 200,
+      "owner_status": 200,
+      "assistant_leaks": {
+        "keys": [],
+        "values": []
+      }
+    },
+    {
+      "label": "owner vs assistant",
+      "method": "GET",
+      "path": "/crm/v1/trips/7103d4d0-9754-4434-a19d-a071f97f1776/lines",
+      "status": 200,
+      "owner_status": 200,
+      "assistant_leaks": {
+        "keys": [],
+        "values": []
+      }
+    },
+    {
+      "label": "owner vs assistant",
+      "method": "GET",
+      "path": "/crm/v1/trips/7103d4d0-9754-4434-a19d-a071f97f1776/lifecycle",
+      "status": 200,
+      "owner_status": 200,
+      "assistant_leaks": {
+        "keys": [],
+        "values": []
+      }
+    },
+    {
+      "label": "owner vs assistant",
+      "method": "GET",
+      "path": "/crm/v1/bookings",
+      "status": 200,
+      "owner_status": 200,
+      "assistant_leaks": {
+        "keys": [],
+        "values": []
+      }
+    },
+    {
+      "label": "owner vs assistant",
+      "method": "GET",
+      "path": "/crm/v1/suppliers/5e1eace4-1931-4e31-b9c3-fa37dc7b5025",
+      "status": 200,
+      "owner_status": 200,
+      "assistant_leaks": {
+        "keys": [],
+        "values": []
+      }
+    },
+    {
+      "label": "owner vs assistant",
+      "method": "GET",
+      "path": "/crm/v1/suppliers",
+      "status": 200,
+      "owner_status": 200,
+      "assistant_leaks": {
+        "keys": [],
+        "values": []
+      }
+    },
+    {
+      "label": "owner vs assistant",
+      "method": "GET",
+      "path": "/crm/v1/pipeline",
+      "status": 200,
+      "owner_status": 200,
+      "assistant_leaks": {
+        "keys": [],
+        "values": []
+      }
+    }
+  ],
+  "checks": [
+    {
+      "check": "the inquiry is received (202)",
+      "ok": true,
+      "status": 202
+    },
+    {
+      "check": "the inquiry becomes a card on the board",
+      "ok": true,
+      "waited_s": 10
+    },
+    {
+      "check": "the trip starts at Inquiry",
+      "ok": true,
+      "stage": "inquiry"
+    },
+    {
+      "check": "the client accepted on the client host",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "check": "a deposit row exists after the accept",
+      "ok": true
+    },
+    {
+      "check": "the deposit makes the trip Booked (gate met, no override)",
+      "ok": true,
+      "stage": "booked"
+    },
+    {
+      "check": "the own-supplier line is confirmed with its margin",
+      "ok": true,
+      "status": "confirmed",
+      "margin_base": "233.20"
+    },
+    {
+      "check": "the trip is Completed",
+      "ok": true,
+      "stage": "completed",
+      "history": [
+        "inquiry",
+        "qualifying",
+        "proposal",
+        "booked",
+        "travelling",
+        "completed"
+      ]
+    },
+    {
+      "check": "assistant GET /trips/7103d4d0-9754-4434-a19d-a071f97f1776: 200 with no margin key or cost-side value",
+      "ok": true,
+      "status": 200,
+      "keys": [],
+      "values": []
+    },
+    {
+      "check": "assistant GET /trips/7103d4d0-9754-4434-a19d-a071f97f1776/lines: 200 with no margin key or cost-side value",
+      "ok": true,
+      "status": 200,
+      "keys": [],
+      "values": []
+    },
+    {
+      "check": "assistant GET /trips/7103d4d0-9754-4434-a19d-a071f97f1776/lifecycle: 200 with no margin key or cost-side value",
+      "ok": true,
+      "status": 200,
+      "keys": [],
+      "values": []
+    },
+    {
+      "check": "assistant GET /bookings: 200 with no margin key or cost-side value",
+      "ok": true,
+      "status": 200,
+      "keys": [],
+      "values": []
+    },
+    {
+      "check": "assistant GET /suppliers/5e1eace4-1931-4e31-b9c3-fa37dc7b5025: 200 with no margin key or cost-side value",
+      "ok": true,
+      "status": 200,
+      "keys": [],
+      "values": []
+    },
+    {
+      "check": "assistant GET /suppliers: 200 with no margin key or cost-side value",
+      "ok": true,
+      "status": 200,
+      "keys": [],
+      "values": []
+    },
+    {
+      "check": "assistant GET /pipeline: 200 with no margin key or cost-side value",
+      "ok": true,
+      "status": 200,
+      "keys": [],
+      "values": []
+    },
+    {
+      "check": "positive control: the owner reads every cost-side value",
+      "ok": true,
+      "seen": [
+        "233.20",
+        "612.40",
+        "67.65",
+        "83.35"
+      ]
+    }
+  ],
+  "run": "1029170848",
+  "tenant_id": "bab16039-a064-517f-a99f-172b729ad3c4",
+  "partner": "https://portal.lumiguides.it.com",
+  "client": "https://go-dev.lumiguides.it.com",
+  "passed": true,
+  "trip_id": "7103d4d0-9754-4434-a19d-a071f97f1776",
+  "proposal_id": "958b50e9-32ca-417e-8547-0fd915cd42fc",
+  "supplier_id": "5e1eace4-1931-4e31-b9c3-fa37dc7b5025",
+  "line_id": "ab0f5dde-25ad-49d9-96ec-4a57b6490559",
+  "finished_at": "20261029T170929Z"
+}

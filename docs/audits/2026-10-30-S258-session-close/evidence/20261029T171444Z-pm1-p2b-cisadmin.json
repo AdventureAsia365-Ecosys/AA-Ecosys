@@ -1,0 +1,116 @@
+{
+  "proof": "pm1-p2b-cisadmin",
+  "started_at": "20261029T171444Z",
+  "steps": [
+    {
+      "label": "staff console (control)",
+      "method": "GET",
+      "path": "/crm/ops/v1/tenants",
+      "status": 200
+    },
+    {
+      "label": "portal session mint",
+      "method": "POST",
+      "path": "/auth/tenant-session",
+      "status": 403,
+      "detail": "forbidden"
+    },
+    {
+      "label": "tenant chooser",
+      "method": "GET",
+      "path": "/auth/tenant-memberships",
+      "status": 403,
+      "detail": "forbidden"
+    },
+    {
+      "label": "portal page with the token as studio cookie",
+      "method": "GET",
+      "path": "/portal",
+      "status": 307,
+      "location": "https://portal.lumiguides.it.com/auth/refresh",
+      "clears": []
+    },
+    {
+      "label": "portal BFF identity with the token as studio cookie",
+      "method": "GET",
+      "path": "/api/tenant/me",
+      "status": 401
+    },
+    {
+      "label": "agency API",
+      "method": "GET",
+      "path": "/crm/v1/memberships",
+      "status": 403,
+      "detail": "wrong_audience"
+    },
+    {
+      "label": "contrast: partner token at the mint",
+      "method": "POST",
+      "path": "/auth/tenant-session",
+      "status": 403,
+      "detail": "no_membership"
+    }
+  ],
+  "checks": [
+    {
+      "check": "the token is a WORKFORCE cis-admin access token",
+      "ok": true,
+      "iss": "https://cognito-idp.us-west-1.amazonaws.com/us-west-1_bCcFvbSOS",
+      "client_id": "3oqkumijh04cp81k3nlnub6qtv",
+      "token_use": "access",
+      "cognito:groups": [
+        "cis-admin"
+      ],
+      "exp": 1793294998
+    },
+    {
+      "check": "positive control: the token is valid where cis-admin belongs",
+      "ok": true,
+      "status": 200
+    },
+    {
+      "check": "CIS refuses a portal session to a cis-admin token (403)",
+      "ok": true,
+      "status": 403,
+      "detail": "forbidden"
+    },
+    {
+      "check": "CIS refuses the tenant chooser to a cis-admin token (403)",
+      "ok": true,
+      "status": 403
+    },
+    {
+      "check": "the portal never renders for it (no 200)",
+      "ok": true,
+      "status": 307,
+      "location": "https://portal.lumiguides.it.com/auth/refresh"
+    },
+    {
+      "check": "the portal BFF never answers as a tenant for it",
+      "ok": true,
+      "status": 401
+    },
+    {
+      "check": "the agency API refuses a cis-admin token (403)",
+      "ok": true,
+      "status": 403
+    },
+    {
+      "check": "a partner-pool token reaches the membership check (not 'forbidden')",
+      "ok": true,
+      "status": 403,
+      "detail": "no_membership"
+    }
+  ],
+  "token": {
+    "iss": "https://cognito-idp.us-west-1.amazonaws.com/us-west-1_bCcFvbSOS",
+    "client_id": "3oqkumijh04cp81k3nlnub6qtv",
+    "token_use": "access",
+    "cognito:groups": [
+      "cis-admin"
+    ],
+    "exp": 1793294998
+  },
+  "passed": true,
+  "finished_at": "20261029T171508Z"
+}

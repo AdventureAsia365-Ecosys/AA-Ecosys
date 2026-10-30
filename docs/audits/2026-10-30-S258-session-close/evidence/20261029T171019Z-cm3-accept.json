@@ -1,0 +1,211 @@
+{
+  "proof": "cm3-accept",
+  "started_at": "20261029T171019Z",
+  "steps": [
+    {
+      "label": "who am I",
+      "method": "GET",
+      "path": "/crm/v1/me",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "inquiry form",
+      "method": "POST",
+      "path": "/crm/public/v1/forms/cSyR3Pp6y9euRM-mX2yifw/submissions",
+      "status": 202,
+      "detail": null
+    },
+    {
+      "label": "trip at Inquiry",
+      "method": "GET",
+      "path": "/crm/v1/trips/947ec89c-bd94-46f5-bc48-d6ecad85a556",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "take the trip",
+      "method": "POST",
+      "path": "/crm/v1/trips/947ec89c-bd94-46f5-bc48-d6ecad85a556/owner",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "dates",
+      "method": "PATCH",
+      "path": "/crm/v1/trips/947ec89c-bd94-46f5-bc48-d6ecad85a556",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "to Qualifying",
+      "method": "POST",
+      "path": "/crm/v1/trips/947ec89c-bd94-46f5-bc48-d6ecad85a556/stage",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "to Proposal (Stage 2 by phone)",
+      "method": "POST",
+      "path": "/crm/v1/trips/947ec89c-bd94-46f5-bc48-d6ecad85a556/stage",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "start the builder",
+      "method": "POST",
+      "path": "/crm/v1/trips/947ec89c-bd94-46f5-bc48-d6ecad85a556/builder",
+      "status": 201,
+      "detail": null
+    },
+    {
+      "label": "settings",
+      "method": "PATCH",
+      "path": "/crm/v1/proposals/d9046165-fa25-4237-809d-70b5ad907854/builder",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "agency lodging option",
+      "method": "POST",
+      "path": "/crm/v1/proposals/d9046165-fa25-4237-809d-70b5ad907854/blocks/de7288da-2e7e-40c3-bba3-0e05250e7fd8/options",
+      "status": 201,
+      "detail": null
+    },
+    {
+      "label": "AA product",
+      "method": "GET",
+      "path": "/crm/v1/aa/products/000e3340-d9f5-4b7b-8609-4cdaa9c272dc?currency=USD",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "a day tour block",
+      "method": "POST",
+      "path": "/crm/v1/proposals/d9046165-fa25-4237-809d-70b5ad907854/days/717d704a-7b92-4719-9d91-7ebb46ba0faa/blocks",
+      "status": 201,
+      "detail": null
+    },
+    {
+      "label": "AA option from a live quote",
+      "method": "POST",
+      "path": "/crm/v1/proposals/d9046165-fa25-4237-809d-70b5ad907854/blocks/316e73ff-35e7-46a1-a2b5-88b7a25d10f2/aa-options",
+      "status": 201,
+      "detail": null
+    },
+    {
+      "label": "publish v1",
+      "method": "POST",
+      "path": "/crm/v1/proposals/d9046165-fa25-4237-809d-70b5ad907854/publish",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "send to the client",
+      "method": "POST",
+      "path": "/crm/v1/proposals/d9046165-fa25-4237-809d-70b5ad907854/send",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "client opens the proposal",
+      "method": "GET",
+      "path": "/crm/public/v1/proposal",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "client: check availability (hold)",
+      "method": "POST",
+      "path": "/crm/public/v1/proposal/hold",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "client re-reads the page",
+      "method": "GET",
+      "path": "/crm/public/v1/proposal",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "client accepts",
+      "method": "POST",
+      "path": "/crm/public/v1/proposal/accept",
+      "status": 200,
+      "detail": null
+    },
+    {
+      "label": "agency: the version after the accept",
+      "method": "GET",
+      "path": "/crm/v1/proposals/d9046165-fa25-4237-809d-70b5ad907854/builder",
+      "status": 200,
+      "detail": null
+    }
+  ],
+  "checks": [
+    {
+      "check": "the inquiry is received (202)",
+      "ok": true,
+      "status": 202
+    },
+    {
+      "check": "the inquiry becomes a card on the board",
+      "ok": true,
+      "waited_s": 7
+    },
+    {
+      "check": "the trip starts at Inquiry",
+      "ok": true,
+      "stage": "inquiry"
+    },
+    {
+      "check": "the AA product has a trip plan component",
+      "ok": true
+    },
+    {
+      "check": "quoted: the AA option carries Booking's live net (owner view)",
+      "ok": true,
+      "net_amount": "158.54",
+      "availability": "on_request"
+    },
+    {
+      "check": "the version is published",
+      "ok": true,
+      "status": "published"
+    },
+    {
+      "check": "before the check the hold box asks for it",
+      "ok": true,
+      "hold": "missing"
+    },
+    {
+      "check": "held: Booking holds the AA item for the client",
+      "ok": true,
+      "status": 200,
+      "hold": "active",
+      "expires_at": "2026-10-31T17:10:46.708541+00:00"
+    },
+    {
+      "check": "accepted with the hold in place",
+      "ok": true,
+      "status": 200,
+      "detail": null
+    },
+    {
+      "check": "the agency sees the version accepted",
+      "ok": true,
+      "status": "accepted",
+      "accepted_total": null
+    }
+  ],
+  "run": "1029171019",
+  "tenant_id": "bab16039-a064-517f-a99f-172b729ad3c4",
+  "partner": "https://portal.lumiguides.it.com",
+  "client": "https://go-dev.lumiguides.it.com",
+  "passed": true,
+  "trip_id": "947ec89c-bd94-46f5-bc48-d6ecad85a556",
+  "proposal_id": "d9046165-fa25-4237-809d-70b5ad907854",
+  "confirm_gap": "no code path confirms an accepted proposal hold set with Booking yet (AA-950 'Not built')",
+  "finished_at": "20261029T171048Z"
+}
