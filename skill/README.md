@@ -45,8 +45,8 @@ Tái cấu trúc lần đầu ở AA-733 (S215, 06/10/2026); rà soát toàn b�
 ```
 ai-nghiep/        SKILL.md + references/{aws, adr, stakeholders-english, handoff-prompt}.md
 aa-lessons/       SKILL.md + lessons.md (sổ bài học — ghi ngay khi gặp lỗi do làm sai cách)
-aa-session/       SKILL.md
-aa-ship/          SKILL.md
+aa-session/       SKILL.md + references/parallel-lanes.md
+aa-ship/          SKILL.md + references/merge-trains.md
 aa-ui-verify/     SKILL.md + references/evidence-report.md
 aa-linear-issue/  SKILL.md
 aa-jira-update/   SKILL.md
