@@ -188,6 +188,19 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - **Cổng deploy (schema-gate) chặn mọi deploy khi lần tự áp gần nhất đỏ probe; chạy lại run cũ dùng workflow cũ** — cần một lần tự áp expand mới xanh (S258, AA-993).
 - **Kiểm "trang đọc được không" phải không theo redirect** — `curl -L` theo 302 sang vercel.com/sso-api đọc 200, Visual chụp 40 ảnh trang đăng nhập (S258, TP #189).
 
+- **Một file "giống hệt" chép sang repo khác phải qua lint của repo đích** — Booking #153 / Partner #126 đỏ Lint vì
+  `ruff format --check` (CIS chỉ chạy flake8 trên api/services/shared nên file test chép từ CIS hợp lệ ở CIS) (S259,
+  AA-993). Bắt bằng: sau khi chép, chạy `uvx ruff@<pin> format --check` + `ruff check` theo `ci.yml` của từng repo đích.
+- **`tools/github/mergeq.sh` có thể báo exit 4 "not merged and not in the queue (OPEN, CLEAN)" đúng lúc queue vừa merge**
+  — Partner #128, Booking #156 thật ra đã MERGED (S259). Bắt bằng: exit 4 → đọc lại `gh pr view <n> --json state` sau
+  ~10 s trước khi xử lý như rơi queue.
+- **boto3 không dùng cache MFA của AWS CLI; vá bằng `sitecustomize` làm credential rơi về một khoá tĩnh của ACC3** — dry
+  run Cognito tra nhầm tài khoản (may chưa ghi) (S259, P-M1). Cách đúng: `botocore.session.Session(profile=...)`, gắn
+  `JSONFileCache(~/.aws/cli/cache)` vào provider `assume-role` trước lần dùng đầu, rồi `boto3.Session(botocore_session=…)`;
+  luôn kiểm `get_caller_identity()["Account"]` = acc2 và từ chối nếu khác; không truyền `AWS_SESSION_TOKEN=None`.
+- **Auto mode chặn Terraform apply có IAM/OIDC (dù apply Organizations/SCP/trail trước đó qua được)** (S259, AA-1004) —
+  gom apply IAM + đổi GitHub environment/secret + xoá role bootstrap vào một script cửa sổ, Nghiệp tắt auto mode một lần.
+
 ## Pipeline và chất lượng
 - **Script adhoc chạy lâu (>5′) không chạy trong task api/worker khi còn PR backend chờ merge** — S234 replay F9 v2 chạy `nohup` trong task api, deploy #687/#688 thay task → chết giữa chừng 2 lần, phí ≈ $0,37 (335 lời gọi cho 172 lời gọi cần). `ecs execute-command` chạy nền (không TTY) cũng tự ngắt ("Cannot perform start session: EOF"). Bắt bằng: chạy adhoc dài bằng one-off ECS task (`run-task`, như DB Migrate) hoặc merge xong hết rồi mới chạy; script ghi kết quả ra S3 + có trần chi phí.
 - **Chọn model cho bước enrichment phải A/B cả hãng khác, không dừng ở model rẻ nhất cùng hãng** — S234 place card: Haiku trượt (24/28 identity, 23 fact sai), định giữ Sonnet; Nghiệp hỏi "chưa thử Luna à" → gpt-5.6-luna 27/27, 2 sai, rẻ hơn Sonnet ≈12×. Soạn/kiểm khác hãng → cả hai stage là `validate` (ADR 0008), đổi hãng phải qua migration (admin PATCH chặn đổi vendor). Bắt bằng: A/B mọi tier rẻ có trong catalog trước khi kết luận.
@@ -290,6 +303,14 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - **Dump toạ độ ít chữ số hơn DB thì so tuyến phải có dung sai** — 130/281 "lệch" chỉ do làm tròn 6 vs 7 chữ số (S258, AA-997 p4_tune).
 - **Repo public: chuỗi mẫu trong test cũng không được có 12 chữ số dạng account** (`000000000000` bị guard chặn 2 lần) — dùng `<account>` (S258, CIS #1148, #1159).
 
+- **Thêm FK trỏ vào một bảng có sẵn: tìm mọi test integration xoá/drop bảng đó và các test chạy lại migration cũ** —
+  mig 307 (alias → catalog, RESTRICT) làm đỏ test 259 (xoá dòng `sonnet`); mig 309 (health → connection) làm đỏ test
+  304 (drop bảng để chạy lại), và chạy lại 304 làm mất grant cột của 310 trong test 306 (S259, AA-1002 #1168/#1176).
+  Bắt bằng: `grep -rn "DELETE FROM\|DROP TABLE" tests/integration | grep <bảng>`; chạy các file đó trên Postgres local
+  (`/usr/lib/postgresql/16/bin`, socket dir ngắn) trước khi push.
+- **Số migration lấy theo `main` lúc merge, không theo số lane "giữ chỗ"** — preflight đòi `main max + 1`; lane đặt 309/310/311
+  phải đổi thành 308/309/310 trước khi push, kể cả mọi tham chiếu trong test/tài liệu (S259).
+
 ## Frontend
 
 - API trả field dạng danh sách mà UI coi là số và render thẳng `{x}` thì im lặng khi mảng rỗng, sập cả tab khi có phần tử object đầu tiên — triệu chứng: Places → Merges trắng trang từ lượt dedupe 27/10 02:34 (China có conflict đầu tiên) → nguyên nhân: router chép nguyên kết quả job (list) sang response, kiểu UI ghi `number` (S252, AA-847, CIS #1058). Bắt bằng: router trả view có kiểu rõ (count + detail có cap) kèm unit test; UI không render giá trị thô từ API, dùng helper đếm.
@@ -320,3 +341,5 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 - Playwright headless không tự xin `/favicon.ico`, nên lỗi 404 favicon chỉ hiện ở trình duyệt thật / Lighthouse — "0 console error" từ Playwright chưa đủ, đọc audit `errors-in-console` của Lighthouse (S255, AA-995).
 - Ảnh `fullPage` của trang có `content-visibility: auto` ra dải trống ở các section đó; nghi dải trống thì cuộn tới và chụp theo viewport trước khi kết luận (S255, AA-995).
 - Đo phần bị khuất của mọi hàng cuộn ngang (`scrollWidth - clientWidth`) ở 768/1024/1440, không chỉ tràn trang: ô tìm kiếm home TripPlanner giấu nút ở mọi bề rộng desktop dù tràn trang = 0 (S255, AA-995).
+- **Layout-mock của Booking đo bản `.next` đang có** (`next start`): sửa code rồi chạy `test:layout` mà không `next build`
+  lại sẽ đo bản cũ — 3 lần "không đổi 1082 px" (S259, AA-994 S6d). Bắt bằng: luôn `npx next build` trước `test:layout`.
