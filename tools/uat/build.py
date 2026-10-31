@@ -4,6 +4,7 @@ an English narration track (default), a Vietnamese narration track, and sidecar 
   python -I build.py <work/ID> <out_dir>
   python -I build.py <work/ID> <out_dir> --no-burn   (no burned-in subtitles: input for longform.py, which keeps
                                                       the subtitles as switchable tracks; the default is unchanged)
+  python -I build.py <work/ID> <out_dir> [--allow-drift]  (stops when video.webm is > 1 s shorter than the timeline)
   python -I build.py <work/ID> <out_dir> --soft-subs (a stand-alone chunk with nothing burned in: two soft
                                                       subtitle tracks, mov_text English (default) + Vietnamese, beside
                                                       the two voices; goes to <out_dir>/soft/; a sample to listen to)
@@ -25,6 +26,7 @@ import numpy as np
 import soundfile as sf
 
 LEAD_S = 0.25
+MAX_START_GAP_S = 1.0
 LANG3 = {"en": "eng", "vi": "vie"}
 SUB_TITLE = {"en": "English", "vi": "Tiếng Việt"}
 
@@ -100,6 +102,12 @@ def main(work: Path, out_dir: Path, burn: bool = True, soft: bool = False) -> No
     timeline = json.loads((work / "timeline.json").read_text())
     result = json.loads((work / "result.json").read_text())
     total_s = result["total_ms"] / 1000
+    # timeline.json counts from the recorder's t0; the picture must start there too, or every cue lands late.
+    gap = total_s - video_seconds(work / "video.webm")
+    if gap > MAX_START_GAP_S and "--allow-drift" not in sys.argv[1:]:
+        raise SystemExit(f"{work.name}: the video is {gap:.1f}s shorter than its timeline (start of the take not "
+                         "recorded), so voice and subtitles would lag the picture; record it again (--allow-drift "
+                         "builds it anyway)")
     if soft:
         burn = False
         out_dir = out_dir / "soft"

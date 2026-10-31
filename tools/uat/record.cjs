@@ -97,6 +97,13 @@ async function main() {
     }, sc.blurText);
   }
   const page = await context.newPage();
+  // The video starts at the first painted frame, and about:blank paints none: without this, every second the first
+  // step spends loading its page is cut from the start of the video while timeline.json still counts it, so the
+  // narration and the subtitles lag the picture by that much (2-4 s seen, S261). Paint a plain frame, then start t0.
+  if (!fast) {
+    await page.setContent('<html><body style="margin:0;background:#f8f6f2"></body></html>');
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+  }
   const t0 = Date.now();
   let cursor = { x: sc.viewport.width / 2, y: sc.viewport.height / 2 };
   const wait = (ms) => page.waitForTimeout(fast ? Math.min(ms, 150) : ms);
