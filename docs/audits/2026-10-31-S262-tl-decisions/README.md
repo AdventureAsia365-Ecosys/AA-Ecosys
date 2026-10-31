@@ -1,5 +1,5 @@
 ---
-id: AUD-S262-tl-decisions
+id: OPS-08-s262-tl-decisions
 title: "Tech lead decisions on the S261 architecture review TL items (S262)"
 description: "Rule given by the tech lead on 31/10/2026 for TL-1…TL-25: free and simple items approved and done now; paid or complex items not approved, noted for later."
 type: report
