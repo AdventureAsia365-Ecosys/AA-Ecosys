@@ -93,8 +93,9 @@ async function main() {
       await wait(120);
       await page.mouse.up();
     },
-    scrollTo: async (loc) => {
-      await loc.first().evaluate((el, b) => el.scrollIntoView({ behavior: b, block: 'start' }), fast ? 'instant' : 'smooth');
+    // scenario.scrollBlock = 'center' for apps with a sticky top bar (a 'start' scroll hides the target under it).
+    scrollTo: async (loc, block = sc.scrollBlock || 'start') => {
+      await loc.first().evaluate((el, [b, at]) => el.scrollIntoView({ behavior: b, block: at }), [fast ? 'instant' : 'smooth', block]);
       await wait(1400);
     },
     smoothScrollBy: async (dy) => {

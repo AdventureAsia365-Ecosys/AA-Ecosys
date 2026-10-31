@@ -17,6 +17,7 @@ function base({ id, title, who = 'A', viewport = DESKTOP, mask = [] }) {
     baseURL: crm.PARTNER,
     viewport,
     mask: [...crm.TRAVELLER_MASK, ...mask],
+    scrollBlock: 'center', // the CRM shell has a sticky top bar
     meta: {},
   };
   if (who) {
