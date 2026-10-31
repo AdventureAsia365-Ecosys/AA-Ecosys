@@ -1,5 +1,5 @@
 ---
-id: AUD-S261-aws-bedrock-org-access
+id: OPS-08-s261-aws-bedrock-org-access
 title: "Bedrock access in our own AWS Organization under Billing Transfer (S261)"
 description: "Bản tư vấn cho tech lead: org riêng + Billing Transfer qua đại lý thì account thành viên phải cấu hình gì để gọi Bedrock theo từng nhà cung cấp model (Anthropic, OpenAI, Amazon, Meta, Mistral, Cohere, DeepSeek...), các bước theo thứ tự và ai làm, câu hỏi cho đại lý, và có cần account AI riêng không."
 type: report

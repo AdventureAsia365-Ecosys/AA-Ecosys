@@ -1,7 +1,7 @@
 ---
 id: OPS-08-s261-architecture-review
 title: "Rà soát kiến trúc, dự án và quy trình SDLC/ADLC theo 8 vai (S261)"
-description: "Bản tư vấn cho tech lead: 8 vai (CTO, AWS Solutions Architect, DevOps, GenAI developer, Security, PM, Data Engineer, AI Engineer) cộng một người rà chuẩn SDLC/ADLC chấm điểm cách tổ chức, thực hiện, quản lý dự án, dữ liệu và hệ sinh thái; phát hiện gom theo lĩnh vực, bảng chuẩn cần ngay / trước go-live / sau, lộ trình kèm issue Linear, việc chưa nên làm, và các quyết định cần duyệt."
+description: "Bản tư vấn cho tech lead: 8 vai chuyên môn và một người rà chuẩn SDLC/ADLC chấm cách tổ chức, làm và quản lý hệ sinh thái AA; lộ trình và các quyết định cần duyệt."
 type: report
 status: active
 owner: nghiep
