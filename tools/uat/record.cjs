@@ -7,6 +7,9 @@
 // run, marks the step FAIL and still keeps the video as evidence. Exit: 0 PASS, 2 a step FAILed, 1 crash.
 // Signed-in scenarios: UAT_STORAGE_STATE=<file> (or scenario.storageState) saved by an unrecorded sign-in run;
 // the sign-in screen itself is never recorded. scenario.mask = [CSS selectors] blurs secrets on screen.
+// Optional scenario hooks: prepare() runs before the browser starts (unrecorded sign-in, e.g. lib/crm-signin.cjs; it
+// may set scenario.storageState); fastOnly: true refuses a recorded run (data prep / cleanup scenarios); scenario.meta
+// (filled by steps, e.g. the app git_sha at the start and end) is copied into result.json.
 // Setup once: bash tools/uat/setup.sh (pins @playwright/test). One Chromium, closed at the end.
 const fs = require('fs');
 const path = require('path');
@@ -29,6 +32,9 @@ async function main() {
     console.log(`captions: ${captions.length} -> ${path.join(work, 'captions.json')}`);
     return;
   }
+
+  if (sc.fastOnly && !fast) throw new Error(`${sc.id} is a data step: run it with --fast only`);
+  if (typeof sc.prepare === 'function') await sc.prepare({ fast });
 
   let durations = {};
   const dPath = path.join(work, 'durations.json');
@@ -128,6 +134,8 @@ async function main() {
     id: sc.id, app: sc.app, title: sc.title, baseURL: sc.baseURL, mode: fast ? 'fast' : 'uat',
     recorded_at: new Date().toISOString(), total_ms: total,
     verdict: failed ? 'FAIL' : 'PASS', failed_step: failed, steps_run: timeline.length, steps_total: sc.steps.length,
+    ...(sc.meta ? { meta: sc.meta } : {}),
+    ...(failed ? { failed_error: timeline[timeline.length - 1].error } : {}),
   };
   fs.writeFileSync(path.join(work, 'timeline.json'), JSON.stringify(timeline, null, 2));
   fs.writeFileSync(path.join(work, 'result.json'), JSON.stringify(result, null, 2));
