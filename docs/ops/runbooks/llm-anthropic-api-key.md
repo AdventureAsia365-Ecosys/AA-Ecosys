@@ -63,6 +63,10 @@ Already in place (no key, no cost):
   never do. A stage whose route has only legacy keys (most writers and checks on 31/10) keeps no LLM path until the
   tech lead adds a Converse model (for example `sonnet-5-5` or `haiku-5-5`) to its route in the admin; re-run the
   script's apply after such a change. This is a model choice, not part of this procedure.
+- `SCRIPT held` lines name stages the script did **not** open because their route also reaches a `vendor_direct`
+  deployment on a connection that is already enabled (today `openai-direct`): opening them would send paid traffic
+  outside AWS before the Anthropic key exists. The tech lead decides those stages. A stage whose only Anthropic model
+  is its shadow is never opened (its A/B shadow calls would become paid API calls).
 
 Remaining tech lead steps (in this order):
 
