@@ -101,7 +101,22 @@ async function submitInquiryApi(page, formKey, p) {
   if (r !== 202) throw new Error(`inquiry submission answered ${r}`);
 }
 
+/** Type into a field like a person (fill at once in fast mode); `loc` must be an input or textarea. */
+async function type(page, h, loc, text) {
+  await h.click(loc);
+  await loc.fill('');
+  if (h.fast) await loc.fill(text);
+  else await loc.pressSequentially(text, { delay: 35 });
+  await h.expect(loc).toHaveValue(text);
+}
+
+/** Choose a <select> option (value or { label }) after moving the cursor to it. */
+async function choose(h, loc, option) {
+  await h.hover(loc);
+  await loc.selectOption(option);
+}
+
 /** Days from today as an ISO date (UTC; enough for trip dates weeks ahead). */
 const day = (n, from = new Date()) => new Date(from.getTime() + n * 86_400_000).toISOString().slice(0, 10);
 
-module.exports = { crm, st, DESKTOP, PHONE, base, sha, open, bff, bffOk, waitForCard, prospect, submitInquiryApi, day };
+module.exports = { crm, st, DESKTOP, PHONE, base, sha, open, bff, bffOk, waitForCard, prospect, submitInquiryApi, type, choose, day };

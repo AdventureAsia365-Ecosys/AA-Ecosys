@@ -116,6 +116,8 @@ async function main() {
     } catch (e) {
       status = 'FAIL';
       error = String(e.message || e).split('\n')[0];
+      // The failing screen, for the report (work/ is gitignored; masks apply as on the video).
+      await page.screenshot({ path: path.join(work, `fail-step-${n}.png`) }).catch(() => {});
     }
     const remaining = start + hold - (Date.now() - t0);
     if (remaining > 0) await page.waitForTimeout(remaining);
