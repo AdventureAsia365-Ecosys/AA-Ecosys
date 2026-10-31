@@ -9,6 +9,11 @@
 - **Amends (on acceptance):** ADR 0001, the S235 sentence "Production also runs on acc2 … no new AWS account is
   created for any environment". ADR 0001a (LLM chat models on the LLM account only, no cross-account fallback) is
   unchanged: the LLM account keeps that role under the name `aa-ai`.
+- **Note (S261, AA-804):** [ADR 0009](0009-ai-platform-and-provider-gateway.md) (Proposed) decision 14 would amend
+  this: `aa-nonprod` (acc2), and later `aa-prod`, may serve Bedrock chat models of the families they can run for
+  eval, judge and validate stages only, and every `failure_domain` is re-checked at each payer or organization change
+  in this ADR's timeline. If both are accepted, the `aa-ai` row below reads "main Bedrock chat account" instead of
+  "Bedrock chat models only".
 - **Scope:** AA-CIS-Infra (a new `accounts/management` root, the future `accounts/prod` root, state buckets, OIDC
   roles per account), every app repo (Deploy Prod targets another account), root (account map in onboarding, data
   standards C7.2c, the engineering handbook D-17 row, the DevOps guide, skills that name AWS profiles).
