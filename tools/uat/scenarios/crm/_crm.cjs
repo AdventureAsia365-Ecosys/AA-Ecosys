@@ -117,7 +117,15 @@ async function choose(h, loc, option) {
   await loc.selectOption(option);
 }
 
+/**
+ * A step found its work already done by an earlier run. Fine for a --fast rehearsal (it skips the action); a recorded
+ * take would narrate an action that is not on screen, so it stops and asks for fresh data.
+ */
+function reuse(h, what, fresh = 'prep with UAT_CRM_NEW_RUN=1, then the chunks in order') {
+  if (!h.fast) throw new Error(`${what} already exists: a recorded take needs a fresh run (${fresh})`);
+}
+
 /** Days from today as an ISO date (UTC; enough for trip dates weeks ahead). */
 const day = (n, from = new Date()) => new Date(from.getTime() + n * 86_400_000).toISOString().slice(0, 10);
 
-module.exports = { crm, st, DESKTOP, PHONE, base, sha, open, bff, bffOk, waitForCard, prospect, submitInquiryApi, type, choose, day };
+module.exports = { crm, st, DESKTOP, PHONE, base, sha, open, bff, bffOk, waitForCard, prospect, submitInquiryApi, type, choose, day, reuse };

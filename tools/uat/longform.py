@@ -2,21 +2,28 @@
 the subtitles are switchable (tech lead decision S261): two audio tracks (English default, Vietnamese) and two soft
 subtitle tracks (mov_text English, Vietnamese), nothing burned into the picture.
 
-  python -I longform.py --chunks out/crm --prefix CRM-REV- --out out/crm-long --name CRM-REVIEW_20261105_v1
+  python -I longform.py --chunks out/crm/no-burn --prefix CRM-REV- --out out/crm-long --name CRM-REVIEW_20261105_v1
         [--highlight R01,R03,R04,R06,R08,R10,R11,R15] [--per-language] [--subs-default en|none]
 
 Input: the chunk MP4s from `build.py <work/ID> <dir> --no-burn` (<ID>_<yyyymmdd>_v<n>.mp4, with .en.srt / .vi.srt
-and .result.json beside it); the newest version of each id is used, in id order.
+and .result.json beside it); the newest version of each id is used, in id order. It stops (exit != 0) when a chosen
+chunk is a burned build (subtitles would show twice), is not a PASS (a FAIL chunk keeps [FAIL] captions), recorded
+across a deploy (meta.git_sha_start != git_sha_end) or on another app version than the others, or lacks one of its
+two narration tracks; --allow-not-pass, --allow-sha-drift and --allow-missing-audio override one check each.
 Steps: (1) normalise each chunk: 1440x900 (a 390x844 phone chunk is scaled to fit and padded centred, before any
 subtitle is drawn: none is), yuv420p, 25 fps, both audio tracks 48 kHz stereo at -16 LUFS (loudnorm), audio padded to
 the picture; (2) a 2.5 s chapter card before each chunk; (3) concat -c copy; (4) EN and VI subtitles merged with each
-chunk's offset, chapters from an ffmetadata file, everything muxed without re-encoding. Also writes chapters.txt and
-.srt / .vtt sidecars. --per-language adds <name>_EN.mp4 / <name>_VI.mp4 (that language's voice and subtitles
-first and default, the other still switchable) for players that only use the default track (Drive).
+chunk's offset, chapters from an ffmetadata file; the picture is copied, the audio is re-encoded once over the joined
+file (no AAC priming drift across ~40 segments). Also writes chapters.txt and .srt / .vtt sidecars; check the long
+output with check_sync.py on both tracks (start and end chapters). --per-language adds <name>_EN.mp4 / <name>_VI.mp4
+(that language's voice and subtitles first and default, the other still switchable) plus <name>.README.txt: the
+Drive player shows no embedded subtitle track by itself, so upload the .srt files beside the MP4 as Drive caption
+tracks (or point viewers to the sidecars).
 --highlight writes <name>_highlight.mp4 from the listed chunks (same segments, no new recording).
 Local ffmpeg only, $0. Normalised segments are cached under work/longform/.
 """
 import argparse
+import hashlib
 import json
 import re
 import shutil
@@ -33,6 +40,13 @@ ACCENT = "0x9E6E16"
 ENC_V = ["-c:v", "libx264", "-preset", "medium", "-crf", "26", "-pix_fmt", "yuv420p", "-r", str(FPS), "-g", "50",
          "-video_track_timescale", "12800"]
 ENC_A = ["-c:a", "aac", "-b:a", "128k", "-ar", "48000", "-ac", "2"]
+
+
+DRIVE_NOTE = """{name}: subtitles
+The MP4 files carry English and Vietnamese subtitles as switchable tracks, but the Google Drive player does not show
+an embedded subtitle track by itself. On Drive, add {name}.en.srt and {name}.vi.srt to the video as caption tracks
+(video menu > Manage caption tracks), or open the .srt / .vtt files beside the video in a desktop player.
+"""
 
 
 # ---------- pure helpers (unit-tested in tests/test_longform.py) ----------
@@ -125,6 +139,29 @@ def pick_chunks(files: list[str], prefix: str) -> dict[str, str]:
     return {k: v[2] for k, v in sorted(best.items())}
 
 
+def chunk_problems(results: dict[str, dict], allow_not_pass: bool = False, allow_sha_drift: bool = False) -> list[str]:
+    """results: {id: .result.json of the chosen build} -> what forbids joining them (empty list = fine).
+    A burned build is always refused (the long video adds soft subtitles: they would show twice)."""
+    out, shas = [], {}
+    for cid, r in sorted(results.items()):
+        if r.get("burned", True):
+            out.append(f"{cid}: a burned build (rebuild it with build.py --no-burn)")
+        if not allow_not_pass and r.get("verdict") != "PASS":
+            out.append(f"{cid}: verdict {r.get('verdict')} (step {r.get('failed_step')})")
+        meta = r.get("meta") or {}
+        a, b = meta.get("git_sha_start"), meta.get("git_sha_end")
+        if not allow_sha_drift:
+            if not a or not b:
+                out.append(f"{cid}: no app git sha recorded at the start and the end")
+            elif a != b:
+                out.append(f"{cid}: redeployed during the recording ({a[:7]} -> {b[:7]})")
+        if a:
+            shas.setdefault(a, []).append(cid)
+    if len(shas) > 1 and not allow_sha_drift:
+        out.append("chunks recorded on different app versions: " + "; ".join(f"{k[:7]}: {', '.join(v)}" for k, v in shas.items()))
+    return out
+
+
 def highlight_ids(spec: str, prefix: str) -> list[str]:
     """'R01,R03' -> ['<prefix>01', '<prefix>03'] (also accepts 1,3 or full ids)."""
     out = []
@@ -152,10 +189,16 @@ def duration(path: Path) -> float:
     return float(probe(path)["format"]["duration"])
 
 
+def audio_tracks(src: Path) -> int:
+    return sum(1 for s in probe(src)["streams"] if s["codec_type"] == "audio")
+
+
 def normalise(src: Path, dst: Path) -> None:
+    """A chunk with fewer than two narration tracks gets silence for the missing one; main() refuses that unless
+    --allow-missing-audio was passed."""
     if dst.exists() and dst.stat().st_mtime >= src.stat().st_mtime:
         return
-    n_audio = sum(1 for s in probe(src)["streams"] if s["codec_type"] == "audio")
+    n_audio = audio_tracks(src)
     inputs = ["-i", str(src)]
     if n_audio < 2:
         inputs += ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo"]
@@ -170,6 +213,11 @@ def normalise(src: Path, dst: Path) -> None:
             parts.append(f"[1:a]apad[a{i}]")
     run([*inputs, "-filter_complex", ";".join(parts), "-map", "[v]", "-map", "[a0]", "-map", "[a1]", "-shortest",
          *ENC_V, *ENC_A, str(dst)])
+
+
+def card_name(kicker: str, title: str, font: str) -> str:
+    """Cache name of a chapter card: a hash of what is drawn, so "Chapter 4 of 21" never stands in for "4 of 8"."""
+    return "card-" + hashlib.sha256(f"{kicker}\0{title}\0{font}\0{W}x{H}".encode()).hexdigest()[:16] + ".mp4"
 
 
 def card(dst: Path, kicker: str, title: str, font: str) -> None:
@@ -203,8 +251,9 @@ def assemble(items: list[dict], out_base: Path, cache: Path, title: str, subs_de
     segs, sub_segments = [], {"en": [], "vi": []}
     chapters_in = []
     for n, it in enumerate(items, 1):
-        cpath = cache / f"card-{it['id']}.mp4"
-        card(cpath, f"Chapter {n} of {len(items)}", it["title"], font)
+        kicker = f"Chapter {n} of {len(items)}"
+        cpath = cache / card_name(kicker, it["title"], font)
+        card(cpath, kicker, it["title"], font)
         npath = cache / f"{Path(it['mp4']).stem}.norm.mp4"
         normalise(Path(it["mp4"]), npath)
         cd, nd = duration(cpath), duration(npath)
@@ -217,7 +266,8 @@ def assemble(items: list[dict], out_base: Path, cache: Path, title: str, subs_de
     listing = cache / f"{out_base.name}.concat.txt"
     listing.write_text("".join(f"file '{p.resolve()}'\n" for p in segs), encoding="utf-8")
     joined = cache / f"{out_base.name}.joined.mp4"
-    run(["-f", "concat", "-safe", "0", "-i", str(listing), "-map", "0", "-c", "copy", str(joined)])
+    # Picture copied; both audio tracks re-encoded once over the whole timeline so ~40 AAC primings cannot add up.
+    run(["-f", "concat", "-safe", "0", "-i", str(listing), "-map", "0", "-c:v", "copy", *ENC_A, str(joined)])
 
     chapters = chapter_starts(chapters_in)
     meta = cache / f"{out_base.name}.ffmeta.txt"
@@ -246,13 +296,14 @@ def assemble(items: list[dict], out_base: Path, cache: Path, title: str, subs_de
     if per_language:  # a Drive copy per language: that voice and its subtitles first and default, both switchable
         mux(Path(f"{out_base}_EN.mp4"), "en", "en")
         mux(Path(f"{out_base}_VI.mp4"), "vi", "vi")
+        Path(f"{out_base}.README.txt").write_text(DRIVE_NOTE.format(name=out_base.name), encoding="utf-8")
     joined.unlink(missing_ok=True)
     return master
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--chunks", required=True, help="folder of build.py --no-burn outputs")
+    ap.add_argument("--chunks", required=True, help="folder of build.py --no-burn outputs (<out>/no-burn)")
     ap.add_argument("--prefix", default="CRM-REV-")
     ap.add_argument("--out", required=True)
     ap.add_argument("--name", required=True, help="e.g. CRM-REVIEW_20261105_v1")
@@ -260,6 +311,9 @@ def main() -> int:
     ap.add_argument("--highlight", default="", help="chunk numbers for the highlight cut, e.g. R01,R03,R04")
     ap.add_argument("--per-language", action="store_true")
     ap.add_argument("--subs-default", choices=("en", "vi", "none"), default="en")
+    ap.add_argument("--allow-not-pass", action="store_true", help="join chunks whose verdict is not PASS")
+    ap.add_argument("--allow-sha-drift", action="store_true", help="join chunks recorded across a deploy / versions")
+    ap.add_argument("--allow-missing-audio", action="store_true", help="fill a missing narration track with silence")
     a = ap.parse_args()
     if not shutil.which("ffmpeg"):
         sys.exit("STOP: ffmpeg missing")
@@ -267,12 +321,22 @@ def main() -> int:
     picked = pick_chunks([str(p) for p in chunks_dir.glob(f"{a.prefix}*.mp4")], a.prefix)
     if not picked:
         sys.exit(f"STOP: no {a.prefix}NN_<date>_v<n>.mp4 in {chunks_dir}")
-    items = {}
+    items, results = {}, {}
     for cid, f in picked.items():
         stem = Path(f).with_suffix("")
         res = Path(f"{stem}.result.json")
-        t = json.loads(res.read_text())["title"] if res.exists() else cid
-        items[cid] = {"id": cid, "title": t, "mp4": f, "en": f"{stem}.en.srt", "vi": f"{stem}.vi.srt"}
+        if not res.exists():
+            sys.exit(f"STOP: {cid}: no {res.name} beside the MP4")
+        results[cid] = json.loads(res.read_text())
+        items[cid] = {"id": cid, "title": results[cid]["title"], "mp4": f, "en": f"{stem}.en.srt", "vi": f"{stem}.vi.srt"}
+    problems = chunk_problems(results, a.allow_not_pass, a.allow_sha_drift)
+    if not a.allow_missing_audio:
+        problems += [f"{cid}: {n} narration track(s), expected 2" for cid, it in items.items()
+                     if (n := audio_tracks(Path(it["mp4"]))) < 2]
+    if problems:
+        sys.exit("STOP:\n  " + "\n  ".join(problems))
+    shas = sorted({(r.get("meta") or {}).get("git_sha_start", "?") for r in results.values()})
+    print(f"app git sha: {', '.join(shas)}")
     cache = HERE / "work" / "longform"
     cache.mkdir(parents=True, exist_ok=True)
     out = Path(a.out).resolve()

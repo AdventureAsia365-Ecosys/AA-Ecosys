@@ -3,14 +3,20 @@
 //   UAT_CRM_CLEANUP_KEEP_PREP=1 keeps prep's side trip and invoice trip (clean rehearsal leftovers before recording;
 //   the R10 invoice must stay one agency day old to show as overdue).
 // Given: identity A (owner of the invented agency) and work/crm/state.json from prep.cjs and the chunks.
-// When:  for every trip the review created that is not booked yet it releases the AA holds on its lines and moves it to
-//        Lost (reason "other"); it deletes the saved replies and mail drafts the review made and revokes its ICS feeds.
-// Then:  nothing of the run stays open; booked trips are left as they are (the review keeps them as booked examples).
-//        Re-running is safe: objects already closed or gone are skipped.
+// When:  for every trip the review created that is not booked (inquiry, qualifying, proposal, including an accepted
+//        proposal waiting for its deposit, and lost / cancelled ones) it voids the invoices still receivable (a claim
+//        is answered "not received" first), releases the AA holds on its lines and moves an open trip to Lost (reason
+//        "other"; Lost also gives the client's AA hold back); it deletes the saved replies and mail drafts the review
+//        made and revokes its ICS feeds.
+// Then:  nothing of the run stays open or keeps chasing a client; booked trips are left as they are (the review keeps
+//        them as booked examples). Re-running is safe: objects already closed or gone are skipped; any other answer
+//        than 200 / 404 is a failure.
 // Dev only, invented data, no LLM call. Cost $0.
 const { st, base, open, bff, bffOk } = require('./_crm.cjs');
 
 const OPEN = ['inquiry', 'qualifying', 'proposal'];
+const NOT_BOOKED = [...OPEN, 'lost', 'cancelled'];
+const RECEIVABLE = ['draft', 'open', 'payment_claimed', 'expired'];
 const dry = process.env.UAT_CRM_CLEANUP_DRY === '1';
 const keepPrep = process.env.UAT_CRM_CLEANUP_KEEP_PREP === '1';
 const sc = base({ id: 'CRM-REV-CLEANUP', title: 'Clean up the data of the CRM review' });
@@ -41,7 +47,7 @@ sc.steps = [
     },
   },
   {
-    caption: { en: 'Release AA holds and move the unfinished trips to Lost.', vi: 'Nhả giữ chỗ AA và chuyển các chuyến dở dang sang Lost.' },
+    caption: { en: 'Void open invoices, release AA holds and move the unfinished trips to Lost.', vi: 'Huỷ hoá đơn còn mở, nhả giữ chỗ AA và chuyển các chuyến dở dang sang Lost.' },
     run: async (page) => {
       const ids = [...new Set([...((s.created && s.created.trips) || []), ...(s.r03 ? [s.r03.trip_id] : [])])];
       const kept = keepPrep ? [s.side_trip && s.side_trip.trip_id, s.invoice_trip && s.invoice_trip.trip_id] : [];
@@ -51,18 +57,33 @@ sc.steps = [
           continue;
         }
         const t = await bff(page, 'GET', `trips/${id}`);
-        if (t.status !== 200) continue;
-        const stage = t.data.trip.stage;
-        if (!OPEN.includes(stage)) {
-          done.push(`trip ${id.slice(0, 8)} left at ${stage}`);
+        if (t.status === 404) {
+          done.push(`trip ${id.slice(0, 8)} gone (404)`);
           continue;
+        }
+        if (t.status !== 200) {
+          failed.push(`read trip ${id.slice(0, 8)}: ${t.status}`);
+          continue;
+        }
+        const stage = t.data.trip.stage;
+        if (!NOT_BOOKED.includes(stage)) {
+          done.push(`trip ${id.slice(0, 8)} left at ${stage} (booked example)`);
+          continue;
+        }
+        const invs = await bff(page, 'GET', `trips/${id}/invoices`);
+        if (invs.status !== 200) failed.push(`read invoices of trip ${id.slice(0, 8)}: ${invs.status}`);
+        for (const inv of ((invs.data && invs.data.invoices) || []).filter((x) => RECEIVABLE.includes(x.status))) {
+          const iid = inv.invoice_id.slice(0, 8);
+          if (inv.status === 'payment_claimed') await act(page, `invoice ${iid} claim -> not received`, 'POST', `invoices/${inv.invoice_id}/reject-claim`);
+          await act(page, `void invoice ${iid} (${inv.status})`, 'POST', `invoices/${inv.invoice_id}/void`, { reason: 'CRM review clean-up (invented data)' });
         }
         const lines = ((await bff(page, 'GET', `trips/${id}/lines`)).data || {}).lines || [];
         for (const l of lines.filter((x) => x.supplier_kind === 'aa' && x.aa && x.aa.hold_id && !['released', 'cancelled'].includes(x.status))) {
           const lid = l.booking_line_id || l.line_id;
           await act(page, `release AA hold on line ${lid.slice(0, 8)}`, 'POST', `lines/${lid}/aa/release`, {});
         }
-        await act(page, `trip ${id.slice(0, 8)} ${stage} -> lost`, 'POST', `trips/${id}/stage`, { to: 'lost', lost_reason: 'other' });
+        if (OPEN.includes(stage)) await act(page, `trip ${id.slice(0, 8)} ${stage} -> lost`, 'POST', `trips/${id}/stage`, { to: 'lost', lost_reason: 'other' });
+        else done.push(`trip ${id.slice(0, 8)} already ${stage}`);
       }
     },
   },

@@ -2,13 +2,16 @@
 // Adventure Asia tour on a real departure.
 // Given: A (owner) signed in; the R03 trip at Proposal with dates (R04); prep chose an AA departure with >= 2 seats.
 // When:  the owner starts the builder, adds an agency hotel on night 1, adds an activity block on day 2 and puts the
-//        AA tour on it for the chosen departure (live quote from Booking), then reads the totals.
+//        AA tour on it for the chosen departure (live quote from Booking), reads the totals, sets the balance date,
+//        publishes version 1 and sends it from the trip (the link is shown once, blurred; R08 opens it).
 // Then:  the skeleton has one day per night plus arrival, the agency option shows, the AA option comes back priced
-//        (net present) with its availability; the map is not built yet ("Not ready yet" card).
-// Writes a draft proposal on the invented R03 trip; adding an AA option takes no seat (only a client hold does).
+//        (net present) with its availability, the version is published then sent; the map is not built yet
+//        ("Not ready yet" card). The client link goes to work/crm/.secrets.json (r08_link, chmod 600), never a log.
+// Writes a proposal on the invented R03 trip; adding an AA option takes no seat (only a client hold does). A re-run
+// skips what exists in --fast only; a recorded take on an old draft stops (re-run crm-rev-03 and crm-rev-04).
 // No LLM call, never clicks an AI button. Cost $0.
 const slide = require('../../lib/slide.cjs');
-const { st, base, sha, open, bffOk, type, choose } = require('./_crm.cjs');
+const { st, base, sha, open, bffOk, type, choose, day, reuse } = require('./_crm.cjs');
 
 const sc = base({ id: 'CRM-REV-06', title: 'Proposal builder: day by day, with an Adventure Asia tour at a live price' });
 let s;
@@ -30,7 +33,8 @@ sc.steps = [
       await h.expect(page.getByTestId('trip-stage')).toHaveAttribute('data-stage', 'proposal');
       await h.expect(page.getByTestId('crm-trip')).toHaveAttribute('data-hydrated', 'true', { timeout: 20_000 });
       if (s.r06 && s.r06.trip_id === s.r03.trip_id) {
-        pid = s.r06.proposal_id; // a rehearsal already started it: open the same draft
+        reuse(h, 'the builder draft of the R03 trip', 're-run crm-rev-03 and crm-rev-04 for a fresh trip');
+        pid = s.r06.proposal_id; // a --fast rehearsal: open the same draft
         await open(page, h, `/pipeline/${s.r03.trip_id}/proposal/${pid}`, 'builder');
       } else {
         const section = page.getByTestId('proposal-builder');
@@ -68,7 +72,8 @@ sc.steps = [
       const title = 'Hoi An riverside boutique';
       await h.click(page.getByTestId('builder-day').filter({ hasText: /^Day 1\b/ }).first());
       const block = page.getByTestId('builder-block').first();
-      if (!(await block.getByTestId('builder-option').filter({ hasText: title }).count())) {
+      if (await block.getByTestId('builder-option').filter({ hasText: title }).count()) reuse(h, 'the hotel option');
+      else {
         await h.click(block.getByRole('button', { name: '+ Add' }));
         const drawer = block.getByTestId('builder-drawer');
         await h.click(drawer.getByRole('button', { name: 'Agency item' }));
@@ -90,7 +95,8 @@ sc.steps = [
     run: async (page, h) => {
       await h.click(page.getByTestId('builder-day').filter({ hasText: /^Day 2\b/ }).first());
       const block = page.getByTestId('builder-block').filter({ hasText: 'Island tour' });
-      if (!(await block.count())) {
+      if (await block.count()) reuse(h, 'the Island tour block');
+      else {
         const form = page.getByTestId('builder-add-block');
         await h.scrollTo(form);
         await type(page, h, form.locator('input[name="title"]'), 'Island tour');
@@ -108,7 +114,7 @@ sc.steps = [
     run: async (page, h) => {
       const block = page.getByTestId('builder-block').filter({ hasText: 'Island tour' });
       await h.scrollTo(block);
-      if (await block.getByTestId('builder-option').count()) return; // a rehearsal added it already
+      if (await block.getByTestId('builder-option').count()) return reuse(h, 'the AA option'); // --fast only
       await h.click(block.getByRole('button', { name: '+ Add' }));
       const drawer = block.getByTestId('builder-drawer');
       await h.click(drawer.getByRole('button', { name: 'AA inventory' }));
@@ -122,12 +128,12 @@ sc.steps = [
   },
   {
     caption: {
-      en: 'The owner books the whole trip plan on a fixed departure that still has seats, and sets the selling price.',
-      vi: 'Chủ đại lý chọn đặt cả hành trình theo một ngày khởi hành cố định còn chỗ, rồi nhập giá bán.',
+      en: 'The owner picks the whole trip plan on a fixed departure that still has seats, and sets the selling price.',
+      vi: 'Chủ đại lý chọn cả hành trình theo một ngày khởi hành cố định còn chỗ, rồi nhập giá bán.',
     },
     run: async (page, h) => {
       const block = page.getByTestId('builder-block').filter({ hasText: 'Island tour' });
-      if (await block.getByTestId('builder-option').count()) return;
+      if (await block.getByTestId('builder-option').count()) return reuse(h, 'the AA option');
       const drawer = block.getByTestId('builder-drawer');
       const comp = drawer.getByTestId('builder-aa-component');
       const tp = await comp.locator('option').evaluateAll((os) => (os.find((o) => o.value.startsWith('tp:')) || {}).value);
@@ -146,7 +152,8 @@ sc.steps = [
     },
     run: async (page, h) => {
       const block = page.getByTestId('builder-block').filter({ hasText: 'Island tour' });
-      if (!(await block.getByTestId('builder-option').count())) {
+      if (await block.getByTestId('builder-option').count()) reuse(h, 'the AA option');
+      else {
         const drawer = block.getByTestId('builder-drawer');
         const saved = page.waitForResponse((r) => /\/aa-options$/.test(new URL(r.url()).pathname) && r.request().method() === 'POST', { timeout: 60_000 });
         await h.click(drawer.getByRole('button', { name: 'Add AA item' }));
@@ -173,6 +180,60 @@ sc.steps = [
       await h.scrollTo(totals);
       await h.expect(totals).toContainText('%');
       await h.hover(totals);
+    },
+  },
+  {
+    caption: {
+      en: 'The owner sets when the balance is due and publishes version one. Only a published version can go to the client.',
+      vi: 'Chủ đại lý đặt ngày thanh toán phần còn lại rồi phát hành phiên bản một. Chỉ bản đã phát hành mới gửi được cho khách.',
+    },
+    run: async (page, h) => {
+      const builder = page.getByTestId('builder');
+      if ((await builder.getAttribute('data-status')) !== 'draft') {
+        reuse(h, 'the published version');
+      } else {
+        const settings = page.getByTestId('builder-settings');
+        await h.scrollTo(settings);
+        const due = settings.getByTestId('date-input').nth(1);
+        await type(page, h, due, day(10));
+        const saved = page.waitForResponse((r) => /\/builder$/.test(new URL(r.url()).pathname) && r.request().method() === 'PATCH', { timeout: 30_000 });
+        await h.click(settings.getByRole('button', { name: 'Save', exact: true }));
+        h.expect((await saved).status()).toBeLessThan(300);
+        const publish = page.getByTestId('builder-header').getByRole('button', { name: /^Publish v\d+$/ });
+        await h.scrollTo(publish);
+        await h.expect(publish).toBeEnabled({ timeout: 15_000 });
+        await h.click(publish);
+      }
+      await h.expect(builder).toHaveAttribute('data-status', /^(published|sent)$/, { timeout: 20_000 });
+    },
+  },
+  {
+    caption: {
+      en: 'On the trip, the owner sends it to the client. The private link is shown once; it is hidden in this video.',
+      vi: 'Trên trang chuyến, chủ đại lý gửi đề xuất cho khách. Đường dẫn riêng chỉ hiện một lần; trong video này nó được che đi.',
+    },
+    run: async (page, h) => {
+      await open(page, h, `/pipeline/${s.r03.trip_id}`, 'crm-trip');
+      await h.expect(page.getByTestId('crm-trip')).toHaveAttribute('data-hydrated', 'true', { timeout: 20_000 });
+      const tab = page.getByTestId('trip-proposal');
+      const send = tab.getByTestId('builder-send').getByRole('button');
+      if (await send.count()) {
+        await h.scrollTo(send);
+        await h.click(send);
+      } else {
+        reuse(h, 'the sent version'); // --fast: a new link for R08 (the old one stops working)
+        const again = tab.getByTestId('builder-reissue').getByRole('button');
+        await h.scrollTo(again);
+        await h.click(again);
+      }
+      const link = await tab.getByTestId('proposal-copy-link').first().inputValue({ timeout: 20_000 });
+      if (!/\/c\/p\/[A-Za-z0-9_-]{43}$/.test(link)) throw new Error('the client link has an unexpected shape');
+      const secrets = st.loadSecrets();
+      secrets.r08_link = link;
+      st.saveSecrets(secrets);
+      await h.hover(tab.getByTestId('proposal-copy-links'));
+      const v = await view(page);
+      h.expect(v.status).toBe('sent');
     },
   },
   {

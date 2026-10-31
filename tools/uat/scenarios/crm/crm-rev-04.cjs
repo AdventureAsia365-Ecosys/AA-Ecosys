@@ -6,7 +6,7 @@
 //        followed by a "Not ready yet" card naming what is missing.
 // Writes on the invented R03 trip only (dates, two stage moves). No LLM call. Cost $0.
 const slide = require('../../lib/slide.cjs');
-const { st, base, sha, open, bffOk, choose, day } = require('./_crm.cjs');
+const { st, base, sha, open, bffOk, choose, day, reuse } = require('./_crm.cjs');
 
 const sc = base({ id: 'CRM-REV-04', title: 'Pipeline: a trip moves from Inquiry to Proposal' });
 let s;
@@ -26,7 +26,8 @@ sc.steps = [
       await sha(page, sc, 'start');
       await page.goto(`${sc.baseURL}/pipeline`, { waitUntil: 'domcontentloaded' }); // a CRM page for the BFF
       let t = await bffOk(page, 'GET', `trips/${s.r03.trip_id}`);
-      if (t.trip.stage === 'qualifying') { // a rehearsal stopped half-way: put the trip back (an allowed move)
+      if (t.trip.stage === 'qualifying') { // a rehearsal stopped half-way: put the trip back (--fast only)
+        reuse(h, 'the R03 trip moved to Qualifying', 're-run crm-rev-03 for a fresh trip');
         await bffOk(page, 'POST', `trips/${s.r03.trip_id}/stage`, { to: 'inquiry' });
         t = await bffOk(page, 'GET', `trips/${s.r03.trip_id}`);
       }

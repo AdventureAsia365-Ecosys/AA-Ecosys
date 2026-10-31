@@ -5,13 +5,14 @@ an English narration track (default), a Vietnamese narration track, and sidecar 
   python -I build.py <work/ID> <out_dir> --no-burn   (no burned-in subtitles: input for longform.py, which keeps
                                                       the subtitles as switchable tracks; the default is unchanged)
 
-Output names: <ID>_<yyyymmdd>_v<n>.mp4 (+ .en/.vi .srt/.vtt, .result.json); prints the MP4 path last.
+Output names: <ID>_<yyyymmdd>_v<n>.mp4 (+ .en/.vi .srt/.vtt, .result.json with "burned": true|false, which
+longform.py reads to refuse a burned chunk); --no-burn builds go to <out_dir>/no-burn/ so the two never share a
+version counter. Prints the MP4 path last.
 Each caption is shown from its step start to its step end (timeline.json). Each narration clip starts
 at its step start plus a short lead; record.cjs already held the step as long as the clip, so no stretch.
 """
 import json
 import re
-import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -68,6 +69,8 @@ def main(work: Path, out_dir: Path, burn: bool = True) -> None:
     timeline = json.loads((work / "timeline.json").read_text())
     result = json.loads((work / "result.json").read_text())
     total_s = result["total_ms"] / 1000
+    if not burn:
+        out_dir = out_dir / "no-burn"
     out_dir.mkdir(parents=True, exist_ok=True)
     day = datetime.now(timezone.utc).strftime("%Y%m%d")
     v = 1
@@ -118,7 +121,7 @@ def main(work: Path, out_dir: Path, burn: bool = True) -> None:
         cmd += ["-disposition:a:0", "default"]
     cmd += [str(base.with_suffix(".mp4"))]
     subprocess.run(cmd, check=True)
-    shutil.copy(work / "result.json", base.with_suffix(".result.json"))
+    base.with_suffix(".result.json").write_text(json.dumps({**result, "burned": burn}, indent=2), encoding="utf-8")
     print(base.with_suffix(".mp4"))
 
 

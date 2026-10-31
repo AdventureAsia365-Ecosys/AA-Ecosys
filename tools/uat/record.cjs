@@ -34,6 +34,8 @@ async function main() {
   }
 
   if (sc.fastOnly && !fast) throw new Error(`${sc.id} is a data step: run it with --fast only`);
+  // Failure shots of an earlier run are not evidence of this one.
+  for (const f of fs.readdirSync(work)) if (/^fail-step-\d+\.png$/.test(f)) fs.rmSync(path.join(work, f));
   if (typeof sc.prepare === 'function') await sc.prepare({ fast });
 
   let durations = {};

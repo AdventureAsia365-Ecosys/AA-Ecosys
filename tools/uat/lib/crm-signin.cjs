@@ -29,8 +29,14 @@ const IDENTITIES = {
   A: { secret: 'crm/dev/e2e-test-crm/sen-vang-owner', role: 'owner' },
   B: { secret: 'crm/dev/e2e-test-crm/sen-vang-assistant', role: 'assistant' },
 };
-// Blur on screen: the echoed one-time code, the code box, link tokens and feed URLs.
-const TRAVELLER_MASK = ['[data-testid="portal-hint"]', '[data-testid="portal-code"]'];
+// Blur on screen (every CRM review chunk): the echoed one-time codes and the code boxes (portal sign-in and e-sign),
+// the client / portal links the agency copies once (they carry the link token), the calendar feed URL and the data
+// export download links. A chunk adds its own selectors with base({ mask }).
+const TRAVELLER_MASK = [
+  '[data-testid="portal-hint"]', '[data-testid="portal-code"]', '[data-testid="portal-sign-hint"]',
+  '[data-testid="portal-sign-code-input"]', '[data-testid="proposal-copy-links"]', '[data-testid="proposal-copy-link"]',
+  '[data-testid="feed-url"]', '[data-testid="export-link"]',
+];
 
 function statePath(who) {
   return path.join(WORK, `.state-${who}.json`);
@@ -42,7 +48,12 @@ function creds(who) {
   const raw = execFileSync('aws', ['secretsmanager', 'get-secret-value', '--secret-id', id.secret, '--profile', PROFILE,
     '--region', REGION, '--query', 'SecretString', '--output', 'text'],
   { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 30_000 });
-  const s = JSON.parse(raw);
+  let s;
+  try {
+    s = JSON.parse(raw);
+  } catch {
+    throw new Error(`secret ${id.secret} is not JSON`); // never echo the value (JSON.parse quotes the input)
+  }
   return { email: s.email, password: s.password, totpSecret: s.totp_secret };
 }
 
@@ -129,7 +140,8 @@ function onPartnerApp(page) {
  */
 async function ensureState(who) {
   const { chromium } = require('@playwright/test');
-  fs.mkdirSync(WORK, { recursive: true });
+  fs.mkdirSync(WORK, { recursive: true, mode: 0o700 });
+  fs.chmodSync(WORK, 0o700);
   const file = statePath(who);
   const browser = await chromium.launch({ headless: true });
   try {
@@ -154,7 +166,9 @@ async function ensureState(who) {
       await page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => {});
       if (!onPartnerApp(page)) throw new Error(`sign-in of ${who} did not land on the CRM`);
     }
-    await context.storageState({ path: file });
+    // Written by us with mode 600 from the first byte (storageState({ path }) would create it 644 first).
+    const state = await context.storageState();
+    fs.writeFileSync(file, JSON.stringify(state), { mode: 0o600 });
     fs.chmodSync(file, 0o600);
     await context.close();
     console.log(`crm-signin: ${who} (${IDENTITIES[who].role}) ${reused ? 'saved session still valid' : 'signed in'}`);

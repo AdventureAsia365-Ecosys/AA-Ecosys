@@ -72,5 +72,37 @@ class Picking(unittest.TestCase):
             lf.highlight_ids("Rx", "CRM-REV-")
 
 
+class Cards(unittest.TestCase):
+    def test_cache_name_follows_the_text(self):
+        a = lf.card_name("Chapter 4 of 21", "Pipeline", "/f.ttf")
+        self.assertEqual(a, lf.card_name("Chapter 4 of 21", "Pipeline", "/f.ttf"))
+        self.assertNotEqual(a, lf.card_name("Chapter 4 of 8", "Pipeline", "/f.ttf"))
+        self.assertNotEqual(a, lf.card_name("Chapter 4 of 21", "Pipeline v2", "/f.ttf"))
+        self.assertRegex(a, r"^card-[0-9a-f]{16}\.mp4$")
+
+
+class ChunkChecks(unittest.TestCase):
+    def ok(self, sha="a" * 40, **kw):
+        return {"verdict": "PASS", "burned": False, "meta": {"git_sha_start": sha, "git_sha_end": sha}, **kw}
+
+    def test_clean_set(self):
+        self.assertEqual(lf.chunk_problems({"R00": self.ok(), "R01": self.ok()}), [])
+
+    def test_fail_burned_and_drift(self):
+        bad = {"R00": self.ok(verdict="FAIL", failed_step=3), "R01": self.ok(burned=True),
+               "R02": {"verdict": "PASS", "burned": False, "meta": {"git_sha_start": "a" * 40, "git_sha_end": "b" * 40}}}
+        p = lf.chunk_problems(bad)
+        self.assertTrue(any("R00: verdict FAIL" in x for x in p))
+        self.assertTrue(any("R01: a burned build" in x for x in p))
+        self.assertTrue(any("R02: redeployed" in x for x in p))
+        self.assertEqual(lf.chunk_problems({"R00": self.ok(verdict="FAIL")}, allow_not_pass=True), [])
+
+    def test_versions_differ_and_old_builds(self):
+        p = lf.chunk_problems({"R00": self.ok("a" * 40), "R01": self.ok("c" * 40)})
+        self.assertTrue(any("different app versions" in x for x in p))
+        self.assertEqual(lf.chunk_problems({"R00": self.ok("a" * 40), "R01": self.ok("c" * 40)}, allow_sha_drift=True), [])
+        self.assertTrue(lf.chunk_problems({"R00": {"verdict": "PASS", "meta": {}}}))  # no burned flag, no sha
+
+
 if __name__ == "__main__":
     unittest.main()

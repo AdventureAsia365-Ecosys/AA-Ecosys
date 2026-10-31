@@ -5,10 +5,10 @@
 //        duplicate pair and looks at Connections and privacy.
 // Then:  three required steps; the preview counts 10 new rows and 1 possible duplicate; the import finishes with 10
 //        created; Clients > Duplicates lists the pair. On a second run of the same file every row is "Already imported"
-//        (no duplicates created) and the import step is skipped.
+//        (no duplicates created) and the import step is skipped in --fast; a recorded take stops (it needs a new run).
 // Writes 10 invented clients (@example.invalid) once per run suffix. Never clicks "I understand and accept". Cost $0.
 const path = require('path');
-const { st, base, sha, open } = require('./_crm.cjs');
+const { st, base, sha, open, reuse } = require('./_crm.cjs');
 
 const sc = base({ id: 'CRM-REV-02', title: 'Getting started and importing clients from a spreadsheet' });
 let s;
@@ -77,6 +77,7 @@ sc.steps = [
         await h.expect(page.getByTestId('onb-import').getByText(/share a name with another client/).first()).toBeVisible();
       } else {
         h.expect(already).toBe(10); // the same file again: nothing new (no duplicates on a re-run)
+        reuse(h, 'this run\'s import', 'prep with UAT_CRM_NEW_RUN=1 writes a new file');
       }
       await h.hover(page.getByTestId('onb-import-counts'));
     },
@@ -87,7 +88,7 @@ sc.steps = [
       vi: 'Chủ đại lý chạy lệnh nhập. Việc nhập chạy nền và báo khi đã xong.',
     },
     run: async (page, h) => {
-      if (!fresh) return; // this run's file was imported already
+      if (!fresh) return reuse(h, 'this run\'s import'); // fast rehearsal only
       await h.click(page.getByTestId('onb-import-apply').getByRole('button'));
       await h.expect(page.getByTestId('onb-import-progress')).toContainText(/finished/i, { timeout: 180_000 });
       h.expect(await count(page, 'create')).toBe(10);
