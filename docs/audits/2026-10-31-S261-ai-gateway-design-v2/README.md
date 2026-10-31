@@ -239,3 +239,7 @@ AA-1004 (SCP cho us-west-2), AA-1016 (ngân sách AI theo tenant Content studio)
 **Langfuse:** Cloud bị loại (dữ liệu ra ngoài AWS, trái CIS ADR 0012 và root ADR 0008a); tự host hoãn (ước 60–150
 USD/tháng hạ tầng, chưa kiểm, theo audit AA-842 `docs/audits/2026-10-29-S257-aa842-otel/README.md:487`; ClickHouse
 trên Fargate, thêm kết nối vào RDS chung). Sổ ghi chung + màn truy vết tự làm, 0 USD hạ tầng.
+
+## Artifact
+
+- Trang để duyệt: <https://claude.ai/artifact/Mhw2JBwZQBW5DEzpuPG1pc> (private, tài khoản nghieppham@adventure.asia); nguồn `page.html`.
