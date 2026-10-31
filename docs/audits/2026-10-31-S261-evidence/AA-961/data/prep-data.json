@@ -1,0 +1,153 @@
+{
+ "state": {
+  "run": "1031023120",
+  "trip_id": "bb658382-cc68-4d24-91cb-7b7cdbaca598",
+  "proposal_id": "327d57d7-e36f-4a37-94d4-a09ccf3ff705",
+  "departure_id": "9f7d807d-1b10-4477-9136-02a7911f4875",
+  "departure_start": "2026-11-13",
+  "trip_start": "2026-11-12",
+  "line_status": "confirmed",
+  "line_sub_status": null,
+  "booking_id": "56c617ba-6ea3-44fa-9928-827a36a35745",
+  "hold_id": "bfb19bcc-07b2-488a-b5ec-2e9680fa855c",
+  "line_departure_id": "9f7d807d-1b10-4477-9136-02a7911f4875"
+ },
+ "steps": [
+  {
+   "label": "AA product (departures, live from Booking)",
+   "status": 200
+  },
+  {
+   "label": "intake forms",
+   "status": 200
+  },
+  {
+   "label": "inquiry form (client host)",
+   "status": 202
+  },
+  {
+   "label": "who am I",
+   "status": 200
+  },
+  {
+   "label": "take the trip",
+   "status": 200
+  },
+  {
+   "label": "dates",
+   "status": 200
+  },
+  {
+   "label": "to Qualifying",
+   "status": 200
+  },
+  {
+   "label": "to Proposal (Stage 2 by phone)",
+   "status": 200
+  },
+  {
+   "label": "start the builder",
+   "status": 201
+  },
+  {
+   "label": "agreements in force",
+   "status": 200
+  },
+  {
+   "label": "settings (dates, balance due, booking terms)",
+   "status": 200
+  },
+  {
+   "label": "agency lodging option",
+   "status": 201
+  },
+  {
+   "label": "a day tour block",
+   "status": 201
+  },
+  {
+   "label": "AA option on the departure (live quote)",
+   "status": 201
+  },
+  {
+   "label": "publish v1",
+   "status": 200
+  },
+  {
+   "label": "send to the client",
+   "status": 200
+  },
+  {
+   "label": "client opens the proposal",
+   "status": 200
+  },
+  {
+   "label": "client: check availability (hold)",
+   "status": 200,
+   "hold": "active"
+  },
+  {
+   "label": "client accepts",
+   "status": 200
+  },
+  {
+   "label": "payment schedule",
+   "status": 200
+  },
+  {
+   "label": "trip agreements",
+   "status": 200
+  },
+  {
+   "label": "Mark paid (deposit, bank transfer)",
+   "status": 200,
+   "detail": null,
+   "trip_moved": {
+    "from_stage": "proposal",
+    "stage": "booked",
+    "waiting_on": "aa"
+   }
+  },
+  {
+   "label": "trip incidents before",
+   "status": 200,
+   "incidents": 0
+  },
+  {
+   "label": "add 947ec89c's lead traveller to 9ea4f816",
+   "status": 201
+  },
+  {
+   "label": "undo: remove that traveller from 9ea4f816",
+   "status": 200
+  }
+ ],
+ "overlap": {
+  "traveller_rows": 1,
+  "trip_ids": [
+   "947ec89c",
+   "9ea4f816"
+  ],
+  "keys": [
+   "traveler_id",
+   "trip_ids",
+   "regions",
+   "has_phone",
+   "has_email",
+   "has_emergency_contact",
+   "has_health_info"
+  ],
+  "travellers_total": 4,
+  "before_total": 4
+ },
+ "undo": {
+  "status": 200,
+  "trip_ids_after": [
+   "947ec89c"
+  ],
+  "total_after": 4
+ },
+ "errors": [
+  "pageerror: Error: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+ ]
+}

@@ -1,0 +1,44 @@
+02:02:25Z agency session: reused stored session state
+02:02:26Z documents in force: booking_terms e2e-mvp3tg5i, waiver e2e-mvp3tg5i, insurance_declination none
+02:02:28Z inquiry form submit -> 202
+02:02:33Z trip 13efea13 "Việt Nam, 5 đêm" at inquiry
+02:02:33Z PATCH trip dates -> 200
+02:02:34Z move to qualifying -> 200 
+02:02:34Z move to proposal (override info_by_phone) -> 200 
+02:02:34Z text proposal draft (terms e2e-mvp3tg5i) -> 201 
+02:02:35Z send -> 200 
+02:02:42Z client accepts the proposal -> 200
+02:02:43Z schedule after accept: deposit:due, balance:due; deposit_paid false
+02:02:43Z new booking terms s261-aa955-vra8tb: draft 201, publish 200
+02:02:44Z agreements: terms.published s261-aa955-vra8tb, reaccept_required true
+02:02:47Z Mark paid (deposit) before re-accept -> 409 terms_reaccept_required (version_label s261-aa955-vra8tb)
+02:02:47Z shot 01-mark-paid-refused-terms-reaccept-1440.png (sideways overflow: document 0px, main 0px)
+02:02:48Z shot 01b-proposal-panel-409-1440.png, 01c-agreements-reaccept-required-1440.png
+02:02:51Z shot 02-client-terms-updated-390.png (sideways overflow: document 0px, main 0px)
+02:02:56Z client re-accepts the new terms -> 200
+02:02:57Z shot 02b-client-terms-reaccepted-390.png (sideways overflow: document 0px, main 0px)
+02:03:00Z Mark paid (deposit) after re-accept -> 200 status paid; trip_moved proposal->booked; portal invited 1
+02:03:01Z shot 03-mark-paid-ok-booked-1440.png (sideways overflow: document 0px, main 0px)
+02:03:01Z agreements after: reaccept_required false; acceptances reaccept:s261-aa955-vra8tb, proposal:e2e-mvp3tg5i
+02:03:01Z insurance declination s261-aa955-vra8tb: draft 201, publish 200
+02:03:27Z portal sign-in with the Dev echo code -> home
+02:03:40Z signing code asked -> 202 at 2026-10-31T02:03:40.697Z (TTL 10 min)
+02:03:41Z shot 04-portal-sign-form-declined-390.png (sideways overflow: document 0px, main 0px)
+02:03:41Z shot 04b-portal-sign-form-declined-1440.png (sideways overflow: document 0px, main 0px)
+02:14:25Z waited 645 s since the code was asked
+02:14:26Z submit with the expired code -> 422 code_expired attempts_left 0
+02:14:27Z shot 05-portal-code-expired-1440.png (sideways overflow: document 0px, main 0px)
+02:14:27Z shot 05b-portal-code-expired-390.png (sideways overflow: document 0px, main 0px)
+02:14:27Z signing log after the expired code: code_refused(code_expired), code_sent
+02:14:40Z fresh signing code -> 202
+02:14:56Z sign with a fresh code, insurance declined -> 200 signed signer_role self seal_alg kms-rsassa-pss-sha256 envelope f3d45779…
+02:14:56Z shot 06-portal-signed-declined-1440.png (sideways overflow: document 0px, main 0px)
+02:14:57Z shot 06b-portal-signed-declined-390.png (sideways overflow: document 0px, main 0px)
+02:14:57Z agreements: all_signed true; travellers [{"role":"lead","waiver_signed":true,"signer_role":"self","insurance_choice":"declined","with_terms":true,"with_declination":true,"seal_alg":"kms-rsassa-pss-sha256","envelope_sha256":"f3d45779cbb1aba3ff1d3834f557c354cc35ad34cf26d9a3da28326af654e180"}]
+02:14:57Z agreements: acceptances envelope:s261-aa955-vra8tb, reaccept:s261-aa955-vra8tb, proposal:e2e-mvp3tg5i; log signed, code_sent, code_refused(code_expired), code_sent
+02:15:01Z shot 07-agreements-panel-signed-declined-1440.png (sideways overflow: document 0px, main 0px)
+02:15:02Z shot 07d-agreements-panel-390.png (sideways overflow: document 0px, main 0px)
+02:15:02Z open sealed envelope -> 200; seal.alg kms-rsassa-pss-sha256; seal.verified true; text has terms new version, waiver true, declination true
+02:15:03Z shot 08-sealed-envelope-1440.png (sideways overflow: document 0px, main 0px)
+02:15:03Z console errors: 2 -> partner: Failed to load resource: the server responded with a status of 409 () | go-dev.lumiguides.it.com: Failed to load resource: the server responded with a status of 422 ()
+02:15:03Z CRM responses >= 400: POST /bff/schedule/<id>/mark-paid 409, POST /crm/public/v1/portal/<token>/sign 422

@@ -1,0 +1,10 @@
+ecsx: started (session output not seen, normal when SSM drops it); waiting for the result
+POST 200 {"job_id": "229a6def-2cd1-4f11-ad5a-4f26aa031c45", "created": true, "mode": "dry_run", "located_by": ["llm"], "country": null, "limit": 400, "hide_unconfirmed": false, "reason": "admin", "rule_version": "aa997.2", "recheck": ["llm_point", "off_route"], "strategy": "v2", "accept_rule": "aa997.3"}
+JOB 229a6def-2cd1-4f11-ad5a-4f26aa031c45 succeeded None
+RESULT {"mode": "dry_run", "rows": 1197, "hk_mo": 0, "country": null, "recheck": ["llm_point", "off_route"], "estimate": {"days": 2, "cost_usd": 0.0, "model_calls": 0, "daily_credits": 1500, "requests_note": "every query of each row's plan (no native query in relocate); 429 / 5xx retries are not counted \u2014 the daily credit guard bounds the real spend", "model_cost_usd": 0.0, "capped_requests": 1648, "geoapify_credits": 1648, "geoapify_requests": 1648, "cost_per_request_usd": 0.0, "requests_upper_bound": true}, "no_route": 651, "on_route": 354, "requests": 1648, "strategy": "v2", "non_place": 0, "off_route": 192, "by_country": {"Laos": 211, "China": 529, "India": 184, "Japan": 21, "Nepal": 38, "Bhutan": 90, "Taiwan": 9, "Vietnam": 3, "Cambodia": 17, "Mongolia": 16, "Pakistan": 8, "Tanzania": 1, "Thailand": 7, "Hong Kong": 2, "Sri Lanka": 26, "Kazakhstan": 3, "Kyrgyzstan": 2, "Philippines": 17, "South Korea": 13}, "located_by": ["llm"], "with_route": 546, "accept_rule": "aa997.3", "max_requests": null, "non_place_by": {}, "rule_version": "aa997.2", "with_context": 401, "rejudge_confirmed": {"kept": 0, "rows": 0, "refused": 0, "refused_by": {}, "unjudged_by": {}, "kept_unjudged": 0}, "by_previous_outcome": {"llm_point": 1004, "off_route": 193}}
+Traceback (most recent call last):
+  File "/tmp/20261031T011625-22650-recheck_dry.py", line 28, in <module>
+    print("SAMPLES", json.dumps((res.get("samples") or [])[:12], default=str, ensure_ascii=False)[:3000])
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+KeyError: slice(None, 12, None)
+ecsx: rc=1 bytes=1938

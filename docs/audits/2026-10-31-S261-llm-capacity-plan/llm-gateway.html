@@ -1,0 +1,805 @@
+<title>LLM gateway AA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f6f5f1;
+  --surface: #ffffff;
+  --surface-2: #efede7;
+  --ink: #1c1e23;
+  --ink-2: #464b55;
+  --ink-3: #6c717c;
+  --line: #d9d6cd;
+  --accent: #2c56c9;
+
+  --gov-bg: #efe8fb; --gov-line: #7656c4; --gov-ink: #46298f;
+  --ai-bg: #e0f3ef; --ai-line: #1c937f; --ai-ink: #0c5c4f;
+  --work-bg: #e5edfb; --work-line: #3a6bd4; --work-ink: #1d4293;
+  --prod-bg: #fcece0; --prod-line: #d27028; --prod-ink: #874110;
+  --resell-bg: #faf1d2; --resell-line: #b48c17; --resell-ink: #6b5309;
+  --out-bg: #fbe5eb; --out-line: #c4405f; --out-ink: #861e3c;
+  --user-bg: #eceef2; --user-line: #868c98; --user-ink: #30343d;
+
+  --ok-bg: #dcf2e3; --ok-ink: #14592d;
+  --miss-bg: #fbe1e1; --miss-ink: #8c1d1d;
+  --trig-bg: #fbefcf; --trig-ink: #6e4f04;
+  --part-bg: #e3ebfb; --part-ink: #1f418e;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #131519;
+    --surface: #1b1e24;
+    --surface-2: #23272e;
+    --ink: #eceef2;
+    --ink-2: #c1c6cf;
+    --ink-3: #959ba6;
+    --line: #353a43;
+    --accent: #8daaf5;
+
+    --gov-bg: #2a2340; --gov-line: #a68cf0; --gov-ink: #d7cafb;
+    --ai-bg: #15322d; --ai-line: #46c4ac; --ai-ink: #b4ece0;
+    --work-bg: #1b2a45; --work-line: #6f99f0; --work-ink: #c5d6fb;
+    --prod-bg: #3a2616; --prod-line: #f0985a; --prod-ink: #fbd5b8;
+    --resell-bg: #352c12; --resell-line: #ddb441; --resell-ink: #f5e2a6;
+    --out-bg: #3c1c26; --out-line: #ec7393; --out-ink: #f9c5d3;
+    --user-bg: #262a31; --user-line: #8f96a3; --user-ink: #dde1e8;
+
+    --ok-bg: #173826; --ok-ink: #9fe3b6;
+    --miss-bg: #401c1c; --miss-ink: #f6b2b2;
+    --trig-bg: #3a2f10; --trig-ink: #f2d68a;
+    --part-bg: #1c2a48; --part-ink: #bccff8;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #131519;
+  --surface: #1b1e24;
+  --surface-2: #23272e;
+  --ink: #eceef2;
+  --ink-2: #c1c6cf;
+  --ink-3: #959ba6;
+  --line: #353a43;
+  --accent: #8daaf5;
+
+  --gov-bg: #2a2340; --gov-line: #a68cf0; --gov-ink: #d7cafb;
+  --ai-bg: #15322d; --ai-line: #46c4ac; --ai-ink: #b4ece0;
+  --work-bg: #1b2a45; --work-line: #6f99f0; --work-ink: #c5d6fb;
+  --prod-bg: #3a2616; --prod-line: #f0985a; --prod-ink: #fbd5b8;
+  --resell-bg: #352c12; --resell-line: #ddb441; --resell-ink: #f5e2a6;
+  --out-bg: #3c1c26; --out-line: #ec7393; --out-ink: #f9c5d3;
+  --user-bg: #262a31; --user-line: #8f96a3; --user-ink: #dde1e8;
+
+  --ok-bg: #173826; --ok-ink: #9fe3b6;
+  --miss-bg: #401c1c; --miss-ink: #f6b2b2;
+  --trig-bg: #3a2f10; --trig-ink: #f2d68a;
+  --part-bg: #1c2a48; --part-ink: #bccff8;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 15.5px;
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+code, .mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.86em; }
+code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+a { color: var(--accent); }
+
+header.hero { padding: 12px 0 20px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+.eyebrow { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; }
+h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.15; margin: 6px 0 12px; letter-spacing: -0.01em; }
+.lead { font-size: 17px; color: var(--ink-2); max-width: 820px; margin: 0; }
+.meta { margin-top: 12px; font-size: 13px; color: var(--ink-3); }
+
+nav.toc { margin: 18px 0 8px; display: flex; flex-wrap: wrap; gap: 6px 8px; }
+nav.toc a { font-size: 13px; text-decoration: none; color: var(--ink-2); background: var(--surface); border: 1px solid var(--line); padding: 4px 10px; border-radius: 999px; }
+nav.toc a:hover { border-color: var(--accent); color: var(--accent); }
+
+section { margin-top: 44px; }
+h2 { font-size: 23px; margin: 0 0 6px; letter-spacing: -0.005em; }
+h3 { font-size: 17px; margin: 24px 0 8px; }
+.why { color: var(--ink-2); margin: 0 0 16px; max-width: 860px; }
+.why strong { color: var(--ink); }
+p { margin: 0 0 12px; }
+.note { font-size: 13.5px; color: var(--ink-3); }
+
+.grid { display: grid; gap: 12px; }
+.g2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.g3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; min-width: 0; }
+.card h4 { margin: 0 0 6px; font-size: 15.5px; }
+.card p, .card li { font-size: 14.5px; color: var(--ink-2); }
+.card ul { margin: 0; padding-left: 18px; }
+.card.gov { border-left: 4px solid var(--gov-line); }
+.card.ai { border-left: 4px solid var(--ai-line); }
+.card.work { border-left: 4px solid var(--work-line); }
+.card.prod { border-left: 4px solid var(--prod-line); }
+.card.resell { border-left: 4px solid var(--resell-line); }
+.card.out { border-left: 4px solid var(--out-line); }
+.card .q { font-size: 12.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-3); font-weight: 600; margin-bottom: 2px; }
+
+.chip { display: inline-block; padding: 1px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; line-height: 1.7; }
+.chip.ok { background: var(--ok-bg); color: var(--ok-ink); }
+.chip.miss { background: var(--miss-bg); color: var(--miss-ink); }
+.chip.trig { background: var(--trig-bg); color: var(--trig-ink); }
+.chip.part { background: var(--part-bg); color: var(--part-ink); }
+
+.tw { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); margin: 8px 0 6px; }
+table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 14px; }
+table.narrow { min-width: 560px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { background: var(--surface-2); font-weight: 600; font-size: 13px; color: var(--ink-2); }
+tr:last-child td { border-bottom: 0; }
+td ul { margin: 0; padding-left: 16px; }
+td li { margin: 2px 0; }
+td.k { font-weight: 600; white-space: nowrap; }
+
+.diagram { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 10px; }
+.diagram svg { display: block; width: 100%; min-width: 860px; height: auto; }
+.dia text { font-family: "Be Vietnam Pro", system-ui, sans-serif; }
+.dia .hd { font-size: 13px; font-weight: 700; fill: var(--ink-3); letter-spacing: .04em; }
+.dia .t { font-size: 13.5px; font-weight: 600; }
+.dia .s { font-size: 11.5px; }
+.dia .gt { font-size: 16px; font-weight: 700; fill: var(--gov-ink); }
+.dia .warn { font-size: 11.5px; font-weight: 600; fill: var(--miss-ink); }
+
+.dia .user { fill: var(--user-bg); stroke: var(--user-line); stroke-width: 1.4; }
+.dia .user-t { fill: var(--user-ink); }
+.dia .work { fill: var(--work-bg); stroke: var(--work-line); stroke-width: 1.4; }
+.dia .work-t { fill: var(--work-ink); }
+.dia .gov { fill: var(--gov-bg); stroke: var(--gov-line); stroke-width: 1.6; }
+.dia .gov-layer { fill: var(--surface); stroke: var(--gov-line); stroke-width: 1.3; }
+.dia .gov-t { fill: var(--gov-ink); }
+.dia .ledger { fill: var(--surface-2); stroke: var(--gov-line); stroke-width: 1.2; stroke-dasharray: 3 3; }
+.dia .ai { fill: var(--ai-bg); stroke: var(--ai-line); stroke-width: 1.4; }
+.dia .ai-t { fill: var(--ai-ink); }
+.dia .prod { fill: var(--prod-bg); stroke: var(--prod-line); stroke-width: 1.4; stroke-dasharray: 6 4; }
+.dia .prod-t { fill: var(--prod-ink); }
+.dia .out { fill: var(--out-bg); stroke: var(--out-line); stroke-width: 1.4; }
+.dia .out-t { fill: var(--out-ink); }
+.dia .future { stroke-dasharray: 2 4; }
+.dia .ink2 { fill: var(--ink-2); }
+
+.dia .e { fill: none; stroke-width: 1.8; }
+.dia .e-user { stroke: var(--user-line); }
+.dia .e-work { stroke: var(--work-line); }
+.dia .e-gov { stroke: var(--gov-line); }
+.dia .e-ai { stroke: var(--ai-line); }
+.dia .e-prod { stroke: var(--prod-line); }
+.dia .e-out { stroke: var(--out-line); }
+.dia .dash { stroke-dasharray: 7 5; }
+.dia .dot { stroke-dasharray: 2 4; }
+.dia .m-user { fill: var(--user-line); }
+.dia .m-work { fill: var(--work-line); }
+.dia .m-gov { fill: var(--gov-line); }
+.dia .m-ai { fill: var(--ai-line); }
+.dia .m-prod { fill: var(--prod-line); }
+.dia .m-out { fill: var(--out-line); }
+
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 12px 2px 0; font-size: 13px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.sw { width: 16px; height: 12px; border-radius: 3px; border: 1.5px solid; display: inline-block; }
+.sw.user { background: var(--user-bg); border-color: var(--user-line); }
+.sw.work { background: var(--work-bg); border-color: var(--work-line); }
+.sw.gov { background: var(--gov-bg); border-color: var(--gov-line); }
+.sw.ai { background: var(--ai-bg); border-color: var(--ai-line); }
+.sw.prod { background: var(--prod-bg); border-color: var(--prod-line); border-style: dashed; }
+.sw.out { background: var(--out-bg); border-color: var(--out-line); }
+.ln { width: 28px; height: 0; border-top: 2px solid var(--ink-2); display: inline-block; }
+.ln.dash { border-top-style: dashed; }
+.ln.dot { border-top-style: dotted; }
+
+.stack { display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 6px 0 14px; }
+.layer { border-radius: 10px; padding: 10px 14px; border: 1.5px solid; min-width: 0; }
+.layer b { display: block; font-size: 14.5px; }
+.layer span { font-size: 13px; }
+.layer.l1 { width: 100%; background: var(--ai-bg); border-color: var(--ai-line); color: var(--ai-ink); }
+.layer.l2 { width: 93%; background: var(--gov-bg); border-color: var(--gov-line); color: var(--gov-ink); }
+.layer.l3 { width: 86%; background: var(--work-bg); border-color: var(--work-line); color: var(--work-ink); }
+.layer.l4 { width: 79%; background: var(--resell-bg); border-color: var(--resell-line); color: var(--resell-ink); }
+.layer.l5 { width: 72%; background: var(--user-bg); border-color: var(--user-line); color: var(--user-ink); }
+
+ol.check, ul.check { list-style: none; padding: 0; margin: 0; counter-reset: c; }
+ol.check li { counter-increment: c; position: relative; padding: 10px 12px 10px 48px; border: 1px solid var(--line); background: var(--surface); border-radius: 10px; margin-bottom: 8px; font-size: 14.5px; color: var(--ink-2); }
+ol.check li::before { content: counter(c); position: absolute; left: 12px; top: 10px; width: 24px; height: 24px; border-radius: 50%; background: var(--gov-bg); color: var(--gov-ink); font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+ol.check li b { color: var(--ink); }
+
+.timeline { border-left: 3px solid var(--line); margin-left: 6px; padding-left: 16px; }
+.tl { position: relative; margin-bottom: 12px; }
+.tl::before { content: ""; position: absolute; left: -23px; top: 6px; width: 11px; height: 11px; border-radius: 50%; background: var(--surface); border: 3px solid var(--gov-line); }
+.tl.g::before { border-color: var(--prod-line); }
+.tl .d { font-weight: 700; font-size: 14px; }
+.tl .x { font-size: 14px; color: var(--ink-2); }
+
+.callout { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 10px; padding: 12px 14px; margin: 12px 0; font-size: 14.5px; color: var(--ink-2); }
+.callout b { color: var(--ink); }
+pre { background: var(--surface-2); border-radius: 10px; padding: 12px 14px; overflow-x: auto; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; line-height: 1.5; margin: 8px 0 12px; color: var(--ink); }
+footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-3); }
+footer ul { padding-left: 18px; }
+@media (max-width: 520px) {
+  body { font-size: 15px; }
+  .layer.l2, .layer.l3, .layer.l4, .layer.l5 { width: 100%; }
+}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">AA_Ecosys · S261 · 31/10/2026 · bản tư vấn</div>
+  <h1>LLM gateway AA</h1>
+  <p class="lead">Mọi lệnh gọi AI của mọi app và mọi loại khách đi qua một gateway chung. Trang này cho thấy luồng đó, quota nằm ở đâu, ai giới hạn ai, đang thiếu gì trước prod, và việc nào cần tech lead hay business owner duyệt.</p>
+  <div class="meta">Nguồn: kế hoạch quota LLM S261 (<code>docs/audits/2026-10-31-S261-llm-capacity-plan/README.md</code>) và mô hình account hiện tại (<code>…/2026-10-31-S261-aws-bedrock-org-access/current-situation-model.md</code>). Số có ghi "minh hoạ" là giả định để tính thử. Trang chỉ đọc, không có số account.</div>
+  <nav class="toc">
+    <a href="#tom-tat">Trả lời ngắn</a>
+    <a href="#so-do">Sơ đồ luồng</a>
+    <a href="#quota">5 tầng quota</a>
+    <a href="#xin-quota">Xin quota prod</a>
+    <a href="#khach">Theo loại khách</a>
+    <a href="#giam-sat">Giám sát</a>
+    <a href="#code">Code hôm nay</a>
+    <a href="#app-moi">Thêm app mới</a>
+    <a href="#on-dinh">Ổn định, scale</a>
+    <a href="#viec">Issue, mốc ngày</a>
+    <a href="#duyet">Cần duyệt</a>
+  </nav>
+</header>
+
+<section id="tom-tat">
+  <h2>Trả lời ngắn</h2>
+  <p class="why">Phần này trả lời thẳng từng câu hỏi; các mục sau giải thích chi tiết.</p>
+  <div class="grid g3">
+    <div class="card ai">
+      <div class="q">Quota prod xin ở đâu</div>
+      <p>Ở <b>account gọi model</b>, theo region, model và loại profile. Prod gọi qua role prod-only của <code>aa-ai</code> (acc3), nên quota prod là quota của <code>aa-ai</code>, <b>dùng chung với dev và wave</b>. Không có quota Bedrock cấp org. Đại lý chỉ trả hoá đơn, không nâng quota.</p>
+    </div>
+    <div class="card gov">
+      <div class="q">Có đi qua gateway không</div>
+      <p>Có. Mọi app, mọi lệnh gọi đi qua một lõi gateway chung (lát S8). Hôm nay chỉ CIS đi đủ; TripPlanner có client mỏng riêng, CRM có gateway riêng với lệnh gọi model còn là stub.</p>
+    </div>
+    <div class="card work">
+      <div class="q">Quota theo app, tenant, khách</div>
+      <p>AWS không chia theo app, tenant hay khách. Mọi phân chia nằm <b>trong gateway</b>: dòng connection, budget, limiter. AWS chỉ giúp gán chi phí theo app (một role invoker cho mỗi app, tag <code>App</code>).</p>
+    </div>
+    <div class="card out">
+      <div class="q">B2C, B2B, B2B2C</div>
+      <p>B2C (TripPlanner) chỉ có trần chung 5 USD/ngày, chưa giới hạn theo người. Đại lý CRM đã có trần USD/tháng. Tenant Content studio chưa có trần USD AI. Khách của đại lý (B2B2C) không gọi LLM trực tiếp.</p>
+    </div>
+    <div class="card prod">
+      <div class="q">Thêm app mới</div>
+      <p>Không có account AWS riêng, không có client model riêng. Cắm vào lõi gateway sau S8 với connection, budget, stage, data scope riêng và đường giáng cấp khi AI không chạy. Checklist 12 bước ở dưới.</p>
+    </div>
+    <div class="card resell">
+      <div class="q">Có nên theo dõi bằng issue</div>
+      <p>Có, nhưng ít issue (Linear Free): tái dùng 6 issue sẵn có, chỉ đề xuất <b>2 issue mới</b>. Checklist có mốc ngày; việc chưa tới lúc thì chỉ ghi trigger, không tạo issue.</p>
+    </div>
+  </div>
+  <div class="callout"><b>Làm ngay trong 2 tuần:</b> đọc và ghi quota hiện tại của acc3; bật đường Anthropic API cho Dev; điền <code>monthly_budget_usd</code>, <code>rpm_limit</code>, <code>max_concurrency</code> cho các connection; cảnh báo tức thời khi circuit mở; business owner hỏi đại lý bằng văn bản (hạn AA-820 là 11/11).</div>
+</section>
+
+<section id="so-do">
+  <h2>Sơ đồ luồng</h2>
+  <p class="why">Sơ đồ này cho thấy <b>mọi giới hạn đều nằm ở gateway</b>: khách vào app, app gọi gateway, gateway quyết định route, phạm vi dữ liệu, trần, rồi mới ra đường gọi model.</p>
+  <div class="diagram" role="img" aria-label="Sơ đồ: người dùng vào app, app gọi LLM gateway qua bốn lớp, gateway gọi ra các đường model">
+    <svg class="dia" viewBox="0 0 1080 560" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="a-user" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-user" d="M0 0 L10 5 L0 10 z"/></marker>
+        <marker id="a-work" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-work" d="M0 0 L10 5 L0 10 z"/></marker>
+        <marker id="a-gov" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-gov" d="M0 0 L10 5 L0 10 z"/></marker>
+        <marker id="a-ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-ai" d="M0 0 L10 5 L0 10 z"/></marker>
+        <marker id="a-prod" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-prod" d="M0 0 L10 5 L0 10 z"/></marker>
+        <marker id="a-out" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="m-out" d="M0 0 L10 5 L0 10 z"/></marker>
+      </defs>
+
+      <!-- column headers -->
+      <text class="hd" x="108" y="28" text-anchor="middle">NGƯỜI DÙNG</text>
+      <text class="hd" x="354" y="28" text-anchor="middle">APP</text>
+      <text class="hd" x="636" y="28" text-anchor="middle">LLM GATEWAY</text>
+      <text class="hd" x="950" y="28" text-anchor="middle">ĐƯỜNG GỌI MODEL</text>
+
+      <!-- customers -->
+      <rect class="user" x="16" y="56" width="184" height="58" rx="10"/>
+      <text class="t user-t" x="28" y="80">Khách B2C</text>
+      <text class="s user-t" x="28" y="99">ẩn danh hoặc đã đăng nhập</text>
+
+      <rect class="user" x="16" y="136" width="184" height="58" rx="10"/>
+      <text class="t user-t" x="28" y="160">Tenant B2B</text>
+      <text class="s user-t" x="28" y="179">người dùng Content studio</text>
+
+      <rect class="user" x="16" y="216" width="184" height="58" rx="10"/>
+      <text class="t user-t" x="28" y="240">Nhân viên AA</text>
+      <text class="s user-t" x="28" y="259">admin, wave catalog, eval</text>
+
+      <rect class="user" x="16" y="316" width="184" height="58" rx="10"/>
+      <text class="t user-t" x="28" y="340">Đại lý B2B</text>
+      <text class="s user-t" x="28" y="359">nhân viên đại lý trong CRM</text>
+
+      <rect class="user" x="16" y="396" width="184" height="58" rx="10"/>
+      <text class="t user-t" x="28" y="420">Khách của đại lý</text>
+      <text class="s user-t" x="28" y="439">B2B2C: không gọi LLM</text>
+
+      <!-- apps -->
+      <rect class="work" x="256" y="50" width="196" height="72" rx="10"/>
+      <text class="t work-t" x="268" y="73">TripPlanner</text>
+      <text class="s work-t" x="268" y="92">client mỏng riêng, chưa có</text>
+      <text class="s work-t" x="268" y="108">limiter / breaker (chờ S8)</text>
+
+      <rect class="work" x="256" y="166" width="196" height="78" rx="10"/>
+      <text class="t work-t" x="268" y="189">AA-CIS</text>
+      <text class="s work-t" x="268" y="208">admin + API Content studio</text>
+      <text class="s work-t" x="268" y="225">đi đủ đường gateway hôm nay</text>
+
+      <rect class="work" x="256" y="310" width="196" height="72" rx="10"/>
+      <text class="t work-t" x="268" y="333">CRM (AA-Partner)</text>
+      <text class="s work-t" x="268" y="352">gateway riêng, gọi model</text>
+      <text class="s work-t" x="268" y="368">còn là stub (chờ S8)</text>
+
+      <rect class="work future" x="256" y="470" width="196" height="64" rx="10"/>
+      <text class="t work-t" x="268" y="494">App mới (sau này)</text>
+      <text class="s work-t" x="268" y="513">cắm vào lõi chung sau S8</text>
+
+      <!-- customer to app edges -->
+      <path class="e e-user" d="M200 85 L254 85" marker-end="url(#a-user)"/>
+      <path class="e e-user" d="M200 165 C228 165 228 196 254 196" marker-end="url(#a-user)"/>
+      <path class="e e-user" d="M200 245 C228 245 228 222 254 222" marker-end="url(#a-user)"/>
+      <path class="e e-user" d="M200 345 L254 345" marker-end="url(#a-user)"/>
+      <path class="e e-user dash" d="M200 425 C230 425 228 372 254 372" marker-end="url(#a-user)"/>
+
+      <!-- gateway container -->
+      <rect class="gov" x="496" y="44" width="280" height="500" rx="14"/>
+      <text class="gt" x="636" y="70" text-anchor="middle">LLM gateway</text>
+      <text class="s gov-t" x="636" y="88" text-anchor="middle">một lõi chung cho mọi app (đích S8)</text>
+
+      <rect class="gov-layer" x="516" y="104" width="240" height="74" rx="9"/>
+      <text class="t gov-t" x="528" y="126">1. Route theo stage</text>
+      <text class="s ink2" x="528" y="145">stage → chuỗi deployment,</text>
+      <text class="s ink2" x="528" y="161">max_tokens, lane</text>
+
+      <rect class="gov-layer" x="516" y="194" width="240" height="74" rx="9"/>
+      <text class="t gov-t" x="528" y="216">2. Data scope</text>
+      <text class="s ink2" x="528" y="235">aws_only: chỉ trong AWS</text>
+      <text class="s ink2" x="528" y="251">vendor_direct: được ra API ngoài</text>
+
+      <rect class="gov-layer" x="516" y="284" width="240" height="74" rx="9"/>
+      <text class="t gov-t" x="528" y="306">3. Trần + budget</text>
+      <text class="s ink2" x="528" y="325">rpm, concurrency, budget tháng;</text>
+      <text class="s ink2" x="528" y="341">budget tenant / đại lý, trần ngày</text>
+
+      <rect class="gov-layer" x="516" y="374" width="240" height="74" rx="9"/>
+      <text class="t gov-t" x="528" y="396">4. Breaker + fallback</text>
+      <text class="s ink2" x="528" y="415">circuit mở → deployment kế,</text>
+      <text class="s ink2" x="528" y="431">tối đa 6 lần thử cả chuỗi</text>
+
+      <rect class="ledger" x="516" y="464" width="240" height="66" rx="9"/>
+      <text class="t gov-t" x="528" y="486">Sổ log</text>
+      <text class="s ink2" x="528" y="504">llm_call_log, crm.llm_call:</text>
+      <text class="s ink2" x="528" y="520">tenant, stage, model, chi phí</text>
+
+      <path class="e e-gov" d="M636 178 L636 192" marker-end="url(#a-gov)"/>
+      <path class="e e-gov" d="M636 268 L636 282" marker-end="url(#a-gov)"/>
+      <path class="e e-gov" d="M636 358 L636 372" marker-end="url(#a-gov)"/>
+      <path class="e e-gov dash" d="M636 448 L636 462" marker-end="url(#a-gov)"/>
+
+      <!-- app to gateway edges -->
+      <path class="e e-work dash" d="M452 86 C482 86 486 118 514 118" marker-end="url(#a-work)"/>
+      <path class="e e-work" d="M452 205 C484 205 484 134 514 134" marker-end="url(#a-work)"/>
+      <path class="e e-work dash" d="M452 346 C488 346 486 150 514 150" marker-end="url(#a-work)"/>
+      <path class="e e-work dot" d="M452 502 C492 502 488 166 514 166" marker-end="url(#a-work)"/>
+
+      <!-- paths -->
+      <rect class="ai" x="836" y="50" width="228" height="96" rx="10"/>
+      <text class="t ai-t" x="848" y="72">Bedrock trong aa-ai (acc3)</text>
+      <text class="s ai-t" x="848" y="91">đường 1, mặc định: dev, wave,</text>
+      <text class="s ai-t" x="848" y="107">prod qua role prod-only</text>
+      <text class="warn" x="848" y="128">quota tầng 1 · đang Error 002</text>
+
+      <rect class="prod" x="836" y="162" width="228" height="78" rx="10"/>
+      <text class="t prod-t" x="848" y="184">Bedrock tại chỗ aa-prod</text>
+      <text class="s prod-t" x="848" y="203">đường 2, tuỳ chọn, làm sau</text>
+      <text class="s prod-t" x="848" y="219">quota riêng; phải sửa ADR 0001a</text>
+
+      <rect class="out" x="836" y="256" width="228" height="96" rx="10"/>
+      <text class="t out-t" x="848" y="278">Anthropic API trực tiếp</text>
+      <text class="s out-t" x="848" y="297">đường 3, ngoài AWS, phải ấm</text>
+      <text class="s out-t" x="848" y="313">chỉ stage vendor_direct</text>
+      <text class="s out-t" x="848" y="329">không bao giờ cho CRM</text>
+
+      <rect class="out" x="836" y="368" width="228" height="78" rx="10"/>
+      <text class="t out-t" x="848" y="390">OpenAI API</text>
+      <text class="s out-t" x="848" y="409">chỉ judge / validate</text>
+      <text class="s out-t" x="848" y="425">hôm nay hết credit (429)</text>
+
+      <rect class="work" x="836" y="462" width="228" height="78" rx="10"/>
+      <text class="t work-t" x="848" y="484">Cohere Embed v4 (acc2)</text>
+      <text class="s work-t" x="848" y="503">embed TP hôm nay, 20 RPM</text>
+      <text class="s work-t" x="848" y="519">prod phải chốt đường khác</text>
+
+      <!-- gateway to path edges -->
+      <path class="e e-ai" d="M756 411 C800 411 798 98 834 98" marker-end="url(#a-ai)"/>
+      <path class="e e-prod dash" d="M756 411 C804 411 800 201 834 201" marker-end="url(#a-prod)"/>
+      <path class="e e-out dash" d="M756 411 C808 411 804 304 834 304" marker-end="url(#a-out)"/>
+      <path class="e e-out dash" d="M756 411 L834 407" marker-end="url(#a-out)"/>
+      <path class="e e-work" d="M756 411 C804 411 800 501 834 501" marker-end="url(#a-work)"/>
+    </svg>
+  </div>
+  <div class="legend">
+    <span><i class="sw user"></i>Người dùng</span>
+    <span><i class="sw work"></i>App / hạ tầng chạy app</span>
+    <span><i class="sw gov"></i>Gateway (kiểm soát)</span>
+    <span><i class="sw ai"></i>Account AI (aa-ai)</span>
+    <span><i class="sw prod"></i>Account prod (tuỳ chọn)</span>
+    <span><i class="sw out"></i>Ngoài AWS</span>
+    <span><i class="ln"></i>Chạy hôm nay</span>
+    <span><i class="ln dash"></i>Sau S8 / tuỳ chọn / gián tiếp</span>
+    <span><i class="ln dot"></i>App tương lai</span>
+  </div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card gov">
+      <h4>Đọc sơ đồ thế nào</h4>
+      <ul>
+        <li>Bốn lớp trong gateway chạy theo thứ tự. Lớp 2 quyết định lệnh có được ra khỏi AWS không; lớp 3 là nơi đặt mọi trần do mình kiểm soát.</li>
+        <li>Khách của đại lý chỉ gửi tin nhắn vào CRM; AI chạy trên tin đó qua tay nhân viên đại lý, sau khi scrub.</li>
+        <li>Stage <code>aws_only</code> (TP, CRM, writer tenant) <b>không có fallback ngoài AWS</b> cho tới khi có quyết định data scope.</li>
+      </ul>
+    </div>
+    <div class="card ai">
+      <h4>Vì sao đường 3 quan trọng</h4>
+      <ul>
+        <li>Sự cố 29/10 bắt đầu ở tầng org / payer: acc3 rời org và mọi model Bedrock bị chặn.</li>
+        <li>Thêm account Bedrock (đường 2) chỉ che hỏng ở tầng account, không che hỏng ở tầng payer.</li>
+        <li>Chỉ Anthropic API độc lập với payer AWS, nên phải bật sẵn, có tiền, probe hằng ngày.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="quota">
+  <h2>5 tầng quota</h2>
+  <p class="why">Mỗi lệnh gọi phải qua <b>cả 5 tầng</b>; tầng trên là trần cứng của AWS, các tầng dưới là trần mình đặt để không ai ăn hết phần của người khác.</p>
+  <div class="stack">
+    <div class="layer l1"><b>1. AWS account × region × model</b><span>Trần cứng, AWS duyệt. Nằm ở aa-ai (và aa-prod nếu bật đường 2).</span></div>
+    <div class="layer l2"><b>2. Connection trong gateway</b><span>rpm, concurrency, budget tháng trên từng dòng connection.</span></div>
+    <div class="layer l3"><b>3. App / môi trường</b><span>Dòng riêng cho dev, prod, bulk; trần ngày của TP.</span></div>
+    <div class="layer l4"><b>4. Tenant / đại lý</b><span>Budget USD theo tenant Content studio và đại lý CRM.</span></div>
+    <div class="layer l5"><b>5. Người dùng cuối</b><span>Limiter theo phiên, IP, user; bot check.</span></div>
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Tầng</th><th>Ai đặt</th><th><span class="chip ok">Đã có</span></th><th><span class="chip miss">Thiếu</span></th><th><span class="chip trig">Khi có trigger</span></th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="k">1. AWS account</td>
+          <td>Tech lead xin trên account gọi model; AWS duyệt</td>
+          <td>AWS Budgets 250 USD trên acc3 (chỉ cảnh báo, không chặn)</td>
+          <td><ul><li>Ghi quota thật (không code nào đọc quota)</li><li>Bảng tính nhu cầu TPM; RPM cho embedding</li><li>Đơn xin kèm số đo</li><li>3 alarm CloudWatch</li></ul></td>
+          <td><ul><li>Region nguồn thứ hai khi 503 / 529 lặp lại</li><li>Reserved tier khi interactive bền ≥ 100.000 input TPM</li></ul></td>
+        </tr>
+        <tr>
+          <td class="k">2. Connection</td>
+          <td>Tech lead, tab Connections</td>
+          <td><ul><li><code>rpm_limit</code>, <code>max_concurrency</code>, <code>monthly_budget_usd</code></li><li>Budget: cảnh báo 80 %, chặn 100 %</li><li>Breaker dùng chung giữa các task</li></ul></td>
+          <td><ul><li>Các dòng đang để trống, nên chưa có tác dụng</li><li>Limiter chỉ đếm request, không đếm token</li><li>Đường legacy và vendor direct chưa qua limiter / breaker</li><li>Chia trần theo số task</li></ul></td>
+          <td>Limiter chung qua Redis khi một service chạy &gt; 2 task hoặc vẫn có 429</td>
+        </tr>
+        <tr>
+          <td class="k">3. App / môi trường</td>
+          <td>Tech lead</td>
+          <td><ul><li>TP: trần 5 USD/ngày cho stage online</li><li>CIS: <code>spend_budget</code> theo job kind</li></ul></td>
+          <td><ul><li>Dòng tách dev / prod / bulk + cờ "bulk paused"</li><li>Trần theo app cho CIS và CRM</li><li>TP và CRM chưa đọc connection (chờ S8)</li></ul></td>
+          <td>Lane đầy đủ + job claim theo ưu tiên khi wave làm vượt SLO</td>
+        </tr>
+        <tr>
+          <td class="k">4. Tenant / đại lý</td>
+          <td>Giá: business owner. Số kỹ thuật: tech lead</td>
+          <td><ul><li>CRM: 2 USD/tháng mỗi đại lý, fail closed, AI tắt mặc định</li><li>CRM: mỗi đại lý chỉ 1 lệnh cùng lúc</li><li>CIS: gán chi phí theo tenant, RPM HTTP theo gói</li></ul></td>
+          <td><ul><li>Trần USD AI theo tenant Content studio (MỚI 2)</li><li>Trần lệnh/phút theo đại lý</li><li>Cảnh báo 75 / 90 % cho đại lý</li></ul></td>
+          <td><ul><li>Chia công bằng job khi ≥ 3 tenant trả tiền chạy cùng lúc</li><li>Hạn mức theo nhân viên đại lý</li></ul></td>
+        </tr>
+        <tr>
+          <td class="k">5. Người dùng cuối</td>
+          <td>Tech lead (số); business owner (lượt miễn phí)</td>
+          <td><ul><li>TP: throttle theo route (narrate 2 rps, search 10 rps), dùng chung mọi khách</li><li>Cache narration và embedding</li></ul></td>
+          <td><ul><li><b>Không có giới hạn LLM theo người dùng ở đâu cả</b></li><li>Bot check cho TP (MỚI 1)</li></ul></td>
+          <td>Trần con theo khách khi có trợ lý cho khách B2B2C</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Bốn lỗ hổng tầng 2 phải vá trước prod: limiter chạy trong từng process (trần thật = trần dòng × số task), chỉ đếm request, đường legacy không qua limiter và breaker, các dòng chưa có số.</p>
+</section>
+
+<section id="xin-quota">
+  <h2>Xin quota prod</h2>
+  <p class="why">AWS <b>không tự duyệt</b> đơn tăng quota Bedrock và ưu tiên account đang có lưu lượng thật, nên phải chạy thử trước rồi mới xin.</p>
+  <div class="grid g3">
+    <div class="card gov">
+      <h4>Cấp org (acc4)</h4>
+      <p>Không có quota Bedrock cấp org. Chỉ có template tự xin tối đa 10 quota cho account <b>mới tạo</b> trong org, và form Anthropic nộp ở account quản trị cho account thành viên thừa hưởng.</p>
+    </div>
+    <div class="card ai">
+      <h4>Cấp account (nơi xin thật)</h4>
+      <p>Quota tính theo account × region nguồn × model × loại profile (<code>us.</code> / <code>global.</code>). Prod xin trên <code>aa-ai</code>; thêm <code>aa-prod</code> nếu bật đường 2. Embedding tính theo RPM, không theo TPM.</p>
+    </div>
+    <div class="card resell">
+      <h4>Đại lý</h4>
+      <p>Chỉ trả hoá đơn. Tài liệu AWS không ghi đại lý có quyền nâng quota. Có giúp leo thang qua kênh partner không thì hỏi bằng văn bản (câu 15, 17, 18 trong danh sách câu hỏi đại lý).</p>
+    </div>
+  </div>
+  <h3>Cách xin, theo thứ tự</h3>
+  <ol class="check">
+    <li><b>Đọc quota thật</b> trong Service Quotas của acc3. Quota mặc định có thể thấp hơn bảng công bố, và có thể đổi sau mỗi lần đổi payer hoặc org.</li>
+    <li><b>Chạy lưu lượng giống prod</b> trên đúng model, profile, account prod sẽ dùng (load test ramp, tổng vài USD).</li>
+    <li><b>Xin "Cross-Region InvokeModel tokens per minute"</b> cho model prod. Sonnet 5.5 ở us-west-1 không có In-Region, chỉ chạy qua <code>us.</code> / <code>global.</code>.</li>
+    <li><b>Ghi trong đơn:</b> endpoint, region, model ID, mã lỗi, request ID, token/phút, request/phút, concurrency, lịch tăng tải, ảnh CloudWatch.</li>
+    <li><b>Đệm thời gian:</b> tài liệu không nêu thời hạn xử lý. Mốc 4–6 tuần trước go-live là đệm của mình.</li>
+  </ol>
+  <h3>Tính nhu cầu thế nào</h3>
+  <p>Đầu request, AWS giữ chỗ <code>input + max_tokens</code>; cuối request tính lại theo output thật nhân hệ số burndown (5x đến 15x tuỳ model). Vì vậy <code>max_tokens</code> đặt rộng làm giảm số lệnh chạy song song dù output ngắn.</p>
+<pre>TPM giữ chỗ   ≈ request/phút × (input + max_tokens)
+TPM tính thật ≈ request/phút × (input không cache + cache_write + output × burndown)
+Quota cần xin ≈ max(giữ chỗ, tính thật) × 1,5</pre>
+  <div class="callout"><b>Ví dụ (minh hoạ, burndown 10x):</b> CRM 50 đại lý, giờ cao điểm 10 nháp/phút, input 3.000 token, <code>max_tokens</code> 800, output 400. Giữ chỗ ≈ 38.000 TPM, tính thật ≈ 70.000 TPM, riêng CRM cần khoảng <b>105.000 TPM</b>. Phải cộng TP compose, tenant T-stage và wave dev vì cùng account.</div>
+  <p class="note">Quota khác quyền truy cập: Error 002 của acc3 là chặn mức account (case AWS đang mở), xin quota không gỡ được. Provisioned Throughput không dùng được cho Claude hiện hành ở us-west-1; Bedrock batch không hỗ trợ Sonnet 5.5.</p>
+</section>
+
+<section id="khach">
+  <h2>Theo loại khách</h2>
+  <p class="why">Mỗi loại khách dùng AI theo một cách khác, nên trần, người trả tiền và luật dữ liệu khác nhau.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Loại khách</th><th>App</th><th>Đi đường nào hôm nay → đích</th><th>Ai trả</th><th>Giới hạn hôm nay</th><th>Dữ liệu ra khỏi AWS</th></tr></thead>
+      <tbody>
+        <tr><td class="k">B2C du khách</td><td>TripPlanner search, narrate</td><td>Client mỏng TP → Bedrock (compose acc3, embed acc2). <b>Đích: core gateway (S8)</b></td><td>AA</td><td>Trần chung 5 USD/ngày, throttle route. Đăng nhập không thêm bớt gì <span class="chip miss">Thiếu theo người</span></td><td>Không, <code>aws_only</code></td></tr>
+        <tr><td class="k">B2B tenant</td><td>Content studio (portal → CIS <code>/v1/*</code> → job)</td><td>Job T2 / T9 → gateway CIS → acc3</td><td>AA, thu lại qua giá gói</td><td>Quota bài viết lại không chặn, RPM HTTP theo gói, 4 job mỗi kind dùng chung <span class="chip miss">Thiếu trần USD</span></td><td>Writer: không. Judge T: được dùng OpenAI làm đường cuối</td></tr>
+        <tr><td class="k">B2B đại lý</td><td>CRM (AA-Partner)</td><td>Gateway CRM (stub). <b>Đích: core gateway (S8)</b> + role invoker CRM</td><td>AA, trong trần từng đại lý</td><td>Scrub fail closed, 2 USD/tháng, AI tắt mặc định <span class="chip ok">Đã có</span></td><td><b>Không bao giờ.</b> Chỉ Bedrock, chỉ văn bản đã scrub</td></tr>
+        <tr><td class="k">B2B2C khách của đại lý</td><td>Portal, form, trang trip white-label</td><td>Không gọi LLM; đọc nội dung đã viết sẵn</td><td>—</td><td>Giới hạn theo IP, quota form, honeypot</td><td>Gián tiếp: tin nhắn vào CRM, qua scrub</td></tr>
+        <tr><td class="k">Nội bộ AA</td><td>Admin CIS, wave, job</td><td>Gateway CIS → acc3 (+ Cohere acc2); batch S1</td><td>AA</td><td><code>spend_budget</code> theo kind, wave chưa có trần USD trong code</td><td>Judge / validate được dùng vendor direct</td></tr>
+        <tr><td class="k">AA-Booking</td><td>—</td><td>Chưa gọi LLM</td><td>—</td><td>Luật: không AI cho tư vấn bảo hiểm / tài chính</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="grid g3" style="margin-top:12px">
+    <div class="card"><h4>Ai trả</h4><p>AA trả mọi lệnh gọi. Tenant không thấy chi phí token; khoản này thu lại qua giá gói, không bán lại theo token.</p></div>
+    <div class="card"><h4>Dữ liệu ra khỏi AWS</h4><p>Chỉ khi stage có <code>vendor_direct</code> <b>và</b> terms + DPA cho phép. Route khách (TP, CRM, writer tenant) chưa có fallback ngoài AWS.</p></div>
+    <div class="card"><h4>Global CRIS</h4><p>Rẻ hơn khoảng 10 %, xử lý ở mọi region. Chỉ cho stage không PII (catalog AA, wave). CRM và TP giữ <code>us.</code>.</p></div>
+  </div>
+</section>
+
+<section id="giam-sat">
+  <h2>Giám sát</h2>
+  <p class="why">Digest hằng ngày đã có nhưng <b>chưa đủ nhanh cho prod</b>: cần biết ngay khi một circuit mở hoặc khi AWS bắt đầu throttle.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Thứ</th><th>Trạng thái</th><th>Thấy gì</th><th>Chưa thấy</th></tr></thead>
+      <tbody>
+        <tr><td class="k"><code>shared.llm_call_log</code></td><td><span class="chip ok">Đã có</span></td><td>Mỗi lệnh có tính tiền: tenant, stage, model, connection, fallback, chi phí, cache</td><td>CRM (log riêng). CIS không log lệnh lỗi</td></tr>
+        <tr><td class="k">Trang chi phí theo app</td><td><span class="chip ok">Đã có</span></td><td>Chi phí AWS theo tag <code>App</code> + chi phí AI theo app, gồm CRM</td><td>% budget, quota</td></tr>
+        <tr><td class="k">Thẻ availability</td><td><span class="chip ok">Đã có</span></td><td>blocked / degraded / ok theo provider × account, breaker theo deployment</td><td>CRM, lỗi của TP</td></tr>
+        <tr><td class="k">Digest OPS-12 (07:30)</td><td><span class="chip ok">Đã có</span></td><td>Route blocked, fallback 24 giờ ≥ 5 %, chi phí ngày bất thường</td><td>TP không có probe, chi phí CRM</td></tr>
+        <tr><td class="k">Đối soát chi phí hằng đêm</td><td><span class="chip ok">Đã có</span></td><td>Sổ gateway so với Cost Explorer (Bedrock)</td><td>Anthropic / OpenAI chưa có Admin key</td></tr>
+        <tr><td class="k">Cảnh báo tức thời circuit mở</td><td><span class="chip miss">Thiếu</span></td><td colspan="2">Gửi chuông admin + email ngay khi deployment prod mở circuit. Việc số 1.</td></tr>
+        <tr><td class="k">3 alarm CloudWatch trên aa-ai</td><td><span class="chip miss">Thiếu</span></td><td colspan="2">Throttle, lỗi client (vượt quota đếm ở đây), lỗi server. <b>Không lọc theo model</b>, nếu lọc sẽ đếm thiếu.</td></tr>
+        <tr><td class="k">Cost tag <code>App</code></td><td><span class="chip miss">Thiếu</span></td><td colspan="2">Kích hoạt sớm vì không có hiệu lực ngược. Một role invoker mỗi app là đủ tách chi phí trên hoá đơn.</td></tr>
+        <tr><td class="k">CRM vào thẻ availability + digest</td><td><span class="chip miss">Thiếu</span></td><td colspan="2">Qua ops contract của CRM, hoặc sau S8 ghi chung sổ với <code>app='crm'</code>.</td></tr>
+        <tr><td class="k">Bảng theo tenant</td><td><span class="chip miss">Thiếu</span></td><td colspan="2">% budget tenant (khi có MỚI 2), số 429, tỉ lệ fallback.</td></tr>
+        <tr><td class="k">Invocation logging</td><td><span class="chip trig">Khi có trigger</span></td><td colspan="2">Log chứa toàn bộ prompt và output; thêm một kho dữ liệu nhạy cảm. Chỉ bật khi sổ gateway không đủ để điều tra sự cố.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Ngưỡng khởi điểm</h3>
+  <div class="tw">
+    <table class="narrow">
+      <thead><tr><th>Tín hiệu</th><th>Cảnh báo</th><th>Báo khẩn (prod)</th></tr></thead>
+      <tbody>
+        <tr><td>Circuit mở trên deployment prod</td><td>—</td><td>Ngay lập tức</td></tr>
+        <tr><td>Throttle (stage interactive)</td><td>&gt; 0 trong 5 phút</td><td>≥ 10 trong 5 phút</td></tr>
+        <tr><td>Lỗi client vượt quota</td><td>&gt; 0 trong 15 phút</td><td>≥ 10 trong 15 phút</td></tr>
+        <tr><td>Lỗi server / tổng lệnh</td><td>≥ 2 % trong 15 phút</td><td>≥ 5 % trong 15 phút</td></tr>
+        <tr><td>Ước lượng quota đã dùng</td><td>≥ 60 % đỉnh tuần → chuẩn bị đơn</td><td>—</td></tr>
+        <tr><td>Budget connection</td><td>80 % (đã có)</td><td>100 % = chặn (đã có)</td></tr>
+        <tr><td>Đại lý CRM</td><td>75 % / 90 %</td><td>100 % = AI tắt (đã có)</td></tr>
+        <tr><td>Tenant Content studio</td><td>100 % phần AI của gói</td><td>150 % → chờ staff duyệt</td></tr>
+        <tr><td>Trần ngày TP</td><td>80 %</td><td>Chạm trần</td></tr>
+        <tr><td>Fallback 24 giờ</td><td>≥ 5 % (đã có)</td><td>≥ 20 %</td></tr>
+        <tr><td>Chi phí ngày</td><td>&gt; 2× trung vị 14 ngày (đã có)</td><td>&gt; 4× hoặc vượt AWS Budget ngày</td></tr>
+        <tr><td>Anthropic API so với giới hạn tier</td><td>70 %</td><td>90 % hoặc lỗi spend cap</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Đây là số khởi điểm; chỉnh sau 2 tuần chạy thật. Bài này chỉ bàn lưu lượng LLM, không bàn lưu lượng HTTP thường.</p>
+</section>
+
+<section id="code">
+  <h2>Code hôm nay</h2>
+  <p class="why">Chưa xong S8 thì mọi trần trong gateway <b>chỉ giữ được phần của CIS</b>; hai app còn lại đi đường riêng.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>App</th><th>Hôm nay</th><th>Sau S8</th><th>Còn thiếu trước prod</th></tr></thead>
+      <tbody>
+        <tr><td class="k">AA-CIS</td><td><span class="chip ok">Đã có</span> registry connection, limiter, breaker, budget, fallback, đổi route bằng màn admin</td><td>Tách lõi <code>aa_llm</code> dùng chung</td><td>Điền số trên connection; lát S12 (trần TPM, dòng dev / prod / bulk, bọc đường legacy, cảnh báo tức thời)</td></tr>
+        <tr><td class="k">TripPlanner</td><td><span class="chip part">Một phần</span> client mỏng riêng, account cố định acc3 / acc2, không limiter, breaker, budget connection, không Anthropic API</td><td>Đọc registry chung, vào breaker / limiter / budget; dòng <code>tp-prod</code> có budget + trần ngày</td><td>Limiter theo phiên / IP + bot check (MỚI 1); thêm account prod</td></tr>
+        <tr><td class="k">CRM (AA-Partner)</td><td><span class="chip part">Một phần</span> gateway riêng: scrub → budget → bật AI → gọi model (stub) → log riêng</td><td>Adapter của core, giữ nguyên thứ tự scrub → budget → bật AI; ghi chung sổ hoặc qua ops contract</td><td>Cảnh báo 75 / 90 %, trần lệnh/phút, luật prompt injection, hành vi guardrail khi acc2 hỏng</td></tr>
+        <tr><td class="k">AA-Booking</td><td>Chưa gọi LLM</td><td>Nếu có: cắm vào core như app mới</td><td>—</td></tr>
+        <tr><td class="k">App mới</td><td>—</td><td>Cắm vào core theo checklist</td><td>ADR 0009 (hợp đồng core) phải có trước S8</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="app-moi">
+  <h2>Thêm app mới</h2>
+  <p class="why">Một quy trình chung giúp app thứ năm, thứ sáu không tự dựng client model riêng và không phá trần của app khác.</p>
+  <ol class="check">
+    <li><b>Cổng quyết định.</b> AI là tính năng của AA (AA trả, gateway AA) hay khách tự mang key? Mặc định: tính năng của AA. Viết ADR con hoặc design doc.</li>
+    <li><b>Gateway.</b> Dùng lõi <code>aa_llm</code> sau S8. Không gọi boto3 hay SDK vendor trực tiếp; đăng ký mọi call site.</li>
+    <li><b>Stage + route + data scope.</b> Đăng ký tiền tố <code>&lt;app&gt;_*</code> trong <code>llm_role_config</code>: <code>allowed_scopes</code>, lane, <code>max_tokens</code> theo đo; tách stage online và offline.</li>
+    <li><b>Sổ log.</b> Ghi <code>llm_call_log</code> với tên app, hoặc sổ riêng cùng hợp đồng cột. Không lưu prompt khi có thể có PII.</li>
+    <li><b>DB role.</b> Chỉ SELECT trên cấu hình gateway và INSERT trên log, không hơn.</li>
+    <li><b>Account / role AWS.</b> Không tạo account mới. Một role invoker mỗi môi trường trên <code>aa-ai</code>, trust chỉ task role của app; một dòng connection riêng có số.</li>
+    <li><b>Budget.</b> Budget connection, trần ngày cho stage khách dùng, budget theo tenant nếu B2B, limiter theo user / IP nếu trang công khai, tag <code>App</code>.</li>
+    <li><b>Riêng tư.</b> Tag PII, scrubber nếu văn bản tự do của khách vào prompt, nhãn AI trên văn bản hiển thị, báo rõ là AI khi chat với khách.</li>
+    <li><b>Đường giáng cấp.</b> Mỗi tính năng LLM có bản không-AI (văn bản AA, tìm theo từ khoá, trả lời tay). Không spinner chờ mãi.</li>
+    <li><b>Giám sát.</b> Chi phí theo app và tenant trên trang chi phí; alarm theo ngưỡng; mỗi lệnh một dòng log kết quả, không kèm văn bản.</li>
+    <li><b>Quota.</b> Cộng nhu cầu TPM (RPM nếu embedding) vào bảng tính tầng 1; vượt ~60 % quota hiện có thì xin tăng trước khi bật.</li>
+    <li><b>Review + chạy thử.</b> Thử khoảng 3 lệnh rồi ≤ 50; subagent review độc lập (có IAM); khai SLO. App có khách trả tiền thì business owner xác nhận giá.</li>
+  </ol>
+</section>
+
+<section id="on-dinh">
+  <h2>Ổn định và scale</h2>
+  <p class="why">Đội 2–3 người nên làm <b>các đòn bẩy rẻ ngay</b>, còn các việc lớn chỉ làm khi số đo cho thấy cần.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Đòn bẩy</th><th><span class="chip ok">Làm ngay</span></th><th><span class="chip trig">Khi có trigger</span></th><th>Trigger</th></tr></thead>
+      <tbody>
+        <tr><td class="k">Tách lane batch / interactive</td><td>Dòng connection riêng cho bulk, cờ "bulk paused", wave tự dừng khi circuit prod mở</td><td>Lane trên <code>llm_role_config</code>, job claim theo ưu tiên</td><td>Wave làm p95 của TP / CRM / Content studio vượt SLO</td></tr>
+        <tr><td class="k">Fallback hai họ model</td><td>Mỗi route prod fallback sang model khác; chuỗi 2–3 deployment, ≤ 6 lần thử cả chuỗi</td><td>Region nguồn thứ hai (us-west-2 hoặc us-east-1)</td><td>503 / 529 lặp lại, hoặc quota us-west-1 không được nâng</td></tr>
+        <tr><td class="k">Anthropic API ấm</td><td>Probe hằng ngày + lưu lượng thật nhỏ; workspace dev và prod, spend limit thấp hơn trần tier</td><td>Workspace riêng theo app</td><td>Có app thứ hai ngoài CIS được phép vendor direct</td></tr>
+        <tr><td class="k">Prompt cache + <code>max_tokens</code></td><td><code>max_tokens</code> theo p99 output đo được; cache 1 giờ cho prompt wave và system prompt CRM</td><td>Bảng cache hit theo stage</td><td>Đã có prod và 2 tuần số thật</td></tr>
+        <tr><td class="k">Batch cho wave</td><td>Chạy wave ngoài giờ cao điểm</td><td>Anthropic Message Batches (giảm 50 %)</td><td>Có quyết định data scope cho catalog AA</td></tr>
+        <tr><td class="k">Chia công bằng tenant</td><td>—</td><td>Trần T2 / T9 song song theo tenant</td><td>≥ 3 tenant trả tiền chạy cùng lúc</td></tr>
+        <tr><td class="k">Reserved tier</td><td>—</td><td>Hỏi account team (1 hoặc 3 tháng)</td><td>Interactive bền ≥ 100.000 input + 10.000 output TPM, cần 99,5 %</td></tr>
+        <tr><td class="k">Đường 2 (aa-prod)</td><td>—</td><td>Bedrock tại chỗ sau khi làm ấm quota, sửa ADR 0001a</td><td>Wave vẫn chen prod dù có limiter, hoặc tenant trả tiền có SLA</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Gateway xử lý lỗi thế nào</h3>
+  <div class="tw">
+    <table class="narrow">
+      <thead><tr><th>Lỗi</th><th>Nghĩa</th><th>Gateway làm gì</th></tr></thead>
+      <tbody>
+        <tr><td>429 Bedrock</td><td>Vượt quota</td><td>Lùi lại, sang deployment kế</td></tr>
+        <tr><td>503</td><td>Hết capacity, không phải vượt quota</td><td>Sang region hoặc model khác</td></tr>
+        <tr><td>529</td><td>Quá tải tạm thời</td><td>Chờ theo <code>Retry-After</code></td></tr>
+        <tr><td>429 Anthropic spend cap</td><td>Hết trần chi của tier tháng này</td><td><b>Không retry</b>, báo tech lead xin nâng tier <span class="chip miss">Thiếu</span></td></tr>
+        <tr><td>400 Anthropic usage limit</td><td>Chạm spend limit tự đặt</td><td>Như trên; tự nâng được trong Console <span class="chip miss">Thiếu</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>SLO đề xuất</h3>
+  <div class="tw">
+    <table class="narrow">
+      <thead><tr><th>Tính năng</th><th>SLO (câu trả lời fallback tính là thành công)</th></tr></thead>
+      <tbody>
+        <tr><td class="k">TP compose (B2C)</td><td>99,5 % request có trả lời trong 30 ngày; p95 ra token đầu &lt; 5 giây</td></tr>
+        <tr><td class="k">Nháp CRM (B2B)</td><td>99 % trả nháp hoặc báo "trả lời tay" trong 30 giây; 0 lệnh có văn bản chưa scrub</td></tr>
+        <tr><td class="k">T-stage tenant</td><td>95 % job xong trong N phút (tech lead chốt theo đo Dev); chi phí trong budget tenant</td></tr>
+        <tr><td class="k">Wave catalog</td><td>Xong trong 24 giờ, USD/tour trong trần</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">SLO interactive tiêu &gt; 50 % budget lỗi trong một tuần thì đóng băng wave và việc đổi model tới khi hồi phục.</p>
+  <div class="card out" style="margin-top:12px">
+    <h4>Không làm (ghi để không ai làm sớm)</h4>
+    <ul>
+      <li>Provisioned Throughput; hạ tầng app / DB active-active nhiều region.</li>
+      <li>Message broker mới (SQS, Kafka): bảng job đã là hàng đợi.</li>
+      <li>Gateway bên thứ ba (LiteLLM, Kong AI), self-host model: việc cần làm là gom về core.</li>
+      <li>Cache ngữ nghĩa output cho B2C (rủi ro sai thông tin tour); account AWS / Anthropic riêng cho từng tenant; gọi song song hai model cho một request.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="viec">
+  <h2>Issue và mốc ngày</h2>
+  <p class="why">Ngày go-live (G) chưa chốt, nên các mốc trước go-live tính lùi từ G; các mốc tháng 11 thì cố định vì gắn với hợp đồng và đại lý.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Issue</th><th>Project</th><th>Thêm nội dung gì</th><th>Hạn đề xuất</th></tr></thead>
+      <tbody>
+        <tr><td class="k">AA-1004 <span class="chip ok">có sẵn</span></td><td>Infra / Platform</td><td>Đọc quota acc3 (cả RPM embed); bật Anthropic API Dev; đánh dấu câu 17 cho đại lý; cost tag <code>App</code> + role invoker theo app; chốt đường embedding prod</td><td>≤ 07/11; tag ≤ 29/11; embed ≤ G − 8 tuần</td></tr>
+        <tr><td class="k">AA-1002 <span class="chip ok">có sẵn</span></td><td>CIS</td><td>Lát <b>S12 capacity controls</b> bản nhỏ: trần TPM, dòng dev / prod / bulk, bọc đường legacy, phân loại lỗi Anthropic, cờ "LLM off" + "bulk paused", cảnh báo tức thời</td><td>Số trên connection ≤ 07/11; code ≤ 30/11</td></tr>
+        <tr><td class="k">AA-642 <span class="chip ok">có sẵn</span></td><td>CIS + TP + Partner</td><td>Lát <b>S8</b>: lõi <code>aa_llm</code>, TP và CRM vào core; ADR 0009 trước</td><td>ADR ≤ 15/11; S8 ≤ 13/12 hoặc G − 6 tuần</td></tr>
+        <tr><td class="k">AA-964 <span class="chip ok">có sẵn</span></td><td>Partner</td><td>CRM-33a: cảnh báo 75 / 90 %, trần lệnh/phút, luật prompt injection, guardrail khi acc2 hỏng, mặc định budget prod</td><td>Theo slot S264</td></tr>
+        <tr><td class="k">AA-880 <span class="chip ok">có sẵn</span></td><td>Infra / Platform</td><td>Bảng tính TPM prod, load test ramp, đơn quota, SLO, runbook sự cố</td><td>G − 6 tuần; kiểm cuối G − 2 tuần</td></tr>
+        <tr><td class="k">AA-896 <span class="chip ok">có sẵn</span></td><td>Platform</td><td>3 alarm Bedrock trên aa-ai; % budget theo tenant; đối soát Anthropic</td><td>≤ 30/11</td></tr>
+        <tr><td class="k">MỚI 1 <span class="chip trig">chờ duyệt</span></td><td>TripPlanner</td><td>Giới hạn AI theo phiên / IP + bot check; tách trần ngày search / narration; cảnh báo khi chạm trần</td><td>≤ G − 4 tuần</td></tr>
+        <tr><td class="k">MỚI 2 <span class="chip trig">chờ duyệt</span></td><td>CIS</td><td>Budget AI theo tenant Content studio: cảnh báo 100 %, chờ duyệt từ 150 %; đếm bài T9 vào quota gói</td><td>Trước tenant trả tiền đầu tiên hoặc G − 4 tuần</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Checklist có mốc</h3>
+  <div class="timeline">
+    <div class="tl"><div class="d">≤ 03/11</div><div class="x">Đọc quota acc3 và lưu lại. Tạo key Anthropic Dev, spend limit, workspace Dev.</div></div>
+    <div class="tl"><div class="d">≤ 05/11</div><div class="x">Điền rpm / concurrency / budget cho mọi connection Dev, chia theo số task.</div></div>
+    <div class="tl"><div class="d">≤ 07/11</div><div class="x">Business owner gửi câu hỏi đại lý (gồm câu 17 về quota). Nhắc case AWS nếu chưa trả lời.</div></div>
+    <div class="tl"><div class="d">≤ 11/11</div><div class="x">AA-820: chốt câu AI trong terms tenant (quyết định vendor direct cho nội dung tenant).</div></div>
+    <div class="tl"><div class="d">12/11</div><div class="x">Anthropic AUP có hiệu lực: chat với khách phải báo rõ là AI.</div></div>
+    <div class="tl"><div class="d">≤ 15/11</div><div class="x">ADR 0009 ở trạng thái Proposed. Cảnh báo tức thời circuit mở.</div></div>
+    <div class="tl"><div class="d">≤ 25/11</div><div class="x">Có văn bản đại lý, hoặc dời Billing Transfer sang 01/01/2027.</div></div>
+    <div class="tl"><div class="d">≤ 29/11</div><div class="x">Chấp nhận Billing Transfer (nếu đi tháng 12). Cost tag App + 3 alarm. S12 merge.</div></div>
+    <div class="tl"><div class="d">01/12, 07:00</div><div class="x">Probe mọi connection, đọc lại quota (nếu Billing Transfer chạy).</div></div>
+    <div class="tl"><div class="d">≤ 13/12</div><div class="x">S8: TP và CRM vào core.</div></div>
+    <div class="tl g"><div class="d">G − 8 tuần</div><div class="x">Tạo aa-prod + role prod-only. Chốt đường embedding prod, data scope từng stage, SLO.</div></div>
+    <div class="tl g"><div class="d">G − 6 tuần</div><div class="x">Load test ramp trên đúng model / account prod. Gửi đơn quota kèm số đo.</div></div>
+    <div class="tl g"><div class="d">G − 4 tuần</div><div class="x">Xong MỚI 1 + MỚI 2. Anthropic API prod ấm. Không đổi payer / org nào sau mốc này.</div></div>
+    <div class="tl g"><div class="d">G − 2 tuần</div><div class="x">Kiểm cuối: quota ≥ 1,5 × đỉnh đo; fallback đã probe; runbook chạy thử trên Dev.</div></div>
+    <div class="tl g"><div class="d">G + 2 tuần</div><div class="x">Chỉnh ngưỡng theo số thật; rà bảng trigger; rà quota hằng tháng.</div></div>
+  </div>
+</section>
+
+<section id="duyet">
+  <h2>Cần duyệt</h2>
+  <p class="why">Kiến trúc và số kỹ thuật là việc của tech lead; giá, điều khoản, hợp đồng và ngày go-live là việc của business owner.</p>
+  <h3>Tech lead</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>#</th><th>Việc</th><th>Đề xuất</th><th>Chi phí</th></tr></thead>
+      <tbody>
+        <tr><td class="k">T1</td><td>Số trên connection</td><td>Dev: concurrency 4 ÷ số task, rpm 60, budget 50 USD/tháng (minh hoạ). Prod: đặt sau load test</td><td>0</td></tr>
+        <tr><td class="k">T2</td><td>Tách dòng dev / prod / bulk + cờ "bulk paused"</td><td>Làm trong S12; dòng dev ≤ 30 % quota từ lúc có prod</td><td>~1–2 ngày công</td></tr>
+        <tr><td class="k">T3</td><td>Limiter: chia trần theo số task + giữ chỗ TPM</td><td>Chia trần ngay (không code); TPM trong S12; Redis khi có trigger</td><td>0 hạ tầng mới</td></tr>
+        <tr><td class="k">T4</td><td>SLO + error budget</td><td>Bảng SLO ở trên</td><td>0</td></tr>
+        <tr><td class="k">T5</td><td>Data scope từng stage prod</td><td>Catalog AA: cho vendor direct. Tenant / TP / CRM: giữ aws_only tới khi terms + DPA cho phép</td><td>0</td></tr>
+        <tr><td class="k">T6</td><td>Global CRIS cho stage không PII</td><td>Cho wave / catalog AA; không cho CRM / TP</td><td>Giảm ~10 %</td></tr>
+        <tr><td class="k">T7</td><td>Invocation logging</td><td>Chưa bật; khi bật: retention 30 ngày, quyền đọc hẹp</td><td>0 hôm nay</td></tr>
+        <tr><td class="k">T8</td><td>3 alarm CloudWatch Bedrock</td><td>Bật, không lọc theo model</td><td>Vài USD/năm</td></tr>
+        <tr><td class="k">T9</td><td>Key + credit Anthropic API</td><td>Workspace dev + prod, spend limit thấp hơn trần tier, auto-reload</td><td>Theo dùng + ~0,40 USD/tháng mỗi secret</td></tr>
+        <tr><td class="k">T10</td><td>Load test trước go-live</td><td>Ramp theo AWS, tổng ≤ vài USD</td><td>Vài USD</td></tr>
+        <tr><td class="k">T11</td><td>Tạo MỚI 1, MỚI 2 + thêm S12 vào AA-1002</td><td>Như bảng issue</td><td>0</td></tr>
+        <tr><td class="k">T12</td><td>ADR 0009 trước S8</td><td>Proposed ≤ 15/11</td><td>0</td></tr>
+        <tr><td class="k">T13</td><td>Hạn mức TP theo phiên / IP, bot check</td><td>10 narration/giờ mỗi phiên, 30 search/phút mỗi IP (minh hoạ)</td><td>Bot check có bản miễn phí</td></tr>
+        <tr><td class="k">T14</td><td>Đường embedding prod</td><td>Chốt aa-ai hay aa-prod; xin RPM trước G − 6 tuần</td><td>0</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Business owner</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>#</th><th>Việc</th><th>Bối cảnh</th><th>Đề xuất</th></tr></thead>
+      <tbody>
+        <tr><td class="k">B1</td><td>Ngân sách AI của đại lý trong gói bán</td><td>Mặc định 2 USD/tháng là số thử; 50 đại lý ước khoảng 67–75 USD/tháng</td><td>Giữ 2 USD (AI tắt mặc định) tới khi có bảng giá; mỗi gói một mức AI, đồng hồ hiện cho đại lý</td></tr>
+        <tr><td class="k">B2</td><td>Phần AI trong gói Content studio + xử lý vượt</td><td>Vượt quota hiện được phép và tính phí; chưa có trần USD AI</td><td>Phần AI ≤ 30 % giá gói; vượt 150 % chờ staff duyệt, không cắt ngay</td></tr>
+        <tr><td class="k">B3</td><td>Câu AI trong terms tenant + chính sách riêng tư (hạn 11/11)</td><td>Quyết định nội dung khách có được qua Anthropic API khi AWS lỗi</td><td>Ghi "qua AWS hoặc trực tiếp từ nhà cung cấp model"; có cần luật sư là quyết định của business owner</td></tr>
+        <tr><td class="k">B4</td><td>Hỏi đại lý bằng văn bản</td><td>Quota, Billing Transfer, giấy Anthropic</td><td>Gửi các câu đánh dấu (thêm câu 17 về quota) trước 07/11</td></tr>
+        <tr><td class="k">B5</td><td>Ngày go-live</td><td>Mọi mốc G − n tuần tính từ ngày này</td><td>Chọn ngày cách lúc chọn ít nhất 8 tuần</td></tr>
+        <tr><td class="k">B6</td><td>Trần chi LLM prod hằng tháng</td><td>Để đặt AWS Budget + spend limit Anthropic</td><td>Tech lead đề xuất sau load test, business owner chốt</td></tr>
+        <tr><td class="k">B7</td><td>Khách B2C đăng nhập có thêm lượt AI</td><td>Hôm nay ẩn danh và đăng nhập như nhau</td><td>Có: gấp đôi hạn mức, khuyến khích đăng ký</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <p>Nguồn chính:</p>
+  <ul>
+    <li><code>docs/audits/2026-10-31-S261-llm-capacity-plan/README.md</code> (kế hoạch quota và năng lực LLM cho prod, rà phản biện 31/10)</li>
+    <li><code>docs/audits/2026-10-31-S261-aws-bedrock-org-access/current-situation-model.md</code> (mô hình account, ba đường gọi model, hai tầng hỏng)</li>
+    <li>Tài liệu AWS Bedrock (quota runtime, token burndown, cross-Region, CloudWatch metrics, cost management) và Anthropic (rate limits, service tiers, prompt caching), đọc ngày 31/10/2026.</li>
+  </ul>
+  <p>Số ghi "minh hoạ" là giả định để tính thử, không phải số đo. Trang không ghi số account.</p>
+</footer>
+
+</div>

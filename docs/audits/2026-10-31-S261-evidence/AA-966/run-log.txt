@@ -1,0 +1,77 @@
+05:07:32Z crm session (sen-vang-owner): reused stored session state
+05:07:32Z [owner] agency Lữ hành Sen Vàng (bab16039), role owner
+05:07:32Z [owner] crm /health: {"git_sha":"132112aa1fbfed66d45c44905b1d993abac8e0d3","version":"0.11.0"}
+05:07:33Z [owner] summary 30d -> 200; period 2026-10-02..2026-10-31 Asia/Ho_Chi_Minh base USD; money_visible true; keys period,tiles,money_visible,funnel,outcomes,lead_sources,cycle,open_trips,picks,money,top_products,payments,team,success,insights_included
+05:07:33Z [owner] tiles 30d: inquiries=57, win_rate=40.4, revenue=2345.60, margin=1574.66, aa_share=63.9
+05:07:33Z [owner] receivables GET invoices -> 200: 2 invoices, statuses ["open"], balance by currency {"USD":1080}, count {"USD":2}
+05:07:33Z [owner] report payments.open_invoices outstanding {"USD":1080}, count {"USD":2} -> match true
+05:07:34Z [owner] pipeline: open 39 by stage {"inquiry":29,"qualifying":0,"proposal":4,"booked":6,"pre_departure":0,"travelling":0}; closed 18 {"completed":2,"lost":1,"cancelled":15}
+05:07:34Z [owner] report open_trips by stage {"inquiry":29,"qualifying":0,"proposal":4,"booked":6,"pre_departure":0,"travelling":0} -> match true
+05:07:34Z [owner] inquiries tile 30d 57, 12m 57; trend [["2026-08",0],["2026-09",0],["2026-10",57]]; pipeline open+closed 57
+05:07:34Z [owner] funnel lost 1 cancelled 15 completed 2 vs pipeline closed {"completed":2,"lost":1,"cancelled":15}
+05:07:48Z [owner] shapes: schedule row keys schedule_id,proposal_id,kind,amount,currency,due_on,status,paid_at; invoice keys invoice_id,trip_id,kind,status,number,schedule_id,proposal_id,currency,subtotal_amount,tax_amount,total_amount,tax_rate,tax_label,tax_inclusive,memo,due_on,issue_date,issued_at,paid_at,voided_at,void_reason,created_at,actions,pay_window,claimed_at,hold_extended_at,hold_extend_code,rehold,paid_amount,refunded_amount,balance_amount,payments,refund_requests
+05:08:03Z [owner] direct count over 57 trips: due schedule rows without an issued invoice {"USD/balance":15786,"USD/deposit":540} count {"USD/balance":17,"USD/deposit":1}; report schedule_due {"USD/balance":15786,"USD/deposit":540} count {"USD/balance":17,"USD/deposit":1}
+05:08:04Z [owner] CSV outstanding -> 200 text/csv; charset=utf-8; BOM false; header "what,currency,kind,count,total,paid,outstanding,overdue_count,overdue"; what values ["open_invoices","schedule_not_invoiced"]; rows 3
+05:08:04Z [owner] CSV funnel -> 200; header "stage,trips"; rows 9
+05:08:04Z [owner] CSV money_by_month (owner) -> 200; header "month,currency,lines,sell,cost,margin,margin_pct,commission_expected"
+05:08:08Z [owner] /reports?period=30d sections visible: {"crm-reports":true,"reports-tiles":true,"reports-funnel":true,"reports-open":true,"reports-outcomes":true,"reports-sources":true,"reports-picks":true,"reports-money":true,"reports-products":true,"reports-payments":true,"reports-team":true,"reports-success":true,"reports-insights":true,"reports-export":true}
+05:08:08Z [owner] Outstanding panel shows "not invoiced yet": true; lang en
+05:08:08Z [owner] UI inquiries tile text: "Inquiries 57 Last 3 months: 0 → 0 → 57"
+05:08:09Z shot 01-reports-owner-light-1440.png (sideways overflow: document 0px, main 0px)
+05:08:09Z shot 02-reports-owner-light-390.png (sideways overflow: document 0px, main 0px)
+05:08:10Z [owner] UI Export CSV -> file report-funnel-30d-20261031.csv, first line "stage,trips"
+05:08:10Z shot 03-reports-outstanding-panel-1440.png
+05:08:14Z [owner] Home tiles text: "LAST 12 MONTHS Inquiries 57 Last 3 months: 0 → 0 → 57 Win rate 40.4% Last 3 months: — → — → 40.4% Sold 2,345.60 USD Last 3 months: 0.00 USD → 0.00 USD → 2,345.60 USD Margin 1,574.66 USD Last 3 months:"
+05:08:14Z [owner] GET reports/tiles -> 200: inquiries=57, win_rate=40.4, revenue=2345.60, margin=1574.66, aa_share=63.9 (2025-11-01..2026-10-31)
+05:08:15Z shot 04-home-tiles-owner-light-1440.png (sideways overflow: document 0px, main 0px)
+05:08:15Z shot 05-home-tiles-owner-light-390.png (sideways overflow: document 0px, main 0px)
+05:08:15Z [owner] console errors: 0 
+05:08:15Z [owner] CRM responses >= 400: none
+05:08:19Z crm session (sen-vang-owner): reused stored session state
+05:08:23Z [owner dark] html data-theme=dark
+05:08:23Z shot 06-reports-owner-dark-1440.png (sideways overflow: document 0px, main 0px)
+05:08:24Z shot 07-reports-owner-dark-390.png (sideways overflow: document 0px, main 0px)
+05:08:27Z crm session (sen-vang-owner): reused stored session state
+05:08:28Z [guard] synthetic trip 6034f3a8 "Việt Nam, 3 đêm" (proposal, lead "E2E S261 Payer vwatohB")
+05:08:28Z [guard] agency supplier 5e1eace4 (kind own)
+05:08:29Z [guard] POST trips/<trip>/lines title "=SUM(1+1) E2E AA966 vxwaau" -> 201 
+05:08:29Z [guard] confirm-check -> 404 missing undefined blocking undefined
+05:08:29Z [guard] confirm -> 409 line_incomplete status undefined
+05:10:45Z crm session (sen-vang-owner): reused stored session state
+05:10:45Z [guard] synthetic trip 6034f3a8 "Việt Nam, 3 đêm" (proposal, lead "E2E S261 Payer vwatohB")
+05:10:46Z [guard] agency supplier 5e1eace4 (kind own)
+05:10:46Z [guard] reusing the planning line e9e079d5 from the first attempt (title "=SUM(1+1) E2E AA966 vxwaau")
+05:10:46Z [guard] PUT lines/<line>/money (1.00 USD sell and cost, 0.00 commission) -> 200 ""
+05:10:46Z [guard] PATCH lines/<line> confirmation_no + service dates -> 200 ""
+05:10:46Z [guard] confirm -> 200 "" "" status confirmed
+05:10:47Z [guard] owner CSV top_products -> 200; header "supplier,product,lines,trips,currency,sell"; the line row: agency,'=SUM(1+1) E2E AA966 vxwaau,1,1,USD,1.00
+05:10:47Z [guard] CSV first bytes [239,187,191] (UTF-8 BOM = [239,187,191]: true)
+05:10:47Z [guard] summary JSON top_products title (page text, no prefix): "=SUM(1+1) E2E AA966 vxwaau"
+05:10:50Z crm session (sen-vang-assistant): signing in through managed login (partner pool, password + authenticator)
+05:11:05Z [assistant] agency Lữ hành Sen Vàng (bab16039), role assistant
+05:11:05Z [assistant] summary -> 200; money_visible false; money null; tiles inquiries,win_rate,aa_share; money-named keys ["\"commission_unclaimed\""]
+05:11:06Z [assistant] CSV money_by_month -> 403 {"detail":"role_forbidden","message":"the assistant role may not do view_margin"}
+05:11:06Z [assistant] CSV top_products -> 200; header "supplier,product,lines,trips"; the line row: agency,'=SUM(1+1) E2E AA966 vxwaau,1,1
+05:11:06Z [assistant] CSV outstanding -> 200; header "what,currency,kind,count,total,paid,outstanding,overdue_count,overdue"
+05:11:10Z [assistant] /reports sections visible: {"crm-reports":true,"reports-tiles":true,"reports-funnel":true,"reports-open":true,"reports-outcomes":true,"reports-sources":true,"reports-picks":true,"reports-money":false,"reports-products":true,"reports-payments":true,"reports-team":true,"reports-success":true,"reports-insights":true,"reports-export":true}; export options ["Conversion","Lead sources","Lost and cancelled","Open trips","Top products","Outstanding payments","Team activity","How the CRM is working"]
+05:11:10Z shot 08-reports-assistant-light-1440.png (sideways overflow: document 0px, main 0px)
+05:11:10Z [assistant] console errors: 1 portal.lumiguides.it.com: Failed to load resource: the server responded with a status of 403 (); CRM >= 400: GET portal.lumiguides.it.com /bff/reports/export 403
+05:11:13Z crm session (southern-cross-owner): signing in through managed login (partner pool, password + authenticator)
+05:11:23Z [other] agency Southern Cross Journeys (b9fa1635), role owner; same tenant as Sen Vang: false
+05:11:24Z [other] summary -> 200; inquiries 0; pipeline open+closed 0; open_trips [0,0,0,0,0,0] vs pipeline [0,0,0,0,0,0]
+05:11:24Z [other] outstanding {} vs its receivables {}; team members 4, Sen Vang owner member among them: false; Sen Vang guard line in its report/CSV: false
+05:11:29Z shot 09-reports-second-agency-light-1440.png (sideways overflow: document 0px, main 0px)
+05:11:33Z crm session (sen-vang-owner): reused stored session state
+05:11:33Z [cleanup] cancel the synthetic line -> 200  status cancelled
+05:11:33Z [cleanup] owner CSV top_products after cancel: line listed false
+05:11:48Z [insights] CIS staff signed in: token_use access, groups ["cis-admin"], workforce issuer true
+05:11:49Z [insights] GET insights budget_band 2026-Q4 -> 200; keys generated_at,dimension,quarter,from,to,agencies_included,agencies_opted_out,k_min,agencies_min,cells,suppressed_cells
+05:11:49Z [insights] quarter 2026-Q4 from 2026-10-01 to 2026-12-01; k_min 10 agencies_min 3; agencies_included 4 opted_out 0; cells 0; suppressed 2; every cell >=10 travellers and >=3 agencies true; tenant/agency id anywhere false
+05:11:49Z [insights] from/to instead of quarter -> 422 "invalid_request"
+05:11:49Z [insights] quarter=2026-Q5 -> 422 "invalid_quarter"
+05:11:50Z [insights] no token (control) -> 401
+05:11:50Z [insights] destination 2026-Q4 -> 200; cells 0; suppressed 1; agencies_included 4
+05:11:50Z [insights] age_band 2026-Q4 -> 200; cells 0; suppressed 0; agencies_included 4
+05:11:50Z [insights] party_size 2026-Q4 -> 200; cells 0; suppressed 2; agencies_included 4
+05:11:51Z [insights] stage_reached 2026-Q4 -> 200; cells 0; suppressed 4; agencies_included 4
+05:11:51Z [insights] lost_reason_code 2026-Q4 -> 200; cells 0; suppressed 1; agencies_included 4
