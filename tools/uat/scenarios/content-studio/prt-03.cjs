@@ -3,6 +3,7 @@
 // then the "in my catalog" view. Then: the grid, the drawer and the second view render; nothing is written. $0.
 const { HOSTS, step, ro, check } = require('../../lib/dryrun-page.cjs');
 
+const CARD = '[data-testid="marketplace-grid"] [role="button"][aria-label^="Open "]';
 let cards = 0;
 
 module.exports = ro({
@@ -17,16 +18,17 @@ module.exports = ro({
       'Marketplace hiển thị các tour đã xuất bản của Adventure Asia mà đại lý có thể chọn và viết lại theo giọng của mình.',
       async (page, h) => {
         await check(page, h, '/portal/tours', { heading: 'Marketplace', ready: '[data-testid="marketplace-views"]' });
-        await h.expect(page.locator('[data-testid="marketplace-grid"], [data-testid="kit-empty-state"]').first())
-          .toBeVisible({ timeout: 30_000 });
-        await h.expect(page.locator('[data-testid="marketplace-grid"][aria-busy="true"]')).toHaveCount(0, { timeout: 30_000 });
-        cards = await page.locator('[data-testid="marketplace-grid"] [role="button"][aria-label^="Open "]').count();
+        // The loading skeleton is a separate aria-busy grid: wait for real cards or the empty state.
+        const card = page.locator(CARD);
+        await h.expect.poll(async () => ((await card.count()) > 0 || (await page.getByTestId('kit-empty-state').count()) > 0 ? 'ready' : 'waiting'),
+          { timeout: 30_000, intervals: [500, 1000, 2000] }).toBe('ready');
+        cards = await card.count();
       }),
     step('A tour opens in a drawer with its route, its activities and its price.',
       'Một tour mở trong ngăn bên, kèm lộ trình, hoạt động và giá.',
       async (page, h) => {
         if (!cards) return h.expect(page.getByTestId('kit-empty-state').first()).toBeVisible();
-        await h.click(page.locator('[data-testid="marketplace-grid"] [role="button"][aria-label^="Open "]').first());
+        await h.click(page.locator(CARD).first());
         await h.expect(page.getByTestId('marketplace-drawer')).toBeVisible({ timeout: 30_000 });
         await page.keyboard.press('Escape');
         await h.expect(page.getByTestId('marketplace-drawer')).toHaveCount(0, { timeout: 15_000 });

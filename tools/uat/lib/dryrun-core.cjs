@@ -109,8 +109,15 @@ function outcome(entry, { result = null, timeline = null, exitCode = null, block
     verdict = 'FAIL';
     reason = `blocked ${blockedWrites.length} write(s): ${cell(blockedWrites.slice(0, 3).join(', '))}`;
   }
+  // A paid model path the page tried to reach was aborted before it left the browser: the asserts still decide the
+  // verdict, the report says it happened (a page that calls a model on load is worth knowing about).
+  const blockedUrls = result.blocked_urls || [];
+  if (blockedUrls.length) {
+    const note = `note: aborted ${blockedUrls.length} paid-path request(s): ${cell(blockedUrls.slice(0, 3).join(', '))}`;
+    reason = reason ? `${reason}; ${note}` : note;
+  }
   return { ...base, verdict, reason, steps_passed: passed, steps_total: rows.length, ms: result.total_ms ?? ms, steps: rows,
-    blocked_writes: blockedWrites.map((w) => cell(w)) };
+    blocked_writes: blockedWrites.map((w) => cell(w)), blocked_urls: blockedUrls.map((w) => cell(w)) };
 }
 
 /** Compare the app SHAs read before and after the run: { app: { before, after, changed, source } }. */
@@ -171,7 +178,7 @@ function renderMarkdown(run) {
   }
   L.push('## Scenarios');
   L.push('');
-  L.push('| Id | App | Identity | Title | Verdict | Steps | Time | Failure |');
+  L.push('| Id | App | Identity | Title | Verdict | Steps | Time | Failure / note |');
   L.push('|---|---|---|---|---|---|---|---|');
   for (const o of outcomes) {
     L.push(`| ${o.id} | ${o.app} | ${o.identity} | ${cell(o.title, 70)} | ${o.verdict} | ${o.steps_passed}/${o.steps_total} | ${secs(o.ms)} | ${o.reason || ''} |`);
