@@ -148,7 +148,11 @@ sc.steps = [
       const deps = (prod.departures || []).filter((d) => d.status === 'scheduled' && d.available >= 2 && d.auto_confirm);
       if (!deps.length) throw new Error(`no departure of the seed tour has 2 free seats (${(prod.departures || []).map((d) => `${d.start_date}:${d.available}`).join(', ')})`);
       const kept = s.departure && deps.find((d) => d.departure_id === s.departure.departure_id);
-      const dep = kept || deps.sort((a, b) => b.available - a.available || a.start_date.localeCompare(b.start_date))[0];
+      // A new run takes the next departure in turn: Booking allows 3 re-holds of a departure a UTC day once a hold of
+      // it was let go (AA-Booking b2b re-hold limit), and every run's R08 hold is let go by cleanup. Same departure for
+      // every run of a day -> the 5th run's client gets "Ask your agent" instead of a hold.
+      deps.sort((a, b) => a.start_date.localeCompare(b.start_date) || a.departure_id.localeCompare(b.departure_id));
+      const dep = kept || deps[(Number(s.run.slice(10)) - 1) % deps.length];
       s.departure = { tour_source_id: AA_TOUR, tour_title: prod.tour && prod.tour.title, departure_id: dep.departure_id, start_date: dep.start_date, available: dep.available };
       st.save(s);
     },

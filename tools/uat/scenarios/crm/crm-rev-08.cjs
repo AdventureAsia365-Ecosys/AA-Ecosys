@@ -77,6 +77,13 @@ sc.steps = [
         await crm.paceClientWrite();
         await h.click(page.getByTestId('client-hold-button'));
       }
+      const err = page.getByTestId('client-error');
+      await h.expect(box.locator('xpath=self::*[@data-status="active"]').or(err)).toBeVisible({ timeout: 60_000 });
+      if (await err.isVisible()) {
+        const text = ((await err.textContent()) || '').trim();
+        if (/times today/.test(text)) throw new Error(`Booking refused the hold: re-hold limit of this departure for today (3 a UTC day) is used up; prep a new run after 00:00 UTC or on another departure ("${text}")`);
+        throw new Error(`the hold was refused: ${text}`);
+      }
       await h.expect(box).toHaveAttribute('data-status', 'active', { timeout: 60_000 });
       await h.expect(page.getByTestId('client-held-until')).toBeVisible();
       crm.assertNo429(seen429);
