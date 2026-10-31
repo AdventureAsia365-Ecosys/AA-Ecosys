@@ -8,7 +8,7 @@
 // call. Cost $0.
 const { base, sha, open, choose } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-17', title: 'Settings, Vietnamese and dark mode' });
+const sc = base({ id: 'CRM-REV-17', title: 'Settings, Vietnamese and dark mode', titleVi: 'Cài đặt, tiếng Việt và giao diện tối' });
 let startTheme;
 
 const themeButton = (page) => page.getByRole('button', { name: /^Theme: |^Giao diện: / });
@@ -61,6 +61,7 @@ sc.steps = [
       await open(page, h, '/settings/mailbox', 'mailbox-settings');
       await h.expect(page.getByTestId('mailbox-billing')).toBeVisible();
       await h.hover(page.getByTestId('mailbox-settings').locator('[data-testid$="-address"]').first());
+      await h.assertMasked(['[data-testid^="mailbox-"][data-testid$="-address"]']);
     },
   },
   {

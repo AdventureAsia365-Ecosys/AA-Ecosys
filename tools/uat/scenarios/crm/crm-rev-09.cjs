@@ -11,7 +11,7 @@
 const slide = require('../../lib/slide.cjs');
 const { crm, st, base, sha, open, bffOk, type, choose } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-09', title: 'Contracts: new booking terms, re-accept and e-sign' });
+const sc = base({ id: 'CRM-REV-09', title: 'Contracts: new booking terms, re-accept and e-sign', titleVi: 'Hợp đồng: điều khoản mới, chấp nhận lại và ký điện tử' });
 let s;
 let label;
 let seen429;
@@ -24,7 +24,7 @@ sc.steps = [
     },
     run: async (page, h) => {
       s = st.load();
-      if (!s.r08 || !st.loadSecrets().r08_link) throw new Error('no accepted R08 version: run crm-rev-08 first');
+      if (!s.r08 || !st.link('r08_link', s.r08.trip_id)) throw new Error('no accepted R08 version of this run: run crm-rev-08 first');
       seen429 = crm.watch429(page);
       await sha(page, sc, 'start');
       await open(page, h, '/settings/agreements', 'agreements-view');
@@ -88,7 +88,7 @@ sc.steps = [
       vi: 'Khách mở lại đường dẫn của mình. Phía trên ô thanh toán, khách đọc bản mới, đánh dấu đồng ý và gõ tên.',
     },
     run: async (page, h) => {
-      await h.goto(st.loadSecrets().r08_link);
+      await h.goto(st.link('r08_link', s.r08.trip_id));
       await page.waitForURL(`${crm.CLIENT}/c/p`, { timeout: 20_000 });
       const box = page.getByTestId('client-terms-reaccept');
       await h.expect(box).toBeVisible({ timeout: 20_000 });
@@ -100,8 +100,8 @@ sc.steps = [
   },
   {
     caption: {
-      en: 'She confirms. The new terms are accepted and recorded with the exact text she saw.',
-      vi: 'Khách xác nhận. Điều khoản mới được chấp nhận và lưu kèm đúng văn bản khách đã đọc.',
+      en: 'She confirms, and the trip records that she accepted the new version.',
+      vi: 'Khách xác nhận, và chuyến ghi nhận khách đã chấp nhận phiên bản mới.',
     },
     run: async (page, h) => {
       await crm.paceClientWrite();

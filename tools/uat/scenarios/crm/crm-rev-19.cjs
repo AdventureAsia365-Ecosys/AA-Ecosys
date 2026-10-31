@@ -8,7 +8,7 @@
 const slide = require('../../lib/slide.cjs');
 const { base, sha, open } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-19', title: 'What is not built yet' });
+const sc = base({ id: 'CRM-REV-19', title: 'What is not built yet', titleVi: 'Những phần chưa làm' });
 
 const EMPTY = [
   ['tasks', 'Tasks: one list of every task across trips.', 'Tasks: một danh sách chung mọi việc của các chuyến.'],

@@ -20,7 +20,7 @@ const { st, base, sha, open, bffOk, reuse } = require('./_crm.cjs');
 
 const sc = base({
   id: 'CRM-REV-12',
-  title: 'Duty of care and the calendar: who travels where, and a private calendar feed',
+  title: 'Duty of care and the calendar: who travels where, and a private calendar feed', titleVi: 'Khách đang đi tour và lịch: ai ở đâu, kèm lịch riêng',
   mask: ['[data-testid="trip-answers"]', '[data-testid="trip-history"]'], // the incident trip's page: not part of this story
 });
 // Chosen once, when the file loads: captions and the recorded take must see the same state (record.cjs checks).
@@ -166,6 +166,7 @@ sc.steps = [
         h.expect((await made).status()).toBeLessThan(300);
         await h.expect(panel.getByTestId('calendar-feed-url')).toBeVisible({ timeout: 15_000 });
         await h.hover(panel.getByTestId('calendar-feed-url'));
+        await h.assertMasked(['[data-testid="calendar-feed-url"]']);
       }
       await h.expect(active).toBeVisible({ timeout: 15_000 });
       const feeds = await bffOk(page, 'GET', 'calendar/feeds');
@@ -177,7 +178,7 @@ sc.steps = [
   {
     caption: {
       en: 'Not ready yet: two-way sync with Google or Microsoft calendars. Today the calendar goes out through the read-only feed.',
-      vi: 'Chưa làm xong: đồng bộ hai chiều với lịch Google hoặc Microsoft. Hiện lịch chỉ đi ra qua đường dẫn chỉ đọc ở trên.',
+      vi: 'Chưa có: đồng bộ hai chiều với lịch Google hoặc Microsoft. Hiện lịch chỉ đi ra qua đường dẫn chỉ đọc ở trên.',
     },
     run: async (page, h) => {
       await slide.notReady(page, h, {

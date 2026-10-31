@@ -6,14 +6,14 @@
 //        publishes version 1 and sends it from the trip (the link is shown once, blurred; R08 opens it).
 // Then:  the skeleton has one day per night plus arrival, the agency option shows, the AA option comes back priced
 //        (net present) with its availability, the version is published then sent; the map is not built yet
-//        ("Not ready yet" card). The client link goes to work/crm/.secrets.json (r08_link, chmod 600), never a log.
+//        ("Not ready yet" card). The client link goes to work/crm/.secrets.json (r08_link with its trip id, chmod 600), never a log.
 // Writes a proposal on the invented R03 trip; adding an AA option takes no seat (only a client hold does). A re-run
 // skips what exists in --fast only; a recorded take on an old draft stops (re-run crm-rev-03 and crm-rev-04).
 // No LLM call, never clicks an AI button. Cost $0.
 const slide = require('../../lib/slide.cjs');
 const { st, base, sha, open, bffOk, type, choose, day, reuse } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-06', title: 'Proposal builder: day by day, with an Adventure Asia tour at a live price' });
+const sc = base({ id: 'CRM-REV-06', title: 'Proposal builder: day by day, with an Adventure Asia tour at a live price', titleVi: 'Trình dựng đề xuất: từng ngày, kèm tour Adventure Asia giá trực tiếp' });
 let s;
 let pid;
 
@@ -52,7 +52,7 @@ sc.steps = [
   {
     caption: {
       en: 'The builder lays out the trip from the dates and the inquiry: one day per night, each with a place to stay.',
-      vi: 'Trình dựng tự dàn chuyến từ ngày đi và yêu cầu ban đầu: mỗi đêm một ngày, mỗi ngày có chỗ nghỉ.',
+      vi: 'Trình dựng tự dàn chuyến từ ngày đi và yêu cầu ban đầu: mỗi ngày ứng với một đêm nghỉ, ngày nào cũng có chỗ ở.',
     },
     run: async (page, h) => {
       const v = await view(page);
@@ -228,10 +228,9 @@ sc.steps = [
       }
       const link = await tab.getByTestId('proposal-copy-link').first().inputValue({ timeout: 20_000 });
       if (!/\/c\/p\/[A-Za-z0-9_-]{43}$/.test(link)) throw new Error('the client link has an unexpected shape');
-      const secrets = st.loadSecrets();
-      secrets.r08_link = link;
-      st.saveSecrets(secrets);
+      st.saveLink('r08_link', link, s.r03.trip_id);
       await h.hover(tab.getByTestId('proposal-copy-links'));
+      await h.assertMasked(['[data-testid="proposal-copy-links"]']);
       const v = await view(page);
       h.expect(v.status).toBe('sent');
     },

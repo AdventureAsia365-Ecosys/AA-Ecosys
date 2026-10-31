@@ -10,7 +10,7 @@
 // only. No LLM call. Cost $0.
 const { crm, st, base, sha, PHONE, type, reuse } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-08', title: 'The client accepts the proposal on a phone', who: null, viewport: PHONE });
+const sc = base({ id: 'CRM-REV-08', title: 'The client accepts the proposal on a phone', titleVi: 'Khách chấp nhận đề xuất trên điện thoại', who: null, viewport: PHONE });
 let s;
 let seen429;
 let accepted = false;
@@ -23,8 +23,8 @@ sc.steps = [
     },
     run: async (page, h) => {
       s = st.load();
-      const link = st.loadSecrets().r08_link;
-      if (!link || !s.r03) throw new Error('no client link: run crm-rev-06 first');
+      const link = s.r03 && s.r06 && s.r06.trip_id === s.r03.trip_id ? st.link('r08_link', s.r03.trip_id) : null;
+      if (!link) throw new Error('no client link of this run\'s R03 trip: run crm-rev-06 first');
       seen429 = crm.watch429(page);
       await sha(page, sc, 'start');
       await h.goto(link);

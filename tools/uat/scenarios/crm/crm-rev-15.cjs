@@ -8,7 +8,7 @@
 const slide = require('../../lib/slide.cjs');
 const { base, sha, open, choose } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-15', title: 'Reports: funnel, money, what clients owe, the team and CSV export' });
+const sc = base({ id: 'CRM-REV-15', title: 'Reports: funnel, money, what clients owe, the team and CSV export', titleVi: 'Báo cáo: phễu, doanh thu, công nợ, đội ngũ và xuất CSV' });
 
 sc.steps = [
   {
@@ -53,8 +53,8 @@ sc.steps = [
   },
   {
     caption: {
-      en: 'Any section downloads as a spreadsheet file. Every download is logged.',
-      vi: 'Phần nào cũng tải về được dưới dạng file bảng tính. Mỗi lần tải đều được ghi lại.',
+      en: 'Any section downloads as a spreadsheet file.',
+      vi: 'Phần nào cũng tải về được dưới dạng file bảng tính.',
     },
     run: async (page, h) => {
       const menu = page.getByTestId('reports-export');

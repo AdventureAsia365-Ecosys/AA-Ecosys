@@ -11,7 +11,7 @@
 // take on an already published version stops (prep with UAT_CRM_NEW_RUN=1). No LLM call. Cost $0.
 const { st, base, sha, open, bffOk, choose, reuse } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-07', title: 'A written proposal and the Before you go day' });
+const sc = base({ id: 'CRM-REV-07', title: 'A written proposal and the Before you go day', titleVi: 'Đề xuất dạng chữ và ngày Before you go' });
 let s;
 let t;
 let enBody;
@@ -113,8 +113,8 @@ sc.steps = [
   },
   {
     caption: {
-      en: 'For WhatsApp the agency gets the final text to paste; e-mail goes out from the agency\'s own mailbox. Nothing is sent in this review.',
-      vi: 'Với WhatsApp, đại lý nhận văn bản cuối để dán; e-mail được gửi từ hộp thư của chính đại lý. Trong video này không gửi gì cả.',
+      en: 'For WhatsApp the agency gets the final text to paste; e-mail goes out from the agency\'s own mailbox. Nothing is sent from this screen.',
+      vi: 'Với WhatsApp, đại lý nhận văn bản cuối để dán; e-mail được gửi từ hộp thư của chính đại lý. Ở màn hình này không gửi gì cả.',
     },
     run: async (page, h) => {
       const wa = page.locator('input[name="text-format"][value="whatsapp"]');

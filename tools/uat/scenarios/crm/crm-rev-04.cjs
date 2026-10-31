@@ -8,7 +8,7 @@
 const slide = require('../../lib/slide.cjs');
 const { st, base, sha, open, bffOk, choose, day, reuse } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-04', title: 'Pipeline: a trip moves from Inquiry to Proposal' });
+const sc = base({ id: 'CRM-REV-04', title: 'Pipeline: a trip moves from Inquiry to Proposal', titleVi: 'Pipeline: chuyến đi từ Inquiry sang Proposal' });
 let s;
 let trip;
 

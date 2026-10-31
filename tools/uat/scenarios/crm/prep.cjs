@@ -9,7 +9,11 @@
 // Then:  ids in work/crm/state.json (gitignored); the R10 client link in work/crm/.secrets.json (chmod 600). A re-run
 //        keeps what is still usable (side trip at Proposal; an open deposit invoice; an accepted proposal's deposit
 //        row) and otherwise makes a new trip under a new name (r07b, r10b, ...); the last step asserts both are usable.
-// Dev only, invented people on @example.invalid, no Send of real mail, no LLM call. Cost $0.
+// Dev only, invented people on @example.invalid, no LLM call. Cost $0. Mail: sending the R10 proposal makes the CRM
+// mail the client link through the agency's connected mailbox (a real Gmail account on Dev) to the invented
+// @example.invalid address: undeliverable, the bounce comes back to that mailbox. R06 (proposal send), R10 (portal
+// invites after the deposit) and R11 (sign-in code, companion invite) do the same: about 6 to 8 such mails per run.
+// Nothing is sent to a real person; cleanup.cjs reports the outbound mail of the run's trips.
 const fs = require('fs');
 const path = require('path');
 const { crm, st, base, sha, open, bff, bffOk, waitForCard, prospect, submitInquiryApi, day } = require('./_crm.cjs');
@@ -99,7 +103,8 @@ async function invoiceUsable(page, t) {
     if (inv.status !== 200) return false;
     if (inv.data.status === 'payment_claimed') await bffOk(page, 'POST', `invoices/${t.invoice_id}/reject-claim`);
     if (inv.data.status === 'draft') await bffOk(page, 'POST', `invoices/${t.invoice_id}/issue`);
-    return ['open', 'payment_claimed', 'draft', 'partially_paid'].includes(inv.data.status);
+    // Usable = open once fixed above (a claim rejected, a draft issued); R10 needs it open. Partly paid or paid -> new.
+    return ['open', 'payment_claimed', 'draft'].includes(inv.data.status);
   }
   return false;
 }
@@ -205,9 +210,7 @@ sc.steps = [
         t.proposal_id = draft.proposal_id;
         st.save(s);
         const sent = await bffOk(page, 'POST', `proposals/${draft.proposal_id}/send`);
-        const secrets = st.loadSecrets();
-        secrets.r10_link_path = sent.link_path;
-        st.saveSecrets(secrets);
+        st.saveLink('r10_link_path', sent.link_path, t.trip_id);
         await c.goto(`${crm.CLIENT}${sent.link_path}`, { waitUntil: 'domcontentloaded' });
         await c.waitForLoadState('networkidle').catch(() => {});
         const pg = await c.evaluate(async () => (await (await fetch('/crm/public/v1/proposal', { headers: { Accept: 'application/json' } })).json()));

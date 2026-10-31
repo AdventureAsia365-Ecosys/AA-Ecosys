@@ -2,8 +2,7 @@
 // Given: A (owner) signed in; prep made the invoice trip: an accepted proposal with an issued deposit invoice due on
 //        prep's day (work/crm/state.json invoice_trip; client link path in .secrets.json r10_link_path). R09 published
 //        newer booking terms, so the client re-accepts first.
-// When:  the owner reads the trip's invoice and the overdue reminder (a task for the agent; the CRM never writes to the
-//        client by itself); the client (C, same browser, client host) re-accepts the terms and says "I have paid" by
+// When:  the owner reads the trip's invoice and the overdue reminder (a task for the agent); the client (C, same browser, client host) re-accepts the terms and says "I have paid" by
 //        bank transfer; the owner sees the claim, records the payment; the deposit books the trip; the owner makes the
 //        lead's portal link (shown once, blurred; R11 opens it).
 // Then:  the invoice moves open -> payment_claimed -> paid, the trip is Booked, no 429 on the client host. Card
@@ -12,12 +11,14 @@
 // reminder task is shown (a recorded take stops if the hourly reminder has not run yet: the caption would be false);
 // not passed yet (prep the same day) -> the open invoice with its due date, no reminder task asserted, and the
 // caption says what will happen. Either way result.json meta.overdue notes what was there. Make the captions on the
-// recording day: record.cjs refuses a take whose steps changed since. Booking staff (D) is not shown: this trip has
-// no Adventure Asia item. Writes on invented data only; no real mail (the link is copied, never sent). Cost $0.
+// recording day: record.cjs refuses a take whose steps changed since. Booking staff (D) is not shown, unlike plan §3:
+// this trip has no Adventure Asia item (the AA hold is shown in R08 and R12). Writes on invented data only. Mail: the
+// paid deposit makes the CRM invite each traveller to the portal by e-mail, sent through the agency's connected mailbox
+// to the invented @example.invalid addresses (undeliverable: the bounce comes back to that mailbox). Cost $0.
 const slide = require('../../lib/slide.cjs');
 const { crm, st, base, sha, open, bffOk, type, reuse } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-10', title: 'Invoices and payments: a deposit claimed, checked and recorded' });
+const sc = base({ id: 'CRM-REV-10', title: 'Invoices and payments: a deposit claimed, checked and recorded', titleVi: 'Hoá đơn và thanh toán: khách báo đã cọc, đại lý kiểm và ghi nhận' });
 let s;
 let t;
 let seen429;
@@ -57,8 +58,8 @@ sc.steps = [
   DUE_PASSED
     ? {
       caption: {
-        en: 'The due date has passed. The CRM reminds the agent first, with a task on the trip and an item in the bell; it never writes to the client by itself.',
-        vi: 'Đã quá hạn trả. CRM nhắc đại lý trước, bằng một việc trên chuyến và một mục trong chuông; CRM không tự viết cho khách.',
+        en: 'The due date has passed. The CRM reminds the agent, with a task on the trip and an item in the bell.',
+        vi: 'Đã quá hạn trả. CRM nhắc đại lý bằng một việc trên chuyến và một mục trong chuông.',
       },
       run: async (page, h) => {
         if (sc.meta.skipped) return;
@@ -76,8 +77,8 @@ sc.steps = [
     }
     : {
       caption: {
-        en: 'The deposit is due today. Once the date passes, the CRM reminds the agent first, with a task on the trip and an item in the bell; it never writes to the client by itself.',
-        vi: 'Hạn trả cọc là hôm nay. Khi qua ngày đó, CRM nhắc đại lý trước, bằng một việc trên chuyến và một mục trong chuông; CRM không tự viết cho khách.',
+        en: 'The deposit is due today. Once the date passes, the CRM reminds the agent, with a task on the trip and an item in the bell.',
+        vi: 'Hạn trả cọc là hôm nay. Khi qua ngày đó, CRM nhắc đại lý bằng một việc trên chuyến và một mục trong chuông.',
       },
       run: async (page, h) => {
         if (sc.meta.skipped) return;
@@ -96,7 +97,9 @@ sc.steps = [
     },
     run: async (page, h) => {
       if (sc.meta.skipped) return;
-      await h.goto(`${crm.CLIENT}${st.loadSecrets().r10_link_path}`);
+      const linkPath = st.link('r10_link_path', t.trip_id);
+      if (!linkPath) throw new Error('no client link of this run\'s invoice trip: run scenarios/crm/prep.cjs --fast');
+      await h.goto(`${crm.CLIENT}${linkPath}`);
       await page.waitForURL(`${crm.CLIENT}/c/p`, { timeout: 20_000 });
       await h.expect(page.getByTestId('client-proposal')).toHaveAttribute('data-status', 'accepted', { timeout: 20_000 });
       const box = page.getByTestId('client-terms-reaccept');
@@ -174,13 +177,12 @@ sc.steps = [
       await h.click(row.getByRole('button', { name: /portal link/i }));
       const link = await tab.getByTestId('proposal-copy-link').first().inputValue({ timeout: 20_000 });
       if (!/\/c\/[a-z]+\/[A-Za-z0-9_-]{30,}$/.test(link)) throw new Error('the portal link has an unexpected shape');
-      const secrets = st.loadSecrets();
-      secrets.r11_link = link;
-      st.saveSecrets(secrets);
+      st.saveLink('r11_link', link, t.trip_id);
       s = st.load();
       s.r10 = { trip_id: t.trip_id, booked_at: (s.r10 && s.r10.booked_at) || new Date().toISOString() };
       st.save(s);
       await h.hover(tab.getByTestId('proposal-copy-links'));
+      await h.assertMasked(['[data-testid="proposal-copy-links"]']);
     },
   },
   {

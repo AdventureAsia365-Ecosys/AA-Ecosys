@@ -6,13 +6,15 @@
 //        code, and invites the second traveller to his own portal at an @example.invalid address.
 // Then:  portal home as lead; details done; flight saved in airport time; scan on file (never shown back); envelope
 //        signed; the invite answered without showing a link. Offline use is not built: "Not ready yet" card.
-// Writes: the lead's portal data on an invented trip; one companion invite to an address that never receives mail.
+// Writes: the lead's portal data on an invented trip; one companion invite. Mail: the sign-in code mail and the
+// companion invite go out through the agency's connected mailbox to @example.invalid addresses (undeliverable; the
+// bounce comes back to that mailbox). Masks: hint, code boxes and signing code asserted blurred (steps 1, 2, 6).
 // Anonymous writes (code, session) >= 14 s apart; signed-in portal writes stay far under 30/min. No 429 asserted.
 // A re-run skips what is done in --fast only. No LLM call. Cost $0.
 const slide = require('../../lib/slide.cjs');
 const { crm, st, base, sha, PHONE, type, choose, reuse } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-11', title: 'The traveller portal: details, flights, passport scan, signing and inviting', who: null, viewport: PHONE });
+const sc = base({ id: 'CRM-REV-11', title: 'The traveller portal: details, flights, passport scan, signing and inviting', titleVi: 'Cổng khách: thông tin, chuyến bay, scan hộ chiếu, ký và mời bạn đi', who: null, viewport: PHONE });
 let s;
 let t;
 let seen429;
@@ -49,8 +51,8 @@ sc.steps = [
     run: async (page, h) => {
       s = st.load();
       t = s.invoice_trip;
-      const link = st.loadSecrets().r11_link;
-      if (!link || !s.r10 || s.r10.trip_id !== t.trip_id) throw new Error('no portal link of the booked R10 trip: run crm-rev-10 first');
+      const link = s.r10 && s.r10.trip_id === t.trip_id ? st.link('r11_link', t.trip_id) : null;
+      if (!link) throw new Error('no portal link of the booked R10 trip: run crm-rev-10 first');
       seen429 = crm.watch429(page);
       await sha(page, sc, 'start');
       await h.goto(link);
@@ -59,6 +61,7 @@ sc.steps = [
       await crm.paceClientWrite();
       await h.click(page.getByTestId('portal-send-code'));
       await h.expect(page.getByTestId('portal-hint')).toBeVisible({ timeout: 20_000 });
+      await h.assertMasked(['[data-testid="portal-hint"]']);
     },
   },
   {
@@ -71,6 +74,7 @@ sc.steps = [
         const code = await crm.echoedCode(page);
         await h.click(page.getByTestId('portal-code'));
         await page.getByTestId('portal-code').fill(code); // never typed slowly, never logged
+        await h.assertMasked(['[data-testid="portal-hint"]', '[data-testid="portal-code"]']);
         await crm.paceClientWrite();
         await h.click(page.getByTestId('portal-verify'));
         const pick = page.getByTestId('portal-pick-lead');
@@ -159,6 +163,7 @@ sc.steps = [
       await h.click(page.getByTestId('portal-sign-agree'));
       await type(page, h, page.getByTestId('portal-sign-name'), t.lead_name);
       await page.getByTestId('portal-sign-code-input').fill(code[1]);
+      await h.assertMasked(['[data-testid="portal-sign-hint"]', '[data-testid="portal-sign-code-input"]']);
       await portalPause(h);
       await h.click(page.getByTestId('portal-sign'));
       await h.expect(env).toHaveAttribute('data-signed', 'true', { timeout: 20_000 });

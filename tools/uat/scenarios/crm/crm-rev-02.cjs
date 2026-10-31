@@ -10,7 +10,7 @@
 const path = require('path');
 const { st, base, sha, open, reuse } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-02', title: 'Getting started and importing clients from a spreadsheet' });
+const sc = base({ id: 'CRM-REV-02', title: 'Getting started and importing clients from a spreadsheet', titleVi: 'Bắt đầu sử dụng và nhập khách từ bảng tính' });
 let s;
 let fresh = true;
 

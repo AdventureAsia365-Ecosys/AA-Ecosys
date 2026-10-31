@@ -7,18 +7,25 @@ const st = require('../../lib/crm-state.cjs');
 
 const DESKTOP = { width: 1440, height: 900 };
 const PHONE = { width: 390, height: 844 };
+const REAL_ADDRESS = '[A-Za-z0-9._%+-]+@(?![A-Za-z0-9.-]*\\.invalid\\b)[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}';
 
 /** The fields every CRM review scenario shares; `who` signs in before the browser starts (never recorded). */
-function base({ id, title, who = 'A', viewport = DESKTOP, mask = [] }) {
+function base({ id, title, titleVi, who = 'A', viewport = DESKTOP, mask = [] }) {
+  const phone = viewport === PHONE;
   const sc = {
     id,
     app: 'crm',
     title,
+    ...(titleVi ? { title_vi: titleVi } : {}),
     baseURL: crm.PARTNER,
     viewport,
+    // A phone chunk is a real mobile context (mobile meta viewport, touch), not only a narrow desktop window.
+    ...(phone ? { isMobile: true, hasTouch: true } : {}),
     mask: [...crm.TRAVELLER_MASK, ...mask],
     // Old Dev test rows carry internal issue ids in names ("E2E AA966 ..."): never on screen in a review video.
-    blurText: ['\\bAA-?\\d{3,4}\\b'],
+    // Any e-mail address that is not an invented one (*.invalid) is blurred wherever it shows as text: the agency's
+    // real mailbox in sender lines and quoted "On ... <address> wrote:" lines, a staff sign-in address.
+    blurText: ['\\bAA-?\\d{3,4}\\b', REAL_ADDRESS],
     scrollBlock: 'center', // the CRM shell has a sticky top bar
     meta: {},
   };
@@ -104,11 +111,15 @@ async function submitInquiryApi(page, formKey, p) {
   if (r !== 202) throw new Error(`inquiry submission answered ${r}`);
 }
 
-/** Type into a field like a person (fill at once in fast mode); `loc` must be an input or textarea. */
+/**
+ * Type into a field like a person (fill at once in fast mode); `loc` must be an input or textarea. A native date /
+ * time field is filled (typing "1986-04-12" into a Chromium date field does not give that ISO value).
+ */
 async function type(page, h, loc, text) {
   await h.click(loc);
+  const native = /^(date|datetime-local|time|month|week)$/.test((await loc.getAttribute('type')) || '');
   await loc.fill('');
-  if (h.fast) await loc.fill(text);
+  if (h.fast || native) await loc.fill(text);
   else await loc.pressSequentially(text, { delay: 35 });
   await h.expect(loc).toHaveValue(text);
 }
@@ -130,4 +141,4 @@ function reuse(h, what, fresh = 'prep with UAT_CRM_NEW_RUN=1, then the chunks in
 /** Days from today as an ISO date (UTC; enough for trip dates weeks ahead). */
 const day = (n, from = new Date()) => new Date(from.getTime() + n * 86_400_000).toISOString().slice(0, 10);
 
-module.exports = { crm, st, DESKTOP, PHONE, base, sha, open, bff, bffOk, waitForCard, prospect, submitInquiryApi, type, choose, day, reuse };
+module.exports = { crm, st, DESKTOP, PHONE, REAL_ADDRESS, base, sha, open, bff, bffOk, waitForCard, prospect, submitInquiryApi, type, choose, day, reuse };

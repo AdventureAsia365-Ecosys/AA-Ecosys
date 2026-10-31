@@ -5,7 +5,7 @@
 // Read only: no write, no LLM call. Cost $0.
 const { base, sha, open } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-01', title: 'Home: KPIs, getting started and the bell' });
+const sc = base({ id: 'CRM-REV-01', title: 'Home: KPIs, getting started and the bell', titleVi: 'Trang chủ: chỉ số, bước bắt đầu và chuông thông báo' });
 
 sc.steps = [
   {

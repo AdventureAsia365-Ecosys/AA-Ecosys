@@ -4,14 +4,16 @@
 // When:  the owner reads the trip's threads (sent from the agency's own mailbox, replies matched back by the trip
 //        reference), adds a saved reply in Settings, then on the trip starts a new e-mail from that saved reply.
 // Then:  both threads show their messages; the saved reply is listed; the draft autosaves ("Saved"); Send is never
-//        pressed (nothing leaves the mailbox). Microsoft 365 send-as is not built: "Not ready yet" card.
-// The real mailbox address and every sender line are blurred (lib/crm-signin.cjs mask). Writes: one saved reply and
+//        pressed in this chunk. Microsoft 365 send-as is not built: "Not ready yet" card.
+// The real mailbox address and every sender line are blurred (lib/crm-signin.cjs mask), and so is any text with an
+// address that is not an invented *.invalid one (quoted "On ... <address> wrote:" lines; _crm.cjs REAL_ADDRESS);
+// steps 1-2 assert it. Other chunks do mail clients through this mailbox (see prep.cjs). Writes: one saved reply and
 // one draft (ids kept in work/crm/state.json; cleanup.cjs deletes both). No LLM call. Cost $0.
 const slide = require('../../lib/slide.cjs');
 const { st, base, sha, open, bffOk, type, choose, reuse } = require('./_crm.cjs');
 
 const MAIL_TRIP = process.env.UAT_CRM_MAIL_TRIP || '204b00cc-2122-420a-a217-a2f80ce1b140';
-const sc = base({ id: 'CRM-REV-13', title: 'E-mail on the trip: threads, a saved reply and a draft' });
+const sc = base({ id: 'CRM-REV-13', title: 'E-mail on the trip: threads, a saved reply and a draft', titleVi: 'E-mail trên chuyến: luồng thư, câu trả lời mẫu và bản nháp' });
 let s;
 let title;
 
@@ -34,6 +36,7 @@ sc.steps = [
       await h.scrollTo(p);
       await h.expect(p.locator('li').first()).toBeVisible({ timeout: 20_000 });
       await h.hover(p.locator('li').first());
+      await h.assertMasked(['[data-testid="trip-messages"] li > div:first-child > span:first-child']);
     },
   },
   {
@@ -48,6 +51,7 @@ sc.steps = [
       await h.click(threads.nth(1));
       await h.expect(p.locator('li').filter({ hasText: /^.*Re:/ }).first()).toBeVisible({ timeout: 15_000 });
       await h.hover(p.locator('li').filter({ hasText: 'Re:' }).first());
+      await h.assertMasked(['[data-testid="trip-messages"] li > div:first-child > span:first-child']);
     },
   },
   {
@@ -104,8 +108,8 @@ sc.steps = [
   },
   {
     caption: {
-      en: 'The draft saves by itself. Nothing is sent in this review: Send stays untouched, and a sent e-mail could still be undone for ten seconds.',
-      vi: 'Bản nháp tự lưu. Trong video này không gửi gì: nút Send không được bấm, và e-mail đã gửi vẫn có thể rút lại trong mười giây.',
+      en: 'The draft saves by itself. Send is not pressed here; a sent e-mail can still be undone for ten seconds.',
+      vi: 'Bản nháp tự lưu. Ở đây không bấm Send; e-mail đã gửi vẫn có thể rút lại trong mười giây.',
     },
     run: async (page, h) => {
       const composer = panel(page).getByTestId('messages-composer');

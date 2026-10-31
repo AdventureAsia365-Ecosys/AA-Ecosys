@@ -7,7 +7,7 @@
 // Read only: no write, no LLM call. Cost $0.
 const { base, sha, open } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-18', title: 'The assistant\'s view: what a role cannot see', who: 'B' });
+const sc = base({ id: 'CRM-REV-18', title: 'The assistant\'s view: what a role cannot see', titleVi: 'Góc nhìn của trợ lý: những gì một vai trò không thấy', who: 'B' });
 
 sc.steps = [
   {

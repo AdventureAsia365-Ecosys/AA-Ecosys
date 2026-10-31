@@ -1,17 +1,20 @@
 // CRM review CLEANUP (data step, never recorded): node tools/uat/record.cjs scenarios/crm/cleanup.cjs --fast
 //   UAT_CRM_CLEANUP_DRY=1 lists what it would do and writes nothing.
 //   UAT_CRM_CLEANUP_KEEP_PREP=1 keeps prep's side trip and invoice trip (clean rehearsal leftovers before recording;
-//   the R10 invoice must stay one agency day old to show as overdue).
+//   the R10 invoice must stay one agency day old to show as overdue) and the R10 client link.
+//   UAT_CRM_CLEANUP_TAGS=rv202610311,rv202610312 also trashes the imported clients of those earlier runs.
 // Given: identity A (owner of the invented agency) and work/crm/state.json from prep.cjs and the chunks.
 // When:  for every trip the review created that is not booked (inquiry, qualifying, proposal, including an accepted
 //        proposal waiting for its deposit, and lost / cancelled ones) it voids the invoices still receivable (a claim
 //        is answered "not received" first), releases the AA holds on its lines and moves an open trip to Lost (reason
 //        "other"; Lost also gives the client's AA hold back); it deletes the saved replies and mail drafts the review
-//        made, revokes its ICS feeds, closes its data requests as withdrawn and moves the clients it added (R16) to the
-//        trash.
+//        made, revokes its ICS feeds, closes its data requests as withdrawn and moves the clients it added (R16) and the
+//        run's imported clients (R02: name ends with the run tag, no trip) to the trash; it wipes the run's link tokens
+//        (work/crm/.secrets.json) and reports the outbound mail on the run's trips (status counts only, read only).
 // Then:  nothing of the run stays open or keeps chasing a client; booked trips are left as they are (the review keeps
 //        them as booked examples). Re-running is safe: objects already closed or gone are skipped; any other answer
-//        than 200 / 404 is a failure.
+//        than 200 / 404 is a failure. Left on purpose: R09's booking-terms versions (one per run; an agreement version
+//        cannot be deleted, the newest published one stays in force) and the trashed clients (the CRM purges its trash).
 // Dev only, invented data, no LLM call. Cost $0.
 const { st, base, open, bff, bffOk } = require('./_crm.cjs');
 
@@ -20,6 +23,7 @@ const NOT_BOOKED = [...OPEN, 'lost', 'cancelled'];
 const RECEIVABLE = ['draft', 'open', 'payment_claimed', 'expired'];
 const dry = process.env.UAT_CRM_CLEANUP_DRY === '1';
 const keepPrep = process.env.UAT_CRM_CLEANUP_KEEP_PREP === '1';
+const extraTags = (process.env.UAT_CRM_CLEANUP_TAGS || '').split(',').map((x) => x.trim()).filter((x) => /^rv\d{9,}$/.test(x));
 const sc = base({ id: 'CRM-REV-CLEANUP', title: 'Clean up the data of the CRM review' });
 sc.fastOnly = true;
 let s;
@@ -101,6 +105,41 @@ sc.steps = [
         void r;
       }
       for (const id of c.clients || []) await act(page, `client ${id.slice(0, 8)} -> trash`, 'DELETE', `travelers/${id}`);
+      // R02's imported clients: found by the run tag in their names (exact token search), only those with no trip.
+      for (const tag of [s.run, ...extraTags]) {
+        for (let pg = 1; pg <= 5; pg++) {
+          const r = await bff(page, 'POST', 'travelers/search', { q: tag, page: pg });
+          if (r.status !== 200) {
+            failed.push(`search clients of ${tag}: ${r.status}`);
+            break;
+          }
+          const mine = (r.data.items || []).filter((x) => x.display_name.endsWith(` ${tag}`) && !x.trips && !(c.clients || []).includes(x.traveler_id));
+          for (const x of mine) await act(page, `imported client ${x.traveler_id.slice(0, 8)} (${tag}) -> trash`, 'DELETE', `travelers/${x.traveler_id}`);
+          if (!r.data.has_more || dry) break;
+        }
+      }
+      if (!dry) st.clearSecrets(keepPrep ? ['r10_link_path'] : []);
+    },
+  },
+  {
+    caption: { en: 'Count the outbound mail of the run\'s trips.', vi: 'Đếm thư gửi đi trên các chuyến của lượt chạy.' },
+    run: async (page) => {
+      // Read only. Proposal sends, portal invites and code mails go out through the agency's connected mailbox to the
+      // invented *.invalid addresses; this shows what left (status counts, never an address or a subject).
+      const ids = [...new Set([...((s.created && s.created.trips) || []), ...(s.r03 ? [s.r03.trip_id] : [])])];
+      const tally = {};
+      for (const id of ids) {
+        const cv = await bff(page, 'GET', `conversations?trip_id=${id}`);
+        for (const c of (cv.status === 200 && cv.data.conversations) || []) {
+          const m = await bff(page, 'GET', `conversations/${c.conversation_id}/messages`);
+          for (const x of ((m.status === 200 && m.data.messages) || []).filter((y) => y.direction === 'out')) {
+            const k = `${x.status}${x.failure_code ? `:${x.failure_code}` : ''}`;
+            tally[k] = (tally[k] || 0) + 1;
+          }
+        }
+      }
+      sc.meta.outbound_mail = tally;
+      console.log(`cleanup: outbound mail on the run's trips ${JSON.stringify(tally)}`);
     },
   },
   {
@@ -110,7 +149,8 @@ sc.steps = [
       sc.meta.done = done;
       if (!dry) {
         const fresh = st.load();
-        fresh.cleaned_at = new Date().toISOString();
+        // Kept prep trips are still open: only a full clean-up lets newRun() drop this run's ids.
+        fresh[keepPrep ? 'partly_cleaned_at' : 'cleaned_at'] = new Date().toISOString();
         st.save(fresh);
       }
       if (failed.length) throw new Error(`cleanup failed for: ${failed.join('; ')}`);

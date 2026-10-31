@@ -11,12 +11,20 @@
 // Optional scenario hooks: prepare() runs before the browser starts (unrecorded sign-in, e.g. lib/crm-signin.cjs; it
 // may set scenario.storageState); fastOnly: true refuses a recorded run (data prep / cleanup scenarios); scenario.meta
 // (filled by steps, e.g. the app git_sha at the start and end) is copied into result.json.
+// Masks are on before the first paint; a step that shows a secret calls h.assertMasked([selectors]) (each selector on
+// screen and blurred). scenario.isMobile / hasTouch make a phone take a real mobile context; scenario.title_vi goes to
+// result.json for the Vietnamese chapter list of longform.py. Errors and URLs written to timeline.json / result.json
+// have link tokens (path or query segments of 30+ characters, uuids excepted) replaced by <redacted>.
 // Setup once: bash tools/uat/setup.sh (pins @playwright/test). One Chromium, closed at the end.
 const fs = require('fs');
 const path = require('path');
 const { chromium, expect } = require('@playwright/test');
 
 const MIN_HOLD_MS = 2500;
+// Link tokens travel in URL path segments and query values: never write one to timeline.json / result.json / logs.
+// (A uuid is an object id, not a credential: kept for debugging.)
+const redact = (x) => (x == null ? x : String(x).replace(/([/=])([A-Za-z0-9_.~%-]{30,})/g,
+  (m, lead, seg) => (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(seg) ? m : `${lead}<redacted>`)));
 const TAIL_PAD_MS = 600;
 
 async function main() {
@@ -56,44 +64,57 @@ async function main() {
   const context = await browser.newContext({
     viewport: sc.viewport,
     deviceScaleFactor: 1,
+    // A phone scenario sets isMobile + hasTouch: mobile user agent behaviour, meta viewport and touch events.
+    ...(sc.isMobile ? { isMobile: true } : {}),
+    ...(sc.hasTouch ? { hasTouch: true } : {}),
     ...(fast ? {} : { recordVideo: { dir: work, size: sc.viewport } }),
     ...(storageState ? { storageState } : {}),
     reducedMotion: 'no-preference',
     locale: 'en-US',
   });
   if (!fast) await context.addInitScript({ path: path.join(__dirname, 'lib', 'overlay.js') });
+  // Masks go on before the first paint: the init script runs as soon as the document exists, and a server-rendered
+  // page can paint before DOMContentLoaded (a mask added only then leaves a few unmasked frames).
   if (sc.mask && sc.mask.length) {
     await context.addInitScript((sels) => {
-      const add = () => {
+      const css = `${sels.join(',')}{filter:blur(10px)!important}`;
+      const ensure = () => {
+        const root = document.documentElement;
+        if (!root || document.getElementById('uat-mask')) return !!root;
         const s = document.createElement('style');
-        s.textContent = `${sels.join(',')}{filter:blur(10px)!important}`;
-        document.documentElement.appendChild(s);
+        s.id = 'uat-mask';
+        s.textContent = css;
+        root.appendChild(s);
+        return true;
       };
-      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', add);
-      else add();
+      ensure();
+      // The document element may not exist yet, and a hydration may drop the style: put it back each time.
+      new MutationObserver(ensure).observe(document, { childList: true, subtree: true });
     }, sc.mask);
   }
   if (sc.blurText && sc.blurText.length) {
     await context.addInitScript((srcs) => {
       const res = srcs.map((x) => new RegExp(x));
+      const hit = (n) => n.parentElement && res.some((r) => r.test(n.nodeValue));
       const scan = (root) => {
         if (!root) return;
+        if (root.nodeType === 3) {
+          if (hit(root)) root.parentElement.style.setProperty('filter', 'blur(10px)', 'important');
+          return;
+        }
         const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
         for (let n = w.nextNode(); n; n = w.nextNode()) {
-          if (n.parentElement && res.some((r) => r.test(n.nodeValue))) n.parentElement.style.setProperty('filter', 'blur(10px)', 'important');
+          if (hit(n)) n.parentElement.style.setProperty('filter', 'blur(10px)', 'important');
         }
       };
-      const start = () => {
-        scan(document.body);
-        new MutationObserver((ms) => {
-          for (const m of ms) {
-            if (m.type === 'characterData') scan(m.target.parentElement);
-            for (const a of m.addedNodes) scan(a.nodeType === 1 ? a : a.parentElement);
-          }
-        }).observe(document.body, { childList: true, subtree: true, characterData: true });
-      };
-      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
-      else start();
+      // Observe the document from the start (parser-inserted nodes included), not only after DOMContentLoaded.
+      new MutationObserver((ms) => {
+        for (const m of ms) {
+          if (m.type === 'characterData') scan(m.target);
+          for (const a of m.addedNodes) scan(a);
+        }
+      }).observe(document, { childList: true, subtree: true, characterData: true });
+      scan(document.documentElement);
     }, sc.blurText);
   }
   const page = await context.newPage();
@@ -139,6 +160,35 @@ async function main() {
       await loc.first().evaluate((el, [b, at]) => el.scrollIntoView({ behavior: b, block: at }), [fast ? 'instant' : 'smooth', block]);
       await wait(1400);
     },
+    // A step that shows a secret asserts it is blurred on screen: each selector matches at least one visible element
+    // (a renamed test id would otherwise unmask it silently) and every match, or an ancestor, has a blur filter.
+    // Text that blurText covers is checked the same way. Throws with the selector that is not blurred.
+    assertMasked: async (selectors = sc.mask || []) => {
+      await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => r())));
+      const bad = await page.evaluate(([sels, srcs]) => {
+        const blurred = (el) => {
+          for (let e = el; e && e.nodeType === 1; e = e.parentElement) if (/blur/.test(getComputedStyle(e).filter)) return true;
+          return false;
+        };
+        const visible = (el) => { const b = el.getBoundingClientRect(); return b.width > 0 && b.height > 0; };
+        const out = [];
+        for (const sel of sels) {
+          const els = [...document.querySelectorAll(sel)].filter(visible);
+          if (!els.length) out.push(`${sel}: nothing on screen`);
+          else if (!els.every(blurred)) out.push(`${sel}: not blurred`);
+        }
+        const res = srcs.map((x) => new RegExp(x));
+        const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        for (let n = w.nextNode(); n; n = w.nextNode()) {
+          if (n.parentElement && visible(n.parentElement) && res.some((r) => r.test(n.nodeValue)) && !blurred(n.parentElement)) {
+            out.push('a text the blurText rules cover is not blurred');
+            break;
+          }
+        }
+        return out;
+      }, [[].concat(selectors), sc.blurText || []]);
+      if (bad.length) throw new Error(`MASK: ${bad.join('; ')}`);
+    },
     smoothScrollBy: async (dy) => {
       await page.evaluate(([d, b]) => window.scrollBy({ top: d, behavior: b }), [dy, fast ? 'instant' : 'smooth']);
       await wait(1400);
@@ -157,14 +207,14 @@ async function main() {
       await sc.steps[i].run(page, h);
     } catch (e) {
       status = 'FAIL';
-      error = String(e.message || e).split('\n')[0];
+      error = redact(String(e.message || e).split('\n')[0]);
       // The failing screen, for the report (work/ is gitignored; masks apply as on the video).
       await page.screenshot({ path: path.join(work, `fail-step-${n}.png`) }).catch(() => {});
     }
     const remaining = start + hold - (Date.now() - t0);
     if (remaining > 0) await page.waitForTimeout(remaining);
     const end = Date.now() - t0;
-    timeline.push({ n, start_ms: start, end_ms: end, status, error, url: page.url() });
+    timeline.push({ n, start_ms: start, end_ms: end, status, error, url: redact(page.url()) });
     console.log(`step ${n} ${status} ${((end - start) / 1000).toFixed(1)}s ${error || ''}`);
     if (status === 'FAIL') { failed = n; await wait(1500); break; }
   }
@@ -175,7 +225,7 @@ async function main() {
   await browser.close();
   if (video) fs.renameSync(await video.path(), path.join(work, 'video.webm'));
   const result = {
-    id: sc.id, app: sc.app, title: sc.title, baseURL: sc.baseURL, mode: fast ? 'fast' : 'uat',
+    id: sc.id, app: sc.app, title: sc.title, ...(sc.title_vi ? { title_vi: sc.title_vi } : {}), baseURL: sc.baseURL, mode: fast ? 'fast' : 'uat',
     recorded_at: new Date().toISOString(), total_ms: total,
     verdict: failed ? 'FAIL' : 'PASS', failed_step: failed, steps_run: timeline.length, steps_total: sc.steps.length,
     ...(sc.meta ? { meta: sc.meta } : {}),

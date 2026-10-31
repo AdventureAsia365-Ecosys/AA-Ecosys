@@ -12,7 +12,7 @@
 const slide = require('../../lib/slide.cjs');
 const { st, base, sha, open, bffOk, type, choose } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-16', title: 'A client asks for their data: export, and erasure checked safely' });
+const sc = base({ id: 'CRM-REV-16', title: 'A client asks for their data: export, and erasure checked safely', titleVi: 'Khách yêu cầu dữ liệu: xuất file và kiểm tra xoá an toàn' });
 let s;
 let who;
 let clientId;
@@ -83,7 +83,7 @@ sc.steps = [
   {
     caption: {
       en: 'The export is built in the background. When it is ready, it carries a checksum and downloads through a single-use link.',
-      vi: 'File xuất được tạo chạy nền. Khi xong, file có mã kiểm tra và được tải qua một đường dẫn dùng một lần.',
+      vi: 'File xuất được tạo ở chế độ nền. Khi xong, file có mã kiểm tra và được tải qua một đường dẫn dùng một lần.',
     },
     run: async (page, h) => {
       const row = requests(page).getByTestId('data-request').filter({ hasText: clientId.slice(0, 8) }).filter({ hasText: 'Their data in a file' }).first();

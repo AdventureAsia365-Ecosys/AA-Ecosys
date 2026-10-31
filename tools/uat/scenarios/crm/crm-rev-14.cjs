@@ -7,7 +7,7 @@
 // Read only: no write, no reveal, no LLM call. Cost $0.
 const { base, sha, open } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-14', title: 'Suppliers and the bookings ledger' });
+const sc = base({ id: 'CRM-REV-14', title: 'Suppliers and the bookings ledger', titleVi: 'Nhà cung cấp và sổ đặt chỗ' });
 
 sc.steps = [
   {

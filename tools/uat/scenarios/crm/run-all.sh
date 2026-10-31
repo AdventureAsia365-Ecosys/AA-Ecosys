@@ -8,8 +8,9 @@
 #                           run prepared at least one agency day earlier.
 #            --only 07,12   just these chunks (prep still runs first; cleanup only with --cleanup)
 #            --no-cleanup   leave the run's data in place at the end (to re-run chunks)
+#            --cleanup      clean the run at the end even with --only (the default without --only)
 # Recorded chunks go to tools/uat/out/crm/no-burn/ (input for longform.py). Per chunk verdict, failing step and the CRM
-# git SHA (start and end): work/crm/run-all.tsv. A failing chunk does not stop the set; cleanup always runs.
+# git SHA (start and end): work/crm/run-all.tsv. A failing chunk does not stop the set; the final cleanup still runs.
 # RAM guard before every Chromium launch and TTS load: needs >= 2500 MB available, waits 2 min up to 5 times, then
 # stops with "RAM too low". Exit: 0 all PASS | 2 a chunk FAILed | 3 egress not VN | 4 RAM too low.
 set -uo pipefail

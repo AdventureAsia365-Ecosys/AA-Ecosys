@@ -6,7 +6,7 @@
 const slide = require('../../lib/slide.cjs');
 const { base, sha } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-20', title: 'Where the CRM stands and what comes next', who: null });
+const sc = base({ id: 'CRM-REV-20', title: 'Where the CRM stands and what comes next', titleVi: 'CRM đang ở đâu và bước tiếp theo', who: null });
 
 sc.steps = [
   {

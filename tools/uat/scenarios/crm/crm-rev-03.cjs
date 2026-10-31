@@ -6,7 +6,7 @@
 // work/crm/state.json (r03) for R04-R06. One anonymous write, so the 5-per-minute limit is never reached. Cost $0.
 const { crm, st, base, sha, open, waitForCard, prospect, type, choose } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-03', title: 'A traveller sends an inquiry and the trip lands on the board' });
+const sc = base({ id: 'CRM-REV-03', title: 'A traveller sends an inquiry and the trip lands on the board', titleVi: 'Khách gửi yêu cầu và chuyến xuất hiện trên bảng' });
 let s;
 let who;
 let seen429;

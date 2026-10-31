@@ -6,7 +6,7 @@
 // One reveal (an audit event) on an invented client; no LLM call. Cost $0.
 const { st, base, sha, open, choose } = require('./_crm.cjs');
 
-const sc = base({ id: 'CRM-REV-05', title: 'Client profile: masked by default, every reveal logged' });
+const sc = base({ id: 'CRM-REV-05', title: 'Client profile: masked by default, every reveal logged', titleVi: 'Hồ sơ khách: che sẵn, mỗi lần xem đều được ghi lại' });
 let s;
 let travelerId;
 
