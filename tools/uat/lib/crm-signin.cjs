@@ -48,15 +48,24 @@ function statePath(who) {
 function creds(who) {
   const id = IDENTITIES[who];
   if (!id) throw new Error(`unknown identity ${who}`);
-  const raw = execFileSync('aws', ['secretsmanager', 'get-secret-value', '--secret-id', id.secret, '--profile', PROFILE,
+  return secretCreds(id.secret);
+}
+
+/**
+ * { email, password, totpSecret } of a partner-pool e2e user from its Secrets Manager JSON (read only, profile
+ * UAT_AWS_PROFILE or aa365-admin). Also used by lib/signin.cjs for the Content studio user. Never printed.
+ */
+function secretCreds(secretId) {
+  const raw = execFileSync('aws', ['secretsmanager', 'get-secret-value', '--secret-id', secretId, '--profile', PROFILE,
     '--region', REGION, '--query', 'SecretString', '--output', 'text'],
   { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 30_000 });
   let s;
   try {
     s = JSON.parse(raw);
   } catch {
-    throw new Error(`secret ${id.secret} is not JSON`); // never echo the value (JSON.parse quotes the input)
+    throw new Error(`secret ${secretId} is not JSON`); // never echo the value (JSON.parse quotes the input)
   }
+  if (!s.email || !s.password || !s.totp_secret) throw new Error(`secret ${secretId} lacks email, password or totp_secret`);
   return { email: s.email, password: s.password, totpSecret: s.totp_secret };
 }
 
@@ -265,6 +274,7 @@ async function readMailCode(recipient, sinceMs, timeoutMs = 90_000) {
 module.exports = {
   PARTNER, CLIENT, BOOKING, WORK, IDENTITIES, TRAVELLER_MASK,
   ensureState, statePath, bffCall, paceClientWrite, watch429, assertNo429, echoedCode, readMailCode, totp,
+  secretCreds, freshTotp, PROFILE, REGION,
 };
 
 if (require.main === module) {
