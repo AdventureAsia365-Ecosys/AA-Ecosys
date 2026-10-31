@@ -30,12 +30,15 @@ const IDENTITIES = {
   B: { secret: 'crm/dev/e2e-test-crm/sen-vang-assistant', role: 'assistant' },
 };
 // Blur on screen (every CRM review chunk): the echoed one-time codes and the code boxes (portal sign-in and e-sign),
-// the client / portal links the agency copies once (they carry the link token) and the calendar feed URL. Data and
-// report exports download through a blob (no link on screen). A chunk adds its own selectors with base({ mask }).
+// the client / portal links the agency copies once (they carry the link token), the calendar feed URL, and the real
+// mailbox behind the invented agency (the connected address, the forward-in address and code, the sender line of each
+// message). Data and report exports download through a blob (no link on screen). A chunk adds its own with base({ mask }).
 const TRAVELLER_MASK = [
   '[data-testid="portal-hint"]', '[data-testid="portal-code"]', '[data-testid="portal-sign-hint"]',
   '[data-testid="portal-sign-code-input"]', '[data-testid="proposal-copy-links"]', '[data-testid="proposal-copy-link"]',
   '[data-testid="calendar-feed-url"]',
+  '[data-testid^="mailbox-"][data-testid$="-address"]', '[data-testid="mailbox-forward-code"]',
+  '[data-testid="trip-messages"] li > div:first-child > span:first-child',
 ];
 
 function statePath(who) {
