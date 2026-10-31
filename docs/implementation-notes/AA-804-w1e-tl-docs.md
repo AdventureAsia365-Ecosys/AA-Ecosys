@@ -65,3 +65,7 @@ notes `docs/implementation-notes/TL-24.md` there), AA-CIS-Infra (`CONTEXT.md` ac
   republish).
 - `skill/aa-session/SKILL.md` has three older markdownlint findings (fenced blocks near line 127); skills are outside
   the docs lint scope, and they were not touched here.
+- The decision record `docs/audits/2026-10-31-S262-tl-decisions/README.md` ships in this PR (review fix): ADR 0018
+  links to it and docs-lint checks relative links offline. The main checkout holds an untracked copy of the same file;
+  delete it before pulling master after the merge, or the pull stops on "untracked working tree files would be
+  overwritten".
