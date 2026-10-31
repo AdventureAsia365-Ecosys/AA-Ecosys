@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-api, aa-cis-worker, aa-cis-dev-db]
-last_reviewed: 2026-10-30
+last_reviewed: 2026-10-31
 review_every_days: 90
 last_tested: null
 tested_where: null
@@ -37,10 +37,44 @@ deployment per Anthropic catalog model at priority 100, behind acc3 (priority 10
   [Making the API primary for a model](#making-the-api-primary-for-a-model)).
 
 > [!IMPORTANT]
-> **Switch the connection off again after the probe.** Keep `anthropic-direct` off until slice S5 (data scopes) and
-> slice S10 (the provider-wide daily cap for `anthropic` in `cost_guard`) have landed. Until S10, Anthropic API spend
-> is logged in `shared.llm_call_log` (provider `anthropic`) but no provider-wide daily cap counts it: `cost_guard`
-> sums only `bedrock%` and `openai`. A job's own run budget and a kind-scoped daily cap still count it.
+> **Switch the connection off again after the probe**, unless the Dev road below has been applied. Slices S5 (data
+> scopes per stage) and S10 (monthly budget per connection) have landed; on Dev the connection may then stay on (see
+> [Dev road prepared (S261)](#dev-road-prepared-s261)). Anywhere else, keep it off until the tech lead has decided
+> the data scopes and the budget for that environment.
+
+## Dev road prepared (S261)
+
+Tech lead decision (S261): build the Dev road to the Anthropic API now, add the key later. acc3 Bedrock is refused
+at account level and acc2 Bedrock refuses Claude, so on Dev the Anthropic API is the only way to a Claude model.
+
+Already in place (no key, no cost):
+
+- Connection `anthropic-direct` (kind `anthropic`, data scope `vendor_direct`, secret name
+  `aa-llm/dev/anthropic-direct`), **disabled**, with one deployment per Anthropic Converse catalog model at priority
+  100, behind acc3 (migration 306). With acc3 refused, its circuit opens at once and a call goes to the API row.
+- The CIS task role can read `aa-llm/dev/anthropic-direct` once it exists: no IAM change.
+- AA-CIS-Infra `db/scripts/aa1002_dev_anthropic_road.py` (DB Migrate `mode=run-script`, dry run as merged, apply by a
+  one-line PR). From the live routes it opens `allowed_scopes = {aws_only, vendor_direct}` on every CIS stage that
+  can reach an Anthropic model through `anthropic-direct` (tenant T-stages included, in their own `group=tenant`
+  lines: Dev holds synthetic data only, data standards C7.1a), adds a missing API deployment the same way as 306,
+  and sets the connection's monthly budget to 150 USD (about 5 USD a day; the S10 budget is monthly, enforced on
+  every call path, editable on the Connections tab). It never enables the connection and never reads a secret.
+- `SCRIPT gap` lines name the models a route uses that cannot go to the API: the legacy keys `haiku` / `sonnet`
+  never do. A stage whose route has only legacy keys (most writers and checks on 31/10) keeps no LLM path until the
+  tech lead adds a Converse model (for example `sonnet-5-5` or `haiku-5-5`) to its route in the admin; re-run the
+  script's apply after such a change. This is a model choice, not part of this procedure.
+
+Remaining tech lead steps (in this order):
+
+1. **Create the key** in the Anthropic Console: a dedicated Dev workspace with a monthly spend limit, credit added.
+   The amount of credit is the tech lead's call before buying.
+2. **Store the secret** `aa-llm/dev/anthropic-direct` from a file (step 3 below).
+3. **Enable and probe**: one audited PATCH (step 4), then the probe (step 5). On Dev, leave the connection on after a
+   good probe; step 6 is the rollback.
+
+Check before step 1 ($0): step 2 below. Expected: `anthropic-direct` with `"enabled": false`,
+`"secret_name": "aa-llm/dev/anthropic-direct"`, `"policy_problems": []`, and the PATCH to enable answers `422`
+(secret unreadable) with no audit row.
 
 ## Before you start
 
