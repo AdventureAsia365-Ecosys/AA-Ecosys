@@ -480,7 +480,7 @@ How release-please is set up (AA-891):
 | PR preview (Vercel) | See a frontend change before merge | Yes; Playwright UI smoke on CIS previews (the last three `ui-smoke.yml` runs were skipped: fix in AA-879) | Vercel Hobby until the first paying tenant (D-18) |
 | **Dev** (acc2) | Integration, allowed to break, demo | Yes | **Test data only** (D-01: exact counts on 17/10/2026; Part C C7.1a forbids prod PII on Dev). No grace windows or time-gated watches: generate evidence now |
 | Staging | — | No | Not planned. When prod exists, Dev acts as pre-prod; PR previews cover UI review |
-| **Prod** | Real users | No | Its own environment resources **on acc2** (ADR 0001, D-17; [ADR 0012](adr/0012-environment-model.md) decisions 2–4: own VPC, RDS instance, cluster, Cognito pools, secrets, KMS keys and roles, plus tag-based Deny, per-environment boundaries and no agent access). Built when a go-live date is set (ADR 0012 decision 11, D-16, AA-880, U-40); a separate prod account is reconsidered only on the triggers of decision 12 (AA-864 among them). Prod targets: DM-9.6, C7.2 |
+| **Prod** | Real users | No | Its own AWS account **`aa-prod`** in us-west-1 ([ADR 0018](adr/0018-lean-aws-account-model.md), accepted S262, D-17), with its own VPC, RDS instance, cluster, Cognito pools, secrets, KMS keys and roles; [ADR 0012](adr/0012-environment-model.md) decisions 3–4 (tag-based Deny, per-environment boundaries, no agent access) stay as defence in depth. Built when a go-live date is set (ADR 0012 decision 11, D-16, AA-880, U-40). Prod targets: DM-9.6, C7.2 |
 
 **Build once, deploy many** (ADR 0012 decision 7): a backend image digest verified on Dev is copied to the prod ECR
 and deployed by a Deploy Prod workflow that the tech lead dispatches; only configuration and secrets differ.
@@ -847,7 +847,7 @@ Each item is deliberate, with its reason. Reopening one needs a new decision in 
 | Do not | Why / until |
 |---|---|
 | A permanent staging environment, multi-region, active-active | Dev + previews + promoting the same image are enough until prod with large customers |
-| A separate AWS account for prod | ADR 0001, C7.2a, D-17; ADR 0012 decision 4 (compensating controls) and decision 12 (when to reconsider) |
+| Creating the prod account or building prod before a go-live date | [ADR 0018](adr/0018-lean-aws-account-model.md) (accepted S262): `aa-prod` is created by the management root when the go-live date is set; D-16, D-17 |
 | GitHub Team or Enterprise, GHAS for private repos, making Infra public | D-14: Free plan, app repos public, root and Infra private; gitleaks and `main`-only OIDC instead |
 | Vercel Pro before the first paying tenant | D-18 |
 | A human approval on every PR during the dev phase | DM-11.5 / D-13 |
@@ -910,7 +910,7 @@ S243 session record for N-x. Where a decision changed a standard, the standard i
 | D-14 | App repos public, root private, GitHub Free | [STYLE, where a page may live](STYLE.md#where-a-page-may-live-sec-06); [ADR 0014](adr/0014-repo-visibility-and-github-plan.md); U-25 |
 | D-15 | Agent keeps the `aa365-admin` profile | DM-8.7; [§7.6](#76-access) |
 | D-16 | Prod layout and gate chosen with the go-live date | [ADR 0012](adr/0012-environment-model.md), accepted S257: layout decision 5, gate decision 8; build at the go-live date (decision 11); AA-880 |
-| D-17 | Prod on acc2 by default | ADR 0001; C7.2a; ADR 0012 decision 2; AA-880 |
+| D-17 | Prod in its own AWS account, `aa-prod`, in us-west-1 (S262; was "prod on acc2 by default" until ADR 0018 was accepted) | [ADR 0018](adr/0018-lean-aws-account-model.md) decisions 3 and 7; C7.2a (v1.9); AA-1004; AA-880 |
 | D-18 | Vercel Hobby until the first paying tenant, then Pro | [§6.1](#61-environments); note for the business owner |
 | D-19 | New AWS spend approved item by item, quoted first | PR template cost section; [FinOps](ops/finops.md); DM-10.7 holds only the approval rule ("spend changes need the tech lead's approval") |
 | D-20 | Alarm e-mails on ALARM and OK | Infra alarms (`ok_actions`); AA-872 |

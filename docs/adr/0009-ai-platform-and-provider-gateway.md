@@ -13,7 +13,7 @@
     failure domain (decision 14);
   - root ADR 0001a decisions 1–2 (acc2 may serve chat models for eval, judge and validate stages, decision 14);
   - root ADR 0018, the `aa-ai` row "Bedrock chat models only" and the sentence "ADR 0001a … is unchanged" (decision
-    14; a note is added to ADR 0018 in the same PR, both Proposed);
+    14; applied in ADR 0018 when it was accepted, 2026-10-31, S262);
   - root ADR 0008 decision 5, the grandfathered gateway-config SELECT, closed by the contract of decision 13;
   - data standards DM-10.4 (next version): one ledger contract with domain ledgers linked to it, and `role` gains
     `embed`, `decide` and `data` (decisions 2 and 8);
@@ -35,6 +35,9 @@
   `docs/audits/2026-10-31-S261-llm-capacity-plan/` (including the approved slice S12: bulk and prod lines, token
   limiter, backpressure in job claim; its only home today is a comment on the closed AA-1002), and the approved
   [S258 blueprint](../audits/2026-10-29-S258-aws-org-blueprint/README.md) section "AI / LLM Gateway".
+- **AI Use Register:** v0 at [`docs/architecture/ai-use-register.md`](../architecture/ai-use-register.md) (S262,
+  TL-15): one row per stage with owner role, provider, data scope, budget, kill switch, eval and human gate, plus the
+  OWASP LLM Top 10 (2025) control map. It is the provider list the tenant terms use (AA-820).
 - **Related Linear:** AA-804 (this ADR, ledger v2, AI Use Register), AA-642 (gateway build, shared core S8),
   AA-900 (qualification and evaluation), AA-1002 (S0–S10 as built), AA-820 (tenant AI terms), AA-842 (traces, on
   hold), AA-1004 (organization and SCP), AA-1016 (tenant AI budget), AA-1015 (TripPlanner limits), AA-964 (CRM
@@ -403,4 +406,6 @@ Each item is deferred explicitly; it is brought to the tech lead with a proposed
 - Fix the AA-804 Linear title, which still says "0006".
 - On acceptance, pointer lines in: root ADR 0001 (header), 0001a, 0008 decision 5, 0008a §6 (its text "ADR 0009 is
   reserved and not written yet") and 0018; CIS ADR 0005, 0006, 0007, 0008 and 0012 (its header says "not written
-  yet") in a CIS PR; the S258 blueprint (:1183, :1316); status here and in the index.
+  yet") in a CIS PR; the S258 blueprint (:1183, :1316); status here and in the index. *S262: the root ADR pointers and the
+  index are done (root PR of TL-1/TL-15); the CIS ADR pointers are still open, and the blueprint line waits for
+  decision 11, which is still Proposed.*

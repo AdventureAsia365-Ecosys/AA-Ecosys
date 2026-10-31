@@ -30,7 +30,7 @@ First get your access from [Onboarding](../onboarding.md) (account map, AWS prof
 | Environment | Where | Data | State |
 |---|---|---|---|
 | **Dev** | acc2, us-west-1 (see [account map](../onboarding.md#account-map)) | **Test data only** (D-01) | Live; the only environment |
-| Prod | acc2, its own VPC, RDS instance, cluster, Cognito pools, secrets and roles (ADR 0001, C7.2a, D-17; [ADR 0012](../adr/0012-environment-model.md) decisions 2–3) | Real | Not created; built when a go-live date is set ([ADR 0012](../adr/0012-environment-model.md), accepted S257; AA-880) |
+| Prod | `aa-prod`, its own AWS account in us-west-1, with its own VPC, RDS instance, cluster, Cognito pools, secrets and roles ([ADR 0018](../adr/0018-lean-aws-account-model.md), accepted S262; C7.2a, D-17; [ADR 0012](../adr/0012-environment-model.md) decision 3) | Real | Not created; built when a go-live date is set ([ADR 0012](../adr/0012-environment-model.md), accepted S257; AA-880) |
 
 The GitHub environment that gates Terraform apply is called `prod` but applies Dev. ADR 0012 decision 6 renames it
 to `dev` in phase 1, before any prod role exists, in a fixed four-step order (C7.2d); until that Infra PR lands, the

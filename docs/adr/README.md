@@ -7,8 +7,8 @@ An amendment is a separate file `<nnnn>a-<slug>.md` and the amended ADR carries 
 
 | ADR | Title | Status |
 |---|---|---|
-| [0001](0001-ecosystem-target-architecture.md) | Ecosystem target architecture: shared platform services and contracts between apps | Accepted (tightened by 0008, amended by 0001a) |
-| [0001a](0001a-retire-acc1-llm-on-acc3-only.md) | Amendment: retire acc1; LLM chat models run on acc3 only, no cross-account fallback (AA-998) | Accepted |
+| [0001](0001-ecosystem-target-architecture.md) | Ecosystem target architecture: shared platform services and contracts between apps | Accepted (tightened by 0008, amended by 0001a, 0009 d2 and 0018) |
+| [0001a](0001a-retire-acc1-llm-on-acc3-only.md) | Amendment: retire acc1; LLM chat models run on acc3 only, no cross-account fallback (AA-998) | Accepted (amended by 0009 d14) |
 | [0002](0002-only-cis-writes-content.md) | Only CIS writes content; other apps read it through views | Accepted |
 | [0003](0003-one-durable-job-model.md) | One durable job model for all deferred work | Accepted (amended by 0003a) |
 | [0003a](0003a-per-owner-job-tables.md) | Amendment: one job table per owner schema, from a shared DDL template | Accepted |
@@ -28,12 +28,12 @@ An amendment is a separate file `<nnnn>a-<slug>.md` and the amended ADR carries 
 | [0010a](0010a-content-studio-partner-sign-in.md) | Amendment: Content studio sign-in through the partner pool and a CIS token exchange; studio invitations CIS-created and CRM-delivered (AA-979 P2b) | Proposed |
 | [0011](0011-github-app-identity-and-merge-rights.md) | GitHub App identity for agents and bots, and merge rights per risk tier | Proposed (amended by 0011a) |
 | [0011a](0011a-ci-bot-merges-copy-and-dump-prs.md) | Amendment: ci-bot opens and merges migration-copy PRs in AA-CIS-Infra and schema-dump PRs in the root repo (AA-993, needed by 0017) | Proposed |
-| [0012](0012-environment-model.md) | Environment model: Dev and prod on the infrastructure account (acc2), isolated per environment; Terraform roots, the `prod` GitHub environment rename, promotion, data between environments, go-live trigger (AA-880) | Accepted (S257; build at the go-live date; decisions 1, 2, 5 to be superseded by 0018, Proposed) |
+| [0012](0012-environment-model.md) | Environment model: Dev and prod on the infrastructure account (acc2), isolated per environment; Terraform roots, the `prod` GitHub environment rename, promotion, data between environments, go-live trigger (AA-880) | Accepted (S257; build at the go-live date; decisions 1, 2, 5 superseded by 0018) |
 | [0014](0014-repo-visibility-and-github-plan.md) | Repo visibility and GitHub plan: app repos public, root and Infra private, GitHub Free | Proposed (amended S247: root + Infra public for now; S248: switch precondition, AA-981) |
 | [0015](0015-tour-liveness-and-retirement-propagation.md) | Tour liveness and retirement propagation: one CIS-owned served state per catalog key, one write service, a tombstone/outbox for the other apps (AA-986; design: [S248 audit memo](../audits/2026-10-23-S248-tour-deletion-propagation/memo.md)) | Accepted (Q1–Q10 decided S248; Q11 proposed) |
 | [0016](0016-one-design-system-guarded-kit-copies.md) | One design system for the ecosystem frontends: a canonical kit core in AA-CIS-App, guarded byte copies, one token set for all five apps (AA-994; closes AA-655) | Accepted |
 | [0017](0017-migrations-in-app-pr-expand-auto-apply.md) | Migrations ship in the app PR; expand files are auto-applied on Dev by an Infra pipeline before deploy (AA-993 D2; design: [S252 audit](../audits/2026-10-26-S252-aa993-delivery-pipeline/design.md)) | Accepted (S259) |
-| [0018](0018-lean-aws-account-model.md) | Lean AWS account model: an AA-owned organization (management account), prod in its own account, two environments; supersedes ADR 0012 decisions 1, 2 and 5 on acceptance (AA-1004; design: [S258 blueprint](../audits/2026-10-29-S258-aws-org-blueprint/README.md) §0) | Proposed |
+| [0018](0018-lean-aws-account-model.md) | Lean AWS account model: an AA-owned organization (management account), prod in its own account, two environments; supersedes ADR 0012 decisions 1, 2 and 5; prod in us-west-1 (decision 7) (AA-1004; design: [S258 blueprint](../audits/2026-10-29-S258-aws-org-blueprint/README.md) §0) | Accepted 31/10/2026 (S262, tech lead; amended by 0009 d14) |
 
 ## Numbering
 

@@ -199,9 +199,10 @@ câu hỏi cho luật sư (mục 6).
 Nội dung dưới đây được chép từ mã nguồn trang, đúng như hiển thị: A.1 và A.2 tại commit `8327bb0` (28/10/2026) của
 AA-TripPlanner-Web, A.3 và A.4 tại commit `a33ccf4` (28/10/2026) của AA-Partner. Các trang portal được chuyển từ
 AA-CIS-App sang AA-Partner cùng lịch sử thay đổi (AA-979); nội dung của chúng là bản ngày 20/10/2026 cộng nội dung AA-820
-ở mục 3 của A.4 (24/10/2026). Mỗi trang có nhãn "Draft — pending legal review". Hai trang Trip Planner ghi phiên bản
+ở mục 3 của A.4 (24/10/2026) và danh sách nhà cung cấp AI ở mục 5–6 của A.3 và mục 3 của A.4 (31/10/2026, S262, lấy từ
+[AI Use Register](../architecture/ai-use-register.md)). Mỗi trang có nhãn "Draft — pending legal review". Hai trang Trip Planner ghi phiên bản
 "Draft v0.1" (20 October 2026), dù nội dung đã được thêm phần đăng nhập của khách và phần Geoapify về sau; hai trang
-portal ghi "Draft v0.2" (24 October 2026) từ thay đổi AA-820. Link được ghi bằng chữ hiển thị. Các trang chỉ có bản tiếng
+portal ghi "Draft v0.3" (31 October 2026) từ thay đổi danh sách nhà cung cấp. Link được ghi bằng chữ hiển thị. Các trang chỉ có bản tiếng
 Anh; phần dưới đây là bản dịch để tham khảo, còn câu chữ pháp lý là bản tiếng Anh. Nếu trang thay đổi sau các commit trên,
 trang đang chạy là bản đúng.
 
@@ -218,7 +219,6 @@ Mọi điểm "[to be confirmed]" trong A.1 đến A.4, kèm chủ đề trong b
 | A.2 §1, A.4 §1 | Pháp nhân vận hành | 1 |
 | A.1 §4, A.3 §4 | Cơ sở pháp lý cho từng mục đích sử dụng dữ liệu | 2 |
 | A.1 §6 | Danh sách đầy đủ nhà cung cấp dịch vụ, ghi trong sổ đăng ký | 4 |
-| A.3 §5 | Danh sách đầy đủ nhà cung cấp AI | 4 |
 | A.1 §7, A.3 §7 | Biện pháp bảo vệ khi chuyển dữ liệu ra ngoài nước của người dùng | 7 |
 | A.1 §8 | Thời hạn lưu: hồ sơ khách sau khi yêu cầu hoặc đặt tour kết thúc; chuyến đi chưa gửi; tài khoản đăng nhập | 2, 5 |
 | A.3 §8 | Thời hạn lưu hồ sơ đăng bài và nhật ký quản trị; dữ liệu tài khoản và nội dung sau khi tài khoản kết thúc | 2, 5 |
@@ -412,11 +412,14 @@ việc của bạn và hết hạn sau 24 giờ hoặc khi bạn đăng xuất. 
 
 Cơ sở pháp lý cho từng mục đích sử dụng là [to be confirmed].
 
-**5. Xử lý bằng AI.** Nội dung được tạo bởi các mô hình AI: Claude (Anthropic) qua Amazon Bedrock, và các nhà cung cấp AI
-khác xem lại và chấm điểm bản nháp. Các mô hình nhận nội dung tour, thiết lập thương hiệu của bạn và hướng dẫn cho từng
-bài. Chính sách của chúng tôi là không gửi dữ liệu cá nhân cho các mô hình này và không lưu dữ liệu cá nhân trong bản ghi
-các lần gọi AI, vì vậy xin đừng nhập dữ liệu cá nhân về người khác vào thiết lập thương hiệu hay nội dung. Danh sách đầy
-đủ các nhà cung cấp AI là [to be confirmed].
+**5. Xử lý bằng AI.** Nội dung được tạo và kiểm tra bởi các mô hình AI. Claude (Anthropic), qua Amazon Bedrock, viết nội
+dung; các mô hình của OpenAI, cũng qua Amazon Bedrock, xem lại, chấm điểm và kiểm tra bản nháp. Khi Amazon Bedrock không
+dùng được, API của Anthropic hoặc API của OpenAI, gọi trực tiếp và có trần chi tiêu, có thể được dùng làm đường dự phòng;
+các lần gọi đó đi từ Amazon Web Services tới Anthropic hoặc OpenAI. Với một số đối tác, một dịch vụ kiểm tra quyết định
+(Jev, của TypeSafe) còn trả lời các câu hỏi có/không về bản nháp. Các nhà cung cấp này nhận nội dung tour, thiết lập
+thương hiệu của bạn và hướng dẫn cho từng bài. Chính sách của chúng tôi là không gửi dữ liệu cá nhân cho các mô hình này
+và không lưu dữ liệu cá nhân trong bản ghi các lần gọi AI, vì vậy xin đừng nhập dữ liệu cá nhân về người khác vào thiết
+lập thương hiệu hay nội dung.
 
 **6. Ai nhận dữ liệu của bạn.**
 
@@ -424,7 +427,8 @@ các lần gọi AI, vì vậy xin đừng nhập dữ liệu cá nhân về ng�
   Asia đã đăng giúp bạn).
 - **Amazon Web Services** — lưu trữ, cơ sở dữ liệu, Amazon Bedrock.
 - **Vercel** — lưu trữ và phục vụ các trang của portal.
-- **Các nhà cung cấp AI** như mô tả ở trên.
+- **Các nhà cung cấp AI** — Anthropic và OpenAI (qua Amazon Bedrock, và gọi trực tiếp chỉ khi dự phòng), và Jev
+  (TypeSafe) với một số đối tác, như mô tả ở trên.
 - **Các kênh của bạn** (ví dụ WordPress hoặc Meta), khi bạn đăng bài lên đó.
 
 Chúng tôi không bán dữ liệu cá nhân.
@@ -466,9 +470,12 @@ Pháp nhân vận hành là [to be confirmed].
 - Nội dung được tạo bằng AI và có thể có sai sót. Portal hiển thị điều này ở bước xem lại, đăng và xuất: "Nội dung này
   được tạo bằng AI. Hãy xem lại trước khi đăng; bạn chịu trách nhiệm về những gì bạn đăng." (trang hiển thị câu này bằng
   tiếng Anh).
-- Nội dung được viết bằng mô hình của các nhà cung cấp bên thứ ba, trong đó có Claude của Anthropic qua Amazon Web
-  Services. Bạn phải tuân theo chính sách sử dụng của họ, gồm Chính sách sử dụng của Anthropic và Chính sách sử dụng chấp
-  nhận được của AWS, cũng như các điều khoản này.
+- Nội dung được viết và kiểm tra bằng mô hình của các nhà cung cấp bên thứ ba: Claude của Anthropic, qua Amazon Bedrock
+  (Amazon Web Services), viết nội dung, và các mô hình của OpenAI, cũng qua Amazon Bedrock, xem lại, chấm điểm và kiểm
+  tra. Khi Amazon Bedrock không dùng được, API của Anthropic hoặc API của OpenAI, gọi trực tiếp và có trần chi tiêu, có
+  thể được dùng làm đường dự phòng.
+- Bạn phải tuân theo chính sách sử dụng của các nhà cung cấp này, gồm Chính sách sử dụng của Anthropic, Chính sách sử
+  dụng của OpenAI và Chính sách sử dụng chấp nhận được của AWS, cũng như các điều khoản này.
 - Bạn không được dùng portal hay nội dung của portal để:
   - tạo đánh giá, xếp hạng hay lời chứng thực giả, hoặc trích dẫn và câu chuyện được trình bày như của khách hàng trong
     khi họ không nói ra;

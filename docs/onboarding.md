@@ -28,8 +28,16 @@ with the list of accounts you need.
 
 All infrastructure lives in **acc2**. acc3 only hosts the Bedrock "satellite" role that lets acc2 call chat models,
 the Bedrock batch roles, a read-only Cost Explorer role and its own budget and cost anomaly alerts (ecosystem
-architecture §4.3, §4.4). The ecosystem uses these two accounts only. LLM calls run on acc3 only; there is no
-cross-account fallback ([ADR 0001a](adr/0001a-retire-acc1-llm-on-acc3-only.md)).
+architecture §4.3, §4.4). The ecosystem uses these two accounts only. LLM chat calls run on acc3
+([ADR 0001a](adr/0001a-retire-acc1-llm-on-acc3-only.md)); since [ADR 0009](adr/0009-ai-platform-and-provider-gateway.md)
+decision 14 (accepted 2026-10-31) acc2 may also serve chat models for eval, judge and validate stages once a model
+passes the qualification ladder, and the direct Anthropic and OpenAI APIs are capped warm paths outside AWS.
+
+**Target names ([ADR 0018](adr/0018-lean-aws-account-model.md), accepted 2026-10-31):** acc2 becomes `aa-nonprod`
+and acc3 `aa-ai` when they join the AA-owned AWS organization; the new management account `aa-management` (created
+2026-10-30, AA-1004) holds the organization and billing only, never a workload; `aa-prod` is created at go-live. The
+management account is reached through IAM Identity Center; its ID is added to this table when the organization root is
+applied.
 
 | Name | AWS account ID | Region | CLI profile | Holds | Notes |
 |---|---|---|---|---|---|
@@ -48,8 +56,8 @@ History: acc1 (a personal account, ID 867490540162, profile `pqnghiep-admin`) wa
 The old Quanskill accounts and their `aa-dev`, `aa-stg`, `aa-prod` profiles (ap-southeast-1) are **not** part of
 AA-Ecosys. Never deploy there.
 
-Prod does not exist yet. It will be a separate RDS instance on acc2 (ADR 0001, data standards C7.2a, decision
-D-17), dated when go-live is set (AA-880). Dev holds **test data only** (D-01).
+Prod does not exist yet. It will be a separate RDS instance in its own AWS account, `aa-prod`
+([ADR 0018](adr/0018-lean-aws-account-model.md), data standards C7.2a, decision D-17), dated when go-live is set (AA-880). Dev holds **test data only** (D-01).
 
 ## Accounts you need
 

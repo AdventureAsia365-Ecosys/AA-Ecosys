@@ -85,6 +85,18 @@
      "text": "AA-903: link 1 PR Dependabot frontend có 'Vercel deploy' skipped",
      "done": true
     }
+   ],
+   "risks": [
+    {
+     "text": "Linear gói Free: 250 issue chưa lưu trữ; đầy quota thì không tạo được issue mới",
+     "owner_role": "tech lead",
+     "trigger": "> 220 issue chưa lưu trữ, hoặc cuối phiên quên export + archive"
+    },
+    {
+     "text": "Giới hạn usage của agent (Claude Code / Kiro) làm đứt phiên giữa chừng",
+     "owner_role": "tech lead",
+     "trigger": "một phiên bị chặn vì hết hạn mức; dồn việc tay vào cửa sổ cố định"
+    }
    ]
   },
   {
@@ -120,6 +132,18 @@
     {
      "text": "AA-779/780: không thêm cổng mới trong 4 tuần (số cổng trong registry không tăng)",
      "done": false
+    }
+   ],
+   "risks": [
+    {
+     "text": "Một đường cung cấp LLM duy nhất (acc3) đã đứng từ 29/10: mọi stage viết dừng",
+     "owner_role": "tech lead",
+     "trigger": "acc3 Error 002 chưa gỡ trước 07/11 → mở đường ấm Anthropic API (ADR 0009 d5, BO-2)"
+    },
+    {
+     "text": "Judge chưa hiệu chuẩn (kappa 0,562 trên 13 cặp): chưa có cổng chất lượng thật",
+     "owner_role": "tech lead",
+     "trigger": "trước lượt eval trả phí đầu tiên: ≥ 30 cặp nhãn người, ≥ 8 mỗi lớp (TL-10)"
     }
    ]
   },
@@ -261,6 +285,13 @@
      "text": "Báo cáo pass/fail, Nghiệp ký",
      "done": false
     }
+   ],
+   "risks": [
+    {
+     "text": "UAT cần LLM chạy lại; LLM đứng thì video quay trên dữ liệu cũ",
+     "owner_role": "tech lead",
+     "trigger": "LLM chưa có lại khi UI ổn định"
+    }
    ]
   },
   {
@@ -280,6 +311,23 @@
     {
      "text": "AA-880 ADR 0012 Accepted trước W8; AA-969 không còn finding High; AA-980 đại lý thật đầu tiên được mời trên prod — ADR 0012 đã Accepted S257 (root #320); còn AA-969, AA-980",
      "done": false
+    }
+   ],
+   "risks": [
+    {
+     "text": "Chưa có ngày go-live, khách trả tiền đầu tiên, giá: không dự báo và không bắt đầu build prod được",
+     "owner_role": "business owner",
+     "trigger": "chưa chốt BO-1 tới cuối 11/2026"
+    },
+    {
+     "text": "Bus factor = 1: chỉ tech lead giữ quyền GitHub org, AWS management, tên miền, Vercel",
+     "owner_role": "business owner",
+     "trigger": "trước tenant thật đầu tiên chưa có người giữ quyền dự phòng (BO-5)"
+    },
+    {
+     "text": "Điều khoản AI cho tenant (Anthropic Usage Policy có hiệu lực 12/11) chưa được luật sư duyệt",
+     "owner_role": "business owner",
+     "trigger": "chưa duyệt trước 11/11 (AA-820); tenant ký trước khi có Schedule"
     }
    ]
   }
@@ -1215,6 +1263,7 @@
    "milestone": "M1b",
    "session": "S262",
    "size": "L",
+   "due": "2026-11-07",
    "next": "L7 · S261: mô hình AWS/Bedrock theo account; form Anthropic acc4 đã nộp (aa-mgmt); acc4 Nova + Cohere OK, Claude đang xác minh; acc3 case AWS ~05–06/11, acc3 giữ độc lập; hạn 07/11",
    "needs": "Quyết billing khi mời acc2 / acc3 vào org (tech lead)"
   },
@@ -1275,6 +1324,7 @@
    "milestone": "M5",
    "session": "≤11/11",
    "size": "",
+   "due": "2026-11-11",
    "next": "L3 · hạn 11/11; danh sách nhà cung cấp AI khớp AI Use Register (AA-804)",
    "needs": "Ms. Thư (counsel)"
   },
@@ -1299,6 +1349,7 @@
    "milestone": "M5",
    "session": "S262",
    "size": "M",
+   "due": "2026-11-14",
    "next": "L7 · S261: thiết kế cổng AI + dữ liệu v2 duyệt (root #397, ADR 0009 phần đã duyệt Accepted); hạn 14/11",
    "needs": "Accept the ADR"
   },

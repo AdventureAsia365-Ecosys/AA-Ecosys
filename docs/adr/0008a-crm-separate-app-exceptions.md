@@ -126,8 +126,14 @@ whose members are seeded in `crm.member`.
 
 ### 6. Relation to ADR 0009 (AI platform, AA-804)
 
-ADR 0009 is reserved and not written yet. ADR 0008 decision 5 leaves "the gateway contract" to it. So that the two do
-not collide:
+*Update 2026-10-31:* [ADR 0009](0009-ai-platform-and-provider-gateway.md) is written and its decisions 1–9, 13 and 14
+are Accepted (S261). It keeps this decision unchanged ("Respects, unchanged: root ADR 0008a §5–6"): the CRM keeps its
+own gateway, control plane and ledger, Bedrock only, vendors the gateway code (decision 13), and `crm.llm_call` follows
+the ledger v2 column contract with `app = 'crm'` (decision 8). The AI Use Register
+([`docs/architecture/ai-use-register.md`](../architecture/ai-use-register.md)) lists the CRM stages. The text below
+is the rule as written before ADR 0009 existed; it still holds.
+
+ADR 0008 decision 5 leaves "the gateway contract" to ADR 0009. So that the two do not collide:
 
 - ADR 0009 treats `crm.llm_call` as a **second ledger under the same column contract** as the shared ledger v2
   (`app = 'crm'`, status, attempt number, prompt hash, shadow / experiment flags, cost), and its AI Use Register lists

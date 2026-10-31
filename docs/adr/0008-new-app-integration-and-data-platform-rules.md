@@ -7,7 +7,8 @@
   partner CRM is a separate app (AA-Partner, ADR 0010), with playbook exceptions for traveller OTP (step 8) and an
   own LLM gateway (step 9); decision 8 preconditions and hand-off rewritten.
 - **Scope:** AA-Ecosys as a whole: every app that stores data on the shared PostgreSQL 15 RDS
-  (`aa-cis-dev-db`, acc2 ([account map](../onboarding.md#account-map)), us-west-1, and the later prod instance on acc2):
+  (`aa-cis-dev-db`, acc2 ([account map](../onboarding.md#account-map)), us-west-1, and the later prod instance in the
+  `aa-prod` account, [ADR 0018](0018-lean-aws-account-model.md)):
   AA-CIS-App, AA-TripPlanner-Web, AA-Booking, AA-CIS-Infra (instance, roles, DB Migrate), and any app
   that joins later (first candidate: tenant CRM, AA-821).
 - **Rule body:** the data standards v1.0 in `docs/architecture/data-standards/`
@@ -131,7 +132,11 @@ approves each change.
   ("a column list or a view") to views: new readers use `catalog` views of golden records
   (`catalog.v_destination`, a country view with **X5**). Existing table and column grants (CIS
   173/179/180/201/216, the `published_tours` SELECT) are grandfathered until the **X4** revoke
-  migration; the gateway-config SELECT stays until ADR 0009 defines the gateway contract.
+  migration; the gateway-config SELECT stays until ADR 0009 defines the gateway contract. *(ADR 0009 decision 13,
+  accepted 2026-10-31: TripPlanner reads its gateway configuration through `catalog.v_llm_gateway_config_v1` and its
+  spend through `catalog.v_llm_app_spend_today_v1`; the S8 slice then revokes the grandfathered SELECT on
+  `shared.llm_role_config` and `shared.llm_model_catalog`. The INSERT on `shared.llm_call_log` stays as the standing
+  write exception.)*
 - Contract views live in: `catalog` for every CIS contract, including tenant-facing ones (the AA-813
   membership view) and read-backs (ADR 0004a's CIS → Booking supply content view); a non-CIS
   producer's own schema (`booking.v_supply_hotels`); `<schema>.v_<event>_outbox` for events. **No new

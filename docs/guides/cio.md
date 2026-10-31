@@ -27,7 +27,7 @@ the [data standards](../architecture/data-standards/README.md); this page points
 
 - Only a Dev environment exists. It holds **test data only** (D-01: on 2026-10-17 the 8 Booking and 6 TripPlanner
   customer rows were all test or internal addresses). Data standards C7.1a forbid copying prod personal data to Dev.
-- Prod will be a separate RDS instance on acc2 (ADR 0001, C7.2a, D-17), started when the business owner sets a go-live date.
+- Prod will be a separate RDS instance in its own AWS account, `aa-prod` (ADR 0018, C7.2a, D-17), started when the business owner sets a go-live date.
   Several controls are deliberately scheduled for that date (see the readiness list below).
 - Repos: all six active repos are public: the four app repos (D-14, D-25), and root and Infra since 2026-10-22 until
   the coding phase ends ([ADR 0014](../adr/0014-repo-visibility-and-github-plan.md) amendment; a switch back is gated

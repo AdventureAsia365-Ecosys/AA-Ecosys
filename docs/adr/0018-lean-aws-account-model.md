@@ -1,19 +1,22 @@
 # ADR 0018 — Lean AWS account model: an AA-owned organization, prod in its own account, two environments
 
-- **Status:** Proposed (2026-10-30, S259). Records the lean variant the tech lead chose in S258 (2026-10-29) for a
-  team of two to three engineers. Nothing is applied: the management account root is prepared (AA-1004) and waits
-  for the management account ID.
-- **Supersedes (on acceptance):** ADR 0012 decision 1 (environments), decision 2 (prod stays on the infrastructure
+- **Status:** Accepted (2026-10-31, S262, tech lead: item TL-1 of the S261 architecture review, record
+  [`docs/audits/2026-10-31-S262-tl-decisions/README.md`](../audits/2026-10-31-S262-tl-decisions/README.md)), with
+  us-west-1 kept as the region for the reasons in [decision 7](#7-region-us-west-1-for-prod). Proposed 2026-10-30
+  (S259); records the lean variant the tech lead chose in S258 (2026-10-29) for a team of two to three engineers.
+  Accepting it builds nothing: the management account root is prepared (AA-1004), and `aa-prod` is created only when
+  the go-live date is set.
+- **Supersedes:** ADR 0012 decision 1 (environments), decision 2 (prod stays on the infrastructure
   account) and decision 5 (Terraform layout). ADR 0012 decisions 3, 4 and 6–12 stay in force, read with the notes
   in [Effect on ADR 0012](#effect-on-adr-0012).
-- **Amends (on acceptance):** ADR 0001, the S235 sentence "Production also runs on acc2 … no new AWS account is
-  created for any environment". ADR 0001a (LLM chat models on the LLM account only, no cross-account fallback) is
-  unchanged: the LLM account keeps that role under the name `aa-ai`.
-- **Note (S261, AA-804):** [ADR 0009](0009-ai-platform-and-provider-gateway.md) (Proposed) decision 14 would amend
-  this: `aa-nonprod` (acc2), and later `aa-prod`, may serve Bedrock chat models of the families they can run for
-  eval, judge and validate stages only, and every `failure_domain` is re-checked at each payer or organization change
-  in this ADR's timeline. If both are accepted, the `aa-ai` row below reads "main Bedrock chat account" instead of
-  "Bedrock chat models only".
+- **Amends:** ADR 0001, the S235 sentence "Production also runs on acc2 … no new AWS account is created for any
+  environment" (applied: ADR 0001 carries the pointer). ADR 0001a (LLM chat models on the LLM account only, no
+  cross-account fallback) keeps its account roles under the new names, as amended by ADR 0009 decision 14 below.
+- **Amended by:** [ADR 0009](0009-ai-platform-and-provider-gateway.md) decision 14 (Accepted 2026-10-31, S261):
+  `aa-nonprod` (acc2), and later `aa-prod`, may serve Bedrock chat models of the families they can run for eval,
+  judge and validate stages only, after the model passes the qualification ladder; every `failure_domain` is
+  re-checked at each payer or organization change in this ADR's timeline. The `aa-ai` row below reads "main Bedrock
+  chat account" since both ADRs are accepted.
 - **Scope:** AA-CIS-Infra (a new `accounts/management` root, the future `accounts/prod` root, state buckets, OIDC
   roles per account), every app repo (Deploy Prod targets another account), root (account map in onboarding, data
   standards C7.2c, the engineering handbook D-17 row, the DevOps guide, skills that name AWS profiles).
@@ -51,7 +54,7 @@ by named conditions rather than by date.
 | `aa-management` | New and empty, created by the tech lead on 2026-10-30 | AWS Organizations, IAM Identity Center, billing and budgets, Cost Anomaly Detection, the organization CloudTrail and its log bucket. **No workload**, ever (SCPs do not apply to this account) | Day 1 |
 | `aa-nonprod` | The infrastructure account (acc2 in the [account map](../onboarding.md#account-map)) | Dev, and staging when switched on (decision 2) | Joins by invitation once the payer vendor releases it |
 | `aa-prod` | Does not exist | Real customers: the prod environment of ADR 0012 decisions 3 and 7–10 | Created by the management root when the go-live date is set (ADR 0012 decision 11) |
-| `aa-ai` | The LLM account (acc3) | Bedrock chat models only, with an invoker role per environment | Joins by invitation if the billing model allows it; folded into nonprod and prod once those accounts can call Bedrock themselves |
+| `aa-ai` | The LLM account (acc3) | The main Bedrock chat account, with an invoker role per environment (ADR 0009 decision 14: `aa-nonprod`, and later `aa-prod`, may also serve chat models for eval, judge and validate stages only) | Joins by invitation if the billing model allows it; folded into nonprod and prod once those accounts can call Bedrock themselves |
 
 Account IDs stay in the onboarding account map only. Every Terraform root takes them as variables; none is written
 in code (the root and Infra repos are public for now).
@@ -126,6 +129,36 @@ role (ADR 0012 decision 3, "LLM path").
 | A backup account | Prod data becomes valuable enough to need deletion-proof copies in another account |
 | A shared-services account | Several accounts need shared ECR or DNS |
 | Paid security services | Before go-live or when sensitive data arrives; each one approved with its monthly cost |
+
+### 7. Region: us-west-1 for prod
+
+Prod is built in us-west-1, the region of Dev. The tech lead kept it at acceptance (S262) for these reasons
+(S261 architecture review, finding D7):
+
+- **Data residency is already settled.** The database and servers of every app are in the United States today, the
+  privacy notices say so, and the legal readiness packet ([`docs/legal/readiness-packet.md`](../legal/readiness-packet.md)
+  topic 7) recommends keeping US hosting and preparing the transfer documents. A prod region in the same country
+  changes none of that work.
+- **Bedrock model access is proven in this region.** The LLM account's model access, quotas and cross-Region
+  inference profiles were requested and tested from us-west-1 (S261 access matrix). Another prod region would repeat
+  the access requests and the qualification runs of ADR 0009 decision 12 there.
+- **Same module, no data move.** Prod calls the same environment module as Dev (decision 5) in the same region, so
+  region-specific values (AMIs, Availability Zone names, endpoints, Bedrock profile IDs) are already known and no
+  reference data has to cross regions.
+- **Latency is not a reason to move within the United States.** Travellers and agencies are mostly in Asia. Public
+  pages are served from the Vercel edge network; the API calls that reach AWS cross the Pacific from either US West
+  region, so us-west-2 would not be faster for them. An Asian region would be closer, but it was not assessed
+  (Bedrock model availability, quotas, data-transfer documents) and is not proposed here.
+
+Accepted costs: us-west-1 has two Availability Zones for this account (enough for Multi-AZ RDS), and RDS costs
+about 25 % more than in us-west-2 (db.t4g.medium Multi-AZ 0.171 against 0.129 USD an hour, AWS Price List, S261
+review D7). Creating `aa-prod` is the cheapest moment to change region; after go-live a database region move costs
+about one to two weeks, so a cost plan that shows the difference matters is brought back to the tech lead before
+`aa-prod` is created.
+
+**Second region:** us-west-2 only, and only for backup copies (ADR 0012 decision 10) and, if a model the gateway needs
+is not offered in us-west-1, for eval connections (ADR 0009, "Not decided here"). Prod traffic uses one region until
+a capacity trigger says otherwise. The region SCP of decision 4 already allows us-west-2.
 
 ## Effect on ADR 0012
 

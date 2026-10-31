@@ -158,6 +158,26 @@ Verified live <dd/mm>:
 - Ghi chú: <giới hạn còn lại, issue tách ra nếu có>
 ```
 
+**Done-when đóng băng (TL-4, tech lead duyệt S262):** khi issue sang In Progress, các gạch "Done when" giữ nguyên tới
+lúc đóng. Phát hiện phạm vi mới giữa chừng → mở issue mới (hoặc ghi vào issue đích đã có), không nâng mức Done của
+issue đang làm. Sửa câu chữ cho rõ thì được, đổi nghĩa thì không.
+
+**Done-with-scope (TL-4, S262):** một issue được đóng Done khi chỉ một phần phạm vi đã giao, nếu đủ cả hai:
+
+1. phần đã giao được **verify live** như mục 3 (bằng chứng theo mẫu trên);
+2. **mọi** phần còn lại có **issue follow-up riêng** (link) **hoặc** một **trigger đã ghi** (điều kiện / ngày sẽ làm, ví
+   dụ "khi có ngày go-live", "geocoder trả phí chỉ khi pin ẩn làm hại sản phẩm").
+
+Comment đóng ghi cả hai danh sách, thêm vào mẫu trên:
+
+```text
+Done-with-scope:
+- Đã giao (verify live): <gạch Done-when đạt, bằng chứng>
+- Còn lại: <gạch> → AA-<n> | trigger: <điều kiện/ngày>
+```
+
+Thiếu link hoặc trigger cho dù một phần còn lại → không phải Done-with-scope: để In Progress / In Review.
+
 Thiếu bằng chứng nào → để In Review và ghi rõ còn thiếu gì. Linear có thể tự chuyển Done khi merge/deploy dù chỉ có
 `Refs` → sau mỗi merge/apply của issue còn mở, `get_issue` kiểm trạng thái, mở lại nếu đóng nhầm.
 

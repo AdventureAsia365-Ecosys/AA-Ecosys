@@ -135,7 +135,7 @@ in the same PR that first uses it. The Vietnamese version of this page, with the
 | Term | Meaning | In AA-Ecosys |
 |---|---|---|
 | Dev phase | Today: only a Dev environment, no real users, test data only. | Agents merge after green CI (D-13; DM-11.5 in v1.1). |
-| Prod | The future production environment. | Separate RDS instance on acc2 (ADR 0001, C7.2a, D-17); dated at go-live (AA-880). |
+| Prod | The future production environment. | Separate RDS instance in its own AWS account, `aa-prod` (ADR 0018, C7.2a, D-17); dated at go-live (AA-880). |
 | Data standards | Binding MIG-x (Part A), DM-x (Part B) and C-x (Part C) rules for the shared RDS. | [`docs/architecture/data-standards/`](architecture/data-standards/README.md), version 1.6 (2026-10-28). |
 | U-xx / D-xx | S241 roadmap items / the tech lead's recorded decisions. | [Handbook §9–§10](engineering-handbook.md#9-roadmap); D-xx record in `docs/sessions/2026-10-17-S241-decisions.md`. |
 | Session (`S<nnn>`) | One numbered working session with a log. | `docs/sessions/`, Notion memory. |
