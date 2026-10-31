@@ -4,9 +4,12 @@
   starts only when a go-live date is set (D-16). Proposed 2026-10-28 (S256), drafted ahead of the prod blueprint so
   that CRM Go-real (AA-980) and the other prod-bound work can plan against it. Decisions 1–12 are in force; nothing
   in them is built yet.
-- **Superseded in part (proposed):** [ADR 0018](0018-lean-aws-account-model.md) (Proposed 2026-10-30, S259) would
-  supersede decisions 1, 2 and 5 (prod in its own account, two environments, one root per account); until it is
-  accepted, this ADR stands as written.
+- **Superseded in part:** [ADR 0018](0018-lean-aws-account-model.md) (Accepted 2026-10-31, S262) supersedes
+  decisions 1, 2 and 5: prod lives in its own account `aa-prod`, two account-level environments (nonprod and prod,
+  staging on demand inside nonprod), one Terraform root per account (`accounts/prod` replaces `accounts/aa365-prod`).
+  Decisions 3, 4 and 6–12 stay in force, read with ADR 0018 "Effect on ADR 0012" (decision 4.5 is replaced by the
+  move into the AA-owned organization; decision 12 is answered). Where the text below says "prod on the
+  infrastructure account" or names `accounts/aa365-prod`, ADR 0018 wins.
 - **Reserving issue:** AA-880 (number 0012 was reserved for it in the ADR index, AA-928).
 - **Scope:** AA-CIS-Infra (Terraform layout, state, GitHub environments, OIDC roles, DB Migrate `environment`
   input), every app repo (Deploy Prod workflow, environment-scoped configuration, Vercel prod projects), root (data

@@ -24,7 +24,7 @@
 
 | # | Place | What goes there | Status (24/10/2026) |
 |---|---|---|---|
-| (a) | Partner Portal `/terms` §3 (AA-Partner `portal/app/terms/page.tsx` since AA-979; was AA-CIS-App) | A short binding summary of clauses .2 to .6 in plain English: follow the Model Provider Policies (links to the Anthropic Usage Policy and the AWS Acceptable Use Policy), the prohibited uses, the Tenant's labelling duty, the Tenant as publisher, and AA's right to hold, rewrite or decline content. Unpublishing and suspension stay in §4 and §5 of the page. The page text is copied in [readiness packet](readiness-packet.md) Annex A.4 | Draft v0.2 (AA-820 portal change), still under the "Draft — pending legal review" banner and not indexed |
+| (a) | Partner Portal `/terms` §3 (AA-Partner `portal/app/terms/page.tsx` since AA-979; was AA-CIS-App) | A short binding summary of clauses .2 to .6 in plain English: follow the Model Provider Policies (links to the Anthropic Usage Policy and the AWS Acceptable Use Policy), the prohibited uses, the Tenant's labelling duty, the Tenant as publisher, and AA's right to hold, rewrite or decline content. Unpublishing and suspension stay in §4 and §5 of the page. The page text is copied in [readiness packet](readiness-packet.md) Annex A.4 | Draft v0.2 (AA-820 portal change), still under the "Draft — pending legal review" banner and not indexed. 31/10/2026 (portal Draft v0.3): the provider bullet names the providers of the [AI Use Register](../architecture/ai-use-register.md) and links the OpenAI Usage Policies too; the clause text is unchanged |
 | (b) | Partner agreement | This Schedule in full, as an attachment signed or accepted at onboarding. No partner contract template exists in this repo: `docs/legal` holds only the [DPA template](dpa-template.md). The Schedule is written to attach to whichever agreement counsel or the business chooses (Q10) | To attach at onboarding |
 | (c) | AA-Partner CRM web terms | Nothing yet. The CRM's own LLM gateway runs only a stub provider (§1). **Gate:** the Schedule must be part of the agency terms before any Claude-backed provider is switched on for a CRM agency (card CRM-33a) | Later, gated on CRM-33a |
 | (d) | Trip Planner `/terms` §3 | Already discloses "AI-assisted content" to travellers. Travellers are not tenants, so the Schedule does not apply (see Q2) | No change |
@@ -281,8 +281,8 @@ only after the business approves the final Schedule.
 
 ## 5. Related item outside the tenant Terms: AA-Booking boundary
 
-AA-820 scope item 4 asks for this to be recorded in the AA-Booking `CONTEXT.md` (a separate repo; not
-changed in this PR). Proposed wording:
+AA-820 scope item 4 asks for this to be recorded in the AA-Booking `CONTEXT.md`. Done: AA-Booking `CONTEXT.md`,
+section "AI boundary for high-risk advice (AA-820)", carries the wording below. Proposed wording:
 
 > AA-Booking must not use AI to advise travellers on insurance (choice, underwriting or claims),
 > financing or instalments, refunds or claims decisions, or visas and immigration, unless a
@@ -343,6 +343,11 @@ changed in this PR). Proposed wording:
     only). Routes change by configuration (`shared.llm_role_config`), so engineering re-reads the
     live routes before the list is published. Does
     sending tenant content to them need the DPA or zero-data-retention terms noted in AA's ADR 0001?
+    *Update 31/10/2026 (S262):* the list is now kept in the
+    [AI Use Register](../architecture/ai-use-register.md) (ADR 0009). The portal pages name Claude through Amazon
+    Bedrock as the writer, OpenAI models through Amazon Bedrock as reviewers, the Anthropic API or the OpenAI API used
+    directly with a spending cap "as a fallback" (today only judge routes end at the OpenAI API), and Jev on the
+    privacy notice. Cohere is left out: its embeddings never carry tenant content.
 12. **High-risk boundary (Q12).** Does generic travel content that mentions visas, entry
     requirements or travel insurance (for example "a visa on arrival is available") count as
     "advice" under the high-risk rules? Or does it only count when the content gives a personalised

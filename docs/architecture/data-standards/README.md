@@ -14,12 +14,12 @@ related: [ARCH-08-engineering, ARCH-08-data-management, ARCH-08-scaling, ARCH-08
 
 # AA_Ecosys data standards
 
-**Version 1.8** · S257 · 29/10/2026 · **v1.0 and v1.1 approved by the tech lead** (v1.0: S237 data-architecture review,
+**Version 1.9** · S262 · 31/10/2026 · **v1.0 and v1.1 approved by the tech lead** (v1.0: S237 data-architecture review,
 every recommendation approved, decisions E1–E11; v1.1: S243 N-1; v1.2: X1 close-out, the tech lead approves its root PR; v1.3:
 partner CRM, classes and windows approved in S246 decision D6, the tech lead approves its root PR; v1.4: tour liveness rule
 of ADR 0015, whose answers Q1–Q10 the tech lead decided in S248, root PR merged under DM-11.5 (dev phase); v1.5: enforcement
 facts only (AA-853), no rule change, root PR under DM-11.5; v1.6: facts only from the first capacity review (AA-838), root PR
-under DM-11.5; v1.7: the capacity review decisions D1–D13, approved by the tech lead in S256; v1.8: the C7.2c / C7.2d amendments of ADR 0012, accepted by the tech lead in S257; see the changelog below) · Host ADR:
+under DM-11.5; v1.7: the capacity review decisions D1–D13, approved by the tech lead in S256; v1.8: the C7.2c / C7.2d amendments of ADR 0012, accepted by the tech lead in S257; v1.9: the C7.2a / C7.2c / DM-9.6 amendments of ADR 0018, accepted by the tech lead in S262; see the changelog below) · Host ADR:
 [ADR 0008 — New-app integration and data platform rules](../../adr/0008-new-app-integration-and-data-platform-rules.md)
 (accepted 15/10/2026), with [ADR 0003a — one job table per owner](../../adr/0003a-per-owner-job-tables.md).
 
@@ -41,7 +41,7 @@ AA-CIS-App, AA-TripPlanner-Web, AA-Booking and AA-Partner (the partner CRM) shar
 - **What:** new and changed objects. Existing names stay; legacy objects that break a rule are listed
   once in [Part A §9](01-engineering.md#9-grandfathered-exceptions), each with the roadmap item that
   retires it. New code never copies a grandfathered pattern.
-- **Where:** Dev today; the prod instance (also on acc2, roadmap L9) inherits the same rules plus the
+- **Where:** Dev today; the prod instance (in its own account `aa-prod`, ADR 0018; roadmap L9) inherits the same rules plus the
   prod rows of Part B §9 and Part C §C7.2.
 
 ## The three parts
@@ -150,6 +150,7 @@ ADR 0008.
 | 1.6 | 28/10/2026 | S255 | Facts only, no rule change (AA-838, first monthly capacity review C8, `docs/audits/2026-10-28-S255-aa838-capacity/`; root PR under DM-11.5, dev phase). **C2.2:** TripPlanner reserved concurrency is 15 (browse) / 5 (assembly) in live Terraform, not 10 / 10; target total recomputed to 133 of 135 (`tripplanner` 20 of 30 unchanged); a dated re-check note records the paper worst case 168 with today's `cis-api` pool 10, accepted until 15/12/2026. |
 | 1.7 | 28/10/2026 | S256 | Capacity review decisions D1–D13 (AA-838, `docs/audits/2026-10-28-S255-aa838-capacity/` §4 and §4a), approved by the tech lead in S256. **C3 Retention (rule wording):** the 1M-row hard stop applies to a log table without a retention job kind; a ledger with one is watched by the Partitioning row (D3). **C2.2:** the `cis-api` main pool stays 10 (its `aa859_main_pool_gauge` baseline does not support 5); api `max_capacity` 7 → 3; worst case 120 of 135, the two accepted overages removed (D2). **C1.1a:** `cis-job`, `cis-direct` (default of CIS `get_database_url()`) and `cis-exec` (ECS-exec scripts) added (D9). **C4.2a:** `pg_stat_statements.max = 10000`, pending the next planned reboot (D13). |
 | 1.8 | 29/10/2026 | S257 | Amendments of [ADR 0012 — Environment model](../../adr/0012-environment-model.md) (AA-880), accepted by the tech lead in the S257 session plan; nothing is built, the prod build still waits for a go-live date (D-16). **C7.2c:** the prod Terraform root is `infra/AA-CIS-Infra/accounts/aa365-prod/` (not `envs/prod/`, which AA-841 removed), calling the same environment module as Dev, with its own state bucket; `accounts/aa365` keeps the account-wide layer and Dev (decision 5). **C7.2d:** the prod gate of decision 8 (manual dispatch on `main` by the tech lead, actor allow-list, prod-only IAM trust, never auto-applied) and the rename order of the GitHub environment `prod` → `dev` (decision 6). **C7.2b (fact):** the cross-region backup copy goes to us-west-2 (decision 10). |
+| 1.9 | 31/10/2026 | S262 | Amendments of [ADR 0018 — Lean AWS account model](../../adr/0018-lean-aws-account-model.md) (AA-1004), accepted by the tech lead on 31/10/2026 (item TL-1 of the S261 architecture review, record `docs/audits/2026-10-31-S262-tl-decisions/README.md`); nothing is built, the prod build still waits for a go-live date (D-16). **C7.2a:** the prod RDS instance is in its own account `aa-prod` in us-west-1 (ADR 0018 decisions 3 and 7), no longer on acc2. **C7.2c:** the prod Terraform root is `infra/AA-CIS-Infra/accounts/prod/` in `aa-prod` (not `accounts/aa365-prod/`), with `allowed_account_ids` from a variable, its own state bucket and OIDC roles in that account; `accounts/aa365` keeps the nonprod layer and Dev, `accounts/management` the organization (decision 5). **DM-9.6:** the prod target names the `aa-prod` account and us-west-1. The *Where* line of the index and the Part B purpose follow. |
 
 ## Open items for the tech lead
 

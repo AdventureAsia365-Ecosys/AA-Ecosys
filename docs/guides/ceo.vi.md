@@ -163,7 +163,7 @@ Giữ trang này khớp với: ADR 0006a về đăng nhập nhân viên; menu tr
 `frontend/app/_kit/adminNav.tsx`, đọc ngày 28/10/2026); Cost per app AA-884 (`api/core/app_registry.py`,
 `api/services/platform_cost.py`), báo cáo hằng tháng AA-896 cùng AA-838; ngân sách trong Infra
 `accounts/aa365/variables.tf` và `observability.tf` (đọc trực tiếp ngày 28/10/2026); pháp lý AA-820, AA-886; Dev chỉ
-có dữ liệu thử D-01; prod ADR 0001 / ADR 0012 / C7.2a / D-17 / AA-880; gói Vercel D-18; yêu cầu dữ liệu D-11 và
+có dữ liệu thử D-01; prod ADR 0001 / ADR 0012 / ADR 0018 / C7.2a / D-17 / AA-880; gói Vercel D-18; yêu cầu dữ liệu D-11 và
 [quy trình yêu cầu và xoá dữ liệu](../legal/dsar-erasure-runbook.md); thời gian giữ log D-09 / AA-872; trách nhiệm khi
 có sự cố: [xử lý sự cố](../ops/incident-response.md); video UAT AA-855; đề nghị Google xem lại cảnh báo AA-816. Bản
 tiếng Anh [ceo.md](ceo.md) là bản gốc; sửa bản đó trước rồi cập nhật trang này.

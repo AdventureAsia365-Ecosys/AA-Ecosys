@@ -4,6 +4,12 @@
   losing the cross-account LLM fallback). Separate file, following the `0003a` pattern; ADR 0001 itself only gets a pointer.
 - **Amends:** ADR 0001 decision 2 ("Single Model Gateway"), the sentence "The fallback stays inside acc3 (previous
   model) until acc1 accepts the same agreements". The fallback now stays inside acc3 for good.
+- **Amended by:** [ADR 0009](0009-ai-platform-and-provider-gateway.md) decision 14 (Accepted 2026-10-31, S261):
+  acc3 stays the main Bedrock chat account; acc2 may serve chat models for eval, judge and validate stages only (never
+  writer or tenant stages), after the model passes the qualification ladder; the direct Anthropic and OpenAI APIs are
+  warm paths outside AWS. "No cross-account fallback" therefore holds for writer and tenant stages only; judge and
+  validate routes may end on acc2. The account names
+  follow [ADR 0018](0018-lean-aws-account-model.md) (acc3 = `aa-ai`, acc2 = `aa-nonprod`).
 - **Supersedes:** the AA-296 satellite pattern's acc1 leg and the earlier decision to keep acc1 active for it
   (ADR-2026-022, amended; record in the AA-CIS-Infra ADR index).
 - **Consistent with:** ADR 0001 decisions 1–7, ADR 0004 (every app on acc2), the account map in
