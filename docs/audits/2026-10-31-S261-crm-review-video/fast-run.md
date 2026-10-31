@@ -30,7 +30,7 @@ identities come from the approved plan
 | AA-Partner version | `d29e29e` at the start and the end of every chunk (no deploy during the run) |
 | Browser | one Chromium at a time, closed after each chunk; RAM available before each launch: about 7.4 GB |
 | Egress | VN |
-| Cost | $0: no LLM call, no AI button clicked, no real mail sent, no real address invited |
+| Cost | $0: no LLM call, no AI button clicked, no real person mailed or invited (see Mail below) |
 | Rate limit | no HTTP 429 seen |
 
 ## Result per chunk
@@ -80,6 +80,46 @@ Notes on single chunks:
   shown (Tasks, Automations, Commissions, Marketing, Library) and Help is not faked as empty.
 - **Cleanup**: trips moved to Lost (one booked example left at booked), the Adventure Asia hold released, saved reply and draft
   deleted, ICS feed revoked, both data requests closed as withdrawn, the R16 client moved to the trash.
+
+## Re-run after the review fixes (17:07-17:33 +07)
+
+After the review fixes (masks on before the first paint and asserted where a secret shows, link tokens tied to their
+trip, phone chunks as a real mobile context, cleanup of the imported clients), two full fast passes and one re-run:
+
+| Pass | Run | Result | Failing step | Cause | Fix |
+|---|---|---|---|---|---|
+| 1 | `rv202610315` | 21 of 23 PASS | R08 step 4 (R09 step 1 follows) | Booking refused the client hold: "You checked availability 3 times today". Booking allows 3 re-holds of a departure per UTC day once a hold of it was let go, and runs 1 to 5 of the day all held, then released, the same departure (2026-11-20). Product rule working as designed. | prep takes the next eligible departure per run; R08 names a refused hold |
+| 2 | `rv202610316` (departure 2026-12-04) | 21 of 23 PASS | R17 step 6; R19 step 4 | R17: the language was picked before the reloaded page hydrated, so the select did not submit (script timing). R19: one page landed on the partner sign-in page in the middle of the chunk, near the 30-minute access-token renewal; the saved session was still valid right after. | R17 waits for the page and submits the form when the pick did not |
+| re-run | `rv202610316` | R17 PASS 7/7, R19 PASS 7/7 | – | – | – |
+
+Every other chunk passed in both passes, AA-Partner `d29e29e` at the start and the end of each. The R19 sign-in
+redirect was seen once in three passes; if it shows again in a recorded take, the take stops (the chunk fails) and is
+recorded again. No HTTP 429 from the anonymous client host.
+
+## Mail during a run
+
+The review never presses Send in the mail composer (R13) or the written-proposal hand-over (R07), but some steps
+make the CRM queue mail to the invented client, and that mail really leaves: the CRM sends client mail only through
+the agency's connected mailbox (no fallback to Adventure Asia's mail service), and the invented agency has a real
+Gmail account connected on Dev. The mails are:
+
+- sending a proposal (prep for R10, R06): the client link to the lead;
+- the paid deposit (R10): a portal invitation to each traveller;
+- the traveller portal (R11): the sign-in code mail and the companion invite.
+
+That is about 6 to 8 mails per run, all to `@example.invalid` addresses, which no server accepts: each one bounces
+back into the connected Gmail mailbox. No real person receives anything. The clean-up step reports the outbound mail
+of the run's trips by status (`meta.outbound_mail` in its result, no address or subject).
+Ways to stop this, for the tech lead to choose: connect a test-only mailbox to the invented agency instead of the
+real Gmail account (the bounces then land there), or add a Dev-only rule in AA-Partner that marks mail to `.invalid`
+recipients as sent without handing it to the provider.
+
+## Deviations from the plan
+
+- **R10**: the plan lists the Booking staff identity (D) for R10. The invoice trip has no Adventure Asia item, so
+  there is nothing for Booking staff to see; the Adventure Asia hold appears in R08 (client hold) and R12 instead.
+- **R19**: Help is built now, so five empty pages are shown, not six (see above).
+- **Plan risk row "real mail leaving"**: it reads as if no mail leaves; see Mail during a run for what does.
 
 ## Not covered by this run
 

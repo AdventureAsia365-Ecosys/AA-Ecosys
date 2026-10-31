@@ -13,6 +13,25 @@ let startTheme;
 
 const themeButton = (page) => page.getByRole('button', { name: /^Theme: |^Giao diện: / });
 
+/**
+ * Pick a language in the top bar and wait for the page to come back in it. The select submits its form on change once
+ * the page is hydrated; picked a moment earlier (right after the previous switch reloaded the page) nothing happens,
+ * so the form is then submitted the way its no-JavaScript button would.
+ */
+async function switchLocale(page, h, locale, lang) {
+  await page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => {});
+  const sel = page.getByTestId('locale-select').first();
+  await choose(h, sel, locale);
+  const html = page.locator('html');
+  try {
+    await h.expect(html).toHaveAttribute('lang', lang, { timeout: 6_000 });
+  } catch {
+    await sel.evaluate((el) => el.form && el.form.requestSubmit()).catch(() => {}); // a late submit may be navigating already
+    await h.expect(html).toHaveAttribute('lang', lang, { timeout: 20_000 });
+  }
+  await page.waitForLoadState('load');
+}
+
 sc.steps = [
   {
     caption: {
@@ -83,15 +102,10 @@ sc.steps = [
       vi: 'Toàn bộ giao diện cũng dùng được bằng tiếng Việt. Mỗi người tự chọn ngôn ngữ ở thanh trên cùng.',
     },
     run: async (page, h) => {
-      const sel = page.getByTestId('locale-select').first();
-      await choose(h, sel, 'vi-VN');
-      await page.waitForLoadState('load');
-      await h.expect(page.locator('html')).toHaveAttribute('lang', 'vi', { timeout: 20_000 });
+      await switchLocale(page, h, 'vi-VN', 'vi');
       await h.expect(page.getByRole('link', { name: 'Quy trình bán' }).first()).toBeVisible();
       await h.pause(2500);
-      await choose(h, page.getByTestId('locale-select').first(), 'en-AU');
-      await page.waitForLoadState('load');
-      await h.expect(page.locator('html')).toHaveAttribute('lang', 'en', { timeout: 20_000 });
+      await switchLocale(page, h, 'en-AU', 'en');
     },
   },
   {
