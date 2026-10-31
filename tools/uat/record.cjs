@@ -35,6 +35,14 @@ async function main() {
   }
 
   if (sc.fastOnly && !fast) throw new Error(`${sc.id} is a data step: run it with --fast only`);
+  // The narration was made from captions.json: a recorded take whose steps say something else (scenario edited, or
+  // steps chosen from run state that changed since) would play the wrong voice-over.
+  const cPath = path.join(work, 'captions.json');
+  if (!fast && fs.existsSync(cPath)) {
+    const made = JSON.parse(fs.readFileSync(cPath, 'utf8')).captions.map((c) => `${c.en}\n${c.vi}`).join('\n');
+    const now = sc.steps.map((s) => `${s.caption.en}\n${s.caption.vi}`).join('\n');
+    if (made !== now) throw new Error(`${sc.id}: the steps changed since --captions; make the captions and the narration again`);
+  }
   // Failure shots of an earlier run are not evidence of this one.
   for (const f of fs.readdirSync(work)) if (/^fail-step-\d+\.png$/.test(f)) fs.rmSync(path.join(work, f));
   if (typeof sc.prepare === 'function') await sc.prepare({ fast });
