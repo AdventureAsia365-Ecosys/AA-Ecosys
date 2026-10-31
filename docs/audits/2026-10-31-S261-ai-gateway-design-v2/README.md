@@ -1,9 +1,9 @@
 ---
 id: OPS-08-s261-ai-gateway-design-v2
-title: "Cổng AI và dữ liệu (AI gateway) v2: thiết kế đề xuất cho mọi nguồn trả phí, mọi app, mọi stage (S261)"
-description: "Thiết kế cho tech lead: một cổng cho mọi nhà cung cấp AI và dữ liệu trả phí (LLM qua Bedrock, Anthropic, OpenAI, Azure OpenAI; Jev, DataForSEO, Geoapify), mọi app và stage; 8 chức năng, thứ tự làm, 3 quyết định."
+title: "Cổng AI và dữ liệu (AI gateway) v2: thiết kế đã duyệt cho mọi nguồn trả phí, mọi app, mọi stage (S261)"
+description: "Thiết kế cho tech lead, đã duyệt 31/10: một cổng cho mọi nhà cung cấp AI và dữ liệu trả phí (LLM qua Bedrock, Anthropic, OpenAI, Azure OpenAI; Jev, DataForSEO, Geoapify), mọi app và stage; 8 chức năng, thứ tự làm, 3 quyết định, kế hoạch giao diện và issue."
 type: report
-status: draft
+status: active
 owner: nghiep
 audience: [cto, engineer]
 applies_to: [ecosystem]
@@ -12,10 +12,12 @@ review_every_days: 30
 related: [AA-804, AA-642, AA-900, AA-1002, AA-820, AA-842, AA-1004, AA-1016, AA-1015, AA-964, AA-896]
 ---
 
-# Cổng AI và dữ liệu (AI gateway) v2: thiết kế đề xuất (S261, 31/10/2026)
+# Cổng AI và dữ liệu (AI gateway) v2: thiết kế đã duyệt (S261, 31/10/2026)
 
 Tác nhân: Claude Code. Chỉ là tài liệu: không đổi code, không gọi AWS, DB hay LLM, không đổi route nào.
-Quyết định kiến trúc đi kèm: [root ADR 0009](../../adr/0009-ai-platform-and-provider-gateway.md) (đang chờ duyệt).
+Quyết định kiến trúc đi kèm: [root ADR 0009](../../adr/0009-ai-platform-and-provider-gateway.md). Anh đã duyệt cả 3
+câu ngày 31/10, nên phần ADR mà 3 câu phủ đã chuyển sang Accepted; 3 điểm còn lại vẫn là đề xuất, duyệt riêng khi tới
+bước cần nó.
 
 ## Cổng là gì, phạm vi tới đâu
 
@@ -55,8 +57,8 @@ Hai từ dùng trong cả bài:
 |---|---|---|---|
 | Bedrock acc3 (Claude, GPT trên Bedrock) | Gần hết stage viết, chấm, kiểm của CIS; soạn lịch trình TripPlanner | Bị chặn từ 29/10 (Error 002); là nguồn chính duy nhất | Một miền sự cố; luôn có đường dự phòng ở miền khác |
 | Bedrock acc2 (Cohere Embed; chat: Nova, Llama, Kimi) | Embedding cho CIS và tìm kiếm TripPlanner | Embedding chạy được. Chat: acc2 không gọi được Claude hay GPT (nhà bán lại TrueIDC chặn), chỉ Nova, Llama, Kimi trả lời; chưa stage nào dùng chat trên acc2. Nếu bật, lần gọi chat đó sẽ bị ghi thiếu tài khoản nên không vào ngân sách (sửa ở bước 1) | Ghi đúng tài khoản; có thể làm miền thứ hai cho chấm / kiểm (quyết định 3) |
-| Anthropic API trực tiếp | Đường thứ hai cho Claude | Đã chuẩn bị đường Dev, trần 150 USD/tháng; chưa nạp tiền, chưa có khoá | Đường dự phòng ấm, khác miền sự cố (quyết định 2) |
-| OpenAI API trực tiếp | Dự phòng cuối cho vài stage chấm | Hết tiền | Giữ là dự phòng cuối, có trần, có kiểm tra sống |
+| Anthropic API trực tiếp | Đường thứ hai cho Claude (stage viết) | Đã chuẩn bị đường Dev, trần 150 USD/tháng; chưa nạp tiền, chưa có khoá | **Đường dự phòng ấm** cho stage viết, khác miền sự cố; đã duyệt nạp 50 USD, trần 150 USD/tháng, kiểm tra sống hằng ngày (quyết định 2) |
+| OpenAI API trực tiếp | Đường thứ hai cho model chấm GPT | Hết tiền | **Đường dự phòng ấm** cho stage chấm, khác miền sự cố, đứng trước acc2 (anh chốt 31/10: "API ngoài là cả Anthropic và OpenAI"); có trần, kiểm tra sống hằng ngày. Cần nạp tiền và đặt trần chi tháng: con số trình anh duyệt trước khi nạp; chưa nạp thì trang giám sát hiện đỏ "chưa có tiền" |
 | Azure OpenAI | Một đường GPT ngoài AWS, nếu sau này cần | Đã có code nối (làm ở AA-1002, có kiểm thử) nhưng chưa có tài khoản Azure, chưa bật nguồn nào, không tốn tiền; không phải code chết | Giữ code, không bật; chỉ bật khi cần thêm một đường GPT và anh đã duyệt chi phí |
 | Bedrock Batch (acc3) | Viết lại tour hàng loạt (chạy theo lô) | Không ghi sổ (đã kiểm code: ba file chạy theo lô không có dòng ghi chi phí nào) | Đi qua cổng, ghi sổ như lần gọi thường |
 | **Jev** | Quyết định có kiểu (chọn, chấm điểm), không ra chữ | Client riêng ngoài cổng; ghi hai sổ; không trần trước khi gọi; số dư chỉ ước tính; có danh sách tenant được phép | Một loại nguồn "quyết định" trong cổng; trần trước khi gọi (hết trần thì coi như Jev lỗi, việc vẫn chạy theo luật cũ); giữ danh sách tenant và các chế độ tắt / thử / áp dụng |
@@ -127,53 +129,126 @@ nửa ngày).
 |---|---|---|---|---|---|
 | 0. Đo trước | Đếm trong sổ ghi: stage nào còn gọi qua đường cũ, chỗ nào còn dùng model cố định, để biết bỏ gì trước (chỉ đọc) | Điều hướng, Truy vết | Nửa phiên | 0 USD | Bảng số đếm; bước 4 bỏ đường nào là dựa vào số này |
 | 1. Sửa lỗi không tốn tiền | Ghi đúng tài khoản cho lần gọi chat trên acc2; nhận đúng câu "hết tiền" của Anthropic để không gọi lại mãi; thêm trần cho đường DataForSEO đang không có trần; thêm trần trước khi gọi cho Jev; TripPlanner dừng gọi khi không biết đã tiêu bao nhiêu; xoá code DataForSEO cũ | Quản lý, Truy vết, Gọi | 1 phiên | 0 USD | Mỗi lỗi có bài kiểm thử xanh; bảng kiểm: mọi chỗ gọi trả phí đều có trần; không route nào đổi |
-| 2. Anh duyệt (không phải việc code) | Anh đọc bản này, trả lời 3 câu ở dưới; phần ADR 0009 mà 3 câu phủ chuyển sang Accepted | — | Khoảng 1 giờ của anh | 0 USD | ADR 0009 được merge với trạng thái Accepted |
+| 2. Anh duyệt (không phải việc code) | **Xong 31/10:** anh đồng ý cả 3 câu; phần ADR 0009 mà 3 câu phủ chuyển sang Accepted | — | Khoảng 1 giờ của anh | 0 USD | ADR 0009 được merge với trạng thái Accepted |
 | 3. Sổ ghi chung và trang giám sát | Mỗi lần gọi (cả bị từ chối) có một dòng cùng dạng, có độ trễ; Jev, DataForSEO, Geoapify nối vào cùng dạng; màn xem theo job / tour; trang "Nguồn trả phí" với số dư, chi tiêu, lỗi, độ trễ | Truy vết, Giám sát | 2–3 phiên | 0 USD | Một trang trong admin cho thấy mọi nguồn trả phí với số thật của Dev; mở một job thấy từng lần gọi theo thời gian |
 | 4. Sổ nguồn mở rộng, họ model, tham số | Jev, DataForSEO, Geoapify thành dòng trong sổ nguồn; miền sự cố; họ model và khả năng là dữ liệu; tham số theo stage × model; chọn model ở một chỗ duy nhất | Nguồn, Họ model, Tuỳ biến, Điều hướng | 3–4 phiên | 0 USD | Thêm nhà cung cấp hay model mới = một thay đổi cấu hình nhỏ, không sửa code; trong admin chỉ việc bật / tắt; vẫn chưa route nào đổi |
-| 5. Độ tin cậy | Đường dự phòng ấm khác miền sự cố; kiểm tra sống định kỳ; giới hạn tổng thời gian chờ; tự tạm ngừng một nguồn đang lỗi liên tục; việc bị từ chối tự chạy lại sau; diễn tập chuyển dự phòng hằng tháng trên Dev | Điều hướng, Quản lý, Giám sát | 2–3 phiên | Theo quyết định 2: nạp 50 USD một lần, rồi khoảng 1–2 USD/tháng | Ô trạng thái trên trang admin hiện xanh cho hai miền sự cố; báo cáo diễn tập: tắt nguồn chính, stage chuyển sang dự phòng trong giới hạn thời gian, kèm chi phí |
+| 5. Độ tin cậy | Đường dự phòng ấm khác miền sự cố; kiểm tra sống định kỳ; giới hạn tổng thời gian chờ; tự tạm ngừng một nguồn đang lỗi liên tục; việc bị từ chối tự chạy lại sau; diễn tập chuyển dự phòng hằng tháng trên Dev | Điều hướng, Quản lý, Giám sát | 2–3 phiên | Theo quyết định 2: nạp 50 USD Anthropic một lần, rồi khoảng 1–2 USD/tháng; tiền nạp OpenAI trình anh riêng | Ô trạng thái trên trang admin hiện xanh cho hai miền sự cố; báo cáo diễn tập: tắt nguồn chính, stage chuyển sang dự phòng trong giới hạn thời gian, kèm chi phí |
 | 6. Dùng chung cho các app, thử model mới | TripPlanner và CRM dùng lõi chung (CRM giữ cấu hình và sổ riêng). Model mới được thử từng bước nhỏ, so với model đang dùng, chạy song song không ảnh hưởng thật, rồi mới chuyển; lỗi thì quay lại. Trước lần đổi đầu tiên: đo mức hiện tại của model viết, kiểm model chấm với 40 mẫu anh gán nhãn (khoảng 2 giờ của anh) | Gọi, Họ model | 3–5 phiên | Mỗi model mới vài USD (thử nhanh dưới 0,10 USD; so sánh tối đa 50 tour khoảng 4 USD); mỗi lần chạy trả phí xin anh riêng | TripPlanner và CRM hiện cùng trang giám sát. Đổi model ở stage viết chính: chờ anh duyệt, kèm báo cáo so sánh, chi phí mỗi tour và độ trễ. Đổi ở stage chấm / kiểm: làm khi thử đạt, báo anh sau với cùng báo cáo đó |
 
 **Vì sao đường dự phòng ấm ở bước 5, và không phải chờ tới đó.** Bước 5 làm cho việc dự phòng tự động (tự kiểm tra,
-tự chuyển, diễn tập). Nhưng bài học 29/10 không cần chờ: khi anh chọn Có ở quyết định 2, đường Anthropic bật tay được
+tự chuyển, diễn tập). Nhưng bài học 29/10 không cần chờ: anh đã chọn Có ở quyết định 2, nên đường Anthropic bật tay được
 ngay sau bước 2 (hướng dẫn đã có: nạp tiền, tạo khoá, bật trong admin, rồi thử khoảng 5 tour, dưới 0,50 USD), trong lúc
 bước 3–4 vẫn tiếp tục.
 
-## Cần anh quyết định (3 câu)
+## Anh đã quyết định (31/10): đồng ý cả 3 câu
 
-1. **Phạm vi: một cổng cho mọi nhà cung cấp AI và dữ liệu trả phí** (LLM, Jev, DataForSEO, Geoapify, Guardrails).
-   CRM dùng chung code của cổng nhưng giữ cấu hình và sổ riêng; đó là quy định đã có, giữ nguyên.
-   - Đề xuất: **Có**, duyệt bản này và ADR 0009 như đang viết.
-   - Nếu chọn Có: làm bước 3, 4 và 6; chi phí hạ tầng 0 USD, chỉ tốn thời gian code.
-   - Nếu chọn Không thì: chỉ làm bước 1 (0 USD); Jev, DataForSEO, Geoapify giữ client và sổ riêng; vẫn 5 nơi ghi
-     không cộng gộp được; không có trang chung. Chi phí 0 USD.
-2. **Đường dự phòng ấm, khác miền sự cố, là bắt buộc**: nạp **50 USD** cho đường Anthropic API (đủ khoảng 800 tour
-   viết lại, bước viết tốn khoảng 0,06 USD/tour), giữ trần chi **150 USD/tháng** đã đặt; kiểm tra sống hằng ngày mọi
-   nguồn trên Dev (dưới 1 USD/tháng, riêng Anthropic dưới 0,03 USD/tháng); diễn tập chuyển dự phòng mỗi tháng (khoảng
-   0,25 USD một lần). Cảnh báo đi qua chuông admin và email vận hành đã có, 0 USD.
-   - Đề xuất: **Có**; sự cố 29/10 cho thấy chỉ một nguồn là dừng toàn bộ việc viết.
-   - Nếu chọn Có: 50 USD trả trước một lần, dùng dần; chi đều khoảng 1–2 USD/tháng, cộng tiền gọi thật nếu phải
-     chuyển sang Anthropic.
-   - Nếu chọn Không thì: lần acc3 bị chặn tới, mọi stage viết lại dừng như 29/10 cho tới khi acc3 mở lại. Chi phí
-     0 USD.
-3. **acc2 được chạy model chat cho chấm và kiểm** (không cho stage viết chính, không cho stage của tenant). acc2 chỉ
-   chạy được **Nova (Amazon), Llama 4 (Meta) và Kimi K3 (Moonshot)**, không phải Claude hay GPT (TrueIDC chặn). Tour
-   viết bằng tiếng Anh, nên chỉ cần model viết tốt tiếng Anh. Mỗi model trên acc2 phải qua bước thử, so với model chấm
-   hiện tại, trước khi chạy thật. Việc này thay quy định cũ "chat chỉ chạy trên acc3".
-   - Vì sao cần khi đã có quyết định 2: Anthropic chỉ có Claude, mà model chấm phải khác hãng với model viết (Claude).
-     Khi acc3 hỏng, model chấm GPT hôm nay không còn chỗ chạy (OpenAI API hết tiền). acc2 giúp phần chấm / kiểm vẫn
-     chạy khi acc3 gặp sự cố, kể cả khi Anthropic cũng lỗi.
+Anh trả lời ngày 31/10: **đồng ý hết đề xuất**, kèm một ý: *"API ngoài là cả Anthropic và OpenAI"*. Nghĩa là cả hai
+đường gọi thẳng (không qua AWS) đều là đường dự phòng ấm: có tiền, có trần chi, được gọi thử mỗi ngày.
+
+1. **Một cổng cho mọi nhà cung cấp AI và dữ liệu trả phí** (LLM, Jev, DataForSEO, Geoapify, Guardrails), mọi app,
+   mọi stage. CRM dùng chung code của cổng nhưng giữ cấu hình và sổ riêng, như quy định đã có.
+   - **Đã duyệt: Có.** Làm bước 3, 4 và 6; hạ tầng 0 USD, chỉ tốn thời gian code. Tạo 2 issue mới N1 và N2 (mục
+     "Issue" bên dưới).
+2. **Đường dự phòng ấm, khác miền sự cố, là bắt buộc**, và gồm **cả Anthropic lẫn OpenAI**.
+   - **Đã duyệt: Có.**
+   - **Anthropic API** (dự phòng cho stage viết, vì model viết là Claude): nạp **50 USD** một lần (đủ khoảng 800 tour
+     viết lại, khoảng 0,06 USD/tour), trần chi **150 USD/tháng** đã đặt.
+   - **OpenAI API** (dự phòng cho stage chấm, vì model chấm hôm nay là GPT): hôm nay hết tiền. Anh chưa nêu số tiền
+     nạp và trần chi tháng, nên trước khi nạp tôi trình một con số (tính từ chi phí chấm mỗi tour đo ở bước 0) để
+     anh duyệt. Chưa nạp thì trang giám sát hiện đỏ "chưa có tiền".
+   - Kiểm tra sống hằng ngày mọi nguồn trên Dev: dưới 1 USD/tháng. Diễn tập chuyển dự phòng mỗi tháng: khoảng
+     0,25 USD một lần, mỗi lần thử một stage viết chuyển sang Anthropic và một stage chấm chuyển sang OpenAI.
+     Cảnh báo qua chuông admin và email vận hành đã có, 0 USD.
+3. **acc2 được chạy model chat, chỉ cho chấm và kiểm** (không cho stage viết chính, không cho stage của tenant).
+   acc2 chạy được **Nova (Amazon), Llama 4 (Meta) và Kimi K3 (Moonshot)**, không phải Claude hay GPT (TrueIDC chặn).
+   - **Đã duyệt: Có.** Stage viết giữ Claude (Sonnet 5.5) cho tới khi bước thử chứng minh model khác không kém hơn.
+   - Thứ tự dự phòng cho stage chấm: GPT trên acc3 → OpenAI API → model trên acc2 (chỉ sau khi model đó qua bước
+     thử). acc2 giúp phần chấm / kiểm vẫn chạy khi cả acc3 và OpenAI cùng lỗi.
+   - Mỗi model trên acc2 thử dưới 2 USD; mỗi lần chạy trả phí vẫn xin anh riêng.
    - Lưu ý: acc2 "khác người trả tiền" với acc3 là sự thật hôm nay. Khi đổi cách thanh toán (dự kiến 01/12) hay acc2
      rời TrueIDC thì phải kiểm lại, vì rời TrueIDC có thể làm acc2 mất quyền AI.
-   - Đề xuất: **Có**, chỉ cho chấm / kiểm; stage viết vẫn giữ Claude (Sonnet 5.5) cho tới khi bước thử chứng minh
-     model khác không kém hơn.
-   - Nếu chọn Có: thử 1–2 model, dưới 2 USD mỗi model; mỗi lần chạy trả phí vẫn xin anh riêng.
-   - Nếu chọn Không thì: acc2 chỉ chạy embedding; khi acc3 hỏng, phần chấm / kiểm dừng (trừ khi nạp tiền OpenAI API).
-     Chi phí 0 USD.
 
-**Không cần trả lời bây giờ.** ADR 0009 còn 3 đề xuất được duyệt riêng (luật model viết / model chấm theo hãng, kèm 2
+**Chưa cần trả lời.** ADR 0009 còn 3 đề xuất được duyệt riêng (luật model viết / model chấm theo hãng, kèm 2
 giờ anh gán nhãn ở bước 6; cấu hình nguồn chỉ đổi qua migration; vùng dữ liệu được phép cho tenant) và 4 việc hoãn
 (vùng AWS thứ hai, lọc thông tin cá nhân cho TripPlanner, lưu nội dung prompt, luật chất lượng mới cho bước viết
 tour). Mỗi điểm sẽ được trình kèm đề xuất khi tới bước cần nó.
+
+## Giao diện (UI): làm lại thế nào, ảnh hưởng gì
+
+Tóm gọn: **thêm 1 trang mới, không xoá trang nào, dời hoặc gộp 5 tab** cho gọn. Mọi thay đổi chỉ ở trang admin của
+CIS, nơi nhân viên AA làm việc. Trang mới dựng bằng đúng bộ khung giao diện chung (UI kit) như các trang khác, không tự
+vẽ riêng. Công sức khoảng **5 phiên agent**, đã nằm trong cỡ việc của các bước 3–6 ở trên, không cộng thêm.
+
+### Trang mới: "Nhà cung cấp AI"
+
+Hôm nay thông tin về nguồn AI nằm rải ở ba nơi: trang Cài đặt (tab Model, tab Credit Jev), trang Chi phí (tab LLM,
+DataForSEO, Jev, Ngân sách) và ô trạng thái LLM. Trang mới gom tất cả vào nhóm menu "AI & chi phí", gồm 5 tab:
+
+| Tab | Anh thấy gì | Thay cho | Làm ở bước |
+|---|---|---|---|
+| **Nhà cung cấp** | Mỗi nguồn một dòng: Bedrock acc3, Bedrock acc2, Anthropic API, OpenAI API, Azure (đang tắt), Jev, DataForSEO, Geoapify, Guardrails, Mapbox (chỉ xem). Mỗi dòng: sống hay không, còn quyền không, thuộc miền sự cố nào, còn bao nhiêu tiền, đã chi bao nhiêu so với trần, nhanh hay chậm, tỉ lệ lỗi, lần kiểm tra gần nhất, nút "Thử". Anthropic và OpenAI hiện rõ là đường dự phòng ấm; OpenAI hiện đỏ "chưa có tiền" cho tới khi nạp. Bấm vào dòng mở chi tiết nguồn | Tab Model / Kết nối và tab Credit Jev ở Cài đặt, ô trạng thái LLM, phần số dư ở trang Chi phí | 3 (xem), 4 (nguồn mới), 5 (kiểm tra sống, tự tạm ngừng) |
+| **Điều hướng** | Mỗi app × stage một dòng: model chính và dự phòng, ngân sách, nút tắt, phần chạy thử song song. Một nhãn cho biết stage đó đã có đường dự phòng khác miền sự cố chưa (stage viết: Claude trên acc3 → Anthropic API; stage chấm: GPT trên acc3 → OpenAI API → acc2 sau khi thử đạt) | Phần chọn model theo stage ở Cài đặt | 4, nhãn ở 5 |
+| **Model và thử nghiệm** | Danh sách họ model, hãng, nơi chạy, khả năng, giá (chỉ xem, chỉ bật / tắt được); kết quả so sánh model; kết quả thử model mới | Tab danh mục model, báo cáo so sánh | 4, 6 |
+| **Ngân sách** | Một bảng cho mọi tầng trần: theo nguồn, app, stage, đại lý, thử nghiệm; danh sách "mọi chỗ gọi trả phí đều có trần" | Tab Ngân sách ở trang Chi phí, trần theo nguồn | 4 |
+| **Lần gọi** | Tìm mọi lần gọi theo app, nguồn, stage, job, tour, đại lý, kết quả; độ trễ. Bấm một dòng mở **màn truy vết**: mọi lần gọi của job / tour đó theo thời gian, kể cả lần bị từ chối. Màn này cũng mở được từ trang job, trang tour và trang quyết định Jev | Mới hoàn toàn | 3 |
+
+### Trang cũ thay đổi
+
+| Trang | Thay đổi | Làm ở bước |
+|---|---|---|
+| Chi phí | Thành trang tiền: giữ Tổng quan, Dự báo, Hoá đơn AWS; gộp 3 tab LLM, DataForSEO, Jev thành một tab "Chi cho AI và dữ liệu"; tab Ngân sách dời sang trang mới | 3, 4 |
+| Cài đặt | Bỏ tab Model và tab Credit Jev (đã dời sang trang mới) | 4 |
+| Tổng quan admin | Bảng chi phí thành ô tóm tắt "Nguồn trả phí", bấm vào sang trang mới | 3 |
+| Chi phí theo app | Phần AI của mỗi app lấy từ sổ ghi chung (có cả CRM) | 3 |
+| Quyết định Jev | Mỗi kết quả có link tới lần gọi và màn truy vết | 3 |
+| Viết lại S1 | Bỏ ô chọn model cố định cho từng lần chạy | 4 |
+| Tenant 360 | Thêm ô ngân sách AI của đại lý và trạng thái | riêng (AA-1016) |
+| Bảng các app | Chữ cho TripPlanner: "AI tạm dừng (không đọc được số đã tiêu)" | 1 |
+
+### Ai nhận ra điều gì
+
+- **Nhân viên admin CIS:** mọi thứ về nguồn AI ở một trang. Có mấy thứ cố ý không sửa được trên giao diện nữa: giá,
+  khoá bí mật, địa chỉ nhà cung cấp, phạm vi dữ liệu (chỉ đổi qua thay đổi cấu hình có duyệt); không còn chọn tài
+  khoản AWS cho từng stage. Lưu một route làm mất đường dự phòng thì bị chặn (trên Dev chỉ cảnh báo). Xem cần quyền
+  xem chi phí, sửa cần quyền quản trị AI; mọi lần sửa được ghi lại.
+- **Đại lý dùng Content studio:** chỉ đổi đoạn chữ chính sách riêng tư và điều khoản (danh sách nhà cung cấp AI).
+  Ngân sách AI của từng đại lý chỉ nhân viên AA thấy, vì đại lý chỉ thấy nội dung.
+- **Đại lý dùng CRM:** chưa đổi gì; phần cài đặt AI làm trong CRM ở issue riêng (AA-964).
+- **Khách dùng TripPlanner:** có thể thấy bản lịch trình đơn giản (không AI) thường hơn một chút, vì khi không biết
+  đã tiêu bao nhiêu thì TripPlanner dừng gọi AI thay vì gọi tiếp.
+- **Booking:** không ảnh hưởng.
+- **Link cũ** (Cài đặt › Model, Chi phí › Ngân sách / LLM / DataForSEO / Jev, trang LLM usage cũ) vẫn mở được, tự
+  chuyển sang chỗ mới.
+- **Kiểm thử và video UAT:** 7 bài kiểm thử tự động có sẵn được sửa theo đường dẫn mới; mỗi PR giao diện có ảnh chụp
+  máy tính và điện thoại, nền sáng và tối; kịch bản UAT nào mở Cài đặt hay Chi phí thì đổi đường dẫn.
+
+## Issue: cập nhật hay tạo mới (ít nhất có thể)
+
+**Tạo mới 2, cập nhật 6, chỉ thêm ghi chú 2, không đụng 4, không đóng issue nào.** Tạo 2 issue mới vì bước 4 và
+bước 5 mỗi bước 2–4 phiên; nhét vào AA-642 (vốn đã nhiều lát việc) thì một issue kéo dài cả tháng, khó chốt xong.
+Hạn có chữ "đề xuất" là hạn mới, anh sửa được.
+
+| Issue | Loại | Thêm gì (nói gọn) | Xong khi | Bước | Trạng thái, ưu tiên, hạn |
+|---|---|---|---|---|---|
+| AA-804 | Cập nhật | Sửa tên "ADR 0006" thành "0009"; thay luật cũ "chỉ Bedrock" bằng luật mới (Anthropic và OpenAI là đường ấm có trần, có kiểm tra; acc2 chỉ chấm / kiểm); sổ ghi chung cho mọi nhà cung cấp. Giao diện: khung trang mới, tab Nhà cung cấp (chỉ xem), tab Lần gọi và màn truy vết, gộp tab chi phí, ô tóm tắt ở Tổng quan, chi phí theo app | ADR 0009 merge (Accepted); lần gọi bị từ chối có dòng 0 USD; mở một job thấy đủ các lần gọi trên Dev; tab Nhà cung cấp có số thật của Dev cho mọi nguồn trả phí; sổ ghi lệch hoá đơn AWS không quá 5%; 7 bài kiểm thử xanh; có ảnh chụp | 2, 3 | Backlog → Todo, High, hạn 14/11 (đề xuất) |
+| AA-642 | Cập nhật | Lát mới "S0" (0 USD): bước 0 đo; bước 1 sửa lỗi không tốn tiền (tài khoản acc2, câu "hết tiền" của Anthropic, trần DataForSEO và Jev, TripPlanner dừng khi không đọc được số tiêu, xoá code DataForSEO cũ, sửa link Jev, chữ trên Bảng các app). Gộp các đường gọi cũ vào một đường, có ngày bỏ; bỏ chọn model cố định ở Viết lại S1. Giữ các lát cũ (TripPlanner dùng lõi chung, dung lượng) | S0: mỗi lỗi có bài kiểm thử xanh, danh sách trần đủ, không route nào đổi; ngày bỏ đường cũ theo số đo ở bước 0 | 0, 1, 4, 6 | Todo, Medium → High, hạn 13/12 giữ |
+| AA-900 | Cập nhật | Thang thử model mới (thử nhanh → kiểm model chấm với 40 mẫu anh gán nhãn → so sánh → chạy song song → chuyển, quay lại được bằng một lần sửa); kiểm "model chấm khác hãng model viết" theo họ model; mục Thử nghiệm trên trang mới | Một model chấm trên acc2 đi tới bước kiểm với 40 mẫu, có báo cáo chi phí; mục Thử nghiệm hiện kết quả | 6 | Todo, Low → Medium |
+| AA-1016 | Cập nhật | Ô ngân sách AI ở Tenant 360 và trạng thái ở thẻ chi phí; tầng đại lý hiện trong tab Ngân sách | Như cũ, cộng ảnh chụp hai màn | 4 / riêng | Backlog, Medium, hạn trước tenant trả tiền đầu tiên |
+| AA-820 | Cập nhật | Danh sách nhà cung cấp AI trong chính sách riêng tư / điều khoản khớp sổ đăng ký AI cho dữ liệu đại lý (Anthropic qua Bedrock; Anthropic trực tiếp có được dùng không; model chấm do OpenAI làm). Nova, Llama, Kimi không cần liệt kê vì acc2 không chạy stage của đại lý. Chốt stage đại lý có rời "chỉ AWS" không; nếu không thì giữ cách xử lý khi AI không có | Trang chính sách và điều khoản sửa cùng PR với sổ đăng ký AI | — | Todo, High, hạn 11/11 giữ |
+| AA-964 | Cập nhật | Cài đặt AI và bản nháp AI trong CRM, theo cùng mẫu sổ ghi; Guardrails ghi chi phí; trang đại lý hiện số thật | Dòng của CRM hiện trong tab Lần gọi và chi phí của CIS | 6 | Backlog, giữ |
+| AA-1004 | Chỉ ghi chú | Kiểm lại miền sự cố và thử mọi nguồn trước và sau lần đổi người trả tiền 01/12; vùng us-west-2 chỉ cho thử nghiệm | — | 5 | In Progress, giữ |
+| AA-842 | Chỉ ghi chú | Vẫn hoãn (giám sát trả phí đang dừng); sổ ghi và màn truy vết là bản 0 USD thay thế; Langfuse Cloud bị loại | — | — | Backlog, giữ |
+| **N2 (mới)** | Tạo | "Sổ nguồn v2": Jev, DataForSEO, Geoapify, Guardrails thành dòng nguồn có miền sự cố; họ model và khả năng là dữ liệu; tham số theo stage × model; route có thêm app; bỏ chọn tài khoản theo stage; cấu hình đổi qua thay đổi có duyệt; chọn model ở một chỗ. Giao diện: tab Điều hướng, tab Model, chi tiết nguồn cho nguồn mới, gộp Ngân sách, bỏ 2 tab ở Cài đặt (link cũ tự chuyển) | Thêm model hay nguồn loại đã biết = một thay đổi cấu hình, không sửa code; admin chỉ còn bật / tắt; không route nào đổi; kiểm thử và ảnh chụp xanh | 4 | Mới, High, hạn 28/11 (đề xuất) |
+| **N1 (mới)** | Tạo | "Độ tin cậy": đường ấm Anthropic và OpenAI; kiểm tra sống hằng ngày; giới hạn tổng thời gian chờ; tạm ngừng cả tài khoản bị chặn; "hết tiền" thì dừng nguồn đó; chạy lại việc bị từ chối; cảnh báo ngay qua chuông admin và email; luật dự phòng (trên Dev chỉ báo); diễn tập hằng tháng; phần nhà cung cấp trong bản tin hằng ngày. Giao diện: trạng thái kiểm tra trên tab Nhà cung cấp, nhãn luật dự phòng ở Điều hướng, nút chạy lại, báo cáo diễn tập | Cả hai API trực tiếp có tiền, có trần, kiểm tra xanh; ô trạng thái xanh cho hai miền sự cố; báo cáo diễn tập: một stage viết sang Anthropic và một stage chấm sang OpenAI trong giới hạn thời gian, kèm chi phí | 5 | Mới, High, hạn 05/12 (đề xuất) |
+
+**Không đụng:** AA-1002 (đã Done; phần dung lượng S12 đã chuyển sang AA-642), AA-1015 (không có phần giao diện),
+AA-896 và AA-1003 (đọc cùng sổ ghi; phần nhà cung cấp trong bản tin hằng ngày nằm trong N1).
+
+**Cần lưu ý trước khi làm:**
+
+1. **Tiền nạp OpenAI chưa có số.** Anh mới duyệt số của Anthropic (nạp 50 USD, trần 150 USD/tháng). Trước khi nạp
+   OpenAI, tôi trình số tiền nạp và trần tháng để anh duyệt.
+2. **Giới hạn số issue trên Linear.** Project CIS Core tối đa 100 issue chưa lưu trữ; đếm lại trước khi tạo N1 và N2.
 
 ## Phụ lục: tên kỹ thuật
 
@@ -234,7 +309,22 @@ cho `s1_generate` ≈ 800 tour.
 dung lượng), AA-900 (thang thẩm định, judge calibration, R2 candidate arm), AA-1002 (đã Done-with-scope; S12 chuyển
 đi), AA-820 (điều khoản tenant: hãng và vùng được phép), AA-842 (OTel / Langfuse tự host, đang hoãn vì chi phí),
 AA-1004 (SCP cho us-west-2), AA-1016 (ngân sách AI theo tenant Content studio), AA-1015 (giới hạn TripPlanner), AA-964
-(gateway CRM), AA-896 (alarm). N1 (độ tin cậy) và N2 (họ model) được tạo nếu anh chọn Có ở quyết định 1.
+(gateway CRM), AA-896 (alarm). Mới (anh chọn Có ở quyết định 1): N1 (độ tin cậy, bước 5) và N2 (sổ nguồn v2, bước
+4); bảng đầy đủ ở mục "Issue".
+
+**Giao diện, tên kỹ thuật:** trang mới `/admin/ai-gateway` (nhóm nav "AI & spend", `_kit/adminNav.tsx`), 5 tab
+Providers / Routing / Models & trials / Budgets / Calls + Trace drawer (mở từ JobDrawer, tour detail, decisions). Gom
+vào: ConnectionsTab, LlmAvailabilityCard, JevCreditTab, CatalogTab, ModelsTab Stages + StageRouteEditor, ShadowReportTab,
+cost-ops BudgetsPanel và phần số dư của tab DFS / Jev (DfsRunsPanel, IncidentCard giữ ở cost-ops). Bỏ select
+`account_route` (D10) và `model_tier` ở `/admin/s1-rewrite`. Redirect: `settings?tab=models|jev-credit`,
+`cost-ops?tab=budgets|llm|dfs|jev`, `/admin/llm-usage`, link JevPanel. RBAC: xem `spend.read`, sửa `ai.admin`, mọi
+thay đổi có audit. Kit (ADR 0016): chỉ AdminMain, PageHeader, Tabs, DataTable, Drawer, Field, Badge, tab Guide;
+component mới (timeline truy vết, dải độ trễ) chỉ thêm ở `_kit/core` canonical của CIS rồi `kit-sync`; các file làm
+lại ra khỏi `eslint-suppressions.json` (BudgetsPanel, trang cost-ops, CatalogTab, ModelsTab, StageRouteEditor,
+JevCreditTab). Kiểm thử cần sửa: e2e `ui-smoke.spec.ts`, `aa663-admin-ia.spec.ts`, `aa660-jev-decisions.spec.ts`,
+`aa566-partE-sticky-audit.spec.ts`; unit `llmConnections.test.mjs`, `llmAvailability.test.mjs`, `guides.test.mjs`;
+ảnh qua aa-ui-verify; kịch bản UAT AA-1009. Chữ: file EN/VI, không mã issue, không nhãn acc trên UI, account ID
+lấy từ `useAwsAccounts`.
 
 **Langfuse:** Cloud bị loại (dữ liệu ra ngoài AWS, trái CIS ADR 0012 và root ADR 0008a); tự host hoãn (ước 60–150
 USD/tháng hạ tầng, chưa kiểm, theo audit AA-842 `docs/audits/2026-10-29-S257-aa842-otel/README.md:487`; ClickHouse

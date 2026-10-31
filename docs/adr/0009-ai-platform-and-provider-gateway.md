@@ -1,13 +1,13 @@
 # ADR 0009 — AI platform and provider gateway: one gateway for every paid AI and data provider, every app and stage
 
-- **Status:** Proposed (31/10/2026, S261). Uses the number reserved for AA-804 ("AI platform and governance").
-  The tech lead's three questions in the design summary cover decisions 1–9, 13 and 14; on his yes they become
-  Accepted. Decisions 10, 11 and 12 are proposed answers to gap §5 items 9, 4 and 1 + 7 and are accepted one by one.
+- **Status:** **Accepted** for decisions 1–9, 13 and 14 and the UI section (tech lead, 31/10/2026, S261; see
+  "Decision record"). **Proposed** for decisions 10, 11 and 12 (proposed answers to gap §5 items 9, 4 and 1 + 7,
+  accepted one by one when their step comes). Uses the number reserved for AA-804 ("AI platform and governance").
   "Not decided here" lists what this ADR leaves open.
 - **Scope:** every paid AI or data API called by AA-CIS-App, AA-TripPlanner-Web, AA-Partner (CRM) and AA-Booking (when
   it needs one), on every environment; the AA-CIS-Infra roots that hold their roles, secrets and alarms.
 - **Implements:** root ADR 0001 decision 4 (cost guard).
-- **Amends (on acceptance):**
+- **Amends (each item when the decision it names is Accepted; see Status):**
   - root ADR 0001 decision 2 ("Single Model Gateway": LLM, Jev and embedding, Converse API, acc3 only): the scope widens
     to DataForSEO, Geoapify and Guardrails (decision 1), to other adapters (decision 9) and to acc2 as a second Bedrock
     failure domain (decision 14);
@@ -39,6 +39,21 @@
   AA-900 (qualification and evaluation), AA-1002 (S0–S10 as built), AA-820 (tenant AI terms), AA-842 (traces, on
   hold), AA-1004 (organization and SCP), AA-1016 (tenant AI budget), AA-1015 (TripPlanner limits), AA-964 (CRM
   gateway), AA-896 (alarms).
+
+## Decision record (31/10/2026)
+
+The tech lead answered the three questions of the design summary on 31/10/2026 (S261): yes to all three proposals,
+with one addition: "the direct APIs are both Anthropic and OpenAI".
+
+| Question | Answer | Effect in this ADR |
+|---|---|---|
+| 1. One gateway for every paid AI and data provider (LLM, Jev, DataForSEO, Geoapify, Guardrails), every app and stage | Yes | Decisions 1–4, 6, 8, 9 and 13 Accepted; new issues N1 and N2 are created (Follow-ups) |
+| 2. A warm path in another failure domain is mandatory | Yes, and **both** direct APIs (Anthropic and OpenAI) are warm independent paths | Decisions 5 and 7 Accepted: the Anthropic API top-up of 50 USD with its 150 USD/month connection budget, daily probes of every connection on Dev (under 1 USD/month) and the monthly failover drill (about 0.25 USD) are approved. The OpenAI API connection is a warm path too, capped and probed; its top-up amount and monthly cap are stated and approved before any purchase (Follow-ups) |
+| 3. acc2 may run chat models for judge and validate stages only; writer stages stay on Claude | Yes | Decision 14 Accepted; writers stay on Claude Sonnet 5.5 (decision 12's writer clause); every acc2 model passes the ladder before going live |
+
+Not covered by the three answers, still Proposed: decision 10 (data scopes per maker and geography), decision 11
+(configuration by migration only) and decision 12 (ladder and family-based writer/judge rule, except the writer
+clause above).
 
 ## Context
 
@@ -129,16 +144,21 @@ What exists (CIS code at `1b6e9448`, S261 audits, [inventory](../audits/2026-10-
 ### 5. Routing with failure domains and a warm independent path
 
 - One dispatch pipeline: route → deployment plan → shared middleware (scope, budget, limiter, breaker, attribution,
-  ledger, response contract) → adapter. The legacy chain, the vendor path and the direct OpenAI path are removed,
-  each by a dated slice in AA-642, after the "Measure first" count (Follow-ups). `model_tier` is accepted only in an
-  eval or probe context (amends CIS ADR 0006 §4).
+  ledger, response contract) → adapter. The legacy chain, the vendor path and the legacy direct-OpenAI code path in
+  `client.py` are removed, each by a dated slice in AA-642, after the "Measure first" count (Follow-ups). The OpenAI
+  API itself stays: it is served as the `openai-direct` connection through the OpenAI adapter like any other
+  connection. `model_tier` is accepted only in an eval or probe context (amends CIS ADR 0006 §4).
 - Order: same model on the next deployment by priority → skip open circuits → next model in the route → typed error.
   One deadline per route; the gateway owns retries (SDK retries off, at most six attempts per chain). No shadow as a
   fallback and no hidden provider-side fallback. No stage falls back across families unless its route lists that model
   explicitly; writer routes list no other family (rewords CIS ADR 0005 decision 4).
 - **Invariant:** every production stage class has at least one enabled, funded deployment in another failure domain
   that its scopes allow, or a declared degrade mode. The independent path is kept warm by the health probes
-  (decision 7).
+  (decision 7). The warm paths approved on 31/10:
+  - writer stages (Claude): acc3 Claude → Anthropic API direct;
+  - judge stages (GPT today): acc3 GPT → OpenAI API direct → acc2 Nova / Llama / Kimi, the last only after that model
+    passes the decision 12 ladder;
+  - validate stages: any enabled model in another failure domain (CIS ADR 0008 decision 2).
   - Tenant (T-series) and TripPlanner writer stages are `aws_only` until AA-820, must stay on Anthropic models
     (decision 12), and acc2 cannot run Claude (decision 14). Their only way to meet the invariant today is a declared
     degrade mode (for example: queue the job and retry later, or show the last saved text).
@@ -165,13 +185,13 @@ What exists (CIS code at `1b6e9448`, S261 audits, [inventory](../audits/2026-10-
 
 ### 7. Health probes, access state and balances
 
-- A daily warm probe of the Anthropic API connection (approved capacity plan §5.3). Cost: one call under 0.001 USD
-  (blueprint checklist A4), under 0.03 USD a month.
-- Proposed, not yet approved (review B3, gap :398): a scheduled probe per connection × enabled deployment, daily on
-  Dev, using the cheapest call or a free endpoint where one exists (the DataForSEO balance API). Cost line: under
-  0.001 USD per call, so under 1 USD a month on Dev while there are at most 30 enabled deployments. It updates
-  `access_state` and the health table, so loss of access is found before real work fails. It is enabled only after
-  the tech lead says yes to that cost (design summary, question 2).
+- A daily warm probe of each direct API connection, Anthropic (approved capacity plan §5.3) and OpenAI (approved
+  31/10). Cost: one call under 0.001 USD (blueprint checklist A4), under 0.03 USD a month per connection.
+- Approved 31/10 (review B3, gap :398; design summary, question 2): a scheduled probe per connection × enabled
+  deployment, daily on Dev, using the cheapest call or a free endpoint where one exists (the DataForSEO balance API).
+  Cost line: under 0.001 USD per call, so under 1 USD a month on Dev while there are at most 30 enabled deployments.
+  It updates `access_state` and the health table, so loss of access is found before real work fails. More than 30
+  enabled deployments, or probes on prod, state the new monthly cost first.
 - Balance per provider: the real balance API where it exists, otherwise ledger spend against recorded top-ups (Jev)
   or counted credits (Geoapify).
 - A connection-level circuit opens all deployments of a blocked account at once. An instant alert fires when a
@@ -179,8 +199,9 @@ What exists (CIS code at `1b6e9448`, S261 audits, [inventory](../audits/2026-10-
   e-mail job (`ops_alert_email`, AA-828): no new service, 0 USD. Jobs that failed with access denied can be re-queued
   from the admin; job backoff gets jitter.
 - A failover drill runs monthly on Dev: the primary is switched off and about 3 tours run through the fallback
-  (about 0.25 USD a drill at 0.0768 USD a tour, S249 wave). Like the probes, it runs only after its monthly cost has
-  been stated and the tech lead has said yes.
+  (about 0.25 USD a drill at 0.0768 USD a tour, S249 wave). Approved 31/10 at that cost. Each drill covers one
+  writer stage failing over to the Anthropic API and one judge stage failing over to the OpenAI API, within the
+  route deadline, and reports its cost.
 
 ### 8. One ledger contract and a trace view
 
@@ -278,10 +299,43 @@ Proposed answer to gap §5 items 1 and 7; accepted separately (it includes about
   acc2 (blueprint :320). Every `failure_domain` value is re-checked at each payer or organization change in the ADR
   0018 timeline, with a probe of every connection before and after.
 - `account_route` is replaced by the connection's role list.
-- Proposed: the Anthropic API becomes the warm independent path for Claude stages once the tech lead approves a stated
-  top-up amount and monthly cost (design summary, question 2). The 150 USD is the connection's monthly budget, not
-  money paid in; the amount of credit is the tech lead's call before buying (`docs/ops/runbooks/llm-anthropic-api-key.md`).
+- Accepted 31/10 (design summary, question 2): both direct APIs are warm independent paths outside AWS, each capped
+  by its connection budget and health-probed daily.
+  - **Anthropic API:** the warm path for Claude (writer) stages. Approved: a one-off top-up of 50 USD and the
+    connection's monthly budget of 150 USD (the budget is a cap, not money paid in;
+    `docs/ops/runbooks/llm-anthropic-api-key.md`).
+  - **OpenAI API:** the warm path for GPT (judge) stages, ahead of acc2. Its top-up amount and monthly cap were not
+    stated on 31/10; they are stated and approved by the tech lead before any purchase. Until then the connection
+    shows "not funded" and the invariant for judge stages is met only by acc2 after its ladder, or not at all.
 - Each app calls Bedrock through its own invoker role so AWS cost allocation shows the caller (root ADR 0018).
+
+## UI
+
+Accepted with decisions 1, 2 and 7–8 (31/10). All in the CIS admin nav group "AI & spend", built only from kit
+components (root ADR 0016); a new kit component, if any, goes into the CIS canonical `_kit/core` and is synced.
+
+- **New page `/admin/ai-gateway` ("AI providers")**, five tabs:
+  - **Providers:** one row per connection (Bedrock acc3 and acc2, Anthropic API, OpenAI API, Azure off, Jev,
+    DataForSEO, Geoapify, Guardrails; Mapbox monitor only) with health, access state, failure domain, balance, spend
+    against budget, latency p50/p95, error rate, last probe and a Test button. Both direct APIs show as warm paths with
+    cap, funding and probe state. Absorbs the settings Connections and Jev credit tabs and the availability card.
+  - **Routing:** app × stage profiles (chain, read-only parameters and scope, budget, kill switch, shadow share) with a
+    failure-domain badge; the per-stage `account_route` select is removed.
+  - **Models & trials:** families and capabilities (read-only except enable), shadow A/B, ladder and calibration.
+  - **Budgets:** every layer (connection, app, stage or job kind, tenant, eval) and the cap-coverage list.
+  - **Calls:** ledger v2 search; a row opens the **Trace drawer** (every attempt of a job or tour in time order,
+    refused attempts included), also opened from the job drawer, tour detail and decisions.
+- **`/admin/cost-ops`** becomes the money view: Overview, Forecast, AWS bill, and one "AI & data spend" tab from the
+  ledger (the LLM, DataForSEO and Jev tabs merged); Budgets moves to the gateway page.
+- **Small edits:** decisions link to ledger and trace; overview shows a "paid providers" summary; platform cost per
+  app reads the ledger `app` column; the per-run `model_tier` select leaves `/admin/s1-rewrite`; Tenant 360 gets the
+  tenant AI budget (AA-1016); `/admin/settings` loses its models and Jev credit tabs.
+- **Rules:** prices, secrets, base URLs and scopes are read-only in the UI (decision 11 when accepted; until then the
+  UI simply does not offer them); a route save that breaks the warm-path invariant is refused on prod and reported on
+  Dev; view needs `spend.read`, edit needs `ai.admin`; every admin change is audited; old deep links redirect.
+- **Net:** one new page, no page deleted, five tabs moved or merged. Only CIS staff see changes; Content studio
+  tenants see only the privacy and terms text (AA-820); CRM agencies get their AI settings in CRM web under AA-964;
+  TripPlanner travellers may see the basic-narration fallback more often after the fail-closed fix.
 
 ## Not decided here
 
@@ -305,8 +359,9 @@ Each item is deferred explicitly; it is brought to the tech lead with a proposed
   - one trace per job, built on the ledger, with no infrastructure cost.
 - **Negative / cost:**
   - a wider registry and a ledger migration for several schemas; Jev, DataForSEO and Geoapify callers must move;
-  - the warm path, the probes and the monthly drill add a small monthly spend (under about 2 USD on Dev, plus any
-    real traffic and the one-off top-up), each stated and approved before it is enabled;
+  - the warm paths, the probes and the monthly drill add a small monthly spend (under about 2 USD on Dev, plus any
+    real traffic), approved 31/10, plus the one-off Anthropic top-up of 50 USD; the OpenAI top-up is still to be
+    stated and approved;
   - the CRM keeps a second ledger in step with the shared contract;
   - this ADR creates no new AWS resource: alerts use the existing admin bell and operator e-mail, and prompt capture
     is not decided. Any later resource states its monthly cost first (DM-10.7).
@@ -341,7 +396,10 @@ Each item is deferred explicitly; it is brought to the tech lead with a proposed
   DataForSEO client.
 - AA-642: dispatch pipeline and removal dates, legacy aliases, shared core (S8), and S12 (bulk and prod lines, token
   limiter, backpressure in job claim). AA-900: ladder and judge calibration. AA-1016: Content studio tenant budget.
-  New issues N1 (reliability) and N2 (model families) are created if the tech lead says yes to question 1.
+  Two new issues, since question 1 is yes: N1 "Reliability: warm Anthropic + OpenAI paths, probes, circuit,
+  re-queue, monthly drill" (step 5) and N2 "Registry v2: provider kinds, model families, stage × model params,
+  routing UI" (step 4). The full issue plan is in the design summary, section "Issue".
+- State the OpenAI API top-up amount and monthly cap for the tech lead's yes before buying (decision 14).
 - Fix the AA-804 Linear title, which still says "0006".
 - On acceptance, pointer lines in: root ADR 0001 (header), 0001a, 0008 decision 5, 0008a §6 (its text "ADR 0009 is
   reserved and not written yet") and 0018; CIS ADR 0005, 0006, 0007, 0008 and 0012 (its header says "not written
