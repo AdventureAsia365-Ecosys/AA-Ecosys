@@ -6,6 +6,9 @@
 Runs in its own venv (venv-vi: vieneu SDK, torch-free ONNX Runtime on CPU). Model + preset voices are
 Apache-2.0 (https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo, "Usage Rights & Licensing FAQ": presets
 licensed for commercial use, speakers consented). Peak RAM ~1.9 GB on this box. Offline after first download.
+The Hugging Face cache keeps each file as a symlink into a sharded blobs/<xx>/ folder; ONNX Runtime >= 1.31 refuses an
+external-data file that resolves outside the folder of its graph, so the snapshot symlinks are swapped for hard links
+(same bytes, no copy) before the model loads, and once more after a first download.
 """
 import json
 import os
@@ -18,13 +21,42 @@ import soundfile as sf
 DEFAULT_VOICE = "Thục Đoan"  # female, Southern (Nam), storytelling
 
 
-def main(work: Path, voice: str) -> None:
+def flatten_snapshots(hub: Path) -> int:
+    """Replace every symlink under hub/*/snapshots/ by a hard link to its blob; returns how many were swapped."""
+    n = 0
+    for link in hub.glob("*/snapshots/**/*"):
+        if not link.is_symlink():
+            continue
+        target = link.resolve()
+        if not target.is_file():
+            continue
+        tmp = link.with_name(link.name + ".hardlink-tmp")
+        if tmp.exists():
+            tmp.unlink()
+        os.link(target, tmp)
+        os.replace(tmp, link)
+        n += 1
+    return n
+
+
+def load():
     from vieneu import Vieneu
 
+    hub = Path(os.environ["HF_HOME"]) / "hub"
+    flatten_snapshots(hub)
+    try:
+        return Vieneu()
+    except Exception as e:  # first download just made new symlinks: swap them and load again
+        if "External data path" not in str(e) or not flatten_snapshots(hub):
+            raise
+        return Vieneu()
+
+
+def main(work: Path, voice: str) -> None:
     caps = json.loads((work / "captions.json").read_text())["captions"]
     out = work / "audio" / "vi"
     out.mkdir(parents=True, exist_ok=True)
-    tts = Vieneu()
+    tts = load()
     if voice.endswith(".npz"):  # an enrolled own-voice clone from own-voice/clone.py
         z = np.load(voice)
         voice_arg = {"speaker_emb": z["speaker_emb"], "codes": z["codes"]}
