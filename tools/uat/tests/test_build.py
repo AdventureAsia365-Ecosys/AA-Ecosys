@@ -1,17 +1,22 @@
 """Unit tests of build.py's mux arguments (soft subtitle tracks beside the two voices). No ffmpeg, $0.
 
-  cd tools/uat && python3 -m unittest discover -s tests
+  cd tools/uat && ./venv/bin/python -m unittest discover -s tests   (build.py needs numpy + soundfile from the venv;
+                                                                     a plain python3 skips these tests)
 """
 import sys
 import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import build  # noqa: E402
+try:
+    import build  # noqa: E402
+except ImportError:  # numpy / soundfile live in tools/uat/venv
+    build = None
 
 VOICES = [(0, "en", "English narration", 1), (1, "vi", "Vietnamese narration", 2)]
 
 
+@unittest.skipIf(build is None, "build.py needs the tools/uat venv (numpy, soundfile)")
 class MuxArgs(unittest.TestCase):
     def test_burned_or_no_burn_has_no_subtitle_track(self):
         a = build.mux_args(VOICES, [])
