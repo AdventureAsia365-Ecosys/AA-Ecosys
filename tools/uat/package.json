@@ -4,5 +4,8 @@
   "description": "UAT and product-intro video recorder (skill aa-uat-video): Playwright scenarios with step asserts, recorded with a cursor overlay.",
   "devDependencies": {
     "@playwright/test": "1.59.1"
+  },
+  "scripts": {
+    "test": "node --test tests/dryrun.test.cjs"
   }
 }

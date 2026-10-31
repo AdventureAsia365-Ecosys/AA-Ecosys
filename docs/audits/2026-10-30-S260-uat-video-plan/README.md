@@ -263,6 +263,31 @@ the order below inside each app: Done now first, then as lanes ship.
 | X-02 | Agency builds a trip in the CRM → Booking confirms after deposit → the trip shows Booked in the CRM | Done now | CRM + Booking staff | 120 s |
 | X-03 | A catalog tour shows the same in TripPlanner, the portal marketplace and the Booking catalog | Done now | none + portal + Booking | 90 s |
 
+### Dry-run set (AA-1009)
+
+The public and read-only scenarios that run as one regression pass (`node tools/uat/dryrun.cjs`, fast mode: asserts
+only, no video, no TTS). Each identity signs in once, outside the scenarios; every non-GET request is aborted and fails
+the scenario; the paid model paths are blocked. Manifest: `tools/uat/scenarios/dryrun.cjs`. Output: one result table
+(pass / fail per step, git SHA of every app at the start and the end).
+
+| App | Identity | Scenarios |
+|---|---|---|
+| TripPlanner | none | TP-PUB-01, TP-02, TP-07 (browse half), TP-PUB-02 (privacy notice and terms) |
+| Agency host, public | none | PORTAL-PUB-01 |
+| Content studio | studio viewer of the E2E tenant | PRT-01 (+ My Content), PRT-03 (browse and drawer, no pick), PRT-09, PRT-10 |
+| CRM web | owner of the invented review agency (can write: only with `--include-writable`) | CRM-01, CRM-02 (list), CRM-05, CRM-07 (+ reports, calendar) |
+| CIS admin | E2E CIS admin (read-only) | CIS-01 (+ review queue, read), CIS-03, CIS-04 (read, no Cut / Edit), CIS-05, CIS-06 (+ Apps), CIS-08, CIS-11, CIS-12 |
+| Booking admin | E2E Booking staff (read-only) | BK-01, BK-05, BK-06, BK-07 (+ pricing rules, read), BK-08 (invoices, payments, trip checks), BK-10 |
+
+The CRM has no read-only member role yet (owner, agent, assistant), so the CRM rows sign in as an account that can
+write and only the browser guard keeps them read-only. A default run leaves them out and names them in the report; they
+run with `--include-writable`. A read-only CRM identity (a viewer role, or a backend-enforced E2E read-only member like
+the CIS and Booking E2E staff) would let them join the default set.
+
+Out of the dry run: the TripPlanner map planner and AI paths (search and narration call paid models, and Vercel BotID
+refuses headless Chromium there; a headed run is possible with `UAT_HEADED=1` on WSLg but is not part of the set), every
+write scenario, and the traveller sign-in scenarios (TP-05, TP-06).
+
 About 60 scenarios; ~45 are recordable now, the rest follow the lanes.
 
 ## 5. Overall design audit (when code work completes)

@@ -80,6 +80,35 @@ Kiểm xong khi cả ba đạt:
 
 Agent không tự nghe được: độ tự nhiên của giọng là Nghiệp quyết.
 
+### 5a. Chạy thử (dry run) cả bộ — AA-1009
+
+```bash
+node tools/uat/dryrun.cjs --list                 # bộ kịch bản công khai / chỉ đọc (manifest scenarios/dryrun.cjs)
+node tools/uat/dryrun.cjs                         # cả bộ, fast mode, một bảng kết quả + git SHA từng app
+node tools/uat/dryrun.cjs --app booking --stop-on-fail   # lọc: --only <id,..> / --app / --identity (AND)
+node tools/uat/dryrun.cjs --identity crm --include-writable   # kịch bản CRM (chủ đại lý GHI ĐƯỢC): chỉ khi gọi rõ
+node tools/uat/dryrun.cjs --record TP-02          # quay một video từ harness (đăng nhập danh tính rồi run.sh)
+node --test tools/uat/tests/dryrun.test.cjs       # unit test logic runner (không cần trình duyệt)
+# exit 0 tất cả PASS | 2 có FAIL / BLOCKED / CRASH | 3 egress không phải VN | 4 thiếu RAM
+```
+
+- Mỗi danh tính (`public`, `studio`, `crm`, `cis-admin`, `booking`) đăng nhập **một lần** ngoài kịch bản
+  (`lib/signin.cjs`), lưu `storageState` chmod 600 trong `work/` (gitignore), dùng lại khi app còn nhận. `cis-admin` /
+  `booking` cần phiên MFA admin còn hạn (đọc mã e-mail từ hộp thư e2e). Đăng nhập lỗi → kịch bản của danh tính đó
+  **BLOCKED** kèm lý do, phần còn lại vẫn chạy.
+- Kịch bản dry run viết bằng `ro()` của `lib/dryrun-page.cjs` (`readOnly`, `identity`, `check()` = tiêu đề + dữ liệu
+  hoặc empty state + không API 5xx/401/403). Runner luôn bật chặn ghi: request không phải GET bị huỷ và kịch bản FAIL
+  (beacon telemetry và keep-alive phiên staff `POST /api/auth/refresh` chỉ được liệt kê); `page.request` /
+  `context.request` ghi bị từ chối (tính là ghi), WebSocket bị đóng; đường gọi model trả tiền (TripPlanner search /
+  narrate) bị chặn hẳn. Runner từ chối kịch bản có danh tính đăng nhập mà không `readOnly`, có `allowWrites` hoặc
+  `prepare()`.
+- Danh tính `crm` (chủ đại lý review) **ghi được** (CRM chưa có vai trò chỉ đọc): mặc định bỏ qua, báo cáo ghi "Not run";
+  chạy bằng `--include-writable`. Phiên lưu riêng `work/dryrun/.state-crm.json`, không dùng chung với bộ CRM review.
+- Lỗi AWS chỉ ghi mã lỗi (`AccessDenied`, `ExpiredToken`); báo cáo che ARN và số account 12 chữ số trước khi chép vào
+  repo gốc (public).
+- Kết quả `tools/uat/work/dryrun/<stamp>/results.{md,json,tsv}` → chép `results.md` vào
+  `docs/audits/<date>-S<nnn>-uat-dry-run/` trong root PR.
+
 ## 6. Đóng gói
 
 ```bash

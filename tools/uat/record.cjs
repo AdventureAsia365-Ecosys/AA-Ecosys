@@ -15,6 +15,14 @@
 // screen and blurred). scenario.isMobile / hasTouch make a phone take a real mobile context; scenario.title_vi goes to
 // result.json for the Vietnamese chapter list of longform.py. Errors and URLs written to timeline.json / result.json
 // have link tokens (path or query segments of 30+ characters, uuids excepted) replaced by <redacted>.
+// Dry-run guards (AA-1009, tools/uat/dryrun.cjs): scenario.readOnly aborts every request that is not GET / HEAD / OPTIONS
+// (scenario.allowWrites = [regex sources on the URL] lets named ones through) and lists them in result.json
+// blocked_writes; scenario.blockUrls = [regex sources] aborts any matching request (e.g. paid model paths) and lists it
+// in blocked_urls (env UAT_READ_ONLY=1 / UAT_BLOCK_URLS=<JSON list> add both to any scenario). Telemetry beacons, the
+// staff session keep-alive (POST /api/auth/refresh) and third-party posts are aborted but listed in blocked_other
+// (lib/net-guard.cjs); a read-only run also refuses non-read page.request / context.request calls (blocked_writes) and
+// closes every WebSocket (blocked_other). UAT_HEADED=1 or scenario.headed opens a visible Chromium (WSLg DISPLAY), for pages a headless browser
+// cannot pass. scenario.identity (public, cis-admin, booking, studio, crm) is copied into result.json.
 // Setup once: bash tools/uat/setup.sh (pins @playwright/test). One Chromium, closed at the end.
 const fs = require('fs');
 const path = require('path');
@@ -23,9 +31,12 @@ const { chromium, expect } = require('@playwright/test');
 const MIN_HOLD_MS = 2500;
 // Link tokens travel in URL path segments and query values: never write one to timeline.json / result.json / logs.
 // (A uuid is an object id, not a credential: kept for debugging.)
-const redact = (x) => (x == null ? x : String(x).replace(/([/=])([A-Za-z0-9_.~%-]{30,})/g,
-  (m, lead, seg) => (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(seg) ? m : `${lead}<redacted>`)));
+// Same rule as the dry-run report (lib/dryrun-core.cjs): also masks AWS ARNs and 12-digit account numbers.
+const { redact } = require('./lib/dryrun-core.cjs');
 const TAIL_PAD_MS = 600;
+// Which aborted request is a write to the app (fails a read-only scenario) and which is telemetry / session upkeep /
+// third party (listed apart): lib/net-guard.cjs.
+const guard = require('./lib/net-guard.cjs');
 
 async function main() {
   const scenarioPath = path.resolve(process.argv[2]);
@@ -60,7 +71,9 @@ async function main() {
   if (!fast && fs.existsSync(dPath)) durations = JSON.parse(fs.readFileSync(dPath, 'utf8'));
 
   const storageState = process.env.UAT_STORAGE_STATE || sc.storageState;
-  const browser = await chromium.launch({ headless: true, slowMo: fast ? 0 : 60 });
+  const headed = process.env.UAT_HEADED === '1' || !!sc.headed;
+  if (headed && !process.env.DISPLAY && !process.env.WAYLAND_DISPLAY) throw new Error(`${sc.id}: a headed run needs a display (WSLg DISPLAY)`);
+  const browser = await chromium.launch({ headless: !headed, slowMo: fast ? 0 : 60 });
   const context = await browser.newContext({
     viewport: sc.viewport,
     deviceScaleFactor: 1,
@@ -72,6 +85,51 @@ async function main() {
     reducedMotion: 'no-preference',
     locale: 'en-US',
   });
+  // Network guards before the first page: a read-only scenario never writes, a blocked URL never leaves the browser.
+  const blockedWrites = [];
+  const blockedUrls = [];
+  const blockedOther = [];
+  // The dry-run runner forces both for every scenario it starts: UAT_READ_ONLY=1, UAT_BLOCK_URLS=<JSON regex list>.
+  const readOnly = !!sc.readOnly || process.env.UAT_READ_ONLY === '1';
+  const blockSrc = [...(sc.blockUrls || []), ...JSON.parse(process.env.UAT_BLOCK_URLS || '[]')];
+  if (readOnly || blockSrc.length) {
+    const allow = (sc.allowWrites || []).map((x) => new RegExp(x));
+    const block = blockSrc.map((x) => new RegExp(x));
+    await context.route('**/*', (route) => {
+      const req = route.request();
+      const url = req.url();
+      const where = () => { const u = new URL(url); return `${u.host}${u.pathname}`; };
+      if (block.some((r) => r.test(url))) {
+        blockedUrls.push(redact(`${req.method()} ${where()}`));
+        return route.abort('blockedbyclient');
+      }
+      if (readOnly && !guard.isRead(req.method()) && !allow.some((r) => r.test(url))) {
+        // Aborted either way; only a write to the app itself fails the scenario. Telemetry beacons (map events, error
+        // reports, Vercel analytics), the staff session keep-alive and third-party posts are listed apart.
+        (guard.classify(url, sc.baseURL) === 'write' ? blockedWrites : blockedOther).push(redact(`${req.method()} ${where()}`));
+        return route.abort('blockedbyclient');
+      }
+      return route.continue();
+    });
+  }
+  if (readOnly) {
+    // context.route() never sees two other ways out of the browser context: Node-side APIRequestContext calls
+    // (page.request / context.request, one shared object) and WebSockets. No app opens a WebSocket today, so every one
+    // is closed and listed; a scenario's own non-read request call is refused and counts as a write.
+    const allow = (sc.allowWrites || []).map((x) => new RegExp(x));
+    guard.guardRequestContext(context.request, { allow,
+      onBlocked: (method, url) => {
+        let w = url;
+        try { const u = new URL(url); w = `${u.host}${u.pathname}`; } catch { /* keep as is */ }
+        blockedWrites.push(redact(`${method} ${w} (request API)`));
+      } });
+    await context.routeWebSocket(/.*/, (ws) => {
+      let w = ws.url();
+      try { const u = new URL(w); w = `${u.host}${u.pathname}`; } catch { /* keep as is */ }
+      blockedOther.push(redact(`WS ${w}`));
+      ws.close();
+    });
+  }
   if (!fast) await context.addInitScript({ path: path.join(__dirname, 'lib', 'overlay.js') });
   // Masks go on before the first paint: the init script runs as soon as the document exists, and a server-rendered
   // page can paint before DOMContentLoaded (a mask added only then leaves a few unmasked frames).
@@ -132,6 +190,7 @@ async function main() {
   const h = {
     expect,
     fast,
+    baseURL: sc.baseURL,
     pause: (ms) => wait(ms),
     goto: async (p) => {
       await page.goto(new URL(p, sc.baseURL).toString(), { waitUntil: 'load' });
@@ -225,10 +284,12 @@ async function main() {
   await browser.close();
   if (video) fs.renameSync(await video.path(), path.join(work, 'video.webm'));
   const result = {
-    id: sc.id, app: sc.app, title: sc.title, ...(sc.title_vi ? { title_vi: sc.title_vi } : {}), baseURL: sc.baseURL, mode: fast ? 'fast' : 'uat',
+    id: sc.id, app: sc.app, ...(sc.identity ? { identity: sc.identity } : {}), title: sc.title, ...(sc.title_vi ? { title_vi: sc.title_vi } : {}), baseURL: sc.baseURL, mode: fast ? 'fast' : 'uat',
     recorded_at: new Date().toISOString(), total_ms: total,
     verdict: failed ? 'FAIL' : 'PASS', failed_step: failed, steps_run: timeline.length, steps_total: sc.steps.length,
     ...(sc.meta ? { meta: sc.meta } : {}),
+    ...(readOnly ? { read_only: true, blocked_writes: blockedWrites, blocked_other: [...new Set(blockedOther)] } : {}),
+    ...(blockedUrls.length ? { blocked_urls: blockedUrls } : {}),
     ...(failed ? { failed_error: timeline[timeline.length - 1].error } : {}),
   };
   fs.writeFileSync(path.join(work, 'timeline.json'), JSON.stringify(timeline, null, 2));
