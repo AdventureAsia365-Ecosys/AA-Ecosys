@@ -57,6 +57,13 @@ between supply options.
 | 29/10 23:47 | Gateway probe: the judge model answers `LLMAccessDenied` and the gateway fails fast (the AA-900 change of S258) | Agent probe |
 | 30/10 | Still refused; decision pending | — |
 
+**Added 31/10/2026 (S261), from acc3 Cost Explorer and CloudTrail:** acc3 was standalone and self-paid from 10 to
+17/08/2026 and called Claude Sonnet 4.6 and Haiku 4.5 then (18.49 USD with tax). It accepted the reseller's organization
+invitation on 17/08 15:40; root tried `LeaveOrganization` on 25/09 and 06/10 and the reseller's SCP denied it; the
+reseller removed it on 29/10 13:50. So "a standalone account is not allowed Bedrock" and "the account has no payment
+history of its own" are both ruled out; the cause stays with AWS Support (candidates: an unpaid August invoice, a state
+left by the removal that needs a manual Bedrock review, or a reseller-program flag on the account).
+
 ## 5. Detection
 
 No signal watched "the provider refuses this account". The first sign was a paid evaluation run whose judge calls

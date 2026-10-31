@@ -1,0 +1,32 @@
+REFRESH.start {"apply":false,"actor":"d33f89bd-c077-5f3c-ae2b-1f38e8e5deb9"}
+REFRESH.before {"pool_e2e":[],"pool_all":[]}
+REFRESH.find_candidates_dry_run {"http":200,"body":{"dry_run":true,"signals":1,"added":1,"existing":0,"marked_never":0,"skipped":{}},"sim_e2e":1,"sim_others":{},"sim_total":1,"match":true}
+REFRESH.DRY_RUN {"note":"APPLY=1 to Add candidates (refresh dry_run:false)"}
+REFRESH.done {}
+PIN.start {"apply":false,"actor":"d33f89bd-c077-5f3c-ae2b-1f38e8e5deb9"}
+PIN.STOP {"why":"no E2E example in the pool (run refresh APPLY=1 first)"}
+UNPIN.start {"apply":false,"actor":"d33f89bd-c077-5f3c-ae2b-1f38e8e5deb9"}
+UNPIN.STOP {"why":"no pinned E2E example by this actor (or EXEMPLAR_ID)","row_status":null}
+VERIFY.start {"apply":false,"actor":"d33f89bd-c077-5f3c-ae2b-1f38e8e5deb9"}
+VERIFY.e2e_examples {"n":1}
+VERIFY.isolation {"owners_checked":9,"writers":3,"leaks":[],"pass":true}
+VERIFY.guard_owner_422 {"http":422,"expect":422}
+VERIFY.tenant360_voice {"http":200,"exemplars":[{"writer":"t2","channel":"tour_page","status":"candidate","n":1}],"totals":{"active_rules":0,"candidate_rules":0,"summaries":0,"exemplars":1,"active_releases":0}}
+VERIFY.done {}
+DISCOVER.tenants [{"tenant_id":"00000000-0000-0000-0000-000000000001","slug":"aa_internal","is_canary":false,"is_active":true},{"tenant_id":"9149d3c6-fcaf-4400-8e7a-4ed5e557e146","slug":"atlas-hearth","is_canary":true,"is_active":true},{"tenant_id":"a1b2c3d4-0002-4000-8000-000000000002","slug":"exploreasia-co","is_canary":false,"is_active":false},{"tenant_id":"ace1f389-3225-4b2d-9502-880c22a93ed1","slug":"s235-throwaway-1791941379","is_canary":false,"is_active":false},{"tenant_id":"20d07d32-ed98-405f-81d5-0c2399c9fcdf","slug":"terra-family","is_canary":false,"is_active":true},{"tenant_id":"1bae2159-671b-4f35-a782-e96ea4cbdd4a","slug":"test-1","is_canary":false,"is_active":false},{"tenant_id":"692a3214-5cc2-46c6-a5ca-265389747269","slug":"trail-pulse","is_canary":false,"is_active":true},{"tenant_id":"a1b2c3d4-0001-4000-8000-000000000001","slug":"wanderlux-travel","is_canary":false,"is_active":false},{"tenant_id":"885d4916-007b-415e-9261-909ad43c6d00","slug":"wildkind-travel","is_canary":false,"is_active":true}]
+DISCOVER.tenant {"tenant_id":"9149d3c6-fcaf-4400-8e7a-4ed5e557e146","slug":"atlas-hearth","actor":"d33f89bd-c077-5f3c-ae2b-1f38e8e5deb9"}
+DISCOVER.PLAN {"group":{"writer":"t2","channel":"tour_page"},"distinct_texts":1,"mark":[],"already_use":1,"pending":0,"seed_needed":false,"seed_n":2}
+MARK.marked {"http":200,"sid":"6d34a740","body":{"signal_id":"6d34a740-07f9-4538-a4f1-4ae2927c3751","exemplar_pref":"use"}}
+MARK.after {"signals":{"fail/-":5,"pass/-":9,"pass/use":1}}
+REFRESH.add_candidates {"http":200,"body":{"dry_run":false,"signals":1,"added":1,"existing":0,"marked_never":0,"skipped":{}}}
+REFRESH.after {"pool_e2e":[{"writer":"t2","channel":"tour_page","status":"candidate","n":1}],"pool_all":[{"scope":"tenant","t":"9149d3c6-fcaf-4400-8e7a-4ed5e557e146","status":"candidate","n":1}]}
+REFRESH.idempotent_dry_run {"http":200,"added":0,"existing":1}
+PIN.before {"target":"04c21780-ab9d-4ebe-aebf-bbd4b9e8c53b","writer":"t2","channel":"tour_page","next_draft":[{"id":"04c21780","ch":"tour_page","pos":1,"st":"candidate"}]}
+PIN.guard_short_reason {"http":422,"expect":422}
+PIN.pinned {"http":200,"status":"pinned","status_by":"admin:d33f89bd-c077-5f3c-ae2b-1f38e8e5deb9"}
+PIN.after {"next_draft":[{"id":"04c21780","ch":"tour_page","pos":1,"st":"pinned"}],"target_in_next_draft":true,"changed":true}
+PIN.guard_repin {"http":409,"expect":409,"code":"bad_transition"}
+PIN.audit_rows {"exemplar_pin":1}
+UNPIN.unpinned {"http":200,"status":"candidate","status_reason":"S261 AA-921 live check done: back to candidate (E2E synthetic tenant)"}
+UNPIN.after {"next_draft":[{"id":"04c21780","ch":"tour_page","pos":1,"st":"candidate"}],"changed":true}
+UNPIN.audit_rows {"writing_memory.exemplar_pin":1,"writing_memory.exemplar_unpin":1}

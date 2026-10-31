@@ -1,0 +1,28 @@
+{
+ "list_status": 200,
+ "rows": 19,
+ "master_newer_true": 2,
+ "field_present": 19,
+ "qa_keys": [],
+ "newer": [
+  {
+   "id": "ee5fa669…",
+   "aa_name": "Goa Honeymoon Tour — 6 Days",
+   "created_at": "2026-10-21T09:50:16.446547+00:00",
+   "master_updated_at": "2026-10-25T06:39:49.275997+00:00",
+   "served_status": "served"
+  },
+  {
+   "id": "f4185e7e…",
+   "aa_name": "Golden Triangle with Ranthambore Wildlife — 8 Days",
+   "created_at": "2026-10-20T10:33:14.596492+00:00",
+   "master_updated_at": "2026-10-25T08:49:49.273014+00:00",
+   "served_status": "served"
+  }
+ ],
+ "badges_1440": 2,
+ "badge_title": "Adventure Asia updated this tour on 25 Oct 2026, after your version. Your text was not changed. Rewrite it if you want the new details.",
+ "notice_text": "Adventure Asia updated this tour on 25 Oct 2026, after your version. Your text was not changed. Rewrite it if you want the new details.Rewrite",
+ "badges_390": 2,
+ "tenant": "Atlas & Hearth (E2E), role studio-viewer"
+}

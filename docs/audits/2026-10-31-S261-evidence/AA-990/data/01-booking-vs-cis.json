@@ -1,0 +1,159 @@
+{
+ "bumdra": {
+  "tour_id": "2e1fd11d-0ba6-4388-9091-716a3e719da8",
+  "booking_title": "Bumdra Trek, Bhutan — 7 Days",
+  "cis_name": "Bumdra Trek, Bhutan — 7 Days",
+  "title_match": true,
+  "booking_summary_match": true,
+  "days_booking": 7,
+  "days_cis": 7,
+  "days": [
+   {
+    "day": 1,
+    "title_match": true,
+    "body_match": true,
+    "booking_title": "Paro arrival and drive to Thimphu",
+    "cis_title": "Paro arrival and drive to Thimphu"
+   },
+   {
+    "day": 2,
+    "title_match": true,
+    "body_match": true,
+    "booking_title": "Sightseeing in Thimphu",
+    "cis_title": "Sightseeing in Thimphu"
+   },
+   {
+    "day": 3,
+    "title_match": true,
+    "body_match": true,
+    "booking_title": "Dochu la Pass and Punakha",
+    "cis_title": "Dochu la Pass and Punakha"
+   },
+   {
+    "day": 4,
+    "title_match": true,
+    "body_match": true,
+    "booking_title": "Return to Paro",
+    "cis_title": "Return to Paro"
+   },
+   {
+    "day": 5,
+    "title_match": true,
+    "body_match": true,
+    "booking_title": "Trek from Sang Choekor to Bumdra camp",
+    "cis_title": "Trek from Sang Choekor to Bumdra camp"
+   },
+   {
+    "day": 6,
+    "title_match": true,
+    "body_match": true,
+    "booking_title": "Descent past Sangtopelri and Taktsang to Paro",
+    "cis_title": "Descent past Sangtopelri and Taktsang to Paro"
+   },
+   {
+    "day": 7,
+    "title_match": true,
+    "body_match": true,
+    "booking_title": "Departure from Paro International Airport",
+    "cis_title": "Departure from Paro International Airport"
+   }
+  ],
+  "proposal_items_vs_cis": [
+   {
+    "day": 1,
+    "proposal_item_title": "Arrival in Paro and Drive to Thimphu",
+    "cis_title_now": "Paro arrival and drive to Thimphu",
+    "match": false
+   },
+   {
+    "day": 2,
+    "proposal_item_title": "Thimphu Sightseeing",
+    "cis_title_now": "Sightseeing in Thimphu",
+    "match": false
+   },
+   {
+    "day": 3,
+    "proposal_item_title": "Dochu La Pass to Punakha Dzong",
+    "cis_title_now": "Dochu la Pass and Punakha",
+    "match": false
+   },
+   {
+    "day": 4,
+    "proposal_item_title": "Return to Paro",
+    "cis_title_now": "Return to Paro",
+    "match": true
+   },
+   {
+    "day": 5,
+    "proposal_item_title": "Bumdra Trek: Sang Choekor to High Mountain Camp",
+    "cis_title_now": "Trek from Sang Choekor to Bumdra camp",
+    "match": false
+   },
+   {
+    "day": 6,
+    "proposal_item_title": "Bumdra to Taktsang: Mountain Descent and Sacred Monastery",
+    "cis_title_now": "Descent past Sangtopelri and Taktsang to Paro",
+    "match": false
+   },
+   {
+    "day": 7,
+    "proposal_item_title": "Departure from Paro",
+    "cis_title_now": "Departure from Paro International Airport",
+    "match": false
+   }
+  ]
+ },
+ "bohol": {
+  "tour_id": "0c8bdf9e-511f-44fa-a665-af8bedeb6d83",
+  "booking_title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+  "cis_name": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+  "title_match": true,
+  "booking_summary_match": true,
+  "days_booking": 6,
+  "days_cis": 6,
+  "days": [
+   {
+    "day": 1,
+    "title_match": true,
+    "body_match": true,
+    "booking_title": "Manila to Tagbilaran, Bohol",
+    "cis_title": "Manila to Tagbilaran, Bohol"
+   },
+   {
+    "day": 2,
+    "title_match": true,
+    "body_match": true,
+    "booking_title": "Chocolate Hills, Baclayon and the Loboc river",
+    "cis_title": "Chocolate Hills, Baclayon and the Loboc river"
+   },
+   {
+    "day": 3,
+    "title_match": true,
+    "body_match": true,
+    "booking_title": "Bohol to Dumaguete by fast craft",
+    "cis_title": "Bohol to Dumaguete by fast craft"
+   },
+   {
+    "day": 4,
+    "title_match": true,
+    "body_match": true,
+    "booking_title": "Dolphin watching by motorized boat",
+    "cis_title": "Dolphin watching by motorized boat"
+   },
+   {
+    "day": 5,
+    "title_match": true,
+    "body_match": true,
+    "booking_title": "Siquijor dolphin watching and free day",
+    "cis_title": "Siquijor dolphin watching and free day"
+   },
+   {
+    "day": 6,
+    "title_match": true,
+    "body_match": true,
+    "booking_title": "Siquijor and Dumaguete to Manila",
+    "cis_title": "Siquijor and Dumaguete to Manila"
+   }
+  ]
+ }
+}

@@ -1,0 +1,89 @@
+{
+  "run": "vra8tb",
+  "trip": {
+    "id": "13efea13",
+    "title": "Việt Nam, 5 đêm",
+    "stage": "inquiry"
+  },
+  "mark_paid_refused": {
+    "status": 409,
+    "detail": "terms_reaccept_required",
+    "version_label": "s261-aa955-vra8tb"
+  },
+  "reaccept": {
+    "mark_paid_after": 200,
+    "acceptances": [
+      {
+        "source": "reaccept",
+        "version": "s261-aa955-vra8tb"
+      },
+      {
+        "source": "proposal",
+        "version": "e2e-mvp3tg5i"
+      }
+    ]
+  },
+  "expired": {
+    "status": 422,
+    "detail": "code_expired",
+    "waited_s": 645
+  },
+  "log_after_expired": [
+    "code_refused(code_expired)",
+    "code_sent"
+  ],
+  "signed": {
+    "status": 200,
+    "body_status": "signed",
+    "signer_role": "self",
+    "seal_alg": "kms-rsassa-pss-sha256",
+    "envelope_sha256": "f3d45779cbb1aba3ff1d3834f557c354cc35ad34cf26d9a3da28326af654e180"
+  },
+  "agreements_final": {
+    "all_signed": true,
+    "travellers": [
+      {
+        "role": "lead",
+        "waiver_signed": true,
+        "signer_role": "self",
+        "insurance_choice": "declined",
+        "with_terms": true,
+        "with_declination": true,
+        "seal_alg": "kms-rsassa-pss-sha256",
+        "envelope_sha256": "f3d45779cbb1aba3ff1d3834f557c354cc35ad34cf26d9a3da28326af654e180"
+      }
+    ],
+    "acceptances": [
+      {
+        "source": "envelope",
+        "version": "s261-aa955-vra8tb"
+      },
+      {
+        "source": "reaccept",
+        "version": "s261-aa955-vra8tb"
+      },
+      {
+        "source": "proposal",
+        "version": "e2e-mvp3tg5i"
+      }
+    ],
+    "log": [
+      "signed",
+      "code_sent",
+      "code_refused(code_expired)",
+      "code_sent"
+    ],
+    "reaccept_required": false
+  },
+  "envelope": {
+    "status": 200,
+    "seal_alg": "kms-rsassa-pss-sha256",
+    "verified": true,
+    "chars": 3652,
+    "starts": "aa-partner-envelope/1\n",
+    "has_new_terms_label": true,
+    "has_waiver_text": true,
+    "has_declination_text": true,
+    "insurance_line": "insurance declination"
+  }
+}

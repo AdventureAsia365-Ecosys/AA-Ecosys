@@ -1,0 +1,946 @@
+<title>Đánh giá hệ sinh thái AA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: one reading column (max 1080px); scorecard as a bar ledger, risks 3-up grid, roadmap 3 columns, decisions split in two. */
+:root {
+  --bg: #f3f6f7;
+  --surface: #ffffff;
+  --sunk: #e8eef0;
+  --ink: #14232b;
+  --muted: #55656d;
+  --line: #d3dce0;
+  --accent: #0e6a73;
+  --accent-soft: #d5ebed;
+  --hi: #b3242d;
+  --hi-soft: #f8e0e1;
+  --mid: #9c5a00;
+  --mid-soft: #f6e8d1;
+  --lo: #47627a;
+  --lo-soft: #e0e8ef;
+  --good: #22714a;
+  --good-soft: #d8eee1;
+  --font-body: "Be Vietnam Pro", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --step--1: 0.8125rem;
+  --step-0: 0.96875rem;
+  --step-1: 1.125rem;
+  --step-2: 1.4rem;
+  --step-3: 2.1rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e161a;
+    --surface: #152127;
+    --sunk: #1c2a31;
+    --ink: #e2ebee;
+    --muted: #9aaab2;
+    --line: #2a3a42;
+    --accent: #5ebfc8;
+    --accent-soft: #163a3e;
+    --hi: #f07a80;
+    --hi-soft: #3b1d20;
+    --mid: #e5a74b;
+    --mid-soft: #392912;
+    --lo: #9cb4c8;
+    --lo-soft: #1e2c37;
+    --good: #6ccf98;
+    --good-soft: #163325;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e161a;
+  --surface: #152127;
+  --sunk: #1c2a31;
+  --ink: #e2ebee;
+  --muted: #9aaab2;
+  --line: #2a3a42;
+  --accent: #5ebfc8;
+  --accent-soft: #163a3e;
+  --hi: #f07a80;
+  --hi-soft: #3b1d20;
+  --mid: #e5a74b;
+  --mid-soft: #392912;
+  --lo: #9cb4c8;
+  --lo-soft: #1e2c37;
+  --good: #6ccf98;
+  --good-soft: #163325;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+}
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+h1, h2, h3 { text-wrap: balance; margin: 0; line-height: 1.25; }
+h1 { font-size: var(--step-3); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: var(--step-2); font-weight: 700; }
+h3 { font-size: var(--step-1); font-weight: 650; }
+p { margin: 0; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+.mono { font-family: var(--font-mono); font-size: 0.86em; }
+.muted { color: var(--muted); }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Header */
+header.top { display: flex; flex-direction: column; gap: 14px; }
+header.top .lead { max-width: 68ch; font-size: var(--step-1); color: var(--muted); }
+.meta-row { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: var(--step--1); color: var(--muted); }
+.meta-row b { color: var(--ink); font-weight: 600; }
+nav.toc { display: flex; flex-wrap: wrap; gap: 8px; }
+nav.toc a {
+  text-decoration: none;
+  font-size: var(--step--1);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+nav.toc a:hover { border-color: var(--accent); color: var(--accent); }
+.notice {
+  border: 1px solid var(--line);
+  background: var(--sunk);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: var(--step--1);
+  color: var(--muted);
+  max-width: 80ch;
+}
+.notice b { color: var(--ink); }
+
+/* Sections */
+section { display: flex; flex-direction: column; gap: 16px; scroll-margin-top: 16px; }
+.why { max-width: 72ch; color: var(--muted); }
+.sec-head { display: flex; flex-direction: column; gap: 6px; }
+
+/* Executive summary */
+.exec { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 24px; align-items: start; }
+.big-score {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.big-score .num { font-size: 3rem; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; color: var(--mid); }
+.big-score .num small { font-size: 1.1rem; color: var(--muted); font-weight: 500; }
+.big-score p { font-size: var(--step--1); color: var(--muted); }
+.exec-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.exec-cols h3 { font-size: var(--step-0); font-weight: 700; margin-bottom: 6px; }
+.exec-cols ul, .first-steps { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 6px; }
+.tag-good { color: var(--good); }
+.tag-bad { color: var(--hi); }
+.first-box {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+.first-box h3 { font-size: var(--step-0); font-weight: 700; margin-bottom: 8px; }
+.first-steps { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.first-steps li {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: var(--step--1);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.first-steps li b { font-family: var(--font-mono); color: var(--accent); font-size: 0.9em; }
+
+/* Scorecard */
+.score-table { width: 100%; border-collapse: collapse; min-width: 640px; }
+.score-table th, .score-table td { text-align: left; padding: 10px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.score-table thead th { font-size: var(--step--1); color: var(--muted); font-weight: 600; }
+.score-table td.role { font-weight: 600; width: 22%; }
+.score-table td.role span { display: block; font-weight: 400; font-size: var(--step--1); color: var(--muted); }
+.score-table td.barcell { width: 30%; }
+.score-table td.note { font-size: var(--step--1); color: var(--muted); }
+.scale { display: grid; grid-template-columns: repeat(5, 1fr); font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+.scale span { text-align: right; }
+.bar-row { display: flex; align-items: center; gap: 10px; }
+.bar {
+  position: relative;
+  flex: 1;
+  height: 12px;
+  border-radius: 3px;
+  background:
+    linear-gradient(to right, transparent calc(20% - 1px), var(--line) calc(20% - 1px), var(--line) 20%, transparent 20%),
+    linear-gradient(to right, transparent calc(40% - 1px), var(--line) calc(40% - 1px), var(--line) 40%, transparent 40%),
+    linear-gradient(to right, transparent calc(60% - 1px), var(--line) calc(60% - 1px), var(--line) 60%, transparent 60%),
+    linear-gradient(to right, transparent calc(80% - 1px), var(--line) calc(80% - 1px), var(--line) 80%, transparent 80%),
+    var(--sunk);
+  overflow: hidden;
+}
+.bar i { position: absolute; inset: 0 auto 0 0; width: calc(var(--v) / 5 * 100%); border-radius: 3px; background: var(--c, var(--accent)); }
+.bar-row .val { font-family: var(--font-mono); font-weight: 600; font-variant-numeric: tabular-nums; min-width: 2.4em; text-align: right; }
+.lvl-low { --c: var(--hi); }
+.lvl-mid { --c: var(--mid); }
+.lvl-ok { --c: var(--accent); }
+.score-table tr.avg td { border-bottom: 0; background: var(--sunk); font-weight: 700; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: var(--step--1); color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 8px; border-radius: 2px; background: var(--c); display: inline-block; }
+
+/* Scroll containers */
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+
+/* Risks */
+.risks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.risk {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.risk-top { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+.risk h3 { font-size: var(--step-0); font-weight: 700; }
+.risk p { font-size: var(--step--1); color: var(--muted); }
+.risk .fix { color: var(--ink); }
+.codes { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+
+/* Chips */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+.sev-hi, .st-now { background: var(--hi-soft); color: var(--hi); }
+.sev-mid, .st-golive { background: var(--mid-soft); color: var(--mid); }
+.st-later { background: var(--lo-soft); color: var(--lo); }
+.eff { background: var(--sunk); color: var(--ink); border: 1px solid var(--line); }
+.eff-m { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.eff-l { background: var(--accent); color: var(--surface); border-color: transparent; }
+.trig { background: var(--lo-soft); color: var(--lo); }
+
+/* Roadmap */
+.roadmap { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.col {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.col-head { padding: 14px 16px 12px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; }
+.col-head h3 { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.col-head h3 .count { font-family: var(--font-mono); font-size: var(--step--1); color: var(--muted); font-weight: 500; }
+.col-head p { font-size: var(--step--1); color: var(--muted); }
+.col ol { list-style: none; margin: 0; padding: 0; }
+.col li {
+  display: grid;
+  grid-template-columns: 2.6em minmax(0, 1fr);
+  gap: 4px 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--step--1);
+}
+.col li:last-child { border-bottom: 0; }
+.col li .id { font-family: var(--font-mono); color: var(--accent); font-weight: 600; }
+.col li .txt { min-width: 0; }
+.col li .foot { grid-column: 2; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.col li .ref { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); }
+.col-now .col-head { background: var(--hi-soft); border-radius: 10px 10px 0 0; }
+.col-golive .col-head { background: var(--mid-soft); border-radius: 10px 10px 0 0; }
+.col-trig .col-head { background: var(--lo-soft); border-radius: 10px 10px 0 0; }
+.col li.trigger { grid-template-columns: minmax(0, 1fr); }
+.col li.trigger .foot { grid-column: 1; }
+
+/* Standards table + generic tables */
+table.std, table.dec { width: 100%; border-collapse: collapse; font-size: var(--step--1); }
+table.std { min-width: 860px; }
+table.dec { min-width: 720px; }
+table.std th, table.std td, table.dec th, table.dec td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.std thead th, table.dec thead th { background: var(--sunk); font-weight: 600; color: var(--muted); position: sticky; top: 0; }
+table.std tbody tr:last-child td, table.dec tbody tr:last-child td { border-bottom: 0; }
+table.std td:first-child { font-weight: 600; width: 18%; }
+table.dec td:first-child { font-family: var(--font-mono); color: var(--accent); font-weight: 600; white-space: nowrap; }
+table.dec td.cost { color: var(--muted); width: 18%; }
+.quote {
+  border-left: 3px solid var(--accent);
+  padding: 8px 14px;
+  background: var(--accent-soft);
+  border-radius: 0 8px 8px 0;
+  max-width: 80ch;
+}
+.gaps { margin: 0; padding-left: 1.2em; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 28px; font-size: var(--step--1); }
+.gaps b { color: var(--ink); }
+
+/* Agent keep/fix */
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.panel ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 6px; font-size: var(--step--1); }
+.panel h3 { font-size: var(--step-0); font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; background: var(--c); }
+
+/* Do-not list */
+.dont { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; }
+.dont div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  min-width: 0;
+}
+.dont b { font-weight: 600; font-size: var(--step--1); }
+.dont span { font-size: var(--step--1); color: var(--muted); }
+
+/* Decisions */
+.bo-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.bo {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  font-size: var(--step--1);
+}
+.bo-top { display: flex; gap: 8px; align-items: baseline; }
+.bo-top .id { font-family: var(--font-mono); font-weight: 600; color: var(--accent); }
+.bo-top h3 { font-size: var(--step-0); font-weight: 700; }
+.bo dl { margin: 0; display: grid; grid-template-columns: 5.2em minmax(0, 1fr); gap: 4px 10px; }
+.bo dt { color: var(--muted); }
+.bo dd { margin: 0; }
+.dec-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; }
+.dec-head p { font-size: var(--step--1); color: var(--muted); }
+
+footer { font-size: var(--step--1); color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: flex; flex-direction: column; gap: 6px; }
+
+@media (max-width: 900px) {
+  .roadmap { grid-template-columns: minmax(0, 1fr); }
+  .risks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 680px) {
+  .exec, .exec-cols, .split, .dont, .bo-grid, .gaps { grid-template-columns: minmax(0, 1fr); }
+  .risks { grid-template-columns: minmax(0, 1fr); }
+  h1 { font-size: 1.7rem; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+html { scroll-behavior: smooth; }
+</style>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">Bản tư vấn · S261 · 31/10/2026</div>
+  <h1>Đánh giá hệ sinh thái AA</h1>
+  <p class="lead">Tám vai (CTO, kiến trúc AWS, DevOps, GenAI, bảo mật, PM, Data Engineer, AI Engineer) và một người rà chuẩn SDLC/ADLC cùng chấm cách chúng ta tổ chức, làm, quản lý dự án, dữ liệu và hệ sinh thái. Trang này là bản tóm tắt để đọc nhanh và chốt quyết định.</p>
+  <div class="meta-row">
+    <span>Viết cho <b>tech lead</b></span>
+    <span>9 lượt rà độc lập, chỉ đọc</span>
+    <span>Có rà phản biện cùng ngày</span>
+    <span>Công sức: <b>S</b> ≤ 1 ngày · <b>M</b> 2–5 ngày · <b>L</b> &gt; 1 tuần</span>
+  </div>
+  <div role="note" style="margin:14px 0 4px;padding:12px 14px;border:1px solid currentColor;border-radius:10px;font-size:14px;line-height:1.55">
+    <b>Tech lead đã quyết (31/10/2026, sau khi bản này được viết):</b>
+    giữ repo gốc và Infra <b>public</b>, không chi tiền cho GitHub (E1, N11, BO-11 không còn áp dụng);
+    TL-7 chưa làm lúc này; TL-9 đã xong từ 25/10 (mật khẩu DataForSEO đã xoay ở S251);
+    bằng chứng quota cho case AWS chờ vài ngày rồi mới tính.
+  </div>
+  <nav class="toc" aria-label="Mục lục">
+    <a href="#tom-tat">Tóm tắt</a>
+    <a href="#bang-diem">Bảng điểm</a>
+    <a href="#rui-ro">Rủi ro lớn</a>
+    <a href="#lo-trinh">Lộ trình</a>
+    <a href="#chuan">Chuẩn</a>
+    <a href="#agent">Làm việc với agent</a>
+    <a href="#khong-lam">Không nên làm</a>
+    <a href="#quyet-dinh">Quyết định</a>
+  </nav>
+  <p class="notice"><b>Về phần bảo mật:</b> repo gốc đang public. Các phát hiện về quyền IAM chưa sửa chỉ được nêu ở mức tóm tắt trên trang này; chi tiết (tên tài nguyên, đường đi cụ thể) để trong Linear riêng tư tới khi đã cắt xong. Bản đầy đủ có bằng chứng từng dòng nằm ở <span class="mono">README.md</span> cùng thư mục.</p>
+</header>
+
+<section id="tom-tat">
+  <div class="sec-head">
+    <h2>Tóm tắt điều hành</h2>
+    <p class="why">Phần này cho biết trong một phút: hệ thống đang ở đâu, cái gì đang chạy tốt, cái gì có thể làm chậm hoặc làm hỏng lần ra mắt.</p>
+  </div>
+  <div class="exec">
+    <div class="big-score">
+      <span class="eyebrow">Điểm chung</span>
+      <span class="num">3,2<small> / 5</small></span>
+      <p>Kỹ thuật và tài liệu khoảng 3,5, hiếm thấy ở đội 1–3 người. Định hướng sản phẩm và quản lý dự án chỉ 2–3.</p>
+      <p>Dev chạy ổn, chưa có prod, 0 người dùng thật. Mọi LLM chat/judge đứng từ 29/10.</p>
+    </div>
+    <div class="exec-cols">
+      <div>
+        <h3 class="tag-good">Đang làm tốt</h3>
+        <ul>
+          <li>Quyết định truy được: 26 ADR, data standards, CONTEXT.md mỗi repo, schema reference sinh tự động. "Done" phải có bằng chứng live.</li>
+          <li>Đường giao hàng tốt: merge queue, migration expand tự áp, plan guard và drift đêm, 2 lần diễn tập PITR (~22 phút), lead time CIS trung vị 10 phút.</li>
+          <li>Chi phí và dữ liệu được quản thật: sổ chi phí LLM, budget theo app, owner role, RLS có probe cô lập, gateway LLM điều khiển bằng dữ liệu.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="tag-bad">Đáng lo</h3>
+        <ul>
+          <li>Chỉ một đường cung cấp LLM, và nó đã đứng. Judge chưa hiệu chuẩn nên chưa có cổng chất lượng thật.</li>
+          <li>Không có ngày go-live, khách trả tiền đầu tiên, giá. Phạm vi 4 app + CRM "hoàn chỉnh", 31 issue In Progress.</li>
+          <li>Bus factor = 1. Vài quyền IAM quá rộng nối thành chuỗi leo quyền; agent chạy bằng role admin của người.</li>
+          <li>Đường lên prod chưa tập: ADR 0018 còn Proposed, chưa baseline schema, chưa seed nội dung, mọi bản sao catalog và tfstate chỉ ở acc2.</li>
+        </ul>
+      </div>
+      <div class="first-box">
+        <h3>Làm trước tiên</h3>
+        <ol class="first-steps">
+          <li><b>a · LLM</b>Mở đường LLM thứ hai (API Anthropic trực tiếp, có trần chi tiêu) và canary kết nối hằng ngày.</li>
+          <li><b>b · Dự án</b>Một trang chiến lược sản phẩm, cửa sổ go-live, WIP ≤ 8, đóng băng CRM W6–W8.</li>
+          <li><b>c · Bảo mật</b>Cắt chuỗi leo quyền IAM (xong S261, Infra #541); mật khẩu nhà cung cấp đã xoay từ S251.</li>
+          <li><b>d · Hạ tầng</b>Chấp nhận ADR 0018, sao lưu catalog + tfstate ra ngoài acc2, thêm S3 gateway endpoint.</li>
+          <li><b>e · Chất lượng AI</b>Bộ 40 nhãn do người gán và luật thống kê cho judge, trước mọi lượt eval trả tiền.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="bang-diem">
+  <div class="sec-head">
+    <h2>Bảng điểm theo vai</h2>
+    <p class="why">Mỗi vai nhìn một mặt khác của cùng hệ thống; điểm thấp nhất cho biết chỗ cần đầu tư công sức trước, không phải chỗ kỹ thuật yếu nhất.</p>
+  </div>
+  <div class="legend">
+    <span style="--c: var(--hi)"><i></i>≤ 2,5 · cần sửa trước</span>
+    <span style="--c: var(--mid)"><i></i>3 · đủ cho Dev, chưa đủ cho prod</span>
+    <span style="--c: var(--accent)"><i></i>3,5 · tốt hơn mức thường của đội nhỏ</span>
+  </div>
+  <div class="scroll">
+    <table class="score-table">
+      <thead>
+        <tr>
+          <th scope="col">Vai</th>
+          <th scope="col"><div class="scale" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div></th>
+          <th scope="col">Nhận xét một câu</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="role">CTO<span>chiến lược, tổ chức</span></td>
+          <td class="barcell"><div class="bar-row lvl-low"><div class="bar" style="--v: 2.5"><i></i></div><span class="val">2,5</span></div></td>
+          <td class="note">Thực thi và tài liệu ~3,5 nhưng định hướng ~2: không ngày go-live, không giá, không khách đầu tiên, nên backlog kỹ thuật dẫn đường.</td>
+        </tr>
+        <tr>
+          <td class="role">AWS Solutions Architect<span>kiến trúc, account</span></td>
+          <td class="barcell"><div class="bar-row lvl-ok"><div class="bar" style="--v: 3.5"><i></i></div><span class="val">3,5</span></div></td>
+          <td class="note">Dev quản trị tốt; prod phụ thuộc 4 việc chưa làm: dời account, Terraform tái dùng được, egress/backup không dồn vào acc2, DR đã thử.</td>
+        </tr>
+        <tr>
+          <td class="role">AWS DevOps<span>phát hành, vận hành</span></td>
+          <td class="barcell"><div class="bar-row lvl-ok"><div class="bar" style="--v: 3.5"><i></i></div><span class="val">3,5</span></div></td>
+          <td class="note">Giao hàng mạnh; vận hành chưa theo kịp: cảnh báo chỉ email, 12/17 runbook chưa thử, DORA chưa có nguồn số liệu.</td>
+        </tr>
+        <tr>
+          <td class="role">AWS GenAI Developer<span>nền tảng LLM</span></td>
+          <td class="barcell"><div class="bar-row lvl-ok"><div class="bar" style="--v: 3.5"><i></i></div><span class="val">3,5</span></div></td>
+          <td class="note">Gateway, sổ chi phí, data scope ở mức 4; nhưng một đường nhà cung cấp đã đứng và đổi prompt/model chưa bị chặn bằng bằng chứng.</td>
+        </tr>
+        <tr>
+          <td class="role">AWS Security<span>bảo mật, quyền riêng tư</span></td>
+          <td class="barcell"><div class="bar-row lvl-ok"><div class="bar" style="--v: 3.5"><i></i></div><span class="val">3,5</span></div></td>
+          <td class="note">Kiểm soát có văn bản và bằng chứng; còn vài quyền quá rộng nối thành chuỗi và hai lựa chọn mức prod chưa chốt.</td>
+        </tr>
+        <tr>
+          <td class="role">Project Manager<span>quản lý dự án</span></td>
+          <td class="barcell"><div class="bar-row lvl-mid"><div class="bar" style="--v: 3"><i></i></div><span class="val">3</span></div></td>
+          <td class="note">Định nghĩa Done rất chặt nhưng chưa quản lý bằng số: không giới hạn WIP, milestone đo bằng số phiên, không sổ rủi ro, trạng thái rải 6–8 nơi.</td>
+        </tr>
+        <tr>
+          <td class="role">Data Engineer<span>dữ liệu</span></td>
+          <td class="barcell"><div class="bar-row lvl-ok"><div class="bar" style="--v: 3.5"><i></i></div><span class="val">3,5</span></div></td>
+          <td class="note">Nền dữ liệu quản trị tốt; thiếu đường Dev→prod (baseline, seed) và các kiểm tra đêm chỉ báo, không chặn, nên đã trượt lại.</td>
+        </tr>
+        <tr>
+          <td class="role">AI Engineer<span>chất lượng AI</span></td>
+          <td class="barcell"><div class="bar-row lvl-mid"><div class="bar" style="--v: 3"><i></i></div><span class="val">3</span></div></td>
+          <td class="note">Thiết kế eval và guardrail mạnh nhưng chưa chứng minh được chất lượng: nhãn chuẩn là LLM chấm LLM, chưa judge nào hiệu chuẩn.</td>
+        </tr>
+        <tr>
+          <td class="role">Rà chuẩn SDLC/ADLC<span>quy trình, hồ sơ</span></td>
+          <td class="barcell"><div class="bar-row lvl-mid"><div class="bar" style="--v: 3"><i></i></div><span class="val">3</span></div></td>
+          <td class="note">Cách làm định nghĩa rõ; bước tiếp là giữ hồ sơ đúng và kiểm được: baseline bảo mật cũ, review PR rủi ro không luôn có vết, eval chưa là cổng.</td>
+        </tr>
+        <tr class="avg">
+          <td class="role">Trung bình</td>
+          <td class="barcell"><div class="bar-row lvl-mid"><div class="bar" style="--v: 3.2"><i></i></div><span class="val">3,2</span></div></td>
+          <td class="note">Mạnh ở thực thi, yếu ở định hướng và đo lường.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="rui-ro">
+  <div class="sec-head">
+    <h2>Rủi ro lớn nhất</h2>
+    <p class="why">Đây là những chỗ có thể làm dừng sản phẩm, làm mất dữ liệu hoặc làm trễ go-live; mỗi thẻ kèm việc sửa rẻ nhất đã đề xuất.</p>
+  </div>
+  <div class="risks">
+    <article class="risk">
+      <div class="risk-top"><span class="chip sev-hi">Cao</span><span class="codes">B1</span></div>
+      <h3>Một đường LLM duy nhất, đã đứng từ 29/10</h3>
+      <p>27/37 stage và fallback của chúng cùng nằm trên một account. Chặn nhiều issue AI và mọi lượt sinh nội dung.</p>
+      <p class="fix">Sửa: API Anthropic trực tiếp có trần chi tiêu, chỉ cho nội dung nội bộ và judge; trang "chế độ suy giảm".</p>
+    </article>
+    <article class="risk">
+      <div class="risk-top"><span class="chip sev-hi">Cao</span><span class="codes">B2</span></div>
+      <h3>Chưa có cổng chất lượng AI thật</h3>
+      <p>Nhãn chuẩn do LLM chấm LLM; 20/20 ngưỡng chưa hiệu chuẩn; kappa tốt nhất 0,562 trên chỉ 13 cặp.</p>
+      <p class="fix">Sửa: 40 nhãn do người gán mù; judge chỉ "tính" khi ≥ 30 cặp và ≥ 8 mỗi lớp.</p>
+    </article>
+    <article class="risk">
+      <div class="risk-top"><span class="chip sev-hi">Cao</span><span class="codes">A1</span></div>
+      <h3>Không ngày go-live, không khách, không giá</h3>
+      <p>Không có ngày thì đợt build prod 3–4 tuần không bắt đầu được và không dự báo được. Backlog kỹ thuật đang dẫn đường.</p>
+      <p class="fix">Sửa: một trang chiến lược sản phẩm do business owner chốt; mặc định bán trực tiếp của AA trước, cửa sổ Q1/2027.</p>
+    </article>
+    <article class="risk">
+      <div class="risk-top"><span class="chip sev-hi">Cao</span><span class="codes">A2</span></div>
+      <h3>Phạm vi quá rộng, không giới hạn WIP</h3>
+      <p>58 issue trên master plan, 31 In Progress; số issue đóng mỗi phiên tụt từ ~15–20 xuống 0–3.</p>
+      <p class="fix">Sửa: WIP ≤ 8 toàn hệ, ≤ 3 mỗi lane; xong việc dở rồi mới lấy việc mới; đóng băng CRM W6–W8.</p>
+    </article>
+    <article class="risk">
+      <div class="risk-top"><span class="chip sev-hi">Cao</span><span class="codes">A3</span></div>
+      <h3>Bus factor = 1</h3>
+      <p>Một người giữ mọi quyền gốc (AWS, GitHub, Vercel, tên miền) và mọi hiểu biết vận hành; không ai được nêu là người kế nhiệm.</p>
+      <p class="fix">Sửa: người giữ quyền thứ hai ngay; kỹ sư thứ hai bán thời gian trước go-live, diễn tập chỉ bằng tài liệu.</p>
+    </article>
+    <article class="risk">
+      <div class="risk-top"><span class="chip sev-hi">Cao</span><span class="codes">F1 · F2 · F3</span></div>
+      <h3>Quyền IAM rộng nối thành chuỗi leo quyền</h3>
+      <p>Chi tiết trong Linear AA-873; đã vá ở Infra #541. Agent chạy bằng role admin của người khi đọc dữ liệu không tin cậy (F3).</p>
+      <p class="fix">Sửa còn lại: agent mặc định role hẹp.</p>
+    </article>
+    <article class="risk">
+      <div class="risk-top"><span class="chip sev-hi">Cao</span><span class="codes">D1 · C1 · C2</span></div>
+      <h3>Đường lên prod chưa từng tập</h3>
+      <p>ADR 0018 còn Proposed và mâu thuẫn standards; không dựng được schema prod từ repo; seed nội dung mới có thiết kế.</p>
+      <p class="fix">Sửa: chấp nhận ADR 0018; baseline schema mỗi owner, tập trên instance nháp.</p>
+    </article>
+    <article class="risk">
+      <div class="risk-top"><span class="chip sev-hi">Cao</span><span class="codes">C3</span></div>
+      <h3>Bản sao duy nhất của catalog nằm trong acc2</h3>
+      <p>Catalog Dev là seed của prod; PITR, snapshot và tfstate đều ở acc2, account thuộc org đại lý và sắp dời org.</p>
+      <p class="fix">Sửa: <span class="mono">pg_dump</span> nội dung không PII + tfstate hằng tuần sang bucket Object Lock ngoài acc2 (1–5 USD/tháng).</p>
+    </article>
+    <article class="risk">
+      <div class="risk-top"><span class="chip sev-hi">Cao</span><span class="codes">E1</span></div>
+      <h3>Về private tháng 11 sẽ tắt cổng pipeline <small>(không áp dụng: repo giữ public, 31/10)</small></h3>
+      <p>Ruleset, environment rule, secret scanning trên GitHub Free chỉ có ở repo public; auto-apply migration dựa vào chúng.</p>
+      <p class="fix">Sửa: checklist "cái gì tắt" trước khi lật; chọn GitHub Team hoặc chấp nhận một click tay mỗi migration.</p>
+    </article>
+  </div>
+</section>
+
+<section id="lo-trinh">
+  <div class="sec-head">
+    <h2>Lộ trình</h2>
+    <p class="why">Thứ tự làm quyết định việc gì mở khoá việc gì; cột giữa bắt đầu khi business owner đặt ngày go-live, cột phải chỉ làm khi sự kiện có tên xảy ra.</p>
+  </div>
+  <div class="roadmap">
+    <div class="col col-now">
+      <div class="col-head">
+        <h3>Ngay <span class="count">25 việc</span></h3>
+        <p>Trong 2 tuần, tới ~14/11.</p>
+      </div>
+      <ol>
+        <li><span class="id">N1</span><span class="txt">Đường LLM thứ hai: API Anthropic trực tiếp, trần chi tiêu, chỉ cho A-series và judge; trang chế độ suy giảm; sửa ADR 0001a.</span><span class="foot"><span class="chip eff">S</span><span class="ref">AA-1002 · AA-642</span></span></li>
+        <li><span class="id">N2</span><span class="txt">Canary kết nối LLM hằng ngày + cảnh báo bị từ chối truy cập; vòng đời model trong catalog; ghi phiên bản prompt vào sổ call.</span><span class="foot"><span class="chip eff">S×3</span><span class="ref">AA-1002 · AA-900</span></span></li>
+        <li><span class="id">N3</span><span class="txt">Bộ 40 nhãn do người gán; luật thống kê cho judge; khối đăng ký trước cho lượt eval trả tiền.</span><span class="foot"><span class="chip eff">S+S</span><span class="ref">AA-919</span></span></li>
+        <li><span class="id">N4</span><span class="txt">Trang chiến lược sản phẩm + cửa sổ go-live; WIP ≤ 8; đóng băng CRM W6–W8 và báo cáo sau R4; luật build-vs-buy.</span><span class="foot"><span class="chip eff">S</span><span class="ref">AA-880</span></span></li>
+        <li><span class="id">N5</span><span class="txt">Milestone theo ngày (baseline, forecast, RAG) + sổ rủi ro; khung quyết định tuần; báo cáo tuần một trang từ 02/11.</span><span class="foot"><span class="chip eff">S</span><span class="ref">PR-20</span></span></li>
+        <li><span class="id">N6</span><span class="txt">Cắt chuỗi leo quyền IAM (xong S261, chi tiết trong Linear); mật khẩu nhà cung cấp đã xoay từ S251.</span><span class="foot"><span class="chip eff eff-m">S+M</span><span class="ref">AA-873</span></span></li>
+        <li><span class="id">N7</span><span class="txt">Agent mặc định dùng role hẹp; role admin chỉ trong cửa sổ đã gom.</span><span class="foot"><span class="chip eff eff-m">M</span><span class="ref">gộp N6</span></span></li>
+        <li><span class="id">N8</span><span class="txt">Chấp nhận ADR 0018 kèm đoạn region; sửa standards và Infra CONTEXT.md cho khớp.</span><span class="foot"><span class="chip eff">S</span><span class="ref">AA-1004</span></span></li>
+        <li><span class="id">N9</span><span class="txt">Bản sao catalog nội dung + tfstate ra ngoài acc2 (Object Lock), trước mọi lần dời org.</span><span class="foot"><span class="chip eff">S</span><span class="ref">AA-1004</span></span></li>
+        <li><span class="id">N10</span><span class="txt">S3 gateway endpoint (miễn phí) + tự phục hồi cho NAT instance.</span><span class="foot"><span class="chip eff">S</span><span class="ref">AA-1004</span></span></li>
+        <li><span class="id">N11</span><span class="txt">Checklist "cái gì tắt khi về private" + chọn gói GitHub; pin SHA action có quyền AWS; Dependabot cho actions.</span><span class="foot"><span class="chip eff">S</span><span class="ref">issue mới</span></span></li>
+        <li><span class="id">N12</span><span class="txt">Tách cảnh báo critical/info, health check ngoài, kênh điện thoại.</span><span class="foot"><span class="chip eff">S</span><span class="ref">issue mới / AA-880</span></span></li>
+        <li><span class="id">N13</span><span class="txt">Game day rollback $0: Booking, CRM, Vercel, Lambda TP; runbook ECS tham số; alias <span class="mono">live</span>.</span><span class="foot"><span class="chip eff eff-m">M</span><span class="ref">issue mới</span></span></li>
+        <li><span class="id">N14</span><span class="txt">Chặn Terraform apply khi còn job; tự apply Dev; kiểm lệch env task def.</span><span class="foot"><span class="chip eff">S</span><span class="ref">gộp N13</span></span></li>
+        <li><span class="id">N15</span><span class="txt">Đổi tên environment <span class="mono">prod</span>→<span class="mono">dev</span>; workflow deploy theo digest.</span><span class="foot"><span class="chip eff eff-m">M</span><span class="ref">AA-880</span></span></li>
+        <li><span class="id">N16</span><span class="txt">Script DORA + tỷ lệ làm lại, báo tháng; check risk-review có vết.</span><span class="foot"><span class="chip eff">S+S</span><span class="ref">AA-1003</span></span></li>
+        <li><span class="id">N17</span><span class="txt">Sửa baseline bảo mật SEC-01 cho đúng thực tế; cảnh báo đăng nhập SSO của đại lý.</span><span class="foot"><span class="chip eff">S</span><span class="ref">AA-873</span></span></li>
+        <li><span class="id">N18</span><span class="txt">PDPL: nhánh vi phạm dữ liệu hai ngả; sửa chữ "PDPD"; site Dev TripPlanner noindex + cảnh báo trên form.</span><span class="foot"><span class="chip eff">S</span><span class="ref">AA-820 · AA-829</span></span></li>
+        <li><span class="id">N19</span><span class="txt">"Bánh cóc" sức khoẻ dữ liệu trong dump đêm; dọn tồn đọng drift và RLS.</span><span class="foot"><span class="chip eff">S</span><span class="ref">issue mới / AA-853</span></span></li>
+        <li><span class="id">N20</span><span class="txt">Diễn tập baseline schema trên instance nháp; luật "bảng ship cùng người ghi và người đọc".</span><span class="foot"><span class="chip eff eff-m">M</span><span class="ref">AA-880</span></span></li>
+        <li><span class="id">N21</span><span class="txt">Đóng AA-997 Done-with-scope, bật ẩn pin bị gắn cờ.</span><span class="foot"><span class="chip eff">S</span><span class="ref">AA-997</span></span></li>
+        <li><span class="id">N22</span><span class="txt">AI Use Register v0 + ADR 0009 (tách khỏi AA-804).</span><span class="foot"><span class="chip eff">S</span><span class="ref">AA-804</span></span></li>
+        <li><span class="id">N23</span><span class="txt">Lint chỉ dẫn agent lần đầu; chuyển luật bền từ memory vào steering/skill.</span><span class="foot"><span class="chip eff eff-m">M</span><span class="ref">việc phiên</span></span></li>
+        <li><span class="id">N24</span><span class="txt">Gộp nguồn trạng thái: Linear là nguồn duy nhất, <span class="mono">plan.json</span> sinh tự động, backlog rút gọn.</span><span class="foot"><span class="chip eff eff-m">M</span><span class="ref">việc phiên</span></span></li>
+        <li><span class="id">N25</span><span class="txt">Bảng tổng chi phí sở hữu (mọi nhà cung cấp, seat) trong báo cáo chi phí tháng 10.</span><span class="foot"><span class="chip eff">S</span><span class="ref">FIN-02</span></span></li>
+      </ol>
+    </div>
+
+    <div class="col col-golive">
+      <div class="col-head">
+        <h3>Trước go-live <span class="count">17 việc</span></h3>
+        <p>Bắt đầu khi có ngày go-live; một số làm sớm được.</p>
+      </div>
+      <ol>
+        <li><span class="id">G1</span><span class="txt">Tham số hoá root Terraform bằng PR không đổi gì, rồi dựng aa-prod; apply role prod hẹp.</span><span class="foot"><span class="chip eff eff-l">L</span><span class="ref">AA-1004 · AA-880</span></span></li>
+        <li><span class="id">G2</span><span class="txt">Baseline schema mỗi owner đóng băng; seed nội dung theo allow-list từ PII tag, đã tập.</span><span class="foot"><span class="chip eff eff-m">M+M</span><span class="ref">AA-880</span></span></li>
+        <li><span class="id">G3</span><span class="txt">DR: ký RTO 24–48 giờ; ECR replication, replica secret, export Cognito, tabletop; CMK cho RDS/S3 prod.</span><span class="foot"><span class="chip eff eff-m">M</span><span class="ref">AA-880</span></span></li>
+        <li><span class="id">G4</span><span class="txt">Hai đường LLM độc lập cho prod; trần TPM/USD theo môi trường; xong payer/org ≥ 2 tuần trước.</span><span class="foot"><span class="chip eff eff-m">M</span><span class="ref">AA-1002</span></span></li>
+        <li><span class="id">G5</span><span class="txt">Một lõi gateway LLM chung cho TripPlanner và CRM, contract test chung.</span><span class="foot"><span class="chip eff eff-l">L</span><span class="ref">AA-1002 S8</span></span></li>
+        <li><span class="id">G6</span><span class="txt">Luật phục vụ dữ kiện do LLM sinh (nguồn + độ tin cậy); job đo chất lượng địa điểm có bộ vàng.</span><span class="foot"><span class="chip eff eff-m">M</span><span class="ref">AA-997</span></span></li>
+        <li><span class="id">G7</span><span class="txt">Duyệt retention cả lô, chạy live trên Dev; cửa sổ PII Booking/TP.</span><span class="foot"><span class="chip eff">S</span><span class="ref">issue mới</span></span></li>
+        <li><span class="id">G8</span><span class="txt">Đăng nhập nhân viên prod bắt yếu tố thứ hai; TOTP break-glass offline; ASVS L1 cho auth.</span><span class="foot"><span class="chip eff eff-m">M</span><span class="ref">AA-816</span></span></li>
+        <li><span class="id">G9</span><span class="txt">Allow-list ARN cho task role CIS; S3 và Bedrock thu hẹp.</span><span class="foot"><span class="chip eff">S</span><span class="ref">gộp N6</span></span></li>
+        <li><span class="id">G10</span><span class="txt">Task definition do Terraform sở hữu; Deploy Prod theo digest + kiểm attestation.</span><span class="foot"><span class="chip eff eff-m">M</span><span class="ref">AA-880</span></span></li>
+        <li><span class="id">G11</span><span class="txt">Mọi runbook đã tập một lần; paging đã thử; 2 SLO cho mỗi API công khai.</span><span class="foot"><span class="chip eff eff-m">M</span><span class="ref">gộp N13</span></span></li>
+        <li><span class="id">G12</span><span class="txt">Threat model mỗi điểm vào LLM (trong AI Use Register); pin SHA ở repo app.</span><span class="foot"><span class="chip eff">S</span><span class="ref">AA-804</span></span></li>
+        <li><span class="id">G13</span><span class="txt">Kỹ sư thứ hai bán thời gian, diễn tập deploy/rollback chỉ bằng tài liệu.</span><span class="foot"><span class="chip eff eff-m">M</span><span class="ref">quyết định nhân sự</span></span></li>
+        <li><span class="id">G14</span><span class="txt">Hồ sơ chuyển dữ liệu ra nước ngoài (Điều 20) sẵn sàng nộp; 3 câu hỏi hẹp cho luật sư.</span><span class="foot"><span class="chip eff">S</span><span class="ref">AA-820</span></span></li>
+        <li><span class="id">G15</span><span class="txt">Gói AWS Business support trên aa-prod (và aa-ai nếu LLM prod đi qua đó).</span><span class="foot"><span class="chip eff">S</span><span class="ref">AA-1004</span></span></li>
+        <li><span class="id">G16</span><span class="txt">PII tag đủ cho schema <span class="mono">crm</span> + lint báo thiếu tag.</span><span class="foot"><span class="chip eff">S</span><span class="ref">trước AA-980</span></span></li>
+        <li><span class="id">G17</span><span class="txt">UAT vòng chính thức khi UI ổn định và LLM có lại.</span><span class="foot"><span class="chip eff eff-m">M</span><span class="ref">AA-855</span></span></li>
+      </ol>
+    </div>
+
+    <div class="col col-trig">
+      <div class="col-head">
+        <h3>Khi có trigger <span class="count">12 trigger</span></h3>
+        <p>Chỉ làm khi sự kiện có tên xảy ra. Công sức ghi khi bản gốc có ước lượng.</p>
+      </div>
+      <ol>
+        <li class="trigger"><span class="txt"><b>acc3 vẫn khoá tới 06/11:</b> chọn phương án LLM dự phòng trong 2 ngày làm việc.</span><span class="foot"><span class="chip trig">T-LLM-06/11</span><span class="ref">AA-1002</span></span></li>
+        <li class="trigger"><span class="txt"><b>Một đại lý ký thư ý định hoặc pilot:</b> mở lại CRM W6–W8 theo luật build-vs-buy.</span><span class="foot"><span class="chip trig">T-PILOT</span><span class="ref">AA-958…971</span></span></li>
+        <li class="trigger"><span class="txt"><b>Có người đọc có tên cho báo cáo:</b> làm thêm báo cáo ngoài R0–R4.</span><span class="foot"><span class="chip trig">T-READER</span><span class="ref">AA-1003</span></span></li>
+        <li class="trigger"><span class="txt"><b>Chi phí batch được &gt; ~100 USD/tháng:</b> làm batch inference (S7).</span><span class="foot"><span class="chip trig">T-BATCH</span><span class="chip eff eff-l">L</span><span class="ref">AA-1002</span></span></li>
+        <li class="trigger"><span class="txt"><b>Một ngưỡng năng lực DB nổ:</b> resize, RDS Proxy, replica; sửa recompute xoá-chèn lại.</span><span class="foot"><span class="chip trig">T-C3</span><span class="ref">AA-838</span></span></li>
+        <li class="trigger"><span class="txt"><b>Tenant trả tiền đầu tiên:</b> đưa detector shadow lên enforce; cổng người cho PR rủi ro; pentest.</span><span class="foot"><span class="chip trig">T-TENANT1</span></span></li>
+        <li class="trigger"><span class="txt"><b>Đối tác gửi bảng câu hỏi bảo mật/AI:</b> cột ISO 27001 Annex A / SOC 2 CC; system card; NIST AI RMF bản gọn.</span><span class="foot"><span class="chip trig">T-QUESTIONNAIRE</span><span class="ref">AA-873 · AA-804</span></span></li>
+        <li class="trigger"><span class="txt"><b>Booking nhận tiền thật:</b> pentest bên ngoài; ASVS L2 cho luồng thanh toán.</span><span class="foot"><span class="chip trig">T-PAY</span></span></li>
+        <li class="trigger"><span class="txt"><b>Hợp đồng đòi chứng chỉ:</b> SOC 2 Type I / ISO 27001 / ISO 42001.</span><span class="foot"><span class="chip trig">T-CONTRACT</span><span class="chip eff eff-l">L</span></span></li>
+        <li class="trigger"><span class="txt"><b>≥ 3 người làm thường xuyên:</b> xét Linear trả phí; PM chuyên trách khi có &gt; 1 khách.</span><span class="foot"><span class="chip trig">T-TEAM3</span></span></li>
+        <li class="trigger"><span class="txt"><b>aa-prod nhận dữ liệu thật:</b> bật GuardDuty (~15–20 USD/tháng); xoay mọi secret một lần.</span><span class="foot"><span class="chip trig">T-PROD-DATA</span><span class="ref">AA-873</span></span></li>
+        <li class="trigger"><span class="txt"><b>Một trigger tăng trưởng của ADR 0018:</b> thêm account log-archive/security/backup.</span><span class="foot"><span class="chip trig">T-ADR0018-§6</span><span class="ref">AA-1004</span></span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="chuan">
+  <div class="sec-head">
+    <h2>Chuẩn: áp dụng khi nào</h2>
+    <p class="why">Đội nhỏ không cần chứng nhận ngay, nhưng cần biết chuẩn nào phải có bằng chứng trước khi khách hỏi, để không làm thừa và không bị bất ngờ.</p>
+  </div>
+  <p class="quote">Trả lời khi đối tác hỏi "có ISO/SOC 2 không": <b>"Chưa chứng nhận. Kiểm soát của chúng tôi bám theo ISO 27001 và SOC 2 và có tài liệu; sẽ chứng nhận khi hợp đồng khách hàng yêu cầu."</b></p>
+  <div class="scroll">
+    <table class="std">
+      <thead>
+        <tr>
+          <th scope="col">Chuẩn / khung</th>
+          <th scope="col">Mức</th>
+          <th scope="col">Cần ngay (≤ 2 tuần)</th>
+          <th scope="col">Trước go-live</th>
+          <th scope="col">Sau / khi có trigger</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Luật Bảo vệ DLCN 91/2025 + NĐ 356/2025 (PDPL)</td>
+          <td><span class="chip st-now">Cần ngay</span></td>
+          <td>Sửa chữ "PDPD"; nhánh vi phạm hai ngả (bên kiểm soát 72 giờ; CRM báo đại lý), chờ luật sư; Dev noindex</td>
+          <td>Hồ sơ chuyển dữ liệu ra nước ngoài (Điều 20, nộp trong 60 ngày từ dữ liệu thật đầu tiên); retention PII Booking/TP</td>
+          <td>Hồ sơ đánh giá tác động (Điều 21) nếu luật sư xác nhận không được miễn</td>
+        </tr>
+        <tr>
+          <td>OWASP Top 10 for LLM 2025</td>
+          <td><span class="chip st-now">Cần ngay</span></td>
+          <td>Bảng ánh xạ trong AI Use Register v0</td>
+          <td>Threat model mỗi điểm vào; ca injection trong bộ test Q0</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>ISO/IEC 27001:2022</td>
+          <td><span class="chip st-now">Cần ngay</span></td>
+          <td>Sửa baseline SEC-01 cho đúng thực tế (chưa thêm cột Annex A)</td>
+          <td>Rà SEC-01 hằng quý</td>
+          <td>SoA-lite ở T-QUESTIONNAIRE; chứng nhận khi hợp đồng yêu cầu</td>
+        </tr>
+        <tr>
+          <td>SOC 2 (CC6/CC7/CC8)</td>
+          <td><span class="chip st-now">Cần ngay</span></td>
+          <td>Check risk-review có vết: vừa là kiểm soát thật, vừa là bằng chứng CC8.1</td>
+          <td>—</td>
+          <td>Gom bằng chứng ở T-QUESTIONNAIRE; Type I khi hợp đồng yêu cầu</td>
+        </tr>
+        <tr>
+          <td>SLSA / chuỗi cung ứng</td>
+          <td><span class="chip st-now">Cần ngay</span></td>
+          <td>Pin SHA cho action có quyền AWS hoặc khoá App</td>
+          <td>Build provenance L2 cho image ECR + verify khi deploy prod</td>
+          <td>Không lên L3 / hardened runner</td>
+        </tr>
+        <tr>
+          <td>DORA</td>
+          <td><span class="chip st-now">Cần ngay</span></td>
+          <td>Script DF/LT/CFR/MTTR + tỷ lệ làm lại, báo tháng</td>
+          <td>Dùng để dự báo ngày</td>
+          <td>Không so dải "elite"</td>
+        </tr>
+        <tr>
+          <td>Kanban (quản lý SDLC)</td>
+          <td><span class="chip st-now">Cần ngay</span></td>
+          <td>WIP limit, Done-when đóng băng, sổ rủi ro, milestone theo ngày</td>
+          <td>Forecast theo throughput</td>
+          <td>Scrum / PM chuyên trách khi ≥ 3 người và &gt; 1 khách</td>
+        </tr>
+        <tr>
+          <td>OWASP ASVS 5.0</td>
+          <td><span class="chip st-golive">Trước go-live</span></td>
+          <td>—</td>
+          <td>Level 1 làm checklist cho auth/session (AA-816, pool prod)</td>
+          <td>L2/L3 khi Booking nhận thanh toán thật</td>
+        </tr>
+        <tr>
+          <td>NIST AI RMF 1.0 + GenAI Profile (AI 600-1)</td>
+          <td><span class="chip st-later">Sau</span></td>
+          <td>—</td>
+          <td>AI Use Register v0 đã đủ làm phần MAP thô</td>
+          <td>Bản gọn (system card, MEASURE) ở T-QUESTIONNAIRE</td>
+        </tr>
+        <tr>
+          <td>ISO/IEC 42001</td>
+          <td><span class="chip st-later">Sau</span></td>
+          <td>—</td>
+          <td>—</td>
+          <td>"Bám theo" qua register + ADR 0009; chứng nhận khi hợp đồng yêu cầu</td>
+        </tr>
+        <tr>
+          <td>Pentest bên ngoài</td>
+          <td><span class="chip st-later">Sau</span></td>
+          <td>—</td>
+          <td>—</td>
+          <td>Trước khi Booking nhận tiền thật hoặc tenant trả tiền đầu tiên</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Sáu khoảng trống chính theo SDLC/ADLC</h3>
+  <ol class="gaps">
+    <li><b>Hồ sơ không còn đúng thực tế:</b> SEC-01 cũ, standards mâu thuẫn ADR 0018, memory mâu thuẫn steering.</li>
+    <li><b>Đo lường chưa có nguồn:</b> DORA, throughput, cycle time chưa đo; eval chưa hiệu chuẩn.</li>
+    <li><b>Kiểm soát chỉ báo, không chặn:</b> drift, RLS, PII trong dump đêm; review PR rủi ro.</li>
+    <li><b>Quyền rộng của workload và agent:</b> task role CIS, apply role, agent dùng role người.</li>
+    <li><b>Vòng đời AI chưa khép:</b> chưa có nhãn của người, chưa canary khi đổi đường, chưa sổ dùng AI.</li>
+    <li><b>Quản lý dự án chưa có số:</b> chưa có WIP, ngày, rủi ro, tuổi của quyết định.</li>
+  </ol>
+</section>
+
+<section id="agent">
+  <div class="sec-head">
+    <h2>Làm việc với AI agent</h2>
+    <p class="why">Agent viết phần lớn code ở đây, nên cách giao việc và giới hạn cho agent chính là quy trình ADLC của dự án.</p>
+  </div>
+  <div class="split">
+    <div class="panel">
+      <h3><span class="dot" style="--c: var(--good)"></span>Nên giữ</h3>
+      <ul>
+        <li>Done bằng bằng chứng live, mẫu Definition of Ready, vòng bài học → guard → xoá.</li>
+        <li>Danh tính riêng cho agent (GitHub App), trailer Co-Authored-By, hook chặn subagent merge/push/IAM.</li>
+        <li>Merge queue + CI bắt buộc; agent tự merge trong giai đoạn dev; cổng người bật lúc bắt đầu build prod.</li>
+        <li>Mọi call LLM qua gateway có sổ chi phí; lượt trả tiền chạy thử ~3 rồi ≤ 50.</li>
+        <li>Lane code song song lane tư vấn; agent tự chụp bằng chứng.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3><span class="dot" style="--c: var(--hi)"></span>Nên sửa</h3>
+      <ul>
+        <li>Bỏ "agent tự chọn 20 việc coi như duyệt"; dùng WIP limit và danh sách chốt theo beachhead.</li>
+        <li>Agent mặc định dùng role hẹp; role admin chỉ trong cửa sổ đã gom.</li>
+        <li>Review PR rủi ro bằng agent khác phải để lại marker kiểm được; tech lead đọc mẫu 3 PR rủi ro mỗi tuần.</li>
+        <li>Luật bền của agent vào repo qua PR; lint chỉ dẫn mỗi 10 phiên.</li>
+        <li>Agent không tạo bảng, workflow, gate, báo cáo đi trước người dùng.</li>
+        <li>Giảm nghi thức phiên: snapshot tự động, <span class="mono">plan.json</span> sinh từ Linear.</li>
+        <li>Bài kiểm "kỹ sư thứ hai": quy trình chạy được mà không cần memory của agent.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="khong-lam">
+  <div class="sec-head">
+    <h2>Không nên làm lúc này</h2>
+    <p class="why">Với một người và vài agent, mỗi thứ thêm vào là thêm việc vận hành; danh sách này giữ năng lực cho đường tới lần ra mắt đầu tiên.</p>
+  </div>
+  <div class="dont">
+    <div><b>Blueprint 9 account / 7 OU, Control Tower</b><span>ADR 0018 bản gọn đủ cho 2–3 người; thêm khi trigger tăng trưởng nổ.</span></div>
+    <div><b>Staging thường trực, active/active, warm standby, EKS, Aurora</b><span>Không giải quyết vấn đề đang có; backup chéo region + dựng lại từ IaC là đủ.</span></div>
+    <div><b>Read replica, tách RDS cho Booking, RDS Proxy trên Dev</b><span>Chưa ngưỡng nào nổ: đỉnh 30/181 connection, DB 1,5 GB.</span></div>
+    <div><b>Interface VPC endpoint trên Dev</b><span>~7–8 USD/AZ/endpoint/tháng, đắt hơn phần NAT tiết kiệm; S3 gateway endpoint là ngoại lệ vì miễn phí.</span></div>
+    <div><b>Savings Plans, RDS reservation</b><span>Chờ prod chạy 4–8 tuần ở kích thước ổn định.</span></div>
+    <div><b>Data warehouse, dbt, CDC/Kafka, data catalog, Macie</b><span>DB 1,5 GB; bảng KPI ngày + archive Parquet là đủ.</span></div>
+    <div><b>Partition bảng log lớn</b><span>Bảng lớn nhất 443 MB, xa ngưỡng; làm retention trước.</span></div>
+    <div><b>GuardDuty, Security Hub, OTel/X-Ray, Langfuse, PagerDuty, Sentry trả phí</b><span>Chưa có prod nên chưa có giá trị; đã xếp vào cổng go-live.</span></div>
+    <div><b>Bedrock Knowledge Bases, Agents, fine-tune, tự host model, thay Jev</b><span>pgvector đủ ở ~20k vector; đổi công cụ làm mất hiệu chuẩn.</span></div>
+    <div><b>Gateway LLM dạng service HTTP / LiteLLM</b><span>Giữ thư viện chung tới khi ≥ 3 app có call prod thật.</span></div>
+    <div><b>Batch S7, eval trả tiền mỗi PR, chạy lại toàn catalog để thử</b><span>Tiết kiệm ít, rủi ro cao; canary 20 mục trước.</span></div>
+    <div><b>Thêm vòng prompt, đổi model, đưa gate shadow lên enforce, hạ thanh kappa</b><span>Chưa có judge hiệu chuẩn và nhãn của người.</span></div>
+    <div><b>Mở lại CRM W6–W8, báo cáo quá R4</b><span>Chưa có pilot, chưa có người đọc; lộ trình báo cáo ~107 ngày công.</span></div>
+    <div><b>Tách state Terraform, dựng root prod trước ngày go-live</b><span>Làm một lần cùng đợt build prod.</span></div>
+    <div><b>Chứng nhận SOC 2 / ISO 27001 / ISO 42001, ISMS đầy đủ</b><span>Hàng chục nghìn USD + nhiều tháng; chỉ khi hợp đồng yêu cầu.</span></div>
+    <div><b>SLSA L3, ký mọi artifact, SBOM đầy đủ, ASVS L2/L3, SAMM</b><span>Provenance L2 và ASVS L1 là trần hợp lý tới prod.</span></div>
+    <div><b>Scrum đủ nghi thức, story point, EVM, PMBOK/SAFe, PM chuyên trách</b><span>Kanban + WIP + nhịp tuần đủ cho 1–2 người + agent.</span></div>
+    <div><b>Linear trả phí, đồng bộ Linear ↔ Jira</b><span>Jira chỉ cho business owner; xét lại ở T-TEAM3.</span></div>
+    <div><b>Thêm tài liệu hoặc nghi thức mới</b><span>Mọi thay đổi theo hướng gộp và tự động hoá cái đang có.</span></div>
+    <div><b>Bổ nhiệm DPO, nộp hồ sơ trước khi luật sư xác nhận</b><span>Chỉ chuẩn bị bản nháp.</span></div>
+    <div><b>Dời acc2 khỏi org đại lý trước khi có đường LLM thay thế</b><span>Một sự cố thành hai.</span></div>
+    <div><b>Thuê đội toàn thời gian, thêm app thứ năm</b><span>Chưa chọn beachhead; phạm vi đã vượt sức đội.</span></div>
+  </div>
+</section>
+
+<section id="quyet-dinh">
+  <div class="sec-head">
+    <h2>Quyết định cần duyệt</h2>
+    <p class="why">Phần lớn việc ở trên chờ một quyết định; tách theo người quyết để mỗi bên biết mình cần trả lời gì và mặc định là gì.</p>
+  </div>
+
+  <div class="dec-head">
+    <h3>Business owner</h3>
+    <p>11 quyết định về tiền, phạm vi, pháp lý. Mã BO-10 và BO-12 đã chuyển sang tech lead.</p>
+  </div>
+  <div class="bo-grid">
+    <article class="bo">
+      <div class="bo-top"><span class="id">BO-1</span><h3>Beachhead và cửa sổ go-live</h3></div>
+      <dl><dt>Đề xuất</dt><dd>Bán trực tiếp của AA trước (TripPlanner + Booking), Content studio với một đại lý design-partner sau, cửa sổ Q1/2027; CRM ở dạng pilot.</dd><dt>Chi phí</dt><dd>2–3 giờ họp; prod ~280–550 USD/tháng khi bắt đầu build.</dd></dl>
+    </article>
+    <article class="bo">
+      <div class="bo-top"><span class="id">BO-2</span><h3>Cấp tiền đường LLM thứ hai</h3></div>
+      <dl><dt>Đề xuất</dt><dd>Thẻ công ty, trần chi tiêu 50–100 USD/tháng, chỉ dùng khi Bedrock lỗi hoặc cho A-series/judge. Đây là câu trả lời cho câu hỏi 5 phương án đang chờ.</dd><dt>Chi phí</dt><dd>0–100 USD/tháng, thường gần 0; hỏi kế toán về thuế nhà thầu.</dd></dl>
+    </article>
+    <article class="bo">
+      <div class="bo-top"><span class="id">BO-3</span><h3>Dữ liệu nào được gửi thẳng tới nhà cung cấp model</h3></div>
+      <dl><dt>Đề xuất</dt><dd>Cho nội dung A-series của AA và call judge; dữ liệu tenant và khách du lịch ở lại trong AWS tới khi sửa điều khoản và đọc DPA.</dd><dt>Chi phí</dt><dd>$0; thời gian rà pháp lý.</dd></dl>
+    </article>
+    <article class="bo">
+      <div class="bo-top"><span class="id">BO-4</span><h3>Đại lý AWS và Billing Transfer</h3></div>
+      <dl><dt>Đề xuất</dt><dd>Chỉ ký khi có văn bản về chuyển credit, điều khoản thoát, không chặn Marketplace; quyết trước ~20/11 (hạn 29/11), không thì dời tháng sau.</dd><dt>Chi phí</dt><dd>0 hoặc 50 USD/org/tháng tuỳ gói; biên đại lý chưa biết.</dd></dl>
+    </article>
+    <article class="bo">
+      <div class="bo-top"><span class="id">BO-5</span><h3>Người giữ quyền dự phòng</h3></div>
+      <dl><dt>Đề xuất</dt><dd>Business owner (hoặc người được chỉ định) là chủ thứ hai trên GitHub, AWS, tên miền, Vercel; ngân sách kỹ sư bán thời gian từ đầu build prod.</dd><dt>Chi phí</dt><dd>$0 bây giờ; ~0,3–0,5 kỹ sư khi build.</dd></dl>
+    </article>
+    <article class="bo">
+      <div class="bo-top"><span class="id">BO-6</span><h3>Khung quyết định tuần</h3></div>
+      <dl><dt>Đề xuất</dt><dd>30 phút/tuần, ≤ 5 quyết định, có mặc định nếu 7 ngày không trả lời; báo cáo thứ Hai; AA-820 trước 11/11.</dd><dt>Chi phí</dt><dd>30 phút/tuần.</dd></dl>
+    </article>
+    <article class="bo">
+      <div class="bo-top"><span class="id">BO-7</span><h3>Mục tiêu DR khi mất region</h3></div>
+      <dl><dt>Đề xuất</dt><dd>RPO 24 giờ, RTO 24–48 giờ: dựng lại từ IaC + bản copy chéo region, thay vì warm standby.</dd><dt>Chi phí</dt><dd>~5–20 USD/tháng, so với vài trăm cho warm standby.</dd></dl>
+    </article>
+    <article class="bo">
+      <div class="bo-top"><span class="id">BO-8</span><h3>Ngân sách prod gồm support và bảo mật</h3></div>
+      <dl><dt>Đề xuất</dt><dd>AWS Business support trên aa-prod; GuardDuty + KMS bật ngày có dữ liệu thật; duyệt cùng ngày go-live.</dd><dt>Chi phí</dt><dd>Support từ ~100 USD/tháng/account (cần kiểm giá) + ~20 USD/tháng.</dd></dl>
+    </article>
+    <article class="bo">
+      <div class="bo-top"><span class="id">BO-9</span><h3>Câu hỏi cho luật sư về PDPL</h3></div>
+      <dl><dt>Đề xuất</dt><dd>Trước đại lý thật đầu tiên: AA là doanh nghiệp nhỏ hay siêu nhỏ; CRM có mất miễn trừ không; mẫu và kênh nộp. Tech lead soạn nháp.</dd><dt>Chi phí</dt><dd>Thời gian luật sư.</dd></dl>
+    </article>
+    <article class="bo">
+      <div class="bo-top"><span class="id">BO-11</span><h3>Khoản chi GitHub khi về private <small>(không áp dụng: không chi tiền GitHub, 31/10)</small></h3></div>
+      <dl><dt>Đề xuất</dt><dd>Tech lead chọn phương án, business owner duyệt khoản chi: GitHub Team 1–2 seat nếu muốn giữ auto-apply; không mua Secret Protection.</dd><dt>Chi phí</dt><dd>~4 USD/user/tháng + ~37 USD/tháng phút Actions.</dd></dl>
+    </article>
+    <article class="bo">
+      <div class="bo-top"><span class="id">BO-13</span><h3>Báo cáo nào thật sự được đọc</h3></div>
+      <dl><dt>Đề xuất</dt><dd>Xác nhận 5–7 báo cáo P0 đã live là bộ duy nhất tới go-live.</dd><dt>Chi phí</dt><dd>Tiết kiệm phần lớn lộ trình 63 báo cáo.</dd></dl>
+    </article>
+  </div>
+
+  <div class="dec-head">
+    <h3>Tech lead</h3>
+    <p>25 quyết định kỹ thuật; phần lớn $0 và làm được trong tuần.</p>
+  </div>
+  <div class="scroll">
+    <table class="dec">
+      <thead><tr><th scope="col">#</th><th scope="col">Quyết định</th><th scope="col">Đề xuất</th><th scope="col">Chi phí</th></tr></thead>
+      <tbody>
+        <tr><td>TL-1</td><td>Chấp nhận ADR 0018 + region</td><td>Chấp nhận ngay, giữ us-west-1 kèm lý do; cùng root PR sửa standards</td><td class="cost">$0, S</td></tr>
+        <tr><td>TL-2</td><td>Cách làm Terraform cho prod</td><td>Tham số hoá root hiện có bằng PR không đổi gì; không tách state trước ngày go-live</td><td class="cost">$0 AWS; L</td></tr>
+        <tr><td>TL-3</td><td>WIP limit + đóng băng phạm vi</td><td>≤ 8 In Progress, ≤ 3 mỗi lane, ≤ 2 L/XL; ≥ 60% năng lực cho beachhead; bỏ "20 việc mỗi phiên"</td><td class="cost">$0; giải phóng ~1/3 năng lực phiên</td></tr>
+        <tr><td>TL-4</td><td>Milestone theo ngày + sổ rủi ro + Done-when đóng băng</td><td>Thêm trường vào <span class="mono">plan.json</span>, luật vào skill ship/session, rà tuần</td><td class="cost">$0, ~2 giờ</td></tr>
+        <tr><td>TL-5</td><td>Gộp nguồn trạng thái</td><td>Linear là nguồn duy nhất; <span class="mono">plan.json</span> sinh tự động; Notion còn con trỏ</td><td class="cost">$0, M</td></tr>
+        <tr><td>TL-6</td><td>Cắt chuỗi leo quyền</td><td>Chi tiết trong Linear AA-873; đã vá ở Infra #541.</td><td class="cost">$0</td></tr>
+        <tr><td>TL-7</td><td>Bảo vệ đường apply Terraform</td><td><b>Đã quyết 31/10: chưa làm lúc này.</b> Chi tiết trong Linear AA-873; đã vá ở Infra #541.</td><td class="cost">$0; thêm một click</td></tr>
+        <tr><td>TL-8</td><td>Agent mặc định role hẹp</td><td>Có; admin chỉ trong cửa sổ đã gom</td><td class="cost">$0; thêm chút ma sát</td></tr>
+        <tr><td>TL-9</td><td>Xoay mật khẩu nhà cung cấp đã lộ</td><td><b>Đã xong 25/10 (S251);</b> secrets register cập nhật 31/10</td><td class="cost">$0, ~15 phút</td></tr>
+        <tr><td>TL-10</td><td>Judge và luật chấp nhận</td><td>Chưa judge nào được dùng làm cổng; 40 nhãn người; ≥ 30 cặp/≥ 8 mỗi lớp; luật dự phòng nếu kappa &lt; 0,6</td><td class="cost">~2 giờ + 1–5 USD/vòng</td></tr>
+        <tr><td>TL-11</td><td>Đóng băng tính năng eval/học</td><td>Tới khi T9 blog đi trọn một vòng; gộp các issue eval vào một track</td><td class="cost">Lùi A1/T2 ~2–3 phiên</td></tr>
+        <tr><td>TL-12</td><td>Thứ tự lượt trả tiền khi LLM có lại</td><td>Canary &lt; 1 USD → hiệu chuẩn ≤ 5 → AA-900 ≤ 2 → AA-1000 ≤ 5 → AA-790; dừng ở lỗi đầu tiên</td><td class="cost">~13 USD</td></tr>
+        <tr><td>TL-13</td><td>Thứ tự lát AA-1002 còn lại</td><td>Phiên bản prompt, vòng đời, canary → S8 → S11; hoãn S7</td><td class="cost">Giải phóng ~4 ngày</td></tr>
+        <tr><td>TL-14</td><td>Registry không gian embedding</td><td>Làm trước khi đổi billing/org của acc2; thử re-embed một bảng</td><td class="cost">&lt; 1 USD, ~1 ngày</td></tr>
+        <tr><td>TL-15</td><td>ADR 0009 + AI Use Register v0</td><td>1–2 phiên tới, kèm bảng OWASP LLM 2025</td><td class="cost">$0, S</td></tr>
+        <tr><td>TL-16</td><td>Baseline schema + bánh cóc + retention cả lô</td><td>Baseline mỗi owner; số xấu đi thì chặn auto-merge PR bot</td><td class="cost">~3–5 ngày + ~1 ngày + 1 phiên</td></tr>
+        <tr><td>TL-17</td><td>Check risk-review bắt buộc</td><td>Có; đọc mẫu 3 PR rủi ro mỗi tuần; đổi sang tech lead duyệt ở trigger prod</td><td class="cost">~1 lượt reviewer/PR rủi ro</td></tr>
+        <tr><td>TL-18</td><td>Luật bền của agent vào repo</td><td>Có; lint chỉ dẫn mỗi 10 phiên</td><td class="cost">M một lần</td></tr>
+        <tr><td>TL-19</td><td>Tầng eval xác định $0 bắt buộc</td><td>Cassette, schema, fixture injection/thiếu nguồn/PII theo path filter; eval trả tiền vẫn tay</td><td class="cost">M, $0 định kỳ</td></tr>
+        <tr><td>TL-20</td><td>Ai sở hữu task def ECS</td><td>Terraform sở hữu template; CI chỉ thay digest; chốt trước khi viết Deploy Prod</td><td class="cost">$0, ~1–2 ngày</td></tr>
+        <tr><td>TL-21</td><td>Kênh cảnh báo critical</td><td>Hai SNS topic; critical vào Chatbot/Slack hoặc SMS cho tech lead + một người dự phòng</td><td class="cost">~0–3 USD/tháng</td></tr>
+        <tr><td>TL-22</td><td>Bản sao ngoài acc2</td><td><span class="mono">pg_dump</span> hằng tuần + tfstate vào bucket Object Lock ở aa-ai, trước lần dời org</td><td class="cost">~1–5 USD/tháng</td></tr>
+        <tr><td>TL-23</td><td>Topology LLM prod</td><td>Role chỉ-prod ở aa-ai + API vendor trực tiếp làm đường độc lập, trần theo môi trường</td><td class="cost">Theo dùng; M</td></tr>
+        <tr><td>TL-24</td><td>Site TripPlanner Dev có được index không</td><td>Không: noindex + dòng "bản xem trước" tới go-live; báo business owner một dòng</td><td class="cost">$0, ~1 giờ</td></tr>
+        <tr><td>TL-25</td><td>Độ chính xác địa điểm AA-997</td><td>Done-with-scope, ẩn pin bị gắn cờ (pin hiển thị ~88–91% đúng); geocoder trả phí chỉ khi thiếu pin làm hại sản phẩm</td><td class="cost">$0 bây giờ</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <p>Nguồn: <span class="mono">docs/audits/2026-10-31-S261-architecture-review/README.md</span> (bằng chứng từng phát hiện, nguồn nội bộ và bên ngoài, danh sách thay đổi sau rà phản biện).</p>
+  <p>Đọc cùng: go-live readiness và legal readiness (S260), triage In Progress (S260), phương án truy cập Bedrock và kế hoạch năng lực LLM (S261). Các dữ kiện luật là bản điện tử; luật sư vẫn phải xác nhận trước khi đưa vào quy trình chính thức.</p>
+</footer>
+
+</div>

@@ -1,0 +1,114 @@
+{
+ "steps": [
+  {
+   "k": "trip",
+   "v": {
+    "tripId": "4d6ec6d0…",
+    "base_currency": "USD"
+   }
+  },
+  {
+   "k": "catalog option",
+   "v": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days · 6 days · PH"
+  },
+  {
+   "k": "product load",
+   "v": 200
+  },
+  {
+   "k": "component",
+   "v": "The whole tour"
+  },
+  {
+   "k": "departure",
+   "v": ""
+  },
+  {
+   "k": "form",
+   "v": {
+    "serviceDate": "2026-11-21",
+    "adults": 2,
+    "sell": "900.00 USD",
+    "fromWarning": false
+   }
+  },
+  {
+   "k": "POST aa-lines",
+   "v": {
+    "status": 201,
+    "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+    "read_only": true,
+    "supplier_kind": "aa",
+    "sub_status": "pending",
+    "pending": "quote"
+   }
+  },
+  {
+   "k": "quoted line",
+   "v": {
+    "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+    "status": "planning",
+    "sub_status": "quoted",
+    "cost": {
+     "amount": "158.54",
+     "currency": "USD",
+     "amount_base": "158.54",
+     "base_currency": "USD",
+     "fx": {
+      "rate": "1.0000000000",
+      "rate_date": "2026-10-31",
+      "source": "aa_quote_lock",
+      "stale_days": 0
+     }
+    },
+    "sell": {
+     "amount": "900.00",
+     "currency": "USD",
+     "amount_base": "900.00",
+     "base_currency": "USD",
+     "fx": {
+      "rate": "1.0000000000",
+      "rate_date": "2026-10-31",
+      "source": "aa_quote_lock",
+      "stale_days": 0
+     }
+    },
+    "from_price": {
+     "amount": "400.00",
+     "currency": "USD"
+    },
+    "below_from_price": false,
+    "actions": [
+     "hold",
+     "release",
+     "requote"
+    ],
+    "quote_id_present": false
+   }
+  },
+  {
+   "k": "row status text",
+   "v": "AA quoted"
+  }
+ ],
+ "tripId": "4d6ec6d0…",
+ "lineId": "7d73099b…",
+ "catalog_cache_vs_cis": {
+  "crm_cache_title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+  "cis_public_name": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+  "match": true,
+  "crm_cache_duration_days": 6,
+  "cis_public_duration": "6 DAYS",
+  "served_state": "served",
+  "components": [
+   "trip_plan",
+   "activity",
+   "hotel_room"
+  ],
+  "from_price": {
+   "amount": "400.00",
+   "currency": "USD"
+  }
+ },
+ "agency": "Lữ hành Sen Vàng (synthetic), member_role owner"
+}

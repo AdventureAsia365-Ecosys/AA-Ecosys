@@ -166,11 +166,8 @@ nothing to flag, but the rows were stale); the three TripPlanner Lambda `pending
    `ADMIN_SECRET` holds that value; preview smoke in viewer mode 59 passed / 7 skipped (CIS #859). The main
    `aa-cis/dev/admin-secret` was rotated the same day (new → 200, old → 403); its copies are now only GitHub
    AA-CIS-App env `dev` and Vercel Production.
-2. **CIS task role `secretsmanager:GetSecretValue` on `*`** (AA-CIS-Infra `modules/ecs/main.tf:171-181`):
-   partly closed by X1 S19 (Infra #204, 19/10/2026): an explicit Deny now covers the RDS master,
-   `aa-cis/dev/db-migrator`, `booking/*` and `tripplanner/*`. The Allow is still `*`, so the CIS containers can
-   still read every other secret (E2E secrets included). The break-glass secret is protected by its
-   resource-policy Deny. Narrowing the Allow to a list stays a follow-up (ask the tech lead first).
+2. **CIS task role secret reads:** narrowed by X1 S19 (Infra #204) and S261 (Infra #541, AA-873). Remaining
+   follow-ups and their detail: Linear AA-873.
 3. **0 rotations configured** (29 live Secrets Manager secrets, `RotationEnabled` null on all). Manual
    rotation dates are the `last_changed` column; vendor rotation dates are `TBD-tech-lead`.
 4. **Full-admin E2E accounts** (narrowed S244): AA-878 N1 is done — GitHub `E2E_ADMIN_*` hold the viewer
@@ -198,14 +195,8 @@ nothing to flag, but the rows were stale); the three TripPlanner Lambda `pending
    the clean-up found 0 Secrets Manager secrets in us-west-1. The us-east-1 tag listing of the same inventory still
    showed one old secret `aa/dev/db_credentials` (pre-acc2 stack), outside the us-west-1 clean-up; the tech lead
    deletes it after a DRY RUN. No ecosystem secret may be created there.
-10. **CI apply role reads every secret** (S245 access review F-7): `aa-cis-infra-tf-apply` carries the AWS
-    managed policy `SecretsManagerReadWrite` and its boundary does not limit `secretsmanager`, so any AA-CIS-Infra
-    workflow on `main` in env `prod` can read (and write) the RDS master, `aa-cis/dev/db-migrator`, `booking/*`,
-    `tripplanner/*` and every other secret. It also holds `PutResourcePolicy` / `DeleteResourcePolicy`, so it can
-    lift the break-glass resource-policy Deny (that call is alerted). Follow-up under AA-806: replace the managed
-    policy with a named-ARN grant (as `tf_plan_secret_arns` does for the plan role) or add a `GetSecretValue` Deny
-    on the master / `booking/*` / `tripplanner/*` to the boundary (bootstrap object: applied locally with MFA, ask
-    the tech lead first, IAM); add a `main` branch policy on env `prod` (AA-866).
+10. **CI apply role secret access:** narrowed in S261 (Infra #541, boundary Denies, AA-873). Remaining follow-ups
+    and their detail: Linear AA-873 / AA-806.
 11. **Infra main lost the S250 Terraform for four secrets (S250 close):** AA-CIS-Infra `main` af8ac53 (#380, schema
     drift report) was squashed from a stale branch and dropped `accounts/aa365/crm_mail.tf` (`crm/dev/mail-oauth`),
     the traveller BFF secrets in `identity.tf` (`tripplanner/dev/cognito-bff-key`, `cognito-signup-proof-key`) and the
@@ -255,7 +246,7 @@ Filled in by AA-878 step M2: DRY RUN list → the tech lead OK → `delete-secre
 |---|---|---|---|---|---|---|---|
 | `aa-cis/dev/rds` | cis | migrator task, read in the task as MASTER_SECRET for roles/ files, set-password, run-script only, incl. the nightly DB Tour Liveness Gate run-script (AA-986) (AA-CIS-Infra db/run_migration.py:204; not injected since X1 S22, Infra #225); AA-CIS-App scripts/link_staff_identity.py:65, services/acp_produce/sweeper_lambda.py:37 (default; Lambda not deployed); humans with the MFA admin profile (break-glass, DM-8.9) | cli (read by data source module.secrets.data.aws_secretsmanager_secret.rds) | none | 2026-07-07 | **keep** | Master DSN (aa_cis_admin). No longer the CIS runtime login since X1 S18 (19/10/2026); the CIS task role is denied it since X1 S19; DB Migrate logs in as db_migrator since X1 S22. Also readable by the CI apply role aa-cis-infra-tf-apply (SecretsManagerReadWrite; open item 10). See "Who can read the RDS master (X1 S19)". |
 | `aa-ecosys/ops/linear-api-key` | ecosystem | AA-Ecosys `tools/linear/linear_export.py` (orchestrating session, MFA admin profile) | cli (by hand, the tech lead) | TBD-tech-lead | 2026-10-20 | **keep** | Linear personal API key (S245): export closed issues to `docs/linear-export/`, then archive via the GraphQL API (Free plan, no manual archive in the UI). Created 20/10/2026 (S245). |
-| `aa-cis/dev/dataforseo` | cis | ECS api + worker DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD (modules/ecs/main.tf:509-510, :708-709) | cli (data source module.secrets.data.aws_secretsmanager_secret.dataforseo) | none | 2026-07-07 | **keep** | Vendor DataForSEO login/password (JSON). |
+| `aa-cis/dev/dataforseo` | cis | ECS api + worker DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD (modules/ecs/main.tf:509-510, :708-709) | cli (data source module.secrets.data.aws_secretsmanager_secret.dataforseo) | manual | 2026-10-25 | **keep** | Vendor DataForSEO login/password (JSON). Rotated S251 (25/10/2026) by the tech lead (vendor dashboard) and written here by the agent; LastChangedDate re-read S261. |
 | `aa-cis/dev/acp-partner-api` | cis | — | terraform module.secrets.aws_secretsmanager_secret.acp_partner_api (forgotten by AA-878 I2, removed block) | none | 2026-10-15 | **deleted** | Placeholder of the retired ACP v1 partner path. No reader on main of any repo; CloudTrail since 18/10: only the plan role (refresh). LastChangedDate 15/10 is a Terraform tag re-apply, not a value change. Deleted 19/10/2026 (S243), recovery until 18/11/2026. |
 | `aa-cis/dev/acp-webhook-secret` | cis | — | terraform module.secrets.aws_secretsmanager_secret.acp_webhook_secret (forgotten by AA-878 I2, removed block) | none | 2026-10-15 | **deleted** | Placeholder of the retired ACP v1 webhook HMAC. No reader on main; CloudTrail since 18/10: only the plan role. Deleted 19/10/2026 (S243), recovery until 18/11/2026. |
 | `aa-cis/dev/admin-secret` | cis | ECS api + worker ADMIN_SECRET (modules/ecs/main.tf:502, :706); ops-probe Lambda aa-cis-dev-dfs-balance-check, read by ARN from the event secret_id (AA-CIS-Infra accounts/aa365/dfs_balance.tf:236, :270); copies: GitHub AA-CIS-App env dev ADMIN_SECRET, Vercel aa-cis-frontend ADMIN_SECRET Production only | cli (var.secret_admin_arn, terraform.tfvars) | manual (2026-10-19, AA-816 I6) | 2026-10-19 | **keep** | Main admin secret (machine callers; legacy sessions until S2). Rotated 19/10/2026 (S244, I6): new → 200, old → 403; GitHub env dev + Vercel Production copies updated; api + worker restarted. Preview holds `aa-cis/dev/admin-secret-preview` (C9). Header trust remains for it until S2. |
@@ -394,7 +385,7 @@ Filled in by AA-878 step M2: DRY RUN list → the tech lead OK → `delete-secre
 | Namecheap account (lumiguides.it.com) | `vendor:namecheap` | TBD-tech-lead | DNS / domain registration | TBD-tech-lead |  |
 | Zoho account | `vendor:zoho` | TBD-tech-lead | mail / business tooling | TBD-tech-lead |  |
 | Mapbox public token (NEXT_PUBLIC_MAPBOX_TOKEN) + account | `vendor:mapbox` | TBD-tech-lead | Vercel aa-tripplanner NEXT_PUBLIC_MAPBOX_TOKEN (URL-restricted, S239) | TBD-tech-lead | Old secret geocoding token revoked 20/10/2026 (S245, geocoding API now 401); the TripPlanner docs PR removed its last mention. |
-| DataForSEO account | `vendor:dataforseo` | TBD-tech-lead | aa-cis/dev/dataforseo | TBD-tech-lead | **Open (S247, 22/10/2026):** AA-CIS-Infra history holds a DataForSEO API credential from an old committed variables file, and that repo is public since 22/10/2026 ([ADR 0014](../adr/0014-repo-visibility-and-github-plan.md) amendment). Rotation recommended; the tech lead accepted the risk and chose not to rotate now. Rotate before the repos go back to private or before prod, then update `aa-cis/dev/dataforseo`. Rotation path (AA-981): vendor dashboard → `aa-cis/dev/dataforseo` → force a new deployment of api + worker → `/admin/dfs-balance` 200 → resolve the external scanner alert. |
+| DataForSEO account | `vendor:dataforseo` | nghiep | aa-cis/dev/dataforseo | manual (last 2026-10-25) | **Closed (S251, 25/10/2026):** the password exposed in old AA-CIS-Infra history (S247 finding) was rotated in the vendor dashboard and `aa-cis/dev/dataforseo` updated (LastChangedDate re-read S261). The old value in git history no longer works. Repos stay public (S261 decision). |
 | OpenAI API key (account) | `vendor:openai` | TBD-tech-lead | aa-cis/dev/openai-key | TBD-tech-lead |  |
 | Typesafe / Jev API key (account) | `vendor:typesafe` | TBD-tech-lead | aa-cis/dev/typesafe | TBD-tech-lead |  |
 | Geoapify API key (account) | `vendor:geoapify` | TBD-tech-lead | aa-cis/dev/geoapify | TBD-tech-lead |  |

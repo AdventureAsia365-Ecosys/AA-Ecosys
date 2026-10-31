@@ -1,0 +1,149 @@
+{
+ "run": {
+  "status": 409,
+  "detail": "deletion_dry_run",
+  "request_id": null,
+  "receipt": null
+ },
+ "staff": {
+  "cis_role": "reviewer",
+  "token_use": "access",
+  "issuer_is_workforce_pool": true,
+  "groups": [
+   "cis-reviewer"
+  ],
+  "minutes_left": 15
+ },
+ "crm_health": {
+  "git_sha": "3718242a264c9ffe9bbb7f0db468c58deb866d73",
+  "version": "0.11.0"
+ },
+ "client": "15931fb1",
+ "export": {
+  "id": "c8ca2a60",
+  "status": "ready",
+  "rows": 2,
+  "tables": 25,
+  "size_bytes": 17612,
+  "content_sha256": "8979b0d4a2fe577fac2635101f8f02e6e7e6decdfadd315bd2092f64e90100b3",
+  "progress": {
+   "done": 25,
+   "total": 25
+  }
+ },
+ "download_1": {
+  "status": 200,
+  "type": "application/zip",
+  "size": 17612,
+  "sha256": "8979b0d4a2fe577fac2635101f8f02e6e7e6decdfadd315bd2092f64e90100b3",
+  "header_sha256": null,
+  "zip_entries": 53,
+  "detail": null,
+  "matches_shown_checksum": true
+ },
+ "staff_checks": {
+  "download": {
+   "status": 403,
+   "detail": "wrong_audience",
+   "type": "application/json"
+  },
+  "list": {
+   "status": 403,
+   "detail": "wrong_audience",
+   "type": "application/json"
+  },
+  "no_token": {
+   "status": 401,
+   "detail": "missing_bearer_token",
+   "type": "application/json"
+  },
+  "agency_same_link_after": {
+   "status": 200,
+   "same_sha256": true
+  },
+  "agency_link_reuse": {
+   "status": 403,
+   "detail": "link_invalid"
+  }
+ },
+ "request": {
+  "id": "c41a85fa",
+  "due_on": "2026-11-30"
+ },
+ "dry_run_1": {
+  "status": 200,
+  "dry_run": true,
+  "counts": {
+   "note": 0,
+   "consent": 0,
+   "message": 0,
+   "document": 0,
+   "traveler": 1,
+   "trip_party": 0,
+   "client_link": 0,
+   "conversation": 0,
+   "meeting_slot": 0,
+   "otp_challenge": 0,
+   "trip_traveler": 0,
+   "dispatch_queue": 0,
+   "form_submission": 0,
+   "profile_history": 0,
+   "traveler_access": 0,
+   "traveler_health": 0,
+   "dispatch_attempt": 0,
+   "traveler_profile": 1,
+   "signature_request": 0,
+   "traveler_relation": 0,
+   "signature_event_kept": 0,
+   "terms_acceptance_kept": 0,
+   "traveler_referrer_unlinked": 0,
+   "proposal_acceptance_name_erased": 0,
+   "document_object": 0
+  },
+  "kept": {
+   "signature_event": 0,
+   "terms_acceptance": 0
+  },
+  "exceptions": [],
+  "exports_withdrawn": 1
+ },
+ "run_ui_message": "Deletion is switched off on this environment: the daily run, erasures and offboarding only count what they would remove.",
+ "after": {
+  "client_get": {
+   "status": 200,
+   "detail": null
+  },
+  "dry_run_2": {
+   "status": 200,
+   "detail": null
+  },
+  "request": {
+   "status": "open",
+   "outcome": null,
+   "erasure_request_id": "-"
+  }
+ },
+ "side": {
+  "unknown_id": {
+   "status": 404,
+   "detail": "subject_not_found"
+  },
+  "crm12": {
+   "client": "dbc9604e",
+   "status": 409,
+   "detail": "traveler_on_trip"
+  }
+ },
+ "console_errors": [
+  "portal.lumiguides.it.com: Failed to load resource: the server responded with a status of 403 ()",
+  "portal.lumiguides.it.com: Failed to load resource: the server responded with a status of 409 ()",
+  "portal.lumiguides.it.com: Failed to load resource: the server responded with a status of 404 ()",
+  "portal.lumiguides.it.com: Failed to load resource: the server responded with a status of 409 ()"
+ ],
+ "bad_responses": [
+  "GET /bff/data/exports/<id>/download 403",
+  "POST /bff/travelers/<id>/erasure 409",
+  "POST /bff/travelers/<id>/erasure 404",
+  "POST /bff/travelers/<id>/erasure 409"
+ ]
+}

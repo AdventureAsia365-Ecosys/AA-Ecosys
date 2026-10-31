@@ -1,0 +1,737 @@
+<title>Tổ chức AWS của AA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f6f5f1;
+  --surface: #ffffff;
+  --surface-2: #efede7;
+  --text: #1d1c1a;
+  --muted: #5c5950;
+  --line: #dad6cc;
+  --accent: #3b4bc8;
+  --org-bg: #fbfaf7;
+  --frame: #9a968c;
+  --gov-bg: #e7e8fb; --gov-line: #4a52c9; --gov-text: #262b78;
+  --ai-bg: #f1e7fb; --ai-line: #8a3fd1; --ai-text: #4d1d7e;
+  --dev-bg: #e2f2f4; --dev-line: #157f8b; --dev-text: #0c4950;
+  --prod-bg: #e4f4e7; --prod-line: #2a8945; --prod-text: #17502a;
+  --res-bg: #fdf0da; --res-line: #c0780c; --res-text: #694005;
+  --ext-bg: #fde7e2; --ext-line: #c94a36; --ext-text: #772314;
+  --warn-bg: #fdebeb; --warn-line: #c4342d; --warn-text: #7a1914;
+  --ok-bg: #e4f4e7; --ok-text: #17502a;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141412;
+    --surface: #1d1c1a;
+    --surface-2: #272623;
+    --text: #ecebe5;
+    --muted: #aaa69c;
+    --line: #3a3833;
+    --accent: #9aa4ff;
+    --org-bg: #191816;
+    --frame: #706c63;
+    --gov-bg: #23264b; --gov-line: #8d94f2; --gov-text: #d6d9ff;
+    --ai-bg: #2f2143; --ai-line: #ba8cf1; --ai-text: #ecdcff;
+    --dev-bg: #14343a; --dev-line: #4fc0cc; --dev-text: #cbf1f5;
+    --prod-bg: #173a21; --prod-line: #5dc57b; --prod-text: #cff3d8;
+    --res-bg: #3d2b0f; --res-line: #e8aa42; --res-text: #fce4b9;
+    --ext-bg: #44201a; --ext-line: #f27d68; --ext-text: #ffd7ce;
+    --warn-bg: #461c1a; --warn-line: #f2726b; --warn-text: #ffd4d1;
+    --ok-bg: #173a21; --ok-text: #cff3d8;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141412;
+  --surface: #1d1c1a;
+  --surface-2: #272623;
+  --text: #ecebe5;
+  --muted: #aaa69c;
+  --line: #3a3833;
+  --accent: #9aa4ff;
+  --org-bg: #191816;
+  --frame: #706c63;
+  --gov-bg: #23264b; --gov-line: #8d94f2; --gov-text: #d6d9ff;
+  --ai-bg: #2f2143; --ai-line: #ba8cf1; --ai-text: #ecdcff;
+  --dev-bg: #14343a; --dev-line: #4fc0cc; --dev-text: #cbf1f5;
+  --prod-bg: #173a21; --prod-line: #5dc57b; --prod-text: #cff3d8;
+  --res-bg: #3d2b0f; --res-line: #e8aa42; --res-text: #fce4b9;
+  --ext-bg: #44201a; --ext-line: #f27d68; --ext-text: #ffd7ce;
+  --warn-bg: #461c1a; --warn-line: #f2726b; --warn-text: #ffd4d1;
+  --ok-bg: #173a21; --ok-text: #cff3d8;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 15.5px;
+  line-height: 1.62;
+}
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+}
+code, .mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.86em; }
+code { background: var(--surface-2); padding: 1px 5px; border-radius: 5px; overflow-wrap: anywhere; }
+a { color: var(--accent); }
+
+header.top { margin-bottom: 28px; }
+.eyebrow { color: var(--muted); font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.15; margin: 6px 0 12px; letter-spacing: -0.01em; }
+.lead { font-size: 17px; color: var(--text); max-width: 760px; margin: 0; }
+h2 { font-size: 22px; line-height: 1.3; margin: 0 0 6px; }
+h3 { font-size: 17px; margin: 18px 0 8px; }
+section { margin-top: 44px; }
+p { margin: 0 0 12px; }
+.why { color: var(--muted); margin-bottom: 16px; max-width: 780px; }
+
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 12px; margin-top: 22px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.stat b { display: block; font-size: 20px; line-height: 1.25; }
+.stat span { color: var(--muted); font-size: 13.5px; }
+.stat.warn { border-color: var(--warn-line); background: var(--warn-bg); }
+.stat.warn b, .stat.warn span { color: var(--warn-text); }
+
+.summary { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
+.summary ul { margin: 0; padding-left: 20px; }
+.summary li { margin-bottom: 8px; }
+.summary li:last-child { margin-bottom: 0; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+.diagram { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.diagram svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.scroll-hint { color: var(--muted); font-size: 13px; margin-top: 6px; }
+@media (min-width: 800px) { .scroll-hint { display: none; } }
+
+/* SVG roles */
+svg text { font-family: "Be Vietnam Pro", system-ui, sans-serif; font-size: 12.5px; fill: var(--text); }
+svg .tt { font-size: 15.5px; font-weight: 700; }
+svg .sm { font-size: 12px; }
+svg .st { font-weight: 600; }
+.frame-org { fill: var(--org-bg); stroke: var(--frame); stroke-width: 1.5; }
+.frame-ou { fill: none; stroke: var(--frame); stroke-width: 1.2; stroke-dasharray: 5 4; }
+.frame-out { fill: none; stroke: var(--res-line); stroke-width: 1.3; stroke-dasharray: 6 4; }
+.lbl { fill: var(--muted); }
+.lbl-strong { fill: var(--text); font-weight: 700; font-size: 14px; }
+.b-gov { fill: var(--gov-bg); stroke: var(--gov-line); stroke-width: 1.6; }
+.b-ai { fill: var(--ai-bg); stroke: var(--ai-line); stroke-width: 1.6; }
+.b-dev { fill: var(--dev-bg); stroke: var(--dev-line); stroke-width: 1.6; }
+.b-prod { fill: var(--prod-bg); stroke: var(--prod-line); stroke-width: 1.6; }
+.b-res { fill: var(--res-bg); stroke: var(--res-line); stroke-width: 1.6; }
+.b-ext { fill: var(--ext-bg); stroke: var(--ext-line); stroke-width: 1.6; }
+.b-warn { fill: var(--warn-bg); stroke: var(--warn-line); stroke-width: 1.4; }
+.dashed { stroke-dasharray: 7 5; }
+.t-gov { fill: var(--gov-text); }
+.t-ai { fill: var(--ai-text); }
+.t-dev { fill: var(--dev-text); }
+.t-prod { fill: var(--prod-text); }
+.t-res { fill: var(--res-text); }
+.t-ext { fill: var(--ext-text); }
+.t-warn { fill: var(--warn-text); }
+.bd-warn { fill: var(--surface); stroke: var(--warn-line); stroke-width: 1.2; }
+.bd-dev { fill: var(--surface); stroke: var(--dev-line); stroke-width: 1.2; }
+.bd-prod { fill: var(--surface); stroke: var(--prod-line); stroke-width: 1.2; }
+.ln-gov { fill: none; stroke: var(--gov-line); stroke-width: 1.6; }
+.ln-ai { fill: none; stroke: var(--ai-line); stroke-width: 2.4; }
+.ln-bill { fill: none; stroke: var(--res-line); stroke-width: 2.2; stroke-dasharray: 8 5; }
+.ln-ext { fill: none; stroke: var(--ext-line); stroke-width: 2.2; stroke-dasharray: 8 5; }
+.ln-move { fill: none; stroke: var(--dev-line); stroke-width: 2.2; stroke-dasharray: 8 5; }
+.mk-ai { fill: var(--ai-line); }
+.mk-bill { fill: var(--res-line); }
+.mk-ext { fill: var(--ext-line); }
+.mk-move { fill: var(--dev-line); }
+
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 14px; font-size: 13.5px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.sw { width: 16px; height: 12px; border-radius: 3px; border: 1.6px solid; display: inline-block; flex: none; }
+.sw.gov { background: var(--gov-bg); border-color: var(--gov-line); }
+.sw.ai { background: var(--ai-bg); border-color: var(--ai-line); }
+.sw.dev { background: var(--dev-bg); border-color: var(--dev-line); }
+.sw.prod { background: var(--prod-bg); border-color: var(--prod-line); }
+.sw.res { background: var(--res-bg); border-color: var(--res-line); }
+.sw.ext { background: var(--ext-bg); border-color: var(--ext-line); }
+.sw.warn { background: var(--warn-bg); border-color: var(--warn-line); }
+.ln { width: 26px; height: 0; border-top: 2.4px solid; display: inline-block; flex: none; }
+.ln.ai { border-color: var(--ai-line); }
+.ln.bill { border-color: var(--res-line); border-top-style: dashed; }
+.ln.ext { border-color: var(--ext-line); border-top-style: dashed; }
+.ln.move { border-color: var(--dev-line); border-top-style: dashed; }
+.ln.gov { border-color: var(--gov-line); border-top-width: 1.6px; }
+.legend .dash-box { width: 16px; height: 12px; border: 1.6px dashed var(--muted); border-radius: 3px; display: inline-block; }
+
+.tbl { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; line-height: 1.5; }
+.tbl.wide table { min-width: 860px; }
+.tbl.mid table { min-width: 640px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { background: var(--surface-2); font-weight: 600; font-size: 13px; color: var(--muted); white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+td.acc { white-space: nowrap; font-weight: 600; }
+.tag { display: inline-block; font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 999px; border: 1px solid; white-space: nowrap; }
+.tag.gov { background: var(--gov-bg); color: var(--gov-text); border-color: var(--gov-line); }
+.tag.ai { background: var(--ai-bg); color: var(--ai-text); border-color: var(--ai-line); }
+.tag.dev { background: var(--dev-bg); color: var(--dev-text); border-color: var(--dev-line); }
+.tag.prod { background: var(--prod-bg); color: var(--prod-text); border-color: var(--prod-line); }
+.tag.res { background: var(--res-bg); color: var(--res-text); border-color: var(--res-line); }
+.tag.ext { background: var(--ext-bg); color: var(--ext-text); border-color: var(--ext-line); }
+.tag.warn { background: var(--warn-bg); color: var(--warn-text); border-color: var(--warn-line); }
+.tag.who { background: var(--surface-2); color: var(--text); border-color: var(--line); }
+.muted { color: var(--muted); }
+
+.callout { border-left: 4px solid var(--accent); background: var(--surface); border-radius: 0 12px 12px 0; padding: 14px 16px; margin: 16px 0; border-top: 1px solid var(--line); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.callout.warn { border-left-color: var(--warn-line); }
+.callout.res { border-left-color: var(--res-line); }
+.callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+.callout ul { margin: 6px 0 0; padding-left: 20px; }
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.steps li { display: grid; grid-template-columns: 150px 1fr; gap: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.steps .when { font-weight: 700; font-size: 14.5px; }
+.steps .when small { display: block; font-weight: 500; color: var(--muted); font-size: 12.5px; }
+.steps .what p { margin: 4px 0 0; }
+.steps .what ul { margin: 6px 0 0; padding-left: 18px; }
+.steps li.gate { border-color: var(--res-line); }
+.steps li.prodphase { border-color: var(--prod-line); }
+@media (max-width: 560px) { .steps li { grid-template-columns: 1fr; gap: 4px; } }
+
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 14px; }
+.approve h3 { margin-top: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.approve ol { margin: 0; padding-left: 20px; }
+.approve li { margin-bottom: 10px; }
+.approve li:last-child { margin-bottom: 0; }
+.approve .prop { display: block; color: var(--muted); font-size: 14px; }
+
+footer { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13.5px; }
+footer ul { padding-left: 20px; margin: 6px 0 0; }
+footer code { overflow-wrap: anywhere; }
+</style>
+
+<div class="page">
+
+<header class="top">
+  <div class="eyebrow">Bản tư vấn S261 · 31/10/2026 · dành cho tech lead và business owner</div>
+  <h1>Tổ chức AWS của AA</h1>
+  <p class="lead">AA đang chuyển từ các account rời rạc sang một tổ chức AWS (org) do chính AA quản trị: một account chỉ để quản trị, một account cho AI, một account cho môi trường Dev, và thêm một account cho khách thật khi go-live. Trang này giải thích từng account làm gì, ai trả tiền, xin quota AI ở đâu, các bước theo ngày, rủi ro, và những việc cần duyệt.</p>
+  <div class="stats">
+    <div class="stat"><b>3 account hôm nay</b><span>acc4 quản trị, acc3 AI, acc2 Dev. Thêm aa-prod khi có ngày go-live</span></div>
+    <div class="stat"><b>01/12/2026</b><span>ngày sớm nhất đại lý bắt đầu trả hoá đơn (Billing Transfer), không phải ngày chắc chắn</span></div>
+    <div class="stat warn"><b>Error 002 trên acc3</b><span>mọi model Bedrock bị chặn từ 29/10; case AWS hẹn trả lời khoảng 04–06/11</span></div>
+    <div class="stat"><b>Chưa có ngày go-live</b><span>mọi mốc chuẩn bị prod tính lùi từ ngày G do business owner chọn</span></div>
+  </div>
+</header>
+
+<section>
+  <h2>Tóm tắt</h2>
+  <p class="why">Năm ý dưới đây là đủ để hiểu mô hình mà không cần đọc phần chi tiết.</p>
+  <div class="summary">
+    <ul>
+      <li><b>AA giữ toàn quyền org.</b> Đại lý chỉ trả hoá đơn qua Billing Transfer. Họ không gắn được chính sách chặn (SCP) lên account của AA, không giữ email root.</li>
+      <li><b>Mỗi org chỉ có một bên trả tiền.</b> Mọi account trong org AA (AI, Dev, prod) dùng chung một payer. Account nào muốn payer khác thì phải đứng ngoài org.</li>
+      <li><b>Quota AI xin ở account gọi model, không xin ở cấp org hay ở đại lý.</b> Theo mô hình hiện tại đó là acc3 (aa-ai), dùng chung cho dev và prod, nên phải đặt trần cho từng môi trường trong LLM gateway.</li>
+      <li><b>Số account không quyết định độ ổn định của AI.</b> Thứ quyết định là: đại lý có giấy bán lại Anthropic bằng văn bản, đường Anthropic API ngoài AWS luôn sẵn sàng, quota dư, mỗi route có hai họ model, và cảnh báo tức thời.</li>
+      <li><b>Mọi lần đổi payer hay đổi org phải xong trước go-live.</b> Sự cố 29/10 bắt đầu đúng lúc acc3 rời org cũ.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Sơ đồ org</h2>
+  <p class="why">Sơ đồ cho thấy account nào nằm ở đâu, ai trả tiền cho ai, và lệnh gọi AI đi đường nào; nét đứt là thứ chưa xảy ra hoặc đang chuyển tiếp.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 1000 710" role="img" aria-labelledby="dg-t dg-d">
+      <title id="dg-t">Sơ đồ tổ chức AWS của AA</title>
+      <desc id="dg-d">Org AA chứa acc4 aa-management ở trên cùng, bên dưới là ba OU: OU AI với acc3 aa-ai, OU NonProd với acc2 aa-nonprod (đích, acc2 hiện còn ở org TrueIDC), OU Prod với aa-prod tạo khi go-live. acc4 nối Billing Transfer tới đại lý từ sớm nhất 01/12/2026. App trong org gọi Anthropic API ngoài AWS. acc2 và aa-prod gọi model qua role của acc3.</desc>
+      <defs>
+        <marker id="m-ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-ai"/></marker>
+        <marker id="m-bill" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-bill"/></marker>
+        <marker id="m-ext" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-ext"/></marker>
+        <marker id="m-move" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-move"/></marker>
+      </defs>
+
+      <!-- Outside AWS: Anthropic API -->
+      <rect x="40" y="20" width="360" height="80" rx="12" class="b-ext"/>
+      <text x="58" y="46" class="tt t-ext">Anthropic API trực tiếp</text>
+      <text x="58" y="68" class="t-ext">Ngoài AWS · connection anthropic-direct</text>
+      <text x="58" y="88" class="t-ext">Không phụ thuộc org hay payer AWS</text>
+
+      <!-- Reseller -->
+      <rect x="600" y="20" width="360" height="80" rx="12" class="b-res"/>
+      <text x="618" y="46" class="tt t-res">Đại lý AWS (bên trả hoá đơn)</text>
+      <text x="618" y="68" class="t-res">Trả hoá đơn cả org, xuất hoá đơn VND/VAT</text>
+      <text x="618" y="88" class="t-res">Không quản trị org, không đặt SCP</text>
+
+      <!-- Org frame -->
+      <rect x="20" y="150" width="960" height="400" rx="18" class="frame-org"/>
+      <text x="40" y="176" class="lbl-strong">Org AA · all features</text>
+      <text x="40" y="195" class="sm lbl">AA giữ toàn quyền quản trị</text>
+
+      <!-- Anthropic link -->
+      <path d="M220,150 V104" class="ln-ext" marker-end="url(#m-ext)"/>
+      <text x="232" y="122" class="sm t-ext st">dev: dùng ngay bây giờ</text>
+      <text x="232" y="138" class="sm t-ext">prod: fallback có điều kiện</text>
+
+      <!-- acc4 -->
+      <rect x="330" y="176" width="340" height="88" rx="12" class="b-gov"/>
+      <text x="348" y="202" class="tt t-gov">acc4 · aa-management</text>
+      <text x="348" y="224" class="t-gov">Chỉ quản trị: org, SCP, Identity Center,</text>
+      <text x="348" y="244" class="t-gov">budget, form Anthropic. Không chạy app.</text>
+
+      <!-- Billing transfer -->
+      <path d="M670,220 H780 V104" class="ln-bill" marker-end="url(#m-bill)"/>
+      <text x="792" y="122" class="sm t-res st">Billing Transfer</text>
+      <text x="792" y="138" class="sm t-res">sớm nhất 01/12/2026</text>
+
+      <!-- Governance lines -->
+      <path d="M500,264 V277 M185,277 H815 M185,277 V290 M500,277 V290 M815,277 V290" class="ln-gov"/>
+
+      <!-- OU AI -->
+      <rect x="40" y="290" width="290" height="212" rx="14" class="frame-ou"/>
+      <text x="56" y="312" class="sm lbl st">OU AI</text>
+      <rect x="56" y="322" width="258" height="166" rx="12" class="b-ai"/>
+      <text x="72" y="350" class="tt t-ai">acc3 · aa-ai</text>
+      <text x="72" y="374" class="t-ai">Chỉ gọi model Bedrock</text>
+      <text x="72" y="394" class="t-ai">Role invoker theo môi trường</text>
+      <text x="72" y="414" class="t-ai">Quota AI chính của cả AA</text>
+      <rect x="72" y="440" width="226" height="28" rx="14" class="bd-warn"/>
+      <text x="185" y="459" text-anchor="middle" class="sm t-warn st">Error 002 · case AWS đang mở</text>
+
+      <!-- OU NonProd -->
+      <rect x="355" y="290" width="290" height="212" rx="14" class="frame-ou"/>
+      <text x="371" y="312" class="sm lbl st">OU NonProd</text>
+      <rect x="371" y="322" width="258" height="166" rx="12" class="b-dev dashed"/>
+      <text x="387" y="350" class="tt t-dev">acc2 · aa-nonprod</text>
+      <text x="387" y="374" class="t-dev">Hạ tầng Dev (+ staging)</text>
+      <text x="387" y="394" class="t-dev">ECS, RDS, S3, Cognito</text>
+      <text x="387" y="414" class="t-dev">Cohere Embed + guardrail tại chỗ</text>
+      <rect x="387" y="440" width="226" height="28" rx="14" class="bd-dev"/>
+      <text x="500" y="459" text-anchor="middle" class="sm t-dev st">Vào org khi TrueIDC cho rời</text>
+
+      <!-- OU Prod -->
+      <rect x="670" y="290" width="290" height="212" rx="14" class="frame-ou"/>
+      <text x="686" y="312" class="sm lbl st">OU Prod</text>
+      <rect x="686" y="322" width="258" height="166" rx="12" class="b-prod dashed"/>
+      <text x="702" y="350" class="tt t-prod">aa-prod</text>
+      <text x="702" y="374" class="t-prod">Khách thật, SCP chặt hơn</text>
+      <text x="702" y="394" class="t-prod">Gọi AI qua role prod-only</text>
+      <text x="702" y="414" class="t-prod">của aa-ai, có trần riêng</text>
+      <rect x="702" y="440" width="226" height="28" rx="14" class="bd-prod"/>
+      <text x="815" y="459" text-anchor="middle" class="sm t-prod st">Tạo khi có ngày go-live</text>
+
+      <!-- AI call bus -->
+      <path d="M815,488 V522 H185 V493" class="ln-ai" marker-end="url(#m-ai)"/>
+      <path d="M440,488 V522" class="ln-ai"/>
+      <text x="200" y="541" class="sm t-ai st">Gọi model qua role của aa-ai</text>
+      <text x="600" y="541" class="sm t-ai">dev hôm nay · prod khi go-live</text>
+
+      <!-- Transfer from TrueIDC -->
+      <path d="M560,596 V493" class="ln-move" marker-end="url(#m-move)"/>
+      <text x="572" y="570" class="sm t-dev st">chuyển thẳng sang org AA khi hợp đồng cho</text>
+
+      <!-- TrueIDC org -->
+      <rect x="400" y="582" width="560" height="112" rx="14" class="frame-out"/>
+      <rect x="416" y="596" width="290" height="84" rx="12" class="b-dev"/>
+      <text x="432" y="620" class="tt t-dev">acc2 hôm nay</text>
+      <text x="432" y="642" class="t-dev">Member của org TrueIDC</text>
+      <text x="432" y="662" class="t-dev">TrueIDC trả hoá đơn, giữ SCP</text>
+      <text x="724" y="626" class="lbl-strong">Org TrueIDC</text>
+      <text x="724" y="646" class="sm lbl">bên ngoài, hôm nay</text>
+      <text x="724" y="666" class="sm lbl">hợp đồng chưa cho rời</text>
+
+      <!-- Today warning -->
+      <rect x="20" y="582" width="360" height="112" rx="12" class="b-warn"/>
+      <text x="36" y="607" class="tt t-warn">Dev hôm nay chưa có AI chat</text>
+      <text x="36" y="630" class="t-warn">acc3: Error 002 · OpenAI: hết credit</text>
+      <text x="36" y="650" class="t-warn">Anthropic API: chưa có key mới</text>
+      <text x="36" y="670" class="t-warn">Chỉ Cohere Embed v4 trên acc2 chạy</text>
+    </svg>
+  </div>
+  <div class="scroll-hint">Vuốt ngang để xem hết sơ đồ.</div>
+  <div class="legend" aria-label="Chú giải">
+    <span><i class="sw gov"></i>Quản trị (governance)</span>
+    <span><i class="sw ai"></i>AI (Bedrock)</span>
+    <span><i class="sw dev"></i>Workload Dev / non-prod</span>
+    <span><i class="sw prod"></i>Prod (khách thật)</span>
+    <span><i class="sw res"></i>Đại lý trả hoá đơn</span>
+    <span><i class="sw ext"></i>Ngoài AWS</span>
+    <span><i class="sw warn"></i>Sự cố hôm nay</span>
+    <span><i class="dash-box"></i>Viền đứt: chưa có / đang chuyển tiếp</span>
+    <span><i class="ln ai"></i>Lệnh gọi model</span>
+    <span><i class="ln bill"></i>Trả hoá đơn</span>
+    <span><i class="ln ext"></i>Gọi API ngoài AWS</span>
+    <span><i class="ln move"></i>Chuyển account</span>
+    <span><i class="ln gov"></i>Quản trị, SCP</span>
+  </div>
+  <div class="callout">
+    <p><b>Lưu ý về OU.</b> Account mới vào org đứng thẳng dưới root (chưa gắn SCP chặn) khoảng 1 tuần, rồi mới chuyển vào OU của nó (ADR 0018 §4). acc4 không chịu SCP, vì SCP không áp lên account quản lý. ADR 0018 đang ở trạng thái Proposed.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Từng account</h2>
+  <p class="why">Mỗi account có một việc riêng; biết rõ việc của từng account thì biết khi nó hỏng thì cái gì dừng.</p>
+  <div class="tbl wide">
+    <table>
+      <thead>
+        <tr><th>Account</th><th>Vai trò</th><th>Ai dùng</th><th>Chạy gì</th><th>Gọi AI thế nào</th><th>Quota AI</th><th>Chi phí (theo nguồn)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="acc"><span class="tag gov">acc4</span><br>aa-management</td>
+          <td>Account quản lý của org AA. <b>Đã dựng ở S259</b>: org (all features), 3 OU, 3 SCP, org trail, budget, Identity Center us-west-1, CI OIDC. Org chưa có member.</td>
+          <td>Tech lead, qua IAM Identity Center (không dùng root hằng ngày), profile CLI <code>aa-mgmt</code> có MFA</td>
+          <td>Organizations, SCP, Identity Center, budget, org CloudTrail, bật cost allocation tag, form Anthropic. Không chạy app</td>
+          <td>Không gọi model. Nộp form Anthropic (FTU) một lần bằng API, các account thành viên thừa hưởng</td>
+          <td>Không cần quota Bedrock. Cấp org chỉ có template quota cho account <b>mới tạo</b> trong org (tối đa 10 quota)</td>
+          <td>Organizations và IAM miễn phí. Thẻ công ty trả hoá đơn của org tới khi Billing Transfer chạy. Có AWS Budget org 300 USD (chỉ cảnh báo)</td>
+        </tr>
+        <tr>
+          <td class="acc"><span class="tag ai">acc3</span><br>aa-ai</td>
+          <td>Account AI: chỉ Bedrock chat. Đã rời org eCloudvalley 29/10, đang đứng riêng</td>
+          <td>Các app qua role invoker: CIS (writer, judge, T-stage tenant), TripPlanner compose, CRM (role riêng). Prod qua role prod-only</td>
+          <td>Chỉ Bedrock: Claude, GPT, Nova. Không có hạ tầng app</td>
+          <td>App ở account khác assume role vào đây rồi gọi model. Hôm nay bị Error 002, kể cả Nova</td>
+          <td><b>Quota chính của AA.</b> Dev, wave và prod dùng chung, nên dòng dev giữ ≤ 30 % quota từ lúc có prod</td>
+          <td>AWS Budget 250 USD (chỉ cảnh báo). Credit Lift khoảng 250 USD, hết hạn 31/12/2026, sau đó tới thẻ</td>
+        </tr>
+        <tr>
+          <td class="acc"><span class="tag dev">acc2</span><br>aa-nonprod</td>
+          <td>Hạ tầng Dev (và staging khi bật). Vẫn là member trong org TrueIDC</td>
+          <td>Đội kỹ thuật, agent, staff thử nghiệm; bốn app CIS, Booking, TripPlanner, Partner</td>
+          <td>ECS, RDS, S3, Cognito, Lambda, DNS của môi trường Dev</td>
+          <td>Claude / GPT qua role của acc3. Cohere Embed v4 và guardrail CRM gọi tại chỗ. Anthropic API cho Dev (bước 0a)</td>
+          <td>Thấp: Cohere Embed 20 RPM, Sonnet 4.6 10 rpm. Claude / GPT tại chỗ bị từ chối dưới TrueIDC. Không dùng cho prod</td>
+          <td>TrueIDC trả. Nguồn không nêu số tháng</td>
+        </tr>
+        <tr>
+          <td class="acc"><span class="tag prod">aa-prod</span><br><span class="muted">chưa tạo</span></td>
+          <td>Khách thật, tách khỏi Dev để người và quyền của Dev không chạm dữ liệu khách (ADR 0018)</td>
+          <td>Khách B2C, tenant, đại lý CRM qua các app prod</td>
+          <td>Hạ tầng prod của các app</td>
+          <td>Mặc định: qua role prod-only của aa-ai. Tuỳ chọn sau: Bedrock tại chỗ (phải sửa ADR 0001a). Anthropic API là fallback cho stage được phép</td>
+          <td>Chỉ cần nếu bật Bedrock tại chỗ hoặc đặt embedding prod ở đây. Account mới có thể có quota thấp hơn mặc định</td>
+          <td>Nguồn chưa có số. Trần chi LLM prod hằng tháng do business owner chốt sau load test</td>
+        </tr>
+        <tr>
+          <td class="acc"><span class="tag res">Đại lý</span></td>
+          <td>Bên trả hoá đơn (bill-transfer account). Không phải account của AA</td>
+          <td>Đại lý tự vận hành</td>
+          <td>Nhận hoá đơn AWS của cả org AA, kể cả Marketplace</td>
+          <td>Không gọi model cho AA</td>
+          <td>Tài liệu AWS không ghi đại lý có quyền nâng quota; chỉ hỏi được về hỗ trợ leo thang (câu 17)</td>
+          <td>Billing Conductor: 0 USD (gói AWS managed) hoặc 50 USD/org/tháng (gói customer managed). Ai chịu: hỏi đại lý</td>
+        </tr>
+        <tr>
+          <td class="acc"><span class="tag ext">Anthropic API</span></td>
+          <td>Đường gọi Claude ngoài AWS. Đường duy nhất không phụ thuộc org / payer</td>
+          <td>Chỉ CIS. CRM không bao giờ dùng (chỉ Bedrock). TripPlanner giữ chỉ AWS tới khi data scope cho phép</td>
+          <td>Connection <code>anthropic-direct</code> trong LLM gateway</td>
+          <td>Gọi thẳng API Anthropic bằng key. Hôm nay chỉ judge / validate được phép dùng</td>
+          <td>Theo tier tổ chức Anthropic, tự xếp theo lịch sử dùng. Tier Start có trần chi 500 USD/tháng</td>
+          <td>Trả theo dùng, cộng khoảng 0,40 USD/tháng cho mỗi secret. Số credit nạp do tech lead chốt</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Ba đường gọi model</h3>
+  <div class="tbl mid">
+    <table>
+      <thead><tr><th>Đường</th><th>Dùng cho</th><th>Quota</th><th>Hỏng khi</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag ai">1</span> Bedrock trong aa-ai (assume role)</td><td>Dev, wave, batch; prod qua role prod-only (mặc định)</td><td>Quota của acc3, dev và prod dùng chung</td><td>acc3 bị chặn mức account (như 29/10), quota cạn, đăng ký Marketplace lỗi</td></tr>
+        <tr><td><span class="tag prod">2</span> Bedrock tại chỗ trong aa-prod</td><td>Prod, chỉ khi đã gọi thật mọi route và đã làm ấm quota (làm sau)</td><td>Quota riêng của aa-prod</td><td>Như trên, cho aa-prod. Cần sửa ADR 0001a</td></tr>
+        <tr><td><span class="tag ext">3</span> Anthropic API trực tiếp</td><td>Dev ngay bây giờ; prod cho stage được phép gửi dữ liệu ra ngoài AWS</td><td>Tier của tổ chức Anthropic</td><td>Key hoặc credit hết, Anthropic sự cố</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout warn">
+    <p><b>Hai đường Bedrock không độc lập với nhau.</b> Tách account chỉ che được lỗi ở mức một account. Lỗi ở mức org / payer (payer đổi, Billing Transfer bị rút, giấy Anthropic của đại lý không áp, đại lý trễ thanh toán, SCP sai) làm mất Bedrock ở mọi account cùng lúc. Chỉ đường 3 độc lập với lớp này, nên prod phải có đường 3 bật sẵn, có tiền và được kiểm hằng ngày.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Ai trả tiền gì</h2>
+  <p class="why">Bên trả tiền đổi hai lần trong tháng 11 và 12, và mỗi lần đổi là một lần có thể làm gãy quyền gọi model, nên cần biết trước từng giai đoạn ai trả.</p>
+  <div class="tbl wide">
+    <table>
+      <thead><tr><th>Khoản</th><th>Hôm nay (31/10)</th><th>acc3 đã vào org, chưa có Billing Transfer</th><th>Sau Billing Transfer (sớm nhất 01/12)</th></tr></thead>
+      <tbody>
+        <tr><td>Hạ tầng acc2 (Dev)</td><td>TrueIDC</td><td>TrueIDC (acc2 vẫn ở org TrueIDC)</td><td>TrueIDC, tới khi acc2 chuyển sang org AA; sau đó đại lý</td></tr>
+        <tr><td>acc4 và aa-prod</td><td>Thẻ công ty trên acc4</td><td>Thẻ công ty trên acc4</td><td>Đại lý trả AWS, xuất hoá đơn cho AA</td></tr>
+        <tr><td>Model AWS tự bán (Nova, Llama, Mistral, DeepSeek...)</td><td>acc3 tự trả (credit Lift, rồi thẻ)</td><td>Thẻ trên acc4</td><td>Đại lý (hoá đơn Bedrock thường)</td></tr>
+        <tr><td>Model bán qua Marketplace (Claude, GPT, Cohere)</td><td>acc3 (đang bị chặn)</td><td>Thẻ trên acc4. Credit Lift có trừ khoản này không: chưa xác nhận</td><td>Hoá đơn Marketplace chuyển sang đại lý, thuế theo hồ sơ thuế của đại lý</td></tr>
+        <tr><td>Anthropic API trực tiếp</td><td>Chưa có key</td><td>Công ty trả Anthropic theo dùng</td><td>Không đổi: vẫn trả Anthropic trực tiếp, ngoài Billing Transfer</td></tr>
+        <tr><td>Credit Lift của acc3 (~250 USD, hết hạn 31/12)</td><td>Trừ vào hoá đơn acc3</td><td>Còn áp hay không: chưa xác nhận. Xuất Cost Explorer, hoá đơn và số dư trước khi vào org</td><td>Vẫn áp nhưng trừ vào hoá đơn AWS gửi đại lý; AA không thấy số dư. Hợp đồng phải ghi đại lý trả lại phần này</td></tr>
+        <tr><td>Hoá đơn</td><td>USD</td><td>USD gửi acc4, không có hoá đơn VAT Việt Nam</td><td>VND / VAT do đại lý xuất. AA chỉ thấy chi phí "pro forma", mất Cost Anomaly Detection, phải dựng lại CUR</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout res">
+    <p><b>Hạn của Billing Transfer.</b> Billing Transfer luôn bắt đầu 00:00 UTC ngày 1 của tháng (07:00 giờ Việt Nam). Đại lý gửi lời mời; acc4 chấp nhận chậm nhất 29/11/2026 23:59:59 UTC, nên làm trước vài ngày. Không có văn bản của đại lý tới khoảng 25/11 thì dời sang 01/01/2027: cái giá là thêm một tháng trả bằng thẻ acc4, không có gì gãy. Không ép ký cho kịp ngày.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Xin quota AI ở đâu</h2>
+  <p class="why">Quota là trần số token mỗi phút AWS cho một account gọi; thiếu quota thì khách thật bị từ chối đúng giờ cao điểm, và AWS không tự duyệt đơn tăng quota Bedrock.</p>
+  <div class="tbl wide">
+    <table>
+      <thead><tr><th>Ở đâu</th><th>Xin gì</th><th>Cách xin</th><th>Ai</th><th>Khi nào</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="acc"><span class="tag ai">acc3</span> aa-ai</td>
+          <td>"Cross-Region InvokeModel tokens per minute" cho đúng model prod dùng (Sonnet 5.5 ở us-west-1 chỉ chạy qua profile <code>us.</code> / <code>global.</code>); quota Global riêng nếu dùng <code>global.</code>; RPM nếu embedding prod đặt ở đây</td>
+          <td>Service Quotas, region us-west-1, kèm số đo CloudWatch. AWS ưu tiên account đang tiêu gần hết quota; đơn không được ưu tiên dù có gói Support</td>
+          <td><span class="tag who">Tech lead</span> xin, AWS duyệt</td>
+          <td>Đọc và ghi lại quota hiện tại ≤ 03/11. Đọc lại sau mỗi lần đổi payer / org. Xin tăng sau load test, ở G − 6 tuần</td>
+        </tr>
+        <tr>
+          <td class="acc"><span class="tag prod">aa-prod</span></td>
+          <td>Chỉ khi bật Bedrock tại chỗ (đường 2) hoặc đặt embedding prod ở đây</td>
+          <td>Chạy lưu lượng Claude thật nhỏ để đăng ký Marketplace và tạo lịch sử, đọc quota, rồi mới xin</td>
+          <td><span class="tag who">Tech lead</span></td>
+          <td>Tạo account ở G − 8 tuần; xin ở G − 6 tuần nếu dùng</td>
+        </tr>
+        <tr>
+          <td class="acc"><span class="tag dev">acc2</span> aa-nonprod</td>
+          <td>Không xin cho prod. Prod không được dựa vào account non-prod</td>
+          <td>Chỉ đọc quota trước và sau khi chuyển sang org AA</td>
+          <td><span class="tag who">Tech lead</span></td>
+          <td>Lúc chuyển org</td>
+        </tr>
+        <tr>
+          <td class="acc"><span class="tag gov">acc4</span> / cấp org</td>
+          <td>Không có quota Bedrock cấp org. Chỉ có template tự xin quota cho account mới tạo trong org</td>
+          <td>Service Quotas template (org phải bật all features)</td>
+          <td><span class="tag who">Tech lead</span></td>
+          <td>Tuỳ chọn, trước khi tạo aa-prod</td>
+        </tr>
+        <tr>
+          <td class="acc"><span class="tag ext">Anthropic API</span></td>
+          <td>Tier cao hơn khi giới hạn tier gần đỉnh prod</td>
+          <td>Nút "Request tier increase" trong Anthropic Console. Tier tự tăng theo lịch sử, nên key phải dùng đều</td>
+          <td><span class="tag who">Tech lead</span></td>
+          <td>Giữ ấm từ bước 0a; so tier với đỉnh prod trước G − 4 tuần</td>
+        </tr>
+        <tr>
+          <td class="acc"><span class="tag res">Đại lý</span></td>
+          <td>Không xin được ở đây. Hỏi họ có hỗ trợ leo thang qua kênh partner không, mất bao lâu</td>
+          <td>Câu 17 trong danh sách câu hỏi gửi đại lý, đòi trả lời bằng văn bản</td>
+          <td><span class="tag who">Business owner</span> gửi</td>
+          <td>≤ 07/11</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <p><b>Quota khác quyền truy cập.</b> Tăng quota không mở được lệnh chặn ở mức account. Error 002 của acc3 là lệnh chặn (cả Nova cũng bị từ chối), nên phải xin AWS "gỡ chặn cho account", không xin "tăng TPM". AWS cũng không có quota theo app, tenant, đại lý hay khách: các trần đó nằm trong LLM gateway (xem trang LLM gateway riêng).</p>
+  </div>
+</section>
+
+<section>
+  <h2>Thứ tự làm và ngày</h2>
+  <p class="why">Thứ tự quan trọng vì mỗi lần đổi payer hay org đều có thể làm gãy quyền gọi model, và việc chờ lâu nhất (văn bản của đại lý) phải bắt đầu đầu tiên.</p>
+  <ol class="steps">
+    <li>
+      <div class="when">≤ 03/11<small>ngay, ngoài AWS</small></div>
+      <div class="what"><span class="tag who">Tech lead</span>
+        <p>Tạo key Anthropic API mới cho Dev (key cũ đã thu hồi), đặt giới hạn chi trong Anthropic Console, nạp credit, lưu secret <code>aa-llm/dev/anthropic-direct</code>, chạy probe. Đọc và ghi lại quota hiện tại của acc3. Việc này cho Dev có lại đường AI và gỡ áp lực thời gian khỏi case AWS.</p>
+      </div>
+    </li>
+    <li>
+      <div class="when">≤ 05/11</div>
+      <div class="what"><span class="tag who">Tech lead</span>
+        <p>Điền <code>rpm_limit</code>, <code>max_concurrency</code>, <code>monthly_budget_usd</code> cho mọi connection Dev (hôm nay đang để trống nên limiter và budget chưa có tác dụng).</p>
+      </div>
+    </li>
+    <li class="gate">
+      <div class="when">≤ 07/11<small>việc chờ lâu nhất</small></div>
+      <div class="what"><span class="tag who">Business owner</span>
+        <p>Gửi đại lý các câu đánh dấu ★, đòi trả lời bằng văn bản. Quan trọng nhất:</p>
+        <ul>
+          <li>Giấy bán lại Anthropic có áp cho khách Việt Nam theo Billing Transfer không (câu 6a, 6b).</li>
+          <li>Có chấp nhận khoản Marketplace của Claude, GPT, Cohere không (câu 8); hỗ trợ xin quota (câu 17).</li>
+          <li>Hạn mức nhận Billing Transfer đã được AWS nâng khỏi 0 chưa; chuỗi chuyển hoá đơn có đúng một cấp không; đã đăng ký Partner Central chưa.</li>
+        </ul>
+      </div>
+    </li>
+    <li>
+      <div class="when">~04–07/11<small>case AWS</small></div>
+      <div class="what"><span class="tag who">AWS</span> <span class="tag who">Tech lead</span>
+        <p>AWS hẹn trả lời case Error 002 khoảng 04–06/11. Tới 07/11 chưa có thì nhắc lại trong case. Nâng gói Support của acc3 một tháng là tuỳ chọn có phí: xem báo giá trước, chỉ làm khi tech lead đồng ý.</p>
+      </div>
+    </li>
+    <li>
+      <div class="when">Song song<small>trước khi acc3 vào org</small></div>
+      <div class="what"><span class="tag who">Tech lead</span>
+        <p><b>Đã xong ở S259:</b> root MFA, Organizations (all features), 3 OU, 3 SCP, org trail, budget, Identity Center us-west-1, CI OIDC. <b>Còn lại:</b> nộp form Anthropic từ acc4 <b>bằng API trong CloudShell</b> (lệnh soạn sẵn trong <code>acc4-anthropic-form.md</code>); kiểm thẻ + địa chỉ thanh toán + thông tin thuế và alternate contacts.</p>
+      </div>
+    </li>
+    <li class="gate">
+      <div class="when">Khi đủ 2 điều kiện<small>case AWS + văn bản đại lý</small></div>
+      <div class="what"><span class="tag who">Tech lead</span>
+        <p>Đưa acc3 vào org AA. Trước đó xuất Cost Explorer, hoá đơn và số dư credit Lift. Chọn giờ không có wave, để acc3 đứng dưới root 1 tuần, gọi thử từng route ngay, đọc lại quota. Nếu đại lý không xác nhận giấy Anthropic: giữ acc3 đứng riêng và trả bằng thẻ.</p>
+      </div>
+    </li>
+    <li>
+      <div class="when">≤ 11/11</div>
+      <div class="what"><span class="tag who">Business owner</span>
+        <p>Chốt câu về AI trong điều khoản tenant và chính sách riêng tư (AA-820). Câu này quyết định nội dung khách có được đi qua Anthropic API khi AWS lỗi hay không.</p>
+      </div>
+    </li>
+    <li>
+      <div class="when">12/11</div>
+      <div class="what"><span class="tag who">Mọi app</span>
+        <p>Chính sách sử dụng của Anthropic có hiệu lực: chat với khách phải báo rõ là AI.</p>
+      </div>
+    </li>
+    <li class="gate">
+      <div class="when">≤ 25/11<small>điểm quyết định</small></div>
+      <div class="what"><span class="tag who">Business owner</span>
+        <p>Có văn bản của đại lý thì đi Billing Transfer 01/12; không có thì dời sang 01/01/2027.</p>
+      </div>
+    </li>
+    <li>
+      <div class="when">≤ 29/11</div>
+      <div class="what"><span class="tag who">Tech lead</span>
+        <p>Tải CUR, Budgets, dữ liệu hoá đơn; acc4 chấp nhận lời mời Billing Transfer (nếu đi tháng 12). Kích hoạt cost allocation tag <code>App</code> và 3 alarm CloudWatch Bedrock trên aa-ai.</p>
+      </div>
+    </li>
+    <li>
+      <div class="when">01/12, 07:00<small>giờ Việt Nam</small></div>
+      <div class="what"><span class="tag who">Tech lead</span>
+        <p>Nếu Billing Transfer chạy: probe mọi connection, kể cả model fallback, đọc lại quota.</p>
+      </div>
+    </li>
+    <li>
+      <div class="when">Khi TrueIDC cho<small>chưa có ngày</small></div>
+      <div class="what"><span class="tag who">Tech lead</span> <span class="tag who">Business owner</span>
+        <p>acc2 chuyển thẳng từ org TrueIDC sang org AA (AWS cho phép từ 19/11/2025), không đứng riêng ở giữa. Trước đó: đổi email root sang email công ty, xuất dữ liệu chi phí, thử Cohere Embed và guardrail trước và sau, đọc quota trước và sau.</p>
+      </div>
+    </li>
+    <li class="prodphase">
+      <div class="when">G − 8 tuần</div>
+      <div class="what"><span class="tag who">Tech lead</span>
+        <p>Tạo aa-prod và role prod-only trên aa-ai, đặt trần theo môi trường. Chốt đường embedding prod, data scope từng stage, SLO.</p>
+      </div>
+    </li>
+    <li class="prodphase">
+      <div class="when">G − 6 tuần</div>
+      <div class="what"><span class="tag who">Tech lead</span>
+        <p>Load test tăng dần trên đúng account, model và profile prod (tổng vài USD), rồi gửi đơn quota kèm số đo.</p>
+      </div>
+    </li>
+    <li class="prodphase">
+      <div class="when">G − 4 tuần</div>
+      <div class="what"><span class="tag who">Tech lead</span>
+        <p>Đóng băng: không đổi payer hay org nào sau mốc này. Anthropic API prod đã ấm (probe hằng ngày + lưu lượng thật nhỏ).</p>
+      </div>
+    </li>
+    <li class="prodphase">
+      <div class="when">G − 2 tuần</div>
+      <div class="what"><span class="tag who">Tech lead</span>
+        <p>Kiểm cuối: quota đã duyệt ≥ 1,5 × đỉnh đo; fallback sang model thứ hai và Anthropic API đã probe; runbook đã chạy thử trên Dev.</p>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<section>
+  <h2>Có nên dồn về một account</h2>
+  <p class="why">Câu hỏi này hay quay lại vì một account trông đơn giản hơn, nên cần trả lời một lần cho rõ.</p>
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin-top:0">Bây giờ: không làm được</h3>
+      <p>Trên acc2 dưới TrueIDC, Claude và GPT đều bị từ chối (chưa rõ nguyên nhân). Dồn về acc3 thì phải dời toàn bộ RDS, ECS, Cognito, DNS: quá lớn.</p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Về lâu dài: giữ tách prod</h3>
+      <p>Một account cho dev + prod + AI đảo ngược quyết định bảo mật của ADR 0018 (người và quyền của Dev không chạm dữ liệu khách), và prod sẽ chạy không có rào SCP. Lỗi ở mức org / payer thì hai mô hình mất như nhau; chi phí AWS như nhau.</p>
+    </div>
+  </div>
+  <div class="callout">
+    <p><b>Không làm bây giờ</b> (đúng kỹ thuật nhưng quá cỡ đội 2–3 người): Provisioned Throughput, account riêng cho log / security, account AI riêng cho prod, account AWS hay Anthropic riêng cho từng tenant. Mỗi việc chỉ làm khi có trigger đo được.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Rủi ro</h2>
+  <p class="why">Phần lớn rủi ro nằm ở giấy tờ và lúc đổi bên trả tiền, không nằm ở code, nên cần người chịu trách nhiệm rõ cho từng dòng.</p>
+  <div class="tbl wide">
+    <table>
+      <thead><tr><th>Rủi ro</th><th>Hậu quả</th><th>Cách giảm</th><th>Ai</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag warn">Lớn nhất</span> Giấy bán lại Anthropic của đại lý không áp cho khách Việt Nam theo Billing Transfer (chưa xác nhận)</td><td>Claude bị từ chối trên mọi account trong org</td><td>Đòi văn bản (phụ lục hợp đồng) trước khi ký. Dự phòng: acc3 đứng riêng trả thẻ, hoặc Anthropic API</td><td>Business owner</td></tr>
+        <tr><td>Đổi payer / org làm Bedrock gãy (như 29/10)</td><td>Mất mọi model Bedrock</td><td>Mỗi lần đổi: không chạy wave, mở case sẵn, probe trước và ngay sau, đọc lại quota. Xong hết trước G − 4 tuần</td><td>Tech lead</td></tr>
+        <tr><td>Error 002 kéo dài</td><td>Dev không có AI chat</td><td>Anthropic API cho Dev (bước 0a); nhắc case 07/11</td><td>Tech lead</td></tr>
+        <tr><td>Dev, wave và prod dùng chung quota acc3</td><td>Wave chiếm phần của khách</td><td>Dòng connection riêng theo môi trường, dev ≤ 30 % quota, wave tự dừng khi circuit prod mở</td><td>Tech lead</td></tr>
+        <tr><td>Account mới hoặc vừa đổi payer có quota thấp</td><td>Bị throttle ngay từ đầu</td><td>Đọc quota thật, chạy lưu lượng thật trước, xin sớm có số đo</td><td>Tech lead</td></tr>
+        <tr><td>Form Anthropic nộp bằng console, member không thừa hưởng</td><td>Claude bị từ chối ở account thành viên</td><td>Nộp bằng API từ acc4; kiểm trạng thái thoả thuận trên từng account sau khi vào</td><td>Tech lead</td></tr>
+        <tr><td>SCP chặn region đích của profile <code>us.</code> / <code>global.</code></td><td>Lỗi chỉ khi gọi cross-region</td><td>Ngoại lệ theo inference profile; thử ở OU tạm trước</td><td>Tech lead</td></tr>
+        <tr><td>Key Anthropic để nguội</td><td>Tier thấp, bị throttle đúng lúc cần fallback</td><td>Probe hằng ngày + lưu lượng thật nhỏ, auto-reload, spend limit</td><td>Tech lead</td></tr>
+        <tr><td>Mất công cụ chi phí sau Billing Transfer</td><td>Không còn cảnh báo bất thường, không thấy số dư credit</td><td>Tải dữ liệu trước ngày bắt đầu, budget theo account, hỏi đại lý CUR pro forma</td><td>Tech lead</td></tr>
+        <tr><td>Hoá đơn tháng 11 bằng USD trên thẻ acc4</td><td>Kế toán bất ngờ, không có VAT</td><td>Báo kế toán trước</td><td>Business owner</td></tr>
+        <tr><td>Hợp đồng mẫu lệch cam kết qua chat (kiểu member trong org đại lý, giữ root, phí 10 %)</td><td>Mất quyền quản trị org</td><td>Chỉ tin điều khoản trong hợp đồng / phụ lục</td><td>Business owner</td></tr>
+        <tr><td>TrueIDC chặn acc2 rời org</td><td>acc2 kẹt ở org ngoài</td><td>Hỏi điều kiện rời, ai giữ email root; trong lúc chờ acc2 vẫn gọi model qua acc3</td><td>Business owner</td></tr>
+        <tr><td>Guardrail CRM nằm ở acc2</td><td>acc2 hỏng Bedrock thì mọi lệnh AI của CRM bị từ chối</td><td>Chốt trước prod: guardrail thứ hai, hoặc giáng cấp rõ sang "trả lời tay"</td><td>Tech lead</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>Cần duyệt</h2>
+  <p class="why">Kiến trúc là việc của tech lead; giá, hợp đồng, điều khoản và ngày go-live là việc của business owner, nên mỗi bên chỉ cần quyết danh sách của mình.</p>
+  <div class="grid2">
+    <div class="card approve">
+      <h3><span class="tag gov">Tech lead</span> duyệt</h3>
+      <ol>
+        <li><b>Key Anthropic API và số credit nạp.</b><span class="prop">Đề xuất: workspace dev và prod riêng, spend limit thấp hơn trần tier, auto-reload. Chi phí: trả theo dùng.</span></li>
+        <li><b>Thời điểm đưa acc3 vào org.</b><span class="prop">Đề xuất: chỉ khi có trả lời case AWS và văn bản đại lý (6a/6b).</span></li>
+        <li><b>Nâng gói Support acc3 một tháng.</b><span class="prop">Tuỳ chọn có phí; xem báo giá trước. Đề xuất: chưa, trừ khi case chậm sau 07/11.</span></li>
+        <li><b>Chấp nhận ADR 0018 và cấu trúc OU / SCP.</b><span class="prop">Đề xuất: OU NonProd, Prod, Suspended (+ AI); thử SCP ở OU tạm.</span></li>
+        <li><b>Data scope từng stage prod.</b><span class="prop">Đề xuất: catalog AA được dùng Anthropic API; tenant, TripPlanner, CRM chỉ AWS tới khi điều khoản + DPA cho phép.</span></li>
+        <li><b>Đường embedding prod.</b><span class="prop">Chọn aa-ai (role prod-only) hay aa-prod; xin RPM trước G − 6 tuần.</span></li>
+        <li><b>Bedrock tại chỗ trong aa-prod (đường 2).</b><span class="prop">Đề xuất: chưa bật; chỉ khi wave vẫn chen prod hoặc có tenant trả tiền có SLA, kèm sửa ADR 0001a.</span></li>
+        <li><b>Load test và đơn quota.</b><span class="prop">Ở G − 6 tuần, tổng vài USD.</span></li>
+      </ol>
+    </div>
+    <div class="card approve">
+      <h3><span class="tag res">Business owner</span> duyệt</h3>
+      <ol>
+        <li><b>Gửi câu hỏi cho đại lý bằng văn bản.</b><span class="prop">Trước 07/11. Không tốn phí.</span></li>
+        <li><b>Chọn đại lý và phụ lục hợp đồng.</b><span class="prop">Ba điều khoản bắt buộc: đây là Billing Transfer (không phải đưa account vào org đại lý); giấy Anthropic áp cho khách Việt Nam; chấp nhận khoản Marketplace và không đặt chính sách chặn. Thêm: đại lý trả lại phần credit của AA.</span></li>
+        <li><b>Đi Billing Transfer 01/12 hay 01/01/2027.</b><span class="prop">Quyết trước 25/11, theo văn bản của đại lý.</span></li>
+        <li><b>Thẻ công ty trên acc4 cho hoá đơn USD tháng 11.</b><span class="prop">Báo kế toán trước.</span></li>
+        <li><b>Hỏi TrueIDC điều kiện cho acc2 rời org.</b><span class="prop">Gồm: có chặn chuyển thẳng không, ai giữ email root.</span></li>
+        <li><b>Câu AI trong điều khoản tenant (AA-820).</b><span class="prop">Trước 11/11. Đề xuất: "qua AWS hoặc trực tiếp từ nhà cung cấp model". Có cần luật sư không là quyết định của business owner.</span></li>
+        <li><b>Ngày go-live.</b><span class="prop">Chọn ngày cách thời điểm chọn ít nhất 8 tuần.</span></li>
+        <li><b>Trần chi LLM prod hằng tháng.</b><span class="prop">Tech lead đề xuất số sau load test, business owner chốt.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Trang này không ghi account ID. Số liệu lấy từ nguồn bên dưới; ô ghi "chưa có số" hoặc "chưa xác nhận" nghĩa là nguồn chưa nêu hoặc còn chờ AWS / đại lý trả lời. Tài liệu AWS đọc ngày 31/10/2026.</p>
+  <p>Nguồn:</p>
+  <ul>
+    <li><code>docs/audits/2026-10-31-S261-aws-bedrock-org-access/current-situation-model.md</code></li>
+    <li><code>docs/audits/2026-10-31-S261-aws-bedrock-org-access/README.md</code></li>
+    <li><code>docs/audits/2026-10-31-S261-llm-capacity-plan/README.md</code></li>
+  </ul>
+</footer>
+
+</div>

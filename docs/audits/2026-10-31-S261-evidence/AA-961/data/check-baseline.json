@@ -1,0 +1,61 @@
+{
+ "mode": "baseline",
+ "trip": "bb658382",
+ "departure": "9f7d807d",
+ "trip_incidents": {
+  "status": 200,
+  "items": []
+ },
+ "aa_incident_tasks": [],
+ "travelling_14d": {
+  "status": 200,
+  "trip_listed": true,
+  "trip_incident_flag": false,
+  "incidents": []
+ },
+ "reach": {
+  "status": 200,
+  "incidents": []
+ },
+ "trip_page_light": {
+  "banner": null,
+  "aa_incident_task_rows": 0
+ },
+ "travelling_page_light": {
+  "incident_panel": null,
+  "trip_row": 1
+ },
+ "crm_errors_light": [
+  "pageerror: Error: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+ ],
+ "trip_page_dark": {
+  "banner": null,
+  "aa_incident_task_rows": 0
+ },
+ "travelling_page_dark": {
+  "incident_panel": null,
+  "trip_row": 1
+ },
+ "crm_errors_dark": [
+  "pageerror: Error: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+ ],
+ "booking_departure": {
+  "start_date": "2026-11-13",
+  "sold": 2,
+  "partners": 1,
+  "open_incident": null
+ },
+ "booking_incidents": [],
+ "booking_partners": [
+  {
+   "agency_name": "Synthetic Agency 972 (S248 live verify)",
+   "status": "active"
+  },
+  {
+   "agency_name": "SYNTHETIC CRM sen-vang (AA-947 E2E)",
+   "status": "active"
+  }
+ ],
+ "atlas_hearth_is_partner": false,
+ "booking_errors": []
+}
