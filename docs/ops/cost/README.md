@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-10-31
 review_every_days: 90
 related: [FIN-01, FIN-02, OPS-08, AA-896, AA-838, AA-884]
 ---
@@ -20,8 +20,8 @@ approved by the tech lead (C8a). This folder holds only this how-to; reports liv
 Rules and budgets: [FinOps process](../finops.md).
 
 > [!NOTE]
-> Not yet run on real data. `tools/finops/monthly_cost_report.py` is tested with synthetic inputs only
-> (`tools/finops/test_monthly_cost_report.py`). The first real run is the October 2026 report, in the first
+> Not yet run on real data. `tools/finops/collect_month.py` and `tools/finops/monthly_cost_report.py` are tested
+> with synthetic inputs only (`tools/finops/test_*.py`). The first real run is the October 2026 report, in the first
 > session on or after 2026-11-03 (see "Before you start"). Update this page with what that run teaches.
 
 ## Before you start
@@ -42,48 +42,49 @@ Rules and budgets: [FinOps process](../finops.md).
 
    Expected: the acc2 account (account map in `docs/onboarding.md`). Abort on any other account.
 
-2. Export the cost-per-app JSON for the month and for the month before. Choose one way:
-   - **Browser (tech lead):** open the admin console page **Cost per app** (`/admin/platform/cost`), pick the month,
-     and in the browser developer tools save the response of the `cost?month=YYYY-MM` request as
-     `platform-cost-YYYY-MM.json`.
-   - **ECS exec (orchestrator session only):** a short script inside the api container calls
-     `api.services.platform_cost.cost_by_app(pool, "YYYY-MM", refresh_if_stale=False)` and writes the JSON to the
-     bronze bucket `scripts/` prefix (S3-mediated pattern, `skill/aa-cis-schema/references/ecs-exec.md`).
-     Subagents cannot run ECS exec.
-
-   Verify: the JSON has `month`, `aws.covered_from`, `aws.covered_to` and `refresh.stale = false`. If `stale` is
-   true, refresh first (admin page, or `POST /admin/cost-explorer/check`, about 0.01 USD) and export again.
-
-3. Export LLM spend by stage for the month (read only):
+2. Collect the inputs, one run per app container (orchestrator session only: subagents cannot run ECS exec).
+   `collect_month.py` is read-only, reads the stored Cost Explorer data through the CIS cost module
+   (`cost_by_app`, the admin page's numbers) and drops every account ID. `MONTHS` defaults to the three whole months
+   before today; set it to compare other months.
 
    ```bash
-   python3 tools/finops/monthly_cost_report.py --print-sql
+   mkdir -p .tmp-session/cost-2026-10
+   tools/ecs/ecsx.sh tools/finops/collect_month.py PART=cis MONTHS=2026-08,2026-09,2026-10 > .tmp-session/cost-2026-10/cis.txt
+   ECSX_SERVICE=aa-booking-dev-api tools/ecs/ecsx.sh tools/finops/collect_month.py PART=booking MONTHS=2026-08,2026-09,2026-10 > .tmp-session/cost-2026-10/booking.txt
+   ECSX_SERVICE=aa-crm-dev-api tools/ecs/ecsx.sh tools/finops/collect_month.py PART=crm MONTHS=2026-08,2026-09,2026-10 > .tmp-session/cost-2026-10/crm.txt
    ```
 
-   Run the printed SQL through the same ECS exec pattern with the first day of the month and of the next month,
-   and save the result as CSV with a header row (`stage,role,account,calls,cost_usd`).
-   Verify: the CSV total is close to the LLM total in the JSON (they read the same ledgers).
+   Verify: each file has one line starting with `FINOPS_BUNDLE `. If the report later lists "Stored Cost Explorer
+   data was stale", run the CIS line again with `REFRESH=1` (one Cost Explorer request per stale month, about
+   0.01 USD each, through the CIS client).
 
-4. Optional: write the unit-cost denominators to `units-YYYY-MM.json`, for example
-   `{"published_tours": 0, "trip_plans": 0, "bookings": 0}`. Take the counts with read-only queries; read the
-   table and column names in `docs/architecture/db-schema-reference.md`, never from memory.
+3. Optional: write the trip plan count (TripPlanner runs in Lambda, there is no container) to `units-YYYY-MM.json`,
+   for example `{"trip_plans": 0}`. Take it with a read-only query; read the table and column names in
+   `docs/architecture/db-schema-reference.md`, never from memory.
 
-5. Draft the cost sections:
+4. Draft the cost sections:
 
    ```bash
-   python3 tools/finops/monthly_cost_report.py --current platform-cost-2026-10.json --previous platform-cost-2026-09.json --llm-csv llm-by-stage-2026-10.csv --units units-2026-10.json --out cost-sections.md
+   python3 tools/finops/monthly_cost_report.py --bundle .tmp-session/cost-2026-10/cis.txt --booking-bundle .tmp-session/cost-2026-10/booking.txt --crm-bundle .tmp-session/cost-2026-10/crm.txt --budget-usd 300 --out .tmp-session/cost-2026-10/cost-sections.md
    ```
 
-   Expected: Markdown with "Totals by account", "By app", "Top 5 services", "LLM spend", "Unit costs" and
-   "Findings from the data". Untagged spend and changes over 20 % are flagged.
-   If it stops with "not a /admin/platform/cost response", the export in step 2 saved the wrong request.
+   Expected: Markdown with the five-line Vietnamese summary (lines 3 and 5 left as `<điền>`), "Totals by account",
+   "By app", "Month over month" (every month of the bundle), "Top 5 services", "LLM spend" (by app, stage and role;
+   ad-hoc stages apart), "Unit costs" and "Findings from the data". Untagged spend, changes over 20 %, an acc3 Cost
+   Explorer figure under half of the gateway estimate (credits) and a missing CRM part are flagged.
+   `--month YYYY-MM` drafts an earlier month of the bundle. `--budget-usd` is the acc2 account budget
+   ([FinOps process](../finops.md#budgets-and-alerts)).
+
+5. The single-export way still works (`--current` / `--previous` with the `/admin/platform/cost` JSON saved from
+   the browser, `--llm-csv` from the SQL that `--print-sql` prints, `--units`), for a month the collector cannot
+   reach.
 
 6. Create `docs/audits/<date>-S<nnn>-capacity-review/README.md` from
    [`templates/cost-report.md`](../../templates/cost-report.md). Paste the drafted sections, keep the input files
-   in the same folder, then fill in by hand. The inputs hold no secrets and no personal data, but the
-   `/admin/platform/cost` JSON contains the real account IDs (`aws.account_id`, `llm_satellites.*.account_id`;
-   the acc1 line stays for months before November 2026). Keep them in the root repo only, which may hold account
-   IDs, and never copy them into an app repo (SEC-06, D-25). The drafted Markdown does not print account IDs.
+   in the same folder, then fill in by hand. The bundles hold no secrets, no personal data and no account IDs. A
+   browser export of `/admin/platform/cost` does contain account IDs (`aws.account_id`,
+   `llm_satellites.*.account_id`): do not commit it while the root repo is public; never copy it into an app repo
+   (SEC-06, D-25). The drafted Markdown does not print account IDs.
    - the reason for each flagged change (Terraform applies, deploys, waves, batch runs in the month);
    - "Budgets and anomalies": budget e-mails and Cost Anomaly Detection alerts of the month;
    - the C8b capacity checklist (CloudWatch, Performance Insights, table sizes, ledgers, Lambda, jobs);

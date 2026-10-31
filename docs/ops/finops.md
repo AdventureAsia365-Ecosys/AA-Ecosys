@@ -7,9 +7,9 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, cio, pm, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-10-31
 review_every_days: 90
-related: [FIN-02, OPS-08, SEC-01, AA-896, AA-884, AA-838, AA-828]
+related: [FIN-02, OPS-08, SEC-01, APP-06-ai-register, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-896, AA-884, AA-838, AA-828, AA-1004]
 ---
 
 # FinOps process
@@ -29,9 +29,11 @@ budgets, alerts, where to read the numbers and the monthly review.
 | Per-app LLM spend from the rollup; every external spend checks a DB budget | DM-10.5 |
 | Paid batch runs on Dev: trial of ~3, then at most ~50 tours, never the whole catalog without approval | DM-10.6 |
 | Spend changes need the tech lead's approval | DM-10.7 |
-| Quote the monthly cost of a new AWS service or resource before it is applied | S241 D-19. Proposed as an explicit line of DM-10.7 in data standards v1.1 (N-1) |
+| Quote the monthly cost of a new paid service, resource or feature (AWS or outside) and get the tech lead's explicit yes **for that item** before it is applied. Approval of a plan or a batch of work does not cover a paid item inside it (S255: a security plan approval did not cover GuardDuty) | S241 D-19. Proposed as an explicit line of DM-10.7 in data standards v1.1 (N-1) |
+| Paid run ladder: trial of about 3 items, check the cost per item, then at most about 50, then per country; a wave report states the cost per stage, the wave total and $/tour from the ledger | DM-10.6; runbook skill `aa-wave-rerun` |
 
-A change to a rule is a PR to the data standards, not an edit here.
+A change to a rule is a PR to the data standards, not an edit here. Every AI and paid-data stage, with its budget and
+kill switch, is listed in the [AI use register](../architecture/ai-use-register.md).
 
 ## Where the money is
 
@@ -56,6 +58,18 @@ no cross-account fallback. Its older rows stay in the ledgers and snapshots as h
   payer to activate `Environment`**, as was done for `App`. Cost: 0 USD.
 - Tags count only from the day they are set; Cost Explorer does not re-tag older usage.
 
+Where the keys come from in Terraform (INF):
+
+| Root | Provider `default_tags` | `App` |
+|---|---|---|
+| `accounts/aa365` (acc2) | `Project`, `Environment`, `ManagedBy`, `Account` | Set per resource through `local.common_tags` (`cis`), `local.shared_tags` (`shared`) and the per-app maps, never in `default_tags`, so a resource that forgets its own `App` shows as untagged instead of being billed to `cis` (`main.tf`) |
+| `accounts/acc3-bedrock` | `Project`, `Environment`, `ManagedBy`, `Account`, `Issue` | None: Bedrock usage carries no resource tag. Per-app LLM spend comes from the ledger (`app` column), not from tags |
+| `accounts/management` | Same keys plus `App = shared` | Every governance resource is `shared` |
+
+No AWS Organizations tag policy exists. Bedrock calls are attributed per app by the gateway ledger, and the
+capacity plan (S261) adds one invoker role per app and environment on the LLM account, which AWS bills per IAM
+principal without any tag.
+
 ## Budgets and alerts
 
 | Guard | Threshold | Goes to | Defined in |
@@ -68,15 +82,41 @@ no cross-account fallback. Its older rows stay in the ledgers and snapshots as h
 | acc3 anomaly subscription `aa3-cost-anomaly-daily` | Daily summary of anomalies with total impact at least 10 USD, on the AWS services monitor | Same e-mail | Same file |
 | acc3 anomaly subscription `aa3-cost-anomaly-immediate` | Total impact of an anomaly at least 15 USD | acc3 SNS topic `aa3-cost-alerts` (e-mail, immediate) | INF `accounts/acc3-bedrock/cost_anomaly_immediate.tf` (S255) |
 | acc3 AWS default subscription | Daily summary when impact is at least 100 USD and 40 % | Account e-mail | Created by AWS, not in Terraform |
-| LLM and external API caps | Per stage or provider, DB-configured | Refused calls + admin console | `shared.spend_budget` (DM-10.5) |
+| Organization budget `aa-org-monthly` | 300 USD/month gross (`var.org_budget_usd`); 50 %, 80 % and 100 % actual, 100 % forecast | Budget alert e-mails (tech lead and business owner role mailboxes) | INF `accounts/management/budgets.tf` (AA-1004) |
+| Per-account budgets `<account name>-monthly` | Management account 10 USD; each member account its `budget_usd` once it is listed in `member_accounts`; 80 % and 100 % actual, 100 % forecast | Same e-mails | Same file |
+| Per-account anomaly monitors `<account name>-spend` + `<account name>-anomaly-daily` | Daily summary of anomalies with total impact at least 15 USD (`var.anomaly_threshold_usd`) | Same e-mails | Same file |
+| Per-`App` anomaly monitors `aa-app-<app>-spend` | Daily summary, impact at least 15 USD; **prepared, off** (`app_tag_anomaly_monitors_enabled = false`) | Same e-mails | INF `accounts/management/cost_anomaly_app_tag.tf` (AA-896, S262) |
+| LLM and external API caps | Per provider and scope, DB-configured (next section) | Refused calls + admin console | `shared.spend_budget` (DM-10.5) |
+| LLM connection budgets | Monthly per connection; alert 80 %, hard stop 100 % by default | Refused calls (hard stop) + admin console | `shared.llm_provider_connection.monthly_budget_usd` + `shared.llm_connection_cost_policy` (next section) |
 
-Not available: an anomaly monitor per `App` tag. AWS allows tag and linked-account monitors only in the
-management account; the per-App budgets cover that need. acc3 alerts go to its own SNS topic and e-mail, not to the
-acc2 alerts topic: an IMMEDIATE subscription needs an SNS topic in the same account.
+**Per-`App` anomaly monitor: why it is off.** AWS creates tag, cost category and linked-account monitors only in the
+management (payer) account. Today acc2 is billed by the reseller's organization, not ours, so a monitor in our
+management account would see none of its spend; the per-App budgets on acc2 cover the need meanwhile. Switch it on
+(one variable, then the Infra Terraform Apply workflow for the management root) when both are true: the nonprod
+account (acc2) has joined our organization (ADR 0018 timeline), and `App` is an active cost allocation tag in the
+management account (Billing, Cost allocation tags; activation is not retroactive and takes up to 24 hours). acc3
+alerts go to its own SNS topic and e-mail, not to the acc2 alerts topic: an IMMEDIATE subscription needs an SNS topic
+in the same account, which is also why the management monitors send daily e-mails.
 
 Cost of these guards: 0 USD/month. Budgets without actions are free (AWS Budgets pricing page, read
 2026-10-19; none of ours has actions), Cost Anomaly Detection is free, and SNS e-mail stays inside the free tier.
 Each Cost Explorer API request costs 0.01 USD.
+
+## Spend caps in the database
+
+The gateway refuses a call before it is made when a cap is reached (ADR 0009 decision 6, "budgets at every layer").
+The live values are on the admin console, Cost Operations, Budgets tab; this table is the seeded state.
+
+| Layer | Where | Seeded values |
+|---|---|---|
+| Provider and job (`provider`, `scope` = `global` or `job:<kind>`) | `shared.spend_budget` (`per_run_usd`, `per_day_usd`, `hard_stop`, `alert_pct`) | Jev `global`: 5.00 USD per UTC day, hard stop, alert at 80 % (migration 318; rule max(1.00, 2 × p95 daily spend)). DataForSEO `job:s1_rewrite`: 0.50 USD per run (one run = one tour), hard stop (migration 318; rule max(0.50, 2 × p99 per tour)). DataForSEO `global`: 10.00 USD per day, alert only. Bedrock and geocoder rows from earlier migrations |
+| LLM connection (monthly) | `shared.llm_provider_connection.monthly_budget_usd` + optional `shared.llm_connection_cost_policy` row (migration 317) | No policy row = alert at 80 %, hard stop at 100 %. Anthropic API connection: 150 USD/month approved 2026-10-31 (a cap, not money paid in). The OpenAI API connection's cap is stated and approved before any purchase |
+| Reconciliation | Job `llm_cost_reconcile` (nightly, 0 USD) writes `shared.llm_cost_reconcile`: the ledger next to the provider's own figure per connection and day | Compares gross amounts; Cost Explorer `UnblendedCost` is net of credits |
+| Tenant | CRM `ai_budget_usd` per agency (hard, root ADR 0008a); Content studio tenants alert at 100 % and need staff approval from 150 % (AA-1016) | Amounts from the business owner's plan prices |
+
+Over a Jev cap, `decide()` makes no call and the stage keeps its own rule; over the DataForSEO run cap, the rest of
+that tour's SEO calls are skipped. Neither fails a job. Every stage with its cap and kill switch:
+[AI use register](../architecture/ai-use-register.md).
 
 ## Where to read the numbers
 
@@ -102,8 +142,11 @@ from the template [`templates/cost-report.md`](../templates/cost-report.md), dra
 the tech lead (C8a). A preliminary August / September / October (month to date) comparison per account, `App` tag, service
 and usage type was made on 2026-10-23 (S248): [`docs/audits/2026-10-23-S248-cost-report/`](../audits/2026-10-23-S248-cost-report/README.md).
 The final October report is made in the first session on or after 2026-11-03 (Cost Explorer revises a day for about
-48 hours): it re-runs that folder's `scripts/fetch_ce.sh` with the month end and its read-only unit-cost SQL, then
-follows the how-to.
+48 hours). Since S262 the inputs come from `tools/finops/collect_month.py`, run once per app container through
+`tools/ecs/ecsx.sh` (cost per app for August to October, LLM by app and stage, tour and trip case counts), and
+`tools/finops/monthly_cost_report.py --bundle` drafts every cost section, the month-over-month table and the
+five-line Vietnamese summary. The S248 `scripts/fetch_ce.sh` stays a one-off audit pull (usage types, which the stored
+snapshots do not hold).
 
 ## Unit costs
 
@@ -112,9 +155,11 @@ follows the how-to.
 | USD per published tour | `cis` total for the month | Tours published or republished in the month |
 | USD LLM per published tour | `cis` LLM spend | Same |
 | USD per trip plan | `tripplanner` total | Trip plans created |
-| USD per booking | `booking` total | Bookings created (0 during the dev phase) |
+| USD per trip case | `booking` total | Trip cases created in the month (`booking.trip_cases`, not deleted) |
+| USD per booking | `booking` total | Of those trip cases, the ones confirmed or later now (0 during the dev phase) |
 
-Denominators come from read-only counts in the monthly review; Dev numbers are for trend only.
+Denominators come from the read-only counts of `collect_month.py` (trip plans: a manual `--units` value, TripPlanner
+runs in Lambda); Dev numbers are for trend only.
 
 Per-model LLM unit costs (USD per 1,000 calls, USD per 1M tokens, tokens per call) need no DB: join the Cost
 Explorer service line of each model with the CloudWatch `AWS/Bedrock` metrics `Invocations`, `InputTokenCount`,
