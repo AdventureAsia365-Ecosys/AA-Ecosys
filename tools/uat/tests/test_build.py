@@ -35,5 +35,13 @@ class MuxArgs(unittest.TestCase):
         self.assertIn("title=Tiếng Việt", a)
 
 
+@unittest.skipIf(build is None, "build.py needs the tools/uat venv (numpy, soundfile)")
+class StartGap(unittest.TestCase):
+    def test_small_gap_ignored_large_gap_kept(self):
+        self.assertEqual(build.start_gap(33.176, 33.12), 0.0)
+        self.assertEqual(build.start_gap(43.179, 41.0), 2.179)
+        self.assertEqual(build.start_gap(10.0, 10.4), 0.0)
+
+
 if __name__ == "__main__":
     unittest.main()
