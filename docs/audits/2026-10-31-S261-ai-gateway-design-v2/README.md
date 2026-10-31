@@ -58,7 +58,7 @@ Hai từ dùng trong cả bài:
 | Bedrock acc3 (Claude, GPT trên Bedrock) | Gần hết stage viết, chấm, kiểm của CIS; soạn lịch trình TripPlanner | Bị chặn từ 29/10 (Error 002); là nguồn chính duy nhất | Một miền sự cố; luôn có đường dự phòng ở miền khác |
 | Bedrock acc2 (Cohere Embed; chat: Nova, Llama, Kimi) | Embedding cho CIS và tìm kiếm TripPlanner | Embedding chạy được. Chat: acc2 không gọi được Claude hay GPT (nhà bán lại TrueIDC chặn), chỉ Nova, Llama, Kimi trả lời; chưa stage nào dùng chat trên acc2. Nếu bật, lần gọi chat đó sẽ bị ghi thiếu tài khoản nên không vào ngân sách (sửa ở bước 1) | Ghi đúng tài khoản; có thể làm miền thứ hai cho chấm / kiểm (quyết định 3) |
 | Anthropic API trực tiếp | Đường thứ hai cho Claude (stage viết) | Đã chuẩn bị đường Dev, trần 150 USD/tháng; chưa nạp tiền, chưa có khoá | **Đường dự phòng ấm** cho stage viết, khác miền sự cố; đã duyệt nạp 50 USD, trần 150 USD/tháng, kiểm tra sống hằng ngày (quyết định 2) |
-| OpenAI API trực tiếp | Đường thứ hai cho model chấm GPT | Hết tiền | **Đường dự phòng ấm** cho stage chấm, khác miền sự cố, đứng trước acc2 (anh chốt 31/10: "API ngoài là cả Anthropic và OpenAI"); có trần, kiểm tra sống hằng ngày. Cần nạp tiền và đặt trần chi tháng: con số trình anh duyệt trước khi nạp; chưa nạp thì trang giám sát hiện đỏ "chưa có tiền" |
+| OpenAI API trực tiếp | Đường thứ hai cho model chấm GPT | **Khoá chạy được** (gọi thử 31/10 17:45: 200, hạn mức còn nguyên). Hệ thống dùng rất ít: tháng 9 khoảng 1,72 USD, tháng 10 khoảng 0,73 USD, lần gọi cuối 02/10. Ghi chú "hết tiền (429)" ở S257 đã cũ | **Đường dự phòng ấm** cho stage chấm, khác miền sự cố, đứng trước acc2 (anh chốt 31/10: "API ngoài là cả Anthropic và OpenAI"); có trần, kiểm tra sống hằng ngày; chưa cần nạp thêm, đặt trần chi tháng (số trình anh duyệt) |
 | Azure OpenAI | Một đường GPT ngoài AWS, nếu sau này cần | Đã có code nối (làm ở AA-1002, có kiểm thử) nhưng chưa có tài khoản Azure, chưa bật nguồn nào, không tốn tiền; không phải code chết | Giữ code, không bật; chỉ bật khi cần thêm một đường GPT và anh đã duyệt chi phí |
 | Bedrock Batch (acc3) | Viết lại tour hàng loạt (chạy theo lô) | Không ghi sổ (đã kiểm code: ba file chạy theo lô không có dòng ghi chi phí nào) | Đi qua cổng, ghi sổ như lần gọi thường |
 | **Jev** | Quyết định có kiểu (chọn, chấm điểm), không ra chữ | Client riêng ngoài cổng; ghi hai sổ; không trần trước khi gọi; số dư chỉ ước tính; có danh sách tenant được phép | Một loại nguồn "quyết định" trong cổng; trần trước khi gọi (hết trần thì coi như Jev lỗi, việc vẫn chạy theo luật cũ); giữ danh sách tenant và các chế độ tắt / thử / áp dụng |
@@ -153,9 +153,9 @@ Anh trả lời ngày 31/10: **đồng ý hết đề xuất**, kèm một ý: *
    - **Đã duyệt: Có.**
    - **Anthropic API** (dự phòng cho stage viết, vì model viết là Claude): nạp **50 USD** một lần (đủ khoảng 800 tour
      viết lại, khoảng 0,06 USD/tour), trần chi **150 USD/tháng** đã đặt.
-   - **OpenAI API** (dự phòng cho stage chấm, vì model chấm hôm nay là GPT): hôm nay hết tiền. Anh chưa nêu số tiền
-     nạp và trần chi tháng, nên trước khi nạp tôi trình một con số (tính từ chi phí chấm mỗi tour đo ở bước 0) để
-     anh duyệt. Chưa nạp thì trang giám sát hiện đỏ "chưa có tiền".
+   - **OpenAI API** (dự phòng cho stage chấm, vì model chấm hôm nay là GPT): **khoá đang chạy được, còn tiền** (gọi thử
+     31/10; cả tháng 9–10 hệ thống chỉ dùng khoảng 2,45 USD). Chưa cần nạp thêm; tôi trình con số trần chi tháng (tính từ
+     chi phí chấm mỗi tour đo ở bước 0) để anh duyệt.
    - Kiểm tra sống hằng ngày mọi nguồn trên Dev: dưới 1 USD/tháng. Diễn tập chuyển dự phòng mỗi tháng: khoảng
      0,25 USD một lần, mỗi lần thử một stage viết chuyển sang Anthropic và một stage chấm chuyển sang OpenAI.
      Cảnh báo qua chuông admin và email vận hành đã có, 0 USD.
@@ -246,8 +246,8 @@ AA-896 và AA-1003 (đọc cùng sổ ghi; phần nhà cung cấp trong bản ti
 
 **Cần lưu ý trước khi làm:**
 
-1. **Tiền nạp OpenAI chưa có số.** Anh mới duyệt số của Anthropic (nạp 50 USD, trần 150 USD/tháng). Trước khi nạp
-   OpenAI, tôi trình số tiền nạp và trần tháng để anh duyệt.
+1. **OpenAI không cần nạp thêm lúc này.** Khoá đang chạy được, còn tiền (kiểm 31/10). Chỉ trình anh số trần chi tháng
+   trước khi bật kiểm tra sống.
 2. **Giới hạn số issue trên Linear.** Project CIS Core tối đa 100 issue chưa lưu trữ; đếm lại trước khi tạo N1 và N2.
 
 ## Phụ lục: tên kỹ thuật

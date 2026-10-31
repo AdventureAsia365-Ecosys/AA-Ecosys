@@ -97,7 +97,7 @@ code{font:13px var(--f-mono)}
       <tr><td>Bedrock acc3</td><td>Gần hết stage viết, chấm, kiểm của CIS; lịch trình TripPlanner</td><td><span class="pill p-bad">bị chặn từ 29/10</span> Nguồn chính duy nhất</td><td>Một miền sự cố; luôn có dự phòng ở miền khác</td></tr>
       <tr><td>Bedrock acc2</td><td>Embedding (Cohere); chat: Nova, Llama, Kimi</td><td><span class="pill p-ok">embedding chạy</span> Claude/GPT bị nhà bán lại chặn; chat chưa stage nào dùng</td><td>Ghi đúng tài khoản; có thể làm miền thứ hai cho chấm / kiểm (quyết định 3)</td></tr>
       <tr><td>Anthropic API</td><td>Đường thứ hai cho Claude (stage viết)</td><td><span class="pill p-off">đường đã sẵn, chưa có khoá</span> Trần 150 USD/tháng</td><td><b>Đường dự phòng ấm</b> cho stage viết; đã duyệt nạp 50 USD, trần 150 USD/tháng, kiểm tra sống hằng ngày</td></tr>
-      <tr><td>OpenAI API</td><td>Đường thứ hai cho model chấm GPT</td><td><span class="pill p-bad">hết tiền</span></td><td><b>Đường dự phòng ấm</b> cho stage chấm, đứng trước acc2; có trần, kiểm tra sống hằng ngày. Cần nạp tiền và đặt trần tháng: số trình anh duyệt trước khi nạp</td></tr>
+      <tr><td>OpenAI API</td><td>Đường thứ hai cho model chấm GPT</td><td><span class="pill p-ok">khoá chạy được</span> Gọi thử 31/10: OK, hạn mức còn nguyên. Tháng 9–10 hệ thống chỉ dùng khoảng 2,45 USD, lần cuối 02/10</td><td><b>Đường dự phòng ấm</b> cho stage chấm, đứng trước acc2; có trần, kiểm tra sống hằng ngày. Chưa cần nạp thêm</td></tr>
       <tr><td>Azure OpenAI</td><td>Đường GPT ngoài AWS nếu sau này cần</td><td><span class="pill p-off">có code, chưa bật</span></td><td>Giữ code, chỉ bật khi anh duyệt chi phí</td></tr>
       <tr><td>Bedrock Batch</td><td>Viết lại tour theo lô</td><td>Không ghi sổ chi phí</td><td>Đi qua cổng, ghi sổ như lần gọi thường</td></tr>
       <tr><td>Jev</td><td>Quyết định có kiểu (chọn, chấm), không ra chữ</td><td>Client riêng; ghi hai sổ; không trần trước khi gọi; số dư ước tính; có danh sách tenant được phép</td><td>Một loại nguồn "quyết định"; trần trước khi gọi; giữ danh sách tenant và chế độ tắt / thử / áp dụng</td></tr>
@@ -180,7 +180,7 @@ flowchart LR
       <h3>2. Đường dự phòng ấm, khác miền sự cố, là bắt buộc: cả Anthropic lẫn OpenAI <span class="pill p-ok">đã duyệt: Có</span></h3>
       <ul>
         <li><b>Anthropic API</b> (dự phòng cho stage viết, model viết là Claude): nạp 50 USD một lần (khoảng 800 tour viết lại), trần 150 USD/tháng.</li>
-        <li><b>OpenAI API</b> (dự phòng cho stage chấm, model chấm hôm nay là GPT): hôm nay hết tiền. Số tiền nạp và trần tháng chưa có: tôi trình con số (tính từ chi phí chấm mỗi tour đo ở bước 0) để anh duyệt trước khi nạp. Chưa nạp thì trang giám sát hiện đỏ "chưa có tiền".</li>
+        <li><b>OpenAI API</b> (dự phòng cho stage chấm, model chấm hôm nay là GPT): khoá đang chạy được, còn tiền (tháng 9–10 chỉ dùng khoảng 2,45 USD). Chưa cần nạp thêm; tôi trình con số trần chi tháng để anh duyệt.</li>
         <li>Kiểm tra sống hằng ngày mọi nguồn trên Dev: dưới 1 USD/tháng. Diễn tập mỗi tháng, khoảng 0,25 USD/lần: một stage viết chuyển sang Anthropic, một stage chấm chuyển sang OpenAI.</li>
       </ul>
     </div>
