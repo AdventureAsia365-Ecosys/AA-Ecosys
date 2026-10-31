@@ -44,8 +44,18 @@
       "ai_usd": 20,
       "ai_in_aws_acc2_usd": 0.0,
       "ai_calls": 100,
-      "ai_by_source": [],
-      "total_usd": 120
+      "ai_by_source": [
+       {
+        "provider": "bedrock",
+        "account": "acc3",
+        "account_name": "acc3",
+        "calls": 100,
+        "cost_usd": 20,
+        "billed_in_aws_acc2": false
+       }
+      ],
+      "total_usd": 120,
+      "hint": null
      },
      {
       "app": "booking",
@@ -67,7 +77,8 @@
       "ai_in_aws_acc2_usd": 0.0,
       "ai_calls": 0,
       "ai_by_source": [],
-      "total_usd": 10.0
+      "total_usd": 10.0,
+      "hint": null
      },
      {
       "app": "tripplanner",
@@ -89,7 +100,8 @@
       "ai_in_aws_acc2_usd": 0.0,
       "ai_calls": 0,
       "ai_by_source": [],
-      "total_usd": 5.0
+      "total_usd": 5.0,
+      "hint": null
      },
      {
       "app": "tag:shared",
@@ -111,7 +123,8 @@
       "ai_in_aws_acc2_usd": 0.0,
       "ai_calls": 0,
       "ai_by_source": [],
-      "total_usd": 40.0
+      "total_usd": 40.0,
+      "hint": null
      },
      {
       "app": "untagged",
@@ -133,7 +146,8 @@
       "ai_in_aws_acc2_usd": 0.0,
       "ai_calls": 0,
       "ai_by_source": [],
-      "total_usd": 3.0
+      "total_usd": 3.0,
+      "hint": null
      }
     ],
     "totals": {
@@ -146,7 +160,15 @@
       "ce_bedrock_usd": 18,
       "llm_log_estimate_usd": 17.099999999999998
      },
-     "ce_fetched_at": null
+     "ce_fetched_at": null,
+     "lines": [
+      {
+       "key": "acc3",
+       "label": "acc3 (LLM)",
+       "ce_bedrock_usd": 18,
+       "llm_log_estimate_usd": 17.099999999999998
+      }
+     ]
     },
     "refresh": {
      "attempted": false,
@@ -212,8 +234,18 @@
       "ai_usd": 25,
       "ai_in_aws_acc2_usd": 0.0,
       "ai_calls": 100,
-      "ai_by_source": [],
-      "total_usd": 155
+      "ai_by_source": [
+       {
+        "provider": "bedrock",
+        "account": "acc3",
+        "account_name": "acc3",
+        "calls": 100,
+        "cost_usd": 25,
+        "billed_in_aws_acc2": false
+       }
+      ],
+      "total_usd": 155,
+      "hint": null
      },
      {
       "app": "booking",
@@ -235,7 +267,8 @@
       "ai_in_aws_acc2_usd": 0.0,
       "ai_calls": 0,
       "ai_by_source": [],
-      "total_usd": 10.0
+      "total_usd": 10.0,
+      "hint": null
      },
      {
       "app": "tripplanner",
@@ -257,7 +290,8 @@
       "ai_in_aws_acc2_usd": 0.0,
       "ai_calls": 0,
       "ai_by_source": [],
-      "total_usd": 5.0
+      "total_usd": 5.0,
+      "hint": null
      },
      {
       "app": "tag:shared",
@@ -279,7 +313,8 @@
       "ai_in_aws_acc2_usd": 0.0,
       "ai_calls": 0,
       "ai_by_source": [],
-      "total_usd": 41.0
+      "total_usd": 41.0,
+      "hint": null
      },
      {
       "app": "untagged",
@@ -301,7 +336,8 @@
       "ai_in_aws_acc2_usd": 0.0,
       "ai_calls": 0,
       "ai_by_source": [],
-      "total_usd": 0.0
+      "total_usd": 0.0,
+      "hint": null
      }
     ],
     "totals": {
@@ -314,7 +350,15 @@
       "ce_bedrock_usd": 30,
       "llm_log_estimate_usd": 28.5
      },
-     "ce_fetched_at": null
+     "ce_fetched_at": null,
+     "lines": [
+      {
+       "key": "acc3",
+       "label": "acc3 (LLM)",
+       "ce_bedrock_usd": 30,
+       "llm_log_estimate_usd": 28.5
+      }
+     ]
     },
     "refresh": {
      "attempted": false,
@@ -380,9 +424,19 @@
       "ai_usd": 40.0,
       "ai_in_aws_acc2_usd": 0.0,
       "ai_calls": 100,
-      "ai_by_source": [],
+      "ai_by_source": [
+       {
+        "provider": "bedrock",
+        "account": "acc3",
+        "account_name": "acc3",
+        "calls": 100,
+        "cost_usd": 40.0,
+        "billed_in_aws_acc2": false
+       }
+      ],
       "total_usd": 180.0,
-      "ai_outside_aws_usd": 40.0
+      "ai_outside_aws_usd": 40.0,
+      "hint": null
      },
      {
       "app": "booking",
@@ -404,7 +458,8 @@
       "ai_in_aws_acc2_usd": 0.0,
       "ai_calls": 0,
       "ai_by_source": [],
-      "total_usd": 10.0
+      "total_usd": 10.0,
+      "hint": null
      },
      {
       "app": "tripplanner",
@@ -426,7 +481,8 @@
       "ai_in_aws_acc2_usd": 0.0,
       "ai_calls": 0,
       "ai_by_source": [],
-      "total_usd": 5.0
+      "total_usd": 5.0,
+      "hint": null
      },
      {
       "app": "tag:shared",
@@ -448,7 +504,8 @@
       "ai_in_aws_acc2_usd": 0.0,
       "ai_calls": 0,
       "ai_by_source": [],
-      "total_usd": 41.0
+      "total_usd": 41.0,
+      "hint": null
      },
      {
       "app": "untagged",
@@ -470,7 +527,8 @@
       "ai_in_aws_acc2_usd": 0.0,
       "ai_calls": 0,
       "ai_by_source": [],
-      "total_usd": 0.0
+      "total_usd": 0.0,
+      "hint": null
      },
      {
       "app": "crm",
@@ -493,7 +551,8 @@
       "ai_outside_aws_usd": 0.0,
       "ai_calls": 0,
       "ai_by_source": [],
-      "total_usd": 4.0
+      "total_usd": 4.0,
+      "hint": null
      }
     ],
     "totals": {
@@ -508,7 +567,15 @@
       "ce_bedrock_usd": 2.5,
       "llm_log_estimate_usd": 38.0
      },
-     "ce_fetched_at": null
+     "ce_fetched_at": null,
+     "lines": [
+      {
+       "key": "acc3",
+       "label": "acc3 (LLM)",
+       "ce_bedrock_usd": 2.5,
+       "llm_log_estimate_usd": 38.0
+      }
+     ]
     },
     "refresh": {
      "attempted": false,

@@ -23,6 +23,15 @@ B. Single exports (S243, still supported):
 Both ways:
   --units FILE      optional JSON with denominators for the report month, e.g. {"published_tours": 1234,
                     "trip_plans": 56, "bookings": 0}; it overrides the bundle counts with the same key.
+  --prev-units FILE last month's denominators as counted at last month's end: the CIS bundle saved with last month's
+                    report (its units of that month are taken), or a units JSON. Without it the per-tour costs of
+                    last month show "n/a": published_at is overwritten on republish, so a past month's tour count
+                    read today is too low (collect_month.PUBLISHED_TOURS_SQL).
+  --mgmt-usd N      the management account's own spend of the report month (org CloudTrail trail and bucket, KMS
+                    key, budgets), from the one-line Cost Explorer read in docs/ops/cost/README.md (profile aa-mgmt;
+                    the CIS client reads acc2 and acc3 only). Shown as its own row and added to the grand total.
+                    Without it the totals say plainly that the management account is not included.
+  --mgmt-prev-usd N the same for the month before (optional; enables the change column and a like-for-like line 2).
   --budget-usd N    the acc2 monthly account budget (docs/ops/finops.md, Budgets) for the budget line.
   --out FILE        write the Markdown there (default: stdout).
 
@@ -39,6 +48,7 @@ import argparse
 import copy
 import csv
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any, Optional
@@ -46,6 +56,9 @@ from typing import Any, Optional
 CHANGE_FLAG_PCT = 20.0  # template: "changes over 20 %"
 BUNDLE_MARKER = "FINOPS_BUNDLE "
 CREDIT_GAP_RATIO = 0.5  # acc3 CE under half the gateway estimate: credits, not savings
+ACCOUNT_ID_RE = re.compile(r"(?<![\w-])\d{12}(?![\w-])")  # same as collect_month.ACCOUNT_ID_RE
+TOUR_UNITS = ("published_tours", "published_tours_live")
+MGMT_LABEL = "Management account (org trail, KMS, budgets)"
 
 LLM_BY_STAGE_SQL = """-- Read-only. $1 = first day of the month, $2 = first day of the next month (dates, UTC).
 -- Same sources as platform_cost.AI_SPEND_SQL: rolled-up days from shared.llm_call_daily, other days from
@@ -159,16 +172,25 @@ def apply_crm(cost: dict[str, Any], crm_month: Optional[dict[str, Any]]) -> dict
     return out
 
 
-# acc3 is the only LLM satellite (AA-998). acc1 (the old fallback) gets a row only while a month's JSON still
-# carries it, so the first report after the retirement still compares with the month before.
-SATELLITES = (("acc3", "acc3 (LLM satellite)"), ("acc1", "acc1 (retired, AA-998)"))
+# acc3 is the only LLM satellite (AA-998). The retired fallback account gets a row only while a month's JSON still
+# carries it (key "retired" in cost_by_app since AA-998, "acc1" in older exports), so the first report after the
+# retirement still compares with the month before.
+SATELLITES = (("acc3", "acc3 (LLM satellite)"), ("retired", "Retired account (former LLM fallback)"),
+              ("acc1", "acc1 (retired, AA-998)"))
 
 
 def satellite_rows(cur: dict[str, Any], prev: dict[str, Any]) -> list[tuple[str, str]]:
     return [(n, label) for n, label in SATELLITES if n == "acc3" or n in cur or n in prev]
 
 
-def section_totals(cur: dict[str, Any], prev: Optional[dict[str, Any]]) -> list[str]:
+def grand_total(cost: Optional[dict[str, Any]], mgmt_usd: Optional[float]) -> Optional[float]:
+    """The AA-884 total (acc2 + LLM outside acc2) plus the management account when it is given."""
+    t = ((cost or {}).get("totals") or {}).get("total_usd")
+    return None if t is None else round(float(t) + (mgmt_usd or 0.0), 4)
+
+
+def section_totals(cur: dict[str, Any], prev: Optional[dict[str, Any]], mgmt_usd: Optional[float] = None,
+                   mgmt_prev_usd: Optional[float] = None) -> list[str]:
     lines = ["## Totals by account", "",
              "| Account | This month (USD) | Last month (USD) | Change | Note |",
              "|---|---|---|---|---|"]
@@ -186,10 +208,21 @@ def section_totals(cur: dict[str, Any], prev: Optional[dict[str, Any]]) -> list[
         est = (sat_c.get(name) or {}).get("llm_log_estimate_usd")
         ch, _ = change(c, p)
         lines.append(f"| {label} | {money(c)} | {money(p)} | {ch} | Bedrock from Cost Explorer; gateway estimate {money(est)} |")
+    if mgmt_usd is not None:
+        ch, _ = change(mgmt_usd, mgmt_prev_usd)
+        lines.append(f"| {MGMT_LABEL} | {money(mgmt_usd)} | {money(mgmt_prev_usd)} | {ch} | "
+                     "Cost Explorer of the management account itself (profile aa-mgmt) |")
+    else:
+        lines.append(f"| {MGMT_LABEL} | not included | | | no --mgmt-usd given: not in any total below |")
     ai = (cur.get("totals") or {}).get("ai_usd")
+    total = (cur.get("totals") or {}).get("total_usd")
     lines += ["", f"LLM spend by app (gateway estimates, incl. OpenAI and Jev): {money(ai)} USD. "
-              f"Grand total per the AA-884 rule (AWS acc2 + LLM - acc2 Bedrock counted once): "
-              f"{money((cur.get('totals') or {}).get('total_usd'))} USD.", ""]
+              f"Total per the AA-884 rule (AWS acc2 + LLM - acc2 Bedrock counted once): {money(total)} USD."]
+    if mgmt_usd is not None:
+        lines.append(f"Grand total with the management account: {money(grand_total(cur, mgmt_usd))} USD.")
+    else:
+        lines.append("Grand total: the management account is not included (no --mgmt-usd).")
+    lines.append("")
     return lines
 
 
@@ -231,7 +264,8 @@ def section_mom(months: list[str], costs: dict[str, dict[str, Any]]) -> list[str
 
     lines = ["## Month over month", "",
              "App tags count only from the day they were set (2026-10-15/16, AA-828); spend before that sits in "
-             "\"Not assigned to an app\". Compare earlier months by service.", "",
+             "\"Not assigned to an app\". Compare earlier months by service. The management account is not in this "
+             "table (see Totals by account).", "",
              head.format("App"), sep]
     order: list[str] = []
     labels: dict[str, str] = {}
@@ -318,6 +352,9 @@ def section_llm(rows: Optional[list[dict[str, Any]]]) -> list[str]:
     return lines
 
 
+NOT_FROZEN = "n/a (published_at is overwritten on republish)"
+
+
 def unit_values(cost: Optional[dict[str, Any]], units: dict[str, Any]) -> dict[str, Optional[float]]:
     rows = apps_by_key(cost)
 
@@ -336,12 +373,16 @@ def unit_values(cost: Optional[dict[str, Any]], units: dict[str, Any]) -> dict[s
 
 
 def section_units(cur: dict[str, Any], prev: Optional[dict[str, Any]], units: Optional[dict[str, Any]],
-                  prev_units: Optional[dict[str, Any]] = None) -> list[str]:
+                  prev_units: Optional[dict[str, Any]] = None, prev_tours_frozen: bool = False) -> list[str]:
+    """``prev_tours_frozen``: last month's tour counts were taken at last month's end (--prev-units). Otherwise
+    they were counted today, after republishes moved published_at, so last month's per-tour costs show n/a."""
     lines = ["## Unit costs", "", "| Unit | Value (USD) | Last month (USD) | Basis |", "|---|---|---|---|"]
     if not units:
         return lines + ["| <no --units file or bundle counts> | | | |", ""]
     v = unit_values(cur, units)
-    pv = unit_values(prev, prev_units) if prev is not None and prev_units else {}
+    pv: dict[str, Any] = unit_values(prev, prev_units) if prev is not None and prev_units else {}
+    if pv and not prev_tours_frozen:
+        pv.update(tour=NOT_FROZEN, tour_llm=NOT_FROZEN)
     def n(key: str) -> str:
         v = units.get(key)
         return "no count" if v is None else f"{v:,}"
@@ -358,30 +399,43 @@ def section_units(cur: dict[str, Any], prev: Optional[dict[str, Any]], units: Op
     rows.append(("USD per booking", "booking", f"booking total / {n(bookings_key)} bookings"
                  + (" (trip cases confirmed or later)" if "bookings_confirmed" in units else "")))
     for label, key, basis in rows:
-        lines.append(f"| {label} | {money(v[key])} | {money(pv.get(key))} | {basis} |")
-    lines += ["", "Published tours = published or republished in the month (`published_at`). Dev numbers: trend only.",
-              ""]
+        last = pv.get(key)
+        lines.append(f"| {label} | {money(v[key])} | {last if isinstance(last, str) else money(last)} | {basis} |")
+    lines += ["", "Published tours = published or republished in the month (`published_at`), counted when the bundle "
+              "was collected: a republish overwrites `published_at`, so a later republish moves a tour out of its "
+              "earlier month and a past month counted today is too low. Last month's per-tour cost is shown only "
+              "from the counts saved with last month's report (`--prev-units`). Dev numbers: trend only.", ""]
     return lines
 
 
 def summary_vi(cur: dict[str, Any], prev: Optional[dict[str, Any]], units: Optional[dict[str, Any]],
-               budget_usd: Optional[float]) -> list[str]:
-    """Five lines for the business owner (plain Vietnamese, no issue keys). The reason and the decision stay to fill."""
+               budget_usd: Optional[float], mgmt_usd: Optional[float] = None,
+               mgmt_prev_usd: Optional[float] = None) -> list[str]:
+    """Five lines for the business owner (plain Vietnamese, no issue keys). The reason and the decision stay to fill.
+    Line 1 is the grand total with the management account when --mgmt-usd is given, and says so when it is not."""
     t = cur.get("totals") or {}
     total, aws = t.get("total_usd"), (cur.get("aws") or {}).get("total_usd")
     outside = t.get("ai_outside_aws_usd")
     if outside is None and total is not None and aws is not None:
         outside = total - aws
     m = month_vi(cur["month"])
+    parts = f"hạ tầng AWS {money(aws)} USD, AI tính ngoài hoá đơn AWS {money(outside)} USD"
+    if mgmt_usd is not None:
+        line1 = (f"1. Tổng chi phí tháng {m}: {money(grand_total(cur, mgmt_usd))} USD ({parts}, tài khoản quản lý AWS "
+                 f"{money(mgmt_usd)} USD).")
+    else:
+        line1 = f"1. Tổng chi phí tháng {m}: {money(total)} USD ({parts}; chưa gồm tài khoản quản lý AWS)."
     lines = ["## Tóm tắt cho chủ doanh nghiệp (VI)", "",
              "<!-- Bản nháp tự sinh từ số liệu: điền lý do (dòng 3) và việc cần quyết (dòng 5), đọc lại trước khi gửi. -->",
-             "",
-             f"1. Tổng chi phí tháng {m}: {money(total)} USD (hạ tầng AWS {money(aws)} USD, AI tính ngoài hoá đơn AWS "
-             f"{money(outside)} USD)."]
+             "", line1]
     if prev:
-        pt = (prev.get("totals") or {}).get("total_usd")
-        ch, _ = change(total, pt)
-        lines.append(f"2. So với tháng {month_vi(prev['month'])} ({money(pt)} USD): {ch.replace('n/a', 'chưa so được')}.")
+        both = mgmt_usd is not None and mgmt_prev_usd is not None
+        cur_t = grand_total(cur, mgmt_usd if both else None)
+        pt = grand_total(prev, mgmt_prev_usd if both else None)
+        ch, _ = change(cur_t, pt)
+        note = " (so sánh chưa gồm tài khoản quản lý)" if mgmt_usd is not None and not both else ""
+        lines.append(f"2. So với tháng {month_vi(prev['month'])} ({money(pt)} USD): "
+                     f"{ch.replace('n/a', 'chưa so được')}{note}.")
     else:
         lines.append("2. Chưa có số tháng trước để so sánh.")
     deltas = []
@@ -430,23 +484,27 @@ def data_findings(cur: dict[str, Any], crm_given: bool) -> list[str]:
 def build(cur: dict[str, Any], prev: Optional[dict[str, Any]], llm_rows: Optional[list[dict[str, Any]]],
           units: Optional[dict[str, Any]], *, prev_units: Optional[dict[str, Any]] = None,
           history: Optional[dict[str, dict[str, Any]]] = None, budget_usd: Optional[float] = None,
-          crm_given: bool = False) -> str:
+          crm_given: bool = False, prev_tours_frozen: bool = False, mgmt_usd: Optional[float] = None,
+          mgmt_prev_usd: Optional[float] = None) -> str:
     out = [f"<!-- Drafted by tools/finops/monthly_cost_report.py from /admin/platform/cost {cur['month']}"
            f"{' vs ' + prev['month'] if prev else ''}; numbers are inputs, the reasons are not. -->", ""]
-    out += summary_vi(cur, prev, units, budget_usd)
-    out += section_totals(cur, prev)
+    out += summary_vi(cur, prev, units, budget_usd, mgmt_usd, mgmt_prev_usd)
+    out += section_totals(cur, prev, mgmt_usd, mgmt_prev_usd)
     app_lines, findings = section_apps(cur, prev)
     out += app_lines
     if history:
         out += section_mom(sorted(history), history)
     out += section_services(cur, prev)
     out += section_llm(llm_rows)
-    out += section_units(cur, prev, units, prev_units)
+    out += section_units(cur, prev, units, prev_units, prev_tours_frozen)
     findings += data_findings(cur, crm_given)
     out += ["## Findings from the data", ""]
     out += [f"- {f}" for f in findings] or ["- none"]
     out.append("")
-    return "\n".join(out)
+    text = "\n".join(out)
+    if ACCOUNT_ID_RE.search(text):  # the draft goes into the public root repo
+        raise SystemExit("the drafted report holds a 12-digit account ID; scrub the input (collect_month.scrub)")
+    return text
 
 
 def from_bundles(a: argparse.Namespace) -> dict[str, Any]:
@@ -470,10 +528,32 @@ def from_bundles(a: argparse.Namespace) -> dict[str, Any]:
     units = units_of(month)
     if a.units:
         units.update(json.loads(Path(a.units).read_text(encoding="utf-8")))
+    prev_units = units_of(prev_m) if prev_m else None
+    frozen = load_prev_units(a.prev_units, prev_m) if prev_m else None
+    if prev_units is not None and frozen:
+        prev_units.update(frozen)
     llm = list(cis["months"][month].get("llm_by_stage") or []) + crm_llm_rows(crm_m.get(month))
     return {"cur": history[month], "prev": history.get(prev_m) if prev_m else None, "llm_rows": llm,
-            "units": units, "prev_units": units_of(prev_m) if prev_m else None, "history": history,
-            "crm_given": crm is not None}
+            "units": units, "prev_units": prev_units, "history": history, "crm_given": crm is not None,
+            "prev_tours_frozen": bool(frozen) and any(k in frozen for k in TOUR_UNITS)}
+
+
+def load_prev_units(path: Optional[str], prev_month: Optional[str]) -> Optional[dict[str, Any]]:
+    """--prev-units: last month's CIS bundle (the units of ``prev_month`` it holds) or a plain units JSON."""
+    if not path:
+        return None
+    text = Path(path).read_text(encoding="utf-8")
+    line = next((ln for ln in text.splitlines() if ln.startswith(BUNDLE_MARKER)), None)
+    try:
+        data = json.loads(line[len(BUNDLE_MARKER):] if line is not None else text)
+    except json.JSONDecodeError as e:
+        raise SystemExit(f"{path}: not JSON ({e.msg})") from None
+    if data.get("kind") != "finops_bundle":
+        return dict(data)
+    got = ((data.get("months") or {}).get(prev_month) or {}).get("units")
+    if got is None:
+        raise SystemExit(f"{path}: the bundle has no units for {prev_month}")
+    return dict(got)
 
 
 def main(argv: Optional[list[str]] = None) -> int:
@@ -486,6 +566,9 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap.add_argument("--previous")
     ap.add_argument("--llm-csv")
     ap.add_argument("--units")
+    ap.add_argument("--prev-units")
+    ap.add_argument("--mgmt-usd", type=float)
+    ap.add_argument("--mgmt-prev-usd", type=float)
     ap.add_argument("--budget-usd", type=float)
     ap.add_argument("--out")
     ap.add_argument("--print-sql", action="store_true", help="print the read-only LLM-by-stage SQL and exit")
@@ -493,12 +576,14 @@ def main(argv: Optional[list[str]] = None) -> int:
     if a.print_sql:
         print(LLM_BY_STAGE_SQL)
         return 0
+    if a.mgmt_prev_usd is not None and a.mgmt_usd is None:
+        ap.error("--mgmt-prev-usd needs --mgmt-usd")
     if a.bundle:
         if a.current or a.previous or a.llm_csv:
             ap.error("--bundle replaces --current, --previous and --llm-csv")
         kw = from_bundles(a)
         text = build(kw.pop("cur"), kw.pop("prev"), kw.pop("llm_rows"), kw.pop("units"), budget_usd=a.budget_usd,
-                     **kw)
+                     mgmt_usd=a.mgmt_usd, mgmt_prev_usd=a.mgmt_prev_usd, **kw)
     else:
         if not a.current:
             ap.error("--current or --bundle is required (or use --print-sql)")
@@ -507,7 +592,10 @@ def main(argv: Optional[list[str]] = None) -> int:
         cur, prev = load_json(a.current), load_json(a.previous)
         units = json.loads(Path(a.units).read_text(encoding="utf-8")) if a.units else None
         llm_rows = read_llm_csv(a.llm_csv) if a.llm_csv else None
-        text = build(cur, prev, llm_rows, units, budget_usd=a.budget_usd)
+        prev_units = load_prev_units(a.prev_units, prev["month"]) if a.prev_units and prev else None
+        text = build(cur, prev, llm_rows, units, prev_units=prev_units, budget_usd=a.budget_usd,
+                     prev_tours_frozen=bool(prev_units) and any(k in prev_units for k in TOUR_UNITS),
+                     mgmt_usd=a.mgmt_usd, mgmt_prev_usd=a.mgmt_prev_usd)
     if a.out:
         Path(a.out).write_text(text, encoding="utf-8")
     else:

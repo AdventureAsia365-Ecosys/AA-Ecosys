@@ -29,7 +29,8 @@ Rules and budgets: [FinOps process](../finops.md).
 - When: the first session of the month, for the month that just ended. The same session runs the vulnerability
   triage ([SEC-03](../../security/vulnerability-management.md#monthly-triage)).
 - Cost: 0 USD when the stored Cost Explorer data is fresh; one Cost Explorer request (0.01 USD) per month window
-  that the admin page refreshes. No new Cost Explorer script (DM-10.4).
+  that the admin page refreshes, plus two one-line reads in the management account (step 3, 0.02 USD). No new Cost
+  Explorer script (DM-10.4).
 - Wait two days after the month ends: Cost Explorer revises a day for about 48 hours.
 
 ## Steps
@@ -44,7 +45,9 @@ Rules and budgets: [FinOps process](../finops.md).
 
 2. Collect the inputs, one run per app container (orchestrator session only: subagents cannot run ECS exec).
    `collect_month.py` is read-only, reads the stored Cost Explorer data through the CIS cost module
-   (`cost_by_app`, the admin page's numbers) and drops every account ID. `MONTHS` defaults to the three whole months
+   (`cost_by_app`, the admin page's numbers) and removes every AWS account ID (`account_id` keys dropped,
+   `account_name` and the satellite labels turned into the account key `acc2` / `acc3`, any other 12-digit number in
+   a text replaced); if one is still left it prints nothing and exits 3. `MONTHS` defaults to the three whole months
    before today; set it to compare other months.
 
    ```bash
@@ -58,15 +61,31 @@ Rules and budgets: [FinOps process](../finops.md).
    data was stale", run the CIS line again with `REFRESH=1` (one Cost Explorer request per stale month, about
    0.01 USD each, through the CIS client).
 
-3. Optional: write the trip plan count (TripPlanner runs in Lambda, there is no container) to `units-YYYY-MM.json`,
+3. Read the management account's own spend for the report month and the month before. The CIS client reads acc2
+   and acc3 only; the management account (organization CloudTrail trail and bucket, KMS key, budgets) is read here.
+   Sign in first (`aws sso login --sso-session aa-mgmt-sso`), then one line per month (Cost Explorer endpoint is in
+   us-east-1; the filter keeps the account itself, not the member accounts it pays for):
+
+   ```bash
+   aws ce get-cost-and-usage --time-period Start=2026-10-01,End=2026-11-01 --granularity MONTHLY --metrics UnblendedCost --filter "{\"Dimensions\":{\"Key\":\"LINKED_ACCOUNT\",\"Values\":[\"$(aws sts get-caller-identity --profile aa-mgmt --query Account --output text)\"]}}" --profile aa-mgmt --region us-east-1 --query 'ResultsByTime[0].Total.UnblendedCost.Amount' --output text
+   ```
+
+   Pass the two amounts as `--mgmt-usd` and `--mgmt-prev-usd` in step 5. Without them the report says in its totals
+   and in summary line 1 that the management account is not included.
+
+4. Optional: write the trip plan count (TripPlanner runs in Lambda, there is no container) to `units-YYYY-MM.json`,
    for example `{"trip_plans": 0}`. Take it with a read-only query; read the table and column names in
    `docs/architecture/db-schema-reference.md`, never from memory.
 
-4. Draft the cost sections:
+5. Draft the cost sections:
 
    ```bash
-   python3 tools/finops/monthly_cost_report.py --bundle .tmp-session/cost-2026-10/cis.txt --booking-bundle .tmp-session/cost-2026-10/booking.txt --crm-bundle .tmp-session/cost-2026-10/crm.txt --budget-usd 300 --out .tmp-session/cost-2026-10/cost-sections.md
+   python3 tools/finops/monthly_cost_report.py --bundle .tmp-session/cost-2026-10/cis.txt --booking-bundle .tmp-session/cost-2026-10/booking.txt --crm-bundle .tmp-session/cost-2026-10/crm.txt --mgmt-usd <amount> --mgmt-prev-usd <amount> --budget-usd 300 --out .tmp-session/cost-2026-10/cost-sections.md
    ```
+
+   From the second report on, add `--prev-units docs/audits/<last month's review>/cis.txt` (the CIS bundle saved with
+   last month's report). Published-tour counts change after the month ends (a republish overwrites `published_at`),
+   so last month's per-tour cost comes only from the counts saved then; without `--prev-units` it shows `n/a`.
 
    Expected: Markdown with the five-line Vietnamese summary (lines 3 and 5 left as `<điền>`), "Totals by account",
    "By app", "Month over month" (every month of the bundle), "Top 5 services", "LLM spend" (by app, stage and role;
@@ -75,13 +94,16 @@ Rules and budgets: [FinOps process](../finops.md).
    `--month YYYY-MM` drafts an earlier month of the bundle. `--budget-usd` is the acc2 account budget
    ([FinOps process](../finops.md#budgets-and-alerts)).
 
-5. The single-export way still works (`--current` / `--previous` with the `/admin/platform/cost` JSON saved from
+6. The single-export way still works (`--current` / `--previous` with the `/admin/platform/cost` JSON saved from
    the browser, `--llm-csv` from the SQL that `--print-sql` prints, `--units`), for a month the collector cannot
    reach.
 
-6. Create `docs/audits/<date>-S<nnn>-capacity-review/README.md` from
+7. Create `docs/audits/<date>-S<nnn>-capacity-review/README.md` from
    [`templates/cost-report.md`](../../templates/cost-report.md). Paste the drafted sections, keep the input files
-   in the same folder, then fill in by hand. The bundles hold no secrets, no personal data and no account IDs. A
+   in the same folder (keep `cis.txt`: next month's `--prev-units`), then fill in by hand. The bundles hold no
+   secrets, no personal data and no account IDs (the collector refuses to print one with an ID, and the report
+   refuses to draft text with one). Check before committing:
+   `grep -nE '(^|[^0-9A-Za-z_-])[0-9]{12}([^0-9A-Za-z_-]|$)' docs/audits/<folder>/*` prints nothing. A
    browser export of `/admin/platform/cost` does contain account IDs (`aws.account_id`,
    `llm_satellites.*.account_id`): do not commit it while the root repo is public; never copy it into an app repo
    (SEC-06, D-25). The drafted Markdown does not print account IDs.
@@ -91,7 +113,7 @@ Rules and budgets: [FinOps process](../finops.md).
    - the five-line Vietnamese summary for the business owner (plain words, no Linear keys);
    - the action list.
 
-7. Open the root PR (`docs: capacity and cost review YYYY-MM`, body `Refs AA-838, AA-896`) and ask the tech lead to
+8. Open the root PR (`docs: capacity and cost review YYYY-MM`, body `Refs AA-838, AA-896`) and ask the tech lead to
    approve. Rollback: the PR only adds files; close it to discard.
 
 ## The first report (October 2026)

@@ -22,8 +22,9 @@ Environment (ecsx.sh VAR=value pairs):
            0.01 USD per month window). Default 0: read the stored data only, in a read-only transaction.
 
 No new Cost Explorer client (data standard DM-10.4, S243 K-14): Cost Explorer is read only through the CIS module.
-Output: one line "FINOPS_BUNDLE <json>" on stdout. Every account_id key is dropped (the root repo is public), so the
-bundle can be kept next to the report. Feed it to tools/finops/monthly_cost_report.py --bundle.
+Output: one line "FINOPS_BUNDLE <json>" on stdout, with every AWS account ID removed (scrub(): the root repo is public,
+ADR 0014, DM-6.10), so the bundle can be kept next to the report. If an ID is still found after the scrub, nothing is
+printed and the exit code is 3. Feed it to tools/finops/monthly_cost_report.py --bundle.
 
 Table and column names: docs/architecture/db-schema-reference.md (verified 2026-10-31).
 """
@@ -32,6 +33,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import re
 import sys
 from datetime import date, datetime, timezone
 from decimal import Decimal
@@ -61,7 +63,11 @@ SELECT app, stage, role, account, sum(calls)::bigint AS calls, round(sum(cost_us
  ORDER BY cost_usd DESC
 """
 
-# published_at moves on a republish, so the first count is "published or republished in the month".
+# gold_aa_internal.published_tours keeps one row per tour and a republish overwrites published_at (no table keeps one
+# row per publish of a tour; acp_shared.publish_log is the tenant channel log). So the first count is "published or
+# republished in the month, as of the run": a later republish moves a tour out of an earlier month, and a past month
+# counted today is too low. The report uses only the report month's counts from a run; last month's come from the
+# bundle saved with last month's report (monthly_cost_report.py --prev-units).
 PUBLISHED_TOURS_SQL = """
 SELECT count(*) FILTER (WHERE published_at >= ($1::date::timestamp AT TIME ZONE 'UTC')
                           AND published_at < ($2::date::timestamp AT TIME ZONE 'UTC')) AS published_tours,
@@ -129,13 +135,58 @@ def window(month: str, today: date) -> tuple[date, date]:
     return start, min(next_month(start), date.fromordinal(today.toordinal() + 1))
 
 
+# A 12-digit AWS account ID inside any text ("123456789012 (LLM)", an ARN in an error message). Not part of a longer
+# word or number, and not the digits-only tail of a UUID ("...-123456789012").
+ACCOUNT_ID_RE = re.compile(r"(?<![\w-])\d{12}(?![\w-])")
+REDACTED = "<account-id>"
+
+
 def scrub(obj: Any) -> Any:
-    """Drop every ``account_id`` key, at any depth (the root repo is public)."""
+    """Remove every AWS account ID, at any depth (the root repo is public). cost_by_app carries them in three shapes:
+
+    - ``account_id`` keys (``aws``, ``llm_satellites.acc3``): dropped;
+    - ``account_name`` (``apps[].ai_by_source[]``, accounts.account_name gives the ID of a live account): replaced by
+      the entry's account key (``acc2`` / ``acc3``);
+    - ``label`` next to a ``key`` (``llm_satellites.lines[]``, "<id> (LLM)"): the ID replaced by the key ("acc3 (LLM)").
+
+    Any other 12-digit run in a string or a key (a future field, an ARN in a refresh error) becomes ``<account-id>``.
+    """
     if isinstance(obj, dict):
-        return {k: scrub(v) for k, v in obj.items() if k != "account_id"}
+        out: dict[Any, Any] = {}
+        for k, v in obj.items():
+            if k == "account_id":
+                continue
+            if isinstance(v, str) and ACCOUNT_ID_RE.search(v):
+                if k == "account_name":
+                    v = str(obj.get("account") or REDACTED)
+                elif k == "label" and isinstance(obj.get("key"), str) and not ACCOUNT_ID_RE.search(obj["key"]):
+                    v = ACCOUNT_ID_RE.sub(obj["key"], v)
+            out[scrub(k) if isinstance(k, str) else k] = scrub(v)
+        return out
     if isinstance(obj, list):
         return [scrub(v) for v in obj]
+    if isinstance(obj, str):
+        return ACCOUNT_ID_RE.sub(REDACTED, obj)
     return obj
+
+
+def find_account_ids(obj: Any, path: str = "$") -> list[str]:
+    """Paths that still hold an account ID: a 12-digit run in a string or key, or a 12-digit integer. The last guard
+    before printing (floats are amounts, not IDs)."""
+    found: list[str] = []
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if isinstance(k, str) and ACCOUNT_ID_RE.search(k):
+                found.append(f"{path} (key)")
+            found += find_account_ids(v, f"{path}.{k}")
+    elif isinstance(obj, list):
+        for i, v in enumerate(obj):
+            found += find_account_ids(v, f"{path}[{i}]")
+    elif isinstance(obj, str) and ACCOUNT_ID_RE.search(obj):
+        found.append(path)
+    elif isinstance(obj, int) and not isinstance(obj, bool) and len(str(abs(obj))) == 12:
+        found.append(path)
+    return found
 
 
 def jsonable(v: Any) -> Any:
@@ -233,6 +284,11 @@ def main() -> int:
     months = parse_months(os.environ.get("MONTHS"), now.date())
     refresh = os.environ.get("REFRESH", "0").strip() == "1"
     out = asyncio.run(run(part, months, refresh, now))
+    leaks = find_account_ids(out)
+    if leaks:  # never print a bundle with an account ID (the bundles are kept in the public root repo)
+        sys.stderr.write("collect_month: account ID left after scrub at " + ", ".join(leaks[:10])
+                         + "; bundle not printed\n")
+        return 3
     sys.stdout.write(MARKER + json.dumps(out, default=jsonable, separators=(",", ":")) + "\n")
     return 0
 

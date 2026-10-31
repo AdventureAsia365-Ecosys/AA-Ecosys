@@ -138,6 +138,55 @@ class CollectTest(unittest.TestCase):
         self.assertNotIn("account_id", json.dumps(b))
         self.assertEqual(b["part"], "cis")
 
+    def test_a_cost_by_app_answer_leaves_no_account_id_in_the_bundle(self):
+        """The live cost_by_app shape carries IDs under account_id, ai_by_source[].account_name and
+        llm_satellites.lines[].label (shared/aws_client/accounts.py); none may reach the public repo."""
+        acc2, acc3 = "1" * 12, "2" * 12  # invented IDs
+
+        async def cost_fn(pool, month, *, refresh_if_stale):
+            return {
+                "month": month, "totals": {"total_usd": 1.5},
+                "aws": {"account_id": acc2, "total_usd": 1.0},
+                "apps": [{"app": "cis", "ai_by_source": [
+                    {"provider": "bedrock", "account": "acc3", "account_name": acc3, "cost_usd": 0.5},
+                    {"provider": "bedrock", "account": "acc2", "account_name": acc2, "cost_usd": 0.1},
+                    {"provider": "openai", "account": "openai-direct", "account_name": "OpenAI API", "cost_usd": 0.1},
+                    {"provider": "crm_gateway:m1", "account": None, "account_name": None, "cost_usd": 0.1}]}],
+                "llm_satellites": {"acc3": {"account_id": acc3, "ce_bedrock_usd": 0.4},
+                                   "lines": [{"key": "acc3", "label": f"{acc3} (LLM)", "account_id": acc3}]},
+                "refresh": {"stale": False,
+                            "reason": f"AccessDenied: arn:aws:sts::{acc2}:assumed-role/x is not authorized"},
+            }
+
+        db = FakeDB({c.PUBLISHED_TOURS_SQL: [{"published_tours": 1, "published_tours_live": 1}],
+                     c.LLM_BY_STAGE_SQL: []})
+        data = asyncio.run(c.collect_cis(db, ["2099-10"], date(2099, 11, 3), cost_fn=cost_fn))
+        b = c.bundle("cis", data, datetime(2099, 11, 3, tzinfo=timezone.utc))
+        text = json.dumps(b)
+        self.assertIsNone(re.search(r"\b\d{12}\b", text), text)
+        self.assertEqual(c.find_account_ids(b), [])
+        pc = b["months"]["2099-10"]["platform_cost"]
+        self.assertEqual([s["account_name"] for s in pc["apps"][0]["ai_by_source"]],
+                         ["acc3", "acc2", "OpenAI API", None])
+        self.assertEqual(pc["llm_satellites"]["lines"][0]["label"], "acc3 (LLM)")
+        self.assertIn("arn:aws:sts::<account-id>:assumed-role", pc["refresh"]["reason"])
+        self.assertEqual(pc["llm_satellites"]["acc3"], {"ce_bedrock_usd": 0.4})
+
+    def test_scrub_keeps_uuids_and_amounts(self):
+        uid = "0f0e0d0c-0000-4000-8000-" + "3" * 12
+        self.assertEqual(c.scrub({"id": uid, "usd": 0.123456789012}), {"id": uid, "usd": 0.123456789012})
+
+    def test_main_refuses_to_print_a_bundle_with_an_account_id(self):
+        async def fake_run(part, months, refresh, now):
+            return {"kind": "finops_bundle", "part": "crm", "months": {"2099-10": {"n": int("5" * 12)}}}
+
+        buf, err = io.StringIO(), io.StringIO()
+        with mock.patch.dict(os.environ, {"PART": "crm", "MONTHS": "2020-10"}), \
+                mock.patch.object(c, "run", fake_run), redirect_stdout(buf), mock.patch.object(c.sys, "stderr", err):
+            self.assertEqual(c.main(), 3)
+        self.assertEqual(buf.getvalue(), "")
+        self.assertIn("$.months.2099-10.n", err.getvalue())
+
 
 class SchemaNamesTest(unittest.TestCase):
     """Every table the collector reads exists in the live dump (never guess names, db-schema.md)."""

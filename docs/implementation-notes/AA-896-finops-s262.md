@@ -19,8 +19,29 @@ Session S262 (31/10/2026), Claude Code subagent, branches `docs/aa-896-finops` (
   report and the capacity review are one document, K-05). The brief's `docs/ops/cost/YYYY-MM.md` would contradict
   C8a and `docs/ops/cost/README.md` ("this folder holds only this how-to"). The Linear "2026-10.md report" maps to
   that audit README.
-- **Bundle files carry no account IDs.** The collector drops every `account_id` key before printing, because the
-  root repo is public for now (ADR 0014 amendment) and the inputs are kept next to the report.
+- **Bundle files carry no account IDs** (review fix pass). The root repo is public for now (ADR 0014 amendment) and
+  the inputs are kept next to the report. `cost_by_app` holds IDs in three shapes, not only `account_id`:
+  `apps[].ai_by_source[].account_name` (accounts.account_name gives the ID of acc2/acc3) and
+  `llm_satellites.lines[].label` ("<id> (LLM)"). `scrub()` now drops `account_id`, turns `account_name` into the
+  entry's account key and the line label into "acc3 (LLM)", and replaces any other 12-digit run in a string or key
+  (an ARN in a refresh error, a future field) with `<account-id>`. `find_account_ids()` is the last guard: `main()`
+  prints nothing and exits 3 if one is left. The report refuses to draft Markdown that holds a 12-digit number.
+  The regex skips a digits-only UUID tail (`-` before it) and floats are not checked (amounts, not IDs).
+- **Last month's per-tour cost is n/a unless frozen** (review fix pass). `published_tours` has one row per tour and a
+  republish overwrites `published_at`; no table logs each publish of a master tour (`acp_shared.publish_log` is the
+  tenant channel log, checked in db-schema-reference). So the report month's count is taken right after the month
+  ends, and last month's comes from the CIS bundle saved with last month's report (`--prev-units`, bundle or units
+  JSON). Without it the "Last month" cell of the two tour rows says "n/a (published_at is overwritten on
+  republish)". Trip-case units use `created_at`, which does not move, so they keep the last-month column.
+- **Management account in the totals** (review fix pass). The CIS client reads acc2 and acc3 only. `--mgmt-usd` /
+  `--mgmt-prev-usd` take the management account's own spend from a one-line `aws ce get-cost-and-usage` with profile
+  `aa-mgmt` (filter LINKED_ACCOUNT = itself, so member accounts it may pay for later are not counted twice; 0.01 USD
+  per request, run by the orchestrator). It is its own row in "Totals by account", added to the grand total and to
+  Vietnamese line 1; line 2 compares like for like (with it only when both months are given). Without the input the
+  totals and line 1 say plainly that the management account is not included. Not a standing CE client: one read per
+  month in an account the CIS client cannot reach.
+- **Retired satellite key.** `cost_by_app` names the former fallback account `retired` since AA-998; the report's
+  satellite rows now accept it (old exports still use `acc1`).
 - **CRM LLM spend from `crm.llm_usage_daily`** (PART=crm). `cost_by_app` gets the CRM spend only through the staff
   token path (`crm_llm`), which a container script does not have. The report adds the CRM part to the `crm` row as
   spend outside the acc2 bill, like the admin page does.
@@ -57,6 +78,10 @@ Session S262 (31/10/2026), Claude Code subagent, branches `docs/aa-896-finops` (
 - Trip plans are still a manual `--units` input: TripPlanner runs in Lambda, there is no container to exec into.
 
 ## Should know
+
+- Review fix pass (S262): the sample CIS bundle now has the current `cost_by_app` shape (`hint`, `ai_by_source` with
+  `account_name`, `llm_satellites.lines`) in its scrubbed form; the raw shape with invented IDs is built in
+  `test_collect_month.py` (`test_a_cost_by_app_answer_leaves_no_account_id_in_the_bundle`).
 
 - Nothing here calls AWS from a test; the collector's DB part is tested with a fake connection.
 - The final October numbers: run on or after 03/11 (CE revises a day for about 48 h); a run on 01/11 is provisional.

@@ -152,7 +152,7 @@ snapshots do not hold).
 
 | Unit | Numerator | Denominator |
 |---|---|---|
-| USD per published tour | `cis` total for the month | Tours published or republished in the month |
+| USD per published tour | `cis` total for the month | Tours published or republished in the month, counted right after the month ends |
 | USD LLM per published tour | `cis` LLM spend | Same |
 | USD per trip plan | `tripplanner` total | Trip plans created |
 | USD per trip case | `booking` total | Trip cases created in the month (`booking.trip_cases`, not deleted) |
@@ -160,6 +160,13 @@ snapshots do not hold).
 
 Denominators come from the read-only counts of `collect_month.py` (trip plans: a manual `--units` value, TripPlanner
 runs in Lambda); Dev numbers are for trend only.
+
+The published-tour count is a snapshot. `gold_aa_internal.published_tours` keeps one row per tour and a republish
+overwrites `published_at` (no table keeps one row per publish of a tour), so a tour published in September and
+republished in October counts only in October, and a past month counted later is too low. The report therefore uses
+the counts of the report month from the run right after the month ends, and takes last month's from the CIS bundle
+saved with last month's report (`--prev-units`); without it, last month's per-tour cost shows `n/a`. Trip cases are
+counted by `created_at`, which does not move.
 
 Per-model LLM unit costs (USD per 1,000 calls, USD per 1M tokens, tokens per call) need no DB: join the Cost
 Explorer service line of each model with the CloudWatch `AWS/Bedrock` metrics `Invocations`, `InputTokenCount`,

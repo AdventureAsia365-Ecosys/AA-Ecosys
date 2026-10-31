@@ -1,5 +1,7 @@
 """Run: python3 -m unittest discover -s tools/finops -p 'test_*.py' (from the repo root). Synthetic data only."""
 import io
+import json
+import tempfile
 import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
@@ -42,6 +44,9 @@ class ReportTest(unittest.TestCase):
 
     def test_retired_acc1_row_only_when_a_month_carries_it(self):
         self.assertEqual(m.satellite_rows({}, {}), [("acc3", "acc3 (LLM satellite)")])
+        # cost_by_app names the retired account "retired" since AA-998
+        self.assertEqual(m.satellite_rows({"retired": {}}, {}),
+                         [("acc3", "acc3 (LLM satellite)"), ("retired", "Retired account (former LLM fallback)")])
         self.assertEqual(m.satellite_rows({"acc3": {}}, {"acc1": {"ce_bedrock_usd": 0.76}}),
                          [("acc3", "acc3 (LLM satellite)"), ("acc1", "acc1 (retired, AA-998)")])
 
@@ -90,7 +95,7 @@ class BundleReportTest(unittest.TestCase):
     def test_crm_gateway_spend_is_added_once_to_the_crm_row_and_totals(self):
         out = self.full()
         self.assertIn("| CRM | 5.50 | n/a | n/a | 4.00 | 1.50 |", out)
-        self.assertIn("Grand total per the AA-884 rule (AWS acc2 + LLM - acc2 Bedrock counted once): 241.50 USD.", out)
+        self.assertIn("Total per the AA-884 rule (AWS acc2 + LLM - acc2 Bedrock counted once): 241.50 USD.", out)
         self.assertIn("| crm | crm_mail_summary | model-small | crm_gateway | 30 | 1.50 |", out)
         self.assertNotIn("CRM LLM spend is not in the CRM row", out)
 
@@ -105,7 +110,10 @@ class BundleReportTest(unittest.TestCase):
 
     def test_unit_costs_from_bundle_counts(self):
         out = self.full()
-        self.assertIn("| USD per published tour | 0.30 | 0.31 | cis total / 600 published tours; 520 live at month end |", out)
+        # Last month's tour count read today is too low (republish moves published_at): no per-tour cost for it.
+        self.assertIn("| USD per published tour | 0.30 | n/a (published_at is overwritten on republish) | "
+                      "cis total / 600 published tours; 520 live at month end |", out)
+        self.assertIn("| USD LLM per published tour | 0.07 | n/a (published_at is overwritten on republish) |", out)
         self.assertIn("| USD per trip case | 1.25 | 2.50 | booking total / 8 trip cases created |", out)
         self.assertIn("| USD per booking | 5.00 | n/a | booking total / 2 bookings (trip cases confirmed or later) |", out)
         self.assertIn("| USD per trip plan | n/a | n/a | tripplanner total / no count trip plans |", out)
@@ -138,6 +146,55 @@ class BundleReportTest(unittest.TestCase):
         out = self.full()
         self.assertIn("By app: cis 39.70 USD, crm 1.50 USD, tripplanner 0.30 USD.", out)
         self.assertIn("### Ad-hoc runs (stage adhoc_<issue>) — 0.20 USD", out)
+
+    def test_prev_units_from_last_months_saved_bundle(self):
+        with tempfile.TemporaryDirectory() as d:
+            saved = Path(d) / "cis-saved-2099-03-02.txt"  # last month's bundle, counted at that month's end
+            saved.write_text("ecsx: run started\nFINOPS_BUNDLE " + json.dumps(
+                {"kind": "finops_bundle", "version": 1, "part": "cis", "generated_at": "2099-03-02T00:00:00+00:00",
+                 "months": {"2099-02": {"units": {"published_tours": 500, "published_tours_live": 480}}}}) + "\n",
+                encoding="utf-8")
+            out = self.run_main("--bundle", B["bundle"], "--prev-units", str(saved))
+            self.assertIn("| USD per published tour | 0.30 | 0.31 |", out)  # 155.00 / 500
+            plain = Path(d) / "units.json"
+            plain.write_text(json.dumps({"published_tours": 310}), encoding="utf-8")
+            out = self.run_main("--bundle", B["bundle"], "--prev-units", str(plain))
+            self.assertIn("| USD per published tour | 0.30 | 0.50 |", out)
+            no_month = Path(d) / "other.json"
+            no_month.write_text(json.dumps({"kind": "finops_bundle", "months": {"2098-12": {"units": {}}}}),
+                                encoding="utf-8")
+            with self.assertRaises(SystemExit):
+                self.run_main("--bundle", B["bundle"], "--prev-units", str(no_month))
+
+    def test_management_account_row_and_grand_total(self):
+        out = self.run_main("--bundle", B["bundle"], "--crm-bundle", B["crm"], "--mgmt-usd", "3.5",
+                            "--mgmt-prev-usd", "3")
+        self.assertIn("| Management account (org trail, KMS, budgets) | 3.50 | 3.00 | +16.7 % |", out)
+        self.assertIn("Grand total with the management account: 245.00 USD.", out)
+        self.assertIn("1. Tổng chi phí tháng 03/2099: 245.00 USD (hạ tầng AWS 200.00 USD, AI tính ngoài hoá đơn AWS "
+                      "41.50 USD, tài khoản quản lý AWS 3.50 USD).", out)
+        self.assertIn("2. So với tháng 02/2099 (214.00 USD): +14.5 %.", out)
+        only_cur = self.run_main("--bundle", B["bundle"], "--crm-bundle", B["crm"], "--mgmt-usd", "3.5")
+        self.assertIn("(211.00 USD): +14.5 % (so sánh chưa gồm tài khoản quản lý).", only_cur)
+        with self.assertRaises(SystemExit):
+            self.run_main("--bundle", B["bundle"], "--mgmt-prev-usd", "3")
+
+    def test_without_management_input_the_totals_say_so(self):
+        out = self.full()
+        self.assertIn("| Management account (org trail, KMS, budgets) | not included |", out)
+        self.assertIn("Grand total: the management account is not included (no --mgmt-usd).", out)
+        self.assertIn("1. Tổng chi phí tháng 03/2099: 241.50 USD (hạ tầng AWS 200.00 USD, AI tính ngoài hoá đơn AWS "
+                      "41.50 USD; chưa gồm tài khoản quản lý AWS).", out)
+
+    def test_sample_bundle_and_report_hold_no_account_id(self):
+        self.assertFalse(m.ACCOUNT_ID_RE.search(Path(B["bundle"]).read_text(encoding="utf-8")))
+        self.assertFalse(m.ACCOUNT_ID_RE.search(self.full()))
+
+    def test_report_refuses_text_with_an_account_id(self):
+        cost = json.loads(Path(B["bundle"]).read_text(encoding="utf-8"))["months"]["2099-03"]["platform_cost"]
+        cost["apps"][0]["label"] = "CIS " + "4" * 12  # an unscrubbed export
+        with self.assertRaises(SystemExit):
+            m.build(cost, None, None, None)
 
     def test_bad_inputs(self):
         with self.assertRaises(SystemExit):
