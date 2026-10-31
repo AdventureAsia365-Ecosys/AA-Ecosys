@@ -7,7 +7,8 @@
 //        proposal waiting for its deposit, and lost / cancelled ones) it voids the invoices still receivable (a claim
 //        is answered "not received" first), releases the AA holds on its lines and moves an open trip to Lost (reason
 //        "other"; Lost also gives the client's AA hold back); it deletes the saved replies and mail drafts the review
-//        made and revokes its ICS feeds.
+//        made, revokes its ICS feeds, closes its data requests as withdrawn and moves the clients it added (R16) to the
+//        trash.
 // Then:  nothing of the run stays open or keeps chasing a client; booked trips are left as they are (the review keeps
 //        them as booked examples). Re-running is safe: objects already closed or gone are skipped; any other answer
 //        than 200 / 404 is a failure.
@@ -25,13 +26,14 @@ let s;
 const done = [];
 const failed = [];
 
-async function act(page, label, method, p, body) {
+/** One clean-up write; 200/404 (and any `alsoFine` code, e.g. 409 for "already closed") count as done. */
+async function act(page, label, method, p, body, alsoFine = []) {
   if (dry) {
     done.push(`would ${label}`);
     return;
   }
   const r = await bff(page, method, p, body);
-  if (r.status < 300 || r.status === 404) done.push(`${label} (${r.status})`);
+  if (r.status < 300 || r.status === 404 || alsoFine.includes(r.status)) done.push(`${label} (${r.status})`);
   else failed.push(`${label}: ${r.status} ${JSON.stringify(r.data && r.data.detail !== undefined ? r.data.detail : '').slice(0, 100)}`);
 }
 
@@ -88,12 +90,17 @@ sc.steps = [
     },
   },
   {
-    caption: { en: 'Delete the saved replies and drafts, revoke the calendar feeds.', vi: 'Xoá câu trả lời mẫu và bản nháp, thu hồi các lịch ICS.' },
+    caption: { en: 'Delete the saved replies and drafts, revoke the calendar feeds, close the data requests, trash the added clients.', vi: 'Xoá câu trả lời mẫu và bản nháp, thu hồi lịch ICS, đóng các yêu cầu dữ liệu, chuyển khách đã thêm vào thùng rác.' },
     run: async (page) => {
       const c = s.created || {};
       for (const id of c.saved_replies || []) await act(page, `delete saved reply ${id.slice(0, 8)}`, 'DELETE', `saved-replies/${id}`);
       for (const id of c.drafts || []) await act(page, `delete draft ${id.slice(0, 8)}`, 'DELETE', `messages/drafts/${id}`);
       for (const id of c.ics_feeds || []) await act(page, `revoke ICS feed ${id.slice(0, 8)}`, 'POST', `calendar/feeds/${id}/revoke`, {});
+      for (const id of c.data_requests || []) {
+        const r = await act(page, `close data request ${id.slice(0, 8)}`, 'POST', `data/requests/${id}/close`, { status: 'withdrawn', outcome: 'withdrawn_by_subject' }, [409]);
+        void r;
+      }
+      for (const id of c.clients || []) await act(page, `client ${id.slice(0, 8)} -> trash`, 'DELETE', `travelers/${id}`);
     },
   },
   {
