@@ -19,7 +19,11 @@ module.exports = ro({
     step('The payments tab lists the money received and how it was matched.',
       'Thẻ thanh toán liệt kê tiền đã nhận và cách đối chiếu.',
       async (page, h) => {
-        await openTab(page, h, 'Payments');
+        // Track tabs (no aria-selected): the tab is in the URL and only the payments table has this search box.
+        await openTab(page, h, 'Payments', {
+          url: /[?&]tab=payments\b/,
+          shows: (p) => p.getByPlaceholder('Search payment, invoice, case or reference'),
+        });
         await rowsOrEmpty(page, h);
       }),
     step('Trip checks list what must be confirmed before each departure. This is the end of the scenario.',
