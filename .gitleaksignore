@@ -91,3 +91,11 @@ abb57ca122f6138cf28730d0bf592f8c587f2970:docs/audits/2026-10-21-S246-jev-questio
 # the scan goes red. Its PR head stays fetchable, so it is pinned by commit.
 e089300c97f2d2a6c3b4e69d3e6a2398a3da47b0:canary/aa981-canary.tfvars:credential-key-literal:2
 e089300c97f2d2a6c3b4e69d3e6a2398a3da47b0:canary/aa981-canary.tfvars:terraform-plaintext-secret:2
+
+# S261 (31/10/2026): two false positives found by the full-history scan.
+# - tools/docs/test_docs_reader.py: the redaction test uses the obviously fake key AKIA + "ABCDEFGHIJKLMNOP" (two commits, two lines each).
+# - docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:721: a Jev question_key identifier, not a credential.
+97a3c2b872fc91140b6c3156e0c1854df30ce0b6:tools/docs/test_docs_reader.py:aws-access-token:138
+97a3c2b872fc91140b6c3156e0c1854df30ce0b6:tools/docs/test_docs_reader.py:aws-access-token:146
+b1fe235863298252281a28f5685ce75af001d139:tools/docs/test_docs_reader.py:aws-access-token:138
+b1fe235863298252281a28f5685ce75af001d139:tools/docs/test_docs_reader.py:aws-access-token:146
