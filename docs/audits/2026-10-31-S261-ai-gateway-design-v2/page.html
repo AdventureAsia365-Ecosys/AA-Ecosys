@@ -1,0 +1,260 @@
+<title>Cổng AI và dữ liệu v2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; wide tables scroll inside their own frame; decisions set apart as the only boxed block */
+:root{
+  --bg:#f6f8f9; --surface:#ffffff; --ink:#15232b; --muted:#566872; --line:#d9e1e5;
+  --accent:#0b6e79; --accent-soft:#e2f1f2; --warn:#9a5b00; --warn-soft:#fbf0dc; --ok:#1f7a45; --ok-soft:#e3f3e9;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1719; --surface:#162226; --ink:#e3ecef; --muted:#9db0b8; --line:#28393f;
+  --accent:#5cc3cd; --accent-soft:#163338; --warn:#e8b25a; --warn-soft:#352a17; --ok:#6cc896; --ok-soft:#173226; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1719; --surface:#162226; --ink:#e3ecef; --muted:#9db0b8; --line:#28393f;
+  --accent:#5cc3cd; --accent-soft:#163338; --warn:#e8b25a; --warn-soft:#352a17; --ok:#6cc896; --ok-soft:#173226; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:15px/1.65 var(--f-body)}
+.wrap{max-width:1080px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:34px}
+header{display:grid;gap:10px}
+.eyebrow{font:500 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+h1{font-size:clamp(26px,4vw,36px);line-height:1.2;margin:0;text-wrap:balance;font-weight:700}
+h2{font-size:21px;margin:0 0 12px;text-wrap:balance}
+p{margin:0;max-width:72ch}
+.lead{font-size:16.5px;color:var(--ink)}
+.muted{color:var(--muted)}
+.quote{border-left:3px solid var(--accent);padding:4px 0 4px 14px;color:var(--muted);font-style:italic;max-width:72ch}
+section{display:grid;gap:12px;min-width:0}
+.terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.term{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.term b{display:block;margin-bottom:2px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+th{font:600 12px var(--f-mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600;white-space:nowrap}
+.today{background:var(--warn-soft)}
+.todo{background:var(--ok-soft)}
+.pill{display:inline-block;font:500 11.5px var(--f-mono);padding:1px 8px;border-radius:99px;white-space:nowrap}
+.p-bad{background:var(--warn-soft);color:var(--warn)}
+.p-ok{background:var(--ok-soft);color:var(--ok)}
+.p-off{background:var(--accent-soft);color:var(--accent)}
+.diagram{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+.rule{background:var(--accent-soft);border-radius:10px;padding:12px 16px;max-width:none}
+.decisions{display:grid;gap:14px;border:2px solid var(--accent);border-radius:14px;padding:18px;background:var(--surface)}
+.dec{display:grid;gap:6px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.dec:last-child{border-bottom:0;padding-bottom:0}
+.dec h3{margin:0;font-size:16.5px}
+section > h3{margin:6px 0 0;font-size:16.5px}
+.rec{font-weight:600;color:var(--accent)}
+.dec ul{margin:0;padding-left:20px;display:grid;gap:4px}
+footer{font-size:13px;color:var(--muted);display:grid;gap:6px}
+code{font:13px var(--f-mono)}
+@media (max-width:520px){td:first-child{white-space:normal}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">AA_Ecosys · S261 · 31/10/2026 · đã duyệt 31/10</div>
+  <h1>Cổng AI và dữ liệu (AI gateway) v2</h1>
+  <p class="lead">Một cổng duy nhất để mọi app trong hệ sinh thái gọi, quản lý, điều hướng, giám sát và truy vết <b>mọi nhà cung cấp AI và dữ liệu mà AA trả tiền</b>, cấu hình riêng được cho từng app và từng stage. Anh đã duyệt cả 3 câu ngày 31/10. Trang này vẫn chỉ là thiết kế: chưa đổi code, chưa đổi route nào, chưa chạy gì tốn tiền.</p>
+  <p class="quote">"LLM gateway là nơi dùng gọi, quản lý, điều hướng, giám sát, truy vết cho tất cả nguồn, họ model, và có setup tùy biến cho mỗi loại app, stage… Còn cả Jev và DFS nữa." Tech lead, 31/10</p>
+</header>
+
+<section>
+  <h2>Phạm vi</h2>
+  <p><b>Nhà cung cấp:</b> LLM ở mọi nguồn (Bedrock trên acc3 và acc2, API trực tiếp của Anthropic và OpenAI, Azure OpenAI khi cần) và mọi họ model (Claude, GPT, Cohere; thêm Nova, Llama, Kimi chạy được trên acc2), Jev, DataForSEO, Geoapify, Bedrock Guardrails, Bedrock Batch. <b>App:</b> CIS, TripPlanner, CRM/Partner, Booking khi cần. <b>Stage:</b> mọi nơi gọi các dịch vụ trên. Bản v2 mở rộng thiết kế đã duyệt ở S258 (vốn chỉ phủ LLM của CIS) và giữ những gì S258 đã đúng.</p>
+  <div class="terms">
+    <div class="term"><b>Miền sự cố</b><span class="muted">Nhóm nguồn có thể hỏng cùng lúc vì cùng người trả tiền hoặc cùng tổ chức có thể chặn (vd. mọi thứ trên acc3).</span></div>
+    <div class="term"><b>Đường dự phòng ấm</b><span class="muted">Đường thứ hai đã có tiền, có khoá, được gọi thử định kỳ, nên khi nguồn chính hỏng thì dùng được ngay.</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>8 chức năng: mục tiêu, hôm nay, cần làm</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Chức năng</th><th>Mục tiêu</th><th>Hôm nay</th><th>Cần làm</th></tr></thead>
+    <tbody>
+      <tr><td>Gọi</td><td>Mọi app gọi mọi nhà cung cấp trả phí qua một cửa; mỗi loại việc một cách gọi (viết chữ, embedding, quyết định của Jev, tra SEO, tra toạ độ)</td><td class="today">Chỉ LLM của CIS đi qua cổng; Jev, DataForSEO, Geoapify mỗi thứ một client riêng; TripPlanner có bản sao cổng riêng; CRM còn giả lập; vài chỗ code gọi thẳng nhà cung cấp</td><td class="todo">Một lõi dùng chung, phần nối riêng cho từng nhà cung cấp; đóng các chỗ gọi thẳng; xoá code DataForSEO cũ</td></tr>
+      <tr><td>Nguồn</td><td>Mỗi đường vào (tài khoản, API, khoá, vùng) là một dòng trong sổ nguồn, có ngân sách, phạm vi dữ liệu và miền sự cố</td><td class="today">Sổ nguồn chỉ có cho LLM của CIS (5 nguồn); không ghi miền sự cố; Jev, DataForSEO, Geoapify nằm trong biến môi trường và code</td><td class="todo">Đưa mọi nhà cung cấp trả phí vào sổ nguồn, thêm miền sự cố</td></tr>
+      <tr><td>Họ model</td><td>Hãng làm model, nơi chạy và khả năng của model (suy luận, xuất JSON, cache) là ba thứ riêng, ghi bằng dữ liệu</td><td class="today">Muốn thêm một hãng model mới phải sửa code</td><td class="todo">Thêm hãng / model mới chỉ bằng cấu hình</td></tr>
+      <tr><td>Điều hướng</td><td>Mỗi stage có model chính, dự phòng theo thứ tự, ít nhất một đường dự phòng ấm ở miền sự cố khác, giới hạn tổng thời gian chờ</td><td class="today">Có route theo stage nhưng gần hết chạy trên acc3; 29/10 acc3 bị chặn thì không stage viết nào chạy; chọn model ở nhiều chỗ; vài chỗ dùng model cố định</td><td class="todo">Chọn model ở một chỗ duy nhất; luật "luôn có dự phòng khác miền sự cố"; giới hạn thời gian chờ</td></tr>
+      <tr><td>Tuỳ biến theo app / stage</td><td>Mỗi app, mỗi stage có hồ sơ: model, tham số (độ dài, mức suy nghĩ, nhiệt độ), phạm vi dữ liệu, ngân sách, bật/tắt</td><td class="today">Chỉ CIS đổi model theo stage trong admin; tham số rải trong code; TripPlanner dùng một phần cấu hình của CIS; CRM có cấu hình riêng theo đại lý</td><td class="todo">Bảng tham số theo stage × model; hồ sơ theo app</td></tr>
+      <tr><td>Quản lý</td><td>Không lần gọi trả phí nào chạy mà không qua trần tiền; dữ liệu chỉ tới nơi được phép; biết trước khi một nguồn mất quyền hay hết tiền</td><td class="today">Trần chi chỉ có hiệu lực ở chỗ code nhớ bật; Jev không có trần trước khi gọi; một đường DataForSEO không có trần; mất quyền chỉ phát hiện khi việc thật hỏng</td><td class="todo">Trần bắt buộc ở cổng cho mọi nguồn; chính sách dữ liệu theo nguồn (hãng, vùng, tenant); kiểm tra sống định kỳ</td></tr>
+      <tr><td>Giám sát</td><td>Một trang: nguồn nào sống, còn bao nhiêu tiền, đã chi bao nhiêu theo app / stage / tenant, độ trễ, tỉ lệ lỗi; cảnh báo ngay</td><td class="today">LLM có ô trạng thái, bản tin hằng ngày, đối soát hoá đơn; DataForSEO có số dư hằng ngày; Jev chỉ có số dư ước tính; TripPlanner không có gì; không có độ trễ</td><td class="todo">Trang "Nguồn trả phí" chung, độ trễ theo stage, cảnh báo qua chuông admin và email vận hành đã có</td></tr>
+      <tr><td>Truy vết</td><td>Mỗi lần gọi (kể cả bị từ chối) để lại một dòng cùng dạng; xem được theo job và theo tour</td><td class="today">5 nơi ghi, mỗi nơi một kiểu, không cộng gộp được; lần gọi bị từ chối không để lại dòng; không xem được theo job</td><td class="todo">Một mẫu ghi chung cho mọi nhà cung cấp; màn xem theo job / tour</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Từng nhà cung cấp</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Nhà cung cấp</th><th>Dùng cho</th><th>Hôm nay (31/10)</th><th>Trong cổng v2</th></tr></thead>
+    <tbody>
+      <tr><td>Bedrock acc3</td><td>Gần hết stage viết, chấm, kiểm của CIS; lịch trình TripPlanner</td><td><span class="pill p-bad">bị chặn từ 29/10</span> Nguồn chính duy nhất</td><td>Một miền sự cố; luôn có dự phòng ở miền khác</td></tr>
+      <tr><td>Bedrock acc2</td><td>Embedding (Cohere); chat: Nova, Llama, Kimi</td><td><span class="pill p-ok">embedding chạy</span> Claude/GPT bị nhà bán lại chặn; chat chưa stage nào dùng</td><td>Ghi đúng tài khoản; có thể làm miền thứ hai cho chấm / kiểm (quyết định 3)</td></tr>
+      <tr><td>Anthropic API</td><td>Đường thứ hai cho Claude (stage viết)</td><td><span class="pill p-off">đường đã sẵn, chưa có khoá</span> Trần 150 USD/tháng</td><td><b>Đường dự phòng ấm</b> cho stage viết; đã duyệt nạp 50 USD, trần 150 USD/tháng, kiểm tra sống hằng ngày</td></tr>
+      <tr><td>OpenAI API</td><td>Đường thứ hai cho model chấm GPT</td><td><span class="pill p-ok">khoá chạy được</span> Gọi thử 31/10: OK, hạn mức còn nguyên. Tháng 9–10 hệ thống chỉ dùng khoảng 2,45 USD, lần cuối 02/10</td><td><b>Đường dự phòng ấm</b> cho stage chấm, đứng trước acc2; có trần, kiểm tra sống hằng ngày. Chưa cần nạp thêm</td></tr>
+      <tr><td>Azure OpenAI</td><td>Đường GPT ngoài AWS nếu sau này cần</td><td><span class="pill p-off">có code, chưa bật</span></td><td>Giữ code, chỉ bật khi anh duyệt chi phí</td></tr>
+      <tr><td>Bedrock Batch</td><td>Viết lại tour theo lô</td><td>Không ghi sổ chi phí</td><td>Đi qua cổng, ghi sổ như lần gọi thường</td></tr>
+      <tr><td>Jev</td><td>Quyết định có kiểu (chọn, chấm), không ra chữ</td><td>Client riêng; ghi hai sổ; không trần trước khi gọi; số dư ước tính; có danh sách tenant được phép</td><td>Một loại nguồn "quyết định"; trần trước khi gọi; giữ danh sách tenant và chế độ tắt / thử / áp dụng</td></tr>
+      <tr><td>DataForSEO</td><td>Từ khoá, kết quả Google, câu hỏi người tìm</td><td>Client riêng; sổ riêng; một đường không có trần; số dư đọc hằng ngày</td><td>Một loại nguồn "dữ liệu"; trần ở mọi đường; giữ đọc số dư</td></tr>
+      <tr><td>Geoapify</td><td>Xác nhận toạ độ, hình dạng tuyến</td><td>Gói miễn phí 3.000 credit/ngày, tự dừng ở 2.500; sổ riêng</td><td>Nguồn "dữ liệu"; hạn mức là dữ liệu của nguồn</td></tr>
+      <tr><td>Guardrails (CRM)</td><td>Lọc thông tin cá nhân trước khi gọi model</td><td>Có code; phần gọi model của CRM còn giả lập; không ghi chi phí</td><td>Đi qua cổng của CRM, có dòng chi phí</td></tr>
+      <tr><td>Mapbox</td><td>Bản đồ trên trình duyệt khách</td><td>Gọi thẳng từ trình duyệt</td><td>Chỉ đưa vào trang giám sát và cảnh báo mức dùng</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Hình tổng thể</h2>
+  <div class="diagram"><pre class="mermaid">
+flowchart LR
+  subgraph Apps["Các app"]
+    CIS["CIS"]
+    TP["TripPlanner"]
+    CRM["CRM / Partner"]
+    BK["Booking (khi cần)"]
+  end
+  subgraph GW["Cổng AI và dữ liệu (lõi dùng chung)"]
+    CFG["Tuỳ biến theo app / stage"]
+    REG["Sổ nguồn + họ model"]
+    RT["Điều hướng: chính, dự phòng, giới hạn chờ"]
+    POL["Quản lý: ngân sách, dữ liệu, kiểm tra sống"]
+    CALL["Gọi: phần nối cho từng nhà cung cấp"]
+    LOG["Truy vết: sổ ghi chung"]
+  end
+  subgraph P["Nhà cung cấp"]
+    B3["Bedrock acc3"]
+    B2["Bedrock acc2"]
+    AN["Anthropic API"]
+    OA["OpenAI API"]
+    JEV["Jev"]
+    DFS["DataForSEO"]
+    GEO["Geoapify"]
+  end
+  MON["Giám sát: nguồn, chi phí, độ trễ, cảnh báo"]
+  CIS --> CFG
+  TP --> CFG
+  CRM -->|"lõi chung, sổ riêng"| CFG
+  BK -.-> CFG
+  CFG --> RT --> POL --> CALL
+  REG -.-> RT
+  CALL --> B3 & B2 & AN & OA & JEV & DFS & GEO
+  CALL --> LOG
+  POL -->|"lần bị từ chối"| LOG
+  LOG --> MON
+  </pre></div>
+</section>
+
+<section>
+  <h2>Thứ tự làm</h2>
+  <p class="rule"><b>Luật chung:</b> không lần chạy trả phí nào khi anh chưa đồng ý; không đổi route nào khi anh chưa duyệt bản thiết kế này. Mỗi bước là một lát nhỏ, có bằng chứng. Một phiên của agent khoảng nửa ngày.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Bước</th><th>Làm gì</th><th>Cỡ việc</th><th>Chi phí</th><th>Anh thấy gì khi xong</th></tr></thead>
+    <tbody>
+      <tr><td>0. Đo trước</td><td>Đếm trong sổ ghi: stage nào còn gọi qua đường cũ, chỗ nào còn dùng model cố định (chỉ đọc)</td><td>Nửa phiên</td><td>0 USD</td><td>Bảng số đếm; bước 4 bỏ đường nào là dựa vào số này</td></tr>
+      <tr><td>1. Sửa lỗi không tốn tiền</td><td>Ghi đúng tài khoản cho chat trên acc2; nhận đúng câu "hết tiền" của Anthropic; thêm trần cho đường DataForSEO và cho Jev; TripPlanner dừng gọi khi không biết đã tiêu bao nhiêu; xoá code DataForSEO cũ</td><td>1 phiên</td><td>0 USD</td><td>Kiểm thử xanh; bảng kiểm: mọi chỗ gọi trả phí đều có trần; không route nào đổi</td></tr>
+      <tr><td>2. Anh duyệt</td><td><span class="pill p-ok">xong 31/10</span> Anh đồng ý cả 3 câu</td><td>Khoảng 1 giờ của anh</td><td>0 USD</td><td>ADR 0009 merge với trạng thái Accepted</td></tr>
+      <tr><td>3. Sổ ghi chung + trang giám sát</td><td>Mỗi lần gọi một dòng cùng dạng, có độ trễ; Jev, DataForSEO, Geoapify nối vào; màn xem theo job / tour; trang "Nguồn trả phí"</td><td>2–3 phiên</td><td>0 USD</td><td>Một trang admin cho thấy mọi nguồn trả phí với số thật của Dev; mở một job thấy từng lần gọi</td></tr>
+      <tr><td>4. Sổ nguồn, họ model, tham số</td><td>Jev, DataForSEO, Geoapify vào sổ nguồn; miền sự cố; họ model và khả năng là dữ liệu; tham số theo stage × model; chọn model ở một chỗ</td><td>3–4 phiên</td><td>0 USD</td><td>Thêm nhà cung cấp hay model mới chỉ là đổi cấu hình; chưa route nào đổi</td></tr>
+      <tr><td>5. Độ tin cậy</td><td>Dự phòng ấm khác miền sự cố; kiểm tra sống định kỳ; giới hạn thời gian chờ; tự tạm ngừng nguồn lỗi liên tục; việc bị từ chối tự chạy lại; diễn tập chuyển dự phòng hằng tháng trên Dev</td><td>2–3 phiên</td><td>Nạp 50 USD Anthropic một lần, rồi 1–2 USD/tháng; tiền nạp OpenAI trình riêng</td><td>Ô trạng thái xanh cho hai miền sự cố; báo cáo diễn tập kèm chi phí</td></tr>
+      <tr><td>6. Dùng chung + thử model mới</td><td>TripPlanner và CRM dùng lõi chung (CRM giữ sổ riêng). Model mới thử từng bước nhỏ, so với model đang dùng, rồi mới chuyển; lỗi thì quay lại</td><td>3–5 phiên</td><td>Mỗi model mới vài USD, xin anh từng lần</td><td>TripPlanner và CRM hiện cùng trang giám sát; đổi model ở stage viết chính chờ anh duyệt kèm báo cáo so sánh</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Anh đã quyết định (31/10): đồng ý cả 3 câu</h2>
+  <p class="quote">"Lưu ý API ngoài là cả Anthropic và OpenAI. Và đồng ý hết đề xuất." Tech lead, 31/10</p>
+  <div class="decisions">
+    <div class="dec">
+      <h3>1. Một cổng cho mọi nhà cung cấp AI và dữ liệu trả phí <span class="pill p-ok">đã duyệt: Có</span></h3>
+      <p>LLM, Jev, DataForSEO, Geoapify, Guardrails; mọi app, mọi stage. CRM dùng chung code của cổng nhưng giữ cấu hình và sổ riêng (quy định đã có).</p>
+      <ul><li>Làm bước 3, 4, 6; hạ tầng 0 USD, chỉ tốn thời gian code.</li><li>Tạo 2 issue mới AA-1017, AA-1018 (mục Issue bên dưới).</li></ul>
+    </div>
+    <div class="dec">
+      <h3>2. Đường dự phòng ấm, khác miền sự cố, là bắt buộc: cả Anthropic lẫn OpenAI <span class="pill p-ok">đã duyệt: Có</span></h3>
+      <ul>
+        <li><b>Anthropic API</b> (dự phòng cho stage viết, model viết là Claude): nạp 50 USD một lần (khoảng 800 tour viết lại), trần 150 USD/tháng.</li>
+        <li><b>OpenAI API</b> (dự phòng cho stage chấm, model chấm hôm nay là GPT): khoá đang chạy được, còn tiền (tháng 9–10 chỉ dùng khoảng 2,45 USD). Chưa cần nạp thêm; tôi trình con số trần chi tháng để anh duyệt.</li>
+        <li>Kiểm tra sống hằng ngày mọi nguồn trên Dev: dưới 1 USD/tháng. Diễn tập mỗi tháng, khoảng 0,25 USD/lần: một stage viết chuyển sang Anthropic, một stage chấm chuyển sang OpenAI.</li>
+      </ul>
+    </div>
+    <div class="dec">
+      <h3>3. acc2 chạy model chat, chỉ cho chấm và kiểm <span class="pill p-ok">đã duyệt: Có</span></h3>
+      <p>Không cho stage viết chính, không cho stage của tenant. acc2 chạy được Nova, Llama 4, Kimi K3, không phải Claude hay GPT. Stage viết giữ Claude Sonnet 5.5.</p>
+      <ul><li>Thứ tự dự phòng cho stage chấm: GPT trên acc3 → OpenAI API → model trên acc2 (chỉ sau khi model đó qua bước thử).</li><li>Mỗi model trên acc2 thử dưới 2 USD; mỗi lần chạy trả phí vẫn xin anh riêng.</li></ul>
+    </div>
+  </div>
+  <p class="muted">Còn 3 đề xuất trong bản kỹ thuật (luật model viết / model chấm theo hãng, cấu hình nguồn chỉ đổi qua thay đổi có duyệt, vùng dữ liệu cho tenant) vẫn chờ duyệt riêng khi tới bước cần nó.</p>
+</section>
+
+<section>
+  <h2>Giao diện: làm lại thế nào, ảnh hưởng gì</h2>
+  <p class="rule"><b>Tóm gọn:</b> thêm 1 trang mới, không xoá trang nào, dời hoặc gộp 5 tab. Chỉ trang admin của CIS đổi. Dựng bằng bộ khung giao diện chung như các trang khác. Khoảng 5 phiên agent, đã nằm trong cỡ việc của bước 3–6, không cộng thêm.</p>
+  <h3>Trang mới "Nhà cung cấp AI" (nhóm menu "AI &amp; chi phí"), 5 tab</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Tab</th><th>Anh thấy gì</th><th>Thay cho</th><th>Bước</th></tr></thead>
+    <tbody>
+      <tr><td>Nhà cung cấp</td><td>Mỗi nguồn một dòng (Bedrock acc3, acc2, Anthropic API, OpenAI API, Azure tắt, Jev, DataForSEO, Geoapify, Guardrails, Mapbox chỉ xem): sống hay không, còn quyền không, miền sự cố, còn bao nhiêu tiền, đã chi so với trần, độ trễ, tỉ lệ lỗi, lần kiểm tra gần nhất, nút "Thử". Anthropic và OpenAI hiện là đường dự phòng ấm; OpenAI hiện đỏ "chưa có tiền" tới khi nạp</td><td>Tab Kết nối và Credit Jev ở Cài đặt, ô trạng thái LLM, phần số dư ở trang Chi phí</td><td>3, 4, 5</td></tr>
+      <tr><td>Điều hướng</td><td>Mỗi app × stage: model chính và dự phòng, ngân sách, nút tắt, chạy thử song song; nhãn "đã có dự phòng khác miền sự cố chưa"</td><td>Phần chọn model theo stage ở Cài đặt</td><td>4, 5</td></tr>
+      <tr><td>Model và thử nghiệm</td><td>Họ model, hãng, nơi chạy, khả năng, giá (chỉ xem, chỉ bật / tắt); kết quả so sánh và thử model mới</td><td>Tab danh mục model, báo cáo so sánh</td><td>4, 6</td></tr>
+      <tr><td>Ngân sách</td><td>Một bảng cho mọi tầng trần: nguồn, app, stage, đại lý, thử nghiệm; danh sách "mọi chỗ gọi trả phí đều có trần"</td><td>Tab Ngân sách ở Chi phí</td><td>4</td></tr>
+      <tr><td>Lần gọi</td><td>Tìm mọi lần gọi theo app, nguồn, stage, job, tour, đại lý; bấm một dòng mở màn truy vết (mọi lần gọi của job / tour theo thời gian, kể cả lần bị từ chối), mở được cả từ trang job, tour, quyết định Jev</td><td>Mới</td><td>3</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Trang cũ thay đổi</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>Trang</th><th>Thay đổi</th><th>Bước</th></tr></thead>
+    <tbody>
+      <tr><td>Chi phí</td><td>Thành trang tiền: giữ Tổng quan, Dự báo, Hoá đơn AWS; gộp 3 tab LLM, DataForSEO, Jev thành "Chi cho AI và dữ liệu"; Ngân sách dời sang trang mới</td><td>3, 4</td></tr>
+      <tr><td>Cài đặt</td><td>Bỏ tab Model và tab Credit Jev</td><td>4</td></tr>
+      <tr><td>Tổng quan admin</td><td>Ô tóm tắt "Nguồn trả phí", bấm vào sang trang mới</td><td>3</td></tr>
+      <tr><td>Chi phí theo app</td><td>Phần AI mỗi app lấy từ sổ ghi chung (có cả CRM)</td><td>3</td></tr>
+      <tr><td>Quyết định Jev</td><td>Mỗi kết quả có link tới lần gọi và màn truy vết</td><td>3</td></tr>
+      <tr><td>Viết lại S1</td><td>Bỏ ô chọn model cố định cho từng lần chạy</td><td>4</td></tr>
+      <tr><td>Tenant 360</td><td>Ô ngân sách AI của đại lý và trạng thái</td><td>riêng (AA-1016)</td></tr>
+      <tr><td>Bảng các app</td><td>Chữ cho TripPlanner: "AI tạm dừng (không đọc được số đã tiêu)"</td><td>1</td></tr>
+    </tbody>
+  </table></div>
+  <h3>Ai nhận ra điều gì</h3>
+  <div class="terms">
+    <div class="term"><b>Nhân viên admin CIS</b><span class="muted">Mọi thứ về nguồn AI ở một trang. Không còn sửa giá, khoá bí mật, địa chỉ, phạm vi dữ liệu trên giao diện; không chọn tài khoản AWS theo stage. Lưu route làm mất dự phòng thì bị chặn (Dev chỉ cảnh báo). Mọi lần sửa được ghi lại.</span></div>
+    <div class="term"><b>Đại lý Content studio</b><span class="muted">Chỉ đổi đoạn chữ chính sách riêng tư và điều khoản. Ngân sách AI của đại lý chỉ nhân viên AA thấy.</span></div>
+    <div class="term"><b>Đại lý CRM</b><span class="muted">Chưa đổi gì; cài đặt AI làm trong CRM ở AA-964.</span></div>
+    <div class="term"><b>Khách TripPlanner</b><span class="muted">Có thể thấy bản lịch trình đơn giản (không AI) thường hơn một chút, vì TripPlanner dừng gọi AI khi không biết đã tiêu bao nhiêu.</span></div>
+    <div class="term"><b>Booking</b><span class="muted">Không ảnh hưởng.</span></div>
+    <div class="term"><b>Link cũ, kiểm thử, UAT</b><span class="muted">Link cũ tự chuyển sang chỗ mới. 7 bài kiểm thử tự động sửa theo đường dẫn mới; mỗi PR có ảnh máy tính / điện thoại, sáng / tối; kịch bản UAT đổi đường dẫn.</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>Issue: cập nhật hay tạo mới (ít nhất có thể)</h2>
+  <p><b>Tạo mới 2, cập nhật 6, chỉ thêm ghi chú 2, không đụng 4, không đóng issue nào.</b> Tạo 2 issue mới vì bước 4 và bước 5 mỗi bước 2–4 phiên; nhét vào AA-642 (đã nhiều lát) thì một issue kéo dài cả tháng. Hạn ghi "đề xuất" là hạn mới, anh sửa được.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Issue</th><th>Loại</th><th>Thêm gì</th><th>Bước</th><th>Trạng thái, ưu tiên, hạn</th></tr></thead>
+    <tbody>
+      <tr><td>AA-804</td><td>Cập nhật</td><td>Sửa tên thành ADR 0009; luật mới (Anthropic và OpenAI là đường ấm; acc2 chỉ chấm / kiểm); sổ ghi chung. Giao diện: khung trang mới, tab Nhà cung cấp (chỉ xem), tab Lần gọi + màn truy vết, gộp tab chi phí, tóm tắt ở Tổng quan</td><td>2, 3</td><td>Backlog → Todo, High, hạn 14/11 (đề xuất)</td></tr>
+      <tr><td>AA-642</td><td>Cập nhật</td><td>Lát "S0" 0 USD: đo ở bước 0, sửa lỗi không tốn tiền ở bước 1; gộp các đường gọi cũ, có ngày bỏ; bỏ chọn model cố định ở Viết lại S1; giữ các lát cũ</td><td>0, 1, 4, 6</td><td>Todo, Medium → High, hạn 13/12 giữ</td></tr>
+      <tr><td>AA-900</td><td>Cập nhật</td><td>Thang thử model mới; kiểm model chấm với 40 mẫu anh gán nhãn; mục Thử nghiệm trên trang mới</td><td>6</td><td>Todo, Low → Medium</td></tr>
+      <tr><td>AA-1016</td><td>Cập nhật</td><td>Ô ngân sách AI ở Tenant 360; tầng đại lý trong tab Ngân sách</td><td>4 / riêng</td><td>Backlog, Medium, trước tenant trả tiền đầu tiên</td></tr>
+      <tr><td>AA-820</td><td>Cập nhật</td><td>Danh sách nhà cung cấp AI trong chính sách / điều khoản khớp sổ đăng ký AI; Nova, Llama, Kimi không cần vì acc2 không chạy stage đại lý</td><td>—</td><td>Todo, High, hạn 11/11 giữ</td></tr>
+      <tr><td>AA-964</td><td>Cập nhật</td><td>Cài đặt AI và bản nháp AI trong CRM theo cùng mẫu sổ ghi; Guardrails ghi chi phí</td><td>6</td><td>Backlog, giữ</td></tr>
+      <tr><td>AA-1004</td><td>Ghi chú</td><td>Kiểm lại miền sự cố, thử mọi nguồn trước / sau 01/12</td><td>5</td><td>In Progress, giữ</td></tr>
+      <tr><td>AA-842</td><td>Ghi chú</td><td>Vẫn hoãn; sổ ghi + màn truy vết là bản 0 USD thay thế</td><td>—</td><td>Backlog, giữ</td></tr>
+      <tr class="todo"><td>AA-1017 (mới)</td><td>Tạo</td><td>Sổ nguồn v2: Jev, DataForSEO, Geoapify, Guardrails thành dòng nguồn; họ model; tham số stage × model; chọn model một chỗ. Giao diện: tab Điều hướng, Model, Ngân sách; bỏ 2 tab Cài đặt</td><td>4</td><td>High, hạn 28/11 (đề xuất)</td></tr>
+      <tr class="todo"><td>AA-1018 (mới)</td><td>Tạo</td><td>Độ tin cậy: đường ấm Anthropic + OpenAI, kiểm tra sống, giới hạn chờ, tạm ngừng tài khoản bị chặn, chạy lại việc bị từ chối, cảnh báo ngay, diễn tập hằng tháng. Giao diện: trạng thái kiểm tra, nhãn luật dự phòng, nút chạy lại, báo cáo diễn tập</td><td>5</td><td>High, hạn 05/12 (đề xuất)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted"><b>Không đụng:</b> AA-1002 (đã Done), AA-1015 (không có phần giao diện), AA-896 và AA-1003 (đọc cùng sổ ghi). <b>Lưu ý:</b> tiền nạp OpenAI chưa có số, trình anh trước khi nạp; đếm lại số issue của project CIS Core (tối đa 100) trước khi tạo N1, N2.</p>
+</section>
+
+<footer>
+  <div>Bản đầy đủ (kèm phụ lục kỹ thuật): <code>docs/audits/2026-10-31-S261-ai-gateway-design-v2/README.md</code>. Quyết định kiến trúc đi kèm: <code>docs/adr/0009-ai-platform-and-provider-gateway.md</code> (Accepted 31/10 cho phần 3 câu phủ; 3 điểm còn lại Proposed).</div>
+  <div>Dựa trên: thiết kế đã duyệt S258, phân tích khoảng hở S261, kiểm kê nhà cung cấp trả phí S261 (đọc code, không gọi live).</div>
+</footer>
+</div>
