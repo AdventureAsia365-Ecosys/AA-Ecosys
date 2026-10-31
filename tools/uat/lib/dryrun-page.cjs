@@ -7,7 +7,18 @@
 'use strict';
 
 const DESKTOP = { width: 1440, height: 900 };
+const host = (env, dflt) => (process.env[env] || dflt).replace(/\/+$/, '');
+// Dev hosts of every app a dry-run scenario opens; the same env overrides as lib/signin.cjs and lib/crm-signin.cjs.
+const HOSTS = {
+  cisAdmin: host('UAT_CIS_ADMIN', 'https://aa-cis.lumiguides.it.com'),
+  booking: host('UAT_BOOKING', 'https://booking.lumiguides.it.com'),
+  partner: host('UAT_CRM_PARTNER', 'https://portal.lumiguides.it.com'),
+  tripplanner: host('UAT_TRIPPLANNER', 'https://aa-tripplanner.vercel.app'),
+};
 const PHONE = { width: 390, height: 844 };
+
+/** One scenario step: the caption (subtitle and narration in record mode, en + vi) and run() = action + assert. */
+const step = (en, vi, run) => ({ caption: { en, vi }, run });
 
 /** A read-only scenario: identity + readOnly + the usual record.cjs fields. */
 function ro({ id, app, identity = 'public', title, titleVi, baseURL, viewport = DESKTOP, steps, ...rest }) {
@@ -78,15 +89,28 @@ async function check(page, h, p, { heading, ready, table = false, signedIn = tru
   assertNoApiErrors(page);
 }
 
-/** A data row (table body row or role=row) or the kit empty state, and no skeleton left. */
+/**
+ * A data row or an empty state, and no loading skeleton left. Kit signals first (the kit DataTable row and the kit
+ * EmptyState, shared by every staff app through ADR 0016), then a plain table body row, then the exact legacy empty
+ * phrases of the CIS smoke (no broad text regex: "empty" in any sentence would pass a broken page).
+ */
 async function rowsOrEmpty(page, h, timeout = 30_000) {
-  await h.expect.poll(async () => {
-    const rows = await page.locator('table tbody tr, [role="row"]').count().catch(() => 0);
-    const empty = await page.getByText(/no (results|data|items|records|matches)|nothing (here|yet)|empty/i).first()
-      .isVisible().catch(() => false);
-    const loading = await page.locator('[aria-busy="true"], .aa-skeleton').count().catch(() => 0);
-    return (rows > 0 || empty) && loading === 0 ? 'ready' : 'waiting';
-  }, { timeout, intervals: [500, 1000, 2000] }).toBe('ready');
+  await h.expect.poll(() => page.evaluate(() => {
+    const has = (sel) => !!document.querySelector(sel);
+    const rows = has('[data-testid="kit-datatable-row"]') || has('table tbody tr');
+    const text = document.body ? document.body.innerText : '';
+    const empty = has('[data-testid="kit-empty-state"]') || /Nothing here yet|No results|No data/.test(text);
+    const loading = has('[aria-busy="true"]') || has('.aa-skeleton');
+    return (rows || empty) && !loading ? 'ready' : 'waiting';
+  }).catch(() => 'waiting'), { timeout, intervals: [500, 1000, 2000] }).toBe('ready');
+}
+
+/** Click the kit tab named `name` (role=tab) and wait until it is the selected one. Tabs only read: no write. */
+async function openTab(page, h, name, { timeout = 20_000 } = {}) {
+  const tab = page.getByRole('tab', { name }).first();
+  await h.expect(tab).toBeVisible({ timeout });
+  await h.click(tab);
+  await h.expect(tab).toHaveAttribute('aria-selected', 'true', { timeout });
 }
 
 /** At a phone width, nothing scrolls sideways (document, and `main` when the shell scrolls inside it). */
@@ -99,4 +123,4 @@ async function assertNoSideScroll(page) {
   if (m.doc > 1 || m.main > 1) throw new Error(`the page scrolls sideways at this width (document +${m.doc}px, main +${m.main}px)`);
 }
 
-module.exports = { DESKTOP, PHONE, ro, check, rowsOrEmpty, watch, assertNoApiErrors, assertSignedIn, assertNoSideScroll };
+module.exports = { HOSTS, DESKTOP, PHONE, step, ro, check, rowsOrEmpty, openTab, watch, assertNoApiErrors, assertSignedIn, assertNoSideScroll };
