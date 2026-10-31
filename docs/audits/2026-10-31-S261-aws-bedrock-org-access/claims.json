@@ -1,0 +1,910 @@
+{
+ "audit": "2026-10-31-S261-aws-bedrock-org-access",
+ "read_date": "2026-10-31",
+ "status_legend": {
+  "supported": "independent check against current primary source agrees",
+  "partly": "source agrees on core; correction noted (README uses corrected form)",
+  "not_rechecked": "sourced with verbatim quote by a research angle, not in the independent verification pass",
+  "unconfirmed": "no primary source confirms it; listed in README section 7"
+ },
+ "note": "Quotes are verbatim excerpts (shortened). Internal paths are relative to the repo root (or the user memory folder). No account IDs.",
+ "claims": [
+  {
+   "id": "A-B1",
+   "claim": "Under Billing Transfer the reseller's management account pays our org's whole consolidated bill (members included); we stay owner of our org.",
+   "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/orgs_transfer_billing.html",
+   "quote": "A billing transfer is an arrangement between two management accounts where one management account manages and pays for the consolidated bill of the other management account, and member accounts under it.",
+   "doc_date": "GA 2025-11-19",
+   "verification": "supported",
+   "note": "Only usage from the start date (1st of a month, 00:00 UTC); earlier usage stays with us."
+  },
+  {
+   "id": "A-B2",
+   "claim": "We keep full administrative control (IAM, access, security, SCPs, account lifecycle); reseller takes over billing.",
+   "url": "https://docs.aws.amazon.com/marketplace/latest/buyerguide/billing-transfer-faq-for-buyer.html",
+   "quote": "Billing transfer only affects billing relationships. You maintain full control over account access and permissions, resource management, security configurations, and all administrative functions.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "SCPs/account lifecycle implied, not named. Reseller also controls which prices/cost data we see via Billing Conductor."
+  },
+  {
+   "id": "A-B3",
+   "claim": "An org can have only one outbound billing transfer; not adjustable. A different payer for the AI account needs another org or standalone.",
+   "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/orgs_transfer_billing-quotas.html",
+   "quote": "This quota is not adjustable.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "'At any given time': switching resellers is possible by withdraw + new invite."
+  },
+  {
+   "id": "A-B4",
+   "claim": "Setup: reseller sends invitation (InviteOrganizationToTransferResponsibility, BILLING); we accept (ListHandshakesForAccount TRANSFER_RESPONSIBILITY, AcceptHandshake); both orgs all-features.",
+   "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/orgs_transfer_billing-respond-invitation.html",
+   "quote": "To respond to an invitation, you must have the following permissions actions: organizations:ListHandshakesAccount organizations:AcceptHandshake organizations:DeclineHandshake",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "AWS page typo: real action is ListHandshakesForAccount. All-features requirement is on the best-practices page. Sender needs Billing Conductor permissions."
+  },
+  {
+   "id": "A-B5",
+   "claim": "Only management accounts send invitations, and only the paying side.",
+   "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/orgs_transfer_billing.html",
+   "quote": "Only the account that will manage and pay for the consolidated bill (bill-transfer account) can send invitations.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "Console setup requires Billing Conductor; API setup possible without."
+  },
+  {
+   "id": "A-B6",
+   "claim": "Transfer starts 1st of a month (next month up to 6 months); accept >=24h before. Earliest from 31/10/2026 is 01/12/2026; November billed to us.",
+   "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/orgs_transfer_billing-send-invitation.html",
+   "quote": "It can be the first day of any month from the next month up to six months in the future.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "AWS wording on cutoff is inconsistent; safe deadline 29/11/2026 23:59:59 UTC at the latest."
+  },
+  {
+   "id": "A-B7",
+   "claim": "Marketplace purchases (Claude, proprietary OpenAI) still possible; invoices go to reseller, reseller's tax profile, notifications to reseller.",
+   "url": "https://docs.aws.amazon.com/marketplace/latest/buyerguide/billing-transfer-faq-for-buyer.html",
+   "quote": "Your channel partner becomes responsible for paying for all your marketplace purchases.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "FAQ does not mention Bedrock; gpt-oss is not Marketplace. Partners 'may' use SCPs to keep PO off invoice."
+  },
+  {
+   "id": "A-B8",
+   "claim": "Third-party models set up per account: auto-subscribe on first call needs aws-marketplace perms, Anthropic FTU (inheritable), valid Marketplace payment method; separate account-level gate may remain.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "Access is determined separately for each AWS account, so accounts in the same AWS Organization can have different access.",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "Only models with a Marketplace product ID auto-subscribe. Perms needed only for first call. AWS names AWS Sales (not Support) for the extra gate. FTU not needed on bedrock-mantle; can stay PENDING."
+  },
+  {
+   "id": "A-B9",
+   "claim": "Anthropic FTU submitted once from our management account is inherited by members (opt-in regions excepted); under Billing Transfer that management account is ours.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "The form submission at the root account will be inherited by other accounts in the same AWS Organization.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "Covers only the use-case step; Marketplace subscription and account-level access still per account."
+  },
+  {
+   "id": "A-B10",
+   "claim": "Seller of record by provider: Anthropic sells Claude, OpenAI sells proprietary models; AWS sells gpt-oss, Meta, Mistral, DeepSeek, Qwen.",
+   "url": "https://aws.amazon.com/legal/bedrock/third-party-models/",
+   "quote": "Anthropic Services on Amazon Bedrock are sold by Anthropic.",
+   "doc_date": "Anthropic terms 2025-08-18; OpenAI terms June 2026",
+   "verification": "supported",
+   "note": "Cohere, Stability, Luma, TwelveLabs, Writer (except Palmyra Vision 7B) also sell their own models with product IDs."
+  },
+  {
+   "id": "A-B11",
+   "claim": "Providers not sold via Marketplace: Amazon, DeepSeek, Google, Meta, MiniMax, Mistral, Moonshot, NVIDIA, Qwen, xAI, Z.AI, plus OpenAI gpt-oss.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "Models from the following providers aren't sold through AWS Marketplace and don't have product keys",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "Confirmed by verification of B-B5/C-C5."
+  },
+  {
+   "id": "A-B12",
+   "claim": "SPP Authorized Services List: reseller must hold Anthropic resale authority before it or its end customer uses Claude; whether Billing Transfer counts is the open point.",
+   "url": "https://solution-provider-program-legal-documents.s3-us-west-2.amazonaws.com/Solution+Provider+Program+List+of+Services.pdf",
+   "quote": "Before you or your End Customer can access and use any model offered by Anthropic, you must first apply for and obtain resale authority from Anthropic",
+   "doc_date": "list updated 2026-09-24",
+   "verification": "partly",
+   "note": "AWS What's New 2025-11-19: SPP/Distribution partners 'can now resell AWS services using Billing Transfer' -> gate logically applies; no page names Anthropic+Billing Transfer together (inference)."
+  },
+  {
+   "id": "A-B13",
+   "claim": "AWS announced Bedrock partner resale; Anthropic resale has limits.",
+   "url": "https://aws.amazon.com/blogs/apn/amazon-bedrock-now-available-for-partner-resale/",
+   "quote": "*Resale of Anthropic models subject to certain limitations.",
+   "doc_date": "2025-10-14",
+   "verification": "supported",
+   "note": "See B-B9/C-C13."
+  },
+  {
+   "id": "A-B14",
+   "claim": "Reseller sees our consumption and billing metadata (tags, cost categories) in Cost Explorer and CUR; prices what we see via Billing Conductor.",
+   "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/orgs_transfer_billing.html",
+   "quote": "The bill transfer account can view the consumption and billing metadata (such as cost categories and cost allocation tags) of bill source accounts in Cost Explorer and AWS Cost and Usage Report.",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "Not in the independent verification pass; consistent with D-D8/D-D9 checks."
+  },
+  {
+   "id": "A-B15",
+   "claim": "We lose visibility: pro forma only, existing CUR Unhealthy, Cost Anomaly Detection stops alerting, no hourly granularity.",
+   "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/orgs_transfer_billing.html",
+   "quote": "CAD is not supported for bill-source accounts. As a bill-source account, existing monitors and newly created monitors won't generate alerts.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "Confirmed in D-D9 verification."
+  },
+  {
+   "id": "A-B16",
+   "claim": "Our credits still apply but to the bill AWS sends the reseller; Credits page no longer shows balance.",
+   "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/useconsolidatedbilling-credits.html",
+   "quote": "Your Credits page no longer displays your credit balance.",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "Not re-checked; contract must pass savings through."
+  },
+  {
+   "id": "A-B17",
+   "claim": "Activate credits can offset Marketplace fees for third-party Bedrock models; whether Lift credit does is unconfirmed.",
+   "url": "https://aws.amazon.com/activate/terms/",
+   "quote": "may be applied to offset fees and charges for AWS Marketplace incurred for the use of third-party foundation models available on Amazon Bedrock",
+   "doc_date": "Activate terms 2026-01-22",
+   "verification": "unconfirmed",
+   "note": "Lift credit coverage unconfirmed (README U7)."
+  },
+  {
+   "id": "A-B18",
+   "claim": "Savings Plans, RIs and volume tiers stay calculated per org, not pooled with reseller's customers.",
+   "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/orgs_transfer_billing.html",
+   "quote": "Volume discount tiers, Reserved Instances, and Savings Plans continue to be calculated and applied at the individual AWS Organizations level.",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "Also stated in A-B2 verification note."
+  },
+  {
+   "id": "A-B19",
+   "claim": "Billing Conductor: AWS managed plan free; customer managed plan 50 USD per org per month from 01/06/2026; who pays unclear.",
+   "url": "https://aws.amazon.com/aws-cost-management/aws-billing-conductor/pricing/",
+   "quote": "there is a monthly fee of $50 per AWS Organization",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "S261 spot-check: charged 'by the number of AWS Organizations that have a customer managed pricing plan attached'; payer between reseller and us still UNCONFIRMED (U8)."
+  },
+  {
+   "id": "A-B20",
+   "claim": "Either side can withdraw any time; ends 23:59:59 UTC last day of chosen month; irreversible; no account moves.",
+   "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/orgs_transfer_billing-stop-transfer.html",
+   "quote": "Either account involved in a transfer can withdraw the transfer at any time.",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "End month can only be current or next month. A payment method on our side before the end date is our inference, not documented."
+  },
+  {
+   "id": "A-B21",
+   "claim": "As a member of reseller's org, reseller can attach SCPs, remove accounts, block leaving; leaving loses org agreements and Cost Explorer history; OrganizationAccountAccessRole stays.",
+   "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_leave-as-member.html",
+   "quote": "Note that the organization administrator can apply a policy to your account that removes this permission, preventing you from removing your account from the organization.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "OrganizationAccountAccessRole is auto-created only for accounts created in the org. acc2/acc3 org membership is from internal records, not AWS docs."
+  },
+  {
+   "id": "A-B22",
+   "claim": "Management account is the payer and has final control; SCPs never restrict it.",
+   "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_getting-started_concepts.html",
+   "quote": "The management account is the ultimate owner of the organization, having final control over security, infrastructure, and finance policies.",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "Standard Organizations behaviour."
+  },
+  {
+   "id": "A-B23",
+   "claim": "Since Nov 2025 an account can move directly between orgs without standing alone.",
+   "url": "https://aws.amazon.com/about-aws/whats-new/2025/11/aws-organizations-direct-account-transfers/",
+   "quote": "eliminates the previous requirement for the account to temporarily operate as a standalone account",
+   "doc_date": "2025-11-19",
+   "verification": "supported",
+   "note": "S261 spot-check: 'an organization invites an account, and the account accepts the invite'; available in all commercial regions."
+  },
+  {
+   "id": "B-B1",
+   "claim": "Since 15/10/2025 serverless models are open by default in commercial regions; control via IAM and SCP.",
+   "url": "https://aws.amazon.com/about-aws/whats-new/2025/10/amazon-bedrock-automatic-enablement-serverless-foundation-models/",
+   "quote": "Amazon Bedrock now provides immediate access to all serverless foundation models by default",
+   "doc_date": "2025-10-15",
+   "verification": "partly",
+   "note": "Correction: PutFoundationModelEntitlement is still listed as an IAM action; the Model access page now applies only to GovCloud. Marketplace subscription, FTU, payment method and account-level access still apply."
+  },
+  {
+   "id": "B-B2",
+   "claim": "Anthropic FTU via PutUseCaseForModelAccess, once per account or once at management account; members inherit; not for opt-in regions; not needed on bedrock-mantle.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "Anthropic requires first-time customers to submit use case details before invoking a model once per account or once at the organization's management account.",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "Check status via agreementAvailability.status (not authorizationStatus). Form fields: companyName, companyWebsite, intendedUsers, industryOption, otherIndustryOption, useCases."
+  },
+  {
+   "id": "B-B3",
+   "claim": "Org-level FTU inheritance only works when submitted via API from management account (Security blog).",
+   "url": "https://aws.amazon.com/blogs/security/simplified-amazon-bedrock-model-access/",
+   "quote": "Its approval automatically extends to the child accounts within your organization (but only if done via the API).",
+   "doc_date": "2025-10-15, updated 2025-10-22",
+   "verification": "partly",
+   "note": "The current User Guide does not repeat the API-only condition; submitting via API satisfies both."
+  },
+  {
+   "id": "B-B4",
+   "claim": "Marketplace-sold models auto-subscribe per account on first call; first caller needs Subscribe/Unsubscribe/ViewSubscriptions; account needs valid payment method; up to 15 minutes.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "When you invoke a third-party model for the first time in your account, Amazon Bedrock automatically initiates the subscription process in the background.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "After enablement, other principals need no Marketplace perms."
+  },
+  {
+   "id": "B-B5",
+   "claim": "Which providers go through Marketplace (product IDs: Claude Sonnet 5.5 prod-pjfguoisodbd6, GPT-5.5 prod-indw4nwkcsyua).",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "These models are available to all Amazon Bedrock users and don't require a AWS Marketplace subscription.",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "Command R+ reached end of life 2026-08-19 (bad example; use Cohere Embed v4). Other providers (AI21, Writer X4/X5, Luma, Stability, TwelveLabs) must be checked per model card."
+  },
+  {
+   "id": "B-B6",
+   "claim": "Marketplace-sold models are billed under the model provider, not Amazon Bedrock.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-sonnet-5-5.html",
+   "quote": "Charges appear on your AWS bill and in AWS Cost Explorer under the model provider (not under Amazon Bedrock).",
+   "doc_date": "model launch 2026-09-28",
+   "verification": "partly",
+   "note": "Same sentence on Cohere Embed v4 card (prod-ft3cj5gst3spo). GPT cards have product IDs but not the sentence. 'Payer matters' is our inference."
+  },
+  {
+   "id": "B-B7",
+   "claim": "Even with FTU, subscription and payment, an account can be refused: additional account-level access, per account; contact AWS Sales. Error 002 text not in AWS docs.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "Some models require additional account-level access.",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "AWS does not name which models. Community reports Error 002 as ValidationException vs docs' AccessDeniedException; link to acc3 is inference. Rule out PENDING agreement first."
+  },
+  {
+   "id": "B-B8",
+   "claim": "Under Billing Transfer Marketplace invoices (incl. Bedrock third-party) go to the reseller; partners may use SCPs for PO handling.",
+   "url": "https://docs.aws.amazon.com/marketplace/latest/buyerguide/billing-transfer-faq-for-buyer.html",
+   "quote": "Channel partners may choose to prevent your PO from appearing on their invoice by implementing Service Control Policies (SCPs).",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "Ask reseller whether bill-transfer setup counts as valid Marketplace payment method (U4)."
+  },
+  {
+   "id": "B-B9",
+   "claim": "Partner resale of Anthropic has limitations documented in Partner Central; Vietnam is on Anthropic's supported countries.",
+   "url": "https://aws.amazon.com/blogs/apn/amazon-bedrock-now-available-for-partner-resale/",
+   "quote": "*Resale of Anthropic models subject to certain limitations.",
+   "doc_date": "2025-10-14",
+   "verification": "partly",
+   "note": "Not 'only' Partner Central: 2026 partner announcements say Anthropic runs its own reseller approval. Written VN+Billing Transfer confirmation is our recommendation, not an AWS rule."
+  },
+  {
+   "id": "B-B10",
+   "claim": "Converse authorizes as InvokeModel; ConverseStream as InvokeModelWithResponseStream; no provider condition key.",
+   "url": "https://docs.aws.amazon.com/service-authorization/latest/reference/list_bedrock.html",
+   "quote": "ConverseStream bedrock-runtime ... bedrock:InvokeModelWithResponseStream",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "Consistent with Security blog note that denying InvokeModel also blocks Converse."
+  },
+  {
+   "id": "B-B11",
+   "claim": "us.* profile needs InvokeModel on profile ARN, source FM and every destination FM; from us-west-1 Sonnet 5.5 routes to us-east-1, us-east-2, us-west-1, us-west-2; InferenceProfileArn exception cannot bypass source region.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/geographic-cross-region-inference.html",
+   "quote": "If your organization's security policy uses SCPs to block unused Regions, you must either allow access to all destination Regions listed in the Geographic cross-Region inference profile for your source Region or add an inference-profile exception",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "Destinations vary by source region and model; confirm with GetInferenceProfile. Sonnet 5.5 has no in-region support in us-west-1."
+  },
+  {
+   "id": "B-B12",
+   "claim": "global.* needs region-less FM ARN; aws:RequestedRegion = unspecified; ~10% cheaper than geographic.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/global-cross-region-inference.html",
+   "quote": "For this evaluation, the service sets aws:RequestedRegion to unspecified rather than the actual destination AWS Region.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "Source region must still be allowed by the SCP."
+  },
+  {
+   "id": "B-B13",
+   "claim": "Denying aws-marketplace:Subscribe does not block first call; deny bedrock:InvokeModel* or bedrock:* on model ARNs; deleting agreement does not block.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "Denying aws-marketplace:Subscribe alone will not block the first model invocation, because Amazon Bedrock auto-initiates the subscription in the background.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "DenyDeepseekEverywhere sample is from the Security blog. Test deny on bedrock-mantle separately."
+  },
+  {
+   "id": "B-B14",
+   "claim": "Marketplace perms can be scoped with aws:CalledViaLast = bedrock.amazonaws.com and aws-marketplace:ProductId.",
+   "url": "https://aws.amazon.com/blogs/security/simplified-amazon-bedrock-model-access/",
+   "quote": "\"aws:CalledViaLast\": \"bedrock.amazonaws.com\"",
+   "doc_date": "2025-10-15, updated 2025-10-22",
+   "verification": "not_rechecked",
+   "note": "Used as optional statement in README IAM example."
+  },
+  {
+   "id": "B-B15",
+   "claim": "Managed entitlements: management account subscribes once and grants members via License Manager; licenses in us-east-1; private offer price applies only to accepting account until grants.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/managed-entitlements.html",
+   "quote": "Managed entitlements for Amazon Bedrock solves this by letting you subscribe once from a management account and distribute access to member accounts across your AWS Organization.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "S261 spot-check: 'All licenses are created in the us-east-1 region'; 'request that private offers ... be issued to your management account'."
+  },
+  {
+   "id": "B-B16",
+   "claim": "OpenAI GPT-5.5 on bedrock-runtime in us-west-1 only via us./global. profiles; needs InvokeModel on project/default; mantle action bedrock-mantle:CreateInference, GPT-5.5 mantle only us-east-1/2.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-openai-gpt-55.html",
+   "quote": "Your IAM identity also needs bedrock:InvokeModel on your account's default project (arn:aws:bedrock:{region}:{account-id}:project/default)",
+   "doc_date": "model launch 2026-06-01",
+   "verification": "not_rechecked",
+   "note": "Same pattern confirmed on GPT-5.6 Terra card (C-C18)."
+  },
+  {
+   "id": "B-B17",
+   "claim": "Billing Transfer leaves our governance intact; consolidated bill priced to us through Billing Conductor.",
+   "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/orgs_transfer_billing.html",
+   "quote": "Separate billing and administration: The management account that accepted the invitation maintains complete administration over its organization",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "Same evidence as A-B1/A-B2."
+  },
+  {
+   "id": "C-C1",
+   "claim": "Account-level gate separate from self-service steps; per account; AWS Sales route. Closest official description of Error 002.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "If you complete the activation requirements and verify that the model is supported in the AWS Region but still receive an `AccessDeniedException`, contact AWS Sales for additional access options.",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "'Closest description' is inference; page says 'some models'. Rule out IAM/SCP conditions, Marketplace perms, payment method, PENDING agreement first."
+  },
+  {
+   "id": "C-C2",
+   "claim": "A quota increase does not grant account-level access.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-mantle.html",
+   "quote": "A quota increase doesn't grant additional account-level access to a model.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "Ask 'grant this account access' only after ruling out ordinary causes."
+  },
+  {
+   "id": "C-C3",
+   "claim": "Three per-account prerequisites for Marketplace-sold models; up to 2 min after fix, up to 15 min setup.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "After granting the necessary permissions, it may take up to 2 minutes for the subscription to complete",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "Model access page retired only in commercial regions. Perms needed only for first caller. FTU inheritable; PENDING wait separate."
+  },
+  {
+   "id": "C-C4",
+   "claim": "Marketplace perms only for first enabling call; afterwards invoker needs only bedrock:InvokeModel; enabling call must satisfy InvokeModel conditions.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "These permissions are only required the first time a model is being used in an account.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "aws:SourceIp conditions cannot be met via VPC endpoint. Streaming and cross-region need extra actions/resources."
+  },
+  {
+   "id": "C-C5",
+   "claim": "Non-Marketplace providers skip Marketplace perms and payment checks; if Nova/Mistral also refused, cause is the account.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "Some providers sell only part of their model catalog through AWS Marketplace.",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "Last step overstated: also IAM/SCP denies, region availability, project/default before concluding account-level gate. GPT-5.4 product ID prod-3bbohv3635iau."
+  },
+  {
+   "id": "C-C6",
+   "claim": "FTU once per account or at management account; PENDING until AVAILABLE; API inheritance per blog.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "The model agreement can enter a pending state, during which invoking the model continues to return AccessDeniedException even though your submission succeeded.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "Current guide console text does not repeat API-only condition."
+  },
+  {
+   "id": "C-C7",
+   "claim": "FTU inheritance only via API (Security blog).",
+   "url": "https://aws.amazon.com/blogs/security/simplified-amazon-bedrock-model-access/",
+   "quote": "(but only if done via the API)",
+   "doc_date": "2025-10-15, updated 2025-10-22",
+   "verification": "partly",
+   "note": "See B-B3."
+  },
+  {
+   "id": "C-C8",
+   "claim": "Marketplace agreement failure (403): common causes invalid payment and restricted geo-location; no official fix procedure.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/troubleshooting-api-error-codes.html",
+   "quote": "Common underlying issues are invalid payment error and restricted geo-location.",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "'Common', not 'most often'. Reseller-payer payment instrument link is our inference."
+  },
+  {
+   "id": "C-C9",
+   "claim": "Default quotas can be lower for an account based on age, usage and payment history; increases not automatic.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/quotas.html",
+   "quote": "As a result, the quotas that apply to your account might be lower than the default values listed",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "Check per account, per region, per endpoint; embeddings limited by RPM."
+  },
+  {
+   "id": "C-C10",
+   "claim": "Raise runtime quotas via 'Cross-Region InvokeModel tokens per minute for <model>'; priority to accounts using quota; no increases for Legacy/Deprecated.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-runtime.html",
+   "quote": "Due to overwhelming demand, priority will be given to customers who generate traffic that consumes their existing quota allocation.",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "Correction: General Reference does publish L-codes (Sonnet 4.6 cross-region TPM L-15B8E632, Haiku 4.5 L-58BE175A). RPM not in the bundle."
+  },
+  {
+   "id": "C-C11",
+   "claim": "bedrock-mantle quotas separate; increases via AWS Support limit form, not Service Quotas console.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-mantle.html",
+   "quote": "quota increase requests are not currently processed through the Service Quotas console.",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "Used in README step 9."
+  },
+  {
+   "id": "C-C12",
+   "claim": "Anthropic and OpenAI sell their models; Meta and Mistral sold by AWS; Anthropic bans unapproved resale; OpenAI limited to Supported Countries.",
+   "url": "https://aws.amazon.com/legal/bedrock/third-party-models/",
+   "quote": "resell the Services except as expressly approved by Anthropic.",
+   "doc_date": "Anthropic 2025-08-18; OpenAI June 2026",
+   "verification": "partly",
+   "note": "'Payer matters for Claude/GPT' is our inference, not an AWS rule."
+  },
+  {
+   "id": "C-C13",
+   "claim": "SPP/Distribution partners may resell Bedrock since 14/10/2025; Anthropic limited; terms not public.",
+   "url": "https://aws.amazon.com/blogs/apn/amazon-bedrock-now-available-for-partner-resale/",
+   "quote": "Resale of Anthropic models subject to certain limitations.",
+   "doc_date": "2025-10-14",
+   "verification": "partly",
+   "note": "Provider list also includes AI21, Luma, Stability, TwelveLabs. 2026 partner releases: separate Anthropic approval required."
+  },
+  {
+   "id": "C-C14",
+   "claim": "Under Billing Transfer Marketplace purchases invoiced to reseller; we keep admin control; coordinate with partner.",
+   "url": "https://docs.aws.amazon.com/marketplace/latest/buyerguide/billing-transfer-faq-for-buyer.html",
+   "quote": "When you purchase products from AWS Marketplace, your invoices are transferred to your channel partner's Bill-Transfer account.",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "No AWS doc says reseller must 'explicitly accept' Marketplace charges; that is a contract question."
+  },
+  {
+   "id": "C-C15",
+   "claim": "Billing questions to channel partner first; AWS Support handles billing transfer / Marketplace integration problems.",
+   "url": "https://docs.aws.amazon.com/marketplace/latest/buyerguide/billing-transfer-faq-for-buyer.html",
+   "quote": "For platform issues, AWS Support can help resolve billing transfer and AWS Marketplace integration problems",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "Used in README section 6."
+  },
+  {
+   "id": "C-C16",
+   "claim": "With Resold Support, AWS Support does not handle billing/account issues; Basic plan can open account/billing and limit-increase cases, not technical.",
+   "url": "https://docs.aws.amazon.com/awssupport/latest/user/case-management.html",
+   "quote": "AWS Support can't assist with non-technical issues for Resold Support, such as billing and account management.",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "Only 'Resold Support' is named; Partner-Led Support restriction not stated. Which case type covers Error 002 is inference."
+  },
+  {
+   "id": "C-C17",
+   "claim": "Billing Transfer mechanics: accept 24h before start; CAD not supported; credits not visible.",
+   "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/orgs_transfer_billing.html",
+   "quote": "Invites must be accepted 24 hours before the start date of the billing transfer, in UTC time.",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "Consistent with A-B6/A-B15 verification."
+  },
+  {
+   "id": "C-C18",
+   "claim": "In us-west-1 Claude Haiku 5.5 and GPT-5.6 Terra only via us./global. profiles; GPT-5.6 needs project/default; mantle in us-east-1/2, us-west-2.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-openai-gpt-56-terra.html",
+   "quote": "This model is not available for in-Region inference on that endpoint.",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "Used in README provider table."
+  },
+  {
+   "id": "C-C19",
+   "claim": "Claude on Bedrock billed through Marketplace under the provider; credit coverage not stated on card.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-haiku-5-5.html",
+   "quote": "This model is a third-party model offered and billed through AWS Marketplace.",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "Credit coverage UNCONFIRMED (U7)."
+  },
+  {
+   "id": "C-C20",
+   "claim": "Vietnam is on Anthropic's supported countries list.",
+   "url": "https://www.anthropic.com/supported-countries",
+   "quote": "Vietnam",
+   "doc_date": "effective 2026-11-12 (as shown)",
+   "verification": "not_rechecked",
+   "note": "Covers 'Claude models offered through cloud platforms and authorized resellers' (per B-B9 verification). Geo-check attribute unconfirmed (U13)."
+  },
+  {
+   "id": "C-C21",
+   "claim": "Private offer accepted by management account can be distributed; otherwise members pay public rates until grants.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/managed-entitlements-subscribing.html",
+   "quote": "If you accept this offer from any other account, you cannot distribute it from AWS Marketplace, and member accounts continue to be billed at public rates until you create grants in AWS License Manager.",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "Consistent with S261 spot-check of managed-entitlements page."
+  },
+  {
+   "id": "C-C22",
+   "claim": "'Error 002' appears only in community re:Post threads (incl. org members vended same day), fixed via Support case.",
+   "url": "https://www.repost.aws/questions/QUrt7TJfi4SqqvBh9DXMtE0A/bedrock-error-002-access-to-bedrock-models-is-not-allowed-for-this-account-on-four-organization-member-accounts-vended-the-same-day-accounts-vended-one-day-earlier-and-three-months-later-work",
+   "quote": "bedrock error 002 access to bedrock models is not allowed for this account on four organization member accounts vended the same day",
+   "doc_date": "not shown on page",
+   "verification": "unconfirmed",
+   "note": "Thread body returned 403; title only. Low confidence."
+  },
+  {
+   "id": "D-D1",
+   "claim": "Access decided per account, so fewer Bedrock-calling accounts means fewer accounts that can be refused.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "Access is determined separately for each AWS account, so accounts in the same AWS Organization can have different access.",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "Overstated: FTU and org SCPs are org-wide; per-account parts are Marketplace agreement, payment method, extra access. Valid but moderate argument."
+  },
+  {
+   "id": "D-D2",
+   "claim": "AWS SRA for AI separates Application and Generative AI accounts but allows merging; single gen-AI account for pre-trained models.",
+   "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture-generative-ai/gen-ai-sra.html",
+   "quote": "Merge the Application and Generative AI accounts if your architecture requires consolidating both services in one account, or if your generative AI usage spans your entire organization.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "The 'single account' bullet is about one vs several gen-AI accounts, not merging app+AI."
+  },
+  {
+   "id": "D-D3",
+   "claim": "SRA benefits: OU/account-specific SCPs, simpler least privilege; option to split gen-AI accounts by SDLC.",
+   "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/security-reference-architecture-generative-ai/gen-ai-sra.html",
+   "quote": "This account separation provides two key benefits.",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "SDLC split is one option, not a recommendation; guide assumes a single gen-AI account with IAM roles."
+  },
+  {
+   "id": "D-D4",
+   "claim": "TPM quotas per model per region per account; daily token cap per account per region; shared AI account means dev waves compete with prod.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-runtime.html",
+   "quote": "Maximum tokens per day across all supported Amazon Bedrock models for this account.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "Separate account only helps if prod uses its own credentials."
+  },
+  {
+   "id": "D-D5",
+   "claim": "New accounts may start below defaults; keep account with history or warm up early.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/quotas.html",
+   "quote": "the default quotas assigned to an account might be updated depending on regional factors, account age, usage history, payment history",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "Recommendation is inference; quotas per region and per endpoint."
+  },
+  {
+   "id": "D-D6",
+   "claim": "Application inference profiles give per-app cost on InvokeModel/Converse; not supported by Responses/Chat Completions (400).",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-application-inference-profiles.html",
+   "quote": "Application inference profiles aren't supported by the Responses and Chat Completions APIs, on either endpoint.",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "Tags must be activated; up to 24h; not retroactive."
+  },
+  {
+   "id": "D-D7",
+   "claim": "IAM principal attribution records calling role per request on runtime and mantle; session tags need sts:TagSession; cache credentials.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-iam-principal-tracking.html",
+   "quote": "Amazon Bedrock automatically captures the IAM principal identity (IAM users and IAM roles) for every inference request.",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "Needs tag activation in payer account, new CUR 2.0 export with caller identity; daily granularity; AWS positions it for user-level attribution."
+  },
+  {
+   "id": "D-D8",
+   "claim": "Cost allocation tags activated only from management/payer account; under Billing Transfer bill-source manages its tags.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-iam-principal-tracking.html",
+   "quote": "Member accounts don't have access to the cost allocation tags manager",
+   "doc_date": "not shown on page",
+   "verification": "supported",
+   "note": "Tag filtering on bill-source pro forma Cost Explorer UNCONFIRMED (U9)."
+  },
+  {
+   "id": "D-D9",
+   "claim": "Bill-source loses CAD, CUR becomes inactive, pro forma only; separate AI account gives clean cost line.",
+   "url": "https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/orgs_transfer_billing.html",
+   "quote": "After transfer, existing AWS Cost and Usage Report (CUR) configurations become inactive and display as Unhealthy.",
+   "doc_date": "not shown on page",
+   "verification": "partly",
+   "note": "CUR can be reconfigured. Bedrock/Marketplace already appear as separate service lines, so cost alone does not justify a separate account."
+  },
+  {
+   "id": "D-D10",
+   "claim": "Anthropic FTU at management account covers every member; extra accounts add no Anthropic paperwork.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "once per account or once at the organization's management account",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "Same evidence as A-B9."
+  },
+  {
+   "id": "D-D11",
+   "claim": "Bedrock has resource policies only for guardrails; cross-account invocation means assuming a role.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/security_iam_service-with-iam.html",
+   "quote": "Amazon Bedrock supports resource-based policies for guardrails and guardrail inference profiles.",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "Supports keeping the satellite assume-role pattern."
+  },
+  {
+   "id": "D-D12",
+   "claim": "Cross-account pattern adds no AWS fee: Organizations and IAM free; STS free not on a primary page.",
+   "url": "https://docs.aws.amazon.com/organizations/latest/userguide/pricing.html",
+   "quote": "AWS Organizations is offered at no additional charge.",
+   "doc_date": "not shown on page",
+   "verification": "unconfirmed",
+   "note": "STS AssumeRole free: UNCONFIRMED from primary source (U14)."
+  },
+  {
+   "id": "D-D13",
+   "claim": "Since April 2026 a Bedrock policy in Organizations enforces a guardrail on all members.",
+   "url": "https://aws.amazon.com/about-aws/whats-new/2026/04/bedrock-guardrails-cross-account-safeguards",
+   "quote": "automatically enforces configured safeguards across all member entities",
+   "doc_date": "2026-04-03",
+   "verification": "not_rechecked",
+   "note": "Not re-checked."
+  },
+  {
+   "id": "D-D14",
+   "claim": "Global CRIS needs 'unspecified' allowed; dedicated AI OU can confine the exception.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html",
+   "quote": "Allow \"aws:RequestedRegion\": \"unspecified\"",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "Consistent with B-B12 verification."
+  },
+  {
+   "id": "D-D15",
+   "claim": "Multi-account benefits: cost allocation unit, quota distribution.",
+   "url": "https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/benefits-of-using-multiple-aws-accounts.html",
+   "quote": "An account is the default means by which AWS costs are allocated.",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "General guidance."
+  },
+  {
+   "id": "D-D16",
+   "claim": "Operating models: decentralized puts Bedrock cost in each workload account.",
+   "url": "https://aws.amazon.com/blogs/machine-learning/generative-ai-operating-models-in-enterprise-organizations-with-amazon-bedrock/",
+   "quote": "Amazon Bedrock cost and usage will be recorded in each LOB's AWS accounts.",
+   "doc_date": "2025-01-29",
+   "verification": "not_rechecked",
+   "note": "Background only."
+  },
+  {
+   "id": "D-D17",
+   "claim": "Landing-zone baseline places Bedrock in a dedicated gen-AI account.",
+   "url": "https://aws.amazon.com/blogs/architecture/amazon-bedrock-baseline-architecture-in-an-aws-landing-zone/",
+   "quote": "hosts the organization's Amazon Bedrock capabilities and serves as the central point for AI/ML management",
+   "doc_date": "2025-06-23",
+   "verification": "not_rechecked",
+   "note": "Enterprise-scale; background only."
+  },
+  {
+   "id": "D-D18",
+   "claim": "Every Bedrock-calling account goes through first-invoke Marketplace setup.",
+   "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html",
+   "quote": "Valid payment method: Your AWS account must have a valid payment method configured for AWS Marketplace purchases.",
+   "doc_date": "not shown on page",
+   "verification": "not_rechecked",
+   "note": "Same evidence as B-B4."
+  },
+  {
+   "id": "E-E1",
+   "claim": "acc3 left reseller org 29/10 13:50 ICT; OpenAI refused then Error 002 on all models by ~15:20 ICT with valid payment method.",
+   "url": "docs/ops/postmortems/2026-10-29-acc3-bedrock-access-refusal.md",
+   "quote": "every Bedrock model on acc3, Claude included, answers \"Error 002: Access to Bedrock models is not allowed for this account\"",
+   "doc_date": "2026-10-30",
+   "verification": "not_rechecked",
+   "note": "Internal record. Minor timeline inconsistency with S260 log (07:11Z) to fix in postmortem."
+  },
+  {
+   "id": "E-E2",
+   "claim": "On 30/10 block persisted for all models incl. Nova from IAM admin; control account worked; AWS case: 3-5 working days (~04-06/11).",
+   "url": "docs/sessions/2026-10-30-S260-crm-four-modules-gateway-s5-s10-video-intro.md",
+   "quote": "service team gỡ trong 3–5 ngày làm việc (~04–06/11)",
+   "doc_date": "2026-10-30",
+   "verification": "not_rechecked",
+   "note": "Internal record."
+  },
+  {
+   "id": "E-E3",
+   "claim": "Internal root cause: third-party model access depends on who pays for the account.",
+   "url": "docs/ops/postmortems/2026-10-29-acc3-bedrock-access-refusal.md",
+   "quote": "Access to third-party models on Bedrock depends on who pays for the account, not only on IAM, agreements and forms.",
+   "doc_date": "2026-10-30",
+   "verification": "unconfirmed",
+   "note": "AWS only documents 'per account'; payer link is an inference (U15)."
+  },
+  {
+   "id": "E-E4",
+   "claim": "acc2 (TrueIDC org) can call only native Cohere Embed v4 + guardrail; Claude/GPT blocked by payer; tiny quotas.",
+   "url": "docs/audits/2026-10-29-S257-llm-access-options/migration-assessment.md",
+   "quote": "Claude/GPT blocked by the payer; quotas tiny",
+   "doc_date": "2026-10-29",
+   "verification": "not_rechecked",
+   "note": "Note: Cohere Embed v4 is a Marketplace product, so TrueIDC's payer accepts at least Cohere Marketplace charges (inference)."
+  },
+  {
+   "id": "E-E5",
+   "claim": "eCloudvalley Zalo claims: Billing Transfer, Anthropic covers Vietnam and Billing Transfer, OpenAI OK, VND VAT invoice, list price, deposit.",
+   "url": ".tmp-session/S258/thu-aws/longterm.json",
+   "quote": "hỗ trợ Billing Transfer, giấy Anthropic áp cho Việt Nam, OpenAI chạy được",
+   "doc_date": "2026-10-29/30",
+   "verification": "unconfirmed",
+   "note": "Chat only; not in contract."
+  },
+  {
+   "id": "E-E6",
+   "claim": "eCloudvalley contract template contradicts: 10% fee, consolidated billing, root retention, auto-renew, 8% penalty, no AI clause.",
+   "url": ".tmp-session/S258/thu-aws/longterm.json",
+   "quote": "kiểu thành viên trong tổ chức của họ, có điều khoản giữ tài khoản root",
+   "doc_date": "2026-10-29/30",
+   "verification": "not_rechecked",
+   "note": "Internal record; trust contract only."
+  },
+  {
+   "id": "E-E7",
+   "claim": "30/10 request to eCloudvalley to put Claude/OpenAI for VN incl. Billing Transfer into the contract.",
+   "url": ".tmp-session/S258/thu-aws/zalo-ecloudvalley.txt",
+   "quote": "áp dụng cả cho kiểu Billing Transfer",
+   "doc_date": "2026-10-30",
+   "verification": "not_rechecked",
+   "note": "No written answer recorded yet."
+  },
+  {
+   "id": "E-E8",
+   "claim": "eCloudvalley press release names 'Taiwan and Southeast Asia', not Vietnam explicitly.",
+   "url": "docs/audits/2026-10-29-S257-llm-access-options/angle1-aws-partners-vn.md",
+   "quote": "Whether Billing-Transfer accounts are \"channel program accounts\" for the Anthropic gate.",
+   "doc_date": "2026-10-29",
+   "verification": "unconfirmed",
+   "note": "U1."
+  },
+  {
+   "id": "E-E9",
+   "claim": "SPP list: only Anthropic needs separate resale authority; Anthropic and proprietary OpenAI ineligible for discount.",
+   "url": "docs/audits/2026-10-29-S257-llm-access-options/angle1-aws-partners-vn.md",
+   "quote": "you must first apply for and obtain resale authority from Anthropic",
+   "doc_date": "SPP list 2026-09-24",
+   "verification": "partly",
+   "note": "Footnote verified via A-B12; discount status per A-B12 evidence for Anthropic."
+  },
+  {
+   "id": "E-E10",
+   "claim": "Internal summary of per-account prerequisites (Marketplace perms, payment method, FTU inherited).",
+   "url": "docs/audits/2026-10-29-S257-llm-access-options/angle1-aws-partners-vn.md",
+   "quote": "which an account inherits from its organization's management account.",
+   "doc_date": "2026-10-29",
+   "verification": "supported",
+   "note": "Matches A-B8/B-B4 verification."
+  },
+  {
+   "id": "E-E11",
+   "claim": "Sun Cloud chat claims: 4% discount, VAT invoice, OpenAI supported; no Anthropic or Billing Transfer claim.",
+   "url": "~/.claude/projects/-home-nghiep-projects-AA-Ecosys/memory/acc2-bedrock-claude-gpt-blocked.md",
+   "quote": "(4 % discount, no contractor tax / service fee, VAT invoice, says OpenAI supported)",
+   "doc_date": "2026-10-29",
+   "verification": "unconfirmed",
+   "note": "Chat only."
+  },
+  {
+   "id": "E-E12",
+   "claim": "TrueIDC: no written claim on Billing Transfer, Anthropic, leaving org, root ownership; receive quota default 0 not asked.",
+   "url": ".tmp-session/S258/thu-aws/longterm.json",
+   "quote": "đã được AWS mở hạn mức nhận (mặc định là 0); điều này chưa hỏi",
+   "doc_date": "2026-10-29/30",
+   "verification": "not_rechecked",
+   "note": "Internal record."
+  },
+  {
+   "id": "E-E13",
+   "claim": "S258 lean layout: aa-management, aa-nonprod, aa-prod later, aa-ai merged when nonprod/prod can call Bedrock.",
+   "url": "docs/audits/2026-10-29-S258-aws-org-blueprint/README.md",
+   "quote": "gộp vào nonprod/prod khi 2 tài khoản đó gọi được Bedrock",
+   "doc_date": "2026-10-29",
+   "verification": "not_rechecked",
+   "note": "Basis of README section 2."
+  },
+  {
+   "id": "E-E14",
+   "claim": "Blueprint: separate AI account not structurally needed but kept now; revisit when prod sends PII.",
+   "url": "docs/audits/2026-10-29-S258-aws-org-blueprint/README.md",
+   "quote": "Chung lúc này (account mới có thể dính Error 002)",
+   "doc_date": "2026-10-29",
+   "verification": "not_rechecked",
+   "note": "Consistent with D-angle verdict."
+  },
+  {
+   "id": "E-E15",
+   "claim": "One bill-transfer partner per org; if it lacks Anthropic authority, Claude may be blocked on all members.",
+   "url": "docs/audits/2026-10-29-S258-aws-org-blueprint/README.md",
+   "quote": "Một org chỉ có MỘT bên bill-transfer.",
+   "doc_date": "2026-10-29",
+   "verification": "supported",
+   "note": "First half verified via A-B3; second half is inference."
+  },
+  {
+   "id": "E-E16",
+   "claim": "Billing Transfer mechanics summary (invite, 24h, withdraw, lose CUR/CAD/credits).",
+   "url": "docs/audits/2026-10-29-S257-llm-access-options/migration-assessment.md",
+   "quote": "start is 00:00 UTC on the 1st of the month named in the invitation, which must be accepted at least 24 h earlier;",
+   "doc_date": "2026-10-29",
+   "verification": "supported",
+   "note": "Matches A-B6/A-B20 verification."
+  },
+  {
+   "id": "E-E17",
+   "claim": "Risk: acc2 leaving TrueIDC may trigger account-level Bedrock block, stopping Cohere Embed v4 and CRM guardrail.",
+   "url": "docs/audits/2026-10-29-S257-llm-access-options/migration-assessment.md",
+   "quote": "Leaving TrueIDC triggers an account-level Bedrock block on acc2",
+   "doc_date": "2026-10-29",
+   "verification": "unconfirmed",
+   "note": "Risk hypothesis; mitigations in README step 3."
+  },
+  {
+   "id": "E-E18",
+   "claim": "Standalone AWS-direct is not a guaranteed fix.",
+   "url": "docs/audits/2026-10-29-S257-llm-access-options/migration-assessment.md",
+   "quote": "Standalone AWS-direct is not a guaranteed fix.",
+   "doc_date": "2026-10-29",
+   "verification": "not_rechecked",
+   "note": "Internal observation."
+  },
+  {
+   "id": "E-E19",
+   "claim": "Lift credit 249.94 USD expiring 31/12/2026; under Billing Transfer not visible; may not cover Marketplace.",
+   "url": "docs/audits/2026-10-29-S258-aws-org-blueprint/README.md",
+   "quote": "Theo Billing Transfer, bên bill-source không thấy credit.",
+   "doc_date": "2026-10-29",
+   "verification": "unconfirmed",
+   "note": "U7."
+  }
+ ],
+ "counts": {
+  "supported": 34,
+  "partly": 25,
+  "not_rechecked": 31,
+  "unconfirmed": 9
+ }
+}

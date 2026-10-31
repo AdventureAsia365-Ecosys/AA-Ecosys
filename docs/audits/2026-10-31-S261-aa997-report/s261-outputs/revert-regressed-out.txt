@@ -1,0 +1,20 @@
+# S261 31/10/2026 ~02:15Z — revert_regressed.py (orchestrator, ECS exec, cis_app)
+# DRY=1 (default) output:
+ROWS 5
+ROW {"id": "6b41d67b-1800-4e9b-9262-c2741aabffda", "name": "Janaki Temple", "from": [27.6933256, 85.4310224], "to": [26.7283, 85.9267], "moved_km": 118.0}
+ROW {"id": "e9a229e1-d887-4252-929b-c49082e517ee", "name": "Chaturbhuj Temple", "from": [24.8251612, 79.9310377], "to": [25.3517, 78.6417], "moved_km": 142.4}
+ROW {"id": "9d967b47-8911-4950-bfc2-26c580e678ee", "name": "Meharangadh Fort", "from": [26.3134083, 72.9794659], "to": [26.298, 73.0188], "moved_km": 4.3}
+ROW {"id": "cbd4ec6f-d3d3-4956-a8ec-6ce2fef62fbf", "name": "Meherangarh Fort", "from": [26.3134083, 72.9794659], "to": [26.298, 73.0188], "moved_km": 4.3}
+ROW {"id": "e8b78fd0-75b9-4123-b882-5af4b4f9a71a", "name": "Sheeshganj Gurudwara", "from": [28.6839464, 77.1865454], "to": [28.6562, 77.23], "moved_km": 5.2}
+DRY RUN: nothing written
+# DRY=0 output (resource_type places_relocate, action places.relocate.revert_regressed, one acp_shared.audit_log row):
+ROWS 5
+WRITTEN 5
+# read-back (regressed.py) after the write:
+Janaki Temple 26.7283 85.9267 manual
+Chaturbhuj Temple 25.3517 78.6417 manual
+Meharangadh Fort 26.298 73.0188 manual
+Meherangarh Fort 26.298 73.0188 manual
+Sheeshganj Gurudwara 28.6562 77.23 manual
+# Note: the audit's 6th regressed name "sheeshganj gurudwara sikh temple" has no destination row of its own
+# (regressed.py looked it up by lower(name) and found none); it reads the same destination as "Sheeshganj Gurudwara".

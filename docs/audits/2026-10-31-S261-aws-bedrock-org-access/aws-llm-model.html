@@ -1,0 +1,212 @@
+<title>Mô hình AWS cho AI</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column of a field brief; diagrams and tables break out to the full column with their own scroll. */
+:root {
+  --bg: #f3f5f4; --paper: #ffffff; --ink: #18211f; --muted: #56635f; --line: #d6dedb;
+  --accent: #0f6a5c; --accent-soft: #e0f0ec; --amber: #9a5b00; --amber-soft: #fbefd9;
+  --bad: #a8321f; --bad-soft: #f8e4df; --ok: #2a7a46; --ok-soft: #e2f2e7;
+  --f-body: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --s-1: .8125rem; --s0: .9375rem; --s1: 1.0625rem; --s2: 1.3rem; --s3: 1.85rem;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111816; --paper: #18211f; --ink: #e5ece9; --muted: #9db0aa; --line: #2c3a36;
+  --accent: #5fc5b2; --accent-soft: #163a33; --amber: #e6a84d; --amber-soft: #3a2b12;
+  --bad: #f0907f; --bad-soft: #3d1d18; --ok: #78d39a; --ok-soft: #173723; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #111816; --paper: #18211f; --ink: #e5ece9; --muted: #9db0aa; --line: #2c3a36;
+  --accent: #5fc5b2; --accent-soft: #163a33; --amber: #e6a84d; --amber-soft: #3a2b12;
+  --bad: #f0907f; --bad-soft: #3d1d18; --ok: #78d39a; --ok-soft: #173723; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: var(--s0); line-height: 1.6; }
+.wrap { max-width: 920px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; display: grid; gap: 22px; }
+header { display: grid; gap: 6px; }
+.eyebrow { font-family: var(--f-mono); font-size: var(--s-1); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+h1 { font-size: var(--s3); line-height: 1.2; margin: 0; text-wrap: balance; }
+h2 { font-size: var(--s2); margin: 0; text-wrap: balance; }
+h3 { font-size: var(--s1); margin: 0; }
+p { margin: 0; max-width: 70ch; }
+.lead { color: var(--muted); }
+section { display: grid; gap: 12px; min-width: 0; }
+.panel { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 10px; min-width: 0; }
+ul, ol { margin: 0; padding-left: 1.25em; display: grid; gap: 5px; }
+li { max-width: 70ch; }
+.answer { border-left: 3px solid var(--accent); }
+.diagram { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 14px; overflow-x: auto; }
+.diagram pre.mermaid { margin: 0; min-width: 620px; background: transparent; }
+.cap { font-size: var(--s-1); color: var(--muted); }
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); }
+table { border-collapse: collapse; width: 100%; font-size: var(--s0); }
+th, td { border-bottom: 1px solid var(--line); padding: 9px 11px; text-align: left; vertical-align: top; }
+thead th { background: var(--bg); font-weight: 600; font-size: var(--s-1); }
+tbody tr:last-child td { border-bottom: 0; }
+td:first-child { font-weight: 600; }
+.wide { min-width: 680px; }
+.chip { display: inline-block; font-size: .74rem; font-weight: 600; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+.c-ok { background: var(--ok-soft); color: var(--ok); }
+.c-part { background: var(--amber-soft); color: var(--amber); }
+.c-no { background: var(--bad-soft); color: var(--bad); }
+code { font-family: var(--f-mono); font-size: .86em; background: var(--bg); padding: 0 4px; border-radius: 4px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.when { font-family: var(--f-mono); font-size: var(--s-1); color: var(--accent); font-variant-numeric: tabular-nums; }
+.steps { display: grid; gap: 10px; }
+.step { display: grid; grid-template-columns: 7.5em 1fr; gap: 12px; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+.step > div { min-width: 0; display: grid; gap: 4px; }
+.who { font-size: var(--s-1); color: var(--muted); }
+.note { background: var(--amber-soft); border-radius: 10px; padding: 12px 14px; display: grid; gap: 6px; }
+.note strong { color: var(--amber); }
+footer { font-size: var(--s-1); color: var(--muted); display: grid; gap: 4px; }
+@media (max-width: 560px) { .step { grid-template-columns: 1fr; gap: 4px; } }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Tư vấn kỹ thuật · S261 · 31/10/2026</div>
+  <h1>Mô hình AWS cho AI: account, đường gọi model, độ ổn định khi lên prod</h1>
+  <p class="lead">Áp cho tình huống hiện tại: acc4 vừa tạo làm account quản lý; acc2 (hạ tầng) còn trong org TrueIDC vì hợp đồng; acc3 (AI) đã rời org eCloudvalley và đang bị Bedrock chặn "Error 002", case AWS đang chờ trả lời.</p>
+</header>
+
+<section>
+  <div class="panel answer">
+    <h2>Trả lời ngắn</h2>
+    <ul>
+      <li><b>acc4 là account quản lý của org AA.</b> Chỉ quản trị (org, SCP, đăng nhập, budget, form Anthropic), không chạy app, không gọi model.</li>
+      <li><b>Mô hình gọn: 3 account bây giờ, thêm aa-prod khi go-live.</b> acc3 = AI, acc2 = hạ tầng dev. Không dùng bản 9 account của blueprint S258.</li>
+      <li><b>Số account không quyết định độ ổn định của AI.</b> Mọi account trong org dùng chung bên trả tiền, giấy Anthropic của đại lý, form và SCP. Sự cố 29/10 nằm đúng ở tầng chung đó. Đường dự phòng thật sự là Anthropic API (ngoài AWS).</li>
+      <li><b>LLM gateway đã thiết kế để app nào cũng đi được đường nào.</b> CIS đã chạy đầy đủ. TripPlanner và CRM còn lát S8 (AA-642) để dùng chung core. Mở thêm đường ra ngoài AWS cho một stage là chỉnh cấu hình, không viết code.</li>
+      <li><b>Không dồn hết về 1 account.</b> Bây giờ không làm được (acc2 dưới TrueIDC không gọi được Claude). Về sau làm được nhưng phải bỏ việc tách prod (ADR 0018), mà về độ ổn định AI thì không lợi hơn.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>1. Account và đường hoá đơn</h2>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart LR
+  subgraph RESELLER["Đại lý có giấy Anthropic"]
+    R["Account quản lý của đại lý<br/>trả hoá đơn AWS, xuất VAT VND"]
+  end
+  subgraph ORG["Org AA (all features)"]
+    M["acc4 · aa-management<br/>org, SCP, đăng nhập, budget,<br/>form Anthropic (nộp 1 lần)"]
+    AI["acc3 · aa-ai<br/>chỉ Bedrock; mỗi môi trường 1 role"]
+    NP["acc2 · aa-nonprod<br/>hạ tầng dev (+ staging)"]
+    PR["aa-prod<br/>tạo khi có ngày go-live"]
+  end
+  subgraph TRUE["Org TrueIDC (tạm thời)"]
+    NP0["acc2 hôm nay"]
+  end
+  M -- "Billing Transfer<br/>sớm nhất 01/12/2026" --> R
+  M --- AI
+  M --- NP
+  M --- PR
+  NP0 -. "khi hợp đồng cho rời" .-> NP
+  NP0 -- "gọi Claude/GPT qua role" --> AI
+  PR -- "gọi model qua role prod-only" --> AI
+</pre>
+  </div>
+  <p class="cap">Gọi chéo account qua assume role thì tiền và quota tính vào account bị gọi (acc3). Vì vậy acc2 vẫn ở TrueIDC mà vẫn dùng được Claude qua acc3.</p>
+</section>
+
+<section>
+  <h2>2. LLM gateway: app nào đi đường nào</h2>
+  <div class="diagram">
+<pre class="mermaid">
+flowchart LR
+  CIS["CIS<br/>writer, judge, tenant"] --> GW
+  TP["TripPlanner<br/>compose, search"] -. "S8 (AA-642)" .-> GW
+  CRM["CRM<br/>trả lời AI (CRM-33a)"] -. "S8 (AA-642)" .-> GW
+  GW{{"LLM gateway (AA-1002)<br/>route theo stage · breaker · budget<br/>đổi bằng màn admin"}}
+  GW --> B3["Đường 1 · Bedrock acc3<br/>dev, batch, prod qua role riêng"]
+  GW --> B2["Đường 2 · Bedrock tại aa-prod<br/>tuỳ chọn, làm sau"]
+  GW --> AN["Đường 3 · Anthropic API<br/>ngoài AWS, dự phòng thật"]
+  GW --> OA["OpenAI API<br/>tuỳ chọn"]
+</pre>
+  </div>
+  <div class="scroll">
+    <table class="wide">
+      <thead><tr><th>App</th><th>Thiết kế</th><th>Code hôm nay</th><th>Còn lại</th></tr></thead>
+      <tbody>
+        <tr><td>CIS</td><td>Mọi đường, đổi bằng admin</td><td><span class="chip c-ok">Đủ</span> registry, breaker, fallback, budget theo connection</td><td>Chọn <code>allowed_scopes</code> cho stage prod (hiện chỉ judge/validate được ra ngoài AWS)</td></tr>
+        <tr><td>TripPlanner</td><td>Dùng chung gateway</td><td><span class="chip c-part">Một phần</span> đọc chung bảng route/catalog; client gọi model riêng chỉ biết acc3/acc2</td><td>S8: chuyển sang core chung để có aa-prod và Anthropic API</td></tr>
+        <tr><td>CRM</td><td>Dùng chung gateway sau lớp lọc PII</td><td><span class="chip c-part">Một phần</span> gateway riêng (lọc PII, budget, fail-closed); gọi model còn là stub</td><td>CRM-33a (AA-964) cắm model qua S8; bộ lọc PII đang dùng guardrail ở acc2 → cần đường dự phòng</td></tr>
+        <tr><td>Booking</td><td>—</td><td><span class="chip c-ok">Không gọi model</span></td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>3. Hai tầng hỏng</h2>
+  <div class="grid2">
+    <div class="panel">
+      <h3>Tầng account</h3>
+      <p>Chỉ một account bị ảnh hưởng: cổng quyền model mức account, quota, đăng ký Marketplace của account đó.</p>
+      <p class="cap">Tách account che được tầng này.</p>
+    </div>
+    <div class="panel">
+      <h3>Tầng org / bên trả tiền</h3>
+      <p>Mọi account trong org cùng hỏng: đổi bên trả tiền, Billing Transfer bị rút, giấy Anthropic của đại lý không áp, form Anthropic, SCP sai, region nguồn, model hết đời.</p>
+      <p class="cap">Sự cố 29/10 bắt đầu ở tầng này. Chỉ đường 3 (Anthropic API) không phụ thuộc nó.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>4. Có nên dồn về 1 account?</h2>
+  <div class="scroll">
+    <table class="wide">
+      <thead><tr><th></th><th>1 account (dev + prod + AI)</th><th>Mô hình đề xuất</th></tr></thead>
+      <tbody>
+        <tr><td>Bây giờ làm được không</td><td>Không: acc2 dưới TrueIDC không gọi được Claude/GPT</td><td>Được: acc2 gọi qua acc3</td></tr>
+        <tr><td>Hỏng tầng org / payer</td><td>Mất mọi Bedrock, còn đường 3</td><td>Như nhau</td></tr>
+        <tr><td>Hỏng tầng account</td><td>Dev và prod cùng mất Bedrock</td><td>Mất một account; prod còn đường khác nếu đã dựng</td></tr>
+        <tr><td>Quota</td><td>Dồn lịch sử một chỗ; dev tranh với prod, cần giới hạn trong gateway</td><td>Cũng cần giới hạn theo môi trường trong gateway</td></tr>
+        <tr><td>Cách ly prod</td><td>Không (trái ADR 0018)</td><td>Có: người và quyền của dev không chạm dữ liệu khách thật</td></tr>
+        <tr><td>Chi phí AWS</td><td>Như nhau</td><td>Như nhau (Organizations, IAM miễn phí)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>5. Năm thứ quyết định độ ổn định khi lên prod</h2>
+  <div class="panel">
+    <ol>
+      <li>Đại lý xác nhận <b>bằng văn bản</b>: giấy Anthropic áp cho khách Việt Nam theo Billing Transfer, chấp nhận khoản Marketplace (Claude, GPT, Cohere).</li>
+      <li>Đường Anthropic API luôn sẵn sàng: có credit, probe hằng ngày, được bật cho các stage prod đã chọn.</li>
+      <li>Quota dư trên đúng account prod gọi, xin trước go-live 4–6 tuần.</li>
+      <li>Mỗi route prod có 2 họ model và 2 region nguồn (profile <code>us.*</code> / <code>global.*</code>).</li>
+      <li>Báo động ngay khi gateway ngắt mạch hoặc có <code>llm_access_denied</code>.</li>
+    </ol>
+    <p class="cap">Mọi lần đổi bên trả tiền hoặc đổi org phải xong trước go-live; mỗi lần đổi: không chạy wave, probe trước và ngay sau.</p>
+  </div>
+</section>
+
+<section>
+  <h2>6. Thứ tự làm</h2>
+  <div class="steps">
+    <div class="step"><span class="when">Ngay</span><div><b>Dev có đường LLM:</b> tạo key Anthropic API mới, đặt trần chi, nạp credit; bật connection <code>anthropic-direct</code> và chạy probe.<span class="who">Tech lead duyệt mức nạp · agent gắn và probe</span></div></div>
+    <div class="step"><span class="when">Ngay</span><div><b>Hỏi đại lý bằng văn bản</b> các câu ★ (giấy Anthropic + Billing Transfer cho Việt Nam, Marketplace, không giữ root/SCP, phí, credit), thêm hạn mức nhận Billing Transfer và chuỗi 1 cấp.<span class="who">Business owner gửi</span></div></div>
+    <div class="step"><span class="when">Tuần này</span><div><b>acc4:</b> email root theo vai trò, MFA phần cứng, liên hệ dự phòng, thẻ + thông tin thuế, đăng nhập qua Identity Center, budget; bật Organizations, tạo OU; nộp form Anthropic bằng API.<span class="who">Tech lead (phần cần đăng nhập) · agent soạn lệnh</span></div></div>
+    <div class="step"><span class="when">~04–07/11</span><div><b>acc3:</b> chờ AWS trả lời case; hỏi thẳng nên vào org trước hay sau khi gỡ chặn. Chỉ đưa acc3 vào org khi có cả trả lời AWS và trả lời văn bản của đại lý.<span class="who">Tech lead</span></div></div>
+    <div class="step"><span class="when">≤ 29/11</span><div><b>Billing Transfer:</b> đại lý gửi lời mời, acc4 chấp nhận trước ngày bắt đầu ít nhất 24 giờ. Hiệu lực từ 01/12 (trễ thì 01/01).<span class="who">Đại lý gửi · tech lead chấp nhận</span></div></div>
+    <div class="step"><span class="when">Khi được</span><div><b>acc2 rời TrueIDC vào org AA:</b> đổi email root sang email công ty trước, xuất Cost Explorer và hoá đơn, rời sát ngày 1, chấp nhận lời mời trong ngày, chạy smoke.<span class="who">Business owner + TrueIDC + tech lead</span></div></div>
+    <div class="step"><span class="when">Trước prod</span><div><b>Code:</b> S8 (TripPlanner + CRM lên core gateway chung), đường dự phòng cho bộ lọc PII của CRM, chọn <code>allowed_scopes</code> stage prod, giới hạn theo môi trường.<span class="who">Agent (AA-642, AA-964)</span></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="note">
+    <strong>Chưa xác nhận được</strong>
+    <p>Error 002 không có trong tài liệu AWS; chỉ case đang mở trả lời được nguyên nhân. Giấy Anthropic của đại lý có áp cho Billing Transfer ở Việt Nam không, credit Lift có dùng cho khoản Marketplace không, ai chịu phí Billing Conductor: cần đại lý và AWS trả lời bằng văn bản.</p>
+  </div>
+</section>
+
+<footer>
+  <span>Nguồn: <code>docs/audits/2026-10-31-S261-aws-bedrock-org-access/</code> (README, current-situation-model.md, reseller-questions.md, claims.json — 99 khẳng định có URL nguồn AWS/Anthropic, 47 đã kiểm chéo).</span>
+  <span>ADR liên quan: 0018 (mô hình account gọn), 0001a (LLM chỉ trên account AI), AA-1002 / AA-642 (LLM gateway).</span>
+</footer>
+</div>

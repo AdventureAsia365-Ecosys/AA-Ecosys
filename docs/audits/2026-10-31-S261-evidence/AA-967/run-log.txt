@@ -1,0 +1,32 @@
+02:43:01Z cis staff signed in on aa-cis.lumiguides.it.com: cis_role=reviewer, token_use=access, groups=["cis-reviewer"]
+02:43:01Z shot 01-cis-staff-signed-in-reviewer-1440.png
+02:43:06Z crm session: signing in through managed login (partner pool, password + authenticator)
+02:43:18Z agency: Lữ hành Sen Vàng (bab16039), role owner
+02:43:18Z crm /health: {"git_sha":"3718242a264c9ffe9bbb7f0db468c58deb866d73","version":"0.11.0"}
+02:43:18Z POST /bff/travelers -> 201
+02:43:18Z client 15931fb1 "E2E S261 Erase vsq3k7" (@example.invalid), no trip
+02:43:22Z shot 02-client-created-no-trip-1440.png (sideways overflow: document 0px, main 0px)
+02:43:23Z POST /bff/data/exports (scope traveler) -> 201 queued
+02:43:26Z export c8ca2a60: ready 25/25, 2 rows, 25 tables, 17612 bytes, sha256 8979b0d4a2fe…
+02:43:28Z agency download (link 1) -> 200 application/zip, 17612 bytes, 53 zip entries, sha256 8979b0d4a2fe…, header match false, shown checksum match true
+02:43:30Z CIS staff token: GET /crm/v1/data/exports/<id>/download?token=<unused link> -> 403 "wrong_audience"
+02:43:30Z CIS staff token: GET /crm/v1/data/exports -> 403 "wrong_audience"
+02:43:30Z no token (control): GET /crm/v1/data/exports/<id>/download -> 401 "missing_bearer_token"
+02:43:30Z agency download with the SAME link after the staff call -> 200, 17612 bytes, same sha256 true
+02:43:30Z agency download, same link a second time -> 403 link_invalid
+02:43:31Z POST /bff/data/requests (erasure) -> 201 due 2026-11-30
+02:43:35Z shot 03-settings-data-export-ready-request-open-1440.png (sideways overflow: document 0px, main 0px)
+02:43:35Z UI Check erasure (DRY RUN) -> 200 dry_run=true; non-zero counts {"traveler":1,"traveler_profile":1}; kept {"signature_event":0,"terms_acceptance":0}; exceptions []; exports_withdrawn 1
+02:43:36Z shot 04-erasure-dry-run-preview-1440.png (sideways overflow: document 0px, main 0px)
+02:43:36Z shot 04b-erasure-dry-run-preview-element-1440.png
+02:43:36Z UI Erase this client now (real run) -> 409 "deletion_dry_run"
+02:43:37Z UI message after the run: "Deletion is switched off on this environment: the daily run, erasures and offboarding only count what they would remove."
+02:43:38Z shot 05-erasure-run-answer-1440.png (sideways overflow: document 0px, main 0px)
+02:43:38Z shot 05b-erasure-run-answer-390.png (sideways overflow: document 0px, main 0px)
+02:43:38Z GET /bff/travelers/<client> after the run -> 200 
+02:43:39Z second DRY RUN on the same client -> 200 dry_run=true
+02:43:39Z erasure request after the run: status open, outcome null, erasure_request_id -
+02:43:39Z DRY RUN on an id that is no client -> 404 subject_not_found
+02:43:40Z DRY RUN on the AA-955 signer (on a Booked trip) -> 409 traveler_on_trip
+02:43:40Z console errors: 4 -> portal.lumiguides.it.com: Failed to load resource: the server responded with a status of 403 () | portal.lumiguides.it.com: Failed to load resource: the server responded with a status of 409 () | portal.lumiguides.it.com: Failed to load resource: the server responded with a status of 404 () | portal.lumiguides.it.com: Failed to load resource: the server responded with a status of 409 ()
+02:43:40Z CRM responses >= 400: GET /bff/data/exports/<id>/download 403, POST /bff/travelers/<id>/erasure 409, POST /bff/travelers/<id>/erasure 404, POST /bff/travelers/<id>/erasure 409

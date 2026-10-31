@@ -1,0 +1,29 @@
+{
+ "me": {
+  "role": "admin",
+  "can_write_desk": true,
+  "preview_viewer": false
+ },
+ "departure": {
+  "id": "9f7d807d",
+  "start_date": "2026-11-13",
+  "capacity": 2,
+  "held": 0,
+  "sold": 2,
+  "partners": 1,
+  "open_incident": null
+ },
+ "flag": {
+  "status": 403,
+  "detail": "e2e_read_only",
+  "id": null
+ },
+ "incidents_after": {
+  "status": 200,
+  "count": 0
+ },
+ "errors": [
+  "403 POST /api/booking/b2b-desk/departures/9f7d807d-1b10-4477-9136-02a7911f4875/incidents",
+  "console: Failed to load resource: the server responded with a status of 403 ()"
+ ]
+}

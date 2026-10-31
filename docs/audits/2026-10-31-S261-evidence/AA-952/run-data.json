@@ -1,0 +1,148 @@
+{
+ "run": "vwatoh",
+ "started_at": "2026-10-31T04:22:46.721Z",
+ "A": {
+  "trip": "87f9e5ee-d61f-4e2b-ab7c-15dd37064fa6",
+  "proposal": "6c4296a1-3fd2-4df1-8dc5-c8be8df69162",
+  "invoice": "36d2cf34-fdf0-4db2-8553-54edca0dbf5d",
+  "number": "INV-000002",
+  "hold_expires_at": "2026-11-02T04:23:07.605061+00:00",
+  "client_before": {
+   "window": {
+    "state": "open",
+    "until": "2026-11-02T04:23:07.605061+00:00"
+   },
+   "can_claim": true,
+   "pay_by": true,
+   "kind": "deposit",
+   "hold": "2026-11-02T04:23:07.605061+00:00"
+  },
+  "claim": {
+   "status": 200,
+   "outcome": "claimed",
+   "extension": {
+    "code": "extended",
+    "until": "2026-11-05T04:23:07.605061+00:00"
+   }
+  },
+  "agency_after_claim": {
+   "status": "payment_claimed",
+   "actions": [
+    "record_payment",
+    "reject_claim"
+   ],
+   "claimed_at": "2026-10-31T04:23:34.980725+00:00",
+   "hold_extended_at": "2026-10-31T04:23:35.055853+00:00",
+   "hold_extend_code": "extended",
+   "pay_window": {
+    "state": "claimed",
+    "until": "2026-11-05T04:23:07.605061+00:00"
+   }
+  },
+  "verify_tasks_after_claim": [
+   {
+    "status": "open",
+    "priority": "urgent",
+    "assignee_is_me": true,
+    "due_at": "2026-11-05T04:23:07.605061+00:00"
+   }
+  ],
+  "bell_after_claim": [
+   {
+    "name": "invoice.payment_claimed",
+    "count": 1,
+    "detail": {
+     "kind": "deposit",
+     "number": "INV-000002"
+    }
+   },
+   {
+    "name": "proposal.accepted",
+    "count": 1,
+    "detail": {
+     "total": "1800.00",
+     "version": 1
+    }
+   },
+   {
+    "name": "proposal.viewed",
+    "count": 1,
+    "detail": {
+     "first": true,
+     "version": 1
+    }
+   }
+  ],
+  "aa_lines": [
+   {
+    "status": "planning",
+    "sub": "held",
+    "hold": "9532088f",
+    "exp": "2026-11-02T04:23:07.605061+00:00"
+   }
+  ],
+  "void_claimed": {
+   "status": 409,
+   "detail": "invoice_claimed"
+  },
+  "card_claimed": {
+   "status": 409,
+   "detail": "invoice_not_payable"
+  },
+  "second_claim": {
+   "status": 200,
+   "outcome": "claimed",
+   "extension": null
+  },
+  "invoice_card_note": "The client says they paid. Check your account before 5 Nov 2026, 4:23 am, when the AA places are released.",
+  "payments_notes": [
+   "The client says they paid. Check your account before 5 Nov 2026, 4:23 am, when the AA places are released."
+  ],
+  "after_not_received": {
+   "status": "open",
+   "actions": [
+    "record_payment",
+    "void"
+   ],
+   "pay_window": {
+    "state": "open",
+    "until": "2026-11-05T04:23:07.605061+00:00"
+   },
+   "hold_extended_at": "2026-10-31T04:23:35.055853+00:00",
+   "verify_tasks": [
+    "skipped"
+   ]
+  },
+  "card_open": {
+   "status": 409,
+   "detail": "card_not_offered"
+  },
+  "claim_after_reject": {
+   "status": 200,
+   "outcome": "claimed",
+   "extension": null,
+   "hold_extended_at_unchanged": true
+  }
+ },
+ "B": {
+  "trip": "6034f3a8-0f64-426f-b318-3bb88e2c64d0",
+  "proposal": "f24632b5-e20f-4122-9797-82e642d2ba4b",
+  "invoice": "1a0e5f4f-25dd-4689-95f4-c4c20f2c879e",
+  "number": "INV-000003",
+  "hold_expires_at": "2026-11-02T04:25:05.443395+00:00",
+  "window": {
+   "state": "open",
+   "until": "2026-11-02T04:25:05.443395+00:00"
+  }
+ },
+ "console_errors": [
+  "portal.lumiguides.it.com: Failed to load resource: the server responded with a status of 409 ()",
+  "go-dev.lumiguides.it.com: Failed to load resource: the server responded with a status of 409 ()",
+  "go-dev.lumiguides.it.com: Failed to load resource: the server responded with a status of 409 ()"
+ ],
+ "responses_4xx_5xx": [
+  "POST /bff/invoices/<id>/void 409",
+  "POST /crm/public/v1/proposal/invoices/<id>/card 409",
+  "POST /crm/public/v1/proposal/invoices/<id>/card 409"
+ ]
+}

@@ -1,0 +1,81 @@
+ecsx: started (session output not seen, normal when SSM drops it); waiting for the result
+RECHECK14 at 2026-10-31 01:15 deployed relocate RULE_VERSION=aa997.2
+TOUR 0c608efd p14 build=ok days=2(tp) stop_days=1 pinned=1 route=Y places=4/5 all_confirmed=N loose=Y pending_chain=0
+  NEED d1 night 'Yamanohana or Ryugu-jujiro crossroad' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+TOUR 2020d00f leg build=ok days=2(tp) stop_days=2 pinned=2 route=Y places=2/10 all_confirmed=N loose=N pending_chain=0
+  NEED d1 night 'Marunuma Onsen' -> Marunuma Onsen lb=llm pt=36.8333,139.2167 reason=llm_point stamp=aa997.1/llm_point/None => old-rule flagged llm_point (aa997.1): relocate recheck llm_point (strategy v2, aa997.3) or admin fix
+  NEED d1 place 'Roadside Station Oze Katashina' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d1 place 'the Nikko-Shiranesan Ropeway to Marunuma Dam' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d1 place 'Roadside Station Oze Katashina to the Nikko-Shiranesan Ropew' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d1 place 'Marunuma Dam to Marunuma' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d2 night 'Roadside station of Nikko Nikko kaido nikoniko honjin' -> Roadside station of Nikko Nikko kaido nikoniko honjin lb=llm pt=36.7167,139.6833 reason=llm_point stamp=aa997.1/llm_point/None => old-rule flagged llm_point (aa997.1): relocate recheck llm_point (strategy v2, aa997.3) or admin fix
+  NEED d2 place 'the Roadside station of Nikko Nikko kaido nikoniko honjin' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d2 place 'Yu-daki Falls' -> Yudaki Falls lb=geoapify pt=36.7198,139.6981 reason=centroid_fallback stamp=None/None/None => flagged centroid_fallback: admin review
+TOUR 229f2c60 p14 build=ok days=3(tp) stop_days=2 pinned=2 route=Y places=2/5 all_confirmed=N loose=N pending_chain=0
+  NEED d2 night 'local home-stay' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d3 night 'Chiang Mai' -> Chiang Mai lb=mapbox pt=18.7875,98.9937 reason=None stamp=None/None/None => mapbox point (relocate located_by mapbox, dry run first) or keep
+  NEED d3 place 'Wat Ban Den temple' -> Wat Ban Den lb=llm pt=19.1167,99.0167 reason=llm_point stamp=aa997.2/llm_point/aa997.3 => chain flagged llm_point (current chain, no geocoder match): admin fix in /admin/places or hide
+TOUR 2d9ccb23 p14 build=ok days=3(tp) stop_days=3 pinned=3 route=Y places=8/17 all_confirmed=N loose=N pending_chain=0
+  NEED d2 night 'Ban Mae Khi' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d2 place 'Ban Teen Doi village' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d2 place 'Ban Palan' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d2 place 'Ban Pong Kwaw' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d2 place 'Ban Teen Doi to Ban Mae Pa to Ban Palan' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d2 place 'Ban Mae Khi' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d2 place 'Ban Pong Kwaw' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d3 night 'Chiang Mai' -> Chiang Mai lb=mapbox pt=18.7875,98.9937 reason=None stamp=None/None/None => mapbox point (relocate located_by mapbox, dry run first) or keep
+  NEED d3 place 'Royal Project at Ban Nong Hoi Kao' -> Nong Hoi Royal Project Development Center lb=llm pt=18.6500,98.9667 reason=llm_point stamp=aa997.2/llm_point/aa997.3 => chain flagged llm_point (current chain, no geocoder match): admin fix in /admin/places or hide
+TOUR 3eda85ad p14 build=ok days=1(tp) stop_days=0 pinned=0 route=N places=0/1 all_confirmed=N loose=N pending_chain=0
+  NEED d1 night 'the office' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+TOUR 56e78342 p14 build=ok days=3(tp) stop_days=2 pinned=2 route=Y places=4/7 all_confirmed=N loose=N pending_chain=0
+  NEED d2 night 'a coffee shop' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d3 night 'Chiang Mai' -> Chiang Mai lb=mapbox pt=18.7875,98.9937 reason=None stamp=None/None/None => mapbox point (relocate located_by mapbox, dry run first) or keep
+  NEED d3 place 'a hillside Lahu village' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+TOUR 90b88118 leg build=ok days=14(tp) stop_days=12 pinned=11 route=Y places=15/23 all_confirmed=N loose=N pending_chain=0
+  NEED d3 night 'Asan Hot Spring town' -> Asan Hot Spring town lb=llm pt=36.7897,127.0042 reason=off_route stamp=aa997.1/off_route/None => old-rule flagged off_route (aa997.1): relocate recheck off_route (strategy v2, aa997.3) or admin fix
+  NEED d4 night 'Buyeo' -> Buyeo lb=llm pt=36.2758,126.9097 reason=llm_point stamp=aa997.1/llm_point/None => old-rule flagged llm_point (aa997.1): relocate recheck llm_point (strategy v2, aa997.3) or admin fix
+  NEED d5 night 'Buyeo' -> Buyeo lb=llm pt=36.2758,126.9097 reason=llm_point stamp=aa997.1/llm_point/None => old-rule flagged llm_point (aa997.1): relocate recheck llm_point (strategy v2, aa997.3) or admin fix
+  NEED d7 place 'Gunsan to Byunsan National Park' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d12 night 'Hadong county' -> Hadong county lb=llm pt=35.0678,127.7428 reason=llm_point stamp=aa997.1/llm_point/None => old-rule flagged llm_point (aa997.1): relocate recheck llm_point (strategy v2, aa997.3) or admin fix
+  NEED d12 place 'Gurye to Hadong county' -> Hadong county lb=llm pt=35.0678,127.7428 reason=llm_point stamp=aa997.1/llm_point/None => old-rule flagged llm_point (aa997.1): relocate recheck llm_point (strategy v2, aa997.3) or admin fix
+  NEED d13 night 'Busan' -> Busan lb=mapbox pt=35.1800,129.0752 reason=None stamp=None/None/None => mapbox point (relocate located_by mapbox, dry run first) or keep
+  NEED d13 place 'Busan city' -> Busan lb=mapbox pt=35.1800,129.0752 reason=None stamp=None/None/None => mapbox point (relocate located_by mapbox, dry run first) or keep
+TOUR a423e72e p14 build=ok days=1(tp) stop_days=1 pinned=1 route=Y places=0/3 all_confirmed=N loose=N pending_chain=0
+  NEED d1 night 'the office' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d1 place 'a specially designed route through Shibuya' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d1 place '17 toilets from the Tokyo Toilet project' -> The Tokyo Toilet lb=llm pt=35.6618,139.7042 reason=llm_point stamp=aa997.2/llm_point/aa997.3 => chain flagged llm_point (current chain, no geocoder match): admin fix in /admin/places or hide
+TOUR a44bf9c4 p14 build=ok days=1(tp) stop_days=0 pinned=0 route=N places=0/1 all_confirmed=N loose=N pending_chain=0
+  NEED d1 night 'the trailhead' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+TOUR ac1d5f9b p14 build=ok days=3(tp) stop_days=2 pinned=2 route=Y places=5/7 all_confirmed=N loose=N pending_chain=0
+  NEED d1 night 'Daxueshan National Forest' -> Daxueshan National Forest lb=llm pt=24.3700,120.9000 reason=llm_point stamp=aa997.1/llm_point/None => old-rule flagged llm_point (aa997.1): relocate recheck llm_point (strategy v2, aa997.3) or admin fix
+  NEED d2 night 'accommodation in the mountains of Central Taiwan' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+TOUR b5c3c908 p14 build=ok days=1(tp) stop_days=0 pinned=1 route=N places=0/2 all_confirmed=N loose=N pending_chain=0
+  NEED d1 night 'Masuya Meat Shop' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d1 place 'Masuya Meat Shop' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+TOUR b7188d60 p14 build=ok days=1(tp) stop_days=1 pinned=1 route=Y places=6/7 all_confirmed=N loose=Y pending_chain=0
+  NEED d1 night 'the office' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+TOUR b9b39260 p14 build=ok days=1(tp) stop_days=1 pinned=1 route=Y places=6/7 all_confirmed=N loose=Y pending_chain=0
+  NEED d1 night 'the office' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+TOUR c6b24380 p14 build=ok days=3(tp) stop_days=1 pinned=2 route=Y places=1/4 all_confirmed=N loose=N pending_chain=0
+  NEED d1 place 'Chiang Mai to a valley' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d2 night 'remote village' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d3 night 'Chiang Mai' -> Chiang Mai lb=mapbox pt=18.7875,98.9937 reason=None stamp=None/None/None => mapbox point (relocate located_by mapbox, dry run first) or keep
+TOUR c99a1434 p14 build=ok days=3(tp) stop_days=2 pinned=3 route=Y places=3/7 all_confirmed=N loose=N pending_chain=0
+  NEED d1 place 'Charaundi to Kurintar' -> Charaundi–Kurintar stretch of the Trishuli River lb=llm pt=27.6833,84.6333 reason=llm_point stamp=aa997.2/llm_point/aa997.3 => chain flagged llm_point (current chain, no geocoder match): admin fix in /admin/places or hide
+  NEED d2 night 'Simaltar' -> Simaltar lb=llm pt=27.9500,84.5500 reason=llm_point stamp=aa997.1/llm_point/None => old-rule flagged llm_point (aa997.1): relocate recheck llm_point (strategy v2, aa997.3) or admin fix
+  NEED d2 place 'Simaltar' -> Simaltar lb=llm pt=27.9500,84.5500 reason=llm_point stamp=aa997.1/llm_point/None => old-rule flagged llm_point (aa997.1): relocate recheck llm_point (strategy v2, aa997.3) or admin fix
+  NEED d3 night 'trip end and onward choice' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+TOUR e864ec99 p14 build=ok days=3(tp) stop_days=3 pinned=3 route=Y places=3/13 all_confirmed=N loose=N pending_chain=0
+  NEED d1 night 'Musunun Beach' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d1 place 'Rakuen no Kajitsu' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d1 place 'Pani Pani' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d1 place 'Musunun Beach' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d2 place 'Yabiji' -> Yabiji lb=llm pt=24.9833,125.4167 reason=llm_point stamp=aa997.2/llm_point/aa997.3 => chain flagged llm_point (current chain, no geocoder match): admin fix in /admin/places or hide
+  NEED d2 place 'Utopia Farm Miyakojima' -> Utopia Farm Miyakojima lb=llm pt=24.8203,125.2699 reason=llm_point stamp=aa997.2/llm_point/aa997.3 => chain flagged llm_point (current chain, no geocoder match): admin fix in /admin/places or hide
+  NEED d2 place 'Shirou Farm' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d2 place 'Small beaches along the coast' -> - lb=None pt=- reason=None stamp=None/None/None => unlinked (name not resolved: place_geocode / admin)
+  NEED d3 place 'Toriike Pond' -> Toriike Ponds lb=llm pt=24.8167,125.3167 reason=llm_point stamp=aa997.2/llm_point/aa997.3 => chain flagged llm_point (current chain, no geocoder match): admin fix in /admin/places or hide
+  NEED d3 place 'The Irabu Ohashi Bridge' -> The Irabu Ohashi Bridge lb=llm pt=24.8167,125.1667 reason=llm_point stamp=aa997.2/llm_point/aa997.3 => chain flagged llm_point (current chain, no geocoder match): admin fix in /admin/places or hide
+RECHECK14 route ok 13/16 · all-confirmed 0/16 (loose 3/16) missing=[] llm_rows_left_for_chain=0
+SUMMARY {"route_ok": "13/16", "all_confirmed": "0/16", "all_confirmed_loose": "3/16", "missing": [], "next_steps": {"unlinked": 35, "old-rule flagged llm_point": 9, "chain flagged llm_point": 8, "mapbox point": 6, "flagged centroid_fallback": 1, "old-rule flagged off_route": 1}, "llm_rows_left_for_chain": 0, "s257_baseline": {"route": "13/16", "all_confirmed": "1/16"}, "tours": [{"tour": "0c608efd", "route": true, "all_confirmed": false, "loose": true, "confirmed": 4, "places": 5, "pending_chain": 0}, {"tour": "2020d00f", "route": true, "all_confirmed": false, "loose": false, "confirmed": 2, "places": 10, "pending_chain": 0}, {"tour": "229f2c60", "route": true, "all_confirmed": false, "loose": false, "confirmed": 2, "places": 5, "pending_chain": 0}, {"tour": "2d9ccb23", "route": true, "all_confirmed": false, "loose": false, "confirmed": 8, "places": 17, "pending_chain": 0}, {"tour": "3eda85ad", "route": false, "all_confirmed": false, "loose": false, "confirmed": 0, "places": 1, "pending_chain": 0}, {"tour": "56e78342", "route": true, "all_confirmed": false, "loose": false, "confirmed": 4, "places": 7, "pending_chain": 0}, {"tour": "90b88118", "route": true, "all_confirmed": false, "loose": false, "confirmed": 15, "places": 23, "pending_chain": 0}, {"tour": "a423e72e", "route": true, "all_confirmed": false, "loose": false, "confirmed": 0, "places": 3, "pending_chain": 0}, {"tour": "a44bf9c4", "route": false, "all_confirmed": false, "loose": false, "confirmed": 0, "places": 1, "pending_chain": 0}, {"tour": "ac1d5f9b", "route": true, "all_confirmed": false, "loose": false, "confirmed": 5, "places": 7, "pending_chain": 0}, {"tour": "b5c3c908", "route": false, "all_confirmed": false, "loose": false, "confirmed": 0, "places": 2, "pending_chain": 0}, {"tour": "b7188d60", "route": true, "all_confirmed": false, "loose": true, "confirmed": 6, "places": 7, "pending_chain": 0}, {"tour": "b9b39260", "route": true, "all_confirmed": false, "loose": true, "confirmed": 6, "places": 7, "pending_chain": 0}, {"tour": "c6b24380", "route": true, "all_confirmed": false, "loose": false, "confirmed": 1, "places": 4, "pending_chain": 0}, {"tour": "c99a1434", "route": true, "all_confirmed": false, "loose": false, "confirmed": 3, "places": 7, "pending_chain": 0}, {"tour": "e864ec99", "route": true, "all_confirmed": false, "loose": false, "confirmed": 3, "places": 13, "pending_chain": 0}]}
+ecsx: rc=0 bytes=15082

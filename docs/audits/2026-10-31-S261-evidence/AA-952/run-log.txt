@@ -1,0 +1,119 @@
+04:22:51Z crm session: reused stored session state
+04:22:52Z agency: me -> 200, member b85c6b16
+04:22:53Z [A] inquiry -> 202 
+04:23:00Z [A] trip 87f9e5ee; take 200, dates 200, qualifying 200, proposal 200
+04:23:00Z [A] builder settings -> 200 
+04:23:01Z [A] agency lodging option -> 201 
+04:23:01Z [A] day tour block -> 201 
+04:23:05Z [A] AA option from a live quote -> 201 
+04:23:05Z [A] publish -> 200 
+04:23:05Z [A] send -> 200
+04:23:08Z [A] client hold -> 200; hold active, expires 2026-11-02T04:23:07.605061+00:00
+04:23:21Z [A] client accept -> 200 
+04:23:21Z [A] deposit row c6b1feba 540.00 USD due 2026-10-31 due
+04:23:22Z [A] deposit invoice draft -> 201 
+04:23:22Z [A] issue -> 200 number INV-000002 status open due 2026-10-31
+04:23:22Z [A] client page: status accepted; payments 1; invoice INV-000002 window {"state":"open","until":"2026-11-02T04:23:07.605061+00:00"} can_claim true pay_by present balance 540.00
+04:23:23Z [A] agency invoice before claim: open, actions ["record_payment","void"], window {"state":"open","until":"2026-11-02T04:23:07.605061+00:00"}
+04:23:25Z shot 01-client-pay-box-open-390.png (sideways overflow: document 0px, main 0px)
+04:23:26Z shot 01c-client-pay-box-open-1440.png (sideways overflow: document 0px, main 0px)
+04:23:26Z shot 01d-client-pay-box-open-dark-390.png (sideways overflow: document 0px, main 0px)
+04:23:35Z [A] client "I have paid" -> 200 outcome claimed; extension {"code":"extended","until":"2026-11-05T04:23:07.605061+00:00"}
+04:23:36Z shot 02-client-pay-box-claimed-390.png (sideways overflow: document 0px, main 0px)
+04:23:36Z shot 02c-client-pay-box-claimed-1440.png (sideways overflow: document 0px, main 0px)
+04:23:37Z shot 02d-client-pay-box-claimed-dark-390.png (sideways overflow: document 0px, main 0px)
+04:23:37Z [A] client page after claim: window {"state":"claimed","until":"2026-11-05T04:23:07.605061+00:00"} can_claim false pay_by none; hold expires 2026-11-05T04:23:07.605061+00:00
+04:23:37Z [A] agency invoice after claim: status payment_claimed, actions ["record_payment","reject_claim"], claimed_at 2026-10-31T04:23:34.980725+00:00, hold_extended_at 2026-10-31T04:23:35.055853+00:00, hold_extend_code extended, window {"state":"claimed","until":"2026-11-05T04:23:07.605061+00:00"}
+04:23:37Z [A] trip owner -; verify_transfer tasks [{"status":"open","priority":"urgent","assignee":"b85c6b16","due_at":"2026-11-05T04:23:07.605061+00:00"}]
+04:23:38Z [A] bell items of the trip: [{"name":"invoice.payment_claimed","count":1,"detail":{"kind":"deposit","number":"INV-000002"}},{"name":"proposal.accepted","count":1,"detail":{"total":"1800.00","version":1}},{"name":"proposal.viewed","count":1,"detail":{"first":true,"version":1}}]
+04:23:38Z [A] AA lines: [{"status":"planning","sub":"held","hold":"9532088f","exp":"2026-11-02T04:23:07.605061+00:00"}]
+04:23:38Z [A] void a claimed invoice -> 409 invoice_claimed
+04:23:49Z [A] card button while claimed -> 409 invoice_not_payable
+04:24:03Z [A] second "I have paid" while claimed -> 200 outcome claimed extension null
+04:24:04Z [A] Invoices card claim note: "The client says they paid. Check your account before 5 Nov 2026, 4:23 am, when the AA places are released."
+04:24:07Z shot 03b-trip-page-claimed-1440.png (sideways overflow: document 0px, main 0px)
+04:24:08Z shot 03, 03c, 03d (Invoices card: light 1440, 390, dark 1440)
+04:24:13Z [A] /payments receivables notes: ["The client says they paid. Check your account before 5 Nov 2026, 4:23 am, when the AA places are released."]
+04:24:13Z shot 04-payments-receivables-claim-note-1440.png (sideways overflow: document 0px, main 0px)
+04:24:13Z shot 04b-payments-receivables-claim-note-390.png (sideways overflow: document 0px, main 0px)
+04:24:14Z shot 04c-payments-receivables-claim-note-dark-1440.png (sideways overflow: document 0px, main 0px)
+04:24:18Z [A] agency "Not received" -> 200
+04:24:18Z [A] message: "Marked as not received. The invoice is open again."
+04:24:18Z shot 05-invoices-card-not-received-1440.png
+04:24:19Z [A] after Not received: invoice open, actions ["record_payment","void"], window {"state":"open","until":"2026-11-05T04:23:07.605061+00:00"}, hold_extended_at 2026-10-31T04:23:35.055853+00:00; verify tasks ["skipped"]
+04:24:21Z shot 06-client-pay-box-open-again-390.png (sideways overflow: document 0px, main 0px)
+04:24:21Z [A] card button with an open window -> 409 card_not_offered
+04:24:35Z [A] claim after Not received -> 200 outcome claimed extension null; hold_extended_at 2026-10-31T04:23:35.055853+00:00 (unchanged: true)
+04:24:36Z [A] Not received again (leave it open for the reminder check) -> 200 status open
+04:24:51Z [B] inquiry -> 202 
+04:24:57Z [B] trip 6034f3a8; take 200, dates 200, qualifying 200, proposal 200
+04:24:58Z [B] builder settings -> 200 
+04:24:58Z [B] agency lodging option -> 201 
+04:24:59Z [B] day tour block -> 201 
+04:24:59Z [B] AA option from a live quote -> 201 
+04:25:00Z [B] publish -> 200 
+04:25:00Z [B] send -> 200
+04:25:05Z [B] client hold -> 200; hold active, expires 2026-11-02T04:25:05.443395+00:00
+04:25:19Z [B] client accept -> 200 
+04:25:19Z [B] deposit row e085e157 540.00 USD due 2026-10-31 due
+04:25:19Z [B] deposit invoice draft -> 201 
+04:25:20Z [B] issue -> 200 number INV-000003 status open due 2026-10-31
+04:25:20Z [B] client page: window {"state":"open","until":"2026-11-02T04:25:05.443395+00:00"} can_claim true
+04:25:20Z console errors: 3 -> portal.lumiguides.it.com: Failed to load resource: the server responded with a status of 409 () | go-dev.lumiguides.it.com: Failed to load resource: the server responded with a status of 409 () | go-dev.lumiguides.it.com: Failed to load resource: the server responded with a status of 409 ()
+04:25:20Z CRM responses >= 400: POST /bff/invoices/<id>/void 409, POST /crm/public/v1/proposal/invoices/<id>/card 409, POST /crm/public/v1/proposal/invoices/<id>/card 409
+04:26:13Z crm session: reused stored session state
+04:26:15Z dark client html data-theme=dark
+04:26:17Z shot 01d-client-pay-box-open-dark-390.png (sideways overflow: document 0px, main 0px)
+04:26:18Z dark run: re-claim -> 200 outcome claimed extension null
+04:26:18Z shot 02d-client-pay-box-claimed-dark-390.png (sideways overflow: document 0px, main 0px)
+04:26:19Z dark agency html data-theme=dark
+04:26:21Z shot 03d-invoices-card-claimed-dark-1440.png
+04:26:23Z shot 04c-payments-receivables-claim-note-dark-1440.png (sideways overflow: document 0px, main 0px)
+04:26:24Z dark run: Not received -> 200 status open
+04:27:03Z crm session: reused stored session state
+04:27:03Z [A] agreements -> 200; published s261-aa955-vra8tb; reaccept_required true; acceptances []
+04:27:03Z [A] builder version: status accepted; terms keys ["terms_doc_id"] null
+04:27:04Z [B] agreements -> 200; published s261-aa955-vra8tb; reaccept_required true; acceptances []
+04:27:04Z [B] builder version: status accepted; terms keys ["terms_doc_id"] null
+04:27:05Z [B] client page term fields: ["terms","terms_reaccept"] terms=null reaccept={"v":"s261-aa955-vra8tb"}
+04:27:32Z crm session: reused stored session state
+04:27:32Z [A] record a 1.00 payment while the terms re-accept is pending -> 409 terms_reaccept_required s261-aa955-vra8tb
+04:27:36Z shot 07-client-reaccept-and-pay-box-together-390.png (sideways overflow: document 0px, main 0px)
+04:27:36Z [A] client re-accepts the published terms -> 200
+04:27:56Z [B] client re-accepts the published terms -> 200
+04:28:10Z [A] reaccept_required after: undefined
+04:28:11Z [B] reaccept_required after: undefined
+04:28:17Z crm session: reused stored session state
+04:28:17Z [A] agreements -> 503; published undefined; reaccept_required undefined; acceptances []
+04:28:18Z [A] builder version: status undefined; terms keys [] null
+04:28:18Z [B] agreements -> 503; published undefined; reaccept_required undefined; acceptances []
+04:28:18Z [B] builder version: status undefined; terms keys [] null
+04:28:19Z [B] client page term fields: ["terms","terms_reaccept"] terms=null reaccept=null
+04:28:31Z crm session: reused stored session state
+04:28:31Z [A] agreements -> 503 "<html>\r\n<head><title>503 Service Temporarily Unavailable</title></head>\r\n<body>\r\n<center><h1>503 Service Temporarily Unavailable</h1></center>\r\n</body>\r\n</html>\r\n<!-- a padding to disable MSIE and Chrome friendly error page -->\r\n<!-- a padding to disable MSIE and Chrome friendly error; published undefined; reaccept_required undefined; acceptances []
+04:28:32Z [A] builder version: status undefined; terms keys [] null
+04:28:32Z [B] agreements -> 503 "<html>\r\n<head><title>503 Service Temporarily Unavailable</title></head>\r\n<body>\r\n<center><h1>503 Service Temporarily Unavailable</h1></center>\r\n</body>\r\n</html>\r\n<!-- a padding to disable MSIE and Chrome friendly error page -->\r\n<!-- a padding to disable MSIE and Chrome friendly error; published undefined; reaccept_required undefined; acceptances []
+04:28:32Z [B] builder version: status undefined; terms keys [] null
+04:28:32Z [B] client page term fields: ["terms","terms_reaccept"] terms=null reaccept=null
+04:29:05Z crm session: reused stored session state
+04:29:05Z [A] agreements -> 200 {"trip_id":"87f9e5ee-d61f-4e2b-ab7c-15dd37064fa6","waiver_required":true,"all_signed":false,"travellers":[{"traveler_id":"d8d4a9c3-d99b-4f61-95fa-877f00542a6f","role":"lead","waiver_signed":false,"signature":null}],"terms":{"published":{"doc_id":"f9b905c8-52cc-4580-9e99-a8fa70b2b771","version_label"; published s261-aa955-vra8tb; reaccept_required false; acceptances ["reaccept:s261-aa955-vra8tb"]
+04:29:05Z [A] builder version: status accepted; terms keys ["terms_doc_id"] null
+04:29:06Z [B] agreements -> 200 {"trip_id":"6034f3a8-0f64-426f-b318-3bb88e2c64d0","waiver_required":true,"all_signed":false,"travellers":[{"traveler_id":"406e0c54-353f-4d53-88ed-bcef68960585","role":"lead","waiver_signed":false,"signature":null}],"terms":{"published":{"doc_id":"f9b905c8-52cc-4580-9e99-a8fa70b2b771","version_label"; published s261-aa955-vra8tb; reaccept_required false; acceptances ["reaccept:s261-aa955-vra8tb"]
+04:29:06Z [B] builder version: status accepted; terms keys ["terms_doc_id"] null
+04:29:07Z [B] client page term fields: ["terms","terms_reaccept"] terms=null reaccept=null
+04:29:39Z crm session: reused stored session state
+04:29:39Z settings/pipeline -> 200 timezone Asia/Ho_Chi_Minh
+04:29:39Z invoice A keys ["invoice_id","trip_id","kind","status","number","schedule_id","proposal_id","currency","subtotal_amount","tax_amount","total_amount","tax_rate","tax_label","tax_inclusive","memo","due_on","issue_date","issued_at","paid_at","voided_at","void_reason","created_at","actions","pay_window","claimed_at","hold_extended_at","hold_extend_code","rehold","lines","paid_amount","refunded_amount","balance_amount","payments","refund_requests"]; status open; due 2026-10-31; window {"state":"open","until":"2026-11-05T04:23:07.605061+00:00"}
+04:29:40Z A AA lines now: [{"status":"planning","sub":"held","exp":"2026-11-05T04:23:07.605061+00:00"}]
+04:29:40Z A tasks: ["reply_inquiry:open","get_planning_info:open","collect_deposit:open","verify_transfer:skipped","verify_transfer:skipped","verify_transfer:skipped"]
+04:31:25Z recheck: claim A -> 200
+04:31:33Z crm session: reused stored session state
+04:31:37Z recheck dark: html data-theme=light; Invoices panel background rgb(255, 255, 255); note "The client says they paid. Check your account before 5 Nov 2026, 11:23 am, when the AA places are released."
+04:31:37Z shot 03e-trip-page-claimed-dark-1440.png (sideways overflow: document 0px, main 0px)
+04:31:41Z recheck light: html data-theme=light; Invoices panel background rgb(255, 255, 255); note "The client says they paid. Check your account before 5 Nov 2026, 11:23 am, when the AA places are released."
+04:31:41Z recheck: Not received -> 200
+04:31:41Z recheck: +0 ms after Not received: first row data-status=payment_claimed, claim notes 1
+04:31:43Z recheck: +2000 ms after Not received: first row data-status=open, claim notes 0
+04:31:46Z recheck: +5000 ms after Not received: first row data-status=open, claim notes 0
+04:31:51Z recheck: +10000 ms after Not received: first row data-status=open, claim notes 0
+04:31:54Z recheck: after reload: first row data-status=open, claim notes 0

@@ -1,0 +1,19 @@
+session: signing in through managed login (partner pool, password + authenticator)
+POST /bff/saved-replies -> 201
+shot 01-saved-reply-created-1440.png
+thread on open: conversation b58f6a43, 4 messages, 0 stored drafts before the check
+PUT /bff/messages/drafts/<bbe882f8> -> 200; target conversation b58f6a43; body ends with the typed line: true
+shot 02-composer-saved-reply-inserted-draft-saved-1440.png
+POST /bff/trips/<trip>/notes -> 201
+shot 03-internal-note-added-1440.png
+after reload: GET conversations/<b58f6a43>/messages -> 200; draft row status=draft_autosaved, direction=out
+after reload: composer subject + body restored from the stored draft; the draft is not in the message list; the note is still listed
+shot 04-after-reload-draft-restored-1440.png
+shot 04b-after-reload-draft-restored-390.png
+390px horizontal overflow: document 0px, main 0px
+DELETE /bff/messages/drafts/<bbe882f8> -> 200
+after discard + reload: draft row present=false
+shot 05-after-discard-composer-empty-1440.png
+DELETE /bff/saved-replies/<id> -> 200
+console errors: 0
+BFF responses >= 400: none

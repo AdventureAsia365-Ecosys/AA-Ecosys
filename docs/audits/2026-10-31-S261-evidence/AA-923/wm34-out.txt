@@ -1,0 +1,6 @@
+ecsx: started (session output not seen, normal when SSM drops it); waiting for the result
+SCRIPT now=2026-10-31T01:19:23.937456+00:00 login=cis_app
+SCRIPT table=shared.pipeline_lessons exists=f
+SCRIPT table=acp_shared.acp_output_rules exists=f
+SCRIPT verdict ready=false reasons=shared.pipeline_lessons:missing,acp_shared.acp_output_rules:missing
+ecsx: rc=0 bytes=257
