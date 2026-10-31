@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: crm.ops.v1 (AA-Partner CRM → CIS admin, L1 platform console)
-  version: "1.5"
+  version: "1.6"
   description: >-
     Platform console API of the partner CRM (AA-Partner, root ADR 0010), served under /crm/ops/v1 and called by the
     CIS admin screen S-01 "Agencies (CRM)" (AA-941) and the CIS platform-ops pages (AA-936: job summary, LLM usage).
@@ -38,13 +38,20 @@ info:
     withheld (only their number is returned, never a bucket, a count or a total), a trip counts its travellers once
     (once per destination for the destination dimension), an agency that opted out is never read, and no agency id
     appears; like /data-coverage it writes no agency audit event. The cells are live: two reads of a quarter differ by
-    what changed in between, including an agency's opt-out (a platform write on the owner's request, audited). Errors are
+    what changed in between, including an agency's opt-out (a platform write on the owner's request, audited). Version 1.6
+    (AA-964, additive; root ADR 0009 §8, root ADR 0008a §6): GET /llm/calls, the CRM's own LLM ledger rows
+    (`crm.llm_call` under the ledger v2 column contract, `app` = crm) for the CIS admin Calls tab, newest first across
+    agencies or for one: ids, codes and numbers only (stage, role, provider, model, connection, wire id, status, refusal
+    and error codes, tokens, guardrail text units, cost, latency, the sha256 of the scrubbed prompt, the prompt version,
+    shadow / experiment flags, the scrub's entity total); never a prompt, an output, a placeholder value, the scrub
+    receipt's per-kind counts or the member who asked. Each agency whose rows are returned gets one `ops_read` event
+    (reason `llm_calls`) in its audit log. Errors are
     `{detail, message?, fields?, state?, member_limit?}` (Problem); a 422 names the failing fields only, never the
     submitted values.
   x-aa-contract: crm.ops.v1
   x-aa-producer: AA-Partner
   x-aa-consumers: [AA-CIS-App]
-  x-aa-issues: [AA-928, AA-941, AA-939, AA-936, AA-933, AA-978, AA-979, AA-992, AA-966]
+  x-aa-issues: [AA-928, AA-941, AA-939, AA-936, AA-933, AA-978, AA-979, AA-992, AA-966, AA-964]
 servers:
   - url: /crm/ops/v1
 security:
@@ -626,6 +633,57 @@ paths:
         "422":
           $ref: "#/components/responses/Invalid"
           description: "`invalid_request`, `invalid_range` (`to` before `from`, or a range over the server's maximum)"
+  /llm/calls:
+    get:
+      operationId: getLlmCalls
+      summary: The CRM LLM ledger rows, newest first (1.6; root ADR 0009 §8; scrubbed fields only, no text)
+      description: >-
+        Rows of `crm.llm_call` in the UTC days `from` .. `to` (at most 31 days), across every agency or for
+        `tenant_id`, ordered by (`at`, `call_id`) descending, keyset paged by `cursor` (the `next_cursor` of the
+        previous page, `<at>~<call id>`). One `ops_read` audit event (reason `llm_calls`) in each agency whose rows were
+        returned. Guardrail attempts of the PII scrub are rows of their own (stage `crm_scrub`, role `guard`, `units`
+        text units).
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema: {type: string, format: date}
+        - name: to
+          in: query
+          required: true
+          schema: {type: string, format: date}
+        - name: tenant_id
+          in: query
+          required: false
+          schema: {type: string, format: uuid}
+        - name: stage
+          in: query
+          required: false
+          schema: {type: string, pattern: "^crm_[a-z0-9_]{1,40}$"}
+        - name: status
+          in: query
+          required: false
+          schema: {type: string, enum: [ok, refused, error]}
+        - name: limit
+          in: query
+          required: false
+          schema: {type: integer, minimum: 1, maximum: 500, default: 100}
+        - name: cursor
+          in: query
+          required: false
+          schema: {type: string, maxLength: 120}
+      responses:
+        "200":
+          description: One page of ledger rows
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/LlmCalls"}
+        "401": {$ref: "#/components/responses/Unauthorized"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "404": {$ref: "#/components/responses/TenantNotFound"}
+        "422":
+          $ref: "#/components/responses/Invalid"
+          description: "`invalid_request`, `invalid_range` (`to` before `from`, or more than 31 days), `invalid_cursor`"
 components:
   securitySchemes:
     workforceStaff:
@@ -1221,6 +1279,54 @@ components:
         input_tokens: {type: integer, minimum: 0}
         output_tokens: {type: integer, minimum: 0}
         cost_usd: {type: string, pattern: "^\\d+(\\.\\d{1,6})?$"}
+    LlmCallRow:
+      type: object
+      additionalProperties: false
+      required: [call_id, tenant_id, at, app, stage, role, provider, model, status, input_tokens, output_tokens, cost_usd,
+                 latency_ms, is_shadow, is_experiment]
+      properties:
+        call_id: {type: string, format: uuid}
+        tenant_id: {type: string, format: uuid}
+        at: {type: string, format: date-time}
+        app: {type: string, const: crm}
+        stage: {type: string, pattern: "^crm_[a-z0-9_]+$"}
+        role: {type: string, enum: [writer, judge, validate, guard]}
+        provider: {type: string, pattern: "^[a-z][a-z0-9_]{0,30}$"}
+        model: {type: string, maxLength: 120}
+        family: {type: [string, "null"], maxLength: 41}
+        connection_key: {type: [string, "null"], maxLength: 64}
+        deployment_wire_id: {type: [string, "null"], maxLength: 160}
+        attempt_no: {type: [integer, "null"], minimum: 1}
+        provider_request_id: {type: [string, "null"], maxLength: 128, description: The provider's request id (Bedrock RequestId)}
+        job_id: {type: [string, "null"], format: uuid}
+        status: {type: string, enum: [ok, refused, error]}
+        refusal_code: {type: [string, "null"], pattern: "^[a-z][a-z0-9_]{0,39}$"}
+        error_class: {type: [string, "null"], pattern: "^[A-Za-z][A-Za-z0-9_]{0,63}$"}
+        input_tokens: {type: integer, minimum: 0}
+        output_tokens: {type: integer, minimum: 0}
+        cache_read_tokens: {type: [integer, "null"], minimum: 0}
+        cache_write_tokens: {type: [integer, "null"], minimum: 0}
+        units: {type: [integer, "null"], minimum: 0, description: Billed units that are not tokens (guardrail text units)}
+        unit_kind: {type: [string, "null"], maxLength: 31}
+        cost_usd: {type: string, pattern: "^\\d+(\\.\\d{1,6})?$"}
+        pricing_mode: {type: [string, "null"], pattern: "^(override|catalog|code_table|estimate)(\\+batch)?(\\+geo_us)?$"}
+        latency_ms: {type: integer, minimum: 0}
+        prompt_hash: {type: [string, "null"], pattern: "^[0-9a-f]{64}$", description: sha256 of the scrubbed prompt, never the prompt}
+        prompt_version: {type: [string, "null"], maxLength: 40}
+        is_shadow: {type: boolean}
+        is_experiment: {type: boolean}
+        scrub_entities: {type: [integer, "null"], minimum: 0, description: How many values the PII scrub replaced (a total, no kinds)}
+    LlmCalls:
+      type: object
+      additionalProperties: false
+      required: [from, to, rows, next_cursor]
+      properties:
+        from: {type: string, format: date}
+        to: {type: string, format: date}
+        rows:
+          type: array
+          items: {$ref: "#/components/schemas/LlmCallRow"}
+        next_cursor: {type: [string, "null"], maxLength: 120}
     LlmUsage:
       type: object
       additionalProperties: false
