@@ -189,6 +189,22 @@ def duration(path: Path) -> float:
     return float(probe(path)["format"]["duration"])
 
 
+def video_duration(path: Path) -> float:
+    info = probe(path)
+    v = next((s for s in info["streams"] if s["codec_type"] == "video" and s.get("duration")), None)
+    return float(v["duration"] if v else info["format"]["duration"])
+
+
+def run_to(dst: Path, cmd: list[str]) -> None:
+    """ffmpeg into <dst>.part, then rename: a failed or killed run never leaves a stub the cache would reuse."""
+    part = dst.with_name(dst.stem + ".part" + dst.suffix)
+    try:
+        run([*cmd, str(part)])
+        part.replace(dst)
+    finally:
+        part.unlink(missing_ok=True)
+
+
 def audio_tracks(src: Path) -> int:
     return sum(1 for s in probe(src)["streams"] if s["codec_type"] == "audio")
 
@@ -199,20 +215,21 @@ def normalise(src: Path, dst: Path) -> None:
     if dst.exists() and dst.stat().st_mtime >= src.stat().st_mtime:
         return
     n_audio = audio_tracks(src)
+    secs = video_duration(src)
     inputs = ["-i", str(src)]
     if n_audio < 2:
         inputs += ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo"]
     v = (f"[0:v]scale={W}:{H}:force_original_aspect_ratio=decrease,pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color={BG},"
          f"setsar=1,fps={FPS},format=yuv420p[v]")
     parts = [v]
+    # Pad each narration to the picture length and cut everything at it. Not an endless apad + -shortest: ffmpeg 6.1
+    # then ends with "Error while filtering: No space left on device" (exit 228) although the file is complete.
     for i in range(2):
-        if i < n_audio:
-            parts.append(f"[0:a:{i}]aresample=48000,aformat=channel_layouts=stereo,loudnorm=I=-16:TP=-1.5:LRA=11,"
-                         f"aresample=48000,apad[a{i}]")
-        else:
-            parts.append(f"[1:a]apad[a{i}]")
-    run([*inputs, "-filter_complex", ";".join(parts), "-map", "[v]", "-map", "[a0]", "-map", "[a1]", "-shortest",
-         *ENC_V, *ENC_A, str(dst)])
+        src_a = f"[0:a:{i}]aresample=48000,aformat=channel_layouts=stereo,loudnorm=I=-16:TP=-1.5:LRA=11," \
+                f"aresample=48000," if i < n_audio else "[1:a]"
+        parts.append(f"{src_a}apad=whole_dur={secs:.3f},atrim=end={secs:.3f}[a{i}]")
+    run_to(dst, [*inputs, "-filter_complex", ";".join(parts), "-map", "[v]", "-map", "[a0]", "-map", "[a1]",
+                 "-t", f"{secs:.3f}", *ENC_V, *ENC_A])
 
 
 def card_name(kicker: str, title: str, font: str) -> str:
@@ -230,9 +247,9 @@ def card(dst: Path, kicker: str, title: str, font: str) -> None:
     vf = (f"drawtext=fontfile='{ff}':textfile='{k}':fontsize=26:fontcolor={ACCENT}:x=(w-text_w)/2:y=h/2-70,"
           f"drawtext=fontfile='{ff}':textfile='{t}':fontsize=44:fontcolor={INK}:x=max((w-text_w)/2\\,40):y=h/2-10,"
           f"format=yuv420p")
-    run(["-f", "lavfi", "-i", f"color=c={BG}:s={W}x{H}:r={FPS}:d={CARD_S}", "-f", "lavfi", "-t", str(CARD_S), "-i",
-         "anullsrc=r=48000:cl=stereo", "-vf", vf, "-map", "0:v", "-map", "1:a", "-map", "1:a", "-t", str(CARD_S),
-         *ENC_V, *ENC_A, str(dst)])
+    run_to(dst, ["-f", "lavfi", "-i", f"color=c={BG}:s={W}x{H}:r={FPS}:d={CARD_S}", "-f", "lavfi", "-t", str(CARD_S),
+                 "-i", "anullsrc=r=48000:cl=stereo", "-vf", vf, "-map", "0:v", "-map", "1:a", "-map", "1:a",
+                 "-t", str(CARD_S), *ENC_V, *ENC_A])
 
 
 def font_file() -> str:
