@@ -27,7 +27,7 @@ see which risks are open and how the roadmap is tracked. Every section points to
 AA-Ecosys runs four apps on one AWS account (acc2, us-west-1) with one shared PostgreSQL instance, one schema owner
 per schema and versioned contracts between apps. AI models run on Amazon Bedrock in a second account, acc3; acc1 left
 the ecosystem on 2026-10-28 (AA-998), so there is no cross-account fallback. Only CIS writes content (ADR 0002). There is only a Dev environment,
-holding test data only (D-01); prod will be a separate RDS instance on acc2 (ADR 0001, C7.2a, D-17), dated at
+holding test data only (D-01); prod will be a separate RDS instance in its own AWS account, `aa-prod` (ADR 0018, C7.2a, D-17), dated at
 go-live. Full explanation: [ecosystem architecture](../ecosystem-architecture.md).
 
 ### C4 level 1 - system context

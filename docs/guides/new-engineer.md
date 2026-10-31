@@ -39,7 +39,7 @@ second account, acc3:
 - **AA-CIS-Infra** - Terraform for every AWS resource, and the DB Migrate workflow for the shared RDS.
 
 There is only a **Dev** environment today, holding **test data only** (D-01). Prod will be a separate RDS instance
-on acc2 (ADR 0001, C7.2a, D-17), dated when go-live is set. Read the
+in its own AWS account, `aa-prod` (ADR 0018, C7.2a, D-17), dated when go-live is set. Read the
 [ecosystem architecture](../ecosystem-architecture.md) once end to end.
 
 ## Repos map

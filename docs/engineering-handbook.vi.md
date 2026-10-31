@@ -482,7 +482,7 @@ Cách cài release-please (AA-891):
 | PR preview (Vercel) | Xem thay đổi frontend trước khi merge | Có; Playwright UI smoke trên preview của CIS (ba lần chạy `ui-smoke.yml` gần nhất bị bỏ qua: sửa ở AA-879) | Vercel Hobby tới tenant trả tiền đầu tiên (D-18) |
 | **Dev** (acc2) | Tích hợp, được phép hỏng, demo | Có | **Chỉ dữ liệu test** (D-01: số đếm chính xác ngày 17/10/2026; Phần C C7.1a cấm PII prod trên Dev). Không có thời gian ân hạn hay theo dõi theo mốc: tạo bằng chứng ngay |
 | Staging | — | Không | Không có kế hoạch. Khi có prod, Dev đóng vai pre-prod; PR preview lo phần review UI |
-| **Prod** | Người dùng thật | Không | Tài nguyên môi trường riêng **trên acc2** (ADR 0001, D-17; [ADR 0012](adr/0012-environment-model.md) quyết định 2–4: VPC, instance RDS, cluster, pool Cognito, secret, khoá KMS và role riêng, cùng Deny theo tag, permission boundary theo môi trường và agent không truy cập prod). Xây khi có ngày go-live (ADR 0012 quyết định 11, D-16, AA-880, U-40); tài khoản prod riêng chỉ được xem lại khi gặp các điều kiện của quyết định 12 (trong đó có AA-864). Mục tiêu prod: DM-9.6, C7.2 |
+| **Prod** | Người dùng thật | Không | Tài khoản AWS riêng **`aa-prod`** ở us-west-1 ([ADR 0018](adr/0018-lean-aws-account-model.md), chấp nhận S262, D-17), với VPC, instance RDS, cluster, pool Cognito, secret, khoá KMS và role riêng; [ADR 0012](adr/0012-environment-model.md) quyết định 3–4 (Deny theo tag, permission boundary theo môi trường, agent không truy cập prod) giữ làm lớp phòng thủ thêm. Xây khi có ngày go-live (ADR 0012 quyết định 11, D-16, AA-880, U-40). Mục tiêu prod: DM-9.6, C7.2 |
 
 **Build một lần, deploy nhiều nơi** (ADR 0012 quyết định 7): digest image backend đã kiểm trên Dev được chép sang ECR
 prod và deploy bằng workflow Deploy Prod do tech lead chạy; chỉ cấu hình và secret khác nhau. Frontend được build lại
@@ -854,7 +854,7 @@ Mỗi mục là có chủ đích, kèm lý do. Mở lại một mục cần mộ
 | Không làm | Vì sao / cho tới khi |
 |---|---|
 | Một môi trường staging cố định, nhiều vùng, active-active | Dev + preview + đẩy cùng một image là đủ cho tới khi có prod với khách hàng lớn |
-| Một tài khoản AWS riêng cho prod | ADR 0001, C7.2a, D-17; ADR 0012 quyết định 4 (biện pháp bù đắp) và quyết định 12 (khi nào xem lại) |
+| Tạo tài khoản prod hoặc dựng prod trước khi có ngày go-live | [ADR 0018](adr/0018-lean-aws-account-model.md) (chấp nhận S262): `aa-prod` do root management tạo khi đặt ngày go-live; D-16, D-17 |
 | GitHub Team hoặc Enterprise, GHAS cho repo private, chuyển Infra thành public | D-14: gói Free, repo app public, repo gốc và Infra private; thay bằng gitleaks và OIDC chỉ cho `main` |
 | Vercel Pro trước tenant trả tiền đầu tiên | D-18 |
 | Người duyệt mọi PR trong giai đoạn dev | DM-11.5 / D-13 |
@@ -917,7 +917,7 @@ phiên S243 cho N-x. Khi một quyết định đã đổi một chuẩn, chuẩ
 | D-14 | Repo app public, repo gốc private, GitHub Free | [STYLE, trang được đặt ở đâu](STYLE.md#where-a-page-may-live-sec-06); [ADR 0014](adr/0014-repo-visibility-and-github-plan.md); U-25 |
 | D-15 | Agent giữ profile `aa365-admin` | DM-8.7; [§7.6](#76-quyền-truy-cập) |
 | D-16 | Bố cục và cổng prod chọn cùng ngày go-live | [ADR 0012](adr/0012-environment-model.md), chấp nhận ở S257: bố cục quyết định 5, cổng quyết định 8; xây khi có ngày go-live (quyết định 11); AA-880 |
-| D-17 | Prod mặc định trên acc2 | ADR 0001; C7.2a; ADR 0012 quyết định 2; AA-880 |
+| D-17 | Prod ở tài khoản AWS riêng `aa-prod`, us-west-1 (S262; trước đó "prod mặc định trên acc2" tới khi ADR 0018 được chấp nhận) | [ADR 0018](adr/0018-lean-aws-account-model.md) quyết định 3 và 7; C7.2a (v1.9); AA-1004; AA-880 |
 | D-18 | Vercel Hobby tới tenant trả tiền đầu tiên, sau đó Pro | [§6.1](#61-môi-trường); ghi chú cho chủ doanh nghiệp |
 | D-19 | Chi tiêu AWS mới được duyệt từng mục, báo giá trước | Mục chi phí trong mẫu PR; [FinOps](ops/finops.md); DM-10.7 chỉ giữ luật phê duyệt ("thay đổi chi tiêu cần tech lead duyệt") |
 | D-20 | E-mail alarm khi ALARM và OK | Alarm của Infra (`ok_actions`); AA-872 |

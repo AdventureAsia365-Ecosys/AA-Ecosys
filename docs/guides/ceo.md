@@ -158,7 +158,7 @@ The full glossary with more terms: [glossary](../glossary.md).
 Keep this page in step with: staff sign-in ADR 0006a; CIS admin navigation (`AA-CIS-App` `frontend/app/_kit/adminNav.tsx`,
 read 2026-10-28); cost per app AA-884 (`api/core/app_registry.py`, `api/services/platform_cost.py`), monthly report
 AA-896 with AA-838; budgets in Infra `accounts/aa365/variables.tf` and `observability.tf` (read live 2026-10-28);
-legal AA-820, AA-886; Dev test data only D-01; prod ADR 0001 / ADR 0012 / C7.2a / D-17 / AA-880; Vercel plan D-18; data requests
+legal AA-820, AA-886; Dev test data only D-01; prod ADR 0001 / ADR 0012 / ADR 0018 / C7.2a / D-17 / AA-880; Vercel plan D-18; data requests
 D-11 and the [DSAR and erasure runbook](../legal/dsar-erasure-runbook.md); log retention D-09 / AA-872; incident duties
 [incident response](../ops/incident-response.md); UAT videos AA-855; Safe Browsing review AA-816. Keep
 [ceo.vi.md](ceo.vi.md) in step with this page.

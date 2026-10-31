@@ -137,7 +137,7 @@ của [glossary.md](glossary.md); cột thứ hai là tên tiếng Việt của 
 | Thuật ngữ | Tiếng Việt | Nghĩa | Trong AA-Ecosys |
 |---|---|---|---|
 | Dev phase | Giai đoạn Dev | Hiện nay: chỉ có môi trường Dev, không có người dùng thật, chỉ có dữ liệu thử. | Agent merge sau khi CI xanh (D-13; DM-11.5 ở v1.1). |
-| Prod | Môi trường prod | Môi trường chạy thật sau này. | Một RDS instance riêng trên acc2 (ADR 0001, C7.2a, D-17); chốt ngày khi go-live (AA-880). |
+| Prod | Môi trường prod | Môi trường chạy thật sau này. | Một RDS instance riêng trong tài khoản AWS riêng `aa-prod` (ADR 0018, C7.2a, D-17); chốt ngày khi go-live (AA-880). |
 | Data standards | Chuẩn dữ liệu | Các quy tắc bắt buộc MIG-x (Phần A), DM-x (Phần B) và C-x (Phần C) cho RDS dùng chung. | [`docs/architecture/data-standards/`](architecture/data-standards/README.md), version 1.6 (28/10/2026). |
 | U-xx / D-xx | Mục lộ trình / quyết định | Các mục lộ trình của S241 / các quyết định tech lead đã ghi lại. | [Handbook §9–§10](engineering-handbook.md#9-roadmap); bản ghi D-xx trong `docs/sessions/2026-10-17-S241-decisions.md`. |
 | Session (`S<nnn>`) | Phiên làm việc | Một phiên làm việc có đánh số và có log. | `docs/sessions/`, memory Notion. |
