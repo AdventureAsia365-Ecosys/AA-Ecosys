@@ -19,13 +19,15 @@ module.exports = ro({
     step('Candidates are the rules drafted from repeated signals, waiting for a decision.',
       'Ứng viên là các quy tắc được soạn từ những tín hiệu lặp lại, đang chờ quyết định.',
       async (page, h) => {
-        await openTab(page, h, 'Candidates');
+        // Track tabs (no aria-selected, not in the URL): only the Candidates table has the rule "Status" filter.
+        await openTab(page, h, 'Candidates', { shows: (p) => p.getByRole('combobox', { name: 'Status', exact: true }) });
         await rowsOrEmpty(page, h);
       }),
     step('Releases list the rule sets the writer used over time. This is the end of the scenario.',
       'Bản phát hành liệt kê các bộ quy tắc người viết đã dùng theo thời gian. Kết thúc kịch bản.',
       async (page, h) => {
-        await openTab(page, h, 'Releases');
+        // Only the Releases tab has the "Writers" section (memory switch and train close per writer).
+        await openTab(page, h, 'Releases', { shows: (p) => p.getByRole('heading', { name: 'Writers', exact: true }) });
         await rowsOrEmpty(page, h);
       }),
   ],

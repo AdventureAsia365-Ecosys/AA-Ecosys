@@ -105,12 +105,25 @@ async function rowsOrEmpty(page, h, timeout = 30_000) {
   }).catch(() => 'waiting'), { timeout, intervals: [500, 1000, 2000] }).toBe('ready');
 }
 
-/** Click the kit tab named `name` (role=tab) and wait until it is the selected one. Tabs only read: no write. */
-async function openTab(page, h, name, { timeout = 20_000 } = {}) {
-  const tab = page.getByRole('tab', { name }).first();
+/**
+ * Click the kit tab named `name` and prove it opened. Tabs only read: no write. The kit Tabs has two variants
+ * (_kit/core/primitives.tsx): "underline" renders role=tab with aria-selected (waited on); the default "track" renders
+ * plain buttons with no tab role and no selected state, so its caller passes `shows`: page => a Locator only that tab
+ * renders (waited visible). `url` (a RegExp, for tabs kept in the URL such as ?tab=queue) is waited too when given.
+ */
+async function openTab(page, h, name, { shows, url, timeout = 20_000 } = {}) {
+  const asTab = page.getByRole('tab', { name });
+  const asButton = page.getByRole('button', { name, exact: typeof name === 'string' });
+  const tab = asTab.or(asButton).first();
   await h.expect(tab).toBeVisible({ timeout });
+  const roleTab = (await tab.getAttribute('role')) === 'tab';
+  if (!roleTab && !shows) {
+    throw new Error(`tab "${name}" is a plain button (kit Tabs "track", no aria-selected): pass { shows } to prove it opened`);
+  }
   await h.click(tab);
-  await h.expect(tab).toHaveAttribute('aria-selected', 'true', { timeout });
+  if (roleTab) await h.expect(tab).toHaveAttribute('aria-selected', 'true', { timeout });
+  if (url) await h.expect(page).toHaveURL(url, { timeout });
+  if (shows) await h.expect(shows(page).first()).toBeVisible({ timeout });
 }
 
 /** At a phone width, nothing scrolls sideways (document, and `main` when the shell scrolls inside it). */
