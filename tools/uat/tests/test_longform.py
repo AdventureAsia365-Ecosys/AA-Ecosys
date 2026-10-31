@@ -80,6 +80,39 @@ class Cards(unittest.TestCase):
         self.assertNotEqual(a, lf.card_name("Chapter 4 of 21", "Pipeline v2", "/f.ttf"))
         self.assertRegex(a, r"^card-[0-9a-f]{16}\.mp4$")
 
+    def test_long_titles_wrap_to_fit(self):
+        r12 = "Duty of care and the calendar: who travels where, and a private calendar feed"
+        lines, size = lf.wrap_title(r12)
+        self.assertEqual(len(lines), 2)
+        chars = dict(lf.CARD_FITS)[size]
+        self.assertTrue(all(len(x) <= chars for x in lines))
+        self.assertEqual(" ".join(lines), r12)
+        self.assertEqual(lf.wrap_title("Pipeline"), (["Pipeline"], 44))
+        lines, size = lf.wrap_title("word " * 60)
+        self.assertEqual((len(lines), size), (2, lf.CARD_FITS[-1][0]))
+        self.assertTrue(lines[1].endswith("…"))
+
+    def test_vietnamese_kicker_and_titles(self):
+        self.assertEqual(lf.kicker(3, 21), "Chapter 3 of 21")
+        self.assertEqual(lf.kicker(3, 21, "vi"), "Phần 3/21")
+        it = {"title": "Pipeline", "title_vi": "Bảng chuyến"}
+        self.assertEqual(lf.chapter_title(it, "vi"), "Bảng chuyến")
+        self.assertEqual(lf.chapter_title(it, "en"), "Pipeline")
+        self.assertEqual(lf.chapter_title({"title": "Pipeline", "title_vi": None}, "vi"), "Pipeline")
+
+
+class NormCache(unittest.TestCase):
+    def test_key_follows_the_settings(self):
+        name = lf.norm_name(Path("CRM-REV-01_20261031_v1.mp4"))
+        self.assertRegex(name, r"^CRM-REV-01_20261031_v1\.[0-9a-f]{10}\.norm\.mp4$")
+        old = lf.NORM_A
+        try:
+            lf.NORM_A = old.replace("I=-16", "I=-14")
+            self.assertNotEqual(name, lf.norm_name(Path("CRM-REV-01_20261031_v1.mp4")))
+        finally:
+            lf.NORM_A = old
+        self.assertEqual(name, lf.norm_name(Path("CRM-REV-01_20261031_v1.mp4")))
+
 
 class ChunkChecks(unittest.TestCase):
     def ok(self, sha="a" * 40, **kw):

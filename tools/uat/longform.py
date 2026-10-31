@@ -3,7 +3,7 @@ the subtitles are switchable (tech lead decision S261): two audio tracks (Englis
 subtitle tracks (mov_text English, Vietnamese), nothing burned into the picture.
 
   python -I longform.py --chunks out/crm/no-burn --prefix CRM-REV- --out out/crm-long --name CRM-REVIEW_20261105_v1
-        [--highlight R01,R03,R04,R06,R08,R10,R11,R15] [--per-language] [--subs-default en|none]
+        [--highlight R01,R03,R04,R06,R08,R10,R11,R15] [--per-language] [--subs-default en|none] [--title-vi "..."]
 
 Input: the chunk MP4s from `build.py <work/ID> <dir> --no-burn` (<ID>_<yyyymmdd>_v<n>.mp4, with .en.srt / .vi.srt
 and .result.json beside it); the newest version of each id is used, in id order. It stops (exit != 0) when a chosen
@@ -16,11 +16,14 @@ the picture; (2) a 2.5 s chapter card before each chunk; (3) concat -c copy; (4)
 chunk's offset, chapters from an ffmetadata file; the picture is copied, the audio is re-encoded once over the joined
 file (no AAC priming drift across ~40 segments). Also writes chapters.txt and .srt / .vtt sidecars; check the long
 output with check_sync.py on both tracks (start and end chapters). --per-language adds <name>_EN.mp4 / <name>_VI.mp4
-(that language's voice and subtitles first and default, the other still switchable) plus <name>.README.txt: the
+(that language's voice and subtitles first and default, the other still switchable; in _VI.mp4 the chapter cards and
+the chapter list are Vietnamese too, from each chunk's title_vi, else its English title) plus <name>.README.txt: the
 Drive player shows no embedded subtitle track by itself, so upload the .srt files beside the MP4 as Drive caption
 tracks (or point viewers to the sidecars).
 --highlight writes <name>_highlight.mp4 from the listed chunks (same segments, no new recording).
-Local ffmpeg only, $0. Normalised segments are cached under work/longform/.
+Chapter titles longer than a card line wrap onto two lines (smaller type for very long ones).
+Local ffmpeg only, $0. Normalised segments and cards are cached under work/longform/, keyed on the filter and encoder
+settings (a changed setting never reuses an old segment).
 """
 import argparse
 import hashlib
@@ -29,6 +32,7 @@ import re
 import shutil
 import subprocess
 import sys
+import textwrap
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -40,6 +44,16 @@ ACCENT = "0x9E6E16"
 ENC_V = ["-c:v", "libx264", "-preset", "medium", "-crf", "26", "-pix_fmt", "yuv420p", "-r", str(FPS), "-g", "50",
          "-video_track_timescale", "12800"]
 ENC_A = ["-c:a", "aac", "-b:a", "128k", "-ar", "48000", "-ac", "2"]
+# Normalise filters (templates filled per chunk). Part of the cache key: edit them and old segments are not reused.
+NORM_V = ("[0:v]scale={W}:{H}:force_original_aspect_ratio=decrease,pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color={BG},"
+          "setsar=1,fps={FPS},format=yuv420p[v]")
+NORM_A = ("[0:a:{i}]aresample=48000,aformat=channel_layouts=stereo,loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000,"
+          "apad=whole_dur={secs},atrim=end={secs}[a{i}]")
+NORM_SILENT = "[1:a]apad=whole_dur={secs},atrim=end={secs}[a{i}]"
+# Card title sizes: (font px, characters per line). DejaVu Sans averages ~0.6 em per character, so each fits the
+# 1360 px between the 40 px margins; a title that needs a third line at the smallest size is cut with an ellipsis.
+CARD_FITS = ((44, 46), (38, 54), (32, 64))
+KICKER = {"en": "Chapter {n} of {total}", "vi": "Phần {n}/{total}"}
 
 
 DRIVE_NOTE = """{name}: subtitles
@@ -106,6 +120,36 @@ def ffmetadata(chapters: list[tuple[str, float, float]], title: str = "") -> str
         lines += ["", "[CHAPTER]", "TIMEBASE=1/1000", f"START={int(round(a * 1000))}", f"END={int(round(b * 1000))}",
                   f"title={esc(name)}"]
     return "\n".join(lines) + "\n"
+
+
+def norm_key() -> str:
+    """Hash of everything normalise() applies: part of each normalised segment's cache name."""
+    spec = json.dumps([W, H, FPS, BG, NORM_V, NORM_A, NORM_SILENT, ENC_V, ENC_A])
+    return hashlib.sha256(spec.encode()).hexdigest()[:10]
+
+
+def norm_name(src: Path) -> str:
+    return f"{src.stem}.{norm_key()}.norm.mp4"
+
+
+def wrap_title(title: str) -> tuple[list[str], int]:
+    """A chapter title -> (card lines, font px): one or two lines at the largest size that fits."""
+    for size, chars in CARD_FITS:
+        lines = textwrap.wrap(title, chars) or [""]
+        if len(lines) <= 2:
+            return lines, size
+    size, chars = CARD_FITS[-1]
+    lines = textwrap.wrap(title, chars)
+    return [lines[0], textwrap.shorten(" ".join(lines[1:]), chars, placeholder=" …")], size
+
+
+def kicker(n: int, total: int, lang: str = "en") -> str:
+    return KICKER[lang].format(n=n, total=total)
+
+
+def chapter_title(item: dict, lang: str = "en") -> str:
+    """The chunk's chapter title in that language (title_vi from the scenario, else the English title)."""
+    return (item.get("title_vi") if lang == "vi" else None) or item["title"]
 
 
 def chapters_txt(chapters: list[tuple[str, float, float]]) -> str:
@@ -211,7 +255,7 @@ def audio_tracks(src: Path) -> int:
 
 def normalise(src: Path, dst: Path) -> None:
     """A chunk with fewer than two narration tracks gets silence for the missing one; main() refuses that unless
-    --allow-missing-audio was passed."""
+    --allow-missing-audio was passed. `dst` should be named by norm_name() (the settings are in the name)."""
     if dst.exists() and dst.stat().st_mtime >= src.stat().st_mtime:
         return
     n_audio = audio_tracks(src)
@@ -219,34 +263,38 @@ def normalise(src: Path, dst: Path) -> None:
     inputs = ["-i", str(src)]
     if n_audio < 2:
         inputs += ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo"]
-    v = (f"[0:v]scale={W}:{H}:force_original_aspect_ratio=decrease,pad={W}:{H}:(ow-iw)/2:(oh-ih)/2:color={BG},"
-         f"setsar=1,fps={FPS},format=yuv420p[v]")
-    parts = [v]
+    parts = [NORM_V.format(W=W, H=H, BG=BG, FPS=FPS)]
     # Pad each narration to the picture length and cut everything at it. Not an endless apad + -shortest: ffmpeg 6.1
     # then ends with "Error while filtering: No space left on device" (exit 228) although the file is complete.
     for i in range(2):
-        src_a = f"[0:a:{i}]aresample=48000,aformat=channel_layouts=stereo,loudnorm=I=-16:TP=-1.5:LRA=11," \
-                f"aresample=48000," if i < n_audio else "[1:a]"
-        parts.append(f"{src_a}apad=whole_dur={secs:.3f},atrim=end={secs:.3f}[a{i}]")
+        parts.append((NORM_A if i < n_audio else NORM_SILENT).format(i=i, secs=f"{secs:.3f}"))
     run_to(dst, [*inputs, "-filter_complex", ";".join(parts), "-map", "[v]", "-map", "[a0]", "-map", "[a1]",
                  "-t", f"{secs:.3f}", *ENC_V, *ENC_A])
 
 
 def card_name(kicker: str, title: str, font: str) -> str:
-    """Cache name of a chapter card: a hash of what is drawn, so "Chapter 4 of 21" never stands in for "4 of 8"."""
-    return "card-" + hashlib.sha256(f"{kicker}\0{title}\0{font}\0{W}x{H}".encode()).hexdigest()[:16] + ".mp4"
+    """Cache name of a chapter card: a hash of what is drawn and how (layout, encoder), so "Chapter 4 of 21" never
+    stands in for "4 of 8" and a card cut by an older layout is not reused."""
+    spec = json.dumps([kicker, title, font, W, H, CARD_FITS, ENC_V, ENC_A, "card-v2"])
+    return "card-" + hashlib.sha256(spec.encode()).hexdigest()[:16] + ".mp4"
 
 
 def card(dst: Path, kicker: str, title: str, font: str) -> None:
     if dst.exists():
         return
-    k, t = dst.with_suffix(".k.txt"), dst.with_suffix(".t.txt")
+    lines, size = wrap_title(title)
+    k = dst.with_suffix(".k.txt")
     k.write_text(kicker, encoding="utf-8")
-    t.write_text(title, encoding="utf-8")
     ff = font.replace(":", "\\:")
-    vf = (f"drawtext=fontfile='{ff}':textfile='{k}':fontsize=26:fontcolor={ACCENT}:x=(w-text_w)/2:y=h/2-70,"
-          f"drawtext=fontfile='{ff}':textfile='{t}':fontsize=44:fontcolor={INK}:x=max((w-text_w)/2\\,40):y=h/2-10,"
-          f"format=yuv420p")
+    step = int(size * 1.3)
+    top = -10 - (len(lines) - 1) * step // 2  # the title block stays centred under the kicker
+    draws = [f"drawtext=fontfile='{ff}':textfile='{k}':fontsize=26:fontcolor={ACCENT}:x=(w-text_w)/2:y=h/2{top - 60:+d}"]
+    for i, line in enumerate(lines):
+        t = dst.with_suffix(f".t{i}.txt")
+        t.write_text(line, encoding="utf-8")
+        draws.append(f"drawtext=fontfile='{ff}':textfile='{t}':fontsize={size}:fontcolor={INK}:"
+                     f"x=max((w-text_w)/2\\,40):y=h/2{top + i * step:+d}")
+    vf = ",".join([*draws, "format=yuv420p"])
     run_to(dst, ["-f", "lavfi", "-i", f"color=c={BG}:s={W}x{H}:r={FPS}:d={CARD_S}", "-f", "lavfi", "-t", str(CARD_S),
                  "-i", "anullsrc=r=48000:cl=stereo", "-vf", vf, "-map", "0:v", "-map", "1:a", "-map", "1:a",
                  "-t", str(CARD_S), *ENC_V, *ENC_A])
@@ -262,40 +310,48 @@ def font_file() -> str:
     sys.exit("STOP: no DejaVu Sans font (sudo apt install fonts-dejavu-core)")
 
 
-def assemble(items: list[dict], out_base: Path, cache: Path, title: str, subs_default: str, per_language: bool) -> Path:
-    """items: [{id, title, mp4, en, vi}] in play order -> <out_base>.mp4 (+ sidecars, chapters.txt)."""
+def assemble(items: list[dict], out_base: Path, cache: Path, title: str, subs_default: str, per_language: bool,
+             title_vi: str = "") -> Path:
+    """items: [{id, title, title_vi?, mp4, en, vi}] in play order -> <out_base>.mp4 (+ sidecars, chapters.txt).
+    With per_language, _VI.mp4 is joined from Vietnamese chapter cards and carries a Vietnamese chapter list."""
     font = font_file()
-    segs, sub_segments = [], {"en": [], "vi": []}
-    chapters_in = []
-    for n, it in enumerate(items, 1):
-        kicker = f"Chapter {n} of {len(items)}"
-        cpath = cache / card_name(kicker, it["title"], font)
-        card(cpath, kicker, it["title"], font)
-        npath = cache / f"{Path(it['mp4']).stem}.norm.mp4"
+    norms = []
+    for it in items:
+        npath = cache / norm_name(Path(it["mp4"]))
         normalise(Path(it["mp4"]), npath)
-        cd, nd = duration(cpath), duration(npath)
-        segs += [cpath, npath]
-        chapters_in.append((it["title"], cd, nd))
-        for lang in ("en", "vi"):
-            cues = parse_srt(Path(it[lang]).read_text(encoding="utf-8")) if it.get(lang) and Path(it[lang]).exists() else []
-            sub_segments[lang] += [(cd, None), (nd, cues)]
+        norms.append(npath)
     out_base.parent.mkdir(parents=True, exist_ok=True)
-    listing = cache / f"{out_base.name}.concat.txt"
-    listing.write_text("".join(f"file '{p.resolve()}'\n" for p in segs), encoding="utf-8")
-    joined = cache / f"{out_base.name}.joined.mp4"
-    # Picture copied; both audio tracks re-encoded once over the whole timeline so ~40 AAC primings cannot add up.
-    run(["-f", "concat", "-safe", "0", "-i", str(listing), "-map", "0", "-c:v", "copy", *ENC_A, str(joined)])
 
-    chapters = chapter_starts(chapters_in)
-    meta = cache / f"{out_base.name}.ffmeta.txt"
-    meta.write_text(ffmetadata(chapters, title), encoding="utf-8")
-    Path(f"{out_base}.chapters.txt").write_text(chapters_txt(chapters), encoding="utf-8")
-    srt = {lang: write_subs(merge_cues(sub_segments[lang]), out_base, lang)[0] for lang in ("en", "vi")}
+    def join(lang: str) -> dict:
+        """Cards in `lang` + the normalised chunks -> joined MP4, ffmetadata, chapters and both subtitle files."""
+        segs, chapters_in, sub_segments = [], [], {"en": [], "vi": []}
+        for n, (it, npath) in enumerate(zip(items, norms), 1):
+            k, t = kicker(n, len(items), lang), chapter_title(it, lang)
+            cpath = cache / card_name(k, t, font)
+            card(cpath, k, t, font)
+            cd, nd = duration(cpath), duration(npath)
+            segs += [cpath, npath]
+            chapters_in.append((t, cd, nd))
+            for sl in ("en", "vi"):
+                cues = parse_srt(Path(it[sl]).read_text(encoding="utf-8")) if it.get(sl) and Path(it[sl]).exists() else []
+                sub_segments[sl] += [(cd, None), (nd, cues)]
+        listing = cache / f"{out_base.name}.{lang}.concat.txt"
+        listing.write_text("".join(f"file '{p.resolve()}'\n" for p in segs), encoding="utf-8")
+        joined = cache / f"{out_base.name}.{lang}.joined.mp4"
+        # Picture copied; both audio tracks re-encoded once over the whole timeline so ~40 AAC primings cannot add up.
+        run(["-f", "concat", "-safe", "0", "-i", str(listing), "-map", "0", "-c:v", "copy", *ENC_A, str(joined)])
+        chapters = chapter_starts(chapters_in)
+        meta = cache / f"{out_base.name}.{lang}.ffmeta.txt"
+        meta.write_text(ffmetadata(chapters, (title_vi or title) if lang == "vi" else title), encoding="utf-8")
+        # The EN join writes the sidecars beside the output; the VI join keeps its own copies in the cache.
+        sub_base = out_base if lang == "en" else cache / f"{out_base.name}.vi-cards"
+        srt = {sl: write_subs(merge_cues(sub_segments[sl]), sub_base, sl)[0] for sl in ("en", "vi")}
+        return {"joined": joined, "meta": meta, "chapters": chapters, "srt": srt}
 
-    def mux(dst: Path, first: str, sub_default: str) -> None:
+    def mux(dst: Path, src: dict, first: str, sub_default: str) -> None:
         second = "vi" if first == "en" else "en"
         a_idx = {"en": 0, "vi": 1}
-        cmd = ["-i", str(joined), "-i", str(srt[first]), "-i", str(srt[second]), "-i", str(meta),
+        cmd = ["-i", str(src["joined"]), "-i", str(src["srt"][first]), "-i", str(src["srt"][second]), "-i", str(src["meta"]),
                "-map", "0:v", "-map", f"0:a:{a_idx[first]}", "-map", f"0:a:{a_idx[second]}", "-map", "1", "-map", "2",
                "-map_metadata", "3", "-map_chapters", "3", "-c:v", "copy", "-c:a", "copy", "-c:s", "mov_text"]
         names = {"en": ("eng", "English"), "vi": ("vie", "Tiếng Việt")}
@@ -308,13 +364,20 @@ def assemble(items: list[dict], out_base: Path, cache: Path, title: str, subs_de
                 "-movflags", "+faststart", str(dst)]
         run(cmd)
 
+    en = join("en")
+    Path(f"{out_base}.chapters.txt").write_text(chapters_txt(en["chapters"]), encoding="utf-8")
     master = out_base.with_suffix(".mp4")
-    mux(master, "en", subs_default)
+    mux(master, en, "en", subs_default)
+    joined = [en["joined"]]
     if per_language:  # a Drive copy per language: that voice and its subtitles first and default, both switchable
-        mux(Path(f"{out_base}_EN.mp4"), "en", "en")
-        mux(Path(f"{out_base}_VI.mp4"), "vi", "vi")
+        mux(Path(f"{out_base}_EN.mp4"), en, "en", "en")
+        vi = join("vi")
+        joined.append(vi["joined"])
+        Path(f"{out_base}.chapters.vi.txt").write_text(chapters_txt(vi["chapters"]), encoding="utf-8")
+        mux(Path(f"{out_base}_VI.mp4"), vi, "vi", "vi")
         Path(f"{out_base}.README.txt").write_text(DRIVE_NOTE.format(name=out_base.name), encoding="utf-8")
-    joined.unlink(missing_ok=True)
+    for j in joined:
+        j.unlink(missing_ok=True)
     return master
 
 
@@ -325,6 +388,8 @@ def main() -> int:
     ap.add_argument("--out", required=True)
     ap.add_argument("--name", required=True, help="e.g. CRM-REVIEW_20261105_v1")
     ap.add_argument("--title", default="Adventure Asia Partner CRM review")
+    ap.add_argument("--title-vi", default="Đánh giá CRM cho đại lý của Adventure Asia",
+                    help="the file title in the Vietnamese copy (--per-language)")
     ap.add_argument("--highlight", default="", help="chunk numbers for the highlight cut, e.g. R01,R03,R04")
     ap.add_argument("--per-language", action="store_true")
     ap.add_argument("--subs-default", choices=("en", "vi", "none"), default="en")
@@ -345,7 +410,8 @@ def main() -> int:
         if not res.exists():
             sys.exit(f"STOP: {cid}: no {res.name} beside the MP4")
         results[cid] = json.loads(res.read_text())
-        items[cid] = {"id": cid, "title": results[cid]["title"], "mp4": f, "en": f"{stem}.en.srt", "vi": f"{stem}.vi.srt"}
+        items[cid] = {"id": cid, "title": results[cid]["title"], "title_vi": results[cid].get("title_vi"), "mp4": f,
+                      "en": f"{stem}.en.srt", "vi": f"{stem}.vi.srt"}
     problems = chunk_problems(results, a.allow_not_pass, a.allow_sha_drift)
     if not a.allow_missing_audio:
         problems += [f"{cid}: {n} narration track(s), expected 2" for cid, it in items.items()
@@ -357,7 +423,7 @@ def main() -> int:
     cache = HERE / "work" / "longform"
     cache.mkdir(parents=True, exist_ok=True)
     out = Path(a.out).resolve()
-    master = assemble(list(items.values()), out / a.name, cache, a.title, a.subs_default, a.per_language)
+    master = assemble(list(items.values()), out / a.name, cache, a.title, a.subs_default, a.per_language, a.title_vi)
     print(master)
     if a.highlight:
         ids = highlight_ids(a.highlight, a.prefix)
@@ -365,7 +431,7 @@ def main() -> int:
         if missing:
             sys.exit(f"STOP: highlight chunks not found: {', '.join(missing)}")
         hl = assemble([items[i] for i in ids], out / f"{a.name}_highlight", cache, f"{a.title} (highlights)",
-                      a.subs_default, a.per_language)
+                      a.subs_default, a.per_language, f"{a.title_vi} (bản rút gọn)")
         print(hl)
     return 0
 
