@@ -2,28 +2,41 @@
 """Draft the cost sections of the monthly cost and capacity review (FIN-02 / OPS-08, AA-896).
 
 Offline and read-only. It makes NO AWS call: Cost Explorer data comes from what the CIS API already stored
-(data standard DM-10.4, S243 reconciliation K-14: no new Cost Explorer script). Inputs:
+(data standard DM-10.4, S243 reconciliation K-14: no new Cost Explorer script). Two ways to give the inputs:
 
+A. Bundles from tools/finops/collect_month.py (S262; the orchestrator runs it through tools/ecs/ecsx.sh):
+  --bundle FILE          PART=cis output: per month the /admin/platform/cost answer, LLM by app/stage/role/account
+                         and the published-tour counts. Holds several months (default Aug-Oct style: the three
+                         months before the run), which gives the month-over-month section.
+  --booking-bundle FILE  PART=booking output: trip cases created and confirmed per month (optional).
+  --crm-bundle FILE      PART=crm output: CRM LLM spend per month from crm.llm_usage_daily (optional). Added to the
+                         CRM row as spend outside the acc2 bill, as the admin page does with its staff token.
+  --month YYYY-MM        the month the report is about (default: the latest month in --bundle).
+
+B. Single exports (S243, still supported):
   --current FILE    JSON body of  GET /admin/platform/cost?month=YYYY-MM&refresh_if_stale=false  (AA-884,
-                    api/services/platform_cost.py cost_by_app): acc2 spend by App tag and service, LLM spend
-                    by app, acc3 Bedrock from shared.cost_explorer_snapshot (acc1, retired by AA-998,
-                    only when a month still carries it).
+                    api/services/platform_cost.py cost_by_app).
   --previous FILE   the same JSON for the month before (optional; enables the change columns).
-  --llm-csv FILE    optional CSV with columns stage,role,account,calls,cost_usd (one month), from the
-                    read-only SQL printed by --print-sql (shared.llm_call_daily + shared.llm_call_log).
-  --units FILE      optional JSON with denominators for unit costs, e.g.
-                    {"published_tours": 1234, "trip_plans": 56, "bookings": 0}.
+  --llm-csv FILE    optional CSV with columns [app,]stage,role,account,calls,cost_usd (one month), from the
+                    read-only SQL printed by --print-sql.
+
+Both ways:
+  --units FILE      optional JSON with denominators for the report month, e.g. {"published_tours": 1234,
+                    "trip_plans": 56, "bookings": 0}; it overrides the bundle counts with the same key.
+  --budget-usd N    the acc2 monthly account budget (docs/ops/finops.md, Budgets) for the budget line.
   --out FILE        write the Markdown there (default: stdout).
 
-The output fills the "Totals", "By app", "Top services", "LLM spend" and "Unit costs" sections of
-docs/templates/cost-report.md. Claude Code pastes it into docs/audits/<date>-S<nnn>-capacity-review/README.md,
-adds the C8b capacity checklist and the Vietnamese summary, and Nghiệp approves (C8a).
+The output fills the Vietnamese summary, "Totals", "By app", "Month over month", "Top services", "LLM spend" and
+"Unit costs" sections of docs/templates/cost-report.md. Claude Code pastes it into
+docs/audits/<date>-S<nnn>-capacity-review/README.md, fills the <điền> / <fill in> reasons and the C8b capacity
+checklist, and the tech lead approves (C8a).
 
 How to get the inputs: docs/ops/cost/README.md. Standard library only; Python 3.10+.
 """
 from __future__ import annotations
 
 import argparse
+import copy
 import csv
 import json
 import sys
@@ -31,25 +44,28 @@ from pathlib import Path
 from typing import Any, Optional
 
 CHANGE_FLAG_PCT = 20.0  # template: "changes over 20 %"
+BUNDLE_MARKER = "FINOPS_BUNDLE "
+CREDIT_GAP_RATIO = 0.5  # acc3 CE under half the gateway estimate: credits, not savings
 
 LLM_BY_STAGE_SQL = """-- Read-only. $1 = first day of the month, $2 = first day of the next month (dates, UTC).
 -- Same sources as platform_cost.AI_SPEND_SQL: rolled-up days from shared.llm_call_daily, other days from
 -- shared.llm_call_log. Export the result as CSV with a header row.
-SELECT stage, role, coalesce(account, 'acc2') AS account,
-       sum(calls)::bigint AS calls, round(sum(cost_usd)::numeric, 4) AS cost_usd
+-- tools/finops/collect_month.py (PART=cis) runs the same query for every month of a bundle.
+SELECT app, stage, role, account, sum(calls)::bigint AS calls, round(sum(cost_usd)::numeric, 4) AS cost_usd
   FROM (
-        SELECT d.stage, d.role, d.account, d.calls, d.cost_usd
+        SELECT d.app, d.stage, d.role, coalesce(d.account, 'acc2') AS account, d.calls, d.cost_usd
           FROM shared.llm_call_daily d
          WHERE d.day >= $1 AND d.day < $2
         UNION ALL
-        SELECT l.stage, l.role, l.account, 1, coalesce(l.cost_usd, 0)
+        SELECT coalesce(l.app, l.quality_signal ->> 'app', 'cis'), l.stage, l.role, coalesce(l.account, 'acc2'),
+               1, coalesce(l.cost_usd, 0)
           FROM shared.llm_call_log l
          WHERE l.created_at >= ($1::date::timestamp AT TIME ZONE 'UTC')
            AND l.created_at < ($2::date::timestamp AT TIME ZONE 'UTC')
            AND NOT EXISTS (SELECT 1 FROM shared.llm_call_daily d
                             WHERE d.day = (l.created_at AT TIME ZONE 'UTC')::date)
        ) u
- GROUP BY 1, 2, 3
+ GROUP BY 1, 2, 3, 4
  ORDER BY cost_usd DESC;
 """
 
@@ -68,13 +84,42 @@ def change(cur: Optional[float], prev: Optional[float]) -> tuple[str, bool]:
     return f"{pct:+.1f} %", abs(pct) > CHANGE_FLAG_PCT
 
 
+def month_vi(month: str) -> str:
+    """'2026-10' -> '10/2026' (Vietnamese text uses dd/mm/yyyy, docs/STYLE.md)."""
+    y, m = month.split("-")
+    return f"{m}/{y}"
+
+
+def check_platform_cost(data: dict[str, Any], where: str) -> dict[str, Any]:
+    for key in ("month", "apps", "totals"):
+        if key not in data:
+            raise SystemExit(f"{where}: not a /admin/platform/cost response (missing '{key}')")
+    return data
+
+
 def load_json(path: Optional[str]) -> Optional[dict[str, Any]]:
     if not path:
         return None
-    data = json.loads(Path(path).read_text(encoding="utf-8"))
-    for key in ("month", "apps", "totals"):
-        if key not in data:
-            raise SystemExit(f"{path}: not a /admin/platform/cost response (missing '{key}')")
+    return check_platform_cost(json.loads(Path(path).read_text(encoding="utf-8")), path)
+
+
+def load_bundle(path: Optional[str], part: str) -> Optional[dict[str, Any]]:
+    """A collect_month.py bundle: the 'FINOPS_BUNDLE <json>' line of an ecsx.sh output, or the bare JSON."""
+    if not path:
+        return None
+    text = Path(path).read_text(encoding="utf-8")
+    line = next((ln for ln in text.splitlines() if ln.startswith(BUNDLE_MARKER)), None)
+    try:
+        data = json.loads(line[len(BUNDLE_MARKER):] if line is not None else text)
+    except json.JSONDecodeError as e:
+        raise SystemExit(f"{path}: no FINOPS_BUNDLE line and not JSON ({e.msg})") from None
+    if data.get("kind") != "finops_bundle" or data.get("part") != part:
+        raise SystemExit(f"{path}: not a collect_month.py bundle with PART={part}")
+    if not isinstance(data.get("months"), dict) or not data["months"]:
+        raise SystemExit(f"{path}: the bundle has no months")
+    if part == "cis":
+        for m, v in data["months"].items():
+            check_platform_cost(v.get("platform_cost") or {}, f"{path} month {m}")
     return data
 
 
@@ -87,6 +132,30 @@ def services_total(data: Optional[dict[str, Any]]) -> dict[str, float]:
     for r in (data or {}).get("apps", []):
         for s in r.get("services", []):
             out[s["service"]] = out.get(s["service"], 0.0) + float(s["amount_usd"])
+    return out
+
+
+def apply_crm(cost: dict[str, Any], crm_month: Optional[dict[str, Any]]) -> dict[str, Any]:
+    """Add the CRM gateway's LLM spend to the CRM row, unless the export already holds it (crm_llm status ok).
+    Those calls are not billed on acc2, so they count as LLM outside the AWS bill (platform_cost.cost_by_app)."""
+    if not crm_month or (cost.get("crm_llm") or {}).get("status") == "ok":
+        return cost
+    usage = crm_month.get("crm_llm") or {}
+    usd, calls = float(usage.get("cost_usd") or 0.0), int(usage.get("calls") or 0)
+    out = copy.deepcopy(cost)
+    row = next((r for r in out["apps"] if r["app"] == "crm"), None)
+    if row is None:
+        row = {"app": "crm", "kind": "app", "label": "CRM", "aws_usd": 0.0, "services": [], "ai_usd": 0.0,
+               "ai_in_aws_acc2_usd": 0.0, "ai_calls": 0, "total_usd": 0.0}
+        out["apps"].append(row)
+    row["ai_usd"] = round(float(row.get("ai_usd") or 0.0) + usd, 4)
+    row["ai_outside_aws_usd"] = round(row["ai_usd"] - float(row.get("ai_in_aws_acc2_usd") or 0.0), 4)
+    row["ai_calls"] = int(row.get("ai_calls") or 0) + calls
+    row["total_usd"] = round(float(row.get("total_usd") or 0.0) + usd, 4)
+    totals = out["totals"]
+    for k in ("ai_usd", "total_usd") + (("ai_outside_aws_usd",) if "ai_outside_aws_usd" in totals else ()):
+        totals[k] = round(float(totals.get(k) or 0.0) + usd, 4)
+    out["crm_llm"] = {"status": "ok", "source": "crm.llm_usage_daily (collect_month.py PART=crm)"}
     return out
 
 
@@ -147,6 +216,51 @@ def section_apps(cur: dict[str, Any], prev: Optional[dict[str, Any]]) -> tuple[l
     return lines, findings
 
 
+def section_mom(months: list[str], costs: dict[str, dict[str, Any]]) -> list[str]:
+    """Every month of the bundle side by side: per app row, the totals, and the top services of the last month."""
+    if len(months) < 2:
+        return []
+    head = "| {} | " + " | ".join(months) + " | Change, last month |"
+    sep = "|---|" + "---|" * len(months) + "---|"
+    last, before = months[-1], months[-2]
+
+    def row(label: str, values: list[Optional[float]]) -> str:
+        ch, flagged = change(values[-1], values[-2])
+        return (f"| {label} | " + " | ".join(money(v) for v in values)
+                + f" | {ch}{' (over 20 %)' if flagged else ''} |")
+
+    lines = ["## Month over month", "",
+             "App tags count only from the day they were set (2026-10-15/16, AA-828); spend before that sits in "
+             "\"Not assigned to an app\". Compare earlier months by service.", "",
+             head.format("App"), sep]
+    order: list[str] = []
+    labels: dict[str, str] = {}
+    for m in months:
+        for r in costs[m].get("apps", []):
+            if r["app"] not in labels:
+                order.append(r["app"])
+            labels[r["app"]] = r.get("label", r["app"])
+    for key in order:
+        vals = [apps_by_key(costs[m]).get(key, {}).get("total_usd") for m in months]
+        lines.append(row(labels[key], [None if v is None else float(v) for v in vals]))
+    lines.append(row("**Total (AWS acc2 + LLM outside AWS)**",
+                     [(costs[m].get("totals") or {}).get("total_usd") for m in months]))
+    lines.append(row("AWS acc2", [(costs[m].get("aws") or {}).get("total_usd") for m in months]))
+    lines.append(row("LLM, all apps (gateway estimate)", [(costs[m].get("totals") or {}).get("ai_usd") for m in months]))
+    lines.append(row("acc3 Bedrock (Cost Explorer, net of credits)",
+                     [((costs[m].get("llm_satellites") or {}).get("acc3") or {}).get("ce_bedrock_usd") for m in months]))
+    svc = {m: services_total(costs[m]) for m in months}
+    top = sorted(svc[last].items(), key=lambda kv: -kv[1])[:10]
+    lines += ["", f"Top 10 acc2 services of {last}:", "", head.format("Service"), sep]
+    for name, _ in top:
+        lines.append(row(name, [svc[m].get(name) for m in months]))
+    gone = [s for s in svc[before] if s not in svc[last] and svc[before][s] >= 1.0]
+    if gone:
+        lines += ["", f"Services billed in {before} but not in {last}: {', '.join(sorted(gone))}."]
+    lines.append("")
+    return lines
+
+
 def section_services(cur: dict[str, Any], prev: Optional[dict[str, Any]]) -> list[str]:
     c, p = services_total(cur), services_total(prev)
     top = sorted(c.items(), key=lambda kv: -kv[1])[:5]
@@ -160,88 +274,240 @@ def section_services(cur: dict[str, Any], prev: Optional[dict[str, Any]]) -> lis
     return lines
 
 
-def section_llm(path: Optional[str]) -> list[str]:
-    lines = ["## LLM spend", ""]
-    if not path:
-        return lines + ["<No --llm-csv given: run the SQL from `--print-sql` and add the by-stage table.>", ""]
-    rows = list(csv.DictReader(Path(path).open(encoding="utf-8")))
+def read_llm_csv(path: str) -> list[dict[str, Any]]:
+    with Path(path).open(encoding="utf-8", newline="") as f:
+        rows = list(csv.DictReader(f))
     need = {"stage", "role", "account", "calls", "cost_usd"}
     if rows and not need <= set(rows[0]):
         raise SystemExit(f"{path}: columns must include {sorted(need)}")
-    regular = [r for r in rows if not r["stage"].startswith("adhoc_")]
-    adhoc = [r for r in rows if r["stage"].startswith("adhoc_")]
+    return rows
+
+
+def crm_llm_rows(crm_month: Optional[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [{"app": "crm", "stage": r.get("stage"), "role": r.get("model") or "-", "account": "crm_gateway",
+             "calls": r.get("calls"), "cost_usd": r.get("cost_usd")}
+            for r in ((crm_month or {}).get("crm_llm") or {}).get("by_stage_model") or []]
+
+
+def section_llm(rows: Optional[list[dict[str, Any]]]) -> list[str]:
+    lines = ["## LLM spend", ""]
+    if rows is None:
+        return lines + ["<No --llm-csv or --bundle given: run the SQL from `--print-sql` and add the by-stage table.>",
+                        ""]
+    with_app = any(r.get("app") for r in rows)
+    regular = [r for r in rows if not str(r["stage"]).startswith("adhoc_")]
+    adhoc = [r for r in rows if str(r["stage"]).startswith("adhoc_")]
+    if with_app:
+        by_app: dict[str, float] = {}
+        for r in rows:
+            by_app[r.get("app") or "cis"] = by_app.get(r.get("app") or "cis", 0.0) + float(r["cost_usd"] or 0)
+        lines += ["By app: " + ", ".join(f"{a} {money(v)} USD" for a, v in sorted(by_app.items(), key=lambda kv: -kv[1]))
+                  + "." + (" CRM rows come from its own gateway (role column = model)." if "crm" in by_app else ""), ""]
     for title, subset in (("By stage and role", regular), ("Ad-hoc runs (stage adhoc_<issue>)", adhoc)):
         total = sum(float(r["cost_usd"] or 0) for r in subset)
-        lines += [f"### {title} — {money(total)} USD", "",
-                  "| Stage | Role | Account | Calls | USD |", "|---|---|---|---|---|"]
+        cols = ("| App | Stage | Role | Account | Calls | USD |", "|---|---|---|---|---|---|") if with_app else \
+            ("| Stage | Role | Account | Calls | USD |", "|---|---|---|---|---|")
+        lines += [f"### {title} — {money(total)} USD", "", *cols]
         for r in sorted(subset, key=lambda r: -float(r["cost_usd"] or 0))[:20]:
-            lines.append(f"| {r['stage']} | {r['role']} | {r['account']} | {int(float(r['calls'] or 0)):,} | "
+            app = f"{r.get('app') or 'cis'} | " if with_app else ""
+            lines.append(f"| {app}{r['stage']} | {r['role']} | {r['account']} | {int(float(r['calls'] or 0)):,} | "
                          f"{money(float(r['cost_usd'] or 0))} |")
         if not subset:
-            lines.append("| none | | | | |")
+            lines.append("| none | | | | |" + (" |" if with_app else ""))
         lines.append("")
     return lines
 
 
-def section_units(cur: dict[str, Any], prev: Optional[dict[str, Any]], units_path: Optional[str]) -> list[str]:
-    lines = ["## Unit costs", "", "| Unit | Value (USD) | Basis |", "|---|---|---|"]
-    if not units_path:
-        return lines + ["| <no --units file> | | |", ""]
-    units = json.loads(Path(units_path).read_text(encoding="utf-8"))
-    rows = apps_by_key(cur)
+def unit_values(cost: Optional[dict[str, Any]], units: dict[str, Any]) -> dict[str, Optional[float]]:
+    rows = apps_by_key(cost)
 
-    def per(numer: Optional[float], key: str) -> str:
-        n = units.get(key)
-        return money(numer / n) if numer is not None and n else "n/a"
+    def per(numer: Optional[float], n: Any) -> Optional[float]:
+        return numer / n if numer is not None and n else None
 
-    cis = rows.get("cis", {})
-    tp = rows.get("tripplanner", {})
-    bk = rows.get("booking", {})
-    lines += [
-        f"| USD per published tour | {per(cis.get('total_usd'), 'published_tours')} | cis total / {units.get('published_tours')} published tours |",
-        f"| USD LLM per published tour | {per(cis.get('ai_usd'), 'published_tours')} | cis LLM / {units.get('published_tours')} |",
-        f"| USD per trip plan | {per(tp.get('total_usd'), 'trip_plans')} | tripplanner total / {units.get('trip_plans')} trip plans |",
-        f"| USD per booking | {per(bk.get('total_usd'), 'bookings')} | booking total / {units.get('bookings')} bookings |",
-        "",
+    cis, tp, bk = rows.get("cis", {}), rows.get("tripplanner", {}), rows.get("booking", {})
+    bookings = units.get("bookings_confirmed", units.get("bookings"))
+    return {
+        "tour": per(cis.get("total_usd"), units.get("published_tours")),
+        "tour_llm": per(cis.get("ai_usd"), units.get("published_tours")),
+        "trip_plan": per(tp.get("total_usd"), units.get("trip_plans")),
+        "trip_case": per(bk.get("total_usd"), units.get("trip_cases")),
+        "booking": per(bk.get("total_usd"), bookings),
+    }
+
+
+def section_units(cur: dict[str, Any], prev: Optional[dict[str, Any]], units: Optional[dict[str, Any]],
+                  prev_units: Optional[dict[str, Any]] = None) -> list[str]:
+    lines = ["## Unit costs", "", "| Unit | Value (USD) | Last month (USD) | Basis |", "|---|---|---|---|"]
+    if not units:
+        return lines + ["| <no --units file or bundle counts> | | | |", ""]
+    v = unit_values(cur, units)
+    pv = unit_values(prev, prev_units) if prev is not None and prev_units else {}
+    def n(key: str) -> str:
+        v = units.get(key)
+        return "no count" if v is None else f"{v:,}"
+
+    bookings_key = "bookings_confirmed" if "bookings_confirmed" in units else "bookings"
+    live = f"; {n('published_tours_live')} live at month end" if "published_tours_live" in units else ""
+    rows = [
+        ("USD per published tour", "tour", f"cis total / {n('published_tours')} published tours{live}"),
+        ("USD LLM per published tour", "tour_llm", f"cis LLM / {n('published_tours')}"),
+        ("USD per trip plan", "trip_plan", f"tripplanner total / {n('trip_plans')} trip plans"),
     ]
+    if "trip_cases" in units:
+        rows.append(("USD per trip case", "trip_case", f"booking total / {n('trip_cases')} trip cases created"))
+    rows.append(("USD per booking", "booking", f"booking total / {n(bookings_key)} bookings"
+                 + (" (trip cases confirmed or later)" if "bookings_confirmed" in units else "")))
+    for label, key, basis in rows:
+        lines.append(f"| {label} | {money(v[key])} | {money(pv.get(key))} | {basis} |")
+    lines += ["", "Published tours = published or republished in the month (`published_at`). Dev numbers: trend only.",
+              ""]
     return lines
 
 
-def build(cur: dict[str, Any], prev: Optional[dict[str, Any]], llm_csv: Optional[str], units: Optional[str]) -> str:
+def summary_vi(cur: dict[str, Any], prev: Optional[dict[str, Any]], units: Optional[dict[str, Any]],
+               budget_usd: Optional[float]) -> list[str]:
+    """Five lines for the business owner (plain Vietnamese, no issue keys). The reason and the decision stay to fill."""
+    t = cur.get("totals") or {}
+    total, aws = t.get("total_usd"), (cur.get("aws") or {}).get("total_usd")
+    outside = t.get("ai_outside_aws_usd")
+    if outside is None and total is not None and aws is not None:
+        outside = total - aws
+    m = month_vi(cur["month"])
+    lines = ["## Tóm tắt cho chủ doanh nghiệp (VI)", "",
+             "<!-- Bản nháp tự sinh từ số liệu: điền lý do (dòng 3) và việc cần quyết (dòng 5), đọc lại trước khi gửi. -->",
+             "",
+             f"1. Tổng chi phí tháng {m}: {money(total)} USD (hạ tầng AWS {money(aws)} USD, AI tính ngoài hoá đơn AWS "
+             f"{money(outside)} USD)."]
+    if prev:
+        pt = (prev.get("totals") or {}).get("total_usd")
+        ch, _ = change(total, pt)
+        lines.append(f"2. So với tháng {month_vi(prev['month'])} ({money(pt)} USD): {ch.replace('n/a', 'chưa so được')}.")
+    else:
+        lines.append("2. Chưa có số tháng trước để so sánh.")
+    deltas = []
+    prev_rows = apps_by_key(prev)
+    for r in cur.get("apps", []):
+        if prev is not None:
+            deltas.append((float(r.get("total_usd") or 0) - float(prev_rows.get(r["app"], {}).get("total_usd") or 0),
+                           r.get("label", r["app"])))
+    if deltas:
+        d, label = max(deltas, key=lambda x: abs(x[0]))
+        lines.append(f"3. Thay đổi lớn nhất: {label} {d:+,.2f} USD; lý do: <điền>.")
+    else:
+        lines.append("3. Phần lớn chi phí: <điền>; lý do: <điền>.")
+    if budget_usd and aws is not None:
+        used = aws / budget_usd * 100
+        lines.append(f"4. Ngân sách AWS tháng: đã dùng {money(aws)} / {money(budget_usd)} USD ({used:.0f} %), "
+                     f"còn {money(budget_usd - aws)} USD.")
+    else:
+        lines.append("4. Ngân sách tháng: <điền>.")
+    v = unit_values(cur, units or {})
+    unit = (f"Chi phí mỗi tour xuất bản: {money(v['tour'])} USD (riêng AI {money(v['tour_llm'])} USD)"
+            if v["tour"] is not None else "Chi phí mỗi tour xuất bản: chưa có số tour")
+    lines += [f"5. {unit}; số liệu môi trường Dev, chỉ để xem xu hướng. Cần quyết định: <điền, hoặc \"không có\">.", ""]
+    return lines
+
+
+def data_findings(cur: dict[str, Any], crm_given: bool) -> list[str]:
+    out: list[str] = []
+    refresh = cur.get("refresh") or {}
+    if refresh.get("stale"):
+        out.append(f"Stored Cost Explorer data was stale when exported ({refresh.get('reason')}); "
+                   "refresh with POST /admin/cost-explorer/check (~$0.01) or collect_month.py REFRESH=1 before "
+                   "final numbers.")
+    acc3 = (cur.get("llm_satellites") or {}).get("acc3") or {}
+    ce_usd, est = acc3.get("ce_bedrock_usd"), acc3.get("llm_log_estimate_usd")
+    if est is not None and est >= 1.0 and (ce_usd is None or ce_usd < CREDIT_GAP_RATIO * est):
+        out.append(f"acc3 Bedrock in Cost Explorer ({money(ce_usd)} USD) is under half of the gateway estimate "
+                   f"({money(est)} USD). UnblendedCost is net of credits (acc3 pays with its AWS Lift credit since "
+                   "2026-10-29): read the gross Usage amount (RECORD_TYPE) before calling it a saving.")
+    if "crm_llm" in cur and (cur.get("crm_llm") or {}).get("status") != "ok" and not crm_given:
+        out.append("CRM LLM spend is not in the CRM row (the export had no staff token for the CRM gateway); add "
+                   "--crm-bundle from collect_month.py PART=crm.")
+    return out
+
+
+def build(cur: dict[str, Any], prev: Optional[dict[str, Any]], llm_rows: Optional[list[dict[str, Any]]],
+          units: Optional[dict[str, Any]], *, prev_units: Optional[dict[str, Any]] = None,
+          history: Optional[dict[str, dict[str, Any]]] = None, budget_usd: Optional[float] = None,
+          crm_given: bool = False) -> str:
     out = [f"<!-- Drafted by tools/finops/monthly_cost_report.py from /admin/platform/cost {cur['month']}"
            f"{' vs ' + prev['month'] if prev else ''}; numbers are inputs, the reasons are not. -->", ""]
+    out += summary_vi(cur, prev, units, budget_usd)
     out += section_totals(cur, prev)
     app_lines, findings = section_apps(cur, prev)
     out += app_lines
+    if history:
+        out += section_mom(sorted(history), history)
     out += section_services(cur, prev)
-    out += section_llm(llm_csv)
-    out += section_units(cur, prev, units)
-    refresh = cur.get("refresh") or {}
-    if refresh.get("stale"):
-        findings.append(f"Stored Cost Explorer data was stale when exported ({refresh.get('reason')}); "
-                        "refresh with POST /admin/cost-explorer/check (~$0.01) before final numbers.")
+    out += section_llm(llm_rows)
+    out += section_units(cur, prev, units, prev_units)
+    findings += data_findings(cur, crm_given)
     out += ["## Findings from the data", ""]
     out += [f"- {f}" for f in findings] or ["- none"]
     out.append("")
     return "\n".join(out)
 
 
+def from_bundles(a: argparse.Namespace) -> dict[str, Any]:
+    cis = load_bundle(a.bundle, "cis")
+    bk = load_bundle(a.booking_bundle, "booking")
+    crm = load_bundle(a.crm_bundle, "crm")
+    months = sorted(cis["months"])
+    month = a.month or months[-1]
+    if month not in cis["months"]:
+        raise SystemExit(f"--month {month} is not in the bundle ({', '.join(months)})")
+    crm_m = (crm or {}).get("months", {})
+    history = {m: apply_crm(cis["months"][m]["platform_cost"], crm_m.get(m)) for m in months if m <= month}
+
+    def units_of(m: str) -> dict[str, Any]:
+        u = dict(cis["months"][m].get("units") or {})
+        u.update(((bk or {}).get("months", {}).get(m) or {}).get("units") or {})
+        return u
+
+    i = months.index(month)
+    prev_m = months[i - 1] if i > 0 else None
+    units = units_of(month)
+    if a.units:
+        units.update(json.loads(Path(a.units).read_text(encoding="utf-8")))
+    llm = list(cis["months"][month].get("llm_by_stage") or []) + crm_llm_rows(crm_m.get(month))
+    return {"cur": history[month], "prev": history.get(prev_m) if prev_m else None, "llm_rows": llm,
+            "units": units, "prev_units": units_of(prev_m) if prev_m else None, "history": history,
+            "crm_given": crm is not None}
+
+
 def main(argv: Optional[list[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("--bundle")
+    ap.add_argument("--booking-bundle")
+    ap.add_argument("--crm-bundle")
+    ap.add_argument("--month")
     ap.add_argument("--current")
     ap.add_argument("--previous")
     ap.add_argument("--llm-csv")
     ap.add_argument("--units")
+    ap.add_argument("--budget-usd", type=float)
     ap.add_argument("--out")
     ap.add_argument("--print-sql", action="store_true", help="print the read-only LLM-by-stage SQL and exit")
     a = ap.parse_args(argv)
     if a.print_sql:
         print(LLM_BY_STAGE_SQL)
         return 0
-    if not a.current:
-        ap.error("--current is required (or use --print-sql)")
-    cur, prev = load_json(a.current), load_json(a.previous)
-    text = build(cur, prev, a.llm_csv, a.units)
+    if a.bundle:
+        if a.current or a.previous or a.llm_csv:
+            ap.error("--bundle replaces --current, --previous and --llm-csv")
+        kw = from_bundles(a)
+        text = build(kw.pop("cur"), kw.pop("prev"), kw.pop("llm_rows"), kw.pop("units"), budget_usd=a.budget_usd,
+                     **kw)
+    else:
+        if not a.current:
+            ap.error("--current or --bundle is required (or use --print-sql)")
+        if a.booking_bundle or a.crm_bundle or a.month:
+            ap.error("--booking-bundle, --crm-bundle and --month need --bundle")
+        cur, prev = load_json(a.current), load_json(a.previous)
+        units = json.loads(Path(a.units).read_text(encoding="utf-8")) if a.units else None
+        llm_rows = read_llm_csv(a.llm_csv) if a.llm_csv else None
+        text = build(cur, prev, llm_rows, units, budget_usd=a.budget_usd)
     if a.out:
         Path(a.out).write_text(text, encoding="utf-8")
     else:

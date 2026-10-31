@@ -1,0 +1,1 @@
+FINOPS_BUNDLE {"kind":"finops_bundle","version":1,"part":"crm","generated_at":"2099-04-03T00:00:00+00:00","months":{"2099-03":{"crm_llm":{"calls":30,"cost_usd":1.5,"by_stage_model":[{"stage":"crm_mail_summary","model":"model-small","calls":30,"cost_usd":1.5}]}}}}
