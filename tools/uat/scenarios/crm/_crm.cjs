@@ -17,6 +17,8 @@ function base({ id, title, who = 'A', viewport = DESKTOP, mask = [] }) {
     baseURL: crm.PARTNER,
     viewport,
     mask: [...crm.TRAVELLER_MASK, ...mask],
+    // Old Dev test rows carry internal issue ids in names ("E2E AA966 ..."): never on screen in a review video.
+    blurText: ['\\bAA-?\\d{3,4}\\b'],
     scrollBlock: 'center', // the CRM shell has a sticky top bar
     meta: {},
   };

@@ -6,7 +6,8 @@
 // so the voice-over fits without stretching audio. Assertions run inside each step: a failing assertion stops the
 // run, marks the step FAIL and still keeps the video as evidence. Exit: 0 PASS, 2 a step FAILed, 1 crash.
 // Signed-in scenarios: UAT_STORAGE_STATE=<file> (or scenario.storageState) saved by an unrecorded sign-in run;
-// the sign-in screen itself is never recorded. scenario.mask = [CSS selectors] blurs secrets on screen.
+// the sign-in screen itself is never recorded. scenario.mask = [CSS selectors] blurs secrets on screen;
+// scenario.blurText = [regex sources] blurs any element whose own text matches (e.g. internal ids in old test data).
 // Optional scenario hooks: prepare() runs before the browser starts (unrecorded sign-in, e.g. lib/crm-signin.cjs; it
 // may set scenario.storageState); fastOnly: true refuses a recorded run (data prep / cleanup scenarios); scenario.meta
 // (filled by steps, e.g. the app git_sha at the start and end) is copied into result.json.
@@ -63,6 +64,29 @@ async function main() {
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', add);
       else add();
     }, sc.mask);
+  }
+  if (sc.blurText && sc.blurText.length) {
+    await context.addInitScript((srcs) => {
+      const res = srcs.map((x) => new RegExp(x));
+      const scan = (root) => {
+        if (!root) return;
+        const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        for (let n = w.nextNode(); n; n = w.nextNode()) {
+          if (n.parentElement && res.some((r) => r.test(n.nodeValue))) n.parentElement.style.setProperty('filter', 'blur(10px)', 'important');
+        }
+      };
+      const start = () => {
+        scan(document.body);
+        new MutationObserver((ms) => {
+          for (const m of ms) {
+            if (m.type === 'characterData') scan(m.target.parentElement);
+            for (const a of m.addedNodes) scan(a.nodeType === 1 ? a : a.parentElement);
+          }
+        }).observe(document.body, { childList: true, subtree: true, characterData: true });
+      };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+      else start();
+    }, sc.blurText);
   }
   const page = await context.newPage();
   const t0 = Date.now();

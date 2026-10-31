@@ -8,7 +8,7 @@
 // The real mailbox address and every sender line are blurred (lib/crm-signin.cjs mask). Writes: one saved reply and
 // one draft (ids kept in work/crm/state.json; cleanup.cjs deletes both). No LLM call. Cost $0.
 const slide = require('../../lib/slide.cjs');
-const { st, base, sha, open, bffOk, type, choose } = require('./_crm.cjs');
+const { st, base, sha, open, bffOk, type, choose, reuse } = require('./_crm.cjs');
 
 const MAIL_TRIP = process.env.UAT_CRM_MAIL_TRIP || '204b00cc-2122-420a-a217-a2f80ce1b140';
 const sc = base({ id: 'CRM-REV-13', title: 'E-mail on the trip: threads, a saved reply and a draft' });
@@ -59,7 +59,8 @@ sc.steps = [
       title = `Deposit received ${s.run}`;
       await open(page, h, '/settings/saved-replies', 'saved-replies');
       const list = page.getByTestId('saved-replies-list');
-      if (!(await list.getByText(title).count())) {
+      if (await list.getByText(title).count()) reuse(h, 'this run\'s saved reply', 'cleanup.cjs deletes it');
+      else {
         const form = page.getByTestId('saved-replies-new');
         await h.scrollTo(form);
         await type(page, h, form.locator('input[name="title"]'), title);
@@ -85,6 +86,9 @@ sc.steps = [
       await open(page, h, `/pipeline/${MAIL_TRIP}`, 'crm-trip');
       const composer = panel(page).getByTestId('messages-composer');
       await h.scrollTo(composer);
+      if ((await composer.locator('textarea').inputValue()).trim()) reuse(h, 'a saved draft on the mail trip', 'cleanup.cjs deletes it');
+      await composer.locator('textarea').fill(''); // --fast only: start the rehearsal from an empty composer
+      await composer.locator('input[aria-label]').first().fill('');
       const pick = composer.locator('select[aria-label]').first();
       const id = (st.load().created.saved_replies || []).slice(-1)[0];
       await choose(h, pick, id);

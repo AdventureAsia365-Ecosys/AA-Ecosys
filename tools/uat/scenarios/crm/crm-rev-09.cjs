@@ -1,7 +1,7 @@
 // CRM review R09 (plan docs/audits/2026-10-31-S261-crm-progress-video-plan §3): contracts and e-sign.
 // Given: A (owner) signed in; the R03 trip's version accepted in R08 (client link in work/crm/.secrets.json r08_link).
 // When:  the owner reads Settings > Agreements (booking terms, waiver, insurance declination), saves and publishes new
-//        booking terms "rv-<run>-<n>"; the trip then asks the client to re-accept; the client (C, same browser, client
+//        booking terms "<run>-<n>" (rv<yyyymmdd><n>-<n>); the trip then asks the client to re-accept; the client (C, same browser, client
 //        host) reads the new version, ticks it and types her name; the owner sees the trip clear again and the signing
 //        panel per traveller (the waiver envelope is signed in the traveller portal after the deposit, R11).
 // Then:  the new version is published; the trip shows the re-accept warning, then not; the client's re-accept is
@@ -43,8 +43,8 @@ sc.steps = [
     run: async (page, h) => {
       const rows = await page.locator('[data-testid="agreement-row"][data-kind="booking_terms"]').allInnerTexts();
       let n = 1;
-      while (rows.some((r) => r.includes(`rv-${s.run}-${n}`))) n += 1;
-      label = `rv-${s.run}-${n}`;
+      while (rows.some((r) => r.includes(`${s.run}-${n}`))) n += 1;
+      label = `${s.run}-${n}`; // rv<yyyymmdd><run>-<n>
       const form = page.getByTestId('agreement-form');
       await h.scrollTo(form);
       await choose(h, form.locator('select[name="kind"]'), 'booking_terms');
