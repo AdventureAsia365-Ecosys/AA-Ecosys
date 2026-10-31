@@ -6,8 +6,9 @@
   "payload": {
     "generated_at": "2026-10-31T04:00:00Z",
     "dimension": "destination",
+    "quarter": "2026-Q1",
     "from": "2026-01-01",
-    "to": "2026-12-01",
+    "to": "2026-03-01",
     "agencies_included": 4,
     "agencies_opted_out": 1,
     "k_min": 10,

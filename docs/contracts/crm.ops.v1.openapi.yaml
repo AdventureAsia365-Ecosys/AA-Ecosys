@@ -32,10 +32,13 @@ info:
     and the CIS page refreshes it every 10 minutes, so one `ops_read` event per agency per refresh would bury each
     owner's access log; the CRM logs the call once instead (like /jobs/summary, which writes no event either). Version 1.5
     (AA-966, additive; spec module 17, design v3 S-03): GET /insights, AA insights across agencies for one dimension
-    (destination, budget band, age band, party size band, current stage, Lost reason) over a month range: a cell is
-    returned only when it holds at least 10 travellers from at least 3 agencies, every other cell is withheld (only
-    their number is returned, never a bucket, a count or a total), an agency that opted out is never read, and no
-    agency id appears; like /data-coverage it writes no agency audit event. Errors are
+    (destination, budget band, age band, party size band, current stage, Lost reason) over ONE calendar quarter (no
+    other period, so two answers never overlap or nest and cannot be subtracted): a cell is returned only when it holds
+    at least 10 travellers from at least 3 agencies and no agency holds more than 70 % of them, every other cell is
+    withheld (only their number is returned, never a bucket, a count or a total), a trip counts its travellers once
+    (once per destination for the destination dimension), an agency that opted out is never read, and no agency id
+    appears; like /data-coverage it writes no agency audit event. The cells are live: two reads of a quarter differ by
+    what changed in between, including an agency's opt-out (a platform write on the owner's request, audited). Errors are
     `{detail, message?, fields?, state?, member_limit?}` (Problem); a 422 names the failing fields only, never the
     submitted values.
   x-aa-contract: crm.ops.v1
@@ -568,11 +571,14 @@ paths:
   /insights:
     get:
       operationId: getInsights
-      summary: AA insights across agencies, published cells only (1.5; >= 10 travellers from >= 3 agencies)
+      summary: AA insights across agencies for one quarter, published cells only (1.5; >= 10 travellers from >= 3 agencies, none above 70 %)
       description: >-
-        Reads `crm.v_insight_fact` per active agency as the NOLOGIN role crm_insights, after the agency's opt-out (Q2
-        3.12, set through PUT /tenants/{tenant_id}/insights-opt-out) was checked; synthetic agencies count only outside
-        prod. Totals only: no agency audit event, one log line per call.
+        Reads per active agency, as the NOLOGIN role crm_insights and after the agency's opt-out (Q2 3.12, set through
+        PUT /tenants/{tenant_id}/insights-opt-out) was checked, `crm.v_insight_fact` (one row per trip and destination)
+        for the destination dimension and `crm.v_insight_trip_fact` (crm-031, trips per band combination) for every
+        other one, so a trip's travellers count once; synthetic agencies count only outside prod. Totals only: no agency
+        audit event, one log line per call. Not guaranteed: changing one agency's opt-out between two reads of the same
+        quarter shows that agency's share of the cells published both times.
       parameters:
         - name: dimension
           in: query
@@ -580,16 +586,11 @@ paths:
           schema:
             type: string
             enum: [destination, budget_band, age_band, party_size, stage_reached, lost_reason_code]
-        - name: from
+        - name: quarter
           in: query
           required: true
-          description: Any day of the first month.
-          schema: {type: string, format: date}
-        - name: to
-          in: query
-          required: true
-          description: Any day of the last month (at most 36 months after `from`).
-          schema: {type: string, format: date}
+          description: One calendar quarter, `YYYY-Q1` to `YYYY-Q4`; no other period is served.
+          schema: {type: string, pattern: "^20[0-9]{2}-Q[1-4]$"}
       responses:
         "200":
           description: The published cells, largest first
@@ -600,7 +601,7 @@ paths:
         "403": {$ref: "#/components/responses/Forbidden"}
         "422":
           $ref: "#/components/responses/Invalid"
-          description: "`invalid_request` (unknown dimension, bad date), `invalid_range` (`to` before `from`, or 36 months or more)"
+          description: "`invalid_request` (unknown dimension, no quarter), `invalid_quarter` (not `YYYY-Q1` to `YYYY-Q4`)"
   /llm/usage:
     get:
       operationId: getLlmUsage
@@ -1184,20 +1185,21 @@ components:
       required: [bucket, traveller_count, agency_count]
       properties:
         bucket: {type: string, maxLength: 40, description: "The dimension's value (a destination code, a band, a stage or reason code)"}
-        traveller_count: {type: integer, minimum: 10}
+        traveller_count: {type: integer, minimum: 10, description: "Travellers summed over the cell's trips (a trip once; per destination for the destination dimension); no agency holds more than 70 % of them"}
         agency_count: {type: integer, minimum: 3}
     Insights:
       type: object
       additionalProperties: false
-      required: [generated_at, dimension, from, to, agencies_included, agencies_opted_out, k_min, agencies_min, cells,
-                 suppressed_cells]
+      required: [generated_at, dimension, quarter, from, to, agencies_included, agencies_opted_out, k_min, agencies_min,
+                 cells, suppressed_cells]
       properties:
         generated_at: {type: string, format: date-time}
         dimension:
           type: string
           enum: [destination, budget_band, age_band, party_size, stage_reached, lost_reason_code]
-        from: {type: string, format: date, description: First day of the first month}
-        to: {type: string, format: date, description: First day of the last month}
+        quarter: {type: string, pattern: "^20[0-9]{2}-Q[1-4]$", description: The calendar quarter asked for}
+        from: {type: string, format: date, description: First day of the quarter's first month}
+        to: {type: string, format: date, description: First day of the quarter's last month}
         agencies_included: {type: integer, minimum: 0}
         agencies_opted_out: {type: integer, minimum: 0}
         k_min: {type: integer, const: 10}
@@ -1205,7 +1207,7 @@ components:
         cells:
           type: array
           items: {$ref: "#/components/schemas/InsightCell"}
-        suppressed_cells: {type: integer, minimum: 0, description: How many cells were withheld (below either threshold)}
+        suppressed_cells: {type: integer, minimum: 0, description: How many cells were withheld (below a threshold, or one agency above 70 %)}
     LlmUsageRow:
       type: object
       additionalProperties: false
