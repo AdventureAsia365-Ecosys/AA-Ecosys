@@ -63,6 +63,13 @@ header { display: grid; gap: 18px }
 .ms li.done .tick { color: var(--ok) }
 .ms li.done span:last-child { color: var(--muted) }
 .ms-foot { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--muted) }
+/* TL-4 (S262): optional milestone due date and risk register */
+.ms-due { font: 500 12px var(--mono); color: var(--muted) }
+.ms-risks { border-top: 1px solid var(--line); padding-top: 8px; display: grid; gap: 6px; font-size: 12.5px }
+.ms-risks b { font-size: 12px; color: var(--warn) }
+.ms-risks div { display: grid; gap: 1px }
+.ms-risks small { color: var(--muted) }
+.card .due { font: 500 11px/1 var(--mono); color: var(--warn) }
 
 /* pills */
 .pill { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; font: 500 12px/1 var(--body);
@@ -228,7 +235,11 @@ footer code { font-family: var(--mono); font-size: 12.5px }
       return '<article class="ms"><div class="ms-top"><span class="ms-id">' + esc(m.id) + '</span><span class="pill ' + esc(m.status) + '">' + esc(STATUS_VI[m.status] || m.status) + "</span></div>" +
         "<h3>" + esc(m.name) + '</h3><div class="bar" role="img" aria-label="' + d + " trên " + n + ' tiêu chí"><i style="width:' + Math.round(100 * d / n) + '%"></i></div><ul>' +
         m.criteria.map(function (c) { return '<li class="' + (c.done ? "done" : "") + '"><span class="tick">' + (c.done ? "✓" : "○") + "</span><span>" + esc(c.text) + "</span></li>" }).join("") +
-        '</ul><div class="ms-foot"><span class="mono">' + d + "/" + n + " tiêu chí</span><span>" + esc(m.window) + " · " + cnt + " issue</span></div></article>";
+        "</ul>" + (m.due ? '<div class="ms-due">Hạn ' + esc(m.due.split("-").reverse().join("/")) + "</div>" : "") +
+        ((m.risks || []).length ? '<div class="ms-risks"><b>Rủi ro</b>' + m.risks.map(function (r) {
+          return "<div><span>" + esc(r.text) + "</span><small>" + esc(r.owner_role) + " · khi: " + esc(r.trigger) + "</small></div>";
+        }).join("") + "</div>" : "") +
+        '<div class="ms-foot"><span class="mono">' + d + "/" + n + " tiêu chí</span><span>" + esc(m.window) + " · " + cnt + " issue</span></div></article>";
     }).join("");
 
     $("lanes").innerHTML = LANES.map(function (L, i) {
@@ -236,7 +247,8 @@ footer code { font-family: var(--mono); font-size: 12.5px }
       return '<div class="lane' + (L === data.next_session ? " now" : "") + '"><h3>' + esc(L) + "<small>" + items.length + " việc</small></h3>" +
         items.map(function (x) {
           return '<div class="card"><div class="row1">' + link(x.id) + (x.size ? '<span class="size">' + esc(x.size) + "</span>" : "") +
-            '<span class="pill">' + esc(x.milestone) + "</span>" + (x.status === "In Progress" ? '<span class="pill prog">đang làm</span>' : "") + "</div>" +
+            '<span class="pill">' + esc(x.milestone) + "</span>" + (x.status === "In Progress" ? '<span class="pill prog">đang làm</span>' : "") +
+            (x.due ? '<span class="due">hạn ' + esc(x.due.split("-").reverse().join("/")) + "</span>" : "") + "</div>" +
             "<p>" + esc(x.next) + "</p>" + (x.needs ? '<div class="needs">Cần: ' + esc(x.needs) + "</div>" : "") + "</div>";
         }).join("") + "</div>";
     }).join("");

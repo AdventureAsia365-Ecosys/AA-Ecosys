@@ -33,6 +33,10 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
    - Cỡ phiên: 3–5 issue; Ultracode bật → 8–10 issue chạy liên tục bằng lane song song.
    - Liệt kê mọi issue **In Progress**: đủ Done-when → đóng ngay kèm bằng chứng (`aa-ship`); còn ít → làm xong trong
      phiên; bị chặn → ghi rõ cái gì chặn. Ưu tiên làm xong việc dở trước việc mới.
+   - **Trần WIP (TL-3 phần đã duyệt, tech lead S262):** tối đa **8 issue In Progress toàn team** (Linear team
+     `AA_Ecosys`, mọi project). Quá 8 → phiên mở bằng một lượt hội tụ: đóng (Done hoặc Done-with-scope, `aa-ship` §4),
+     trả về Backlog kèm lý do, hoặc làm xong, tới khi ≤ 8, rồi mới chuyển issue mới sang In Progress. Đây là trần do tech
+     lead đặt, không phải trần agent tự đặt; trần theo lane / theo cỡ (≤ 3 mỗi lane, ≤ 2 L/XL) chưa duyệt, không áp.
    - Mỗi issue `get_issue` để chắc title đúng.
 4. **Báo lệch:** state thật khác memory (revision, job treo, issue đã đóng, PR mở) → nói ngay trước khi làm.
 5. **Đọc bài học:** mục liên quan trong `aa-lessons/lessons.md`, và `.tmp-session/S<nnn-1>-lessons-pending.md` nếu
