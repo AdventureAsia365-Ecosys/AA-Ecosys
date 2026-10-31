@@ -5,7 +5,10 @@
 //   const st = require('../../lib/crm-state.cjs');
 //   const s = st.load();  s.r03 = { trip_id }; st.save(s);
 //   st.runTag(s)          -> "rv202610311": the per-run suffix of every synthetic name and @example.invalid address
-//   st.newRun()           -> a fresh run (next <n> for today), keeping nothing of the previous run's ids
+//   st.newRun()           -> a fresh run (next <n> for today), keeping none of the previous run's ids (only `incident`)
+// CLI (an Adventure Asia incident is raised outside the CRM; crm-rev-12 shows it only when this says it is open):
+//   node tools/uat/lib/crm-state.cjs incident open <trip id>   -> state.json incident = { trip_id, open: true }
+//   node tools/uat/lib/crm-state.cjs incident clear            -> incident.open = false
 const fs = require('fs');
 const path = require('path');
 
@@ -37,7 +40,9 @@ function newRun() {
   const prev = load();
   const day = today();
   const n = prev.run && prev.run.startsWith(`rv${day}`) ? Number(prev.run.slice(10)) + 1 : 1;
-  return save({ run: `rv${day}${n}`, run_day: day, created_at: new Date().toISOString(), created: {} });
+  // An Adventure Asia incident belongs to a departure, not to a run: it survives a new run.
+  const keep = prev.incident ? { incident: prev.incident } : {};
+  return save({ run: `rv${day}${n}`, run_day: day, created_at: new Date().toISOString(), created: {}, ...keep });
 }
 
 function runTag(s) {
@@ -68,3 +73,23 @@ function saveSecrets(v) {
 }
 
 module.exports = { DIR, STATE, today, load, save, newRun, runTag, remember, loadSecrets, saveSecrets };
+
+if (require.main === module) {
+  const [what, mode, tripId] = process.argv.slice(2);
+  if (what !== 'incident' || !['open', 'clear'].includes(mode)) {
+    console.error('usage: node tools/uat/lib/crm-state.cjs incident open <trip id> | incident clear');
+    process.exit(64);
+  }
+  const s = load();
+  if (mode === 'open') {
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(tripId || '')) {
+      console.error('incident open needs the affected CRM trip id (a uuid)');
+      process.exit(64);
+    }
+    s.incident = { trip_id: tripId, open: true, set_at: new Date().toISOString() };
+  } else {
+    s.incident = { ...(s.incident || {}), open: false, set_at: new Date().toISOString() };
+  }
+  save(s);
+  console.log(`incident ${mode === 'open' ? `open on trip ${tripId.slice(0, 8)}` : 'cleared'} in ${path.relative(process.cwd(), STATE)}; make the CRM-REV-12 captions again`);
+}

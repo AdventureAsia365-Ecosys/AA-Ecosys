@@ -8,8 +8,11 @@
 //        lead's portal link (shown once, blurred; R11 opens it).
 // Then:  the invoice moves open -> payment_claimed -> paid, the trip is Booked, no 429 on the client host. Card
 //        payments (Stripe) are not built: "Not ready yet" card.
-// The overdue task needs the due date passed in the agency's day (prep >= 1 agency day earlier): a recorded take
-// stops when it is not overdue yet; --fast notes it in result.json meta. Booking staff (D) is not shown: this trip has
+// The overdue step is chosen when the file loads, from state.json and the agency's day: due date passed -> the
+// reminder task is shown (a recorded take stops if the hourly reminder has not run yet: the caption would be false);
+// not passed yet (prep the same day) -> the open invoice with its due date, no reminder task asserted, and the
+// caption says what will happen. Either way result.json meta.overdue notes what was there. Make the captions on the
+// recording day: record.cjs refuses a take whose steps changed since. Booking staff (D) is not shown: this trip has
 // no Adventure Asia item. Writes on invented data only; no real mail (the link is copied, never sent). Cost $0.
 const slide = require('../../lib/slide.cjs');
 const { crm, st, base, sha, open, bffOk, type, reuse } = require('./_crm.cjs');
@@ -18,14 +21,19 @@ const sc = base({ id: 'CRM-REV-10', title: 'Invoices and payments: a deposit cla
 let s;
 let t;
 let seen429;
+// Chosen once, when the file loads: captions and the recorded take must see the same state (record.cjs checks).
+const DUE_PASSED = (() => {
+  const t0 = st.load().invoice_trip;
+  return !!(t0 && t0.due_on && st.today() > t0.due_on.replace(/-/g, ''));
+})();
 
 const invoiceRow = (page) => page.getByTestId('trip-invoices').getByTestId('invoice-row').filter({ hasText: t.number });
 
 sc.steps = [
   {
     caption: {
-      en: 'A trip accepted a few days ago. Its deposit invoice was issued with a due date, and it is still open.',
-      vi: 'Một chuyến khách đã chấp nhận vài hôm trước. Hoá đơn đặt cọc đã phát hành kèm hạn trả, và vẫn đang mở.',
+      en: 'A trip the client has already accepted. Its deposit invoice was issued with a due date, and it is still open.',
+      vi: 'Một chuyến khách đã chấp nhận trước đó. Hoá đơn đặt cọc đã phát hành kèm hạn trả, và vẫn đang mở.',
     },
     run: async (page, h) => {
       s = st.load();
@@ -46,26 +54,41 @@ sc.steps = [
       await h.expect(row).toHaveAttribute('data-status', 'open');
     },
   },
-  {
-    caption: {
-      en: 'The due date has passed. The CRM reminds the agent first, with a task on the trip and an item in the bell; it never writes to the client by itself.',
-      vi: 'Đã quá hạn trả. CRM nhắc đại lý trước, bằng một việc trên chuyến và một mục trong chuông; CRM không tự viết cho khách.',
+  DUE_PASSED
+    ? {
+      caption: {
+        en: 'The due date has passed. The CRM reminds the agent first, with a task on the trip and an item in the bell; it never writes to the client by itself.',
+        vi: 'Đã quá hạn trả. CRM nhắc đại lý trước, bằng một việc trên chuyến và một mục trong chuông; CRM không tự viết cho khách.',
+      },
+      run: async (page, h) => {
+        if (sc.meta.skipped) return;
+        const task = page.locator('[data-testid="trip-task"][data-kind="invoice_overdue"]');
+        if (!(await task.count())) {
+          if (!h.fast) throw new Error(`the deposit (due ${t.due_on}) is not reminded as overdue yet: the reminder runs hourly, record again later`);
+          sc.meta.overdue = 'due passed, reminder not run yet';
+          return;
+        }
+        await h.scrollTo(task.first());
+        await h.expect(task.first()).toHaveAttribute('data-status', 'open');
+        await h.hover(task.first());
+        sc.meta.overdue = 'reminded';
+      },
+    }
+    : {
+      caption: {
+        en: 'The deposit is due today. Once the date passes, the CRM reminds the agent first, with a task on the trip and an item in the bell; it never writes to the client by itself.',
+        vi: 'Hạn trả cọc là hôm nay. Khi qua ngày đó, CRM nhắc đại lý trước, bằng một việc trên chuyến và một mục trong chuông; CRM không tự viết cho khách.',
+      },
+      run: async (page, h) => {
+        if (sc.meta.skipped) return;
+        if (st.today() !== t.due_on.replace(/-/g, '')) throw new Error(`the deposit is due ${t.due_on}, the agency day is ${st.today()}: make the captions again`);
+        const row = invoiceRow(page);
+        await h.expect(row).toHaveAttribute('data-status', 'open');
+        await h.expect(page.locator('[data-testid="trip-task"][data-kind="invoice_overdue"]')).toHaveCount(0);
+        await h.hover(row);
+        sc.meta.overdue = `not overdue yet (due ${t.due_on})`;
+      },
     },
-    run: async (page, h) => {
-      if (sc.meta.skipped) return;
-      const overdue = st.today() > t.due_on.replace(/-/g, '');
-      const task = page.locator('[data-testid="trip-task"][data-kind="invoice_overdue"]');
-      if (!overdue || !(await task.count())) {
-        if (!h.fast) throw new Error(`the deposit is not reminded as overdue yet (due ${t.due_on}, agency day ${st.today()}; the reminder runs hourly): run prep at least one agency day before recording`);
-        sc.meta.overdue = overdue ? 'due passed, reminder not run yet' : `not overdue yet (due ${t.due_on})`;
-        return;
-      }
-      await h.scrollTo(task.first());
-      await h.expect(task.first()).toHaveAttribute('data-status', 'open');
-      await h.hover(task.first());
-      sc.meta.overdue = 'reminded';
-    },
-  },
   {
     caption: {
       en: 'The client opens her link. The terms changed after she accepted, so she accepts the new version first.',
