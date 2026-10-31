@@ -46,7 +46,8 @@ Session S262 (31/10/2026), Claude Code subagent, branches `docs/aa-896-finops` (
   `shared.spend_budget` caps (migration 318), the gateway connection budgets (ADR 0009 decision 6), the management
   root guards (AA-1004), the AI use register link, the App-tag monitor status.
 - `docs/ops/cost/README.md`: the collector steps replace the manual JSON/CSV export.
-- Infra `accounts/management/cost_anomaly_app_tag.tf` + variables + README row.
+- Infra `accounts/management/cost_anomaly_app_tag.tf` + variables + README row + static tests.
+- Untracked `tools/finops/__pycache__/*.pyc` (committed by mistake in S243; `__pycache__/` is already in `.gitignore`).
 
 ## Tradeoffs
 
@@ -59,4 +60,6 @@ Session S262 (31/10/2026), Claude Code subagent, branches `docs/aa-896-finops` (
 
 - Nothing here calls AWS from a test; the collector's DB part is tested with a fake connection.
 - The final October numbers: run on or after 03/11 (CE revises a day for about 48 h); a run on 01/11 is provisional.
-- The App-tag monitor needs no apply now (default false: the plan is empty).
+- The App-tag monitor needs no apply now (default false: the plan is empty). Activating `App` as a cost allocation
+  tag in the management account stays a console step (Billing, Cost allocation tags), see the Infra notes.
+- `ecsx.sh` prints the bundle line on stdout; `--bundle` finds the `FINOPS_BUNDLE` line among other output lines.
