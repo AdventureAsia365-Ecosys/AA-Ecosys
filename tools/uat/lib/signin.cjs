@@ -14,7 +14,9 @@
 //              Read-only session (403 e2e_read_only on every write).
 //   studio     Content studio VIEWER of the E2E tenant (partner pool, password + authenticator), secret
 //              crm/dev/e2e-test-studio/viewer (UAT_STUDIO_SECRET overrides).
-//   crm        Owner of the invented agency of the CRM review set: lib/crm-signin.cjs identity A (same state file).
+//   crm        Owner of the invented agency of the CRM review set: lib/crm-signin.cjs identity A, with its own state
+//              file (work/dryrun/.state-crm.json, never the review set's). This account CAN write (the CRM has no
+//              read-only role yet): the runner leaves its scenarios out unless --include-writable (dryrun-core.cjs).
 // Secrets and codes are read at run time and never printed, logged or written; the state files go to
 // work/dryrun/.state-<identity>.json (chmod 600, gitignored). No screenshot or trace is ever taken here.
 'use strict';
@@ -37,7 +39,7 @@ const STAFF = {
 };
 
 function statePath(who) {
-  return who === 'crm' ? crm.statePath('A') : path.join(WORK, `.state-${who}.json`);
+  return path.join(WORK, `.state-${who}.json`);
 }
 
 /** Fill a managed-login field once its page settled; refill until the value is kept (lesson S253, AA-979). */
@@ -177,8 +179,14 @@ async function studioAlive(page) {
 async function ensureState(who) {
   if (who === 'public') return { file: null, reused: true };
   if (who === 'crm') {
-    const existed = fs.existsSync(crm.statePath('A'));
-    const file = await crm.ensureState('A');
+    const target = statePath('crm');
+    const existed = fs.existsSync(target);
+    let file;
+    try {
+      file = await crm.ensureState('A', target);
+    } catch (e) {
+      throw new Error(`crm: ${redact(String(e.message || e).split('\n')[0])}`);
+    }
     return { file, reused: existed };
   }
   if (!['cis-admin', 'booking', 'studio'].includes(who)) throw new Error(`unknown identity ${who}`);

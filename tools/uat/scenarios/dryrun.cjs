@@ -16,7 +16,8 @@ module.exports = [
   'content-studio/prt-03.cjs',
   'content-studio/prt-09.cjs',
   'content-studio/prt-10.cjs',
-  // CRM web, the owner of the invented review agency.
+  // CRM web, the owner of the invented review agency. That account CAN write (the CRM has no read-only role): the runner
+  // leaves these out unless --include-writable, and only its browser guard keeps them read-only.
   'crm-web/crm-01.cjs',
   'crm-web/crm-02.cjs',
   'crm-web/crm-05.cjs',

@@ -10,6 +10,9 @@
 //   node tools/uat/dryrun.cjs --record TP-02          record mode for one scenario: sign its identity in, then run.sh
 //                                                     (captions -> local TTS -> take -> build -> sync check)
 //   --out <dir> (default work/dryrun/<UTC stamp>/)    --skip-egress-check (only for a run that opens no Vercel host)
+//   --include-writable                                also run the scenarios whose identity CAN write (crm: the CRM
+//                                                     has no read-only role; only the browser guard keeps them
+//                                                     read-only). Left out by default and named in the report.
 // Output: <out>/results.md (the table to copy to docs/audits/<date>-S<nnn>-uat-dry-run/), results.json, results.tsv.
 // Before: bash tools/uat/setup.sh once; egress VN (VPN off; Vercel challenges VPN IPs); for cis-admin / booking a fresh
 // MFA session of the admin profile (the code mail is read from the e2e mailbox), aws sts get-caller-identity.
@@ -115,9 +118,8 @@ async function signIn(who) {
   return ensureState(who);
 }
 
-async function record(entries, id) {
-  const e = entries.find((x) => x.id === id);
-  if (!e) throw new Error(`no scenario ${id} in the manifest`);
+async function record(entries, id, opts) {
+  const [e] = core.select(entries, { only: [id], includeWritable: opts.includeWritable });
   let state = null;
   if (e.identity !== 'public') {
     await ramGuard();
@@ -132,7 +134,10 @@ async function main() {
   const entries = loadEntries();
   core.select(entries, { only: [] }); // duplicate ids fail even for --list
   if (opts.list) {
-    for (const e of entries) console.log([e.id, e.app, e.identity, `${e.steps} steps`, e.file].join('\t'));
+    for (const e of entries) {
+      const note = core.WRITABLE_IDENTITIES.includes(e.identity) ? 'only with --include-writable' : '';
+      console.log([e.id, e.app, e.identity, `${e.steps} steps`, e.file, note].filter(Boolean).join('\t'));
+    }
     return 0;
   }
   if (!fs.existsSync(path.join(HERE, 'node_modules', '@playwright', 'test'))) {
@@ -144,9 +149,11 @@ async function main() {
     console.error(`STOP: public IP country is '${country}', not VN (Vercel blocks VPN IPs). Turn the VPN off.`);
     return 3;
   }
-  if (opts.record) return record(entries, opts.record);
+  if (opts.record) return record(entries, opts.record, opts);
 
   const sel = core.select(entries, opts);
+  const skipped = core.skippedWritable(entries, opts);
+  if (skipped.length) console.log(`not run (identity can write, add --include-writable): ${skipped.join(', ')}`);
   if (!sel.length) throw new Error('no scenario matches the options');
   const startedAt = new Date().toISOString();
   const out = path.resolve(opts.out || path.join(HERE, 'work', 'dryrun', core.stamp(new Date(startedAt))));
@@ -190,7 +197,8 @@ async function main() {
   }
 
   const after = await readVersions();
-  const run = { startedAt, finishedAt: new Date().toISOString(), egress: country, signins, shas: core.shaTable(before, after), outcomes };
+  const run = { startedAt, finishedAt: new Date().toISOString(), egress: country, signins, shas: core.shaTable(before, after),
+    skipped, outcomes };
   fs.writeFileSync(path.join(out, 'results.json'), `${JSON.stringify(run, null, 2)}\n`);
   fs.writeFileSync(path.join(out, 'results.md'), core.renderMarkdown(run));
   fs.writeFileSync(path.join(out, 'results.tsv'), core.renderTsv(outcomes));

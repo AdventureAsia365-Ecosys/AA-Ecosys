@@ -23,14 +23,27 @@ const CLOCK_SKEW_MS = 60_000;
 const MAX_BYTES = 1_000_000;
 const RECIPIENT_HEADERS = ['to', 'cc', 'delivered-to', 'x-original-to', 'x-forwarded-to', 'envelope-to'];
 
+/**
+ * The error code of a failed AWS CLI call, never its text: the CLI's message names the caller's role ARN, the account
+ * and the bucket (built from the account), and the error ends up in the dry-run report (public root repo).
+ * "An error occurred (AccessDenied) when calling ..." -> AccessDenied; a timeout -> timeout; else "exit <n>".
+ */
+function awsErrorCode(e) {
+  if (e && (e.killed || e.signal === 'SIGTERM')) return 'timeout';
+  const m = /An error occurred \(([A-Za-z0-9.]+)\)/.exec(String((e && e.stderr) || ''));
+  if (m) return m[1];
+  if (/expired|sso|mfa|token/i.test(String((e && e.stderr) || ''))) return 'credentials expired or missing (refresh the MFA session)';
+  if (e && e.code === 'ENOENT') return 'aws CLI not found';
+  return `exit ${e && typeof e.code === 'number' ? e.code : '?'}`;
+}
+
 async function aws(args) {
   try {
     const { stdout } = await run('aws', [...args, '--profile', PROFILE, '--region', REGION, '--output', 'json'],
       { timeout: CLI_TIMEOUT_MS, maxBuffer: 16 * 1024 * 1024 });
     return stdout;
   } catch (e) {
-    // stderr carries AccessDenied / ExpiredToken, never a message body.
-    throw new Error(`aws ${args.slice(0, 2).join(' ')} failed: ${String(e.stderr || e.message || e).trim().split('\n')[0]}`);
+    throw new Error(`aws ${args.slice(0, 2).join(' ')} failed: ${awsErrorCode(e)}`);
   }
 }
 
@@ -200,4 +213,4 @@ async function waitForCode({ recipient, prefix, before, since, timeoutMs = 90_00
   throw new Error(`no sign-in code for ${recipient} under ${prefix} within ${Math.round(timeoutMs / 1000)} s${lastError ? ` (${lastError})` : ''}`);
 }
 
-module.exports = { baseline, waitForCode, extractCode, isAddressedTo, textBodies, parseHeaders };
+module.exports = { baseline, waitForCode, extractCode, isAddressedTo, textBodies, parseHeaders, awsErrorCode };

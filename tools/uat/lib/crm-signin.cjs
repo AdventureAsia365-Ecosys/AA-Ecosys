@@ -149,12 +149,13 @@ function onPartnerApp(page) {
 /**
  * A valid storageState file for identity A or B: the saved one when the CRM still accepts it, else a fresh managed
  * login. Runs its own headless Chromium, closed before returning (one browser at a time). Returns the file path.
+ * `file` (default work/crm/.state-<who>.json) lets the dry run keep its own session file apart from the review set.
  */
-async function ensureState(who) {
+async function ensureState(who, file = statePath(who)) {
   const { chromium } = require('@playwright/test');
-  fs.mkdirSync(WORK, { recursive: true, mode: 0o700 });
-  fs.chmodSync(WORK, 0o700);
-  const file = statePath(who);
+  const dir = path.dirname(file);
+  fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
+  fs.chmodSync(dir, 0o700);
   const browser = await chromium.launch({ headless: true });
   try {
     const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, locale: 'en-US',

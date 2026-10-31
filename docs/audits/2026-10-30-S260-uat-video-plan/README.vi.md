@@ -279,9 +279,14 @@ kịch bản FAIL; các đường gọi model trả tiền bị chặn. Danh sá
 | TripPlanner | không | TP-PUB-01, TP-02, TP-07 (phần xem tour), TP-PUB-02 (thông báo quyền riêng tư và điều khoản) |
 | Host agency, công khai | không | PORTAL-PUB-01 |
 | Content studio | người xem (viewer) của tenant E2E | PRT-01 (+ My Content), PRT-03 (xem và mở ngăn tour, không chọn tour), PRT-09, PRT-10 |
-| CRM web | chủ đại lý dựng sẵn cho video review | CRM-01, CRM-02 (danh sách), CRM-05, CRM-07 (+ báo cáo, lịch) |
+| CRM web | chủ đại lý dựng sẵn cho video review (ghi được: chỉ chạy với `--include-writable`) | CRM-01, CRM-02 (danh sách), CRM-05, CRM-07 (+ báo cáo, lịch) |
 | CIS admin | E2E CIS admin (chỉ đọc) | CIS-01 (+ hàng chờ duyệt, chỉ đọc), CIS-03, CIS-04 (chỉ đọc, không Cut / Edit), CIS-05, CIS-06 (+ Apps), CIS-08, CIS-11, CIS-12 |
 | Booking admin | E2E Booking staff (chỉ đọc) | BK-01, BK-05, BK-06, BK-07 (+ quy tắc giá, chỉ đọc), BK-08 (hoá đơn, thanh toán, kiểm tra chuyến đi), BK-10 |
+
+CRM chưa có vai trò thành viên chỉ đọc (owner, agent, assistant), nên các dòng CRM đăng nhập bằng một tài khoản ghi
+được và chỉ có lớp chặn của trình duyệt giữ chúng ở chế độ chỉ đọc. Lượt chạy mặc định bỏ qua chúng và ghi tên trong báo
+cáo; chạy chúng bằng `--include-writable`. Khi có danh tính CRM chỉ đọc (vai trò viewer, hoặc thành viên E2E bị backend
+chặn ghi như E2E staff của CIS và Booking) thì chúng vào lại bộ mặc định.
 
 Ngoài bộ chạy thử: trình lập kế hoạch bản đồ và các đường AI của TripPlanner (tìm kiếm và thuyết minh gọi model trả
 tiền, và Vercel BotID từ chối Chromium headless ở đó; có thể chạy có cửa sổ bằng `UAT_HEADED=1` trên WSLg nhưng không
