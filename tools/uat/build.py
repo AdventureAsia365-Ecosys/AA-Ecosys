@@ -2,6 +2,8 @@
 an English narration track (default), a Vietnamese narration track, and sidecar WebVTT/SRT files.
 
   python -I build.py <work/ID> <out_dir>
+  python -I build.py <work/ID> <out_dir> --no-burn   (no burned-in subtitles: input for longform.py, which keeps
+                                                      the subtitles as switchable tracks; the default is unchanged)
 
 Output names: <ID>_<yyyymmdd>_v<n>.mp4 (+ .en/.vi .srt/.vtt, .result.json); prints the MP4 path last.
 Each caption is shown from its step start to its step end (timeline.json). Each narration clip starts
@@ -61,7 +63,7 @@ def narration(work: Path, lang: str, timeline, total_s: float, out_wav: Path) ->
     return True
 
 
-def main(work: Path, out_dir: Path) -> None:
+def main(work: Path, out_dir: Path, burn: bool = True) -> None:
     caps = {c["n"]: c for c in json.loads((work / "captions.json").read_text())["captions"]}
     timeline = json.loads((work / "timeline.json").read_text())
     result = json.loads((work / "result.json").read_text())
@@ -105,8 +107,9 @@ def main(work: Path, out_dir: Path) -> None:
             meta.append(("a", a, lang, title))
             idx += 1
     cmd += maps
-    cmd += ["-vf", f"subtitles='{sub_file}':force_style='{style}'",
-            "-c:v", "libx264", "-preset", "medium", "-crf", "26", "-pix_fmt", "yuv420p", "-r", "25",
+    if burn:
+        cmd += ["-vf", f"subtitles='{sub_file}':force_style='{style}'"]
+    cmd += ["-c:v", "libx264", "-preset", "medium", "-crf", "26", "-pix_fmt", "yuv420p", "-r", "25",
             "-c:a", "aac", "-b:a", "96k", "-movflags", "+faststart", "-shortest"]
     for kind, i, lang, title in meta:
         cmd += [f"-metadata:s:a:{i}", f"language={'eng' if lang == 'en' else 'vie'}",
@@ -120,4 +123,5 @@ def main(work: Path, out_dir: Path) -> None:
 
 
 if __name__ == "__main__":
-    main(Path(sys.argv[1]).resolve(), Path(sys.argv[2]).resolve())
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    main(Path(args[0]).resolve(), Path(args[1]).resolve(), burn="--no-burn" not in sys.argv[1:])
