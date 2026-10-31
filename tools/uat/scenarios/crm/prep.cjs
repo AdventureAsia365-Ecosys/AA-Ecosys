@@ -3,7 +3,8 @@
 // Given: identity A (owner of the synthetic agency "Lữ hành Sen Vàng") on Dev.
 // When:  it checks /crm/health and keeps the git sha, picks an AA departure with >= 2 free seats, writes the ~10-row
 //        import CSV (one possible-duplicate pair) for R02, makes the side trip for R07 (at Proposal, with a builder
-//        draft: an agency hotel and an AA tour, balance date set) and the deposit invoice for R10 (issued due today:
+//        draft: an agency hotel and an AA tour, balance date set) and the deposit invoice for R10 on a 2-adult trip (the
+//        second adult added by name for R11's invite; issued due today:
 //        it is overdue from the next agency day, so prep runs >= 1 h and one day boundary before R10).
 // Then:  ids in work/crm/state.json (gitignored); the R10 client link in work/crm/.secrets.json (chmod 600). A re-run
 //        keeps what is still usable (side trip at Proposal; an open deposit invoice; an accepted proposal's deposit
@@ -191,6 +192,9 @@ sc.steps = [
         const t = await newTrip(page, c, 'r10', { first: 'Sara', last: 'Lindqvist', nights: 3, adults: 2, start: day(12), end: day(15) }, attempt);
         s.invoice_trip = t;
         st.save(s);
+        // The second adult, by name only: R11 shows the lead inviting him to his own portal.
+        const trip = await bffOk(page, 'GET', `trips/${t.trip_id}`);
+        if ((trip.party || []).length < 2) await bffOk(page, 'POST', `trips/${t.trip_id}/travelers`, { new: { display_name: `Erik Lindqvist ${s.run}` } }, 201);
         const docs = (await bffOk(page, 'GET', 'agreements')).agreements || [];
         const terms = docs.find((d) => d.kind === 'booking_terms' && d.status === 'published');
         const draft = await bffOk(page, 'POST', `trips/${t.trip_id}/proposals`, {

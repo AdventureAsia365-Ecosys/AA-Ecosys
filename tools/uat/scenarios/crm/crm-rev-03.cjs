@@ -33,13 +33,13 @@ sc.steps = [
   },
   {
     caption: {
-      en: 'She picks Vietnam, six nights for two adults, a budget band and a balanced pace.',
-      vi: 'Chị chọn Việt Nam, sáu đêm cho hai người lớn, một mức ngân sách và nhịp độ vừa phải.',
+      en: 'She picks Vietnam, six nights for one adult (one seat on the Adventure Asia tour), a budget band and a balanced pace.',
+      vi: 'Chị chọn Việt Nam, sáu đêm cho một người lớn (một chỗ trên tour của Adventure Asia), một mức ngân sách và nhịp độ vừa phải.',
     },
     run: async (page, h) => {
       await h.click(page.getByTestId('intake-dest-vietnam'));
       await type(page, h, page.locator('input[name="nights"]'), '6');
-      await type(page, h, page.locator('input[name="adults"]'), '2');
+      await type(page, h, page.locator('input[name="adults"]'), '1');
       await choose(h, page.locator('select[name="budget_band"]'), '2000_3500');
       await choose(h, page.locator('select[name="trip_style"]'), 'balanced');
     },
