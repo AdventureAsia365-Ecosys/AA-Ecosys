@@ -1,0 +1,25 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "Insights",
+  "expect": "invalid",
+  "why": "a cell under 10 travellers is never published (spec module 17, card CRM-34 R)",
+  "payload": {
+    "generated_at": "2026-10-31T04:00:00Z",
+    "dimension": "destination",
+    "quarter": "2026-Q1",
+    "from": "2026-01-01",
+    "to": "2026-03-01",
+    "agencies_included": 4,
+    "agencies_opted_out": 1,
+    "k_min": 10,
+    "agencies_min": 3,
+    "cells": [
+      {
+        "bucket": "laos",
+        "traveller_count": 9,
+        "agency_count": 3
+      }
+    ],
+    "suppressed_cells": 5
+  }
+}
