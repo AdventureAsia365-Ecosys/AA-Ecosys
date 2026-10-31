@@ -17,7 +17,7 @@ related: [AA-1014, AA-855, docs/audits/2026-10-31-S261-crm-progress-video-plan/R
 One full pass of the review set in fast mode (every step acts and asserts; no video, no holds, no narration), run
 with `bash tools/uat/scenarios/crm/run-all.sh --fast` on 31/10/2026, 16:22-16:31 (+07). The chunk list and the
 identities come from the approved plan
-([`2026-10-31-S261-crm-progress-video-plan`](../2026-10-31-S261-crm-progress-video-plan/README.md), §3-§5).
+(`2026-10-31-S261-crm-progress-video-plan` (`docs/audits/2026-10-31-S261-crm-progress-video-plan/README.md`, root PR at the S261 close), §3-§5).
 
 ## Conditions
 
