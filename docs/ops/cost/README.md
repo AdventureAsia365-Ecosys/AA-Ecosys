@@ -57,7 +57,7 @@ Rules and budgets: [FinOps process](../finops.md).
    ECSX_SERVICE=aa-crm-dev-api tools/ecs/ecsx.sh tools/finops/collect_month.py PART=crm MONTHS=2026-08,2026-09,2026-10 > .tmp-session/cost-2026-10/crm.txt
    ```
 
-   Verify: each file has one line starting with `FINOPS_BUNDLE `. If the report later lists "Stored Cost Explorer
+   Verify: each file has one line starting with `FINOPS_BUNDLE`. If the report later lists "Stored Cost Explorer
    data was stale", run the CIS line again with `REFRESH=1` (one Cost Explorer request per stale month, about
    0.01 USD each, through the CIS client).
 
