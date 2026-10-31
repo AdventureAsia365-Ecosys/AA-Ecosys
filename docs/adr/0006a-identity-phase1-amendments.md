@@ -8,7 +8,8 @@
   flag scope) and the "Remaining open risks" list (the `AdminCreateUser` line). A10 (19/10/2026, S243) adds a
   temporary exception to the `@adventure.asia`-only staff rule for the E2E test account; A10a (24/10/2026, S250)
   adds a second E2E address for the Booking staff admin. A10b (26/10/2026, S252) adds a third, Dev-only E2E address for
-  the CIS admin, read-only except the content-quality sentence-apply routes. A11 and A12 (22/10/2026,
+  the CIS admin, read-only except the content-quality sentence-apply routes. A10c (01/11/2026, S262) adds a fourth,
+  Dev-only E2E address for the AA-Partner staff console (crm-ops + crm-support, synthetic agencies only). A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2).
 - **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) was unchanged and still pending on 18/10/2026.
 - **Update 2026-10-28:** Booking Phase 2 has shipped in part: Booking verifies WORKFORCE tokens of the
@@ -463,6 +464,51 @@ mailbox or Google account". That is too strong.
   Then drop `studio_invitees` from `crm_e2e_users.json` (AA-CIS-Infra), Terraform Apply, and delete the two
   partner-pool accounts (`crm_dev_identity.py --pool partner invitee-reset --invitee studio-viewer|studio-editor
   --apply`). Add a closing line here. The A10b removal list covers all of this as well.
+
+#### A10c. Fourth E2E address: the AA-Partner staff console, Dev only, synthetic agencies only (01/11/2026, S262, AA-1019)
+
+- **Decision (S262, orchestrator under the tech lead's standing approval and the dev-phase merge rule; the AA-1019
+  issue asks for "a Dev E2E WORKFORCE user in crm-ops + crm-support, read-limited like the other E2E users"):** the
+  orchestrating agent must sign itself in to the AA-Partner staff console (CRM web `/staff`, WORKFORCE `crm-staff`
+  client, root ADR 0006b decision 6) to screenshot S-02 / S-04 and to run the live checks of AA-956 / AA-971 (open
+  one release and see the agency's view count move; a support read refused after the owner revokes; break-glass mails
+  the owner and raises the AA ops alarm). No E2E identity holds `crm-ops` or `crm-support` today. A fourth dedicated
+  WORKFORCE identity, `e2e-crm-staff@e2e-mail.lumiguides.it.com`, signs in with the staff groups exactly `crm-ops` +
+  `crm-support`, on Dev only. Temporary, like A10.
+- **Groups (trigger):** one more entry in the Dev-only map of A10b, `workforce.E2E_DEV_ONLY_TEST_STAFF =
+  {e2e-cis-admin@: ("cis-admin",), e2e-crm-staff@: ("crm-ops", "crm-support")}`, behind the same
+  `E2E_DEV_ONLY_STAFF_ENABLED` flag (exactly `"true"` on dev only, a Terraform precondition elsewhere). Any other
+  group set (one of the two alone, `crm-platform-admin`, any `cis-*` / `booking-*`) denies the token, never stripped.
+  Same ASCII-only exact lookup. The other E2E addresses cannot borrow these groups (the map is per address).
+- **Synthetic agencies only (AA-Partner, `api/app/auth/e2e_staff.py`):** the CRM recognises the identity by the access
+  token's `email` claim (set by the pre token trigger, signed by the pool). The class guard refuses it outside
+  `ENVIRONMENT` dev / test / local (403 `e2e_read_only`). Every staff context (`ops_tx`, `staff_tx`, `support_tx`)
+  refuses an agency whose `crm.tenant.is_synthetic` is not true (403 `e2e_synthetic_only`), and the S-02 board and
+  both agency lists leave such an agency out. On a synthetic agency it works like any `crm-ops` / `crm-support` member:
+  it reads S-02, downloads a watermarked manifest, starts a support session inside the owner's grant, opens
+  break-glass (the owners of that synthetic agency, E2E mailbox addresses, are mailed; the AA ops alarm fires, which is
+  what the live check needs). It can never read, export or open a real agency. Unlike A10b this is not "read-only": the
+  staff class has no write besides one's own session rows and the S-02 view / manifest records (AA-971, AA-956), and
+  those are exactly what the checks exercise.
+- **Mailbox isolation (Infra `e2e_mailbox.tf`):** the address is a second recipient of the A10b rule
+  `e2e-cognito-admin` (dev only), so its codes land under `inbound-admin/`, which only the MFA admin role reads; it is
+  never a recipient of `e2e-cognito` (the CI-readable `inbound/`).
+- **Created outside the CIS directory**, like A10a's Booking address: AA-CIS-Infra
+  `tools/identity/crm_dev_identity.py e2e-staff --apply` (AdminCreateUser with SUPPRESS and `email_verified=true`, no
+  password, AdminAddUserToGroup for the two groups; refuses a user that holds any other group). The A8 alarm does not
+  fire (no password). The CIS reconcile may list it as not in the directory, as it does the A10a user.
+- **Exposure.** Code readers: the MFA admin role and whoever controls mail for `e2e-mail.lumiguides.it.com` (A10's
+  domain dependency). What a code yields: S-02 and S-04 on synthetic Dev agencies only, including break-glass mails
+  to E2E mailbox owners and the AA ops alarm. No CIS, Booking or `/crm/ops/v1` access (no `cis-*` / `booking-*` /
+  `crm-platform-admin` group; `/crm/v1` refuses every WORKFORCE token).
+- **Detection:** `workforce_e2e_test_token_issued` (with `email`), AA-Partner `route_guard_e2e_crm_staff_refused`
+  (outside dev) and `crm_e2e_staff_refused tenant=...` (a real agency), plus every staff action in the synthetic
+  agency's own access log (actor kinds `aa_ops`, `support`, `breakglass`).
+- **Used only by the agent, locally**, with the MFA admin role reading the code (runbook in AA-CIS-Infra
+  `tools/identity/README.md`). Never CI.
+- **Removal (end of project code, with A10 / A10a / A10b):** `admin-delete-user` of the address; drop the trigger entry,
+  the mailbox recipient, the `e2e-staff` command and the AA-Partner `E2E_CRM_STAFF_EMAIL` rule
+  (`Caller.e2e_synthetic_only`); Terraform Apply; a closing line here. Faster stop on Dev: disable the user.
 
 ### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)
 
