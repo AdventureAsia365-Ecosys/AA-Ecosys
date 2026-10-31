@@ -2,14 +2,22 @@
 an English narration track (default), a Vietnamese narration track, and sidecar WebVTT/SRT files.
 
   python -I build.py <work/ID> <out_dir>
+  python -I build.py <work/ID> <out_dir> --no-burn   (no burned-in subtitles: input for longform.py, which keeps
+                                                      the subtitles as switchable tracks; the default is unchanged)
+  python -I build.py <work/ID> <out_dir> [--allow-drift]  (a take whose first paint came late gets its first
+                                                      frame held that long; stops when the gap is longer than step 1)
+  python -I build.py <work/ID> <out_dir> --soft-subs (a stand-alone chunk with nothing burned in: two soft
+                                                      subtitle tracks, mov_text English (default) + Vietnamese, beside
+                                                      the two voices; goes to <out_dir>/soft/; a sample to listen to)
 
-Output names: <ID>_<yyyymmdd>_v<n>.mp4 (+ .en/.vi .srt/.vtt, .result.json); prints the MP4 path last.
+Output names: <ID>_<yyyymmdd>_v<n>.mp4 (+ .en/.vi .srt/.vtt, .result.json with "burned": true|false, which
+longform.py reads to refuse a burned chunk); --no-burn builds go to <out_dir>/no-burn/ and --soft-subs builds to
+<out_dir>/soft/, so no two kinds share a version counter. Prints the MP4 path last.
 Each caption is shown from its step start to its step end (timeline.json). Each narration clip starts
 at its step start plus a short lead; record.cjs already held the step as long as the clip, so no stretch.
 """
 import json
 import re
-import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -19,6 +27,9 @@ import numpy as np
 import soundfile as sf
 
 LEAD_S = 0.25
+MIN_START_GAP_S = 0.3
+LANG3 = {"en": "eng", "vi": "vie"}
+SUB_TITLE = {"en": "English", "vi": "Tiếng Việt"}
 
 
 def ts(sec: float, sep: str) -> str:
@@ -61,11 +72,58 @@ def narration(work: Path, lang: str, timeline, total_s: float, out_wav: Path) ->
     return True
 
 
-def main(work: Path, out_dir: Path) -> None:
+def start_gap(total_s: float, video_s: float) -> float:
+    """Seconds of the take missing at the start of video.webm (0 when within MIN_START_GAP_S)."""
+    gap = total_s - video_s
+    return round(gap, 3) if gap > MIN_START_GAP_S else 0.0
+
+
+def video_seconds(path: Path) -> float:
+    out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=nw=1:nk=1",
+                          str(path)], check=True, capture_output=True, text=True).stdout.strip()
+    return float(out)
+
+
+def mux_args(audio_meta, soft_srts) -> list:
+    """ffmpeg -map/-c:s/-metadata arguments after the inputs: picture, the narration tracks (first one default) and,
+    for a soft build, one mov_text track per (lang, srt input index), the first one shown by default."""
+    args = ["-map", "0:v"]
+    for i, lang, title, idx in audio_meta:
+        args += ["-map", f"{idx}:a"]
+    for j, (lang, idx) in enumerate(soft_srts):
+        args += ["-map", f"{idx}:s"]
+    for i, lang, title, idx in audio_meta:
+        args += [f"-metadata:s:a:{i}", f"language={LANG3[lang]}", f"-metadata:s:a:{i}", f"title={title}"]
+    if audio_meta:
+        args += ["-disposition:a:0", "default"]
+    if soft_srts:
+        args += ["-c:s", "mov_text"]
+        for j, (lang, idx) in enumerate(soft_srts):
+            args += [f"-metadata:s:s:{j}", f"language={LANG3[lang]}", f"-metadata:s:s:{j}", f"title={SUB_TITLE[lang]}",
+                     f"-disposition:s:{j}", "default" if j == 0 else "0"]
+    return args
+
+
+def main(work: Path, out_dir: Path, burn: bool = True, soft: bool = False) -> None:
     caps = {c["n"]: c for c in json.loads((work / "captions.json").read_text())["captions"]}
     timeline = json.loads((work / "timeline.json").read_text())
     result = json.loads((work / "result.json").read_text())
     total_s = result["total_ms"] / 1000
+    # timeline.json counts from the recorder's t0, but the video starts at its first painted frame: when the first
+    # page paints late, the video is shorter by that much and every cue would land late. The lost time is at the start
+    # (the first frame is the loaded page), so the first frame is held that long (tpad); the narration and the
+    # subtitles keep the timeline. A gap longer than step 1 cannot come from the start alone and stops the build.
+    gap = start_gap(total_s, video_seconds(work / "video.webm"))
+    if gap:
+        if timeline and gap * 1000 > timeline[0]["end_ms"] and "--allow-drift" not in sys.argv[1:]:
+            raise SystemExit(f"{work.name}: the video is {gap:.1f}s shorter than its timeline, more than step 1 lasts; "
+                             "record it again (--allow-drift builds it anyway)")
+        print(f"{work.name}: video starts {gap:.2f}s after t0; first frame held {gap:.2f}s to match", file=sys.stderr)
+    if soft:
+        burn = False
+        out_dir = out_dir / "soft"
+    elif not burn:
+        out_dir = out_dir / "no-burn"
     out_dir.mkdir(parents=True, exist_ok=True)
     day = datetime.now(timezone.utc).strftime("%Y%m%d")
     v = 1
@@ -85,7 +143,7 @@ def main(work: Path, out_dir: Path) -> None:
                 text = ("[FAIL] " if lang == "en" else "[LỖI] ") + text
             cues[lang].append((st["start_ms"] / 1000, st["end_ms"] / 1000, text))
     en_srt, _ = write_subs(cues["en"], "en", base)
-    write_subs(cues["vi"], "vi", base)
+    vi_srt, _ = write_subs(cues["vi"], "vi", base)
 
     has_en = narration(work, "en", timeline, total_s, work / "narration.en.wav")
     has_vi = narration(work, "vi", timeline, total_s, work / "narration.vi.wav")
@@ -94,30 +152,38 @@ def main(work: Path, out_dir: Path) -> None:
              "BackColour=&H30000000,BorderStyle=4,Outline=1,Shadow=0,MarginV=18,MarginL=60,MarginR=60")
     sub_file = str(en_srt).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
     cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", str(work / "video.webm")]
-    maps = ["-map", "0:v"]
     idx = 1
-    meta = []
+    audio_meta = []
     for lang, ok, title in (("en", has_en, "English narration"), ("vi", has_vi, "Vietnamese narration")):
         if ok:
             cmd += ["-i", str(work / f"narration.{lang}.wav")]
-            maps += ["-map", f"{idx}:a"]
-            a = len([m for m in meta if m[0] == "a"])
-            meta.append(("a", a, lang, title))
+            audio_meta.append((len(audio_meta), lang, title, idx))
             idx += 1
-    cmd += maps
-    cmd += ["-vf", f"subtitles='{sub_file}':force_style='{style}'",
-            "-c:v", "libx264", "-preset", "medium", "-crf", "26", "-pix_fmt", "yuv420p", "-r", "25",
-            "-c:a", "aac", "-b:a", "96k", "-movflags", "+faststart", "-shortest"]
-    for kind, i, lang, title in meta:
-        cmd += [f"-metadata:s:a:{i}", f"language={'eng' if lang == 'en' else 'vie'}",
-                f"-metadata:s:a:{i}", f"title={title}"]
-    if meta:
-        cmd += ["-disposition:a:0", "default"]
+    soft_srts = []
+    if soft:
+        for lang, srt in (("en", en_srt), ("vi", vi_srt)):
+            if cues[lang]:
+                cmd += ["-i", str(srt)]
+                soft_srts.append((lang, idx))
+                idx += 1
+    vf = [f"tpad=start_duration={gap:.3f}:start_mode=clone"] if gap else []
+    if burn:
+        vf.append(f"subtitles='{sub_file}':force_style='{style}'")
+    if vf:
+        cmd += ["-vf", ",".join(vf)]
+    # -shortest trims the narration (total + 1 s) to the picture; a subtitle track ends at its last cue, so a soft
+    # build cuts at the picture's own length instead (with -shortest it would end at the last cue).
+    end = ["-t", f"{video_seconds(work / 'video.webm') + gap:.3f}"] if soft_srts else ["-shortest"]
+    cmd += ["-c:v", "libx264", "-preset", "medium", "-crf", "26", "-pix_fmt", "yuv420p", "-r", "25",
+            "-c:a", "aac", "-b:a", "96k", "-movflags", "+faststart", *end]
+    cmd += mux_args(audio_meta, soft_srts)
     cmd += [str(base.with_suffix(".mp4"))]
     subprocess.run(cmd, check=True)
-    shutil.copy(work / "result.json", base.with_suffix(".result.json"))
+    base.with_suffix(".result.json").write_text(json.dumps({**result, "burned": burn, "soft_subs": soft}, indent=2), encoding="utf-8")
     print(base.with_suffix(".mp4"))
 
 
 if __name__ == "__main__":
-    main(Path(sys.argv[1]).resolve(), Path(sys.argv[2]).resolve())
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    main(Path(args[0]).resolve(), Path(args[1]).resolve(), burn="--no-burn" not in sys.argv[1:],
+         soft="--soft-subs" in sys.argv[1:])

@@ -1,5 +1,5 @@
 # tools/uat: local runtimes, model weights and every recording stay out of git (binary, large; may show people's voices).
-node_modules/
+node_modules
 package-lock.json
 venv
 venv-vi
