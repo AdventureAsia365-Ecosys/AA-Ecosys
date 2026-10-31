@@ -147,7 +147,7 @@ Anh trả lời ngày 31/10: **đồng ý hết đề xuất**, kèm một ý: *
 
 1. **Một cổng cho mọi nhà cung cấp AI và dữ liệu trả phí** (LLM, Jev, DataForSEO, Geoapify, Guardrails), mọi app,
    mọi stage. CRM dùng chung code của cổng nhưng giữ cấu hình và sổ riêng, như quy định đã có.
-   - **Đã duyệt: Có.** Làm bước 3, 4 và 6; hạ tầng 0 USD, chỉ tốn thời gian code. Tạo 2 issue mới N1 và N2 (mục
+   - **Đã duyệt: Có.** Làm bước 3, 4 và 6; hạ tầng 0 USD, chỉ tốn thời gian code. Tạo 2 issue mới AA-1018 và AA-1017 (mục
      "Issue" bên dưới).
 2. **Đường dự phòng ấm, khác miền sự cố, là bắt buộc**, và gồm **cả Anthropic lẫn OpenAI**.
    - **Đã duyệt: Có.**
@@ -238,17 +238,17 @@ Hạn có chữ "đề xuất" là hạn mới, anh sửa được.
 | AA-964 | Cập nhật | Cài đặt AI và bản nháp AI trong CRM, theo cùng mẫu sổ ghi; Guardrails ghi chi phí; trang đại lý hiện số thật | Dòng của CRM hiện trong tab Lần gọi và chi phí của CIS | 6 | Backlog, giữ |
 | AA-1004 | Chỉ ghi chú | Kiểm lại miền sự cố và thử mọi nguồn trước và sau lần đổi người trả tiền 01/12; vùng us-west-2 chỉ cho thử nghiệm | — | 5 | In Progress, giữ |
 | AA-842 | Chỉ ghi chú | Vẫn hoãn (giám sát trả phí đang dừng); sổ ghi và màn truy vết là bản 0 USD thay thế; Langfuse Cloud bị loại | — | — | Backlog, giữ |
-| **N2 (mới)** | Tạo | "Sổ nguồn v2": Jev, DataForSEO, Geoapify, Guardrails thành dòng nguồn có miền sự cố; họ model và khả năng là dữ liệu; tham số theo stage × model; route có thêm app; bỏ chọn tài khoản theo stage; cấu hình đổi qua thay đổi có duyệt; chọn model ở một chỗ. Giao diện: tab Điều hướng, tab Model, chi tiết nguồn cho nguồn mới, gộp Ngân sách, bỏ 2 tab ở Cài đặt (link cũ tự chuyển) | Thêm model hay nguồn loại đã biết = một thay đổi cấu hình, không sửa code; admin chỉ còn bật / tắt; không route nào đổi; kiểm thử và ảnh chụp xanh | 4 | Mới, High, hạn 28/11 (đề xuất) |
-| **N1 (mới)** | Tạo | "Độ tin cậy": đường ấm Anthropic và OpenAI; kiểm tra sống hằng ngày; giới hạn tổng thời gian chờ; tạm ngừng cả tài khoản bị chặn; "hết tiền" thì dừng nguồn đó; chạy lại việc bị từ chối; cảnh báo ngay qua chuông admin và email; luật dự phòng (trên Dev chỉ báo); diễn tập hằng tháng; phần nhà cung cấp trong bản tin hằng ngày. Giao diện: trạng thái kiểm tra trên tab Nhà cung cấp, nhãn luật dự phòng ở Điều hướng, nút chạy lại, báo cáo diễn tập | Cả hai API trực tiếp có tiền, có trần, kiểm tra xanh; ô trạng thái xanh cho hai miền sự cố; báo cáo diễn tập: một stage viết sang Anthropic và một stage chấm sang OpenAI trong giới hạn thời gian, kèm chi phí | 5 | Mới, High, hạn 05/12 (đề xuất) |
+| **AA-1017 (mới)** | Tạo | "Sổ nguồn v2": Jev, DataForSEO, Geoapify, Guardrails thành dòng nguồn có miền sự cố; họ model và khả năng là dữ liệu; tham số theo stage × model; route có thêm app; bỏ chọn tài khoản theo stage; cấu hình đổi qua thay đổi có duyệt; chọn model ở một chỗ. Giao diện: tab Điều hướng, tab Model, chi tiết nguồn cho nguồn mới, gộp Ngân sách, bỏ 2 tab ở Cài đặt (link cũ tự chuyển) | Thêm model hay nguồn loại đã biết = một thay đổi cấu hình, không sửa code; admin chỉ còn bật / tắt; không route nào đổi; kiểm thử và ảnh chụp xanh | 4 | Mới, High, hạn 28/11 (đề xuất) |
+| **AA-1018 (mới)** | Tạo | "Độ tin cậy": đường ấm Anthropic và OpenAI; kiểm tra sống hằng ngày; giới hạn tổng thời gian chờ; tạm ngừng cả tài khoản bị chặn; "hết tiền" thì dừng nguồn đó; chạy lại việc bị từ chối; cảnh báo ngay qua chuông admin và email; luật dự phòng (trên Dev chỉ báo); diễn tập hằng tháng; phần nhà cung cấp trong bản tin hằng ngày. Giao diện: trạng thái kiểm tra trên tab Nhà cung cấp, nhãn luật dự phòng ở Điều hướng, nút chạy lại, báo cáo diễn tập | Cả hai API trực tiếp có tiền, có trần, kiểm tra xanh; ô trạng thái xanh cho hai miền sự cố; báo cáo diễn tập: một stage viết sang Anthropic và một stage chấm sang OpenAI trong giới hạn thời gian, kèm chi phí | 5 | Mới, High, hạn 05/12 (đề xuất) |
 
 **Không đụng:** AA-1002 (đã Done; phần dung lượng S12 đã chuyển sang AA-642), AA-1015 (không có phần giao diện),
-AA-896 và AA-1003 (đọc cùng sổ ghi; phần nhà cung cấp trong bản tin hằng ngày nằm trong N1).
+AA-896 và AA-1003 (đọc cùng sổ ghi; phần nhà cung cấp trong bản tin hằng ngày nằm trong AA-1018).
 
 **Cần lưu ý trước khi làm:**
 
 1. **OpenAI không cần nạp thêm lúc này.** Khoá đang chạy được, còn tiền (kiểm 31/10). Chỉ trình anh số trần chi tháng
    trước khi bật kiểm tra sống.
-2. **Giới hạn số issue trên Linear.** Project CIS Core tối đa 100 issue chưa lưu trữ; đếm lại trước khi tạo N1 và N2.
+2. **Giới hạn số issue trên Linear.** Project CIS Core tối đa 100 issue chưa lưu trữ; đếm lại trước khi tạo AA-1018 và AA-1017.
 
 ## Phụ lục: tên kỹ thuật
 
@@ -309,7 +309,7 @@ cho `s1_generate` ≈ 800 tour.
 dung lượng), AA-900 (thang thẩm định, judge calibration, R2 candidate arm), AA-1002 (đã Done-with-scope; S12 chuyển
 đi), AA-820 (điều khoản tenant: hãng và vùng được phép), AA-842 (OTel / Langfuse tự host, đang hoãn vì chi phí),
 AA-1004 (SCP cho us-west-2), AA-1016 (ngân sách AI theo tenant Content studio), AA-1015 (giới hạn TripPlanner), AA-964
-(gateway CRM), AA-896 (alarm). Mới (anh chọn Có ở quyết định 1): N1 (độ tin cậy, bước 5) và N2 (sổ nguồn v2, bước
+(gateway CRM), AA-896 (alarm). Mới (anh chọn Có ở quyết định 1): AA-1018 (độ tin cậy, bước 5) và AA-1017 (sổ nguồn v2, bước
 4); bảng đầy đủ ở mục "Issue".
 
 **Giao diện, tên kỹ thuật:** trang mới `/admin/ai-gateway` (nhóm nav "AI & spend", `_kit/adminNav.tsx`), 5 tab
