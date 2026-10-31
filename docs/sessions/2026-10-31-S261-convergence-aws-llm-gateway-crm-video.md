@@ -100,6 +100,12 @@ AA-962, AA-966.
 
 Kèm theo khi rảnh: xem lại CI Secret Scan đỏ của repo gốc và DB Freshness Probe đỏ của Infra (snapshot mục "Cần biết
 trước"); C4.3 W45 từ 02/11; AA-1003 bằng chứng report_run (≥ 03/11).
+9. AA-1014: tech lead nghe mẫu R01/R03 (giọng duyệt tạm; mẫu đã lên Drive, rclone check 0 khác biệt, 10 file).
+10. AA-997: khôi phục 6 dòng regressed cũ từ relocate.prev (kèm lúc đóng).
+11. Root Secret Scan (full history) đỏ từ 02:48Z: 2 báo nhầm đã ghim trong root PR chốt S261 (khoá giả AKIA…ABCDEF trong test, question_key Jev) → kiểm xanh lại.
+12. Infra DB Freshness Probe đỏ 4 đêm (place_card_links_missing 111) → điều tra.
+13. db-schema-reference cũ (crm-027, live crm-031) → chạy DB Schema Dump publish=true; host crm.lumiguides.it.com/healthz trả 000 → kiểm DNS/host.
+14. acc4 (kiểm 09:40Z): Claude 4.x chạy, Claude 5 "not available for this account" — chỉ ghi nhận, không có việc.
 
 ## Bài học (đã vào `skill/aa-lessons/lessons.md`)
 

@@ -436,7 +436,7 @@ html { scroll-behavior: smooth; }
         <ol class="first-steps">
           <li><b>a · LLM</b>Mở đường LLM thứ hai (API Anthropic trực tiếp, có trần chi tiêu) và canary kết nối hằng ngày.</li>
           <li><b>b · Dự án</b>Một trang chiến lược sản phẩm, cửa sổ go-live, WIP ≤ 8, đóng băng CRM W6–W8.</li>
-          <li><b>c · Bảo mật</b>Cắt chuỗi leo quyền IAM, xoay mật khẩu nhà cung cấp đã lộ trong lịch sử repo.</li>
+          <li><b>c · Bảo mật</b>Cắt chuỗi leo quyền IAM (xong S261, Infra #541); mật khẩu nhà cung cấp đã xoay từ S251.</li>
           <li><b>d · Hạ tầng</b>Chấp nhận ADR 0018, sao lưu catalog + tfstate ra ngoài acc2, thêm S3 gateway endpoint.</li>
           <li><b>e · Chất lượng AI</b>Bộ 40 nhãn do người gán và luật thống kê cho judge, trước mọi lượt eval trả tiền.</li>
         </ol>
@@ -600,7 +600,7 @@ html { scroll-behavior: smooth; }
         <li><span class="id">N3</span><span class="txt">Bộ 40 nhãn do người gán; luật thống kê cho judge; khối đăng ký trước cho lượt eval trả tiền.</span><span class="foot"><span class="chip eff">S+S</span><span class="ref">AA-919</span></span></li>
         <li><span class="id">N4</span><span class="txt">Trang chiến lược sản phẩm + cửa sổ go-live; WIP ≤ 8; đóng băng CRM W6–W8 và báo cáo sau R4; luật build-vs-buy.</span><span class="foot"><span class="chip eff">S</span><span class="ref">AA-880</span></span></li>
         <li><span class="id">N5</span><span class="txt">Milestone theo ngày (baseline, forecast, RAG) + sổ rủi ro; khung quyết định tuần; báo cáo tuần một trang từ 02/11.</span><span class="foot"><span class="chip eff">S</span><span class="ref">PR-20</span></span></li>
-        <li><span class="id">N6</span><span class="txt">Cắt chuỗi leo quyền IAM (chi tiết trong Linear); xoay mật khẩu nhà cung cấp đã lộ.</span><span class="foot"><span class="chip eff eff-m">S+M</span><span class="ref">AA-873</span></span></li>
+        <li><span class="id">N6</span><span class="txt">Cắt chuỗi leo quyền IAM (xong S261, chi tiết trong Linear); mật khẩu nhà cung cấp đã xoay từ S251.</span><span class="foot"><span class="chip eff eff-m">S+M</span><span class="ref">AA-873</span></span></li>
         <li><span class="id">N7</span><span class="txt">Agent mặc định dùng role hẹp; role admin chỉ trong cửa sổ đã gom.</span><span class="foot"><span class="chip eff eff-m">M</span><span class="ref">gộp N6</span></span></li>
         <li><span class="id">N8</span><span class="txt">Chấp nhận ADR 0018 kèm đoạn region; sửa standards và Infra CONTEXT.md cho khớp.</span><span class="foot"><span class="chip eff">S</span><span class="ref">AA-1004</span></span></li>
         <li><span class="id">N9</span><span class="txt">Bản sao catalog nội dung + tfstate ra ngoài acc2 (Object Lock), trước mọi lần dời org.</span><span class="foot"><span class="chip eff">S</span><span class="ref">AA-1004</span></span></li>

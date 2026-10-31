@@ -54,6 +54,12 @@ Dán nguyên văn phần dưới đường kẻ vào đầu `Program Brain/memor
 6. AA-1014 Session B trước 10/11 (prep ≥ 1 giờ trước R10).
 7. AA-896 (01/11), AA-922 (02/11).
 8. AA-994 follow-up UI kit (AA-1006 → AA-1007 → AA-1008).
+9. AA-1014: tech lead nghe mẫu R01/R03 (giọng duyệt tạm; mẫu đã lên Drive, rclone check 0 khác biệt, 10 file).
+10. AA-997: khôi phục 6 dòng regressed cũ từ relocate.prev (kèm lúc đóng).
+11. Root Secret Scan (full history) đỏ từ 02:48Z: 2 báo nhầm đã ghim trong root PR chốt S261 (khoá giả AKIA…ABCDEF trong test, question_key Jev) → kiểm xanh lại.
+12. Infra DB Freshness Probe đỏ 4 đêm (place_card_links_missing 111) → điều tra.
+13. db-schema-reference cũ (crm-027, live crm-031) → chạy DB Schema Dump publish=true; host crm.lumiguides.it.com/healthz trả 000 → kiểm DNS/host.
+14. acc4 (kiểm 09:40Z): Claude 4.x chạy, Claude 5 "not available for this account" — chỉ ghi nhận, không có việc.
 **Lưu ý kỹ thuật**
 - Expand guard: bảng chưa ANALYZE (reltuples -1) → runner ANALYZE rồi đọc lại (Infra #538). Apply-pending không nhảy khoảng trống số → merge migration theo thứ tự số.
 - Lane nặng RAM (TTS + Chromium) cần free -m ≥ 2,5 GB; cloudcode_cli giữ ~3,5 GB.

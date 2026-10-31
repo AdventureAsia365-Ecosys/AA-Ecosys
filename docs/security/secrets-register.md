@@ -166,11 +166,8 @@ nothing to flag, but the rows were stale); the three TripPlanner Lambda `pending
    `ADMIN_SECRET` holds that value; preview smoke in viewer mode 59 passed / 7 skipped (CIS #859). The main
    `aa-cis/dev/admin-secret` was rotated the same day (new → 200, old → 403); its copies are now only GitHub
    AA-CIS-App env `dev` and Vercel Production.
-2. **CIS task role `secretsmanager:GetSecretValue` on `*`** (AA-CIS-Infra `modules/ecs/main.tf:171-181`):
-   partly closed by X1 S19 (Infra #204, 19/10/2026): an explicit Deny now covers the RDS master,
-   `aa-cis/dev/db-migrator`, `booking/*` and `tripplanner/*`. The Allow is still `*`, so the CIS containers can
-   still read every other secret (E2E secrets included). The break-glass secret is protected by its
-   resource-policy Deny. Narrowing the Allow to a list stays a follow-up (ask the tech lead first).
+2. **CIS task role secret reads:** narrowed by X1 S19 (Infra #204) and S261 (Infra #541, AA-873). Remaining
+   follow-ups and their detail: Linear AA-873.
 3. **0 rotations configured** (29 live Secrets Manager secrets, `RotationEnabled` null on all). Manual
    rotation dates are the `last_changed` column; vendor rotation dates are `TBD-tech-lead`.
 4. **Full-admin E2E accounts** (narrowed S244): AA-878 N1 is done — GitHub `E2E_ADMIN_*` hold the viewer
@@ -198,14 +195,8 @@ nothing to flag, but the rows were stale); the three TripPlanner Lambda `pending
    the clean-up found 0 Secrets Manager secrets in us-west-1. The us-east-1 tag listing of the same inventory still
    showed one old secret `aa/dev/db_credentials` (pre-acc2 stack), outside the us-west-1 clean-up; the tech lead
    deletes it after a DRY RUN. No ecosystem secret may be created there.
-10. **CI apply role reads every secret** (S245 access review F-7): `aa-cis-infra-tf-apply` carries the AWS
-    managed policy `SecretsManagerReadWrite` and its boundary does not limit `secretsmanager`, so any AA-CIS-Infra
-    workflow on `main` in env `prod` can read (and write) the RDS master, `aa-cis/dev/db-migrator`, `booking/*`,
-    `tripplanner/*` and every other secret. It also holds `PutResourcePolicy` / `DeleteResourcePolicy`, so it can
-    lift the break-glass resource-policy Deny (that call is alerted). Follow-up under AA-806: replace the managed
-    policy with a named-ARN grant (as `tf_plan_secret_arns` does for the plan role) or add a `GetSecretValue` Deny
-    on the master / `booking/*` / `tripplanner/*` to the boundary (bootstrap object: applied locally with MFA, ask
-    the tech lead first, IAM); add a `main` branch policy on env `prod` (AA-866).
+10. **CI apply role secret access:** narrowed in S261 (Infra #541, boundary Denies, AA-873). Remaining follow-ups
+    and their detail: Linear AA-873 / AA-806.
 11. **Infra main lost the S250 Terraform for four secrets (S250 close):** AA-CIS-Infra `main` af8ac53 (#380, schema
     drift report) was squashed from a stale branch and dropped `accounts/aa365/crm_mail.tf` (`crm/dev/mail-oauth`),
     the traveller BFF secrets in `identity.tf` (`tripplanner/dev/cognito-bff-key`, `cognito-signup-proof-key`) and the
