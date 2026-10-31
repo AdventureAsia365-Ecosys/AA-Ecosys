@@ -7,10 +7,10 @@ status: active
 owner: nghiep
 audience: [engineer, agent]
 applies_to: [aa-cis-dev-db, tripplanner-lambda]
-last_reviewed: 2026-10-29
+last_reviewed: 2026-10-31
 review_every_days: 90
 generated: false
-related: [APP-04, APP-04-erd, APP-04-erd-design, APP-04-erd-tripplanner, AA-894, AA-861]
+related: [APP-04, APP-04-erd, APP-04-erd-design, APP-04-erd-tripplanner, AA-894, AA-861, AA-1015]
 ---
 
 # ERD design: tripplanner schema
@@ -26,7 +26,9 @@ or foreign key changed. Updated for **tp-021** (AA-861) in S257, in the same cha
 `job` table (ADR 0003a job table template, kinds `tp_*`, self FK `parent_job_id`, drawn like `crm.job` and
 `booking.job`) and the new nullable `outbox.redacted_at` (the redaction marker of DM-6.6; no key or FK change on
 `outbox`). The `job` unique key on `idempotency_key` is a partial unique index, so it is not marked `UK` (the
-generated page marks single-column unique keys without a predicate only). The page draws tables only; the views are listed on the generated page. It is **enforced**: the nightly DB Schema Dump fails its drift step when the live tables, primary keys or
+generated page marks single-column unique keys without a predicate only). Updated for **tp-023** (AA-1015) in S262,
+before the migration copy: the new `ai_rate_counter` table (the AI route limiter's fixed-window counters, composite
+primary key `(key_hash, window_start)`, no foreign key, no personal data: `key_hash` is an HMAC). The page draws tables only; the views are listed on the generated page. It is **enforced**: the nightly DB Schema Dump fails its drift step when the live tables, primary keys or
 foreign keys differ from this page. A TripPlanner migration that changes
 them updates this page in the same change (root PR next to the migration copy).
 
@@ -34,6 +36,11 @@ Generated live view: [ERD: tripplanner schema](../tripplanner.md). Conventions: 
 
 ```mermaid
 erDiagram
+    ai_rate_counter {
+        text key_hash PK
+        timestamptz window_start PK
+        integer count
+    }
     component_id_map {
         uuid old_id PK
         uuid new_id
