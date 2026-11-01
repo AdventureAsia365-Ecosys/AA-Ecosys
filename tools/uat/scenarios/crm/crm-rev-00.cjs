@@ -26,8 +26,8 @@ sc.steps = [
   },
   {
     caption: {
-      en: 'About eighty percent of the planned CRM is built. Intake, the pipeline, bookings, suppliers and the traveller portal, which now also works offline, are complete; commissions and trip cancel are in. Card payments are not live yet, the AI assistant runs in test mode only, and workflows and WhatsApp or SMS are not started.',
-      vi: 'CRM theo kế hoạch đã làm được khoảng tám mươi phần trăm. Phần nhận yêu cầu, pipeline, booking, nhà cung cấp và cổng khách, nay xem được cả khi không có mạng, đã xong; hoa hồng và huỷ chuyến cũng đã có. Thanh toán bằng thẻ chưa chạy thật, trợ lý AI mới chạy chế độ thử, còn quy trình tự động và WhatsApp, SMS thì chưa bắt đầu.',
+      en: 'About eighty percent of the planned CRM is built. Intake, the pipeline, bookings, suppliers and the traveller portal (its itinerary now also opens offline) are complete; commissions and trip cancel are in. Card payments are not live yet, the AI assistant runs in test mode only, and workflows and WhatsApp or SMS are not started.',
+      vi: 'CRM theo kế hoạch đã làm được khoảng tám mươi phần trăm. Phần nhận yêu cầu, pipeline, booking, nhà cung cấp và cổng khách (nay xem được lịch trình cả khi không có mạng) đã xong; hoa hồng và huỷ chuyến cũng đã có. Thanh toán bằng thẻ chưa chạy thật, trợ lý AI mới chạy chế độ thử, còn quy trình tự động và WhatsApp, SMS thì chưa bắt đầu.',
     },
     run: async (page, h) => {
       // Tile values: tools/uat/scenarios/crm/PROGRESS.md (S261 method, recomputed S262 01/11/2026).
@@ -39,7 +39,7 @@ sc.steps = [
           { value: '83-100%', label: 'Proposals (interactive and written)' },
           { value: '95-100%', label: 'Bookings, suppliers and commissions', note: 'one-action trip cancel included' },
           { value: '90%', label: 'Invoices and payments', note: 'card payments not yet' },
-          { value: '100%', label: 'Traveller portal', note: 'now works offline' },
+          { value: '100%', label: 'Traveller portal', note: 'itinerary works offline' },
           { value: '90-95%', label: 'Email, reports and data export' },
           { value: '90-95%', label: 'Trip hand-over to Adventure Asia, support access', note: 'staff screen not live yet' },
           { value: '0-50%', label: 'Workflows, WhatsApp/SMS, AI', note: 'AI in test mode only; the rest not started' },

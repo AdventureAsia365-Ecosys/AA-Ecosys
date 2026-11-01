@@ -102,7 +102,7 @@ is added. A range shows the lowest and highest module in the tile.
 | Proposals (interactive and written) | M3, M4 | 83-100% | 83-100% (same) |
 | Bookings, suppliers and commissions | M6, M15, M13 | 95-100% | "Bookings and suppliers" 100%; M13 added |
 | Invoices and payments | M7 | 90%, note "card payments not yet" | 90% (same) |
-| Traveller portal | M11 | 100%, note "now works offline" | 76%, "offline use not yet" |
+| Traveller portal | M11 | 100%, note "itinerary works offline" | 76%, "offline use not yet" |
 | Email, reports and data export | M5, M16, M18 | 90-95% | "Email and reports" 90% + "Data export and erasure" 90%, merged |
 | Trip hand-over to Adventure Asia, support access | M8, F1, F4 | 90-95%, note "staff screen not live yet" | new tile |
 | Workflows, WhatsApp/SMS, AI | M10, M9, M14 | 0-50%, note "AI in test mode only; the rest not started" | 0%, "not started or blocked" |
