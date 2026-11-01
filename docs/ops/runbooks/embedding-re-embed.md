@@ -20,8 +20,8 @@ related: [APP-06, OPS-05-db-migrate, OPS-05-ecs-exec, APP-06-anthropic-key, AA-1
 > [!WARNING]
 > UNTESTED - do not follow in an incident without checking each step. The T-15 test below is the first run.
 
-Source of truth: AA-CIS-App migrations `340_embedding_space_registry.sql` and
-`341_embedding_reembed_tools_titan_fallback.sql`, `shared/llm_client/embedding_space.py`, `shared/llm_client/embed.py`,
+Source of truth: AA-CIS-App migrations `328_embedding_space_registry.sql` and
+`329_embedding_reembed_tools_titan_fallback.sql`, `shared/llm_client/embedding_space.py`, `shared/llm_client/embed.py`,
 `services/embeddings/reembed.py`, `services/jobs/embedding_reembed_job.py`, `docs/implementation-notes/AA-1026-gw-embed.md`;
 AA-CIS-Infra `db/scripts/aa1026_embedding_shadow.py`; AA-TripPlanner-Web `backend/shared/embedding_space.py`.
 
@@ -75,7 +75,7 @@ Decide in this order:
 
 ## Before you start
 
-- CIS migrations 340 and 341 applied on Dev (`shared.schema_versions` has both), the CIS code deployed (api and worker
+- CIS migrations 328 and 329 applied on Dev (`shared.schema_versions` has both), the CIS code deployed (api and worker
   on the same SHA), Infra `db/scripts/aa1026_embedding_shadow.py` on Infra `main`.
 - A tech lead yes for the paid part with a cap (`cost_cap_usd`), per run.
 - For a **swap**: job tables idle (DB Migrate checks it) and no open wave.
