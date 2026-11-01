@@ -42,7 +42,7 @@ class FakeRunner(Runner):
     def __init__(self) -> None:
         self.rules: list[tuple[tuple[str, ...], list[Response]]] = []
         self.calls: list[list[str]] = []
-        self.t = 1_793_000_000.0  # 2026-10-28, a fixed fake clock
+        self.t = 1_793_000_000.0  # 2026-10-26T07:33:20Z, a fixed fake clock
         self.slept = 0.0
 
     def on(self, tokens: tuple[str, ...] | list[str], *responses: Response) -> "FakeRunner":
