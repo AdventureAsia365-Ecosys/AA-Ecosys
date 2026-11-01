@@ -41,7 +41,7 @@ sc.steps = [
           { value: '76%', label: 'Traveller portal', note: 'offline use not yet' },
           { value: '90%', label: 'Email and reports' },
           { value: '90%', label: 'Data export and erasure' },
-          { value: '0%', label: 'Workflows, WhatsApp/SMS, commissions, AI', note: 'not started or blocked' },
+          { value: '0%', label: 'Workflows, WhatsApp/SMS, AI', note: 'not started or blocked' },
         ],
       });
     },
