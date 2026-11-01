@@ -1,0 +1,4 @@
+CRM-REVIEW_20261101_v1: subtitles
+The MP4 files carry English and Vietnamese subtitles as switchable tracks, but the Google Drive player does not show
+an embedded subtitle track by itself. On Drive, add CRM-REVIEW_20261101_v1.en.srt and CRM-REVIEW_20261101_v1.vi.srt to the video as caption tracks
+(video menu > Manage caption tracks), or open the .srt / .vtt files beside the video in a desktop player.

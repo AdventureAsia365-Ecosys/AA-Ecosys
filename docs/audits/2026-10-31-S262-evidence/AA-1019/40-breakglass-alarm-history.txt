@@ -1,0 +1,5 @@
+# AA-1019 S5: CloudWatch alarm aa-crm-dev-breakglass-opened, StateUpdate history (latest 5), read-only describe-alarm-history
+2026-11-01T09:14:49.556000+07:00	Alarm updated from ALARM to OK
+2026-11-01T08:59:49.556000+07:00	Alarm updated from OK to ALARM
+2026-10-31T23:08:49.556000+07:00	Alarm updated from INSUFFICIENT_DATA to OK
+# UTC: OK->ALARM 2026-11-01T01:59:49Z (break-glass started 01:58:30Z, ended 01:58:45Z); ALARM->OK 02:14:49Z

@@ -1,0 +1,272 @@
+{
+ "sha": "f2f72e92",
+ "ticket": "SUP-1020",
+ "before": {
+  "status": 200,
+  "grant": false,
+  "active": 0
+ },
+ "granted": {
+  "status": 200,
+  "show_identity": false,
+  "expires_at": "2026-11-02T03:34:05.809439+00:00"
+ },
+ "tenant": "bab16039",
+ "settingsEn": [
+  {
+   "key": "ai_enabled",
+   "label": "AI drafts",
+   "value": "Off"
+  },
+  {
+   "key": "ai_budget_usd",
+   "label": "Monthly AI budget",
+   "value": "2.00 USD a month"
+  },
+  {
+   "key": "timezone",
+   "label": "Time zone",
+   "value": "Asia/Ho_Chi_Minh"
+  },
+  {
+   "key": "base_currency",
+   "label": "Base currency",
+   "value": "USD"
+  },
+  {
+   "key": "booking_validation_level",
+   "label": "Booking validation",
+   "value": "Basic"
+  },
+  {
+   "key": "fx_mode",
+   "label": "Exchange rates",
+   "value": "Automatic"
+  },
+  {
+   "key": "trash_days",
+   "label": "Trash kept for",
+   "value": "7 days"
+  },
+  {
+   "key": "auto_archive_months",
+   "label": "Archive clients after",
+   "value": "36 months without trips"
+  },
+  {
+   "key": "stage2_auto_send",
+   "label": "Planning form sent automatically",
+   "value": "Off"
+  },
+  {
+   "key": "invoice_due_days",
+   "label": "Invoice payment terms",
+   "value": "7 days"
+  },
+  {
+   "key": "service_fee_enabled",
+   "label": "Service-fee invoices",
+   "value": "Off"
+  },
+  {
+   "key": "onboarding_later",
+   "label": "Setup steps left for later",
+   "value": "None"
+  },
+  {
+   "key": "onboarding_done",
+   "label": "Setup steps marked done",
+   "value": "None"
+  }
+ ],
+ "settingsEnCard": "SETTINGS AI drafts Off Monthly AI budget 2.00 USD a month Time zone Asia/Ho_Chi_Minh Base currency USD Booking validation Basic Exchange rates Automatic Trash kept for 7 days Archive clients after 36 months without trips Planning form sent automatically Off Invoice payment terms 7 days Service-fee invoices Off Setup steps left for later None Setup steps marked done None",
+ "settingsEnCheck": {
+  "n": 13,
+  "snake": [],
+  "bareBool": [],
+  "ok": true
+ },
+ "agencyShots": {
+  "50-staff-agency-settings-1440-light.png": {
+   "side": 0,
+   "theme": "light",
+   "bg": "rgb(248, 246, 242)"
+  },
+  "50-staff-agency-settings-390-light.png": {
+   "side": 0,
+   "theme": "light",
+   "bg": "rgb(248, 246, 242)"
+  },
+  "50-staff-agency-settings-1440-dark.png": {
+   "side": 0,
+   "theme": "dark",
+   "bg": "rgb(15, 20, 27)"
+  },
+  "50-staff-agency-settings-390-dark.png": {
+   "side": 0,
+   "theme": "dark",
+   "bg": "rgb(15, 20, 27)"
+  }
+ },
+ "settingsVi": [
+  {
+   "key": "ai_enabled",
+   "label": "Bản nháp AI",
+   "value": "Tắt"
+  },
+  {
+   "key": "ai_budget_usd",
+   "label": "Ngân sách AI mỗi tháng",
+   "value": "2,00 USD mỗi tháng"
+  },
+  {
+   "key": "timezone",
+   "label": "Múi giờ",
+   "value": "Asia/Ho_Chi_Minh"
+  },
+  {
+   "key": "base_currency",
+   "label": "Đơn vị tiền gốc",
+   "value": "USD"
+  },
+  {
+   "key": "booking_validation_level",
+   "label": "Kiểm tra dòng đặt chỗ",
+   "value": "Cơ bản"
+  },
+  {
+   "key": "fx_mode",
+   "label": "Tỷ giá",
+   "value": "Tự động"
+  },
+  {
+   "key": "trash_days",
+   "label": "Giữ trong thùng rác",
+   "value": "7 ngày"
+  },
+  {
+   "key": "auto_archive_months",
+   "label": "Lưu trữ khách sau",
+   "value": "36 tháng không có chuyến"
+  },
+  {
+   "key": "stage2_auto_send",
+   "label": "Tự gửi biểu mẫu kế hoạch",
+   "value": "Tắt"
+  },
+  {
+   "key": "invoice_due_days",
+   "label": "Hạn thanh toán hoá đơn",
+   "value": "7 ngày"
+  },
+  {
+   "key": "service_fee_enabled",
+   "label": "Hoá đơn phí dịch vụ",
+   "value": "Tắt"
+  },
+  {
+   "key": "onboarding_later",
+   "label": "Bước thiết lập để sau",
+   "value": "Không có"
+  },
+  {
+   "key": "onboarding_done",
+   "label": "Bước thiết lập đã đánh dấu xong",
+   "value": "Không có"
+  }
+ ],
+ "settingsViCard": "CÀI ĐẶT Bản nháp AI Tắt Ngân sách AI mỗi tháng 2,00 USD mỗi tháng Múi giờ Asia/Ho_Chi_Minh Đơn vị tiền gốc USD Kiểm tra dòng đặt chỗ Cơ bản Tỷ giá Tự động Giữ trong thùng rác 7 ngày Lưu trữ khách sau 36 tháng không có chuyến Tự gửi biểu mẫu kế hoạch Tắt Hạn thanh toán hoá đơn 7 ngày Hoá đơn phí dịch vụ Tắt Bước thiết lập để sau Không có Bước thiết lập đã đánh dấu xong Không có",
+ "settingsViCheck": {
+  "n": 13,
+  "snake": [],
+  "bareBool": [],
+  "ok": true
+ },
+ "refusedText": "← Back Lữ hành Sen Vàng This session has ended. The agency owner ended AA support. YOUR SESSIONS IN THIS AGENCY SUPPORT SUP-1020 · 1 Nov 2026, 3:34 am UTC – 1 Nov 2026, 3:34 am UTC · Ended by the owner EMERGENCY INC-1019 · Service outage · 1 Nov 2026, 1:58 am UTC – 1 Nov 2026, 1:58 am UTC · Ended by you SUPPORT SUP-1019 · 1 Nov 2026, 1:57 am UTC – 1 Nov 2026, 1:57 am UTC · Ended by the owner",
+ "endedNoticeOk": true,
+ "history": [
+  "SUPPORT SUP-1020 · 1 Nov 2026, 3:34 am UTC – 1 Nov 2026, 3:34 am UTC · Ended by the owner",
+  "EMERGENCY INC-1019 · Service outage · 1 Nov 2026, 1:58 am UTC – 1 Nov 2026, 1:58 am UTC · Ended by you",
+  "SUPPORT SUP-1019 · 1 Nov 2026, 1:57 am UTC – 1 Nov 2026, 1:57 am UTC · Ended by the owner"
+ ],
+ "historyCheck": {
+  "hasYourSessionsTitle": false,
+  "sup1020": "SUPPORT SUP-1020 · 1 Nov 2026, 3:34 am UTC – 1 Nov 2026, 3:34 am UTC · Ended by the owner",
+  "sup1020EndedByOwner": true,
+  "sup1019": "SUPPORT SUP-1019 · 1 Nov 2026, 1:57 am UTC – 1 Nov 2026, 1:57 am UTC · Ended by the owner",
+  "inc1019": "EMERGENCY INC-1019 · Service outage · 1 Nov 2026, 1:58 am UTC – 1 Nov 2026, 1:58 am UTC · Ended by you",
+  "snakeOrRaw": []
+ },
+ "refusedShots": {
+  "51-staff-agency-owner-ended-1440-light.png": {
+   "side": 0,
+   "theme": "light",
+   "bg": "rgb(248, 246, 242)"
+  },
+  "51-staff-agency-owner-ended-390-light.png": {
+   "side": 0,
+   "theme": "light",
+   "bg": "rgb(248, 246, 242)"
+  },
+  "51-staff-agency-owner-ended-1440-dark.png": {
+   "side": 0,
+   "theme": "dark",
+   "bg": "rgb(15, 20, 27)"
+  },
+  "51-staff-agency-owner-ended-390-dark.png": {
+   "side": 0,
+   "theme": "dark",
+   "bg": "rgb(15, 20, 27)"
+  }
+ },
+ "sessionApi": {
+  "status": 200,
+  "sessions": [
+   {
+    "kind": "support",
+    "ticket": "SUP-1020",
+    "status": "revoked",
+    "end_reason": "owner_ended",
+    "ended_at": "2026-11-01T03:34:19.643767+00:00"
+   },
+   {
+    "kind": "breakglass",
+    "ticket": "INC-1019",
+    "status": "ended",
+    "end_reason": "staff_ended",
+    "ended_at": "2026-11-01T01:58:46.325038+00:00"
+   },
+   {
+    "kind": "support",
+    "ticket": "SUP-1019",
+    "status": "revoked",
+    "end_reason": "owner_ended",
+    "ended_at": "2026-11-01T01:57:36.129506+00:00"
+   }
+  ]
+ },
+ "final": {
+  "grant": null,
+  "active": [],
+  "recent": [
+   {
+    "kind": "support",
+    "ticket": "SUP-1020",
+    "status": "revoked"
+   },
+   {
+    "kind": "breakglass",
+    "ticket": "INC-1019",
+    "status": "ended"
+   },
+   {
+    "kind": "support",
+    "ticket": "SUP-1019",
+    "status": "revoked"
+   }
+  ],
+  "staffActive": 0
+ },
+ "staffConsoleErrors": [],
+ "staffHttpErrors": []
+}

@@ -98,7 +98,7 @@ Log ghi sau cùng nên có cả kết quả Jira và số liệu đã kiểm, kh
      running/desired; api và worker CIS cùng SHA. Revision mới nhất của mỗi family phải là revision đang chạy — một
      Terraform apply chạm ECS để lại revision mẫu mà deploy kế tiếp sẽ chép (xem `aa-lessons`, mục Vận hành).
    - Endpoint: CIS `/health` + `/health/ready`; Booking `/booking/health` + `/booking/health/ready`; CRM api
-     `/crm/health` + `/crm/health/ready`; CRM web `/healthz`; git_sha khớp ECS. TripPlanner: web `/api/health` (Vercel,
+     `/crm/health` + `/crm/health/ready`; CRM web `/healthz` (cả hai trên host `portal.`; `partner-dev.` chỉ còn `/crm*`); git_sha khớp ECS. TripPlanner: web `/api/health` (Vercel,
      có `git_sha`); hai Lambda không có health → gọi một route browse (`/api/browse?resource=countries`) và đọc
      `CodeSha256` của `aa-tripplanner-dev-browse` / `-assembly`. Host: bảng repo của `docs/ecosystem-architecture.md`.
    - Migration mới nhất mỗi owner (CIS, `bk-`, `tp-`, `crm-`): `/health/ready` hoặc dòng "Verified" của

@@ -1,0 +1,24 @@
+{
+ "request": "fields=name&fields=age_band&fields=dietary&fields=mobility",
+ "status": 200,
+ "suggestedFilename": "manifest-7a63a728-AAOPS-6FF0564C4E.csv",
+ "api": {
+  "filename": "manifest-7a63a728-AAOPS-6FF0564C4E.csv",
+  "watermark": "AAOPS-6FF0564C4E",
+  "row_count": 1,
+  "fields": [
+   "name",
+   "age_band",
+   "dietary",
+   "mobility"
+  ]
+ },
+ "csvHeader": "watermark,no,name,age_band,dietary,mobility",
+ "csvDataRows": 1,
+ "everyRowWatermarked": true,
+ "csvRedacted": [
+  "watermark,no,name,age_band,dietary,mobility",
+  "AAOPS-6FF0564C4E,1,<redacted>,<redacted>,<redacted>,<redacted>"
+ ],
+ "doneText": "Downloaded 1 rows, watermark AAOPS-6FF0564C4E."
+}

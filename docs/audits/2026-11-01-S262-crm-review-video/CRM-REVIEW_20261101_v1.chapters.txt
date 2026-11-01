@@ -1,0 +1,21 @@
+00:00 CRM review: what the partner CRM is and how far it is built
+00:49 Home: KPIs, getting started and the bell
+01:26 Getting started and importing clients from a spreadsheet
+02:18 A traveller sends an inquiry and the trip lands on the board
+03:08 Pipeline: a trip moves from Inquiry to Proposal
+04:08 Client profile: masked by default, every reveal logged
+04:52 Proposal builder: day by day, with an Adventure Asia tour at a live price
+06:25 A written proposal and the Before you go day
+07:24 The client accepts the proposal on a phone
+08:13 Contracts: new booking terms, re-accept and e-sign
+09:24 Invoices and payments: a deposit claimed, checked and recorded
+10:41 The traveller portal: details, flights, passport scan, signing and inviting
+12:16 Duty of care and the calendar: who travels where, and a private calendar feed
+13:15 E-mail on the trip: threads, a saved reply and a draft
+14:27 Suppliers and the bookings ledger
+15:05 Reports: funnel, money, what clients owe, the team and CSV export
+15:55 A client asks for their data: export, and erasure checked safely
+17:11 Settings, Vietnamese and dark mode
+18:10 The assistant's view: what a role cannot see
+18:48 What is not built yet
+19:32 Where the CRM stands and what comes next

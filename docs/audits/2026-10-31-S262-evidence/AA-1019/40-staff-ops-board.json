@@ -1,0 +1,19 @@
+{
+ "status": 200,
+ "n": 2,
+ "item": {
+  "trip_ref": "7a63a728",
+  "agency": "Lữ hành Sen Vàng",
+  "status": "live",
+  "start": "2026-11-26",
+  "end": "2026-11-29",
+  "travellers": 1,
+  "complete": false,
+  "days_to_purge": 118,
+  "purge_at": "2027-02-27",
+  "views": 0,
+  "deps": [
+   "2d3f3d0c-f10f-44f9-8709-e7a2f5396080"
+  ]
+ }
+}

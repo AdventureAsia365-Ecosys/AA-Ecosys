@@ -1,0 +1,20 @@
+{
+  "id": "TP-02",
+  "app": "tripplanner",
+  "identity": "public",
+  "title": "A destination page: its tours and the places they visit",
+  "title_vi": "Trang \u0111i\u1ec3m \u0111\u1ebfn: c\u00e1c tour v\u00e0 nh\u1eefng n\u01a1i tour \u0111i qua",
+  "baseURL": "https://aa-tripplanner.vercel.app",
+  "mode": "uat",
+  "recorded_at": "2026-10-31T19:39:53.566Z",
+  "total_ms": 21476,
+  "verdict": "PASS",
+  "failed_step": null,
+  "steps_run": 4,
+  "steps_total": 4,
+  "read_only": true,
+  "blocked_writes": [],
+  "blocked_other": [],
+  "burned": true,
+  "soft_subs": false
+}
