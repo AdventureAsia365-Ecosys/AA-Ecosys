@@ -210,7 +210,7 @@ tech lead) theo [ứng phó sự cố](../ops/incident-response.md); runbook kho
 
 ## 9. Lưu ý giai đoạn Dev
 
-- Dev chỉ nhận **đại lý giả lập**; không tạo được đại lý thật trên Dev. Mọi khách du lịch đều được tạo ra.
+- Trên Dev, bạn tạo được bao nhiêu đại lý cũng được (để trình diễn, để đào tạo): **Create agency** tự đánh dấu mọi đại lý tạo trên Dev là **synthetic** (dữ liệu thử), và đại lý đó dùng được đầy đủ chức năng CRM. Nhãn này để tách dữ liệu thử khỏi dữ liệu thật: bản production sẽ từ chối đại lý mang nhãn thử, và Dev không bao giờ được chứa dữ liệu khách thật (tên, số điện thoại, hộ chiếu của khách hàng thật). Để trình diễn, mời e-mail của chính bạn làm owner, hoặc dùng đại lý thử có sẵn đã có chuyến, đề xuất, hoá đơn và tin nhắn WhatsApp mẫu.
 - Soạn nháp bằng AI chạy một bộ thay thế dựng sẵn, không phải model thật, nên nội dung chỉ là chữ giữ chỗ.
 - SMS và WhatsApp dùng một nhà cung cấp sandbox không gửi gì. Thanh toán thẻ qua Stripe chưa được xây; thanh toán được
   ghi bằng tay.
