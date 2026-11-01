@@ -328,8 +328,14 @@ Proposed answer to gap §5 items 1 and 7; accepted separately (it includes about
     `manual_check` (`BRAND_AUDIT_UNCALIBRATED_JUDGE`), so the tour goes to the Review Queue. The hold lifts per
     connection once its model passes the 40-item calibration.
   The validate stages are accepted on the smoke alone: their output is checked downstream (geocoder, card check,
-  dedupe rules). Tenant judge and validate stages are not covered: CIS migration 332 (same shape, same gate) waits for
-  the tech lead's yes and the conditions above (decision 10, AA-820).
+  dedupe rules).
+  - **Tenant stages (tech lead, S263: "do it now", ahead of decision 10 and AA-820).** CIS migration 332 gives the
+    tenant judge and validate stages (t2_brand_audit, t10_claims, t9_faq_answer_fit, t9_faq_filter) the same acc2 last
+    fallback, with the same smoke order gate. The t2 brand audit keeps the uncalibrated-judge hold (its acc2 `pass`
+    becomes `manual_check`), so an acc2 answer never publishes tenant copy on its own.
+  - **AWS first, outside last (tech lead, S263).** Where a judge or validate route also reaches the OpenAI API (the
+    vendor fallback of CIS migration 327), the acc2 pick goes before that hop and the OpenAI API stays the last rung
+    (CIS migration 333, same gate).
 - The same role list applies to `aa-prod` connections when `aa-prod` can call Bedrock (ADR 0018): judge and validate
   stages only, after the ladder passes there.
 - "Different payer" is today's fact, not a permanent one: the 01/12 Billing Transfer and the move into the AA
