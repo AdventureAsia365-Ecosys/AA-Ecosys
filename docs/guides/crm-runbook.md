@@ -83,17 +83,21 @@ message.
 
 ## 4. Sign in and out
 
-**Agency team**
+### Agency team
 
 1. Open `https://portal.lumiguides.it.com` and choose **Sign in**.
 2. Type your e-mail, your password and the code from your authenticator app.
 3. If you belong to several agencies, choose one. A locked agency shows "This agency is locked by AA".
 4. To sign out, choose **Sign out** in the menu. This also signs you out of the Content studio.
 
-**Adventure Asia staff**: open `https://portal.lumiguides.it.com/staff` and choose **Sign in with your AA staff
+### Adventure Asia staff
+
+Open `https://portal.lumiguides.it.com/staff` and choose **Sign in with your AA staff
 account**. Signing out of the console (**Sign out of the staff console**) leaves any agency session alone.
 
-**Travellers** open the links the agency sends. The traveller portal asks for a code sent to their e-mail.
+### Travellers
+
+Travellers open the links the agency sends. The traveller portal asks for a code sent to their e-mail.
 
 ## 5. Roles
 
