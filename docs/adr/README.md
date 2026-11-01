@@ -19,7 +19,7 @@ An amendment is a separate file `<nnnn>a-<slug>.md` and the amended ADR carries 
 | [0005a](0005a-b2b-resale-warn-and-vnd.md) | Amendment: B2B resale by partner agencies (warn below the "from" price, no subscription line, VND quotes) | Accepted |
 | [0006](0006-ecosystem-identity.md) | Ecosystem identity on Amazon Cognito (staff, tenant users, travellers) | Accepted (amended by 0006a, 0006b) |
 | [0006a](0006a-identity-phase1-amendments.md) | Amendment: identity Phase 1 as shipped (CIS staff on Cognito WORKFORCE) | Accepted |
-| [0006b](0006b-partner-pool-and-mfa.md) | Amendment: a partner pool with required MFA for agency people, and an M2M pool for service calls | Accepted |
+| [0006b](0006b-partner-pool-and-mfa.md) | Amendment: a partner pool with required MFA for agency people, and an M2M pool for service calls | Accepted (A1 S263: `AdminDeleteUser` for never-signed-in accounts) |
 | [0007](0007-place-pipeline-in-cis.md) | Place pipeline in CIS: `geo` schema, `catalog.*` views, background jobs | Accepted |
 | [0008](0008-new-app-integration-and-data-platform-rules.md) | New-app integration and data platform rules | Accepted (amended by 0008a) |
 | [0008a](0008a-crm-separate-app-exceptions.md) | Amendment: the partner CRM is a separate app; traveller OTP and an own LLM gateway as playbook exceptions | Accepted |
