@@ -45,7 +45,7 @@ info:
     and error codes, tokens, guardrail text units, cost, latency, the sha256 of the scrubbed prompt, the prompt version,
     shadow / experiment flags, the scrub's entity total); never a prompt, an output, a placeholder value, the scrub
     receipt's per-kind counts or the member who asked. Each agency whose rows are returned gets one `ops_read` event
-    (reason `llm_calls`) in its audit log. Version 1.7 (AA-964 S263 F1, crm-040; additive for a reader that maps an
+    (reason `llm_calls`) in its audit log. Version 1.7 (AA-964 S263 F1, crm-037; additive for a reader that maps an
     unknown status to `error`, as the CIS Calls tab does): `status` on GET /llm/calls (row and filter) adds the two
     other ledger v2 statuses, `billed_unusable` (billed, no usable answer) and `truncated` (cut at its token limit,
     never `ok`). Errors are
