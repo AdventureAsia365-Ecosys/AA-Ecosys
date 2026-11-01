@@ -87,7 +87,7 @@ allow-list and to this table. To ship a route dark, set its key to `false` on De
 
 | Flag | Kind | Where | Default | Live value | Owner | remove_by | Notes |
 |---|---|---|---|---|---|---|---|
-| `WORKER_ENABLED` | ops | ECS task env | on in `dev` when a database URL is set | not set, so on (2026-10-28) | tech lead | none | Off makes `aa-booking-dev-jobs-sampling-stopped` fire by design |
+| `WORKER_ENABLED` | ops | ECS task env | on in `dev` when a database URL is set | not set, so on (2026-10-28) | tech lead | none | Off also stops the Booking job checks (they run next to the worker; S263) |
 | `JOB_TEST_KINDS` | ops | ECS task env (Terraform `booking.tf`) | off | `1` on Dev (2026-10-28) | tech lead | none | Registers the test-only kind `bk_noop_sleep` (AA-993 G4) |
 | Deploy-blocking kinds | ops | code (`backend/app/jobs/kinds.py` `DEPLOY_BLOCKING_KINDS`) | `bk_retention_job`, `bk_retention_inbox_redact` | same | tech lead | none | The deploy gate blocks only while one of them runs or is due within 15 minutes (AA-993 G5) |
 | Deploy-gate exempt kinds | ops | code (`DEPLOY_GATE_EXEMPT`) | `bk_inquiry_pull`, `bk_noop_sleep` | same | tech lead | none | Left out of the gate's counts, which are information only since AA-993 G5 |

@@ -38,8 +38,9 @@ aws ecs update-service --cluster aa-cis-dev-cluster --service aa-cis-dev-worker 
 Undo: the same command with `--desired-count 1`, then look for `job_worker_started` in `/ecs/aa-cis-dev`. Scaling the
 worker to 0 stops all CIS job work; the tech lead decides it.
 
-The worker's autoscaling target has minimum 1 (maximum 3), so the next scaling activity can start a task again. For a
-stop that must last, also lower the minimum, and put it back afterwards (until then Terraform shows drift):
+The worker's scalable target has minimum 1 (maximum 3). Since S263 it has no target-tracking policy on Dev (a heavy
+wave raises the desired count by hand, at most 3); lowering the minimum still keeps a registration from starting a task
+again. For a stop that must last, lower the minimum and put it back afterwards (until then Terraform shows drift):
 
 ```bash
 aws application-autoscaling register-scalable-target --service-namespace ecs --resource-id service/aa-cis-dev-cluster/aa-cis-dev-worker --scalable-dimension ecs:service:DesiredCount --min-capacity 0 --profile aa365-admin --region us-west-1 # WRITE
@@ -66,7 +67,7 @@ kinds in AA-CIS-Infra `db/owners.yaml`.
 ## CIS (`shared.job`, worker service `aa-cis-dev-worker`)
 
 `concurrency` = parallel rows of the kind per worker; `expected` = seconds after which a running row is "overdue" on the
-Jobs page and in `aa-cis-dev-jobs-overdue-running` (twice this value); `background` kinds never take the worker's last
+Jobs page and in the CIS ops check `jobs_overdue` (twice this value); `background` kinds never take the worker's last
 free slots; **blocks** = `deploy_blocking` in the registry.
 
 | Kind | Code | Concurrency | Max attempts | Expected (s) | Background | Blocks deploys | Paid calls (from the code; check before relying on it) |

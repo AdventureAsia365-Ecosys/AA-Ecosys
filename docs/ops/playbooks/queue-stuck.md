@@ -20,14 +20,18 @@ related: [OPS-04, APP-09, OPS-10-deploy-gate, OPS-04-llm-cost-spike, AA-650, AA-
 
 ## Triggers
 
-Each job owner has the same three alarms. `<prefix>` is `aa-cis-dev` (CIS, `shared.job`), `aa-booking-dev`
-(Booking, `booking.job`) or `aa-crm-dev` (Partner CRM, `crm.job`).
+Since the S263 alert diet (AA-1025) these are **in-app checks**, not CloudWatch alarms: each owner's 5-minute sampler
+checks its own job table and e-mails the alerts topic (subject `[AA-CIS|AA-Booking|AA-Partner dev] Ops check: ...`,
+at most once per check and UTC day); CIS also writes the admin bell.
 
-| Alarm | Means |
-|---|---|
-| `<prefix>-jobs-queue-age` | a due queued job has waited more than 15 minutes (no live worker, an unregistered kind, or a free slot that does not claim it) |
-| `<prefix>-jobs-overdue-running` | a running job has run longer than twice its kind's expected time |
-| `<prefix>-jobs-sampling-stopped` | the sampler that feeds the two alarms above is silent for 45 minutes; expected while the service is scaled to 0 or its worker is off |
+| Check | App | Means |
+|---|---|---|
+| `jobs_starved` (CIS) / `jobs_stuck` (Booking, Partner CRM) | `shared.job` / `booking.job` / `crm.job` | a due queued job has waited more than 15 minutes (no live worker, an unregistered kind, or a free slot that does not claim it; Booking / CRM: no healthy job running) |
+| `jobs_overdue` | all three | a running job has run longer than twice its kind's expected time |
+| `aa-<app>-dev-no-healthy-task` (CloudWatch) | the API process that runs the sampler | the service is down, so the checks above are silent too |
+
+The CIS job checks mail from the api, not through the worker, so a dead worker is still reported. Ledger rows of sent
+alerts: `bk_ops_alert` in `booking.job`, `crm_ops_alert` in `crm.job` (status `succeeded`, never claimed).
 
 Also: a deploy blocked by the [deploy gate](../runbooks/deploy-gate-override.md), or a UI that waits forever. Since
 AA-993 G5 a busy queue no longer blocks a deploy: only an open rerun wave or a deploy-blocking kind does.

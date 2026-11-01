@@ -191,7 +191,7 @@ phải kênh cảnh báo; alarm cảnh báo đi qua SNS email.
   (`aa-management-monthly` 10 USD, `aa-org-monthly` 300 USD). Không có budget action nên không tính tiền
   (Cost Explorer không có dòng "AWS Budgets").
 
-## 5. Đề xuất gỡ / gộp (chưa làm, chờ tech lead chọn)
+## 5. Đề xuất gỡ / gộp (tech lead đồng ý tất cả trong S263; bản làm thật ở §8 và `diet.md`)
 
 Giá: 0,10 USD/alarm-metric/tháng, 0,30 USD/custom metric/tháng, dashboard ~2,3–3 USD/tháng (acc2 không có free tier).
 Mọi alarm/rule đều do Terraform trong `infra/AA-CIS-Infra/accounts/aa365/*.tf` (và `modules/eventbridge`) quản lý,
@@ -242,3 +242,28 @@ nên không rẻ hơn.
   trên ba account này trong tháng 9–10).
 - Không ghi account ID, ARN, ID tài nguyên, địa chỉ email vào file này (repo public). Topic, alarm, rule chỉ ghi theo tên.
 - Muốn số tháng 11 thật: chạy lại Cost Explorer sau ngày 03/11 (dữ liệu trễ 24–48 giờ).
+
+## 8. Sau khi dọn (S263 alert diet, AA-1025)
+
+Tech lead: "chỉ giữ những cái thật cần thiết, đồng ý các đề xuất để giảm tiền". Bảng quyết định từng alarm
+(giữ / gỡ / chuyển vào app, lý do, check thay thế, test) ở [`diet.md`](diet.md); làm theo bảng đó trong 4 PR
+(AA-CIS-Infra, AA-CIS-App, AA-Booking, AA-Partner) + PR repo gốc này.
+
+| | Trước (dự báo tháng 11) | Sau |
+|---|---:|---:|
+| Alarm | 101 (+1 mới) → ~10,5 USD | 24 alarm, 27 đơn vị tính tiền → **2,70 USD** |
+| Custom metric | ~28 → ~8–9 USD | ~3 → **~0,90 USD** |
+| Dashboard | 1 → ~2,3–3 USD | 0 |
+| **Tổng nhóm cảnh báo** | **~21 USD/tháng** | **~3,7 USD/tháng** (vượt mục tiêu ≤ 6 USD) |
+| Log vended (VPC flow + WAF) | ~3,0 USD (tháng 10) | ~0,3 USD (flow log chỉ REJECT, WAF log chỉ request bị chặn/đếm, 30 ngày) |
+| Email | ~375/tháng, 92 alarm gửi cả OK | chỉ 13 alarm trạng thái gửi OK; check trong app tối đa 1 email/check/ngày |
+
+Chuyển vào app ($0, dùng chung topic SNS cảnh báo nên người nhận không đổi): hàng đợi job của CIS/Booking/CRM,
+giới hạn kết nối theo role, tuổi XID, các log event (ghi cost-log lỗi, tenant pool fail-closed, cis_app hết kết nối),
+audit export CRM, break-glass, membership feed, ops release, bulk reveal. Gỡ hẳn: 8 alarm target tracking (bỏ
+autoscaling theo CPU/memory trên Dev), alarm 5xx/latency API (Sentry bắt lỗi app; sập service đã có
+`*-no-healthy-task`), unhealthy-hosts, CPU service, RDS memory/latency/disk queue/surplus credits, NAT
+StatusCheckFailed trùng, alarm ACP chết (emitter không ai gọi), DLQ ACP, uptime Booking, throttles/duration identity,
+WAF blocked. Thêm 1: `aa-cis-dev-api-no-healthy-task` (thay alarm mù `ecs-running-tasks-low`).
+Số thật sau apply: đếm lại alarm/custom metric theo live step của PR Infra; Cost Explorer tháng 12 mới thấy đủ.
+

@@ -25,7 +25,7 @@ related: [OPS-02-cis, OPS-04, OPS-10-deploy-gate, AA-869, AA-892]
 ## When to use
 
 - Trigger: a Booking deploy finished (rollout `COMPLETED`) but `/booking/*` routes misbehave, or
-  `aa-booking-dev-api-5xx` fires right after a deploy.
+  a Sentry error burst or `aa-booking-dev-no-healthy-task` right after a deploy.
 - Not for:
   - a deploy that never became healthy: the ECS circuit breaker (enabled, with rollback) handles it;
   - the Booking admin frontend: [roll back a Vercel deployment](rollback-vercel.md);
@@ -118,7 +118,7 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 ## Verify the result
 
 - Service `COMPLETED`, `/booking/health` reports the good SHA, `/booking/health/ready` 200,
-  `aa-booking-dev-api-5xx` back to `OK`.
+  no new Sentry errors on the changed routes.
 
 ## Roll back or abort
 

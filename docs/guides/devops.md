@@ -91,11 +91,13 @@ and on demand.
 
 ## Alarms, runbooks and incidents
 
-- CloudWatch alarms (94 on acc2, counted 2026-10-28) e-mail through SNS on ALARM **and** on OK (D-20) to the
-  recipients on CIS admin → Platform → Alert recipients. Main ones: CIS API 5xx and p95 latency, ECS health, RDS
-  connections and storage, Booking, TripPlanner Lambda errors, the CRM api, web and portal, job health, SES, Cognito
-  and its WAF, log-write failures of the cost ledgers. The generated list is [alarms](../generated/alarms.md).
-- `TargetTracking-...-AlarmLow` alarms belong to ECS auto scaling and sit in ALARM on an idle Dev; that is normal.
+- CloudWatch alarms (24 on acc2 after the S263 alert diet) e-mail through SNS to the recipients on CIS admin →
+  Platform → Alert recipients: state alarms (service down, RDS, NAT recover, SES, backup copy age) on ALARM and OK,
+  event alarms (Lambda errors, break-glass token, KMS decrypt anomaly) on ALARM only. The generated list is
+  [alarms](../generated/alarms.md).
+- S263 alert diet: CloudWatch keeps service down, RDS CPU / storage / connections, Lambda errors, SES and the security
+  signals only AWS sees; job queues, per-role connections and log events are in-app checks that e-mail the same topic
+  (table: `docs/audits/2026-11-01-S263-alerting-cost/diet.md`). No target-tracking autoscaling on Dev.
 - Sentry: CIS backend and frontend errors, one uptime monitor on CIS `/health` (free plan). Booking and TripPlanner
   also report errors to Sentry (AA-871, DSN set on Dev); AA-Partner has the code but no DSN yet.
 - Start at the operations index [`ops/README.md`](../ops/README.md) (AA-892): rollback per app, restore, break-glass,
