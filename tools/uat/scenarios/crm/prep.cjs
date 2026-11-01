@@ -73,7 +73,19 @@ const stageOf = async (page, tripId) => {
 async function sideDraft(page, t) {
   if (t.proposal_id) {
     const b = await bff(page, 'GET', `proposals/${t.proposal_id}/builder`);
-    if (b.status === 200) return;
+    if (b.status === 200) {
+      // A kept draft still names the booking terms that were published when it was made; a later R09 or CRM E2E run
+      // retires them, and Publish then refuses with terms_not_published. Point the draft at the current version.
+      if (b.data.status === 'draft' && b.data.terms_doc_id) {
+        const docs = (await bffOk(page, 'GET', 'agreements')).agreements || [];
+        const named = docs.find((d) => d.doc_id === b.data.terms_doc_id);
+        const current = docs.find((d) => d.kind === 'booking_terms' && d.status === 'published');
+        if (current && (!named || named.status !== 'published')) {
+          await bffOk(page, 'PATCH', `proposals/${t.proposal_id}/builder`, { seq: b.data.edit_seq, terms_doc_id: current.doc_id });
+        }
+      }
+      return;
+    }
   }
   let v = await bffOk(page, 'POST', `trips/${t.trip_id}/builder`, { currency: 'USD' }, 201);
   const pid = v.proposal_id;

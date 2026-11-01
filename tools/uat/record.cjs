@@ -23,6 +23,8 @@
 // (lib/net-guard.cjs); a read-only run also refuses non-read page.request / context.request calls (blocked_writes) and
 // closes every WebSocket (blocked_other). UAT_HEADED=1 or scenario.headed opens a visible Chromium (WSLg DISPLAY), for pages a headless browser
 // cannot pass. scenario.identity (public, cis-admin, booking, studio, crm) is copied into result.json.
+// UAT_DEBUG=1 prints a failing step's whole error (redacted, one line "Error detail: ..."): result.json keeps only its
+// first line, which hides the reason (a strict mode violation reads "expect(locator).toBeVisible() failed").
 // Setup once: bash tools/uat/setup.sh (pins @playwright/test). One Chromium, closed at the end.
 const fs = require('fs');
 const path = require('path');
@@ -267,6 +269,7 @@ async function main() {
     } catch (e) {
       status = 'FAIL';
       error = redact(String(e.message || e).split('\n')[0]);
+      if (process.env.UAT_DEBUG) console.log(`Error detail: ${redact(String(e.message || e)).replace(/\x1b\[[0-9;]*m/g, '').replace(/\s*\n\s*/g, ' | ').slice(0, 2500)}`);
       // The failing screen, for the report (work/ is gitignored; masks apply as on the video).
       await page.screenshot({ path: path.join(work, `fail-step-${n}.png`) }).catch(() => {});
     }
