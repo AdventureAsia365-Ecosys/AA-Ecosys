@@ -37,7 +37,8 @@ nghiệp dùng nó để xem toàn bộ nền tảng. Đại lý đối tác kh�
 
 1. Xin quyền từ một chủ nền tảng (hiện là tech lead), kèm địa chỉ `@adventure.asia` và công việc bạn làm.
 2. Chủ nền tảng mở **Platform › People & access › Staff**, chọn **Add staff**, nhập tên và e-mail công việc của bạn,
-   chọn **CIS role** và, nếu bạn cũng làm việc trong Booking, chọn **Booking role**.
+   chọn **CIS role**, chọn **Booking role** nếu bạn cũng làm việc trong Booking, và một hoặc nhiều **CRM role** nếu
+   bạn chăm sóc đại lý đối tác trong CRM.
 3. Bạn nhận được e-mail mời. Nếu sau vài phút chưa thấy, chủ nền tảng bấm **Resend invite** trên dòng của bạn.
 
 Chỉ một chủ nền tảng đã đăng nhập bằng e-mail công ty mới thêm được tài khoản, đổi vai trò hoặc vô hiệu hoá tài khoản.
@@ -66,6 +67,18 @@ Phiên tự gia hạn khi bạn đang làm việc và kết thúc sau khoảng 1
 
 Một số nút cần nhiều quyền hơn bản thân trang: ví dụ sửa **Facts**, publish **AA content (CRM)** và mọi thiết lập
 tenant chỉ dành cho admin. Máy chủ kiểm lại vai trò ở mỗi thay đổi.
+
+Cùng tài khoản đó còn có một **Booking role** (Booking admin, Sales, Contracting, Content creator, hoặc không có) và
+bao nhiêu **CRM role** tuỳ ý cho việc nhân sự CRM (mặc định không có):
+
+| CRM role | Cho phép gì |
+|---|---|
+| **Agency admin** | Các nút ghi của **Agencies (CRM)**: **Create agency**, **Invite first owner**, **Lock**, **Unlock** |
+| **Operations** | Console nhân sự CRM cho vận hành mặt đất của AA (thông tin khách được chia sẻ cho chuyến có dịch vụ AA đã xác nhận) |
+| **Support** | Console nhân sự CRM cho phiên hỗ trợ; mỗi phiên còn cần chủ đại lý cấp quyền trong CRM |
+
+Sau khi đổi vai trò, hãy bảo người đó đăng xuất rồi đăng nhập lại; trước đó phiên có thể giữ quyền cũ tối đa 15
+phút.
 
 ## 6. Menu
 
@@ -118,7 +131,20 @@ Menu bên trái có hai phần.
 ### Quản lý nhân sự (chỉ chủ nền tảng)
 
 1. **Staff**: thêm, đổi vai trò, vô hiệu hoá hoặc đăng xuất một người. **Open in Booking** mở cùng người đó trong
-   Booking admin.
+   Booking admin. Danh sách hiện **CIS role**, **Booking role** và **CRM role** của mọi tài khoản (cả trong file CSV
+   xuất ra).
+   - Đổi vai trò: mở dòng đó, rồi **Manage access**. Chọn CIS role và Booking role, đánh dấu hoặc bỏ đánh dấu các CRM
+     role, rồi bấm **Save roles**. Thay đổi được lưu trong CIS trước, sau đó trong hệ thống đăng nhập công ty, và ghi
+     vào **Audit log**. Bạn không đổi được CIS role của chính mình; bạn tự cấp được Booking role hoặc CRM role.
+   - **Platform owner preset**: trong **Manage access**, **Apply preset** cấp Quản trị viên CIS, Booking admin và CRM
+     Agency admin trong một lần lưu (các CRM role khác giữ nguyên). Nó không biến người đó thành chủ sở hữu danh sách
+     nhân sự; việc đó vẫn là một bước riêng, có ghi lại, do tech lead làm.
+   - Nếu khi lưu báo đang chờ cập nhật đăng nhập, bấm **Retry Cognito** (hoặc **Retry Cognito sync**). Đồng bộ làm hệ
+     thống đăng nhập công ty khớp đúng với dòng đó, nên một quyền CRM cấp tay ngoài trang này sẽ bị gỡ nếu dòng không
+     có CRM role tương ứng: hãy đặt vai trò trên trang trước.
+   - **Directory health** (đầu trang) so sánh các nhóm đăng nhập với danh sách mỗi ngày một lần hoặc khi bấm
+     **Check now**; một CRM role lệch được liệt kê là một phát hiện. Các tài khoản kiểm thử tự động được phép trên Dev
+     được liệt kê riêng.
 2. **Audit log**: ai đã đổi gì và khi nào.
 3. **Alert recipients**: ai nhận e-mail cảnh báo và ngân sách.
 
@@ -129,7 +155,8 @@ Menu bên trái có hai phần.
    Markets, Audit, Settings). Mời thành viên tenant chưa có nút: xem
    [runbook Content studio](content-studio-runbook.vi.md), mục 3.
 2. **Agencies (CRM)**: các đại lý đối tác của CRM. **Create agency**, **Invite first owner**, **Lock** và **Unlock**
-   cần nhóm nhân sự CRM platform-admin và một mã ticket; các admin khác xem được danh sách và mức sử dụng. Chi tiết:
+   cần CRM role **Agency admin** (đặt ở trang Staff, rồi đăng nhập lại) và một mã ticket; các admin khác xem được
+   danh sách và mức sử dụng. Chi tiết:
    [runbook CRM](crm-runbook.vi.md), mục 3.
 
 ### Một người yêu cầu xoá dữ liệu của họ
@@ -172,5 +199,5 @@ Trong giai đoạn dev, tech lead là kỹ sư trực. Lỗi thông thường g�
 Đọc từ AA-CIS-App `main` ngày 01/11/2026: `frontend/app/_kit/adminNav.tsx` (menu), `frontend/lib/rbac.ts` (vai trò),
 `frontend/app/login/page.tsx`, các file `messages.ts` của `admin/platform/staff`, `upload`, `s1-rewrite`, `review`,
 `master-content`, `platform/apps`, `tenants`, `platform/agencies`, `_kit/Topbar.tsx` (chuông), và `CONTEXT.md`
-("Staff roles and permissions"). Thiết kế đăng nhập: ADR gốc 0006 và 0006a. Giữ trang này khớp với
-[cis-admin-runbook.md](cis-admin-runbook.md).
+("Staff roles and permissions"). Thiết kế đăng nhập: ADR gốc 0006, 0006a và 0006b (nhóm nhân sự CRM). Giữ trang này
+khớp với [cis-admin-runbook.md](cis-admin-runbook.md).
