@@ -73,7 +73,9 @@ Script asyncpg ad-hoc: tham số ngày bind `$1::date` phải là `datetime.date
 - Luồng merge → copy Infra → DB Migrate `check` → `apply` → PR schema dump: skill `aa-ship` (luồng D8). File ở repo chủ;
   bản copy byte-identical ở Infra `db/migrations/<owner>/` (Migration Copy Guard đòi PR của repo chủ đã vào `main`).
   Input `migration` của DB Migrate có tiền tố owner (`cis/281_x.sql`). `apply` chờ **mọi** bảng job rảnh và không có
-  wave mở (`shared.rerun_wave`), trừ khi Nghiệp override có lý do.
+  wave mở (`shared.rerun_wave`), trừ khi Nghiệp override có lý do. Trên Dev, file expand và file contract do
+  `migration-apply.yml` tự áp sau khi PR copy merge (contract: chờ mọi bảng job rảnh, ADR 0017a); DB Migrate tay chỉ
+  cho file destructive / out-of-order / `roles/` hoặc file run Migration Apply báo `manual`.
 - DB Migrate đăng nhập **`db_migrator`** và chạy mỗi file bằng role chủ sống của schema neo: `cis/` → `cis_owner`,
   `booking/` → `bk_owner`, `tripplanner/` → `tp_owner`, `crm/` → `crm_owner` (không cần `OWNER TO`). File `roles/`
   (key `rl-NNN`) chạy bằng master.

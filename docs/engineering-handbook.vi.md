@@ -394,7 +394,11 @@ Cách cài release-please (AA-891):
   DDL từ laptop, ECS exec hay lúc app khởi động.
 - **Luồng D8** ([DM-11.2](architecture/data-standards/02-data-management.md#11-change-management), Phần A MIG-4): PR
   chỉ có migration → bản copy y hệt vào Infra → Copy Guard → DB Migrate `check` → `apply` → merge PR schema reference
-  được sinh lại → rồi mới tới PR code. Runbook là [DB Migrate](ops/runbooks/db-migrate.md).
+  được sinh lại → rồi mới tới PR code. Runbook là [DB Migrate](ops/runbooks/db-migrate.md). Trên Dev bước copy và
+  apply là tự động: file expand đi cùng code ([ADR 0017](adr/0017-migrations-in-app-pr-expand-auto-apply.md)), file
+  contract được Migration Apply áp khi mọi bảng job rảnh
+  ([ADR 0017a](adr/0017a-dev-auto-applies-contract-migrations.md)); file destructive, và file contract có `DELETE`
+  mà thiếu header destructive, vẫn làm tay.
 - **Expand / contract** cho mọi thay đổi mà hai phiên bản app phải cùng chạy được:
   1. Expand: thêm cột nullable hoặc bảng mới (PR chỉ có migration, áp trước).
   2. Deploy code ghi cả cũ lẫn mới; backfill qua một job.

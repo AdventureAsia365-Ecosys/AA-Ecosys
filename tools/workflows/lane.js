@@ -48,6 +48,18 @@ HARD RULES for this lane:
   A file that ALTERs an existing table, adds a policy/constraint to one or INSERTs config rows is contract, not expand: run the app's
   migration preflight (Booking/Partner .github/scripts/migration_preflight.py with --infra-tools) before returning; contract = MIG-4 (a contract file has NO '-- migrate:' directive line; 'contract' is not a directive)
   (a migration-only PR without the readiness raise, then the code PR). Reserved numbers must be renumbered to owner main max + 1.
+  On Dev a contract file is applied by Infra Migration Apply once every job table is idle (root ADR 0017a): its live_step is
+  "the migration-apply run shows <owner>/<file> applied (class contract)", never a DB Migrate dispatch; only destructive
+  files ('-- migrate: destructive', DRY RUN first) keep a DB Migrate live_step.
+- Several migrations of one owner in this lane: consecutive numbers in ONE migration-only PR (or one PR per file, listed in
+  number order in prs[] with "batch: <owner> <first>-<last>" in pr_body), so the orchestrator ships the wave's migrations of
+  one owner as one batch (one copy + one Migration Apply run), never one at a time.
+- Before returning, run the checks CI runs on your diff, not only unit tests (each red CI round costs the orchestrator a queue cycle):
+  the app migration preflight with --infra-tools when a migration changed; the integration tests of every touched module on local
+  Postgres; and a gitleaks scan of your commits: download gitleaks v8.30.1 (the CI pin) once into <scratchpad>/${L.key}-gitleaks/
+  from github.com/gitleaks/gitleaks/releases (linux_x64 tar.gz, verify it against the release checksums file), then in each
+  worktree: gitleaks git --log-opts="origin/main..HEAD" --config .gitleaks.toml --redact (root: origin/master; no .gitleaks.toml =
+  no --config). A finding means rewrite the local branch (reset --soft + recommit) before returning; never "fix it in a later commit".
 - When a change adds a field to a DB query or row shape, also run the integration tests that read it (local Postgres), not only unit tests.
   A migration that creates a table also needs its DM-7.1 retention row (root docs/architecture/data-standards/02-data-management.md):
   return that root PR too, merged before the Infra bot copy (its "Retention rows" check fails without it).
