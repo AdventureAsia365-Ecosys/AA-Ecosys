@@ -10,6 +10,7 @@ name: Docs lint
 #   - every alarm row of docs/generated/alarms.md links to an existing runbook (AA-893)
 #   - PRDs (docs/product/): required PRD fields, acceptance criteria, and every referenced path exists (AA-894)
 #   - the report registry docs/reports/*.yaml (AA-1003): shape, KPI references, templates, source tables
+#   - the tracker docs/backlog/tracker/plan.json (S263): plan_sync.py tests, shape, no account ID or ARN
 # Secrets: gitleaks runs on every PR (any path) in secret-scan.yml and nightly over the full history in
 # secret-scan-history.yml (AA-981),
 # so it is not repeated here (secret names are fine in docs, values never are).
@@ -28,6 +29,7 @@ on:
       - ".kiro/steering/**"
       - ".claude/**/*.md"
       - "tools/docs/**"
+      - "tools/linear/**"
       - ".markdownlint-cli2.jsonc"
       - ".github/workflows/docs-lint.yml"
   schedule:
@@ -64,6 +66,14 @@ jobs:
       - name: Unit tests of the lint tools
         if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
         run: python -m unittest discover -s tools/docs -p 'test_*.py'
+
+      # S263 (AA-896 plan-sync): the tracker plan.json keeps its file format (indent 1, so plan_sync.py --write does
+      # not churn), its due/risks shape, and carries no account ID or ARN (the tracker page can be shared). Offline.
+      - name: Tracker plan (plan_sync tests + plan.json checks)
+        if: ${{ !cancelled() }}
+        run: |
+          python -m unittest discover -s tools/linear -p 'test_*.py'
+          python tools/linear/plan_sync.py --validate
 
       - name: Front-matter schema
         if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
