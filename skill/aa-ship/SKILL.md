@@ -47,10 +47,10 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
   <owner> <NNN>` (key đã có trong `/health/ready` thì không dispatch), rồi mới merge PR code. Chỉ dispatch DB Migrate
   (`ship_copy_apply.py <owner> <NNN> --mode check` rồi không `--mode`, hoặc `tools/github/dbmig.sh <owner>/<NNN>
   check|apply` với file đã trên Infra main) khi run báo dừng `manual` (kill switch `DB_AUTO_APPLY_CONTRACT=false`, lỗi
-  replay/lint) hoặc cần override bận (chỉ Nghiệp). File **destructive** luôn tay: DRY RUN → `ship_copy_apply.py …
-  --allow-destructive` (snapshot). Nhiều migration cùng owner trong một wave → gộp (một PR chỉ migration số liên tiếp,
-  hoặc merge liền nhau) để một vòng copy + apply phủ hết. Bước, idle check, log `ran as: <owner>`, Schema Dump/Isolation
-  Probe: `docs/ops/runbooks/db-migrate.md`.
+  replay/lint, hoặc kind `delete`: file contract có `DELETE` mà thiếu header destructive) hoặc cần override bận (chỉ
+  Nghiệp). File **destructive** luôn tay: DRY RUN → `ship_copy_apply.py … --allow-destructive` (snapshot). Nhiều
+  migration cùng owner trong một wave → gộp (một PR chỉ migration số liên tiếp, hoặc merge liền nhau) để một vòng copy +
+  apply phủ hết. Bước, idle check, log `ran as: <owner>`, Schema Dump/Isolation Probe: `docs/ops/runbooks/db-migrate.md`.
   - Migration đổi bảng/khoá/FK của schema có trang ERD thiết kế `enforce=true`
     (`docs/architecture/erd/design/<schema>.md`, repo gốc) → sửa trang đó trong cùng đợt thay đổi, không thì DB Schema
     Dump đêm đó đỏ bước drift.

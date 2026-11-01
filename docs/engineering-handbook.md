@@ -396,7 +396,8 @@ How release-please is set up (AA-891):
   reference PR → then the code PR. The runbook is [DB Migrate](ops/runbooks/db-migrate.md). On Dev the copy and the
   apply are automatic: expand files ship with their code ([ADR 0017](adr/0017-migrations-in-app-pr-expand-auto-apply.md)),
   contract files are applied by Migration Apply once every job table is idle
-  ([ADR 0017a](adr/0017a-dev-auto-applies-contract-migrations.md)); destructive files stay manual.
+  ([ADR 0017a](adr/0017a-dev-auto-applies-contract-migrations.md)); destructive files, and contract files with a
+  `DELETE` but no destructive header, stay manual.
 - **Expand / contract** for every change that two app versions must survive:
   1. Expand: add the nullable column or the new table (migration-only PR, applied first).
   2. Deploy code that writes old and new; backfill through a job.

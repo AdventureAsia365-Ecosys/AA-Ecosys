@@ -26,7 +26,8 @@ workflow wins and this page gets fixed.
 - `check` / `apply`: a migration file merged on its owner repo `main` and copied byte-for-byte into AA-CIS-Infra
   `db/migrations/<owner>/` (Migration Copy Guard green, PR merged) that Migration Apply did not apply. On Dev that
   means: a **destructive** file, an out-of-order file, a `roles/` file, or a contract file the Migration Apply run
-  stopped as `manual` (kill switch `DB_AUTO_APPLY_CONTRACT=false`, a replay or lint refusal). Expand files (ADR 0017)
+  stopped as `manual` (kill switch `DB_AUTO_APPLY_CONTRACT=false`, a replay or lint refusal, or kind `delete`: a
+  `DELETE` without the `-- migrate: destructive` header; if it removes real data, follow the DRY RUN procedure). Expand files (ADR 0017)
   and, on Dev, contract files (ADR 0017a, AA-1032) are applied by `migration-apply.yml` after the copy merges, a
   contract file only when every job table is idle and no wave is open (busy = `deferred`, its next run retries). Read
   that run's summary first; do not run DB Migrate for a file it applied or deferred.

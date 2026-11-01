@@ -13,6 +13,9 @@ The code half is in AA-CIS-Infra (branch `feat/aa-1032-contract-auto-apply`, its
 - **MIG-4's order stays** (migration-only PR, then the code PR): only the manual DB Migrate step goes away on Dev.
   Skills and runbook now say: read the Migration Apply run summary; `dbmig.sh` only for a `manual` stop, destructive
   files and the tech lead's busy override.
+- **Header-less DELETE (review fix pass):** ADR 0017a decision 2, the runbook, `aa-ship`, the handbook (EN + VI) and
+  MIG-4's Dev exception now say a contract file with a `DELETE` but no `-- migrate: destructive` header stays manual
+  (Infra stop kind `delete`). The lint only warns about it, and an automatic run has no reader for a warning.
 - **Batching (part 5):** written as a lane rule (one migration-only PR with consecutive numbers per owner, or files
   listed in number order with a `batch:` line) and as an orchestrator rule in `aa-ship` and `merge-trains.md`.
 - **Lane CI parity (part 5):** `lane.js` COMMON now asks for the app preflight, integration tests of touched modules

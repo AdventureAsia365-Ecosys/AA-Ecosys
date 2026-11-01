@@ -42,7 +42,10 @@ the tech lead approves every migration before it is applied (DM-11.5, ADR 0017 d
 2. **Strict order and stops are unchanged.** Per owner in key order; the first failure stops that owner (the other
    owners still run, ADR 0017 decision 5); never past a gap, a copy PR not merged yet, or an out-of-order file.
    **Destructive files** (`-- migrate: destructive`) are always a stop with their own note: DRY RUN counts to the tech
-   lead, then DB Migrate (RDS snapshot), as before. Out-of-order files, `roles/`, `catalog.*` recipes that need a
+   lead, then DB Migrate (RDS snapshot), as before. A **contract file with a `DELETE`** statement but no destructive
+   header is a stop too (kind `delete`, its own note): the lint only warns about it (MIG-12) and nobody reads a
+   warning on an automatic run, so a person adds the header (snapshot, DRY RUN) or applies it with DB Migrate.
+   Out-of-order files, `roles/`, `catalog.*` recipes that need a
    person, `set-password` and `run-script` stay manual.
 3. **Dev only; prod unchanged.** The environment is checked three times: the workflow's `TARGET_ENV` (the
    workflow targets the Dev cluster and database), the runner (`apply_pending.py --environment … --contract`) and the
