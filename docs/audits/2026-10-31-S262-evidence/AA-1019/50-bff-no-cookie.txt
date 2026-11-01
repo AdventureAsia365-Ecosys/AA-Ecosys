@@ -1,0 +1,7 @@
+# AA-1019 PR #171 check (1), 2026-11-01T03:33:36Z, healthz git_sha=f2f72e921393065bd0dd8624b54e41c2a2bc67a8
+## GET /staff/bff/ops-releases, header x-aa-staff-console: 1, no cookie
+{"detail":"session_expired"}
+HTTP 401
+## GET /staff/bff/ops-releases, no header, no cookie
+{"detail":"console_call_required"}
+HTTP 403

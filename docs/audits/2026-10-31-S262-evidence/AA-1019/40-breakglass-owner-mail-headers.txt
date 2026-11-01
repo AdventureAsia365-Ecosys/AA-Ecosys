@@ -1,0 +1,7 @@
+# AA-1019 S5 break-glass owner notification: headers only (Subject/From/To/Date), read-only from the e2e mailbox
+object_key_prefix: inbound/iv83kj9s…
+s3_last_modified: 2026-11-01T01:58:32+00:00 (break-glass started 01:58:30Z)
+Subject: Emergency access to Lữ hành Sen Vàng / Truy cập khẩn cấp vào Lữ hành Sen Vàng
+From: no-reply@lumiguides.it.com
+To: e2e-test-crm-sen-vang-owner@e2e-mail.lumiguides.it.com
+Date: Sun, 1 Nov 2026 01:58:31 +0000

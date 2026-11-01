@@ -1,0 +1,26 @@
+{
+ "status": 200,
+ "sessions": [
+  {
+   "kind": "support",
+   "ticket": "SUP-1020",
+   "status": "revoked",
+   "end_reason": "owner_ended",
+   "ended_at": "2026-11-01T03:34:19.643767+00:00"
+  },
+  {
+   "kind": "breakglass",
+   "ticket": "INC-1019",
+   "status": "ended",
+   "end_reason": "staff_ended",
+   "ended_at": "2026-11-01T01:58:46.325038+00:00"
+  },
+  {
+   "kind": "support",
+   "ticket": "SUP-1019",
+   "status": "revoked",
+   "end_reason": "owner_ended",
+   "ended_at": "2026-11-01T01:57:36.129506+00:00"
+  }
+ ]
+}
