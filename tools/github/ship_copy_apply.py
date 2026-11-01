@@ -22,12 +22,20 @@ Target: NNN, <prefix>-NNN or the file name.
    log lines (job log API: lesson S243/S254).
 5. Read the owner app's /health/ready: status, schema_version and whether the key is in registered_keys.
 Dev Migration Apply can apply the file itself (expand, and contract when every job table is idle: AA-1032 part 1):
-an apply whose key is already registered is not dispatched, and a red run (exit 17, apply lock held) whose key shows
-up within 5 minutes passes with a warning.
+an apply whose key is already registered is not dispatched. A red run passes only when ITS OWN log says the apply
+lock was held (exit code 17: nothing ran) and the key shows up within 5 minutes; any other red run is exit 1 even
+when the key is registered (exit 9 registers the file and still needs hand cleanup).
+
+Owner order (what Migration Sync and Migration Apply keep): before it merges a copy PR, and before an apply dispatch,
+the tool refuses (exit 4) while an OPEN bot/migration-copy/<owner>-<lower NNN> PR exists, or while the owner's
+/health/ready lacks the key of a lower file on Infra main (above keys_baseline) or cannot be read. Applying 331 while
+330 waits makes 330 out-of-order for auto-apply (AA-920: 297 applied after 299). --allow-out-of-order bypasses it.
 
 Exit: 0 applied / checked and (apply) the key is registered | 1 run not green or key not registered |
-2 usage, dispatch failed or run not found | 3 copy PR red | 4 refused (destructive, closed) | 5 timed out.
-dbmig.sh calls this with --no-copy. Orchestrator only (merge + gh workflow run). Holds no secrets.
+2 usage, dispatch failed or run not found | 3 copy PR red | 4 refused (destructive, closed, out of order) |
+5 timed out. dbmig.sh calls this with --no-copy. Orchestrator only: .claude/hooks/subagent-guardrails.sh refuses any
+subagent command that names this tool or dbmig.sh (the merge and the dispatch run inside, out of the hook's sight).
+Holds no secrets.
 """
 
 from __future__ import annotations
@@ -59,6 +67,13 @@ READY_URL = {
 LOG_PATTERN = re.compile(r"ran as|master login|busy|idle|wave|applied|already|refus|NOTICE|error|exit \d+|"
                          r"^MIGRATE|^SCRIPT|registered", re.IGNORECASE)
 LOCK_FILE = ROOT / ".tmp-session" / ".db-migrate-dispatch.lock"
+# Unregistered files at or below this number are legacy (ran by hand before self-registration; Infra
+# db/run_migration.py AUTO_APPLY_FLOOR). The readiness body's keys_baseline wins when present.
+LEGACY_FLOOR = {"cis": 263}
+# The db-migrate.yml lines that say the apply lock was held and nothing ran (exit 17). Anchored at the line start:
+# the job log also prints the step's script, where the same words follow `echo "` or `if [`.
+LOCK_HELD = re.compile(r"^(exit code: 17\b|(##\[error\]|::error::)the apply lock is held)")
+EXIT_LINE = re.compile(r"^exit code: \S+")
 
 
 def parse_target(owner: str, target: str) -> tuple[str, str, str | None]:
@@ -98,12 +113,16 @@ def find_copy_pr(runner: Runner, owner: str, num: str) -> dict | None:
     return None
 
 
-def file_on_main(runner: Runner, owner: str, num: str, name: str | None) -> str | None:
+def main_files(runner: Runner, owner: str) -> list[str]:
     r = runner.run(["gh", "api", f"repos/{INFRA_SLUG}/contents/db/migrations/{owner}?ref=main",
                     "--jq", ".[].name"], timeout=60)
     if not r.ok:
         raise ShipError(f"cannot list db/migrations/{owner} on Infra main: {r.last_line()}", 2)
-    names = [x.strip() for x in r.out.splitlines() if x.strip()]
+    return [x.strip() for x in r.out.splitlines() if x.strip()]
+
+
+def file_on_main(runner: Runner, owner: str, num: str, name: str | None) -> str | None:
+    names = main_files(runner, owner)
     hits = [x for x in names if x.startswith(f"{num}_") and x.endswith(".sql")]
     if name:
         return name if name in hits else None
@@ -112,13 +131,67 @@ def file_on_main(runner: Runner, owner: str, num: str, name: str | None) -> str 
     return hits[0] if hits else None
 
 
+def open_lower_copy_prs(runner: Runner, owner: str, num: str) -> list[str]:
+    """Open copy PRs of the same owner with a lower number (Migration Sync merges them in owner order)."""
+    prefix = f"bot/migration-copy/{owner}-"
+    prs = gh_json(runner, ["gh", "pr", "list", "-R", INFRA_SLUG, "--state", "open", "--limit", "100",
+                           "--json", "number,state,headRefName"])
+    out = []
+    for p in prs or []:
+        m = re.fullmatch(re.escape(prefix) + r"(\d{3,4})", str(p.get("headRefName") or ""))
+        if m and p.get("state", "OPEN") == "OPEN" and int(m.group(1)) < int(num):
+            out.append(f"#{p['number']} ({owner}-{m.group(1)})")
+    return sorted(out)
+
+
+def unapplied_below(runner: Runner, owner: str, num: str, fetch) -> list[str]:
+    """Keys of the owner's files on Infra main below NNN (above the legacy baseline) that Dev has not registered.
+    Raises (exit 4) when the readiness body cannot tell; [] for an owner without a readiness endpoint."""
+    url = READY_URL.get(owner)
+    if not url:
+        return []
+    try:
+        d = fetch(url)
+    except Exception as e:  # noqa: BLE001 - fail closed: the order cannot be checked
+        raise ShipError(f"cannot read {url} ({type(e).__name__}) to check that every {owner} file below {num} is "
+                        f"applied; --allow-out-of-order to go on anyway", 4) from e
+    keys = d.get("registered_keys")
+    if not isinstance(keys, list):
+        raise ShipError(f"{url} has no registered_keys (status={d.get('status')}): cannot check that every {owner} "
+                        f"file below {num} is applied; --allow-out-of-order to go on anyway", 4)
+    floor = int(d.get("keys_baseline") or LEGACY_FLOOR.get(owner, 0))
+    lower = set()
+    for x in main_files(runner, owner):
+        m = re.fullmatch(r"(\d{3,4})_[A-Za-z0-9_]+\.sql", x)
+        if m and floor < int(m.group(1)) < int(num):
+            lower.add(m.group(1))
+    return [ready_key(owner, n) for n in sorted(lower, key=int) if ready_key(owner, n) not in keys]
+
+
+def check_order(runner: Runner, owner: str, num: str, *, fetch=None, applied: bool) -> None:
+    """Refuse (exit 4) while a lower copy PR is open, or (applied=True) a lower file is not registered on Dev."""
+    opened = open_lower_copy_prs(runner, owner, num)
+    missing = unapplied_below(runner, owner, num, fetch or fetch_ready) if applied else []
+    why = []
+    if opened:
+        why.append(f"lower copy PRs still open: {', '.join(opened)}")
+    if missing:
+        why.append(f"lower files not registered on Dev: {', '.join(missing)}")
+    if why:
+        raise ShipError(f"{owner}-{num} out of order: {'; '.join(why)}. Land them first (Migration Sync/Apply keep "
+                        f"owner order; applying past a gap leaves the lower file out-of-order), or rerun with "
+                        f"--allow-out-of-order", 4)
+
+
 def ensure_copy(runner: Runner, owner: str, num: str, name: str | None, *, timeout: float, interval: float,
-                gate_timeout: float) -> str:
+                gate_timeout: float, in_order: bool = True) -> str:
     """Wait for / merge the copy PR; return the file name on Infra main."""
     t0 = runner.now()
     while True:
         pr = find_copy_pr(runner, owner, num)
         if pr and pr.get("state") == "OPEN":
+            if in_order:
+                check_order(runner, owner, num, applied=False)
             labels = ",".join(x.get("name", "") for x in pr.get("labels") or [])
             log(f"copy {owner}-{num}: PR #{pr['number']} open [{labels}], gating")
             ship_merge.merge_one(runner, INFRA, int(pr["number"]), timeout=gate_timeout, interval=interval)
@@ -231,21 +304,30 @@ def wait_run(runner: Runner, run_id: int, *, timeout: float, interval: float = 3
         runner.sleep(interval)
 
 
-def key_log_lines(runner: Runner, run_id: int, limit: int = 25) -> list[str]:
+def run_log(runner: Runner, run_id: int) -> list[str]:
+    """Every log line of the run's jobs, timestamp column dropped and stripped (job log API: lesson S243/S254)."""
     v = gh_json(runner, ["gh", "run", "view", str(run_id), "-R", INFRA_SLUG, "--json", "jobs"])
     out: list[str] = []
     for job in (v or {}).get("jobs") or []:
         r = runner.run(["gh", "api", f"repos/{INFRA_SLUG}/actions/jobs/{job.get('databaseId')}/logs"], timeout=120)
-        if not r.ok:
-            continue
-        for line in r.out.splitlines():
-            text = re.sub(r"^\S+Z\s", "", line).strip()  # drop the timestamp column
-            if text.startswith("##[group") or not LOG_PATTERN.search(text):
-                continue
-            out.append(text[:260])
-            if len(out) >= limit:
-                return out
+        if r.ok:
+            out.extend(re.sub(r"^\S+Z\s", "", line).strip() for line in r.out.splitlines())
     return out
+
+
+def key_log_lines(lines: list[str], limit: int = 25) -> list[str]:
+    out = [x[:260] for x in lines if not x.startswith("##[group") and LOG_PATTERN.search(x)]
+    return out[:limit]
+
+
+def lock_held(lines: list[str]) -> bool:
+    """The run's own log says the apply lock was held by another run and nothing ran (exit 17)."""
+    return any(LOCK_HELD.match(x) for x in lines)
+
+
+def exit_line(lines: list[str]) -> str:
+    hits = [x for x in lines if EXIT_LINE.match(x)]
+    return hits[-1] if hits else "no 'exit code:' line in the run log"
 
 
 # --- readiness ---------------------------------------------------------------------------------------------------
@@ -303,6 +385,9 @@ def main(argv: list[str] | None = None, runner: Runner | None = None, fetch=fetc
     ap.add_argument("--no-dispatch", action="store_true", help="stop after the copy PR")
     ap.add_argument("--dispatch-expand", action="store_true", help="dispatch even for an expand file")
     ap.add_argument("--allow-destructive", action="store_true", help="dispatch a destructive file (after DRY RUN)")
+    ap.add_argument("--allow-out-of-order", action="store_true",
+                    help="merge/apply although a lower file of the owner is not copied or not applied (bypasses the "
+                         "Migration Sync / Apply owner order)")
     ap.add_argument("--copy-timeout", type=float, default=1200)
     ap.add_argument("--run-timeout", type=float, default=1500)
     ap.add_argument("--interval", type=float, default=30)
@@ -317,7 +402,7 @@ def main(argv: list[str] | None = None, runner: Runner | None = None, fetch=fetc
                 raise ShipError(f"no file {owner}/{name or num + '_*.sql'} on Infra main", 2)
         else:
             fname = ensure_copy(runner, owner, num, name, timeout=a.copy_timeout, interval=a.interval,
-                                gate_timeout=a.run_timeout)
+                                gate_timeout=a.run_timeout, in_order=not a.allow_out_of_order)
         path = f"{owner}/{fname}"
         kind = file_class(runner, path)
         log(f"copy {owner}-{num}: {path} on Infra main ({kind})")
@@ -336,18 +421,25 @@ def main(argv: list[str] | None = None, runner: Runner | None = None, fetch=fetc
             log(f"{path}: key {ready_key(owner, num)} already registered; not dispatching")
             check_ready(runner, owner, num, timeout=0, fetch=fetch)
             return 0
+        if a.mode == "apply" and not a.allow_out_of_order:
+            check_order(runner, owner, num, fetch=fetch, applied=True)
+        elif a.mode == "apply":
+            log(f"WARN {path}: --allow-out-of-order, owner order not checked")
         run = dispatch(runner, path, a.mode)
         rid = int(run["databaseId"])
         conclusion = wait_run(runner, rid, timeout=a.run_timeout, interval=a.interval)
         log(f"DBMIG {a.mode} {path} run={rid} conclusion={conclusion}")
-        for line in key_log_lines(runner, rid):
+        lines = run_log(runner, rid)
+        for line in key_log_lines(lines):
             log(f"  {line}")
         if conclusion != "success":
-            if a.mode == "apply" and READY_URL.get(owner):
-                # Exit 17 (apply lock held): Migration Apply may be applying the same file right now.
+            log(f"run {rid} {conclusion}: {exit_line(lines)}")
+            if a.mode == "apply" and READY_URL.get(owner) and lock_held(lines):
+                # Exit 17: another run (Migration Apply) held the apply lock, nothing ran here; it may be applying
+                # this very file.
                 if check_ready(runner, owner, num, timeout=300, interval=a.interval, fetch=fetch):
-                    log(f"WARN run {rid} is {conclusion}, but the key is registered: applied by another run "
-                        f"(Migration Apply?); read run {rid}'s log above")
+                    log(f"WARN run {rid} found the apply lock held (exit 17, nothing ran), and the key is "
+                        f"registered: applied by the run that held the lock")
                     return 0
             return 1
         if a.mode == "check":

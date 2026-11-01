@@ -22,6 +22,17 @@ from ship_fakes import FakeRunner, pr
 
 T0 = "2026-10-28T03:00:00Z"  # FakeRunner clock starts 2026-10-26T07:33:20Z
 LATER = "2026-10-28T03:30:00Z"
+GREEN_LOG = ("2026-10-28T03:01:00.0000000Z MIGRATE ran as: crm_owner\n"
+             "2026-10-28T03:01:01.0000000Z ##[group]Run something\n"
+             "2026-10-28T03:01:02.0000000Z applied crm/038 in 1.2s\n"
+             "2026-10-28T03:01:03.0000000Z exit code: 0  status: STOPPED  stopped: Essential container exited\n")
+# The step's script is printed in the log too: these words after `echo "` / `if [` are not the lock message.
+SCRIPT_ECHO = ("2026-10-28T03:00:59.0000000Z   if [ \"$EXIT\" = \"17\" ]; then\n"
+               "2026-10-28T03:00:59.0000000Z     echo \"::error::the apply lock is held by another DB Migrate run\"\n")
+LOCK_LOG = (SCRIPT_ECHO + "2026-10-28T03:26:00.0000000Z exit code: 17  status: STOPPED  stopped: exited\n"
+            "2026-10-28T03:26:00.0000000Z ##[error]the apply lock is held by another DB Migrate or auto-apply run\n")
+POSTCHECK_LOG = (SCRIPT_ECHO + "2026-10-28T03:05:00.0000000Z exit code: 9  status: STOPPED  stopped: exited\n"
+                 "2026-10-28T03:05:00.0000000Z ##[error]ownership post-check failed: clean up by hand\n")
 
 
 def js(obj) -> Result:
@@ -119,7 +130,8 @@ class MainFlowTest(unittest.TestCase):
         self.lock.stop()
         self.tmp.cleanup()
 
-    def runner(self, header: str, *, conclusion: str = "success", copy_state: str = "OPEN") -> FakeRunner:
+    def runner(self, header: str, *, conclusion: str = "success", copy_state: str = "OPEN",
+               job_log: str = GREEN_LOG, lower_open: tuple = ()) -> FakeRunner:
         fname = "038_crm_workflows.sql"
         state = {"dispatched": False, "merged": copy_state == "MERGED"}
         head = "bot/migration-copy/crm-038"
@@ -147,23 +159,31 @@ class MainFlowTest(unittest.TestCase):
                         run_row(11, f"DB Migrate {state['mode']} crm/{fname}")] + rows
             return js(rows)
 
+        def open_list(argv):
+            rows = [{"number": 500 + int(n), "state": "OPEN", "headRefName": f"bot/migration-copy/crm-{n}"}
+                    for n in lower_open]
+            rows += [{"number": 700, "state": "OPEN", "headRefName": "bot/migration-copy/cis-020"},
+                     {"number": 701, "state": "OPEN", "headRefName": "feat/crm-030-something"}]
+            if not state["merged"] and copy_state == "OPEN":
+                rows.append({"number": 589, "state": "OPEN", "headRefName": head})
+            return js(rows)
+
         r = FakeRunner()
         r.on(("aws",), js({"Expiration": "2026-10-28T12:00:00Z"}))
+        r.on(("gh", "pr", "list", "open"), open_list)
         r.on(("gh", "pr", "list"), copy_list)
         r.on(("gh", "pr", "view"), copy_view)
         r.on(("gh", "api", f"repos/{sca.INFRA_SLUG}/pulls/589/files?per_page=100"), Result(0, "[]\n"))
         r.on(("gh", "api", f"repos/{sca.INFRA_SLUG}/contents/db/migrations/crm?ref=main"),
-             lambda argv: Result(0, f"037_x.sql\n{fname}\n") if state["merged"] else Result(0, "037_x.sql\n"))
+             lambda argv: Result(0, f"036_w.sql\n037_x.sql\n{fname}\n") if state["merged"]
+             else Result(0, "036_w.sql\n037_x.sql\n"))
         r.on(("gh", "api", f"repos/{sca.INFRA_SLUG}/contents/db/migrations/crm/{fname}?ref=main"), content(header))
         r.on((ship_common.AS_APP,), app)
         r.on(("gh", "run", "list"), runs)
         r.on(("gh", "run", "view", "11", "status,conclusion"),
              js({"status": "in_progress"}), js({"status": "completed", "conclusion": conclusion}))
         r.on(("gh", "run", "view", "11", "jobs"), js({"jobs": [{"databaseId": 77}]}))
-        r.on(("gh", "api", f"repos/{sca.INFRA_SLUG}/actions/jobs/77/logs"),
-             Result(0, "2026-10-28T03:01:00.0000000Z MIGRATE ran as: crm_owner\n"
-                       "2026-10-28T03:01:01.0000000Z ##[group]Run something\n"
-                       "2026-10-28T03:01:02.0000000Z applied crm/038 in 1.2s\n"))
+        r.on(("gh", "api", f"repos/{sca.INFRA_SLUG}/actions/jobs/77/logs"), Result(0, job_log))
         return r
 
     @staticmethod
@@ -174,7 +194,7 @@ class MainFlowTest(unittest.TestCase):
     def ready_after_dispatch(r: FakeRunner):
         """crm-038 shows up in registered_keys only once a DB Migrate run was dispatched."""
         def fetch(url):
-            keys = ["crm-037"] + (["crm-038"] if r.called("workflow") else [])
+            keys = ["crm-036", "crm-037"] + (["crm-038"] if r.called("workflow") else [])
             return {"status": "ok", "schema_version": keys[-1], "registered_keys": keys}
         return fetch
 
@@ -207,11 +227,71 @@ class MainFlowTest(unittest.TestCase):
         self.assertFalse([c for c in r.called(ship_common.AS_APP) if "workflow" in c])
         self.assertIn("already registered; not dispatching", self.out.getvalue())
 
-    def test_red_run_but_applied_by_another_run_passes_with_a_warning(self):
-        # Exit 17: Migration Apply held the apply lock and applied the file itself.
-        r = self.runner("CREATE TABLE crm.task (id int);\n", conclusion="failure", copy_state="MERGED")
+    def test_red_run_with_the_lock_held_and_the_key_registered_passes_with_a_warning(self):
+        # Exit 17: Migration Apply held the apply lock (nothing ran here) and applied the file itself.
+        r = self.runner("CREATE TABLE crm.task (id int);\n", conclusion="failure", copy_state="MERGED",
+                        job_log=LOCK_LOG)
         self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=self.ready_after_dispatch(r)), 0)
-        self.assertIn("applied by another run", self.out.getvalue())
+        self.assertIn("applied by the run that held the lock", self.out.getvalue())
+
+    def test_red_run_for_another_reason_fails_even_with_the_key_registered(self):
+        # Exit 9: the post-check failed after COMMIT, so the key IS registered and the run needs hand cleanup.
+        r = self.runner("CREATE TABLE crm.task (id int);\n", conclusion="failure", copy_state="MERGED",
+                        job_log=POSTCHECK_LOG)
+        self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=self.ready_after_dispatch(r)), 1)
+        out = self.out.getvalue()
+        self.assertIn("exit code: 9", out)
+        self.assertNotIn("WARN run", out)
+
+    def test_lock_line_match_ignores_the_printed_script(self):
+        lines = [sca.re.sub(r"^\S+Z\s", "", x).strip() for x in POSTCHECK_LOG.splitlines()]
+        self.assertFalse(sca.lock_held(lines))
+        self.assertEqual(sca.exit_line(lines), "exit code: 9  status: STOPPED  stopped: exited")
+        lines = [sca.re.sub(r"^\S+Z\s", "", x).strip() for x in LOCK_LOG.splitlines()]
+        self.assertTrue(sca.lock_held(lines))
+
+    def test_open_lower_copy_pr_refuses_merge_and_dispatch(self):
+        # Migration Sync merges in owner order: crm-037's copy is still open.
+        r = self.runner("CREATE TABLE crm.task (id int);\n", lower_open=("037",))
+        self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=self.ready_after_dispatch(r)), 4)
+        self.assertFalse(r.called(ship_common.AS_APP))
+        self.assertIn("lower copy PRs still open: #537 (crm-037)", self.out.getvalue())
+        r = self.runner("CREATE TABLE crm.task (id int);\n", copy_state="MERGED", lower_open=("037",))
+        self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=self.ready_after_dispatch(r)), 4)
+        self.assertFalse([c for c in r.called(ship_common.AS_APP) if "workflow" in c])
+
+    def test_lower_file_not_registered_refuses_the_dispatch(self):
+        # crm-037 is on Infra main but not applied on Dev: applying 038 would leave 037 out-of-order (AA-920).
+        r = self.runner("CREATE TABLE crm.task (id int);\n", copy_state="MERGED")
+        self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=self.ready(["crm-036"])), 4)
+        self.assertFalse([c for c in r.called(ship_common.AS_APP) if "workflow" in c])
+        self.assertIn("lower files not registered on Dev: crm-037", self.out.getvalue())
+        # dbmig.sh path (--no-copy) is checked too, and --allow-out-of-order bypasses the check.
+        r = self.runner("CREATE TABLE crm.task (id int);\n", copy_state="MERGED")
+        self.assertEqual(sca.main(["crm", "038", "--no-copy"], runner=r, fetch=self.ready(["crm-036"])), 4)
+        r = self.runner("CREATE TABLE crm.task (id int);\n", copy_state="MERGED")
+        fetch = self.ready_after_dispatch(r)
+        self.assertEqual(sca.main(["crm", "038", "--allow-out-of-order"], runner=r,
+                                  fetch=lambda url: {**fetch(url), "registered_keys": [
+                                      k for k in fetch(url)["registered_keys"] if k != "crm-037"]}), 0)
+        self.assertEqual(len([c for c in r.called(ship_common.AS_APP) if "workflow" in c]), 1)
+
+    def test_unreadable_readiness_refuses_the_dispatch(self):
+        def down(url):
+            raise OSError("connection refused")
+        r = self.runner("CREATE TABLE crm.task (id int);\n", copy_state="MERGED")
+        self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=down), 4)
+        self.assertFalse([c for c in r.called(ship_common.AS_APP) if "workflow" in c])
+        r = self.runner("CREATE TABLE crm.task (id int);\n", copy_state="MERGED")
+        self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=lambda url: {"status": "degraded"}), 4)
+
+    def test_cis_baseline_skips_legacy_unregistered_files(self):
+        r = FakeRunner().on(("gh", "api"), Result(0, "232_a.sql\n263_b.sql\n264_c.sql\n330_d.sql\n331_e.sql\n"))
+        body = {"status": "ok", "registered_keys": ["264", "330"], "keys_baseline": "263"}
+        self.assertEqual(sca.unapplied_below(r, "cis", "331", lambda url: body), [])
+        body["registered_keys"] = ["264"]
+        self.assertEqual(sca.unapplied_below(r, "cis", "331", lambda url: body), ["330"])
+        self.assertEqual(sca.unapplied_below(r, "tripplanner", "021", lambda url: body), [])
 
     def test_expand_is_not_dispatched_and_destructive_is_refused(self):
         r = self.runner("-- migrate: expand\nALTER TABLE crm.task ADD COLUMN x int;\n")
@@ -222,10 +302,10 @@ class MainFlowTest(unittest.TestCase):
         self.assertFalse([c for c in r.called(ship_common.AS_APP) if "workflow" in c])
 
     def test_red_run_and_unregistered_key_fail(self):
-        r = self.runner("CREATE TABLE crm.task (id int);\n", conclusion="failure")
-        self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=self.ready(["crm-037"])), 1)
+        r = self.runner("CREATE TABLE crm.task (id int);\n", conclusion="failure", job_log=LOCK_LOG)
+        self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=self.ready(["crm-036", "crm-037"])), 1)
         r = self.runner("CREATE TABLE crm.task (id int);\n")
-        self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=self.ready(["crm-037"])), 1)
+        self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=self.ready(["crm-036", "crm-037"])), 1)
         self.assertIn("key crm-038 registered=no", self.out.getvalue())
 
     def test_red_copy_pr_is_not_merged(self):
@@ -240,7 +320,7 @@ class MainFlowTest(unittest.TestCase):
         r = self.runner("-- migrate: expand\nALTER TABLE crm.task ADD COLUMN x int;\n", copy_state="MERGED")
         self.assertEqual(sca.main(["crm", "038", "--no-copy", "--mode", "check"], runner=r,
                                   fetch=self.ready(["crm-038"])), 0)
-        self.assertFalse(r.called("gh", "pr", "list"))
+        self.assertFalse(r.called("gh", "pr", "list"))  # a check reads no copy PR and no owner order
         [dispatch] = [c for c in r.called(ship_common.AS_APP) if "workflow" in c]
         self.assertIn("mode=check", dispatch)
 
