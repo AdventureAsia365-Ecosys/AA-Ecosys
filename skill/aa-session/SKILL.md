@@ -13,6 +13,8 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
    `docs/sessions/`, backlog sống `docs/backlog/README.md` (mục "Time-gated checks", "Waiting on Nghiệp") và master
    plan `docs/backlog/tracker/plan.json`. Không đọc archive trừ khi cần lịch sử cũ; không audit lại toàn Linear
    (chỉ khi backlog cũ hơn ~2 tuần).
+   - Trước khi đọc plan: `python3 tools/linear/plan_sync.py --write` (cục bộ, không commit) để trạng thái/ưu tiên/hạn
+     issue là số thật từ Linear; tóm tắt lệch (REMOVED / NEW / CHANGED / WARN) vào khối trạng thái đầu phiên.
    - Connector Notion/Linear/Jira lỗi (404, "not connected") mà `claude mcp list` báo Connected → registry của phiên đã
      cũ (hay gặp sau khi đổi tài khoản claude.ai): báo Nghiệp mở lại phiên, không debug. Không có Notion thì đọc HOT
      block từ log local.
@@ -134,7 +136,9 @@ Log ghi sau cùng nên có cả kết quả Jira và số liệu đã kiểm, kh
      ```
      **Chỉ prepend.** Agent không cắt, không di chuyển, không xoá session block cũ; Nghiệp tự chuyển phiên cũ sang
      archive bằng tay. Không có connector Notion → để block trong log local cho phiên sau dán.
-   - **Backlog sống** `docs/backlog/README.md` + `docs/backlog/tracker/plan.json`, publish lại trang tracker theo
+   - **Backlog sống** `docs/backlog/README.md` + `docs/backlog/tracker/plan.json`: trước hết
+     `python3 tools/linear/plan_sync.py --write --session S<nnn> --log-draft` (trường Linear sở hữu + nháp `log[0]`),
+     rồi mới sửa tay slot/milestone/checks/waiting/log, `--validate`, publish lại trang tracker theo
      `docs/backlog/tracker/README.md` (link nằm ở đó). Artifact thuộc tài khoản claude.ai đã publish nó: sau khi đổi
      tài khoản, `read` trước; bị từ chối ghi → publish trang mới dưới tài khoản hiện tại và cập nhật link trong README.
 6. **Skill đổi trong phiên → đóng gói cho claude.ai:** `tools/skills/package_skills.sh --changed <commit đầu phiên>` →

@@ -194,7 +194,7 @@ footer code { font-family: var(--mono); font-size: 12.5px }
 
   <footer>
     <div id="src"></div>
-    <div>Cập nhật cuối mỗi phiên: sửa <code>docs/backlog/tracker/plan.json</code> trong repo gốc (cùng PR với <code>docs/backlog/README.md</code>), rồi publish lại artifact này với cùng URL. Cách làm: <code>docs/backlog/tracker/README.md</code>.</div>
+    <div>Trạng thái, ưu tiên, project, hạn của issue lấy từ Linear bằng <code>tools/linear/plan_sync.py</code>; mốc, phiên, việc tiếp sửa tay. Cập nhật cuối mỗi phiên: sửa <code>docs/backlog/tracker/plan.json</code> trong repo gốc (cùng PR với <code>docs/backlog/README.md</code>), rồi publish lại artifact này với cùng URL. Cách làm: <code>docs/backlog/tracker/README.md</code>.</div>
   </footer>
 </div>
 
@@ -223,7 +223,9 @@ footer code { font-family: var(--mono); font-size: 12.5px }
     var I = data.issues, prog = I.filter(function (x) { return x.status === "In Progress" }).length;
     var needs = I.filter(function (x) { return x.needs }).length;
     var last = data.log[0] || { closed: [] };
-    $("meta").innerHTML = "<span>Cập nhật <b class='mono'>" + esc(data.updated.split("-").reverse().join("/")) + "</b> sau phiên <b class='mono'>" + esc(data.session) + "</b></span><span>Phiên kế tiếp: <b class='mono'>" + esc(data.next_session) + "</b></span>";
+    $("meta").innerHTML = "<span>Cập nhật <b class='mono'>" + esc(data.updated.split("-").reverse().join("/")) + "</b> sau phiên <b class='mono'>" + esc(data.session) + "</b></span><span>Phiên kế tiếp: <b class='mono'>" + esc(data.next_session) + "</b></span>" +
+      // plan_sync.py (S263): when Linear-owned fields were last pulled; absent = edited by hand only.
+      "<span>Đồng bộ Linear: <b class='mono'>" + (data.synced_at ? esc(data.synced_at.replace("T", " ")) : "chưa") + "</b></span>";
     $("stats").innerHTML = [
       [I.length, "issue đang mở"], [prog, "In Progress"], [I.length - prog, "Backlog"],
       [last.closed.length, "đóng trong " + esc(last.session)], [needs, "issue cần Nghiệp quyết"]

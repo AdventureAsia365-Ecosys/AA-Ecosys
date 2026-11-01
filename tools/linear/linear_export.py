@@ -16,22 +16,18 @@ Rules:
 - An issue is archived only after its export file exists and matches the issue's current updatedAt.
 - Deleted issues still in Linear's 30-day trash are exported too (marked trashed) so their comments survive.
 - The API key is read from Secrets Manager (aa-ecosys/ops/linear-api-key, acc2) into memory only; it is
-  never printed or written. LINEAR_API_KEY in the environment overrides it (CI / testing).
+  never printed or written. LINEAR_API_KEY in the environment overrides it (CI / testing). Key lookup and the GraphQL
+  call live in linear_api.py (shared with plan_sync.py).
 """
 from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
-import subprocess
-import sys
-import urllib.error
-import urllib.request
 from pathlib import Path
 
-API = "https://api.linear.app/graphql"
-SECRET_ID = "aa-ecosys/ops/linear-api-key"
+from linear_api import api_key, gql
+
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "docs" / "linear-export"
 CLOSED = ("completed", "canceled")
@@ -79,36 +75,6 @@ def open_children(issue: dict) -> list[str]:
 def keep(issue: dict) -> bool:
     """Exported: every closed issue, and every archived or trashed issue whatever its state."""
     return issue["state"]["type"] in CLOSED or bool(issue.get("archivedAt")) or bool(issue.get("trashed"))
-
-
-def api_key() -> str:
-    key = os.environ.get("LINEAR_API_KEY", "").strip()
-    if key:
-        return key
-    r = subprocess.run(
-        ["aws", "secretsmanager", "get-secret-value", "--secret-id", SECRET_ID, "--query", "SecretString",
-         "--output", "text", "--profile", os.environ.get("AWS_PROFILE_LINEAR", "aa365-admin"), "--region", "us-west-1"],
-        capture_output=True, text=True, stdin=subprocess.DEVNULL,
-    )
-    key = r.stdout.strip()
-    if r.returncode != 0 or not key:
-        sys.exit(f"cannot read {SECRET_ID} (aws exit {r.returncode}); unlock MFA or set LINEAR_API_KEY")
-    return key
-
-
-def gql(key: str, query: str, variables: dict) -> dict:
-    req = urllib.request.Request(
-        API, data=json.dumps({"query": query, "variables": variables}).encode(),
-        headers={"Content-Type": "application/json", "Authorization": key},
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=60) as resp:
-            body = json.loads(resp.read())
-    except urllib.error.HTTPError as e:
-        sys.exit(f"Linear API HTTP {e.code}: {e.read()[:300]!r}")
-    if body.get("errors"):
-        sys.exit(f"Linear API error: {json.dumps(body['errors'])[:500]}")
-    return body["data"]
 
 
 def slug(text: str) -> str:
