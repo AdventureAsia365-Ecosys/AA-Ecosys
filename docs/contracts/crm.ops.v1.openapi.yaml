@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: crm.ops.v1 (AA-Partner CRM → CIS admin, L1 platform console)
-  version: "1.7"
+  version: "1.8"
   description: >-
     Platform console API of the partner CRM (AA-Partner, root ADR 0010), served under /crm/ops/v1 and called by the
     CIS admin screen S-01 "Agencies (CRM)" (AA-941) and the CIS platform-ops pages (AA-936: job summary, LLM usage).
@@ -48,7 +48,11 @@ info:
     (reason `llm_calls`) in its audit log. Version 1.7 (AA-964 S263 F1, crm-037; additive for a reader that maps an
     unknown status to `error`, as the CIS Calls tab does): `status` on GET /llm/calls (row and filter) adds the two
     other ledger v2 statuses, `billed_unusable` (billed, no usable answer) and `truncated` (cut at its token limit,
-    never `ok`). Errors are
+    never `ok`). Version 1.8 (AA-939 S263 join fix, additive): POST /tenants/{tenant_id}/owner-invite/withdraw closes
+    the first-owner invitation AA sent while it is pending, or claimed and not accepted (a claimed one used to block a
+    new owner invitation for its whole lifetime), and POST /tenants/{tenant_id}/delete deletes a synthetic (test)
+    agency without members, travellers or legal holds (the agency name typed exactly; the row goes to the trash and its
+    keys are crypto-shredded); a real agency is still deleted only by its owner's confirmed offboarding. Errors are
     `{detail, message?, fields?, state?, member_limit?}` (Problem); a 422 names the failing fields only, never the
     submitted values.
   x-aa-contract: crm.ops.v1
@@ -237,6 +241,74 @@ paths:
         "503":
           $ref: "#/components/responses/Unavailable"
           description: "`mail_not_configured`, `key_provider_not_configured`"
+  /tenants/{tenant_id}/owner-invite/withdraw:
+    parameters:
+      - $ref: "#/components/parameters/TenantId"
+    post:
+      operationId: withdrawFirstOwnerInvite
+      summary: Withdraw the first-owner invitation AA sent (write; 1.8)
+      description: >-
+        Every live first-owner invitation a platform actor sent (pending, or claimed and not yet accepted) becomes
+        `revoked`; its link answers 410 `invitation_used`. One `owner_invite_withdraw` event per invitation with
+        `ticket:<REF>`. The owner's own team invitations are never touched. Afterwards POST .../owner-invite works
+        again; a partner-pool account the withdrawn claim created and that never signed in gets a new temporary
+        password when the next invitation to its address is claimed. Active and locked agencies.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/TicketRequest"}
+      responses:
+        "200":
+          description: Withdrawn (the newest invitation is named; every live one was withdrawn)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/OwnerInviteWithdrawn"}
+        "401": {$ref: "#/components/responses/Unauthorized"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "404":
+          $ref: "#/components/responses/NotFound"
+          description: "`tenant_not_found`, `owner_invite_not_found` (no live first-owner invitation)"
+        "409":
+          $ref: "#/components/responses/Conflict"
+          description: "`tenant_status` with `state` (offboarding / offboarded)"
+        "422": {$ref: "#/components/responses/Invalid"}
+  /tenants/{tenant_id}/delete:
+    parameters:
+      - $ref: "#/components/parameters/TenantId"
+    post:
+      operationId: deleteTestAgency
+      summary: Delete a synthetic (test) agency (write; 1.8)
+      description: >-
+        Only an agency with `is_synthetic` true, the name typed exactly as the agency's name, no active or invited
+        member, no traveller or stored inquiry and no active legal hold; active, locked or offboarded (never while it is
+        being erased). In one transaction every live invitation is revoked, the agency's keys are crypto-shredded
+        (anything encrypted under them, such as invited addresses, is unreadable for good) and the agency row goes to
+        the trash: no context opens it any more, GET /tenants leaves it out and GET /tenants/{tenant_id} answers 404.
+        Audited in the agency's own log (`agency_delete` with `ticket:<REF>`); a refused attempt on a real agency is a
+        `denied` event. A real agency is deleted only by its owner's confirmed offboarding.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/DeleteTestAgencyRequest"}
+      responses:
+        "200":
+          description: Deleted (trashed, keys destroyed)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/AgencyDeleted"}
+        "401": {$ref: "#/components/responses/Unauthorized"}
+        "403":
+          $ref: "#/components/responses/Forbidden"
+          description: "`missing_group`, `e2e_read_only`, `not_synthetic` (a real agency; on record)"
+        "404": {$ref: "#/components/responses/TenantNotFound"}
+        "409":
+          $ref: "#/components/responses/Conflict"
+          description: "`has_members`, `has_travellers`, `legal_hold`, `tenant_status` (with `state`)"
+        "422":
+          $ref: "#/components/responses/Invalid"
+          description: "`invalid_request`, `agency_name_mismatch`"
   /tenants/{tenant_id}/studio-invitations:
     parameters:
       - $ref: "#/components/parameters/TenantId"
@@ -947,6 +1019,35 @@ components:
           description: The CRM member invitation (crm.member_invitation), not a CIS membership invitation.
         status: {type: string, enum: [pending]}
         expires_at: {type: string, format: date-time}
+    OwnerInviteWithdrawn:
+      type: object
+      additionalProperties: false
+      required: [tenant_id, invitation_id, status]
+      properties:
+        tenant_id: {type: string, format: uuid}
+        invitation_id:
+          type: string
+          format: uuid
+          description: The newest withdrawn CRM member invitation.
+        status: {type: string, enum: [revoked]}
+    DeleteTestAgencyRequest:
+      type: object
+      additionalProperties: false
+      required: [agency_name, ticket_ref]
+      properties:
+        agency_name:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: The agency's business name typed exactly as GET /tenants shows it (a confirmation, not data).
+        ticket_ref: {$ref: "#/components/schemas/TicketRef"}
+    AgencyDeleted:
+      type: object
+      additionalProperties: false
+      required: [tenant_id, status]
+      properties:
+        tenant_id: {type: string, format: uuid}
+        status: {type: string, enum: [deleted]}
     StudioInvitationRequest:
       type: object
       additionalProperties: false
