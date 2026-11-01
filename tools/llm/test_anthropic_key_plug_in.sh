@@ -14,6 +14,7 @@ ok() { if eval "$2"; then pass=$((pass+1)); else fail=$((fail+1)); echo "MISS: $
 W=$(mktemp -d); trap 'rm -rf "$W"' EXIT
 mkdir -p "$W/bin"
 # a made-up key, built at run time (no key-shaped literal in the repo)
+export FAKE_ADMIN=$(printf "a%.0s" {1..16})   # a stand-in admin credential (no literal)
 KEY="sk-ant-$(printf 'test%.0s' {1..3})-$(printf 'Zq9%.0s' {1..25})"
 
 cat >"$W/bin/aws" <<'EOF'
@@ -33,7 +34,7 @@ if a[:2] == ["secretsmanager", "describe-secret"]:
         print(sid); sys.exit(0)
     sys.stderr.write("ResourceNotFoundException\n"); sys.exit(254)
 if a[:2] == ["secretsmanager", "get-secret-value"]:
-    print("fake-admin-credential"); sys.exit(0)
+    print(os.environ["FAKE_ADMIN"]); sys.exit(0)
 if a[:2] in (["secretsmanager", "create-secret"], ["secretsmanager", "put-secret-value"]):
     src = arg("--secret-string")
     assert src.startswith("file://"), src
@@ -72,7 +73,7 @@ while i < len(a):
 with open(log, "a") as f:
     f.write("curl " + json.dumps(a) + "\n")
     f.write("call %s %s %s\n" % (method, url.split(".com", 1)[1], body or ""))
-assert "X-Admin-Secret: fake-admin-credential" in headers, headers
+assert "X-Admin-Secret: " + os.environ["FAKE_ADMIN"] in headers, headers
 path = url.split(".com", 1)[1]
 code, out = 404, {"detail": "unexpected"}
 if method == "GET" and path == "/admin/llm-connections":
@@ -110,7 +111,7 @@ ok "secret holds exactly the key" '[ "$(cat "$W/apply.store")" = "$KEY" ]'
 ok "key file was mode 600" 'grep -q "^mode 600$" "$W/apply.log"'
 ok "key never in argv" '! grep -qF -- "$KEY" "$W/apply.log"'
 ok "key never in output" '! grep -qF -- "$KEY" "$W/apply.out"'
-ok "admin credential never in argv" '! grep -q "fake-admin-credential" <(grep "^curl " "$W/apply.log")'
+ok "admin credential never in argv" '! grep -qF -- "$FAKE_ADMIN" <(grep "^curl " "$W/apply.log")'
 ok "created (no secret yet)" 'grep -q "\"create-secret\"" "$W/apply.log"'
 order() {  # the write steps of a run, in order
   grep -E '"(create-secret|put-secret-value)"|^call (PATCH|POST)' "$1" | sed -E \
