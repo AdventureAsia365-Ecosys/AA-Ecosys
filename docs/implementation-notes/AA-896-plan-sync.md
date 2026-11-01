@@ -42,13 +42,21 @@ Scope: the tracker sync approved by the tech lead in S263 (P10, $0), built to th
   `json.dump(..., indent=1, ensure_ascii=False)` plus a final newline.
 - **Free-text session labels warn** (e.g. "đầu tháng 12", "trước prod"): 9 warnings on today's plan. Not added to
   `SES_ORDER`, since they are hand choices; the page sorts them last.
-- **Bot auto-merge** relies on `gh pr checks --required --watch`; if the root branch has no required checks the step
-  reports not-green and the PR stays open for a person (continue-on-error).
+- **Bot auto-merge names its checks** (fix pass after review): root master has no branch protection or ruleset, so
+  `gh pr checks --required` had nothing to wait for and always failed. The step now polls the PR head's check runs
+  (max 10 minutes) like AA-CIS-Infra DB Schema Dump and asks `tools/linear/bot_pr_checks.py` for a verdict:
+  `ROOT_REQUIRED_CHECKS="Docs lint,gitleaks"` must each have a `success` run (a required check that only skipped does
+  not count, stricter than the Infra copy), no run may be red, an empty run list is "pending", never green.
 
 ## Should know
 
 - Not run against live Linear in the lane (no key access). The orchestrator runs the dry run, then `--write`, and
   commits the refreshed `plan.json` in the same PR.
+- **The public-safety guard runs before anything is printed** (fix pass after review): stdout of `--check` goes to the
+  public Actions log and into the bot PR body. The guard scans the formatted diff (CHANGED titles, WARN lines with
+  Linear project names), the new plan and the log draft; on a hit it prints only the redacted hits (first 4 digits)
+  and exits 2. The workflow prints the output only for exit 0/1. `arn:` matches only at a word start, so a title like
+  "Learn: ..." does not stop the sync.
 - Only the public-safety guard is a hard failure (exit 2, nothing written). Other validation errors block `--write`
   (exit 1) but not the dry run.
 - The GraphQL filters (`team.key.eq`, `state.type.in`, `updatedAt.gte` as `DateTimeOrDuration`) follow Linear's

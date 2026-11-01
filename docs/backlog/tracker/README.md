@@ -28,7 +28,7 @@ One way, Linear to `plan.json`; the script never writes to Linear. Design: `docs
 | Exit 1 when drifted | `python3 tools/linear/plan_sync.py --check` |
 | Offline checks (Docs lint runs this) | `python3 tools/linear/plan_sync.py --validate` |
 
-Optional nightly bot: `.github/workflows/plan-sync.yml` (manual dispatch only until the repo secret `LINEAR_PLAN_SYNC_KEY` and the aa-ecosys-ci-bot App exist; header of the workflow). It opens or updates PR `bot/plan-sync` and merges it only when `--check-scope` shows Linear-owned changes alone.
+Optional nightly bot: `.github/workflows/plan-sync.yml` (manual dispatch only until the repo secret `LINEAR_PLAN_SYNC_KEY` and the aa-ecosys-ci-bot App exist; header of the workflow). It opens or updates PR `bot/plan-sync` and merges it only when `--check-scope` shows Linear-owned changes alone and the Docs lint and gitleaks check runs passed on the PR head (polled by `tools/linear/bot_pr_checks.py`; root master has no required checks).
 
 ## Update at the end of every session
 

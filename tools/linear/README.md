@@ -31,3 +31,6 @@ exits 1 on drift, `--validate` is offline. Field ownership, conflict rules and w
 `docs/backlog/tracker/README.md`. Tests: `python3 -m unittest discover -s tools/linear -p 'test_*.py'`.
 
 `linear_api.py` holds the shared key lookup and GraphQL call used by both scripts.
+
+`bot_pr_checks.py` is the merge gate of the optional Plan sync bot PR (`.github/workflows/plan-sync.yml`): it reads
+the PR head's check runs and says whether the named root checks (Docs lint, gitleaks) passed.
