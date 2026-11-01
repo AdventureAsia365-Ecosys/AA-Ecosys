@@ -1,243 +1,170 @@
 ---
 id: APP-06-anthropic-key
 title: Plug in and probe the Anthropic API key
-description: How the tech lead stores the Anthropic API key, switches the anthropic-direct LLM connection on with the one audited admin PATCH, runs the adhoc_aa1002 probe through LLMClient and switches the connection off again (LLM gateway slice S2).
+description: "One command plugs the Anthropic API key into the Dev AI gateway: it stores secret aa-llm/dev/anthropic-direct from stdin, sets the anthropic-direct connection's budget (150 USD a month, hard stop), probes one Haiku 5.5 call and only then switches the connection on."
 type: how-to
 status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-api, aa-cis-worker, aa-cis-dev-db]
-last_reviewed: 2026-10-31
+last_reviewed: 2026-11-01
 review_every_days: 90
 last_tested: null
 tested_where: null
 tested_evidence: null
-related: [APP-06, OPS-05-ecs-exec, SEC-02-rotation, OPS-04-llm-cost-spike, AA-1002]
+related: [APP-06, APP-06-routes, OPS-05-ecs-exec, SEC-02-rotation, OPS-04-llm-cost-spike, AA-1002, AA-1004, AA-1026]
 ---
 
 # Plug in and probe the Anthropic API key
 
 > [!WARNING]
-> UNTESTED - do not follow in an incident without checking each step.
+> UNTESTED on Dev with a real key. The script was tested offline only (`tools/llm/test_anthropic_key_plug_in.sh`:
+> fake `aws` and `curl`). The first real run sets `last_tested` and removes this warning.
 
-Source of truth: AA-CIS-App `shared/llm_client/adapters/anthropic_messages.py`, `shared/llm_client/vendor_route.py`,
-`api/services/llm_connections.py` (`set_enabled`), migration `api/migrations/306_llm_anthropic_deployments.sql` and
-`docs/implementation-notes/AA-1002.md` (slice S2). The probe script is
-[`tools/llm/aa1002_anthropic_probe.py`](../../../tools/llm/aa1002_anthropic_probe.py) in this repo.
+Source of truth: the script [`tools/llm/anthropic_key_plug_in.sh`](../../../tools/llm/anthropic_key_plug_in.sh)
+(`--help`), and in AA-CIS-App `api/services/llm_connections.py` (`update_connection`, `test_connection`),
+`shared/llm_client/adapters/anthropic_messages.py`, `shared/llm_client/vendor_route.py` and migrations 306, 311, 317,
+335.
 
-## What this does and does not do
+## What it does
 
-LLM gateway slice S2 adds a second way to call Anthropic models: the Anthropic Messages API on the connection
-`anthropic-direct` (kind `anthropic`, data scope `vendor_direct`). Migration 306 seeds one `anthropic-direct`
-deployment per Anthropic catalog model at priority 100, behind acc3 (priority 10), and leaves the connection off.
+The Anthropic Messages API is a second way to the Claude models, on the connection `anthropic-direct` (kind
+`anthropic`, data scope `vendor_direct`). Everything except the key is in place on Dev:
 
-- Switching the connection on moves **no stage route**: every Anthropic API deployment sits behind acc3. Only a
-  probe that pins the deployment (`model_tier = "haiku-5-5@anthropic-direct"`) reaches the API.
-- Making the API the first way in for a model is a separate decision (see
-  [Making the API primary for a model](#making-the-api-primary-for-a-model)).
+- One `anthropic-direct` deployment per Anthropic Converse catalog model (migration 306) at priority 100, behind the
+  acc3 Bedrock deployment (priority 10). Per model, the gateway tries acc3 first and the API after it.
+- Data scopes per stage (migration 311, decided by data, not code): only a stage whose `allowed_scopes` include
+  `vendor_direct` can reach the API. Since migration 335 (AA-1026, tech lead decision T-3 in S263) those are the five
+  A-series writers `s1_generate`, `s1_flag_fix`, `s1_itinerary_nudge`, `a0_column_map`, `supply_content_writer`.
+  Each names one Anthropic model, then GPT-6 Luna on the OpenAI API, so the API is reached only after acc3 failed for
+  the whole route (the gateway tries every deployment of a model before the next model; the admin refuses an AWS
+  fallback behind a model with an API deployment on such a stage).
+  T-stages (tenant content), `tp_*` (traveller text) and the CRM stay `aws_only`: they never reach the API.
+- The legacy keys `haiku` / `sonnet` never ran on the API. Migration 335 moved every route off them to `haiku-5-5` /
+  `sonnet-5-5` (decision T-4), which have API deployments.
+- Monthly budget per connection, enforced on every call path (slice S10): `anthropic-direct` 150 USD a month, alert
+  at 80 %, hard stop at 100 %. The script sets it again before anything can spend.
+- The CIS task role can already read `aa-llm/dev/anthropic-direct`: no IAM change.
 
-> [!IMPORTANT]
-> **Switch the connection off again after the probe**, unless the Dev road below has been applied. Slices S5 (data
-> scopes per stage) and S10 (monthly budget per connection) have landed; on Dev the connection may then stay on (see
-> [Dev road prepared (S261)](#dev-road-prepared-s261)). Anywhere else, keep it off until the tech lead has decided
-> the data scopes and the budget for that environment.
+Approved spend (ADR 0009, S263 T-1): a one-time top-up of 50 USD on the Anthropic side, a connection cap of 150 USD a
+month. The probe costs under 0.001 USD; the secret about 0.40 USD a month.
 
-## Dev road prepared (S261)
-
-Tech lead decision (S261): build the Dev road to the Anthropic API now, add the key later. acc3 Bedrock is refused
-at account level and acc2 Bedrock refuses Claude, so on Dev the Anthropic API is the only way to a Claude model.
-
-Already in place (no key, no cost):
-
-- Connection `anthropic-direct` (kind `anthropic`, data scope `vendor_direct`, secret name
-  `aa-llm/dev/anthropic-direct`), **disabled**, with one deployment per Anthropic Converse catalog model at priority
-  100, behind acc3 (migration 306). With acc3 refused, its circuit opens at once and a call goes to the API row.
-- The CIS task role can read `aa-llm/dev/anthropic-direct` once it exists: no IAM change.
-- AA-CIS-Infra `db/scripts/aa1002_dev_anthropic_road.py` (DB Migrate `mode=run-script`, dry run as merged, apply by a
-  one-line PR). From the live routes it opens `allowed_scopes = {aws_only, vendor_direct}` on every CIS stage that
-  can reach an Anthropic model through `anthropic-direct` (tenant T-stages included, in their own `group=tenant`
-  lines: Dev holds synthetic data only, data standards C7.1a), adds a missing API deployment the same way as 306,
-  and sets the connection's monthly budget to 150 USD (about 5 USD a day; the S10 budget is monthly, enforced on
-  every call path, editable on the Connections tab). It never enables the connection and never reads a secret.
-- `SCRIPT gap` lines name the models a route uses that cannot go to the API: the legacy keys `haiku` / `sonnet`
-  never do. A stage whose route has only legacy keys (most writers and checks on 31/10) keeps no LLM path until the
-  tech lead adds a Converse model (for example `sonnet-5-5` or `haiku-5-5`) to its route in the admin; re-run the
-  script's apply after such a change. This is a model choice, not part of this procedure.
-- `SCRIPT held` lines name stages the script did **not** open because their route also reaches a `vendor_direct`
-  deployment on a connection that is already enabled (today `openai-direct`): opening them would send paid traffic
-  outside AWS before the Anthropic key exists. The tech lead decides those stages. A stage whose only Anthropic model
-  is its shadow is never opened (its A/B shadow calls would become paid API calls).
-
-Remaining tech lead steps (in this order):
-
-1. **Create the key** in the Anthropic Console: a dedicated Dev workspace with a monthly spend limit, credit added.
-   The amount of credit is the tech lead's call before buying.
-2. **Store the secret** `aa-llm/dev/anthropic-direct` from a file (step 3 below).
-3. **Enable and probe**: one audited PATCH (step 4), then the probe (step 5). On Dev, leave the connection on after a
-   good probe; step 6 is the rollback.
-
-Check before step 1 ($0): step 2 below. Expected: `anthropic-direct` with `"enabled": false`,
-`"secret_name": "aa-llm/dev/anthropic-direct"`, `"policy_problems": []`, and the PATCH to enable answers `422`
-(secret unreadable) with no audit row.
+> [!CAUTION]
+> Do not run the AA-CIS-Infra run-script `db/scripts/aa1002_dev_anthropic_road.py` in apply mode again. It opens
+> every stage whose route reaches an Anthropic Converse model, and since migration 335 that includes the T-stages,
+> against T-3. Migration 335 already opened the writers.
 
 ## Before you start
 
-- The CIS migration 306 is applied on Dev (`shared.schema_versions` has `306`) and the CIS code PR "Anthropic
-  Messages API adapter behind the connection registry" is deployed (api and worker on the same image SHA).
-- You have the Anthropic API key in a file, never on a command line. Recommended on the Anthropic side: a dedicated
-  workspace for this key with a monthly spend limit.
-- Cost of the whole procedure: under $0.001 (one Haiku 5.5 call), plus about $0.40 a month for the secret.
+- The Anthropic Console side (tech lead, browser): a dedicated Dev workspace with a monthly spend limit, the 50 USD
+  top-up, and an API key of that workspace saved to a file. Never paste the key into a chat or a command line.
+- The CIS migration 335 is applied on Dev (`shared.schema_versions` has `335`) and the api / worker run the same
+  image (`/health` 200).
+- An MFA session for `aa365-admin` that lasts the run: `aws sts get-caller-identity --profile aa365-admin`.
+- Who runs it: the orchestrating session or the tech lead. Subagents are blocked by
+  `.claude/hooks/subagent-guardrails.sh` (AWS write and audited admin writes).
 
-## 1. Confirm the account
-
-```bash
-aws sts get-caller-identity --profile aa365-admin
-```
-
-Expected: the acc2 account of the [account map](../../onboarding.md#account-map). Abort on any other account.
-
-## 2. Check the deploy before the key exists ($0, no key)
-
-1. Read the connection listing. The admin secret comes from Secrets Manager; it never goes into the shell history.
-
-   ```bash
-   ADMIN_SECRET=$(aws secretsmanager get-secret-value --secret-id aa-cis/dev/admin-secret --query SecretString --output text --profile aa365-admin --region us-west-1)
-   curl -s https://api-cis.lumiguides.it.com/admin/llm-connections -H "X-Admin-Secret: $ADMIN_SECRET" -H "x-admin-role: admin" | python3 -m json.tool | head -80
-   ```
-
-   Expected: HTTP 200, `"routing_uses_registry": true`; `anthropic-direct` has `"enabled": false`,
-   `"secret_name": "aa-llm/dev/anthropic-direct"`, `"policy_problems": []` and its deployments at priority 100. No
-   `sk-` string anywhere in the body.
-
-2. Check that the switch refuses what it must refuse:
-
-   ```bash
-   curl -s -o /dev/null -w "%{http_code}\n" -X PATCH https://api-cis.lumiguides.it.com/admin/llm-connections/acc3 -H "X-Admin-Secret: $ADMIN_SECRET" -H "x-admin-role: admin" -H "content-type: application/json" -d '{"enabled": false}'
-   curl -s -X PATCH https://api-cis.lumiguides.it.com/admin/llm-connections/anthropic-direct -H "X-Admin-Secret: $ADMIN_SECRET" -H "x-admin-role: admin" -H "content-type: application/json" -d '{"enabled": true}'
-   ```
-
-   Expected: `422` for `acc3` (the gateway reads no Bedrock flag before slice S3). For `anthropic-direct` before the
-   secret exists: `422` with `secret unreadable (ResourceNotFoundException)`, and nothing is written (no audit row).
-
-Verify: no `anthropic` row appears in `shared.llm_call_log` after the deploy (read-only, as `cis_app`, through
-[ECS exec](ecs-exec-s3-mediated.md)):
-
-```sql
-SELECT provider, account, count(*) FROM shared.llm_call_log WHERE created_at > now() - interval '1 hour' GROUP BY 1, 2 ORDER BY 1, 2;
-```
-
-Abort: if the listing shows `"enabled": true` for `anthropic-direct` or a policy problem, stop and fix the row
-first.
-
-## 3. Store the key
-
-Create the secret from a file, then delete the file. The secret holds the bare key or the JSON `{"api_key": "<key>"}`.
+## 1. Check ($0, no write)
 
 ```bash
-aws secretsmanager create-secret --name aa-llm/dev/anthropic-direct --secret-string file:///home/nghiep/projects/AA-Ecosys/.tmp-session/anthropic-key.txt --profile aa365-admin --region us-west-1  # WRITE
+tools/llm/anthropic_key_plug_in.sh --check
+```
+
+Expected:
+
+```text
+[anthropic-key] account: the CIS account (profile aa365-admin)
+[anthropic-key] connection anthropic-direct: kind=anthropic secret=aa-llm/dev/anthropic-direct problems=0 enabled=False budget=150.0 hard_stop=True alert=80
+[anthropic-key] secret aa-llm/dev/anthropic-direct does not exist yet
+[anthropic-key] check done (no write)
+```
+
+Abort when the script stops with `ABORT:`: the line says what is wrong (MFA expired, another account, a connection
+that names another secret or has a policy problem). `EXPECTED_ACCOUNT=<acc2 account ID>` adds an exact account check.
+
+## 2. Plug in, probe, switch on (one command)
+
+```bash
+tools/llm/anthropic_key_plug_in.sh --apply < /home/nghiep/projects/AA-Ecosys/.tmp-session/anthropic-key.txt  # WRITE
 shred -u /home/nghiep/projects/AA-Ecosys/.tmp-session/anthropic-key.txt
 ```
 
-- The name must start with `aa-llm/` (a table CHECK and the gateway both refuse anything else).
-- The CIS task role already has `secretsmanager:GetSecretValue` on this name: no IAM change.
-- The Secrets Manager console works too (plaintext, the bare key).
+In this order, stopping at the first failure:
 
-Verify: `aws secretsmanager describe-secret --secret-id aa-llm/dev/anthropic-direct --profile aa365-admin --region us-west-1 --query Name --output text`
-prints the name. Never run `get-secret-value` on it.
+1. Reads the key from stdin and checks its shape (prefix `sk-ant-`, no spaces or extra text, not pasted twice,
+   plausible length). The key is never printed and never on a command line; it touches disk only as a mode-600 file
+   under `.tmp-session/`, shredded right after the Secrets Manager call.
+2. Stores it: `create-secret` the first time, `put-secret-value` (a new version) afterwards.
+3. One audited PATCH: `monthly_budget_usd = 150`, `budget_hard_stop = true`, `budget_alert_pct = 80`.
+4. Probe: one call of `haiku-5-5` on `anthropic-direct` (at most 16 output tokens) through the admin connection test.
+   The test works while the connection is still off, so a bad key never switches anything on.
+5. Only when the probe answered: one audited PATCH `enabled = true`.
 
-Rollback: `aws secretsmanager delete-secret --secret-id aa-llm/dev/anthropic-direct --profile aa365-admin --region us-west-1  # WRITE`
-(30-day recovery window).
+Expected (token counts, cost and latency vary):
 
-## 4. Switch the connection on (one audited PATCH)
-
-```bash
-curl -s -X PATCH https://api-cis.lumiguides.it.com/admin/llm-connections/anthropic-direct -H "X-Admin-Secret: $ADMIN_SECRET" -H "x-admin-role: admin" -H "x-admin-user-id: tech-lead" -H "content-type: application/json" -d '{"enabled": true}'  # WRITE
+```text
+[anthropic-key] key read from stdin (... characters, not shown)
+[anthropic-key] secret aa-llm/dev/anthropic-direct: created
+[anthropic-key] budget: 150 USD a month, hard stop, alert at 80 % (changed: [...])
+[anthropic-key] probe: {'model_key': 'haiku-5-5', 'wire_id': 'claude-haiku-5-5', 'ok': True, 'reply_usable': True, 'error_class': None, 'cost_usd': 1e-05, 'latency_ms': ...}
+[anthropic-key] connection anthropic-direct: ON (api now; worker within 5 minutes). ...
 ```
 
-Expected: `{"connection_key":"anthropic-direct","kind":"anthropic","enabled":true,"changed":true,"updated_by":"admin:tech-lead"}`.
-The switch reads the secret before it writes and refuses (`422`) when it cannot. The api process uses the new state
-at once; the worker within 5 minutes (registry cache).
+The api uses the new state at once; the worker within 5 minutes (registry cache).
 
-Verify the audit row:
+If the probe fails, the connection stays off and the script prints the class:
 
-```sql
-SELECT actor, action, resource_id, details, created_at FROM acp_shared.audit_log WHERE action = 'llm_connection_changed' ORDER BY created_at DESC LIMIT 1;
-```
-
-Expected: actor `admin:tech-lead`, `details` with `before.enabled = false`, `after.enabled = true`, the secret NAME
-(never the key).
-
-Rollback: the same PATCH with `{"enabled": false}` (step 6).
-
-## 5. Probe the key
-
-Run the probe in the CIS worker container with [`tools/ecs/ecsx.sh`](../../../tools/ecs/ecsx.sh) (it returns the
-whole output; the manual S3-mediated steps are in the [ECS exec runbook](ecs-exec-s3-mediated.md)). Run it on the
-api service instead (`ECSX_SERVICE=aa-cis-dev-api`) if you do not want to wait up to 5 minutes for the worker cache.
-
-```bash
-ECSX_SERVICE=aa-cis-dev-worker tools/ecs/ecsx.sh tools/llm/aa1002_anthropic_probe.py PROBE_MODEL=haiku-5-5
-```
-
-Expected output (one JSON line):
-
-```json
-{"ok": true, "content": "OK", "model_used": "anthropic-api-haiku-5-5", "provider": "anthropic", "provider_model": "claude-haiku-5-5", "tokens_in": 30, "tokens_out": 3, "cost_usd": 0.00001, "stop_reason": "end_turn"}
-```
-
-Token counts and cost vary a little; `provider_model` is the model the API says answered.
-
-Verify the cost row (`stage = 'adhoc_aa1002'`, role `validate`):
-
-```sql
-SELECT model, provider, account, tokens_in, tokens_out, cost_usd, stop_reason, quality_signal, created_at FROM shared.llm_call_log WHERE stage = 'adhoc_aa1002' ORDER BY created_at DESC LIMIT 3;
-```
-
-Expected: model `haiku-5-5`, provider `anthropic`, account NULL (slice S2 does not record the connection there;
-the probe puts it and `provider_model` into `quality_signal`).
-
-If the probe prints `{"ok": false, ...}`, read `llm_error_class`:
-
-| `llm_error_class` / error | Meaning | Action |
+| `error_class` | Meaning | Action |
 |---|---|---|
-| `access_denied` | 401 or 403: wrong or revoked key, or no permission in the workspace | Check the key, update the secret (`put-secret-value` from a file), re-run. A 401 drops the cached key, so the next call reads the new value |
-| `quota_exhausted` | No credit, or the workspace spend limit is reached | Add credit or raise the limit on the Anthropic side |
-| `throttled` | 429 rate limit or 529 overloaded | Wait a minute and re-run |
-| `secret unreadable (...)` | Secret name or task role | Check step 3; the name must be exactly `aa-llm/dev/anthropic-direct` |
-| `connection ... is missing or disabled` | The worker still has the old registry | Wait 5 minutes or run on the api service |
+| `access_denied` / `credential` | 401 or 403: wrong or revoked key, no permission in the workspace | New key in the Console, run step 2 again (a new secret version) |
+| `quota_exhausted` | No credit, or the workspace spend limit is reached | Add credit or raise the limit on the Anthropic side, run step 2 again |
+| `throttled` | 429 rate limit or 529 overloaded | Wait a minute, run step 2 again |
 
-## 6. Switch the connection off again
+## 3. Verify
+
+The ledger row of the probe (read-only, as `cis_app`, through [ECS exec](ecs-exec-s3-mediated.md)):
+
+```sql
+SELECT stage, model, provider, account, tokens_in, tokens_out, cost_usd, status, created_at FROM shared.llm_call_log WHERE stage = 'adhoc_conn_test' AND account = 'anthropic-direct' ORDER BY created_at DESC LIMIT 3;
+```
+
+Expected: one row, model `haiku-5-5`, provider `anthropic`, cost under 0.001 USD. The audit rows:
+
+```sql
+SELECT actor, action, resource_id, created_at FROM acp_shared.audit_log WHERE resource_id = 'anthropic-direct' ORDER BY created_at DESC LIMIT 3;
+```
+
+Expected: the budget change, the connection test and the switch, actor `admin:tech-lead` (`AUDIT_ACTOR` sets it). No
+row holds the key.
+
+Record the run: set `last_tested`, `tested_where: dev-acc2` and `tested_evidence` (the script output and the two
+query results, saved under `docs/audits/<date>-S<nnn>-<slug>/`) in this page's front-matter, then remove the warning
+at the top.
+
+## Rollback
+
+Switch the connection off (every stage returns to its AWS deployments within 5 minutes; the writers end on the OpenAI
+API again):
 
 ```bash
+ADMIN_SECRET=$(aws secretsmanager get-secret-value --secret-id aa-cis/dev/admin-secret --query SecretString --output text --profile aa365-admin --region us-west-1)
 curl -s -X PATCH https://api-cis.lumiguides.it.com/admin/llm-connections/anthropic-direct -H "X-Admin-Secret: $ADMIN_SECRET" -H "x-admin-role: admin" -H "x-admin-user-id: tech-lead" -H "content-type: application/json" -d '{"enabled": false}'  # WRITE
 unset ADMIN_SECRET
 ```
 
-Expected: `"enabled": false, "changed": true` and a second `llm_connection_changed` audit row. Keep it off until S5
-and S10 (see the warning at the top). The secret can stay: a disabled connection never reads it.
-
-Record the run: set `last_tested`, `tested_where: dev-acc2` and `tested_evidence` (the probe output and the
-`llm_call_log` row, saved under `docs/audits/<date>-S<nnn>-<slug>/`) in this page's front-matter.
-
-## Making the API primary for a model
-
-Not part of this procedure. It needs a tech lead decision on three points:
-
-1. **Data scope**: `anthropic-direct` is `vendor_direct`. A tenant (T-series) stage on such a model sends tenant
-   content outside AWS. Nothing enforces data scopes before slice S5.
-2. **Budget**: no provider-wide daily cap for `anthropic` before slice S10.
-3. **Mechanism**: lower that model's `anthropic-direct` deployment priority below 10 (acc3) with a CIS migration or
-   DB Migrate `mode=run-script` (`cis_app` cannot write deployments). Revert: priority back to 100, or switch the
-   connection off (every model returns to Bedrock within 5 minutes). Legacy keys `haiku` / `sonnet` cannot use the
-   API before slice S3.
-
-> [!CAUTION]
-> Slice S3 (spread a route over every deployment) turns the seeded `anthropic-direct` deployments into same-model
-> fallbacks automatically, tenant models included. S5 data scopes must land before or with S3; otherwise tenant
-> content leaves AWS whenever acc3 fails.
+The Connections tab of `/admin/ai-gateway` has the same switch. The secret can stay: a disabled connection never
+reads it. Remove it only when the key is retired:
+`aws secretsmanager delete-secret --secret-id aa-llm/dev/anthropic-direct --profile aa365-admin --region us-west-1  # WRITE`
+(30-day recovery window).
 
 ## Rotate the key
 
-Update the secret from a file (`aws secretsmanager put-secret-value --secret-id aa-llm/dev/anthropic-direct --secret-string file://<path> --profile aa365-admin --region us-west-1  # WRITE`),
-delete the file, then re-run step 5 with the connection on. A cached key lives up to the credential cache TTL; a 401
-drops it at once. See also the [secret rotation runbook](secret-rotation.md).
+Run step 2 with the new key: it stores a new secret version, probes and leaves the connection on. A cached key lives
+up to the credential cache TTL; a 401 drops it at once. Revoke the old key in the Console after the probe answered.
+See also the [secret rotation runbook](secret-rotation.md).
+
+## Making the API the first way in for a model
+
+Not part of this procedure, and a tech lead decision per model: lower that model's `anthropic-direct` deployment
+priority below 10 (acc3) with a CIS migration (`cis_app` cannot write deployments). Revert: priority back to 100, or
+switch the connection off. A stage still reaches the API only when its `allowed_scopes` allow `vendor_direct`.
