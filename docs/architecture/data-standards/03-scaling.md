@@ -150,8 +150,8 @@ The partner CRM's NOLOGIN roles (`crm_owner`, `crm_ai_reader`, `crm_insights`, `
 `docs/implementation-notes/AA-860-S15.md`): per-job pools `cis-job` (export / recompute 5, S1 Jev gates 4,
 grounding 2 per in-flight rewrite), the eval pool 2 (eval workflow only) and short-lived ad-hoc `asyncpg.connect`
 calls. Theoretical worst case per api + worker task set ≈ 63 (× 2 during a deploy overlap); measured instance-wide
-`DatabaseConnections` daily max 28 (05–18/10/2026). The limit stays 90 (S15c); 53300 on `cis_app` is a CloudWatch log
-alarm (S18) next to `RoleConnectionLimitPct` > 80 %. Raise it only by an Infra `roles/` file, never a CIS migration.
+`DatabaseConnections` daily max 28 (05–18/10/2026). The limit stays 90 (S15c); 53300 on `cis_app` is a CIS in-app
+check (`cis_app_too_many_connections`, was a CloudWatch log alarm until S263) next to `rds_role_connections` > 80 %. Raise it only by an Infra `roles/` file, never a CIS migration.
 
 ### C2.3 Rules
 
