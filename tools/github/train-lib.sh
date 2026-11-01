@@ -9,6 +9,10 @@
 #   waitdeploy <cis|booking|crm> <sha>  wait until the app's health endpoint reports git_sha = <sha>
 #   restack <worktree> <old-base-sha> <pr>  rebase --onto origin/main, push --force-with-lease, gh pr ready, re-gate
 #
+# AA-1032: gate/waitcopy/restack have maintained tool versions with tests (README.md here): ship_merge.py gates EVERY
+# check and merges, ship_copy_apply.py handles the copy PR in any state and follows its own DB Migrate run,
+# ship_train.py restacks only each branch's own commits. Prefer those; waitdeploy and merged have no replacement.
+#
 # Orchestrator only: merges and pushes go through the aa-agent App (as-app.sh next to this file); the subagent hook
 # blocks them. Holds no secrets: as-app.sh reads the App key from Secrets Manager at call time (needs a live MFA session).
 # Every wait has a timeout; a function returns non-zero on the first red step so the train can `|| exit 1`.

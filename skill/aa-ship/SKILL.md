@@ -12,7 +12,9 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 
 - **Agent điều phối** push, mở PR, merge, `gh workflow run` (deploy, DB Migrate, Terraform apply, probe), ECS exec.
 - **Subagent** chỉ code, test, commit local. Hook `.claude/hooks/subagent-guardrails.sh` chặn push/merge/`gh workflow run`/
-  Terraform apply/`aws ecs execute-command`. Việc live (kiểm DB, verify) subagent giao lại dạng runbook/script kèm mục
+  Terraform apply/`aws ecs execute-command`, và mọi lệnh nhắc tới tool ship (`ship_*.py`, `mergeq.sh`, `dbmig.sh`,
+  `train-lib.sh`, `as-app.sh`: chúng push/merge/dispatch bên trong, hook không thấy). Việc live (kiểm DB, verify)
+  subagent giao lại dạng runbook/script kèm mục
   "post-merge steps cho orchestrator" — không lách qua script helper.
 
 ## 1. Trước khi mở/merge PR
@@ -31,7 +33,7 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
   trên đường request): commit local → subagent review độc lập (chỉ đọc, nhiệm vụ "phá nó") → sửa mọi blocker/should-fix
   → điều phối push, chờ CI, merge.
 - [ ] **Gate mọi check:** chỉ merge khi không còn check nào đỏ hoặc pending trong `gh pr checks <n>` (đọc đủ, không chỉ
-  `--required`; Infra và repo gốc không có required check). Có gì push vào PR (bot, restack, release-please) → gate lại,
+  `--required`; Infra và repo gốc không có required check) — `ship_merge.py` làm đúng việc này. Có gì push vào PR (bot, restack, release-please) → gate lại,
   lần xanh trước không còn tính. Vercel deploy + UI smoke → PR frontend kiểm thêm `aa-ui-verify`.
 - [ ] Test xanh local, đỏ CI → so package đã cài (`pip list` local vs CI/image) trước khi sửa code.
 - [ ] Khẳng định "check xanh khi khớp / đỏ khi lệch" → chứng minh bằng nhánh thử hoặc draft PR có cài sẵn chỗ lệch rồi
@@ -39,8 +41,9 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 - [ ] **PR có migration (ADR 0017; chủ schema `docs/database/schema-ownership.md`):** file **expand** (`-- migrate:
   expand`) → một PR app (file + code + bump readiness); PR copy ci-bot sang Infra tự merge, Migration Apply tự chạy, job
   schema gate của Deploy Dev chờ nó. File **contract/destructive** (không header = contract) giữ MIG-4: PR chỉ migration
-  → review → PR copy nhãn contract KHÔNG tự merge → gate + merge tay → `tools/github/dbmig.sh <owner>/<NNN> check` rồi
-  `apply` → PR code. Bước, idle check, log `ran as: <owner>`, Schema Dump/Isolation Probe: `docs/ops/runbooks/db-migrate.md`.
+  → review → PR copy nhãn contract KHÔNG tự merge → `python3 tools/github/ship_copy_apply.py <owner> <NNN> --mode check`
+  rồi lệnh đó không `--mode` (= apply: gate + merge PR copy dù đã merge hay đang mở, dispatch DB Migrate, theo đúng run
+  của mình, đọc `/health/ready`) → PR code. File đã có trên Infra main: `tools/github/dbmig.sh <owner>/<NNN> <check|apply>`. Bước, idle check, log `ran as: <owner>`, Schema Dump/Isolation Probe: `docs/ops/runbooks/db-migrate.md`.
   - Migration đổi bảng/khoá/FK của schema có trang ERD thiết kế `enforce=true`
     (`docs/architecture/erd/design/<schema>.md`, repo gốc) → sửa trang đó trong cùng đợt thay đổi, không thì DB Schema
     Dump đêm đó đỏ bước drift.
@@ -60,18 +63,27 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 
 ### Cách merge
 
+- **Công cụ (AA-1032, `tools/github/README.md`)** — dùng thay script tự viết trong `.tmp-session/`:
+  - mở PR của lane: `python3 tools/github/ship_open_prs.py <wf_id | journal.jsonl> [--only <Repo>] [--dry-run]`
+    (lấy `prs[]` của result cuối, kiểm tiêu đề/`Refs`/worktree trước khi push, push không force, in `live_steps`);
+  - merge: `python3 tools/github/ship_merge.py '<Repo> <n>' <Repo>#<n> …` — **từ chối khi BẤT KỲ check nào đỏ**
+    (không chỉ required; S263 CIS #1225 vào queue với "Migration preflight" đỏ), draft, base không phải nhánh mặc
+    định, DIRTY, PR xoá file (`--allow-deletes` khi chủ ý); repo queue đi qua `mergeq.sh`, repo khác squash
+    `--match-head-commit`. `--check-only` để chỉ gate;
+  - nhánh xếp chồng: `ship_train.py`; migration copy + DB Migrate: `ship_copy_apply.py` (`references/merge-trains.md`).
 - Squash chỉ sau `git fetch`; gộp commit bằng `git reset --soft $(git merge-base HEAD origin/main)`, không bằng
-  `origin/main` trần. Trước mọi merge: `gh pr diff <n> --name-only` — có file bị xoá/đổi ngoài phạm vi PR thì dừng.
-- **CIS, Booking, Partner: merge queue (AA-889).** Không `update-branch` nữa: một lệnh mỗi PR,
-  `tools/github/mergeq.sh <Repo> <n>` — chờ check của PR, xếp hàng (`gh pr merge --squash --auto` qua `as-app.sh`),
-  chờ tới merged, in SHA. Queue chạy lại required check trên commit tạm `gh-readonly-queue/main/*` (PR đi trước +
-  `main` mới nhất) rồi tự squash vào `main`. Guard §2 (bảng job, wave) kiểm **trước khi** xếp hàng vì queue merge tự
-  động. Rút PR khỏi hàng: `tools/github/mergeq.sh <Repo> <n> --dequeue` (GraphQL `dequeuePullRequest`, hoặc "Remove
-  from queue" trên UI). `gh pr merge --disable-auto` chỉ huỷ được khi check của PR còn chạy; PR đã xanh thì đã vào
-  thẳng hàng, lệnh đó không rút được. Check không báo → queue loại PR sau `check_response_timeout`; xem
-  `gh run list --event merge_group`.
-- TripPlanner: `gh pr merge <n> --auto --squash`. AA-CIS-Infra, repo gốc tắt auto-merge → `gh pr merge <n> --squash`
-  sau khi check xanh.
+  `origin/main` trần. Trước mọi merge: `gh pr diff <n> --name-only` — có file bị xoá/đổi ngoài phạm vi PR thì dừng
+  (`ship_merge.py` tự từ chối PR xoá file; file đổi ngoài phạm vi vẫn phải đọc).
+- **CIS, Booking, Partner: merge queue (AA-889).** Không `update-branch` nữa: `ship_merge.py` gate mọi check rồi gọi
+  `tools/github/mergeq.sh <Repo> <n>` — xếp hàng (`gh pr merge --squash --auto` qua `as-app.sh`), chờ tới merged, in
+  SHA. Gọi `mergeq.sh` trần thì nó chỉ đọc check **required**. Queue chạy lại required check trên commit tạm
+  `gh-readonly-queue/main/*` (PR đi trước + `main` mới nhất) rồi tự squash vào `main`. Guard §2 (bảng job, wave) kiểm
+  **trước khi** xếp hàng vì queue merge tự động. Rút PR khỏi hàng: `tools/github/mergeq.sh <Repo> <n> --dequeue`
+  (GraphQL `dequeuePullRequest`, hoặc "Remove from queue" trên UI). `gh pr merge --disable-auto` chỉ huỷ được khi
+  check của PR còn chạy; PR đã xanh thì đã vào thẳng hàng, lệnh đó không rút được. Check không báo → queue loại PR sau
+  `check_response_timeout`; xem `gh run list --event merge_group`.
+- TripPlanner, AA-CIS-Infra, repo gốc: `ship_merge.py` (squash thẳng khi mọi check xanh, không `--auto`: PR đã CLEAN
+  thì `--auto` báo lỗi).
 - Nhiều PR backend cùng repo: xếp hàng cùng lúc được; queue có thể đẩy cả nhóm trong một push → một Deploy Dev cho cả
   nhóm, verify live (§3) cho từng PR của nhóm theo `git_sha` cuối. Deploy đỏ → tìm PR gây lỗi trong nhóm trước khi xếp
   tiếp.

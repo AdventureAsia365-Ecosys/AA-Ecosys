@@ -19,7 +19,14 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
      cũ (hay gặp sau khi đổi tài khoản claude.ai): báo Nghiệp mở lại phiên, không debug. Không có Notion thì đọc HOT
      block từ log local.
 2. **Kiểm trạng thái thật**, so với memory (lệnh AWS một dòng, `--profile aa365-admin --region us-west-1`):
-   - STS còn hạn: `aws sts get-caller-identity --profile aa365-admin` (hết hạn → Nghiệp nhập MFA).
+   - STS còn hạn: `aws sts get-caller-identity --profile aa365-admin` (hết hạn → Nghiệp nhập MFA), rồi **ghi giờ hết
+     hạn phiên MFA** (~8 h): `python3 tools/github/ship_common.py mfa` — in giờ hết hạn, số phút còn lại và giờ nhắc
+     (hết hạn − 30′); chỉ đọc trường `Expiration`, không in key/token. Ghi dòng đó vào khối trạng thái đầu phiên và
+     đầu checklist `.tmp-session/S<nnn>-checklist.md`.
+   - **Nhắc trước khi hết hạn:** đặt một lời nhắc một lần (CronCreate) đúng giờ nhắc; không có thì kiểm lại giờ đó
+     trước mỗi bước cần AWS/`as-app.sh` (push, merge, DB Migrate, ECS exec). Tới giờ nhắc → báo tech lead nhập MFA
+     mới **trước** khi chạy train/merge dài (`as-app.sh` đọc key App bằng phiên MFA; train chết giữa chừng khi hết
+     hạn). Các tool `tools/github/ship_*.py` cũng tự cảnh báo khi còn < 30′ (train: < 60′).
    - ECS cluster `aa-cis-dev-cluster`, 5 service `aa-cis-dev-api`, `aa-cis-dev-worker`, `aa-booking-dev-api`,
      `aa-crm-dev-api`, `aa-crm-dev-web`: running = desired, rollout COMPLETED; api và worker CIS cùng image SHA.
      Service nào đang tắt → **không tự bật**; báo Nghiệp (agent không bao giờ tự bật/tắt hạ tầng).
