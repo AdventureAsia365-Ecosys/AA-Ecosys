@@ -26,6 +26,8 @@ patterns=(
   'aws( +--[a-z-]+( +[^- ][^ ]*)?)* +lambda +(invoke|update|create|delete)'
   'aws( +--[a-z-]+( +[^- ][^ ]*)?)* +ssm +(put|delete|send-command)'
   'aws( +--[a-z-]+( +[^- ][^ ]*)?)* +ecr +(put|delete|batch-delete)'
+  # AA-1026: scripts whose AWS / admin-API writes the command line does not show
+  '(^|[ /])anthropic_key_plug_in\.sh'
 )
 for p in "${patterns[@]}"; do
   if echo "$cmd" | grep -Eq "$p"; then
