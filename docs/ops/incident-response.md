@@ -58,8 +58,13 @@ Subjects start with `[aa-sec]`; the rules and the live check are listed in [the 
 - **`admin session digest`**: the follow-up for the same session, sent within about two hours of its last call (or when
   its credentials expire): calls per service, every DELETE then every other WRITE call with its resource name and
   error code, read-only calls by count. Read the delete and write lists first; an unknown call is SEV1 even if the
-  sign-in was yours. A digest marked `(continued)` covers calls made after an earlier digest of the same session.
-  `WARNING: the lookup hit its page cap` means the counts are a lower bound: read the rest in CloudTrail Event history.
+  sign-in was yours. A digest marked `(continued)` covers calls made after an earlier digest of the same session; one
+  marked `(partial)` covers calls up to the time it states only (the run ran short of time), and a continued digest
+  follows within the hour. `WARNING: the lookup hit its page cap` means the counts are a lower bound: read the rest
+  in CloudTrail Event history. The digest reads the regions the organization region policy allows (us-east-1,
+  us-west-1, us-west-2). Calls to services that policy exempts from the region rule (global services, Bedrock, KMS,
+  ACM and the like), made in any other region, are not in the digest: for a session you did not start, also read
+  CloudTrail Event history in those regions.
   No digest after a sign-in alert: check the function's `-errors` alarm and its log group
   (`/aws/lambda/aa-sec-dev-admin-session-digest`).
 - Other `[aa-sec]` rules (IAM, security-group, trail, root, Access Analyzer): expected only from Terraform or a
