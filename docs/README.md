@@ -30,7 +30,8 @@ Templates: [`templates/`](templates/). Terms: [glossary](glossary.md).
 | You are | Open first | Then |
 |---|---|---|
 | **Anyone** | [Engineering handbook](engineering-handbook.md) (CAT-01): how we build, document, version, release, operate and pay for AA-Ecosys; the platform roadmap and the decision log | Your role row below |
-| **Business owner** (CEO) | [CEO guide](guides/ceo.md) (English; Vietnamese translation: [ceo.vi.md](guides/ceo.vi.md)) | Monthly cost and capacity summary (FIN-02), release notes (APP-07) |
+| **Business owner** (CEO) | [CEO guide](guides/ceo.md) (English; Vietnamese translation: [ceo.vi.md](guides/ceo.vi.md)) | [App access and operations](guides/app-access-and-operations.md) (how to get into and run each app), monthly cost and capacity summary (FIN-02), release notes (APP-07) |
+| **Staff** (Adventure Asia, partner agencies) | [App access and operations](guides/app-access-and-operations.md) (Vietnamese: [app-access-and-operations.vi.md](guides/app-access-and-operations.vi.md)) | The runbook of your app, linked from that page |
 | **New engineer** | [New engineer guide](guides/new-engineer.md) | [Onboarding: accounts and access](onboarding.md), [architecture](ecosystem-architecture.md), [STYLE](STYLE.md) |
 | **DevOps / operations** | [DevOps guide](guides/devops.md) | [Operations index](ops/README.md) (OPS-01), [incident response](ops/incident-response.md) |
 | **CTO** | [CTO guide](guides/cto.md) | [Architecture](ecosystem-architecture.md), [ADR index](adr/README.md), [data standards](architecture/data-standards/README.md) |
@@ -46,8 +47,8 @@ Templates: [`templates/`](templates/). Terms: [glossary](glossary.md).
 - **Owner**: `nghiep` (the tech lead) approves, Claude Code drafts and updates, unless stated. Generated pages are changed only by
   their generator's PR.
 - **Review**: the `review_every_days` value (days) or the event that forces a review.
-- **Audience**: O = owner (the business owner, CEO), E = engineer, D = DevOps, CT = CTO, CI = CIO, P = PM, A = agent. It is a
-  navigation filter, not access control.
+- **Audience**: O = owner (the business owner, CEO), S = staff (Adventure Asia and partner-agency app users),
+  E = engineer, D = DevOps, CT = CTO, CI = CIO, P = PM, A = agent. It is a navigation filter, not access control.
 - **Repo**: root = AA-Ecosys, INF = AA-CIS-Infra, CIS / BK / TP / Partner = app repos. The app repos are
   **public** (public-safe content only, see [where a page may live](STYLE.md#where-a-page-may-live-sec-06)); root and
   Infra are public too since 22/10/2026 until the coding phase ends ([ADR 0014](adr/0014-repo-visibility-and-github-plan.md)
@@ -55,7 +56,8 @@ Templates: [`templates/`](templates/). Terms: [glossary](glossary.md).
 - **Language**: every page is English. A Vietnamese translation sits next to its page as `<name>.vi.md`, with the
   same ID, `lang: vi` and `translation_of` ([STYLE, Language](STYLE.md#language)). The catalog lists the English page
   only; translations today: [engineering handbook](engineering-handbook.vi.md), [glossary](glossary.vi.md),
-  [CEO guide](guides/ceo.vi.md), [legal readiness packet](legal/readiness-packet.vi.md).
+  [CEO guide](guides/ceo.vi.md), [legal readiness packet](legal/readiness-packet.vi.md), the app runbooks of GUIDE-12
+  (for example [app access and operations](guides/app-access-and-operations.vi.md)).
 - **People**: company docs name roles, not people: the tech lead, the business owner (CEO), the engineer on duty.
 - **Status**: `exists` = page is in the repo (front-matter added or not); `planned` = page not written yet, with
   the issue that writes it. S241 roadmap items (U-xx) are named so nothing is built twice.
@@ -142,6 +144,7 @@ Templates: [`templates/`](templates/). Terms: [glossary](glossary.md).
 | GUIDE-09 | CIO guide | Exp | root `docs/guides/cio.md` | H | nghiep | 90 | CI | draft (AA-897, S243): [`guides/cio.md`](guides/cio.md) |
 | GUIDE-10 | New engineer guide (learning path) | Tut | root `docs/guides/new-engineer.md` | H | nghiep | 90 | E | draft (AA-897, S243): [`guides/new-engineer.md`](guides/new-engineer.md); links GUIDE-01 for access |
 | GUIDE-11 | Agent docs index (`llms.txt`) | Ref | root [`docs/llms.txt`](llms.txt) | H | nghiep | 90 | A | exists (AA-887) |
+| GUIDE-12 | App access and operations: index + one runbook per app (how to get in, how to run it) | How | root [`guides/app-access-and-operations.md`](guides/app-access-and-operations.md) with [CIS admin](guides/cis-admin-runbook.md) (`GUIDE-12-cis-admin`), [AI providers and reports](guides/ai-providers-and-reports-runbook.md) (`GUIDE-12-ai-reports`), [Content studio](guides/content-studio-runbook.md) (`GUIDE-12-content-studio`), [CRM](guides/crm-runbook.md) (`GUIDE-12-crm`), [Booking admin](guides/booking-admin-runbook.md) (`GUIDE-12-booking`), [TripPlanner](guides/tripplanner-runbook.md) (`GUIDE-12-tripplanner`); each with a `.vi.md` translation | H | nghiep; the business owner reviews | 90; on a sign-in, role or menu change | O S E D | draft (AA-1020, S263): written from the app code and checked on Dev by HTTP status on 2026-11-01; staff walk-through pending |
 
 ### Standards, templates and status
 

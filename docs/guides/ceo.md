@@ -47,6 +47,9 @@ changes tour content; the other apps read it.
 Your CIS role is **admin**: you can see every page. Changing who has access (the Staff page) is reserved for CIS
 owner accounts: the tech lead and one locked emergency account.
 
+Step by step, for each app (how an account is made, how to sign in, the daily tasks and what to do when something
+looks wrong): [app access and operations](app-access-and-operations.md).
+
 > [!NOTE]
 > On 2026-10-18 we asked Google to review a false "dangerous site" warning on `lumiguides.it.com`. If your browser
 > shows a red warning page, tell the tech lead; do not click through on a shared computer.
