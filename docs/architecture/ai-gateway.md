@@ -19,7 +19,8 @@ related: [ARCH-01, ARCH-01-diagrams, APP-06-ai-register, APP-06-routes, ARCH-08,
 > Bedrock guardrail list and `/health/ready` of each app. The decisions behind this page are in
 > [ADR 0009](../adr/0009-ai-platform-and-provider-gateway.md); this page says what of them runs today. The full stage
 > list is the [AI Use Register](ai-use-register.md); the current routes are in
-> [`generated/llm-routes.md`](../generated/llm-routes.md).
+> [`generated/llm-routes.md`](../generated/llm-routes.md) (snapshot of 2026-10-29: routes current, but its model
+> catalog predates migration 324 and lacks the five acc2 candidates; recapture tracked in the backlog).
 
 ## 1. What the gateway is
 
@@ -196,7 +197,7 @@ Checked on 2026-11-01 unless the row says otherwise.
 | Daily probe of every enabled connection | **Live**, on | `LLM_DAILY_PROBE=on` in the CIS api and worker task definitions |
 | acc3 Bedrock (main chat account) | **Refusing** since 2026-10-29 (Error 002, every model); the connection circuit and the probe show it | Provider case open; [postmortem](../ops/postmortems/2026-10-29-acc3-bedrock-access-refusal.md) |
 | acc2 Bedrock embeddings (Cohere Embed v4) | **Live** | Used by CIS and TripPlanner search |
-| acc2 Bedrock candidate chat models (Nova Lite, Nova 2 Lite, Llama 4 Maverick, Llama 4 Scout, Kimi K3) | **Catalogued and probed, not routed** | A route needs the qualification ladder (ADR 0009 decision 12, AA-900) |
+| acc2 Bedrock candidate chat models (Nova Lite, Nova 2 Lite, Llama 4 Maverick, Llama 4 Scout, Kimi K3) | **Catalogued and probed, not routed** | A route needs the qualification ladder (ADR 0009 decision 12, AA-900). Not yet in the [generated route table](../generated/llm-routes.md): its 2026-10-29 snapshot predates 324; recapture tracked in the backlog (AA-1020 follow-up) |
 | OpenAI API (`openai-direct`) | Key present (`aa-cis/dev/openai-key`); last resort of the judge routes only | Monthly cap still to be stated and approved (ADR 0009 decision 14) |
 | Anthropic API (`anthropic-direct`) | **Not live:** no `aa-llm/` secret exists; deployments seeded behind acc3 (306) with the connection off | The tech lead creates the key with a workspace spend limit; then the secret is stored and the connection switched on (runbook [llm-anthropic-api-key](../ops/runbooks/llm-anthropic-api-key.md)) |
 | Jev, DataForSEO, Geoapify as registry rows (322) with ledger rows | **Live** | Settings come from their rows, else env, else the old constants |

@@ -28,7 +28,8 @@ which human checks the output before anyone relies on it.
   candidate models (324), the probe and Bedrock Batch ledger rows, and the gateway's circuit, route deadline and
   re-queue as switches. The model column still comes from the 29/10 route snapshot: no route changed since (320–324
   add no route row), and the [generated route table](../generated/llm-routes.md) (`APP-06-routes`) wins when they
-  differ. v0 was written by hand from the code on `main` on 31/10/2026.
+  differ. Its model catalog half predates 324 (the five acc2 candidates are missing there until the snapshot is
+  recaptured, a backlog follow-up). v0 was written by hand from the code on `main` on 31/10/2026.
 - **Who updates it:** the PR that adds, removes or re-routes a stage, adds a provider, or changes a stage's data
   scope, budget or human gate updates its row. A new provider also updates the tenant terms list (AA-820).
 
