@@ -181,7 +181,7 @@ event alarms (one e-mail per incident instead of two).
 | **Alerting total** | **~21 USD/month** | **~3.8 USD/month** |
 | Logs (vended VPC flow + WAF, ingest) | ~3.0 USD (Oct) | ~0.3 USD (REJECT-only flow logs, BLOCK/COUNT-only WAF log) |
 
-E-mail: 92 alarms sent OK mails too; after the diet 12 state alarms do. Event checks in the apps send one e-mail per
+E-mail: 92 alarms sent OK mails too; after the diet 13 state alarms do. Event checks in the apps send one e-mail per
 check per UTC day (or per break-glass session / ops release / refused event).
 
 ## 6. What is not covered any more (accepted)

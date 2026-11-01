@@ -256,7 +256,7 @@ Tech lead: "chỉ giữ những cái thật cần thiết, đồng ý các đề
 | Dashboard | 1 → ~2,3–3 USD | 0 |
 | **Tổng nhóm cảnh báo** | **~21 USD/tháng** | **~3,8 USD/tháng** (dưới mục tiêu ≤ 6 USD) |
 | Log vended (VPC flow + WAF) | ~3,0 USD (tháng 10) | ~0,3 USD (flow log chỉ REJECT, WAF log chỉ request bị chặn/đếm, 30 ngày) |
-| Email | ~375/tháng, 92 alarm gửi cả OK | chỉ 12 alarm trạng thái gửi OK; check trong app tối đa 1 email/check/ngày |
+| Email | ~375/tháng, 92 alarm gửi cả OK | chỉ 13 alarm trạng thái gửi OK; check trong app tối đa 1 email/check/ngày |
 
 Chuyển vào app ($0, dùng chung topic SNS cảnh báo nên người nhận không đổi): hàng đợi job của CIS/Booking/CRM,
 giới hạn kết nối theo role, tuổi XID, các log event (ghi cost-log lỗi, tenant pool fail-closed, cis_app hết kết nối),
