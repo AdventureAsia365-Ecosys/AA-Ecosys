@@ -251,19 +251,22 @@ Tech lead: "chỉ giữ những cái thật cần thiết, đồng ý các đề
 
 | | Trước (dự báo tháng 11) | Sau |
 |---|---:|---:|
-| Alarm | 101 (+1 mới, +1 của Infra #581) → ~10,5 USD | 25 alarm, 28 đơn vị tính tiền → **2,80 USD** |
+| Alarm | 101 (+1 mới, +1 của Infra #581) → ~10,5 USD | 27 alarm, 30 đơn vị tính tiền → **3,00 USD** |
 | Custom metric | ~28 → ~8–9 USD | ~3 → **~0,90 USD** |
 | Dashboard | 1 → ~2,3–3 USD | 0 |
-| **Tổng nhóm cảnh báo** | **~21 USD/tháng** | **~3,8 USD/tháng** (dưới mục tiêu ≤ 6 USD) |
+| **Tổng nhóm cảnh báo** | **~21 USD/tháng** | **~4,0 USD/tháng** (dưới mục tiêu ≤ 6 USD) |
 | Log vended (VPC flow + WAF) | ~3,0 USD (tháng 10) | ~0,3 USD (flow log chỉ REJECT, WAF log chỉ request bị chặn/đếm, 30 ngày) |
-| Email | ~375/tháng, 92 alarm gửi cả OK | chỉ 13 alarm trạng thái gửi OK; check trong app tối đa 1 email/check/ngày |
+| Email | ~375/tháng, 92 alarm gửi cả OK | chỉ 14 alarm trạng thái gửi OK; check trong app tối đa 1 email/check/ngày |
 
 Chuyển vào app ($0, dùng chung topic SNS cảnh báo nên người nhận không đổi): hàng đợi job của CIS/Booking/CRM,
 giới hạn kết nối theo role, tuổi XID, các log event (ghi cost-log lỗi, tenant pool fail-closed, cis_app hết kết nối),
 audit export CRM, break-glass, membership feed, ops release, bulk reveal. Gỡ hẳn: 8 alarm target tracking (bỏ
 autoscaling theo CPU/memory trên Dev), alarm 5xx/latency API (Sentry bắt lỗi app; sập service đã có
-`*-no-healthy-task`), unhealthy-hosts, CPU service, RDS memory/latency/disk queue/surplus credits, NAT
-StatusCheckFailed trùng, alarm ACP chết (emitter không ai gọi), DLQ ACP, uptime Booking, throttles/duration identity,
-WAF blocked. Thêm 1: `aa-cis-dev-api-no-healthy-task` (thay alarm mù `ecs-running-tasks-low`).
+`*-no-healthy-task`), unhealthy-hosts, CPU service, RDS memory/latency/disk queue/surplus credits, alarm ACP chết (emitter không ai gọi), DLQ ACP, uptime Booking,
+throttles/duration identity, WAF blocked. Thêm 1: `aa-cis-dev-api-no-healthy-task` (thay alarm mù `ecs-running-tasks-low`).
+Đổi 1: NAT `nat-status-check-failed` → `nat-instance-check-failed` (chỉ `StatusCheckFailed_Instance`; hết email trùng với
+alarm recover, vẫn bắt lỗi OS mà recover không sửa — check trong app gửi SNS qua chính NAT này nên không thay được).
+Giữ lại sau vòng review: `aa-identity-dev-trigger-unexpected-error` (ngưỡng 1; alarm Errors ngưỡng 20/5 phút không bao
+giờ chạm ở Dev; metric bỏ `default_value` nên chỉ tính tiền giờ có lỗi).
 Số thật sau apply: đếm lại alarm/custom metric theo live step của PR Infra; Cost Explorer tháng 12 mới thấy đủ.
 

@@ -91,8 +91,8 @@ and on demand.
 
 ## Alarms, runbooks and incidents
 
-- CloudWatch alarms (25 on acc2 after the S263 alert diet) e-mail through SNS to the recipients on CIS admin →
-  Platform → Alert recipients: state alarms (service down, RDS, NAT recover, SES, backup copy age) on ALARM and OK,
+- CloudWatch alarms (27 on acc2 after the S263 alert diet) e-mail through SNS to the recipients on CIS admin →
+  Platform → Alert recipients: state alarms (service down, RDS, NAT recover and instance check, SES, backup copy age) on ALARM and OK,
   event alarms (Lambda errors, break-glass token, KMS decrypt anomaly) on ALARM only. The generated list is
   [alarms](../generated/alarms.md).
 - S263 alert diet: CloudWatch keeps service down, RDS CPU / storage / connections, Lambda errors, SES and the security

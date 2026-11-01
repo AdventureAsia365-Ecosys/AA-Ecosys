@@ -109,7 +109,7 @@ event alarms (one e-mail per incident instead of two).
 |---|---|---|---|
 | `{workforce,external}-{pre-sign-up,pre-token}-errors` (4) | Keep | Cognito triggers have no app behind them | no |
 | `*-throttles` (4), `*-duration-p99` (4) | Remove | a throttled or timed-out trigger fails the sign-in, which shows as `Errors` (Cognito kills a trigger at 5 s) | — |
-| `trigger-unexpected-error` (log filter, default value 0 = always billed) | Remove | an unexpected exception refuses the sign-in: it is an `Errors` datapoint too | — |
+| `trigger-unexpected-error` (log filter) | Keep (review pass) | the `Errors` alarm has a burst threshold (20 in 5 minutes, refusals count too) that Dev traffic never reaches when a broken release refuses every sign-in; this alarm fires on 1. Its metric filters lose `default_value`, so the metric is billed only in hours with an error | no |
 | `waf-blocked` | Remove | the WAF does its job; blocked requests stay in the WAF log | — |
 | `breakglass-token-issued` | Keep | only the trigger log sees the break-glass account; the metric filter loses `default_value` so the metric is billed only in hours with a token | no |
 
@@ -133,7 +133,7 @@ event alarms (one e-mail per incident instead of two).
 | `aa-tripplanner-dev-jobs-errors` | Keep | daily retention / redaction jobs (DM-6.6) | no |
 | `aa-tripplanner-dev-jobs-not-run` | Keep | the only signal that the redaction schedule stopped | yes |
 | `aa-ecosys-dev-nat-system-check-recover` | Keep | the recover action itself | yes |
-| `aa-ecosys-dev-nat-status-check-failed` | Remove | duplicate e-mail of the recover alarm for the system part; an instance-level failure stops all egress, which every app's no-healthy-task / job checks show | — |
+| `aa-ecosys-dev-nat-status-check-failed` | **Replace** (review pass) | by `aa-ecosys-dev-nat-instance-check-failed` on `StatusCheckFailed_Instance` (guest OS): recover does not fix that, the ALB health checks stay inside the VPC, and the in-app checks reach SNS **through** the NAT, so nothing else would e-mail. The Instance metric no longer doubles the recover alarm's e-mail on a system failure | yes |
 | `aa-email-dev-bounce-rate`, `aa-email-dev-complaint-rate` | Keep | SES requires them | yes |
 | `aa-sec-dev-admin-session-digest-errors` (Infra #581, 01/11) | Keep | Lambda with no app behind it | no |
 | `TargetTracking-*` (8, api + worker x CPU + memory x High + Low) | Remove | the four target-tracking policies are removed on Dev (1 api + 1 worker task; a wave scales the worker by hand, `docs/ops/job-kinds.md`). The scalable targets (1..3) stay, so the documented scale commands still work | — |
@@ -144,8 +144,8 @@ event alarms (one e-mail per incident instead of two).
 |---|---|
 | Dashboard `aa-cis-dev-pipeline` | Remove (module `monitoring`); the admin overview shows the same ECS numbers |
 | Custom metrics `AA/RDS` RoleConnections / RoleConnectionLimitPct, `AA/Jobs/CIS`, `AA/Jobs/Booking`, `AA/Jobs/Crm` (7 incl. `MailIngestDropped`, `RevealsPerMemberPeakHour`, 3 audit) | Stop publishing (the samplers no longer call PutMetricData; the IAM grants go) |
-| Custom metrics `aa-cis/ops`, `AA/Crm/*`, `AA/RDS CisAppTooManyConnections`, `AA/Identity TriggerUnexpectedError` | Their 20 metric filters are removed |
-| Custom metrics kept | `AA/Crm/Kms DecryptCalls` (anomaly band), `AA/RDS BackupCopyMaxAgeDays` + retention (copy age), `AA/Identity BreakglassTokenIssued` (only when used) |
+| Custom metrics `aa-cis/ops`, `AA/Crm/*` (support, membership, ops release), `AA/RDS CisAppTooManyConnections` | Their 20 metric filters are removed |
+| Custom metrics kept | `AA/Crm/Kms DecryptCalls` (anomaly band), `AA/RDS BackupCopyMaxAgeDays` + retention (copy age), `AA/Identity BreakglassTokenIssued` and `TriggerUnexpectedError` (no `default_value`: billed only in hours with an event) |
 | Log group `/aa-cis-dev/diagnostic/vpc-flow-logs` | 365 -> 30 days; flow logs record `REJECT` traffic only (security signal kept, ~95 % less ingest) |
 | Log group `aws-waf-logs-aa-cis-dev` | 365 -> 30 days on Dev; logging filter keeps `BLOCK` and `COUNT` requests only (allowed requests are dropped) |
 | Log group `/aws/apigateway/welcome` | imported into Terraform with 30 days |
@@ -174,14 +174,14 @@ event alarms (one e-mail per incident instead of two).
 
 | | Before (Nov forecast) | After |
 |---|---:|---:|
-| Alarms (alarm-metric units x 0.10 USD) | 105 -> ~10.5 USD | 28 -> 2.80 USD (25 alarms incl. the new CIS one and the #581 digest one; copy-age 2 metrics, KMS anomaly 3) |
+| Alarms (alarm-metric units x 0.10 USD) | 105 -> ~10.5 USD | 30 -> 3.00 USD (27 alarms incl. the new CIS one, the #581 digest one, the NAT instance check and the identity unexpected-error alarm; copy-age 2 metrics, KMS anomaly 3) |
 | Custom metrics (x 0.30 USD) | ~28 -> ~8.1-9 USD | ~3 -> ~0.90 USD |
 | Dashboard | ~2.3-3 USD | 0 |
 | API requests, SNS, SES, EventBridge, Lambda | ~0.1 USD | ~0.05 USD |
-| **Alerting total** | **~21 USD/month** | **~3.8 USD/month** |
+| **Alerting total** | **~21 USD/month** | **~4.0 USD/month** |
 | Logs (vended VPC flow + WAF, ingest) | ~3.0 USD (Oct) | ~0.3 USD (REJECT-only flow logs, BLOCK/COUNT-only WAF log) |
 
-E-mail: 92 alarms sent OK mails too; after the diet 13 state alarms do. Event checks in the apps send one e-mail per
+E-mail: 92 alarms sent OK mails too; after the diet 14 state alarms do. Event checks in the apps send one e-mail per
 check per UTC day (or per break-glass session / ops release / refused event).
 
 ## 6. What is not covered any more (accepted)
