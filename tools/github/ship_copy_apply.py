@@ -21,6 +21,9 @@ Target: NNN, <prefix>-NNN or the file name.
 4. Wait for that run (status polls, no `gh run watch`, which can hang: lesson S252), print its conclusion and the key
    log lines (job log API: lesson S243/S254).
 5. Read the owner app's /health/ready: status, schema_version and whether the key is in registered_keys.
+Dev Migration Apply can apply the file itself (expand, and contract when every job table is idle: AA-1032 part 1):
+an apply whose key is already registered is not dispatched, and a red run (exit 17, apply lock held) whose key shows
+up within 5 minutes passes with a warning.
 
 Exit: 0 applied / checked and (apply) the key is registered | 1 run not green or key not registered |
 2 usage, dispatch failed or run not found | 3 copy PR red | 4 refused (destructive, closed) | 5 timed out.
@@ -254,6 +257,15 @@ def fetch_ready(url: str) -> dict:
         return json.loads(resp.read().decode("utf-8"))
 
 
+def ready_now(owner: str, num: str, fetch=None) -> bool:
+    """One read, no wait: is the key already in the app's registered_keys?"""
+    try:
+        d = (fetch or fetch_ready)(READY_URL[owner])
+    except Exception:  # noqa: BLE001 - unreachable means "not known", the dispatch goes ahead
+        return False
+    return ready_key(owner, num) in (d.get("registered_keys") or [])
+
+
 def check_ready(runner: Runner, owner: str, num: str, *, timeout: float, interval: float = 30,
                 fetch=fetch_ready) -> bool | None:
     """True/False = key registered or not after waiting; None = the owner has no readiness endpoint."""
@@ -319,6 +331,11 @@ def main(argv: list[str] | None = None, runner: Runner | None = None, fetch=fetc
             log(f"{path}: expand file, Migration Apply applies it after the copy merge; not dispatching")
             ok = check_ready(runner, owner, num, timeout=a.run_timeout, interval=a.interval, fetch=fetch)
             return 0 if ok in (True, None) else 1
+        if a.mode == "apply" and READY_URL.get(owner) and ready_now(owner, num, fetch):
+            # Dev Migration Apply may have applied it already (expand, or contract when idle: AA-1032 part 1).
+            log(f"{path}: key {ready_key(owner, num)} already registered; not dispatching")
+            check_ready(runner, owner, num, timeout=0, fetch=fetch)
+            return 0
         run = dispatch(runner, path, a.mode)
         rid = int(run["databaseId"])
         conclusion = wait_run(runner, rid, timeout=a.run_timeout, interval=a.interval)
@@ -326,6 +343,12 @@ def main(argv: list[str] | None = None, runner: Runner | None = None, fetch=fetc
         for line in key_log_lines(runner, rid):
             log(f"  {line}")
         if conclusion != "success":
+            if a.mode == "apply" and READY_URL.get(owner):
+                # Exit 17 (apply lock held): Migration Apply may be applying the same file right now.
+                if check_ready(runner, owner, num, timeout=300, interval=a.interval, fetch=fetch):
+                    log(f"WARN run {rid} is {conclusion}, but the key is registered: applied by another run "
+                        f"(Migration Apply?); read run {rid}'s log above")
+                    return 0
             return 1
         if a.mode == "check":
             return 0

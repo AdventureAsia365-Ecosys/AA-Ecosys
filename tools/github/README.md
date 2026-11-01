@@ -58,6 +58,9 @@ checkout: `python3 tools/github/<tool>.py --help`.
   titled `DB Migrate <mode> <owner>/<file>` (Infra `run-name`); before that title exists it takes the one new run
   and refuses to guess between two. Then it polls that run, prints its conclusion and key log lines, and reads the
   owner app's `/health/ready` (`schema_version`, key in `registered_keys`).
+- Dev Migration Apply may apply the file itself (expand; contract when idle once AA-1032 part 1 lands): a key already
+  in `registered_keys` is not dispatched, and a red run whose key shows up within 5 minutes (exit 17, the apply lock
+  was held by Migration Apply) passes with a warning.
 - Exit 0 applied and registered, 1 run red or key missing, 2 dispatch/run not found, 3 copy PR red, 4 refused,
   5 timeout.
 

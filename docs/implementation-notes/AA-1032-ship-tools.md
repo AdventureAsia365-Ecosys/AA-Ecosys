@@ -36,6 +36,9 @@ of the issue run in other lanes (`AA-1032-<lane>.md` where they keep notes).
   closed duplicates, e.g. Infra #591 closed / #592 merged for cis-329). No PR but the file on Infra main is accepted.
 - **Class from the file header on Infra main**, not from PR labels (labels can lag): expand → Migration Apply applies
   it, no dispatch, readiness checked; destructive → refused without `--allow-destructive`; else contract → dispatch.
+- **Works beside the contract auto-apply lane (part 1):** before an apply dispatch the tool reads `/health/ready` once
+  and skips the dispatch when the key is already registered; a red run (exit 17, apply lock held by Migration Apply)
+  is accepted with a warning when the key shows up within 5 minutes.
 - **`dbmig.sh` kept as the entry point** (docs and runbooks name it) but now delegates to
   `ship_copy_apply.py --no-copy`, so its old "last run != before" logic (same race) is gone. With `--no-copy` the call
   is an explicit dispatch: expand and destructive files are dispatched as before.
@@ -77,4 +80,4 @@ of the issue run in other lanes (`AA-1032-<lane>.md` where they keep notes).
   for the dispatch lock and PR body temp files (`.tmp-session/`).
 - Exit codes are shared: 0 ok, 1 git / run red, 2 usage or gh error, 3 red check, 4 refused / merge failed,
   5 timeout. A train or merge list stops at the first non-zero.
-- `python -m unittest discover -s tools/github -p 'test_*.py'` — 45 offline tests.
+- `python -m unittest discover -s tools/github -p 'test_*.py'` — 47 offline tests.

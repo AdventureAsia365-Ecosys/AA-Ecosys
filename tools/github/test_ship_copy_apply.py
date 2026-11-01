@@ -170,9 +170,17 @@ class MainFlowTest(unittest.TestCase):
     def ready(keys):
         return lambda url: {"status": "ok", "schema_version": keys[-1], "registered_keys": keys}
 
+    @staticmethod
+    def ready_after_dispatch(r: FakeRunner):
+        """crm-038 shows up in registered_keys only once a DB Migrate run was dispatched."""
+        def fetch(url):
+            keys = ["crm-037"] + (["crm-038"] if r.called("workflow") else [])
+            return {"status": "ok", "schema_version": keys[-1], "registered_keys": keys}
+        return fetch
+
     def test_contract_copy_merged_dispatched_own_run_followed(self):
         r = self.runner("-- crm-038: tasks\nCREATE TABLE crm.task (id int);\n")
-        code = sca.main(["crm", "crm-038"], runner=r, fetch=self.ready(["crm-037", "crm-038"]))
+        code = sca.main(["crm", "crm-038"], runner=r, fetch=self.ready_after_dispatch(r))
         out = self.out.getvalue()
         self.assertEqual(code, 0, out)
         merge = [c for c in r.called(ship_common.AS_APP) if "merge" in c][0]
@@ -188,8 +196,22 @@ class MainFlowTest(unittest.TestCase):
 
     def test_already_merged_copy_is_found(self):
         r = self.runner("CREATE TABLE crm.task (id int);\n", copy_state="MERGED")
-        self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=self.ready(["crm-038"])), 0)
+        self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=self.ready_after_dispatch(r)), 0)
         self.assertFalse([c for c in r.called(ship_common.AS_APP) if "merge" in c])
+        self.assertEqual(len([c for c in r.called(ship_common.AS_APP) if "workflow" in c]), 1)
+
+    def test_key_already_registered_is_not_dispatched(self):
+        # Dev Migration Apply applied the contract file on its own (AA-1032 part 1).
+        r = self.runner("CREATE TABLE crm.task (id int);\n", copy_state="MERGED")
+        self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=self.ready(["crm-037", "crm-038"])), 0)
+        self.assertFalse([c for c in r.called(ship_common.AS_APP) if "workflow" in c])
+        self.assertIn("already registered; not dispatching", self.out.getvalue())
+
+    def test_red_run_but_applied_by_another_run_passes_with_a_warning(self):
+        # Exit 17: Migration Apply held the apply lock and applied the file itself.
+        r = self.runner("CREATE TABLE crm.task (id int);\n", conclusion="failure", copy_state="MERGED")
+        self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=self.ready_after_dispatch(r)), 0)
+        self.assertIn("applied by another run", self.out.getvalue())
 
     def test_expand_is_not_dispatched_and_destructive_is_refused(self):
         r = self.runner("-- migrate: expand\nALTER TABLE crm.task ADD COLUMN x int;\n")
