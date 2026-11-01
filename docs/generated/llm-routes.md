@@ -21,8 +21,8 @@ related: [APP-06-prompts, APP-06-eval, CAT-01, AA-900]
 
 > **Generated - do not edit.** Source: a read-only snapshot of `shared.llm_role_config` and
 > `shared.llm_model_catalog` on the shared Dev RDS, captured 2026-10-29T05:33Z
-> ([`llm-routes.snapshot.json`](llm-routes.snapshot.json)). The admin changes routes and models in CIS Settings
-> (LLM models); after such a change, or a migration that touches either table, capture a new snapshot and render
+> ([`llm-routes.snapshot.json`](llm-routes.snapshot.json)). The admin changes routes and models in CIS AI providers ›
+> Routing (`/admin/ai-gateway`); after such a change, or a migration that touches either table, capture a new snapshot and render
 > this page (`tools/docs/gen_llm_routes.py`, module docstring). The docs lint fails when this page and the snapshot disagree.
 
 A route is the order the gateway tries models for a stage: the primary, then each fallback; the shadow (when set)

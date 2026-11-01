@@ -1,7 +1,7 @@
 """Generate the LLM route and model table (docs/generated/llm-routes.md) from a snapshot of the Model Gateway config.
 
 AA-900 (APP-06-routes). The routes (`shared.llm_role_config`) and the model catalog (`shared.llm_model_catalog`) are
-runtime data the admin edits in CIS Settings, so the table is regenerated from a snapshot of those two tables, never
+runtime data the admin edits in CIS AI providers › Routing (`/admin/ai-gateway`), so the table is regenerated from a snapshot of those two tables, never
 edited by hand. Two committed files: the snapshot `docs/generated/llm-routes.snapshot.json` (the generator's input)
 and the page `docs/generated/llm-routes.md` (its output). `check` proves the page is what `render` makes from the
 snapshot; `test_llm_routes.py` runs it in the docs-lint "Unit tests of the lint tools" step.
@@ -180,8 +180,8 @@ related: [APP-06-prompts, APP-06-eval, CAT-01, AA-900]
 
 > **Generated - do not edit.** Source: a read-only snapshot of `shared.llm_role_config` and
 > `shared.llm_model_catalog` on the shared Dev RDS, captured {captured}
-> ([`llm-routes.snapshot.json`](llm-routes.snapshot.json)). The admin changes routes and models in CIS Settings
-> (LLM models); after such a change, or a migration that touches either table, capture a new snapshot and render
+> ([`llm-routes.snapshot.json`](llm-routes.snapshot.json)). The admin changes routes and models in CIS AI providers ›
+> Routing (`/admin/ai-gateway`); after such a change, or a migration that touches either table, capture a new snapshot and render
 > this page (`{GENERATOR}`, module docstring). The docs lint fails when this page and the snapshot disagree.
 
 A route is the order the gateway tries models for a stage: the primary, then each fallback; the shadow (when set)

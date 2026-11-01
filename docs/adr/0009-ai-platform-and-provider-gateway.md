@@ -43,6 +43,25 @@
   hold), AA-1004 (organization and SCP), AA-1016 (tenant AI budget), AA-1015 (TripPlanner limits), AA-964 (CRM
   gateway), AA-896 (alarms).
 
+## Implementation status (2026-11-01)
+
+What runs today, with a diagram and a live / planned table: [AI gateway (as built)](../architecture/ai-gateway.md).
+In short:
+
+- **Built and live on Dev:** ledger v2 (CIS 319, CRM crm-032), registry v2 with provider kinds, families, stage ×
+  model parameters and the per-kind secret guard (320, 322), the tenant AI budget and prompt register tables (321),
+  the TripPlanner contract views and the shared core `aa_llm` vendored by TripPlanner and the CRM (323, decision 13),
+  five acc2 candidate chat models catalogued with no route (324, decision 14), the connection-level circuit with
+  bell and e-mail alerts, the bulk re-queue, route deadlines (no route sets one yet) and the daily probe (on).
+- **Decision 11** is still Proposed, but migration 322 already enforces part of it: secret names, base URLs and
+  catalog prices change only by migration, and the admin answers 422 when asked to edit them.
+- **Not live yet:** the Anthropic API warm path (no key; decision 5), the OpenAI API monthly cap (decision 14), the
+  monthly failover drill (decision 7), any acc2 chat route (decision 12 ladder first), the revoke of TripPlanner's
+  grandfathered SELECT (decision 13), the writer warm path, which also needs a data-scope change because writer stages
+  are `aws_only` and the Anthropic API connection is `vendor_direct` (decisions 5 and 10), and a real CRM provider (the
+  CRM runs the stub on Dev). Owner of each: the tech lead; the follow-ups below and the
+  [backlog](../backlog/README.md) carry them.
+
 ## Decision record (31/10/2026)
 
 The tech lead answered the three questions of the design summary on 31/10/2026 (S261): yes to all three proposals,

@@ -28,7 +28,8 @@ with the list of accounts you need.
 
 All infrastructure lives in **acc2**. acc3 only hosts the Bedrock "satellite" role that lets acc2 call chat models,
 the Bedrock batch roles, a read-only Cost Explorer role and its own budget and cost anomaly alerts (ecosystem
-architecture §4.3, §4.4). The ecosystem uses these two accounts only. LLM chat calls run on acc3
+architecture §4.3, §4.4). Workloads use these two accounts only; a third, the management account, holds the AA
+organization and runs no workload (below). LLM chat calls run on acc3
 ([ADR 0001a](adr/0001a-retire-acc1-llm-on-acc3-only.md)); since [ADR 0009](adr/0009-ai-platform-and-provider-gateway.md)
 decision 14 (accepted 2026-10-31) acc2 may also serve chat models for eval, judge and validate stages once a model
 passes the qualification ladder, and the direct Anthropic and OpenAI APIs are capped warm paths outside AWS.
@@ -36,8 +37,10 @@ passes the qualification ladder, and the direct Anthropic and OpenAI APIs are ca
 **Target names ([ADR 0018](adr/0018-lean-aws-account-model.md), accepted 2026-10-31):** acc2 becomes `aa-nonprod`
 and acc3 `aa-ai` when they join the AA-owned AWS organization; the new management account `aa-management` (created
 2026-10-30, AA-1004) holds the organization and billing only, never a workload; `aa-prod` is created at go-live. The
-management account is reached through IAM Identity Center; its ID is added to this table when the organization root is
-applied.
+organization root is applied (organization, OUs, SCPs, organization trail, budgets, Identity Center; checked
+2026-11-01), and no workload account has joined yet. The management account is reached only through IAM Identity
+Center: run `aws sso login --sso-session aa-mgmt-sso`, then use the profile `aa-mgmt`. Its ID is kept out of this
+public repo; read it with `aws sts get-caller-identity --profile aa-mgmt`.
 
 | Name | AWS account ID | Region | CLI profile | Holds | Notes |
 |---|---|---|---|---|---|
