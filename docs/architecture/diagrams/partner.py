@@ -1,8 +1,9 @@
-"""AA-Partner view: agency CRM and the tenant Content studio behind CloudFront, data and contracts (AA-697).
+"""AA-Partner view: agency CRM and the tenant Content studio behind CloudFront, data and contracts (AA-697, AA-1020).
 
 Facts: apps/AA-Partner CONTEXT.md ("Role in the ecosystem", "Route classes", "Job runner", "Web", "Tenant portal",
 "LLM gateway", "F3 PII scrubber"), infra/AA-CIS-Infra CONTEXT.md (crm_edge.tf, crm_agency_edge.tf, crm_portal.tf)
-and docs/ecosystem-architecture.md sections 1, 4.1, 4.6; S3 and KMS from the live aa365 state (2026-10-28).
+and docs/ecosystem-architecture.md sections 1, 4.1, 4.3, 4.6 (reviewed 2026-11-01); S3 and KMS from the live aa365
+state (2026-10-28); the AA staff console (crm-staff client, crm-033) and the gateway ledger (crm-032) from CONTEXT.
 Subnet tiers from AA-CIS-Infra modules/vpc.
 """
 from diagrams.aws.compute import ECR, Fargate
@@ -23,6 +24,7 @@ def draw(filename: str) -> None:
         with group("people", "People"):
             agents = Users("Agency staff\n(CRM, Content studio)")
             clients = Users("Agency clients\n(proposals, forms)")
+            aa_staff = Users("AA staff\n(staff console)")
 
         with group("github", "GitHub: AA-Partner"):
             deploy = GithubActions("GitHub Actions\ndeploy api · web · portal")
@@ -34,7 +36,7 @@ def draw(filename: str) -> None:
             role = IAMRole("AWS IAM\ndeploy role (OIDC)")
             with group("region", "us-west-1"):
                 ecr = ECR("Amazon ECR\nimage per git SHA")
-                cognito = Cognito("Amazon Cognito\nPARTNER pool (MFA) · M2M")
+                cognito = Cognito("Amazon Cognito\nPARTNER (MFA) · M2M\nWORKFORCE crm-staff")
                 cis = APIGateway("Amazon API Gateway\nCIS API: catalog · membership\nContent studio /v1")
                 booking = APIGateway("Amazon API Gateway\nBooking API: booking.b2b.v1")
                 guard = Bedrock("Amazon Bedrock Guardrails\nPII scrubber")
@@ -49,9 +51,9 @@ def draw(filename: str) -> None:
                         with group("ecs", "Amazon ECS cluster", "Fargate ARM64") as ecs:
                             web = Fargate("aa-crm-dev-web\nCRM (Next.js)")
                             portal = Fargate("aa-crm-dev-portal\nContent studio (Next.js)")
-                            api = Fargate("aa-crm-dev-api\nFastAPI + crm.job worker")
+                            api = Fargate("aa-crm-dev-api\nFastAPI + crm.job worker\nAI gateway (aa_llm core)")
                     with group("private", "Private subnets", "database"):
-                        rds = RDSPostgresqlInstance("Amazon RDS for PostgreSQL\nschema crm (crm-NNN), RLS per agency")
+                        rds = RDSPostgresqlInstance("Amazon RDS for PostgreSQL\nschema crm (crm-NNN), RLS per agency\nAI ledger crm.llm_call")
 
         with group("outside", "Agency's own accounts", "bring your own"):
             byo = Internet("Twilio / WhatsApp · Stripe\nmailbox · e-sign")
@@ -59,7 +61,7 @@ def draw(filename: str) -> None:
         place({
             agents: (0, 1), cf_agency: (1, 1), nlb: (2, 1), alb: (3, 1), web: (4, 1), booking: (8, 1),
             clients: (0, 2), cf_client: (1, 2), api: (5, 2), cis: (8, 2),
-            portal: (4, 3), cognito: (7, 3),
+            aa_staff: (0, 3), portal: (4, 3), cognito: (7, 3),
             rds: (6, 4), byo: (9, 4),
             deploy: (0, 5), role: (1, 5), ecr: (2, 5), files: (5, 5), kms: (6, 5), guard: (7, 5),
         })
@@ -67,6 +69,7 @@ def draw(filename: str) -> None:
 
         link(agents, cf_agency)
         link(clients, cf_client)
+        link(aa_staff, cf_agency)
         # no "VPC origin" label: the NLB text says it, and two borders leave no room for a label there
         link(cf_agency, nlb, out_of=cdn)
         link(nlb, alb)

@@ -78,6 +78,18 @@ class RenderTest(unittest.TestCase):
         page = g.render({"schema": g.SCHEMA, "routes": [], "models": []})
         self.assertIn("## No snapshot yet", page)
 
+    def test_known_gaps_callout_only_when_set(self) -> None:
+        self.assertNotIn("Known gaps", g.render(SNAP))
+        self.assertNotIn("known_gaps", g.snapshot_text(SNAP))
+        gapped = dict(SNAP, known_gaps=["  Two zz rows added after the capture  ", ""])
+        page = g.render(gapped)
+        self.assertIn("> **Known gaps of this snapshot** (the next capture clears this list):\n"
+                      "> - Two zz rows added after the capture\n", page)
+        self.assertEqual(g.normalise(gapped)["known_gaps"], ["Two zz rows added after the capture"])
+        self.assertNotEqual(g.fingerprint(SNAP), g.fingerprint(gapped))
+        self.assertEqual(g.redact(["acct " + "3" * 12]), ["acct [redacted]"])
+        self.assertEqual(g.normalise(dict(SNAP, known_gaps=["acct " + "3" * 12]))["known_gaps"], ["acct [redacted]"])
+
     def test_wrong_schema_is_refused(self) -> None:
         with self.assertRaises(ValueError):
             g.render({"schema": "other", "routes": []})

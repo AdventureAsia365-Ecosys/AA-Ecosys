@@ -7,12 +7,12 @@ status: draft
 owner: nghiep
 audience: [engineer, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-api, aa-cis-worker, tripplanner-lambda, aa-crm-api]
-last_reviewed: 2026-10-31
+last_reviewed: 2026-11-01
 review_every_days: 30
-related: [APP-06-routes, APP-06-eval, APP-06-prompts, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-804, AA-820]
+related: [ARCH-01-ai-gateway, APP-06-routes, APP-06-eval, APP-06-prompts, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-804, AA-820]
 ---
 
-# AI Use Register (v0)
+# AI Use Register (v1)
 
 One row per place where the ecosystem calls an AI model or a paid data provider. It answers, for each stage: what it
 is for, who owns the decision to change it, which provider and model family serve it today, which data may leave AWS,
@@ -22,11 +22,14 @@ which human checks the output before anyone relies on it.
 - **Why it exists:** [ADR 0009](../adr/0009-ai-platform-and-provider-gateway.md) (AI platform and provider gateway,
   decisions 1–9, 13 and 14 accepted 31/10/2026) and the S261 architecture review item TL-15. The tenant terms and the
   partner-portal privacy notice take their provider list from this page (AA-820).
-- **v0 limits:** written by hand from the code on `main` (31/10/2026) and the route snapshot of 29/10/2026. Routes
-  change by configuration, so the [generated route table](../generated/llm-routes.md) (`APP-06-routes`, from
-  `shared.llm_role_config` and `shared.llm_model_catalog`) wins for the model of a stage. v1 adds what ADR 0009
-  builds: one stage profile per app with its own budget and kill switch (decisions 4 and 6), ledger v2 columns
-  (decision 8) and the CRM stages read from `crm.ops.v1`.
+- **v1 (2026-11-01):** adds what the S262 gateway build made live ([AI gateway (as built)](ai-gateway.md)): ledger v2
+  for CIS, TripPlanner and the CRM, the Jev and DataForSEO caps (CIS 318), the tenant AI budget (321), the per-kind
+  registry rows of Jev, DataForSEO, Geoapify and Guardrails (322), the TripPlanner contract views (323), the acc2
+  candidate models (324), the probe and Bedrock Batch ledger rows, and the gateway's circuit, route deadline and
+  re-queue as switches. The model column still comes from the 29/10 route snapshot: no route changed since (320–324
+  add no route row), and the [generated route table](../generated/llm-routes.md) (`APP-06-routes`) wins when they
+  differ. Its model catalog half predates 324 (the five acc2 candidates are missing there until the snapshot is
+  recaptured, a backlog follow-up). v0 was written by hand from the code on `main` on 31/10/2026.
 - **Who updates it:** the PR that adds, removes or re-routes a stage, adds a provider, or changes a stage's data
   scope, budget or human gate updates its row. A new provider also updates the tenant terms list (AA-820).
 
@@ -38,8 +41,8 @@ which human checks the output before anyone relies on it.
 | Provider / family today | Primary model, then fallbacks, from the route table. "Bedrock (acc3)" = Amazon Bedrock in the LLM account; "OpenAI API" = the OpenAI platform API outside AWS; "acc2" = Bedrock in the infrastructure account. Families: Anthropic (Claude Sonnet 4.6 / 5.5, Haiku 4.5), OpenAI (GPT-5.6 Luna, GPT-6 Luna), Cohere (Embed v4). |
 | Data scope | From `shared.llm_role_config.allowed_scopes` (CIS migration 311, `shared/llm_client/data_scope.py`): `aws_only` = the stage's content may only go to connections inside AWS; `vendor_direct` = it may also reach a vendor API outside AWS. Every CIS stage whose route names a model reachable only outside AWS (`gpt-6-luna-openai`) is `vendor_direct`; every other stage is `aws_only`. |
 | Tenant data | Yes when the prompt carries a tenant's brand settings, briefs or tenant-written text. Traveller input is noted separately. |
-| Budget source | What stops spend today. **Connection** = `shared.llm_provider_connection.monthly_budget_usd` (every CIS and TripPlanner call). **Job cap** = a `shared.spend_budget` row (provider × `job:<kind>`) that the job loads with `shared/cost_guard.py` before each call. "Connection only" means no per-stage or per-job cap exists yet (ADR 0009 decision 6 closes this). |
-| Kill switch | What turns the stage off without a deploy of new code. Today there is **no per-stage switch in the gateway**: `is_active = false` on a route row makes the code fall back to its built-in default route (`SAFE_DEFAULTS`), it does not stop calls. The switches that exist are the connection `enabled` flag (all stages on that connection), a hard-stop budget row, and the feature flags named per row. |
+| Budget source | What stops spend today. **Connection** = `shared.llm_provider_connection.monthly_budget_usd` (every CIS and TripPlanner call). **Job cap** = a `shared.spend_budget` row (provider × `job:<kind>`) that the job loads with `shared/cost_guard.py` before each call. **Tenant budget** = a `shared.tenant_ai_budget` row (CIS 321, AA-1016): alert, then staff approval for T-stages; a tenant without a row has none. "Connection only" means no per-stage or per-job cap exists yet (ADR 0009 decision 6 closes this). |
+| Kill switch | What turns the stage off without a deploy of new code. Since v1 the gateway also stops a connection by itself (connection circuit, AA-1018), ends a slow route at its `route_deadline_s` (none set yet), and holds refused jobs for the bulk re-queue. There is still **no per-stage switch in the gateway**: `is_active = false` on a route row makes the code fall back to its built-in default route (`SAFE_DEFAULTS`), it does not stop calls. The switches that exist are the connection `enabled` flag (all stages on that connection), a hard-stop budget row, and the feature flags named per row. |
 | Golden set / eval | How a prompt or route change is measured ([eval runbook](https://github.com/AdventureAsia365-Ecosys/AA-CIS-App/blob/main/docs/llm/eval-runbook.md)): **R2** = a run on the frozen AA-729 golden set (`shared.eval_golden_set`) for writers `a1`, `t2`, `t9_blog`, `t9_social`; **Q2** = judge re-score; otherwise the baseline named in the CIS prompt register. |
 | Human gate | Who checks the output before it is published, served or relied on. |
 
@@ -56,7 +59,7 @@ which human checks the output before anyone relies on it.
 | `s1_flag_fix` | CIS | Repair the sentences the checks flagged | Tech lead | Haiku 4.5, Bedrock (acc3) / Anthropic | aws_only | No | Connection only | Connection `enabled` | R2 `a1` (part of the graph) | A2 review |
 | `s1_itinerary_nudge` | CIS | Fix itinerary structure in an S1 draft | Tech lead | Haiku 4.5, Bedrock (acc3) / Anthropic | aws_only | No | Connection only | Connection `enabled` | R2 `a1` (part of the graph) | A2 review |
 | `s1_source_facts` | CIS | Extract per-day source facts for the writer | Engineer on duty | GPT-6 Luna → Haiku 4.5, Bedrock (acc3) / OpenAI, Anthropic | aws_only | No | Connection only | Flag `S1_STRUCTURED_FACTS` (env or tenant flag, default off) | Prompt register baseline | A2 review |
-| `s1_grounding` (Jev) | CIS | Ask Jev whether each sentence is supported by the source (`a1_claim_supported`) | Tech lead | Jev (TypeSafe), decision API outside AWS | Jev connection (outside AWS) | No | None before the call today (Jev has no pre-call budget; ADR 0009 first slice adds one) | Question mode off / shadow / enforce (`decision_question`, CIS ADR 0007); Jev failing never blocks | Jev verdicts act only when enforced and calibrated (CIS ADR 0007) | A2 review; unsupported claims go to manual check |
+| `s1_grounding` (Jev) | CIS | Ask Jev whether each sentence is supported by the source (`a1_claim_supported`) | Tech lead | Jev (TypeSafe), decision API outside AWS | Jev connection (outside AWS) | No | Jev day cap 5 USD, hard stop before each ask (CIS 318, AA-642 S0); a stop leaves the stage on its own rule | Question mode off / shadow / enforce (`decision_question`, CIS ADR 0007); Jev failing never blocks | Jev verdicts act only when enforced and calibrated (CIS ADR 0007) | A2 review; unsupported claims go to manual check |
 | Other Jev `decide` questions | CIS | Typed yes/no questions in debate, claim rules, trip facts, atom ranking, segment matching, tenant pipeline (`shared.decision_log`) | Engineer on duty | Jev (TypeSafe) | Jev connection; tenant questions only for allowlisted tenants | Some (tenant pipeline, allowlisted tenants only) | None before the call today | Per-question mode (off / shadow / enforce) | Per question (CIS ADR 0007) | As the calling stage |
 | `s1_atom_writer` | CIS | Route kept for atom writing; **no caller found on `main`** | Engineer on duty | Sonnet 4.6, Bedrock (acc3) / Anthropic | aws_only | No | Connection only | Connection `enabled` | None | None (not called) |
 | `a3_atomize` | CIS | Cut a Master tour into atoms (A3) | Engineer on duty | GPT-6 Luna → Haiku 4.5, Bedrock (acc3) / OpenAI, Anthropic | aws_only | No | Connection only | Connection `enabled` | Offline A/B of S224 (prompt register) | None per item; atoms are curated in the admin atom pages |
@@ -70,7 +73,10 @@ which human checks the output before anyone relies on it.
 | `supply_content_writer` | CIS (for Booking) | Customer description and highlights of a Booking hotel or service, from staff-entered facts treated as untrusted data | Tech lead | Sonnet 5.5 → Sonnet 4.6, Bedrock (acc3) / Anthropic | aws_only | No | Job cap `bedrock` × `job:supply_content_draft` (per day of that kind) + `SUPPLY_CONTENT_MAX_DRAFTS_PER_DAY` | Flag `SUPPLY_CONTENT_LLM=off` | None | Booking staff review each draft before Booking shows it |
 | `writing_memory_mine`, `writing_memory_eval` | CIS | Draft writing-memory rules from edits; eval judge of the R2 runner | Tech lead | GPT-5.6 Luna → GPT-6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API) / OpenAI | vendor_direct | Possible: writing memory has tenant-scoped rows (CIS ADR 0010) | Job cap `bedrock` × `writing_memory_mine`; eval runs: 25 USD a month over every writing-memory stage (`MONTH_CAP_USD`) | Per-writer memory switch and release activation (CIS ADR 0010) | R2 itself | Release activation by staff (CIS ADR 0010) |
 | DataForSEO (`data`) | CIS | Keyword volumes, SERP and question research for tours and segments | Engineer on duty | DataForSEO API, outside AWS | Keywords and place names only | No | Job cap `dfs` (a global day cap, seeded 10 USD/day, plus per-job rows: segment research, S1 SEO prefetch, question top-up) | Budget hard stop | Not applicable | Not applicable |
-| Geocoder (`data`) | CIS | Geocode and shape places (`services/places/geocoder.py`) | Engineer on duty | External geocoder, outside AWS (`geo.geocode_call`) | Place names only | No | Job cap `geocoder` (place geocode, relocate, shape jobs) | `PLACE_SHAPES_ENABLED` (shape job, default off); budget hard stop | AA-997 accuracy audit | Flagged pins hidden (AA-997) |
+| Geocoder (`data`) | CIS | Geocode and shape places (`services/places/geocoder.py`) | Engineer on duty | Geoapify, outside AWS (`geo.geocode_call`, ledger v2 row; registry row since CIS 322) | Place names only | No | Job cap `geocoder` (place geocode, relocate, shape jobs) | `PLACE_SHAPES_ENABLED` (shape job, default off); budget hard stop | AA-997 accuracy audit | Flagged pins hidden (AA-997) |
+| `s1_generate` (Bedrock Batch) | CIS | The same A1 rewrite sent as a Bedrock Batch job (`s1_batch`); each record writes a ledger row at the batch price | Tech lead | Haiku 4.5, Bedrock Batch (acc3) / Anthropic; **blocked**: AWS has not enabled Batch Inference on acc3 (AA-624) | aws_only | No | Connection only | Connection `enabled`; no batch is submitted while AA-624 is open | R2 `a1` | A2 review |
+| acc2 candidate chat models (Nova Lite, Nova 2 Lite, Llama 4 Maverick, Llama 4 Scout, Kimi K3) | CIS | Catalogued with one acc2 deployment each (CIS 324) for eval, judge and validate stages; **no route names them** | Tech lead | Bedrock (acc2) / Amazon, Meta, Moonshot | aws_only | No | Connection only | Connection `enabled`; no route | The qualification ladder before any route (ADR 0009 decision 12, AA-900) | Not applicable until routed |
+| `adhoc_conn_test` (daily probe, Test connection) | CIS | One small call per enabled text deployment (`llm_connection_probe`, daily 05:00 UTC, at most 30) or one admin Test; writes `access_state` and `last_probe_at` | Engineer on duty | Every enabled connection | The connection's own scope; the prompt is a fixed test text | No | Connection only (under 1 USD a month on Dev, ADR 0009 decision 7) | `LLM_DAILY_PROBE` (on, Dev) | Not applicable | Not applicable |
 
 ### CIS: T-series (tenant content, Content studio)
 
@@ -80,23 +86,23 @@ OpenAI API when both Bedrock judge models fail. The tenant terms state this as "
 
 | Stage | App | Purpose | Owner role | Provider / family today | Data scope | Tenant data | Budget source | Kill switch | Golden set / eval | Human gate |
 |---|---|---|---|---|---|---|---|---|---|---|
-| `t2_generate` | CIS | T2: rewrite a catalog tour in the tenant's brand voice | Tech lead | Sonnet 4.6, Bedrock (acc3) / Anthropic | aws_only | Yes (brand settings) | Connection only (tenant budget: AA-1016, not built) | Connection `enabled` | R2 `t2` | Tenant reviews and exports; AI notice at review, publish and export |
-| `t2_judge`, `t2_brand_audit` | CIS | Score and audit a T2 rewrite | Tech lead | GPT-5.6 Luna → GPT-6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API, `t2_judge` only); 10 % shadow on GPT-6 Luna / OpenAI | vendor_direct | Yes | Connection only | Connection `enabled`; brand claim check `T2_BRAND_CLAIM_CHECK=off` | Q2 | Tenant review |
-| `t2_flag_fix`, `t2_itinerary_nudge` | CIS | Repair flagged T2 sentences and itinerary structure | Tech lead | Haiku 4.5, Bedrock (acc3) / Anthropic | aws_only | Yes | Connection only | Connection `enabled` | R2 `t2` (part of the graph) | Tenant review |
-| `t7_debate_judge` | CIS | Brand-fit call of the T7 debate | Tech lead | GPT-5.6 Luna → GPT-6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API); 10 % shadow | vendor_direct | Yes | Connection only | Connection `enabled` | Q2 | Tenant review |
-| `t8_angle_gen` | CIS | Propose content angles for a tenant brief | Tech lead | Sonnet 4.6, Bedrock (acc3) / Anthropic | aws_only | Yes | Connection only | Connection `enabled` | Prompt register baseline | Tenant picks the angle |
-| `t9_write` | CIS | T9: blog and social pieces about a tour | Tech lead | Sonnet 4.6, Bedrock (acc3) / Anthropic | aws_only | Yes | Connection only | Connection `enabled` | R2 `t9_blog`, `t9_social` | Authenticity check (no reviews, testimonials, first-person customers, independence claims); tenant reviews and presses publish (T10/T11) |
-| `t9_repair` | CIS | Sentence repair, SEO fit and the admin sentence suggest | Tech lead | Haiku 4.5 → Sonnet 4.6, Bedrock (acc3) / Anthropic | aws_only | Yes | Connection only | Connection `enabled` | Prompt register baseline | Tenant review |
-| `t9_faq_filter`, `t9_faq_answer_fit` | CIS | Filter real search questions for the blog FAQ; check each answer fits | Engineer on duty | Haiku 4.5 / Sonnet 4.6, Bedrock (acc3) / Anthropic | aws_only | Yes | Connection only | Flag `T9_FAQ_LLM_FILTER` (default off) | S247 trial | Tenant review |
-| `t10_judge` | CIS | T10 gate: score a T9 piece | Tech lead | GPT-5.6 Luna → GPT-6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API) / OpenAI | vendor_direct | Yes | Connection only | Connection `enabled` | Q2 | Tenant review |
-| `t10_adjudicate` | CIS | T10 tier-2 adjudicator of the writer's sentences | Tech lead | GPT-6 Luna → GPT-5.6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API) / OpenAI | vendor_direct | Yes | Connection only | `T10_ADJ_MODE` (default off) | None yet | Tenant review |
-| `t10_claims` | CIS | F9 v2 claim extraction; **not wired into the gates** (no caller on `main`) | Engineer on duty | GPT-6 Luna → GPT-5.6 Luna, Bedrock (acc3) / OpenAI | aws_only | Yes (when wired) | Connection only | Connection `enabled` | Replay before wiring | Not applicable yet |
+| `t2_generate` | CIS | T2: rewrite a catalog tour in the tenant's brand voice | Tech lead | Sonnet 4.6, Bedrock (acc3) / Anthropic | aws_only | Yes (brand settings) | Connection + tenant budget | Connection `enabled` | R2 `t2` | Tenant reviews and exports; AI notice at review, publish and export |
+| `t2_judge`, `t2_brand_audit` | CIS | Score and audit a T2 rewrite | Tech lead | GPT-5.6 Luna → GPT-6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API, `t2_judge` only); 10 % shadow on GPT-6 Luna / OpenAI | vendor_direct | Yes | Connection + tenant budget | Connection `enabled`; brand claim check `T2_BRAND_CLAIM_CHECK=off` | Q2 | Tenant review |
+| `t2_flag_fix`, `t2_itinerary_nudge` | CIS | Repair flagged T2 sentences and itinerary structure | Tech lead | Haiku 4.5, Bedrock (acc3) / Anthropic | aws_only | Yes | Connection + tenant budget | Connection `enabled` | R2 `t2` (part of the graph) | Tenant review |
+| `t7_debate_judge` | CIS | Brand-fit call of the T7 debate | Tech lead | GPT-5.6 Luna → GPT-6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API); 10 % shadow | vendor_direct | Yes | Connection + tenant budget | Connection `enabled` | Q2 | Tenant review |
+| `t8_angle_gen` | CIS | Propose content angles for a tenant brief | Tech lead | Sonnet 4.6, Bedrock (acc3) / Anthropic | aws_only | Yes | Connection + tenant budget | Connection `enabled` | Prompt register baseline | Tenant picks the angle |
+| `t9_write` | CIS | T9: blog and social pieces about a tour | Tech lead | Sonnet 4.6, Bedrock (acc3) / Anthropic | aws_only | Yes | Connection + tenant budget | Connection `enabled` | R2 `t9_blog`, `t9_social` | Authenticity check (no reviews, testimonials, first-person customers, independence claims); tenant reviews and presses publish (T10/T11) |
+| `t9_repair` | CIS | Sentence repair, SEO fit and the admin sentence suggest | Tech lead | Haiku 4.5 → Sonnet 4.6, Bedrock (acc3) / Anthropic | aws_only | Yes | Connection + tenant budget | Connection `enabled` | Prompt register baseline | Tenant review |
+| `t9_faq_filter`, `t9_faq_answer_fit` | CIS | Filter real search questions for the blog FAQ; check each answer fits | Engineer on duty | Haiku 4.5 / Sonnet 4.6, Bedrock (acc3) / Anthropic | aws_only | Yes | Connection + tenant budget | Flag `T9_FAQ_LLM_FILTER` (default off) | S247 trial | Tenant review |
+| `t10_judge` | CIS | T10 gate: score a T9 piece | Tech lead | GPT-5.6 Luna → GPT-6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API) / OpenAI | vendor_direct | Yes | Connection + tenant budget | Connection `enabled` | Q2 | Tenant review |
+| `t10_adjudicate` | CIS | T10 tier-2 adjudicator of the writer's sentences | Tech lead | GPT-6 Luna → GPT-5.6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API) / OpenAI | vendor_direct | Yes | Connection + tenant budget | `T10_ADJ_MODE` (default off) | None yet | Tenant review |
+| `t10_claims` | CIS | F9 v2 claim extraction; **not wired into the gates** (no caller on `main`) | Engineer on duty | GPT-6 Luna → GPT-5.6 Luna, Bedrock (acc3) / OpenAI | aws_only | Yes (when wired) | Connection + tenant budget | Connection `enabled` | Replay before wiring | Not applicable yet |
 
 ### TripPlanner (travellers, no sign-in needed)
 
 | Stage | App | Purpose | Owner role | Provider / family today | Data scope | Tenant data | Budget source | Kill switch | Golden set / eval | Human gate |
 |---|---|---|---|---|---|---|---|---|---|---|
-| `tp_compose` | TripPlanner | Narrate and re-narrate a traveller's trip | Tech lead | Sonnet 4.6, Bedrock (acc3) / Anthropic; no fallback | aws_only (TripPlanner reads only the routes) | No; **traveller free text** can be in the prompt (no automated scrub yet, ADR 0009 "Not decided here") | `TP_DAILY_SPEND_CAP_USD` (default 5 USD/day over the online stages, `tripplanner.llm_spend_daily`); it fails open when the counter cannot be read until the S262 fail-closed fix ships | Over the cap the site serves basic narration (degrade mode) | None | AI label on the site and on AI narration; an Adventure Asia advisor reviews every itinerary before booking |
+| `tp_compose` | TripPlanner | Narrate and re-narrate a traveller's trip | Tech lead | Sonnet 4.6, Bedrock (acc3) / Anthropic; no fallback | aws_only (TripPlanner reads its route through `catalog.v_llm_gateway_config_v1`, CIS 323) | No; **traveller free text** can be in the prompt (no automated scrub yet, ADR 0009 "Not decided here") | `TP_DAILY_SPEND_CAP_USD` (5 USD/day over the online stages, set by Infra), read through `catalog.v_llm_app_spend_today_v1` (fallback `tripplanner.llm_spend_daily`); fails closed when the spend cannot be read (AA-642 S0); per-visitor limits in `tripplanner.ai_rate_counter` (tp-023, AA-1015) | Over the cap the site serves basic narration (degrade mode) | None | AI label on the site and on AI narration; an Adventure Asia advisor reviews every itinerary before booking |
 | `tp_search_embed` | TripPlanner | Embed the traveller's search text | Engineer on duty | Cohere Embed v4, Bedrock acc2 → acc3 / Cohere | aws_only | No; traveller search text | Same daily cap | Same degrade mode | None | Not applicable |
 | `tp_extract`, `tp_component_embed` | TripPlanner | Routes kept for the old place extraction and embedding; **no caller found on `main`** (the place pipeline moved to CIS `a3_*`, AA-712) | Engineer on duty | Sonnet 4.6 / Cohere Embed v4 | aws_only | No | Logged only (offline stages are outside the daily cap) | Connection `enabled` | None | None (not called) |
 
@@ -104,7 +110,8 @@ OpenAI API when both Bedrock judge models fail. The tenant terms state this as "
 
 | Stage | App | Purpose | Owner role | Provider / family today | Data scope | Tenant data | Budget source | Kill switch | Golden set / eval | Human gate |
 |---|---|---|---|---|---|---|---|---|---|---|
-| `crm_*` (gateway stub) | CRM | Reply drafts for agencies (card CRM-33a); **only a stub provider today, no real model is called** | Tech lead | Stub (no network). Planned: Bedrock only, never OpenAI or Jev (root ADR 0008a §5–6) | Bedrock only | Yes: the agency's own client data, scrubbed first (F3: known values, regex, Bedrock Guardrails in acc2 detect mode) | Per agency `crm.tenant_settings.ai_budget_usd` (default 2 USD a month), refused at 100 % | `ai_enabled` per agency (default false) | None yet | Every draft is shown to an agency member, who sends it by hand |
+| `crm_*` (gateway v2, stub provider) | CRM | Reply drafts for agencies (card CRM-33a); the CRM gateway runs on the vendored `aa_llm` core and writes `crm.llm_call` in the ledger v2 shape (crm-032), but **Dev runs the stub provider** (no `CRM_LLM_*` variable set), so no real model is called | Tech lead | Stub (no network). Planned: Bedrock only, never OpenAI or Jev (root ADR 0008a §5–6) | Bedrock only | Yes: the agency's own client data, scrubbed first (F3: known values, regex, Bedrock Guardrails in acc2 detect mode) | Per agency `crm.tenant_settings.ai_budget_usd` (default 2 USD a month), alerts at 75 / 90 / 100 % (crm-032), refused at 100 % | `ai_enabled` per agency (default false) | None yet | Every draft is shown to an agency member, who sends it by hand |
+| `crm_scrub` (`guard`) | CRM | Pass 3 of the F3 PII scrubber: Bedrock Guardrails detect personal data before any CRM model call; each call is a `crm.llm_call` row with role `guard` | Tech lead | Bedrock Guardrails (acc2), guardrail `aa-crm-dev-scrub` | Bedrock only | Yes: the agency's client text, before it reaches a model | Per agency AI budget | `ai_enabled`; a failed scrub fails closed | EN/VI scrub corpus gate (`Scrub corpus` workflow) | Not applicable |
 | None | Booking | Booking makes no AI calls. Hotel and service text is drafted by CIS (`supply_content_writer`) | — | — | — | — | — | — | — | High-risk advice rule in Booking `CONTEXT.md` (AA-820): no AI advice on insurance, financing, claims or visas without qualified staff review and AI disclosure |
 
 ### Providers, for the tenant terms (AA-820)
@@ -118,11 +125,13 @@ What the tenant terms and the partner-portal privacy notice name, derived from t
   decisions 5 and 14). In the 29/10 route snapshot only judge and dedupe routes end at the OpenAI API, and no route
   names an Anthropic API model yet (the writer warm path is approved, its routing is a later gateway step). Terms wording: "may be used as a fallback".
 - **Jev (TypeSafe)**: yes/no decision checks; for tenant content only for allowlisted tenants.
-- **DataForSEO, the geocoder**: keywords and place names only, never tenant text.
+- **DataForSEO, Geoapify**: keywords and place names only, never tenant text.
+- **Amazon, Meta and Moonshot models on Bedrock (acc2)**: catalogued for evaluation only (CIS 324); no route names
+  them, so they are not in the tenant terms until one passes the qualification ladder and is routed.
 
 ## OWASP Top 10 for LLM Applications (2025): controls and gaps
 
-Controls are cited only where they exist in code or configuration on `main` (31/10/2026). Gaps name the ADR 0009
+Controls are cited only where they exist in code or configuration on `main` (01/11/2026). Gaps name the ADR 0009
 decision or issue that closes them, or say "none planned".
 
 | Risk | Existing controls | Gaps |
@@ -136,10 +145,11 @@ decision or issue that closes them, or say "none planned".
 | **LLM07 System prompt leakage** | Prompts live in the public CIS repo, so they hold no secrets by construction (gitleaks scans every commit); the injection samples check for prompt leaks. | None needed while prompts stay secret-free. |
 | **LLM08 Vector and embedding weaknesses** | Embeddings cover catalog and place content and traveller search text only, never tenant data; one model (Cohere Embed v4, 1536 dimensions) for every embed stage. | No registry of embedding spaces and no re-embed procedure (S261 review TL-14, deferred). |
 | **LLM09 Misinformation** | Jev grounding plus the numeric check on S1 sentences; judge and audit stages; two-model place card and dedupe checks; flagged map pins hidden (AA-997); AI labels on TripPlanner and the portal notice at review, publish and export; human review before serving (A2, tenant, advisor). | Judges are not calibrated (kappa 0.562 on 13 pairs); a judge becomes a gate only after at least 30 human-labelled pairs with at least 8 per class (S261 review TL-10, labelling deferred). |
-| **LLM10 Unbounded consumption** | Connection monthly budgets; job caps with hard stop (`shared/cost_guard.py`, `shared.spend_budget`); TripPlanner daily cap with a degrade mode; CRM per-agency budget; writing-memory eval cap 25 USD a month; AWS budgets and cost anomaly alerts per account (AA-896). | Budgets are opt-in per caller (most writer stages have only the connection budget); Jev has no pre-call budget; the TripPlanner cap fails open; no Content studio tenant budget (AA-1016). ADR 0009 decision 6 and its first slice close these. |
+| **LLM10 Unbounded consumption** | Connection monthly budgets; job caps with hard stop (`shared/cost_guard.py`, `shared.spend_budget`); TripPlanner daily cap with a degrade mode; CRM per-agency budget; writing-memory eval cap 25 USD a month; AWS budgets and cost anomaly alerts per account (AA-896). | Most writer stages still have only the connection budget (no per-stage cap); the tenant budget has no amounts until the business owner sets plan prices; route deadlines are unset. Closed in S262: Jev pre-call cap (318), TripPlanner fail-closed and per-visitor limits (tp-023), tenant budget (321), connection circuit and re-queue (AA-1018). |
 
 ## Change log
 
 | Version | Date | Change |
 |---|---|---|
+| v1 | 01/11/2026 (S263, AA-1020) | Gateway v2 as built: ledger v2 for CIS, TripPlanner and the CRM; Jev and DataForSEO caps (318); tenant budget (321); provider registry rows (322); TripPlanner contract views (323); acc2 candidate models (324); Bedrock Batch, probe and CRM guard rows; circuit, deadline and re-queue as switches; LLM10 gaps updated. Routes unchanged since the 29/10 snapshot. |
 | v0 | 31/10/2026 (S262) | First version: 37 routed stages of the 29/10 route snapshot, `t10_adjudicate` (CIS migration 309), Jev, DataForSEO, the geocoder, the CRM stub; OWASP LLM Top 10 (2025) map. Draft until the tech lead has read it. |
