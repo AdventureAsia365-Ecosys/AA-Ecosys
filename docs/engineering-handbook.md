@@ -393,7 +393,10 @@ How release-please is set up (AA-891):
   laptop, ECS exec or app start-up.
 - **The D8 path** ([DM-11.2](architecture/data-standards/02-data-management.md#11-change-management), Part A MIG-4):
   migration-only PR → byte copy into Infra → Copy Guard → DB Migrate `check` → `apply` → merge the regenerated schema
-  reference PR → then the code PR. The runbook is [DB Migrate](ops/runbooks/db-migrate.md).
+  reference PR → then the code PR. The runbook is [DB Migrate](ops/runbooks/db-migrate.md). On Dev the copy and the
+  apply are automatic: expand files ship with their code ([ADR 0017](adr/0017-migrations-in-app-pr-expand-auto-apply.md)),
+  contract files are applied by Migration Apply once every job table is idle
+  ([ADR 0017a](adr/0017a-dev-auto-applies-contract-migrations.md)); destructive files stay manual.
 - **Expand / contract** for every change that two app versions must survive:
   1. Expand: add the nullable column or the new table (migration-only PR, applied first).
   2. Deploy code that writes old and new; backfill through a job.

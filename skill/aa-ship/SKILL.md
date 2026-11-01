@@ -40,10 +40,17 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
   đóng không merge; không merge thứ sai để thử.
 - [ ] **PR có migration (ADR 0017; chủ schema `docs/database/schema-ownership.md`):** file **expand** (`-- migrate:
   expand`) → một PR app (file + code + bump readiness); PR copy ci-bot sang Infra tự merge, Migration Apply tự chạy, job
-  schema gate của Deploy Dev chờ nó. File **contract/destructive** (không header = contract) giữ MIG-4: PR chỉ migration
-  → review → PR copy nhãn contract KHÔNG tự merge → `python3 tools/github/ship_copy_apply.py <owner> <NNN> --mode check`
-  rồi lệnh đó không `--mode` (= apply: gate + merge PR copy dù đã merge hay đang mở, dispatch DB Migrate, theo đúng run
-  của mình, đọc `/health/ready`) → PR code. File đã có trên Infra main: `tools/github/dbmig.sh <owner>/<NNN> <check|apply>`. Bước, idle check, log `ran as: <owner>`, Schema Dump/Isolation Probe: `docs/ops/runbooks/db-migrate.md`.
+  schema gate của Deploy Dev chờ nó. File **contract** (không header) giữ THỨ TỰ MIG-4 (PR chỉ migration → review →
+  PR code), nhưng trên **Dev** không còn bước tay (ADR 0017a, S263, AA-1032): PR copy ci-bot tự merge khi xanh, Migration
+  Apply tự apply khi MỌI bảng job rảnh + không wave mở (bận → `deferred`, lượt hằng giờ / lượt copy kế chạy lại). Kiểm
+  bằng summary run `migration-apply.yml` (dòng `applied`, class `contract`) hoặc `python3 tools/github/ship_copy_apply.py
+  <owner> <NNN>` (key đã có trong `/health/ready` thì không dispatch), rồi mới merge PR code. Chỉ dispatch DB Migrate
+  (`ship_copy_apply.py <owner> <NNN> --mode check` rồi không `--mode`, hoặc `tools/github/dbmig.sh <owner>/<NNN>
+  check|apply` với file đã trên Infra main) khi run báo dừng `manual` (kill switch `DB_AUTO_APPLY_CONTRACT=false`, lỗi
+  replay/lint) hoặc cần override bận (chỉ Nghiệp). File **destructive** luôn tay: DRY RUN → `ship_copy_apply.py …
+  --allow-destructive` (snapshot). Nhiều migration cùng owner trong một wave → gộp (một PR chỉ migration số liên tiếp,
+  hoặc merge liền nhau) để một vòng copy + apply phủ hết. Bước, idle check, log `ran as: <owner>`, Schema Dump/Isolation
+  Probe: `docs/ops/runbooks/db-migrate.md`.
   - Migration đổi bảng/khoá/FK của schema có trang ERD thiết kế `enforce=true`
     (`docs/architecture/erd/design/<schema>.md`, repo gốc) → sửa trang đó trong cùng đợt thay đổi, không thì DB Schema
     Dump đêm đó đỏ bước drift.
