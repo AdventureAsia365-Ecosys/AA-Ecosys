@@ -49,6 +49,9 @@ sửa nội dung tour; các ứng dụng còn lại chỉ đọc.
 Vai trò của bạn trên CIS là **admin**: bạn xem được mọi trang. Việc đổi quyền người khác (trang Staff) chỉ dành cho
 các tài khoản owner của CIS: tech lead và một tài khoản khẩn cấp luôn khoá sẵn.
 
+Từng bước cho mỗi ứng dụng (tài khoản được tạo thế nào, cách đăng nhập, việc hằng ngày và làm gì khi có gì đó sai):
+[truy cập và vận hành các ứng dụng](app-access-and-operations.vi.md).
+
 > [!NOTE]
 > Ngày 18/10/2026 bên mình đã đề nghị Google xem lại cảnh báo "trang nguy hiểm" bị gắn nhầm cho `lumiguides.it.com`.
 > Nếu trình duyệt hiện trang cảnh báo màu đỏ, hãy báo tech lead; đừng bấm bỏ qua trên máy dùng chung.
