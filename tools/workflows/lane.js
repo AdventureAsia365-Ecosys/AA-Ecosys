@@ -45,6 +45,10 @@ HARD RULES for this lane:
 - Every LLM record_call passes **billed_fields(resp) (shared/llm_client/call_log.py; gateway AST guard test_aa1002_s6_billed_fields).
 - Migrations: take the next free number on the owner main (hint: ${mig}); classify expand (header "-- migrate: expand") vs contract per ADR 0017.
   If you renumber, find every use with git grep '<old>_' (a word-boundary regex misses "<old>_name"). Booking bk-, Partner crm-, TripPlanner tp- likewise.
+  A file that ALTERs an existing table, adds a policy/constraint to one or INSERTs config rows is contract, not expand: run the app's
+  migration preflight (Booking/Partner .github/scripts/migration_preflight.py with --infra-tools) before returning; contract = MIG-4 (a contract file has NO '-- migrate:' directive line; 'contract' is not a directive)
+  (a migration-only PR without the readiness raise, then the code PR). Reserved numbers must be renumbered to owner main max + 1.
+- When a change adds a field to a DB query or row shape, also run the integration tests that read it (local Postgres), not only unit tests.
   A migration that creates a table also needs its DM-7.1 retention row (root docs/architecture/data-standards/02-data-management.md):
   return that root PR too, merged before the Infra bot copy (its "Retention rows" check fails without it).
 - AA-Partner: before returning, run the unit suite the way ci.yml does (pytest tests/unit with coverage, gate 90%); new modules need unit
