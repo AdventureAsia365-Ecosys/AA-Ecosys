@@ -14,8 +14,10 @@ related: [SEC-01, SEC-02, SEC-03, SEC-05, SEC-06, SEC-07]
 
 # Security docs index
 
-Security pages live only in this private repo (SEC-06, D-25). They are not synced to the admin docs page
-unless the tech lead decides who may read them there (N-3).
+Security pages live in this root repo, never in an app repo (SEC-06, D-25). The root repo is public until the coding
+phase ends (ADR 0014 amendment), so these pages name controls and issues but hold no exploitable detail (no step-by-step
+privilege path, no open finding before its fix). They are not synced to the admin docs page unless the tech lead
+decides who may read them there (N-3).
 
 | ID | Page | What it answers |
 |---|---|---|
