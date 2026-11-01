@@ -7,9 +7,9 @@ status: active
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-11-01
 review_every_days: 90
-related: [OPS-01, OPS-02-cis, OPS-04-5xx-spike, OPS-10, skill/aa-ship/SKILL.md, AA-869, AA-892]
+related: [OPS-01, OPS-02-cis, OPS-04-5xx-spike, OPS-10, SEC-01, skill/aa-ship/SKILL.md, AA-869, AA-892, AA-873]
 ---
 
 # Incident response
@@ -47,6 +47,23 @@ When unsure, pick the higher severity and lower it later.
 4. **Write it down.** Open a Linear issue `[Incident] <short title>` with a timeline as you go (times in
    ICT). Commands and outputs go in the issue, never secret values.
 5. **Tell people** (below) once the severity is clear.
+
+## Security alert e-mails
+
+Subjects start with `[aa-sec]`; the rules and the live check are listed in [the security baseline](../security/baseline.md).
+
+- **`sso_admin_signin`**: an Identity Center session on an administrator permission set started. Expected only when the
+  tech lead signs in. If it was not you, treat it as SEV1: sign out every session and reset the user in Identity
+  Center, then read what the session did (next item, or CloudTrail Event history by user name).
+- **`admin session digest`**: the follow-up for the same session, sent within about two hours of its last call (or when
+  its credentials expire): calls per service, every DELETE then every other WRITE call with its resource name and
+  error code, read-only calls by count. Read the delete and write lists first; an unknown call is SEV1 even if the
+  sign-in was yours. A digest marked `(continued)` covers calls made after an earlier digest of the same session.
+  `WARNING: the lookup hit its page cap` means the counts are a lower bound: read the rest in CloudTrail Event history.
+  No digest after a sign-in alert: check the function's `-errors` alarm and its log group
+  (`/aws/lambda/aa-sec-dev-admin-session-digest`).
+- Other `[aa-sec]` rules (IAM, security-group, trail, root, Access Analyzer): expected only from Terraform or a
+  planned change; otherwise follow the first 15 minutes above.
 
 ## Who is told
 
