@@ -53,7 +53,7 @@ before it publishes (`INSERT ... ON CONFLICT DO NOTHING`); only the process whos
 tasks or a restart never send twice; a failed publish deletes the row so the next tick retries. The rows are the
 history of sent alerts and age out with the normal job retention.
 
-## 2. Alarms (101 on 01/11/2026, plus 1 new)
+## 2. Alarms (101 on 01/11/2026, plus 1 new and 1 added the same day by Infra #581)
 
 Legend: **Keep** (stays in CloudWatch), **Remove** (no replacement needed, reason given), **Move** (becomes an in-app
 check), **Replace**. "OK mail" = whether the alarm still e-mails on recovery: kept for state alarms, dropped for
@@ -123,7 +123,7 @@ event alarms (one e-mail per incident instead of two).
 | `jobs-queue-age`, `jobs-overdue-running` | Move (Booking) | checks `jobs_stuck`, `jobs_overdue` from `booking.job` | — |
 | `jobs-sampling-stopped` | Remove | worker in the API process; API down = `no-healthy-task` | — |
 
-### 2.5 TripPlanner, shared, e-mail, autoscaling (18)
+### 2.5 TripPlanner, shared, e-mail, autoscaling, security digest (18 + 1)
 
 | Alarm | Decision | Why | OK mail |
 |---|---|---|---|
@@ -135,6 +135,7 @@ event alarms (one e-mail per incident instead of two).
 | `aa-ecosys-dev-nat-system-check-recover` | Keep | the recover action itself | yes |
 | `aa-ecosys-dev-nat-status-check-failed` | Remove | duplicate e-mail of the recover alarm for the system part; an instance-level failure stops all egress, which every app's no-healthy-task / job checks show | — |
 | `aa-email-dev-bounce-rate`, `aa-email-dev-complaint-rate` | Keep | SES requires them | yes |
+| `aa-sec-dev-admin-session-digest-errors` (Infra #581, 01/11) | Keep | Lambda with no app behind it | no |
 | `TargetTracking-*` (8, api + worker x CPU + memory x High + Low) | Remove | the four target-tracking policies are removed on Dev (1 api + 1 worker task; a wave scales the worker by hand, `docs/ops/job-kinds.md`). The scalable targets (1..3) stay, so the documented scale commands still work | — |
 
 ## 3. Other CloudWatch items
@@ -173,14 +174,14 @@ event alarms (one e-mail per incident instead of two).
 
 | | Before (Nov forecast) | After |
 |---|---:|---:|
-| Alarms (alarm-metric units x 0.10 USD) | 105 -> ~10.5 USD | 27 -> 2.70 USD (24 standard incl. the new CIS one, copy-age 2 metrics, KMS anomaly 3) |
+| Alarms (alarm-metric units x 0.10 USD) | 105 -> ~10.5 USD | 28 -> 2.80 USD (25 alarms incl. the new CIS one and the #581 digest one; copy-age 2 metrics, KMS anomaly 3) |
 | Custom metrics (x 0.30 USD) | ~28 -> ~8.1-9 USD | ~3 -> ~0.90 USD |
 | Dashboard | ~2.3-3 USD | 0 |
 | API requests, SNS, SES, EventBridge, Lambda | ~0.1 USD | ~0.05 USD |
-| **Alerting total** | **~21 USD/month** | **~3.7 USD/month** |
+| **Alerting total** | **~21 USD/month** | **~3.8 USD/month** |
 | Logs (vended VPC flow + WAF, ingest) | ~3.0 USD (Oct) | ~0.3 USD (REJECT-only flow logs, BLOCK/COUNT-only WAF log) |
 
-E-mail: 92 alarms sent OK mails too; after the diet 13 state alarms do. Event checks in the apps send one e-mail per
+E-mail: 92 alarms sent OK mails too; after the diet 12 state alarms do. Event checks in the apps send one e-mail per
 check per UTC day (or per break-glass session / ops release / refused event).
 
 ## 6. What is not covered any more (accepted)
