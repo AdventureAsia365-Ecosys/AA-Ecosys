@@ -1,44 +1,64 @@
 # Merge train chạy nền
 
 Một **train** = một chuỗi PR phụ thuộc nhau (migration → copy → DB Migrate → code → deploy, hoặc nhánh xếp chồng)
-merge theo thứ tự bằng một script chạy nền. Chỉ agent điều phối chạy train (merge/push/`gh workflow run` bị hook chặn
-với subagent, `SKILL.md` §0). Luật gate và cách merge từng repo: `SKILL.md` §1 "Cách merge"; guard job/wave: §2;
-verify live: §3.
+merge theo thứ tự bằng lệnh chạy nền. Chỉ agent điều phối chạy train (merge/push/`gh workflow run` bị hook chặn với
+subagent, `SKILL.md` §0). Luật gate và cách merge từng repo: `SKILL.md` §1 "Cách merge"; guard job/wave: §2; verify
+live: §3. Công cụ và mã thoát: `tools/github/README.md` (AA-1032).
 
 ## Dựng train
 
-- Một script mỗi chuỗi phụ thuộc: `.tmp-session/S<nnn>/<tên>-train.sh`, chạy bằng Bash `run_in_background`, output
-  `> .tmp-session/S<nnn>/<tên>-train.txt 2>&1`. Hai chuỗi độc lập = hai train, không gộp.
-- Đầu script: `set -u`, `cd /home/nghiep/projects/AA-Ecosys`, `. tools/github/train-lib.sh`. Mỗi bước `|| exit 1`:
-  train **dừng ở bước đỏ đầu tiên** và báo; điều phối đọc `.txt`, sửa, viết `<tên>-train2.sh` cho phần còn lại.
-- Hàm trong `tools/github/train-lib.sh` (cách gọi ở header file):
-  - `gate <Repo> <pr>` — chờ check, chỉ qua khi **mọi** check `pass`/`skipping` và `mergeStateStatus` không `DIRTY`.
-  - `merged <Repo> <pr>` — in trạng thái, đặt `MERGED_SHA`.
-  - `waitcopy <owner> <NNN>` — chờ file copy trên Infra `main`; PR copy contract/destructive đang mở thì gate + merge.
-  - `waitdeploy <cis|booking|crm> <sha>` — chờ health của app báo `git_sha` = SHA merge.
-  - `restack <worktree> <old-base-sha> <pr>` — rebase nhánh xếp chồng lên `origin/main` mới, push, `gh pr ready`, gate lại.
-- Mọi lệnh chờ có `timeout` (hàm đã có; `gh run watch` trần có thể treo). Train không poll dồn: mỗi vòng ≥ 30 s.
+- Mỗi chuỗi phụ thuộc một lệnh (hoặc một script ngắn nối các lệnh bằng `&&`) chạy bằng Bash `run_in_background`,
+  output `> .tmp-session/S<nnn>/<tên>-train.txt 2>&1`. Hai chuỗi độc lập = hai train, không gộp. Không tự viết lại
+  gate/merge/copy trong `.tmp-session/`: dùng các tool dưới đây (S263: script tự viết merge PR có check đỏ không bắt
+  buộc và đọc nhầm run DB Migrate của file khác).
+- Công cụ (Python stdlib, `python3 tools/github/<tool>.py --help`):
+  - `ship_merge.py '<Repo> <n>' …` — chờ check, **mọi** check phải xanh (không chỉ required), từ chối draft / base
+    không phải nhánh mặc định / DIRTY / PR xoá file; repo queue qua `mergeq.sh`, repo khác squash
+    `--match-head-commit`. Nhiều PR: queue chạy song song, cùng repo không queue thì lần lượt; `--serial` giữ thứ tự.
+  - `ship_train.py <Repo> <worktree> <branch>:<pr>[:<own>] …` — nhánh xếp chồng (mục dưới).
+  - `ship_copy_apply.py <owner> <NNN>` — PR copy Infra + DB Migrate + readiness (mục Migration).
+  - `train-lib.sh` (source): còn dùng `waitdeploy <cis|booking|crm> <sha>` (chờ health báo `git_sha`) và `merged`;
+    `gate`/`waitcopy`/`restack` cũ đã có bản tool ở trên.
+- Train **dừng ở bước đỏ đầu tiên** (mã thoát khác 0) và báo; điều phối đọc `.txt`, sửa, chạy lại phần còn lại (tool
+  bỏ qua PR đã merge). Mọi lần chờ có timeout; tool tự poll (≥ 30 s mỗi vòng), không `gh run watch` trần.
+- Phiên MFA 8 h: tool cảnh báo khi còn < 30 phút (train: < 60 phút) vì `as-app.sh` cần MFA ở mỗi lần push/merge.
 
 ## Thứ tự merge từng repo
 
-- CIS, Booking, Partner: `gate` → `timeout 1500 tools/github/mergeq.sh <Repo> <n>` → `merged`.
-- TripPlanner: `gate` → `as-app.sh … gh pr merge <n> --auto --squash`.
-- Infra, repo gốc (không required check, không auto-merge): `gate` → `as-app.sh … gh pr merge <n> --squash`.
-- Có gì push vào PR sau lần gate trước (bot, restack, release-please) → `gate` lại ngay trước lệnh merge.
+- CIS, Booking, Partner: `ship_merge.py` (gate mọi check → `mergeq.sh` → đọc lại state, kể cả khi `mergeq.sh` báo
+  "not merged" mà queue vừa merge).
+- TripPlanner, Infra, repo gốc: `ship_merge.py` (squash thẳng khi mọi check xanh, đúng head đã gate).
+- Có gì push vào PR sau lần gate trước (bot, restack, release-please) → chạy lại `ship_merge.py` ngay trước khi merge.
 
 ## Migration trong train (ADR 0017)
 
-- **Expand:** merge PR app → `waitcopy <owner> <NNN>` (PR copy ci-bot tự merge, Migration Apply tự chạy) →
-  `waitdeploy` (job schema gate của Deploy Dev chờ apply).
-- **Contract / destructive:** merge PR chỉ migration → `waitcopy` (tìm PR `bot/migration-copy/<owner>-<NNN>` theo
-  `headRefName`, gate, merge tay) → `tools/github/dbmig.sh <owner>/<NNN> check && … apply` → mới tới PR code.
+- **Expand:** `ship_merge.py` PR app → `ship_copy_apply.py <owner> <NNN>` (chờ PR copy ci-bot tự merge — hoặc gate +
+  merge nếu còn mở — không dispatch, đợi key có trong `/health/ready`) → `waitdeploy` (job schema gate của Deploy Dev
+  chờ apply).
+- **Contract / destructive:** `ship_merge.py` PR chỉ migration → `ship_copy_apply.py <owner> <NNN> --mode check` →
+  `ship_copy_apply.py <owner> <NNN>` (apply) → mới tới PR code. Tool:
+  - tìm `bot/migration-copy/<owner>-<NNN>` ở **mọi** trạng thái (mở → gate + merge; đã merge → dùng luôn; đóng → bỏ);
+  - đọc loại file từ header trên Infra main; file destructive cần `--allow-destructive` sau quy trình DRY RUN;
+  - theo **đúng run của mình**: khoá cục bộ, ghi các run có sẵn, dispatch, lấy run mới có tiêu đề
+    `DB Migrate <mode> <owner>/<file>` (run-name của Infra); không bao giờ đọc "run mới nhất";
+  - giữ thứ tự owner: từ chối (exit 4) khi còn PR copy số nhỏ hơn đang mở hoặc file số nhỏ hơn trên Infra main chưa
+    có key trong `/health/ready` (áp 331 khi 330 còn chờ → 330 thành out-of-order, AA-920); `--allow-out-of-order`
+    chỉ khi chắc file độc lập;
+  - in conclusion + dòng log chính (`ran as`, busy/idle, applied), rồi `/health/ready` (`schema_version`, key trong
+    `registered_keys`). Run đỏ chỉ được chấp nhận khi log của chính nó có `exit code: 17` (khoá apply bị giữ, không
+    chạy gì) và key xuất hiện; đỏ vì lý do khác (vd. exit 9 đã COMMIT + đăng ký nhưng cần dọn tay) → exit 1.
   Bước, idle check và output của DB Migrate: `docs/ops/runbooks/db-migrate.md` (không chép vào train).
 
 ## Nhánh xếp chồng (stacked)
 
-- PR B dựng trên nhánh PR A: sau khi A squash vào `main`, ghi SHA base cũ của B bằng `git -C <wt> log --oneline`
-  **ngay trước** khi restack, rồi `restack <wt> <sha> <prB>` (`git rebase --onto origin/main <sha>` — rebase trần
-  kéo lại commit của A đã squash). Xung đột → train dừng, điều phối giải tay (`resolving-merge-conflicts`).
+- `ship_train.py <Repo> <worktree> <A>:<prA> <B>:<prB>` (dưới cùng trước). Số commit riêng của mỗi nhánh đếm **một
+  lần trước khi đụng gì** (`<nhánh dưới>..<nhánh>`; ghi `:<n>` để ép), rồi mỗi nhánh:
+  `git rebase --onto origin/main <nhánh>~<n> <nhánh>` — chỉ commit riêng di chuyển, commit của nhánh dưới đã squash
+  không bị replay (lesson S243) → đổi base PR về `main` + `gh pr ready` nếu cần → push
+  `--force-with-lease=<nhánh>:<SHA remote>` qua `as-app.sh` → gate + merge như `ship_merge.py`.
+- Tool từ chối khi đang rebase dở, có file tracked bị sửa, hoặc `origin/<nhánh>` có commit mà nhánh local thiếu
+  (bot/người khác đã push). Xung đột → abort rebase, train dừng, điều phối giải tay (`resolving-merge-conflicts`).
+- `--dry-run` in kế hoạch rebase, không đụng gì.
 
 ## Deploy và kết thúc
 

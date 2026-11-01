@@ -11,6 +11,7 @@ name: Docs lint
 #   - PRDs (docs/product/): required PRD fields, acceptance criteria, and every referenced path exists (AA-894)
 #   - the report registry docs/reports/*.yaml (AA-1003): shape, KPI references, templates, source tables
 #   - the tracker docs/backlog/tracker/plan.json (S263): plan_sync.py tests, shape, no account ID or ARN
+#   - unit tests of the orchestrator ship tools tools/github/ship_*.py (AA-1032; offline, scripted gh/aws, temp git)
 # Secrets: gitleaks runs on every PR (any path) in secret-scan.yml and nightly over the full history in
 # secret-scan-history.yml (AA-981),
 # so it is not repeated here (secret names are fine in docs, values never are).
@@ -30,6 +31,7 @@ on:
       - ".claude/**/*.md"
       - "tools/docs/**"
       - "tools/linear/**"
+      - "tools/github/**"
       - ".markdownlint-cli2.jsonc"
       - ".github/workflows/docs-lint.yml"
   schedule:
@@ -74,6 +76,12 @@ jobs:
         run: |
           python -m unittest discover -s tools/linear -p 'test_*.py'
           python tools/linear/plan_sync.py --validate
+
+      # AA-1032: ship_merge / ship_train / ship_copy_apply / ship_open_prs. Offline: gh and aws are scripted, git runs in
+      # temporary repositories; nothing reaches GitHub or AWS.
+      - name: Ship tools tests
+        if: ${{ !cancelled() }}
+        run: python -m unittest discover -s tools/github -p 'test_*.py'
 
       - name: Front-matter schema
         if: ${{ !cancelled() && steps.deps.outcome == 'success' }}

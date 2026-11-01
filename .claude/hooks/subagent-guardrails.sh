@@ -28,6 +28,11 @@ patterns=(
   'aws( +--[a-z-]+( +[^- ][^ ]*)?)* +ecr +(put|delete|batch-delete)'
   # AA-1026: scripts whose AWS / admin-API writes the command line does not show
   '(^|[ /])anthropic_key_plug_in\.sh'
+  # AA-1032: the orchestrator ship tools push, merge and dispatch DB Migrate inside their own subprocesses (through
+  # as-app.sh), where this hook never sees the command. Any mention is refused, so `cat`/`git add` of these files is
+  # too: subagents editing them use the Read/Edit tools and `git add <dir>`. Their tests (test_ship_*.py) stay open.
+  '(^|[ /"'"'"'=(`;&|])(ship_(merge|train|copy_apply|open_prs)\.py|mergeq\.sh|dbmig\.sh|train-lib\.sh|as-app\.sh)'
+  '(^|[ ;&|(])-m +ship_(merge|train|copy_apply|open_prs)( |$|[;&|)])'
 )
 for p in "${patterns[@]}"; do
   if echo "$cmd" | grep -Eq "$p"; then
