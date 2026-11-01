@@ -36,6 +36,9 @@ The Anthropic Messages API is a second way to the Claude models, on the connecti
 - Data scopes per stage (migration 311, decided by data, not code): only a stage whose `allowed_scopes` include
   `vendor_direct` can reach the API. Since migration 335 (AA-1026, tech lead decision T-3 in S263) those are the five
   A-series writers `s1_generate`, `s1_flag_fix`, `s1_itinerary_nudge`, `a0_column_map`, `supply_content_writer`.
+  Each names one Anthropic model, then GPT-6 Luna on the OpenAI API, so the API is reached only after acc3 failed for
+  the whole route (the gateway tries every deployment of a model before the next model; the admin refuses an AWS
+  fallback behind a model with an API deployment on such a stage).
   T-stages (tenant content), `tp_*` (traveller text) and the CRM stay `aws_only`: they never reach the API.
 - The legacy keys `haiku` / `sonnet` never ran on the API. Migration 335 moved every route off them to `haiku-5-5` /
   `sonnet-5-5` (decision T-4), which have API deployments.
