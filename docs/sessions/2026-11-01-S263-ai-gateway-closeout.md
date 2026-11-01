@@ -43,7 +43,7 @@ Chép nguyên từ checklist (giờ +07):
 - **Thử tay CRM:** Nghiệp tự thử lời mời chủ đại lý (không cho agent chạy tự động); yêu cầu dọn tài khoản email mồ côi →
   lane crm-orphan-accounts.
 - **16:30Z:** "quay về việc chính (cổng AI), dừng mở rộng CRM".
-- **Jira:** 7 nháp S262 + việc S263 gom thành 8 nháp, đưa duyệt một lần cuối phiên (chưa đăng).
+- **Jira:** 7 nháp S262 + việc S263 gom thành 8 nháp; tech lead duyệt "duyệt hết, bỏ dòng Nền tảng"; **đã đăng 02/11** (8 comment, 25 ảnh).
 
 ## Kết quả theo issue
 
@@ -56,7 +56,7 @@ Trạng thái đọc lại trên Linear cuối phiên (02/11). Done: **AA-1022, 
 | AA-1031 Trang Staff cấp vai trò CRM + mẫu "Platform owner" | **Done** | mig 330 (expand); tech lead tạo đại lý `test nghiep` bằng quyền mới; nhóm Cognito booking-admin / cis-admin / crm-platform-admin; audit `staff.roles_changed` preset. Follow-up: gợi ý trường ticket bắt buộc | CIS #1230; root #437 |
 | AA-1032 Vòng ship nhanh hơn | **Done** | Dev tự áp migration contract khi mọi bảng job rảnh (ADR 0017a) — ca thật đầu tiên crm-039 tự áp (copy #600, `/crm/health/ready` = crm-039); CI Partner 6–10′ → 1–4′, CIS 4–5′ → ~4′ (Docker Build Check giờ dài nhất); ship tools `ship_merge` từ chối mọi check đỏ; DB Migrate có run-name; merge queue CIS/Partner/Booking 4 build / 5 merge / chờ 3′ | Infra #594, #595; root #441, #442; CIS #1236; Partner #184 |
 | AA-1033 Thông báo nội dung AI trên mọi app + mục AI trong điều khoản | **In Review** | Kit `AiNotice` (staff / publisher / traveller); CIS admin reviewer, CRM draft + điều khoản, portal, TripPlanner (trang tour, planner, chân trang, `/terms` mục 3 "Use of AI"); kit sync 3 repo. Còn: ảnh live trên Vercel/prod + root #443 (token profile ADR 0016) | CIS #1235; Partner #185, #159; TP #210, #209; Booking #164; root #443 (mở) |
-| AA-1024 Lõi CIS + chặn đường vòng | **In Progress** | Live: A1 (tắt `t9_write` → refused 0 USD, `prompt_version` v1), D1 (32 dòng `shared.prompt_version`), G1/G2 (guard 4 repo), A2 phần code (`model_tier` → 422), A4 (luật family judge, lý do tiếng Anh, PATCH 422), A6 (`warnings[]`, đã trả lại). A8 merged, chưa kiểm live. **A9 chưa đủ** (dòng embed ok thiếu `latency_ms`/`attempt_no`) → sửa trong #1245. A3/A5/D8/A2 stage rows: CIS #1244 (mig 334–338) merged; #1245 (gateway giữ retry, lọc theo served role) + #1246 (336 giữ `tp_extract` vì còn traffic 11/10) **đang mở**. Chưa làm: A10, D2 (cần IAM + MFA) | CIS #1214, #1219 (325), #1220 (326), #1221, #1222, #1223, #1243, #1244; Infra #583, #584, #601–#605 |
+| AA-1024 Lõi CIS + chặn đường vòng | **In Progress** | Live: A1 (tắt `t9_write` → refused 0 USD, `prompt_version` v1), D1 (32 dòng `shared.prompt_version`), G1/G2 (guard 4 repo), A2 phần code (`model_tier` → 422), A4 (luật family judge, lý do tiếng Anh, PATCH 422), A6 (`warnings[]`, đã trả lại). A8 merged, chưa kiểm live. **A9 chưa đủ** (dòng embed ok thiếu `latency_ms`/`attempt_no`) → sửa trong #1245. A3/A5/A2 stage rows/I6: CIS #1244 (mig 334–338) + #1245 (gateway giữ retry, lọc theo served role, dòng embed đủ trường + giá, Llama prompt mode) merged + deploy 4f1244a9; live: 0 route thiếu deadline, A9 đạt (latency 427, attempt 1, 0,000001 USD), smoke `a3_place_dedupe` trên Maverick **đạt**. **Mig 336 (D8) chờ**: chốt chặn của chính nó từ chối vì `tp_extract` còn caller TripPlanner (121 dòng, cuối 11/10); file đã copy nên không sửa được (#1246 đóng); 337/338 áp lệch thứ tự bằng DB Migrate. Chưa làm: A10, D2 (cần IAM + MFA) | CIS #1214, #1219 (325), #1220 (326), #1221, #1222, #1223, #1243, #1244; Infra #583, #584, #601–#605 |
 | AA-1025 Ngân sách, app profile, provider ngoài LLM, trang Providers | **In Progress** | Live: L2 (Batch 503, công tắc Jev/DFS/Geoapify, probe dry-run), B1 (Jev tắt → canary "nothing was sent", đã bật lại), B2 (probe embed + Geoapify, ~0,001 USD), C1 trang Providers (lỗi/độ trễ p50/p95 mỗi dòng, dòng CRM AI, Guardrails, Mapbox; ảnh 1440/390 sáng/tối, 0 lỗi console — ảnh giữ ngoài git vì có account ID). B4 merged, chưa kiểm bật/tắt live. Follow-up: ẩn nút Switch/Re-queue với vai trò chỉ đọc; cột cuối bị cắt 32 px ở 1440. Chưa làm: A7, B3, B5, D3, H1, H2 | CIS #1218, #1242 |
 | AA-1026 Warm path + quản trị route | **In Review** | mig 327: bỏ key cũ `haiku`/`sonnet`, writer A-series → GPT trên OpenAI API cuối cùng (T-3), trần OpenAI 10 USD/tháng, báo 80 %, hard stop; smoke < 0,0001 USD. Dự phòng acc2: mig 331 (8 stage nền tảng), 332 (4 stage tenant), 333 (Nova Lite trước bước OpenAI trên 7 route judge); contract smoke live 11/12 rồi 19/20 (~0,0017 + ~0,0025 USD), parser đọc JSON đầu tiên (#1238), smoke đếm lỗi provider là failed (#1241). D7 live (đổi route judge phải có eval hoặc break-glass ≥ 20 ký tự + audit + chuông). Khoá Anthropic: lệnh một dòng cắm key (root #431). **Mở:** `a3_place_dedupe` chưa có bậc acc2 (Llama 4 từ chối forced tool choice; mig 337 thêm prompt mode → smoke Maverick trước) | CIS #1224 (327), #1232, #1233 (331), #1234 (332), #1238, #1239 (333), #1241, #1243; Infra #588, #596–#598; root #431, #440 |
 | AA-1027 TripPlanner + CRM trên lõi chung | **In Progress** | E1 (reply `truncated` = lỗi, route deadline) + E2 (`prompt_version`/`prompt_hash`/`request_id` trên ledger TP + gate) merged, Lambda assembly/browse đổi CodeSha256 (06:05Z); kiểm degrade narration live chưa làm (cần guest token). F1/F2: crm-037 stage profile + kill switch, gateway CRM trên lõi chung (live). TP #208: search chỉ embed trong không gian embedding của cột được tìm. Chưa làm: E3–E5, F3 (UI nháp AI), F4 (trả phí, chờ LLM) | TP #206, #207, #208; Partner #176 (crm-037), #177; Infra #587 |
@@ -107,7 +107,7 @@ trước khi mở việc mới).
   tập trung, B3 circuit chung cho provider ngoài LLM, B5 sổ top-up, D3 hợp đồng ledger, H1 app profile, H2 capacity S12,
   A10 CIS lên `shared/aa_llm`, D2 model lifecycle (cần IAM + MFA), I4 drill failover hằng tháng, I7 harness qualification,
   I8 data scope d10, I9 invoker role riêng TP/CRM (apply có MFA), D6 đối soát hoá đơn (≥01/12), E3–E5 TP, F3 UI nháp AI CRM.
-  PR mở: CIS #1245, #1246.
+  PR #1245 merged + deploy; #1246 đóng (file migration đã copy là bất biến).
 - **`a3_place_dedupe`:** chưa có bậc acc2 — chờ smoke Llama 4 Maverick ở prompt mode (mig 337) rồi migration sau.
 - **AA-1033:** chờ ảnh live + root #443.
 - **AA-959 / AA-960:** AA-959 chưa kiểm live; AA-960 chưa bắt đầu (dừng mở rộng CRM theo quyết định 16:30Z).
@@ -129,11 +129,13 @@ trước khi mở việc mới).
 Tổng LLM/API trả phí trong phiên **< 0,01 USD** (tổng `llm_call_log` của phiên: chưa kiểm). Chi phí định kỳ: giảm cảnh báo
 (mục tiêu ≤ ~6 USD/tháng từ 15,59 USD), trần OpenAI 10 USD/tháng (mức tối đa, không phải chi tiêu).
 
-## Jira: chờ duyệt (8 nháp)
+## Jira: đã đăng (8 comment, 02/11)
 
-8 nháp (PR-26 A/B/C, PR-25, PR-24, PR-23, PR-22, PR-20 kỳ 3) ở `.tmp-session/S263/jira-drafts.md` — **chưa đăng**, chờ
-tech lead duyệt một lần. Gồm 7 nháp S262 chuyển sang. Không soạn PR-27 (việc kỹ thuật). Sau khi đăng: ghi link comment vào
-bản public `jira-drafts.md` trong thư mục chốt phiên (không account ID, không link Drive riêng, không ảnh evidence-private).
+Tech lead duyệt một lần ("duyệt hết, bỏ dòng Nền tảng"). Subagent bị hook chặn ghi Jira nên điều phối tự đăng: PR-26 ×3
+(10596, 10597, 10598), PR-25 (10599), PR-24 (10600), PR-23 (10601), PR-22 (10602), PR-20 kỳ 3 (10603, kèm link trang báo
+cáo cho buổi họp 14:00); 25 ảnh. Sửa cho đúng sự thật lúc đăng: phí huỷ lần thử khác ảnh chụp lại (ghi cả hai), câu che
+thông tin cá nhân của trợ lý AI nói đúng mức "biết và phát hiện được", hộp Create agency không có email chủ, bước gộp địa
+điểm trùng "đã có model dự phòng đạt bài kiểm 02/11". Chi tiết: `docs/audits/2026-11-02-S263-close/jira-drafts.md`.
 
 ## Trạng thái kiểm cuối phiên
 
@@ -141,22 +143,30 @@ _(Điều phối điền từ `state-snapshot.md` của phiên: STS; ECS task de
 mỗi app; migration mới nhất mỗi owner (CIS, `bk-`, `tp-`, `crm-`); Lambda TP CodeSha256; Vercel Production; bảng job;
 PR còn mở; CI nhánh mặc định; cái gì cố ý để BẬT.)_
 
-- ECS: _chưa điền_
-- Endpoint + migration: _chưa điền_
-- Vercel / Lambda: _chưa điền_
-- Bảng job + wave: _chưa điền_
-- PR còn mở + CI: _chưa điền_
-- Cố ý để BẬT: _chưa điền_
+- STS: acc2 OK (phiên admin 8h).
+- ECS (5/5 COMPLETED, revision đang chạy = revision mới nhất): cis-api :973 + worker :539 cùng `dev-4f1244a9`; booking-api
+  :93 `967f9b2c`; crm-api :117 `f7e8d381`; crm-web :86 `e5d5d517`.
+- Endpoint + migration: CIS `/health` 200 `4f1244a9` v0.18.0, `/health/ready` schema **338** (336 chờ, 337/338 áp lệch thứ
+  tự); Booking 200 `967f9b2c` `bk-035`; CRM 200 `f7e8d381` `crm-039`; TripPlanner web 200 `8e59223a`.
+- Lambda TP: browse + assembly CodeSha256 `uAHKF2/…` (12:51Z 01/11). Vercel: run "Vercel Deploy" của CIS main `4f1244a9` success; portal/TP Production chưa kiểm riêng (portal /terms live có câu Nova/Llama của #190).
+- Bảng job + wave: `shared.job` 0 queued/running, wave mở 0.
+- PR còn mở: root #374 (bot infra docs, chưa merge được), #328 (cũ, AA-993 M5); CIS #1237, #1212 (dependabot), #1179
+  (release); Partner #133, Booking #161, TP #196 (release-please). Secret Scan full history CIS: sửa bằng #1247 (ghim
+  fingerprint head PR #1228 đã đóng).
+- Cố ý để BẬT/TẮT: **`DB_AUTO_APPLY_CONTRACT=false`** (Infra repo variable, công tắc ADR 0017a, tech lead đồng ý tắt auto
+  mode để đặt) — tắt tạm vì 336 làm mọi lượt Migration Apply đỏ và gate CIS chặn deploy; giờ 336 nằm dưới 338 nên
+  auto-apply coi là "manual, out-of-order" (dừng xanh) → **bật lại an toàn ở S264** sau khi chốt `tp_extract`. Kết nối
+  `typesafe` bật lại sau test B1. OpenAI trần 10 USD/tháng bật.
 
 ## Việc cần làm đầu phiên sau (S264), theo thứ tự
 
-1. **Jira:** 8 nháp → tech lead duyệt một lần → đăng; ghi link vào `jira-drafts.md`.
+1. **`tp_extract` + mig 336:** tìm caller TripPlanner (`op components`), gỡ hoặc giữ; áp 336 bằng DB Migrate khi hết traffic (hoặc migration mới thay thế), rồi bật lại `DB_AUTO_APPLY_CONTRACT`.
 2. **Cổng AI — phần còn lại** (AA-1024/1025/1026/1027): A7, B3, B5, D3, H1, H2, A10, D2, I4, I7, I8, I9, D6 (D6 ≥01/12);
-   merge CIS #1245 + #1246, kiểm A8, A9 live, B4 bật/tắt live.
+   kiểm A8 live, B4 bật/tắt live, A5 test âm live.
 3. **TripPlanner:** kiểm live E1–E2 (degrade narration, cần guest token) rồi E3–E5.
 4. **CRM F3:** UI nháp AI trong trip workspace (`crm.ai_draft`, entitlement `ai_assist`).
-5. **Caller `tp_extract`:** tìm ai còn gọi (2 dòng ngày 11/10) trước khi retire route (CIS #1246 giữ nó).
-6. **`a3_place_dedupe`:** bậc acc2 sau smoke Llama 4 Maverick ở prompt mode (mig 337).
+5. **Root #374** (bot infra docs) merge khi CI xanh; root #328 cũ: xem còn cần không.
+6. **`a3_place_dedupe`:** smoke Maverick prompt mode đã đạt (02/11, 0,00021 USD) → migration thêm bậc acc2.
 7. **Content studio:** trang hiện địa chỉ của phiên cũ (`info@…`) thay vì user CRM hiện tại; ẩn "Open Content studio" với
    đại lý không có tenant studio.
 8. **Trang Providers:** ẩn/khoá nút Switch/Re-queue với vai trò chỉ đọc; độ rộng cột cuối ở 1440.
