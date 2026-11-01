@@ -57,6 +57,7 @@ Everything runs on **acc2** (us-west-1) except the LLM calls, which run on acc3;
 | [Handle an SES bounce or complaint alarm](runbooks/ses-bounce.md) | draft, UNTESTED | read-only only |
 | [Handle a CRM KMS key alarm](runbooks/crm-keys.md) | draft, UNTESTED | rule patterns only (AA-932) |
 | [Plug in and probe the Anthropic API key](runbooks/llm-anthropic-api-key.md) | draft, UNTESTED | - (AA-1002 S2) |
+| [Re-embed a vector column into another embedding space](runbooks/embedding-re-embed.md) | draft, UNTESTED | - (AA-1026; T-15 test on `question_embedding` pending) |
 | Data subject request (manual delete/export) | planned (AA-839, D-11) | - |
 | Disaster recovery overview (`dr.md`) | planned (AA-829 / AA-880) | - |
 
