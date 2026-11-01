@@ -20,7 +20,9 @@ chạy lane; luật hook subagent ở `SKILL.md` mục "Điều phối và subag
    `lenses` khi lane có rủi ro khác (ví dụ UI kit, hiệu năng).
 4. **Fix:** một lượt sửa cho finding blocking/major; finding bị bác phải có lý do.
 5. **Kết quả:** `prs[]` theo thứ tự merge, mỗi PR có `live_steps`; `notes_vi` 3–6 dòng cho tech lead.
-6. **Điều phối** push, mở PR, chạy merge train (`aa-ship`, `references/merge-trains.md`), chạy `live_steps`.
+6. **Điều phối** mở PR bằng `python3 tools/github/ship_open_prs.py <wf_id>` (đọc `prs[]` của result cuối trong
+   journal, kiểm worktree/tiêu đề/`Refs` trước khi push, push không force, in `live_steps`; `--dry-run` để xem trước),
+   merge bằng `ship_merge.py` / train (`aa-ship`, `references/merge-trains.md`), rồi chạy `live_steps`.
 
 ## Luật trong brief
 

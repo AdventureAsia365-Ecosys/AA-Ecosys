@@ -319,3 +319,27 @@ def fmt_list(items: list[str], limit: int = 12) -> str:
 def die(e: ShipError) -> int:
     print(f"ERROR {e}", file=sys.stderr, flush=True)
     return e.code
+
+
+def mfa_status_line(runner: Runner, profile: str = "aa365-admin", remind_before: int = 30) -> tuple[int, str]:
+    """One line for the session start block: expiry, minutes left and when to remind the tech lead."""
+    exp = mfa_expiry(runner, profile)
+    if exp is None:
+        return 1, (f"MFA {profile}: expired or not unlocked; tech lead runs: aws sts get-caller-identity "
+                   f"--profile {profile}")
+    left = int((exp - datetime.fromtimestamp(runner.now(), tz=timezone.utc)).total_seconds() // 60)
+    local = exp.astimezone()
+    remind = datetime.fromtimestamp(exp.timestamp() - remind_before * 60, tz=timezone.utc).astimezone()
+    utc = exp.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
+    return 0, (f"MFA {profile}: ends {local.strftime('%H:%M')} local ({utc}), "
+               f"{left} min left; remind the tech lead at {remind.strftime('%H:%M')}")
+
+
+if __name__ == "__main__":
+    # python3 tools/github/ship_common.py mfa [profile]  -> session start line (skill aa-session step 2)
+    if len(sys.argv) >= 2 and sys.argv[1] == "mfa":
+        code, line = mfa_status_line(Runner(), *(sys.argv[2:3]))
+        print(line)
+        sys.exit(code)
+    print("usage: ship_common.py mfa [profile]", file=sys.stderr)
+    sys.exit(2)
