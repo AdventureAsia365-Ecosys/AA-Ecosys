@@ -108,6 +108,14 @@ their tenant and content (AA-979).
 | Client host (travellers) | no Cognito token; CRM link tokens and email codes (ADR 0008a decision 4) | per-person access rows |
 
 - `cis-admin` and `breakglass` tokens are **refused** on `/crm/v1`, with a negative test per route group.
+- **Note (2026-11-01, S263, AA-1031): who grants the three groups.** Like every other WORKFORCE staff group (ADR 0006
+  §3), they are granted only from the CIS staff directory: the CIS admin Staff page stores the person's CRM roles
+  (`platform_admin`, `ops`, `support`; several per person) in `shared.staff_crm_grant` (CIS migration 330), audits
+  each change like the Booking role, and adds and removes the matching group; a directory sync now removes a CRM group
+  the row does not hold, so a group set by hand is set on the Staff page first. The page's "Platform owner" preset
+  grants `cis-admin`, `booking-admin` and `crm-platform-admin` in one change and never sets the owner flag. The Dev-only
+  CRM staff E2E user of [ADR 0006a](0006a-identity-phase1-amendments.md) A10c stays outside the directory (exactly
+  `crm-ops` + `crm-support`); the directory health check lists it apart on Dev. The decisions above are unchanged.
 
 ### 7. An M2M pool for service-to-service calls
 

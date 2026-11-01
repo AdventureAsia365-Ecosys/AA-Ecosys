@@ -35,7 +35,8 @@ spend. The business owner uses it to see the whole platform. Partner agencies ne
 
 1. Ask a platform owner (today the tech lead) for access, with your `@adventure.asia` address and the work you do.
 2. The owner opens **Platform › People & access › Staff**, chooses **Add staff**, types your name and work e-mail,
-   and picks a **CIS role** and, if you also work in Booking, a **Booking role**.
+   and picks a **CIS role**, a **Booking role** if you also work in Booking, and one or more **CRM roles** if you
+   look after partner agencies in the CRM.
 3. You receive an invitation e-mail. If it does not arrive within a few minutes, the owner presses **Resend invite**
    on your row.
 
@@ -65,6 +66,18 @@ A session renews itself while you work and ends after about 12 hours. There is n
 
 Some buttons need more than the page: for example editing **Facts**, publishing **AA content (CRM)** and every tenant
 setting are admin only. The server checks the role again on every change.
+
+The same account also carries a **Booking role** (one of Booking admin, Sales, Contracting, Content creator, or none)
+and any number of **CRM roles** for the CRM staff work (none by default):
+
+| CRM role | What it allows |
+|---|---|
+| **Agency admin** | The write buttons of **Agencies (CRM)**: **Create agency**, **Invite first owner**, **Lock**, **Unlock** |
+| **Operations** | The CRM staff console for AA ground operations (traveller details released for a trip with a confirmed AA line) |
+| **Support** | The CRM staff console for support sessions; each session also needs the agency owner's grant in the CRM |
+
+After a role change, ask the person to sign out and in again; until then the session may keep the old access for up
+to 15 minutes.
 
 ## 6. The menu
 
@@ -118,7 +131,19 @@ The left menu has two sections.
 ### Manage staff (owners only)
 
 1. **Staff**: add, change role, disable or sign someone out. **Open in Booking** opens the same person in Booking
-   admin.
+   admin. The list shows the **CIS role**, **Booking role** and **CRM role** of every account (also in the CSV
+   export).
+   - Change roles: open the row, then **Manage access**. Pick the CIS role and Booking role, tick or untick the CRM
+     roles, and press **Save roles**. The change is saved in CIS first, then in the company sign-in, and recorded in
+     the **Audit log**. You cannot change your own CIS role; you can give yourself a Booking or CRM role.
+   - **Platform owner preset**: in **Manage access**, **Apply preset** gives CIS Administrator, Booking admin and CRM
+     Agency admin in one save (other CRM roles stay). It does not make the person an owner of the staff list; that
+     stays a separate, recorded step by the tech lead.
+   - If a save says the sign-in update is pending, press **Retry Cognito** (or **Retry Cognito sync**). A sync makes
+     the company sign-in match the row exactly, so a CRM access given by hand outside this page is removed unless the
+     row has that CRM role: set the role on the page first.
+   - **Directory health** (top of the page) compares the sign-in groups with the list once a day or on **Check now**;
+     a CRM role that differs is listed as a finding. The automated test accounts allowed on Dev are listed apart.
 2. **Audit log**: who changed what and when.
 3. **Alert recipients**: who receives alarm and budget e-mails.
 
@@ -129,8 +154,8 @@ The left menu has two sections.
    Audit, Settings). Inviting tenant members has no button yet: see the
    [Content studio runbook](content-studio-runbook.md#3-get-an-account).
 2. **Agencies (CRM)**: the partner agencies of the CRM. **Create agency**, **Invite first owner**, **Lock** and
-   **Unlock** need the CRM platform-admin staff group and a ticket reference; other admins can read the list and the
-   usage. Details: [CRM runbook](crm-runbook.md#3-get-an-account).
+   **Unlock** need the CRM role **Agency admin** (set on the Staff page, then sign in again) and a ticket reference;
+   other admins can read the list and the usage. Details: [CRM runbook](crm-runbook.md#3-get-an-account).
 
 ### A person asks for their data to be deleted
 
@@ -172,5 +197,5 @@ During the dev phase the tech lead is the engineer on duty. Normal issues go to 
 Read from AA-CIS-App `main` on 2026-11-01: `frontend/app/_kit/adminNav.tsx` (menu), `frontend/lib/rbac.ts` (roles),
 `frontend/app/login/page.tsx`, the `messages.ts` files of `admin/platform/staff`, `upload`, `s1-rewrite`, `review`,
 `master-content`, `platform/apps`, `tenants`, `platform/agencies`, `_kit/Topbar.tsx` (bell), and `CONTEXT.md`
-("Staff roles and permissions"). Sign-in design: root ADR 0006 and 0006a. Keep
+("Staff roles and permissions"). Sign-in design: root ADR 0006, 0006a and 0006b (CRM staff groups). Keep
 [cis-admin-runbook.vi.md](cis-admin-runbook.vi.md) in step with this page.
