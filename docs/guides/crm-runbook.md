@@ -208,7 +208,7 @@ tech lead) follows [incident response](../ops/incident-response.md); the CRM enc
 
 ## 9. Dev-phase caveats
 
-- Dev accepts **synthetic agencies only**; a real agency cannot be created on Dev. All travellers are invented.
+- You can create as many agencies as you need on Dev (for a demo, for training): **Create agency** marks every agency created on Dev as **synthetic** (test data) by itself, and the agency then has every CRM feature. The label keeps test data apart from real data: production will refuse synthetic agencies, and Dev must never hold real customer data (real names, phone numbers, passports). For a demo, invite your own e-mail as the owner, or use the ready test agency that already has sample trips, proposals, invoices and WhatsApp messages.
 - AI drafting runs a built-in stand-in, not a real model, so its texts are placeholders.
 - SMS and WhatsApp use a sandbox provider that sends nothing. Card payments by Stripe are not built yet; payments are
   recorded by hand.
