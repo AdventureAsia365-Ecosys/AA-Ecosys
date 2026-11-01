@@ -9,7 +9,10 @@ Targets: '<Repo> <pr>' (quoted), '<Repo>#<pr>', or loose '<Repo> <pr>' argv pair
 partner/crm, tp, infra.
 
 Gate (every target): wait for the PR's checks, then merge only when EVERY check is green (SUCCESS, NEUTRAL or
-SKIPPED), required or not — S263 #1225 merged through the queue with a red non-required "Migration preflight". It also
+SKIPPED), required or not — S263 #1225 merged through the queue with a red non-required "Migration preflight". A
+green read is not final: a job with `needs:` gets its check only when it is queued and a workflow_run workflow starts
+later, so the gate reads again after SETTLE_SECONDS, requires the same set of checks still green, and requires every
+workflow run on the head commit (`gh run list --commit`) to be finished and green. It also
 refuses a draft PR, a PR that does not target the default branch (a stacked PR still based on its parent), a DIRTY PR,
 and a PR that deletes files unless --allow-deletes (a squash from a stale base shows up as deletions, lessons
 S250/S253). The gate does not see job tables or waves: aa-ship §2 still applies before backend merges.
@@ -18,9 +21,10 @@ Merge: AA-CIS-App, AA-Booking, AA-Partner through the merge queue (mergeq.sh); T
 squash through the aa-agent App with --match-head-commit (the head that was gated). Queue repos run in parallel (one
 worker per PR, lesson S257); PRs of one non-queue repo run one after the other. --serial keeps the given order for all.
 
-Exit: 0 all merged (or green with --check-only) | 2 usage / gh error | 3 a check red or none reported |
-4 refused (draft, base, DIRTY, deletions, closed) or merge failed | 5 checks still pending at --timeout.
-Orchestrator only: the subagent hook blocks merges. Holds no secrets.
+Exit: 0 all merged (or green with --check-only) | 2 usage / gh error | 3 a check or workflow run red, or none
+reported | 4 refused (draft, base, DIRTY, deletions, closed) or merge failed | 5 checks still pending at --timeout.
+Orchestrator only: .claude/hooks/subagent-guardrails.sh refuses any subagent command that names this tool (the merge
+runs inside it, out of the hook's sight). Holds no secrets.
 """
 
 from __future__ import annotations
@@ -36,17 +40,22 @@ from ship_common import (
     Runner,
     ShipError,
     classify_checks,
+    classify_runs,
     default_branch,
     fmt_list,
     log,
     parse_targets,
     pr_view,
     removed_files,
+    runs_on_commit,
     slug,
     warn_mfa,
 )
 
 NO_CHECKS_GRACE = 180  # seconds to wait for a first check to register on a fresh head
+# A green read is confirmed by a second one this much later: checks of `needs:` jobs and workflow_run workflows are
+# created late (the failure mode of S263 #1225: a red non-required check after the merge).
+SETTLE_SECONDS = 25
 
 
 def gate(runner: Runner, repo: str, n: int, *, timeout: float = 2400, interval: float = 60,
@@ -54,6 +63,7 @@ def gate(runner: Runner, repo: str, n: int, *, timeout: float = 2400, interval: 
     """Wait for the PR's checks; return the PR (state MERGED is returned as is) or raise ShipError."""
     t0 = runner.now()
     tag = f"{repo}#{n}"
+    seen_green: frozenset | None = None  # the green set of the previous read, confirmed by the next one
     while True:
         pr = pr_view(runner, repo, n)
         elapsed = runner.now() - t0
@@ -78,6 +88,23 @@ def gate(runner: Runner, repo: str, n: int, *, timeout: float = 2400, interval: 
         if s.pending:
             if elapsed >= timeout:
                 raise ShipError(f"{tag} checks still pending after {int(timeout)}s: {fmt_list(s.pending)}", 5)
+            seen_green = None
+            runner.sleep(interval)
+            continue
+        green = frozenset(s.green)
+        if green != seen_green:
+            # First all-green read, or the set changed since the last one: read again before trusting it.
+            seen_green = green
+            runner.sleep(SETTLE_SECONDS)
+            continue
+        head = str(pr.get("headRefOid") or "")
+        rs = classify_runs(runs_on_commit(runner, repo, head))
+        if rs.red:
+            raise ShipError(f"{tag} REFUSED: red workflow runs on head {head[:8]}: {fmt_list(rs.red)}", 3)
+        if rs.pending:
+            if elapsed >= timeout:
+                raise ShipError(f"{tag} workflow runs still pending after {int(timeout)}s: {fmt_list(rs.pending)}", 5)
+            seen_green = None
             runner.sleep(interval)
             continue
         break

@@ -6,6 +6,7 @@ the network. HybridRunner runs real `git` (temporary repositories) and scripts e
 
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 import tempfile
@@ -32,6 +33,16 @@ def pr(n: int = 1, state: str = "OPEN", checks: list | None = None, head: str = 
             "statusCheckRollup": checks if checks is not None else [check("Lint"), check("Unit tests")]}
 
 
+def run_row(name: str, status: str = "completed", conclusion: str | None = "success", event: str = "pull_request",
+            created: str = "2026-11-01T10:00:00Z") -> dict:
+    """One `gh run list --commit` row (workflow runs on the gated head)."""
+    return {"databaseId": abs(hash((name, created))) % 10**9, "name": name, "workflowName": name, "event": event,
+            "status": status, "conclusion": conclusion, "createdAt": created}
+
+
+# Default answer to `gh run list --commit <sha>` (the gate's settle read): every workflow run finished and green.
+RUNS_GREEN = [run_row("CI"), run_row("Secret scan")]
+
 Response = Result | Callable[[list[str]], Result]
 
 
@@ -51,7 +62,13 @@ class FakeRunner(Runner):
 
     def _answer(self, argv: list[str]) -> Result:
         self.calls.append(list(argv))
-        for tokens, responses in self.rules:
+        rules = self.rules
+        if "--commit" in argv and "run" in argv:
+            # The gate's settle read: a rule naming "--commit" answers it, else every run is green.
+            rules = [rule for rule in self.rules if "--commit" in rule[0]]
+            if not rules:
+                return Result(0, json.dumps(RUNS_GREEN))
+        for tokens, responses in rules:
             if all(t in argv for t in tokens):
                 resp = responses.pop(0) if len(responses) > 1 else responses[0]
                 return resp(argv) if callable(resp) else resp

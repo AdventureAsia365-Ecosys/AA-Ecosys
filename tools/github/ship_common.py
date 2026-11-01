@@ -4,8 +4,9 @@ The tools merge, restack, copy-and-apply and open PRs for the AA_Ecosys repos. E
 the aa-agent App (as-app.sh next to this file); reads use the local `gh` login. No token, key or credential is
 printed: MFA expiry is read from `aws configure export-credentials` and only its Expiration field is kept.
 
-Orchestrator only: the subagent guardrail hook blocks push, merge and `gh workflow run`, and these tools do exactly
-that. Python stdlib only. Every external command goes through a Runner so the tests can replace it with a stub.
+Orchestrator only: they push, merge and dispatch workflows inside their own subprocesses, where the subagent
+guardrail hook cannot see the command, so .claude/hooks/subagent-guardrails.sh refuses any subagent command that names
+one of them (ship_merge/ship_train/ship_copy_apply/ship_open_prs, mergeq.sh, dbmig.sh, train-lib.sh, as-app.sh). Python stdlib only. Every external command goes through a Runner so the tests can replace it with a stub.
 """
 
 from __future__ import annotations
@@ -255,6 +256,38 @@ def classify_checks(rollup: list[dict] | None) -> CheckSummary:
                 s.green.append(label)
             else:
                 s.red.append(f"{label} ({(item.get('conclusion') or 'no conclusion').lower()})")
+    return s
+
+
+# Workflow run conclusions (gh run list, lower case) that count as green; a run that is not "completed" is pending.
+GREEN_RUN_CONCLUSIONS = frozenset({"success", "skipped", "neutral"})
+
+
+def runs_on_commit(runner: Runner, repo: str, sha: str) -> list[dict]:
+    """Every workflow run on one commit (any event)."""
+    data = gh_json(runner, ["gh", "run", "list", "-R", slug(repo), "--commit", sha, "-L", "100",
+                            "--json", "databaseId,name,workflowName,event,status,conclusion,createdAt"])
+    return list(data or [])
+
+
+def classify_runs(runs: list[dict]) -> CheckSummary:
+    """The latest run per (workflow, event) counts: it must be finished and green. An older run of the same workflow
+    (cancelled by concurrency, then started again) does not."""
+    latest: dict[tuple, dict] = {}
+    for r in runs or []:
+        key = (r.get("workflowName") or r.get("name") or "", r.get("event") or "")
+        if key not in latest or (r.get("createdAt") or "") >= (latest[key].get("createdAt") or ""):
+            latest[key] = r
+    s = CheckSummary()
+    for (wf, event), r in sorted(latest.items()):
+        label = f"{wf} ({event})" if event else wf
+        status = (r.get("status") or "").lower()
+        if status != "completed":
+            s.pending.append(f"{label} {status or 'no status'}")
+        elif (r.get("conclusion") or "").lower() in GREEN_RUN_CONCLUSIONS:
+            s.green.append(label)
+        else:
+            s.red.append(f"{label} {(r.get('conclusion') or 'no conclusion').lower()}")
     return s
 
 

@@ -13,7 +13,7 @@ import unittest
 import ship_common
 import ship_merge
 from ship_common import Result, ShipError, classify_checks, normalize_repo, parse_targets
-from ship_fakes import FakeRunner, check, pr, status_ctx
+from ship_fakes import FakeRunner, check, pr, run_row, status_ctx
 
 
 def js(obj) -> Result:
@@ -89,7 +89,7 @@ class GateAndMergeTest(unittest.TestCase):
     def test_waits_for_pending_then_merges_through_queue(self):
         pending = pr(checks=[check("Unit tests"), check("Integration", None, status="IN_PROGRESS")])
         r = (FakeRunner()
-             .on(("gh", "pr", "view"), js(pending), js(pr()), js(pr(state="MERGED", merge_oid="b" * 40)))
+             .on(("gh", "pr", "view"), js(pending), js(pr()), js(pr()), js(pr(state="MERGED", merge_oid="b" * 40)))
              .on(("gh", "api"), NO_DELETES)
              .on((ship_common.MERGEQ,), Result(0, "AA-CIS-App #7 MERGED bbbbbbbb")))
         sha = ship_merge.merge_one(r, "AA-CIS-App", 7, interval=60)
@@ -100,7 +100,7 @@ class GateAndMergeTest(unittest.TestCase):
     def test_non_queue_repo_squashes_the_gated_head_as_the_app(self):
         head = "c" * 40
         r = (FakeRunner()
-             .on(("gh", "pr", "view"), js(pr(head=head, base="master")),
+             .on(("gh", "pr", "view"), js(pr(head=head, base="master")), js(pr(head=head, base="master")),
                  js(pr(state="MERGED", merge_oid="d" * 40, base="master")))
              .on(("gh", "api"), NO_DELETES)
              .on((ship_common.AS_APP,), Result(0, "")))
@@ -123,7 +123,7 @@ class GateAndMergeTest(unittest.TestCase):
         with self.assertRaises(ShipError) as cm:
             ship_merge.merge_one(r, "AA-CIS-Infra", 5)
         self.assertIn("deletes 2 file", str(cm.exception))
-        r = (FakeRunner().on(("gh", "pr", "view"), js(pr()), js(pr(state="MERGED", merge_oid="e" * 40)))
+        r = (FakeRunner().on(("gh", "pr", "view"), js(pr()), js(pr()), js(pr(state="MERGED", merge_oid="e" * 40)))
              .on((ship_common.AS_APP,), Result(0, "")))
         self.assertEqual(ship_merge.merge_one(r, "AA-CIS-Infra", 5, allow_deletes=True), "e" * 40)
 
@@ -148,7 +148,7 @@ class GateAndMergeTest(unittest.TestCase):
     def test_queue_says_not_merged_but_github_already_merged(self):
         # Lesson S255: mergeq.sh can report "not merged" while the queue has just merged the PR.
         r = (FakeRunner()
-             .on(("gh", "pr", "view"), js(pr()), js(pr()), js(pr(state="MERGED", merge_oid="1" * 40)))
+             .on(("gh", "pr", "view"), js(pr()), js(pr()), js(pr()), js(pr(state="MERGED", merge_oid="1" * 40)))
              .on(("gh", "api"), NO_DELETES)
              .on((ship_common.MERGEQ,), Result(4, "not merged and not in the queue")))
         self.assertEqual(ship_merge.merge_one(r, "AA-CIS-App", 11), "1" * 40)
@@ -161,6 +161,65 @@ class GateAndMergeTest(unittest.TestCase):
             ship_merge.merge_one(r, "AA-CIS-App", 12)
         self.assertEqual(cm.exception.code, 4)
         self.assertIn("dropped from the queue", str(cm.exception))
+
+
+class SettleTest(unittest.TestCase):
+    """A green read is confirmed by a second read and by the workflow runs on the head (late checks)."""
+
+    def setUp(self):
+        self.redirect = contextlib.redirect_stdout(io.StringIO())
+        self.redirect.__enter__()
+
+    def tearDown(self):
+        self.redirect.__exit__(None, None, None)
+
+    def test_new_pending_check_on_the_second_read_is_waited_for(self):
+        # A `needs:` job registers its check only once it is queued: it shows up on the settle read.
+        first = pr(checks=[check("Lint"), check("Unit tests")])
+        late_pending = pr(checks=[check("Lint"), check("Unit tests"), check("Apply plan", None, status="QUEUED")])
+        late_red = pr(checks=[check("Lint"), check("Unit tests"), check("Apply plan", "FAILURE")])
+        r = (FakeRunner().on(("gh", "pr", "view"), js(first), js(late_pending), js(late_red))
+             .on(("gh", "api"), NO_DELETES).on((ship_common.MERGEQ,), Result(0, "")))
+        with self.assertRaises(ShipError) as cm:
+            ship_merge.merge_one(r, "AA-CIS-App", 21)
+        self.assertEqual(cm.exception.code, 3)
+        self.assertIn("Apply plan", str(cm.exception))
+        self.assertFalse(r.called(ship_common.MERGEQ))
+        self.assertGreaterEqual(r.slept, ship_merge.SETTLE_SECONDS)
+
+    def test_new_green_check_resets_the_settle_read(self):
+        first = pr(checks=[check("Lint")])
+        more = pr(checks=[check("Lint"), check("Copy guard")])
+        r = (FakeRunner().on(("gh", "pr", "view"), js(first), js(more), js(more),
+                             js(pr(state="MERGED", merge_oid="9" * 40)))
+             .on(("gh", "api"), NO_DELETES).on((ship_common.AS_APP,), Result(0, "")))
+        self.assertEqual(ship_merge.merge_one(r, "AA-CIS-Infra", 22), "9" * 40)
+        self.assertEqual(len(r.called("gh", "pr", "view")), 4)
+        self.assertEqual(len(r.called("--commit")), 1)
+
+    def test_pending_or_red_workflow_run_on_the_head_blocks(self):
+        # A workflow_run workflow has no check on the PR yet, but its run on the head commit is queued, then red.
+        runs_pending = js([run_row("CI"), run_row("Migration Copy Guard", status="queued", conclusion=None,
+                                              event="workflow_run")])
+        runs_red = js([run_row("CI"), run_row("Migration Copy Guard", conclusion="failure", event="workflow_run")])
+        r = (FakeRunner().on(("gh", "pr", "view"), js(pr(base="master")))
+             .on(("gh", "run", "list", "--commit"), runs_pending, runs_red)
+             .on(("gh", "api"), NO_DELETES).on((ship_common.AS_APP,), Result(0, "")))
+        with self.assertRaises(ShipError) as cm:
+            ship_merge.merge_one(r, "AA-Ecosys", 23)
+        self.assertEqual(cm.exception.code, 3)
+        self.assertIn("Migration Copy Guard (workflow_run) failure", str(cm.exception))
+        self.assertFalse(r.called(ship_common.AS_APP))
+        self.assertEqual(len(r.called("--commit")), 2)
+
+    def test_superseded_cancelled_run_does_not_block(self):
+        runs = [run_row("CI", conclusion="cancelled", created="2026-11-01T09:00:00Z"),
+                run_row("CI", created="2026-11-01T09:05:00Z")]
+        s = ship_common.classify_runs(runs)
+        self.assertEqual((s.red, s.pending), ([], []))
+        s = ship_common.classify_runs(list(reversed(runs)) + [run_row("CI", conclusion="cancelled",
+                                                                        created="2026-11-01T09:10:00Z")])
+        self.assertEqual(s.red, ["CI (pull_request) cancelled"])
 
 
 class RunTargetsTest(unittest.TestCase):
