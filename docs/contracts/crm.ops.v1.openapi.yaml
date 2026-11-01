@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: crm.ops.v1 (AA-Partner CRM → CIS admin, L1 platform console)
-  version: "1.6"
+  version: "1.7"
   description: >-
     Platform console API of the partner CRM (AA-Partner, root ADR 0010), served under /crm/ops/v1 and called by the
     CIS admin screen S-01 "Agencies (CRM)" (AA-941) and the CIS platform-ops pages (AA-936: job summary, LLM usage).
@@ -45,7 +45,10 @@ info:
     and error codes, tokens, guardrail text units, cost, latency, the sha256 of the scrubbed prompt, the prompt version,
     shadow / experiment flags, the scrub's entity total); never a prompt, an output, a placeholder value, the scrub
     receipt's per-kind counts or the member who asked. Each agency whose rows are returned gets one `ops_read` event
-    (reason `llm_calls`) in its audit log. Errors are
+    (reason `llm_calls`) in its audit log. Version 1.7 (AA-964 S263 F1, crm-037; additive for a reader that maps an
+    unknown status to `error`, as the CIS Calls tab does): `status` on GET /llm/calls (row and filter) adds the two
+    other ledger v2 statuses, `billed_unusable` (billed, no usable answer) and `truncated` (cut at its token limit,
+    never `ok`). Errors are
     `{detail, message?, fields?, state?, member_limit?}` (Problem); a 422 names the failing fields only, never the
     submitted values.
   x-aa-contract: crm.ops.v1
@@ -663,7 +666,7 @@ paths:
         - name: status
           in: query
           required: false
-          schema: {type: string, enum: [ok, refused, error]}
+          schema: {type: string, enum: [ok, refused, error, billed_unusable, truncated]}
         - name: limit
           in: query
           required: false
@@ -1299,7 +1302,7 @@ components:
         attempt_no: {type: [integer, "null"], minimum: 1}
         provider_request_id: {type: [string, "null"], maxLength: 128, description: The provider's request id (Bedrock RequestId)}
         job_id: {type: [string, "null"], format: uuid}
-        status: {type: string, enum: [ok, refused, error]}
+        status: {type: string, enum: [ok, refused, error, billed_unusable, truncated]}
         refusal_code: {type: [string, "null"], pattern: "^[a-z][a-z0-9_]{0,39}$"}
         error_class: {type: [string, "null"], pattern: "^[A-Za-z][A-Za-z0-9_]{0,63}$"}
         input_tokens: {type: integer, minimum: 0}
