@@ -136,7 +136,10 @@ gh workflow run db-migrate.yml --repo AdventureAsia365-Ecosys/AA-CIS-Infra --ref
 ```
 
 Expected: `SCRIPT done action=prepare result=<column>__shadow`, then a `SCRIPT column` line with `shadow_space` set.
-It adds a nullable `vector(1024)` column (a catalog-only change, no rewrite). Once per column of the group.
+It adds a nullable `vector(1024)` column (a catalog-only change, no rewrite) and the trigger
+`<column>__shadow_reset`: from now on a writer that rewrites a row's serving vector (a T9 piece rewritten, an upsert)
+also empties that row's shadow vector, so the fill picks the row up again and the swap never promotes a vector of
+text that is gone. Once per column of the group.
 
 ## 6. Fill the shadow (paid, capped, resumable)
 
@@ -144,12 +147,19 @@ It adds a nullable `vector(1024)` column (a catalog-only change, no rewrite). On
 curl -s -X POST https://api-cis.lumiguides.it.com/admin/job-runner/embedding-reembed/run -H "X-Admin-Secret: $ADMIN_SECRET" -H "x-admin-role: admin" -H "content-type: application/json" -d '{"mode": "fill", "column": "acp_contract.question_embedding.embedding", "cost_cap_usd": 1}'
 ```
 
-Watch the job on the Jobs page (progress: `written`, `blank`, `calls`, `spent_usd`, `last_key`). Result:
-`complete: true` when every row with a vector has a shadow vector (`remaining_rows` = `remaining_blank_rows`).
-`stopped: cost_cap` or a failure: queue the same payload again; it continues where it stopped (it only reads rows
-whose shadow is still empty). Each call writes one ledger row (stage = the column's writer stage, role `embed`,
-`quality_signal.op = reembed`, `embedding_space`). Writers keep writing the serving column in the old space during
-the fill; re-run the fill right before the swap to catch the rows they added.
+Watch the job on the Jobs page (progress: `written`, `blank`, `calls`, `spent_usd`, `job_spent_usd`, `last_key`).
+Result: `complete: true` only when every row with a vector has a shadow vector (`remaining_rows` = 0), which is what
+the swap needs. Rows whose source text is blank cannot be embedded: they come back as `remaining_blank_rows` and
+`blank_keys` (up to 50 keys) and keep `complete: false`; see [step 7b](#7b-blank-text-rows-before-a-swap).
+
+The cap is per job: the job's retries (3 attempts) and releases on deploy share it (`job_spent_usd`, from
+`shared.job.cost_usd`), so one enqueue never spends more than `cost_cap_usd`. An answer outside the target space fails
+the job at once (not retried: a retry would pay for the same page again). `stopped: cost_cap` or a failure: queue the
+same payload again (a new job, a new cap: that is the operator's decision); it continues where it stopped (it only
+reads rows whose shadow is still empty). Each call writes one ledger row (stage = the column's writer stage, role
+`embed`, `quality_signal.op = reembed`, `embedding_space`). Writers keep writing the serving column in the old space
+during the fill: rows they add, and rows whose vector they rewrite (the reset trigger empties those shadows), are
+picked up by a re-run of the fill right before the swap.
 
 ## 7. Index the shadow (only for a column that has a vector index)
 
@@ -160,9 +170,27 @@ lists from the data), with `CREATE INDEX CONCURRENTLY IF NOT EXISTS ... ON ... U
 vector_cosine_ops) [WITH (lists = 10)]` in its own no-transaction cis/ file (DB Migrate). `question_embedding` has no
 vector index: skip.
 
+## 7b. Blank-text rows (before a swap)
+
+The swap refuses while any row has a vector but no shadow vector, and a blank-text row never gets one. When a fill
+ends with `remaining_blank_rows` > 0 (its `blank_keys` name them):
+
+- `acp_contract.atom_embedding` / `acp_contract.question_embedding` are caches: the rows are atoms that are gone or
+  have no place, or blank questions, and the writers re-embed a cache row on demand if it is ever used again. Delete
+  them with the Infra script: `ACTION = "purge_blank"`, `COLUMN = "<the column>"`, `EXPECT_BLANK = <the fill's
+  remaining_blank_rows>`. Dry run first (prints the count, rolls back), then `MODE = "apply"` on a tech lead yes (a
+  data deletion, `skill/aa-cis-schema/references/destructive-ops.md`). Any other count is refused and nothing is
+  deleted: re-run the fill and read its number again.
+- `acp_shared.content_piece` / `geo.tour_place` are not caches: no purge. Read the rows by their keys; fix the text
+  and re-run the fill, or (tech lead decision) swap with `ALLOW_MISSING = True`, which leaves those rows without a
+  vector and the column nullable.
+
+Then re-run the fill: `complete: true`.
+
 ## 8. Swap the group
 
-- Job tables idle, no wave. Fill re-run last (step 6) so `remaining_rows` = `remaining_blank_rows` for every column.
+- Job tables idle, no wave. Fill re-run last (step 6) so every column of the group reports `complete: true`
+  (`remaining_rows` = 0, after step 7b).
 - `f10_embed` group (no catalog view reads these columns): the Infra script with `ACTION = "swap"` (dry run, then
   apply). Expected `SCRIPT done action=swap result=3`.
 - `tour_place` group: its dependent views (`catalog.v_component_embedding`, `catalog.v_tour_component`) belong to
@@ -182,7 +210,8 @@ vector index: skip.
   COMMIT;
   ```
 
-What the swap does: refuses while a row has a vector but no shadow vector; drops the dependent views (deepest first),
+What the swap does: refuses while a row has a vector but no shadow vector; removes the shadow reset triggers; drops
+the dependent views (deepest first),
 renames `<column>` → `<column>__prev` and `<column>__shadow` → `<column>` (NOT NULL and single-column indexes follow),
 recreates the views from their own definition as their owners with their options, grants and comments, marks the
 registry (`space_key` = the new space, `previous_*` = the old one) in the same transaction.
@@ -199,8 +228,8 @@ counts are unchanged.
 The Infra script with `ACTION = "rollback"` (or the guarded migration form for `tour_place`). Rows written after the
 swap have no old vector: the rollback refuses with their count. For the f10 caches delete those rows (they are
 re-embedded on demand: `atom_embedding` / `question_embedding` rows created after the swap time) or set
-`ALLOW_MISSING = True` (the column then stays nullable). After a rollback the new vectors sit in the shadow again: a
-later swap needs only a fill catch-up.
+`ALLOW_MISSING = True` (the column then stays nullable). After a rollback the new vectors sit in the shadow again,
+with the reset trigger back on: a later swap needs only a fill catch-up.
 
 ## 10. Cleanup (destructive, after 7 days without a rollback)
 
@@ -230,8 +259,9 @@ organization. No swap: the serving column is untouched.
    `titan-embed-text-v2/1024/v1`. Expected about 1,000 rows and `estimated_usd` well under 0.01. Stop if over 1 USD.
 2. Step 4: connection `acc2-usw2` on, probe `"ok": true`.
 3. Step 5: Infra script `ACTION = "prepare"`, `COLUMN = "acp_contract.question_embedding.embedding"` (dry run, apply).
-4. Step 6: fill with `"cost_cap_usd": 1`. Expected `complete: true`, `spent_usd` < 0.01, `calls` about the row count
-   divided by 16 (Titan pages), ledger rows with `quality_signal.op = reembed`.
+4. Step 6: fill with `"cost_cap_usd": 1`. Expected `complete: true` (or `false` with `remaining_rows` =
+   `remaining_blank_rows` = the blank questions: no purge for the test, it does not swap), `job_spent_usd` < 0.01,
+   `calls` about the row count divided by 16 (Titan pages), ledger rows with `quality_signal.op = reembed`.
 5. Verify (as `cis_app`, [ECS exec](ecs-exec-s3-mediated.md)):
    `SELECT count(*) AS n, count(embedding__shadow) AS shadow, min(vector_dims(embedding__shadow)) AS dims FROM acp_contract.question_embedding;`
    expected `shadow = n` (minus blank questions), `dims = 1024`; and
