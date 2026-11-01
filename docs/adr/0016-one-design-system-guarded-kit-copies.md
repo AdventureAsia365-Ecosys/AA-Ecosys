@@ -100,7 +100,11 @@ lockfile.
 | AA-TripPlanner-Web (B2C) | `frontend/ui/core/` | tokens | `frontend/kit.lock.json` |
 
 - The **tokens** profile is `tokens.css`, `tokens.ts`, `brand.ts`, `theme.ts`, `check-kit-copy.mjs`, `eslint-kit.mjs`
-  and `MANIFEST.json`. TripPlanner keeps its B2C components (`Button`, `Badge`, `Icon`, `Photo`, state components) on
+  and `MANIFEST.json`. **Amended 2026-11-01 (S263, AA-1033):** it also carries `aiNotice.messages.ts` (the wording of
+  the ecosystem's one AI notice, plain data) and `i18n.ts` (its one import, no React), so TripPlanner's own B2C notice
+  renders the same sentence as the kit `AiNotice` and the AI wording cannot drift between apps. The React component
+  `AiNotice.tsx` stays out of the profile. The profile list lives in `check-kit-copy.mjs` `TOKENS_PROFILE` and is
+  written to `MANIFEST.json` `profiles.tokens`, which the sync reads. TripPlanner keeps its B2C components (`Button`, `Badge`, `Icon`, `Photo`, state components) on
   purpose: they are a separate brand surface, not drift. Its Tailwind 3 config keeps mapping `k-*` onto `var(--aa-*)`
   (`tailwind.config.ts:13-43`).
 - The frozen CIS copy `AA-CIS-App/portal/app/_kit/` (pinned by `tests/unit/test_aa885_portal_split.py`) is not a
