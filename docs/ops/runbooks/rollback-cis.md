@@ -22,7 +22,7 @@ Moved here from `skill/aa-ship/SKILL.md` §5 (AA-869, S241). The skill now links
 ## When to use
 
 - Trigger: a CIS deploy finished (rollout `COMPLETED`) but the app is wrong: 5xx on changed routes, wrong data,
-  a broken admin page that depends on the API, or the `aa-cis-dev-api-5xx` alarm right after a deploy.
+  a broken admin page that depends on the API, or a Sentry error burst / `aa-cis-dev-api-no-healthy-task` right after a deploy.
 - Not for:
   - a deploy that never became healthy. The ECS deployment circuit breaker (enabled, with rollback) already
     returns the service to the previous revision by itself. Check the rollout state first.

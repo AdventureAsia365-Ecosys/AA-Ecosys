@@ -84,7 +84,7 @@ All of them fail closed: an unreachable gate or an unreadable answer blocks. The
    re-run on purpose, and note which in the issue.
    A DB Migrate override restarts nothing: a lock conflict with a busy job fails the migration after its
    `lock_timeout` (5 s).
-   Expected: no row stays `running` past twice its kind's expected time (`aa-cis-dev-jobs-overdue-running` stays OK).
+   Expected: no row stays `running` past twice its kind's expected time (no `jobs_overdue` ops check in the admin bell).
 
 ## Verify the result
 

@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-api, aa-booking-api, aa-crm-api, aa-crm-web, aa-crm-portal, tripplanner-lambda]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-11-01
 review_every_days: 90
 related: [OPS-04, OPS-02-cis, OPS-02-booking, OPS-02-tp-lambda, OPS-04-queue-stuck, AA-870, AA-892]
 ---
@@ -21,18 +21,18 @@ related: [OPS-04, OPS-02-cis, OPS-02-booking, OPS-02-tp-lambda, OPS-04-queue-stu
 
 | Alarm | Fires when |
 |---|---|
-| `aa-cis-dev-api-5xx` | 5 or more 5XX from the CIS REST API in 5 minutes |
-| `aa-cis-dev-api-latency-p95` | integration latency p95 above 5 s for 15 minutes |
-| `aa-booking-dev-api-5xx` | 5 or more 5XX from the Booking REST API in 5 minutes |
-| `aa-booking-dev-no-healthy-task`, `aa-booking-dev-unhealthy-hosts`, `aa-cis-dev-ecs-running-tasks-low` | no healthy task behind the API |
-| `aa-crm-dev-no-healthy-task`, `aa-crm-dev-unhealthy-hosts`, `aa-crm-dev-web-*`, `aa-crm-dev-portal-*` (incl. `aa-crm-dev-portal-target-5xx`) | the CRM API, CRM web or portal (Content studio) has no healthy task or answers 5xx |
-| `aa-booking-dev-cpu-high`, `aa-crm-dev-cpu-high` | service CPU above 85 % for 15 minutes |
-| `aa-booking-dev-uptime` | the ops-probe Lambda `aa-cis-dev-dfs-balance-check`, which also probes Booking, reported errors in 2 periods of 5 minutes |
+| `aa-cis-dev-api-no-healthy-task`, `aa-booking-dev-no-healthy-task`, `aa-crm-dev-no-healthy-task`, `aa-crm-dev-web-no-healthy-task`, `aa-crm-dev-portal-no-healthy-task` | no healthy target behind the ALB for 5 minutes (service down) |
 | `aa-tripplanner-dev-browse-errors`, `aa-tripplanner-dev-assembly-errors` | 3 or more Lambda errors in 5 minutes |
-| `aa-tripplanner-dev-browse-throttles`, `aa-tripplanner-dev-assembly-throttles` | more than 5 throttles in 5 minutes, 2 of 3 periods |
-| `aa-cis-dev-rds-*` (connections, CPU, memory, storage, latency) | the shared database is the cause |
+| `aa-tripplanner-dev-browse-throttles` | more than 5 throttles in 5 minutes, 2 of 3 periods |
+| `aa-cis-dev-rds-*` (CPU, free storage, connections) | the shared database is the cause |
+| EventBridge rule `aa-sec-dev-rds-instance-event` (e-mail `[aa-rds] aa-cis-dev-db: RDS-EVENT-...`) | the shared database shut down, restarted, stopped, failed, is recovering or is low on storage |
+| `aa-ecosys-dev-nat-system-check-recover`, `aa-ecosys-dev-nat-instance-check-failed` | the NAT instance failed its system check (CloudWatch recovers it) or its guest OS check (reboot it): all private-subnet egress, the in-app check e-mails included, goes through it |
 
-Also: a Sentry issue for the CIS api or worker (free plan), or a person reporting a broken page. Exact conditions: the
+Since the S263 alert diet (AA-1025) there is no CloudWatch alarm on API 5xx, latency, unhealthy hosts or service CPU:
+an app error that answers 5xx is a **Sentry** issue (CIS, Booking and Partner report to Sentry), an outage is the
+`*-no-healthy-task` alarm.
+
+Also: a Sentry issue (free plan), or a person reporting a broken page. Exact conditions: the
 [alarm catalog](../../generated/alarms.md).
 
 ## First 5 minutes
@@ -48,9 +48,10 @@ Also: a Sentry issue for the CIS api or worker (free plan), or a person reportin
    aws cloudwatch describe-alarms --state-value ALARM --profile aa365-admin --region us-west-1 --query "MetricAlarms[?!starts_with(AlarmName, 'TargetTracking')].[AlarmName,StateUpdatedTimestamp]" --output table
    ```
 
-   Expected: `200` from each, and readiness JSON from Booking (checked 2026-10-28). `TargetTracking-…-AlarmLow-…` alarms in ALARM are autoscaling
-   scale-in signals, not incidents. One app failing points at that app; all of them failing points at RDS, the network (NAT alarm
-   `aa-ecosys-dev-nat-status-check-failed`) or DNS.
+   Expected: `200` from each, and readiness JSON from Booking (checked 2026-10-28). One app failing points at that app;
+   all of them failing points at RDS (the `[aa-rds]` event e-mail if it is down or stopped), the network (NAT recover
+   alarm `aa-ecosys-dev-nat-system-check-recover`; NAT guest-OS alarm `aa-ecosys-dev-nat-instance-check-failed`:
+   reboot the instance) or DNS.
 
 2. Was there a deploy in the last hour? If yes, that is the first suspect.
 
@@ -76,9 +77,9 @@ Also: a Sentry issue for the CIS api or worker (free plan), or a person reportin
 |---|---|
 | Started with a deploy | Roll back: [CIS](../runbooks/rollback-cis.md), [Booking](../runbooks/rollback-booking.md), [TP Lambdas](../runbooks/rollback-tp-lambda.md), [Terraform](../runbooks/rollback-terraform.md). CRM API, web and portal: no runbook yet; until 2026-11-03 the portal can fall back to Vercel ([rollback-vercel](../runbooks/rollback-vercel.md)) |
 | `AccessDenied` / `42501 permission denied` after an Infra apply or a migration | A grant or IAM change: roll back that change; for DB grants run the [isolation probe](../runbooks/isolation-probe.md) |
-| `too many connections`, pool acquire timeouts, `aa-cis-dev-rds-connections-high` | Connection budget (C2.2): find the caller in the `aa-cis-dev-rds-role-connections-*` alarms; scale the noisy service down to its minimum, stop a runaway job ([queue stuck](queue-stuck.md)) |
+| `too many connections`, pool acquire timeouts, `aa-cis-dev-rds-connections-high` | Connection budget (C2.2): find the caller in the CIS ops check `rds_role_connections` (admin bell / alert e-mail, roles over 80 %); scale the noisy service down to its minimum, stop a runaway job ([queue stuck](queue-stuck.md)) |
 | Tenant routes only (`/v1/...`), `aa817_tenant_pool_unavailable` in the log | Tenant pool or RLS: switch the route back to the admin pool ([feature flags](../feature-flags.md), break-glass C) |
-| Slow, not failing (p95) | RDS CPU or a long query; a heavy job running - check the Jobs page |
+| Slow, not failing | RDS CPU or a long query; a heavy job running - check the Jobs page |
 | Only Bedrock/OpenAI-backed routes | Provider outage or quota: see [LLM cost spike](llm-cost-spike.md) for the routes, wait or switch the route |
 
 ## Close

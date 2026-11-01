@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-dev-db]
-last_reviewed: 2026-10-29
+last_reviewed: 2026-11-01
 review_every_days: 90
 related: [ARCH-08, ARCH-08-engineering, ARCH-08-data-management, ARCH-08-schema-ownership]
 ---
@@ -150,8 +150,8 @@ The partner CRM's NOLOGIN roles (`crm_owner`, `crm_ai_reader`, `crm_insights`, `
 `docs/implementation-notes/AA-860-S15.md`): per-job pools `cis-job` (export / recompute 5, S1 Jev gates 4,
 grounding 2 per in-flight rewrite), the eval pool 2 (eval workflow only) and short-lived ad-hoc `asyncpg.connect`
 calls. Theoretical worst case per api + worker task set ≈ 63 (× 2 during a deploy overlap); measured instance-wide
-`DatabaseConnections` daily max 28 (05–18/10/2026). The limit stays 90 (S15c); 53300 on `cis_app` is a CloudWatch log
-alarm (S18) next to `RoleConnectionLimitPct` > 80 %. Raise it only by an Infra `roles/` file, never a CIS migration.
+`DatabaseConnections` daily max 28 (05–18/10/2026). The limit stays 90 (S15c); 53300 on `cis_app` is a CIS in-app
+check (`cis_app_too_many_connections`, was a CloudWatch log alarm until S263) next to `rds_role_connections` > 80 %. Raise it only by an Infra `roles/` file, never a CIS migration.
 
 ### C2.3 Rules
 
@@ -201,36 +201,33 @@ except rows marked **Now** (approved for immediate delivery).
 
 ## C4. Monitoring and alerting baseline
 
-### C4.1 CloudWatch alarms (in `accounts/aa365/observability_ecosys.tf`, all to `aws_sns_topic.alerts` defined in `accounts/aa365/observability.tf`)
+### C4.1 Alarms and in-app checks (CloudWatch in `accounts/aa365/observability_ecosys.tf`, all to `aws_sns_topic.alerts` defined in `accounts/aa365/observability.tf`)
 
-CIS has no recurring job scheduler today (Booking has recurring kinds in its worker). Every
-"nightly" or "custom metric" item in this part (N1 dump, per-role connection metric, retention
-kinds, backlog age) is triggered by an EventBridge Scheduler rule that only **enqueues** a job
-(ADR 0003 decision 5; existing pattern `accounts/aa365/dfs_balance.tf` `aws_scheduler_schedule`).
-Built for the per-role metric (AA-832). CIS daily kinds (retention, photo sync, staff reconcile) are enqueued through
-admin schedule endpoints such as `POST /admin/job-runner/retention/schedule` (AA-825), which only enqueue; the N1
-dump runs as a nightly GitHub Actions workflow instead (DB Schema Dump). Publishing a custom metric needs `cloudwatch:PutMetricData` on the CIS
-task role (shared by api and worker), scoped by `cloudwatch:namespace`, added in the same Infra PR.
+S263 alert diet (AA-1025, tech lead approved; table of every alarm: `docs/audits/2026-11-01-S263-alerting-cost/diet.md`):
+CloudWatch keeps only what the apps cannot see themselves. Everything an app can read from its own database or
+process is an **in-app check** evaluated by the app's own 5-minute loop (CIS `api/core/ops_metrics_sampler.py` +
+`shared/ops_checks.py`, Booking `app/jobs/ops_checks.py`, AA-Partner `app/observability/ops_alerts.py`), mailed on the
+same alerts topic (task role `sns:Publish`, env `ALERTS_TOPIC_ARN`) at most once per check per UTC day (per event for
+event checks); CIS also writes the admin bell. No app publishes a CloudWatch custom metric for these any more.
 
-| Alarm | Threshold | Status |
+| Signal | Threshold | Where (S263) |
 |---|---|---|
-| `rds-connections-high` (`DatabaseConnections`) | > 60 for 5 min on t3.micro; after a resize, 60 % of `max_connections` for 5 min | **Exists**: > 108 (60 % of 181) for 5 min, `local.rds_max_connections` (AA-832, Infra #155) |
-| `rds-free-storage-low` (`FreeStorageSpace`) | < 50 % of allocated storage | **Exists** (AA-824, Infra #121) |
-| `FreeableMemory` | < 100 MB (t3.micro), < 200 MB (t4g.small), < 10 % of RAM (larger) | **Exists**: < 200 MiB for 10 min (AA-824 #121, raised by AA-832 #155; live floor 523 MB) |
-| `CPUUtilization` | > 80 % for 15 min | **Exists** (#121; `notBreaching` since #155) |
-| `CPUSurplusCreditsCharged` | > 0 (T-class runs Unlimited, so the symptom is cost) | **Exists** (AA-824, #121) |
-| `ReadLatency` / `WriteLatency` | > 20 ms for 15 min | **Exists** (AA-832, Infra #155) |
-| `DiskQueueDepth` | > 10 for 15 min | **Exists** (AA-832, Infra #155) |
-| `MaximumUsedTransactionIDs` | > 1,000,000,000 | **Exists** (AA-832, Infra #155) — wraparound guard |
-| Per-role connections | > 80 % of `CONNECTION LIMIT` | **Exists** (AA-832): CIS job `ops_rds_role_connections` (CIS #771) every 5 min → `AA/RDS RoleConnectionLimitPct{Role}`, one alarm per limited role, 1 of 2 periods (Infra #155). SNS fire + recover tested 16/10/2026 |
-| Per-role sampling stopped | no `RoleConnections` sample for 45 min | **Exists** (AA-832, Infra #155). The one alarm that treats missing data as **breaching** (exception to C4.1a): its job is to notice missing data |
-| Job backlog age, per owner (`shared.job`, `booking.job`, later `<schema>.job`) | oldest **claimable** `queued` row (due: `run_after <= now()`, by `run_after`) > 15 min, capacity-aware (CIS: starved while workers are full; Booking: 0 while a healthy job of the owner runs), or any `running` past 2 × the kind's `expected_seconds` (a registry attribute, not a column, so the owner's app computes it) | **Exists** (AA-751): in-process samplers every 5 min, CIS `api/ops_metrics_sampler` (CIS #786) → `AA/Jobs/CIS`, Booking `JobMetricsSampler` (Booking #26) → `AA/Jobs/Booking`; alarms `aa-<owner>-dev-jobs-queue-age` / `-overdue-running` / `-sampling-stopped` (Infra #160). Fired and recovered: CIS 16/10 (S240), Booking 17/10 (S241). |
-| Existing app alarms (Lambda errors/throttles, Booking health/5xx/CPU, NAT status) | as defined | Keep |
+| `rds-connections-high` (`DatabaseConnections`) | > 60 for 5 min on t3.micro; after a resize, 60 % of `max_connections` for 5 min | **CloudWatch**: > 108 (60 % of 181) for 5 min, `local.rds_max_connections` (AA-832) |
+| `rds-free-storage-low` (`FreeStorageSpace`) | < 50 % of allocated storage | **CloudWatch** (AA-824) |
+| `CPUUtilization` | > 80 % for 15 min | **CloudWatch** |
+| `FreeableMemory`, `CPUSurplusCreditsCharged`, `ReadLatency` / `WriteLatency`, `DiskQueueDepth` | as before | **Removed on Dev** (never fired; the C4.3 weekly review covers them). Prod re-decides (ADR 0018) |
+| `MaximumUsedTransactionIDs` | > 1,000,000,000 | **In-app (CIS)**: `rds_xid_age`, `max(age(datfrozenxid))` on the ops sampler tick |
+| Per-role connections | > 80 % of `CONNECTION LIMIT` | **In-app (CIS)**: `rds_role_connections`, every LOGIN role with a limit (`pg_roles` + `pg_stat_activity`) on the tick; `cis_app` refused connections (`too many connections for role "cis_app"` in a log line) as `cis_app_too_many_connections` |
+| Job backlog age, per owner (`shared.job`, `booking.job`, `crm.job`) | oldest **claimable** `queued` row > 15 min, capacity-aware (CIS: starved while workers are full; Booking / CRM: 0 while a healthy job runs), or any `running` past 2 × the kind's `expected_seconds` | **In-app** in each owner's sampler (`jobs_starved` / `jobs_stuck`, `jobs_overdue`). The CIS job check mails from the api, not through the worker |
+| Sampler stopped (heartbeat) | — | **Removed**: each sampler runs in its API process; the API down is the service's `*-no-healthy-task` alarm. The heartbeats treated missing data as breaching, so they also mailed when the database was down; that case is now the RDS instance events rule (next row) |
+| Shared RDS down, stopped, failed, recovering or low on storage | any RDS instance event of category availability, failure, low storage or recovery, and `RDS-EVENT-0087` / `0088` / `0154` (stopped, started, started after 7 days) | **EventBridge** rule `aa-sec-<env>-rds-instance-event` (free, one e-mail per event). Every in-app check needs the database, so nothing else reports it down. Not covered: a database AWS reports healthy that the apps cannot log in to (failing requests reach Sentry) |
+| Service down (every ECS service behind the ALB, CIS api included) | no healthy target for 5 min | **CloudWatch**: `*-no-healthy-task` (ALB `HealthyHostCount`) |
+| Lambda errors (Cognito triggers, TripPlanner, snapshot expiry), TripPlanner browse throttles, NAT recover and NAT guest-OS check, SES bounce / complaint, backup copy age, break-glass token, CRM KMS decrypt anomaly | as defined | **CloudWatch** (what only AWS sees) |
 
 | # | Rule | Why | Enforced by |
 |---|---|---|---|
-| C4.1a | Every alarm in C4.1 MUST exist in Terraform (no console-only alarms) and treat missing data as not breaching. | Dev is stopped on purpose at times; console alarms drift. | Review checklist on `observability_ecosys.tf`. |
-| C4.1b | An alarm threshold tied to `max_connections` or RAM MUST be updated in the same PR as an instance resize. | A stale absolute threshold silently stops protecting. | C9.1 runbook step; review checklist. |
+| C4.1a | Every CloudWatch alarm MUST exist in Terraform (no console-only alarms) and treat missing data as not breaching (the backup copy age and TripPlanner jobs not-run alarms are the documented exceptions: missing data there means the function did not run). A signal an app can read from its own database or process MUST be an in-app check, not a custom metric + alarm. State alarms e-mail on ALARM and OK, event alarms on ALARM only. | Dev is stopped on purpose at times; console alarms drift; acc2 has no CloudWatch free tier (every alarm-metric 0.10 USD, every custom metric 0.30 USD a month). | Review checklist on `observability_ecosys.tf`; diet table. |
+| C4.1b | An alarm or check threshold tied to `max_connections` or RAM MUST be updated in the same PR as an instance resize. | A stale absolute threshold silently stops protecting. | C9.1 runbook step; review checklist. |
 
 ### C4.2 Logs
 
@@ -317,7 +314,8 @@ kinds (`AA-Booking/backend/app/jobs/queue.py` `prune`, succeeded/cancelled rows 
 Current facts: CIS `shared.job` runs on `aa-cis-dev-worker` (`JOB_WORKER_IN_API=false`),
 `JOB_WORKER_MAX_PARALLEL` default 8, `BACKGROUND_MAX_RUNNING = 1`, per-kind DB-wide `concurrency`
 in `shared/jobs/registry.py`, claims serialized by `pg_advisory_xact_lock(650001)` + `FOR UPDATE
-SKIP LOCKED`, autoscaling 1..`worker_max_count` (3) on CPU 70 % / memory 80 %, drain `grace_seconds`
+SKIP LOCKED`, scalable target 1..`worker_max_count` (3) with no target-tracking policy on Dev since S263 (AA-1025: a
+heavy wave raises the desired count by hand, `docs/ops/job-kinds.md`), drain `grace_seconds`
 20 s inside an ECS `stopTimeout` of 120 s, lease 90 s. Booking runs its `booking.job` worker inside
 the API process when `WORKER_ENABLED` is on: one job at a time, lease 300 s, on shutdown it stops the
 loop and waits `WORKER_STOP_TIMEOUT_S` = 20 s (`app/main.py`) inside an ECS `stopTimeout` of 30 s

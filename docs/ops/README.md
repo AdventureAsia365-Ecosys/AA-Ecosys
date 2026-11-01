@@ -71,7 +71,8 @@ Drills and their evidence: [drill index](drills/README.md).
 - [Alarm catalog](../generated/alarms.md): every alarm with its condition and runbook link, generated from Terraform by
   AA-CIS-Infra Docs Gen (AA-893). Live state:
   `aws cloudwatch describe-alarms --state-value ALARM --profile aa365-admin --region us-west-1 --query "MetricAlarms[].[AlarmName,StateValue]" --output table`.
-  The `TargetTracking-…-AlarmLow-…` alarms are autoscaling signals and sit in ALARM normally.
+  Since the S263 alert diet only the essential alarms stay (no target-tracking alarms on Dev); job, connection and
+  log-event signals are in-app checks (bell + alert e-mail): `docs/audits/2026-11-01-S263-alerting-cost/diet.md`.
 - Secrets register: `docs/security/secrets-register.md` (AA-878).
 
 ## Runbooks in other places

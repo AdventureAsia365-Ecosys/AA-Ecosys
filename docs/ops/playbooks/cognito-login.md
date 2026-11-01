@@ -29,9 +29,11 @@ password login is off since AA-816 S2 (2026-10-22) ([legacy login flag](../runbo
 ## Triggers
 
 - A staff member reports "no code", "not authorised", or a loop back to the login page.
-- Alarms: `aa-identity-dev-workforce-pre-token-errors` (20 or more refusals or errors in 5 minutes),
-  `…-pre-token-throttles`, `…-pre-token-duration-p99`, the same three for `…-workforce-pre-sign-up`,
-  `aa-identity-dev-trigger-unexpected-error`, `aa-identity-dev-waf-blocked` and `aa-email-dev-bounce-rate`. The
+- Alarms: `aa-identity-dev-workforce-pre-token-errors` (20 or more refusals or errors in 5 minutes), the same for
+  `…-workforce-pre-sign-up`, `aa-identity-dev-trigger-unexpected-error` (one unexpected exception: sign-ins are being
+  refused) and `aa-email-dev-bounce-rate`. Since the S263 alert diet there is no throttles, p99 duration or WAF blocked
+  alarm: a throttled or timed-out trigger fails the sign-in and counts as an error; blocked requests stay in the WAF
+  log. The
   `aa-identity-dev-external-*` alarms (the EXTERNAL pool, no live staff sign-in) link here too. Conditions: the
   [alarm catalog](../../generated/alarms.md).
 - Chrome shows "Dangerous site" for lumiguides.it.com (Safe Browsing review of 2026-10-18; backlog §1).
