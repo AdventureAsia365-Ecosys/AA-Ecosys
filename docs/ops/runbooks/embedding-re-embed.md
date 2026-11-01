@@ -39,7 +39,11 @@ AA-CIS-Infra `db/scripts/aa1026_embedding_shadow.py`; AA-TripPlanner-Web `backen
 - A move is: new vectors into `<column>__shadow` (resumable, capped job) → **swap** the whole group in one transaction
   (old vectors kept as `<column>__prev`, dependent views rebuilt, registry updated) → writers and searches embed in the
   new space within 60 s, no code change.
-- Rollback while `__prev` is kept: `shared.embedding_rollback`. Cleanup after a week: drop `__prev`.
+- Rollback while `__prev` is kept (the Infra script's `rollback`). Cleanup after a week: a destructive migration drops
+  `__prev`.
+- Every owner step (prepare, swap, rollback, drop shadow) is the AA-CIS-Infra run-script
+  `db/scripts/aa1026_embedding_shadow.py`, run by DB Migrate as `cis_owner`: a dry run prints each DDL statement and
+  rolls back, then the same with `MODE = "apply"`. CIS migration 329 only adds the shadow reset trigger function.
 
 ## When to use
 
@@ -76,7 +80,8 @@ Decide in this order:
 ## Before you start
 
 - CIS migrations 328 and 329 applied on Dev (`shared.schema_versions` has both), the CIS code deployed (api and worker
-  on the same SHA), Infra `db/scripts/aa1026_embedding_shadow.py` on Infra `main`.
+  on the same SHA), Infra `db/scripts/aa1026_embedding_shadow.py` on Infra `main` (the version that runs the DDL itself;
+  its `prepare` refuses while 329's `shared._embedding_shadow_reset()` is missing).
 - A tech lead yes for the paid part with a cap (`cost_cap_usd`), per run.
 - For a **swap**: job tables idle (DB Migrate checks it) and no open wave.
 
@@ -107,7 +112,7 @@ curl -s https://api-cis.lumiguides.it.com/admin/job-runner/jobs/<job_id> -H "X-A
 ```
 
 Expected result: `rows`, `blank_rows`, `chars`, `estimated_tokens`, `estimated_usd`, `requests`, `prepared: false`
-and `next_steps` (the exact owner calls). Repeat for every column of the group. `published_tours.content_embedding`
+and `next_steps` (the Infra script's `ACTION` / `COLUMN` / `SPACE` for each owner step). Repeat for every column of the group. `published_tours.content_embedding`
 answers 422/failed "no re-embed text source": it has no writer, see [published_tours](#published_tours).
 
 ## 4. Switch the fallback connection on and probe it (< 0.0001 USD)
@@ -135,8 +140,9 @@ merged), then `MODE = "apply"`. Dispatch:
 gh workflow run db-migrate.yml --repo AdventureAsia365-Ecosys/AA-CIS-Infra --ref main -f environment=dev -f mode=run-script -f script=db/scripts/aa1026_embedding_shadow.py
 ```
 
-Expected: `SCRIPT done action=prepare result=<column>__shadow`, then a `SCRIPT column` line with `shadow_space` set.
-It adds a nullable `vector(1024)` column (a catalog-only change, no rewrite) and the trigger
+Expected: `SCRIPT ddl sql=ALTER TABLE ... ADD COLUMN "<column>__shadow" vector(1024)`, `SCRIPT ddl sql=CREATE TRIGGER
+"<column>__shadow_reset" ...`, `SCRIPT done action=prepare result=<column>__shadow`, then a `SCRIPT column` line with
+`shadow_space` set (the dry run ends with `SCRIPT rolled_back`, the apply with `SCRIPT committed`). It adds a nullable `vector(1024)` column (a catalog-only change, no rewrite) and the trigger
 `<column>__shadow_reset`: from now on a writer that rewrites a row's serving vector (a T9 piece rewritten, an upsert)
 also empties that row's shadow vector, so the fill picks the row up again and the swap never promotes a vector of
 text that is gone. Once per column of the group.
@@ -191,30 +197,65 @@ Then re-run the fill: `complete: true`.
 
 - Job tables idle, no wave. Fill re-run last (step 6) so every column of the group reports `complete: true`
   (`remaining_rows` = 0, after step 7b).
-- `f10_embed` group (no catalog view reads these columns): the Infra script with `ACTION = "swap"` (dry run, then
-  apply). Expected `SCRIPT done action=swap result=3`.
+- `f10_embed` group (no view reads these columns) and `published_tours` (read by `acp_contract.v_trip_registry`,
+  `cis_owner`'s): the Infra script with `ACTION = "swap"`, `COLUMN` = any column of the group (dry run, then apply).
+  The dry run prints every statement (`SCRIPT ddl ...`, view bodies by name only) and rolls back. Expected on apply
+  `SCRIPT done action=swap result=3` for `f10_embed`.
 - `tour_place` group: its dependent views (`catalog.v_component_embedding`, `catalog.v_tour_component`) belong to
-  `catalog_owner`, which the master login may not act as. Swap it with a one-line **cis/ migration** applied by DB
-  Migrate (db_migrator may), guarded so it replays as a no-op elsewhere:
+  `catalog_owner`. The script recreates views only as `cis_owner` (the master login is not a member of
+  `catalog_owner` and never becomes one), so it refuses this group before any change
+  (`SCRIPT refuse why=swap: catalog.v_... belongs to catalog_owner ...`). Swap it with a contract **cis/ migration**
+  in AA-CIS-App, applied by DB Migrate (db_migrator may act as `catalog_owner`), written when that move is decided.
+  Shape, in one `BEGIN; ... COMMIT;` with literal statements only (the X1 role lint refuses dynamic role switches):
 
   ```sql
   BEGIN;
+  SET LOCAL lock_timeout = '5s';
+  -- guard: tour_place is prepared for the target space and filled (no row with a vector and no shadow vector)
   DO $$ BEGIN
-      IF EXISTS (SELECT 1 FROM shared.embedding_column WHERE swap_group = 'tour_place' AND shadow_column IS NOT NULL) THEN
-          PERFORM shared.embedding_swap('tour_place');
-      ELSE
-          RAISE NOTICE 'tour_place has no prepared shadow here: nothing to swap';
+      IF NOT EXISTS (SELECT 1 FROM shared.embedding_column WHERE swap_group = 'tour_place'
+                       AND shadow_space_key = '<target space>') THEN
+          RAISE EXCEPTION 'tour_place has no shadow for <target space>';
+      END IF;
+      IF EXISTS (SELECT 1 FROM geo.tour_place WHERE embedding IS NOT NULL AND embedding__shadow IS NULL) THEN
+          RAISE EXCEPTION 'tour_place: rows without a shadow vector (re-run the fill)';
       END IF;
   END $$;
-  INSERT INTO shared.schema_versions (version, applied_at, description) VALUES ('<NNN>', now(), 'AA-1026 swap tour_place') ON CONFLICT (version) DO NOTHING;
+  GRANT CREATE ON SCHEMA catalog TO catalog_owner;
+  SET LOCAL ROLE catalog_owner;
+  DROP VIEW catalog.v_tour_component;           -- deepest first; check pg_depend for others at the time
+  DROP VIEW catalog.v_component_embedding;
+  SET LOCAL ROLE cis_owner;
+  DROP TRIGGER embedding__shadow_reset ON geo.tour_place;
+  ALTER INDEX geo.tour_place_embedding_hnsw RENAME TO tour_place_embedding_hnsw__prev;
+  ALTER TABLE geo.tour_place RENAME COLUMN embedding TO embedding__prev;
+  ALTER TABLE geo.tour_place RENAME COLUMN embedding__shadow TO embedding;
+  ALTER INDEX geo.tour_place_embedding_hnsw__shadow RENAME TO tour_place_embedding_hnsw;
+  UPDATE shared.embedding_column SET previous_column = 'embedding__prev', previous_space_key = space_key,
+         space_key = shadow_space_key, shadow_column = NULL, shadow_space_key = NULL, updated_at = now(),
+         updated_by = 'migration-<NNN>'
+   WHERE table_schema = 'geo' AND table_name = 'tour_place' AND column_name = 'embedding';
+  UPDATE shared.embedding_space SET status = 'active', updated_at = now(), updated_by = 'migration-<NNN>'
+   WHERE space_key = '<target space>';
+  SET LOCAL ROLE catalog_owner;
+  -- the two views again, from the latest migration that defines each (git grep 'VIEW catalog.v_component_embedding'),
+  -- with their grants and comments
+  SET LOCAL ROLE cis_owner;
+  REVOKE CREATE ON SCHEMA catalog FROM catalog_owner;
+  INSERT INTO shared.schema_versions (version, applied_at, description)
+  VALUES ('<NNN>', now(), 'AA-1026 swap geo.tour_place.embedding to <target space>') ON CONFLICT (version) DO NOTHING;
   COMMIT;
   ```
 
-What the swap does: refuses while a row has a vector but no shadow vector; removes the shadow reset triggers; drops
-the dependent views (deepest first),
-renames `<column>` → `<column>__prev` and `<column>__shadow` → `<column>` (NOT NULL and single-column indexes follow),
-recreates the views from their own definition as their owners with their options, grants and comments, marks the
-registry (`space_key` = the new space, `previous_*` = the old one) in the same transaction.
+  Rehearse it with the Infra `swap` dry run first: it refuses at the views, but a `status` before and after shows the
+  counts. A rollback of `tour_place` is the same file in reverse (a new migration).
+
+What the script's swap does, in one transaction as `cis_owner`: refuses while a row has a vector but no shadow vector
+(unless `ALLOW_MISSING = True`), and before any change when a view reading the group belongs to another owner; drops
+the dependent views (deepest first); removes the shadow reset triggers; renames `<column>` → `<column>__prev` and
+`<column>__shadow` → `<column>` (NOT NULL and single-column indexes follow); recreates the views from their own
+definition with their options, grants and comments; marks the registry (`space_key` = the new space, `previous_*` =
+the old one).
 
 After the swap: redeploy api and worker with no code change (`aws ecs update-service ... --force-new-deployment`, one
 line each) so no process keeps a cached registry (60 s) or a prepared statement over the renamed column.
@@ -225,7 +266,7 @@ counts are unchanged.
 
 ## 9. Rollback (while `__prev` is kept)
 
-The Infra script with `ACTION = "rollback"` (or the guarded migration form for `tour_place`). Rows written after the
+The Infra script with `ACTION = "rollback"` (dry run, then apply; for `tour_place` a reverse cis/ migration). Rows written after the
 swap have no old vector: the rollback refuses with their count. For the f10 caches delete those rows (they are
 re-embedded on demand: `atom_embedding` / `question_embedding` rows created after the swap time) or set
 `ALLOW_MISSING = True` (the column then stays nullable). After a rollback the new vectors sit in the shadow again,
@@ -233,9 +274,14 @@ with the reset trigger back on: a later swap needs only a fill catch-up.
 
 ## 10. Cleanup (destructive, after 7 days without a rollback)
 
-`shared.embedding_drop_previous('<group>')` drops the kept old vectors: no rollback after it. It follows the DRY RUN
-procedure (`skill/aa-cis-schema/references/destructive-ops.md`) as its own reviewed script; switch the old space to
-`retired` in a migration if it will not come back. To abandon a fill instead: `ACTION = "drop_shadow"`.
+Dropping `<column>__prev` drops the kept old vectors: no rollback after it. It is a destructive **cis/ migration** in
+AA-CIS-App (header `-- migrate: destructive`, so DB Migrate snapshots the database before applying), following the DRY
+RUN procedure (`skill/aa-cis-schema/references/destructive-ops.md`): per column of the group
+`ALTER TABLE <table> DROP COLUMN <column>__prev;` (its `__prev` indexes go with it) and
+`UPDATE shared.embedding_column SET previous_column = NULL, previous_space_key = NULL ...` in the same transaction, a
+guard that each row's `previous_column` is the one dropped, and the old space set to `retired` if it will not come
+back. The Infra script does not offer it. To abandon a fill instead: `ACTION = "drop_shadow"` (it drops only the
+re-embedded vectors and the reset trigger).
 
 ## TripPlanner and the tour_place group
 
