@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-api, aa-booking-api, aa-crm-api, aa-crm-web, aa-crm-portal, tripplanner-lambda]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-11-01
 review_every_days: 90
 related: [OPS-04, OPS-02-cis, OPS-02-booking, OPS-02-tp-lambda, OPS-04-queue-stuck, AA-870, AA-892]
 ---
@@ -25,6 +25,8 @@ related: [OPS-04, OPS-02-cis, OPS-02-booking, OPS-02-tp-lambda, OPS-04-queue-stu
 | `aa-tripplanner-dev-browse-errors`, `aa-tripplanner-dev-assembly-errors` | 3 or more Lambda errors in 5 minutes |
 | `aa-tripplanner-dev-browse-throttles` | more than 5 throttles in 5 minutes, 2 of 3 periods |
 | `aa-cis-dev-rds-*` (CPU, free storage, connections) | the shared database is the cause |
+| EventBridge rule `aa-sec-dev-rds-instance-event` (e-mail `[aa-rds] aa-cis-dev-db: RDS-EVENT-...`) | the shared database shut down, restarted, stopped, failed, is recovering or is low on storage |
+| `aa-ecosys-dev-nat-system-check-recover`, `aa-ecosys-dev-nat-instance-check-failed` | the NAT instance failed its system check (CloudWatch recovers it) or its guest OS check (reboot it): all private-subnet egress, the in-app check e-mails included, goes through it |
 
 Since the S263 alert diet (AA-1025) there is no CloudWatch alarm on API 5xx, latency, unhealthy hosts or service CPU:
 an app error that answers 5xx is a **Sentry** issue (CIS, Booking and Partner report to Sentry), an outage is the
@@ -47,8 +49,9 @@ Also: a Sentry issue (free plan), or a person reporting a broken page. Exact con
    ```
 
    Expected: `200` from each, and readiness JSON from Booking (checked 2026-10-28). One app failing points at that app;
-   all of them failing points at RDS, the network (NAT recover alarm `aa-ecosys-dev-nat-system-check-recover`; a NAT
-   whose guest OS hangs has no alarm of its own since S263, every app's health fails at once) or DNS.
+   all of them failing points at RDS (the `[aa-rds]` event e-mail if it is down or stopped), the network (NAT recover
+   alarm `aa-ecosys-dev-nat-system-check-recover`; NAT guest-OS alarm `aa-ecosys-dev-nat-instance-check-failed`:
+   reboot the instance) or DNS.
 
 2. Was there a deploy in the last hour? If yes, that is the first suspect.
 

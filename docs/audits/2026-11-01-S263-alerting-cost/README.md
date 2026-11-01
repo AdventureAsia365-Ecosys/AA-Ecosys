@@ -268,5 +268,10 @@ throttles/duration identity, WAF blocked. Thêm 1: `aa-cis-dev-api-no-healthy-ta
 alarm recover, vẫn bắt lỗi OS mà recover không sửa — check trong app gửi SNS qua chính NAT này nên không thay được).
 Giữ lại sau vòng review: `aa-identity-dev-trigger-unexpected-error` (ngưỡng 1; alarm Errors ngưỡng 20/5 phút không bao
 giờ chạm ở Dev; metric bỏ `default_value` nên chỉ tính tiền giờ có lỗi).
+Thêm sau vòng review thứ hai: rule EventBridge `aa-sec-dev-rds-instance-event` (miễn phí) gửi email khi RDS dùng chung
+tắt / khởi động lại / bị stop / lỗi / sắp hết dung lượng. Lý do: các alarm `*-sampling-stopped` đã gỡ coi thiếu dữ liệu
+là báo động nên trước đây DB sập vẫn có email; alarm RDS còn lại đều `notBreaching`, health check ALB không chạm DB và
+mọi check trong app cần DB. Check sự kiện trong app (break-glass, ops release, ...) giờ cũng được gửi nốt khi task dừng
+bình thường (deploy, scale-in); chỉ task bị kill cứng (OOM) mới mất sự kiện của ≤ 5 phút cuối.
 Số thật sau apply: đếm lại alarm/custom metric theo live step của PR Infra; Cost Explorer tháng 12 mới thấy đủ.
 

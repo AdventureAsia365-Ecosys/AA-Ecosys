@@ -26,7 +26,8 @@ CloudWatch keeps only the signals an app cannot see itself:
   recover action; the Lambda functions with no app behind them (Cognito triggers, TripPlanner, the snapshot-expiry
   and TripPlanner jobs functions);
 - **what AWS requires or only AWS sees**: SES bounce and complaint rates, the break-glass token, CRM KMS decrypts;
-- the security EventBridge rules (free) and the budgets (free) stay as they are.
+- the security EventBridge rules (free) and the budgets (free) stay as they are; one free EventBridge rule is added for
+  the shared RDS instance events (review pass, §2.5).
 
 Everything an app can read from its own database or its own process (job queues, connection limits, audit export
 lag, membership feed, log events such as a failed cost-log write) becomes an **in-app check** evaluated by the
@@ -136,6 +137,7 @@ event alarms (one e-mail per incident instead of two).
 | `aa-ecosys-dev-nat-status-check-failed` | **Replace** (review pass) | by `aa-ecosys-dev-nat-instance-check-failed` on `StatusCheckFailed_Instance` (guest OS): recover does not fix that, the ALB health checks stay inside the VPC, and the in-app checks reach SNS **through** the NAT, so nothing else would e-mail. The Instance metric no longer doubles the recover alarm's e-mail on a system failure | yes |
 | `aa-email-dev-bounce-rate`, `aa-email-dev-complaint-rate` | Keep | SES requires them | yes |
 | `aa-sec-dev-admin-session-digest-errors` (Infra #581, 01/11) | Keep | Lambda with no app behind it | no |
+| EventBridge rule `aa-sec-dev-rds-instance-event` (review pass, new) | **Add** | the removed `*-sampling-stopped` alarms treated missing data as breaching, so they mailed when the database was down; nothing kept does (RDS alarms are `notBreaching`, the ALB health checks do not touch the database, every in-app check needs it). The rule mails RDS instance events of `aa-cis-dev-db`: categories availability, failure, low storage, recovery, and `RDS-EVENT-0087` / `0088` / `0154` (stopped, started, started after 7 days). Free; the `aa-sec-` prefix reuses the topic policy and CI apply grants | no (one e-mail per event) |
 | `TargetTracking-*` (8, api + worker x CPU + memory x High + Low) | Remove | the four target-tracking policies are removed on Dev (1 api + 1 worker task; a wave scales the worker by hand, `docs/ops/job-kinds.md`). The scalable targets (1..3) stay, so the documented scale commands still work | — |
 
 ## 3. Other CloudWatch items
@@ -149,7 +151,7 @@ event alarms (one e-mail per incident instead of two).
 | Log group `/aa-cis-dev/diagnostic/vpc-flow-logs` | 365 -> 30 days; flow logs record `REJECT` traffic only (security signal kept, ~95 % less ingest) |
 | Log group `aws-waf-logs-aa-cis-dev` | 365 -> 30 days on Dev; logging filter keeps `BLOCK` and `COUNT` requests only (allowed requests are dropped) |
 | Log group `/aws/apigateway/welcome` | imported into Terraform with 30 days |
-| Security EventBridge rules, budgets, cost anomaly monitor, SES configuration sets | Unchanged (free) |
+| Security EventBridge rules, budgets, cost anomaly monitor, SES configuration sets | Unchanged (free); plus the RDS instance events rule (free, §2.5) |
 
 ## 4. Controls that moved from CloudWatch to the apps
 
@@ -189,4 +191,10 @@ check per UTC day (or per break-glass session / ops release / refused event).
 - RDS memory, latency and disk queue on Dev (no alarm; C4.3 weekly review and the admin overview).
 - API 5xx bursts while the service is healthy: Sentry (all apps), not e-mail from CloudWatch.
 - Automatic scale-out of the CIS api / worker on Dev: a heavy wave sets the worker desired count by hand.
+- A database AWS reports healthy that the apps cannot log in to (a password or role change): no e-mail; the apps'
+  failing requests reach Sentry. Down, stopped, failed or out of storage is the RDS instance events rule (§2.5).
+- In-app event checks (CRM break-glass, ops release, membership, bulk reveal; CIS log events) wait in process memory
+  until the next 5-minute tick. A normal stop (deploy, scale-in, task replacement) flushes them first (review pass);
+  a hard kill (OOM, SIGKILL, host failure) in between loses them. The log line stays, and a break-glass read is in
+  the agency's access log.
 - Prod (ADR 0018, own account) re-decides this list; this diet is for Dev.
