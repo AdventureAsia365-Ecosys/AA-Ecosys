@@ -2,8 +2,11 @@
 
 Orchestrator helpers for pushing, merging and migrating across the AA_Ecosys repos. Every write to GitHub goes
 through the org App `aa-agent` (`as-app.sh`, ADR 0011), which reads its key from Secrets Manager: a live MFA
-session for `aa365-admin` is needed (renew with `aws sts get-caller-identity --profile aa365-admin`). Subagents
-cannot run the writing commands (the guardrail hook blocks push, merge and `gh workflow run`). The process these
+session for `aa365-admin` is needed (renew with `aws sts get-caller-identity --profile aa365-admin`). Orchestrator
+only: these tools push, merge and dispatch inside their own subprocesses, where the subagent guardrail hook cannot see
+the command, so `.claude/hooks/subagent-guardrails.sh` refuses any subagent Bash command that names one of them
+(`ship_merge/train/copy_apply/open_prs.py`, `mergeq.sh`, `dbmig.sh`, `train-lib.sh`, `as-app.sh`; the `test_ship_*.py`
+tests stay open; red-team cases in `.claude/hooks/test_subagent_guardrails.sh`). The process these
 tools serve, and when to use each: skill `aa-ship` (§1 "Cách merge", `references/merge-trains.md`).
 
 | Tool | What it does |
@@ -27,6 +30,9 @@ checkout: `python3 tools/github/<tool>.py --help`.
 
 - Waits for the PR's checks and merges only when **every** check is green (success, neutral or skipped), required or
   not. S263: CIS #1225 went through the merge queue with a red non-required "Migration preflight".
+- A green read is confirmed: checks of `needs:` jobs and `workflow_run` workflows are created late, so the gate reads
+  again 25 s later, needs the same set of checks still green, and needs every workflow run on the head commit
+  (`gh run list --commit <head>`, latest run per workflow and event) finished and green.
 - Refuses a draft PR, a PR whose base is not the default branch, a DIRTY PR, and a PR that deletes files (a squash
   from a stale base shows up as deletions) unless `--allow-deletes`.
 - CIS, Booking and Partner merge through the queue (`mergeq.sh`, one worker per PR in parallel); TripPlanner, Infra
@@ -58,11 +64,18 @@ checkout: `python3 tools/github/<tool>.py --help`.
   titled `DB Migrate <mode> <owner>/<file>` (Infra `run-name`); before that title exists it takes the one new run
   and refuses to guess between two. Then it polls that run, prints its conclusion and key log lines, and reads the
   owner app's `/health/ready` (`schema_version`, key in `registered_keys`).
+- Owner order: before it merges a copy PR, and before an apply dispatch, it refuses (exit 4) while an open
+  `bot/migration-copy/<owner>-<lower NNN>` PR exists, or while the owner's `/health/ready` lacks the key of a lower
+  file on Infra main (above `keys_baseline`; CIS 263) or cannot be read. Applying 331 while 330 waits leaves 330
+  out-of-order for auto-apply (AA-920). `--allow-out-of-order` bypasses this, and with it the ordering that Migration
+  Sync and Migration Apply keep: use it only for a file you know is independent. `dbmig.sh` passes the flag through.
 - Dev Migration Apply may apply the file itself (expand; contract when idle once AA-1032 part 1 lands): a key already
-  in `registered_keys` is not dispatched, and a red run whose key shows up within 5 minutes (exit 17, the apply lock
-  was held by Migration Apply) passes with a warning.
-- Exit 0 applied and registered, 1 run red or key missing, 2 dispatch/run not found, 3 copy PR red, 4 refused,
-  5 timeout.
+  in `registered_keys` is not dispatched. A red run passes (with a warning) only when its own log shows the apply
+  lock was held (`exit code: 17`, nothing ran) and the key shows up within 5 minutes; any other red run is exit 1
+  even when the key is registered (exit 9 commits and registers the file but needs hand cleanup), and the run's
+  `exit code:` line is printed.
+- Exit 0 applied and registered, 1 run red or key missing, 2 dispatch/run not found, 3 copy PR red, 4 refused
+  (destructive, closed, out of order), 5 timeout.
 
 ## ship_open_prs.py
 

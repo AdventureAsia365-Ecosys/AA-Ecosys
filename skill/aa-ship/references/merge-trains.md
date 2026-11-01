@@ -41,8 +41,12 @@ live: §3. Công cụ và mã thoát: `tools/github/README.md` (AA-1032).
   - đọc loại file từ header trên Infra main; file destructive cần `--allow-destructive` sau quy trình DRY RUN;
   - theo **đúng run của mình**: khoá cục bộ, ghi các run có sẵn, dispatch, lấy run mới có tiêu đề
     `DB Migrate <mode> <owner>/<file>` (run-name của Infra); không bao giờ đọc "run mới nhất";
+  - giữ thứ tự owner: từ chối (exit 4) khi còn PR copy số nhỏ hơn đang mở hoặc file số nhỏ hơn trên Infra main chưa
+    có key trong `/health/ready` (áp 331 khi 330 còn chờ → 330 thành out-of-order, AA-920); `--allow-out-of-order`
+    chỉ khi chắc file độc lập;
   - in conclusion + dòng log chính (`ran as`, busy/idle, applied), rồi `/health/ready` (`schema_version`, key trong
-    `registered_keys`).
+    `registered_keys`). Run đỏ chỉ được chấp nhận khi log của chính nó có `exit code: 17` (khoá apply bị giữ, không
+    chạy gì) và key xuất hiện; đỏ vì lý do khác (vd. exit 9 đã COMMIT + đăng ký nhưng cần dọn tay) → exit 1.
   Bước, idle check và output của DB Migrate: `docs/ops/runbooks/db-migrate.md` (không chép vào train).
 
 ## Nhánh xếp chồng (stacked)

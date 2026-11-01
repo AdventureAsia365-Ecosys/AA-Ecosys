@@ -70,8 +70,21 @@ of the issue run in other lanes (`AA-1032-<lane>.md` where they keep notes).
 - Matching runs by title needs the Infra `run-name`; without it two dispatches from different machines in the same
   minute are refused rather than guessed (safe, rare).
 - The gate cannot see job tables or waves (needs DB access); `aa-ship` §2 still comes first for backend merges.
-- Checks that register late (a `workflow_run` workflow) can be missed if the gate passes before they appear; the
-  queue re-runs required checks, and Infra/root have few late checks.
+- Late checks (review fix): the gate confirms a green read 25 s later (same green set) and requires every workflow
+  run on the head commit (`gh run list --commit`, latest per workflow + event) finished and green. Costs ~25 s and one
+  extra API read per PR; a `needs:` job not yet queued is covered by its run, which is still in progress. A workflow
+  started later than both reads (rare) is not seen.
+- Owner order (review fix): `ship_copy_apply.py` refuses to merge a copy PR while a lower copy PR is open, and an
+  apply dispatch while a lower file on Infra main lacks its key in `/health/ready` (or readiness is unreadable: fail
+  closed). `--allow-out-of-order` is the explicit override. A check-mode dispatch is not ordered (it applies nothing).
+- Red DB Migrate run (review fix): accepted only when its own log has `exit code: 17` / the `##[error]the apply lock
+  is held` annotation at the line start (the printed step script contains the same words after `echo "`), and the key
+  then shows up. Any other red run is exit 1 even with the key registered (exit 9 registers and needs cleanup).
+- Hook (review fix): the guardrail hook only sees the top-level command, so it now refuses any subagent command that
+  names a ship tool, `mergeq.sh`, `dbmig.sh`, `train-lib.sh` or `as-app.sh`. Mention-based (like the AA-1026
+  pattern), so `cat`/`git add <file>` of them is refused for subagents too; lanes editing them use Read/Edit and
+  `git add <dir>`. No `--check-only`/`--dry-run` exception: a subagent reads checks with `gh pr checks`.
+  `test_subagent_guardrails.sh` is not run in CI (it never was); run it by hand after a hook change.
 - `--allow-deletes` is all-or-nothing per run; a PR that legitimately deletes files needs it explicitly.
 
 ## Should know
@@ -80,4 +93,5 @@ of the issue run in other lanes (`AA-1032-<lane>.md` where they keep notes).
   for the dispatch lock and PR body temp files (`.tmp-session/`).
 - Exit codes are shared: 0 ok, 1 git / run red, 2 usage or gh error, 3 red check, 4 refused / merge failed,
   5 timeout. A train or merge list stops at the first non-zero.
-- `python -m unittest discover -s tools/github -p 'test_*.py'` — 48 offline tests.
+- `python -m unittest discover -s tools/github -p 'test_*.py'` — 58 offline tests; hook cases:
+  `bash .claude/hooks/test_subagent_guardrails.sh` (51).

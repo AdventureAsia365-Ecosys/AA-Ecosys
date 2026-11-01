@@ -9,8 +9,13 @@ t 2 terraform apply; t 2 terraform -chdir=x apply; t 2 aws ecs update-service --
 t 2 aws --profile aa365-admin ecs execute-command --task t; t 2 aws --region us-west-1 secretsmanager put-secret-value --secret-id x
 t 2 aws iam get-role --role-name x; t 2 aws --profile p iam list-roles; t 2 aws --profile p s3 rm s3://x
 t 2 tools/llm/anthropic_key_plug_in.sh --apply; t 2 bash tools/llm/anthropic_key_plug_in.sh --check; t 2 cat k \| tools/llm/anthropic_key_plug_in.sh --apply
+t 2 python3 tools/github/ship_merge.py cis#1230; t 2 tools/github/ship_merge.py --check-only cis#1230; t 2 ./ship_train.py cis /x feat/a:1
+t 2 tools/github/ship_copy_apply.py cis 330; t 2 python3 -u /home/x/tools/github/ship_open_prs.py wf_1; t 2 tools/github/dbmig.sh cis/330 apply
+t 2 tools/github/mergeq.sh AA-CIS-App 1; t 2 tools/github/as-app.sh --repos AA-Ecosys -- gh api repos/x; t 2 . tools/github/train-lib.sh
+t 2 bash -c "tools/github/ship_merge.py root#1"; t 2 cd tools/github \&\& python3 -m ship_merge root#1; t 2 X=1 ship_copy_apply.py cis 330
 # must allow (0)
-t 0 bash tools/llm/test_anthropic_key_plug_in.sh
+t 0 python -m unittest discover -s tools/github -p 'test_*.py'; t 0 python3 tools/github/test_ship_merge.py; t 0 python3 -m unittest test_ship_copy_apply
+t 0 python3 tools/github/ship_common.py mfa; t 0 bash tools/llm/test_anthropic_key_plug_in.sh
 t 0 git status; t 0 git -C /x log --oneline; t 0 git commit -m msg; t 0 gh pr view 1; t 0 gh api repos/x; t 0 gh pr checks 1
 t 0 aws --profile p ecs describe-services --cluster c; t 0 aws s3 cp a s3://b; t 0 terraform plan; t 0 aws --profile p secretsmanager get-secret-value --secret-id x
 echo "pass=$pass fail=$fail"; [ "$fail" = 0 ]

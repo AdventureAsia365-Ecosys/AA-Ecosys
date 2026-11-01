@@ -12,7 +12,9 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 
 - **Agent điều phối** push, mở PR, merge, `gh workflow run` (deploy, DB Migrate, Terraform apply, probe), ECS exec.
 - **Subagent** chỉ code, test, commit local. Hook `.claude/hooks/subagent-guardrails.sh` chặn push/merge/`gh workflow run`/
-  Terraform apply/`aws ecs execute-command`. Việc live (kiểm DB, verify) subagent giao lại dạng runbook/script kèm mục
+  Terraform apply/`aws ecs execute-command`, và mọi lệnh nhắc tới tool ship (`ship_*.py`, `mergeq.sh`, `dbmig.sh`,
+  `train-lib.sh`, `as-app.sh`: chúng push/merge/dispatch bên trong, hook không thấy). Việc live (kiểm DB, verify)
+  subagent giao lại dạng runbook/script kèm mục
   "post-merge steps cho orchestrator" — không lách qua script helper.
 
 ## 1. Trước khi mở/merge PR

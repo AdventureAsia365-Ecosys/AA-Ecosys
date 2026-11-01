@@ -6,7 +6,9 @@ printed: MFA expiry is read from `aws configure export-credentials` and only its
 
 Orchestrator only: they push, merge and dispatch workflows inside their own subprocesses, where the subagent
 guardrail hook cannot see the command, so .claude/hooks/subagent-guardrails.sh refuses any subagent command that names
-one of them (ship_merge/ship_train/ship_copy_apply/ship_open_prs, mergeq.sh, dbmig.sh, train-lib.sh, as-app.sh). Python stdlib only. Every external command goes through a Runner so the tests can replace it with a stub.
+one of them (ship_merge/ship_train/ship_copy_apply/ship_open_prs, mergeq.sh, dbmig.sh, train-lib.sh, as-app.sh).
+
+Python stdlib only. Every external command goes through a Runner so the tests can replace it with a stub.
 """
 
 from __future__ import annotations
