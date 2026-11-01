@@ -1,9 +1,3 @@
----
-title: "S263 — trạng thái live cuối phiên"
-date: 2026-11-02
-lang: vi
----
-
 # S263 — trạng thái live cuối phiên (02/11/2026 ~06:40 +07)
 
 Chụp bằng lệnh chỉ đọc (`.tmp-session/S263/snapshot.sh` + ECS exec đọc bảng job). Không account ID, ARN hay secret.

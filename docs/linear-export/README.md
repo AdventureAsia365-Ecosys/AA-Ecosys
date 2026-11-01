@@ -57,6 +57,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1016](cis-core-pipeline-llm-platform/AA-1016.md) | [Content studio] Per-tenant AI budget: alert at 100 %, staff approval from 150 %, T9 counted in plan quota | Done | 2026-10-31 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1017](cis-core-pipeline-llm-platform/AA-1017.md) | [AI gateway] Registry v2: provider kinds, model families, stage × model params, routing UI | Done | 2026-10-31 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1018](cis-core-pipeline-llm-platform/AA-1018.md) | [AI gateway] Reliability: warm Anthropic + OpenAI paths, probes, circuit, re-queue, monthly drill | Done | 2026-10-31 | CIS Core — Pipeline, LLM & Platform |
+| [AA-1031](cis-core-pipeline-llm-platform/AA-1031.md) | [Identity] Staff page grants CRM roles (multi-select) and a "Platform owner" preset (CIS admin + Booking admin + CRM platform admin) | Done | 2026-11-01 | CIS Core — Pipeline, LLM & Platform |
 | [AA-594](cis-core-pipeline-llm-platform/AA-594.md) | [EPIC] CIS Data Reset & Pipeline Rerun — giữ raw_tours, reset dẫn xuất, chạy lại S1/atom/social, verify UI | Done | 2026-10-12 | CIS Core — Pipeline, LLM & Platform |
 | [AA-634](cis-core-pipeline-llm-platform/AA-634.md) | [RESEARCH] TypeSafe AI "Jev" (System One Model) — khảo sát toàn diện A/T-series + TripPlanner + AAA cho quyết định có cấu trúc | Done | 2026-10-15 | CIS Core — Pipeline, LLM & Platform |
 | [AA-642](cis-core-pipeline-llm-platform/AA-642.md) | [LLM] Gateway remaining slices: S7 batch, S8 aa_llm core for TripPlanner + CRM, S11 legacy stages to 5.5, live proof of S9/S10 | Done | 2026-10-31 | CIS Core — Pipeline, LLM & Platform |
@@ -256,6 +257,8 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-994](cis-portal-admin-tenant-ui/AA-994.md) | [UI] One design system for the staff and partner apps: kit coverage, conformance guards, every page migrated | Done | 2026-10-31 | CIS Portal — Admin & Tenant UI |
 | [AA-1001](data-platform-schema-ops-scale/AA-1001.md) | [Reporting] Ecosystem report catalog — advisory: which reports, content, cadence, templates, automation | Done | 2026-10-29 | Data Platform — Schema, Ops & Scale |
 | [AA-1002](data-platform-schema-ops-scale/AA-1002.md) | [Infra] AWS organization + governance blueprint, IaC/Terraform reorganization, dev/staging/prod, and a plug-and-play multi-provider LLM gateway | Done | 2026-10-31 | Data Platform — Schema, Ops & Scale |
+| [AA-1022](data-platform-schema-ops-scale/AA-1022.md) | [Infra] Free hardening: S3 gateway endpoint, NAT recover action, pin Infra action SHAs, OIDC ref condition, Dependabot for CIS actions | Done | 2026-11-01 | Data Platform — Schema, Ops & Scale |
+| [AA-1032](data-platform-schema-ops-scale/AA-1032.md) | [Ops] Faster ship loop: Dev auto-applies contract migrations when idle, merge queue batching, faster CI, ship helpers as repo tools | Done | 2026-11-01 | Data Platform — Schema, Ops & Scale |
 | [AA-751](data-platform-schema-ops-scale/AA-751.md) | [Jobs] X6 per-owner job tables (ADR 0003a): DDL template + comparison test, booking.job parity, Booking deploy guard, DB Migrate idle check, backlog-age alarms, acp_runs readers | Done | 2026-10-17 | Data Platform — Schema, Ops & Scale |
 | [AA-824](data-platform-schema-ops-scale/AA-824.md) | [Data/Ops] RDS guardrails + connection budget — storage autoscaling, parameter group, pg_stat_statements, log export, alarms, CONNECTION LIMIT per role, Lambda reserved concurrency | Done | 2026-10-15 | Data Platform — Schema, Ops & Scale |
 | [AA-825](data-platform-schema-ops-scale/AA-825.md) | [Data] Retention + rollups for log tables — llm_call_log 180 d + daily rollup, tenant_api_usage 90 d + monthly, job TTL, sargable usage view, S3 Parquet archive | Done | 2026-10-25 | Data Platform — Schema, Ops & Scale |
@@ -586,6 +589,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-955](partner-crm-aa-partner/AA-955.md) | [CRM W5] CRM-25 Module 12 contracts and waivers | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-956](partner-crm-aa-partner/AA-956.md) | [CRM W5] CRM-26 Module 8 ops release | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-957](partner-crm-aa-partner/AA-957.md) | [CRM W5] CRM-27 Commission + cancel trip | Done | 2026-11-01 | Partner CRM — AA-Partner |
+| [AA-958](partner-crm-aa-partner/AA-958.md) | [CRM W6] CRM-28 Module 9 WhatsApp + SMS | Done | 2026-11-01 | Partner CRM — AA-Partner |
 | [AA-961](partner-crm-aa-partner/AA-961.md) | [CRM W6] CRM-30 Duty of care + calendar | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-962](partner-crm-aa-partner/AA-962.md) | [CRM W6] CRM-31 Onboarding + import | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-964](partner-crm-aa-partner/AA-964.md) | [CRM W7] CRM-33a AI gateway + drafts + guardrails | Done | 2026-10-31 | Partner CRM — AA-Partner |
