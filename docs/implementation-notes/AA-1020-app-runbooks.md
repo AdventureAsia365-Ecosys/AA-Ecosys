@@ -45,5 +45,10 @@ staff). Root repo only, docs only.
   `api-booking /booking/health` 200, `portal /crm/health` 200, `portal /health` 200.
 - Dev caveats quoted from sources on master: acc3 refusing since 2026-10-29 (postmortem), CRM LLM stub and Twilio
   sandbox provider, Stripe not built (`provider_not_available`), TripPlanner preview `noindex`, draft legal pages.
+- Fix pass (review): payment requests show on TripPlanner **My trips** only for trips sent while signed in. A trip sent
+  as a guest makes an unverified lead customer in Booking (`bk_inquiry_process`, never merged), so its payment
+  requests never match the signed-in identity, even after `/me/claim` adds the trip to My trips (TripPlanner
+  CONTEXT.md "My Payments"). The Booking admin and TripPlanner pages (and `.vi.md`) now say so: staff e-mail the
+  payment request for a case whose customer shows **Unverified** (chip on the case page).
 - Review cadence 90 days; any sign-in, role or menu change in an app should update the matching page and its `.vi.md`
   in the same session.

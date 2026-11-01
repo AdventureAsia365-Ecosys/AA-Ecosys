@@ -24,7 +24,8 @@ Thuộc bộ [truy cập và vận hành các ứng dụng](app-access-and-opera
 Booking admin là nơi nhân sự Adventure Asia xử lý từng yêu cầu của khách du lịch: khách hàng, trip case, báo giá và giá,
 việc đặt nhà cung cấp, hoá đơn và các bước kiểm trước khởi hành. Nhân sự kinh doanh, hợp đồng và nội dung dùng trang
 này; chủ doanh nghiệp mở được khi có vai trò Booking. Khách du lịch không bao giờ đăng nhập ở đây: họ lên kế hoạch trên
-[TripPlanner](tripplanner-runbook.vi.md) và xem yêu cầu thanh toán của họ ở đó.
+[TripPlanner](tripplanner-runbook.vi.md), và khách du lịch đã đăng nhập khi gửi chuyến đi sẽ xem yêu cầu thanh toán
+của chuyến đó ở đó.
 
 ## 2. Địa chỉ
 
@@ -110,7 +111,9 @@ plan bằng **Use for trip case**.
 ### Hoá đơn và thanh toán (B2C)
 
 1. Trong case, tab **Billing**, tạo hoá đơn từ phiên bản đã duyệt: tiền cọc và phần còn lại theo cài đặt.
-2. Gửi hoá đơn. Khách du lịch thấy nó trên TripPlanner trong **My trips**.
+2. Gửi hoá đơn. Khách du lịch chỉ thấy nó trên TripPlanner trong **My trips** khi họ đã đăng nhập lúc gửi chuyến đi.
+   Với chuyến đi gửi ở dạng khách vãng lai (case hiện khách hàng là **Unverified**), hãy tự gửi yêu cầu thanh toán qua
+   e-mail: nó không bao giờ hiện trong **My trips**, kể cả khi khách du lịch đăng nhập sau đó.
 3. Khi tiền về: **Record payment** (ở đây hoặc trong **Payments & Invoices**).
 4. Một Booking admin không phải người đã ghi nhận mở khoản thanh toán và chọn **Verify payment**. Chỉ tiền đã xác minh
    mới đánh dấu hoá đơn là đã trả.

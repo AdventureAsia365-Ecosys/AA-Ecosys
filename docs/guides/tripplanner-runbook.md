@@ -21,8 +21,8 @@ Part of [app access and operations](app-access-and-operations.md). A Vietnamese 
 
 TripPlanner is the public website where a traveller explores Adventure Asia destinations and tours, builds a trip on
 a map and sends it to an Adventure Asia advisor. Travellers use it as **guests** (no account) or **signed in** (to see
-their trips on any device and their payment requests). Adventure Asia staff do not sign in here: the trips sent to
-an advisor arrive in the [Booking admin](booking-admin-runbook.md).
+their trips on any device and the payment requests for trips they sent while signed in). Adventure Asia staff do not
+sign in here: the trips sent to an advisor arrive in the [Booking admin](booking-admin-runbook.md).
 
 ## 2. Address
 
@@ -45,7 +45,8 @@ e-mail code. Travellers who only plan a trip and send it need no account.
 2. Type an e-mail address and choose **Email me a code**.
 3. Type the code from the e-mail. A new address gets one code to confirm it, then one more to sign in ("Your email is
    confirmed. We sent one more code to sign you in.").
-4. You land on **My trips**. Trips planned in this browser as a guest are added to your account.
+4. You land on **My trips**. Trips planned in this browser as a guest are added to your account. A trip you already
+   sent as a guest still gets its payment requests by e-mail from the advisor, not under **Payments**.
 5. To sign out, choose **Sign out**. On a shared computer, always sign out.
 
 There is no password. A code that expired or was mistyped shows a message; ask for a new one.
@@ -57,7 +58,7 @@ There is no password. A code that expired or was mistyped shows a message; ask f
 | Explore destinations and tours, plan on the map | Yes | Yes |
 | Send a trip to an advisor | Yes (name, e-mail and phone in the form) | Yes (the e-mail is filled in) |
 | Find the trip again | In the same browser only | **My trips**, on any device |
-| See payment requests from Adventure Asia | No | **Payments** on **My trips** |
+| See payment requests from Adventure Asia | No: the advisor sends them by e-mail | **Payments** on **My trips**, only for trips sent while signed in (a trip sent as a guest stays by e-mail, even after signing in) |
 
 ## 6. Day-to-day use (traveller)
 
@@ -81,6 +82,8 @@ There is no password. A code that expired or was mistyped shows a message; ask f
    the map.
 2. Under **Payments**, see the payment schedule, payments received and **How to pay** while money is owed. There is no
    pay button: payment instructions come from the advisor.
+3. **Payments** lists only trips sent while signed in. A trip sent as a guest never shows its payment requests here,
+   even after you sign in and it is added to **My trips**: the advisor sends those by e-mail.
 
 ## 7. What staff do
 

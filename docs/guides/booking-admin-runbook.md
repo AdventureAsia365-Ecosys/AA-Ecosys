@@ -22,7 +22,8 @@ Part of [app access and operations](app-access-and-operations.md). A Vietnamese 
 The Booking admin is where Adventure Asia staff handle each traveller request: the customer, the trip case, the
 proposal and its price, the supplier bookings, the invoice and the checks before departure. Sales, contracting and
 content staff use it; the business owner can open it with a Booking role. Travellers never sign in here: they plan on
-[TripPlanner](tripplanner-runbook.md) and see their payment requests there.
+[TripPlanner](tripplanner-runbook.md), and a traveller who was signed in when they sent the trip sees its payment
+requests there.
 
 ## 2. Address
 
@@ -109,7 +110,9 @@ A request by phone or e-mail: **Trip Cases › New trip case** (or **New lead**)
 
 1. In the case, tab **Billing**, create the invoice from the approved version: deposit and balance follow the
    settings.
-2. Send it. The traveller sees it on TripPlanner under **My trips**.
+2. Send it. The traveller sees it on TripPlanner under **My trips** only when they were signed in when they sent the
+   trip. For a trip sent as a guest (the case shows the customer as **Unverified**), e-mail the payment request
+   yourself: it never shows on **My trips**, even after the traveller signs in.
 3. When money arrives: **Record payment** (here or in **Payments & Invoices**).
 4. A Booking admin who did not record it opens the payment and chooses **Verify payment**. Only verified money marks
    the invoice paid.

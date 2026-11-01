@@ -23,8 +23,9 @@ Thuộc bộ [truy cập và vận hành các ứng dụng](app-access-and-opera
 
 TripPlanner là website công khai nơi khách du lịch khám phá các điểm đến và tour của Adventure Asia, dựng chuyến đi trên
 bản đồ và gửi nó cho một tư vấn viên Adventure Asia. Khách du lịch dùng ở dạng **khách vãng lai** (không có tài khoản)
-hoặc **đã đăng nhập** (để xem chuyến đi trên mọi thiết bị và các yêu cầu thanh toán của họ). Nhân sự Adventure Asia
-không đăng nhập ở đây: các chuyến đi gửi cho tư vấn viên sẽ tới [Booking admin](booking-admin-runbook.vi.md).
+hoặc **đã đăng nhập** (để xem chuyến đi trên mọi thiết bị và các yêu cầu thanh toán của những chuyến đi họ gửi khi đã
+đăng nhập). Nhân sự Adventure Asia không đăng nhập ở đây: các chuyến đi gửi cho tư vấn viên sẽ tới
+[Booking admin](booking-admin-runbook.vi.md).
 
 ## 2. Địa chỉ
 
@@ -48,7 +49,8 @@ e-mail. Khách chỉ lên kế hoạch và gửi chuyến đi thì không cần 
 3. Nhập mã trong e-mail. Một địa chỉ mới nhận một mã để xác nhận địa chỉ, rồi thêm một mã nữa để đăng nhập ("Your
    email is confirmed. We sent one more code to sign you in.").
 4. Bạn vào **My trips**. Các chuyến đi đã lên kế hoạch trên trình duyệt này khi còn là khách vãng lai được thêm vào tài
-   khoản của bạn.
+   khoản của bạn. Chuyến đi bạn đã gửi ở dạng khách vãng lai vẫn nhận yêu cầu thanh toán qua e-mail từ tư vấn viên,
+   không hiện trong **Payments**.
 5. Để đăng xuất, chọn **Sign out**. Trên máy tính dùng chung, luôn đăng xuất.
 
 Không có mật khẩu. Mã đã hết hạn hoặc nhập sai sẽ hiện thông báo; hãy xin mã mới.
@@ -60,7 +62,7 @@ Không có mật khẩu. Mã đã hết hạn hoặc nhập sai sẽ hiện thô
 | Khám phá điểm đến và tour, lên kế hoạch trên bản đồ | Có | Có |
 | Gửi chuyến đi cho tư vấn viên | Có (tên, e-mail và số điện thoại trong biểu mẫu) | Có (e-mail được điền sẵn) |
 | Tìm lại chuyến đi | Chỉ trên cùng trình duyệt | **My trips**, trên mọi thiết bị |
-| Xem yêu cầu thanh toán từ Adventure Asia | Không | **Payments** trong **My trips** |
+| Xem yêu cầu thanh toán từ Adventure Asia | Không: tư vấn viên gửi qua e-mail | **Payments** trong **My trips**, chỉ với chuyến đi gửi khi đã đăng nhập (chuyến đi gửi ở dạng khách vãng lai vẫn qua e-mail, kể cả sau khi đăng nhập) |
 
 ## 6. Sử dụng hằng ngày (khách du lịch)
 
@@ -84,6 +86,9 @@ Không có mật khẩu. Mã đã hết hạn hoặc nhập sai sẽ hiện thô
    mở lại nó trên bản đồ.
 2. Trong **Payments**, xem lịch thanh toán, các khoản đã nhận và **How to pay** khi còn nợ tiền. Không có nút thanh
    toán: hướng dẫn thanh toán do tư vấn viên gửi.
+3. **Payments** chỉ liệt kê các chuyến đi gửi khi đã đăng nhập. Chuyến đi gửi ở dạng khách vãng lai không bao giờ hiện
+   yêu cầu thanh toán ở đây, kể cả khi bạn đăng nhập sau đó và nó được thêm vào **My trips**: tư vấn viên gửi các yêu
+   cầu đó qua e-mail.
 
 ## 7. Nhân sự làm gì
 
