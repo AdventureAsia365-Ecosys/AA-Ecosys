@@ -1,5 +1,10 @@
 {
  "captured_at": "2026-10-29T05:33Z",
+ "known_gaps": [
+  "Catalog: CIS migration 324 (applied 2026-10-31) added five enabled acc2 Bedrock chat models that this snapshot does not list: `nova-lite`, `nova-2-lite`, `llama4-maverick`, `llama4-scout`, `kimi-k3`. No route, fallback or shadow names them, so the Routes table is unaffected.",
+  "Routes: CIS migrations 320-324 add no route row. Admin edits in AI providers › Routing after 2026-10-29T05:33Z are not checked.",
+  "Recapture (`dump` + `import`) is a tracked follow-up: root `docs/backlog/README.md` §1 (AA-1020)."
+ ],
  "models": [
   {
    "api_style": "embed",

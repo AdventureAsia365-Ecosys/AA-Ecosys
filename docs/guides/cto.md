@@ -7,9 +7,9 @@ status: draft
 owner: nghiep
 audience: [cto]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-11-01
 review_every_days: 90
-related: [ARCH-01, ARCH-05, ARCH-08, GUIDE-09, GUIDE-07, AA-897, AA-697]
+related: [ARCH-01, ARCH-01-ai-gateway, ARCH-05, ARCH-08, GUIDE-09, GUIDE-07, AA-897, AA-697]
 ---
 
 # CTO guide
@@ -25,8 +25,11 @@ see which risks are open and how the roadmap is tracked. Every section points to
 ## The system on one page
 
 AA-Ecosys runs four apps on one AWS account (acc2, us-west-1) with one shared PostgreSQL instance, one schema owner
-per schema and versioned contracts between apps. AI models run on Amazon Bedrock in a second account, acc3; acc1 left
-the ecosystem on 2026-10-28 (AA-998), so there is no cross-account fallback. Only CIS writes content (ADR 0002). There is only a Dev environment,
+per schema and versioned contracts between apps. A management account holds the AA organization, its guard policies,
+single sign-on, the organization trail and budgets; the workload accounts join it later (ADR 0018). Every paid AI
+and data call goes through one AI gateway with one ledger ([AI gateway](../architecture/ai-gateway.md), ADR 0009): chat
+models run on Amazon Bedrock in a second account, acc3, with acc2 embeddings and the direct OpenAI and Anthropic APIs
+as other failure domains. Only CIS writes content (ADR 0002). There is only a Dev environment,
 holding test data only (D-01); prod will be a separate RDS instance in its own AWS account, `aa-prod` (ADR 0018, C7.2a, D-17), dated at
 go-live. Full explanation: [ecosystem architecture](../ecosystem-architecture.md).
 
@@ -38,14 +41,18 @@ flowchart LR
   traveller["Traveller<br/>[Person]"]
   partner["Partner agency (tenant)<br/>[Person]"]
   eco["AA-Ecosys<br/>[Software system]<br/>CIS, TripPlanner, Booking, Partner"]
-  bedrock["Amazon Bedrock on acc3<br/>[External system]"]
+  bedrock["Amazon Bedrock on acc3 and acc2<br/>[External system]"]
+  direct["OpenAI API, Anthropic API<br/>[External systems, warm paths]"]
   jev["Jev decision service<br/>[External system]"]
   dfs["DataForSEO, Geoapify, Mapbox<br/>[External systems]"]
+  org["AWS organization<br/>[Management account]"]
   drive["Google Drive<br/>[External system]"]
   thu -->|"curates tours, handles trip cases"| eco
   traveller -->|"plans a trip, sends an inquiry"| eco
   partner -->|"runs its CRM, gets tenant content"| eco
-  eco -->|"writes and judges content"| bedrock
+  eco -->|"writes and judges content, embeddings"| bedrock
+  eco -.->|"judge last resort; Anthropic has no key yet"| direct
+  org -.->|"guard policies, sign-in, audit, budgets"| eco
   eco -->|"content verdicts"| jev
   eco -->|"search demand, geocoding, maps"| dfs
   eco -->|"photo originals"| drive
@@ -61,18 +68,20 @@ flowchart TB
   bkfe["Booking staff admin<br/>[Next.js on Vercel]"]
   cisapi["CIS API + worker<br/>[FastAPI on ECS Fargate]"]
   crmapi["Partner CRM API + job worker<br/>[FastAPI on ECS Fargate]"]
-  tpl["TripPlanner browse + assembly<br/>[Python Lambdas]"]
+  tpl["TripPlanner browse + assembly + jobs<br/>[Python Lambdas]"]
   bkapi["Booking API + job worker<br/>[FastAPI on ECS Fargate]"]
   rds[("Shared RDS PostgreSQL<br/>schemas per owner, RLS")]
-  cognito["Cognito WORKFORCE / EXTERNAL / PARTNER<br/>[Identity]"]
-  redis[("Redis<br/>[CIS cache and flags]")]
+  cognito["Cognito WORKFORCE / EXTERNAL / PARTNER / M2M<br/>[Identity]"]
+  redis[("ElastiCache Valkey<br/>[CIS cache and flags]")]
+  gw["AI gateway<br/>[control plane in CIS, aa_llm core in TP and CRM]"]
   cisfe -->|"REST via API Gateway"| cisapi
-  partnerfe -->|"Content studio: tenant API key"| cisapi
+  partnerfe -->|"Content studio: partner token exchanged for a 15-minute tenant JWT"| cisapi
   partnerfe -->|"CRM REST"| crmapi
   tpfe -->|"BFF via HTTP API"| tpl
   bkfe -->|"REST via API Gateway"| bkapi
   cisapi --> rds
   cisapi --> redis
+  cisapi & tpl & crmapi -->|"every paid AI and data call"| gw
   crmapi -->|"own schema + catalog views"| rds
   tpl -->|"own schema + catalog views"| rds
   bkapi -->|"own schema + catalog views"| rds
@@ -126,7 +135,7 @@ One identity service: Amazon Cognito on acc2 ([ADR 0006](../adr/0006-ecosystem-i
 | CIS staff | Live: e-mail one-time code on `staff-auth.lumiguides.it.com`; directory in CIS (`shared.admin_users`, `shared.staff_app_grant`); only owners write it. The legacy password login is off since AA-816 S2 and kept only as a rollback |
 | Break-glass | Live, disabled at rest, password + TOTP |
 | Booking staff | Phase 2 (AA-680): Booking accepts WORKFORCE tokens; it still accepts the CIS bridge token during the transition |
-| Partner agency people | PARTNER pool with required MFA ([ADR 0006b](../adr/0006b-partner-pool-and-mfa.md)) for the AA-Partner CRM web. The Content studio still signs in with the tenant API key until AA-979 P2b (ADR 0010a, proposed) |
+| Partner agency people | PARTNER pool with required MFA ([ADR 0006b](../adr/0006b-partner-pool-and-mfa.md)) for the AA-Partner CRM web and the Content studio; since AA-979 P2b the studio exchanges the partner token for a 15-minute tenant JWT ([ADR 0010a](../adr/0010a-content-studio-partner-sign-in.md)) and has no API-key sign-in |
 | Tenant users of the Content studio | Phase 3 (AA-813), not started |
 | Travellers / customers | Phase 4 (AA-908): e-mail code sign-in and My Trips live on TripPlanner (EXTERNAL pool, `tripplanner.traveller_accounts`, tp-019); WAF rate rules on the Cognito pools |
 

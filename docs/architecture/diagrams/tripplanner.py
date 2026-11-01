@@ -1,12 +1,14 @@
-"""AA-TripPlanner-Web view: map-first web app, two Lambdas split by statefulness, data and AI (AA-697).
+"""AA-TripPlanner-Web view: map-first web app, three Lambdas (two split by statefulness, one job worker), data and AI
+(AA-697, AA-1020).
 
 Facts: apps/AA-TripPlanner-Web CONTEXT.md ("Architecture at a glance", "Backend", "Guest identity", "AI (Bedrock)",
-"Deploy & CI") and docs/ecosystem-architecture.md sections 4.1-4.3. Subnet tiers from AA-CIS-Infra modules/vpc
+"Deploy & CI"), docs/ecosystem-architecture.md sections 4.1-4.3 and docs/architecture/ai-gateway.md (2026-11-01). Subnet tiers from AA-CIS-Infra modules/vpc
 (the Lambdas run in the private subnets, AA-Booking on the shared ECS cluster).
 """
 from diagrams.aws.compute import Fargate, Lambda
 from diagrams.aws.database import RDSPostgresqlInstance
 from diagrams.aws.general import Users
+from diagrams.aws.integration import EventbridgeScheduler
 from diagrams.aws.ml import Bedrock
 from diagrams.aws.network import APIGateway
 from diagrams.aws.security import IAMRole, Cognito, SecretsManager
@@ -39,15 +41,17 @@ def draw(filename: str) -> None:
                 http = APIGateway("Amazon API Gateway\nHTTP /browse · /trip\n(X-TripPlanner-Key)")
                 key = SecretsManager("AWS Secrets Manager\nAPI key secret")
                 artifacts = S3("Amazon S3\nLambda artifacts")
+                sched = EventbridgeScheduler("EventBridge Scheduler\ndaily tick")
                 embed = Bedrock("Amazon Bedrock\nCohere Embed v4")
                 with group("vpc", "Shared VPC"):
                     with group("private", "Private subnets", "TripPlanner Lambdas"):
                         with group("generic", "AWS Lambda functions") as fns:
                             browse = Lambda("browse\nstateless, cacheable reads\nsearch embedding")
                             assembly = Lambda("assembly\ntrip writes + AI narration")
+                            jobs = Lambda("jobs\ntripplanner.job worker")
                     with group("private", "Private subnets", "database"):
                         with group("generic", "Amazon RDS for PostgreSQL", "shared instance"):
-                            reads = RDSPostgresqlInstance("read only\ncatalog.* views (CIS)\nModel Gateway config")
+                            reads = RDSPostgresqlInstance("read only\ncatalog.* views (CIS)\nAI gateway views")
                             own = RDSPostgresqlInstance("schema tripplanner\nevent-sourced trips\n(tp-NNN, owner)")
                     with group("private", "Private subnets", "ECS workloads"):
                         booking = Fargate("AA-Booking api\npulls the inquiry outbox")
@@ -61,7 +65,7 @@ def draw(filename: str) -> None:
             cognito: (3, 0),
             travellers: (0, 1), fe: (1, 1), http: (3, 1), browse: (4, 1), reads: (5, 1),
             mapbox: (1, 3), assembly: (4, 3), own: (5, 3), booking: (6, 3),
-            invoker: (7, 4), llm: (8, 4),
+            sched: (3, 4), jobs: (4, 4), invoker: (7, 4), llm: (8, 4),
             deploy: (0, 5), role: (2, 5), artifacts: (3, 5), key: (4, 5), embed: (5, 5),
         })
         legend((8, 5))
@@ -79,6 +83,7 @@ def draw(filename: str) -> None:
         link(assembly, invoker, "sts:AssumeRole", "control")
         link(invoker, llm)
         link(own, booking, "inquiry.submitted", "async")
+        link(sched, jobs, "daily", "async")
         link(deploy, role, "OIDC", "control")
         link(role, artifacts, "upload", "control")
         link(role, browse, "UpdateFunctionCode", "control", into=fns)

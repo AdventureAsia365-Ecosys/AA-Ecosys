@@ -1,7 +1,8 @@
-"""AA-CIS-App view: admin console, API and job worker, data and the LLM path (AA-697).
+"""AA-CIS-App view: admin console, API and job worker, data and the AI gateway paths (AA-697, AA-1020).
 
-Facts: apps/AA-CIS-App CONTEXT.md ("Architecture at a glance", "Deploy & CI", "Contracts with other apps") and
-docs/ecosystem-architecture.md sections 4.1, 4.3-4.6. Subnet tiers from AA-CIS-Infra modules/vpc.
+Facts: apps/AA-CIS-App CONTEXT.md ("Architecture at a glance", "Deploy & CI", "Contracts with other apps"),
+docs/ecosystem-architecture.md sections 4.1, 4.3-4.6 and docs/architecture/ai-gateway.md (as built 2026-11-01).
+Subnet tiers from AA-CIS-Infra modules/vpc.
 """
 from diagrams.aws.compute import ECR, Fargate, Lambda
 from diagrams.aws.database import ElastiCache, RDSPostgresqlInstance
@@ -41,25 +42,25 @@ def draw(filename: str) -> None:
                     lb = ElbApplicationLoadBalancer("Elastic Load Balancing\nNLB → ALB, regional WAF")
                     with group("private", "Private subnets", "workloads"):
                         with group("ecs", "Amazon ECS cluster", "Fargate, one image") as ecs:
-                            api = Fargate("aa-cis-dev-api\nadmin API · /v1 studio · Model Gateway")
-                            worker = Fargate("aa-cis-dev-worker\nshared.job runner (A- and T-series)")
+                            api = Fargate("aa-cis-dev-api\nadmin API · /v1 studio\nAI gateway control plane")
+                            worker = Fargate("aa-cis-dev-worker\nshared.job runner (A- and T-series)\ndaily AI connection probe")
                         cache = ElastiCache("Amazon ElastiCache\nValkey cache")
                         probe = Lambda("AWS Lambda\nops probe")
                     with group("private", "Private subnets", "database"):
                         rds = RDSPostgresqlInstance(
-                            "Amazon RDS for PostgreSQL\nsilver · gold · acp_* · geo\ncatalog · shared")
+                            "Amazon RDS for PostgreSQL\nsilver · gold · acp_* · geo · catalog\nshared (incl. AI registry + ledger)")
                 ecr = ECR("Amazon ECR\nimage per git SHA")
                 s3 = S3("Amazon S3\nbronze: uploads · photos · docs")
-                embed = Bedrock("Amazon Bedrock\nCohere Embed v4")
+                embed = Bedrock("Amazon Bedrock\nCohere Embed v4\n5 chat candidates, no route")
                 cw = Cloudwatch("Amazon CloudWatch\nlogs · metrics · alarms")
 
         with group("cloud", "AWS Cloud", "LLM account (acc3)"):
             invoker = IAMRole("AWS IAM\nBedrock invoker role")
             with group("region", "us-west-1"):
-                llm = Bedrock("Amazon Bedrock\nwriter + judge models")
+                llm = Bedrock("Amazon Bedrock\nmain writer + judge models")
 
         with group("outside", "Outside services") as outside:
-            apis = Internet("Decision + SEO APIs\nJev · DataForSEO\nOpenAI (judge fallback)")
+            apis = Internet("Paid APIs via the gateway\nJev · DataForSEO · Geoapify\nOpenAI (judge last resort)\nAnthropic (no key yet)")
             channels = Internet("Photos + channels\nGoogle Drive · WordPress · Facebook")
 
         place({
@@ -75,7 +76,7 @@ def draw(filename: str) -> None:
         link(staff, admin)
         link(admin, rest)
         link(admin, cognito, "sign-in", "control")
-        link(studio, rest, "tenant JWT")
+        link(studio, rest, "tenant JWT (15 min)")
         link(rest, lb, "VPC link")
         link(lb, api)
         link(api, cache)

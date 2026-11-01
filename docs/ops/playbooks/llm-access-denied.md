@@ -7,12 +7,12 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-worker, aa-cis-api, tripplanner-lambda]
-last_reviewed: 2026-10-30
+last_reviewed: 2026-11-01
 review_every_days: 90
 last_tested: 2026-10-30
 tested_where: incident
 tested_evidence: real incident on the LLM account 29-30/10/2026; docs/ops/postmortems/2026-10-29-acc3-bedrock-access-refusal.md; probes with tools/llm/llm_last_ok.py and tools/llm/llm_connections_probe.py
-related: [OPS-04, OPS-04-llm-cost-spike, OPS-04-pm-2026-10-29-acc3-bedrock-access, APP-06-anthropic-key, OPS-05-ecs-exec, AA-900, AA-1002, AA-1003]
+related: [OPS-04, ARCH-01-ai-gateway, OPS-04-llm-cost-spike, OPS-04-pm-2026-10-29-acc3-bedrock-access, APP-06-anthropic-key, OPS-05-ecs-exec, AA-900, AA-1002, AA-1003]
 ---
 
 # LLM calls refused (llm_access_denied, Bedrock Error 002)
@@ -32,8 +32,13 @@ log.
 ## Triggers
 
 - Job errors starting with `llm_access_denied` (the gateway fails fast on an account-level refusal, AA-900).
-- The LLM availability card (CIS admin, Settings › LLM Models) shows `blocked`, or the Connections tab shows an open
-  circuit with an access error.
+- An admin bell "LLM connection paused" and the ops e-mail `llm_circuit_open`: a connection-level circuit opened
+  (AA-1018; one `credential` or `quota_exhausted` refusal, or `access_denied` on two models of one connection).
+- CIS admin **AI providers** (`/admin/ai-gateway`): the LLM availability card on the Routing tab shows `blocked`, or
+  the Providers tab shows a connection with `access_state` `access_denied`, `quota_exhausted` or `unconfigured`, an
+  open or half-open circuit, or a failed last probe.
+- The daily probe (`llm_connection_probe`, 05:00 UTC, on Dev since Infra #574) fails on a connection that answered
+  the day before.
 - The OPS-12 daily digest's LLM line reports failures (AA-1003).
 - A provider message such as "Error 002: Access to Bedrock models is not allowed for this account", or
   `AccessDeniedException` naming the account, not the role.
@@ -45,7 +50,9 @@ log.
    Expected: the error names access or the account, not throttling (`ThrottlingException` is a quota problem: see the
    lessons log, section Vận hành). Abort if it is throttling or a 5xx ([5xx spike](5xx-spike.md)).
 
-2. **When it last worked, per account** (read-only, no cost): `tools/ecs/ecsx.sh tools/llm/llm_last_ok.py`
+2. **When it last worked, per account** (read-only, no cost). First look at the connection's `last_probe_at` and
+   `access_state` on AI providers › Providers, and at the Calls tab filtered on that connection: refused attempts
+   are ledger rows at 0 USD (`status` `refused`, `error_class`). Then: `tools/ecs/ecsx.sh tools/llm/llm_last_ok.py`
    (optional `LAST_OK_DAYS=14`, `LAST_OK_ACCOUNT=<label>`).
    Expected: one account (or connection) stops at a clear time while the others continue. That time is the start of
    the incident; compare it with organization, billing or credit events (step 7).
@@ -106,12 +113,19 @@ audit rows. Abort the probing as soon as step 7 or the support case gives the ca
 
 ## While access is refused
 
-- No retry loops or catalogue reruns: refused calls are free, but a half-done wave is not.
+- No retry loops or catalogue reruns: refused calls are free, but a half-done wave is not. The connection circuit
+  already skips every deployment of the refused connection and lets the route move on to another failure domain
+  where the stage's data scope allows one ([AI gateway](../../architecture/ai-gateway.md) §4).
+- Jobs refused at account level end `failed` with `llm_access_denied`; they are held, not lost. Once the connection
+  answers again (a real call, the daily probe or Test connection), re-queue them:
+  `POST /admin/job-runner/jobs/retry-llm-denied` (dry run by default; at most 50 per apply). A job whose connection
+  still refuses stays held.
 - A fallback route is configuration, not code (AA-1002 connection registry). The Anthropic API key path:
   [Anthropic API key runbook](../runbooks/llm-anthropic-api-key.md) and `tools/llm/aa1002_anthropic_probe.py`.
 
 ## Close
 
-- `llm_connections_probe.py` shows `ok: true` on the restored connection, the availability card is no longer
-  `blocked`, and the next digest line is clean.
+- `llm_connections_probe.py` shows `ok: true` on the restored connection, its `access_state` is `ok`, the connection
+  circuit is closed, the availability card is no longer `blocked`, and the next digest line is clean.
+- The held jobs are re-queued with `retry-llm-denied` (apply), and the re-queued jobs finish.
 - The invalid paid runs of the outage are listed for a re-run, and the postmortem's actions are updated.

@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [devops, engineer]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-11-01
 review_every_days: 90
 related: [GUIDE-01, OPS-01, OPS-04, OPS-03, SEC-02, FIN-01, AA-897, AA-892]
 ---
@@ -34,14 +34,23 @@ First get your access from [Onboarding](../onboarding.md) (account map, AWS prof
 
 The GitHub environment that gates Terraform apply is called `prod` but applies Dev. ADR 0012 decision 6 renames it
 to `dev` in phase 1, before any prod role exists, in a fixed four-step order (C7.2d); until that Infra PR lands, the
-name stays `prod`. Prod Terraform will be its own root, `accounts/aa365-prod` (decision 5, C7.2c).
+name stays `prod`. Prod Terraform will be its own root, `accounts/prod`, in the `aa-prod` account (ADR 0018 decision
+5, replacing the `accounts/aa365-prod` of ADR 0012; C7.2c).
 
-Live components on Dev (checked 2026-10-28): ECS cluster `aa-cis-dev-cluster` with services `aa-cis-dev-api`,
+Live components on Dev (checked 2026-11-01): ECS cluster `aa-cis-dev-cluster` with services `aa-cis-dev-api`,
 `aa-cis-dev-worker`, `aa-booking-dev-api`, `aa-crm-dev-api`, `aa-crm-dev-web` and `aa-crm-dev-portal`; RDS
-`aa-cis-dev-db` (PostgreSQL, `db.t4g.small`, single-AZ, 7-day PITR); Lambdas `aa-tripplanner-dev-browse` and
-`aa-tripplanner-dev-assembly`; four Cognito trigger Lambdas (`aa-identity-dev-*`); the daily probe Lambda
-`aa-cis-dev-dfs-balance-check`; the snapshot expiry Lambda `aa-cis-dev-rds-snapshot-expiry`. The AI models run on
-Amazon Bedrock in acc3; acc1 (a personal account) was removed from the ecosystem on 2026-10-28 (AA-998).
+`aa-cis-dev-db` (PostgreSQL, `db.t4g.small`, single-AZ, 7-day PITR); Lambdas `aa-tripplanner-dev-browse`,
+`aa-tripplanner-dev-assembly` and `aa-tripplanner-dev-jobs` (the `tripplanner.job` worker, woken by a daily
+EventBridge Scheduler entry); four Cognito trigger Lambdas (`aa-identity-dev-*`); the daily probe Lambda
+`aa-cis-dev-dfs-balance-check`; the snapshot expiry Lambda `aa-cis-dev-rds-snapshot-expiry`. Chat models run on Amazon
+Bedrock in acc3, behind the [AI gateway](../architecture/ai-gateway.md); acc1 (a personal account) was removed from the
+ecosystem on 2026-10-28 (AA-998).
+
+The management account (ADR 0018) holds the AA organization: OUs, three SCPs on the OUs, the organization trail,
+budgets and IAM Identity Center. It runs no workload, and no workload account has joined yet. Its Terraform root is
+`accounts/management` in AA-CIS-Infra (bootstrap and apply order in that root's README). Read it with the Identity
+Center profile `aa-mgmt` after `aws sso login --sso-session aa-mgmt-sso`; an apply runs only through the GitHub
+environment `org` with the tech lead as reviewer.
 
 ## How each app deploys
 
@@ -49,13 +58,13 @@ Amazon Bedrock in acc3; acc1 (a personal account) was removed from the ecosystem
 |---|---|---|---|
 | CIS | Merge to `main` → `Deploy Dev` (`deploy-dev.yml`): image `dev-<sha>` to ECR (immutable tags), new task definitions for api **and** worker on the same image | `vercel-deploy.yml` (admin, `aa-cis-frontend`), followed by a Playwright UI smoke. The portal is no longer deployed from here (AA-979, CIS #997) | Refuses only while a rerun wave is open or a deploy-blocking kind (`data_erasure`, `s1_batch_ingest`, `writing_memory_r2`, `writing_memory_shadow`) runs or is due within 15 min (C6.3a, AA-993 G5); other queued/running jobs are released and re-claimed by the new task |
 | Booking | Merge to `main` → `Deploy Dev`: image tagged with the git SHA, role `aa-booking-dev-app-deploy`, smoke `/booking/health` (same `git_sha`) and `/booking/health/ready` | `vercel-deploy.yml` (`aa-booking-admin`) | Asks `/booking/ops/deploy-gate`; refuses only while a retention job (`bk_retention_job`, `bk_retention_inbox_redact`) runs or is due within 15 min (C6.3a, AA-993 G5) |
-| TripPlanner | Merge to `main` touching `backend/**` → `deploy-lambdas.yml`: zip to the artifacts bucket, `UpdateFunctionCode` on both Lambdas | `vercel-deploy.yml` | None (no job table yet, AA-861) |
+| TripPlanner | Merge to `main` touching `backend/**` → `deploy-lambdas.yml`: zips to the artifacts bucket, `UpdateFunctionCode` on the three Lambdas (browse, assembly, jobs) | `vercel-deploy.yml` | None: `tripplanner.job` (tp-021) has no deploy-blocking kind, and a Lambda deploy does not interrupt a running invocation |
 | Partner | Merge to `main` touching `api/**` → `Deploy Dev`: image tagged with the git SHA (native arm64), service `aa-crm-dev-api`; `web/**` → `Deploy Web Dev`, service `aa-crm-dev-web` | `portal/**` → `Deploy Portal Dev` (`deploy-portal-dev.yml`): the tenant portal (Content studio) to the Fargate service `aa-crm-dev-portal` behind `portal.lumiguides.it.com`, then post-deploy verify and the portal UI smoke. The Vercel project `aa-cis-portal` and `vercel-deploy-portal.yml` were removed at the AA-979 clean-up (S256): no portal PR preview | The API deploy has the same guard, but no Partner kind blocks a deploy today (`crm_dispatch` stopped blocking in AA-993 G4b); web and portal deploys have no job gate |
 | Infra | PR → **Terraform Plan** (read it; Infra has no required checks) → merge → **Terraform Apply Prod** run by hand (`workflow_dispatch` on `main`) | - | Plan read in the PR; OIDC trust only for `refs/heads/main` |
 
 Boundary: *apps own code, Infra owns resources*. Infra creates the ECS services, Lambdas and roles; the apps ship
 code into them. Bootstrap IAM roles and policies and the `accounts/acc3-bedrock` root are applied by a human with the
-MFA profile, never by CI.
+MFA profile, never by CI; the `accounts/management` root applies only through its gated GitHub environment.
 
 Vercel's Git integration is off in every repo; CI creates deploys with `VERCEL_TOKEN`, and only when frontend files
 change.

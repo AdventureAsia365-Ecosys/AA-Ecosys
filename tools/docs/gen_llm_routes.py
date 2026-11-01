@@ -1,7 +1,7 @@
 """Generate the LLM route and model table (docs/generated/llm-routes.md) from a snapshot of the Model Gateway config.
 
 AA-900 (APP-06-routes). The routes (`shared.llm_role_config`) and the model catalog (`shared.llm_model_catalog`) are
-runtime data the admin edits in CIS Settings, so the table is regenerated from a snapshot of those two tables, never
+runtime data the admin edits in CIS AI providers › Routing (`/admin/ai-gateway`), so the table is regenerated from a snapshot of those two tables, never
 edited by hand. Two committed files: the snapshot `docs/generated/llm-routes.snapshot.json` (the generator's input)
 and the page `docs/generated/llm-routes.md` (its output). `check` proves the page is what `render` makes from the
 snapshot; `test_llm_routes.py` runs it in the docs-lint "Unit tests of the lint tools" step.
@@ -16,6 +16,10 @@ Commands (rendering is standard library only; `dump` also needs asyncpg, present
   render               render the page from the committed snapshot.
   check                exit 1 when the committed page differs from the render of the committed snapshot, or when
                        the snapshot holds an account ID or an ARN (the repos are public).
+
+`known_gaps` (optional list of strings in the snapshot): what is known to have changed in the two tables since the
+capture, written by hand into the committed snapshot when a recapture cannot run yet (for example a migration that
+added catalog rows). The page shows it under the header. `dump` never writes it, so the next capture clears it.
 
 Only non-secret columns are read. `bedrock_profile_ids` is reduced to its account keys (acc2 / acc3): the profile
 values can carry ARNs. `updated_by` (a person) is not read. Any 12-digit number or ARN left in a text value is
@@ -97,8 +101,12 @@ def normalise(snapshot: dict) -> dict:
     for m in models:
         m["bedrock_accounts"] = sorted(m.get("bedrock_accounts") or [])
         m["callable_via"] = list(m.get("callable_via") or [])
-    return {"schema": SCHEMA, "captured_at": snapshot.get("captured_at"), "source": snapshot.get("source"),
-            "routes": redact(routes), "models": redact(models)}
+    out = {"schema": SCHEMA, "captured_at": snapshot.get("captured_at"), "source": snapshot.get("source"),
+           "routes": redact(routes), "models": redact(models)}
+    gaps = [str(g).strip() for g in snapshot.get("known_gaps") or [] if str(g).strip()]
+    if gaps:
+        out["known_gaps"] = redact(gaps)
+    return out
 
 
 def snapshot_text(snapshot: dict) -> str:
@@ -149,6 +157,16 @@ def _num(v) -> str:
     return s.rstrip("0").rstrip(".") if "." in s else s
 
 
+def _gaps(snap: dict) -> str:
+    """The known-gaps callout (empty when the snapshot has none): changes since the capture that it does not show."""
+    gaps = snap.get("known_gaps") or []
+    if not gaps:
+        return ""
+    lines = ["", "> **Known gaps of this snapshot** (the next capture clears this list):"]
+    lines += [f"> - {_cell(g)}" for g in gaps]
+    return "\n".join(lines) + "\n"
+
+
 def fingerprint(snapshot: dict) -> str:
     return hashlib.sha256(snapshot_text(snapshot).encode("utf-8")).hexdigest()
 
@@ -180,10 +198,10 @@ related: [APP-06-prompts, APP-06-eval, CAT-01, AA-900]
 
 > **Generated - do not edit.** Source: a read-only snapshot of `shared.llm_role_config` and
 > `shared.llm_model_catalog` on the shared Dev RDS, captured {captured}
-> ([`llm-routes.snapshot.json`](llm-routes.snapshot.json)). The admin changes routes and models in CIS Settings
-> (LLM models); after such a change, or a migration that touches either table, capture a new snapshot and render
+> ([`llm-routes.snapshot.json`](llm-routes.snapshot.json)). The admin changes routes and models in CIS AI providers ›
+> Routing (`/admin/ai-gateway`); after such a change, or a migration that touches either table, capture a new snapshot and render
 > this page (`{GENERATOR}`, module docstring). The docs lint fails when this page and the snapshot disagree.
-
+{_gaps(snap)}
 A route is the order the gateway tries models for a stage: the primary, then each fallback; the shadow (when set)
 gets a sampled copy of the call for comparison and never serves the result. Prompts per stage are in the CIS prompt
 register (`docs/llm/prompt-register.md` in AA-CIS-App). A prompt, model or route change records an eval run ID in its
