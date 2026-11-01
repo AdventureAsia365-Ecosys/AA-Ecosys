@@ -1,0 +1,178 @@
+name: Plan sync
+# S263 (AA-896, design: docs/audits/2026-11-01-S262-assessment-followup/README.md 6.5): pull the Linear-owned fields of
+# the master plan tracker (docs/backlog/tracker/plan.json: open issue set, title, status, priority, project, due) from
+# Linear with tools/linear/plan_sync.py, one way. When anything moved, force-push branch bot/plan-sync from master and
+# open or update one root PR, like the bot/db-schema-reference PR of AA-CIS-Infra DB Schema Dump. The PR merges itself
+# only when `plan_sync.py --check-scope` proves the diff touches Linear-owned fields alone and the required root checks
+# (Docs lint, gitleaks) are green; otherwise it stays open for a person. A session's own --write wins over the bot: the
+# bot rebuilds its branch from the latest master on every run.
+#
+# DISABLED BY DEFAULT: workflow_dispatch only. The nightly schedule below stays commented out until both exist:
+#   - repo secret LINEAR_PLAN_SYNC_KEY: a Linear API key of its own, narrowest scope Linear allows (read). Set it by a
+#     pipe from Secrets Manager, never printed (e.g. `aws secretsmanager get-secret-value ... --output text |
+#     gh secret set LINEAR_PLAN_SYNC_KEY --repo <root repo>`, one line).
+#   - repo variable AA_CI_BOT_APP_ID + repo secret AA_CI_BOT_PRIVATE_KEY (GitHub App aa-ecosys-ci-bot, ADR 0011): a PR
+#     opened with the default GITHUB_TOKEN would not start the Docs lint / gitleaks checks, so the App token is required.
+# Without the Linear key the run ends with a notice (not a failure).
+#
+# Never writes to Linear. Cost: $0 (standard runner on a public repo, about 1 minute per run).
+on:
+  workflow_dispatch:
+    inputs:
+      automerge:
+        description: "Merge the PR when the diff is Linear-owned only and the root checks are green"
+        type: boolean
+        default: true
+  # Turn on after the first manual run is green (header):
+  # schedule:
+  #   - cron: "30 23 * * *"   # nightly 23:30 UTC (06:30 in Vietnam)
+
+permissions:
+  contents: read
+
+concurrency:
+  group: plan-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Plan sync
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      ROOT_REPO: ${{ github.repository }}
+      PR_BRANCH: bot/plan-sync
+      PLAN: docs/backlog/tracker/plan.json
+      HAS_LINEAR: ${{ secrets.LINEAR_PLAN_SYNC_KEY != '' }}
+      HAS_CI_BOT_APP: ${{ vars.AA_CI_BOT_APP_ID != '' && secrets.AA_CI_BOT_PRIVATE_KEY != '' }}
+      AUTOMERGE: ${{ github.event_name == 'schedule' || inputs.automerge }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Preconditions
+        id: pre
+        run: |
+          if [ "$HAS_LINEAR" != "true" ]; then
+            echo "::notice::repo secret LINEAR_PLAN_SYNC_KEY is not set: plan sync skipped (see the workflow header)"
+            echo "- plan sync skipped: no LINEAR_PLAN_SYNC_KEY secret" >> "$GITHUB_STEP_SUMMARY"
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$HAS_CI_BOT_APP" != "true" ]; then
+            echo "::error::the aa-ecosys-ci-bot App is not configured in this repo (variable AA_CI_BOT_APP_ID and/or secret AA_CI_BOT_PRIVATE_KEY missing): a PR could not start the root checks"
+            exit 1
+          fi
+          echo "run=true" >> "$GITHUB_OUTPUT"
+
+      - name: Mint the aa-ecosys-ci-bot token (this repo, contents + pull requests write)
+        id: app-token
+        if: steps.pre.outputs.run == 'true'
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.AA_CI_BOT_APP_ID }}
+          private-key: ${{ secrets.AA_CI_BOT_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.pre.outputs.run == 'true'
+        with:
+          ref: master
+          token: ${{ steps.app-token.outputs.token }}
+          fetch-depth: 1
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        if: steps.pre.outputs.run == 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Sync plan.json from Linear
+        id: sync
+        if: steps.pre.outputs.run == 'true'
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_PLAN_SYNC_KEY }}
+        run: |
+          cp "$PLAN" "$RUNNER_TEMP/base.json"
+          set +e
+          python tools/linear/plan_sync.py --check > "$RUNNER_TEMP/diff.txt"
+          rc=$?
+          set -e
+          cat "$RUNNER_TEMP/diff.txt"
+          if [ "$rc" = "0" ]; then
+            echo "- plan.json already matches Linear: no PR" >> "$GITHUB_STEP_SUMMARY"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          [ "$rc" = "1" ] || { echo "::error::plan_sync.py --check exit $rc (public-safety guard or API error)"; exit 1; }
+          python tools/linear/plan_sync.py --write --log-draft > "$RUNNER_TEMP/write.txt"
+          cat "$RUNNER_TEMP/write.txt"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          if python tools/linear/plan_sync.py --check-scope "$RUNNER_TEMP/base.json" > "$RUNNER_TEMP/scope.txt"; then
+            echo "scope_ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "scope_ok=false" >> "$GITHUB_OUTPUT"
+          fi
+          cat "$RUNNER_TEMP/scope.txt"
+
+      - name: Open or update the root PR
+        id: pr
+        if: steps.sync.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -q -B "$PR_BRANCH"
+          git add -- "$PLAN"
+          git commit -q -m "docs: sync tracker plan.json from Linear" -m "Generated by the Plan sync workflow: $RUN_URL"
+          git push -q --force origin "$PR_BRANCH"
+          echo "head=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          {
+            echo "Generated by the **Plan sync** workflow: $RUN_URL"
+            echo
+            echo "Linear-owned fields only (issue set, title, status, priority, project, due). Milestone, session, size,"
+            echo "next and needs stay hand-owned; new issues arrive as \`later\` / \`unscheduled\` and need a slot."
+            echo
+            echo '```text'
+            cat "$RUNNER_TEMP/diff.txt"
+            echo '```'
+            echo
+            echo "Scope check: $(tail -1 "$RUNNER_TEMP/scope.txt")"
+            echo
+            echo "Do not push to \`$PR_BRANCH\`: every run force-pushes it from master."
+          } > "$RUNNER_TEMP/pr-body.md"
+          PR=$(gh pr list --repo "$ROOT_REPO" --head "$PR_BRANCH" --state open --json number --jq '.[0].number // empty')
+          if [ -n "$PR" ]; then
+            gh pr edit "$PR" --repo "$ROOT_REPO" --body-file "$RUNNER_TEMP/pr-body.md"
+            echo "- updated root PR #$PR" >> "$GITHUB_STEP_SUMMARY"
+          else
+            URL=$(gh pr create --repo "$ROOT_REPO" --base master --head "$PR_BRANCH" \
+              --title "docs: sync tracker plan.json from Linear" --body-file "$RUNNER_TEMP/pr-body.md")
+            PR="${URL##*/}"
+            echo "- opened root PR $URL" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "number=$PR" >> "$GITHUB_OUTPUT"
+
+      # Merges only a Linear-owned diff with green required checks; anything else waits for a person (6.5).
+      - name: Merge the PR when the diff is Linear-owned only
+        if: steps.pr.outputs.number != ''
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PR: ${{ steps.pr.outputs.number }}
+          HEAD: ${{ steps.pr.outputs.head }}
+          SCOPE_OK: ${{ steps.sync.outputs.scope_ok }}
+        run: |
+          if [ "$AUTOMERGE" != "true" ] || [ "$SCOPE_OK" != "true" ]; then
+            echo "- PR #$PR stays open for a person (automerge=$AUTOMERGE, scope_ok=$SCOPE_OK)" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          sleep 30   # let the checks of the new head register
+          if ! timeout 600 gh pr checks "$PR" --repo "$ROOT_REPO" --required --watch --interval 20; then
+            echo "- PR #$PR stays open: required checks not green" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          gh pr merge "$PR" --repo "$ROOT_REPO" --squash --match-head-commit "$HEAD"
+          echo "- PR #$PR merged by aa-ecosys-ci-bot (Linear-owned diff, checks green)" >> "$GITHUB_STEP_SUMMARY"

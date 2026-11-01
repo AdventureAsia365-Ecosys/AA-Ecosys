@@ -22,3 +22,12 @@ are gone after 30 days.
 
 Issue size rule (S245): one Linear issue = one deliverable slice (about one PR or a small PR group); the
 detailed task list lives in local plans (`docs/backlog/tracker/plan.json`, wave files).
+
+## Tracker sync (`plan_sync.py`, S263)
+
+`python3 tools/linear/plan_sync.py` pulls the Linear-owned fields (open issue set, title, status, priority,
+project, due) into `docs/backlog/tracker/plan.json`, one way; dry run by default, `--write` to save, `--check`
+exits 1 on drift, `--validate` is offline. Field ownership, conflict rules and when to run it:
+`docs/backlog/tracker/README.md`. Tests: `python3 -m unittest discover -s tools/linear -p 'test_*.py'`.
+
+`linear_api.py` holds the shared key lookup and GraphQL call used by both scripts.
