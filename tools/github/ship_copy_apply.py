@@ -37,7 +37,7 @@ import re
 import sys
 import urllib.request
 from contextlib import contextmanager
-from datetime import datetime, timezone
+from datetime import datetime
 
 import ship_merge
 from ship_common import AS_APP, ROOT, Runner, ShipError, gh_json, log, warn_mfa
