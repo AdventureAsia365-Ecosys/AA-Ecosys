@@ -11,14 +11,14 @@ const sc = base({ id: 'CRM-REV-20', title: 'Where the CRM stands and what comes 
 sc.steps = [
   {
     caption: {
-      en: 'To sum up: about seventy percent of the planned CRM is built and runs end to end, from the first inquiry to a booked trip and a signed traveller.',
-      vi: 'Tóm lại: khoảng bảy mươi phần trăm CRM theo kế hoạch đã được làm và chạy trọn vẹn, từ yêu cầu đầu tiên tới chuyến đã đặt và khách đã ký.',
+      en: 'To sum up: about eighty percent of the planned CRM is built and runs end to end, from the first inquiry to a booked trip and a signed traveller.',
+      vi: 'Tóm lại: khoảng tám mươi phần trăm CRM theo kế hoạch đã được làm và chạy trọn vẹn, từ yêu cầu đầu tiên tới chuyến đã đặt và khách đã ký.',
     },
     run: async (page, h) => {
       await sha(page, sc, 'start');
       await slide.show(page, h, {
         kicker: 'Where the build stands',
-        title: 'About 70% built, working end to end',
+        title: 'About 80% built, working end to end',
         tiles: [
           { value: '100%', label: 'Intake, pipeline, bookings, suppliers' },
           { value: '83-100%', label: 'Proposals', note: 'map in the builder not yet' },

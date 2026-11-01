@@ -97,8 +97,11 @@ sc.steps = [
         stage(page).and(page.locator('[data-stage="proposal"]')).waitFor({ timeout: 15_000 }).then(() => false),
       ]).catch(() => false);
       if (gated) {
-        await h.expect(page.getByTestId('gate-dialog-body')).toBeVisible();
-        await h.hover(page.getByTestId('gate-missing').or(page.getByTestId('gate-dialog-body')).first());
+        // The dialog shell names its scroll body "gate-dialog-body" too (CRM 9ca6997): the gate text is the one with data-gate.
+        const why = page.locator('[data-testid="gate-dialog-body"][data-gate]');
+        await h.expect(why).toHaveAttribute('data-gate', 'stage2');
+        await h.expect(why).toBeVisible();
+        await h.hover(page.getByTestId('gate-missing').or(why).first());
         await choose(h, gate, 'info_by_phone');
         await h.click(page.getByTestId('gate-confirm').getByRole('button'));
       }

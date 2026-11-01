@@ -26,22 +26,23 @@ sc.steps = [
   },
   {
     caption: {
-      en: 'About seventy percent of the planned CRM is built. Intake, the pipeline, bookings and suppliers are complete; money, the traveller portal and reports are mostly there.',
-      vi: 'Khoảng bảy mươi phần trăm CRM theo kế hoạch đã được làm. Phần nhận yêu cầu, pipeline, sổ booking và nhà cung cấp đã xong; tiền, cổng khách và báo cáo đã có phần lớn.',
+      en: 'About eighty percent of the planned CRM is built. Intake, the pipeline, bookings, suppliers and the traveller portal (its itinerary now also opens offline) are complete; commissions and trip cancel are in. Card payments are not live yet, the AI assistant runs in test mode only, and workflows and WhatsApp or SMS are not started.',
+      vi: 'CRM theo kế hoạch đã làm được khoảng tám mươi phần trăm. Phần nhận yêu cầu, pipeline, booking, nhà cung cấp và cổng khách (nay xem được lịch trình cả khi không có mạng) đã xong; hoa hồng và huỷ chuyến cũng đã có. Thanh toán bằng thẻ chưa chạy thật, trợ lý AI mới chạy chế độ thử, còn quy trình tự động và WhatsApp, SMS thì chưa bắt đầu.',
     },
     run: async (page, h) => {
+      // Tile values: tools/uat/scenarios/crm/PROGRESS.md (S261 method, recomputed S262 01/11/2026).
       await slide.show(page, h, {
         kicker: 'Where the build stands',
-        title: 'About 70% of the planned CRM is built',
+        title: 'About 80% of the planned CRM is built',
         tiles: [
           { value: '100%', label: 'Intake and pipeline' },
           { value: '83-100%', label: 'Proposals (interactive and written)' },
-          { value: '100%', label: 'Bookings and suppliers' },
+          { value: '95-100%', label: 'Bookings, suppliers and commissions', note: 'one-action trip cancel included' },
           { value: '90%', label: 'Invoices and payments', note: 'card payments not yet' },
-          { value: '76%', label: 'Traveller portal', note: 'offline use not yet' },
-          { value: '90%', label: 'Email and reports' },
-          { value: '90%', label: 'Data export and erasure' },
-          { value: '0%', label: 'Workflows, WhatsApp/SMS, commissions, AI', note: 'not started or blocked' },
+          { value: '100%', label: 'Traveller portal', note: 'itinerary works offline' },
+          { value: '90-95%', label: 'Email, reports and data export' },
+          { value: '90-95%', label: 'Trip hand-over to Adventure Asia, support access', note: 'staff screen not live yet' },
+          { value: '0-50%', label: 'Workflows, WhatsApp/SMS, AI', note: 'AI in test mode only; the rest not started' },
         ],
       });
     },

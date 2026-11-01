@@ -89,7 +89,7 @@ sc.steps = [
       await slide.notReady(page, h, {
         screen: 'More reports',
         missing: [
-          'Measures for workflows, commissions and AI help, which are not built yet',
+          'Measures for workflows and AI help, which are not built yet',
           'The Adventure Asia insights page, built from the anonymous totals agencies choose to share',
         ],
       });
