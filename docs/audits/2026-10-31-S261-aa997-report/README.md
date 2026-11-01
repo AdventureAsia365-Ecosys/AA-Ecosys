@@ -1,13 +1,13 @@
 ---
 id: PROD-01-aa997-report-s261
 title: "AA-997 Places geocode accuracy: full report 28/10 → 01/11/2026 (S254–S261)"
-description: "Báo cáo tổng cho tech lead về AA-997: mục tiêu 90 %, cách đo, dòng thời gian theo ngày, các luật aa997.1→aa997.4, lỗi và cách sửa, số liệu, chuỗi recheck aa997.4 (01/11, phần kết quả cuối điền sau) và việc còn lại."
+description: "Báo cáo tổng cho tech lead về AA-997: mục tiêu 90 %, cách đo, dòng thời gian theo ngày, các luật aa997.1→aa997.4, lỗi và cách sửa, số liệu, chuỗi recheck aa997.4 (đóng 01/11 00:30Z, kết quả cuối ở §7.2), confirm hide_flagged và việc còn lại."
 type: report
 status: active
 owner: nghiep
 audience: [engineer, agent]
 applies_to: [aa-cis, aa-booking, tripplanner]
-last_reviewed: 2026-10-31
+last_reviewed: 2026-11-01
 review_every_days: 30
 related: [AA-997, AA-990, docs/audits/2026-10-28-S254-geocode-audit/README.md, docs/audits/2026-10-30-S260-aa997-interim/README.md]
 ---
@@ -48,7 +48,7 @@ Quy ước:
 7. **Khuyến nghị:** sau audit cuối (khi chuỗi đóng, dự kiến 01/11, muộn nhất 02/11), đóng AA-997 dạng **Done-with-scope** (đạt mục tiêu chặn sai cho tên mới,
    không đạt 90 % trên dữ liệu cũ), confirm `hide_flagged` theo đề xuất đã duyệt, và mở follow-up có điều kiện
    "[Places] Reach 90%" cho phần dữ liệu cũ (§8).
-8. Các ô `{{FINAL_*}}` (§3.1, §6, §7) điền số cuối sau khi chuỗi xong; §7.2 là bảng tổng.
+8. Các ô "Cuối" (§3.1, §6, §7) đã điền số 01/11 (S262: audit 00:33Z trước khi ẩn, audit 01:22Z sau khi ẩn); §7.2 là bảng tổng.
 
 ---
 
@@ -101,10 +101,9 @@ Giới hạn cần nhớ khi đọc số:
 | 31/10 01:15Z | S261 | Audit cuối chuỗi v2 (chỉ đọc). | **78,8 % ±4,0, FAIL**; dự phóng 81,3 %; 6 regressed trong v2; pin phục vụ 80,6 % → 87,8 % → 90,7 %; `recheck_14` 13/16, 0/16, loose 3/16. | — |
 | 31/10 ~01:16Z | S261 | Dry run recheck aa997.3 `229a6def`. | 1.197 dòng (llm_point 1.004 + off_route 193 của aa997.1), 1.648 request. | — |
 | 31/10 01:54Z | S261 | Merge CIS #1193 `1b6e9448` (luật `aa997.4`), live api :940 / worker :506. | — | Thêm guard bằng chứng trong ngày để chặn dời sang POI trùng tên. |
-| 31/10 ~02:07–02:43Z | S261 | Dry run aa997.4 `8fa953f3`; trial `32ace765` → `6086f577`; trả 5 điểm regressed về điểm cũ; chuỗi đầy đủ `b0190743`. | Dry run khớp aa997.3 (1.197 / 1.648). Trial 98 dòng (50 dòng đầu: confirmed 6, `kept_model` 0, 76 request). `b0190743`: 75 dòng, confirmed 15, 108 request, dừng credit; còn **1.024 dòng**, `dc260ef8` chạy 01/11 00:11Z. | `hide_flagged` coi như đã duyệt theo đề xuất. Kế hoạch: audit cuối sáng 01/11 → Done-with-scope + follow-up. AA-990 đóng Done-with-scope; `recheck_14` theo AA-997. |
-| 01/11 từ 00:11Z | (tự chạy) | Chuỗi recheck aa997.4 tiếp tục (`dc260ef8` và các job nối tiếp). | Xem §7. `{{FINAL_TIMELINE_0111}}` | `{{FINAL_DECISION_0111}}` |
-| 02/11 (nếu tràn) | (tự chạy) | Phần còn lại của chuỗi nếu 01/11 hết credit. | `{{FINAL_TIMELINE_0211}}` (xoá dòng nếu chuỗi đóng trong 01/11) | — |
-| sau khi chuỗi đóng | S262? | Audit cuối (`audit_relocated.py`, `recheck_14.py`), báo cáo + confirm `hide_flagged`, comment Linear. | `{{FINAL_AUDIT_AT}}` | `{{FINAL_CLOSE_DECISION}}` |
+| 31/10 ~02:07–02:42Z | S261 | Dry run aa997.4 `8fa953f3`; trial `32ace765` → `6086f577`; trả 5 điểm regressed về điểm cũ; chuỗi đầy đủ `b0190743`. | Dry run khớp aa997.3 (1.197 / 1.648). Trial 98 dòng (50 dòng đầu: confirmed 6, `kept_model` 0, 76 request). `b0190743`: 75 dòng, confirmed 15, 108 request, dừng credit; còn **1.024 dòng**, `dc260ef8` chạy 01/11 00:11Z. | `hide_flagged` coi như đã duyệt theo đề xuất. Kế hoạch: audit cuối sáng 01/11 → Done-with-scope + follow-up. AA-990 đóng Done-with-scope; `recheck_14` theo AA-997. |
+| 01/11 từ 00:11Z | (tự chạy) | Chuỗi recheck aa997.4 tiếp tục (`dc260ef8` và các job nối tiếp). | Xem §7. `dc260ef8` 400 dòng, `continuing`, 0 lỗi (00:11–00:18Z); `3625eac5` 400 dòng, `continuing` (00:18–00:25Z); `b1e780e8` 224 dòng, `ok`, `remaining 0` (00:25:59–00:30:06Z). Ba lượt 01/11: confirmed 164, `kept_model` 4, 1.357 request. Chuỗi đóng 00:30Z: 1.197/1.197 dòng, $0. | Chuỗi đóng trong 01/11, không cần lượt 02/11. |
+| sau khi chuỗi đóng (01/11) | S262 | Audit cuối (`audit_relocated.py`, `recheck_14.py`), báo cáo + confirm `hide_flagged`, comment Linear. | 00:33Z: audit cuối `ACCEPT=aa997.4` + `recheck_14` (cổng 79,0 % ±4,0 FAIL; 5 regressed). Trả 3 dòng regressed về điểm cũ (`WRITTEN 3`: Sheeshganj Gurudwara (Sikh Temple) 5,3 km, the village of Dazhai 8,5 km, a farmer's restaurant in Dazhai 126,6 km). Deploy CIS #1213 `0982cbd9` trước confirm (sửa P15 của #1178: unhide chỉ trả lại đúng cái hide đã đổi, reveal / đổi lý do có audit, confirm kiểm lại stamp, so tên chính xác, digest có stamp v/at). Báo cáo `f54cdf77` (2.517 dòng, 1.187 gắn tour) → confirm `4919a61f` (ẩn 2.517, 26 dòng audit_log, `changed_since_report 0`). 01:22Z audit sau ẩn: cổng 79,6 % ±4,0, pin phục vụ 88,0 % ±4,5 (phủ 50,8 %). | Done-with-scope theo TL-25 (`docs/audits/2026-10-31-S262-tl-decisions/README.md`); `hide_flagged` đã confirm. |
 
 ### 3.2 Các chuỗi `place_relocate`
 
@@ -284,31 +283,33 @@ Chuỗi S259–S261 chạy `strategy v2`; tên mới vẫn `v1` (env `GEOCODER_S
 | S257 (aa997.1, 1.621/3.842) | 29/10 04:03Z | **77,7 % ±4,1** | 18,7 % | 77,1 % ±3,8 | ~79,5 % | FAIL |
 | S260 (v2 ngày 1) | 30/10 08:25Z | **78,4 % ±4,0** | 18,0 % | 77,8 % ±3,8 | 80,0 % | FAIL |
 | S261 (v2 xong) | 31/10 01:15Z | **78,8 % ±4,0** | 17,2 % | 78,3 % ±3,8 | 81,3 % | **FAIL** |
-| Cuối (sau recheck aa997.4) | 01/11 | `{{FINAL_GATE_FLAGSTRAT}}` | `{{FINAL_WRONG}}` | `{{FINAL_GATE_PROVSTRAT}}` | `{{FINAL_PROJECTION}}` | `{{FINAL_GATE_VERDICT}}` |
+| Cuối (sau recheck aa997.4) | 01/11 00:33Z → 01:22Z (sau revert 3 dòng + ẩn) | **79,0 % ±4,0 → 79,6 % ±4,0** | 17,0 % → 16,4 % | 78,5 % ±3,8 → 79,2 % ±3,8 | 81,4 % (00:33Z) | **FAIL** |
 
 ### 6.2 Dự phóng theo ô
 
 | ô | S257 | S260 | S261 | Cuối (01/11) |
 |---|---|---|---|---|
-| geoapify | 4.006 @ 93 % | 4.006 @ 93 % | 4.006 @ 93 % (n 254) | `{{FINAL_CELL_GEOAPIFY}}` |
-| relocate gắn cờ (`rl_flagged`) | 1.207 @ 66 % | 2.001 @ 65 % | **2.697 @ 64 %** (n 232) | `{{FINAL_CELL_RL_FLAGGED}}` |
-| relocate confirmed | 314 @ 64 % | 620 @ 75 % | 880 @ 77 % (n 63) | `{{FINAL_CELL_RL_CONFIRMED}}` |
+| geoapify | 4.006 @ 93 % | 4.006 @ 93 % | 4.006 @ 93 % (n 254) | 4.006 @ 93 % (n 254) |
+| relocate gắn cờ (`rl_flagged`) | 1.207 @ 66 % | 2.001 @ 65 % | **2.697 @ 64 %** (n 232) | 2.500 @ 61 % (n 207) |
+| relocate confirmed | 314 @ 64 % | 620 @ 75 % | 880 @ 77 % (n 63) | 1.077 @ 81 % (n 88) |
 | llm chưa chạm | 2.152 @ 63 % | 994 @ 58 % | 0 | 0 |
-| mapbox | 210 @ 89 % | 210 @ 89 % | 210 @ 89 % (n 9) | `{{FINAL_CELL_MAPBOX}}` |
-| relocate non_place | 97 @ 95 % | 155 @ 97 % | 193 @ 98 % (n 22) | `{{FINAL_CELL_RL_NON_PLACE}}` |
-| **tổng** | **~79,5 %** | **80,0 %** | **81,3 %** | `{{FINAL_PROJECTION}}` |
+| mapbox | 210 @ 89 % | 210 @ 89 % | 210 @ 89 % (n 9) | 210 @ 89 % (n 9) |
+| relocate non_place | 97 @ 95 % | 155 @ 97 % | 193 @ 98 % (n 22) | 193 @ 98 % (n 22) |
+| **tổng** | **~79,5 %** | **80,0 %** | **81,3 %** | **81,4 %** (7.986 dòng) |
 
 Ô kéo số xuống là `rl_flagged`: các dòng geocoder không xác nhận được nên vẫn giữ điểm model.
+
+Cột Cuối lấy từ audit 00:33Z (trước khi trả 3 dòng và ẩn). Audit sau ẩn (01:22Z) in 91,3 % nhưng chỉ trên 5.490 dòng (dòng bị ẩn rời khỏi các ô, `rl_flagged` còn 4 dòng; `rl_confirmed` 85 % sau revert), nên không so được với các cột trước.
 
 ### 6.3 Theo nhóm trên mẫu có nhãn
 
 | nhóm | S257 | S260 | S261 | Cuối (recheck aa997.4) |
 |---|---|---|---|---|
-| dòng của chuỗi hiện tại, trước → nay | n 185 (aa997.1): 57,8 → 64,3 % | n 94 (v2): 69,1 → 71,3 % | n 148 (v2): 62,2 → 67,6 % | `{{FINAL_GROUP_CHAIN}}` |
-| mọi dòng đã chạm | — | n 279: 61,6 → 66,7 % | n 333: 59,8 → 65,8 % | `{{FINAL_GROUP_TOUCHED}}` |
-| dòng chưa chạm | n 415: 80,2 % | n 321: 83,5 % | n 267: 90,3 % | `{{FINAL_GROUP_UNTOUCHED}}` |
-| theo outcome (đúng / n) | confirmed 18/29, llm_point 84/132, non_place 8/9, off_route 9/15 | 22/29, 36/55, 7/7, 2/3 | **28/38, 57/92, 13/13, 2/5** | `{{FINAL_CHAIN_BY_OUTCOME}}` (gồm `kept_model`) |
-| regressed | 3 | 9 (6 trong v2) | 9 (6 trong v2; 5 đã trả về sau lần đo này) | `{{FINAL_REGRESSED}}` |
+| dòng của chuỗi hiện tại, trước → nay | n 185 (aa997.1): 57,8 → 64,3 % | n 94 (v2): 69,1 → 71,3 % | n 148 (v2): 62,2 → 67,6 % | n 147 (aa997.4): 61,9 → 63,9 % (00:33Z) → 65,3 % (01:22Z, sau revert) |
+| mọi dòng đã chạm | — | n 279: 61,6 → 66,7 % | n 333: 59,8 → 65,8 % | n 333: 59,8 → 67,6 % (00:33Z) → 69,1 % (01:22Z) |
+| dòng chưa chạm | n 415: 80,2 % | n 321: 83,5 % | n 267: 90,3 % | n 267: 90,3 % |
+| theo outcome (đúng / n) | confirmed 18/29, llm_point 84/132, non_place 8/9, off_route 9/15 | 22/29, 36/55, 7/7, 2/3 | **28/38, 57/92, 13/13, 2/5** | confirmed 20/25, llm_point 66/110, off_route 8/12 (00:33Z); 21/25, 67/110, 8/12 (01:22Z); không có dòng `kept_model` trong mẫu (25 + 110 + 12 = n 147) |
+| regressed | 3 | 9 (6 trong v2) | 9 (6 trong v2; 5 đã trả về sau lần đo này) | 5 (00:33Z; 1 mới do aa997.4: the village of Dazhai) → **3** (01:22Z, sau khi trả 3 dòng về điểm cũ) |
 
 Trên mẫu có nhãn, chuỗi v2 sửa được 3 dòng sai (TC>fixed 2 + WP>fixed 1) nhưng làm hỏng 6 dòng đúng. Phần tăng
 S260 → S261 (+0,4 điểm) chủ yếu đến từ non_place được gắn cờ (`np_flagged` 13 → 19), không phải từ dời đúng chỗ.
@@ -317,13 +318,13 @@ S260 → S261 (+0,4 điểm) chủ yếu đến từ non_place được gắn c�
 
 | trạng thái | S260 (30/10 10:08Z) | S261 (31/10 01:15Z) | độ phủ S260 → S261 | Cuối (01/11) |
 |---|---|---|---|---|
-| mọi dòng (cổng) | 78,4 % | 78,8 % | 100 % | `{{FINAL_GATE_FLAGSTRAT}}` |
-| pin phục vụ hôm nay | 80,6 % ±5,0 | **80,6 % ±5,0** | 65,0 % → 65,0 % | `{{FINAL_SERVED_NOW}}` |
-| nếu `hide_flagged` | 86,6 % ±4,6 | **87,8 % ±4,6** | 52,0 % → 49,9 % | `{{FINAL_SERVED_IF_HIDE}}` |
-| + ẩn `non_place` | 88,7 % ±4,3 | **90,7 % ±4,3** | 50,8 % → 48,3 % | `{{FINAL_SERVED_IF_HIDE_NP}}` |
-| dự phóng theo ô (phục vụ → ẩn → + non_place) | 80,4 → 85,6 → 86,7 % | 81,7 → 89,4 → 91,3 % | | `{{FINAL_SERVED_PROJECTION}}` |
-| ứng viên ẩn / pin gắn tour sẽ biến mất | 2.017 / 1.015 | 2.715 / **1.293** | | `{{FINAL_HIDE_CANDIDATES}}` |
-| non_place đang phục vụ | 51 | 74 | | `{{FINAL_NON_PLACE_SERVED}}` |
+| mọi dòng (cổng) | 78,4 % | 78,8 % | 100 % | 79,0 % (00:33Z) → 79,6 % (01:22Z) |
+| pin phục vụ hôm nay | 80,6 % ±5,0 | **80,6 % ±5,0** | 65,0 % → 65,0 % | 81,0 % ±5,0 (phủ 65,0 %) trước confirm → **88,0 % ±4,5** (phủ 50,8 %) sau confirm, 01:22Z |
+| nếu `hide_flagged` | 86,6 % ±4,6 | **87,8 % ±4,6** | 52,0 % → 49,9 % | **88,0 % ±4,5**, phủ 50,8 % (đã ẩn thật; khớp số đo sau ẩn) |
+| + ẩn `non_place` | 88,7 % ±4,3 | **90,7 % ±4,3** | 50,8 % → 48,3 % | 90,9 % ±4,2, phủ 49,2 % (chưa ẩn non_place) |
+| dự phóng theo ô (phục vụ → ẩn → + non_place) | 80,4 → 85,6 → 86,7 % | 81,7 → 89,4 → 91,3 % | | 82,4 → 89,8 → 91,6 % |
+| ứng viên ẩn / pin gắn tour sẽ biến mất | 2.017 / 1.015 | 2.715 / **1.293** | | 2.517 / **1.187** (đã ẩn cả 2.517: báo cáo `f54cdf77`, confirm `4919a61f`) |
+| non_place đang phục vụ | 51 | 74 | | 74 |
 
 Ứng viên ẩn S261 theo nước (script chỉ in 14 nước lớn nhất, cộng 2.667; 48 dòng còn lại ở nước khác): India 567, China 529, Nepal 253, Laos 211, Japan 179, Sri Lanka 177, South Korea 143,
 Thailand 142, Philippines 108, Bhutan 90, Pakistan 87, Taiwan 82, Mongolia 69, Vietnam 30.
@@ -335,8 +336,8 @@ giảm từ 65 % xuống ~48 %. Số cổng (mọi dòng) không đổi khi ẩn
 
 | phép đo | aa997.2 | aa997.3 | aa997.4 |
 |---|---|---|---|
-| P4: dòng đúng bị từ chối (cổng ≤ 2 %) | 34/251 = 13,5 % FAIL | 3/251 = 1,2 % PASS | chưa có output replay `{{FINAL_REPLAY_GATE}}` |
-| P4: dòng sai bị bắt | 5/30 | 4/30 (mất Huashan) | `{{FINAL_REPLAY_CAUGHT}}` |
+| P4: dòng đúng bị từ chối (cổng ≤ 2 %) | 34/251 = 13,5 % FAIL | 3/251 = 1,2 % PASS | chưa có output replay: chưa đo (S262) |
+| P4: dòng sai bị bắt | 5/30 | 4/30 (mất Huashan) | chưa đo (S262) |
 | census 3.842 dòng Geoapify gốc | 259 (6,7 %) | 33 (0,9 %): off_route 14, site_type 9, ambiguous_route 10 | — |
 | đọc tay 33 dòng aa997.3 | — | 6 đúng, 21 sai, 6 lưng chừng | — |
 | dry run recheck 1.197 dòng aa997.1 | — | `229a6def`: 1.197 / 1.648 req | `8fa953f3`: 1.197 / 1.648 req (khớp) |
@@ -346,16 +347,17 @@ giảm từ 65 % xuống ~48 %. Số cổng (mọi dòng) không đổi khi ẩn
 - Khoảng dời v2: < 1 km 195, 1–5 km 169, 5–25 km 128, 25–100 km 72, > 100 km 38; trung vị 2,9 km, lớn nhất
   1.208 km; 135/201 lần dời đến gần route có neo hơn.
 - Khoảng dời aa997.1: < 1 km 61, 1–5 km 63, 5–25 km 86, 25–100 km 82, > 100 km 33.
+- Khoảng dời chuỗi recheck aa997.4 (194 confirmed): < 1 km 53, 1–5 km 59, 5–25 km 56, 25–100 km 17, > 100 km 9; trung vị 3,4 km, lớn nhất 351,1 km; 15/25 lần dời đến gần route có neo hơn.
 
 | proxy (dòng chuỗi v2, không nhãn) | S260 (1.216 dòng, 1.154 pin) | S261 (2.221 dòng, 2.120 pin) | Cuối (chuỗi aa997.4) |
 |---|---|---|---|
-| chấm được / không route | 555 / 599 | 1.038 / 1.082 | `{{FINAL_PROXY_JUDGED}}` |
-| điểm geocoder viết hợp lý | 83,3 % | 83,9 % (mong ≥ 90 %) | `{{FINAL_PROXY_MOVED}}` |
-| điểm model giữ lại hợp lý | 70,0 % | 68,6 % | `{{FINAL_PROXY_KEPT}}` |
-| tất cả | 74,8 % | 74,1 % | `{{FINAL_PROXY_ALL}}` |
-| confirmed / pin | 28,9 % | 28,4 % | `{{FINAL_PROXY_CONFIRMED_SHARE}}` |
+| chấm được / không route | 555 / 599 | 1.038 / 1.082 | 632 / 565 (`judged` / `unjudged`, 1.197 pin) |
+| điểm geocoder viết hợp lý | 83,3 % | 83,9 % (mong ≥ 90 %) | 72,6 % |
+| điểm model giữ lại hợp lý | 70,0 % | 68,6 % | 70,9 % |
+| tất cả | 74,8 % | 74,1 % | 71,2 % |
+| confirmed / pin | 28,9 % | 28,4 % | 16,2 % |
 
-Cuối: chạy `audit_relocated.py` với `ACCEPT=aa997.4` (bước cuối của `l4-live-steps.json`) để khối `R` lấy dòng của chuỗi recheck.
+Cột Cuối: khối `R` của `audit_relocated.py` với `ACCEPT=aa997.4` (01/11 00:33Z), 1.197 dòng của chuỗi recheck.
 
 ### 6.7 `recheck_14` (16 tour của AA-990)
 
@@ -365,11 +367,13 @@ Cuối: chạy `audit_relocated.py` với `ACCEPT=aa997.4` (bước cuối của
 | S258 | 13/16 | 0/16 | — | — | 35 unlinked |
 | S260 | 13/16 | 0/16 | 3/16 | 54/119 | 65 |
 | S261 | **13/16** | **0/16** | **3/16** | **59/119** | **60** |
-| Cuối | `{{FINAL_R14_ROUTE}}` | `{{FINAL_R14_ALL_CONFIRMED}}` | `{{FINAL_R14_LOOSE}}` | `{{FINAL_R14_CONFIRMED_PLACES}}` | `{{FINAL_R14_UNCONFIRMED}}` |
+| Cuối (01/11 00:33Z) | **13/16** | **0/16** | **3/16** | **61/119** | **58** |
 
 60 địa điểm chưa xác nhận ở S261: unlinked 35 (6 chặng "A to B", 13 cụm mô tả, 16 tên thật chưa resolve; P9); luật cũ aa997.1 gắn cờ 10 (llm_point 9, off_route 1, **chuỗi 01/11
 xử lý**); chuỗi v2 llm_point 8; điểm mapbox 6; centroid_fallback 1. Tour `route = N`: `3eda85ad`, `a44bf9c4`,
 `b5c3c908` (tour 1 ngày không có stop). Tour loose: `0c608efd`, `b7188d60`, `b9b39260`.
+
+Cuối (01/11 00:33Z, trước khi ẩn): 58 địa điểm chưa xác nhận = unlinked 35, chuỗi llm_point 15, điểm mapbox 6, centroid_fallback 1, chuỗi off_route 1; `llm_rows_left_for_chain 0`. Tour `route = N` và tour loose không đổi.
 
 ### 6.8 Tên chưa resolve (trước/sau theo Done-when)
 
@@ -378,7 +382,7 @@ xử lý**); chuỗi v2 llm_point 8; điểm mapbox 6; centroid_fallback 1. Tour
 | S254 | 7.924 | 1.203 | 418 |
 | S257 | 7.986 | 1.011 | 580 |
 | S260 / S261 | chưa đo (`audit_relocated.py` không in trạng thái `geo.place_name`) | | |
-| Cuối | `{{FINAL_RESOLVED}}` | `{{FINAL_PENDING}}` | `{{FINAL_UNKNOWN}}` |
+| Cuối | chưa đo (S262) | chưa đo (S262) | chưa đo (S262) |
 
 ---
 
@@ -394,41 +398,44 @@ nhầm sang POI trùng tên.
 |---|---|---|---|---|---|---|
 | `229a6def` | dry run aa997.3 | 31/10 ~01:16Z | 1.197 | — | 1.648 (ước) | succeeded |
 | `8fa953f3` | dry run aa997.4 | 31/10 ~02:07Z | 1.197 | — | 1.648 (ước) | succeeded (khớp aa997.3) |
-| `32ace765` | trial apply, limit 50, trần 150 | 31/10 ~02:09Z | 50 | 6 / 23 / 21 / 0 / 0 | 76 | ok, 0 lỗi |
-| `6086f577` | nối tiếp trial | 31/10 | 48 (= 1.147 − 1.024 − 75; tổng trial 98) | chưa có file | ≤ 74 (suy ra: 1.242 + 76 + 74 + 108 = 1.500 credit relocate ngày 31/10) | dừng ở trần 150 (checklist) |
-| `b0190743` | apply đầy đủ, 400 dòng/lượt | 31/10 ~02:43Z | 75 | 15 / 44 / 16 / 0 / 0 | 108 | `stopped_credit_limit` |
-| `dc260ef8` | nối tiếp | 01/11 ~00:11Z | `{{FINAL_JOB_DC260EF8_ROWS}}` | `{{FINAL_JOB_DC260EF8_OUTCOMES}}` | `{{FINAL_JOB_DC260EF8_REQ}}` | `{{FINAL_JOB_DC260EF8_STATUS}}` |
-| (job nối tiếp khác) | | 01/11 | `{{FINAL_JOBS_MORE}}` | | | |
+| `32ace765` | trial apply, limit 50, trần 150 | 31/10 ~02:09Z | 50 | 6 / 23 / 21 / 0 / 0 | 76 | `continuing` (nối `6086f577`), 0 lỗi |
+| `6086f577` | nối tiếp trial | 31/10 02:09–02:10Z | 48 (tổng trial 98) | 9 / 24 / 15 / 0 / 0 | 74 | `stopped_request_cap` (trần 150) |
+| `b0190743` | apply đầy đủ, 400 dòng/lượt | 31/10 02:41–02:42Z | 75 | 15 / 44 / 16 / 0 / 0 | 108 | `stopped_credit_limit` |
+| `dc260ef8` | nối tiếp | 01/11 00:11–00:18Z | 400 | 75 / 267 / 57 / 0 / 1 | 564 | `continuing`, 0 lỗi (`remaining 624`) |
+| `3625eac5` | nối tiếp | 01/11 00:18–00:25Z | 400 | 47 / 319 / 32 / 0 / 2 | 522 | `continuing` (`remaining 224`) |
+| `b1e780e8` | nối tiếp, lượt cuối | 01/11 00:25:59–00:30:06Z | 224 | 42 / 165 / 16 / 0 / 1 | 271 | `ok`, `remaining 0` (chuỗi đóng) |
 
 Sau 31/10 còn **1.024 dòng** (1.197 − 98 − 75). Tỉ lệ request thật: 1,52/dòng (`32ace765`), 1,44/dòng (`b0190743`);
 dry run ước 1,38/dòng và `days: 2`. 1.024 dòng × 1,38–1,52 ≈ 1.410–1.560 request, sát trần 1.500 credit/ngày của
 relocate (trần này tính cả credit `place_geocode` dùng trong ngày). Chuỗi có thể xong trong 01/11 hoặc tràn sang lượt
 02/11 00:11Z: kiểm `remaining` của job cuối trước khi audit.
 
-### 7.2 KẾT QUẢ CUỐI (điền sau khi chuỗi xong 01/11)
+Thực tế 01/11: 1.024 dòng dùng 1.357 request (~1,33/dòng), chuỗi đóng 00:30Z, không tràn sang 02/11.
+
+### 7.2 KẾT QUẢ CUỐI (01/11: audit 00:33Z trước khi ẩn, 01:22Z sau khi ẩn)
 
 Chạy lại `audit_relocated.py` và `recheck_14.py` (chỉ đọc, $0) khi bảng job không còn job `place_relocate` mở.
 
 | chỉ số | giá trị |
 |---|---|
-| Thời điểm chuỗi đóng (job cuối, `remaining 0`) | `{{FINAL_CHAIN_CLOSED_AT}}` |
-| Cổng flag-strat (`GATE`) | `{{FINAL_GATE_FLAGSTRAT}}` (`{{FINAL_GATE_VERDICT}}`, mốc 90 %) |
-| Cổng prov-strat | `{{FINAL_GATE_PROVSTRAT}}` |
-| Dự phóng theo ô | `{{FINAL_PROJECTION}}` |
-| Pin phục vụ hôm nay / độ phủ | `{{FINAL_SERVED_NOW}}` / `{{FINAL_SERVED_NOW_COVERAGE}}` |
-| Pin phục vụ nếu `hide_flagged` / độ phủ | `{{FINAL_SERVED_IF_HIDE}}` / `{{FINAL_SERVED_IF_HIDE_COVERAGE}}` |
-| Pin phục vụ nếu ẩn thêm `non_place` / độ phủ | `{{FINAL_SERVED_IF_HIDE_NP}}` / `{{FINAL_SERVED_IF_HIDE_NP_COVERAGE}}` |
-| Ứng viên ẩn / pin gắn tour sẽ biến mất | `{{FINAL_HIDE_CANDIDATES}}` / `{{FINAL_HIDE_LINKED}}` |
-| `recheck_14`: route / all-confirmed / loose | `{{FINAL_R14_ROUTE}}` / `{{FINAL_R14_ALL_CONFIRMED}}` / `{{FINAL_R14_LOOSE}}` |
-| Chain sums aa997.4: dòng done | `{{FINAL_CHAIN_DONE}}` (kỳ vọng 1.197) |
-| Chain sums: confirmed / llm_point / off_route / non_place | `{{FINAL_CHAIN_CONFIRMED}}` / `{{FINAL_CHAIN_LLM_POINT}}` / `{{FINAL_CHAIN_OFF_ROUTE}}` / `{{FINAL_CHAIN_NON_PLACE}}` |
-| Chain sums: `kept_model` (guard aa997.4 chặn dời xa) | `{{FINAL_CHAIN_KEPT_MODEL}}` |
-| Chain sums: request Geoapify / chi phí | `{{FINAL_CHAIN_REQUESTS}}` / `{{FINAL_CHAIN_COST}}` (kỳ vọng $0) |
-| Regressed trên mẫu (S254 đúng, nay sai) | `{{FINAL_REGRESSED}}` (31/10: 9, trong đó 6 của v2; 5 đã trả về) |
-| Regressed mới do aa997.4 | `{{FINAL_REGRESSED_NEW_AA9974}}` |
-| Tên `geo.place_name`: resolved / pending / unknown (cần query riêng, audit không in) | `{{FINAL_RESOLVED}}` / `{{FINAL_PENDING}}` / `{{FINAL_UNKNOWN}}` |
+| Thời điểm chuỗi đóng (job cuối, `remaining 0`) | 01/11 00:30Z (`b1e780e8`, `ok`, `remaining 0`; `J open []`) |
+| Cổng flag-strat (`GATE`) | 79,0 % ±4,0 (00:33Z) → **79,6 % ±4,0** (01:22Z, sau revert 3 dòng + ẩn) (**FAIL**, mốc 90 %) |
+| Cổng prov-strat | 78,5 % ±3,8 → 79,2 % ±3,8 |
+| Dự phóng theo ô | 81,4 % trên 7.986 dòng (00:33Z); số 91,3 % lúc 01:22Z chỉ tính 5.490 dòng còn hiện, không so được |
+| Pin phục vụ hôm nay / độ phủ | sau confirm (01:22Z): **88,0 % ±4,5 / 50,8 %**; trước confirm (00:33Z): 81,0 % ±5,0 / 65,0 % |
+| Pin phục vụ nếu `hide_flagged` / độ phủ | 88,0 % ±4,5 / 50,8 % (đã ẩn thật) |
+| Pin phục vụ nếu ẩn thêm `non_place` / độ phủ | 90,9 % ±4,2 / 49,2 % (chưa làm) |
+| Ứng viên ẩn / pin gắn tour sẽ biến mất | 2.517 / 1.187 (báo cáo `f54cdf77`; confirm `4919a61f`: ẩn 2.517, 26 dòng audit_log, `changed_since_report 0`) |
+| `recheck_14`: route / all-confirmed / loose | 13/16 / 0/16 / 3/16 |
+| Chain sums aa997.4: dòng done | 1.197 (kỳ vọng 1.197) |
+| Chain sums: confirmed / llm_point / off_route / non_place | 194 / 842 / 157 / 0 |
+| Chain sums: `kept_model` (guard aa997.4 chặn dời xa) | 4 |
+| Chain sums: request Geoapify / chi phí | 1.615 (6 job apply aa997.4 từ 31/10, gồm trial; riêng 01/11: 1.357) / $0 (`cost_usd 0.0`) |
+| Regressed trên mẫu (S254 đúng, nay sai) | 5 (00:33Z) → **3** (01:22Z, sau khi trả 3 dòng về điểm cũ) (31/10: 9, trong đó 6 của v2; 5 đã trả về, vẫn ở điểm `manual` khi kiểm 01/11) |
+| Regressed mới do aa997.4 | 1 trên mẫu: the village of Dazhai (8,5 km), đã trả về; cùng lượt trả về a farmer's restaurant in Dazhai (126,6 km) |
+| Tên `geo.place_name`: resolved / pending / unknown (cần query riêng, audit không in) | chưa đo (S262) / chưa đo (S262) / chưa đo (S262) |
 
-Kết luận cuối: `{{FINAL_VERDICT_TEXT}}`
+Kết luận cuối: **Done-with-scope** theo quyết định TL-25 của tech lead (`docs/audits/2026-10-31-S262-tl-decisions/README.md`). Tên mới chỉ lấy toạ độ từ geocoder, nên sai được chặn từ nguồn. Dữ liệu cũ trên cổng đạt 79,6 % ±4,0, **FAIL** (mốc 90 %). Pin phục vụ khách sau khi confirm `hide_flagged` đạt 88,0 % ±4,5, độ phủ 50,8 %. Follow-up chỉ mở nếu tech lead muốn 90 % trên dữ liệu cũ; geocoder trả phí hoặc LLM chấm chọn ứng viên chỉ xét khi pin bị ẩn làm hại sản phẩm.
 
 ---
 

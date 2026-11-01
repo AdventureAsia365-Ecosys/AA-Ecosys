@@ -1,0 +1,3 @@
+chunk	verdict	failed_step	steps	git_sha_start	git_sha_end	mode
+CRM-REV-PREP	PASS		6/6	2787b45	2787b45	fast
+CRM-REV-15	PASS		6/6	2787b45	2787b45	uat

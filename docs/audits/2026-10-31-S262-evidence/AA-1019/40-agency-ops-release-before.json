@@ -1,0 +1,46 @@
+{
+ "trip_id": "7a63a728-b957-41f3-9e08-8df22dc254d4",
+ "confirmed_aa_lines": 1,
+ "release": {
+  "ops_release_id": "74c05c77-0963-4140-adca-b25bd10850d9",
+  "status": "live",
+  "payload_version": 1,
+  "fields_released": [
+   "name"
+  ],
+  "completeness": {
+   "missing": {
+    "stage3": 1,
+    "waiver": 1,
+    "arrival_flight": 1,
+    "departure_flight": 1
+   },
+   "complete": 0,
+   "travellers": 1
+  },
+  "complete": false,
+  "traveller_count": 1,
+  "released_at": "2026-11-01T02:36:13.996068+00:00",
+  "refreshed_at": "2026-11-01T02:36:13.996068+00:00",
+  "purge_at": "2027-02-27",
+  "days_to_purge": 118,
+  "t21_alerted_at": null,
+  "withdrawn_at": null,
+  "withdraw_reason": null,
+  "purged_at": null,
+  "purge_reason": null,
+  "deletion_receipt": null,
+  "view_count": 0,
+  "last_viewed_at": null,
+  "can_withdraw": true
+ },
+ "activity": [
+  {
+   "at": "2026-11-01T02:36:14.085928+00:00",
+   "actor_kind": "system",
+   "action": "ops_release_create",
+   "reason": "aa_line_confirmed"
+  }
+ ],
+ "activity_more": false
+}

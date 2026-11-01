@@ -1,0 +1,131 @@
+{
+ "trip": "7a63a728",
+ "before": {
+  "status": "live",
+  "view_count": 0,
+  "days_to_purge": 118,
+  "activity": [
+   "ops_release_create"
+  ]
+ },
+ "boardApi": {
+  "status": 200,
+  "n": 2,
+  "item": {
+   "trip_ref": "7a63a728",
+   "agency": "Lữ hành Sen Vàng",
+   "status": "live",
+   "start": "2026-11-26",
+   "end": "2026-11-29",
+   "travellers": 1,
+   "complete": false,
+   "days_to_purge": 118,
+   "purge_at": "2027-02-27",
+   "views": 0,
+   "deps": [
+    "2d3f3d0c-f10f-44f9-8709-e7a2f5396080"
+   ]
+  }
+ },
+ "boardRow": "Lữ hành Sen Vàng 7a63a728 26 Nov 2026 – 29 Nov 2026 1 0 OF 1 COMPLETE Booking details: 1 Waiver: 1 Arrival flight: 1 Departure flight: 1 2d3f3d0c-f10f-44f9-8709-e7a2f5396080 118 DAYS 0 times SHARED",
+ "purgeBadge": "118 DAYS",
+ "boardShots": {
+  "40-staff-ops-board-live-1440-light.png": {
+   "side": 0,
+   "theme": "light",
+   "bg": "rgb(248, 246, 242)"
+  },
+  "40-staff-ops-board-live-390-light.png": {
+   "side": 0,
+   "theme": "light",
+   "bg": "rgb(248, 246, 242)"
+  },
+  "40-staff-ops-board-live-1440-dark.png": {
+   "side": 0,
+   "theme": "dark",
+   "bg": "rgb(15, 20, 27)"
+  },
+  "40-staff-ops-board-live-390-dark.png": {
+   "side": 0,
+   "theme": "dark",
+   "bg": "rgb(15, 20, 27)"
+  }
+ },
+ "openStepShown": false,
+ "staffSubtitle": "This view is counted and shown to the agency (opened 1 times so far).",
+ "staffPurge": "Deleted on 27 Feb 2027, in 118 days",
+ "navRequests": [
+  "GET /staff/ops/<id>/<id>?…"
+ ],
+ "afterView": {
+  "view_count": 1,
+  "last_viewed_at": "2026-11-01T02:39:52.696376+00:00",
+  "activity": [
+   "aa_ops:ops_release_view:ops_release",
+   "system:ops_release_create:aa_line_confirmed"
+  ]
+ },
+ "viewDelta": 1,
+ "agencyPanelAfterView": "AA GROUND OPERATIONS When AA confirms a tour on this trip, AA's ground team gets the minimum they need to run it: names, age bands, dietary and mobility needs, flights and the insurance choice. Never phone numbers, e-mails, passports or notes. Each time they open it, your access log shows it. SHARED WITH AA GROUND TEAM DETAILS MISSING Version 1 · Updated 1 Nov 2026 0 of 1 traveller complete Still missing: BOOKING DETAILS: 1 WAIVER NOT SIGNED: 1 ARRIVAL FLIGHT: 1 DEPARTURE FLIGHT: 1 Opened by AA once, last on 1 Nov 2026 Deleted automatically on 27 Feb 2027, in 118 days Withdraw from AA Activity 1 Nov 2026 · AA operations opened this trip's details 1 Nov 2026 · System shared this trip's details · AA tour confirmed",
+ "manifestChecked": [
+  {
+   "label": "Name",
+   "on": true
+  },
+  {
+   "label": "Age band",
+   "on": true
+  },
+  {
+   "label": "Dietary needs",
+   "on": true
+  },
+  {
+   "label": "Mobility needs",
+   "on": true
+  },
+  {
+   "label": "Arrival flight",
+   "on": false
+  },
+  {
+   "label": "Departure flight",
+   "on": false
+  }
+ ],
+ "manifest": {
+  "request": "fields=name&fields=age_band&fields=dietary&fields=mobility",
+  "status": 200,
+  "suggestedFilename": "manifest-7a63a728-AAOPS-6FF0564C4E.csv",
+  "api": {
+   "filename": "manifest-7a63a728-AAOPS-6FF0564C4E.csv",
+   "watermark": "AAOPS-6FF0564C4E",
+   "row_count": 1,
+   "fields": [
+    "name",
+    "age_band",
+    "dietary",
+    "mobility"
+   ]
+  },
+  "csvHeader": "watermark,no,name,age_band,dietary,mobility",
+  "csvDataRows": 1,
+  "everyRowWatermarked": true,
+  "csvRedacted": [
+   "watermark,no,name,age_band,dietary,mobility",
+   "AAOPS-6FF0564C4E,1,<redacted>,<redacted>,<redacted>,<redacted>"
+  ],
+  "doneText": "Downloaded 1 rows, watermark AAOPS-6FF0564C4E."
+ },
+ "afterManifest": {
+  "view_count": 1,
+  "activity": [
+   "aa_ops:ops_manifest_export:supplier_manifest",
+   "aa_ops:ops_release_view:ops_release",
+   "system:ops_release_create:aa_line_confirmed"
+  ]
+ },
+ "agencyPanelAfterManifest": "AA GROUND OPERATIONS When AA confirms a tour on this trip, AA's ground team gets the minimum they need to run it: names, age bands, dietary and mobility needs, flights and the insurance choice. Never phone numbers, e-mails, passports or notes. Each time they open it, your access log shows it. SHARED WITH AA GROUND TEAM DETAILS MISSING Version 1 · Updated 1 Nov 2026 0 of 1 traveller complete Still missing: BOOKING DETAILS: 1 WAIVER NOT SIGNED: 1 ARRIVAL FLIGHT: 1 DEPARTURE FLIGHT: 1 Opened by AA once, last on 1 Nov 2026 Deleted automatically on 27 Feb 2027, in 118 days Withdraw from AA Activity 1 Nov 2026 · AA operations downloaded the supplier list for this trip 1 Nov 2026 · AA operations opened this trip's details 1 Nov 2026 · System shared this trip's details · AA tour confirmed",
+ "staffConsoleErrors": [],
+ "staffHttpErrors": []
+}

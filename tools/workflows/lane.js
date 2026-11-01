@@ -45,6 +45,10 @@ HARD RULES for this lane:
 - Every LLM record_call passes **billed_fields(resp) (shared/llm_client/call_log.py; gateway AST guard test_aa1002_s6_billed_fields).
 - Migrations: take the next free number on the owner main (hint: ${mig}); classify expand (header "-- migrate: expand") vs contract per ADR 0017.
   If you renumber, find every use with git grep '<old>_' (a word-boundary regex misses "<old>_name"). Booking bk-, Partner crm-, TripPlanner tp- likewise.
+  A migration that creates a table also needs its DM-7.1 retention row (root docs/architecture/data-standards/02-data-management.md):
+  return that root PR too, merged before the Infra bot copy (its "Retention rows" check fails without it).
+- AA-Partner: before returning, run the unit suite the way ci.yml does (pytest tests/unit with coverage, gate 90%); new modules need unit
+  tests, not only integration tests, or the gate fails (TOTAL must stay >= 90.5%).
 - CIS openapi.json: regenerate only with the fastapi/pydantic versions pinned in requirements.txt (the CI versions), never a different local venv.
 - One model label containing "api" per line in code and tests (gitleaks generic-api-key scans every commit; a later fix commit does not clear it).
 - Integration tests that sign in as cis_app: grant schema USAGE/SELECT temporarily in the test, name result columns ("AS ok") and read rows by column name.
