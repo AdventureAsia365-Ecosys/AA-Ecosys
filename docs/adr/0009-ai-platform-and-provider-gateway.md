@@ -56,10 +56,11 @@ In short:
 - **Decision 11** is still Proposed, but migration 322 already enforces part of it: secret names, base URLs and
   catalog prices change only by migration, and the admin answers 422 when asked to edit them.
 - **Not live yet:** the Anthropic API warm path (no key; decision 5), the OpenAI API monthly cap (decision 14), the
-  monthly failover drill (decision 7), any acc2 chat route (decision 12 ladder first), the revoke of TripPlanner's
-  grandfathered SELECT (decision 13), the writer warm path, which also needs a data-scope change because writer stages
-  are `aws_only` and the Anthropic API connection is `vendor_direct` (decisions 5 and 10), and a real CRM provider (the
-  CRM runs the stub on Dev). Owner of each: the tech lead; the follow-ups below and the
+  monthly failover drill (decision 7), any acc2 chat route beyond the S263 amendment of decision 14 (the platform
+  judge / validate fallback of CIS 331, gated on the contract smoke; everything else waits for the decision 12
+  ladder), the revoke of TripPlanner's grandfathered SELECT (decision 13), the writer warm path, which also needs a
+  data-scope change because writer stages are `aws_only` and the Anthropic API connection is `vendor_direct`
+  (decisions 5 and 10), and a real CRM provider (the CRM runs the stub on Dev). Owner of each: the tech lead; the follow-ups below and the
   [backlog](../backlog/README.md) carry them.
 
 ## Decision record (31/10/2026)
@@ -314,6 +315,27 @@ Proposed answer to gap §5 items 1 and 7; accepted separately (it includes about
   ADR 0018's `aa-ai` row. The families acc2 can serve today are Amazon Nova, Meta Llama 4 and Moonshot Kimi K3; it
   cannot run Claude or GPT (S261 access matrix). So acc2 cannot back up today's judges (GPT Luna) as they are, and no
   acc2 chat route goes live before its model passes the decision 12 ladder, judge calibration included.
+- **Amendment (tech lead, 01/11/2026, S263: "add the acc2 fallback path"; AA-1026 I6).** With acc3 refusing every
+  model since 29/10, the platform judge and validate stages that reach acc3 only get an acc2 model as the LAST
+  fallback of their route (CIS migration 331: Nova Lite; Llama 4 Scout for the place card check, so draft and check
+  stay on two makers). This knowingly skips ladder rungs: these routes go live on the contract smoke alone (format
+  through each stage's own prompt and parser, under 0.10 USD), without judge calibration, A/B or shadow. Two
+  conditions make that acceptable:
+  - **Order.** The contract smoke runs before the routes change, and migration 331 enforces it: it refuses a stage
+    whose latest smoke on its pick did not pass (ledger rows of stage `adhoc_aa1026`).
+  - **An uncalibrated judge never publishes.** The brand audit is the one judge among these stages, and its `pass`
+    publishes a tour. A brand audit answered on acc2 can flag a tour or hold it, but its `pass` becomes
+    `manual_check` (`BRAND_AUDIT_UNCALIBRATED_JUDGE`), so the tour goes to the Review Queue. The hold lifts per
+    connection once its model passes the 40-item calibration.
+  The validate stages are accepted on the smoke alone: their output is checked downstream (geocoder, card check,
+  dedupe rules).
+  - **Tenant stages (tech lead, S263: "do it now", ahead of decision 10 and AA-820).** CIS migration 332 gives the
+    tenant judge and validate stages (t2_brand_audit, t10_claims, t9_faq_answer_fit, t9_faq_filter) the same acc2 last
+    fallback, with the same smoke order gate. The t2 brand audit keeps the uncalibrated-judge hold (its acc2 `pass`
+    becomes `manual_check`), so an acc2 answer never publishes tenant copy on its own.
+  - **AWS first, outside last (tech lead, S263).** Where a judge or validate route also reaches the OpenAI API (the
+    vendor fallback of CIS migration 327), the acc2 pick goes before that hop and the OpenAI API stays the last rung
+    (CIS migration 333, same gate).
 - The same role list applies to `aa-prod` connections when `aa-prod` can call Bedrock (ADR 0018): judge and validate
   stages only, after the ladder passes there.
 - "Different payer" is today's fact, not a permanent one: the 01/12 Billing Transfer and the move into the AA
