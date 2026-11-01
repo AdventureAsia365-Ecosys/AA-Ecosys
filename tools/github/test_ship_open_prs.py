@@ -133,6 +133,14 @@ class OpenTest(unittest.TestCase):
         self.sb.git(self.sb.wt, "checkout", "-q", "-b", "feat/empty", "origin/main")
         self.assertIn("no commit ahead", " ".join(sop.validate(r, lane_pr(self.sb.wt, branch="feat/empty"))[0]))
 
+    def test_stacked_pr_is_compared_with_the_local_branch_below(self):
+        self.sb.git(self.sb.wt, "checkout", "-q", "-b", "feat/lanterns-2")
+        self.sb.commit(self.sb.wt, "lantern2.py", "GLOW = 5\n", "feat: brighter lantern")
+        r, _ = self.runner()
+        upper = lane_pr(self.sb.wt, branch="feat/lanterns-2", base="feat/lanterns")
+        self.assertIn("cannot compare", " ".join(sop.validate(r, upper)[0]))
+        self.assertEqual(sop.validate(r, upper, frozenset({"feat/lanterns"}))[0], [])
+
     def test_open_pushes_and_creates_with_refs_and_attribution(self):
         write_journal(self.journal, [{"ready": True, "prs": [lane_pr(self.sb.wt)]}])
         r, seen = self.runner()

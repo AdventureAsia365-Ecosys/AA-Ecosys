@@ -80,4 +80,4 @@ of the issue run in other lanes (`AA-1032-<lane>.md` where they keep notes).
   for the dispatch lock and PR body temp files (`.tmp-session/`).
 - Exit codes are shared: 0 ok, 1 git / run red, 2 usage or gh error, 3 red check, 4 refused / merge failed,
   5 timeout. A train or merge list stops at the first non-zero.
-- `python -m unittest discover -s tools/github -p 'test_*.py'` — 47 offline tests.
+- `python -m unittest discover -s tools/github -p 'test_*.py'` — 48 offline tests.

@@ -105,8 +105,9 @@ def with_attribution(body: str) -> str:
     return body.rstrip() + "\n\n" + ATTRIBUTION + "\n"
 
 
-def validate(runner: Runner, p: dict) -> tuple[list[str], list[str]]:
-    """Return (problems, warnings) for one prs[] entry."""
+def validate(runner: Runner, p: dict, stacked_on: frozenset[str] = frozenset()) -> tuple[list[str], list[str]]:
+    """Return (problems, warnings) for one prs[] entry. `stacked_on`: branches of earlier PRs in the same list; a PR
+    based on one of them is compared with the local branch (it reaches origin when the earlier PR is pushed)."""
     problems: list[str] = []
     warnings: list[str] = []
     try:
@@ -144,12 +145,15 @@ def validate(runner: Runner, p: dict) -> tuple[list[str], list[str]]:
     if git("status", "--porcelain", "--untracked-files=no").out.strip():
         problems.append(f"{wt}: tracked files are modified (commit or stash first)")
     git("fetch", "-q", "origin")
-    r = git("rev-list", "--count", f"origin/{base}..{br}")
+    ref = f"origin/{base}"
+    if base in stacked_on and not git("rev-parse", "--verify", "--quiet", f"refs/remotes/{ref}").ok:
+        ref = base
+    r = git("rev-list", "--count", f"{ref}..{br}")
     if not r.ok:
-        problems.append(f"cannot compare {br} with origin/{base}: {r.last_line()}")
+        problems.append(f"cannot compare {br} with {ref}: {r.last_line()}")
     elif int(r.out.strip() or "0") < 1:
-        problems.append(f"{br} has no commit ahead of origin/{base}")
-    d = git("diff", "--name-only", "--diff-filter=D", f"origin/{base}...{br}")
+        problems.append(f"{br} has no commit ahead of {ref}")
+    d = git("diff", "--name-only", "--diff-filter=D", f"{ref}...{br}")
     gone = [x for x in d.out.splitlines() if x.strip()]
     if gone:
         warnings.append(f"{br} deletes {len(gone)} file(s): {', '.join(gone[:8])}")
@@ -223,8 +227,10 @@ def main(argv: list[str] | None = None, runner: Runner | None = None) -> int:
         if not chosen:
             raise ShipError(f"no PR matches --only '{a.only}'", 2)
         bad = False
+        earlier: set[str] = set()
         for p in chosen:
-            problems, warnings = validate(runner, p)
+            problems, warnings = validate(runner, p, frozenset(earlier))
+            earlier.add(str(p.get("branch", "")))
             tag = f"{p.get('repo')} {p.get('branch')}"
             for w in warnings:
                 log(f"WARN {tag}: {w}")
