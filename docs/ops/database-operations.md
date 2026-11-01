@@ -32,7 +32,7 @@ personal logins, no SSH (DM-8.8).
 | Restore after data loss | [PITR to a copy](runbooks/restore-rds-pitr.md), then [single-schema restore](runbooks/restore-schema.md) | the tech lead decides |
 | Rehearse a restore | [drills index](drills/README.md) | per DM-9.3 |
 | Understand the gotchas (PK names, status columns, views to read) | `skill/aa-cis-schema/SKILL.md` and `references/gotchas.md` | anyone |
-| Check connection budgets | data standards C2.2 ([`03-scaling.md`](../architecture/data-standards/03-scaling.md)); alarms `aa-cis-dev-rds-role-connections-*` | anyone |
+| Check connection budgets | data standards C2.2 ([`03-scaling.md`](../architecture/data-standards/03-scaling.md)); the CIS ops check `rds_role_connections` (admin bell, S263) | anyone |
 
 ## Facts (read 2026-10-28)
 
