@@ -1,6 +1,7 @@
 # ADR 0006 — Amendment: a partner pool with required MFA for agency people, and an M2M pool for service calls
 
-- **Status:** Accepted (2026-10-22, S247, tech lead). Proposed the same day.
+- **Status:** Accepted (2026-10-22, S247, tech lead). Proposed the same day. Amended by **A1** (2026-11-01, S263,
+  section "Amendment A1" below: `AdminDeleteUser` for never-signed-in partner-pool accounts).
 - **Scope:** AA-CIS-Infra (pools, clients, groups, domains), AA-Partner ([ADR 0010](0010-aa-partner-app.md): CRM and,
   after P2b, the tenant portal), AA-CIS-App (tenant membership, CIS admin calling `crm.ops.v1`), AA-Booking
   (B2B API receiving M2M tokens). TripPlanner and the Booking customer app are **not** affected.
@@ -90,7 +91,7 @@ the token is valid **and** the access token's verified email equals the invited 
 token's `(iss, sub)`; never bound by an email lookup), but it creates the user in the **partner pool**, and the person
 enrols the second factor before the membership becomes active. The IAM allow-list of decision 3 for the EXTERNAL
 writer applies to the partner pool too (`AdminCreateUser`, `ListUsers`, `AdminDisableUser`,
-`AdminUserGlobalSignOut` only). Content studio users already active at P2b are re-enrolled by invitation, keeping
+`AdminUserGlobalSignOut` only; amendment A1 adds `AdminDeleteUser` for never-signed-in accounts only). Content studio users already active at P2b are re-enrolled by invitation, keeping
 their tenant and content (AA-979).
 
 ### 6. Staff groups, clients and route classes
@@ -128,6 +129,53 @@ their tenant and content (AA-979).
   `X-AA-Tenant-Id` on every B2B call and Booking checks it against its own partner table.
 - Tenant API keys for tenant machine access are unchanged. ⚠️ This contains underscore env vars — edit manually in
   VSCode (M2M client configuration in the services' environment).
+
+### Amendment A1 (2026-11-01, S263): `AdminDeleteUser` for never-signed-in accounts
+
+- **Status:** Accepted (2026-11-01, S263, on the tech lead's request "clean up the e-mail accounts too", dev phase
+  DM-11.5; review before the first prod pool, AA-980).
+- **Amends:** decision 5 (the partner-pool allow-list) and decision 1 (the partner admin-bypass alert).
+- **Related Linear:** AA-939 (follow-up). Built in: AA-Partner `app/members/accounts.py` (job
+  `crm_partner_accounts`, migration crm-039), AA-CIS-Infra `identity_partner.tf`
+  (`crm_ecs_task_partner_pool`, `identity_partner_admin_bypass`), `crm_app.tf` (`PARTNER_ACCOUNT_CLEANUP_DRY_RUN`).
+
+**Context.** A claim creates the invited person's partner-pool account before they sign in. When the invitation then
+ends unused (AA withdraws a first-owner invitation, an owner revokes one, it expires, or AA deletes a synthetic test
+agency), the account stays in `FORCE_CHANGE_PASSWORD` for ever: Dev already holds such test addresses (S263, after a
+test agency was deleted). Nothing in the allow-list could remove them; only a person with the admin profile could, and
+that raises the bypass alert each time.
+
+**Decision.**
+
+1. The CRM API task role's partner-pool allow-list becomes `AdminCreateUser`, `ListUsers`, `AdminDisableUser`,
+   `AdminUserGlobalSignOut`, **`AdminDeleteUser`**, on the partner pool only. Still nothing that writes a password,
+   an attribute or an MFA setting, and nothing on WORKFORCE or EXTERNAL: the explicit Deny of
+   `AdminDeleteUser` on the staff pools (AA-CIS-Infra `identity_iam.tf`) stays as it is.
+2. The CRM uses it **only** for an account that (a) a CRM invitation claim bound (the clean-up never lists the pool),
+   (b) never signed in (`FORCE_CHANGE_PASSWORD`, re-read from Cognito right before the delete, and unchanged since the
+   last of its invitations ended), (c) no CRM member row in any agency, no live CRM invitation and no Content studio
+   invitation or membership still needs, and (d) whose invitations all ended more than 7 days ago, or at once when
+   they belonged to a deleted synthetic test agency. A `CONFIRMED` account is never deleted by this code. Each delete
+   is audited in every agency whose invitation it was (`partner_account_delete`, invitation id and reason code only,
+   never the address). A daily run (dry run switch, at most 50 deletes per run) and one run queued by a test agency's
+   delete.
+3. The partner admin-bypass alert keeps watching `AdminDeleteUser`; like `AdminCreateUser`, it excludes the CRM task
+   role only. A person, the e2e identity tool, any other role or a static key deleting a partner-pool user still
+   alerts.
+
+**Threat model.** IAM cannot limit `AdminDeleteUser` to unused accounts; the limit is the app's (2). Worst case, a
+compromised CRM API (or a bug) deletes partner-pool accounts: agency people cannot sign in until they are invited
+again (denial of service, recoverable: memberships are keyed by `(iss, sub)` in app data and a new invitation binds a
+new account). No takeover: the role still cannot set a password, change an e-mail or attribute, or touch MFA, and a
+new account for the same address is reachable only through an invitation link. Detective controls: the app's audit
+event per delete, the CRM's CloudWatch log line per delete (ids only), and the bypass alert for every other caller.
+The same compromised API could already disable and sign people out (`AdminDisableUser`, `AdminUserGlobalSignOut`),
+so the denial-of-service ceiling barely moves.
+
+**Alternatives considered.** Keep deleting by hand with the admin profile (an alert mail per address, and nobody
+notices most leftovers); disable instead of delete (`AdminDisableUser` is allowed, but a disabled account still
+blocks a fresh claim's `AdminCreateUser` and keeps the address in the pool); a separate delete-only role for a
+Lambda (more moving parts for the same blast radius).
 
 ## Consequences
 
