@@ -147,8 +147,8 @@ function onPartnerApp(page) {
 }
 
 /**
- * A valid storageState file for identity A or B: the saved one when the CRM still accepts it, else a fresh managed
- * login. Runs its own headless Chromium, closed before returning (one browser at a time). Returns the file path.
+ * A valid storageState file for identity A or B: the saved one, renewed through /auth/refresh, when the CRM still
+ * accepts it, else a fresh managed login. Runs its own headless Chromium, closed before returning (one browser at a time). Returns the file path.
  * `file` (default work/crm/.state-<who>.json) lets the dry run keep its own session file apart from the review set.
  */
 async function ensureState(who, file = statePath(who)) {
@@ -161,7 +161,10 @@ async function ensureState(who, file = statePath(who)) {
     const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, locale: 'en-US',
       ...(fs.existsSync(file) ? { storageState: file } : {}) });
     const page = await context.newPage();
-    await page.goto(`${PARTNER}/pipeline`, { waitUntil: 'domcontentloaded' });
+    // Through /auth/refresh, not straight to /pipeline (AA-1014): a saved session renews its 30-minute access token
+    // here, so each chunk starts with a full token and none expires mid-recording (an expired token made the reports
+    // export fail in the S262 review video). No refresh cookie -> /auth/sign-in -> the managed login below.
+    await page.goto(`${PARTNER}/auth/refresh?next=${encodeURIComponent('/pipeline')}`, { waitUntil: 'domcontentloaded' });
     await page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => {});
     let reused = onPartnerApp(page);
     if (reused) {
