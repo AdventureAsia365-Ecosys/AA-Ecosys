@@ -1,18 +1,18 @@
 ---
 id: APP-06-ai-register
 title: "AI Use Register"
-description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps. v0."
+description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps. v1.1."
 type: reference
 status: draft
 owner: nghiep
 audience: [engineer, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-api, aa-cis-worker, tripplanner-lambda, aa-crm-api]
-last_reviewed: 2026-11-01
+last_reviewed: 2026-11-02
 review_every_days: 30
 related: [ARCH-01-ai-gateway, APP-06-routes, APP-06-eval, APP-06-prompts, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-804, AA-820]
 ---
 
-# AI Use Register (v1)
+# AI Use Register (v1.1)
 
 One row per place where the ecosystem calls an AI model or a paid data provider. It answers, for each stage: what it
 is for, who owns the decision to change it, which provider and model family serve it today, which data may leave AWS,
@@ -30,6 +30,9 @@ which human checks the output before anyone relies on it.
   add no route row), and the [generated route table](../generated/llm-routes.md) (`APP-06-routes`) wins when they
   differ. Its model catalog half predates 324 (the five acc2 candidates are missing there until the snapshot is
   recaptured, a backlog follow-up). v0 was written by hand from the code on `main` on 31/10/2026.
+- **v1.1 (2026-11-02):** adds the acc2 Bedrock fallback of the judge and validate stages (CIS migrations 331–333,
+  [section below](#acc2-bedrock-fallback-for-judge-and-validate-stages-cis-331333)). For the stages listed there, that
+  section wins over the "Provider / family today" column of their rows, which still shows the 29/10 snapshot.
 - **Who updates it:** the PR that adds, removes or re-routes a stage, adds a provider, or changes a stage's data
   scope, budget or human gate updates its row. A new provider also updates the tenant terms list (AA-820).
 
@@ -39,7 +42,7 @@ which human checks the output before anyone relies on it.
 |---|---|
 | Owner role | Who decides a change. **Tech lead**: writer stages and anything tenant-facing (a route switch on a main writer stage needs the tech lead's yes, ADR 0009 decision 12). **Engineer on duty**: extraction, validate and embed stages, which an engineer may re-route after the eval in the [eval runbook](https://github.com/AdventureAsia365-Ecosys/AA-CIS-App/blob/main/docs/llm/eval-runbook.md) and report after the fact. Roles, never names. |
 | Provider / family today | Primary model, then fallbacks, from the route table. "Bedrock (acc3)" = Amazon Bedrock in the LLM account; "OpenAI API" = the OpenAI platform API outside AWS; "acc2" = Bedrock in the infrastructure account. Families: Anthropic (Claude Sonnet 4.6 / 5.5, Haiku 4.5), OpenAI (GPT-5.6 Luna, GPT-6 Luna), Cohere (Embed v4). |
-| Data scope | From `shared.llm_role_config.allowed_scopes` (CIS migration 311, `shared/llm_client/data_scope.py`): `aws_only` = the stage's content may only go to connections inside AWS; `vendor_direct` = it may also reach a vendor API outside AWS. Every CIS stage whose route names a model reachable only outside AWS (`gpt-6-luna-openai`) is `vendor_direct`; every other stage is `aws_only`. Since CIS migration 335 (AA-1026, tech lead T-3 in S263) that includes the five A-series writers (`a0_column_map`, `s1_generate`, `s1_flag_fix`, `s1_itinerary_nudge`, `supply_content_writer`): every AWS deployment of the route first, then the Anthropic API once its key is in, GPT-6 Luna on the OpenAI API last (each writer names one Anthropic model, then GPT-6 Luna: the gateway tries all deployments of a model before the next model, so a vendor_direct route names no AWS model behind a model with a vendor API deployment). The same migration moved every route off the legacy keys `haiku` / `sonnet` (Haiku 4.5 / Sonnet 4.6) to `haiku-5-5` / `sonnet-5-5` (T-4). |
+| Data scope | From `shared.llm_role_config.allowed_scopes` (CIS migration 311, `shared/llm_client/data_scope.py`): `aws_only` = the stage's content may only go to connections inside AWS; `vendor_direct` = it may also reach a vendor API outside AWS. Every CIS stage whose route names a model reachable only outside AWS (`gpt-6-luna-openai`) is `vendor_direct`; every other stage is `aws_only`. Since CIS migration 327 (AA-1026, tech lead T-3 in S263) that includes the five A-series writers (`a0_column_map`, `s1_generate`, `s1_flag_fix`, `s1_itinerary_nudge`, `supply_content_writer`): every AWS deployment of the route first, then the Anthropic API once its key is in, GPT-6 Luna on the OpenAI API last (each writer names one Anthropic model, then GPT-6 Luna: the gateway tries all deployments of a model before the next model, so a vendor_direct route names no AWS model behind a model with a vendor API deployment). The same migration moved every route off the legacy keys `haiku` / `sonnet` (Haiku 4.5 / Sonnet 4.6) to `haiku-5-5` / `sonnet-5-5` (T-4). |
 | Tenant data | Yes when the prompt carries a tenant's brand settings, briefs or tenant-written text. Traveller input is noted separately. |
 | Budget source | What stops spend today. **Connection** = `shared.llm_provider_connection.monthly_budget_usd` (every CIS and TripPlanner call). **Job cap** = a `shared.spend_budget` row (provider × `job:<kind>`) that the job loads with `shared/cost_guard.py` before each call. **Tenant budget** = a `shared.tenant_ai_budget` row (CIS 321, AA-1016): alert, then staff approval for T-stages; a tenant without a row has none. "Connection only" means no per-stage or per-job cap exists yet (ADR 0009 decision 6 closes this). |
 | Kill switch | What turns the stage off without a deploy of new code. Since v1 the gateway also stops a connection by itself (connection circuit, AA-1018), ends a slow route at its `route_deadline_s` (none set yet), and holds refused jobs for the bulk re-queue. There is still **no per-stage switch in the gateway**: `is_active = false` on a route row makes the code fall back to its built-in default route (`SAFE_DEFAULTS`), it does not stop calls. The switches that exist are the connection `enabled` flag (all stages on that connection), a hard-stop budget row, and the feature flags named per row. |
@@ -75,14 +78,15 @@ which human checks the output before anyone relies on it.
 | DataForSEO (`data`) | CIS | Keyword volumes, SERP and question research for tours and segments | Engineer on duty | DataForSEO API, outside AWS | Keywords and place names only | No | Job cap `dfs` (a global day cap, seeded 10 USD/day, plus per-job rows: segment research, S1 SEO prefetch, question top-up) | Budget hard stop | Not applicable | Not applicable |
 | Geocoder (`data`) | CIS | Geocode and shape places (`services/places/geocoder.py`) | Engineer on duty | Geoapify, outside AWS (`geo.geocode_call`, ledger v2 row; registry row since CIS 322) | Place names only | No | Job cap `geocoder` (place geocode, relocate, shape jobs) | `PLACE_SHAPES_ENABLED` (shape job, default off); budget hard stop | AA-997 accuracy audit | Flagged pins hidden (AA-997) |
 | `s1_generate` (Bedrock Batch) | CIS | The same A1 rewrite sent as a Bedrock Batch job (`s1_batch`); each record writes a ledger row at the batch price | Tech lead | Haiku 4.5, Bedrock Batch (acc3) / Anthropic; **blocked**: AWS has not enabled Batch Inference on acc3 (AA-624) | aws_only | No | Connection only | Connection `enabled`; no batch is submitted while AA-624 is open | R2 `a1` | A2 review |
-| acc2 candidate chat models (Nova Lite, Nova 2 Lite, Llama 4 Maverick, Llama 4 Scout, Kimi K3) | CIS | Catalogued with one acc2 deployment each (CIS 324) for eval, judge and validate stages; **no route names them** | Tech lead | Bedrock (acc2) / Amazon, Meta, Moonshot | aws_only | No | Connection only | Connection `enabled`; no route | The qualification ladder before any route (ADR 0009 decision 12, AA-900) | Not applicable until routed |
+| acc2 chat models (Nova Lite, Nova 2 Lite, Llama 4 Maverick, Llama 4 Scout, Kimi K3) | CIS | Catalogued with one acc2 deployment each (CIS 324). **Since CIS 331–333 (S263) Nova Lite and Llama 4 Scout are routed** as the acc2 fallback of judge and validate stages (section below); Nova 2 Lite, Llama 4 Maverick and Kimi K3 are on no route | Tech lead | Bedrock (acc2) / Amazon, Meta, Moonshot | aws_only | Nova Lite: yes, on the tenant judge / validate stages of 332–333 | Connection only | Connection `enabled`; the admin route PATCH | Contract smoke per stage before routing (`llm_contract_smoke`, AA-1026); the rest of the ladder (calibration, A/B, shadow) skipped knowingly for these fallbacks | An acc2 judge pass that would publish (`s1_brand_audit`, `t2_brand_audit`) is held for a human check (`BRAND_AUDIT_UNCALIBRATED_JUDGE`) |
 | `adhoc_conn_test` (daily probe, Test connection) | CIS | One small call per enabled text deployment (`llm_connection_probe`, daily 05:00 UTC, at most 30) or one admin Test; writes `access_state` and `last_probe_at` | Engineer on duty | Every enabled connection | The connection's own scope; the prompt is a fixed test text | No | Connection only (under 1 USD a month on Dev, ADR 0009 decision 7) | `LLM_DAILY_PROBE` (on, Dev) | Not applicable | Not applicable |
 
 ### CIS: T-series (tenant content, Content studio)
 
 T-series stages are `aws_only` for writers until the tenant terms cover more (AA-820, ADR 0009 decision 5). The
 judge stages below are `vendor_direct` because their route ends at the OpenAI API, so tenant content can reach the
-OpenAI API when both Bedrock judge models fail. The tenant terms state this as "may be used as a fallback".
+OpenAI API when every Bedrock hop fails: since CIS 333 that means both acc3 judge models **and** the acc2 Nova Lite hop
+placed before the OpenAI API (section below). The tenant terms state this as "may be used as a fallback".
 
 | Stage | App | Purpose | Owner role | Provider / family today | Data scope | Tenant data | Budget source | Kill switch | Golden set / eval | Human gate |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -97,6 +101,31 @@ OpenAI API when both Bedrock judge models fail. The tenant terms state this as "
 | `t10_judge` | CIS | T10 gate: score a T9 piece | Tech lead | GPT-5.6 Luna → GPT-6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API) / OpenAI | vendor_direct | Yes | Connection + tenant budget | Connection `enabled` | Q2 | Tenant review |
 | `t10_adjudicate` | CIS | T10 tier-2 adjudicator of the writer's sentences | Tech lead | GPT-6 Luna → GPT-5.6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API) / OpenAI | vendor_direct | Yes | Connection + tenant budget | `T10_ADJ_MODE` (default off) | None yet | Tenant review |
 | `t10_claims` | CIS | F9 v2 claim extraction; **not wired into the gates** (no caller on `main`) | Engineer on duty | GPT-6 Luna → GPT-5.6 Luna, Bedrock (acc3) / OpenAI | aws_only | Yes (when wired) | Connection + tenant budget | Connection `enabled` | Replay before wiring | Not applicable yet |
+
+### acc2 Bedrock fallback for judge and validate stages (CIS 331–333)
+
+Root [ADR 0009](../adr/0009-ai-platform-and-provider-gateway.md) decision 14, amended by the tech lead on 01/11/2026
+(S263, AA-1026): judge and validate stages may fall back to chat models on Bedrock in the infrastructure account
+(acc2), a second failure domain next to the LLM account (acc3), which refuses every model since 29/10. Rule **AWS
+first, vendor APIs last**: every AWS deployment of a route is tried before a vendor API outside AWS (the OpenAI API
+today, the Anthropic API once its key is in). Writer stages keep Anthropic models; acc2 cannot run Claude. Each pick is
+the cheapest acc2 model that passed the stage's contract smoke (its own prompt and parser on the acc2 deployment), and
+is not from the writers' family (Anthropic), per decision 12. acc2 is `aws_only`, so no data scope changed.
+
+| Migration | Stages | acc2 model (maker) | Position in the route |
+|---|---|---|---|
+| 331 (platform) | `s1_brand_audit`, `s1_source_facts`, `a3_atomize`, `a3_place_card`, `a3_place_days`, `a3_place_locate`, `a3_place_dedupe_check` | Nova Lite (Amazon) | Last fallback |
+| 331 (platform) | `a3_place_card_check` | Llama 4 Scout (Meta): another maker than the draft stage's Nova Lite, so the two-model check keeps two makers | Last fallback |
+| 332 (tenant) | `t2_brand_audit`, `t10_claims`, `t9_faq_answer_fit`, `t9_faq_filter` | Nova Lite (Amazon) | Last fallback |
+| 333 (platform and tenant) | `s1_judge`, `t2_judge`, `t7_debate_judge`, `t10_judge`, `t10_adjudicate`, `writing_memory_eval`, `writing_memory_mine` | Nova Lite (Amazon) | Before the OpenAI API hop, which stays last |
+
+- **Open:** `a3_place_dedupe` keeps its route (acc3, then the OpenAI API). It needs an acc2 model of another maker
+  than its check stage's Nova Lite that also returns a structured verdict; Llama 4 Scout and Maverick refuse a forced
+  tool choice on Bedrock. CIS 337 lets the gateway ask Llama 4 models for the object in the prompt instead; the
+  Maverick rung follows in a later migration once its contract smoke passes.
+- **Human gate:** an acc2 pass of a brand audit that would publish is held as a manual check
+  (`BRAND_AUDIT_UNCALIBRATED_JUDGE`), so an uncalibrated judge never publishes on its own.
+- **Rollback:** a new forward migration (remove the acc2 key from the routes), or the admin route PATCH per stage.
 
 ### TripPlanner (travellers, no sign-in needed)
 
@@ -126,8 +155,11 @@ What the tenant terms and the partner-portal privacy notice name, derived from t
   names an Anthropic API model yet (the writer warm path is approved, its routing is a later gateway step). Terms wording: "may be used as a fallback".
 - **Jev (TypeSafe)**: yes/no decision checks; for tenant content only for allowlisted tenants.
 - **DataForSEO, Geoapify**: keywords and place names only, never tenant text.
-- **Amazon, Meta and Moonshot models on Bedrock (acc2)**: catalogued for evaluation only (CIS 324); no route names
-  them, so they are not in the tenant terms until one passes the qualification ladder and is routed.
+- **Amazon (Nova) and Meta (Llama) models on Bedrock (acc2)**: fallback for judge and validate stages when acc3
+  refuses (CIS 331–333, AWS first, vendor APIs last). On tenant stages only Amazon Nova Lite is routed; Meta Llama 4
+  Scout serves one platform stage (`a3_place_card_check`). Terms wording: "may be used as a fallback". The other acc2
+  models (Nova 2 Lite, Llama 4 Maverick, Moonshot Kimi K3) are on no route and stay out of the tenant terms until one
+  passes its contract smoke and is routed.
 
 ## OWASP Top 10 for LLM Applications (2025): controls and gaps
 
@@ -151,5 +183,6 @@ decision or issue that closes them, or say "none planned".
 
 | Version | Date | Change |
 |---|---|---|
+| v1.1 | 02/11/2026 (S263 close) | acc2 Bedrock fallback for judge and validate stages (CIS 331–333; Nova Lite, Llama 4 Scout on `a3_place_card_check`; AWS first, vendor APIs last); `a3_place_dedupe` open; tenant-terms provider list; the A-series writer scope note now cites CIS 327 (was 335 by mistake). |
 | v1 | 01/11/2026 (S263, AA-1020) | Gateway v2 as built: ledger v2 for CIS, TripPlanner and the CRM; Jev and DataForSEO caps (318); tenant budget (321); provider registry rows (322); TripPlanner contract views (323); acc2 candidate models (324); Bedrock Batch, probe and CRM guard rows; circuit, deadline and re-queue as switches; LLM10 gaps updated. Routes unchanged since the 29/10 snapshot. |
 | v0 | 31/10/2026 (S262) | First version: 37 routed stages of the 29/10 route snapshot, `t10_adjudicate` (CIS migration 309), Jev, DataForSEO, the geocoder, the CRM stub; OWASP LLM Top 10 (2025) map. Draft until the tech lead has read it. |
