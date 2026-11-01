@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-infra, aa-cis-dev-db]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-11-01
 review_every_days: 90
 last_tested: 2026-10-18
 tested_where: dev-acc2
@@ -24,7 +24,13 @@ workflow wins and this page gets fixed.
 ## When to use
 
 - `check` / `apply`: a migration file merged on its owner repo `main` and copied byte-for-byte into AA-CIS-Infra
-  `db/migrations/<owner>/` (Migration Copy Guard green, PR merged).
+  `db/migrations/<owner>/` (Migration Copy Guard green, PR merged) that Migration Apply did not apply. On Dev that
+  means: a **destructive** file, an out-of-order file, a `roles/` file, or a contract file the Migration Apply run
+  stopped as `manual` (kill switch `DB_AUTO_APPLY_CONTRACT=false`, a replay or lint refusal, or kind `delete`: a
+  `DELETE` without the `-- migrate: destructive` header; if it removes real data, follow the DRY RUN procedure). Expand files (ADR 0017)
+  and, on Dev, contract files (ADR 0017a, AA-1032) are applied by `migration-apply.yml` after the copy merges, a
+  contract file only when every job table is idle and no wave is open (busy = `deferred`, its next run retries). Read
+  that run's summary first; do not run DB Migrate for a file it applied or deferred.
 - `set-password`: give `cis_app`, `crm_app` or `db_migrator` the password the tech lead wrote into that role's DSN
   secret (X1; allowlist `password_roles` in `db/owners.yaml`).
 - `run-script`: master-level work that is not a migration (another app's data, roles, a fix across owners), as a
@@ -58,6 +64,8 @@ workflow wins and this page gets fixed.
 ## Preconditions
 
 - The owner repo merged a migration-file-only PR first; code that reads the new objects comes later (S237 D8).
+- The latest Migration Apply run (`gh run list -R AdventureAsia365-Ecosys/AA-CIS-Infra --workflow migration-apply.yml -L 3`)
+  stopped at this file as `manual` (or the file is destructive / `roles/`); it did not apply or defer it.
 - The Infra copy PR is merged and Migration Copy Guard is green.
 - No other DB Migrate run is in progress (`gh run list … --workflow db-migrate.yml -L 3`).
 

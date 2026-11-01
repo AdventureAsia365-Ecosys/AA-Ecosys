@@ -35,18 +35,22 @@ live: §3. Công cụ và mã thoát: `tools/github/README.md` (AA-1032).
 - **Expand:** `ship_merge.py` PR app → `ship_copy_apply.py <owner> <NNN>` (chờ PR copy ci-bot tự merge — hoặc gate +
   merge nếu còn mở — không dispatch, đợi key có trong `/health/ready`) → `waitdeploy` (job schema gate của Deploy Dev
   chờ apply).
-- **Contract / destructive:** `ship_merge.py` PR chỉ migration → `ship_copy_apply.py <owner> <NNN> --mode check` →
-  `ship_copy_apply.py <owner> <NNN>` (apply) → mới tới PR code. Tool:
+- **Contract (Dev, ADR 0017a):** `ship_merge.py` PR chỉ migration → `ship_copy_apply.py <owner> <NNN>` (ci-bot tự merge
+  PR copy xanh; Migration Apply do lần merge đó kích hoạt tự apply khi mọi bảng job rảnh; key đã đăng ký thì tool không
+  dispatch) → mới tới PR code. Run báo `deferred` (bảng job bận / wave mở) → chờ lượt hằng giờ, không override; báo
+  `manual` → `ship_copy_apply.py <owner> <NNN> --mode check` rồi apply (dispatch DB Migrate).
+- **Destructive:** `ship_merge.py` PR chỉ migration → DRY RUN → `ship_copy_apply.py <owner> <NNN> --allow-destructive`
+  (snapshot) → PR code.
+- Tool `ship_copy_apply.py`:
   - tìm `bot/migration-copy/<owner>-<NNN>` ở **mọi** trạng thái (mở → gate + merge; đã merge → dùng luôn; đóng → bỏ);
-  - đọc loại file từ header trên Infra main; file destructive cần `--allow-destructive` sau quy trình DRY RUN;
   - theo **đúng run của mình**: khoá cục bộ, ghi các run có sẵn, dispatch, lấy run mới có tiêu đề
     `DB Migrate <mode> <owner>/<file>` (run-name của Infra); không bao giờ đọc "run mới nhất";
   - giữ thứ tự owner: từ chối (exit 4) khi còn PR copy số nhỏ hơn đang mở hoặc file số nhỏ hơn trên Infra main chưa
-    có key trong `/health/ready` (áp 331 khi 330 còn chờ → 330 thành out-of-order, AA-920); `--allow-out-of-order`
-    chỉ khi chắc file độc lập;
-  - in conclusion + dòng log chính (`ran as`, busy/idle, applied), rồi `/health/ready` (`schema_version`, key trong
-    `registered_keys`). Run đỏ chỉ được chấp nhận khi log của chính nó có `exit code: 17` (khoá apply bị giữ, không
-    chạy gì) và key xuất hiện; đỏ vì lý do khác (vd. exit 9 đã COMMIT + đăng ký nhưng cần dọn tay) → exit 1.
+    có key trong `/health/ready` (AA-920); `--allow-out-of-order` chỉ khi chắc file độc lập;
+  - run đỏ chỉ được chấp nhận khi log của chính nó có `exit code: 17` (khoá apply bị giữ, ví dụ Migration Apply đang
+    chạy cùng file) và key xuất hiện; đỏ vì lý do khác → exit 1.
+- **Nhiều migration một owner trong một wave:** gộp thành một PR chỉ migration (số liên tiếp) hoặc merge liền nhau
+  theo đúng thứ tự số, rồi một lần chờ copy + apply cho cả nhóm (Migration Apply chạy hết theo thứ tự trong một task).
   Bước, idle check và output của DB Migrate: `docs/ops/runbooks/db-migrate.md` (không chép vào train).
 
 ## Nhánh xếp chồng (stacked)

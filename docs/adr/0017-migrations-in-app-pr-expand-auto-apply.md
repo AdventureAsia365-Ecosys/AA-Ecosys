@@ -12,6 +12,9 @@
   migration-sync and migration-apply workflows, a narrow IAM role, an environment and a ruleset on `main`, schema-dump
   auto-merge), root (data standards MIG-4 / DM-11.2 / DM-11.4 / C6.3b, skills `aa-ship` and `aa-cis-schema`,
   steering `db-schema.md`).
+- **Amended by:** [ADR 0017a](0017a-dev-auto-applies-contract-migrations.md) (Accepted 2026-11-01, S263, AA-1032): on
+  **Dev** Migration Apply also applies contract files, each when every job table is idle and no rerun wave is open;
+  destructive files stay manual; prod unchanged.
 - **Amends:** data standards DM-11.2 (`02-data-management.md`), C6.3b (`03-scaling.md`) and Part A MIG-4
   (`01-engineering.md`, the order "migration-only PR → copy → apply → code PR") — for **expand** files only. Contract
   and destructive files keep MIG-4 unchanged.
@@ -153,6 +156,9 @@ schema. The risky changes (constraints, policies, grants, data rewrites, drops) 
 - (−) A revert of an app PR whose migration was applied is code-only; the file stays (copied = immutable).
 
 ## What stays manual
+
+*(On Dev, contract files are applied by Migration Apply when every job table is idle: ADR 0017a. The list below is
+the prod rule and the Dev rule for everything else.)*
 
 - Contract files: migration-only PR → agent review → manual DB Migrate `apply` → code PR (MIG-4); from the first prod,
   the tech lead approves (DM-11.5). Destructive files: RDS snapshot, DRY RUN counts to the tech lead, dead-table registry.

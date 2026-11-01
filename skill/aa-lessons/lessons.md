@@ -192,7 +192,6 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
 
 - **Workflow gọi workflow (reusable) không tự nhận secret của environment ở job được gọi** — probe sau tự áp chạy không có `role-to-assume`, đỏ ở bước OIDC → nguyên nhân: thiếu `secrets: inherit` ở job gọi (S258, AA-993 Infra #507). Bắt bằng: bước "Role secret present" trong db-isolation-probe.yml.
 - **Test giả định trạng thái tạm thời ("chưa có copy nào mang header X") sẽ đỏ đúng lúc tính năng chạy thật** — copy expand đầu tiên (bk-034) chặn PR bot (S258, Infra #503). Bắt bằng: test kiểm điều kiện thật, không kiểm "chưa ai dùng".
-- **Bot đọc check run theo tên phải lấy lần MỚI NHẤT** — gitleaks huỷ + gitleaks xanh trên cùng commit làm `merge-check` từ chối copy tp-022 (S258, #510). Bắt bằng: (cần sửa `db/migration_sync.py merge-check`).
 - **Migration tách PR riêng thì test của migration phải đi cùng PR đó, và không import code của PR sau** — #1163 rơi khỏi merge queue 2 lần (S258, AA-1002).
 - **Cổng deploy (schema-gate) chặn mọi deploy khi lần tự áp gần nhất đỏ probe; chạy lại run cũ dùng workflow cũ** — cần một lần tự áp expand mới xanh (S258, AA-993).
 - **Kiểm "trang đọc được không" phải không theo redirect** — `curl -L` theo 302 sang vercel.com/sso-api đọc 200, Visual chụp 40 ảnh trang đăng nhập (S258, TP #189).
@@ -224,8 +223,10 @@ Khi một nguyên tắc đã thành CI check hoặc code guard, xoá dòng đó.
   #370 chưa merge) → gate "không còn check fail" và merge root PR chứa retention rows trước bản copy Infra; (2) bot cập
   nhật PR (update-branch, sinh lại file) làm check chạy lại → gate lại sau mọi lần bot đẩy, không merge theo kết quả
   cũ; (3) bản chép migration loại **contract** của CIS (`bot/migration-copy/cis-NNN`) không tự merge như expand → chuỗi
-  chờ file trên Infra main treo mãi (S260, #532 / CIS 316). Bắt bằng: helper train gọi `gh pr checks <n>` (không còn
-  fail/pending) ngay trước merge; tìm PR bot theo `headRefName` và merge tay nếu là contract, rồi mới DB Migrate.
+  chờ file trên Infra main treo mãi (S260, #532 / CIS 316; nguyên nhân thật: một run gitleaks bị huỷ trùng làm
+  `merge-check` từ chối — sửa ở AA-1032, test `LatestCheckRunTest`). Bắt bằng: helper train gọi `gh pr checks <n>` (không
+  còn fail/pending) ngay trước merge; PR copy còn mở thì `waitcopy` gate + merge tay; trên Dev Migration Apply tự áp
+  file contract khi bảng job rảnh (ADR 0017a).
 - **Merge train nhiều lane cùng repo: gộp xung đột kiểu "giữ cả hai bên" chỉ an toàn cho dòng danh sách (tuple version, bảng CONTEXT), không cho file code** — Home `page.tsx` (lane reports thêm tile, lane onboarding thay checklist) sinh biến trùng `session`/`steps`, tsc TS2451 sau rebase; nguyên nhân: script keep-both áp cho mọi file (S261, AA-962 × AA-966). Bắt bằng: sau mỗi rebase có xung đột chạy tsc + eslint + vitest (web) và py_compile (api) trước khi push.
 - **Apply-pending KHÔNG nhảy qua khoảng trống số migration: nhiều lane cùng owner → merge theo đúng thứ tự số, hoặc lane merge trước lấy số nhỏ nhất còn trống** — crm-031 (merge trước) dừng "gap: crm-029 is neither registered nor copied" tới khi crm-029/030 merge (S261, AA-966/953/962). Bắt bằng: COMMON của `lane.js` ghi "merge order = migration number order".
 - **Thêm thao tác ghi cho người đã đăng nhập (portal) → kiểm nó không dùng chung limiter chống spam ẩn danh** — E2E CRM-18 429 trên PUT stage3: `intake_limiter` 5/phút/IP dùng cho mọi route ghi public, #145 thêm nhiều thao tác ghi (S261, AA-953). Bắt bằng: test giới hạn theo lớp route (ẩn danh vs có session) + log CloudWatch status 429 với duration < 2 ms.
