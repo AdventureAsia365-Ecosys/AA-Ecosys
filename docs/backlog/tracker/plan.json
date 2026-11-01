@@ -1,5 +1,6 @@
 {
  "updated": "2026-11-01",
+ "synced_at": "2026-11-01T05:09Z",
  "session": "S262",
  "next_session": "S263",
  "source": "Linear (01/11/2026, S262 close: trạng thái đọc lại bằng list_issues — cập nhật từ 31/10 06:00Z + mọi issue Todo/Backlog) + docs/backlog/README.md + .tmp-session/S262-checklist.md + docs/audits/2026-11-01-S262-close/state-snapshot.md + docs/audits/2026-10-31-S262-evidence/ + docs/audits/2026-10-31-S262-tl-decisions/ + docs/audits/2026-11-01-S262-capacity-review/ + docs/audits/2026-11-01-S262-arch-video-plan/ + docs/audits/2026-10-21-S246-master-plan/plan-and-status.json",
@@ -1333,7 +1334,7 @@
   {
    "id": "AA-1020",
    "title": "[Docs] Architecture docs refresh to the as-built state (ADR 0009 gateway v2, ADR 0018 accounts, per-app CONTEXT)",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "data",
    "milestone": "M1b",
@@ -1345,7 +1346,7 @@
   {
    "id": "AA-1021",
    "title": "[Content] Anonymized architecture video series + engineering-notes posts (\"How a travel company runs AI in production\")",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "data",
    "milestone": "later",
@@ -1368,7 +1369,7 @@
   },
   {
    "id": "AA-896",
-   "title": "FinOps doc, Cost Anomaly Detection and the monthly cost report with unit costs",
+   "title": "[FinOps] FinOps doc, Cost Anomaly Detection and the monthly cost report with unit costs",
    "status": "In Progress",
    "priority": "High",
    "project": "data",
@@ -1381,7 +1382,7 @@
   },
   {
    "id": "AA-704",
-   "title": "In-app AI assistant for admin + tenant",
+   "title": "[ASSISTANT] In-app AI assistant for admin + tenant — answers questions about the system and the user's own data",
    "status": "Backlog",
    "priority": "Medium",
    "project": "core",
@@ -1393,7 +1394,7 @@
   },
   {
    "id": "AA-900",
-   "title": "LLM operations docs, prompt versioning and eval gate",
+   "title": "[LLM] LLM operations docs, prompt versioning and eval gate",
    "status": "In Progress",
    "priority": "Medium",
    "project": "data",
@@ -1405,20 +1406,20 @@
   },
   {
    "id": "AA-820",
-   "title": "Tenant Terms clause for the Anthropic Usage Policy (effective 12/11/2026) + AI-content attribution",
+   "title": "[Legal] Tenant Terms clause for the Anthropic Usage Policy (effective 12/11/2026) + legal confirmations on AI-content attribution",
    "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M5",
    "session": "≤11/11",
    "size": "",
-   "due": "2026-11-11",
    "next": "L3 · S262: phần kỹ thuật xong (danh sách nhà cung cấp AI khớp AI Use Register v0 + bản nháp điều khoản, TL-15); còn luật sư + báo tenant (chị Thư, qua Jira — nháp PR-23 chờ duyệt S263); hạn 11/11",
-   "needs": "Ms. Thư (counsel)"
+   "needs": "Ms. Thư (counsel)",
+   "due": "2026-11-11"
   },
   {
    "id": "AA-855",
-   "title": "Ecosystem UAT with recorded run videos: CIS admin + portal, TripPlanner, AA-Booking",
+   "title": "[UAT] Ecosystem UAT with recorded run videos: CIS admin + tenant portal, TripPlanner, AA-Booking",
    "status": "Backlog",
    "priority": "Medium",
    "project": "portal",
@@ -1430,7 +1431,7 @@
   },
   {
    "id": "AA-873",
-   "title": "Account detection baseline: GuardDuty, Access Analyzer, S3 BPA, CloudTrail",
+   "title": "[Security] Account detection baseline: GuardDuty, Access Analyzer, S3 BPA, CloudTrail",
    "status": "Backlog",
    "priority": "Medium",
    "project": "data",
@@ -1442,7 +1443,7 @@
   },
   {
    "id": "AA-881",
-   "title": "PostgreSQL 15 major-upgrade rehearsal on a restored snapshot (trigger 05/2027)",
+   "title": "[Data/Ops] PostgreSQL 15 major-upgrade rehearsal on a restored snapshot (trigger 05/2027)",
    "status": "Backlog",
    "priority": "Low",
    "project": "data",
@@ -1454,7 +1455,7 @@
   },
   {
    "id": "AA-864",
-   "title": "Research: consolidate on one AWS account",
+   "title": "[Research] Consolidate on one AWS account: scenario to migrate all of acc2 (services, data, connections) to acc3 or a designated account",
    "status": "Backlog",
    "priority": "Low",
    "project": "data",
@@ -1466,7 +1467,7 @@
   },
   {
    "id": "AA-842",
-   "title": "Investigate OpenTelemetry gen_ai tracing for every LLM call (read-only report)",
+   "title": "[Observability] Investigate OpenTelemetry gen_ai tracing for every LLM call (Bedrock + OpenAI) — read-only report, options, backend, pilot plan",
    "status": "Backlog",
    "priority": "Medium",
    "project": "core",
@@ -1478,7 +1479,7 @@
   },
   {
    "id": "AA-741",
-   "title": "T-series audit: end-to-end T0→T11 run on controlled tenants + per-mechanism report",
+   "title": "[T-series audit] End-to-end T0→T11 test run on controlled tenants + per-mechanism audit report (same method as the S218 A-series audit)",
    "status": "Backlog",
    "priority": "Medium",
    "project": "core",
@@ -1490,7 +1491,7 @@
   },
   {
    "id": "AA-790",
-   "title": "T10: tenant-voice rubric gate + post-repair integrity check",
+   "title": "[T10 gates] New tenant-voice rubric gate + post-repair integrity check (orphans, split paragraphs, grammar)",
    "status": "Backlog",
    "priority": "High",
    "project": "core",
@@ -1502,7 +1503,7 @@
   },
   {
    "id": "AA-788",
-   "title": "T10: promote F12_scope, F14 under-length and F9_brand_style to blocking",
+   "title": "[T10 gates] Promote F12_scope, F14 under-length and F9_brand_style (repair once, never hold) to blocking",
    "status": "Backlog",
    "priority": "Medium",
    "project": "core",
@@ -1514,7 +1515,7 @@
   },
   {
    "id": "AA-782",
-   "title": "T9 cost: A/B a cheaper blog writer on 8 paired blogs",
+   "title": "[T9 cost] A/B a cheaper blog writer (gpt-5.6-luna vs Sonnet) on 8 paired blogs, blind panel",
    "status": "Backlog",
    "priority": "Medium",
    "project": "core",
@@ -1526,7 +1527,7 @@
   },
   {
    "id": "AA-781",
-   "title": "F9 v2: fix place_background / opinion claim classification",
+   "title": "[F9 v2] Fix place_background / opinion claim classification, replay as a one-off ECS task, wire only at ≥90%",
    "status": "Backlog",
    "priority": "Medium",
    "project": "core",
@@ -1538,7 +1539,7 @@
   },
   {
    "id": "AA-710",
-   "title": "B2B benchmark: Asian Trails (eConnect, API, Lemax)",
+   "title": "[AAA] B2B benchmark: Asian Trails (eConnect portal, API, Lemax back office)",
    "status": "Backlog",
    "priority": "Low",
    "project": "tpbk",
@@ -1550,7 +1551,7 @@
   },
   {
    "id": "AA-628",
-   "title": "Engagement feedback loop for T-series",
+   "title": "[Future] Engagement feedback loop for T-series (rebuild on content_piece/publish_log)",
    "status": "Backlog",
    "priority": "Low",
    "project": "core",
@@ -1766,7 +1767,7 @@
   },
   {
    "id": "AA-1008",
-   "title": "[UI] Kit shell, visual job and close-out (S6e + S1d/S2c + S6f/H3)",
+   "title": "[UI] Kit shell, visual job and close-out (S6e + S1d/S2c + S6f/H3): shared ShellFrame, visual job 1440/390 light/dark for CIS/portal/CRM web, empty suppressions, required checks",
    "status": "Backlog",
    "priority": "No priority",
    "project": "portal",
@@ -1790,7 +1791,7 @@
   },
   {
    "id": "AA-1011",
-   "title": "[CRM] Microsoft 365 + BYO calendar connect: M365/SMTP send-as, calendar OAuth sync",
+   "title": "[CRM] Microsoft 365 + BYO calendar connect: mail send-as for M365 and SMTP, calendar OAuth sync (Google calendar.events / Microsoft Graph)",
    "status": "Backlog",
    "priority": "No priority",
    "project": "crm",
@@ -1802,7 +1803,7 @@
   },
   {
    "id": "AA-1012",
-   "title": "[CRM] CRM-25b PAdES-B-B signed PDF (pyHanko over kms:Sign)",
+   "title": "[CRM] CRM-25b PAdES-B-B signed PDF (pyHanko external signer over kms:Sign, embedded EN/VI font, X.509 for seal key)",
    "status": "Backlog",
    "priority": "No priority",
    "project": "crm",
@@ -1810,6 +1811,30 @@
    "session": "later",
    "size": "M",
    "next": "L6 · S261 tạo (follow-up AA-955)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1022",
+   "title": "[Infra] Free hardening: S3 gateway endpoint, NAT recover action, pin Infra action SHAs, OIDC ref condition, Dependabot for CIS actions",
+   "status": "Todo",
+   "priority": "Medium",
+   "project": "data",
+   "milestone": "M1b",
+   "session": "S263",
+   "size": "S",
+   "next": "L3 · S263 tạo (P3 review S261, $0): S3 endpoint, NAT recover, pin SHA, OIDC sub, Dependabot + cảnh báo SSO (AA-873 N17)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1023",
+   "title": "[Ops] $0 rollback game day (Booking, CRM, Vercel, TP Lambda) + parameterised ECS runbook + job-idle gate in terraform-apply",
+   "status": "Todo",
+   "priority": "Medium",
+   "project": "data",
+   "milestone": "M1b",
+   "session": "S264",
+   "size": "M",
+   "next": "L7 · S263 tạo (P4 review S261, $0): runbook rollback ECS + game day + gate job rảnh ở terraform-apply + env prod→dev",
    "needs": ""
   }
  ]
