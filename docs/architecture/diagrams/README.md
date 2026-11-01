@@ -7,14 +7,14 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem, cis, booking, tripplanner, partner, infra]
-last_reviewed: 2026-10-29
+last_reviewed: 2026-11-01
 review_every_days: 90
-related: [ARCH-01, ARCH-06, AA-697]
+related: [ARCH-01, ARCH-01-ai-gateway, ARCH-06, AA-697, AA-1020]
 ---
 
 # Architecture diagrams with AWS icons
 
-Six deployment views of the Dev platform, drawn as code in the style of the AWS Architecture Icons deck (the AWS
+Seven views of the Dev platform (six deployment views and the AI gateway), drawn as code in the style of the AWS Architecture Icons deck (the AWS
 reference-architecture look): the official service icons and group shapes shipped by the Python
 [`diagrams`](https://diagrams.mingrammer.com/) package, laid out on a grid and drawn by Graphviz. Each view is a `.py`
 source next to its rendered `.svg`. The prose they illustrate is the source of truth:
@@ -23,6 +23,8 @@ disagree, fix the view.
 
 **Review:** pilot reviewed and approved by the tech lead (S257 session plan, 2026-10-29). The Infra view passed the
 Terraform drift check on 2026-10-28 (S256, [below](#aa-cis-infra)), and every repo's `CONTEXT.md` links this page.
+Redrawn on 2026-11-01 (S263, AA-1020) for the management account (ADR 0018), the TripPlanner jobs Lambda, the AI
+gateway v2 (ADR 0009) and the new [AI gateway](#ai-gateway) view.
 
 ## Conventions
 
@@ -30,7 +32,7 @@ Groups follow the AWS order and look, outermost first:
 
 | Group | Look | Holds |
 |---|---|---|
-| AWS Cloud (one per account) | dark solid border, AWS logo | the infrastructure account (acc2) and the LLM account (acc3), side by side, never nested; global services (CloudFront, Route 53, IAM roles) sit here, outside the Region |
+| AWS Cloud (one per account) | dark solid border, AWS logo | the infrastructure account (acc2), the LLM account (acc3) and the management account of the AA organization, side by side, never nested; global services (CloudFront, Route 53, IAM roles, Organizations, Identity Center) sit here, outside the Region |
 | Region | teal dashed border, flag | `us-west-1` |
 | VPC | purple border, VPC icon | the shared VPC |
 | Public subnets | green fill, green lock | ALB, NAT instance |
@@ -54,15 +56,18 @@ Labels name services and roles only: never an account ID, an ARN or a network ID
 
 ## Ecosystem
 
-The four apps on the infrastructure account (acc2), the shared VPC and RDS, the edge (API Gateway, CloudFront) and the
-LLM account (acc3). Source: [`ecosystem.py`](ecosystem.py).
+The four apps on the infrastructure account (acc2), the shared VPC and RDS, the edge (API Gateway, CloudFront), the
+LLM account (acc3) and the management account (ADR 0018; no workload account has joined its organization yet).
+Source: [`ecosystem.py`](ecosystem.py).
 
 ![Ecosystem architecture with AWS icons](ecosystem.svg)
 
 ## AA-CIS-Infra
 
-What the two Terraform roots create: edge and DNS, the VPC with the ECS cluster, Lambdas, RDS and Valkey, data and
-identity services, operations, and the acc3 roles. Source: [`infra.py`](infra.py). Cross-checked on 2026-10-28 against
+What the three Terraform roots create: edge and DNS, the VPC with the ECS cluster, Lambdas, RDS and Valkey, data and
+identity services, operations, the acc3 roles, and the organization in the management account. Source:
+[`infra.py`](infra.py). The 2026-11-01 redraw is checked by live reads (Lambda list, Scheduler, bucket count, ECR, KMS
+aliases, Cognito pools, the management account's Organizations and Identity Center), not by a new TerraVision run. Cross-checked on 2026-10-28 against
 the live `accounts/aa365` state (a no-refresh plan reported no changes) with TerraVision 0.56.0: every service group in
 the state has a node and no node draws something that does not exist. The drift table and how to repeat the check are in
 the root audit folder `docs/audits/2026-10-28-S256-aa697-drift/`.
@@ -71,8 +76,8 @@ the root audit folder `docs/audits/2026-10-28-S256-aa697-drift/`.
 
 ## AA-CIS-App
 
-The admin console on Vercel, the API and the `shared.job` worker on one image, the CIS schemas, and the Model Gateway
-path to Bedrock on both accounts and to the outside APIs. Source: [`cis.py`](cis.py).
+The admin console on Vercel, the API and the `shared.job` worker on one image, the CIS schemas, and the AI gateway
+paths to Bedrock on both accounts and to the outside APIs. Source: [`cis.py`](cis.py).
 
 ![AA-CIS-App with AWS icons](cis.svg)
 
@@ -85,8 +90,9 @@ grants it consumes, the B2B API for AA-Partner, and its S3, KMS and SES pieces. 
 
 ## AA-TripPlanner-Web
 
-The Next.js web app, the HTTP API and the two Lambdas split by statefulness, the `tripplanner` schema and the read-only
-catalog views, the embedding and narration models, and the inquiry hand-off to AA-Booking.
+The Next.js web app, the HTTP API and the two Lambdas split by statefulness, the jobs Lambda woken by a daily
+Scheduler tick, the `tripplanner` schema and the read-only catalog views (the AI gateway views included), the
+embedding and narration models, and the inquiry hand-off to AA-Booking.
 Source: [`tripplanner.py`](tripplanner.py).
 
 ![AA-TripPlanner-Web with AWS icons](tripplanner.svg)
@@ -94,10 +100,18 @@ Source: [`tripplanner.py`](tripplanner.py).
 ## AA-Partner
 
 The agency CRM and the Content studio behind CloudFront (VPC origin on the shared NLB), the three ECS services, the
-`crm` schema with row-level security, the PARTNER and M2M identity, and the HTTP contracts with CIS and AA-Booking.
-Source: [`partner.py`](partner.py).
+`crm` schema with row-level security and its AI ledger, the PARTNER, M2M and WORKFORCE (AA staff console) identity,
+and the HTTP contracts with CIS and AA-Booking. Source: [`partner.py`](partner.py).
 
 ![AA-Partner with AWS icons](partner.svg)
+
+## AI gateway
+
+Who calls the AI gateway, where its control plane and ledger live (CIS schema `shared`, the CRM's own `crm` schema,
+the TripPlanner contract views) and which providers it reaches in which failure domain. Dotted arrows are built but
+not live. The prose is [AI gateway (as built)](../ai-gateway.md). Source: [`gateway.py`](gateway.py).
+
+![AI gateway with AWS icons](gateway.svg)
 
 ## Change a diagram
 

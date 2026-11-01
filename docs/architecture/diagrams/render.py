@@ -21,7 +21,7 @@ sys.path.insert(0, str(HERE))
 import _common  # noqa: E402
 from _common import check_svg_safe, finalize_svg  # noqa: E402
 
-VIEWS = ["ecosystem", "infra", "cis", "booking", "tripplanner", "partner"]
+VIEWS = ["ecosystem", "infra", "cis", "booking", "tripplanner", "partner", "gateway"]
 
 
 def main(argv: list[str]) -> int:
