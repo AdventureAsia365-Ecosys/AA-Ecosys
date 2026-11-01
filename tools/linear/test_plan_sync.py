@@ -157,6 +157,10 @@ class GuardTest(unittest.TestCase):
         self.assertTrue(ps.safety_problems(FAKE_ARN))
         self.assertEqual(ps.safety_problems("AA-1003 due 2026-11-03, 1234567890123 is 13 digits"), [])
 
+    def test_arn_only_at_a_word_start(self):
+        self.assertEqual(ps.safety_problems("Learn: how the invented widget works; barn: red"), [])
+        self.assertTrue(ps.safety_problems(f"see ({FAKE_ARN})"))
+
     def test_validate_real_plan_has_no_errors(self):
         ses, ms = ps.orders(ps.INDEX)
         errors, _ = ps.validate(json.loads(ps.PLAN.read_text(encoding="utf-8")), ses, ms)
@@ -258,6 +262,21 @@ class CliTest(unittest.TestCase):
         self.assertEqual(code, 2)
         self.assertIn("refusing", out)
         self.assertEqual(self.path.read_text(encoding="utf-8"), before)
+
+    def test_public_safety_prints_nothing_from_linear(self):
+        # The workflow puts stdout in a public Actions log and the bot PR body: a leaked value must not be printed,
+        # neither in a CHANGED title line nor in a WARN line with a Linear project name.
+        leak_title = ps.normalize(node("AA-10", title=f"Invented title {FAKE_ACCOUNT}"))
+        leak_project = ps.normalize(node("AA-12", project=f"Team {FAKE_ARN}"))
+        for linear in ([leak_title], [ps.normalize(node("AA-10")), leak_project]):
+            for argv in (("--check",), ("--write", "--log-draft"), ()):
+                code, out = self.run_main(*argv, linear=linear)
+                self.assertEqual(code, 2, out)
+                self.assertNotIn(FAKE_ACCOUNT, out)
+                self.assertNotIn(FAKE_ARN, out)
+                self.assertNotIn("CHANGED", out)
+                self.assertNotIn("WARN", out)
+                self.assertIn("refusing", out)
 
     def test_validate_and_check_scope_offline(self):
         with mock.patch("linear_api.api_key", side_effect=AssertionError("offline modes must not read the key")):

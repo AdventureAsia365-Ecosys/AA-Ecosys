@@ -60,6 +60,7 @@ NEW_DEFAULTS = {"milestone": "later", "session": "unscheduled", "size": "", "nex
 SYNC_TOP_KEYS = ("issues", "updated", "synced_at")
 
 ACCOUNT_ID = re.compile(r"(?<!\d)\d{12}(?!\d)")
+ARN = re.compile(r"(?<![A-Za-z0-9])arn:")  # "arn:aws:..."; not the tail of a word such as "Learn:"
 ISO_DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
 
 OPEN_QUERY = """
@@ -205,7 +206,7 @@ def dumps(plan: dict) -> str:
 
 def safety_problems(text: str) -> list[str]:
     hits = [f"12-digit number (account ID?) {m.group(0)[:4]}…" for m in ACCOUNT_ID.finditer(text)]
-    if "arn:" in text:
+    if ARN.search(text):
         hits.append("'arn:' found")
     return hits
 
@@ -402,26 +403,31 @@ def main(argv: list[str] | None = None) -> int:
     closed = {n["identifier"]: f"{n['state']['name']} in Linear" for n in changed if n["state"]["type"] in CLOSED}
     closed.update({n["identifier"]: "deleted in Linear" for n in changed if n.get("trashed")})
     new_plan, diff = merge(plan, linear, closed)
-    print(format_diff(diff))
 
     now = now_local()
     if args.write:
         new_plan = stamp(new_plan, now.date().isoformat(),
                          dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%MZ"), args.session)
+    report = format_diff(diff)
+    draft = log_draft(changed, since or now.date().isoformat(), args.session, now.strftime("%d/%m/%Y")) \
+        if args.log_draft else None
+    # Public-safety gate BEFORE anything is printed: the Plan sync workflow puts this output in the Actions log and in
+    # the bot PR body, both public (the root repo is public). On a hit print only the redacted hits, nothing else.
+    hits = safety_problems("\n".join([report, dumps(new_plan), json.dumps(draft, ensure_ascii=False)]))
+    if hits:
+        for h in hits:
+            print(f"ERROR    public safety: {h}")
+        print("refusing to continue: Linear data would put an account ID or an ARN into plan.json or this output")
+        return 2
+    print(report)
+
     errors, warnings = validate(new_plan, ses_order, ms_order)
     for w in warnings:
         print(f"WARN     {w}")
-    safety = [e for e in errors if e.startswith("public safety")]
-    if safety:
-        for e in safety:
-            print(f"ERROR    {e}")
-        print("refusing to continue: plan.json must not carry account IDs or ARNs")
-        return 2
     for e in errors:
         print(f"ERROR    {e}")
 
-    if args.log_draft:
-        draft = log_draft(changed, since or now.date().isoformat(), args.session, now.strftime("%d/%m/%Y"))
+    if draft is not None:
         print("log draft (since " + str(since) + "):")
         print(json.dumps(draft, ensure_ascii=False, indent=1))
 
