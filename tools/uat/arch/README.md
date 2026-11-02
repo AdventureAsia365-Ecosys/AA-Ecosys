@@ -16,14 +16,15 @@ ffmpeg, tesseract). Issue: AA-1021 (content series, details private).
   (cut lengths, build date, counts). The gate's n-gram, identity and label-set checks fail a build whose text can be
   found in a public repo, and that includes text you add here. Only `gate-summary.md` (layer, status, hit count) may be
   copied into an audit page.
-- A committed diagram, relabelled or not: its layout, icons and arrow routes are a visual fingerprint of a public
+- A committed diagram, relabelled or not: its layout, frames and arrow routes are a visual fingerprint of a public
   figure. Every diagram in a video is a sketch drawn for that episode (`sketch.py`).
+- The icon files: `setup.sh` fetches them into the gitignored cache (see Icons).
 
 ## Setup (once)
 
 ```bash
 bash tools/uat/setup.sh          # venv with kokoro-onnx, models/, Playwright (shared with the UAT videos)
-bash tools/uat/arch/setup.sh     # the theme font (OFL, pinned + sha256) and tesseract unpacked without root
+bash tools/uat/arch/setup.sh     # theme font (OFL), official cloud icons (both pinned + sha256), tesseract (no root)
 ```
 
 ## Build an episode
@@ -56,6 +57,34 @@ a viewer would search for (the series name and tag are always checked). Cuts set
 length rules (`min_s`, `max_s`); the master carries chapters (3 or more, 10 s or longer each). Write narration
 in plain industry words; avoid the coined terms of the codebase and say "designed to" for anything not live.
 
+## Phone frames and framing
+
+- The camera never cuts a node or a label: the view takes the card's exact shape, and a node, group title or edge label
+  only partly inside it is hidden whole (a frame whose title is hidden and that holds no node in view goes too).
+- A diagram can have a variant for the tall cuts: key `<diagram>@<name>` with `"aspects": ["9:16", "4:5"]`, its own
+  grid and `"text_scale"` / `"node_w"`, drawn from the base labels only (`scene.load` checks). A diagram visual can set
+  `"aspects": {"9:16,4:5": {"focus": [...]}}` so a phone frame shows a few nodes, large. Aim for node labels of about
+  28 px at 1080 wide: two columns and two or three rows per frame at `text_scale` 1.5.
+- Labels too wide for a node wrap onto two lines inside one `<text>`, so page.py and the gate still read one label.
+
+## Icons
+
+Diagrams use the official AWS Architecture Icons: the asset package AWS publishes on its architecture icons page, which
+AWS permits customers and partners to use in architecture diagrams (keep the icons unmodified: no recolouring, cropping
+or flipping). `setup.sh` downloads the package from a pinned URL, checks its sha256 and extracts only the files listed
+in `sketch.ICONS` into `<cache>/aws-icons` (the zip is deleted); nothing of it is committed. A newer package means a
+new URL, checksum and member paths in `setup.sh` and `sketch.ICONS`.
+
+- A node draws the icon named by `"icon"` (a key of `sketch.ICONS`, or `"none"`), else the product its label names
+  ("Amazon RDS ..." draws the RDS icon), else its kind's general icon (people: users, external: internet).
+- A group `"kind"` (`cloud`, `account`, `region`, `vpc`, `private-subnet`, `public-subnet`, `generic`) draws the
+  official group style: border colour and corner icon; a group `"icon"` draws a service group in the category colour.
+  A label starting with "AWS Cloud" picks `cloud`.
+- Icons are inlined as plain shapes: `<title>`, `<desc>`, ids and classes are dropped, and an icon holding text, an
+  image, a link, a style or a `url()` reference is refused, so an icon adds nothing gate layers 1-2 can read. Layer 3
+  (OCR) drops glyph noise as before (words lower than 5 px).
+- Without the icon folder `make_episode.py` stops with a pointer to `setup.sh`.
+
 ## The gate (gate.py)
 
 | Layer | What it checks | When |
@@ -75,8 +104,8 @@ a planted brand word, an account-ID-shaped number and a hostname each fail the t
 |---|---|
 | `make_episode.py` | the build: layer 1 (with the drawn sketch labels), TTS, timelines, capture, MP4s, layers 2-4, logs |
 | `scene.py` | scene JSON validation, per-cut timelines, keyframes, caption cues, chapters, SRT/VTT/ASS |
-| `sketch.py` | a per-episode diagram sketch (grid, groups, nodes, edges) drawn as plain SVG, neutral keys only |
-| `page.py` | the stage page per aspect (neutral theme, reveal / focus / highlight on the SVG) |
+| `sketch.py` | a per-episode diagram sketch (grid, groups, nodes, edges, official icons) drawn as plain SVG, neutral keys only |
+| `page.py` | the stage page per aspect (high-contrast light theme, reveal / focus / highlight on the SVG) |
 | `capture.cjs` | Playwright keyframes at 2x with the layer 2 check before each shot |
 | `tts_arch.py` | Kokoro clip per sentence and voice, two-pass loudnorm, cached by text hash |
 | `video.py` | keyframes + narration to MP4 (cross-fades, burned captions, chapters, no metadata) |

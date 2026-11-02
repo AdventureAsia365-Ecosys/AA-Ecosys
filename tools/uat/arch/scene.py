@@ -17,6 +17,11 @@ keep them in .tmp-session/ or Drive. Format (an invented, complete example: test
 Voices: each sentence has a voice key (F/M); a scene without "voice" alternates with the previous scene, starting with F
 in odd episodes and M in even ones; a sentence may override it. Visual types: title, points, diagram, end (page.py).
 A sentence "visual" is merged over the scene visual. A scene without "cuts" is in the master only.
+
+Phone frames: a diagram may have a variant drawn for some aspects, keyed "<diagram>@<name>" with "aspects":
+["9:16", "4:5"] and its own grid (and text_scale / node_w); it shows only labels of its base diagram. A diagram
+visual may carry "aspects": {"9:16,4:5": {"focus": [...], "reveal": [...], "highlight": [...]}}, merged over it in
+those aspects only (the camera of a phone frame shows fewer nodes, larger).
 """
 from __future__ import annotations
 
@@ -37,7 +42,7 @@ LAYOUT = {
     "16:9": {"header": (0.035, 0.135), "stage": (0.15, 0.80), "cap_margin": 0.045, "cap_px": 44, "side": (0.05, 0.05)},
     "1:1": {"header": (0.04, 0.15), "stage": (0.16, 0.74), "cap_margin": 0.05, "cap_px": 46, "side": (0.06, 0.06)},
     "4:5": {"header": (0.04, 0.14), "stage": (0.15, 0.73), "cap_margin": 0.06, "cap_px": 48, "side": (0.06, 0.06)},
-    "9:16": {"header": (0.07, 0.17), "stage": (0.18, 0.57), "cap_margin": 0.27, "cap_px": 52, "side": (0.07, 0.15)},
+    "9:16": {"header": (0.07, 0.17), "stage": (0.18, 0.645), "cap_margin": 0.27, "cap_px": 52, "side": (0.07, 0.15)},
 }
 VISUAL_TYPES = {"title", "points", "diagram", "end"}
 INTRO_S, SENT_GAP_S, SCENE_GAP_S, OUTRO_S, PRE_S = 0.6, 0.35, 0.6, 1.4, 0.25
@@ -80,13 +85,33 @@ def load(data: dict) -> tuple[dict, list[Sentence]]:
             problems.append(f"cut {name}: aspect must be one of {sorted(ASPECTS)}")
     if "master" not in cuts:
         problems.append("a 'master' cut is required")
-    diagrams = data.get("diagrams", {})
-    for key, spec in diagrams.items():
+    all_diagrams = data.get("diagrams", {})
+    diagrams = {k: v for k, v in all_diagrams.items() if "@" not in k}
+    for key, spec in all_diagrams.items():
         if isinstance(spec, str):
             problems.append(f"diagram {key}: a committed diagram ({spec!r}) cannot be used; a relabelled copy keeps "
                             "the public figure's layout (a visual fingerprint): author a sketch (sketch.py)")
         else:
             problems += sketch.validate(spec, key)
+    taken: set[tuple[str, str]] = set()
+    for key, spec in all_diagrams.items():
+        if "@" not in key or isinstance(spec, str):
+            continue
+        base = key.split("@", 1)[0]
+        asps = spec.get("aspects") if isinstance(spec, dict) else None
+        if base not in diagrams or isinstance(diagrams[base], str):
+            problems.append(f"diagram {key}: variant of an unknown diagram {base!r}")
+            continue
+        if not (isinstance(asps, list) and asps and set(asps) <= set(ASPECTS)):
+            problems.append(f"diagram {key}: aspects must be a list of {sorted(ASPECTS)}")
+            continue
+        for a in asps:
+            if (base, a) in taken:
+                problems.append(f"diagram {key}: a second variant of {base} for {a}")
+            taken.add((base, a))
+        extra = set(sketch.labels(spec)) - set(sketch.labels(diagrams[base]))
+        if extra:
+            problems.append(f"diagram {key}: labels not in {base}: {sorted(extra)}")
     episode = int(data.get("episode", 1))
     prev = "M" if episode % 2 == 1 else "F"      # so the first scene gets F in odd episodes
     out: list[Sentence] = []
@@ -119,6 +144,11 @@ def load(data: dict) -> tuple[dict, list[Sentence]]:
                 problems.append(f"{sid}.{ni}: visual type {vt!r} not in {sorted(VISUAL_TYPES)}")
             if vt == "diagram" and vis.get("diagram") not in diagrams:
                 problems.append(f"{sid}.{ni}: diagram {vis.get('diagram')!r} not declared in 'diagrams'")
+            for ak, ov in (vis.get("aspects") or {}).items():
+                if not set(a.strip() for a in ak.split(",")) <= set(ASPECTS):
+                    problems.append(f"{sid}.{ni}: visual aspects key {ak!r} is not a list of {sorted(ASPECTS)}")
+                if not (isinstance(ov, dict) and set(ov) <= {"reveal", "focus", "highlight"}):
+                    problems.append(f"{sid}.{ni}: visual aspects {ak!r} may set reveal / focus / highlight only")
             sc_cuts = set(item.get("cuts") or scene_cuts)
             for c in sc_cuts - set(cuts):
                 problems.append(f"{sid}.{ni}: unknown cut {c}")
@@ -137,12 +167,21 @@ def all_texts(data: dict, sentences: list[Sentence]) -> dict[str, str]:
     for s in sentences:
         texts[f"{s.id}:text"] = s.text
         for k, v in s.visual.items():
-            if k in ("type", "diagram", "reveal", "focus", "highlight"):
+            if k in ("type", "diagram", "reveal", "focus", "highlight", "aspects"):
                 continue
             texts[f"{s.id}:visual.{k}"] = " ".join(v) if isinstance(v, list) else str(v)
     for sc in data.get("scenes", []):
         texts[f"{sc.get('id')}:chapter"] = sc.get("chapter", "")
     return {k: v for k, v in texts.items() if v}
+
+
+def svgs_for_aspect(svgs: dict[str, str], diagrams: dict, aspect: str) -> dict[str, str]:
+    """The rendered diagrams one aspect shows: each base key, drawn from its variant for that aspect if any."""
+    out = {k: v for k, v in svgs.items() if "@" not in k}
+    for k, spec in diagrams.items():
+        if "@" in k and k in svgs and aspect in (spec.get("aspects") or []):
+            out[k.split("@", 1)[0]] = svgs[k]
+    return out
 
 
 def cut_sentences(sentences: list[Sentence], cut: str) -> list[Sentence]:
