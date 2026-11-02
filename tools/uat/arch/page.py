@@ -15,7 +15,8 @@ Visual types (scene.py):
           diagram without reveal; with reveal: the revealed groups and nodes, not their enclosing frames).
           highlight: an accent outline around these.
   end     {kicker, title, lead}                 closing card
-Theme: one open-licence sans font, dark ink on a light grey page, one accent colour; no brand colours or fonts.
+Theme: one open-licence sans font, near-black ink on a light grey page, white cards, one orange accent (dark orange
+for text, AWS-style orange for marks) so the diagrams read on a phone; no company colours or fonts. Light only.
 """
 from __future__ import annotations
 
@@ -27,14 +28,14 @@ from scene import ASPECTS, LAYOUT
 
 CSS = """
 @font-face{font-family:"Plex";src:url(%(font)s) format("truetype");font-weight:100 700;font-display:block}
-:root{--bg:#F4F6F8;--card:#FFFFFF;--ink:#16202B;--body:#3B4754;--muted:#66727F;--line:#DCE2E8;--accent:#0E7C7B;
-  --accent-soft:#E3F2F1;--W:%(w)spx;--H:%(h)spx}
+:root{--bg:#E9EDF2;--card:#FFFFFF;--ink:#0B1219;--body:#232F3E;--muted:#3F4B59;--line:#B9C3CE;--accent:#B84A00;
+  --accent-mark:#ED7100;--accent-soft:#FDEBD9;--W:%(w)spx;--H:%(h)spx}
 *{box-sizing:border-box}
 html,body{margin:0;width:var(--W);height:var(--H);overflow:hidden;background:var(--bg);color:var(--ink);
   font-family:%(family)s;-webkit-font-smoothing:antialiased}
 #frame{position:absolute;inset:0}
 #tag{position:absolute;top:%(tag_top)spx;right:%(side_r)spx;font-size:%(tag_px)spx;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--muted);font-weight:500}
+  text-transform:uppercase;color:var(--body);font-weight:600}
 #hd{position:absolute;left:%(side_l)spx;right:%(side_r)spx;top:%(hd_top)spx;height:%(hd_h)spx;display:flex;
   flex-direction:column;justify-content:flex-end}
 #hd .kicker{font-size:%(kick_px)spx;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);
@@ -42,25 +43,25 @@ html,body{margin:0;width:var(--W);height:var(--H);overflow:hidden;background:var
 #hd h1{font-size:%(h1_px)spx;line-height:1.12;font-weight:600;margin:0}
 #stage{position:absolute;left:%(side_l)spx;right:%(side_r)spx;top:%(st_top)spx;height:%(st_h)spx}
 .card{position:absolute;inset:0;background:var(--card);border:1px solid var(--line);border-radius:18px;
-  box-shadow:0 14px 40px rgba(22,32,43,.07);overflow:hidden}
-.card svg{position:absolute;inset:%(pad)spx;width:calc(100%% - %(pad2)spx);height:calc(100%% - %(pad2)spx)}
+  box-shadow:0 14px 40px rgba(11,18,25,.12);overflow:hidden}
+.card > svg{position:absolute;inset:%(pad)spx;width:calc(100%% - %(pad2)spx);height:calc(100%% - %(pad2)spx)}
 .card svg text{font-family:%(family)s}
-.card svg .fade{opacity:.07}
+.card svg .fade{opacity:.08}
 .card svg g{transition:none}
-.hl{fill:none;stroke:var(--accent);stroke-width:6;rx:14;ry:14}
+.hl{fill:none;stroke:var(--accent-mark);stroke-width:7;rx:14;ry:14}
 .cover{position:absolute;left:%(side_l)spx;right:%(side_r)spx;top:%(cov_top)spx;bottom:%(cov_bottom)spx;display:flex;
   flex-direction:column;justify-content:center}
 .cover .kicker{display:inline-block;align-self:flex-start;font-size:%(kick_px)spx;font-weight:600;letter-spacing:.08em;
   text-transform:uppercase;color:var(--accent);border:2px solid var(--accent);border-radius:999px;padding:6px 16px;
-  margin:0 0 26px}
+  margin:0 0 26px;border-width:3px}
 .cover h1{font-size:%(cover_px)spx;line-height:1.08;font-weight:600;margin:0 0 22px;max-width:18ch}
 .cover p{font-size:%(lead_px)spx;line-height:1.45;color:var(--body);margin:0;max-width:34ch}
-.cover .rule{width:%(rule_w)spx;height:8px;background:var(--accent);border-radius:4px;margin:0 0 30px}
+.cover .rule{width:%(rule_w)spx;height:8px;background:var(--accent-mark);border-radius:4px;margin:0 0 30px}
 ul.points{list-style:none;margin:0;padding:%(pts_pad)spx;display:flex;flex-direction:column;justify-content:center;
   gap:%(pts_gap)spx;height:100%%}
 ul.points li{font-size:%(pt_px)spx;line-height:1.3;color:var(--ink);padding-left:%(pt_ind)spx;position:relative}
 ul.points li::before{content:"";position:absolute;left:0;top:.38em;width:%(dot)spx;height:%(dot)spx;border-radius:6px;
-  background:var(--accent)}
+  background:var(--accent-mark)}
 """
 
 JS = r"""

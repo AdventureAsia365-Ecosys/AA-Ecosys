@@ -188,6 +188,48 @@ class Sketch(unittest.TestCase):
         with self.assertRaises(sketch.SketchError):
             sketch.render(bad, "eco")
 
+    def test_official_icons_inline_as_plain_shapes(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            icon = ('<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" '
+                    'viewBox="0 0 80 80"><title>Icon-Planted-Brand_64</title><desc>Planted</desc>'
+                    '<g id="Planted-Brand-Id" fill="#ED7100"><rect id="Rect-Brand" width="80" height="80"/></g>'
+                    '<path id="Brand-Path" d="M1 1L2 2" fill="#FFFFFF"/></svg>')
+            for key in ("users", "internet", "rds", "group-cloud"):
+                Path(d, f"{key}.svg").write_text(icon, encoding="utf-8")
+            spec = copy.deepcopy(SKETCH)
+            spec["nodes"][3]["icon"] = "rds"
+            spec["groups"][0]["kind"] = "cloud"
+            svg = sketch.render(spec, "eco", Path(d))
+            self.assertEqual(svg.count('class="icon"'), 4)   # people, store (rds), external, cloud frame
+            for gone in ("Planted", "Brand", "<title", "<desc", " id=", "href", "<image"):
+                self.assertNotIn(gone, svg)
+            drawn = re.findall(r"<text[^>]*>([^<]*)</text>", svg)
+            self.assertEqual(sorted(html.unescape(t) for t in drawn), sorted(sketch.labels(SKETCH)))
+            Path(d, "rds.svg").write_text(icon.replace("</svg>", "<text>Brand</text></svg>"), encoding="utf-8")
+            with self.assertRaises(sketch.SketchError):
+                sketch.render(spec, "eco", Path(d))
+            Path(d, "rds.svg").write_text(icon.replace('fill="#FFFFFF"', 'fill="url(#g)"'), encoding="utf-8")
+            with self.assertRaises(sketch.SketchError):
+                sketch.render(spec, "eco", Path(d))
+
+    def test_icon_and_group_style_choice(self):
+        self.assertEqual(sketch.node_icon({"label": "Amazon RDS for a db"}), "rds")
+        self.assertEqual(sketch.node_icon({"label": "Trip planner (AWS Lambda)"}), "lambda")
+        self.assertIsNone(sketch.node_icon({"label": "Classes and buses"}))      # no product word inside a word
+        self.assertEqual(sketch.node_icon({"label": "Guests", "kind": "people"}), "users")
+        self.assertIsNone(sketch.node_icon({"label": "Amazon S3", "icon": "none"}))
+        self.assertEqual(sketch.group_style({"label": "AWS Cloud"})["stroke"], "#242F3E")
+        self.assertEqual(sketch.group_style({"label": "x", "kind": "account"})["icon"], "group-account")
+        self.assertEqual(sketch.group_style({"label": "Amazon ECS cluster"})["icon"], "ecs")
+        self.assertTrue(sketch.group_style({"label": "Common", "style": "dashed"})["dash"])
+        bad = copy.deepcopy(SKETCH)
+        bad["nodes"][0]["icon"] = "nope"
+        bad["groups"][0]["kind"] = "planet"
+        msg = "; ".join(sketch.validate(bad, "eco"))
+        self.assertIn("icon must be one of", msg)
+        self.assertIn("kind must be one of", msg)
+
     def test_committed_diagram_name_is_refused(self):
         ep = copy.deepcopy(EPISODE)
         ep["diagrams"] = {"eco": "ecosystem"}
