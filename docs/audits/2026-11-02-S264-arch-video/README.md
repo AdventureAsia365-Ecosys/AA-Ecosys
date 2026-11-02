@@ -1,7 +1,7 @@
 ---
 id: OPS-08-s264-arch-video-gate
-title: "Architecture video series: gate log (S264)"
-description: "Gate results per architecture video (layers 1-4 automated, layer 5 human): layer, status and hit count only, no script text."
+title: "AA-1021 gate log (S264)"
+description: "AA-1021 (content series, details private): gate results per build (layers 1-4 automated, layer 5 human), layer, status and hit count only."
 type: report
 status: active
 owner: nghiep
@@ -12,18 +12,16 @@ review_every_days: 30
 related: [AA-1021]
 ---
 
-# Architecture video series: gate log (S264)
+# AA-1021 gate log (S264)
 
-One section per built episode. This page holds the gate result only: layer, status and hit count, copied from the
-build's `gate-summary.md`. Cut lengths, build dates, counts, tool versions, the scripts, the sketches, the deny-list and
-the videos stay outside the public repos (Drive, 01 Video), because they would let anyone match this repo to the
-videos. Gate and pipeline: `tools/uat/arch/README.md`.
+AA-1021 (content series, details private). This page holds the gate result only: layer, status and hit count, copied
+from the build's `gate-summary.md`. Everything else stays in the private folder. Gate and pipeline:
+`tools/uat/arch/README.md`.
 
-## Ep1 pilot
+## Pilot
 
-Layers 1-4 passed on the rebuild after the S264 review fixes (per-episode diagram sketch, drawn labels through the full
-text check, hyphenated-token and identity checks). Layer 5 (independent review agent, then the tech lead watching all
-four cuts) is pending, so nothing is uploaded or published yet.
+Layers 1-4 re-run on the rebuild after the S264 layer 5a fixes. Layer 5 (independent review, then the tech lead) is
+pending, so nothing is uploaded or published yet.
 
 | Layer | Status | Hits |
 |---|---|---|
