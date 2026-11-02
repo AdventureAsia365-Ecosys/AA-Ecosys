@@ -1,0 +1,198 @@
+{
+  "A": "S264 WFA mvyjwak6 Dated",
+  "B": "S264 WFB mvyjwak6 Nodates",
+  "log": [
+    {
+      "t": "2026-11-02T00:58:53.518Z",
+      "step": "intake A",
+      "data": {
+        "status": 202,
+        "name": "S264 WFA mvyjwak6 Dated"
+      }
+    },
+    {
+      "t": "2026-11-02T00:58:54.142Z",
+      "step": "intake B",
+      "data": {
+        "status": 202,
+        "name": "S264 WFB mvyjwak6 Nodates"
+      }
+    },
+    {
+      "t": "2026-11-02T00:59:18.005Z",
+      "step": "installed template",
+      "data": {
+        "template": "visa_documents_task_list",
+        "tplName": "Visa and documents task list",
+        "rules": 1,
+        "ruleStatus": "active",
+        "ruleText": "Visa and documents task list ON LIBRARY Applied by hand Create the task \"Check the visa rules for every passport on the trip\" Create the task \"Collect passport copies\" Create the task \"Confirm travel insurance for every traveller\" 0 running · 0 finished Preview Edit Pause Archive"
+      }
+    },
+    {
+      "t": "2026-11-02T00:59:22.017Z",
+      "step": "trip A on board",
+      "data": {
+        "href": "/pipeline/<uuid>"
+      }
+    },
+    {
+      "t": "2026-11-02T00:59:26.139Z",
+      "step": "trip B on board",
+      "data": {
+        "href": "/pipeline/<uuid>"
+      }
+    },
+    {
+      "t": "2026-11-02T00:59:34.612Z",
+      "step": "trip A dates set",
+      "data": {
+        "start": "2027-03-01",
+        "end": "2027-03-10"
+      }
+    },
+    {
+      "t": "2026-11-02T00:59:46.901Z",
+      "step": "apply A #1",
+      "data": {
+        "checkText": "Apply a task list Task list Visa and documents task list Check Apply Ready to apply to this trip.",
+        "applied": true,
+        "notice": "Applied. The tasks appear in a few seconds."
+      }
+    },
+    {
+      "t": "2026-11-02T01:00:26.949Z",
+      "step": "A runs after #1",
+      "data": {
+        "runs": [
+          {
+            "status": "completed",
+            "text": "Visa and documents task list FINISHED Create a task: task created Create a task: task created Create a task: task created"
+          }
+        ],
+        "tasks": [
+          {
+            "kind": "reply_inquiry",
+            "status": "open",
+            "text": "Reply within 2 h · due 2 Nov 2026, 9:58 am GMT+7 Done"
+          },
+          {
+            "kind": "custom_6b05451c8f187bab5c4aba9d",
+            "status": "open",
+            "text": "Check the visa rules for every passport on the trip · due 31 Dec 2026, 9:00 am GMT+7 Done"
+          },
+          {
+            "kind": "custom_e3e01afb46f95fb41461d2fd",
+            "status": "open",
+            "text": "Collect passport copies · due 15 Jan 2027, 9:00 am GMT+7 Done"
+          },
+          {
+            "kind": "custom_c298cb18f3fc75d24ef843be",
+            "status": "open",
+            "text": "Confirm travel insurance for every traveller · due 30 Jan 2027, 9:00 am GMT+7 Done"
+          }
+        ]
+      }
+    },
+    {
+      "t": "2026-11-02T01:00:37.650Z",
+      "step": "apply B #1",
+      "data": {
+        "checkText": "Apply a task list Task list Visa and documents task list Check Apply Ready to apply to this trip.",
+        "applied": true,
+        "notice": "Applied. The tasks appear in a few seconds."
+      }
+    },
+    {
+      "t": "2026-11-02T01:01:17.246Z",
+      "step": "B runs after #1",
+      "data": {
+        "runs": [
+          {
+            "status": "completed",
+            "text": "Visa and documents task list FINISHED Create a task: task created Create a task: task created Create a task: task created"
+          }
+        ],
+        "tasks": [
+          {
+            "kind": "reply_inquiry",
+            "status": "open",
+            "text": "Reply within 2 h · due 2 Nov 2026, 9:58 am GMT+7 Done"
+          },
+          {
+            "kind": "custom_6b05451c8f187bab5c4aba9d",
+            "status": "open",
+            "text": "Check the visa rules for every passport on the trip Done"
+          },
+          {
+            "kind": "custom_e3e01afb46f95fb41461d2fd",
+            "status": "open",
+            "text": "Collect passport copies Done"
+          },
+          {
+            "kind": "custom_c298cb18f3fc75d24ef843be",
+            "status": "open",
+            "text": "Confirm travel insurance for every traveller Done"
+          }
+        ]
+      }
+    },
+    {
+      "t": "2026-11-02T01:01:22.697Z",
+      "step": "tasks board (team)",
+      "data": {
+        "lines": [
+          "Check the visa rules for every passport on the trip AUTOMATION Done Việt Nam, 9 đêm 31 Dec 2026, 9:00 am GMT+7 Unassigned Agent · d476 Agent · f6ec Assistant · ",
+          "Collect passport copies AUTOMATION Done Việt Nam, 9 đêm 15 Jan 2027, 9:00 am GMT+7 Unassigned Agent · d476 Agent · f6ec Assistant · 2f97 Assistant · e905 Owner ",
+          "Confirm travel insurance for every traveller AUTOMATION Done Việt Nam, 9 đêm 30 Jan 2027, 9:00 am GMT+7 Unassigned Agent · d476 Agent · f6ec Assistant · 2f97 As",
+          "Check the visa rules for every passport on the trip AUTOMATION Done Việt Nam, 9 đêm No date Unassigned Agent · d476 Agent · f6ec Assistant · 2f97 Assistant · e9",
+          "Confirm travel insurance for every traveller AUTOMATION Done Việt Nam, 9 đêm No date Unassigned Agent · d476 Agent · f6ec Assistant · 2f97 Assistant · e905 Owne",
+          "Collect passport copies AUTOMATION Done Việt Nam, 9 đêm No date Unassigned Agent · d476 Agent · f6ec Assistant · 2f97 Assistant · e905 Owner · a78e Me"
+        ],
+        "waitingSection": "My tasks Team tasks Done (7 days) New task Morning digest Each member gets one e-mail at 07:00 with the number of their overdue, today's and upcoming tasks. No client details. 175 tasks OVERDUE (111) Reply within 2 h CRM Done Việt Nam, 9 đêm 24 Oct 2026, 1:02 pm GMT+7 Unassigned Agent · d476 Agent · f6ec Assistant · 2f97 Assistant · e905 Owner · a78e Me Reply within 2 h CRM Done Việt Nam, 9 đêm 24 Oct 2026, 1:38 pm GMT+7 Unassigned Agent · d476 Agent · f6ec Assistant · 2f97 Assistant · e905 Owne"
+      }
+    },
+    {
+      "t": "2026-11-02T01:01:35.401Z",
+      "step": "apply A #2",
+      "data": {
+        "checkText": "Apply a task list Task list Visa and documents task list Check Apply Ready to apply to this trip.",
+        "applied": true,
+        "notice": "Applied. The tasks appear in a few seconds."
+      }
+    },
+    {
+      "t": "2026-11-02T01:02:16.515Z",
+      "step": "A after #2",
+      "data": {
+        "runs": [
+          {
+            "status": "completed",
+            "text": "Visa and documents task list FINISHED Create a task: task already open Create a task: task already open Create a task: task already open"
+          },
+          {
+            "status": "completed",
+            "text": "Visa and documents task list FINISHED Create a task: task created Create a task: task created Create a task: task created"
+          }
+        ],
+        "openTasksBefore": 4,
+        "openTasksAfter": 4
+      }
+    },
+    {
+      "t": "2026-11-02T01:02:26.861Z",
+      "step": "apply A #3 (then cancel at once)",
+      "data": {
+        "checkText": "Apply a task list Task list Visa and documents task list Check Apply Ready to apply to this trip.",
+        "applied": true,
+        "notice": "Applied. The tasks appear in a few seconds."
+      }
+    },
+    {
+      "t": "2026-11-02T01:02:43.804Z",
+      "step": "ERROR",
+      "data": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('trip-cancel').getByRole('button')\u001b[22m\n"
+    }
+  ],
+  "errs": []
+}

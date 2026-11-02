@@ -1,0 +1,30 @@
+{
+  "res": {
+    "1440-light": {
+      "text": "Some descriptions are written with the help of AI and may contain mistakes. Prices, itineraries and visa conditions are confirmed in your official quote. Use of AI",
+      "link": "/terms#ai",
+      "target": "_blank",
+      "overflow": 0
+    },
+    "1440-dark": {
+      "text": "Some descriptions are written with the help of AI and may contain mistakes. Prices, itineraries and visa conditions are confirmed in your official quote. Use of AI",
+      "link": "/terms#ai",
+      "target": "_blank",
+      "overflow": 0
+    },
+    "390-light": {
+      "text": "Some descriptions are written with the help of AI and may contain mistakes. Prices, itineraries and visa conditions are confirmed in your official quote. Use of AI",
+      "link": "/terms#ai",
+      "target": "_blank",
+      "overflow": 0
+    },
+    "390-dark": {
+      "text": "Some descriptions are written with the help of AI and may contain mistakes. Prices, itineraries and visa conditions are confirmed in your official quote. Use of AI",
+      "link": "/terms#ai",
+      "target": "_blank",
+      "overflow": 0
+    }
+  },
+  "ce": [],
+  "bad": []
+}

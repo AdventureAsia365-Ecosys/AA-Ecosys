@@ -1,0 +1,117 @@
+{
+  "log": [
+    {
+      "t": "2026-11-02T01:03:59.736Z",
+      "step": "A before moves",
+      "data": {
+        "stage": "inquiry",
+        "runs": [
+          "completed",
+          "completed",
+          "completed"
+        ]
+      }
+    },
+    {
+      "t": "2026-11-02T01:04:01.632Z",
+      "step": "moved A to qualifying"
+    },
+    {
+      "t": "2026-11-02T01:04:22.539Z",
+      "step": "moved A to proposal",
+      "data": {
+        "override": "other"
+      }
+    },
+    {
+      "t": "2026-11-02T01:04:41.726Z",
+      "step": "moved A to booked",
+      "data": {
+        "override": "manual_booking"
+      }
+    },
+    {
+      "t": "2026-11-02T01:05:10.596Z",
+      "step": "apply A #4 (then cancel at once)",
+      "data": {
+        "checkText": "Apply a task list Task list Visa and documents task list Check Apply Ready to apply to this trip.",
+        "applied": true,
+        "notice": "Applied. The tasks appear in a few seconds."
+      }
+    },
+    {
+      "t": "2026-11-02T01:05:11.037Z",
+      "step": "cancel A confirmed",
+      "data": {
+        "reason": "client_request"
+      }
+    },
+    {
+      "t": "2026-11-02T01:05:21.640Z",
+      "step": "A after cancel",
+      "data": {
+        "stage": "cancelled",
+        "runs": [
+          {
+            "status": "stopped",
+            "text": "Visa and documents task list STOPPED the trip was cancelled"
+          },
+          {
+            "status": "completed",
+            "text": "Visa and documents task list FINISHED Create a task: task already open Create a task: task already open Create a task: task already open"
+          },
+          {
+            "status": "completed",
+            "text": "Visa and documents task list FINISHED Create a task: task already open Create a task: task already open Create a task: task already open"
+          },
+          {
+            "status": "completed",
+            "text": "Visa and documents task list FINISHED Create a task: task created Create a task: task created Create a task: task created"
+          }
+        ],
+        "tasks": [
+          {
+            "kind": "reply_inquiry",
+            "status": "skipped",
+            "text": "Reply within 2 h Reopen"
+          },
+          {
+            "kind": "get_planning_info",
+            "status": "skipped",
+            "text": "Get the planning info Reopen"
+          },
+          {
+            "kind": "custom_6b05451c8f187bab5c4aba9d",
+            "status": "skipped",
+            "text": "Check the visa rules for every passport on the trip Reopen"
+          },
+          {
+            "kind": "custom_e3e01afb46f95fb41461d2fd",
+            "status": "skipped",
+            "text": "Collect passport copies Reopen"
+          },
+          {
+            "kind": "custom_c298cb18f3fc75d24ef843be",
+            "status": "skipped",
+            "text": "Confirm travel insurance for every traveller Reopen"
+          }
+        ]
+      }
+    },
+    {
+      "t": "2026-11-02T01:05:25.592Z",
+      "step": "birthday template",
+      "data": {
+        "present": 1,
+        "text": "Birthday greeting Add On the client's birthday, your greeting e-mail (only to clients who agreed to marketing) and a task. On the client's birthday · Pick your message template after adding it.",
+        "rule": "Visa and documents task list ON LIBRARY Applied by hand Create the task \"Check the visa rules for every passport on the trip\" Create the task \"Collect passport copies\" Create the task \"Confirm travel "
+      }
+    }
+  ],
+  "errs": [
+    "409 POST /bff/trips/<uuid>/stage",
+    "console Failed to load resource: the server responded with a status of 409 ()",
+    "409 POST /bff/trips/<uuid>/stage",
+    "console Failed to load resource: the server responded with a status of 409 ()"
+  ]
+}

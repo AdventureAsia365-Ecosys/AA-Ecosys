@@ -1,0 +1,122 @@
+{
+  "log": [
+    {
+      "t": "2026-11-02T01:07:55.290Z",
+      "s": "search sent",
+      "d": "temple"
+    },
+    {
+      "t": "2026-11-02T01:08:01.296Z",
+      "s": "search done",
+      "d": {
+        "resultsText": null
+      }
+    },
+    {
+      "t": "2026-11-02T01:08:29.460Z",
+      "s": "popup 1",
+      "d": "popup"
+    },
+    {
+      "t": "2026-11-02T01:08:32.477Z",
+      "s": "pinned 1"
+    },
+    {
+      "t": "2026-11-02T01:08:55.621Z",
+      "s": "popup 2",
+      "d": "popup"
+    },
+    {
+      "t": "2026-11-02T01:08:58.643Z",
+      "s": "pinned 2"
+    },
+    {
+      "t": "2026-11-02T01:09:00.196Z",
+      "s": "trip panel",
+      "d": {
+        "stopControls": 4,
+        "url": "https://tripplanner.lumiguides.it.com/plan"
+      }
+    },
+    {
+      "t": "2026-11-02T01:09:00.258Z",
+      "s": "narrate clicked"
+    },
+    {
+      "t": "2026-11-02T01:09:04.163Z",
+      "s": "narration result",
+      "d": {
+        "narr": "2 DAYS 1 COUNTRY — KM BY ROAD Start from an Adventure Asia route Built from 1 Adventure Asia tour Luang Prabang to Hoi An Cycling Tour, Laos and Vietnam · tour day 12 1 Ho Chi Minh Trail Ho Chi Minh Trail · ≈ 15 km Activities here + extra night Remove 2 Ho Chi Minh Trail Ho Chi Minh Trail · ≈ 30 km Activities here + extra night Remove + free day + extra day at the end Drag day cards to reorder. Distances are rough estimates and travel modes are suggestions — your advisor arranges the real transfers, boats and flights for an adventure route. You might also like Where Adventure Asia tours go next from your last stop. + A Shau Valley + Bolaven Plateau + Hue + Dakrong River + Thien Mu Pagoda + H",
+        "notice": 0
+      }
+    },
+    {
+      "t": "2026-11-02T01:09:04.419Z",
+      "s": "localStorage trip keys",
+      "d": {
+        "aa-tripplanner:ids": "{\"sessionId\":\"<uuid>\",\"tripId\":\"<uuid>\"}"
+      }
+    }
+  ],
+  "errs": [
+    "Failed to load resource: the server responded with a status of 403 ()",
+    "Failed to load resource: the server responded with a status of 403 ()"
+  ],
+  "api": [
+    "2026-11-02T01:07:51.967Z 200 GET /api/browse",
+    "2026-11-02T01:07:52.294Z 200 GET /api/auth/status",
+    "2026-11-02T01:07:52.297Z 200 GET /api/trip",
+    "2026-11-02T01:07:53.903Z 200 GET /api/browse",
+    "2026-11-02T01:07:53.904Z 200 GET /api/browse",
+    "2026-11-02T01:07:53.904Z 200 GET /api/browse",
+    "2026-11-02T01:07:53.905Z 200 GET /api/browse",
+    "2026-11-02T01:07:54.145Z 200 GET /api/browse",
+    "2026-11-02T01:07:54.145Z 200 GET /api/browse",
+    "2026-11-02T01:07:54.146Z 200 GET /api/browse",
+    "2026-11-02T01:07:54.170Z 200 GET /api/browse",
+    "2026-11-02T01:07:54.204Z 200 GET /api/browse",
+    "2026-11-02T01:07:54.206Z 200 GET /api/browse",
+    "2026-11-02T01:07:54.230Z 200 GET /api/browse",
+    "2026-11-02T01:07:54.231Z 200 GET /api/browse",
+    "2026-11-02T01:07:54.260Z 200 GET /api/browse",
+    "2026-11-02T01:07:54.301Z 200 GET /api/browse",
+    "2026-11-02T01:07:54.302Z 200 GET /api/browse",
+    "2026-11-02T01:07:54.377Z 200 GET /api/browse",
+    "2026-11-02T01:07:54.568Z 200 GET /api/browse",
+    "2026-11-02T01:07:56.179Z 403 GET /api/browse/search",
+    "2026-11-02T01:08:04.033Z 200 GET /api/browse",
+    "2026-11-02T01:08:04.033Z 200 GET /api/browse",
+    "2026-11-02T01:08:04.034Z 200 GET /api/browse",
+    "2026-11-02T01:08:04.034Z 200 GET /api/browse",
+    "2026-11-02T01:08:04.034Z 200 GET /api/browse",
+    "2026-11-02T01:08:04.298Z 200 GET /api/browse",
+    "2026-11-02T01:08:04.298Z 200 GET /api/browse",
+    "2026-11-02T01:08:04.298Z 200 GET /api/browse",
+    "2026-11-02T01:08:04.298Z 200 GET /api/browse",
+    "2026-11-02T01:08:04.897Z 200 GET /api/browse",
+    "2026-11-02T01:08:04.898Z 200 GET /api/browse",
+    "2026-11-02T01:08:04.898Z 200 GET /api/browse",
+    "2026-11-02T01:08:04.898Z 200 GET /api/browse",
+    "2026-11-02T01:08:05.447Z 200 GET /api/browse",
+    "2026-11-02T01:08:05.447Z 200 GET /api/browse",
+    "2026-11-02T01:08:05.447Z 200 GET /api/browse",
+    "2026-11-02T01:08:05.447Z 200 GET /api/browse",
+    "2026-11-02T01:08:05.811Z 200 GET /api/browse",
+    "2026-11-02T01:08:05.811Z 200 GET /api/browse",
+    "2026-11-02T01:08:05.811Z 200 GET /api/browse",
+    "2026-11-02T01:08:05.811Z 200 GET /api/browse",
+    "2026-11-02T01:08:05.940Z 200 GET /api/browse",
+    "2026-11-02T01:08:05.941Z 200 GET /api/browse",
+    "2026-11-02T01:08:05.941Z 200 GET /api/browse",
+    "2026-11-02T01:08:05.972Z 200 GET /api/browse",
+    "2026-11-02T01:08:12.368Z 200 GET /api/browse",
+    "2026-11-02T01:08:29.887Z 200 POST /api/trip",
+    "2026-11-02T01:08:30.287Z 200 GET /api/trip",
+    "2026-11-02T01:08:30.393Z 200 GET /api/trip",
+    "2026-11-02T01:08:38.494Z 200 GET /api/browse",
+    "2026-11-02T01:08:56.148Z 200 POST /api/trip",
+    "2026-11-02T01:08:56.510Z 200 GET /api/trip",
+    "2026-11-02T01:08:56.568Z 200 GET /api/trip",
+    "2026-11-02T01:09:00.795Z 403 POST /api/trip/narrate"
+  ]
+}

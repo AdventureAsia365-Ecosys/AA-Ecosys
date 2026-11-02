@@ -1,0 +1,278 @@
+{
+  "signin": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "shots": [],
+    "checks": {}
+  },
+  "/admin/overview": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "shots": [
+      "02-overview-1440-light.png",
+      "02-overview-390-light.png",
+      "02-overview-1440-dark.png",
+      "02-overview-390-dark.png"
+    ],
+    "checks": {
+      "landed": "/admin/overview",
+      "rows": 27,
+      "overflow1440_light": {
+        "docScrollW": 1440,
+        "docClientW": 1440,
+        "docOk": true,
+        "mainScrollW": 1204,
+        "mainClientW": 1204,
+        "mainOk": true
+      },
+      "overflow390_light": {
+        "docScrollW": 390,
+        "docClientW": 390,
+        "docOk": true,
+        "mainScrollW": 390,
+        "mainClientW": 390,
+        "mainOk": true
+      },
+      "overflow1440_dark": {
+        "docScrollW": 1440,
+        "docClientW": 1440,
+        "docOk": true,
+        "mainScrollW": 1204,
+        "mainClientW": 1204,
+        "mainOk": true
+      },
+      "overflow390_dark": {
+        "docScrollW": 390,
+        "docClientW": 390,
+        "docOk": true,
+        "mainScrollW": 390,
+        "mainClientW": 390,
+        "mainOk": true
+      }
+    }
+  },
+  "/admin/master-content": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "shots": [
+      "02-master-content-1440-light.png",
+      "02-master-content-390-light.png",
+      "02-master-content-1440-dark.png",
+      "02-master-content-390-dark.png",
+      "02-master-content-page2-refreshing-1440-light.png",
+      "02-master-content-page2-settled-1440-light.png"
+    ],
+    "checks": {
+      "landed": "/admin/master-content",
+      "rows": 20,
+      "columnsButton": {
+        "buttonRight": 1404,
+        "mainRight": 1440,
+        "gapPx": 36
+      },
+      "overflow1440_light": {
+        "docScrollW": 1440,
+        "docClientW": 1440,
+        "docOk": true,
+        "mainScrollW": 1204,
+        "mainClientW": 1204,
+        "mainOk": true
+      },
+      "overflow390_light": {
+        "docScrollW": 390,
+        "docClientW": 390,
+        "docOk": true,
+        "mainScrollW": 390,
+        "mainClientW": 390,
+        "mainOk": true
+      },
+      "overflow1440_dark": {
+        "docScrollW": 1440,
+        "docClientW": 1440,
+        "docOk": true,
+        "mainScrollW": 1204,
+        "mainClientW": 1204,
+        "mainOk": true
+      },
+      "overflow390_dark": {
+        "docScrollW": 390,
+        "docClientW": 390,
+        "docOk": true,
+        "mainScrollW": 390,
+        "mainClientW": 390,
+        "mainOk": true
+      },
+      "rangeP1": "1–20 of 89220 / page50 / page100 / page200 / page",
+      "firstNumP1": "",
+      "rangeDuringRefresh": "1–20 of 89220 / page50 / page100 / page200 / page",
+      "firstNumDuringRefresh": "",
+      "rangeP2": "21–40 of 89220 / page50 / page100 / page200 / page",
+      "firstNumP2": ""
+    }
+  },
+  "/admin/upload": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "shots": [
+      "02-upload-1440-light.png",
+      "02-upload-390-light.png"
+    ],
+    "checks": {
+      "landed": "/admin/upload",
+      "rows": 20,
+      "columnsButton": {
+        "buttonRight": 1383,
+        "mainRight": 1440,
+        "gapPx": 57
+      },
+      "overflow1440_light": {
+        "docScrollW": 1440,
+        "docClientW": 1440,
+        "docOk": true,
+        "mainScrollW": 1204,
+        "mainClientW": 1204,
+        "mainOk": true
+      },
+      "overflow390_light": {
+        "docScrollW": 390,
+        "docClientW": 390,
+        "docOk": true,
+        "mainScrollW": 675,
+        "mainClientW": 390,
+        "mainOk": false
+      }
+    }
+  },
+  "/admin/tenant-activity": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "shots": [
+      "02-tenant-activity-1440-light.png",
+      "02-tenant-activity-390-light.png",
+      "02-tenant-activity-1440-dark.png",
+      "02-tenant-activity-390-dark.png"
+    ],
+    "checks": {
+      "landed": "/admin/tenant-activity",
+      "rows": 50,
+      "headers": [
+        "TOPIC",
+        "TENANT / TOUR",
+        "CHANNEL",
+        "ANGLE CHOSEN",
+        "STATUS",
+        "GATES",
+        "CREATED"
+      ],
+      "tableFits": {
+        "tableW": 910,
+        "wrapW": 910
+      },
+      "pager": "1–50 of 349",
+      "totalTile": "TOTAL PIECES 349",
+      "overflow1440_light": {
+        "docScrollW": 1440,
+        "docClientW": 1440,
+        "docOk": true,
+        "mainScrollW": 1204,
+        "mainClientW": 1204,
+        "mainOk": true
+      },
+      "overflow390_light": {
+        "docScrollW": 390,
+        "docClientW": 390,
+        "docOk": true,
+        "mainScrollW": 390,
+        "mainClientW": 390,
+        "mainOk": true
+      },
+      "overflow1440_dark": {
+        "docScrollW": 1440,
+        "docClientW": 1440,
+        "docOk": true,
+        "mainScrollW": 1204,
+        "mainClientW": 1204,
+        "mainOk": true
+      },
+      "overflow390_dark": {
+        "docScrollW": 390,
+        "docClientW": 390,
+        "docOk": true,
+        "mainScrollW": 390,
+        "mainClientW": 390,
+        "mainOk": true
+      }
+    }
+  },
+  "review-editor": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [
+      "dialog prompt"
+    ],
+    "shots": [
+      "01-cis-review-editor-1440-light.png",
+      "01-cis-review-editor-390-light.png",
+      "01-cis-review-editor-1440-dark.png",
+      "01-cis-review-editor-390-dark.png"
+    ],
+    "checks": {
+      "rows": 25,
+      "notice": {
+        "count": 1,
+        "visible": true,
+        "variant": "staff",
+        "text": "AI can make mistakes. Check prices, dates, visa and safety information before you send or publish this.",
+        "lang": "en"
+      },
+      "textMatches": true,
+      "noticeVisible390_light": true,
+      "noticeVisible390_dark": true
+    }
+  },
+  "tour-detail-rewrite": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "shots": [
+      "01-cis-tour-rewrite-tab-1440-light.png",
+      "01-cis-tour-rewrite-tab-390-light.png",
+      "01-cis-tour-rewrite-tab-1440-dark.png",
+      "01-cis-tour-rewrite-tab-390-dark.png"
+    ],
+    "checks": {
+      "viewButtons": 20,
+      "tourIndex": 0,
+      "notice": {
+        "count": 1,
+        "visible": true,
+        "variant": "staff",
+        "text": "AI can make mistakes. Check prices, dates, visa and safety information before you send or publish this.",
+        "lang": "en"
+      },
+      "textMatches": true
+    }
+  },
+  "kit-gallery": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [
+      "ERROR Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-kit-gallery=\"ai-notice\"]')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for locator('"
+    ],
+    "shots": [],
+    "checks": {}
+  }
+}

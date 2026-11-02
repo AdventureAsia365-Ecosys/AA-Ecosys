@@ -1,0 +1,354 @@
+{
+  "crm-signin": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "landed": "/"
+    },
+    "shots": []
+  },
+  "crm-tasks": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "boardVisible": true,
+      "linesBefore": 79,
+      "sourcesBefore": [
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system",
+        "system"
+      ],
+      "ov1440_light": {
+        "doc": "1440/1440",
+        "main": "1200/1200",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov1440_dark": {
+        "doc": "1440/1440",
+        "main": "1200/1200",
+        "ok": true,
+        "theme": "dark"
+      },
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      }
+    },
+    "shots": [
+      "03-crm-tasks-1440-light.png",
+      "03-crm-tasks-390-light.png",
+      "03-crm-tasks-1440-dark.png",
+      "03-crm-tasks-390-dark.png"
+    ]
+  },
+  "crm-task-create": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "listedAfterCreate": 1,
+      "lineText": "S264 verify task OWN TASK Done Not linked to a trip No date",
+      "openAfterDone": 0,
+      "inDoneList": 1
+    },
+    "shots": []
+  },
+  "crm-automations": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "rules": [],
+      "templates": 10,
+      "text": "YOUR AUTOMATIONS New automation Your automations No automation yet. Add one from the library below or build your own. LIBRARY Ready-made automations from Adventure Asia. Adding one makes it your own: you can rename and change it. Confirm the arrival flight (T-48 h) Add Two days before departure, an urgent task to check the arrival flights, with a flight status link. 2 days before departure Remind travellers of their booking details (T-21) Add 21 days before departure, while booking details are missing, an e-mail to the lead traveller from your mailbox. You also get the T-21 task. 21 days before departure · Pick your message template after adding it. Pre-departure checklist Add When a trip is",
+      "ov1440_light": {
+        "doc": "1440/1440",
+        "main": "1200/1200",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov1440_dark": {
+        "doc": "1440/1440",
+        "main": "1200/1200",
+        "ok": true,
+        "theme": "dark"
+      },
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      }
+    },
+    "shots": [
+      "03-crm-automations-1440-light.png",
+      "03-crm-automations-390-light.png",
+      "03-crm-automations-1440-dark.png",
+      "03-crm-automations-390-dark.png"
+    ]
+  },
+  "crm-trip-runs": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "tripsTried": 6,
+      "runs": 0,
+      "applyControl": 1,
+      "runTexts": []
+    },
+    "shots": []
+  },
+  "crm-settings-ai": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "notice": {
+        "text": "AI can make mistakes. Check prices, dates, visa and safety information before you send or publish this.",
+        "matches": true
+      },
+      "mistakesRuleFirst": "HOW AI DRAFTS WORK",
+      "termsLinks": [
+        "/terms#ai",
+        "/terms"
+      ],
+      "ov1440_light": {
+        "doc": "1440/1440",
+        "main": "1200/1200",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov1440_dark": {
+        "doc": "1440/1440",
+        "main": "1200/1200",
+        "ok": true,
+        "theme": "dark"
+      },
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      }
+    },
+    "shots": [
+      "01-crm-settings-ai-1440-light.png",
+      "01-crm-settings-ai-390-light.png",
+      "01-crm-settings-ai-1440-dark.png",
+      "01-crm-settings-ai-390-dark.png"
+    ]
+  },
+  "crm-terms-link": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "footerLink": "/terms",
+      "landedH1": "Partner terms",
+      "crmTerms": 0,
+      "studioAiHeading": "3. AI-generated content and acceptable use"
+    },
+    "shots": []
+  },
+  "studio-signin": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "landed": "/portal/dashboard"
+    },
+    "shots": []
+  },
+  "/portal/content": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "landed": "/portal/content",
+      "notices": 1,
+      "text": "This content was generated with AI. Review it before publishing; you are responsible for what you publish.",
+      "matches": true,
+      "ov1440_light": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov1440_dark": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "dark"
+      },
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      }
+    },
+    "shots": [
+      "01-studio-content-1440-light.png",
+      "01-studio-content-390-light.png",
+      "01-studio-content-1440-dark.png",
+      "01-studio-content-390-dark.png"
+    ]
+  },
+  "/portal/tours": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "landed": "/portal/tours",
+      "notices": 0,
+      "text": null,
+      "matches": false,
+      "ov1440_light": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov1440_dark": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "dark"
+      },
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      }
+    },
+    "shots": [
+      "01-studio-tours-1440-light.png",
+      "01-studio-tours-390-light.png",
+      "01-studio-tours-1440-dark.png",
+      "01-studio-tours-390-dark.png"
+    ]
+  }
+}
