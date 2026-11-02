@@ -111,7 +111,7 @@ Team Vercel chỉ còn 3 project.
 - In Progress còn **3**: AA-896 (FinOps, báo cáo tháng 10 SƠ BỘ, chính thức ≥ 03/11), AA-820 (luật sư + báo tenant,
   chị Thư), AA-900 (nhãn 40 mẫu + chạy thử trả phí).
 - Chuyển Backlog trong phiên: AA-873, AA-1004, AA-922 (track đóng băng TL-11). Issue mới: AA-1019 (đã Done),
-  AA-1020 (docs kiến trúc, slot S263), AA-1021 (series video, S264+).
+  AA-1020 (docs kiến trúc, slot S263), AA-1021 (content series, details private).
 
 ## 9. Cố ý để BẬT cho phiên sau
 

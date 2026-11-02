@@ -33,13 +33,10 @@ thực tế nằm trong 20:30–21:36 +07 (đã ghi chú trong checklist); mốc
   `e2e-crm-staff` (crm-ops + crm-support).
 - **09:00 — nháp Jira (7 đích) KHÔNG đăng ở S262, gom sang S263.**
 - **10:22 — yêu cầu mới:** kiểm tài liệu kiến trúc AWS (hệ sinh thái + từng app) và mô hình cổng AI đã cập nhật chưa;
-  dựng video preview kiến trúc ẩn danh (EN, nhiều clip ngắn YT/X/LinkedIn, giọng nam/nữ xen kẽ, kiểm bảo mật) → trình
-  plan trước.
-- **10:56 — duyệt plan video kiến trúc** (`docs/audits/2026-11-01-S262-arch-video-plan/`): đăng ở tài khoản cá nhân, kiểu
-  engineering notes + blog kỹ thuật FB; mặc định giọng nam `am_michael`, nêu tên dịch vụ AWS, không nêu hãng model/vendor
-  ngách, TP theo luật dev-phase. **Duyệt tạo issue AA-1020** ([Docs] refresh kiến trúc, High, slot S263, lane docs song
-  song CRM W6) và **AA-1021** ([Content] series video + bài viết; pipeline + gate S264, pilot Ep1 S264–S265, các tập còn
-  lại ~2/phiên S265–S267).
+  thêm AA-1021 (content series, details private) → trình plan trước.
+- **10:56 — duyệt plan kiến trúc** (`docs/audits/2026-11-01-S262-arch-video-plan/`): TP theo luật dev-phase. **Duyệt tạo
+  issue AA-1020** ([Docs] refresh kiến trúc, High, slot S263, lane docs song song CRM W6) và **AA-1021** (content
+  series, details private).
 - **11:06 — câu hỏi:** việc trong bản đánh giá S261 đã thành issue chưa; `plan.json` ↔ Linear tự động hay tay → trả lời:
   **tay** (tracker README: mirror; N24 chưa làm); workflow đối chiếu N1–N25 / G1–G17 / trigger + thiết kế sync đang chạy
   lúc ghi log.
@@ -89,7 +86,7 @@ Việc khác trong phiên (không đóng issue):
   chi phí, mở lại trước prod/tenant trả tiền; chi phí tháng đầu đọc ≥ 01/12), **AA-1004** (còn mời acc3 — TL giữ độc lập,
   mời acc2 sau 01/12, test SCP, đường AI, ADR 0018 phần TL), **AA-922** (track đóng băng TL-11).
 - **Tạo mới:** AA-1019 (Done trong phiên), **AA-1020** [Docs] refresh kiến trúc (Backlog, High, slot S263), **AA-1021**
-  [Content] series video + bài viết (Backlog, S264+).
+  (content series, details private; Backlog, S264+).
 - In Progress cuối phiên: **3** — AA-896, AA-820, AA-900 (trần TL-3 ≤ 8).
 
 ## PR theo repo (merge trong phiên, từ 31/10 ~11:40Z)
