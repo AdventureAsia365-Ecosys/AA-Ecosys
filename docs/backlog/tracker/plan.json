@@ -1403,15 +1403,15 @@
   },
   {
    "id": "AA-1021",
-   "title": "[Content] Anonymized architecture video series + engineering-notes posts (\"How a travel company runs AI in production\")",
+   "title": "AA-1021 (content series, details private)",
    "status": "In Progress",
    "priority": "Medium",
    "project": "data",
    "milestone": "later",
    "session": "S264",
    "size": "L",
-   "next": "L7 · S262 tạo (plan duyệt 01/11): S264 pipeline video + cổng nội dung công khai 5 lớp (sau AA-1020), pilot Ep1 đủ 4 định dạng S264–S265 (tech lead duyệt giọng / hình / lời), các tập còn lại ~2/phiên S265–S267; 0 USD, TTS local af_heart + am_michael, kịch bản + video không vào repo public",
-   "needs": "Duyệt pilot Ep1 (tech lead)"
+   "next": "L7 · S262 tạo; S264–S267, chi tiết riêng tư (ngoài repo public)",
+   "needs": "Tech lead duyệt"
   },
   {
    "id": "AA-1000",
