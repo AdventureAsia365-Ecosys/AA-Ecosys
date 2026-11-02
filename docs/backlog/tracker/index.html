@@ -151,6 +151,18 @@ footer code { font-family: var(--mono); font-size: 12.5px }
 .md li.done .mk { color: var(--ok) } .md li.run .mk { color: var(--info) } .md li.block .mk, .md li.warn .mk { color: var(--warn) }
 .md code { font: 12.5px var(--mono); background: var(--sunk); padding: 1px 4px; border-radius: 4px }
 .ses-sum { display: flex; flex-wrap: wrap; gap: 6px }
+.sdash { display: grid; gap: 18px }
+.sgroup { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden }
+.sgroup h3 { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 14px; background: var(--sunk); font-size: 15px }
+.sgroup h3 small { font: 500 12px var(--mono); color: var(--muted) }
+.srow { display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; align-items: center; padding: 8px 14px; border-top: 1px solid var(--line); font-size: 14px }
+.srow .ref { font: 12px var(--mono); color: var(--muted); text-align: right }
+.srow .st { font-family: var(--mono); text-align: center }
+.srow.done .st { color: var(--ok) } .srow.run .st { color: var(--info) } .srow.wait .st { color: var(--muted) }
+.srow.warn .st, .srow.block .st { color: var(--warn) }
+@media (max-width: 560px) { .srow { grid-template-columns: 22px 1fr } .srow .ref { grid-column: 2; text-align: left } }
+details.sdetail summary { cursor: pointer; font-weight: 600; color: var(--muted) }
+
 @media (prefers-reduced-motion: no-preference) { .bar i { transition: width .4s ease } }
 </style>
 
@@ -169,8 +181,11 @@ footer code { font-family: var(--mono); font-size: 12.5px }
   <section id="view-ses" role="tabpanel" aria-labelledby="tab-ses" hidden>
     <div class="sec-head"><h2>Checklist phiên</h2>
       <div class="ses-bar"><label class="muted" for="ses-pick">Phiên</label><select id="ses-pick"></select><span class="muted mono" id="ses-meta"></span></div></div>
+    <div class="stats" id="ses-kpi"></div>
     <div class="ses-sum" id="ses-sum"></div>
-    <div class="md" id="ses-body"><span class="muted">Đang tải…</span></div>
+    <div class="sdash" id="ses-dash"></div>
+    <details class="sdetail"><summary>Chi tiết (checklist đầy đủ)</summary>
+      <div class="md" id="ses-body" style="margin-top:10px"><span class="muted">Đang tải…</span></div></details>
   </section>
 
   <div id="view-plan" role="tabpanel" aria-labelledby="tab-plan" style="display:grid;gap:40px">
@@ -383,11 +398,28 @@ footer code { font-family: var(--mono); font-size: 12.5px }
     var s = sessions.filter(function (x) { return x.session === name })[0];
     if (!s) return;
     $("ses-meta").textContent = (s.date || "") + (s.status ? " · " + s.status : "") + (s.updated ? " · cập nhật " + s.updated : "");
+    // S264: the stats view (sessions/<S>.json: kpis + groups of short items); the Markdown stays under "Chi tiết".
+    $("ses-kpi").innerHTML = ""; $("ses-dash").innerHTML = "";
+    if (s.data) fetch(s.data, { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json() })
+      .then(function (d) {
+        var MK = { done: "✓", run: "⏳", wait: "○", warn: "⚠", block: "⛔" }, tot = { done: 0, run: 0, wait: 0, warn: 0, block: 0 };
+        (d.groups || []).forEach(function (g) { g.items.forEach(function (it) { tot[it.s] = (tot[it.s] || 0) + 1 }) });
+        $("ses-kpi").innerHTML = (d.kpis || []).map(function (k) { return '<div class="stat" title="' + esc(k.hint || "") + '"><b>' + esc(k.value) + "</b><span>" + esc(k.label) + (k.hint ? "<br><small>" + esc(k.hint) + "</small>" : "") + "</span></div>" }).join("");
+        $("ses-sum").innerHTML = '<span class="pill" style="background:var(--ok-soft);color:var(--ok)">✓ ' + tot.done + " xong</span>" +
+          '<span class="pill prog">⏳ ' + tot.run + " đang chạy</span>" + '<span class="pill">○ ' + tot.wait + " chờ</span>" +
+          (tot.warn ? '<span class="pill blocked">⚠ ' + tot.warn + " cần xem</span>" : "") + (tot.block ? '<span class="pill blocked">⛔ ' + tot.block + " bị chặn</span>" : "");
+        $("ses-dash").innerHTML = (d.groups || []).map(function (g) {
+          var dn = g.items.filter(function (it) { return it.s === "done" }).length;
+          return '<div class="sgroup"><h3>' + esc(g.name) + "<small>" + dn + "/" + g.items.length + " xong</small></h3>" + g.items.map(function (it) {
+            return '<div class="srow ' + esc(it.s) + '"><span class="st">' + (MK[it.s] || "•") + "</span><span>" + esc(it.t) + '</span><span class="ref">' + esc(it.ref || "") + "</span></div>";
+          }).join("") + "</div>";
+        }).join("");
+      }).catch(function () {});
     fetch(s.file, { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.text() })
       .then(function (t) {
         var r = md(t);
         $("ses-body").innerHTML = r.html;
-        $("ses-sum").innerHTML = '<span class="pill" style="background:var(--ok-soft);color:var(--ok)">✓ ' + r.cnt.done + " xong</span>" +
+        if (!s.data) $("ses-sum").innerHTML = '<span class="pill" style="background:var(--ok-soft);color:var(--ok)">✓ ' + r.cnt.done + " xong</span>" +
           '<span class="pill prog">⏳ ' + r.cnt.run + " đang chạy</span>" + '<span class="pill">○ ' + r.cnt.todo + " chưa làm</span>" +
           (r.cnt.block ? '<span class="pill blocked">⛔ ' + r.cnt.block + " bị chặn</span>" : "");
       })
