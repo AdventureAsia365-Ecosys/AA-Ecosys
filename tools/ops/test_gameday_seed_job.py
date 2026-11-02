@@ -20,8 +20,9 @@ import gameday_seed_job as g  # noqa: E402
 
 
 class FakeConn:
-    def __init__(self, open_rows=()):
+    def __init__(self, open_rows=(), statuses=()):
         self.open_rows = list(open_rows)
+        self.statuses = list(statuses)          # what successive ROW_STATUS_SQL reads return; then 'queued'
         self.calls = []
 
     async def fetch(self, sql, *args):
@@ -39,11 +40,20 @@ class FakeConn:
         assert sql == g.SEED_SQL
         return {"id": "00000000-0000-4000-8000-000000000001", "status": "queued", "run_after": "now"}
 
+    async def fetchval(self, sql, *args):
+        self.calls.append((sql, args))
+        assert sql == g.ROW_STATUS_SQL
+        return self.statuses.pop(0) if self.statuses else "queued"
+
+
+async def no_sleep(_seconds):
+    return None
+
 
 def run(conn, action, env=None):
     out = io.StringIO()
     with contextlib.redirect_stdout(out):
-        code = asyncio.run(g.run(conn, action, env or {}))
+        code = asyncio.run(g.run(conn, action, env or {}, sleep=no_sleep))
     return code, out.getvalue()
 
 
@@ -58,8 +68,40 @@ class SeedLogicTest(unittest.TestCase):
         code, out = run(conn, "seed", {"SLEEP_SECONDS": "600"})
         self.assertEqual(code, 0)
         self.assertIn("SEEDED id=00000000-0000-4000-8000-000000000001 kind=noop_sleep status=queued seconds=600", out)
-        sql, args = conn.calls[-1]
-        self.assertEqual(args, ("noop_sleep", json.dumps({"seconds": 600}), "aa1023-gameday"))
+        inserts = [args for sql, args in conn.calls if sql == g.SEED_SQL]
+        self.assertEqual(inserts, [("noop_sleep", json.dumps({"seconds": 600}), "aa1023-gameday")])
+
+    def test_seed_warns_loudly_when_no_worker_claims_the_row(self):
+        # Normal Dev config: JOB_TEST_KINDS is off, nothing claims noop_sleep, the row never ends by itself.
+        conn = FakeConn()
+        code, out = run(conn, "seed", {"CLAIM_WAIT_SECONDS": "3"})
+        self.assertEqual(code, 0)
+        self.assertIn("UNCLAIMED id=00000000-0000-4000-8000-000000000001 after 3 s", out)
+        self.assertIn("NEVER ends by itself", out)
+        self.assertIn("OPEN_COUNT 0", out)
+        self.assertNotIn("CLAIMED id=", out.replace("UNCLAIMED", ""))
+        self.assertEqual(sum(1 for sql, _ in conn.calls if sql == g.ROW_STATUS_SQL), 3)
+
+    def test_seed_reports_a_claimed_row_and_still_asks_for_clear(self):
+        conn = FakeConn(statuses=["queued", "running"])
+        code, out = run(conn, "seed", {"SLEEP_SECONDS": "120"})
+        self.assertEqual(code, 0)
+        self.assertIn("CLAIMED id=00000000-0000-4000-8000-000000000001", out)
+        self.assertNotIn("UNCLAIMED", out)
+        self.assertIn("ends by itself after 120 s", out)
+        self.assertIn("ACTION=clear", out)
+        self.assertEqual(sum(1 for sql, _ in conn.calls if sql == g.ROW_STATUS_SQL), 2)   # stops at the claim
+
+    def test_claim_wait_bounds_checked_before_the_insert(self):
+        self.assertEqual(g.claim_wait_from_env({}), 15)
+        self.assertEqual(g.claim_wait_from_env({"CLAIM_WAIT_SECONDS": "0"}), 0)
+        for bad in ("121", "x", "-1"):
+            with self.subTest(bad), self.assertRaises(ValueError):
+                g.claim_wait_from_env({"CLAIM_WAIT_SECONDS": bad})
+        conn = FakeConn()
+        with self.assertRaises(ValueError):
+            run(conn, "seed", {"CLAIM_WAIT_SECONDS": "500"})
+        self.assertFalse([1 for sql, _ in conn.calls if sql == g.SEED_SQL])
 
     def test_seed_refuses_when_a_tagged_row_is_open(self):
         conn = FakeConn([row("running")])
@@ -117,7 +159,8 @@ class SeedSqlOnPostgresTest(unittest.TestCase):
                 await conn.execute(JOB_DDL)
                 await conn.execute("INSERT INTO shared.job (kind, created_by) VALUES ('noop_sleep', 'someone-else')")
                 with contextlib.redirect_stdout(io.StringIO()) as out:
-                    self.assertEqual(await g.run(conn, "seed", {"SLEEP_SECONDS": "120"}), 0)
+                    self.assertEqual(await g.run(conn, "seed", {"SLEEP_SECONDS": "120", "CLAIM_WAIT_SECONDS": "2"},
+                                                 sleep=no_sleep), 0)
                     self.assertEqual(await g.run(conn, "seed", {}), 1)
                     await conn.execute("UPDATE shared.job SET status = 'running', started_at = now() "
                                        "WHERE created_by = 'aa1023-gameday'")
@@ -125,6 +168,7 @@ class SeedSqlOnPostgresTest(unittest.TestCase):
                     self.assertEqual(await g.run(conn, "clear", {}), 0)
                 text = out.getvalue()
                 self.assertIn("status=queued seconds=120", text)
+                self.assertIn("UNCLAIMED", text)                     # ROW_STATUS_SQL read the real row
                 self.assertIn("CLEARED queued_cancelled=0 running_cancel_requested=1", text)
                 rows = await conn.fetch("SELECT created_by, status, cancel_requested, payload FROM shared.job "
                                         "ORDER BY created_by")

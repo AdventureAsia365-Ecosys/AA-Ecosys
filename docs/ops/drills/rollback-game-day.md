@@ -33,7 +33,9 @@ S241 and are not repeated.
 
 ## Before you start
 
-- Who: the orchestrating agent or the tech lead (every write below is refused to agent lanes).
+- Who: the orchestrating agent or the tech lead. Agent lanes are refused every write below by the subagent hooks
+  (`.claude/hooks/subagent-guardrails.sh` refuses `ecs_rollback.sh`, `ecsx.sh`, `gh workflow run`,
+  `aws lambda update-*` and the Vercel CLI rollback/promote; `subagent-mcp-guardrails.sh` the Vercel MCP writes).
 - No rerun wave open, no Deploy Dev or Migration Apply run in progress on any repo, no `data_erasure` job running.
   D5 makes `shared.job` busy for a few minutes: a Migration Apply contract file due in that window is deferred to the
   next hourly run (no harm), so do D5 last.
@@ -132,24 +134,29 @@ which runs only the gate: no plan, no apply.
    ```
 
    A red baseline means real jobs are busy: read the `MIGRATE busy:` lines, wait, and retry before seeding.
-2. Seed one busy row (CIS api container, `cis_app`; kind `noop_sleep`, tag `aa1023-gameday`, ends by itself after
-   15 minutes):
+2. Seed one busy row (CIS api container, `cis_app`; kind `noop_sleep`, tag `aa1023-gameday`). The row ends by itself
+   only when the CIS worker runs `noop_sleep`, i.e. `JOB_TEST_KINDS=1` is set on it; that is off on Dev by default,
+   so expect the row to stay `queued` and to block DB Migrate apply, Migration Apply and the terraform-apply gate
+   until step 5 clears it. Step 5 is mandatory, never optional:
 
    ```bash
    tools/ecs/ecsx.sh tools/ops/gameday_seed_job.py ACTION=seed
    ```
 
-   Expected: `SEEDED id=<uuid> kind=noop_sleep status=queued seconds=900`.
+   Expected: `SEEDED id=<uuid> kind=noop_sleep status=queued seconds=900`, then after about 15 s either
+   `UNCLAIMED ...` (normal Dev config: the row NEVER ends by itself) or `CLAIMED ...` (the worker runs the test kind:
+   it ends after 900 s). Paste the line into `d5-idle-gate.txt` either way.
 3. Dispatch the same `gh workflow run` line. Expected: red at "Job-idle gate", summary `job-idle gate: refused`, a line
    `MIGRATE busy: shared.job running=1 ...` (or `queued=1` when the worker does not claim the test kind).
 4. Override wiring (optional): dispatch with `-f override_busy_jobs="AA-1023 game day: override wiring check"`.
    Expected: green with `::warning::job-idle gate OVERRIDDEN`.
-5. Clear: `tools/ecs/ecsx.sh tools/ops/gameday_seed_job.py ACTION=clear`, then
-   `tools/ecs/ecsx.sh tools/ops/gameday_seed_job.py ACTION=status` until `OPEN_COUNT 0` (a running row ends at its next
-   lease heartbeat).
+5. Clear (mandatory, also when step 3 or 4 failed): `tools/ecs/ecsx.sh tools/ops/gameday_seed_job.py ACTION=clear`,
+   then `tools/ecs/ecsx.sh tools/ops/gameday_seed_job.py ACTION=status` until `OPEN_COUNT 0` (a queued row is cancelled
+   at once; a running row ends at its next progress write, within 5 s). Paste the `OPEN_COUNT 0` line into
+   `d5-idle-gate.txt`: the game day is not over without it.
 6. Dispatch again. Expected: green, `job-idle gate: pass`.
 
-Pass: red with the seeded row, green before and after it.
+Pass: red with the seeded row, green before and after it, and `ACTION=status` printing `OPEN_COUNT 0` at the end.
 
 ## Results table (copy into the evidence README)
 
@@ -159,7 +166,7 @@ Pass: red with the seeded row, green before and after it.
 | D2 CRM API | | | | | |
 | D3 Vercel `aa-booking-admin` | | | | | |
 | D4 Lambda browse | | | | | |
-| D5 job-idle gate | idle -> seeded -> cleared | - | - | green / red / green | |
+| D5 job-idle gate | idle -> seeded -> cleared (`OPEN_COUNT 0`) | - | - | green / red / green | |
 
 ## After the run
 
@@ -174,4 +181,8 @@ Pass: red with the seeded row, green before and after it.
 
 - Any drill that does not come back healthy: run its forward step at once (it is the way back), then stop the game
   day and open an incident if the forward step fails ([incident response](../incident-response.md)).
-- D5: a seeded row left behind ends by itself after 15 minutes; `ACTION=clear` ends it earlier.
+- D5: whatever happened, run `ACTION=clear` and then `ACTION=status` until it prints `OPEN_COUNT 0` before you stop.
+  A seeded row left behind does NOT end by itself on the normal Dev config (`JOB_TEST_KINDS` off: nothing claims
+  `noop_sleep`); it stays queued, due now, and blocks DB Migrate apply, Migration Apply contract files and the
+  terraform-apply job-idle gate until it is cleared. It ends by itself after `SLEEP_SECONDS` only when the worker runs
+  with `JOB_TEST_KINDS=1`. The CIS deploy gate is not affected (`noop_sleep` is not `deploy_blocking`).
