@@ -1,9 +1,9 @@
 # Architecture videos and posts (tools/uat/arch)
 
-Builds short architecture videos for public channels: one YouTube master plus three cut-downs per episode, a blog post
-with the same story, diagrams drawn from a per-episode sketch, and a five-layer public-content gate that fails the build
+Builds short architecture videos: a master with chapters plus up to three cut-downs per episode, a blog post with the
+same story, diagrams drawn from a per-episode sketch, and a five-layer public-content gate that fails the build
 on any hit. Everything runs locally at $0 (Kokoro TTS, Chromium,
-ffmpeg, tesseract). Plan and rules: `docs/audits/2026-11-01-S262-arch-video-plan/README.md`; issue AA-1021.
+ffmpeg, tesseract). Issue: AA-1021 (content series, details private).
 
 ## What never goes into this (public) repo
 
@@ -53,7 +53,7 @@ chapter title, a visual (`title`, `points`, `diagram`, `end`) and sentences; eac
 sketch (groups on a grid, nodes, edges; format in `sketch.py`, invented example `sketch.example.json`); a `diagram`
 visual names a sketch and the labels to `reveal`, `focus` (camera) and `highlight`. Optional `identity`: extra phrases
 a viewer would search for (the series name and tag are always checked). Cuts set the aspect (`16:9`, `1:1`, `4:5`, `9:16`) and
-length rules (`min_s`, `max_s`); the master carries YouTube chapters (3 or more, 10 s or longer each). Write narration
+length rules (`min_s`, `max_s`); the master carries chapters (3 or more, 10 s or longer each). Write narration
 in plain industry words; avoid the coined terms of the codebase and say "designed to" for anything not live.
 
 ## The gate (gate.py)

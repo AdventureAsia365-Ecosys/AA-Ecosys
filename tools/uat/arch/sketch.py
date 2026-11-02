@@ -9,7 +9,7 @@ episode file, simplified to what the episode says, and laid out on its own grid;
 and goes through the whole layer 1 check (deny-list, identifier shapes, n-gram and internal-token check, label set).
 
 Format (the value of one "diagrams" entry of the episode file; an invented example: sketch.example.json):
-  {"groups": [{"id": "base", "label": "Shared base", "sub": "one region", "cells": [c0, r0, c1, r1],
+  {"groups": [{"id": "base", "label": "Common layer", "sub": "one region", "cells": [c0, r0, c1, r1],
                "style": "solid" | "dashed"}],                     a frame around grid cells c0..c1 x r0..r1 (inclusive)
    "nodes":  [{"id": "cat", "label": "Catalogue app", "sub": "api + workers" | ["line", "line"],
                "at": [col, row], "kind": "service" | "store" | "people" | "external"}],

@@ -16,7 +16,7 @@ import sketch  # noqa: E402
 
 SKETCH = {
     "groups": [{"id": "cloud", "label": "Cloud account", "sub": "one region", "cells": [0, 1, 1, 2]},
-               {"id": "base", "label": "Shared base", "cells": [0, 2, 1, 2], "style": "dashed"}],
+               {"id": "base", "label": "Common layer", "cells": [0, 2, 1, 2], "style": "dashed"}],
     "nodes": [{"id": "guests", "label": "Guests", "at": [0, 0], "kind": "people"},
               {"id": "cat", "label": "Catalogue", "sub": ["api", "workers"], "at": [0, 1]},
               {"id": "box", "label": "Containers", "at": [1, 1]},
@@ -27,14 +27,14 @@ SKETCH = {
 }
 
 EPISODE = {
-    "slug": "ep1-example", "title": "Four apps, one picture", "series": "River notes", "episode": 1,
+    "slug": "ep1-example", "title": "Three shops, one ledger", "series": "River notes", "episode": 1,
     "diagrams": {"eco": SKETCH},
     "description": "How an invented company splits its platform.", "hashtags": ["#aws", "#architecture"],
     "cuts": {"master": {"aspect": "16:9", "chapters": True, "max_s": 200},
              "short": {"aspect": "9:16", "max_s": 60}},
     "scenes": [
         {"id": "s1", "chapter": "The problem", "cuts": ["master", "short"],
-         "visual": {"type": "title", "kicker": "Episode 1", "title": "Four apps, one picture"},
+         "visual": {"type": "title", "kicker": "Episode 1", "title": "Three shops, one ledger"},
          "sentences": ["An invented company sells river cruises.", "It runs four small apps."]},
         {"id": "s2", "chapter": "The catalogue",
          "visual": {"type": "diagram", "diagram": "eco", "title": "Catalogue", "reveal": ["Catalogue"]},

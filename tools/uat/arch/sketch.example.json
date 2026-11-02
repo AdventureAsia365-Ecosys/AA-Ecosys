@@ -2,7 +2,7 @@
   "_comment": "TEMPLATE with invented names. A sketch is authored per episode and lives in the episode file, outside git; never copy a committed diagram's layout into it.",
   "groups": [
     {"id": "cloud", "label": "Cloud account", "sub": "one region", "cells": [0, 1, 2, 2]},
-    {"id": "base", "label": "Shared base", "cells": [0, 2, 2, 2], "style": "dashed"}
+    {"id": "base", "label": "Common layer", "cells": [0, 2, 2, 2], "style": "dashed"}
   ],
   "nodes": [
     {"id": "guests", "label": "Guests", "at": [1, 0], "kind": "people"},
