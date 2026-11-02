@@ -12,6 +12,7 @@ name: Docs lint
 #   - the report registry docs/reports/*.yaml (AA-1003): shape, KPI references, templates, source tables
 #   - the tracker docs/backlog/tracker/plan.json (S263): plan_sync.py tests, shape, no account ID or ARN
 #   - unit tests of the orchestrator ship tools tools/github/ship_*.py (AA-1032; offline, scripted gh/aws, temp git)
+#   - unit tests of the architecture video gate tools/uat/arch (AA-1021; stdlib, invented names, temp git, no media)
 # Secrets: gitleaks runs on every PR (any path) in secret-scan.yml and nightly over the full history in
 # secret-scan-history.yml (AA-981),
 # so it is not repeated here (secret names are fine in docs, values never are).
@@ -32,6 +33,7 @@ on:
       - "tools/docs/**"
       - "tools/linear/**"
       - "tools/github/**"
+      - "tools/uat/arch/**"
       - ".markdownlint-cli2.jsonc"
       - ".github/workflows/docs-lint.yml"
   schedule:
@@ -82,6 +84,12 @@ jobs:
       - name: Ship tools tests
         if: ${{ !cancelled() }}
         run: python -m unittest discover -s tools/github -p 'test_*.py'
+
+      # AA-1021: the public-content gate of the architecture videos (planted brand word, account-ID-shaped number and
+      # hostname must each fail every layer that sees text). Stdlib only; no TTS, browser, ffmpeg or OCR in CI.
+      - name: Architecture video gate tests
+        if: ${{ !cancelled() }}
+        run: python -m unittest discover -s tools/uat/arch/tests -p 'test_*.py'
 
       - name: Front-matter schema
         if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
