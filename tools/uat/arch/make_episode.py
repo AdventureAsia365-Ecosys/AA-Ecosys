@@ -138,7 +138,11 @@ def main(argv: list[str]) -> int:
     # Layer 1: every authored string, the blog post and every drawn diagram label, before anything is rendered.
     blog = data.get("blog") or {}
     blog_src = (ep_path.parent / blog["file"]) if blog.get("file") else None
-    hits, texts, svgs, n_labels = layer1(data, meta, sents, blog_src, patterns, workspace, allow, ngram=not no_ngram)
+    icon_dir = cache_dir() / "aws-icons"
+    if meta.get("diagrams") and not (icon_dir / "VERSION").exists():
+        return fail(f"official icons missing in {icon_dir}: run tools/uat/arch/setup.sh", 2)
+    hits, texts, svgs, n_labels = layer1(data, meta, sents, blog_src, patterns, workspace, allow, ngram=not no_ngram,
+                                         icon_dir=icon_dir)
     log["layers"]["L1"] = {"status": "FAIL" if hits else "PASS", "hits": len(hits), "by_category": gate.counts(hits),
                            "strings": len(texts), "diagram_labels": n_labels, "ngram": "off" if no_ngram else
                            f"{gate.NGRAM_N}-word phrases, internal tokens, identity, label set vs public repos"}
@@ -197,7 +201,8 @@ def main(argv: list[str]) -> int:
                     uniq.append({"key": key, "visual": v})
         for i, u in enumerate(uniq, 1):
             u["n"] = i
-        html_path = page.write(adir / "stage.html", meta_page, asp, svgs, font)
+        html_path = page.write(adir / "stage.html", meta_page, asp,
+                               scene.svgs_for_aspect(svgs, meta.get("diagrams", {}), asp), font)
         kf_json = adir / "keyframes.json"
         kf_json.write_text(json.dumps([{"n": u["n"], "visual": u["visual"]} for u in uniq]), encoding="utf-8")
         rc = subprocess.run(["node", str(HERE / "capture.cjs"), str(html_path), str(kf_json), str(adir), asp,
@@ -272,11 +277,12 @@ def main(argv: list[str]) -> int:
 
 def visible_texts(svg: str) -> list[str]:
     """The text a rendered diagram draws, one entry per <text> element (unescaped)."""
-    return [html.unescape(t) for t in re.findall(r"<text[^>]*>([^<]*)</text>", svg) if t.strip()]
+    out = [html.unescape(re.sub(r"<[^>]+>", "", t)) for t in re.findall(r"<text[^>]*>(.*?)</text>", svg, re.S)]
+    return [t for t in out if t.strip()]
 
 
 def layer1(data: dict, meta: dict, sents: list, blog_src: Path | None, patterns: list, workspace: Path | None,
-           allow: set[str], ngram: bool = True) -> tuple[list, dict, dict, int]:
+           allow: set[str], ngram: bool = True, icon_dir: Path | None = None) -> tuple[list, dict, dict, int]:
     """Gate layer 1 over everything the episode will show or say. Returns (hits, texts, svgs, drawn label count).
 
     The drawn diagram text is read back from the rendered SVG (what the frames will show, not what the author meant)
@@ -293,7 +299,7 @@ def layer1(data: dict, meta: dict, sents: list, blog_src: Path | None, patterns:
         texts["series_tag"] = meta["series_tag"]
     svgs, drawn = {}, []
     for key, spec in meta.get("diagrams", {}).items():
-        svgs[key] = sketch.render(spec, key)
+        svgs[key] = sketch.render(spec, key, icon_dir)
         for i, t in enumerate(visible_texts(svgs[key]), 1):
             texts[f"diagram:{key}:{i}"] = t
             drawn.append(t)

@@ -15,7 +15,8 @@ Visual types (scene.py):
           diagram without reveal; with reveal: the revealed groups and nodes, not their enclosing frames).
           highlight: an accent outline around these.
   end     {kicker, title, lead}                 closing card
-Theme: one open-licence sans font, dark ink on a light grey page, one accent colour; no brand colours or fonts.
+Theme: one open-licence sans font, near-black ink on a light grey page, white cards, one orange accent (dark orange
+for text, AWS-style orange for marks) so the diagrams read on a phone; no company colours or fonts. Light only.
 """
 from __future__ import annotations
 
@@ -27,14 +28,14 @@ from scene import ASPECTS, LAYOUT
 
 CSS = """
 @font-face{font-family:"Plex";src:url(%(font)s) format("truetype");font-weight:100 700;font-display:block}
-:root{--bg:#F4F6F8;--card:#FFFFFF;--ink:#16202B;--body:#3B4754;--muted:#66727F;--line:#DCE2E8;--accent:#0E7C7B;
-  --accent-soft:#E3F2F1;--W:%(w)spx;--H:%(h)spx}
+:root{--bg:#E9EDF2;--card:#FFFFFF;--ink:#0B1219;--body:#232F3E;--muted:#3F4B59;--line:#B9C3CE;--accent:#B84A00;
+  --accent-mark:#ED7100;--accent-soft:#FDEBD9;--W:%(w)spx;--H:%(h)spx}
 *{box-sizing:border-box}
 html,body{margin:0;width:var(--W);height:var(--H);overflow:hidden;background:var(--bg);color:var(--ink);
   font-family:%(family)s;-webkit-font-smoothing:antialiased}
 #frame{position:absolute;inset:0}
 #tag{position:absolute;top:%(tag_top)spx;right:%(side_r)spx;font-size:%(tag_px)spx;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--muted);font-weight:500}
+  text-transform:uppercase;color:var(--body);font-weight:600}
 #hd{position:absolute;left:%(side_l)spx;right:%(side_r)spx;top:%(hd_top)spx;height:%(hd_h)spx;display:flex;
   flex-direction:column;justify-content:flex-end}
 #hd .kicker{font-size:%(kick_px)spx;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);
@@ -42,25 +43,26 @@ html,body{margin:0;width:var(--W);height:var(--H);overflow:hidden;background:var
 #hd h1{font-size:%(h1_px)spx;line-height:1.12;font-weight:600;margin:0}
 #stage{position:absolute;left:%(side_l)spx;right:%(side_r)spx;top:%(st_top)spx;height:%(st_h)spx}
 .card{position:absolute;inset:0;background:var(--card);border:1px solid var(--line);border-radius:18px;
-  box-shadow:0 14px 40px rgba(22,32,43,.07);overflow:hidden}
-.card svg{position:absolute;inset:%(pad)spx;width:calc(100%% - %(pad2)spx);height:calc(100%% - %(pad2)spx)}
+  box-shadow:0 14px 40px rgba(11,18,25,.12);overflow:hidden}
+.card > svg{position:absolute;inset:%(pad)spx;width:calc(100%% - %(pad2)spx);height:calc(100%% - %(pad2)spx)}
 .card svg text{font-family:%(family)s}
-.card svg .fade{opacity:.07}
+.card svg .fade{opacity:.08}
+.card svg .cut{visibility:hidden}
 .card svg g{transition:none}
-.hl{fill:none;stroke:var(--accent);stroke-width:6;rx:14;ry:14}
+.hl{fill:none;stroke:var(--accent-mark);stroke-width:7;rx:14;ry:14}
 .cover{position:absolute;left:%(side_l)spx;right:%(side_r)spx;top:%(cov_top)spx;bottom:%(cov_bottom)spx;display:flex;
   flex-direction:column;justify-content:center}
 .cover .kicker{display:inline-block;align-self:flex-start;font-size:%(kick_px)spx;font-weight:600;letter-spacing:.08em;
   text-transform:uppercase;color:var(--accent);border:2px solid var(--accent);border-radius:999px;padding:6px 16px;
-  margin:0 0 26px}
+  margin:0 0 26px;border-width:3px}
 .cover h1{font-size:%(cover_px)spx;line-height:1.08;font-weight:600;margin:0 0 22px;max-width:18ch}
 .cover p{font-size:%(lead_px)spx;line-height:1.45;color:var(--body);margin:0;max-width:34ch}
-.cover .rule{width:%(rule_w)spx;height:8px;background:var(--accent);border-radius:4px;margin:0 0 30px}
+.cover .rule{width:%(rule_w)spx;height:8px;background:var(--accent-mark);border-radius:4px;margin:0 0 30px}
 ul.points{list-style:none;margin:0;padding:%(pts_pad)spx;display:flex;flex-direction:column;justify-content:center;
   gap:%(pts_gap)spx;height:100%%}
 ul.points li{font-size:%(pt_px)spx;line-height:1.3;color:var(--ink);padding-left:%(pt_ind)spx;position:relative}
 ul.points li::before{content:"";position:absolute;left:0;top:.38em;width:%(dot)spx;height:%(dot)spx;border-radius:6px;
-  background:var(--accent)}
+  background:var(--accent-mark)}
 """
 
 JS = r"""
@@ -107,7 +109,15 @@ JS = r"""
     const x1 = Math.max(...bs.map((b) => b.x + b.w)), y1 = Math.max(...bs.map((b) => b.y + b.h));
     return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
   };
+  function forAspect(v) {
+    let out = v;
+    for (const [k, o] of Object.entries(v.aspects || {})) {
+      if (k.split(',').map((x) => x.trim()).includes(aspect)) out = { ...out, ...o };
+    }
+    return out;
+  }
   function diagram(v) {
+    v = forAspect(v);
     header(v);
     const tpl = document.getElementById('dg-' + v.diagram);
     if (!tpl) throw new Error('diagram not on the page: ' + v.diagram);
@@ -174,14 +184,47 @@ JS = r"""
     let frameBox = null;
     if (v.focus && v.focus.length) frameBox = union([...pick(v.focus)].map((el) => bb.get(el)));
     else if (core) frameBox = union([...core].map((el) => bb.get(el)));
+    const full = svg.viewBox.baseVal;
+    let w = full.width, h = full.height, cx = full.x + w / 2, cy = full.y + h / 2;
     if (frameBox) {
-      const full = svg.viewBox.baseVal;
-      const minW = full.width * 0.18, minH = full.height * 0.18;
-      const w = Math.max(frameBox.w, minW), h = Math.max(frameBox.h, minH);
-      const cx = frameBox.x + frameBox.w / 2, cy = frameBox.y + frameBox.h / 2;
-      const pad = 0.06;
-      svg.setAttribute('viewBox', `${cx - w / 2 - w * pad} ${cy - h / 2 - h * pad} ${w * (1 + 2 * pad)} ${h * (1 + 2 * pad)}`);
+      const pad = 0.04;
+      w = Math.max(frameBox.w, full.width * 0.18) * (1 + 2 * pad);
+      h = Math.max(frameBox.h, full.height * 0.18) * (1 + 2 * pad);
+      cx = frameBox.x + frameBox.w / 2; cy = frameBox.y + frameBox.h / 2;
     }
+    // The view is exactly what the card shows: widen the box to the card's shape, so nothing outside it peeks in.
+    const port = svg.getBoundingClientRect();
+    const ratio = port.width / port.height;
+    if (w / h < ratio) w = h * ratio; else h = w / ratio;
+    const view = { x: cx - w / 2, y: cy - h / 2, w, h };
+    svg.setAttribute('viewBox', `${view.x} ${view.y} ${view.w} ${view.h}`);
+    // Never cut a node or a label at the edge: whatever the view only partly holds is hidden whole.
+    const within = (b) => b.x >= view.x - 0.5 && b.y >= view.y - 0.5 && b.x + b.w <= view.x + view.w + 0.5 && b.y + b.h <= view.y + view.h + 0.5;
+    const meets = (b) => b.x < view.x + view.w && b.x + b.w > view.x && b.y < view.y + view.h && b.y + b.h > view.y;
+    const cut = (b) => meets(b) && !within(b);
+    // Boxes in diagram units from the rendered layout (getBBox leaves out an element's own transform, e.g. an icon's).
+    const inv = svg.getScreenCTM().inverse();
+    const ubox = (el) => {
+      const r = el.getBoundingClientRect();
+      const pts = [[r.left, r.top], [r.right, r.bottom]].map(([x, y]) => {
+        const p = svg.createSVGPoint(); p.x = x; p.y = y; return p.matrixTransform(inv);
+      });
+      return { x: pts[0].x, y: pts[0].y, w: pts[1].x - pts[0].x, h: pts[1].y - pts[0].y };
+    };
+    for (const n of nodes) if (cut(ubox(n))) n.classList.add('cut');
+    for (const g of groups) {
+      const frameRect = g.querySelector(':scope > rect');
+      const head = [...g.children].filter((el) => el !== frameRect);
+      const hb = union(head.map(ubox));
+      if (hb && cut(hb)) {
+        head.forEach((el) => el.classList.add('cut'));
+        // A frame whose title is hidden and that holds no node in view is an empty box: hide it too.
+        const holds = nodes.some((n) => !n.classList.contains('cut') && meets(bb.get(n)) && center(bb.get(n), bb.get(g)));
+        if (!holds && frameRect) frameRect.classList.add('cut');
+      }
+    }
+    for (const e of edges) for (const t of e.querySelectorAll(':scope > text')) if (cut(ubox(t))) t.classList.add('cut');
+    for (const r of svg.querySelectorAll('rect.hl')) if (cut(ubox(r))) r.classList.add('cut');
   }
   window.show = (v) => {
     clear();
