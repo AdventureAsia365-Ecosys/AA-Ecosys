@@ -133,6 +133,24 @@ td.n { color: var(--warn) }
 .err { padding: 16px; border: 1px solid var(--bad); color: var(--bad); border-radius: 8px; background: var(--bad-soft) }
 footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 6px }
 footer code { font-family: var(--mono); font-size: 12.5px }
+
+/* S264: tabs (plan / session) and the live session checklist (sessions/<S>.md published next to the page) */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--line); padding-bottom: 8px }
+.tabs button { font: 600 14px var(--body); color: var(--muted); background: var(--surface); border: 1px solid var(--line);
+  border-radius: 8px; padding: 7px 14px; cursor: pointer }
+.tabs button[aria-selected="true"] { color: var(--accent); border-color: var(--accent); background: var(--accent-soft) }
+.ses-bar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center }
+.ses-bar select { font: 14px var(--body); color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 7px; padding: 6px 10px }
+.md { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: grid; gap: 10px;
+  font-size: 14px; min-width: 0; overflow-wrap: anywhere }
+.md h1 { font-size: 22px } .md h2 { font-size: 18px; margin-top: 10px } .md h3 { font-size: 15px }
+.md p { margin: 0 }
+.md ul { margin: 0; padding-left: 0; list-style: none; display: grid; gap: 4px }
+.md li { display: grid; grid-template-columns: 22px 1fr; gap: 6px; align-items: start }
+.md li .mk { font-family: var(--mono); color: var(--muted) }
+.md li.done .mk { color: var(--ok) } .md li.run .mk { color: var(--info) } .md li.block .mk, .md li.warn .mk { color: var(--warn) }
+.md code { font: 12.5px var(--mono); background: var(--sunk); padding: 1px 4px; border-radius: 4px }
+.ses-sum { display: flex; flex-wrap: wrap; gap: 6px }
 @media (prefers-reduced-motion: no-preference) { .bar i { transition: width .4s ease } }
 </style>
 
@@ -142,7 +160,20 @@ footer code { font-family: var(--mono); font-size: 12.5px }
     <h1>Master Plan — CIS, TripPlanner, Booking, CRM</h1>
     <div class="meta" id="meta"><span>Đang tải dữ liệu…</span></div>
     <div class="stats" id="stats"></div>
+    <div class="tabs" role="tablist" aria-label="Chế độ xem">
+      <button role="tab" id="tab-plan" aria-selected="true" aria-controls="view-plan">Kế hoạch tổng thể</button>
+      <button role="tab" id="tab-ses" aria-selected="false" aria-controls="view-ses">Phiên (checklist sống)</button>
+    </div>
   </header>
+
+  <section id="view-ses" role="tabpanel" aria-labelledby="tab-ses" hidden>
+    <div class="sec-head"><h2>Checklist phiên</h2>
+      <div class="ses-bar"><label class="muted" for="ses-pick">Phiên</label><select id="ses-pick"></select><span class="muted mono" id="ses-meta"></span></div></div>
+    <div class="ses-sum" id="ses-sum"></div>
+    <div class="md" id="ses-body"><span class="muted">Đang tải…</span></div>
+  </section>
+
+  <div id="view-plan" role="tabpanel" aria-labelledby="tab-plan" style="display:grid;gap:40px">
 
   <section aria-labelledby="h-ms">
     <div class="sec-head"><h2 id="h-ms">Mốc</h2><span class="muted">Tiến độ = số tiêu chí Done-when đã đạt</span></div>
@@ -191,6 +222,8 @@ footer code { font-family: var(--mono); font-size: 12.5px }
     <h2 id="h-log">Nhật ký theo phiên</h2>
     <div class="log" id="log"></div>
   </section>
+
+  </div>
 
   <footer>
     <div id="src"></div>
@@ -313,6 +346,70 @@ footer code { font-family: var(--mono); font-size: 12.5px }
     th.addEventListener("click", go);
     th.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go() } });
   });
+
+
+  // S264: the session tab. sessions/index.json lists the sessions ([{session, date, status, file}], newest first); each
+  // file is the session's live checklist in Markdown, published next to the page (never committed: the repo is public).
+  function inline(t) {
+    return esc(t).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>")
+      .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  }
+  function md(text) {
+    var out = [], list = null, cnt = { done: 0, run: 0, todo: 0, block: 0 };
+    function close() { if (list) { out.push("<ul>" + list.join("") + "</ul>"); list = null } }
+    text.split("\n").forEach(function (raw) {
+      var line = raw.replace(/\s+$/, ""), m;
+      if (!line.trim()) { close(); return }
+      if ((m = /^(#{1,3})\s+(.*)$/.exec(line))) { close(); out.push("<h" + m[1].length + ">" + inline(m[2]) + "</h" + m[1].length + ">"); return }
+      if ((m = /^\s*(?:-|\d+[.)])\s+(.*)$/.exec(line)) && !/^\s{4,}/.test(line)) {
+        var body = m[1], mk = "•", cls = "";
+        if (/^\[x\]\s*/i.test(body)) { mk = "✓"; cls = "done"; body = body.replace(/^\[x\]\s*/i, ""); cnt.done++ }
+        else if (/^\[ \]\s*/.test(body)) { mk = "○"; body = body.replace(/^\[ \]\s*/, ""); cnt.todo++ }
+        else if (/^⏳\s*/.test(body)) { mk = "⏳"; cls = "run"; body = body.replace(/^⏳\s*/, ""); cnt.run++ }
+        else if (/^⛔\s*/.test(body)) { mk = "⛔"; cls = "block"; body = body.replace(/^⛔\s*/, ""); cnt.block++ }
+        else if (/^⚠️\s*/.test(body)) { mk = "⚠"; cls = "warn"; body = body.replace(/^⚠️\s*/, "") }
+        list = list || [];
+        list.push('<li class="' + cls + '"><span class="mk">' + mk + "</span><span>" + inline(body) + "</span></li>");
+        return;
+      }
+      if (list && /^\s+/.test(line)) { list[list.length - 1] = list[list.length - 1].replace(/<\/span><\/li>$/, " " + inline(line.trim()) + "</span></li>"); return }
+      close(); out.push("<p>" + inline(line) + "</p>");
+    });
+    close();
+    return { html: out.join(""), cnt: cnt };
+  }
+  var sessions = [];
+  function loadSession(name) {
+    var s = sessions.filter(function (x) { return x.session === name })[0];
+    if (!s) return;
+    $("ses-meta").textContent = (s.date || "") + (s.status ? " · " + s.status : "") + (s.updated ? " · cập nhật " + s.updated : "");
+    fetch(s.file, { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.text() })
+      .then(function (t) {
+        var r = md(t);
+        $("ses-body").innerHTML = r.html;
+        $("ses-sum").innerHTML = '<span class="pill" style="background:var(--ok-soft);color:var(--ok)">✓ ' + r.cnt.done + " xong</span>" +
+          '<span class="pill prog">⏳ ' + r.cnt.run + " đang chạy</span>" + '<span class="pill">○ ' + r.cnt.todo + " chưa làm</span>" +
+          (r.cnt.block ? '<span class="pill blocked">⛔ ' + r.cnt.block + " bị chặn</span>" : "");
+      })
+      .catch(function (e) { $("ses-body").innerHTML = '<div class="err">Không đọc được ' + esc(s.file) + " (" + esc(e.message) + ").</div>" });
+  }
+  function showTab(which) {
+    var ses = which === "ses";
+    $("tab-plan").setAttribute("aria-selected", String(!ses)); $("tab-ses").setAttribute("aria-selected", String(ses));
+    $("view-plan").hidden = ses; $("view-plan").style.display = ses ? "none" : "grid"; $("view-ses").hidden = !ses;
+    try { localStorage.setItem("aa_tracker_tab", which) } catch (e) {}
+  }
+  $("tab-plan").addEventListener("click", function () { showTab("plan") });
+  $("tab-ses").addEventListener("click", function () { showTab("ses") });
+  $("ses-pick").addEventListener("change", function () { loadSession(this.value) });
+  fetch("sessions/index.json", { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json() })
+    .then(function (list) {
+      sessions = list || [];
+      $("ses-pick").innerHTML = sessions.map(function (x) { return '<option value="' + esc(x.session) + '">' + esc(x.session) + (x.status ? " — " + esc(x.status) : "") + "</option>" }).join("");
+      if (sessions.length) loadSession(sessions[0].session);
+    })
+    .catch(function () { $("ses-body").innerHTML = '<span class="muted">Chưa có checklist phiên nào được publish cùng trang.</span>' });
+  try { if (localStorage.getItem("aa_tracker_tab") === "ses") showTab("ses") } catch (e) {}
 
   fetch("plan.json", { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json() })
     .then(function (d) { data = d; render() })
