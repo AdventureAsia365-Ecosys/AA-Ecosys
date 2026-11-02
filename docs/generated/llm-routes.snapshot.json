@@ -1,10 +1,5 @@
 {
- "captured_at": "2026-10-29T05:33Z",
- "known_gaps": [
-  "Catalog: CIS migration 324 (applied 2026-10-31) added five enabled acc2 Bedrock chat models that this snapshot does not list: `nova-lite`, `nova-2-lite`, `llama4-maverick`, `llama4-scout`, `kimi-k3`. Since CIS migration 331, `nova-lite` and `llama4-scout` are route fallbacks (next item).",
-  "Routes: CIS migration 327 (AA-1026 T-3 / T-4) moved every route off the legacy keys `haiku` / `sonnet` to `haiku-5-5` / `sonnet-5-5` and ends the five A-series writers on `gpt-6-luna-openai`. CIS migration 331 (AA-1026 I6) appends an acc2 Bedrock model as the LAST fallback of the eight platform judge / validate stages that reached acc3 only: `nova-lite` for `s1_brand_audit`, `s1_source_facts`, `a3_atomize`, `a3_place_card`, `a3_place_days`, `a3_place_locate`, `a3_place_dedupe_check`, and `llama4-scout` for `a3_place_card_check`. The Routes table below predates both. Admin edits in AI providers › Routing after 2026-10-29T05:33Z are not checked.",
-  "Recapture (`dump` + `import`) is a tracked follow-up: root `docs/backlog/README.md` §1 (AA-1020)."
- ],
+ "captured_at": "2026-11-02T11:35Z",
  "models": [
   {
    "api_style": "embed",
@@ -234,6 +229,121 @@
   {
    "api_style": "converse",
    "bedrock_accounts": [
+    "acc2"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "Moonshot Kimi K3",
+   "max_output_tokens": null,
+   "model_key": "kimi-k3",
+   "price_cache_read_per_mtok": "0.3300",
+   "price_cache_write_per_mtok": "4.1250",
+   "price_in_per_mtok": "3.3000",
+   "price_out_per_mtok": "16.5000",
+   "price_source": "AWS Price List API AmazonBedrock 20261030160456, us-west-1 on-demand, US cross-region (aws.amazon.com/bedrock/pricing), 31/10/2026",
+   "provider": "bedrock",
+   "supports_temperature": false,
+   "vendor": "moonshot",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc2"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "Meta Llama 4 Maverick",
+   "max_output_tokens": null,
+   "model_key": "llama4-maverick",
+   "price_cache_read_per_mtok": null,
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "0.2400",
+   "price_out_per_mtok": "0.9700",
+   "price_source": "AWS Price List API AmazonBedrock 20261030160456, us-west-1 on-demand (aws.amazon.com/bedrock/pricing), 31/10/2026",
+   "provider": "bedrock",
+   "supports_temperature": true,
+   "vendor": "meta",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc2"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "Meta Llama 4 Scout",
+   "max_output_tokens": null,
+   "model_key": "llama4-scout",
+   "price_cache_read_per_mtok": null,
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "0.1700",
+   "price_out_per_mtok": "0.6600",
+   "price_source": "AWS Price List API AmazonBedrock 20261030160456, us-west-1 on-demand (aws.amazon.com/bedrock/pricing), 31/10/2026",
+   "provider": "bedrock",
+   "supports_temperature": true,
+   "vendor": "meta",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc2"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "Amazon Nova 2 Lite",
+   "max_output_tokens": null,
+   "model_key": "nova-2-lite",
+   "price_cache_read_per_mtok": "0.1073",
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "0.4290",
+   "price_out_per_mtok": "3.3510",
+   "price_source": "AWS Price List API AmazonBedrock 20261030160456, us-west-1 on-demand (aws.amazon.com/bedrock/pricing), 31/10/2026",
+   "provider": "bedrock",
+   "supports_temperature": true,
+   "vendor": "amazon",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc2"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "Amazon Nova Lite",
+   "max_output_tokens": null,
+   "model_key": "nova-lite",
+   "price_cache_read_per_mtok": null,
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "0.0770",
+   "price_out_per_mtok": "0.3080",
+   "price_source": "AWS Price List API AmazonBedrock 20261030160456, us-west-1 on-demand (aws.amazon.com/bedrock/pricing), 31/10/2026",
+   "provider": "bedrock",
+   "supports_temperature": true,
+   "vendor": "amazon",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
     "acc3"
    ],
    "blocked_reason": null,
@@ -322,25 +432,51 @@
    "supports_temperature": false,
    "vendor": "anthropic",
    "wire_model": null
+  },
+  {
+   "api_style": "embed",
+   "bedrock_accounts": [
+    "acc2-usw2"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "embed"
+   ],
+   "enabled": true,
+   "label": "Amazon Titan Text Embeddings V2",
+   "max_output_tokens": null,
+   "model_key": "titan-embed-text-v2",
+   "price_cache_read_per_mtok": null,
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "0.0200",
+   "price_out_per_mtok": "0.0000",
+   "price_source": "AWS Price List API AmazonBedrock, USW2-TitanEmbeddingV2-Text-input-tokens 0.00002 USD / 1K tokens, 01/11/2026",
+   "provider": "bedrock",
+   "supports_temperature": false,
+   "vendor": "amazon",
+   "wire_model": null
   }
  ],
  "routes": [
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "gpt-6-luna-openai"
+   ],
    "is_active": true,
-   "model_id": "haiku",
+   "model_id": "haiku-5-5",
    "provider": "claude",
    "role": "writer",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a0_column_map",
-   "updated_at": "2026-09-28"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "haiku"
+    "haiku-5-5",
+    "nova-lite"
    ],
    "is_active": true,
    "model_id": "gpt-6-luna",
@@ -349,12 +485,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a3_atomize",
-   "updated_at": "2026-10-10"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "gpt-5.6-luna"
+    "gpt-5.6-luna",
+    "nova-lite"
    ],
    "is_active": true,
    "model_id": "gpt-6-luna",
@@ -363,39 +500,42 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a3_place_card",
-   "updated_at": "2026-10-26"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "sonnet"
+    "sonnet-5-5",
+    "llama4-scout"
    ],
    "is_active": true,
-   "model_id": "haiku",
+   "model_id": "haiku-5-5",
    "provider": "claude",
    "role": "validate",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a3_place_card_check",
-   "updated_at": "2026-10-13"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "sonnet"
+    "sonnet-5-5",
+    "nova-lite"
    ],
    "is_active": true,
-   "model_id": "haiku",
+   "model_id": "haiku-5-5",
    "provider": "claude",
    "role": "validate",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a3_place_days",
-   "updated_at": "2026-10-21"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "llama4-maverick",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -405,19 +545,21 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a3_place_dedupe",
-   "updated_at": "2026-10-21"
+   "updated_at": "2026-11-02"
   },
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "nova-lite"
+   ],
    "is_active": true,
-   "model_id": "haiku",
+   "model_id": "haiku-5-5",
    "provider": "claude",
    "role": "validate",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a3_place_dedupe_check",
-   "updated_at": "2026-10-21"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": null,
@@ -436,16 +578,17 @@
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "haiku"
+    "haiku-5-5",
+    "nova-lite"
    ],
    "is_active": true,
-   "model_id": "sonnet",
+   "model_id": "sonnet-5-5",
    "provider": "claude",
    "role": "validate",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a3_place_locate",
-   "updated_at": "2026-10-22"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": null,
@@ -463,20 +606,23 @@
   },
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "haiku-5-5"
+   ],
    "is_active": true,
-   "model_id": "sonnet",
+   "model_id": "sonnet-5-5",
    "provider": "claude",
    "role": "writer",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_atom_writer",
-   "updated_at": "2026-09-02"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
-    "gpt-6-luna"
+    "gpt-6-luna",
+    "nova-lite"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -485,23 +631,27 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_brand_audit",
-   "updated_at": "2026-10-16"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "gpt-6-luna-openai"
+   ],
    "is_active": true,
-   "model_id": "haiku",
+   "model_id": "haiku-5-5",
    "provider": "claude",
    "role": "writer",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_flag_fix",
-   "updated_at": "2026-09-02"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "gpt-6-luna-openai"
+   ],
    "is_active": true,
    "model_id": "sonnet-5-5",
    "provider": "claude",
@@ -509,24 +659,27 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_generate",
-   "updated_at": "2026-10-24"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "gpt-6-luna-openai"
+   ],
    "is_active": true,
-   "model_id": "haiku",
+   "model_id": "haiku-5-5",
    "provider": "claude",
    "role": "writer",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_itinerary_nudge",
-   "updated_at": "2026-09-02"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
+    "nova-lite",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -536,12 +689,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_judge",
-   "updated_at": "2026-10-16"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "haiku"
+    "haiku-5-5",
+    "nova-lite"
    ],
    "is_active": true,
    "model_id": "gpt-6-luna",
@@ -550,12 +704,36 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_source_facts",
-   "updated_at": "2026-10-10"
+   "updated_at": "2026-11-01"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "haiku-5-5",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "segment_research",
+   "updated_at": "2026-11-01"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [],
+   "is_active": true,
+   "model_id": "haiku-5-5",
+   "provider": "claude",
+   "role": "writer",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "segment_research_batch",
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "sonnet"
+    "gpt-6-luna-openai"
    ],
    "is_active": true,
    "model_id": "sonnet-5-5",
@@ -564,12 +742,29 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "supply_content_writer",
-   "updated_at": "2026-10-25"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "gpt-5.6-luna"
+    "gpt-5.6-luna",
+    "nova-lite",
+    "gpt-6-luna-openai"
+   ],
+   "is_active": true,
+   "model_id": "gpt-6-luna",
+   "provider": "openai",
+   "role": "judge",
+   "shadow_model_id": null,
+   "shadow_sample_pct": 0,
+   "stage": "t10_adjudicate",
+   "updated_at": "2026-11-01"
+  },
+  {
+   "account_route": "acc3",
+   "fallback_model_ids": [
+    "gpt-5.6-luna",
+    "nova-lite"
    ],
    "is_active": true,
    "model_id": "gpt-6-luna",
@@ -578,12 +773,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t10_claims",
-   "updated_at": "2026-10-13"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
+    "nova-lite",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -593,12 +789,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t10_judge",
-   "updated_at": "2026-10-16"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
-    "gpt-6-luna"
+    "gpt-6-luna",
+    "nova-lite"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -607,48 +804,55 @@
    "shadow_model_id": "gpt-6-luna",
    "shadow_sample_pct": 10,
    "stage": "t2_brand_audit",
-   "updated_at": "2026-10-12"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "gpt-6-luna-openai"
+   ],
    "is_active": true,
-   "model_id": "haiku",
+   "model_id": "haiku-5-5",
    "provider": "claude",
    "role": "writer",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t2_flag_fix",
-   "updated_at": "2026-10-12"
+   "updated_at": "2026-11-02"
   },
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "gpt-6-luna-openai"
+   ],
    "is_active": true,
-   "model_id": "sonnet",
+   "model_id": "sonnet-5-5",
    "provider": "claude",
    "role": "writer",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t2_generate",
-   "updated_at": "2026-09-18"
+   "updated_at": "2026-11-02"
   },
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "gpt-6-luna-openai"
+   ],
    "is_active": true,
-   "model_id": "haiku",
+   "model_id": "haiku-5-5",
    "provider": "claude",
    "role": "writer",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t2_itinerary_nudge",
-   "updated_at": "2026-10-12"
+   "updated_at": "2026-11-02"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
+    "nova-lite",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -658,12 +862,13 @@
    "shadow_model_id": "gpt-6-luna",
    "shadow_sample_pct": 10,
    "stage": "t2_judge",
-   "updated_at": "2026-10-12"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
+    "nova-lite",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -673,69 +878,78 @@
    "shadow_model_id": "gpt-6-luna",
    "shadow_sample_pct": 10,
    "stage": "t7_debate_judge",
-   "updated_at": "2026-10-12"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "gpt-6-luna-openai"
+   ],
    "is_active": true,
-   "model_id": "sonnet",
+   "model_id": "sonnet-5-5",
    "provider": "claude",
    "role": "writer",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t8_angle_gen",
-   "updated_at": "2026-09-02"
+   "updated_at": "2026-11-02"
   },
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "haiku-5-5",
+    "nova-lite"
+   ],
    "is_active": true,
-   "model_id": "sonnet",
+   "model_id": "sonnet-5-5",
    "provider": "claude",
    "role": "validate",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t9_faq_answer_fit",
-   "updated_at": "2026-10-22"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "nova-lite"
+   ],
    "is_active": true,
-   "model_id": "haiku",
+   "model_id": "haiku-5-5",
    "provider": "claude",
    "role": "validate",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t9_faq_filter",
-   "updated_at": "2026-10-22"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "sonnet"
+    "gpt-6-luna-openai"
    ],
    "is_active": true,
-   "model_id": "haiku",
+   "model_id": "haiku-5-5",
    "provider": "claude",
    "role": "writer",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t9_repair",
-   "updated_at": "2026-10-13"
+   "updated_at": "2026-11-02"
   },
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "gpt-6-luna-openai"
+   ],
    "is_active": true,
-   "model_id": "sonnet",
+   "model_id": "sonnet-5-5",
    "provider": "claude",
    "role": "writer",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t9_write",
-   "updated_at": "2026-09-02"
+   "updated_at": "2026-11-02"
   },
   {
    "account_route": null,
@@ -755,25 +969,25 @@
    "account_route": "acc3",
    "fallback_model_ids": [],
    "is_active": true,
-   "model_id": "sonnet",
+   "model_id": "sonnet-5-5",
    "provider": "claude",
    "role": "writer",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "tp_compose",
-   "updated_at": "2026-09-28"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [],
    "is_active": true,
-   "model_id": "sonnet",
+   "model_id": "sonnet-5-5",
    "provider": "claude",
    "role": "writer",
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "tp_extract",
-   "updated_at": "2026-09-28"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": null,
@@ -793,6 +1007,7 @@
    "account_route": "acc3",
    "fallback_model_ids": [
     "gpt-6-luna",
+    "nova-lite",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -802,12 +1017,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "writing_memory_eval",
-   "updated_at": "2026-10-28"
+   "updated_at": "2026-11-01"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
     "gpt-6-luna",
+    "nova-lite",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -817,7 +1033,7 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "writing_memory_mine",
-   "updated_at": "2026-10-25"
+   "updated_at": "2026-11-01"
   }
  ],
  "schema": "aa900-llm-routes/1",
