@@ -20,7 +20,7 @@ from the build's `gate-summary.md`. Everything else stays in the private folder.
 
 ## Pilot
 
-Layers 1-4 re-run on the rebuild after the S264 layer 5a fixes. Layer 5 (independent review, then the tech lead) is
+Layers 1-4 re-run on the final rebuild after the S264 layer 5a fixes (text, narration and sketch). Layer 5 (independent review, then the tech lead) is
 pending, so nothing is uploaded or published yet.
 
 | Layer | Status | Hits |
