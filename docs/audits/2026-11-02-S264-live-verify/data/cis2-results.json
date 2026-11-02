@@ -1,0 +1,79 @@
+{
+  "signin": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "shots": [],
+    "checks": {}
+  },
+  "overview-alerts": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "shots": [
+      "02-overview-alerts-390-light.png",
+      "02-overview-alerts-1440-light.png",
+      "02-overview-alerts-390-dark.png",
+      "02-overview-alerts-1440-dark.png"
+    ],
+    "checks": {
+      "alertsFound": 1,
+      "overflow390_light": {
+        "docScrollW": 390,
+        "docClientW": 390,
+        "docOk": true,
+        "mainScrollW": 390,
+        "mainClientW": 390,
+        "mainOk": true
+      },
+      "wide_light": [],
+      "overflow390_dark": {
+        "docScrollW": 390,
+        "docClientW": 390,
+        "docOk": true,
+        "mainScrollW": 390,
+        "mainClientW": 390,
+        "mainOk": true
+      },
+      "wide_dark": []
+    }
+  },
+  "upload-390": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "shots": [
+      "02-upload-390-light-scrolled.png"
+    ],
+    "checks": {
+      "overflow": {
+        "docScrollW": 390,
+        "docClientW": 390,
+        "docOk": true,
+        "mainScrollW": 675,
+        "mainClientW": 390,
+        "mainOk": false
+      },
+      "wide": [
+        "SPAN right=425 \"Parse & Review\"",
+        "DIV right=473 \"4\"",
+        "SPAN right=532 \"Commit\"",
+        "DIV right=580 \"5\"",
+        "SPAN right=661 \"Dup Review\""
+      ]
+    }
+  },
+  "kit-gallery": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [
+      "ERROR TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('tab', { name: /^gallery$/i }).first()\u001b[22m\n"
+    ],
+    "shots": [],
+    "checks": {}
+  }
+}

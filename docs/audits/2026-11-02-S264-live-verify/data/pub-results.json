@@ -1,0 +1,210 @@
+{
+  "tp-footer": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "notice": {
+        "count": 1,
+        "visible": true,
+        "startsWithTraveller": true,
+        "text": "Some descriptions are written with the help of AI and may contain mistakes. Prices, itineraries and visa conditions are confirmed in your official quote."
+      },
+      "useOfAiLink": [
+        "Use of AI -> /terms#ai"
+      ],
+      "ov1440_light": {
+        "scrollW": 1440,
+        "clientW": 1440,
+        "ok": true,
+        "theme": "light",
+        "bg": "rgb(248, 246, 242)"
+      },
+      "ov390_light": {
+        "scrollW": 390,
+        "clientW": 390,
+        "ok": true,
+        "theme": "light",
+        "bg": "rgb(248, 246, 242)"
+      },
+      "ov1440_dark": {
+        "scrollW": 1440,
+        "clientW": 1440,
+        "ok": true,
+        "theme": "dark",
+        "bg": "rgb(15, 20, 27)"
+      },
+      "ov390_dark": {
+        "scrollW": 390,
+        "clientW": 390,
+        "ok": true,
+        "theme": "dark",
+        "bg": "rgb(15, 20, 27)"
+      }
+    }
+  },
+  "tp-tour": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "notice": {
+        "count": 1,
+        "visible": true,
+        "startsWithTraveller": true,
+        "text": "Some descriptions are written with the help of AI and may contain mistakes. Prices, itineraries and visa conditions are confirmed in your official quote."
+      },
+      "ov1440_light": {
+        "scrollW": 1440,
+        "clientW": 1440,
+        "ok": true,
+        "theme": "light",
+        "bg": "rgb(248, 246, 242)"
+      },
+      "ov390_light": {
+        "scrollW": 390,
+        "clientW": 390,
+        "ok": true,
+        "theme": "light",
+        "bg": "rgb(248, 246, 242)"
+      },
+      "ov1440_dark": {
+        "scrollW": 1440,
+        "clientW": 1440,
+        "ok": true,
+        "theme": "dark",
+        "bg": "rgb(15, 20, 27)"
+      },
+      "ov390_dark": {
+        "scrollW": 390,
+        "clientW": 390,
+        "ok": true,
+        "theme": "dark",
+        "bg": "rgb(15, 20, 27)"
+      }
+    }
+  },
+  "tp-terms": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "heading": "3. Use of AI",
+      "sectionText": "3. Use of AI AI helps write some of the text on this site: tour descriptions and their day-by-day itineraries (written by AI from Adventure Asia's own tour notes and checked by automated quality checks), and the day-by-day narration of a trip you build. The place search and the “You might also like” suggestions use AI to match your words and the places you picked. AI-written text is labelled as such. AI can make mistakes, so this text can contain errors. It is there for information, to help you explore and shape a trip idea. Do not rely on it for travel, visa, health or safety decisions. Prices, itineraries and visa conditions are confirmed in your official quote. What binds you and Adventure Asia is that confirmed quote and the booking conditions you accept, not the text on this site; your advisor confirms the details before anything is booked.",
+      "ov1440_light": {
+        "scrollW": 1440,
+        "clientW": 1440,
+        "ok": true,
+        "theme": "light",
+        "bg": "rgb(248, 246, 242)"
+      },
+      "ov390_light": {
+        "scrollW": 390,
+        "clientW": 390,
+        "ok": true,
+        "theme": "light",
+        "bg": "rgb(248, 246, 242)"
+      },
+      "ov1440_dark": {
+        "scrollW": 1440,
+        "clientW": 1440,
+        "ok": true,
+        "theme": "dark",
+        "bg": "rgb(15, 20, 27)"
+      },
+      "ov390_dark": {
+        "scrollW": 390,
+        "clientW": 390,
+        "ok": true,
+        "theme": "dark",
+        "bg": "rgb(15, 20, 27)"
+      }
+    }
+  },
+  "tp-plan": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "noticesOnLoad": 0,
+      "markers": 0,
+      "popup": {
+        "count": 0
+      },
+      "link": null,
+      "ov1440_light": {
+        "scrollW": 1440,
+        "clientW": 1440,
+        "ok": true,
+        "theme": "light",
+        "bg": "rgb(248, 246, 242)"
+      },
+      "ov390_light": {
+        "scrollW": 390,
+        "clientW": 390,
+        "ok": true,
+        "theme": "light",
+        "bg": "rgb(248, 246, 242)"
+      },
+      "ov1440_dark": {
+        "scrollW": 1440,
+        "clientW": 1440,
+        "ok": true,
+        "theme": "dark",
+        "bg": "rgb(15, 20, 27)"
+      },
+      "ov390_dark": {
+        "scrollW": 390,
+        "clientW": 390,
+        "ok": true,
+        "theme": "dark",
+        "bg": "rgb(15, 20, 27)"
+      },
+      "popupAfterResize": 0
+    }
+  },
+  "studio-terms": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "h1": "Partner terms",
+      "heading": "3. AI-generated content and acceptable use",
+      "sectionText": "3. AI-generated content and acceptable use Content is generated with AI and can contain mistakes. The portal shows this at review, publish and export: “This content was generated with AI. Review it before publishing; you are responsible for what you publish.” The content is written and checked with models from third-party providers: Anthropic's Claude, through Amazon Bedrock (Amazon Web Services), writes it, and OpenAI models, also through Amazon Bedrock, review, score and check it. When those models are unavailable, the review and check steps may fall back to other models on Amazon Bedrock (Amazon Nova, Meta Llama), and the Anthropic API or the OpenAI API, used directly and with a spending cap, may be used as a fallback after them. You must follow these providers' usage policies, including the Anthropic Usage Policy, the OpenAI Usage Policies and the AWS Acceptable Use Policy, as well a",
+      "crmTermsTestId": 0,
+      "ov1440_light": {
+        "scrollW": 1440,
+        "clientW": 1440,
+        "ok": true,
+        "theme": "light",
+        "bg": "rgb(244, 241, 236)"
+      },
+      "ov390_light": {
+        "scrollW": 390,
+        "clientW": 390,
+        "ok": true,
+        "theme": "light",
+        "bg": "rgb(244, 241, 236)"
+      },
+      "ov1440_dark": {
+        "scrollW": 1440,
+        "clientW": 1440,
+        "ok": true,
+        "theme": "light",
+        "bg": "rgb(244, 241, 236)"
+      },
+      "ov390_dark": {
+        "scrollW": 390,
+        "clientW": 390,
+        "ok": true,
+        "theme": "light",
+        "bg": "rgb(244, 241, 236)"
+      }
+    }
+  }
+}
