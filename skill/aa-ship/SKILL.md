@@ -40,7 +40,8 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
   đóng không merge; không merge thứ sai để thử.
 - [ ] **PR có migration (ADR 0017; chủ schema `docs/database/schema-ownership.md`):** file **expand** (`-- migrate:
   expand`) → một PR app (file + code + bump readiness); PR copy ci-bot sang Infra tự merge, Migration Apply tự chạy, job
-  schema gate của Deploy Dev chờ nó. File **contract** (không header) giữ THỨ TỰ MIG-4 (PR chỉ migration → review →
+  schema gate của Deploy Dev chờ nó (cửa sổ chờ = biến repo `SCHEMA_GATE_TIMEOUT_S`, mặc định 2400 s, tối đa 2580 s —
+  `.github/scripts/schema_gate.py`; quá cửa sổ thì chạy lại Deploy Dev sau khi migration đã áp). File **contract** (không header) giữ THỨ TỰ MIG-4 (PR chỉ migration → review →
   PR code), nhưng trên **Dev** không còn bước tay (ADR 0017a, S263, AA-1032): PR copy ci-bot tự merge khi xanh, Migration
   Apply tự apply khi MỌI bảng job rảnh + không wave mở (bận → `deferred`, lượt hằng giờ / lượt copy kế chạy lại). Kiểm
   bằng summary run `migration-apply.yml` (dòng `applied`, class `contract`) hoặc `python3 tools/github/ship_copy_apply.py
@@ -142,7 +143,7 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 1. **Revision:** service đã đổi rollout COMPLETED; CIS api và worker cùng image SHA.
 
    ```bash
-   aws ecs describe-services --cluster aa-cis-dev-cluster --services aa-cis-dev-api aa-cis-dev-worker aa-booking-dev-api aa-crm-dev-api aa-crm-dev-web --profile aa365-admin --region us-west-1 --query "services[].{n:serviceName,td:taskDefinition,r:deployments[0].rolloutState}"
+   aws ecs describe-services --cluster aa-cis-dev-cluster --services aa-cis-dev-api aa-cis-dev-worker aa-booking-dev-api aa-crm-dev-api aa-crm-dev-web aa-crm-dev-portal --profile aa365-admin --region us-west-1 --query "services[].{n:serviceName,td:taskDefinition,r:deployments[0].rolloutState}"
    ```
 
 2. **Health:** `git_sha` = commit vừa merge và `/health/ready` 200 — CIS `api-cis…/health`, Booking
