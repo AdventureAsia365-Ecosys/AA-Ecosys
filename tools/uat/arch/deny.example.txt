@@ -1,0 +1,19 @@
+# TEMPLATE with invented terms. Copy to private/deny.txt (gitignored) and fill it with the real literals; never commit it.
+# Lines: `term` = case-insensitive literal (word-bounded; spaces match any whitespace), `cs:Term` = case-sensitive,
+# `re:regex` = case-insensitive regex, `csre:regex` = case-sensitive regex. `## name` starts a category (the log counts
+# hits per category, never the matched text). Built-in identifier shapes (account IDs, ARNs, hostnames, ...) live in
+# gate.py and need no line here.
+## brand
+Orbit Travel
+cs:OT
+re:orbit[-_ ]?(?:content|trips|bookings|agents)
+## people
+Jane Example
+## vendors
+VendorOne
+RankData
+## coined
+cs:wk1
+widget_queue
+## weak
+re:\bno\s+key\b

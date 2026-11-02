@@ -1,0 +1,22 @@
+{
+  "_comment": "TEMPLATE with invented names. A sketch is authored per episode and lives in the episode file, outside git; never copy a committed diagram's layout into it.",
+  "groups": [
+    {"id": "cloud", "label": "Cloud account", "sub": "one region", "cells": [0, 1, 2, 2]},
+    {"id": "base", "label": "Common layer", "cells": [0, 2, 2, 2], "style": "dashed"}
+  ],
+  "nodes": [
+    {"id": "guests", "label": "Guests", "at": [1, 0], "kind": "people"},
+    {"id": "cat", "label": "Catalogue app", "sub": "api + workers", "at": [0, 1]},
+    {"id": "orders", "label": "Orders app", "sub": "api + workers", "at": [1, 1]},
+    {"id": "route", "label": "Route app", "sub": "functions", "at": [2, 1]},
+    {"id": "db", "label": "Managed database", "sub": "one schema per app", "at": [0, 2], "kind": "store"},
+    {"id": "cache", "label": "Cache", "at": [1, 2], "kind": "store"},
+    {"id": "ext", "label": "Vendor APIs", "at": [2, 2], "kind": "external"}
+  ],
+  "edges": [
+    {"from": "guests", "to": "orders", "label": "HTTPS"},
+    {"from": "cat", "to": "db"},
+    {"from": "orders", "to": "cache"},
+    {"from": "route", "to": "ext", "style": "dashed"}
+  ]
+}

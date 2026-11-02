@@ -8,7 +8,7 @@
 - "Làm tiếp đi còn nhiều ram" / "còn nhiều ram thì đẩy tốc độ" / "cứ làm bình thường … khi nào hết tôi switch acc" → chạy tới 6 lane song song; đổi tài khoản Claude 2 lần rồi "tiếp tục".
 - Duyệt Infra #568 (2 alarm break-glass CRM, ~0,20 USD/tháng) và Infra #575 (2 alarm Module 8 + BOOKING_ADMIN_URL, ~0,20 USD/tháng). Tắt auto mode 2 cửa sổ (Terraform Apply #553; ghi secret + apply + user E2E của AA-1019).
 - 09:00: 7 nháp Jira **không đăng trong S262**, gom sang S263.
-- 10:56: duyệt plan video kiến trúc ẩn danh (tài khoản cá nhân, kiểu engineering notes + blog kỹ thuật FB; mặc định giọng nam am_michael, nêu tên dịch vụ AWS, không nêu hãng model/vendor ngách, TripPlanner theo luật dev-phase); duyệt tạo AA-1020 (docs kiến trúc, slot S263) và AA-1021 (series video, pipeline + gate S264, pilot Ep1 S264–S265, ~2 tập/phiên S265–S267).
+- 10:56: duyệt plan kiến trúc (TripPlanner theo luật dev-phase); duyệt tạo AA-1020 (docs kiến trúc, slot S263) và AA-1021 (content series, details private).
 
 **Kết quả chính**
 
@@ -22,7 +22,7 @@
 - **Vệ sinh:** Secret Scan root xanh (#399); DB Freshness Probe 111 → 0 (CIS #1194, Infra #551, relink 0 USD); schema-ref tự cập nhật.
 - **AA-896:** báo cáo chi phí tháng 10 SƠ BỘ ~471,70 USD (AWS acc2 202,85 + AI 268,85), +165 % so với tháng 9 → `docs/audits/2026-11-01-S262-capacity-review/` (bản chính thức ≥ 03/11).
 - **AA-900** phần 0 USD (prompt register + CI gate + Experiments); **AA-820** phần kỹ thuật (danh sách nhà cung cấp + nháp điều khoản).
-- Audit kiến trúc: tài liệu chưa as-built (ecosystem-architecture, sơ đồ, trang gateway, CONTEXT 4 app + Infra) → AA-1020; plan video 10 tập `docs/audits/2026-11-01-S262-arch-video-plan/`.
+- Audit kiến trúc: tài liệu chưa as-built (ecosystem-architecture, sơ đồ, trang gateway, CONTEXT 4 app + Infra) → AA-1020 (`docs/audits/2026-11-01-S262-arch-video-plan/`); AA-1021 (content series, details private).
 - Bài học S262 đã chuyển vào `skill/aa-lessons/lessons.md`; zip skill aa-lessons / aa-session / aa-ship / aa-uat-video; Linear export + archive 18 issue.
 
 **Trạng thái kiểm cuối phiên** (snapshot 01/11 ~04:07Z, `docs/audits/2026-11-01-S262-close/state-snapshot.md`)
