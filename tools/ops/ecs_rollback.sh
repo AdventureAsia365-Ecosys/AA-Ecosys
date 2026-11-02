@@ -195,9 +195,15 @@ echo "applying: $SERVICE -> $TARGET"
 STATE="$(aws_ ecs update-service --cluster "$CLUSTER" --service "$SERVICE" --task-definition "$TARGET" --query 'service.deployments[0].rolloutState' --output text)"
 echo "rollout:  $STATE"
 aws_ ecs wait services-stable --cluster "$CLUSTER" --services "$SERVICE" || die "services-stable did not return (10 min): check the deployment; way back: $BACK"
-SVC="$(aws_ ecs describe-services --cluster "$CLUSTER" --services "$SERVICE" --output json)"
-NOW_ARN="$(jq -r '.services[0].taskDefinition' <<<"$SVC")"
-NOW_ROLLOUT="$(jq -r '[.services[0].deployments[]? | select(.status=="PRIMARY") | .rolloutState][0] // "unknown"' <<<"$SVC")"
+# S264 game day: services-stable can return a few seconds before the PRIMARY deployment reads COMPLETED, so poll
+# the rollout state (ROLLOUT_TRIES x SLEEP_S, about two minutes) before calling it a failure.
+for i in $(seq 1 "${ROLLOUT_TRIES:-12}"); do
+  SVC="$(aws_ ecs describe-services --cluster "$CLUSTER" --services "$SERVICE" --output json)"
+  NOW_ARN="$(jq -r '.services[0].taskDefinition' <<<"$SVC")"
+  NOW_ROLLOUT="$(jq -r '[.services[0].deployments[]? | select(.status=="PRIMARY") | .rolloutState][0] // "unknown"' <<<"$SVC")"
+  [ "$NOW_ROLLOUT" = IN_PROGRESS ] || break
+  [ "$i" -lt "${ROLLOUT_TRIES:-12}" ] && sleep "$SLEEP_S"
+done
 [ "$(rev_of "$NOW_ARN")" = "$TARGET_REV" ] || die "service runs $NOW_ARN, not $TARGET (circuit breaker rolled back?)"
 [ "$NOW_ROLLOUT" = COMPLETED ] || die "rollout is $NOW_ROLLOUT, not COMPLETED"
 echo "stable:   $TARGET COMPLETED after $(( $(date +%s) - START )) s"
