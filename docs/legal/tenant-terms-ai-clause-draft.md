@@ -348,6 +348,10 @@ section "AI boundary for high-risk advice (AA-820)", carries the wording below. 
     Bedrock as the writer, OpenAI models through Amazon Bedrock as reviewers, the Anthropic API or the OpenAI API used
     directly with a spending cap "as a fallback" (today only judge routes end at the OpenAI API), and Jev on the
     privacy notice. Cohere is left out: its embeddings never carry tenant content.
+    *Update 02/11/2026 (S264):* since CIS migration 344 the tenant writer routes also end at the OpenAI API: when Claude
+    is unavailable on Amazon Bedrock (and on the Anthropic API, once its key is in), an OpenAI model may write tenant
+    content as a last resort, with the same spending cap. The portal `/terms` §3 and `/privacy` §5 say so (AI Use
+    Register v1.2). Counsel to confirm the DPA / zero-data-retention question above covers OpenAI as a writer too.
 12. **High-risk boundary (Q12).** Does generic travel content that mentions visas, entry
     requirements or travel insurance (for example "a visa on arrival is available") count as
     "advice" under the high-risk rules? Or does it only count when the content gives a personalised

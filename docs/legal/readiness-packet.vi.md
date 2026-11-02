@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-11-02
 review_every_days: 90
 related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, AA-886, AA-820, AA-839, AA-877]
 lang: vi
@@ -413,9 +413,12 @@ việc của bạn và hết hạn sau 24 giờ hoặc khi bạn đăng xuất. 
 Cơ sở pháp lý cho từng mục đích sử dụng là [to be confirmed].
 
 **5. Xử lý bằng AI.** Nội dung được tạo và kiểm tra bởi các mô hình AI. Claude (Anthropic), qua Amazon Bedrock, viết nội
-dung; các mô hình của OpenAI, cũng qua Amazon Bedrock, xem lại, chấm điểm và kiểm tra bản nháp. Khi Amazon Bedrock không
-dùng được, API của Anthropic hoặc API của OpenAI, gọi trực tiếp và có trần chi tiêu, có thể được dùng làm đường dự phòng;
-các lần gọi đó đi từ Amazon Web Services tới Anthropic hoặc OpenAI. Với một số đối tác, một dịch vụ kiểm tra quyết định
+dung; các mô hình của OpenAI, cũng qua Amazon Bedrock, xem lại, chấm điểm và kiểm tra bản nháp. Khi các mô hình đó không
+dùng được, bước xem lại và kiểm tra có thể chuyển sang các mô hình khác trên Amazon Bedrock (Amazon Nova, Meta Llama). Khi
+Amazon Bedrock không dùng được, API của Anthropic hoặc API của OpenAI, gọi trực tiếp và có trần chi tiêu, có thể được dùng
+làm đường dự phòng; các lần gọi đó đi từ Amazon Web Services tới Anthropic hoặc OpenAI. Với bước viết, nghĩa là trước hết
+Claude qua API của Anthropic và, khi không còn cách nào khác, một mô hình của OpenAI qua API của OpenAI. Với một số đối
+tác, một dịch vụ kiểm tra quyết định
 (Jev, của TypeSafe) còn trả lời các câu hỏi có/không về bản nháp. Các nhà cung cấp này nhận nội dung tour, thiết lập
 thương hiệu của bạn và hướng dẫn cho từng bài. Chính sách của chúng tôi là không gửi dữ liệu cá nhân cho các mô hình này
 và không lưu dữ liệu cá nhân trong bản ghi các lần gọi AI, vì vậy xin đừng nhập dữ liệu cá nhân về người khác vào thiết
@@ -472,8 +475,11 @@ Pháp nhân vận hành là [to be confirmed].
   tiếng Anh).
 - Nội dung được viết và kiểm tra bằng mô hình của các nhà cung cấp bên thứ ba: Claude của Anthropic, qua Amazon Bedrock
   (Amazon Web Services), viết nội dung, và các mô hình của OpenAI, cũng qua Amazon Bedrock, xem lại, chấm điểm và kiểm
-  tra. Khi Amazon Bedrock không dùng được, API của Anthropic hoặc API của OpenAI, gọi trực tiếp và có trần chi tiêu, có
-  thể được dùng làm đường dự phòng.
+  tra. Khi các mô hình đó không dùng được, bước xem lại và kiểm tra có thể chuyển sang các mô hình khác trên Amazon
+  Bedrock (Amazon Nova, Meta Llama), và sau đó API của Anthropic hoặc API của OpenAI, gọi trực tiếp và có trần chi tiêu,
+  có thể được dùng làm đường dự phòng. Khi Claude trên Amazon Bedrock không dùng được, bước viết có thể chuyển sang
+  Claude qua API của Anthropic và, khi không còn cách nào khác, sang một mô hình của OpenAI qua API của OpenAI, gọi trực
+  tiếp và có trần chi tiêu.
 - Bạn phải tuân theo chính sách sử dụng của các nhà cung cấp này, gồm Chính sách sử dụng của Anthropic, Chính sách sử
   dụng của OpenAI và Chính sách sử dụng chấp nhận được của AWS, cũng như các điều khoản này.
 - Bạn không được dùng portal hay nội dung của portal để:

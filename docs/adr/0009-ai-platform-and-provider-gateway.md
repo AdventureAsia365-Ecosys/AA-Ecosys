@@ -185,6 +185,16 @@ What exists (CIS code at `1b6e9448`, S261 audits, [inventory](../audits/2026-10-
   - Tenant (T-series) and TripPlanner writer stages are `aws_only` until AA-820, must stay on Anthropic models
     (decision 12), and acc2 cannot run Claude (decision 14). Their only way to meet the invariant today is a declared
     degrade mode (for example: queue the job and retry later, or show the last saved text).
+  - **Amendment (tech lead, 02/11/2026, S264: "add OpenAI as the last fallback"; AA-1026).** With acc3 refusing every
+    model since 29/10 and no Anthropic API key, the T-series writer stages had no path at all. CIS migration 344 opens
+    the six tenant writer stages (`t2_generate`, `t2_flag_fix`, `t2_itinerary_nudge`, `t8_angle_gen`, `t9_write`,
+    `t9_repair`) to `vendor_direct`, with GPT-6 Luna on the OpenAI API as the LAST rung of each route, the rule CIS 327
+    applied to the A-series writers (tech lead T-3, S263): every AWS deployment first, then the same Claude model on the
+    Anthropic API once its key is in, the OpenAI API only when both failed. A route names no AWS model behind a model
+    that has a vendor API deployment (the Claude fallback behind each primary was dropped for that reason). This
+    knowingly skips decision 12's ladder for that last rung (writers stay on Anthropic as their primary). The tenant
+    terms and the AI Use Register (v1.2) name the writing fallback, so decision 10's "only makers named in the terms"
+    holds. TripPlanner writer stages stay `aws_only`.
   - The CI check on route data is report-only on Dev and blocking for prod routes from go-live, so it never turns a
     funding question into a red build. The availability card shows the same result.
 - `stop_reason = max_tokens` is the error class `truncated`, never a success.

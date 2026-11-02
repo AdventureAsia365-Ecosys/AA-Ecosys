@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-11-02
 review_every_days: 90
 related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, AA-886, AA-820, AA-839, AA-877]
 ---
@@ -402,9 +402,11 @@ expire after 24 hours or when you sign out. We do not use advertising or analyti
 The legal basis for each use is [to be confirmed].
 
 **5. AI processing.** Content is generated and checked by AI models. Claude (Anthropic), through Amazon Bedrock, writes
-it; OpenAI models, also through Amazon Bedrock, review, score and check the drafts. If Amazon Bedrock is unavailable, the
-Anthropic API or the OpenAI API, used directly and with a spending cap, may be used as a fallback; those calls go from
-Amazon Web Services to Anthropic or OpenAI. For some partners, a decision-checking service (Jev, by TypeSafe) also answers
+it; OpenAI models, also through Amazon Bedrock, review, score and check the drafts. When those models are unavailable,
+the review and check steps may fall back to other models on Amazon Bedrock (Amazon Nova, Meta Llama). If Amazon Bedrock
+is unavailable, the Anthropic API or the OpenAI API, used directly and with a spending cap, may be used as a fallback;
+those calls go from Amazon Web Services to Anthropic or OpenAI. For writing, that means Claude through the Anthropic API
+first and, as a last resort, an OpenAI model through the OpenAI API. For some partners, a decision-checking service (Jev, by TypeSafe) also answers
 yes-or-no checks about the drafts. These providers receive tour content, your brand settings and the instructions for each
 piece. Our policy is not to send personal data to these models and not to store any in our AI call records, so please do
 not enter personal data about other people in brand settings or content.
@@ -458,9 +460,12 @@ pieces about those tours, and tools to export them or publish them to your own c
 - Content is generated with AI and can contain mistakes. The portal shows this at review, publish and export: "This
   content was generated with AI. Review it before publishing; you are responsible for what you publish."
 - The content is written and checked with models from third-party providers: Anthropic's Claude, through Amazon Bedrock
-  (Amazon Web Services), writes it, and OpenAI models, also through Amazon Bedrock, review, score and check it. If Amazon
-  Bedrock is unavailable, the Anthropic API or the OpenAI API, used directly and with a spending cap, may be used as a
-  fallback.
+  (Amazon Web Services), writes it, and OpenAI models, also through Amazon Bedrock, review, score and check it. When
+  those models are unavailable, the review and check steps may fall back to other models on Amazon Bedrock (Amazon
+  Nova, Meta Llama), and the Anthropic API or the OpenAI API, used directly and with a spending cap, may be used as a
+  fallback after them. When Claude is unavailable on Amazon Bedrock, the writing step may fall back to Claude through
+  the Anthropic API and, as a last resort, to an OpenAI model through the OpenAI API, used directly and with a spending
+  cap.
 - You must follow these providers' usage policies, including the Anthropic Usage Policy, the OpenAI Usage Policies and
   the AWS Acceptable Use Policy, as well as these terms.
 - You must not use the portal or its content for:
