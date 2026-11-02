@@ -12,9 +12,11 @@ Five layers (plan docs/audits/2026-11-01-S262-arch-video-plan, security section)
               The private deny-list (gitignored) + built-in identifier shapes (account IDs, ARNs, network and pool IDs,
               hostnames, URLs, e-mails, regions, issue / migration / ADR / session numbers, money amounts) + an n-gram
               check: any 5-word phrase with 2+ content words, or any internal-looking token (snake_case, dotted,
-              CamelCase, ALLCAPS), that appears verbatim in a public repo is a hit (pasting it into a search would lead
-              to the company); and a label-set check: one public file holding 4+ of the multi-word public labels shown
-              on screen is a hit (the combination would find the repo even when each label is generic).
+              hyphenated, CamelCase, ALLCAPS), that appears verbatim in a public repo is a hit (pasting it into a
+              search would lead to the company); an identity check: the series name and series tag (and any
+              "identity" phrase of the episode) must not appear in any public file at all; and a label-set check: one
+              public file holding 4+ of the multi-word labels shown on screen is a hit (the combination would find the
+              repo even when each label is generic; cloud product names such as "Amazon ..." do not count).
   2 dom       capture.cjs checks the rendered page (body text, SVG text/title/desc, alt/aria/title/data-*, href/src)
               with the same patterns BEFORE every screenshot and refuses to capture on a hit; `gate.py dom` re-audits
               the saved dumps.
@@ -85,6 +87,19 @@ GENERIC_TOKENS = {
     "postgresql", "postgres", "javascript", "typescript", "nextjs", "next.js", "node.js", "fastapi", "cloudfront",
     "elasticache", "cloudtrail", "cloudwatch", "eventbridge", "github", "devops", "saas", "mvp", "ok", "e.g.", "i.e.",
 }
+# Ordinary hyphenated English words narration uses; any other hyphenated token counts as internal-looking. Extend it per
+# series with the private ngram_allow.txt (a token line there is allowed as is).
+GENERIC_HYPHENATED = {
+    "add-on", "all-in-one", "built-in", "cross-account", "day-to-day", "end-to-end", "event-driven", "follow-up",
+    "full-text", "high-level", "in-house", "least-privilege", "long-running", "low-cost", "multi-account",
+    "multi-tenant", "one-off", "open-source", "per-app", "read-only", "real-time", "right-sized", "self-hosted",
+    "self-service", "single-tenant", "sign-in", "sign-on", "step-by-step", "third-party", "time-boxed",
+    "two-factor", "up-to-date", "well-known", "write-ahead", "zero-trust", "pay-as-you-go", "short-lived",
+    "long-lived", "back-end", "front-end", "back-office", "e-mail", "re-run", "co-founder", "small-team",
+    "cloud-native", "plain-text", "rate-limit", "rate-limited", "fail-safe", "first-class", "general-purpose",
+}
+CLOUD_PRODUCT_PREFIXES = ("amazon ", "aws ")
+IDENTITY_MIN_CHARS = 6
 STOPWORDS = set("""
 a about above after again against all also am an and any are as at be because been before being below between both but
 by can could did do does doing down during each few for from further had has have having he her here hers him his how
@@ -95,6 +110,7 @@ every each per via let lets get gets got make makes made way ways thing things a
 two three four five six seven eight nine ten its it's that's there's here's don't doesn't isn't can't won't
 """.split())
 WORD = re.compile(r"[a-z0-9]+(?:[._'][a-z0-9]+)*")
+TOKEN_EDGE = "a-z0-9"      # a rare token matches in the corpus between characters outside this set ("x_y" in "x_y_z")
 
 
 @dataclass
@@ -121,7 +137,7 @@ class Hit:
 
 # ---------------------------------------------------------------------------------------------------------------- setup
 def private_dir(arg: str | None = None) -> Path:
-    """Where the gitignored deny-list and label profile live: --private, env ARCH_VIDEO_PRIVATE, else ./private."""
+    """Where the gitignored deny-list and allow-list live: --private, env ARCH_VIDEO_PRIVATE, else ./private."""
     return Path(arg or os.environ.get("ARCH_VIDEO_PRIVATE") or HERE / "private").resolve()
 
 
@@ -193,10 +209,12 @@ def tokens(text: str) -> list[str]:
     return WORD.findall(text.lower())
 
 
-def internal_looking(tok_raw: str) -> bool:
-    """A token shaped like code or a coined name: snake_case, dotted, CamelCase inside, ALLCAPS, letters+digits."""
-    t = tok_raw.strip(".,;:!?()[]\"'")
-    if not t or t.lower() in GENERIC_TOKENS:
+def internal_looking(tok_raw: str, allow: set[str] | frozenset = frozenset()) -> bool:
+    """A token shaped like code or a coined name: snake_case, dotted, hyphenated (2+ parts, unless an ordinary English
+    compound), CamelCase inside, ALLCAPS, letters+digits."""
+    t = re.sub(r"['’]s$", "", tok_raw.strip(".,;:!?()[]\"'"))
+    low = t.lower()
+    if not t or low in GENERIC_TOKENS or low in allow:
         return False
     if "_" in t or re.search(r"[a-z]\.[a-z]", t, re.I):
         return True
@@ -204,7 +222,18 @@ def internal_looking(tok_raw: str) -> bool:
         return True
     if re.fullmatch(r"[A-Z]{2,8}s?", t):
         return True
+    if re.fullmatch(r"[A-Za-z0-9]+(?:-[A-Za-z0-9]+)+", t) and low not in GENERIC_HYPHENATED:
+        return True
     return bool(re.fullmatch(r"(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9-]{3,}", t))
+
+
+def rare_regex(rare: set[str]) -> re.Pattern | None:
+    """One pattern for every internal-looking token, matched whole in the lower-cased corpus text. It does not go
+    through WORD, which splits on '-' and would never rebuild a hyphenated token such as 'xx-thing2'."""
+    if not rare:
+        return None
+    alts = "|".join(re.escape(t) for t in sorted(rare, key=len, reverse=True))
+    return re.compile(rf"(?<![{TOKEN_EDGE}])(?:{alts})(?![{TOKEN_EDGE}])")
 
 
 def script_shingles(text: str, allow: set[str]) -> set[str]:
@@ -246,9 +275,20 @@ def rel_name(path: Path, workspace: Path) -> str:
         return path.name
 
 
+def label_set_candidates(public_labels: list[str]) -> list[str]:
+    """The multi-word labels the label-set check counts: cloud product names ("Amazon ...", "AWS ...") are left out,
+    they sit together in every architecture page on the web."""
+    out = set()
+    for lab in public_labels:
+        low = " ".join((lab or "").lower().split())
+        if len(low.split()) >= 2 and not low.startswith(CLOUD_PRODUCT_PREFIXES):
+            out.add(low)
+    return sorted(out)
+
+
 def label_set_scan(public_labels: list[str], workspace: Path, k: int = LABEL_SET_K) -> list[Hit]:
-    """Layer 1: a public file that holds k or more of the multi-word public labels (case-insensitive)."""
-    labs = sorted({" ".join(lab.lower().split()) for lab in public_labels if lab and len(lab.split()) >= 2})
+    """Layer 1: a public file that holds k or more of the multi-word labels shown on screen (case-insensitive)."""
+    labs = label_set_candidates(public_labels)
     if len(labs) < k:
         return []
     hits = []
@@ -273,25 +313,27 @@ def ngram_scan(texts: dict[str, str], workspace: Path, allow: set[str]) -> list[
         for s in script_shingles(text, allow):
             shingles.setdefault(s, where)
         for raw in text.split():
-            if internal_looking(raw):
-                rare.setdefault(raw.strip(".,;:!?()[]\"'").lower(), where)
+            if internal_looking(raw, allow):
+                rare.setdefault(re.sub(r"['’]s$", "", raw.strip(".,;:!?()[]\"'")).lower(), where)
     if not shingles and not rare:
         return []
     first = {}
     for s in shingles:
         first.setdefault(s.split(" ", 1)[0], []).append(s)
+    rare_rx = rare_regex(set(rare))
     found: dict[str, str] = {}
     for path in corpus_files(workspace):
         try:
             if path.stat().st_size > MAX_CORPUS_FILE:
                 continue
-            body = path.read_text(encoding="utf-8", errors="ignore")
+            body = INLINE_DATA.sub(" ", path.read_text(encoding="utf-8", errors="ignore")).lower()
         except OSError:
             continue
-        toks = tokens(INLINE_DATA.sub(" ", body))
+        if rare_rx is not None:
+            for m in rare_rx.finditer(body):
+                found.setdefault(m.group(0), rel_name(path, workspace))
+        toks = tokens(body)
         for i, tok in enumerate(toks):
-            if tok in rare and tok not in found:
-                found[tok] = rel_name(path, workspace)
             cands = first.get(tok)
             if cands:
                 phrase = " ".join(toks[i:i + NGRAM_N])
@@ -305,7 +347,39 @@ def ngram_scan(texts: dict[str, str], workspace: Path, allow: set[str]) -> list[
     return hits
 
 
+def identity_scan(phrases: dict[str, str], workspace: Path) -> list[Hit]:
+    """Layer 1: the series name, the series tag and any listed identity phrase are what a viewer would search for, so
+    none of them may appear in any public file (case- and whitespace-insensitive), however short or generic."""
+    want: dict[str, str] = {}
+    for where, phrase in phrases.items():
+        norm = " ".join(re.sub(r"[^a-z0-9]+", " ", (phrase or "").lower()).split())
+        if len(norm) >= IDENTITY_MIN_CHARS:
+            want.setdefault(norm, where)
+    if not want:
+        return []
+    found: dict[str, str] = {}
+    for path in corpus_files(workspace):
+        try:
+            if path.stat().st_size > MAX_CORPUS_FILE:
+                continue
+            body = " " + " ".join(re.sub(r"[^a-z0-9]+", " ",
+                                         INLINE_DATA.sub(" ", path.read_text(encoding="utf-8", errors="ignore"))
+                                         .lower()).split()) + " "
+        except OSError:
+            continue
+        for norm in want:
+            if norm not in found and f" {norm} " in body:
+                found[norm] = rel_name(path, workspace)
+    return [Hit("L1", "ngram:identity", want[n], f"{n}  (in {src})") for n, src in sorted(found.items())]
+
+
+def strip_episode_marker(tag: str) -> str:
+    """'Series name · Ep 3' -> 'Series name' (the identity check looks for the series part of an on-screen tag)."""
+    return re.sub(r"[\s·|:,-]*\b(?:ep|episode|part|no)\.?\s*\d+\s*$", "", tag or "", flags=re.I).strip(" ·|:-")
+
+
 def load_allow(priv: Path | None) -> set[str]:
+    """Allowed phrases (normalised to WORD tokens) and allowed single tokens (lower-cased as written)."""
     allow = set()
     for f in (HERE / "ngram_allow.txt", (priv / "ngram_allow.txt") if priv else None):
         if f and f.exists():
@@ -313,6 +387,8 @@ def load_allow(priv: Path | None) -> set[str]:
                 line = line.strip()
                 if line and not line.startswith("#"):
                     allow.add(" ".join(tokens(line)))
+                    if len(line.split()) == 1:
+                        allow.add(line.lower())
     return allow
 
 

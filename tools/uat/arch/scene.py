@@ -5,7 +5,8 @@ keep them in .tmp-session/ or Drive. Format (an invented, complete example: test
 
   {"slug": "ep1-example", "title": "...", "series": "...", "episode": 1,
    "voices": {"F": "af_heart", "M": "am_michael"},                 optional, these are the defaults
-   "diagrams": {"eco": "ecosystem"},                               key -> docs/architecture/diagrams/<stem>.svg
+   "diagrams": {"eco": {"groups": [...], "nodes": [...], "edges": [...]}},   key -> a sketch (sketch.py format)
+   "identity": ["..."],                                            optional: phrases a viewer would search for
    "description": "...", "hashtags": ["#aws"],
    "cuts": {"master": {"aspect": "16:9", "chapters": true, "min_s": 150, "max_s": 260},
             "short":  {"aspect": "9:16", "max_s": 60}, ...},
@@ -22,6 +23,8 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass, field
+
+import sketch
 
 ALLOWED_VOICES = {"af_heart", "am_michael"}
 DEFAULT_VOICES = {"F": "af_heart", "M": "am_michael"}
@@ -78,6 +81,12 @@ def load(data: dict) -> tuple[dict, list[Sentence]]:
     if "master" not in cuts:
         problems.append("a 'master' cut is required")
     diagrams = data.get("diagrams", {})
+    for key, spec in diagrams.items():
+        if isinstance(spec, str):
+            problems.append(f"diagram {key}: a committed diagram ({spec!r}) cannot be used; a relabelled copy keeps "
+                            "the public figure's layout (a visual fingerprint): author a sketch (sketch.py)")
+        else:
+            problems += sketch.validate(spec, key)
     episode = int(data.get("episode", 1))
     prev = "M" if episode % 2 == 1 else "F"      # so the first scene gets F in odd episodes
     out: list[Sentence] = []

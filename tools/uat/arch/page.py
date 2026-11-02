@@ -4,7 +4,7 @@
 
 capture.cjs opens the page at the frame size (1920x1080, 1080x1080, 1080x1350 or 1080x1920) with deviceScaleFactor 2,
 calls window.show(visual) for each keyframe, checks the DOM (gate layer 2) and screenshots. Everything is inline: the
-font is a data: URI, the diagrams are the anonymized SVGs (labels.py) inside <template> elements, no network request.
+font is a data: URI, the diagrams are the episode's sketches (sketch.py) inside <template> elements, no network request.
 
 Visual types (scene.py):
   title   {kicker, title, lead}                 opening card
@@ -15,7 +15,7 @@ Visual types (scene.py):
           diagram without reveal; with reveal: the revealed groups and nodes, not their enclosing frames).
           highlight: an accent outline around these.
   end     {kicker, title, lead}                 closing card
-Theme: IBM Plex Sans (OFL), slate ink on a light grey page, one teal accent; no brand colours or fonts.
+Theme: one open-licence sans font, dark ink on a light grey page, one accent colour; no brand colours or fonts.
 """
 from __future__ import annotations
 

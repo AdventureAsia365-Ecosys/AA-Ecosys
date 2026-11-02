@@ -1,24 +1,26 @@
 """Build one architecture episode (AA-1021): every cut, the blog images, the 5-layer gate log. Any gate hit fails.
 
   tools/uat/venv/bin/python -I tools/uat/arch/make_episode.py <episode.json> --out <dir>
-      [--work DIR] [--private DIR] [--cuts master,short] [--diagrams DIR] [--no-ngram]
+      [--work DIR] [--private DIR] [--cuts master,short] [--no-ngram] [--check]
 
-  in : <episode.json> (scene.py format; kept OUTSIDE git), the label profile + deny-list in --private
-       (default: env ARCH_VIDEO_PRIVATE, else tools/uat/arch/private/; both gitignored), the diagrams in
-       docs/architecture/diagrams/*.svg (internal, real names; anonymized here through the profile).
+  in : <episode.json> (scene.py format, its diagrams are sketches (sketch.py); kept OUTSIDE git), the deny-list in
+       --private (default: env ARCH_VIDEO_PRIVATE, else tools/uat/arch/private/; gitignored).
   out: <out>/<slug>/<slug>_<cut>.mp4 + .srt + .vtt + .description.txt, blog/<slug>.md + blog/images/*.png,
-       and beside it <out>/<slug>-gate/: gate-log.md + gate-log.json (counts only, no script text) and REVIEW.md
-       (layer 5 checklist); that folder is for the team, never published, and stays out of the layer 4 scan.
+       and beside it <out>/<slug>-gate/ (team only, never published, never committed, out of the layer 4 scan):
+       gate-log.md + gate-log.json (counts, cut lengths, date, tool versions; no script text), REVIEW.md (layer 5
+       checklist) and gate-summary.md (layer, status and hit count only: the one part that may be copied into a repo).
+  --check: layer 1 only (no TTS, browser or ffmpeg), for editing a script.
   work: <work>/<slug>/ (stage pages, 2x keyframes, DOM dumps, OCR frames); default <out>/../work.
   exit: 0 = built, gate layers 1-4 PASS (layer 5 is the human review) | 1 = gate FAIL | 2 = scene / duration error.
 
-Order: layer 1 on every authored string (before any TTS) -> anonymize diagrams (+ layer 1 on their labels) -> TTS ->
+Order: layer 1 on every authored string and every drawn diagram label (before any TTS) -> TTS ->
 per-cut timelines and length checks -> per-aspect keyframe capture with the layer 2 DOM check -> MP4s -> layer 2
 audit, layer 3 OCR, layer 4 artifacts -> logs. Cost $0: local Kokoro, Chromium, ffmpeg, tesseract; no upload.
 """
 from __future__ import annotations
 
 import datetime as dt
+import html
 import json
 import os
 import re
@@ -31,13 +33,12 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
 import gate  # noqa: E402
-import labels  # noqa: E402
 import page  # noqa: E402
 import scene  # noqa: E402
+import sketch  # noqa: E402
 import tts_arch  # noqa: E402
 import video  # noqa: E402
 
-REPO = HERE.parents[2]
 
 
 def opt(argv: list[str], name: str, default=None):
@@ -92,7 +93,11 @@ Gate layers 1-4 passed for this build (see gate-log.md). Layer 5 is human and is
 - [ ] LinkedIn clip: 60-120 s; captions burned; SRT attached on upload.
 - [ ] Description files: generic, "Narration: synthetic voice", no links to company domains or repos.
 - [ ] Blog post: same rules; images are the public renders only.
-- [ ] Posting account matches the "engineering notes" framing (no employer link on the post itself).
+- [ ] No diagram or image is visually the same as a figure in a public repo (layout, icons, frames, arrow routes):
+      every diagram is a sketch drawn for this episode, never a relabelled committed SVG.
+- [ ] Nothing committed to a repo describes this episode: no cut lengths, build date, series wording or hashtags
+      (only gate-summary.md, layer status and hit counts, may be copied into a repo).
+- [ ] Posting account matches the series framing (no employer link on the post itself).
 
 Sign-off: review agent ______  tech lead ______  date ______
 """
@@ -104,9 +109,9 @@ def main(argv: list[str]) -> int:
     work_root = opt(argv, "--work")
     priv = gate.private_dir(opt(argv, "--private"))
     only = opt(argv, "--cuts")
-    diag_dir = Path(opt(argv, "--diagrams") or REPO / "docs" / "architecture" / "diagrams").resolve()
     no_ngram = "--no-ngram" in argv
-    argv = [a for a in argv if a != "--no-ngram"]
+    check_only = "--check" in argv
+    argv = [a for a in argv if a not in ("--no-ngram", "--check")]
     if len(argv) != 1 or not str(out_root):
         print(__doc__)
         return 2
@@ -127,39 +132,23 @@ def main(argv: list[str]) -> int:
     log: dict = {"slug": slug, "date": dt.date.today().isoformat(), "layers": {}, "cuts": {}}
 
     patterns = gate.load_patterns(priv)
-    profile = labels.load_profile(priv / "labels.public.json")
     workspace = gate.default_workspace()
     allow = gate.load_allow(priv)
 
-    # Layer 1: every authored string, the blog post and the public labels, before anything is rendered.
-    texts = scene.all_texts(data, sents)
-    for name, cfg in meta["cuts"].items():
-        if cfg.get("description"):
-            texts[f"cut:{name}:description"] = cfg["description"]
+    # Layer 1: every authored string, the blog post and every drawn diagram label, before anything is rendered.
     blog = data.get("blog") or {}
     blog_src = (ep_path.parent / blog["file"]) if blog.get("file") else None
-    if blog_src:
-        texts["blog"] = blog_src.read_text(encoding="utf-8")
-    texts["series_tag"] = meta.get("series_tag", "")
-    label_texts = {f"label:{k}": v for k, v in profile["map"].items() if v}
-    hits = gate.check_texts(texts, patterns, workspace, allow, ngram=not no_ngram)
-    hits += gate.check_texts(label_texts, patterns, None, allow, ngram=False)
-    if not no_ngram:
-        hits += gate.label_set_scan(list(label_texts.values()), workspace)
-    svgs = {}
-    for key, stem in meta.get("diagrams", {}).items():
-        svg = labels.anonymize_svg((diag_dir / f"{stem}.svg").read_text(encoding="utf-8"), profile)
-        svgs[key] = svg
-        visible = " | ".join(re.findall(r"<text[^>]*>([^<]*)</text>", svg))
-        hits += gate.scan_text(visible, f"diagram:{key}", patterns)
+    hits, texts, svgs, n_labels = layer1(data, meta, sents, blog_src, patterns, workspace, allow, ngram=not no_ngram)
     log["layers"]["L1"] = {"status": "FAIL" if hits else "PASS", "hits": len(hits), "by_category": gate.counts(hits),
-                           "strings": len(texts) + len(label_texts), "ngram": "off" if no_ngram else
-                           f"{gate.NGRAM_N}-word phrases + internal-looking tokens vs public repos"}
+                           "strings": len(texts), "diagram_labels": n_labels, "ngram": "off" if no_ngram else
+                           f"{gate.NGRAM_N}-word phrases, internal tokens, identity, label set vs public repos"}
     if hits:
         gate.report(hits, "L1 text")
         write_logs(gate_dir, log)
         return 1
-    print(f"L1 text: PASS ({len(texts)} strings, {len(label_texts)} labels, {len(svgs)} diagrams)")
+    print(f"L1 text: PASS ({len(texts)} strings, {n_labels} diagram labels, {len(svgs)} diagrams)")
+    if check_only:
+        return 0
 
     # Narration.
     used = [s for s in sents if s.cuts & set(cuts)]
@@ -281,6 +270,42 @@ def main(argv: list[str]) -> int:
     return rc
 
 
+def visible_texts(svg: str) -> list[str]:
+    """The text a rendered diagram draws, one entry per <text> element (unescaped)."""
+    return [html.unescape(t) for t in re.findall(r"<text[^>]*>([^<]*)</text>", svg) if t.strip()]
+
+
+def layer1(data: dict, meta: dict, sents: list, blog_src: Path | None, patterns: list, workspace: Path | None,
+           allow: set[str], ngram: bool = True) -> tuple[list, dict, dict, int]:
+    """Gate layer 1 over everything the episode will show or say. Returns (hits, texts, svgs, drawn label count).
+
+    The drawn diagram text is read back from the rendered SVG (what the frames will show, not what the author meant)
+    and goes through the same checks as the narration, one label per entry so phrases never run across labels:
+    deny-list, identifier shapes, n-gram phrases and internal-looking tokens. The multi-word labels also feed the
+    label-set check; the series name, the series tag and any listed identity phrase feed the identity check."""
+    texts = scene.all_texts(data, sents)
+    for name, cfg in meta["cuts"].items():
+        if cfg.get("description"):
+            texts[f"cut:{name}:description"] = cfg["description"]
+    if blog_src:
+        texts["blog"] = blog_src.read_text(encoding="utf-8")
+    if meta.get("series_tag"):
+        texts["series_tag"] = meta["series_tag"]
+    svgs, drawn = {}, []
+    for key, spec in meta.get("diagrams", {}).items():
+        svgs[key] = sketch.render(spec, key)
+        for i, t in enumerate(visible_texts(svgs[key]), 1):
+            texts[f"diagram:{key}:{i}"] = t
+            drawn.append(t)
+    hits = gate.check_texts(texts, patterns, workspace if ngram else None, allow, ngram=ngram)
+    if ngram and workspace is not None:
+        hits += gate.label_set_scan(drawn, workspace)
+        ident = {"series": meta.get("series", ""), "series_tag": gate.strip_episode_marker(meta.get("series_tag", ""))}
+        ident.update({f"identity:{i}": p for i, p in enumerate(meta.get("identity") or [], 1)})
+        hits += gate.identity_scan(ident, workspace)
+    return hits, texts, svgs, len(drawn)
+
+
 def tool_versions() -> dict:
     tess = gate.tesseract_cmd()
     vers = {"ffmpeg": gate.tool_version(["ffmpeg", "-version"]),
@@ -298,12 +323,26 @@ def tool_versions() -> dict:
     return vers
 
 
+LAYER_NAMES = {"L1": "1 text + n-gram", "L2": "2 DOM before capture", "L3": "3 OCR on frames",
+               "L4": "4 artifacts + metadata", "L5": "5 human review"}
+
+
+def public_summary(log: dict) -> str:
+    """The only gate output that may be copied into a repo: layer, status and hit count. No slug, date, cut length,
+    count of strings, frames or files, and no tool version: those would let anyone match the repo to the videos."""
+    lines = ["| Layer | Status | Hits |", "|---|---|---|"]
+    for k, name in LAYER_NAMES.items():
+        layer = log["layers"].get(k) or {}
+        lines.append(f"| {name} | {layer.get('status', 'not run')} | {layer.get('hits', '-')} |")
+    return "\n".join(lines) + "\n"
+
+
 def write_logs(out: Path, log: dict) -> None:
     (out / "gate-log.json").write_text(json.dumps(log, indent=2), encoding="utf-8")
-    lines = [f"# Gate log: {log['slug']} ({log['date']})", "", "| Layer | Status | Hits | Notes |", "|---|---|---|---|"]
-    names = {"L1": "1 text + n-gram", "L2": "2 DOM before capture", "L3": "3 OCR on frames",
-             "L4": "4 artifacts + metadata",
-             "L5": "5 human review"}
+    (out / "gate-summary.md").write_text(public_summary(log), encoding="utf-8")
+    lines = [f"# Gate log: {log['slug']} ({log['date']})", "", "Team only: never copy this file into a repo (use "
+             "gate-summary.md).", "", "| Layer | Status | Hits | Notes |", "|---|---|---|---|"]
+    names = LAYER_NAMES
     for k in ("L1", "L2", "L3", "L4", "L5"):
         layer = log["layers"].get(k)
         if not layer:

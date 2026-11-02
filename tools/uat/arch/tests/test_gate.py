@@ -129,6 +129,76 @@ class NgramLayer(Base):
             del os.environ["ARCH_VIDEO_ROOT_REPO"]
 
 
+class HyphenAndIdentity(Base):
+    """Hyphenated coined names, the series identity and drawn diagram labels (review findings of the S264 pilot)."""
+
+    def setUp(self):
+        super().setUp()
+        self.ws = self.tmp / "ws"
+        (self.ws / "src").mkdir(parents=True)
+        (self.ws / "src" / "notes.md").write_text(
+            "We run xx-thing2 and orbit-core-v3 nightly; see crate.parcel_log and the Harbour digest series.\n"
+            "Read-only replicas are event-driven.\n")
+        (self.ws / "src" / "plan.md").write_text("Amazon Aurora, Amazon SQS, AWS Lambda and Amazon S3 Glacier.\n")
+        subprocess.run(["git", "init", "-q", str(self.ws)], check=True)
+        subprocess.run(["git", "-C", str(self.ws), "add", "."], check=True)
+
+    def test_hyphenated_tokens_are_internal_looking(self):
+        for tok in ("xx-thing2", "orbit-core", "Orbit-Core", "aa-bb", "geo-v2's"):
+            self.assertTrue(gate.internal_looking(tok), tok)
+        for tok in ("read-only", "event-driven", "Multi-tenant", "well-known"):
+            self.assertFalse(gate.internal_looking(tok), tok)
+        self.assertFalse(gate.internal_looking("orbit-core", {"orbit-core"}))
+
+    def test_hyphenated_token_found_in_a_public_repo_fails(self):
+        hits = gate.ngram_scan({"s1": "Our xx-thing2 is fast and orbit-core keeps up."}, self.ws, set())
+        self.assertEqual(sorted(h.match.split()[0] for h in hits), ["orbit-core", "xx-thing2"])
+        self.assertEqual({h.category for h in hits}, {"ngram:token"})
+
+    def test_prefix_of_a_public_identifier_fails(self):
+        hits = gate.ngram_scan({"s1": "Rows land in crate.parcel and then drain."}, self.ws, set())
+        self.assertEqual([h.category for h in hits], ["ngram:token"])
+
+    def test_ordinary_compounds_pass(self):
+        self.assertEqual(gate.ngram_scan({"s1": "Our read-only copies stay event-driven."}, self.ws, set()), [])
+
+    def test_series_identity_found_anywhere_fails(self):
+        hits = gate.identity_scan({"series_tag": gate.strip_episode_marker("Harbour digest · Ep 2")}, self.ws)
+        self.assertEqual([h.category for h in hits], ["ngram:identity"])
+        self.assertEqual(gate.identity_scan({"series": "Lantern letters"}, self.ws), [])
+        self.assertEqual(gate.strip_episode_marker("Harbour digest · Episode 12"), "Harbour digest")
+
+    def test_cloud_product_names_do_not_count_in_the_label_set(self):
+        cloud = ["Amazon Aurora", "Amazon SQS", "AWS Lambda", "Amazon S3 Glacier", "Partner desk"]
+        self.assertEqual(gate.label_set_scan(cloud, self.ws), [])
+        self.assertEqual(gate.label_set_candidates(cloud), ["partner desk"])
+
+    def test_coined_label_drawn_in_a_sketch_fails_layer1(self):
+        sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+        import make_episode  # noqa: E402
+        import scene  # noqa: E402
+
+        sk = {"nodes": [{"id": "a", "label": "Catalogue", "sub": "crate.parcel_log", "at": [0, 0]},
+                        {"id": "b", "label": "Workers", "sub": "orbit-core", "at": [1, 0]}],
+              "edges": [{"from": "a", "to": "b"}]}
+        ep = {"slug": "ep9-test", "title": "A calm title", "series": "Lantern letters", "series_tag": "Lantern · Ep 9",
+              "cuts": {"master": {"aspect": "16:9"}}, "diagrams": {"d": sk},
+              "scenes": [{"id": "s1", "visual": {"type": "diagram", "diagram": "d"}, "sentences": ["Hello there."]}]}
+        meta, sents = scene.load(ep)
+        hits, texts, svgs, n = make_episode.layer1(ep, meta, sents, None, self.pats, self.ws, set())
+        self.assertEqual(n, 4)
+        self.assertIn("d", svgs)
+        drawn = {h.match.split()[0] for h in hits if h.where.startswith("diagram:d:")}
+        self.assertEqual(drawn, {"crate.parcel_log", "orbit-core"})
+        sk["nodes"][0]["sub"], sk["nodes"][1]["sub"] = "api", "workers"
+        meta, sents = scene.load(ep)
+        self.assertEqual(make_episode.layer1(ep, meta, sents, None, self.pats, self.ws, set())[0], [])
+        ep["series_tag"] = "Harbour digest · Ep 9"
+        meta, sents = scene.load(ep)
+        hits = make_episode.layer1(ep, meta, sents, None, self.pats, self.ws, set())[0]
+        self.assertEqual([h.category for h in hits], ["ngram:identity"])
+
+
 class Layer2(Base):
     def test_dom_dump_with_brand_in_svg_fails(self):
         dump = {"title": "x", "body": "Catalogue", "svg": ["Zentrova admin"], "attrs": [], "refs": []}
@@ -199,7 +269,7 @@ class Layer4(Base):
 
     def test_metadata_tags(self):
         mp4 = self.tmp / "ep1_master.mp4"
-        self.assertEqual(gate.metadata_hits(self.probe({"title": "Engineering notes", "encoder": "Lavf60.16.100"})(mp4),
+        self.assertEqual(gate.metadata_hits(self.probe({"title": "River notes", "encoder": "Lavf60.16.100"})(mp4),
                                             "m", self.pats), [])
         bad = gate.metadata_hits(self.probe({"title": "Zentrova notes", "comment": "x"})(mp4), "m", self.pats)
         self.assertEqual({h.category for h in bad}, {"metadata:tag", "deny:brand"})

@@ -1,19 +1,34 @@
-"""Scene, timeline, caption and label-profile tests (AA-1021). Invented content only. Stdlib only:
+"""Scene, timeline, caption and sketch tests (AA-1021). Invented content only. Stdlib only:
 
   python3 -m unittest discover -s tools/uat/arch/tests
 """
 import copy
+import html
+import re
 import sys
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import labels  # noqa: E402
 import scene  # noqa: E402
+import sketch  # noqa: E402
+
+SKETCH = {
+    "groups": [{"id": "cloud", "label": "Cloud account", "sub": "one region", "cells": [0, 1, 1, 2]},
+               {"id": "base", "label": "Shared base", "cells": [0, 2, 1, 2], "style": "dashed"}],
+    "nodes": [{"id": "guests", "label": "Guests", "at": [0, 0], "kind": "people"},
+              {"id": "cat", "label": "Catalogue", "sub": ["api", "workers"], "at": [0, 1]},
+              {"id": "box", "label": "Containers", "at": [1, 1]},
+              {"id": "db", "label": "Managed database", "at": [0, 2], "kind": "store"},
+              {"id": "ext", "label": "Vendor APIs", "at": [1, 2], "kind": "external"}],
+    "edges": [{"from": "guests", "to": "cat", "label": "HTTPS & co"}, {"from": "cat", "to": "db"},
+              {"from": "box", "to": "ext", "style": "dashed"}],
+}
 
 EPISODE = {
-    "slug": "ep1-example", "title": "Four apps, one picture", "series": "Engineering notes", "episode": 1,
-    "diagrams": {"eco": "ecosystem"},
+    "slug": "ep1-example", "title": "Four apps, one picture", "series": "River notes", "episode": 1,
+    "diagrams": {"eco": SKETCH},
     "description": "How an invented company splits its platform.", "hashtags": ["#aws", "#architecture"],
     "cuts": {"master": {"aspect": "16:9", "chapters": True, "max_s": 200},
              "short": {"aspect": "9:16", "max_s": 60}},
@@ -66,7 +81,7 @@ class Load(unittest.TestCase):
         self.assertIn("s1.1:text", texts)
         self.assertEqual(texts["s1.1:visual.kicker"], "Episode 1")
         self.assertEqual(texts["hashtags"], "#aws #architecture")
-        self.assertNotIn("s2.1:visual.reveal", texts)   # labels are checked through the profile instead
+        self.assertNotIn("s2.1:visual.reveal", texts)   # names of drawn labels; the drawn text is checked itself
 
 
 class Timeline(unittest.TestCase):
@@ -122,50 +137,63 @@ class Timeline(unittest.TestCase):
         self.assertIn(f",{int(scene.LAYOUT['9:16']['cap_margin'] * 1920)},1", a)
 
 
-SVG = """<?xml version="1.0"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "x">
-<svg width="200pt" height="100pt" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg"
- xmlns:xlink="http://www.w3.org/1999/xlink"><!-- secret comment -->
-<g id="graph0" class="graph"><title>Orbit platform</title><text>Orbit platform: ecosystem architecture (Dev)</text>
-<g id="clust1" class="cluster"><title>cluster_1 orbit Orbit-Trips</title><text>Orbit-Trips</text></g>
-<g id="node1" class="node"><title>s1</title><a xlink:href="https://x.example.com" xlink:title="t">
-<text>OrbitTrips web</text></a></g>
-<g id="node3" class="node"><title>s7</title><image xlink:href="data:image/png;base64,AAAA"
- width="20px" height="20px" x="5" y="6"/></g>
-<g id="node4" class="node"><title>s7&#45;t</title><text>Hosting box</text></g>
-<g id="node2" class="node"><title>orbit_api</title><text>VendorOne · VendorTwo (no key)</text></g>
-<g id="edge1" class="edge"><title>s1&#45;&gt;s2</title><text>calls</text></g>
-</g></svg>"""
-PROFILE = {"map": {"Orbit-Trips": "Route app", "Orbit platform: ecosystem architecture (Dev)": None,
-                   "VendorOne · VendorTwo (no key)": "model vendor APIs"},
-           "replace": [["Orbit-?Trips", "Route app"]], "drop_titles": True, "neutral_icons": ["Hosting box"]}
-
-
-class LabelProfile(unittest.TestCase):
+class Sketch(unittest.TestCase):
     def setUp(self):
-        self.out = labels.anonymize_svg(SVG, labels.prepare(PROFILE))
+        self.svg = sketch.render(copy.deepcopy(SKETCH), "eco")
 
-    def test_texts_are_mapped_dropped_or_rewritten(self):
-        self.assertIn(">Route app<", self.out)
-        self.assertIn(">Route app web<", self.out)
-        self.assertIn(">model vendor APIs<", self.out)
-        self.assertNotIn("Orbit", self.out)
-        self.assertNotIn("VendorOne", self.out)
+    def test_structure_page_py_drives(self):
+        root = ET.fromstring(self.svg)
+        ns = "{http://www.w3.org/2000/svg}"
+        graph = root.find(f"{ns}g")
+        self.assertEqual(graph.get("class"), "graph")
+        kinds = [g.get("class") for g in graph.findall(f"{ns}g")]
+        self.assertEqual(kinds.count("cluster"), 2)
+        self.assertEqual(kinds.count("node"), 5)
+        self.assertEqual(kinds.count("edge"), 3)
+        for g in graph.findall(f"{ns}g"):
+            if g.get("class") in ("node", "cluster"):
+                self.assertTrue(g.findall(f"{ns}text"), g.get("class"))   # labels are direct children (pick())
+        self.assertEqual(root.get("width"), "100%")
 
-    def test_titles_comments_links_and_doctype_are_gone(self):
-        for gone in ("<title", "secret comment", "DOCTYPE", "example.com", "orbit_api"):
-            self.assertNotIn(gone, self.out)
+    def test_keys_are_neutral_never_the_authored_ids(self):
+        self.assertIn('data-k="n1"', self.svg)
+        self.assertIn('data-from="n1" data-to="n2"', self.svg)
+        for authored in ("guests", "data-k=\"cat\"", "\"ext\""):
+            self.assertNotIn(authored, self.svg)
+        for gone in ("<title", "<desc", "<image", "href", "<a "):
+            self.assertNotIn(gone, self.svg)
 
-    def test_vendor_icon_becomes_a_plain_shape(self):
-        self.assertNotIn("<image", self.out)
-        self.assertIn('rx="6"', self.out)
-        self.assertIn('x="5"', self.out)
+    def test_drawn_text_is_exactly_the_labels(self):
+        drawn = re.findall(r"<text[^>]*>([^<]*)</text>", self.svg)
+        self.assertEqual(sorted(html.unescape(t) for t in drawn), sorted(sketch.labels(SKETCH)))
 
-    def test_neutral_keys_kept_for_reveal(self):
-        self.assertIn('data-k="s1"', self.out)
-        self.assertIn('data-from="s1"', self.out)
-        self.assertIn('data-to="s2"', self.out)
-        self.assertNotIn('data-k="orbit_api"', self.out)
-        self.assertIn('width="100%"', self.out)
+    def test_nested_groups_and_nodes_inside_their_frames(self):
+        root = ET.fromstring(self.svg)
+        ns = "{http://www.w3.org/2000/svg}"
+        rects = [g.find(f"{ns}rect") for g in root.iter(f"{ns}g") if g.get("class") == "cluster"]
+        (outer, inner) = sorted(rects, key=lambda r: float(r.get("width")), reverse=True)
+        f = lambda r, k: float(r.get(k))  # noqa: E731
+        self.assertLess(f(outer, "x"), f(inner, "x"))
+        self.assertLess(f(outer, "y"), f(inner, "y"))
+        self.assertGreater(f(outer, "y") + f(outer, "height"), f(inner, "y") + f(inner, "height"))
+
+    def test_invalid_sketches_are_errors(self):
+        bad = copy.deepcopy(SKETCH)
+        bad["nodes"][1]["at"] = [0, 0]
+        bad["edges"].append({"from": "cat", "to": "nowhere"})
+        bad["groups"].append({"id": "x", "label": "Cross", "cells": [1, 0, 2, 1]})
+        msg = "; ".join(sketch.validate(bad, "eco"))
+        for part in ("share cell", "'nowhere'", "overlap without nesting"):
+            self.assertIn(part, msg)
+        with self.assertRaises(sketch.SketchError):
+            sketch.render(bad, "eco")
+
+    def test_committed_diagram_name_is_refused(self):
+        ep = copy.deepcopy(EPISODE)
+        ep["diagrams"] = {"eco": "ecosystem"}
+        with self.assertRaises(scene.SceneError) as e:
+            scene.load(ep)
+        self.assertIn("visual fingerprint", str(e.exception))
 
 
 if __name__ == "__main__":

@@ -16,9 +16,6 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
-import numpy as np
-import soundfile as sf
-
 from scene import ASPECTS
 
 XF = 0.45
@@ -38,6 +35,9 @@ def scale_keyframe(src: Path, dst: Path, aspect: str) -> Path:
 
 
 def narration(tl: list[dict], clips: dict[str, dict], total: float, out_wav: Path) -> Path:
+    import numpy as np          # venv only: the stdlib gate tests import make_episode without them
+    import soundfile as sf
+
     track = np.zeros(int((total + 1) * SR), dtype=np.float32)
     for e in tl:
         s, sr = sf.read(clips[e["id"]]["wav"], dtype="float32")
