@@ -1,0 +1,84 @@
+2026-11-02T12:27:14Z
+<acc2>
+service:  aa-crm-dev-api (cluster aa-cis-dev-cluster)
+running:  aa-crm-dev-api:120  image tag dca5465b  rollout IN_PROGRESS  deployments 2
+revisions (newest first, ACTIVE):
+  aa-crm-dev-api:120  dca5465b  ACTIVE   <- running
+  aa-crm-dev-api:119  22d833cb  ACTIVE
+  aa-crm-dev-api:118  3bd30d51  ACTIVE
+  aa-crm-dev-api:117  f7e8d381  ACTIVE
+  aa-crm-dev-api:116  bootstrap  ACTIVE   (Terraform template, not a target)
+  aa-crm-dev-api:115  3fd7d085  ACTIVE
+  aa-crm-dev-api:114  e5d5d517  ACTIVE
+  aa-crm-dev-api:113  6b82c8c0  ACTIVE
+  aa-crm-dev-api:112  d2e20a4d  ACTIVE
+  aa-crm-dev-api:111  50042c12  ACTIVE
+{"status":"ok","service":"aa-crm-api","version":"0.11.0","git_sha":"dca5465b"}
+service:  aa-crm-dev-api (cluster aa-cis-dev-cluster)
+running:  aa-crm-dev-api:120  image tag dca5465b  rollout IN_PROGRESS  deployments 2
+WARNING: the running deployment is IN_PROGRESS, not COMPLETED: wait for the circuit breaker first (runbook step 1)
+target:   aa-crm-dev-api:119  image tag 22d833cb
+image:    aa-crm-dev-api:22d833cb pushed 2026-11-02T12:22:34.369000+07:00
+config:   same environment names and secret references
+
+command (WRITE):  aws ecs update-service --cluster aa-cis-dev-cluster --service aa-crm-dev-api --task-definition aa-crm-dev-api:119 --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text
+wait:             aws ecs wait services-stable --cluster aa-cis-dev-cluster --services aa-crm-dev-api --profile aa365-admin --region us-west-1
+verify:           curl -s https://partner-dev.lumiguides.it.com/crm/health   (expect git_sha starting with 22d833cb)
+way back (WRITE): aws ecs update-service --cluster aa-cis-dev-cluster --service aa-crm-dev-api --task-definition aa-crm-dev-api:120 --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text
+NOTE: a rollback restarts the container like a deploy: check the app's deploy gate first (runbook rollback-ecs, Preconditions)
+
+DRY RUN: nothing changed. Re-run with --apply to run the command above.
+== BACK
+2026-11-02T12:28:23Z
+service:  aa-crm-dev-api (cluster aa-cis-dev-cluster)
+running:  aa-crm-dev-api:120  image tag dca5465b  rollout COMPLETED  deployments 1
+target:   aa-crm-dev-api:119  image tag 22d833cb
+image:    aa-crm-dev-api:22d833cb pushed 2026-11-02T12:22:34.369000+07:00
+config:   same environment names and secret references
+
+command (WRITE):  aws ecs update-service --cluster aa-cis-dev-cluster --service aa-crm-dev-api --task-definition aa-crm-dev-api:119 --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text
+wait:             aws ecs wait services-stable --cluster aa-cis-dev-cluster --services aa-crm-dev-api --profile aa365-admin --region us-west-1
+verify:           curl -s https://partner-dev.lumiguides.it.com/crm/health   (expect git_sha starting with 22d833cb)
+way back (WRITE): aws ecs update-service --cluster aa-cis-dev-cluster --service aa-crm-dev-api --task-definition aa-crm-dev-api:120 --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text
+NOTE: a rollback restarts the container like a deploy: check the app's deploy gate first (runbook rollback-ecs, Preconditions)
+
+applying: aa-crm-dev-api -> aa-crm-dev-api:119
+rollout:  IN_PROGRESS
+stable:   aa-crm-dev-api:119 COMPLETED after 165 s
+health:   https://partner-dev.lumiguides.it.com/crm/health git_sha=22d833cb
+DONE: aa-crm-dev-api on aa-crm-dev-api:119 (22d833cb) in 166 s. Way back: aws ecs update-service --cluster aa-cis-dev-cluster --service aa-crm-dev-api --task-definition aa-crm-dev-api:120 --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text
+2026-11-02T12:31:41Z
+ready 200
+{"status":"ok","service":"aa-crm-api","version":"0.11.0","git_sha":"22d833cb"}
+== FORWARD
+2026-11-02T12:32:00Z
+getpass.py:99: GetPassWarning: Can not control echo on the terminal.
+Warning: Password input may be echoed.
+Enter MFA code for arn:aws:iam::<acc2>:mfa/aa365_admin_nghiep: 
+aws: [ERROR]:
+2026-11-02T12:32:00Z
+ready 200
+{"status":"ok","service":"aa-crm-api","version":"0.11.0","git_sha":"22d833cb"}
+web healthz 200
+== FORWARD (after MFA refresh)
+2026-11-02T12:39:05Z
+service:  aa-crm-dev-api (cluster aa-cis-dev-cluster)
+running:  aa-crm-dev-api:119  image tag 22d833cb  rollout COMPLETED  deployments 1
+target:   aa-crm-dev-api:120  image tag dca5465b
+image:    aa-crm-dev-api:dca5465b pushed 2026-11-02T19:25:07.489000+07:00
+config:   same environment names and secret references
+
+command (WRITE):  aws ecs update-service --cluster aa-cis-dev-cluster --service aa-crm-dev-api --task-definition aa-crm-dev-api:120 --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text
+wait:             aws ecs wait services-stable --cluster aa-cis-dev-cluster --services aa-crm-dev-api --profile aa365-admin --region us-west-1
+verify:           curl -s https://partner-dev.lumiguides.it.com/crm/health   (expect git_sha starting with dca5465b)
+way back (WRITE): aws ecs update-service --cluster aa-cis-dev-cluster --service aa-crm-dev-api --task-definition aa-crm-dev-api:119 --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text
+NOTE: a rollback restarts the container like a deploy: check the app's deploy gate first (runbook rollback-ecs, Preconditions)
+
+applying: aa-crm-dev-api -> aa-crm-dev-api:120
+rollout:  IN_PROGRESS
+ERROR: rollout is IN_PROGRESS, not COMPLETED
+2026-11-02T12:42:07Z
+ready 200
+{"status":"ok","service":"aa-crm-api","version":"0.11.0","git_sha":"dca5465b"}
+web healthz 200
+COMPLETED	aa-crm-dev-api:120	1	1	1

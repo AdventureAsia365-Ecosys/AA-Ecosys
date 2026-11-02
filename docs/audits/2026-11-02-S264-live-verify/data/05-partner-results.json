@@ -1,0 +1,394 @@
+{
+  "crm-signin": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "landed": "/pipeline",
+      "agency": "Lữ hành Sen Vàng\nOwner · Test agency"
+    },
+    "shots": []
+  },
+  "1-crm-sidebar": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "groupsInitial": [
+        {
+          "tid": "crm-nav-group-crm-toggle",
+          "label": "CRM",
+          "expanded": "true",
+          "active": true,
+          "visible": true
+        },
+        {
+          "tid": "crm-nav-group-money-toggle",
+          "label": "MONEY",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        },
+        {
+          "tid": "crm-nav-group-grow-toggle",
+          "label": "GROW",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        }
+      ],
+      "defaultOk": {
+        "groups": 3,
+        "active": [
+          "CRM"
+        ],
+        "activeOpen": true,
+        "othersFolded": true
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "drawerButton": "Menu",
+      "groups390_light": [
+        "CRM:true",
+        "MONEY:false",
+        "GROW:false"
+      ],
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      },
+      "groups390_dark": [
+        "CRM:true",
+        "MONEY:false",
+        "GROW:false"
+      ],
+      "persist": {
+        "group": "MONEY",
+        "afterClick": "true",
+        "afterReload": "true",
+        "ok": true
+      },
+      "rail": "no collapse control found"
+    },
+    "shots": [
+      "05-crm-sidebar-1440-light.png",
+      "05-crm-sidebar-390-light-drawer.png",
+      "05-crm-sidebar-1440-dark.png",
+      "05-crm-sidebar-390-dark-drawer.png",
+      "05-crm-sidebar-unfolded-after-reload-1440-light.png"
+    ],
+    "url": "/pipeline"
+  },
+  "4-crm-terms-footer": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "footerText": "Terms of use",
+      "footerHref": "/legal/terms",
+      "landed": "/legal/terms",
+      "crmTerms": 1,
+      "h1": "Terms of use",
+      "partnerTerms": false
+    },
+    "shots": [
+      "05-crm-footer-terms-link-1440-light.png"
+    ],
+    "url": "/legal/terms"
+  },
+  "4-crm-terms-settings-ai": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "linkText": "AI-generated content in the terms of use",
+      "linkHref": "/legal/terms#ai",
+      "landed": "/legal/terms#ai",
+      "crmTerms": 1,
+      "aiSection": 1,
+      "aiHeading": "1. AI-GENERATED CONTENT",
+      "aiText": "1. AI-GENERATED CONTENT When your agency switches AI on (Settings > AI), the CRM can draft client replies and follow-ups with AI. AI drafts can contain mistakes. A draft is for information only: a suggestion for your team. Nothing reaches a client until a person in your agency reviews it and sends it. Before you send, check prices, dates, visa and entry rules, health and safety information against",
+      "partnerTerms": false,
+      "ov1440_light": {
+        "doc": "1440/1440",
+        "main": "1200/1200",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov1440_dark": {
+        "doc": "1440/1440",
+        "main": "1200/1200",
+        "ok": true,
+        "theme": "dark"
+      },
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      }
+    },
+    "shots": [
+      "05-crm-settings-ai-terms-link-1440-light.png",
+      "05-crm-legal-terms-ai-1440-light.png",
+      "05-crm-legal-terms-ai-390-light.png",
+      "05-crm-legal-terms-ai-1440-dark.png",
+      "05-crm-legal-terms-ai-390-dark.png"
+    ],
+    "url": "/legal/terms#ai"
+  },
+  "studio-signin": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "landed": "/portal/dashboard"
+    },
+    "shots": []
+  },
+  "1-studio-sidebar": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "groupsInitial": [
+        {
+          "tid": "portal-nav-group-tours-toggle",
+          "label": "TOURS",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        },
+        {
+          "tid": "portal-nav-group-brand-toggle",
+          "label": "BRAND",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        },
+        {
+          "tid": "portal-nav-group-create-toggle",
+          "label": "CREATE",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        },
+        {
+          "tid": "portal-nav-group-content-toggle",
+          "label": "CONTENT",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        },
+        {
+          "tid": "portal-nav-group-account-toggle",
+          "label": "ACCOUNT",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        },
+        {
+          "tid": "portal-nav-group-crm-toggle",
+          "label": "PARTNER CRM",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        }
+      ],
+      "defaultOk": {
+        "groups": 6,
+        "active": [],
+        "activeOpen": true,
+        "othersFolded": true
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "drawerButton": "Open menu",
+      "groups390_light": [
+        "TOURS:false",
+        "BRAND:false",
+        "CREATE:false",
+        "CONTENT:false",
+        "ACCOUNT:false",
+        "PARTNER CRM:false"
+      ],
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      },
+      "groups390_dark": [
+        "TOURS:false",
+        "BRAND:false",
+        "CREATE:false",
+        "CONTENT:false",
+        "ACCOUNT:false",
+        "PARTNER CRM:false"
+      ],
+      "persist": {
+        "group": "TOURS",
+        "afterClick": "true",
+        "afterReload": "true",
+        "ok": true
+      },
+      "rail": {
+        "width": 68,
+        "links": 16,
+        "visibleLinks": 16,
+        "visibleWithIcon": 16,
+        "visibleHeaders": 0
+      }
+    },
+    "shots": [
+      "05-studio-sidebar-1440-light.png",
+      "05-studio-sidebar-390-light-drawer.png",
+      "05-studio-sidebar-1440-dark.png",
+      "05-studio-sidebar-390-dark-drawer.png",
+      "05-studio-sidebar-unfolded-after-reload-1440-light.png",
+      "05-studio-sidebar-rail-1440-light.png",
+      "05-studio-sidebar-rail-1440-dark.png"
+    ],
+    "url": "/portal/dashboard"
+  },
+  "5-studio/portal/terms": {
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "pageErrors": [],
+    "badResponses": [
+      "404 GET portal.lumiguides.it.com/portal/terms :: <!DOCTYPE html><html lang=\"en\" data-theme=\"light\" data-sidebar=\"expanded\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initia"
+    ],
+    "notes": [
+      "/portal/terms -> 404 /portal/terms"
+    ],
+    "checks": {
+      "status": 404,
+      "fallbackStatus": 200,
+      "mentionsOpenAI": true,
+      "openaiContext": "his at review, publish and export: “This content was generated with AI. Review it before publishing; you are responsible for what you publish.” The content is written and checked with models from third-party providers: Anthropic's Claude, through Amazon Bedrock (Amazon Web Services), writes it, and OpenAI models, also through Amazon Bedrock, review, score and check it. When those models are unavailable, the review and check steps may fall back to other models on Amazon Bedrock (Amazon Nova, Meta",
+      "lastResort": true,
+      "h2": [
+        "1. The service",
+        "2. Your account and API key",
+        "3. AI-generated content and acceptable use",
+        "4. Publishing to your channels",
+        "5. Suspension and ending the service",
+        "6. Content rights",
+        "7. Plans and fees",
+        "8. Availability",
+        "9. Liability and governing law",
+        "10. Contact"
+      ],
+      "ov1440_light": {
+        "doc": "1440/1440",
+        "main": "758/758",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "356/356",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov1440_dark": {
+        "doc": "1440/1440",
+        "main": "758/758",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "356/356",
+        "ok": true,
+        "theme": "light"
+      }
+    },
+    "shots": [
+      "05-studio-terms-fallback-1440-light.png",
+      "05-studio-terms-fallback-390-light.png",
+      "05-studio-terms-fallback-1440-dark.png",
+      "05-studio-terms-fallback-390-dark.png"
+    ],
+    "url": "/terms"
+  },
+  "5-studio/privacy": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "status": 200,
+      "mentionsOpenAI": true,
+      "openaiContext": "tell us to. To support you, keep the service secure, and enforce the partner terms. To measure our own costs and service quality. The legal basis for each use is [to be confirmed]. 5. AI processing Content is generated and checked by AI models. Claude (Anthropic), through Amazon Bedrock, writes it; OpenAI models, also through Amazon Bedrock, review, score and check the drafts. When those models are unavailable, the review and check steps may fall back to other models on Amazon Bedrock (Amazon No",
+      "lastResort": true,
+      "h2": [
+        "1. Who we are",
+        "2. What we collect",
+        "3. Cookies",
+        "4. How we use your data",
+        "5. AI processing",
+        "6. Who receives your data",
+        "7. Where your data is stored",
+        "8. How long we keep it",
+        "9. Your rights",
+        "10. Data about your own customers",
+        "11. Changes to this notice"
+      ],
+      "ov1440_light": {
+        "doc": "1440/1440",
+        "main": "758/758",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "356/356",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov1440_dark": {
+        "doc": "1440/1440",
+        "main": "758/758",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "356/356",
+        "ok": true,
+        "theme": "light"
+      }
+    },
+    "shots": [
+      "05-studio-privacy-fallback-1440-light.png",
+      "05-studio-privacy-fallback-390-light.png",
+      "05-studio-privacy-fallback-1440-dark.png",
+      "05-studio-privacy-fallback-390-dark.png"
+    ],
+    "url": "/privacy"
+  }
+}
