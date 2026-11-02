@@ -1,0 +1,61 @@
+{
+  "cis-signin": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {},
+    "shots": []
+  },
+  "2-cis-tenant-members-scan": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "tenantRows": 11,
+      "scan": {
+        "Adventure Asia Internal": 0,
+        "ExploreAsia Co.": 0,
+        "WanderLux Travel": 0,
+        "test 1": 0,
+        "Atlas & Hearth": 5
+      },
+      "hasEmail": false,
+      "text": "Content studio members Who can sign in to this tenant's Content studio, and with which role. Owners manage the account, editors write content, viewers only read. An invitation is an e-mail with a sign-in link; the person accepts it on the agency site. CIS never stores the address. CRM roles are managed in the partner CRM. Refresh Invite member Columns IDENTITY ROLE STATUS INVITED LAST CHANGE BY not signed in yet Viewer INVITED 27 Oct 2026, 13:33 27 Oct 2026, 13:33 admin:<staff-id> not signed in yet Viewer INVITED 27 Oct 2026, 13:38 27 Oct 2026, 13:38 admin:<staff-id> 5d6ee12ce763 Owner ACTIVE 27 Oct 2026, 13:56 29 Oct 2026, 12:50 admin:6801",
+      "inviteVisible": true,
+      "rowMenus": 5,
+      "ov1440_light": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov1440_dark": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "dark"
+      },
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      }
+    },
+    "shots": [
+      "PRIVATE 05-cis-tenant-members-rows-1440-light.png",
+      "PRIVATE 05-cis-tenant-members-rows-390-light.png",
+      "PRIVATE 05-cis-tenant-members-rows-1440-dark.png",
+      "PRIVATE 05-cis-tenant-members-rows-390-dark.png"
+    ],
+    "url": "/admin/tenants"
+  }
+}

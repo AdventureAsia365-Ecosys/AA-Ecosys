@@ -77,6 +77,14 @@ class MergeTest(unittest.TestCase):
         self.assertEqual({c[1] for c in diff["changed"]}, {"title", "status", "priority", "project"})
         self.assertEqual(plan["issues"][0]["status"], "Todo", "merge must not modify its input")
 
+    def test_private_issue_keeps_its_plan_title(self):
+        plan = make_plan([plan_issue("AA-11", title="AA-11 (details private)", status="Todo", private=True)])
+        linear = [ps.normalize(node("AA-11", title="Secret working title", state=("In Progress", "started")))]
+        new, diff = ps.merge(plan, linear)
+        self.assertEqual(new["issues"][0]["title"], "AA-11 (details private)")
+        self.assertEqual(new["issues"][0]["status"], "In Progress")
+        self.assertNotIn("Secret working title", repr(diff))
+
     def test_closed_issue_removed_with_reason(self):
         plan = make_plan([plan_issue("AA-10"), plan_issue("AA-11")])
         new, diff = ps.merge(plan, [ps.normalize(node("AA-11"))], {"AA-10": "Done in Linear"})

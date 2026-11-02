@@ -1,0 +1,6 @@
+2026-11-02T12:51:33Z
+back: rollback requested 12:51:33Z; booking.lumiguides.it.com alias on dpl_HWmT (cc2c78d1) confirmed 12:52Z; page 307 (login redirect, normal)
+2026-11-02T12:52:45Z
+forward: promote dpl_5Hca (1fceb3c4) requested
+page 307
+forward: alias on dpl_5Hca confirmed 2026-11-02T12:53:08Z

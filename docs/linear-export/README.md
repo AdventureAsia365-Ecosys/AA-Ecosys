@@ -208,7 +208,9 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-640](cis-data-reset-pipeline-rerun-audit/AA-640.md) | [Billing] One source for plan tour quota (membership_plans); over-quota rewrites allowed + billed as overage | Done | 2026-09-25 | CIS Data Reset & Pipeline Rerun (Audit) |
 | [AA-641](cis-data-reset-pipeline-rerun-audit/AA-641.md) | [T2 pipeline] Stop flag_fix from creating new hard failures: deterministic seo_meta fit + forbidden-word guard | Done | 2026-10-07 | CIS Data Reset & Pipeline Rerun (Audit) |
 | [AA-724](cis-data-reset-pipeline-rerun-audit/AA-724.md) | [S1 writer] Cycle/bike tours fail brand-fit — writer emits hype/persona tone + forbidden words, regenerate can't fix | Done | 2026-10-07 | CIS Data Reset & Pipeline Rerun (Audit) |
+| [AA-1006](cis-portal-admin-tenant-ui/AA-1006.md) | [UI] CIS admin pages on the kit (S6b rest): suppressions 659 → 0, delete adminUi.tsx | Done | 2026-11-02 | CIS Portal — Admin & Tenant UI |
 | [AA-1009](cis-portal-admin-tenant-ui/AA-1009.md) | [UAT] Dry-run scenario harness: fast mode, sign-in setup per identity, ~20 public/read-only scenarios as regression | Done | 2026-10-31 | CIS Portal — Admin & Tenant UI |
+| [AA-1033](cis-portal-admin-tenant-ui/AA-1033.md) | AI-output notice across apps: one kit component + AI clause in CRM and TripPlanner terms | Done | 2026-11-02 | CIS Portal — Admin & Tenant UI |
 | [AA-160](cis-portal-admin-tenant-ui/AA-160.md) | Notification Layer Phase 2 — EventBridge + SQS + Dispatch Lambda | Canceled | 2026-10-12 | CIS Portal — Admin & Tenant UI |
 | [AA-662](cis-portal-admin-tenant-ui/AA-662.md) | [UI kit] Shared admin/portal components — DataTable (filter, sort, columns, pagination, saved views, CSV), Drawer, Modal, PageHeader, empty/loading/error states | Done | 2026-10-05 | CIS Portal — Admin & Tenant UI |
 | [AA-663](cis-portal-admin-tenant-ui/AA-663.md) | [Admin] Information architecture consolidation — one Dashboard, remove duplicates and legacy routes, Brand Identity + system config into Settings, drop the "ADMIN" tag | Done | 2026-09-29 | CIS Portal — Admin & Tenant UI |
@@ -590,6 +592,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-956](partner-crm-aa-partner/AA-956.md) | [CRM W5] CRM-26 Module 8 ops release | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-957](partner-crm-aa-partner/AA-957.md) | [CRM W5] CRM-27 Commission + cancel trip | Done | 2026-11-01 | Partner CRM — AA-Partner |
 | [AA-958](partner-crm-aa-partner/AA-958.md) | [CRM W6] CRM-28 Module 9 WhatsApp + SMS | Done | 2026-11-01 | Partner CRM — AA-Partner |
+| [AA-959](partner-crm-aa-partner/AA-959.md) | [CRM W6] CRM-29a Module 10 engine + tasks | Done | 2026-11-02 | Partner CRM — AA-Partner |
 | [AA-961](partner-crm-aa-partner/AA-961.md) | [CRM W6] CRM-30 Duty of care + calendar | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-962](partner-crm-aa-partner/AA-962.md) | [CRM W6] CRM-31 Onboarding + import | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-964](partner-crm-aa-partner/AA-964.md) | [CRM W7] CRM-33a AI gateway + drafts + guardrails | Done | 2026-10-31 | Partner CRM — AA-Partner |

@@ -1,0 +1,50 @@
+2026-11-02T12:42:41Z
+service:  aa-booking-dev-api (cluster aa-cis-dev-cluster)
+running:  aa-booking-dev-api:93  image tag 967f9b2c  rollout COMPLETED  deployments 1
+revisions (newest first, ACTIVE):
+  aa-booking-dev-api:93  967f9b2c  ACTIVE   <- running
+  aa-booking-dev-api:92  bootstrap  ACTIVE   (Terraform template, not a target)
+  aa-booking-dev-api:91  16fbed68  ACTIVE
+  aa-booking-dev-api:90  636df62c  ACTIVE
+  aa-booking-dev-api:89  45de0368  ACTIVE
+{"status":"ok","service":"aa-booking-api","version":"0.14.0","git_sha":"967f9b2c"}
+running:  aa-booking-dev-api:93  image tag 967f9b2c  rollout COMPLETED  deployments 1
+target:   aa-booking-dev-api:91  image tag 16fbed68
+CONFIG DIFF between aa-booking-dev-api:93 (running) and aa-booking-dev-api:91:
+  env only in running: ALERTS_TOPIC_ARN
+== BACK
+2026-11-02T12:43:40Z
+running:  aa-booking-dev-api:93  image tag 967f9b2c  rollout COMPLETED  deployments 1
+command (WRITE):  aws ecs update-service --cluster aa-cis-dev-cluster --service aa-booking-dev-api --task-definition aa-booking-dev-api:91 --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text
+wait:             aws ecs wait services-stable --cluster aa-cis-dev-cluster --services aa-booking-dev-api --profile aa365-admin --region us-west-1
+verify:           curl -s https://api-booking.lumiguides.it.com/booking/health   (expect git_sha starting with 16fbed68)
+way back (WRITE): aws ecs update-service --cluster aa-cis-dev-cluster --service aa-booking-dev-api --task-definition aa-booking-dev-api:93 --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text
+applying: aa-booking-dev-api -> aa-booking-dev-api:91
+rollout:  IN_PROGRESS
+stable:   aa-booking-dev-api:91 COMPLETED after 149 s
+health:   https://api-booking.lumiguides.it.com/booking/health git_sha=16fbed68
+DONE: aa-booking-dev-api on aa-booking-dev-api:91 (16fbed68) in 150 s. Way back: aws ecs update-service --cluster aa-cis-dev-cluster --service aa-booking-dev-api --task-definition aa-booking-dev-api:93 --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text
+2026-11-02T12:46:42Z
+ready 200
+{"status":"ok","service":"aa-booking-api","version":"0.14.0","git_sha":"16fbed68"}
+== FORWARD
+2026-11-02T12:47:05Z
+running:  aa-booking-dev-api:91  image tag 16fbed68  rollout COMPLETED  deployments 1
+ERROR: configuration differs (above): --apply refused without --allow-config-diff (the tech lead decides)
+command (WRITE):  aws ecs update-service --cluster aa-cis-dev-cluster --service aa-booking-dev-api --task-definition aa-booking-dev-api:93 --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text
+wait:             aws ecs wait services-stable --cluster aa-cis-dev-cluster --services aa-booking-dev-api --profile aa365-admin --region us-west-1
+verify:           curl -s https://api-booking.lumiguides.it.com/booking/health   (expect git_sha starting with 967f9b2c)
+way back (WRITE): aws ecs update-service --cluster aa-cis-dev-cluster --service aa-booking-dev-api --task-definition aa-booking-dev-api:91 --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text
+2026-11-02T12:47:38Z
+ready 200
+{"status":"ok","service":"aa-booking-api","version":"0.14.0","git_sha":"16fbed68"}
+== FORWARD (allow config diff: back to the running build)
+2026-11-02T12:47:55Z
+wait:             aws ecs wait services-stable --cluster aa-cis-dev-cluster --services aa-booking-dev-api --profile aa365-admin --region us-west-1
+applying: aa-booking-dev-api -> aa-booking-dev-api:93
+rollout:  IN_PROGRESS
+ERROR: rollout is IN_PROGRESS, not COMPLETED
+2026-11-02T12:50:56Z
+ready 200
+{"status":"ok","service":"aa-booking-api","version":"0.14.0","git_sha":"967f9b2c"}
+COMPLETED	aa-booking-dev-api:93	1	1

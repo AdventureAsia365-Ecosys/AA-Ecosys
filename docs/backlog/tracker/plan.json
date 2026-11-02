@@ -1,8 +1,8 @@
 {
  "updated": "2026-11-02",
- "synced_at": "2026-11-01T19:55Z",
- "session": "S263",
- "next_session": "S264",
+ "synced_at": "2026-11-02T14:27Z",
+ "session": "S264",
+ "next_session": "S265",
  "source": "Linear (02/11/2026, S263 close: plan_sync.py --write --session S263 + đọc lại list_issues cập nhật trong 2 ngày) + docs/backlog/README.md + .tmp-session/S263-checklist.md + docs/audits/2026-11-01-S263-*",
  "projects": {
   "data": "Data Platform",
@@ -340,9 +340,24 @@
  ],
  "checks": [
   {
-   "due": "S264 đầu phiên",
+   "due": "03/11",
    "issue": "AA-1003",
-   "text": "Đọc báo cáo tuần đầu tiên (02/11 01:30Z) rồi đóng AA-1003 nếu đạt Done-when; FI-01 tháng 10 chạy tay S263 05:11Z succeeded"
+   "text": "S264: lượt tuần đầu 00:32Z — 11 báo cáo succeeded, nhưng mới 26/63 báo cáo do engine sinh → chưa Done (còn R4–R7), giữ Todo; hạn bằng chứng 03/11"
+  },
+  {
+   "due": "≥10/11 ~12:00 UTC",
+   "issue": "AA-1024",
+   "text": "Áp mig CIS 336 (DB Migrate out-of-order; guard 30 ngày từ lượt tp_extract cuối 11/10 11:59Z), rồi bật lại DB_AUTO_APPLY_CONTRACT (đang false từ S263)"
+  },
+  {
+   "due": "khi có tenant chi tiêu thật",
+   "issue": "AA-1024",
+   "text": "S264: A8 (trần tenant chặn cứng) chưa chứng minh được live — trần 0 USD = không trần, numeric(10,2) không đặt < 0,01; kiểm lại khi tenant có chi tiêu"
+  },
+  {
+   "due": "~tháng 12",
+   "issue": "",
+   "text": "S264: AWS từ chối mở batch inference cho acc3 (chưa đủ lịch sử on-demand); xin lại sau, không ảnh hưởng việc đang chạy"
   },
   {
    "due": "hằng đêm 05:13 UTC",
@@ -445,9 +460,9 @@
    "text": "S262: báo cáo tháng 10 SƠ BỘ + C8 xong (docs/audits/2026-11-01-S262-capacity-review/: 471,70 USD, +165 % so với tháng 9; acc2 202,85, AI 268,85). Bản chính thức ≥03/11 với bundle làm mới, điền lý do 'chưa rõ'; AA-896 giữ In Progress tới đó"
   },
   {
-   "due": "hằng tuần (W45 từ 02/11)",
+   "due": "tuần W46 (≥09/11)",
    "issue": "",
-   "text": "S263: chưa chạy (phiên bắt đầu 01/11, dồn sức cổng AI) → S264. C4.3: rà pg_stat_statements tuần W45 (W44 xong S257, docs/audits/2026-10-29-S257-c43-w44/). S262: chưa tới hạn (31/10–01/11 vẫn là ISO W44); tới hạn ở phiên đầu từ thứ Hai 02/11 (S263 nếu chạy từ ngày đó)"
+   "text": "S264: C4.3 tuần W45 xong (docs/audits/2026-11-02-S264-c43-w45/, không mục tiêu C1.2 nào trượt); lượt sau ở phiên đầu tiên từ thứ Hai 09/11"
   },
   {
    "due": "04/11",
@@ -503,13 +518,33 @@
  "waiting": [
   {
    "who": "Tech lead",
+   "issue": "AA-1021",
+   "text": "S264: duyệt (chi tiết riêng tư, ngoài repo public), rồi upload Drive"
+  },
+  {
+   "who": "Tech lead",
+   "issue": "",
+   "text": "S264: gửi câu hỏi làm rõ cho IDS Vietnam (Sunny Cloud) — bản nháp riêng tư, không vào repo"
+  },
+  {
+   "who": "Tech lead",
+   "issue": "AA-1026",
+   "text": "S264: có chen Llama 4 Maverick (acc2) trước OpenAI cho 6 stage viết tenant không — cần đổi luật thứ tự 327 / ADR 0009 d5; đề xuất so 3 bài mẫu trước"
+  },
+  {
+   "who": "Tech lead",
+   "issue": "AA-1024",
+   "text": "S264: một cửa sổ MFA cho AA-1024 D2 (IAM) + AA-1023 (đổi tên environment prod ở 3 workflow Infra)"
+  },
+  {
+   "who": "Tech lead",
    "issue": "PR-20",
-   "text": "S263: duyệt 8 nháp Jira một lần (.tmp-session/S263/jira-drafts.md) rồi đăng; bản public vào thư mục chốt phiên S263 không có account ID, link Drive riêng, ảnh Providers"
+   "text": "S264: XONG — 4 nháp Jira duyệt một lần (\"ok đăng\") và đã đăng 02/11: PR-23 #10604, PR-26 #10605, PR-22 #10606, PR-20 #10607 (docs/audits/2026-11-02-S264-close/jira-drafts.md)"
   },
   {
    "who": "Tech lead",
    "issue": "AA-1020",
-   "text": "\"Có\" cho 2 dòng cấu hình agent: dòng role ledger trong .kiro/steering/session-workflow.md (DM-10.4 v1.10) và dòng portal trong .claude/CLAUDE.md (live là ECS aa-crm-dev-portal)"
+   "text": "S264: XONG — \"Có\" 07:55 cho 2 dòng cấu hình agent (root #448)"
   },
   {
    "who": "Tech lead",
@@ -628,6 +663,24 @@
   }
  ],
  "log": [
+  {
+   "session": "S264",
+   "date": "02/11/2026",
+   "closed": [
+    "AA-959",
+    "AA-1006",
+    "AA-1033"
+   ],
+   "canceled": [],
+   "created": [],
+   "reopened": [],
+   "notes": [
+    "S264 (Claude Code, VSCode/WSL, Ultracode; 02/11 ~07:05 → ~21:45 +07, lane L1–L15): In Progress 11 → 8",
+    "Done: AA-1033 (thông báo AI mọi app, CRM /legal/terms), AA-1006 (CIS admin lên kit), AA-959 (CRM Tasks + Automations, engine kiểm trên đại lý thử)",
+    "Cổng AI: CIS mig 339–346 (trần LLM chung, circuit + sổ credit, cảnh báo credit/số dư, ledger liên app + app profile, đại lý viết qua OpenAI hop cuối); TP E3; CRM F3",
+    "Thanh bên gom nhóm 4 app; tab Thành viên Tenant 360; game day quay lui D1–D5 đạt; C4.3 W45 không trượt; Jira đăng 4 comment"
+   ]
+  },
   {
    "session": "S263",
    "date": "01–02/11/2026",
@@ -1396,9 +1449,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M1b",
-   "session": "S264",
+   "session": "S265",
    "size": "M",
-   "next": "L0 · S263: 6 PR merged (root #427, CIS #1217, Booking #166, TP #205, Partner #174, Infra #580); còn kiểm /admin/docs, 2 dòng cấu hình agent (cần \"có\" của tech lead), chụp lại snapshot route",
+   "next": "L0 · S264: snapshot route chụp lại (root #461), cấu hình agent (root #448), tab Phiên tracker (#462/#463); còn kiểm /admin/docs",
    "needs": "\"có\" của tech lead cho 2 dòng cấu hình agent"
   },
   {
@@ -1408,10 +1461,11 @@
    "priority": "Medium",
    "project": "data",
    "milestone": "later",
-   "session": "S264",
+   "session": "S265",
    "size": "L",
-   "next": "L7 · S262 tạo; S264–S267, chi tiết riêng tư (ngoài repo public)",
-   "needs": "Tech lead duyệt"
+   "next": "L7 · S262 tạo; S264 tiến triển (chi tiết riêng tư, ngoài repo public); chờ tech lead duyệt",
+   "needs": "Tech lead duyệt",
+   "private": true
   },
   {
    "id": "AA-1000",
@@ -1680,27 +1734,15 @@
    "needs": ""
   },
   {
-   "id": "AA-959",
-   "title": "[CRM W6] CRM-29a Module 10 engine + tasks",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "later",
-   "session": "S264",
-   "size": "L",
-   "next": "L6 · S263: crm-038 + code merged (Partner #182/#183); kiểm live S264",
-   "needs": ""
-  },
-  {
    "id": "AA-960",
    "title": "[CRM W6] CRM-29b Tags, system tags, coverage, ready-to-travel",
    "status": "Backlog",
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "S264",
+   "session": "S265",
    "size": "M",
-   "next": "L6 · S263 chưa bắt đầu (tech lead 16:30Z: quay về cổng AI, dừng mở rộng CRM) → S264 sau AA-959",
+   "next": "L6 · S264 chưa làm (ưu tiên cổng AI + tenant) → S265",
    "needs": ""
   },
   {
@@ -1710,9 +1752,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "S264",
+   "session": "S265",
    "size": "M",
-   "next": "L6 · kế hoạch lại S260 · W6 · S264: search + thư viện. Chặn bởi AA-959 (S263); AA-947, AA-977 Done",
+   "next": "L6 · W6 · search + thư viện; AA-959 Done S264 → S265",
    "needs": ""
   },
   {
@@ -1734,9 +1776,9 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "later",
-   "session": "S264",
+   "session": "S265",
    "size": "M",
-   "next": "L6 · kế hoạch lại S260 · W7 · S264: campaign (R14). Chặn bởi AA-959 (S263); AA-977 Done, AA-945 phần Gmail đủ để gửi",
+   "next": "L6 · W7 · campaign (R14); AA-959 Done S264 → S265",
    "needs": ""
   },
   {
@@ -1788,27 +1830,15 @@
    "needs": ""
   },
   {
-   "id": "AA-1006",
-   "title": "[UI] CIS admin pages on the kit (S6b rest): suppressions 659 → 0, delete adminUi.tsx",
+   "id": "AA-1007",
+   "title": "[UI] Partner portal + CRM web on the kit (S6c): delete portal ui.tsx, suppressions 182 + 111 → 0",
    "status": "In Progress",
    "priority": "No priority",
    "project": "portal",
    "milestone": "M4",
-   "session": "S264",
+   "session": "S265",
    "size": "L",
-   "next": "LP · S263: CIS #1226 xoá adminUi.tsx, suppression kit → 0; kiểm prod 10 trang 0 lỗi; sửa tràn mobile + 3 mục nhẹ (#1229); còn chụp lại → rồi AA-1007",
-   "needs": ""
-  },
-  {
-   "id": "AA-1007",
-   "title": "[UI] Partner portal + CRM web on the kit (S6c): delete portal ui.tsx, suppressions 182 + 111 → 0",
-   "status": "Todo",
-   "priority": "No priority",
-   "project": "portal",
-   "milestone": "M4",
-   "session": "≥S263",
-   "size": "L",
-   "next": "LP · S261 tạo (follow-up AA-994)",
+   "next": "LP · S264: thanh bên gom nhóm 4 app (kit NavGroup), Members chỉ xem ẩn nút; còn suppressions portal/web, email của chính user trong studio",
    "needs": ""
   },
   {
@@ -1862,13 +1892,13 @@
   {
    "id": "AA-1023",
    "title": "[Ops] $0 rollback game day (Booking, CRM, Vercel, TP Lambda) + parameterised ECS runbook + job-idle gate in terraform-apply",
-   "status": "Todo",
+   "status": "In Review",
    "priority": "Medium",
    "project": "data",
    "milestone": "M1b",
-   "session": "S264",
+   "session": "S265",
    "size": "M",
-   "next": "L7 · S263 tạo (P4 review S261, $0): runbook rollback ECS + game day + gate job rảnh ở terraform-apply + env prod→dev",
+   "next": "L7 · S264: runbook + helper (root #464, #469), gate job rảnh (Infra #615), game day D1–D5 đạt; còn đổi tên env prod ở 3 workflow Infra (MFA)",
    "needs": ""
   },
   {
@@ -1878,21 +1908,21 @@
    "priority": "High",
    "project": "core",
    "milestone": "M1b",
-   "session": "S264",
+   "session": "S265",
    "size": "L",
-   "next": "L1 · S263 tạo (T-20): live A1, A2 (code), A4, A6, D1, G1, G2; A8 merged chưa kiểm live; A9 thiếu latency/attempt_no → CIS #1245 (mở); A3/A5/D8 + stage A2 ở CIS #1244 (mig 334–338) + #1245/#1246 mở; chưa làm A10, D2",
+   "next": "L1 · S264: A10 + A5 live (CIS #1261, lõi aa_llm 1.1.0); A8 chưa chứng minh được live (chờ tenant có chi tiêu); còn D2 (IAM + MFA), D8 mig 336 (≥10/11)",
    "needs": "MFA + IAM cho D2"
   },
   {
    "id": "AA-1025",
    "title": "[AI gateway] Budgets, app profiles and non-LLM providers: central caps, app on/off + degrade, Jev/DFS/Geoapify switches and circuit, Providers page",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "High",
    "project": "core",
    "milestone": "M1b",
-   "session": "S264",
+   "session": "S265",
    "size": "L",
-   "next": "L1 · S263 tạo: live L2 (Batch 503, công tắc), B1, B2, C1 trang Providers (CIS #1218, #1242); còn B4 kiểm bật/tắt live; follow-up nút chỉ đọc + cột cuối 1440; chưa làm A7, B3, B5, D3, H1, H2",
+   "next": "L1 · S264: A7 (mig 340), B3 (342), B5 (343), B4, D3 + H1a (345/346) live; Providers ẩn nút chỉ xem; còn H1b/H1c/H2",
    "needs": ""
   },
   {
@@ -1902,21 +1932,21 @@
    "priority": "High",
    "project": "core",
    "milestone": "M1b",
-   "session": "S264",
+   "session": "đầu tháng 12",
    "size": "M",
-   "next": "L1 · S263 tạo: mig 327 (bỏ key cũ, trần OpenAI 10 USD/80 %/hard stop), dự phòng acc2 331–333 (smoke 19/20), D7 live, lệnh cắm khoá Anthropic (root #431), ADR 0009 d14 amendment (#440); mở: a3_place_dedupe bậc acc2 (Maverick prompt mode, mig 337), I4 drill, I7 harness, D6 (≥01/12)",
+   "next": "L1 · S264: mig 339 bậc Maverick (smoke 0,00021 USD), mig 344 OpenAI hop cuối cho 6 stage viết tenant live; còn D6 đối soát hoá đơn (≥01/12)",
    "needs": "khoá Anthropic (tech lead)"
   },
   {
    "id": "AA-1027",
    "title": "[AI gateway] TripPlanner and CRM on the shared core: truncation + deadlines, prompt versions, deployment dispatch, CRM stage profiles and kill switch",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "High",
    "project": "core",
    "milestone": "M1b",
-   "session": "S264",
+   "session": "S265",
    "size": "L",
-   "next": "L5 · S263 tạo: TP E1/E2 merged (TP #206/#207, Lambda deploy; còn kiểm degrade narration live), TP #208; CRM F1/F2 live (crm-037); còn E3–E5, F3 UI nháp AI, F4 (trả phí, chờ LLM)",
+   "next": "L5 · S264: E3 live (TP #211, mig 341); F3 ship (Partner #194, crm-040), kiểm live cần ai_assist; còn E4, E5, F4",
    "needs": ""
   },
   {
@@ -1954,18 +1984,6 @@
    "size": "M",
    "next": "L6 · S263 tạo: hạng đại lý, biên B2B, markup gợi ý trong CRM; sau AA-1029",
    "needs": "biên theo hạng (chủ doanh nghiệp)"
-  },
-  {
-   "id": "AA-1033",
-   "title": "AI-output notice across apps: one kit component + AI clause in CRM and TripPlanner terms",
-   "status": "In Review",
-   "priority": "High",
-   "project": "portal",
-   "milestone": "M4",
-   "session": "S264",
-   "size": "M",
-   "next": "LP · S263 tạo: kit AiNotice + CIS #1235, Partner #185, TP #210 + kit sync merged; còn ảnh live + root #443",
-   "needs": ""
   }
  ]
 }
