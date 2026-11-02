@@ -142,7 +142,7 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 1. **Revision:** service đã đổi rollout COMPLETED; CIS api và worker cùng image SHA.
 
    ```bash
-   aws ecs describe-services --cluster aa-cis-dev-cluster --services aa-cis-dev-api aa-cis-dev-worker aa-booking-dev-api aa-crm-dev-api aa-crm-dev-web --profile aa365-admin --region us-west-1 --query "services[].{n:serviceName,td:taskDefinition,r:deployments[0].rolloutState}"
+   aws ecs describe-services --cluster aa-cis-dev-cluster --services aa-cis-dev-api aa-cis-dev-worker aa-booking-dev-api aa-crm-dev-api aa-crm-dev-web aa-crm-dev-portal --profile aa365-admin --region us-west-1 --query "services[].{n:serviceName,td:taskDefinition,r:deployments[0].rolloutState}"
    ```
 
 2. **Health:** `git_sha` = commit vừa merge và `/health/ready` 200 — CIS `api-cis…/health`, Booking
