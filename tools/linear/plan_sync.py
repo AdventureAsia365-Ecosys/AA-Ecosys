@@ -150,6 +150,8 @@ def merge(plan: dict, linear: list[dict], closed: dict[str, str] | None = None) 
             continue
         cur = dict(old)
         for field in ("title", "status", "priority", "project"):
+            if field == "title" and cur.get("private"):
+                continue  # private work: the plan keeps its public-safe label, the Linear title never reaches the repo
             if cur.get(field) != src[field]:
                 diff["changed"].append((ident, field, cur.get(field), src[field]))
                 cur[field] = src[field]

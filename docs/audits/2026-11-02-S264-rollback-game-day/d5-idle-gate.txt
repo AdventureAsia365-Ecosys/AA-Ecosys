@@ -1,0 +1,34 @@
+== D5.1 baseline
+2026-11-02T12:54:57Z
+run 41448556395
+conclusion: success
+MIGRATE idle: tripplanner.job running=0 queued=0
+MIGRATE idle: shared.rerun_wave open=0
+MIGRATE idle-gate: pass (every job table idle, no open rerun wave)
+idle-gate exit code: 0  status: STOPPED
+job-idle gate: pass
+== D5.2 seed
+2026-11-02T12:57:22Z
+SEEDED id=c5636cb8-0ed3-4b35-8f2e-2e86b0dea749 kind=noop_sleep status=queued seconds=900 run_after=2026-11-02 12:57:53.008615+00:00
+CLAIMED id=c5636cb8-0ed3-4b35-8f2e-2e86b0dea749: the worker runs noop_sleep; it ends by itself after 900 s. Still run ACTION=clear and ACTION=status (OPEN_COUNT 0) when the drill is done.
+ecsx: rc=0 bytes=320
+== D5.3 busy
+2026-11-02T12:59:29Z
+run 41449153963
+conclusion: failure
+MIGRATE busy: shared.job running=1 queued=0 due=0 kinds=[noop_sleep:running=1]
+MIGRATE busy: shared.job running=1 queued=0 due=0 kinds=[noop_sleep:running=1]
+MIGRATE busy: shared.job running=1 queued=0 due=0 kinds=[noop_sleep:running=1]
+##[error]job-idle gate refused the apply: a job table is busy or a rerun wave is open (see the MIGRATE busy lines)
+== D5.5 clear
+2026-11-02T13:02:43Z
+CLEARED queued_cancelled=0 running_cancel_requested=1
+ecsx: rc=0 bytes=54
+OPEN_COUNT 0
+ecsx: rc=0 bytes=13
+== D5.6 after clear
+2026-11-02T13:07:26Z
+run 41450256149
+conclusion: success
+Complete job name: Job-idle gate (check only)
+job-idle gate: pass

@@ -1,0 +1,397 @@
+{
+  "cis-signin": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {},
+    "shots": []
+  },
+  "1-cis-sidebar": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "groupsInitial": [
+        {
+          "tid": "nav-group-overview-toggle",
+          "label": "OVERVIEW",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        },
+        {
+          "tid": "nav-group-people-access-toggle",
+          "label": "PEOPLE & ACCESS",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        },
+        {
+          "tid": "nav-group-tenants-toggle",
+          "label": "TENANTS",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        },
+        {
+          "tid": "nav-group-jobs-toggle",
+          "label": "JOBS",
+          "expanded": "true",
+          "active": true,
+          "visible": true
+        },
+        {
+          "tid": "nav-group-ai-spend-toggle",
+          "label": "AI & SPEND",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        },
+        {
+          "tid": "nav-group-developer-toggle",
+          "label": "DEVELOPER",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        },
+        {
+          "tid": "nav-group-pipeline-toggle",
+          "label": "PIPELINE 25",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        },
+        {
+          "tid": "nav-group-assets-toggle",
+          "label": "ASSETS",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        },
+        {
+          "tid": "nav-group-intelligence-toggle",
+          "label": "INTELLIGENCE",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        },
+        {
+          "tid": "nav-group-tenant-output-toggle",
+          "label": "TENANT OUTPUT",
+          "expanded": "false",
+          "active": false,
+          "visible": true
+        }
+      ],
+      "defaultOk": {
+        "groups": 10,
+        "active": [
+          "JOBS"
+        ],
+        "activeOpen": true,
+        "othersFolded": true
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "drawerButton": "Open navigation menu",
+      "groups390_light": [
+        "OVERVIEW:false",
+        "PEOPLE & ACCESS:false",
+        "TENANTS:false",
+        "JOBS:true",
+        "AI & SPEND:false",
+        "DEVELOPER:false",
+        "PIPELINE 25:false",
+        "ASSETS:false",
+        "INTELLIGENCE:false",
+        "TENANT OUTPUT:false"
+      ],
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      },
+      "groups390_dark": [
+        "OVERVIEW:false",
+        "PEOPLE & ACCESS:false",
+        "TENANTS:false",
+        "JOBS:true",
+        "AI & SPEND:false",
+        "DEVELOPER:false",
+        "PIPELINE 25:false",
+        "ASSETS:false",
+        "INTELLIGENCE:false",
+        "TENANT OUTPUT:false"
+      ],
+      "persist": {
+        "group": "OVERVIEW",
+        "afterClick": "true",
+        "afterReload": "true",
+        "ok": true
+      },
+      "rail": {
+        "width": 68,
+        "links": 2,
+        "visibleLinks": 2,
+        "visibleWithIcon": 2,
+        "visibleHeaders": 0
+      }
+    },
+    "shots": [
+      "05-cis-sidebar-1440-light.png",
+      "05-cis-sidebar-390-light-drawer.png",
+      "05-cis-sidebar-1440-dark.png",
+      "05-cis-sidebar-390-dark-drawer.png",
+      "05-cis-sidebar-unfolded-after-reload-1440-light.png",
+      "05-cis-sidebar-rail-1440-light.png",
+      "05-cis-sidebar-rail-1440-dark.png"
+    ],
+    "url": "/admin/jobs"
+  },
+  "2-cis-tenant-members": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "firstRow": "Adventure Asia Internal aa_internal INTERNAL 7 posts/week Source 917 26 44 987 t",
+      "inviteButtons": 1,
+      "inviteVisible": true,
+      "rows": 0,
+      "text": "Content studio members Who can sign in to this tenant's Content studio, and with which role. Owners manage the account, editors write content, viewers only read. An invitation is an e-mail with a sign-in link; the person accepts it on the agency site. CIS never stores the address. CRM roles are managed in the partner CRM. Refresh Invite member Columns No member yet Invite the first owner to give this tenant access to the Content studio.",
+      "hasEmail": false,
+      "writeButtons": 1,
+      "rowMenus": 0,
+      "ov1440_light": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov1440_dark": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "dark"
+      },
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      }
+    },
+    "shots": [
+      "05-cis-tenant-members-1440-light.png",
+      "05-cis-tenant-members-390-light.png",
+      "05-cis-tenant-members-1440-dark.png",
+      "05-cis-tenant-members-390-dark.png"
+    ],
+    "url": "/admin/tenants"
+  },
+  "3-cis-ai-budgets": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "hasCentral": true,
+      "hasCoverage": true,
+      "centralText": "Central LLM caps Caps on every LLM call of a scope, whatever provider answers: the whole app, one stage, one kind of job, the eval runs or the ad-hoc scripts. Checked before each call. On Dev they stay alert only. Columns SCOPE PER RUN PER DAY PER MONTH AT THE CAP SPENT TODAY STATE LAST CHANGED App: cis app:cis no cap $51.65 no cap ALERT ONLY · 80 % $0.0012 0 % of the cap OK Migration 340 9 h ago LLM connection budgets The monthly budget of each way the platform reaches a model. Edited with the connection's settings. Edit in Connections Columns CONNECTION MONTHLY BUDGET THIS MONTH AT THE CAP S",
+      "appCisRows": 1,
+      "appCisRow": "App: cis app:cis no cap $51.65 no cap ALERT ONLY · 80 % $0.0012 0 % of the cap OK Migration 340 9 h ago ",
+      "coverageText": "Coverage per call site One line per stage that calls a model (routes, and stages seen this month or in the last 7 days): which central caps it is under. Connection budgets apply to every call on top. Columns STAGE UNDER THE CAPS CALLED BY JOBS SPENT TODAY SPENT THIS MONTH CALLS (7 DAYS) adhoc_aa1026 — · no route (ledger only) APP: CIS · ALERT ONLY llm_contract_smoke $0.0002 $0.0068 49 adhoc_conn_test — · no route (ledger only) APP: CIS · ALERT ONLY llm_connection_probe $0.0010 $0.0039 97 adhoc_j",
+      "writeButtons": 1,
+      "ov1440_light": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov1440_dark": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "dark"
+      },
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      }
+    },
+    "shots": [
+      "PRIVATE 05-cis-ai-budgets-central-1440-light.png",
+      "PRIVATE 05-cis-ai-budgets-central-390-light.png",
+      "PRIVATE 05-cis-ai-budgets-central-1440-dark.png",
+      "PRIVATE 05-cis-ai-budgets-central-390-dark.png",
+      "PRIVATE 05-cis-ai-budgets-coverage-1440-light.png",
+      "PRIVATE 05-cis-ai-budgets-coverage-390-light.png",
+      "PRIVATE 05-cis-ai-budgets-coverage-1440-dark.png",
+      "PRIVATE 05-cis-ai-budgets-coverage-390-dark.png"
+    ],
+    "url": "/admin/ai-gateway?tab=budgets"
+  },
+  "3-cis-ai-providers": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "readOnlyNotice": 1,
+      "circuitLines": [],
+      "vendorRows": {
+        "Jev": "Jev (TypeSafe decisions) Vendor API Failure domain: Jev · its own vendor account · Vendor API OK Access: ANSWERING 0 calls, 0 errors (24 h) Last probe 4 h ago 24 h 1 call · 0 % errors 7 d 4 calls · 0 % errors $0.0000 $0.0001 5 calls Daily $0.00 of $5.00 · 0 % ",
+        "DataForSEO": "DataForSEO Vendor API Failure domain: DataForSEO · its own vendor account · Vendor API OK Access: ANSWERING — Last probe 4 h ago 24 h 1 call · 0 % errors p50 600 ms · p95 600 ms 7 d 5 calls · 0 % errors p50 609 ms · p95 653 ms $0.00 $0.00 5 calls · 5 live Dail",
+        "Geoapify": "Geoapify (geocoder) Vendor API Failure domain: Geoapify · its own vendor account · Vendor API OK Access: ANSWERING — Last probe 6 h ago 24 h 3 calls · 0 % errors 7 d 9959 calls · 0 % errors $0.00 $0.00 1360 calls Daily $0.00 of $25.00 · 0 % · stops at the cap "
+      },
+      "ov1440_light": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov1440_dark": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "dark"
+      },
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      }
+    },
+    "shots": [
+      "PRIVATE 05-cis-ai-providers-overview-1440-light.png",
+      "PRIVATE 05-cis-ai-providers-overview-390-light.png",
+      "PRIVATE 05-cis-ai-providers-overview-1440-dark.png",
+      "PRIVATE 05-cis-ai-providers-overview-390-dark.png"
+    ],
+    "url": "/admin/ai-gateway (Providers › Overview)"
+  },
+  "3-cis-ai-credit": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "creditText": "Platform / AI & spend / AI providers AI providers Every paid AI and data provider in one place: is it answering, what it cost, how close it is to its cap, which model each stage uses, and every spending cap. The numbers come from our own logs; opening the page calls no provider. New here? Read the Guide Refresh Providers Routing Models & trials Budgets Calls Guide Overview Connections Jev credit Credit The vendor APIs (OpenAI, Anthropic) have no balance the gateway may read, so the balance is estimated: the balance you record here, plus the top-ups after it, minus the spend logged since then. Record a fresh balance from the provider's console now and then: the estimate restarts from the newe",
+      "writeButtons": [],
+      "ov1440_light": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov1440_dark": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "dark"
+      },
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      }
+    },
+    "shots": [
+      "PRIVATE 05-cis-ai-providers-credit-1440-light.png",
+      "PRIVATE 05-cis-ai-providers-credit-390-light.png",
+      "PRIVATE 05-cis-ai-providers-credit-1440-dark.png",
+      "PRIVATE 05-cis-ai-providers-credit-390-dark.png"
+    ],
+    "url": "/admin/ai-gateway?view=credit"
+  },
+  "6-cis-upload-390": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "wide_light": [],
+      "ov1440_light": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      },
+      "wide_dark": [],
+      "ov1440_dark": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "dark"
+      }
+    },
+    "shots": [
+      "05-cis-upload-390-light.png",
+      "05-cis-upload-1440-light.png",
+      "05-cis-upload-390-dark.png",
+      "05-cis-upload-1440-dark.png"
+    ],
+    "url": "/admin/upload"
+  },
+  "1-booking-sidebar": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "landed": "/login",
+      "h1": "Sign in to Booking",
+      "loginText": "Welcome back BOOKING · STAFF Sign in to Booking Use your company e-mail. Trip cases, proposals and customers in one place. Your company account has no Booking role yet. Ask an owner to give you one in CIS → Platform → Staff, then sign in again. SIGN IN WITH COMPANY EMAIL Opens staff-auth.lumiguides."
+    },
+    "shots": [
+      "05-booking-login-refused-1440-light.png"
+    ]
+  }
+}

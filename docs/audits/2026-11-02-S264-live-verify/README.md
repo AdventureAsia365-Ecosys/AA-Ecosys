@@ -168,3 +168,36 @@ Anonymous visitor on `tripplanner.` (`/plan`), Playwright Chromium, headless (01
     (`s264.wf{a,b}.mvyjwak6@example.invalid`);
   - 5 workflow runs (A: 4, B: 1) and 6 automation tasks (3 on A, now skipped; 3 on B, open, waiting for dates).
 - TripPlanner: two anonymous guest trips with 2 stops each (planner, no sign-in).
+
+## 5. S264 afternoon checks
+
+Run ~11:00–11:25Z, same method as above (headless Chromium, one browser at a time; theme by `prefers-color-scheme`;
+overflow measured on the document and on `main`). Deployed at the run: CIS admin Vercel production `e651bc89` (includes
+CIS #1250, #1252, #1254, #1255, #1256), CIS API `/health/ready` `6d22f1bf` (schema 343); CRM web `/healthz` `ba3eec9`
+(Partner #196, includes #192); Content studio Deploy Portal Dev green on `0b02c03` (Partner #198); Booking admin Vercel
+`1fceb3c4` (Booking #169). Identities: E2E CIS admin (read-only session), CRM owner of "Lữ hành Sen Vàng", e2e studio
+viewer (Atlas & Hearth). Raw records: `data/05-cis-results.json`, `data/05-cis-members-results.json`,
+`data/05-partner-results.json`. The AI providers pages show AWS account IDs, so their shots (and the Members list with
+rows, which shows staff ids) are kept out of the repo, in the session's private folder.
+
+| # | Check (PR) | Path | Shots (`05-…`) | Viewport / theme | Console errors | Result |
+|---|---|---|---|---|---|---|
+| 1a | CIS sidebar groups (CIS #1254) | `/admin/jobs` | `cis-sidebar-{1440,390-…-drawer}-{light,dark}`, `cis-sidebar-unfolded-after-reload-1440-light`, `cis-sidebar-rail-1440-{light,dark}` | 1440 + 390, light + dark | 0 | **PASS**: 10 groups, only JOBS (active) open; "Overview" unfolded → still open after reload; rail 68 px with every item icon, 0 group headers; 390 drawer same state, no overflow |
+| 1b | Booking admin sidebar groups (Booking #169) | `booking./login` | `booking-login-refused-1440-light` | 1440 light | 0 | **NOT VERIFIED**: the E2E CIS admin signs in but Booking answers "Your company account has no Booking role yet"; the agent has no Booking staff account |
+| 1c | CRM web sidebar groups (Partner #196) | `portal./pipeline` | `crm-sidebar-{1440,390-…-drawer}-{light,dark}`, `crm-sidebar-unfolded-after-reload-1440-light` | 1440 + 390, light + dark | 0 | **PASS**: groups CRM (active, open), MONEY and GROW folded; MONEY unfolded → open after reload; 390 drawer same; the CRM shell has no icon rail (no collapse control), so the rail check does not apply |
+| 1d | Content studio sidebar groups (Partner #196) | `portal./portal/dashboard` | `studio-sidebar-{1440,390-…-drawer}-{light,dark}`, `studio-sidebar-unfolded-after-reload-1440-light`, `studio-sidebar-rail-1440-{light,dark}` | 1440 + 390, light + dark | 0 | **PASS**: 6 groups all folded (Dashboard sits outside any group, so no active group); TOURS unfolded → open after reload; rail 68 px, 16 of 16 items with icon, 0 headers |
+| 2 | Tenant 360 › Members (CIS #1256) | `/admin/tenants` → tenant → Members | `cis-tenant-members-{1440,390}-{light,dark}` (Adventure Asia Internal, empty state); private `cis-tenant-members-rows-*` (Atlas & Hearth, 5 rows) | 1440 + 390, light + dark | 0 | **PASS** for the list (columns Identity / Role / Status / Invited / Last change / By; empty state "No member yet"; no overflow). **Finding F3**: "Invite member" and the row menus are **shown** to the read-only E2E admin (the tab gates on the role `tenant.write` only, not on the read-only session); no write was tried |
+| 3a | AI providers › Budgets (CIS #1252) | `/admin/ai-gateway?tab=budgets` | private `cis-ai-budgets-{central,coverage}-{1440,390}-{light,dark}` | 1440 + 390, light + dark | 0 | **PASS**: "Central LLM caps" row `app:cis`, per day $51.65, **ALERT ONLY · 80 %**, spent today $0.0012, OK; "Coverage per call site" table lists stages with "APP: CIS · ALERT ONLY"; "Add a central cap" hidden (read-only) |
+| 3b | AI providers › Providers (CIS #1255) | `/admin/ai-gateway`, `?view=credit` | private `cis-ai-providers-{overview,credit}-{1440,390}-{light,dark}` | 1440 + 390, light + dark | 0 | **PASS**: read-only notice shown; Credit view renders the ledger estimate with the read-only sentence (add / delete / threshold / Check now hidden). Jev, DataForSEO, Geoapify rows OK with last probe; **no circuit line**, as designed: the line renders only when a circuit is open, half-open or failing, and all three are closed |
+| 4 | CRM terms (Partner #192, AA-1033 F1) | footer → `/legal/terms`; Settings › AI → `/legal/terms#ai` | `crm-footer-terms-link-1440-light`, `crm-settings-ai-terms-link-1440-light`, `crm-legal-terms-ai-{1440,390}-{light,dark}` | 1440 + 390, light + dark | 0 | **PASS**: footer "Terms of use" href `/legal/terms`; Settings › AI "AI-generated content in the terms of use" href `/legal/terms#ai`; both land on the CRM page (`data-testid="crm-terms"`, h1 "Terms of use", section `#ai` "1. AI-generated content"); no "Partner terms". **Closes F1** |
+| 5 | Studio terms §3 + privacy §5 (Partner #198) | `portal./terms`, `portal./privacy` | `studio-terms-fallback-{1440,390}-{light,dark}`, `studio-privacy-fallback-{1440,390}-{light,dark}` | 1440 + 390 (pages have no dark theme) | 0 on the pages | **PASS** (deployed): §3 "…the writing step may fall back to Claude through the Anthropic API and, as a last resort, to an OpenAI model through the OpenAI API, used directly and with a spending cap."; §5 "For writing, that means Claude through the Anthropic API first and, as a last resort, an OpenAI model through the OpenAI API." Note: `/portal/terms` is 404; the studio terms live at `/terms` |
+| 6 | Upload at 390 (CIS #1250, F2 above) | `/admin/upload` | `cis-upload-{1440,390}-{light,dark}` | 1440 + 390, light + dark | 0 | **PASS**: `main` 390/390 and document 390/390 in light and dark, no element past the right edge. **Closes F2** |
+
+Failing requests: none on the pages checked (the only 404 is the agent's probe of `/portal/terms`).
+
+- **F3 — Members tab shows write controls to a read-only session.** The tab follows `can(role, "tenant.write")`; the
+  E2E admin's role is admin, so "Invite member" and the row menus show although the session is read-only (the API
+  would answer 403 `e2e_read_only`). The AI providers pages hide their write controls for the same session. Proposed:
+  use the same read-only flag there. Not fixed in this lane.
+- Not verified by the agent: the Booking admin sidebar (no Booking staff account for the agent); the circuit line in a
+  non-closed state (needs a failing vendor).
