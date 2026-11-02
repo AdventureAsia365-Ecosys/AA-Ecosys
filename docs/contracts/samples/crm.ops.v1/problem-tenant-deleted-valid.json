@@ -1,0 +1,10 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "Problem",
+  "expect": "valid",
+  "why": "POST /tenants on the id of a deleted (trashed) test agency: 409 tenant_deleted (1.9), nothing written",
+  "payload": {
+    "detail": "tenant_deleted",
+    "message": "the agency with this id was deleted and its id cannot be reused; create a new CIS tenant"
+  }
+}
