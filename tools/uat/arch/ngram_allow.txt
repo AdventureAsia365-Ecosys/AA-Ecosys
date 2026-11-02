@@ -1,0 +1,3 @@
+# Generic phrases the n-gram layer may see in a public repo without it being a fingerprint (one per line, any case).
+# Keep this list generic: a phrase that only this company would write never belongs here.
+one day at a time

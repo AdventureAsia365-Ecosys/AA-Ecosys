@@ -1,0 +1,7 @@
+# tools/uat/arch: the private label profile and deny-list, downloaded fonts / OCR, and every build stay out of git.
+# Episode scripts and scene JSON live outside the repo too (.tmp-session/ or Drive), never here.
+private/
+.cache/
+out/
+work/
+__pycache__/
