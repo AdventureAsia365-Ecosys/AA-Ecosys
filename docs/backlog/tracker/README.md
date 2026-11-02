@@ -6,6 +6,14 @@ A one-page view of the living backlog for Nghiệp: milestones (M1–M5 plus the
 - Files: `index.html` (layout + script, rarely changes) and `plan.json` (all content). The page reads `plan.json` next to it.
 - Source of truth stays `docs/backlog/README.md` + Linear. `plan.json` mirrors them; when they disagree, fix `plan.json`.
 
+## Session tab (S264)
+
+The page has a second tab, "Phiên (checklist sống)". It renders `sessions/<S>.md` (the session's live checklist,
+`.tmp-session/S<nnn>-checklist.md`) listed in `sessions/index.json` (`[{session, date, status, updated, file}]`, newest
+first). Both files are published with the artifact only and never committed (the repo is public; the checklist names
+people, tenants and private work). Publish at session start, after each major step, and at the close (status
+`đã chốt`); keep the earlier sessions' files in `index.json` so the picker shows them.
+
 ## Sync from Linear (`tools/linear/plan_sync.py`, S263)
 
 One way, Linear to `plan.json`; the script never writes to Linear. Design: `docs/audits/2026-11-01-S262-assessment-followup/README.md` section 6.
@@ -43,7 +51,7 @@ Do it in the same root PR that updates `docs/backlog/README.md`.
    - `checks[]` and `waiting[]`: mirror backlog §1 and §2.
    - `log[]`: prepend the `--log-draft` entry (`closed`, `canceled`, `created`, `reopened`), with short `notes` in Vietnamese.
 3. Validate: `python3 tools/linear/plan_sync.py --validate`.
-4. Republish the artifact to the same URL: Artifact tool, `url` = the link above, `file_path` = `docs/backlog/tracker/index.html`, `files` = `{"plan.json": "docs/backlog/tracker/plan.json"}`. Read the artifact first when the session did not publish it (the tool refuses otherwise).
+4. Republish the artifact to the same URL: Artifact tool, `url` = the link above, `file_path` = `docs/backlog/tracker/index.html`, `files` = `{"plan.json": "docs/backlog/tracker/plan.json", "sessions/index.json": …, "sessions/S<nnn>.md": …}` (session files from `.tmp-session/`, see Session tab). Read the artifact first when the session did not publish it (the tool refuses otherwise).
 
 ## Optional fields (TL-4, S262)
 
