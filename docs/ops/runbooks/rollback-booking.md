@@ -12,10 +12,13 @@ review_every_days: 90
 last_tested: null
 tested_where: null
 tested_evidence: null
-related: [OPS-02-cis, OPS-04, OPS-10-deploy-gate, AA-869, AA-892]
+related: [OPS-02-ecs, OPS-02-cis, OPS-04, OPS-10-deploy-gate, AA-869, AA-892, AA-1023]
 ---
 
 # Roll back the Booking API
+
+The shared, parameterised procedure (and its helper `tools/ops/ecs_rollback.sh`, which runs steps 1-6 below) is
+[roll back any ECS service](rollback-ecs.md); this page keeps the Booking facts.
 
 > [!WARNING]
 > UNTESTED - do not follow in an incident without checking each step.

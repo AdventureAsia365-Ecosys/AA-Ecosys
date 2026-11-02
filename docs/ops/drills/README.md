@@ -9,7 +9,7 @@ audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-10-28
 review_every_days: 90
-related: [OPS-02-cis, OPS-03-pitr, OPS-03-schema, OPS-01, AA-829, AA-869]
+related: [OPS-02-cis, OPS-02-ecs, OPS-03-gameday, OPS-03-pitr, OPS-03-schema, OPS-01, AA-829, AA-869, AA-1023]
 ---
 
 # Drill index
@@ -28,6 +28,7 @@ prod. A `last_tested` older than the review window on Dev is a warning, not an o
 
 | Runbook | Blocker or next step |
 |---|---|
-| [rollback-booking](../runbooks/rollback-booking.md), [rollback-vercel](../runbooks/rollback-vercel.md), [rollback-tp-lambda](../runbooks/rollback-tp-lambda.md), [rollback-terraform](../runbooks/rollback-terraform.md) | once each before prod (DM-9.3); cost 0 USD |
+| [rollback-ecs](../runbooks/rollback-ecs.md) (Booking, CRM), [rollback-booking](../runbooks/rollback-booking.md), [rollback-vercel](../runbooks/rollback-vercel.md), [rollback-tp-lambda](../runbooks/rollback-tp-lambda.md), terraform-apply job-idle gate | planned as one 0 USD sitting: [rollback game day plan](rollback-game-day.md) (AA-1023) |
+| [rollback-terraform](../runbooks/rollback-terraform.md) | once before prod (DM-9.3); cost 0 USD |
 | [break-glass](../runbooks/break-glass.md) via managed login | AA-816 open item |
 | [legacy-login-flag](../runbooks/legacy-login-flag.md) | the AA-816 cutover itself |

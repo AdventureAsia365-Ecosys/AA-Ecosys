@@ -13,6 +13,7 @@ name: Docs lint
 #   - the tracker docs/backlog/tracker/plan.json (S263): plan_sync.py tests, shape, no account ID or ARN
 #   - unit tests of the orchestrator ship tools tools/github/ship_*.py (AA-1032; offline, scripted gh/aws, temp git)
 #   - unit tests of the architecture video gate tools/uat/arch (AA-1021; stdlib, invented names, temp git, no media)
+#   - unit tests of the ops helpers tools/ops (AA-1023: ecs_rollback.sh against a scripted aws/curl, the game-day seed)
 # Secrets: gitleaks runs on every PR (any path) in secret-scan.yml and nightly over the full history in
 # secret-scan-history.yml (AA-981),
 # so it is not repeated here (secret names are fine in docs, values never are).
@@ -34,6 +35,7 @@ on:
       - "tools/linear/**"
       - "tools/github/**"
       - "tools/uat/arch/**"
+      - "tools/ops/**"
       - ".markdownlint-cli2.jsonc"
       - ".github/workflows/docs-lint.yml"
   schedule:
@@ -90,6 +92,12 @@ jobs:
       - name: Architecture video gate tests
         if: ${{ !cancelled() }}
         run: python -m unittest discover -s tools/uat/arch/tests -p 'test_*.py'
+
+      # AA-1023: the ECS rollback helper (dry run by default) against a scripted aws and curl, and the game-day seed
+      # script's logic on a fake connection. Offline; needs bash and jq (on the runner image).
+      - name: Ops tools tests
+        if: ${{ !cancelled() }}
+        run: python -m unittest discover -s tools/ops -p 'test_*.py'
 
       - name: Front-matter schema
         if: ${{ !cancelled() && steps.deps.outcome == 'success' }}

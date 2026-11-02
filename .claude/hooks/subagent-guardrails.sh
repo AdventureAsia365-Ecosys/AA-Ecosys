@@ -33,6 +33,13 @@ patterns=(
   # too: subagents editing them use the Read/Edit tools and `git add <dir>`. Their tests (test_ship_*.py) stay open.
   '(^|[ /"'"'"'=(`;&|])(ship_(merge|train|copy_apply|open_prs)\.py|mergeq\.sh|dbmig\.sh|train-lib\.sh|as-app\.sh)'
   '(^|[ ;&|(])-m +ship_(merge|train|copy_apply|open_prs)( |$|[;&|)])'
+  # AA-1023: the ECS rollback helper runs update-service and the ECS exec wrapper runs execute-command (game-day seed
+  # writes shared.job through it) inside the script, out of this hook's sight. Any mention is refused, as for the ship
+  # tools above (dry runs too: they need the MFA session; lanes edit these files with Read/Edit and `git add <dir>`).
+  # Their tests (test_ecs_rollback.py, test_ecsx.py, test_gameday_seed_job.py) stay open.
+  '(^|[ /"'"'"'=(`;&|])(ecs_rollback|ecsx)\.sh'
+  # Vercel CLI moves of the production domain (the MCP request_rollback / request_promote are in the MCP hook).
+  '(^|[ ;&|(])(npx +)?vercel( +-[^ ]+( +[^- ][^ ]*)?)* +(rollback|promote|redeploy|deploy +.*--prod)( |$)'
 )
 for p in "${patterns[@]}"; do
   if echo "$cmd" | grep -Eq "$p"; then

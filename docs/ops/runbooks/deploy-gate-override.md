@@ -12,7 +12,7 @@ review_every_days: 90
 last_tested: null
 tested_where: null
 tested_evidence: null
-related: [OPS-10, OPS-02-cis, OPS-05-db-migrate, OPS-04-queue-stuck, AA-725, AA-751, AA-868]
+related: [OPS-10, OPS-02-cis, OPS-02-ecs, OPS-05-db-migrate, OPS-04-queue-stuck, AA-725, AA-751, AA-868, AA-1023]
 ---
 
 # Override a deploy or migration gate
@@ -43,6 +43,7 @@ busy jobs.
 | Booking Deploy Dev (`deploy-dev.yml`) | `GET https://api-booking.lumiguides.it.com/booking/ops/deploy-gate` with the run's GitHub OIDC token; skipped when the service runs 0 tasks. Since AA-993 G5: blocks only while a retention job (`bk_retention_job`, `bk_retention_inbox_redact`) runs or is queued due within 15 min | info counts leave out `bk_inquiry_pull`, `bk_noop_sleep` | `override_running_jobs` (workflow_dispatch) |
 | Partner Deploy Dev (`deploy-dev.yml`) | `GET /crm/ci/deploy-gate` with the run's GitHub OIDC token; passes when the service runs 0 tasks. Since AA-993 G4b no CRM kind is deploy-blocking (`DEPLOY_BLOCKING_KINDS` is empty), so the gate passes unless it cannot answer or a task is starting | info counts leave out `crm_heartbeat`, `crm_membership_pull`, `crm_booking_sync` | `override_running_jobs` (workflow_dispatch) |
 | DB Migrate (`db-migrate.yml`, apply and writing run-script) | every owner job table and open `shared.rerun_wave`, 3 checks 20 s apart | `owners.yaml` idle-exempt kinds | `override_busy_jobs` (one line, at most 200 characters) |
+| Terraform Apply (`terraform-apply.yml`, AA-1023), only when the plan changes an ECS service / cluster or the RDS instance / parameter group | the same check as DB Migrate, run by the migrator task in `MIGRATION_MODE=idle-gate` right before the apply; `idle_gate_check=true` runs only the gate | the same idle-exempt kinds | `override_busy_jobs` (one line, at most 200 characters); also lets the apply through when the gate cannot answer |
 
 All of them fail closed: an unreachable gate or an unreadable answer blocks. The deploy gates name the reason in
 `blocked_by` (the `deploy-gate: {...}` log line).

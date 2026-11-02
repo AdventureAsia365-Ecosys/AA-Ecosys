@@ -205,9 +205,11 @@ Thiếu bằng chứng nào → để In Review và ghi rõ còn thiếu gì. Li
 
 Deploy hỏng mà circuit breaker ECS không tự lùi → lùi app trước, sửa sau. DB không lùi theo app (migration chỉ tiến).
 
-- CIS api + worker: `docs/ops/runbooks/rollback-cis.md`.
-- Booking: `docs/ops/runbooks/rollback-booking.md`. AA-Partner (`aa-crm-dev-api`, `aa-crm-dev-web`) chưa có runbook
-  riêng: cùng cơ chế Deploy Dev (chép revision mới nhất, tag = git SHA) → theo các bước của rollback-booking.
+- Mọi service ECS (CIS api/worker, Booking, CRM api/web/portal): runbook có tham số `docs/ops/runbooks/rollback-ecs.md`
+  + helper `tools/ops/ecs_rollback.sh <service> --list | --previous | --to <rev> | --to-sha <sha>` (mặc định DRY RUN, in
+  lệnh 1 dòng; `--apply` mới ghi, rồi chờ stable + so SHA ở health). Bỏ qua revision template Terraform (`bootstrap`).
+- CIS api + worker: `docs/ops/runbooks/rollback-cis.md` (hai service cùng image). Booking: `rollback-booking.md`.
+- Game day $0 (Booking, CRM, Vercel, TP Lambda, gate job-idle của terraform-apply): `docs/ops/drills/rollback-game-day.md`.
 - Vercel (CIS admin, portal, Booking admin, TripPlanner): `docs/ops/runbooks/rollback-vercel.md`.
 - Lambda TripPlanner: `docs/ops/runbooks/rollback-tp-lambda.md`. Terraform: `docs/ops/runbooks/rollback-terraform.md`.
 - Mục lục + playbook sự cố: `docs/ops/README.md`. Sự cố ảnh hưởng người dùng → `docs/ops/incident-response.md`.

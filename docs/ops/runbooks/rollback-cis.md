@@ -12,12 +12,14 @@ review_every_days: 90
 last_tested: 2026-10-17
 tested_where: drill
 tested_evidence: docs/sessions/2026-10-17-S241-sdlc-admin-console-x1-security.md (AA-869 rollback drill)
-related: [OPS-04, OPS-10-deploy-gate, OPS-02-vercel, skill/aa-ship/SKILL.md, AA-869, AA-892]
+related: [OPS-02-ecs, OPS-04, OPS-10-deploy-gate, OPS-02-vercel, skill/aa-ship/SKILL.md, AA-869, AA-892, AA-1023]
 ---
 
 # Roll back the CIS API and worker
 
-Moved here from `skill/aa-ship/SKILL.md` §5 (AA-869, S241). The skill now links to this page.
+Moved here from `skill/aa-ship/SKILL.md` §5 (AA-869, S241). The skill now links to this page. The same steps for any
+ECS service, with the helper `tools/ops/ecs_rollback.sh`: [roll back any ECS service](rollback-ecs.md) (run it once per
+service: api, then worker on the same image).
 
 ## When to use
 
