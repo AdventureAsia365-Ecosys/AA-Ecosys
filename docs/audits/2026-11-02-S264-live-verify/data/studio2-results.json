@@ -1,0 +1,54 @@
+{
+  "studio-signin": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "landed": "/portal/dashboard"
+    },
+    "shots": []
+  },
+  "/portal/tours/mine": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "checks": {
+      "landed": "/portal/tours/mine",
+      "notices": 1,
+      "text": "This content was generated with AI. Review it before publishing; you are responsible for what you publish.",
+      "matches": true,
+      "ov1440_light": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov390_light": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "light"
+      },
+      "ov1440_dark": {
+        "doc": "1440/1440",
+        "main": "1204/1204",
+        "ok": true,
+        "theme": "dark"
+      },
+      "ov390_dark": {
+        "doc": "390/390",
+        "main": "390/390",
+        "ok": true,
+        "theme": "dark"
+      }
+    },
+    "shots": [
+      "01-studio-catalog-1440-light.png",
+      "01-studio-catalog-390-light.png",
+      "01-studio-catalog-1440-dark.png",
+      "01-studio-catalog-390-dark.png"
+    ]
+  }
+}

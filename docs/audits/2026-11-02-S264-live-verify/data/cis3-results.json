@@ -1,0 +1,42 @@
+{
+  "signin": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "shots": [],
+    "checks": {}
+  },
+  "kit-gallery": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "shots": [
+      "01-cis-kit-gallery-ai-notice-1440-light.png",
+      "01-cis-kit-gallery-ai-notice-390-light.png",
+      "01-cis-kit-gallery-ai-notice-1440-dark.png",
+      "01-cis-kit-gallery-ai-notice-390-dark.png"
+    ],
+    "checks": {
+      "tabsSeen": [
+        "Primitives",
+        "Gallery"
+      ],
+      "variants": [
+        {
+          "v": "staff",
+          "t": "AI can make mistakes. Check prices, dates, visa and safety information before you send or publish this."
+        },
+        {
+          "v": "publisher",
+          "t": "This content was generated with AI. Review it before publishing; you are responsible for what you publish."
+        },
+        {
+          "v": "traveller",
+          "t": "Some descriptions are written with the help of AI and may contain mistakes. Prices, itineraries and visa conditions are confirmed in your official quote."
+        }
+      ]
+    }
+  }
+}
