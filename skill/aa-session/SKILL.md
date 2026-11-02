@@ -130,6 +130,7 @@ Log ghi sau cùng nên có cả kết quả Jira và số liệu đã kiểm, kh
    duyệt. Đăng xong ghi link comment (hoặc "chưa đăng: lý do") vào `docs/audits/<date>-S<nnn>-<slug>/jira-drafts.md`.
    Ngoại lệ: tách phiên trong **cùng ngày** → draft gom sang phiên sau, ghi rõ trong log.
 5. **Rồi mới ghi**, tất cả từ snapshot (bước 2) + kết quả Jira (bước 4):
+   - **Series nội dung riêng tư:** log, snapshot, backlog, tracker và memory ghi vào repo public chỉ nêu mã issue của series (vd. "AA-1021 (content series, details private)"), không tả tên, tập, kịch bản, giọng, nền tảng đăng; chi tiết để thư mục riêng / Drive.
    - **Log local** `docs/sessions/<yyyy-mm-dd>-S<nnn>-<slug>.md` (ghi rõ tác nhân) + index `docs/sessions/README.md`
      (có mục Jira: đã đăng / chờ).
    - **Session block** prepend vào đầu Notion `memory.md` HOT, đúng format:
