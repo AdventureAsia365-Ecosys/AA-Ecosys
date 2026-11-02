@@ -57,6 +57,16 @@ a viewer would search for (the series name and tag are always checked). Cuts set
 length rules (`min_s`, `max_s`); the master carries chapters (3 or more, 10 s or longer each). Write narration
 in plain industry words; avoid the coined terms of the codebase and say "designed to" for anything not live.
 
+## Phone frames and framing
+
+- The camera never cuts a node or a label: the view takes the card's exact shape, and a node, group title or edge label
+  only partly inside it is hidden whole (a frame whose title is hidden and that holds no node in view goes too).
+- A diagram can have a variant for the tall cuts: key `<diagram>@<name>` with `"aspects": ["9:16", "4:5"]`, its own
+  grid and `"text_scale"` / `"node_w"`, drawn from the base labels only (`scene.load` checks). A diagram visual can set
+  `"aspects": {"9:16,4:5": {"focus": [...]}}` so a phone frame shows a few nodes, large. Aim for node labels of about
+  28 px at 1080 wide: two columns and two or three rows per frame at `text_scale` 1.5.
+- Labels too wide for a node wrap onto two lines inside one `<text>`, so page.py and the gate still read one label.
+
 ## Icons
 
 Diagrams use the official AWS Architecture Icons: the asset package AWS publishes on its architecture icons page, which

@@ -47,6 +47,7 @@ html,body{margin:0;width:var(--W);height:var(--H);overflow:hidden;background:var
 .card > svg{position:absolute;inset:%(pad)spx;width:calc(100%% - %(pad2)spx);height:calc(100%% - %(pad2)spx)}
 .card svg text{font-family:%(family)s}
 .card svg .fade{opacity:.08}
+.card svg .cut{visibility:hidden}
 .card svg g{transition:none}
 .hl{fill:none;stroke:var(--accent-mark);stroke-width:7;rx:14;ry:14}
 .cover{position:absolute;left:%(side_l)spx;right:%(side_r)spx;top:%(cov_top)spx;bottom:%(cov_bottom)spx;display:flex;
@@ -108,7 +109,15 @@ JS = r"""
     const x1 = Math.max(...bs.map((b) => b.x + b.w)), y1 = Math.max(...bs.map((b) => b.y + b.h));
     return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
   };
+  function forAspect(v) {
+    let out = v;
+    for (const [k, o] of Object.entries(v.aspects || {})) {
+      if (k.split(',').map((x) => x.trim()).includes(aspect)) out = { ...out, ...o };
+    }
+    return out;
+  }
   function diagram(v) {
+    v = forAspect(v);
     header(v);
     const tpl = document.getElementById('dg-' + v.diagram);
     if (!tpl) throw new Error('diagram not on the page: ' + v.diagram);
@@ -175,14 +184,47 @@ JS = r"""
     let frameBox = null;
     if (v.focus && v.focus.length) frameBox = union([...pick(v.focus)].map((el) => bb.get(el)));
     else if (core) frameBox = union([...core].map((el) => bb.get(el)));
+    const full = svg.viewBox.baseVal;
+    let w = full.width, h = full.height, cx = full.x + w / 2, cy = full.y + h / 2;
     if (frameBox) {
-      const full = svg.viewBox.baseVal;
-      const minW = full.width * 0.18, minH = full.height * 0.18;
-      const w = Math.max(frameBox.w, minW), h = Math.max(frameBox.h, minH);
-      const cx = frameBox.x + frameBox.w / 2, cy = frameBox.y + frameBox.h / 2;
-      const pad = 0.06;
-      svg.setAttribute('viewBox', `${cx - w / 2 - w * pad} ${cy - h / 2 - h * pad} ${w * (1 + 2 * pad)} ${h * (1 + 2 * pad)}`);
+      const pad = 0.04;
+      w = Math.max(frameBox.w, full.width * 0.18) * (1 + 2 * pad);
+      h = Math.max(frameBox.h, full.height * 0.18) * (1 + 2 * pad);
+      cx = frameBox.x + frameBox.w / 2; cy = frameBox.y + frameBox.h / 2;
     }
+    // The view is exactly what the card shows: widen the box to the card's shape, so nothing outside it peeks in.
+    const port = svg.getBoundingClientRect();
+    const ratio = port.width / port.height;
+    if (w / h < ratio) w = h * ratio; else h = w / ratio;
+    const view = { x: cx - w / 2, y: cy - h / 2, w, h };
+    svg.setAttribute('viewBox', `${view.x} ${view.y} ${view.w} ${view.h}`);
+    // Never cut a node or a label at the edge: whatever the view only partly holds is hidden whole.
+    const within = (b) => b.x >= view.x - 0.5 && b.y >= view.y - 0.5 && b.x + b.w <= view.x + view.w + 0.5 && b.y + b.h <= view.y + view.h + 0.5;
+    const meets = (b) => b.x < view.x + view.w && b.x + b.w > view.x && b.y < view.y + view.h && b.y + b.h > view.y;
+    const cut = (b) => meets(b) && !within(b);
+    // Boxes in diagram units from the rendered layout (getBBox leaves out an element's own transform, e.g. an icon's).
+    const inv = svg.getScreenCTM().inverse();
+    const ubox = (el) => {
+      const r = el.getBoundingClientRect();
+      const pts = [[r.left, r.top], [r.right, r.bottom]].map(([x, y]) => {
+        const p = svg.createSVGPoint(); p.x = x; p.y = y; return p.matrixTransform(inv);
+      });
+      return { x: pts[0].x, y: pts[0].y, w: pts[1].x - pts[0].x, h: pts[1].y - pts[0].y };
+    };
+    for (const n of nodes) if (cut(ubox(n))) n.classList.add('cut');
+    for (const g of groups) {
+      const frameRect = g.querySelector(':scope > rect');
+      const head = [...g.children].filter((el) => el !== frameRect);
+      const hb = union(head.map(ubox));
+      if (hb && cut(hb)) {
+        head.forEach((el) => el.classList.add('cut'));
+        // A frame whose title is hidden and that holds no node in view is an empty box: hide it too.
+        const holds = nodes.some((n) => !n.classList.contains('cut') && meets(bb.get(n)) && center(bb.get(n), bb.get(g)));
+        if (!holds && frameRect) frameRect.classList.add('cut');
+      }
+    }
+    for (const e of edges) for (const t of e.querySelectorAll(':scope > text')) if (cut(ubox(t))) t.classList.add('cut');
+    for (const r of svg.querySelectorAll('rect.hl')) if (cut(ubox(r))) r.classList.add('cut');
   }
   window.show = (v) => {
     clear();

@@ -230,6 +230,42 @@ class Sketch(unittest.TestCase):
         self.assertIn("icon must be one of", msg)
         self.assertIn("kind must be one of", msg)
 
+    def test_long_labels_wrap_but_read_as_one_label(self):
+        spec = copy.deepcopy(SKETCH)
+        spec["text_scale"] = 2
+        spec["nodes"][3]["label"] = "Managed relational database"
+        svg = sketch.render(spec, "eco")
+        self.assertIn("<tspan", svg)
+        root = ET.fromstring(svg)
+        texts = ["".join(t.itertext()) for t in root.iter("{http://www.w3.org/2000/svg}text")]
+        self.assertIn("Managed relational database", texts)
+        self.assertEqual(sketch.wrap("Short", 16, 200), ["Short"])
+        self.assertIn("Managed relational database", __import__("make_episode").visible_texts(svg))
+        self.assertTrue(sketch.validate({**spec, "text_scale": 3}, "eco"))
+
+    def test_phone_variant_and_aspect_overrides(self):
+        ep = copy.deepcopy(EPISODE)
+        tall = copy.deepcopy(SKETCH)
+        tall.update({"aspects": ["9:16"], "text_scale": 1.5})
+        tall["nodes"][1]["at"], tall["nodes"][2]["at"] = [0, 1], [0, 2]
+        tall["nodes"][3]["at"], tall["nodes"][4]["at"] = [0, 3], [0, 4]
+        tall["groups"][0]["cells"], tall["groups"][1]["cells"] = [0, 1, 0, 4], [0, 3, 0, 4]
+        ep["diagrams"]["eco@phone"] = tall
+        ep["scenes"][1]["visual"]["aspects"] = {"9:16,4:5": {"focus": ["Catalogue"]}}
+        meta, sents = scene.load(ep)
+        self.assertNotIn("s2:visual.aspects", scene.all_texts(ep, sents))
+        svgs = {"eco": "<svg>wide</svg>", "eco@phone": "<svg>tall</svg>"}
+        self.assertEqual(scene.svgs_for_aspect(svgs, meta["diagrams"], "9:16"), {"eco": "<svg>tall</svg>"})
+        self.assertEqual(scene.svgs_for_aspect(svgs, meta["diagrams"], "16:9"), {"eco": "<svg>wide</svg>"})
+        bad = copy.deepcopy(ep)
+        bad["diagrams"]["eco@phone"]["nodes"][0]["label"] = "Brand new label"
+        bad["diagrams"]["eco@other"] = {**copy.deepcopy(SKETCH), "aspects": ["9:16"]}
+        bad["scenes"][1]["visual"]["aspects"] = {"21:9": {"title": "x"}}
+        with self.assertRaises(scene.SceneError) as e:
+            scene.load(bad)
+        for part in ("labels not in eco", "second variant", "not a list of", "reveal / focus / highlight only"):
+            self.assertIn(part, str(e.exception))
+
     def test_committed_diagram_name_is_refused(self):
         ep = copy.deepcopy(EPISODE)
         ep["diagrams"] = {"eco": "ecosystem"}

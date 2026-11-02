@@ -15,7 +15,9 @@ Format (the value of one "diagrams" entry of the episode file; an invented examp
                "icon": "<icon key>", "style": "solid" | "dashed"}],  a frame around grid cells c0..c1 x r0..r1
    "nodes":  [{"id": "cat", "label": "Catalogue app", "sub": "api + workers" | ["line", "line"],
                "at": [col, row], "kind": "service" | "store" | "people" | "external", "icon": "<icon key>" | "none"}],
-   "edges":  [{"from": "cat", "to": "db", "label": "SQL", "style": "solid" | "dashed", "bend": 0.5}]}
+   "edges":  [{"from": "cat", "to": "db", "label": "SQL", "style": "solid" | "dashed", "bend": 0.5}],
+   "text_scale": 1.0, "node_w": 240}                      optional: larger text and icons, wider nodes
+A label too wide for its node wraps onto two lines (one <text>, two <tspan>s that join back into the label).
 An edge between two rows runs down, across, down; "bend" (0.1-0.9, default 0.5) sets where the cross run sits in the
 gap, so two edges that would share a run can be kept apart.
 Groups nest by their cells (a group inside another must sit strictly within its cells, or share no cell with it).
@@ -170,6 +172,11 @@ def validate(spec: dict, key: str = "sketch") -> list[str]:
         return [f"diagram {key}: must be a sketch object (groups / nodes / edges), not {type(spec).__name__}"]
     problems = []
     nodes, groups, edges = spec.get("nodes") or [], spec.get("groups") or [], spec.get("edges") or []
+    ts, nw = spec.get("text_scale", 1), spec.get("node_w", NODE_W)
+    if not (isinstance(ts, (int, float)) and 1 <= ts <= 2):
+        problems.append(f"diagram {key}: text_scale must be 1-2")
+    if not (isinstance(nw, (int, float)) and 160 <= nw <= 400):
+        problems.append(f"diagram {key}: node_w must be 160-400")
     if not nodes:
         problems.append(f"diagram {key}: no nodes")
     ids, cells = set(), {}
@@ -327,60 +334,101 @@ def extract_icons(package: Path, out_dir: Path) -> list[str]:
 # ---- layout and drawing -------------------------------------------------------------------------------------------
 
 STORE_TOP = 10          # extra room under a store's lid (stores drawn without an icon)
+CHAR_EM = 0.58          # a generous average glyph width of the theme font (semibold), in em, for label wrapping
 
 
-def _node_h(n: dict, icons: _Icons) -> float:
+class Dims:
+    """Sizes of one sketch. "text_scale" (1-2) enlarges text and icons, for example in a variant drawn for a phone
+    frame; "node_w" sets the node width (the cell grows with it). Labels too wide for a node wrap onto two lines."""
+
+    def __init__(self, spec: dict):
+        s = float(spec.get("text_scale", 1))
+        self.NODE_W = float(spec.get("node_w", NODE_W))
+        self.CELL_W = max(CELL_W, self.NODE_W + 44)
+        self.LINE_H, self.SUB_H = LINE_H * s, SUB_H * s
+        self.NODE_PAD_Y, self.ICON_GAP = NODE_PAD_Y, ICON_GAP * s
+        self.ICON, self.GROUP_ICON = ICON * min(s, 1.3), GROUP_ICON * min(s, 1.3)
+        self.TITLE_BAND = TITLE_BAND * s
+        self.LABEL_PX, self.SUB_PX, self.GROUP_PX, self.EDGE_PX = LABEL_PX * s, SUB_PX * s, GROUP_PX * s, EDGE_PX * s
+        self.STORE_TOP = STORE_TOP
+
+
+def wrap(label: str, px: float, width: float) -> list[str]:
+    """One line when it fits, else the two-line split with the narrowest longer line (words kept whole)."""
+    fits = lambda t: len(t) * CHAR_EM * px <= width  # noqa: E731
+    words = label.split()
+    if fits(label) or len(words) < 2:
+        return [label]
+    splits = [(" ".join(words[:i]), " ".join(words[i:])) for i in range(1, len(words))]
+    return list(min(splits, key=lambda ab: max(len(ab[0]), len(ab[1]))))
+
+
+def _label_lines(n: dict, d: Dims) -> list[str]:
+    return wrap(str(n["label"]), d.LABEL_PX, d.NODE_W - 16)
+
+
+def _node_h(n: dict, icons: _Icons, d: Dims) -> float:
+    text = d.LINE_H * len(_label_lines(n, d)) + d.SUB_H * len(_lines(n.get("sub")))
     if icons.has(node_icon(n)):
-        return 2 * NODE_PAD_Y + ICON + ICON_GAP + LINE_H + SUB_H * len(_lines(n.get("sub")))
-    lid = STORE_TOP if n.get("kind") == "store" else 0
-    return 2 * NODE_PAD_Y + LINE_H + SUB_H * len(_lines(n.get("sub"))) + lid
+        return 2 * d.NODE_PAD_Y + d.ICON + d.ICON_GAP + text
+    lid = d.STORE_TOP if n.get("kind") == "store" else 0
+    return 2 * d.NODE_PAD_Y + text + lid
 
 
-def _layout(spec: dict, icons: _Icons):
+def _layout(spec: dict, icons: _Icons, d: Dims):
     nodes, groups = spec.get("nodes") or [], spec.get("groups") or []
     cols = 1 + max([n["at"][0] for n in nodes] + [g["cells"][2] for g in groups])
     rows = 1 + max([n["at"][1] for n in nodes] + [g["cells"][3] for g in groups])
     depth = {g["id"]: sum(1 for o in groups if o is not g and _within(g["cells"], o["cells"])) for g in groups}
     starts = {r: sorted((g for g in groups if g["cells"][1] == r), key=lambda g: depth[g["id"]]) for r in range(rows)}
     ends = {r: [g for g in groups if g["cells"][3] == r] for r in range(rows)}
-    body = {r: max([_node_h(n, icons) for n in nodes if n["at"][1] == r] + [LINE_H + 2 * NODE_PAD_Y])
+    body = {r: max([_node_h(n, icons, d) for n in nodes if n["at"][1] == r] + [d.LINE_H + 2 * d.NODE_PAD_Y])
             for r in range(rows)}
-    head = {r: TITLE_BAND * len(starts[r]) + sum(SUB_H for g in starts[r] if _lines(g.get("sub"))) for r in range(rows)}
+    head = {r: d.TITLE_BAND * len(starts[r]) + sum(d.SUB_H for g in starts[r] if _lines(g.get("sub")))
+            for r in range(rows)}
     tail = {r: GROUP_INSET * (1 + max([depth[g["id"]] for g in ends[r]], default=0)) for r in range(rows)}
     y, row_y = PAD, {}
     for r in range(rows):
         row_y[r] = y
         y += head[r] + 22 + body[r] + 22 + tail[r]
     height = y + PAD
-    width = 2 * PAD + cols * CELL_W
+    width = 2 * PAD + cols * d.CELL_W
     box = {}
     for r in range(rows):
         top = row_y[r]
         for g in starts[r]:
             box[g["id"]] = {"top": top}
-            top += TITLE_BAND + (SUB_H if _lines(g.get("sub")) else 0)
+            top += d.TITLE_BAND + (d.SUB_H if _lines(g.get("sub")) else 0)
     for g in groups:
-        d = depth[g["id"]]
+        dp = depth[g["id"]]
         c0, r0, c1, r1 = g["cells"]
-        x0 = PAD + c0 * CELL_W + 4 + GROUP_INSET * d
-        x1 = PAD + (c1 + 1) * CELL_W - 4 - GROUP_INSET * d
+        x0 = PAD + c0 * d.CELL_W + 4 + GROUP_INSET * dp
+        x1 = PAD + (c1 + 1) * d.CELL_W - 4 - GROUP_INSET * dp
         y0 = box[g["id"]]["top"]
-        y1 = row_y[r1] + head[r1] + 22 + body[r1] + 22 + tail[r1] - GROUP_INSET * (1 + d) + 4
-        box[g["id"]] = {"x": x0, "y": y0, "w": x1 - x0, "h": y1 - y0, "depth": d}
+        y1 = row_y[r1] + head[r1] + 22 + body[r1] + 22 + tail[r1] - GROUP_INSET * (1 + dp) + 4
+        box[g["id"]] = {"x": x0, "y": y0, "w": x1 - x0, "h": y1 - y0, "depth": dp}
     nbox = {}
     for n in nodes:
         c, r = n["at"]
-        h = _node_h(n, icons)
-        x = PAD + c * CELL_W + (CELL_W - NODE_W) / 2
+        h = _node_h(n, icons, d)
+        x = PAD + c * d.CELL_W + (d.CELL_W - d.NODE_W) / 2
         y = row_y[r] + head[r] + 22 + (body[r] - h) / 2
-        nbox[n["id"]] = {"x": x, "y": y, "w": NODE_W, "h": h}
+        nbox[n["id"]] = {"x": x, "y": y, "w": d.NODE_W, "h": h}
     return width, height, box, nbox
 
 
-def _t(x, y, text, size, weight=400, fill=INK, anchor="middle", halo=False) -> str:
+def _t(x, y, text, size, weight=400, fill=INK, anchor="middle", halo=False, line_h=0.0) -> str:
+    """One <text>; a list of lines becomes <tspan>s whose text joins back into the whole label (the joining space
+    sits in a zero-size tspan so it does not shift a centred line), so page.py and the gate read one label."""
     ring = f' paint-order="stroke" stroke="{CARD}" stroke-width="6" stroke-linejoin="round"' if halo else ""
-    return (f'<text x="{x:.1f}" y="{y:.1f}" text-anchor="{anchor}" font-size="{size}" font-weight="{weight}" '
-            f'fill="{fill}"{ring}>{escape(text, quote=False)}</text>')
+    if isinstance(text, list) and len(text) > 1:
+        sep = '<tspan font-size="0"> </tspan>'
+        body = sep.join(f'<tspan x="{x:.1f}" dy="{0 if i == 0 else line_h:.1f}">{escape(t, quote=False)}</tspan>'
+                        for i, t in enumerate(text))
+    else:
+        body = escape(text[0] if isinstance(text, list) else text, quote=False)
+    return (f'<text x="{x:.1f}" y="{y:.1f}" text-anchor="{anchor}" font-size="{size:.1f}" font-weight="{weight}" '
+            f'fill="{fill}"{ring}>{body}</text>')
 
 
 def _shape(n: dict, b: dict, with_icon: bool) -> str:
@@ -432,7 +480,8 @@ def render(spec: dict, key: str = "sketch", icon_dir: Path | None = None) -> str
     if problems:
         raise SketchError("; ".join(problems))
     icons = _Icons(icon_dir)
-    width, height, gbox, nbox = _layout(spec, icons)
+    d = Dims(spec)
+    width, height, gbox, nbox = _layout(spec, icons, d)
     keys = {n["id"]: f"n{i}" for i, n in enumerate(spec["nodes"], 1)}
     # Paint order: edges, then the group frames (a faint tint at most; their titles keep a halo so an arrow passes
     # behind a title, never through it), then the nodes.
@@ -446,11 +495,12 @@ def render(spec: dict, key: str = "sketch", icon_dir: Path | None = None) -> str
                 f'{fill} stroke="{st["stroke"]}" stroke-width="2.4"{dash}/>']
         tx = b["x"] + 14
         if icons.has(st.get("icon")):
-            body.append(icons.draw(st["icon"], b["x"], b["y"], GROUP_ICON))
-            tx = b["x"] + GROUP_ICON + 10
-        body.append(_t(tx, b["y"] + 22, str(g["label"]), GROUP_PX, 600, INK, "start", halo=True))
+            body.append(icons.draw(st["icon"], b["x"], b["y"], d.GROUP_ICON))
+            tx = b["x"] + d.GROUP_ICON + 10
+        body.append(_t(tx, b["y"] + 22 * d.LINE_H / LINE_H, str(g["label"]), d.GROUP_PX, 600, INK, "start", halo=True))
         for sub in _lines(g.get("sub"))[:1]:
-            body.append(_t(tx, b["y"] + 22 + SUB_H, sub, SUB_PX, 500, MUTED, "start", halo=True))
+            body.append(_t(tx, b["y"] + 22 * d.LINE_H / LINE_H + d.SUB_H, sub, d.SUB_PX, 500, MUTED, "start",
+                           halo=True))
         frames.append('<g class="cluster">' + "".join(body) + "</g>")
     for e in spec.get("edges") or []:
         pts = _route(nbox[e["from"]], nbox[e["to"]], float(e.get("bend", 0.5)))
@@ -463,7 +513,7 @@ def render(spec: dict, key: str = "sketch", icon_dir: Path | None = None) -> str
             (x0, y0), (x1, y1) = pts[i], pts[i + 1]
             mx, my = (x0 + x1) / 2, (y0 + y1) / 2
             for j, line in enumerate(lab):
-                body.append(_t(mx + (8 if x0 == x1 else 0), my - 6 + j * 16, line, EDGE_PX, 500, MUTED,
+                body.append(_t(mx + (8 if x0 == x1 else 0), my - 6 + j * d.EDGE_PX * 1.2, line, d.EDGE_PX, 500, MUTED,
                                "start" if x0 == x1 else "middle", halo=True))
         ends = f'data-from="{keys[e["from"]]}" data-to="{keys[e["to"]]}"'
         parts.append(f'<g class="edge" {ends}>' + "".join(body) + "</g>")
@@ -474,16 +524,17 @@ def render(spec: dict, key: str = "sketch", icon_dir: Path | None = None) -> str
         ik = node_icon(n)
         with_icon = icons.has(ik)
         body = [_shape(n, b, with_icon)]
-        top = b["y"] + NODE_PAD_Y
+        top = b["y"] + d.NODE_PAD_Y
         if with_icon:
-            body.append(icons.draw(ik, cx - ICON / 2, top, ICON))
-            top += ICON + ICON_GAP
+            body.append(icons.draw(ik, cx - d.ICON / 2, top, d.ICON))
+            top += d.ICON + d.ICON_GAP
         elif n.get("kind") == "store":
-            top += STORE_TOP
-        y = top + 17
-        body.append(_t(cx, y, str(n["label"]), LABEL_PX, 600))
+            top += d.STORE_TOP
+        y = top + 17 * d.LINE_H / LINE_H
+        body.append(_t(cx, y, _label_lines(n, d), d.LABEL_PX, 600, line_h=d.LINE_H))
+        y += d.LINE_H * (len(_label_lines(n, d)) - 1)
         for j, sub in enumerate(_lines(n.get("sub")), 1):
-            body.append(_t(cx, y + 3 + j * SUB_H, sub, SUB_PX, 500, MUTED))
+            body.append(_t(cx, y + 3 + j * d.SUB_H, sub, d.SUB_PX, 500, MUTED))
         parts.append(f'<g class="node" data-k="{keys[n["id"]]}">' + "".join(body) + "</g>")
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" '
             f'viewBox="0 0 {width:.0f} {height:.0f}" preserveAspectRatio="xMidYMid meet">'

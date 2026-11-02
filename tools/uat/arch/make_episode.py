@@ -201,7 +201,8 @@ def main(argv: list[str]) -> int:
                     uniq.append({"key": key, "visual": v})
         for i, u in enumerate(uniq, 1):
             u["n"] = i
-        html_path = page.write(adir / "stage.html", meta_page, asp, svgs, font)
+        html_path = page.write(adir / "stage.html", meta_page, asp,
+                               scene.svgs_for_aspect(svgs, meta.get("diagrams", {}), asp), font)
         kf_json = adir / "keyframes.json"
         kf_json.write_text(json.dumps([{"n": u["n"], "visual": u["visual"]} for u in uniq]), encoding="utf-8")
         rc = subprocess.run(["node", str(HERE / "capture.cjs"), str(html_path), str(kf_json), str(adir), asp,
@@ -276,7 +277,8 @@ def main(argv: list[str]) -> int:
 
 def visible_texts(svg: str) -> list[str]:
     """The text a rendered diagram draws, one entry per <text> element (unescaped)."""
-    return [html.unescape(t) for t in re.findall(r"<text[^>]*>([^<]*)</text>", svg) if t.strip()]
+    out = [html.unescape(re.sub(r"<[^>]+>", "", t)) for t in re.findall(r"<text[^>]*>(.*?)</text>", svg, re.S)]
+    return [t for t in out if t.strip()]
 
 
 def layer1(data: dict, meta: dict, sents: list, blog_src: Path | None, patterns: list, workspace: Path | None,
