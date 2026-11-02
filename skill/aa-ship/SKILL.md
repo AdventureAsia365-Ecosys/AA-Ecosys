@@ -40,7 +40,8 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
   đóng không merge; không merge thứ sai để thử.
 - [ ] **PR có migration (ADR 0017; chủ schema `docs/database/schema-ownership.md`):** file **expand** (`-- migrate:
   expand`) → một PR app (file + code + bump readiness); PR copy ci-bot sang Infra tự merge, Migration Apply tự chạy, job
-  schema gate của Deploy Dev chờ nó. File **contract** (không header) giữ THỨ TỰ MIG-4 (PR chỉ migration → review →
+  schema gate của Deploy Dev chờ nó (cửa sổ chờ = biến repo `SCHEMA_GATE_TIMEOUT_S`, mặc định 2400 s, tối đa 2580 s —
+  `.github/scripts/schema_gate.py`; quá cửa sổ thì chạy lại Deploy Dev sau khi migration đã áp). File **contract** (không header) giữ THỨ TỰ MIG-4 (PR chỉ migration → review →
   PR code), nhưng trên **Dev** không còn bước tay (ADR 0017a, S263, AA-1032): PR copy ci-bot tự merge khi xanh, Migration
   Apply tự apply khi MỌI bảng job rảnh + không wave mở (bận → `deferred`, lượt hằng giờ / lượt copy kế chạy lại). Kiểm
   bằng summary run `migration-apply.yml` (dòng `applied`, class `contract`) hoặc `python3 tools/github/ship_copy_apply.py
