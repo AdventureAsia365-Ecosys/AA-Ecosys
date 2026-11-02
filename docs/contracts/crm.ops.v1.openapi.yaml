@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: crm.ops.v1 (AA-Partner CRM → CIS admin, L1 platform console)
-  version: "1.8"
+  version: "1.9"
   description: >-
     Platform console API of the partner CRM (AA-Partner, root ADR 0010), served under /crm/ops/v1 and called by the
     CIS admin screen S-01 "Agencies (CRM)" (AA-941) and the CIS platform-ops pages (AA-936: job summary, LLM usage).
@@ -52,7 +52,10 @@ info:
     the first-owner invitation AA sent while it is pending, or claimed and not accepted (a claimed one used to block a
     new owner invitation for its whole lifetime), and POST /tenants/{tenant_id}/delete deletes a synthetic (test)
     agency without members, travellers or legal holds (the agency name typed exactly; the row goes to the trash and its
-    keys are crypto-shredded); a real agency is still deleted only by its owner's confirmed offboarding. Errors are
+    keys are crypto-shredded); a real agency is still deleted only by its owner's confirmed offboarding. Version 1.9
+    (AA-1031 S264, additive for a reader that shows an unknown refusal code as it is): POST /tenants on the id of an
+    agency in the trash (a deleted test agency) answers 409 `tenant_deleted` instead of `tenant_exists`; the id is
+    never reused, so the caller creates a new CIS tenant. Errors are
     `{detail, message?, fields?, state?, member_limit?}` (Problem); a 422 names the failing fields only, never the
     submitted values.
   x-aa-contract: crm.ops.v1
@@ -98,7 +101,8 @@ paths:
       summary: Create an agency without any member (write); the first owner is invited after
       description: >-
         Create-only: an id that already exists is 409 `tenant_exists` and nothing is written, whatever the agency's
-        status (never a silent rename). Dev accepts synthetic agencies only, prod real ones only. The `agency_create`
+        status (never a silent rename); since 1.9 an id whose agency is in the trash (a deleted test agency) is 409
+        `tenant_deleted` (the id is never reused: create a new CIS tenant). Dev accepts synthetic agencies only, prod real ones only. The `agency_create`
         audit event carries `ticket:<REF>`.
       requestBody:
         required: true
@@ -115,7 +119,7 @@ paths:
         "403": {$ref: "#/components/responses/Forbidden"}
         "409":
           $ref: "#/components/responses/Conflict"
-          description: "`tenant_exists`, `synthetic_flag_mismatch`, `tenant_unavailable`"
+          description: "`tenant_exists`, `tenant_deleted` (1.9), `synthetic_flag_mismatch`, `tenant_unavailable`"
         "422":
           $ref: "#/components/responses/Invalid"
           description: >-
