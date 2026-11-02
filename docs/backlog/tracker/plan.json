@@ -534,7 +534,7 @@
   {
    "who": "Nghiệp",
    "issue": "",
-   "text": "Đã quyết S262: luật TL (miễn phí + đơn giản → duyệt làm luôn; tốn tiền / phức tạp → ghi để sau, bảng docs/audits/2026-10-31-S262-tl-decisions/); Infra #568 + #575 (4 alarm, ~0,20 USD/tháng mỗi PR) duyệt; diễn tập GPT API nhỏ; không tự giới hạn theo hạn mức (đổi tài khoản 2 lần); nháp Jira dời S263; plan video kiến trúc duyệt (tài khoản cá nhân, giọng nam am_michael, nêu tên dịch vụ AWS, không nêu hãng model) → AA-1020 (S263), AA-1021 (S264+)"
+   "text": "Đã quyết S262: luật TL (miễn phí + đơn giản → duyệt làm luôn; tốn tiền / phức tạp → ghi để sau, bảng docs/audits/2026-10-31-S262-tl-decisions/); Infra #568 + #575 (4 alarm, ~0,20 USD/tháng mỗi PR) duyệt; diễn tập GPT API nhỏ; không tự giới hạn theo hạn mức (đổi tài khoản 2 lần); nháp Jira dời S263; plan kiến trúc duyệt → AA-1020 (S263), AA-1021 (content series, details private)"
   },
   {
    "who": "Tech lead",
@@ -693,8 +693,8 @@
    "notes": [
     "S262 (Claude Code, VSCode/WSL, Ultracode; 31/10 ~18:40 → 01/11 ~11:10 +07, tối đa 6 lane, đổi tài khoản 2 lần vì hạn mức): dọn In Progress 12 → 3 + hoàn chỉnh cổng AI v2, rồi CRM W5/W7",
     "Done: AA-1017 (registry v2, mig 320–322 + 324), AA-1014 (video review CRM EN + VI lên Drive), AA-1009 (harness UAT, dry run 23/23), AA-954 (PWA), AA-957 (hoa hồng + huỷ, crm-035), AA-1019 (staff console, tạo + đóng trong phiên); Done-with-scope: AA-642, AA-804, AA-1018, AA-1016, AA-964, AA-952, AA-956, AA-971, AA-1013, AA-1015, AA-997 (hide_flagged confirm)",
-    "→ Backlog: AA-873, AA-1004, AA-922 (TL-11 đóng băng). Còn In Progress: AA-896 (bản chính thức ≥03/11), AA-820 (chị Thư), AA-900 (nhãn 40 mẫu + chạy trả phí). Tạo AA-1020 (docs kiến trúc, S263), AA-1021 (series video, S264+)",
-    "Quyết định tech lead: luật TL miễn phí/đơn giản làm luôn (ADR 0018 Accepted, TL-3/4/10/11/13/15/24/25); duyệt Infra #568 + #575 alarm; diễn tập GPT API; nháp Jira (7) dời S263; plan video kiến trúc duyệt",
+    "→ Backlog: AA-873, AA-1004, AA-922 (TL-11 đóng băng). Còn In Progress: AA-896 (bản chính thức ≥03/11), AA-820 (chị Thư), AA-900 (nhãn 40 mẫu + chạy trả phí). Tạo AA-1020 (docs kiến trúc, S263), AA-1021 (content series, details private)",
+    "Quyết định tech lead: luật TL miễn phí/đơn giản làm luôn (ADR 0018 Accepted, TL-3/4/10/11/13/15/24/25); duyệt Infra #568 + #575 alarm; diễn tập GPT API; nháp Jira (7) dời S263; plan kiến trúc duyệt",
     "Trạng thái cuối: cis :956/:522 dev-0982cbd9 (324), booking :91 16fbed68 (bk-035), crm-api :107 f2f72e92 + web :81 d395b7ac (crm-035), portal :25, TP 4fd7dcab (tp-023); LLM_DAILY_PROBE=on; chi phí tháng 10 sơ bộ 471,70 USD; CI đỏ S261 đã xanh"
    ]
   },
