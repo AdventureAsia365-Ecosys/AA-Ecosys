@@ -243,6 +243,18 @@ class Layer3(Base):
         self.assertEqual(hits, [])
         self.assertTrue(status.startswith("SKIPPED"))
 
+    def test_tsv_drops_line_noise_but_keeps_text(self):
+        head = "level\tpage_num\tblock_num\tpar_num\tline_num\tword_num\tleft\ttop\twidth\theight\tconf\ttext"
+        rows = ["5\t1\t1\t1\t1\t1\t10\t10\t60\t14\t95\tZentrova",
+                "5\t1\t1\t1\t1\t2\t80\t10\t40\t14\t93\tadmin",
+                "5\t1\t2\t1\t1\t1\t10\t300\t13\t2\t18\t\u00a36",
+                "5\t1\t2\t1\t1\t2\t30\t300\t70\t2\t20\teee",
+                "4\t1\t3\t1\t1\t0\t0\t0\t9\t9\t-1\t"]
+        text = gate.tsv_text("\n".join([head] + rows))
+        self.assertEqual(text, "Zentrova admin")
+        self.assertTrue(gate.scan_text(text, "f", self.pats, layer="L3"))
+        self.assertEqual(gate.scan_text(text.replace("Zentrova ", ""), "f", self.pats, layer="L3"), [])
+
     def test_edit_distance_one(self):
         self.assertTrue(gate.edit1("zentrova", "zentr0va"))
         self.assertTrue(gate.edit1("zentrova", "zentrov"))

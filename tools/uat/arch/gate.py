@@ -447,11 +447,32 @@ def tool_version(cmd: list[str], env: dict | None = None) -> str:
         return "unavailable"
 
 
+MIN_OCR_WORD_PX = 5     # a "word" lower than this in the frame is a dashed line or an arrowhead, not readable text
+
+
+def tsv_text(tsv: str, min_px: int = MIN_OCR_WORD_PX) -> str:
+    """Rebuild OCR text from tesseract TSV, one line per OCR line, dropping words lower than min_px pixels: a dashed
+    edge reads as '£6 eee' at 2 px high, which no viewer can read and which tripped the money pattern."""
+    lines: dict[tuple, list[str]] = {}
+    for row in tsv.splitlines()[1:]:
+        f = row.split("\t")
+        if len(f) < 12 or not f[11].strip():
+            continue
+        try:
+            height = int(f[9])
+        except ValueError:
+            continue
+        if height < min_px:
+            continue
+        lines.setdefault((f[2], f[3], f[4]), []).append(f[11])
+    return "\n".join(" ".join(words) for words in lines.values())
+
+
 def ocr_image(path: Path, tess: tuple[list[str], dict]) -> str:
     cmd, env = tess
-    out = subprocess.run(cmd + [str(path), "stdout", "--psm", "11", "-l", "eng"], capture_output=True, text=True,
-                         env=env, timeout=300)
-    return out.stdout
+    out = subprocess.run(cmd + [str(path), "stdout", "--psm", "11", "-l", "eng", "tsv"], capture_output=True,
+                         text=True, env=env, timeout=300)
+    return tsv_text(out.stdout)
 
 
 def edit1(a: str, b: str) -> bool:
