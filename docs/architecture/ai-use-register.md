@@ -1,7 +1,7 @@
 ---
 id: APP-06-ai-register
 title: "AI Use Register"
-description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps. v1.1."
+description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps. v1.2."
 type: reference
 status: draft
 owner: nghiep
@@ -12,7 +12,7 @@ review_every_days: 30
 related: [ARCH-01-ai-gateway, APP-06-routes, APP-06-eval, APP-06-prompts, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-804, AA-820]
 ---
 
-# AI Use Register (v1.1)
+# AI Use Register (v1.2)
 
 One row per place where the ecosystem calls an AI model or a paid data provider. It answers, for each stage: what it
 is for, who owns the decision to change it, which provider and model family serve it today, which data may leave AWS,
@@ -33,6 +33,9 @@ which human checks the output before anyone relies on it.
 - **v1.1 (2026-11-02):** adds the acc2 Bedrock fallback of the judge and validate stages (CIS migrations 331–333,
   [section below](#acc2-bedrock-fallback-for-judge-and-validate-stages-cis-331333)). For the stages listed there, that
   section wins over the "Provider / family today" column of their rows, which still shows the 29/10 snapshot.
+- **v1.2 (2026-11-02, S264):** the six tenant writer stages may fall back to the OpenAI API as their last rung (CIS
+  migration 344, tech lead decision S264, ADR 0009 decision 5 amendment): their rows below and the tenant-terms
+  provider list.
 - **Who updates it:** the PR that adds, removes or re-routes a stage, adds a provider, or changes a stage's data
   scope, budget or human gate updates its row. A new provider also updates the tenant terms list (AA-820).
 
@@ -42,7 +45,7 @@ which human checks the output before anyone relies on it.
 |---|---|
 | Owner role | Who decides a change. **Tech lead**: writer stages and anything tenant-facing (a route switch on a main writer stage needs the tech lead's yes, ADR 0009 decision 12). **Engineer on duty**: extraction, validate and embed stages, which an engineer may re-route after the eval in the [eval runbook](https://github.com/AdventureAsia365-Ecosys/AA-CIS-App/blob/main/docs/llm/eval-runbook.md) and report after the fact. Roles, never names. |
 | Provider / family today | Primary model, then fallbacks, from the route table. "Bedrock (acc3)" = Amazon Bedrock in the LLM account; "OpenAI API" = the OpenAI platform API outside AWS; "acc2" = Bedrock in the infrastructure account. Families: Anthropic (Claude Sonnet 4.6 / 5.5, Haiku 4.5), OpenAI (GPT-5.6 Luna, GPT-6 Luna), Cohere (Embed v4). |
-| Data scope | From `shared.llm_role_config.allowed_scopes` (CIS migration 311, `shared/llm_client/data_scope.py`): `aws_only` = the stage's content may only go to connections inside AWS; `vendor_direct` = it may also reach a vendor API outside AWS. Every CIS stage whose route names a model reachable only outside AWS (`gpt-6-luna-openai`) is `vendor_direct`; every other stage is `aws_only`. Since CIS migration 327 (AA-1026, tech lead T-3 in S263) that includes the five A-series writers (`a0_column_map`, `s1_generate`, `s1_flag_fix`, `s1_itinerary_nudge`, `supply_content_writer`): every AWS deployment of the route first, then the Anthropic API once its key is in, GPT-6 Luna on the OpenAI API last (each writer names one Anthropic model, then GPT-6 Luna: the gateway tries all deployments of a model before the next model, so a vendor_direct route names no AWS model behind a model with a vendor API deployment). The same migration moved every route off the legacy keys `haiku` / `sonnet` (Haiku 4.5 / Sonnet 4.6) to `haiku-5-5` / `sonnet-5-5` (T-4). |
+| Data scope | From `shared.llm_role_config.allowed_scopes` (CIS migration 311, `shared/llm_client/data_scope.py`): `aws_only` = the stage's content may only go to connections inside AWS; `vendor_direct` = it may also reach a vendor API outside AWS. Every CIS stage whose route names a model reachable only outside AWS (`gpt-6-luna-openai`) is `vendor_direct`; every other stage is `aws_only`. Since CIS migration 327 (AA-1026, tech lead T-3 in S263) that includes the five A-series writers (`a0_column_map`, `s1_generate`, `s1_flag_fix`, `s1_itinerary_nudge`, `supply_content_writer`), and since CIS migration 344 (tech lead, S264) the six tenant writers (`t2_generate`, `t2_flag_fix`, `t2_itinerary_nudge`, `t8_angle_gen`, `t9_write`, `t9_repair`): every AWS deployment of the route first, then the Anthropic API once its key is in, GPT-6 Luna on the OpenAI API last (each writer names one Anthropic model, then GPT-6 Luna: the gateway tries all deployments of a model before the next model, so a vendor_direct route names no AWS model behind a model with a vendor API deployment). The same migration moved every route off the legacy keys `haiku` / `sonnet` (Haiku 4.5 / Sonnet 4.6) to `haiku-5-5` / `sonnet-5-5` (T-4). |
 | Tenant data | Yes when the prompt carries a tenant's brand settings, briefs or tenant-written text. Traveller input is noted separately. |
 | Budget source | What stops spend today. **Connection** = `shared.llm_provider_connection.monthly_budget_usd` (every CIS and TripPlanner call). **Job cap** = a `shared.spend_budget` row (provider × `job:<kind>`) that the job loads with `shared/cost_guard.py` before each call. **Tenant budget** = a `shared.tenant_ai_budget` row (CIS 321, AA-1016): alert, then staff approval for T-stages; a tenant without a row has none. "Connection only" means no per-stage or per-job cap exists yet (ADR 0009 decision 6 closes this). |
 | Kill switch | What turns the stage off without a deploy of new code. Since v1 the gateway also stops a connection by itself (connection circuit, AA-1018), ends a slow route at its `route_deadline_s` (none set yet), and holds refused jobs for the bulk re-queue. There is still **no per-stage switch in the gateway**: `is_active = false` on a route row makes the code fall back to its built-in default route (`SAFE_DEFAULTS`), it does not stop calls. The switches that exist are the connection `enabled` flag (all stages on that connection), a hard-stop budget row, and the feature flags named per row. |
@@ -83,20 +86,26 @@ which human checks the output before anyone relies on it.
 
 ### CIS: T-series (tenant content, Content studio)
 
-T-series stages are `aws_only` for writers until the tenant terms cover more (AA-820, ADR 0009 decision 5). The
-judge stages below are `vendor_direct` because their route ends at the OpenAI API, so tenant content can reach the
+T-series writer stages were `aws_only` until S264. Since CIS migration 344 (tech lead decision S264, 02/11/2026: acc3
+refuses every model since 29/10 and the Anthropic API has no key, so tenants could not write at all) the six tenant
+writer stages are `vendor_direct`: Claude on Bedrock (acc3) first, then the same Claude model on the Anthropic API
+once its key is in, then GPT-6 Luna on the OpenAI API as the **last** rung, only when every AWS path failed (ADR 0009
+decision 5 amendment, the rule of the A-series writers in CIS 327). The Claude fallback that sat behind each primary
+(Sonnet 5.5 → Haiku 5.5, or the reverse) was dropped: with the Anthropic API allowed, it would have been called after
+a vendor API. The tenant terms name this ("writing may fall back to the Anthropic API or, as a last resort, an OpenAI
+model through the OpenAI API"). The other T-stage writers' rules are unchanged. The judge stages below are `vendor_direct` because their route ends at the OpenAI API, so tenant content can reach the
 OpenAI API when every Bedrock hop fails: since CIS 333 that means both acc3 judge models **and** the acc2 Nova Lite hop
 placed before the OpenAI API (section below). The tenant terms state this as "may be used as a fallback".
 
 | Stage | App | Purpose | Owner role | Provider / family today | Data scope | Tenant data | Budget source | Kill switch | Golden set / eval | Human gate |
 |---|---|---|---|---|---|---|---|---|---|---|
-| `t2_generate` | CIS | T2: rewrite a catalog tour in the tenant's brand voice | Tech lead | Sonnet 5.5 → Haiku 5.5, Bedrock (acc3) / Anthropic | aws_only | Yes (brand settings) | Connection + tenant budget | Connection `enabled` | R2 `t2` | Tenant reviews and exports; AI notice at review, publish and export |
+| `t2_generate` | CIS | T2: rewrite a catalog tour in the tenant's brand voice | Tech lead | Sonnet 5.5, Bedrock (acc3) / Anthropic; then the Anthropic API (when switched on); GPT-6 Luna (OpenAI API) last resort | vendor_direct | Yes (brand settings) | Connection + tenant budget | Connection `enabled` | R2 `t2` | Tenant reviews and exports; AI notice at review, publish and export |
 | `t2_judge`, `t2_brand_audit` | CIS | Score and audit a T2 rewrite | Tech lead | GPT-5.6 Luna → GPT-6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API, `t2_judge` only); 10 % shadow on GPT-6 Luna / OpenAI | vendor_direct | Yes | Connection + tenant budget | Connection `enabled`; brand claim check `T2_BRAND_CLAIM_CHECK=off` | Q2 | Tenant review |
-| `t2_flag_fix`, `t2_itinerary_nudge` | CIS | Repair flagged T2 sentences and itinerary structure | Tech lead | Haiku 5.5, Bedrock (acc3) / Anthropic | aws_only | Yes | Connection + tenant budget | Connection `enabled` | R2 `t2` (part of the graph) | Tenant review |
+| `t2_flag_fix`, `t2_itinerary_nudge` | CIS | Repair flagged T2 sentences and itinerary structure | Tech lead | Haiku 5.5, Bedrock (acc3) / Anthropic; then the Anthropic API (when switched on); GPT-6 Luna (OpenAI API) last resort | vendor_direct | Yes | Connection + tenant budget | Connection `enabled` | R2 `t2` (part of the graph) | Tenant review |
 | `t7_debate_judge` | CIS | Brand-fit call of the T7 debate | Tech lead | GPT-5.6 Luna → GPT-6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API); 10 % shadow | vendor_direct | Yes | Connection + tenant budget | Connection `enabled` | Q2 | Tenant review |
-| `t8_angle_gen` | CIS | Propose content angles for a tenant brief | Tech lead | Sonnet 5.5 → Haiku 5.5, Bedrock (acc3) / Anthropic | aws_only | Yes | Connection + tenant budget | Connection `enabled` | Prompt register baseline | Tenant picks the angle |
-| `t9_write` | CIS | T9: blog and social pieces about a tour | Tech lead | Sonnet 5.5 → Haiku 5.5, Bedrock (acc3) / Anthropic | aws_only | Yes | Connection + tenant budget | Connection `enabled` | R2 `t9_blog`, `t9_social` | Authenticity check (no reviews, testimonials, first-person customers, independence claims); tenant reviews and presses publish (T10/T11) |
-| `t9_repair` | CIS | Sentence repair, SEO fit and the admin sentence suggest | Tech lead | Haiku 5.5 → Sonnet 5.5, Bedrock (acc3) / Anthropic | aws_only | Yes | Connection + tenant budget | Connection `enabled` | Prompt register baseline | Tenant review |
+| `t8_angle_gen` | CIS | Propose content angles for a tenant brief | Tech lead | Sonnet 5.5, Bedrock (acc3) / Anthropic; then the Anthropic API (when switched on); GPT-6 Luna (OpenAI API) last resort | vendor_direct | Yes | Connection + tenant budget | Connection `enabled` | Prompt register baseline | Tenant picks the angle |
+| `t9_write` | CIS | T9: blog and social pieces about a tour | Tech lead | Sonnet 5.5, Bedrock (acc3) / Anthropic; then the Anthropic API (when switched on); GPT-6 Luna (OpenAI API) last resort | vendor_direct | Yes | Connection + tenant budget | Connection `enabled` | R2 `t9_blog`, `t9_social` | Authenticity check (no reviews, testimonials, first-person customers, independence claims); tenant reviews and presses publish (T10/T11) |
+| `t9_repair` | CIS | Sentence repair, SEO fit and the admin sentence suggest | Tech lead | Haiku 5.5, Bedrock (acc3) / Anthropic; then the Anthropic API (when switched on); GPT-6 Luna (OpenAI API) last resort | vendor_direct | Yes | Connection + tenant budget | Connection `enabled` | Prompt register baseline | Tenant review |
 | `t9_faq_filter`, `t9_faq_answer_fit` | CIS | Filter real search questions for the blog FAQ; check each answer fits | Engineer on duty | Haiku 5.5 / Sonnet 5.5 → Haiku 5.5, Bedrock (acc3) / Anthropic | aws_only | Yes | Connection + tenant budget | Flag `T9_FAQ_LLM_FILTER` (default off) | S247 trial | Tenant review |
 | `t10_judge` | CIS | T10 gate: score a T9 piece | Tech lead | GPT-5.6 Luna → GPT-6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API) / OpenAI | vendor_direct | Yes | Connection + tenant budget | Connection `enabled` | Q2 | Tenant review |
 | `t10_adjudicate` | CIS | T10 tier-2 adjudicator of the writer's sentences | Tech lead | GPT-6 Luna → GPT-5.6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API) / OpenAI | vendor_direct | Yes | Connection + tenant budget | `T10_ADJ_MODE` (default off) | None yet | Tenant review |
@@ -147,12 +156,14 @@ is not from the writers' family (Anthropic), per decision 12. acc2 is `aws_only`
 
 What the tenant terms and the partner-portal privacy notice name, derived from the rows above:
 
-- **Anthropic (Claude), through Amazon Bedrock**: every writer stage.
+- **Anthropic (Claude), through Amazon Bedrock**: every writer stage (the primary).
 - **OpenAI models, through Amazon Bedrock**: judge, audit and extraction stages that score or check drafts.
 - **Cohere (Embed v4), through Amazon Bedrock**: search embeddings of catalog content.
 - **Direct Anthropic API and direct OpenAI API**: warm fallback paths outside AWS with a monthly cap (ADR 0009
-  decisions 5 and 14). In the 29/10 route snapshot only judge and dedupe routes end at the OpenAI API, and no route
-  names an Anthropic API model yet (the writer warm path is approved, its routing is a later gateway step). Terms wording: "may be used as a fallback".
+  decisions 5 and 14). Judge and dedupe routes end at the OpenAI API; since CIS 327 (A-series) and CIS 344 (tenant,
+  S264) the writer routes do too: their Claude model on the Anthropic API once its key is in, then GPT-6 Luna on the
+  OpenAI API as the last rung, only when every AWS path failed. So an OpenAI model may **write** tenant content when
+  Claude is unavailable. Terms wording: "may be used as a fallback"; for writing, "as a last resort".
 - **Jev (TypeSafe)**: yes/no decision checks; for tenant content only for allowlisted tenants.
 - **DataForSEO, Geoapify**: keywords and place names only, never tenant text.
 - **Amazon (Nova) and Meta (Llama) models on Bedrock (acc2)**: fallback for judge and validate stages when acc3
@@ -183,6 +194,7 @@ decision or issue that closes them, or say "none planned".
 
 | Version | Date | Change |
 |---|---|---|
+| v1.2 | 02/11/2026 (S264) | Tenant writer stages (`t2_generate`, `t2_flag_fix`, `t2_itinerary_nudge`, `t8_angle_gen`, `t9_write`, `t9_repair`) `vendor_direct` with GPT-6 Luna on the OpenAI API as the last rung (CIS 344, tech lead S264; ADR 0009 decision 5 amendment); tenant-terms provider list: an OpenAI model may write as a last resort. |
 | v1.1 | 02/11/2026 (S263 close) | acc2 Bedrock fallback for judge and validate stages (CIS 331–333; Nova Lite, Llama 4 Scout on `a3_place_card_check`; AWS first, vendor APIs last); `a3_place_dedupe` open; tenant-terms provider list; the A-series writer scope note now cites CIS 327 (was 335 by mistake). |
 | v1 | 01/11/2026 (S263, AA-1020) | Gateway v2 as built: ledger v2 for CIS, TripPlanner and the CRM; Jev and DataForSEO caps (318); tenant budget (321); provider registry rows (322); TripPlanner contract views (323); acc2 candidate models (324); Bedrock Batch, probe and CRM guard rows; circuit, deadline and re-queue as switches; LLM10 gaps updated. Routes unchanged since the 29/10 snapshot. |
 | v0 | 31/10/2026 (S262) | First version: 37 routed stages of the 29/10 route snapshot, `t10_adjudicate` (CIS migration 309), Jev, DataForSEO, the geocoder, the CRM stub; OWASP LLM Top 10 (2025) map. Draft until the tech lead has read it. |
