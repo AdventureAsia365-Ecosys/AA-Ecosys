@@ -83,8 +83,9 @@ theo quy trình DRY RUN (`skill/aa-cis-schema/references/destructive-ops.md`).
 
 ## Script gọi LLM chạy tay — PHẢI ghi cost
 Script adhoc gọi Bedrock/OpenAI (A/B, threshold, backfill…) phải qua `LLMClient.generate()` và ghi
-`shared.llm_call_log` (`record_call_sync`/`record_call_with_pool`, `stage="adhoc_<issue>"`, `role` chỉ
-`writer`/`judge`/`validate`). Không gọi thẳng boto3. Lý do: AWS vẫn tính tiền, không log thì không truy được nguồn (AA-635).
+`shared.llm_call_log` (`record_call_sync`/`record_call_with_pool`, `stage="adhoc_<issue>"`, `role` ∈
+`writer`/`judge`/`validate`/`embed`/`decide`/`data`/`guard` theo DM-10.4 v1.10 + CHECK của CIS 319; ledger v2 một dòng
+mỗi lần gọi, kể cả lượt bị từ chối / lỗi; truyền `**billed_fields(resp)`). Không gọi thẳng boto3. Lý do: AWS vẫn tính tiền, không log thì không truy được nguồn (AA-635).
 
 ## Chờ CI/deploy — KHÔNG poll liên tục
 Chờ 1 khoảng đủ dài (CI ~3–5′, ECS ~2–5′, Vercel ~1–2′) rồi kiểm 1 lần; ưu tiên `gh pr checks <n> --watch`.
