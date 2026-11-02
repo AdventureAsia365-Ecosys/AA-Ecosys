@@ -142,6 +142,7 @@ Migrations 304, 306, 307, 320 and 322 (AA-1002, AA-1017).
 | Connection budget | `connection_budget.py`, policy `shared.llm_connection_cost_policy` (317) | Month-to-date ledger spend of the connection; alert at 80 %, hard stop at 100 % of `monthly_budget_usd` by default |
 | App budget | TripPlanner `TP_DAILY_SPEND_CAP_USD` (5 USD on Dev, set by Infra) through `catalog.v_llm_app_spend_today_v1` | Fails closed when the spend cannot be read |
 | Job and stage budget | `shared.spend_budget`, `cost_guard.RunBudget` | Jev and DataForSEO caps seeded by 318 |
+| App profile | `shared.llm_app_profile` (345), `app_profile.py` (AA-1025 H1a, ADR 0009 decision 4) | One row per app: AI on / off, bulk paused, default daily budget, degrade mode. AI off for `cis`: every CIS AI call (chat, embed, connection test, Jev) is refused before it is sent, a 0 USD `refused` / `disabled` row; jobs wait for the re-queue. No row or unreadable = AI on. TripPlanner and the CRM read their row later (H1b / H1c) |
 | Tenant budget | `shared.tenant_ai_budget` (321), `tenant_budget.py` (AA-1016) | Bell + ops e-mail at `alert_pct`; with `hard_stop`, T-stage jobs stop `stopped_budget` at `approval_pct` and wait for staff approval, then the bulk re-queue. No row = no budget. The CRM keeps its own hard per-agency monthly budget, alerts at 75 / 90 / 100 % (crm-032), capped by `AI_BUDGET_MAX_USD` |
 | Circuit breaker | `breaker.py`, `shared.llm_provider_health` (309) | One circuit per deployment, shared across tasks; a connection-level circuit derived from it trips on account-wide signals (one `credential` or `quota_exhausted`, or `access_denied` on two models) |
 | Limiter | per process | `max_concurrency` and `rpm_limit` of the connection |
@@ -156,7 +157,11 @@ error class `quota_exhausted`: the connection stops and the call is never retrie
   tenant, job, request id, attempt number, status (`ok`, `refused`, `error`, `truncated`, `billed_unusable`),
   error class, latency, tokens (in, out, cache read, cache write, reasoning), units, cost, pricing mode,
   `prompt_hash` (sha256 of the system prompt), `prompt_version`, `is_shadow`, `is_experiment`. No prompt or completion
-  text is stored (DM-6.4). Bedrock Batch records and Jev, DataForSEO and Geoapify calls write rows too.
+  text is stored (DM-6.4). Bedrock Batch records and Jev calls (role `decide` since AA-1025 D3) write rows too.
+- **Read federated** (ADR 0009 decision 8 as amended in S264, DM-10.4): DataForSEO and Geoapify keep their domain
+  ledgers (`shared.dfs_call_log`, `geo.geocode_call`) with the contract's status, latency, app and stage (CIS 319 /
+  346); Jev's per-question verdicts stay in `shared.decision_log`. The Calls tab, the trace and Providers read every
+  ledger side by side; nothing is copied into one table.
 - **CIS admin, AI providers** (`/admin/ai-gateway`): tabs Providers (connections, Jev credit, availability),
   Routing, Models & trials (families, shadow report, the read-only Experiments section), Budgets (every cap layer,
   tenant budgets), Calls (ledger search) and Guide; the **Trace drawer** shows every attempt of a job or tour in time
@@ -205,6 +210,7 @@ Checked on 2026-11-01 unless the row says otherwise.
 | TripPlanner on the shared core and the 323 views | **Live** (code on `main`); the grandfathered SELECT on `shared.llm_role_config` / `llm_model_catalog` is still granted | A later CIS migration revokes it (ADR 0009 decision 13) |
 | CRM gateway v2 (crm-032 ledger, vendored core) | **Live, stub provider:** no `CRM_LLM_*` variable is set on Dev, so CRM AI drafting runs the deterministic stub | Real provider needs `CRM_LLM_PROVIDER` and the role, Bedrock only (root ADR 0008a) |
 | Tenant AI budget (Content studio) | **Live** (code and table); a tenant without a row has no budget | Amounts come from the business owner's plan prices |
+| App profile (345) and the geocode ledger columns (346) | **Built** (AA-1025 D3 / H1a, S264); live once the migrations are applied and the CIS code PR is deployed | Live check: AI off for `cis`, one connection test refused at 0 USD, AI back on |
 | Prompt register | Table live; until a migration registers versions, `prompt_version` is NULL | A migration inserts the first versions (`scripts/prompt_registry_check.py --sql`) |
 | Stage × model parameters | Table live, no rows at its release (AA-1017) | Filled when a trial needs it |
 | Legacy aliases (`LLM_LEGACY_ALIASES`) | **Off** | Switch after a live check; legacy paths proposed for removal 2026-12-31 |

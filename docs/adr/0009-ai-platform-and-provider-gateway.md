@@ -243,10 +243,21 @@ What exists (CIS code at `1b6e9448`, S261 audits, [inventory](../audits/2026-10-
   outcome, error class, latency, units (tokens in / out / cache / reasoning, credits, tasks), cost and an estimate
   flag, prompt version, `prompt_hash`, `is_shadow` and `is_experiment` (the columns root ADR 0008a §6 and AA-804
   promise).
-- The shared ledger is `shared.llm_call_log` extended to this contract (ledger v2) for CIS and TripPlanner.
-  `decision_log`, `dfs_call_log` and `geo.geocode_call` stay as domain detail, linked to the ledger row by call id.
-  `crm.llm_call` follows the same contract with `app = 'crm'` and reaches CIS only through `crm.ops.v1`. This amends
-  DM-10.4, which names one ledger per provider and limits `role` to writer, judge and validate.
+- **The contract is read federated** (amended S264, AA-1025 D3, tech lead T-14 option b, 01/11/2026): it is one set
+  of columns and one admin view, not one physical table. Each ledger holds the contract's facts for its own calls and
+  the admin reads them together (AI providers › Calls, the job / tour trace, Providers; `api/services/ai_gateway*.py`):
+  - `shared.llm_call_log` (ledger v2) for every LLM and Jev call of CIS and TripPlanner, one row per attempt; a Jev
+    call has role `decide` (D3; `validate` before);
+  - `shared.dfs_call_log` for DataForSEO (status, latency, stage, app since CIS 319) and `geo.geocode_call` for
+    Geoapify (status, latency, app and stage since CIS 346), one row per call or per batch of requests, with their own
+    units (keywords, credits);
+  - `shared.decision_log` keeps Jev's per-question verdicts next to the call's `llm_call_log` row (same job); its
+    status is derived by the reader (a refused ask is `refused`);
+  - `crm.llm_call` follows the same contract with `app = 'crm'` and reaches CIS only through `crm.ops.v1`.
+  A column one ledger cannot hold (tokens for Geoapify, credits for an LLM) stays NULL there; a reader never joins
+  the ledgers by row, it lists and sums them side by side. Rows written before a ledger gained a column keep NULL and
+  are derived as before. This amends DM-10.4, which named one ledger per provider and limited `role` to writer, judge
+  and validate (data standards v1.10, then v1.13 for the federated read).
 - Refused attempts now get 0-cost rows, so the 180-day volume of `llm_call_log` grows (AA-825). Every new table
   (family, stage × model parameters, health and probe, eval run) gets its DM-7.1 retention row in the PR that creates
   it.
