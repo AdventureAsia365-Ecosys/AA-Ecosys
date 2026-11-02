@@ -70,6 +70,8 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
 - **Checklist sống:** đầu phiên tạo `.tmp-session/S<nnn>-checklist.md` — issue gom theo nhóm, mỗi dòng `[x]` xong /
   `⏳` đang chạy / `⛔` bị chặn + lý do / `[ ]` chưa làm, cộng mục "Ràng buộc" và "Quyết định của Nghiệp". Báo
   Nghiệp mở bằng Markdown Preview (Ctrl+Shift+V). Cập nhật sau mỗi bước xong; lúc chốt phiên nó là nguồn cho log.
+  **Publish checklist thành tab "Phiên" của trang tracker** (S264, `docs/backlog/tracker/README.md` mục Session tab):
+  đầu phiên, sau mỗi bước lớn và lúc chốt (`sessions/S<nnn>.md` + `sessions/index.json`, chỉ đi kèm artifact, không commit).
 - **Bài học chờ:** tìm ra nguyên nhân gốc → ghi ngay 1 dòng (mẫu `aa-lessons`) vào `.tmp-session/S<nnn>-lessons-pending.md`.
 - **Mỗi issue khi bắt đầu:** 3–6 dòng tiếng Việt cho Nghiệp — vấn đề / làm gì / ai làm / kiểm thế nào. Việc rộng
   (audit, migration nhiều file, nghiên cứu nhiều nguồn) mà Ultracode đang tắt → một dòng gợi ý bật.
