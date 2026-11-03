@@ -40,7 +40,7 @@ numbers, never trips or revenue, unless the owner allows support access.
 | Traveller pages (forms, proposals, traveller portal) | `https://go-dev.lumiguides.it.com/c/...` (only through the links the agency sends; the bare host shows nothing) |
 | AA staff console | `https://portal.lumiguides.it.com/staff` |
 | CRM health page | `https://portal.lumiguides.it.com/health` |
-| Agencies (CRM) admin page | `https://aa-cis.lumiguides.it.com/admin/platform/agencies` |
+| CRM agencies admin page (Tenants › CRM agencies) | `https://aa-cis.lumiguides.it.com/admin/tenants/agencies` |
 
 The old host `partner-dev.lumiguides.it.com` forwards to `portal.lumiguides.it.com`.
 
@@ -220,5 +220,5 @@ tech lead) follows [incident response](../ops/incident-response.md); the CRM enc
 Read from AA-Partner `main` on 2026-11-01: `web/lib/nav.ts` (menu and role visibility), `web/lib/i18n.ts` and
 `web/lib/i18nStaff.ts` (labels), `web/app/(crm)/settings/page.tsx`, `CONTEXT.md` (sections "Web", "Tenant portal",
 "F4 roles and team", "L1 console", "AA support access L2 + break-glass L3", "AA staff console", "Domain terms");
-AA-CIS-App `frontend/app/admin/platform/agencies/messages.ts`. Decisions: root ADR 0010, 0006b, 0008a. Keep
+AA-CIS-App `frontend/app/admin/tenants/agencies/messages.ts`. Decisions: root ADR 0010, 0006b, 0008a. Keep
 [crm-runbook.vi.md](crm-runbook.vi.md) in step with this page.

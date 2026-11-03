@@ -40,7 +40,7 @@ approval. Booking and TripPlanner rows are other owners' schemas: their lookup a
 Migrate `mode=run-script` (sections 2 and 3). Every erasure follows the DRY RUN procedure
 ([`destructive-ops.md`](../../skill/aa-cis-schema/references/destructive-ops.md)) with the tech lead's approval.
 
-**Operator UI.** The CIS admin page **Jobs › Data erasure** (`/admin/data-erasure`, admin role; AA-CIS-App #960) is
+**Operator UI.** The CIS admin page **Tenants › Data erasure** (`/admin/tenants/data-erasure`, was `/admin/data-erasure`; admin role; AA-CIS-App #960) is
 the usual way to run the CIS part: it shows the settings (apply on or off, retention days, DRY RUN max age), starts a
 DRY RUN for an offboarded tenant or for a traveller (the address is hashed in the browser and cleared; only the hash
 is sent), shows the plan and the fingerprint, opens the apply panel only while apply is on and only for a succeeded,
@@ -168,7 +168,7 @@ and the work item, nowhere else. After the erasure it matches no row.
    curl -s -X POST https://api-cis.lumiguides.it.com/admin/job-runner/erasure/run -H "x-admin-secret: $A" -H "x-admin-role: admin" -H "content-type: application/json" -d '{"subject":"traveller","email_sha256":"<64-hex-characters>"}'
    ```
 
-   Or on `/admin/data-erasure`, tab "Traveller (DSAR)": type the address there (it is hashed in the browser and
+   Or on `/admin/tenants/data-erasure`, tab "Traveller (DSAR)": type the address there (it is hashed in the browser and
    cleared) and start the DRY RUN. Expected: `{"job_id": "...", "mode": "dry_run"}`. Read the result with
    `curl -s https://api-cis.lumiguides.it.com/admin/job-runner/jobs/<job_id> -H "x-admin-secret: $A" -H "x-admin-role: admin"`
    (or the admin Jobs page, kind `data_erasure`). Expected: `status` `succeeded`, every `rows` 0, `blocked` false.
@@ -251,7 +251,7 @@ section 2 lookup only**, held as constants: no address, name or phone in the cod
    `ERASURE_APPLY_ENABLED=true` on the api and worker (Terraform, approved). From a Cognito staff session (admin role;
    the apply refuses a password session or the bare secret):
 
-   The usual path is the apply panel of `/admin/data-erasure` on that DRY RUN (it builds the body from the DRY RUN
+   The usual path is the apply panel of `/admin/tenants/data-erasure` on that DRY RUN (it builds the body from the DRY RUN
    job). The terminal equivalent:
 
    ```bash
@@ -292,7 +292,7 @@ section 2 lookup only**, held as constants: no address, name or phone in the cod
    curl -s -X POST https://api-cis.lumiguides.it.com/admin/job-runner/erasure/run -H "x-admin-secret: $A" -H "x-admin-role: admin" -H "content-type: application/json" -d '{"subject":"traveller","email_sha256":"<64-hex-characters>","verify":true}'
    ```
 
-   On `/admin/data-erasure` the verification DRY RUN is started from the finished apply (it uses the hash held in
+   On `/admin/tenants/data-erasure` the verification DRY RUN is started from the finished apply (it uses the hash held in
    the page's memory; after a reload, type the address again). The verification job replaces the hash in its own
    row with `stripped-after-verify` when it ends (`result.hash_stripped: true`) and never stores a salt, so it
    leaves no copy behind.
@@ -393,7 +393,7 @@ deleted.
    so it is for a drill on a synthetic tenant only. A real tenant erasure needs a change that turns on the apply
    alone and keeps the window.
 7. **Apply**, within 24 hours of the DRY RUN, from a Cognito staff session (admin role): the apply panel of
-   `/admin/data-erasure` on that DRY RUN, or:
+   `/admin/tenants/data-erasure` on that DRY RUN, or:
 
    ```bash
    curl -s -X POST https://api-cis.lumiguides.it.com/admin/job-runner/erasure/run -H "Authorization: Bearer <staff-id-token>" -H "content-type: application/json" -d '{"subject":"tenant","tenant_id":"<tenant uuid>","dry_run":false,"dry_run_job_id":"<dry-run job id>","approved_fingerprint":"<fingerprint>","approved_by":"<approver>","snapshot_id":"tenant-erase-<yyyymmdd>-pre"}' # WRITE

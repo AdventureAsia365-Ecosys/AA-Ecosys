@@ -23,7 +23,7 @@
 | `/v1`, `/v1/pipeline`, `/v1/integrations`, `/v1/rules`, `/v1/social`, `/v1/publish-log`, `/v1/notifications` | Tenant hỗ trợ / tài khoản |
 | `/v1/trip`, `/v1/progress`, `/content/photos` | Public / live progress / ảnh |
 | `/catalog/v1`, `/tenant/membership/v1` | Hợp đồng HTTP cho AA-Partner (token M2M) |
-| `/admin`, `/admin/dashboard`, `/admin/overview`, `/admin/seo-intelligence`, `/admin/content-quality` | Admin tổng quan |
+| `/admin`, `/admin/dashboard`, `/admin/overview`, `/admin/seo-intelligence`, `/admin/tenant-qa/*` (Content quality, Content Trace, Review log, Slate) | Admin tổng quan |
 | `/admin/a4`, `/admin/segment-research`, `/admin/decisions`, `/admin/photos`, `/admin/places`, `/admin/trip-pages`, `/admin/writing-memory` | Admin A4 + ops nội dung |
 | `/admin/aa-content`, `/admin/supply-content` | Nội dung AA tự viết, nội dung supply cho Booking |
 | `/admin/tenants`, `/admin/platform`, `/admin/platform/crm` | Tenant, staff, nền tảng, CRM console |
