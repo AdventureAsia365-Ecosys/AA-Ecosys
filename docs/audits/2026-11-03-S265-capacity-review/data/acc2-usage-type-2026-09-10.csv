@@ -1,0 +1,141 @@
+month,service,usage_type,unblended_usd,usage_quantity,unit
+2026-09,AWS Secrets Manager,USW1-AWSSecretsManager-Secrets,4.3978,10.995,Secrets
+2026-09,AWS Secrets Manager,USW1-AWSSecretsManagerAPIRequest,0.0217,4332.0,API Requests
+2026-09,Amazon API Gateway,USW1-ApiGatewayHttpRequest,0.1807,154427.0,Requests
+2026-09,Amazon API Gateway,USW1-ApiGatewayRequest,0.1793,51217.0,Requests
+2026-09,Amazon API Gateway,USW1-DataTransfer-Out-Bytes,0.0238,0.264,GB
+2026-09,Amazon Elastic Container Service,USW1-DataTransfer-Regional-Bytes,0.5429,54.292,GB
+2026-09,Amazon Elastic Container Service,USW1-Fargate-GB-Hours,3.7051,725.073,Hrs
+2026-09,Amazon Elastic Container Service,USW1-Fargate-vCPU-Hours:perCPU,16.8797,362.536,Hrs
+2026-09,Amazon Elastic Container Service,USW1-SpotUsage-Fargate-GB-Hours,0.0007,0.423,Hrs
+2026-09,Amazon Elastic Container Service,USW1-SpotUsage-Fargate-vCPU-Hours:perCPU,0.003,0.211,Hrs
+2026-09,Amazon Relational Database Service,USW1-DataTransfer-In-Bytes,0.0,0.011,GB
+2026-09,Amazon Relational Database Service,USW1-DataTransfer-Out-Bytes,0.001,0.011,GB
+2026-09,Amazon Relational Database Service,USW1-InstanceUsage:db.t3.micro,17.28,720.0,Hrs
+2026-09,Amazon Relational Database Service,USW1-RDS:ChargedBackupUsage,0.3488,3.671,GB-Month
+2026-09,Amazon Relational Database Service,USW1-RDS:GP3-Storage,2.76,20.0,GB-Month
+2026-09,Amazon Simple Storage Service,APS1-Requests-Tier1,0.0,2.0,Requests
+2026-09,Amazon Simple Storage Service,DataTransfer-In-Bytes,0.0,0.0,GB
+2026-09,Amazon Simple Storage Service,Global-Bucket-Hrs-FreeTier,0.0,0.4,Bucket-Mo
+2026-09,Amazon Simple Storage Service,Requests-Tier1,0.0001,23.0,Requests
+2026-09,Amazon Simple Storage Service,USE1-APS1-AWS-Out-Bytes,0.0,0.0,GB
+2026-09,Amazon Simple Storage Service,USE1-APS2-AWS-Out-Bytes,0.0,0.0,GB
+2026-09,Amazon Simple Storage Service,USE1-USW1-AWS-Out-Bytes,0.0,0.0,GB
+2026-09,Amazon Simple Storage Service,USW1-DataTransfer-In-Bytes,0.0,3.692,GB
+2026-09,Amazon Simple Storage Service,USW1-DataTransfer-Out-Bytes,0.0166,0.184,GB
+2026-09,Amazon Simple Storage Service,USW1-Requests-Tier1,0.1632,29668.0,Requests
+2026-09,Amazon Simple Storage Service,USW1-Requests-Tier2,0.0081,18316.0,Requests
+2026-09,Amazon Simple Storage Service,USW1-Requests-Tier3,0.0004,6.0,Requests
+2026-09,Amazon Simple Storage Service,USW1-TagStorage-TagHrs,0.0,34.933,Tag-Mo
+2026-09,Amazon Simple Storage Service,USW1-TimedStorage-ByteHrs,0.045,1.731,GB-Month
+2026-09,Amazon Simple Storage Service,USW1-TimedStorage-GDA-ByteHrs,0.0,0.0,GB-Month
+2026-09,AmazonCloudWatch,DashboardsUsageHour-Basic,2.4,1.0,Dashboards
+2026-09,AmazonCloudWatch,USW1-CW:AlarmMonitorUsage,1.68,18.0,Alarms
+2026-09,AmazonCloudWatch,USW1-CW:MetricMonitorUsage,2.2504,7.501,Metrics
+2026-09,AmazonCloudWatch,USW1-CW:Requests,0.0,96.0,Requests
+2026-09,AmazonCloudWatch,USW1-DataProcessing-Bytes,0.1016,0.152,GB
+2026-09,AmazonCloudWatch,USW1-DataScanned-Bytes,0.0039,0.585,GB
+2026-09,AmazonCloudWatch,USW1-TimedStorage-ByteHrs,0.0,0.599,GB-Month
+2026-09,AmazonCloudWatch,USW1-VendedLog-Bytes,0.8682,1.296,GB
+2026-09,AmazonCloudWatch,USW1-VendedLog-Bytes-WAFLogs,0.5608,0.837,GB
+2026-09,EC2 - Other,USW1-DataTransfer-Regional-Bytes,0.5242,53.396,GB
+2026-09,EC2 - Other,USW1-EBS:VolumeUsage.gp3,2.912,30.334,GB-Month
+2026-09,EC2 - Other,USW1-USE1-AWS-In-Bytes,0.0,0.001,GB
+2026-09,EC2 - Other,USW1-USE1-AWS-Out-Bytes,0.0,0.001,GB
+2026-10,AWS Secrets Manager,APS1-AWSSecretsManagerAPIRequest,0.0,1.0,API Requests
+2026-10,AWS Secrets Manager,USE1-AWSSecretsManagerAPIRequest,0.0,2.0,API Requests
+2026-10,AWS Secrets Manager,USW1-AWSSecretsManager-Secrets,11.4792,28.698,Secrets
+2026-10,AWS Secrets Manager,USW1-AWSSecretsManagerAPIRequest,0.2395,47898.0,API Requests
+2026-10,AWS Secrets Manager,USW2-AWSSecretsManagerAPIRequest,0.0,1.0,API Requests
+2026-10,Amazon API Gateway,USW1-ApiGatewayHttpRequest,0.033,28205.0,Requests
+2026-10,Amazon API Gateway,USW1-ApiGatewayRequest,1.22,348574.0,Requests
+2026-10,Amazon API Gateway,USW1-DataTransfer-Out-Bytes,1.1815,13.128,GB
+2026-10,Amazon Elastic Container Service,USW1-DataTransfer-Regional-Bytes,4.6461,464.614,GB
+2026-10,Amazon Elastic Container Service,USW1-Fargate-ARM-GB-Hours,0.4373,106.931,Hrs
+2026-10,Amazon Elastic Container Service,USW1-Fargate-ARM-vCPU-Hours:perCPU,1.9916,53.466,Hrs
+2026-10,Amazon Elastic Container Service,USW1-Fargate-GB-Hours,8.3605,1636.104,Hrs
+2026-10,Amazon Elastic Container Service,USW1-Fargate-vCPU-Hours:perCPU,38.0885,818.052,Hrs
+2026-10,Amazon Elastic Container Service,USW1-SpotUsage-Fargate-ARM-GB-Hours,0.2019,164.572,Hrs
+2026-10,Amazon Elastic Container Service,USW1-SpotUsage-Fargate-ARM-vCPU-Hours:perCPU,0.9195,82.286,Hrs
+2026-10,Amazon Elastic Container Service,USW1-SpotUsage-Fargate-GB-Hours,0.0501,32.382,Hrs
+2026-10,Amazon Elastic Container Service,USW1-SpotUsage-Fargate-vCPU-Hours:perCPU,0.2285,16.191,Hrs
+2026-10,Amazon Relational Database Service,USW1-DataTransfer-In-Bytes,0.0,0.002,GB
+2026-10,Amazon Relational Database Service,USW1-DataTransfer-Out-Bytes,0.0002,0.002,GB
+2026-10,Amazon Relational Database Service,USW1-InstanceUsage:db.t3.micro,8.2445,343.523,Hrs
+2026-10,Amazon Relational Database Service,USW1-InstanceUsage:db.t4g.micro,0.2345,11.166,Hrs
+2026-10,Amazon Relational Database Service,USW1-InstanceUsage:db.t4g.small,17.211,400.256,Hrs
+2026-10,Amazon Relational Database Service,USW1-RDS:ChargedBackupUsage,2.3056,24.269,GB-Month
+2026-10,Amazon Relational Database Service,USW1-RDS:GP3-Storage,2.8006,20.294,GB-Month
+2026-10,Amazon Relational Database Service,USW1-USE1-AWS-In-Bytes,0.0,0.004,GB
+2026-10,Amazon Relational Database Service,USW1-USE1-AWS-Out-Bytes,0.0001,0.004,GB
+2026-10,Amazon Simple Storage Service,APS1-DataTransfer-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,APS1-Requests-Tier1,0.0,7.0,Requests
+2026-10,Amazon Simple Storage Service,APS2-Requests-Tier1,0.0,4.0,Requests
+2026-10,Amazon Simple Storage Service,APS2-Vectors-Request-Tier1,0.0001,1.0,Requests
+2026-10,Amazon Simple Storage Service,DataTransfer-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,Global-Bucket-Hrs-FreeTier,0.0,0.499,Bucket-Mo
+2026-10,Amazon Simple Storage Service,Requests-Tier1,0.0001,19.0,Requests
+2026-10,Amazon Simple Storage Service,USE1-APS1-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USE1-APS2-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USE1-USW1-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-APN1-AWS-In-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-APN1-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-APN2-AWS-In-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-APN2-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-APN3-AWS-In-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-APN3-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-APS1-AWS-In-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-APS1-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-APS2-AWS-In-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-APS2-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-APS3-AWS-In-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-APS3-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-CAN1-AWS-In-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-CAN1-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-CloudFront-Out-Bytes,0.0,0.049,GB
+2026-10,Amazon Simple Storage Service,USW1-DataTransfer-In-Bytes,0.0,7.048,GB
+2026-10,Amazon Simple Storage Service,USW1-DataTransfer-Out-Bytes,0.4842,5.38,GB
+2026-10,Amazon Simple Storage Service,USW1-EU-AWS-In-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-EU-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-EUC1-AWS-In-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-EUC1-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-EUN1-AWS-In-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-EUN1-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-EUW2-AWS-In-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-EUW2-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-EUW3-AWS-In-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-EUW3-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-Requests-Tier1,0.4857,88316.0,Requests
+2026-10,Amazon Simple Storage Service,USW1-Requests-Tier2,0.097,220442.0,Requests
+2026-10,Amazon Simple Storage Service,USW1-Requests-Tier3,0.001,17.0,Requests
+2026-10,Amazon Simple Storage Service,USW1-SAE1-AWS-In-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-SAE1-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-TagStorage-TagHrs,0.0001,136.258,Tag-Mo
+2026-10,Amazon Simple Storage Service,USW1-TimedStorage-ByteHrs,0.2621,10.082,GB-Month
+2026-10,Amazon Simple Storage Service,USW1-TimedStorage-GDA-ByteHrs,0.0,0.003,GB-Month
+2026-10,Amazon Simple Storage Service,USW1-USE1-AWS-In-Bytes,0.0,0.009,GB
+2026-10,Amazon Simple Storage Service,USW1-USE1-AWS-Out-Bytes,0.0001,0.006,GB
+2026-10,Amazon Simple Storage Service,USW1-USE2-AWS-In-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-USE2-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,USW1-USW2-AWS-In-Bytes,0.0,0.004,GB
+2026-10,Amazon Simple Storage Service,USW1-USW2-AWS-Out-Bytes,0.0,0.001,GB
+2026-10,Amazon Simple Storage Service,USW1-Vectors-Request-Tier1,0.0001,1.0,Requests
+2026-10,Amazon Simple Storage Service,USW2-Requests-Tier1,0.0001,13.0,Requests
+2026-10,Amazon Simple Storage Service,USW2-USW1-AWS-Out-Bytes,0.0,0.0,GB
+2026-10,Amazon Simple Storage Service,Vectors-Request-Tier1,0.0001,1.0,Requests
+2026-10,AmazonCloudWatch,CW:Requests,0.0,3.0,Requests
+2026-10,AmazonCloudWatch,DashboardsUsageHour-Basic,2.3226,1.0,Dashboards
+2026-10,AmazonCloudWatch,USW1-CW:AlarmMonitorUsage,5.0776,51.937,Alarms
+2026-10,AmazonCloudWatch,USW1-CW:DatabaseInsights-API,0.0,10.0,API Calls
+2026-10,AmazonCloudWatch,USW1-CW:GMD-Metrics,0.0128,1284.0,Metrics
+2026-10,AmazonCloudWatch,USW1-CW:MetricMonitorUsage,8.2177,27.832,Metrics
+2026-10,AmazonCloudWatch,USW1-CW:Requests,0.0389,18116.0,Requests
+2026-10,AmazonCloudWatch,USW1-DataProcessing-Bytes,0.9817,1.465,GB
+2026-10,AmazonCloudWatch,USW1-DataScanned-Bytes,0.2689,40.134,GB
+2026-10,AmazonCloudWatch,USW1-TimedStorage-ByteHrs,0.0,2.087,GB-Month
+2026-10,AmazonCloudWatch,USW1-VendedLog-Bytes,1.7857,2.665,GB
+2026-10,AmazonCloudWatch,USW1-VendedLog-Bytes-WAFLogs,1.1933,1.781,GB
+2026-10,EC2 - Other,USW1-DataTransfer-Regional-Bytes,4.4908,449.077,GB
+2026-10,EC2 - Other,USW1-EBS:VolumeUsage.gp3,2.88,30.0,GB-Month
+2026-10,EC2 - Other,USW1-USE1-AWS-In-Bytes,0.0,0.004,GB
+2026-10,EC2 - Other,USW1-USE1-AWS-Out-Bytes,0.0,0.001,GB
