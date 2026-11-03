@@ -32,9 +32,9 @@ First get your access from [Onboarding](../onboarding.md) (account map, AWS prof
 | **Dev** | acc2, us-west-1 (see [account map](../onboarding.md#account-map)) | **Test data only** (D-01) | Live; the only environment |
 | Prod | `aa-prod`, its own AWS account in us-west-1, with its own VPC, RDS instance, cluster, Cognito pools, secrets and roles ([ADR 0018](../adr/0018-lean-aws-account-model.md), accepted S262; C7.2a, D-17; [ADR 0012](../adr/0012-environment-model.md) decision 3) | Real | Not created; built when a go-live date is set ([ADR 0012](../adr/0012-environment-model.md), accepted S257; AA-880) |
 
-The GitHub environment that gates Terraform apply is called `prod` but applies Dev. ADR 0012 decision 6 renames it
-to `dev` in phase 1, before any prod role exists, in a fixed four-step order (C7.2d); until that Infra PR lands, the
-name stays `prod`. Prod Terraform will be its own root, `accounts/prod`, in the `aa-prod` account (ADR 0018 decision
+The GitHub environment that gates Terraform apply, DB Migrate, the schema dump and the DB probes is `dev` (it was
+named `prod` until AA-1023, ADR 0012 decision 6, C7.2d); the Dev apply role trusts only `environment:dev`, so the name
+`prod` is free for a future prod apply role. Prod Terraform will be its own root, `accounts/prod`, in the `aa-prod` account (ADR 0018 decision
 5, replacing the `accounts/aa365-prod` of ADR 0012; C7.2c).
 
 Live components on Dev (checked 2026-11-01): ECS cluster `aa-cis-dev-cluster` with services `aa-cis-dev-api`,
@@ -60,7 +60,7 @@ environment `org` with the tech lead as reviewer.
 | Booking | Merge to `main` → `Deploy Dev`: image tagged with the git SHA, role `aa-booking-dev-app-deploy`, smoke `/booking/health` (same `git_sha`) and `/booking/health/ready` | `vercel-deploy.yml` (`aa-booking-admin`) | Asks `/booking/ops/deploy-gate`; refuses only while a retention job (`bk_retention_job`, `bk_retention_inbox_redact`) runs or is due within 15 min (C6.3a, AA-993 G5) |
 | TripPlanner | Merge to `main` touching `backend/**` → `deploy-lambdas.yml`: zips to the artifacts bucket, `UpdateFunctionCode` on the three Lambdas (browse, assembly, jobs) | `vercel-deploy.yml` | None: `tripplanner.job` (tp-021) has no deploy-blocking kind, and a Lambda deploy does not interrupt a running invocation |
 | Partner | Merge to `main` touching `api/**` → `Deploy Dev`: image tagged with the git SHA (native arm64), service `aa-crm-dev-api`; `web/**` → `Deploy Web Dev`, service `aa-crm-dev-web` | `portal/**` → `Deploy Portal Dev` (`deploy-portal-dev.yml`): the tenant portal (Content studio) to the Fargate service `aa-crm-dev-portal` behind `portal.lumiguides.it.com`, then post-deploy verify and the portal UI smoke. The Vercel project `aa-cis-portal` and `vercel-deploy-portal.yml` were removed at the AA-979 clean-up (S256): no portal PR preview | The API deploy has the same guard, but no Partner kind blocks a deploy today (`crm_dispatch` stopped blocking in AA-993 G4b); web and portal deploys have no job gate |
-| Infra | PR → **Terraform Plan** (read it; Infra has no required checks) → merge → **Terraform Apply Prod** run by hand (`workflow_dispatch` on `main`) | - | Plan read in the PR; OIDC trust only for `refs/heads/main` |
+| Infra | PR → **Terraform Plan** (read it; Infra has no required checks) → merge → **Terraform Apply Dev** run by hand (`workflow_dispatch` on `main`) | - | Plan read in the PR; OIDC trust only for `refs/heads/main` |
 
 Boundary: *apps own code, Infra owns resources*. Infra creates the ECS services, Lambdas and roles; the apps ship
 code into them. Bootstrap IAM roles and policies and the `accounts/acc3-bedrock` root are applied by a human with the
