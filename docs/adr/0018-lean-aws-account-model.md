@@ -17,6 +17,10 @@
   judge and validate stages only, after the model passes the qualification ladder; every `failure_domain` is
   re-checked at each payer or organization change in this ADR's timeline. The `aa-ai` row below reads "main Bedrock
   chat account" since both ADRs are accepted.
+- **Amended by:** [ADR 0019](0019-b2b-only-ecosystem-model.md) (Accepted 2026-11-03, S265, AA-1034): decision 7 ("data residency is already settled": US)
+  becomes "US by default, an EU cell only on triggers" (ADR 0019 d12), decided before `aa-prod` is created. Decision 2's
+  "test or synthetic data only" on Dev gets a time-boxed pilot exception: one tenant, at most 8 weeks or until `aa-prod`
+  exists (d16). The TripPlanner ECS service (d23) lives in `aa-nonprod`; no new account.
 - **Scope:** AA-CIS-Infra (a new `accounts/management` root, the future `accounts/prod` root, state buckets, OIDC
   roles per account), every app repo (Deploy Prod targets another account), root (account map in onboarding, data
   standards C7.2c, the engineering handbook D-17 row, the DevOps guide, skills that name AWS profiles).

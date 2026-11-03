@@ -7,6 +7,10 @@
 - **Amended by:** [ADR 0001a](0001a-retire-acc1-llm-on-acc3-only.md) (S255, AA-998): decision 2, acc1 retired; LLM chat models run on acc3 only, no cross-account fallback.
 - **Amended by:** [ADR 0009](0009-ai-platform-and-provider-gateway.md) (decisions 1–9, 13 and 14 Accepted 2026-10-31, S261): decision 2, the gateway covers every paid AI and data provider (LLM of every source and family, Jev, DataForSEO, Geoapify, Guardrails) for every app and stage; the direct Anthropic and OpenAI APIs are capped warm paths outside AWS; acc2 may serve chat models for eval, judge and validate stages only.
 - **Amended by:** [ADR 0018](0018-lean-aws-account-model.md) (Accepted 2026-10-31, S262): the S235 amendment "Production also runs on acc2 … no new AWS account is created for any environment" is replaced: prod runs in its own account `aa-prod` inside an AA-owned AWS organization, in us-west-1.
+- **Amended by:** [ADR 0019](0019-b2b-only-ecosystem-model.md) (Accepted 2026-11-03, S265, AA-1034): AA sells to partner agencies (tenants) only.
+  Decision 5's "drafts carry the leg chain, so AA-Booking can open a complete Trip Case" and decision 6's first
+  contract `inquiry.submitted` (TripPlanner → AA-Booking) are superseded by ADR 0019 d10–d11: TripPlanner is
+  tenant-scoped and its leads go to the tenant on `lead.submitted.v1`. The end customer lives only in `crm.traveler`.
 - **Implemented by:** [ADR 0016](0016-one-design-system-guarded-kit-copies.md) (S252): decision 7 "one design system" through a canonical CIS kit core and guarded copies.
 - **Update 2026-10-28:** decision 2: acc1 left the ecosystem (AA-998, S255). LLM calls run on acc3 only, and
   the fallback chain stays inside acc3; there is no cross-account fallback. Decision 8: an English page may have a
