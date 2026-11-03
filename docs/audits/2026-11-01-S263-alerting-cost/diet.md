@@ -168,6 +168,7 @@ event alarms (one e-mail per incident instead of two).
 | CRM job queue stuck / overdue | `aa-crm-dev-jobs-queue-age`, `-overdue-running` | `app/observability/ops_alerts.py` `jobs_stuck`, `jobs_overdue` | `api/tests/unit/test_ops_alerts.py` |
 | CRM audit export lag / partitions / verify lag | `aa-crm-dev-audit-*` (3) | `audit_export_lag`, `audit_partitions`, `audit_verify_lag` | same |
 | CRM bulk reveal | `aa-crm-dev-bulk-reveal` | event `bulk_reveal` | same + `test_reveal_meter.py` |
+| CRM daily AI budget (new, AA-1025 H1c; no alarm before) | — | `llm_app_spend_near` (80 %), `llm_app_spend_cap` (100 %) of the app profile's daily budget | same + `test_job_metrics.py` |
 | CRM break-glass | `aa-crm-dev-breakglass-opened`, `-owner-not-mailed` | events `breakglass_opened`, `breakglass_owner_not_mailed` | same |
 | CRM membership feed | `aa-crm-dev-membership-feed-stuck`, `-apply-refused` | events `membership_feed_stuck`, `membership_apply_refused` | same |
 | CRM ops release | `aa-crm-dev-ops-release-incomplete-t21`, `-withdrawn` | events `ops_release_incomplete_t21`, `ops_release_withdrawn` | same |
