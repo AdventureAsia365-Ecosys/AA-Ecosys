@@ -8,6 +8,10 @@
   `email_verified` gap and the residual `AdminCreateUser` risk. Where the two differ, 0006a wins.
 - **Amended by:** [ADR 0006b](0006b-partner-pool-and-mfa.md) (Accepted 22/10/2026, S247): a partner pool
   with required MFA for agency people, an M2M pool for service calls, Phase 3 moved to the partner pool.
+- **Amended by:** [ADR 0019](0019-b2b-only-ecosystem-model.md) (Accepted 2026-11-03, S265, AA-1034): the EXTERNAL traveller clients `tripplanner` and
+  `booking-customer` are frozen (ADR 0019 d11). Travellers are guests who return through the tenant's CRM client-portal
+  link, so Phase 4 traveller accounts are re-scoped to "access through a CRM link" (AA-1005). Staff gain the d3 roles
+  (including the Cognito group `booking-finance`) and a server-side tenant scope (d4).
 - **Scope:** AA-Ecosys as a whole: AA-CIS-App (staff admin, tenant portal), AA-Booking (staff app,
   customer app), AA-TripPlanner-Web (traveller sign-in), AA-CIS-Infra (pools, triggers, domains, SES).
 - **Amends:** ADR 0001 decision 6 (the clause "AA-Booking owns the customer identity (OTP)") and

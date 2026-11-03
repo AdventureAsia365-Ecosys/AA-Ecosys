@@ -9,6 +9,10 @@
   (only CIS writes content). Applies ADR 0003 (one durable job model) to Booking through its own
   `booking.job` table on the same runner library (O3). Answers ecosystem review §11 open question 5
   ("Does AAA follow the CIS stack?"): yes (O4).
+- **Amended by:** [ADR 0019](0019-b2b-only-ecosystem-model.md) (Accepted 2026-11-03, S265, AA-1034): O6 (guest inquiry → Booking trip case) and O8
+  (TripPlanner as the customer front door; Booking customer app) are superseded. Booking is the B2B back office: its
+  B2C part is frozen and later dropped (ADR 0019 d8), `booking.b2b_partners` becomes a projection of the CIS tenant
+  master (d1), and every agency invoice, software fee and tour settlement, is issued from Booking (d9).
 - **Related Linear:** AA-677 (ERD v2, done), AA-678 (bootstrap), AA-679 (catalog sync), AA-680
   (identity), AA-681 (trip case), AA-682 (operations), AA-683 (UI spec), AA-751 (second repo on
   `shared.job`).

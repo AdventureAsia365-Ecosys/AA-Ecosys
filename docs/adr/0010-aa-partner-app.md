@@ -11,6 +11,10 @@
 - **Amended by:** [ADR 0010a](0010a-content-studio-partner-sign-in.md) (S252, AA-979 P2b: the Content studio signs in
   through the partner pool with a CIS token exchange; studio invitations are CIS-created and CRM-delivered; the agency
   host is cut over by one DNS value).
+- **Amended by:** [ADR 0019](0019-b2b-only-ecosystem-model.md) (Accepted 2026-11-03, S265, AA-1034): decision 5 is narrowed: the agency's own suppliers
+  cover non-AA ancillaries only (flights, insurance, visa, transfers, fees); every tour must be an AA tour (ADR 0019 b6).
+  Decision 6 ends with one app: in R3 `portal/` merges into `web/` and the `aa-crm-<env>-portal` service is removed
+  (d6). `crm.tenant` becomes a read-only projection of the CIS tenant master (d1).
 - **Amends / Supersedes:** none directly. It is the placement decision that
   [ADR 0008a](0008a-crm-separate-app-exceptions.md) points to.
 - **Implements:** ADR 0008 decision 2 (gate answer 3) and its 12-step playbook, with the exceptions in ADR 0008a;

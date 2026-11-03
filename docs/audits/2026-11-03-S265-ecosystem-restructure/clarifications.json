@@ -1,0 +1,319 @@
+{
+ "answers": [
+  {
+   "id": "TL-6",
+   "answer_vi": "Gộp được ngay trong R3. Hôm nay trên Dev không ai còn đăng nhập bằng API key: cờ PORTAL_API_KEY_SIGNIN đã tắt từ S256 và /tenant-login trả 308. Code và dữ liệu key vẫn còn ở nhiều chỗ: trang /tenant-login; CIS POST /auth/tenant-login có hai handler (api/main.py:385, không đánh dấu deprecated, và api/routers/auth.py:163, deprecated); verify_tenant_api_key (auth.py:267, không route nào dùng làm dependency); Lambda authorizer (code chết); phần cấp, xoay, khôi phục key trong admin.py; thẻ API key trong Account; cột shared.tenants.api_key_hash. Cần biết: đường máy duy nhất của agency vào /v1/* hôm nay là JWT 24 giờ lấy từ POST /auth/tenant-login, nên khi xoá endpoint này thì mọi truy cập bằng máy của agency vào /v1/* dừng tới R8. Sau khi gộp chỉ còn một app web/ trên host portal., một đăng nhập partner pool có MFA, studio giữ URL /portal/*. Server vẫn đổi token partner lấy JWT tenant ngắn hạn ở CIS vì /v1/* chỉ nhận JWT của CIS. M2M nội bộ của AA (client-credentials aa-m2m: AA-Partner gọi Booking/CIS) vẫn giữ. Riêng phần gộp mất khoảng 3 phiên. Tiết kiệm thật hôm nay chỉ khoảng 2,2–2,5 USD/tháng, vì aa-crm-dev-portal đã chạy FARGATE_SPOT (crm_portal.tf). Con số 8,3 USD chỉ đúng nếu sau này service chuyển sang on-demand.",
+   "revised_vi": "R3 thành khoảng 6–7 phiên công: gộp và xoá đường key 3 phiên, i18n studio 2–3 phiên (lane song song), phần portal shell cũ còn lại khoảng 1 phiên. Phiên 1: chuyển portal/app/portal và portal/lib vào web/, gộp hai proxy.ts (host → /staff → /c → /portal → CRM), gộp CSP và /healthz, /terms và /privacy vào /legal/* (308), dùng một bản kit. Phiên 2: bỏ CI/deploy portal, bỏ rule ALB, xoá service aa-crm-dev-portal, task def, target group, ECR, log group. Phiên 3: xoá cả hai handler tenant-login, verify_tenant_api_key, Lambda authorizer, code key trong admin.py, thẻ API key; set NULL rồi drop api_key_hash theo DRY RUN; offboarding chuyển từ dấu REVOKED_ sang account_status; sửa ADR 0010a và CONTEXT.md. API máy cho agency để R8, chỉ làm khi tenant trả tiền yêu cầu. Theo trang Cognito pricing: không tính phí theo app client, M2M tính 0,00225 USD mỗi token request thành công, không có free tier.",
+   "follow_up": [
+    "Đọc audit_log 30 ngày xem còn ai gọi /auth/tenant-login trước khi xoá",
+    "Tắt Tailwind preflight khi gộp, chụp ảnh so sánh trang CRM trước/sau (aa-ui-verify)",
+    "Chuyển E2E portal sang E2E partner identity",
+    "Sửa ADR 0010a thành bản 'merged, no API-key sign-in'"
+   ]
+  },
+  {
+   "id": "TL-9",
+   "answer_vi": "'Gộp Booking' có hai nghĩa. Nghĩa thứ nhất là dữ liệu và backend: hoá đơn nằm trong schema booking.*. Việc này đã chốt bằng all_in_booking. Nghĩa thứ hai là màn hình: nhân viên làm việc ở một chỗ. Backend Booking không gộp được vào CIS vì giá net không được ra khỏi Booking. booking.invoices chỉ dùng cho B2C (bill_to_kind chỉ là 'customer', trip_case_id NOT NULL), nên cần bảng mới. Màn hình bây giờ: nhóm 'Trade' trong nav AA Admin mở sang Booking admin bằng app switcher, dùng chung đăng nhập WORKFORCE; Tenant 360 có tab Billing chỉ đọc. Gộp hẳn màn Booking vào frontend CIS để ở R8, khi đã bỏ màn B2C.",
+   "revised_vi": "R4 thêm một migration bk gồm các bảng mới: booking.agency_invoice (party_tenant_id, invoice_kind saas|settlement, e_invoice_no, bản chụp bên nhận), agency_invoice_line (CHECK cùng loại), agency_payment (maker-checker, bắt chứng từ), invoice_sequence (AAS-/AAT-), billing_entity, tax_rule. Trường pháp lý bên nhận nằm trên shared.tenants (CIS là master); Booking chụp lại vào hoá đơn khi phát hành. Mọi tenant, kể cả chỉ dùng Content, có một dòng booking.b2b_partners do bk_tenant_pull tạo. Booking công bố view booking.v_tenant_billing_status để CIS tenant_billing_tick đọc. Hai job bk_saas_invoice_draft và bk_settlement_draft. Sửa lại: vai trò finance KHÔNG phải migration bk. staff_app_grant_role_chk nằm trên shared.staff_app_grant, owner cis_owner, và schema-ownership.md giao bảng này cho CIS, nên phải là migration CIS. Thêm vào đó: Infra tạo Cognito group booking-finance trong identity.tf (đề xuất precedence 75), Booking map vai trò từ cognito:groups hoặc bridge token. R4 tăng khoảng 2 phiên (từ 1–2 lên 3–4), 0 USD AWS.",
+   "follow_up": [
+    "Migration CIS: thêm 'finance' vào staff_app_grant_role_chk (R2)",
+    "Infra: group booking-finance trong identity.tf (R2)",
+    "Thêm trường bên nhận hoá đơn vào migration R1 trên shared.tenants",
+    "bk_tenant_pull tạo b2b_partners cho mọi tenant (R1)",
+    "Đưa việc gộp màn Booking vào AA Admin sang R8"
+   ]
+  },
+  {
+   "id": "TL-16",
+   "answer_vi": "Pilot là một agency thật (design partner) dùng sản phẩm cho việc thật trong 4–8 tuần, đổi lại họ góp ý. Chuỗi pilot: nhận lời mời, khai thương hiệu, nối WordPress/Facebook của chính họ, viết lại tour AA và đăng bài, mở planner mang thương hiệu, nhận lead vào CRM rồi báo giá và lập hoá đơn, đặt tour với AA qua Agency desk. Chọn all_on_dev đi ngược ADR 0018 d2 và C7.1a (Dev chỉ có dữ liệu thử), nên ADR 0019 d16 ghi một ngoại lệ có thời hạn. Rủi ro thật: PITR khôi phục cả DB của 4 app chứ không khôi phục riêng một tenant; agent và run-script có quyền master; log CI của repo Infra là public; script dọn dẹp có thể xoá nhầm.",
+   "revised_vi": "Ngoại lệ: chỉ 1 tenant kind='agency' có dấu pilot, tối đa 8 tuần hoặc tới khi có aa-prod. Thư pilot ghi 'môi trường thử, không SLA' kèm DPA (business owner quyết câu chữ). Trước khi có PII thật phải có: AA-969 xong; hook chặn agent và DB Migrate run-script đọc PII của tenant pilot (script chỉ in số đếm); job dọn dẹp, E2E và wave bỏ qua tenant pilot; export riêng tenant pilot mỗi đêm bằng crm.export_job. Tuỳ chọn trả phí: nâng backup từ 7 lên 14 ngày, ước tính dưới 1 USD/tháng (backup miễn phí tới bằng dung lượng DB đã cấp theo RDS FAQ, phần vượt 0,095 USD/GB-tháng ở us-west-1 theo AWS Price List API), cần đồng ý riêng. Pilot chia hai mốc: Content + CRM sau R1, R3 phần gộp, R2 và AA-969 (khoảng S272); TripPlanner sau R5 (khoảng S277). Kế hoạch prod 6 pha (P0–P6), khoảng 8–10 phiên, đã viết ở clarifications mục 5. P0 (tách module, 0 USD) làm sớm trên lane song song; P2–P6 làm khi business owner chốt ngày go-live.",
+   "follow_up": [
+    "Ghi ngoại lệ C7.1a vào ADR 0019 d16 trong PR R0",
+    "Viết hook chặn đọc PII tenant pilot",
+    "Thêm dấu pilot vào migration R1",
+    "Viết kế hoạch test pilot 6 bước, mỗi bước có tiêu chí qua",
+    "Mở P0 (moved block) trên lane song song"
+   ]
+  },
+  {
+   "id": "TL-23",
+   "answer_vi": "Chuyển được theo mẫu aa-crm-dev-portal: Fargate ARM sau CloudFront → VPC origin → ALB dùng chung, hai Lambda giữ nguyên. Giá Fargate ARM us-west-1 là 0,03725 USD/vCPU-giờ và 0,00409 USD/GB-giờ (AWS Price List API). Một task 0.5 vCPU/1 GB tốn 16,6 USD/tháng on-demand. Spot không có giá niêm yết cố định: trang Fargate pricing chỉ ghi 'up to a 70% discount', nên khoảng 5 USD là ước tính. WAF phạm vi CLOUDFRONT gồm 5 USD web ACL, 2 rule mỗi rule 1 USD, 0,60 USD mỗi triệu request và 0,40 USD mỗi triệu challenge response. Ở pilot WAF khoảng 7,4 USD, khi tăng trưởng khoảng 14 USD. Tổng: Dev khoảng 16 USD/tháng; pilot on-demand khoảng 28 USD, so với Vercel Pro 20 USD. Ở khoảng 50 tenant thì ECS tốn 85–100 USD so với 20–40 USD của Vercel, chủ yếu do CloudFront tính theo GB và request, cộng WAF; khoản này không nhỏ. Đổi lại: mặt tiền cho tenant nằm hẳn trên AWS, DPA bớt một sub-processor, tên miền riêng dùng chứng chỉ ACM miễn phí.",
+   "revised_vi": "R5 thêm khoảng 1–2 phiên (thống nhất đơn vị phiên): Dockerfile standalone, tripplanner_web.tf chép từ crm_portal.tf, workflow deploy (ECR immutable, tag theo SHA), CloudFront distribution mới tái dùng VPC origin và wildcard cert, web ACL CLOUDFRONT (tài nguyên mới, vì web ACL hiện có đều là REGIONAL) gồm rule rate theo IP và Challenge trên /api/browse/search và /api/trip/narrate, gỡ botid, vercel-cdn-cache-control đổi sang s-maxage, /photo-cdn thành behavior CloudFront, preview bằng next start trong CI. Dev chạy Spot, chuyển on-demand khi có tenant trả tiền.",
+   "follow_up": [
+    "Xin 'đồng ý' Fargate (8,3–16,6 USD/tháng) trước terraform apply",
+    "Xin 'đồng ý' CloudFront WAF (~7,4 USD/tháng ở pilot, ~14 USD khi tăng trưởng)",
+    "Chốt CIS admin + Booking admin trên Vercel: Pro 1 seat hay chuyển ECS",
+    "Sửa comment chi phí 7,2 USD trong crm_portal.tf thành ~8,3 USD on-demand"
+   ]
+  },
+  {
+   "id": "TL-1",
+   "answer_vi": "Master (system of record) là nơi duy nhất được quyền sửa một loại thông tin. Nơi khác chỉ giữ bản chép, tự cập nhật theo master. Hôm nay một agency nằm ở 3 bản ghi (shared.tenants, crm.tenant, booking.b2b_partners), mỗi bản có trạng thái riêng, nên khoá agency ở CIS thì Booking vẫn active. Đề xuất mỗi loại dữ liệu một master. Tài khoản, trạng thái, gói, add-on, người dùng và thông tin bên nhận hoá đơn: CIS shared. Tiền với agency: Booking. Khách cuối: crm.traveler của tenant. Sửa cách nói: CIS là NGUỒN duy nhất, còn job pull của từng app tự ghi bản chép của mình. Cụ thể, crm_entitlement_pull của AA-Partner ghi phía CRM, và bk_tenant_pull của Booking ghi booking.b2b_partners (owner bk_owner).",
+   "follow_up": [
+    "Ghi bảng master theo loại dữ liệu vào CONTEXT.md của CIS, Booking, Partner ở R0/R1"
+   ]
+  },
+  {
+   "id": "TL-3",
+   "answer_vi": "Có 8 vai trò staff, mỗi người giữ một vai trò, vì code lấy 'nhóm cao nhất thắng'. Vai trò lồng nhau: content_lead chứa content và tenant_qa; customer_success chứa support. admin làm mọi thứ. content_lead lo kho nội dung AA. content viết và duyệt bài (đã gộp reviewer vào). tenant_qa xem bài tenant bị giữ. customer_success chỉ thấy tenant của mình. support gửi lại lời mời, reset MFA, view-as chỉ đọc. finance lo hoá đơn trong Booking và không đọc nội dung; vai trò này cần migration CIS trên staff_app_grant_role_chk và group booking-finance ở Infra. ai_ops lo model và ngân sách AI. Ma trận đầy đủ ở clarifications mục 3. R2 phải sửa ba lỗ hổng. Thứ nhất, tenant.read đang gác chung ba thứ. Thứ hai, GET không có entry trong POLICY thì mở cho mọi vai trò. Thứ ba, PATCH tenant trộn trường billing với trường vòng đời.",
+   "follow_up": [
+    "Anh chọn: ai_ops có đọc text tenant trong Writing Lab không",
+    "Tổ hợp CSM kiêm finance: tạm giao admin, quyết sau"
+   ]
+  },
+  {
+   "id": "TL-7",
+   "answer_vi": "Anh hiểu đúng: lời mời là cho người, gói là cho tenant. Staff tạo tenant bằng một thao tác rồi mời owner. Owner nhận mail /join, tạo tài khoản partner pool có MFA và vào thẳng Content. Owner mời đồng nghiệp bằng e-mail kèm vai trò Content; ô vai trò CRM chỉ hiện khi tenant có crm.core. Để bật CRM: owner bấm 'Request CRM', account manager duyệt, CIS ghi entitlement, CRM tự tạo crm.tenant. Sau đó owner bấm 'Kích hoạt CRM' một lần (giữ ADR 0006b d4) và gán vai trò CRM cho người đã có trong Team. TripPlanner mở theo entitlement tp.* và dùng vai trò Content. Mỗi người có một tài khoản và một lần đăng nhập; dữ liệu vai trò vẫn ở hai bảng, mỗi app giữ bảng của mình.",
+   "follow_up": [
+    "Thiết kế thẻ khoá 'Request CRM/TripPlanner' trong R3"
+   ]
+  },
+  {
+   "id": "TL-8",
+   "answer_vi": "Từ Booking nên port sang CRM ba thứ. (1) Ghi thanh toán tay có maker-checker: bắt chứng từ, chặn trùng số tham chiếu, tuỳ chọn theo tenant. (2) Ba check trước khởi hành, port thành mẫu workflow có seed task. (3) Cảnh báo 'chưa trả đủ' ở stage pre_departure. So với Tern, TravelJoy và Safari Portal, CRM còn thiếu hai thứ quan trọng. Ưu tiên 1 là khách trả thẻ online qua Stripe Connect trên tài khoản của chính agency (BYO). Ưu tiên 2 là lịch trình nhiều ảnh lấy từ atom và ảnh CIS. Làm sau: PWA theo thương hiệu, hoa hồng cho từng advisor, xuất CSV kế toán.",
+   "follow_up": [
+    "Kiểm điều khoản Stripe Connect Standard trước khi lên kế hoạch",
+    "Đưa slice maker-checker vào lane CRM sau R3"
+   ]
+  },
+  {
+   "id": "TL-10",
+   "answer_vi": "Có bốn cách giao, cùng một engine do AA host. (a) Path /{slug} kèm launcher: agency dán một link; an toàn nhất; làm ở R5. (d) Subdomain hoặc tên miền riêng bằng một CNAME, dùng ACM; tốt cho SEO. (b) iframe: phải mở frame-ancestors theo tenant. (c) API headless: tốn công nhất. Một repo cho nhiều tenant: proxy.ts đọc slug rồi tra catalog.v_tenant_tripplanner_v1 (mới); theme tenant ghi đè token kit; BFF ký tenant_id; tripplanner.* có tenant_id kèm FORCE RLS; tour lấy từ catalog.v_tenant_tour_v1 (mới). Khác biệt giữa các tenant là dữ liệu, không phải code.",
+   "follow_up": [
+    "Thứ tự: (a) → (d) → (b) → (c), mỗi bước có trigger riêng"
+   ]
+  },
+  {
+   "id": "TL-11",
+   "answer_vi": "Khách lên kế hoạch dưới dạng khách ẩn danh; cookie không chứa tên hay e-mail, và kế hoạch có hạn xoá. Khi bấm 'Request this trip', khách nhập tên và e-mail. Lead đi qua lead.submitted.v1 vào CRM của tenant, hoặc qua webhook hay e-mail tới hệ thống của tenant; TripPlanner chỉ giữ tới khi giao xong. Khách quay lại bằng link /c/t/<token> do agency gửi, xem proposal, ký, đặt cọc qua Stripe của agency. Agency đặt dịch vụ AA qua booking.b2b.v1, API chỉ mang số khách. AA chỉ nhận danh sách tên lúc đi tour, qua crm.ops_release; danh sách niêm phong theo khoá của agency và xoá sau khi tour kết thúc + 90 ngày. Dữ liệu khách nằm trong CRM do tenant kiểm soát; AA là processor.",
+   "follow_up": [
+    "Thiết kế đường gửi danh sách khách cho tenant không có CRM dùng 'Book with AA' (R4)",
+    "Đặt hạn xoá kế hoạch ẩn danh (đề xuất 30 ngày)"
+   ]
+  },
+  {
+   "id": "TL-19",
+   "answer_vi": "Phần người đọc thấy (EU AI Act Art. 50(1)) đã xong: component AiNotice đã merge ở CIS #1235, Partner #185 và TripPlanner #210. Phần còn lại là nhãn ẩn cho máy đọc (Art. 50(2)): ai_generated, model, generated_at trong JSON /v1/* và file export CIS, thẻ meta trên trang WordPress đã đăng, badge 'AI-assisted' trong studio. Hạn 02/12/2026 lấy từ nguồn thứ cấp về AI Omnibus, luật sư nên kiểm. Công khoảng 1 phiên, 0 USD.",
+   "follow_up": [
+    "Lên lịch phần metadata máy đọc trước 02/12/2026"
+   ]
+  },
+  {
+   "id": "TL-20",
+   "answer_vi": "Báo qua cả hai kênh. Thông báo trong portal đã có: tour.discontinued được ghi vào shared.notifications và hiện ở chuông. Kênh cần thêm là e-mail qua SES, làm ở R6. Thư gửi ngay khi tour retired mà tenant còn trang hoặc bài đang live; các trường hợp khác gom vào digest hằng ngày. Người nhận là owner và thành viên content. Tour restored có thư báo bán lại; tour paused không có thư. Thư viết theo lời nội dung, không có chữ flag/QA. SES đã dùng trên acc2 (ses.tf), nên chỉ thêm phí gửi: 0,10 USD mỗi 1.000 thư, tức vài cent/tháng. Đã ghi vào ADR d20.",
+   "follow_up": [
+    "Thêm e-mail SES (thư ngay + digest) vào R6",
+    "Kiểm trạng thái SES sandbox trên acc2"
+   ]
+  },
+  {
+   "id": "TL-21",
+   "answer_vi": "AA subject gate là bước kiểm bằng luật, không gọi AI nên miễn phí, chạy lúc tạo bài và trước khi đăng. Gate kiểm hai điều. Thứ nhất, bài có gắn ít nhất một tour AA còn live hoặc một place AA; bài thương hiệu không có lời mời mua thì được qua. Thứ hai, mọi link 'Book now' phải trỏ tới trang tour AA hoặc site TripPlanner của tenant. Ví dụ: bài có link sang congtykhac.com/mekong-tour bị giữ ở Tenant QA › Compliance, tenant chỉ thấy lời nhắc đổi link. Mục đích là nền tảng và tiền AI của AA không bị dùng để quảng cáo tour của đối thủ.",
+   "follow_up": [
+    "Giữ gate trong R6; bộ phân loại LLM chỉ thêm khi cần, xin chi phí riêng"
+   ]
+  },
+  {
+   "id": "TL-22",
+   "answer_vi": "Công không nằm ở việc dịch mà ở việc duy trì bản dịch. Content studio chưa có i18n (khoảng 11,6k dòng TSX viết chữ cứng), nên phải đưa chữ vào catalogue trước, mất 2–3 phiên. Việc này đưa vào R3, làm cùng đợt gộp TL-6 trên một lane song song, và không chặn mốc pilot 1. Mở kit sang nhiều ngôn ngữ mất khoảng 1 phiên. Mỗi ngôn ngữ thêm mất khoảng 0,5 phiên cộng vài USD token dịch máy (cần đồng ý riêng). Hai phần này để R8, sau R5. Thứ tự gợi ý: Đức, Pháp, Tây Ban Nha, Nhật, Hàn, nhưng tốt nhất là theo ngôn ngữ của các agency đầu tiên.",
+   "revised_vi": "i18n studio vào R3; ngôn ngữ thêm vào R8. ADR d22 đã sửa theo.",
+   "follow_up": [
+    "Gộp i18n studio vào phạm vi R3"
+   ]
+  },
+  {
+   "id": "BO-4",
+   "answer_vi": "Đúng một phần. Nhúng hay API thì AA vẫn chạy planner, catalogue, AI và bản đồ; điều AA tránh được là giữ PII khách lâu dài. Với trang hosted hoặc nhúng, AA chỉ giữ kế hoạch ẩn danh có hạn xoá và giữ lead tới khi giao xong. API không trạng thái gần như không lưu gì, chỉ có log gọi API. Lead vào CRM add-on thì nằm ở crm.traveler: tenant là controller, AA là processor. Vẫn phải quản IP trong log, PII trong chat tự do (cho qua scrubber trước khi gọi model) và Sentry. Muốn 'AA không giữ gì' tuyệt đối thì chọn API không trạng thái + chỉ webhook. Quyết định này thuộc business owner.",
+   "follow_up": [
+    "Đặt thời hạn giữ log CloudFront/ALB",
+    "Scrubber PII cho chat TripPlanner trước khi gọi model"
+   ]
+  },
+  {
+   "id": "BO-7",
+   "answer_vi": "Hôm nay chưa có chỗ nào lưu con số 7 ngày. Trong R1, số này lưu thành dữ liệu: dòng policy.notice_days = 7 trong shared.plan_feature (mới); ghi đè theo tenant bằng shared.tenant_entitlement_override (mới); mỗi lần đổi ghi vào shared.tenant_account_event (mới). Cả ba bảng chưa có trong dump live. Mỗi thông báo lưu due_at lúc gửi, nên đổi số ngày sau này không làm ngắn hạn của thông báo đã gửi. Lên prod thì đổi trên trang Plans, không cần deploy.",
+   "follow_up": [
+    "Thêm key policy.notice_days vào migration R1"
+   ]
+  },
+  {
+   "id": "BO-8",
+   "answer_vi": "Về kỹ thuật cả ba phương án như nhau: một cờ gắn với entitlement tp.branding. Xây cờ trong R5, mặc định tắt, chốt bảng giá thì chỉ đổi cấu hình. Phương án 3 cho agency lý do để nâng gói nhưng gói thấp không còn white-label trọn vẹn. Nếu chọn: chữ nhỏ ở footer, rel=nofollow, không đặt trong khung chat AI. Business owner quyết.",
+   "follow_up": [
+    "Xây cờ tp.branding trong R5"
+   ]
+  },
+  {
+   "id": "BO-10",
+   "answer_vi": "Ghi nhận. Đổi pháp nhân sang AA Úc chỉ là cấu hình: booking.billing_entity (mới), tên pháp nhân trên DPA và hoá đơn, contract_version; dữ liệu vẫn ở us-west-1. Cần luật sư và kế toán Úc xác nhận bốn điểm. (1) Dịch vụ cho agency nước ngoài có được GST-free không (ATO). (2) Có thuộc diện miễn Privacy Act không. (3) Kỹ sư ở Việt Nam truy cập dữ liệu thì cần hợp đồng nội bộ gì (APP 8, Nghị định 356/2025). (4) Tenant EU vẫn cần SCC, TIA và câu hỏi đại diện theo Art. 27. Đây là tư vấn trung lập; quyết định thuộc business owner.",
+   "follow_up": [
+    "Thêm billing_entity (mới) ở R4"
+   ]
+  },
+  {
+   "id": "BO-14",
+   "answer_vi": "Phần lớn tự làm được trong Booking, 0 USD: hoá đơn định kỳ, PDF, e-mail, nhắc nợ, tự chuyển past_due sang suspend qua CIS. Phần không tự làm được là hoá đơn VAT hợp pháp ở Việt Nam: theo Nghị định 70/2025, hoá đơn này phải đi qua phần mềm hoá đơn điện tử nối với cơ quan thuế. Giai đoạn đầu, kế toán phát hành trên phần mềm AA đang dùng rồi dán số vào e_invoice_no. Khi số hoá đơn nhiều thì nối API của nhà cung cấp đó, khoảng 1 phiên. Stripe không mở cho pháp nhân Việt Nam. Stripe Billing (0,7% doanh thu) chỉ cân nhắc khi AA Úc xuất hoá đơn, và cần đồng ý riêng.",
+   "follow_up": [
+    "Hỏi kế toán AA đang dùng nhà cung cấp hoá đơn điện tử nào"
+   ]
+  },
+  {
+   "id": "BO-15",
+   "answer_vi": "Cứ dùng thiết kế đang có: biên B2B, tỷ giá, giá net theo mùa và phí huỷ đã là dữ liệu có maker-checker. Ba hạng 0/3/6% và RRP = net + 25% thì chưa có. R4 thêm booking.partner_tier (mới) và cột rrp_markup_pct (mới) trên pricing_rules kênh b2b.",
+   "follow_up": [
+    "Gộp AA-1029, AA-1030 vào R4"
+   ]
+  },
+  {
+   "id": "BO-16",
+   "answer_vi": "Hôm nay mức cọc 30% và hạn trả số dư 30 ngày chỉ áp cho B2C; công nợ chỉ là chữ tự do trong credit_terms_ref. R4 thêm booking.partner_terms (mới): deposit_pct, balance_days_before_start, credit_enabled, credit_limit_usd, due_days, valid_from. Bảng chỉ thêm dòng mới, có maker-checker, và điều khoản được khoá trên hold lúc confirm. Trang Settings sửa được booking.settings qua route có maker-checker.",
+   "follow_up": [
+    "Thiết kế partner_terms trong migration R4"
+   ]
+  },
+  {
+   "id": "BO-17",
+   "answer_vi": "Thiết kế ngay. Hai dãy số riêng, AAS- cho phí phần mềm và AAT- cho quyết toán tour, có CHECK không cho trộn dòng. booking.tax_rule và billing_entity (mới) giữ cách tính thuế theo pháp nhân và loại người mua; chữ chân hoá đơn là dữ liệu theo từng tax_rule. Finance nhập theo trả lời của kế toán, không cần sửa code.",
+   "follow_up": [
+    "Gửi ghi chú cho kế toán (business owner)",
+    "Mẫu hoá đơn HTML → PDF theo mẫu crm/invoices/render.py"
+   ]
+  },
+  {
+   "id": "BO-19",
+   "answer_vi": "Ghi nhận, không thay đổi. Trần 150 USD/tháng và mức AI theo gói là dữ liệu theo feature key ai.budget_usd_monthly (TL-2), nên đổi số không cần code. Khi vượt mức thì dừng mềm và báo cho agency cùng người phụ trách.",
+   "follow_up": []
+  }
+ ],
+ "role_table": [
+  {
+   "role": "admin",
+   "who": "Tech lead, business owner (is_owner)",
+   "does": "Cấu hình hệ thống, xử lý sự cố, giao tenant, quản lý nhân viên",
+   "can_change": "Mọi thứ; sửa nhân viên cần is_owner + phiên Cognito",
+   "cannot": "Không giới hạn chức năng; mọi thao tác nhạy cảm ghi audit"
+  },
+  {
+   "role": "content_lead",
+   "who": "1 người phụ trách nội dung",
+   "does": "Wave, review queue, master content, atom/route/hub, ảnh, SEO",
+   "can_change": "AA Catalogue (W), Tenant QA (W); chứa quyền content + tenant_qa",
+   "cannot": "Danh bạ tenant, tiền, AI spend, nhân viên"
+  },
+  {
+   "role": "content (gộp reviewer)",
+   "who": "1–3 writer/editor",
+   "does": "Upload, S1 rewrite, sửa và duyệt bản viết",
+   "can_change": "Bản viết, review",
+   "cannot": "Ngừng/xoá tour master, sửa atom, xem tenant"
+  },
+  {
+   "role": "tenant_qa",
+   "who": "Kiêm bởi content_lead hoặc 1 editor",
+   "does": "Xem bài tenant held/flag, gắn nhãn, sửa place card, Content Trace",
+   "can_change": "Nhãn chất lượng, place card, facts",
+   "cannot": "Tenant 360, view-as, tiền, gửi ra ngoài"
+  },
+  {
+   "role": "customer_success",
+   "who": "Account manager, 5–25 tenant",
+   "does": "Sức khoẻ tenant của mình, trial, gợi ý add-on, lời mời, ghi chú",
+   "can_change": "Tenant 360 của mình (trừ billing), add-on, seat, thành viên; chứa quyền support",
+   "cannot": "Tenant người khác, hoá đơn, offboard/xoá, ghi khi view-as"
+  },
+  {
+   "role": "support",
+   "who": "Kiêm bởi CSM, sau này tier 1",
+   "does": "Gửi lại lời mời, reset MFA, view-as chỉ đọc, hàng đợi Pool",
+   "can_change": "Thao tác thành viên, ghi chú",
+   "cannot": "Đổi gói, billing, PII khách CRM khi chưa có support_grant"
+  },
+  {
+   "role": "finance",
+   "who": "Kế toán part-time",
+   "does": "Phát hành hoá đơn trong Booking, ghi thanh toán, tạm ngưng vì nợ",
+   "can_change": "Trường billing mọi tenant; agency_invoice/payment trong Booking (cần migration CIS trên staff_app_grant_role_chk + group booking-finance ở Infra)",
+   "cannot": "Nội dung tenant, thành viên, view-as"
+  },
+  {
+   "role": "ai_ops",
+   "who": "Tech lead hoặc 1 kỹ sư",
+   "does": "Routing model, provider, ngân sách AI, Writing Lab, job",
+   "can_change": "Cấu hình model, ngân sách, release Writing Lab",
+   "cannot": "Danh bạ, Tenant 360, billing, view-as (đọc text tenant trong Lab: chờ anh chọn)"
+  },
+  {
+   "role": "viewer",
+   "who": "Tài khoản E2E, Preview",
+   "does": "Smoke test",
+   "can_change": "Không gì",
+   "cannot": "Mọi thao tác ghi; không gán được từ trang Staff"
+  }
+ ],
+ "cost_table": [
+  {
+   "option": "Vercel Pro (1 seat)",
+   "usd_month": "20 (pilot) / 20–40 (tăng trưởng)",
+   "notes": "Gồm 1 TB, 10 triệu request, BotID Basic; tenant-facing ngoài AWS. vercel.com/pricing, 03/11/2026"
+  },
+  {
+   "option": "ECS Fargate Spot 0.5 vCPU/1 GB + CloudFront + WAF (chọn cho Dev)",
+   "usd_month": "~16",
+   "notes": "Spot ~5 (ước tính: trang Fargate pricing ghi 'up to 70% discount', giá Spot thay đổi) + CloudFront ~2,4 + WAF ~7,4 + phụ ~1"
+  },
+  {
+   "option": "ECS Fargate on-demand + WAF (prod)",
+   "usd_month": "~28 (pilot) / ~85–100 (2 task, tăng trưởng)",
+   "notes": "Pilot: 16,6 compute + 2,4 CF + 7,4 WAF + 1. Tăng trưởng: 33 compute + 36 CF GB (0,12/GB) + ~10–12 request + ~14 WAF; phần CF và WAF không nhỏ"
+  },
+  {
+   "option": "WAF CLOUDFRONT (thành phần)",
+   "usd_month": "~7,4 (pilot) / ~14 (tăng trưởng)",
+   "notes": "5 web ACL + 2×1 rule + 0,60/triệu request + Challenge 0,40/triệu response (Price List ChallengeServed). Tài nguyên mới: web ACL hiện có đều REGIONAL"
+  },
+  {
+   "option": "ECS không WAF (Spot / on-demand)",
+   "usd_month": "~9 / ~20",
+   "notes": "Không khuyến nghị cho mặt tiền công khai (mất BotID)"
+  },
+  {
+   "option": "Amplify Hosting",
+   "usd_month": "~26 (pilot) / ~90+",
+   "notes": "Dịch vụ mới, không VPC origin, Next 16 chưa kiểm; không khuyến nghị"
+  },
+  {
+   "option": "S3 + CloudFront static export",
+   "usd_month": "không khả thi",
+   "notes": "BFF, cookie HttpOnly, ISR, SSR theo tenant cần server"
+  },
+  {
+   "option": "OpenNext trên Lambda",
+   "usd_month": "~0–5",
+   "notes": "Adapter không chính thức, thêm S3/SQS/DynamoDB; vận hành nặng"
+  },
+  {
+   "option": "Phụ: SES thư tour ngừng (TL-20)",
+   "usd_month": "vài cent",
+   "notes": "0,10 USD/1.000 thư; SES đã dùng trên acc2 (ses.tf)"
+  },
+  {
+   "option": "Phụ: backup RDS 14 ngày (tuỳ chọn, TL-16)",
+   "usd_month": "< 1",
+   "notes": "Miễn phí tới bằng dung lượng DB đã cấp (RDS FAQ); vượt 0,095 USD/GB-tháng us-west-1 (Price List API)"
+  }
+ ],
+ "roadmap_delta_vi": [
+  "R0: ADR 0019 ghi 4 lựa chọn khác (adr-0019-draft.md đã sửa d1, d3, d6, d9, d15, d16, d20, d22, d23, Consequences, Open items, có link clarifications.md); ghi ngoại lệ C7.1a; đọc audit_log xem còn ai gọi /auth/tenant-login",
+  "R1 (S266–S268): trường bên nhận hoá đơn trên shared.tenants, dấu pilot, policy.notice_days; bk_tenant_pull tạo booking.b2b_partners cho MỌI tenant; view billing hai chiều",
+  "R2 (S269–S271, lane song song): giữ nội dung; thêm finance cho Booking bằng migration CIS trên shared.staff_app_grant + group booking-finance ở Infra + Booking map vai trò; xong cùng AA-969 trước PII thật",
+  "R3 (S268–S272): từ 2 lên khoảng 6–7 phiên công: gộp + xoá đường key (3), i18n studio lane song song (2–3), phần shell còn lại (~1)",
+  "R4 (S271–S274): từ 1–2 lên khoảng 3–4 phiên: agency_invoice/line/payment, invoice_sequence, tax_rule, billing_entity, partner_tier/terms, Settings sửa được, đường danh sách khách 'Book with AA', nav 'Trade' + tab Billing",
+  "R5 (S272–S277): từ 3–4 lên khoảng 4–6 phiên: thêm chuyển TripPlanner sang ECS (1–2 phiên), CloudFront + WAF thay BotID, cờ tp.branding",
+  "Pilot: mốc 1 Content + CRM ~S272 (sau R1, R3 phần gộp, R2, AA-969); mốc 2 TripPlanner ~S277; 1 tenant, tối đa 8 tuần hoặc tới aa-prod",
+  "Prod: P0 (0 USD) lane song song; P2–P6 khi business owner chốt go-live; 8–10 phiên, tính riêng",
+  "R6 (song song): e-mail SES (thư ngay + digest); R7 (S277–S280): preview bằng next start trong CI",
+  "R8: subdomain/tên miền riêng dùng ACM; gộp màn Booking vào AA Admin; API máy cho agency khi có yêu cầu; thêm ngôn ngữ",
+  "Tổng R0–R8: khoảng 32–39 phiên (trước 25–30), chưa tính prod"
+ ],
+ "summary_vi": "Đã sửa hai file theo đợt rà soát, chưa commit: docs/audits/2026-11-03-S265-ecosystem-restructure/clarifications.md và docs/audits/2026-11-03-S265-ecosystem-restructure/adr-0019-draft.md.\n\nSửa chỗ sai:\n- finance: phải là migration CIS (staff_app_grant_role_chk nằm trên shared.staff_app_grant, owner cis_owner), cộng group booking-finance ở Infra.\n- d1: CIS là nguồn duy nhất; job pull của từng app tự ghi bản chép của mình.\n- TL-6: xoá /auth/tenant-login thì mọi truy cập bằng máy của agency vào /v1/* dừng tới R8.\n- Tiết kiệm khi gộp chỉ khoảng 2,2–2,5 USD/tháng, vì portal đã chạy Spot.\n- R3 là 6–7 phiên công. Tổng R0–R8 khoảng 32–39 phiên.\n- Chi phí TripPlanner prod: 28 USD ở pilot, 85–100 USD khi tăng trưởng; các khoản không nhỏ.\n- Công TL-23 đổi sang đơn vị phiên: 1–2 phiên.\n- BO-7: thêm nhãn (mới) cho các bảng chưa có.\n\nADR đã bổ sung: dọn key ở d6; thiết kế Booking ở d9; thứ tự mới ở d15 với hai mốc pilot; ngoại lệ pilot đầy đủ ở d16; kênh e-mail ở d20; i18n ở d22; CloudFront/WAF ở d23. Open items chỉ còn 3 việc, có link sang clarifications.md.\n\nNguồn giá đã kiểm (03/11/2026):\n- Spot giảm \"tới 70%\", không có giá cố định.\n- WAF Challenge 0,40 USD mỗi triệu response.\n- Cognito M2M không tính phí theo app client.\n- Backup vượt mức miễn phí 0,095 USD/GB-tháng.\n- SES 0,10 USD mỗi 1.000 thư.\n\nCòn chờ anh: ai_ops đọc text tenant; CIS/Booking admin trên Vercel Pro hay ECS; các \"đồng ý\" chi phí (Fargate, WAF, backup 14 ngày)."
+}
