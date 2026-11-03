@@ -1531,7 +1531,7 @@ reports:
   - '1. The twelve readiness topics from docs/legal/readiness-packet.md: status, proposed answer, owner role'
   - 2. Draft pages still marked 'Draft - pending legal review' (TripPlanner and Partner privacy/terms)
   - 3. Vendor DPAs and AI zero-retention status (docs/legal/register.md vendor table)
-  - 4. Tenant AI clause status (docs/legal/tenant-terms-ai-clause-draft.md)
+  - 4. Tenant AI clause status (docs/legal/tenant-ai-schedule.md)
   - 5. '[to be confirmed]' markers remaining in public pages
   - 6. Changes since last review
 - id: DATA-01

@@ -7,9 +7,9 @@ status: draft
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-02
+last_reviewed: 2026-11-03
 review_every_days: 90
-related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, AA-886, AA-820, AA-839, AA-877]
+related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, SEC-04-ai-schedule, SEC-04-dpa-pack, AA-886, AA-820, AA-839, AA-877]
 ---
 
 # Legal readiness packet
@@ -43,7 +43,7 @@ to involve a lawyer, and on which topics, is the business owner's call.
 | 9 | Support address | `support@` to a shared mailbox |
 | 10 | Status page | None until the first paying partner |
 | 11 | Vercel plan | Pro before the first partner is charged (D-18) |
-| 12 | AI acceptable-use clause | A or C: adopt the AI Schedule now (no partners yet); answer needed by 2026-11-11 |
+| 12 | AI acceptable-use clause | Done as C: the AI Schedule v1.0 is adopted (tech lead, 2026-11-03) and ships in the pilot letter; counsel before the first paying agency |
 
 ## 1. Data controller entity
 
@@ -177,19 +177,21 @@ Any new spend needs the tech lead's approval (DM-10.7). *Proposed answer:* A. *D
 
 ## 12. AI acceptable-use clause
 
-*Current fact:* Anthropic's Usage Policy takes effect on 2026-11-12 (the live text was re-read on 2026-10-24)
-and reaches partners whose content is written with Claude through Amazon Bedrock. The full AI Schedule for the partner
-terms is at Draft v0.2. Since the AA-820 portal change, the portal terms §3 carry a short summary of it (Annex A.4),
-still under the "Draft — pending legal review" banner. There are no real or paying partners yet, so nobody needs a
-notice: each partner accepts the Schedule when it joins, with its partner agreement. The agency CRM does not call
-Claude yet; the Schedule must be part of the agency terms before it does. The business owner's answer is needed by
-2026-11-11, one day before the policy takes effect. *Options:* (A) adopt the Schedule as written: the portal summary
-is already live before 2026-11-11, the Schedule is attached to every partner agreement at onboarding, and a lawyer's review is optional and
-her call; (B) a lawyer reviews the Schedule first, and the portal keeps the summary marked as a draft until then;
-(C) adopt it now as in A, and have a lawyer review it before the first paying partner. *Proposed answer:* A or C. With
-no partners yet, adopting now costs nothing and covers the 2026-11-12 date; C adds a review before the first partner pays.
-*Detail:* [AI acceptable-use clause draft](tenant-terms-ai-clause-draft.md): where each part goes (§0), the Schedule
-(§2) and 14 questions for a lawyer (§6).
+*Current fact (2026-11-03):* Anthropic's Usage Policy takes effect on 2026-11-12 (the live text was re-read on
+2026-11-03). It covers businesses that reach Claude through a cloud provider (Amazon Bedrock) **and** those that use
+Anthropic's own API, and the end users of their products, so it reaches every partner on both paths. The tech lead
+adopted the AI Schedule as **v1.0** on 2026-11-03 (option C of this topic, ADR 0019 b20): it is in use now, and a
+lawyer reviews it before the first paying agency. v1.0 adds that the direct Anthropic and OpenAI API paths run on
+accounts held in Adventure Asia's own company name (b19), a rule against AI advice to a specific client on insurance,
+visas or financing without a qualified person and an AI notice, the monthly AI allowance, and a clause for the pilot
+letter. There is still no real partner, so nobody is notified: the clause **ships in the pilot letter**, and each later
+partner accepts the Schedule with its partner agreement. The Content studio terms §3 and the CRM terms carry a short
+summary of v1.0 (Annex A.4), the Trip Planner terms name the model that writes its AI text, and all of them keep the
+"Draft — pending legal review" banner until the lawyer has read the Schedule. *Business owner decides:* the wording of
+the pilot letter around the clause, the pilot's monthly AI allowance, and when to bring in the lawyer (before the
+first paying agency at the latest). *Detail:* [AI Schedule v1.0](tenant-ai-schedule.md): where each part ships (§2),
+the Schedule (§3), the pilot-letter clause (§5) and 16 questions for a lawyer (§7). Part 2, the data processing pack
+for the pilot, is outlined in [dpa-pack-outline.md](dpa-pack-outline.md).
 
 ## Annex A: current text of the four pages
 
@@ -199,11 +201,14 @@ AA-Partner with their history (AA-979); their text is the one of 2026-10-20 plus
 (2026-10-24) and the AI provider list of A.3 §5–§6 and A.4 §3 (2026-10-31, S262, from the
 [AI Use Register](../architecture/ai-use-register.md)). Each page shows the banner "Draft — pending legal review". The Trip Planner pages show the version
 "Draft v0.1" (20 October 2026), although their text gained the traveller sign-in and Geoapify parts later; the two
-portal pages show "Draft v0.3" (31 October 2026) since the provider-list change. Links are shown as their text. The pages
+portal pages show "Draft v0.4" (3 November 2026) since the AI Schedule v1.0 change. Links are shown as their text. The pages
 exist in English only. If a page changes after those commits, the live page wins.
 
 Two page-copy follow-ups are known. The portal privacy notice §6 still says that Vercel hosts the portal pages,
-although the portal now runs on AWS. The Trip Planner pages changed after 2026-10-20 but still show that date.
+although the portal now runs on AWS. The Trip Planner pages changed after 2026-10-20 but still showed that date until
+2026-11-03 (Draft v0.2). A.4 §3 below is the 2026-11-03 text (AA-820, AI Schedule v1.0, portal Draft v0.4); A.2 §3 is
+older than the live page, which since then names the model that writes the narration and links the Anthropic Usage
+Policy.
 
 ### A.0 Points to be confirmed on the four pages
 
@@ -466,8 +471,12 @@ pieces about those tours, and tools to export them or publish them to your own c
   fallback after them. When Claude is unavailable on Amazon Bedrock, the writing step may fall back to Claude through
   the Anthropic API and, as a last resort, to an OpenAI model through the OpenAI API, used directly and with a spending
   cap.
-- You must follow these providers' usage policies, including the Anthropic Usage Policy, the OpenAI Usage Policies and
-  the AWS Acceptable Use Policy, as well as these terms.
+- Every AI feature runs on accounts that Adventure Asia holds in its own company name with these providers. You do not
+  get an account or a key with any of them, and you must not try to reach them through the portal other than through
+  its AI features.
+- These providers' usage policies apply to you as a user of a service built on their models, whichever way Adventure
+  Asia reaches the model. You must follow them, including the Anthropic Usage Policy, the OpenAI Usage Policies and the
+  AWS Acceptable Use Policy, as well as these terms. The updated Anthropic Usage Policy applies from 12 November 2026.
 - You must not use the portal or its content for:
   - fake reviews, ratings or testimonials, or quotes and stories presented as coming from customers who did not give
     them;
@@ -478,14 +487,24 @@ pieces about those tours, and tools to export them or publish them to your own c
   - spam, or posting meant to get around the publishing limit;
   - false or misleading information, in particular about visas and entry rules, health, safety, prices or
     availability;
-  - advice on insurance, finance, visas or other high-risk matters, unless a qualified person reviews it before it is
-    delivered and the person receiving it is told that AI was used;
-  - getting around Adventure Asia's content checks, limits or other safeguards.
+  - advice to a specific person on insurance, finance, visas or other high-risk matters, unless a qualified person
+    reviews it before it is delivered and the person receiving it is told that AI was used (general travel
+    information, such as which visa rules exist, is not advice);
+  - getting around Adventure Asia's content checks, limits or other safeguards;
+  - any automation or AI agent you run through the API that does one of the above: you are responsible for it.
 - If the law or a channel's rules require content to be labelled as AI-generated, you add that label.
+- If you use AI content to talk directly with your customers, for example in a chat or in automated replies, tell them
+  they are talking to AI, at least at the start of each conversation.
 - You review each piece before it is published, and you are its publisher. Telling Adventure Asia to publish a piece,
   in the portal or through the API, confirms that you have reviewed it.
 - Adventure Asia may hold, rewrite or decline to generate or publish content that breaks these rules. Unpublishing and
   suspension are covered in sections 4 and 5.
+- Your plan may include a monthly AI allowance. When it is used up, AI features may pause until the next month or until
+  Adventure Asia raises it; nothing extra is charged for AI use.
+- Adventure Asia keeps records of AI use (model, provider, step, time and cost, not the text itself) and of publishing,
+  to run and secure the service and to show that these rules are followed.
+- This section summarises the AI Schedule v1.0 attached to your partner agreement. If they differ, the AI Schedule
+  applies.
 
 **4. Publishing to your channels.**
 
