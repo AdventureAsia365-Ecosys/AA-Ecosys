@@ -57,7 +57,9 @@ FAMILIES = ("executive", "finops", "app-ops", "ai-quality", "reliability", "secu
             "data-quality", "growth", "customer", "agency", "readiness", "on-demand")
 SCHEDULES = ("hourly", "daily", "weekly", "monthly", "quarterly", "live", "event", "on_demand")
 AUTOMATION = ("auto", "semi", "manual", "on_demand")
-STATUSES = ("exists", "partial", "planned", "missing")
+# retired (AA-1003 R0 hotfix, ADR 0019): the report no longer runs; it keeps its ID and its past runs, needs a
+# retired_on day and has no generator.
+STATUSES = ("exists", "partial", "planned", "missing", "retired")
 PRIORITIES = ("P0", "P1", "P2", "P3")
 GENERATORS = (None, "cis")
 UNITS = ("count", "ratio", "usd", "seconds", "hours", "days", "score", "status", "text")
@@ -80,11 +82,13 @@ HEADER_CATALOG = """\
 #
 # Fields: id, family, name_en, name_vi, audience, owner_role, decision (what the reader decides with it), cadence
 # (words), schedule (one of hourly/daily/weekly/monthly/quarterly/live/event/on_demand), channel, automation
-# (auto/semi/manual/on_demand), status (state of the report today: exists/partial/planned/missing), priority (P0-P3),
-# template (path of its Markdown template, or null for a product page), generator (cis = the CIS engine renders it
-# with job kind report_generate; null = not automated yet), automated_from (optional, generator cis only: the first
-# snapshot day YYYY-MM-DD whose daily chain can create the report's scheduled period, the deploy day of its generator,
-# so the register does not call earlier periods overdue), kpis (IDs in kpis.yaml), sections (what it contains).
+# (auto/semi/manual/on_demand), status (state of the report today: exists/partial/planned/missing, or retired: it no
+# longer runs, keeps its ID and past runs), priority (P0-P3), template (path of its Markdown template, or null for a
+# product page), generator (cis = the CIS engine renders it with job kind report_generate; null = not automated yet,
+# or retired), automated_from (optional, generator cis only: the first snapshot day YYYY-MM-DD whose daily chain can
+# create the report's scheduled period, the deploy day of its generator, so the register does not call earlier
+# periods overdue), retired_on (status retired only, required: the day it stopped, YYYY-MM-DD), kpis (IDs in
+# kpis.yaml), sections (what it contains).
 """
 
 HEADER_KPIS = """\
@@ -473,6 +477,14 @@ def check(root: Path, copy_dir: Path | None = None) -> tuple[list[Finding], list
                 err(CATALOG, f"report {rid}: automated_from {af!r} must be a YYYY-MM-DD date")
             if r.get("generator") != "cis":
                 err(CATALOG, f"report {rid}: automated_from needs generator cis")
+        if r.get("status") == "retired":
+            ro = r.get("retired_on")
+            if not isinstance(ro, date) and not (isinstance(ro, str) and DAY.match(ro)):
+                err(CATALOG, f"report {rid}: a retired report needs retired_on YYYY-MM-DD (got {ro!r})")
+            if r.get("generator") is not None:
+                err(CATALOG, f"report {rid}: a retired report has no generator (got {r.get('generator')!r})")
+        elif "retired_on" in r:
+            err(CATALOG, f"report {rid}: retired_on needs status retired")
         tpl = r.get("template")
         if tpl is not None and (not isinstance(tpl, str) or not (root / tpl).is_file()):
             err(CATALOG, f"report {rid}: template {tpl!r} does not exist")

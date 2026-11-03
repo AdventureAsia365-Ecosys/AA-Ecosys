@@ -4,6 +4,11 @@ Part of the AA-1001 report catalog advisory (S258, 2026-10-29). Report IDs refer
 machine-readable list is [catalog.json](catalog.json). Everything below is a proposal: no table, job kind or page in
 this plan exists yet unless the text says so.
 
+> [!IMPORTANT]
+> **Amended 2026-11-03 (S266, B2B-only model, ADR 0019 d8 / d11):** TP-03 is retired, so the hourly handoff check and
+> the TP-03 daily summary below no longer run; TP-01, EX-01 and DATA-02 show their inquiry lines as historical; BK-02
+> is the B2B pipeline and CX-01 agency satisfaction. The live list is `docs/reports/catalog.yaml`.
+
 ## 1. One engine, many reports
 
 Every scheduled report runs on the same small engine, built once in CIS (memory consistent-not-one-off):
@@ -19,9 +24,9 @@ Every scheduled report runs on the same small engine, built once in CIS (memory 
 
 | Time | Cadence | Runs |
 |---|---|---|
-| hourly | every hour | TP-03 handoff check (alert only on gap) |
+| hourly | every hour | ~~TP-03 handoff check (alert only on gap)~~ retired 2026-11-03 |
 | 00:30 | daily | EX-04 KPI snapshot for the previous ICT day |
-| 01:00 | daily | OPS-12 platform digest (every day), TP-03 daily summary, BK-01 Booking digest (Mon-Fri) |
+| 01:00 | daily | OPS-12 platform digest (every day), ~~TP-03 daily summary~~ (retired 2026-11-03), BK-01 Booking digest (Mon-Fri) |
 | 02:00 | daily | EX-06 due/overdue check |
 | 02:17-05:13 | nightly | DATA-01 probes (Infra workflows) upload summary JSON |
 | Mon 00:43 | weekly | OPS-13 pg_stat_statements probe (Infra workflow) |
