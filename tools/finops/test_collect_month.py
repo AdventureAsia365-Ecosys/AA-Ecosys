@@ -93,11 +93,79 @@ class CollectTest(unittest.TestCase):
 
         out = asyncio.run(c.collect_cis(db, ["2099-10"], date(2099, 11, 3), cost_fn=cost_fn, refresh_fn=refresh_fn))
         self.assertEqual(refreshed, [(date(2099, 10, 1), date(2099, 11, 1))])
-        self.assertEqual(out["2099-10"]["refreshed"], {"row_count": 4})
+        self.assertEqual(out["2099-10"]["refreshed"], {"app_tag": {"row_count": 4}})
         self.assertFalse(out["2099-10"]["platform_cost"]["refresh"]["stale"])
         state["stale"] = True
         out = asyncio.run(c.collect_cis(db, ["2099-10"], date(2099, 11, 3), cost_fn=cost_fn))
         self.assertIsNone(out["2099-10"]["refreshed"])
+
+    def test_refresh_also_fetches_the_service_snapshot_until_final(self):
+        # S265: REFRESH=1 used to refresh only the App-tag snapshot; the acc3 line (llm_satellites) reads the SERVICE
+        # snapshot, which kept a fetch from before the month ended. Both now refresh while the month is not final.
+        db = FakeDB({c.PUBLISHED_TOURS_SQL: [{"published_tours": 0, "published_tours_live": 0}],
+                     c.LLM_BY_STAGE_SQL: []})
+        state = {"ce_fetched_at": "2099-10-27T03:59:41+00:00", "reason": "fresh"}
+
+        async def cost_fn(pool, month, *, refresh_if_stale):
+            return {"month": month, "refresh": {"stale": False, "reason": state["reason"]},
+                    "llm_satellites": {"acc3": {"ce_bedrock_usd": 1.0}, "ce_fetched_at": state["ce_fetched_at"]}}
+
+        app_calls, fetch_calls, recorded = [], [], []
+
+        async def refresh_fn(pool, start, end):
+            app_calls.append((start, end))
+            return {"row_count": 2}
+
+        def fetch_all(start, end):  # stands in for cost_explorer.fetch_all_accounts_cost (no AWS call)
+            fetch_calls.append((start, end))
+            return {"rows": [{"service": "Amazon Bedrock"}] * 3,
+                    "errors": {"acc3": "arn:aws:iam::<id>:role/Reader AccessDenied"}}
+
+        async def record(pool, rows):  # stands in for cost_explorer.record_snapshot
+            recorded.append(len(rows))
+            state["ce_fetched_at"] = "2099-11-04T00:00:00+00:00"
+            return len(rows)
+
+        async def service_refresh(pool, start, end):
+            return await c.refresh_service_snapshot(pool, start, end, fetch_fn=fetch_all, record_fn=record)
+
+        out = asyncio.run(c.collect_cis(db, ["2099-10"], date(2099, 11, 3), cost_fn=cost_fn, refresh_fn=refresh_fn,
+                                        service_refresh_fn=service_refresh))
+        self.assertEqual(fetch_calls, [("2099-10-01", "2099-11-01")])
+        self.assertEqual(recorded, [3])
+        self.assertEqual(app_calls, [(date(2099, 10, 1), date(2099, 11, 1))])  # "fresh" is not final either
+        got = out["2099-10"]["refreshed"]
+        self.assertEqual(got["service"], {"ok": True, "row_count": 3, "accounts_failed": ["acc3"]})
+        self.assertNotIn("arn:", json.dumps(got))  # the error text (role ARN) is never kept in the bundle
+        self.assertEqual(out["2099-10"]["platform_cost"]["llm_satellites"]["ce_fetched_at"],
+                         "2099-11-04T00:00:00+00:00")  # read again after the refresh
+
+        # Final data (fetched >= 3 days after the month ended) is not fetched again.
+        state["reason"] = "final (fetched after the window closed)"
+        fetch_calls.clear()
+        app_calls.clear()
+        out = asyncio.run(c.collect_cis(db, ["2099-10"], date(2099, 11, 5), cost_fn=cost_fn, refresh_fn=refresh_fn,
+                                        service_refresh_fn=service_refresh))
+        self.assertEqual((fetch_calls, app_calls), ([], []))
+        self.assertIsNone(out["2099-10"]["refreshed"])
+
+    def test_service_refresh_never_raises_and_keeps_no_error_text(self):
+        def fetch_all(start, end):
+            raise RuntimeError("Cost Explorer fetch failed for all accounts: arn:aws:sts::<id>:assumed-role/x")
+
+        async def record(pool, rows):
+            raise AssertionError("nothing to record")
+
+        got = asyncio.run(c.refresh_service_snapshot(None, date(2099, 10, 1), date(2099, 11, 1), fetch_fn=fetch_all,
+                                                     record_fn=record))
+        self.assertEqual(got, {"ok": False, "error": "RuntimeError"})
+
+    def test_is_final(self):
+        end = date(2099, 11, 1)
+        self.assertFalse(c.is_final(None, end))
+        self.assertFalse(c.is_final("2099-11-02T23:33:24+00:00", end))  # 48 h after the month: not final yet
+        self.assertTrue(c.is_final("2099-11-04T00:00:00+00:00", end))
+        self.assertTrue(c.is_final("2099-11-05T00:00:00", end))  # naive = UTC
 
     def test_booking_counts_confirmed_statuses(self):
         db = FakeDB({c.TRIP_CASES_SQL: [{"trip_cases": 5, "bookings_confirmed": 2}]})
