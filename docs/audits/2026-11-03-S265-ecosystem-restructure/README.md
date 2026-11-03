@@ -1,7 +1,7 @@
 ---
-id: ARCH-s265-ecosystem-restructure
+id: ARCH-05-s265-ecosystem-restructure
 title: "Tái cấu trúc hệ sinh thái AA theo mô hình chỉ B2B (S265): audit, kiến trúc đích và danh sách quyết định"
-description: "Audit codebase và kiến trúc hiện tại so với mô hình mới chốt ngày 02/11/2026 (AA chỉ phục vụ tenant/agency; CIS Content là gói nền; CRM và TripPlanner là add-on), kèm kiến trúc đích, phân quyền, mô hình dữ liệu, IA của CIS admin và portal, TripPlanner đa tenant, quy định dữ liệu theo vùng, lộ trình và các quyết định cần duyệt."
+description: "Bản tư vấn S265: chuyển hệ sinh thái sang mô hình chỉ B2B (tenant-first, CRM và TripPlanner là add-on, Booking là back office B2B), kèm kiến trúc đích, vai trò, dữ liệu và quy định vùng."
 type: report
 status: draft
 owner: nghiep

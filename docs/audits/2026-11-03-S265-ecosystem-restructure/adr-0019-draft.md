@@ -2,7 +2,7 @@
 
 - **Status:** **Accepted** (tech lead, S265, 03/11/2026) for the invariants and technical decisions d1–d23. The S265 decision page recorded all 44 items. 40 follow the recommendation. Four take another option: d6 `merge_now`, d9 `all_in_booking`, d16 `all_on_dev` and d23 `move_tp_to_ecs`. Items b1–b21 are **business decisions taken by the tech lead on the decision page (S265); the business owner may revisit** them. A change there updates this ADR. It does not reopen d1–d23.
 - **Context source:** the meeting of 02/11/2026 that settled the B2B-only model.
-- **Design and evidence:** [`docs/audits/2026-11-03-S265-ecosystem-restructure/README.md`](../audits/2026-11-03-S265-ecosystem-restructure/README.md) (sections 1–13), `decisions.json` (options and trade-offs), `approvals.json` (choices and notes) and [`clarifications.md`](../audits/2026-11-03-S265-ecosystem-restructure/clarifications.md) (answers to the approval notes, the redesign for the four other choices, the staff role matrix, TripPlanner hosting cost, the prod plan and the revised order), all in that folder.
+- **Design and evidence:** [`docs/audits/2026-11-03-S265-ecosystem-restructure/README.md`](./README.md) (sections 1–13), `decisions.json` (options and trade-offs), `approvals.json` (choices and notes) and [`clarifications.md`](./clarifications.md) (answers to the approval notes, the redesign for the four other choices, the staff role matrix, TripPlanner hosting cost, the prod plan and the revised order), all in that folder.
 - **Amends:** ADR 0001, 0004, 0005, 0005a, 0006, 0010, 0010a, 0016 and 0018. Each one gets a one-line pointer to this ADR (see [ADRs amended](#adrs-amended)). It extends ADR 0015 (d20) but does not change any of its decisions.
 - **Respects, unchanged:** ADR 0002 (only CIS writes content), 0003/0003a (job tables per owner), 0006b d4 (a CIS event never grants a CRM role), 0008/0008a (no fifth app; the CRM keeps its own gateway), 0009 (gateway route order), 0010 d9 (bring-your-own integrations), 0017 (migrations in the app PR). It also keeps the standing rule that every new paid service needs its own yes, with the monthly cost stated first.
 - **Scope:** every repo: AA-CIS-App, AA-Partner, AA-Booking, AA-TripPlanner-Web, AA-CIS-Infra and root.
@@ -277,7 +277,7 @@ Each one gets a one-line pointer to this ADR.
 
 ## Open items
 
-The approval notes (TL-1, TL-3, TL-7, TL-10, TL-11, TL-19, TL-21 explanations; TL-6 keys; TL-9 UI merge; TL-16 prod and pilot plan; TL-20 channels; TL-8; TL-22; BO-4; BO-8; BO-10; BO-14) are all answered in [`clarifications.md`](../audits/2026-11-03-S265-ecosystem-restructure/clarifications.md), and the answers are folded into d1–d23 above. Still open (`clarifications.md` section 7):
+The approval notes (TL-1, TL-3, TL-7, TL-10, TL-11, TL-19, TL-21 explanations; TL-6 keys; TL-9 UI merge; TL-16 prod and pilot plan; TL-20 channels; TL-8; TL-22; BO-4; BO-8; BO-10; BO-14) are all answered in [`clarifications.md`](./clarifications.md), and the answers are folded into d1–d23 above. Still open (`clarifications.md` section 7):
 
 1. Whether `ai_ops` may read tenant text in Writing Lab (`tenant_content.read`, Lab only, logged), or tenant text is masked for that role.
 2. CIS admin and Booking admin on Vercel: Pro with one seat, or a move to ECS on the TripPlanner pattern.

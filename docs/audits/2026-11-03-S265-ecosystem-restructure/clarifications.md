@@ -1,7 +1,7 @@
 ---
-id: ARCH-s265-restructure-clarifications
+id: ARCH-05-s265-restructure-clarifications
 title: "Giải thích và thiết kế lại sau khi tech lead duyệt 44 quyết định (S265)"
-description: "Trả lời từng ghi chú của tech lead trên trang quyết định S265, thiết kế lại cho 4 lựa chọn khác khuyến nghị (TL-6 merge_now, TL-9 all_in_booking, TL-16 all_on_dev, TL-23 move_tp_to_ecs), bảng vai trò và ma trận quyền nhân viên AA, bảng chi phí hosting TripPlanner, kế hoạch lên prod và lộ trình R0..R8 đã đổi."
+description: "Giải đáp S265 cho các ghi chú của tech lead trên trang quyết định, thiết kế lại 4 lựa chọn khác đề xuất, bảng vai trò, chi phí hosting TripPlanner và kế hoạch lên prod."
 type: report
 status: draft
 owner: nghiep
@@ -9,7 +9,7 @@ audience: [owner, cto, engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-03
 review_every_days: 30
-related: [ARCH-s265-ecosystem-restructure, AA-1028, AA-1004, AA-969, AA-1029, AA-1030, AA-1007, AA-1008, AA-820]
+related: [ARCH-05-s265-ecosystem-restructure, AA-1028, AA-1004, AA-969, AA-1029, AA-1030, AA-1007, AA-1008, AA-820]
 ---
 
 # Giải thích và thiết kế lại sau khi duyệt 44 quyết định (S265, 03/11/2026)
