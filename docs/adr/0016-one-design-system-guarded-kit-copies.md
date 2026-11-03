@@ -12,6 +12,10 @@
   until a package exists"). Closes AA-655 (parked) as "guarded copies chosen, package re-evaluated under decision
   12"; the work is tracked as AA-994. Corrects the `aa-ci-bot` install row of
   [ADR 0011](0011-github-app-identity-and-merge-rights.md) (decision 13).
+- **Amended by:** [ADR 0019](0019-b2b-only-ecosystem-model.md) (Accepted 2026-11-03, S265, AA-1034): the canonical core gains a runtime per-tenant
+  brand-token layer, the AI-notice component (ADR 0019 d19) and one message catalogue, English and Vietnamese by
+  default (d22), each built once in the CIS core and synced. After the AA-Partner `portal/` and `web/` merge (d6) there
+  are four kit consumers, not five.
 - **Design and evidence:** `docs/audits/2026-10-27-S252-aa994-design-system/` (`adr-draft.md`, `plan.md`: inventory
   in section 0, slice plan S0–S6f in section 2, guards G1–G19 in section 3, visual job in section 4). Evidence was read
   on origin/main: AA-CIS-App `5cc5fb4d`, AA-Partner `5a6de8b`, AA-Booking `e84d8c1`, AA-TripPlanner-Web `4b08949`,

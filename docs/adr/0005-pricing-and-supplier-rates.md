@@ -5,6 +5,10 @@
   the business owner before the first price load.
 - **Amended by:** [ADR 0005a](0005a-b2b-resale-warn-and-vnd.md) (Accepted 22/10/2026, S247): decision 9
   (warn, not block, below the "from" price; no subscription line), VND quotes, `b2b_price` naming.
+- **Amended by:** [ADR 0019](0019-b2b-only-ecosystem-model.md) (Accepted 2026-11-03, S265, AA-1034): the B2C channel rows of decision 4 are retired
+  (AA no longer sells to travellers). The "from" price of decision 6 becomes the suggested retail price (RRP = net +
+  25 %, ADR 0019 b15), kept as policy data in `booking.pricing_rules`; agency prices follow b15 (one net price per tour
+  per season, three agency tiers with per-contract discounts).
 - **Update 2026-10-28** (live schema dump, Booking bk-032): built in schema `booking`: `suppliers`,
   `supplier_contracts`, `supplier_rates`, `fx_rates`, `pricing_rules`, `trip_plan_prices`. Not built yet: the view
   `booking.v_from_prices`, the contract `price.from.v1` and the `tax_rules` table. Until then the B2B price-parity

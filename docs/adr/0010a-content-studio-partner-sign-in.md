@@ -9,6 +9,10 @@
   and how they are re-enrolled) and decision 2 (the agency host serves the CRM and the studio from one CloudFront
   distribution on Fargate). [ADR 0006b](0006b-partner-pool-and-mfa.md) is applied as written (the partner pool is the
   pool of agency people, MFA required); this file only says how the Content studio uses it.
+- **Amended by:** [ADR 0019](0019-b2b-only-ecosystem-model.md) (Accepted 2026-11-03, S265, AA-1034): decisions 1 and 6 are superseded by ADR 0019 d6
+  (one merged agency app, one session, no separate studio service). Decision 5's clean-up is brought forward: people's
+  API-key sign-in and all tenant API-key code and data are removed in R3, so agency machine access to `/v1/*` waits for
+  R8. Decisions 2 and 3 stay; decision 4 is delivered through the role-map invitation (d7).
 - **Implements:** ADR 0010 §6 P2b, final design §4.2–§4.4 ("one host, one sign-in, one sidebar"; `tenant-login`
   replaced by the partner-pool sign-in; API keys stay for machines).
 - **Design and evidence:** [`design.md`](../audits/2026-10-26-S252-aa979-p2b/design.md) and

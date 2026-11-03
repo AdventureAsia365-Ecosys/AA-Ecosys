@@ -7,6 +7,10 @@
   CIS and TripPlanner (readers of `price.from.v1`, unchanged).
 - **Amends:** [ADR 0005](0005-pricing-and-supplier-rates.md) decision 9 (tenant resale), decision 5 (currencies) and
   the last sentence of decision 6 (how B2B price lists are exposed).
+- **Amended by:** [ADR 0019](0019-b2b-only-ecosystem-model.md) (Accepted 2026-11-03, S265, AA-1034): "no subscription line, CRM free at launch" is
+  superseded. Tenants pay subscriptions (Content tiers, ADR 0019 b2); CRM and TripPlanner are paid add-ons (b3, b4);
+  every agency invoice is issued from Booking in two kinds, software fee and tour settlement (d9). The warn-below-"from"
+  rule gains a suspend step after a 7-day notice (b7). Decisions 2–4 (naming, VND quotes, cancellation fees) stay.
 - **Implements:** the business owner's questionnaire answers Q1 1.1 (free for agencies now), Q2 1.1 (B2B price at the existing
   15 % margin, the agency sets its sell price), Q2 1.2 (AA bills the agency under the current B2B terms, outside the
   CRM), Q2 1.3 (below the public price: contract clause only); contradictions X10 and X11 of the CRM design.
