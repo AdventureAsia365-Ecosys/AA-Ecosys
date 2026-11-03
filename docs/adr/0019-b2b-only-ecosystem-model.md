@@ -231,16 +231,18 @@ Tenants are told on two channels:
 - Dev runs on Spot; on-demand from the first paying tenant. A tenant never uses a surface on Vercel Hobby.
 - Work: about 1–2 extra sessions in R5.
 - **Two separate yeses before the Terraform apply:** Fargate (8.3–16.6 USD a month) and the WAF (about 7.4 USD a month at pilot volume). Cost basis in [Consequences](#consequences).
-- **All agency-facing and staff frontends leave Vercel (settled by the tech lead the same day, S265).** The two staff
-  apps (CIS admin, Booking admin) stay on Vercel only while there is only Dev and only AA staff use them. With the
-  production set-up they run as **one combined Fargate task** (two containers) behind the shared ALB and an existing
-  REGIONAL web ACL, no CDN; Dev Spot about 5 USD a month, production two on-demand tasks about 33 USD a month.
-  TripPlanner keeps the pattern above (ECS + CloudFront + CLOUDFRONT-scope WAF): Dev about 13–15 USD a month,
-  production about 40–45 USD at pilot. Frontend total: Dev about 20–22 USD a month; production about 75–80 USD at
-  pilot and about 105–140 USD at growth (against 20 USD for one Vercel Pro seat), estimates from the AWS price list
-  of 03/11/2026. **OpenNext on Lambda behind a CloudFront flat-rate plan** (Free 0 USD / Pro 15 USD a month with WAF
-  included; VPC origins only from the 200 USD Business plan) is the recorded cheaper option, not used now: the
-  adapter is community-maintained, so it is tried only in a $0 Dev spike when CloudFront and WAF cost grows.
+- **All agency-facing and staff frontends leave Vercel, Dev first (settled by the tech lead the same day, S265).**
+  On Dev each frontend gets **its own task definition and ECS service** (CIS admin, Booking admin, TripPlanner),
+  Fargate ARM on Spot behind the shared ALB; the two staff apps use an existing REGIONAL web ACL and no CDN,
+  TripPlanner keeps the pattern above (CloudFront + CLOUDFRONT-scope WAF). Dev cost estimate: about 2.5–5 USD a month
+  per staff app (0.25 vCPU / 0.5 GB to 0.5 vCPU / 1 GB on Spot) and about 13–15 USD for TripPlanner, about 20–25 USD
+  in all (AWS price list, 03/11/2026). Run on Dev and watch cost, memory and latency before deciding production.
+  **Production sizing (task count, on-demand vs Spot, high availability) is decided later**, with the `aa-prod`
+  set-up; the earlier estimate (about 75–80 USD a month at pilot, 105–140 USD at growth, against 20 USD for one
+  Vercel Pro seat) is a planning figure only. **OpenNext on Lambda behind a CloudFront flat-rate plan** (Free 0 USD /
+  Pro 15 USD a month with WAF included; VPC origins only from the 200 USD Business plan) is recorded as a cheaper
+  option, not used now: the adapter is community-maintained, so it is tried only in a $0 Dev spike if CloudFront and
+  WAF cost grows.
 
 ### Business decisions taken by the tech lead on the decision page (S265); the business owner may revisit
 
