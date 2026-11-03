@@ -362,6 +362,20 @@ Proposed answer to gap §5 items 1 and 7; accepted separately (it includes about
   - **AWS first, outside last (tech lead, S263).** Where a judge or validate route also reaches the OpenAI API (the
     vendor fallback of CIS migration 327), the acc2 pick goes before that hop and the OpenAI API stays the last rung
     (CIS migration 333, same gate).
+- **Amendment (tech lead, 03/11/2026, S265 re-scope of AA-1027 F4): the CRM draft writer on acc2, Dev only.** The
+  CRM's one AI stage, `crm_draft_reply` (writer, tenant-facing), routes to Amazon Nova Lite on acc2 (AA-Partner
+  crm-042; AA-CIS-Infra `crm_llm.tf`: the CRM task role, `bedrock:InvokeModel` on that us. profile only, no acc3 role),
+  while acc3 refuses every model. This is a knowing exception to "never for main writer or tenant stages" above and to
+  decision 12's writer clause, accepted on these conditions:
+  - **Dev only.** Dev holds synthetic agencies only. No `aa-prod` or paying-agency connection gets it: there the
+    CRM writer waits for decision 10, AA-820 and the ladder like every other writer.
+  - **A human sends.** A draft is a suggestion the member reads, edits and sends (design R39); nothing is sent from
+    the AI path, so an uncalibrated writer cannot reach a traveller on its own.
+  - **Every CRM guard stands.** The F3 scrub fails closed before the call; an agency pays only with the `ai_assist`
+    entitlement and AI switched on (default off), under its monthly budget (default 2 USD) and the app profile's
+    daily budget (crm-041), behind the stage kill switch and the per-agency rate cap.
+  - **Reversible by data.** The crm-037 Claude entries stay in the route, switched off; the acc3 return is one forward
+    CRM file that switches them back on (Haiku first, Nova Lite third, beyond `max_attempts`).
 - The same role list applies to `aa-prod` connections when `aa-prod` can call Bedrock (ADR 0018): judge and validate
   stages only, after the ladder passes there.
 - "Different payer" is today's fact, not a permanent one: the 01/12 Billing Transfer and the move into the AA
