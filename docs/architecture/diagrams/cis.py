@@ -1,7 +1,7 @@
 """AA-CIS-App view: admin console, API and job worker, data and the AI gateway paths (AA-697, AA-1020).
 
 Facts: apps/AA-CIS-App CONTEXT.md ("Architecture at a glance", "Deploy & CI", "Contracts with other apps"),
-docs/ecosystem-architecture.md sections 4.1, 4.3-4.6 and docs/architecture/ai-gateway.md (as built 2026-11-01).
+docs/ecosystem-architecture.md sections 4.1, 4.3-4.6 and docs/architecture/ai-gateway.md (as built 2026-11-01, routes refreshed 2026-11-03).
 Subnet tiers from AA-CIS-Infra modules/vpc.
 """
 from diagrams.aws.compute import ECR, Fargate, Lambda
@@ -51,7 +51,7 @@ def draw(filename: str) -> None:
                             "Amazon RDS for PostgreSQL\nsilver · gold · acp_* · geo · catalog\nshared (incl. AI registry + ledger)")
                 ecr = ECR("Amazon ECR\nimage per git SHA")
                 s3 = S3("Amazon S3\nbronze: uploads · photos · docs")
-                embed = Bedrock("Amazon Bedrock\nCohere Embed v4\n5 chat candidates, no route")
+                embed = Bedrock("Amazon Bedrock\nCohere Embed v4\njudge fallbacks (3 models)")
                 cw = Cloudwatch("Amazon CloudWatch\nlogs · metrics · alarms")
 
         with group("cloud", "AWS Cloud", "LLM account (acc3)"):
@@ -60,7 +60,7 @@ def draw(filename: str) -> None:
                 llm = Bedrock("Amazon Bedrock\nmain writer + judge models")
 
         with group("outside", "Outside services") as outside:
-            apis = Internet("Paid APIs via the gateway\nJev · DataForSEO · Geoapify\nOpenAI (judge last resort)\nAnthropic (no key yet)")
+            apis = Internet("Paid APIs via the gateway\nJev · DataForSEO · Geoapify\nOpenAI (last rung)\nAnthropic (no key yet)")
             channels = Internet("Photos + channels\nGoogle Drive · WordPress · Facebook")
 
         place({

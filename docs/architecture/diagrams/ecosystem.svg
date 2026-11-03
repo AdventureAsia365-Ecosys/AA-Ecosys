@@ -435,7 +435,7 @@
 <title>s23&#45;t</title>
 <text text-anchor="middle" x="1507.36" y="-87.5" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#232f3e">Amazon Bedrock</text>
 <text text-anchor="middle" x="1507.36" y="-74.5" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#232f3e">embeddings · CRM guardrail</text>
-<text text-anchor="middle" x="1507.36" y="-61.5" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#232f3e">chat candidates (no route)</text>
+<text text-anchor="middle" x="1507.36" y="-61.5" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#232f3e">judge fallback models</text>
 </g>
 <g id="node49" class="node">
 <title>s25</title>

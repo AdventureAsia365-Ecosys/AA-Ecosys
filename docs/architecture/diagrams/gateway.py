@@ -1,9 +1,11 @@
 """AI gateway view: who calls the gateway, where its control plane and ledger live, and which providers it reaches
 (root ADR 0009, AA-1020).
 
-Facts: docs/architecture/ai-gateway.md (as built 2026-11-01: CIS 319-324, crm-032, the 323 contract views, the acc2
-candidate models of 324, no Anthropic key, the CRM on the stub provider) and docs/ecosystem-architecture.md 4.3.
-Dotted arrows are paths that are built but not live (no key, stub provider, no route). Names only, no IDs.
+Facts: docs/architecture/ai-gateway.md (as built 2026-11-01, refreshed 2026-11-03: CIS 319-346 without 336, crm-032,
+the 323 contract views, three acc2 models of 324 routed as judge / validate fallbacks by 331-333 and 339, the OpenAI
+API as the last rung of judge and writer routes by 327 and 344, no Anthropic key, the CRM on the stub provider) and
+docs/ecosystem-architecture.md 4.3. Dotted arrows are paths that are built but not live (no key, stub provider).
+Names only, no IDs.
 """
 from diagrams.aws.compute import Fargate, Lambda
 from diagrams.aws.database import RDSPostgresqlInstance
@@ -37,7 +39,7 @@ def draw(filename: str) -> None:
                     crm_db = RDSPostgresqlInstance("schema crm\nAI settings + crm.llm_call\n(ledger v2 shape)")
                 with group("generic", "Amazon Bedrock on acc2") as acc2_bedrock:
                     embed = Bedrock("Amazon Bedrock\nCohere Embed v4")
-                    candidates = Bedrock("Amazon Bedrock\n5 chat candidates\ncatalogued, no route")
+                    candidates = Bedrock("Amazon Bedrock\nNova Lite, Llama 4\njudge fallbacks")
                     guard = Bedrock("Amazon Bedrock Guardrails\nCRM PII scrub")
 
         with group("cloud", "AWS Cloud", "LLM account (acc3)") as acc3:
@@ -46,7 +48,7 @@ def draw(filename: str) -> None:
                 chat = Bedrock("Amazon Bedrock\nmain chat models\n(refusing since 2026-10-29)")
 
         with group("outside", "Outside services", "other failure domains") as outside:
-            openai = Internet("OpenAI API\njudge last resort")
+            openai = Internet("OpenAI API\nlast rung")
             anthropic = Internet("Anthropic API\nbuilt, no key yet")
             data = Internet("Jev · DataForSEO\nGeoapify")
 
@@ -73,7 +75,7 @@ def draw(filename: str) -> None:
         link(cis, invoker, "sts:AssumeRole (CIS, TripPlanner)", "control", out_of=callers)
         link(invoker, chat)
         link(crm, guard, "PII scrub")
-        link(cis, candidates, "eval only after the ladder", "async")
+        link(cis, candidates, "judge, validate fallback")
         link(cis, openai, "direct and data APIs (CIS)", out_of=callers, into=outside)
 
 

@@ -1,18 +1,18 @@
 ---
 id: APP-06-ai-register
 title: "AI Use Register"
-description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps. v1.2."
+description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps. v1.3."
 type: reference
 status: draft
 owner: nghiep
 audience: [engineer, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-api, aa-cis-worker, tripplanner-lambda, aa-crm-api]
-last_reviewed: 2026-11-02
+last_reviewed: 2026-11-03
 review_every_days: 30
 related: [ARCH-01-ai-gateway, APP-06-routes, APP-06-eval, APP-06-prompts, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-804, AA-820]
 ---
 
-# AI Use Register (v1.2)
+# AI Use Register (v1.3)
 
 One row per place where the ecosystem calls an AI model or a paid data provider. It answers, for each stage: what it
 is for, who owns the decision to change it, which provider and model family serve it today, which data may leave AWS,
@@ -36,6 +36,8 @@ which human checks the output before anyone relies on it.
 - **v1.2 (2026-11-02, S264):** the six tenant writer stages may fall back to the OpenAI API as their last rung (CIS
   migration 344, tech lead decision S264, ADR 0009 decision 5 amendment): their rows below and the tenant-terms
   provider list.
+- **v1.3 (2026-11-03, S265):** `a3_place_dedupe` gets the acc2 Llama 4 Maverick rung before the OpenAI API hop (CIS
+  339; its row and the acc2 section below).
 - **Who updates it:** the PR that adds, removes or re-routes a stage, adds a provider, or changes a stage's data
   scope, budget or human gate updates its row. A new provider also updates the tenant terms list (AA-820).
 
@@ -73,7 +75,7 @@ which human checks the output before anyone relies on it.
 | `a3_place_locate` | CIS | Name and locate places from tour text | Engineer on duty | Sonnet 5.5 → Haiku 5.5, Bedrock (acc3) / Anthropic | aws_only | No | Job cap `bedrock` (place geocode job) | Connection `enabled`; budget hard stop | S247 trial | None per item; flagged pins can be hidden (AA-997) |
 | `a3_place_card` | CIS | Draft a place card from web-sourced facts | Engineer on duty | GPT-6 Luna → GPT-5.6 Luna, Bedrock (acc3) / OpenAI | aws_only | No | Connection only | Connection `enabled` | AA-784 blind eval (S252) | Two-model check (`a3_place_card_check`, another maker) |
 | `a3_place_card_check` | CIS | Fact-check the place card draft | Engineer on duty | Haiku 5.5 → Sonnet 5.5, Bedrock (acc3) / Anthropic | aws_only | No | Connection only | Connection `enabled` | AA-784 blind eval | None per item |
-| `a3_place_dedupe` | CIS | Decide whether two places are the same | Engineer on duty | GPT-6 Luna (Bedrock acc3) → GPT-6 Luna (OpenAI API) / OpenAI | vendor_direct | No | Job cap `bedrock` × `job:place_dedupe` | Connection `enabled`; budget hard stop | S234 identity A/B | Two-model check (`a3_place_dedupe_check`) |
+| `a3_place_dedupe` | CIS | Decide whether two places are the same | Engineer on duty | GPT-6 Luna (Bedrock acc3) → Llama 4 Maverick (Bedrock acc2, CIS 339) → GPT-6 Luna (OpenAI API) / OpenAI, Meta | vendor_direct | No | Job cap `bedrock` × `job:place_dedupe` | Connection `enabled`; budget hard stop | S234 identity A/B | Two-model check (`a3_place_dedupe_check`) |
 | `a3_place_dedupe_check` | CIS | Second opinion on a merge | Engineer on duty | Haiku 5.5, Bedrock (acc3) / Anthropic | aws_only | No | Job cap (as above) | Connection `enabled` | S234 identity A/B | None per item |
 | `a3_place_embed`, `f10_embed` | CIS | Embeddings of places and content for search and similarity | Engineer on duty | Cohere Embed v4, Bedrock acc2 → acc3 / Cohere | aws_only | No | Connection only | Connection `enabled` | None (deterministic use) | Not applicable |
 | `supply_content_writer` | CIS (for Booking) | Customer description and highlights of a Booking hotel or service, from staff-entered facts treated as untrusted data | Tech lead | Sonnet 5.5, Bedrock (acc3) / Anthropic; GPT-6 Luna (OpenAI API) last resort | vendor_direct | No | Job cap `bedrock` × `job:supply_content_draft` (per day of that kind) + `SUPPLY_CONTENT_MAX_DRAFTS_PER_DAY` | Flag `SUPPLY_CONTENT_LLM=off` | None | Booking staff review each draft before Booking shows it |
@@ -81,7 +83,7 @@ which human checks the output before anyone relies on it.
 | DataForSEO (`data`) | CIS | Keyword volumes, SERP and question research for tours and segments | Engineer on duty | DataForSEO API, outside AWS | Keywords and place names only | No | Job cap `dfs` (a global day cap, seeded 10 USD/day, plus per-job rows: segment research, S1 SEO prefetch, question top-up) | Budget hard stop | Not applicable | Not applicable |
 | Geocoder (`data`) | CIS | Geocode and shape places (`services/places/geocoder.py`) | Engineer on duty | Geoapify, outside AWS (`geo.geocode_call`, ledger v2 row; registry row since CIS 322) | Place names only | No | Job cap `geocoder` (place geocode, relocate, shape jobs) | `PLACE_SHAPES_ENABLED` (shape job, default off); budget hard stop | AA-997 accuracy audit | Flagged pins hidden (AA-997) |
 | `s1_generate` (Bedrock Batch) | CIS | The same A1 rewrite sent as a Bedrock Batch job (`s1_batch`); each record writes a ledger row at the batch price | Tech lead | Haiku 4.5, Bedrock Batch (acc3) / Anthropic; **blocked**: AWS has not enabled Batch Inference on acc3 (AA-624) | aws_only | No | Connection only | Connection `enabled`; no batch is submitted while AA-624 is open | R2 `a1` | A2 review |
-| acc2 chat models (Nova Lite, Nova 2 Lite, Llama 4 Maverick, Llama 4 Scout, Kimi K3) | CIS | Catalogued with one acc2 deployment each (CIS 324). **Since CIS 331–333 (S263) Nova Lite and Llama 4 Scout are routed** as the acc2 fallback of judge and validate stages (section below); Nova 2 Lite, Llama 4 Maverick and Kimi K3 are on no route | Tech lead | Bedrock (acc2) / Amazon, Meta, Moonshot | aws_only | Nova Lite: yes, on the tenant judge / validate stages of 332–333 | Connection only | Connection `enabled`; the admin route PATCH | Contract smoke per stage before routing (`llm_contract_smoke`, AA-1026); the rest of the ladder (calibration, A/B, shadow) skipped knowingly for these fallbacks | An acc2 judge pass that would publish (`s1_brand_audit`, `t2_brand_audit`) is held for a human check (`BRAND_AUDIT_UNCALIBRATED_JUDGE`) |
+| acc2 chat models (Nova Lite, Nova 2 Lite, Llama 4 Maverick, Llama 4 Scout, Kimi K3) | CIS | Catalogued with one acc2 deployment each (CIS 324). **Since CIS 331–333 (S263) Nova Lite and Llama 4 Scout are routed** as the acc2 fallback of judge and validate stages, and since CIS 339 (S264) Llama 4 Maverick on `a3_place_dedupe` (section below); Nova 2 Lite and Kimi K3 are on no route | Tech lead | Bedrock (acc2) / Amazon, Meta, Moonshot | aws_only | Nova Lite: yes, on the tenant judge / validate stages of 332–333 | Connection only | Connection `enabled`; the admin route PATCH | Contract smoke per stage before routing (`llm_contract_smoke`, AA-1026); the rest of the ladder (calibration, A/B, shadow) skipped knowingly for these fallbacks | An acc2 judge pass that would publish (`s1_brand_audit`, `t2_brand_audit`) is held for a human check (`BRAND_AUDIT_UNCALIBRATED_JUDGE`) |
 | `adhoc_conn_test` (daily probe, Test connection) | CIS | One small call per enabled text deployment (`llm_connection_probe`, daily 05:00 UTC, at most 30) or one admin Test; writes `access_state` and `last_probe_at` | Engineer on duty | Every enabled connection | The connection's own scope; the prompt is a fixed test text | No | Connection only (under 1 USD a month on Dev, ADR 0009 decision 7) | `LLM_DAILY_PROBE` (on, Dev) | Not applicable | Not applicable |
 
 ### CIS: T-series (tenant content, Content studio)
@@ -127,11 +129,12 @@ is not from the writers' family (Anthropic), per decision 12. acc2 is `aws_only`
 | 331 (platform) | `a3_place_card_check` | Llama 4 Scout (Meta): another maker than the draft stage's Nova Lite, so the two-model check keeps two makers | Last fallback |
 | 332 (tenant) | `t2_brand_audit`, `t10_claims`, `t9_faq_answer_fit`, `t9_faq_filter` | Nova Lite (Amazon) | Last fallback |
 | 333 (platform and tenant) | `s1_judge`, `t2_judge`, `t7_debate_judge`, `t10_judge`, `t10_adjudicate`, `writing_memory_eval`, `writing_memory_mine` | Nova Lite (Amazon) | Before the OpenAI API hop, which stays last |
+| 339 (platform) | `a3_place_dedupe` | Llama 4 Maverick (Meta): another maker than its check stage's Nova Lite; asked for the object in the prompt (CIS 337) | Before the OpenAI API hop, which stays last |
 
-- **Open:** `a3_place_dedupe` keeps its route (acc3, then the OpenAI API). It needs an acc2 model of another maker
-  than its check stage's Nova Lite that also returns a structured verdict; Llama 4 Scout and Maverick refuse a forced
-  tool choice on Bedrock. CIS 337 lets the gateway ask Llama 4 models for the object in the prompt instead; the
-  Maverick rung follows in a later migration once its contract smoke passes.
+- **`a3_place_dedupe` (closed by CIS 339, S264):** it needed an acc2 model of another maker than its check stage's
+  Nova Lite that also returns a structured verdict; Llama 4 Scout and Maverick refuse a forced tool choice on Bedrock,
+  so CIS 337 asks Llama 4 models for the object in the prompt, and the Maverick rung went in after its contract smoke
+  passed (one call, 779 ms, 0.00021 USD).
 - **Human gate:** an acc2 pass of a brand audit that would publish is held as a manual check
   (`BRAND_AUDIT_UNCALIBRATED_JUDGE`), so an uncalibrated judge never publishes on its own.
 - **Rollback:** a new forward migration (remove the acc2 key from the routes), or the admin route PATCH per stage.
@@ -168,8 +171,8 @@ What the tenant terms and the partner-portal privacy notice name, derived from t
 - **DataForSEO, Geoapify**: keywords and place names only, never tenant text.
 - **Amazon (Nova) and Meta (Llama) models on Bedrock (acc2)**: fallback for judge and validate stages when acc3
   refuses (CIS 331–333, AWS first, vendor APIs last). On tenant stages only Amazon Nova Lite is routed; Meta Llama 4
-  Scout serves one platform stage (`a3_place_card_check`). Terms wording: "may be used as a fallback". The other acc2
-  models (Nova 2 Lite, Llama 4 Maverick, Moonshot Kimi K3) are on no route and stay out of the tenant terms until one
+  Scout and Llama 4 Maverick serve one platform stage each (`a3_place_card_check`, `a3_place_dedupe`). Terms wording:
+  "may be used as a fallback". The other acc2 models (Nova 2 Lite, Moonshot Kimi K3) are on no route and stay out of the tenant terms until one
   passes its contract smoke and is routed.
 
 ## OWASP Top 10 for LLM Applications (2025): controls and gaps
@@ -194,6 +197,7 @@ decision or issue that closes them, or say "none planned".
 
 | Version | Date | Change |
 |---|---|---|
+| v1.3 | 03/11/2026 (S265, AA-1020) | `a3_place_dedupe`: Llama 4 Maverick (acc2) before the OpenAI API hop (CIS 339, live since S264); the acc2 models row, section and tenant-terms note follow. |
 | v1.2 | 02/11/2026 (S264) | Tenant writer stages (`t2_generate`, `t2_flag_fix`, `t2_itinerary_nudge`, `t8_angle_gen`, `t9_write`, `t9_repair`) `vendor_direct` with GPT-6 Luna on the OpenAI API as the last rung (CIS 344, tech lead S264; ADR 0009 decision 5 amendment); tenant-terms provider list: an OpenAI model may write as a last resort. |
 | v1.1 | 02/11/2026 (S263 close) | acc2 Bedrock fallback for judge and validate stages (CIS 331–333; Nova Lite, Llama 4 Scout on `a3_place_card_check`; AWS first, vendor APIs last); `a3_place_dedupe` open; tenant-terms provider list; the A-series writer scope note now cites CIS 327 (was 335 by mistake). |
 | v1 | 01/11/2026 (S263, AA-1020) | Gateway v2 as built: ledger v2 for CIS, TripPlanner and the CRM; Jev and DataForSEO caps (318); tenant budget (321); provider registry rows (322); TripPlanner contract views (323); acc2 candidate models (324); Bedrock Batch, probe and CRM guard rows; circuit, deadline and re-queue as switches; LLM10 gaps updated. Routes unchanged since the 29/10 snapshot. |
