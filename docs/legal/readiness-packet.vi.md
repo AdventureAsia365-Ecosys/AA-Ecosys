@@ -7,9 +7,9 @@ status: draft
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-02
+last_reviewed: 2026-11-03
 review_every_days: 90
-related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, AA-886, AA-820, AA-839, AA-877]
+related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, SEC-04-ai-schedule, SEC-04-dpa-pack, AA-886, AA-820, AA-839, AA-877]
 lang: vi
 translation_of: docs/legal/readiness-packet.md
 ---
@@ -45,7 +45,7 @@ hay không, và cho chủ đề nào, là chủ doanh nghiệp quyết định.
 | 9 | Địa chỉ hỗ trợ | `support@` về một hộp thư chung |
 | 10 | Trang trạng thái | Chưa làm tới khi có đối tác trả tiền đầu tiên |
 | 11 | Gói Vercel | Lên Pro trước lần thu tiền đối tác đầu tiên (D-18) |
-| 12 | Điều khoản sử dụng AI | A hoặc C: áp dụng Phụ lục AI ngay (chưa có đối tác); cần trả lời trước 11/11/2026 |
+| 12 | Điều khoản sử dụng AI | Đã làm theo C: Phụ lục AI v1.0 được áp dụng (trưởng nhóm kỹ thuật, 03/11/2026) và đi kèm thư pilot; luật sư xem trước đại lý trả tiền đầu tiên |
 
 ## 1. Pháp nhân chịu trách nhiệm dữ liệu
 
@@ -179,20 +179,21 @@ nhóm kỹ thuật duyệt (DM-10.7). *Đề xuất:* A. *Chi tiết:*
 
 ## 12. Điều khoản sử dụng AI
 
-*Hiện trạng:* Chính sách sử dụng của Anthropic có hiệu lực từ 12/11/2026 (bản đang đăng đã được đọc lại ngày
-24/10/2026) và áp dụng cho các đối tác có nội dung được viết bằng Claude qua Amazon Bedrock. Phụ lục AI đầy đủ cho điều
-khoản đối tác đang ở bản Draft v0.2. Từ thay đổi AA-820 trên portal, mục 3 của điều khoản portal có một bản tóm tắt
-ngắn của phụ lục này (Phụ lục A.4), vẫn nằm dưới nhãn "Draft — pending legal review". Hiện chưa có đối tác thật hay đối
-tác trả tiền, nên không cần gửi thông báo cho ai: mỗi đối tác chấp nhận phụ lục khi tham gia, cùng với hợp đồng đối tác.
-CRM cho đại lý chưa gọi Claude; phụ lục phải nằm trong điều khoản cho đại lý trước khi CRM gọi Claude. Cần chủ doanh
-nghiệp trả lời trước ngày 11/11/2026, một ngày trước khi chính sách có hiệu lực. *Phương án:* (A) áp dụng phụ lục như
-bản hiện tại: bản tóm tắt trên portal đã có trước 11/11/2026, phụ lục được đính kèm mọi hợp đồng đối tác khi đối tác
-tham gia, còn việc nhờ luật sư xem là tùy chủ doanh nghiệp quyết định; (B) luật sư xem phụ lục trước, và portal giữ bản
-tóm tắt ở trạng thái bản nháp cho tới lúc đó; (C) áp dụng ngay như phương án A, và nhờ luật sư xem trước khi có đối tác
-trả tiền đầu tiên. *Đề xuất:* A hoặc C. Vì chưa có đối tác, áp dụng ngay không tốn gì và kịp mốc 12/11/2026; phương án C
-thêm một lần xem của luật sư trước khi đối tác đầu tiên trả tiền. *Chi tiết:*
-[bản nháp điều khoản sử dụng AI](tenant-terms-ai-clause-draft.md): từng phần đặt ở đâu (mục 0), phụ lục (mục 2) và 14
-câu hỏi cho luật sư (mục 6).
+*Hiện trạng (03/11/2026):* Chính sách sử dụng của Anthropic có hiệu lực từ 12/11/2026 (bản đang đăng đã được đọc lại
+ngày 03/11/2026). Chính sách áp dụng cho doanh nghiệp dùng Claude qua nhà cung cấp đám mây (Amazon Bedrock) **và** doanh
+nghiệp dùng API riêng của Anthropic, cùng người dùng cuối của sản phẩm của họ, nên áp dụng cho mọi đối tác trên cả hai
+đường. Ngày 03/11/2026 trưởng nhóm kỹ thuật đã áp dụng Phụ lục AI bản **v1.0** (phương án C của mục này, ADR 0019 b20):
+phụ lục được dùng ngay, và luật sư xem trước khi có đại lý trả tiền đầu tiên. Bản v1.0 bổ sung: đường gọi trực tiếp API
+của Anthropic và OpenAI chạy trên tài khoản đứng tên công ty Adventure Asia (b19); quy định không dùng AI tư vấn cho một
+khách cụ thể về bảo hiểm, thị thực hay trả góp nếu không có người có chuyên môn xem trước và không báo có dùng AI; hạn
+mức AI hằng tháng; và một điều khoản cho thư pilot. Hiện vẫn chưa có đối tác thật nên không cần báo cho ai: điều khoản
+**đi kèm thư pilot**, và mỗi đối tác sau này chấp nhận phụ lục cùng hợp đồng đối tác. Mục 3 điều khoản Content studio và
+điều khoản CRM có bản tóm tắt v1.0 (Phụ lục A.4), điều khoản Trip Planner ghi rõ mô hình viết nội dung AI, và tất cả vẫn
+giữ nhãn "Draft — pending legal review" cho tới khi luật sư đọc phụ lục. *Chủ doanh nghiệp quyết định:* câu chữ của thư
+pilot quanh điều khoản này, hạn mức AI hằng tháng của pilot, và thời điểm mời luật sư (muộn nhất là trước đại lý trả
+tiền đầu tiên). *Chi tiết:* [Phụ lục AI v1.0](tenant-ai-schedule.md): từng phần đặt ở đâu (mục 2), phụ lục (mục 3),
+điều khoản cho thư pilot (mục 5) và 16 câu hỏi cho luật sư (mục 7). Phần 2, bộ hồ sơ xử lý dữ liệu cho pilot, có dàn ý
+ở [dpa-pack-outline.md](dpa-pack-outline.md).
 
 ## Phụ lục A: nội dung hiện tại của bốn trang
 
@@ -202,12 +203,15 @@ AA-CIS-App sang AA-Partner cùng lịch sử thay đổi (AA-979); nội dung c�
 ở mục 3 của A.4 (24/10/2026) và danh sách nhà cung cấp AI ở mục 5–6 của A.3 và mục 3 của A.4 (31/10/2026, S262, lấy từ
 [AI Use Register](../architecture/ai-use-register.md)). Mỗi trang có nhãn "Draft — pending legal review". Hai trang Trip Planner ghi phiên bản
 "Draft v0.1" (20 October 2026), dù nội dung đã được thêm phần đăng nhập của khách và phần Geoapify về sau; hai trang
-portal ghi "Draft v0.3" (31 October 2026) từ thay đổi danh sách nhà cung cấp. Link được ghi bằng chữ hiển thị. Các trang chỉ có bản tiếng
+portal ghi "Draft v0.4" (3 November 2026) từ thay đổi Phụ lục AI v1.0. Link được ghi bằng chữ hiển thị. Các trang chỉ có bản tiếng
 Anh; phần dưới đây là bản dịch để tham khảo, còn câu chữ pháp lý là bản tiếng Anh. Nếu trang thay đổi sau các commit trên,
 trang đang chạy là bản đúng.
 
 Có hai việc cần sửa nội dung trang đã biết. Mục 6 của chính sách quyền riêng tư portal vẫn ghi Vercel lưu trữ các trang
-portal, dù portal nay chạy trên AWS. Hai trang Trip Planner đã đổi sau ngày 20/10/2026 nhưng vẫn ghi ngày đó.
+portal, dù portal nay chạy trên AWS. Hai trang Trip Planner đã đổi sau ngày 20/10/2026 nhưng vẫn ghi ngày đó cho tới
+03/11/2026 (Draft v0.2). Mục 3 của A.4 dưới đây là nội dung ngày 03/11/2026 (AA-820, Phụ lục AI v1.0, portal Draft
+v0.4); mục 3 của A.2 cũ hơn trang đang chạy, trang này từ đó ghi rõ mô hình viết phần thuyết minh và dẫn link Chính sách
+sử dụng của Anthropic.
 
 ### A.0 Các điểm cần xác nhận trên bốn trang
 
@@ -480,8 +484,12 @@ Pháp nhân vận hành là [to be confirmed].
   có thể được dùng làm đường dự phòng. Khi Claude trên Amazon Bedrock không dùng được, bước viết có thể chuyển sang
   Claude qua API của Anthropic và, khi không còn cách nào khác, sang một mô hình của OpenAI qua API của OpenAI, gọi trực
   tiếp và có trần chi tiêu.
-- Bạn phải tuân theo chính sách sử dụng của các nhà cung cấp này, gồm Chính sách sử dụng của Anthropic, Chính sách sử
-  dụng của OpenAI và Chính sách sử dụng chấp nhận được của AWS, cũng như các điều khoản này.
+- Mọi tính năng AI chạy trên tài khoản mà Adventure Asia đứng tên công ty với các nhà cung cấp này. Bạn không nhận tài
+  khoản hay khoá nào của họ, và không được tìm cách gọi tới họ qua portal ngoài các tính năng AI của portal.
+- Chính sách sử dụng của các nhà cung cấp này áp dụng cho bạn với tư cách người dùng một dịch vụ xây trên mô hình của
+  họ, dù Adventure Asia gọi mô hình theo đường nào. Bạn phải tuân theo các chính sách đó, gồm Chính sách sử dụng của
+  Anthropic, Chính sách sử dụng của OpenAI và Chính sách sử dụng chấp nhận được của AWS, cũng như các điều khoản này.
+  Chính sách sử dụng mới của Anthropic áp dụng từ ngày 12/11/2026.
 - Bạn không được dùng portal hay nội dung của portal để:
   - tạo đánh giá, xếp hạng hay lời chứng thực giả, hoặc trích dẫn và câu chuyện được trình bày như của khách hàng trong
     khi họ không nói ra;
@@ -492,14 +500,24 @@ Pháp nhân vận hành là [to be confirmed].
   - gửi thư rác, hoặc đăng bài nhằm lách giới hạn đăng bài;
   - đưa thông tin sai hoặc gây hiểu lầm, nhất là về thị thực và quy định nhập cảnh, sức khoẻ, an toàn, giá hoặc tình
     trạng chỗ;
-  - tư vấn về bảo hiểm, tài chính, thị thực hay các vấn đề rủi ro cao khác, trừ khi một người có chuyên môn xem lại trước
-    khi gửi và người nhận được cho biết có dùng AI;
-  - lách các bước kiểm tra nội dung, giới hạn hay các biện pháp bảo vệ khác của Adventure Asia.
-- Nếu luật hoặc quy định của một kênh yêu cầu nội dung phải ghi nhãn do AI tạo, bạn thêm nhãn đó.
-- Bạn xem lại từng bài trước khi đăng, và bạn là người đăng bài. Việc bạn yêu cầu Adventure Asia đăng một bài, trên
-  portal hay qua API, xác nhận rằng bạn đã xem lại bài đó.
-- Adventure Asia có thể giữ lại, viết lại hoặc từ chối tạo hay đăng nội dung vi phạm các quy định này. Việc gỡ bài và tạm
-  ngưng tài khoản được nêu ở mục 4 và 5.
+  - tư vấn cho một người cụ thể về bảo hiểm, tài chính, thị thực hay các vấn đề rủi ro cao khác, trừ khi một người có
+    chuyên môn xem lại trước khi gửi và người nhận được cho biết có dùng AI (thông tin du lịch chung, ví dụ có những quy
+    định thị thực nào, không phải là tư vấn);
+  - lách các bước kiểm tra nội dung, giới hạn hay biện pháp bảo vệ khác của Adventure Asia;
+  - chạy bất kỳ tự động hoá hay tác tử AI nào qua API làm một trong các việc trên: bạn chịu trách nhiệm về nó.
+- Nếu luật hoặc quy định của một kênh yêu cầu ghi nhãn nội dung do AI tạo, bạn thêm nhãn đó.
+- Nếu bạn dùng nội dung AI để trao đổi trực tiếp với khách, ví dụ trong khung chat hay tin trả lời tự động, hãy cho khách
+  biết họ đang nói chuyện với AI, ít nhất ở đầu mỗi cuộc trò chuyện.
+- Bạn xem lại từng bài trước khi đăng, và bạn là người đăng. Việc bạn bảo Adventure Asia đăng một bài, trên portal hay
+  qua API, xác nhận rằng bạn đã xem lại bài đó.
+- Adventure Asia có thể giữ lại, viết lại hoặc từ chối tạo hay đăng nội dung vi phạm các quy định này. Việc gỡ bài và
+  tạm ngừng tài khoản nằm ở mục 4 và 5.
+- Gói của bạn có thể có hạn mức AI hằng tháng. Khi dùng hết, tính năng AI có thể tạm dừng tới tháng sau hoặc tới khi
+  Adventure Asia nâng hạn mức; không thu thêm tiền cho việc dùng AI.
+- Adventure Asia lưu hồ sơ việc dùng AI (mô hình, nhà cung cấp, bước, thời gian và chi phí, không lưu chính văn bản) và
+  việc đăng bài, để vận hành, bảo vệ dịch vụ và chứng minh các quy định này được tuân thủ.
+- Mục này tóm tắt Phụ lục AI v1.0 (AI Schedule v1.0) đính kèm hợp đồng đối tác của bạn. Nếu hai văn bản khác nhau, Phụ
+  lục AI được áp dụng.
 
 **4. Đăng bài lên kênh của bạn.**
 

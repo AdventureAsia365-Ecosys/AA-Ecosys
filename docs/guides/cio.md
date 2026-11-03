@@ -157,7 +157,7 @@ Raised as calm proposals with options; whether a lawyer is needed is her call.
 
 | Item | Status |
 |---|---|
-| Tenant terms: clause on AI-written content | Draft in `docs/legal/tenant-terms-ai-clause-draft.md`; her answer wanted by 2026-11-11 (AA-820) |
+| Tenant terms: clause on AI-written content | AI Schedule v1.0 in `docs/legal/tenant-ai-schedule.md`, adopted by the tech lead on 2026-11-03 (ADR 0019 b20) and shipped in the pilot letter; counsel reviews it before the first paying agency (AA-820) |
 | Privacy policy, terms of use, sub-processor list, records of processing | Draft pages live (TripPlanner and portal `/privacy`, `/terms`); [register](../legal/register.md) and [readiness packet](../legal/readiness-packet.md) (AA-886) |
 | DPA template for tenants (before any tenant CRM data) | Draft [DPA template](../legal/dpa-template.md); required before the first tenant uses a CRM (DM-6.8) |
 | Access and deletion requests | [DSAR and erasure runbook](../legal/dsar-erasure-runbook.md) (CIS erasure job built; tenant erasure drilled on Dev 2026-10-23; traveller part and the Booking / TripPlanner scripts still to do); runs logged in the [retention log](../legal/retention-log.md) |

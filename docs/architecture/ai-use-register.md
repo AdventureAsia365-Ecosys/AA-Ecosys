@@ -1,7 +1,7 @@
 ---
 id: APP-06-ai-register
 title: "AI Use Register"
-description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps. v1.3."
+description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps. v1.4."
 type: reference
 status: draft
 owner: nghiep
@@ -12,7 +12,7 @@ review_every_days: 30
 related: [ARCH-01-ai-gateway, APP-06-routes, APP-06-eval, APP-06-prompts, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-804, AA-820]
 ---
 
-# AI Use Register (v1.3)
+# AI Use Register (v1.4)
 
 One row per place where the ecosystem calls an AI model or a paid data provider. It answers, for each stage: what it
 is for, who owns the decision to change it, which provider and model family serve it today, which data may leave AWS,
@@ -157,7 +157,11 @@ is not from the writers' family (Anthropic), per decision 12. acc2 is `aws_only`
 
 ### Providers, for the tenant terms (AA-820)
 
-What the tenant terms and the partner-portal privacy notice name, derived from the rows above:
+What the tenant terms and the partner-portal privacy notice name, derived from the rows above. Since S266 the tenant
+terms summarise the [AI Schedule v1.0](../legal/tenant-ai-schedule.md) (AA-820): the Content studio `/terms` §3 and the
+CRM `/legal/terms` §1 (AA-Partner) take its version and the three policy links from one list, and the Trip Planner
+`/terms` §3 names the narration model (`tp_compose`). Every direct API path below runs on an account held in the AA
+company's name (ADR 0019 b19); tenants never hold a provider key.
 
 - **Anthropic (Claude), through Amazon Bedrock**: every writer stage (the primary).
 - **OpenAI models, through Amazon Bedrock**: judge, audit and extraction stages that score or check drafts.
@@ -197,6 +201,7 @@ decision or issue that closes them, or say "none planned".
 
 | Version | Date | Change |
 |---|---|---|
+| v1.4 | 03/11/2026 (S266, AA-820) | Tenant-terms note: the AI Schedule v1.0 and where each app page summarises it; direct API accounts in the AA company name (ADR 0019 b19). No route change. |
 | v1.3 | 03/11/2026 (S265, AA-1020) | `a3_place_dedupe`: Llama 4 Maverick (acc2) before the OpenAI API hop (CIS 339, live since S264); the acc2 models row, section and tenant-terms note follow. |
 | v1.2 | 02/11/2026 (S264) | Tenant writer stages (`t2_generate`, `t2_flag_fix`, `t2_itinerary_nudge`, `t8_angle_gen`, `t9_write`, `t9_repair`) `vendor_direct` with GPT-6 Luna on the OpenAI API as the last rung (CIS 344, tech lead S264; ADR 0009 decision 5 amendment); tenant-terms provider list: an OpenAI model may write as a last resort. |
 | v1.1 | 02/11/2026 (S263 close) | acc2 Bedrock fallback for judge and validate stages (CIS 331–333; Nova Lite, Llama 4 Scout on `a3_place_card_check`; AWS first, vendor APIs last); `a3_place_dedupe` open; tenant-terms provider list; the A-series writer scope note now cites CIS 327 (was 335 by mistake). |

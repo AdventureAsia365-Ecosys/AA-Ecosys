@@ -25,7 +25,7 @@ related: [SEC-04, SEC-04-packet, AA-886, AA-820, AA-839, AA-877]
 |---|---|
 | Status | Draft v0.1, 21/10/2026 |
 | Placeholders | `[●]` = a value counsel or the business fills in. *Drafting notes* (italics) are for the reviewer and are not part of the agreement. |
-| Companion | AI acceptable-use clause: [`tenant-terms-ai-clause-draft.md`](tenant-terms-ai-clause-draft.md) |
+| Companion | AI acceptable-use clause: [`tenant-ai-schedule.md`](tenant-ai-schedule.md) (v1.0). The B2B pack that replaces this template for the pilot is outlined in [`dpa-pack-outline.md`](dpa-pack-outline.md) |
 
 ## 1. Parties and roles
 
