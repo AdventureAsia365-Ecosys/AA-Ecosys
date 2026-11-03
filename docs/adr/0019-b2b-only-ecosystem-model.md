@@ -53,7 +53,9 @@ The S265 audit found that the codebase already has most of the pieces: tenant RL
 - Booking gains a `finance` role (d9). This takes three changes:
   - a **CIS** migration adds `'finance'` to `staff_app_grant_role_chk`. The check is on `shared.staff_app_grant` (owner `cis_owner`), which `schema-ownership.md` gives to CIS, so Booking may not migrate it;
   - Infra adds a Cognito group `booking-finance` in `identity.tf` (proposed precedence 75, between `booking-content_creator` 70 and `crm-platform-admin` 80);
-  - Booking reads the role from `cognito:groups` or the bridge token, like its other roles, and gates the invoice and payment routes with it.
+  - Booking reads the role from the Cognito group `booking-finance` in `cognito:groups`, backed by the CIS grant in
+    `shared.staff_app_grant` (`role = 'finance'`), like its other roles, and gates the invoice and payment routes with
+    it. The finance role is not read from the CIS → Booking bridge token, which AA-911 retires.
 - The full role table and permission matrix are in `clarifications.md` section 3.
 
 **d4 Tenant scope enforced on the server (TL-4).**
@@ -309,18 +311,32 @@ Each one carries an "Amended by ADR 0019 (S265)" pointer in its header.
 
 ## Open items
 
-The approval notes (TL-1, TL-3, TL-7, TL-10, TL-11, TL-19, TL-21 explanations; TL-6 keys; TL-9 UI merge; TL-16 prod and pilot plan; TL-20 channels; TL-8; TL-22; BO-4; BO-8; BO-10; BO-14) are all answered in [`clarifications.md`](../audits/2026-11-03-S265-ecosystem-restructure/clarifications.md), and the answers are folded into d1–d23 above. Still open (`clarifications.md` section 7):
+The approval notes (TL-1, TL-3, TL-7, TL-10, TL-11, TL-19, TL-21 explanations; TL-6 keys; TL-9 UI merge; TL-16 prod and pilot plan; TL-20 channels; TL-8; TL-22; BO-4; BO-8; BO-10; BO-14) are all answered in [`clarifications.md`](../audits/2026-11-03-S265-ecosystem-restructure/clarifications.md), and the answers are folded into d1–d23 above. The items left open in `clarifications.md` section 7 and the three questions of the S265 plan review (`docs/audits/2026-11-03-S265-plan-issue-review/review.json`) are settled.
 
 Settled by the tech lead later the same day (S265):
 
 1. `ai_ops` may read tenant text in Writing Lab: permission `tenant_content.read`, Lab pages only, every view logged.
-2. CIS admin and Booking admin stay on Vercel while there is only Dev and only AA staff use them; they move to ECS
-   on the TripPlanner pattern (d23) as part of the production set-up (`aa-prod`), not before.
+2. The staff apps leave Vercel on **Dev first**, as d23 says (this replaces the earlier "stay on Vercel until
+   `aa-prod`" line). The two staff apps (CIS admin, Booking admin) run together in **one Fargate Spot task** (two
+   containers, 0.5 vCPU / 1 GB) behind the shared ALB. TripPlanner runs as **one Spot task** of its own with
+   CloudFront and the CLOUDFRONT-scope WAF. Dev total about 20–22 USD a month. Production sizing (task count,
+   on-demand vs Spot, high availability) is decided later with the `aa-prod` set-up. The staff move and the
+   bridge retirement are slotted in AA-911.
 3. Cost yeses given, each switched on only when its phase needs it: Fargate for the TripPlanner frontend (8.3–16.6
    USD a month, R5), the CLOUDFRONT-scope WAF (about 7.4 USD a month at pilot, about 14 USD at growth, R5), and
    14-day RDS backups (under 1 USD a month, before the first pilot data on Dev, d16).
 4. "No access keys" (d6) means: one sign-in for tenant users (partner pool, MFA) and no tenant API keys; AA's own
    app-to-app client credentials (`aa-m2m`) stay; a machine API for agencies waits for R8.
+5. **Pilot exit (q-pilot, S265 plan review).** If the Dev pilot (d16, at most 8 weeks) starts with no go-live date,
+   the `aa-prod` build (AA-1004 P2) starts at the latest in week 3 of the pilot, so that the pilot tenant can move
+   to production inside the 8 weeks. `aa-prod` cost counts only from its first apply.
+6. **SES for the tour-retirement fan-out (q-ses, S265 plan review).** Yes to SES mail for the d20 fan-out to
+   tenants (AA-1039): 0.10 USD per 1,000 mails, a few cents a month at pilot volume. This is the separate cost yes
+   that [Consequences](#consequences) asks for.
+7. **AA-741 paid T-series run (q-aa741, S265 plan review).** Yes, at most 20 USD and at most 50 tours, through the
+   interim OpenAI API / acc2 path while acc3 is closed. The run stays inside the gateway caps (the OpenAI connection
+   has a 10 USD a month hard stop, CIS 327); raising that cap is not part of this yes. It is pilot-period work, not
+   a pilot gate.
 
 **Follow-ups (R0, AA-1034):**
 

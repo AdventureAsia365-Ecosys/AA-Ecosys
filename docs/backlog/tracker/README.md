@@ -1,6 +1,6 @@
 # Master plan tracker (HTML)
 
-A one-page view of the living backlog for Nghiệp: milestones (M1–M5 plus the CRM and portal-move milestones C-M1, P-M1, C-M2, C-M3) with their Done-when criteria, the per-session queue, time-gated checks, items waiting on people, every open Linear issue (filter + sort) and a per-session log.
+A one-page view of the living backlog for Nghiệp: milestones (since S265 the ADR 0019 phases: M-R0, M-R1, M-R3, M-R2, M-P1 pilot milestone 1, M-R4, M-P2 R5 + pilot milestone 2, M-R6, M-R7, plus M1b gateway/FinOps, M2a CIS quality, M5 prod, CRM-after-R3 and parked) with their Done-when criteria, the per-session queue, time-gated checks, items waiting on people, every open Linear issue (filter + sort) and a per-session log.
 
 - Live page (private claude.ai artifact, owner Nghiệp): <https://claude.ai/artifact/Q4LvqJyX5wsqRgZZQ75aoF>
 - Files: `index.html` (layout + script, rarely changes) and `plan.json` (all content). The page reads `plan.json` next to it.
@@ -45,7 +45,7 @@ Do it in the same root PR that updates `docs/backlog/README.md`.
 1. After the session's Linear updates: `python3 tools/linear/plan_sync.py --write --session S<nnn> --log-draft`. Read the diff: every `NEW` issue needs a slot, every `WARN` a decision.
 2. Edit the hand-owned parts of `plan.json`:
    - `next_session` when it is not the next S number.
-   - `issues[]`: `milestone`, `session`, `size`, `next`, `needs` in line with backlog §3/§4 (new issues first). `session` uses the labels in `SES_ORDER` in `index.html` (e.g. `S247`, `≥S263`, `later`, `parked`); the lanes show `S253`…`S266` (window moved at the S262 close; S246 master plan, re-slotted at the end of S248 and S260). `next` starts with the work lane (`L0`…`L7`, `LP`) of the plan in `docs/audits/2026-10-21-S246-master-plan/plan-and-status.json`; `≥S263` holds unslotted work after S262, `≥03/11` the date-gated items. When the window moves, update `SES_ORDER`, `LANES` and `MS_ORDER` in `index.html`.
+   - `issues[]`: `milestone`, `session`, `size`, `next`, `needs` in line with backlog §3/§4 (new issues first). `session` uses the labels in `SES_ORDER` in `index.html` (`S265`…`S280`, the date-gated `≤11/11`, `≥10/11`, `≥19/11`, `≥01/12`, and `after S280`, `LLM path`, `TL-11 lift`, `at go-live`, `unscheduled`, `later`, `05/2027`, `parked`); the lanes show `S265`…`S280` (window re-cut at S265 after the ADR 0019 plan review, `docs/audits/2026-11-03-S265-plan-issue-review/`). `next` starts with the phase (`R0`…`R7`, `Gateway`, `M2a`, `Prod`, `CRM`, `UAT`, …) and a short Vietnamese line. When the window moves, update `SES_ORDER`, `LANES` and `MS_ORDER` in `index.html`.
    - `milestones[].criteria[].done`: tick what the session proved with live evidence; change `status` (`active` / `next` / `blocked` / `later`).
    - `milestones[].risks[]` and `due` (optional, below): review them with the weekly report (PR-20); add a risk when a session finds one, drop it when its trigger can no longer fire.
    - `checks[]` and `waiting[]`: mirror backlog §1 and §2.
