@@ -129,7 +129,7 @@ Read from each repo's `.github/workflows/` on `main` on 2026-10-19; the CI rows 
 | AA-TripPlanner-Web | `deploy-lambdas.yml` | push to `main` (`backend/**`); dispatch | Build + deploy Lambda code | deploy role trusts `main` only |
 | AA-TripPlanner-Web | `vercel-deploy.yml` | PR / push `main` (`frontend/**`); dispatch | Vercel deploy | |
 | AA-CIS-Infra | `terraform-plan.yml` | PR to `main` | Terraform Plan (dev) | plan comment on the PR |
-| AA-CIS-Infra | `terraform-apply.yml` | dispatch from `main` | Terraform Apply (prod) | GitHub environment `prod` = Dev resources (rename: AA-880, D-16) |
+| AA-CIS-Infra | `terraform-apply.yml` | dispatch from `main` | Terraform Apply (dev) | GitHub environment `dev` = Dev resources (renamed from `prod` in AA-1023, ADR 0012 decision 6) |
 | AA-CIS-Infra | `db-migrate.yml` | dispatch from `main` | Migrate | modes check / apply / set-password / run-script |
 | AA-CIS-Infra | `db-schema-dump.yml` | nightly 03:43 UTC; after each apply; dispatch | Dump schema, regenerate reference | opens the root PR `bot/db-schema-reference` |
 | AA-CIS-Infra | `db-isolation-probe.yml` | nightly 04:13 UTC; after each apply; dispatch | Isolation probe | read-only |
@@ -162,7 +162,7 @@ the staff directory reconcile; a second schedule enqueues the retention kinds) a
 
 No prod environment exists. [ADR 0012](../adr/0012-environment-model.md) (accepted S257) sets the model: prod on acc2 next to Dev, with its own environment
 resources and the compensating controls of decision 4; Terraform root `accounts/aa365-prod` (decision 5); the
-GitHub environment `prod` renamed to `dev` first (decision 6); releases promote the Dev-verified backend image by
+GitHub environment `prod` renamed to `dev` first (decision 6, done in AA-1023); releases promote the Dev-verified backend image by
 digest through a Deploy Prod workflow that only the tech lead dispatches, frontends rebuilt in Vercel prod projects
 (decisions 7–8); personal data never leaves prod (decision 9); the go-live gate of decision 11. The build (phase 3)
 starts when the business owner sets a go-live date (D-16, D-17). The prod blueprint, readiness checklist and prod
