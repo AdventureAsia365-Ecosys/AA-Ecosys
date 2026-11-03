@@ -41,10 +41,10 @@ related: [FIN-02, OPS-08, FIN-01, OPS-08-s262-capacity-review-prelim, OPS-08-s26
 
 ## Tóm tắt cho chủ doanh nghiệp (VI)
 
-1. Tổng chi phí tháng 10/2026: **482.77 USD** (hạ tầng AWS 213.87 USD, AI tính ngoài hoá đơn AWS 268.85 USD, tài khoản quản lý AWS 0.04 USD).
+1. Tổng chi phí tháng 10/2026: **482.77 USD** (hạ tầng AWS 213.87 USD, AI tính ngoài hoá đơn AWS 268.85 USD, tài khoản quản lý AWS 0.04 USD). Đây là mức **sử dụng**; phần AI trên tài khoản AI ngày 01–28/10 (khoảng 236 USD) do nhà cung cấp cũ trả trong thời gian tài khoản còn ở tổ chức của họ, nên tiền công ty thực trả cho tháng 10 thấp hơn khoảng 236 USD.
 2. So với tháng 09/2026 (177.74 USD): **+171.6 %** (gấp khoảng 2.7 lần).
 3. Thay đổi lớn nhất: CIS (content + catalog) +263.50 USD; lý do: AI viết lại toàn bộ catalogue tour hai lần trong tháng (đầu tháng chạy lại 14 nước, 24–25/10 viết lại 810 tour), dựng thẻ địa điểm và các vòng thử chất lượng bài viết (AI 269 USD); hạ tầng AWS tăng 79 USD vì có thêm hệ thống đặt tour, CRM cho đại lý, máy chạy việc nền riêng, cơ sở dữ liệu lớn hơn kèm bản sao lưu trước mỗi đợt viết lại, khoảng 100 cảnh báo và gần 50 khoá bảo mật.
-4. Ngân sách AWS tháng: đã dùng 213.87 / 300.00 USD (71 %), còn 86.13 USD; tài khoản AI dùng 236.27 / 250 USD (94 %), không vượt.
+4. Ngân sách AWS tháng: đã dùng 213.87 / 300.00 USD (71 %), còn 86.13 USD; tài khoản AI dùng 236.27 / 250 USD (94 %), không vượt; từ 29/10 tài khoản AI tự trả (0.20 USD tới 31/10).
 5. Chi phí mỗi tour xuất bản: 0.34 USD (riêng AI 0.30 USD); số liệu môi trường Dev, chỉ để xem xu hướng. Tháng 11 dự kiến thấp hơn: không còn đợt viết lại cả catalogue và số cảnh báo đã giảm từ 101 xuống 27 ngày 01/11. Cần quyết định: không có.
 
 ## Khác bản sơ bộ (01/11 → 03/11)
@@ -183,9 +183,14 @@ and quantity); daily: [`data/acc2-daily-usage-2026-10.csv`](data/acc2-daily-usag
   gateway routes to OpenAI and acc2 models meanwhile.
 - **Not in the bundle:** DataForSEO (`shared.dfs_call_log`) and the geocoder (`geo.geocode_call`): **chưa rõ**
   (finding P8). Geoapify ran on its free plan (S259).
-- **Discrepancy to resolve:** the S263 alerting audit read acc3's October total as 0.20 USD, while the CIS client's
-  acc3 snapshot (refetched 02/11) shows 236.27 USD of Bedrock. They cannot both be acc3; the S263 read probably used
-  another account or profile. Not checked here (no acc3 request in this lane), finding P11.
+- **acc3: usage vs what we pay (P11, resolved by the orchestrator 03/11):** both numbers are acc3 and both are right.
+  The CIS snapshot rows for 01–26/10 (236.40 USD, 155 rows) were fetched on 27/10, while acc3 was still a member of the
+  former reseller's organization; the 02/11 refetch returned only 29–31/10 (0.20 USD, 12 rows). A direct read of
+  acc3's own Cost Explorer on 03/11 (profile of acc3, one request) shows the same 0.20 USD for October (Claude Sonnet
+  4.6 0.11, Cost Explorer 0.07, tax 0.02): once an account leaves an organization, its spend from the member period
+  belongs to the former payer's bill. So **236.27 USD is real usage** (the gateway estimate 248.31 agrees) **but it was
+  billed to the former reseller** under its trial cover; the company pays only the 0.20 USD from 29/10. The S263
+  alerting audit read acc3 after 29/10 and was not wrong. Cash view of October: about 482.77 − 236.07 ≈ **246.70 USD**.
 
 ### By stage and role — 233.93 USD (top 20)
 
@@ -281,7 +286,7 @@ nothing applied. No item adds a paid AWS service. Ask before creating any Linear
 | P8 | DataForSEO and geocoder spend outside the bundle | Add `shared.dfs_call_log` and `geo.geocode_call` totals to `collect_month.py` (PART=cis) | investigate | 0 | open |
 | P9 | Inter-AZ traffic between Fargate tasks and the NAT instance ≈ 20 GB/day from 14/10 (9.14 USD in October on ECS + EC2-Other, ≈ 12–13 USD per full month), not LLM traffic | Find the source first: one CloudWatch Logs Insights query on the VPC flow log (already on, 365-day retention) grouped by source ENI / destination port for one day; then decide (for example keep the busiest service in the NAT's Availability Zone). No interface endpoint before the source is known (each costs more than it would save) | investigate | ≈ 0.01–0.05 USD once | new |
 | P10 | RDS backup storage beyond the free allowance ≈ 6.8 USD/month at the end-October level; the 20 `pre-s1` snapshots expire only ≈ 23–25/11 | Either let them expire (≈ 5 USD more in November) or delete the ones the catalogue no longer needs, through the DRY RUN procedure (`skill/aa-cis-schema/references/destructive-ops.md`) | tune | saves ≈ 4–5 USD once | new |
-| P11 | The S263 alerting audit read acc3's October total as 0.20 USD; the CIS acc3 snapshot says 236.27 | Re-check which account the S263 acc3 profile reached (`sts get-caller-identity`); correct the audit if it read another account | investigate | 0 | new |
+| P11 | acc3 October: CIS snapshot 236.27 USD vs acc3's own Cost Explorer 0.20 USD | Resolved 03/11: the 01–26/10 usage was billed to the former reseller (member period); the company pays 0.20 USD. From November the report shows usage and cash side by side for acc3 | done | 0.01 | resolved |
 | P12 | API Gateway carries a steady 15–20k REST requests/day from 25/10, likely the CRM portal calling the CIS API through the public host | Confirm from the API Gateway access log by route; if confirmed and it grows, consider the private path (ALB inside the VPC) for server-to-server calls | investigate | 0 | new |
 
 ## Data
