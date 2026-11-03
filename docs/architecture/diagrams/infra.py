@@ -68,7 +68,7 @@ def draw(filename: str) -> None:
                             "Booking media · TP artifacts\nCloudTrail · ALB logs")
                     secrets = SecretsManager("AWS Secrets Manager\none DSN secret per app")
                     kms = KMS("AWS KMS, 4 CMKs\nCloudTrail · CRM data\nCRM ingest · CRM seal")
-                    bedrock2 = Bedrock("Amazon Bedrock\nembeddings · CRM guardrail\n5 chat candidates, no route")
+                    bedrock2 = Bedrock("Amazon Bedrock\nembeddings · CRM guardrail\n3 judge fallback models")
                     cognito = Cognito("Amazon Cognito\nfour user pools")
                     waf_id = WAF("AWS WAF\non 3 user pools")
                     triggers = Lambda("AWS Lambda outside the VPC\n4 Cognito triggers\nRDS snapshot expiry")

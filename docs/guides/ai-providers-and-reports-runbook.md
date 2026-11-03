@@ -126,7 +126,8 @@ During the dev phase the tech lead is the engineer on duty.
 - The main chat-model account has refused every call since 2026-10-29: its rows show **Circuit open** or access
   denied, and AI stages wait or fail
   ([postmortem](../ops/postmortems/2026-10-29-acc3-bedrock-access-refusal.md)). Search embeddings still run.
-- The direct Anthropic API path is not switched on yet; the OpenAI API is only the last resort of the judge stages.
+- The direct Anthropic API path is not switched on yet. The OpenAI API is the last fallback of the judge stages and of
+  the writing stages (platform and tenant), used only when every AWS path is blocked, under a 10 USD monthly cap.
 - Dev numbers are small and unstable: test runs, not business volume. Do not read a trend from them.
 
 ## Sources (for maintainers)

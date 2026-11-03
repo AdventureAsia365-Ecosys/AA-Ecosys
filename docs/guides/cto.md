@@ -51,7 +51,7 @@ flowchart LR
   traveller -->|"plans a trip, sends an inquiry"| eco
   partner -->|"runs its CRM, gets tenant content"| eco
   eco -->|"writes and judges content, embeddings"| bedrock
-  eco -.->|"judge last resort; Anthropic has no key yet"| direct
+  eco -.->|"last fallback of judges and writers; Anthropic has no key yet"| direct
   org -.->|"guard policies, sign-in, audit, budgets"| eco
   eco -->|"content verdicts"| jev
   eco -->|"search demand, geocoding, maps"| dfs

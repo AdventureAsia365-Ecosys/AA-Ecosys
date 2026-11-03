@@ -131,7 +131,8 @@ Trong giai đoạn dev, tech lead là kỹ sư trực.
 - Tài khoản model chat chính từ chối mọi lời gọi từ 29/10/2026: các dòng của nó hiện **Circuit open** hoặc bị từ chối
   truy cập, và các bước AI phải chờ hoặc lỗi
   ([postmortem](../ops/postmortems/2026-10-29-acc3-bedrock-access-refusal.md)). Embedding cho tìm kiếm vẫn chạy.
-- Đường gọi thẳng Anthropic API chưa được bật; OpenAI API chỉ là lựa chọn cuối cùng của các bước chấm điểm.
+- Đường gọi thẳng Anthropic API chưa được bật. OpenAI API là lựa chọn dự phòng cuối cùng của các bước chấm điểm và
+  các bước viết bài (nền tảng và tenant), chỉ dùng khi mọi đường AWS đều bị chặn, với trần 10 USD mỗi tháng.
 - Số liệu Dev nhỏ và không ổn định: là các lượt chạy thử, không phải khối lượng kinh doanh. Đừng đọc xu hướng từ đó.
 
 ## Nguồn (cho người bảo trì)

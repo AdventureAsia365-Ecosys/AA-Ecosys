@@ -1,26 +1,26 @@
 ---
 id: ARCH-01-ai-gateway
 title: AI gateway (as built)
-description: How every paid AI and data call of the ecosystem is configured, routed, guarded, metered and observed today (root ADR 0009, gateway v2), with a live / planned table checked on 2026-11-01.
+description: How every paid AI and data call of the ecosystem is configured, routed, guarded, metered and observed today (root ADR 0009, gateway v2), with a live / planned table checked on 2026-11-01 and refreshed on 2026-11-03.
 type: explanation
 status: draft
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-api, aa-cis-worker, tripplanner-lambda, aa-crm-api]
-last_reviewed: 2026-11-01
+last_reviewed: 2026-11-03
 review_every_days: 30
 related: [ARCH-01, ARCH-01-diagrams, APP-06-ai-register, APP-06-routes, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-642, AA-804, AA-1002, AA-1016, AA-1017, AA-1018]
 ---
 
 # AI gateway (as built)
 
-> **Status:** as built on 2026-11-01 (S263). CIS migrations 319–324, TripPlanner tp-023 and CRM crm-035 are applied
-> on Dev. Live facts were checked on that day: ECS task definitions, the Secrets Manager secret names (names only), the
-> Bedrock guardrail list and `/health/ready` of each app. The decisions behind this page are in
-> [ADR 0009](../adr/0009-ai-platform-and-provider-gateway.md); this page says what of them runs today. The full stage
-> list is the [AI Use Register](ai-use-register.md); the current routes are in
-> [`generated/llm-routes.md`](../generated/llm-routes.md) (snapshot of 2026-10-29: routes current, but its model
-> catalog predates migration 324 and lacks the five acc2 candidates; recapture tracked in the backlog).
+> **Status:** as built on 2026-11-01 (S263), refreshed on 2026-11-03 (S265). Applied on Dev on 2026-11-03, read from
+> each API's `/health/ready`: CIS every migration through 346 except the held contract file 336, TripPlanner tp-023 and
+> CRM crm-040. Live facts of 2026-11-01: ECS task definitions, the Secrets Manager secret names (names only), the
+> Bedrock guardrail list. The live checks of the S264 slices (340, 342, 343, 345) are in the S264 session log. The
+> decisions behind this page are in [ADR 0009](../adr/0009-ai-platform-and-provider-gateway.md); this page says what
+> of them runs today. The full stage list is the [AI Use Register](ai-use-register.md); the current routes are in
+> [`generated/llm-routes.md`](../generated/llm-routes.md) (snapshot of 2026-11-02T11:35Z: 40 stages, 20 models).
 
 ## 1. What the gateway is
 
@@ -68,9 +68,9 @@ flowchart LR
   subgraph Prov[Providers and failure domains]
     B3[Bedrock acc3: main chat account]
     B2E[Bedrock acc2: embeddings]
-    B2C[Bedrock acc2: 5 candidate chat models, last fallback of platform judge and validate stages]
+    B2C[Bedrock acc2: Nova Lite, Llama 4 Scout and Maverick as judge and validate fallbacks]
     GR[Bedrock Guardrails acc2: CRM scrub]
-    OA[OpenAI API: last resort of judge routes]
+    OA[OpenAI API: last rung of judge and writer routes]
     AN[Anthropic API: no key]
     JEV[Jev decisions]
     DFS[DataForSEO]
@@ -84,8 +84,8 @@ flowchart LR
   LLMC --> REG & RT & POL
   CORE --> VIEWS
   VIEWS --> RT
-  LLMC --> B3 & B2E & OA & JEV & DFS & GEO
-  LLMC -.-> B2C & AN
+  LLMC --> B3 & B2E & B2C & OA & JEV & DFS & GEO
+  LLMC -.-> AN
   TP --> B3 & B2E
   CRM --> GR
   CRM -.-> B3
@@ -120,20 +120,25 @@ Migrations 304, 306, 307, 320 and 322 (AA-1002, AA-1017).
 - **Edits:** secret names, base URLs and catalog prices change only by migration (322 revoked the runtime role's
   UPDATE on them). The admin may switch a connection on or off and edit limits, budgets and notes; each change is
   audited. Migration 324 proved "add a model = one migration PR": five acc2 chat models with one enabled acc2
-  deployment each and no route.
+  deployment each and no route. Migrations 331–333 and 339 then made three of them route fallbacks (§8).
 
 ## 4. Routing
 
 - **Route per stage** (`shared.llm_role_config`): a primary model, ordered fallbacks, an optional shadow at a sample
-  rate, `allowed_scopes` (migration-only, AA-1002 S5) and `route_deadline_s` (320; NULL on every row today).
+  rate, `allowed_scopes` (migration-only, AA-1002 S5), `route_deadline_s` (320; set by role in 334: writer 1200 s,
+  judge 900 s, validate 600 s, embed 120 s) and the stage kill switch with its declared degrade mode (326).
 - **Order of attempts:** the same model on its next deployment by priority, skipping open circuits and connections
   over budget, then the next model of the route, then a typed error. A route lists every model it may use; nothing
   falls back silently across families.
-- **Legacy keys:** `haiku` and `sonnet` still reach acc3 through the legacy chain, inside the breaker since AA-1018
-  part 2. The aliases that replace them (`shared.llm_model_alias`, 307) stay off until a live check; the legacy paths
-  log `llm_deprecated_path_used` with a proposed removal date of 2026-12-31.
+- **Legacy keys:** since migration 327 no route names `haiku` or `sonnet`: every stage moved to the Converse keys of
+  the same tier (`haiku-5-5`, `sonnet-5-5`). The catalog rows stay; a caller that still passes a legacy key reaches
+  acc3 through the legacy chain, inside the breaker since AA-1018 part 2, and logs `llm_deprecated_path_used`
+  (proposed removal 2026-12-31). The aliases of 307 stay off.
 - **Data scopes** (CIS ADR 0012): a stage's content may use only connections whose `data_scope` its
-  `allowed_scopes` lists. Writer stages are `aws_only`; the Anthropic and OpenAI API connections are `vendor_direct`.
+  `allowed_scopes` lists. The Anthropic and OpenAI API connections are `vendor_direct`. The A-series writers (327) and
+  the six tenant writers (344) allow `{aws_only, vendor_direct}` with the OpenAI API model `gpt-6-luna-openai` as the
+  last fallback, so they leave AWS only when every AWS path is blocked; the TripPlanner, segment research and CRM
+  stages stay `aws_only`.
 
 ## 5. Guards
 
@@ -193,28 +198,32 @@ error class `quota_exhausted`: the connection stops and the call is never retrie
 
 ## 8. Live and planned
 
-Checked on 2026-11-01 unless the row says otherwise.
+Checked on 2026-11-01 and refreshed on 2026-11-03 (the `/health/ready` reads, the route snapshot of 2026-11-02 and the
+S264 live checks), unless the row says otherwise.
 
 | Item | State | Evidence or next step |
 |---|---|---|
-| Ledger v2 (319), registry v2 (320, 322), tenant budget and prompt register tables (321), contract views (323), acc2 candidates (324) | **Live** on Dev | CIS `/health/ready` `schema_version` 324 |
-| Circuit breaker, connection circuit, alerts, route deadline support, re-queue | **Live** (code); `route_deadline_s` NULL on every route | AA-1002 S4, AA-1018 |
+| Ledger v2 (319), registry v2 (320, 322), tenant budget and prompt register tables (321), contract views (323, routing facts and circuit state appended by 341), acc2 candidates (324) | **Live** on Dev | CIS `/health/ready` `schema_version` 346 on 2026-11-03 |
+| Circuit breaker, connection circuit, alerts, route deadlines, re-queue | **Live**; every route has a deadline by role (334) | AA-1002 S4, AA-1018, AA-1024 |
+| Stage kill switch and degrade mode (326), central LLM budgets in `shared.spend_budget` (340) | **Live** | 340: the `llm/app:cis` cap alerts only (S264 live check) |
+| Shared circuit of Jev, DataForSEO and Geoapify (342); credit ledger and low-credit alert of the direct APIs (342, 343) | **Live** | S264 live checks (bell + e-mail, circuit closed after 60 s) |
 | Daily probe of every enabled connection | **Live**, on | `LLM_DAILY_PROBE=on` in the CIS api and worker task definitions |
 | acc3 Bedrock (main chat account) | **Refusing** since 2026-10-29 (Error 002, every model); the connection circuit and the probe show it | Provider case open; [postmortem](../ops/postmortems/2026-10-29-acc3-bedrock-access-refusal.md) |
 | acc2 Bedrock embeddings (Cohere Embed v4) | **Live** | Used by CIS and TripPlanner search |
-| acc2 Bedrock candidate chat models (Nova Lite, Nova 2 Lite, Llama 4 Maverick, Llama 4 Scout, Kimi K3) | **Last fallback of the eight platform judge / validate stages that reached acc3 only** (CIS migration 331, AA-1026 I6: Nova Lite; Llama 4 Scout for the place card check). Never on writers; tenant judge / validate stages wait for CIS migration 332 and the tech lead's yes (decision 14 keeps acc2 off tenant stages until decision 10 and AA-820) | Format checked per stage by the contract smoke (CIS job `llm_contract_smoke`), which 331 requires before it changes a stage; judge calibration and A/B of the ladder (ADR 0009 decision 12, AA-900) skipped by the S263 amendment of decision 14, so a brand audit `pass` answered on acc2 is held as `manual_check` (`BRAND_AUDIT_UNCALIBRATED_JUDGE`). The [generated route table](../generated/llm-routes.md) lists the change under its known gaps until the recapture (AA-1020 follow-up) |
-| OpenAI API (`openai-direct`) | Key present (`aa-cis/dev/openai-key`); last resort of the judge routes only | Monthly cap still to be stated and approved (ADR 0009 decision 14) |
+| acc2 Bedrock candidate chat models (Nova Lite, Nova 2 Lite, Llama 4 Maverick, Llama 4 Scout, Kimi K3) | **Fallbacks of judge and validate routes, never of a writer:** Nova Lite on the platform (331) and tenant (332) judge / validate stages and before the OpenAI hop of the judge routes (333); Llama 4 Scout for the place card check; Llama 4 Maverick for `a3_place_dedupe` (339). Nova 2 Lite and Kimi K3 are on no route | Format checked per stage by the contract smoke (CIS job `llm_contract_smoke`) before each change; judge calibration and A/B of the ladder (ADR 0009 decision 12, AA-900) skipped by the S263 amendment of decision 14, so a brand audit `pass` answered on acc2 is held as `manual_check` (`BRAND_AUDIT_UNCALIBRATED_JUDGE`) |
+| OpenAI API (`openai-direct`) | Key present (`aa-cis/dev/openai-key`); **last rung** of most judge routes, `a3_place_dedupe`, the A-series writers (327) and the six tenant writers (344); monthly budget 10 USD, alert at 80 %, hard stop (327) | While acc3 refuses, tenant writing runs on it (a live `t9_write` answered through it on 2026-11-02); balance from the credit ledger (343) |
 | Anthropic API (`anthropic-direct`) | **Not live:** no `aa-llm/` secret exists; deployments seeded behind acc3 (306) with the connection off | The tech lead creates the key with a workspace spend limit; then the secret is stored and the connection switched on (runbook [llm-anthropic-api-key](../ops/runbooks/llm-anthropic-api-key.md)) |
 | Jev, DataForSEO, Geoapify as registry rows (322) with ledger rows | **Live** | Settings come from their rows, else env, else the old constants |
 | Bedrock Guardrails | **Live for the CRM scrub** (guardrail `aa-crm-dev-scrub`); the CIS registry row is seeded off | — |
 | TripPlanner on the shared core and the 323 views | **Live** (code on `main`); the grandfathered SELECT on `shared.llm_role_config` / `llm_model_catalog` is still granted | A later CIS migration revokes it (ADR 0009 decision 13) |
 | CRM gateway v2 (crm-032 ledger, vendored core) | **Live, stub provider:** no `CRM_LLM_*` variable is set on Dev, so CRM AI drafting runs the deterministic stub | Real provider needs `CRM_LLM_PROVIDER` and the role, Bedrock only (root ADR 0008a) |
 | Tenant AI budget (Content studio) | **Live** (code and table); a tenant without a row has no budget | Amounts come from the business owner's plan prices |
-| App profile (345) and the geocode ledger columns (346) | **Built** (AA-1025 D3 / H1a, S264); live once the migrations are applied and the CIS code PR is deployed | Live check: AI off for `cis`, one connection test refused at 0 USD, AI back on |
+| App profile (345) and the geocode ledger columns (346) | **Live** in CIS (AA-1025 D3 / H1a, S264); TripPlanner and the CRM read their row later (H1b / H1c) | S264 live check: AI off for `cis`, one connection test refused at 0 USD, AI back on; all four apps `ai_enabled = true` at the close |
+| Retire the dead routes `s1_atom_writer`, `tp_extract`, `tp_component_embed` (336) | **Held** (contract file; its 30-day guard allows it from 2026-11-10) | Applied by hand with DB Migrate, then `DB_AUTO_APPLY_CONTRACT` back on |
 | Prompt register | Table live; until a migration registers versions, `prompt_version` is NULL | A migration inserts the first versions (`scripts/prompt_registry_check.py --sql`) |
 | Stage × model parameters | Table live, no rows at its release (AA-1017) | Filled when a trial needs it |
-| Legacy aliases (`LLM_LEGACY_ALIASES`) | **Off** | Switch after a live check; legacy paths proposed for removal 2026-12-31 |
-| Warm independent path per stage class (decision 5 invariant) | **Not met** for writer stages | Needs the Anthropic key, or a declared degrade mode |
+| Legacy keys and aliases (`LLM_LEGACY_ALIASES`) | No route names a legacy key (327); aliases **off** | Legacy paths proposed for removal 2026-12-31 |
+| Warm independent path per stage class (decision 5 invariant) | A-series and tenant writers: met through the OpenAI API last rung (327, 344). TripPlanner `tp_compose` and segment research: acc3 only, covered by their declared degrade modes (TripPlanner `basic_narration`, 326; segment research `queue_retry`, 335) | A Claude warm path still needs the Anthropic key |
 | Monthly failover drill | **Not scheduled** | Starts once both direct APIs are funded |
 | Second region for eval connections | Not decided | ADR 0009 "Not decided here" |
 | HTTP gateway service | Deferred | Reconsidered when three apps call it in production (decision 13) |
