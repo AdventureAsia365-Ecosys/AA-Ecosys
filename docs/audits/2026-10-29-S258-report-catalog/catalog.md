@@ -2,6 +2,13 @@
 
 Part of the AA-1001 report catalog advisory (S258, 2026-10-29). Generated from [catalog.json](catalog.json) (do not edit by hand; edit the JSON and regenerate). Overview and recommendation (Vietnamese, for the tech lead): [README.md](README.md). Engine and schedule: [automation-plan.md](automation-plan.md). On-demand requests: [on-demand.md](on-demand.md).
 
+> [!IMPORTANT]
+> **Amended 2026-11-03 (S266, B2B-only model, [ADR 0019](../../adr/0019-b2b-only-ecosystem-model.md) d8 / d11).** This
+> advisory is the S258 snapshot; the live source is the registry [`docs/reports/catalog.yaml`](../../reports/catalog.yaml).
+> After the B2C switch-off: **TP-03 is retired** (status `retired`, no generator); the inquiry metrics of **TP-01**, the
+> **EX-01** demand funnel and **DATA-02** are historical (never red or amber); **BK-02** is the B2B pipeline;
+> **CX-01** is agency satisfaction and support. The sections below keep the S258 text with a one-line pointer.
+
 > [!NOTE]
 > All numbers on the platform today are Dev-phase: no real customers, tenants or bookings yet. Thresholds marked trend or baseline become targets after the first production month or quarter. Tables, views, job kinds and pages marked proposed do not exist yet; every other table and column name was checked against `docs/architecture/db-schema-reference.md`.
 
@@ -80,6 +87,8 @@ Part of the AA-1001 report catalog advisory (S258, 2026-10-29). Generated from [
 <a id="ex-01"></a>
 
 ### EX-01 Weekly business pack
+
+> S266: the B2C inquiry part of the demand headline is historical since 2026-11-03 (registry EX-01 section 5).
 
 Vietnamese name: Gói báo cáo kinh doanh hằng tuần.
 
@@ -978,6 +987,8 @@ Notes: Content Trace is row-level only today. QA, gates and held details stay in
 
 ### TP-01 Weekly TripPlanner funnel
 
+> S266: the advisor-inquiry step (inquiries sent, K-TP-T2I) is historical since 2026-11-03; the decision is now the demo's visitors to planned trips (registry TP-01).
+
 Vietnamese name: Phễu TripPlanner hằng tuần.
 
 | Field | Value |
@@ -1072,6 +1083,8 @@ Notes: v_invoice_balance and v_payment_schedule_status are granted to role booki
 <a id="bk-02"></a>
 
 ### BK-02 Booking sales pipeline
+
+> S266: re-scoped to the Booking B2B pipeline (agency requests to confirmed trade bookings, channel `b2b`, per partner); B2C inquiries are out of scope (registry BK-02).
 
 Vietnamese name: Phễu bán hàng Booking (tuần/tháng).
 
@@ -1533,6 +1546,8 @@ Notes: Accuracy needs ground truth; keep the fixed sample so numbers stay compar
 
 ### TP-03 Inquiry handoff reconciliation (TripPlanner to Booking)
 
+> S266: **retired** on 2026-11-03 (status `retired`): the hand-off TripPlanner to Booking is off, so there is nothing to reconcile. Tenant leads travel on `lead.submitted.v1` into the tenant CRM; their delivery check is a new report once that contract has a producer.
+
 Vietnamese name: Đối soát yêu cầu tư vấn TripPlanner sang Booking (mỗi giờ + tổng hợp ngày).
 
 | Field | Value |
@@ -1618,6 +1633,8 @@ Notes: Results live only in GITHUB_STEP_SUMMARY today, so no trend and no digest
 <a id="data-02"></a>
 
 ### DATA-02 Weekly cross-app reconciliation
+
+> S266: the inquiry handoff and Booking inbox parts are historical since 2026-11-03 (K-REC-INBOX, K-REC-UNMATCHED status historical).
 
 Vietnamese name: Đối soát liên ứng dụng hằng tuần.
 
@@ -2605,6 +2622,8 @@ Notes: Agent records the videos itself with E2E logins (memory screenshots-self-
 <a id="cx-01"></a>
 
 ### CX-01 Traveller satisfaction and reviews
+
+> S266: re-scoped to **agency satisfaction and support** (the agencies are AA's customers; traveller reviews stay inside each agency's CRM, ADR 0019 invariant 1; registry CX-01).
 
 Vietnamese name: Mức hài lòng của khách và đánh giá sau chuyến đi.
 

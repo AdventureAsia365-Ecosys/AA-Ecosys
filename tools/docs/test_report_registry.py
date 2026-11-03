@@ -85,6 +85,16 @@ class RegistryCheck(unittest.TestCase):
         errors, _ = self.messages(_catalog(automated_from="2026-10-31", generator=None), _kpis())
         self.assertTrue(any("needs generator cis" in e for e in errors), errors)
 
+    def test_retired_report_needs_a_day_and_no_generator(self):
+        errors, _ = self.messages(_catalog(status="retired", retired_on="2026-11-03", generator=None), _kpis())
+        self.assertEqual(errors, [])
+        errors, _ = self.messages(_catalog(status="retired", generator=None), _kpis())
+        self.assertTrue(any("retired_on" in e for e in errors), errors)
+        errors, _ = self.messages(_catalog(status="retired", retired_on="2026-11-03"), _kpis())
+        self.assertTrue(any("no generator" in e for e in errors), errors)
+        errors, _ = self.messages(_catalog(retired_on="2026-11-03"), _kpis())
+        self.assertTrue(any("needs status retired" in e for e in errors), errors)
+
     def test_duplicate_report_id_fails(self):
         cat = _catalog()
         cat["reports"].append(dict(cat["reports"][0]))

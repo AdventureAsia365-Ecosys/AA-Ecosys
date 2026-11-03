@@ -14,6 +14,12 @@ related: [AA-1001, PLAT-01, FIN-02, OPS-08, SEC-03, SEC-05, APP-07]
 
 # Tư vấn danh mục báo cáo của hệ sinh thái (AA-1001)
 
+> [!IMPORTANT]
+> **Bổ sung 03/11/2026 (S266, mô hình chỉ B2B, ADR 0019 d8 / d11):** TP-03 đã ngừng (trạng thái `retired`, không còn
+> kiểm mỗi giờ, không chuông, không e-mail); phần yêu cầu tư vấn của TP-01, phễu nhu cầu EX-01 và DATA-02 thành số liệu
+> lịch sử (không bao giờ báo đỏ hay vàng); BK-02 đổi thành phễu B2B của Booking; CX-01 đổi thành mức hài lòng của đại
+> lý. Danh sách sống: `docs/reports/catalog.yaml`. Phần dưới giữ nguyên bản S258.
+
 Ngày: 29/10/2026 (S258). Tác nhân: Claude Code (lane tư vấn, chỉ đọc repo; không chạy gì trả phí, không tạo resource).
 Chi phí: 0 USD. Phạm vi: cả 4 app (CIS, TripPlanner, Booking, Partner/CRM) + Infra + repo gốc.
 
