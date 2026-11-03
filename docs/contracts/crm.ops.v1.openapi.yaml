@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: crm.ops.v1 (AA-Partner CRM → CIS admin, L1 platform console)
-  version: "1.10"
+  version: "1.11"
   description: >-
     Platform console API of the partner CRM (AA-Partner, root ADR 0010), served under /crm/ops/v1 and called by the
     CIS admin screen S-01 "Agencies (CRM)" (AA-941) and the CIS platform-ops pages (AA-936: job summary, LLM usage).
@@ -61,6 +61,13 @@ info:
     profiles; the CIS admin relays its edit of that row here (PUT, crm-platform-admin). A platform setting, not an
     agency's data: like /data-coverage it writes no agency audit event (CIS audits the edit), and it returns no staff
     id. The CRM gateway refuses with `app_disabled` / `app_budget_exhausted` (the refusal codes on GET /llm/calls).
+    Version 1.11 (AA-1028 R1 slice 2, root ADR 0019 d1; additive for a reader that shows an unknown refusal code as it
+    is): the agency's plan, seats and allowed features are the projection of the tenant's CIS account
+    (tenant.entitlements.v1, the CRM's crm_entitlement_pull) once the pull has projected the agency. From then on
+    PUT /tenants/{tenant_id}/entitlements-allowed answers 409 `entitlements_managed_by_cis` and writes nothing (AA
+    changes the tenant's CRM add-on in CIS instead). While the agency is still `managed_by` `ops` (never projected:
+    no CIS tenant, or the pull waits for CIS to hold a crm subscription) the PUT works as in 1.10.
+    `Entitlements.managed_by` tells `cis` (projected from CIS) from `ops` (not projected yet).
     Errors are
     `{detail, message?, fields?, state?, member_limit?}` (Problem); a 422 names the failing fields only, never the
     submitted values.
@@ -387,8 +394,10 @@ paths:
       - $ref: "#/components/parameters/TenantId"
     put:
       operationId: setAllowedEntitlements
-      summary: Features the agency owner may switch on (write; AA never switches them on)
-      description: Replaces the allowed list; never writes the owner's settings. Active or locked agency.
+      summary: Features the agency owner may switch on (write while managed_by ops; the CIS account decides them after)
+      description: Replaces the allowed list; never writes the owner's settings. Active or locked agency. Since 1.11
+        only while the agency is managed_by ops (never projected from CIS); once crm_entitlement_pull has projected
+        it, 409 entitlements_managed_by_cis and nothing written (audited as denied).
       requestBody:
         required: true
         content:
@@ -405,7 +414,8 @@ paths:
         "404": {$ref: "#/components/responses/TenantNotFound"}
         "409":
           $ref: "#/components/responses/Conflict"
-          description: "`tenant_status` with `state` (offboarding / offboarded)"
+          description: "`tenant_status` with `state` (offboarding / offboarded); since 1.11
+            `entitlements_managed_by_cis` once the agency is managed_by cis (the features follow the CIS account)"
         "422":
           $ref: "#/components/responses/Invalid"
           description: "`invalid_request`, `invalid_feature` (unknown or repeated code)"
@@ -1152,6 +1162,13 @@ components:
       additionalProperties: false
       required: [plan, seats_allowed, features_allowed, insights_opt_out]
       properties:
+        managed_by:
+          type: string
+          enum: [cis, ops]
+          description: >-
+            1.11: cis = projected from the tenant's CIS account by crm_entitlement_pull (PUT entitlements-allowed
+            answers 409); ops = not projected yet (what the L1 console wrote; the PUT still works). Optional for a
+            1.10 reader.
         plan: {type: string, enum: [free, core, pro]}
         seats_allowed: {type: integer, minimum: 0}
         features_allowed:
