@@ -1,0 +1,71 @@
+{
+  "mode": "run",
+  "consoleErrors": [],
+  "pageErrors": [],
+  "badResponses": [],
+  "notes": [],
+  "settingsInitial": {
+    "status": 200,
+    "ai_enabled": false,
+    "ai_assist_allowed": false,
+    "test_mode": true,
+    "spent_usd_month": "0.0000",
+    "ai_budget_usd": "2.00",
+    "can_edit": true
+  },
+  "tripsSeen": 112,
+  "cardInitial": {
+    "state": "no_plan",
+    "reason": "The AI assistant is not on your agency's plan. Ask AA support to add it.",
+    "buttonDisabled": true,
+    "text": "AI DRAFT Ask AI for a draft reply to your client. You read it, edit it and send it yourself. The AI assistant is not on your agency's plan. Ask AA support to add it. Draft"
+  },
+  "02-crm-ai-draft-initial-ov1440": {
+    "doc": "1440/1440",
+    "main": "1200/1200",
+    "ok": true
+  },
+  "02-crm-ai-draft-initial-ov390": {
+    "doc": "390/390",
+    "main": "390/390",
+    "ok": true
+  },
+  "cardOff": {
+    "state": "no_plan",
+    "reason": "The AI assistant is not on your agency's plan. Ask AA support to add it.",
+    "buttonDisabled": true,
+    "text": "AI DRAFT Ask AI for a draft reply to your client. You read it, edit it and send it yourself. The AI assistant is not on your agency's plan. Ask AA support to add it. Draft"
+  },
+  "02a-crm-ai-draft-ai-off-ov1440": {
+    "doc": "1440/1440",
+    "main": "1200/1200",
+    "ok": true
+  },
+  "02a-crm-ai-draft-ai-off-ov390": {
+    "doc": "390/390",
+    "main": "390/390",
+    "ok": true
+  },
+  "cardOn": {
+    "state": "no_plan",
+    "reason": "The AI assistant is not on your agency's plan. Ask AA support to add it.",
+    "buttonDisabled": true,
+    "text": "AI DRAFT Ask AI for a draft reply to your client. You read it, edit it and send it yourself. The AI assistant is not on your agency's plan. Ask AA support to add it. Draft"
+  },
+  "02b-crm-ai-draft-ai-on-ov1440": {
+    "doc": "1440/1440",
+    "main": "1200/1200",
+    "ok": true
+  },
+  "02b-crm-ai-draft-ai-on-ov390": {
+    "doc": "390/390",
+    "main": "390/390",
+    "ok": true
+  },
+  "settingsFinal": {
+    "ai_enabled": false,
+    "ai_assist_allowed": false,
+    "spent_usd_month": "0.0000"
+  },
+  "trip": "<uuid>"
+}

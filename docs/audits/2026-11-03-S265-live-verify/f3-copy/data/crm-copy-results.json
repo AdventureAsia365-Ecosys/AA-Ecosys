@@ -1,0 +1,90 @@
+{
+  "consoleErrors": [],
+  "pageErrors": [],
+  "badResponses": [],
+  "notes": [],
+  "healthz": "200 {\"status\":\"ok\",\"service\":\"aa-crm-web\",\"version\":\"0.11.0\",\"git_sha\":\"0997e46be43fe3a938428d9fe7e0d6c05e2962bd\",\"environment\":\"dev\",\"auth_configured\":true,\"staff_auth_configured\":true}",
+  "settingsInitial": {
+    "status": 200,
+    "provider": "stub",
+    "model_test_mode": true,
+    "scrub_billed": true,
+    "test_mode": false,
+    "ai_assist_allowed": false,
+    "ai_enabled": false,
+    "can_edit": true,
+    "spent_usd_month": "0.0000",
+    "ai_budget_usd": "2.00"
+  },
+  "cookieLocaleInitial": null,
+  "localeSelectInitial": "en-AU",
+  "lang": "en",
+  "settingsEn": {
+    "testMode": "TEST MODE Drafts come from a test model on this environment, so the model costs nothing. Only the privacy check that replaces personal details before each draft is billed, at a very small cost, and it counts in this month's spend.",
+    "statusNoPlan": "NOT ON YOUR PLAN",
+    "noPlan": "The AI assistant is not on your agency's plan. Ask AA support to add it. You can still switch AI on now: drafts start once AA support adds the AI assistant to your plan.",
+    "hasNothingCharged": false,
+    "hasKhongTinhPhi": false,
+    "checkbox": false
+  },
+  "ovEn1440": {
+    "doc": "1440/1440",
+    "main": "1200/1200",
+    "ok": true
+  },
+  "ovEn390": {
+    "doc": "390/390",
+    "main": "390/390",
+    "ok": true
+  },
+  "langVi": "vi",
+  "settingsVi": {
+    "testMode": "CHẾ ĐỘ THỬ Bản nháp ở môi trường này đến từ mô hình thử nên mô hình không tốn phí. Chỉ bước kiểm tra quyền riêng tư (thay thông tin cá nhân trước mỗi bản nháp) bị tính phí, ở mức rất nhỏ, và được tính vào chi tiêu tháng này.",
+    "statusNoPlan": "CHƯA CÓ TRONG GÓI",
+    "noPlan": "Gói của đại lý chưa có trợ lý AI. Hãy liên hệ bộ phận hỗ trợ AA để thêm. Bạn vẫn có thể bật AI ngay bây giờ: bản nháp sẽ hoạt động khi bộ phận hỗ trợ AA thêm trợ lý AI vào gói.",
+    "hasNothingCharged": false,
+    "hasKhongTinhPhi": false,
+    "checkbox": false
+  },
+  "ovVi1440": {
+    "doc": "1440/1440",
+    "main": "1200/1200",
+    "ok": true
+  },
+  "ovVi390": {
+    "doc": "390/390",
+    "main": "390/390",
+    "ok": true
+  },
+  "langRestored": "en",
+  "settingsBackEn": {
+    "testMode": "TEST MODE Drafts come from a test model on this environment, so the model costs nothing. Only the privacy check that replaces personal details before each draft is billed, at a very small cost, and it counts in this month's spend.",
+    "statusNoPlan": "NOT ON YOUR PLAN",
+    "noPlan": "The AI assistant is not on your agency's plan. Ask AA support to add it. You can still switch AI on now: drafts start once AA support adds the AI assistant to your plan.",
+    "hasNothingCharged": false,
+    "hasKhongTinhPhi": false,
+    "checkbox": false
+  },
+  "card": {
+    "state": "no_plan",
+    "reason": "The AI assistant is not on your agency's plan. Ask AA support to add it.",
+    "buttonDisabled": true
+  },
+  "ovTrip1440": {
+    "doc": "1440/1440",
+    "main": "1200/1200",
+    "ok": true
+  },
+  "ovTrip390": {
+    "doc": "390/390",
+    "main": "390/390",
+    "ok": true
+  },
+  "settingsFinal": {
+    "ai_enabled": false,
+    "ai_assist_allowed": false,
+    "ai_budget_usd": "2.00",
+    "spent_usd_month": "0.0000"
+  },
+  "cookieLocaleFinal": null
+}

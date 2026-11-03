@@ -141,7 +141,7 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | Issue | Work | Milestone | Slot | S265 verdict | Status |
 |---|---|---|---|---|---|
 | AA-1003 | [Reporting] Build the ecosystem report engine and the 63-report catalog (appr… | M-R0 | S265 | re-scope | Todo |
-| AA-1034 | [Platform] R0 B2B-only model: ADR 0019, B2C paths off by flag, backlog re-sco… | M-R0 | S265 | keep | In Review |
+| AA-1034 | [Platform] R0 B2B-only model: ADR 0019, B2C paths off by flag, backlog re-sco… | M-R0 | S265 | keep | **Done** |
 | AA-1027 | [AI gateway] TripPlanner and CRM on the shared core: truncation + deadlines,… | M1b | S265 | re-scope | In Review |
 | AA-1028 | [Platform] One plan catalogue for tenants and agencies: admin CRUD, plan driv… | M-R1 | S266 | re-scope | Todo |
 | AA-1004 | [Infra] Implement the lean AWS model: company organization, Identity Center,… | M5 | S266 | re-scope | Backlog |
@@ -261,6 +261,9 @@ Evidence per issue: the S265 Linear comments (then `docs/linear-export/`), `docs
 - **AA-1025** budgets, app profiles and non-LLM providers (Done): H1b live (AI off → keyword search + `ai_paused`, refused / disabled ledger rows at 0 USD, semantic back on), H1c live (CRM app AI off → draft refused `app_disabled`, 0 USD; `docs/audits/2026-11-03-S265-live-verify/h1c-appoff/`), H2 drill passed; CIS #1268 / #1270, TripPlanner #217, Partner #202 / #203.
 - Also S265: ADR 0019 Accepted (root #486–#488); R0 B2C paths off (Booking #171, TripPlanner demo notice, bk-036 42501 live, Overview without B2C cards); AA-1024 D2 live (CIS #1266 + mig 352); CIS 347–352, tp-024, bk-036.
 - Created: AA-1034 (R0), AA-1035 (R2), AA-1036 (R3), AA-1037 (R4), AA-1038 (R5), AA-1039 (R6), AA-1040 (AI notice, d19), AA-1041 (R7). Canceled with a comment (in the Linear pass of this review): AA-864, AA-628; merged: AA-1005 → AA-1038, AA-1007 → AA-1036, AA-1010 → AA-1035.
+
+- **AA-1034** R0 B2B-only model (Done): ADR 0019 Accepted (root #486/#487/#488/#490); B2C paths off on Dev, live: TripPlanner `send-to-advisor` 410 `b2b_only` (TP #218), `bk_inquiry_pull` off and an INSERT into `booking.customers` refused 42501 (Booking #170 bk-036, #171), CIS Overview without B2C cards (CIS #1271, `docs/audits/2026-11-03-S265-live-verify/r0-overview/`); phase issues AA-1035…AA-1041 created and all 52 open issues re-slotted (`docs/audits/2026-11-03-S265-plan-issue-review/`).
+- **Duplicates / cancelled (plan review):** AA-1005 → AA-1038, AA-1007 → AA-1036, AA-1010 → AA-1035; AA-628 and AA-864 cancelled with a reason comment.
 
 ## 5a. Closed in S264
 
