@@ -117,8 +117,9 @@ Migrations 304, 306, 307, 320 and 322 (AA-1002, AA-1017).
 - **Stage × model parameters** (`shared.stage_model_params`): max tokens, minimum output tokens, temperature, effort
   and reasoning mode. Precedence: call site, then the row, then the protocol default. With no row a request is
   unchanged. TripPlanner reads the row through the `stage_params` column of `catalog.v_llm_gateway_config_v1` (CIS
-  350, AA-1027 E4) and applies temperature (when the catalog says the model takes one) and effort (Anthropic-native
-  body only); its call sites always set max tokens, which wins.
+  350, AA-1027 E4) and applies temperature (when the catalog says the model takes one); its call sites always set max
+  tokens, which wins. It sends no effort or reasoning field: every TripPlanner call goes to Bedrock, and, as in CIS
+  (effort only on the Anthropic Messages API), the field is added on Bedrock only after a probe shows it is accepted.
 - **Edits:** secret names, base URLs and catalog prices change only by migration (322 revoked the runtime role's
   UPDATE on them). The admin may switch a connection on or off and edit limits, budgets and notes; each change is
   audited. Migration 324 proved "add a model = one migration PR": five acc2 chat models with one enabled acc2
