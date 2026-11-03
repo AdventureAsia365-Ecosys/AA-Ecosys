@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-01
+last_reviewed: 2026-11-03
 review_every_days: 90
 related: [ARCH-01-ai-gateway, ARCH-01-diagrams, ARCH-05, ARCH-08, AA-697, AA-889, AA-998, AA-1020]
 ---
@@ -16,8 +16,11 @@ related: [ARCH-01-ai-gateway, ARCH-01-diagrams, ARCH-05, ARCH-08, AA-697, AA-889
 
 > **Status:** reviewed 2026-11-01 (S263, AA-1020) against code and migrations on `main`, Terraform on `main`, and live
 > reads of that day (STS, ECS services and task definitions, Lambda functions, EventBridge Scheduler, CloudFront
-> aliases, ElastiCache, the Organizations and Identity Center state of the management account). The newest migrations
-> are CIS 324, tp-023, bk-035 and crm-035. Earlier revisions: 2026-10-28 (S255, acc1 retired, Content studio on
+> aliases, ElastiCache, the Organizations and Identity Center state of the management account). Refreshed 2026-11-03
+> (S265) for the AI routes and migrations that changed since: the newest applied migrations are CIS 346 (every key
+> through 346 except the held contract file 336), tp-023, bk-035 and crm-040, read from each API's `/health/ready`
+> that day; the routes come from the route snapshot of 2026-11-02T11:35Z
+> ([`generated/llm-routes.md`](generated/llm-routes.md)). Earlier revisions: 2026-10-28 (S255, acc1 retired, Content studio on
 > Fargate), 2026-10-18 (S242), 2026-10-16 (S239), 2026-10-14 (S235–S236), 2026-10-11 (S225), 2026-09-25. Items marked
 > **[FACT]** were checked in code, migrations or live state; **[TO CONFIRM]** marks an inference or gap the tech lead
 > still has to confirm.
@@ -58,7 +61,7 @@ AA-Ecosys is a **multi-repo**. Each app deploys on its own. Locally the repos si
 | `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | B2C web app: browse destinations, plan a trip, sign in and keep trips. Next.js FE + 3 Lambdas: `browse` (stateless reads, search embeddings), `assembly` (trip writes, narration) and `jobs` (no HTTP route; the `tripplanner.job` worker woken by a daily EventBridge Scheduler tick, tp-021). AI through the shared gateway core (3.3, [AI gateway](architecture/ai-gateway.md)) | Vercel `aa-tripplanner` (FE) + Lambda (BE) |
 | `infra/AA-CIS-Infra` | `AA-CIS-Infra` | Terraform for every AWS resource, one root per account: `accounts/aa365` (acc2: VPC, RDS, ECS, Lambda, API GW, CloudFront, Cognito, OIDC, alarms), `accounts/acc3-bedrock` (the Bedrock chat account) and `accounts/management` (the organization, ADR 0018). DB Migrate, Migration Sync / Apply (ADR 0017) and DB Schema Dump workflows | GitHub Actions (`accounts/aa365`) + a human with MFA (`accounts/acc3-bedrock`, bootstrap objects, `accounts/management`) |
 | `apps/AA-Booking` | `AA-Booking` | AAA: advisor workflow and booking lifecycle. Live on Dev since 2026-10-14: inquiry intake, staff trip cases and proposals, pricing and FX, suppliers and supply, sellable trip plans, operations (supplier bookings, invoices, payments, supplier bills), the B2B API for AA-Partner; staff admin frontend (see 3.4) | ECS Fargate `aa-booking-dev-api` on the CIS cluster `aa-cis-dev-cluster` (acc2, same VPC, ADR 0004) + Vercel `aa-booking-admin` |
-| `apps/AA-Partner` (public) | `AA-Partner` | Partner agencies' app (ADR 0010, accepted 2026-10-22): the agency CRM and the tenant Content studio (`portal/`, moved from AA-CIS-App with its history by AA-979 P2a). Own schema `crm` (`crm-001` to `crm-035`): clients and the identity vault, pipeline, proposals, invoices and payments, e-sign, duty of care, portability and deletion, onboarding and import, AA insights, the AA staff console with owner-granted support access and audited break-glass (crm-033), ops releases to AA ground operations (crm-034), commissions and one-action cancel (crm-035), an offline-capable traveller portal on the client host `go-dev.`. AI through its own control plane and ledger on the shared gateway core (ledger v2, crm-032; the provider is the stub on Dev), PII scrubbed first by the F3 scrubber with Bedrock Guardrails. Partner Cognito pool with MFA (ADR 0006b). Integrations are bring-your-own (agency Twilio/WhatsApp, Stripe, mailbox, e-sign); AA provides the maps. The API runs the `crm.job` worker in its own process | ECS Fargate ARM64 on `aa-cis-dev-cluster`: `aa-crm-dev-api`, `aa-crm-dev-web` and `aa-crm-dev-portal` (Content studio), all on the agency host `portal.` (its own CloudFront distribution → VPC origin → NLB → ALB host rules: `/crm*` API, studio paths, the rest the CRM web). The old host `partner-dev.` keeps only the API paths `/crm` and `/crm/*` and answers 301 to `portal.` for everything else (AA-979 P2b clean-up, a CloudFront Function). Images in IMMUTABLE ECR repos tagged with the git SHA; deploy by the GitHub OIDC role `aa-crm-dev-app-deploy`. No Vercel project (the P2a project `aa-cis-portal` was deleted at the clean-up) |
+| `apps/AA-Partner` (public) | `AA-Partner` | Partner agencies' app (ADR 0010, accepted 2026-10-22): the agency CRM and the tenant Content studio (`portal/`, moved from AA-CIS-App with its history by AA-979 P2a). Own schema `crm` (`crm-001` to `crm-040`): clients and the identity vault, pipeline, proposals, invoices and payments, e-sign, duty of care, portability and deletion, onboarding and import, AA insights, the AA staff console with owner-granted support access and audited break-glass (crm-033), ops releases to AA ground operations (crm-034), commissions and one-action cancel (crm-035), SMS and WhatsApp on the agency's own Twilio (crm-036), workflow rules and tasks (crm-038), AI drafts in the trip workspace (crm-040), an offline-capable traveller portal on the client host `go-dev.`. AI through its own control plane and ledger on the shared gateway core (ledger v2, crm-032; stage profiles crm-037; the provider was the stub on Dev when checked on 2026-11-01), PII scrubbed first by the F3 scrubber with Bedrock Guardrails. Partner Cognito pool with MFA (ADR 0006b). Integrations are bring-your-own (agency Twilio/WhatsApp, Stripe, mailbox, e-sign); AA provides the maps. The API runs the `crm.job` worker in its own process | ECS Fargate ARM64 on `aa-cis-dev-cluster`: `aa-crm-dev-api`, `aa-crm-dev-web` and `aa-crm-dev-portal` (Content studio), all on the agency host `portal.` (its own CloudFront distribution → VPC origin → NLB → ALB host rules: `/crm*` API, studio paths, the rest the CRM web). The old host `partner-dev.` keeps only the API paths `/crm` and `/crm/*` and answers 301 to `portal.` for everything else (AA-979 P2b clean-up, a CloudFront Function). Images in IMMUTABLE ECR repos tagged with the git SHA; deploy by the GitHub OIDC role `aa-crm-dev-app-deploy`. No Vercel project (the P2a project `aa-cis-portal` was deleted at the clean-up) |
 
 **Boundary rule [FACT]:** *apps own code, Infra owns resources.* TripPlanner shows it best:
 `infra/AA-CIS-Infra/accounts/aa365/tripplanner.tf` and `tripplanner_jobs.tf` create the 3 Lambdas from a placeholder zip.
@@ -71,7 +74,7 @@ Terraform `ignore_changes` covers the code attributes, so it never overwrites th
 | Account (target name) | Holds today | State on 2026-11-01 |
 |---|---|---|
 | Management account (`aa-management`) | AWS Organizations (all features), OUs `NonProd`, `Prod`, `Suspended`, three SCPs attached to the OUs (deny leave or close, protect audit and billing, Region allow-list), the organization CloudTrail `aa-org-trail` with its bucket, IAM Identity Center (groups `aa-admins`, `aa-developers`, `aa-billing`; permission sets `AA-Admin`, `AA-Developer`, `AA-ReadOnly`, `AA-Billing`), the organization budget and its own budget, Cost Anomaly Detection. **No workload** | **Live** since S259; Terraform root `accounts/management`. It is the only member of its organization: no workload account has joined yet |
-| acc2 (`aa-nonprod`) | Every workload: VPC, RDS, ECS, Lambda, API Gateway, CloudFront, Cognito, S3, SES, Valkey, Bedrock embeddings, the Bedrock Guardrail of the CRM scrub, and five candidate Bedrock chat models catalogued for eval, judge and validate stages (ADR 0009 decision 14, not routed) | Live. Still a member of the reseller's organization; joining the AA organization and moving the payer are planned for 2026-12-01 |
+| acc2 (`aa-nonprod`) | Every workload: VPC, RDS, ECS, Lambda, API Gateway, CloudFront, Cognito, S3, SES, Valkey, Bedrock embeddings, the Bedrock Guardrail of the CRM scrub, and five Bedrock chat models catalogued by CIS 324; three of them (Nova Lite, Llama 4 Scout, Llama 4 Maverick) are fallbacks of judge and validate routes since CIS 331–333 and 339 (ADR 0009 decision 14), never of a writer | Live. Still a member of the reseller's organization; joining the AA organization and moving the payer are planned for 2026-12-01 |
 | acc3 (`aa-ai`) | The main Bedrock chat account: invoker role, Bedrock Batch service role, Cost Explorer reader | Live, but Bedrock refuses every model since 2026-10-29 (Error 002); see the [AI gateway](architecture/ai-gateway.md) |
 | `aa-prod` | Does not exist | Created by the management root when the go-live date is set (ADR 0018 decision 3) |
 
@@ -346,8 +349,10 @@ The full as-built description, with a live / planned table: [AI gateway](archite
   vendor the shared core `aa_llm`. Booking makes no AI call.
 - **Providers and failure domains:** acc3 is the main Bedrock chat account, reached by `sts:AssumeRole` from the ECS
   task role and the TripPlanner Lambda role (it refuses every model since 2026-10-29). acc2 serves embeddings
-  (Cohere Embed v4), the CRM guardrail and five catalogued candidate chat models with no route. The OpenAI API is the
-  last resort of the judge routes; the Anthropic API path is built but has no key.
+  (Cohere Embed v4), the CRM guardrail and, as fallbacks of judge and validate routes, three of the five catalogued
+  chat models (Nova Lite, Llama 4 Scout, Llama 4 Maverick; CIS 331–333, 339). The OpenAI API is the last rung of the
+  judge routes and of the A-series and tenant writer routes (CIS 327, 344: the writers may leave AWS only when every
+  AWS path is blocked); the Anthropic API path is built but has no key.
 - **Where to look:** CIS admin **AI providers** (`/admin/ai-gateway`) for providers, routing, models, budgets, calls
   and traces; [`generated/llm-routes.md`](generated/llm-routes.md) for a route snapshot; the
   [AI Use Register](architecture/ai-use-register.md) for owners, scopes and kill switches. Do not memorize routes.
@@ -431,7 +436,7 @@ roles (ADR 0018 decision 5); nothing crosses accounts on the CI path.
 | `aa-cis-infra-tf-plan` | `accounts/aa365/cicd_split.tf` | AA-CIS-Infra, `pull_request` | `Terraform Plan` (read only) |
 | `aa-cis-infra-tf-apply` | `accounts/aa365/cicd_split.tf` | AA-CIS-Infra, `environment:prod` | `Terraform Apply Prod`, `DB Migrate`, `DB Schema Dump`, `DB Isolation Probe` (boundary `aa-cis-infra-tf-apply-boundary`) |
 | `aa-booking-dev-app-deploy` | `accounts/aa365/booking.tf` | AA-Booking, `environment:dev` or `ref:refs/heads/main` | Booking `Deploy Dev` (Booking ECR, task family and service only) |
-| `aa-tripplanner-dev-app-deploy` | `accounts/aa365/tripplanner.tf` | AA-TripPlanner-Web, `ref:refs/heads/main` | `deploy-lambdas.yml` (artifact zip + the two Lambdas' code) |
+| `aa-tripplanner-dev-app-deploy` | `accounts/aa365/tripplanner.tf` | AA-TripPlanner-Web, `ref:refs/heads/main` | `deploy-lambdas.yml` (artifact zip + the three Lambdas' code) |
 | `aa-crm-dev-app-deploy` | `accounts/aa365/crm_app.tf` | AA-Partner, `environment:dev` | AA-Partner deploy workflows (CRM api, web and portal) |
 | `aa-cis-dev-docs-sync` | `accounts/aa365/docs_reader.tf` | AA-Ecosys (root), `ref:refs/heads/master` | Root `Docs sync` (the `/admin/docs` bundle in the bronze bucket, `docs-reader/` only) |
 | `aa-cis-infra-db-auto-apply` | `accounts/aa365/cicd_db_auto_apply.tf` | AA-CIS-Infra, `environment:dev-db-auto` + `ref:refs/heads/main` | Migration Apply of expand files (ADR 0017 decision 6): the migrator task family only |
@@ -476,10 +481,12 @@ names), so only the `sub` match is affected.
   organization and the payer moves (planned 2026-12-01), each account moves to its OU after a quiet week, the
   per-account budgets and `App`-tag anomaly monitors switch on, the acc2 trail is removed after the organization trail
   delivers cleanly for 7 days, and `aa-prod` with `accounts/prod` is created when the go-live date is set.
-- **AI gateway (ADR 0009):** the acc3 refusal case; the Anthropic API key with its workspace spend limit; the OpenAI
-  API monthly cap; the monthly failover drill; the qualification ladder before any acc2 chat route (AA-900); the revoke
-  of TripPlanner's grandfathered SELECT on the gateway tables; removing the legacy `haiku` / `sonnet` paths; a real
-  CRM provider. Details and state: [AI gateway](architecture/ai-gateway.md) §8.
+- **AI gateway (ADR 0009):** the acc3 refusal case; the Anthropic API key with its workspace spend limit; the monthly
+  failover drill; the qualification ladder of the acc2 chat models, which the S263 amendment of decision 14 skipped
+  for their fallback use (AA-900); the contract migration 336 (retires three dead routes, held until 2026-11-10); the
+  revoke of TripPlanner's grandfathered SELECT on the gateway tables; removing the legacy `haiku` / `sonnet` catalog
+  rows, which no route names since CIS 327; a real CRM provider. Details and state:
+  [AI gateway](architecture/ai-gateway.md) §8.
 
 ## 7. References
 
