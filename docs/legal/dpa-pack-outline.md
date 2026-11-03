@@ -1,7 +1,7 @@
 ---
 id: SEC-04-dpa-pack
 title: "B2B contract pack, part 2: DPA pack outline"
-description: "Outline only (no legal drafting yet) of AA-820 part 2: the agency-controller / AA-processor Art. 28 DPA with its technical annex, SCC Module 2 and a TIA template, the sub-processor list after ADR 0019 d23, the joint-controller clause for embedded collection, and the tenant-as-controller privacy text."
+description: "Outline only of AA-820 part 2: Art. 28 DPA (agency controller, AA processor) with annexes, SCC Module 2 and a TIA template, sub-processors after d23, the joint-controller clause and the tenant-as-controller privacy text."
 type: reference
 status: draft
 owner: nghiep
