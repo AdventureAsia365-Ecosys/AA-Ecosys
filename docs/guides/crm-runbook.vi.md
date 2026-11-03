@@ -42,7 +42,7 @@ thấy số liệu sử dụng, không bao giờ thấy chuyến đi hay doanh t
 | Trang cho khách du lịch (biểu mẫu, báo giá, cổng khách du lịch) | `https://go-dev.lumiguides.it.com/c/...` (chỉ qua đường link đại lý gửi; mở host trần không thấy gì) |
 | Console nhân sự AA | `https://portal.lumiguides.it.com/staff` |
 | Trang health của CRM | `https://portal.lumiguides.it.com/health` |
-| Trang admin Agencies (CRM) | `https://aa-cis.lumiguides.it.com/admin/platform/agencies` |
+| Trang admin Đại lý CRM (Tenant › Đại lý CRM) | `https://aa-cis.lumiguides.it.com/admin/tenants/agencies` |
 
 Host cũ `partner-dev.lumiguides.it.com` chuyển tiếp sang `portal.lumiguides.it.com`.
 
@@ -222,5 +222,5 @@ tech lead) theo [ứng phó sự cố](../ops/incident-response.md); runbook kho
 Đọc từ AA-Partner `main` ngày 01/11/2026: `web/lib/nav.ts` (menu và vai trò thấy gì), `web/lib/i18n.ts` và
 `web/lib/i18nStaff.ts` (nhãn), `web/app/(crm)/settings/page.tsx`, `CONTEXT.md` (các mục "Web", "Tenant portal",
 "F4 roles and team", "L1 console", "AA support access L2 + break-glass L3", "AA staff console", "Domain terms");
-AA-CIS-App `frontend/app/admin/platform/agencies/messages.ts`. Quyết định: ADR gốc 0010, 0006b, 0008a. Giữ trang này
+AA-CIS-App `frontend/app/admin/tenants/agencies/messages.ts`. Quyết định: ADR gốc 0010, 0006b, 0008a. Giữ trang này
 khớp với [crm-runbook.md](crm-runbook.md).

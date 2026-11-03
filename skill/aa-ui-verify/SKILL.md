@@ -73,7 +73,7 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
    | Trang công khai, layout chung, trang `/login` | PR preview: smoke công khai (tự chạy) hoặc browser không đăng nhập |
    | Trang đọc (viewer xem được) trước merge | Host Preview cố định (dispatch `alias_only_url` hoặc label `preview-signin`) + smoke có đăng nhập |
    | Trang reviewer sau merge | Smoke production có đăng nhập (tự chạy sau deploy) hoặc `e2e-cognito.yml` |
-   | Trang chỉ-admin (`/admin/content-quality`, `/admin/writing-memory`, …) | Agent tự chụp local bằng user E2E CIS admin (mục 3a, A10b) |
+   | Trang chỉ-admin (`/admin/tenant-qa/quality`, `/admin/writing-memory`, …) | Agent tự chụp local bằng user E2E CIS admin (mục 3a, A10b) |
    | Cut / Edit câu ở Content quality (mẫu AA-916 WM-07) | Cùng phiên mục 3a: chỉ 2 route `…/sentences/apply` mode `cut` / `manual` được ghi, trên tenant tổng hợp Dev |
    | Thao tác ghi admin khác | Phiên E2E admin bị chặn 403 `e2e_read_only`: sau deploy nhờ **Nghiệp** kiểm (hoặc gửi ảnh); báo cáo ghi rõ phần này chưa do agent kiểm |
    | Tenant portal | Key tenant E2E (mục 3b) trên preview hoặc `https://portal.lumiguides.it.com` |
