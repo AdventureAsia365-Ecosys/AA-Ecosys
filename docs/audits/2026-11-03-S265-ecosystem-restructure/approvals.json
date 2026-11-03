@@ -1,0 +1,445 @@
+{
+ "approved_by": "tech lead (S265, 03/11/2026, trang quyết định)",
+ "approvals": [
+  {
+   "id": "BO-1",
+   "owner": "business_owner",
+   "choice": "approve_now",
+   "recommended": "approve_now",
+   "followed_recommendation": true,
+   "choice_label_vi": "Duyệt câu chữ đề xuất ngay; luật sư rà cùng bộ hợp đồng mẫu sau",
+   "note": "",
+   "at": "2026-11-03T03:35:03.694Z"
+  },
+  {
+   "id": "BO-2",
+   "owner": "business_owner",
+   "choice": "keep_tiers",
+   "recommended": "keep_tiers",
+   "followed_recommendation": true,
+   "choice_label_vi": "Dùng 299 / 799 / 1 499 USD làm giá khởi điểm; Enterprise là \"liên hệ sales\", giá theo hợp đồng, không thấp hơn Business, gồm người phụ trách riêng, cam kết dịch vụ cao hơn và tuỳ chọn lưu dữ liệu ở EU có tính phí; xem lại sau 3 đại lý đầu tiên",
+   "note": "",
+   "at": "2026-11-03T03:41:20.528Z"
+  },
+  {
+   "id": "BO-3",
+   "owner": "business_owner",
+   "choice": "per_seat",
+   "recommended": "per_seat",
+   "followed_recommendation": true,
+   "choice_label_vi": "Tính theo người dùng, thấp hơn mức của Tern (ví dụ 25–35 USD/người/tháng)",
+   "note": "",
+   "at": "2026-11-03T03:41:52.096Z"
+  },
+  {
+   "id": "BO-4",
+   "owner": "business_owner",
+   "choice": "subscription_tiers",
+   "recommended": "subscription_tiers",
+   "followed_recommendation": true,
+   "choice_label_vi": "Thuê bao theo site: gói cơ bản (trang lưu trữ + nút mở), gói cao (tên miền riêng + API)",
+   "note": "tôi nghĩ chỉ nên làm nhúng vào website của đại lý, hoặc cung cấp giao diện lập trình (API) cho đại lý tự làm giao diện. chúng ta không lưu trữ dữ liệu hay thông tin gì về khách hàng, dữ liệu của đại ký, tôi hiểu vậy đúng không",
+   "at": "2026-11-03T03:44:59.874Z"
+  },
+  {
+   "id": "BO-5",
+   "owner": "business_owner",
+   "choice": "tenant_mor",
+   "recommended": "tenant_mor",
+   "followed_recommendation": true,
+   "choice_label_vi": "Đại lý thu tiền khách; Adventure Asia xuất hoá đơn cho đại lý theo giá B2B",
+   "note": "",
+   "at": "2026-11-03T03:45:23.775Z"
+  },
+  {
+   "id": "BO-6",
+   "owner": "business_owner",
+   "choice": "ancillaries_only",
+   "recommended": "ancillaries_only",
+   "followed_recommendation": true,
+   "choice_label_vi": "Chỉ cho dịch vụ bổ trợ (vé máy bay, bảo hiểm, visa, đưa đón, phí); tour phải của Adventure Asia",
+   "note": "",
+   "at": "2026-11-03T03:47:25.670Z"
+  },
+  {
+   "id": "BO-7",
+   "owner": "business_owner",
+   "choice": "warn_then_suspend",
+   "recommended": "warn_then_suspend",
+   "followed_recommendation": true,
+   "choice_label_vi": "Có điều khoản; cảnh báo trước, rồi tạm ngưng nếu không khắc phục sau thời hạn thông báo",
+   "note": "đồng ý cách làm, note làm 7 ngày có thể điều chỉnh sau này khi lên prod",
+   "at": "2026-11-03T03:48:36.847Z"
+  },
+  {
+   "id": "BO-8",
+   "owner": "business_owner",
+   "choice": "optional_off",
+   "recommended": "optional_off",
+   "followed_recommendation": true,
+   "choice_label_vi": "Tuỳ chọn, mặc định tắt",
+   "note": "note cân nhắc phương án 3",
+   "at": "2026-11-03T03:50:42.966Z"
+  },
+  {
+   "id": "BO-9",
+   "owner": "business_owner",
+   "choice": "controller_processor",
+   "recommended": "controller_processor",
+   "followed_recommendation": true,
+   "choice_label_vi": "Đại lý là bên kiểm soát, Adventure Asia là bên xử lý; ghi thêm điều khoản đồng kiểm soát cho phần nhúng; đại lý tự hiển thị thông báo cookie trên site của họ",
+   "note": "",
+   "at": "2026-11-03T03:52:03.474Z"
+  },
+  {
+   "id": "BO-10",
+   "owner": "business_owner",
+   "choice": "confirm_and_counsel",
+   "recommended": "confirm_and_counsel",
+   "followed_recommendation": true,
+   "choice_label_vi": "Xác nhận pháp nhân và xin ý kiến luật sư (giấy phép Việt Nam, đại diện EU) trước khi đại lý Việt Nam lưu dữ liệu khách hoặc trước đại lý EU đầu tiên",
+   "note": "note lại thôi, chúng ta hướng đên đại lý nước ngoài, nên pháp nhân có thể là AA ở Úc, chứ không phải ở VN, có thể tư vấn thêm cho tôi.",
+   "at": "2026-11-03T03:53:38.230Z"
+  },
+  {
+   "id": "BO-11",
+   "owner": "business_owner",
+   "choice": "us_scc_eu_on_request",
+   "recommended": "us_scc_eu_on_request",
+   "followed_recommendation": true,
+   "choice_label_vi": "Bán toàn cầu từ máy chủ Mỹ kèm hợp đồng chuẩn và đánh giá chuyển dữ liệu; lưu tại EU chỉ khi hợp đồng yêu cầu và có tính phí; Trung Quốc đại lục chỉ dùng gói Content",
+   "note": "",
+   "at": "2026-11-03T03:54:51.149Z"
+  },
+  {
+   "id": "BO-12",
+   "owner": "business_owner",
+   "choice": "info_pack",
+   "recommended": "info_pack",
+   "followed_recommendation": true,
+   "choice_label_vi": "Đại lý vẫn là bên tổ chức; Adventure Asia cung cấp gói thông tin về tour và nhà cung cấp",
+   "note": "",
+   "at": "2026-11-03T03:55:48.587Z"
+  },
+  {
+   "id": "BO-13",
+   "owner": "business_owner",
+   "choice": "named_owner_tiered",
+   "recommended": "named_owner_tiered",
+   "followed_recommendation": true,
+   "choice_label_vi": "Mọi đại lý có một người phụ trách có tên; chăm sóc sát cho gói Business/Enterprise; các gói khác qua hàng đợi chung khi số lượng tăng",
+   "note": "",
+   "at": "2026-11-03T03:56:33.422Z"
+  },
+  {
+   "id": "BO-14",
+   "owner": "business_owner",
+   "choice": "not_now",
+   "recommended": "not_now",
+   "followed_recommendation": true,
+   "choice_label_vi": "Chưa dùng; lập hoá đơn tay ở giai đoạn đầu; hỏi lại khi số hoá đơn mỗi tháng vượt sức làm tay",
+   "note": "không có giải pháp tự động từ hệ thống của chúng ta à, hay phải buộc dùng app ngoài",
+   "at": "2026-11-03T04:00:02.910Z"
+  },
+  {
+   "id": "BO-15",
+   "owner": "business_owner",
+   "choice": "tiers_off_one_net",
+   "recommended": "tiers_off_one_net",
+   "followed_recommendation": true,
+   "choice_label_vi": "Một giá net mỗi tour theo mùa; 3 hạng đại lý giảm theo phần trăm, gán theo hợp đồng (số khởi điểm để chạy thử 0 / 3 / 6%, chị đặt lại); giá bán lẻ gợi ý = giá net cộng 25% (bằng biên cũ của kênh bán lẻ)",
+   "note": "cứ dùng thiết kế đang có, sẽ xem xét điều chỉnh sau",
+   "at": "2026-11-03T04:02:19.761Z"
+  },
+  {
+   "id": "BO-16",
+   "owner": "business_owner",
+   "choice": "prepay_then_credit",
+   "recommended": "prepay_then_credit",
+   "followed_recommendation": true,
+   "choice_label_vi": "Đại lý mới: đặt cọc 30% khi xác nhận, phần còn lại trước ngày khởi hành 30 ngày (đặt sát ngày thì trả đủ); công nợ chỉ mở sau khoảng 6 tháng thanh toán tốt, có hạn mức ghi trong hợp đồng; tiền tệ USD",
+   "note": "tạm dùng theo đề xuất nhưng phải có cơ chế đề điều chỉnh sau được",
+   "at": "2026-11-03T04:09:14.098Z"
+  },
+  {
+   "id": "BO-17",
+   "owner": "business_owner",
+   "choice": "accountant_note_now",
+   "recommended": "accountant_note_now",
+   "followed_recommendation": true,
+   "choice_label_vi": "Gửi ghi chú cho kế toán ngay; hợp đồng ghi \"giá chưa gồm thuế\"; hai loại hoá đơn tách riêng (phí phần mềm và quyết toán tour)",
+   "note": "làm thiết kế trước luôn đi, có thể điều chỉnh sau cho mẫu này",
+   "at": "2026-11-03T04:10:09.443Z"
+  },
+  {
+   "id": "BO-18",
+   "owner": "business_owner",
+   "choice": "lean_sla_trust_later",
+   "recommended": "lean_sla_trust_later",
+   "followed_recommendation": true,
+   "choice_label_vi": "Chốt ngày dùng thật khi có đại lý thí điểm đồng ý dùng CRM với khách thật; cam kết 99,5% thời gian hoạt động cho gói Business/Enterprise, phản hồi hỗ trợ trong 1 ngày làm việc (4 giờ cho gói cao); chưa làm SOC 2/ISO, làm khi đại lý lớn hoặc EU đầu tiên đòi; kiểm thử xâm nhập trước ngày dùng thật",
+   "note": "",
+   "at": "2026-11-03T04:10:51.175Z"
+  },
+  {
+   "id": "BO-19",
+   "owner": "business_owner",
+   "choice": "company_account_soft_cap",
+   "recommended": "company_account_soft_cap",
+   "followed_recommendation": true,
+   "choice_label_vi": "Tài khoản đứng tên pháp nhân Adventure Asia, chị là chủ thanh toán, tech lead quản lý khoá; trần 150 USD/tháng, nâng chỉ khi chị đồng ý; AI kèm gói khởi điểm Starter 15 / Growth 40 / Business 80 USD/tháng, Enterprise theo hợp đồng; vượt mức thì dừng mềm, báo đại lý và người phụ trách, chưa tính tiền ở giai đoạn đầu",
+   "note": "theo thiết kế",
+   "at": "2026-11-03T04:11:21.026Z"
+  },
+  {
+   "id": "BO-20",
+   "owner": "business_owner",
+   "choice": "approve_draft_now",
+   "recommended": "approve_draft_now",
+   "followed_recommendation": true,
+   "choice_label_vi": "Duyệt bản nháp ngay; luật sư rà trước đại lý trả tiền đầu tiên",
+   "note": "",
+   "at": "2026-11-03T04:11:29.423Z"
+  },
+  {
+   "id": "BO-21",
+   "owner": "business_owner",
+   "choice": "light_kyc",
+   "recommended": "light_kyc",
+   "followed_recommendation": true,
+   "choice_label_vi": "Giấy đăng ký kinh doanh; giấy phép lữ hành nếu nước của đại lý yêu cầu; tra tay danh sách trừng phạt công khai miễn phí; người phụ trách đại lý duyệt, chị duyệt trường hợp đặc biệt",
+   "note": "",
+   "at": "2026-11-03T04:11:45.136Z"
+  },
+  {
+   "id": "TL-1",
+   "owner": "tech_lead",
+   "choice": "cis_shared",
+   "recommended": "cis_shared",
+   "followed_recommendation": true,
+   "choice_label_vi": "CIS schema shared; CRM và Booking là projection",
+   "note": "giải thích thêm chưa hiểu ý master  là gì, đặt ở đâu phù hợp",
+   "at": "2026-11-03T04:13:49.559Z"
+  },
+  {
+   "id": "TL-2",
+   "owner": "tech_lead",
+   "choice": "feature_keys",
+   "recommended": "feature_keys",
+   "followed_recommendation": true,
+   "choice_label_vi": "Feature key vật chất hoá trong shared.tenant_entitlement + contract tenant.entitlements.v1 (view + HTTP + feed)",
+   "note": "",
+   "at": "2026-11-03T04:14:33.434Z"
+  },
+  {
+   "id": "TL-3",
+   "owner": "tech_lead",
+   "choice": "extend_enum",
+   "recommended": "extend_enum",
+   "followed_recommendation": true,
+   "choice_label_vi": "Thêm giá trị enum content_lead, tenant_qa, customer_success, support, finance, ai_ops; gộp reviewer vào content (sửa admin_users_email_chk, alias group một release); giữ 2 bảng grant Booking/CRM",
+   "note": "cần tư vấn thêm rõ ràng mỗi vai trò làm gì cụ thể, nên có bảng phân quyền dễ hiểu hơn",
+   "at": "2026-11-03T04:15:42.714Z"
+  },
+  {
+   "id": "TL-4",
+   "owner": "tech_lead",
+   "choice": "server_scope",
+   "recommended": "server_scope",
+   "followed_recommendation": true,
+   "choice_label_vi": "Bảng shared.staff_tenant_assignment + dependency require_tenant_scope phía server + CI test mọi route {tenant_id} + probe cô lập; relay crm.ops.v1 chuyển kèm scope",
+   "note": "",
+   "at": "2026-11-03T04:15:52.695Z"
+  },
+  {
+   "id": "TL-5",
+   "owner": "tech_lead",
+   "choice": "readonly_viewas",
+   "recommended": "readonly_viewas",
+   "followed_recommendation": true,
+   "choice_label_vi": "View-as chỉ đọc 60 phút, lý do/ticket, banner, log shared.staff_view_as_session; PII khách cuối trong CRM chỉ qua support_grant",
+   "note": "",
+   "at": "2026-11-03T04:16:18.579Z"
+  },
+  {
+   "id": "TL-6",
+   "owner": "tech_lead",
+   "choice": "merge_now",
+   "recommended": "keep_crm_host",
+   "followed_recommendation": false,
+   "choice_label_vi": "Gộp portal/ vào web/ ngay thành một app",
+   "note": "phải gộp lại và chỉ 1 cách đăng nhập duy nhất thôi, không dùng key access gì nữa.",
+   "at": "2026-11-03T04:18:39.003Z"
+  },
+  {
+   "id": "TL-7",
+   "owner": "tech_lead",
+   "choice": "one_invite_role_map",
+   "recommended": "one_invite_role_map",
+   "followed_recommendation": true,
+   "choice_label_vi": "Một lời mời qua AA-Partner API mang bản đồ vai trò; vai trò CRM do hành động owner/admin tenant ghi vào crm.member; hai bảng vai trò giữ nguyên",
+   "note": "chưa hiểu lắm, phải gộp làm 1 cách đăng nhập và mời 1 lần thôi, còn còn add-on CRM, Tripplnaner thì mở theo request hat goid chứ, vì tenant đã vào home là thấy content rồi mà.",
+   "at": "2026-11-03T04:21:01.705Z"
+  },
+  {
+   "id": "TL-8",
+   "owner": "tech_lead",
+   "choice": "freeze_port_gaps_then_drop",
+   "recommended": "freeze_port_gaps_then_drop",
+   "followed_recommendation": true,
+   "choice_label_vi": "Flag + REVOKE INSERT ngay; port một lát maker-checker thanh toán tay sang CRM (tuỳ chọn theo tenant); CHECK chỉ b2b; drop sau theo DRY RUN; đảo S253 cho màn B2C, giữ supply/giá/ops/B2B, thêm Partners + Settlement",
+   "note": "nên lấy tính năng nào tốt phù hợp mô hình B2C của Booking thì dùng cho CRM, thêm nữa thì xem CRM cần thêm  nhưng tính năng gì so với các sản phẩm thị trường thì đề xuất",
+   "at": "2026-11-03T04:23:35.555Z"
+  },
+  {
+   "id": "TL-9",
+   "owner": "tech_lead",
+   "choice": "all_in_booking",
+   "recommended": "manual_split",
+   "followed_recommendation": false,
+   "choice_label_vi": "Mọi hoá đơn (SaaS + quyết toán) trong Booking",
+   "note": "không phải sẽ làm gộp phần Booking hiện tại về trang admin để chỉ cần quản lý cho B2B sao.",
+   "at": "2026-11-03T04:25:09.441Z"
+  },
+  {
+   "id": "TL-10",
+   "owner": "tech_lead",
+   "choice": "inplace_path_launcher",
+   "recommended": "inplace_path_launcher",
+   "followed_recommendation": true,
+   "choice_label_vi": "Tại chỗ; tenant theo path /{slug} trên host hiện có + nút launcher; subdomain/custom domain sau",
+   "note": "chưa hiểu lắm phải mô tả, giải thích rõ hơn , không dùng vercel pro mà build vào trong aws thì sao, tư vấn xem cách nào tốt hơn, an toàn hơn, cách nào dùng 1 repo nhưng cắm được vào nhiều CRM/tenant",
+   "at": "2026-11-03T04:28:28.973Z"
+  },
+  {
+   "id": "TL-11",
+   "owner": "tech_lead",
+   "choice": "guest_crm_link",
+   "recommended": "guest_crm_link",
+   "followed_recommendation": true,
+   "choice_label_vi": "Guest + e-mail lúc gửi; quay lại bằng link CRM; lead qua lead.submitted.v1 vào CRM intake, không có CRM thì webhook ký/e-mail; đóng băng client tripplanner, booking-customer",
+   "note": "chua hiểu lắm, vậy sao khách xem lại tour của mình và đặt tour được, nhưng AA không muốn giữ dữ liệu khách cuối, cái đó đẻ tenant tự quản lý.",
+   "at": "2026-11-03T04:31:37.895Z"
+  },
+  {
+   "id": "TL-12",
+   "owner": "tech_lead",
+   "choice": "region_field_pii_class",
+   "recommended": "region_field_pii_class",
+   "followed_recommendation": true,
+   "choice_label_vi": "Thêm data_region ngay; pii_class mỗi stage (PII → us, content → global); sửa ADR 0018 d7 với trigger trước khi tạo aa-prod; cell EU chỉ khi có trigger",
+   "note": "",
+   "at": "2026-11-03T04:32:14.271Z"
+  },
+  {
+   "id": "TL-13",
+   "owner": "tech_lead",
+   "choice": "regroup_lab",
+   "recommended": "regroup_lab",
+   "followed_recommendation": true,
+   "choice_label_vi": "Nhóm Home/Tenants/AA Catalogue/Tenant QA/AI & spend/Writing Lab/Platform; Writing Lab theo stage chỉ regroup UI trên bảng hiện có, gỡ băng từng stage sau",
+   "note": "",
+   "at": "2026-11-03T04:33:33.283Z"
+  },
+  {
+   "id": "TL-14",
+   "owner": "tech_lead",
+   "choice": "keep_repos_one_adr",
+   "recommended": "keep_repos_one_adr",
+   "followed_recommendation": true,
+   "choice_label_vi": "Giữ 6 repo; một ADR 0019 'B2B-only ecosystem model' + ghi chú sửa ngắn ở từng ADR; cập nhật CONTEXT.md các repo",
+   "note": "",
+   "at": "2026-11-03T04:33:48.532Z"
+  },
+  {
+   "id": "TL-15",
+   "owner": "tech_lead",
+   "choice": "content_path_first",
+   "recommended": "content_path_first",
+   "followed_recommendation": true,
+   "choice_label_vi": "S265 R0 + khép gateway In Review + AA-820; S266–S268 R1 (kéo AA-1028 lên); S268–S269 R3 (+AA-1007/1008); ~S270 pilot Content; S270–S271 R2; S271–S272 R4 (+AA-1029/1030); S272–S275 R5; S276–S278 R7; R6 lane song song. Tạm dừng AA-960/963/968/970/980, AA-1003 (re-scope); AA-965 chờ BO-6; giữ AA-969, AA-1024…1027, AA-820, AA-896, AA-873",
+   "note": "",
+   "at": "2026-11-03T04:34:43.499Z"
+  },
+  {
+   "id": "TL-16",
+   "owner": "tech_lead",
+   "choice": "all_on_dev",
+   "recommended": "content_dev_crm_prod",
+   "followed_recommendation": false,
+   "choice_label_vi": "Pilot cả Content và CRM với dữ liệu thật trên Dev",
+   "note": "phải có kế hoạch chi tiết để lên prod, làm pilot cả content, crm và tripplanner chứ nhỉ, ý tôi là chayj test toàn bộ, hay bạn đang nói pilot gì",
+   "at": "2026-11-03T04:36:56.871Z"
+  },
+  {
+   "id": "TL-17",
+   "owner": "tech_lead",
+   "choice": "portal_book_with_aa",
+   "recommended": "portal_book_with_aa",
+   "followed_recommendation": true,
+   "choice_label_vi": "Nút 'Book with AA' trong Content (trang tour): form quote/hold gọi booking.b2b.v1 qua AA-Partner API dưới danh tính tenant, vào Agency desk của Booking; trang 'Bookings với AA' xem trạng thái + hoá đơn quyết toán; e-mail tới agency desk làm dự phòng; API B2B công khai cho hệ thống riêng của tenant khi có tenant yêu cầu",
+   "note": "",
+   "at": "2026-11-03T04:39:12.009Z"
+  },
+  {
+   "id": "TL-18",
+   "owner": "tech_lead",
+   "choice": "keep_order_flip_by_stage",
+   "recommended": "keep_order_flip_by_stage",
+   "followed_recommendation": true,
+   "choice_label_vi": "Giữ thứ tự route ADR 0009; bật Anthropic theo stage: (1) s1_generate, place_card (chỉ nội dung AA); (2) stage viết của tenant sau AA-820 (BO-20); (3) tp_compose sau trần AI theo tenant; (4) crm_draft_reply cuối, geo us. Mỗi stage: shadow → 3 tour → ≤ ~50 tour, báo chi phí mỗi tour; judge giữ OpenAI API làm đường ấm, khác family writer",
+   "note": "",
+   "at": "2026-11-03T04:40:32.740Z"
+  },
+  {
+   "id": "TL-19",
+   "owner": "tech_lead",
+   "choice": "kit_notice_by_dec2",
+   "recommended": "kit_notice_by_dec2",
+   "followed_recommendation": true,
+   "choice_label_vi": "Một thành phần AI notice trong kit (TripPlanner chat/narration, CRM AI draft, nhãn 'AI-assisted' trong Content) + metadata ai_generated/model/ngày trên export CIS, API /v1/* và trang WordPress publish; xong trước 02/12/2026",
+   "note": "giải thích thêm chưa hiểu ý là gì",
+   "at": "2026-11-03T04:42:07.858Z"
+  },
+  {
+   "id": "TL-20",
+   "owner": "tech_lead",
+   "choice": "event_fanout_notify",
+   "recommended": "event_fanout_notify",
+   "followed_recommendation": true,
+   "choice_label_vi": "Sự kiện catalog.tour_liveness_changed; TripPlanner ẩn ngay; huỷ mục publish đang chờ; WordPress: báo tenant + flag, tự chuyển trang tour về draft sau thời hạn thông báo (mặc định 7 ngày, BO-7); Facebook: báo + flag, không xoá; CRM: đánh dấu dòng + task cho agent; Booking: chặn hold mới, giữ booking đã xác nhận",
+   "note": "nên có thông báo trên hệ thống hay mail cho các tenant không?",
+   "at": "2026-11-03T04:44:52.686Z"
+  },
+  {
+   "id": "TL-21",
+   "owner": "tech_lead",
+   "choice": "structural_gate",
+   "recommended": "structural_gate",
+   "followed_recommendation": true,
+   "choice_label_vi": "Gate không LLM lúc tạo và trước publish: mỗi piece gắn ≥ 1 chủ thể AA (tour live, atom/place AA, hoặc nội dung thương hiệu không có CTA bán); link/CTA bán chỉ tới trang tour AA hoặc site TripPlanner của tenant; sai thì held vào Tenant QA › Compliance; tenant thấy lý do dạng nội dung",
+   "note": "là gì chưa hiểu, cho việc gì",
+   "at": "2026-11-03T04:46:35.576Z"
+  },
+  {
+   "id": "TL-22",
+   "owner": "tech_lead",
+   "choice": "catalogue_en_vi_tz_currency",
+   "recommended": "catalogue_en_vi_tz_currency",
+   "followed_recommendation": true,
+   "choice_label_vi": "Một message catalogue trong kit, mặc định EN + VI, thêm ngôn ngữ khi tenant trả tiền yêu cầu; shared.tenants.time_zone (IANA) + múi giờ người dùng, lưu UTC; display_currency theo tenant cho hiển thị, hoá đơn AA giữ USD trừ khi hợp đồng ghi khác",
+   "note": "nếu không tốn nhiều công thì có thể làm sẵn chứ nhỉ, tức nhiên là sau khi build xong các tính năng khác.",
+   "at": "2026-11-03T04:48:10.308Z"
+  },
+  {
+   "id": "TL-23",
+   "owner": "tech_lead",
+   "choice": "move_tp_to_ecs",
+   "recommended": "pro_now",
+   "followed_recommendation": false,
+   "choice_label_vi": "Chuyển TripPlanner sang ECS như portal",
+   "note": "phần tích thêm chi phí khi về aws",
+   "at": "2026-11-03T04:48:39.710Z"
+  }
+ ]
+}
