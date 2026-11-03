@@ -17,9 +17,16 @@ because each container's DATABASE_URL reads only its own schemas:
 Environment (ecsx.sh VAR=value pairs):
   MONTHS   comma-separated YYYY-MM list; default: the three whole months before the current UTC month.
   PART     cis | booking | crm (see above).
-  REFRESH  1 = PART=cis only: when the stored App-tag Cost Explorer data of a month is stale, refresh that window
-           first through the CIS client (platform_cost.refresh_app_snapshot: one Cost Explorer request, about
-           0.01 USD per month window). Default 0: read the stored data only, in a read-only transaction.
+  REFRESH  1 = PART=cis only: refresh a month's stored Cost Explorer data through the CIS client before reading it,
+           when that data is not final yet (fetched less than FINAL_AFTER after the month ended), the same two
+           fetches as POST /admin/cost-explorer/check:
+             - the acc2 App-tag snapshot (platform_cost.refresh_app_snapshot, one request, about 0.01 USD), which the
+               App rows and the acc2 total read; also when cost_by_app calls the month stale;
+             - the acc2 + acc3 SERVICE snapshot (cost_explorer.fetch_all_accounts_cost + record_snapshot, one request
+               per account, about 0.02 USD), which the acc3 Bedrock line (llm_satellites) reads. Before S265 REFRESH=1
+               refreshed only the App-tag snapshot, so the acc3 line kept an older fetch (October 2026 report).
+           A month whose stored data is final is not fetched again. Default 0: read the stored data only, in a
+           read-only transaction.
 
 No new Cost Explorer client (data standard DM-10.4, S243 K-14): Cost Explorer is read only through the CIS module.
 Output: one line "FINOPS_BUNDLE <json>" on stdout, with every AWS account ID removed (scrub(): the root repo is public,
@@ -35,12 +42,15 @@ import json
 import os
 import re
 import sys
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 from typing import Any, Awaitable, Callable, Optional
 
 MARKER = "FINOPS_BUNDLE "
 BUNDLE_VERSION = 1
+# Same rule as api.services.platform_cost.FINAL_AFTER: Cost Explorer stops revising a day about 48 h after it ends, so
+# stored data fetched at least 3 days after the window's end is final and REFRESH=1 does not fetch it again.
+FINAL_AFTER = timedelta(days=3)
 
 # Same sources and app rule as platform_cost.AI_SPEND_SQL: rolled-up days from shared.llm_call_daily, the other days
 # from shared.llm_call_log, app = coalesce(app, quality_signal ->> 'app', 'cis').
@@ -203,17 +213,55 @@ def rows(records: Any) -> list[dict[str, Any]]:
 
 CostFn = Callable[..., Awaitable[dict]]
 RefreshFn = Callable[[Any, date, date], Awaitable[dict]]
+FetchAllFn = Callable[[str, str], dict]
+RecordFn = Callable[[Any, list], Awaitable[int]]
+
+
+def is_final(fetched_at: Optional[str], end_exclusive: date) -> bool:
+    """True when stored data fetched at ``fetched_at`` (ISO time) can no longer change: fetched at least FINAL_AFTER
+    after the window ended. No fetch time = not final."""
+    if not fetched_at:
+        return False
+    fetched = datetime.fromisoformat(fetched_at)
+    if fetched.tzinfo is None:
+        fetched = fetched.replace(tzinfo=timezone.utc)
+    return fetched >= datetime.combine(end_exclusive, datetime.min.time(), tzinfo=timezone.utc) + FINAL_AFTER
+
+
+async def refresh_service_snapshot(pool: Any, start: date, end_exclusive: date, *, fetch_fn: FetchAllFn,
+                                   record_fn: RecordFn) -> dict:
+    """The SERVICE half of POST /admin/cost-explorer/check for [start, end_exclusive): acc2 + acc3 Cost Explorer by
+    service (one request per account, about 0.01 USD each), stored in shared.cost_explorer_snapshot. The acc3 line of
+    cost_by_app reads it. Never raises: the per-account error text names roles and account IDs, so only the account
+    keys that failed are kept (the bundle is committed to the public root repo)."""
+    try:
+        result = await asyncio.to_thread(fetch_fn, start.isoformat(), end_exclusive.isoformat())
+    except Exception as e:  # CostExplorerUnavailable when every account failed
+        return {"ok": False, "error": type(e).__name__}
+    written = await record_fn(pool, result.get("rows") or [])
+    return {"ok": True, "row_count": written, "accounts_failed": sorted(result.get("errors") or {})}
 
 
 async def collect_cis(pool: Any, months: list[str], today: date, *, cost_fn: CostFn,
-                      refresh_fn: Optional[RefreshFn] = None) -> dict[str, Any]:
+                      refresh_fn: Optional[RefreshFn] = None,
+                      service_refresh_fn: Optional[RefreshFn] = None) -> dict[str, Any]:
+    """``refresh_fn`` refreshes the App-tag snapshot, ``service_refresh_fn`` the SERVICE snapshot (REFRESH=1); each
+    runs only for a month whose stored data is not final yet."""
     out: dict[str, Any] = {}
     for m in months:
         start, end = window(m, today)
         cost = await cost_fn(pool, m, refresh_if_stale=False)
         refreshed = None
-        if refresh_fn is not None and (cost.get("refresh") or {}).get("stale"):
-            refreshed = await refresh_fn(pool, start, end)
+        state = cost.get("refresh") or {}
+        app_tag_final = not state.get("stale") and str(state.get("reason") or "").startswith("final")
+        service_final = is_final((cost.get("llm_satellites") or {}).get("ce_fetched_at"), end)
+        done: dict[str, Any] = {}
+        if refresh_fn is not None and not app_tag_final:
+            done["app_tag"] = await refresh_fn(pool, start, end)
+        if service_refresh_fn is not None and not service_final:
+            done["service"] = await service_refresh_fn(pool, start, end)
+        if done:
+            refreshed = done
             cost = await cost_fn(pool, m, refresh_if_stale=False)
         units = dict((await pool.fetch(PUBLISHED_TOURS_SQL, start, end))[0])
         out[m] = {
@@ -260,11 +308,17 @@ async def run(part: str, months: list[str], refresh: bool, now: datetime) -> dic
     today = now.date()
     if part == "cis":
         from api.services import platform_cost  # the container's /app is on sys.path (ecsx_runner)
+        from shared.aws_client import cost_explorer as ce
+
+        async def service_refresh(p: Any, start: date, end: date) -> dict:
+            return await refresh_service_snapshot(p, start, end, fetch_fn=ce.fetch_all_accounts_cost,
+                                                  record_fn=ce.record_snapshot)
 
         pool = await asyncpg.create_pool(dsn, ssl="require", min_size=1, max_size=2, server_settings=settings)
         try:
             data = await collect_cis(pool, months, today, cost_fn=platform_cost.cost_by_app,
-                                     refresh_fn=platform_cost.refresh_app_snapshot if refresh else None)
+                                     refresh_fn=platform_cost.refresh_app_snapshot if refresh else None,
+                                     service_refresh_fn=service_refresh if refresh else None)
         finally:
             await pool.close()
     else:
