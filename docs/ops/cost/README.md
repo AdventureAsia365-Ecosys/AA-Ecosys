@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-31
+last_reviewed: 2026-11-03
 review_every_days: 90
 related: [FIN-01, FIN-02, OPS-08, AA-896, AA-838, AA-884]
 ---
@@ -19,19 +19,16 @@ saved as `docs/audits/<date>-S<nnn>-capacity-review/README.md` with a root PR, d
 approved by the tech lead (C8a). This folder holds only this how-to; reports live in `docs/audits/` (DM-8.10, C8a).
 Rules and budgets: [FinOps process](../finops.md).
 
-> [!NOTE]
-> Not yet run on real data. `tools/finops/collect_month.py` and `tools/finops/monthly_cost_report.py` are tested
-> with synthetic inputs only (`tools/finops/test_*.py`). The first real run is the October 2026 report, in the first
-> session on or after 2026-11-03 (see "Before you start"). Update this page with what that run teaches.
-
 ## Before you start
 
 - When: the first session of the month, for the month that just ended. The same session runs the vulnerability
   triage ([SEC-03](../../security/vulnerability-management.md#monthly-triage)).
-- Cost: 0 USD when the stored Cost Explorer data is fresh; one Cost Explorer request (0.01 USD) per month window
-  that the admin page refreshes, plus two one-line reads in the management account (step 3, 0.02 USD). No new Cost
-  Explorer script (DM-10.4).
-- Wait two days after the month ends: Cost Explorer revises a day for about 48 hours.
+- Cost: 0 USD when the stored Cost Explorer data is final; with `REFRESH=1` about 0.03 USD per month that is not
+  final yet (step 2), plus two one-line reads in the management account (step 3, 0.02 USD) and, to explain the
+  jumps, about two usage-type reads (0.02 USD, see "What the first real run taught"). No new Cost Explorer script
+  (DM-10.4).
+- Wait two days after the month ends: Cost Explorer revises a day for about 48 hours. Collect the final report's
+  bundles at or after month end + 48 hours (for October 2026: 2026-11-02 23:30 UTC), with `REFRESH=1` (step 2).
 
 ## Steps
 
@@ -57,9 +54,14 @@ Rules and budgets: [FinOps process](../finops.md).
    ECSX_SERVICE=aa-crm-dev-api tools/ecs/ecsx.sh tools/finops/collect_month.py PART=crm MONTHS=2026-08,2026-09,2026-10 > .tmp-session/cost-2026-10/crm.txt
    ```
 
-   Verify: each file has one line starting with `FINOPS_BUNDLE`. If the report later lists "Stored Cost Explorer
-   data was stale", run the CIS line again with `REFRESH=1` (one Cost Explorer request per stale month, about
-   0.01 USD each, through the CIS client).
+   Verify: each file has one line starting with `FINOPS_BUNDLE`. For the final report add `REFRESH=1` to the CIS
+   line (after `PART=cis`): for every month whose stored Cost Explorer data is not final yet (fetched less than
+   3 days after the month ended) it makes the same two fetches as `POST /admin/cost-explorer/check`, through the CIS
+   client: the acc2 App-tag snapshot (one request, about 0.01 USD) and the acc2 + acc3 SERVICE snapshot that the
+   acc3 line reads (one request per account, about 0.02 USD). A final month is not fetched again, so the older
+   months of `MONTHS` cost nothing. Check `months.<month>.refreshed` in the bundle: `service.ok` is true and
+   `service.accounts_failed` is empty. If the report lists "Stored Cost Explorer data was stale", run the CIS line
+   again with `REFRESH=1`.
 
 3. Read the management account's own spend for the report month and the month before. The CIS client reads acc2
    and acc3 only; the management account (organization CloudTrail trail and bucket, KMS key, budgets) is read here.
@@ -115,6 +117,31 @@ Rules and budgets: [FinOps process](../finops.md).
 
 8. Open the root PR (`docs: capacity and cost review YYYY-MM`, body `Refs AA-838, AA-896`) and ask the tech lead to
    approve. Rollback: the PR only adds files; close it to discard.
+
+## What the first real run taught (October 2026, S265)
+
+The first run on real data was the October 2026 report
+([`docs/audits/2026-11-03-S265-capacity-review/`](../../audits/2026-11-03-S265-capacity-review/README.md)).
+
+- **`REFRESH=1` refreshed only half of the data.** It refreshed the acc2 App-tag snapshot
+  (`shared.cost_explorer_app_snapshot`), which the App rows and the acc2 total read, but not the acc2 + acc3 SERVICE
+  snapshot (`shared.cost_explorer_snapshot`), which the acc3 Bedrock line (`llm_satellites`) reads: the first
+  bundle's acc3 figure was a fetch from five days before the month ended. The orchestrator had to run the
+  equivalent of `POST /admin/cost-explorer/check` for the month first (`fetch_all_accounts_cost` +
+  `record_snapshot`, about 0.02 USD). Fixed with the October report: `REFRESH=1` now refreshes both snapshots
+  (step 2).
+- **"fresh" is not "final".** The stale rule of the cost module (`platform_cost._is_stale`) calls a month `fresh`
+  when every stored day was fetched less than 24 hours ago, even before `FINAL_AFTER` (3 days after the month
+  ended). A bundle collected on the 1st can therefore read `fresh` and still miss the last day and the revisions of
+  the last 48 hours (October: +11.02 USD on acc2 between the 01/11 and the 02/11 fetch). Run the final report's
+  refresh at or after month end + 48 hours; `REFRESH=1` now also refreshes a `fresh` month until it is final.
+- **Explaining the jumps needs usage types.** The bundle carries service and `App` tag only. Two one-line
+  `get-cost-and-usage` reads on acc2 (0.01 USD each) answered most of the open items: one MONTHLY read of the report
+  month and the month before, grouped by `SERVICE` and `USAGE_TYPE` and filtered to the flagged services; one DAILY
+  read of the report month, filtered to the usage types that moved. The S248 11-request script is not needed for
+  this.
+- **The MFA session can expire in the middle of the run.** Plan the Cost Explorer reads in one window right after
+  `aws sts get-caller-identity`; a read that stops at the MFA prompt is not sent and costs nothing.
 
 ## The first report (October 2026)
 
