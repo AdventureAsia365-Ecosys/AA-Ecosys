@@ -1,0 +1,86 @@
+{
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 403 ()"
+  ],
+  "pageErrors": [],
+  "badResponses": [
+    "403 PUT /api/admin/platform/crm/agencies/<uuid>/entitlements-allowed :: {\"detail\":\"e2e_read_only\"}"
+  ],
+  "notes": [],
+  "console": {
+    "status": 200,
+    "body": "{\"can_write\":false,\"environment\":\"dev\"}"
+  },
+  "agencies": [
+    {
+      "name": "test 2",
+      "synthetic": true
+    },
+    {
+      "name": "Atlas & Hearth",
+      "synthetic": true
+    },
+    {
+      "name": "Southern Cross Journeys",
+      "synthetic": true
+    },
+    {
+      "name": "Lữ hành Sen Vàng",
+      "synthetic": true
+    },
+    {
+      "name": "Harbour Lights Travel Co.",
+      "synthetic": true
+    }
+  ],
+  "agencyFound": true,
+  "readOnlyBanner": "Read only: your staff account is not in the crm-platform-admin group, so the actions are hidden.",
+  "featuresBefore": "Features allowed Plan free · 10 seats AA allows; the owner switches on. Allowing a feature does not turn it on for the agency. AI writing assist WhatsApp and SMS Stripe payments (Connect) E-mail campaigns Custom domain Insights export",
+  "featureCheckboxes": [
+    {
+      "label": "AI writing assist",
+      "checked": false,
+      "disabled": true
+    },
+    {
+      "label": "WhatsApp and SMS",
+      "checked": false,
+      "disabled": true
+    },
+    {
+      "label": "Stripe payments (Connect)",
+      "checked": false,
+      "disabled": true
+    },
+    {
+      "label": "E-mail campaigns",
+      "checked": false,
+      "disabled": true
+    },
+    {
+      "label": "Custom domain",
+      "checked": false,
+      "disabled": true
+    },
+    {
+      "label": "Insights export",
+      "checked": false,
+      "disabled": true
+    }
+  ],
+  "saveButton": 0,
+  "entitlementsBefore": {
+    "status": 200,
+    "features_allowed": []
+  },
+  "putAllow": {
+    "status": 403,
+    "body": "{\"detail\":\"e2e_read_only\"}"
+  },
+  "entitlementsAfter": {
+    "status": 200,
+    "features_allowed": []
+  },
+  "featuresAfter": "Features allowed Plan free · 10 seats AA allows; the owner switches on. Allowing a feature does not turn it on for the agency. AI writing assist WhatsApp and SMS Stripe payments (Connect) E-mail campaigns Custom domain Insights export",
+  "overflow390": "390/390"
+}

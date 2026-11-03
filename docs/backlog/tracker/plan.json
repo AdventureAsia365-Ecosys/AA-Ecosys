@@ -1,6 +1,6 @@
 {
  "updated": "2026-11-03",
- "synced_at": "2026-11-03T07:31Z",
+ "synced_at": "2026-11-03T08:43Z",
  "session": "S265",
  "next_session": "S266",
  "source": "Linear (03/11/2026 07:31Z, plan_sync.py --write) + rà plan/issue S265 đã duyệt (docs/audits/2026-11-03-S265-plan-issue-review/review.json, ADR 0019) + docs/backlog/README.md + .tmp-session/S265-checklist.md",
@@ -801,9 +801,13 @@
     "AA-896",
     "AA-1020",
     "AA-1023",
-    "AA-1025"
+    "AA-1025",
+    "AA-1034"
    ],
-   "canceled": [],
+   "canceled": [
+    "AA-628",
+    "AA-864"
+   ],
    "created": [
     "AA-1034",
     "AA-1035",
@@ -820,7 +824,8 @@
     "R0 (AA-1034): cờ B2C tắt (Booking #171, TripPlanner thông báo demo), bk-036 REVOKE INSERT booking.customer* (42501 live), Overview hết thẻ B2C; CIS mig 347–352, tp-024",
     "Rà 52 issue đang mở theo ADR 0019, tech lead duyệt hết: sửa phạm vi 23, giữ 17, tạm dừng 7 (CRM W6–W8 sau R3), gộp 3 (AA-1005→1038, AA-1007→1036, AA-1010→1035), huỷ 2 (AA-864, AA-628); plan cắt lại theo mốc R0–R7, pilot mốc 1 ~S272, mốc 2 ~S277",
     "Duyệt: 4 frontend lên ECS trên Dev trước (2 app staff chung 1 task Spot, TripPlanner 1 task Spot + CloudFront + WAF, ~20–22 USD/tháng); P2 aa-prod muộn nhất tuần 3 pilot nếu chưa có ngày go-live; mail SES cho fan-out tour ngừng bán; lượt AA-741 ≤20 USD, ≤50 tour",
-    "Done: AA-896 (chi phí 8/9/10 chính thức), AA-1020 (/admin/docs live), AA-1023 (cửa sổ MFA IAM + environment dev), AA-1025 (H1b/H2 live); AA-1024 D2 PASS (mig 352)"
+    "Done: AA-896 (chi phí 8/9/10 chính thức), AA-1020 (/admin/docs live), AA-1023 (cửa sổ MFA IAM + environment dev), AA-1025 (H1b/H2 live); AA-1024 D2 PASS (mig 352)",
+    "Gộp (Duplicate): AA-1005→AA-1038, AA-1007→AA-1036, AA-1010→AA-1035; R0 (AA-1034) Done: ADR 0019, cờ B2C tắt, bk-036, Overview hết thẻ B2C."
    ]
   },
   {
@@ -1701,18 +1706,6 @@
    "needs": ""
   },
   {
-   "id": "AA-864",
-   "title": "[Research] Consolidate on one AWS account: scenario to migrate all of acc2 (services, data, connections) to acc3 or a designated account",
-   "status": "Backlog",
-   "priority": "Low",
-   "project": "data",
-   "milestone": "M-R0",
-   "session": "parked",
-   "size": "M",
-   "next": "R0 · huỷ (Canceled, có comment): ADR 0018 + AA-1004 đã thay việc gộp một account",
-   "needs": ""
-  },
-  {
    "id": "AA-842",
    "title": "[Observability] Investigate OpenTelemetry gen_ai tracing for every LLM call (Bedrock + OpenAI) — read-only report, options, backend, pilot plan",
    "status": "Backlog",
@@ -1794,18 +1787,6 @@
    "session": "S271",
    "size": "S",
    "next": "R4 · đầu R4: cập nhật ghi chú Asian Trails theo thiết kế R4 (AA-1037/1029/1030, Book with AA d17), map khoảng trống sang issue, nháp KAN-20 cuối phiên rồi đóng",
-   "needs": ""
-  },
-  {
-   "id": "AA-628",
-   "title": "[Future] Engagement feedback loop for T-series (rebuild on content_piece/publish_log)",
-   "status": "Backlog",
-   "priority": "Low",
-   "project": "core",
-   "milestone": "M-R0",
-   "session": "parked",
-   "size": "L",
-   "next": "R0 · huỷ (Canceled, có comment): ý tưởng giữ trong docs/backlog §4 + tab Metrics của Writing Lab",
    "needs": ""
   },
   {
@@ -1953,30 +1934,6 @@
    "needs": "Business owner: ngày go-live + đại lý thật đầu tiên"
   },
   {
-   "id": "AA-1005",
-   "title": "[Identity] Traveller Google/Facebook sign-in, Booking customer app sign-in and live abuse-limit audit",
-   "status": "Backlog",
-   "priority": "No priority",
-   "project": "core",
-   "milestone": "M-P2",
-   "session": "S272",
-   "size": "M",
-   "next": "R5 · gộp vào AA-1038 (comment bằng chứng): bỏ đăng nhập traveller/app khách (trái d11); giới hạn lạm dụng ở bước gửi guest thành rule WAF trong AA-1038",
-   "needs": ""
-  },
-  {
-   "id": "AA-1007",
-   "title": "[UI] Partner portal + CRM web on the kit (S6c): delete portal ui.tsx, suppressions 182 + 111 → 0",
-   "status": "In Progress",
-   "priority": "No priority",
-   "project": "portal",
-   "milestone": "M-R3",
-   "session": "S268",
-   "size": "L",
-   "next": "R3 · gộp vào AA-1036: 0 suppression + xoá ui.tsx đếm trên web/ sau gộp; slice đã ship (sidebar 4 app, Members chỉ xem) ghi vào comment",
-   "needs": ""
-  },
-  {
    "id": "AA-1008",
    "title": "[UI] Kit shell, visual job and close-out (S6e + S1d/S2c + S6f/H3): shared ShellFrame, visual job 1440/390 light/dark for CIS/portal/CRM web, empty suppressions, required checks",
    "status": "Backlog",
@@ -1987,18 +1944,6 @@
    "size": "M",
    "next": "R3 · sau khi AA-1036 gộp: ShellFrame chung cho 4 consumer kit + visual job 1440/390 sáng/tối trên next start trong CI, bật check bắt buộc (H3)",
    "needs": "Tech lead đăng nhập GitHub để bật check bắt buộc (H3)"
-  },
-  {
-   "id": "AA-1010",
-   "title": "[Auth] Dev-only UAT write permission for the E2E CIS admin",
-   "status": "Backlog",
-   "priority": "No priority",
-   "project": "portal",
-   "milestone": "M-R2",
-   "session": "S269",
-   "size": "S",
-   "next": "R2 · gộp vào AA-1035: quyền ghi UAT = E2E identity theo vai trò thật trên Dev (ENVIRONMENT=dev, allow-list, audit mỗi lần ghi)",
-   "needs": ""
   },
   {
    "id": "AA-1011",
@@ -2094,18 +2039,6 @@
    "session": "S271",
    "size": "M",
    "next": "R4 · sau AA-1029: hạng đại lý giảm 0/3/6 % trên net (b15) trong booking.partner_tier, maker-checker; dựa projection b2b_partners của R1",
-   "needs": ""
-  },
-  {
-   "id": "AA-1034",
-   "title": "[Platform] R0 B2B-only model: ADR 0019, B2C paths off by flag, backlog re-scope",
-   "status": "In Review",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M-R0",
-   "session": "S265",
-   "size": "M",
-   "next": "R0 · đã live: cờ B2C tắt, bk-036 trả 42501, Overview hết thẻ B2C, ADR 0019 trên master; còn follow-up R0 (C7.1a, CONTEXT.md, 2 contract nháp, đếm audit_log tenant-login 30 ngày) + comment re-scope Linear",
    "needs": ""
   },
   {

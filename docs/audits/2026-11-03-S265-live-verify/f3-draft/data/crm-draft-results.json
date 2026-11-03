@@ -1,0 +1,150 @@
+{
+  "consoleErrors": [],
+  "pageErrors": [],
+  "badResponses": [],
+  "notes": [],
+  "steps": {
+    "1": "PASS ai_assist_allowed true",
+    "2": "PASS switch found off, now on",
+    "3": "PASS card ready, Draft enabled, drawer opened",
+    "4": "PASS draft text + AiNotice staff + test-mode note + ai_draft_id, accept/discard visible",
+    "5": "PASS switch restored to off, ai_assist still allowed",
+    "4b": "PASS discarded with feedback other"
+  },
+  "draftRequests": [
+    {
+      "n": 1,
+      "status": 200,
+      "path": "/bff/trips/<trip>/ai/draft",
+      "requestBodyKeys": [
+        "kind",
+        "text"
+      ],
+      "responseFields": {
+        "ai_draft_id": "b1e96c77-12c0-44f9-b15f-75e5a25388b1",
+        "outcome": "ok",
+        "fallback": null,
+        "refusal_code": null,
+        "error_class": null,
+        "llm_call_id": "10ad07af-611e-4965-8e74-a74759f3fec8",
+        "budget_used_pct": 0,
+        "budget_alert": null,
+        "truncated": false,
+        "approval_required": true,
+        "drafted_at": "2026-11-03T02:30:30.177754+00:00"
+      },
+      "textPresent": true,
+      "textLength": 24
+    }
+  ],
+  "healthz": "200 {\"status\":\"ok\",\"service\":\"aa-crm-web\",\"version\":\"0.11.0\",\"git_sha\":\"0997e46be43fe3a938428d9fe7e0d6c05e2962bd\",\"environment\":\"dev\",\"auth_configured\":true,\"staff_auth_configured\":true}",
+  "settingsInitial": {
+    "status": 200,
+    "provider": "stub",
+    "model_test_mode": true,
+    "scrub_billed": true,
+    "test_mode": false,
+    "ai_assist_allowed": true,
+    "ai_enabled": false,
+    "can_edit": true,
+    "spent_usd_month": "0.0000",
+    "ai_budget_usd": "2.00"
+  },
+  "aiSwitchInitial": false,
+  "switchOnPut": 200,
+  "settingsAfterOn": {
+    "status": 200,
+    "provider": "stub",
+    "model_test_mode": true,
+    "scrub_billed": true,
+    "test_mode": false,
+    "ai_assist_allowed": true,
+    "ai_enabled": true,
+    "can_edit": true,
+    "spent_usd_month": "0.0000",
+    "ai_budget_usd": "2.00"
+  },
+  "settingsPageNoPlanBanner": 0,
+  "settingsTestMode": "TEST MODE Drafts come from a test model on this environment, so the model costs nothing. Only the privacy check that replaces personal details before each draft is billed, at a very small cost, and it counts in this month's spend.",
+  "ovSettings390": {
+    "doc": "390/390",
+    "main": "390/390",
+    "drawer": null,
+    "ok": true
+  },
+  "tripTitle": "Việt Nam, 9 đêm",
+  "card": {
+    "state": "ready",
+    "unavailable": null,
+    "buttonDisabled": false
+  },
+  "ovTrip1440": {
+    "doc": "1440/1440",
+    "main": "1200/1200",
+    "drawer": null,
+    "ok": true
+  },
+  "ovTrip390": {
+    "doc": "390/390",
+    "main": "390/390",
+    "drawer": null,
+    "ok": true
+  },
+  "drawerTestMode": "TEST MODE Test mode: this draft comes from a test model, so the model costs nothing. Only the privacy check is billed, at a very small cost.",
+  "kindDefault": "Reply",
+  "writeLabel": "WRITE DRAFT",
+  "clicks": 1,
+  "draftMs": 1353,
+  "draftUi": "result",
+  "result": {
+    "textLength": 24,
+    "noticeVariant": "staff",
+    "noticeText": "AI can make mistakes. Check prices, dates, visa and safety information before you send or publish this.",
+    "acceptVisible": true,
+    "discardVisible": true,
+    "testModeNote": "TEST MODE Test mode: this draft comes from a test model, so the model costs nothing. Only the privacy check is billed, at a very small cost."
+  },
+  "ovDrawer390": {
+    "doc": "390/390",
+    "main": "390/390",
+    "drawer": "349/349",
+    "ok": true
+  },
+  "decisionResponse": {
+    "status": 200,
+    "method": "POST",
+    "body": "{\"ai_draft_id\":\"b1e96c77-12c0-44f9-b15f-75e5a25388b1\",\"trip_id\":\"d708d347-b146-49cd-a05f-67cb385eef8b\",\"decision\":\"discarded\",\"feedback_code\":\"other\",\"decided_at\":\"2026-11-03T02:30:33.052608+00:00\"}",
+    "request": "{\"feedback_code\":\"other\"}"
+  },
+  "done": {
+    "decision": "discarded",
+    "text": "Discarded. Write the reply yourself or ask for a new draft."
+  },
+  "draftButtonAfter": "NEW DRAFT",
+  "draftPostsSent": 1,
+  "settingsAfterDraft": {
+    "status": 200,
+    "provider": "stub",
+    "model_test_mode": true,
+    "scrub_billed": true,
+    "test_mode": false,
+    "ai_assist_allowed": true,
+    "ai_enabled": true,
+    "can_edit": true,
+    "spent_usd_month": "0.0001",
+    "ai_budget_usd": "2.00"
+  },
+  "switchOffPut": 200,
+  "settingsFinal": {
+    "status": 200,
+    "provider": "stub",
+    "model_test_mode": true,
+    "scrub_billed": true,
+    "test_mode": false,
+    "ai_assist_allowed": true,
+    "ai_enabled": false,
+    "can_edit": true,
+    "spent_usd_month": "0.0001",
+    "ai_budget_usd": "2.00"
+  }
+}
