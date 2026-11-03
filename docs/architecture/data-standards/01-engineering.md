@@ -781,7 +781,7 @@ Each row is allowed to stay until its item lands. New code MUST NOT copy any of 
 | CIS tenant pool: an explicit `"false"` flag value (Redis, immediate) or the emergency variable `TENANT_POOL_FORCE_ADMIN_FLAGS` (task definition, durable, needs a redeploy) moves one route to the admin pool (operator rollback, Part B DM-8.4). Missing or unreadable flags and a missing pool fail closed since S241 D-12 (CIS #792) | SEC-10 | AA-817 / AA-859 (retire the flags route by route) |
 | CIS 007b creates login role `aa_app_user` in a migration | MIG-6 | **X1** (role definitions moved to the Infra bootstrap) |
 | `shared.admin_users.password_hash`; `booking.customer_otps`, `booking.customer_sessions` | NAM-14 | ADR 0006 Phase 1 (AA-816) / Phase 4 (a later `bk-NNN` drop) |
-| `tripplanner.llm_spend_daily` (own spend table) | CON-8 | closed by AA-1027 E5: no reader or writer since the TripPlanner E5 build; dropped by tp-025 |
+| `tripplanner.llm_spend_daily` (own spend table) | CON-8 | closed by AA-1027 E5: no reader or writer since the TripPlanner E5 build; dropped by tp-024 |
 | Connection worst case above the C2.1 ceiling; no `CONNECTION LIMIT` on any role | QRY-6, SEC-11 | **N3** (before the Lambda quota of 1000) |
 | `inquiry.submitted` v1/v1.1 carry `tour_id`; TP `source_tour_id` mixes key types | KEY-3 | **X3** (v1.2) |
 | CIS duplicate numbers 007, 008, 019 and the `007b` suffix | MIG-3 | registry note (no renumbering) |

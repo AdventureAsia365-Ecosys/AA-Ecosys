@@ -1639,7 +1639,7 @@ kpis:
   version: 1
   name: LLM spend by app
   definition: sum shared.llm_call_daily.cost_usd by app (TripPlanner is app tripplanner; its own counter was dropped by
-    tp-025, AA-1027 E5) + crm.llm_usage_daily.cost_usd (check overlap with shared.llm_call_daily app values before summing)
+    tp-024, AA-1027 E5) + crm.llm_usage_daily.cost_usd (check overlap with shared.llm_call_daily app values before summing)
   unit: usd
   threshold: Within FI-06 allocation
   sources:

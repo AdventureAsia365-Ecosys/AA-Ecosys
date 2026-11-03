@@ -29,7 +29,7 @@ or foreign key changed. Updated for **tp-021** (AA-861) in S257, in the same cha
 generated page marks single-column unique keys without a predicate only). Updated for **tp-023** (AA-1015) in S262,
 before the migration copy: the new `ai_rate_counter` table (the AI route limiter's fixed-window counters, composite
 primary key `(key_hash, window_start)`, no foreign key, no personal data: `key_hash` is an HMAC). Updated for
-**tp-025** (AA-1027 E5) in S265, merged right before the destructive apply: `llm_spend_daily` (the tp-010 spend
+**tp-024** (AA-1027 E5) in S265, merged right before the destructive apply: `llm_spend_daily` (the tp-010 spend
 counter; no foreign key) is gone from the page. The page draws tables only; the views are listed on the generated page. It is **enforced**: the nightly DB Schema Dump fails its drift step when the live tables, primary keys or
 foreign keys differ from this page. A TripPlanner migration that changes
 them updates this page in the same change (root PR next to the migration copy).
