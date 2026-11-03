@@ -1592,8 +1592,7 @@
    "session": "S265",
    "size": "XL",
    "next": "R0 · sửa ngay 4 báo cáo dựa B2C (TP-03 trỏ sang lead.submitted.v1, TP-01/EX-01 thành lịch sử, BK-02, CX-01) để không báo đỏ giả; R5–R7 sau S280 khi có nguồn R1/R4",
-   "needs": "",
-   "due": "2026-11-03"
+   "needs": ""
   },
   {
    "id": "AA-1004",
