@@ -297,9 +297,16 @@ Each one carries an "Amended by ADR 0019 (S265)" pointer in its header.
 
 The approval notes (TL-1, TL-3, TL-7, TL-10, TL-11, TL-19, TL-21 explanations; TL-6 keys; TL-9 UI merge; TL-16 prod and pilot plan; TL-20 channels; TL-8; TL-22; BO-4; BO-8; BO-10; BO-14) are all answered in [`clarifications.md`](../audits/2026-11-03-S265-ecosystem-restructure/clarifications.md), and the answers are folded into d1–d23 above. Still open (`clarifications.md` section 7):
 
-1. Whether `ai_ops` may read tenant text in Writing Lab (`tenant_content.read`, Lab only, logged), or tenant text is masked for that role.
-2. CIS admin and Booking admin on Vercel: Pro with one seat, or a move to ECS on the TripPlanner pattern.
-3. The cost yeses: Fargate for TripPlanner (8.3–16.6 USD a month), the CLOUDFRONT-scope WAF (about 7.4 USD a month), and optionally 14-day RDS backups (under 1 USD a month).
+Settled by the tech lead later the same day (S265):
+
+1. `ai_ops` may read tenant text in Writing Lab: permission `tenant_content.read`, Lab pages only, every view logged.
+2. CIS admin and Booking admin stay on Vercel while there is only Dev and only AA staff use them; they move to ECS
+   on the TripPlanner pattern (d23) as part of the production set-up (`aa-prod`), not before.
+3. Cost yeses given, each switched on only when its phase needs it: Fargate for the TripPlanner frontend (8.3–16.6
+   USD a month, R5), the CLOUDFRONT-scope WAF (about 7.4 USD a month at pilot, about 14 USD at growth, R5), and
+   14-day RDS backups (under 1 USD a month, before the first pilot data on Dev, d16).
+4. "No access keys" (d6) means: one sign-in for tenant users (partner pool, MFA) and no tenant API keys; AA's own
+   app-to-app client credentials (`aa-m2m`) stay; a machine API for agencies waits for R8.
 
 **Follow-ups (R0, AA-1034):**
 
