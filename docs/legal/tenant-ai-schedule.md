@@ -279,6 +279,7 @@ agency's plan, and so the number, is the business owner's call.*
 | Trip Planner AI | Trip narration (`tp_compose`): Claude through Amazon Bedrock, no fallback outside AWS. AI text is labelled on the site |
 | Direct API accounts | Held in the AA company's name (b19), monthly cap 150 USD for Anthropic; tenants never get a key |
 | Records | AI call ledgers (`shared.llm_call_log`, `crm.llm_call`) without prompt or output text, 180 days; publish log; admin audit log |
+| AI-content marks (for [●].4) | Notices and "AI-assisted" labels in every app, plus a machine-readable mark on AI Output: stored with each piece, sent in the API answers and downloads, and carried in the HTML of a WordPress post (EU AI Act Art. 50, AA-1040). What each surface carries: [AI Use Register, "Machine-readable marking"](../architecture/ai-use-register.md#machine-readable-marking-eu-ai-act-art-50) |
 
 ## 7. Questions for counsel (before the first paying agency)
 
