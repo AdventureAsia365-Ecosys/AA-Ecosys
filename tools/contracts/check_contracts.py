@@ -161,6 +161,17 @@ POLICY: dict[str, Policy] = {
         allowed_pii_classes=frozenset({"online_id"}),
         why="identity (iss, sub) and Content studio role only; never a CRM role, email or name",
     ),
+    # AA-1028 R1 (root ADR 0019 d2): account state, subscriptions and feature keys only. The bill-to fields, prices,
+    # billing references and the writer's actor stay in CIS; no personal data crosses.
+    "tenant.entitlements.v1": Policy(
+        forbidden_keys=frozenset({"billing_email", "legal_entity_name", "tax_id", "billing_address", "billing_country",
+                                  "billing_ref", "paid_through", "price_usd_monthly", "price_extra_seat_usd",
+                                  "actor", "email", "updated_by", "granted_by", "reason"}),
+        forbidden_patterns=(r"^billing", r"(^|_)prices?(_|$)", r"(^|_)tax(_|$)", r"_by$", r"^actor$",
+                            r"(^|_)reasons?$(?<!suspend_reason)", r"paid_through"),
+        why="account status, subscriptions and feature keys only: no bill-to field, price, billing reference, "
+            "override reason or actor, and no personal data",
+    ),
     # Signed cache purge notice (AA-987): served-state events only; no prices, no personal data.
     "catalog.tour.lifecycle.v1": Policy(
         forbidden_keys=frozenset({"supplier_net", "b2b_price", "price"}),
@@ -196,6 +207,8 @@ REQUIRED_NEGATIVES: dict[str, tuple[str, ...]] = {
     # AA-835 S1: a supplier net amount, the supplier id, internal notes and a free photo URL are each refused.
     "supply.hotel.v1": ("net_amount", "supplier_id", "internal_notes", "url"),
     "supply.service.v1": ("net_amount", "supplier_id", "internal_notes", "url"),
+    # AA-1028: the bill-to e-mail, a plan price and the writer's actor are each refused.
+    "tenant.entitlements.v1": ("billing_email", "price_usd_monthly", "actor"),
     # AA-908: the hand-off never carries the traveller's token.
     "inquiry.submitted.v1.4": ("access_token",),
 }

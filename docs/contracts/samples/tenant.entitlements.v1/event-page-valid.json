@@ -1,0 +1,70 @@
+{
+  "contract": "tenant.entitlements.v1",
+  "schema": "AccountEventPage",
+  "expect": "valid",
+  "why": "One event of each type, oldest first",
+  "payload": {
+    "items": [
+      {
+        "event_id": "9b8a7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c6d",
+        "cursor": "djE6MTAwOjQy",
+        "type": "account.status_changed",
+        "occurred_at": "2026-11-21T09:00:00.000000Z",
+        "tenant_id": "0b9d6c7e-3f43-4c1e-9a52-6d0c3b8f1a01",
+        "change": {
+          "status": "suspended",
+          "previous_status": "active",
+          "suspend_reason": "billing"
+        }
+      },
+      {
+        "event_id": "1b8a7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c6e",
+        "cursor": "djE6MTAxOjQz",
+        "type": "subscription.changed",
+        "occurred_at": "2026-11-21T09:01:00.000000Z",
+        "tenant_id": "0b9d6c7e-3f43-4c1e-9a52-6d0c3b8f1a01",
+        "change": {
+          "op": "updated",
+          "product": "content",
+          "plan_key": "content.business",
+          "status": "active",
+          "previous_status": "active",
+          "previous_plan_key": "content.growth",
+          "seats": null,
+          "trial_ends_at": null
+        }
+      },
+      {
+        "event_id": "2b8a7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c6f",
+        "cursor": "djE6MTAxOjQ0",
+        "type": "entitlement.changed",
+        "occurred_at": "2026-11-21T09:01:00.000000Z",
+        "tenant_id": "0b9d6c7e-3f43-4c1e-9a52-6d0c3b8f1a01",
+        "change": {
+          "op": "updated",
+          "feature_key": "ai.budget_usd_monthly",
+          "product": "platform",
+          "limit": "80.00",
+          "source": "plan",
+          "expires_at": null
+        }
+      },
+      {
+        "event_id": "3b8a7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c70",
+        "cursor": "djE6MTAxOjQ1",
+        "type": "entitlement.changed",
+        "occurred_at": "2026-11-21T09:01:00.000000Z",
+        "tenant_id": "0b9d6c7e-3f43-4c1e-9a52-6d0c3b8f1a01",
+        "change": {
+          "op": "removed",
+          "feature_key": "tp.branding",
+          "product": "tripplanner",
+          "limit": null,
+          "source": null,
+          "expires_at": null
+        }
+      }
+    ],
+    "next_cursor": "djE6MTAxOjQ1"
+  }
+}
