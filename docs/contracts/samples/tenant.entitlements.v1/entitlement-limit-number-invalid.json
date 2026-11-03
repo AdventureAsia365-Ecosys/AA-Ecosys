@@ -1,0 +1,98 @@
+{
+  "contract": "tenant.entitlements.v1",
+  "schema": "TenantAccount",
+  "expect": "invalid",
+  "why": "A limit is a decimal string, never a JSON number",
+  "payload": {
+    "tenant_id": "0b9d6c7e-3f43-4c1e-9a52-6d0c3b8f1a01",
+    "account_status": "active",
+    "suspend_reason": null,
+    "in_service": true,
+    "kind": "agency",
+    "is_pilot": false,
+    "data_region": "us",
+    "time_zone": "Asia/Ho_Chi_Minh",
+    "subscriptions": [
+      {
+        "product": "content",
+        "plan_key": "content.growth",
+        "status": "active",
+        "trial_ends_at": null,
+        "seats": null
+      },
+      {
+        "product": "crm",
+        "plan_key": "crm.core",
+        "status": "trialing",
+        "trial_ends_at": "2026-11-30T00:00:00.000000Z",
+        "seats": 3
+      }
+    ],
+    "entitlements": [
+      {
+        "feature_key": "ai.budget_usd_monthly",
+        "product": "platform",
+        "kind": "limit",
+        "unit": "usd_month",
+        "limit": "40.00",
+        "source": "plan",
+        "expires_at": null
+      },
+      {
+        "feature_key": "content.rewrite",
+        "product": "content",
+        "kind": "limit",
+        "unit": "count_month",
+        "limit": 200,
+        "source": "plan",
+        "expires_at": null
+      },
+      {
+        "feature_key": "content.social",
+        "product": "content",
+        "kind": "flag",
+        "unit": null,
+        "limit": null,
+        "source": "plan",
+        "expires_at": null
+      },
+      {
+        "feature_key": "crm.core",
+        "product": "crm",
+        "kind": "flag",
+        "unit": null,
+        "limit": null,
+        "source": "trial",
+        "expires_at": "2026-11-30T00:00:00.000000Z"
+      },
+      {
+        "feature_key": "crm.seats",
+        "product": "crm",
+        "kind": "seats",
+        "unit": "seats",
+        "limit": "3.00",
+        "source": "trial",
+        "expires_at": "2026-11-30T00:00:00.000000Z"
+      },
+      {
+        "feature_key": "policy.notice_days",
+        "product": "platform",
+        "kind": "policy",
+        "unit": "days",
+        "limit": "7.00",
+        "source": "plan",
+        "expires_at": null
+      },
+      {
+        "feature_key": "tp.branding",
+        "product": "tripplanner",
+        "kind": "flag",
+        "unit": null,
+        "limit": null,
+        "source": "override",
+        "expires_at": null
+      }
+    ],
+    "as_of": "2026-11-20T04:00:00.000000Z"
+  }
+}
