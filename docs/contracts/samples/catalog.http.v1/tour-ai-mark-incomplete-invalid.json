@@ -1,0 +1,57 @@
+{
+  "contract": "catalog.http.v1",
+  "schema": "Tour",
+  "expect": "invalid",
+  "why": "v1.3 (AA-1040): the AI mark must name its generator and carry only the five mark fields",
+  "payload": {
+    "source_system": "cis",
+    "source_id": "la-mekong-slow-boat-3d",
+    "title": "Mekong Slow Boat, 3 days",
+    "summary": null,
+    "country_code": "LA",
+    "duration_days": 3,
+    "content_hash": "sha256:5d41402abc4b2a76",
+    "days": [
+      {
+        "day_no": 1,
+        "title": "Houay Xai to Pakbeng",
+        "description": null,
+        "places": [
+          {
+            "destination_id": "la-pakbeng",
+            "name": "Pakbeng",
+            "time_zone": "Asia/Vientiane",
+            "lat": 19.894,
+            "lng": 101.135,
+            "precision": "point"
+          }
+        ],
+        "time_zone": "Asia/Vientiane"
+      }
+    ],
+    "inclusions": [
+      "Boat ticket"
+    ],
+    "exclusions": [
+      {
+        "code": "tips",
+        "text": "Tips",
+        "suggests_collect_on_arrival": false
+      }
+    ],
+    "facets": {
+      "activities": [
+        "boat"
+      ],
+      "intensity": "easy"
+    },
+    "photos": [],
+    "ai": {
+      "ai_generated": true,
+      "model": null,
+      "generated_at": "2026-10-02T03:00:00+00:00",
+      "human_edited": null,
+      "prompt": "not part of the mark"
+    }
+  }
+}
