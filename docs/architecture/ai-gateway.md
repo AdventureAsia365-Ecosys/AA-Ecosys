@@ -116,7 +116,10 @@ Migrations 304, 306, 307, 320 and 322 (AA-1002, AA-1017).
   default effort).
 - **Stage × model parameters** (`shared.stage_model_params`): max tokens, minimum output tokens, temperature, effort
   and reasoning mode. Precedence: call site, then the row, then the protocol default. With no row a request is
-  unchanged.
+  unchanged. TripPlanner reads the row through the `stage_params` column of `catalog.v_llm_gateway_config_v1` (CIS
+  350, AA-1027 E4) and applies temperature (when the catalog says the model takes one); its call sites always set max
+  tokens, which wins. It sends no effort or reasoning field: every TripPlanner call goes to Bedrock, and, as in CIS
+  (effort only on the Anthropic Messages API), the field is added on Bedrock only after a probe shows it is accepted.
 - **Edits:** secret names, base URLs and catalog prices change only by migration (322 revoked the runtime role's
   UPDATE on them). The admin may switch a connection on or off and edit limits, budgets and notes; each change is
   audited. Migration 324 proved "add a model = one migration PR": five acc2 chat models with one enabled acc2
@@ -216,7 +219,7 @@ S264 live checks), unless the row says otherwise.
 | Anthropic API (`anthropic-direct`) | **Not live:** no `aa-llm/` secret exists; deployments seeded behind acc3 (306) with the connection off | The tech lead creates the key with a workspace spend limit; then the secret is stored and the connection switched on (runbook [llm-anthropic-api-key](../ops/runbooks/llm-anthropic-api-key.md)) |
 | Jev, DataForSEO, Geoapify as registry rows (322) with ledger rows | **Live** | Settings come from their rows, else env, else the old constants |
 | Bedrock Guardrails | **Live for the CRM scrub** (guardrail `aa-crm-dev-scrub`); the CIS registry row is seeded off | — |
-| TripPlanner on the shared core and the 323 views | **Live** (code on `main`); the grandfathered SELECT on `shared.llm_role_config` / `llm_model_catalog` is still granted | A later CIS migration revokes it (ADR 0009 decision 13) |
+| TripPlanner on the shared core and the 323 views | **Live**; since AA-1027 E5 it reads the views only and fails closed (no table fallback) | CIS 351 revokes the grandfathered SELECT on `shared.llm_role_config` / `llm_model_catalog`; tp-024 drops `tripplanner.llm_spend_daily` |
 | CRM gateway v2 (crm-032 ledger, vendored core) | **Live, stub provider:** no `CRM_LLM_*` variable is set on Dev, so CRM AI drafting runs the deterministic stub | Real provider needs `CRM_LLM_PROVIDER` and the role, Bedrock only (root ADR 0008a) |
 | Tenant AI budget (Content studio) | **Live** (code and table); a tenant without a row has no budget | Amounts come from the business owner's plan prices |
 | App profile (345) and the geocode ledger columns (346) | **Live** in CIS (AA-1025 D3 / H1a, S264); TripPlanner and the CRM read their row later (H1b / H1c) | S264 live check: AI off for `cis`, one connection test refused at 0 USD, AI back on; all four apps `ai_enabled = true` at the close |
