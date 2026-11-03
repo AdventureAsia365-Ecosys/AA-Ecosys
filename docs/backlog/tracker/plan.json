@@ -1,9 +1,9 @@
 {
- "updated": "2026-11-02",
- "synced_at": "2026-11-02T14:27Z",
- "session": "S264",
- "next_session": "S265",
- "source": "Linear (02/11/2026, S263 close: plan_sync.py --write --session S263 + đọc lại list_issues cập nhật trong 2 ngày) + docs/backlog/README.md + .tmp-session/S263-checklist.md + docs/audits/2026-11-01-S263-*",
+ "updated": "2026-11-03",
+ "synced_at": "2026-11-03T07:31Z",
+ "session": "S265",
+ "next_session": "S266",
+ "source": "Linear (03/11/2026 07:31Z, plan_sync.py --write) + rà plan/issue S265 đã duyệt (docs/audits/2026-11-03-S265-plan-issue-review/review.json, ADR 0019) + docs/backlog/README.md + .tmp-session/S265-checklist.md",
  "projects": {
   "data": "Data Platform",
   "core": "CIS Core",
@@ -13,78 +13,78 @@
  },
  "milestones": [
   {
-   "id": "M1",
-   "name": "Đóng khối identity",
-   "window": "S244–S248 (AA-911 P5–P8 cuối dự án)",
+   "id": "M-R0",
+   "name": "R0 Mô hình B2B-only + đóng băng B2C",
+   "window": "S265–S266 (03–04/11)",
    "status": "active",
    "criteria": [
     {
-     "text": "X1 S20–S22 xong, probe 58/58 xanh, không còn ô pending",
+     "text": "ADR 0019 Accepted trên master (root #486, #487, #488 merge 03/11)",
      "done": true
     },
     {
-     "text": "Cutover AA-816 S1: Production tắt đăng nhập mật khẩu, break-glass thử qua managed login, xoay ADMIN_SECRET, E2E 7/7",
+     "text": "booking.job: 0 dòng bk_inquiry_pull sau thời điểm tắt cờ (Booking #171, B2C_INTAKE_ENABLED off, lead mới 410 b2b_only)",
      "done": true
     },
     {
-     "text": "AA-860 Done sau probe đêm 20/10 (không còn phiên master)",
+     "text": "TripPlanner 'Send to advisor' trả thông báo demo live, không ghi dòng inquiry.submitted",
      "done": true
     },
     {
-     "text": "AA-680 nửa staff: từ chối live user không có nhóm booking-* (S245); gỡ cầu nối chuyển sang AA-911",
+     "text": "CIS admin Overview không còn thẻ B2C (ảnh 1440 sáng)",
      "done": true
     },
     {
-     "text": "AA-911: e2e đăng nhập staff trên URL Preview của Booking và CIS xanh; /auth/booking-token trả 404; 0 dòng bridge-era trong booking.staff_users",
+     "text": "INSERT vào booking.customer_* bằng role booking trả 42501 (bk-036)",
+     "done": true
+    },
+    {
+     "text": "Báo cáo TP-03 bỏ hoặc trỏ sang lead.submitted.v1, TP-01/EX-01 thành lịch sử, sửa BK-02 + CX-01; lượt báo cáo hằng ngày kế tiếp không đỏ vì việc tắt B2C",
      "done": false
     },
     {
-     "text": "AA-816 S2: LEGACY_ADMIN_LOGIN_ENABLED=false trên API Dev, POST login cũ trả 404 (A10 dời cuối dự án)",
-     "done": true
+     "text": "Follow-up R0 merge: ghi chú C7.1a (d16), CONTEXT.md có bảng master theo loại dữ liệu ở mỗi repo, contract nháp tenant.entitlements.v1 + lead.submitted.v1, đếm caller POST /auth/tenant-login 30 ngày trong audit_log",
+     "done": false
     },
     {
-     "text": "AA-703: comment trạng thái Phase 2/3 có link bằng chứng",
-     "done": true
+     "text": "Mọi issue đã rà có comment re-scope; AA-864, AA-628 huỷ kèm comment; AA-1005→AA-1038, AA-1007→AA-1036, AA-1010→AA-1035 gộp kèm comment bằng chứng; plan.json cắt lại theo các mốc này",
+     "done": false
     }
    ]
   },
   {
    "id": "M1b",
-   "name": "SDLC / FinOps",
-   "window": "S248–S263 (AA-896 theo ngày ≥01/11; AA-998 đóng đầu tháng 12; AA-993 Done S259)",
+   "name": "Cổng AI + FinOps (giữ)",
+   "window": "S265–S266 cho lát gateway; kiểm theo ngày ≥10/11 và ≥01/12",
    "status": "active",
    "criteria": [
     {
-     "text": "AA-902: 0 account ID trên main 3 repo public, CI đỏ khi cài thử",
-     "done": true
-    },
-    {
-     "text": "AA-904 TripPlanner Next 15 merge + verify",
-     "done": true
-    },
-    {
-     "text": "Docs lint chặn mọi repo (AA-888), squash-only (AA-890), front-matter CONTEXT.md (AA-887)",
-     "done": true
-    },
-    {
-     "text": "alarms.md sinh tự động (AA-893)",
-     "done": true
-    },
-    {
-     "text": "AA-879: branch protection + check bắt buộc giống nhau ở 4 repo (kể cả AA-Partner từ ngày tạo), job drift Terraform theo lịch chạy xanh 1 lần — S258: job drift theo lịch Infra #502 chạy xanh (exit 0); phần protection còn 6 lệch G1–G6 (root #343)",
+     "text": "AA-1027: E4 + E5 live (tp-024 áp + verify)",
      "done": false
     },
     {
-     "text": "AA-901 GitHub App cài + AA-891 tag đầu tiên ở ≥1 repo",
+     "text": "AA-1027: F3 kiểm live trên đại lý thử có ai_assist (S265)",
      "done": true
     },
     {
-     "text": "AA-896: báo cáo chi phí Aug/Sep/Oct theo tag App + dịch vụ, có ở docs/audits — S262: bản sơ bộ tháng 10 có (docs/audits/2026-11-01-S262-capacity-review/), bản chính thức ≥03/11",
+     "text": "AA-1027: F4 chạy trên đường tạm acc2/OpenAI (1 draft ~0,001 USD); Haiku trên acc3 chỉ là kiểm phụ khi acc3 trở lại",
      "done": false
     },
     {
-     "text": "AA-903: link 1 PR Dependabot frontend có 'Vercel deploy' skipped",
+     "text": "AA-1024 D2: thay đổi IAM áp live (CIS #1266 + mig 352, S265)",
      "done": true
+    },
+    {
+     "text": "AA-1024 D8: mig CIS 336 áp sau guard 30 ngày (≥10/11 ~12:00 UTC) và DB_AUTO_APPLY_CONTRACT=true lại",
+     "done": false
+    },
+    {
+     "text": "AA-1026 D6: báo cáo đối soát hoá đơn tháng 11 (≤5 %) trong docs/audits, phiên đầu tiên ≥01/12",
+     "done": false
+    },
+    {
+     "text": "AA-998: Cost Explorer acc1 tháng 11 = 0 USD, đọc ở phiên đầu tiên ≥01/12",
+     "done": false
     }
    ],
    "risks": [
@@ -101,45 +101,281 @@
    ]
   },
   {
-   "id": "M2a",
-   "name": "Chất lượng CIS: S1-first",
-   "window": "S247–S251",
-   "status": "active",
+   "id": "M-R1",
+   "name": "R1 Control plane v1",
+   "window": "S266–S268",
+   "status": "next",
    "criteria": [
     {
-     "text": "Golden set + baseline (AA-729, Done S246)",
-     "done": true
-    },
-    {
-     "text": "Từ vựng thương hiệu tenant (AA-800)",
-     "done": true
-    },
-    {
-     "text": "Bảng dữ kiện + bộ kiểm bằng code chạy trên 50 bài S1, có báo cáo; panel chấm lại 10–15 trang 2 lần, độ lặp ghi bằng số",
+     "text": "Mig CIS áp: cột mới shared.tenants (account_status, suspend_reason, data_region mặc định 'us', kind, time_zone, bill-to) + shared.plan, plan_feature, tenant_subscription, tenant_entitlement, tenant_entitlement_override, tenant_account_event và dấu tenant pilot; review độc lập trước merge",
      "done": false
     },
     {
-     "text": "Run 1 + run 2 mỗi run ≤$10, chi phí đọc từ shared.llm_call_log stage adhoc_*; luật dừng P4 ghi trước khi chạy",
+     "text": "tenant.entitlements.v1 live: view + GET /tenant/v1/tenants/{id}/account đúng shape tài liệu; event feed phát khi đổi",
      "done": false
     },
     {
-     "text": "Nhánh thắng chạy shadow/review sau cờ, T2 đọc bảng dữ kiện",
+     "text": "Một job tenant_provision trên shared.job tạo một tenant E2E có mặt ở CIS, crm.tenant và booking.b2b_partners trong một lượt",
      "done": false
     },
     {
-     "text": "Quyết định go/no-go bằng văn bản ở docs/audits cho AA-926/916/924/790/WM P1+/chạy lại catalog — xong S250 (root #239, GO cho 926/924/916/790)",
-     "done": true
+     "text": "Feature key tắt cho tenant E2E bị CRM từ chối live (403) sau crm_entitlement_pull",
+     "done": false
     },
     {
-     "text": "AA-779/780: không thêm cổng mới trong 4 tuần (số cổng trong registry không tăng)",
+     "text": "ai.budget_usd_monthly là nguồn ngân sách; bỏ bảng shared.tenant_ai_budget (việc mới của R1, AA-1016 đã Done)",
+     "done": false
+    },
+    {
+     "text": "Fail-closed (A8 cũ từ AA-1024): tenant E2E có ai.budget_usd_monthly = 0,01 USD gọi thật ~30–35 lần acc2 rẻ (~1 cent) tới khi có dòng refused trong shared.llm_call_log; không bơm dòng chi tiêu giả",
+     "done": false
+    },
+    {
+     "text": "Guard Dev: Dev từ chối tenant thật (kind real) trừ đúng một tenant có dấu pilot (d16), live trước pilot mốc 1",
+     "done": false
+    },
+    {
+     "text": "Bỏ PLAN_LIMITS, hằng 10/10/50 và PLAN_OPTIONS ở UI (grep = 0 trong CIS, Partner)",
+     "done": false
+    },
+    {
+     "text": "Nhóm Tenants trong admin live: Directory, route Tenant 360, tab Subscription, Plans seed 299/799/1.499 USD và AI 15/40/80 USD dạng dữ liệu",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "M-R3",
+   "name": "R3 Một app agency",
+   "window": "S268–S272 (gộp + bỏ key S268–S270; i18n studio S269–S272)",
+   "status": "next",
+   "criteria": [
+    {
+     "text": "portal/ của AA-Partner gộp vào route group của web/; một đăng nhập partner pool; xoá ui.tsx của portal; suppression kit 182 + 111 → 0",
+     "done": false
+    },
+    {
+     "text": "Bỏ key API tenant: key cũ trả 401; POST /auth/tenant-login 404/410 chỉ sau bằng chứng audit_log 30 ngày",
+     "done": false
+    },
+    {
+     "text": "Tenant không có dòng crm.tenant đăng nhập và vào Content home; lời mời có key crm bị từ chối khi thiếu entitlement crm.core",
+     "done": false
+    },
+    {
+     "text": "Chuỗi chữ Content studio vào message catalogue của kit, EN mặc định + VI (kiểm hình cả hai ngôn ngữ)",
+     "done": false
+    },
+    {
+     "text": "AA-1008: ShellFrame chung ở 4 consumer kit; visual job 1440/390 sáng/tối trên next start trong CI xanh và bắt buộc",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "M-R2",
+   "name": "R2 Vai trò staff + scope tenant",
+   "window": "S269–S271 (song song R3)",
+   "status": "later",
+   "criteria": [
+    {
+     "text": "Sáu vai trò staff mới trong POLICY của CIS; 'finance' trong staff_app_grant_role_chk; Booking đọc finance từ cognito:groups (booking-finance, precedence 75) và chặn route hoá đơn/thanh toán",
+     "done": false
+    },
+    {
+     "text": "Test CI vai trò × route deny-by-default xanh; mọi GET có {tenant_id} có mục POLICY; tenant.read tách thành tenant.read / tenant_content.read / catalog.read",
+     "done": false
+    },
+    {
+     "text": "Account manager chỉ thấy tenant được giao (403 live với tenant khác); view-as chỉ đọc ghi một dòng audit",
+     "done": false
+    },
+    {
+     "text": "E2E identity theo vai trò chỉ trên Dev (ENVIRONMENT=dev, allow-list, audit mỗi lần ghi) cho UAT quyền ghi (nhận AA-1010)",
+     "done": false
+    },
+    {
+     "text": "Có bản review auth độc lập trước merge",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "M-P1",
+   "name": "Pilot mốc 1: Content + CRM trên Dev (d16)",
+   "window": "~S272",
+   "status": "later",
+   "criteria": [
+    {
+     "text": "Đạt M-R1, M-R3 (phần gộp) và M-R2",
+     "done": false
+    },
+    {
+     "text": "AA-969: review bảo mật module CRM live + app agency gộp + scope R2, không còn phát hiện High mở; load test có giới hạn + SLO ghi lại",
+     "done": false
+    },
+    {
+     "text": "Biện pháp d16 live: hook chặn agent và DB Migrate run-script đọc PII của tenant pilot (chỉ đếm, có test); job dọn dẹp/E2E/wave bỏ qua tenant pilot (test); export crm.export_job hằng đêm cho tenant pilot + một lần diễn tập khôi phục một tenant; RDS giữ backup 14 ngày",
+     "done": false
+    },
+    {
+     "text": "AA-1040: AI notice + dấu ai_generated máy đọc được trong kit, live ở app agency (ảnh + kiểm header/metadata); ngày Art. 50(2) đối chiếu văn bản chính thức",
+     "done": false
+    },
+    {
+     "text": "AA-820: điều khoản AI trong thư pilot; bộ DPA sẵn sàng (controller/processor, SCC Module 2 + TIA, danh sách sub-processor sau d23)",
+     "done": false
+    },
+    {
+     "text": "Lát AA-1039: gate chủ đề AA (d21) giữ piece lỗi ở Tenant QA › Compliance; fan-out tour ngừng bán (d20, mail SES) thử trên tenant tổng hợp",
      "done": false
     }
    ],
    "risks": [
     {
-     "text": "Một đường cung cấp LLM duy nhất (acc3) đã đứng từ 29/10: mọi stage viết dừng (S262: OpenAI API trả lời lại; 5 model ứng viên acc2 probe OK, chưa route)",
+     "text": "Pilot thật trên Dev (d16) tối đa 8 tuần; chưa có ngày go-live thì không có lối ra sang aa-prod",
      "owner_role": "tech lead",
-     "trigger": "acc3 Error 002 chưa gỡ trước 07/11 → mở đường ấm Anthropic API (ADR 0009 d5, BO-2)"
+     "trigger": "tuần 3 của pilot mà chưa có ngày go-live → bắt đầu P2 của AA-1004 (đã chốt S265)"
+    },
+    {
+     "text": "Card CRM ship trong thời gian pilot đi vào app đang chứa PII thật",
+     "owner_role": "tech lead",
+     "trigger": "mỗi card CRM mới trước khi bật cho tenant pilot → review bảo mật (AA-969)"
+    }
+   ]
+  },
+  {
+   "id": "M-R4",
+   "name": "R4 Booking chỉ B2B + mọi hoá đơn",
+   "window": "S271–S274",
+   "status": "later",
+   "criteria": [
+    {
+     "text": "CHECK kênh booking chỉ cho b2b và fixed_departure; hết điều hướng B2C",
+     "done": false
+    },
+    {
+     "text": "booking.agency_invoice live: một hoá đơn SaaS và một hoá đơn settlement cho tenant E2E phát từ Booking, đọc được ở Tenant 360 › Billing (chỉ đọc, 'Open in Booking')",
+     "done": false
+    },
+    {
+     "text": "Đường 'Book with AA' ở bàn đại lý: yêu cầu quote/hold từ app agency qua booking.b2b.v1 vào Booking",
+     "done": false
+    },
+    {
+     "text": "price.from.v1 trả RRP = net + 25 % từ rrp_markup_pct; hạng đại lý 0/3/6 % trong booking.partner_tier sửa được có maker-checker; Done bằng fixture (không dữ liệu nhà cung cấp thật)",
+     "done": false
+    },
+    {
+     "text": "Bảng B2C chỉ xoá sau DRY RUN + review độc lập; xoá code bk_inquiry_pull",
+     "done": false
+    },
+    {
+     "text": "AA-710: ghi chú Asian Trails cập nhật theo thiết kế R4, nháp KAN-20, rồi đóng",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "M-P2",
+   "name": "R5 + Pilot mốc 2: TripPlanner đa tenant",
+   "window": "S273–S277 (pilot mốc 2 ~S277)",
+   "status": "later",
+   "criteria": [
+    {
+     "text": "Mig tp: tenant_id + RLS, backfill về tenant demo; policy shadow một lần deploy rồi FORCE; isolation probe phủ bảng tripplanner",
+     "done": false
+    },
+    {
+     "text": "Tenant theo path; catalog.v_tenant_tour_v1 giới hạn tour của tenant trong tour AA đang live; brand token tenant từ kit core; tp.branding với 'Powered by AA' mặc định tắt",
+     "done": false
+    },
+    {
+     "text": "lead.submitted.v1 vào CRM của tenant; TripPlanner chỉ phát lead.submitted.v1 (B2C intake đã tắt từ R0, không phát lại inquiry.submitted); client EXTERNAL tripplanner + booking-customer đóng băng; không đăng nhập mạng xã hội cho traveller",
+     "done": false
+    },
+    {
+     "text": "Frontend trên một task Fargate Spot sau CloudFront + WAF CLOUDFRONT (rule rate + Challenge trả 429/challenge live; nhận giới hạn lạm dụng bước gửi guest từ AA-1005)",
+     "done": false
+    },
+    {
+     "text": "Trần AI theo tenant áp cho các stage tp; guard d16 mở rộng sang dữ liệu traveller",
+     "done": false
+    },
+    {
+     "text": "AA-855 vòng 2 (TripPlanner) có video + báo cáo",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "M-R6",
+   "name": "R6 IA admin + Writing Lab (lane song song)",
+   "window": "S267–S276",
+   "status": "next",
+   "criteria": [
+    {
+     "text": "Điều hướng admin Home / Tenants / AA Catalogue / Tenant QA / AI & spend / Writing Lab / Platform; URL cũ redirect (danh sách có test)",
+     "done": false
+    },
+    {
+     "text": "Writing Lab gom lại bảng hiện có theo stage (không thêm logic học; băng TL-11 giữ nguyên); ai_ops chỉ đọc text tenant trong trang Lab, mỗi lượt xem có log",
+     "done": false
+    },
+    {
+     "text": "Gate d21 + fan-out d20 ship trước khi tenant pilot đăng bài (xem M-P1); gửi mail SES cho fan-out đã được duyệt S265 (vài cent/tháng)",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "M-R7",
+   "name": "R7 UX TripPlanner",
+   "window": "S277–S280",
+   "status": "later",
+   "criteria": [
+    {
+     "text": "§8.4 mục 1–7 live trên tenant demo: thẻ ảnh chỉ từ CIS, ~25 lớp icon, sắp xếp bằng bàn phím/chạm có undo, chọn ngày + số khách, thời gian di chuyển có cảnh báo nhịp, link chia sẻ + PDF theo brand tenant + .ics, split view chọn hai chiều",
+     "done": false
+    },
+    {
+     "text": "Visual test trên next start trong CI thay preview Vercel",
+     "done": false
+    },
+    {
+     "text": "tp_plan_chat không làm (chuyển sang R8)",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "M2a",
+   "name": "Chất lượng CIS (chờ LLM, băng TL-11, giữ slot theo TL-15)",
+   "window": "khi có đường LLM (case acc3 ~04–06/11; đường tạm OpenAI/acc2) và gỡ băng TL-11 theo stage; AA-788 ≥19/11",
+   "status": "later",
+   "criteria": [
+    {
+     "text": "Mỗi lượt trả phí: có đồng ý riêng, thử ~3 rồi ≤50, chi phí theo stage từ shared.llm_call_log",
+     "done": false
+    },
+    {
+     "text": "AA-741: báo cáo audit T-series (tenant thử qua tenant_provision) trong docs/audits; lượt trả phí đã duyệt S265 (≤20 USD, ≤50 tour, đường tạm OpenAI/acc2 nếu acc3 còn đóng); việc trong thời gian pilot, không phải cổng pilot",
+     "done": false
+    },
+    {
+     "text": "AA-788: pilot 20 piece từ 19/11 có đường LLM",
+     "done": false
+    },
+    {
+     "text": "Kết quả hiện ở Writing Lab khi R6 ship",
+     "done": false
+    }
+   ],
+   "risks": [
+    {
+     "text": "acc3 đứng từ 29/10 (Error 002): mọi stage viết trên acc3 dừng; tạm dùng OpenAI API (trần cứng 10 USD/tháng) + model acc2",
+     "owner_role": "tech lead",
+     "trigger": "case AWS chưa gỡ ~04–06/11 → giữ đường tạm, d18 bước 2 (Anthropic) sau AA-820"
     },
     {
      "text": "Judge chưa hiệu chuẩn (kappa 0,562 trên 13 cặp): chưa có cổng chất lượng thật",
@@ -149,176 +385,45 @@
    ]
   },
   {
-   "id": "M2b",
-   "name": "Places flip + place runs",
-   "window": "S247–S256",
-   "status": "active",
-   "criteria": [
-    {
-     "text": "CloudFront + đồng bộ ảnh hằng ngày (AA-844, Done S246, hứa trên PR-11)",
-     "done": true
-    },
-    {
-     "text": "CIS 253–257 (hoặc số đã đổi) + tp-017 applied; TP 6c/6d/redirect merged",
-     "done": true
-    },
-    {
-     "text": "PLACES_SOURCE=cis trên cả 2 Lambda; parity probe trên ≥50 trip không lệch place id/toạ độ; 0 tuyến bị ẩn hoặc vẽ vòng tròn thay thế; gộp trùng chạy tự động, 0 lần gộp tay",
-     "done": true
-    },
-    {
-     "text": "AA-712, AA-905 chạy tập con (≤50 tour/lượt), chi phí ghi log; AA-845 Q845-2/3 xong; AA-803 Cancel — AA-905 Done S252 (8 lô, $4,31)",
-     "done": false
-    }
-   ]
-  },
-  {
-   "id": "M3",
-   "name": "Lõi thương mại Booking + Lane B",
-   "window": "S247–S255 (AA-682, AA-996 Done S254)",
+   "id": "M5",
+   "name": "Prod (aa-prod) + go-real",
+   "window": "P0 song song S266–S270; mời org ≥01/12; P2–P6 từ ngày go-live (b18), trong cửa sổ pilot 8 tuần",
    "status": "next",
    "criteria": [
     {
-     "text": "Memo lõi thương mại nằm trong AA-928, ADR Accepted",
-     "done": true
-    },
-    {
-     "text": "AA-972..975 live trên Dev: quote M2M, hold hết hạn bằng reaper, VND + phí huỷ, outbox phát sự kiện; review độc lập mỗi bk-019..022 — AA-972/973/974 Done S248, AA-975 Done S249",
-     "done": true
-    },
-    {
-     "text": "AA-976/977: catalog.http.v1 trả dữ liệu từ read model đã lật — AA-976 Done S249, AA-977 Done S250",
-     "done": true
-    },
-    {
-     "text": "AA-682 (chỉ khi chị Thư đã chốt thuế/% cọc/đánh dấu thanh toán): /billing và /trip-checks thôi placeholder — S253: /trip-checks (S2, bk-027) + /billing (S3, bk-028) live trên Dev, ảnh 1440/390; thuế/% cọc vẫn chờ chị Thư chốt; S254: S4 hoá đơn NCC + chi trả (bk-030) và S5 My Payments live, AA-682 Done",
-     "done": false
-    }
-   ]
-  },
-  {
-   "id": "C-M1",
-   "name": "CRM chạy trên Dev (W0–W1)",
-   "window": "S249–S250 (nhịp Ultracode) — đạt S249 (AA-934/935/936)",
-   "status": "active",
-   "criteria": [
-    {
-     "text": "AA-928..931 merged/applied; host không phải partner trả 403 qua CloudFront→VPC origin",
-     "done": true
-    },
-    {
-     "text": "AA-932: crm_app → booking.* và cis_app → crm.* trả 42501; DB Migrate CIS không bị heartbeat CRM chặn",
-     "done": true
-    },
-    {
-     "text": "Agency giả đăng nhập; form traveller → thẻ Inquiry < 1 phút; F1 chỉ có ciphertext; CIS thấy crm.job",
-     "done": true
-    }
-   ]
-  },
-  {
-   "id": "P-M1",
-   "name": "Portal tách repo",
-   "window": "P2a xong S250; P1 (AA-978 Done S250, chờ kiểm revocation end-to-end); P2b phase 1 xong S252, phase 2 cutover xong S253 (27/10: Fargate, smoke 59/59, rollback 3′28″/3′11″, E2E 6/6); gỡ Vercel từ 03/11; P2b PASS 8/8 S258, P1 đạt S259",
-   "status": "active",
-   "criteria": [
-    {
-     "text": "P2a: AA-Partner/portal giữ history, 24 smoke portal xanh từ CI AA-Partner, Vercel aa-cis-portal deploy từ repo mới — xong S250 (Partner #44/#46, deploy prod run 40156305885)",
-     "done": true
-    },
-    {
-     "text": "P1: thay đổi membership ở CIS tới CRM ≤1 phút; CIS cố cấp vai CRM thì bị từ chối — đạt S259: agency tổng hợp Atlas & Hearth, mời studio editor (membership activated), đổi vai trò → CRM nhận 4,7 s / 37,9 s ≤ 60 s; CIS cấp vai CRM bị từ chối 3/3 (23514, 23001, 0 event)",
-     "done": true
-    },
-    {
-     "text": "P2b: portal. chạy trên CloudFront→Fargate, 24 smoke xanh, token cis-admin không lấy được phiên portal, URL Vercel cũ redirect giữ path, diễn tập rollback Vercel thành công — S253: cutover live (Infra #428), smoke 59/59 (run 40461936316), Vercel /x → 301 portal./x, rollback 3′28″/3′11″; chưa có bằng chứng riêng cho ý token cis-admin; S258: PASS 8/8 (gồm ý token cis-admin)",
-     "done": true
-    },
-    {
-     "text": "Sau ≥7 ngày: xoá portal/ khỏi CIS, đảo guard test, cập nhật CONTEXT.md + ecosystem-architecture — xong sớm S256: CIS #1126 f80429a9 (xoá portal/, guard AA-885 đảo chiều, CONTEXT.md CIS gọn lại, /trip 308), docs hệ sinh thái root #316",
-     "done": true
-    }
-   ]
-  },
-  {
-   "id": "C-M2",
-   "name": "CRM full lifecycle hàng của đại lý (W2–W3)",
-   "window": "S256–S258 (Ultracode); ~giữa 12 nếu phiên thường",
-   "status": "active",
-   "criteria": [
-    {
-     "text": "AA-937..946 xong (937–944 Done S249–S250, 946 Done S251; còn 945); 1 trip đi từ Inquiry tới Completed với supplier của đại lý trên Dev; S258: 1 trip Inquiry → Completed với supplier riêng của đại lý PASS — còn AA-945 (M365)",
+     "text": "P0: tách module môi trường bằng moved block, workflow Deploy Prod, DB Migrate environment=prod (0 USD, plan không đổi gì trên Dev)",
      "done": false
     },
     {
-     "text": "Partner pool bắt MFA; test lọc trường trên mọi route: trợ lý không nhận lãi/net/hoa hồng — đạt S258: Partner pool đã bắt MFA, test lọc lãi Partner #123, trợ lý 7 route không lộ lãi",
-     "done": true
-    }
-   ]
-  },
-  {
-   "id": "C-M3",
-   "name": "AA supply trong CRM (W4)",
-   "window": "S259–S263; ~đầu 1/2027 nếu phiên thường — đạt S259",
-   "status": "active",
-   "criteria": [
-    {
-     "text": "AA-947, 949, 950, 951 xong (AA-947 Done S251; AA-949, AA-950 Done S252; AA-951 Done S253 — crm-022, Partner #96; AA-948 là bản nâng cấp, không chặn mốc)",
-     "done": true
-    },
-    {
-     "text": "Sản phẩm AA được quote, hold, confirm từ đề xuất tương tác; accept sau khi hold hết hạn trả 409 hold_expired — đạt: quote / hold / accept + 409 hold_expired (S258), confirm sau đặt cọc 16/16 (S259, AA-952 lát 1: Booking #155, root #363, Partner #128)",
-     "done": true
-    }
-   ]
-  },
-  {
-   "id": "M4",
-   "name": "UAT video",
-   "window": "sau M2a và sau toàn bộ kỹ thuật (>S262); chạy thử nội bộ từ S261 (S260 tech lead chốt)",
-   "status": "later",
-   "criteria": [
-    {
-     "text": "Mỗi kịch bản 1 video 1440/390, đăng nhập Cognito, đủ mọi app",
+     "text": "Sửa d7 vùng dữ liệu của ADR 0018 (US mặc định, cell EU theo trigger) xong trong ADR 0019, áp vào Terraform prod trước khi tạo aa-prod",
      "done": false
     },
     {
-     "text": "Báo cáo pass/fail, Nghiệp ký",
+     "text": "Pilot bắt đầu mà chưa có ngày go-live → P2 (dựng aa-prod) bắt đầu muộn nhất tuần 3 của pilot (chốt S265)",
+     "done": false
+    },
+    {
+     "text": "aa-prod live có PITR, bản sao backup khác region, một lần diễn tập khôi phục; tenant pilot export/import từ Dev (P4)",
+     "done": false
+    },
+    {
+     "text": "AA-873: mục phát hiện cho prod xong (quyết GuardDuty ở P5); đọc chi phí tháng đầu ≥01/12",
+     "done": false
+    },
+    {
+     "text": "AA-980: prod từ chối tenant tổng hợp; pentest trước go-live",
+     "done": false
+    },
+    {
+     "text": "AA-911: CIS admin + Booking admin chạy trên ECS (Dev trước, d23); gỡ cầu nối CIS → Booking (POST /auth/booking-token 404, 0 dòng bridge-era trong booking.staff_users); gỡ ngoại lệ E2E A10 lúc go-live",
      "done": false
     }
    ],
    "risks": [
     {
-     "text": "UAT cần LLM chạy lại; LLM đứng thì video quay trên dữ liệu cũ",
-     "owner_role": "tech lead",
-     "trigger": "LLM chưa có lại khi UI ổn định"
-    }
-   ]
-  },
-  {
-   "id": "M5",
-   "name": "Tenant trả tiền / prod + CRM Go-real",
-   "window": ">S262 (CRM W7–W8 ~T2–T3/2027)",
-   "status": "later",
-   "criteria": [
-    {
-     "text": "AA-820 xong trước 11/11; AA-886 gói pháp lý chị Thư duyệt",
-     "done": false
-    },
-    {
-     "text": "AA-874, AA-873, AA-859, AA-871 xong",
-     "done": false
-    },
-    {
-     "text": "AA-880 ADR 0012 Accepted trước W8; AA-969 không còn finding High; AA-980 đại lý thật đầu tiên được mời trên prod — ADR 0012 đã Accepted S257 (root #320); còn AA-969, AA-980",
-     "done": false
-    }
-   ],
-   "risks": [
-    {
-     "text": "Chưa có ngày go-live, khách trả tiền đầu tiên, giá: không dự báo và không bắt đầu build prod được",
+     "text": "Chưa có ngày go-live, khách trả tiền đầu tiên: không dự báo được lúc dựng prod",
      "owner_role": "business owner",
-     "trigger": "chưa chốt BO-1 tới cuối 11/2026"
+     "trigger": "tuần 3 pilot chưa có ngày go-live → tech lead bắt đầu P2 (S265)"
     },
     {
      "text": "Bus factor = 1: chỉ tech lead giữ quyền GitHub org, AWS management, tên miền, Vercel",
@@ -326,9 +431,9 @@
      "trigger": "trước tenant thật đầu tiên chưa có người giữ quyền dự phòng (BO-5)"
     },
     {
-     "text": "Điều khoản AI cho tenant (Anthropic Usage Policy có hiệu lực 12/11) chưa được luật sư duyệt",
+     "text": "Điều khoản AI cho tenant (Anthropic Usage Policy có hiệu lực 12/11) chưa được duyệt",
      "owner_role": "business owner",
-     "trigger": "chưa duyệt trước 11/11 (AA-820); tenant ký trước khi có Schedule"
+     "trigger": "chưa duyệt trước 11/11 (AA-820); thư pilot gửi trước khi có điều khoản"
     },
     {
      "text": "Khoá staff console CRM nằm chung secret crm/dev/web mà role chạy Content studio cũng đọc được (AA-1019)",
@@ -336,23 +441,59 @@
      "trigger": "trước tenant trả tiền đầu tiên: tách secret riêng (~0,40 USD/tháng, cần duyệt riêng)"
     }
    ]
+  },
+  {
+   "id": "CRM-after-R3",
+   "name": "CRM add-on mở lại sau R3",
+   "window": "sau R3; slot sau S280 (≥60 % năng lực giữ cho content)",
+   "status": "later",
+   "criteria": [
+    {
+     "text": "Mỗi card làm trong app agency đã gộp, kiểm theo feature key (không theo tên gói)",
+     "done": false
+    },
+    {
+     "text": "AA-965 chỉ cho supplier dịch vụ phụ không phải AA, qua gateway với pii_class us và ngân sách AI của R1",
+     "done": false
+    },
+    {
+     "text": "AA-968 campaign qua cổng nội dung d21 và phản ứng với tour_liveness_changed",
+     "done": false
+    },
+    {
+     "text": "Card ship trong thời gian pilot qua review bảo mật (AA-969) trước khi bật cho tenant pilot",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "parked",
+   "name": "Parked / lane phụ",
+   "window": "theo trigger",
+   "status": "later",
+   "criteria": [
+    {
+     "text": "Không slot; ghi chú re-scope trong từng issue; lane phụ AA-1021 theo luật 'không trình bày việc đang thiết kế như đã chạy'",
+     "done": false
+    }
+   ]
   }
  ],
  "checks": [
   {
-   "due": "03/11",
-   "issue": "AA-1003",
-   "text": "S264: lượt tuần đầu 00:32Z — 11 báo cáo succeeded, nhưng mới 26/63 báo cáo do engine sinh → chưa Done (còn R4–R7), giữ Todo; hạn bằng chứng 03/11"
+   "due": "tuần 3 của pilot",
+   "issue": "AA-1004",
+   "text": "Chốt S265 (q-pilot): pilot Dev bắt đầu mà chưa có ngày go-live → bắt đầu P2 (dựng aa-prod) muộn nhất tuần 3 của pilot; pilot trên Dev tối đa 8 tuần (d16)"
+  },
+  {
+   "due": "trước 02/12 (xếp S269–S271)",
+   "issue": "AA-1040",
+   "text": "Hạn cứng d19 (EU AI Act Art. 50): AI notice + dấu ai_generated máy đọc được ở mọi bề mặt; xếp trước pilot mốc 1 (~S272) vì tenant pilot sẽ đăng nội dung AI"
   },
   {
    "due": "≥10/11 ~12:00 UTC",
    "issue": "AA-1024",
-   "text": "Áp mig CIS 336 (DB Migrate out-of-order; guard 30 ngày từ lượt tp_extract cuối 11/10 11:59Z), rồi bật lại DB_AUTO_APPLY_CONTRACT (đang false từ S263)"
-  },
-  {
-   "due": "khi có tenant chi tiêu thật",
-   "issue": "AA-1024",
-   "text": "S264: A8 (trần tenant chặn cứng) chưa chứng minh được live — trần 0 USD = không trần, numeric(10,2) không đặt < 0,01; kiểm lại khi tenant có chi tiêu"
+   "text": "D8: áp mig CIS 336 (DB Migrate out-of-order; guard 30 ngày từ lượt tp_extract cuối 11/10 11:59Z), rồi bật lại DB_AUTO_APPLY_CONTRACT (đang false từ S263) → đóng AA-1024 (D2 PASS S265, A8 chuyển sang R1)"
   },
   {
    "due": "~tháng 12",
@@ -416,8 +557,8 @@
   },
   {
    "due": "≥01/12",
-   "issue": "AA-804",
-   "text": "Đối soát ledger v2 với hoá đơn nhà cung cấp tháng 11: lệch ≤ 5 % (phần còn lại của AA-804, Done-with-scope S262)"
+   "issue": "AA-1026",
+   "text": "AA-1026 D6 + phần còn lại của AA-804: đối soát ledger v2 với hoá đơn tháng 11, lệch ≤ 5 % (không dùng tháng 10: acc3 01–28/10 do payer cũ trả)"
   },
   {
    "due": "xong S259",
@@ -455,9 +596,9 @@
    "text": "Xong S262: root Secret Scan xanh (#399 ghim 2 false positive), Infra DB Freshness Probe xanh (relink 12 tour 0 USD, 111 → 0, run enforce 41201504877)"
   },
   {
-   "due": "≥03/11 (bản chính thức)",
+   "due": "xong S265",
    "issue": "AA-896",
-   "text": "S262: báo cáo tháng 10 SƠ BỘ + C8 xong (docs/audits/2026-11-01-S262-capacity-review/: 471,70 USD, +165 % so với tháng 9; acc2 202,85, AI 268,85). Bản chính thức ≥03/11 với bundle làm mới, điền lý do 'chưa rõ'; AA-896 giữ In Progress tới đó"
+   "text": "AA-896 Done S265: báo cáo chi phí tháng 8/9/10 chính thức (root #471 + #473; acc3 01–28/10 do payer cũ trả); anomaly monitor live"
   },
   {
    "due": "tuần W46 (≥09/11)",
@@ -518,6 +659,16 @@
  "waiting": [
   {
    "who": "Tech lead",
+   "issue": "AA-1034",
+   "text": "Đã chốt S265: ADR 0019 B2B-only (44/44 mục), rà 52 issue (sửa phạm vi 23, giữ 17, tạm dừng 7, gộp 3, huỷ 2); 4 frontend (CIS admin + Booking admin chung 1 task Spot, TripPlanner 1 task Spot + CloudFront + WAF) lên ECS trên Dev trước (~20–22 USD/tháng); q-pilot: P2 muộn nhất tuần 3 pilot; q-ses: có (vài cent/tháng, AA-1039); q-aa741: có (≤20 USD, ≤50 tour, đường tạm OpenAI/acc2)"
+  },
+  {
+   "who": "Tech lead",
+   "issue": "AA-1027",
+   "text": "S265: một lượt draft F4 (~0,001 USD) qua đường tạm acc2/OpenAI để đóng AA-1027"
+  },
+  {
+   "who": "Tech lead",
    "issue": "AA-1021",
    "text": "S264: duyệt (chi tiết riêng tư, ngoài repo public), rồi upload Drive"
   },
@@ -533,28 +684,8 @@
   },
   {
    "who": "Tech lead",
-   "issue": "AA-1024",
-   "text": "S264: một cửa sổ MFA cho AA-1024 D2 (IAM) + AA-1023 (đổi tên environment prod ở 3 workflow Infra)"
-  },
-  {
-   "who": "Tech lead",
-   "issue": "PR-20",
-   "text": "S264: XONG — 4 nháp Jira duyệt một lần (\"ok đăng\") và đã đăng 02/11: PR-23 #10604, PR-26 #10605, PR-22 #10606, PR-20 #10607 (docs/audits/2026-11-02-S264-close/jira-drafts.md)"
-  },
-  {
-   "who": "Tech lead",
-   "issue": "AA-1020",
-   "text": "S264: XONG — \"Có\" 07:55 cho 2 dòng cấu hình agent (root #448)"
-  },
-  {
-   "who": "Tech lead",
    "text": "S262: acc3 không đổi (case mở, ~04–06/11); OpenAI API trả lời lại (diễn tập); 5 model acc2 probe OK, chưa route. Đường LLM (S260): acc3 Error 002 = khoá cấp tài khoản sau khi acc3 rời org của reseller ngày 29/10 (call thành công cuối 29/10 07:11Z; mọi model kể cả Amazon Nova, cả IAM admin, us-west-1 + us-east-1). Case AWS Support 179326606700328 đang mở: service team gỡ hạn chế, 3–5 ngày làm việc (~04–06/11). Đối chứng acc1 (16:00): Bedrock chạy trên một tài khoản standalone khác (Nova Pro, Claude Haiku 4.5 OK) → khoá là riêng acc3; không route gì vào acc1 (AA-998). OpenAI trực tiếp 429 hết credit; khoá Anthropic đã revoke trên Console và gỡ khỏi ~/.zshrc. Probe lại mỗi phiên. Chặn AA-919 kappa, AA-790, AA-1000, eval AA-900, phần LLM của AA-921 / AA-922 và mọi lần chạy writer / judge",
    "issue": "AA-1002"
-  },
-  {
-   "who": "Tech lead",
-   "issue": "AA-1020",
-   "text": "S263: XONG — tech lead đã đăng nhập SSO aa-mgmt đầu phiên (12:00). Chạy aws sso login --sso-session aa-mgmt-sso trước lane docs S263: trạng thái tài khoản quản lý (org, OU, SCP, Identity Center) chỉ ghi vào tài liệu khi đọc live; token SSO đã hết hạn"
   },
   {
    "who": "Tech lead",
@@ -603,8 +734,8 @@
   },
   {
    "who": "Nghiệp",
-   "text": "Branch protection H3 (bằng login của Nghiệp, ADR 0011): sau S2/S3b — Kit provenance bắt buộc ở CIS, Partner, Booking (TripPlanner: bắt buộc trên pull_request). H1 (Partner Portal Build + Web Build) và H2 (CIS Frontend Lint) xong 28/10 (S254). Chi tiết docs/audits/2026-10-27-S252-aa994-design-system/plan.md",
-   "issue": "AA-994"
+   "text": "Branch protection H3 (bằng login của tech lead, ADR 0011): bật visual job + Kit provenance thành check bắt buộc ở các repo kit sau khi AA-1036 gộp (AA-1008, ~S270–S272)",
+   "issue": "AA-1008"
   },
   {
    "who": "Nghiệp",
@@ -623,7 +754,7 @@
   },
   {
    "who": "Nghiệp",
-   "text": "Hỏi trước khi tạo issue: T13 ghép tuyến (cho AA-948). Làn Booking Figma đã thành AA-996, kế hoạch geocode thành AA-997 (S254)",
+   "text": "AA-948: chấp nhận hướng dùng chung engine TripPlanner sau R7 thay issue T13 + đồng ý chi phí Mapbox riêng (S265 re-scope)",
    "issue": "AA-948"
   },
   {
@@ -653,7 +784,7 @@
   },
   {
    "who": "Nghiệp",
-   "text": "UAT video: S260 tech lead chốt thứ tự — chạy thử nội bộ từ S261; vòng 1 chính thức khi AA-994 xong (UI ổn định) + có đường LLM + quyền ghi UAT cho E2E CIS admin; lời đọc chỉ TTS local miễn phí",
+   "text": "UAT video: vòng 1 (Content + CRM) khi AA-1036, AA-1008, AA-1035 (quyền ghi UAT, nhận AA-1010) + đường LLM xanh; vòng 2 sau R5; không phải cổng pilot (S265)",
    "issue": "AA-855"
   },
   {
@@ -663,6 +794,35 @@
   }
  ],
  "log": [
+  {
+   "session": "S265",
+   "date": "03/11/2026",
+   "closed": [
+    "AA-896",
+    "AA-1020",
+    "AA-1023",
+    "AA-1025"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-1034",
+    "AA-1035",
+    "AA-1036",
+    "AA-1037",
+    "AA-1038",
+    "AA-1039",
+    "AA-1040",
+    "AA-1041"
+   ],
+   "reopened": [],
+   "notes": [
+    "S265 (Claude Code, VSCode/WSL, Ultracode; 03/11): ADR 0019 B2B-only Accepted (44/44 mục quyết định, root #486–#488): AA chỉ bán cho tenant, Content là gói nền, CRM + TripPlanner là add-on, Booking là back office B2B",
+    "R0 (AA-1034): cờ B2C tắt (Booking #171, TripPlanner thông báo demo), bk-036 REVOKE INSERT booking.customer* (42501 live), Overview hết thẻ B2C; CIS mig 347–352, tp-024",
+    "Rà 52 issue đang mở theo ADR 0019, tech lead duyệt hết: sửa phạm vi 23, giữ 17, tạm dừng 7 (CRM W6–W8 sau R3), gộp 3 (AA-1005→1038, AA-1007→1036, AA-1010→1035), huỷ 2 (AA-864, AA-628); plan cắt lại theo mốc R0–R7, pilot mốc 1 ~S272, mốc 2 ~S277",
+    "Duyệt: 4 frontend lên ECS trên Dev trước (2 app staff chung 1 task Spot, TripPlanner 1 task Spot + CloudFront + WAF, ~20–22 USD/tháng); P2 aa-prod muộn nhất tuần 3 pilot nếu chưa có ngày go-live; mail SES cho fan-out tour ngừng bán; lượt AA-741 ≤20 USD, ≤50 tour",
+    "Done: AA-896 (chi phí 8/9/10 chính thức), AA-1020 (/admin/docs live), AA-1023 (cửa sổ MFA IAM + environment dev), AA-1025 (H1b/H2 live); AA-1024 D2 PASS (mig 352)"
+   ]
+  },
   {
    "session": "S264",
    "date": "02/11/2026",
@@ -1411,9 +1571,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M1b",
-   "session": "đầu tháng 12",
+   "session": "≥01/12",
    "size": "L",
-   "next": "L7 · S261: Backlog; còn Cost Explorer acc1 tháng 11 = 0 (đầu tháng 12)",
+   "next": "Ops · 4/5 Done-when đạt; phiên đầu tiên ≥01/12 đọc Cost Explorer acc1 tháng 11 = 0 USD → đóng (cùng phiên AA-873, AA-1026 D6)",
    "needs": "",
    "due": "2026-12-01"
   },
@@ -1423,10 +1583,10 @@
    "status": "Todo",
    "priority": "High",
    "project": "data",
-   "milestone": "M1b",
-   "session": "S264",
+   "milestone": "M-R0",
+   "session": "S265",
    "size": "XL",
-   "next": "L7 · S263: FI-01 tháng 10 chạy tay 05:11Z succeeded; còn đọc báo cáo tuần 02/11 01:30Z rồi đóng",
+   "next": "R0 · sửa ngay 4 báo cáo dựa B2C (TP-03 trỏ sang lead.submitted.v1, TP-01/EX-01 thành lịch sử, BK-02, CX-01) để không báo đỏ giả; R5–R7 sau S280 khi có nguồn R1/R4",
    "needs": "",
    "due": "2026-11-03"
   },
@@ -1436,23 +1596,11 @@
    "status": "Backlog",
    "priority": "High",
    "project": "data",
-   "milestone": "M1b",
-   "session": "đầu tháng 12",
+   "milestone": "M5",
+   "session": "S266",
    "size": "L",
-   "next": "L7 · S262: → Backlog (vẫn mở, hạn 07/11): org + OU + 3 SCP + budget + Identity Center + CI drift xanh đã live; ADR 0018 Accepted (TL-1, root #401). Còn: mời acc2 (sau 01/12), acc3 giữ độc lập (tech lead), test SCP (cần account thành viên), đường AI (case acc3 ~04–06/11 / khoá Anthropic)",
-   "needs": "Quyết billing khi mời acc2 vào org (tech lead, sau 01/12)"
-  },
-  {
-   "id": "AA-1020",
-   "title": "[Docs] Architecture docs refresh to the as-built state (ADR 0009 gateway v2, ADR 0018 accounts, per-app CONTEXT)",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S265",
-   "size": "M",
-   "next": "L0 · S264: snapshot route chụp lại (root #461), cấu hình agent (root #448), tab Phiên tracker (#462/#463); còn kiểm /admin/docs",
-   "needs": "\"có\" của tech lead cho 2 dòng cấu hình agent"
+   "next": "Prod · P0 lane song song S266–S270 (tách module, Deploy Prod, DB Migrate env prod, 0 USD); mời org ≥01/12; P2–P6 từ ngày go-live, và nếu pilot bắt đầu chưa có ngày go-live thì P2 muộn nhất tuần 3 của pilot (S265)",
+   "needs": "Business owner: ngày go-live (b18); tech lead: mời acc2/acc3 vào org (≥01/12)"
   },
   {
    "id": "AA-1021",
@@ -1460,11 +1608,11 @@
    "status": "In Progress",
    "priority": "Medium",
    "project": "data",
-   "milestone": "later",
-   "session": "S265",
+   "milestone": "parked",
+   "session": "S266",
    "size": "L",
-   "next": "L7 · S262 tạo; S264 tiến triển (chi tiết riêng tư, ngoài repo public); chờ tech lead duyệt",
-   "needs": "Tech lead duyệt",
+   "next": "Lane phụ · tập pilot trên mô hình hiện tại; tập về khu vực đổi chỉ làm sau khi R3/R4/R5 ship",
+   "needs": "Tech lead duyệt bản pilot",
    "private": true
   },
   {
@@ -1474,23 +1622,10 @@
    "priority": "Low",
    "project": "core",
    "milestone": "M2a",
-   "session": "khi có LLM (case AWS ~04–06/11)",
+   "session": "LLM path",
    "size": "M",
-   "next": "L1 · S262: TL-11 đóng băng track Writing memory + eval · S261: Backlog, chờ LLM",
-   "needs": "Đường LLM (tech lead)"
-  },
-  {
-   "id": "AA-896",
-   "title": "[FinOps] FinOps doc, Cost Anomaly Detection and the monthly cost report with unit costs",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "≥03/11",
-   "size": "S",
-   "next": "L7 · S262: báo cáo tháng 10 SƠ BỘ + C8 capacity review xong (docs/audits/2026-11-01-S262-capacity-review/: 471,70 USD, +165 % so với tháng 9; 0 USD để làm); bản chính thức ≥03/11 (Cost Explorer còn sửa số ~48 h), điền các lý do 'chưa rõ' (API Gateway, S3, EC2-Other)",
-   "needs": "",
-   "due": "2026-11-03"
+   "next": "M2a · chờ đường LLM + gỡ băng TL-11; chạy sau AA-790/788",
+   "needs": ""
   },
   {
    "id": "AA-704",
@@ -1501,8 +1636,8 @@
    "milestone": "parked",
    "session": "parked",
    "size": "L",
-   "next": "In-app AI assistant — after AA-703 phases 1 and 3",
-   "needs": "Keep on the roadmap?"
+   "next": "R8 · theo trigger sau pilot mốc 2; đi sau control plane, AI notice và trần AI theo tenant",
+   "needs": ""
   },
   {
    "id": "AA-900",
@@ -1511,10 +1646,10 @@
    "priority": "Medium",
    "project": "data",
    "milestone": "M2a",
-   "session": "khi có LLM (case AWS ~04–06/11)",
+   "session": "LLM path",
    "size": "M",
-   "next": "L1 · S262: phần không cần lượt trả phí xong (prompt register + cổng CI + Experiments, CIS #1208/#1210); còn nhãn 40 mẫu (tech lead ~2 h) + chạy thử trả phí khi có đường LLM; TL-10: judge chỉ làm cổng khi ≥ 30 cặp nhãn người, ≥ 8 mỗi lớp",
-   "needs": "Nhãn 40 mẫu + đường LLM (tech lead)"
+   "next": "M2a · phần $0 xong; còn 40 nhãn + lượt thử trả phí trong trần cứng OpenAI 10 USD/tháng",
+   "needs": "Nhãn 40 mẫu (tech lead, ~2 h)"
   },
   {
    "id": "AA-820",
@@ -1522,11 +1657,11 @@
    "status": "In Progress",
    "priority": "High",
    "project": "core",
-   "milestone": "M5",
+   "milestone": "M-P1",
    "session": "≤11/11",
    "size": "",
-   "next": "L3 · S262: phần kỹ thuật xong (danh sách nhà cung cấp AI khớp AI Use Register v0 + bản nháp điều khoản, TL-15); còn luật sư + báo tenant (chị Thư, qua Jira — nháp PR-23 chờ duyệt S263); hạn 11/11",
-   "needs": "Ms. Thư (counsel)",
+   "next": "Pháp lý · điều khoản AI (b20) chốt trước 11/11; bộ DPA (controller/processor, SCC Module 2 + TIA, danh sách sub-processor sau d23) S269–S271 trước khi có PII pilot",
+   "needs": "Business owner: duyệt điều khoản AI trước 11/11 (có cần luật sư hay không)",
    "due": "2026-11-11"
   },
   {
@@ -1535,11 +1670,11 @@
    "status": "Backlog",
    "priority": "Medium",
    "project": "portal",
-   "milestone": "M4",
-   "session": "later",
+   "milestone": "M-P1",
+   "session": "S272",
    "size": "L",
-   "next": "L7 · S262: AA-1009 harness Done (dry run 23/23 PASS, TP-02 quay headed EN + VI); vòng 1 chính thức còn chờ đường LLM + quyền ghi UAT (AA-1010)",
-   "needs": "Vòng 1 chính thức: đường LLM + quyền ghi UAT"
+   "next": "UAT · vòng 1 (Content + CRM) khi AA-1036, AA-1008, AA-1035 + đường LLM xanh (~S272–S274), vòng 2 TripPlanner sau R5 (~S277+); việc trong thời gian pilot, không phải cổng pilot",
+   "needs": ""
   },
   {
    "id": "AA-873",
@@ -1548,10 +1683,10 @@
    "priority": "Medium",
    "project": "data",
    "milestone": "M5",
-   "session": "trước prod",
+   "session": "≥01/12",
    "size": "M",
-   "next": "L3 · S263: In Progress lại — thêm N17/G9; mail tóm tắt phiên quản trị Identity Center live (Infra #581, root #429); GuardDuty vẫn tắt · S262: mọi hạng mục miễn phí đã live; GuardDuty hoãn (trước prod)",
-   "needs": "GuardDuty có / không (tech lead)"
+   "next": "Prod · mọi phần miễn phí đã live; phiên đầu tiên ≥01/12 đọc chi phí tháng đầu (cùng AA-998); GuardDuty quyết ở P5 prod hoặc tenant trả tiền đầu tiên",
+   "needs": ""
   },
   {
    "id": "AA-881",
@@ -1562,7 +1697,7 @@
    "milestone": "parked",
    "session": "05/2027",
    "size": "M",
-   "next": "PG 15 major-upgrade rehearsal",
+   "next": "Ops · trigger 05/2027; gợi ý cho AA-1004 P3: RDS prod mới cân nhắc Postgres major > 15",
    "needs": ""
   },
   {
@@ -1571,11 +1706,11 @@
    "status": "Backlog",
    "priority": "Low",
    "project": "data",
-   "milestone": "later",
-   "session": "later",
+   "milestone": "M-R0",
+   "session": "parked",
    "size": "M",
-   "next": "L7 · Consolidate on one AWS account — decide before AA-880",
-   "needs": "Still wanted?"
+   "next": "R0 · huỷ (Canceled, có comment): ADR 0018 + AA-1004 đã thay việc gộp một account",
+   "needs": ""
   },
   {
    "id": "AA-842",
@@ -1586,8 +1721,8 @@
    "milestone": "parked",
    "session": "parked",
    "size": "M",
-   "next": "S257: báo cáo xong (docs/audits/2026-10-29-S257-aa842-otel/, Notion): chưa có tracing LLM, 41 call site qua một gateway; đề xuất phương án B (span gen_ai mỗi lệnh logic + span con mỗi attempt, X-Ray Transaction Search < ~$2/tháng Dev). Spike chờ tech lead; trạng thái giữ theo Done-when",
-   "needs": "Duyệt spike (tech lead)"
+   "next": "Parked · báo cáo xong S257; spike OTel trả phí giữ tắt, không hỏi lại",
+   "needs": ""
   },
   {
    "id": "AA-741",
@@ -1596,10 +1731,10 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S258",
+   "session": "S270",
    "size": "XL",
-   "next": "L1 · S258 T-series G7 + G8 report (paid), per the S251 go/no-go",
-   "needs": "Paid run ~$10–20"
+   "next": "M2a · sau R1 + R3 gộp: tenant thử qua tenant_provision (bỏ E2E_TENANT_API_KEY); lượt trả phí đã duyệt S265 (≤20 USD, ≤50 tour, đường tạm OpenAI/acc2 nếu acc3 còn đóng; trong trần cứng OpenAI 10 USD/tháng); làm trong thời gian pilot, không phải cổng",
+   "needs": ""
   },
   {
    "id": "AA-790",
@@ -1608,10 +1743,10 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "khi có LLM (case AWS ~04–06/11)",
+   "session": "LLM path",
    "size": "L",
-   "next": "L1 · S262: TL-11 đóng băng track Writing memory + eval · S261: Backlog, chờ đường LLM",
-   "needs": "Đường LLM (tech lead)"
+   "next": "M2a · chờ đường LLM + gỡ băng TL-11 theo stage; kết quả hiện ở Writing Lab (R6)",
+   "needs": ""
   },
   {
    "id": "AA-788",
@@ -1620,9 +1755,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "khi có LLM (case AWS ~04–06/11)",
+   "session": "≥19/11",
    "size": "S",
-   "next": "L1 · S261: replay 349/349 (0 lỗi), giữ thêm tối đa 5 (1,7 %, F12_scope) → chờ 19/11 + LLM",
+   "next": "M2a · replay $0 xong (giữ thêm ≤5/300, F12_scope); pilot 20 piece trả phí từ 19/11 khi có đường LLM (~S286+)",
    "needs": ""
   },
   {
@@ -1634,8 +1769,8 @@
    "milestone": "parked",
    "session": "parked",
    "size": "S",
-   "next": "Cheaper T9 blog writer A/B (~$1.20)",
-   "needs": "Vendor rule"
+   "next": "Parked · sau d18 bước 2 (stage viết tenant lên Anthropic, sau AA-820) + AA-1039; đổi model ứng viên khác family judge",
+   "needs": ""
   },
   {
    "id": "AA-781",
@@ -1646,8 +1781,8 @@
    "milestone": "parked",
    "session": "parked",
    "size": "M",
-   "next": "F9 v2 claim rules",
-   "needs": "Keep or park"
+   "next": "Parked · sau Writing Lab (R6) + đường LLM, chạy như experiment (~0,40 USD)",
+   "needs": ""
   },
   {
    "id": "AA-710",
@@ -1655,11 +1790,11 @@
    "status": "Backlog",
    "priority": "Low",
    "project": "tpbk",
-   "milestone": "parked",
-   "session": "parked",
+   "milestone": "M-R4",
+   "session": "S271",
    "size": "S",
-   "next": "Asian Trails B2B benchmark (KAN-20) — at B2B design start",
-   "needs": "Close or keep"
+   "next": "R4 · đầu R4: cập nhật ghi chú Asian Trails theo thiết kế R4 (AA-1037/1029/1030, Book with AA d17), map khoảng trống sang issue, nháp KAN-20 cuối phiên rồi đóng",
+   "needs": ""
   },
   {
    "id": "AA-628",
@@ -1667,11 +1802,11 @@
    "status": "Backlog",
    "priority": "Low",
    "project": "core",
-   "milestone": "parked",
+   "milestone": "M-R0",
    "session": "parked",
    "size": "L",
-   "next": "Engagement feedback loop — needs real publish volume",
-   "needs": "Park or cancel"
+   "next": "R0 · huỷ (Canceled, có comment): ý tưởng giữ trong docs/backlog §4 + tab Metrics của Writing Lab",
+   "needs": ""
   },
   {
    "id": "AA-920",
@@ -1680,9 +1815,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "release 1",
+   "session": "LLM path",
    "size": "M",
-   "next": "L1 · S262: TL-11 đóng băng track Writing memory + eval · S261: Backlog (release 1 + LLM)",
+   "next": "M2a · release 1 khi có đường LLM + gỡ băng TL-11; rule quản lý theo stage ở Writing Lab › Releases",
    "needs": ""
   },
   {
@@ -1692,9 +1827,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "khi có LLM (case AWS ~04–06/11)",
+   "session": "LLM path",
    "size": "M",
-   "next": "L1 · S262: TL-11 đóng băng track Writing memory + eval · S261: kiểm live xong (mark, refresh, pin/unpin, cách ly 9 owner 0 rò rỉ) → Backlog, phần còn lại cần LLM",
+   "next": "M2a · phần $0 đã kiểm live; phần LLM còn lại, UI tóm tắt sở thích đặt ở Tenant 360 › Brand & voice",
    "needs": ""
   },
   {
@@ -1704,9 +1839,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "later",
+   "session": "TL-11 lift",
    "size": "M",
-   "next": "L1 · S262: → Backlog — TL-11 đóng băng track Writing memory + eval (AA-919…923, AA-790, AA-1000) tới khi T9 blog đi trọn một vòng",
+   "next": "M2a · WM-30 (logic) + WM-31 (UI) làm trọn khi gỡ băng TL-11, UI vào tab Metrics/Releases của Writing Lab; không xếp vào R6",
    "needs": ""
   },
   {
@@ -1715,10 +1850,10 @@
    "status": "Backlog",
    "priority": "Medium",
    "project": "tpbk",
-   "milestone": "M1",
-   "session": "later",
+   "milestone": "M5",
+   "session": "S275",
    "size": "M",
-   "next": "L3 · S261: Backlog; P5–P8 cuối dự án",
+   "next": "Prod · CIS admin + Booking admin lên ECS trên Dev (d23, 1 task Spot) rồi gỡ cầu nối CIS → Booking (/auth/booking-token 404, 0 dòng bridge-era); ngoại lệ E2E A10 gỡ lúc go-live",
    "needs": ""
   },
   {
@@ -1727,11 +1862,11 @@
    "status": "Backlog",
    "priority": "Medium",
    "project": "crm",
-   "milestone": "C-M3",
-   "session": "later",
+   "milestone": "CRM-after-R3",
+   "session": "parked",
    "size": "M",
-   "next": "L6 · W4 · S259: chặn — cần issue T13 (chưa có) + Mapbox; để sau. Bản nâng cấp, không chặn C-M3 (đã đạt S259)",
-   "needs": ""
+   "next": "CRM · park tới sau R7: TripPlanner dựng lại R5/R7 ('một engine, hai bề mặt'), fork bây giờ sẽ lệch",
+   "needs": "Tech lead: hướng dùng chung engine sau R7 thay T13 + đồng ý chi phí Mapbox"
   },
   {
    "id": "AA-960",
@@ -1739,10 +1874,10 @@
    "status": "Backlog",
    "priority": "Medium",
    "project": "crm",
-   "milestone": "later",
-   "session": "S265",
+   "milestone": "CRM-after-R3",
+   "session": "after S280",
    "size": "M",
-   "next": "L6 · S264 chưa làm (ưu tiên cổng AI + tenant) → S265",
+   "next": "CRM · tạm dừng (TL-15); mở lại sau R3 trong app đã gộp, kiểm theo feature key",
    "needs": ""
   },
   {
@@ -1751,10 +1886,10 @@
    "status": "Backlog",
    "priority": "Medium",
    "project": "crm",
-   "milestone": "later",
-   "session": "S265",
+   "milestone": "CRM-after-R3",
+   "session": "after S280",
    "size": "M",
-   "next": "L6 · W6 · search + thư viện; AA-959 Done S264 → S265",
+   "next": "CRM · tạm dừng (TL-15); khi mở lại tìm kiếm toàn cục phủ Content + CRM theo entitlement",
    "needs": ""
   },
   {
@@ -1763,10 +1898,10 @@
    "status": "Backlog",
    "priority": "Medium",
    "project": "crm",
-   "milestone": "later",
-   "session": "S265",
+   "milestone": "CRM-after-R3",
+   "session": "after S280",
    "size": "L",
-   "next": "L6 · kế hoạch lại S260 · W7 · S265: AI xác nhận supplier, ghi chú → phương án, giọng. Chặn bởi AA-964 + đường LLM (chạy thử ~3 rồi ≤50) · S262: AA-964 Done-with-scope (stub live), còn chờ đường LLM",
+   "next": "CRM · chỉ dịch vụ phụ không phải tour (b6), gợi ý chỉ từ tour/atom AA live; qua gateway pii_class us + trần AI R1; chờ đường LLM",
    "needs": ""
   },
   {
@@ -1775,10 +1910,10 @@
    "status": "Backlog",
    "priority": "Medium",
    "project": "crm",
-   "milestone": "later",
-   "session": "S265",
+   "milestone": "CRM-after-R3",
+   "session": "after S280",
    "size": "M",
-   "next": "L6 · W7 · campaign (R14); AA-959 Done S264 → S265",
+   "next": "CRM · tạm dừng (TL-15); khi mở lại áp cổng nội dung d21 + sự kiện tour ngừng bán d20",
    "needs": ""
   },
   {
@@ -1787,10 +1922,10 @@
    "status": "Backlog",
    "priority": "Medium",
    "project": "crm",
-   "milestone": "M5",
-   "session": "S265",
+   "milestone": "M-P1",
+   "session": "S269",
    "size": "L",
-   "next": "L6 · kế hoạch lại S260 · W7 · S265–S266: security review, SLO, load test có giới hạn — sau khi mọi module W5–W7 lên Dev. Chặn bởi AA-954, AA-957, AA-960, AA-962, AA-963, AA-965, AA-966, AA-968, AA-971 (AA-955, AA-961, AA-967, AA-979 xong / đang chốt S260). AA-965 trễ vì LLM → review phần còn lại trước, AI review riêng sau",
+   "next": "Pilot 1 · review bảo mật module CRM live + app agency gộp + scope R2, SLO, load test; thêm 5 biện pháp d16 (hook chặn đọc PII pilot, job bỏ qua tenant pilot, export đêm + diễn tập khôi phục 1 tenant, backup 14 ngày); mỗi card CRM ship trong pilot review trước khi bật",
    "needs": ""
   },
   {
@@ -1799,10 +1934,10 @@
    "status": "Backlog",
    "priority": "Medium",
    "project": "crm",
-   "milestone": "M5",
-   "session": "S266",
+   "milestone": "CRM-after-R3",
+   "session": "after S280",
    "size": "M",
-   "next": "L6 · kế hoạch lại S260 · W7 · S266: release train, help, trang data (sub-processor). Chặn bởi AA-969",
+   "next": "CRM · tạm dừng (TL-15); phần DPA + trang sub-processor chuyển sang AA-820 trước pilot 1",
    "needs": ""
   },
   {
@@ -1812,10 +1947,10 @@
    "priority": "Medium",
    "project": "crm",
    "milestone": "M5",
-   "session": "≥S267",
+   "session": "at go-live",
    "size": "L",
-   "next": "L6 · kế hoạch lại S260 · W8 · Go-real: mở khi chủ doanh nghiệp chọn đại lý thật đầu tiên. Chặn bởi AA-969, AA-970 (S265–S266), AA-971 (S262), AA-880 (ngày go-live + blueprint prod), AA-873, AA-874; tài khoản prod theo AA-1004 (chờ quyết billing); AA-979 Done",
-   "needs": ""
+   "next": "Prod · tạm dừng (TL-15): phần app của P2–P6 lúc go-live; guard Dev 1 tenant pilot đã chuyển sang R1; bỏ 'Stripe live' (b14), chỉ còn Stripe Connect BYO của agency",
+   "needs": "Business owner: ngày go-live + đại lý thật đầu tiên"
   },
   {
    "id": "AA-1005",
@@ -1823,10 +1958,10 @@
    "status": "Backlog",
    "priority": "No priority",
    "project": "core",
-   "milestone": "M1",
-   "session": "later",
+   "milestone": "M-P2",
+   "session": "S272",
    "size": "M",
-   "next": "L3 · S261 tạo (follow-up AA-703)",
+   "next": "R5 · gộp vào AA-1038 (comment bằng chứng): bỏ đăng nhập traveller/app khách (trái d11); giới hạn lạm dụng ở bước gửi guest thành rule WAF trong AA-1038",
    "needs": ""
   },
   {
@@ -1835,10 +1970,10 @@
    "status": "In Progress",
    "priority": "No priority",
    "project": "portal",
-   "milestone": "M4",
-   "session": "S265",
+   "milestone": "M-R3",
+   "session": "S268",
    "size": "L",
-   "next": "LP · S264: thanh bên gom nhóm 4 app (kit NavGroup), Members chỉ xem ẩn nút; còn suppressions portal/web, email của chính user trong studio",
+   "next": "R3 · gộp vào AA-1036: 0 suppression + xoá ui.tsx đếm trên web/ sau gộp; slice đã ship (sidebar 4 app, Members chỉ xem) ghi vào comment",
    "needs": ""
   },
   {
@@ -1847,11 +1982,11 @@
    "status": "Backlog",
    "priority": "No priority",
    "project": "portal",
-   "milestone": "M4",
-   "session": "≥S263",
+   "milestone": "M-R3",
+   "session": "S270",
    "size": "M",
-   "next": "LP · S261 tạo (follow-up AA-994)",
-   "needs": ""
+   "next": "R3 · sau khi AA-1036 gộp: ShellFrame chung cho 4 consumer kit + visual job 1440/390 sáng/tối trên next start trong CI, bật check bắt buộc (H3)",
+   "needs": "Tech lead đăng nhập GitHub để bật check bắt buộc (H3)"
   },
   {
    "id": "AA-1010",
@@ -1859,10 +1994,10 @@
    "status": "Backlog",
    "priority": "No priority",
    "project": "portal",
-   "milestone": "M4",
-   "session": "later",
+   "milestone": "M-R2",
+   "session": "S269",
    "size": "S",
-   "next": "L3 · S261 tạo (follow-up AA-855)",
+   "next": "R2 · gộp vào AA-1035: quyền ghi UAT = E2E identity theo vai trò thật trên Dev (ENVIRONMENT=dev, allow-list, audit mỗi lần ghi)",
    "needs": ""
   },
   {
@@ -1871,11 +2006,11 @@
    "status": "Backlog",
    "priority": "No priority",
    "project": "crm",
-   "milestone": "later",
-   "session": "later",
+   "milestone": "CRM-after-R3",
+   "session": "after S280",
    "size": "M",
-   "next": "L6 · S261 tạo (follow-up AA-945); cần app M365 (tech lead)",
-   "needs": ""
+   "next": "CRM · M365 + lịch BYO ở Account › Integrations của app agency; ship trong pilot thì qua review AA-969 trước",
+   "needs": "Tech lead: đăng ký app Entra (M365)"
   },
   {
    "id": "AA-1012",
@@ -1883,22 +2018,10 @@
    "status": "Backlog",
    "priority": "No priority",
    "project": "crm",
-   "milestone": "later",
-   "session": "later",
+   "milestone": "CRM-after-R3",
+   "session": "after S280",
    "size": "M",
-   "next": "L6 · S261 tạo (follow-up AA-955)",
-   "needs": ""
-  },
-  {
-   "id": "AA-1023",
-   "title": "[Ops] $0 rollback game day (Booking, CRM, Vercel, TP Lambda) + parameterised ECS runbook + job-idle gate in terraform-apply",
-   "status": "In Review",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "S265",
-   "size": "M",
-   "next": "L7 · S264: runbook + helper (root #464, #469), gate job rảnh (Infra #615), game day D1–D5 đạt; còn đổi tên env prod ở 3 workflow Infra (MFA)",
+   "next": "CRM · PDF ký PAdES-B-B, phông EN/VI (d22); chứng chỉ X.509 prod quyết lúc go-live",
    "needs": ""
   },
   {
@@ -1908,21 +2031,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M1b",
-   "session": "S265",
+   "session": "≥10/11",
    "size": "L",
-   "next": "L1 · S264: A10 + A5 live (CIS #1261, lõi aa_llm 1.1.0); A8 chưa chứng minh được live (chờ tenant có chi tiêu); còn D2 (IAM + MFA), D8 mig 336 (≥10/11)",
-   "needs": "MFA + IAM cho D2"
-  },
-  {
-   "id": "AA-1025",
-   "title": "[AI gateway] Budgets, app profiles and non-LLM providers: central caps, app on/off + degrade, Jev/DFS/Geoapify switches and circuit, Providers page",
-   "status": "In Review",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M1b",
-   "session": "S265",
-   "size": "L",
-   "next": "L1 · S264: A7 (mig 340), B3 (342), B5 (343), B4, D3 + H1a (345/346) live; Providers ẩn nút chỉ xem; còn H1b/H1c/H2",
+   "next": "Gateway · D2 PASS S265 (CIS #1266 + mig 352); A8 chuyển sang R1 (AA-1028); chỉ còn D8: áp mig 336 phiên đầu tiên ≥10/11 ~12:00Z rồi bật lại DB_AUTO_APPLY_CONTRACT → đóng",
    "needs": ""
   },
   {
@@ -1932,10 +2043,10 @@
    "priority": "High",
    "project": "core",
    "milestone": "M1b",
-   "session": "đầu tháng 12",
+   "session": "≥01/12",
    "size": "M",
-   "next": "L1 · S264: mig 339 bậc Maverick (smoke 0,00021 USD), mig 344 OpenAI hop cuối cho 6 stage viết tenant live; còn D6 đối soát hoá đơn (≥01/12)",
-   "needs": "khoá Anthropic (tech lead)"
+   "next": "Gateway · In Review, chỉ còn D6: đối soát ledger với hoá đơn tháng 11 (≤5 %) ở phiên đầu tiên ≥01/12 (không dùng tháng 10: acc3 01–28/10 do payer cũ trả)",
+   "needs": ""
   },
   {
    "id": "AA-1027",
@@ -1946,8 +2057,8 @@
    "milestone": "M1b",
    "session": "S265",
    "size": "L",
-   "next": "L5 · S264: E3 live (TP #211, mig 341); F3 ship (Partner #194, crm-040), kiểm live cần ai_assist; còn E4, E5, F4",
-   "needs": ""
+   "next": "Gateway · E4/E5 merge, chờ verify tp-024 sau DB Migrate; F3 đã kiểm live S265; F4 chạy trên đường tạm acc2/OpenAI (1 draft ~0,001 USD) → đóng S265–S266",
+   "needs": "Đồng ý 1 lượt draft F4 ~0,001 USD qua đường tạm (tech lead)"
   },
   {
    "id": "AA-1028",
@@ -1955,11 +2066,11 @@
    "status": "Todo",
    "priority": "High",
    "project": "core",
-   "milestone": "later",
-   "session": "≥S267",
+   "milestone": "M-R1",
+   "session": "S266",
    "size": "L",
-   "next": "L1 · S263 tạo (xây sẵn, tech lead 13:10): catalogue gói cho tenant + đại lý; nghiên cứu docs/audits/2026-11-01-S263-pricing-and-plans/",
-   "needs": "giá gói (chủ doanh nghiệp)"
+   "next": "R1 · lát 1 S266: mig CIS control plane (cột shared.tenants, plan/subscription/entitlement, dấu pilot) + tenant.entitlements.v1, review độc lập; lát 2 saga tenant_provision + projection CRM/Booking; lát 3 nhóm Tenants admin; fail-closed (A8 cũ) + guard Dev 1 tenant pilot",
+   "needs": ""
   },
   {
    "id": "AA-1029",
@@ -1967,11 +2078,11 @@
    "status": "Todo",
    "priority": "High",
    "project": "tpbk",
-   "milestone": "later",
-   "session": "≥S267",
+   "milestone": "M-R4",
+   "session": "S271",
    "size": "L",
-   "next": "L4 · S263 tạo (xây sẵn): chuỗi giá CIS master tour → Booking trip plan, cost sheet, view price.from.v1",
-   "needs": "dữ liệu giá nhà cung cấp"
+   "next": "R4 · chuỗi giá CIS master tour → Booking, giá 'from' = RRP (net + 25 %, b15), TripPlanner đọc qua view theo tenant; Done bằng fixture, không chờ dữ liệu nhà cung cấp",
+   "needs": ""
   },
   {
    "id": "AA-1030",
@@ -1979,11 +2090,108 @@
    "status": "Todo",
    "priority": "Medium",
    "project": "tpbk",
-   "milestone": "later",
-   "session": "≥S267",
+   "milestone": "M-R4",
+   "session": "S271",
    "size": "M",
-   "next": "L6 · S263 tạo: hạng đại lý, biên B2B, markup gợi ý trong CRM; sau AA-1029",
-   "needs": "biên theo hạng (chủ doanh nghiệp)"
+   "next": "R4 · sau AA-1029: hạng đại lý giảm 0/3/6 % trên net (b15) trong booking.partner_tier, maker-checker; dựa projection b2b_partners của R1",
+   "needs": ""
+  },
+  {
+   "id": "AA-1034",
+   "title": "[Platform] R0 B2B-only model: ADR 0019, B2C paths off by flag, backlog re-scope",
+   "status": "In Review",
+   "priority": "High",
+   "project": "data",
+   "milestone": "M-R0",
+   "session": "S265",
+   "size": "M",
+   "next": "R0 · đã live: cờ B2C tắt, bk-036 trả 42501, Overview hết thẻ B2C, ADR 0019 trên master; còn follow-up R0 (C7.1a, CONTEXT.md, 2 contract nháp, đếm audit_log tenant-login 30 ngày) + comment re-scope Linear",
+   "needs": ""
+  },
+  {
+   "id": "AA-1035",
+   "title": "[Platform] R2 AA staff roles and tenant scope: six new roles, account-manager tenant book, read-only view-as",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "portal",
+   "milestone": "M-R2",
+   "session": "S269",
+   "size": "L",
+   "next": "R2 · lane song song R3: 6 vai trò staff + finance (CIS staff_app_grant + nhóm Cognito booking-finance), test deny-by-default, require_tenant_scope, view-as chỉ đọc; nhận AA-1010; review auth độc lập trước merge",
+   "needs": ""
+  },
+  {
+   "id": "AA-1036",
+   "title": "[Portal] R3 one agency app: merge portal/ into web/, one sign-in, Content home, app switcher, no tenant API keys",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "crm",
+   "milestone": "M-R3",
+   "session": "S268",
+   "size": "XL",
+   "next": "R3 · gộp portal/ vào web/, một đăng nhập partner pool, bỏ key tenant (401; tenant-login 404/410 sau bằng chứng audit_log 30 ngày); lane i18n studio S269–S272; nhận AA-1007",
+   "needs": ""
+  },
+  {
+   "id": "AA-1037",
+   "title": "[Booking] R4 Booking B2B only: drop the B2C side, every invoice issued from Booking (SaaS + settlement)",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "tpbk",
+   "milestone": "M-R4",
+   "session": "S271",
+   "size": "L",
+   "next": "R4 · CHECK kênh chỉ b2b/fixed_departure, booking.agency_invoice (SaaS + settlement, làm tay, không Stripe Billing b14), nhóm Trade + tab Billing Tenant 360, đầu Booking của Book with AA; xoá bảng B2C sau DRY RUN + review độc lập",
+   "needs": ""
+  },
+  {
+   "id": "AA-1038",
+   "title": "[TripPlanner] R5 multi-tenant white-label TripPlanner: tenant_id + RLS, per-tenant brand, leads to the tenant CRM, frontend on ECS (Dev)",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "tpbk",
+   "milestone": "M-P2",
+   "session": "S273",
+   "size": "XL",
+   "next": "R5 · tp tenant_id + RLS (shadow rồi FORCE), tenant theo path, chỉ phát lead.submitted.v1 (không phát lại inquiry.submitted), frontend 1 task Spot + CloudFront + WAF; nhận AA-1005",
+   "needs": ""
+  },
+  {
+   "id": "AA-1039",
+   "title": "[Admin] R6 AA Admin IA and Writing Lab: Tenants group, AA Catalogue vs Tenant content QA, AI & spend, Writing Lab per stage, AA-subject gate, tour retirement fan-out",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "portal",
+   "milestone": "M-R6",
+   "session": "S267",
+   "size": "L",
+   "next": "R6 · lane song song sau khi AA-1027 đóng: IA admin (Home/Tenants/AA Catalogue/Tenant QA/AI & spend/Writing Lab/Platform), Writing Lab chỉ gom UI (TL-11 giữ); gate d21 + fan-out d20 (SES đã duyệt S265) trước pilot 1",
+   "needs": ""
+  },
+  {
+   "id": "AA-1040",
+   "title": "[Kit] AI notice and machine-readable AI-content marking across apps (EU AI Act Art. 50) before 02/12/2026",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M-P1",
+   "session": "S269",
+   "size": "M",
+   "next": "Pilot 1 · component AI notice + dấu ai_generated máy đọc được trong kit core CIS rồi sync; gắn vào app agency sau R3 gộp; hạn cứng trước 02/12 (d19)",
+   "needs": "",
+   "due": "2026-12-01"
+  },
+  {
+   "id": "AA-1041",
+   "title": "[TripPlanner] R7 TripPlanner UX: place photos, activity icons, map/itinerary sync, mobile reorder, planning chat bound to AA tours",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "tpbk",
+   "milestone": "M-R7",
+   "session": "S277",
+   "size": "L",
+   "next": "R7 · §8.4 mục 1–7 trên tenant demo (ảnh CIS, ~25 icon, sắp xếp có undo, chọn ngày + số khách, thời gian di chuyển, share/PDF/.ics, split view); tp_plan_chat sang R8",
+   "needs": ""
   }
  ]
 }
