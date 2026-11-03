@@ -1,7 +1,7 @@
 ---
 id: APP-06-ai-register
 title: "AI Use Register"
-description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps. v1.4."
+description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps, and the machine-readable marking of AI output (EU AI Act Art. 50). v1.5."
 type: reference
 status: draft
 owner: nghiep
@@ -9,10 +9,10 @@ audience: [engineer, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-api, aa-cis-worker, tripplanner-lambda, aa-crm-api]
 last_reviewed: 2026-11-03
 review_every_days: 30
-related: [ARCH-01-ai-gateway, APP-06-routes, APP-06-eval, APP-06-prompts, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-804, AA-820]
+related: [ARCH-01-ai-gateway, APP-06-routes, APP-06-eval, APP-06-prompts, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-804, AA-820, AA-1040]
 ---
 
-# AI Use Register (v1.4)
+# AI Use Register (v1.5)
 
 One row per place where the ecosystem calls an AI model or a paid data provider. It answers, for each stage: what it
 is for, who owns the decision to change it, which provider and model family serve it today, which data may leave AWS,
@@ -38,6 +38,9 @@ which human checks the output before anyone relies on it.
   provider list.
 - **v1.3 (2026-11-03, S265):** `a3_place_dedupe` gets the acc2 Llama 4 Maverick rung before the OpenAI API hop (CIS
   339; its row and the acc2 section below).
+- **v1.5 (2026-11-03, S266):** the [machine-readable marking](#machine-readable-marking-eu-ai-act-art-50) of AI
+  output per surface and per publish channel (AA-1040, EU AI Act Art. 50, ADR 0019 d19). Includes the catalog Master
+  text row and the coverage limits. No route change.
 - **Who updates it:** the PR that adds, removes or re-routes a stage, adds a provider, or changes a stage's data
   scope, budget or human gate updates its row. A new provider also updates the tenant terms list (AA-820).
 
@@ -179,6 +182,40 @@ company's name (ADR 0019 b19); tenants never hold a provider key.
   "may be used as a fallback". The other acc2 models (Nova 2 Lite, Moonshot Kimi K3) are on no route and stay out of the tenant terms until one
   passes its contract smoke and is routed.
 
+## Machine-readable marking (EU AI Act Art. 50)
+
+Root ADR 0019 d19 (deadline 02/12/2026, AA-1040). Two duties: a person is told when they read or use AI output
+(Art. 50(1), the visible notice), and AI-generated text carries a mark that software can read (Art. 50(2)). The
+notice is the kit `AiNotice` (AA-CIS-App `frontend/app/_kit/core/`, one wording file for every app): variants
+`staff`, `publisher`, `traveller`, `narration`, and the short "AI-assisted" badge (`form="badge"`). The tenant AI
+Schedule [●].4 ([tenant-ai-schedule.md](../legal/tenant-ai-schedule.md)) relies on this section; the tenant still adds
+any label a Channel or law requires to what it publishes ([●].4(b)).
+
+| Surface | What AI wrote | Stored mark | Delivered mark | Visible notice |
+|---|---|---|---|---|
+| Content studio piece (T9) | Blog and social pieces (`t9_write`) | `acp_shared.content_piece.writer_input -> 'ai_provenance'`: `ai_generated`, `generator`, writer `model` (from the `t9_write` ledger row), `generated_at`; `human_edited_at` after a tenant edit. A piece older than AA-1040 still reads as AI-generated (`generated_at` = `created_at`, model unknown) | `piece.ai` in `/v1/content-writing/pieces/*`; HTML export: `<meta name="ai-*">` in the `<head>` (document) or after the `<article>` (fragment), `data-ai-*` on the `<article>`; every download: `X-AI-Generated` / `X-AI-Generator` / `X-AI-Model` headers | `publisher` line at review, publish and export; "AI-assisted" badge on each My Content, Published and publish row and in the piece drawer |
+| Catalog Master text (A-series) | Tour name, subtitle, summary, description, highlights and day-by-day text of every Master tour (`s1_generate` and its repair stages) | None per row: every `gold_aa_internal.published_tours` `aa_*` text is S1 writer output by construction; the writer models and a staff edit before approval are on `silver_aa_internal.generated_content` (admin only) | `ai: {ai_generated, generator: "Adventure Asia catalog writer", generated_at, model: null, human_edited: null}` in the tenant tour reads (`/v1/tours/pool`, `/v1/tours/{id}`, `/v1/tours/{id}/full`), `generated_at` = the last Master publish (`updated_at`, else `published_at`); TripPlanner tour pages: `data-ai-generated="true" data-ai-source="catalog" data-ai-generated-at` on the summary, highlights and each itinerary day block (never page-wide: prices, photos and facts on the same page are not AI output). **Not marked yet:** the browse Lambda JSON (`catalog.http.v1`) the TripPlanner server reads, and Marketplace rows (tour name only) | AI label (AA-819) on the tour text and the `traveller` line under the itinerary (AA-1033); `publisher` line in the Content studio catalog tab |
+| Content studio tour version (T2) | Tour rewrites (`t2_generate`) | `gold_aa_internal.tenant_tour_versions.edit_source` (`ai_generated`, `re_rewrite`; `tenant_edit` = a person's edit) and `generation_meta` (admin only) | `ai` in every tenant version read (`/v1/tours/my-versions`, `/v1/tours/versions/{id}`); DOCX download: core properties keywords `ai-generated` and comments (generator, generated-at, human-edited) | `publisher` line in the catalog tab, drawer and rewrite panel |
+| WordPress post (T11 blog) | The published T9 piece | As the piece | Post body: `<article data-ai-generated="true" data-ai-generator data-ai-model data-ai-generated-at data-ai-human-edited>` (kept by WordPress for every role) and, after it, `<meta name="ai-generated">`, `ai-generator`, `ai-model`, `ai-generated-at`, `ai-human-edited`, `digital-source-type` (IPTC `trainedAlgorithmicMedia`), kept only when the connected WordPress user may post unfiltered HTML (administrators, editors) | The tenant's own site; Schedule [●].4(b) |
+| Facebook Page post (T11) | The published T9 piece | As the piece | **None on the platform**: the Graph API Page feed has no AI label for a text post; the text is not changed | Schedule [●].4(b): the tenant labels it if Facebook's rules or the law require |
+| CRM AI draft | Reply and follow-up drafts (`crm_draft_reply`) | `crm.ai_draft` (every row is model output; the model is on the ledger row `llm_call_id`) | `ai: {ai_generated, generator, generated_at}` in the draft answer; `data-ai-generated` / `data-ai-generated-at` on the draft text in the CRM web | `staff` line under the draft. A message a member writes from it is their own (a person reviews and sends) |
+| Trip Planner narration | Day text on request (`tp_compose`, source `llm` / `mixed`) or AA itinerary text written earlier (`master`) | The narrate answer's `source` | `data-ai-generated="true"` and `data-ai-source` on the narration block | `narration` line for `llm` / `mixed`, `traveller` line otherwise; the per-source AI label (AA-819) |
+
+**Coverage limits** (03/11/2026): the table lists every surface that shows AI text to a tenant or the public today except two, which carry the visible notice only: Booking hotel and service descriptions drafted by `supply_content_writer` (staff review each draft; no machine mark on the Booking side yet) and the browse Lambda JSON above. Both need a mark before 02/12/2026 (ADR 0019 d19); a surface added later gets its row here first.
+
+**Publish channels and platform AI labels** (checked 03/11/2026; only blog and Facebook are built, the others answer
+"not yet supported"). Verify against the platform's own reference when a channel is built:
+
+| Channel | Platform label through the API | What AA sends |
+|---|---|---|
+| WordPress (blog) | No AI field in the REST API; unregistered post meta is ignored | The HTML mark above |
+| Facebook Page feed (text) | None documented for a text post. Meta's "AI info" label comes from image and video metadata (C2PA / IPTC) or the uploader's own disclosure in the app; a `video_labels` parameter for video is reported by third parties only | Nothing extra; the mark stays in the piece |
+| Instagram, LinkedIn, e-mail, ads | Not built | — |
+| TikTok | Not built; third-party guides name a boolean `is_aigc` on the Content Posting API (video `post_info`), not confirmed against TikTok's reference | — |
+
+The meta names are plain and self-describing; no single web standard marks AI text yet, so this table is their
+definition. C2PA Content Credentials would apply to images and video, which no stage generates today.
+
 ## OWASP Top 10 for LLM Applications (2025): controls and gaps
 
 Controls are cited only where they exist in code or configuration on `main` (01/11/2026). Gaps name the ADR 0009
@@ -201,6 +238,7 @@ decision or issue that closes them, or say "none planned".
 
 | Version | Date | Change |
 |---|---|---|
+| v1.5 | 03/11/2026 (S266, AA-1040) | Machine-readable marking (EU AI Act Art. 50): per-surface stored and delivered marks, notices, publish-channel AI labels. The AI Schedule facts table points here. No route change. |
 | v1.4 | 03/11/2026 (S266, AA-820) | Tenant-terms note: the AI Schedule v1.0 and where each app page summarises it; direct API accounts in the AA company name (ADR 0019 b19). No route change. |
 | v1.3 | 03/11/2026 (S265, AA-1020) | `a3_place_dedupe`: Llama 4 Maverick (acc2) before the OpenAI API hop (CIS 339, live since S264); the acc2 models row, section and tenant-terms note follow. |
 | v1.2 | 02/11/2026 (S264) | Tenant writer stages (`t2_generate`, `t2_flag_fix`, `t2_itinerary_nudge`, `t8_angle_gen`, `t9_write`, `t9_repair`) `vendor_direct` with GPT-6 Luna on the OpenAI API as the last rung (CIS 344, tech lead S264; ADR 0009 decision 5 amendment); tenant-terms provider list: an OpenAI model may write as a last resort. |
