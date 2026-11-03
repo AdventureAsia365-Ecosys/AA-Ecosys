@@ -38,7 +38,7 @@ related: [OPS-04, OPS-04-queue-stuck, APP-09, FIN-01, APP-06, AA-649, AA-804, AA
 |---|---|---|
 | Cost guard (AA-649) | `shared.spend_budget` rows per (provider, scope): `per_run_usd`, `per_day_usd`, `hard_stop`, `alert_pct`; providers `dfs`, `bedrock`, `openai`, `jev`, `geocoder` | A job checks before each paid call; a hard limit raises and the job ends `stopped_budget` |
 | Admin budgets page | `GET /admin/budgets`, `PUT /admin/budgets/{provider}/{scope}` (admin) | Read today's spend; lower a limit to stop new spend at once |
-| TripPlanner daily cap | Lambda setting, code default 5 USD per UTC day for the customer-facing stages (`tripplanner.llm_spend_daily`) | Over the cap, narration falls back to plain text and free-text search answers 503 |
+| TripPlanner daily cap | Lambda setting, code default 5 USD per UTC day for the customer-facing stages (ledger spend through `catalog.v_llm_app_spend_today_v1`) | Over the cap, narration falls back to plain text and free-text search answers the keyword ranking |
 | Ledgers | `shared.llm_call_log` (every call, `stage`, `role`, `model`, `cost_usd`, `job_id`, `account`), `shared.llm_call_daily` (per day, app, stage, model), `shared.dfs_call_log`, `geo.geocode_call` | Who spent what |
 | Jobs | admin Jobs page: cancel queued or running jobs; `/admin/job-runner/jobs/{id}/llm-calls` | Stop the spender |
 | Model routes | admin LLM config (`/admin/llm-config`) | Switch a stage to a cheaper model (admin, confirm-gated) |
