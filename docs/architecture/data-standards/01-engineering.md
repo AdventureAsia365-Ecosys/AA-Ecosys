@@ -776,12 +776,12 @@ Each row is allowed to stay until its item lands. New code MUST NOT copy any of 
 | CIS tenant tables with ENABLE but no FORCE (D2) | SEC-7 (new apps only) | after the CIS role split |
 | `acp_shared.angle_gate_option` without `tenant_id` | NAM-10 | when its route moves to the tenant pool (AA-817 §5) |
 | TripPlanner: 12 FKs into `shared.destinations`; direct reads of `published_tours` (self-set master GUC), `raw_tours`, `shared.destinations`; CIS `photo_sync` reading frozen TP tables | KEY-1, SEC-10, CON-1 | **X4** (AA-712) |
-| Table/column grants to `tripplanner`: CIS 173 (gateway tables), 179 (`raw_tours` columns), 180/216 (atoms), 201 (destinations, photo views), the `published_tours` SELECT | SEC-5 (`schema-ownership.md` rule 2 allowed them) | **X4** revoke migration; the gateway-config SELECT (`llm_role_config`, `llm_model_catalog`) stays until ADR 0009 (AA-804) defines the gateway contract |
+| Table/column grants to `tripplanner`: CIS 173 (gateway tables), 179 (`raw_tours` columns), 180/216 (atoms), 201 (destinations, photo views), the `published_tours` SELECT | SEC-5 (`schema-ownership.md` rule 2 allowed them) | **X4** revoke migration (CIS 254, 270); the gateway-config SELECT (`llm_role_config`, `llm_model_catalog`) is revoked by CIS 351 (AA-1027 E5) once TripPlanner reads the ADR 0009 contract view only |
 | Contract views in `shared`: `shared.v_tour_photos`, `shared.v_destination_photos` (ADR 0002, CIS 200) | CON-1 | retired once TripPlanner reads `catalog.v_*_photo` (**X4**) |
 | CIS tenant pool: an explicit `"false"` flag value (Redis, immediate) or the emergency variable `TENANT_POOL_FORCE_ADMIN_FLAGS` (task definition, durable, needs a redeploy) moves one route to the admin pool (operator rollback, Part B DM-8.4). Missing or unreadable flags and a missing pool fail closed since S241 D-12 (CIS #792) | SEC-10 | AA-817 / AA-859 (retire the flags route by route) |
 | CIS 007b creates login role `aa_app_user` in a migration | MIG-6 | **X1** (role definitions moved to the Infra bootstrap) |
 | `shared.admin_users.password_hash`; `booking.customer_otps`, `booking.customer_sessions` | NAM-14 | ADR 0006 Phase 1 (AA-816) / Phase 4 (a later `bk-NNN` drop) |
-| `tripplanner.llm_spend_daily` (own spend table) | CON-8 | after `shared.llm_call_daily` (**N4**) |
+| `tripplanner.llm_spend_daily` (own spend table) | CON-8 | closed by AA-1027 E5: no reader or writer since the TripPlanner E5 build; dropped by tp-025 |
 | Connection worst case above the C2.1 ceiling; no `CONNECTION LIMIT` on any role | QRY-6, SEC-11 | **N3** (before the Lambda quota of 1000) |
 | `inquiry.submitted` v1/v1.1 carry `tour_id`; TP `source_tour_id` mixes key types | KEY-3 | **X3** (v1.2) |
 | CIS duplicate numbers 007, 008, 019 and the `007b` suffix | MIG-3 | registry note (no renumbering) |
