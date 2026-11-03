@@ -3,7 +3,8 @@ id: OPS-08-s262-capacity-review-prelim
 title: Cost and capacity review 2026-10 (preliminary)
 description: "Preliminary October 2026 review: about 472 USD (AWS acc2 203 + LLM outside AWS 269) vs 178 in September, driven by two catalogue rewrites and new always-on services; final version from 03/11."
 type: report
-status: draft
+status: superseded
+superseded_by: OPS-08-s265-capacity-review-2026-10
 owner: nghiep
 audience: [owner, engineer, cto, cio, pm, agent]
 applies_to: [ecosystem]
@@ -13,6 +14,9 @@ related: [FIN-02, OPS-08, FIN-01, FIN-02-2026-10-prelim, OPS-08-2026-10, AA-896,
 ---
 
 # Rà soát chi phí và dung lượng tháng 10/2026 (sơ bộ)
+
+> [!CAUTION]
+> Superseded by the final October report: [S265](../2026-11-03-S265-capacity-review/README.md) (03/11/2026).
 
 > [!WARNING]
 > **SƠ BỘ — Cost Explorer đến 30/10; bản chính thức từ 03/11 theo runbook.** acc2 có số 01–30/10 (thiếu 31/10);
