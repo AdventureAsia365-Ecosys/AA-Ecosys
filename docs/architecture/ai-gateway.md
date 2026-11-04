@@ -7,9 +7,9 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-api, aa-cis-worker, tripplanner-lambda, aa-crm-api]
-last_reviewed: 2026-11-03
+last_reviewed: 2026-11-04
 review_every_days: 30
-related: [ARCH-01, ARCH-01-diagrams, APP-06-ai-register, APP-06-routes, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-642, AA-804, AA-1002, AA-1016, AA-1017, AA-1018]
+related: [ARCH-01, ARCH-01-diagrams, APP-06-ai-register, APP-06-routes, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-642, AA-804, AA-1002, AA-1016, AA-1017, AA-1018, AA-1042]
 ---
 
 # AI gateway (as built)
@@ -130,9 +130,14 @@ Migrations 304, 306, 307, 320 and 322 (AA-1002, AA-1017).
 - **Route per stage** (`shared.llm_role_config`): a primary model, ordered fallbacks, an optional shadow at a sample
   rate, `allowed_scopes` (migration-only, AA-1002 S5), `route_deadline_s` (320; set by role in 334: writer 1200 s,
   judge 900 s, validate 600 s, embed 120 s) and the stage kill switch with its declared degrade mode (326).
-- **Order of attempts:** the same model on its next deployment by priority, skipping open circuits and connections
-  over budget, then the next model of the route, then a typed error. A route lists every model it may use; nothing
-  falls back silently across families.
+- **Order of attempts:** set by the **order mode** (`shared.llm_route_settings.order_mode`, CIS 370; the env var
+  `LLM_ROUTE_AWS_FIRST` is only the start-up default while that row cannot be read):
+  - `model_first` (the default, tech lead S267, ADR 0009 decision 5 amendment): every deployment of a model, in its
+    **provider order** (`shared.llm_model_deployment.priority`, lowest first), then the next model of the route;
+  - `aws_first`: every AWS deployment of every model of the route, then the vendor API deployments.
+  Open circuits, connections over budget and switched-off rows are skipped; after the last rung, or after six attempts
+  in all (`errors.MAX_CHAIN_ATTEMPTS`), a typed error. A route lists every model it may use; nothing falls back
+  silently across families.
 - **Legacy keys:** since migration 327 no route names `haiku` or `sonnet`: every stage moved to the Converse keys of
   the same tier (`haiku-5-5`, `sonnet-5-5`). The catalog rows stay; a caller that still passes a legacy key reaches
   acc3 through the legacy chain, inside the breaker since AA-1018 part 2, and logs `llm_deprecated_path_used`
@@ -142,6 +147,38 @@ Migrations 304, 306, 307, 320 and 322 (AA-1002, AA-1017).
   the six tenant writers (344) allow `{aws_only, vendor_direct}` with the OpenAI API model `gpt-6-luna-openai` as the
   last fallback, so they leave AWS only when every AWS path is blocked; the TripPlanner, segment research and CRM
   stages stay `aws_only`.
+
+### 4.1 Route control (admin, no deploy)
+
+The admin page AI providers › **Route control** (`/admin/ai-gateway?tab=controls`, AA-1042, CIS 370) changes routing
+without a deploy. The gateway picks a change up within about 20 seconds (each process re-reads the settings row every
+20 s and drops its route caches when the version number moves).
+
+- **What it edits:** the order mode, the chain of every stage (primary and fallbacks, drag and drop) and the provider
+  order of every model with more than one deployment.
+- **Presets:** "Prefer Anthropic API for Claude (sponsored)" puts the Anthropic API deployment of every Claude model
+  first and sets the order mode to `model_first`; "Prefer AWS" puts the AWS deployments of every model first. Presets
+  never change a chain.
+- **Preview before saving:** the server walks every active stage with the proposed config (the same $0 resolver as
+  `scripts/llm_ops/route_chain_check.py`, no model call) and returns the model and provider that would serve first,
+  next to the one in force.
+- **Rules on every save, preview, preset and revert (server side):** a selectable model for the stage (family rule,
+  catalog, data scopes); a model reached only through a vendor API stays at the end of a chain or right behind the same
+  model on AWS; a judge never of the writers' family; the two sides of a check pair on different makers; at most six
+  attempts per request; every active stage keeps a model that would be called now. A rule the live config already
+  breaks is a warning, not an error. A writer or judge chain change needs an eval run or a break-glass reason (the
+  break glass raises an admin bell).
+- **Versions:** every route change, the Routing tab's own edits included, is a row of
+  `shared.llm_route_config_version` with who, when, the action (save, preset, revert, baseline, external), a note, the
+  snapshot (order mode, chains, priorities) and the diff. A change made outside the admin (a migration) is recorded as
+  an `external` version before the next admin change. Revert restores an earlier snapshot as a new version, audited
+  in `acp_shared.audit_log`. Shadows, the stage switch, data scopes and caps keep their own controls and are not part
+  of a version.
+- **On every call:** each CIS ledger row carries `route_config_version`, the version in force when it was written
+  (a BEFORE INSERT trigger; TripPlanner rows stay NULL). Within the 20 s after a change a row may name the new version
+  for a call routed by the previous one.
+- **Who:** reads need `spend.read`; preview and every write need `ai.admin` (admin and ai_ops). A reader sees the
+  routes, presets and versions with no control.
 
 ## 5. Guards
 
@@ -172,8 +209,9 @@ error class `quota_exhausted`: the connection stops and the call is never retrie
   346); Jev's per-question verdicts stay in `shared.decision_log`. The Calls tab, the trace and Providers read every
   ledger side by side; nothing is copied into one table.
 - **CIS admin, AI providers** (`/admin/ai-gateway`): tabs Providers (connections, Jev credit, availability),
-  Routing, Models & trials (families, shadow report, the read-only Experiments section), Budgets (every cap layer,
-  tenant budgets), Calls (ledger search) and Guide; the **Trace drawer** shows every attempt of a job or tour in time
+  Routing, Route control (order mode, presets, chains, provider order, versions; §4.1), Models & trials (families,
+  shadow report, the read-only Experiments section), Budgets (every cap layer, tenant budgets), Calls (ledger search)
+  and Guide; the **Trace drawer** shows every attempt of a job or tour in time
   order. **Cost Operations** (`/admin/cost-ops`) holds the money view, with the "AI & data spend" tab built from the
   ledger.
 - **Daily probe:** job kind `llm_connection_probe`, one small Test call per enabled text deployment (at most 30), daily
@@ -230,6 +268,7 @@ S264 live checks), unless the row says otherwise.
 | Stage × model parameters | Table live, no rows at its release (AA-1017) | Filled when a trial needs it |
 | Legacy keys and aliases (`LLM_LEGACY_ALIASES`) | No route names a legacy key (327); aliases **off** | Legacy paths proposed for removal 2026-12-31 |
 | Warm independent path per stage class (decision 5 invariant) | A-series and tenant writers: met through the OpenAI API last rung (327, 344). TripPlanner `tp_compose` and segment research: acc3 only, covered by their declared degrade modes (TripPlanner `basic_narration`, 326; segment research `queue_retry`, 335) | A Claude warm path still needs the Anthropic key |
+| Route control: order mode in the DB, provider order, presets, preview, versions with revert, route version on the ledger (CIS 370) | **Built** (AA-1042, S268); live once 370 is applied and the code PR deployed | Live check: Route control tab shows version 1 (baseline); a preview of "Prefer AWS" lists the provider-order diff; `llm_call_log.route_config_version` is set on new CIS rows. The retired `gpt-4.1` deployment is switched off by 370 (the daily probe stops calling it) |
 | Monthly failover drill | **Not scheduled** | Starts once both direct APIs are funded |
 | Second region for eval connections | Not decided | ADR 0009 "Not decided here" |
 | HTTP gateway service | Deferred | Reconsidered when three apps call it in production (decision 13) |
@@ -239,7 +278,8 @@ S264 live checks), unless the row says otherwise.
 | Change | How |
 |---|---|
 | A new model on a known provider kind | One migration PR in CIS: catalog row with price and family, a deployment, no route (the 324 pattern), then the qualification ladder |
-| A route | Admin AI providers › Routing within the rules (scopes, last-resort position); a writer route needs the tech lead's yes |
+| A route, a provider order or the order mode | Admin AI providers › Route control (previewed, checked by the server, versioned, revertible; §4.1) or Routing for one stage; a writer route needs the tech lead's yes |
+| Undo a route change | Admin AI providers › Route control › Versions › Revert (a new version; the history keeps every step) |
 | A secret name, base URL, price or data scope | Migration only |
 | A budget or limit | Admin AI providers › Budgets or the connection drawer (audited) |
 | The shared core | CIS `shared/aa_llm/`, then the Llm Core Sync PRs in TripPlanner and AA-Partner |
