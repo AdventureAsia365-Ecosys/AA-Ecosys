@@ -77,6 +77,11 @@ The S265 audit found that the codebase already has most of the pieces: tenant RL
   - `verify_tenant_api_key` (`api/routers/auth.py:267`; no route depends on it), the dead Lambda authorizer, the key issue / rotate / restore code in `api/routers/admin.py`, and the API-key card in Account.
   - `shared.tenants.api_key_hash` is set to NULL, then dropped under the destructive-ops DRY RUN.
   - Offboarding moves from the `REVOKED_` key marker to `account_status` (d1).
+- **Done in R3 slice 3 (S267, AA-1036):** the 30-day `audit_log` check found only synthetic E2E tenants signing in
+  with a key (no agency); both `/auth/tenant-login` handlers answer 410 Gone with a body naming the partner sign-in;
+  the key code (verify, issue, rotate, restore, the Account key card, the studio API page, the E2E key copy sync and
+  its task role grant) is removed; CIS 368 sets `api_key_hash` NULL; the column DROP waits for its DRY RUN and the
+  tech lead's yes; the four `aa-cis/dev/e2e-tenant/*` secrets are orphan-delete.
 - **Consequence:** the only machine path an agency has to `/v1/*` today is the 24-hour JWT from `POST /auth/tenant-login` (`X-API-Key` is not wired to any route). Removing it ends all agency machine access to `/v1/*` until R8.
 - **Stays:** AA-internal M2M. AA-Partner calls `booking.b2b.v1` and CIS `tenant.membership.v1` with `aa-m2m` client credentials. That is AA machines calling AA machines, not a tenant key.
 - **Deferred to R8:** a machine API for agencies (higher tier, b4), built only when a paying tenant asks, with scoped, rotatable credentials and its own cost yes.
