@@ -200,6 +200,21 @@ What exists (CIS code at `1b6e9448`, S261 audits, [inventory](../audits/2026-10-
     knowingly skips decision 12's ladder for that last rung (writers stay on Anthropic as their primary). The tenant
     terms and the AI Use Register (v1.2) name the writing fallback, so decision 10's "only makers named in the terms"
     holds. TripPlanner writer stages stay `aws_only`.
+  - **Amendment (tech lead, 04/11/2026, S267: "family fallback chains, each model falls to the next"; AA-1026, CIS
+    366).** The gateway now runs a route of a stage allowed both scopes AWS first across the whole route: every AWS
+    deployment of every model in route order, then every vendor API deployment in route order
+    (`client.route_attempts`, switch `LLM_ROUTE_AWS_FIRST`, default on). Before, it tried every deployment of one model
+    before the next model, which is why the rule above forbade an AWS model behind a model with a vendor API
+    deployment. With the AWS-first order on, that rule is lifted: a same-family AWS degrade may sit behind such a model
+    (CIS 366: `sonnet-5-5 → sonnet-4-6 → haiku-4-5 → gpt-6-luna-openai` on the large-tier writers, `haiku-5-5 →
+    haiku-4-5 → sonnet-4-6 → gpt-6-luna-openai` on the small-tier ones, Claude 4.x on acc3 by Converse), and the
+    order "every AWS deployment first, then the Anthropic API, the OpenAI API last" still holds per request. The CIS
+    admin check `_check_aws_before_vendor` stands down while the switch is on. Turning `LLM_ROUTE_AWS_FIRST` off brings
+    back the per-model order AND the old constraint: a route must then name no AWS model behind a model that has a
+    vendor API deployment (the admin check applies again, and the CIS 366 writer routes must be reverted first).
+    Same change: a model refused on its own (its refusal streak began before another model on the connection
+    answered) no longer counts toward the connection circuit (decision 7, AA-1018), so a refused 5.x model does not
+    block its 4.x sibling on the same account. Writers stay Claude, judges stay off Claude (decision 12).
   - The CI check on route data is report-only on Dev and blocking for prod routes from go-live, so it never turns a
     funding question into a red build. The availability card shows the same result.
 - `stop_reason = max_tokens` is the error class `truncated`, never a success.
