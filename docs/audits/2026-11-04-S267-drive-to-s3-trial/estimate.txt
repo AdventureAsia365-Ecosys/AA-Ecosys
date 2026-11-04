@@ -1,0 +1,11 @@
+COUNTRY South Korea: drive images=360 bytes=354799295 (0.33 GB) folders=18 image_folders=18 non_image=2 same_md5_extra_copies=167 not_in_db=0 | db rows=360 with_original_in_s3=360 original_bytes=359540744 matched=307 errors=0 tours=16
+COUNTRY Mongolia: drive images=230 bytes=183007874 (0.17 GB) folders=16 image_folders=16 non_image=2 same_md5_extra_copies=104 not_in_db=0 | db rows=230 with_original_in_s3=230 original_bytes=183007874 matched=230 errors=0 tours=16
+COUNTRY China: drive images=1156 bytes=1253695041 (1.17 GB) folders=76 image_folders=76 non_image=3 same_md5_extra_copies=737 not_in_db=0 | db rows=1156 with_original_in_s3=1156 original_bytes=1254415349 matched=904 errors=0 tours=69
+COUNTRY Taiwan: drive images=566 bytes=393460166 (0.37 GB) folders=46 image_folders=46 non_image=2 same_md5_extra_copies=294 not_in_db=0 | db rows=566 with_original_in_s3=566 original_bytes=406544794 matched=464 errors=0 tours=30
+COUNTRY Philippines: drive images=113 bytes=104117032 (0.10 GB) folders=18 image_folders=18 non_image=2 same_md5_extra_copies=11 not_in_db=0 | db rows=113 with_original_in_s3=113 original_bytes=104922868 matched=0 errors=0 tours=0
+COUNTRY Bhutan: drive images=753 bytes=854522619 (0.80 GB) folders=35 image_folders=33 non_image=4 same_md5_extra_copies=590 not_in_db=0 | db rows=753 with_original_in_s3=753 original_bytes=854522619 matched=695 errors=0 tours=29
+COUNTRY Sri Lanka: drive images=54 bytes=19444637 (0.02 GB) folders=4 image_folders=4 non_image=3 same_md5_extra_copies=16 not_in_db=0 | db rows=54 with_original_in_s3=54 original_bytes=19444637 matched=29 errors=0 tours=2
+TOTAL drive images=3232 bytes=3163046664 (2.95 GB) folders=213 image_folders=211 same_md5_extra_copies=1919 not_yet_in_db=0 drive_list_calls=220 CAPPED=False
+TOTAL db rows=3232 with_original_in_s3=3232 original_bytes=3182398885 (2.96 GB) countries_in_db=['Bhutan', 'China', 'Mongolia', 'Philippines', 'South Korea', 'Sri Lanka', 'Taiwan']
+COST originals_only: 2.95 GB x 0.026 = 0.077 USD/month; one-off PUTs 3232 x 0.0055/1000 = 0.0178 USD; data in from the internet 0 USD
+COST already_in_s3 (AA-708 originals): 2.96 GB x 0.026 = 0.077 USD/month (already billed today)

@@ -1,0 +1,539 @@
+{
+  "issue": "AA-1043",
+  "region": "us-west-2",
+  "intended_use": "Storage",
+  "fallback_bias": "country",
+  "sample_seed": "aa1043",
+  "places_in_sample": 50,
+  "places_done": 50,
+  "skipped_ids": [],
+  "stopped": null,
+  "requests": {
+    "total": 81,
+    "cap": 120,
+    "by_op": {
+      "Geocode": 50,
+      "SearchText": 23,
+      "Geocode_local": 8
+    },
+    "pricing_buckets": {
+      "Stored": 81
+    },
+    "no_bucket_reported": 0
+  },
+  "cost_usd_estimate": 0.324,
+  "cost_line": "81 requests; buckets {'Stored': 81}; at the official us-west-2 prices (Stored $4.00/1k, Core $0.50/1k) = $0.3240; Core free tier (20k/month for 3 months) does not cover Stored",
+  "overall": {
+    "places": 50,
+    "found": 44,
+    "found_rate": 0.88,
+    "median_km": 18.992,
+    "p90_km": 1475.24,
+    "within_1km": 12,
+    "within_5km": 18,
+    "within_25km": 23,
+    "over_25km": 21,
+    "country_match_rate": 1.0,
+    "coarse_answers": 2,
+    "right_place_in_list_1km": 14
+  },
+  "by_op": {
+    "Geocode": {
+      "places": 27,
+      "found": 27,
+      "found_rate": 1.0,
+      "median_km": 31.336,
+      "p90_km": 1387.908,
+      "within_1km": 8,
+      "within_5km": 10,
+      "within_25km": 13,
+      "over_25km": 14,
+      "country_match_rate": 1.0,
+      "coarse_answers": 2,
+      "right_place_in_list_1km": 10
+    },
+    "SearchText(country_centroid)": {
+      "places": 23,
+      "found": 17,
+      "found_rate": 0.739,
+      "median_km": 14.25,
+      "p90_km": 2748.648,
+      "within_1km": 4,
+      "within_5km": 8,
+      "within_25km": 10,
+      "over_25km": 7,
+      "country_match_rate": 1.0,
+      "coarse_answers": 0,
+      "right_place_in_list_1km": 4
+    }
+  },
+  "by_tag": {
+    "area": {
+      "places": 4,
+      "found": 4,
+      "found_rate": 1.0,
+      "median_km": 565.63,
+      "p90_km": 1387.908,
+      "within_1km": 1,
+      "within_5km": 1,
+      "within_25km": 1,
+      "over_25km": 3,
+      "country_match_rate": 1.0,
+      "coarse_answers": 0,
+      "right_place_in_list_1km": 1
+    },
+    "diacritic": {
+      "places": 6,
+      "found": 6,
+      "found_rate": 1.0,
+      "median_km": 22.538,
+      "p90_km": 2748.648,
+      "within_1km": 3,
+      "within_5km": 3,
+      "within_25km": 3,
+      "over_25km": 3,
+      "country_match_rate": 1.0,
+      "coarse_answers": 0,
+      "right_place_in_list_1km": 3
+    },
+    "island": {
+      "places": 8,
+      "found": 7,
+      "found_rate": 0.875,
+      "median_km": 113.116,
+      "p90_km": 1971.107,
+      "within_1km": 1,
+      "within_5km": 1,
+      "within_25km": 3,
+      "over_25km": 4,
+      "country_match_rate": 1.0,
+      "coarse_answers": 1,
+      "right_place_in_list_1km": 1
+    },
+    "non_latin": {
+      "places": 8,
+      "found": 6,
+      "found_rate": 0.75,
+      "median_km": 7.986,
+      "p90_km": 241.067,
+      "within_1km": 1,
+      "within_5km": 3,
+      "within_25km": 4,
+      "over_25km": 2,
+      "country_match_rate": 1.0,
+      "coarse_answers": 0,
+      "right_place_in_list_1km": 2
+    },
+    "temple": {
+      "places": 9,
+      "found": 8,
+      "found_rate": 0.889,
+      "median_km": 2.702,
+      "p90_km": 2423.571,
+      "within_1km": 3,
+      "within_5km": 5,
+      "within_25km": 5,
+      "over_25km": 3,
+      "country_match_rate": 1.0,
+      "coarse_answers": 0,
+      "right_place_in_list_1km": 3
+    }
+  },
+  "by_country": {
+    "CN": {
+      "places": 6,
+      "found": 6,
+      "found_rate": 1.0,
+      "median_km": 2197.339,
+      "p90_km": 3208.604,
+      "within_1km": 0,
+      "within_5km": 0,
+      "within_25km": 0,
+      "over_25km": 6,
+      "country_match_rate": 1.0,
+      "coarse_answers": 0,
+      "right_place_in_list_1km": 0
+    },
+    "IN": {
+      "places": 6,
+      "found": 6,
+      "found_rate": 1.0,
+      "median_km": 6.357,
+      "p90_km": 1387.908,
+      "within_1km": 3,
+      "within_5km": 3,
+      "within_25km": 4,
+      "over_25km": 2,
+      "country_match_rate": 1.0,
+      "coarse_answers": 0,
+      "right_place_in_list_1km": 4
+    },
+    "JP": {
+      "places": 4,
+      "found": 4,
+      "found_rate": 1.0,
+      "median_km": 277.717,
+      "p90_km": 1475.24,
+      "within_1km": 2,
+      "within_5km": 2,
+      "within_25km": 2,
+      "over_25km": 2,
+      "country_match_rate": 1.0,
+      "coarse_answers": 1,
+      "right_place_in_list_1km": 2
+    },
+    "KR": {
+      "places": 9,
+      "found": 3,
+      "found_rate": 0.333,
+      "median_km": 14.25,
+      "p90_km": 44.905,
+      "within_1km": 0,
+      "within_5km": 1,
+      "within_25km": 2,
+      "over_25km": 1,
+      "country_match_rate": 1.0,
+      "coarse_answers": 0,
+      "right_place_in_list_1km": 0
+    },
+    "LA": {
+      "places": 4,
+      "found": 4,
+      "found_rate": 1.0,
+      "median_km": 2.05,
+      "p90_km": 553.984,
+      "within_1km": 1,
+      "within_5km": 3,
+      "within_25km": 3,
+      "over_25km": 1,
+      "country_match_rate": 1.0,
+      "coarse_answers": 0,
+      "right_place_in_list_1km": 1
+    },
+    "LK": {
+      "places": 5,
+      "found": 5,
+      "found_rate": 1.0,
+      "median_km": 13.459,
+      "p90_km": 108.782,
+      "within_1km": 1,
+      "within_5km": 2,
+      "within_25km": 3,
+      "over_25km": 2,
+      "country_match_rate": 1.0,
+      "coarse_answers": 0,
+      "right_place_in_list_1km": 1
+    },
+    "NP": {
+      "places": 6,
+      "found": 6,
+      "found_rate": 1.0,
+      "median_km": 16.46,
+      "p90_km": 82.556,
+      "within_1km": 2,
+      "within_5km": 2,
+      "within_25km": 4,
+      "over_25km": 2,
+      "country_match_rate": 1.0,
+      "coarse_answers": 1,
+      "right_place_in_list_1km": 2
+    },
+    "PH": {
+      "places": 4,
+      "found": 4,
+      "found_rate": 1.0,
+      "median_km": 322.326,
+      "p90_km": 1181.993,
+      "within_1km": 0,
+      "within_5km": 1,
+      "within_25km": 1,
+      "over_25km": 3,
+      "country_match_rate": 1.0,
+      "coarse_answers": 0,
+      "right_place_in_list_1km": 0
+    },
+    "TW": {
+      "places": 6,
+      "found": 6,
+      "found_rate": 1.0,
+      "median_km": 1.147,
+      "p90_km": 241.067,
+      "within_1km": 3,
+      "within_5km": 4,
+      "within_25km": 4,
+      "over_25km": 2,
+      "country_match_rate": 1.0,
+      "coarse_answers": 0,
+      "right_place_in_list_1km": 4
+    }
+  },
+  "by_geo_precision": {
+    "area": {
+      "places": 4,
+      "found": 4,
+      "found_rate": 1.0,
+      "median_km": 565.63,
+      "p90_km": 1387.908,
+      "within_1km": 1,
+      "within_5km": 1,
+      "within_25km": 1,
+      "over_25km": 3,
+      "country_match_rate": 1.0,
+      "coarse_answers": 0,
+      "right_place_in_list_1km": 1
+    },
+    "point": {
+      "places": 46,
+      "found": 40,
+      "found_rate": 0.87,
+      "median_km": 13.854,
+      "p90_km": 1971.107,
+      "within_1km": 11,
+      "within_5km": 17,
+      "within_25km": 22,
+      "over_25km": 18,
+      "country_match_rate": 1.0,
+      "coarse_answers": 2,
+      "right_place_in_list_1km": 13
+    }
+  },
+  "local_script_probe": {
+    "places": 8,
+    "found": 2,
+    "found_rate": 0.25,
+    "median_km": 0.441,
+    "p90_km": 0.678,
+    "within_1km": 2,
+    "within_5km": 2,
+    "within_25km": 2,
+    "over_25km": 0,
+    "country_match_rate": 1.0,
+    "coarse_answers": 0,
+    "right_place_in_list_1km": 2
+  },
+  "worst_20": [
+    {
+      "id": "e14188cd-2b71-455f-80de-21c0acbc5f69",
+      "name": "Astana Graveyard",
+      "iso2": "CN",
+      "km": 3208.604,
+      "title": "Yip Man Grave",
+      "place_type": "PointOfInterest",
+      "tags": ""
+    },
+    {
+      "id": "377de9d1-592c-42a7-a492-e49323c6970b",
+      "name": "Ngamring lake",
+      "iso2": "CN",
+      "km": 2748.648,
+      "title": "CASINO LISBOA",
+      "place_type": "PointOfInterest",
+      "tags": "diacritic"
+    },
+    {
+      "id": "45f747fb-2898-4b7b-b033-611b07cb0235",
+      "name": "Drepung Monastery",
+      "iso2": "CN",
+      "km": 2423.571,
+      "title": "Yan Chi Monastery (Monastery)",
+      "place_type": "PointOfInterest",
+      "tags": "temple"
+    },
+    {
+      "id": "3b3d663a-c098-4133-bf72-1f89d16798c8",
+      "name": "Jade Island",
+      "iso2": "CN",
+      "km": 1971.107,
+      "title": "The Jade",
+      "place_type": "PointOfInterest",
+      "tags": "island"
+    },
+    {
+      "id": "08474427-a9a6-4f6f-918f-5db5ec7fa672",
+      "name": "Ikema Island",
+      "iso2": "JP",
+      "km": 1475.24,
+      "title": "Ikoma-gun, Nara, Japan",
+      "place_type": "SubRegion",
+      "tags": "island"
+    },
+    {
+      "id": "29e51668-47a6-44ef-a984-fe7bbb43198e",
+      "name": "Manas National Park",
+      "iso2": "IN",
+      "km": 1387.908,
+      "title": "Mansa Ram Park, Uttam Nagar, Delhi, India",
+      "place_type": "SubDistrict",
+      "tags": "area"
+    },
+    {
+      "id": "054f0588-0816-4c9b-9c16-7076a0171ad7",
+      "name": "Batad Saddle Junction",
+      "iso2": "PH",
+      "km": 1181.993,
+      "title": "Junction, Kidapawan, Soccsksargen, Philippines",
+      "place_type": "District",
+      "tags": ""
+    },
+    {
+      "id": "d380219a-76a3-4c34-a194-16c22687fdbd",
+      "name": "the Wu Gorge",
+      "iso2": "CN",
+      "km": 1065.291,
+      "title": "The Venetian Macao-Resort-Hotel (The Venetian Macao)",
+      "place_type": "PointOfInterest",
+      "tags": "area"
+    },
+    {
+      "id": "41a55a97-3078-49a5-9444-5a0bda113ab0",
+      "name": "Shingu City to Kumano Nachi Grand Shrine",
+      "iso2": "JP",
+      "km": 554.713,
+      "title": "Kumano, Keitokumachi Shingu, Kitakata-shi, Fukushima 966-0923, Japan",
+      "place_type": "Block",
+      "tags": "temple"
+    },
+    {
+      "id": "4c18545f-d51b-4356-95dc-34cf484f46e8",
+      "name": "Si Phan Don (Four Thousand Islands)",
+      "iso2": "LA",
+      "km": 553.984,
+      "title": "Pha That Luang",
+      "place_type": "PointOfInterest",
+      "tags": "island"
+    },
+    {
+      "id": "3f287e9d-cd1a-4823-8a16-176cf22e7639",
+      "name": "Sto Niño Shrine",
+      "iso2": "PH",
+      "km": 531.536,
+      "title": "Santo Niño, Soccsksargen, Philippines",
+      "place_type": "Locality",
+      "tags": "temple|diacritic"
+    },
+    {
+      "id": "92456f54-779c-4cec-b70a-89749966a342",
+      "name": "the town of Yangshuo",
+      "iso2": "CN",
+      "km": 470.404,
+      "title": "The Town",
+      "place_type": "PointOfInterest",
+      "tags": ""
+    },
+    {
+      "id": "2f81f25e-9d1c-4179-abc4-e879fed4de87",
+      "name": "An Ping Old Street",
+      "iso2": "TW",
+      "km": 241.067,
+      "title": "Ping An S. St., Pingzhen District, Taoyuan City, 324, Taiwan",
+      "place_type": "Street",
+      "tags": "non_latin"
+    },
+    {
+      "id": "e3803e0d-8621-4bc0-aece-259ee140fc46",
+      "name": "Sumilon",
+      "iso2": "PH",
+      "km": 113.116,
+      "title": "Sumilon Rd, 6000 Cebu City, Philippines",
+      "place_type": "Street",
+      "tags": "island"
+    },
+    {
+      "id": "a50e2fc4-eee0-4812-9182-cbb2072fec29",
+      "name": "Dutch Museum",
+      "iso2": "LK",
+      "km": 108.782,
+      "title": "Dutch Museum",
+      "place_type": "PointOfInterest",
+      "tags": ""
+    },
+    {
+      "id": "761ae4fa-cdf0-4ba9-b214-756039cdfd61",
+      "name": "Bimthang",
+      "iso2": "NP",
+      "km": 82.556,
+      "title": "Thang, Tilhar, Dhawalagiri, Nepal",
+      "place_type": "District",
+      "tags": ""
+    },
+    {
+      "id": "4795189f-59da-4644-8ff3-b205442ed97e",
+      "name": "Royal Botanical Gardens at Peradeniya",
+      "iso2": "LK",
+      "km": 69.325,
+      "title": "Botanical Garden, Asgiriya South, Western, Sri Lanka",
+      "place_type": "District",
+      "tags": ""
+    },
+    {
+      "id": "35d23b9e-845a-438b-909a-225a9d46717e",
+      "name": "Royal Chitwan National Park",
+      "iso2": "NP",
+      "km": 65.97,
+      "title": "Royal Chitwan National Park, Lumbini, Nepal",
+      "place_type": "Locality",
+      "tags": "area"
+    },
+    {
+      "id": "308aa783-a3aa-4282-9e92-244d02882560",
+      "name": "Xiangyang National Scenic Area",
+      "iso2": "TW",
+      "km": 50.773,
+      "title": "National Scenic Area",
+      "place_type": "PointOfInterest",
+      "tags": "non_latin"
+    },
+    {
+      "id": "09e607e5-0f5a-4039-854d-4b8a76a4c24d",
+      "name": "Taebaek Mountains",
+      "iso2": "KR",
+      "km": 44.905,
+      "title": "T'Aebaek, South Korea, South Korea",
+      "place_type": "Locality",
+      "tags": "diacritic"
+    }
+  ],
+  "not_found": [
+    {
+      "id": "626ae242-5e5e-45d0-9e54-f73efbf95a34",
+      "name": "Arte Museum Yeosu",
+      "iso2": "KR",
+      "error": null
+    },
+    {
+      "id": "4c10586a-9271-4265-9ad3-dbd49294f556",
+      "name": "Cheonmachong Ancient Tombs",
+      "iso2": "KR",
+      "error": null
+    },
+    {
+      "id": "e18e28bc-34d9-4e00-99e0-af266a5c9201",
+      "name": "Nodeul Island",
+      "iso2": "KR",
+      "error": null
+    },
+    {
+      "id": "e2ec0f6c-d5da-4336-b1cc-ed75d29912e1",
+      "name": "Tongdosa Temple",
+      "iso2": "KR",
+      "error": null
+    },
+    {
+      "id": "2114c119-1150-4524-b963-de22573cc607",
+      "name": "Imjingak",
+      "iso2": "KR",
+      "error": null
+    },
+    {
+      "id": "869309da-eec1-445c-a301-f10889831741",
+      "name": "northern slopes of Jirisan",
+      "iso2": "KR",
+      "error": null
+    }
+  ],
+  "files": {
+    "csv": "/home/nghiep/projects/AA-Ecosys/.tmp-session/S267/trials/out/aws_location_trial.csv",
+    "raw": "/home/nghiep/projects/AA-Ecosys/.tmp-session/S267/trials/out/aws_location_trial_raw.jsonl"
+  },
+  "note": "The stored point is Geoapify's accepted answer, not ground truth: a large km means the two providers disagree; check worst_20 by hand before calling either one wrong."
+}

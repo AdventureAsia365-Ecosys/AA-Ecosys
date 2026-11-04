@@ -1,0 +1,59 @@
+{
+ "job_id": "2643e856-387d-4172-a4b9-f10a326ed128",
+ "status": "succeeded",
+ "error": null,
+ "live": false,
+ "estimated_usd": 0.00227,
+ "unpriced": 3,
+ "planned": [
+  {
+   "connection_key": "acc3",
+   "model_key": "gpt-6.1-sol",
+   "wire_id": "global.openai.gpt-6.1-sol",
+   "estimated_usd": null
+  },
+  {
+   "connection_key": "acc3",
+   "model_key": "gpt-6.1-terra",
+   "wire_id": "global.openai.gpt-6.1-terra",
+   "estimated_usd": null
+  },
+  {
+   "connection_key": "acc3",
+   "model_key": "gpt-6-sol",
+   "wire_id": "global.openai.gpt-6-sol",
+   "estimated_usd": null
+  },
+  {
+   "connection_key": "acc3",
+   "model_key": "kimi-k3",
+   "wire_id": "global.moonshotai.kimi-k3",
+   "estimated_usd": 0.00042
+  },
+  {
+   "connection_key": "acc3",
+   "model_key": "llama4-maverick",
+   "wire_id": "us.meta.llama4-maverick-17b-instruct-v1:0",
+   "estimated_usd": 3e-05
+  },
+  {
+   "connection_key": "acc3",
+   "model_key": "opus-4-5",
+   "wire_id": "global.anthropic.claude-opus-4-5-20251101-v1:0",
+   "estimated_usd": 0.0007
+  },
+  {
+   "connection_key": "acc3",
+   "model_key": "opus-4-6",
+   "wire_id": "global.anthropic.claude-opus-4-6-v1",
+   "estimated_usd": 0.0007
+  },
+  {
+   "connection_key": "acc3",
+   "model_key": "sonnet-4-5",
+   "wire_id": "global.anthropic.claude-sonnet-4-5-20250929-v1:0",
+   "estimated_usd": 0.00042
+  }
+ ],
+ "skipped": []
+}

@@ -1,5 +1,5 @@
 {
- "captured_at": "2026-11-02T11:35Z",
+ "captured_at": "2026-11-04T12:50Z",
  "models": [
   {
    "api_style": "embed",
@@ -159,6 +159,75 @@
    "wire_model": "gpt-6-luna"
   },
   {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": "Candidate (CIS 367), unpriced: cannot be enabled before a price is set. Not routed.",
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": false,
+   "label": "GPT-6 Sol (Bedrock)",
+   "max_output_tokens": null,
+   "model_key": "gpt-6-sol",
+   "price_cache_read_per_mtok": null,
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": null,
+   "price_out_per_mtok": null,
+   "price_source": "UNPRICED: no us-west-1 entry in the AWS Price List (AmazonBedrock, AmazonBedrockFoundationModels) on 04/11/2026",
+   "provider": "bedrock",
+   "supports_temperature": false,
+   "vendor": "openai",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": "Candidate (CIS 367), unpriced: cannot be enabled before a price is set. Not routed.",
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": false,
+   "label": "GPT-6.1 Sol (Bedrock)",
+   "max_output_tokens": null,
+   "model_key": "gpt-6.1-sol",
+   "price_cache_read_per_mtok": null,
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": null,
+   "price_out_per_mtok": null,
+   "price_source": "UNPRICED: no us-west-1 entry in the AWS Price List (AmazonBedrock, AmazonBedrockFoundationModels) on 04/11/2026",
+   "provider": "bedrock",
+   "supports_temperature": false,
+   "vendor": "openai",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": "Candidate (CIS 367), unpriced: cannot be enabled before a price is set. Not routed.",
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": false,
+   "label": "GPT-6.1 Terra (Bedrock)",
+   "max_output_tokens": null,
+   "model_key": "gpt-6.1-terra",
+   "price_cache_read_per_mtok": null,
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": null,
+   "price_out_per_mtok": null,
+   "price_source": "UNPRICED: no us-west-1 entry in the AWS Price List (AmazonBedrock, AmazonBedrockFoundationModels) on 04/11/2026",
+   "provider": "bedrock",
+   "supports_temperature": false,
+   "vendor": "openai",
+   "wire_model": null
+  },
+  {
    "api_style": "anthropic_native",
    "bedrock_accounts": [
     "acc2",
@@ -177,6 +246,29 @@
    "price_in_per_mtok": "1.0000",
    "price_out_per_mtok": "5.0000",
    "price_source": "pricing.py",
+   "provider": "bedrock",
+   "supports_temperature": true,
+   "vendor": "anthropic",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "Claude Haiku 4.5",
+   "max_output_tokens": null,
+   "model_key": "haiku-4-5",
+   "price_cache_read_per_mtok": null,
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "1.0000",
+   "price_out_per_mtok": "5.0000",
+   "price_source": "copied from the legacy row haiku (migration 366)",
    "provider": "bedrock",
    "supports_temperature": true,
    "vendor": "anthropic",
@@ -346,6 +438,52 @@
    "bedrock_accounts": [
     "acc3"
    ],
+   "blocked_reason": "Candidate (CIS 367): not routed. Enable after the availability sweep answers and an approved trial.",
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": false,
+   "label": "Claude Opus 4.5",
+   "max_output_tokens": null,
+   "model_key": "opus-4-5",
+   "price_cache_read_per_mtok": "0.5000",
+   "price_cache_write_per_mtok": "6.2500",
+   "price_in_per_mtok": "5.0000",
+   "price_out_per_mtok": "25.0000",
+   "price_source": "AWS Price List API AmazonBedrockFoundationModels, us-west-1 Global cross-region, read 04/11/2026",
+   "provider": "bedrock",
+   "supports_temperature": true,
+   "vendor": "anthropic",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": "Candidate (CIS 367): not routed. Enable after the availability sweep answers and an approved trial.",
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": false,
+   "label": "Claude Opus 4.6",
+   "max_output_tokens": null,
+   "model_key": "opus-4-6",
+   "price_cache_read_per_mtok": "0.5000",
+   "price_cache_write_per_mtok": "6.2500",
+   "price_in_per_mtok": "5.0000",
+   "price_out_per_mtok": "25.0000",
+   "price_source": "AWS Price List API AmazonBedrockFoundationModels, us-west-1 Global cross-region, read 04/11/2026",
+   "provider": "bedrock",
+   "supports_temperature": false,
+   "vendor": "anthropic",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc3"
+   ],
    "blocked_reason": null,
    "callable_via": [
     "llm_client"
@@ -382,6 +520,52 @@
    "price_in_per_mtok": "3.0000",
    "price_out_per_mtok": "15.0000",
    "price_source": "pricing.py",
+   "provider": "bedrock",
+   "supports_temperature": true,
+   "vendor": "anthropic",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": "Candidate (CIS 367): not routed. Enable after the availability sweep answers and an approved trial.",
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": false,
+   "label": "Claude Sonnet 4.5",
+   "max_output_tokens": null,
+   "model_key": "sonnet-4-5",
+   "price_cache_read_per_mtok": "0.3000",
+   "price_cache_write_per_mtok": "3.7500",
+   "price_in_per_mtok": "3.0000",
+   "price_out_per_mtok": "15.0000",
+   "price_source": "AWS Price List API AmazonBedrockFoundationModels, us-west-1 Global cross-region, read 04/11/2026",
+   "provider": "bedrock",
+   "supports_temperature": true,
+   "vendor": "anthropic",
+   "wire_model": null
+  },
+  {
+   "api_style": "converse",
+   "bedrock_accounts": [
+    "acc3"
+   ],
+   "blocked_reason": null,
+   "callable_via": [
+    "llm_client"
+   ],
+   "enabled": true,
+   "label": "Claude Sonnet 4.6",
+   "max_output_tokens": null,
+   "model_key": "sonnet-4-6",
+   "price_cache_read_per_mtok": null,
+   "price_cache_write_per_mtok": null,
+   "price_in_per_mtok": "3.0000",
+   "price_out_per_mtok": "15.0000",
+   "price_source": "copied from the legacy row sonnet (migration 366)",
    "provider": "bedrock",
    "supports_temperature": true,
    "vendor": "anthropic",
@@ -461,6 +645,8 @@
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "haiku-4-5",
+    "sonnet-4-6",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -470,12 +656,14 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a0_column_map",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "gpt-6-luna-openai",
     "haiku-5-5",
+    "haiku-4-5",
     "nova-lite"
    ],
    "is_active": true,
@@ -485,11 +673,12 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a3_atomize",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "gpt-6-luna-openai",
     "gpt-5.6-luna",
     "nova-lite"
    ],
@@ -500,12 +689,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a3_place_card",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "sonnet-5-5",
+    "haiku-4-5",
+    "sonnet-4-6",
     "llama4-scout"
    ],
    "is_active": true,
@@ -515,12 +705,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a3_place_card_check",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "sonnet-5-5",
+    "haiku-4-5",
+    "sonnet-4-6",
     "nova-lite"
    ],
    "is_active": true,
@@ -530,13 +721,14 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a3_place_days",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "llama4-maverick",
-    "gpt-6-luna-openai"
+    "gpt-6-luna-openai",
+    "gpt-5.6-luna",
+    "llama4-maverick"
    ],
    "is_active": true,
    "model_id": "gpt-6-luna",
@@ -545,11 +737,12 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a3_place_dedupe",
-   "updated_at": "2026-11-02"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "haiku-4-5",
     "nova-lite"
    ],
    "is_active": true,
@@ -559,7 +752,7 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a3_place_dedupe_check",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": null,
@@ -578,7 +771,8 @@
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "haiku-5-5",
+    "sonnet-4-6",
+    "haiku-4-5",
     "nova-lite"
    ],
    "is_active": true,
@@ -588,7 +782,7 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a3_place_locate",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": null,
@@ -616,12 +810,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_atom_writer",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
+    "gpt-6-luna-openai",
     "nova-lite"
    ],
    "is_active": true,
@@ -631,11 +826,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_brand_audit",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "haiku-4-5",
+    "sonnet-4-6",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -645,11 +842,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_flag_fix",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "sonnet-4-6",
+    "haiku-4-5",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -659,11 +858,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_generate",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "haiku-4-5",
+    "sonnet-4-6",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -673,14 +874,14 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_itinerary_nudge",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
-    "nova-lite",
-    "gpt-6-luna-openai"
+    "gpt-6-luna-openai",
+    "nova-lite"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -689,12 +890,14 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_judge",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "gpt-6-luna-openai",
     "haiku-5-5",
+    "haiku-4-5",
     "nova-lite"
    ],
    "is_active": true,
@@ -704,11 +907,15 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_source_facts",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "haiku-4-5",
+    "sonnet-4-6",
+    "gpt-6-luna-openai"
+   ],
    "is_active": true,
    "model_id": "haiku-5-5",
    "provider": "claude",
@@ -716,11 +923,15 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "segment_research",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "haiku-4-5",
+    "sonnet-4-6",
+    "gpt-6-luna-openai"
+   ],
    "is_active": true,
    "model_id": "haiku-5-5",
    "provider": "claude",
@@ -728,11 +939,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "segment_research_batch",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "sonnet-4-6",
+    "haiku-4-5",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -742,14 +955,14 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "supply_content_writer",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "gpt-6-luna-openai",
     "gpt-5.6-luna",
-    "nova-lite",
-    "gpt-6-luna-openai"
+    "nova-lite"
    ],
    "is_active": true,
    "model_id": "gpt-6-luna",
@@ -758,11 +971,12 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t10_adjudicate",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "gpt-6-luna-openai",
     "gpt-5.6-luna",
     "nova-lite"
    ],
@@ -773,14 +987,14 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t10_claims",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
-    "nova-lite",
-    "gpt-6-luna-openai"
+    "gpt-6-luna-openai",
+    "nova-lite"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -789,12 +1003,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t10_judge",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
+    "gpt-6-luna-openai",
     "nova-lite"
    ],
    "is_active": true,
@@ -804,11 +1019,13 @@
    "shadow_model_id": "gpt-6-luna",
    "shadow_sample_pct": 10,
    "stage": "t2_brand_audit",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "haiku-4-5",
+    "sonnet-4-6",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -818,11 +1035,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t2_flag_fix",
-   "updated_at": "2026-11-02"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "sonnet-4-6",
+    "haiku-4-5",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -832,11 +1051,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t2_generate",
-   "updated_at": "2026-11-02"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "haiku-4-5",
+    "sonnet-4-6",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -846,14 +1067,14 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t2_itinerary_nudge",
-   "updated_at": "2026-11-02"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
-    "nova-lite",
-    "gpt-6-luna-openai"
+    "gpt-6-luna-openai",
+    "nova-lite"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -862,14 +1083,14 @@
    "shadow_model_id": "gpt-6-luna",
    "shadow_sample_pct": 10,
    "stage": "t2_judge",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
-    "nova-lite",
-    "gpt-6-luna-openai"
+    "gpt-6-luna-openai",
+    "nova-lite"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -878,11 +1099,13 @@
    "shadow_model_id": "gpt-6-luna",
    "shadow_sample_pct": 10,
    "stage": "t7_debate_judge",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "sonnet-4-6",
+    "haiku-4-5",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -892,12 +1115,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t8_angle_gen",
-   "updated_at": "2026-11-02"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "haiku-5-5",
+    "sonnet-4-6",
+    "haiku-4-5",
     "nova-lite"
    ],
    "is_active": true,
@@ -907,11 +1131,12 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t9_faq_answer_fit",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "haiku-4-5",
     "nova-lite"
    ],
    "is_active": true,
@@ -921,11 +1146,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t9_faq_filter",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "haiku-4-5",
+    "sonnet-4-6",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -935,11 +1162,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t9_repair",
-   "updated_at": "2026-11-02"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
+    "sonnet-4-6",
+    "haiku-4-5",
     "gpt-6-luna-openai"
    ],
    "is_active": true,
@@ -949,7 +1178,7 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t9_write",
-   "updated_at": "2026-11-02"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": null,
@@ -967,7 +1196,11 @@
   },
   {
    "account_route": "acc3",
-   "fallback_model_ids": [],
+   "fallback_model_ids": [
+    "sonnet-4-6",
+    "haiku-4-5",
+    "gpt-6-luna-openai"
+   ],
    "is_active": true,
    "model_id": "sonnet-5-5",
    "provider": "claude",
@@ -975,7 +1208,7 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "tp_compose",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
@@ -987,7 +1220,7 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "tp_extract",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": null,
@@ -1007,8 +1240,8 @@
    "account_route": "acc3",
    "fallback_model_ids": [
     "gpt-6-luna",
-    "nova-lite",
-    "gpt-6-luna-openai"
+    "gpt-6-luna-openai",
+    "nova-lite"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -1017,14 +1250,14 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "writing_memory_eval",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
     "gpt-6-luna",
-    "nova-lite",
-    "gpt-6-luna-openai"
+    "gpt-6-luna-openai",
+    "nova-lite"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -1033,7 +1266,7 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "writing_memory_mine",
-   "updated_at": "2026-11-01"
+   "updated_at": "2026-11-04"
   }
  ],
  "schema": "aa900-llm-routes/1",
