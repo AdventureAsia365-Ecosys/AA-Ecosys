@@ -6,7 +6,7 @@ type: how-to
 status: draft
 owner: nghiep
 audience: [owner, staff, engineer]
-applies_to: [aa-crm-portal, aa-cis-api]
+applies_to: [aa-crm-web, aa-cis-api]
 last_reviewed: 2026-11-01
 review_every_days: 90
 related: [GUIDE-12, GUIDE-12-crm, GUIDE-12-cis-admin, GUIDE-04, AA-1020]

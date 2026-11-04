@@ -6,7 +6,7 @@ type: how-to
 status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
-applies_to: [aa-cis-api, aa-booking-api, aa-crm-api, aa-crm-web, aa-crm-portal, tripplanner-lambda]
+applies_to: [aa-cis-api, aa-booking-api, aa-crm-api, aa-crm-web, tripplanner-lambda]
 last_reviewed: 2026-11-01
 review_every_days: 90
 related: [OPS-04, OPS-02-cis, OPS-02-booking, OPS-02-tp-lambda, OPS-04-queue-stuck, AA-870, AA-892]
@@ -21,7 +21,7 @@ related: [OPS-04, OPS-02-cis, OPS-02-booking, OPS-02-tp-lambda, OPS-04-queue-stu
 
 | Alarm | Fires when |
 |---|---|
-| `aa-cis-dev-api-no-healthy-task`, `aa-booking-dev-no-healthy-task`, `aa-crm-dev-no-healthy-task`, `aa-crm-dev-web-no-healthy-task`, `aa-crm-dev-portal-no-healthy-task` | no healthy target behind the ALB for 5 minutes (service down) |
+| `aa-cis-dev-api-no-healthy-task`, `aa-booking-dev-no-healthy-task`, `aa-crm-dev-no-healthy-task`, `aa-crm-dev-web-no-healthy-task` (the Content studio is part of the web since AA-1036) | no healthy target behind the ALB for 5 minutes (service down) |
 | `aa-tripplanner-dev-browse-errors`, `aa-tripplanner-dev-assembly-errors` | 3 or more Lambda errors in 5 minutes |
 | `aa-tripplanner-dev-browse-throttles` | more than 5 throttles in 5 minutes, 2 of 3 periods |
 | `aa-cis-dev-rds-*` (CPU, free storage, connections) | the shared database is the cause |
@@ -56,7 +56,7 @@ Also: a Sentry issue (free plan), or a person reporting a broken page. Exact con
 2. Was there a deploy in the last hour? If yes, that is the first suspect.
 
    ```bash
-   aws ecs describe-services --cluster aa-cis-dev-cluster --services aa-cis-dev-api aa-cis-dev-worker aa-booking-dev-api aa-crm-dev-api aa-crm-dev-web aa-crm-dev-portal --profile aa365-admin --region us-west-1 --query "services[].{n:serviceName,td:taskDefinition,r:deployments[0].rolloutState,since:deployments[0].createdAt}" --output table
+   aws ecs describe-services --cluster aa-cis-dev-cluster --services aa-cis-dev-api aa-cis-dev-worker aa-booking-dev-api aa-crm-dev-api aa-crm-dev-web --profile aa365-admin --region us-west-1 --query "services[].{n:serviceName,td:taskDefinition,r:deployments[0].rolloutState,since:deployments[0].createdAt}" --output table
    ```
 
    Also: `gh run list -R AdventureAsia365-Ecosys/<repo> -L 5` for app repos and for AA-CIS-Infra (a Terraform apply can

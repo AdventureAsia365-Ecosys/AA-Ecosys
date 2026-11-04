@@ -245,13 +245,17 @@ class EcsRollbackTest(unittest.TestCase):
         self.assertEqual(r.returncode, 1)
         self.assertIn("services-stable did not return", r.stderr)
 
-    def test_portal_reads_the_sha_field_and_worker_has_no_http_check(self):
-        portal = {"fam": "aa-crm-dev-portal", "running": 7, "health_field": "sha", "revs": {
-            "7": {"image": f"{REGISTRY}/aa-crm-dev-portal:{SHA_B}"},
-            "6": {"image": f"{REGISTRY}/aa-crm-dev-portal:{SHA_A}"}}}
-        r, _, _ = self.run_tool(portal, "aa-crm-dev-portal", "--previous", "--apply")
+    def test_crm_web_checks_the_agency_host_and_worker_has_no_http_check(self):
+        web = {"fam": "aa-crm-dev-web", "running": 7, "revs": {
+            "7": {"image": f"{REGISTRY}/aa-crm-dev-web:{SHA_B}"},
+            "6": {"image": f"{REGISTRY}/aa-crm-dev-web:{SHA_A}"}}}
+        r, _, _ = self.run_tool(web, "aa-crm-dev-web", "--previous", "--apply")
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
-        self.assertIn("https://portal.lumiguides.it.com/api/healthz sha=" + SHA_A, r.stdout)
+        self.assertIn("https://portal.lumiguides.it.com/healthz git_sha=" + SHA_A, r.stdout)
+        # AA-1036: the separate Content studio service is retired; the tool refuses it before any AWS call.
+        r, calls, _ = self.run_tool(web, "aa-crm-dev-portal", "--list")
+        self.assertEqual(r.returncode, 2, r.stdout + r.stderr)
+        self.assertEqual(calls, "")
         worker = {"fam": "aa-cis-dev-worker", "running": 9, "revs": {
             "9": {"image": f"{REGISTRY}/aa-cis-dev-api:dev-{SHA_B}"},
             "8": {"image": f"{REGISTRY}/aa-cis-dev-api:dev-{SHA_A}"}}}
