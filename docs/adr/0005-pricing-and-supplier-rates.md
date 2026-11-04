@@ -9,6 +9,12 @@
   (AA no longer sells to travellers). The "from" price of decision 6 becomes the suggested retail price (RRP = net +
   25 %, ADR 0019 b15), kept as policy data in `booking.pricing_rules`; agency prices follow b15 (one net price per tour
   per season, three agency tiers with per-contract discounts).
+- **Update 2026-11-04** (AA-1029, Booking bk-039): built: the bridge from every published CIS tour to a Booking trip
+  plan (`bk_trip_plan_sync`), the cost sheet from the plan's components and the supplier rates in force
+  (`bk_price_recompute`, decision 3), the RRP on `b2b` rows (`pricing_rules.rrp_markup_pct`, ADR 0019 b15), the view
+  `booking.v_from_prices` with the contract [`price.from.v1`](../contracts/price.from.v1.md) (decision 6), the dated
+  price history, the rate-sheet Excel import (decision 7) and the reviewed reference price kept from the CIS source
+  text. Still not built: the `tax_rules` table (decision 10).
 - **Update 2026-10-28** (live schema dump, Booking bk-032): built in schema `booking`: `suppliers`,
   `supplier_contracts`, `supplier_rates`, `fx_rates`, `pricing_rules`, `trip_plan_prices`. Not built yet: the view
   `booking.v_from_prices`, the contract `price.from.v1` and the `tax_rules` table. Until then the B2B price-parity
