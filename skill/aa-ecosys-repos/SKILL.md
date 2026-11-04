@@ -17,7 +17,7 @@ Infra từ 22/10/2026, ADR 0014 amendment): không ghi account ID, ARN, SG/VPC I
 
 | Repo | Vai trò | Chạy ở đâu (acc2) | Chi tiết |
 |---|---|---|---|
-| `AA-CIS-App` | FastAPI API (gồm Content studio API `/v1/*`, `/auth/tenant-login`, `/catalog/v1`, `/tenant/membership/v1`) + job worker + Next.js admin. `portal/` ở đây là bản copy **đóng băng, không deploy** (AA-979) | ECS `aa-cis-dev-api` + `aa-cis-dev-worker` (cùng image); Vercel admin `aa-cis.lumiguides.it.com` | `references/cis-app.md` |
+| `AA-CIS-App` | FastAPI API (gồm Content studio API `/v1/*`, `/auth/tenant-login` (410 từ AA-1036), `/catalog/v1`, `/tenant/membership/v1`) + job worker + Next.js admin. `portal/` ở đây là bản copy **đóng băng, không deploy** (AA-979) | ECS `aa-cis-dev-api` + `aa-cis-dev-worker` (cùng image); Vercel admin `aa-cis.lumiguides.it.com` | `references/cis-app.md` |
 | `AA-Booking` | Booking back office (AAA): khách, trip case, đề xuất, nhà cung cấp, B2B API `/booking/b2b/v1` | ECS `aa-booking-dev-api` (worker `booking.job` chạy trong process API); Vercel `aa-booking-admin` | `references/booking.md` |
 | `AA-TripPlanner-Web` | B2C map-first planner: Next.js + 2 Lambda (browse, assembly) | Vercel + Lambda | `references/tripplanner.md` |
 | `AA-Partner` | CRM cho đại lý (ADR 0010): `api/` (worker `crm.job` trong process API) + `web/`; **tenant portal / Content studio** `portal/` (chuyển từ CIS kèm lịch sử, AA-979 P2a; logic vẫn ở CIS API) | ECS ARM64 `aa-crm-dev-api` + `aa-crm-dev-web` + `aa-crm-dev-portal` (studio, `deploy-portal-dev.yml`), cùng host `portal.lumiguides.it.com`; `partner-dev.` chỉ còn `/crm` và `/crm/*`, còn lại 301 sang `portal.` (AA-979 dọn dẹp) | `CONTEXT.md` của repo |
@@ -82,7 +82,7 @@ suy từ tên. Bảng stage → file → bảng DB: `references/pipeline.md`. Mo
   - Staff: Cognito WORKFORCE (email OTP, managed login `staff-auth.lumiguides.it.com`); CIS xác minh access token ở
     `api/core/staff_identity.py`; `verify_admin_secret` (header `x-admin-secret`) vẫn nhận secret cho gọi
     server-to-server. Booking nhận cùng pool (client `booking-staff`).
-  - Tenant: API key → `/auth/tenant-login` → JWT tenant (`_create_jwt` / `verify_jwt` trong `api/routers/auth.py`).
+  - Tenant: partner pool (MFA) → CIS `POST /auth/tenant-session` → JWT tenant ngắn (`amr=partner`); key API tenant đã bỏ (AA-1036, `/auth/tenant-login` trả 410).
   - M2M: pool `aa-m2m-<env>` client-credentials (`api/core/m2m_auth.py`) cho `/catalog/v1`, `/tenant/membership/v1`,
     Booking `/booking/b2b/v1`.
 
