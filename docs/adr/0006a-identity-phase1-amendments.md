@@ -8,8 +8,9 @@
   flag scope) and the "Remaining open risks" list (the `AdminCreateUser` line). A10 (19/10/2026, S243) adds a
   temporary exception to the `@adventure.asia`-only staff rule for the E2E test account; A10a (24/10/2026, S250)
   adds a second E2E address for the Booking staff admin. A10b (26/10/2026, S252) adds a third, Dev-only E2E address for
-  the CIS admin, read-only except the content-quality sentence-apply routes. A10c (01/11/2026, S262) adds a fourth,
-  Dev-only E2E address for the AA-Partner staff console (crm-ops + crm-support, synthetic agencies only). A11 and A12 (22/10/2026,
+  the CIS admin, read-only except the content-quality sentence-apply routes; A10b-1 adds the Content studio invitation
+  routes and A10b-2 (05/11/2026, S268) a read-only view-as session, both on synthetic tenants only. A10c (01/11/2026,
+  S262) adds a fourth, Dev-only E2E address for the AA-Partner staff console (crm-ops + crm-support, synthetic agencies only). A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2).
 - **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) was unchanged and still pending on 18/10/2026.
 - **Update 2026-10-28:** Booking Phase 2 has shipped in part: Booking verifies WORKFORCE tokens of the
@@ -464,6 +465,41 @@ mailbox or Google account". That is too strong.
   Then drop `studio_invitees` from `crm_e2e_users.json` (AA-CIS-Infra), Terraform Apply, and delete the two
   partner-pool accounts (`crm_dev_identity.py --pool partner invitee-reset --invitee studio-viewer|studio-editor
   --apply`). Add a closing line here. The A10b removal list covers all of this as well.
+
+##### A10b-2. Amendment: a read-only view-as session on synthetic tenants (05/11/2026, S268, AA-1035)
+
+- **Decision (S268, orchestrator under the tech lead's standing approval and the dev-phase merge rule; root ADR 0019
+  d5 "view as tenant"):** the A10b identity may start and end a read-only view-as session on a synthetic Dev tenant,
+  so the orchestrator's admin-evidence run (AA-CIS-App Playwright project `admin-evidence`) can show the view-as
+  banner, the partner reads and the audit rows without a person. Two more write routes:
+  - POST `/admin/tenants/{tenant_id}/view-as` (open a session: reason, optional ticket, at most 60 minutes);
+  - POST `/admin/view-as/sessions/{session_id}/end` (end it).
+- **Scope, enforced by CIS (AA-CIS-App `api/core/e2e_staff.py` `E2E_VIEW_AS_WRITES`, `api/routers/admin_view_as.py`):**
+  - **Two routes only.** They join `E2E_ALLOWED_WRITES` (route templates, `staff_authz`) and
+    `E2E_ALLOWED_WRITE_PATHS` (concrete paths, UUIDs, full match, bearer middleware). Every other write still gets 403
+    `e2e_read_only` before the route runs.
+  - **Synthetic tenants only.** On both routes, for the A10b session, CIS reads `shared.tenants.is_canary` and refuses
+    with 403 `e2e_read_only` unless it is exactly TRUE (the A10b-1 rule), before any session row, audit row or token.
+  - **Its own sessions only (S268 follow-up).** The A10b identity holds the admin role, but its session list
+    (`GET /admin/view-as/sessions`) is scoped to its own sessions, and another member's session is a 404 to it on
+    read and end: the evidence run never lists, reads or revokes a real member's view.
+  - **Read-only session.** A session opened by A10b is the same read-only view as any other (root ADR 0019 d5): only
+    the allow-listed side-effect-free tenant reads, every request logged (`tenant.view_as_request`), the session ends
+    with its expiry, its end, the tenant's offboarding or the member's sign-out, each with one
+    `tenant.view_as_ended` row.
+  - **Dev only.** Unchanged from A10b: the token exists only where the WORKFORCE flag is on (Terraform: dev), and CIS
+    refuses the identity unless `ENVIRONMENT` is exactly `dev` (403 `e2e_not_allowed_here`).
+- **Audit.** Every A10b write that passes the bearer cap gets the AA-884 `staff.request` row; a start writes
+  `tenant.view_as_started`, an end `tenant.view_as_ended`, each read with the token `tenant.view_as_request`. A refusal
+  by the route is logged `view_as_e2e_refused reason=tenant_not_synthetic`.
+- **Exposure added.** Whoever reads an A10b code can read, for at most 60 minutes per session, what the partner's own
+  API answers for a synthetic Dev tenant (the allow-listed reads). Synthetic tenants hold invented data only; no real
+  tenant can be viewed.
+- **Revoke (any time, without waiting for the A10 / A10a / A10b removal):** drop the two routes from
+  `E2E_VIEW_AS_WRITES` and the route check (`_refuse_e2e`) in AA-CIS-App, update the guard test of the write
+  allow-list, deploy. Faster stop on Dev: disable the A10b user (directory disable, which also ends its open view-as
+  sessions) or clear `is_canary` on the synthetic tenants. Add a closing line here. The A10b removal list covers this
+  as well.
 
 #### A10c. Fourth E2E address: the AA-Partner staff console, Dev only, synthetic agencies only (01/11/2026, S262, AA-1019)
 
