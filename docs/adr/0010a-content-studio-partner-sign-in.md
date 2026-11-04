@@ -24,6 +24,16 @@
   `portal.` points at the agency CloudFront distribution (Fargate). The clean-up (decision 5: the API-key sign-in flag
   off, `/tenant-login` 308 to the partner sign-in, the Vercel project removed) ran on 2026-10-28 (S256), ahead of the
   planned 2026-11-03 because Dev has no real users. Evidence: [cutover record](../audits/2026-10-27-S253-aa979-cutover/README.md).
+- **R3 slice 1 (2026-11-04, S267, AA-1036, root ADR 0019 d6 / d7):** in AA-Partner the studio now also lives inside
+  the CRM web (`web/app/(studio)/`, the studio BFF at the same `/api/*` paths): one app, one session (the web's own
+  sealed cookie; the studio's byte copies of `session.ts` / `seal.ts` are not carried over), the CIS exchange of
+  decision 2 unchanged as a server-side call, no people-facing API-key sign-in (`/tenant-login*` 308 to the partner
+  sign-in, no `PORTAL_API_KEY_SIGNIN`), the draft legal pages at `/legal/partner-terms` and `/legal/privacy` (308 from
+  `/terms`, `/privacy`), and the app switcher of ADR 0019 d7. This replaces, at the cut-over, decision 1 ("the studio
+  reads that session read only") and decision 6 ("the studio runs as its own Fargate service"; the ALB studio paths).
+  `portal/` and `aa-crm-dev-portal` stay untouched until the cut-over (R3 slice 2: the agency-host ALB rules move to the
+  web target group, then the studio service and `portal/` are deleted). Decision 5's machine path (`X-API-Key`, CIS
+  `/auth/tenant-login`) is removed in R3 slice 3, after the 30-day `audit_log` check.
 
 ## Context
 
