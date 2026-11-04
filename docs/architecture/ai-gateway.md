@@ -219,6 +219,20 @@ error class `quota_exhausted`: the connection stops and the call is never retrie
   `access_state` and `last_probe_at`.
 - **Alerts:** when a connection circuit opens, one admin bell and one ops e-mail (`llm_circuit_open`, provider text
   masked of ARNs and account IDs); budget alerts use the same bell and e-mail.
+- **Route trace** (AA-1042): every row of one gateway request carries the same `quality_signal.route_trace` (the
+  answered row also `route_position`; no ledger column). AI gateway › **Trace** shows, per stage, the share of
+  answered requests per rung (primary = the first model on its first provider; any later model or provider =
+  fallback), the requests with every attempt (reason, error class, latency, cost; a Calls row links to it) and the
+  content a fallback model wrote. `POST /admin/ai-gateway/route-trace/test` sends 1-6 tiny real requests on one stage,
+  optionally refusing its first model for those requests only (no breaker or circuit change): the live check.
+- **Route alerts** (AA-1042): job kind `llm_route_watch` on `shared.job` every 15 minutes, queued by the api's ops
+  sampler, and a daily digest from 01:00 UTC; bell + at most one e-mail per alert and UTC day: fallback share above
+  the stage's threshold, the last model of a route reached, the first model back after a fallback alert, fallback
+  answers costing more than the primary would have (24 h). Thresholds per stage (or `*` defaults) in
+  `shared.llm_route_policy` (CIS 371), edited on the Trace tab; defaults 20 % of at least 5 requests, 1 USD.
+- **Quality guard** (AA-1042): content whose writer was answered by a fallback model is marked in QA (degraded entry
+  `fallback_writer`, admin only); with the stage's `hold_fallback_writes` on, A1 / T2 output is held for review
+  (`DEGRADED_DETECTOR`) and a T9 piece gets the admin-only held label (the tenant still receives it). Off by default.
 - **Re-queue:** `POST /admin/job-runner/jobs/retry-llm-denied` re-queues failed jobs refused with
   `llm_access_denied` (or held with `tenant_ai_budget_approval`) once their connection answers again; dry run by
   default, at most 50 per apply.
