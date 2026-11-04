@@ -1,0 +1,150 @@
+{
+  "consoleErrors": [],
+  "pageErrors": [],
+  "badResponses": [],
+  "notes": [],
+  "steps": {
+    "1": "PASS ai_assist_allowed true",
+    "2": "PASS switch found off, now on",
+    "3": "PASS card ready, Draft enabled, drawer opened",
+    "4": "PASS draft text + AiNotice staff + no test-mode note (real model) + ai_draft_id, accept/discard visible",
+    "5": "PASS switch restored to off, ai_assist still allowed",
+    "4b": "PASS discarded with feedback other"
+  },
+  "draftRequests": [
+    {
+      "n": 1,
+      "status": 200,
+      "path": "/bff/trips/<trip>/ai/draft",
+      "requestBodyKeys": [
+        "kind",
+        "text"
+      ],
+      "responseFields": {
+        "ai_draft_id": "67aadd23-1dfd-4fdd-ac0b-872ae69ded5f",
+        "outcome": "ok",
+        "fallback": null,
+        "refusal_code": null,
+        "error_class": null,
+        "llm_call_id": "bf41a2fc-aac0-4612-b303-5751fc3679e1",
+        "budget_used_pct": 0,
+        "budget_alert": null,
+        "truncated": false,
+        "approval_required": true,
+        "drafted_at": "2026-11-03T10:38:24.792678+00:00"
+      },
+      "textPresent": true,
+      "textLength": 230
+    }
+  ],
+  "healthz": "200 {\"status\":\"ok\",\"service\":\"aa-crm-web\",\"version\":\"0.11.0\",\"git_sha\":\"a3d96a5c2f94de2b8fcd798f4832112647f2e2df\",\"environment\":\"dev\",\"auth_configured\":true,\"staff_auth_configured\":true}",
+  "settingsInitial": {
+    "status": 200,
+    "provider": "bedrock",
+    "model_test_mode": false,
+    "scrub_billed": true,
+    "test_mode": false,
+    "ai_assist_allowed": true,
+    "ai_enabled": false,
+    "can_edit": true,
+    "spent_usd_month": "0.0001",
+    "ai_budget_usd": "2.00"
+  },
+  "aiSwitchInitial": false,
+  "switchOnPut": 200,
+  "settingsAfterOn": {
+    "status": 200,
+    "provider": "bedrock",
+    "model_test_mode": false,
+    "scrub_billed": true,
+    "test_mode": false,
+    "ai_assist_allowed": true,
+    "ai_enabled": true,
+    "can_edit": true,
+    "spent_usd_month": "0.0001",
+    "ai_budget_usd": "2.00"
+  },
+  "settingsPageNoPlanBanner": 0,
+  "settingsTestMode": null,
+  "ovSettings390": {
+    "doc": "390/390",
+    "main": "390/390",
+    "drawer": null,
+    "ok": true
+  },
+  "tripTitle": "Việt Nam, 9 đêm",
+  "card": {
+    "state": "ready",
+    "unavailable": null,
+    "buttonDisabled": false
+  },
+  "ovTrip1440": {
+    "doc": "1440/1440",
+    "main": "1200/1200",
+    "drawer": null,
+    "ok": true
+  },
+  "ovTrip390": {
+    "doc": "390/390",
+    "main": "390/390",
+    "drawer": null,
+    "ok": true
+  },
+  "drawerTestMode": null,
+  "kindDefault": "Reply",
+  "writeLabel": "WRITE DRAFT",
+  "clicks": 1,
+  "draftMs": 1841,
+  "draftUi": "result",
+  "result": {
+    "textLength": 230,
+    "noticeVariant": "staff",
+    "noticeText": "AI can make mistakes. Check prices, dates, visa and safety information before you send or publish this.",
+    "acceptVisible": true,
+    "discardVisible": true,
+    "testModeNote": null
+  },
+  "ovDrawer390": {
+    "doc": "390/390",
+    "main": "390/390",
+    "drawer": "349/349",
+    "ok": true
+  },
+  "decisionResponse": {
+    "status": 200,
+    "method": "POST",
+    "body": "{\"ai_draft_id\":\"67aadd23-1dfd-4fdd-ac0b-872ae69ded5f\",\"trip_id\":\"d708d347-b146-49cd-a05f-67cb385eef8b\",\"decision\":\"discarded\",\"feedback_code\":\"other\",\"decided_at\":\"2026-11-03T10:38:27.724656+00:00\"}",
+    "request": "{\"feedback_code\":\"other\"}"
+  },
+  "done": {
+    "decision": "discarded",
+    "text": "Discarded. Write the reply yourself or ask for a new draft."
+  },
+  "draftButtonAfter": "NEW DRAFT",
+  "draftPostsSent": 1,
+  "settingsAfterDraft": {
+    "status": 200,
+    "provider": "bedrock",
+    "model_test_mode": false,
+    "scrub_billed": true,
+    "test_mode": false,
+    "ai_assist_allowed": true,
+    "ai_enabled": true,
+    "can_edit": true,
+    "spent_usd_month": "0.0002",
+    "ai_budget_usd": "2.00"
+  },
+  "switchOffPut": 200,
+  "settingsFinal": {
+    "status": 200,
+    "provider": "bedrock",
+    "model_test_mode": false,
+    "scrub_billed": true,
+    "test_mode": false,
+    "ai_assist_allowed": true,
+    "ai_enabled": false,
+    "can_edit": true,
+    "spent_usd_month": "0.0002",
+    "ai_budget_usd": "2.00"
+  }
+}
