@@ -1,8 +1,8 @@
 {
  "updated": "2026-11-04",
- "synced_at": "2026-11-04T01:20Z",
- "session": "S266",
- "next_session": "S267",
+ "synced_at": "2026-11-04T13:28Z",
+ "session": "S267",
+ "next_session": "S268",
  "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
  "projects": {
   "data": "Data Platform",
@@ -116,11 +116,11 @@
     },
     {
      "text": "Một job tenant_provision trên shared.job tạo một tenant E2E có mặt ở CIS, crm.tenant và booking.b2b_partners trong một lượt",
-     "done": false
+     "done": true
     },
     {
      "text": "Feature key tắt cho tenant E2E bị CRM từ chối live (403) sau crm_entitlement_pull",
-     "done": false
+     "done": true
     },
     {
      "text": "ai.budget_usd_monthly là nguồn ngân sách; bỏ bảng shared.tenant_ai_budget (việc mới của R1, AA-1016 đã Done)",
@@ -809,6 +809,30 @@
   }
  ],
  "log": [
+  {
+   "session": "S267",
+   "date": "04/11/2026",
+   "closed": [
+    "AA-1028",
+    "AA-1043",
+    "AA-1044"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-1042",
+    "AA-1043",
+    "AA-1044",
+    "AA-1045"
+   ],
+   "reopened": [],
+   "notes": [
+    "S267 (Claude Code, Ultracode; 04/11 08:30 → 20:40 +07)",
+    "Done: AA-1028 (saga crm.core, CRM 403 live), AA-1043 (giữ Geoapify), AA-1044 (3.232/3.232 ảnh đã ở S3)",
+    "R2 lát 1 live (CIS 362–364, bk-038); R3 lát 1–3 live (studio vào web, portal gỡ, bỏ API key, 368); R4 giá from 235 USD (CIS 365, bk-039); R6 Writing Lab + Spend",
+    "Chính sách LLM: ưu tiên AWS không chỉ AWS, cùng model trước, 1 key Anthropic, trần acc3 100 USD → CIS 366 + 367, ADR 0009 d5, AI Use Register v1.8",
+    "Jira đã đăng 7 comment (PR-20, PR-22…PR-26), 11 ảnh; 55 PR; chi phí ≈ 0,33 USD"
+   ]
+  },
   {
    "session": "S266",
    "date": "04/11/2026",
@@ -1619,7 +1643,7 @@
   {
    "id": "AA-1003",
    "title": "[Reporting] Build the ecosystem report engine and the 63-report catalog (approved S258), slices R0–R7",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "data",
    "milestone": "later",
@@ -2023,31 +2047,19 @@
    "milestone": "M1b",
    "session": "≥01/12",
    "size": "M",
-   "next": "Gateway · In Review, chỉ còn D6: đối soát ledger với hoá đơn tháng 11 (≤5 %) ở phiên đầu tiên ≥01/12 (không dùng tháng 10: acc3 01–28/10 do payer cũ trả)",
-   "needs": ""
-  },
-  {
-   "id": "AA-1028",
-   "title": "[Platform] One plan catalogue for tenants and agencies: admin CRUD, plan drives AI budget, quotas, rate limit, seats and features",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M-R1",
-   "session": "S267",
-   "size": "L",
-   "next": "R1 · lát 1–3 live S266 (CIS 353–361 trừ 336, tenant.entitlements.v1 1.2, /tenant/v1, saga tenant_provision, crm-043, bk-037, Plans & add-ons, Tenant 360 Subscription + override, bỏ PLAN_LIMITS, tenant_account_tick, fail-closed live 04/11 01:14Z: 24 lượt nova-lite 0,0101 USD rồi refused/budget); còn: ảnh tạo/gán plan + GET live đi theo, CRM 403 live (cần login CRM của đại lý thuộc tenant CIS), follow-up nhỏ (ngưỡng override vs dòng AA-1016, thứ tự unpaid/paused, mặc định ô Cost, giới hạn trial grace 361, nguồn billing, liệt kê tier Budgets) → đóng S267",
+   "next": "Gateway · In Review; S267: 367 + sweep ứng viên live (Sonnet 4.5, Opus 4.5/4.6, Maverick, Kimi trả lời). Còn D6 đối soát hoá đơn tháng 11 ≥01/12; cắm key Anthropic khi có",
    "needs": ""
   },
   {
    "id": "AA-1029",
    "title": "[Pricing] Tour price chain ready for data: CIS master tour → Booking trip plan, cost sheet from supplier rates, price.from.v1 view for TripPlanner and portal",
-   "status": "Todo",
+   "status": "In Progress",
    "priority": "High",
    "project": "tpbk",
    "milestone": "M-R4",
-   "session": "S271",
+   "session": "S268",
    "size": "L",
-   "next": "R4 · chuỗi giá CIS master tour → Booking, giá 'from' = RRP (net + 25 %, b15), TripPlanner đọc qua view theo tenant; Done bằng fixture, không chờ dữ liệu nhà cung cấp",
+   "next": "R4 · chuỗi giá live S267 (CIS 365, bk-039, TripPlanner \"From $235\" trên tour thử); còn: portal marketplace đọc giá, nhập bảng giá thật",
    "needs": ""
   },
   {
@@ -2065,25 +2077,25 @@
   {
    "id": "AA-1035",
    "title": "[Platform] R2 AA staff roles and tenant scope: six new roles, account-manager tenant book, read-only view-as",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "portal",
    "milestone": "M-R2",
-   "session": "S267",
+   "session": "S268",
    "size": "L",
-   "next": "R2 · mở khoá nhờ R1; lane song song R3: 6 vai trò staff + finance (CIS staff_app_grant + nhóm Cognito booking-finance), test deny-by-default, require_tenant_scope, view-as chỉ đọc; nhận AA-1010; follow-up S266: studio-viewer thấy nút Edit/Export trong drawer bài → kiểm chặn ở API; review auth độc lập trước merge",
+   "next": "R2 · lát 1 live S267 (6 vai trò + scope, CIS 362–364, bk-038, kiểm cô lập 200/403); còn lát 2: trang giao đối tác cho nhân viên, view-as chỉ đọc, thử bằng tài khoản nhân viên thật",
    "needs": ""
   },
   {
    "id": "AA-1036",
    "title": "[Portal] R3 one agency app: merge portal/ into web/, one sign-in, Content home, app switcher, no tenant API keys",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "crm",
    "milestone": "M-R3",
-   "session": "S267",
+   "session": "S268",
    "size": "XL",
-   "next": "R3 · bắt đầu S267: gộp portal/ vào web/, một đăng nhập partner pool, bỏ key tenant (401; tenant-login 404/410 sau bằng chứng audit_log 30 ngày); lane i18n studio S269–S272; nhận AA-1007",
+   "next": "R3 · lát 1–3 live S267 (studio trong web, portal cũ gỡ, tenant-login 410, 368 NULL); còn: 369 DROP (DRY RUN + duyệt), kiểm user mới mời vào Content, studio tiếng Việt",
    "needs": ""
   },
   {
@@ -2117,9 +2129,9 @@
    "priority": "Medium",
    "project": "portal",
    "milestone": "M-R6",
-   "session": "S267",
+   "session": "S268",
    "size": "L",
-   "next": "R6 · lát 1 (IA admin 7 nhóm, redirect) + lát 2 (gate d21 PASS live, fan-out d20, CIS 360, IAM ListUsers) live S266; còn: kiểm retire→restore live (cần bài E2E đang đăng = site WP test mới), Writing Lab theo stage, gộp/đổi tên Spend, portal hiện needs_change",
+   "next": "R6 · lát 3 live S267 (Writing Lab theo stage, Spend gộp 4 tab); còn: kiểm retire→restore (cần site WP test mới), portal hiện needs_change",
    "needs": "Tech lead: site WordPress test mới (kiểm retire→restore)"
   },
   {
@@ -2145,6 +2157,30 @@
    "session": "S277",
    "size": "L",
    "next": "R7 · §8.4 mục 1–7 trên tenant demo (ảnh CIS, ~25 icon, sắp xếp có undo, chọn ngày + số khách, thời gian di chuyển, share/PDF/.ics, split view); tp_plan_chat sang R8",
+   "needs": ""
+  },
+  {
+   "id": "AA-1042",
+   "title": "[AI gateway] Route control center: family fallback chains, admin-editable provider order, route trace and fallback alerts",
+   "status": "In Progress",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M1b",
+   "session": "S268",
+   "size": "L",
+   "next": "Gateway · 366/367 live S267 (route theo họ, model-first, sweep + coverage); còn: thứ tự nhà cung cấp theo model trên admin, preset Anthropic-first, chế độ thứ tự trong DB, Route trace, cảnh báo rơi model, tab Guide + docs, tắt gpt-4.1",
+   "needs": ""
+  },
+  {
+   "id": "AA-1045",
+   "title": "[AI gateway] Usage analytics explorer",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M1b",
+   "session": "S270",
+   "size": "M",
+   "next": "Gateway · Usage analytics explorer: lọc/sắp theo provider, account, app, stage, thời gian, token, request (yêu cầu chị Thư)",
    "needs": ""
   }
  ]

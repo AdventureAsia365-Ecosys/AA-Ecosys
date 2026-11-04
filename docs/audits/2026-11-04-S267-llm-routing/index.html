@@ -1,0 +1,359 @@
+<title>Bản đồ route model AI</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a route switchboard — status strip, rules, flow diagram, then the matrices that answer "who serves what". */
+:root {
+  --bg: #f6f7f4; --surface: #ffffff; --sunk: #eceee8; --line: #d6dacf;
+  --fg: #1b211d; --muted: #5d665f; --accent: #2f5d50; --accent-soft: #dcebe4;
+  --ok: #1e7a45; --ok-soft: #dcf0e2; --wait: #9a6100; --wait-soft: #f6ead0;
+  --bad: #b02a24; --bad-soft: #f7dcda; --off: #6b6f78; --off-soft: #e7e8ec;
+  --api: #4b3f9e; --api-soft: #e6e3f7;
+  --display: "Fraunces", Georgia, serif;
+  --body: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121614; --surface: #1a201d; --sunk: #222a26; --line: #33403a;
+  --fg: #e4ebe6; --muted: #9aa69f; --accent: #7cc4ab; --accent-soft: #1d3a31;
+  --ok: #6fd498; --ok-soft: #173424; --wait: #e5b25c; --wait-soft: #3a2e14;
+  --bad: #f2928b; --bad-soft: #3e1d1b; --off: #a4a8b2; --off-soft: #2a2d33;
+  --api: #b2a8f2; --api-soft: #2a2550; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121614; --surface: #1a201d; --sunk: #222a26; --line: #33403a;
+  --fg: #e4ebe6; --muted: #9aa69f; --accent: #7cc4ab; --accent-soft: #1d3a31;
+  --ok: #6fd498; --ok-soft: #173424; --wait: #e5b25c; --wait-soft: #3a2e14;
+  --bad: #f2928b; --bad-soft: #3e1d1b; --off: #a4a8b2; --off-soft: #2a2d33;
+  --api: #b2a8f2; --api-soft: #2a2550; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 32px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 44px }
+h1, h2, h3 { margin: 0; text-wrap: balance; line-height: 1.2 }
+h1 { font: 700 clamp(30px, 4.6vw, 46px)/1.1 var(--display); letter-spacing: -0.01em }
+h2 { font: 600 24px/1.25 var(--display) }
+h3 { font-size: 16px; font-weight: 600 }
+p { margin: 0; max-width: 72ch }
+.eyebrow { font: 500 12px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted) }
+.muted { color: var(--muted) }
+.mono { font-family: var(--mono); font-size: 13px }
+section { display: grid; gap: 16px; min-width: 0 }
+header { display: grid; gap: 14px }
+.lede { font-size: 17px; color: var(--muted) }
+
+/* status strip */
+.strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--line);
+  border: 1px solid var(--line); border-radius: 10px; overflow: hidden }
+.strip > div { background: var(--surface); padding: 14px 16px; display: grid; gap: 6px; align-content: start }
+.strip b { font-size: 15px }
+.strip small { color: var(--muted); font-size: 13px }
+
+/* chips */
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 500 12px/1 var(--body); padding: 4px 8px; border-radius: 999px; white-space: nowrap }
+.chip::before { content: ""; width: 7px; height: 7px; border-radius: 50% }
+.ok { background: var(--ok-soft); color: var(--ok) } .ok::before { background: var(--ok) }
+.wait { background: var(--wait-soft); color: var(--wait) } .wait::before { background: var(--wait) }
+.bad { background: var(--bad-soft); color: var(--bad) } .bad::before { background: var(--bad) }
+.off { background: var(--off-soft); color: var(--off) } .off::before { background: var(--off) }
+.api { background: var(--api-soft); color: var(--api) } .api::before { background: var(--api) }
+
+/* rules */
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 12px; counter-reset: r }
+.rule { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; min-width: 0 }
+.rule h3 { display: flex; gap: 10px; align-items: baseline }
+.rule h3::before { counter-increment: r; content: counter(r); font: 600 13px var(--mono); color: var(--accent) }
+.rule p { font-size: 14px; color: var(--muted) }
+
+/* tables */
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface) }
+table { border-collapse: collapse; width: 100%; font-size: 14px }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--line) }
+th { font: 600 12px var(--mono); letter-spacing: .03em; text-transform: uppercase; color: var(--muted); background: var(--sunk); white-space: nowrap }
+tbody tr:last-child td { border-bottom: 0 }
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap }
+.chain { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center }
+.chain .m { font: 500 13px var(--mono); padding: 2px 7px; border-radius: 6px; background: var(--sunk); white-space: nowrap }
+.chain .m.live { background: var(--ok-soft); color: var(--ok) }
+.chain .m.blocked { background: var(--wait-soft); color: var(--wait); text-decoration: line-through; text-decoration-thickness: 1px }
+.chain .m.api { background: var(--api-soft); color: var(--api) }
+.chain .arrow { color: var(--muted); font-size: 12px }
+.group td { background: var(--accent-soft); color: var(--accent); font: 600 13px var(--body) }
+
+/* matrix */
+.matrix th.rot { writing-mode: vertical-rl; transform: rotate(180deg); text-transform: none; font: 500 12px var(--mono); padding: 10px 6px; height: 150px; vertical-align: bottom }
+.matrix td.c { text-align: center; font: 600 13px var(--mono); padding: 8px 4px; min-width: 34px }
+.r1 { background: var(--accent); color: var(--bg) }
+.r2 { background: var(--accent-soft); color: var(--accent) }
+.r3 { background: var(--sunk); color: var(--fg) }
+.rn { background: var(--sunk); color: var(--muted) }
+.now { outline: 2px solid var(--ok); outline-offset: -3px }
+
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 13px; color: var(--muted); align-items: center }
+.legend span { display: inline-flex; gap: 6px; align-items: center }
+.sw { width: 14px; height: 14px; border-radius: 4px; display: inline-block }
+
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 20px }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 10px; align-content: start; min-width: 0 }
+.card ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px }
+.diagram { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; overflow-x: auto }
+footer { border-top: 1px solid var(--line); padding-top: 16px; font-size: 13px; color: var(--muted); display: grid; gap: 6px }
+a { color: var(--accent) }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">AA_Ecosys · AI gateway · cập nhật 04/11/2026 (phiên S267)</div>
+    <h1>Bản đồ route model AI</h1>
+    <p class="lede">Hệ thống chọn model nào cho từng việc, rơi sang model nào khi model chính lỗi, được ghi lại và cảnh báo thế nào, và những gì quản trị viên chỉnh được trên trang admin.</p>
+    <div class="strip" aria-label="Tình trạng kết nối">
+      <div><span class="eyebrow">acc3 · Bedrock (AWS)</span><b>Mở một phần</b><small>Claude Sonnet 4.6, Haiku 4.5, Cohere chạy (probe 04/11 tối). Sonnet 4.5, Opus 4.5/4.6, Llama 4 Maverick, Kimi K3 trả lời (ứng viên, đang tắt). Claude 5.x và GPT trên Bedrock vẫn chờ case AWS.</small><span class="chip wait">chờ AWS mở model</span></div>
+      <div><span class="eyebrow">Anthropic API</span><b>Chưa có key</b><small>Đã sẵn kết nối, trần 150 USD/tháng. Một key cho mọi việc; Claude đang tài trợ nên sẽ được ưu tiên trước acc3.</small><span class="chip off">tắt · chờ key</span></div>
+      <div><span class="eyebrow">OpenAI API</span><b>Đang chạy</b><small>GPT-6 Luna trả lời. Trần 10 USD/tháng, báo ở 80 %.</small><span class="chip ok">sống</span></div>
+      <div><span class="eyebrow">acc2 · Bedrock (AWS)</span><b>Đang chạy</b><small>Nova Lite, Nova 2 Lite, Llama 4, Kimi K3, Cohere. Vùng lỗi tách biệt với acc3.</small><span class="chip ok">sống</span></div>
+    </div>
+  </header>
+
+  <section aria-labelledby="h-rules">
+    <div><div class="eyebrow">Nguyên tắc</div><h2 id="h-rules">Hệ thống dùng model theo 8 quy tắc</h2></div>
+    <div class="rules">
+      <div class="rule"><h3>Không stage nào được đứng</h3><p>Mỗi stage có chuỗi dự phòng. Model chính lỗi hay bị từ chối thì tự rơi xuống model kế, không cần người can thiệp.</p></div>
+      <div class="rule"><h3>Cùng model trước, rồi mới đổi model</h3><p>Thử hết các đường tới cùng một model (AWS và API của hãng) rồi mới xuống model đời cũ hơn, sau cùng mới sang hãng khác.</p></div>
+      <div class="rule"><h3>Ưu tiên AWS, không chỉ AWS</h3><p>Mọi stage được gọi API của hãng khi cần. Riêng Claude đang được tài trợ nên thứ tự nhà cung cấp của Claude đặt API Anthropic trước acc3, chỉnh bằng nút trên admin.</p></div>
+      <div class="rule"><h3>Chất lượng trước giá</h3><p>Claude viết, GPT chấm. Model tốt qua API đứng trước model yếu hơn ở acc2.</p></div>
+      <div class="rule"><h3>Không tự chấm bài mình</h3><p>Judge luôn khác họ với writer. Cặp làm–kiểm (thẻ địa điểm, gộp trùng) luôn khác hãng, kể cả khi đã rơi xuống model dự phòng.</p></div>
+      <div class="rule"><h3>Hai vùng lỗi tách nhau</h3><p>acc2 và acc3 là hai tài khoản AWS riêng. Bậc dự phòng cuối của nhóm kiểm tra đặt ở acc2 để một tài khoản hỏng không kéo cả hệ thống.</p></div>
+      <div class="rule"><h3>Mọi lượt gọi đều có sổ</h3><p>Mỗi lượt thử, kể cả bị từ chối hay lỗi, ghi một dòng ledger: stage, model, kết nối, lượt thứ mấy, trạng thái, chi phí, tour hay job liên quan.</p></div>
+      <div class="rule"><h3>Có trần và có còi</h3><p>Mỗi kết nối có trần chi tháng (báo ở 80 %, dừng ở 100 %). Ngân sách AI của từng đại lý khoá cứng. Rơi model, mất model, hồi phục đều báo cho quản trị viên.</p></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-flow">
+    <div><div class="eyebrow">Luồng một lượt gọi</div><h2 id="h-flow">Một request đi qua gateway thế nào</h2></div>
+    <div class="diagram">
+<pre class="mermaid">
+flowchart LR
+  A["Stage cần AI<br/>(vd. s1_generate)"] --> B["Đọc route của stage<br/>chuỗi model, thứ tự nhà cung cấp<br/>(chỉnh trên admin)"]
+  B --> C{"Model 1<br/>Sonnet 5.5"}
+  C -->|"thử API Anthropic<br/>(ưu tiên vì tài trợ)"| D1["API Anthropic"]
+  C -->|"rồi acc3"| D2["acc3 Bedrock"]
+  D1 -->|"lỗi / từ chối / hết trần"| E{"Model 2<br/>Sonnet 4.6"}
+  D2 -->|"lỗi / từ chối / hết trần"| E
+  E --> F["... Haiku 4.5 ..."] --> G["GPT-6 Luna<br/>API OpenAI (bậc cuối)"]
+  D1 & D2 & E & F & G -.->|"mỗi lượt thử"| L[("Ledger<br/>shared.llm_call_log")]
+  L --> M["Trang Spend · Route trace"]
+  L --> N["Cảnh báo: rơi model,<br/>mất model, hồi phục, chi phí"]
+  O["Circuit breaker + probe 05:00Z"] -.->|"bỏ qua model đang hỏng,<br/>tự dùng lại khi mở"| C
+</pre>
+    </div>
+    <p class="muted">Lượt bị từ chối trước khi chạy model tốn 0 USD. Tối đa 6 lượt thử mỗi request; chuỗi được xếp để bậc cuối vẫn chạy được trong giới hạn đó.</p>
+  </section>
+
+  <section aria-labelledby="h-models">
+    <div><div class="eyebrow">Ma trận 1</div><h2 id="h-models">Model × đường gọi: chạy được ở đâu, giá bao nhiêu</h2></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Model</th><th>Hãng</th><th>acc3 (AWS)</th><th>API của hãng</th><th>acc2 (AWS)</th><th>Giá vào / ra (USD / 1M token)</th></tr></thead>
+        <tbody>
+          <tr><td><b>Claude Sonnet 5.5</b></td><td>Anthropic</td><td><span class="chip wait">chờ case</span></td><td><span class="chip off">chờ key</span></td><td><span class="chip off">không có</span></td><td class="num">2 / 10</td></tr>
+          <tr><td><b>Claude Haiku 5.5</b></td><td>Anthropic</td><td><span class="chip wait">chờ case</span></td><td><span class="chip off">chờ key</span></td><td><span class="chip off">không có</span></td><td class="num">0,10 / 0,50</td></tr>
+          <tr><td>Claude Sonnet 4.6</td><td>Anthropic</td><td><span class="chip ok">sống</span></td><td><span class="chip off">chờ key</span></td><td><span class="chip off">không có</span></td><td class="num">3 / 15</td></tr>
+          <tr><td>Claude Haiku 4.5</td><td>Anthropic</td><td><span class="chip ok">sống</span></td><td><span class="chip off">chờ key</span></td><td><span class="chip off">không có</span></td><td class="num">1 / 5</td></tr>
+          <tr><td><b>GPT-5.6 Luna</b></td><td>OpenAI</td><td><span class="chip wait">chờ case</span></td><td><span class="chip off">không dùng</span></td><td><span class="chip off">không có</span></td><td class="num">0,20 / 1,20</td></tr>
+          <tr><td><b>GPT-6 Luna</b></td><td>OpenAI</td><td><span class="chip wait">chờ case</span></td><td><span class="chip ok">sống</span></td><td><span class="chip off">không có</span></td><td class="num">0,10 / 0,50</td></tr>
+          <tr><td>Amazon Nova Lite</td><td>Amazon</td><td><span class="chip off">không dùng</span></td><td>—</td><td><span class="chip ok">sống</span></td><td class="num">0,077 / 0,308</td></tr>
+          <tr><td>Amazon Nova 2 Lite</td><td>Amazon</td><td><span class="chip off">không dùng</span></td><td>—</td><td><span class="chip ok">sống</span></td><td class="num">0,429 / 3,351</td></tr>
+          <tr><td>Meta Llama 4 Maverick</td><td>Meta</td><td><span class="chip api">trả lời · ứng viên</span></td><td>—</td><td><span class="chip ok">sống</span></td><td class="num">0,24 / 0,97</td></tr>
+          <tr><td>Claude Sonnet 4.5</td><td>Anthropic</td><td><span class="chip api">trả lời · ứng viên</span></td><td><span class="chip off">chờ key</span></td><td><span class="chip off">không có</span></td><td class="num">3 / 15</td></tr>
+          <tr><td>Claude Opus 4.5</td><td>Anthropic</td><td><span class="chip api">trả lời · ứng viên</span></td><td><span class="chip off">chờ key</span></td><td><span class="chip off">không có</span></td><td class="num">5 / 25</td></tr>
+          <tr><td>Claude Opus 4.6</td><td>Anthropic</td><td><span class="chip api">trả lời · ứng viên</span></td><td><span class="chip off">chờ key</span></td><td><span class="chip off">không có</span></td><td class="num">5 / 25</td></tr>
+          <tr><td>GPT-6 Sol · GPT-6.1 Sol · GPT-6.1 Terra</td><td>OpenAI</td><td><span class="chip wait">bị từ chối</span></td><td><span class="chip off">không dùng</span></td><td><span class="chip off">không có</span></td><td class="num">—</td></tr>
+          <tr><td>Moonshot Kimi K3</td><td>Moonshot</td><td><span class="chip api">trả lời · ứng viên</span></td><td>—</td><td><span class="chip ok">sống</span></td><td class="num">—</td></tr>
+          <tr><td>Meta Llama 4 Scout</td><td>Meta</td><td>—</td><td>—</td><td><span class="chip ok">sống</span></td><td class="num">0,17 / 0,66</td></tr>
+          <tr><td>Cohere Embed v4</td><td>Cohere</td><td><span class="chip ok">sống</span></td><td>—</td><td><span class="chip ok">sống</span></td><td class="num">0,12 / —</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="legend"><span class="chip ok">sống</span> gọi thật trả lời và đang nằm trong route (probe 04/11 12:5xZ sau khi áp migration 366–368) <span class="chip api">trả lời · ứng viên</span> acc3 trả lời nhưng model đang tắt, chưa vào route nào (sweep ứng viên 04/11, 0,0012 USD) <span class="chip wait">chờ case</span> AWS trả "not available for this account", quota bị đặt 0 <span class="chip off">chờ key / không có</span> chưa bật hoặc không có đường này</div>
+    <div class="card" style="margin-top:12px"><h3>Kiểm live 04/11 tối (sau migration 366–368)</h3><ul>
+      <li>Probe mọi deployment đang bật: 13 trả lời, 8 bị từ chối (Claude 5.x và GPT trên acc3 vẫn chờ case AWS), chi phí 0,0013 USD.</li>
+      <li>Model đang thật sự phục vụ: 20 stage viết/kiểm chạy <b>Sonnet 4.6 / Haiku 4.5 trên acc3</b>, 14 stage GPT (judge, atomize, thẻ địa điểm) chạy <b>GPT-6 Luna qua API OpenAI</b>, 4 stage embed chạy Cohere trên acc2.</li>
+      <li>Thẻ "Stage coverage" chỉ còn 2 stage không có model: <code>s1_atom_writer</code>, <code>tp_extract</code> — route cũ không còn code gọi, sẽ tắt khi áp migration 336 (từ 10/11).</li>
+      <li>Kiểm route ($0): 40 stage, chuỗi khớp bảng đã duyệt; riêng <code>a3_atomize</code>/<code>s1_source_facts</code> đặt GPT-6 Luna qua API ngay sau bản acc3 (cùng model trước) và bỏ GPT-5.6 Luna (acc3 từ chối cùng lúc).</li>
+    </ul></div>
+    <p class="muted">Model 5.5 rẻ hơn bản 4.x cùng họ, nên khi AWS mở hoặc có key Anthropic, chi phí giảm lại. Giá theo catalog của gateway; ước tính chi phí khi writer chạy Sonnet 4.6: khoảng 0,15 USD / tour (S1 + A3), đã được duyệt.</p>
+  </section>
+
+  <section aria-labelledby="h-keys">
+    <div><div class="eyebrow">Sổ key và kết nối</div><h2 id="h-keys">Key nào của nhà cung cấp nào, dùng cho sản phẩm và stage nào</h2></div>
+    <p class="muted">Chỉ ghi tên kết nối và tên secret trong AWS Secrets Manager. Giá trị key không bao giờ in ra, không nằm trong code hay tài liệu; ứng dụng đọc key lúc chạy theo tên. Đọc từ bảng kết nối của gateway và sổ đăng ký secret, 04/11/2026.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Nhà cung cấp</th><th>Kết nối</th><th>Xác thực</th><th>Secret (tên)</th><th>Sản phẩm</th><th>Stage / việc</th><th>Trần tháng</th><th>Trạng thái</th></tr></thead>
+        <tbody>
+          <tr class="group"><td colspan="8">AI: model ngôn ngữ và embedding</td></tr>
+          <tr><td><b>AWS Bedrock</b> (tài khoản LLM)</td><td class="mono">acc3</td><td>assume role, không có key</td><td>—</td><td>Catalogue, Nội dung đại lý, TripPlanner</td><td>Model chính của writer (Claude), judge và kiểm tra (GPT), embedding dự phòng</td><td class="num">100 USD <small class="muted">(áp khi migration 366 chạy)</small></td><td><span class="chip wait">mở một phần</span></td></tr>
+          <tr><td><b>AWS Bedrock</b> (tài khoản chính)</td><td class="mono">acc2</td><td>task role, không có key</td><td>—</td><td>Mọi sản phẩm; CRM soạn nháp AI</td><td>Bậc dự phòng của judge và kiểm tra (Nova, Llama), embedding chính (Cohere), CRM AI draft (Nova Lite)</td><td class="num">—</td><td><span class="chip ok">sống</span></td></tr>
+          <tr><td><b>Anthropic API</b></td><td class="mono">anthropic-direct</td><td>API key (1 key cho mọi việc)</td><td class="mono">aa-llm/dev/anthropic-direct</td><td>Mọi sản phẩm</td><td>Claude cho writer lớn/nhỏ và kiểm tra; ưu tiên trước acc3 khi đang tài trợ</td><td class="num">150 USD</td><td><span class="chip off">chờ key</span></td></tr>
+          <tr><td><b>OpenAI API</b></td><td class="mono">openai-direct</td><td>API key</td><td class="mono">aa-cis/dev/openai-key</td><td>Mọi sản phẩm</td><td>GPT-6 Luna: dự phòng của judge và kiểm tra, bậc cuối của writer</td><td class="num">10 USD</td><td><span class="chip ok">sống</span></td></tr>
+          <tr><td>AWS Bedrock Guardrails</td><td class="mono">bedrock-guardrails</td><td>task role</td><td>—</td><td>CRM</td><td>Lọc dữ liệu cá nhân trước khi gửi model</td><td class="num">—</td><td><span class="chip off">tắt</span></td></tr>
+          <tr><td>AWS Bedrock (tài khoản LLM mới trong org)</td><td class="mono">bedrock-llm-org</td><td>assume role</td><td>—</td><td>—</td><td>Dự phòng cho tương lai khi tài khoản mới trong org sẵn sàng</td><td class="num">—</td><td><span class="chip off">tắt</span></td></tr>
+          <tr class="group"><td colspan="8">Dữ liệu và dịch vụ bên ngoài</td></tr>
+          <tr><td><b>DataForSEO</b></td><td class="mono">dataforseo</td><td>login + mật khẩu</td><td class="mono">aa-cis/dev/dataforseo</td><td>Catalogue, Nội dung đại lý</td><td>Dữ liệu từ khoá SEO cho nghiên cứu chủ đề, góc bài</td><td class="num">theo số dư</td><td><span class="chip ok">sống</span></td></tr>
+          <tr><td><b>Geoapify</b></td><td class="mono">geoapify</td><td>API key</td><td class="mono">aa-cis/dev/geoapify</td><td>Catalogue, TripPlanner</td><td>Định vị địa điểm (toạ độ) cho atom và bản đồ</td><td class="num">gói miễn phí theo ngày</td><td><span class="chip ok">sống</span></td></tr>
+          <tr><td><b>Jev (TypeSafe)</b></td><td class="mono">typesafe</td><td>API key</td><td class="mono">aa-cis/dev/typesafe</td><td>Catalogue, Nội dung đại lý</td><td>Quyết định tự động ở các cổng (góc bài, gate chất lượng)</td><td class="num">—</td><td><span class="chip ok">sống</span></td></tr>
+          <tr><td><b>Google API</b></td><td>—</td><td>API key</td><td class="mono">aa-cis/dev/gdrive-photo-reader</td><td>Catalogue</td><td>Đọc thư mục ảnh tour công khai trên Drive</td><td class="num">—</td><td><span class="chip ok">dùng</span></td></tr>
+          <tr><td>Google / Microsoft (OAuth app)</td><td>—</td><td>OAuth client</td><td class="mono">crm/dev/mail-oauth</td><td>CRM</td><td>Đại lý gửi mail bằng hộp thư của họ (send-as)</td><td class="num">—</td><td><span class="chip ok">Google</span> <span class="chip off">Microsoft chờ</span></td></tr>
+          <tr><td>WordPress, Facebook của từng đại lý</td><td>—</td><td>thông tin đăng nhập do đại lý cấp</td><td class="mono">acp/cms/&lt;tenant&gt; · acp/social/&lt;tenant&gt;</td><td>Nội dung đại lý</td><td>Đăng bài, đăng post lên kênh của đại lý</td><td class="num">—</td><td><span class="chip ok">theo đại lý</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted">Không còn key API cho đại lý gọi hệ thống: đăng nhập bằng API key của tenant đã bỏ (trả 410), đại lý vào bằng tài khoản đối tác có MFA. Key bản đồ Mapbox cũ đã thu hồi. Theo dõi chi phí theo sản phẩm trên trang Spend › By app, không cần tách key.</p>
+  </section>
+
+  <section aria-labelledby="h-chains">
+    <div><div class="eyebrow">Chuỗi dự phòng</div><h2 id="h-chains">Từng stage rơi theo thứ tự nào</h2></div>
+    <div class="legend"><span><span class="sw" style="background:var(--ok-soft)"></span>đang phục vụ lúc này</span><span><span class="sw" style="background:var(--wait-soft)"></span>bị chặn, chờ case AWS</span><span><span class="sw" style="background:var(--api-soft)"></span>API của hãng</span><span>Mỗi model Claude: thử API Anthropic (khi có key) rồi acc3.</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Stage</th><th>Làm gì</th><th>Chuỗi</th></tr></thead>
+        <tbody>
+          <tr class="group"><td colspan="3">Writer lớn · viết nội dung chính</td></tr>
+          <tr><td class="mono">s1_generate · t2_generate · t9_write · t8_angle_gen · supply_content_writer · tp_compose · tp_extract · s1_atom_writer</td><td>viết lại tour, bài cho đại lý, góc bài, nội dung nhà cung cấp, lịch trình TripPlanner</td><td><div class="chain"><span class="m blocked">Sonnet 5.5</span><span class="arrow">→</span><span class="m live">Sonnet 4.6</span><span class="arrow">→</span><span class="m">Haiku 4.5</span><span class="arrow">→</span><span class="m api">GPT-6 Luna · API</span></div></td></tr>
+          <tr class="group"><td colspan="3">Writer nhỏ · sửa, chỉnh, việc ngắn</td></tr>
+          <tr><td class="mono">a0_column_map · s1_flag_fix · s1_itinerary_nudge · t2_flag_fix · t2_itinerary_nudge · t9_repair · segment_research(_batch)</td><td>map cột Excel, sửa lỗi bị gắn cờ, nắn lịch trình, nghiên cứu phân khúc</td><td><div class="chain"><span class="m blocked">Haiku 5.5</span><span class="arrow">→</span><span class="m live">Haiku 4.5</span><span class="arrow">→</span><span class="m">Sonnet 4.6</span><span class="arrow">→</span><span class="m api">GPT-6 Luna · API</span></div></td></tr>
+          <tr class="group"><td colspan="3">Judge · chấm bài (không bao giờ dùng Claude)</td></tr>
+          <tr><td class="mono">s1_judge · s1_brand_audit · t2_judge · t2_brand_audit · t10_judge · t7_debate_judge · writing_memory_eval · writing_memory_mine</td><td>chấm chất lượng, kiểm giọng thương hiệu, đánh giá writing memory</td><td><div class="chain"><span class="m blocked">GPT-5.6 Luna</span><span class="arrow">→</span><span class="m blocked">GPT-6 Luna</span><span class="arrow">→</span><span class="m api live">GPT-6 Luna · API</span><span class="arrow">→</span><span class="m">Nova Lite · acc2</span></div></td></tr>
+          <tr><td class="mono">t10_adjudicate</td><td>phân xử khi hai lượt chấm vênh</td><td><div class="chain"><span class="m blocked">GPT-6 Luna</span><span class="arrow">→</span><span class="m blocked">GPT-5.6 Luna</span><span class="arrow">→</span><span class="m api live">GPT-6 Luna · API</span><span class="arrow">→</span><span class="m">Nova Lite · acc2</span></div></td></tr>
+          <tr class="group"><td colspan="3">Kiểm tra · trích xuất, đối chiếu (không viết bài)</td></tr>
+          <tr><td class="mono">a3_atomize · s1_source_facts</td><td>tách tour thành atom; rút sự kiện có trong nguồn để biết writer có bịa không</td><td><div class="chain"><span class="m blocked">GPT-6 Luna</span><span class="arrow">→</span><span class="m blocked">GPT-5.6 Luna</span><span class="arrow">→</span><span class="m api live">GPT-6 Luna · API</span><span class="arrow">→</span><span class="m">Haiku 4.5</span><span class="arrow">→</span><span class="m">Nova Lite · acc2</span></div></td></tr>
+          <tr><td class="mono">t10_claims</td><td>rút các khẳng định trong bài đại lý để kiểm</td><td><div class="chain"><span class="m blocked">GPT-6 Luna</span><span class="arrow">→</span><span class="m blocked">GPT-5.6 Luna</span><span class="arrow">→</span><span class="m api live">GPT-6 Luna · API</span><span class="arrow">→</span><span class="m">Nova Lite · acc2</span></div></td></tr>
+          <tr><td class="mono">a3_place_locate · t9_faq_answer_fit</td><td>định vị địa điểm; kiểm câu trả lời FAQ đúng câu hỏi</td><td><div class="chain"><span class="m blocked">Sonnet 5.5</span><span class="arrow">→</span><span class="m live">Sonnet 4.6</span><span class="arrow">→</span><span class="m">Haiku 4.5</span><span class="arrow">→</span><span class="m">Nova Lite · acc2</span></div></td></tr>
+          <tr><td class="mono">a3_place_days</td><td>địa điểm thuộc ngày nào</td><td><div class="chain"><span class="m blocked">Haiku 5.5</span><span class="arrow">→</span><span class="m live">Haiku 4.5</span><span class="arrow">→</span><span class="m">Sonnet 4.6</span><span class="arrow">→</span><span class="m">Nova Lite · acc2</span></div></td></tr>
+          <tr><td class="mono">t9_faq_filter</td><td>lọc FAQ thừa, trùng</td><td><div class="chain"><span class="m blocked">Haiku 5.5</span><span class="arrow">→</span><span class="m live">Haiku 4.5</span><span class="arrow">→</span><span class="m">Nova Lite · acc2</span></div></td></tr>
+          <tr class="group"><td colspan="3">Cặp kiểm chéo · bên làm và bên kiểm luôn khác hãng</td></tr>
+          <tr><td class="mono">a3_place_card</td><td>bên làm: viết thẻ địa điểm</td><td><div class="chain"><span class="m blocked">GPT-6 Luna</span><span class="arrow">→</span><span class="m blocked">GPT-5.6 Luna</span><span class="arrow">→</span><span class="m api live">GPT-6 Luna · API</span><span class="arrow">→</span><span class="m">Nova Lite · Amazon</span></div></td></tr>
+          <tr><td class="mono">a3_place_card_check</td><td>bên kiểm: kiểm thẻ địa điểm</td><td><div class="chain"><span class="m blocked">Haiku 5.5</span><span class="arrow">→</span><span class="m live">Haiku 4.5</span><span class="arrow">→</span><span class="m">Sonnet 4.6</span><span class="arrow">→</span><span class="m">Llama 4 Scout · Meta</span></div></td></tr>
+          <tr><td class="mono">a3_place_dedupe</td><td>bên làm: gộp địa điểm trùng</td><td><div class="chain"><span class="m blocked">GPT-6 Luna</span><span class="arrow">→</span><span class="m blocked">GPT-5.6 Luna</span><span class="arrow">→</span><span class="m api live">GPT-6 Luna · API</span><span class="arrow">→</span><span class="m">Llama 4 Maverick · Meta</span></div></td></tr>
+          <tr><td class="mono">a3_place_dedupe_check</td><td>bên kiểm: kiểm việc gộp</td><td><div class="chain"><span class="m blocked">Haiku 5.5</span><span class="arrow">→</span><span class="m live">Haiku 4.5</span><span class="arrow">→</span><span class="m">Nova Lite · Amazon</span></div></td></tr>
+          <tr class="group"><td colspan="3">Embedding · không đổi</td></tr>
+          <tr><td class="mono">a3_place_embed · f10_embed · tp_component_embed · tp_search_embed</td><td>vector hoá để tìm kiếm, so trùng</td><td><div class="chain"><span class="m live">Cohere Embed v4 · acc2</span><span class="arrow">→</span><span class="m">Cohere Embed v4 · acc3</span></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-matrix">
+    <div><div class="eyebrow">Ma trận 2</div><h2 id="h-matrix">Stage × model: model nào đứng bậc mấy</h2></div>
+    <div class="legend"><span><span class="sw r1"></span>bậc 1 (model chính)</span><span><span class="sw r2"></span>bậc 2</span><span><span class="sw r3"></span>bậc 3 trở đi</span><span><span class="sw" style="outline:2px solid var(--ok);outline-offset:-2px"></span>đang phục vụ lúc này</span></div>
+    <div class="scroll">
+      <table class="matrix" id="matrix"></table>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-obs" class="split">
+    <div class="card">
+      <div class="eyebrow">Log và truy vết</div>
+      <h2 id="h-obs">Mỗi lần rơi model đều để lại dấu</h2>
+      <ul>
+        <li><b>Đã có:</b> ledger ghi mọi lượt thử với <span class="mono">request_id</span>, <span class="mono">attempt_no</span>, <span class="mono">fallback_used</span>, trạng thái và lý do lỗi, kết nối, model, chi phí, app, tour, job.</li>
+        <li><b>Đã có:</b> trang AI &amp; spend › Spend xem chi phí theo app (Catalogue, đại lý, TripPlanner, CRM) và theo stage.</li>
+        <li><b>Sắp làm:</b> trang <i>Route trace</i>: một request đi qua những lượt nào, vì sao rơi, tốn bao nhiêu; tỉ lệ request chạy bằng model chính và bằng dự phòng theo từng stage.</li>
+        <li><b>Sắp làm:</b> mỗi lượt gọi ghi kèm <i>phiên bản cấu hình route</i> đang dùng.</li>
+        <li><b>Sắp làm:</b> nội dung viết bằng model dự phòng được đánh dấu và hiện ở hàng QA; tuỳ chọn giữ lại chờ duyệt.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Cảnh báo cho quản trị viên</div>
+      <h2>Chuông trong admin và email</h2>
+      <ul>
+        <li><b>Đã có:</b> circuit mở (kết nối bị từ chối), trần chi tháng chạm 80 % và 100 %, ngân sách AI đại lý.</li>
+        <li><b>Đang ship:</b> stage không còn model sống ("NO LIVE MODEL") trên thẻ Stage coverage; mỗi stage tối đa 1 chuông / 24 giờ, 1 email / ngày.</li>
+        <li><b>Sắp làm:</b> rơi model quá ngưỡng (vd. trên 20 % request trong 1 giờ, hoặc rơi tới bậc cuối).</li>
+        <li><b>Sắp làm:</b> model chính hồi phục (vd. AWS mở Sonnet 5.5).</li>
+        <li><b>Sắp làm:</b> chi phí đổi vì rơi sang model đắt hơn; bản tin hằng ngày theo stage.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-admin">
+    <div><div class="eyebrow">Điều khiển trên admin</div><h2 id="h-admin">Những gì quản trị viên tự chỉnh, không cần sửa code</h2></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Thiết lập</th><th>Ở đâu</th><th>Trạng thái</th></tr></thead>
+        <tbody>
+          <tr><td>Chuỗi model của từng stage (thêm, bớt, đổi thứ tự)</td><td>AI gateway › Routing</td><td><span class="chip ok">đã có</span> <span class="chip wait">kéo-thả, xem trước, hoàn tác: sắp làm</span></td></tr>
+          <tr><td>Bật/tắt kết nối, trần chi tháng, ngưỡng báo</td><td>AI gateway › Providers</td><td><span class="chip ok">đã có</span></td></tr>
+          <tr><td>Thứ tự nhà cung cấp cho từng model (API trước hay AWS trước)</td><td>AI gateway › Models</td><td><span class="chip wait">sắp làm</span></td></tr>
+          <tr><td>Preset "Ưu tiên API Anthropic cho Claude (tài trợ)" / "Ưu tiên AWS"</td><td>AI gateway › Routing</td><td><span class="chip wait">sắp làm</span></td></tr>
+          <tr><td>Kiểu thứ tự: cùng model trước / AWS trước toàn route</td><td>AI gateway › Routing</td><td><span class="chip wait">sắp làm (hiện ở biến môi trường)</span></td></tr>
+          <tr><td>Luật kiểm khi lưu: judge khác họ writer, cặp kiểm chéo khác hãng, tối đa 6 lượt, stage còn model sống</td><td>chạy phía server cho mọi lần sửa</td><td><span class="chip ok">luật đã có trong code</span> <span class="chip wait">hiện trên giao diện: sắp làm</span></td></tr>
+          <tr><td>Lịch sử phiên bản route, ai sửa, nút hoàn tác</td><td>AI gateway › Routing</td><td><span class="chip ok">audit đã có</span> <span class="chip wait">lịch sử + hoàn tác: sắp làm</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-next" class="split">
+    <div class="card">
+      <div class="eyebrow">Đang chờ</div>
+      <h2 id="h-next">Ba việc sẽ đổi bảng trên</h2>
+      <ul>
+        <li><b>Key Anthropic</b> (chị Thư gửi): cắm vào bằng script, trần 150 USD. Writer chạy lại Sonnet/Haiku 5.5 qua API.</li>
+        <li><b>Case AWS acc3</b> (đã gửi 04/11): khi AWS mở Claude 5.x và GPT, probe 05:00Z tự bắt, các stage tự quay về model chính trên acc3.</li>
+        <li><b>Gọi thử toàn bộ model khả thi</b> (dưới 0,01 USD) sau khi migration 366/367 áp: cập nhật cột "sống/chờ" bằng kết quả thật.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Nguồn</div>
+      <h2>Số liệu lấy từ đâu</h2>
+      <ul>
+        <li>Trạng thái model: probe hằng ngày 04/11 05:02Z và test connection 07:42Z (ledger + audit log).</li>
+        <li>Quota acc3: Service Quotas, so giá trị đang áp với mặc định của AWS (04/11).</li>
+        <li>Giá: catalog của gateway (<span class="mono">shared.llm_model_catalog</span>).</li>
+        <li>Chuỗi: bảng route đã thống nhất với tech lead 04/11, áp bằng migration CIS 366 (đang review).</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <div>Trang này mô tả thiết kế đã duyệt trong phiên S267. Cấu hình thật luôn đọc từ trang AI gateway trên admin; khi hai nơi khác nhau, admin là nguồn đúng.</div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var models = ["Sonnet 5.5", "Sonnet 4.6", "Haiku 5.5", "Haiku 4.5", "GPT-5.6 Luna", "GPT-6 Luna", "GPT-6 Luna · API", "Nova Lite", "Llama 4 Scout", "Llama 4 Maverick"];
+  var live = { "Sonnet 4.6": 1, "Haiku 4.5": 1, "GPT-6 Luna · API": 1, "Nova Lite": 1, "Llama 4 Scout": 1, "Llama 4 Maverick": 1 };
+  var rows = [
+    ["s1_generate / t2 / t9 / t8 / supply / tp_*", ["Sonnet 5.5", "Sonnet 4.6", "Haiku 4.5", "GPT-6 Luna · API"]],
+    ["writer nhỏ (flag_fix, nudge, repair…)", ["Haiku 5.5", "Haiku 4.5", "Sonnet 4.6", "GPT-6 Luna · API"]],
+    ["judge (s1, t2, t10, t7, writing memory)", ["GPT-5.6 Luna", "GPT-6 Luna", "GPT-6 Luna · API", "Nova Lite"]],
+    ["t10_adjudicate", ["GPT-6 Luna", "GPT-5.6 Luna", "GPT-6 Luna · API", "Nova Lite"]],
+    ["a3_atomize · s1_source_facts", ["GPT-6 Luna", "GPT-5.6 Luna", "GPT-6 Luna · API", "Haiku 4.5", "Nova Lite"]],
+    ["t10_claims", ["GPT-6 Luna", "GPT-5.6 Luna", "GPT-6 Luna · API", "Nova Lite"]],
+    ["a3_place_locate · t9_faq_answer_fit", ["Sonnet 5.5", "Sonnet 4.6", "Haiku 4.5", "Nova Lite"]],
+    ["a3_place_days", ["Haiku 5.5", "Haiku 4.5", "Sonnet 4.6", "Nova Lite"]],
+    ["t9_faq_filter", ["Haiku 5.5", "Haiku 4.5", "Nova Lite"]],
+    ["a3_place_card (làm)", ["GPT-6 Luna", "GPT-5.6 Luna", "GPT-6 Luna · API", "Nova Lite"]],
+    ["a3_place_card_check (kiểm)", ["Haiku 5.5", "Haiku 4.5", "Sonnet 4.6", "Llama 4 Scout"]],
+    ["a3_place_dedupe (làm)", ["GPT-6 Luna", "GPT-5.6 Luna", "GPT-6 Luna · API", "Llama 4 Maverick"]],
+    ["a3_place_dedupe_check (kiểm)", ["Haiku 5.5", "Haiku 4.5", "Nova Lite"]]
+  ];
+  var t = document.getElementById("matrix");
+  var h = "<thead><tr><th>Stage</th>" + models.map(function (m) { return '<th class="rot">' + m + "</th>"; }).join("") + "</tr></thead><tbody>";
+  rows.forEach(function (r) {
+    var chain = r[1], first = null;
+    for (var i = 0; i < chain.length; i++) { if (live[chain[i]]) { first = chain[i]; break; } }
+    h += '<tr><td class="mono">' + r[0] + "</td>" + models.map(function (m) {
+      var k = chain.indexOf(m);
+      if (k < 0) return '<td class="c"></td>';
+      var cls = k === 0 ? "r1" : k === 1 ? "r2" : "r3";
+      return '<td class="c ' + cls + (m === first ? " now" : "") + '">' + (k + 1) + "</td>";
+    }).join("") + "</tr>";
+  });
+  t.innerHTML = h + "</tbody>";
+})();
+</script>

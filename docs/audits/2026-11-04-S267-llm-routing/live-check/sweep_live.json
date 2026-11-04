@@ -1,0 +1,128 @@
+{
+ "job_id": "a38b9d3f-cd85-421c-bef9-879398b9663f",
+ "status": "succeeded",
+ "error": null,
+ "live": true,
+ "estimated_usd": 0.00227,
+ "unpriced": 3,
+ "cost_usd": 0.001228,
+ "probed": 8,
+ "ok": 5,
+ "failed": 3,
+ "matrix": [
+  {
+   "ok": false,
+   "error": "AccessDeniedException: An error occurred (AccessDeniedException) when calling the Converse operation (reached max retries: 0): openai.gpt-6.1-sol is not available for this account. You can explore oth",
+   "wire_id": "global.openai.gpt-6.1-sol",
+   "model_key": "gpt-6.1-sol",
+   "error_class": "access_denied",
+   "connection_key": "acc3"
+  },
+  {
+   "ok": false,
+   "error": "AccessDeniedException: An error occurred (AccessDeniedException) when calling the Converse operation (reached max retries: 0): openai.gpt-6.1-terra is not available for this account. You can explore o",
+   "wire_id": "global.openai.gpt-6.1-terra",
+   "model_key": "gpt-6.1-terra",
+   "error_class": "access_denied",
+   "connection_key": "acc3"
+  },
+  {
+   "ok": false,
+   "error": "AccessDeniedException: An error occurred (AccessDeniedException) when calling the Converse operation (reached max retries: 0): openai.gpt-6-sol is not available for this account. You can explore other",
+   "wire_id": "global.openai.gpt-6-sol",
+   "model_key": "gpt-6-sol",
+   "error_class": "access_denied",
+   "connection_key": "acc3"
+  },
+  {
+   "ok": true,
+   "error": "kimi-k3 returned empty content (stopReason=max_tokens)",
+   "wire_id": "global.moonshotai.kimi-k3",
+   "model_key": "kimi-k3",
+   "error_class": null,
+   "connection_key": "acc3"
+  },
+  {
+   "ok": true,
+   "error": null,
+   "wire_id": "us.meta.llama4-maverick-17b-instruct-v1:0",
+   "model_key": "llama4-maverick",
+   "error_class": null,
+   "connection_key": "acc3"
+  },
+  {
+   "ok": true,
+   "error": null,
+   "wire_id": "global.anthropic.claude-opus-4-5-20251101-v1:0",
+   "model_key": "opus-4-5",
+   "error_class": null,
+   "connection_key": "acc3"
+  },
+  {
+   "ok": true,
+   "error": null,
+   "wire_id": "global.anthropic.claude-opus-4-6-v1",
+   "model_key": "opus-4-6",
+   "error_class": null,
+   "connection_key": "acc3"
+  },
+  {
+   "ok": true,
+   "error": null,
+   "wire_id": "global.anthropic.claude-sonnet-4-5-20250929-v1:0",
+   "model_key": "sonnet-4-5",
+   "error_class": null,
+   "connection_key": "acc3"
+  }
+ ],
+ "stage_coverage": {
+  "ok": false,
+  "live": {
+   "s1_judge": "gpt-6-luna-openai@openai-direct",
+   "t2_judge": "gpt-6-luna-openai@openai-direct",
+   "t9_write": "gpt-6-luna-openai@openai-direct",
+   "f10_embed": "cohere-embed-v4@acc2",
+   "t10_judge": "gpt-6-luna-openai@openai-direct",
+   "t9_repair": "gpt-6-luna-openai@openai-direct",
+   "a3_atomize": "gpt-6-luna-openai@openai-direct",
+   "t10_claims": "gpt-6-luna-openai@openai-direct",
+   "tp_compose": "gpt-6-luna-openai@openai-direct",
+   "s1_flag_fix": "gpt-6-luna-openai@openai-direct",
+   "s1_generate": "gpt-6-luna-openai@openai-direct",
+   "t2_flag_fix": "gpt-6-luna-openai@openai-direct",
+   "t2_generate": "gpt-6-luna-openai@openai-direct",
+   "t8_angle_gen": "gpt-6-luna-openai@openai-direct",
+   "a0_column_map": "gpt-6-luna-openai@openai-direct",
+   "a3_place_card": "gpt-6-luna-openai@openai-direct",
+   "a3_place_days": "nova-lite@acc2",
+   "t9_faq_filter": "nova-lite@acc2",
+   "a3_place_embed": "cohere-embed-v4@acc2",
+   "s1_brand_audit": "gpt-6-luna-openai@openai-direct",
+   "t10_adjudicate": "gpt-6-luna-openai@openai-direct",
+   "t2_brand_audit": "gpt-6-luna-openai@openai-direct",
+   "a3_place_dedupe": "gpt-6-luna-openai@openai-direct",
+   "a3_place_locate": "nova-lite@acc2",
+   "s1_source_facts": "gpt-6-luna-openai@openai-direct",
+   "t7_debate_judge": "gpt-6-luna-openai@openai-direct",
+   "tp_search_embed": "cohere-embed-v4@acc2",
+   "segment_research": "gpt-6-luna-openai@openai-direct",
+   "t9_faq_answer_fit": "nova-lite@acc2",
+   "s1_itinerary_nudge": "gpt-6-luna-openai@openai-direct",
+   "t2_itinerary_nudge": "gpt-6-luna-openai@openai-direct",
+   "tp_component_embed": "cohere-embed-v4@acc2",
+   "a3_place_card_check": "llama4-scout@acc2",
+   "writing_memory_eval": "gpt-6-luna-openai@openai-direct",
+   "writing_memory_mine": "gpt-6-luna-openai@openai-direct",
+   "a3_place_dedupe_check": "nova-lite@acc2",
+   "supply_content_writer": "gpt-6-luna-openai@openai-direct",
+   "segment_research_batch": "gpt-6-luna-openai@openai-direct"
+  },
+  "ready": true,
+  "uncovered": [
+   "s1_atom_writer",
+   "tp_extract"
+  ],
+  "stages_checked": 40
+ },
+ "skipped": []
+}

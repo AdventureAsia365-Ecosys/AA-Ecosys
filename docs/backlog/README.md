@@ -6,7 +6,7 @@
 
 **Rules:** at session start read §1–§3 and pick the session's parallel items from §3 and §3b by slot (skip items blocked in §2 or by the "blocked by" notes). At session end update the Status column, move closed items to §5, add new items. Re-audit only when this file is older than ~2 weeks or many issues were created outside sessions.
 
-_Last updated: S266, 04/11/2026 (Claude Code, Ultracode on most of the session; 03/11 16:25 → 04/11 08:30 +07). **Closed in S266 (1):** AA-1027 (§5). **R1 control plane live** (AA-1028 slices 1–3: CIS 353–361 except 336, `tenant.entitlements.v1` 1.2, `/tenant/v1`, the `tenant_provision` saga, crm-043, bk-037, Plans & add-ons, fail-closed AI budget proved live); AA-1003 R0 hotfix live (issue back to Backlog for R5–R7); AA-820 part 1, AA-1004 P0 + P1, AA-1039 slices 1–2 and AA-1040 marks live. Created: none. Open issues 45 (Linear sync 04/11 01:20Z). Next session: **S267** (Jira drafts S265 + S266 first)._
+_Last updated: S267, 04/11/2026 (Claude Code, Ultracode; 08:30 → 20:40 +07). **Closed in S267 (3):** AA-1028, AA-1043, AA-1044 (§5). R2 slice 1, R3 slices 1–3, R4 price chain and R6 slice 3 live; LLM policy "AWS preferred, not AWS only" with model-first family chains (CIS 366) and the candidate sweep (CIS 367). Created: AA-1042, AA-1043, AA-1044, AA-1045. Jira posted (7 comments). Next session: **S268** (AA-1042 admin controls first)._
 
 ## 1. Time-gated checks (do these first when due)
 
@@ -56,6 +56,7 @@ _Last updated: S266, 04/11/2026 (Claude Code, Ultracode on most of the session; 
 ## 2. Waiting on Nghiệp (decisions / manual steps)
 
 - **Settled in S265 (ADR 0019, B2B-only):** the decision page (44/44 items) and the plan/issue review (all 52 verdicts approved). Frontends: the two staff apps (CIS admin, Booking admin) leave Vercel on **Dev first**, in one Fargate Spot task (0.5 vCPU / 1 GB), and TripPlanner runs as one Spot task with CloudFront + WAF, about 20–22 USD a month on Dev; production sizing later (ADR 0019 d23, settled item 2). **q-pilot:** if the Dev pilot starts with no go-live date, the `aa-prod` build (P2) starts at the latest in pilot week 3. **q-ses:** yes to SES mail for the tour-retirement fan-out (a few cents a month, AA-1039). **q-aa741:** yes to the AA-741 paid T-series run, at most 20 USD and 50 tours, through the interim OpenAI / acc2 path while acc3 is closed (inside the OpenAI 10 USD/month hard cap, CIS 327). Every session's list explains each issue in plain words before the tech lead approves it.
+- **Waiting after S267:** (a) the Anthropic API key from the business owner (one key for every product; the tech lead plugs it with the one-command runbook, then sets a 150 USD limit in the Anthropic Console); (b) the AWS case for acc3 (Claude 5.x, GPT-6 Luna, GPT-5.6 Luna + quotas; resent by the tech lead 04/11) — until then writers run on Claude 4.x @acc3 and the GPT stages on the OpenAI API (cap 10 USD/month); (c) approval of the CIS 369 DROP of `shared.tenants.api_key_hash` after its DRY RUN (AA-1036); (d) the public case-study posts and video (AA-1021) need the tech lead review before anything is posted.
 - **Waiting after S266:** (a) a new WordPress test site + an Application Password from the tech lead (not urgent, 03/11 19:40; the old TasteWP site expired): it unlocks the one live WordPress publish of AA-1040 and the AA-1039 retire → restore check; (b) the S265 + S266 Jira drafts, merged and moved to S267 (tech lead, 04/11 06:40): draft at the S267 start, one approval, then post; (c) AA-820 counsel review (the business owner's call); (d) the auto-mode-off windows of S266 were used for the Terraform applies (Dev, `/tenant/v1` route, IAM #646 + the P1 moves), nothing left.
 - **Waiting after S265 (new model):** (a) ~~AA-1027 F4~~ done S266 (Nova Lite acc2, ~0.000034 USD); one draft (~0.001 USD) on the interim acc2 / OpenAI path to close the issue; (b) AA-820: the business owner approves the AI clause before 11/11 (counsel or not), the DPA pack goes into the pilot letter before pilot PII (d16); (c) AA-1008 H3: the tech lead's GitHub sign-in to make the visual job and Kit provenance required checks after the AA-1036 merge (~S270–S272); (d) AA-900: 40 sample labels (~2 h); (e) AA-1004: the business owner's go-live date (b18) and the org invites of acc2 / acc3 (≥01/12); (f) AA-980: the first real agency and the go-live date; (g) AA-948: accept one shared TripPlanner engine after R7 instead of a T13 issue, plus a separate Mapbox cost yes; (h) AA-1011: the Entra (Microsoft 365) app registration; (i) AA-1021: approval of the pilot episode.
 - **LLM path (S260, tech lead):** **S262:** acc3 unchanged (case open, ~04–06/11); the OpenAI direct API answers again (drill); five acc2 candidates probed, not routed. The acc3 Error 002 is an **account-level hold** that started when acc3 left the reseller's organization on 29/10 (last successful call 29/10 07:11Z; every model incl. Amazon Nova, also as the IAM admin, us-west-1 + us-east-1; the use-case form is submitted). AWS Support case 179326606700328 is open: live chat 16:30 passed it to the service team to lift the restriction, **3–5 working days (~04–06/11)**. Control on acc1 (16:00, the tech lead's SSO): Bedrock works on another standalone account (Nova Pro, Claude Haiku 4.5), so the hold is specific to acc3; nothing is routed to acc1 (AA-998). OpenAI direct: no credits (429). The Anthropic API key was revoked on the Console and removed from `~/.zshrc`. Probe once per session. Blocks AA-919 kappa, AA-790, AA-1000 calibration, the AA-900 eval, the LLM parts of AA-921 / AA-922 and every writer / judge run.
@@ -123,8 +124,8 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 |---|---|---|
 | S265 (rest) | AA-1034, AA-1003, AA-1027, AA-820 | R0 live checks and follow-ups (C7.1a note, CONTEXT.md master-per-data-type tables, draft contracts `tenant.entitlements.v1` + `lead.submitted.v1`, 30-day `audit_log` count of `POST /auth/tenant-login`); TP-03 / TP-01 / EX-01 / BK-02 / CX-01 fixed with the switch-off; the Linear re-scope comments, cancels and merges; AA-1027 tp-024 verify + F4 on the interim path; AA-820 clause draft (b20). |
 | S266 (done) | AA-1027, AA-1028, AA-1003, AA-820, AA-1004, AA-1039, AA-1040 | **Done:** AA-1027 closed (F4 on Nova Lite acc2, crm-042). AA-1028 R1 slices 1–3 live (CIS 353–361 except 336, `tenant.entitlements.v1` 1.2, `/tenant/v1` producer, `tenant_provision` saga, `crm_entitlement_pull` crm-043, `bk_tenant_pull` bk-037, Plans & add-ons, Tenant 360 Subscription + overrides, PLAN_LIMITS removed, `tenant_account_tick`, fail-closed proved live). AA-1003 R0 hotfix live. AA-820 part 1 live. AA-1004 P0 slice 1 + P1 slice 2 (plan 0/0/0). AA-1039 slices 1–2 live. AA-1040 marks live everywhere. |
-| S267 | Jira, AA-1028, AA-1039, AA-1035, AA-1036, AA-1004 | The S265 + S266 Jira drafts first (one approval). AA-1028: plan create / assign screenshots + the live GET follow, the live CRM 403 (a CRM login for an agency of a CIS tenant), the small follow-ups → close. AA-1039 next slice (Writing Lab per stage, Spend merge / renames, portal `needs_change`). AA-1035 R2 roles (unblocked by R1; check the API gating of the studio-viewer Edit / Export buttons). AA-1036 R3 start. AA-1004 next stack (TripPlanner, identity / SES / DNS, observability). |
-| S268 | AA-1036, AA-1035, AA-1039, AA-790, AA-1000 | R3 merge continues; R2 migration (enums, `staff_tenant_assignment`, finance role); AA-1039 close if the WordPress test site exists. The R1 Dev guard for the one pilot tenant and the `shared.tenant_ai_budget` retirement (follow-ups of AA-1028 slice 3) if not closed in S267. M2a items only with a live LLM path (TL-11 per stage). |
+| S267 (done) | Jira, AA-1028, AA-1035, AA-1036, AA-1039, AA-1029, AA-1004, AA-1042, AA-1026, AA-1043, AA-1044 | **Done:** AA-1028, AA-1043, AA-1044 closed. Jira S265–S267 posted. AA-1035 R2 slice 1, AA-1036 R3 slices 1–3 (portal retired, tenant API keys removed, 368), AA-1039 slice 3, AA-1029 R4 price chain, AA-1004 slice 3 live. LLM family chains (366) + candidate sweep (367) live; route map artifact. |
+| S268 | AA-1042, AA-1036, AA-1035, AA-1029, AA-1039, AA-1021 | AA-1042 admin controls (provider order per model, Anthropic-first preset, order mode in the DB, Route trace, fallback alerts, Guide tab + docs sync, `gpt-4.1` off); plug the Anthropic key when it arrives. AA-1036: 369 DROP (DRY RUN + tech lead), invited-user check, studio i18n. AA-1035 R2 slice 2 (assignment page, view-as). AA-1029 portal marketplace read. AA-1039 if the WordPress test site exists. AA-1021 LLM case study posts + video (anonymised, AWS icons). |
 | S269 | AA-1036, AA-1035 (+ AA-1010), AA-1040, AA-969, AA-920 | R3 merge + key removal; R2 migration (enums, `staff_tenant_assignment`, finance role) on a parallel lane; AA-1040 AI-notice component in the CIS kit core; AA-969 checklist + d16 hook. AA-920 only with an LLM path. |
 | S270 | AA-1036, AA-1035, AA-969, AA-1040, AA-1008, AA-741, AA-1004 | R3 invitation role map, sign-in without CRM, 30-day `audit_log` evidence then `/auth/tenant-login` 404/410; studio i18n lane. R2 `require_tenant_scope` + CI test + view-as. AA-1040 wired into the merged app. AA-1008 starts after the merge. AA-741 phase 0 on `tenant_provision`. AA-1004 P0 close. |
 | S271 | AA-1035, AA-969, AA-1008, AA-1039, AA-741, AA-1037, AA-1029, AA-1030, AA-710 | R2 close after the independent auth review. AA-969 d16 protections (pilot skip in jobs, nightly export + one-tenant restore). AA-1039 d21 gate + d20 fan-out with SES (yes given S265). AA-741 paid run (yes given: ≤20 USD, ≤50 tours). R4 starts: AA-1037, AA-1029, AA-1030; AA-710 note against the R4 design, KAN-20 draft at the session end. |
@@ -139,24 +140,25 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | S280 | AA-1041, AA-1004 | R7 item 7 + visual tests against `next start` → close R7. AA-1004 P2–P6 from the go-live date, or from pilot week 3 at the latest (q-pilot). |
 | after S280 / date-gated | AA-1024, AA-788, AA-1026, AA-998, AA-873, AA-1003, CRM-after-R3, AA-980, AA-881, parked | AA-1024 D8 ≥10/11 ~12:00Z; AA-788 ≥19/11 with an LLM path (~S286+); first session ≥01/12: AA-1026 D6 (November bill), AA-998 acc1 = 0 USD, AA-873 first-month cost read, AA-1004 org invites; AA-1003 R5–R7; CRM add-ons AA-960, AA-963, AA-965, AA-968, AA-970, AA-1011, AA-1012 in the merged app (≥60 % capacity stays on content); AA-980 at go-live; AA-881 05/2027; parked AA-842, AA-781, AA-782, AA-704, AA-948, AA-922 (TL-11 lift). |
 
-### Open issues by slot (45 after the S266 Linear sync)
+### Open issues by slot (46 after the S267 Linear sync)
 
 | Issue | Work | Milestone | Slot | S265 verdict | Status |
 |---|---|---|---|---|---|
-| AA-1003 | [Reporting] Build the ecosystem report engine and the 63-report catalog (appr… | M-R0 | after S280 | re-scope | Backlog |
-| AA-1028 | [Platform] One plan catalogue for tenants and agencies: admin CRUD, plan driv… | M-R1 | S267 | re-scope | In Progress |
-| AA-1004 | [Infra] Implement the lean AWS model: company organization, Identity Center,… | M5 | S267 | re-scope | In Progress |
+| AA-1003 | [Reporting] Build the ecosystem report engine and the 63-report catalog (appr… | M-R0 | after S280 | re-scope | In Progress |
+| AA-1042 | [AI gateway] Route control center: family fallback chains, admin-editable provider order, route trace an… | M1b | S268 | new S267 | In Progress |
+| AA-1004 | [Infra] Implement the lean AWS model: company organization, Identity Center,… | M5 | S268 | re-scope | In Progress |
 | AA-1021 | AA-1021 (content series, details private) | parked | S267 | re-scope | In Progress |
-| AA-1039 | [Admin] R6 AA Admin IA and Writing Lab: Tenants group, AA Catalogue vs Tenant… | M-R6 | S267 | re-scope | In Progress |
-| AA-1036 | [Portal] R3 one agency app: merge portal/ into web/, one sign-in, Content hom… | M-R3 | S267 | re-scope | Backlog |
-| AA-1035 | [Platform] R2 AA staff roles and tenant scope: six new roles, account-manager… | M-R2 | S267 | re-scope | Backlog |
+| AA-1039 | [Admin] R6 AA Admin IA and Writing Lab: Tenants group, AA Catalogue vs Tenant… | M-R6 | S268 | re-scope | In Progress |
+| AA-1036 | [Portal] R3 one agency app: merge portal/ into web/, one sign-in, Content hom… | M-R3 | S268 | re-scope | In Progress |
+| AA-1035 | [Platform] R2 AA staff roles and tenant scope: six new roles, account-manager… | M-R2 | S268 | re-scope | In Progress |
 | AA-969 | [CRM W7] CRM-37a Security review, SLOs, bounded load test | M-P1 | S269 | re-scope | Backlog |
 | AA-1040 | [Kit] AI notice and machine-readable AI-content marking across apps (EU AI Ac… | M-P1 | S269 | keep | In Progress |
+| AA-1045 | [AI gateway] Usage analytics explorer | M1b | S270 | new S267 | Backlog |
 | AA-1008 | [UI] Kit shell, visual job and close-out (S6e + S1d/S2c + S6f/H3): shared She… | M-R3 | S270 | re-scope | Backlog |
 | AA-741 | [T-series audit] End-to-end T0→T11 test run on controlled tenants + per-mecha… | M2a | S270 | re-scope | Backlog |
 | AA-820 | [Legal] Tenant Terms clause for the Anthropic Usage Policy (effective 12/11/2… | M-P1 | ≤11/11 | re-scope | In Progress |
 | AA-710 | [AAA] B2B benchmark: Asian Trails (eConnect portal, API, Lemax back office) | M-R4 | S271 | keep | Backlog |
-| AA-1029 | [Pricing] Tour price chain ready for data: CIS master tour → Booking trip pla… | M-R4 | S271 | re-scope | Todo |
+| AA-1029 | [Pricing] Tour price chain ready for data: CIS master tour → Booking trip pla… | M-R4 | S271 | re-scope | In Progress |
 | AA-1030 | [Pricing] Agency price tiers: B2B margin per partner tier or contract rate ca… | M-R4 | S271 | re-scope | Todo |
 | AA-1037 | [Booking] R4 Booking B2B only: drop the B2C side, every invoice issued from B… | M-R4 | S271 | re-scope | Backlog |
 | AA-855 | [UAT] Ecosystem UAT with recorded run videos: CIS admin + tenant portal, Trip… | M-P1 | S272 | re-scope | Backlog |
@@ -247,7 +249,17 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-710 | B2B benchmark: Asian Trails (eConnect, API, Lemax) | M-R4 | **S265:** slot S271 (R4 start): update the note against the R4 design (AA-1037, AA-1029, AA-1030, 'Book with AA' d17), map the gaps to issues, KAN-20 draft at that session's end, then close | — |
 | AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 | **S262:** AA-952, AA-954, AA-956, AA-957, AA-964, AA-971 closed (§5); AA-958 → S263. AA-952 was In Progress since S259 (slice 1 = C-M3 confirm, §3 row 0ah); **re-planned at the S260 close**: slots S261–S266, go-real ≥S267, see §3b "Kế hoạch CRM W5–W8 sau S260" | AA-958 needs a free Twilio trial for the live proof; AA-965 needs an LLM path |
 
-## 5. Closed in S266
+## 5. Closed in S267
+
+Evidence per issue: the S267 Linear comments (then `docs/linear-export/`), `docs/audits/2026-11-04-S267-live-verify/`, the trial folders and the S267 state snapshot (`docs/audits/2026-11-04-S267-close/state-snapshot.md`). 04/11/2026.
+
+- **AA-1028** One plan catalogue / R1 control plane (Done): the `tenant_provision` saga attached `crm.core` to Atlas & Hearth, the CRM projected core / 10 seats / `ai_assist`, the CRM gate refused `whatsapp_sms` live (403 `feature_not_allowed`), a test plan was created, assigned, reverted and retired; 11 screenshots (`aa1028/`).
+- **AA-1043** Amazon Location trial (Done): keep Geoapify. 81 requests, 0.32 USD (Stored pricing); wrong places in Asia, 0/6 in Korea (`docs/audits/2026-11-04-S267-geo-location-trial/`).
+- **AA-1044** Drive → S3 trial (Done): 3,232 / 3,232 tour photos already in S3, md5 16/16 match; cut-over recommendation (`docs/audits/2026-11-04-S267-drive-to-s3-trial/`).
+- Delivered, issue kept open: **AA-1035** R2 slice 1 (CIS 362–364, bk-038, Cognito groups, isolation 200/403); **AA-1036** R3 slices 1–3 (studio inside CRM web, portal service retired, tenant-login 410, CIS 368); **AA-1039** slice 3 (Writing Lab per stage, one Spend page); **AA-1029** R4 price chain (CIS 365, bk-039, "From $235" on a test tour); **AA-1004** slice 3 (TripPlanner stack in `modules/environment`, apply 0/0/0); **AA-1042** / **AA-1026** family fallback chains (CIS 366) and candidate models + sweep (CIS 367), ADR 0009 d5 S267 amendment, AI Use Register v1.8.
+- Migrations applied: CIS 362–368 (336 still waits for ≥10/11), bk-038, bk-039. Created: AA-1042, AA-1043, AA-1044, AA-1045.
+
+## 5a. Closed in S266
 
 Evidence per issue: the S266 Linear comments (then `docs/linear-export/`), `docs/audits/2026-11-03-S266-live-verify/` and the S266 state snapshot (`docs/audits/2026-11-03-S266-close/state-snapshot.md`). 04/11/2026.
 
@@ -255,7 +267,7 @@ Evidence per issue: the S266 Linear comments (then `docs/linear-export/`), `docs
 - Delivered, issue kept open: **AA-1003** R0 hotfix live (root #493, CIS #1272, Booking #172, TripPlanner #220; TP-03 retired, historical KPIs, 5/5 reports 0 red) → Backlog for R5–R7 after S280. **AA-1028** R1 slices 1–3 live, fail-closed proved 04/11 01:14Z (In Review, closes S267). **AA-820** part 1, **AA-1004** P0 slice 1 + P1 slice 2, **AA-1039** slices 1–2, **AA-1040** marks: see §1 / §3.
 - Migrations applied: CIS 353–361 (336 still waits for ≥10/11), bk-037, crm-042, crm-043. Created: none. Follow-up noted for R2 (AA-1035): the studio-viewer sees Edit / Export in the piece drawer; check the API gating.
 
-## 5a. Closed in S265
+## 5b. Closed in S265
 
 Evidence per issue: the S265 Linear comments (then `docs/linear-export/`), `docs/audits/2026-11-03-S265-live-verify/`, `docs/audits/2026-11-03-S265-aa1020-verify/` and the S265 state snapshot. 03/11/2026.
 
@@ -269,7 +281,7 @@ Evidence per issue: the S265 Linear comments (then `docs/linear-export/`), `docs
 - **AA-1034** R0 B2B-only model (Done): ADR 0019 Accepted (root #486/#487/#488/#490); B2C paths off on Dev, live: TripPlanner `send-to-advisor` 410 `b2b_only` (TP #218), `bk_inquiry_pull` off and an INSERT into `booking.customers` refused 42501 (Booking #170 bk-036, #171), CIS Overview without B2C cards (CIS #1271, `docs/audits/2026-11-03-S265-live-verify/r0-overview/`); phase issues AA-1035…AA-1041 created and all 52 open issues re-slotted (`docs/audits/2026-11-03-S265-plan-issue-review/`).
 - **Duplicates / cancelled (plan review):** AA-1005 → AA-1038, AA-1007 → AA-1036, AA-1010 → AA-1035; AA-628 and AA-864 cancelled with a reason comment.
 
-## 5b. Closed in S264
+## 5c. Closed in S264
 
 Evidence per issue: the S264 Linear comments (then `docs/linear-export/`), `docs/sessions/2026-11-02-S264-gateway-leftovers-tenant-writing-sidebar-gameday.md`, `docs/audits/2026-11-02-S264-live-verify/` and the S264 state snapshot. 02/11/2026.
 
@@ -279,7 +291,7 @@ Evidence per issue: the S264 Linear comments (then `docs/linear-export/`), `docs
 - Created: none. In Review: AA-1023, AA-1025, AA-1026, AA-1027.
 - LLM: < 0.01 USD (Maverick smoke 0.00021 USD, two OpenAI writer test calls and the A8 call, each < 0.001 USD).
 
-## 5c. Closed in S263
+## 5d. Closed in S263
 
 Evidence per issue: the S263 Linear comments (then `docs/linear-export/`), `docs/sessions/2026-11-01-S263-ai-gateway-closeout.md` and the S263 state snapshot. 01–02/11/2026.
 
@@ -290,7 +302,7 @@ Evidence per issue: the S263 Linear comments (then `docs/linear-export/`), `docs
 - Created and still open: AA-1023, AA-1024, AA-1025, AA-1026 (In Review), AA-1027, AA-1028, AA-1029, AA-1030, AA-1033 (In Review).
 - LLM: no paid writer / judge / wave run. Small calls: two acc2 contract smokes (~0.0017 + ~0.0025 USD), the B2 probe (~0.001 USD), the 327 smoke (< 0.0001 USD). Total `llm_call_log` cost of the session: not checked.
 
-## 5d. Closed in S262
+## 5e. Closed in S262
 
 Evidence per issue: the S262 Linear comments (then `docs/linear-export/`), `docs/audits/2026-10-31-S262-evidence/`, `docs/audits/2026-10-31-S262-uat-dry-run/`, `docs/audits/2026-11-01-S262-crm-review-video/` and `docs/audits/2026-11-01-S262-close/state-snapshot.md`. 31/10–01/11/2026. Done-with-scope follows TL-4: the left items are named in Linear with their trigger.
 
@@ -302,7 +314,7 @@ Evidence per issue: the S262 Linear comments (then `docs/linear-export/`), `docs
 - Moved to Backlog, still open: **AA-873** (GuardDuty before prod; first-month cost ≥01/12), **AA-1004** (acc2 invite after 01/12, SCP test, AI path), **AA-922** (TL-11 freeze track).
 - LLM: no paid writer / judge / wave run. Small approved calls: the OpenAI API drill (~0.00004 USD) and the acc2 candidate probe (~0.0016 USD). Total `llm_call_log` cost of the session: not checked.
 
-## 5e. Closed in S261
+## 5f. Closed in S261
 
 Evidence per issue: the S261 Linear comments (then `docs/linear-export/`), `docs/audits/2026-10-31-S261-evidence/` and `docs/audits/2026-10-31-S261-close/state-snapshot.md`. 31/10/2026.
 
@@ -315,7 +327,7 @@ Evidence per issue: the S261 Linear comments (then `docs/linear-export/`), `docs
 - Shipped, still In Progress: **AA-952** (slice 4 + F1/F2), **AA-997** (aa997.4), **AA-873** (IAM secret-read fix Infra #541), **AA-804** (gateway v2 design, root #397), **AA-1004**, **AA-1014** (Session A, root #396).
 - LLM: no paid LLM run (acc3 still on hold; AWS case ~05–06/11). Cost in `llm_call_log` for the session: not checked.
 
-## 5f. Closed in S260
+## 5g. Closed in S260
 
 Evidence per issue: the S260 Linear comments (then `docs/linear-export/`), `docs/audits/2026-10-30-S260-evidence/` and `docs/audits/2026-10-30-S260-session-close/state-snapshot.md`. 30/10/2026.
 
@@ -323,7 +335,7 @@ Evidence per issue: the S260 Linear comments (then `docs/linear-export/`), `docs
 - Shipped, still In Progress: **AA-1002** (S5, S6 live; S9, S10 merged, schema 317), **AA-1003** (R4 part 2, R5 checklist), **AA-994** (button variants, S6d done, S6b PR2), **AA-952** (slices 2 + 3), **AA-997** (`hide_flagged`, suspect-point readers), **AA-990** (interim `recheck_14`). Shipped while Backlog in Linear: **AA-921**, **AA-922**, **AA-923** (Writing memory P3), **AA-788** (per-check modes). Not run (no LLM path): AA-919, AA-790, AA-1000, AA-900. AA-1004 not started (billing). No new Linear issue.
 - LLM: every text model still refused (acc3 account-level hold, AWS case ~04–06/11; OpenAI no credits; the Anthropic key revoked). LLM spend $0; the acc1 control check cost ~$0.00002.
 
-## 5g. Closed in S259
+## 5h. Closed in S259
 
 Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the S259 log in `docs/sessions/` and `docs/audits/2026-10-30-S259-session-close/state-snapshot.md`. Closed 30/10/2026.
 
@@ -334,7 +346,7 @@ Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the
 - Milestones: **C-M3 met** (quote, hold, accept, 409 `hold_expired` in S258; confirm after deposit 16/16 in S259); **P-M1 P1 met** (membership change reaches the CRM in 4.7 s / 37.9 s; CIS refuses CRM roles 3/3).
 - LLM: every text model refused from 30/10 11:20 (acc3 Bedrock Error 002; OpenAI direct 429 "no credits remaining"); only Cohere Embed v4 (acc2) works. LLM spend $0.
 
-## 5h. Closed in S258
+## 5i. Closed in S258
 
 Evidence: the Done comment on Linear (then `docs/linear-export/`, root #359), the S258 log (`docs/sessions/2026-10-30-S258-aws-blueprint-report-catalog-auto-apply-llm-gateway.md`) and `docs/audits/2026-10-30-S258-session-close/state-snapshot.md`. Closed 29/10/2026.
 
@@ -342,7 +354,7 @@ Evidence: the Done comment on Linear (then `docs/linear-export/`, root #359), th
 - Created in S258: **AA-1001**, **AA-1002** (AWS org / governance blueprint + LLM gateway; lean variant recommended), **AA-1003** (build the 63-report catalog), **AA-1004** (implement the lean AWS model).
 - Milestones (S258): C-M2 PASS (Inquiry → Completed with the agency's own supplier, assistant 7 routes leak no margin, Partner #123); P-M1 P2b PASS 8/8; C-M3 PASS except confirm (done S259). Jira S258 drafts rolled over to S259.
 
-## 5i. Closed in S257
+## 5j. Closed in S257
 
 Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the S257 log (`docs/sessions/2026-10-29-S257-facts-entry-tp-jobs-migration-sync-kit-sync-geocode-v2.md`) and `docs/audits/2026-10-29-S257-session-close/state-snapshot.md`. Closed 29/10/2026.
 
@@ -355,7 +367,7 @@ Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the
 - Jira: drafts waiting for the tech lead's approval (`docs/audits/2026-10-29-S257-session-close/jira-drafts.md`), not posted.
 - No new Linear issue in S257.
 
-## 5j. Closed in S256
+## 5k. Closed in S256
 
 Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the S256 log (`docs/sessions/2026-10-29-S256-cost-spike-t2-judge-lcp-capacity-alerts-aws-diagrams.md`) and `docs/audits/2026-10-29-S256-session-close/state-snapshot.md`. Closed 28–29/10/2026.
 
@@ -371,7 +383,7 @@ Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the
 - Jira: drafts S256 in `docs/audits/2026-10-29-S256-session-close/jira-drafts.md`: Jira: tech lead duyệt 29/10, đăng 5 comment (PR-22 #10521, PR-23 #10528, PR-24 #10526, PR-25 #10527, PR-27 #10529, kèm 7 ảnh live), KAN-90 bỏ theo tech lead — chi tiết docs/audits/2026-10-29-S256-session-close/jira-drafts.md.
 - No new Linear issue in S256.
 
-## 5k. Closed in S255
+## 5l. Closed in S255
 
 - **AA-898** ([Admin] Docs reader page in the CIS admin): `/admin/docs` CIS #1100 + Infra #465 + root #302 (Docs sync), review of 98 pages root #303, EN/VI + Mermaid + callouts + Dev-only owner read CIS #1104 (`a427e40c`, Deploy Dev success). Evidence: Done-when 1, an owner-only page (`docs/legal/register.md`) opened through a staff Cognito login (the Dev-only E2E admin, `docs.owner_read`; the business owner's own login was not tried); Done-when 2, root #305 merged 20:38:23 → Docs sync done 20:39:04 → the reader shows `684374d5933f`, no Vercel deploy. `admin-evidence` spec passed 20:55 (spec fix CIS #1105); screenshots `docs/audits/2026-10-28-S255-session-close/aa898-admin-evidence/`.
 
@@ -383,7 +395,7 @@ Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the
 - Jira: drafts S254 + S255 written (6 comments, PR-22…PR-27), waiting for the tech lead's approval (§2).
 - New Linear issue in S255: **AA-998** (In Progress).
 
-## 5l. Closed in S254
+## 5m. Closed in S254
 
 Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the S254 log (`docs/sessions/2026-10-28-S254-booking-figma-job-resume-releases-geocode-audit.md`) and `docs/audits/2026-10-28-S254-session-close/state-snapshot.md`. Closed 28/10/2026.
 
@@ -394,7 +406,7 @@ Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the
 - Jira: no drafts at the S254 close — they roll over to S255 (same day).
 - New Linear issues in S254: **AA-996** (created and Done in S254), **AA-997** (Backlog).
 
-## 5m. Closed in S253
+## 5n. Closed in S253
 
 Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the S253 log (`docs/sessions/2026-10-27-S253-s1-propagation-place-cards-booking-ops-golden-hour-worker-drain.md`) and `docs/audits/2026-10-27-S253-session-close/state-snapshot.md`. All closed 27/10/2026.
 
@@ -407,7 +419,7 @@ Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the
 - Jira (27/10, all with screenshots): PR-23 10509, PR-26 10510, PR-25 10511, PR-24 10512, PR-22 10513, PR-27 10514; PR-20 period 3 not posted (weekly rhythm, §1).
 - New Linear issues in S253: none.
 
-## 5n. Closed in S252
+## 5o. Closed in S252
 
 Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the S252 log (`docs/sessions/2026-10-27-S252-places-parity-writing-memory-gmail-merge-queue-ui-kit.md`) and `docs/audits/2026-10-27-S252-session-close/state-snapshot.md`. Close dates are Linear `completedAt` (UTC).
 
@@ -421,7 +433,7 @@ Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the
 - No issue: releases live (CIS 0.11.0, Booking 0.7.0, CRM 0.5.0, TripPlanner 0.8.2 on `/health`); CIS #1010 merged with the `secret-scan-baseline-reviewed` label, 0 open secret alerts in 6 repos; CIS main red from a time-bomb test → #1023; AA-835 live 409 `photo_rights` clean, hotel off → unpublished; AA-973 seed kept on purpose; propagation audit CIS + TripPlanner (`docs/audits/2026-10-26-S252-propagation-audit/`); Infra #425 (`PLACE_PIPELINE_AUTO=on`, 3 dead schedules removed, probe metrics; TF apply 40450724466, deploy 04:57Z); Writing memory UI (CIS #1054 Guide tab, #1055 full width, #1056 every admin page on kit `AdminMain`). LLM cost from 25/10 00:00Z: $54.93.
 - New Linear issues in S252: **AA-993** (DevOps delivery pipeline + CI speed), **AA-994** (one design system / UI kit for 5 frontends, ADR 0016; AA-655 folded into it — close AA-655 in Linear as folded), **AA-995** (TripPlanner customer pages with motion).
 
-## 5o. Closed in S251
+## 5p. Closed in S251
 
 Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the S251 log and `docs/audits/2026-10-25-S251-wrap/`.
 
@@ -434,7 +446,7 @@ Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the
 - No issue: 10 skill zips rebuilt (root #257, #259 packager guard); secret-scan alerts — gitleaks' own sample Google keys in `.gitleaks.toml` rewritten without literal keys (Partner #57, Booking #93, Infra #393, TP #151, root #260) → 80/96 alerts closed; CIS #1010 (`secret-scan-baseline-reviewed` label) was being merged at the snapshot, the last 16 CIS alerts closing is not verified (§1); CodeQL CIS #1011 (5 ReDoS + 1 stack trace) + TP #152, CIS code-scanning open 0; DFS password rotated (secret updated, `/admin/dfs-balance/check` 200, Sentry issues resolved); test tenant keys stored (4/4 login 200); Partner main red fixed (#62 keyset cursor, #60 E2E helper); acc3 AWS budget $201.69 of $250 (Oct), forecast $215–225; Jira: 7 approved posts (PR-22…PR-27 comments + new story PR-28).
 - New Linear issues in S251: **AA-988**, **AA-989**, **AA-990**, **AA-991** (S1 v2 propagation, Nghiệp's request).
 
-## 5p. Closed in S250
+## 5q. Closed in S250
 
 Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the S250 log and `docs/audits/2026-10-2[45]-S250-*`.
 
@@ -446,7 +458,7 @@ Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the
 - No issue: AA-938 option B (Partner #36; scrub corpus over-scrub 9.1 % → 3.98 %, GitHub AA-Partner #27 closed); the written S251 go/no-go (root #239, GO for AA-926/924/916/790); data contracts R1 + registers R2 (root #237/#238); `S1_WRITER_V2` moved into Terraform (Infra #372); secrets register brought up to date (this close: 14 unregistered Secrets Manager names + AA-Partner GitHub rows, drift check AWS `diff = 0`).
 - New Linear issues in S250: none.
 
-## 5q. Closed in S249
+## 5r. Closed in S249
 
 Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the S249 log and `docs/audits/2026-10-24-S249-*`.
 
@@ -460,7 +472,7 @@ Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the
 - No issue: releases CIS 0.7.0 + 0.8.0, Booking 0.4.0 + 0.5.0, TripPlanner 0.6.0 + 0.7.0, AA-Partner 0.2.0 + 0.3.0; AA-679 re-land (Booking #78: facets count country-less tours, catalog read timeouts answer 503); Dependabot CIS #968 (`@sentry/nextjs`); CIS Sentry hardening (CIS #979: no frame locals, tokens and e-mails redacted); tf-plan role gets Bedrock read (Infra #350).
 - New Linear issues in S249: none.
 
-## 5r. Closed in S248
+## 5s. Closed in S248
 
 Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the S248 log and `docs/audits/2026-10-23-S248-*`.
 
@@ -475,7 +487,7 @@ Evidence per issue: the Done comment on Linear (then `docs/linear-export/`), the
 - Duplicate: **AA-762** → AA-939.
 - No issue: 18-card decision page approved (d01–d18); account ids masked in generated docs (Infra #313, root #204); CRM hello spike removed (Infra #312); cost report Aug–Oct (root #191/#194); S1-first step 0/1 audit (root #188); #908 closed (checks stay ON).
 
-## 5s. Closed in S247
+## 5t. Closed in S247
 
 Evidence per issue: the Done comment on Linear (then `docs/linear-export/` once exported and archived), the S247 log and `docs/audits/2026-10-22-S247-*`.
 
@@ -488,7 +500,7 @@ Evidence per issue: the Done comment on Linear (then `docs/linear-export/` once 
 - No issue: root and AA-CIS-Infra made public (ADR 0014 amendment, root #182); Vercel env cleanup; third-party GitHub Apps narrowed; S3 scripts cleanup; skills packaged as zips (root #176/#181); session process (root #172/#174); lessons (root #182).
 - New Linear issues in S247: none. Follow-ups without an issue are in §3 as "(no issue yet)".
 
-## 5t. Closed in S246
+## 5u. Closed in S246
 
 Evidence per issue: Linear comments, then `docs/linear-export/` once exported and archived.
 
@@ -499,7 +511,7 @@ Evidence per issue: Linear comments, then `docs/linear-export/` once exported an
 - New in S246: **AA-928…AA-980** (53 CRM issues: W0–W8, Lane B AA-972…AA-977, Lane P AA-978/AA-979).
 - Plan: the S246 master plan ([plan-and-status.json](../audits/2026-10-21-S246-master-plan/plan-and-status.json)) replaces the S244 slots; tracker `index.html` now shows S247…S262 and the new milestones.
 
-## 5u. Closed in S245
+## 5v. Closed in S245
 
 Evidence per issue: `docs/linear-export/` (closed issues exported, then archived) and the S245 session log.
 
@@ -511,7 +523,7 @@ Evidence per issue: `docs/linear-export/` (closed issues exported, then archived
 - New in S245: **AA-911** (Preview staff sign-in, bridge retirement), **AA-912–AA-914**, **AA-915–AA-923** (Writing Memory v1), **AA-924** (from AA-787), **AA-925** (Q-2), **AA-926** (Q-1), **AA-927** (LLM calls without a log row).
 - Tools: `tools/linear/linear_export.py` exports closed issues to `docs/linear-export/` and archives them through the API (Linear Free plan, no upgrade); secret `aa-ecosys/ops/linear-api-key`.
 
-## 5v. Closed in S244
+## 5w. Closed in S244
 
 - **AA-904 Done** (TP Next 15.5.28 / React 19, TP #107; preview smoke 4 flows desktop + 390 px, prod verified, `npm audit --omit=dev` 0).
 - **AA-902** Done on the S244 root PR merge (0 real account IDs on main of the 3 public repos; CI probe PRs CIS #857 / Booking #47 / TP #108 red as intended; baseline row in place).
@@ -525,7 +537,7 @@ Evidence per issue: `docs/linear-export/` (closed issues exported, then archived
 - Jira PR-14: same-day comment 10485 extended with the S244 cutover bullets + login screenshot (Nghiệp approved).
 - Master plan HTML tracker: `docs/backlog/tracker/` (artifact <https://claude.ai/artifact/2VSP2stGG1TF7uXvqgQTUY>).
 
-## 5w. Closed in S243
+## 5x. Closed in S243
 
 - **AA-885 Done** (tenant portal on its own Vercel project `aa-cis-portal`, `portal.lumiguides.it.com`; CIS #832, Infra #197; prod smoke 24/24).
 - **AA-892 Done** (ops runbooks/playbooks in root #105; every runbook either active with `last_tested` evidence or draft with the UNTESTED banner; alarm links Infra #213).
@@ -541,7 +553,7 @@ Evidence per issue: `docs/linear-export/` (closed issues exported, then archived
 - Jira: Epic PR-20 + Story PR-21 (platform report period 1) posted. Google Safe Browsing review of lumiguides.it.com passed (19/10): the §1 check is removed.
 - New Linear issues (Nghiệp approved S243): **AA-902** public-repo account ID/ARN scrub (High), **AA-903** skip Vercel deploy for Dependabot, **AA-904** TripPlanner Next 15, **AA-905** geo backfill (paid, quote first). CIS logout → Cognito `/logout` stays a scope line of AA-816; Bhutan 33 vs 32 stays §3 row 13.
 
-## 5x. Closed in S242
+## 5y. Closed in S242
 
 - **AA-854 Done** (Cognito Phase 0: break-glass, email-code spike, no-group deny, self sign-up rejected; evidence `docs/audits/2026-10-18-S242-cognito-phase1/`).
 - **AA-816** shipped (In Progress until cutover): Infra #183/#184/#185/#191/#194, CIS #807/#808/#809/#810/#811/#812/#813/#826/#827/#828/#829, mig 247.
@@ -549,7 +561,7 @@ Evidence per issue: `docs/linear-export/` (closed issues exported, then archived
 - Dependabot cleared in all repos (CIS #814/#819/#820/#830, Infra #192/#193 — AWS provider 6.69.1); CIS `dependabot.yml` groups security updates.
 - AA-869 confirmed Done (S241). New issue: none.
 
-## 5y. Closed in S241
+## 5z. Closed in S241
 
 - Done with live evidence: **AA-883** (console 2 sections + Staff), **AA-882** (server-side staff authz), **AA-836**, **AA-863**, **AA-834**,
   **AA-866** (main-only OIDC trust), **AA-867** (GitHub security, org 2FA, AA-ACP-App deleted), **AA-868** (CI hardening),
