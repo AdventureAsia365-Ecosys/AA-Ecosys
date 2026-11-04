@@ -9,7 +9,7 @@ audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-api, aa-cis-worker, tripplanner-lambda, aa-crm-api]
 last_reviewed: 2026-11-04
 review_every_days: 30
-related: [ARCH-01, ARCH-01-diagrams, APP-06-ai-register, APP-06-routes, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-642, AA-804, AA-1002, AA-1016, AA-1017, AA-1018, AA-1042]
+related: [ARCH-01, ARCH-01-diagrams, APP-06-ai-register, APP-06-routes, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-642, AA-804, AA-1002, AA-1016, AA-1017, AA-1018, AA-1042, AA-1045]
 ---
 
 # AI gateway (as built)
@@ -242,6 +242,16 @@ error class `quota_exhausted`: the connection stops and the call is never retrie
   default, at most 50 per apply.
 - **Nightly reconcile:** job kind `llm_cost_reconcile` compares logged cost with the provider's figure per connection
   and day (Bedrock from the stored Cost Explorer snapshot).
+- **Usage explorer** (AA-1045): AI & spend › Usage explorer (`/admin/usage`, spend.read: admin, finance, ai_ops)
+  groups requests, tokens, cost, average and p95 latency, error and fallback rates (the route trace's rung rule) by any
+  one or two of source, app, product, provider, connection, model, family, stage, role, tenant, status, error class,
+  traffic and time (hour, ICT day, week or month), with multi-select filters in the address, CSV export, named saved
+  views per staff member and a link from every cell or bar to the Calls tab with the same range and dimensions. It
+  reads an hourly rollup (`shared.ai_usage_hourly`, CIS 372) that job kind `ai_usage_rollup` rebuilds from the four
+  CIS ledgers every 15 minutes (the last 6 hours re-rolled for late rows, idempotent per hour); its totals equal the
+  ledgers' (`GET /admin/usage-explorer/rollup/check`). The CRM's daily totals (crm.ops.v1 `GET /llm/usage`) are merged
+  at read time for day buckets and longer. An invoice card puts each provider's ledger month next to the stored
+  provider figure; no provider invoice amount is recorded yet.
 - **Failure-domain invariant:** report-only on Dev (`invariant.py`, in `/admin/llm-availability` and the OPS-12
   digest): every stage class should have an enabled, funded deployment in another failure domain, or a declared
   degrade mode.
