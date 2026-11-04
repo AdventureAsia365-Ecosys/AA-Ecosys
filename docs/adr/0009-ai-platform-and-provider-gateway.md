@@ -200,6 +200,64 @@ What exists (CIS code at `1b6e9448`, S261 audits, [inventory](../audits/2026-10-
     knowingly skips decision 12's ladder for that last rung (writers stay on Anthropic as their primary). The tenant
     terms and the AI Use Register (v1.2) name the writing fallback, so decision 10's "only makers named in the terms"
     holds. TripPlanner writer stages stay `aws_only`.
+  - **Amendment (tech lead, 04/11/2026, S267: "family fallback chains, each model falls to the next"; "prefer the
+    same model first, then go outside"; "one key for easy management, the per-product tracking in our own system";
+    AA-1026, CIS 366). It replaces T-3 (S263: tenant content, TripPlanner and the CRM `aws_only`; the A-series writers
+    outside AWS only after every AWS path), the bullet "Tenant (T-series) and TripPlanner writer stages are `aws_only`
+    until AA-820" and the "TripPlanner writer stages stay `aws_only`" line above.**
+    - **AWS preferred, not AWS only.** Every active text stage (writer, judge, validate) of every app may reach a vendor
+      API (the Anthropic API, the OpenAI API) after the AWS deployments of the model it is on, so each stage runs the
+      best model available. CIS 366 sets `allowed_scopes = {aws_only, vendor_direct}` on every such stage of
+      `shared.llm_role_config` (tenant T-series, TripPlanner `tp_*`, the validate and brand-audit stages included).
+      Embedding stages stay `aws_only` (no vendor embedding deployment exists). The existing protections stay: the
+      tenant AI budget (fail closed), the per-connection monthly caps, the tenant `data_region` (ADR 0019; the per-stage
+      `pii_class` it plans is not built yet) and the CRM's PII scrub before any call (root ADR 0008a §5).
+    - **Order: model first.** For each model of a route, every deployment of that model (acc3 by priority, then the
+      same model on its vendor API: the Anthropic API for Claude, the OpenAI API for a GPT twin if one exists) before
+      the route's next model: e.g. Sonnet 5.5 on acc3 → Sonnet 5.5 on the Anthropic API → Sonnet 4.6 on acc3 → Haiku
+      4.5 on acc3 → GPT-6 Luna on the OpenAI API. A Claude 5.x catalog row carries its Anthropic API deployment
+      itself; GPT-6 Luna's OpenAI API path is a separate catalog row, `gpt-6-luna-openai` (CIS 170: the same model,
+      served by the OpenAI API), which is that GPT twin: on every GPT route it sits right behind `gpt-6-luna`, before
+      the route's next model (e.g. judges GPT-5.6 Luna → GPT-6 Luna on acc3 → GPT-6 Luna on the OpenAI API → Nova Lite
+      on acc2). This is the gateway's per-model order (bullet "Order" above); the CIS switch `LLM_ROUTE_AWS_FIRST=on`
+      (default off) runs every AWS deployment of the route first instead. The rule of the S264 amendment ("a route
+      names no AWS model behind a model that has a vendor API deployment") is lifted; what stays is "a model reached
+      only outside AWS is never followed by an AWS model, except as the twin right behind its own model on AWS" (the
+      CIS admin route checks, the chain rules of `api/services/llm_route_chains.py` and the twin rule of
+      `shared/llm_client/data_scope.py` `vendor_twins`: same family, same base model). On a writer route the OpenAI
+      API (another maker) stays the END of the route.
+    - **Chains (CIS 366).** Large-tier writers `sonnet-5-5 → sonnet-4-6 → haiku-4-5 → gpt-6-luna-openai` (tp_compose
+      included), small-tier writers `haiku-5-5 → haiku-4-5 → sonnet-4-6 → gpt-6-luna-openai` (segment research
+      included), Claude 4.x on acc3 by Converse; Claude validate stages the sibling of each tier on the route and acc2
+      last; GPT validate stages and judges GPT-6 Luna, its OpenAI API twin, GPT-5.6 Luna (judges: GPT-5.6 Luna first),
+      then acc2 (decision 12: a judge never uses the writers' family). The six attempts per request (bullet "Order")
+      are kept: counted with the Anthropic API on, a chain names at most one 5.x Claude tier besides its primary's, and
+      `a3_atomize` / `s1_source_facts` drop GPT-5.6 Luna (refused with GPT-6 Luna on acc3) for the twin, so the last
+      rung still runs (the widest chains make 6 attempts).
+    - **Keys and caps.** ONE Anthropic API key for every product (connection `anthropic-direct`, 150 USD a month,
+      alert 80 %, hard stop), and acc3 capped at 100 USD a month (alert 80 %), both set by CIS 366. The split by
+      product (catalogue, tenant content, TripPlanner, CRM, Booking) is ours: the ledger row per call (stage, app,
+      tenant) and the admin Spend > By app page; CIS maps every stage to its product (`llm_route_chains.product_of`).
+      The hard stop is enforced by the CIS gateway only: it sums `shared.llm_call_log` by connection, so it counts
+      TripPlanner's acc3 calls but stops only CIS calls (TripPlanner's gateway has no per-connection budget check, only
+      its daily app cap); the CRM logs to `crm.llm_call`, so its acc3 calls are neither counted nor stopped. No cap
+      spans every product today: on acc3 the AWS budget only e-mails, and for the Anthropic API key the vendor-side
+      spend limit (set to 150 USD when the key is created) is the cap across products.
+    - **Not yet applied (follow-ups).** TripPlanner's gateway calls Bedrock only (T-11 in its code): it skips the
+      vendor deployments of its route until it gains the vendor adapters. It also lacks the connection hard stop (a
+      per-connection budget flag through `catalog.v_llm_gateway_config_v1`, fail closed), and that view still uses the
+      old connection-circuit rule (below): until a CIS view migration copies the new rule, a CIS request that last
+      probed two refused acc3 models keeps acc3 tripped for TripPlanner until the next CIS answer on acc3, so
+      `tp_compose` may skip its new acc3 rungs. The CRM's acc3 spend must count toward the connection caps before its
+      acc3 entries come back. The CRM keeps its own control plane and is
+      Bedrock-only by root ADR 0008a §5–6 and decision 13; applying this amendment to it amends those lines, in the
+      CRM's own change, with the scrub order unchanged. The tenant terms, AI Schedule and DPA (AA-820) must name the
+      Anthropic API and the OpenAI API as providers for tenant content (AI Use Register v1.8, follow-up for the
+      business owner); decision 10's "only makers named in the terms" depends on it.
+    - Same change: a model refused on its own (its refusal streak began before another model on the connection
+      answered) no longer counts toward the connection circuit (decision 7, AA-1018), so a refused 5.x model does not
+      block its 4.x sibling on the same account. CIS gateway only: the SQL mirror TripPlanner reads (the view above)
+      keeps the old rule until its follow-up migration.
   - The CI check on route data is report-only on Dev and blocking for prod routes from go-live, so it never turns a
     funding question into a red build. The availability card shows the same result.
 - `stop_reason = max_tokens` is the error class `truncated`, never a success.
