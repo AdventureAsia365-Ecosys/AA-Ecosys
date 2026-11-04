@@ -1,4 +1,4 @@
-# price.from.v1 — the public "from" price of a catalog tour (AA-Booking → TripPlanner)
+# price.from.v1 — the public "from" price of a catalog tour (AA-Booking → TripPlanner, AA-CIS-App)
 
 AA-Booking owns every price (root ADR 0005 decision 1). The public **"from" price** of a tour (ADR 0005 decision 6, as
 amended by root ADR 0019 b15) is the **suggested retail price (RRP)** per person for 2 travellers: the agency price of
@@ -9,7 +9,7 @@ never compute a price.
 | | |
 |---|---|
 | View | `booking.v_from_prices` (Booking migration `bk-039`, AA-1029), owner `bk_owner` |
-| Readers | role `tripplanner` (the browse Lambda's tour detail): `SELECT` on the view + `USAGE` on schema `booking`, nothing else of `booking` (Infra `db/owners.yaml` consumer grant, isolation probe cell `consumer.contract_grants.bk-039`); role `booking` itself (staff pages, B2B price parity) |
+| Readers | role `tripplanner` (the browse Lambda's tour detail): `SELECT` on the view + `USAGE` on schema `booking`, nothing else of `booking` (Infra `db/owners.yaml` consumer grant, isolation probe cell `consumer.contract_grants.bk-039`); role `cis_app` (Booking `bk-040`: CIS `GET /v1/tours/pool`, read on its main pool after the tenant block, returned as `from_price` to the agency Content studio Marketplace; probe cell `consumer.contract_grants.bk-040`); role `booking` itself (staff pages, B2B price parity) |
 | Key | `(source_system, source_id)` = the catalog tour key of `catalog.tour.v1` (never the CIS `tour_id`) |
 | Rows | one per key that has a `b2b` price row with an RRP covering 2 travellers and still valid today (UTC); no row = no price shown |
 
