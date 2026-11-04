@@ -1,0 +1,535 @@
+{
+  "session": "S266",
+  "date": "2026-11-03",
+  "agent": "Claude Code (evidence subagent), read-only",
+  "deploy": {
+    "cis_admin": "AA-CIS-App main de0db1c5, Vercel Deploy run 41630657452 success (+ production signed-in UI smoke success); /admin/content-quality answered 307 before the run",
+    "portal": "AA-Partner main 66367c1 (Deploy Portal Dev success)",
+    "tripplanner": "AA-TripPlanner-Web main c3e6acc (release deployment 2026-11-03T11:15Z)"
+  },
+  "logins": {
+    "cis_admin": "E2E CIS admin via Cognito managed login, e-mail code from inbound-admin/ (aa-cis/dev/e2e-test-admin not used: password sessions are off)",
+    "portal": "crm/dev/e2e-test-studio/viewer (role studio-viewer, studio Atlas & Hearth)",
+    "tripplanner": "public, no sign-in"
+  },
+  "verdicts": {
+    "AA-1039 sidebar seven groups": "PASS",
+    "AA-1039 routing by data class empty state": "PASS",
+    "AA-1039 tenants directory": "PASS",
+    "AA-1039 redirect /admin/content-quality": "PASS",
+    "AA-1039 redirect /admin/platform/agencies": "PASS",
+    "AA-1039 redirect /admin/atom-curation?section=slate": "PASS",
+    "AA-1040 kit AI notice narration + 2 badges": "PASS",
+    "AA-1040 studio My Content badge": "PASS",
+    "AA-1040 studio piece drawer title badge": "PASS",
+    "AA-1040 studio Published list badge": "NOT SHOWN (Published list empty for Atlas & Hearth: 'Nothing published yet'; Ready to Publish rows carry the badge)",
+    "AA-1040 TripPlanner machine mark": "PASS (9 elements data-ai-generated=true)"
+  },
+  "cis": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [
+      "non-GET request seen: POST /api/auth/refresh",
+      "non-GET request seen: POST /api/auth/refresh",
+      "non-GET request seen: POST /api/auth/refresh",
+      "non-GET request seen: POST /api/auth/refresh",
+      "non-GET request seen: POST /api/auth/refresh",
+      "non-GET request seen: POST /api/auth/refresh",
+      "non-GET request seen: POST /api/auth/refresh",
+      "non-GET request seen: POST /api/auth/refresh"
+    ],
+    "landing": "/admin/overview",
+    "shots": [
+      "aa1039-admin-ia/01-sidebar-group-1-home-1440-light.png",
+      "aa1039-admin-ia/01-sidebar-group-2-tenants-1440-light.png",
+      "aa1039-admin-ia/01-sidebar-group-3-aa-catalogue-1440-light.png",
+      "aa1039-admin-ia/01-sidebar-group-4-tenant-content-qa-1440-light.png",
+      "aa1039-admin-ia/01-sidebar-group-5-ai-spend-1440-light.png",
+      "aa1039-admin-ia/01-sidebar-group-6-writing-lab-1440-light.png",
+      "aa1039-admin-ia/01-sidebar-group-7-platform-1440-light.png",
+      "aa1039-admin-ia/02-sidebar-all-groups-open-1440-light.png",
+      "aa1039-admin-ia/02-sidebar-all-groups-open-1440-dark.png",
+      "aa1039-admin-ia/03-shell-390-light.png",
+      "aa1039-admin-ia/03-sidebar-open-390-light.png",
+      "aa1039-admin-ia/04-ai-providers-routing-data-class-1440-light.png",
+      "aa1039-admin-ia/04-ai-providers-routing-data-class-390-light.png",
+      "aa1039-admin-ia/04-ai-providers-routing-data-class-1440-dark.png",
+      "aa1039-admin-ia/04-ai-providers-routing-data-class-390-dark.png",
+      "aa1039-admin-ia/04-ai-providers-routing-data-class-card-1440-light.png",
+      "aa1039-admin-ia/05-tenants-directory-1440-light.png",
+      "aa1039-admin-ia/05-tenants-directory-390-light.png",
+      "aa1039-admin-ia/05-tenants-directory-1440-dark.png",
+      "aa1039-admin-ia/05-tenants-directory-390-dark.png",
+      "aa1039-admin-ia/06-redirect-content-quality-1440-light.png",
+      "aa1039-admin-ia/06-redirect-platform-agencies-1440-light.png",
+      "aa1039-admin-ia/06-redirect-atom-curation-section-slate-1440-light.png",
+      "aa1040-ai-marking/01-kit-ai-notice-entry-1440-light.png",
+      "aa1040-ai-marking/01-kit-ai-notice-page-1440-light.png",
+      "aa1040-ai-marking/01-kit-ai-notice-entry-390-light.png",
+      "aa1040-ai-marking/01-kit-ai-notice-page-390-light.png",
+      "aa1040-ai-marking/01-kit-ai-notice-entry-1440-dark.png",
+      "aa1040-ai-marking/01-kit-ai-notice-page-1440-dark.png",
+      "aa1040-ai-marking/01-kit-ai-notice-entry-390-dark.png",
+      "aa1040-ai-marking/01-kit-ai-notice-page-390-dark.png"
+    ],
+    "navGroups": [
+      {
+        "id": "home",
+        "label": "HOME",
+        "items": [
+          "Overview",
+          "App health",
+          "Reports",
+          "Data coverage"
+        ]
+      },
+      {
+        "id": "tenants",
+        "label": "TENANTS",
+        "items": [
+          "Directory",
+          "CRM agencies",
+          "Data erasure"
+        ]
+      },
+      {
+        "id": "aa-catalogue",
+        "label": "AA CATALOGUE\n25",
+        "items": [
+          "Upload (S0)",
+          "Rewrite (S1)",
+          "Review Queue\n25",
+          "Master Content",
+          "Atoms & routes",
+          "Places",
+          "Photos",
+          "Facts",
+          "Supply copy",
+          "AA content",
+          "SEO Intelligence",
+          "Settings"
+        ]
+      },
+      {
+        "id": "tenant-content-qa",
+        "label": "TENANT CONTENT QA",
+        "items": [
+          "Content quality",
+          "Content Trace",
+          "Review log",
+          "Slate"
+        ]
+      },
+      {
+        "id": "ai-spend",
+        "label": "AI & SPEND",
+        "items": [
+          "AI providers",
+          "Cost Operations",
+          "Cost per app"
+        ]
+      },
+      {
+        "id": "writing-lab",
+        "label": "WRITING LAB",
+        "items": [
+          "Writing memory",
+          "Jev Decisions"
+        ]
+      },
+      {
+        "id": "platform",
+        "label": "PLATFORM",
+        "items": [
+          "Staff & access",
+          "Audit log",
+          "Jobs",
+          "Alert recipients",
+          "API Docs",
+          "Data model",
+          "Docs"
+        ]
+      }
+    ],
+    "sidebarScrollHeight": 1813,
+    "mobileMenuButton": true,
+    "shell-ov390": {
+      "doc": "390/390",
+      "inner": "ok",
+      "ok": true
+    },
+    "routingUrl": "/admin/ai-gateway?tab=routing",
+    "dataClassText": "The rule: a stage that handles personal data uses only routes kept in the United States; a stage that handles content only may also use a global route. No stage has a data class yet The gateway does not record a data class per stage yet, so routes are not checked against this rule. This card lists the stages per class once it does.",
+    "dataClassEmptyState": 1,
+    "dataClassLines": [],
+    "04-ai-providers-routing-data-class-ov1440-light": {
+      "doc": "1440/1440",
+      "inner": "ok",
+      "ok": true
+    },
+    "04-ai-providers-routing-data-class-ov390-light": {
+      "doc": "390/390",
+      "inner": "ok",
+      "ok": true
+    },
+    "04-ai-providers-routing-data-class-ov1440-dark": {
+      "doc": "1440/1440",
+      "inner": "ok",
+      "ok": true
+    },
+    "04-ai-providers-routing-data-class-ov390-dark": {
+      "doc": "390/390",
+      "inner": "ok",
+      "ok": true
+    },
+    "routingTabActive": [],
+    "tenantsUrl": "/admin/tenants",
+    "tenantsH1": "Tenants",
+    "tenantsRows": 11,
+    "05-tenants-directory-ov1440-light": {
+      "doc": "1440/1440",
+      "inner": "ok",
+      "ok": true
+    },
+    "05-tenants-directory-ov390-light": {
+      "doc": "390/390",
+      "inner": "ok",
+      "ok": true
+    },
+    "05-tenants-directory-ov1440-dark": {
+      "doc": "1440/1440",
+      "inner": "ok",
+      "ok": true
+    },
+    "05-tenants-directory-ov390-dark": {
+      "doc": "390/390",
+      "inner": "ok",
+      "ok": true
+    },
+    "redirects": [
+      {
+        "from": "/admin/content-quality",
+        "expected": "/admin/tenant-qa/quality",
+        "firstHopStatus": 307,
+        "firstHopLocation": "/admin/tenant-qa/quality",
+        "finalUrl": "/admin/tenant-qa/quality",
+        "h1": "Content quality",
+        "pass": true
+      },
+      {
+        "from": "/admin/platform/agencies",
+        "expected": "/admin/tenants/agencies",
+        "firstHopStatus": 307,
+        "firstHopLocation": "/admin/tenants/agencies",
+        "finalUrl": "/admin/tenants/agencies",
+        "h1": "CRM agencies",
+        "pass": true
+      },
+      {
+        "from": "/admin/atom-curation?section=slate",
+        "expected": "/admin/tenant-qa/slate",
+        "firstHopStatus": 307,
+        "firstHopLocation": "/admin/tenant-qa/slate?section=slate",
+        "finalUrl": "/admin/tenant-qa/slate?section=slate",
+        "h1": "Slate",
+        "pass": true
+      }
+    ],
+    "kitUrl": "/admin/settings?tab=ui-kit",
+    "kitEntryText": "AI NOTICE AI can make mistakes. Check prices, dates, visa and safety information before you send or publish this. This content was generated with AI. Review it before publishing; you are responsible for what you publish. Some descriptions are written with the help of AI and may contain mistakes. Prices, itineraries and visa conditions are confirmed in your official quote. This text was written by AI when you asked for it and may contain mistakes. Prices, itineraries and visa conditions are confirmed in your official quote. AI-assisted AI-assisted",
+    "kitNarration": "This text was written by AI when you asked for it and may contain mistakes. Prices, itineraries and visa conditions are confirmed in your official quote.",
+    "kitNarrationAttr": "narration",
+    "kitBadges": [
+      {
+        "id": "kit-gallery-ai-badge",
+        "text": "AI-assisted",
+        "variant": "publisher",
+        "form": "badge",
+        "aria": "AI-assisted. This content was generated with AI. Review it before publishing; you are responsible for what you publish.",
+        "title": "This content was generated with AI. Review it before publishing; you are responsible for what you publish."
+      },
+      {
+        "id": "kit-gallery-ai-badge-staff",
+        "text": "AI-assisted",
+        "variant": "staff",
+        "form": "badge",
+        "aria": "AI-assisted. AI can make mistakes. Check prices, dates, visa and safety information before you send or publish this.",
+        "title": "AI can make mistakes. Check prices, dates, visa and safety information before you send or publish this."
+      }
+    ],
+    "kit-ov1440-light": {
+      "doc": "1440/1440",
+      "inner": "ok",
+      "ok": true
+    },
+    "kit-ov390-light": {
+      "doc": "390/390",
+      "inner": "ok",
+      "ok": true
+    },
+    "kit-ov1440-dark": {
+      "doc": "1440/1440",
+      "inner": "ok",
+      "ok": true
+    },
+    "kit-ov390-dark": {
+      "doc": "390/390",
+      "inner": "ok",
+      "ok": true
+    }
+  },
+  "portal": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "notes": [],
+    "shots": [
+      "aa1040-ai-marking/02-studio-my-content-1440-light.png",
+      "aa1040-ai-marking/02-studio-my-content-390-light.png",
+      "aa1040-ai-marking/02-studio-my-content-1440-dark.png",
+      "aa1040-ai-marking/02-studio-my-content-390-dark.png",
+      "aa1040-ai-marking/03-studio-piece-drawer-1440-light.png",
+      "aa1040-ai-marking/03-studio-piece-drawer-390-light.png",
+      "aa1040-ai-marking/03-studio-piece-drawer-1440-dark.png",
+      "aa1040-ai-marking/03-studio-piece-drawer-390-dark.png",
+      "aa1040-ai-marking/04-studio-published-1440-light.png",
+      "aa1040-ai-marking/04-studio-published-390-light.png",
+      "aa1040-ai-marking/04-studio-published-1440-dark.png",
+      "aa1040-ai-marking/04-studio-published-390-dark.png"
+    ],
+    "signedInRole": "studio-viewer",
+    "studioName": "Adventure Asia | PARTNER PORTAL | Dashboard",
+    "myContentUrl": "/portal/content",
+    "myContentRows": 6,
+    "myContentBadges": 6,
+    "myContentBadgeSample": {
+      "text": "AI-assisted",
+      "form": "badge",
+      "variant": "publisher",
+      "aria": "AI-assisted. This content was generated with AI. Review it before publishing; you are responsible for what you publish.",
+      "title": "This content was generated with AI. Review it before publishing; you are responsible for what you publish."
+    },
+    "myContentMachineMarks": 0,
+    "02-studio-my-content-ov1440-light": {
+      "doc": "1440/1440",
+      "main": "1204/1204",
+      "ok": true
+    },
+    "02-studio-my-content-ov390-light": {
+      "doc": "390/390",
+      "main": "390/390",
+      "ok": true
+    },
+    "02-studio-my-content-ov1440-dark": {
+      "doc": "1440/1440",
+      "main": "1204/1204",
+      "ok": true
+    },
+    "02-studio-my-content-ov390-dark": {
+      "doc": "390/390",
+      "main": "390/390",
+      "ok": true
+    },
+    "drawerOpened": true,
+    "drawerTitle": "A Site at the Confluence: Why Setting Is Not Incidental in Bhutanese Sacred Architecture\nLINKEDIN\nAI-assisted",
+    "drawerMachineMarks": 0,
+    "publishUrl": "/portal/content/publish",
+    "publishedBadges": 0,
+    "pendingBadges": 4,
+    "publishedHeading": true,
+    "publishedSectionText": null,
+    "04-studio-published-ov1440-light": {
+      "doc": "1440/1440",
+      "main": "1204/1204",
+      "ok": true
+    },
+    "04-studio-published-ov390-light": {
+      "doc": "390/390",
+      "main": "390/390",
+      "ok": true
+    },
+    "04-studio-published-ov1440-dark": {
+      "doc": "1440/1440",
+      "main": "1204/1204",
+      "ok": true
+    },
+    "04-studio-published-ov390-dark": {
+      "doc": "390/390",
+      "main": "390/390",
+      "ok": true
+    }
+  },
+  "tripplanner": {
+    "consoleErrors": [],
+    "pageErrors": [],
+    "badResponses": [],
+    "shots": [
+      "aa1040-ai-marking/05-tp-tour-day-by-day-1440-light.png",
+      "aa1040-ai-marking/05-tp-tour-day-by-day-section-1440-light.png",
+      "aa1040-ai-marking/05-tp-tour-day-by-day-1440-dark.png",
+      "aa1040-ai-marking/05-tp-tour-day-by-day-390-light.png",
+      "aa1040-ai-marking/05-tp-tour-day-by-day-section-390-light.png",
+      "aa1040-ai-marking/05-tp-tour-day-by-day-390-dark.png"
+    ],
+    "status-desktop-light": 200,
+    "theme-desktop-light": "light",
+    "marksOnLoad": {
+      "count": 9,
+      "items": [
+        {
+          "tag": "p",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "ul",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "div",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "div",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "div",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "div",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "div",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "div",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "div",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        }
+      ]
+    },
+    "toggleAll-desktop-light": "clicked",
+    "daysOpen-desktop-light": "7/7",
+    "marksDaysOpen": {
+      "count": 9,
+      "items": [
+        {
+          "tag": "p",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "ul",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "div",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "div",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "div",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "div",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "div",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "div",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        },
+        {
+          "tag": "div",
+          "source": "catalog",
+          "at": "2026-11-02T21:10:52.090772+00:00",
+          "testid": null,
+          "visible": true
+        }
+      ]
+    },
+    "tourAiNotice": "Some descriptions are written with the help of AI and may contain mistakes. Prices, itineraries and visa conditions are confirmed in your official quote.",
+    "dayByDayAiLabel": "Day by day",
+    "overflow-desktop-light": "1440/1440",
+    "status-desktop-dark": 200,
+    "theme-desktop-dark": "dark",
+    "toggleAll-desktop-dark": "clicked",
+    "daysOpen-desktop-dark": "7/7",
+    "overflow-desktop-dark": "1440/1440",
+    "status-mobile-light": 200,
+    "theme-mobile-light": "light",
+    "toggleAll-mobile-light": "clicked",
+    "daysOpen-mobile-light": "7/7",
+    "overflow-mobile-light": "390/390",
+    "status-mobile-dark": 200,
+    "theme-mobile-dark": "dark",
+    "toggleAll-mobile-dark": "clicked",
+    "daysOpen-mobile-dark": "7/7",
+    "overflow-mobile-dark": "390/390",
+    "origin": "https://aa-tripplanner.vercel.app"
+  }
+}

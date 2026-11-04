@@ -1,0 +1,200 @@
+<title>TripPlanner cho tenant</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column like a field guide; a short answer card first, then the reference sections, wide tables scroll in place. */
+:root {
+  --bg: #f3f6f7; --surface: #ffffff; --sunk: #e4ebee; --line: #ccd8dd;
+  --fg: #13232b; --muted: #536a74; --accent: #1f6f8b; --accent-soft: #d8eaf1;
+  --route: #2f7d4f; --route-soft: #dcefe3; --pin: #b5531c; --pin-soft: #f6e3d6;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0e171b; --surface: #152127; --sunk: #1b2a31; --line: #2a3d46;
+  --fg: #e2ecef; --muted: #93aab3; --accent: #6cc0dd; --accent-soft: #163543;
+  --route: #79cf9a; --route-soft: #183327; --pin: #f0a070; --pin-soft: #3a2416; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0e171b; --surface: #152127; --sunk: #1b2a31; --line: #2a3d46;
+  --fg: #e2ecef; --muted: #93aab3; --accent: #6cc0dd; --accent-soft: #163543;
+  --route: #79cf9a; --route-soft: #183327; --pin: #f0a070; --pin-soft: #3a2416; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 16px/1.65 var(--body) }
+.wrap { max-width: 860px; margin: 0 auto; padding-block: 32px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 44px }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.15 }
+h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 800; letter-spacing: -0.015em }
+h2 { font-size: 24px; font-weight: 800 }
+h3 { font-size: 17px; font-weight: 600 }
+p { margin: 0; max-width: 68ch }
+a { color: var(--accent) }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+code { font: 0.86em var(--mono); background: var(--sunk); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere }
+section { display: grid; gap: 14px; min-width: 0 }
+.eyebrow { font: 500 12px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted) }
+.lede { font-size: 18px; color: var(--muted) }
+header { display: grid; gap: 12px }
+ul, ol { margin: 0; padding-left: 22px; display: grid; gap: 6px; max-width: 70ch }
+
+.answer { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; display: grid; gap: 14px }
+.answer h2 { font-size: 21px }
+.verdict { font-weight: 600 }
+.sets { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 12px }
+.set { border-radius: 10px; padding: 14px; display: grid; gap: 6px; align-content: start; font-size: 15px; min-width: 0 }
+.set b { font-family: var(--display); font-size: 16px }
+.set.cat { background: var(--sunk) }
+.set.scope { background: var(--route-soft) }
+.set.content { background: var(--pin-soft) }
+.set small { color: var(--muted); font: 12.5px var(--mono) }
+.proposal { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 12px 16px; border-radius: 0 8px 8px 0; display: grid; gap: 8px }
+.proposal b { color: var(--accent) }
+
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface) }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14.5px }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line) }
+th { font: 600 12px var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); background: var(--sunk) }
+tr:last-child td { border-bottom: 0 }
+td.k { font-weight: 600; white-space: nowrap }
+
+.flow { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px }
+.flow pre { margin: 0; font: 13px/1.6 var(--mono); color: var(--fg); white-space: pre }
+.note { font-size: 14.5px; color: var(--muted) }
+footer { border-top: 1px solid var(--line); padding-top: 16px; font-size: 13.5px; color: var(--muted); display: grid; gap: 4px }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">AA_Ecosys · mô hình chỉ B2B (ADR 0019) · S266, 03/11/2026</div>
+    <h1>TripPlanner cho tenant</h1>
+    <p class="lede">Bán TripPlanner cho từng tenant thế nào, lead đi vào CRM của tenant ra sao, tenant tự làm giao diện được tới đâu, và các add-on nối với Content thế nào.</p>
+  </header>
+
+  <section class="answer" aria-labelledby="h-q">
+    <div class="eyebrow">Câu hỏi mới</div>
+    <h2 id="h-q">Bản đồ TripPlanner chỉ hiện tour tenant đã viết lại, hay hiện tất cả?</h2>
+    <p class="verdict">Không hẳn là cả hai. Thiết kế tách ba tập tour, và "đã viết lại" không phải điều kiện để tour hiện trên bản đồ.</p>
+    <div class="sets">
+      <div class="set cat"><b>1. Catalogue AA còn live</b><span>Mọi tour AA đang bán, sau luật liveness (ADR 0015). Tour ngừng bán biến khỏi mọi nơi ngay (d20).</span><small>A-series master</small></div>
+      <div class="set scope"><b>2. Tour hiển thị của tenant</b><span>Tenant chọn trong màn TripPlanner ("Tour hiển thị"), giới hạn theo nước được phép. Bản đồ chỉ hiện tập này. Tour đã viết lại thì hiện chữ của tenant, tour chưa viết lại thì hiện chữ gốc của AA.</span><small>catalog.v_tenant_tour_v1</small></div>
+      <div class="set content"><b>3. Tour tenant viết bài</b><span>Trong Content, tenant chọn tour để viết lại hoặc viết bài, giới hạn theo gói (số bài viết lại mỗi tháng, bài đăng mỗi tuần). Chọn bất kỳ tour AA nào còn live, không cần nằm trong tập 2.</span><small>T-series</small></div>
+    </div>
+    <p>Hiện tại TripPlanner chưa có tenant: nó hiện toàn bộ tour AA còn live. Tập 2 theo từng tenant đến ở pha R5 (khoảng S273–S276).</p>
+    <div class="proposal">
+      <p><b>Đề xuất, chờ tech lead chốt khi vào R5 (AA-1038):</b></p>
+      <ul>
+        <li>Mặc định tập 2 = mọi tour AA còn live ở các nước tenant được phép. Tenant mới mở bản đồ ra là có tour ngay, không phải chờ viết bài.</li>
+        <li>Tenant thu hẹp được: theo nước, theo danh sách tour, hoặc bật "chỉ tour đã viết lại" cho ai muốn bản đồ toàn chữ của mình.</li>
+        <li>Bài trong Content chỉ hiện nút "Plan this trip" khi tour nằm trong tập 2; ngoài tập 2 thì link về trang tour AA (luật d21).</li>
+        <li>Tour tenant đã viết lại mà chưa đưa vào tập 2 thì màn TripPlanner nhắc "tour này có bài viết của bạn nhưng chưa hiện trên bản đồ".</li>
+      </ul>
+      <p class="note">Lý do không ràng bản đồ vào bài viết lại: bản đồ sẽ trống với tenant mới, và số tour hiện bị khoá theo quota viết bài của gói, hai thứ bán riêng.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-sell">
+    <div class="eyebrow">1</div>
+    <h2 id="h-sell">Bán: gói, feature key và cách bật</h2>
+    <ul>
+      <li>Content là gói nền, bắt buộc. CRM và TripPlanner là add-on, chỉ mua khi Content đang active.</li>
+      <li>TripPlanner bán theo site (b4). Gói cơ bản: trang hosted + nút launcher. Gói cao: tên miền riêng + API. Không thu hoa hồng trên tour.</li>
+      <li>Mỗi phần bán được là một feature key: <code>tp.hosted</code>, <code>tp.launcher</code>, <code>tp.branding</code>, <code>tp.custom_domain</code>, <code>tp.embed</code>, <code>tp.api</code>, <code>tp.ai_sessions</code>.</li>
+      <li>App chỉ kiểm feature key, không kiểm tên gói. Đổi cách đóng gói chỉ sửa dữ liệu, không sửa code.</li>
+    </ul>
+    <div class="flow"><pre>Account manager gán gói trong CIS admin (Tenants › Subscription)
+  → shared.tenant_subscription → shared.tenant_entitlement (+ override)
+  → contract tenant.entitlements.v1 (view + GET /tenant/v1/tenants/{id}/account + event feed)
+      ├─ TripPlanner đọc view → biết tenant có tp.* nào
+      ├─ CRM: job crm_entitlement_pull → crm.tenant_entitlement (chỉ đọc)
+      └─ Booking: bk_tenant_pull → booking.b2b_partners; bk_saas_invoice_draft lập hoá đơn đầu kỳ</pre></div>
+    <p class="note">Phần này là pha R1 (AA-1028), đang làm từ S266.</p>
+  </section>
+
+  <section aria-labelledby="h-crm">
+    <div class="eyebrow">2</div>
+    <h2 id="h-crm">TripPlanner nối vào CRM của từng tenant</h2>
+    <h3>Nhận ra tenant và cách ly dữ liệu</h3>
+    <ul>
+      <li>Khách mở <code>planner.&lt;miền AA&gt;/acme/plan</code>. <code>proxy.ts</code> đọc slug (sau này đọc Host khi tenant có tên miền riêng) rồi tra <code>catalog.v_tenant_tripplanner_v1</code>: theme, ngôn ngữ, entitlement, đích gửi lead, origin được phép.</li>
+      <li>BFF ký <code>tenant_id</code> gửi sang Lambda. Mọi bảng <code>tripplanner.*</code> có <code>tenant_id NOT NULL</code> và FORCE RLS: tenant A không đọc được dữ liệu tenant B, kể cả khi code có lỗi.</li>
+      <li>Một repo phục vụ mọi tenant. Tenant khác nhau ở dữ liệu cấu hình, không ở code.</li>
+    </ul>
+    <h3>Lead về đúng CRM của tenant</h3>
+    <div class="flow"><pre>Khách (ẩn danh, chỉ có cookie) lên kế hoạch → "Request this trip", nhập tên + e-mail
+  → lead.submitted.v1 { tenant_id, site_id, lead_route ∈ crm | webhook | email, trip... }
+      ├─ crm     → job crm_tp_lead_pull → intake CRM của tenant (crm.traveler + trip)
+      ├─ webhook → POST có chữ ký HMAC tới hệ thống riêng của tenant
+      └─ email   → hộp thư riêng của tenant, hoặc SES của AA với Reply-To của tenant
+  TripPlanner chỉ giữ bản ghi tới khi giao xong</pre></div>
+    <h3>Sau khi lead vào CRM</h3>
+    <ol>
+      <li>Nhân viên đại lý làm proposal, gửi khách link client portal <code>/c/t/&lt;token&gt;</code>.</li>
+      <li>Khách xem, ký, đặt cọc qua Stripe của chính đại lý (đại lý là merchant of record).</li>
+      <li>Đại lý đặt dịch vụ AA qua <code>booking.b2b.v1</code>: chỉ số khách theo nhóm tuổi, không có tên.</li>
+      <li>Danh sách tên chỉ sang AA lúc đi tour, qua <code>crm.ops_release</code>, niêm phong bằng khoá của đại lý, xoá sau khi tour kết thúc 90 ngày.</li>
+    </ol>
+    <p>Dữ liệu khách nằm trong CRM của tenant (tenant là controller, AA là processor). AA không có khách B2C nào.</p>
+  </section>
+
+  <section aria-labelledby="h-ui">
+    <div class="eyebrow">3</div>
+    <h2 id="h-ui">Tenant muốn giao diện riêng: bốn mức</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Mức</th><th>Tenant làm gì</th><th>Kỹ thuật</th><th>Key</th><th>Khi nào</th></tr></thead>
+      <tbody>
+        <tr><td class="k">1. Brand token</td><td>Điền cấu hình, không cần code</td><td>Theme ghi đè biến <code>--aa-*</code> của kit lúc runtime; logo, ảnh hero từ ảnh CIS; tên trợ lý "{Brand} assistant"; ngôn ngữ; link privacy/terms của tenant</td><td><code>tp.branding</code></td><td>R5</td></tr>
+        <tr><td class="k">2. Tên miền riêng</td><td>Thêm 1 CNAME <code>plan.acme.com</code></td><td>CloudFront + chứng chỉ ACM miễn phí (TripPlanner trên ECS, d23); proxy đọc Host ra tenant. Tốt cho SEO của đại lý</td><td><code>tp.custom_domain</code></td><td>Khi có tenant trả tiền</td></tr>
+        <tr><td class="k">3. Nhúng iframe</td><td>Dán <code>&lt;iframe&gt;</code> hoặc plugin WordPress</td><td>Chỉ route embed mở <code>frame-ancestors</code> theo danh sách cho phép của từng tenant; cookie CHIPS; cần review bảo mật</td><td><code>tp.embed</code></td><td>Sau mức 2</td></tr>
+        <tr><td class="k">4. Headless API + SDK</td><td>Lập trình viên của đại lý tự làm toàn bộ UI</td><td>Publishable key (trình duyệt: <code>catalog:read</code>, <code>trip:write</code>) + secret key (server: <code>lead:create</code>), theo tenant, xoay được; rate limit và trần AI theo tenant</td><td><code>tp.api</code></td><td>R8, khi có tenant trả tiền yêu cầu</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li>Ở mọi mức, tenant không đổi được: chỉ bán tour AA còn live, trần chi phí AI theo gói, lead luôn mang đúng <code>tenant_id</code>. Các luật này chặn ở API, không ở giao diện.</li>
+      <li>Ở mức 4, API trả cờ <code>ai_generated</code>; tenant tự hiện thông báo AI (EU AI Act Art. 50). Điều này phải ghi vào điều khoản.</li>
+      <li>Tenant muốn "AA không giữ dữ liệu gì": bán thành gói riêng gồm API không lưu trạng thái + chỉ webhook. Đây là quyết định sản phẩm và pháp lý của business owner.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="h-addon">
+    <div class="eyebrow">4</div>
+    <h2 id="h-addon">Nối add-on vào Content</h2>
+    <h3>Add-on của AA (CRM, TripPlanner)</h3>
+    <ul>
+      <li>Giao diện (R3): tenant luôn vào Content trước. App switcher và menu CRM/TripPlanner hiện theo entitlement; chưa mua thì có nút "Request add-on".</li>
+      <li>Content sang TripPlanner: bài viết có nút "Plan this trip" dẫn vào <code>/{slug}/plan?tour=…</code>. Luật d21 chỉ cho CTA trỏ về trang tour AA hoặc site TripPlanner của chính tenant.</li>
+      <li>Ngược lại: văn bản tenant viết lại trong Content studio hiện trong TripPlanner qua <code>catalog.v_tenant_tour_v1</code>. Tenant viết một lần, dùng ở cả hai nơi.</li>
+      <li>Content và CRM: proposal lấy nội dung tour và atom từ catalogue. Tour ngừng bán phát event <code>catalog.tour_liveness_changed</code> tới TripPlanner, CRM, WordPress, Facebook (d20).</li>
+      <li>Dùng chung một ngân sách AI <code>ai.budget_usd_monthly</code> cho mọi add-on, và một lần đăng nhập.</li>
+    </ul>
+    <h3>Hệ thống riêng của tenant (HubSpot, website, booking engine)</h3>
+    <ul>
+      <li>CRM riêng: đặt <code>lead_route=webhook</code> có chữ ký; tenant không cần mua CRM của AA.</li>
+      <li>Kênh đăng bài: WordPress và Facebook theo kiểu tenant tự mang tài khoản; credential trong vault mã hoá KMS của CRM.</li>
+      <li>Hệ thống máy của tenant gọi vào AA: chưa có. API máy cho tenant để tới R8, credential theo scope, xoay được.</li>
+    </ul>
+    <p>Mẫu chung cho mọi connector mới: một contract có version trong <code>docs/contracts/</code>, một feature key, credential theo tenant trong vault, event qua outbox + webhook có chữ ký, tenant tự mang tài khoản nhà cung cấp.</p>
+  </section>
+
+  <section aria-labelledby="h-road">
+    <div class="eyebrow">5</div>
+    <h2 id="h-road">Lộ trình</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Pha</th><th>Phiên</th><th>Nội dung</th></tr></thead>
+      <tbody>
+        <tr><td class="k">R1</td><td>S266–S268</td><td>Gói, entitlement, contract <code>tenant.entitlements.v1</code> (đang làm)</td></tr>
+        <tr><td class="k">R3</td><td>~S269–S272</td><td>Một app cho đại lý, Content là trang chủ, menu theo entitlement</td></tr>
+        <tr><td class="k">R5</td><td>~S273–S276</td><td>TripPlanner đa tenant: <code>tenant_id</code> + RLS, path + launcher, brand token, tập tour hiển thị, <code>lead.submitted.v1</code></td></tr>
+        <tr><td class="k">Pilot mốc 2</td><td>~S277</td><td>Chạy thử TripPlanner với đại lý thật</td></tr>
+        <tr><td class="k">R8</td><td>Theo trigger</td><td>Tên miền riêng, iframe, headless API, API máy cho đại lý</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <footer>
+    <div>Nguồn: ADR 0019 (d1, d2, d10, d11, d19–d21, b4, b9), audit tái tổ chức S265 (<code>docs/audits/2026-11-03-S265-ecosystem-restructure/</code>: README mục 3 và R5, clarifications TL-10, TL-11).</div>
+    <div>Mục "Đề xuất" ở đầu trang chưa phải quyết định; chốt khi vào R5.</div>
+  </footer>
+</div>
