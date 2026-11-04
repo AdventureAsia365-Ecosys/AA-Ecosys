@@ -24,8 +24,8 @@ never compute a price.
 | `basis` | text | `per_person` |
 | `pax` | integer | `2` (the party the price is for) |
 | `season` | text, null | the season label of the row (`Low`, `High / Peak`, …) |
-| `valid_from` | date | first day of the row's validity |
-| `valid_to` | date | last day of the row's validity (a reader may show "valid until") |
+| `valid_from` | date | first day of the row's validity (may be before today: a cost sheet row starts where its supplier rates start) |
+| `valid_to` | date | last day of the row's validity (a reader may show "valid until"); `9999-12-31` = open-ended, no end date to show |
 | `price_kind` | text | `rrp` (a later kind is a new value, never a new meaning of `rrp`) |
 | `priced_at` | timestamptz | when the row was written (by staff or the cost sheet) |
 
