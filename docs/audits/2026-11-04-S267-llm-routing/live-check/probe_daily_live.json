@@ -1,0 +1,290 @@
+{
+ "job_id": "a5bff824-5a0b-421a-a2c2-cdc84903c16c",
+ "status": "succeeded",
+ "error": null,
+ "live": true,
+ "estimated_usd": 0.007163,
+ "unpriced": 0,
+ "cost_usd": 0.001334,
+ "probed": 21,
+ "ok": 13,
+ "failed": 8,
+ "matrix": [
+  {
+   "ok": true,
+   "error": "kimi-k3 returned empty content (stopReason=max_tokens)",
+   "wire_id": "us.moonshotai.kimi-k3",
+   "model_key": "kimi-k3",
+   "error_class": null,
+   "connection_key": "acc2"
+  },
+  {
+   "ok": true,
+   "error": null,
+   "wire_id": "us.meta.llama4-maverick-17b-instruct-v1:0",
+   "model_key": "llama4-maverick",
+   "error_class": null,
+   "connection_key": "acc2"
+  },
+  {
+   "ok": true,
+   "error": null,
+   "wire_id": "us.meta.llama4-scout-17b-instruct-v1:0",
+   "model_key": "llama4-scout",
+   "error_class": null,
+   "connection_key": "acc2"
+  },
+  {
+   "ok": true,
+   "error": null,
+   "wire_id": "us.amazon.nova-2-lite-v1:0",
+   "model_key": "nova-2-lite",
+   "error_class": null,
+   "connection_key": "acc2"
+  },
+  {
+   "ok": true,
+   "error": null,
+   "wire_id": "us.amazon.nova-lite-v1:0",
+   "model_key": "nova-lite",
+   "error_class": null,
+   "connection_key": "acc2"
+  },
+  {
+   "ok": true,
+   "error": null,
+   "wire_id": "global.cohere.embed-v4:0",
+   "model_key": "cohere-embed-v4",
+   "error_class": null,
+   "connection_key": "acc2"
+  },
+  {
+   "ok": false,
+   "error": "AccessDeniedException: An error occurred (AccessDeniedException) when calling the Converse operation (reached max retries: 0): openai.gpt-5.6-luna is not available for this account. You can explore ot",
+   "wire_id": "global.openai.gpt-5.6-luna",
+   "model_key": "gpt-5.6-luna",
+   "error_class": "access_denied",
+   "connection_key": "acc3"
+  },
+  {
+   "ok": false,
+   "error": "AccessDeniedException: An error occurred (AccessDeniedException) when calling the Converse operation (reached max retries: 0): openai.gpt-6-astra is not available for this account. You can explore oth",
+   "wire_id": "global.openai.gpt-6-astra",
+   "model_key": "gpt-6-astra",
+   "error_class": "access_denied",
+   "connection_key": "acc3"
+  },
+  {
+   "ok": false,
+   "error": "AccessDeniedException: An error occurred (AccessDeniedException) when calling the Converse operation (reached max retries: 0): openai.gpt-6-luna is not available for this account. You can explore othe",
+   "wire_id": "global.openai.gpt-6-luna",
+   "model_key": "gpt-6-luna",
+   "error_class": "access_denied",
+   "connection_key": "acc3"
+  },
+  {
+   "ok": true,
+   "error": null,
+   "wire_id": "global.anthropic.claude-haiku-4-5-20251001-v1:0",
+   "model_key": "haiku",
+   "error_class": null,
+   "connection_key": "acc3"
+  },
+  {
+   "ok": true,
+   "error": null,
+   "wire_id": "global.anthropic.claude-haiku-4-5-20251001-v1:0",
+   "model_key": "haiku-4-5",
+   "error_class": null,
+   "connection_key": "acc3"
+  },
+  {
+   "ok": false,
+   "error": "AccessDeniedException: An error occurred (AccessDeniedException) when calling the Converse operation (reached max retries: 0): anthropic.claude-haiku-5-5 is not available for this account. You can exp",
+   "wire_id": "global.anthropic.claude-haiku-5-5",
+   "model_key": "haiku-5-5",
+   "error_class": "access_denied",
+   "connection_key": "acc3"
+  },
+  {
+   "ok": false,
+   "error": "AccessDeniedException: An error occurred (AccessDeniedException) when calling the Converse operation (reached max retries: 0): anthropic.claude-opus-5-5 is not available for this account. You can expl",
+   "wire_id": "global.anthropic.claude-opus-5-5",
+   "model_key": "opus-5-5",
+   "error_class": "access_denied",
+   "connection_key": "acc3"
+  },
+  {
+   "ok": true,
+   "error": null,
+   "wire_id": "global.anthropic.claude-sonnet-4-6",
+   "model_key": "sonnet",
+   "error_class": null,
+   "connection_key": "acc3"
+  },
+  {
+   "ok": true,
+   "error": null,
+   "wire_id": "global.anthropic.claude-sonnet-4-6",
+   "model_key": "sonnet-4-6",
+   "error_class": null,
+   "connection_key": "acc3"
+  },
+  {
+   "ok": false,
+   "error": "AccessDeniedException: An error occurred (AccessDeniedException) when calling the Converse operation (reached max retries: 0): anthropic.claude-sonnet-5 is not available for this account. You can expl",
+   "wire_id": "global.anthropic.claude-sonnet-5",
+   "model_key": "sonnet-5",
+   "error_class": "access_denied",
+   "connection_key": "acc3"
+  },
+  {
+   "ok": false,
+   "error": "AccessDeniedException: An error occurred (AccessDeniedException) when calling the Converse operation (reached max retries: 0): anthropic.claude-sonnet-5-5 is not available for this account. You can ex",
+   "wire_id": "global.anthropic.claude-sonnet-5-5",
+   "model_key": "sonnet-5-5",
+   "error_class": "access_denied",
+   "connection_key": "acc3"
+  },
+  {
+   "ok": true,
+   "error": null,
+   "wire_id": "global.cohere.embed-v4:0",
+   "model_key": "cohere-embed-v4-acc3",
+   "error_class": null,
+   "connection_key": "acc3"
+  },
+  {
+   "ok": false,
+   "error": "OpenAIPlatformBlocked: gpt-4.1: OpenAI platform API is disabled (S235 Bedrock-only policy)",
+   "wire_id": "gpt-4.1",
+   "model_key": "gpt-4.1",
+   "error_class": "other",
+   "connection_key": "openai-direct"
+  },
+  {
+   "ok": true,
+   "error": null,
+   "wire_id": "gpt-6-luna",
+   "model_key": "gpt-6-luna-openai",
+   "error_class": null,
+   "connection_key": "openai-direct"
+  }
+ ],
+ "stage_coverage": {
+  "ok": false,
+  "live": {
+   "s1_judge": "gpt-6-luna-openai@openai-direct",
+   "t2_judge": "gpt-6-luna-openai@openai-direct",
+   "t9_write": "sonnet-4-6@acc3",
+   "f10_embed": "cohere-embed-v4@acc2",
+   "t10_judge": "gpt-6-luna-openai@openai-direct",
+   "t9_repair": "haiku-4-5@acc3",
+   "a3_atomize": "gpt-6-luna-openai@openai-direct",
+   "t10_claims": "gpt-6-luna-openai@openai-direct",
+   "tp_compose": "sonnet-4-6@acc3",
+   "s1_flag_fix": "haiku-4-5@acc3",
+   "s1_generate": "sonnet-4-6@acc3",
+   "t2_flag_fix": "haiku-4-5@acc3",
+   "t2_generate": "sonnet-4-6@acc3",
+   "t8_angle_gen": "sonnet-4-6@acc3",
+   "a0_column_map": "haiku-4-5@acc3",
+   "a3_place_card": "gpt-6-luna-openai@openai-direct",
+   "a3_place_days": "haiku-4-5@acc3",
+   "t9_faq_filter": "haiku-4-5@acc3",
+   "a3_place_embed": "cohere-embed-v4@acc2",
+   "s1_brand_audit": "gpt-6-luna-openai@openai-direct",
+   "t10_adjudicate": "gpt-6-luna-openai@openai-direct",
+   "t2_brand_audit": "gpt-6-luna-openai@openai-direct",
+   "a3_place_dedupe": "gpt-6-luna-openai@openai-direct",
+   "a3_place_locate": "sonnet-4-6@acc3",
+   "s1_source_facts": "gpt-6-luna-openai@openai-direct",
+   "t7_debate_judge": "gpt-6-luna-openai@openai-direct",
+   "tp_search_embed": "cohere-embed-v4@acc2",
+   "segment_research": "haiku-4-5@acc3",
+   "t9_faq_answer_fit": "sonnet-4-6@acc3",
+   "s1_itinerary_nudge": "haiku-4-5@acc3",
+   "t2_itinerary_nudge": "haiku-4-5@acc3",
+   "tp_component_embed": "cohere-embed-v4@acc2",
+   "a3_place_card_check": "haiku-4-5@acc3",
+   "writing_memory_eval": "gpt-6-luna-openai@openai-direct",
+   "writing_memory_mine": "gpt-6-luna-openai@openai-direct",
+   "a3_place_dedupe_check": "haiku-4-5@acc3",
+   "supply_content_writer": "sonnet-4-6@acc3",
+   "segment_research_batch": "haiku-4-5@acc3"
+  },
+  "ready": true,
+  "uncovered": [
+   "s1_atom_writer",
+   "tp_extract"
+  ],
+  "stages_checked": 40
+ },
+ "skipped": [
+  {
+   "why": "deployment disabled",
+   "model_key": "haiku",
+   "connection_key": "acc2"
+  },
+  {
+   "why": "deployment disabled",
+   "model_key": "sonnet",
+   "connection_key": "acc2"
+  },
+  {
+   "why": "disabled",
+   "model_key": null,
+   "connection_key": "acc2-usw2"
+  },
+  {
+   "why": "deployment disabled",
+   "model_key": "gpt-6.1-sol",
+   "connection_key": "acc3"
+  },
+  {
+   "why": "deployment disabled",
+   "model_key": "gpt-6.1-terra",
+   "connection_key": "acc3"
+  },
+  {
+   "why": "deployment disabled",
+   "model_key": "gpt-6-sol",
+   "connection_key": "acc3"
+  },
+  {
+   "why": "deployment disabled",
+   "model_key": "kimi-k3",
+   "connection_key": "acc3"
+  },
+  {
+   "why": "deployment disabled",
+   "model_key": "llama4-maverick",
+   "connection_key": "acc3"
+  },
+  {
+   "why": "deployment disabled",
+   "model_key": "opus-4-5",
+   "connection_key": "acc3"
+  },
+  {
+   "why": "deployment disabled",
+   "model_key": "opus-4-6",
+   "connection_key": "acc3"
+  },
+  {
+   "why": "deployment disabled",
+   "model_key": "sonnet-4-5",
+   "connection_key": "acc3"
+  },
+  {
+   "why": "disabled",
+   "model_key": null,
+   "connection_key": "anthropic-direct"
+  },
+  {
+   "why": "disabled",
+   "model_key": null,
+   "connection_key": "bedrock-llm-org"
+  }
+ ]
+}

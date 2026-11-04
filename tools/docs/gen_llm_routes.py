@@ -37,7 +37,9 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+# `dump` runs as a copy in the container's /tmp (tools/ecs/ecsx.sh), where the file has no grandparent (S267).
+_HERE = Path(__file__).resolve()
+REPO_ROOT = _HERE.parents[2] if len(_HERE.parents) > 2 else _HERE.parent
 SNAPSHOT = REPO_ROOT / "docs" / "generated" / "llm-routes.snapshot.json"
 PAGE = REPO_ROOT / "docs" / "generated" / "llm-routes.md"
 SCHEMA = "aa900-llm-routes/1"
