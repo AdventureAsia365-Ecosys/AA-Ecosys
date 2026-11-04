@@ -6,7 +6,7 @@ type: how-to
 status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
-applies_to: [aa-cis-api, aa-booking-api, aa-crm-api, aa-crm-web, aa-crm-portal, tripplanner-lambda]
+applies_to: [aa-cis-api, aa-booking-api, aa-crm-api, aa-crm-web, tripplanner-lambda]
 last_reviewed: 2026-11-01
 review_every_days: 90
 related: [OPS-04, OPS-02-cis, OPS-02-booking, OPS-02-tp-lambda, OPS-04-queue-stuck, AA-870, AA-892]

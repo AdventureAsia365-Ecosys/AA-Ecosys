@@ -6,7 +6,7 @@ type: how-to
 status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
-applies_to: [aa-cis-api, aa-cis-worker, aa-booking-api, aa-crm-api, aa-crm-web, aa-crm-portal]
+applies_to: [aa-cis-api, aa-cis-worker, aa-booking-api, aa-crm-api, aa-crm-web]
 last_reviewed: 2026-11-02
 review_every_days: 90
 last_tested: null

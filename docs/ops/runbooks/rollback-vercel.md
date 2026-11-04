@@ -36,10 +36,10 @@ related: [OPS-02-cis, OPS-02-terraform, OPS-04, AA-869, AA-892, AA-979]
 - Projects with live production traffic (2026-10-28): `aa-cis-frontend` (aa-cis.lumiguides.it.com),
   `aa-booking-admin` and `aa-tripplanner` (tripplanner.lumiguides.it.com).
 - The tenant portal is **no longer served by Vercel**. Since the AA-979 P2b cutover, `portal.lumiguides.it.com`
-  points at a CloudFront distribution in front of the Fargate service `aa-crm-dev-portal` (AA-Partner
-  `deploy-portal-dev.yml`). The Vercel project `aa-cis-portal`, its rollback target, was deleted at the P2b
-  clean-up (S256): a bad studio deploy is rolled back on ECS (redeploy the previous task definition revision, or
-  revert on AA-Partner `main`).
+  points at a CloudFront distribution in front of Fargate; since AA-1036 the studio is part of the agency web
+  `aa-crm-dev-web` (AA-Partner `deploy-web-dev.yml`; the separate service `aa-crm-dev-portal` is retired). The
+  Vercel project `aa-cis-portal`, its rollback target, was deleted at the P2b clean-up (S256): a bad studio deploy
+  is rolled back on ECS ([rollback-ecs](rollback-ecs.md) on `aa-crm-dev-web`, or revert on AA-Partner `main`).
 - Deployments are created by each repo's `vercel-deploy.yml` (S241), not by the Vercel Git integration
   (`git.deploymentEnabled: false`). A push to `main` that touches `frontend/**` makes the production deployment.
 - After a rollback Vercel stops assigning the production domains to new deployments until one is promoted.
