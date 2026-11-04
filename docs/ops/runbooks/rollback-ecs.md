@@ -41,7 +41,7 @@ This page is the shared procedure. The per-app pages keep their app facts:
 
 | Parameter | Values |
 |---|---|
-| `<service>` | `aa-cis-dev-api`, `aa-cis-dev-worker`, `aa-booking-dev-api`, `aa-crm-dev-api`, `aa-crm-dev-web`, `aa-crm-dev-portal`. The task-definition family has the same name. Cluster `aa-cis-dev-cluster` for all. |
+| `<service>` | `aa-cis-dev-api`, `aa-cis-dev-worker`, `aa-booking-dev-api`, `aa-crm-dev-api`, `aa-crm-dev-web` (CRM + Content studio; `aa-crm-dev-portal` was retired in AA-1036). The task-definition family has the same name. Cluster `aa-cis-dev-cluster` for all. |
 | `<target>` | one of: `--previous` (newest older revision with a different real build), `--to <revision>`, `--to-sha <git-sha>` (full or a 7+ character prefix) |
 | `<current-revision>` | the revision the service runs now (step 1); it is the way back |
 
@@ -52,7 +52,6 @@ This page is the shared procedure. The per-app pages keep their app facts:
 | `aa-booking-dev-api` | `<sha>` | 10 | `https://api-booking.lumiguides.it.com/booking/health` (`git_sha`) | `booking.job` (in process) |
 | `aa-crm-dev-api` | `<sha>` | 10 | `https://partner-dev.lumiguides.it.com/crm/health` (`git_sha`) | `crm.job` (in process) |
 | `aa-crm-dev-web` | `<sha>` | 10 | `https://portal.lumiguides.it.com/healthz` (`git_sha`) | none |
-| `aa-crm-dev-portal` | `<sha>` | 10 | `https://portal.lumiguides.it.com/api/healthz` (`sha`) | none |
 
 Facts that shape the procedure:
 
