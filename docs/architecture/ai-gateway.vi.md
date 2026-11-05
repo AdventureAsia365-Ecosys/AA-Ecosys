@@ -1,7 +1,7 @@
 ---
 id: ARCH-01-ai-gateway
 title: Cổng AI (hiện trạng)
-description: Mọi lời gọi AI và dữ liệu có trả phí của hệ sinh thái được cấu hình, định tuyến, chặn, đo và quan sát ra sao hôm nay (ADR gốc 0009, gateway v2), kèm bảng đã chạy / dự kiến kiểm ngày 2026-11-01 và cập nhật ngày 2026-11-05. Tab Hướng dẫn của trang admin cổng AI trong CIS hiện trang này cạnh các bảng trực tiếp.
+description: Mọi lời gọi AI và dữ liệu có trả phí được cấu hình, định tuyến, chặn, đo và quan sát ra sao hôm nay (ADR gốc 0009, gateway v2), kèm bảng đã chạy / dự kiến (kiểm 2026-11-01, cập nhật 2026-11-05). Tab Hướng dẫn của trang cổng AI hiện trang này cạnh các bảng live.
 type: explanation
 status: draft
 owner: nghiep
