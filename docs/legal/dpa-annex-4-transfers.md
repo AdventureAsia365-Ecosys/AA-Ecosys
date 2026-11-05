@@ -25,7 +25,8 @@ related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa
 |---|---|---|
 | United States, AWS us-west-1 | Every app's storage and compute | ADR 0018 d7 as amended by ADR 0019 d12 ("US by default, EU cell on triggers"); [Annex 3](dpa-annex-3-subprocessors.md) §1.1 |
 | Any AWS commercial region (cross-region inference) | Content studio inputs only, when a stage uses a Bedrock `global.` profile; never a stage classed `pii` (CIS 373) | Annex 3 §1.2 |
-| The Anthropic API and the OpenAI API (location [to confirm]) | Content studio inputs, when the AWS deployment of a model refuses or fails | AI Use Register v1.8; Annex 3 §1.2 |
+| United States, AWS us-east-1, us-east-2, us-west-2 (US cross-region inference) | CRM reply-draft text after the F3 scrub (placeholders, no identity fields), when an Agency has AI switched on; Amazon Nova Lite through a `us.` profile, which stays inside the US | Annex 3 §1.2; AA-CIS-Infra `modules/environment/crm_llm.tf` |
+| The Anthropic API and the OpenAI API (location [to confirm]) | Content studio inputs, when the AWS deployment of a model refuses or fails | AI Use Register v1.9; Annex 3 §1.2 |
 | Sentry, United States | Scrubbed error events | Annex 3 §1.3 |
 | Vercel, United States (`sfo1`) and edge | Staff views and the Trip Planner form in transit, until ADR 0019 d23 completes | Annex 3 §1.3, §4 |
 
