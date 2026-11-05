@@ -44,7 +44,8 @@ passed; 1 = a gate hit; 2 = a scene or length error (for example a Short longer 
 Other environment variables: `ARCH_VIDEO_CACHE` (fonts, OCR, TTS clip cache; default `tools/uat/arch/.cache`),
 `ARCH_VIDEO_WORKSPACE` (the folder holding the root repo with `apps/*` and `infra/*` for the n-gram corpus; default:
 this checkout's main worktree), `ARCH_VIDEO_ROOT_REPO` (check the root repo text of another checkout, for example a
-worktree with an unmerged change).
+worktree with an unmerged change). Before layer 1 the build fetches every corpus repo and stops (exit 2) when one is behind its
+origin default branch or cannot be compared; `ARCH_VIDEO_ALLOW_STALE=1` skips that check (note it in the gate log).
 
 ## Episode file (scene JSON)
 
