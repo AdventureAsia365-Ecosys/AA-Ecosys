@@ -1,5 +1,5 @@
 // UAT scenario PORTAL-PUB-01 (skill aa-uat-video): a partner agency reads the public legal pages.
-// Given: a visitor with no account on the agency host (CloudFront, not Vercel).
+// Given: a visitor with no account on the agency host (the AA-Partner web app; /terms answers 308 to /legal/partner-terms).
 // When:  they open the partner terms, read the AI clause, follow the link to the privacy notice.
 // Then:  each page shows its heading and the expected numbered sections.
 // Public pages only: no sign-in, no form submit, no LLM call. Cost $0.
@@ -48,8 +48,10 @@ module.exports = {
         vi: 'Đại lý bấm vào liên kết sang trang thông báo quyền riêng tư.',
       },
       run: async (page, h) => {
-        await h.click(page.locator('main a[href="/privacy"], a[href="/privacy"]').first());
-        await page.waitForURL('**/privacy');
+        // The studio's legal pages moved to /legal/* in the agency web app (AA-Partner web/lib/studio/legal.ts); /terms
+        // and /privacy only answer 308, so no link on the page points at /privacy any more. The body link in "10. Contact".
+        await h.click(page.locator('main a[href="/legal/privacy"]').first());
+        await page.waitForURL('**/legal/privacy');
         await h.expect(page.locator('h1')).toHaveText('Privacy notice');
       },
     },
