@@ -172,6 +172,16 @@ POLICY: dict[str, Policy] = {
         why="account status, subscriptions and feature keys only: no bill-to field, price, billing reference, "
             "override reason or actor, and no personal data",
     ),
+    # AA-1036 R3 (root ADR 0019 d7): an agency's add-ons and its requests, relayed by the CRM for its CRM owner. The
+    # agency's own note and the reason staff wrote for it cross; the staff actor, the requester's name or e-mail, a
+    # CRM role, the plan key, the attach job, a price and a billing field never do.
+    "tenant.addons.v1": Policy(
+        forbidden_keys=frozenset({"actor", "email", "display_name", "role", "crm_role", "requested_by", "decided_by",
+                                  "plan_key", "provision_job_id", "job_id", "job_error"}),
+        forbidden_patterns=(r"_by$", r"^actor$", r"^billing", r"(^|_)prices?(_|$)", r"(^|_)roles?$", r"(^|_)jobs?(_|$)"),
+        why="add-on states and the agency's own requests only: no staff actor, requester name or e-mail, CRM role, "
+            "plan key, attach job, price or billing field",
+    ),
     # Signed cache purge notice (AA-987): served-state events only; no prices, no personal data.
     "catalog.tour.lifecycle.v1": Policy(
         forbidden_keys=frozenset({"supplier_net", "b2b_price", "price"}),
@@ -209,6 +219,8 @@ REQUIRED_NEGATIVES: dict[str, tuple[str, ...]] = {
     "supply.service.v1": ("net_amount", "supplier_id", "internal_notes", "url"),
     # AA-1028: the bill-to e-mail, a plan price and the writer's actor are each refused.
     "tenant.entitlements.v1": ("billing_email", "price_usd_monthly", "actor"),
+    # AA-1036 R3: the staff member who decided and the attach job are each refused.
+    "tenant.addons.v1": ("decided_by", "provision_job_id"),
     # AA-908: the hand-off never carries the traveller's token.
     "inquiry.submitted.v1.4": ("access_token",),
 }
