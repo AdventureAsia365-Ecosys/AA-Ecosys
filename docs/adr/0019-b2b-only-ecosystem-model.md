@@ -125,12 +125,14 @@ The S265 audit found that the codebase already has most of the pieces: tenant RL
 - The tenant comes from the path `/{slug}` on the existing host, plus a launcher button. CSP stays `frame-ancestors 'none'`.
 - Tenant configuration comes from `catalog.v_tenant_tripplanner_v1` and tours from `catalog.v_tenant_tour_v1`.
 - Subdomains, custom domains, iframe embed and a headless API come later, each on its own trigger.
+- **Amendment (S270, AA-1038 slice 1):** the shadow phase is TripPlanner migration tp-025 (applied on Dev 05/11/2026). It adds `tenant_id uuid NOT NULL` to `tripplanner.sessions`, `trip_drafts`, `trip_events` and `outbox`, backfills every existing row to the demo tenant `aa-tripplanner` (fixed id `00000000-0000-0000-0000-000000000002`, kind `demo`), and gives the column a default that reads the `app.tenant_id` setting and falls back to that demo tenant. It turns RLS on with ENABLE, not FORCE: one permissive policy `<table>_tenant_shadow` per table, `TO tripplanner` only, allows every row while `app.tenant_id` is unset and filters reads and writes to that tenant once it is set. The owner `tp_owner` bypasses, so the owner views read by Booking and CIS (`v_inquiry_outbox`, `v_ops_*`) keep every row. The one shadow deploy is the TripPlanner code change that binds the demo tenant on every assembly request. `tenant_id` is a soft key to `shared.tenants` (no foreign key across owners); the CIS row for `aa-tripplanner` is seeded with the view-contract slice (S274). FORCE, the strict policies without the unset branch, dropping the demo fallback default and a system path for the jobs Lambda come in the FORCE slice (S276).
 
 **d11 Travellers are guests; leads go to the tenant (TL-11).**
 
 - A traveller is a guest (cookie) and gives an e-mail when they submit. They return through the CRM client-portal link.
 - Leads travel on the new `lead.submitted.v1` into CRM intake. A tenant without the CRM gets a signed webhook or an e-mail.
 - `inquiry.submitted` and `bk_inquiry_pull` run in parallel for one release, then stop. The EXTERNAL clients `tripplanner` and `booking-customer` are frozen.
+- **Amendment (S265 review of AA-1038, recorded S270):** R0 (AA-1034: Booking #171 turned the B2C intake off, TripPlanner #218 answers the send-to-advisor route with 410 `b2b_only` before any SQL) superseded the "run in parallel for one release" step above. TripPlanner writes no new `inquiry.submitted` rows and emits `lead.submitted.v1` only, once that slice ships. Re-emitting `inquiry.submitted` with no consumer would only park outbox rows.
 
 **d12 Region field and PII class (TL-12).**
 

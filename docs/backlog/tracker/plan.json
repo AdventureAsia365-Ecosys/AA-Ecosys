@@ -2099,7 +2099,7 @@
    "milestone": "M-P2",
    "session": "S273",
    "size": "XL",
-   "next": "R5 · tp tenant_id + RLS (shadow rồi FORCE), tenant theo path, chỉ phát lead.submitted.v1 (không phát lại inquiry.submitted), frontend 1 task Spot + CloudFront + WAF; nhận AA-1005",
+   "next": "R5 · lát 1 xong S270: tp-025 (tenant_id + RLS shadow trên sessions/trip_drafts/trip_events/outbox, tenant demo aa-tripplanner) + Lambda assembly gắn tenant demo; tiếp S274: view contract catalog.v_tenant_tripplanner_v1 + đường /{slug} + BFF ký tenant assertion; sau: lead.submitted.v1, ECS + CloudFront + WAF (S275), FORCE RLS (S276)",
    "needs": ""
   },
   {

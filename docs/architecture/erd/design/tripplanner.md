@@ -7,10 +7,10 @@ status: active
 owner: nghiep
 audience: [engineer, agent]
 applies_to: [aa-cis-dev-db, tripplanner-lambda]
-last_reviewed: 2026-10-31
+last_reviewed: 2026-11-05
 review_every_days: 90
 generated: false
-related: [APP-04, APP-04-erd, APP-04-erd-design, APP-04-erd-tripplanner, AA-894, AA-861, AA-1015]
+related: [APP-04, APP-04-erd, APP-04-erd-design, APP-04-erd-tripplanner, AA-894, AA-861, AA-1015, AA-1038]
 ---
 
 # ERD design: tripplanner schema
@@ -30,7 +30,11 @@ generated page marks single-column unique keys without a predicate only). Update
 before the migration copy: the new `ai_rate_counter` table (the AI route limiter's fixed-window counters, composite
 primary key `(key_hash, window_start)`, no foreign key, no personal data: `key_hash` is an HMAC). Updated for
 **tp-024** (AA-1027 E5) in S265, merged right before the destructive apply: `llm_spend_daily` (the tp-010 spend
-counter; no foreign key) is gone from the page. The page draws tables only; the views are listed on the generated page. It is **enforced**: the nightly DB Schema Dump fails its drift step when the live tables, primary keys or
+counter; no foreign key) is gone from the page. Updated for **tp-025** (AA-1038 R5 slice 1, root ADR 0019 d10) in S270: `sessions`,
+`trip_drafts`, `trip_events` and `outbox` gain `tenant_id uuid NOT NULL` (backfilled to the demo tenant `aa-tripplanner`,
+default from the `app.tenant_id` setting with that tenant as fallback) under shadow row-level security (ENABLE, not
+FORCE; one permissive policy TO `tripplanner` per table). No table, primary key or foreign key changes: `tenant_id` is a
+soft key to `shared.tenants.tenant_id`, so no tenant edge is drawn. The page draws tables only; the views are listed on the generated page. It is **enforced**: the nightly DB Schema Dump fails its drift step when the live tables, primary keys or
 foreign keys differ from this page. A TripPlanner migration that changes
 them updates this page in the same change (root PR next to the migration copy).
 
@@ -100,6 +104,7 @@ erDiagram
         jsonb payload "pii:contact"
         timestamptz created_at
         timestamptz redacted_at
+        uuid tenant_id
     }
     sessions {
         uuid id PK
@@ -109,6 +114,7 @@ erDiagram
         timestamptz expires_at
         bytea guest_token_hash "conf:credential"
         uuid account_id FK
+        uuid tenant_id
     }
     traveller_accounts {
         uuid id PK
@@ -126,6 +132,7 @@ erDiagram
         date date_end "pii:travel"
         timestamptz created_at
         timestamptz updated_at
+        uuid tenant_id
     }
     trip_events {
         bigint id PK
@@ -134,6 +141,7 @@ erDiagram
         text event_type
         jsonb payload "pii:free_text"
         timestamptz created_at
+        uuid tenant_id
     }
     customers |o--o{ sessions : "customer_id"
     job |o--o{ job : "parent_job_id"
