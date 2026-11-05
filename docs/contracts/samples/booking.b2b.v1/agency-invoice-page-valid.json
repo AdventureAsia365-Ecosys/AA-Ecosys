@@ -1,0 +1,30 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "AgencyInvoicePage",
+  "expect": "valid",
+  "why": "1.5 (AA-1037): the first page of an agency's invoices, a paid software fee invoice",
+  "payload": {
+    "items": [
+      {
+        "number": "AAS-2026-000012",
+        "invoice_kind": "saas",
+        "status": "paid",
+        "period_start": "2026-10-01",
+        "period_end": "2026-10-31",
+        "currency": "USD",
+        "subtotal": "299.00",
+        "tax_amount": "0.00",
+        "total": "299.00",
+        "paid": "299.00",
+        "balance": "0.00",
+        "issued_on": "2026-10-01",
+        "due_date": "2026-10-15",
+        "overdue_days": 0,
+        "e_invoice_no": null
+      }
+    ],
+    "total": 1,
+    "limit": 50,
+    "offset": 0
+  }
+}
