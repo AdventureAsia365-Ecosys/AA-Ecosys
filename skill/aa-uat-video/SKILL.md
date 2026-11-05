@@ -44,7 +44,16 @@ thoại), header Given/When/Then, danh sách `steps`.
 - Assert sai → step FAIL, dừng chạy, **video vẫn giữ** làm bằng chứng lỗi; phụ đề step đó có `[FAIL]`.
 - **Fast mode** cho CI / regression: `node tools/uat/record.cjs <scenario> --fast` (không video, không giữ nhịp,
   chỉ `result.json`).
-- Id theo danh mục kế hoạch §4 (`TP-03`, `BK-04`, `CRM-06`…); kịch bản mới thêm vào danh mục đó.
+- Id theo danh mục **`tools/uat/catalogue.json`** (AA-855: một dòng mỗi kịch bản — app, module, story, roles, kinds,
+  covers, screens, status live / after-lane / blocked / retired, round, identity, writes, paid; kiểm bằng
+  `node tools/uat/lib/catalogue.cjs` và `node --test tools/uat/tests/*.test.cjs`). Kịch bản mới = thêm dòng catalogue
+  cùng PR; id retired giữ nguyên, không tái dùng số. Kịch bản đọc thêm vào `scenarios/dryrun.cjs`; kịch bản ghi / trả
+  phí dùng `rw()` của `lib/uat-page.cjs` (allowWrites hẹp, `after()` trả lại giá trị cũ) và không vào dry run.
+- **Chặn tenant pilot** (AA-855, `lib/pilot-guard.cjs`, fail closed): trước mỗi kịch bản đã đăng nhập, record.cjs đọc
+  tenant / agency qua API của app (`/api/tenant/me`, `/bff/me`) trong một context không quay; ngoài allow-list tổng
+  hợp hoặc có dấu pilot → exit 5 `pilot_guard`, không video. Id tenant không công khai được để trong
+  `tools/uat/work/uat-allowlist.json` (gitignore). Trang staff có danh sách tenant dùng `allowRows` (che hàng ngoài
+  allow-list) + `h.assertRowsFiltered()`.
 
 ## 4. Giọng đọc
 
@@ -139,7 +148,8 @@ tạo OAuth client riêng (Google Cloud project miễn phí) rồi `rclone confi
 ## 8. Index và báo cáo
 
 - Index mỗi app: `docs/audits/<date>-S<nnn>-uat/<app>.md` trong root PR — kịch bản, story, verdict, độ dài, step FAIL +
-  mốc thời gian, link Drive, commit SHA của app lúc quay.
+  mốc thời gian, commit SHA của app lúc quay. **Không link Drive** (repo gốc public): link Drive chỉ nằm trong trang
+  artifact cho chủ doanh nghiệp và draft Jira, không bao giờ trong index public (AA-855, kế hoạch S268).
 - Một trang artifact cho chủ doanh nghiệp (một tab mỗi app), lưu local theo `aa-session` (save audits locally); link
   đưa vào draft Jira cuối phiên, lời văn theo `aa-jira-update`.
 - Lỗi tìm thấy → issue có sẵn hoặc issue mới (hỏi trước, `aa-linear-issue`).

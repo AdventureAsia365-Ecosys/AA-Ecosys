@@ -17,13 +17,17 @@
 // Before: bash tools/uat/setup.sh once; egress VN (VPN off; Vercel challenges VPN IPs); for cis-admin / booking a fresh
 // MFA session of the admin profile (the code mail is read from the e2e mailbox), aws sts get-caller-identity.
 // RAM guard before each Chromium: >= 2500 MB available, waits 2 min up to 5 times.
+// Pilot guard (AA-855, lib/pilot-guard.cjs): after each identity signs in, its tenant / agency is read through the app's
+// own API; a tenant outside the synthetic allow-list (or any pilot marker) blocks every scenario of that identity, and
+// record.cjs checks again before each scenario. Fail closed.
 // Exit: 0 all PASS | 2 a scenario FAILed, was BLOCKED (its identity could not sign in) or crashed | 3 egress not VN |
-// 4 RAM too low | 1 usage / runner error.
+// 4 RAM too low | 5 pilot_guard refused a session (no scenario of it ran) | 1 usage / runner error.
 'use strict';
 const { execFileSync, spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const core = require('./lib/dryrun-core.cjs');
+const pilotGuard = require('./lib/pilot-guard.cjs');
 
 const HERE = __dirname;
 const MANIFEST = path.join(HERE, 'scenarios', 'dryrun.cjs');
@@ -163,12 +167,20 @@ async function main() {
 
   const states = {};
   const signins = {};
+  const refused = {};
   for (const who of core.signinPlan(sel)) {
     await ramGuard();
     try {
       const r = await signIn(who);
-      states[who] = r.file;
       signins[who] = r.reused ? 'saved session still valid' : 'signed in';
+      const v = await pilotGuard.checkState(r.file, pilotGuard.scopesFor({ id: who, identity: who }, r.file));
+      if (v.ok) {
+        states[who] = r.file;
+        signins[who] += `; ${pilotGuard.describeVerdict(v)}`;
+      } else {
+        refused[who] = true;
+        signins[who] = `BLOCKED: ${core.cell(v.reason, 200)}`;
+      }
     } catch (e) {
       signins[who] = `BLOCKED: ${core.cell(String(e.message || e).split('\n')[0], 200)}`;
     }
@@ -179,7 +191,7 @@ async function main() {
   for (const e of sel) {
     let o;
     if (e.identity !== 'public' && !states[e.identity]) {
-      o = core.outcome(e, { blocked: signins[e.identity] || 'not signed in' });
+      o = core.outcome(e, { blocked: signins[e.identity] || 'not signed in', pilotGuard: !!refused[e.identity] });
     } else {
       await ramGuard();
       const work = path.join(HERE, 'work', e.id);

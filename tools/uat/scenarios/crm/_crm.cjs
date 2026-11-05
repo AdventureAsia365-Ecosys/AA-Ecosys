@@ -141,4 +141,28 @@ function reuse(h, what, fresh = 'prep with UAT_CRM_NEW_RUN=1, then the chunks in
 /** Days from today as an ISO date (UTC; enough for trip dates weeks ahead). */
 const day = (n, from = new Date()) => new Date(from.getTime() + n * 86_400_000).toISOString().slice(0, 10);
 
-module.exports = { crm, st, DESKTOP, PHONE, REAL_ADDRESS, base, sha, open, bff, bffOk, waitForCard, prospect, submitInquiryApi, type, choose, day, reuse };
+// The cut of the review (AA-855): the UAT round shows the product only, so a step marked `internal: true` (the
+// build-progress slide of R00 and the progress tiles of R20) is left out unless UAT_CUT=internal (the internal review
+// video of S262). Captions and the take filter the same way, so the narration always matches the steps.
+const INTERNAL_CUT = process.env.UAT_CUT === 'internal';
+function uatCut(steps) {
+  return steps.filter((x) => INTERNAL_CUT || !x.internal);
+}
+
+/**
+ * The data steps (prep.cjs, cleanup.cjs) write and delete in bulk: they run only on the invented review agency
+ * sen-vang, never on another synthetic agency and never on a pilot (AA-855; root ADR 0019 d16). record.cjs already
+ * refused any other agency before the browser opened (scenario.pilotGuard); this repeats it from inside the session.
+ */
+const REVIEW_AGENCY = { scopes: ['crm'], only: ['sen-vang'] };
+async function assertReviewAgency(page) {
+  const pilotGuard = require('../../lib/pilot-guard.cjs');
+  const r = await bff(page, 'GET', 'me');
+  if (r.status !== 200) throw new Error(`${pilotGuard.CODE}: could not read the CRM agency (HTTP ${r.status})`);
+  const v = pilotGuard.evaluate(r.data, { scope: 'crm', allow: pilotGuard.buildAllowlist(pilotGuard.loadLocal()), only: REVIEW_AGENCY.only });
+  if (!v.ok) throw new Error(v.reason);
+  return v;
+}
+
+module.exports = { crm, st, DESKTOP, PHONE, REAL_ADDRESS, base, sha, open, bff, bffOk, waitForCard, prospect, submitInquiryApi, type, choose, day, reuse,
+  REVIEW_AGENCY, assertReviewAgency, INTERNAL_CUT, uatCut };

@@ -16,7 +16,7 @@
 //        than 200 / 404 is a failure. Left on purpose: R09's booking-terms versions (one per run; an agreement version
 //        cannot be deleted, the newest published one stays in force) and the trashed clients (the CRM purges its trash).
 // Dev only, invented data, no LLM call. Cost $0.
-const { st, base, open, bff, bffOk } = require('./_crm.cjs');
+const { st, base, open, bff, bffOk, REVIEW_AGENCY, assertReviewAgency } = require('./_crm.cjs');
 
 const OPEN = ['inquiry', 'qualifying', 'proposal'];
 const NOT_BOOKED = [...OPEN, 'lost', 'cancelled'];
@@ -26,6 +26,7 @@ const keepPrep = process.env.UAT_CRM_CLEANUP_KEEP_PREP === '1';
 const extraTags = (process.env.UAT_CRM_CLEANUP_TAGS || '').split(',').map((x) => x.trim()).filter((x) => /^rv\d{9,}$/.test(x));
 const sc = base({ id: 'CRM-REV-CLEANUP', title: 'Clean up the data of the CRM review' });
 sc.fastOnly = true;
+sc.pilotGuard = REVIEW_AGENCY; // only the invented sen-vang, never a pilot (record.cjs exit 5 otherwise)
 let s;
 const done = [];
 const failed = [];
@@ -45,6 +46,7 @@ sc.steps = [
   {
     caption: { en: 'Open the CRM and read the run state.', vi: 'Mở CRM và đọc trạng thái lượt chạy.' },
     run: async (page, h) => {
+      await assertReviewAgency(page); // before any write: the clean-up never touches another agency
       s = st.load();
       if (!s.run) throw new Error('no review run in work/crm/state.json');
       await open(page, h, '/pipeline', 'crm-pipeline');

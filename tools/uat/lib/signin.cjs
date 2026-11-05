@@ -14,6 +14,9 @@
 //              Read-only session (403 e2e_read_only on every write).
 //   studio     Content studio VIEWER of the E2E tenant (partner pool, password + authenticator), secret
 //              crm/dev/e2e-test-studio/viewer (UAT_STUDIO_SECRET overrides).
+//   studio-editor  Content studio EDITOR of the E2E tenant (AA-855; the A10b-1 invitee e2e-test-studio-editor@), same
+//              flow, secret crm/dev/e2e-test-studio/editor (UAT_STUDIO_EDITOR_SECRET overrides). It CAN write: only
+//              write scenarios use it (PRT-02, PRT-06). No secret yet = BLOCKED with that reason, not a crash.
 //   crm        Owner of the invented agency of the CRM review set: lib/crm-signin.cjs identity A, with its own state
 //              file (work/dryrun/.state-crm.json, never the review set's). This account CAN write (the CRM has no
 //              read-only role yet): the runner leaves its scenarios out unless --include-writable (dryrun-core.cjs).
@@ -31,7 +34,11 @@ const BOOKING = crm.BOOKING;
 const PARTNER = crm.PARTNER;
 const STAFF_AUTH_HOST = 'staff-auth.lumiguides.it.com';
 const WORK = path.join(__dirname, '..', 'work', 'dryrun');
-const STUDIO_SECRET = process.env.UAT_STUDIO_SECRET || 'crm/dev/e2e-test-studio/viewer';
+const STUDIO_SECRETS = {
+  studio: process.env.UAT_STUDIO_SECRET || 'crm/dev/e2e-test-studio/viewer',
+  'studio-editor': process.env.UAT_STUDIO_EDITOR_SECRET || 'crm/dev/e2e-test-studio/editor',
+};
+const STUDIO_IDENTITIES = Object.keys(STUDIO_SECRETS);
 
 const STAFF = {
   'cis-admin': { origin: CIS, email: 'e2e-cis-admin@e2e-mail.lumiguides.it.com', prefix: 'inbound-admin/' },
@@ -126,7 +133,7 @@ async function partnerLogin(page, c) {
 }
 
 /** The studio flow of AA-Partner e2e/smoke-portal/auth.setup.ts: hop until the studio dashboard renders. */
-async function studioLogin(page, alreadyThere) {
+async function studioLogin(page, alreadyThere, creds) {
   const origin = PARTNER;
   let signedIn = false;
   if (!alreadyThere) await page.goto(`${origin}/portal/dashboard`, { waitUntil: 'domcontentloaded' });
@@ -135,7 +142,7 @@ async function studioLogin(page, alreadyThere) {
     const u = new URL(page.url());
     if (u.origin !== origin) {
       if (signedIn) throw new Error(`sent to the sign-in again (${u.host}): check the studio user's password and authenticator`);
-      await partnerLogin(page, crm.secretCreds(STUDIO_SECRET));
+      await partnerLogin(page, creds);
       signedIn = true;
       await page.waitForURL((x) => x.origin === origin, { timeout: 60_000 });
       continue;
@@ -189,7 +196,17 @@ async function ensureState(who) {
     }
     return { file, reused: existed };
   }
-  if (!['cis-admin', 'booking', 'studio'].includes(who)) throw new Error(`unknown identity ${who}`);
+  if (!['cis-admin', 'booking', ...STUDIO_IDENTITIES].includes(who)) throw new Error(`unknown identity ${who}`);
+  // A studio identity's secret is read before any browser starts: a missing one (the editor not enrolled yet) is a
+  // clear BLOCKED reason, not a crash half-way through a sign-in. Never printed.
+  let studioCreds = null;
+  if (STUDIO_IDENTITIES.includes(who) && !fs.existsSync(statePath(who))) {
+    try {
+      studioCreds = crm.secretCreds(STUDIO_SECRETS[who]);
+    } catch (e) {
+      throw new Error(`${who}: BLOCKED: ${redact(String(e.message || e).split('\n')[0])}`);
+    }
+  }
   const { chromium } = require('@playwright/test');
   fs.mkdirSync(WORK, { recursive: true, mode: 0o700 });
   fs.chmodSync(WORK, 0o700);
@@ -216,7 +233,8 @@ async function ensureState(who) {
       } else {
         reused = await studioAlive(page);
         if (!reused) {
-          await studioLogin(page, true);
+          if (!studioCreds) studioCreds = crm.secretCreds(STUDIO_SECRETS[who]);
+          await studioLogin(page, true, studioCreds);
           if (!(await studioAlive(page))) throw new Error('signed in, but the studio dashboard did not render');
         }
       }
@@ -234,7 +252,7 @@ async function ensureState(who) {
   }
 }
 
-module.exports = { ensureState, statePath, CIS, BOOKING, PARTNER, STAFF_AUTH_HOST };
+module.exports = { ensureState, statePath, CIS, BOOKING, PARTNER, STAFF_AUTH_HOST, STUDIO_SECRETS };
 
 if (require.main === module) {
   (async () => {

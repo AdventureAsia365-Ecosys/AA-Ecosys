@@ -15,7 +15,7 @@ sc.steps = [
     },
     run: async (page, h) => {
       await sha(page, sc, 'start');
-      await open(page, h, '/', 'crm-home');
+      await open(page, h, '/home', 'crm-home'); // the bare host '/' is the Content studio since AA-1036
       await h.expect(page.getByRole('heading', { level: 1 })).toContainText('Welcome · Lữ hành Sen Vàng');
     },
   },
