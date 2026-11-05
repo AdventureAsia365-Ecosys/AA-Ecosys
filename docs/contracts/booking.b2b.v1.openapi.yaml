@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: booking.b2b.v1 (AA-Booking → AA-Partner CRM, B2B products, quotes, holds, bookings, events)
-  version: "1.2"
+  version: "1.3"
   description: >-
     The AA inventory API of the partner CRM spec (§9), owned by AA-Booking (root ADR 0005, 0005a) and called by the
     AA-Partner CRM API server to server (root ADR 0010). Auth: an M2M access token of the aa-m2m pool (root ADR 0006b
@@ -20,10 +20,15 @@ info:
     each HoldLine's b2b_price), so the CRM writes the agency's AA lines of an accepted proposal (net = b2b_price, the
     quote's FX lock) and presents the right hash at confirm. Optional in the schema (left out only when Booking cannot
     read the quote row); never a net cost or a supplier rate.
+    Minor 1.3 (AA-1037 R4 extras, additive): every Quote and Hold answer carries cancellation_policy (the fee schedule
+    a confirm today would lock, or the one locked on a confirmed hold); GET /bookings/{booking_id}/confirmation (the
+    booking confirmation, JSON or a printable HTML file, no traveller names and no prices); GET /terms (the agency's
+    payment terms, credit status, default cancellation policy and approved terms clauses); and the Problem error
+    credit_hold_overdue (409 on POST /holds while the agency's AA invoices are overdue past its credit terms).
   x-aa-contract: booking.b2b.v1
   x-aa-producer: AA-Booking
   x-aa-consumers: [AA-Partner]
-  x-aa-issues: [AA-928, AA-952, AA-972, AA-973, AA-974, AA-975, AA-986]
+  x-aa-issues: [AA-928, AA-952, AA-972, AA-973, AA-974, AA-975, AA-986, AA-1037]
 servers:
   - url: /booking/b2b/v1
 security:
@@ -124,7 +129,9 @@ paths:
         already holds, is answered before the limit and never counts. 409 tour_not_served (AA-986, root ADR 0015): a
         trip_plan line whose tour is no longer served by AA (retired, paused or out of the catalog) cannot be held;
         tour, tour_state and reason say which and why. hotel_room and service lines carry no tour and are not
-        checked. A replay of an existing hold is still answered.
+        checked. A replay of an existing hold is still answered. 409 credit_hold_overdue (1.3, AA-1037): the agency's
+        AA invoices are overdue past its credit terms (its billing status is past_due, see GET /terms credit); no new
+        hold until they are paid. Replays, confirms, extends, releases and cancels of existing holds still work.
       security:
         - m2m: [booking.b2b/hold]
       parameters:
@@ -278,6 +285,60 @@ paths:
         "404": {$ref: "#/components/responses/Problem"}
         "409": {$ref: "#/components/responses/Problem"}
         "422": {$ref: "#/components/responses/Problem"}
+  /bookings/{booking_id}/confirmation:
+    parameters:
+      - name: booking_id
+        in: path
+        required: true
+        schema: {type: string, minLength: 1, maxLength: 64}
+    get:
+      operationId: getBookingConfirmation
+      summary: The booking confirmation of a confirmed booking (1.3), JSON or a printable HTML file
+      description: >-
+        1.3 (AA-1037). booking_id is Booking.booking_id. The reference (trip_case_code), the agency's proposal ref and
+        version, the status (confirmed, or cancelled once cancelled), the trip dates, the most travellers of a line by
+        age band, every line (title, kind, date, nights, pax counts, room set-up, status, the supplier confirmation refs
+        of the confirmed supplier bookings covering it) and the cancellation policy locked on the booking. No traveller
+        names and no prices (the agency may pass it to its client). format=html answers one self-contained HTML file
+        (inline CSS, no script) as an attachment, to print or save as PDF. 404 unknown or another agency's booking.
+      security:
+        - m2m: [booking.b2b/read]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+        - name: format
+          in: query
+          required: false
+          schema: {type: string, enum: [json, html], default: json}
+      responses:
+        "200":
+          description: The confirmation
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/BookingConfirmation"}
+            text/html:
+              schema: {type: string}
+        "404": {$ref: "#/components/responses/Problem"}
+  /terms:
+    get:
+      operationId: getPartnerTerms
+      summary: The calling agency's terms with AA (1.3)
+      description: >-
+        1.3 (AA-1037). Read from Booking data rows: the agency's payment terms (its contract terms, else AA's default;
+        null when none exist), its credit status (holds_paused while past_due, when POST /holds answers 409
+        credit_hold_overdue), the default cancellation policy in force (a tour may have its own; quotes and holds show
+        the one that applies) and AA's approved terms clauses (for example how AA corrects a clearly wrong price, with
+        the agency's free-cancel window). A clause is never shown before it is approved.
+      security:
+        - m2m: [booking.b2b/read]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+      responses:
+        "200":
+          description: The agency's terms
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/PartnerTerms"}
+        "403": {$ref: "#/components/responses/Problem"}
   /events:
     get:
       operationId: listEvents
@@ -410,7 +471,7 @@ components:
         error:
           type: string
           enum: [unauthorized, forbidden, unknown_partner, not_found, price_changed, hold_expired, sold_out,
-                 rehold_limit, extend_limit, tour_not_served, invalid, unavailable]
+                 rehold_limit, extend_limit, tour_not_served, credit_hold_overdue, invalid, unavailable]
         message: {type: string, maxLength: 500}
         tour:
           $ref: "#/components/schemas/TourKey"
@@ -581,6 +642,13 @@ components:
           type: array
           items: {$ref: "#/components/schemas/QuoteLine"}
         total_b2b_price: {$ref: "#/components/schemas/Money"}
+        cancellation_policy:
+          oneOf:
+            - $ref: "#/components/schemas/CancellationPolicy"
+            - type: "null"
+          description: >-
+            1.3 (AA-1037). The fee schedule a confirm today would lock (basis in_force_today); the confirm locks the
+            one in force on its own day. Not part of price_hash. Null when no approved policy is in force.
     Departure:
       type: object
       additionalProperties: false
@@ -650,6 +718,13 @@ components:
         fx:
           $ref: "#/components/schemas/FxLock"
           description: 1.2 (AA-952). The held quote's FX lock, as POST /quotes answered it.
+        cancellation_policy:
+          oneOf:
+            - $ref: "#/components/schemas/CancellationPolicy"
+            - type: "null"
+          description: >-
+            1.3 (AA-1037). A confirmed hold: the policy locked at confirm (basis locked, what a cancel charges by);
+            any other hold: the one a confirm today would lock (basis in_force_today).
     ExtendRequest:
       type: object
       additionalProperties: false
@@ -687,6 +762,160 @@ components:
         lines:
           type: array
           items: {$ref: "#/components/schemas/BookingLine"}
+    PolicyTier:
+      type: object
+      additionalProperties: false
+      required: [min_days, fee_pct]
+      properties:
+        min_days:
+          type: integer
+          minimum: 0
+          maximum: 730
+          description: Cancelling at least this many days before departure (UTC day of the cancel to the start date).
+        fee_pct: {type: string, pattern: "^\\d+(\\.\\d{1,2})?$"}
+    CancellationPolicy:
+      type: object
+      additionalProperties: false
+      description: >-
+        1.3 (AA-1037). A cancel costs the fee_pct of the tier with the largest min_days at or below the days left
+        (0 on or after the start day) of the booking's quoted total. Tiers sorted by min_days, descending.
+      required: [policy_id, basis, tiers]
+      properties:
+        policy_id: {type: string, maxLength: 64}
+        basis: {type: string, enum: [in_force_today, locked]}
+        tiers:
+          type: array
+          minItems: 1
+          maxItems: 20
+          items: {$ref: "#/components/schemas/PolicyTier"}
+    Travellers:
+      type: object
+      additionalProperties: false
+      description: Counts only, never people.
+      required: [adult, child, infant]
+      properties:
+        adult: {type: integer, minimum: 0}
+        child: {type: integer, minimum: 0}
+        infant: {type: integer, minimum: 0}
+    ConfirmationLine:
+      type: object
+      additionalProperties: false
+      required: [line_ref, title, kind, service_date, pax, rooms, status, supplier_confirmations]
+      properties:
+        line_ref: {type: string, maxLength: 64}
+        title:
+          type: string
+          maxLength: 500
+          description: What was sold (the AA tour title, "hotel · room type" or the service title).
+        kind: {type: string, enum: [trip_plan, hotel_room, transfer, guide, activity, entrance, meal]}
+        service_date: {type: string, format: date}
+        nights: {type: [integer, "null"], minimum: 1}
+        pax: {$ref: "#/components/schemas/Travellers"}
+        rooms:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [occupancy, count]
+            properties:
+              occupancy: {type: string, enum: [single, double, twin, triple, family]}
+              count: {type: integer, minimum: 1}
+        status: {type: string, enum: [confirmed, on_request, declined, cancelled]}
+        supplier_confirmations:
+          type: array
+          items: {type: string}
+          description: The supplier's confirmation references of the confirmed supplier bookings covering the line.
+    BookingConfirmation:
+      type: object
+      additionalProperties: false
+      description: 1.3 (AA-1037). No traveller names, no prices.
+      required: [booking_id, trip_case_code, hold_id, proposal_ref, proposal_version, status, issued_at, confirmed_at,
+                 cancelled_at, start_date, end_date, travellers, lines, cancellation_policy]
+      properties:
+        booking_id: {type: string, maxLength: 64}
+        trip_case_code: {type: string, maxLength: 32}
+        hold_id: {type: string, maxLength: 64}
+        proposal_ref: {type: string, maxLength: 64}
+        proposal_version: {type: integer, minimum: 1}
+        status: {type: string, enum: [confirmed, cancelled]}
+        issuer:
+          type: [string, "null"]
+          maxLength: 300
+          description: The AA legal entity that issues the confirmation (the default billing entity), when set.
+        issued_at: {type: string, format: date-time}
+        confirmed_at: {type: [string, "null"], format: date-time}
+        cancelled_at: {type: [string, "null"], format: date-time}
+        start_date: {type: [string, "null"], format: date}
+        end_date: {type: [string, "null"], format: date}
+        travellers:
+          $ref: "#/components/schemas/Travellers"
+          description: The most travellers of one line, by age band.
+        lines:
+          type: array
+          items: {$ref: "#/components/schemas/ConfirmationLine"}
+        cancellation_policy:
+          oneOf:
+            - $ref: "#/components/schemas/CancellationPolicy"
+            - type: "null"
+    PartnerTerms:
+      type: object
+      additionalProperties: false
+      description: 1.3 (AA-1037). The agency's terms with AA, all from Booking data rows.
+      required: [as_of, payment, credit, cancellation_policy, clauses]
+      properties:
+        as_of: {type: string, format: date}
+        payment:
+          type: [object, "null"]
+          additionalProperties: false
+          required: [deposit_pct, balance_days_before_departure, settlement_due_days]
+          properties:
+            deposit_pct:
+              type: string
+              pattern: "^\\d+(\\.\\d{1,2})?$"
+              description: The deposit billed when a booking is confirmed, % of its B2B total.
+            balance_days_before_departure:
+              type: integer
+              minimum: 0
+              description: The balance is billed this many days before departure (booked later = billed in full).
+            settlement_due_days: {type: integer, minimum: 0}
+        credit:
+          type: object
+          additionalProperties: false
+          required: [status, holds_paused, overdue_invoices, oldest_overdue_days, overdue_amount]
+          properties:
+            status: {type: string, enum: [ok, warn, past_due]}
+            holds_paused:
+              type: boolean
+              description: True while past_due; POST /holds answers 409 credit_hold_overdue.
+            overdue_invoices: {type: integer, minimum: 0}
+            oldest_overdue_days: {type: integer, minimum: 0}
+            overdue_amount:
+              type: array
+              items: {$ref: "#/components/schemas/Money"}
+            warn_after_days: {type: [integer, "null"]}
+            suspend_after_days: {type: [integer, "null"]}
+        cancellation_policy:
+          oneOf:
+            - $ref: "#/components/schemas/CancellationPolicy"
+            - type: "null"
+          description: AA's default B2B policy in force today (basis in_force_today).
+        clauses:
+          type: array
+          description: AA's approved terms clauses, in display order (drafts are never listed).
+          items:
+            type: object
+            additionalProperties: false
+            required: [code, title, body, version, approved_at]
+            properties:
+              code: {type: string, maxLength: 40}
+              title: {type: string, maxLength: 120}
+              body: {type: string, maxLength: 4000}
+              free_cancel_days:
+                type: [integer, "null"]
+                minimum: 0
+                description: Days the agency may cancel free of charge after AA's notice (e.g. a corrected price).
+              version: {type: integer, minimum: 1}
+              approved_at: {type: string, format: date-time}
     CancelRequest:
       type: object
       additionalProperties: false
