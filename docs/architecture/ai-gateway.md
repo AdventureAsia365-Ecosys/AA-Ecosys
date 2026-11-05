@@ -148,7 +148,7 @@ Migrations 304, 306, 307, 320 and 322 (AA-1002, AA-1017).
   silently across families.
 - **Legacy keys:** since migration 327 no route names `haiku` or `sonnet`: every stage moved to the Converse keys of
   the same tier (`haiku-5-5`, `sonnet-5-5`). The catalog rows stay; a caller that still passes a legacy key reaches
-  acc3 through the legacy chain, inside the breaker since AA-1018 part 2, and logs `llm_deprecated_path_used`
+  acc3 through the legacy chain, inside the breaker (AA-1018 part 2), and logs `llm_deprecated_path_used`
   (proposed removal 2026-12-31). The aliases of 307 stay off.
 - **Data scopes** (CIS ADR 0012): a stage's content may use only connections whose `data_scope` its
   `allowed_scopes` lists. The Anthropic and OpenAI API connections are `vendor_direct`. The A-series writers (327) and
@@ -229,7 +229,7 @@ error class `quota_exhausted`: the connection stops and the call is never retrie
   tenant, job, request id, attempt number, status (`ok`, `refused`, `error`, `truncated`, `billed_unusable`),
   error class, latency, tokens (in, out, cache read, cache write, reasoning), units, cost, pricing mode,
   `prompt_hash` (sha256 of the system prompt), `prompt_version`, `is_shadow`, `is_experiment`. No prompt or completion
-  text is stored (DM-6.4). Bedrock Batch records and Jev calls (role `decide` since AA-1025 D3) write rows too.
+  text is stored (DM-6.4). Bedrock Batch records and Jev calls (role `decide`, AA-1025 D3) write rows too.
 - **Read federated** (ADR 0009 decision 8 as amended in S264, DM-10.4): DataForSEO and Geoapify keep their domain
   ledgers (`shared.dfs_call_log`, `geo.geocode_call`) with the contract's status, latency, app and stage (CIS 319 /
   346); Jev's per-question verdicts stay in `shared.decision_log`. The Calls tab, the trace and Providers read every
@@ -311,7 +311,7 @@ S264 live checks); the Anthropic API, route control and Guide tab rows on 2026-1
 | Anthropic API (`anthropic-direct`) | **Live** since 2026-11-05: sponsored key stored as `aa-llm/dev/anthropic-direct`, connection on, 150 USD a month with a hard stop; first provider of every Claude model by route control version 6 (§4.1) | Stored with the runbook [llm-anthropic-api-key](../ops/runbooks/llm-anthropic-api-key.md); 13 of 13 deployments answered a probe on 2026-11-05 |
 | Jev, DataForSEO, Geoapify as registry rows (322) with ledger rows | **Live** | Settings come from their rows, else env, else the old constants |
 | Bedrock Guardrails | **Live for the CRM scrub** (guardrail `aa-crm-dev-scrub`); the CIS registry row is seeded off | — |
-| TripPlanner on the shared core and the 323 views | **Live**; since AA-1027 E5 it reads the views only and fails closed (no table fallback) | CIS 351 revokes the grandfathered SELECT on `shared.llm_role_config` / `llm_model_catalog`; tp-024 drops `tripplanner.llm_spend_daily` |
+| TripPlanner on the shared core and the 323 views | **Live**; it reads the views only (AA-1027 E5) and fails closed (no table fallback) | CIS 351 revokes the grandfathered SELECT on `shared.llm_role_config` / `llm_model_catalog`; tp-024 drops `tripplanner.llm_spend_daily` |
 | CRM gateway v2 (crm-032 ledger, vendored core) | **Live, stub provider:** no `CRM_LLM_*` variable is set on Dev, so CRM AI drafting runs the deterministic stub | Real provider needs `CRM_LLM_PROVIDER` and the role, Bedrock only (root ADR 0008a) |
 | Tenant AI budget (Content studio) | **Live** (code and table); a tenant without a row has no budget | Amounts come from the business owner's plan prices |
 | App profile (345) and the geocode ledger columns (346) | **Live** in CIS (AA-1025 D3 / H1a, S264); TripPlanner and the CRM read their row later (H1b / H1c) | S264 live check: AI off for `cis`, one connection test refused at 0 USD, AI back on; all four apps `ai_enabled = true` at the close |

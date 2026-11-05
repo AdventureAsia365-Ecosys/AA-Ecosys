@@ -151,7 +151,7 @@ Migration 304, 306, 307, 320 và 322 (AA-1002, AA-1017).
   sang họ model khác.
 - **Key cũ:** từ migration 327 không route nào nêu `haiku` hay `sonnet`: mọi stage chuyển sang key Converse cùng hạng
   (`haiku-5-5`, `sonnet-5-5`). Dòng catalog vẫn giữ; bên gọi nào còn truyền key cũ sẽ tới acc3 qua chuỗi cũ, nằm trong
-  breaker từ AA-1018 phần 2, và ghi log `llm_deprecated_path_used` (đề xuất gỡ ngày 2026-12-31). Các alias của 307
+  breaker (AA-1018 phần 2), và ghi log `llm_deprecated_path_used` (đề xuất gỡ ngày 2026-12-31). Các alias của 307
   vẫn tắt.
 - **Phạm vi dữ liệu** (CIS ADR 0012): nội dung của một stage chỉ được dùng các connection có `data_scope` nằm trong
   `allowed_scopes` của nó. Connection Anthropic API và OpenAI API là `vendor_direct`. Các writer dòng A (327) và sáu
@@ -233,7 +233,7 @@ throttle.
   model, tenant, job, request id, số lần thử, trạng thái (`ok`, `refused`, `error`, `truncated`, `billed_unusable`),
   lớp lỗi, độ trễ, token (vào, ra, đọc cache, ghi cache, reasoning), đơn vị, chi phí, cách tính giá, `prompt_hash`
   (sha256 của system prompt), `prompt_version`, `is_shadow`, `is_experiment`. Không lưu văn bản prompt hay câu trả lời
-  (DM-6.4). Bản ghi Bedrock Batch và lời gọi Jev (vai trò `decide` từ AA-1025 D3) cũng ghi dòng.
+  (DM-6.4). Bản ghi Bedrock Batch và lời gọi Jev (vai trò `decide`, AA-1025 D3) cũng ghi dòng.
 - **Đọc liên kết** (ADR 0009 quyết định 8 theo sửa đổi S264, DM-10.4): DataForSEO và Geoapify giữ ledger miền của
   chúng (`shared.dfs_call_log`, `geo.geocode_call`) với trạng thái, độ trễ, app và stage theo hợp đồng (CIS 319 / 346);
   phán quyết theo từng câu hỏi của Jev vẫn ở `shared.decision_log`. Tab Calls, trace và Providers đọc mọi ledger cạnh
@@ -314,7 +314,7 @@ phép kiểm live S264); các dòng Anthropic API, route control và tab Hướn
 | Anthropic API (`anthropic-direct`) | **Đang chạy** từ 2026-11-05: khoá tài trợ lưu thành `aa-llm/dev/anthropic-direct`, connection bật, 150 USD mỗi tháng có dừng cứng; nhà cung cấp đầu tiên của mọi model Claude theo route control phiên bản 6 (§4.1) | Lưu theo runbook [llm-anthropic-api-key](../ops/runbooks/llm-anthropic-api-key.md); 13 trên 13 deployment trả lời probe ngày 2026-11-05 |
 | Jev, DataForSEO, Geoapify thành dòng sổ (322) có dòng ledger | **Đang chạy** | Cài đặt lấy từ dòng của chúng, nếu không thì env, nếu không nữa thì hằng số cũ |
 | Bedrock Guardrails | **Đang chạy cho bộ lọc CRM** (guardrail `aa-crm-dev-scrub`); dòng sổ CIS được gieo ở trạng thái tắt | — |
-| TripPlanner trên lõi dùng chung và các view 323 | **Đang chạy**; từ AA-1027 E5 nó chỉ đọc các view và đóng an toàn (không quay về đọc bảng) | CIS 351 thu hồi quyền SELECT được giữ lại trên `shared.llm_role_config` / `llm_model_catalog`; tp-024 xoá `tripplanner.llm_spend_daily` |
+| TripPlanner trên lõi dùng chung và các view 323 | **Đang chạy**; nó chỉ đọc các view (AA-1027 E5) và đóng an toàn (không quay về đọc bảng) | CIS 351 thu hồi quyền SELECT được giữ lại trên `shared.llm_role_config` / `llm_model_catalog`; tp-024 xoá `tripplanner.llm_spend_daily` |
 | Gateway CRM v2 (ledger crm-032, lõi vendor) | **Đang chạy, provider giả:** trên Dev không đặt biến `CRM_LLM_*` nào, nên việc soạn nháp AI của CRM chạy stub tất định | Provider thật cần `CRM_LLM_PROVIDER` và role, chỉ Bedrock (ADR gốc 0008a) |
 | Ngân sách AI tenant (Content studio) | **Đang chạy** (code và bảng); tenant không có dòng thì không có ngân sách | Số tiền lấy từ giá gói của chủ doanh nghiệp |
 | App profile (345) và các cột ledger geocode (346) | **Đang chạy** trong CIS (AA-1025 D3 / H1a, S264); TripPlanner và CRM đọc dòng của chúng sau (H1b / H1c) | Phép kiểm live S264: tắt AI cho `cis`, một test connection bị từ chối ở 0 USD, bật AI lại; cả bốn app `ai_enabled = true` lúc kết thúc |
