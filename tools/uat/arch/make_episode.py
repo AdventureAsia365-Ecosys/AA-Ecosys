@@ -134,6 +134,11 @@ def main(argv: list[str]) -> int:
     patterns = gate.load_patterns(priv)
     workspace = gate.default_workspace()
     allow = gate.load_allow(priv)
+    if not no_ngram and os.environ.get("ARCH_VIDEO_ALLOW_STALE") != "1":
+        stale = gate.stale_corpus(workspace)
+        if stale:
+            return fail("the n-gram corpus is behind origin (fast-forward it, or point ARCH_VIDEO_WORKSPACE / "
+                        "ARCH_VIDEO_ROOT_REPO at fresh worktrees):\n  " + "\n  ".join(stale), 2)
 
     # Layer 1: every authored string, the blog post and every drawn diagram label, before anything is rendered.
     blog = data.get("blog") or {}
