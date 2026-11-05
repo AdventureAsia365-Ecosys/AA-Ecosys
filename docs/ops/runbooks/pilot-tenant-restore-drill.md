@@ -9,8 +9,8 @@ audience: [engineer, devops, agent]
 applies_to: [aa-crm-dev-api, aa-cis-dev-db]
 last_reviewed: 2026-11-05
 review_every_days: 90
-last_tested: never
-tested_where: none
+last_tested: null
+tested_where: null
 related: [OPS-03-schema, OPS-03-pitr, OPS-05-ecs-exec, AA-969, AA-1028]
 ---
 
