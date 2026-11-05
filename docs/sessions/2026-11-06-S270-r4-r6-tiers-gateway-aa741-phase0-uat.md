@@ -21,7 +21,7 @@ auto mode (H3 AA-1008 + tạo user cs AA-1035). Playwright 1.65.0 phát hành d�
 
 ## Kết quả theo issue
 
-Done (8): **AA-1037**, **AA-1030**, **AA-1035**, **AA-1039**, **AA-1008**, **AA-1045**, **AA-1042**, **AA-1029**. Tạo **AA-1046**.
+Done (9): **AA-1037**, **AA-1030**, **AA-1035**, **AA-1039**, **AA-1008**, **AA-1045**, **AA-1042**, **AA-1029**, **AA-710** (06/11 ~06:10: tech lead quyết không đăng KAN-20, đóng benchmark). Tạo **AA-1046**.
 
 | Issue | Trạng thái | Kết quả | PR / bằng chứng |
 |---|---|---|---|
@@ -63,12 +63,12 @@ Chi tiết: `docs/audits/2026-11-06-S270-close/state-snapshot.md`.
 
 ## Jira
 
-7 nháp (PR-23, PR-17, PR-18, PR-22, PR-25, PR-26, KAN-20) ở `docs/audits/2026-11-06-S270-close/jira-drafts.md` — **chờ tech lead duyệt**
-rồi mới đăng. PR-20 kỳ 4 đến hạn thứ Hai 09/11.
+6 nháp (PR-23, PR-17, PR-18, PR-22, PR-25, PR-26) ở `docs/audits/2026-11-06-S270-close/jira-drafts.md` — **chờ tech lead duyệt**
+rồi mới đăng. **KAN-20 không đăng** (tech lead, 06/11 ~06:10). PR-20 kỳ 4 đến hạn thứ Hai 09/11.
 
 ## Việc cần làm đầu phiên sau (S271), theo thứ tự
 
-1. Jira: tech lead duyệt 7 nháp → đăng.
+1. Jira: tech lead duyệt 6 nháp → đăng (KAN-20 không đăng).
 2. AA-741 phase 1 trên 4 tenant audit (≈ 3–4 USD), rồi phase 2.
 3. AA-855: tải 23 video lên Drive; mở đường ghi UAT.
 4. AA-1038 R5 lát tiếp theo.
