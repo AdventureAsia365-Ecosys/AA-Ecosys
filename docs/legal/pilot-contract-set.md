@@ -1,7 +1,7 @@
 ---
 id: SEC-04-pilot-set
 title: "Pilot contract set: partner-terms clauses, AI and DPA incorporation, joint-controller clause, agency privacy notice"
-description: "What the pilot agency signs (ADR 0019 d16): the partner-terms clauses that incorporate the DPA and the AI Schedule v1.0 with the Anthropic Usage Policy effective 2026-11-12, the order of precedence, the joint-controller clause for embedded collection, the model privacy notice for the agency's own clients, and the readiness checks before signing."
+description: "What the pilot agency signs: clauses that incorporate the DPA and the AI Schedule (Anthropic Usage Policy from 2026-11-12), precedence, joint-controller clause, model privacy notice, readiness checks."
 type: reference
 status: draft
 owner: nghiep

@@ -226,7 +226,9 @@ company's name (ADR 0019 b19); tenants never hold a provider key.
   TripPlanner traveller text, not only as writing fallbacks of the T-series writers (since CIS 366 the tenant judges
   and the claim extraction send tenant content to the OpenAI API as soon as acc3 refuses GPT-6 Luna, not only as a
   last resort). Until they do, decision 10's "only makers named in the terms" is not met for the T-stages and
-  `tp_compose` that 366 opened.
+  `tp_compose` that 366 opened. *S269:* the DPA draft v0.2 names both direct APIs as sub-processors for the Content
+  studio stages ([DPA Annex 3](../legal/dpa-annex-3-subprocessors.md) §1.2), and the pilot contract set incorporates
+  the AI Schedule; both wait for the tech lead's read and counsel.
 - **Jev (TypeSafe)**: yes/no decision checks; for tenant content only for allowlisted tenants.
 - **DataForSEO, Geoapify**: keywords and place names only, never tenant text.
 - **Amazon (Nova) and Meta (Llama) models on Bedrock (acc2)**: fallback for judge and validate stages when acc3

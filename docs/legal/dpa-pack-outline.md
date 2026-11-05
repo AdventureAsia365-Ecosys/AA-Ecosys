@@ -7,9 +7,9 @@ status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-03
+last_reviewed: 2026-11-05
 review_every_days: 30
-related: [SEC-04, SEC-04-dpa, SEC-04-ai-schedule, SEC-04-packet, AA-820, AA-970]
+related: [SEC-04, SEC-04-dpa, SEC-04-ai-schedule, SEC-04-packet, SEC-04-dpa-agreement, SEC-04-pilot-set, AA-820, AA-970]
 ---
 
 # B2B contract pack, part 2: DPA pack outline
@@ -17,6 +17,19 @@ related: [SEC-04, SEC-04-dpa, SEC-04-ai-schedule, SEC-04-packet, AA-820, AA-970]
 > **Outline only.** Nothing below is clause text. It lists what part 2 of AA-820 must contain, where each fact comes
 > from, and what is still open. Drafting happens in S269–S271 and must be finished **before any real pilot PII reaches
 > Dev** (ADR 0019 d16). Counsel reviews the pack before the first paying agency (b20). Not legal advice.
+
+**Drafted on 2026-11-05 (S269), draft v0.2.** Every item below now has text:
+
+| Item | Page |
+|---|---|
+| P1 | [Data Processing Agreement](dpa.md) (supersedes the [DPA template v0.1](dpa-template.md)) |
+| P2 | [Annex 1: processing per app](dpa-annex-1-processing.md) |
+| P3 | [Annex 2: technical and organisational measures](dpa-annex-2-security.md) |
+| P4 | [Annex 3: sub-processors](dpa-annex-3-subprocessors.md) |
+| P5, P6 | [Annex 4: transfers, SCC fill-ins and TIA template](dpa-annex-4-transfers.md) |
+| P7, P8, P9 | [Pilot contract set](pilot-contract-set.md) (partner-terms clauses with the AI Schedule and the Anthropic Usage Policy, joint-controller clause, model privacy notice, readiness checks) |
+
+The table below stays as the plan of record for what each item had to cover.
 
 | | |
 |---|---|

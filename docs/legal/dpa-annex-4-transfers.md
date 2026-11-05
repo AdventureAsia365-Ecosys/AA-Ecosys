@@ -1,7 +1,7 @@
 ---
 id: SEC-04-dpa-annex4
 title: "DPA Annex 4: international transfers, SCC fill-ins and TIA template (draft v0.2)"
-description: "Annex 4 of the partner-agency DPA: the transfer basis per agency market (EU SCC Module 2 with its option choices, UK, Switzerland, Vietnam, Australia, others), the SCC Annex I-III cross-references, and a transfer impact assessment template with the destinations to assess (US hosting, cross-region AI inference, the direct Anthropic and OpenAI APIs)."
+description: "Annex 4 of the partner-agency DPA: transfer basis per agency market, EU SCC Module 2 option choices and Annex I-III cross-references, and a transfer impact assessment template."
 type: template
 status: draft
 owner: nghiep

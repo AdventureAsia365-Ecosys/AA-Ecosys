@@ -1,7 +1,7 @@
 ---
 id: SEC-04-dpa-annex3
 title: "DPA Annex 3: sub-processors (draft v0.2)"
-description: "Annex 3 of the partner-agency DPA (and SCC Annex III): every third party that may receive Agency Personal Data, with service, data, apps, processing location and transfer basis, taken from the live AI gateway routes and the AWS set-up; plus the vendors that are not sub-processors and the Vercel exit under ADR 0019 d23. No account IDs."
+description: "Annex 3 of the partner-agency DPA (SCC Annex III): every third party that may receive agency personal data, with data, apps and location, from the live AI gateway and AWS; plus non-sub-processors and the Vercel exit."
 type: reference
 status: draft
 owner: nghiep
