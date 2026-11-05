@@ -44,6 +44,19 @@ SNAP = {
          "price_in_per_mtok": None, "price_out_per_mtok": None, "price_cache_read_per_mtok": None,
          "price_cache_write_per_mtok": None},
     ],
+    # Schema 2 (AA-1042): names and states only. `secret_name` is planted to prove normalise drops any extra field.
+    "connections": [
+        {"connection_key": "zz-direct", "kind": "anthropic", "enabled": True, "secret_name": "zz/dev/never-kept"},
+        {"connection_key": "acc9", "kind": "bedrock", "enabled": False},
+    ],
+    "deployments": [
+        {"model_key": "zz-writer", "connection_key": "acc9", "enabled": True, "priority": 20,
+         "access_state": "access_denied"},
+        {"model_key": "zz-writer", "connection_key": "zz-direct", "enabled": True, "priority": 10,
+         "access_state": "ok"},
+        {"model_key": "zz-judge", "connection_key": "acc9", "enabled": False, "priority": 100,
+         "access_state": "unknown"},
+    ],
 }
 
 
@@ -90,9 +103,38 @@ class RenderTest(unittest.TestCase):
         self.assertEqual(g.redact(["acct " + "3" * 12]), ["acct [redacted]"])
         self.assertEqual(g.normalise(dict(SNAP, known_gaps=["acct " + "3" * 12]))["known_gaps"], ["acct [redacted]"])
 
+    def test_connections_and_provider_order(self) -> None:
+        page = g.render(SNAP)
+        self.assertIn("## Connections\n\n2 connections", page)
+        self.assertIn("| `acc9` | bedrock | no | 1 / 2 |", page)
+        self.assertIn("| `zz-direct` | anthropic | yes | 1 / 1 |", page)
+        self.assertIn("| `zz-judge` | `acc9` (100, unknown, off) |", page)
+        self.assertIn("| `zz-writer` | `zz-direct` (10, ok) → `acc9` (20, access_denied) |", page)
+        self.assertLess(page.index("| `acc9` | bedrock"), page.index("| `zz-direct` | anthropic"))
+
+    def test_registry_keeps_names_and_states_only(self) -> None:
+        snap = g.normalise(SNAP)
+        self.assertEqual(set(snap["connections"][1]), set(g.CONNECTION_FIELDS))
+        self.assertNotIn("never-kept", g.snapshot_text(SNAP))
+        self.assertEqual([d["connection_key"] for d in snap["deployments"] if d["model_key"] == "zz-writer"],
+                         ["zz-direct", "acc9"])
+        dirty = dict(SNAP, connections=[{"connection_key": "acc " + "4" * 12, "kind": "bedrock", "enabled": True}])
+        self.assertEqual(g.normalise(dirty)["connections"][0]["connection_key"], "acc [redacted]")
+
+    def test_registry_not_captured_says_so(self) -> None:
+        old = {k: v for k, v in SNAP.items() if k not in ("connections", "deployments")}
+        self.assertNotIn("connections", g.normalise(old))
+        self.assertIn("Not in this snapshot: it was captured before the generator read the connections",
+                      g.render(old))
+        empty = dict(SNAP, connections=[], deployments=[])
+        self.assertEqual(g.normalise(empty)["connections"], [])
+        self.assertIn("0 connections", g.render(empty))
+
     def test_wrong_schema_is_refused(self) -> None:
         with self.assertRaises(ValueError):
             g.render({"schema": "other", "routes": []})
+        with self.assertRaises(ValueError):       # schema 1 (no registry) needs a new capture, not a silent upgrade
+            g.render({"schema": "aa900-llm-routes/1", "routes": []})
 
 
 class SafetyTest(unittest.TestCase):

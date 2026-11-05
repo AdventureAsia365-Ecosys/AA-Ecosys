@@ -1,26 +1,34 @@
 ---
 id: ARCH-01-ai-gateway
 title: AI gateway (as built)
-description: How every paid AI and data call of the ecosystem is configured, routed, guarded, metered and observed today (root ADR 0009, gateway v2), with a live / planned table checked on 2026-11-01 and refreshed on 2026-11-03.
+description: How every paid AI and data call of the ecosystem is configured, routed, guarded, metered and observed today (root ADR 0009, gateway v2), with a live / planned table checked on 2026-11-01 and refreshed on 2026-11-05. The CIS admin AI gateway Guide tab shows this page next to the live tables.
 type: explanation
 status: draft
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-api, aa-cis-worker, tripplanner-lambda, aa-crm-api]
-last_reviewed: 2026-11-04
+last_reviewed: 2026-11-05
 review_every_days: 30
 related: [ARCH-01, ARCH-01-diagrams, APP-06-ai-register, APP-06-routes, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-642, AA-804, AA-1002, AA-1016, AA-1017, AA-1018, AA-1042, AA-1045]
 ---
 
 # AI gateway (as built)
 
-> **Status:** as built on 2026-11-01 (S263), refreshed on 2026-11-03 (S265). Applied on Dev on 2026-11-03, read from
-> each API's `/health/ready`: CIS every migration through 346 except the held contract file 336, TripPlanner tp-023 and
-> CRM crm-040. Live facts of 2026-11-01: ECS task definitions, the Secrets Manager secret names (names only), the
-> Bedrock guardrail list. The live checks of the S264 slices (340, 342, 343, 345) are in the S264 session log. The
-> decisions behind this page are in [ADR 0009](../adr/0009-ai-platform-and-provider-gateway.md); this page says what
-> of them runs today. The full stage list is the [AI Use Register](ai-use-register.md); the current routes are in
-> [`generated/llm-routes.md`](../generated/llm-routes.md) (snapshot of 2026-11-02T11:35Z: 40 stages, 20 models).
+> **Status:** as built on 2026-11-01 (S263), refreshed on 2026-11-03 (S265) and on 2026-11-05 (S270: route control
+> version 6, the Anthropic API key, CIS 376). Applied on Dev on 2026-11-03, read from each API's `/health/ready`: CIS
+> every migration through 346 except the held contract file 336, TripPlanner tp-023 and CRM crm-040; CIS 370 to 376 on
+> 2026-11-04 and 2026-11-05. Live facts of 2026-11-01: ECS task definitions, the Secrets Manager secret names (names
+> only), the Bedrock guardrail list. The live checks of the S264 slices (340, 342, 343, 345) are in the S264 session
+> log. The decisions behind this page are in [ADR 0009](../adr/0009-ai-platform-and-provider-gateway.md); this page
+> says what of them runs today. The full stage list is the [AI Use Register](ai-use-register.md); the current routes,
+> connections and provider order are in [`generated/llm-routes.md`](../generated/llm-routes.md) (a snapshot; its
+> capture time is on that page).
+>
+> **Where to read the live state:** the CIS admin page AI gateway › **Guide** (`/admin/ai-gateway?tab=guide`) shows
+> this page and, below it, tables read live from the gateway: the route of every stage with the deployment that would
+> serve it first, the model × connection matrix, the connection register (secret names only), the connection caps and
+> the stage coverage. When this page and those tables disagree, the tables are right. A CI check (docs lint "AI gateway
+> guide names") fails when this page names a stage, model, connection or secret that no longer exists.
 
 ## 1. What the gateway is
 
@@ -71,7 +79,7 @@ flowchart LR
     B2C[Bedrock acc2: Nova Lite, Llama 4 Scout and Maverick as judge and validate fallbacks]
     GR[Bedrock Guardrails acc2: CRM scrub]
     OA[OpenAI API: last rung of judge and writer routes]
-    AN[Anthropic API: no key]
+    AN[Anthropic API: sponsored key, first for Claude]
     JEV[Jev decisions]
     DFS[DataForSEO]
     GEO[Geoapify]
@@ -85,7 +93,7 @@ flowchart LR
   CORE --> VIEWS
   VIEWS --> RT
   LLMC --> B3 & B2E & B2C & OA & JEV & DFS & GEO
-  LLMC -.-> AN
+  LLMC --> AN
   TP --> B3 & B2E
   CRM --> GR
   CRM -.-> B3
@@ -144,30 +152,34 @@ Migrations 304, 306, 307, 320 and 322 (AA-1002, AA-1017).
   (proposed removal 2026-12-31). The aliases of 307 stay off.
 - **Data scopes** (CIS ADR 0012): a stage's content may use only connections whose `data_scope` its
   `allowed_scopes` lists. The Anthropic and OpenAI API connections are `vendor_direct`. The A-series writers (327) and
-  the six tenant writers (344) allow `{aws_only, vendor_direct}` with the OpenAI API model `gpt-6-luna-openai` as the
-  last fallback, so they leave AWS only when every AWS path is blocked; the TripPlanner, segment research and CRM
-  stages stay `aws_only`.
+  the six tenant writers (344) first allowed `{aws_only, vendor_direct}` with the OpenAI API model `gpt-6-luna-openai`
+  as the last fallback. Since migration 366 ("AWS preferred, not AWS only", tech lead S267) every active text stage
+  allows both scopes, so each reaches the Anthropic API for its Claude models and the OpenAI API for the GPT twin;
+  only the embedding stages stay `aws_only`. TripPlanner's own gateway still calls Bedrock only, and the CRM routes in
+  its own gateway.
 
 ### 4.1 Route control (admin, no deploy)
 
-The admin page AI providers › **Route control** (`/admin/ai-gateway?tab=controls`, AA-1042, CIS 370) changes routing
+The admin page AI gateway › **Route control** (`/admin/ai-gateway?tab=controls`, AA-1042, CIS 370) changes routing
 without a deploy. The gateway picks a change up within about 20 seconds (each process re-reads the settings row every
 20 s and drops its route caches when the version number moves).
 
 - **What it edits:** the order mode, the chain of every stage (primary and fallbacks, drag and drop) and the provider
   order of every model with more than one deployment.
-- **Presets:** "Prefer Anthropic API for Claude (sponsored)" puts the Anthropic API deployment of every Claude model
-  first and sets the order mode to `model_first`; "Prefer AWS" puts the AWS deployments of every model first. Presets
-  never change a chain.
+- **Presets:** "Prefer Anthropic API for Claude (sponsored)" (`prefer_anthropic_api`) puts the Anthropic API
+  deployment (`anthropic-direct`) of every Claude model first and sets the order mode to `model_first`; "Prefer AWS"
+  (`prefer_aws`) puts the AWS deployments of every model first. Presets never change a chain.
 - **Preview before saving:** the server walks every active stage with the proposed config (the same $0 resolver as
   `scripts/llm_ops/route_chain_check.py`, no model call) and returns the model and provider that would serve first,
-  next to the one in force.
+  next to the one in force. "Serves first" skips a deployment the account refuses on record (the probe or the breaker,
+  the Stage coverage card's own rule) and lists it with its reason, so a refused primary is never shown as the one
+  that serves.
 - **Rules on every save, preview, preset and revert (server side):** a selectable model for the stage (family rule,
   catalog, data scopes); a model reached only through a vendor API stays at the end of a chain or right behind the same
   model on AWS; a judge never of the writers' family; the two sides of a check pair on different makers; at most six
-  attempts per request; every active stage keeps a model that would be called now. A rule the live config already
-  breaks is a warning, not an error. A writer or judge chain change needs an eval run or a break-glass reason (the
-  break glass raises an admin bell).
+  attempts per request (`attempt_cap`); every active stage keeps a model that would be called now. A rule the live
+  config already breaks is a warning, not an error. A writer or judge chain change needs an eval run or a break-glass
+  reason (the break glass raises an admin bell).
 - **Versions:** every route change, the Routing tab's own edits included, is a row of
   `shared.llm_route_config_version` with who, when, the action (save, preset, revert, baseline, external), a note, the
   snapshot (order mode, chains, priorities) and the diff. A change made outside the admin (a migration) is recorded as
@@ -179,6 +191,20 @@ without a deploy. The gateway picks a change up within about 20 seconds (each pr
   for a call routed by the previous one.
 - **Who:** reads need `spend.read`; preview and every write need `ai.admin` (admin and ai_ops). A reader sees the
   routes, presets and versions with no control.
+
+**State on Dev (2026-11-05, S269).** The sponsored Anthropic API key is stored (`aa-llm/dev/anthropic-direct`) and the
+connection `anthropic-direct` is on, with a 150 USD monthly budget and a hard stop.
+
+- **Version 4:** the preset `prefer_anthropic_api`. The Claude 5.x models (`haiku-5-5`, `sonnet-5`, `sonnet-5-5`,
+  `opus-5-5`) call the Anthropic API first and acc3 second.
+- **CIS 376:** five catalog models reached only through the Anthropic API (`fable-5-1`, `fable-5`, `opus-5`,
+  `opus-4-8`, `opus-4-7`); `opus-4-6` and `opus-4-5` enabled (their acc3 rows stay off); nine new `anthropic-direct`
+  deployments at priority 100, behind AWS. The six-attempt cap made 20 family chains drop their lowest Claude rung;
+  the other-maker last rung stays. No stage routes Sonnet 5, Opus or Fable yet.
+- **Version 6 (in force):** `prefer_anthropic_api` applied again, so `haiku-4-5`, `sonnet-4-6`, `opus-4-6` and
+  `opus-4-5` call the API first too.
+- **Going back to AWS first:** apply the preset Prefer AWS. A revert to versions 3 to 5 is refused by `attempt_cap`
+  since 376 (their chains are one rung too long).
 
 ## 5. Guards
 
@@ -210,10 +236,10 @@ error class `quota_exhausted`: the connection stops and the call is never retrie
   ledger side by side; nothing is copied into one table.
 - **CIS admin, AI providers** (`/admin/ai-gateway`): tabs Providers (connections, Jev credit, availability),
   Routing, Route control (order mode, presets, chains, provider order, versions; §4.1), Models & trials (families,
-  shadow report, the read-only Experiments section), Budgets (every cap layer, tenant budgets), Calls (ledger search)
-  and Guide; the **Trace drawer** shows every attempt of a job or tour in time
-  order. **Cost Operations** (`/admin/cost-ops`) holds the money view, with the "AI & data spend" tab built from the
-  ledger.
+  shadow report, the read-only Experiments section), Budgets (every cap layer, tenant budgets), Calls (ledger search),
+  Trace and Guide (this page from the docs catalog, in the app language, plus the live tables named at the top); the
+  **Trace drawer** shows every attempt of a job or tour in time order. **Cost Operations** (`/admin/cost-ops`) holds
+  the money view, with the "AI & data spend" tab built from the ledger.
 - **Daily probe:** job kind `llm_connection_probe`, one small Test call per enabled text deployment (at most 30), daily
   from 05:00 UTC. It is **on** on Dev (`LLM_DAILY_PROBE=on` on the CIS api and worker, Infra #574). Each probe writes
   `access_state` and `last_probe_at`.
@@ -269,7 +295,7 @@ error class `quota_exhausted`: the connection stops and the call is never retrie
 ## 8. Live and planned
 
 Checked on 2026-11-01 and refreshed on 2026-11-03 (the `/health/ready` reads, the route snapshot of 2026-11-02 and the
-S264 live checks), unless the row says otherwise.
+S264 live checks); the Anthropic API, route control and Guide tab rows on 2026-11-05. A row may say otherwise.
 
 | Item | State | Evidence or next step |
 |---|---|---|
@@ -282,7 +308,7 @@ S264 live checks), unless the row says otherwise.
 | acc2 Bedrock embeddings (Cohere Embed v4) | **Live** | Used by CIS and TripPlanner search |
 | acc2 Bedrock candidate chat models (Nova Lite, Nova 2 Lite, Llama 4 Maverick, Llama 4 Scout, Kimi K3) | **Fallbacks of judge and validate routes, never of a writer:** Nova Lite on the platform (331) and tenant (332) judge / validate stages and before the OpenAI hop of the judge routes (333); Llama 4 Scout for the place card check; Llama 4 Maverick for `a3_place_dedupe` (339). Nova 2 Lite and Kimi K3 are on no route | Format checked per stage by the contract smoke (CIS job `llm_contract_smoke`) before each change; judge calibration and A/B of the ladder (ADR 0009 decision 12, AA-900) skipped by the S263 amendment of decision 14, so a brand audit `pass` answered on acc2 is held as `manual_check` (`BRAND_AUDIT_UNCALIBRATED_JUDGE`) |
 | OpenAI API (`openai-direct`) | Key present (`aa-cis/dev/openai-key`); **last rung** of most judge routes, `a3_place_dedupe`, the A-series writers (327) and the six tenant writers (344); monthly budget 10 USD, alert at 80 %, hard stop (327) | While acc3 refuses, tenant writing runs on it (a live `t9_write` answered through it on 2026-11-02); balance from the credit ledger (343) |
-| Anthropic API (`anthropic-direct`) | **Not live:** no `aa-llm/` secret exists; deployments seeded behind acc3 (306) with the connection off | The tech lead creates the key with a workspace spend limit; then the secret is stored and the connection switched on (runbook [llm-anthropic-api-key](../ops/runbooks/llm-anthropic-api-key.md)) |
+| Anthropic API (`anthropic-direct`) | **Live** since 2026-11-05: sponsored key stored as `aa-llm/dev/anthropic-direct`, connection on, 150 USD a month with a hard stop; first provider of every Claude model by route control version 6 (§4.1) | Stored with the runbook [llm-anthropic-api-key](../ops/runbooks/llm-anthropic-api-key.md); 13 of 13 deployments answered a probe on 2026-11-05 |
 | Jev, DataForSEO, Geoapify as registry rows (322) with ledger rows | **Live** | Settings come from their rows, else env, else the old constants |
 | Bedrock Guardrails | **Live for the CRM scrub** (guardrail `aa-crm-dev-scrub`); the CIS registry row is seeded off | — |
 | TripPlanner on the shared core and the 323 views | **Live**; since AA-1027 E5 it reads the views only and fails closed (no table fallback) | CIS 351 revokes the grandfathered SELECT on `shared.llm_role_config` / `llm_model_catalog`; tp-024 drops `tripplanner.llm_spend_daily` |
@@ -295,9 +321,10 @@ S264 live checks), unless the row says otherwise.
 | Prompt register | Table live; until a migration registers versions, `prompt_version` is NULL | A migration inserts the first versions (`scripts/prompt_registry_check.py --sql`) |
 | Stage × model parameters | Table live, no rows at its release (AA-1017) | Filled when a trial needs it |
 | Legacy keys and aliases (`LLM_LEGACY_ALIASES`) | No route names a legacy key (327); aliases **off** | Legacy paths proposed for removal 2026-12-31 |
-| Warm independent path per stage class (decision 5 invariant) | A-series and tenant writers: met through the OpenAI API last rung (327, 344). TripPlanner `tp_compose` and segment research: acc3 only, covered by their declared degrade modes (TripPlanner `basic_narration`, 326; segment research `queue_retry`, 335) | A Claude warm path still needs the Anthropic key |
-| Route control: order mode in the DB, provider order, presets, preview, versions with revert, route version on the ledger (CIS 370) | **Built** (AA-1042, S268); live once 370 is applied and the code PR deployed | Live check: Route control tab shows version 1 (baseline); a preview of "Prefer AWS" lists the provider-order diff; `llm_call_log.route_config_version` is set on new CIS rows. The retired `gpt-4.1` deployment is switched off by 370 (the daily probe stops calling it) |
-| Monthly failover drill | **Not scheduled** | Starts once both direct APIs are funded |
+| Warm independent path per stage class (decision 5 invariant) | A-series and tenant writers: met through the OpenAI API last rung (327, 344) and, since 2026-11-05, the Anthropic API for every Claude model. TripPlanner `tp_compose`: Bedrock only in its own gateway, covered by its declared degrade mode (`basic_narration`, 326) | TripPlanner gains the vendor adapters later |
+| Route control: order mode in the DB, provider order, presets, preview, versions with revert, route version on the ledger (CIS 370) | **Live** (AA-1042, S268); version 6 in force on 2026-11-05 (§4.1) | S268 live check: presets, revert and a preview with 0 errors, audited versions; `llm_call_log.route_config_version` set on new CIS rows. The retired `gpt-4.1` deployment is switched off by 370 (the daily probe stops calling it) |
+| Guide tab: this page plus live routes, matrix, connection register, caps and coverage | **Built** (AA-1042, S270); shows this page once the Docs sync bundle holds it | The tab names the deployment that serves each stage first, with the same resolver as the Route control preview |
+| Monthly failover drill | **Not scheduled** | Both direct APIs are funded since 2026-11-05; the drill is not planned yet |
 | Second region for eval connections | Not decided | ADR 0009 "Not decided here" |
 | HTTP gateway service | Deferred | Reconsidered when three apps call it in production (decision 13) |
 
