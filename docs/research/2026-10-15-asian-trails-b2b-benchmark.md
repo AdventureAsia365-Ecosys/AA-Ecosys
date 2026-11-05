@@ -1,5 +1,10 @@
 # Asian Trails — B2B benchmark (reference note)
 
+> **Superseded (S269, 05/11/2026):** the sourced benchmark against the R4 design is
+> [`2026-11-05-asian-trails-b2b-benchmark/README.md`](2026-11-05-asian-trails-b2b-benchmark/README.md). It corrects
+> two facts below: eConnect was built with 11Infotech, not on Lemax, and the Cloud Tariff is one agents-only hub, not
+> rate sheets published per partner. This page is kept as the first look.
+
 Status: reference, first look only. Source: Jira KAN-20 ("look at IT solutions from Asian Trails", Leigh Wilson,
 16/03/2026). On 01/10/2026 Leigh replied that it is "a B2B benchmark". Nghiệp's first-look comment is 10444,
 from 01/10/2026. Saved in S237 (15/10/2026) so the B2B design work has something to compare against.
