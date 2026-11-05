@@ -41,7 +41,10 @@ library plus a control plane.
 - **The call path runs inside each app.** CIS calls it as `shared/llm_client/`. TripPlanner and the CRM vendor the
   pure core `aa_llm` (standard library only) as a byte copy and keep their own adapters.
 - **Every attempt writes one ledger row**, including refused and failed attempts at 0 USD. The ledger is the source of
-  truth for cost, latency and outcome.
+  truth for cost, latency and outcome. One exception (AA-1042, CIS #1332): a route rung whose circuit is open after a
+  refusal (access denied, quota, credential) is deferred without a call and without a row of its own; it is listed in
+  the answered row's `quality_signal.route_skips`. When no live rung answers, the deferred rungs are tried last and
+  write their rows as before.
 
 | Caller | How it calls | Config it reads | Ledger it writes |
 |---|---|---|---|
@@ -250,7 +253,8 @@ error class `quota_exhausted`: the connection stops and the call is never retrie
   answered requests per rung (primary = the first model on its first provider; fallback = a later route position,
   a later provider of the first model, or a reply the gateway marked `fallback_used`, so a fallback model that
   answers while the first model is skipped without an attempt (open circuit, disabled, budget) still counts as a
-  fallback), the requests with every attempt (reason, error class, latency, cost; a Calls row links to it) and the
+  fallback), the requests with every attempt (reason, error class, latency, cost; a Calls row links to it; a deferred
+  rung from `route_skips` shows as a `skipped` attempt, "Not called: circuit open", at 0 USD) and the
   catalog (A1) content a fallback model wrote. The tenant content (T2 versions, T9 pieces) is a Tenant QA read,
   `GET /admin/content-quality/fallback-writes` (`tenant_content.read`), shown on the tab only to a role that holds it. `POST /admin/ai-gateway/route-trace/test` sends 1-6 tiny real requests on one stage,
   optionally refusing its first model for those requests only (no breaker or circuit change): the live check.

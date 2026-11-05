@@ -6,7 +6,7 @@
 
 **Rules:** at session start read §1–§3 and pick the session's parallel items from §3 and §3b by slot (skip items blocked in §2 or by the "blocked by" notes). At session end update the Status column, move closed items to §5, add new items. Re-audit only when this file is older than ~2 weeks or many issues were created outside sessions.
 
-_Last updated: S269, 05/11/2026 (Claude Code, Ultracode; 09:30 → ~18:00 +07). **Closed in S269: AA-969, AA-1036.** Live on Dev with checks: AA-969 load test (50 agencies, SLOs held) + d16 pilot protections + restore drill + export DEK fix; AA-1036 invited user and add-on round trip, CRM-only Add-ons (`tenant.addons.v1`); AA-1035 R2 close-out (375, crm-045); AA-1008 ShellFrame + visual job + empty suppressions (H3 left); AA-1037 R4 agency billing core + G1/G2/G4/G5/G6 (bk-041…044, CIS 377); AA-1030 agency tiers + CRM retail markup + G3 tariff (bk-043, crm-046); Anthropic API key plugged, 13/13 Claude models via the API, route control v6 prefers the API (CIS 376). Next session: **S270** (Jira round with the S268 + S269 drafts first, then AA-741 phase 0 and the R4 live checks)._
+_Last updated: S270, 06/11/2026 (Claude Code, Ultracode; 05/11 18:06 → 06/11 ~03:30 +07). **Closed in S270: AA-1037, AA-1030, AA-1035, AA-1039, AA-1008, AA-1045, AA-1042, AA-1029.** Live on Dev with checks: R4 agency invoice flow + B2C writes off (410) + Tenant 360 Billing; tiers silver/gold + AA prices in the CRM; customer_success E2E identity (CIS 378) with scoped reads; R6 fan-out; H3 required checks; usage explorer; gateway Guide tab + deferred refusal rungs (#1332); rate-sheet import 19/19 + price readiness (890/892 tours have no components: a data task). AA-741 phase 0 done (≈ 2.0 USD, report `docs/audits/2026-11-05-S270-aa741-phase0/`); AA-1038 R5 slice 1 (tp-025 shadow RLS); AA-855 23 UAT videos PASS. New: AA-1046 (R4b). Jira: 7 drafts wait for the tech lead (`docs/audits/2026-11-06-S270-close/jira-drafts.md`)._
 
 ## 1. Time-gated checks (do these first when due)
 
@@ -142,29 +142,22 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | S280 | AA-1041, AA-1004 | R7 item 7 + visual tests against `next start` → close R7. AA-1004 P2–P6 from the go-live date, or from pilot week 3 at the latest (q-pilot). |
 | after S280 / date-gated | AA-1024, AA-788, AA-1026, AA-998, AA-873, AA-1003, CRM-after-R3, AA-980, AA-881, parked | AA-1024 D8 ≥10/11 ~12:00Z; AA-788 ≥19/11 with an LLM path (~S286+); first session ≥01/12: AA-1026 D6 (November bill), AA-998 acc1 = 0 USD, AA-873 first-month cost read, AA-1004 org invites; AA-1003 R5–R7; CRM add-ons AA-960, AA-963, AA-965, AA-968, AA-970, AA-1011, AA-1012 in the merged app (≥60 % capacity stays on content); AA-980 at go-live; AA-881 05/2027; parked AA-842, AA-781, AA-782, AA-704, AA-948, AA-922 (TL-11 lift). |
 
-### Open issues by slot (46 after the S267 Linear sync)
+### Open issues by slot (after the S270 close: 8 closed, AA-1046 added)
 
 | Issue | Work | Milestone | Slot | S265 verdict | Status |
 |---|---|---|---|---|---|
 | AA-1003 | [Reporting] Build the ecosystem report engine and the 63-report catalog (appr… | M-R0 | after S280 | re-scope | In Progress |
-| AA-1042 | [AI gateway] Route control center: family fallback chains, admin-editable provider order, route trace an… | M1b | S268 | new S267 | In Progress |
 | AA-1004 | [Infra] Implement the lean AWS model: company organization, Identity Center,… | M5 | S268 | re-scope | In Progress |
 | AA-1021 | AA-1021 (content series, details private) | parked | S267 | re-scope | In Progress |
-| AA-1039 | [Admin] R6 AA Admin IA and Writing Lab: Tenants group, AA Catalogue vs Tenant… | M-R6 | S268 | re-scope | In Progress |
 | AA-1036 | [Portal] R3 one agency app: merge portal/ into web/, one sign-in, Content hom… | M-R3 | S268 | re-scope | In Progress |
-| AA-1035 | [Platform] R2 AA staff roles and tenant scope: six new roles, account-manager… | M-R2 | S268 | re-scope | In Progress |
 | AA-969 | [CRM W7] CRM-37a Security review, SLOs, bounded load test | M-P1 | S269 | re-scope | Backlog |
 | AA-1040 | [Kit] AI notice and machine-readable AI-content marking across apps (EU AI Ac… | M-P1 | S269 | keep | In Progress |
-| AA-1045 | [AI gateway] Usage analytics explorer | M1b | S270 | new S267 | Backlog |
-| AA-1008 | [UI] Kit shell, visual job and close-out (S6e + S1d/S2c + S6f/H3): shared She… | M-R3 | S270 | re-scope | Backlog |
-| AA-741 | [T-series audit] End-to-end T0→T11 test run on controlled tenants + per-mecha… | M2a | S270 | re-scope | Backlog |
+| AA-741 | [T-series audit] End-to-end T0→T11 test run on controlled tenants + per-mecha… | M2a | S270 | re-scope | In Progress |
 | AA-820 | [Legal] Tenant Terms clause for the Anthropic Usage Policy (effective 12/11/2… | M-P1 | ≤11/11 | re-scope | In Progress |
 | AA-710 | [AAA] B2B benchmark: Asian Trails (eConnect portal, API, Lemax back office) | M-R4 | S271 | keep | Backlog |
-| AA-1029 | [Pricing] Tour price chain ready for data: CIS master tour → Booking trip pla… | M-R4 | S271 | re-scope | In Progress |
-| AA-1030 | [Pricing] Agency price tiers: B2B margin per partner tier or contract rate ca… | M-R4 | S271 | re-scope | Todo |
-| AA-1037 | [Booking] R4 Booking B2B only: drop the B2C side, every invoice issued from B… | M-R4 | S271 | re-scope | Backlog |
-| AA-855 | [UAT] Ecosystem UAT with recorded run videos: CIS admin + tenant portal, Trip… | M-P1 | S272 | re-scope | Backlog |
-| AA-1038 | [TripPlanner] R5 multi-tenant white-label TripPlanner: tenant_id + RLS, per-t… | M-P2 | S273 | re-scope | Backlog |
+| AA-855 | [UAT] Ecosystem UAT with recorded run videos: CIS admin + tenant portal, Trip… | M-P1 | S272 | re-scope | In Progress |
+| AA-1038 | [TripPlanner] R5 multi-tenant white-label TripPlanner: tenant_id + RLS, per-t… | M-P2 | S273 | re-scope | In Progress |
+| AA-1046 | [Booking] R4b B2C drop and VAT e-invoice provider API | M-R4 | S274 | new S270 | Backlog |
 | AA-1024 | [AI gateway] CIS core hardening + bypass guards: stage kill switch, prompt_ve… | M1b | ≥10/11 | re-scope | In Progress |
 | AA-911 | [Identity] Staff sign-in for Booking (and CIS) Vercel Previews, then retire t… | M5 | S275 | re-scope | Backlog |
 | AA-1041 | [TripPlanner] R7 TripPlanner UX: place photos, activity icons, map/itinerary… | M-R7 | S277 | re-scope | Backlog |
@@ -250,6 +243,18 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-697 | Architecture diagrams with official AWS icons — ecosystem + each repo | S256 | **Done S257** (§5c): pilot approved under the S257 session plan (root #320); drift findings closed (Booking ops-docs bucket built S256, EFS removed S257 Infra #492) | — |
 | AA-710 | B2B benchmark: Asian Trails (eConnect, API, Lemax) | M-R4 | **S265:** slot S271 (R4 start): update the note against the R4 design (AA-1037, AA-1029, AA-1030, 'Book with AA' d17), map the gaps to issues, KAN-20 draft at that session's end, then close | — |
 | AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 | **S262:** AA-952, AA-954, AA-956, AA-957, AA-964, AA-971 closed (§5); AA-958 → S263. AA-952 was In Progress since S259 (slice 1 = C-M3 confirm, §3 row 0ah); **re-planned at the S260 close**: slots S261–S266, go-real ≥S267, see §3b "Kế hoạch CRM W5–W8 sau S260" | AA-958 needs a free Twilio trial for the live proof; AA-965 needs an LLM path |
+
+## 5. Closed in S270
+
+- **AA-1037** (R4) — Done: live agency invoice flow (draft → issue → DEV e-invoice → maker-checker → paid; overdue → past_due → booking hold → CIS billing lock → paid → unlock), B2C writes 410 (34/34), agency invoice read via CRM (37 PASS), Tenant 360 Billing + Trade group (Booking #194–#196, CIS #1326, root #569–#571). Remainder → AA-1046.
+- **AA-1030** (tiers) — Done: silver/gold on one tour, 10 % rate card, tariff = quote engine, CRM markup, AA prices page in the CRM (Partner #235, #236; Booking #197).
+- **AA-1035** (R2) — Done: Dev-only read-only customer_success E2E identity (A10d, CIS 378), scope 7/7, Cognito Playwright 28 shots, view-as audit; write controls and the Review badge follow the role (CIS #1323–#1325, #1331, #1334; Partner #234; Infra #691, #692; root #567).
+- **AA-1039** (R6) — Done: redirects 15/15, 48 R6 shots, retire → restore fan-out (CIS #1327).
+- **AA-1008** (kit close-out) — Done: H3, Visual + Kit consumers required on the merge queue (CIS #1322, Partner #233, Booking #193).
+- **AA-1045** (usage explorer) — Done: rollup = ledger, CSV, drill, trace evidence (CIS #1328, #1329).
+- **AA-1042** (route control) — Done: Guide tab, refusal-circuit rungs deferred, route test FORCED 16/16 + NATURAL 11/11 (CIS #1329, #1332; root #572).
+- **AA-1029** (price chain) — Done: rate-sheet Excel import 19/19 (rolled back), price readiness report, AUD 422 + Retry-After (Booking #197, #198; Partner #236).
+
 
 ## 5. Closed in S269
 

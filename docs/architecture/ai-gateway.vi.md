@@ -43,7 +43,10 @@ là một thư viện cộng một control plane.
 - **Đường gọi chạy bên trong từng app.** CIS gọi nó dưới dạng `shared/llm_client/`. TripPlanner và CRM vendor phần lõi
   thuần `aa_llm` (chỉ thư viện chuẩn) dưới dạng bản sao từng byte và giữ adapter riêng.
 - **Mỗi lần thử ghi một dòng ledger**, kể cả lần bị từ chối và lần lỗi, ở 0 USD. Ledger là nguồn sự thật về chi phí,
-  độ trễ và kết quả.
+  độ trễ và kết quả. Một ngoại lệ (AA-1042, CIS #1332): nấc route có circuit đang mở sau một lần bị từ chối (không có
+  quyền, hết hạn mức, thông tin xác thực) được dời lại, không gọi và không ghi dòng riêng; nó được liệt kê trong
+  `quality_signal.route_skips` của dòng được trả lời. Khi không nấc nào còn sống trả lời, các nấc bị dời được thử sau
+  cùng và ghi dòng như trước.
 
 | Bên gọi | Gọi thế nào | Đọc cấu hình nào | Ghi ledger nào |
 |---|---|---|---|
@@ -254,7 +257,8 @@ throttle.
   mỗi nấc (chính = model đầu tiên trên nhà cung cấp đầu tiên của nó; dự phòng = một vị trí route sau, một nhà cung cấp
   sau của model đầu tiên, hoặc câu trả lời gateway đánh dấu `fallback_used`, nên một model dự phòng trả lời khi model
   đầu bị bỏ qua mà không thử (circuit mở, đang tắt, ngân sách) vẫn tính là dự phòng), các request với mọi lần thử (lý
-  do, lớp lỗi, độ trễ, chi phí; một dòng Calls liên kết tới nó) và nội dung catalog (A1) do một model dự phòng viết. Nội
+  do, lớp lỗi, độ trễ, chi phí; một dòng Calls liên kết tới nó; nấc bị dời trong `route_skips` hiện thành lần thử
+  `skipped`, "Không gọi: circuit mở", 0 USD) và nội dung catalog (A1) do một model dự phòng viết. Nội
   dung tenant (phiên bản T2, mẩu T9) là một lượt đọc Tenant QA, `GET /admin/content-quality/fallback-writes`
   (`tenant_content.read`), chỉ hiện trên tab cho vai trò có quyền đó. `POST /admin/ai-gateway/route-trace/test` gửi 1-6
   request thật rất nhỏ trên một stage, tuỳ chọn từ chối model đầu tiên của nó chỉ cho các request đó (không đổi breaker

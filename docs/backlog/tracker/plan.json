@@ -1,8 +1,8 @@
 {
- "updated": "2026-11-05",
- "synced_at": "2026-11-05T10:53Z",
- "session": "S269",
- "next_session": "S270",
+ "updated": "2026-11-06",
+ "synced_at": "2026-11-05T20:11Z",
+ "session": "S270",
+ "next_session": "S271",
  "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
  "projects": {
   "data": "Data Platform",
@@ -809,6 +809,34 @@
   }
  ],
  "log": [
+  {
+   "session": "S270",
+   "date": "06/11/2026",
+   "closed": [
+    "AA-1037",
+    "AA-1030",
+    "AA-1035",
+    "AA-1039",
+    "AA-1008",
+    "AA-1045",
+    "AA-1042",
+    "AA-1029"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-1046"
+   ],
+   "reopened": [],
+   "notes": [
+    "AA-1037: luồng hoá đơn đại lý live (maker-checker, quá hạn → chặn giữ chỗ + khoá CIS → trả → mở), tắt ghi B2C 410, Tenant 360 Billing",
+    "AA-1030: 2 đối tác silver/gold cùng tour, rate card 10 %, bảng giá AA trong CRM (owner + agent)",
+    "AA-1035: user E2E customer_success chỉ đọc (CIS 378), phạm vi 7/7, nút ghi + badge Review theo vai trò",
+    "AA-1039 R6 + AA-1008 H3 + AA-1045 explorer + AA-1042 (dời nấc bị chặn, route test 16/16 + 11/11) Done",
+    "AA-1029: import Excel 19/19, báo cáo sẵn sàng giá — 890/892 tour chưa có thành phần (việc dữ liệu)",
+    "AA-741 phase 0: đại lý nhận 8/8 tour, max_tokens sửa (#1330), ≈ 2,0 USD; AA-1038 R5 lát 1 live; AA-855 23 video UAT PASS",
+    "Jira: 7 nháp chờ tech lead duyệt"
+   ]
+  },
   {
    "session": "S269",
    "date": "05/11/2026",
@@ -1733,13 +1761,13 @@
   {
    "id": "AA-855",
    "title": "[UAT] Ecosystem UAT with recorded run videos: CIS admin + tenant portal, TripPlanner, AA-Booking",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "portal",
    "milestone": "M-P1",
    "session": "S272",
    "size": "L",
-   "next": "UAT · S268 gộp kế hoạch series sản phẩm (PV ~27 video) + video vận hành (UAT/G/REL/BUG) — docs/audits/2026-11-05-S268-video-plan; vòng 1 S272–S274",
+   "next": "Vòng 1: 23 video PASS (S270); tải lên Drive; đường ghi theo vai trò",
    "needs": ""
   },
   {
@@ -1781,13 +1809,13 @@
   {
    "id": "AA-741",
    "title": "[T-series audit] End-to-end T0→T11 test run on controlled tenants + per-mechanism audit report (same method as the S218 A-series audit)",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S270",
+   "session": "S271",
    "size": "XL",
-   "next": "M2a — phase 0 trên tenant_provision (tech lead dời từ S269)",
+   "next": "M2a — phase 0 xong S270 (≈ 2,0 USD); phase 1: 3 tour/thương hiệu đủ kênh (≈ 3–4 USD), rồi phase 2 (48 tour)",
    "needs": ""
   },
   {
@@ -1983,18 +2011,6 @@
    "needs": "Business owner: ngày go-live + đại lý thật đầu tiên"
   },
   {
-   "id": "AA-1008",
-   "title": "[UI] Kit shell, visual job and close-out (S6e + S1d/S2c + S6f/H3): shared ShellFrame, visual job 1440/390 light/dark for CIS/portal/CRM web, empty suppressions, required checks",
-   "status": "In Review",
-   "priority": "No priority",
-   "project": "portal",
-   "milestone": "M-R3",
-   "session": "S270",
-   "size": "M",
-   "next": "UI — chỉ còn H3: tech lead đăng nhập GitHub đặt check bắt buộc → đóng",
-   "needs": "Tech lead đăng nhập GitHub để bật check bắt buộc (H3)"
-  },
-  {
    "id": "AA-1011",
    "title": "[CRM] Microsoft 365 + BYO calendar connect: mail send-as for M365 and SMTP, calendar OAuth sync (Google calendar.events / Microsoft Graph)",
    "status": "Backlog",
@@ -2043,76 +2059,16 @@
    "needs": ""
   },
   {
-   "id": "AA-1029",
-   "title": "[Pricing] Tour price chain ready for data: CIS master tour → Booking trip plan, cost sheet from supplier rates, price.from.v1 view for TripPlanner and portal",
-   "status": "In Review",
-   "priority": "High",
-   "project": "tpbk",
-   "milestone": "M-R4",
-   "session": "S271",
-   "size": "L",
-   "next": "R4 · S268 portal Marketplace hiện 'From $235' (bk-040, smoke 67/67 + ảnh); còn: nhập bảng giá thật, giá theo hạng đại lý (AA-1030)",
-   "needs": ""
-  },
-  {
-   "id": "AA-1030",
-   "title": "[Pricing] Agency price tiers: B2B margin per partner tier or contract rate card, suggested retail markup in the CRM",
-   "status": "In Review",
-   "priority": "Medium",
-   "project": "tpbk",
-   "milestone": "M-R4",
-   "session": "S270",
-   "size": "M",
-   "next": "R4 — kiểm live 2 đối tác khác bậc + ảnh; câu hỏi biên cho business owner qua Jira; nút bảng giá CRM chờ quyết định vai trò",
-   "needs": ""
-  },
-  {
-   "id": "AA-1035",
-   "title": "[Platform] R2 AA staff roles and tenant scope: six new roles, account-manager tenant book, read-only view-as",
-   "status": "In Review",
-   "priority": "High",
-   "project": "portal",
-   "milestone": "M-R2",
-   "session": "S270",
-   "size": "L",
-   "next": "R2 — tạo user E2E customer_success, kiểm live phạm vi tenant → đóng",
-   "needs": ""
-  },
-  {
-   "id": "AA-1037",
-   "title": "[Booking] R4 Booking B2B only: drop the B2C side, every invoice issued from Booking (SaaS + settlement)",
-   "status": "In Review",
-   "priority": "Medium",
-   "project": "tpbk",
-   "milestone": "M-R4",
-   "session": "S270",
-   "size": "L",
-   "next": "R4 — kiểm live luồng hoá đơn (2 staff maker-checker, CIS tick, credit stop); fixture layout-mock; Tenant 360 Billing; lát bỏ B2C",
-   "needs": ""
-  },
-  {
    "id": "AA-1038",
    "title": "[TripPlanner] R5 multi-tenant white-label TripPlanner: tenant_id + RLS, per-tenant brand, leads to the tenant CRM, frontend on ECS (Dev)",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M-P2",
    "session": "S273",
    "size": "XL",
-   "next": "R5 · lát 1 xong S270: tp-025 (tenant_id + RLS shadow trên sessions/trip_drafts/trip_events/outbox, tenant demo aa-tripplanner) + Lambda assembly gắn tenant demo; tiếp S274: view contract catalog.v_tenant_tripplanner_v1 + đường /{slug} + BFF ký tenant assertion; sau: lead.submitted.v1, ECS + CloudFront + WAF (S275), FORCE RLS (S276)",
+   "next": "R5 lát 1 live S270 (tp-025 shadow RLS, Lambda gắn tenant); lát 2: view tenant tripplanner",
    "needs": ""
-  },
-  {
-   "id": "AA-1039",
-   "title": "[Admin] R6 AA Admin IA and Writing Lab: Tenants group, AA Catalogue vs Tenant content QA, AI & spend, Writing Lab per stage, AA-subject gate, tour retirement fan-out",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "portal",
-   "milestone": "M-R6",
-   "session": "S270",
-   "size": "L",
-   "next": "R6 · S268 live: route theo pii_class (373), Tenant 360 route, Catalogue settings, Place cards (A), Lab Releases/Metrics; còn: kiểm retire→restore",
-   "needs": "Tech lead: site WordPress test mới (kiểm retire→restore)"
   },
   {
    "id": "AA-1040",
@@ -2140,28 +2096,16 @@
    "needs": ""
   },
   {
-   "id": "AA-1042",
-   "title": "[AI gateway] Route control center: family fallback chains, admin-editable provider order, route trace and fallback alerts",
-   "status": "In Review",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M1b",
-   "session": "S270",
-   "size": "L",
-   "next": "Gateway — route v6 ưu tiên Anthropic API (tạm thời); quay AWS bằng preset Prefer AWS khi acc3 mở 5.x",
-   "needs": "Tech lead: mở trang admin Route control/Trace chụp ảnh"
-  },
-  {
-   "id": "AA-1045",
-   "title": "[AI gateway] Usage analytics explorer",
-   "status": "In Review",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M1b",
-   "session": "S269",
-   "size": "M",
-   "next": "Gateway · S268 live (372): explorer API 14/14, rollup = ledger; còn: ảnh trang admin (tech lead), kiểm tổng CRM từ phiên đăng nhập",
-   "needs": "Tech lead: mở /admin/usage chụp ảnh"
+   "id": "AA-1046",
+   "title": "[Booking] R4b B2C drop and VAT e-invoice provider API",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "tpbk",
+   "milestone": "M-R4",
+   "session": "S274",
+   "size": "",
+   "next": "R4b — xoá bảng B2C theo DRY RUN (root #571) + API hoá đơn điện tử",
+   "needs": "cần xếp slot"
   }
  ]
 }
