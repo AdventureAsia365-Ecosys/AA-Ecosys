@@ -1,5 +1,6 @@
-// Dry-run scenario CIS-08 (AA-1009, plan §4): Jobs and Cost Operations, read only.
-// Given: the E2E CIS admin (read-only session). When: they open Jobs (two tabs), then Cost Operations (two tabs).
+// Dry-run scenario CIS-08 (AA-1009, plan §4): Jobs and Spend, read only.
+// Given: the E2E CIS admin (read-only session). When: they open Jobs (two tabs), then AI & spend › Spend (two tabs;
+// /admin/spend since the R6 admin IA, which merged Cost Operations and Cost per app; /admin/cost-ops answers 307 there).
 // Then: each tab shows its rows or its ready marker; no API call fails; nothing is written. The live Cost Explorer
 // check is a POST, so the read-only guard would stop it: only stored snapshots are read. $0.
 const { HOSTS, step, ro, check, openTab, rowsOrEmpty } = require('../../lib/dryrun-page.cjs');
@@ -8,8 +9,8 @@ module.exports = ro({
   id: 'CIS-08',
   app: 'cis-admin',
   identity: 'cis-admin',
-  title: 'Jobs and Cost Operations',
-  titleVi: 'Tác vụ nền và vận hành chi phí',
+  title: 'Jobs and Spend',
+  titleVi: 'Tác vụ nền và chi tiêu',
   baseURL: HOSTS.cisAdmin,
   steps: [
     step('Jobs lists the background work of the content platform, newest first.',
@@ -27,10 +28,10 @@ module.exports = ro({
         });
         await rowsOrEmpty(page, h);
       }),
-    step('Cost Operations shows what the platform spends, per provider and per day.',
-      'Trang Vận hành chi phí cho biết nền tảng chi bao nhiêu, theo từng nhà cung cấp và từng ngày.',
+    step('Spend shows what the platform spends, per provider and per day.',
+      'Trang Chi tiêu cho biết nền tảng chi bao nhiêu, theo từng nhà cung cấp và từng ngày.',
       async (page, h) => {
-        await check(page, h, '/admin/cost-ops', { heading: 'Cost Operations' });
+        await check(page, h, '/admin/spend', { heading: 'Spend' });
       }),
     step('The AI and data spend tab shows the spend caps of the trip planner. This is the end of the scenario.',
       'Thẻ chi phí AI và dữ liệu hiển thị mức trần chi phí của trang lập kế hoạch chuyến đi. Kết thúc kịch bản.',
