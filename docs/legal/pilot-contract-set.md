@@ -35,9 +35,20 @@ related: [SEC-04-dpa-agreement, SEC-04-ai-schedule, SEC-04-dpa-pack, SEC-04-dpa-
 *Drafting note: there is no partner agreement template in this repository yet (commercial terms are b2-b5, b18). These
 clauses are written to sit in the pilot letter now and move into the partner agreement unchanged.*
 
+**[●].0 Definitions.** In this letter and the documents attached to it: "**Adventure Asia**" (or "**AA**") means [●]
+(the Adventure Asia contracting entity); the "**Agency**" means the partner agency that signs this letter; the
+"**Agreement**" means this letter with the documents attached to it (later, the partner agreement); the
+"**Services**" means the services Adventure Asia provides to the Agency under the Agreement: the Content studio, the
+CRM and Booking B2B, and the Trip Planner once the Agency takes it; the "**Portal**" means the agency app through which
+the Agency's users reach the Services. In the AI Schedule, "**Tenant**" means the Agency and "**Personal Data**" has
+the meaning of "personal data" in the DPA (clause 2). "**Confidential Information**" has the meaning in clause [●]
+of this letter **[COUNSEL: the pilot letter's confidentiality clause]**. Other capitalised terms have the meaning in
+the DPA.
+
 **[●].1 Data protection.** The Data Processing Agreement attached to this letter (the "**DPA**") forms part of it. For
-personal data of the Agency's clients and users that the Agency puts into the Services, the Agency is the controller
-and Adventure Asia is the processor, and the DPA governs that processing.
+Agency Personal Data (as defined in the DPA) the Agency is the controller and Adventure Asia the processor, and the
+DPA governs that processing. Adventure Asia's own role for the Agency's account and billing data, the sign-in
+identities of the Agency's users and its security and usage records is set out in DPA clause 1.4.
 
 **[●].2 Acceptable use of AI features.** The AI Schedule (v1.0) attached to this letter forms part of it. The Agency
 uses the AI features only in line with the AI Schedule and with the usage policies of the AI model providers named
@@ -62,7 +73,7 @@ moves with it) or to leave, in which case DPA clause 11 (return and deletion) ap
 
 | Surface | What it says | State on 2026-11-05 |
 |---|---|---|
-| Pilot letter (§2 above, clause [●].2) | Incorporates AI Schedule v1.0 and names the Anthropic Usage Policy effective 12 November 2026 | This draft |
+| Pilot letter (§2 above, clauses [●].0 and [●].2) | Defines the terms the AI Schedule assumes (Services, Tenant = the Agency, Personal Data); incorporates AI Schedule v1.0 and names the Anthropic Usage Policy effective 12 November 2026 | This draft |
 | AI Schedule v1.0 clauses .1-.2 | Defines Model Provider Policies, binds the Agency from the provider's effective date | [tenant-ai-schedule.md](tenant-ai-schedule.md) |
 | DPA clause 3.3 | AA need not follow an instruction that breaches the AI Schedule or a Model Provider Policy, "including the Anthropic Usage Policy that takes effect on 12 November 2026" | [dpa.md](dpa.md) |
 | Agency app: Content studio `/terms` §3 and CRM `/legal/terms` §1 | Summary of AI Schedule v1.0 with the three policy links | Live since S266 (AA-820 part 1) |

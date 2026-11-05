@@ -40,12 +40,12 @@ decides which regimes apply to AA itself and which SCC module fits (Annex 4).*
 
 **1.2 Agency Personal Data.** "**Agency Personal Data**" means personal data that the Agency, its users, or its
 clients through the Agency's forms and links, put into the Services, or that AA collects on the Agency's behalf
-through the Services. Annex 1 describes it per service.
+through the Services, other than the data in clause 1.4. Annex 1 describes it per service.
 
 **1.3 Roles.** For Agency Personal Data the Agency is the **controller** and AA is the **processor**, in every service:
-the Content studio, the CRM, Booking B2B and, once the Agency takes it, the Trip Planner. AA does not use Agency
-Personal Data for its own purposes, does not market to the Agency's clients, and does not copy the Agency's clients
-into any AA customer record (ADR 0019 b1 commitment; data standard DM-6.8).
+the Content studio, the CRM, Booking B2B and, once the Agency takes it, the Trip Planner. Except as clause 1.6
+allows, AA does not use Agency Personal Data for its own purposes, does not market to the Agency's clients, and does
+not copy the Agency's clients into any AA customer record (ADR 0019 b1 commitment; data standard DM-6.8).
 
 **1.4 What AA controls itself.** AA is an independent controller only for:
 
@@ -64,6 +64,17 @@ Booking customer records, ADR 0019 invariant 1 "after cut-over") is not Agency P
 own privacy notices. Services the Agency connects with its own accounts (mail, messaging, payments, calendars,
 websites, social pages) are the Agency's own processors, not AA's sub-processors (ADR 0019 invariant 5; Annex 3 §3).
 
+**1.6 Anonymous statistics.** The Agency instructs AA to compute anonymous statistics across agencies from the CRM's
+trip data (for example trips per destination or per party-size band in one calendar quarter), as Annex 1 §2 describes.
+A statistic is released only when it covers at least 10 travellers from at least 3 agencies and no agency holds more
+than 70 % of it, and it carries no agency identifier and no personal data. On the Agency's written request AA leaves
+the Agency's data out of every statistic from then on (the insights opt-out). AA's operations staff read the
+statistics only to run and improve the Services, and AA never tries to identify a person or an agency from them.
+
+*Drafting note [COUNSEL]: whether this is processing on the Agency's instruction (AA stays processor) or AA's own
+purpose on data it anonymises, which would make AA a controller for that step (GDPR Art. 28(10)); whether the opt-out
+should be an opt-in for EU agencies (point C13).*
+
 ## 2. Definitions
 
 Terms not defined here have the meaning given in the Agreement, or else in the GDPR (Regulation (EU) 2016/679).
@@ -72,6 +83,9 @@ the UK GDPR, Vietnam's personal data protection law and its implementing decree,
 (APPs) **[COUNSEL: confirm the list per Agency market]**. "**Personal Data Breach**", "**data subject**" and
 "**processing**" have their GDPR meaning. "**Model Provider Policies**" and "**Model Provider**" have the meaning in the
 AI Schedule clause .1. "**Sub-processor**" means a third party AA engages that processes Agency Personal Data.
+"**Services**" means the services AA provides to the Agency under the Agreement: the Content studio, the CRM and
+Booking B2B, and the Trip Planner once the Agency takes it. In the AI Schedule, "**Tenant**" means the Agency and
+"**Personal Data**" means personal data as defined by Data Protection Law.
 
 ## 3. Instructions
 
@@ -88,16 +102,16 @@ to carry out an instruction that would breach Data Protection Law, the AI Schedu
 (including the Anthropic Usage Policy that takes effect on 12 November 2026), and may suspend the affected processing
 until the Agency changes the instruction.
 
-**3.4 AI processing.** The AI Features (AI Schedule clause .1) process Agency Personal Data only as Annex 1 states.
-In the CRM, personal data the CRM knows or detects is replaced by placeholders before any model call and restored only
-for the Agency's user (Annex 2, M-14). In the Content studio, the Agency puts no personal data of its clients into
-brand settings, briefs or content inputs (clause 13.3). AA keeps no prompt or AI output text in its AI call records
-(AI Schedule clause .8(a)).
+**3.4 AI processing.** The AI Features (AI Schedule clause .1) process Agency Personal Data only as Annex 1 states. In
+the CRM, personal data the CRM knows or detects is replaced by placeholders before any model call and restored only
+for the Agency's user (Annex 2, M-18; the placeholder map: M-20). In the Content studio, the Agency puts no personal
+data of its clients into brand settings, briefs or content inputs (clause 13.3). AA keeps no prompt or AI output text
+in its AI call records (AI Schedule clause .8(a)).
 
 ## 4. Confidentiality
 
 AA ensures that every person it authorises to process Agency Personal Data is bound by a duty of confidentiality, by
-contract or by law, and sees the data only as far as the task needs (Annex 2, M-9 to M-12).
+contract or by law, and sees the data only as far as the task needs (Annex 2, M-9 to M-15).
 
 *Drafting note [COUNSEL]: AA's staff contracts and confidentiality terms are not in this repository. The business
 owner confirms they exist and cover contractors and agents.*
@@ -247,7 +261,7 @@ content inputs of the Content studio. Those inputs may be sent to the Model Prov
 
 ## 14. AA's access to Agency Personal Data
 
-AA staff reach Agency Personal Data only as follows (Annex 2, M-10 to M-12):
+AA staff reach Agency Personal Data only as follows (Annex 2, M-7 and M-13 to M-15):
 
 - **CRM.** Level 1: a platform console without personal data. Level 2: read-only support that the Agency owner grants
   for 1 to 7 days, with names hidden unless the owner chooses to show them; the owner can end it at any time. Level 3:
@@ -305,3 +319,4 @@ Each is also marked inline.
 | C10 | Transfer mechanism per Agency market; SCC options; the Vietnamese cross-border dossier; APP 8 | 10, Annex 4 |
 | C11 | Pilot on Dev with real data: is the pilot letter plus this DPA enough (AI Schedule Q16) | 15 |
 | C12 | Liability caps and carve-outs; governing law | 16 |
+| C13 | Anonymous cross-agency statistics: an Agency instruction AA carries out as processor, or AA's own purpose on data it anonymises (Art. 28(10) risk); the opt-out | 1.3, 1.6, Annex 1 §2 |
