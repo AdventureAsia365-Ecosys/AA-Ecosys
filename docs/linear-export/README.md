@@ -574,6 +574,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-96](no-project/AA-96.md) | [Learning] DOP Gap: Prometheus + Grafana — open-source observability | Canceled | 2026-08-21 | — |
 | [AA-1014](partner-crm-aa-partner/AA-1014.md) | [UAT] CRM full-app review video: 21 chunks merged into one chaptered long video (EN + VI voice, switchable subtitles) | Done | 2026-11-01 | Partner CRM — AA-Partner |
 | [AA-1019](partner-crm-aa-partner/AA-1019.md) | [CRM] Staff sign-in on CRM web + S-02 ops release and S-04 support pages + Dev E2E crm-ops user | Done | 2026-11-01 | Partner CRM — AA-Partner |
+| [AA-1036](partner-crm-aa-partner/AA-1036.md) | [Portal] R3 one agency app: merge portal/ into web/, one sign-in, Content home, app switcher, no tenant API keys | Done | 2026-11-05 | Partner CRM — AA-Partner |
 | [AA-928](partner-crm-aa-partner/AA-928.md) | [CRM W0] CRM-01a ADRs + contracts + spec errata | Done | 2026-10-22 | Partner CRM — AA-Partner |
 | [AA-929](partner-crm-aa-partner/AA-929.md) | [CRM W0] CRM-01b Data-standards bump | Done | 2026-10-22 | Partner CRM — AA-Partner |
 | [AA-930](partner-crm-aa-partner/AA-930.md) | [CRM W0] CRM-02 Readiness checks (read-only) | Done | 2026-10-22 | Partner CRM — AA-Partner |
@@ -610,6 +611,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-964](partner-crm-aa-partner/AA-964.md) | [CRM W7] CRM-33a AI gateway + drafts + guardrails | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-966](partner-crm-aa-partner/AA-966.md) | [CRM W7] CRM-34 Reports + insights | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-967](partner-crm-aa-partner/AA-967.md) | [CRM W7] CRM-35 Module 18 portability + deletion | Done | 2026-10-31 | Partner CRM — AA-Partner |
+| [AA-969](partner-crm-aa-partner/AA-969.md) | [CRM W7] CRM-37a Security review, SLOs, bounded load test | Done | 2026-11-05 | Partner CRM — AA-Partner |
 | [AA-971](partner-crm-aa-partner/AA-971.md) | [CRM W7] CRM-13b AA support L2 + break-glass L3 | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-972](partner-crm-aa-partner/AA-972.md) | [CRM LB] CRM-B1 M2M + B2B quote | Done | 2026-10-23 | Partner CRM — AA-Partner |
 | [AA-973](partner-crm-aa-partner/AA-973.md) | [CRM LB] CRM-B2 Departures, capacity, holds | Done | 2026-10-23 | Partner CRM — AA-Partner |
