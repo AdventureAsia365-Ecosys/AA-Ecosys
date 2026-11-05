@@ -44,6 +44,19 @@ SNAP = {
          "price_in_per_mtok": None, "price_out_per_mtok": None, "price_cache_read_per_mtok": None,
          "price_cache_write_per_mtok": None},
     ],
+    # Schema 2 (AA-1042): names and states only. `secret_name` is planted to prove normalise drops any extra field.
+    "connections": [
+        {"connection_key": "zz-direct", "kind": "anthropic", "enabled": True, "secret_name": "zz/dev/never-kept"},
+        {"connection_key": "acc9", "kind": "bedrock", "enabled": False},
+    ],
+    "deployments": [
+        {"model_key": "zz-writer", "connection_key": "acc9", "enabled": True, "priority": 20,
+         "access_state": "access_denied"},
+        {"model_key": "zz-writer", "connection_key": "zz-direct", "enabled": True, "priority": 10,
+         "access_state": "ok"},
+        {"model_key": "zz-judge", "connection_key": "acc9", "enabled": False, "priority": 100,
+         "access_state": "unknown"},
+    ],
 }
 
 
@@ -75,7 +88,7 @@ class RenderTest(unittest.TestCase):
         self.assertIn(f"docs-fingerprint: {g.fingerprint(SNAP)}", page)
 
     def test_empty_snapshot_says_so(self) -> None:
-        page = g.render({"schema": g.SCHEMA, "routes": [], "models": []})
+        page = g.render({"schema": g.SCHEMA, "routes": [], "models": [], "connections": [], "deployments": []})
         self.assertIn("## No snapshot yet", page)
 
     def test_known_gaps_callout_only_when_set(self) -> None:
@@ -90,9 +103,45 @@ class RenderTest(unittest.TestCase):
         self.assertEqual(g.redact(["acct " + "3" * 12]), ["acct [redacted]"])
         self.assertEqual(g.normalise(dict(SNAP, known_gaps=["acct " + "3" * 12]))["known_gaps"], ["acct [redacted]"])
 
+    def test_connections_and_provider_order(self) -> None:
+        page = g.render(SNAP)
+        self.assertIn("## Connections\n\n2 connections", page)
+        self.assertIn("| `acc9` | bedrock | no | 1 / 2 |", page)
+        self.assertIn("| `zz-direct` | anthropic | yes | 1 / 1 |", page)
+        self.assertIn("| `zz-judge` | `acc9` (100, unknown, off) |", page)
+        self.assertIn("| `zz-writer` | `zz-direct` (10, ok) → `acc9` (20, access_denied) |", page)
+        self.assertLess(page.index("| `acc9` | bedrock"), page.index("| `zz-direct` | anthropic"))
+
+    def test_registry_keeps_names_and_states_only(self) -> None:
+        snap = g.normalise(SNAP)
+        self.assertEqual(set(snap["connections"][1]), set(g.CONNECTION_FIELDS))
+        self.assertNotIn("never-kept", g.snapshot_text(SNAP))
+        self.assertEqual([d["connection_key"] for d in snap["deployments"] if d["model_key"] == "zz-writer"],
+                         ["zz-direct", "acc9"])
+        dirty = dict(SNAP, connections=[{"connection_key": "acc " + "4" * 12, "kind": "bedrock", "enabled": True}])
+        self.assertEqual(g.normalise(dirty)["connections"][0]["connection_key"], "acc [redacted]")
+
+    def test_registry_not_captured_says_so(self) -> None:
+        old = {k: v for k, v in SNAP.items() if k not in ("connections", "deployments")}
+        old["schema"] = g.SCHEMA_V1
+        self.assertNotIn("connections", g.normalise(old))
+        self.assertEqual(g.normalise(old)["schema"], g.SCHEMA_V1)     # read as is, never relabelled 2
+        self.assertIn("Not in this snapshot: it was captured before the generator read the connections",
+                      g.render(old))
+        empty = dict(SNAP, connections=[], deployments=[])
+        self.assertEqual(g.normalise(empty)["connections"], [])
+        self.assertIn("0 connections", g.render(empty))
+
     def test_wrong_schema_is_refused(self) -> None:
         with self.assertRaises(ValueError):
             g.render({"schema": "other", "routes": []})
+        bare = {k: v for k, v in SNAP.items() if k not in ("connections", "deployments")}
+        with self.assertRaises(ValueError):       # a schema-1 payload relabelled 2: needs a new capture, not a label
+            g.render(bare)
+        with self.assertRaises(ValueError):       # half a registry is not schema 2 either
+            g.render({k: v for k, v in SNAP.items() if k != "deployments"})
+        with self.assertRaises(ValueError):       # schema 1 carrying registry lists is mislabelled
+            g.render(dict(SNAP, schema=g.SCHEMA_V1))
 
 
 class SafetyTest(unittest.TestCase):

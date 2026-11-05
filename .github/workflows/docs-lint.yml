@@ -8,6 +8,7 @@ name: Docs lint
 #     generated pages are ignored in the config)
 #   - internal links, offline (lychee): no network, no external sites
 #   - every alarm row of docs/generated/alarms.md links to an existing runbook (AA-893)
+#   - the AI gateway guide names only stages, models, connections and secrets that exist (AA-1042)
 #   - PRDs (docs/product/): required PRD fields, acceptance criteria, and every referenced path exists (AA-894)
 #   - the report registry docs/reports/*.yaml (AA-1003): shape, KPI references, templates, source tables
 #   - the tracker docs/backlog/tracker/plan.json (S263): plan_sync.py tests, shape, no account ID or ARN
@@ -121,6 +122,13 @@ jobs:
       - name: Alarm runbook links
         if: ${{ !cancelled() }}
         run: python tools/docs/check_alarm_runbooks.py
+
+      # AA-1042: every stage, model and connection key the AI gateway guide (docs/architecture/ai-gateway.md and its
+      # .vi.md, rendered by the CIS admin Guide tab) names exists in the committed route snapshot
+      # (docs/generated/llm-routes.snapshot.json), and every secret name it names has a secrets-register row. Names only.
+      - name: AI gateway guide names
+        if: ${{ !cancelled() }}
+        run: python tools/docs/check_ai_gateway_names.py
 
       # AA-1003 R1: the report registry (docs/reports/catalog.yaml + kpis.yaml): shape, KPI references, template
       # paths, and every KPI source table against docs/architecture/db-schema-reference.md.
