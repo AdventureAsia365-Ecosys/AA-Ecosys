@@ -76,8 +76,10 @@ info:
     serves a desk caller GET /console, GET /tenants (only its tenants, filtered before any agency is opened), the
     per-agency GETs and the studio-invitation relay of its tenants; 403 `tenant_outside_scope` for another tenant
     (whether it exists or not), 403 `missing_group` on a platform-wide read (/jobs/summary, /llm/usage, /llm/calls,
-    /llm/app-profile, /data-coverage, /insights) and on every write, 503 `cis_unavailable` when CIS cannot answer
-    (fail closed; cis-admin and crm-platform-admin are unaffected). ConsoleAccess gains `scope` (`all` for cis-admin /
+    /llm/app-profile, /data-coverage, /insights), on every write and, for a caller in cis-support but not
+    cis-customer_success, on the agency account reads GET /tenants/{tenant_id}/usage and /entitlements (support sees
+    no plan and no usage); 503 `cis_unavailable` when CIS cannot answer or its answer is about another identity or
+    desk role than asked (fail closed; cis-admin and crm-platform-admin are unaffected). ConsoleAccess gains `scope` (`all` for cis-admin /
     crm-platform-admin). POST /tenants/{tenant_id}/studio-invitations takes `keep_address: true` in place of `email`:
     the CRM now also keeps each issued address sealed under a one-off data key of its KMS key (until the invitation is
     claimed) and sends again to it, so nobody types it again; 409 `address_not_kept` for an invitation that kept none.
@@ -182,6 +184,7 @@ paths:
     get:
       operationId: getTenantUsage
       summary: Fixed usage meters for one agency, current calendar month (no business figures)
+      description: Not for a cis-support desk caller (1.12, 403 `missing_group`).
       responses:
         "200":
           description: Usage meters
@@ -408,6 +411,7 @@ paths:
     get:
       operationId: getEntitlements
       summary: Plan, seats, features allowed and the insights opt-out
+      description: Not for a cis-support desk caller (1.12, 403 `missing_group`).
       responses:
         "200":
           description: Entitlements
@@ -888,7 +892,7 @@ components:
     Forbidden:
       description: >-
         `wrong_audience`, `missing_group` (a write without crm-platform-admin; 1.12: also a platform-wide read by a
-        desk caller), `e2e_read_only` (the Dev-only E2E CIS admin, root ADR 0006a A10b: read-only on every write),
+        desk caller, and the agency usage / entitlements by a cis-support one), `e2e_read_only` (the Dev-only E2E CIS admin, root ADR 0006a A10b: read-only on every write),
         `tenant_outside_scope` (1.12: a desk caller, cis-customer_success / cis-support, and a tenant CIS does not
         hold in its scope, whether it exists or not)
       content:
