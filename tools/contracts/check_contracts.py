@@ -124,11 +124,16 @@ POLICY: dict[str, Policy] = {
             "(two write-only fields: the first-owner invite and the studio invitation addresses)",
     ),
     # Fix B19: the agency price is b2b_price; the supplier net never leaves Booking. No PII crosses the API.
+    # AA-1037 (1.5): the agency's own invoices never carry AA's staff note, a void / reject reason, a staff member
+    # (``*_by``), a payment bank reference or document, the amount waiting for approval or the bill-to snapshot.
     "booking.b2b.v1": Policy(
-        forbidden_keys=frozenset({"supplier_net"}),
+        forbidden_keys=frozenset({"supplier_net", "staff_note", "void_reason", "reject_reason", "recorded_by",
+                                  "approved_by", "rejected_by", "voided_by", "issued_by", "reference", "document_ref",
+                                  "bill_to", "waiting"}),
         forbidden_patterns=(r"supplier_net", r"(^|_)net_cost(_|$)", r"(^|_)supplier_cost(_|$)",
-                            r"(^|_)supplier_rate(_|$)"),
-        why="b2b_price only; supplier net cost never leaves Booking; pax counts only",
+                            r"(^|_)supplier_rate(_|$)", r"_by$", r"^bill_to"),
+        why="b2b_price only; supplier net cost never leaves Booking; pax counts only; an agency invoice without staff "
+            "notes, reasons, staff names, bank references, documents or the bill-to snapshot",
     ),
     # AA-682 S5 My Payments (S252 design §5, §8): the traveller's own payment requests. Never a staff member, payment
     # evidence, a bank reference or staff note, an internal note or reason, the bill-to snapshot, a net cost, a margin
@@ -211,7 +216,8 @@ POLICY: dict[str, Policy] = {
 # The negative samples the design requires (AA-928 Done-when R case). rule = a forbidden key, or "pii:".
 REQUIRED_NEGATIVES: dict[str, tuple[str, ...]] = {
     "crm.ops.v1": ("trip_count", "revenue", "pii:"),
-    "booking.b2b.v1": ("supplier_net",),
+    # AA-1037 (1.5): a staff note, the bill-to snapshot and a payment's approver on an agency invoice are each refused.
+    "booking.b2b.v1": ("supplier_net", "staff_note", "bill_to", "approved_by"),
     # AA-682 S5: a staff name, an evidence URL, a net cost, a supplier and an internal note are each refused.
     "booking.customer.v1": ("recorded_by", "evidence_url", "net_amount", "supplier_id", "notes"),
     # AA-835 S1: a supplier net amount, the supplier id, internal notes and a free photo URL are each refused.

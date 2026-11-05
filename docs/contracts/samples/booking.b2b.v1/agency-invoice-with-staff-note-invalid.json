@@ -1,0 +1,79 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "AgencyInvoice",
+  "expect": "invalid",
+  "why": "An agency never sees AA's internal note on its invoice (AA-1037 field allow-list)",
+  "rule": "staff_note",
+  "payload": {
+    "number": "AAT-2026-000007",
+    "invoice_kind": "settlement",
+    "status": "issued",
+    "period_start": "2026-10-01",
+    "period_end": "2026-10-31",
+    "currency": "USD",
+    "subtotal": "680.00",
+    "tax_amount": "0.00",
+    "total": "680.00",
+    "paid": "300.00",
+    "balance": "380.00",
+    "issued_on": "2026-11-02",
+    "due_date": "2026-11-16",
+    "overdue_days": 0,
+    "e_invoice_no": "C26TLB-00031",
+    "tax_rate": "0.0000",
+    "footer_wording": "Prices exclude tax.",
+    "issuer": {
+      "code": "LBT",
+      "legal_entity": "Lantern Bay Travel Ltd",
+      "tax_code": "0100000001",
+      "registered_office": "3 Paper Lane, Old Quarter",
+      "country_iso2": "VN",
+      "invoice_inbox": "billing@lanternbay.example",
+      "payment_instructions": "Transfer to the account on the contract.",
+      "tax_line": "VAT 0%"
+    },
+    "lines": [
+      {
+        "line_no": 1,
+        "line_role": "deposit",
+        "description": "Deposit 30 % for the Misty Ridge loop",
+        "quantity": "1.00",
+        "unit_price": "300.00",
+        "amount": "300.00",
+        "hold_id": "e1000000-0000-4000-8000-000000001037",
+        "booking_id": "e3000000-0000-4000-8000-000000001037",
+        "voided": false
+      },
+      {
+        "line_no": 2,
+        "line_role": "full",
+        "description": "Full amount for the Lotus Bay day cruise",
+        "quantity": "1.00",
+        "unit_price": "400.00",
+        "amount": "400.00",
+        "hold_id": "e1000000-0000-4000-8000-000000002037",
+        "booking_id": "e3000000-0000-4000-8000-000000002037",
+        "voided": false
+      },
+      {
+        "line_no": 3,
+        "line_role": "adjustment",
+        "description": "Goodwill credit",
+        "quantity": "1.00",
+        "unit_price": "-20.00",
+        "amount": "-20.00",
+        "hold_id": null,
+        "booking_id": null,
+        "voided": false
+      }
+    ],
+    "payments": [
+      {
+        "received_on": "2026-11-04",
+        "amount": "300.00",
+        "currency": "USD"
+      }
+    ],
+    "staff_note": "Call the owner before the next run"
+  }
+}

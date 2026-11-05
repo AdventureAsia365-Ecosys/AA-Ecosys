@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: booking.b2b.v1 (AA-Booking → AA-Partner CRM, B2B products, quotes, holds, bookings, events)
-  version: "1.4"
+  version: "1.5"
   description: >-
     The AA inventory API of the partner CRM spec (§9), owned by AA-Booking (root ADR 0005, 0005a) and called by the
     AA-Partner CRM API server to server (root ADR 0010). Auth: an M2M access token of the aa-m2m pool (root ADR 0006b
@@ -28,6 +28,12 @@ info:
     Minor 1.4 (AA-1030 G3, additive): GET /tariff, the calling agency's own tariff (its price per tour, season and
     pax band, JSON or CSV), priced as POST /quotes prices the plan for the band's smallest party with the agency's
     tier or contract discount; never a net cost, a supplier rate or a margin.
+    Minor 1.5 (AA-1037, additive; root ADR 0019 d17, the data of the CRM "Bookings with AA" page): GET /invoices and
+    GET /invoices/{number}, the calling agency's own AA invoices (software fee and tour settlement; issued, paid or
+    void, never a draft) with their lines, approved payments and the issuer's payment instructions; GET
+    /billing-status, its credit status and the last day its software fee is paid for; and the Problem error
+    invoice_not_found. Never a staff note, a void reason, a staff name, a payment bank reference or document, or the
+    bill-to snapshot.
   x-aa-contract: booking.b2b.v1
   x-aa-producer: AA-Booking
   x-aa-consumers: [AA-Partner]
@@ -469,6 +475,90 @@ paths:
         "403": {$ref: "#/components/responses/Problem"}
         "422": {$ref: "#/components/responses/Problem"}  # invalid: not a quote currency
         "503": {$ref: "#/components/responses/Problem"}  # unavailable: no b2b rule, no FX rate, catalog unreadable
+  /invoices:
+    get:
+      operationId: listAgencyInvoices
+      summary: 1.5 (AA-1037). The calling agency's own AA invoices, newest first
+      description: >-
+        The invoices AA issued to the calling agency (the partner of X-AA-Tenant-Id bound to the token's client):
+        software fee (saas, numbers AAS-) and tour settlement (settlement, AAT-), issued, paid or void. A draft is never
+        listed. No lines here (GET /invoices/{number}). Answers are Cache-Control no-store.
+      security:
+        - m2m: [booking.b2b/read]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+        - name: kind
+          in: query
+          required: false
+          schema: {type: string, enum: [saas, settlement]}
+        - name: status
+          in: query
+          required: false
+          schema: {type: string, enum: [issued, paid, void]}
+        - name: limit
+          in: query
+          required: false
+          schema: {type: integer, minimum: 1, maximum: 100, default: 50}
+        - name: offset
+          in: query
+          required: false
+          schema: {type: integer, minimum: 0, maximum: 10000, default: 0}
+      responses:
+        "200":
+          description: One page of the agency's invoices
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/AgencyInvoicePage"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
+        "422": {$ref: "#/components/responses/Problem"}  # invalid: another kind or status, limit or offset out of range
+  /invoices/{number}:
+    parameters:
+      - name: number
+        in: path
+        required: true
+        description: The invoice number (AAS-2026-000001, AAT-2026-000001).
+        schema: {type: string, minLength: 1, maxLength: 64}
+    get:
+      operationId: getAgencyInvoice
+      summary: 1.5 (AA-1037). One of the agency's AA invoices with its lines, approved payments and how to pay
+      description: >-
+        404 invoice_not_found for another agency's invoice, a draft, an unknown number or anything that is not an
+        invoice number (one answer for all, so an agency learns nothing about other invoices). Answers are
+        Cache-Control no-store.
+      security:
+        - m2m: [booking.b2b/read]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+      responses:
+        "200":
+          description: The invoice
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/AgencyInvoice"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
+        "404": {$ref: "#/components/responses/Problem"}
+  /billing-status:
+    get:
+      operationId: getBillingStatus
+      summary: 1.5 (AA-1037). The calling agency's billing status with AA
+      description: >-
+        The credit status of GET /terms (holds_paused while past_due, when POST /holds answers 409
+        credit_hold_overdue) plus paid_through, the last day the agency's software fee is paid for (null before the
+        first paid software fee invoice). An agency with no AA invoice is ok. Cache-Control no-store.
+      security:
+        - m2m: [booking.b2b/read]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+      responses:
+        "200":
+          description: The billing status
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/BillingStatus"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
 components:
   securitySchemes:
     m2m:
@@ -478,7 +568,7 @@ components:
         clientCredentials:
           tokenUrl: https://m2m-auth.example.invalid/oauth2/token
           scopes:
-            booking.b2b/read: Products, departures, holds, events, FX, parity
+            booking.b2b/read: Products, departures, holds, events, FX, parity, terms, tariff, invoices
             booking.b2b/quote: Create quotes
             booking.b2b/hold: Place, extend and release holds
             booking.b2b/book: Confirm and cancel bookings
@@ -518,8 +608,8 @@ components:
       properties:
         error:
           type: string
-          enum: [unauthorized, forbidden, unknown_partner, not_found, price_changed, hold_expired, sold_out,
-                 rehold_limit, extend_limit, tour_not_served, credit_hold_overdue, invalid, unavailable]
+          enum: [unauthorized, forbidden, unknown_partner, not_found, invoice_not_found, price_changed, hold_expired,
+                 sold_out, rehold_limit, extend_limit, tour_not_served, credit_hold_overdue, invalid, unavailable]
         message: {type: string, maxLength: 500}
         tour:
           $ref: "#/components/schemas/TourKey"
@@ -1105,3 +1195,153 @@ components:
             - {type: "null"}
             - {$ref: "#/components/schemas/Money"}
           description: AA's public suggested retail price per person of the window and band (price.from.v1 basis).
+    AgencyInvoiceSummary:
+      type: object
+      additionalProperties: false
+      description: >-
+        1.5 (AA-1037). One AA invoice of the calling agency (issued, paid or void). Amounts are decimal strings with
+        two places in the invoice currency. paid = the approved payments; balance = total - paid while issued, else 0;
+        overdue_days > 0 once an issued invoice with a balance is past its due date.
+      required: [number, invoice_kind, status, period_start, period_end, currency, subtotal, tax_amount, total, paid,
+                 balance, issued_on, due_date, overdue_days, e_invoice_no]
+      properties:
+        number: {type: string, pattern: "^AA[ST]-\\d{4}-\\d{6}$"}
+        invoice_kind:
+          type: string
+          enum: [saas, settlement]
+          description: saas = the software fee (AAS- numbers); settlement = the tour money of AA bookings (AAT-).
+        status: {type: string, enum: [issued, paid, void]}
+        period_start: {type: string, format: date}
+        period_end: {type: string, format: date, description: The last day the invoice covers.}
+        currency: {type: string, pattern: "^[A-Z]{3}$"}
+        subtotal: {$ref: "#/components/schemas/Amount"}
+        tax_amount: {$ref: "#/components/schemas/Amount"}
+        total: {$ref: "#/components/schemas/Amount"}
+        paid: {$ref: "#/components/schemas/Amount"}
+        balance: {$ref: "#/components/schemas/Amount"}
+        issued_on: {type: string, format: date}
+        due_date: {type: string, format: date}
+        overdue_days: {type: integer, minimum: 0}
+        e_invoice_no:
+          type: [string, "null"]
+          maxLength: 64
+          description: The number of the legal VAT e-invoice AA's accountant issued for it, once recorded.
+    AgencyInvoicePage:
+      type: object
+      additionalProperties: false
+      description: 1.5 (AA-1037).
+      required: [items, total, limit, offset]
+      properties:
+        items:
+          type: array
+          items: {$ref: "#/components/schemas/AgencyInvoiceSummary"}
+        total: {type: integer, minimum: 0, description: Invoices matching the filters.}
+        limit: {type: integer, minimum: 1}
+        offset: {type: integer, minimum: 0}
+    AgencyInvoice:
+      type: object
+      additionalProperties: false
+      description: >-
+        1.5 (AA-1037). The invoice with its lines, the approved payments and the AA entity that issued it (how to pay).
+        Never a staff note, a void reason, a staff name, a payment bank reference or document, or the bill-to snapshot.
+      required: [number, invoice_kind, status, period_start, period_end, currency, subtotal, tax_amount, total, paid,
+                 balance, issued_on, due_date, overdue_days, e_invoice_no, tax_rate, footer_wording, issuer, lines,
+                 payments]
+      properties:
+        number: {type: string, pattern: "^AA[ST]-\\d{4}-\\d{6}$"}
+        invoice_kind:
+          type: string
+          enum: [saas, settlement]
+          description: saas = the software fee (AAS- numbers); settlement = the tour money of AA bookings (AAT-).
+        status: {type: string, enum: [issued, paid, void]}
+        period_start: {type: string, format: date}
+        period_end: {type: string, format: date, description: The last day the invoice covers.}
+        currency: {type: string, pattern: "^[A-Z]{3}$"}
+        subtotal: {$ref: "#/components/schemas/Amount"}
+        tax_amount: {$ref: "#/components/schemas/Amount"}
+        total: {$ref: "#/components/schemas/Amount"}
+        paid: {$ref: "#/components/schemas/Amount"}
+        balance: {$ref: "#/components/schemas/Amount"}
+        issued_on: {type: string, format: date}
+        due_date: {type: string, format: date}
+        overdue_days: {type: integer, minimum: 0}
+        e_invoice_no:
+          type: [string, "null"]
+          maxLength: 64
+          description: The number of the legal VAT e-invoice AA's accountant issued for it, once recorded.
+        tax_rate: {type: string, pattern: "^\\d+\\.\\d{4}$", description: The tax rate applied ("0.0700" = 7 %).}
+        footer_wording: {type: [string, "null"], maxLength: 1000, description: The tax note printed on the invoice.}
+        issuer:
+          oneOf:
+            - $ref: "#/components/schemas/InvoiceIssuer"
+            - type: "null"
+        lines:
+          type: array
+          items: {$ref: "#/components/schemas/AgencyInvoiceLine"}
+        payments:
+          type: array
+          description: The approved payments only (a payment waiting for AA's check is not listed).
+          items:
+            type: object
+            additionalProperties: false
+            required: [received_on, amount, currency]
+            properties:
+              received_on: {type: string, format: date}
+              amount: {$ref: "#/components/schemas/Amount"}
+              currency: {type: string, pattern: "^[A-Z]{3}$"}
+    AgencyInvoiceLine:
+      type: object
+      additionalProperties: false
+      description: >-
+        1.5 (AA-1037). saas lines: subscription, extra_seats, adjustment; settlement lines: deposit, balance, full,
+        cancellation_fee (each from one booking: hold_id and booking_id), adjustment. An adjustment may be negative.
+      required: [line_no, line_role, description, quantity, unit_price, amount, hold_id, booking_id, voided]
+      properties:
+        line_no: {type: integer, minimum: 1}
+        line_role:
+          type: string
+          enum: [subscription, extra_seats, deposit, balance, full, cancellation_fee, adjustment]
+        description: {type: string, maxLength: 300}
+        quantity: {$ref: "#/components/schemas/Amount"}
+        unit_price: {$ref: "#/components/schemas/Amount"}
+        amount: {$ref: "#/components/schemas/Amount"}
+        hold_id: {type: [string, "null"], maxLength: 64, description: Hold.hold_id of the booking billed.}
+        booking_id: {type: [string, "null"], maxLength: 64, description: Booking.booking_id of the booking billed.}
+        voided: {type: boolean, description: True on the lines of a void invoice.}
+    InvoiceIssuer:
+      type: object
+      additionalProperties: false
+      description: 1.5 (AA-1037). The AA entity that issued the invoice, as it stood at issue.
+      required: [code, legal_entity, tax_code, registered_office, country_iso2, invoice_inbox, payment_instructions,
+                 tax_line]
+      properties:
+        code: {type: [string, "null"], maxLength: 32}
+        legal_entity: {type: [string, "null"], maxLength: 300}
+        tax_code: {type: [string, "null"], maxLength: 64}
+        registered_office: {type: [string, "null"], maxLength: 1000}
+        country_iso2: {type: [string, "null"], maxLength: 2}
+        invoice_inbox: {type: [string, "null"], maxLength: 254, description: AA's billing mailbox.}
+        payment_instructions: {type: [string, "null"], maxLength: 2000, description: How to pay AA.}
+        tax_line: {type: [string, "null"], maxLength: 120}
+    BillingStatus:
+      type: object
+      additionalProperties: false
+      description: 1.5 (AA-1037). PartnerTerms.credit plus the last day the software fee is paid for.
+      required: [status, holds_paused, overdue_invoices, oldest_overdue_days, overdue_amount, paid_through]
+      properties:
+        status: {type: string, enum: [ok, warn, past_due]}
+        holds_paused:
+          type: boolean
+          description: True while past_due; POST /holds answers 409 credit_hold_overdue.
+        overdue_invoices: {type: integer, minimum: 0}
+        oldest_overdue_days: {type: integer, minimum: 0}
+        overdue_amount:
+          type: array
+          items: {$ref: "#/components/schemas/Money"}
+        warn_after_days: {type: [integer, "null"]}
+        suspend_after_days: {type: [integer, "null"]}
+        paid_through: {type: [string, "null"], format: date}
+    Amount:
+      type: string
+      pattern: "^-?\\d+\\.\\d{2}$"
+      description: 1.5 (AA-1037). A decimal string with two places, in the currency of the invoice.

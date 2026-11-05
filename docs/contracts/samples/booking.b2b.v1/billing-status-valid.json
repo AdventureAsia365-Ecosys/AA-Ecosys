@@ -1,0 +1,21 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "BillingStatus",
+  "expect": "valid",
+  "why": "1.5 (AA-1037): an agency warned for an overdue settlement invoice, its software fee paid through October",
+  "payload": {
+    "status": "warn",
+    "holds_paused": false,
+    "overdue_invoices": 1,
+    "oldest_overdue_days": 12,
+    "overdue_amount": [
+      {
+        "amount": "380.00",
+        "currency": "USD"
+      }
+    ],
+    "warn_after_days": 10,
+    "suspend_after_days": 30,
+    "paid_through": "2026-10-31"
+  }
+}
