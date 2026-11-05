@@ -51,9 +51,10 @@ thoại), header Given/When/Then, danh sách `steps`.
   phí dùng `rw()` của `lib/uat-page.cjs` (allowWrites hẹp, `after()` trả lại giá trị cũ) và không vào dry run.
 - **Chặn tenant pilot** (AA-855, `lib/pilot-guard.cjs`, fail closed): trước mỗi kịch bản đã đăng nhập, record.cjs đọc
   tenant / agency qua API của app (`/api/tenant/me`, `/bff/me`) trong một context không quay; ngoài allow-list tổng
-  hợp hoặc có dấu pilot → exit 5 `pilot_guard`, không video. Id tenant không công khai được để trong
-  `tools/uat/work/uat-allowlist.json` (gitignore). Trang staff có danh sách tenant dùng `allowRows` (che hàng ngoài
-  allow-list) + `h.assertRowsFiltered()`.
+  hợp hoặc có dấu pilot → exit 5 `pilot_guard`, không video. Phạm vi CRM chỉ khớp theo id (agency tự đặt
+  `display_name`); Content khớp được theo tên bịa khi chưa ghim id. Id tenant không công khai được để trong
+  `tools/uat/work/uat-allowlist.json` (gitignore). Mọi trang staff có tên tenant (CIS-01/04/06/12) dùng `allowRows`
+  (che hàng ngoài allow-list) + `h.assertRowsFiltered()`; trang mới có tên tenant cũng phải thêm.
 
 ## 4. Giọng đọc
 
