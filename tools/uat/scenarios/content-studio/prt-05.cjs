@@ -19,6 +19,11 @@ module.exports = ro({
         await check(page, h, '/portal/create/social', { heading: 'Social Posts' });
         await h.expect(page.getByText('Social topics').first()).toBeVisible({ timeout: 30_000 });
         await h.expect(page.getByTestId('slate-tabstrip')).toBeVisible({ timeout: 30_000 });
+        // The tab strip and the card title are server-rendered; the topics come from GET /api/tenant/v1/slate after
+        // hydration, and the "Update topics" line then appears ABOVE the tab strip and pushes it down. Wait for the
+        // loaded state (that button, no loading skeleton) so step 2's mouse click lands on a live, settled tab.
+        await h.expect(page.getByRole('button', { name: /^(Update topics|Updating…)$/ })).toBeVisible({ timeout: 30_000 });
+        await h.expect(page.locator('[aria-busy="true"]')).toHaveCount(0, { timeout: 30_000 });
       }),
     step('Each channel has its own tab. Picking a topic starts the writer; here the topics are only read.',
       'Mỗi kênh có một thẻ riêng. Chọn một chủ đề sẽ mở trình viết; ở đây chỉ xem các chủ đề.',
