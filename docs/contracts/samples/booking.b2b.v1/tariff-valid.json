@@ -1,0 +1,77 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "Tariff",
+  "expect": "valid",
+  "why": "1.4 (AA-1030 G3): an agency's own tariff, two pax bands of one window",
+  "payload": {
+    "currency": "USD",
+    "priced_on": "2026-11-05",
+    "basis": "per_person_band_min_twin_share",
+    "tier_code": "silver",
+    "fx": {
+      "base_currency": "USD",
+      "quote_currency": "USD",
+      "rate_per_usd": "1",
+      "rate_date": "2026-11-05",
+      "source": "base"
+    },
+    "items": [
+      {
+        "tour": {
+          "source_system": "cis",
+          "source_id": "e1000000-0000-4000-8000-000000001030"
+        },
+        "title": "Invented Highlands Loop",
+        "country": "Invented Land",
+        "duration_days": 4,
+        "season": "Green",
+        "valid_from": "2027-01-01",
+        "valid_to": "2027-03-31",
+        "pax_min": 3,
+        "pax_max": 4,
+        "priced_for_pax": 3,
+        "priced_for_date": "2027-01-01",
+        "price": {
+          "amount": "1164.00",
+          "currency": "USD"
+        },
+        "price_per_person": {
+          "amount": "388.00",
+          "currency": "USD"
+        },
+        "agency_discount_pct": "0.0300",
+        "rrp_per_person": {
+          "amount": "500.00",
+          "currency": "USD"
+        }
+      },
+      {
+        "tour": {
+          "source_system": "cis",
+          "source_id": "e1000000-0000-4000-8000-000000001030"
+        },
+        "title": "Invented Highlands Loop",
+        "country": "Invented Land",
+        "duration_days": 4,
+        "season": "Green",
+        "valid_from": "2027-01-01",
+        "valid_to": "2027-03-31",
+        "pax_min": 11,
+        "pax_max": null,
+        "priced_for_pax": 11,
+        "priced_for_date": "2027-01-01",
+        "price": {
+          "amount": "3410.00",
+          "currency": "USD"
+        },
+        "price_per_person": {
+          "amount": "310.00",
+          "currency": "USD"
+        },
+        "agency_discount_pct": "0.0300",
+        "rrp_per_person": null
+      }
+    ],
+    "truncated": false
+  }
+}
