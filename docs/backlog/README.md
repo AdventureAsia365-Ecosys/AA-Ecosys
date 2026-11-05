@@ -6,7 +6,7 @@
 
 **Rules:** at session start read §1–§3 and pick the session's parallel items from §3 and §3b by slot (skip items blocked in §2 or by the "blocked by" notes). At session end update the Status column, move closed items to §5, add new items. Re-audit only when this file is older than ~2 weeks or many issues were created outside sessions.
 
-_Last updated: S268, 04–05/11/2026 (Claude Code, Ultracode; 20:45 → ~09:10 +07). **Closed in S268: none; canceled: AA-1021** (tech lead: no personal publishing). Live on Dev with checks: AA-1042 route control (370) + trace/alerts (371) + probe-aware preview, AA-1035 R2 slice 2 (view-as, Assignments), AA-1036 R3 (369 DROP, studio EN/VI, add-on requests 374, AI-paused banner), AA-1029 portal from price (bk-040), AA-1045 usage explorer (372, rollup = ledger), AA-1039 R6 rest (373 pii_class, Tenant 360, Place cards), AA-969 CRM security review fixes + SLO alarms. Video plan (product series + operational videos) merged into AA-855. Next session: **S269** (AA-969 load test first)._
+_Last updated: S269, 05/11/2026 (Claude Code, Ultracode; 09:30 → ~18:00 +07). **Closed in S269: AA-969, AA-1036.** Live on Dev with checks: AA-969 load test (50 agencies, SLOs held) + d16 pilot protections + restore drill + export DEK fix; AA-1036 invited user and add-on round trip, CRM-only Add-ons (`tenant.addons.v1`); AA-1035 R2 close-out (375, crm-045); AA-1008 ShellFrame + visual job + empty suppressions (H3 left); AA-1037 R4 agency billing core + G1/G2/G4/G5/G6 (bk-041…044, CIS 377); AA-1030 agency tiers + CRM retail markup + G3 tariff (bk-043, crm-046); Anthropic API key plugged, 13/13 Claude models via the API, route control v6 prefers the API (CIS 376). Next session: **S270** (Jira round with the S268 + S269 drafts first, then AA-741 phase 0 and the R4 live checks)._
 
 ## 1. Time-gated checks (do these first when due)
 
@@ -251,7 +251,11 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-710 | B2B benchmark: Asian Trails (eConnect, API, Lemax) | M-R4 | **S265:** slot S271 (R4 start): update the note against the R4 design (AA-1037, AA-1029, AA-1030, 'Book with AA' d17), map the gaps to issues, KAN-20 draft at that session's end, then close | — |
 | AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 | **S262:** AA-952, AA-954, AA-956, AA-957, AA-964, AA-971 closed (§5); AA-958 → S263. AA-952 was In Progress since S259 (slice 1 = C-M3 confirm, §3 row 0ah); **re-planned at the S260 close**: slots S261–S266, go-real ≥S267, see §3b "Kế hoạch CRM W5–W8 sau S260" | AA-958 needs a free Twilio trial for the live proof; AA-965 needs an LLM path |
 
-<!-- TODO (orchestrator, S269 close): S269 closed: AA-969, AA-1036 (+ more at close) — add a new §5 section with the final states and shift the letters. -->
+## 5. Closed in S269
+
+- **AA-969** (CRM-37a) — Done: bounded load test PASS (6,482 req, 0 failed, calm p95 238/238/288 ms), d16 pilot protections (agent PII hook root #548, run-script guard Infra #678, clean-up skips the pilot, crm-044, nightly backup, restore drill 24/24 and 5,206/5,206), export DEK fix Partner #230. Evidence `docs/audits/2026-11-05-S269-aa969-loadtest/`.
+- **AA-1036** (R3 one agency app) — Done: invited user 7/7, add-on round trip 1 + 15 + 4 PASS, CRM-only Add-ons via `tenant.addons.v1` (root #547, CIS #1313, Partner #221, Infra #677), Partner suppressions `{}`. Screens `docs/audits/2026-11-05-S269-live-verify/`.
+
 
 ## 5. Closed in S268
 
