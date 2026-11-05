@@ -1,8 +1,3 @@
----
-title: S268 state snapshot (05/11/2026)
-lang: vi
----
-
 # S268 — snapshot trạng thái cuối phiên (05/11/2026 ~02:05Z)
 
 Kiểm trực tiếp lúc chốt phiên; mọi số trong log / memory / backlog lấy từ đây. Không ghi account ID, ARN hay giá trị secret.

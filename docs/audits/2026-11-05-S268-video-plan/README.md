@@ -1,8 +1,3 @@
----
-title: Kế hoạch video sản phẩm và UAT (S268)
-lang: vi
----
-
 # Kế hoạch video sản phẩm và UAT (S268, 05/11/2026)
 
 Bản tư vấn cho tech lead (tiếng Việt theo luật N-7 cho audit tư vấn). Theo dõi trong Linear **AA-855** (tech lead chọn gộp kế hoạch series sản phẩm vào AA-855, 05/11/2026).
