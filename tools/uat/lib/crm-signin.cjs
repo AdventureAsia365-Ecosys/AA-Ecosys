@@ -56,9 +56,15 @@ function creds(who) {
  * UAT_AWS_PROFILE or aa365-admin). Also used by lib/signin.cjs for the Content studio user. Never printed.
  */
 function secretCreds(secretId) {
-  const raw = execFileSync('aws', ['secretsmanager', 'get-secret-value', '--secret-id', secretId, '--profile', PROFILE,
-    '--region', REGION, '--query', 'SecretString', '--output', 'text'],
-  { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 30_000 });
+  let raw;
+  try {
+    raw = execFileSync('aws', ['secretsmanager', 'get-secret-value', '--secret-id', secretId, '--profile', PROFILE,
+      '--region', REGION, '--query', 'SecretString', '--output', 'text'],
+    { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 30_000 });
+  } catch (e) {
+    // Never the CLI text (it may carry an ARN); the error class only. A missing secret is a clear BLOCKED reason.
+    throw new Error(secretError(secretId, String(e.stderr || e.message || '')));
+  }
   let s;
   try {
     s = JSON.parse(raw);
@@ -67,6 +73,14 @@ function secretCreds(secretId) {
   }
   if (!s.email || !s.password || !s.totp_secret) throw new Error(`secret ${secretId} lacks email, password or totp_secret`);
   return { email: s.email, password: s.password, totpSecret: s.totp_secret };
+}
+
+/** One line for a failed secret read, from the CLI's error text (never echoed): missing, denied, expired, other. */
+function secretError(secretId, text) {
+  if (/ResourceNotFoundException/.test(text)) return `secret ${secretId} does not exist (identity not enrolled yet)`;
+  if (/AccessDenied/.test(text)) return `access denied reading secret ${secretId}`;
+  if (/ExpiredToken|expired|MFA|mfa/.test(text)) return `AWS session expired: run aws sts get-caller-identity --profile ${PROFILE} (MFA)`;
+  return `could not read secret ${secretId}`;
 }
 
 // RFC 6238 (SHA-1, 6 digits, 30 s), the partner pool's authenticator. Cognito refuses a code replayed in the same
@@ -278,7 +292,7 @@ async function readMailCode(recipient, sinceMs, timeoutMs = 90_000) {
 module.exports = {
   PARTNER, CLIENT, BOOKING, WORK, IDENTITIES, TRAVELLER_MASK,
   ensureState, statePath, bffCall, paceClientWrite, watch429, assertNo429, echoedCode, readMailCode, totp,
-  secretCreds, freshTotp, PROFILE, REGION,
+  secretCreds, secretError, freshTotp, PROFILE, REGION,
 };
 
 if (require.main === module) {

@@ -17,7 +17,7 @@ sc.steps = [
     },
     run: async (page, h) => {
       await sha(page, sc, 'start');
-      await open(page, h, '/', 'crm-home');
+      await open(page, h, '/home', 'crm-home'); // the bare host '/' is the Content studio since AA-1036
       await h.expect(page.getByTestId('crm-agency')).toContainText(/assistant/i);
       await h.hover(page.getByTestId('crm-agency'));
     },

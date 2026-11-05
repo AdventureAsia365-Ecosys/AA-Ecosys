@@ -2,7 +2,9 @@
 # UAT video pipeline (skill aa-uat-video): captions -> local TTS -> record (each step held to its narration)
 # -> subtitles + EN/VI audio mux -> sync check. $0: local TTS + local ffmpeg, no API call.
 #   bash tools/uat/run.sh scenarios/<app>/<id>.cjs        (path relative to tools/uat/, or absolute)
-# Setup once: bash tools/uat/setup.sh. Exit: 0 PASS | 2 a step FAILed (video kept) | 3 egress not VN (VPN on).
+# Setup once: bash tools/uat/setup.sh. Exit: 0 PASS | 2 a step FAILed (video kept) | 3 egress not VN (VPN on) |
+# 5 pilot_guard: the signed-in tenant / agency is not a synthetic one on the allow-list (lib/pilot-guard.cjs); checked
+# before the TTS and again before the take, and no video is made.
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 cd "$HERE"
@@ -11,9 +13,12 @@ SC="$(realpath "${1:?scenario path, e.g. scenarios/tripplanner/tp-pub-01.cjs}")"
 c=$(curl -s --max-time 10 https://ipinfo.io/country || true)
 [ "$c" = "VN" ] || { echo "STOP: public IP country is '$c', not VN (Vercel blocks VPN IPs). Turn the VPN off."; exit 3; }
 ID="$(node -e "console.log(require(process.argv[1]).id)" "$SC")"
+set +e; node record.cjs "$SC" --guard-only; rc=$?; set -e
+[ "$rc" = 0 ] || { echo "STOP: $ID refused before recording (exit $rc; 5 = pilot_guard)"; exit "$rc"; }
 node record.cjs "$SC" --captions
 ./venv/bin/python -I tts.py "work/$ID"
 set +e; node record.cjs "$SC"; rc=$?; set -e
+[ "$rc" = 5 ] && { echo "STOP: $ID pilot_guard, no video"; exit 5; }
 MP4="$(./venv/bin/python -I build.py "work/$ID" out | tail -1)"
 if ! ./venv/bin/python -I check_sync.py "$MP4" "${MP4%.mp4}.en.srt" --frames "work/$ID/frames"; then
   rc=$(( rc == 0 ? 2 : rc ))

@@ -4,7 +4,8 @@
 'use strict';
 
 // The identities a dry-run scenario may name (lib/signin.cjs signs each one in once, outside the recorded context).
-const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'crm'];
+// studio-editor (AA-855): the Content studio EDITOR of the E2E tenant; it can write, so only write scenarios use it.
+const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'crm'];
 // Paths that reach a paid model or data provider: aborted in every dry-run scenario (record.cjs UAT_BLOCK_URLS), so a
 // dry run can never start one, even by a stray click. TripPlanner free-text search (embedding) and narration (chat
 // model), in both spellings (lib/botCheck.ts in AA-TripPlanner-Web); the writes among them are also non-GET.
@@ -13,10 +14,12 @@ const PAID_URLS = ['/api/browse/search(?:[?#]|$)', '/api/browse\\?(?:.*&)?resour
 // (roles owner / agent / assistant), so the dry run signs in the OWNER of the invented review agency. Only the browser
 // guard of record.cjs keeps those scenarios read-only, so they run only on an explicit --include-writable. The other
 // signed-in identities are refused writes by their backend too (403 e2e_read_only for the CIS / Booking E2E staff,
-// 403 studio_role_forbidden for the Content studio viewer).
-const WRITABLE_IDENTITIES = ['crm'];
+// 403 studio_role_forbidden for the Content studio viewer). The studio editor can write too (AA-855).
+const WRITABLE_IDENTITIES = ['crm', 'studio-editor'];
+// Exit code of a run stopped by the pilot guard (lib/pilot-guard.cjs EXIT_PILOT_GUARD).
+const EXIT_PILOT_GUARD = 5;
 // Order in which identities sign in: the cheap ones first, so a code-mail wait never delays the public pages.
-const SIGNIN_ORDER = ['public', 'studio', 'crm', 'cis-admin', 'booking'];
+const SIGNIN_ORDER = ['public', 'studio', 'studio-editor', 'crm', 'cis-admin', 'booking'];
 
 /** Parse the runner's argv (without node and the script). Throws on an unknown option or a missing value. */
 function parseArgs(argv) {
@@ -126,11 +129,17 @@ function cell(x, max = 160) {
  * The outcome of one scenario from record.cjs output. `result` / `timeline` are the parsed JSON files (null when the
  * child crashed before writing them); `blocked` is the sign-in failure reason when the identity could not sign in.
  */
-function outcome(entry, { result = null, timeline = null, exitCode = null, blocked = null, ms = null } = {}) {
+function outcome(entry, { result = null, timeline = null, exitCode = null, blocked = null, pilotGuard = false, ms = null } = {}) {
   const base = { id: entry.id, app: entry.app, identity: entry.identity, title: entry.title, steps_total: entry.steps };
+  const notRun = () => Array.from({ length: entry.steps }, (_, i) => ({ n: i + 1, status: 'NOT RUN', error: '' }));
   if (blocked) {
-    return { ...base, verdict: 'BLOCKED', reason: cell(blocked), steps_passed: 0, ms: 0,
-      steps: Array.from({ length: entry.steps }, (_, i) => ({ n: i + 1, status: 'NOT RUN', error: '' })) };
+    return { ...base, verdict: 'BLOCKED', reason: cell(blocked), steps_passed: 0, ms: 0, steps: notRun(),
+      ...(pilotGuard ? { pilot_guard: true } : {}) };
+  }
+  // record.cjs refused the session's tenant before any browser page (exit 5, no video).
+  if ((result && result.verdict === 'BLOCKED' && result.pilot_guard) || exitCode === EXIT_PILOT_GUARD) {
+    const why = (result && result.pilot_guard) || 'pilot_guard: refused by record.cjs';
+    return { ...base, verdict: 'BLOCKED', reason: cell(why), steps_passed: 0, ms, steps: notRun(), pilot_guard: true };
   }
   if (!result) {
     return { ...base, verdict: 'CRASH', reason: `record.cjs exited ${exitCode} without result.json`, steps_passed: 0, ms,
@@ -179,8 +188,9 @@ function counts(outcomes) {
   return c;
 }
 
-/** Exit code of the run: 0 every scenario PASS, 2 otherwise (FAIL, BLOCKED or CRASH). */
+/** Exit code of the run: 5 when the pilot guard refused any scenario, 0 every scenario PASS, 2 otherwise. */
 function exitCode(outcomes) {
+  if (outcomes.some((o) => o.pilot_guard)) return EXIT_PILOT_GUARD;
   return outcomes.length && outcomes.every((o) => o.verdict === 'PASS') ? 0 : 2;
 }
 
@@ -248,6 +258,6 @@ function stamp(d = new Date()) {
 }
 
 module.exports = {
-  IDENTITIES, WRITABLE_IDENTITIES, SIGNIN_ORDER, PAID_URLS, parseArgs, describe, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
+  IDENTITIES, WRITABLE_IDENTITIES, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, parseArgs, describe, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
   renderMarkdown, renderTsv, stamp,
 };
