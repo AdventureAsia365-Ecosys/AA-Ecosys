@@ -82,7 +82,11 @@ info:
     the CRM now also keeps each issued address sealed under a one-off data key of its KMS key (until the invitation is
     claimed) and sends again to it, so nobody types it again; 409 `address_not_kept` for an invitation that kept none.
     A caller in cis-support but not cis-customer_success / cis-admin never names an address (403
-    `readdress_not_allowed`).
+    `readdress_not_allowed`). A desk caller can call the CRM without CIS (it holds the relayed token), so the CRM
+    asks CIS (tenant.membership.v1 getTenantMembers of that tenant, M2M) and delivers for it only an `invited`
+    membership of that tenant with the role `viewer` or `editor`: 403 `owner_invitation_not_allowed` (the owner seat
+    stays with cis-admin / crm-platform-admin), 403 `invitation_not_invited` (no open invitation with that id on that
+    tenant).
     Errors are
     `{detail, message?, fields?, state?, member_limit?}` (Problem); a 422 names the failing fields only, never the
     submitted values.
@@ -363,7 +367,8 @@ paths:
         environment, for an address on the E2E mailbox domain, for a synthetic CRM agency with this `tenant_id`, and
         for a `cis_invitation_id` that CIS (tenant.membership.v1 getTenantMembers, M2M) reports as an `invited`
         membership of this tenant with the role `viewer` or `editor`. 403 `e2e_read_only` otherwise; 503
-        `cis_unavailable` when CIS cannot answer. Other callers are unchanged.
+        `cis_unavailable` when CIS cannot answer. A desk caller (1.12) is checked against the same CIS answer: an
+        `invited` `viewer` / `editor` membership of this tenant only. Other callers are unchanged.
       requestBody:
         required: true
         content:
@@ -380,7 +385,8 @@ paths:
           $ref: "#/components/responses/Forbidden"
           description: >-
             `wrong_audience`, `missing_group`, `e2e_read_only` (the Dev E2E CIS admin outside its terms, or with
-            `keep_address`), `tenant_outside_scope` and `readdress_not_allowed` (a desk caller, 1.12)
+            `keep_address`), `tenant_outside_scope`, `readdress_not_allowed`, `owner_invitation_not_allowed` and
+            `invitation_not_invited` (a desk caller, 1.12)
         "409":
           $ref: "#/components/responses/Conflict"
           description: >-
