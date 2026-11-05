@@ -1,18 +1,18 @@
 ---
 id: APP-06-ai-register
 title: "AI Use Register"
-description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps, and the machine-readable marking of AI output (EU AI Act Art. 50). v1.8."
+description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps, and the machine-readable marking of AI output (EU AI Act Art. 50). v1.9."
 type: reference
 status: draft
 owner: nghiep
 audience: [engineer, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-api, aa-cis-worker, tripplanner-lambda, aa-crm-api, aa-booking-api, aa-booking-admin]
-last_reviewed: 2026-11-04
+last_reviewed: 2026-11-05
 review_every_days: 30
 related: [ARCH-01-ai-gateway, APP-06-routes, APP-06-eval, APP-06-prompts, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-804, AA-820, AA-1040]
 ---
 
-# AI Use Register (v1.8)
+# AI Use Register (v1.9)
 
 One row per place where the ecosystem calls an AI model or a paid data provider. It answers, for each stage: what it
 is for, who owns the decision to change it, which provider and model family serve it today, which data may leave AWS,
@@ -196,7 +196,7 @@ is not from the writers' family (Anthropic), per decision 12. acc2 is `aws_only`
 
 | Stage | App | Purpose | Owner role | Provider / family today | Data scope | Tenant data | Budget source | Kill switch | Golden set / eval | Human gate |
 |---|---|---|---|---|---|---|---|---|---|---|
-| `crm_*` (gateway v2, stub provider) | CRM | Reply drafts for agencies (card CRM-33a); the CRM gateway runs on the vendored `aa_llm` core and writes `crm.llm_call` in the ledger v2 shape (crm-032), but **Dev runs the stub provider** (no `CRM_LLM_*` variable set), so no real model is called | Tech lead | Stub (no network). Planned: Bedrock only, never OpenAI or Jev (root ADR 0008a §5–6). The S267 decision (AWS preferred, not AWS only; one Anthropic key) covers the CRM too; it applies when the CRM's own gateway change amends ADR 0008a §5–6, with the scrub kept before any call | Bedrock only (until that change) | Yes: the agency's own client data, scrubbed first (F3: known values, regex, Bedrock Guardrails in acc2 detect mode) | Per agency `crm.tenant_settings.ai_budget_usd` (default 2 USD a month), alerts at 75 / 90 / 100 % (crm-032), refused at 100 % | `ai_enabled` per agency (default false) | None yet | Every draft is shown to an agency member, who sends it by hand |
+| `crm_*` (gateway v2) | CRM | Reply drafts for agencies (card CRM-33a); the CRM gateway runs on the vendored `aa_llm` core and writes `crm.llm_call` in the ledger v2 shape (crm-032). **Dev runs Amazon Nova Lite** on acc2 (AA-Partner crm-042, AA-CIS-Infra `crm_llm.tf`, `CRM_LLM_PROVIDER=bedrock`, read live 05/11/2026), the interim path of root ADR 0009 decision 14 amendment (Dev only) | Tech lead | Nova Lite (Amazon), Bedrock acc2, `us.` cross-region profile (US regions only); the crm-037 Claude entries kept, switched off. Bedrock only, never OpenAI or Jev (root ADR 0008a §5–6). The S267 decision (AWS preferred, not AWS only; one Anthropic key) covers the CRM too; it applies when the CRM's own gateway change amends ADR 0008a §5–6, with the scrub kept before any call | Bedrock only (until that change) | Yes: the agency's own client data, scrubbed first (F3: known values, regex, Bedrock Guardrails in acc2 detect mode) | Per agency `crm.tenant_settings.ai_budget_usd` (default 2 USD a month), alerts at 75 / 90 / 100 % (crm-032), refused at 100 % | `ai_enabled` per agency (default false) | None yet | Every draft is shown to an agency member, who sends it by hand |
 | `crm_scrub` (`guard`) | CRM | Pass 3 of the F3 PII scrubber: Bedrock Guardrails detect personal data before any CRM model call; each call is a `crm.llm_call` row with role `guard` | Tech lead | Bedrock Guardrails (acc2), guardrail `aa-crm-dev-scrub` | Bedrock only | Yes: the agency's client text, before it reaches a model | Per agency AI budget | `ai_enabled`; a failed scrub fails closed | EN/VI scrub corpus gate (`Scrub corpus` workflow) | Not applicable |
 | None | Booking | Booking makes no AI calls. Hotel and service text is drafted by CIS (`supply_content_writer`) | — | — | — | — | — | — | — | High-risk advice rule in Booking `CONTEXT.md` (AA-820): no AI advice on insurance, financing, claims or visas without qualified staff review and AI disclosure |
 
@@ -226,7 +226,9 @@ company's name (ADR 0019 b19); tenants never hold a provider key.
   TripPlanner traveller text, not only as writing fallbacks of the T-series writers (since CIS 366 the tenant judges
   and the claim extraction send tenant content to the OpenAI API as soon as acc3 refuses GPT-6 Luna, not only as a
   last resort). Until they do, decision 10's "only makers named in the terms" is not met for the T-stages and
-  `tp_compose` that 366 opened.
+  `tp_compose` that 366 opened. *S269:* the DPA draft v0.2 names both direct APIs as sub-processors for the Content
+  studio stages ([DPA Annex 3](../legal/dpa-annex-3-subprocessors.md) §1.2), and the pilot contract set incorporates
+  the AI Schedule; both wait for the tech lead's read and counsel.
 - **Jev (TypeSafe)**: yes/no decision checks; for tenant content only for allowlisted tenants.
 - **DataForSEO, Geoapify**: keywords and place names only, never tenant text.
 - **Amazon (Nova) and Meta (Llama) models on Bedrock (acc2)**: fallback for judge and validate stages when acc3
@@ -292,6 +294,7 @@ decision or issue that closes them, or say "none planned".
 
 | Version | Date | Change |
 |---|---|---|
+| v1.9 | 05/11/2026 (S269, AA-820) | CRM row corrected: Dev drafts run on Amazon Nova Lite on acc2 through a `us.` profile since AA-1027 F4 (AA-Partner crm-042, AA-CIS-Infra `crm_llm.tf`, root ADR 0009 decision 14 amendment), not the stub; the DPA draft v0.2 cross-reference in the provider list. No route change. |
 | v1.8 | 04/11/2026 (S267, AA-1026) | Tech lead decisions S267: AWS preferred, not AWS only (every active text stage `vendor_direct`, CIS 366); model first (the same model on its vendor API before the next model; GPT-6 Luna's OpenAI API twin right behind it on every GPT route); one Anthropic API key (150 USD a month) and acc3 capped at 100 USD a month, hard stops enforced by the CIS gateway only (TripPlanner counted, not stopped; CRM outside); provider list for tenant terms widened (AA-820 follow-up); TripPlanner view gap noted. |
 | v1.7 | 04/11/2026 (S267, AA-1026) | Family fallback chains (CIS 366): Claude Sonnet 4.6 / Haiku 4.5 Converse rows behind their 5.5 siblings; first fallbacks for `tp_compose` and `segment_research*`. Order superseded by v1.8. |
 | v1.6 | 03/11/2026 (S266, AA-1040) | Marking gaps closed: catalog tour JSON (`Tour.ai` in catalog.http.v1 1.3, TripPlanner browse Lambda cards and detail; `generated_at` from `v_tour.text_updated_at`, CIS 359) and the Booking supply text row (CIS 358 view columns, Booking `content.ai` / `supply.ai`, "AI-assisted" badge). Coverage limits rewritten. No route change. |

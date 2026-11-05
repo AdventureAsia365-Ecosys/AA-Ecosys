@@ -1,0 +1,104 @@
+---
+id: SEC-04-dpa-annex1
+title: "DPA Annex 1: description of the processing per app (draft v0.2)"
+description: "Annex 1 of the partner-agency DPA (and SCC Annex I.B): subject matter, purposes, data subjects, data categories, special categories, storage, recipients and retention for the CRM, the Content studio, Booking B2B and the Trip Planner, from the live schema dump and the DM-7.1 retention table."
+type: reference
+status: draft
+owner: nghiep
+audience: [owner, cio, engineer, agent]
+applies_to: [ecosystem, aa-crm-api, aa-crm-web, aa-partner-portal, aa-cis-api, aa-booking-api]
+last_reviewed: 2026-11-05
+review_every_days: 30
+related: [SEC-04-dpa-agreement, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04, ARCH-08-data-management, AA-820]
+---
+
+# DPA Annex 1: description of the processing per app (draft v0.2)
+
+> [!WARNING]
+> Draft for counsel, not legal advice. Part of the [Data Processing Agreement](dpa.md). The table and column names
+> come from the live schema dump ([`db-schema-reference.md`](../architecture/db-schema-reference.md), Verified
+> 2026-11-04 23:53 UTC); retention windows come from the [DM-7.1 retention table](../architecture/data-standards/02-data-management.md#7-retention-and-archival).
+> Windows marked "(est.)" are estimates that counsel or the tech lead still confirms.
+
+This annex also serves as Annex I.B of the EU Standard Contractual Clauses ([Annex 4](dpa-annex-4-transfers.md)).
+
+## 1. Common to every app
+
+| Item | Description |
+|---|---|
+| Controller | The Agency |
+| Processor | AA (contracting entity [●]) |
+| Duration | The term of the Agreement plus the exit window and deletion period of DPA clause 11 |
+| Frequency | Continuous |
+| Location | AWS region us-west-1 (United States); Sub-processors as in [Annex 3](dpa-annex-3-subprocessors.md) |
+| Not done with Agency Personal Data | Marketing by AA; selling or sharing; building AA customer profiles; copying the Agency's clients into AA's Booking or Trip Planner records (DM-6.2, DM-6.8); training AI models (AA does not train models; AI call records keep no prompt or output text) |
+
+## 2. CRM (AA-Partner, schema `crm`)
+
+The Agency's client relationship system: leads, clients, trips, proposals, messages, documents, payments it records,
+and the operational hand-over of AA tours.
+
+| Item | Description |
+|---|---|
+| Nature and purposes | Storing and organising the Agency's client and trip records; receiving enquiries from the Agency's forms and forwarded mail; sending messages through the Agency's own mailboxes and messaging accounts; building and sending proposals and collecting acceptances and signatures; recording invoices, payments and commissions; reminders, tasks and workflows; reports for the Agency; AI reply drafts after personal data is replaced by placeholders (off by default, per Agency); exports and erasures on the Agency's request; passing to AA operations the traveller details needed to run an AA tour the Agency booked (the "ops release"); security, audit and support |
+| Data subjects | The Agency's clients and leads (travellers); their companions, guardians and related persons; their emergency contacts; people who write to the Agency's forwarded mailbox; contacts of the Agency's own suppliers; the Agency's users |
+| Identity and contact data | Names, e-mail, phone, address fields in channel accounts and forms (`crm.traveler` `given_name_enc`, `family_name_enc`, `display_name_enc`, `email_enc`, `phone_enc`; `crm.agency_supplier` contact name and e-mail; `crm.form_submission.payload_enc`) |
+| Identity-document data | Date of birth, nationality, passport number, expiry and issuing country, document scans (`crm.traveler` `dob_enc`, `nationality_enc`, `passport_no_enc`, `passport_expiry_enc`, `passport_country_enc`; `crm.document`, files in the documents bucket) |
+| Emergency contact | `crm.traveler.emergency_contact_enc` |
+| Travel data | Trips, dates, party, flights, destinations, proposals and the day plan (`crm.trip`, `crm.trip_party`, `crm.traveler_flight`, `crm.proposal`, `crm.proposal_day`) |
+| Preference profile (pseudonymous) | Budget, pace, fitness, interests, dietary and mobility codes, age band at departure, held apart from identity under a random token (`crm.traveler_profile`, reached through `crm.traveler.profile_token_enc`) |
+| Communications | Mail and SMS / WhatsApp messages, their subjects, bodies and addresses (`crm.message` `subject_enc`, `body_enc`, `body_html_enc`, `from_enc`, `to_enc`), notes, saved replies, templates |
+| Agreements and payments | Booking-terms acceptances, signatures with the typed name, invoices, payment records with references only (no card numbers), refunds, commissions |
+| Online identifiers and credentials | The Agency users' sign-in identity (Cognito issuer and subject); hashed client-link and sign-in codes; the Agency's own vendor credentials, encrypted (`crm.integration_credential.secret_enc`) |
+| Audit data | Who viewed, revealed, changed or exported what, with ids and codes only (`crm.audit_event`) |
+| **Special categories** | **Health:** dietary, medical and mobility needs as closed-list codes only, stored only with the client's explicit consent and hidden when it is withdrawn (`crm.traveler_health.health_flags_enc`; DM-6.1 `health`). No other special category is intended; free-text notes and messages may contain one if a client writes it **[COUNSEL: Agency instruction for free text]** |
+| Storage | Every personal field is encrypted with a key of the Agency's own (Annex 2, M-3); documents are encrypted before storage; mail arriving at the forwarding address is held raw for at most 1 day, then parsed and deleted |
+| Recipients inside AA | The CRM service; AA operations staff for the ops release of AA tours (name, age band, dietary and mobility codes while consent stands, flights, the waiver's insurance choice; never phone, e-mail, emergency contact, passport, nationality, date of birth or notes); AA support only with the owner's grant, or emergency access with an owner notice (DPA clause 14) |
+| AI | Reply and follow-up drafts on Amazon Bedrock after a three-pass scrub (known values, patterns, Amazon Bedrock Guardrails) replaces personal data with placeholders; the model never sees the identity fields. A person sends every draft. Only for an Agency with the `ai_assist` entitlement and AI switched on (off by default), always after the scrub. On Dev the drafts run on **Amazon Nova Lite** (Amazon Bedrock, AA's infrastructure account) through a `us.` cross-region inference profile, so a call may be served in any of the US regions us-east-1, us-east-2, us-west-1 or us-west-2, never outside the US (AA-CIS-Infra `modules/environment/crm_llm.tf`; root ADR 0009 decision 14 amendment of 2026-11-03, "the CRM draft writer on acc2, Dev only"; CRM task environment read 2026-11-05) |
+| Aggregated statistics | AA may compute anonymous statistics across agencies (a cell is shown only with at least 10 travellers from at least 3 agencies and no agency above 70 % of it; no agency id). On the Agency's written request AA sets its opt-out and its trips are left out of every cell (`crm.tenant_entitlement.insights_opt_out`). DPA clause 1.6 governs it **[COUNSEL: confirm this is permitted processing or an AA purpose on anonymised data]** |
+| Retention (DM-7.1 `crm` rows) | Clients and their identity data: until the Agency deletes the client or offboards; an archive suggestion after 36 months without trip activity (est.). Trips, messages, proposals, notes, tasks: until the trip is deleted or the Agency offboards. Ops release: trip end + 90 days, then purged with a receipt. Form and inbox payloads: personal data redacted after 90 days. Sign-in codes and placeholder maps: 24 hours. AI draft prompts (scrubbed): cleared after 30 days (est.). AI call records (no text): 180 days. Deleted items: 7 days in the trash. Audit: 12 months in the database, archive up to 7 years. On a single-client erasure: invoices and payments kept for the Agency's statutory period; signed agreements until trip end + 3 years (est.). Offboarding deletes all agency data except the audit and the receipts (DPA clause 11) |
+
+## 3. Content studio (AA-CIS, schemas `shared`, `acp_*`; served in the agency app)
+
+The Agency's marketing content: tour rewrites in the Agency's brand voice, blog and social pieces, and publishing to
+the Agency's own website and social pages on its instruction.
+
+| Item | Description |
+|---|---|
+| Nature and purposes | Storing brand settings and content; AI generation, scoring and checking of content; publishing to the Agency's channels and unpublishing on its instruction; exports; usage metering and billing; support and moderation; security and audit |
+| Data subjects | The Agency's users; people the Agency names in its own brand settings, briefs or content (for example a guide named in a blog post) |
+| Personal data | Users: Cognito issuer and subject (`shared.tenant_members`), membership changes (`shared.tenant_membership_event`); account and billing contact of the Agency (`shared.tenants` `legal_entity_name`, `tax_id`, `billing_email`, `billing_address`; AA as controller, DPA 1.4(a)); free text in add-on requests (`shared.tenant_addon_request.note`); whatever the Agency types into brand settings, briefs and content; edits and labels the Agency makes, which feed its own writing rules (`shared.writing_signal`, `shared.writing_rule`); channel credentials for its website and social pages, stored in AWS Secrets Manager and `shared.tenant_integrations`; publish and audit records naming the Agency account or an AA staff member (`acp_shared.audit_log`) |
+| Special categories | None intended. The Agency must not put its clients' personal data into Content studio inputs (DPA clause 13.3) |
+| AI | Content inputs (brand settings, briefs, tour text, the Agency's text) are sent to the AI models of [Annex 3](dpa-annex-3-subprocessors.md) §1.2: Claude on Amazon Bedrock first, then the same model on the Anthropic API, OpenAI models on Amazon Bedrock and the OpenAI API for scoring and checking and, as a last resort, for writing; Amazon Nova on Bedrock as a fallback check. Every Content studio stage is classed `content`, not `pii` (CIS migration 373), because it receives no personal data of the Agency's clients by rule (DM-6.4) |
+| Recipients inside AA | AA staff in roles that may read tenant content (content lead, tenant QA, AI operations, admin), each view through role-scoped routes; customer success and support only for the agencies assigned to them; read-only "view as tenant" sessions, audited (DPA clause 14) |
+| Retention | While the account is active. AI call records: 180 days, no text. Tenant writing rules and edits: while the account is active, deleted with it. Audit log: kept (window to be set before production). After offboarding: the tenant erasure job of DPA clause 11 |
+
+## 4. Booking B2B (AA-Booking, schema `booking`)
+
+AA's own back office for AA tours that the Agency quotes, holds and books with AA through the CRM (and, once built,
+the Content studio's "Book with AA" form, ADR 0019 d17).
+
+| Item | Description |
+|---|---|
+| Role | For the Agency's bookings of AA tours, AA acts as a supplier to the Agency and keeps its commercial records as a controller (DPA clause 1.4(c)) **[COUNSEL]**. No Agency Personal Data about travellers is processed here |
+| Data kept | The Agency as a B2B partner (`booking.b2b_partners`: agency name, status, billing currency, credit terms reference, machine client id); quotes, holds and bookings with passenger counts, age bands, rooms, dates and the Agency's proposal reference (`booking.b2b_quotes`, `b2b_holds`, `b2b_hold_lines`, B2B `trip_cases` with `customer_id` empty); cancellations and fees; AA invoices to the Agency |
+| What never reaches Booking | Traveller names, contact details, dates of birth or passport data: the B2B contract `booking.b2b.v1` has no field for them, and CI fails a contract sample that carries personal fields (DM-6.8) |
+| Traveller details for running an AA tour | Stay in the CRM as the encrypted ops release and are read by AA operations inside the CRM, every view written to the Agency's audit trail (section 2) |
+| Retention | AA's statutory accounting period for invoices and bookings **[COUNSEL]**; no window is set yet in DM-7.1 for these tables |
+
+## 5. Trip Planner (AA-TripPlanner-Web, schema `tripplanner`): from pilot milestone 2
+
+The Trip Planner becomes a per-agency service in release R5 (ADR 0019 d10, d11; about S272-S277). Until then it is
+AA's own site, AA is its controller, and it is **not** part of this DPA. When an Agency takes it:
+
+| Item | Description |
+|---|---|
+| Nature and purposes | A trip planner on the Agency's page (`/{agency slug}` plus a launcher button on the Agency's site); AI narration of the traveller's plan; sending the traveller's request to the Agency as a lead (`lead.submitted.v1` into the CRM intake, or a signed webhook or e-mail to an Agency without the CRM) |
+| Data subjects | Travellers who use the planner (guests, no account) |
+| Personal data | Name, e-mail and phone given when they submit, with their contact consent; the trip plan and dates; free text they write into the plan; a guest cookie stored as a hash; IP-based rate-limit counters |
+| AI | Trip narration on Amazon Bedrock (Claude); traveller free text may be in the prompt without an identifier (DM-6.4; no automated scrub yet, AI Use Register `tp_compose`) |
+| Joint collection | Abuse prevention and rate limits on the planner may make AA a joint controller with the Agency for that purpose only: see the joint-controller clause in the [pilot contract set](pilot-contract-set.md) §3 |
+| Retention | Lead payload personal data redacted after 90 days (DM-6.6, `tp_retention_outbox_redact`, DRY RUN until its first approved run); other windows proposed in L3 |
+
+*Drafting note: this section is written now so that counsel reads the whole set once. It is attached to an Agency's
+DPA only when that Agency takes the Trip Planner.*
