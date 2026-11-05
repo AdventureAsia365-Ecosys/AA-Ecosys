@@ -48,7 +48,7 @@ The S265 audit found that the codebase already has most of the pieces: tenant RL
 **d3 Staff roles (TL-3).**
 
 - `shared.admin_role` gains `content_lead`, `tenant_qa`, `customer_success`, `support`, `finance` and `ai_ops`. `ALTER TYPE` runs in its own migration.
-- `reviewer` merges into `content`. The same CIS migration fixes `admin_users_email_chk`, and the `cis-reviewer` group stays as an alias for one release.
+- `reviewer` merges into `content`. The same CIS migration fixes `admin_users_email_chk`, and the `cis-reviewer` group stays as an alias for one release. (Done S269, AA-1035 R2 close-out: CIS 375 moves the last row, the A10 E2E account, to `content` and forbids `reviewer`; the alias is gone from the code and AA-CIS-Infra drops the group.)
 - `shared.staff_app_grant` and `shared.staff_crm_grant` stay. Booking `sales` now means the agency desk.
 - Booking gains a `finance` role (d9). This takes three changes:
   - a **CIS** migration adds `'finance'` to `staff_app_grant_role_chk`. The check is on `shared.staff_app_grant` (owner `cis_owner`), which `schema-ownership.md` gives to CIS, so Booking may not migrate it;
@@ -63,6 +63,7 @@ The S265 audit found that the codebase already has most of the pieces: tenant RL
 - New `shared.staff_tenant_assignment` (owner, backup or support; one owner per tenant).
 - Every `{tenant_id}` route uses the `require_tenant_scope` dependency. A CI test checks that every such route uses it, and an isolation probe runs against it.
 - The `crm.ops.v1` relay forwards the staff member's scope. `admin` bypasses scope.
+  - *How (S269, AA-1035 R2 close-out):* the relayed token is the staff member's own, so the CRM does not trust a scope sent with it. For a caller in `cis-customer_success` / `cis-support` it reads the scope from CIS (`tenant.membership.v1` 1.3 `getStaffTenantScope`, M2M, cached at most 30 s, fail closed) and serves only those tenants (`crm.ops.v1` 1.12); CIS also filters the relay itself. `cis-admin` / `crm-platform-admin` keep every agency.
 - This is an auth change, so it gets an independent review.
 
 **d5 Support access (TL-5).** "View as tenant" is read-only, lasts at most 60 minutes, requires a reason or ticket, shows a banner and is logged in `shared.staff_view_as_session`. Staff reach end-customer PII in the CRM only through `crm.support_grant`, which the tenant owner grants.
