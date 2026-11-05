@@ -22,10 +22,13 @@ info:
     refunds); the word "net" is reserved for costs and never appears in this contract. Money is a decimal string with
     two places (numeric(16,2); a VND amount reads "2400000.00") with an ISO 4217 currency. Every answer is
     Cache-Control no-store, the 401, 404 and 503 refusals included.
+    Frozen (root ADR 0019 d8, AA-1037): while Booking's B2C part is switched off (B2C_INTAKE_ENABLED, the default) staff
+    can no longer create, send, amend or cancel an invoice or record a payment, so the answers stop changing; the read
+    stays unchanged until the B2C tables are dropped (destructive-ops DRY RUN), which retires this contract.
   x-aa-contract: booking.customer.v1
   x-aa-producer: AA-Booking
   x-aa-consumers: [AA-TripPlanner-Web]
-  x-aa-issues: [AA-682]
+  x-aa-issues: [AA-682, AA-1037]
 servers:
   - url: /booking/customer/v1
 security:
