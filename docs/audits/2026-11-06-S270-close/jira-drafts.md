@@ -1,6 +1,9 @@
 # S268 + S269 + S270 + KAN-20: nháp Jira gom một lượt (CHƯA ĐĂNG)
 
-> **06/11 ~06:10 +07, tech lead: KAN-20 KHÔNG đăng** (#7 chỉ để tham khảo). 6 nháp còn lại chờ duyệt.
+> **06/11 ~06:10 +07, tech lead: KAN-20 KHÔNG đăng** (#7 chỉ để tham khảo).
+>
+> **ĐÃ ĐĂNG 06/11 ~06:40 +07** (tech lead "đăng 6 jira"): PR-23 #10616 (4 ảnh), PR-17 #10617 (1 ảnh, bỏ dòng chi phí), PR-18 #10618 (1 ảnh, che dòng Reason), PR-22 #10619 (2 ảnh), PR-25 #10620 (2 ảnh), PR-26 #10621 (2 ảnh).
+> PR-25: tech lead bỏ đoạn "Để chị cân nhắc" (Gold 6 % dưới sàn) và ảnh Agency tiers — **không hỏi chị Thư**. Ảnh add-on / bảng giá Gold / Tenant 360 đã cắt bỏ mã nội bộ.
 
 > **CHƯA ĐĂNG.** Soạn 06/11/2026 ~02:40 +07 (Claude Code, phiên S270). Chưa đăng, chưa sửa comment nào, chưa đổi trạng thái
 > issue nào. Tech lead duyệt một lần sáng 06/11, rồi đăng theo skill `aa-jira-update`: `contentFormat: html`, chữ `@thule`
