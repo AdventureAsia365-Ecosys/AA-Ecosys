@@ -28,6 +28,13 @@ related: [OPS-05, OPS-05-db-migrate, skill/aa-cis-schema/references/ecs-exec.md,
 This page is the canonical copy of the pattern (data standard DM-8.8). The agent quick reference in
 `skill/aa-cis-schema/references/ecs-exec.md`, the global `CLAUDE.md` block and older notes point here.
 
+> [!IMPORTANT]
+> Counts, not rows, of personal data (AA-969, root ADR 0019 d16: a real pilot agency is on Dev). The Claude Code hook
+> `.claude/hooks/pilot-pii-guard.sh` reads the SQL of the script that an `aws s3 cp … s3://` upload, the ECS exec
+> wrapper, an inline `--command` / `psql -c` or a DB Migrate run-script dispatch would send, and refuses one that
+> returns a `pii:` tagged column of a tenant table (`count(...)`, `count(DISTINCT ...)` and `IS [NOT] NULL` pass).
+> Rules: `.claude/hooks/pilot_pii_guard.py`; the run-script side is enforced on the live database by AA-CIS-Infra.
+
 ## When to use
 
 - Read or small one-off writes on **CIS-owned** schemas (DM-8.8, MIG-5): counts, checks, an ad-hoc A/B script.
