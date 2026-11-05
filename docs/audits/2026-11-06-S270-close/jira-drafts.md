@@ -1,5 +1,7 @@
 # S268 + S269 + S270 + KAN-20: nháp Jira gom một lượt (CHƯA ĐĂNG)
 
+> **06/11 ~06:10 +07, tech lead: KAN-20 KHÔNG đăng** (#7 chỉ để tham khảo). 6 nháp còn lại chờ duyệt.
+
 > **CHƯA ĐĂNG.** Soạn 06/11/2026 ~02:40 +07 (Claude Code, phiên S270). Chưa đăng, chưa sửa comment nào, chưa đổi trạng thái
 > issue nào. Tech lead duyệt một lần sáng 06/11, rồi đăng theo skill `aa-jira-update`: `contentFormat: html`, chữ `@thule`
 > ở đầu mỗi nháp thay bằng
