@@ -32,6 +32,10 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
      Service nào đang tắt → **không tự bật**; báo Nghiệp (agent không bao giờ tự bật/tắt hạ tầng).
    - Bảng job `shared.job`, `booking.job`, `crm.job`: queued/running (query không lọc thời gian). Truy vấn qua ECS exec
      chỉ phiên điều phối làm được (hook chặn subagent).
+   - **AI gateway (tech lead S269):** `tools/ecs/ecsx.sh tools/llm/gateway_status.py` (chỉ đọc, $0) — mỗi connection
+     enabled / `access_state` / lần probe cuối; deployment ok / denied (tên model bị từ chối); chi tiêu tháng này so với
+     cap; 24 h ok / err; route control version + preset; top lỗi 24 h. Connection bật mà denied, chi tiêu sát cap hay
+     err 24 h tăng → báo ngay trong khối trạng thái.
    - Jev canary `credit_ok` và số dư DFS, nếu phiên có chạy pipeline.
    - **Chỉ khi Nghiệp nói "dùng kiro-cli"**: chạy `.claude/skills/kiro-delegate/kiro-preflight.sh`, ghi credit Kiro vào
      khối trạng thái. Lỗi / credit thấp → báo và làm phiên này bằng Claude (skill `kiro-delegate`).
@@ -63,7 +67,8 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
      `*access-review*` mới nhất thuộc quý trước.
    - Không bao giờ chạy `pg_stat_statements_reset()` trừ ngay sau một rà soát tháng đã lưu snapshot top 50 (C4.3a).
 
-Đầu ra: một khối ngắn gồm trạng thái (3–5 dòng), lệch nếu có, danh sách việc kèm slot.
+Đầu ra: một khối ngắn gồm trạng thái (3–5 dòng), khối AI gateway (2–4 dòng từ `gateway_status.py`: connection bật,
+deployment denied, chi tiêu / cap, lỗi 24 h, route version), lệch nếu có, danh sách việc kèm slot.
 
 ## Trong phiên
 

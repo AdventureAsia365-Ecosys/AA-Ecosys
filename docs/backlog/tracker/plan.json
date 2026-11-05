@@ -1,8 +1,8 @@
 {
  "updated": "2026-11-05",
- "synced_at": "2026-11-05T02:04Z",
- "session": "S268",
- "next_session": "S269",
+ "synced_at": "2026-11-05T10:53Z",
+ "session": "S269",
+ "next_session": "S270",
  "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
  "projects": {
   "data": "Data Platform",
@@ -809,6 +809,23 @@
   }
  ],
  "log": [
+  {
+   "session": "S269",
+   "date": "05/11/2026",
+   "closed": [
+    "AA-969",
+    "AA-1036"
+   ],
+   "canceled": [],
+   "created": [],
+   "reopened": [],
+   "notes": [
+    "AA-969: load test 50 đại lý đạt SLO; bảo vệ pilot d16 live; diễn tập khôi phục đạt; sửa lỗi export sai DEK",
+    "AA-1036: mời user thật + vòng add-on live; trang Add-ons CRM-only (tenant.addons.v1)",
+    "AA-1035/1008/1037/1030/1042 In Review: R2 đóng lát, kit shell + visual job (còn H3), R4 hoá đơn + G1–G6, bậc giá + G3, 13 model Claude qua API (route v6)",
+    "AA-741 dời S270; nháp Jira S268+S269 gom sang S270"
+   ]
+  },
   {
    "session": "S267",
    "date": "04/11/2026",
@@ -1770,7 +1787,7 @@
    "milestone": "M2a",
    "session": "S270",
    "size": "XL",
-   "next": "M2a · sau R1 + R3 gộp: tenant thử qua tenant_provision (bỏ E2E_TENANT_API_KEY); lượt trả phí đã duyệt S265 (≤20 USD, ≤50 tour, đường tạm OpenAI/acc2 nếu acc3 còn đóng; trong trần cứng OpenAI 10 USD/tháng); làm trong thời gian pilot, không phải cổng",
+   "next": "M2a — phase 0 trên tenant_provision (tech lead dời từ S269)",
    "needs": ""
   },
   {
@@ -1824,13 +1841,13 @@
   {
    "id": "AA-710",
    "title": "[AAA] B2B benchmark: Asian Trails (eConnect portal, API, Lemax back office)",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Low",
    "project": "tpbk",
    "milestone": "M-R4",
-   "session": "S271",
+   "session": "S270",
    "size": "S",
-   "next": "R4 · đầu R4: cập nhật ghi chú Asian Trails theo thiết kế R4 (AA-1037/1029/1030, Book with AA d17), map khoảng trống sang issue, nháp KAN-20 cuối phiên rồi đóng",
+   "next": "R4 — đăng KAN-20 (nháp gom S270) rồi đóng",
    "needs": ""
   },
   {
@@ -1942,18 +1959,6 @@
    "needs": ""
   },
   {
-   "id": "AA-969",
-   "title": "[CRM W7] CRM-37a Security review, SLOs, bounded load test",
-   "status": "In Review",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "M-P1",
-   "session": "S269",
-   "size": "L",
-   "next": "Pilot 1 · S268: review bảo mật 3 vòng (16 lỗi sửa) live crm-api :130, alarm SLO apply; còn: seed lại 50 đại lý lt-* rồi chạy load test, 5 biện pháp d16, web 1 task Spot",
-   "needs": ""
-  },
-  {
    "id": "AA-970",
    "title": "[CRM W7] CRM-37b Release train, help, data page",
    "status": "Backlog",
@@ -1980,13 +1985,13 @@
   {
    "id": "AA-1008",
    "title": "[UI] Kit shell, visual job and close-out (S6e + S1d/S2c + S6f/H3): shared ShellFrame, visual job 1440/390 light/dark for CIS/portal/CRM web, empty suppressions, required checks",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "No priority",
    "project": "portal",
    "milestone": "M-R3",
    "session": "S270",
    "size": "M",
-   "next": "R3 · sau khi AA-1036 gộp: ShellFrame chung cho 4 consumer kit + visual job 1440/390 sáng/tối trên next start trong CI, bật check bắt buộc (H3)",
+   "next": "UI — chỉ còn H3: tech lead đăng nhập GitHub đặt check bắt buộc → đóng",
    "needs": "Tech lead đăng nhập GitHub để bật check bắt buộc (H3)"
   },
   {
@@ -2052,13 +2057,13 @@
   {
    "id": "AA-1030",
    "title": "[Pricing] Agency price tiers: B2B margin per partner tier or contract rate card, suggested retail markup in the CRM",
-   "status": "Todo",
+   "status": "In Review",
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M-R4",
-   "session": "S271",
+   "session": "S270",
    "size": "M",
-   "next": "R4 · sau AA-1029: hạng đại lý giảm 0/3/6 % trên net (b15) trong booking.partner_tier, maker-checker; dựa projection b2b_partners của R1",
+   "next": "R4 — kiểm live 2 đối tác khác bậc + ảnh; câu hỏi biên cho business owner qua Jira; nút bảng giá CRM chờ quyết định vai trò",
    "needs": ""
   },
   {
@@ -2068,33 +2073,21 @@
    "priority": "High",
    "project": "portal",
    "milestone": "M-R2",
-   "session": "S269",
+   "session": "S270",
    "size": "L",
-   "next": "R2 · S268 lát 2 live (view-as chỉ đọc 20/20, Assignments, đọc Lab có log, minor #1308); còn: relay crm.ops scope, Tenant QA book riêng, bỏ alias reviewer",
-   "needs": ""
-  },
-  {
-   "id": "AA-1036",
-   "title": "[Portal] R3 one agency app: merge portal/ into web/, one sign-in, Content home, app switcher, no tenant API keys",
-   "status": "In Review",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "M-R3",
-   "session": "S269",
-   "size": "XL",
-   "next": "R3 · S268 live: 369 DROP, studio EN/VI (smoke 67/67), Request add-on thật (374) + banner AI tạm dừng; còn: thử vòng tenant gửi → staff duyệt trên Dev, user mời thật",
+   "next": "R2 — tạo user E2E customer_success, kiểm live phạm vi tenant → đóng",
    "needs": ""
   },
   {
    "id": "AA-1037",
    "title": "[Booking] R4 Booking B2B only: drop the B2C side, every invoice issued from Booking (SaaS + settlement)",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M-R4",
-   "session": "S271",
+   "session": "S270",
    "size": "L",
-   "next": "R4 · CHECK kênh chỉ b2b/fixed_departure, booking.agency_invoice (SaaS + settlement, làm tay, không Stripe Billing b14), nhóm Trade + tab Billing Tenant 360, đầu Booking của Book with AA; xoá bảng B2C sau DRY RUN + review độc lập",
+   "next": "R4 — kiểm live luồng hoá đơn (2 staff maker-checker, CIS tick, credit stop); fixture layout-mock; Tenant 360 Billing; lát bỏ B2C",
    "needs": ""
   },
   {
@@ -2153,9 +2146,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M1b",
-   "session": "S269",
+   "session": "S270",
    "size": "L",
-   "next": "Gateway · S268 live: route control (370, preset, version, revert), trace + cảnh báo (371), preview theo probe; còn: ảnh trang admin (tech lead), 'primary back' chờ acc3, coverage sạch sau 336 (≥10/11)",
+   "next": "Gateway — route v6 ưu tiên Anthropic API (tạm thời); quay AWS bằng preset Prefer AWS khi acc3 mở 5.x",
    "needs": "Tech lead: mở trang admin Route control/Trace chụp ảnh"
   },
   {

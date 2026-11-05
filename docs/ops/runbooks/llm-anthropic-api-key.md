@@ -7,19 +7,18 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-api, aa-cis-worker, aa-cis-dev-db]
-last_reviewed: 2026-11-01
+last_reviewed: 2026-11-05
 review_every_days: 90
-last_tested: null
-tested_where: null
-tested_evidence: null
+last_tested: 2026-11-05
+tested_where: dev-acc2
+tested_evidence: "Dev, connection anthropic-direct (S269). Linear AA-1026 comment 05/11: secret created, budget 150 USD hard stop, probe haiku-5-5 ok 0.000005 USD, connection ON; AA-1042 comment: 13/13 Claude deployments probed ok after CIS 376"
 related: [APP-06, APP-06-routes, OPS-05-ecs-exec, SEC-02-rotation, OPS-04-llm-cost-spike, AA-1002, AA-1004, AA-1026]
 ---
 
 # Plug in and probe the Anthropic API key
 
-> [!WARNING]
-> UNTESTED on Dev with a real key. The script was tested offline only (`tools/llm/test_anthropic_key_plug_in.sh`:
-> fake `aws` and `curl`). The first real run sets `last_tested` and removes this warning.
+Tested on Dev with the real key on 05/11/2026 (S269): see `tested_evidence` in the front-matter. The offline test
+of the script stays `tools/llm/test_anthropic_key_plug_in.sh` (fake `aws` and `curl`).
 
 Source of truth: the script [`tools/llm/anthropic_key_plug_in.sh`](../../../tools/llm/anthropic_key_plug_in.sh)
 (`--help`), and in AA-CIS-App `api/services/llm_connections.py` (`update_connection`, `test_connection`),
@@ -58,6 +57,9 @@ month. The probe costs under 0.001 USD; the secret about 0.40 USD a month.
 
 - The Anthropic Console side (tech lead, browser): a dedicated Dev workspace with a monthly spend limit, the 50 USD
   top-up, and an API key of that workspace saved to a file. Never paste the key into a chat or a command line.
+- The API-key archive handed over by the business owner lives outside every repo, in the tech lead's secret folder.
+  An agent uses it only after asking the tech lead, and never copies it into a repo or a session folder beyond the
+  one mode-600 key file that step 2 shreds.
 - The CIS migration 335 is applied on Dev (`shared.schema_versions` has `335`) and the api / worker run the same
   image (`/health` 200).
 - An MFA session for `aa365-admin` that lasts the run: `aws sts get-caller-identity --profile aa365-admin`.
@@ -137,9 +139,8 @@ SELECT actor, action, resource_id, created_at FROM acp_shared.audit_log WHERE re
 Expected: the budget change, the connection test and the switch, actor `admin:tech-lead` (`AUDIT_ACTOR` sets it). No
 row holds the key.
 
-Record the run: set `last_tested`, `tested_where: dev-acc2` and `tested_evidence` (the script output and the two
-query results, saved under `docs/audits/<date>-S<nnn>-<slug>/`) in this page's front-matter, then remove the warning
-at the top.
+Record each run (a rotation too): update `last_tested`, `tested_where` and `tested_evidence` (the script output and
+the two query results, or the Linear comment that holds them) in this page's front-matter.
 
 ## Rollback
 
