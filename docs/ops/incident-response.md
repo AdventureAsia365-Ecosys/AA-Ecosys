@@ -1,15 +1,15 @@
 ---
 id: OPS-04
 title: Incident response
-description: Severity levels, who to tell and when, and the first steps for an incident during the dev phase.
+description: Severity levels, who to tell and when, the first steps for an incident during the dev phase, and the personal-data breach branch (agency as controller, AA as controller with the 72-hour path of Vietnam's law).
 type: how-to
 status: active
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-01
+last_reviewed: 2026-11-06
 review_every_days: 90
-related: [OPS-01, OPS-02-cis, OPS-04-5xx-spike, OPS-10, SEC-01, skill/aa-ship/SKILL.md, AA-869, AA-892, AA-873]
+related: [OPS-01, OPS-02-cis, OPS-04-5xx-spike, OPS-10, SEC-01, SEC-04, SEC-04-dpa-agreement, SEC-04-vn-transfer-dossier, skill/aa-ship/SKILL.md, AA-869, AA-892, AA-873, AA-820]
 ---
 
 # Incident response
@@ -76,7 +76,51 @@ Subjects start with `[aa-sec]`; the rules and the live check are listed in [the 
 |---|---|---|---|
 | Business owner | within 30 min | if a tenant noticed or a deadline is at risk | Zalo (plain text, short) |
 | Affected tenants | within 2 h, then on each change and on resolution | only if they reported it | E-mail from the tech lead (no agent names, no internal issue keys) |
-| Customers (Booking/TripPlanner) | if personal data is involved: the business owner decides with the lawyer (PDPD notice duties) | no | — |
+| Agency (as controller of its clients' data) | if the agency's personal data is involved: the [processor path](#personal-data-breach) below | no | E-mail to the agency owner |
+| Authority and data subjects | if personal data AA controls is involved: the [controller path](#personal-data-breach) below (Vietnam's personal data protection law, Law 91/2025/QH15, and Decree 356/2025/ND-CP) | no | Business owner, with counsel |
+
+## Personal data breach
+
+Any SEV1 where personal data may have been exposed, lost, changed or read by someone who should not have it also
+follows this branch. The timings come from the [DPA](../legal/dpa.md) clause 8 and from Vietnam's personal data
+protection law (PDPL: Law 91/2025/QH15 and Decree 356/2025/ND-CP, in force since 2026-01-01) as the S261 architecture
+review read Article 23; **counsel confirms the triggers, the form and the channel before the first real personal
+data** (DPA C5; [Vietnam transfer dossier](../legal/vn-cross-border-transfer-dossier.md) §7).
+
+**1. Whose data is it?** Decide in the first hour; count rows, never read them (the agent hook refuses row reads).
+
+| Data | AA's role | Path |
+|---|---|---|
+| An agency's data: CRM clients, leads, trips and messages (schema `crm`); its Content studio inputs; Trip Planner leads sent to it | Processor (DPA clause 1.2) | Processor path |
+| AA's own records: staff, agency account and billing contacts, AA's own Booking and Trip Planner customers held today, AI and usage ledgers, security logs | Controller (DPA clause 1.4) | Controller path |
+
+Both paths can apply to one incident. Which tables and personal-data classes are involved: the
+[compliance register](../legal/register.md) (records of processing and the `pii:` column inventory).
+
+**2. Processor path (the agency is the controller).**
+
+| When | Do |
+|---|---|
+| T0 + 2 hours (target) | E-mail the agency owner with the template below: what is known, from when, what the agency sees |
+| T0 + [24] hours (DPA clause 8.3, counsel) | The breach notice of DPA clause 8.2: nature, categories and approximate numbers of people and records, likely consequences, measures taken, a contact |
+| On each change, at least every 24 hours | An update to the agency |
+| Resolution + [5] business days | A written summary to the agency: timeline, cause, data, fix, prevention |
+
+AA does not notify an authority or the agency's clients itself unless the agency asks in writing or the law requires
+it (DPA 8.4). The agency carries its own deadline: under the PDPL the controller notifies the authority within 72
+hours (Article 23(1)); an EU agency, within 72 hours under GDPR Article 33. Give it the facts it needs for that.
+
+**3. Controller path (AA is the controller).**
+
+| When | Who | Do |
+|---|---|---|
+| T0 + 30 minutes | Tech lead | Tell the business owner (the SEV1 rule above), saying that personal data AA controls is involved |
+| As soon as the facts allow | Tech lead | Prepare the facts: what happened and when, which data categories and how many people and records, likely consequences, the measures taken, the AA contact |
+| **T0 + 72 hours at the latest** | Business owner | When the breach may harm national defence, security or public order, or the life, health, honour, dignity or property of the people concerned: notify the personal data protection authority (the Ministry of Public Security's department; the S245 research names A05) under PDPL Article 23(1), on the form and channel counsel confirms |
+| With counsel | Business owner | Whether to tell the people concerned, and the duties of other laws by their country (for example GDPR Articles 33 and 34, Australia's notifiable data breaches scheme) |
+
+The small-business exemption of PDPL Article 38 does not cover Article 23, so this path applies to AA whatever its
+size. Keep in the incident issue: the times, who decided, what was sent to whom (copies without personal data).
 
 ## Notice template (tenant e-mail)
 
