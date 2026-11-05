@@ -10,7 +10,8 @@
 // scenario.blurText = [regex sources] blurs any element whose own text matches (e.g. internal ids in old test data).
 // Optional scenario hooks: prepare() runs before the browser starts (unrecorded sign-in, e.g. lib/crm-signin.cjs; it
 // may set scenario.storageState); fastOnly: true refuses a recorded run (data prep / cleanup scenarios); scenario.meta
-// (filled by steps, e.g. the app git_sha at the start and end) is copied into result.json.
+// (filled by steps, e.g. the app git_sha at the start and end) is copied into result.json; after(page, h) runs once
+// after the steps, also after a FAIL (restore what the scenario changed on its synthetic tenant).
 // Masks are on before the first paint; a step that shows a secret calls h.assertMasked([selectors]) (each selector on
 // screen and blurred). scenario.isMobile / hasTouch make a phone take a real mobile context; scenario.title_vi goes to
 // result.json for the Vietnamese chapter list of longform.py. Errors and URLs written to timeline.json / result.json
@@ -25,7 +26,15 @@
 // cannot pass. scenario.identity (public, cis-admin, booking, studio, crm) is copied into result.json.
 // UAT_DEBUG=1 prints a failing step's whole error (redacted, one line "Error detail: ..."): result.json keeps only its
 // first line, which hides the reason (a strict mode violation reads "expect(locator).toBeVisible() failed").
+// Pilot guard (AA-855, lib/pilot-guard.cjs, fail closed): before the recorded context exists, a signed-in scenario reads
+// its tenant / agency through the app's own API in a separate, unrecorded context; anything but a synthetic tenant on the
+// allow-list stops the run with exit 5 (pilot_guard), result.json verdict BLOCKED, and no video. --guard-only runs
+// prepare() and the guard only (run.sh calls it before the TTS). scenario.pilotGuard = { scopes, only } narrows it.
+// scenario.allowRows = { rows: CSS selector, allow: [regex sources] } blurs, before the first paint, every matching row
+// whose text matches none of `allow` (AA staff pages that list tenants); h.assertRowsFiltered() fails a step when such a
+// row is on screen unblurred.
 // Setup once: bash tools/uat/setup.sh (pins @playwright/test). One Chromium, closed at the end.
+// Exit: 0 PASS, 2 a step FAILed, 5 pilot_guard (no video), 1 crash.
 const fs = require('fs');
 const path = require('path');
 const { chromium, expect } = require('@playwright/test');
@@ -39,11 +48,13 @@ const TAIL_PAD_MS = 600;
 // Which aborted request is a write to the app (fails a read-only scenario) and which is telemetry / session upkeep /
 // third party (listed apart): lib/net-guard.cjs.
 const guard = require('./lib/net-guard.cjs');
+const pilotGuard = require('./lib/pilot-guard.cjs');
 
 async function main() {
   const scenarioPath = path.resolve(process.argv[2]);
   const captionsOnly = process.argv.includes('--captions');
   const fast = process.argv.includes('--fast');
+  const guardOnly = process.argv.includes('--guard-only');
   const sc = require(scenarioPath);
   const work = path.join(__dirname, 'work', sc.id);
   fs.mkdirSync(work, { recursive: true });
@@ -55,11 +66,11 @@ async function main() {
     return;
   }
 
-  if (sc.fastOnly && !fast) throw new Error(`${sc.id} is a data step: run it with --fast only`);
+  if (sc.fastOnly && !fast && !guardOnly) throw new Error(`${sc.id} is a data step: run it with --fast only`);
   // The narration was made from captions.json: a recorded take whose steps say something else (scenario edited, or
   // steps chosen from run state that changed since) would play the wrong voice-over.
   const cPath = path.join(work, 'captions.json');
-  if (!fast && fs.existsSync(cPath)) {
+  if (!fast && !guardOnly && fs.existsSync(cPath)) {
     const made = JSON.parse(fs.readFileSync(cPath, 'utf8')).captions.map((c) => `${c.en}\n${c.vi}`).join('\n');
     const now = sc.steps.map((s) => `${s.caption.en}\n${s.caption.vi}`).join('\n');
     if (made !== now) throw new Error(`${sc.id}: the steps changed since --captions; make the captions and the narration again`);
@@ -76,6 +87,28 @@ async function main() {
   const headed = process.env.UAT_HEADED === '1' || !!sc.headed;
   if (headed && !process.env.DISPLAY && !process.env.WAYLAND_DISPLAY) throw new Error(`${sc.id}: a headed run needs a display (WSLg DISPLAY)`);
   const browser = await chromium.launch({ headless: !headed, slowMo: fast ? 0 : 60 });
+  // The pilot guard runs in its own unrecorded context, before the recorded one exists (no frame of a refused tenant).
+  let verdict;
+  try {
+    verdict = await pilotGuard.check(browser, storageState, pilotGuard.scopesFor(sc, storageState));
+  } catch (e) {
+    verdict = { ok: false, code: pilotGuard.CODE, reason: String(e.message || e).split('\n')[0] };
+  }
+  console.log(`pilot guard ${sc.id}: ${redact(pilotGuard.describeVerdict(verdict))}`);
+  if (!verdict.ok || guardOnly) {
+    await browser.close();
+    if (!verdict.ok) {
+      if (!guardOnly) {
+        fs.writeFileSync(path.join(work, 'timeline.json'), '[]');
+        fs.writeFileSync(path.join(work, 'result.json'), JSON.stringify({ id: sc.id, app: sc.app,
+          ...(sc.identity ? { identity: sc.identity } : {}), title: sc.title, mode: fast ? 'fast' : 'uat',
+          recorded_at: new Date().toISOString(), total_ms: 0, verdict: 'BLOCKED', pilot_guard: redact(verdict.reason),
+          failed_step: null, steps_run: 0, steps_total: sc.steps.length }, null, 2));
+      }
+      process.exitCode = pilotGuard.EXIT_PILOT_GUARD;
+    }
+    return;
+  }
   const context = await browser.newContext({
     viewport: sc.viewport,
     deviceScaleFactor: 1,
@@ -177,6 +210,18 @@ async function main() {
       scan(document.documentElement);
     }, sc.blurText);
   }
+  if (sc.allowRows) {
+    await context.addInitScript(({ rows, allow }) => {
+      const res = allow.map((x) => new RegExp(x, 'i'));
+      const scan = () => {
+        for (const r of document.querySelectorAll(rows)) {
+          if (!res.some((x) => x.test(r.textContent || ''))) r.style.setProperty('filter', 'blur(10px)', 'important');
+        }
+      };
+      new MutationObserver(scan).observe(document, { childList: true, subtree: true, characterData: true });
+      scan();
+    }, sc.allowRows);
+  }
   const page = await context.newPage();
   // The video starts at the first painted frame, and about:blank paints none: without this, every second the first
   // step spends loading its page is cut from the start of the video while timeline.json still counts it, so the
@@ -250,6 +295,25 @@ async function main() {
       }, [[].concat(selectors), sc.blurText || []]);
       if (bad.length) throw new Error(`MASK: ${bad.join('; ')}`);
     },
+    // scenario.allowRows: every visible row outside the allow-list is blurred (or there is none). Returns the counts.
+    assertRowsFiltered: async () => {
+      if (!sc.allowRows) throw new Error('assertRowsFiltered needs scenario.allowRows');
+      await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => r())));
+      const c = await page.evaluate(({ rows, allow }) => {
+        const res = allow.map((x) => new RegExp(x, 'i'));
+        const out = { allowed: 0, blurred: 0, open: 0 };
+        for (const r of document.querySelectorAll(rows)) {
+          const b = r.getBoundingClientRect();
+          if (!b.width || !b.height) continue;
+          if (res.some((x) => x.test(r.textContent || ''))) out.allowed++;
+          else if (/blur/.test(getComputedStyle(r).filter)) out.blurred++;
+          else out.open++;
+        }
+        return out;
+      }, sc.allowRows);
+      if (c.open) throw new Error(`MASK: ${c.open} row(s) outside the synthetic allow-list are not blurred`);
+      return c;
+    },
     smoothScrollBy: async (dy) => {
       await page.evaluate(([d, b]) => window.scrollBy({ top: d, behavior: b }), [dy, fast ? 'instant' : 'smooth']);
       await wait(1400);
@@ -280,6 +344,17 @@ async function main() {
     console.log(`step ${n} ${status} ${((end - start) / 1000).toFixed(1)}s ${error || ''}`);
     if (status === 'FAIL') { failed = n; await wait(1500); break; }
   }
+  // scenario.after(page, h): runs once after the steps, also after a FAIL (e.g. put a synthetic tenant's old values
+  // back). Its failure does not change the verdict; it is kept in result.json after_error and fails the exit code.
+  let afterError = null;
+  if (typeof sc.after === 'function') {
+    try {
+      await sc.after(page, h);
+    } catch (e) {
+      afterError = redact(String(e.message || e).split('\n')[0]);
+      console.log(`after: FAIL ${afterError}`);
+    }
+  }
   await wait(800);
   const total = Date.now() - t0;
   const video = fast ? null : page.video();
@@ -294,11 +369,14 @@ async function main() {
     ...(readOnly ? { read_only: true, blocked_writes: blockedWrites, blocked_other: [...new Set(blockedOther)] } : {}),
     ...(blockedUrls.length ? { blocked_urls: blockedUrls } : {}),
     ...(failed ? { failed_error: timeline[timeline.length - 1].error } : {}),
+    ...(afterError ? { after_error: afterError } : {}),
   };
   fs.writeFileSync(path.join(work, 'timeline.json'), JSON.stringify(timeline, null, 2));
   fs.writeFileSync(path.join(work, 'result.json'), JSON.stringify(result, null, 2));
   console.log(`verdict ${result.verdict}${video ? `; video ${path.join(work, 'video.webm')}` : ''}`);
-  process.exitCode = failed ? 2 : 0;
+  // A step that refused its tenant (scenarios/crm/_crm.cjs assertReviewAgency) is a pilot-guard stop too.
+  const guardStop = failed && String(result.failed_error || '').startsWith(`${pilotGuard.CODE}:`);
+  process.exitCode = guardStop ? pilotGuard.EXIT_PILOT_GUARD : (failed || afterError ? 2 : 0);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

@@ -2,7 +2,13 @@
 // Given: the Dev-only E2E CIS admin signed in outside the run (read-only session, lib/signin.cjs cis-admin).
 // When:  they open the overview, look at the sidebar, then the review queue.
 // Then:  each page shows its title and its data (or the empty state); no API call fails; nothing is written. $0.
+// Pilot guard (AA-855): the overview's Tenants section lists the tenants near their quota by name; each of its rows
+// that does not name an invented synthetic tenant is blurred before the first paint (scenario.allowRows, record.cjs).
+// The selector reaches only that section (its header links to /admin/tenants), not the pipeline table or the queue.
 const { HOSTS, step, ro, check, rowsOrEmpty } = require('../../lib/dryrun-page.cjs');
+const { syntheticRowPatterns } = require('../../lib/pilot-guard.cjs');
+
+const TENANTS_SECTION = 'section:has(> div > a[href="/admin/tenants"])';
 
 module.exports = ro({
   id: 'CIS-01',
@@ -11,12 +17,17 @@ module.exports = ro({
   title: 'Admin shell: overview, navigation and the review queue',
   titleVi: 'Khung trang quản trị: tổng quan, điều hướng và hàng chờ duyệt',
   baseURL: HOSTS.cisAdmin,
+  allowRows: {
+    rows: `${TENANTS_SECTION} [data-testid="kit-datatable-row"], ${TENANTS_SECTION} table tbody tr`,
+    allow: syntheticRowPatterns(),
+  },
   steps: [
     step('A staff admin opens the CIS admin. The overview shows how the business and the content pipeline are doing.',
       'Quản trị viên mở trang quản trị CIS. Trang tổng quan cho thấy tình hình kinh doanh và quy trình nội dung.',
       async (page, h) => {
         await check(page, h, '/admin/overview', { heading: 'Overview' });
         await h.expect(page.getByRole('button', { name: 'Account menu' })).toBeVisible({ timeout: 20_000 });
+        await h.assertRowsFiltered();
       }),
     step('The sidebar groups every admin area: content, operations and the platform.',
       'Thanh bên nhóm mọi khu vực quản trị: nội dung, vận hành và nền tảng.',

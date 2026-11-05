@@ -25,7 +25,7 @@ sc.steps = [
     },
     run: async (page, h) => {
       await sha(page, sc, 'start');
-      await open(page, h, '/', 'crm-home');
+      await open(page, h, '/home', 'crm-home'); // the bare host '/' is the Content studio since AA-1036
       for (const [key] of EMPTY) await h.expect(page.locator(`a[href="/${key}"]`).first()).toBeVisible(); // in the menu
       await h.hover(page.locator(`a[href="/${EMPTY[0][0]}"]`).first());
     },
@@ -40,8 +40,8 @@ sc.steps = [
   })),
   {
     caption: {
-      en: 'Not ready yet, besides those pages: Adventure Asia\'s own release of bookings, WhatsApp and text messages, AI help, deeper support access, and the hardening and go-live work.',
-      vi: 'Ngoài các trang đó, còn chưa có: bước xác nhận booking phía Adventure Asia, WhatsApp và tin nhắn SMS, trợ giúp bằng AI, quyền hỗ trợ sâu hơn, cùng phần gia cố và đưa vào chạy thật.',
+      en: 'Not ready yet, besides those pages: Adventure Asia\'s own release of bookings, WhatsApp and text messages, deeper support access, and the hardening and go-live work. AI drafts run in test mode, on an interim model.',
+      vi: 'Ngoài các trang đó, còn chưa có: bước xác nhận booking phía Adventure Asia, WhatsApp và tin nhắn SMS, quyền hỗ trợ sâu hơn, cùng phần gia cố và đưa vào chạy thật. Bản nháp AI đang chạy ở chế độ thử, trên một mô hình tạm thời.',
     },
     run: async (page, h) => {
       await slide.notReady(page, h, {
@@ -50,7 +50,7 @@ sc.steps = [
           'Workflows and one task list across trips; marketing campaigns; search and the library',
           'Adventure Asia\'s operations release of bookings (built on the Booking side, not yet in the CRM)',
           'WhatsApp and SMS through the agency\'s own account',
-          'AI help for drafts and replies (waiting for the AI service to be available again)',
+          'AI drafts and replies: test mode only, on an interim model',
           'Deeper support access for Adventure Asia staff, with the client\'s and agency\'s consent',
           'Security review, service targets, load tests, and the steps to run for real (live payments, vendor checks)',
         ],

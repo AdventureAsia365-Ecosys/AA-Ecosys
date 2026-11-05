@@ -2,7 +2,8 @@
 // relative to this folder. A scenario here must be read-only: the runner forces the read-only guard (every non-GET
 // request aborted and listed) and blocks the paid model paths, but a step that clicks a write button still fails.
 // Add a scenario = add one line here and its id to the plan's §4 "Dry-run set"
-// (docs/audits/2026-10-30-S260-uat-video-plan/README.md). Ids are unique (the runner checks).
+// (docs/audits/2026-10-30-S260-uat-video-plan/README.md). Ids are unique (the runner checks). Every id here has a row
+// in tools/uat/catalogue.json that is live, writes nothing and costs nothing (tests/catalogue.test.cjs).
 module.exports = [
   // TripPlanner, public (no sign-in). The AI paths and the map planner are not in the dry run.
   'tripplanner/tp-pub-01.cjs',
@@ -16,6 +17,11 @@ module.exports = [
   'content-studio/prt-03.cjs',
   'content-studio/prt-09.cjs',
   'content-studio/prt-10.cjs',
+  // AA-855 round 1, read only (the write and paid ones, PRT-02 / PRT-06 / PRT-14, and the after-lane PRT-13 are not here).
+  'content-studio/prt-04.cjs',
+  'content-studio/prt-05.cjs',
+  'content-studio/prt-08.cjs',
+  'content-studio/x-04.cjs',
   // CRM web, the owner of the invented review agency. That account CAN write (the CRM has no read-only role): the runner
   // leaves these out unless --include-writable, and only its browser guard keeps them read-only.
   'crm-web/crm-01.cjs',

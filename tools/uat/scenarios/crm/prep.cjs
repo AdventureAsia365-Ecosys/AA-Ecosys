@@ -16,11 +16,12 @@
 // Nothing is sent to a real person; cleanup.cjs reports the outbound mail of the run's trips.
 const fs = require('fs');
 const path = require('path');
-const { crm, st, base, sha, open, bff, bffOk, waitForCard, prospect, submitInquiryApi, day } = require('./_crm.cjs');
+const { crm, st, base, sha, open, bff, bffOk, waitForCard, prospect, submitInquiryApi, day, REVIEW_AGENCY, assertReviewAgency } = require('./_crm.cjs');
 
 const AA_TOUR = process.env.UAT_CRM_AA_TOUR || '000e3340-d9f5-4b7b-8609-4cdaa9c272dc'; // the Dev seed tour (fixed departures)
 const sc = base({ id: 'CRM-REV-PREP', title: 'Prepare the data of the CRM review' });
 sc.fastOnly = true;
+sc.pilotGuard = REVIEW_AGENCY; // only the invented sen-vang, never a pilot (record.cjs exit 5 otherwise)
 let s;
 
 const FIRST = ['Linh', 'Oskar', 'Mira', 'Tomas', 'Aiko', 'Priya', 'Lucas', 'Hana', 'Sofia'];
@@ -140,6 +141,7 @@ sc.steps = [
   {
     caption: { en: 'Check the CRM is up and keep its version.', vi: 'Kiểm tra CRM đang chạy và ghi lại phiên bản.' },
     run: async (page, h) => {
+      await assertReviewAgency(page); // before any write, and before a new run replaces the local state
       s = process.env.UAT_CRM_NEW_RUN === '1' || !st.load().run ? st.newRun() : st.load();
       await open(page, h, '/pipeline', 'crm-pipeline');
       s.git_sha = await sha(page, sc, 'start');

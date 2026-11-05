@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [owner, engineer, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-30
+last_reviewed: 2026-11-05
 review_every_days: 30
 related: [AA-855]
 lang: vi
@@ -178,7 +178,15 @@ một tab, đưa vào bản nháp Jira cuối phiên.
 
 ## 4. Danh mục kịch bản
 
-Trạng thái: **Done now** = đã live và ổn định, quay từ S261. **After lanes** = chờ một lane code S260–S262.
+**Nguồn sự thật từ AA-855 (S270): `tools/uat/catalogue.json`**, mỗi id kịch bản một dòng (app, module, story, roles,
+kinds, covers, screens, trạng thái `live` / `after-lane` / `blocked` / `retired`, vòng UAT, identity, writes, paid),
+được kiểm bởi `tools/uat/lib/catalogue.cjs` và gắn với các file kịch bản cùng manifest dry run qua
+`tools/uat/tests/catalogue.test.cjs`. Các bảng dưới đây là ảnh chụp S260, giữ để tra lịch sử; khi lệch, catalogue thắng.
+Thay đổi từ S260: TP-05, X-01 và BK-02 đã retired (ADR gốc 0019, chỉ B2B; X-05 thay X-01); thêm PRT-11 tới PRT-14,
+CIS-15 tới CIS-20, X-04, X-05, BK-11 và BK-12 (kế hoạch S268); vòng 1 `R1-2026-11` gồm Content và CRM. Index công khai
+của một vòng chỉ ghi id, kết quả và SHA của app, không bao giờ có link Drive.
+
+Trạng thái (ảnh chụp S260): **Done now** = đã live và ổn định, quay từ S261. **After lanes** = chờ một lane code S260–S262.
 **Blocked** = chờ một phụ thuộc bên ngoài. Độ dài mục tiêu 60–120 s trừ khi ghi khác. Thứ tự quay theo thứ tự dưới
 đây trong từng app: Done now trước, rồi tới các mục khác khi lane xong.
 

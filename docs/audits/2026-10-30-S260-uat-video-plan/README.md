@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [owner, engineer, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-30
+last_reviewed: 2026-11-05
 review_every_days: 30
 related: [AA-855]
 ---
@@ -174,7 +174,15 @@ per app, which goes into the session-end Jira draft.
 
 ## 4. Scenario catalogue
 
-Status: **Done now** = live and stable, record from S261. **After lanes** = waiting on an S260–S262 code lane.
+**Source of truth since AA-855 (S270): `tools/uat/catalogue.json`**, one row per scenario id (app, module, story, roles,
+kinds, covers, screens, status `live` / `after-lane` / `blocked` / `retired`, UAT round, identity, writes, paid),
+validated by `tools/uat/lib/catalogue.cjs` and tied to the scenario files and the dry-run manifest by
+`tools/uat/tests/catalogue.test.cjs`. The tables below are the S260 snapshot, kept for history; when they disagree, the
+catalogue wins. Changes since S260: TP-05, X-01 and BK-02 are retired (root ADR 0019, B2B-only; X-05 replaces X-01);
+PRT-11 to PRT-14, CIS-15 to CIS-20, X-04, X-05, BK-11 and BK-12 are added (S268 plan); round 1 `R1-2026-11` is Content
+plus CRM. The public index of a round names ids, verdicts and app SHAs only, never a Drive link.
+
+Status (S260 snapshot): **Done now** = live and stable, record from S261. **After lanes** = waiting on an S260–S262 code lane.
 **Blocked** = waiting on an external dependency. Length target 60–120 s unless noted. Order of recording follows
 the order below inside each app: Done now first, then as lanes ship.
 

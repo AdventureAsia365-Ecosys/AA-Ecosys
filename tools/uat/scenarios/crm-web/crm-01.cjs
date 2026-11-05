@@ -16,7 +16,8 @@ module.exports = ro({
     step('The agency owner opens the CRM. Home shows what needs attention and the setup progress.',
       'Chủ đại lý mở CRM. Trang chủ cho biết việc cần chú ý và tiến độ thiết lập.',
       async (page, h) => {
-        await check(page, h, '/', { heading: 'Welcome', ready: '[data-testid="crm-home"]' });
+        // The CRM home lives at /home: the bare host '/' opens the Content studio in the one agency app (AA-1036).
+        await check(page, h, '/home', { heading: 'Welcome', ready: '[data-testid="crm-home"]' });
       }),
     step('The pipeline board shows every trip by stage, from inquiry to travelling. This is the end of the scenario.',
       'Bảng quy trình bán hiển thị mọi chuyến theo giai đoạn, từ yêu cầu đến khi đang đi. Kết thúc kịch bản.',
