@@ -2,7 +2,11 @@
 
 AA-900 (APP-06-routes). The routes (`shared.llm_role_config`) and the model catalog (`shared.llm_model_catalog`) are
 runtime data the admin edits in CIS AI providers › Routing (`/admin/ai-gateway`), so the table is regenerated from a snapshot of those two tables, never
-edited by hand. Two committed files: the snapshot `docs/generated/llm-routes.snapshot.json` (the generator's input)
+edited by hand. AA-1042 (S270, snapshot schema 2): the snapshot also holds the connection keys
+(`shared.llm_provider_connection`: connection_key, kind, enabled) and the deployments (`shared.llm_model_deployment`:
+model_key, connection_key, enabled, priority, access_state), names and states only, rendered as the Connections and
+Provider order tables. The drift guard `check_ai_gateway_names.py` checks the stage, model and connection keys of
+`docs/architecture/ai-gateway.md` (and its `.vi.md`) against this snapshot. Two committed files: the snapshot `docs/generated/llm-routes.snapshot.json` (the generator's input)
 and the page `docs/generated/llm-routes.md` (its output). `check` proves the page is what `render` makes from the
 snapshot; `test_llm_routes.py` runs it in the docs-lint "Unit tests of the lint tools" step.
 
@@ -42,7 +46,8 @@ _HERE = Path(__file__).resolve()
 REPO_ROOT = _HERE.parents[2] if len(_HERE.parents) > 2 else _HERE.parent
 SNAPSHOT = REPO_ROOT / "docs" / "generated" / "llm-routes.snapshot.json"
 PAGE = REPO_ROOT / "docs" / "generated" / "llm-routes.md"
-SCHEMA = "aa900-llm-routes/1"
+SCHEMA = "aa900-llm-routes/2"     # 2 (AA-1042, S270): + connections, deployments
+SCHEMA_V1 = "aa900-llm-routes/1"  # routes + models only: still read and rendered, kept at 1, never relabelled
 GENERATOR = "tools/docs/gen_llm_routes.py"
 BEGIN, END = "--- AA900 LLM ROUTES SNAPSHOT ---", "--- END ---"
 
@@ -61,6 +66,16 @@ MODELS_SQL = """
            price_source, enabled, blocked_reason
       FROM shared.llm_model_catalog ORDER BY model_key
 """
+# AA-1042 (S270): names and states only; never secret_name, base_url, account_id or role columns.
+CONNECTIONS_SQL = """
+    SELECT connection_key, kind, enabled FROM shared.llm_provider_connection ORDER BY connection_key
+"""
+DEPLOYMENTS_SQL = """
+    SELECT model_key, connection_key, enabled, priority, access_state
+      FROM shared.llm_model_deployment ORDER BY model_key, priority, connection_key
+"""
+CONNECTION_FIELDS = ("connection_key", "kind", "enabled")
+DEPLOYMENT_FIELDS = ("model_key", "connection_key", "enabled", "priority", "access_state")
 
 _ID_RE = re.compile(r"arn:aws[a-z-]*:[^\s\"']*|(?<!\d)\d{12}(?!\d)")
 _APPS = (("tp_", "TripPlanner"),)
@@ -92,8 +107,16 @@ def find_ids(value) -> list[str]:
 
 def normalise(snapshot: dict) -> dict:
     """Sorted, typed snapshot: routes by stage, models by key, lists as lists. Raises ValueError on a bad shape."""
-    if snapshot.get("schema") != SCHEMA:
-        raise ValueError(f"snapshot schema must be {SCHEMA!r}")
+    schema = snapshot.get("schema")
+    if schema not in (SCHEMA, SCHEMA_V1):
+        raise ValueError(f"snapshot schema must be {SCHEMA!r} (or {SCHEMA_V1!r})")
+    has_conns, has_deps = snapshot.get("connections") is not None, snapshot.get("deployments") is not None
+    # The label follows the payload: schema 2 holds both registry lists, schema 1 neither. A schema-1 capture is never
+    # upgraded by a label edit (the drift guard would then trust names that were never read); only `dump` writes 2.
+    if schema == SCHEMA and not (has_conns and has_deps):
+        raise ValueError(f"a {SCHEMA!r} snapshot must hold both connections and deployments: recapture with `dump`")
+    if schema == SCHEMA_V1 and (has_conns or has_deps):
+        raise ValueError(f"a {SCHEMA_V1!r} snapshot holds no connections or deployments: label a capture with them 2")
     routes = sorted((dict(r) for r in snapshot.get("routes") or []), key=lambda r: r["stage"])
     models = sorted((dict(m) for m in snapshot.get("models") or []), key=lambda m: m["model_key"])
     for r in routes:
@@ -103,8 +126,19 @@ def normalise(snapshot: dict) -> dict:
     for m in models:
         m["bedrock_accounts"] = sorted(m.get("bedrock_accounts") or [])
         m["callable_via"] = list(m.get("callable_via") or [])
-    out = {"schema": SCHEMA, "captured_at": snapshot.get("captured_at"), "source": snapshot.get("source"),
+    out = {"schema": schema, "captured_at": snapshot.get("captured_at"), "source": snapshot.get("source"),
            "routes": redact(routes), "models": redact(models)}
+    # Schema 2: None (the key absent) = not captured, which the drift guard refuses; a list = captured. Only the
+    # listed fields are kept, so a wider SELECT can never carry another column into the public repo.
+    if snapshot.get("connections") is not None:
+        out["connections"] = redact(sorted(({k: c.get(k) for k in CONNECTION_FIELDS}
+                                            for c in snapshot["connections"]), key=lambda c: c["connection_key"]))
+    if snapshot.get("deployments") is not None:
+        deps = [{k: d.get(k) for k in DEPLOYMENT_FIELDS} for d in snapshot["deployments"]]
+        for d in deps:
+            d["priority"] = int(d["priority"]) if d.get("priority") is not None else None
+        out["deployments"] = redact(sorted(deps, key=lambda d: (d["model_key"], d["priority"] is None,
+                                                                d["priority"] or 0, d["connection_key"])))
     gaps = [str(g).strip() for g in snapshot.get("known_gaps") or [] if str(g).strip()]
     if gaps:
         out["known_gaps"] = redact(gaps)
@@ -180,7 +214,7 @@ def render(snapshot: dict) -> str:
     head = f"""---
 id: APP-06-routes
 title: "LLM routes and models"
-description: "Every Model Gateway stage with its route (primary, fallbacks, shadow) and every catalog model with vendor, provider, prices and the stages using it; generated from a snapshot of shared.llm_role_config and shared.llm_model_catalog."
+description: "Every Model Gateway stage with its route, every catalog model with prices and the stages using it, and every connection with each model's provider order; generated from a snapshot of the gateway registry tables."
 type: reference
 status: active
 owner: nghiep
@@ -195,13 +229,14 @@ related: [APP-06-prompts, APP-06-eval, CAT-01, AA-900]
 
 # LLM routes and models
 
-<!-- GENERATED by {GENERATOR} from shared.llm_role_config + shared.llm_model_catalog@{captured} - do not edit -->
+<!-- GENERATED by {GENERATOR} from shared.llm_role_config + shared.llm_model_catalog + shared.llm_provider_connection + shared.llm_model_deployment@{captured} - do not edit -->
 <!-- docs-fingerprint: {fingerprint(snapshot)} -->
 
-> **Generated - do not edit.** Source: a read-only snapshot of `shared.llm_role_config` and
-> `shared.llm_model_catalog` on the shared Dev RDS, captured {captured}
+> **Generated - do not edit.** Source: a read-only snapshot of `shared.llm_role_config`, `shared.llm_model_catalog`,
+> `shared.llm_provider_connection` and `shared.llm_model_deployment` (names and states only) on the shared Dev RDS,
+> captured {captured}
 > ([`llm-routes.snapshot.json`](llm-routes.snapshot.json)). The admin changes routes and models in CIS AI providers ›
-> Routing (`/admin/ai-gateway`); after such a change, or a migration that touches either table, capture a new snapshot and render
+> Routing and Route control (`/admin/ai-gateway`); after such a change, or a migration that touches one of the tables, capture a new snapshot and render
 > this page (`{GENERATOR}`, module docstring). The docs lint fails when this page and the snapshot disagree.
 {_gaps(snap)}
 A route is the order the gateway tries models for a stage: the primary, then each fallback; the shadow (when set)
@@ -253,7 +288,44 @@ The snapshot has no rows: it has not been captured from the database yet. Run `d
     if unknown:
         lines += ["", "Route keys with no catalog row (legacy keys the gateway resolves in code): "
                   + ", ".join(f"`{k}`" for k in unknown) + "."]
+    lines += _registry(snap)
     return "\n".join(lines) + "\n"
+
+
+def _registry(snap: dict) -> list[str]:
+    """The Connections and Provider order tables (schema 2); a note when the snapshot did not capture them."""
+    conns, deps = snap.get("connections"), snap.get("deployments")
+    if conns is None or deps is None:
+        return ["", "## Connections", "",
+                "Not in this snapshot: it was captured before the generator read the connections and deployments. "
+                "The next capture adds them."]
+    per_conn: dict[str, list[dict]] = {}
+    per_model: dict[str, list[dict]] = {}
+    for d in deps:
+        per_conn.setdefault(d["connection_key"], []).append(d)
+        per_model.setdefault(d["model_key"], []).append(d)
+    lines = ["", "## Connections", "",
+             f"{len(conns)} connections (`shared.llm_provider_connection`): keys, kind and switch only. Secret names "
+             "are in the [secrets register](../security/secrets-register.md); the admin shows the rest in AI "
+             "providers › Providers › Connections.", "",
+             "| Connection | Kind | Enabled | Deployments (enabled / all) |", "|---|---|---|---|"]
+    for c in conns:
+        rows = per_conn.get(c["connection_key"], [])
+        lines.append(f"| `{c['connection_key']}` | {_cell(c.get('kind'))} | {_cell(c.get('enabled'))} | "
+                     f"{sum(1 for d in rows if d.get('enabled'))} / {len(rows)} |")
+    lines += ["", "## Provider order", "",
+              f"{len(deps)} deployments (`shared.llm_model_deployment`). Per model, its connections in the order the "
+              "gateway tries them (lowest priority first; Route control edits it). Each entry: priority, access state "
+              "from the daily probe, and `off` when the deployment is switched off.", "",
+              "| Model key | Connections in order |", "|---|---|"]
+    for model in sorted(per_model):
+        parts = []
+        for d in per_model[model]:
+            state = d.get("access_state") or "-"
+            off = ", off" if not d.get("enabled") else ""
+            parts.append(f"`{d['connection_key']}` ({_cell(d.get('priority'))}, {_cell(state)}{off})")
+        lines.append(f"| `{model}` | {' → '.join(parts)} |")
+    return lines
 
 
 def check(snapshot_path: Path = SNAPSHOT, page_path: Path = PAGE) -> list[str]:
@@ -286,13 +358,16 @@ async def dump() -> dict:
         async with conn.transaction(readonly=True):
             routes = [dict(r) for r in await conn.fetch(ROUTES_SQL)]
             models = [dict(r) for r in await conn.fetch(MODELS_SQL)]
+            connections = [dict(r) for r in await conn.fetch(CONNECTIONS_SQL)]
+            deployments = [dict(r) for r in await conn.fetch(DEPLOYMENTS_SQL)]
     finally:
         await conn.close()
     for r in routes:
         r["updated_at"] = r["updated_at"].date().isoformat() if r.get("updated_at") else None
     return normalise({"schema": SCHEMA, "captured_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
-                      "source": "shared.llm_role_config + shared.llm_model_catalog (aa-cis-dev-db, read as cis_app)",
-                      "routes": routes, "models": models})
+                      "source": ("shared.llm_role_config + shared.llm_model_catalog + shared.llm_provider_connection + "
+                                 "shared.llm_model_deployment (aa-cis-dev-db, read as cis_app)"),
+                      "routes": routes, "models": models, "connections": connections, "deployments": deployments})
 
 
 def _write(snapshot: dict, snapshot_path: Path, page_path: Path) -> None:
@@ -319,7 +394,8 @@ def main(argv=None) -> int:
     if a.cmd == "import":
         snap = extract(Path(a.log).read_text(encoding="utf-8", errors="replace"))
         _write(snap, SNAPSHOT, PAGE)
-        print(f"wrote {SNAPSHOT.relative_to(REPO_ROOT)} ({len(snap['routes'])} routes, {len(snap['models'])} models) "
+        print(f"wrote {SNAPSHOT.relative_to(REPO_ROOT)} ({len(snap['routes'])} routes, {len(snap['models'])} models, "
+              f"{len(snap.get('connections') or [])} connections, {len(snap.get('deployments') or [])} deployments) "
               f"and {PAGE.relative_to(REPO_ROOT)}")
         return 0
     if a.cmd == "render":
