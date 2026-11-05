@@ -234,8 +234,8 @@ company's name (ADR 0019 b19); tenants never hold a provider key.
   tenant content, not as fallbacks only. **Since CIS 366
   (S267, AWS preferred, not AWS only) every active text stage may reach them**: tenant content (writers, judges, the
   brand audit, the FAQ checks and the claim extraction), TripPlanner narration (`tp_compose`, once TripPlanner's
-  gateway can call them) and, after its own change, the CRM. A Claude model goes to the Anthropic API when its AWS
-  deployment refuses or fails (model first); GPT-6 Luna goes to the OpenAI API (its twin row) when its acc3
+  gateway can call them) and, after its own change, the CRM. A Claude model goes to the Anthropic API first (route
+  control version 6; before it, only when its AWS deployment refused or failed); GPT-6 Luna goes to the OpenAI API (its twin row) when its acc3
   deployment refuses or fails, before the next model of a judge or GPT validate route; and GPT-6 Luna on the OpenAI
   API is the last rung of the writer routes. So an OpenAI model may **write** tenant content when Claude is
   unavailable. Terms wording: for the OpenAI API writing, "as a last resort"; for the Anthropic API and the OpenAI
