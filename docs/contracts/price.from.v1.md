@@ -35,7 +35,7 @@ never compute a price.
 - Columns are **append-only**; a change of meaning is `price.from.v2` (a new view).
 - A reader treats `UndefinedTable` / `InsufficientPrivilege` / no row as "no price" and shows none (fail soft); the
   reader may ship before `bk-039` is applied.
-- Agency tiers and contract rate cards (ADR 0019 b15, AA-1030, Booking bk-045) change only the agency (`b2b`) price a
+- Agency tiers and contract rate cards (ADR 0019 b15, AA-1030, Booking bk-043) change only the agency (`b2b`) price a
   partner is quoted through `booking.b2b.v1`; the RRP served here is the same for every agency. The per-tenant tour
   read (`catalog.v_tenant_tour_v1`, ADR 0019 d10) is a later view; this one is the AA catalogue price.
 - How the row is produced (Booking `CONTEXT.md`, "Tour price chain"): the cost sheet job computes the net per pax band
