@@ -1,8 +1,8 @@
 {
- "updated": "2026-11-04",
- "synced_at": "2026-11-04T13:28Z",
- "session": "S267",
- "next_session": "S268",
+ "updated": "2026-11-05",
+ "synced_at": "2026-11-05T02:04Z",
+ "session": "S268",
+ "next_session": "S269",
  "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
  "projects": {
   "data": "Data Platform",
@@ -1665,19 +1665,6 @@
    "needs": "Business owner: ngày go-live (b18); tech lead: mời acc2/acc3 vào org (≥01/12)"
   },
   {
-   "id": "AA-1021",
-   "title": "AA-1021 (content series, details private)",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "parked",
-   "session": "S267",
-   "size": "L",
-   "next": "Lane phụ · tập pilot trên mô hình hiện tại chờ tech lead duyệt; tập về khu vực đổi chỉ làm sau khi R3/R4/R5 ship",
-   "needs": "Tech lead duyệt bản pilot",
-   "private": true
-  },
-  {
    "id": "AA-1000",
    "title": "[T10] Tier-2 LLM adjudicator for the recall classes the seed-alignment tier cannot reach (never holds)",
    "status": "Backlog",
@@ -1735,7 +1722,7 @@
    "milestone": "M-P1",
    "session": "S272",
    "size": "L",
-   "next": "UAT · vòng 1 (Content + CRM) khi AA-1036, AA-1008, AA-1035 + đường LLM xanh (~S272–S274), vòng 2 TripPlanner sau R5 (~S277+); việc trong thời gian pilot, không phải cổng pilot",
+   "next": "UAT · S268 gộp kế hoạch series sản phẩm (PV ~27 video) + video vận hành (UAT/G/REL/BUG) — docs/audits/2026-11-05-S268-video-plan; vòng 1 S272–S274",
    "needs": ""
   },
   {
@@ -1957,13 +1944,13 @@
   {
    "id": "AA-969",
    "title": "[CRM W7] CRM-37a Security review, SLOs, bounded load test",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "Medium",
    "project": "crm",
    "milestone": "M-P1",
    "session": "S269",
    "size": "L",
-   "next": "Pilot 1 · review bảo mật module CRM live + app agency gộp + scope R2, SLO, load test; thêm 5 biện pháp d16 (hook chặn đọc PII pilot, job bỏ qua tenant pilot, export đêm + diễn tập khôi phục 1 tenant, backup 14 ngày); mỗi card CRM ship trong pilot review trước khi bật",
+   "next": "Pilot 1 · S268: review bảo mật 3 vòng (16 lỗi sửa) live crm-api :130, alarm SLO apply; còn: seed lại 50 đại lý lt-* rồi chạy load test, 5 biện pháp d16, web 1 task Spot",
    "needs": ""
   },
   {
@@ -2053,13 +2040,13 @@
   {
    "id": "AA-1029",
    "title": "[Pricing] Tour price chain ready for data: CIS master tour → Booking trip plan, cost sheet from supplier rates, price.from.v1 view for TripPlanner and portal",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "High",
    "project": "tpbk",
    "milestone": "M-R4",
-   "session": "S268",
+   "session": "S271",
    "size": "L",
-   "next": "R4 · chuỗi giá live S267 (CIS 365, bk-039, TripPlanner \"From $235\" trên tour thử); còn: portal marketplace đọc giá, nhập bảng giá thật",
+   "next": "R4 · S268 portal Marketplace hiện 'From $235' (bk-040, smoke 67/67 + ảnh); còn: nhập bảng giá thật, giá theo hạng đại lý (AA-1030)",
    "needs": ""
   },
   {
@@ -2077,25 +2064,25 @@
   {
    "id": "AA-1035",
    "title": "[Platform] R2 AA staff roles and tenant scope: six new roles, account-manager tenant book, read-only view-as",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "High",
    "project": "portal",
    "milestone": "M-R2",
-   "session": "S268",
+   "session": "S269",
    "size": "L",
-   "next": "R2 · lát 1 live S267 (6 vai trò + scope, CIS 362–364, bk-038, kiểm cô lập 200/403); còn lát 2: trang giao đối tác cho nhân viên, view-as chỉ đọc, thử bằng tài khoản nhân viên thật",
+   "next": "R2 · S268 lát 2 live (view-as chỉ đọc 20/20, Assignments, đọc Lab có log, minor #1308); còn: relay crm.ops scope, Tenant QA book riêng, bỏ alias reviewer",
    "needs": ""
   },
   {
    "id": "AA-1036",
    "title": "[Portal] R3 one agency app: merge portal/ into web/, one sign-in, Content home, app switcher, no tenant API keys",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "High",
    "project": "crm",
    "milestone": "M-R3",
-   "session": "S268",
+   "session": "S269",
    "size": "XL",
-   "next": "R3 · lát 1–3 live S267 (studio trong web, portal cũ gỡ, tenant-login 410, 368 NULL); còn: 369 DROP (DRY RUN + duyệt), kiểm user mới mời vào Content, studio tiếng Việt",
+   "next": "R3 · S268 live: 369 DROP, studio EN/VI (smoke 67/67), Request add-on thật (374) + banner AI tạm dừng; còn: thử vòng tenant gửi → staff duyệt trên Dev, user mời thật",
    "needs": ""
   },
   {
@@ -2129,9 +2116,9 @@
    "priority": "Medium",
    "project": "portal",
    "milestone": "M-R6",
-   "session": "S268",
+   "session": "S270",
    "size": "L",
-   "next": "R6 · lát 3 live S267 (Writing Lab theo stage, Spend gộp 4 tab); còn: kiểm retire→restore (cần site WP test mới), portal hiện needs_change",
+   "next": "R6 · S268 live: route theo pii_class (373), Tenant 360 route, Catalogue settings, Place cards (A), Lab Releases/Metrics; còn: kiểm retire→restore",
    "needs": "Tech lead: site WordPress test mới (kiểm retire→restore)"
   },
   {
@@ -2162,26 +2149,26 @@
   {
    "id": "AA-1042",
    "title": "[AI gateway] Route control center: family fallback chains, admin-editable provider order, route trace and fallback alerts",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "High",
    "project": "core",
    "milestone": "M1b",
-   "session": "S268",
+   "session": "S269",
    "size": "L",
-   "next": "Gateway · 366/367 live S267 (route theo họ, model-first, sweep + coverage); còn: thứ tự nhà cung cấp theo model trên admin, preset Anthropic-first, chế độ thứ tự trong DB, Route trace, cảnh báo rơi model, tab Guide + docs, tắt gpt-4.1",
-   "needs": ""
+   "next": "Gateway · S268 live: route control (370, preset, version, revert), trace + cảnh báo (371), preview theo probe; còn: ảnh trang admin (tech lead), 'primary back' chờ acc3, coverage sạch sau 336 (≥10/11)",
+   "needs": "Tech lead: mở trang admin Route control/Trace chụp ảnh"
   },
   {
    "id": "AA-1045",
    "title": "[AI gateway] Usage analytics explorer",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "High",
    "project": "core",
    "milestone": "M1b",
-   "session": "S270",
+   "session": "S269",
    "size": "M",
-   "next": "Gateway · Usage analytics explorer: lọc/sắp theo provider, account, app, stage, thời gian, token, request (yêu cầu chị Thư)",
-   "needs": ""
+   "next": "Gateway · S268 live (372): explorer API 14/14, rollup = ledger; còn: ảnh trang admin (tech lead), kiểm tổng CRM từ phiên đăng nhập",
+   "needs": "Tech lead: mở /admin/usage chụp ảnh"
   }
  ]
 }
