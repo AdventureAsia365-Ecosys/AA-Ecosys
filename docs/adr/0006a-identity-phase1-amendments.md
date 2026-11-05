@@ -270,9 +270,13 @@ mailbox or Google account". That is too strong.
   - **One exact address per allow-map entry** (this one; A10a adds the second), with no pattern and no other local
     part or sub-domain. It is a code constant in each place, never configuration: CIS migration 250 (`admin_users_email_chk`), CIS
     `staff_directory.E2E_TEST_STAFF_EMAIL`, and the WORKFORCE pre sign-up and pre token triggers.
-  - **Reviewer only.** The DB CHECK accepts the address only with `role = 'reviewer'`, not an owner and with no
-    password. The directory refuses any other CIS role. The pre token trigger denies the token unless the
-    staff groups are exactly `cis-reviewer`.
+  - **Content only** (reviewer until 05/11/2026). The DB CHECK accepts the address only with `role = 'content'`, not
+    an owner and with no password. The directory refuses any other CIS role. The pre token trigger denies the token
+    unless the staff groups are exactly `cis-content`. *Update S269 (AA-1035 R2 close-out, root ADR 0019 d3):* the
+    `reviewer` role merged into `content` (CIS 363) and its alias is gone (CIS 375 moves this row to `content` and
+    forbids `reviewer`; the CIS API maps no role to `cis-reviewer`; AA-CIS-Infra drops the `cis-reviewer` group and the
+    trigger's map entry becomes `cis-content`). The exception is otherwise unchanged: same address, same mailbox, no
+    Booking access, still temporary.
   - **No Booking access.** The directory refuses a Booking grant for the address, and the pre token trigger
     denies any `booking-*` group on it.
   - **Short-lived codes at rest.** Mailbox objects expire after 1 day.
@@ -306,7 +310,7 @@ mailbox or Google account". That is too strong.
   included (AA-Booking `backend/app/auth/staff.py`). Temporary, like A10.
 - **How the trigger holds it:** the WORKFORCE pre sign-up and pre token triggers now keep a fixed, read-only
   allow-map `{address: exact group tuple}` (`workforce.E2E_TEST_STAFF`, a code constant, never configuration):
-  the A10 address with `cis-reviewer`, this address with `booking-admin`. Exact match after lower-casing, and only
+  the A10 address with `cis-reviewer` (`cis-content` since S269, see A10), this address with `booking-admin`. Exact match after lower-casing, and only
   when the raw email attribute is ASCII: `str.lower()` folds some non-ASCII letters to ASCII (U+212A KELVIN SIGN
   becomes `k`), so a look-alike user would otherwise pass as this one. Any other group set on either address denies
   the token (logged `workforce_pre_token_denied`), it is never stripped. The A10 address behaves as before.
@@ -345,7 +349,7 @@ mailbox or Google account". That is too strong.
 - **Decision (S252, orchestrator under the tech lead's standing approval; design reviewed in the S252 session):** the orchestrating agent must sign itself in to the CIS
   admin as an **admin** to screenshot the admin-only pages (`/admin/content-quality`, `/admin/writing-memory`) and to
   produce the AA-916 WM-07 sample (admin sentence actions through the UI, on synthetic Dev tenants). The A10 account is
-  a reviewer only. A third dedicated WORKFORCE E2E identity, `e2e-cis-admin@e2e-mail.lumiguides.it.com`, signs in with
+  a reviewer only (content since S269). A third dedicated WORKFORCE E2E identity, `e2e-cis-admin@e2e-mail.lumiguides.it.com`, signs in with
   the staff groups exactly `cis-admin`, on Dev only. The name carries the app (`e2e-cis-admin@`, not `e2e-admin@`), so
   nothing that greps for `admin@` (the break-glass address `admin@adventure.asia`, username `admin`) confuses them.
   Temporary, like A10.
