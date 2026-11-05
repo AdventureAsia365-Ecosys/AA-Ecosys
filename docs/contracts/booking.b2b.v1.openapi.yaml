@@ -430,10 +430,12 @@ paths:
       summary: 1.4 (AA-1030 G3). The calling agency's own tariff, its price per tour, season and pax band
       description: >-
         One row per window x pax band of the AA price matrix (b2b rows still valid today) of every sellable tour AA
-        serves, priced exactly as POST /quotes prices the plan's tp line for the band's smallest party (all adults,
-        twin share) on priced_for_date, with the agency's tier or contract rate card discount in force today. A
-        quote of that party on that day answers the same price while no rate, rule, FX rate or discount changes; the
-        quote stays the binding price. Rows AA cannot quote today are left out. format=csv returns the same rows as a
+        serves, each window from today at the earliest and cut wherever a supplier rate of the tour changes, so every
+        departure date from valid_from to valid_to prices the same. Priced exactly as POST /quotes prices the plan's
+        tp line for the band's smallest party (all adults, twin share) on priced_for_date (= valid_from), with the
+        agency's tier or contract rate card discount in force today. A quote of that party for any departure date of
+        the row answers the same price while no rate, rule, FX rate or discount changes; the quote stays the binding
+        price. Rows AA cannot quote today are left out. format=csv returns the same rows as a
         CSV file (columns tour_key, title, country, duration_days, season, valid_from, valid_to, pax_min, pax_max,
         priced_for_pax, currency, price_per_person, price_for_party, agency_discount_pct, rrp_per_person,
         rrp_currency; an open pax band has an empty pax_max).
@@ -1071,7 +1073,9 @@ components:
     TariffItem:
       type: object
       additionalProperties: false
-      description: 1.4 (AA-1030 G3). One window x pax band of a tour.
+      description: >-
+        1.4 (AA-1030 G3). One window x pax band of a tour; every departure date from valid_from to valid_to prices
+        the same.
       required: [tour, valid_from, valid_to, pax_min, priced_for_pax, priced_for_date, price, price_per_person,
                  agency_discount_pct]
       properties:
@@ -1080,12 +1084,12 @@ components:
         country: {type: [string, "null"], maxLength: 120}
         duration_days: {type: [integer, "null"]}
         season: {type: [string, "null"], maxLength: 80}
-        valid_from: {type: string, format: date}
-        valid_to: {type: string, format: date}
+        valid_from: {type: string, format: date, description: First departure date of the row (today at the earliest).}
+        valid_to: {type: string, format: date, description: Last departure date of the row.}
         pax_min: {type: integer, minimum: 1}
         pax_max: {type: [integer, "null"], minimum: 1, description: Null = and more.}
         priced_for_pax: {type: integer, minimum: 1, description: The party the price is for (the band's smallest).}
-        priced_for_date: {type: string, format: date, description: The start date priced (window start or today).}
+        priced_for_date: {type: string, format: date, description: The departure date priced (= valid_from).}
         price:
           $ref: "#/components/schemas/Money"
           description: What POST /quotes charges for priced_for_pax travellers (the whole line).
