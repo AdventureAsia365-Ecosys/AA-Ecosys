@@ -1,6 +1,6 @@
 {
  "updated": "2026-11-06",
- "synced_at": "2026-11-05T20:11Z",
+ "synced_at": "2026-11-05T23:11Z",
  "session": "S270",
  "next_session": "S271",
  "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
@@ -820,7 +820,8 @@
     "AA-1008",
     "AA-1045",
     "AA-1042",
-    "AA-1029"
+    "AA-1029",
+    "AA-710"
    ],
    "canceled": [],
    "created": [
@@ -834,7 +835,8 @@
     "AA-1039 R6 + AA-1008 H3 + AA-1045 explorer + AA-1042 (dời nấc bị chặn, route test 16/16 + 11/11) Done",
     "AA-1029: import Excel 19/19, báo cáo sẵn sàng giá — 890/892 tour chưa có thành phần (việc dữ liệu)",
     "AA-741 phase 0: đại lý nhận 8/8 tour, max_tokens sửa (#1330), ≈ 2,0 USD; AA-1038 R5 lát 1 live; AA-855 23 video UAT PASS",
-    "Jira: 7 nháp chờ tech lead duyệt"
+    "Jira: 6 nháp chờ tech lead duyệt (KAN-20 không đăng)",
+    "AA-710 Done (06/11): benchmark xong, G1–G6 đã làm; tech lead quyết KHÔNG đăng KAN-20"
    ]
   },
   {
@@ -1864,18 +1866,6 @@
    "session": "parked",
    "size": "M",
    "next": "Parked · sau Writing Lab (R6) + đường LLM, chạy như experiment (~0,40 USD)",
-   "needs": ""
-  },
-  {
-   "id": "AA-710",
-   "title": "[AAA] B2B benchmark: Asian Trails (eConnect portal, API, Lemax back office)",
-   "status": "In Progress",
-   "priority": "Low",
-   "project": "tpbk",
-   "milestone": "M-R4",
-   "session": "S270",
-   "size": "S",
-   "next": "R4 — đăng KAN-20 (nháp gom S270) rồi đóng",
    "needs": ""
   },
   {

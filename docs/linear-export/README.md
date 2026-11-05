@@ -649,6 +649,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-689](tripplanner-aa-booking/AA-689.md) | [EPIC] TripPlanner — Trip.com-style planner on AA data (Jira PR-11) | Canceled | 2026-10-19 | TripPlanner & AA-Booking |
 | [AA-708](tripplanner-aa-booking/AA-708.md) | [Photos] Sync AA marketing photos from Google Drive (Jira CON PHOTOS) to S3 and match them to places/tours | Done | 2026-10-16 | TripPlanner & AA-Booking |
 | [AA-709](tripplanner-aa-booking/AA-709.md) | [AAA] Research: load supplier price and AA selling price for raw tours | Done | 2026-10-15 | TripPlanner & AA-Booking |
+| [AA-710](tripplanner-aa-booking/AA-710.md) | [AAA] B2B benchmark: Asian Trails (eConnect portal, API, Lemax back office) | Done | 2026-11-05 | TripPlanner & AA-Booking |
 | [AA-731](tripplanner-aa-booking/AA-731.md) | [TripPlanner] Harness fixes before real customers — idempotent Send-to-advisor, read v_active_tour_atoms, rerun after waves, renarrate grounding | Done | 2026-10-11 | TripPlanner & AA-Booking |
 | [AA-805](tripplanner-aa-booking/AA-805.md) | [TripPlanner] AI Phase 0 — narration spend caps + cache + session ownership + "AI-assisted" label; search fixes; contract version 1.1 | Done | 2026-10-20 | TripPlanner & AA-Booking |
 | [AA-810](tripplanner-aa-booking/AA-810.md) | [AAA] Minimal pricing engine (ADR 0005 first cut) — pricing_rules, dated fx_rates, manual net per version item, deterministic sell-price engine | Done | 2026-10-15 | TripPlanner & AA-Booking |

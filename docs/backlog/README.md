@@ -6,7 +6,7 @@
 
 **Rules:** at session start read §1–§3 and pick the session's parallel items from §3 and §3b by slot (skip items blocked in §2 or by the "blocked by" notes). At session end update the Status column, move closed items to §5, add new items. Re-audit only when this file is older than ~2 weeks or many issues were created outside sessions.
 
-_Last updated: S270, 06/11/2026 (Claude Code, Ultracode; 05/11 18:06 → 06/11 ~03:30 +07). **Closed in S270: AA-1037, AA-1030, AA-1035, AA-1039, AA-1008, AA-1045, AA-1042, AA-1029.** Live on Dev with checks: R4 agency invoice flow + B2C writes off (410) + Tenant 360 Billing; tiers silver/gold + AA prices in the CRM; customer_success E2E identity (CIS 378) with scoped reads; R6 fan-out; H3 required checks; usage explorer; gateway Guide tab + deferred refusal rungs (#1332); rate-sheet import 19/19 + price readiness (890/892 tours have no components: a data task). AA-741 phase 0 done (≈ 2.0 USD, report `docs/audits/2026-11-05-S270-aa741-phase0/`); AA-1038 R5 slice 1 (tp-025 shadow RLS); AA-855 23 UAT videos PASS. New: AA-1046 (R4b). Jira: 7 drafts wait for the tech lead (`docs/audits/2026-11-06-S270-close/jira-drafts.md`)._
+_Last updated: S270, 06/11/2026 (Claude Code, Ultracode; 05/11 18:06 → 06/11 ~03:30 +07). **Closed in S270: AA-1037, AA-1030, AA-1035, AA-1039, AA-1008, AA-1045, AA-1042, AA-1029, AA-710.** Live on Dev with checks: R4 agency invoice flow + B2C writes off (410) + Tenant 360 Billing; tiers silver/gold + AA prices in the CRM; customer_success E2E identity (CIS 378) with scoped reads; R6 fan-out; H3 required checks; usage explorer; gateway Guide tab + deferred refusal rungs (#1332); rate-sheet import 19/19 + price readiness (890/892 tours have no components: a data task). AA-741 phase 0 done (≈ 2.0 USD, report `docs/audits/2026-11-05-S270-aa741-phase0/`); AA-1038 R5 slice 1 (tp-025 shadow RLS); AA-855 23 UAT videos PASS. New: AA-1046 (R4b). Jira: 6 drafts wait for the tech lead (`docs/audits/2026-11-06-S270-close/jira-drafts.md`); KAN-20 not posted (tech lead, 06/11)._
 
 ## 1. Time-gated checks (do these first when due)
 
@@ -154,7 +154,6 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | AA-1040 | [Kit] AI notice and machine-readable AI-content marking across apps (EU AI Ac… | M-P1 | S269 | keep | In Progress |
 | AA-741 | [T-series audit] End-to-end T0→T11 test run on controlled tenants + per-mecha… | M2a | S270 | re-scope | In Progress |
 | AA-820 | [Legal] Tenant Terms clause for the Anthropic Usage Policy (effective 12/11/2… | M-P1 | ≤11/11 | re-scope | In Progress |
-| AA-710 | [AAA] B2B benchmark: Asian Trails (eConnect portal, API, Lemax back office) | M-R4 | S271 | keep | Backlog |
 | AA-855 | [UAT] Ecosystem UAT with recorded run videos: CIS admin + tenant portal, Trip… | M-P1 | S272 | re-scope | In Progress |
 | AA-1038 | [TripPlanner] R5 multi-tenant white-label TripPlanner: tenant_id + RLS, per-t… | M-P2 | S273 | re-scope | In Progress |
 | AA-1046 | [Booking] R4b B2C drop and VAT e-invoice provider API | M-R4 | S274 | new S270 | Backlog |
@@ -253,6 +252,7 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 - **AA-1008** (kit close-out) — Done: H3, Visual + Kit consumers required on the merge queue (CIS #1322, Partner #233, Booking #193).
 - **AA-1045** (usage explorer) — Done: rollup = ledger, CSV, drill, trace evidence (CIS #1328, #1329).
 - **AA-1042** (route control) — Done: Guide tab, refusal-circuit rungs deferred, route test FORCED 16/16 + NATURAL 11/11 (CIS #1329, #1332; root #572).
+- **AA-710** (Asian Trails benchmark) — Done: note root #545, gaps built as G1–G6; KAN-20 update not posted (tech lead decision 06/11).
 - **AA-1029** (price chain) — Done: rate-sheet Excel import 19/19 (rolled back), price readiness report, AUD 422 + Retry-After (Booking #197, #198; Partner #236).
 
 
