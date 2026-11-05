@@ -10,7 +10,9 @@
   adds a second E2E address for the Booking staff admin. A10b (26/10/2026, S252) adds a third, Dev-only E2E address for
   the CIS admin, read-only except the content-quality sentence-apply routes; A10b-1 adds the Content studio invitation
   routes and A10b-2 (05/11/2026, S268) a read-only view-as session, both on synthetic tenants only. A10c (01/11/2026,
-  S262) adds a fourth, Dev-only E2E address for the AA-Partner staff console (crm-ops + crm-support, synthetic agencies only). A11 and A12 (22/10/2026,
+  S262) adds a fourth, Dev-only E2E address for the AA-Partner staff console (crm-ops + crm-support, synthetic agencies only).
+  A10d (05/11/2026, S270) adds a fifth, Dev-only E2E address for a CIS customer_success member, read-only with no write
+  allow-list, synthetic tenants only in its book. A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2).
 - **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) was unchanged and still pending on 18/10/2026.
 - **Update 2026-10-28:** Booking Phase 2 has shipped in part: Booking verifies WORKFORCE tokens of the
@@ -295,12 +297,13 @@ mailbox or Google account". That is too strong.
   2. Delete the `shared.admin_users` row (DRY RUN procedure) and the Cognito user (console; the writer may
      not call `AdminDeleteUser`).
   3. Add a new CIS migration that restores the 247 CHECK. It RAISEs while a row still uses either E2E address
-     (A10 `e2e@`, A10b `e2e-cis-admin@`; migration 283's header holds the SQL).
+     (A10 `e2e@`, A10b `e2e-cis-admin@`, A10d `e2e-cis-cs@`; migration 283's header holds the SQL).
   4. Remove `E2E_TEST_STAFF_EMAIL` and the scope checks from CIS. Remove the trigger exception from Infra and
      run Terraform Apply.
   5. Point the E2E test at a company address, or retire it.
   6. Add a closing line here.
-  The A10a Booking address and the A10b CIS admin address go in the same cleanup (see A10a and A10b "Removal").
+  The A10a Booking address, the A10b CIS admin address, the A10c CRM staff address and the A10d customer success
+  address go in the same cleanup (see each one's "Removal").
 
 #### A10a. Second E2E address: the Booking staff admin (24/10/2026, S250, AA-910)
 
@@ -549,6 +552,67 @@ mailbox or Google account". That is too strong.
 - **Removal (end of project code, with A10 / A10a / A10b):** `admin-delete-user` of the address; drop the trigger entry,
   the mailbox recipient, the `e2e-staff` command and the AA-Partner `E2E_CRM_STAFF_EMAIL` rule
   (`Caller.e2e_synthetic_only`); Terraform Apply; a closing line here. Faster stop on Dev: disable the user.
+
+#### A10d. Fifth E2E address: a CIS customer_success member, Dev only, read-only with no write allow-list (05/11/2026, S270, AA-1035)
+
+- **Decision (S270, orchestrator under the tech lead's standing approval and the dev-phase merge rule; AA-1035
+  Done-when "Live on Dev: a customer_success E2E user sees only the assigned tenants (403 on another tenant)"):** the
+  S267 probe proved the tenant-book scoping only through the header path in the container, without a Cognito session.
+  A fifth dedicated WORKFORCE identity, `e2e-cis-cs@e2e-mail.lumiguides.it.com`, signs in with the staff groups
+  exactly `cis-customer_success`, on Dev only, so the orchestrator's admin-evidence run proves the scoping end to end
+  (AA-CIS-App Playwright `admin-evidence/cs-scope.spec.ts`). Temporary, like A10.
+- **Groups (trigger):** one more entry in the Dev-only map of A10b, `workforce.E2E_DEV_ONLY_TEST_STAFF =
+  {…, e2e-cis-cs@: ("cis-customer_success",)}`, behind the same `E2E_DEV_ONLY_STAFF_ENABLED` flag (exactly `"true"`
+  on dev only, a Terraform precondition elsewhere). Any other group set (another `cis-*`, any `booking-*` or `crm-*`)
+  denies the token, never stripped. Same ASCII-only exact lookup; no address can borrow another address's groups (the
+  map is per address).
+- **Environment guard (two layers), as A10b:** Terraform switches the trigger entry on for dev only; the CIS API creates,
+  re-enables or syncs the account only where `ENVIRONMENT` is exactly `dev` and `staff_identity.resolve_staff` refuses
+  its token with 403 `e2e_not_allowed_here` anywhere else (AA-CIS-App `api/core/e2e_staff.py`
+  `DEV_ONLY_E2E_STAFF_ROLES`). Disabling it stays allowed everywhere.
+- **Directory row:** `shared.admin_users`, `role = 'customer_success'`, `is_owner = false`, `password_hash IS NULL`, no
+  `staff_app_grant` (no Booking role), no `staff_crm_grant` (no CRM role). CIS migration 378 extends
+  `admin_users_email_chk` with exactly that tuple (the A10 and A10b clauses are unchanged); the directory refuses any
+  other role, a Booking grant or a CRM role for the address (400 `e2e_test_scope`).
+- **Read-only cap with NO write allow-list (CIS):** the identity carries `e2e_read_only` but not
+  `e2e_allowlisted_writes`, a second identity flag that only the A10b address carries and that every A10b exception now
+  keys on: the bearer middleware allow-list, `staff_authz.denial_reason`, the `docs.owner_read` `"e2e_dev"` branch and
+  the route checks of the sentence-apply routes (A10b), the Content studio invitations (A10b-1) and view-as (A10b-2).
+  So every method other than GET / HEAD / OPTIONS is refused with 403 `e2e_read_only` before the route runs: no
+  sentence apply, no A10b-1 invitation, no A10b-2 view-as, no assignment change, nothing else. The route checks refuse
+  it outright as a third layer. `/auth/verify-admin` returns `customer_success`, so the BFF opens the desk pages.
+- **Synthetic tenants only in its book:** `PUT /admin/tenants/{id}/assignments/{staff}` answers 409 for a Dev-only E2E
+  staff row (A10b or A10d) on a tenant that is not synthetic (`shared.tenants.is_canary IS TRUE` and not the pilot,
+  the A10b-1 rule), before any row or audit write. The book therefore never holds a real tenant or the pilot, and the
+  identity's reads stay on synthetic data.
+- **Mailbox:** a third recipient of the A10b rule `e2e-cognito-admin` (dev only), so its codes land under
+  `inbound-admin/`, which only the MFA admin role reads; it is never a recipient of `e2e-cognito` (the CI-readable
+  `inbound/`).
+- **Exposure.** Code readers: the MFA admin role and whoever controls mail for `e2e-mail.lumiguides.it.com` (A10's
+  domain dependency applies: losing it removes every E2E address at once). What a code yields: the customer_success
+  **reads** of the synthetic tenants in its book on Dev (Tenant 360, members, the Content quality lists of its book,
+  the CRM desk reads CIS scopes). No write anywhere.
+- **Cross-app:** no `booking-*` group, so Booking answers `no_booking_role`; the CIS to Booking bridge mints only from
+  password sessions (A11). AA-Partner `/crm/ops/v1` accepts `cis-customer_success` as a desk caller whose reads CIS
+  scopes (`tenant.membership.v1` staff-scope); the CRM flags this identity `Caller.e2e_no_write` (deliberately not
+  `e2e_read_only`, which would open the A10b-1 invitation path), refuses it outside dev / test / local, and refuses the
+  studio-invitation relay (its one reachable write) and every `crm-platform-admin` write with 403 `e2e_read_only`.
+- **Created through the directory:** an S3-mediated ECS exec script on the CIS API calls `staff_directory.create_staff`
+  with `role="customer_success"`, `booking_role=None`, no CRM roles, `send_invite=False`, the active owner row as the
+  audited actor (`staff.created`), after the Infra trigger is applied. Then an admin assigns ONE synthetic tenant to it
+  (the route above). `AdminCreateUser` is SUPPRESS with no password, so the A8 alarm does not fire.
+- **Reconcile:** listed under the known E2E exceptions on Dev (clause `ADR 0006a A10d`), not counted as drift.
+- **Detection:** `workforce_e2e_test_token_issued` (with `email`), `staff_identity_e2e_read_only`
+  (`allowlisted_writes=false`), `staff_bearer_refused reason=e2e_read_only`, `tenant_assignment_e2e_refused`, AA-Partner
+  `route_guard_e2e_cis_cs_refused` and `studio_invitation_e2e_no_write_refused`.
+- **Used only by the agent, locally**, with the MFA admin role reading the code (`E2ECS=1`, no workflow sets it). Never
+  CI.
+- **Removal (end of project code, with A10 / A10a / A10b / A10c):** directory disable + global sign-out; delete the row
+  and its assignments (DRY RUN procedure) and the Cognito user (console); the restore-247 migration (A10 step 3, which
+  RAISEs while a row still uses an E2E address); drop the CIS constants and the `e2e_allowlisted_writes` split with the
+  rest of `api/core/e2e_staff.py`, the assignment guard, the trigger entry, the receipt-rule recipient and the AA-Partner
+  `E2E_CIS_CS_EMAIL` rule (`Caller.e2e_no_write`); Terraform Apply; a closing line here. Faster stop on Dev: disable the
+  user. The full end-of-project removal list is therefore A10, A10a, A10b (with A10b-1 and A10b-2), A10c and A10d.
 
 ### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)
 
