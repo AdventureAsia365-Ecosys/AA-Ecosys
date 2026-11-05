@@ -1,18 +1,18 @@
 ---
 id: SEC-04-dpa-annex4
-title: "DPA Annex 4: international transfers, SCC fill-ins and TIA template (draft v0.2)"
+title: "DPA Annex 4: international transfers, SCC fill-ins and TIA template (draft v0.3)"
 description: "Annex 4 of the partner-agency DPA: transfer basis per agency market, EU SCC Module 2 option choices and Annex I-III cross-references, and a transfer impact assessment template."
 type: template
 status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-05
+last_reviewed: 2026-11-06
 review_every_days: 30
-related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04-dpa-pack, AA-820]
+related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04-dpa-pack, SEC-04-vn-transfer-dossier, AA-820]
 ---
 
-# DPA Annex 4: international transfers, SCC fill-ins and TIA template (draft v0.2)
+# DPA Annex 4: international transfers, SCC fill-ins and TIA template (draft v0.3)
 
 > [!WARNING]
 > **Draft for counsel, not legal advice.** The choice of transfer mechanism per market, the SCC options and every
@@ -26,7 +26,7 @@ related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa
 | United States, AWS us-west-1 | Every app's storage and compute | ADR 0018 d7 as amended by ADR 0019 d12 ("US by default, EU cell on triggers"); [Annex 3](dpa-annex-3-subprocessors.md) §1.1 |
 | Any AWS commercial region (cross-region inference) | Content studio inputs only, when a stage uses a Bedrock `global.` profile; never a stage classed `pii` (CIS 373) | Annex 3 §1.2 |
 | United States, AWS us-east-1, us-east-2, us-west-2 (US cross-region inference) | CRM reply-draft text after the F3 scrub (placeholders, no identity fields), when an Agency has AI switched on; Amazon Nova Lite through a `us.` profile, which stays inside the US | Annex 3 §1.2; AA-CIS-Infra `modules/environment/crm_llm.tf` |
-| The Anthropic API and the OpenAI API (location [to confirm]) | Content studio inputs, when the AWS deployment of a model refuses or fails | AI Use Register v1.9; Annex 3 §1.2 |
+| The Anthropic API and the OpenAI API (location [to confirm]) | Content studio inputs: the Anthropic API is the first path of every Claude model since 2026-11-05 (route control version 6); the OpenAI API answers the GPT scoring and checking stages while Amazon Bedrock refuses, and writes as a last resort | AI Use Register v1.11; Annex 3 §1.2 |
 | Sentry, United States | Scrubbed error events | Annex 3 §1.3 |
 | Vercel, United States (`sfo1`) and edge | Staff views and the Trip Planner form in transit, until ADR 0019 d23 completes | Annex 3 §1.3, §4 |
 
@@ -43,7 +43,7 @@ EU, the transfer from an EU Agency to AA is itself a restricted transfer.
 | EU / EEA | EU Standard Contractual Clauses (Commission Implementing Decision (EU) 2021/914), **Module 2 (controller to processor)**, with Annexes I-III = DPA Annexes 1-3; AA's onward transfers to its US sub-processors under the sub-processors' own terms (Module 3 where needed) | Whether AA needs an EU representative (b10); the options in §3; whether any vendor relies on the EU-US Data Privacy Framework instead (check each vendor's certification, not assumed here) |
 | United Kingdom | The UK International Data Transfer Addendum to the EU SCCs | Whether needed for the first agencies |
 | Switzerland | The EU SCCs with the Swiss amendments (FDPIC as authority, Swiss law references) | Whether needed |
-| Vietnam | A cross-border transfer impact assessment dossier under Vietnam's personal data protection law (the S263 scope add of AA-820 names Article 20); it reuses §1, Annex 1 and Annex 2 | The decree's form, who files (the Agency as controller, AA for its own data), timing; a Vietnamese licence for AA (b10) |
+| Vietnam | A cross-border transfer impact assessment dossier under Vietnam's personal data protection law (Article 20 of Law 91/2025/QH15, the S263 scope add of AA-820); engineering's facts are filled in the [Vietnam transfer dossier](vn-cross-border-transfer-dossier.md), which reuses §1, Annex 1 and Annex 2 | The decree's form, who files (the Agency as controller, AA for its own data), timing; a Vietnamese licence for AA (b10) |
 | Australia | APP 8: reasonable steps by contract (this DPA) so that the overseas recipient does not breach the APPs | Whether the Agency's notice must name the US |
 | Mainland China | Not offered: Content only, no personal data (ADR 0019 b11) | — |
 | Others | This DPA as the contractual basis | Per market, when an agency signs |
@@ -129,4 +129,5 @@ Pick the ones that apply from Annex 2 and say what each protects against at this
 4. The OpenAI API: Content studio.
 5. Sentry (United States) and Vercel (until d23 completes): low-volume, scrubbed or in-transit data.
 
-*Drafting note: the Vietnamese dossier of §2 and the EU TIA share sections A, B and D; write the facts once.*
+*Drafting note: the Vietnamese dossier of §2 and the EU TIA share sections A, B and D; write the facts once. The
+[Vietnam transfer dossier](vn-cross-border-transfer-dossier.md) holds them for the destinations above.*

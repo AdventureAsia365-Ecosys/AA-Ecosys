@@ -1,29 +1,29 @@
 ---
 id: SEC-04-dpa-agreement
-title: "Data Processing Agreement for partner agencies (draft v0.2)"
+title: "Data Processing Agreement for partner agencies (draft v0.3)"
 description: "The Art. 28 Data Processing Agreement between Adventure Asia (processor) and a partner agency (controller) for the Content studio, the CRM and Booking B2B, with the breach notice timeline, sub-processor rules, transfers and return or deletion at the end; draft for counsel, not legal advice."
 type: reference
 status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-partner-portal, aa-crm-api, aa-crm-web, aa-cis-api, aa-booking-api]
-last_reviewed: 2026-11-05
+last_reviewed: 2026-11-06
 review_every_days: 30
 related: [SEC-04, SEC-04-dpa-pack, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04-dpa-annex4, SEC-04-pilot-set, SEC-04-ai-schedule, SEC-04-dsar, AA-820]
 ---
 
-# Data Processing Agreement for partner agencies (draft v0.2)
+# Data Processing Agreement for partner agencies (draft v0.3)
 
 > [!WARNING]
 > **DRAFT FOR COUNSEL. NOT LEGAL ADVICE. NOT APPROVED.** Engineering wrote this text from the product facts on
-> `main` on 2026-11-05. Counsel has not read it and no agency has signed it. Every item marked **[COUNSEL]** needs a
+> `main` on 2026-11-05 and re-checked them on 2026-11-06. Counsel has not read it and no agency has signed it. Every item marked **[COUNSEL]** needs a
 > lawyer's answer; whether and when a lawyer reviews the pack is the business owner's decision (ADR 0019 b20, b10).
 > `[●]` is a value the business owner or counsel fills in. *Drafting notes* in italics are for the reviewer and are
 > not part of the agreement.
 
 | | |
 |---|---|
-| Version | **Draft v0.2, 2026-11-05** (AA-820 part 2). Replaces the [DPA template v0.1](dpa-template.md) of 2026-10-21, whose clause 1.3 made AA the controller of travellers; ADR 0019 invariant 2 superseded that |
+| Version | **Draft v0.3, 2026-11-06** (AA-820 part 2): the pilot safeguards of clause 15.3 are in place on Dev (Annex 2 M-25), backups are 14 days (11.3), the breach timeline points to the personal-data breach branch of the incident runbook (8.3), and Annex 3 names the Anthropic API as the first path of Claude models. v0.2 of 2026-11-05 was root PR #546. Replaces the [DPA template v0.1](dpa-template.md) of 2026-10-21, whose clause 1.3 made AA the controller of travellers; ADR 0019 invariant 2 superseded that |
 | Decisions | [ADR 0019](../adr/0019-b2b-only-ecosystem-model.md) invariant 2 and b9 (agency = controller, AA = processor, on every app), b10 (contracting entity and counsel before Vietnamese or EU agencies store data), b11 (worldwide from US hosting with SCCs plus a TIA), d12 (US by default, EU cell on triggers), d16 (pilot on Dev with one agency, a pilot letter and this DPA); ADR 0008a (CRM: agency controller, AA processor) |
 | Annexes | [Annex 1: processing per app](dpa-annex-1-processing.md) · [Annex 2: security measures](dpa-annex-2-security.md) · [Annex 3: sub-processors](dpa-annex-3-subprocessors.md) · [Annex 4: transfers, SCC fill-ins and TIA](dpa-annex-4-transfers.md) |
 | Ships with | The [pilot contract set](pilot-contract-set.md): the partner-terms clauses that incorporate this DPA and the [AI Schedule v1.0](tenant-ai-schedule.md) (Anthropic Usage Policy effective 12 November 2026), the joint-controller clause and the model privacy notice for the agency |
@@ -183,8 +183,11 @@ contact point. AA sends what it knows first and the rest in phases, without undu
 
 *Drafting note: the controller's own deadline to its authority is the Agency's duty (GDPR Art. 33: 72 hours; the
 Vietnamese deadline is reported as 72 hours in the CRM research, `04-economics-compliance-security.md` §4.1, not
-checked against the decree). The 24-hour contractual limit leaves the Agency most of its window. A "PDPL branch" for
-the incident runbook (controller path for the Agency) is an open AA-820 item (S263 scope add).*
+checked against the decree; the S261 architecture review read Article 23 of Law 91/2025/QH15 as 72 hours for the
+controller and "promptly" for the processor, counsel to confirm). The 24-hour contractual limit leaves the Agency
+most of its window. The incident runbook has the matching branch ([Incident response](../ops/incident-response.md),
+"Personal data breach"): for Agency Personal Data AA tells the Agency under this clause and the Agency notifies its
+authority; for the records AA controls itself (clause 1.4) AA runs its own 72-hour path.*
 
 **8.4** AA's notice is not an admission of fault. AA does not notify authorities or data subjects about Agency
 Personal Data on the Agency's behalf unless the Agency asks it in writing or the law requires AA to.
@@ -224,14 +227,15 @@ confirmation, AA deletes the Agency Personal Data of that service, and confirms 
 | **Content studio** (live, AA-CIS) | Per item during the term: export of each piece as a full HTML document or an HTML fragment, and the tour rewrite as a DOCX file. A whole-account export is prepared by AA staff on request **[not built as a self-serve tool]** | AA offboards the Agency (reversible), then after a retention window (default 30 days) runs the tenant erasure job: a dry run with counts and a fingerprint, the tech lead's approval of that fingerprint, a database snapshot, the erasure in one transaction with a recount that must find 0, then the files and stored channel credentials outside the database. Tested once on Dev on a synthetic agency (2026-10-23) | The audit log (append-only hash chain) and one "erased" row. AI cost records are kept without the Agency link (they hold no text). Archived cost and usage files hold no personal data (DSAR runbook §4 step 8) |
 | **Booking B2B** (live, AA-Booking) | The Agency's own copies are in its CRM (AA lines, invoices from AA) | Not applicable to Agency Personal Data: Booking holds no traveller identity for the Agency (DM-6.8) | AA's commercial and accounting records of the Agency's bookings, for AA's statutory period (AA as controller, 1.4(c)) |
 
-**11.3 Backups.** Deleted data leaves AA's automated database backups when they expire, within **7 days**, and is never
+**11.3 Backups.** Deleted data leaves AA's automated database backups when they expire, within **14 days**, and is never
 restored into the live Services except in a disaster recovery that covers every app; after such a restore AA erases
 the data again before the Services reopen **[COUNSEL]**. A manual snapshot taken for an erasure is deleted once the
 erasure is verified. The CRM erasure receipt states a backup purge date of erasure + 30 days, a conservative bound.
 
-*Drafting note: automated backups are 7 days (`backup_retention_period = 7`, AA-CIS-Infra `modules/rds/main.tf`, read
-2026-11-05). The 14-day option of ADR 0019 d16 has its cost yes but is not applied; if it is applied, this number
-becomes 14.*
+*Drafting note: automated backups are 14 days (`backup_retention_period = 14`, AA-CIS-Infra `modules/rds/main.tf`,
+PR #694, the ADR 0019 d16 option with its cost yes), pending that apply; 7 days before. <!-- TODO(S271 orchestrator):
+delete ", pending that apply" after the RDS apply, as in Annex 2 M-29 --> The one-agency nightly export of the pilot
+(Annex 2 M-25 item 4) is kept 7 days.*
 
 ## 12. Audits and information
 
@@ -285,7 +289,9 @@ While the Agency is the pilot agency:
 3. **Before any real personal data enters the pilot**, AA puts in place the five pilot safeguards of Annex 2, M-25
    (only the pilot agency may hold real data; agents and maintenance scripts cannot read its personal data; clean-up,
    test and batch jobs skip it; a nightly export of the pilot agency; a one-agency restore drill). AA tells the Agency
-   when they are in place. *Drafting note: none of the five is built on 2026-11-05 (S268 CRM security review §4).*
+   when they are in place. *Drafting note: all five run on Dev since 2026-11-05 (Annex 2 M-25, with the evidence per
+   item; AA-969 closed in session S269). AA still has to give the Agency the written confirmation of the pilot letter
+   (clause [●].4), and the pilot agency's CRM account needs the pilot exception of Annex 2 §2 item 2 first.*
 4. A database point-in-time restore resets every app on the shared instance, never one agency. AA does not run one
    without telling the Agency first; per-agency recovery uses the nightly export.
 
