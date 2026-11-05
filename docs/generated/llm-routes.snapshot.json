@@ -1269,6 +1269,6 @@
    "updated_at": "2026-11-04"
   }
  ],
- "schema": "aa900-llm-routes/2",
+ "schema": "aa900-llm-routes/1",
  "source": "shared.llm_role_config + shared.llm_model_catalog (aa-cis-dev-db, read as cis_app)"
 }

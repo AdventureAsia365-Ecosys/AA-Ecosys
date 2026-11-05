@@ -88,7 +88,7 @@ class RenderTest(unittest.TestCase):
         self.assertIn(f"docs-fingerprint: {g.fingerprint(SNAP)}", page)
 
     def test_empty_snapshot_says_so(self) -> None:
-        page = g.render({"schema": g.SCHEMA, "routes": [], "models": []})
+        page = g.render({"schema": g.SCHEMA, "routes": [], "models": [], "connections": [], "deployments": []})
         self.assertIn("## No snapshot yet", page)
 
     def test_known_gaps_callout_only_when_set(self) -> None:
@@ -123,7 +123,9 @@ class RenderTest(unittest.TestCase):
 
     def test_registry_not_captured_says_so(self) -> None:
         old = {k: v for k, v in SNAP.items() if k not in ("connections", "deployments")}
+        old["schema"] = g.SCHEMA_V1
         self.assertNotIn("connections", g.normalise(old))
+        self.assertEqual(g.normalise(old)["schema"], g.SCHEMA_V1)     # read as is, never relabelled 2
         self.assertIn("Not in this snapshot: it was captured before the generator read the connections",
                       g.render(old))
         empty = dict(SNAP, connections=[], deployments=[])
@@ -133,8 +135,13 @@ class RenderTest(unittest.TestCase):
     def test_wrong_schema_is_refused(self) -> None:
         with self.assertRaises(ValueError):
             g.render({"schema": "other", "routes": []})
-        with self.assertRaises(ValueError):       # schema 1 (no registry) needs a new capture, not a silent upgrade
-            g.render({"schema": "aa900-llm-routes/1", "routes": []})
+        bare = {k: v for k, v in SNAP.items() if k not in ("connections", "deployments")}
+        with self.assertRaises(ValueError):       # a schema-1 payload relabelled 2: needs a new capture, not a label
+            g.render(bare)
+        with self.assertRaises(ValueError):       # half a registry is not schema 2 either
+            g.render({k: v for k, v in SNAP.items() if k != "deployments"})
+        with self.assertRaises(ValueError):       # schema 1 carrying registry lists is mislabelled
+            g.render(dict(SNAP, schema=g.SCHEMA_V1))
 
 
 class SafetyTest(unittest.TestCase):

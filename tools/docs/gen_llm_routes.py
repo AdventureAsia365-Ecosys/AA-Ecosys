@@ -47,6 +47,7 @@ REPO_ROOT = _HERE.parents[2] if len(_HERE.parents) > 2 else _HERE.parent
 SNAPSHOT = REPO_ROOT / "docs" / "generated" / "llm-routes.snapshot.json"
 PAGE = REPO_ROOT / "docs" / "generated" / "llm-routes.md"
 SCHEMA = "aa900-llm-routes/2"     # 2 (AA-1042, S270): + connections, deployments
+SCHEMA_V1 = "aa900-llm-routes/1"  # routes + models only: still read and rendered, kept at 1, never relabelled
 GENERATOR = "tools/docs/gen_llm_routes.py"
 BEGIN, END = "--- AA900 LLM ROUTES SNAPSHOT ---", "--- END ---"
 
@@ -106,8 +107,16 @@ def find_ids(value) -> list[str]:
 
 def normalise(snapshot: dict) -> dict:
     """Sorted, typed snapshot: routes by stage, models by key, lists as lists. Raises ValueError on a bad shape."""
-    if snapshot.get("schema") != SCHEMA:
-        raise ValueError(f"snapshot schema must be {SCHEMA!r}")
+    schema = snapshot.get("schema")
+    if schema not in (SCHEMA, SCHEMA_V1):
+        raise ValueError(f"snapshot schema must be {SCHEMA!r} (or {SCHEMA_V1!r})")
+    has_conns, has_deps = snapshot.get("connections") is not None, snapshot.get("deployments") is not None
+    # The label follows the payload: schema 2 holds both registry lists, schema 1 neither. A schema-1 capture is never
+    # upgraded by a label edit (the drift guard would then trust names that were never read); only `dump` writes 2.
+    if schema == SCHEMA and not (has_conns and has_deps):
+        raise ValueError(f"a {SCHEMA!r} snapshot must hold both connections and deployments: recapture with `dump`")
+    if schema == SCHEMA_V1 and (has_conns or has_deps):
+        raise ValueError(f"a {SCHEMA_V1!r} snapshot holds no connections or deployments: label a capture with them 2")
     routes = sorted((dict(r) for r in snapshot.get("routes") or []), key=lambda r: r["stage"])
     models = sorted((dict(m) for m in snapshot.get("models") or []), key=lambda m: m["model_key"])
     for r in routes:
@@ -117,7 +126,7 @@ def normalise(snapshot: dict) -> dict:
     for m in models:
         m["bedrock_accounts"] = sorted(m.get("bedrock_accounts") or [])
         m["callable_via"] = list(m.get("callable_via") or [])
-    out = {"schema": SCHEMA, "captured_at": snapshot.get("captured_at"), "source": snapshot.get("source"),
+    out = {"schema": schema, "captured_at": snapshot.get("captured_at"), "source": snapshot.get("source"),
            "routes": redact(routes), "models": redact(models)}
     # Schema 2: None (the key absent) = not captured, which the drift guard refuses; a list = captured. Only the
     # listed fields are kept, so a wider SELECT can never carry another column into the public repo.
