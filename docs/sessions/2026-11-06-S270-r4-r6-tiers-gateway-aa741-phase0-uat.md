@@ -63,12 +63,13 @@ Chi tiết: `docs/audits/2026-11-06-S270-close/state-snapshot.md`.
 
 ## Jira
 
-6 nháp (PR-23, PR-17, PR-18, PR-22, PR-25, PR-26) ở `docs/audits/2026-11-06-S270-close/jira-drafts.md` — **chờ tech lead duyệt**
-rồi mới đăng. **KAN-20 không đăng** (tech lead, 06/11 ~06:10). PR-20 kỳ 4 đến hạn thứ Hai 09/11.
+**Đã đăng 06/11 ~06:40 +07** (tech lead duyệt): PR-23 #10616, PR-17 #10617, PR-18 #10618, PR-22 #10619, PR-25 #10620, PR-26 #10621
+(12 ảnh; 3 ảnh cắt bỏ mã nội bộ, 1 ảnh che dòng Reason). PR-25 bỏ câu hỏi Gold 6 % cho chị Thư (tech lead: không đưa câu hỏi).
+**KAN-20 không đăng** (tech lead, 06/11 ~06:10). PR-20 kỳ 4 đến hạn thứ Hai 09/11.
 
 ## Việc cần làm đầu phiên sau (S271), theo thứ tự
 
-1. Jira: tech lead duyệt 6 nháp → đăng (KAN-20 không đăng).
+1. Jira: PR-20 kỳ 4 từ thứ Hai 09/11 (đợt S268–S270 đã đăng 06/11).
 2. AA-741 phase 1 trên 4 tenant audit (≈ 3–4 USD), rồi phase 2.
 3. AA-855: tải 23 video lên Drive; mở đường ghi UAT.
 4. AA-1038 R5 lát tiếp theo.
