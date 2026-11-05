@@ -249,14 +249,52 @@ def script_shingles(text: str, allow: set[str]) -> set[str]:
     return out
 
 
-def corpus_files(workspace: Path) -> list[Path]:
-    """Every tracked text file of the public repos: the workspace root repo and each child repo under apps/ and infra/.
-    ARCH_VIDEO_ROOT_REPO points the root repo at another checkout (a worktree holding a not yet merged change)."""
+def corpus_repos(workspace: Path) -> list[Path]:
+    """The public repos of the n-gram corpus: the workspace root repo (or ARCH_VIDEO_ROOT_REPO, a worktree holding a
+    not yet merged change) and each child repo under apps/ and infra/."""
     root = Path(os.environ.get("ARCH_VIDEO_ROOT_REPO") or workspace)
-    repos = [root] + sorted(p.parent for p in workspace.glob("apps/*/.git")) + \
+    return [root] + sorted(p.parent for p in workspace.glob("apps/*/.git")) + \
         sorted(p.parent for p in workspace.glob("infra/*/.git"))
+
+
+def _origin_default(repo: Path) -> str:
+    def git(*a):
+        return subprocess.run(["git", "-C", str(repo), *a], check=True, capture_output=True, text=True).stdout.strip()
+    try:
+        return git("symbolic-ref", "--short", "refs/remotes/origin/HEAD")
+    except subprocess.CalledProcessError:
+        for ref in ("origin/main", "origin/master"):
+            if subprocess.run(["git", "-C", str(repo), "rev-parse", "--verify", "--quiet", ref],
+                              capture_output=True).returncode == 0:
+                return ref
+    raise RuntimeError("no origin default branch")
+
+
+def stale_corpus(workspace: Path, fetch: bool = True) -> list[str]:
+    """Corpus repos whose checkout is behind its origin default branch (after a fetch), or that cannot be compared.
+    The newest public text is often what an episode is about, so a stale corpus misses exactly the copied phrases."""
+    problems = []
+    for repo in corpus_repos(workspace):
+        try:
+            if fetch:
+                subprocess.run(["git", "-C", str(repo), "fetch", "--quiet", "origin"], check=True,
+                               capture_output=True, timeout=90)
+            ref = _origin_default(repo)
+            behind = int(subprocess.run(["git", "-C", str(repo), "rev-list", "--count", f"HEAD..{ref}"], check=True,
+                                        capture_output=True, text=True).stdout.strip())
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired, RuntimeError, ValueError,
+                FileNotFoundError) as e:
+            problems.append(f"{repo}: cannot compare with origin ({type(e).__name__})")
+            continue
+        if behind:
+            problems.append(f"{repo}: {behind} commit(s) behind {ref}")
+    return problems
+
+
+def corpus_files(workspace: Path) -> list[Path]:
+    """Every tracked text file of the public repos (corpus_repos)."""
     files = []
-    for repo in repos:
+    for repo in corpus_repos(workspace):
         try:
             out = subprocess.run(["git", "-C", str(repo), "ls-files", "-z"], check=True, capture_output=True).stdout
         except (subprocess.CalledProcessError, FileNotFoundError):
