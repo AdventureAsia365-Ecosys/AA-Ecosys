@@ -234,6 +234,16 @@ What exists (CIS code at `1b6e9448`, S261 audits, [inventory](../audits/2026-10-
       are kept: counted with the Anthropic API on, a chain names at most one 5.x Claude tier besides its primary's, and
       `a3_atomize` / `s1_source_facts` drop GPT-5.6 Luna (refused with GPT-6 Luna on acc3) for the twin, so the last
       rung still runs (the widest chains make 6 attempts).
+    - **Every Claude model of the key (CIS 376, S269).** The catalog holds every Claude model the Anthropic API key can
+      use, each with an `anthropic-direct` deployment behind its AWS deployments (priority 100): Fable 5.1 / 5 and
+      Opus 5 / 4.8 / 4.7 reached only by the API, the Opus 4.6 / 4.5 candidates switched on (acc3 rows still off), and
+      Sonnet 4.6 / Haiku 4.5 now on acc3 AND the API. With that second 4.x deployment counted, each chain keeps the six
+      attempts by dropping its lowest Claude rung: large-tier writers `sonnet-5-5 → sonnet-4-6 → gpt-6-luna-openai`
+      (tp_compose `sonnet-5-5 → sonnet-4-6 → haiku-4-5`: TripPlanner's gateway calls Bedrock only), small-tier writers
+      `haiku-5-5 → haiku-4-5 → gpt-6-luna-openai`, the Claude validate stages one 4.x sibling then acc2,
+      `a3_atomize` / `s1_source_facts` `gpt-6-luna → gpt-6-luna-openai → haiku-5-5 → nova-lite`. No stage routes
+      Sonnet 5, Opus or Fable (selectable in the admin route control; Opus degrade order 5.5 > 5 > 4.8 > 4.7 > 4.6 >
+      4.5). Carrying more rungs needs a higher attempt cap: a change of this decision, not a migration.
     - **Keys and caps.** ONE Anthropic API key for every product (connection `anthropic-direct`, 150 USD a month,
       alert 80 %, hard stop), and acc3 capped at 100 USD a month (alert 80 %), both set by CIS 366. The split by
       product (catalogue, tenant content, TripPlanner, CRM, Booking) is ours: the ledger row per call (stage, app,
