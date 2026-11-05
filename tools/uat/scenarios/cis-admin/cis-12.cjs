@@ -1,5 +1,6 @@
 // Dry-run scenario CIS-12 (AA-1009, plan §4): Writing memory, read only (no new run: that needs a model).
-// Given: the E2E CIS admin (read-only session). When: they open Writing memory and walk its tabs.
+// Given: the E2E CIS admin (read-only session). When: they open Writing Lab › Writing memory (/admin/lab/writing-memory
+// since the R6 admin IA; the old /admin/writing-memory answers 307 there) and walk its tabs.
 // Then: each tab shows its rows or the empty state; no API call fails; nothing is written. $0.
 // Pilot guard (AA-855): the lists name their owner, "Platform" or a tenant (a short id on Signals / Candidates, the
 // tenant's name on Releases). Each row that is neither a platform row nor names an invented synthetic tenant is blurred
@@ -24,7 +25,7 @@ module.exports = ro({
     step('Writing memory collects what reviewers changed, so the writer learns from it.',
       'Bộ nhớ viết gom những gì người duyệt đã sửa để người viết học từ đó.',
       async (page, h) => {
-        await check(page, h, '/admin/writing-memory', { heading: 'Writing memory', table: true });
+        await check(page, h, '/admin/lab/writing-memory', { heading: 'Writing memory', table: true });
         await h.assertRowsFiltered();
       }),
     step('Candidates are the rules drafted from repeated signals, waiting for a decision.',

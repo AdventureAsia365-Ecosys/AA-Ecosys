@@ -29,11 +29,16 @@ module.exports = ro({
         await h.expect(page.getByRole('button', { name: 'Account menu' })).toBeVisible({ timeout: 20_000 });
         await h.assertRowsFiltered();
       }),
-    step('The sidebar groups every admin area: content, operations and the platform.',
-      'Thanh bên nhóm mọi khu vực quản trị: nội dung, vận hành và nền tảng.',
+    step('The sidebar groups every admin area: tenants, the AA catalogue, tenant content checks, AI spend and the platform.',
+      'Thanh bên nhóm mọi khu vực quản trị: đại lý, danh mục AA, kiểm tra nội dung đại lý, chi phí AI và nền tảng.',
       async (page, h) => {
         await h.expect(page.getByTestId('admin-sidebar')).toBeVisible();
-        await h.expect(page.locator('[data-testid^="nav-section-"]').first()).toBeVisible();
+        // Each titled group of the kit NavGroup (_kit/core/NavGroup.tsx) has a disclosure button, test id
+        // nav-group-<id>-toggle (id = navGroupId(label), e.g. nav-group-aa-catalogue-toggle). The role decides which
+        // groups show, so the step asserts several, not a fixed list.
+        const groups = page.getByTestId('admin-nav').locator('[data-testid^="nav-group-"][data-testid$="-toggle"]');
+        await h.expect(groups.first()).toBeVisible({ timeout: 20_000 });
+        await h.expect.poll(() => groups.count(), { timeout: 10_000 }).toBeGreaterThan(2);
         await h.hover(page.getByTestId('sidebar-logo'));
       }),
     step('The review queue lists the tours waiting for a human check.',
