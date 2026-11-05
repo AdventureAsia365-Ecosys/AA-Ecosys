@@ -103,6 +103,31 @@ test('evaluate: a pinned slug matches by id only; `only` narrows to some slugs; 
   assert.equal(g.evaluate({ tenant_id: senVangId, display_name: 'Lữ hành Sen Vàng' }, { scope: 'crm', allow: allow({ builtin: false }) }).ok, false);
 });
 
+test('evaluate: the CRM scope matches by id only; a renamed agency with an unknown id is refused, with or without only', () => {
+  const impostor = { tenant_id: ID_A, display_name: 'Lữ hành Sen Vàng' };
+  for (const only of [null, ['sen-vang']]) {
+    const v = g.evaluate(impostor, { scope: 'crm', allow: allow(), only });
+    assert.equal(v.ok, false, `only=${only}`);
+    assert.match(v.reason, /CRM agency 11111111… is not in the synthetic allow-list \(this scope matches by id only\)/);
+    assert.ok(!v.reason.includes('Sen'));
+  }
+  // A Content tenant name is not enough in the CRM scope either; a local pin makes it pass by id.
+  assert.equal(g.evaluate({ tenant_id: ID_A, display_name: 'Atlas & Hearth' }, { scope: 'crm', allow: allow() }).ok, false);
+  const pinned = g.evaluate({ tenant_id: ID_A, display_name: 'x' }, { scope: 'crm', allow: allow({ crm: { [ID_A]: 'atlas-hearth' } }) });
+  assert.deepEqual([pinned.ok, pinned.slug, pinned.matched_by], [true, 'atlas-hearth', 'id']);
+});
+
+test('buildAllowlist: the built-in CRM agency slugs are pinned to their ids, so their names never match elsewhere', () => {
+  const a = allow();
+  assert.deepEqual([...a.pinned.get('sen-vang')], [senVangId]);
+  assert.ok(a.pinned.has('southern-cross') && a.pinned.has('harbour-lights'));
+  assert.ok(!a.pinned.has('atlas-hearth'));
+  // The Content scope still matches by name, but not the name of a pinned agency under another id.
+  assert.match(g.evaluate({ tenant_id: ID_A, tenant_name: 'Lữ hành Sen Vàng' }, { scope: 'content', allow: a }).reason,
+    /carries the name of sen-vang, but not its pinned id/);
+  assert.equal(g.evaluate({ tenant_id: senVangId, tenant_name: 'Lữ hành Sen Vàng' }, { scope: 'content', allow: a }).ok, true);
+});
+
 // ── scopes ──────────────────────────────────────────────────────────────────────────────────────────────────────────
 
 test('scopesFor: by identity, by pilotGuard, CRM review chunks by app; a signed-in scenario without a scope throws', () => {

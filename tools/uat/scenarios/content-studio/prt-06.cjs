@@ -1,8 +1,9 @@
 // UAT scenario PRT-06 (AA-855 round 1, catalogue.json): write ONE social piece with AI. PAID: the angle step and the
 // write call the writing model (a few cents per piece, logged by CIS in its LLM ledger). Never part of the dry run.
-// Runs only with UAT_ALLOW_PAID=1 (prepare() refuses otherwise) and writes at most one piece per run: the browser lets
-// exactly one write request through (a second is aborted and fails the take). The default for round 1 is to show the
-// pieces already written (PRT-04, PRT-08, X-04) at no cost.
+// Runs only with UAT_ALLOW_PAID=1 (prepare() refuses otherwise) and writes at most one piece per run: the browser guard
+// lets the write path through (allowWrites), and a page route in front of it passes only the FIRST write request; a
+// second is aborted before it leaves the browser and fails the take. The default for round 1 is to show the pieces
+// already written (PRT-04, PRT-08, X-04) at no cost.
 // Given: the Content studio EDITOR of the E2E tenant (lib/signin.cjs studio-editor), a slate with at least one topic.
 // When:  they pick the first topic of the first channel, choose the first goal and the first angle.
 // Then:  the writer panel shows the live steps, then the finished piece with the AI notice. Desktop 1440 x 900.
@@ -21,13 +22,23 @@ const sc = rw({
   title: 'Write a social piece with AI',
   titleVi: 'Viết một bài mạng xã hội bằng AI',
   baseURL: HOSTS.partner,
-  // Pick a topic, choose a goal (angles are generated), choose an angle, write: nothing else may be written.
-  allowWrites: [`${T}/subjects/[^/]+/pick$`, `${T}/angle-gate/requests/[^/]+/(goal|choose)$`, WRITE.source].map((x) => x.replace(/\//g, '\\/')),
+  // Pick a topic, choose a goal (angles are generated), choose an angle, write: nothing else may be written. Only the
+  // template strings are escaped here: WRITE.source is a regex source already (escaping it again would match "\\/").
+  allowWrites: [
+    ...[`${T}/subjects/[^/]+/pick$`, `${T}/angle-gate/requests/[^/]+/(goal|choose)$`].map((x) => x.replace(/\//g, '\\/')),
+    WRITE.source,
+  ],
   steps: [
     step('Social Posts ranks topics for each channel. The editor picks the first one to write about.',
       'Bài mạng xã hội xếp hạng chủ đề cho từng kênh. Biên tập viên chọn chủ đề đầu tiên để viết.',
       async (page, h) => {
-        page.on('request', (r) => { if (r.method() === 'POST' && WRITE.test(new URL(r.url()).pathname)) writes++; });
+        // In front of the browser guard (a page route runs before the context's): the first write goes on to the guard,
+        // any later one is aborted here, so a run never pays for a second piece. Each one is counted.
+        await page.route((u) => WRITE.test(u.pathname), (route) => {
+          if (route.request().method() !== 'POST') return route.fallback();
+          writes++;
+          return writes === 1 ? route.fallback() : route.abort('blockedbyclient');
+        });
         await check(page, h, '/portal/create/social', { heading: 'Social Posts' });
         const pick = page.getByRole('button', { name: 'Pick to write' }).first();
         await h.expect(pick).toBeVisible({ timeout: 30_000 });

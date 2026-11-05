@@ -14,8 +14,11 @@
 // field tightens the guard without a change here. The allow-list is what keeps the pilot out today.
 //
 // Allow-list (synthetic tenants only, all invented):
-//   built in   the four E2E Content tenants and the three CRM review agencies, by their invented display name; the CRM
-//              agencies also by id (a UUIDv5 of their key, AA-Partner api/app/seed/catalogue.py, public there).
+//   built in   the four E2E Content tenants by their invented display name; the three CRM review agencies by id only
+//              (a UUIDv5 of their key, AA-Partner api/app/seed/catalogue.py, public there): their slugs are pinned to
+//              those ids, so an agency that merely renames itself "Lữ hành Sen Vàng" is refused.
+//   by scope   the CRM scope never matches by name: an agency sets its own display_name. A Content tenant checked in the
+//              CRM scope (it holds the CRM add-on) must be pinned by id in the local file below.
 //   local      work/uat-allowlist.json (gitignored; env UAT_ALLOWLIST names another file): ids that must not be public,
 //              { "content": { "<tenant uuid>": "atlas-hearth" }, "crm": { "<uuid>": "sen-vang" }, "builtin": true }.
 //              An id pinned for a slug makes that slug match by id only. "builtin": false turns the built-in names and
@@ -56,8 +59,10 @@ const SYNTHETIC = [
   { slug: 'harbour-lights', name: 'Harbour Lights Travel Co.', crmKey: 'harbour-lights' },
 ];
 const SCOPES = {
-  content: { path: '/api/tenant/me', nameField: 'tenant_name', what: 'Content studio tenant' },
-  crm: { path: '/bff/me', nameField: 'display_name', what: 'CRM agency' },
+  // nameMatch: whether an unpinned invented display name is enough. Content: yes (the studio session returns no slug and
+  // the ids stay private); CRM: no (the agency edits display_name, and the review agencies have public ids).
+  content: { path: '/api/tenant/me', nameField: 'tenant_name', what: 'Content studio tenant', nameMatch: true },
+  crm: { path: '/bff/me', nameField: 'display_name', what: 'CRM agency', nameMatch: false },
 };
 // Identities whose session has no tenant (AA staff): their list pages are masked per scenario (allowRows), not here.
 const STAFF_IDENTITIES = ['cis-admin', 'booking'];
@@ -84,7 +89,12 @@ function buildAllowlist(local = null) {
   if (builtin) {
     for (const e of SYNTHETIC) {
       names.set(norm(e.name), e.slug);
-      if (e.crmKey) ids.set(uuid5(CRM_NAMESPACE, `aa-crm-synthetic-agency:${e.crmKey}`), e.slug);
+      if (e.crmKey) {
+        // A built-in agency id pins its slug: that slug then matches by id only, never by its (agency-set) name.
+        const id = uuid5(CRM_NAMESPACE, `aa-crm-synthetic-agency:${e.crmKey}`);
+        ids.set(id, e.slug);
+        pinned.set(e.slug, new Set([id]));
+      }
     }
   }
   for (const scope of ['content', 'crm']) {
@@ -143,9 +153,11 @@ function evaluate(answer, { scope, allow, only = null } = {}) {
   if ('kind' in answer && ['pilot', 'real'].includes(String(answer.kind).toLowerCase())) {
     return refuse(`${sc.what} ${who} is of kind ${String(answer.kind).toLowerCase()}`);
   }
-  // (a) the allow-list: by id first, else by the invented display name (unless that slug is pinned to other ids).
+  // (a) the allow-list: by id first, else (Content scope only) by the invented display name, unless that slug is
+  // pinned to other ids. The CRM scope is id only: an agency sets its own display_name.
   let slug = allow.ids.get(id.toLowerCase()) || null;
   let matchedBy = 'id';
+  if (!slug && !sc.nameMatch) return refuse(`${sc.what} ${who} is not in the synthetic allow-list (this scope matches by id only)`);
   if (!slug) {
     const name = answer[sc.nameField];
     if (typeof name !== 'string' || !name.trim()) return refuse(`${sc.what} ${who} is not in the synthetic allow-list (no name in the answer)`);

@@ -23,9 +23,13 @@ CRM in the one agency app (portal host: `/portal/*` = Content, the `(crm)` route
   - Layer 2: `record.cjs` checks every signed-in scenario in a separate, unrecorded context BEFORE the recorded context
     exists, writes `result.json` verdict BLOCKED and exits 5. `run.sh` calls `record.cjs --guard-only` before the TTS
     and stops on any non-zero exit; a 5 after the take also stops before the build.
-- **Allow-list.** Built in: the invented display names of the four E2E Content tenants and the three CRM review
-  agencies; the CRM agencies also by id, computed as UUIDv5 of their key with the namespace already public in AA-Partner
-  `api/app/seed/catalogue.py` (no id literal in this repo). Local, gitignored `tools/uat/work/uat-allowlist.json` (env
+- **Allow-list.** Built in: the invented display names of the four E2E Content tenants; the three CRM review agencies
+  by id only, computed as UUIDv5 of their key with the namespace already public in AA-Partner
+  `api/app/seed/catalogue.py` (no id literal in this repo). Their slugs are pinned to those ids, so their names never
+  match under another id in any scope. Review fix: the CRM scope never matches by display name at all (an agency sets
+  its own `display_name`, so "Lữ hành Sen Vàng" under another tenant id passed, including the `only: ['sen-vang']`
+  check of prep / cleanup). A Content tenant checked in the CRM scope (PRT-13, once its tenant holds the add-on) must
+  be pinned by id in the local file. Local, gitignored `tools/uat/work/uat-allowlist.json` (env
   `UAT_ALLOWLIST`) pins ids per slug; a pinned slug then matches by id only; `"builtin": false` refuses every tenant
   (the negative check). A refusal names the tenant by the first 8 characters of its id, never by name.
 - **Scopes.** studio / studio-editor -> content, crm -> crm, AA staff identities -> none (their tenant lists are blurred
@@ -35,13 +39,23 @@ CRM in the one agency app (portal host: `/portal/*` = Content, the `(crm)` route
   failure also exits 5.
 - **Tenant lists on AA staff pages.** `scenario.allowRows = { rows, allow }` blurs every row outside the synthetic
   names before the first paint; `h.assertRowsFiltered()` fails a step when such a row shows unblurred. Applied to
-  CIS-06 (`/admin/tenants`).
+  CIS-06 (`/admin/tenants`), and after review to every CIS admin scenario page that names tenants (checked against
+  AA-CIS-App `origin/main`): CIS-04 (`/admin/content-quality`, pieces table with a tenant column), CIS-01 (overview,
+  only the Tenants section's quota table: `section:has(> div > a[href="/admin/tenants"])`), CIS-12 (writing memory:
+  owner is "Platform", "Tenant" + short id, or the tenant name on Releases; platform rows stay readable unless the row
+  carries a tenant label). CIS-05 (AA atom store only), CIS-08 (jobs list and spend: no tenant name; the job drawer
+  that names tenants is never opened), CIS-03 / CIS-11 show no tenant: unchanged.
 - **studio-editor identity.** Mirrors `studio`; secret `crm/dev/e2e-test-studio/editor` (`UAT_STUDIO_EDITOR_SECRET`),
   state `work/dryrun/.state-studio-editor.json` (600). The secret is read before any browser starts; a missing secret
   is a one-line BLOCKED reason (`lib/crm-signin.cjs secretError`: the CLI text, which may carry an ARN, is never echoed).
   It is a WRITABLE identity (only with `--include-writable`), and no dry-run scenario uses it.
 - **Write / paid scenarios** use `rw()` (`lib/uat-page.cjs`): the browser guard stays on with a narrow `allowWrites`,
   `prepare()` signs the identity in unless the runner handed a session, paid ones refuse without `UAT_ALLOW_PAID=1`.
+  PRT-06 (review fix): its allowWrites escaped `WRITE.source` twice (`\\/` matches a literal backslash), so the guard
+  aborted the one write after the paid goal / angle calls; now only the template strings are escaped. A page route in
+  front of the guard passes the first write and aborts any later one (the comment claimed this before; it is now true).
+  `tests/allow-writes.test.cjs` compiles every allowWrites entry of PRT-02 / PRT-06 / PRT-14 like record.cjs and
+  checks it against its intended URL.
   `record.cjs` gained `scenario.after(page, h)` (runs once after the steps, also after a FAIL; its error fails the exit
   code) for PRT-02's restore and PRT-14's language reset.
 - **CRM UAT cut.** Steps marked `internal: true` (the R00 build-progress slide, the R20 progress tiles) are dropped
@@ -60,6 +74,11 @@ CRM in the one agency app (portal host: `/portal/*` = Content, the `(crm)` route
   use `node --test tools/uat/tests/*.test.cjs`.
 
 ## Tradeoffs
+
+- Row filters blur by text: on CIS-12 a synthetic tenant's Signals / Candidates rows show only "Tenant" + a short id,
+  so they are blurred too (safe side); the Releases Writers rows hold no tenant and no "Platform" label and are blurred
+  as well. A readable take of those rows needs the synthetic ids' short form in the allow patterns (not done: the ids
+  stay in the local file).
 
 - Content tenants match by invented display name unless pinned: the studio session API returns no slug. A real tenant
   renamed to an invented name would pass rule (a) alone; pinning the four ids in the local allow-list closes that, and
