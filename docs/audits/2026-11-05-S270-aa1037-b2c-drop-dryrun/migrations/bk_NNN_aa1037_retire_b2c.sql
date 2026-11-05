@@ -45,7 +45,8 @@
 --      OTPs (created / used), sessions, media, the four invoice tables, b2c trip cases and their versions, supplier
 --      bookings / bills / bill lines / payouts of b2c cases, their operations files (created / updated / removed),
 --      inquiry inbox rows); every dropped table still holds exactly the rows the DRY RUN pinned (row count AND an md5
---      of every row's text, so an UPDATE or a delete-plus-insert after the DRY RUN also refuses; checked only when a
+--      over the non-personal columns of every row: key, write times, codes; an app UPDATE moves a write time and a
+--      delete-plus-insert moves the id, so either after the DRY RUN also refuses; checked only when a
 --      dropped table has a row: an empty schema, as in the Integration Tests' replay, loses nothing); no view or
 --      foreign key outside this file depends on a dropped object.
 --   1. Archive: booking.retired_b2c_record, then the four customer money tables copied into it and checked.
@@ -82,7 +83,7 @@
 BEGIN;
 
 SET LOCAL lock_timeout = '5s';
--- The row hashes of the pins read row text: pin the settings that shape it (the DRY RUN sets the same ones).
+-- The pin hashes read the text of timestamps and numbers: pin the settings that shape it (the DRY RUN sets the same).
 SET LOCAL TimeZone = 'UTC';
 SET LOCAL DateStyle = 'ISO, YMD';
 SET LOCAL IntervalStyle = 'postgres';
@@ -93,7 +94,8 @@ SET LOCAL bytea_output = 'hex';
 
 DO $$
 DECLARE
-    -- The DRY RUN's DRYRUN_PINS ({"n": rows, "md5": row-text hash} per dropped table); null = not filled in.
+    -- The DRY RUN's DRYRUN_PINS ({"n": rows, "md5": hash of the pinned columns} per dropped table); null = not
+    -- filled in.
     pins jsonb := '{"customers": null, "customer_identities": null, "customer_otps": null, "customer_sessions": null,
                     "media_files": null, "invoices": null, "invoice_items": null, "payment_schedule": null,
                     "payments": null}';
@@ -101,6 +103,21 @@ DECLARE
     pin_tables text[] := ARRAY['customers', 'customer_identities', 'customer_otps', 'customer_sessions', 'media_files',
                                'invoices', 'invoice_items', 'payment_schedule', 'payments'];
     -- pin-tables:end
+    -- The pinned columns of each table (key, write times, status-like codes; never a personal column), byte-equal to
+    -- the DRY RUN's PIN_COLUMNS: the DRY RUN must pass the pilot PII guard (AA-969), which refuses whole-row reads.
+    -- pin-columns:begin
+    pin_columns jsonb := '{
+        "customers": "t.id, t.code, t.source, t.verified, t.is_blocked, t.created_at, t.updated_at, t.deleted_at",
+        "customer_identities": "t.customer_id, t.created_at",
+        "customer_otps": "t.id, t.customer_id, t.channel, t.attempts, t.created_at, t.expires_at, t.used_at",
+        "customer_sessions": "t.id, t.customer_id, t.created_at, t.expires_at, t.revoked_at",
+        "media_files": "t.id, t.content_type, t.created_at, t.deleted_at",
+        "invoices": "t.id, t.invoice_number, t.trip_case_id, t.version_id, t.document_type, t.status, t.currency, t.total_amount, t.issued_at, t.cancelled_at, t.created_at, t.updated_at, t.deleted_at",
+        "invoice_items": "t.id, t.invoice_id, t.position, t.kind, t.amount, t.created_at, t.updated_at",
+        "payment_schedule": "t.id, t.invoice_id, t.seq, t.kind, t.amount, t.due_date, t.created_at, t.updated_at",
+        "payments": "t.id, t.ref, t.invoice_id, t.kind, t.amount, t.currency, t.method, t.recorded_at, t.verified_at, t.voided_at, t.created_at, t.updated_at"
+    }';
+    -- pin-columns:end
     k        text;
     n        bigint;
     h        text;
@@ -183,8 +200,9 @@ BEGIN
     -- would be lost: a database whose dropped tables are all empty (the Integration Tests replay every file on an
     -- empty schema; a Dev already emptied) loses nothing, whatever the pins say.
     FOREACH k IN ARRAY pin_tables LOOP
-        EXECUTE format('SELECT count(*), md5(coalesce(string_agg(t::text, chr(10) ORDER BY t::text), %L))'
-                       ' FROM booking.%I t', '', k) INTO n, h;
+        EXECUTE format('SELECT count(*) AS n, md5(coalesce(string_agg(r, chr(10) ORDER BY r), %L)) AS h'
+                       ' FROM (SELECT jsonb_build_array(%s)::text AS r FROM booking.%I t) s',
+                       '', pin_columns->>k, k) INTO n, h;
         actual := actual || jsonb_build_object(k, jsonb_build_object('n', n, 'md5', h));
         total := total + n;
     END LOOP;

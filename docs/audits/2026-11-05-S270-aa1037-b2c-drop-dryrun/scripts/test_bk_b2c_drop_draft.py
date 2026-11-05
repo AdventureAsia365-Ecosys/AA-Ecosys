@@ -58,6 +58,10 @@ FEED_REF = "it-1037-catalog"  # the CIS catalog feed inbox row that must survive
 PINS_RE = re.compile(r"pins jsonb := '(\{.*?\})';", re.S)
 LAST_WRITE_RE = re.compile(r"-- last-write:begin\n(.*?)\n\s*-- last-write:end", re.S)
 PIN_TABLES_RE = re.compile(r"-- pin-tables:begin\n(.*?)\n\s*-- pin-tables:end", re.S)
+PIN_COLUMNS_RE = re.compile(r"-- pin-columns:begin\n\s*pin_columns jsonb := '(\{.*?\})';\n\s*-- pin-columns:end", re.S)
+# The repo root of this audit folder (docs/audits/<folder>): the pilot PII guard lives in its .claude/hooks.
+ROOT = AUDIT_DIR.parents[2]
+PII_GUARD = ROOT / ".claude" / "hooks" / "pilot_pii_guard.py"
 B2C_TABLES = (
     "booking.customers",
     "booking.customer_identities",
@@ -315,6 +319,53 @@ async def test_dry_run_matches_the_draft() -> None:
     assert json.loads(placeholder.group(1)) == dict.fromkeys(dry.PIN_TABLES)
     for statement in dry.HASH_SETTINGS:
         assert f"{statement};" in draft, statement
+    # the pinned columns are the DRY RUN's, and each written-out pin statement is the template over them
+    columns = PIN_COLUMNS_RE.search(draft)
+    assert columns
+    assert json.loads(columns.group(1)) == dry.PIN_COLUMNS
+    assert list(dry.PIN_SQL) == list(dry.PIN_TABLES) == list(dry.PIN_COLUMNS)
+    for table, sql in dry.PIN_SQL.items():
+        assert sql == dry.PIN_SQL_TEMPLATE.format(cols=dry.PIN_COLUMNS[table], table=table), table
+    # the migration's EXECUTE is the same template (%s = the columns, %I = the table)
+    template = dry.PIN_SQL_TEMPLATE.replace("''", "%L").replace("{cols}", "%s").replace("{table}", "%I")
+    execute = re.search(r"EXECUTE format\('(SELECT count\(\*\) AS n, md5.*?)',\s*'', pin_columns", draft, re.S)
+    assert execute
+    assert re.sub(r"'\s+'", "", execute.group(1)) == template
+
+
+async def test_pins_read_no_personal_column() -> None:
+    """No pin reads a column the schema reference tags pii: (the pilot PII guard would refuse the ECS exec)."""
+    reference = (ROOT / "docs" / "architecture" / "db-schema-reference.md").read_text()
+    for table, cols in _dry_run().PIN_COLUMNS.items():
+        block = re.search(rf"^### `booking\.{table}`.*?\n```\n(.*?)\n```", reference, re.S | re.M)
+        assert block, table
+        personal = {line.split(" ", 1)[0] for line in block.group(1).splitlines() if "pii:" in line}
+        pinned = {c.strip().removeprefix("t.") for c in cols.split(",")}
+        assert not pinned & personal, (table, pinned & personal)
+
+
+@pytest.mark.skipif(not PII_GUARD.exists(), reason="the root repo's pilot PII guard is not next to this folder")
+async def test_pilot_pii_guard_accepts_the_dry_run() -> None:
+    """The PreToolUse hook passes the ECS exec of this script (exit 0) and refuses a whole-row read (exit 2)."""
+    import subprocess
+    import sys
+
+    def run(script: Path) -> int:
+        command = f"ECSX_SERVICE=aa-booking-dev-api tools/ecs/{'ecs' + 'x.sh'} {script}"
+        payload = json.dumps({"tool_name": "Bash", "tool_input": {"command": command}})
+        env = {**os.environ, "CLAUDE_PROJECT_DIR": str(ROOT)}
+        done = subprocess.run(  # noqa: S603 — fixed interpreter and hook path
+            [sys.executable, str(PII_GUARD)], input=payload, text=True, capture_output=True, env=env, cwd=ROOT
+        )
+        return done.returncode
+
+    assert run(DRY_RUN) == 0
+    probe = DRY_RUN.with_name("_pii_probe_whole_row.py")
+    probe.write_text('SQL = "SELECT md5(t::text) AS h FROM booking.customers t"\n')
+    try:
+        assert run(probe) == 2
+    finally:
+        probe.unlink()
 
 
 async def test_dry_run_counts_the_b2c_graph(world: dict[str, Any]) -> None:
@@ -355,14 +406,29 @@ async def test_draft_refuses_without_pins_on_a_moved_count_and_on_changed_rows(w
         await _apply(conn, _draft())
     with pytest.raises(asyncpg.RaiseError, match="the DRY RUN counted"):
         await _apply(conn, _draft({**pins, "payments": {**pins["payments"], "n": 2}}))
-    # same count, other content, write time untouched: only the row hash sees it
+    # same count, a pinned code changed, write time untouched (triggers off): only the pin hash sees it
+    await _touch(
+        conn,
+        "UPDATE booking.customers SET verified = NOT verified"
+        " WHERE id = (SELECT id FROM booking.customers ORDER BY id LIMIT 1)",
+    )
+    with pytest.raises(asyncpg.RaiseError, match="rows of customers changed since the DRY RUN"):
+        await _apply(conn, _draft(pins))
+    # a delete plus an insert of the same count moves the ids: the pin sees it too
+    pins = await _pins(conn)
+    await _touch(conn, "UPDATE booking.payment_schedule SET id = gen_random_uuid() WHERE seq = 1")
+    with pytest.raises(asyncpg.RaiseError, match="rows of payment_schedule changed since the DRY RUN"):
+        await _apply(conn, _draft(pins))
+    repinned = await _pins(conn)
+    assert repinned["payment_schedule"]["n"] == pins["payment_schedule"]["n"]
+    # known limit (no personal column is hashed): a hand edit of a personal column alone, triggers off, keeps the pin;
+    # an app write moves updated_at (set_updated_at), which the pin and the 30-day guard both see
     await _touch(
         conn,
         "UPDATE booking.customers SET name = 'Invented Traveller B'"
         " WHERE id = (SELECT id FROM booking.customers ORDER BY id LIMIT 1)",
     )
-    with pytest.raises(asyncpg.RaiseError, match="rows of customers changed since the DRY RUN"):
-        await _apply(conn, _draft(pins))
+    assert (await _pins(conn))["customers"] == repinned["customers"]
 
 
 @pytest.mark.parametrize("sql", FRESH_KEPT_WRITES)

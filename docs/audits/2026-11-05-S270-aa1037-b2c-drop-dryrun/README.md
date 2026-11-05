@@ -28,7 +28,7 @@ registry, the counts in section 3 are estimates.
 |---|---|
 | [`scripts/aa1037_b2c_dry_run.py`](scripts/aa1037_b2c_dry_run.py) | The DRY RUN, read-only: aggregate counts, write times and one md5 per dropped table, never a row value. Runs in the `aa-booking-dev-api` container (role `booking`) or as a DB Migrate run-script. Prints `DRYRUN_PINS` for the migration. |
 | [`migrations/bk_NNN_aa1037_retire_b2c.sql`](migrations/bk_NNN_aa1037_retire_b2c.sql) | Draft Booking migration, `-- migrate: destructive`, not in any app repo yet (so nothing copies or applies it). |
-| [`scripts/test_bk_b2c_drop_draft.py`](scripts/test_bk_b2c_drop_draft.py) | Local harness (11 tests): builds a B2C graph with the Booking integration helpers, runs the DRY RUN, then the draft. |
+| [`scripts/test_bk_b2c_drop_draft.py`](scripts/test_bk_b2c_drop_draft.py) | Local harness (13 tests): builds a B2C graph with the Booking integration helpers, runs the DRY RUN, then the draft. |
 
 Repos read for this report (`origin/main`, 05/11/2026): AA-Booking `b30f633`, AA-CIS-App `7495a53d`,
 AA-TripPlanner-Web `11c7b93`, AA-CIS-Infra `290d4e0`, AA-Partner `a1082a9f`, root `162aa6ad`. Table and column names
@@ -156,11 +156,17 @@ Apply never auto-applies it, ADR 0017a). One transaction, as `bk_owner`:
   `deleted_at` included) and of the kept b2c graph: b2c cases and versions, their supplier bookings, bills, bill lines,
   payouts, operations files (`created_at`, `updated_at`, `removed_at`) and the inquiry inbox rows. The block sits
   between `-- last-write:begin` / `-- last-write:end` and is word for word the DRY RUN's `LAST_WRITE_SQL` (a harness
-  test compares them). **Pins**: for each of the nine dropped tables, the DRY RUN's row count and an md5 of the text of
-  every row (sorted, newline-joined; the row-text settings are pinned by `SET LOCAL` in both). A moved count, or the same
-  count with other content (an UPDATE that left `updated_at` alone, a delete plus an insert), refuses the apply. The
-  pins bind only when a dropped table has a row, so the Integration Tests' replay on an empty schema passes. Last: no
-  view or foreign key outside the file on a dropped object.
+  test compares them). **Pins**: for each of the nine dropped tables, the DRY RUN's row count and an md5 over the
+  **non-personal columns** of every row (`PIN_COLUMNS` / `-- pin-columns:begin`: the key, the write times and the
+  status-like codes, one `jsonb_build_array` per row, sorted, newline-joined; the settings that shape timestamp text
+  are pinned by `SET LOCAL` in both). A moved count, or the same count with other content (an app UPDATE moves
+  `updated_at`, a delete plus an insert moves the id and `created_at`, a code changed by hand with the triggers off),
+  refuses the apply. No personal column is read, not even into the hash: the pilot PII guard
+  (`.claude/hooks/pilot_pii_guard.py`, AA-969) refuses a whole-row read (`t::text`) of a table with `pii:` columns,
+  which the first S270 draft did (S271 fix, AA-1046). Known limit: a hand edit of a personal column alone with the
+  triggers off keeps the pin (only `bk_owner` can do that). The pins bind only when a dropped table has a row, so the
+  Integration Tests' replay on an empty schema passes. Last: no view or foreign key outside the file on a dropped
+  object.
 - **Order inside**: create `booking.retired_b2c_record` (owner-only) → copy every row of `invoices`, `invoice_items`,
   `payment_schedule`, `payments` into it (`to_jsonb`, `retain_until` = 31 December of the last-write year in Vietnam
   time + 10) and check the copy equals the source → rewrite the two views and two guard functions → drop the B2C views,
@@ -178,7 +184,7 @@ Apply never auto-applies it, ADR 0017a). One transaction, as `bk_owner`:
 
 | Check | Result |
 |---|---|
-| `test_bk_b2c_drop_draft.py` (11 tests: the 30-day block, pinned table list, pins placeholder and row-text settings equal the DRY RUN's; the DRY RUN pins and counts the graph; refuses fresh rows, fresh writes on kept b2c rows (a payout, a bill line, an OTP use, a payment evidence file), missing pins, a moved count, a same-count UPDATE, a queued intake job; ready once frozen; apply archives every money row whole with `retain_until` 10 years on, drops the B2C objects, keeps the b2c cases with their supplier bookings, bill, line, payout, evidence file, status history, audit and inquiry rows, keeps the B2B case, its supplier booking, the CIS feed inbox row, agency billing, `invoice_sequence`; a kept b2c case can still be redacted; a new b2c case, a change to payment evidence and new payment evidence are refused; money edge refused; guards name no dropped table; the archive is not readable by `booking` or `cis_app`; second run is a no-op and keeps the CHECK) | 11 passed |
+| `test_bk_b2c_drop_draft.py` (13 tests, S271: the 30-day block, pinned table list, pinned columns, pin statements, pins placeholder and timestamp-text settings equal the DRY RUN's; no pinned column is tagged `pii:` in the schema reference; the pilot PII guard passes the ECS exec of the script (exit 0) and refuses a whole-row probe (exit 2); the DRY RUN pins and counts the graph; refuses fresh rows, fresh writes on kept b2c rows (a payout, a bill line, an OTP use, a payment evidence file), missing pins, a moved count, a same-count change of a pinned code, a delete-plus-insert (moved ids), a queued intake job; ready once frozen; apply archives every money row whole with `retain_until` 10 years on, drops the B2C objects, keeps the b2c cases with their supplier bookings, bill, line, payout, evidence file, status history, audit and inquiry rows, keeps the B2B case, its supplier booking, the CIS feed inbox row, agency billing, `invoice_sequence`; a kept b2c case can still be redacted; a new b2c case, a change to payment evidence and new payment evidence are refused; money edge refused; guards name no dropped table; the archive is not readable by `booking` or `cis_app`; second run is a no-op and keeps the CHECK) | 13 passed (S271, PostgreSQL 16, Booking `5066f75`) |
 | Empty-schema apply (the CI replay case: all Booking migrations, then the draft as `045` with null pins) | applied: tables gone, `retired_b2c_record` empty, `bk-045` registered, new CHECK in place |
 | DRY RUN script as role `booking` (the container login) on the replayed schema (bk-044) | every table readable; nine pins (`n` 0, md5 of the empty string), `kept` all 0; verdict `ready` with one note: `v_ops_inquiry_inbox` is granted to `cis_app` (its reader, the Infra probe cell, must go first) |
 | Booking `.github/scripts/migration_preflight.py --infra-tools` (AA-CIS-Infra `290d4e0` lint) with the draft as `045_…` | lint ok, class **destructive**, "copied by the bot, never auto-applied" |
@@ -196,7 +202,7 @@ Expected: `DRYRUN login "booking"`, `latest_booking_migration "bk-044"` (or late
 a `DRYRUN_PINS {…}` line with nine `{"md5", "n"}` objects, and `DRYRUN verdict`. Today the verdict will most likely be
 `ready: false` with the 30-day reason: B2C rows were written on Dev recently (writes were open until Booking #194).
 That is the expected state, not a failure; the drop waits for the 30 days anyway. The output holds counts, codes, md5
-digests and timestamps only. Paste the row counts, the kept counts, the last write time and the verdict into section 7
+digests and timestamps only (the pilot PII guard passes the script since S271: no pin reads a personal column). Paste the row counts, the kept counts, the last write time and the verdict into section 7
 and the dead-table registry rows. **Do not paste the pins into the draft migration now**: they are taken again by the
 fresh DRY RUN of step 6 of the order of work, at least 30 days after the last B2C write.
 
