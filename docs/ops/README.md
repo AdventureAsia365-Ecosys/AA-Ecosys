@@ -52,6 +52,7 @@ Everything runs on **acc2** (us-west-1) except the LLM calls, which run on acc3;
 | [Run and read the DB isolation probe](runbooks/isolation-probe.md) | draft (tested) | 2026-10-19 |
 | [Restore the shared RDS to a point in time](runbooks/restore-rds-pitr.md) | draft (tested) | 2026-10-17 drill |
 | [Restore one schema or table](runbooks/restore-schema.md) | draft, UNTESTED | - (AA-829) |
+| [Restore one tenant's CRM data from its nightly export (pilot drill)](runbooks/pilot-tenant-restore-drill.md) | draft, UNTESTED | - (AA-969 d16) |
 | [Rotate a secret](runbooks/secret-rotation.md) | draft, UNTESTED | two classes once |
 | [Switch off the legacy staff password login](runbooks/legacy-login-flag.md) | draft, UNTESTED | readiness read only |
 | [Use a break-glass path](runbooks/break-glass.md) | draft, UNTESTED | API path 2026-10-18 |
