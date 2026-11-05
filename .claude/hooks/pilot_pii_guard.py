@@ -1,26 +1,38 @@
 """PreToolUse guard (AA-969 part 2, root ADR 0019 d16): agents never read row-level personal data of tenant tables.
 
 ADR 0019 d16 puts one real agency (the pilot) on Dev. Agents reach the shared RDS in three ways, all through Bash:
-an S3-mediated ECS exec script (`aws s3 cp <file> s3://…` + `aws ecs execute-command`, or `tools/ecs/ecsx.sh <file>`),
-an inline `--command` / `python3 -c` / `psql -c`, and a DB Migrate `run-script` dispatch (`gh workflow run db-migrate.yml
-… script=db/scripts/<name>.py`, or `tools/github/dbmig.sh`), whose log is public. This hook reads the SQL those commands
-carry before they run and refuses (exit 2) a statement that would return a value of a personal-data column; counts and
+an S3-mediated ECS exec script (an upload to S3 + `aws ecs execute-command`, or `tools/ecs/ecsx.sh <file>`), an inline
+`--command` / `python3 -c` / `psql -c` (or a psql heredoc / `-f` / `<` file), and a DB Migrate `run-script` dispatch
+(`gh workflow run db-migrate.yml … script=db/scripts/<name>.py`, `tools/github/dbmig.sh`, or `gh api
+…/actions/workflows/db-migrate.yml/dispatches`), whose log is public. This hook reads the SQL those commands carry
+before they run and refuses (exit 2) a statement that would return a value of a personal-data column; counts and
 aggregates pass. The orchestrator and subagents alike.
 
 How it decides (static, so a heuristic; AA-CIS-Infra's run-script guard plans every statement on the live database and
-is the precise gate for run-scripts, db/scripts/README.md "Personal data"):
+is the precise gate for run-scripts, db/scripts/README.md "Personal data"; for an ECS exec script this hook is the only
+gate, so it fails closed on what it cannot read):
 
 1. Personal-data columns: the ` · pii:<class>` tags of `docs/architecture/db-schema-reference.md` (the live dump of the
    DM-6.1 column comments), in schemas crm, booking, tripplanner and in the shared tables that have a tenant_id column;
    not the AA staff directory booking.staff_users (staff identities, not tenant or traveller data).
 2. The SQL: every string literal of a .py file (adjacent and `+` concatenations joined, f-string holes as `?`), the
-   whole text of a .sql file or an inline command. Comments and quoted literals are dropped.
+   whole text of a .sql file or an inline command. Comments and quoted literals (dollar quotes too) are dropped.
 3. A statement is refused when the select list of any SELECT (including subqueries), a RETURNING list, or a COPY of a
-   table names a personal-data column of a table the statement reads (qualified `t.email` through its alias, or a bare
-   `email` when one of the tables in its FROM / JOIN has it), `*` / `t.*` of such a table, or such a table's whole row
-   (`row_to_json(t)`, `to_jsonb(t)`, `json_agg(t)`, `array_agg(t)`). Allowed: the column inside `count(...)` (with its
-   FILTER) and in an `IS [NOT] NULL` test, and anywhere in WHERE / JOIN / GROUP BY / ORDER BY.
-4. Unreadable input passes (exit 0): this hook saves an agent from a mistake; the review and the Infra guard remain.
+   table names a personal-data column of a table the statement reads (qualified `t.email`, `(t).email` or
+   `crm.traveler.email`, or a bare `email` when one of the tables in its FROM / JOIN has it), `*` / `t.*` of such a
+   table, or such a table's whole row (a bare alias `t`, `t::text`, `row_to_json(t)`, `to_jsonb(t)`, …). Tables are
+   found qualified (`crm.traveler`, `"crm"."traveler"`, `crm . traveler`) or unqualified by name (a `search_path`
+   change cannot hide them). Allowed: the column inside `count(...)` (with its FILTER) and in an `IS [NOT] NULL`
+   test, and anywhere in WHERE / JOIN / GROUP BY / ORDER BY.
+4. Also refused: SQL text run by a function (query_to_xml and the other *_to_xml, ts_stat, dblink), a dollar-quoted
+   body (DO block, function) that names a tenant table with personal data or runs EXECUTE, and an upload, ECS exec
+   script or run-script whose file cannot be read: stdin (`-`), a file not written yet (write it in an earlier Bash
+   call), a binary or missing script, a directory with too many scripts, or a run-script path the dispatch hides in a
+   variable. Uploads are `aws s3 cp|mv|sync` (directories walked for .py / .sql files) and `aws s3api put-object
+   --body`. A missing file that does not look like a script (no .py / .sql / .sh name, no `scripts/` in the S3 key)
+   passes.
+5. Unreadable hook input (not JSON) passes (exit 0): this hook saves an agent from a mistake; the review and the Infra
+   guard remain.
 
 Test: python3 -m unittest .claude/hooks/test_pilot_pii_guard.py (or bash .claude/hooks/pilot-pii-guard.sh < input).
 """
@@ -43,28 +55,44 @@ TENANT_SCHEMAS = ("crm", "booking", "tripplanner")
 STAFF_TABLES = frozenset({("booking", "staff_users")})
 
 _AWS = r"aws(?:\s+--[a-z-]+(?:\s+[^-\s]\S*)?)*"
-S3_CP_RE = re.compile(rf"{_AWS}\s+s3\s+cp\s+(\S+)\s+s3://")
+AWS_S3_RE = re.compile(rf"{_AWS}\s+(?:s3\s+(?:cp|mv|sync)|s3api\s+put-object)\b")
 ECS_EXEC_RE = re.compile(rf"{_AWS}\s+ecs\s+execute-command\b")
 ECSX_RE = re.compile(r"(?:^|[\s/;&|(])ecsx\.sh\s+((?:\S+\s*)+)")
-RUN_SCRIPT_RE = re.compile(r"(?:script=|run-script:)(db/scripts/[A-Za-z0-9_]+\.py)")
-DB_MIGRATE_RE = re.compile(r"(gh\s+workflow\s+run\b|dbmig\.sh)")
+RUN_SCRIPT_RE = re.compile(r"(?:script\]?\s*=|run-script:|\"script\"\s*:\s*\")\s*['\"]?(db/scripts/[A-Za-z0-9_]+\.py)")
+RUN_SCRIPT_ASKED_RE = re.compile(r"run-script|\bscript\]?\s*=|\"script\"\s*:")
+DB_MIGRATE_RE = re.compile(r"gh\s+workflow\s+run\b|dbmig\.sh|gh\s+api\b[^\n]*?/dispatches\b")
 PSQL_RE = re.compile(r"(?:^|[\s;&|(])psql\b")
 INLINE_RE = re.compile(r"(?:--command|-c)\s+(\"(?:[^\"\\]|\\.)*\"|'[^']*')")
+SCRIPT_SUFFIXES = (".py", ".sql", ".sh")
+MAX_WALKED_FILES = 500
+# aws s3 cp / mv / sync options that take no value (every other --option takes one).
+S3_FLAGS = frozenset({"--recursive", "--dryrun", "--quiet", "--only-show-errors", "--no-progress", "--follow-symlinks",
+                      "--no-follow-symlinks", "--delete", "--exact-timestamps", "--size-only", "--no-guess-mime-type",
+                      "--force-glacier-transfer", "--ignore-glacier-warnings", "--no-paginate", "--debug",
+                      "--no-verify-ssl", "--no-sign-request", "--no-cli-pager"})
 
 IDENT = r'(?:"(?:[^"]|"")+"|[A-Za-z_][A-Za-z0-9_$]*)'
-TABLE_RE = re.compile(rf"\b({'|'.join(TENANT_SCHEMAS + ('shared',))})\.({IDENT})(?:\s+(?:AS\s+)?({IDENT}))?", re.I)
+_SCHEMAS = "|".join(TENANT_SCHEMAS + ("shared",))
+TABLE_RE = re.compile(rf'(?<![\w$."])("?(?:{_SCHEMAS})"?)\s*\.\s*({IDENT})(?:\s+(?:AS\s+)?({IDENT}))?', re.I)
+# An unqualified table of a FROM clause (the clause text starts right after FROM): the first item, after a comma, after
+# a JOIN.
+_KW = r"(?:JOIN|ON|USING|LEFT|RIGHT|INNER|OUTER|FULL|CROSS|NATURAL|LATERAL|ONLY|WHERE|AS|TABLESAMPLE)\b"
+UNQUALIFIED_RE = re.compile(rf'(?:^|,|\bJOIN\b)\s*(?:ONLY\s+|LATERAL\s+)?(?!{_KW})({IDENT})(?![\w$]|\s*[.(])'
+                            rf'(?:\s+(?:AS\s+)?(?!{_KW})({IDENT}))?', re.I)
+SQL_TEXT_FUNCS_RE = re.compile(r"\b((?:query|cursor|table|schema|database)_to_(?:xml|json)\w*|ts_stat|dblink\w*)\s*\(",
+                               re.I)
+DOLLAR_RE = re.compile(r"\$([A-Za-z_][A-Za-z0-9_]*)?\$(.*?)\$\1\$", re.S)
 KEYWORDS = {"where", "join", "left", "right", "inner", "outer", "full", "cross", "on", "using", "group", "order",
             "limit", "offset", "having", "window", "union", "except", "intersect", "returning", "for", "set",
             "values", "select", "from", "lateral", "natural", "and", "or", "not", "as", "when", "then", "else",
-            "end", "fetch", "tablesample", "with", "into", "do", "default", "is", "null", "in"}
+            "end", "fetch", "tablesample", "with", "into", "do", "default", "is", "null", "in", "only"}
 END_SELECT_LIST = re.compile(r"\bFROM\b", re.I)
 END_FROM = re.compile(r"\b(WHERE|GROUP|ORDER|LIMIT|HAVING|WINDOW|UNION|EXCEPT|INTERSECT|RETURNING|FOR|OFFSET|FETCH)\b",
                       re.I)
-WHOLE_ROW_RE = re.compile(rf"\b(?:row_to_json|to_json|to_jsonb|json_agg|jsonb_agg|array_agg|json_build_array)\s*\(\s*"
-                          rf"({IDENT})\s*\)", re.I)
-NULL_TEST_RE = re.compile(rf"(?:{IDENT}\.)?{IDENT}\s+IS\s+(?:NOT\s+)?NULL", re.I)
-QUALIFIED_RE = re.compile(rf"({IDENT})\.({IDENT}|\*)")
-BARE_RE = re.compile(rf"(?<![\w.\"$])({IDENT})(?![\w\"$]|\s*\(|\.)")
+NULL_TEST_RE = re.compile(rf"(?:{IDENT}\s*\.\s*){{0,2}}{IDENT}\s+IS\s+(?:NOT\s+)?NULL", re.I)
+# alias.col, schema.table.col, (alias).col (the optional first part is a schema).
+QUALIFIED_RE = re.compile(rf"(?:{IDENT}\s*\.\s*)?(?:\(\s*)?({IDENT})\s*\)?\s*\.\s*({IDENT}|\*)")
+BARE_RE = re.compile(rf"(?<![\w.\"$])({IDENT})(?![\w\"$]|\s*\(|\s*\.)")
 
 
 # ── the protected columns ────────────────────────────────────────────────────────────────────────────────────────────
@@ -130,6 +158,7 @@ def python_sql(source: str) -> list:
 def _clean(sql: str) -> str:
     sql = re.sub(r"--[^\n]*", " ", sql)
     sql = re.sub(r"/\*.*?\*/", " ", sql, flags=re.S)
+    sql = DOLLAR_RE.sub(" '' ", sql)
     return re.sub(r"'(?:[^']|'')*'", "''", sql)
 
 
@@ -196,40 +225,54 @@ def _unquote(name: str) -> str:
     return name[1:-1].replace('""', '"') if name.startswith('"') else name.lower()
 
 
+def _by_name(protected: dict) -> dict:
+    out: dict = {}
+    for rel in protected:
+        out.setdefault(rel[1], set()).add(rel)
+    return out
+
+
 def _tables(text: str, protected: dict) -> dict:
-    """alias -> (schema, table) for every protected table the text names (the table name is its own alias too)."""
-    out = {}
+    """alias -> {(schema, table)} for every protected table the text names, qualified (the table name is its own alias
+    too) or, in a FROM clause, unqualified (by name, in any of the protected schemas)."""
+    out: dict = {}
     for schema, table, alias in TABLE_RE.findall(text):
-        rel = (schema.lower(), _unquote(table))
+        rel = (schema.strip('"').lower(), _unquote(table))
         if rel not in protected:
             continue
-        out[rel[1]] = rel
+        out.setdefault(rel[1], set()).add(rel)
         if alias and alias.lower() not in KEYWORDS:
-            out[_unquote(alias)] = rel
+            out.setdefault(_unquote(alias), set()).add(rel)
+    names = _by_name(protected)
+    for table, alias in UNQUALIFIED_RE.findall(TABLE_RE.sub(" ", text)):
+        rels = names.get(_unquote(table))
+        if not rels or table.lower() in KEYWORDS:
+            continue
+        out.setdefault(_unquote(table), set()).update(rels)
+        if alias and alias.lower() not in KEYWORDS:
+            out.setdefault(_unquote(alias), set()).update(rels)
     return out
 
 
 def _list_reads(items: str, rels: dict, protected: dict) -> list:
+    every = sorted({r for v in rels.values() for r in v})
     found = []
     for item in _split_top(items):
         text = _strip_allowed(item)
         if re.fullmatch(r"\s*\*\s*", text):
-            found += [f"{s}.{t}.*" for s, t in sorted(set(rels.values()))]
+            found += [f"{s}.{t}.*" for s, t in every]
             continue
-        for alias in WHOLE_ROW_RE.findall(text):
-            rel = rels.get(_unquote(alias))
-            if rel:
-                found.append(f"{rel[0]}.{rel[1]}.* (whole row)")
         for alias, col in QUALIFIED_RE.findall(text):
-            rel = rels.get(_unquote(alias))
-            if rel and (col == "*" or _unquote(col) in protected[rel]):
-                found.append(f"{rel[0]}.{rel[1]}.{_unquote(col) if col != '*' else '*'}")
-        bare = QUALIFIED_RE.sub(" ", WHOLE_ROW_RE.sub(" ", text))
-        for name in BARE_RE.findall(bare):
+            for rel in sorted(rels.get(_unquote(alias), ())):
+                if col == "*" or _unquote(col) in protected[rel]:
+                    found.append(f"{rel[0]}.{rel[1]}.{_unquote(col) if col != '*' else '*'}")
+        for name in BARE_RE.findall(QUALIFIED_RE.sub(" ", text)):
             col = _unquote(name)
-            for rel in sorted(set(rels.values())):
+            for rel in every:
                 if col in protected[rel]:
                     found.append(f"{rel[0]}.{rel[1]}.{col}")
+            for rel in sorted(rels.get(col, ())):            # a bare alias is the whole row (t, t::text, f(t))
+                found.append(f"{rel[0]}.{rel[1]}.* (whole row)")
     return found
 
 
@@ -252,37 +295,57 @@ def statement_reads(sql: str, protected: dict) -> list:
             found += _list_reads(items, rels, protected)
     for m in re.finditer(r"\bRETURNING\b", text, re.I):
         head = text[:m.start()]
-        target = re.findall(r"\b(?:INSERT\s+INTO|UPDATE|DELETE\s+FROM)\s+(\w+\.\w+(?:\s+(?:AS\s+)?\w+)?)", head, re.I)
+        target = re.findall(rf"\b(?:INSERT\s+INTO|UPDATE|DELETE\s+FROM)\s+((?:{IDENT}\s*\.\s*)?{IDENT}"
+                            rf"(?:\s+(?:AS\s+)?{IDENT})?)", head, re.I)
         if target:
             rels = _tables(target[-1], protected)
             stop = re.search(r";", text[m.end():])
             items = text[m.end():m.end() + stop.start()] if stop else text[m.end():]
             if rels:
                 found += _list_reads(items, rels, protected)
-    for m in re.finditer(rf"\bCOPY\s+({IDENT}\.{IDENT})\s*(\([^)]*\))?\s+TO\b", text, re.I):
+    for m in re.finditer(rf"\bCOPY\s+((?:{IDENT}\s*\.\s*)?{IDENT})\s*(\([^)]*\))?\s+TO\b", text, re.I):
         rels = _tables(m.group(1), protected)
-        if rels:
-            (rel,) = set(rels.values())
+        for rel in sorted({r for v in rels.values() for r in v}):
             cols = [_unquote(c.strip()) for c in (m.group(2) or "").strip("()").split(",") if c.strip()]
             hit = [c for c in cols if c in protected[rel]] if cols else ["*"]
             found += [f"{rel[0]}.{rel[1]}.{c}" for c in hit]
     return sorted(set(found))
 
 
+def code_reads(sql: str, protected: dict) -> list:
+    """What a statement runs that this hook cannot read: SQL text in a function argument, and a dollar-quoted body (DO
+    block, function) that names a tenant table with personal data or runs EXECUTE."""
+    found = []
+    for m in SQL_TEXT_FUNCS_RE.finditer(re.sub(r"--[^\n]*", " ", sql)):
+        found.append(f"{m.group(1).lower()}() (runs SQL text this hook cannot read)")
+    for _tag, body in DOLLAR_RE.findall(sql):
+        if re.search(r"\bEXECUTE\b", body, re.I):
+            found.append("a dollar-quoted body that runs EXECUTE")
+        elif _tables(body, protected) or any(
+                re.search(rf"\b{re.escape(t)}\b", body) for (_s, t) in protected):
+            found.append("a dollar-quoted body (DO block / function) that reads a tenant table with personal data")
+    return found
+
+
 def text_reads(text: str, protected: dict, *, python: bool) -> list:
     pieces = python_sql(text) if python else [text]
     found = []
     for piece in pieces:
-        for stmt in _split_top(piece, ";"):
+        found += code_reads(piece, protected)
+        stripped = DOLLAR_RE.sub(" '' ", piece)
+        for stmt in _split_top(stripped, ";"):
             found += statement_reads(stmt, protected)
     return sorted(set(found))
 
 
 # ── which commands reach the database ────────────────────────────────────────────────────────────────────────────────
-def _read_local(path: str, cwd: str) -> str | None:
+def _path(path: str, cwd: str) -> Path:
     p = Path(os.path.expanduser(path))
-    if not p.is_absolute():
-        p = Path(cwd) / p
+    return p if p.is_absolute() else Path(cwd) / p
+
+
+def _read_local(path: str, cwd: str) -> str | None:
+    p = _path(path, cwd)
     try:
         return p.read_text(encoding="utf-8") if p.is_file() else None
     except (OSError, UnicodeDecodeError):
@@ -301,37 +364,139 @@ def _read_infra_main(path: str) -> str | None:
     return _read_local(str(INFRA / path), str(ROOT))
 
 
-def sources(command: str, cwd: str) -> list:
-    """(label, text, is_python) of every SQL-bearing input the command sends to the database."""
+def _words(line: str) -> list:
+    """Shell words of one line, with ; & | ( ) as their own tokens (plain split when the quoting is unbalanced)."""
+    try:
+        lex = shlex.shlex(line, posix=True, punctuation_chars=True)
+        lex.whitespace_split = True
+        return list(lex)
+    except ValueError:
+        return line.split()
+
+
+def simple_commands(command: str) -> list:
+    """The word lists of every simple command (split at ; & | ( ) and line ends; `\\` line continuations joined)."""
     out = []
-    for m in S3_CP_RE.finditer(command):
-        path = m.group(1).strip("'\"")
-        text = _read_local(path, cwd)
-        if text is not None:
-            out.append((path, text, path.endswith(".py")))
+    for line in command.replace("\\\n", " ").splitlines():
+        cur = []
+        for w in _words(line):
+            if w and all(ch in ";&|()" for ch in w):
+                if cur:
+                    out.append(cur)
+                cur = []
+            else:
+                cur.append(w)
+        if cur:
+            out.append(cur)
+    return out
+
+
+def uploads(command: str) -> list:
+    """(source, destination) of every local-to-S3 upload: aws s3 cp / mv / sync and aws s3api put-object --body."""
+    out = []
+    for words in simple_commands(command):
+        idx = next((i for i, w in enumerate(words) if os.path.basename(w) == "aws"), None)
+        if idx is None:
+            continue
+        rest, i = words[idx + 1:], 0
+        while i < len(rest) and rest[i].startswith("--"):          # global options
+            i += 1 if "=" in rest[i] or rest[i] in S3_FLAGS else 2
+        if i + 1 >= len(rest):
+            continue
+        service, op, args = rest[i], rest[i + 1], rest[i + 2:]
+        if service == "s3" and op in ("cp", "mv", "sync"):
+            pos, j = [], 0
+            while j < len(args):
+                a = args[j]
+                if a.startswith("--"):
+                    j += 1 if "=" in a or a in S3_FLAGS else 2
+                    continue
+                pos.append(a)
+                j += 1
+            if len(pos) >= 2 and pos[1].startswith("s3://") and not pos[0].startswith("s3://"):
+                out.append((pos[0], pos[1]))
+        elif service == "s3api" and op == "put-object":
+            opts = {}
+            for j, a in enumerate(args):
+                if a.startswith("--"):
+                    k, eq, v = a.partition("=")
+                    opts[k] = v if eq else (args[j + 1] if j + 1 < len(args) else "")
+            if "--body" in opts:
+                out.append((opts["--body"], f"s3://{opts.get('--bucket', '')}/{opts.get('--key', '')}"))
+    return out
+
+
+def _looks_like_script(*names: str) -> bool:
+    return any(n.lower().endswith(SCRIPT_SUFFIXES) or "scripts/" in n.lower() for n in names)
+
+
+def _upload_sources(src: str, dst: str, cwd: str, out: list, refused: list) -> None:
+    if src == "-":
+        refused.append(f"{dst}: an upload from stdin cannot be checked (write the file first, then upload it)")
+        return
+    p = _path(src, cwd)
+    if p.is_dir():
+        files = [f for f in sorted(p.rglob("*")) if f.is_file() and f.suffix in (".py", ".sql")]
+        if len(files) > MAX_WALKED_FILES:
+            refused.append(f"{src}: {len(files)} scripts in one upload are too many to check")
+            return
+        for f in files:
+            text = _read_local(str(f), cwd)
+            if text is None:
+                refused.append(f"{f}: cannot be read")
+            else:
+                out.append((str(f), text, f.suffix == ".py"))
+        return
+    text = _read_local(src, cwd)
+    if text is not None:
+        out.append((src, text, src.endswith(".py") or dst.endswith(".py")))
+    elif _looks_like_script(src, dst):
+        refused.append(f"{src}: the script cannot be read (missing, not written yet, or binary): write it in an earlier "
+                       f"Bash call, then upload it")
+
+
+def sources(command: str, cwd: str) -> tuple:
+    """((label, text, is_python) of every SQL-bearing input the command sends to the database, [refusals of inputs that
+    cannot be read])."""
+    out, refused = [], []
+    for src, dst in uploads(command):
+        _upload_sources(src, dst, cwd, out, refused)
     m = ECSX_RE.search(command)
     if m:
-        for word in shlex.split(m.group(1), posix=True) if m.group(1) else []:
+        for word in _words(m.group(1)):
             if word.endswith((".py", ".sql")):
                 text = _read_local(word, cwd)
                 if text is not None:
                     out.append((word, text, word.endswith(".py")))
+                else:
+                    refused.append(f"{word}: the ECS exec script cannot be read")
     if DB_MIGRATE_RE.search(command):
-        for path in RUN_SCRIPT_RE.findall(command):
+        paths = RUN_SCRIPT_RE.findall(command)
+        for path in paths:
             text = _read_infra_main(path)
             if text is not None:
                 out.append((f"AA-CIS-Infra {path}", text, True))
+            else:
+                refused.append(f"AA-CIS-Infra {path}: the run-script cannot be read on origin/main or the checkout")
+        if not paths and RUN_SCRIPT_ASKED_RE.search(command) and re.search(r"db[-_ ]?migrate|dbmig\.sh", command,
+                                                                          re.I):
+            refused.append("a run-script dispatch whose db/scripts/<name>.py path this hook cannot read (name the file "
+                           "literally)")
     if ECS_EXEC_RE.search(command) or PSQL_RE.search(command):
         for raw in INLINE_RE.findall(command):
             inner = raw[1:-1].replace('\\"', '"')
             # the SQL may sit one quoting level further in (a psql -c inside an ECS exec --command)
             for piece in [inner, *re.findall(r"'([^']*)'", inner), *re.findall(r'"([^"]*)"', inner)]:
                 out.append(("inline command", piece, False))
-        for f in re.findall(r"(?:^|\s)-f\s+(\S+\.sql)", command):
+        for f in re.findall(r"(?:^|\s)(?:-f\s*|--file[=\s]|<\s*)(\S+\.sql)", command):
             text = _read_local(f, cwd)
             if text is not None:
                 out.append((f, text, False))
-    return out
+            else:
+                refused.append(f"{f}: the SQL file cannot be read")
+    if PSQL_RE.search(command):
+        out.append(("psql command text", command, False))           # a heredoc or here-string carries the SQL
+    return out, refused
 
 
 def check(data: dict, protected: dict | None = None) -> str | None:
@@ -339,29 +504,29 @@ def check(data: dict, protected: dict | None = None) -> str | None:
     if data.get("tool_name") not in (None, "Bash"):
         return None
     command = ((data.get("tool_input") or {}).get("command") or "")
-    if not isinstance(command, str) or not (S3_CP_RE.search(command) or ECS_EXEC_RE.search(command)
+    if not isinstance(command, str) or not (AWS_S3_RE.search(command) or ECS_EXEC_RE.search(command)
                                             or ECSX_RE.search(command) or DB_MIGRATE_RE.search(command)
                                             or PSQL_RE.search(command)):
         return None
-    srcs = sources(command, data.get("cwd") or os.getcwd())
-    if not srcs:
+    srcs, problems = sources(command, data.get("cwd") or os.getcwd())
+    if not srcs and not problems:
         return None
-    if protected is None:
+    if srcs and protected is None:
         try:
             protected = load_protected(REFERENCE.read_text(encoding="utf-8"))
         except OSError:
-            return None
-    problems = []
-    for label, text, is_python in srcs:
+            protected = None
+            problems.append("docs/architecture/db-schema-reference.md cannot be read (no personal-data column list)")
+    for label, text, is_python in srcs if protected is not None else ():
         reads = text_reads(text, protected, python=is_python)
         if reads:
             problems.append(f"{label}: {', '.join(reads[:6])}")
     if not problems:
         return None
     return ("BLOCKED by the pilot PII guard (AA-969, root ADR 0019 d16): this would read personal data of a tenant table "
-            "into the agent / a public log — " + "; ".join(problems) + ". Count or aggregate instead "
-            "(count(...), count(DISTINCT ...), count(*) FILTER (WHERE col IS NULL), GROUP BY a non-personal column). "
-            "Rules: .claude/hooks/pilot_pii_guard.py and AA-CIS-Infra db/scripts/README.md.")
+            "into the agent / a public log, or sends SQL this hook cannot check — " + "; ".join(problems) + ". Count "
+            "or aggregate instead (count(...), count(DISTINCT ...), count(*) FILTER (WHERE col IS NULL), GROUP BY a "
+            "non-personal column). Rules: .claude/hooks/pilot_pii_guard.py and AA-CIS-Infra db/scripts/README.md.")
 
 
 def main() -> int:

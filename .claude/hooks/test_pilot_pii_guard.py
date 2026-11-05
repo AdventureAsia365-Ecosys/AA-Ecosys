@@ -40,6 +40,24 @@ REFUSED = [
     "COPY crm.traveler TO STDOUT",
     "COPY crm.traveler (traveler_id, email) TO STDOUT",
     'SELECT "email" FROM crm."traveler"',
+    # review fix pass: whole rows through a bare alias, (t).col, quoted / spaced schema, unqualified tables
+    "SELECT t FROM crm.traveler t",
+    "SELECT t::text FROM crm.traveler t",
+    "SELECT hstore(t) FROM crm.traveler t",
+    "SELECT (t).email FROM crm.traveler t",
+    "SELECT crm.traveler.email FROM crm.traveler",
+    'SELECT email FROM "crm"."traveler"',
+    "SELECT email FROM crm . traveler",
+    "SET search_path = crm; SELECT email FROM traveler",
+    "SELECT x.notes FROM crm.trip t JOIN trip x ON x.trip_id = t.trip_id",
+    "SELECT t.email FROM traveler AS t WHERE t.status = 'active'",
+    # SQL text the hook cannot read: functions running a query string, dollar-quoted bodies
+    "SELECT query_to_xml($$SELECT email FROM crm.traveler$$, true, false, '')",
+    "SELECT query_to_xml('SELECT email FROM crm.traveler', true, false, '')",
+    "SELECT table_to_xml('crm.traveler'::regclass, true, false, '')",
+    "SELECT * FROM dblink('dbname=x', 'SELECT 1') AS d(n int)",
+    "DO $$ DECLARE r record; BEGIN FOR r IN SELECT email FROM crm.traveler LOOP RAISE NOTICE '%', r; END LOOP; END $$",
+    "DO $do$ BEGIN EXECUTE 'SELECT 1'; END $do$",
 ]
 ALLOWED = [
     "SELECT count(*) AS n FROM crm.traveler",
@@ -56,6 +74,12 @@ ALLOWED = [
     "UPDATE crm.traveler SET email = NULL WHERE traveler_id = $1 RETURNING traveler_id",
     "COPY crm.traveler (traveler_id, status) TO STDOUT",
     "-- SELECT email FROM crm.traveler\nSELECT count(*) FROM crm.traveler",
+    "SELECT t.traveler_id FROM crm.traveler t JOIN crm.trip tr ON tr.traveler_id = t.traveler_id",
+    "SELECT count(*) FROM traveler WHERE email IS NULL",
+    "SELECT g FROM generate_series(1, 3) g",
+    "SELECT n FROM crm.traveler t, LATERAL (SELECT 1 AS n) s",
+    "DO $$ BEGIN RAISE NOTICE 'hello'; END $$",
+    "SELECT 'a $$ b' AS x FROM crm.traveler",
 ]
 
 SCRIPT = '''
@@ -115,7 +139,38 @@ class CommandTest(unittest.TestCase):
         cp = "aws s3 cp {} s3://aa-cis-bronze-example/scripts/x.py --profile aa365-admin --region us-west-1"
         self.assertIn("leak.py: crm.traveler.email", self.refused(cp.format("leak.py")))
         self.assertIsNone(self.refused(cp.format("safe.py")))
-        self.assertIsNone(self.refused(cp.format("missing.py")))           # nothing to read: passes
+        # fail closed: a script that cannot be read is refused (missing, written in the same call, binary)
+        self.assertIn("missing.py: the script cannot be read", self.refused(cp.format("missing.py")))
+        heredoc = f"cat > {self.tmp}/new.py <<'EOF'\nprint(1)\nEOF\n" + cp.format(f"{self.tmp}/new.py")
+        self.assertIn("the script cannot be read", self.refused(heredoc))
+        Path(self.tmp, "blob.py").write_bytes(b"\xff\xfe\x00")
+        self.assertIsNotNone(self.refused(cp.format("blob.py")))
+        # a missing file that is not a script and not bound for scripts/ passes
+        self.assertIsNone(self.refused("aws s3 cp shot.png s3://bucket/evidence/shot.png"))
+
+    def test_other_upload_forms(self):
+        for cmd in (f"cat leak.py | aws s3 cp - s3://bucket/scripts/x.py",
+                    "aws s3 cp - s3://bucket/anything",
+                    "aws s3api put-object --bucket b --key scripts/x.py --body leak.py",
+                    "aws --profile p s3api put-object --body=leak.py --bucket b --key k",
+                    "aws s3 mv leak.py s3://bucket/scripts/x.py",
+                    f"aws s3 sync {self.tmp} s3://bucket/scripts/",
+                    f"aws s3 cp --recursive {self.tmp} s3://bucket/scripts/ --exclude '*.png'",
+                    "aws s3 cp --only-show-errors leak.py s3://bucket/x.py",
+                    "aws s3api put-object --bucket b --key scripts/y.py --body missing.py"):
+            with self.subTest(cmd=cmd):
+                self.assertIsNotNone(self.refused(cmd))
+        for cmd in ("aws s3 cp safe.py s3://bucket/scripts/x.py --profile aa365-admin --region us-west-1",
+                    "aws s3api put-object --bucket b --key k --body safe.py",
+                    "aws s3 cp s3://bucket/scripts/x.py s3://bucket/backup/x.py",
+                    "aws s3 presign s3://bucket/scripts/x.py --expires-in 300"):
+            with self.subTest(cmd=cmd):
+                self.assertIsNone(self.refused(cmd))
+        Path(self.tmp, "sub").mkdir()
+        Path(self.tmp, "sub", "ok.sql").write_text("SELECT count(*) FROM crm.traveler")
+        self.assertIsNone(self.refused(f"aws s3 sync {self.tmp}/sub s3://bucket/scripts/"))
+        self.assertEqual(g.uploads("aws s3 cp a.py s3://b/k && aws s3 sync d s3://b/p ; aws s3 cp s3://b/k ."),
+                         [("a.py", "s3://b/k"), ("d", "s3://b/p")])
 
     def test_ecsx_wrapper(self):
         self.assertIsNotNone(self.refused(f"tools/ecs/ecsx.sh {self.tmp}/leak.py ACTION=read"))
@@ -138,6 +193,18 @@ class CommandTest(unittest.TestCase):
             msg = self.refused("gh workflow run db-migrate.yml -f mode=run-script -f script=db/scripts/aa969_leak.py")
             self.assertIn("AA-CIS-Infra db/scripts/aa969_leak.py: crm.traveler.email", msg)
             self.assertIsNotNone(self.refused("tools/github/dbmig.sh run-script:db/scripts/aa969_leak.py"))
+            api = ("gh api -X POST repos/o/AA-CIS-Infra/actions/workflows/db-migrate.yml/dispatches -f ref=main "
+                   "-f 'inputs[mode]=run-script' -f 'inputs[script]=db/scripts/aa969_leak.py'")
+            self.assertIn("aa969_leak.py: crm.traveler.email", self.refused(api))
+            body = ("gh api repos/o/AA-CIS-Infra/actions/workflows/db-migrate.yml/dispatches --input - <<'EOF'\n"
+                    '{"ref": "main", "inputs": {"mode": "run-script", "script": "db/scripts/aa969_leak.py"}}\nEOF')
+            self.assertIsNotNone(self.refused(body))
+            # fail closed: a script the hook cannot read, or a path hidden in a variable
+            self.assertIn("cannot be read", self.refused(
+                "gh workflow run db-migrate.yml -f mode=run-script -f script=db/scripts/aa969_nope.py"))
+            self.assertIn("cannot read", self.refused(
+                'gh workflow run db-migrate.yml -f mode=run-script -f script="$S"'))
+            self.assertIsNone(self.refused("gh workflow run db-migrate.yml -f mode=apply -f owner=cis"))
         finally:
             g.INFRA = old
 

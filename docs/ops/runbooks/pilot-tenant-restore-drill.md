@@ -68,11 +68,17 @@ tenant table.
 
    | Key | Pass when |
    |---|---|
-   | `ok` | `true` (exit code 0) |
+   | `ok` | `true`: every table restored (exit code 0 or 3) |
+   | `complete` | `true` (exit code 0); `false` with `ok: true` = exit code 3: the rows restored but documents are missing from the backup (below) |
    | `checksums_verified` | every file of the ZIP (`SHA256SUMS`) matched; the object and ZIP digests are checked before |
    | `tables[].manifest_rows` / `restored_rows` | equal for every table (`mismatched_tables` is empty) |
    | `tables[].live_rows` / `live_pk_matched` | reported only: the agency kept working after the export, so live counts may differ |
-   | `documents.included` / `skipped` | the export's document count (files up to 25 MiB per export; the rest is listed `skipped_size_cap`) |
+   | `documents.lost` | `0`. It counts `documents.skipped_by_reason` entries the backup cannot bring back: `skipped_size_cap` (files past the export's 25 MiB per export, `documents.max_bytes`), `object_missing`, `skipped_integrity`, `documents_not_configured`. `no_object` (a document row that never had a file) is not a loss |
+   | `not_in_backup` | reported only: what the export never holds (next section) |
+
+   Exit code 3 (`complete: false`): the backup restores but does not hold every document. Before the pilot gets real
+   data that matters, tell the tech lead; the options are a larger document cap for the pilot backup (memory of the
+   512 MB task), or a second copy of the agency's document objects with their keys (a design change, not a drill step).
 
 3. A failure prints `{"ok": false, "error": "<code>"}`:
 
@@ -99,7 +105,25 @@ The drill runs as `crm_app` in one transaction of the agency (its row security a
    no longer parses fails the drill); decrypted `*_enc` values and other types are kept as text.
 3. Each table's `json/<table>.json` is loaded with `jsonb_populate_recordset`, then counted, and compared with the
    manifest, the live table and the live primary keys.
-4. One `restore_drill` audit event (reason `ok` / `mismatch`) goes into the agency's access log. Nothing else is written.
+4. It counts the documents the export left out (`documents/manifest.csv`, per `skipped_reason`) and calls the backup
+   complete only when none was lost.
+5. One `restore_drill` audit event (reason `ok` / `incomplete_documents` / `mismatch`) goes into the agency's access log.
+   Nothing else is written.
+
+## What the nightly backup does not hold
+
+The backup is the agency owner's portability export, so it leaves out what an export never hands out
+(AA-Partner `app/portability/tables.py`, `not_in_backup` in the drill report). A real restore gets each back another
+way:
+
+| Not in the backup | Why | How a restore gets it back |
+|---|---|---|
+| Vendor credentials (`crm.integration_credential`) | secrets are never exported | the agency reconnects each vendor (mail, calendar, payment) after the restore |
+| Agency keys (`crm.tenant_key`, `wrapped_dek`) | key rows are never exported | the backup itself is opened with the agency `export` key, so the key rows must still exist: a restore after the agency's rows are gone first takes `crm.tenant_key` of the agency from an RDS snapshot restored to a scratch instance ([PITR](restore-rds-pitr.md)); restored `*_enc` values are re-encrypted under the agency's keys |
+| Audit log (`crm.audit_event` and its export chain) | the agency downloads it separately | the Object Lock copies of the audit export |
+| Blind indexes and token columns (`*_bidx`, `token_hash`, `link_sha256`, …) | derived or secret | rebuilt from the restored values (indexes) or issued again (links, invitations) |
+| Placeholder maps, portal codes (`crm.placeholder_map`, `crm.otp_challenge`) | short-lived secrets | not needed: issued again on use |
+| Documents past the cap, missing or damaged | `documents.lost` above | not recoverable from this backup: the stored files are sealed under the agency keys |
 
 ## A real one-tenant restore
 
