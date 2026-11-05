@@ -3,16 +3,21 @@ id: SEC-04-dpa
 title: Data processing agreement template (draft)
 description: Draft DPA between Adventure Asia and a tenant, with roles, processor obligations and annexes for processing, security measures and sub-processors; for counsel to rewrite, not legal advice.
 type: template
-status: draft
+status: superseded
+superseded_by: SEC-04-dpa-agreement
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
 last_reviewed: 2026-10-28
 review_every_days: 90
-related: [SEC-04, SEC-04-packet, AA-886, AA-820, AA-839, AA-877]
+related: [SEC-04, SEC-04-packet, SEC-04-dpa-agreement, AA-886, AA-820, AA-839, AA-877]
 ---
 
 # Data processing agreement template (draft)
+
+**Superseded on 2026-11-05 by the [Data Processing Agreement draft v0.2](dpa.md)** and its annexes (AA-820 part 2).
+This v0.1 made AA the controller of Trip Planner travellers and Booking customers (clause 1.3); ADR 0019 invariant 2
+replaced that. Kept for history and for the links that point here.
 
 > **DRAFT FOR LAWYER REVIEW. THIS IS NOT LEGAL ADVICE AND IS NOT APPROVED.**
 > The engineering team prepared this outline from the product facts in the
