@@ -23,7 +23,7 @@ An amendment is a separate file `<nnnn>a-<slug>.md` and the amended ADR carries 
 | [0007](0007-place-pipeline-in-cis.md) | Place pipeline in CIS: `geo` schema, `catalog.*` views, background jobs | Accepted |
 | [0008](0008-new-app-integration-and-data-platform-rules.md) | New-app integration and data platform rules | Accepted (amended by 0008a) |
 | [0008a](0008a-crm-separate-app-exceptions.md) | Amendment: the partner CRM is a separate app; traveller OTP and an own LLM gateway as playbook exceptions | Accepted |
-| [0009](0009-ai-platform-and-provider-gateway.md) | AI platform and provider gateway: one gateway for every paid AI and data provider (LLM all sources and families, Jev, DataForSEO, Geoapify), every app and stage; on acceptance amends CIS ADRs 0005 d4/d9, 0006 §4–5, 0008 and 0012; root ADRs 0001 d2, 0001a d1–2, 0008 d5 and 0018 (AA-804; design: [S261 v2](../audits/2026-10-31-S261-ai-gateway-design-v2/README.md)) | Accepted 31/10/2026 (decisions 1–9, 13, 14, UI); 10–12 Proposed |
+| [0009](0009-ai-platform-and-provider-gateway.md) | AI platform and provider gateway: one gateway for every paid AI and data provider (LLM all sources and families, Jev, DataForSEO, Geoapify), every app and stage; on acceptance amends CIS ADRs 0005 d4/d9, 0006 §4–5, 0008 and 0012; root ADRs 0001 d2, 0001a d1–2, 0008 d5 and 0018 (AA-804; design: [S261 v2](../audits/2026-10-31-S261-ai-gateway-design-v2/README.md)) | Accepted 31/10/2026 (decisions 1–9, 13, 14, UI); 10–12 Proposed; amended by 0020 |
 | [0010](0010-aa-partner-app.md) | AA-Partner: one app for partner agencies (CRM and tenant portal) | Accepted (amended by 0010a, 0019) |
 | [0010a](0010a-content-studio-partner-sign-in.md) | Amendment: Content studio sign-in through the partner pool and a CIS token exchange; studio invitations CIS-created and CRM-delivered (AA-979 P2b) | Proposed (amended by 0019: decisions 1 and 6 superseded) |
 | [0011](0011-github-app-identity-and-merge-rights.md) | GitHub App identity for agents and bots, and merge rights per risk tier | Proposed (amended by 0011a) |
@@ -36,6 +36,7 @@ An amendment is a separate file `<nnnn>a-<slug>.md` and the amended ADR carries 
 | [0017a](0017a-dev-auto-applies-contract-migrations.md) | Amendment: on Dev, Migration Apply also applies contract migration files when every job table is idle and no rerun wave is open; destructive files stay manual; prod unchanged (AA-1032) | Accepted (S263) |
 | [0018](0018-lean-aws-account-model.md) | Lean AWS account model: an AA-owned organization (management account), prod in its own account, two environments; supersedes ADR 0012 decisions 1, 2 and 5; prod in us-west-1 (decision 7) (AA-1004; design: [S258 blueprint](../audits/2026-10-29-S258-aws-org-blueprint/README.md) §0) | Accepted 31/10/2026 (S262, tech lead; amended by 0009 d14 and 0019) |
 | [0019](0019-b2b-only-ecosystem-model.md) | B2B-only ecosystem model: AA sells to partner agencies (tenants) only; Content is the base product, CRM and TripPlanner are add-ons, Booking is the B2B back office; tenant master in CIS `shared`, feature keys, staff roles and tenant scope, one agency app (AA-1034; design: [S265 audit](../audits/2026-11-03-S265-ecosystem-restructure/README.md)) | Accepted 03/11/2026 (S265, tech lead; d1–d23; b1–b21 business choices the business owner may revisit) |
+| [0020](0020-content-quality-architecture.md) | Content quality architecture: one policy registry, one FactSheet, measured gates, one exit contract for every AI-written tour page, blog and social post; amends 0009 d5, d8, d10, d12 (AA-900, AA-741; design: [S271 audit](../audits/2026-11-06-S271-writing-quality-audit/README.md)) | Accepted 06/11/2026 (S271, tech lead; D1–D16) |
 
 ## Numbering
 
@@ -48,7 +49,7 @@ already cite it.
 |---|---|---|
 | 0013 | Reserved | HTTP API conventions, before any `/booking/v1` prefix (AA-899; cited by the engineering handbook) |
 
-Next free root numbers: **0020**.
+Next free root numbers: **0021**.
 
 AA-901 took 0011 (agent and bot identity, merge rights) and 0014 (repo visibility and GitHub plan), the next free
 numbers when its ADRs were written (S247).

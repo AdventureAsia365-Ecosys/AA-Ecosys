@@ -1,8 +1,8 @@
 {
  "updated": "2026-11-06",
- "synced_at": "2026-11-05T23:11Z",
- "session": "S270",
- "next_session": "S271",
+ "synced_at": "2026-11-06T13:37Z",
+ "session": "S271",
+ "next_session": "S272",
  "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
  "projects": {
   "data": "Data Platform",
@@ -204,31 +204,31 @@
    "id": "M-P1",
    "name": "Pilot mốc 1: Content + CRM trên Dev (d16)",
    "window": "~S272",
-   "status": "later",
+   "status": "active",
    "criteria": [
     {
      "text": "Đạt M-R1, M-R3 (phần gộp) và M-R2",
-     "done": false
+     "done": true
     },
     {
      "text": "AA-969: review bảo mật module CRM live + app agency gộp + scope R2, không còn phát hiện High mở; load test có giới hạn + SLO ghi lại",
-     "done": false
+     "done": true
     },
     {
      "text": "Biện pháp d16 live: hook chặn agent và DB Migrate run-script đọc PII của tenant pilot (chỉ đếm, có test); job dọn dẹp/E2E/wave bỏ qua tenant pilot (test); export crm.export_job hằng đêm cho tenant pilot + một lần diễn tập khôi phục một tenant; RDS giữ backup 14 ngày",
-     "done": false
+     "done": true
     },
     {
      "text": "AA-1040: AI notice + dấu ai_generated máy đọc được trong kit, live ở app agency (ảnh + kiểm header/metadata); ngày Art. 50(2) đối chiếu văn bản chính thức",
-     "done": false
+     "done": true
     },
     {
      "text": "AA-820: điều khoản AI trong thư pilot; bộ DPA sẵn sàng (controller/processor, SCC Module 2 + TIA, danh sách sub-processor sau d23)",
-     "done": false
+     "done": true
     },
     {
      "text": "Lát AA-1039: gate chủ đề AA (d21) giữ piece lỗi ở Tenant QA › Compliance; fan-out tour ngừng bán (d20, mail SES) thử trên tenant tổng hợp",
-     "done": false
+     "done": true
     }
    ],
    "risks": [
@@ -481,6 +481,36 @@
  ],
  "checks": [
   {
+   "due": "S272",
+   "issue": "AA-900",
+   "text": "S271 W0 (ADR 0020): nếu chưa xong trong S271 — lane T9 interim (lượt 3 = dừng và gắn nhãn, lưu mọi gate fail theo lượt) và lane T2/S1 an toàn (T2 judge chỉ báo cáo, đóng lối hitl, cưỡi voi policy_hold v0 + bộ bắt theo câu chữ chính sách trên mọi trường, chặn approve bản chưa sửa, khoá đường S1 batch); rồi chấm thử judge-only vài cent"
+  },
+  {
+   "due": "trước 20/11",
+   "issue": "AA-1004",
+   "text": "S271 Billing Transfer (agent): Terraform role OrganizationAccountAccessRole trong acc2 tin aa-management; OU Transitional trong acc4; kiểm SCP / LeaveOrganization của org TrueIDC"
+  },
+  {
+   "due": "25–28/11",
+   "issue": "AA-1004",
+   "text": "S271 Billing Transfer (agent): xuất Cost Explorer acc2 13 tháng (11/2025 → 11/2026) theo tháng × service × tag App/Component, CSV vào docs/audits. Nhắc tech lead tải hoá đơn / bảng kê từ TrueIDC cùng lúc (sau khi rời org TrueIDC, acc2 không còn xem lịch sử cũ)"
+  },
+  {
+   "due": "01/12",
+   "issue": "AA-1004",
+   "text": "S271 Billing Transfer: ngày chuyển — tech lead cho acc2 chấp nhận lời mời vào org o-ptmhixehmo (acc4); agent kiểm ngay /health CIS + Booking, ECS, RDS, Cost Explorer trong acc4"
+  },
+  {
+   "due": "phiên đầu ≥ 02/12",
+   "issue": "AA-1004",
+   "text": "S271 Billing Transfer (agent): gỡ role AWSReservedSSO_AdministratorAccess (Identity Center TrueIDC) trong acc2; bật cost allocation tags từ acc4; tạo lại budget / cảnh báo ở acc4; acc3 vẫn ngoài org"
+  },
+  {
+   "due": "≥ 08/11",
+   "issue": "AA-1004",
+   "text": "S271: kiểm Cost Explorer đã thấy tag Component/Project/CostCenter (sau khi TrueIDC bật); chi phí chưa gắn tag tháng 11 giảm so với 106,5 USD tháng 10"
+  },
+  {
    "due": "2 phút / 5 phút / hằng giờ",
    "issue": "AA-1028",
    "text": "S266 để BẬT: crm_entitlement_pull (crm.job, 2 phút), bk_tenant_pull (booking.job, 5 phút), tenant_account_tick (shared.job, hằng giờ); đọc lượt lỗi trong bảng job; đỏ = tenant không được chiếu sang CRM/Booking hoặc trial không chuyển trạng thái"
@@ -667,6 +697,31 @@
   }
  ],
  "waiting": [
+  {
+   "who": "AWS Sales",
+   "issue": "AA-1004",
+   "text": "S271 06/11: tech lead gửi form AWS Sales (aws.amazon.com/contact-us, Use case AI & ML, Sales Support) cho acc3: xin Account Manager + quyền Bedrock us-west-1 cho Claude Sonnet/Opus/Haiku 5.5, Sonnet 5, GPT-6 Luna/Astra, GPT-5.6 Luna + quota TPM; không cho chia sẻ với AWS Partners. Chờ Sales liên hệ qua mail @adventure.asia (1–3 ngày làm việc); khi có trả lời → agent soạn tiếp, rồi chạy lại probe acc3"
+  },
+  {
+   "who": "Tech lead",
+   "issue": "AA-1004",
+   "text": "S271 Billing Transfer: khi TrueIDC gửi lời mời Billing Transfer → chấp nhận trong acc4 (SSO aa-mgmt, quyền billing); 25–28/11 tải hoá đơn / bảng kê acc2 từ TrueIDC; 01/12 cho acc2 chấp nhận lời mời vào org acc4"
+  },
+  {
+   "who": "Chủ doanh nghiệp",
+   "issue": "AA-1004",
+   "text": "S271: ký phụ lục hợp đồng TrueIDC cho Billing Transfer (TrueIDC gửi bản nháp)"
+  },
+  {
+   "who": "Tech lead",
+   "issue": "AA-1004",
+   "text": "S271: từ chiều 07/11 (≥24 giờ sau khi apply tag 06/11 13:30) nhắn TrueIDC (Jade - Hoài) bật cost allocation tag Component, Project, CostCenter, Environment cho acc2 — tin nháp trong log S271; sau khi bật, chạy tools/finops/untagged_report.py và so chi phí theo App/Component"
+  },
+  {
+   "who": "Tech lead",
+   "issue": "AA-1004",
+   "text": "S271: VPC interface endpoint (Secrets Manager, ECR api+dkr, CloudWatch Logs, STS, Bedrock runtime; ≈ 75–90 USD/tháng cho 2 AZ) chỉ ghi chú cho prod — hỏi tech lead duyệt trước khi làm, không làm trên Dev"
+  },
   {
    "who": "Tech lead",
    "issue": "AA-1040",
@@ -1690,7 +1745,7 @@
   {
    "id": "AA-1003",
    "title": "[Reporting] Build the ecosystem report engine and the 63-report catalog (approved S258), slices R0–R7",
-   "status": "In Progress",
+   "status": "Backlog",
    "priority": "High",
    "project": "data",
    "milestone": "later",
@@ -1702,7 +1757,7 @@
   {
    "id": "AA-1004",
    "title": "[Infra] Implement the lean AWS model: company organization, Identity Center, nonprod/ai accounts in the org, prod at go-live, Bedrock path",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "High",
    "project": "data",
    "milestone": "M5",
@@ -1738,13 +1793,13 @@
   {
    "id": "AA-900",
    "title": "[LLM] LLM operations docs, prompt versioning and eval gate",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "Medium",
    "project": "data",
    "milestone": "M2a",
-   "session": "LLM path",
+   "session": "S271",
    "size": "M",
-   "next": "M2a · phần $0 xong; còn 40 nhãn + lượt thử trả phí trong trần cứng OpenAI 10 USD/tháng",
+   "next": "W0 ship #1349/#1351/#1350/#1352 + T9 interim + T2/S1 safety lanes; then cents calibrate-only",
    "needs": "Nhãn 40 mẫu (tech lead, ~2 h)"
   },
   {
@@ -1754,28 +1809,28 @@
    "priority": "High",
    "project": "core",
    "milestone": "M-P1",
-   "session": "≤11/11",
+   "session": "S271",
    "size": "",
-   "next": "Pháp lý · phần 1 live S266 (AI Schedule v1.0, trang terms, điều khoản thư pilot, khung DPA); phần 2 bộ DPA (controller/processor, SCC Module 2 + TIA, sub-processor sau d23) S269–S271 trước PII pilot; luật sư do business owner quyết (Jira)",
+   "next": "Pilot 1 · S271: gói DPA phần 2 (phần kỹ thuật) trước 11/11; luật sư + báo tenant qua Jira",
    "needs": "Business owner: duyệt điều khoản AI trước 11/11 (có cần luật sư hay không)",
    "due": "2026-11-11"
   },
   {
    "id": "AA-855",
    "title": "[UAT] Ecosystem UAT with recorded run videos: CIS admin + tenant portal, TripPlanner, AA-Booking",
-   "status": "In Progress",
+   "status": "Backlog",
    "priority": "Medium",
    "project": "portal",
-   "milestone": "M-P1",
-   "session": "S272",
+   "milestone": "parked",
+   "session": "parked",
    "size": "L",
-   "next": "Vòng 1: 23 video PASS (S270); tải lên Drive; đường ghi theo vai trò",
+   "next": "S271: dừng quay video định kỳ (tech lead); 26 video trên Drive; mở lại khi chủ doanh nghiệp cần ký duyệt mốc (1 video demo) hoặc pilot cần video đào tạo đại lý",
    "needs": ""
   },
   {
    "id": "AA-873",
    "title": "[Security] Account detection baseline: GuardDuty, Access Analyzer, S3 BPA, CloudTrail",
-   "status": "In Progress",
+   "status": "Backlog",
    "priority": "Medium",
    "project": "data",
    "milestone": "M5",
@@ -1811,13 +1866,13 @@
   {
    "id": "AA-741",
    "title": "[T-series audit] End-to-end T0→T11 test run on controlled tenants + per-mechanism audit report (same method as the S218 A-series audit)",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
    "session": "S271",
    "size": "XL",
-   "next": "M2a — phase 0 xong S270 (≈ 2,0 USD); phase 1: 3 tour/thương hiệu đủ kênh (≈ 3–4 USD), rồi phase 2 (48 tour)",
+   "next": "M2a · S271: phase 1 — 3 tour/thương hiệu đủ kênh trên 4 tenant audit (≈ 3–4 USD), rồi phase 2",
    "needs": ""
   },
   {
@@ -1907,13 +1962,13 @@
   {
    "id": "AA-911",
    "title": "[Identity] Staff sign-in for Booking (and CIS) Vercel Previews, then retire the CIS → Booking bridge",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M5",
-   "session": "S275",
+   "session": "S271",
    "size": "M",
-   "next": "Prod · CIS admin + Booking admin lên ECS trên Dev (d23, 1 task Spot) rồi gỡ cầu nối CIS → Booking (/auth/booking-token 404, 0 dòng bridge-era); ngoại lệ E2E A10 gỡ lúc go-live",
+   "next": "Prod · S271 (kéo lên từ S275): CIS admin + Booking admin lên ECS Dev (1 task Spot, d23), gỡ cầu nối CIS → Booking",
    "needs": ""
   },
   {
@@ -2051,13 +2106,13 @@
   {
    "id": "AA-1038",
    "title": "[TripPlanner] R5 multi-tenant white-label TripPlanner: tenant_id + RLS, per-tenant brand, leads to the tenant CRM, frontend on ECS (Dev)",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M-P2",
-   "session": "S273",
+   "session": "S271",
    "size": "XL",
-   "next": "R5 lát 1 live S270 (tp-025 shadow RLS, Lambda gắn tenant); lát 2: view tenant tripplanner",
+   "next": "R5 · S271 (kéo lên từ S274): lát 2 — view catalog.v_tenant_tripplanner_v1, tenant demo, /{slug}, xác nhận tenant ký từ BFF",
    "needs": ""
   },
   {
@@ -2088,13 +2143,85 @@
   {
    "id": "AA-1046",
    "title": "[Booking] R4b B2C drop and VAT e-invoice provider API",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M-R4",
+   "session": "S271",
+   "size": "",
+   "next": "R4b · S271 (kéo lên từ S274): sửa DRY RUN theo guard PII → chạy DRY RUN → review độc lập → tech lead duyệt → drop; e-invoice sau",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1047",
+   "title": "[Quality W1] One policy registry, one FactSheet, one exit contract (report mode) for S1, T2, T9 and the eval",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "later",
+   "session": "S272",
+   "size": "",
+   "next": "",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1048",
+   "title": "[Quality W2] Claim-level ground truth and calibration of the pinned claim instrument",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "later",
+   "session": "S272",
+   "size": "",
+   "next": "",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1049",
+   "title": "[Quality W3] Rewire the T9, S1 and T2 control planes in place (code-composed fields, local source-aware repair, one exit)",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "later",
+   "session": "S273",
+   "size": "",
+   "next": "",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1050",
+   "title": "[Quality W4] Promote the calibrated claim instrument: shadow first, then holds only for measured classes",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "later",
    "session": "S274",
    "size": "",
-   "next": "R4b — xoá bảng B2C theo DRY RUN (root #571) + API hoá đơn điện tử",
+   "next": "",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1051",
+   "title": "[Quality W5] Paid writer proofs on small fixed samples (eval null run, T9, S1, T2) under the D12 caps",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "later",
+   "session": "S274",
+   "size": "",
+   "next": "",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1052",
+   "title": "[Quality W6] Lineage, dormant-code cleanup and permanent change control for every writing workflow",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "later",
+   "session": "S275",
+   "size": "",
+   "next": "",
    "needs": "cần xếp slot"
   }
  ]
