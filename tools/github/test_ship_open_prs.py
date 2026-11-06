@@ -133,6 +133,20 @@ class OpenTest(unittest.TestCase):
         self.sb.git(self.sb.wt, "checkout", "-q", "-b", "feat/empty", "origin/main")
         self.assertIn("no commit ahead", " ".join(sop.validate(r, lane_pr(self.sb.wt, branch="feat/empty"))[0]))
 
+    def test_a_repo_with_a_pre_push_hook_must_have_it_installed(self):
+        r, _ = self.runner()
+        hooks = os.path.join(self.sb.wt, ".githooks")
+        os.makedirs(hooks)
+        with open(os.path.join(hooks, "pre-push"), "w", encoding="utf-8") as fh:
+            fh.write("#!/usr/bin/env bash\nexit 0\n")
+        self.sb.git(self.sb.wt, "add", "-A")
+        self.sb.git(self.sb.wt, "commit", "-qm", "chore: hook")
+        problems, _ = sop.validate(r, lane_pr(self.sb.wt))
+        self.assertIn("pre-push hook is not installed (core.hooksPath=unset)", " ".join(problems))
+        self.assertIn("scripts/install-hooks.sh", " ".join(problems))
+        self.sb.git(self.sb.wt, "config", "core.hooksPath", ".githooks")
+        self.assertEqual(sop.validate(r, lane_pr(self.sb.wt))[0], [])
+
     def test_stacked_pr_is_compared_with_the_local_branch_below(self):
         self.sb.git(self.sb.wt, "checkout", "-q", "-b", "feat/lanterns-2")
         self.sb.commit(self.sb.wt, "lantern2.py", "GLOW = 5\n", "feat: brighter lantern")
@@ -157,6 +171,18 @@ class OpenTest(unittest.TestCase):
         self.assertIn("opened https://github.com/AdventureAsia365-Ecosys/AA-Partner/pull/77", out.getvalue())
         self.assertIn("live: curl /crm/health", out.getvalue())
         self.assertEqual(list(Path(self.sb.tmp.name).glob("pr-body-*")), [])
+
+    def test_a_push_that_skipped_the_integration_stamp_says_so_in_the_body(self):
+        write_journal(self.journal, [{"ready": True, "prs": [lane_pr(self.sb.wt)]}])
+        r, seen = self.runner()
+        with mock.patch.dict(os.environ, {"AA_PREPUSH_SKIP_INTEGRATION": "1"}), \
+                contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(sop.main([str(self.journal)], runner=r), 0)
+        self.assertIn("AA_PREPUSH_SKIP_INTEGRATION=1", seen["body"])
+        self.assertTrue(seen["body"].rstrip().endswith(sop.ATTRIBUTION))
+        self.assertEqual(sop.skip_note(seen["body"]).count("AA_PREPUSH_SKIP_INTEGRATION"), 1)
+        with mock.patch.dict(os.environ, {"AA_PREPUSH_SKIP_INTEGRATION": ""}):
+            self.assertEqual(sop.skip_note(BODY), BODY)
 
     def test_existing_pr_is_reused_and_dry_run_pushes_nothing(self):
         write_journal(self.journal, [{"ready": True, "prs": [lane_pr(self.sb.wt)]}])
