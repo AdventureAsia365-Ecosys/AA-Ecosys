@@ -13,7 +13,8 @@
   S262) adds a fourth, Dev-only E2E address for the AA-Partner staff console (crm-ops + crm-support, synthetic agencies only).
   A10d (05/11/2026, S270) adds a fifth, Dev-only E2E address for a CIS customer_success member, read-only with no write
   allow-list, synthetic tenants only in its book. A11 and A12 (22/10/2026,
-  S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2).
+  S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2). A13
+  (06/11/2026, S271) retires the CIS -> Booking bridge once the staff frontends run on ECS (ADR 0019 d23).
 - **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) was unchanged and still pending on 18/10/2026.
 - **Update 2026-10-28:** Booking Phase 2 has shipped in part: Booking verifies WORKFORCE tokens of the
   `booking-staff` and `breakglass` clients and takes roles from the `booking-*` groups; the CIS bridge stays until
@@ -657,6 +658,29 @@ Supersedes the A6 values and closes its open cutover item.
   (AA-CIS-Infra) and on the Vercel target, then redeploy both. Runbook: `docs/ops/runbooks/legacy-login-flag.md`.
 - **Accounts:** the legacy full-admin test accounts (`e2e-claude-code`, `e2e-claude-code-2`) are disabled; staff
   and agents sign in with Cognito only (agents through the E2E mailbox, A10).
+
+### A13. The CIS -> Booking bridge is retired; the staff apps sign in on their own hosts (06/11/2026, S271; AA-911)
+
+Supersedes the "not changed" line of A11 and the "still not gated" line of A12 for `/auth/booking-token`, and the
+A11 Preview design as the way staff sign in outside Production.
+
+- **Why now:** ADR 0019 d23 moves the CIS admin and the Booking admin from Vercel to one ECS task behind the shared
+  ALB, on the same hosts (`aa-cis.`, `booking.`), and replaces per-PR Vercel previews with `next start` checks in CI.
+  Every staff sign-in then happens on a registered host with the app's WORKFORCE client, so nothing needs the bridge.
+- **Booking:** accepts the WORKFORCE issuer only (`booking-staff`, `breakglass`; roles, finance included, from the
+  `booking-*` groups). A bridge token is 401. The legacy CIS password form and `/api/auth/login` are removed from the
+  Booking admin; a leftover `bk_cis_session` cookie is cleared.
+- **CIS:** `POST /auth/booking-token` and `GET /auth/.well-known/jwks.json` are removed (404); the signing-key secret
+  `aa-cis/dev/booking-jwt-signing-key` is scheduled for deletion with a 7-day recovery window.
+- **Bridge-era rows:** the three `booking.staff_users` rows keyed by a CIS id are linked to their Cognito identity or
+  deactivated by a one-time DB Migrate run-script (AA-CIS-Infra `db/scripts/aa911_bridge_staff_rows.py`, DRY RUN
+  first).
+- **Order:** staff web cut-over (runbook `docs/ops/runbooks/staff-web-ecs-cutover.md`) -> Booking bridge off ->
+  CIS routes removed -> staff rows script -> secret deletion.
+- **Still open (A10 family):** the E2E mailbox exceptions stay until go-live, as decided in S265.
+- **Follow-up:** the Booking endpoint tests still sign in with a test-only bridge issuer; moving them to WORKFORCE
+  tokens lets the bridge profile code be deleted. The Preview hosts and Preview-only clients of A11 go with the
+  Vercel retirement.
 
 ## Phase 1 status (18/10/2026)
 
