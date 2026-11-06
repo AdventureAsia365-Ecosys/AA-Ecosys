@@ -38,8 +38,11 @@ class LaneStartGuardTest(unittest.TestCase):
     def plan(self, data: dict) -> None:
         (self.root / g.PLAN).write_text(json.dumps(data), encoding="utf-8")
 
-    def check(self, tool_input: dict) -> str | None:
-        return g.check(tool_input, self.root)
+    def check(self, tool_input: dict, avail_mib: int = 8000) -> str | None:
+        proc = self.root / "proc"
+        proc.mkdir(exist_ok=True)
+        (proc / "meminfo").write_text(f"MemAvailable: {avail_mib * 1024} kB\n")
+        return g.check(tool_input, self.root, proc)
 
     def test_up_to_date_plan_passes(self):
         self.assertIsNone(self.check({"scriptPath": LANE, "args": args()}))
@@ -72,6 +75,13 @@ class LaneStartGuardTest(unittest.TestCase):
         self.assertIn("prod hotfix", (self.root / g.HITS_LOG).read_text())
         self.assertIsNotNone(self.check({"scriptPath": LANE, "args": args(plan_gate="skip:")}))
 
+    def test_low_memory_refuses_a_new_lane(self):
+        msg = self.check({"scriptPath": LANE, "args": args()}, avail_mib=3000)
+        self.assertIn("MemAvailable is 3000 MiB", msg)
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": args(ram_gate="skip: last small lane")},
+                                     avail_mib=3000))
+        self.assertIsNone(self.check({"scriptPath": "/x/tools/workflows/review.js", "args": {}}, avail_mib=100))
+
     def test_other_workflows_and_unreadable_plan(self):
         self.assertIsNone(self.check({"script": "export const meta = {name: 'audit'}", "args": "x"}))
         self.assertIsNone(self.check({"scriptPath": "/x/tools/workflows/review.js", "args": None}))
@@ -88,7 +98,8 @@ class LaneStartGuardTest(unittest.TestCase):
             return subprocess.run([str(sh)], input=payload, text=True, capture_output=True, env=env,
                                   timeout=30).returncode
 
-        self.assertEqual(run(json.dumps({"tool_name": "Workflow", "tool_input": {"scriptPath": LANE,
+        # Exit 0 on a launch that is not gated (a lane launch would also read the real /proc memory here).
+        self.assertEqual(run(json.dumps({"tool_name": "Workflow", "tool_input": {"scriptPath": "/x/review.js",
                                                                                  "args": args()}})), 0)
         self.assertEqual(run(json.dumps({"tool_name": "Workflow", "tool_input": {"scriptPath": LANE,
                                                                                  "args": "{}"}})), 2)

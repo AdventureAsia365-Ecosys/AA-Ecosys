@@ -11,7 +11,10 @@ For a launch of tools/workflows/lane.js (by scriptPath, any checkout, or by the 
   2. a plan.json `session` other than args.session (aa-session step 7: update plan.json and republish the tracker
      right after the session list is agreed, BEFORE the first lane);
   3. a goal whose first AA-<n> issue is in plan.json with a `session` slot that does not name args.session (a pulled-
-     ahead issue gets its slot moved to this session first; an issue not in plan.json passes).
+     ahead issue gets its slot moved to this session first; an issue not in plan.json passes);
+  4. (G4) MemAvailable under 4 GiB: a lane builds and tests, and the WSL VM ran out of memory with 3 lanes plus the
+     orchestrator's own Playwright (S237 ... S270). The message names the heavy processes running.
+     `ram_gate: "skip: <reason>"` in args passes, logged.
 `plan_gate: "skip: <reason>"` in args passes (a hotfix lane), logged to .tmp-session/guard-hits.log. Every other
 Workflow launch (research, review, audits) is not gated. plan.json is read from the main checkout
 ($CLAUDE_PROJECT_DIR), where the orchestrator edits it. Unreadable hook input passes; an unreadable plan.json refuses
@@ -28,10 +31,14 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import aa_shell_guard  # noqa: E402  (the /proc readers of RAM-1)
+
 ROOT = Path(os.environ.get("CLAUDE_PROJECT_DIR") or Path(__file__).resolve().parents[2])
 PLAN = Path("docs/backlog/tracker/plan.json")
 HITS_LOG = Path(".tmp-session/guard-hits.log")
 REQUIRED = ("key", "goal", "session", "date")
+LANE_MEM_FLOOR_MIB = 4096
 FIX = ("Update docs/backlog/tracker/plan.json first (session, next_session, and the session slot of every agreed "
        "issue, pulled-ahead ones too), run tools/linear/plan_sync.py --validate, republish the tracker (skill "
        "aa-session step 7), then launch the lane. Hotfix only: add plan_gate: \"skip: <reason>\" to args.")
@@ -52,7 +59,7 @@ def _log(root: Path, what: str) -> None:
         pass
 
 
-def check(tool_input: dict, root: Path = ROOT) -> str | None:
+def check(tool_input: dict, root: Path = ROOT, proc: Path = Path("/proc")) -> str | None:
     """None when the launch may go ahead, else the refusal message."""
     if not is_lane(tool_input):
         return None
@@ -94,6 +101,16 @@ def check(tool_input: dict, root: Path = ROOT) -> str | None:
             if session not in re.findall(r"S\d+", slot):
                 return (f"{m.group(0)} is slotted for {slot!r} in {PLAN}, not {session}: move its session slot "
                         f"(and `next`) to {session} if it was pulled ahead. {FIX}")
+    avail = aa_shell_guard.mem_available_mib(proc)
+    if avail is not None and avail < LANE_MEM_FLOOR_MIB:
+        ram_gate = str(args.get("ram_gate") or "")
+        if re.match(r"skip:\s*\S", ram_gate):
+            _log(root, f"ram skip {args.get('key')} at {avail} MiB: {ram_gate}")
+            return None
+        heavy = [f"pid {p[0]} {p[1]} MiB {p[2]}" for p in aa_shell_guard.processes(proc) if p[2]][:6]
+        return (f"MemAvailable is {avail} MiB, under {LANE_MEM_FLOOR_MIB} MiB for a new lane (a lane builds and "
+                f"tests; the WSL VM ran out of memory with 3 lanes). Heavy processes: {'; '.join(heavy) or 'none'}. "
+                f"Wait for a lane to finish, or add ram_gate: \"skip: <reason>\" to args.")
     return None
 
 

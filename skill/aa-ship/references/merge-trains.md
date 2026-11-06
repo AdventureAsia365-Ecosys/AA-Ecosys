@@ -7,10 +7,12 @@ live: §3. Công cụ và mã thoát: `tools/github/README.md` (AA-1032).
 
 ## Dựng train
 
-- Mỗi chuỗi phụ thuộc một lệnh (hoặc một script ngắn nối các lệnh bằng `&&`) chạy bằng Bash `run_in_background`,
-  output `> .tmp-session/S<nnn>/<tên>-train.txt 2>&1`. Hai chuỗi độc lập = hai train, không gộp. Không tự viết lại
-  gate/merge/copy trong `.tmp-session/`: dùng các tool dưới đây (S263: script tự viết merge PR có check đỏ không bắt
-  buộc và đọc nhầm run DB Migrate của file khác).
+- **Cả wave = MỘT lệnh `tools/github/ship_wave.py`** (AA-1024) chạy bằng Bash `run_in_background`, output
+  `> .tmp-session/S<nnn>/<tên>-wave.txt 2>&1`: PR độc lập song song, chuỗi khai báo bằng `'<Repo>#<n>>apply:<owner>/<NNN>'`
+  (PR chỉ migration) và `'<Repo>#<n>@after=<owner>/<NNN>'` (PR code chờ migration), `--wait-deploy` chờ deploy một lần
+  mỗi app. Không nối `ship_merge.py … && ship_copy_apply.py … && ship_merge.py …`, không vòng `for`, không script ship
+  trong `.tmp-session/`: hook `aa_shell_guard` SHIP-1 chặn (S257, S263, S271: script tự viết merge tuần tự, merge PR có
+  check đỏ không bắt buộc, đọc nhầm run DB Migrate của file khác).
 - Công cụ (Python stdlib, `python3 tools/github/<tool>.py --help`):
   - `ship_merge.py '<Repo> <n>' …` — chờ check, **mọi** check phải xanh (không chỉ required), từ chối draft / base
     không phải nhánh mặc định / DIRTY / PR xoá file; repo queue qua `mergeq.sh`, repo khác squash
