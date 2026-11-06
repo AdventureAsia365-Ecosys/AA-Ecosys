@@ -167,6 +167,17 @@ def validate(runner: Runner, p: dict, stacked_on: frozenset[str] = frozenset()) 
     return problems, warnings
 
 
+SKIP_INTEGRATION_NOTE = ("> Pushed with AA_PREPUSH_SKIP_INTEGRATION=1: the integration tests this diff touches were not "
+                         "run locally (pre-push stamp skipped); the CI integration shards are the only run.")
+
+
+def skip_note(body: str) -> str:
+    """AA-1024 l22 (G6): a push that skipped the CIS pre-push integration stamp says so in the PR body."""
+    if os.environ.get("AA_PREPUSH_SKIP_INTEGRATION") != "1" or SKIP_INTEGRATION_NOTE in body:
+        return body
+    return body.rstrip() + "\n\n" + SKIP_INTEGRATION_NOTE + "\n"
+
+
 def open_one(runner: Runner, p: dict, extra_refs: list[str], draft: bool) -> str:
     repo = normalize_repo(str(p["repo"]))
     wt, br = str(p["worktree"]), str(p["branch"])
@@ -181,7 +192,7 @@ def open_one(runner: Runner, p: dict, extra_refs: list[str], draft: bool) -> str
     if url:
         log(f"{tag}: pushed to the open PR {url}")
     else:
-        body = with_attribution(add_refs(str(p.get("pr_body", "")), extra_refs))
+        body = with_attribution(skip_note(add_refs(str(p.get("pr_body", "")), extra_refs)))
         tmpdir = ROOT / ".tmp-session"
         tmpdir.mkdir(parents=True, exist_ok=True)
         fd, fname = tempfile.mkstemp(prefix="pr-body-", suffix=".md", dir=str(tmpdir))

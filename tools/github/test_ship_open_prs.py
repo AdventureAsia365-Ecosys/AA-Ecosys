@@ -172,6 +172,18 @@ class OpenTest(unittest.TestCase):
         self.assertIn("live: curl /crm/health", out.getvalue())
         self.assertEqual(list(Path(self.sb.tmp.name).glob("pr-body-*")), [])
 
+    def test_a_push_that_skipped_the_integration_stamp_says_so_in_the_body(self):
+        write_journal(self.journal, [{"ready": True, "prs": [lane_pr(self.sb.wt)]}])
+        r, seen = self.runner()
+        with mock.patch.dict(os.environ, {"AA_PREPUSH_SKIP_INTEGRATION": "1"}), \
+                contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(sop.main([str(self.journal)], runner=r), 0)
+        self.assertIn("AA_PREPUSH_SKIP_INTEGRATION=1", seen["body"])
+        self.assertTrue(seen["body"].rstrip().endswith(sop.ATTRIBUTION))
+        self.assertEqual(sop.skip_note(seen["body"]).count("AA_PREPUSH_SKIP_INTEGRATION"), 1)
+        with mock.patch.dict(os.environ, {"AA_PREPUSH_SKIP_INTEGRATION": ""}):
+            self.assertEqual(sop.skip_note(BODY), BODY)
+
     def test_existing_pr_is_reused_and_dry_run_pushes_nothing(self):
         write_journal(self.journal, [{"ready": True, "prs": [lane_pr(self.sb.wt)]}])
         r, seen = self.runner(existing="https://github.com/AdventureAsia365-Ecosys/AA-Partner/pull/70\n")
