@@ -41,17 +41,29 @@ trả về để điều phối ghi.
 
 ## 3. Ghi thế nào
 
-Một dòng, đúng mục, theo mẫu:
+Một dòng, đúng mục, theo mẫu (trường `Guard:` BẮT BUỘC, AA-1024):
 
 ```
-- **<Nguyên tắc, mệnh lệnh ngắn>** — <triệu chứng → nguyên nhân gốc> (S<nnn>, AA-xxx). Bắt bằng: <test/grep/query/check cụ thể>.
+- **<Nguyên tắc, mệnh lệnh ngắn>** — <triệu chứng → nguyên nhân gốc> (S<nnn>, AA-xxx). Guard: <loại> <đích>.
 ```
 
-- Trùng ý với dòng đã có → sửa dòng đó (thêm bằng chứng, phiên lặp lại), không thêm dòng mới.
+`Guard:` nói cái gì chặn lỗi lần sau (tech lead S271: "viết bài học không cải thiện được gì, lỗi vẫn lặp"):
+
+| Dạng | Khi nào |
+|---|---|
+| `Guard: test\|hook\|tool\|ci\|lane <đường dẫn>` | đã có máy chặn: test, hook (`aa_shell_guard:<RULE>` cho rule của `.claude/hooks/aa_shell_guard.py`), tool, CI check, luật trong `tools/workflows/lane.js`; đường dẫn phải tồn tại |
+| `Guard: pending GRD-<n>` (hoặc `AA-<n>`) | guard chưa làm; mã phải có trong `docs/backlog/README.md` hoặc `plan.json` (xếp vào phiên kế) |
+| `Guard: none: judgement\|external\|one-off <vì sao>` | không có máy chặn được (phán đoán, sự cố bên ngoài, chỉ một lần); lý do 3+ chữ |
+
+- `tools/docs/check_lessons.py` (Docs lint) đỏ khi một dòng MỚI hoặc SỬA thiếu `Guard:`, đích không tồn tại, mã pending
+  chưa lên kế hoạch, hoặc dòng nhắc 2+ phiên mà ghi `none: one-off`. File chờ: `--pending .tmp-session/S<nnn>-lessons-pending.md`.
+- **Lặp lại → guard, không gộp dòng** (S271): trùng ý với dòng đã có và lỗi kiểm được bằng máy → làm guard ngay trong
+  phiên (hoặc `pending GRD-<n>` xếp vào phiên kế), không chỉ thêm bằng chứng vào dòng cũ. Chỉ dòng `none:` mới gộp.
 - Nguyên tắc chung cho mọi vùng → mục "Cách làm việc".
-- Ghi bằng tiếng Việt (log nội bộ), tên code/bảng/lệnh giữ nguyên. Không ghi secret, account ID mới hay giá trị token.
-- "Bắt bằng" trỏ tới thứ còn tồn tại (test, script trong repo, runbook), không tới helper trong `.tmp-session/`
-  (bị dọn). Guard chưa có thì ghi "ứng viên guard: …".
+- Ghi bằng tiếng Việt (log nội bộ), tên code/bảng/lệnh giữ nguyên; `Guard:` giữ từ khoá tiếng Anh. Không ghi secret,
+  account ID mới hay giá trị token.
+- Đích của `Guard:` là thứ còn tồn tại trong repo, không phải helper trong `.tmp-session/` (bị dọn). "Bắt bằng: …" cũ
+  chỉ còn là gợi ý cách phát hiện, không thay `Guard:`.
 
 ## 4. Biến bài học thành guard
 
@@ -59,14 +71,19 @@ Bài học kiểm được bằng máy là bài học tốt nhất:
 
 1. Có thể viết unit test, CI check, lint rule, hook hoặc assert → **làm luôn** trong PR đang sửa lỗi, nếu nằm trong scope.
 2. Ngoài scope → đề xuất issue (hỏi Nghiệp trước khi tạo, theo `aa-linear-issue`).
-3. Guard đã merge và chặn được **cả lớp lỗi** (không chỉ đúng một ca) → xoá dòng khỏi `lessons.md` (README quy tắc 5),
-   ghi tên guard trong commit message. Guard chỉ ghim một ca → giữ dòng, thêm tên guard vào "Bắt bằng".
+3. Guard đã merge và chặn được **cả lớp lỗi** (không chỉ đúng một ca) → chuyển dòng sang [`guards.md`](guards.md)
+   (cùng mục, kèm đường dẫn guard) trong cùng PR, ghi tên guard trong commit message. Guard chỉ ghim một ca → giữ dòng,
+   ghi guard đó ở `Guard:`. `python3 tools/docs/check_lessons.py --sweep` liệt kê các dòng có guard để rà.
+4. Luật shell / quy trình (pkill, zsh, export, merge tuần tự, RAM, lane): thêm rule vào `.claude/hooks/aa_shell_guard.py`
+   (một bảng rule, mỗi rule có test chặn + test gần-đúng-vẫn-cho-qua, chạy trong root CI), không viết thêm dòng văn xuôi.
 
 ## 5. Cuối phiên
 
-Trong `aa-session` kết thúc phiên (bước "Bài học"): chuyển `.tmp-session/S<nnn>-lessons-pending.md` vào `lessons.md`
-(đúng mục, gộp với dòng trùng ý), rà lại các lỗi đã gặp trong phiên còn thiếu dòng, rồi nêu số bài học mới trong
-session block.
+Trong `aa-session` kết thúc phiên (bước "Bài học"): `python3 tools/docs/check_lessons.py --pending
+.tmp-session/S<nnn>-lessons-pending.md` xanh, rồi chuyển vào `lessons.md` (đúng mục; dòng lặp lại một dòng cũ → guard
+hoặc `pending GRD-<n>`, xem mục 3), rà lại các lỗi đã gặp trong phiên còn thiếu dòng, rồi nêu trong session block:
+"bài học: X mới, Y thành guard, Z chuyển sang guards.md". Subagent trả bài học dạng `{principle, guard_kind,
+guard_target_or_reason}` (`tools/workflows/lane.js`) để điều phối ghi thẳng.
 
 ## 6. Nơi sửa và phát hành
 
