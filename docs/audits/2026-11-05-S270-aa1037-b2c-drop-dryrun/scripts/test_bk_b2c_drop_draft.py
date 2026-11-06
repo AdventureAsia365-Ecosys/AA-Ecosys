@@ -19,6 +19,7 @@ plus a B2B case, a B2B supplier booking and a CIS catalog inbox row that must su
 - the draft refuses: fresh B2C rows (30-day guard, including a fresh supplier payout, bill line, OTP use or operations
   file of a b2c case), unfilled pins, a moved count, a same-count UPDATE after the DRY RUN, a queued intake job;
 - its 30-day block and pinned table list are the DRY RUN script's, word for word;
+- from its first statement it holds the checked tables (SHARE ROW EXCLUSIVE): a concurrent write waits, a read goes on;
 - with the rows backdated 40 days and the pins pasted, it applies: the customer and customer money tables are gone,
   every money row is in booking.retired_b2c_record (whole row, retain_until 10 years on), the b2c cases with their
   supplier bookings, bills, payouts, files, audit and notification rows stay, a new b2c case is refused, the B2B rows
@@ -58,6 +59,23 @@ FEED_REF = "it-1037-catalog"  # the CIS catalog feed inbox row that must survive
 PINS_RE = re.compile(r"pins jsonb := '(\{.*?\})';", re.S)
 LAST_WRITE_RE = re.compile(r"-- last-write:begin\n(.*?)\n\s*-- last-write:end", re.S)
 PIN_TABLES_RE = re.compile(r"-- pin-tables:begin\n(.*?)\n\s*-- pin-tables:end", re.S)
+PIN_COLUMNS_RE = re.compile(r"-- pin-columns:begin\n\s*pin_columns jsonb := '(\{.*?\})';\n\s*-- pin-columns:end", re.S)
+# The repo root of this audit folder (docs/audits/<folder>): the pilot PII guard lives in its .claude/hooks.
+ROOT = AUDIT_DIR.parents[2]
+LOCK_RE = re.compile(r"-- lock:begin\n(.*?)\n-- lock:end", re.S)
+LOCKED_TABLES = (
+    "customers",
+    "customer_identities",
+    "customer_otps",
+    "customer_sessions",
+    "media_files",
+    "invoices",
+    "invoice_items",
+    "payment_schedule",
+    "payments",
+    "trip_cases",
+)
+PII_GUARD = ROOT / ".claude" / "hooks" / "pilot_pii_guard.py"
 B2C_TABLES = (
     "booking.customers",
     "booking.customer_identities",
@@ -246,7 +264,14 @@ async def world(migrated_admin_dsn: str) -> AsyncIterator[dict[str, Any]]:
         b2b["id"],
     )
     try:
-        yield {"conn": conn, "b2b": b2b, "b2b_booking": b2b_booking, "sold": sold, "lead": lead}
+        yield {
+            "conn": conn,
+            "dsn": migrated_admin_dsn,
+            "b2b": b2b,
+            "b2b_booking": b2b_booking,
+            "sold": sold,
+            "lead": lead,
+        }
     finally:
         await conn.close()
 
@@ -315,6 +340,53 @@ async def test_dry_run_matches_the_draft() -> None:
     assert json.loads(placeholder.group(1)) == dict.fromkeys(dry.PIN_TABLES)
     for statement in dry.HASH_SETTINGS:
         assert f"{statement};" in draft, statement
+    # the pinned columns are the DRY RUN's, and each written-out pin statement is the template over them
+    columns = PIN_COLUMNS_RE.search(draft)
+    assert columns
+    assert json.loads(columns.group(1)) == dry.PIN_COLUMNS
+    assert list(dry.PIN_SQL) == list(dry.PIN_TABLES) == list(dry.PIN_COLUMNS)
+    for table, sql in dry.PIN_SQL.items():
+        assert sql == dry.PIN_SQL_TEMPLATE.format(cols=dry.PIN_COLUMNS[table], table=table), table
+    # the migration's EXECUTE is the same template (%s = the columns, %I = the table)
+    template = dry.PIN_SQL_TEMPLATE.replace("''", "%L").replace("{cols}", "%s").replace("{table}", "%I")
+    execute = re.search(r"EXECUTE format\('(SELECT count\(\*\) AS n, md5.*?)',\s*'', pin_columns", draft, re.S)
+    assert execute
+    assert re.sub(r"'\s+'", "", execute.group(1)) == template
+
+
+async def test_pins_read_no_personal_column() -> None:
+    """No pin reads a column the schema reference tags pii: (the pilot PII guard would refuse the ECS exec)."""
+    reference = (ROOT / "docs" / "architecture" / "db-schema-reference.md").read_text()
+    for table, cols in _dry_run().PIN_COLUMNS.items():
+        block = re.search(rf"^### `booking\.{table}`.*?\n```\n(.*?)\n```", reference, re.S | re.M)
+        assert block, table
+        personal = {line.split(" ", 1)[0] for line in block.group(1).splitlines() if "pii:" in line}
+        pinned = {c.strip().removeprefix("t.") for c in cols.split(",")}
+        assert not pinned & personal, (table, pinned & personal)
+
+
+@pytest.mark.skipif(not PII_GUARD.exists(), reason="the root repo's pilot PII guard is not next to this folder")
+async def test_pilot_pii_guard_accepts_the_dry_run() -> None:
+    """The PreToolUse hook passes the ECS exec of this script (exit 0) and refuses a whole-row read (exit 2)."""
+    import subprocess
+    import sys
+
+    def run(script: Path) -> int:
+        command = f"ECSX_SERVICE=aa-booking-dev-api tools/ecs/{'ecs' + 'x.sh'} {script}"
+        payload = json.dumps({"tool_name": "Bash", "tool_input": {"command": command}})
+        env = {**os.environ, "CLAUDE_PROJECT_DIR": str(ROOT)}
+        done = subprocess.run(  # noqa: S603 — fixed interpreter and hook path
+            [sys.executable, str(PII_GUARD)], input=payload, text=True, capture_output=True, env=env, cwd=ROOT
+        )
+        return done.returncode
+
+    assert run(DRY_RUN) == 0
+    probe = DRY_RUN.with_name("_pii_probe_whole_row.py")
+    probe.write_text('SQL = "SELECT md5(t::text) AS h FROM booking.customers t"\n')
+    try:
+        assert run(probe) == 2
+    finally:
+        probe.unlink()
 
 
 async def test_dry_run_counts_the_b2c_graph(world: dict[str, Any]) -> None:
@@ -355,14 +427,29 @@ async def test_draft_refuses_without_pins_on_a_moved_count_and_on_changed_rows(w
         await _apply(conn, _draft())
     with pytest.raises(asyncpg.RaiseError, match="the DRY RUN counted"):
         await _apply(conn, _draft({**pins, "payments": {**pins["payments"], "n": 2}}))
-    # same count, other content, write time untouched: only the row hash sees it
+    # same count, a pinned code changed, write time untouched (triggers off): only the pin hash sees it
+    await _touch(
+        conn,
+        "UPDATE booking.customers SET verified = NOT verified"
+        " WHERE id = (SELECT id FROM booking.customers ORDER BY id LIMIT 1)",
+    )
+    with pytest.raises(asyncpg.RaiseError, match="rows of customers changed since the DRY RUN"):
+        await _apply(conn, _draft(pins))
+    # a delete plus an insert of the same count moves the ids: the pin sees it too
+    pins = await _pins(conn)
+    await _touch(conn, "UPDATE booking.payment_schedule SET id = gen_random_uuid() WHERE seq = 1")
+    with pytest.raises(asyncpg.RaiseError, match="rows of payment_schedule changed since the DRY RUN"):
+        await _apply(conn, _draft(pins))
+    repinned = await _pins(conn)
+    assert repinned["payment_schedule"]["n"] == pins["payment_schedule"]["n"]
+    # known limit (no personal column is hashed): a hand edit of a personal column alone, triggers off, keeps the pin;
+    # an app write moves updated_at (set_updated_at), which the pin and the 30-day guard both see
     await _touch(
         conn,
         "UPDATE booking.customers SET name = 'Invented Traveller B'"
         " WHERE id = (SELECT id FROM booking.customers ORDER BY id LIMIT 1)",
     )
-    with pytest.raises(asyncpg.RaiseError, match="rows of customers changed since the DRY RUN"):
-        await _apply(conn, _draft(pins))
+    assert (await _pins(conn))["customers"] == repinned["customers"]
 
 
 @pytest.mark.parametrize("sql", FRESH_KEPT_WRITES)
@@ -387,6 +474,38 @@ async def test_draft_refuses_while_the_intake_runs(world: dict[str, Any]) -> Non
             await _apply(conn, _draft(await _pins(conn)))
     finally:
         await conn.execute("DELETE FROM booking.job WHERE id = $1", job)
+
+
+async def test_draft_holds_writes_from_the_guards_to_the_drops(world: dict[str, Any]) -> None:
+    """From its first statement the draft holds every checked table: a concurrent write waits (here: times out), a
+    read goes on. So no row committed after the pin / archive checks is dropped unarchived."""
+    conn = world["conn"]
+    draft = _draft(await _pins(conn))
+    head = draft[: draft.index("-- ── 0. Guards")]
+    lock = LOCK_RE.search(head)
+    assert lock, "the lock block runs before the guards"
+    assert re.findall(r"booking\.([a-z_]+)", lock.group(1).split("LOCK TABLE", 1)[1]) == list(LOCKED_TABLES)
+    assert set(_dry_run().PIN_TABLES) < set(LOCKED_TABLES)
+    other = await asyncpg.connect(world["dsn"])
+    try:
+        await conn.execute('SET ROLE "bk_owner"')
+        await conn.execute(head)  # BEGIN, the SET LOCALs and the lock; the transaction stays open
+        await other.execute("SET lock_timeout = '200ms'")
+        for table in LOCKED_TABLES:
+            with pytest.raises(asyncpg.LockNotAvailableError):
+                await other.execute(f"DELETE FROM booking.{table} WHERE false")  # noqa: S608 — constant names
+            assert await other.fetchval(f"SELECT count(*) >= 0 AS ok FROM booking.{table}") is True  # noqa: S608
+    finally:
+        await conn.execute("ROLLBACK")
+        await conn.execute("RESET ROLE")
+        await other.close()
+    # once the transaction ends the tables take writes again
+    other = await asyncpg.connect(world["dsn"])
+    try:
+        await other.execute("SET lock_timeout = '200ms'")
+        await other.execute("DELETE FROM booking.payments WHERE false")
+    finally:
+        await other.close()
 
 
 async def test_dry_run_is_ready_once_frozen(world: dict[str, Any]) -> None:

@@ -12,11 +12,13 @@ How to run it (either way, same file):
 
 Output: one line per section, prefix `DRYRUN`, then one JSON line `DRYRUN_JSON {...}` with everything, and one
 `DRYRUN_PINS {...}` line: for every table the draft migration (../migrations/bk_NNN_aa1037_retire_b2c.sql) drops,
-its row count `n` and `md5`, an md5 of the text of every row (sorted, newline-joined), ready to paste into the
-migration's `pins` jsonb. The migration refuses to run when a count or a hash moved since the DRY RUN, so an UPDATE
-or a delete-plus-insert after the approval also stops it. The hash is not reversible into a row value; the session
-settings that shape row text (TimeZone, DateStyle, IntervalStyle, extra_float_digits, bytea_output) are set to the
-same values here and in the migration.
+its row count `n` and `md5`, an md5 over the NON-personal columns of every row (PIN_COLUMNS: key, write times,
+status-like codes; one jsonb array per row, sorted, newline-joined), ready to paste into the migration's `pins` jsonb.
+The migration refuses to run when a count or a hash moved since the DRY RUN, so an app UPDATE (its write time moves)
+or a delete-plus-insert (the id and created_at move) after the approval also stops it. No personal column is read,
+not even into the hash (the pilot PII guard refuses whole-row reads, AA-969); the session settings that shape the text
+of a timestamp (TimeZone, DateStyle, IntervalStyle, extra_float_digits, bytea_output) are set to the same values here
+and in the migration.
 
 What the migration drops (pinned, rows lost or archived): customers, customer_identities, customer_otps,
 customer_sessions, media_files; and invoices, invoice_items, payment_schedule, payments, whose rows it first copies
@@ -100,9 +102,84 @@ PIN_TABLES = (
     "payment_schedule",
     "payments",
 )
-PIN_SQL = (
-    "SELECT count(*) AS n, md5(coalesce(string_agg(t::text, chr(10) ORDER BY t::text), '')) AS h FROM booking.{table} t"
+# The pinned columns of each table: its key, its write times and its status-like codes, never a personal column
+# (the pilot PII guard, .claude/hooks/pilot_pii_guard.py, refuses a whole-row read of a table with `pii:` columns).
+# Byte-equal to the migration's pin-columns block (test_bk_b2c_drop_draft.py checks it). An app write moves a write
+# time (set_updated_at, or a new id / created_at for a delete plus insert), so the pin still sees it; a hand UPDATE of
+# a personal column alone with the triggers off does not move the pin (known limit: only bk_owner can do that, and the
+# rows are dropped anyway).
+PIN_COLUMNS: dict[str, str] = {
+    "customers": "t.id, t.code, t.source, t.verified, t.is_blocked, t.created_at, t.updated_at, t.deleted_at",
+    "customer_identities": "t.customer_id, t.created_at",
+    "customer_otps": "t.id, t.customer_id, t.channel, t.attempts, t.created_at, t.expires_at, t.used_at",
+    "customer_sessions": "t.id, t.customer_id, t.created_at, t.expires_at, t.revoked_at",
+    "media_files": "t.id, t.content_type, t.created_at, t.deleted_at",
+    "invoices": (
+        "t.id, t.invoice_number, t.trip_case_id, t.version_id, t.document_type, t.status, t.currency, t.total_amount,"
+        " t.issued_at, t.cancelled_at, t.created_at, t.updated_at, t.deleted_at"
+    ),
+    "invoice_items": "t.id, t.invoice_id, t.position, t.kind, t.amount, t.created_at, t.updated_at",
+    "payment_schedule": "t.id, t.invoice_id, t.seq, t.kind, t.amount, t.due_date, t.created_at, t.updated_at",
+    "payments": (
+        "t.id, t.ref, t.invoice_id, t.kind, t.amount, t.currency, t.method, t.recorded_at, t.verified_at,"
+        " t.voided_at, t.created_at, t.updated_at"
+    ),
+}
+# How a pin is computed (the migration's EXECUTE format is the same text with %s / %I for {cols} / {table}).
+PIN_SQL_TEMPLATE = (
+    "SELECT count(*) AS n, md5(coalesce(string_agg(r, chr(10) ORDER BY r), '')) AS h"
+    " FROM (SELECT jsonb_build_array({cols})::text AS r FROM booking.{table} t) s"
 )
+# The nine pin statements written out (no run-time hole, so the PII guard reads each column list against its table);
+# test_bk_b2c_drop_draft.py checks each equals PIN_SQL_TEMPLATE over PIN_COLUMNS.
+PIN_SQL: dict[str, str] = {
+    "customers": (
+        "SELECT count(*) AS n, md5(coalesce(string_agg(r, chr(10) ORDER BY r), '')) AS h"
+        " FROM (SELECT jsonb_build_array(t.id, t.code, t.source, t.verified, t.is_blocked, t.created_at, t.updated_at,"
+        " t.deleted_at)::text AS r FROM booking.customers t) s"
+    ),
+    "customer_identities": (
+        "SELECT count(*) AS n, md5(coalesce(string_agg(r, chr(10) ORDER BY r), '')) AS h"
+        " FROM (SELECT jsonb_build_array(t.customer_id, t.created_at)::text AS r FROM booking.customer_identities t) s"
+    ),
+    "customer_otps": (
+        "SELECT count(*) AS n, md5(coalesce(string_agg(r, chr(10) ORDER BY r), '')) AS h"
+        " FROM (SELECT jsonb_build_array(t.id, t.customer_id, t.channel, t.attempts, t.created_at, t.expires_at,"
+        " t.used_at)::text AS r FROM booking.customer_otps t) s"
+    ),
+    "customer_sessions": (
+        "SELECT count(*) AS n, md5(coalesce(string_agg(r, chr(10) ORDER BY r), '')) AS h"
+        " FROM (SELECT jsonb_build_array(t.id, t.customer_id, t.created_at, t.expires_at, t.revoked_at)::text AS r"
+        " FROM booking.customer_sessions t) s"
+    ),
+    "media_files": (
+        "SELECT count(*) AS n, md5(coalesce(string_agg(r, chr(10) ORDER BY r), '')) AS h"
+        " FROM (SELECT jsonb_build_array(t.id, t.content_type, t.created_at, t.deleted_at)::text AS r"
+        " FROM booking.media_files t) s"
+    ),
+    "invoices": (
+        "SELECT count(*) AS n, md5(coalesce(string_agg(r, chr(10) ORDER BY r), '')) AS h"
+        " FROM (SELECT jsonb_build_array(t.id, t.invoice_number, t.trip_case_id, t.version_id, t.document_type,"
+        " t.status, t.currency, t.total_amount, t.issued_at, t.cancelled_at, t.created_at, t.updated_at,"
+        " t.deleted_at)::text AS r FROM booking.invoices t) s"
+    ),
+    "invoice_items": (
+        "SELECT count(*) AS n, md5(coalesce(string_agg(r, chr(10) ORDER BY r), '')) AS h"
+        " FROM (SELECT jsonb_build_array(t.id, t.invoice_id, t.position, t.kind, t.amount, t.created_at,"
+        " t.updated_at)::text AS r FROM booking.invoice_items t) s"
+    ),
+    "payment_schedule": (
+        "SELECT count(*) AS n, md5(coalesce(string_agg(r, chr(10) ORDER BY r), '')) AS h"
+        " FROM (SELECT jsonb_build_array(t.id, t.invoice_id, t.seq, t.kind, t.amount, t.due_date, t.created_at,"
+        " t.updated_at)::text AS r FROM booking.payment_schedule t) s"
+    ),
+    "payments": (
+        "SELECT count(*) AS n, md5(coalesce(string_agg(r, chr(10) ORDER BY r), '')) AS h"
+        " FROM (SELECT jsonb_build_array(t.id, t.ref, t.invoice_id, t.kind, t.amount, t.currency, t.method,"
+        " t.recorded_at, t.verified_at, t.voided_at, t.created_at, t.updated_at)::text AS r"
+        " FROM booking.payments t) s"
+    ),
+}
 # Row text settings, the same SET LOCALs as the migration.
 HASH_SETTINGS = (
     "SET LOCAL TimeZone = 'UTC'",
@@ -355,7 +432,7 @@ async def _measure(conn: Any) -> dict[str, Any]:
     )
     pins: dict[str, dict[str, Any]] = {}
     for table in PIN_TABLES:
-        row = await conn.fetchrow(PIN_SQL.format(table=table))
+        row = await conn.fetchrow(PIN_SQL[table])
         pins[table] = {"n": int(row["n"]), "md5": row["h"]}
     report["pins"] = pins
     report["kept"] = {k: int(await conn.fetchval(sql)) for k, sql in KEPT.items()}
