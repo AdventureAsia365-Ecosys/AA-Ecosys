@@ -112,16 +112,24 @@ auth, data deletion) starts with prod or the first paying tenant.
 
 ## CI/CD matrix (APP-02)
 
-Read from each repo's `.github/workflows/` on `main` on 2026-10-19; the CI rows and required checks re-read on 2026-10-28.
+Read from each repo's `.github/workflows/` on `main` on 2026-10-19; the CI rows and required checks re-read on 2026-10-28;
+the CI, Visual, copy guard and history scan rows updated on 2026-11-06 (S271, CI minutes).
+
+Since S271 the three merge-queue repos (CIS, Booking, Partner) run `ci.yml` on pull_request, merge_group and dispatch,
+not on push to `main`: every commit on `main` is a queue group commit that already passed the full run. On a pull
+request only the fast jobs run (lint, security audit, unit tests, migration preflight, frontend lint and type check);
+the heavy ones (integration tests, Docker build checks, frontend build, Visual) run in the queue, or on the PR when
+it touches their area (migrations or integration tests, image inputs); a skipped job counts as passed for a required
+check. A docs-only PR skips the test jobs. Dispatching `ci.yml` on a PR branch runs everything on its head.
 
 | Repo | Workflow | Trigger | Jobs | Notes |
 |---|---|---|---|---|
-| AA-CIS-App | `ci.yml` | PR to `main`; push to `main`, `feature/**` | Lint, Quality Paths (report), Security Audit, Unit Tests, Integration Tests, Docker Build Check, Frontend Lint, Frontend Build | required by branch protection: Lint, Security Audit, Unit Tests, Integration Tests, Docker Build Check, Frontend Lint, Frontend Build, plus `gitleaks` from `secret-scan.yml` (Portal Lint / Portal Build went with the frozen `portal/` at the AA-979 P2b clean-up) |
+| AA-CIS-App | `ci.yml` | PR to `main` (fast jobs; heavy ones by area); merge_group (all); dispatch (all) | Lint, Quality Paths (report), Security Audit, Unit Tests, Integration Tests, Docker Build Check, Frontend Lint, Frontend Build | required by branch protection: Lint, Security Audit, Unit Tests, Integration Tests, Docker Build Check, Frontend Lint, Frontend Build, plus `gitleaks` from `secret-scan.yml` (Portal Lint / Portal Build went with the frozen `portal/` at the AA-979 P2b clean-up) |
 | AA-CIS-App | `deploy-dev.yml` | push to `main` (backend paths); dispatch (`override_running_jobs`) | Pre-deploy job guard, Build and Push ECR, Deploy to ECS Dev | concurrency `deploy-dev-cis`, never cancelled |
 | AA-CIS-App | `vercel-deploy.yml` | PR / push `main` (`frontend/**`); dispatch | Vercel deploy, UI smoke | Git integration off; Hobby cap about 100 deployments a day for the team |
 | AA-CIS-App | `ui-smoke.yml` | called by the deploy workflow; dispatch | Playwright smoke | the portal workflows were deleted by AA-979 (CIS #997); the frozen `portal/` was deleted at the P2b clean-up |
 | AA-CIS-App | `eval-regression.yml` | dispatch only | Run eval regression gate | by hand on the golden set (D-23); per-PR trigger only if N-4 is approved |
-| AA-Booking | `ci.yml` | PR to `main`; push `main` | Lint, Security Audit, Unit Tests, Integration Tests, Docker Build Check, Vendored CIS copies, Frontend Build | required: all but Vendored CIS copies, plus `gitleaks` |
+| AA-Booking | `ci.yml` | PR to `main` (fast jobs; heavy ones by area); merge_group (all); dispatch (all) | Lint (with the vendored CIS copies since S271), Security Audit, Unit Tests, Integration Tests, Docker Build Check, Migration preflight, Frontend Build | required: Lint, Security Audit, Unit Tests, Integration Tests, Docker Build Check, Frontend Build, plus `gitleaks` and Visual |
 | AA-Booking | `deploy-dev.yml` | push to `main` (backend paths); dispatch (`override_running_jobs`) | Deploy configuration, Pre-deploy job guard, Deploy to ECS Dev | live smoke on `/booking/health` + `/ready` |
 | AA-Booking | `vercel-deploy.yml` | PR / push `main` (frontend paths); dispatch | Vercel deploy | |
 | AA-Partner | `ui-smoke-portal.yml` | called by `deploy-web-dev.yml` (AA-1036; was `deploy-portal-dev.yml`, retired); dispatch | Playwright Content studio smoke | always the agency host; signs in with the partner pool (secrets `E2EPORTALEMAIL`, `E2EPORTALPASSWORD`, `E2EPORTALTOTP`) since the AA-979 P2b clean-up |
@@ -133,14 +141,14 @@ Read from each repo's `.github/workflows/` on `main` on 2026-10-19; the CI rows 
 | AA-CIS-Infra | `db-migrate.yml` | dispatch from `main` | Migrate | modes check / apply / set-password / run-script |
 | AA-CIS-Infra | `db-schema-dump.yml` | nightly 03:43 UTC; after each apply; dispatch | Dump schema, regenerate reference | opens the root PR `bot/db-schema-reference` |
 | AA-CIS-Infra | `db-isolation-probe.yml` | nightly 04:13 UTC; after each apply; dispatch | Isolation probe | read-only |
-| AA-CIS-Infra | `migration-copy-guard.yml` | PR (migration paths); nightly 02:17 UTC; dispatch | Copies match owner main, Migration lint and unique numbers | |
+| AA-CIS-Infra | `migration-copy-guard.yml` | every PR (a scope step skips the checks outside the migration paths); nightly 02:17 UTC; dispatch | Copies match owner main (with the scope step since S271), Migration lint and unique numbers, Retention rows for new-app tables, Expand classify | required (ruleset): all but Retention rows (advisory, reads root `master`) |
 | AA-CIS-Infra | `secret-scan.yml` | PR to `main` | gitleaks (PR lines) | uses the base commit rules (AA-981) |
-| AA-CIS-Infra | `secret-scan-history.yml` | push `main`; nightly 19:23 UTC; dispatch | gitleaks full history; gitleaks working tree (dispatch only) | every branch, tag and PR head, baseline in `.gitleaksignore` (AA-981) |
+| AA-CIS-Infra | `secret-scan-history.yml` | push `main` (that push's commits only, S271); nightly 19:23 UTC and dispatch (full history) | gitleaks full history; gitleaks working tree (dispatch only) | every branch, tag and PR head, baseline in `.gitleaksignore` (AA-981) |
 | AA-CIS-Infra | `identity-triggers-test.yml`, `ops-probe-test.yml`, `rds-snapshot-expiry-test.yml`, `secrets-register-check-test.yml` | PR / push `main` (their paths) | unit tests of the Lambdas and tools | |
 | AA-Ecosys (root) | `docs-lint.yml` | PR to `master` (docs paths); weekly Monday 01:17 UTC; dispatch | Docs lint, Docs freshness report | AA-888 |
 | AA-Ecosys (root) | `contracts.yml` | PR to `master` (contracts, ADR and tool paths); dispatch | Contracts and ADR numbers | |
 | AA-Ecosys (root) | `secret-scan.yml` | PR to `master` | gitleaks (PR lines) | same rules as Infra (AA-981) |
-| AA-Ecosys (root) | `secret-scan-history.yml` | push `master`; nightly 19:41 UTC; dispatch | gitleaks full history | every branch, tag and PR head (AA-981) |
+| AA-Ecosys (root) | `secret-scan-history.yml` | push `master` (that push's commits only, S271); nightly 19:41 UTC and dispatch (full history) | gitleaks full history | every branch, tag and PR head (AA-981) |
 
 Workflows on `main` on 2026-10-28 that the table above does not describe yet (names only):
 
