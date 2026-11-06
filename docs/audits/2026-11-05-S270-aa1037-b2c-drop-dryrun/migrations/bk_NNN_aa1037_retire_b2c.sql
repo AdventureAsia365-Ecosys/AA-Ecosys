@@ -8,7 +8,9 @@
 --   1. the readers outside Booking are gone (DRY RUN report, section "Readers"): TripPlanner My Payments
 --      (frontend/app/api/me/payments/route.ts, lib/myPayments.ts, components/MyPayments.tsx), CIS data coverage row
 --      bk.customers, the CIS KPI rows on these tables, the CIS erasure checklist line, the AA-CIS-Infra isolation probe
---      cells on booking.customers and booking.v_ops_inquiry_inbox, the root contract booking.customer.v1;
+--      cells on booking.customers and booking.v_ops_inquiry_inbox and its owner-only exemption for
+--      booking.retired_b2c_record, the Infra DM-6.5 consent script, the root contract booking.customer.v1, the root
+--      DSAR runbook, consent query page and UAT scenarios BK-08 / BK-10;
 --   2. the Booking build that no longer reads or writes them is deployed (the B2C routers, app/b2c.py, app/ops
 --      invoices / payments / my_payments, app/customers, app/auth/customer.py, the inquiry intake and its recurring
 --      bk_inquiry_pull job, the staff admin billing and customer pages; trip case lists filter channel = 'b2b');
@@ -45,7 +47,8 @@
 --      OTPs (created / used), sessions, media, the four invoice tables, b2c trip cases and their versions, supplier
 --      bookings / bills / bill lines / payouts of b2c cases, their operations files (created / updated / removed),
 --      inquiry inbox rows); every dropped table still holds exactly the rows the DRY RUN pinned (row count AND an md5
---      of every row's text, so an UPDATE or a delete-plus-insert after the DRY RUN also refuses; checked only when a
+--      over the non-personal columns of every row: key, write times, codes; an app UPDATE moves a write time and a
+--      delete-plus-insert moves the id, so either after the DRY RUN also refuses; checked only when a
 --      dropped table has a row: an empty schema, as in the Integration Tests' replay, loses nothing); no view or
 --      foreign key outside this file depends on a dropped object.
 --   1. Archive: booking.retired_b2c_record, then the four customer money tables copied into it and checked.
@@ -71,8 +74,9 @@
 -- Outside this file: the S3 objects of media_files rows (if any; 0 on Dev) are purged after the apply. The ops-docs
 -- objects of ops_files rows stay (their rows stay). TripPlanner's own customer tables are a TripPlanner migration.
 --
--- Locks: ACCESS EXCLUSIVE on every dropped table and view and on trip_cases (DROP COLUMN, constraint swap) for the
--- length of the transaction. Apply while the job tables are idle (DB Migrate waits for that) and Booking traffic is
+-- Locks: SHARE ROW EXCLUSIVE on the nine dropped tables and trip_cases from the first statement (no write lands
+-- between the guards and the drops), then ACCESS EXCLUSIVE on every dropped table and view and on trip_cases (DROP
+-- COLUMN, constraint swap) for the length of the transaction. Apply while the job tables are idle (DB Migrate waits for that) and Booking traffic is
 -- low; lock_timeout 5s, retry on a timeout.
 -- Undo: none in SQL. Restore from the pre-apply snapshot (db-migrate-bk-NNN-<run>-<attempt>); the archived money
 -- rows can also be read back from booking.retired_b2c_record.record.
@@ -82,18 +86,37 @@
 BEGIN;
 
 SET LOCAL lock_timeout = '5s';
--- The row hashes of the pins read row text: pin the settings that shape it (the DRY RUN sets the same ones).
+-- The pin hashes read the text of timestamps and numbers: pin the settings that shape it (the DRY RUN sets the same).
 SET LOCAL TimeZone = 'UTC';
 SET LOCAL DateStyle = 'ISO, YMD';
 SET LOCAL IntervalStyle = 'postgres';
 SET LOCAL extra_float_digits = 1;
 SET LOCAL bytea_output = 'hex';
 
+-- Hold the checked tables still from the guards to the drops: SHARE ROW EXCLUSIVE lets other sessions read them but
+-- makes every INSERT / UPDATE / DELETE wait until COMMIT (or this file fail on lock_timeout first), so the pins, the
+-- 30-day guard and the archive check still describe the rows at DROP time and no row committed in between is dropped
+-- unarchived. trip_cases is in the set because step 5 alters it anyway. Skipped on a re-run (the tables are gone)
+-- and, like every guard, when not running as bk_owner (the guard block then refuses).
+-- lock:begin
+DO $$
+BEGIN
+    IF current_user = 'bk_owner' AND to_regclass('booking.customers') IS NOT NULL
+       AND to_regclass('booking.invoices') IS NOT NULL THEN
+        LOCK TABLE booking.customers, booking.customer_identities, booking.customer_otps, booking.customer_sessions,
+                   booking.media_files, booking.invoices, booking.invoice_items, booking.payment_schedule,
+                   booking.payments, booking.trip_cases
+            IN SHARE ROW EXCLUSIVE MODE;
+    END IF;
+END $$;
+-- lock:end
+
 -- ── 0. Guards ────────────────────────────────────────────────────────────────
 
 DO $$
 DECLARE
-    -- The DRY RUN's DRYRUN_PINS ({"n": rows, "md5": row-text hash} per dropped table); null = not filled in.
+    -- The DRY RUN's DRYRUN_PINS ({"n": rows, "md5": hash of the pinned columns} per dropped table); null = not
+    -- filled in.
     pins jsonb := '{"customers": null, "customer_identities": null, "customer_otps": null, "customer_sessions": null,
                     "media_files": null, "invoices": null, "invoice_items": null, "payment_schedule": null,
                     "payments": null}';
@@ -101,6 +124,21 @@ DECLARE
     pin_tables text[] := ARRAY['customers', 'customer_identities', 'customer_otps', 'customer_sessions', 'media_files',
                                'invoices', 'invoice_items', 'payment_schedule', 'payments'];
     -- pin-tables:end
+    -- The pinned columns of each table (key, write times, status-like codes; never a personal column), byte-equal to
+    -- the DRY RUN's PIN_COLUMNS: the DRY RUN must pass the pilot PII guard (AA-969), which refuses whole-row reads.
+    -- pin-columns:begin
+    pin_columns jsonb := '{
+        "customers": "t.id, t.code, t.source, t.verified, t.is_blocked, t.created_at, t.updated_at, t.deleted_at",
+        "customer_identities": "t.customer_id, t.created_at",
+        "customer_otps": "t.id, t.customer_id, t.channel, t.attempts, t.created_at, t.expires_at, t.used_at",
+        "customer_sessions": "t.id, t.customer_id, t.created_at, t.expires_at, t.revoked_at",
+        "media_files": "t.id, t.content_type, t.created_at, t.deleted_at",
+        "invoices": "t.id, t.invoice_number, t.trip_case_id, t.version_id, t.document_type, t.status, t.currency, t.total_amount, t.issued_at, t.cancelled_at, t.created_at, t.updated_at, t.deleted_at",
+        "invoice_items": "t.id, t.invoice_id, t.position, t.kind, t.amount, t.created_at, t.updated_at",
+        "payment_schedule": "t.id, t.invoice_id, t.seq, t.kind, t.amount, t.due_date, t.created_at, t.updated_at",
+        "payments": "t.id, t.ref, t.invoice_id, t.kind, t.amount, t.currency, t.method, t.recorded_at, t.verified_at, t.voided_at, t.created_at, t.updated_at"
+    }';
+    -- pin-columns:end
     k        text;
     n        bigint;
     h        text;
@@ -183,8 +221,9 @@ BEGIN
     -- would be lost: a database whose dropped tables are all empty (the Integration Tests replay every file on an
     -- empty schema; a Dev already emptied) loses nothing, whatever the pins say.
     FOREACH k IN ARRAY pin_tables LOOP
-        EXECUTE format('SELECT count(*), md5(coalesce(string_agg(t::text, chr(10) ORDER BY t::text), %L))'
-                       ' FROM booking.%I t', '', k) INTO n, h;
+        EXECUTE format('SELECT count(*) AS n, md5(coalesce(string_agg(r, chr(10) ORDER BY r), %L)) AS h'
+                       ' FROM (SELECT jsonb_build_array(%s)::text AS r FROM booking.%I t) s',
+                       '', pin_columns->>k, k) INTO n, h;
         actual := actual || jsonb_build_object(k, jsonb_build_object('n', n, 'md5', h));
         total := total + n;
     END LOOP;
@@ -351,6 +390,10 @@ UNION ALL
  SELECT 'b2b_partners_active'::text, count(*) FROM booking.b2b_partners WHERE b2b_partners.status = 'active'::text
 UNION ALL
  SELECT 'b2b_holds_active'::text, count(*) FROM booking.b2b_holds WHERE b2b_holds.status = 'active'::text;
+
+-- The views stay read-only for the app role (the migration guard's view rule; CREATE OR REPLACE keeps the grants).
+REVOKE INSERT, UPDATE, DELETE ON booking.v_trip_check_board FROM booking;
+REVOKE INSERT, UPDATE, DELETE ON booking.v_ops_data_totals FROM booking;
 
 -- ── 3. Functions rewritten without B2C (same triggers) ───────────────────────
 
@@ -562,7 +605,7 @@ DELETE FROM booking.trip_case_status_transitions
 
 INSERT INTO shared.schema_versions (version, applied_at, description)
 VALUES ('bk-NNN', now(), 'AA-1037: retire B2C (customer and customer money tables dropped, money rows archived to '
-        'retired_b2c_record; b2c cases kept as history; new trip cases b2b only)')
+        'retired_b2c_record, b2c cases kept as history, new trip cases b2b only)')
 ON CONFLICT (version) DO NOTHING;
 
 COMMIT;
