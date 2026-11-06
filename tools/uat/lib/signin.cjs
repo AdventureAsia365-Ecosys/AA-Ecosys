@@ -17,6 +17,11 @@
 //   studio-editor  Content studio EDITOR of the E2E tenant (AA-855; the A10b-1 invitee e2e-test-studio-editor@), same
 //              flow, secret crm/dev/e2e-test-studio/editor (UAT_STUDIO_EDITOR_SECRET overrides). It CAN write: only
 //              write scenarios use it (PRT-02, PRT-06). No secret yet = BLOCKED with that reason, not a crash.
+//   studio-audit  the partner E2E person who is an EDITOR in the four synthetic audit tenants (AA-855 W-01..W-04;
+//              lib/studio-audit.cjs): secret crm/dev/e2e-test-crm/harbour-lights-owner (UAT_STUDIO_AUDIT_SECRET), same
+//              partner flow; the studio opens on THIS run's audit tenant (env UAT_STUDIO_TENANT, default
+//              audit-atlas-hearth), chosen on the studio chooser by its invented display name and checked through
+//              GET /api/tenant/me. One state file per audit tenant. It CAN write: only the write scenarios use it.
 //   crm        Owner of the invented agency of the CRM review set: lib/crm-signin.cjs identity A, with its own state
 //              file (work/dryrun/.state-crm.json, never the review set's). This account CAN write (the CRM has no
 //              read-only role yet): the runner leaves its scenarios out unless --include-writable (dryrun-core.cjs).
@@ -28,6 +33,7 @@ const path = require('path');
 const crm = require('./crm-signin.cjs');
 const mailbox = require('./mailbox.cjs');
 const { redact } = require('./dryrun-core.cjs');
+const studioAudit = require('./studio-audit.cjs');
 
 const CIS = (process.env.UAT_CIS_ADMIN || 'https://aa-cis.lumiguides.it.com').replace(/\/+$/, '');
 const BOOKING = crm.BOOKING;
@@ -37,6 +43,7 @@ const WORK = path.join(__dirname, '..', 'work', 'dryrun');
 const STUDIO_SECRETS = {
   studio: process.env.UAT_STUDIO_SECRET || 'crm/dev/e2e-test-studio/viewer',
   'studio-editor': process.env.UAT_STUDIO_EDITOR_SECRET || 'crm/dev/e2e-test-studio/editor',
+  'studio-audit': studioAudit.secretId(),
 };
 const STUDIO_IDENTITIES = Object.keys(STUDIO_SECRETS);
 
@@ -46,6 +53,8 @@ const STAFF = {
 };
 
 function statePath(who) {
+  // studio-audit: one session per audit tenant (the studio cookies name the tenant they were exchanged for).
+  if (who === 'studio-audit') return path.join(WORK, `.state-studio-audit-${studioAudit.auditTenant().slug}.json`);
   return path.join(WORK, `.state-${who}.json`);
 }
 
@@ -132,8 +141,20 @@ async function partnerLogin(page, c) {
   if (await skip.isVisible({ timeout: 5_000 }).catch(() => false)) await skip.click();
 }
 
+/** The studio option of `tenantName` on the chooser (/portal-access/select), never just the first one. */
+async function chooseStudio(page, tenantName) {
+  if (!tenantName) {
+    await page.getByTestId('studio-option').first().getByRole('button').click();
+    return;
+  }
+  const option = page.getByTestId('studio-option').filter({ has: page.getByText(tenantName, { exact: true }) });
+  await option.first().waitFor({ state: 'visible', timeout: 30_000 });
+  if ((await option.count()) !== 1) throw new Error('the studio chooser does not list the audit tenant exactly once');
+  await option.getByRole('button').click();
+}
+
 /** The studio flow of AA-Partner e2e/smoke-portal/auth.setup.ts: hop until the studio dashboard renders. */
-async function studioLogin(page, alreadyThere, creds) {
+async function studioLogin(page, alreadyThere, creds, tenantName = null) {
   const origin = PARTNER;
   let signedIn = false;
   if (!alreadyThere) await page.goto(`${origin}/portal/dashboard`, { waitUntil: 'domcontentloaded' });
@@ -152,7 +173,7 @@ async function studioLogin(page, alreadyThere, creds) {
       return;
     }
     if (u.pathname === '/portal-access/select') {
-      await page.getByTestId('studio-option').first().getByRole('button').click();
+      await chooseStudio(page, tenantName);
       await page.waitForURL((x) => x.pathname !== '/portal-access/select', { timeout: 30_000 });
       continue;
     }
@@ -169,6 +190,29 @@ async function studioLogin(page, alreadyThere, creds) {
     await page.waitForURL((x) => x.href !== u.href, { timeout: 30_000 });
   }
   throw new Error('too many hops on the way to the studio');
+}
+
+/** The active studio tenant's display name (GET /api/tenant/me, the pilot guard's own read), or null. */
+async function studioTenantName(page) {
+  const res = await page.context().request.get(`${PARTNER}/api/tenant/me`, { headers: { Accept: 'application/json' }, timeout: 20_000, maxRedirects: 0 });
+  if (res.status() !== 200) return null;
+  const body = await res.json().catch(() => null);
+  return body && typeof body.tenant_name === 'string' ? body.tenant_name : null;
+}
+
+/**
+ * Put the signed-in studio on `tenantName`: nothing when it is already there, else the chooser (the person holds
+ * several studio memberships; the chooser exchanges the partner session for the chosen tenant). Throws when the
+ * studio does not land on it.
+ */
+async function ensureStudioTenant(page, tenantName) {
+  if ((await studioTenantName(page)) === tenantName) return;
+  await page.goto(`${PARTNER}/portal-access/select?next=${encodeURIComponent('/portal/dashboard')}`, { waitUntil: 'domcontentloaded' });
+  if (new URL(page.url()).pathname !== '/portal-access/select') throw new Error('the studio chooser did not open (one membership only?)');
+  await chooseStudio(page, tenantName);
+  await page.waitForURL((x) => x.pathname.startsWith('/portal/'), { timeout: 30_000 });
+  await page.getByTestId('portal-sidebar').waitFor({ state: 'visible', timeout: 30_000 });
+  if ((await studioTenantName(page)) !== tenantName) throw new Error('the studio did not open on the audit tenant');
 }
 
 async function studioAlive(page) {
@@ -231,12 +275,14 @@ async function ensureState(who) {
           if (!(await bookingAlive(page))) throw new Error('signed in, but /api/booking/staff/me did not answer 200');
         }
       } else {
+        const tenantName = who === 'studio-audit' ? studioAudit.auditTenant().name : null;
         reused = await studioAlive(page);
         if (!reused) {
           if (!studioCreds) studioCreds = crm.secretCreds(STUDIO_SECRETS[who]);
-          await studioLogin(page, true, studioCreds);
+          await studioLogin(page, true, studioCreds, tenantName);
           if (!(await studioAlive(page))) throw new Error('signed in, but the studio dashboard did not render');
         }
+        if (tenantName) await ensureStudioTenant(page, tenantName);
       }
     } catch (e) {
       const where = (() => { try { const u = new URL(page.url()); return `${u.host}${u.pathname}`; } catch { return '?'; } })();

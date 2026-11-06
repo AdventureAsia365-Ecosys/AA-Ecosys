@@ -119,6 +119,27 @@ node --test tools/uat/tests/dryrun.test.cjs       # unit test logic runner (khô
 - Kết quả `tools/uat/work/dryrun/<stamp>/results.{md,json,tsv}` → chép `results.md` vào
   `docs/audits/<date>-S<nnn>-uat-dry-run/` trong root PR.
 
+### 5b. Kịch bản GHI / trả phí (write set) — AA-855 W-01..W-04
+
+```bash
+node tools/uat/dryrun.cjs --only W-01,W-02 --preview   # chỉ phần đọc (các bước trước bước ghi đầu tiên), $0
+node tools/uat/dryrun.cjs --record W-01 --allow-paid   # quay 1 kịch bản trả phí (LLM ~0,1–0,2 USD), tenant audit
+UAT_STUDIO_TENANT=audit-terra-family node tools/uat/dryrun.cjs --record W-02 --allow-paid   # đổi tenant audit
+node tools/uat/dryrun.cjs --record W-04 --include-writable   # W-04 chỉ đọc (xuất file), $0, nằm trong bộ dry run
+```
+
+- `scenarios/write-set.cjs` liệt kê kịch bản ghi (W-01..W-03, PRT-02, PRT-06): không bao giờ chạy trong cả bộ hay qua
+  `--app` / `--identity`; chỉ gọi theo id. Kịch bản trả phí bị từ chối nếu thiếu `--allow-paid` (cờ này kéo theo
+  `--include-writable`). Catalogue đánh `paid` khớp với kịch bản (test `checkWriteSet`).
+- Danh tính `studio-audit` (người partner E2E, EDITOR ở 4 tenant audit tổng hợp; secret
+  `crm/dev/e2e-test-crm/harbour-lights-owner`, chỉ đọc trong bộ nhớ): mỗi lượt chạy đúng MỘT tenant audit
+  (`UAT_STUDIO_TENANT`, mặc định `audit-atlas-hearth`; giá trị khác bị từ chối). Pilot guard ghim mọi kịch bản
+  studio-audit vào tenant đó; chọn studio trên trang chooser theo tên tổng hợp, mỗi tenant một file phiên.
+- Mỗi lệnh ghi qua `limitWrites()` (`lib/uat-page.cjs`): tối đa 1 lần (write tối đa 2 khi lần đầu 422 thiếu CTA),
+  lệnh thừa bị huỷ trước khi rời trình duyệt. Bước có thể ghi đánh `step(..., { writes: true })`.
+- Thứ tự quay: W-01 riêng; W-02 (chọn chủ đề + góc, bài bắt đầu viết) → W-03 ngay sau (theo dõi tới khi bài giao) →
+  W-04 (xuất HTML có dấu AI + bài mạng xã hội). Bàn giao id qua `work/uat-write-chain.json`, thiếu thì đọc lại Dev.
+
 ## 6. Đóng gói
 
 ```bash

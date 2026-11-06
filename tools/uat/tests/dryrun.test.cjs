@@ -17,7 +17,7 @@ const entry = (id, identity = 'public', app = 'tripplanner', steps = 3) => ({ id
 test('parseArgs: defaults keep going, check egress, select everything', () => {
   const o = core.parseArgs([]);
   assert.deepEqual(o, { only: [], apps: [], identities: [], list: false, record: null, keepGoing: true, out: null, skipEgress: false,
-    includeWritable: false });
+    includeWritable: false, allowPaid: false, preview: false });
   assert.equal(core.parseArgs(['--include-writable']).includeWritable, true);
 });
 
@@ -86,7 +86,7 @@ test('select: naming a writable-identity scenario without --include-writable thr
   assert.throws(() => core.select(SET, { only: ['CRM-01'] }), /CRM-01: signs in an account that can write.*--include-writable/);
   assert.throws(() => core.select(SET, { identities: ['crm'] }), /crm: signs in an account that can write/);
   assert.deepEqual(core.select(SET, { only: ['CRM-01'], includeWritable: true }).map((e) => e.id), ['CRM-01']);
-  assert.deepEqual(core.WRITABLE_IDENTITIES, ['crm', 'studio-editor']);
+  assert.deepEqual(core.WRITABLE_IDENTITIES, ['crm', 'studio-editor', 'studio-audit']);
 });
 
 test('select: --only, --app and --identity combine (AND)', () => {
@@ -105,6 +105,87 @@ test('signinPlan: one sign-in per identity, public needs none, cheap ones first'
   assert.deepEqual(core.signinPlan(SET), ['studio', 'crm', 'cis-admin', 'booking']);
   assert.deepEqual(core.signinPlan([entry('TP-01')]), []);
   assert.deepEqual(core.signinPlan([entry('BK-01', 'booking'), entry('BK-02', 'booking')]), ['booking']);
+});
+
+// ── the write set (AA-855) ──────────────────────────────────────────────────────────────────────────────────────────
+
+const wstep = (writes = false) => ({ caption: { en: 'e', vi: 'v' }, run: async () => {}, ...(writes ? { writes: true } : {}) });
+const wsc = (over = {}) => ({ id: 'W-91', app: 'content-studio', identity: 'studio-audit', readOnly: true, allowWrites: ['\\/x$'],
+  paid: true, steps: [wstep(), wstep(true), wstep()], ...over });
+
+test('parseArgs: --allow-paid implies --include-writable; --preview is $0 and never pays or records', () => {
+  const o = core.parseArgs(['--allow-paid', '--record', 'w-01']);
+  assert.equal(o.allowPaid, true);
+  assert.equal(o.includeWritable, true);
+  assert.equal(o.record, 'W-01');
+  assert.equal(core.parseArgs(['--preview', '--only', 'W-01']).preview, true);
+  assert.throws(() => core.parseArgs(['--preview', '--allow-paid']), /never takes --allow-paid/);
+  assert.throws(() => core.parseArgs(['--preview', '--record', 'W-01']), /records nothing/);
+});
+
+test('describeWrite: a writable identity, the guard on, a named allow-list, paid stated, writing steps marked', () => {
+  const d = core.describeWrite(wsc(), 'content-studio/w-91.cjs');
+  assert.deepEqual(d, { id: 'W-91', app: 'content-studio', identity: 'studio-audit', title: '', file: 'content-studio/w-91.cjs',
+    steps: 3, readOnly: true, writeSet: true, paid: true, preview: 1 });
+  assert.throws(() => core.describeWrite(wsc({ identity: 'studio' }), 'a.cjs'), /writable identity/);
+  assert.throws(() => core.describeWrite(wsc({ readOnly: false }), 'a.cjs'), /browser guard on/);
+  assert.throws(() => core.describeWrite(wsc({ allowWrites: [] }), 'a.cjs'), /names the writes/);
+  assert.throws(() => core.describeWrite(wsc({ paid: undefined }), 'a.cjs'), /states paid/);
+  assert.throws(() => core.describeWrite(wsc({ steps: [wstep(), wstep()] }), 'a.cjs'), /marks the steps that write/);
+  assert.throws(() => core.describeWrite(wsc({ fastOnly: true }), 'a.cjs'), /fastOnly/);
+  assert.equal(core.previewSteps(wsc({ steps: [wstep(true), wstep()] })), 0);
+});
+
+const WSET = [...SET, { ...entry('W-91', 'studio-audit', 'content-studio'), writeSet: true, paid: true, preview: 2 },
+  { ...entry('W-92', 'studio-audit', 'content-studio'), writeSet: true, paid: true, preview: 0 },
+  { ...entry('W-93', 'studio-editor', 'content-studio'), writeSet: true, paid: false, preview: 1 }];
+
+test('select: the write set is never in the whole set, nor reached by --app / --identity, even with --allow-paid', () => {
+  const ids = (o) => core.select(WSET, o).map((e) => e.id);
+  assert.ok(!ids({}).some((x) => x.startsWith('W-')));
+  assert.ok(!ids({ includeWritable: true, allowPaid: true }).some((x) => x.startsWith('W-')));
+  assert.ok(!ids({ apps: ['content-studio'], includeWritable: true, allowPaid: true }).some((x) => x.startsWith('W-')));
+  assert.ok(!ids({ identities: ['studio-audit'], includeWritable: true, allowPaid: true }).some((x) => x.startsWith('W-')));
+  assert.deepEqual(core.skippedWritable(WSET, {}), ['CRM-01']);
+});
+
+test('select: a paid write-set id needs --allow-paid; a free one needs --include-writable', () => {
+  assert.throws(() => core.select(WSET, { only: ['W-91'] }), /W-91: writes on a synthetic tenant and calls a paid model; add --allow-paid/);
+  assert.throws(() => core.select(WSET, { only: ['W-91'], includeWritable: true }), /add --allow-paid/);
+  assert.deepEqual(core.select(WSET, { only: ['W-91'], includeWritable: true, allowPaid: true }).map((e) => e.id), ['W-91']);
+  assert.throws(() => core.select(WSET, { only: ['W-93'] }), /W-93: signs in an account that can write/);
+  assert.deepEqual(core.select(WSET, { only: ['W-93'], includeWritable: true }).map((e) => e.id), ['W-93']);
+});
+
+test('select: --preview takes write-set ids with a read-only part only', () => {
+  assert.deepEqual(core.select(WSET, { only: ['W-91', 'W-93'], preview: true }).map((e) => e.id), ['W-91', 'W-93']);
+  assert.throws(() => core.select(WSET, { only: ['W-92'], preview: true }), /W-92: no read-only part to preview/);
+  assert.throws(() => core.select(WSET, { only: ['TP-01'], preview: true }), /write-set ids only/);
+  assert.throws(() => core.select(WSET, { preview: true }), /needs --only/);
+});
+
+test('renderMarkdown: a paid run and a preview say so instead of "Cost $0"', () => {
+  const base = { startedAt: '2026-11-06T01:00:00Z', finishedAt: '2026-11-06T01:30:00Z', shas: {}, outcomes: [] };
+  const paid = core.renderMarkdown({ ...base, paid: ['W-91'] });
+  assert.match(paid, /PAID run \(--allow-paid\): W-91/);
+  assert.doesNotMatch(paid, /Cost \$0/);
+  assert.match(core.renderMarkdown({ ...base, preview: true }), /Preview: only the read-only part/);
+  assert.match(core.renderMarkdown(base), /No writes .*Cost \$0/);
+});
+
+test('write set manifest: every entry loads as a write-set scenario, ids unique and apart from the dry-run set', () => {
+  const ws = path.join(__dirname, '..', 'scenarios', 'write-set.cjs');
+  const manifest = path.join(__dirname, '..', 'scenarios', 'dryrun.cjs');
+  const w = require(ws).map((rel) => core.describeWrite(require(path.resolve(path.dirname(ws), rel)), rel));
+  const d = require(manifest).map((rel) => core.describe(require(path.resolve(path.dirname(manifest), rel)), rel));
+  core.select([...d, ...w], {}); // throws on a duplicate id across both sets
+  for (const id of ['W-01', 'W-02', 'W-03']) {
+    const e = w.find((x) => x.id === id);
+    assert.ok(e && e.paid && e.identity === 'studio-audit', `${id} is a paid studio-audit write scenario`);
+  }
+  assert.ok(d.find((x) => x.id === 'W-04' && x.identity === 'studio-audit'), 'W-04 (read only) is in the dry-run set');
+  assert.ok(w.find((x) => x.id === 'W-01').preview >= 1 && w.find((x) => x.id === 'W-02').preview >= 1, 'W-01 / W-02 have a read-only part');
+  assert.equal(w.find((x) => x.id === 'W-03').preview, 0);
 });
 
 // ── redact / cell ───────────────────────────────────────────────────────────────────────────────────────────────────

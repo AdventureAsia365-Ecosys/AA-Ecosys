@@ -79,14 +79,14 @@ const sc = rw({
         await h.expect(page.getByText('Saved — used for everything we write from now on').first()).toBeVisible({ timeout: 30_000 });
         await h.expect(page.getByText(`Active — Version ${Number(before.version) + 1}`).first()).toBeVisible({ timeout: 30_000 });
         await h.expect(ctaField(page)).toHaveValue(NEW_CTA);
-      }),
+      }, { writes: true }),
     step('The test puts the agency\'s previous values back as one more version. This is the end of the scenario.',
       'Bài kiểm thử lưu lại các giá trị cũ của đại lý thành một phiên bản nữa. Kết thúc kịch bản.',
       async (page, h) => {
         await restore(page);
         await h.goto('/portal/brand');
         await h.expect(ctaField(page)).toHaveValue(before.default_cta || '', { timeout: 30_000 });
-      }),
+      }, { writes: true }),
   ],
 });
 

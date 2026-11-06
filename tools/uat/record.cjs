@@ -33,6 +33,9 @@
 // scenario.allowRows = { rows: CSS selector, allow: [regex sources] } blurs, before the first paint, every matching row
 // whose text matches none of `allow` (AA staff pages that list tenants); h.assertRowsFiltered() fails a step when such a
 // row is on screen unblurred.
+// Preview (AA-855, env UAT_PREVIEW=1, set by dryrun.cjs --preview, fast only): only the steps before the first step
+// marked `writes` (lib/dryrun-page.cjs step(..., { writes: true })) run, and allowWrites is emptied, so any write is
+// aborted and fails the run. result.json says preview: true and counts only those steps. Cost $0.
 // Setup once: bash tools/uat/setup.sh (pins @playwright/test). One Chromium, closed at the end.
 // Exit: 0 PASS, 2 a step FAILed, 5 pilot_guard (no video), 1 crash.
 const fs = require('fs');
@@ -67,6 +70,15 @@ async function main() {
   }
 
   if (sc.fastOnly && !fast && !guardOnly) throw new Error(`${sc.id} is a data step: run it with --fast only`);
+  const preview = process.env.UAT_PREVIEW === '1';
+  if (preview && !fast && !guardOnly) throw new Error(`${sc.id}: a preview is a fast dry run, never a recorded take`);
+  let steps = sc.steps;
+  if (preview) {
+    const n = steps.findIndex((s) => s && s.writes);
+    steps = n < 0 ? steps : steps.slice(0, n);
+    if (!steps.length) throw new Error(`${sc.id}: no read-only part to preview (its first step writes)`);
+    sc.allowWrites = []; // nothing is written in a preview: every write is aborted and fails the run
+  }
   // The narration was made from captions.json: a recorded take whose steps say something else (scenario edited, or
   // steps chosen from run state that changed since) would play the wrong voice-over.
   const cPath = path.join(work, 'captions.json');
@@ -323,13 +335,13 @@ async function main() {
   const timeline = [];
   let failed = null;
   await wait(500);
-  for (let i = 0; i < sc.steps.length; i++) {
+  for (let i = 0; i < steps.length; i++) {
     const n = i + 1;
     const start = Date.now() - t0;
     const hold = fast ? 0 : Math.max(MIN_HOLD_MS, Math.round((durations[n] || 0) * 1000) + TAIL_PAD_MS);
     let status = 'PASS', error = null;
     try {
-      await sc.steps[i].run(page, h);
+      await steps[i].run(page, h);
     } catch (e) {
       status = 'FAIL';
       error = redact(String(e.message || e).split('\n')[0]);
@@ -364,7 +376,8 @@ async function main() {
   const result = {
     id: sc.id, app: sc.app, ...(sc.identity ? { identity: sc.identity } : {}), title: sc.title, ...(sc.title_vi ? { title_vi: sc.title_vi } : {}), baseURL: sc.baseURL, mode: fast ? 'fast' : 'uat',
     recorded_at: new Date().toISOString(), total_ms: total,
-    verdict: failed ? 'FAIL' : 'PASS', failed_step: failed, steps_run: timeline.length, steps_total: sc.steps.length,
+    verdict: failed ? 'FAIL' : 'PASS', failed_step: failed, steps_run: timeline.length, steps_total: steps.length,
+    ...(preview ? { preview: true, steps_in_scenario: sc.steps.length } : {}),
     ...(sc.meta ? { meta: sc.meta } : {}),
     ...(readOnly ? { read_only: true, blocked_writes: blockedWrites, blocked_other: [...new Set(blockedOther)] } : {}),
     ...(blockedUrls.length ? { blocked_urls: blockedUrls } : {}),
