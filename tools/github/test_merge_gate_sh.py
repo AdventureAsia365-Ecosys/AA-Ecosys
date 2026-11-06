@@ -101,11 +101,39 @@ class GateScriptsTest(unittest.TestCase):
             self.assertIn("refused a raw 'gh pr merge'", r.stderr)
         self.assertFalse((self.fake / "merges").exists())
 
+    def test_as_app_refuses_a_merge_through_the_api(self):
+        app = self.app_copy()
+        body = self.d / "q.graphql"
+        body.write_text("mutation($id:ID!){enqueuePullRequest(input:{pullRequestId:$id}){clientMutationId}}\n")
+        for args in (
+            # the form found in the S271 transcripts
+            ["--repos", "AA-CIS-Infra", "--", "gh", "api", "-X", "PUT",
+             "repos/AdventureAsia365-Ecosys/AA-CIS-Infra/pulls/663/merge", "-f", "merge_method=squash"],
+            ["--", "gh", "api", "--method", "put", "/repos/o/r/pulls/5/merge"],
+            ["--", "gh", "api", "-XPUT", "repos/o/r/pulls/5/merge"],
+            ["--", "gh", "api", "--method=PUT", "repos/o/r/pulls/5/merge"],
+            ["--", "gh", "api", "repos/o/r/pulls/5/merge", "-f", "merge_method=squash"],
+            ["--", "gh", "api", "graphql", "-f", "query=mutation{mergePullRequest(input:{pullRequestId:\"x\"}){clientMutationId}}"],
+            ["--", "gh", "api", "graphql", "-f", "query=mutation{enqueuePullRequest(input:{pullRequestId:\"x\"}){clientMutationId}}"],
+            ["--", "gh", "api", "graphql", "-F", f"query=@{body}"],
+            ["--", "gh", "api", "graphql", "--input", str(body)],
+        ):
+            r = self.run_script(app, *args)
+            self.assertEqual(r.returncode, 2, (args, r.stderr))
+            self.assertIn("refused a merge through 'gh api'", r.stderr)
+
     def test_as_app_lets_gated_merges_dequeues_and_other_commands_through(self):
         app = self.app_copy()
         cases = ((["--", "gh", "pr", "merge", "5", "--squash"], dict(self.env, AA_SHIP_GATED="ship_merge")),
                  (["--", "gh", "pr", "merge", "5", "--disable-auto"], self.env),
-                 (["--", "gh", "pr", "view", "5"], self.env))
+                 (["--", "gh", "pr", "view", "5"], self.env),
+                 (["--", "gh", "api", "-X", "PUT", "repos/o/r/pulls/5/merge"], dict(self.env, AA_SHIP_GATED="x")),
+                 (["--", "gh", "api", "repos/o/r/pulls/5/merge"], self.env),  # GET: is it merged?
+                 (["--", "gh", "api", "-X", "GET", "repos/o/r/pulls/5/merge"], self.env),
+                 (["--", "gh", "api", "repos/o/r/pulls/5", "--jq", ".mergeable_state"], self.env),
+                 (["--", "gh", "api", "graphql", "-f",
+                   "query=mutation($id:ID!){dequeuePullRequest(input:{id:$id}){clientMutationId}}"], self.env),
+                 (["--", "gh", "api", "graphql", "-f", "query={viewer{login}}"], self.env))
         for args, env in cases:
             r = self.run_script(app, *args, env=env)
             # Past the gate check: the next step reads the App key with aws, which the fake refuses (exit 1).

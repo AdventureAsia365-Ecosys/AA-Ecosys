@@ -74,6 +74,17 @@ the critic's weak and missing lists). This lane built them in the root repo and 
   The rule that refuses when 3 heavy processes run narrows that window. A cgroup or flock slot wrapper would close it,
   as a follow-up.
 - Static reading: a command built at run time (eval, a program name kept in a variable) is not seen.
+- Fix pass (review finding, major): the gate missed merges through the API. The transcripts hold
+  `as-app.sh --repos AA-CIS-Infra -- gh api -X PUT .../pulls/663/merge -f merge_method=squash` (Infra #663). Both layers
+  now refuse it. `as-app.sh` refuses `gh api` with a writing method (explicit `-X`/`--method`, or POST implied by
+  fields) on `pulls/<n>/merge`, and `gh api graphql` with `mergePullRequest` / `enqueuePullRequest`. It also reads the
+  body from `-F query=@file` / `--input file`. SHIP-1 does the same from the raw command text, because `scan()` blanks a
+  quoted path or query (`Text.raw`). The hand-written-script pattern now includes both API forms. A GET of
+  `pulls/<n>/merge` ("is it merged?"), PATCH on `pulls/<n>`, and `dequeuePullRequest` (the mergeq.sh `--dequeue` path)
+  stay open. In the replay, the change adds exactly the 2 distinct corpus commands of that form (SHIP-1: 1,660 to 1,662)
+  and no other new hit. Limits: the raw-text check reads the whole command, so a merge-endpoint path quoted in a
+  different `gh api` call of the same command counts too (rare, and on the safe side). A direct `curl` to the REST API
+  with an App token stays out of reach of both layers; only the subagent hook stops it for lanes.
 
 ## Should know
 

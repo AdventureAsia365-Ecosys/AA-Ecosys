@@ -125,6 +125,17 @@ class ShipTest(unittest.TestCase):
             "tools/github/mergeq.sh AA-CIS-App 1350",
             "bash tools/github/mergeq.sh AA-Booking 7",
             "timeout 600 tools/github/mergeq.sh AA-Partner 45 &",
+            # merges through the API (the first form is the one found in the S271 transcripts)
+            "tools/github/as-app.sh --repos AA-CIS-Infra -- gh api -X PUT "
+            "repos/AdventureAsia365-Ecosys/AA-CIS-Infra/pulls/663/merge -f merge_method=squash",
+            "gh api -X PUT repos/o/r/pulls/5/merge",
+            "gh api --method put 'repos/o/r/pulls/5/merge'",
+            "gh api -XPUT \"repos/o/r/pulls/$N/merge\"",
+            "gh api repos/o/r/pulls/5/merge -f merge_method=squash",
+            "gh api graphql -f query='mutation{enqueuePullRequest(input:{pullRequestId:\"x\"}){clientMutationId}}'",
+            "gh api graphql -f query='mutation{mergePullRequest(input:{pullRequestId:\"x\"}){clientMutationId}}'",
+            "tools/github/as-app.sh -- gh api graphql -f query=\"mutation { mergePullRequest(input: $IN) { a } }\"",
+            "bash -c 'gh api -X PUT repos/o/r/pulls/5/merge'",
         ):
             self.assertEqual(rule(cmd), "SHIP-1", cmd)
 
@@ -150,6 +161,13 @@ class ShipTest(unittest.TestCase):
             "gh pr view 5 --json state",
             "python -m unittest discover -s tools/github -p 'test_*.py'",
             "for n in 1 2; do gh pr checks $n; done",
+            "gh api repos/o/r/pulls/5/merge",  # GET: is it merged?
+            "gh api -X GET repos/o/r/pulls/5/merge",
+            "gh api repos/o/r/pulls/5 --jq .mergeable_state",
+            "gh api -X PATCH repos/o/r/pulls/5 -f title=x",
+            "gh api graphql -f query='mutation($id:ID!){dequeuePullRequest(input:{id:$id}){clientMutationId}}'",
+            "gh api graphql -f query='{repository(owner:\"o\",name:\"r\"){pullRequest(number:5){isInMergeQueue}}}'",
+            "grep -n 'mergePullRequest' tools/github/README.md",
         ):
             self.assertIsNone(rule(cmd), cmd)
 
@@ -165,6 +183,8 @@ class ShipTest(unittest.TestCase):
             reader.write_text("#!/bin/bash\n# mergeq.sh is mentioned in a comment only\ngh pr checks 1\n")
             killer = root / ".tmp-session" / "S999" / "stop.sh"
             killer.write_text("#!/bin/bash\npkill -f 'next build'\n")
+            api_ship = root / ".tmp-session" / "S999" / "api_ship.sh"
+            api_ship.write_text("#!/bin/bash\nfor n in 1 2; do\n  gh api -X PUT \"repos/o/r/pulls/$n/merge\"\ndone\n")
             wt_tool = root / ".tmp-session" / "wt" / "s999-lane" / "tools" / "github"
             wt_tool.mkdir(parents=True)
             (wt_tool / "mergeq.sh").write_text("gh pr merge \"$N\"\n")
@@ -174,7 +194,8 @@ class ShipTest(unittest.TestCase):
                 abs_ship = str(ship)
                 for cmd in (f"bash {abs_ship}", "bash .tmp-session/S999/ship_w9.sh", f"{abs_ship} &",
                             f"nohup bash {abs_ship} > /dev/null 2>&1 &",
-                            f"source <(sed -n '1,4p' {abs_ship}); merge 1", "python3 .tmp-session/S999/ship.py"):
+                            f"source <(sed -n '1,4p' {abs_ship}); merge 1", "python3 .tmp-session/S999/ship.py",
+                            "bash .tmp-session/S999/api_ship.sh"):
                     self.assertEqual(rule(cmd, cwd=root), "SHIP-1", cmd)
                 # A script's command line is `bash <path>`: pkill -f inside it does not match itself.
                 self.assertIsNone(rule("bash .tmp-session/S999/stop.sh", cwd=root))

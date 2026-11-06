@@ -42,7 +42,10 @@ checkout: `python3 tools/github/<tool>.py --help`.
 - Exit 0 merged, 3 a red check (or none reported), 4 refused or merge failed, 5 still pending at `--timeout`.
 - The gate does not read job tables or waves: `aa-ship` §2 still comes first for backend merges.
 - AA-1024: `as-app.sh` refuses `gh pr merge` unless this gate passed (it sets `AA_SHIP_GATED`; `--disable-auto` stays
-  open), and the Claude hook `.claude/hooks/aa_shell_guard.py` (SHIP-1) refuses a raw `gh pr merge`, `mergeq.sh` run by
+  open), and the same merge through the API: `gh api` with a writing method on `pulls/<n>/merge`, or `gh api graphql`
+  with `mergePullRequest` / `enqueuePullRequest` (also from a `-F query=@file` / `--input` body; a GET of the merge
+  endpoint and `dequeuePullRequest` stay open). The Claude hook `.claude/hooks/aa_shell_guard.py` (SHIP-1) refuses the
+  same API forms, a raw `gh pr merge`, `mergeq.sh` run by
   hand, `ship_merge.py` in a shell loop or twice in one command, and running a hand-written `.tmp-session` script that
   merges. `mergeq.sh` exits 4 at once when the PR turns DIRTY while it waits.
 

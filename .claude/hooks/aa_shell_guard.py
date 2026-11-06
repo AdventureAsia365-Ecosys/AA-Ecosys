@@ -22,7 +22,9 @@ Rules (main session and subagents alike; exit 2 refuses, the message goes to std
            session-workflow.md).
   SHIP-1   Merges that skip the ship gate or run one PR after the other (S257, S263, S271: 48 hand-written ship
            scripts; a serial wave took ~4 h instead of ~1 h):
-           (a) a raw `gh pr merge` (also through `as-app.sh -- gh pr merge`, xargs, bash -c), except `--disable-auto`;
+           (a) a raw `gh pr merge` (also through `as-app.sh -- gh pr merge`, xargs, bash -c), except `--disable-auto`,
+               and the same merge through the API: `gh api` with a writing method on `pulls/<n>/merge`, or
+               `gh api graphql` with a mergePullRequest / enqueuePullRequest mutation (dequeuePullRequest stays open);
            (b) the merge-queue wrapper run by hand without --dequeue (it waits for REQUIRED checks only: S263 #1225);
            (c) ship_merge.py inside a shell loop or more than once in one command (one call takes every target and
                runs the queue repos in parallel);
@@ -77,6 +79,7 @@ class Text:
     skeleton: str
     level: str  # "zsh" (the Bash tool's top-level shell) or "bash" (bash -c, bash heredoc, a script run by bash)
     origin: str = "command"
+    raw: str = ""  # the code as written (quotes kept): scan() blanks a quoted API path or GraphQL query
 
 
 @dataclass
@@ -163,7 +166,7 @@ def scan(cmd: str) -> Scan:
 
 def texts_of(cmd: str, level: str = "zsh", origin: str = "command", depth: int = 0) -> list[Text]:
     s = scan(cmd)
-    found = [Text(s.skeleton, level, origin)]
+    found = [Text(s.skeleton, level, origin, cmd)]
     if depth < 4:
         for body, lvl in s.shell_bodies:
             found.extend(texts_of(body, lvl, origin, depth + 1))
@@ -284,7 +287,27 @@ def _rule_env(t: Text) -> str | None:
 
 
 MERGE_IN_SCRIPT = re.compile(
-    r"mergeq\.sh|\bgh\s+pr\s+merge\b|[\"']gh[\"']\s*,\s*[\"']pr[\"']\s*,\s*[\"']merge[\"']|\bship_(?:merge|train)\b")
+    r"mergeq\.sh|\bgh\s+pr\s+merge\b|[\"']gh[\"']\s*,\s*[\"']pr[\"']\s*,\s*[\"']merge[\"']|\bship_(?:merge|train)\b"
+    r"|\b(?:merge|enqueue)PullRequest\b|\bpulls/[^\s/'\"]+/merge\b(?!/)")
+# A merge through the API (S271 review: `as-app.sh -- gh api -X PUT repos/<org>/<repo>/pulls/<n>/merge`, 3 times in
+# the transcripts). Read from the raw text: scan() blanks a quoted path or GraphQL query.
+API_REST_MERGE = re.compile(r"\bpulls/[^\s/'\"]+/merge\b(?!/)")
+API_GQL_MERGE = re.compile(r"\b(?:merge|enqueue)PullRequest\b")
+API_FIELD_FLAGS = ("-f", "-F", "--field", "--raw-field", "--input")
+
+
+def _api_method(args: list[str]) -> str:
+    """The HTTP method of a `gh api` call: -X/--method, else POST when fields are given, else GET."""
+    for i, a in enumerate(args):
+        if a in ("-X", "--method") and i + 1 < len(args):
+            return args[i + 1].upper()
+        if a.startswith("--method="):
+            return a.split("=", 1)[1].upper()
+        if a.startswith("-X") and len(a) > 2:
+            return a[2:].upper()
+    if any(a in API_FIELD_FLAGS or a.startswith(("-f", "-F", "--field=", "--raw-field=", "--input=")) for a in args):
+        return "POST"
+    return "GET"
 
 
 def _is_ship_merge(prog: str, args: list[str]) -> bool:
@@ -305,6 +328,13 @@ def _rule_ship_command(t: Text) -> str | None:
         if prog == "gh" and args[:2] == ["pr", "merge"] and "--disable-auto" not in args:
             return ("a raw `gh pr merge` (it skips the ship gate: every check green, settle re-read, deletions, DIRTY); "
                     "use `python3 tools/github/ship_merge.py <Repo>#<pr> ...` or `ship_wave.py`")
+        if prog == "gh" and args[:1] == ["api"]:
+            if "graphql" in args and API_GQL_MERGE.search(t.raw):
+                return ("a merge through `gh api graphql` (mergePullRequest / enqueuePullRequest skips the ship gate); "
+                        "use `python3 tools/github/ship_merge.py <Repo>#<pr> ...` or `ship_wave.py`")
+            if API_REST_MERGE.search(t.raw) and _api_method(args[1:]) != "GET":
+                return ("a merge through `gh api ... pulls/<n>/merge` (the REST merge skips the ship gate); "
+                        "use `python3 tools/github/ship_merge.py <Repo>#<pr> ...` or `ship_wave.py`")
         if prog == "mergeq.sh" and "--dequeue" not in args:
             return ("the merge-queue wrapper run by hand (it waits for required checks only); use "
                     "`python3 tools/github/ship_merge.py <Repo>#<pr> ...` or `ship_wave.py` (--dequeue stays open)")
