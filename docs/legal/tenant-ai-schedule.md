@@ -41,14 +41,14 @@ relying on them.
 
 ## 2. Where the Schedule ships
 
-| # | Place | What goes there | Status (03/11/2026) |
+| # | Place | What goes there | Status (date checked in the row) |
 |---|---|---|---|
-| (a) | Content studio `/terms` §3 (AA-Partner `portal/app/terms/page.tsx`) | The plain-English summary of clauses .2 to .8, with the links to the three provider policies, the statement that the direct API accounts are AA's own company accounts, and "the AI Schedule v1.0 attached to your partner agreement governs" | S266: v1.0 summary. S271 (2026-11-06): page version Draft v0.5 (EN and VI, with `/legal/privacy` §5–§6) names the Anthropic API and the OpenAI API as providers that may process the content, Claude on the Anthropic API first and Amazon Bedrock second (route control version 6, AI Use Register v1.11), and says AA sets the order and may change it; the "directly only as a fallback" wording is gone |
-| (b) | CRM `/legal/terms` §1 "AI-generated content" (AA-Partner `web/lib/i18nTerms.ts`, EN and VI) | What the CRM drafts do, the provider policies, the prohibited uses, and the high-risk advice rule for ancillaries (insurance, visas, financing; b6) | S266: v1.0 summary. This meets the earlier gate "the Schedule is part of the agency terms before a real model is switched on for a CRM agency" |
-| (c) | Trip Planner `/terms` §3 "Use of AI" (AA-TripPlanner-Web) | Travellers are not tenants, so the Schedule does not bind them. The page names who writes the AI text (Claude through Amazon Bedrock) and links the Anthropic Usage Policy, because travellers are end users of a product that integrates Claude | S266: page version Draft v0.2 |
-| (d) | Partner agreement | This Schedule in full (§3), as an attachment accepted when the agency signs | To attach at onboarding |
-| (e) | Pilot letter (ADR 0019 d16) | The clause in §5: the Schedule ships with the pilot letter, since no tenant exists to notify | Ready; the business owner settles the letter's wording |
-| (f) | CIS admin and other AA staff surfaces | Nothing: staff are not tenants. Only the tenant-facing pages carry the summary | No change |
+| (a) | Content studio `/legal/partner-terms` §3 (AA-Partner `web/app/(studio)/legal/partner-terms/terms.messages.ts`) | The plain-English summary of clauses .2 to .8, with the links to the three provider policies, the statement that the direct API accounts are AA's own company accounts, and "the AI Schedule v1.0 attached to your partner agreement governs" | Checked 06/11/2026. S266: v1.0 summary. S271 (2026-11-06): page version Draft v0.5 (EN and VI, with `/legal/privacy` §5–§6) names the Anthropic API and the OpenAI API as providers that may process the content, Claude on the Anthropic API first and Amazon Bedrock second (route control version 6, AI Use Register v1.11), and says that Claude models also check, that AA may change the order of the listed providers without notice, and that adding or replacing a provider follows the DPA notice ([DPA](dpa.md) 6.2); the "directly only as a fallback" wording is gone |
+| (b) | CRM `/legal/terms` §1 "AI-generated content" (AA-Partner `web/lib/i18nTerms.ts`, EN and VI) | What the CRM drafts do, the provider policies, the prohibited uses, and the high-risk advice rule for ancillaries (insurance, visas, financing; b6) | Checked 03/11/2026. S266: v1.0 summary. This meets the earlier gate "the Schedule is part of the agency terms before a real model is switched on for a CRM agency" |
+| (c) | Trip Planner `/terms` §3 "Use of AI" (AA-TripPlanner-Web) | Travellers are not tenants, so the Schedule does not bind them. The page names who writes the AI text (Claude through Amazon Bedrock) and links the Anthropic Usage Policy, because travellers are end users of a product that integrates Claude | Checked 03/11/2026. S266: page version Draft v0.2 |
+| (d) | Partner agreement | This Schedule in full (§3), as an attachment accepted when the agency signs | Checked 03/11/2026. To attach at onboarding |
+| (e) | Pilot letter (ADR 0019 d16) | The clause in §5: the Schedule ships with the pilot letter, since no tenant exists to notify | Checked 03/11/2026. Ready; the business owner settles the letter's wording |
+| (f) | CIS admin and other AA staff surfaces | Nothing: staff are not tenants. Only the tenant-facing pages carry the summary | Checked 03/11/2026. No change |
 
 The app pages carry the same version label, "AI Schedule v1.0", and the same three policy links. A unit test in
 AA-Partner checks that the Content studio and CRM pages agree; the Trip Planner test checks its own link.
@@ -73,6 +73,12 @@ agreement. Counsel aligns these terms.*
   Anthropic API; OpenAI (OpenAI models), reached through Amazon Bedrock and directly through the OpenAI API; and Amazon
   and Meta models on Amazon Bedrock. AA lists the current Model Providers in the Portal, and may change them by updating
   that list.
+
+  *Drafting note [COUNSEL] (2026-11-06, not a change to v1.0):* "may change them by updating that list" can read as a
+  change without notice, while the [DPA](dpa.md) 6.2 promises at least [30] days' notice before AA adds or replaces a
+  Sub-processor. Since Draft v0.5 the Content studio pages say AA may change only the **order** of the listed providers
+  without notice, and that adding or replacing a provider follows the DPA notice. Counsel aligns this definition with
+  DPA 6.2 (see Q11 in §7).
 - **"AA Provider Accounts"** means the accounts that AA holds **in its own company name** with Amazon Web Services and
   with Model Providers, through which every AI Feature is provided.
 - **"Model Provider Policies"** means the acceptable-use and usage policies of the Model Providers and of the cloud

@@ -192,8 +192,10 @@ mức AI hằng tháng; và một điều khoản cho thư pilot. Hiện vẫn c
 giữ nhãn "Draft — pending legal review" cho tới khi luật sư đọc phụ lục. Từ ngày 06/11/2026 (portal Draft v0.5), các
 trang Content studio ghi API trực tiếp của Anthropic và của OpenAI là nhà cung cấp có thể xử lý nội dung, trong đó
 Claude được gọi qua API của Anthropic trước và qua Amazon Bedrock sau (route control phiên bản 6, [AI Use
-Register](../architecture/ai-use-register.md) v1.11), không còn gọi là đường dự phòng; các trang cũng ghi rằng Adventure
-Asia quyết định thứ tự và có thể thay đổi thứ tự đó. Câu chữ của chính Phụ lục AI đã nêu cả hai đường nên giữ bản v1.0.
+Register](../architecture/ai-use-register.md) v1.11), không còn gọi là đường dự phòng, và ghi rằng các mô hình Claude
+cũng kiểm tra nội dung. Các trang ghi rằng Adventure Asia có thể thay đổi thứ tự dùng các nhà cung cấp trong danh sách mà
+không cần thông báo, còn việc thêm hoặc thay thế một nhà cung cấp phải được thông báo trước theo thoả thuận xử lý dữ liệu
+([DPA](dpa.md) mục 6.2). Câu chữ của chính Phụ lục AI đã nêu cả hai đường nên giữ bản v1.0.
 *Chủ doanh nghiệp quyết định:* câu chữ của thư
 pilot quanh điều khoản này, hạn mức AI hằng tháng của pilot, và thời điểm mời luật sư (muộn nhất là trước đại lý trả
 tiền đầu tiên). *Chi tiết:* [Phụ lục AI v1.0](tenant-ai-schedule.md): từng phần đặt ở đâu (mục 2), phụ lục (mục 3),
@@ -203,7 +205,8 @@ tiền đầu tiên). *Chi tiết:* [Phụ lục AI v1.0](tenant-ai-schedule.md)
 ## Phụ lục A: nội dung hiện tại của bốn trang
 
 Nội dung dưới đây được chép từ mã nguồn trang, đúng như hiển thị: A.1 và A.2 tại commit `8327bb0` (28/10/2026) của
-AA-TripPlanner-Web, A.3 và A.4 tại commit `a33ccf4` (28/10/2026) của AA-Partner. Các trang portal được chuyển từ
+AA-TripPlanner-Web, A.3 và A.4 theo các trang Draft v0.5 của AA-Partner (06/11/2026, bản được merge qua PR các trang
+pháp lý của phiên S271). Các trang portal được chuyển từ
 AA-CIS-App sang AA-Partner cùng lịch sử thay đổi (AA-979); nội dung của chúng là bản ngày 20/10/2026 cộng nội dung AA-820
 ở mục 3 của A.4 (24/10/2026) và danh sách nhà cung cấp AI ở mục 5–6 của A.3 và mục 3 của A.4 (31/10/2026, S262, lấy từ
 [AI Use Register](../architecture/ai-use-register.md)), được viết lại ngày 06/11/2026 (S271) theo route control phiên
@@ -212,7 +215,7 @@ bản 6 (register v1.11). Mỗi trang có nhãn "Draft — pending legal review"
 portal ghi "Draft v0.5" (6 November 2026) từ thay đổi route control phiên bản 6 (Draft v0.4 ngày 3 November 2026 là
 thay đổi Phụ lục AI v1.0). Link được ghi bằng chữ hiển thị. Các trang Trip Planner chỉ có bản tiếng Anh; các trang portal
 có thêm bản dịch tiếng Việt để tham khảo, và bản tiếng Anh được áp dụng. Phần dưới đây là bản dịch để tham khảo, còn câu
-chữ pháp lý là bản tiếng Anh. Nếu trang thay đổi sau các commit trên, trang đang chạy là bản đúng.
+chữ pháp lý là bản tiếng Anh. Nếu trang thay đổi sau commit hoặc PR trên, trang đang chạy là bản đúng.
 
 Có hai việc cần sửa nội dung trang đã biết. Mục 6 của chính sách quyền riêng tư portal vẫn ghi Vercel lưu trữ các trang
 portal, dù portal nay chạy trên AWS. Hai trang Trip Planner đã đổi sau ngày 20/10/2026 nhưng vẫn ghi ngày đó cho tới
@@ -424,13 +427,16 @@ việc của bạn và hết hạn sau 24 giờ hoặc khi bạn đăng xuất. 
 Cơ sở pháp lý cho từng mục đích sử dụng là [to be confirmed].
 
 **5. Xử lý bằng AI.** Nội dung được tạo và kiểm tra bởi các mô hình AI của nhà cung cấp bên thứ ba, và có thể được xử lý
-bởi bất kỳ nhà cung cấp nào trong số đó. Claude (Anthropic) viết nội dung: Adventure Asia gọi Claude qua API của
+bởi bất kỳ nhà cung cấp nào trong số đó. Các mô hình Claude (Anthropic) viết nội dung và cũng có thể kiểm tra nội dung:
+Adventure Asia gọi Claude qua API của
 Anthropic trước và qua Amazon Bedrock (Amazon Web Services) sau. Các mô hình của OpenAI xem lại, chấm điểm và kiểm tra
 bản nháp, qua Amazon Bedrock hoặc API của OpenAI, và các mô hình khác trên Amazon Bedrock (Amazon Nova, Meta Llama) cũng
 có thể xem lại và kiểm tra bản nháp. Nếu không có mô hình Claude nào dùng được, một mô hình của OpenAI qua API của OpenAI
 có thể viết nội dung khi không còn cách nào khác. API của Anthropic và API của OpenAI được gọi trực tiếp, mỗi API có trần
 chi tiêu; các lần gọi đó đi từ Amazon Web Services tới Anthropic hoặc OpenAI, trên tài khoản Adventure Asia đứng tên công
-ty. Adventure Asia quyết định thứ tự dùng các nhà cung cấp này và có thể thay đổi thứ tự đó. Với một số đối tác, một dịch
+ty. Adventure Asia có thể thay đổi thứ tự dùng các nhà cung cấp nêu ở đây mà không cần thông báo. Việc thêm hoặc thay thế
+một nhà cung cấp phải được thông báo trước theo thoả thuận xử lý dữ liệu giữa bạn và Adventure Asia (mục 10). Với một số
+đối tác, một dịch
 vụ kiểm tra quyết định (Jev, của TypeSafe) còn trả lời các câu hỏi có/không về bản nháp. Các nhà cung cấp này nhận nội dung tour, thiết lập
 thương hiệu của bạn và hướng dẫn cho từng bài. Chính sách của chúng tôi là không gửi dữ liệu cá nhân cho các mô hình này
 và không lưu dữ liệu cá nhân trong bản ghi các lần gọi AI, vì vậy xin đừng nhập dữ liệu cá nhân về người khác vào thiết
@@ -486,13 +492,14 @@ Pháp nhân vận hành là [to be confirmed].
   được tạo bằng AI. Hãy xem lại trước khi đăng; bạn chịu trách nhiệm về những gì bạn đăng." (trang hiển thị câu này bằng
   tiếng Anh).
 - Nội dung được viết và kiểm tra bằng các mô hình AI của nhà cung cấp bên thứ ba, và có thể được xử lý bởi bất kỳ nhà
-  cung cấp nào trong số đó. Claude của Anthropic viết nội dung: Adventure Asia gọi Claude qua API của Anthropic trước và
+  cung cấp nào trong số đó. Các mô hình Claude của Anthropic viết nội dung và cũng có thể kiểm tra nội dung: Adventure
+  Asia gọi Claude qua API của Anthropic trước và
   qua Amazon Bedrock (Amazon Web Services) sau. Các mô hình của OpenAI xem lại, chấm điểm và kiểm tra nội dung, qua
   Amazon Bedrock hoặc API của OpenAI, và các mô hình khác trên Amazon Bedrock (Amazon Nova, Meta Llama) cũng có thể xem
   lại và kiểm tra. Nếu không có mô hình Claude nào dùng được, một mô hình của OpenAI qua API của OpenAI có thể viết nội
   dung khi không còn cách nào khác. API của Anthropic và API của OpenAI được gọi trực tiếp, mỗi API có trần chi tiêu.
-  Adventure Asia quyết định thứ tự dùng các nhà cung cấp này và có thể thay đổi thứ tự đó, hoặc thay đổi nhà cung cấp,
-  bằng cách cập nhật danh sách này.
+  Adventure Asia có thể thay đổi thứ tự dùng các nhà cung cấp nêu ở đây mà không cần thông báo. Việc thêm hoặc thay thế
+  một nhà cung cấp phải được thông báo trước theo thoả thuận xử lý dữ liệu giữa bạn và Adventure Asia.
 - Mọi tính năng AI chạy trên tài khoản mà Adventure Asia đứng tên công ty với các nhà cung cấp này. Bạn không nhận tài
   khoản hay khoá nào của họ, và không được tìm cách gọi tới họ qua portal ngoài các tính năng AI của portal.
 - Chính sách sử dụng của các nhà cung cấp này áp dụng cho bạn với tư cách người dùng một dịch vụ xây trên mô hình của

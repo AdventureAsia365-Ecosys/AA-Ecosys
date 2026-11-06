@@ -190,8 +190,10 @@ summary of v1.0 (Annex A.4), the Trip Planner terms name the model that writes i
 "Draft — pending legal review" banner until the lawyer has read the Schedule. Since 2026-11-06 (portal Draft v0.5)
 the Content studio pages name the direct Anthropic API and OpenAI API as providers that may process the content, with
 Claude called on the Anthropic API first and Amazon Bedrock second (route control version 6, [AI Use
-Register](../architecture/ai-use-register.md) v1.11), no longer as a fallback; they say that Adventure Asia sets the
-order and may change it. The Schedule's own clause text already named both paths and stays v1.0. *Business owner decides:* the wording of
+Register](../architecture/ai-use-register.md) v1.11), no longer as a fallback, and say that Claude models also check
+content. They say that Adventure Asia may change the order in which the listed providers are used without notice, and
+that adding or replacing a provider follows the advance notice of the data processing agreement ([DPA](dpa.md) 6.2).
+The Schedule's own clause text already named both paths and stays v1.0. *Business owner decides:* the wording of
 the pilot letter around the clause, the pilot's monthly AI allowance, and when to bring in the lawyer (before the
 first paying agency at the latest). *Detail:* [AI Schedule v1.0](tenant-ai-schedule.md): where each part ships (§2),
 the Schedule (§3), the pilot-letter clause (§5) and 16 questions for a lawyer (§7). Part 2, the data processing pack
@@ -200,7 +202,7 @@ for the pilot, is outlined in [dpa-pack-outline.md](dpa-pack-outline.md).
 ## Annex A: current text of the four pages
 
 The text below is copied from the page source as rendered: A.1 and A.2 at AA-TripPlanner-Web commit `8327bb0`
-(2026-10-28), A.3 and A.4 at AA-Partner commit `a33ccf4` (2026-10-28). The portal pages moved from AA-CIS-App to
+(2026-10-28), A.3 and A.4 from the AA-Partner Draft v0.5 pages (2026-11-06, as merged by the S271 pages PR). The portal pages moved from AA-CIS-App to
 AA-Partner with their history (AA-979); their text is the one of 2026-10-20 plus the AA-820 text of A.4 §3
 (2026-10-24) and the AI provider list of A.3 §5–§6 and A.4 §3 (2026-10-31, S262, from the
 [AI Use Register](../architecture/ai-use-register.md)), rewritten on 2026-11-06 (S271) for route control version 6
@@ -209,7 +211,7 @@ AA-Partner with their history (AA-979); their text is the one of 2026-10-20 plus
 portal pages show "Draft v0.5" (6 November 2026) since the route control version 6 change (Draft v0.4 of 3 November
 2026 was the AI Schedule v1.0 change). Links are shown as their text. The Trip Planner pages exist in English only; the
 portal pages also show a Vietnamese translation for reading, and their English text applies. If a page changes after
-those commits, the live page wins.
+that commit or that PR, the live page wins.
 
 Two page-copy follow-ups are known. The portal privacy notice §6 still says that Vercel hosts the portal pages,
 although the portal now runs on AWS. The Trip Planner pages changed after 2026-10-20 but still showed that date until
@@ -415,13 +417,15 @@ expire after 24 hours or when you sign out. We do not use advertising or analyti
 The legal basis for each use is [to be confirmed].
 
 **5. AI processing.** Content is generated and checked by AI models of third-party providers, and may be processed by
-any of them. Claude (Anthropic) writes it: Adventure Asia calls Claude through the Anthropic API first and through Amazon
+any of them. Claude models (Anthropic) write it and may also check it: Adventure Asia calls Claude through the Anthropic
+API first and through Amazon
 Bedrock (Amazon Web Services) second. OpenAI models review, score and check the drafts, through Amazon Bedrock or the
 OpenAI API, and other models on Amazon Bedrock (Amazon Nova, Meta Llama) may also review and check them. If no Claude
 model is available, an OpenAI model through the OpenAI API may write the content as a last resort. The Anthropic API and
 the OpenAI API are used directly, each with a spending cap; those calls go from Amazon Web Services to Anthropic or
-OpenAI, on accounts Adventure Asia holds in its own company name. Adventure Asia sets the order in which these providers
-are used and may change it. For some partners, a decision-checking service (Jev, by TypeSafe) also answers yes-or-no
+OpenAI, on accounts Adventure Asia holds in its own company name. Adventure Asia may change the order in which the
+providers listed here are used without notice. Adding or replacing a provider follows the advance notice set out in the
+data processing agreement between you and Adventure Asia (section 10). For some partners, a decision-checking service (Jev, by TypeSafe) also answers yes-or-no
 checks about the drafts. These providers receive tour content, your brand settings and the instructions for each
 piece. Our policy is not to send personal data to these models and not to store any in our AI call records, so please do
 not enter personal data about other people in brand settings or content.
@@ -475,12 +479,13 @@ pieces about those tours, and tools to export them or publish them to your own c
 - Content is generated with AI and can contain mistakes. The portal shows this at review, publish and export: "This
   content was generated with AI. Review it before publishing; you are responsible for what you publish."
 - The content is written and checked with AI models of third-party providers, and may be processed by any of them.
-  Anthropic's Claude writes it: Adventure Asia calls Claude through the Anthropic API first and through Amazon Bedrock
+  Anthropic's Claude models write it and may also check it: Adventure Asia calls Claude through the Anthropic API first and through Amazon Bedrock
   (Amazon Web Services) second. OpenAI models review, score and check it, through Amazon Bedrock or the OpenAI API, and
   other models on Amazon Bedrock (Amazon Nova, Meta Llama) may also review and check it. If no Claude model is
   available, an OpenAI model through the OpenAI API may write it as a last resort. The Anthropic API and the OpenAI API
-  are used directly, each with a spending cap. Adventure Asia sets the order in which these providers are used and may
-  change that order, or the providers, by updating this list.
+  are used directly, each with a spending cap. Adventure Asia may change the order in which the providers listed here
+  are used without notice. Adding or replacing a provider follows the advance notice set out in the data processing
+  agreement between you and Adventure Asia.
 - Every AI feature runs on accounts that Adventure Asia holds in its own company name with these providers. You do not
   get an account or a key with any of them, and you must not try to reach them through the portal other than through
   its AI features.
