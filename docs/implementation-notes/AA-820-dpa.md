@@ -88,3 +88,70 @@ Part 1 notes: `AA-820.md`.
 - If backups move to 14 days, update DPA 11.3 and Annex 2 M-29/M-30. When a frontend leaves Vercel, update Annex 3 §4
   and §1.3. When the CRM gateway gets the vendor APIs, or its Dev route leaves Nova Lite (acc3 back: crm-037 Claude entries
   switched on), update Annex 3 §1.2, Annex 4 §1, Annex 2 M-18 and Annex 1 §2.
+
+## S271 — v0.3 close-out (lane l3-dpa-live)
+
+Bring the v0.2 pack (root #546) in line with what runs on Dev on 2026-11-06. Sources: session logs S269 and S270, the
+S269 / S270 close snapshots, `docs/architecture/ai-gateway.md` §4.1, AA-969 and AA-1035 implementation notes and
+exports, AA-CIS-Infra `main` (`modules/rds/main.tf`, `identity.tf`, `identity_partner.tf`) and open PR #694, AA-CIS-App
+`services/tenant_account/dev_guard.py`, AA-Partner `app/agencies.py`. No AWS or app call: live gateway state is the
+S270 close snapshot.
+
+### Decisions
+
+- **M-25 Live, one row kept, a detail table added.** DPA 15.3 and the pilot letter cite "the five pilot safeguards of
+  Annex 2 M-25", so the number stays; a "M-25 in detail" table gives each item its evidence (CIS dev guard + CIS 354 +
+  crm-044; root #548 hook + Infra #678 run-script guard; CIS #1314, Booking #182, Partner #224; Partner #224/#230
+  nightly backup; the restore drill JSON and the S269 log for 5,206/5,206).
+- **14-day backups written as Live, pending the apply.** M-29 says 14 days with "pending that apply" and an HTML
+  `TODO(S271 orchestrator)` comment in three places (Annex 2 M-29, DPA 11.3 drafting note, pilot-contract-set §5
+  check 4). M-30 stays as a "merged into M-29" row so old references resolve.
+- **New gap §2 item 2:** the CRM's own agency creation on Dev accepts synthetic agencies only (`app/agencies.py`), so
+  the pilot agency's CRM account needs a pilot exception keyed on the CIS marker (the AA-969 follow-up). Also in the
+  DPA 15.3 note and pilot readiness check 3.
+- **M-13 rewritten for R2** (roles, tenant scope, CRM desk relay fail-closed, money fields hidden from support,
+  view-as) with the S270 customer-success read-only live check as evidence. Annex 1 recipients line corrected (support
+  = assigned + pool).
+- **New M-37 load test** (k6 summary in the S269 audit folder). M-26 names the new breach branch.
+- **Route control v6 is a provider-order setting, not a route change.** The AI Use Register rows keep their chains and
+  now name each Claude model's providers as "Anthropic API, then acc3: route control v6"; v1.11 bullet and change log
+  say no route changed. Provider list for the tenant terms no longer calls the direct APIs "fallback paths".
+- **AI Schedule stays v1.0.** Only §2 status (a), the §5 pilot-letter proposal ("directly through", not "as a
+  fallback") and the §6 facts changed; the clause text §3 did not, so the app pages' "AI Schedule v1.0" label and the
+  AA-Partner agreement test stay valid.
+- **Compliance register (b):** added the Anthropic API row and reworded the OpenAI API row (was "last resort only").
+  `last_reviewed` of the register not moved: only section (b) AI rows were re-checked.
+- **PDPL breach branch** written into `docs/ops/incident-response.md` (processor path = DPA clause 8 timings;
+  controller path = Article 23(1) 72 hours as the S261 review read it, business owner files; "PDPD" removed). Every
+  legal reading is marked as the S261 review's, counsel to confirm.
+- **Article 20 dossier:** new `docs/legal/vn-cross-border-transfer-dossier.md` (`SEC-04-vn-transfer-dossier`, draft
+  v0.1): when, who files (proposal + [COUNSEL]), destinations table, measures, expected dossier items (the decree's
+  form decides), five counsel questions (the three of S261 BO-9 + filer + pilot-on-Dev).
+- **Restore runbook** `last_tested` 2026-11-05 / `drill` / the S269 JSON; ops index row "draft (tested)". Status stays
+  draft (tech lead has not read it).
+
+### Changed
+
+- `docs/legal/dpa.md`, `dpa-annex-1-processing.md`, `dpa-annex-2-security.md`, `dpa-annex-3-subprocessors.md`,
+  `dpa-annex-4-transfers.md` → v0.3; `pilot-contract-set.md`, `dpa-pack-outline.md`, `tenant-ai-schedule.md` (facts),
+  `register.md` (b); new `vn-cross-border-transfer-dossier.md`.
+- `docs/architecture/ai-use-register.md` v1.11; `docs/ops/incident-response.md`;
+  `docs/ops/runbooks/pilot-tenant-restore-drill.md`, `docs/ops/README.md`; `docs/README.md` SEC-04 row;
+  `docs/guides/cio.md` DPA row.
+
+### Tradeoffs
+
+- Not edited: `docs/architecture/ai-gateway.md` (+ `.vi.md`) still says "CRM gateway v2 … Live, stub provider" in its
+  live table; CRM runs Nova Lite since AA-1027 F4. Left to a gateway lane to avoid a conflict on that page (follow-up).
+- Not edited: the readiness packet's Annex A copies of the app pages (they quote the live app text, which still says
+  "fallback"); they follow the AA-Partner page PR.
+- No `.vi.md`: none of the touched legal pages has one.
+
+### Should know
+
+- Done (S271 orchestrator, 2026-11-06): the #694 apply shows BackupRetentionPeriod 14; the TODO comments are removed and the DSAR runbook + readiness packet (EN + VI) now say 14 days.
+- Still open for an app lane: AA-Partner Content studio `/legal/partner-terms` §3 and `/legal/privacy` §5 (EN and VI,
+  `web/app/(studio)/legal/*/…messages.ts`) say the direct APIs are used "directly only as a fallback"; the AI Use
+  Register v1.11 follow-up names it.
+- Business owner: counsel review (DPA C1-C13, AI Schedule Q1-Q16, dossier §7), contracting entity, the pilot letter
+  (wording, AI allowance, signature). Engineering: the CRM pilot exception before the pilot letter is signed.

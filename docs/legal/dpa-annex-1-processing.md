@@ -1,18 +1,18 @@
 ---
 id: SEC-04-dpa-annex1
-title: "DPA Annex 1: description of the processing per app (draft v0.2)"
+title: "DPA Annex 1: description of the processing per app (draft v0.3)"
 description: "Annex 1 of the partner-agency DPA (and SCC Annex I.B): subject matter, purposes, data subjects, data categories, special categories, storage, recipients and retention for the CRM, the Content studio, Booking B2B and the Trip Planner, from the live schema dump and the DM-7.1 retention table."
 type: reference
 status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-crm-api, aa-crm-web, aa-partner-portal, aa-cis-api, aa-booking-api]
-last_reviewed: 2026-11-05
+last_reviewed: 2026-11-06
 review_every_days: 30
 related: [SEC-04-dpa-agreement, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04, ARCH-08-data-management, AA-820]
 ---
 
-# DPA Annex 1: description of the processing per app (draft v0.2)
+# DPA Annex 1: description of the processing per app (draft v0.3)
 
 > [!WARNING]
 > Draft for counsel, not legal advice. Part of the [Data Processing Agreement](dpa.md). The table and column names
@@ -69,8 +69,8 @@ the Agency's own website and social pages on its instruction.
 | Data subjects | The Agency's users; people the Agency names in its own brand settings, briefs or content (for example a guide named in a blog post) |
 | Personal data | Users: Cognito issuer and subject (`shared.tenant_members`), membership changes (`shared.tenant_membership_event`); account and billing contact of the Agency (`shared.tenants` `legal_entity_name`, `tax_id`, `billing_email`, `billing_address`; AA as controller, DPA 1.4(a)); free text in add-on requests (`shared.tenant_addon_request.note`); whatever the Agency types into brand settings, briefs and content; edits and labels the Agency makes, which feed its own writing rules (`shared.writing_signal`, `shared.writing_rule`); channel credentials for its website and social pages, stored in AWS Secrets Manager and `shared.tenant_integrations`; publish and audit records naming the Agency account or an AA staff member (`acp_shared.audit_log`) |
 | Special categories | None intended. The Agency must not put its clients' personal data into Content studio inputs (DPA clause 13.3) |
-| AI | Content inputs (brand settings, briefs, tour text, the Agency's text) are sent to the AI models of [Annex 3](dpa-annex-3-subprocessors.md) §1.2: Claude on Amazon Bedrock first, then the same model on the Anthropic API, OpenAI models on Amazon Bedrock and the OpenAI API for scoring and checking and, as a last resort, for writing; Amazon Nova on Bedrock as a fallback check. Every Content studio stage is classed `content`, not `pii` (CIS migration 373), because it receives no personal data of the Agency's clients by rule (DM-6.4) |
-| Recipients inside AA | AA staff in roles that may read tenant content (content lead, tenant QA, AI operations, admin), each view through role-scoped routes; customer success and support only for the agencies assigned to them; read-only "view as tenant" sessions, audited (DPA clause 14) |
+| AI | Content inputs (brand settings, briefs, tour text, the Agency's text) are sent to the AI models of [Annex 3](dpa-annex-3-subprocessors.md) §1.2: Claude on the Anthropic API first and on Amazon Bedrock second (a live gateway setting since 2026-11-05); OpenAI models on Amazon Bedrock and then the OpenAI API for scoring and checking (while Bedrock refuses, the OpenAI API answers them) and, as a last resort, for writing; Amazon Nova on Bedrock as a fallback check. Every Content studio stage is classed `content`, not `pii` (CIS migration 373), because it receives no personal data of the Agency's clients by rule (DM-6.4) |
+| Recipients inside AA | AA staff in roles that may read tenant content (content lead, tenant QA, AI operations, admin), each view through role-scoped routes; customer success only for the agencies assigned to it, support for those and the unassigned pool (Annex 2 M-13); read-only "view as tenant" sessions, audited (DPA clause 14) |
 | Retention | While the account is active. AI call records: 180 days, no text. Tenant writing rules and edits: while the account is active, deleted with it. Audit log: kept (window to be set before production). After offboarding: the tenant erasure job of DPA clause 11 |
 
 ## 4. Booking B2B (AA-Booking, schema `booking`)

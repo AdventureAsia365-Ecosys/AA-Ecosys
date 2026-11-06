@@ -305,8 +305,8 @@ section 2 lookup only**, held as constants: no address, name or phone in the cod
    ```
 
    Expected: `describe-db-snapshots --db-snapshot-identifier dsar-<yyyymmdd>-pre` returns `DBSnapshotNotFound`. The
-   automated backups (7 days on Dev, `backup_retention_period = 7` in AA-CIS-Infra `modules/rds/main.tf`) still hold
-   the erased rows and cannot be edited; they age out within 7 days of the erasure. The reply to the person can say so.
+   automated backups (14 days on Dev since 2026-11-06, `backup_retention_period = 14` in AA-CIS-Infra `modules/rds/main.tf`)
+   still hold the erased rows and cannot be edited; they age out within 14 days of the erasure. The reply to the person can say so.
 
    The hash itself: after steps 4b and 7 no `data_erasure` job row holds it (apply and `verify` strip it), and a
    traveller job that failed or was cancelled had it replaced at once (`stripped-on-failed` / `stripped-on-cancelled`),
@@ -325,7 +325,7 @@ section 2 lookup only**, held as constants: no address, name or phone in the cod
    Expected: 0 hits in the mailbox and in Sentry. Abort: none; record what was found.
 10. **Record**: one `booking.audit_logs` row for the erasure (actor, action, entity, no personal data in `after`), a row
     in the [retention log](retention-log.md), and a reply to the person that the data is erased and that the backup
-    copies expire within 7 days.
+    copies expire within 14 days.
 
 ## 4. Tenant erasure (after offboarding)
 
@@ -348,7 +348,7 @@ lead sets the value), with the tech lead's explicit approval.
   row.
 - **Outside the database** (operator steps below): bronze S3 `raw-inbox/<tenant>/` and `brand-identity/<tenant>/`,
   Secrets Manager `acp/cms/<tenant>` and `acp/social/<tenant>`; the tenant's CRM rows in AA-Partner (`crm`, DM-6.8);
-  Cognito tenant users once AA-813 exists; Sentry events tagged with the tenant; automated backups (7 days).
+  Cognito tenant users once AA-813 exists; Sentry events tagged with the tenant; automated backups (14 days).
 
 A table that has `tenant_id` but no inventory entry is reported as `unregistered` and blocks the apply (CI fails on
 it too). A row of another tenant, a kept row or another owner's row that points at a row to erase is a blocker, never

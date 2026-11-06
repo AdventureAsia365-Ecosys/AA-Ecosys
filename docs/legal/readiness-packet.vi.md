@@ -80,17 +80,17 @@ B chỉ khi có nhu cầu tiếp thị. *Chi tiết:* [kiểm tra ghi nhận đ�
 
 ## 4. Thỏa thuận xử lý dữ liệu và nhà cung cấp
 
-*Hiện trạng:* bản nháp thỏa thuận xử lý dữ liệu cho đối tác đã sẵn sàng để xem. Bản nháp nêu đối tác là bên kiểm soát
+*Hiện trạng:* bản nháp thỏa thuận xử lý dữ liệu cho đối tác (v0.3) đã sẵn sàng để xem. Bản nháp nêu đối tác là bên kiểm soát
 dữ liệu họ đưa vào portal và Adventure Asia là bên xử lý, liệt kê nghĩa vụ của bên xử lý, và có các phụ lục về hoạt động
 xử lý, biện pháp bảo mật (mỗi biện pháp ghi rõ đang chạy hay mới dự kiến) và nhà cung cấp dịch vụ. Sổ đăng ký liệt kê các
 nhà cung cấp tìm thấy trong mã nguồn: AWS (máy chủ, e-mail, đăng nhập, mô hình AI qua Amazon Bedrock), các nhà cung cấp
-AI OpenAI và Jev, Sentry (báo lỗi), Vercel (website), Mapbox (bản đồ), Geoapify, DataForSEO, Google (tệp ảnh), nhà cung
+AI Anthropic (API trực tiếp, đường đầu tiên cho các mô hình Claude từ 2026-11-05), OpenAI và Jev, Sentry (báo lỗi), Vercel (website), Mapbox (bản đồ), Geoapify, DataForSEO, Google (tệp ảnh), nhà cung
 cấp hộp thư adventure.asia, và các công cụ làm việc. Jev chỉ nhận nội dung của một danh sách ngắn các đối tác thử, cho tới
 khi có thỏa thuận xử lý dữ liệu và không lưu dữ liệu với Jev; thỏa thuận đó là một điểm còn mở. Các điểm mở khác: có phải
 liệt kê các đại lý bán lại AWS (TrueIDC cho tài khoản máy chủ, eCloudvalley cho tài khoản AI) và các hãng làm mô hình phía
 sau Bedrock hay không, và tình trạng hợp đồng với từng nhà cung cấp. *Phương án:* (A) liệt kê đủ mọi nhà cung cấp, kể cả
 đại lý bán lại, rồi bỏ bớt những bên luật sư cho là không cần; (B) chỉ liệt kê các bên trực tiếp xử lý dữ liệu.
-*Đề xuất:* A. *Chi tiết:* [mẫu thỏa thuận](dpa-template.md); [sổ đăng ký](register.md), mục (b).
+*Đề xuất:* A. *Chi tiết:* [DPA v0.3](dpa.md) cùng các phụ lục; [sổ đăng ký](register.md), mục (b).
 
 ## 5. Sổ đăng ký hoạt động xử lý
 
@@ -108,7 +108,7 @@ nhân được gắn nhãn trong cơ sở dữ liệu. *Phương án:* (A) dùng
 viết sẵn để xác minh danh tính, tìm bản ghi của người đó trong cả hai hệ thống, và xoá sau một lần chạy thử có đếm số dòng
 mà trưởng nhóm kỹ thuật duyệt trước. Bản ghi được tìm bằng một mã băm một chiều tính từ địa chỉ e-mail rồi xoá theo mã số
 bản ghi, nên chính địa chỉ e-mail không bao giờ được ghi vào mã nguồn, nhật ký hay tệp nào. Bản sao lưu cơ sở dữ liệu còn
-giữ dữ liệu tối đa 7 ngày sau khi xoá rồi tự hết hạn. Hệ thống nội dung đã có job xoá với bước chạy thử có đếm số dòng.
+giữ dữ liệu tối đa 14 ngày sau khi xoá rồi tự hết hạn. Hệ thống nội dung đã có job xoá với bước chạy thử có đếm số dòng.
 Phần xoá đối tác của job đã được thử một lần trên môi trường phát triển, ngày 23/10/2026, với một đối tác giả lập: chạy
 thử, duyệt, xoá và kiểm lại đều đạt. Phần xoá khách du lịch chưa chạy lần nào, và các script xoá của hệ thống đặt tour và
 Trip Planner chưa được viết. Chưa có lần xoá thật nào; ba bản ghi thử được giữ lại cho lần thử đầu tiên với khách du lịch.
