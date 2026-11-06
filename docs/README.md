@@ -128,6 +128,7 @@ Templates: [`templates/`](templates/). Terms: [glossary](glossary.md).
 |---|---|---|---|---|---|---|---|---|
 | FIN-01 | FinOps process | Exp + Ref | root `docs/ops/finops.md` | H (links DM-10, no copied rules) | nghiep | 90 | E D CT CI P, O | draft (AA-896, S243): [`ops/finops.md`](ops/finops.md). Tags `App` + existing `Environment` (DM-10.1; `Environment` activation by the payer); Cost Anomaly Detection to the alerts topic (INF `cost_anomaly.tf`, free) |
 | FIN-02 | Monthly cost report (with unit costs) | Rep | same file as OPS-08 | H (reads `shared.cost_explorer_snapshot` + `shared.llm_call_log`) | nghiep (Claude drafts) | monthly; first one for October in the first session from 01/11 | O CT CI P | planned; how-to draft [`ops/cost/README.md`](ops/cost/README.md) + `tools/finops/monthly_cost_report.py` (reads the AA-884 cost export, no Cost Explorer call, DM-10.4). AA-896; first report from 01/11 |
+| FIN-03 | AWS tagging standard | Ref | root [`architecture/tagging-standard.md`](architecture/tagging-standard.md) | H (machine copy INF `tools/terraform/tag_policy.json`, enforced by the INF Terraform Plan tag guard) | nghiep | 90; on a new key or value | E D CT CI A | draft (S271, AA-1004): eight mandatory keys, CI guard, monthly untagged report (C8b item 10), prod tag policy plan |
 
 ### Guides and agents
 
