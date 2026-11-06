@@ -972,7 +972,7 @@ reports:
   sections:
   - 1. Sessions and sign-ups by source (direct, search, social, partner, campaign)
   - 2. Source -> trip -> inquiry -> confirmed, per source
-  - 3. Booking customers by booking.customers.source and trip case channel
+  - 3. Trip cases by channel (B2B agency; B2C cases are history only since the B2C retirement of November 2026)
   - 4. Partner leads (B2B, Content studio, CRM) by source
   - 5. Campaign list with results (when CRM campaigns exist, AA-968)
 - id: MKT-02
