@@ -6,7 +6,7 @@
 
 **Rules:** at session start read §1–§3 and pick the session's parallel items from §3 and §3b by slot (skip items blocked in §2 or by the "blocked by" notes). At session end update the Status column, move closed items to §5, add new items. Re-audit only when this file is older than ~2 weeks or many issues were created outside sessions.
 
-_Last updated: S270, 06/11/2026 (Claude Code, Ultracode; 05/11 18:06 → 06/11 ~03:30 +07). **Closed in S270: AA-1037, AA-1030, AA-1035, AA-1039, AA-1008, AA-1045, AA-1042, AA-1029, AA-710.** Live on Dev with checks: R4 agency invoice flow + B2C writes off (410) + Tenant 360 Billing; tiers silver/gold + AA prices in the CRM; customer_success E2E identity (CIS 378) with scoped reads; R6 fan-out; H3 required checks; usage explorer; gateway Guide tab + deferred refusal rungs (#1332); rate-sheet import 19/19 + price readiness (890/892 tours have no components: a data task). AA-741 phase 0 done (≈ 2.0 USD, report `docs/audits/2026-11-05-S270-aa741-phase0/`); AA-1038 R5 slice 1 (tp-025 shadow RLS); AA-855 23 UAT videos PASS. New: AA-1046 (R4b). Jira: 6 comments posted 06/11 (PR-23/17/18/22/25/26, #10616–#10621); KAN-20 not posted (tech lead)._
+_Last updated: S271, 07/11/2026 (Claude Code, Ultracode; 06/11 06:36 → 07/11 ~03:00 +07). **No issue closed in S271** (every touched issue waits on a live gate or a later slice): AA-900 W0 live (gateway token budget, refusals, cassette, R2 pairing, S1/T2 safety, T9 pass-3 stop, CIS-08 funnel); ADR 0020 content quality architecture accepted (D1–D16 all A) with waves W1–W6 = AA-1047 … AA-1052; CI optimisation in 5 repos (~−50 % minutes); lessons become guards (root #602, Infra #712, the test-guard wave #603 + app PRs); AA-911 phase 1 live (staff web on ECS, the CIS → Booking bridge removed: `/auth/booking-token` 404); RDS backups 14 days; standard tags. Jira: 4 drafts saved, not posted, rolled to S272 (`docs/audits/2026-11-06-S271-writing-quality-audit/jira-drafts.md`)._
 
 ## 1. Time-gated checks (do these first when due)
 
@@ -142,10 +142,16 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | S280 | AA-1041, AA-1004 | R7 item 7 + visual tests against `next start` → close R7. AA-1004 P2–P6 from the go-live date, or from pilot week 3 at the latest (q-pilot). |
 | after S280 / date-gated | AA-1024, AA-788, AA-1026, AA-998, AA-873, AA-1003, CRM-after-R3, AA-980, AA-881, parked | AA-1024 D8 ≥10/11 ~12:00Z; AA-788 ≥19/11 with an LLM path (~S286+); first session ≥01/12: AA-1026 D6 (November bill), AA-998 acc1 = 0 USD, AA-873 first-month cost read, AA-1004 org invites; AA-1003 R5–R7; CRM add-ons AA-960, AA-963, AA-965, AA-968, AA-970, AA-1011, AA-1012 in the merged app (≥60 % capacity stays on content); AA-980 at go-live; AA-881 05/2027; parked AA-842, AA-781, AA-782, AA-704, AA-948, AA-922 (TL-11 lift). |
 
-### Open issues by slot (after the S270 close: 8 closed, AA-1046 added)
+### Open issues by slot (after the S271 close: 0 closed, AA-1047 … AA-1052 added; S270 rows below kept)
 
 | Issue | Work | Milestone | Slot | S265 verdict | Status |
 |---|---|---|---|---|---|
+| AA-1047 | [Quality W1] One policy registry, one FactSheet, one exit contract (report mode) | M2a | S272 | new S271 | Backlog |
+| AA-1048 | [Quality W2] Claim-level ground truth and calibration of the pinned claim instrument | M2a | S273 | new S271 | Backlog |
+| AA-1049 | [Quality W3] Rewire the T9, S1 and T2 control planes in place | M2a | S274 | new S271 | Backlog |
+| AA-1050 | [Quality W4] Promote the calibrated claim instrument: shadow first | M2a | S275 | new S271 | Backlog |
+| AA-1051 | [Quality W5] Paid writer proofs on small fixed samples under the D12 caps | M2a | S275 | new S271 | Backlog |
+| AA-1052 | [Quality W6] Lineage, dormant-code cleanup and permanent change control | M2a | S275 | new S271 | Backlog |
 | AA-1003 | [Reporting] Build the ecosystem report engine and the 63-report catalog (appr… | M-R0 | after S280 | re-scope | In Progress |
 | AA-1004 | [Infra] Implement the lean AWS model: company organization, Identity Center,… | M5 | S268 | re-scope | In Progress |
 | AA-1021 | AA-1021 (content series, details private) | parked | S267 | re-scope | In Progress |
@@ -242,6 +248,11 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-697 | Architecture diagrams with official AWS icons — ecosystem + each repo | S256 | **Done S257** (§5c): pilot approved under the S257 session plan (root #320); drift findings closed (Booking ops-docs bucket built S256, EFS removed S257 Infra #492) | — |
 | AA-710 | B2B benchmark: Asian Trails (eConnect, API, Lemax) | M-R4 | **S265:** slot S271 (R4 start): update the note against the R4 design (AA-1037, AA-1029, AA-1030, 'Book with AA' d17), map the gaps to issues, KAN-20 draft at that session's end, then close | — |
 | AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 | **S262:** AA-952, AA-954, AA-956, AA-957, AA-964, AA-971 closed (§5); AA-958 → S263. AA-952 was In Progress since S259 (slice 1 = C-M3 confirm, §3 row 0ah); **re-planned at the S260 close**: slots S261–S266, go-real ≥S267, see §3b "Kế hoạch CRM W5–W8 sau S260" | AA-958 needs a free Twilio trial for the live proof; AA-965 needs an LLM path |
+
+## 5. Closed in S271
+
+- None. Status moves instead: AA-900, AA-911, AA-741, AA-1046, AA-1038, AA-1024 stay **In Review** with evidence comments (each waits on a live gate: the AA-900 judge-only trial + one R2, AA-911 the Vercel project and old signing-key deletion (tech lead approval), AA-1046 bk-045 from 28/11, AA-1024 D8 ≥10/11 12:00Z). AA-855 is back to Backlog (routine UAT videos stopped, S271). AA-820 stays In Progress (DPA pack read + the business owner's counsel call, due 11/11).
+
 
 ## 5. Closed in S270
 

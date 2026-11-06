@@ -1,0 +1,372 @@
+{
+ "rules": "Update in place: Artifact publish with url=<this url> (read it first in a new conversation). Pages are shared with the team, so any org account with writer access can update them; never create a new page on an account switch. If writing is refused, ask the tech lead before making a new page, then update this file.",
+ "active": [
+  {
+   "id": "Q4LvqJyX5wsqRgZZQ75aoF",
+   "url": "https://claude.ai/artifact/Q4LvqJyX5wsqRgZZQ75aoF",
+   "title": "AA_Ecosys Master Plan",
+   "purpose": "Kế hoạch tổng thể + tab Phiên; cập nhật đầu phiên, sau mỗi bước lớn, cuối phiên",
+   "source": "docs/backlog/tracker/ (index.html + plan.json + sessions/)"
+  },
+  {
+   "id": "HrLRN1M3PyKKRjm5VJkvKV",
+   "url": "https://claude.ai/artifact/HrLRN1M3PyKKRjm5VJkvKV",
+   "title": "Kiến trúc AWS AA_Ecosys",
+   "purpose": "Sơ đồ tầng AWS từ Internet tới DB (acc2)",
+   "source": "docs/audits/2026-11-06-S271-aws-architecture/index.html"
+  },
+  {
+   "id": "YZzbttV86QkzHssvsfkAbd",
+   "url": "https://claude.ai/artifact/YZzbttV86QkzHssvsfkAbd",
+   "title": "Chốt chất lượng viết S271",
+   "purpose": "16 quyết định ADR 0020 (db `decisions`)",
+   "source": "docs/audits/2026-11-06-S271-writing-quality-audit/"
+  },
+  {
+   "id": "Jiz8KaJiWrpdrvi5eJWWJ4",
+   "url": "https://claude.ai/artifact/Jiz8KaJiWrpdrvi5eJWWJ4",
+   "title": "Danh mục báo cáo",
+   "purpose": "Trang đọc mọi báo cáo audit",
+   "source": "docs/audits/2026-10-29-S258-report-catalog/"
+  },
+  {
+   "id": "Lg8MqNQcgkbsqaLp81qNwp",
+   "url": "https://claude.ai/artifact/Lg8MqNQcgkbsqaLp81qNwp",
+   "title": "AA-Ecosys Engineering Handbook",
+   "purpose": "Sổ tay kỹ thuật",
+   "source": "docs/ (handbook)"
+  },
+  {
+   "id": "Mhw2JBwZQBW5DEzpuPG1pc",
+   "url": "https://claude.ai/artifact/Mhw2JBwZQBW5DEzpuPG1pc",
+   "title": "AI gateway thiết kế v2",
+   "purpose": "Trang duyệt thiết kế gateway (ADR 0009)",
+   "source": "docs/audits/2026-10-31-S261-ai-gateway-design-v2/"
+  },
+  {
+   "id": "FEWjBR5UfmvHFSesjL6nR3",
+   "url": "https://claude.ai/artifact/FEWjBR5UfmvHFSesjL6nR3",
+   "title": "AA-CIS Design System v2",
+   "purpose": "Design system / kit",
+   "source": "docs (ADR 0016)"
+  }
+ ],
+ "superseded": [
+  {
+   "id": "2VSP2stGG1TF7uXvqgQTUY",
+   "url": "https://claude.ai/artifact/2VSP2stGG1TF7uXvqgQTUY",
+   "use_instead": "https://claude.ai/artifact/Q4LvqJyX5wsqRgZZQ75aoF"
+  },
+  {
+   "id": "XzuEARCJJnCJj6s5ckEpGX",
+   "url": "https://claude.ai/artifact/XzuEARCJJnCJj6s5ckEpGX",
+   "use_instead": "https://claude.ai/artifact/HrLRN1M3PyKKRjm5VJkvKV"
+  },
+  {
+   "id": "6y5NHZ2rx1Yb7euNifHYeY",
+   "url": "https://claude.ai/artifact/6y5NHZ2rx1Yb7euNifHYeY",
+   "use_instead": "https://claude.ai/artifact/YZzbttV86QkzHssvsfkAbd"
+  }
+ ],
+ "archive": [
+  {
+   "id": "8A5XBeeUU5n7B8potPMt5q",
+   "url": "https://claude.ai/artifact/8A5XBeeUU5n7B8potPMt5q",
+   "title": "- **Report:** `docs/audits/2026-10-10-S223-jev-audit.html` (root repo) · artifact https://",
+   "cited_in": [
+    "docs/linear-export/cis-core-pipeline-llm-platform/AA-756.md:90",
+    "docs/sessions/2026-10-10-S223-n7-distinct-jobs-s1-wave-jev-audit.md:32"
+   ]
+  },
+  {
+   "id": "5srRKGxXrdiADV6u13niAH",
+   "url": "https://claude.ai/artifact/5srRKGxXrdiADV6u13niAH",
+   "title": "- 16 đề xuất. Trang duyệt: <https://claude.ai/artifact/5srRKGxXrdiADV6u13niAH>, Nghiệp **c",
+   "cited_in": [
+    "docs/sessions/2026-10-20-S245-quality-system-golden-set-codeql-crm-research.md:102",
+    "docs/sessions/2026-10-20-S245-quality-system-golden-set-codeql-crm-research.md:128"
+   ]
+  },
+  {
+   "id": "71GWJcHwyzdm88XjpKp6V6",
+   "url": "https://claude.ai/artifact/71GWJcHwyzdm88XjpKp6V6",
+   "title": "- Catalogue page of every Drive video (private artifact): https://claude.ai/artifact/71GWJ",
+   "cited_in": [
+    "docs/linear-export/data-platform-schema-ops-scale/AA-1021.md:91"
+   ]
+  },
+  {
+   "id": "R1YLp4i1QCt3kjnKd6yvvJ",
+   "url": "https://claude.ai/artifact/R1YLp4i1QCt3kjnKd6yvvJ",
+   "title": "- Data standards v1.0 written (wf_7f34466b-0c8): docs/architecture/data-standards/{README,",
+   "cited_in": [
+    "docs/audits/2026-10-14-S237-lane-backlog/00-orchestrator-journal.md:68",
+    "docs/sessions/2026-10-15-S237-chuoi-lane-5-repo-rls-retention-data-standards.md:8"
+   ]
+  },
+  {
+   "id": "Hz5bn9ryLDToqiNU7vrHpt",
+   "url": "https://claude.ai/artifact/Hz5bn9ryLDToqiNU7vrHpt",
+   "title": "- Ecosystem blueprint published: https://claude.ai/artifact/Hz5bn9ryLDToqiNU7vrHpt (source",
+   "cited_in": [
+    "docs/audits/2026-10-14-S235-ecosystem-team-pilot/00-orchestrator-journal.md:64",
+    "docs/audits/2026-10-14-S235-ecosystem-team-pilot/README.md:9"
+   ]
+  },
+  {
+   "id": "9mmgckVoU9BHQ3dG6woEuG",
+   "url": "https://claude.ai/artifact/9mmgckVoU9BHQ3dG6woEuG",
+   "title": "- Trang duyệt: <https://claude.ai/artifact/9mmgckVoU9BHQ3dG6woEuG>.",
+   "cited_in": [
+    "docs/sessions/2026-10-20-S245-quality-system-golden-set-codeql-crm-research.md:95"
+   ]
+  },
+  {
+   "id": "5zccrpwjZ31c2XtiP4HRfu",
+   "url": "https://claude.ai/artifact/5zccrpwjZ31c2XtiP4HRfu",
+   "title": "- `aws-llm-model.html`: <https://claude.ai/artifact/5zccrpwjZ31c2XtiP4HRfu> (private, clau",
+   "cited_in": [
+    "docs/audits/2026-10-31-S261-aws-bedrock-org-access/README.md:488"
+   ]
+  },
+  {
+   "id": "3Sx24UxNAHj7NnqR2gsPpf",
+   "url": "https://claude.ai/artifact/3Sx24UxNAHj7NnqR2gsPpf",
+   "title": "- `llm-gateway.html`: <https://claude.ai/artifact/3Sx24UxNAHj7NnqR2gsPpf> (private, claude",
+   "cited_in": [
+    "docs/audits/2026-10-31-S261-llm-capacity-plan/README.md:737"
+   ]
+  },
+  {
+   "id": "TXwm33B2PZ8xx67q6H8aHv",
+   "url": "https://claude.ai/artifact/TXwm33B2PZ8xx67q6H8aHv",
+   "title": "- `org-accounts.html`: <https://claude.ai/artifact/TXwm33B2PZ8xx67q6H8aHv> (private, claud",
+   "cited_in": [
+    "docs/audits/2026-10-31-S261-llm-capacity-plan/README.md:736"
+   ]
+  },
+  {
+   "id": "Rgw1AnJotY3iLtyqnUcw97",
+   "url": "https://claude.ai/artifact/Rgw1AnJotY3iLtyqnUcw97",
+   "title": "- `page.html`: <https://claude.ai/artifact/Rgw1AnJotY3iLtyqnUcw97> (private, claude.ai acc",
+   "cited_in": [
+    "docs/audits/2026-10-31-S261-crm-progress-video-plan/README.md:216",
+    "docs/linear-export/partner-crm-aa-partner/AA-1014.md:25"
+   ]
+  },
+  {
+   "id": "WZyv9k6EHG559tCBm3DZZz",
+   "url": "https://claude.ai/artifact/WZyv9k6EHG559tCBm3DZZz",
+   "title": "- `review.html`: <https://claude.ai/artifact/WZyv9k6EHG559tCBm3DZZz> (private, claude.ai a",
+   "cited_in": [
+    "docs/audits/2026-10-31-S261-architecture-review/README.md:989"
+   ]
+  },
+  {
+   "id": "UG5UJXbwrXJRNq4DTFLkhq",
+   "url": "https://claude.ai/artifact/UG5UJXbwrXJRNq4DTFLkhq",
+   "title": "AA Ecosys CI",
+   "cited_in": []
+  },
+  {
+   "id": "FSR7H3tiZE25Pn3irbetnJ",
+   "url": "https://claude.ai/artifact/FSR7H3tiZE25Pn3irbetnJ",
+   "title": "AA-729 nhãn golden set",
+   "cited_in": []
+  },
+  {
+   "id": "EH6RFt5Wo8pHx7SJ2sBn29",
+   "url": "https://claude.ai/artifact/EH6RFt5Wo8pHx7SJ2sBn29",
+   "title": "AA-847 tuyến và gộp trùng",
+   "cited_in": []
+  },
+  {
+   "id": "2mCk7BrajpTpLEFao7PRt3",
+   "url": "https://claude.ai/artifact/2mCk7BrajpTpLEFao7PRt3",
+   "title": "AA-Partner giao diện",
+   "cited_in": [
+    "docs/audits/2026-10-21-S246-jira-drafts/README.md:52",
+    "docs/audits/2026-10-21-S246-jira-drafts/README.md:52"
+   ]
+  },
+  {
+   "id": "QUqBMVfkpyeaSWwU8qiARG",
+   "url": "https://claude.ai/artifact/QUqBMVfkpyeaSWwU8qiARG",
+   "title": "Advisory page for Nghiệp (Vietnamese): https://claude.ai/artifact/QUqBMVfkpyeaSWwU8qiARG",
+   "cited_in": [
+    "docs/audits/2026-10-12-S232-t9-social-audit/README.md:3",
+    "docs/sessions/2026-10-12-S232-aa768-aa764-aa763-audit-t9.md:42"
+   ]
+  },
+  {
+   "id": "SJD31VTYU1YNP98fyePMNT",
+   "url": "https://claude.ai/artifact/SJD31VTYU1YNP98fyePMNT",
+   "title": "Bảng câu hỏi CRM đại lý",
+   "cited_in": []
+  },
+  {
+   "id": "7rCi74LYtgacopJwNZTE2d",
+   "url": "https://claude.ai/artifact/7rCi74LYtgacopJwNZTE2d",
+   "title": "Bộ hồ sơ pháp lý AA",
+   "cited_in": []
+  },
+  {
+   "id": "QHJ6K2az7jGGMRUznXgrg9",
+   "url": "https://claude.ai/artifact/QHJ6K2az7jGGMRUznXgrg9",
+   "title": "CRM kỹ thuật v2.1",
+   "cited_in": []
+  },
+  {
+   "id": "DPRWweXAwKH9Wp41mRgW6W",
+   "url": "https://claude.ai/artifact/DPRWweXAwKH9Wp41mRgW6W",
+   "title": "CRM thêm ý Tern TravelJoy",
+   "cited_in": []
+  },
+  {
+   "id": "8BhT3B2C8qQcM7zVHDjxpK",
+   "url": "https://claude.ai/artifact/8BhT3B2C8qQcM7zVHDjxpK",
+   "title": "CRM v2.2 làm gọn",
+   "cited_in": []
+  },
+  {
+   "id": "UQ7XHmCouUsH9QZFprHTwd",
+   "url": "https://claude.ai/artifact/UQ7XHmCouUsH9QZFprHTwd",
+   "title": "CRM đại lý thiết kế v3",
+   "cited_in": []
+  },
+  {
+   "id": "S9JUSxTAdsULth39qHXQJN",
+   "url": "https://claude.ai/artifact/S9JUSxTAdsULth39qHXQJN",
+   "title": "Chưa soạn nháp Jira trong S265: tech lead yêu cầu \"nháp jira gom qua phiên tiếp theo\" (03/",
+   "cited_in": [
+    "docs/audits/2026-11-03-S265-close/jira-drafts.md:3",
+    "docs/audits/2026-11-03-S265-ecosystem-restructure/ARTIFACT.md:3"
+   ]
+  },
+  {
+   "id": "Hsr5SaBRNS7AxgRdoDhBAx",
+   "url": "https://claude.ai/artifact/Hsr5SaBRNS7AxgRdoDhBAx",
+   "title": "Design (approved direction, mockups): [https://claude.ai/artifact/Hsr5SaBRNS7AxgRdoDhBAx](",
+   "cited_in": [
+    "docs/linear-export/cis-portal-admin-tenant-ui/AA-752.md:27",
+    "docs/linear-export/cis-portal-admin-tenant-ui/AA-752.md:27"
+   ]
+  },
+  {
+   "id": "AgTQX7AwiRYAPj2SSYGjsX",
+   "url": "https://claude.ai/artifact/AgTQX7AwiRYAPj2SSYGjsX",
+   "title": "Design page (private artifact): [https://claude.ai/artifact/AgTQX7AwiRYAPj2SSYGjsX](<https",
+   "cited_in": [
+    "docs/linear-export/cis-core-pipeline-llm-platform/AA-1042.md:42",
+    "docs/linear-export/cis-core-pipeline-llm-platform/AA-1042.md:42"
+   ]
+  },
+  {
+   "id": "FkGxnXJuBCu7iJx7So58MK",
+   "url": "https://claude.ai/artifact/FkGxnXJuBCu7iJx7So58MK",
+   "title": "FAQ question check",
+   "cited_in": []
+  },
+  {
+   "id": "LAM1LXGEQq9nCiRSkJCUNm",
+   "url": "https://claude.ai/artifact/LAM1LXGEQq9nCiRSkJCUNm",
+   "title": "Hệ thống viết tự học",
+   "cited_in": []
+  },
+  {
+   "id": "W4CA57NztrD39V5VdUGcs8",
+   "url": "https://claude.ai/artifact/W4CA57NztrD39V5VdUGcs8",
+   "title": "OpenBA-Kit cho AA",
+   "cited_in": []
+  },
+  {
+   "id": "HpHJqSqVJSkdZd3FsPhMaX",
+   "url": "https://claude.ai/artifact/HpHJqSqVJSkdZd3FsPhMaX",
+   "title": "Partner CRM Spec",
+   "cited_in": []
+  },
+  {
+   "id": "KjJJetZqq53KgJVNkSHmJm",
+   "url": "https://claude.ai/artifact/KjJJetZqq53KgJVNkSHmJm",
+   "title": "Photo request for AA marketing (Phase C brief)",
+   "cited_in": [
+    "docs/linear-export/tripplanner-aa-booking/AA-689.md:125",
+    "docs/sessions/2026-09-29-S202-embeddings-jobs-ui-kan90-tour-graph-planner.md:71"
+   ]
+  },
+  {
+   "id": "BuaUQnyYeNYn9LSBxxyY1m",
+   "url": "https://claude.ai/artifact/BuaUQnyYeNYn9LSBxxyY1m",
+   "title": "S218 A-series pipeline audit",
+   "cited_in": []
+  },
+  {
+   "id": "6MTgUdkyb1eVbEzeVWH7gH",
+   "url": "https://claude.ai/artifact/6MTgUdkyb1eVbEzeVWH7gH",
+   "title": "S248 Decision Desk",
+   "cited_in": [
+    "docs/sessions/2026-10-23-S248-tour-liveness-b2b-secret-scan-erasure-drill-writer-decision.md:20"
+   ]
+  },
+  {
+   "id": "KgdjgAVf77xCG4r4KunPsJ",
+   "url": "https://claude.ai/artifact/KgdjgAVf77xCG4r4KunPsJ",
+   "title": "Tenant CRM v2",
+   "cited_in": []
+  },
+  {
+   "id": "PZeVUNY6GeAP1w3frv2oXK",
+   "url": "https://claude.ai/artifact/PZeVUNY6GeAP1w3frv2oXK",
+   "title": "Trang duyệt (52 issue, milestone, lịch phiên, 3 câu hỏi; lựa chọn lưu trong db của artifac",
+   "cited_in": [
+    "docs/audits/2026-11-03-S265-plan-issue-review/ARTIFACT.md:3"
+   ]
+  },
+  {
+   "id": "HYrjWyt2tSqNoNpAyy5Pn8",
+   "url": "https://claude.ai/artifact/HYrjWyt2tSqNoNpAyy5Pn8",
+   "title": "`docs/audits/2026-11-03-S266-tripplanner-tenant-addons/` (<https://claude.ai/artifact/HYrj",
+   "cited_in": [
+    "docs/sessions/2026-11-03-S266-r1-control-plane-ai-marking-gate.md:41"
+   ]
+  },
+  {
+   "id": "FY4DWyQTwVm5c4Qcf4mQo6",
+   "url": "https://claude.ai/artifact/FY4DWyQTwVm5c4Qcf4mQo6",
+   "title": "adventure.asia làm thước S1",
+   "cited_in": []
+  },
+  {
+   "id": "5QtvFweK4LHaMwF3HfXDok",
+   "url": "https://claude.ai/artifact/5QtvFweK4LHaMwF3HfXDok",
+   "title": "https://claude.ai/artifact/5QtvFweK4LHaMwF3HfXDok",
+   "cited_in": [
+    "docs/audits/2026-11-02-S264-close/jira-drafts.md:163",
+    "docs/sessions/2026-11-02-S264-gateway-leftovers-tenant-writing-sidebar-gameday.md:95"
+   ]
+  },
+  {
+   "id": "MQtWM3o23Tit1tzvJ4D3ko",
+   "url": "https://claude.ai/artifact/MQtWM3o23Tit1tzvJ4D3ko",
+   "title": "https://claude.ai/artifact/MQtWM3o23Tit1tzvJ4D3ko, gitleaks AA-ACP-App);",
+   "cited_in": [
+    "docs/sessions/2026-10-17-S241-sdlc-admin-console-x1-security.md:10"
+   ]
+  },
+  {
+   "id": "6XpQ8YUU7w7HsZ9AoGfnRb",
+   "url": "https://claude.ai/artifact/6XpQ8YUU7w7HsZ9AoGfnRb",
+   "title": "sánh đại lý): <https://claude.ai/artifact/6XpQ8YUU7w7HsZ9AoGfnRb>. Điều khoản hợp đồng của",
+   "cited_in": [
+    "docs/audits/2026-10-29-S258-aws-org-blueprint/README.md:20",
+    "docs/linear-export/data-platform-schema-ops-scale/AA-1002.md:41"
+   ]
+  },
+  {
+   "id": "8QcPZJu7Ww5D5MEs35GdaP",
+   "url": "https://claude.ai/artifact/8QcPZJu7Ww5D5MEs35GdaP",
+   "title": "Đánh giá câu hỏi Jev",
+   "cited_in": []
+  }
+ ]
+}

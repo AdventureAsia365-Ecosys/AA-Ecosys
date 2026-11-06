@@ -40,6 +40,9 @@ lỗi, chuyển dòng sang [`guards.md`](guards.md) trong cùng PR.
 - **Lỗi Claude Code 'Unable to read managed policy settings (allowedProviders)' giết mọi agent/workflow đang chạy và chặn cả tin nhắn** — worktree còn diff dở; giao agent mới làm tiếp từ `git status`/`git diff`/notes, không làm lại từ đầu (S266, đêm 03→04/11).
 - **Review đối kháng vòng 2 trên bản đã sửa vẫn bắt lỗi leo quyền mới — lane quyền phải test role × route cho MỌI route ghi mở cho role mới** — vòng 1 sửa 8 finding, vòng 2 thêm 6 major (support tự mời mình làm owner, finance không mở được Tenant 360, schema-gate không thấy key ngoài prefix) vì fix pass mở capability rộng hơn ma trận (S267, AA-1035). Bắt bằng: workflow re-review đối kháng sau mỗi fix pass của lane quyền; test ma trận role × route ghi, kể cả route mời/đổi role owner.
 - **Lane bị dừng giữa chừng để lại commit/thay đổi chưa commit — vòng sau đọc `git status` + `git log origin/main..` trước khi làm tiếp** — vòng sửa route S267 dừng để đổi chính sách, vòng sau suýt làm chồng lên thay đổi dở (S267, AA-1042). Bắt bằng: brief vòng nối lại ghi bước đầu tiên là kiểm cây và commit/loại phần dở.
+- **Cập nhật master plan ngay sau khi tech lead chốt danh sách, trước khi mở lane** — S271 mở 2 lane khi tracker còn ở S270, tech lead phải nhắc (S271). Guard: hook .claude/hooks/lane_start_guard.py.
+- **PR chỉ có code xếp merge queue song song; chỉ chuỗi migration mới tuần tự** — S271 ship 7 PR W0 bằng script tuần tự (ước ~4 giờ, song song ~1 giờ), dù aa-ship đã ghi "xếp cùng lúc được" (S271, AA-889). Guard: hook aa_shell_guard:SHIP-1.
+- **Sửa test CI phải chạy lại đúng test đó ở máy trước khi push** — bản sửa test #1350 lần 1 lại đỏ CI vì ledger lưu tên model đã chuẩn hoá (S271, AA-900). Guard: pending AA-1024.
 
 ## Thái độ làm việc (Nghiệp chốt S228 — áp dụng cho Kiro VÀ Claude Code)
 
@@ -234,6 +237,7 @@ rồi kiểm lại bằng một exec ngắn riêng; exec chỉ đọc thì chạ
 - **Script ecsx gọi hàm app với `asyncpg.create_pool(max_size=2)` có thể tự khoá chết khi hàm app lấy connection lồng nhau** — `staff_directory.create_staff` treo >10 phút, không in gì, ecsx báo "no result" (S270, AA-1035 cs_create); lượt dry (không gọi hàm ghi) xong ngay. Bắt bằng: script gọi service của app dùng pool `max_size` ≥ 6 (hoặc pool của app); triệu chứng "dry xong, apply im lặng" → nghi pool trước khi nghi SSM.
 - **Phiên MFA `aa365-admin` 8 giờ hết giữa phiên làm ecsx/as-app im lặng thất bại ("no result", S3 download failed)** (S270 ~14:20Z). Bắt bằng: phiên dài kiểm `Expiration` (`aws configure export-credentials`) trước mỗi đợt ship/kiểm live; còn < 30′ thì báo tech lead nhập MFA trước.
 - **Cài Playwright không lockfile với dải `^` sẽ vỡ khi upstream phát hành dở** — `@playwright/test` 1.65.0 lên npm 05/11 18:30Z nhưng `playwright-core@1.65.0` chưa có (ETARGET) → mọi job Visual/UI smoke của CIS (root `npm install`, không lockfile) đỏ, chặn cả merge queue vì Visual là check bắt buộc (S270, CIS #1333 ghim 1.64.1). Bắt bằng: phụ thuộc cài trong CI ghim phiên bản cứng hoặc có lockfile; Partner/TP đã ghim, Booking có lockfile.
+- **Kiểm role tin tài khoản ngoài phải xét cả Federated (SAML/OIDC) và Service, không chỉ Principal.AWS** — S271 bỏ sót role AWSReservedSSO_AdministratorAccess của Identity Center reseller trong acc2 (S271, AA-1004). Guard: tool infra/AA-CIS-Infra/tools/terraform/iam_trust_inventory.py.
 
 ## Pipeline và chất lượng
 
@@ -264,6 +268,9 @@ rồi kiểm lại bằng một exec ngắn riêng; exec chỉ đọc thì chạ
 - **Panel mù nhiều vòng: chấm lại MỌI nhánh (pilot / r1 / r2) bằng cùng một bộ giám khảo trong một lượt, không so điểm vòng mới với số của panel phiên trước** — giám khảo trôi giữa các lượt nên chênh lệch đo được lẫn cả độ trôi của panel (S252, AA-790). Bắt bằng: báo cáo panel nêu mọi nhánh được chấm trong cùng một run; thiếu nhánh nào thì chấm lại cả bộ.
 - **Mỗi rule giọng/khán giả mới trong prompt phải được panel chấm đủ 4 lens so với bản trước trên cùng run, không chỉ lens mục tiêu** — r4 FAMILY_RULE (chỉ "your family", cấm gán hoạt động cho trẻ) siết để giữ fidelity nhưng brand voice Terra tụt 7,0 → 5,5 (S252, AA-790). Bắt bằng: bảng panel trước/sau theo cả 4 lens trong cùng run trước khi giữ rule.
 - **Script adhoc gọi API trả phí: ghi sổ bằng helper có sẵn và bọc riêng, chạy thử với stub trước** — 2 lượt gọi OpenAI thành công nhưng không vào `llm_call_log` vì script đọc sai tên trường (`tokens_in` thay vì `input_tokens`), AttributeError nổ sau khi đã tính tiền (S262, AA-1018 drill). Bắt bằng: dùng `billed_fields` + `record_call_sync` (hoặc để gateway tự ghi dòng thành công), chạy với stub trước khi gọi thật.
+- **Trần token do gateway giữ theo model + effort, không để call site tự đặt** — max_tokens cắt lặp 3 lần (T8 S270; T9 + judge eval S271), cut rỗng của Sonnet 5.5 rơi âm thầm xuống 4.6 (S271, AA-900). Guard: test apps/AA-CIS-App/tests/unit/test_aa900_s271_w0_gateway.py.
+- **Eval trả phí phải tự từ chối ở $0 khi không thể ra verdict hợp lệ** — 2 lần R2 tốn ~2,4 USD tiền writer dù calibration đã hỏng và 0/15 bài có đối chứng (S271, AA-900). Guard: test apps/AA-CIS-App/tests/unit/test_aa900_w0_eval_interim.py.
+- **Một luật viết chỉ có MỘT nguồn** — chất lượng blog/tour sửa lặp nhiều tuần vì luật trung thực nguồn chép ~10 chỗ, 16 mâu thuẫn (S271 audit). Guard: pending AA-1047.
 
 ## Job runner
 
@@ -344,6 +351,8 @@ rồi kiểm lại bằng một exec ngắn riêng; exec chỉ đọc thì chạ
 - **Test integration CIS chạm `geo.*` phải apply lại migration geo (255, 319) trong fixture** — `test_aa712_migration_226` (xếp trước theo tên) DROP schema geo rồi chỉ apply 226 → `UndefinedColumnError` chỉ trên CI (S262, CIS #1205). Bắt bằng: helper chung trong conftest (reapply geo) thay vì mỗi file tự chép.
 - **Ngân sách AI theo entitlement phải fail closed trên mọi đường: trial hết hạn chờ tick, override 0, gói add-on chứa key platform, sửa gói bỏ key** — 'không có dòng' = không giới hạn là mặc định nguy hiểm (S266, AA-1028 lát 3).
 - **Fixture test xoá bảng có FK tự tham chiếu (`reverted_from`) theo `created_by` sẽ vỡ khi test khác cùng shard để lại dòng trỏ vào** (S270, CIS #1329, test 376). Bắt bằng: xoá cả dải version trong một câu lệnh (FK NO ACTION kiểm cuối câu lệnh) hoặc dọn dòng trỏ trước.
+- **DRY RUN qua ECS exec không băm cả dòng (`md5(t::text)`)** — hook PII chặn DRY RUN AA-1046 vì whole-row text là đọc cả dòng (S271, AA-1046). Guard: hook .claude/hooks/pilot_pii_guard.py.
+- **Test DB không sắp xếp theo id UUID** — test mới của #1350 đỏ ở CI shard vì thứ tự dòng theo uuid ngẫu nhiên (S271, AA-900). Guard: pending AA-1024.
 
 ## Frontend
 
