@@ -5,7 +5,8 @@
 
 // The identities a dry-run scenario may name (lib/signin.cjs signs each one in once, outside the recorded context).
 // studio-editor (AA-855): the Content studio EDITOR of the E2E tenant; it can write, so only write scenarios use it.
-const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'crm'];
+// studio-audit (AA-855 W-01..W-04): the editor of the four synthetic audit tenants (lib/studio-audit.cjs), one per run.
+const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'crm'];
 // Paths that reach a paid model or data provider: aborted in every dry-run scenario (record.cjs UAT_BLOCK_URLS), so a
 // dry run can never start one, even by a stray click. TripPlanner free-text search (embedding) and narration (chat
 // model), in both spellings (lib/botCheck.ts in AA-TripPlanner-Web); the writes among them are also non-GET.
@@ -15,16 +16,16 @@ const PAID_URLS = ['/api/browse/search(?:[?#]|$)', '/api/browse\\?(?:.*&)?resour
 // guard of record.cjs keeps those scenarios read-only, so they run only on an explicit --include-writable. The other
 // signed-in identities are refused writes by their backend too (403 e2e_read_only for the CIS / Booking E2E staff,
 // 403 studio_role_forbidden for the Content studio viewer). The studio editor can write too (AA-855).
-const WRITABLE_IDENTITIES = ['crm', 'studio-editor'];
+const WRITABLE_IDENTITIES = ['crm', 'studio-editor', 'studio-audit'];
 // Exit code of a run stopped by the pilot guard (lib/pilot-guard.cjs EXIT_PILOT_GUARD).
 const EXIT_PILOT_GUARD = 5;
 // Order in which identities sign in: the cheap ones first, so a code-mail wait never delays the public pages.
-const SIGNIN_ORDER = ['public', 'studio', 'studio-editor', 'crm', 'cis-admin', 'booking'];
+const SIGNIN_ORDER = ['public', 'studio', 'studio-editor', 'studio-audit', 'crm', 'cis-admin', 'booking'];
 
 /** Parse the runner's argv (without node and the script). Throws on an unknown option or a missing value. */
 function parseArgs(argv) {
   const opts = { only: [], apps: [], identities: [], list: false, record: null, keepGoing: true, out: null,
-    skipEgress: false, includeWritable: false };
+    skipEgress: false, includeWritable: false, allowPaid: false, preview: false };
   const value = (i, name) => {
     const v = argv[i + 1];
     if (v === undefined || v.startsWith('--')) throw new Error(`${name} needs a value`);
@@ -43,11 +44,18 @@ function parseArgs(argv) {
       case '--stop-on-fail': opts.keepGoing = false; break;
       case '--skip-egress-check': opts.skipEgress = true; break;
       case '--include-writable': opts.includeWritable = true; break;
+      // AA-855: run (or record) a scenario of the write set (scenarios/write-set.cjs) that writes and calls a paid model.
+      // Implies --include-writable (consent to pay covers consent to sign in a writable identity).
+      case '--allow-paid': opts.allowPaid = true; opts.includeWritable = true; break;
+      // AA-855: run only the read-only part of write-set scenarios (the steps before the first writing step), $0.
+      case '--preview': opts.preview = true; break;
       case '--fast': break; // the dry run is always fast; accepted for symmetry with record.cjs
       default: throw new Error(`unknown option ${a}`);
     }
   }
   for (const id of opts.identities) if (!IDENTITIES.includes(id)) throw new Error(`unknown identity ${id}`);
+  if (opts.preview && opts.allowPaid) throw new Error('--preview runs only the read-only part: it never takes --allow-paid');
+  if (opts.preview && opts.record) throw new Error('--preview is a dry run, it records nothing');
   return opts;
 }
 
@@ -69,6 +77,33 @@ function describe(sc, file) {
   return { id: sc.id, app: sc.app, identity, title: sc.title || '', file, steps: sc.steps.length, readOnly: !!sc.readOnly };
 }
 
+/**
+ * A scenario of the write set (scenarios/write-set.cjs, AA-855): it writes on a synthetic tenant and may call a paid
+ * model, so it is never in a default run. Built with rw() (lib/uat-page.cjs): the browser guard stays on (readOnly)
+ * with a narrow allowWrites list, prepare() signs it in. `paid` must be stated (true or false); `preview` = the number
+ * of steps before the first step marked `writes` (the part a --preview run may take at $0).
+ */
+function describeWrite(sc, file) {
+  if (!sc || typeof sc !== 'object') throw new Error(`${file}: not a scenario module`);
+  if (!sc.id || !sc.app || !Array.isArray(sc.steps) || !sc.steps.length) throw new Error(`${file}: id, app and steps are required`);
+  const identity = sc.identity || 'public';
+  if (!WRITABLE_IDENTITIES.includes(identity)) throw new Error(`${file}: a write-set scenario signs in a writable identity (${WRITABLE_IDENTITIES.join(', ')})`);
+  if (sc.readOnly !== true) throw new Error(`${file}: a write-set scenario keeps the browser guard on (build it with rw())`);
+  if (!Array.isArray(sc.allowWrites) || !sc.allowWrites.length) throw new Error(`${file}: a write-set scenario names the writes it makes (allowWrites)`);
+  if (typeof sc.paid !== 'boolean') throw new Error(`${file}: a write-set scenario states paid: true or false`);
+  if (sc.fastOnly) throw new Error(`${file}: data steps (fastOnly) are not write-set scenarios`);
+  // The steps that may write are marked, so a --preview knows where the read-only part ends.
+  if (!sc.steps.some((s) => s && s.writes)) throw new Error(`${file}: a write-set scenario marks the steps that write (step(..., { writes: true }))`);
+  return { id: sc.id, app: sc.app, identity, title: sc.title || '', file, steps: sc.steps.length, readOnly: true,
+    writeSet: true, paid: sc.paid, preview: previewSteps(sc) };
+}
+
+/** How many steps come before the first step that writes (step.writes): the read-only part of a write scenario. */
+function previewSteps(sc) {
+  const i = sc.steps.findIndex((s) => s && s.writes);
+  return i < 0 ? sc.steps.length : i;
+}
+
 const matches = (e, opts) => (!opts.only || !opts.only.length || opts.only.includes(e.id))
   && (!opts.apps || !opts.apps.length || opts.apps.includes(e.app))
   && (!opts.identities || !opts.identities.length || opts.identities.includes(e.identity));
@@ -83,6 +118,21 @@ function select(entries, opts) {
   const dup = entries.find((e, i) => entries.findIndex((x) => x.id === e.id) !== i);
   if (dup) throw new Error(`duplicate scenario id ${dup.id}`);
   for (const id of opts.only || []) if (!ids.has(id)) throw new Error(`no scenario ${id} in the manifest`);
+  // The write set (AA-855) runs only by id: never in the whole set, never through --app / --identity. A paid one needs
+  // --allow-paid (or --preview: its read-only part only, $0); one without a read-only part has nothing to preview.
+  const named = (opts.only || []);
+  const writes = entries.filter((e) => e.writeSet && named.includes(e.id));
+  if (opts.preview) {
+    const none = writes.filter((e) => !e.preview).map((e) => e.id);
+    if (none.length) throw new Error(`${none.join(', ')}: no read-only part to preview (its first step writes)`);
+    if (named.some((id) => !entries.find((e) => e.id === id).writeSet)) throw new Error('--preview takes write-set ids only (--only W-01,...)');
+    if (!writes.length) throw new Error('--preview needs --only with write-set ids');
+    return writes;
+  }
+  const paid = writes.filter((e) => e.paid && !opts.allowPaid).map((e) => e.id);
+  if (paid.length) {
+    throw new Error(`${paid.join(', ')}: writes on a synthetic tenant and calls a paid model; add --allow-paid to run it (or --preview for its read-only part)`);
+  }
   if (!opts.includeWritable) {
     const named = [...(opts.identities || []).filter((x) => WRITABLE_IDENTITIES.includes(x)),
       ...entries.filter((e) => (opts.only || []).includes(e.id) && WRITABLE_IDENTITIES.includes(e.identity)).map((e) => e.id)];
@@ -90,13 +140,14 @@ function select(entries, opts) {
       throw new Error(`${named.join(', ')}: signs in an account that can write (no read-only role); add --include-writable to run it`);
     }
   }
-  return entries.filter((e) => matches(e, opts) && (opts.includeWritable || !WRITABLE_IDENTITIES.includes(e.identity)));
+  return entries.filter((e) => (!e.writeSet || named.includes(e.id)) && matches(e, opts)
+    && (opts.includeWritable || !WRITABLE_IDENTITIES.includes(e.identity)));
 }
 
 /** Ids the options would select but leave out because their identity can write (said in the report). */
 function skippedWritable(entries, opts) {
   if (opts.includeWritable) return [];
-  return entries.filter((e) => matches(e, opts) && WRITABLE_IDENTITIES.includes(e.identity)).map((e) => e.id);
+  return entries.filter((e) => !e.writeSet && matches(e, opts) && WRITABLE_IDENTITIES.includes(e.identity)).map((e) => e.id);
 }
 
 /** The identities to sign in for the selected entries (public needs none), in SIGNIN_ORDER. */
@@ -206,7 +257,14 @@ function renderMarkdown(run) {
   L.push('');
   L.push(`Started ${startedAt}, finished ${finishedAt}. Mode: fast (asserts only, no video, no TTS). Egress: ${egress || '—'}.`);
   L.push(`Result: **${c.PASS} PASS**, ${c.FAIL} FAIL, ${c.BLOCKED} BLOCKED, ${c.CRASH} CRASH of ${outcomes.length} scenarios.`);
-  L.push('No writes (non-GET requests are aborted and listed), no LLM or paid calls, Dev only. Cost $0.');
+  const paidIds = run.paid || [];
+  if (paidIds.length) {
+    L.push(`PAID run (--allow-paid): ${paidIds.join(', ')} write on the audit tenant and call the writing model (cost in the LLM ledger). Every other request outside their allow-lists is aborted and listed. Dev only.`);
+  } else if (run.preview) {
+    L.push('Preview: only the read-only part of the write scenarios ran (the steps before the first write). No writes, no LLM or paid calls, Dev only. Cost $0.');
+  } else {
+    L.push('No writes (non-GET requests are aborted and listed), no LLM or paid calls, Dev only. Cost $0.');
+  }
   if (skipped.length) {
     L.push(`Not run: ${skipped.join(', ')} (their identity can write; run with --include-writable).`);
   }
@@ -258,6 +316,6 @@ function stamp(d = new Date()) {
 }
 
 module.exports = {
-  IDENTITIES, WRITABLE_IDENTITIES, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, parseArgs, describe, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
+  IDENTITIES, WRITABLE_IDENTITIES, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, parseArgs, describe, describeWrite, previewSteps, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
   renderMarkdown, renderTsv, stamp,
 };

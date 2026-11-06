@@ -17,8 +17,11 @@ const HOSTS = {
 };
 const PHONE = { width: 390, height: 844 };
 
-/** One scenario step: the caption (subtitle and narration in record mode, en + vi) and run() = action + assert. */
-const step = (en, vi, run) => ({ caption: { en, vi }, run });
+/**
+ * One scenario step: the caption (subtitle and narration in record mode, en + vi) and run() = action + assert.
+ * `{ writes: true }` marks a step of a write scenario that may write (AA-855): a --preview run stops before it.
+ */
+const step = (en, vi, run, { writes = false } = {}) => ({ caption: { en, vi }, run, ...(writes ? { writes: true } : {}) });
 
 /** A read-only scenario: identity + readOnly + the usual record.cjs fields. */
 function ro({ id, app, identity = 'public', title, titleVi, baseURL, viewport = DESKTOP, steps, ...rest }) {

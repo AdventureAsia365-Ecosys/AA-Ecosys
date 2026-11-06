@@ -44,7 +44,7 @@ const sc = rw({
         await h.expect(pick).toBeVisible({ timeout: 30_000 });
         await h.click(pick);
         await h.expect(page.getByTestId('writer-panel').first()).toBeVisible({ timeout: 60_000 });
-      }),
+      }, { writes: true }),
     step('The writer asks for the goal of the post, then offers three angles. The agency always chooses.',
       'Trình viết hỏi mục tiêu của bài, rồi đưa ra ba góc tiếp cận. Đại lý luôn là người chọn.',
       async (page, h) => {
@@ -53,14 +53,14 @@ const sc = rw({
         await h.expect(goal).toBeVisible({ timeout: 60_000 });
         await h.click(goal);
         await h.expect(panel.getByRole('button', { name: 'Write with this angle' }).first()).toBeVisible({ timeout: 180_000 });
-      }),
+      }, { writes: true }),
     step('Choosing an angle starts the writing at once. The steps show while the piece is written.',
       'Chọn một góc là bắt đầu viết ngay. Các bước hiện ra trong lúc bài được viết.',
       async (page, h) => {
         if (writes) throw new Error('a piece was already requested in this run (one paid piece per run)');
         await h.click(page.getByTestId('writer-panel').first().getByRole('button', { name: 'Write with this angle' }).first());
         await h.expect(page.getByTestId('live-writer-status').first()).toBeVisible({ timeout: 60_000 });
-      }),
+      }, { writes: true }),
     step('The finished piece carries the AI notice and can be exported or opened in My Content. This is the end of the scenario.',
       'Bài hoàn thành kèm thông báo về AI, có thể xuất file hoặc mở trong Nội dung của tôi. Kết thúc kịch bản.',
       async (page, h) => {
