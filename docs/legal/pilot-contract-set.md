@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-partner-portal, aa-crm-web, tripplanner-frontend]
-last_reviewed: 2026-11-05
+last_reviewed: 2026-11-06
 review_every_days: 30
 related: [SEC-04-dpa-agreement, SEC-04-ai-schedule, SEC-04-dpa-pack, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04-dpa-annex4, AA-820]
 ---
@@ -26,7 +26,7 @@ related: [SEC-04-dpa-agreement, SEC-04-ai-schedule, SEC-04-dpa-pack, SEC-04-dpa-
 |---|---|---|---|
 | 1 | Pilot letter: test environment, no service level, at most 8 weeks or until AA's production environment exists, the monthly AI allowance | Business owner's wording | To write; §2 gives its legal clauses |
 | 2 | [AI Schedule: acceptable use of AI features](tenant-ai-schedule.md) | **v1.0** (2026-11-03) | Adopted by the tech lead; counsel review pending |
-| 3 | [Data Processing Agreement](dpa.md) with [Annex 1](dpa-annex-1-processing.md), [Annex 2](dpa-annex-2-security.md), [Annex 3](dpa-annex-3-subprocessors.md), [Annex 4](dpa-annex-4-transfers.md) | **Draft v0.2** (2026-11-05) | Engineering draft; the tech lead reads it, then counsel |
+| 3 | [Data Processing Agreement](dpa.md) with [Annex 1](dpa-annex-1-processing.md), [Annex 2](dpa-annex-2-security.md), [Annex 3](dpa-annex-3-subprocessors.md), [Annex 4](dpa-annex-4-transfers.md) | **Draft v0.3** (2026-11-06) | Engineering draft; the tech lead reads it, then counsel |
 | 4 | EU SCC Module 2 with the fill-ins of Annex 4 §3 | Only if the pilot agency is in the EU, UK or Switzerland | Not needed for a non-EU pilot **[COUNSEL]** |
 | 5 | Model privacy notice for the agency's own clients (§4) | Draft | The agency adapts and publishes it |
 
@@ -154,13 +154,13 @@ Agency's notice (an app change in AA-TripPlanner-Web, outside this pack).*
 
 ## 5. Readiness checks before the pilot letter is signed
 
-| # | Check | Owner | State on 2026-11-05 |
+| # | Check | Owner | State on 2026-11-06 |
 |---|---|---|---|
 | 1 | The tech lead has read the DPA and its annexes (status `draft` → reviewed) | Tech lead | Pending |
 | 2 | Contracting entity and counsel decision (b10, b20) | Business owner | Open |
-| 3 | The pilot safeguards of Annex 2 M-25 are built and verified live | Engineering | Not built |
-| 4 | 14-day database backups applied (Annex 2 M-30) | Engineering | Approved, not applied |
+| 3 | The pilot safeguards of Annex 2 M-25 are built and verified live | Engineering | **Done** (all five on Dev since 2026-11-05, AA-969; restore drill 24 of 24 and 5,206 of 5,206 rows on synthetic agencies). Left: the pilot exception for the pilot agency's CRM account (Annex 2 §2 item 2), and AA's written confirmation to the Agency (clause [●].4) |
+| 4 | 14-day database backups applied (Annex 2 M-29) | Engineering | Done: 14 days since the AA-CIS-Infra #694 apply on 2026-11-06 |
 | 5 | The Agency's market known, and the transfer mechanism chosen (Annex 4 §2) | Business owner, counsel | Open |
-| 6 | Vendor terms checked for AWS (through the reseller), the Anthropic API, the OpenAI API (Annex 3) | Counsel | Open |
+| 6 | Vendor terms checked for AWS (through the reseller), the Anthropic API, the OpenAI API (Annex 3). The two direct APIs now carry most AI calls (Annex 3 §1.2), so this check is no longer only about a fallback | Counsel | Open |
 | 7 | Jev allowlist does not include the pilot agency without a DPA / zero-retention agreement | Engineering | Proposal (Annex 3 §1.2) |
 | 8 | The monthly AI allowance number in the pilot letter | Business owner | Open (AI Schedule §5) |

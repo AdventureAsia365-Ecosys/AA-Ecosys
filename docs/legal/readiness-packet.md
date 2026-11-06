@@ -79,17 +79,17 @@ planned. *Proposed answer:* A now, B only when a marketing use exists. *Detail:*
 
 ## 4. DPA template and service providers
 
-*Current fact:* a draft data processing agreement for partners is ready for review. It sets out that the
+*Current fact:* a draft data processing agreement for partners (v0.3) is ready for review. It sets out that the
 partner is the controller for data it puts into the portal and Adventure Asia is the processor, lists the processor
 duties, and has annexes for the processing, the security measures (each marked live or planned) and the service
 providers. The register lists the providers found in the code: AWS (hosting, e-mail, sign-in, AI models through Amazon
-Bedrock), the AI providers OpenAI and Jev, Sentry (error reports), Vercel (websites), Mapbox (maps), Geoapify,
+Bedrock), the AI providers Anthropic (direct API, the first path for Claude models since 2026-11-05), OpenAI and Jev, Sentry (error reports), Vercel (websites), Mapbox (maps), Geoapify,
 DataForSEO, Google (photo files), the adventure.asia mail host, and work tools. Jev receives partner content only for a short list of test partners, until a data processing and zero-retention
 agreement with Jev is in place; that agreement is an open item. Other open points: whether the AWS resellers
 (TrueIDC for the hosting account, eCloudvalley for the AI account) and the model makers behind Bedrock must be listed,
 and the contract status of each provider. *Options:* (A) list every provider, including resellers, and remove any that
 counsel says are not needed; (B) list only providers that process data directly. *Proposed answer:* A. *Detail:*
-[DPA template](dpa-template.md); [register](register.md), section (b).
+[DPA v0.3](dpa.md) with its annexes; [register](register.md), section (b).
 
 ## 5. Records of processing
 
@@ -107,7 +107,7 @@ answer:* A. *Detail:* [register](register.md), section (a).
 exists for checking the person's identity, finding their records in both systems, and deleting them under a counted
 dry run that the tech lead approves first. The records are found by a one-way code (hash) computed from the e-mail
 address and then deleted by record number, so the address itself is never written into code, logs or files. Database
-backups keep a copy for up to 7 days after a deletion and then expire. The content system has a deletion job with a
+backups keep a copy for up to 14 days after a deletion and then expire. The content system has a deletion job with a
 counted dry run. Its partner part was tested once on the development environment, on 2026-10-23, on a made-up
 partner: the dry run, the approval, the deletion and the check all passed. The traveller part has not been run yet,
 and the booking system and Trip Planner deletion scripts are not written yet. No real deletion has happened, and three

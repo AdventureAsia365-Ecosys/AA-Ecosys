@@ -7,10 +7,11 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-crm-dev-api, aa-cis-dev-db]
-last_reviewed: 2026-11-05
+last_reviewed: 2026-11-06
 review_every_days: 90
-last_tested: null
-tested_where: null
+last_tested: 2026-11-05
+tested_where: drill
+tested_evidence: docs/audits/2026-11-05-S269-aa969-loadtest/restore-drill.json
 related: [OPS-03-schema, OPS-03-pitr, OPS-05-ecs-exec, AA-969, AA-1028]
 ---
 

@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-partner-portal, aa-crm-web, tripplanner-frontend]
-last_reviewed: 2026-11-03
+last_reviewed: 2026-11-06
 review_every_days: 30
 related: [SEC-04, SEC-04-packet, SEC-04-dpa, SEC-04-dpa-pack, APP-06-ai-register, AA-820]
 ---
@@ -24,7 +24,7 @@ related: [SEC-04, SEC-04-packet, SEC-04-dpa, SEC-04-dpa-pack, APP-06-ai-register
 |---|---|
 | Linear | AA-820 part 1 (due 11/11/2026, one day before the Anthropic Usage Policy update takes effect). Part 2 (the DPA pack) is outlined in [dpa-pack-outline.md](dpa-pack-outline.md) |
 | Decision | ADR 0019 [b20](../adr/0019-b2b-only-ecosystem-model.md) (approve the AI-terms draft now; counsel before the first paying agency), b19 (Anthropic account in the AA company's name, AI included per plan with a soft stop), b9 and d16 (pilot on Dev with one agency, a pilot letter and a DPA) |
-| Version | **v1.0, 03/11/2026.** History: v0.1 15/10/2026 (root PRs #72, #74), v0.2 24/10/2026 (root PR #240); the earlier file name was `tenant-terms-ai-clause-draft.md` |
+| Version | **v1.0, 03/11/2026.** The Schedule text (§3) is unchanged; on 06/11/2026 (S271) the provider facts of §2, §5 and §6 were brought in line with route control version 6 (AI Use Register v1.11). History: v0.1 15/10/2026 (root PRs #72, #74), v0.2 24/10/2026 (root PR #240); the earlier file name was `tenant-terms-ai-clause-draft.md` |
 | Provider list | Taken from the [AI Use Register](../architecture/ai-use-register.md) (ADR 0009). A route change that adds a provider updates the register, this page and the app pages together |
 | Placeholders | `[●]` = a value the business owner or counsel fills in. *Drafting notes* (in italics) are for the reviewer and are not part of the clause |
 
@@ -43,7 +43,7 @@ relying on them.
 
 | # | Place | What goes there | Status (03/11/2026) |
 |---|---|---|---|
-| (a) | Content studio `/terms` §3 (AA-Partner `portal/app/terms/page.tsx`) | The plain-English summary of clauses .2 to .8, with the links to the three provider policies, the statement that the direct API accounts are AA's own company accounts, and "the AI Schedule v1.0 attached to your partner agreement governs" | S266: v1.0 summary, page version Draft v0.4 |
+| (a) | Content studio `/terms` §3 (AA-Partner `portal/app/terms/page.tsx`) | The plain-English summary of clauses .2 to .8, with the links to the three provider policies, the statement that the direct API accounts are AA's own company accounts, and "the AI Schedule v1.0 attached to your partner agreement governs" | S266: v1.0 summary, page version Draft v0.4. **Out of date since 2026-11-05:** its "directly only as a fallback" wording for the Anthropic and OpenAI APIs no longer matches the route (AI Use Register v1.11); an AA-Partner PR updates the page (EN and VI) |
 | (b) | CRM `/legal/terms` §1 "AI-generated content" (AA-Partner `web/lib/i18nTerms.ts`, EN and VI) | What the CRM drafts do, the provider policies, the prohibited uses, and the high-risk advice rule for ancillaries (insurance, visas, financing; b6) | S266: v1.0 summary. This meets the earlier gate "the Schedule is part of the agency terms before a real model is switched on for a CRM agency" |
 | (c) | Trip Planner `/terms` §3 "Use of AI" (AA-TripPlanner-Web) | Travellers are not tenants, so the Schedule does not bind them. The page names who writes the AI text (Claude through Amazon Bedrock) and links the Anthropic Usage Policy, because travellers are end users of a product that integrates Claude | S266: page version Draft v0.2 |
 | (d) | Partner agreement | This Schedule in full (§3), as an attachment accepted when the agency signs | To attach at onboarding |
@@ -245,8 +245,8 @@ the DPA (part 2, [dpa-pack-outline.md](dpa-pack-outline.md)).
 
 > **AI features.** Some tools in the Adventure Asia platform use AI models from third-party providers: Anthropic's
 > Claude, OpenAI models, and Amazon and Meta models on Amazon Bedrock. Adventure Asia reaches them through Amazon Web
-> Services and, as a fallback, through Anthropic's and OpenAI's own services, always on accounts held in Adventure
-> Asia's own company name. Your agency does not need an account with any of them.
+> Services and directly through Anthropic's and OpenAI's own services, always on accounts held in Adventure Asia's
+> own company name. Your agency does not need an account with any of them.
 >
 > By joining the pilot, your agency accepts the **AI Schedule (v1.0)** attached to this letter. In short:
 >
@@ -269,15 +269,15 @@ the DPA (part 2, [dpa-pack-outline.md](dpa-pack-outline.md)).
 *Drafting note: the allowance comes from ADR 0019 b19 (Starter 15, Growth 40, Business 80 USD a month). The pilot
 agency's plan, and so the number, is the business owner's call.*
 
-## 6. Product facts the Schedule relies on (03/11/2026)
+## 6. Product facts the Schedule relies on (03/11/2026, refreshed 06/11/2026)
 
 | Fact | Detail |
 |---|---|
 | Tenants | **No real or paying tenant.** The Dev tenants are test tenants. The first real one is the single pilot agency of ADR 0019 d16 (at most 8 weeks, or until `aa-prod` exists) |
-| Content studio AI | Tour rewrites (T2) and social and blog pieces (T9). Claude through Amazon Bedrock writes; OpenAI models through Amazon Bedrock review and check; Amazon Nova and Meta Llama on Bedrock are fallbacks for checks; the Anthropic API and, as a last resort, the OpenAI API may write when Claude on Bedrock is unavailable, with a spending cap ([AI Use Register](../architecture/ai-use-register.md), CIS migration 344) |
+| Content studio AI | Tour rewrites (T2) and social and blog pieces (T9). Claude writes, called on the **Anthropic API first** and on Amazon Bedrock second (a gateway setting since 2026-11-05, route control version 6); OpenAI models review and check, on Amazon Bedrock first and on the OpenAI API second. AA's Bedrock AI account has refused every main model since 2026-10-29, so today the two direct APIs answer these calls. Amazon Nova and Meta Llama on Bedrock are fallbacks for checks; an OpenAI model on the OpenAI API may write as a last resort. Each direct API has a monthly spending cap ([AI Use Register](../architecture/ai-use-register.md) v1.11; CIS migrations 344, 366, 376) |
 | CRM AI | Reply and follow-up drafts (`crm_draft_reply`), Amazon Bedrock only (ADR 0008a §5-6). Personal data the CRM knows or detects is replaced by placeholders before the model call. A person sends every draft. Off by default per agency, and gated by the plan's `ai_assist` feature |
-| Trip Planner AI | Trip narration (`tp_compose`): Claude through Amazon Bedrock, no fallback outside AWS. AI text is labelled on the site |
-| Direct API accounts | Held in the AA company's name (b19), monthly cap 150 USD for Anthropic; tenants never get a key |
+| Trip Planner AI | Trip narration (`tp_compose`): Claude through Amazon Bedrock only; the Trip Planner's gateway does not call the direct APIs. AI text is labelled on the site |
+| Direct API accounts | Held in the AA company's name (b19), monthly caps with a hard stop: 150 USD for Anthropic (one key for every product, switched on 2026-11-05), 10 USD for OpenAI; tenants never get a key |
 | Records | AI call ledgers (`shared.llm_call_log`, `crm.llm_call`) without prompt or output text, 180 days; publish log; admin audit log |
 | AI-content marks (for [●].4) | Notices and "AI-assisted" labels in every app, plus a machine-readable mark on AI Output: stored with each piece, sent in the API answers and downloads, and carried in the HTML of a WordPress post (EU AI Act Art. 50, AA-1040). What each surface carries: [AI Use Register, "Machine-readable marking"](../architecture/ai-use-register.md#machine-readable-marking-eu-ai-act-art-50) |
 

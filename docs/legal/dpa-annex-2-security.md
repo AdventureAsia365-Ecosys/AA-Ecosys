@@ -1,29 +1,34 @@
 ---
 id: SEC-04-dpa-annex2
-title: "DPA Annex 2: technical and organisational measures (draft v0.2)"
+title: "DPA Annex 2: technical and organisational measures (draft v0.3)"
 description: "Annex 2 of the partner-agency DPA (and SCC Annex II): each security measure marked Live with its code, Terraform or audit evidence and the data-standard rule or ADR it implements, or Planned with the gate it must pass; no measure is claimed that does not run."
 type: reference
 status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-crm-api, aa-crm-web, aa-partner-portal, aa-cis-api, aa-cis-worker, aa-booking-api, aa-cis-dev-db]
-last_reviewed: 2026-11-05
+last_reviewed: 2026-11-06
 review_every_days: 30
-related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex3, ARCH-08-data-management, SEC-08-s268-crm-security-review, AA-820, AA-969, AA-970]
+related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex3, ARCH-08-data-management, SEC-08-s268-crm-security-review, OPS-03-pilot-tenant, AA-820, AA-969, AA-970, AA-1004, AA-1035]
 ---
 
-# DPA Annex 2: technical and organisational measures (draft v0.2)
+# DPA Annex 2: technical and organisational measures (draft v0.3)
 
 > [!WARNING]
 > Draft for counsel, not legal advice. Part of the [Data Processing Agreement](dpa.md); also Annex II of the SCCs
 > ([Annex 4](dpa-annex-4-transfers.md)). This annex takes over the DPA technical annex of AA-970 (paused under ADR 0019
 > d15).
 
-**How to read it.** **Live** = runs on Dev on 2026-11-05, with the evidence named (repo and file on `main`, the live
-schema dump, or an audit folder). **Planned** = not running; the gate says when it must exist. Rules are the data
+**How to read it.** **Live** = runs on Dev on 2026-11-06, with the evidence named (repo and file on `main`, a pull
+request, the live schema dump, an audit folder or a session log in [`docs/sessions/`](../sessions/)). **Planned** = not running; the gate says when it must exist. Rules are the data
 standards ([Part B, data management](../architecture/data-standards/02-data-management.md)) cited as DM-n.n, and the
 ADRs in [`docs/adr/`](../adr/). Repos: CIS = AA-CIS-App, BK = AA-Booking, CRM = AA-Partner, INF = AA-CIS-Infra.
 AA promises the Live measures; the Planned ones are listed so the Agency knows what is not there yet.
+
+**What changed in v0.3 (2026-11-06).** The five pilot safeguards of ADR 0019 d16 (M-25) moved from Planned to Live
+(AA-969, closed in session S269); automated backups are 14 days (M-29, M-30 merged into it); M-13 names the staff
+roles and the tenant scope that went live with AA-1035 (closed in session S270); M-37 records the load test before
+real data; §2 lists the gaps left. v0.2 was root PR #546 (2026-11-05).
 
 ## 1. Measures
 
@@ -48,7 +53,7 @@ AA promises the Live measures; the Planned ones are listed so the Agency knows w
 | M-10 | No other AA app can read the CRM: no AA app role holds a grant on schema `crm`, checked by the isolation probe (every AA app role gets a permission error on `crm`) | Live | `docs/database/schema-ownership.md` (`crm` row); DM-6.8 enforcement column | DM-6.8, DM-8.3 |
 | M-11 | **Agency users** sign in through a dedicated Cognito pool: accounts are created by invitation only, **MFA is required**, password minimum 14 characters | Live | INF `accounts/aa365/identity_partner.tf` (`allow_admin_create_user_only = true`, `mfa_configuration = "ON"`, `minimum_length = 14`) | ADR 0010a, ADR 0019 settled item 4 |
 | M-12 | **AA staff** sign in through the WORKFORCE pool: admin-created accounts only, one-time e-mail codes, password minimum 16 characters, recovery by an admin. **MFA is optional and not enforced** for staff today | Live (MFA: gap) | INF `accounts/aa365/identity.tf` (`allow_admin_create_user_only = true`, `mfa_configuration = "OPTIONAL"`, `minimum_length = 16`) | ADR 0006 / 0006a |
-| M-13 | Least privilege for staff: each staff role has an explicit capability set, deny by default; tenant-scoped routes check the staff member's assigned agencies; reading tenant text is a separate capability; "view as tenant" is read-only, 5-60 minutes, needs a reason, audited | Live | CIS `api/core/staff_authz.py`, `api/core/tenant_scope.py`, `api/core/view_as.py`; CIS CONTEXT "R2 roles and tenant scope" | ADR 0019 d3, d5 |
+| M-13 | **Least privilege for staff.** Each staff role (admin, content, content lead, tenant QA, customer success, support, finance, AI operations, viewer) is one explicit capability set, deny by default. Every staff route that names an agency checks the staff member's **tenant scope**: customer success reaches only the agencies assigned to it, support those plus the unassigned pool, content and viewer only AA's own content; a refusal reads the same whether the agency exists or not, and a CI test fails any agency route without the check. Reading agency text is its own capability; support never sees prices, overage or AI cost. The CRM support desk asks CIS for the staff member's scope on every call and refuses when it cannot get an answer. "View as tenant" is read-only, 5-60 minutes, needs a reason, is audited and shows a banner | Live (checked live on 2026-11-05 with a customer-success test identity that can only read: 7 of 7 scope checks on the API, 403 on an agency not assigned to it, 28 screenshots of the real sign-in; the test identity writes nothing in CIS or the CRM) | CIS `api/core/staff_authz.py`, `api/core/tenant_scope.py`, `api/core/view_as.py`, `tests/unit/test_aa1035_tenant_scope_routes.py`; CIS CONTEXT "R2 roles and tenant scope"; CIS PRs #1315, #1316 (CRM desk scope), #1323-#1325, #1331, #1334; AA-Partner #226, #227, #234; `docs/audits/2026-11-05-S270-live-verify/aa1035/`; session log S270 | ADR 0019 d3, d4, d5; ADR 0006a A10d |
 | M-14 | AA access to CRM data in three levels: (1) console without personal data; (2) owner-granted read-only support, 1-7 days, names hidden by default, revocable at once; (3) emergency access, 15-60 minutes, a reason code and a ticket, never names, every Agency owner e-mailed. Each read is in the Agency's own access log | Live (the AWS-level emergency role is Planned) | CRM `app/support/`, crm-033; CONTEXT "AA support access L2 + break-glass L3" | DM-6.8 |
 | M-15 | Database roles per app, migrations by a separate role, runtime roles without DDL rights, the administrator credential is break-glass only and the CIS runtime is denied it | Live | INF `db/migrations/roles/`, `modules/ecs/main.tf` (statement `DenyMasterAndOtherAppSecrets`) | DM-8.1, DM-8.2, DM-8.9 |
 | M-16 | Secrets in AWS Secrets Manager, one prefix per app, each app reads only its own; secret scanning (gitleaks) in CI in every repo | Live | [Secrets register](../security/secrets-register.md); CI workflows | DM-8.6 |
@@ -70,8 +75,8 @@ AA promises the Live measures; the Planned ones are listed so the Agency knows w
 |---|---|---|---|---|
 | M-23 | **CRM audit trail**: append-only, codes and ids only; every reveal of an identity field and every list shown is recorded; hourly export per agency to write-once (S3 Object Lock) storage with a hash chain, verified before any partition is dropped; the Agency owner reads and downloads its own access log; an alert when one user reveals 60 records in an hour | Live (Dev: governance-mode lock only until go-live) | CRM CONTEXT "F5 audit", "F1 / F2 complete"; `crm.audit_event` (dump) | DM-6.8, DM-7.1 |
 | M-24 | Audit trails in the other apps: CIS audit log append-only with a SHA-256 hash chain; Booking audit log of staff actions; AWS CloudTrail on every region with log file validation and KMS encryption | Live | `acp_shared.audit_log` triggers (dump; CIS migration 248); `booking.audit_logs`; INF `accounts/aa365/observability.tf` (`aws_cloudtrail.main`), `security_cloudtrail.tf` | DM-8.9 |
-| M-25 | **Pilot safeguards before any real personal data** (ADR 0019 d16): (1) only the one pilot-marked agency may hold real data on Dev; (2) a hook stops agents and maintenance scripts from reading the pilot agency's personal data (counts only); (3) clean-up, test and batch jobs skip the pilot agency; (4) a nightly export of the pilot agency, so it can be restored alone; (5) a one-agency restore drill | **Planned: gate before pilot PII.** The pilot marker exists (`shared.tenants.is_pilot`, `pilot_ends_at`); items 1-5 are not built (S268 CRM security review §4); the portability export that item 4 reuses is Live | `docs/audits/2026-11-04-S268-crm-security-review/README.md` §4 | ADR 0019 d16 |
-| M-26 | Incident process: severities, a SEV1 for any exposure or loss of data, containment first, the business owner within 30 minutes, affected agencies within 2 hours, a written review | Live (process; no real incident yet) | [Incident response](../ops/incident-response.md) | DPA clause 8 |
+| M-25 | **Pilot safeguards before any real personal data** (ADR 0019 d16): (1) only the one pilot-marked agency may hold real data on Dev; (2) agents and maintenance scripts cannot read the personal data of any agency, the pilot included (counts only); (3) clean-up, test and batch jobs skip the pilot agency; (4) a nightly export of the pilot agency, so it can be restored alone; (5) a one-agency restore drill. Details per item in the table below | **Live** (all five on Dev since 2026-11-05, AA-969 closed in session S269); one onboarding gap in §2 item 2 | Below; `docs/audits/2026-11-05-S269-aa969-loadtest/`; session log S269 | ADR 0019 d16 |
+| M-26 | Incident process: severities, a SEV1 for any exposure or loss of data, containment first, the business owner within 30 minutes, affected agencies within 2 hours, a written review. A personal-data breach branch: where AA processes for the Agency, AA tells the Agency and the Agency notifies its authority; where AA is the controller of its own records, AA runs the 72-hour clock of Vietnam's law itself | Live (process; no real incident yet) | [Incident response](../ops/incident-response.md), "Personal data breach" | DPA clause 8 |
 | M-27 | Independent security review of the CRM before real data: no blocking finding; four major findings fixed with tests; minor follow-ups listed | Live (2026-11-04) | `docs/audits/2026-11-04-S268-crm-security-review/` | AA-969 |
 | M-28 | Penetration test before go-live | Planned: before the first paying agency | ADR 0019 b18 | |
 
@@ -79,11 +84,12 @@ AA promises the Live measures; the Planned ones are listed so the Agency knows w
 
 | # | Measure | State | Evidence | Rule |
 |---|---|---|---|---|
-| M-29 | Automated database backups with point-in-time restore, 7 days; restore drills to a new instance; per-schema restore procedure | Live (drills 2026-10-17 and 2026-10-24) | INF `modules/rds/main.tf` (`backup_retention_period = 7`); `docs/audits/2026-10-17-S241-restore-drill/`, `docs/audits/2026-10-24-S249-restore-drill/` | DM-9.1, DM-9.3, DM-9.4 |
-| M-30 | 14-day backups | Planned: cost approved, applied before the first pilot data (ADR 0019 settled item 3) | — | ADR 0019 d16 |
+| M-29 | Automated database backups with point-in-time restore, **14 days**; restore drills to a new instance; per-schema restore procedure | Live (14 days since the apply of AA-CIS-Infra PR #694 on 2026-11-06, `describe-db-instances` BackupRetentionPeriod 14; 7 days before; drills 2026-10-17 and 2026-10-24) | INF `modules/rds/main.tf` (`backup_retention_period = 14`, AA-CIS-Infra #694); `docs/audits/2026-10-17-S241-restore-drill/`, `docs/audits/2026-10-24-S249-restore-drill/` | DM-9.1, DM-9.3, DM-9.4; ADR 0019 d16 |
+| M-30 | 14-day backups (v0.2 listed them on their own as Planned) | Merged into M-29 in v0.3 | AA-CIS-Infra #694 | ADR 0019 d16 |
 | M-31 | Retention windows per table, enforced by owner-run jobs in batches, first run of each kind under DRY RUN with the tech lead's approval | Live (CRM `crm_lifecycle`; CIS and Booking retention kinds) | DM-7.1 table; CRM `app/lifecycle/`; `docs/legal/retention-log.md` | DM-7.1, DM-7.2 |
 | M-32 | Erasure and offboarding: one deletion path per app; dry run, verification and a receipt; legal holds enforced in the database | Live (CRM; CIS tenant erasure tested once on Dev on a synthetic agency) | CRM CONTEXT "Data lifecycle"; [DSAR and erasure runbook](dsar-erasure-runbook.md) §4; `docs/audits/2026-10-23-S248-aa839-erasure-drill/` | DM-6.7, DM-6.8 |
 | M-33 | Personal data never in the repositories or on laptops; schema and policy details in the public repos hold no data or secrets | Live (rule; `.gitignore`; review) | DM-6.10; [docs style guide](../STYLE.md) "Where a page may live" | DM-6.10 |
+| M-37 | Load test before real data: the CRM under 50 synthetic agencies at once, with fair per-agency request slots | Live (2026-11-05: 6,482 requests in about 8.6 minutes, 0 errors, 0 % refused for the well-behaved agencies, their p95 238 to 288 ms per request group) | `docs/audits/2026-11-05-S269-aa969-loadtest/k6-summary.json`; AA-Partner #222; session log S269 | AA-969 |
 
 ### People and organisation
 
@@ -93,13 +99,36 @@ AA promises the Live measures; the Planned ones are listed so the Agency knows w
 | M-35 | Named data-protection contact for the Agency | **[●]** (today AA's own privacy pages name one company contact address) | TP `frontend/lib/legal.ts` |
 | M-36 | Security and privacy rules for agents and engineers (hooks that stop sub-agents from merging, deleting data or reading secrets; DRY RUN for destructive steps) | Live | Root `.claude/hooks/`; `skill/aa-cis-schema/references/destructive-ops.md` |
 
+### M-25 in detail: the pilot safeguards (Live)
+
+| # | Safeguard | How it works | Evidence |
+|---|---|---|---|
+| 1 | Only the pilot agency holds real data on Dev | On Dev a new agency is refused unless it is created as the pilot, for 1 to 8 weeks; the database allows one pilot at a time; the marker reaches the CRM only through the CIS account feed | CIS `services/tenant_account/dev_guard.py` (AA-1028); `shared.tenants.is_pilot`, `pilot_ends_at` (CIS 354); `crm.tenant.is_pilot` (crm-044, AA-Partner #223) |
+| 2 | Agents and maintenance scripts cannot read personal data | A hook reads every database command an AI agent is about to send (an uploaded script, an inline query, a maintenance-script run) and refuses one that would return a value of a column tagged as personal data; counting is allowed. The maintenance-script runner (DB Migrate run-script) plans each statement on the live database and refuses the same reads. Both are always on, for every agency, not only during the pilot | Root `.claude/hooks/pilot-pii-guard.sh` (root PR #548); AA-CIS-Infra run-script guard (AA-CIS-Infra #678); session log S269 |
+| 3 | Clean-up, test and batch jobs skip the pilot agency | CIS retention of tenant rows and the end-to-end test identity; Booking case-lifecycle clearing and inbox redaction; the CRM data-lifecycle job and the test-agency delete | CIS #1314; AA-Booking #182; AA-Partner #224 |
+| 4 | Nightly export of the pilot agency | One portability export of the pilot agency every night, sealed under the agency's own key, kept 7 days; a failed nightly backup raises an alert | AA-Partner `crm_pilot_backup` (#224, #230); DM-7.1 row `crm.export_job` |
+| 5 | One-agency restore drill | Opens the newest nightly export, checks every checksum, restores every table into a throwaway schema of its own transaction and compares row counts; prints ids, table names and counts only | [Runbook](../ops/runbooks/pilot-tenant-restore-drill.md); run on Dev on 2026-11-05 on two synthetic agencies: 24 of 24 rows and 169 checksums (`docs/audits/2026-11-05-S269-aa969-loadtest/restore-drill.json`), and 5,206 of 5,206 rows after the fix below (session log S269) |
+
+The drill found a real defect before any real data: the export opened two sealed columns with the wrong agency key, so
+that agency's export failed. It was fixed with a test and a code guard, and a failed pilot backup now alerts
+(AA-Partner #230).
+
 ## 2. Known gaps (stated so the Agency is not surprised)
 
-1. Staff MFA is optional (M-12). Agency users have MFA on (M-11).
-2. The pilot safeguards of M-25 are not built: no real personal data may enter Dev until they are.
-3. Database point-in-time restore resets every app at once; one agency can be restored only from its own export
-   (M-25 item 4, Planned).
+1. Staff MFA is optional (M-12; AA-CIS-Infra `accounts/aa365/identity.tf`, re-read 2026-11-06). Agency users have
+   MFA on (M-11).
+2. The pilot agency's CRM account: on Dev the CRM's own agency creation accepts test agencies only
+   (AA-Partner `app/agencies.py`), so the pilot agency cannot hold real data in the CRM until a pilot exception keyed
+   on the CIS marker is built. This refuses rather than exposes, but it must be done before the pilot starts.
+3. Database point-in-time restore resets every app at once; one agency is restored from its own nightly export
+   (M-25 items 4-5). That export never holds vendor credentials, the agency's keys, the audit log (kept separately
+   in write-once storage) or documents past 25 MiB per export ([runbook](../ops/runbooks/pilot-tenant-restore-drill.md),
+   "What the nightly backup does not hold").
 4. The Content studio has no self-serve whole-account export (DPA clause 11.2).
 5. The Trip Planner prompt may carry traveller free text without an automated scrub (AI Use Register `tp_compose`);
    this matters only from pilot milestone 2.
 6. No SOC 2 or ISO 27001 report (ADR 0019 b18).
+7. The agent hook of M-25 item 2 reads the command text an agent sends: a script another program uploads, or SQL
+   assembled at run time from parts it cannot read, is outside it (its known limits are listed in the hook). The
+   run-script guard is exact for maintenance scripts. Only columns tagged as personal data are protected; the
+   DM-6.1 census lists untagged candidate columns still to review.
