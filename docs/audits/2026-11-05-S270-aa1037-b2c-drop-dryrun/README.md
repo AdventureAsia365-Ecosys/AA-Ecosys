@@ -229,7 +229,20 @@ Kept b2c rows (`kept`):
 
 Last B2C write: _pending_. Verdict: _pending_. Run: _pending_ (date, task, login).
 
-## 8. Order of work (follow-up issue)
+## 8. Order of work (follow-up issue AA-1046)
+
+**S271 status (AA-1046 R4b part 1, lane l2-r4b-b2c-drop).** Steps 1 to 5 and 7 are done as PRs: TripPlanner (My
+Payments retired), CIS (coverage row, KPIs moved to agency billing, erasure checklist), AA-CIS-Infra (isolation probe
+cells on `booking.trip_cases`, the bk-035 cell removed), the Booking code PR (no reader or writer of a dropped object
+is left), the root PRs (this fix of the pins; the contract, standards and registry text), and the Booking
+migration-only PR with this draft as `migrations/045_aa1037_retire_b2c.sql` (stacked on the code PR, its integration
+test `tests/integration/test_bk045_retire_b2c.py`, the DRY RUN script copied to `tests/integration/b2c_dry_run.py`). The
+pins stay `null` in that PR until step 6: the orchestrator pastes the fresh `DRYRUN_PINS` into its `pins jsonb := '…'`
+line before it merges (a merged file is copied to AA-CIS-Infra and never edited again). The draft here keeps the same
+text with `bk-NNN` (the S271 fix pass also added the two view REVOKEs and dropped a `;` from the registration text,
+both for the Booking migration guard).
+
+### Steps
 
 1. TripPlanner PR: remove My Payments (BFF route, component, lib, tests, CONTEXT.md).
 2. CIS PR: remove the `bk.customers` data coverage row, retire or move the eight KPIs, fix the erasure checklist line.

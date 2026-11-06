@@ -370,6 +370,10 @@ UNION ALL
 UNION ALL
  SELECT 'b2b_holds_active'::text, count(*) FROM booking.b2b_holds WHERE b2b_holds.status = 'active'::text;
 
+-- The views stay read-only for the app role (the migration guard's view rule; CREATE OR REPLACE keeps the grants).
+REVOKE INSERT, UPDATE, DELETE ON booking.v_trip_check_board FROM booking;
+REVOKE INSERT, UPDATE, DELETE ON booking.v_ops_data_totals FROM booking;
+
 -- ── 3. Functions rewritten without B2C (same triggers) ───────────────────────
 
 CREATE OR REPLACE FUNCTION booking.trip_cases_post_sale_guard() RETURNS trigger
@@ -580,7 +584,7 @@ DELETE FROM booking.trip_case_status_transitions
 
 INSERT INTO shared.schema_versions (version, applied_at, description)
 VALUES ('bk-NNN', now(), 'AA-1037: retire B2C (customer and customer money tables dropped, money rows archived to '
-        'retired_b2c_record; b2c cases kept as history; new trip cases b2b only)')
+        'retired_b2c_record, b2c cases kept as history, new trip cases b2b only)')
 ON CONFLICT (version) DO NOTHING;
 
 COMMIT;
