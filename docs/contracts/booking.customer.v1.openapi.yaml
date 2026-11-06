@@ -25,10 +25,13 @@ info:
     Frozen (root ADR 0019 d8, AA-1037): while Booking's B2C part is switched off (B2C_INTAKE_ENABLED, the default) staff
     can no longer create, send, amend or cancel an invoice or record a payment, so the answers stop changing; the read
     stays unchanged until the B2C tables are dropped (destructive-ops DRY RUN), which retires this contract.
+    RETIRED (AA-1046): AA-Booking no longer serves /booking/customer/v1 (any path is 404) and TripPlanner no longer
+    calls it; Booking bk-045 drops the customer, invoice and payment tables. The file is kept as the record of what was
+    served; no consumer may call it.
   x-aa-contract: booking.customer.v1
   x-aa-producer: AA-Booking
   x-aa-consumers: [AA-TripPlanner-Web]
-  x-aa-issues: [AA-682, AA-1037]
+  x-aa-issues: [AA-682, AA-1037, AA-1046]
 servers:
   - url: /booking/customer/v1
 security:

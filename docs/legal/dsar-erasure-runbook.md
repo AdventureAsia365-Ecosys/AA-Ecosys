@@ -48,7 +48,8 @@ unblocked, unused DRY RUN within the max age, starts the verification DRY RUN af
 history. The apply needs a Cognito staff sign-in. The `curl` commands below call the same API and stay as the
 terminal fallback.
 
-Scope: travellers and customers (TripPlanner guests, Booking customers) and offboarded tenants. Staff data is out of
+Scope: travellers (TripPlanner guests, and what Booking kept about them when it retired its B2C half: the b2c trip
+cases, the inquiry hand-off rows and the archived customer money rows; bk-045, root ADR 0019) and offboarded tenants. Staff data is out of
 scope. A tenant's own CRM contacts (AA-Partner, schema `crm`) are the tenant's records (DM-6.8): forward such a
 request to the tenant.
 
@@ -117,9 +118,19 @@ and the work item, nowhere else. After the erasure it matches no row.
    BY_EMAIL = H.format(col="email")
    BY_PAYLOAD = H.format(col="payload -> 'customer' ->> 'email'")
    TP_CUST = f"SELECT id FROM tripplanner.customers WHERE {BY_EMAIL}"
-   BK_CUST = f"SELECT id FROM booking.customers WHERE {BY_EMAIL}"
    TP_SESS = f"SELECT id FROM tripplanner.sessions WHERE customer_id IN ({TP_CUST})"
-   BK_CASE = f"SELECT id FROM booking.trip_cases WHERE customer_id IN ({BK_CUST})"
+   TP_TRIP = f"SELECT trip_id::text FROM tripplanner.trip_events WHERE session_id IN ({TP_SESS})"
+   BK_INBOX = f"SELECT id FROM booking.inbox_events WHERE contract = 'inquiry.submitted' AND {BY_PAYLOAD}"
+   # b2c trip cases kept as history by bk-045 (no customer_id any more): through the hand-off row while its payload
+   # is unredacted (90 days, DM-6.6), and through the TripPlanner trip id in source_id for as long as TripPlanner
+   # keeps the trip (the lasting link).
+   BK_CASE = (f"SELECT id FROM booking.trip_cases WHERE channel = 'b2c' AND (inbox_event_id IN ({BK_INBOX})"
+              f" OR (source_system = 'tripplanner' AND source_id IN ({TP_TRIP})))")
+   # bk-045 archive of the retired customer invoices and payments (accounting exception, DM-7.1): to_jsonb of
+   # each source row in `record`; the invoice row holds bill_to_email and trip_case_id, the others invoice_id.
+   BK_RET_INV = ("SELECT source_id FROM booking.retired_b2c_record WHERE source_table = 'invoices' AND ("
+                 + H.format(col="record ->> 'bill_to_email'")
+                 + f" OR record ->> 'trip_case_id' IN (SELECT id::text FROM ({BK_CASE}) c))")
 
    QUERIES = {
        "tp_customers": TP_CUST,
@@ -128,16 +139,14 @@ and the work item, nowhere else. After the erasure it matches no row.
        "tp_trip_events": f"SELECT id FROM tripplanner.trip_events WHERE session_id IN ({TP_SESS})",
        "tp_outbox": f"SELECT id FROM tripplanner.outbox WHERE {BY_PAYLOAD}",
        "tp_traveller_accounts": f"SELECT DISTINCT account_id FROM tripplanner.sessions WHERE id IN ({TP_SESS}) AND account_id IS NOT NULL",
-       "bk_customers": BK_CUST,
-       "bk_merge_refs": f"SELECT id FROM booking.customers WHERE merge_candidate_id IN ({BK_CUST})",
+       "bk_inbox_events": BK_INBOX,
        "bk_trip_cases": BK_CASE,
-       "bk_inbox_events": f"SELECT id FROM booking.inbox_events WHERE {BY_PAYLOAD}",
        "bk_notifications": f"SELECT id FROM booking.notifications WHERE entity_id IN ({BK_CASE})",
-       "bk_audit_logs": f"SELECT id FROM booking.audit_logs WHERE entity_id IN ({BK_CUST}) OR entity_id IN ({BK_CASE})",
-       "bk_customer_otps": f"SELECT id FROM booking.customer_otps WHERE customer_id IN ({BK_CUST})",
-       "bk_customer_sessions": f"SELECT id FROM booking.customer_sessions WHERE customer_id IN ({BK_CUST})",
-       "bk_customer_identities": f"SELECT customer_id FROM booking.customer_identities WHERE customer_id IN ({BK_CUST})",
-       "bk_media_files": f"SELECT profile_media_id FROM booking.customers WHERE {BY_EMAIL} AND profile_media_id IS NOT NULL",
+       "bk_audit_logs": f"SELECT id FROM booking.audit_logs WHERE entity_id IN ({BK_CASE})",
+       "bk_retired_invoices": BK_RET_INV,
+       "bk_retired_invoice_rows": ("SELECT source_table || ':' || source_id FROM booking.retired_b2c_record"
+                                   f" WHERE source_table <> 'invoices' AND record ->> 'invoice_id' IN"
+                                   f" (SELECT source_id::text FROM ({BK_RET_INV}) i)"),
    }
 
 
@@ -152,12 +161,14 @@ and the work item, nowhere else. After the erasure it matches no row.
    Check every column name against `db-schema-reference.md` before the PR, since this outline is not run in CI.
    Expected: CI shape check green.
 4. Merge, then dispatch DB Migrate on `main`: `mode=run-script`, `script=db/scripts/dsar_<yyyymmdd>_lookup.py`.
-   Expected: exit 0 and the `SCRIPT` lines in the job log. Verify: the TripPlanner and Booking counts agree with the
-   consent chain (one TripPlanner customer may have several Booking leads). Abort: exit 13 → fix the script in a new PR.
+   Expected: exit 0 and the `SCRIPT` lines in the job log. Verify: every `bk_trip_cases` id is a b2c case (one
+   TripPlanner customer may have sent several trips, so several cases). Booking keeps no customer record since bk-045
+   (`booking.customers`, its OTPs, sessions, identities and profile pictures were dropped, not archived): only the
+   tags above remain. Abort: exit 13 → fix the script in a new PR.
 5. **Name check, by hand.** Free text cannot be matched by a hash, and the name must not go into a committed script, so
    staff check `booking.trip_cases.notes` in the Booking admin: open each trip case the lookup found and look for the
-   person's name or contact details in the notes, and search the admin customer list for the name in case another
-   customer's trip mentions them. Record only the trip-case ids where the name was found. If the admin cannot search
+   person's name or contact details in the notes, and search the trip-case list for the name in case another
+   traveller's trip mentions them. Record only the trip-case ids where the name was found. If the admin cannot search
    notes, record that gap in the work item for AA-839.
 6. **CIS check (DRY RUN job).** CIS holds no traveller data by design, so this step proves absence: it hashes the
    e-mail-shaped tokens in notification, job and audit text and compares them with the same hash, and compares the
@@ -182,20 +193,24 @@ and the work item, nowhere else. After the erasure it matches no row.
 
 **Access requests.** The task log must not hold row values, so this lookup cannot produce the copy the person asked
 for. Personal values never go to workflow logs, the repo, Google Drive or a laptop (DM-6.3, DM-6.10). Until a tested
-export exists (AA-839), delivery is manual and `[to be confirmed]`: staff read the Booking admin customer and
-trip-case views and reply to the person from the support mailbox, stating that the TripPlanner record holds the same
-contact details and consent (DM-6.2).
+export exists (AA-839), delivery is manual and `[to be confirmed]`: staff read the Booking admin trip-case views
+of the cases the lookup found and the TripPlanner record, and reply to the person from the support mailbox. Booking
+holds no customer record since bk-045; the TripPlanner record holds the contact details and consent (DM-6.2). The
+archived invoice and payment rows (`booking.retired_b2c_record`) are read by the tech lead through a reviewed
+run-script, never shown in a task log.
 
 ## 3. Erasure
 
 **Tables and stores to cover** (AA-839 scope 1, as written):
 
-- `booking.customers`, `booking.customer_identities` (the traveller sign-in link), and `customer_otps` /
-  `customer_sessions` until Phase 4 drops them
 - `booking.inbox_events.payload`
-- `booking.trip_cases.notes` / `inquiry_snapshot`
+- `booking.trip_cases.notes` / `inquiry_snapshot` of the b2c cases kept as history (bk-045)
 - `booking.notifications`
 - `booking.audit_logs` before/after jsonb: redact, never delete
+- `booking.retired_b2c_record.record` (the bk-045 archive of the customer invoices and payments, accounting
+  exception DM-7.1): redact the personal keys in place, never delete (section 3 step 4)
+- gone since bk-045 (dropped, not archived, so nothing to erase): `booking.customers`, `customer_identities`,
+  `customer_otps`, `customer_sessions`, `media_files`, the customer invoice and payment tables
 - `tripplanner.customers`, `tripplanner.outbox.payload`, `tripplanner.sessions`, and
   `tripplanner.traveller_accounts` (the traveller sign-in account, linked through `sessions.account_id`)
 - the Cognito EXTERNAL user
@@ -215,15 +230,13 @@ section 2 lookup only**, held as constants: no address, name or phone in the cod
 
 **Delete order.** The foreign keys set it (AA-839 settles the final order and whether rows are deleted or nulled):
 
-- Booking: `booking.customers.merge_candidate_id` points from another customer row to this one (the `bk_merge_refs`
-  ids): null it first. `booking.trip_cases.customer_id` and `trip_cases.inbox_event_id` point at the customer and the
-  inbox event, and `trip_case_countries`, `trip_case_legs`, `trip_case_status_history`, `trip_case_versions` and
-  `staff_assignments` point at the trip case, and `trip_case_version_itinerary` at `trip_case_versions`;
-  `notification_reads` points at `notifications`; `customer_identities`, `customer_otps` and `customer_sessions`
-  point at the customer.
-  Children first, then trip cases, then the customer and the inbox events. The customer points at
-  `booking.media_files` (`profile_media_id`, the `bk_media_files` ids): that row and its S3 object go after the
-  customer.
+- Booking (after bk-045 there is no customer row): the b2c trip cases are kept as history (DM-7.1) and their
+  supplier bookings, bills and payouts fall under the accounting exception, so the Booking script **redacts in
+  place** rather than deleting cases: `trip_cases.notes` and the personal keys of `inquiry_snapshot`, the
+  `notifications` text and `data`, the `audit_logs` `before` / `after` / `entity_label` / `summary`. Only rows with
+  no other purpose are deleted: `notification_reads` before their `notifications`. `trip_cases.inbox_event_id`
+  points at the inbox event, so the inbox row is redacted (its payload's `customer` keys), not deleted.
+  `booking.retired_b2c_record` is redacted in place, never deleted (step 4).
 - TripPlanner: `trip_drafts` and `trip_events` point at `sessions` (`session_id`), and `sessions` points at
   `customers` and at `traveller_accounts` (`account_id`). Drafts and events first, then sessions, then the customer
   and the traveller account.
@@ -244,7 +257,13 @@ section 2 lookup only**, held as constants: no address, name or phone in the cod
    order above, redact the personal keys inside jsonb (`payload`, `inquiry_snapshot`, `data`, `before`, `after`), and
    compare the affected counts with the DRY RUN inside the transaction; raise (roll back) on any difference.
    `booking.audit_logs` rows are redacted, never deleted. Trip-case notes where the name check (section 2 step 5) found
-   the name are cleared by id.
+   the name are cleared by id. **Archived money rows** (`bk_retired_invoices`, `bk_retired_invoice_rows`): one
+   `UPDATE booking.retired_b2c_record SET record = record || jsonb_build_object(<key>, '[erased]', …)` per found row,
+   by (`source_table`, `source_id`), on the personal keys only: `invoices` `bill_to_name`, `bill_to_email`,
+   `bill_to_address`, `notes`, `terms`, `cancel_reason`; `invoice_items` `description`, `reason`; `payments`
+   `reference`, `note`, `void_reason` (`payment_schedule` has none). Amounts, dates, numbers, ids and
+   `retain_until` stay: the accounting exception keeps the money record for its period, not the person. The table
+   is owner-only (role `booking` has no privilege on it), so this script runs as `bk_owner`.
    Expected: the affected counts equal the DRY RUN. Abort: the script raises, nothing is committed.
 
    4b. **CIS**, only when the section 2 step 6 DRY RUN found `delete` or `redact` rows, and only while
@@ -271,7 +290,8 @@ section 2 lookup only**, held as constants: no address, name or phone in the cod
    and a failed apply is never retried (the Jobs page retry answers 409): run a new DRY RUN, get it approved, and
    start a new apply.
 5. **Cognito EXTERNAL user**, if one exists. Travellers can sign in to TripPlanner with an e-mail code (EXTERNAL
-   pool, AA-908), so expect one when the lookup found a `tp_traveller_accounts` or `bk_customer_identities` row.
+   pool, AA-908), so expect one when the lookup found a `tp_traveller_accounts` row (Booking's own traveller sign-in,
+   `customer_identities`, was dropped by bk-045).
    The pool id comes from `aws cognito-idp list-user-pools --max-results 20 --profile aa365-admin --region us-west-1`.
    Cognito filters on the plain address, so type it at the prompt only: never in a script or file, and clear it from
    the shell history afterwards.
@@ -297,7 +317,9 @@ section 2 lookup only**, held as constants: no address, name or phone in the cod
    row with `stripped-after-verify` when it ends (`result.hash_stripped: true`) and never stores a salt, so it
    leaves no copy behind.
    Expected: 0 rows in every tag and every CIS `delete` / `redact` row, the name found in no trip-case notes, and the
-   Cognito user is gone.
+   Cognito user is gone. The kept b2c trip cases and the archived money rows are then found by no tag (their links
+   were redacted or erased), so a read-only script also checks them by the ids of the first lookup: their personal
+   keys read `[erased]` or are empty.
 8. **Delete the pre-erasure snapshot** once step 7 passes, so no manual copy of the person's data remains.
 
    ```bash
