@@ -233,8 +233,7 @@ the data again before the Services reopen **[COUNSEL]**. A manual snapshot taken
 erasure is verified. The CRM erasure receipt states a backup purge date of erasure + 30 days, a conservative bound.
 
 *Drafting note: automated backups are 14 days (`backup_retention_period = 14`, AA-CIS-Infra `modules/rds/main.tf`,
-PR #694, the ADR 0019 d16 option with its cost yes), pending that apply; 7 days before. <!-- TODO(S271 orchestrator):
-delete ", pending that apply" after the RDS apply, as in Annex 2 M-29 --> The one-agency nightly export of the pilot
+PR #694, the ADR 0019 d16 option with its cost yes), applied on 2026-11-06; 7 days before. The one-agency nightly export of the pilot
 (Annex 2 M-25 item 4) is kept 7 days.*
 
 ## 12. Audits and information

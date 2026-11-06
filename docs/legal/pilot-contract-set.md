@@ -159,7 +159,7 @@ Agency's notice (an app change in AA-TripPlanner-Web, outside this pack).*
 | 1 | The tech lead has read the DPA and its annexes (status `draft` → reviewed) | Tech lead | Pending |
 | 2 | Contracting entity and counsel decision (b10, b20) | Business owner | Open |
 | 3 | The pilot safeguards of Annex 2 M-25 are built and verified live | Engineering | **Done** (all five on Dev since 2026-11-05, AA-969; restore drill 24 of 24 and 5,206 of 5,206 rows on synthetic agencies). Left: the pilot exception for the pilot agency's CRM account (Annex 2 §2 item 2), and AA's written confirmation to the Agency (clause [●].4) |
-| 4 | 14-day database backups applied (Annex 2 M-29) | Engineering | Raised to 14 days by AA-CIS-Infra #694, pending that apply <!-- TODO(S271 orchestrator): "Done" once the RDS apply shows 14 days --> |
+| 4 | 14-day database backups applied (Annex 2 M-29) | Engineering | Done: 14 days since the AA-CIS-Infra #694 apply on 2026-11-06 |
 | 5 | The Agency's market known, and the transfer mechanism chosen (Annex 4 §2) | Business owner, counsel | Open |
 | 6 | Vendor terms checked for AWS (through the reseller), the Anthropic API, the OpenAI API (Annex 3). The two direct APIs now carry most AI calls (Annex 3 §1.2), so this check is no longer only about a fallback | Counsel | Open |
 | 7 | Jev allowlist does not include the pilot agency without a DPA / zero-retention agreement | Engineering | Proposal (Annex 3 §1.2) |

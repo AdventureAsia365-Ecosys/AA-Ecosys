@@ -108,7 +108,7 @@ nhân được gắn nhãn trong cơ sở dữ liệu. *Phương án:* (A) dùng
 viết sẵn để xác minh danh tính, tìm bản ghi của người đó trong cả hai hệ thống, và xoá sau một lần chạy thử có đếm số dòng
 mà trưởng nhóm kỹ thuật duyệt trước. Bản ghi được tìm bằng một mã băm một chiều tính từ địa chỉ e-mail rồi xoá theo mã số
 bản ghi, nên chính địa chỉ e-mail không bao giờ được ghi vào mã nguồn, nhật ký hay tệp nào. Bản sao lưu cơ sở dữ liệu còn
-giữ dữ liệu tối đa 7 ngày sau khi xoá rồi tự hết hạn. Hệ thống nội dung đã có job xoá với bước chạy thử có đếm số dòng.
+giữ dữ liệu tối đa 14 ngày sau khi xoá rồi tự hết hạn. Hệ thống nội dung đã có job xoá với bước chạy thử có đếm số dòng.
 Phần xoá đối tác của job đã được thử một lần trên môi trường phát triển, ngày 23/10/2026, với một đối tác giả lập: chạy
 thử, duyệt, xoá và kiểm lại đều đạt. Phần xoá khách du lịch chưa chạy lần nào, và các script xoá của hệ thống đặt tour và
 Trip Planner chưa được viết. Chưa có lần xoá thật nào; ba bản ghi thử được giữ lại cho lần thử đầu tiên với khách du lịch.

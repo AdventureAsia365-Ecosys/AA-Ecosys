@@ -149,7 +149,7 @@ S270 close snapshot.
 
 ### Should know
 
-- After the RDS apply of AA-CIS-Infra #694: remove the three TODO comments and the words ", pending that apply".
+- Done (S271 orchestrator, 2026-11-06): the #694 apply shows BackupRetentionPeriod 14; the TODO comments are removed and the DSAR runbook + readiness packet (EN + VI) now say 14 days.
 - Still open for an app lane: AA-Partner Content studio `/legal/partner-terms` §3 and `/legal/privacy` §5 (EN and VI,
   `web/app/(studio)/legal/*/…messages.ts`) say the direct APIs are used "directly only as a fallback"; the AI Use
   Register v1.11 follow-up names it.
