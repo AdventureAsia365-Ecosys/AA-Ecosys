@@ -41,7 +41,9 @@ the critic's weak and missing lists). This lane built them in the root repo and 
   `args.session`; the goal's first AA id is in plan.json with a slot that does not name the session; or args are
   missing or are a non-JSON string. A JSON-encoded object string passes, because the harness parses it (replay: 191
   launches did this and ran). `plan_gate: "skip: <reason>"` lets a hotfix through and is logged. lane.js also checks
-  its args, as a backstop for when the hook is not loaded.
+  its args, as a backstop for when the hook is not loaded. The same hook carries the G4 lane-launch gate: a new lane is
+  refused while MemAvailable is under 4 GiB, and the message names the heavy processes. `ram_gate: "skip: <reason>"`
+  overrides it and is logged.
 - **Lessons lint checks only new or changed lines** (`--base`). The backfill is `skill/aa-lessons/guards.md`: 105 audit
   lines, each with a guard checked on its owner's `main`/`master`, plus 5 lines that this lane's guards now block.
   Every section that lost lines keeps a pointer line to that file.
