@@ -13,6 +13,12 @@
 //   --include-writable                                also run the scenarios whose identity CAN write (crm: the CRM
 //                                                     has no read-only role; only the browser guard keeps them
 //                                                     read-only). Left out by default and named in the report.
+// Write set (AA-855, scenarios/write-set.cjs): scenarios that write on a synthetic tenant and may call a paid model.
+// Never in the whole set; only by id. A paid one runs or records only with --allow-paid (implies --include-writable):
+//   node tools/uat/dryrun.cjs --record W-01 --allow-paid        record one (the env UAT_STUDIO_TENANT picks the audit
+//                                                               tenant of studio-audit, default audit-atlas-hearth)
+//   node tools/uat/dryrun.cjs --only W-01,W-02 --preview        their read-only part only (steps before the first
+//                                                               write; every write aborted), $0
 // Output: <out>/results.md (the table to copy to docs/audits/<date>-S<nnn>-uat-dry-run/), results.json, results.tsv.
 // Before: bash tools/uat/setup.sh once; egress VN (VPN off; Vercel challenges VPN IPs); for cis-admin / booking a fresh
 // MFA session of the admin profile (the code mail is read from the e2e mailbox), aws sts get-caller-identity.
@@ -31,6 +37,7 @@ const pilotGuard = require('./lib/pilot-guard.cjs');
 
 const HERE = __dirname;
 const MANIFEST = path.join(HERE, 'scenarios', 'dryrun.cjs');
+const WRITE_SET = path.join(HERE, 'scenarios', 'write-set.cjs');
 const PARTNER = (process.env.UAT_CRM_PARTNER || 'https://portal.lumiguides.it.com').replace(/\/+$/, '');
 const TRIPPLANNER = (process.env.UAT_TRIPPLANNER || 'https://aa-tripplanner.vercel.app').replace(/\/+$/, '');
 const ORG = 'https://github.com/AdventureAsia365-Ecosys';
@@ -50,11 +57,11 @@ const VERSIONS = [
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 function loadEntries() {
-  const files = require(MANIFEST);
-  return files.map((rel) => {
-    const abs = path.resolve(path.dirname(MANIFEST), rel);
-    return { ...core.describe(require(abs), rel), abs };
+  const load = (manifest, describe) => require(manifest).map((rel) => {
+    const abs = path.resolve(path.dirname(manifest), rel);
+    return { ...describe(require(abs), rel), abs };
   });
+  return [...load(MANIFEST, core.describe), ...load(WRITE_SET, core.describeWrite)];
 }
 
 function egress() {
@@ -109,13 +116,20 @@ function readJson(file) {
   }
 }
 
-function childEnv(state) {
+function childEnv(state, { paid = false, preview = false } = {}) {
   const env = { ...process.env, UAT_READ_ONLY: '1', UAT_BLOCK_URLS: JSON.stringify(core.PAID_URLS) };
   delete env.UAT_STORAGE_STATE;
   delete env.UAT_BASE_URL; // one base URL for every app would send each scenario to the wrong host
+  delete env.UAT_ALLOW_PAID; // only an explicit --allow-paid on a paid write-set scenario sets it
+  delete env.UAT_PREVIEW;
   if (state) env.UAT_STORAGE_STATE = state;
+  if (paid) env.UAT_ALLOW_PAID = '1';
+  if (preview) env.UAT_PREVIEW = '1';
   return env;
 }
+
+/** The child env of one entry: the write set's paid ones get UAT_ALLOW_PAID only with --allow-paid. */
+const envFor = (e, state, opts) => childEnv(state, { paid: !!(e.writeSet && e.paid && opts.allowPaid), preview: !!(e.writeSet && opts.preview) });
 
 async function signIn(who) {
   const { ensureState } = require('./lib/signin.cjs');
@@ -123,13 +137,14 @@ async function signIn(who) {
 }
 
 async function record(entries, id, opts) {
-  const [e] = core.select(entries, { only: [id], includeWritable: opts.includeWritable });
+  const [e] = core.select(entries, { only: [id], includeWritable: opts.includeWritable, allowPaid: opts.allowPaid });
   let state = null;
   if (e.identity !== 'public') {
     await ramGuard();
     state = (await signIn(e.identity)).file;
   }
-  const r = spawnSync('bash', [path.join(HERE, 'run.sh'), e.abs], { stdio: 'inherit', env: childEnv(state) });
+  if (e.writeSet) console.log(`record ${e.id}: write-set scenario${e.paid ? ', PAID (--allow-paid)' : ''}`);
+  const r = spawnSync('bash', [path.join(HERE, 'run.sh'), e.abs], { stdio: 'inherit', env: envFor(e, state, opts) });
   return r.status == null ? 1 : r.status;
 }
 
@@ -139,7 +154,8 @@ async function main() {
   core.select(entries, { only: [] }); // duplicate ids fail even for --list
   if (opts.list) {
     for (const e of entries) {
-      const note = core.WRITABLE_IDENTITIES.includes(e.identity) ? 'only with --include-writable' : '';
+      const note = e.writeSet ? (e.paid ? `write set, PAID: only by id with --allow-paid (preview: ${e.preview} step(s))` : 'write set: only by id')
+        : core.WRITABLE_IDENTITIES.includes(e.identity) ? 'only with --include-writable' : '';
       console.log([e.id, e.app, e.identity, `${e.steps} steps`, e.file, note].filter(Boolean).join('\t'));
     }
     return 0;
@@ -155,7 +171,8 @@ async function main() {
   }
   if (opts.record) return record(entries, opts.record, opts);
 
-  const sel = core.select(entries, opts);
+  // A preview counts only the read-only part of each write-set scenario (the steps before its first write).
+  const sel = core.select(entries, opts).map((e) => (opts.preview ? { ...e, steps: e.preview } : e));
   const skipped = core.skippedWritable(entries, opts);
   if (skipped.length) console.log(`not run (identity can write, add --include-writable): ${skipped.join(', ')}`);
   if (!sel.length) throw new Error('no scenario matches the options');
@@ -198,8 +215,9 @@ async function main() {
       for (const f of ['result.json', 'timeline.json']) fs.rmSync(path.join(work, f), { force: true });
       console.log(`=== ${e.id} (${e.app}, ${e.identity})`);
       const t0 = Date.now();
+      // A paid write-set scenario waits for the writer (a tour rewrite or an article: up to ~20 min).
       const r = spawnSync(process.execPath, [path.join(HERE, 'record.cjs'), e.abs, '--fast'],
-        { stdio: 'inherit', env: childEnv(states[e.identity] || null), timeout: 600_000 });
+        { stdio: 'inherit', env: envFor(e, states[e.identity] || null, opts), timeout: e.writeSet && !opts.preview ? 2_400_000 : 600_000 });
       o = core.outcome(e, { result: readJson(path.join(work, 'result.json')), timeline: readJson(path.join(work, 'timeline.json')),
         exitCode: r.status == null ? (r.signal || 'timeout') : r.status, ms: Date.now() - t0 });
     }
@@ -210,7 +228,7 @@ async function main() {
 
   const after = await readVersions();
   const run = { startedAt, finishedAt: new Date().toISOString(), egress: country, signins, shas: core.shaTable(before, after),
-    skipped, outcomes };
+    skipped, outcomes, paid: opts.allowPaid ? sel.filter((e) => e.writeSet && e.paid).map((e) => e.id) : [], preview: opts.preview };
   fs.writeFileSync(path.join(out, 'results.json'), `${JSON.stringify(run, null, 2)}\n`);
   fs.writeFileSync(path.join(out, 'results.md'), core.renderMarkdown(run));
   fs.writeFileSync(path.join(out, 'results.tsv'), core.renderTsv(outcomes));

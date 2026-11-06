@@ -5,7 +5,7 @@
 //
 //   const guard = require('./pilot-guard.cjs');
 //   const v = await guard.check(browser, storageStateFile, guard.scopesFor(sc, storageState));   // { ok, reason, ... }
-//   node tools/uat/lib/pilot-guard.cjs studio|studio-editor|crm      read the saved session's tenant and say ok / refused
+//   node tools/uat/lib/pilot-guard.cjs studio|studio-editor|studio-audit|crm   read the saved session's tenant, ok / refused
 //
 // Where the active tenant is read (AA-Partner web, one agency host since AA-1036):
 //   content  GET /api/tenant/me  -> { tenant_id, tenant_name, ... }   the Content studio session (web/app/api/tenant/me)
@@ -14,7 +14,8 @@
 // field tightens the guard without a change here. The allow-list is what keeps the pilot out today.
 //
 // Allow-list (synthetic tenants only, all invented):
-//   built in   the four E2E Content tenants by their invented display name; the three CRM review agencies by id only
+//   built in   the four E2E Content tenants and the four audit tenants (AA-855 write scenarios) by their invented
+//              display name; the three CRM review agencies by id only
 //              (a UUIDv5 of their key, AA-Partner api/app/seed/catalogue.py, public there): their slugs are pinned to
 //              those ids, so an agency that merely renames itself "Lữ hành Sen Vàng" is refused.
 //   by scope   the CRM scope never matches by name: an agency sets its own display_name. A Content tenant checked in the
@@ -57,6 +58,12 @@ const SYNTHETIC = [
   { slug: 'sen-vang', name: 'Lữ hành Sen Vàng', crmKey: 'sen-vang' },
   { slug: 'southern-cross', name: 'Southern Cross Journeys', crmKey: 'southern-cross' },
   { slug: 'harbour-lights', name: 'Harbour Lights Travel Co.', crmKey: 'harbour-lights' },
+  // AA-855 write scenarios (W-01..W-04): the four synthetic audit tenants of the T-series audit (kind demo, invented
+  // brands). Only the studio-audit identity writes there, and always on exactly one of them (lib/studio-audit.cjs).
+  { slug: 'audit-atlas-hearth', name: 'Atlas & Hearth (Audit)' },
+  { slug: 'audit-terra-family', name: 'Terra Family Expeditions (Audit)' },
+  { slug: 'audit-trail-pulse', name: 'Trail Pulse (Audit)' },
+  { slug: 'audit-wildkind-travel', name: 'WildKind Travel (Audit)' },
 ];
 const SCOPES = {
   // nameMatch: whether an unpinned invented display name is enough. Content: yes (the studio session returns no slug and
@@ -66,7 +73,7 @@ const SCOPES = {
 };
 // Identities whose session has no tenant (AA staff): their list pages are masked per scenario (allowRows), not here.
 const STAFF_IDENTITIES = ['cis-admin', 'booking'];
-const IDENTITY_SCOPES = { studio: ['content'], 'studio-editor': ['content'], crm: ['crm'] };
+const IDENTITY_SCOPES = { studio: ['content'], 'studio-editor': ['content'], 'studio-audit': ['content'], crm: ['crm'] };
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const norm = (s) => String(s).normalize('NFC').trim();
@@ -177,6 +184,8 @@ function evaluate(answer, { scope, allow, only = null } = {}) {
  * Returns { scopes, only }. Throws (fail closed) for a signed-in scenario whose scope cannot be told.
  */
 function scopesFor(sc, storageState) {
+  // A scenario's own pilotGuard never widens the studio-audit pin (checked first).
+  if (sc.identity === 'studio-audit' && sc.pilotGuard) throw new Error(`${CODE}: ${sc.id}: a studio-audit scenario takes the run's audit tenant, not its own pilotGuard`);
   const pg = sc.pilotGuard;
   if (pg) {
     const scopes = Array.isArray(pg) ? pg : pg.scopes;
@@ -184,6 +193,8 @@ function scopesFor(sc, storageState) {
     return { scopes, only: Array.isArray(pg) ? null : pg.only || null };
   }
   const identity = sc.identity || 'public';
+  // The audit editor writes and may pay: it is pinned to the ONE audit tenant of this run, whatever the scenario says.
+  if (identity === 'studio-audit') return { scopes: IDENTITY_SCOPES[identity], only: [require('./studio-audit.cjs').auditTenant().slug] };
   if (IDENTITY_SCOPES[identity]) return { scopes: IDENTITY_SCOPES[identity], only: null };
   if (STAFF_IDENTITIES.includes(identity)) return { scopes: [], only: null };
   if (!storageState) return { scopes: [], only: null };
@@ -272,10 +283,10 @@ module.exports = {
 if (require.main === module) {
   (async () => {
     const who = process.argv[2];
-    if (!IDENTITY_SCOPES[who]) throw new Error('usage: node tools/uat/lib/pilot-guard.cjs studio|studio-editor|crm');
+    if (!IDENTITY_SCOPES[who]) throw new Error('usage: node tools/uat/lib/pilot-guard.cjs studio|studio-editor|studio-audit|crm');
     const { ensureState } = require('./signin.cjs');
     const { file } = await ensureState(who);
-    const v = await checkState(file, { scopes: IDENTITY_SCOPES[who], only: null });
+    const v = await checkState(file, scopesFor({ id: who, identity: who }, file));
     console.log(`${who}: ${describeVerdict(v)}`);
     process.exitCode = v.ok ? 0 : EXIT_PILOT_GUARD;
   })().catch((e) => { console.error(String(e.message || e).split('\n')[0]); process.exitCode = 1; });

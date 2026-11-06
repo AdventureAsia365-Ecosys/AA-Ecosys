@@ -16,7 +16,7 @@ const STATUSES = ['live', 'after-lane', 'blocked', 'retired'];
 const KINDS = ['uat', 'guide', 'release', 'regression', 'data'];
 // The dry-run identities (lib/dryrun-core.cjs) plus the ones only plans name yet: the CRM assistant, a traveller on the
 // client host, several identities in one story, and a story recorded by hand.
-const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'crm', 'crm-assistant', 'traveller', 'multi', 'manual'];
+const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'crm', 'crm-assistant', 'traveller', 'multi', 'manual'];
 const REQUIRED = { id: 'string', app: 'string', module: 'string', story: 'string', roles: 'array', kinds: 'array', covers: 'array',
   screens: 'array', status: 'string', round: 'round', identity: 'string', writes: 'boolean', paid: 'boolean' };
 const OPTIONAL = { file: 'string', note: 'string', issues: 'array' };
@@ -123,7 +123,26 @@ function checkManifest(cat, entries) {
   return errs;
 }
 
-module.exports = { FILE, APPS, STATUSES, KINDS, IDENTITIES, ID, validate, load, loadValid, byId, checkFiles, checkManifest };
+/**
+ * Problems between the catalogue and the write set (scenarios/write-set.cjs entries { id, identity, paid }): every
+ * entry has a live row that writes, with the same identity and the same paid flag (a paid scenario is marked paid in
+ * both places, so the runner's --allow-paid gate and the catalogue never disagree).
+ */
+function checkWriteSet(cat, entries) {
+  const errs = [];
+  const rows = byId(cat);
+  for (const e of entries) {
+    const row = rows.get(e.id);
+    if (!row) { errs.push(`write set ${e.id}: no catalogue row`); continue; }
+    if (row.status !== 'live') errs.push(`write set ${e.id}: status ${row.status}, only live scenarios run`);
+    if (!row.writes) errs.push(`write set ${e.id}: the catalogue says it writes nothing (then it belongs in the dry-run set)`);
+    if (row.paid !== e.paid) errs.push(`write set ${e.id}: catalogue paid ${row.paid}, scenario paid ${e.paid}`);
+    if (row.identity !== e.identity) errs.push(`write set ${e.id}: catalogue identity ${row.identity}, scenario identity ${e.identity}`);
+  }
+  return errs;
+}
+
+module.exports = { FILE, APPS, STATUSES, KINDS, IDENTITIES, ID, validate, load, loadValid, byId, checkFiles, checkManifest, checkWriteSet };
 
 if (require.main === module) {
   const i = process.argv.indexOf('--round');

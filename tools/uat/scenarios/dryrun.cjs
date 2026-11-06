@@ -22,6 +22,9 @@ module.exports = [
   'content-studio/prt-05.cjs',
   'content-studio/prt-08.cjs',
   'content-studio/x-04.cjs',
+  // AA-855 W-04: the audit editor exports the article and a social post (GET only, $0). studio-audit can write, so the
+  // runner leaves it out unless --include-writable; the paid W-01..W-03 are in write-set.cjs, never here.
+  'content-studio/w-04.cjs',
   // CRM web, the owner of the invented review agency. That account CAN write (the CRM has no read-only role): the runner
   // leaves these out unless --include-writable, and only its browser guard keeps them read-only.
   'crm-web/crm-01.cjs',
