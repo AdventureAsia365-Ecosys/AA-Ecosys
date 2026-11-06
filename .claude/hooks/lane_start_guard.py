@@ -2,11 +2,12 @@
 """PreToolUse guard for the Workflow tool (AA-1024 G12, S271): a lane starts only on an up-to-date master plan.
 
 Lessons S264 and S271: lanes were opened while docs/backlog/tracker/plan.json (and the tracker's session tab) still
-showed the previous session, so the tech lead's plan view was wrong for the whole wave; and a lane once got its args
-as a JSON-encoded string instead of an object (lane.js then read `args.session` as undefined).
+showed the previous session, so the tech lead's plan view was wrong for the whole wave; and lanes got a placeholder
+string ("__FROM_FILE__") as args instead of an object (S252: the script read every field as undefined).
 
 For a launch of tools/workflows/lane.js (by scriptPath, any checkout, or by the name `aa-lane`) it refuses (exit 2):
-  1. args that are not an object, or that lack key / goal / session / date;
+  1. args that are not an object (a JSON-encoded object string is fine: the harness parses it), or that lack
+     key / goal / session / date;
   2. a plan.json `session` other than args.session (aa-session step 7: update plan.json and republish the tracker
      right after the session list is agreed, BEFORE the first lane);
   3. a goal whose first AA-<n> issue is in plan.json with a `session` slot that does not name args.session (a pulled-
@@ -56,10 +57,20 @@ def check(tool_input: dict, root: Path = ROOT) -> str | None:
     if not is_lane(tool_input):
         return None
     args = tool_input.get("args")
+    if isinstance(args, str):
+        # The harness parses a JSON-encoded object (replay S271: 191 lane launches passed args that way and ran); a
+        # placeholder such as "__FROM_FILE__" stays one string and the lane breaks (lesson S252).
+        try:
+            parsed = json.loads(args)
+        except json.JSONDecodeError:
+            parsed = None
+        if not isinstance(parsed, dict):
+            return (f"lane.js args is a string that is not a JSON object ({args[:40]!r}): write the args object "
+                    f"inline, never a placeholder string.")
+        args = parsed
     if not isinstance(args, dict):
         kind = type(args).__name__ if args is not None else "missing"
-        return (f"lane.js args must be a JSON object, got {kind}" + (" (a JSON-encoded string: pass the object "
-                "itself, never a quoted or placeholder string)" if isinstance(args, str) else "") + ".")
+        return f"lane.js args must be a JSON object, got {kind}."
     gate = str(args.get("plan_gate") or "")
     if re.match(r"skip:\s*\S", gate):
         _log(root, f"skip {args.get('key')}: {gate}")

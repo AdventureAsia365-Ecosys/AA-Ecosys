@@ -43,6 +43,8 @@ class LaneStartGuardTest(unittest.TestCase):
 
     def test_up_to_date_plan_passes(self):
         self.assertIsNone(self.check({"scriptPath": LANE, "args": args()}))
+        # A JSON-encoded object is parsed by the harness: it passes like the object.
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": json.dumps(args())}))
         self.assertIsNone(self.check({"scriptPath": LANE, "args": args(goal="AA-741 part 2")}))
         self.assertIsNone(self.check({"scriptPath": LANE, "args": args(goal="AA-1099 not in the tracker")}))
         self.assertIsNone(self.check({"scriptPath": LANE, "args": args(goal="no issue id: docs sweep")}))
@@ -57,9 +59,11 @@ class LaneStartGuardTest(unittest.TestCase):
         msg = self.check({"scriptPath": LANE, "args": args(goal="AA-1024: guards")})
         self.assertIn("AA-1024 is slotted for '≥10/11'", msg)
 
-    def test_string_or_incomplete_args_are_refused(self):
-        self.assertIn("JSON-encoded string", self.check({"scriptPath": LANE, "args": json.dumps(args())}))
+    def test_placeholder_or_incomplete_args_are_refused(self):
+        self.assertIn("not a JSON object", self.check({"scriptPath": LANE, "args": "__FROM_FILE__"}))
+        self.assertIn("not a JSON object", self.check({"scriptPath": LANE, "args": "[1, 2]"}))
         self.assertIn("got missing", self.check({"scriptPath": LANE}))
+        self.assertIn("got list", self.check({"scriptPath": LANE, "args": [1]}))
         self.assertIn("lack session", self.check({"scriptPath": LANE, "args": args(session="")}))
 
     def test_skip_with_reason_passes_and_is_logged(self):

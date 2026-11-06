@@ -176,7 +176,8 @@ class ShipTest(unittest.TestCase):
                             f"nohup bash {abs_ship} > /dev/null 2>&1 &",
                             f"source <(sed -n '1,4p' {abs_ship}); merge 1", "python3 .tmp-session/S999/ship.py"):
                     self.assertEqual(rule(cmd, cwd=root), "SHIP-1", cmd)
-                self.assertEqual(rule("bash .tmp-session/S999/stop.sh", cwd=root), "PKILL-1")
+                # A script's command line is `bash <path>`: pkill -f inside it does not match itself.
+                self.assertIsNone(rule("bash .tmp-session/S999/stop.sh", cwd=root))
                 for cmd in (f"cat {abs_ship}", f"grep -n mergeq {abs_ship}", "bash .tmp-session/S999/report.sh",
                             "bash .tmp-session/S999/missing.sh",
                             "bash .tmp-session/wt/s999-lane/tools/github/mergeq.sh AA-CIS-App 1 --dequeue"):

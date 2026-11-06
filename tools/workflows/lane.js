@@ -19,8 +19,8 @@ export const meta = {
   ],
 }
 
-// AA-1024 (lesson S252): args must be an inline object. A JSON-encoded or placeholder string reaches the script as
-// one string and every field reads undefined. .claude/hooks/lane_start_guard.py refuses it before the launch (and a
+// AA-1024 (lesson S252): args must be an object. A placeholder string ("__FROM_FILE__") reaches the script as one
+// string and every field reads undefined (a JSON-encoded object string is parsed by the harness and is fine). .claude/hooks/lane_start_guard.py refuses it before the launch (and a
 // plan.json that is not on args.session); this check is the backstop when the hook is not loaded.
 if (typeof args !== 'object' || args === null || Array.isArray(args)) {
   throw new Error(`lane.js: args must be a JSON object (got ${args === null ? 'null' : typeof args}); pass it inline`)

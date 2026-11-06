@@ -9,8 +9,9 @@ Rules (main session and subagents alike; exit 2 refuses, the message goes to std
 
   PKILL-1  `pkill -f <pattern>`, and `pgrep -f` that feeds kill/xargs or drives an until/while wait loop. The pattern
            also matches the shell that runs the command (its own command line holds the pattern), so the command kills
-           itself or the loop never ends (S262 hang, 13 repeats). Also inside `bash -c`, bash heredocs and the
-           .tmp-session / scratchpad scripts a command runs. Use TaskStop, `kill <pid>` from a PID file, `wait <pid>`.
+           itself or the loop never ends (S262 hang, 13 repeats). Also inside `bash -c` and bash heredocs (both are on
+           the calling shell's command line; a script file run by path is not). Use TaskStop, `kill <pid>` from a
+           PID file, `wait <pid>`.
   ZSH-1    In the Bash tool's top-level shell (zsh here), `for x in $VAR` and `set -- $VAR` do not split $VAR into
            words: the loop runs once with the whole string (S261 silent non-run APPLY loop, S269 wait loop that never
            waited; 14 repeats). Only at the zsh level: the same text inside `bash -c '...'`, a bash heredoc or a script
@@ -532,18 +533,16 @@ def check(cmd: str, cwd: Path | None = None, proc: Path = Path("/proc")) -> Refu
     cwd = cwd or ROOT
     texts = texts_of(cmd)
     override = bool(re.match(r"\s*(?:\w+=\S*\s+)*AA_RAM_OVERRIDE=1\b", cmd))
-    # Scripts the command runs: their text is checked as bash (PKILL-1) and for merges (SHIP-1 d).
+    # Scripts the command runs are checked for merges (SHIP-1 d). Not for PKILL-1: a script's own command line is
+    # `bash <path>`, so a `pgrep -f <other script>` inside it does not match itself (replay S271: 2 such waits).
     for t in list(texts):
         for path in _scripts_run(t, cwd):
             body = _read(path)
             if body is None:
                 continue
-            py = path.suffix == ".py"
             if MERGE_IN_SCRIPT.search(_strip_comments(body)):
                 return Refusal("SHIP-1", f"{path.name} is a hand-written ship script (it merges PRs itself: "
                                f"serial waits, gate skipped)", FIX["SHIP-1"])
-            if not py:
-                texts.extend(texts_of(body, "bash", str(path)))
     for t in texts:
         where = "" if t.origin == "command" else f" (in {Path(t.origin).name})"
         for rule, fn in RULES:
