@@ -51,8 +51,8 @@ waitcopy() {
       lab=${pr#* }
       case $lab in
         *migration:contract*|*migration:destructive*)
-          gate AA-CIS-Infra "${pr%% *}" || return 1
-          "$_T" --repos AA-CIS-Infra -- gh pr merge "${pr%% *}" -R "$ORG/AA-CIS-Infra" --squash && echo "copy PR #${pr%% *} ($lab) merged" ;;
+          # AA-1024: merges go through ship_merge.py's gate (as-app.sh refuses a raw gh pr merge).
+          python3 "$(dirname "$_T")/ship_merge.py" "AA-CIS-Infra#${pr%% *}" && echo "copy PR #${pr%% *} ($lab) merged" || return 1 ;;
       esac
     fi
     sleep 30
