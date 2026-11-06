@@ -8,7 +8,9 @@
 --   1. the readers outside Booking are gone (DRY RUN report, section "Readers"): TripPlanner My Payments
 --      (frontend/app/api/me/payments/route.ts, lib/myPayments.ts, components/MyPayments.tsx), CIS data coverage row
 --      bk.customers, the CIS KPI rows on these tables, the CIS erasure checklist line, the AA-CIS-Infra isolation probe
---      cells on booking.customers and booking.v_ops_inquiry_inbox, the root contract booking.customer.v1;
+--      cells on booking.customers and booking.v_ops_inquiry_inbox and its owner-only exemption for
+--      booking.retired_b2c_record, the Infra DM-6.5 consent script, the root contract booking.customer.v1, the root
+--      DSAR runbook, consent query page and UAT scenarios BK-08 / BK-10;
 --   2. the Booking build that no longer reads or writes them is deployed (the B2C routers, app/b2c.py, app/ops
 --      invoices / payments / my_payments, app/customers, app/auth/customer.py, the inquiry intake and its recurring
 --      bk_inquiry_pull job, the staff admin billing and customer pages; trip case lists filter channel = 'b2b');

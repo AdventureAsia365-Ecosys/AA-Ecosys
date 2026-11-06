@@ -39,3 +39,13 @@ destructive migration. Part 2 (VAT e-invoice provider API) is another lane. Plan
 
 - Verified locally on PostgreSQL 16 against Booking `origin/main` `5066f75` (bk-044): 13 passed. Guard check:
   `python3 .claude/hooks/pilot_pii_guard.py` with `{"tool_name":"Bash","tool_input":{"command":"ECSX_SERVICE=aa-booking-dev-api tools/ecs/<ecsx> <script>"}}` on stdin exits 0.
+
+## Review fixes (S271)
+
+- **Draft holds its tables.** The draft mirrors bk-045: `SHARE ROW EXCLUSIVE` on the nine dropped tables and
+  `trip_cases` right after `BEGIN`, so no write lands between the pin / archive checks and the drops. Harness: 14
+  tests (new `test_draft_holds_writes_from_the_guards_to_the_drops`), passed on PostgreSQL 16 from the Booking code
+  branch checkout.
+- **README section 4** lists the readers the review found: the Infra owner-only exemption for
+  `booking.retired_b2c_record` and the DM-6.5 consent script, the root DSAR runbook, the consent query page and the
+  UAT scenarios BK-08 / BK-10 (fixed in the rootdocs PR of this lane).
