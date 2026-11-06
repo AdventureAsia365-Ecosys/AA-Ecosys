@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-03
+last_reviewed: 2026-11-06
 review_every_days: 90
 related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, SEC-04-ai-schedule, SEC-04-dpa-pack, AA-886, AA-820, AA-839, AA-877]
 lang: vi
@@ -189,7 +189,12 @@ khách cụ thể về bảo hiểm, thị thực hay trả góp nếu không c�
 mức AI hằng tháng; và một điều khoản cho thư pilot. Hiện vẫn chưa có đối tác thật nên không cần báo cho ai: điều khoản
 **đi kèm thư pilot**, và mỗi đối tác sau này chấp nhận phụ lục cùng hợp đồng đối tác. Mục 3 điều khoản Content studio và
 điều khoản CRM có bản tóm tắt v1.0 (Phụ lục A.4), điều khoản Trip Planner ghi rõ mô hình viết nội dung AI, và tất cả vẫn
-giữ nhãn "Draft — pending legal review" cho tới khi luật sư đọc phụ lục. *Chủ doanh nghiệp quyết định:* câu chữ của thư
+giữ nhãn "Draft — pending legal review" cho tới khi luật sư đọc phụ lục. Từ ngày 06/11/2026 (portal Draft v0.5), các
+trang Content studio ghi API trực tiếp của Anthropic và của OpenAI là nhà cung cấp có thể xử lý nội dung, trong đó
+Claude được gọi qua API của Anthropic trước và qua Amazon Bedrock sau (route control phiên bản 6, [AI Use
+Register](../architecture/ai-use-register.md) v1.11), không còn gọi là đường dự phòng; các trang cũng ghi rằng Adventure
+Asia quyết định thứ tự và có thể thay đổi thứ tự đó. Câu chữ của chính Phụ lục AI đã nêu cả hai đường nên giữ bản v1.0.
+*Chủ doanh nghiệp quyết định:* câu chữ của thư
 pilot quanh điều khoản này, hạn mức AI hằng tháng của pilot, và thời điểm mời luật sư (muộn nhất là trước đại lý trả
 tiền đầu tiên). *Chi tiết:* [Phụ lục AI v1.0](tenant-ai-schedule.md): từng phần đặt ở đâu (mục 2), phụ lục (mục 3),
 điều khoản cho thư pilot (mục 5) và 16 câu hỏi cho luật sư (mục 7). Phần 2, bộ hồ sơ xử lý dữ liệu cho pilot, có dàn ý
@@ -201,16 +206,18 @@ Nội dung dưới đây được chép từ mã nguồn trang, đúng như hi�
 AA-TripPlanner-Web, A.3 và A.4 tại commit `a33ccf4` (28/10/2026) của AA-Partner. Các trang portal được chuyển từ
 AA-CIS-App sang AA-Partner cùng lịch sử thay đổi (AA-979); nội dung của chúng là bản ngày 20/10/2026 cộng nội dung AA-820
 ở mục 3 của A.4 (24/10/2026) và danh sách nhà cung cấp AI ở mục 5–6 của A.3 và mục 3 của A.4 (31/10/2026, S262, lấy từ
-[AI Use Register](../architecture/ai-use-register.md)). Mỗi trang có nhãn "Draft — pending legal review". Hai trang Trip Planner ghi phiên bản
+[AI Use Register](../architecture/ai-use-register.md)), được viết lại ngày 06/11/2026 (S271) theo route control phiên
+bản 6 (register v1.11). Mỗi trang có nhãn "Draft — pending legal review". Hai trang Trip Planner ghi phiên bản
 "Draft v0.1" (20 October 2026), dù nội dung đã được thêm phần đăng nhập của khách và phần Geoapify về sau; hai trang
-portal ghi "Draft v0.4" (3 November 2026) từ thay đổi Phụ lục AI v1.0. Link được ghi bằng chữ hiển thị. Các trang chỉ có bản tiếng
-Anh; phần dưới đây là bản dịch để tham khảo, còn câu chữ pháp lý là bản tiếng Anh. Nếu trang thay đổi sau các commit trên,
-trang đang chạy là bản đúng.
+portal ghi "Draft v0.5" (6 November 2026) từ thay đổi route control phiên bản 6 (Draft v0.4 ngày 3 November 2026 là
+thay đổi Phụ lục AI v1.0). Link được ghi bằng chữ hiển thị. Các trang Trip Planner chỉ có bản tiếng Anh; các trang portal
+có thêm bản dịch tiếng Việt để tham khảo, và bản tiếng Anh được áp dụng. Phần dưới đây là bản dịch để tham khảo, còn câu
+chữ pháp lý là bản tiếng Anh. Nếu trang thay đổi sau các commit trên, trang đang chạy là bản đúng.
 
 Có hai việc cần sửa nội dung trang đã biết. Mục 6 của chính sách quyền riêng tư portal vẫn ghi Vercel lưu trữ các trang
 portal, dù portal nay chạy trên AWS. Hai trang Trip Planner đã đổi sau ngày 20/10/2026 nhưng vẫn ghi ngày đó cho tới
-03/11/2026 (Draft v0.2). Mục 3 của A.4 dưới đây là nội dung ngày 03/11/2026 (AA-820, Phụ lục AI v1.0, portal Draft
-v0.4); mục 3 của A.2 cũ hơn trang đang chạy, trang này từ đó ghi rõ mô hình viết phần thuyết minh và dẫn link Chính sách
+03/11/2026 (Draft v0.2). Mục 5–6 của A.3 và mục 3 của A.4 dưới đây là nội dung ngày 06/11/2026 (AA-820, route control
+phiên bản 6, portal Draft v0.5); mục 3 của A.2 cũ hơn trang đang chạy, trang này từ đó ghi rõ mô hình viết phần thuyết minh và dẫn link Chính sách
 sử dụng của Anthropic.
 
 ### A.0 Các điểm cần xác nhận trên bốn trang
@@ -416,14 +423,15 @@ việc của bạn và hết hạn sau 24 giờ hoặc khi bạn đăng xuất. 
 
 Cơ sở pháp lý cho từng mục đích sử dụng là [to be confirmed].
 
-**5. Xử lý bằng AI.** Nội dung được tạo và kiểm tra bởi các mô hình AI. Claude (Anthropic), qua Amazon Bedrock, viết nội
-dung; các mô hình của OpenAI, cũng qua Amazon Bedrock, xem lại, chấm điểm và kiểm tra bản nháp. Khi các mô hình đó không
-dùng được, bước xem lại và kiểm tra có thể chuyển sang các mô hình khác trên Amazon Bedrock (Amazon Nova, Meta Llama). Khi
-Amazon Bedrock không dùng được, API của Anthropic hoặc API của OpenAI, gọi trực tiếp và có trần chi tiêu, có thể được dùng
-làm đường dự phòng; các lần gọi đó đi từ Amazon Web Services tới Anthropic hoặc OpenAI. Với bước viết, nghĩa là trước hết
-Claude qua API của Anthropic và, khi không còn cách nào khác, một mô hình của OpenAI qua API của OpenAI. Với một số đối
-tác, một dịch vụ kiểm tra quyết định
-(Jev, của TypeSafe) còn trả lời các câu hỏi có/không về bản nháp. Các nhà cung cấp này nhận nội dung tour, thiết lập
+**5. Xử lý bằng AI.** Nội dung được tạo và kiểm tra bởi các mô hình AI của nhà cung cấp bên thứ ba, và có thể được xử lý
+bởi bất kỳ nhà cung cấp nào trong số đó. Claude (Anthropic) viết nội dung: Adventure Asia gọi Claude qua API của
+Anthropic trước và qua Amazon Bedrock (Amazon Web Services) sau. Các mô hình của OpenAI xem lại, chấm điểm và kiểm tra
+bản nháp, qua Amazon Bedrock hoặc API của OpenAI, và các mô hình khác trên Amazon Bedrock (Amazon Nova, Meta Llama) cũng
+có thể xem lại và kiểm tra bản nháp. Nếu không có mô hình Claude nào dùng được, một mô hình của OpenAI qua API của OpenAI
+có thể viết nội dung khi không còn cách nào khác. API của Anthropic và API của OpenAI được gọi trực tiếp, mỗi API có trần
+chi tiêu; các lần gọi đó đi từ Amazon Web Services tới Anthropic hoặc OpenAI, trên tài khoản Adventure Asia đứng tên công
+ty. Adventure Asia quyết định thứ tự dùng các nhà cung cấp này và có thể thay đổi thứ tự đó. Với một số đối tác, một dịch
+vụ kiểm tra quyết định (Jev, của TypeSafe) còn trả lời các câu hỏi có/không về bản nháp. Các nhà cung cấp này nhận nội dung tour, thiết lập
 thương hiệu của bạn và hướng dẫn cho từng bài. Chính sách của chúng tôi là không gửi dữ liệu cá nhân cho các mô hình này
 và không lưu dữ liệu cá nhân trong bản ghi các lần gọi AI, vì vậy xin đừng nhập dữ liệu cá nhân về người khác vào thiết
 lập thương hiệu hay nội dung.
@@ -434,8 +442,8 @@ lập thương hiệu hay nội dung.
   Asia đã đăng giúp bạn).
 - **Amazon Web Services** — lưu trữ, cơ sở dữ liệu, Amazon Bedrock.
 - **Vercel** — lưu trữ và phục vụ các trang của portal.
-- **Các nhà cung cấp AI** — Anthropic và OpenAI (qua Amazon Bedrock, và gọi trực tiếp chỉ khi dự phòng), và Jev
-  (TypeSafe) với một số đối tác, như mô tả ở trên.
+- **Các nhà cung cấp AI** — Anthropic và OpenAI (gọi trực tiếp qua API của Anthropic và API của OpenAI, và qua Amazon
+  Bedrock), và Jev (TypeSafe) với một số đối tác, như mô tả ở trên.
 - **Các kênh của bạn** (ví dụ WordPress hoặc Meta), khi bạn đăng bài lên đó.
 
 Chúng tôi không bán dữ liệu cá nhân.
@@ -477,13 +485,14 @@ Pháp nhân vận hành là [to be confirmed].
 - Nội dung được tạo bằng AI và có thể có sai sót. Portal hiển thị điều này ở bước xem lại, đăng và xuất: "Nội dung này
   được tạo bằng AI. Hãy xem lại trước khi đăng; bạn chịu trách nhiệm về những gì bạn đăng." (trang hiển thị câu này bằng
   tiếng Anh).
-- Nội dung được viết và kiểm tra bằng mô hình của các nhà cung cấp bên thứ ba: Claude của Anthropic, qua Amazon Bedrock
-  (Amazon Web Services), viết nội dung, và các mô hình của OpenAI, cũng qua Amazon Bedrock, xem lại, chấm điểm và kiểm
-  tra. Khi các mô hình đó không dùng được, bước xem lại và kiểm tra có thể chuyển sang các mô hình khác trên Amazon
-  Bedrock (Amazon Nova, Meta Llama), và sau đó API của Anthropic hoặc API của OpenAI, gọi trực tiếp và có trần chi tiêu,
-  có thể được dùng làm đường dự phòng. Khi Claude trên Amazon Bedrock không dùng được, bước viết có thể chuyển sang
-  Claude qua API của Anthropic và, khi không còn cách nào khác, sang một mô hình của OpenAI qua API của OpenAI, gọi trực
-  tiếp và có trần chi tiêu.
+- Nội dung được viết và kiểm tra bằng các mô hình AI của nhà cung cấp bên thứ ba, và có thể được xử lý bởi bất kỳ nhà
+  cung cấp nào trong số đó. Claude của Anthropic viết nội dung: Adventure Asia gọi Claude qua API của Anthropic trước và
+  qua Amazon Bedrock (Amazon Web Services) sau. Các mô hình của OpenAI xem lại, chấm điểm và kiểm tra nội dung, qua
+  Amazon Bedrock hoặc API của OpenAI, và các mô hình khác trên Amazon Bedrock (Amazon Nova, Meta Llama) cũng có thể xem
+  lại và kiểm tra. Nếu không có mô hình Claude nào dùng được, một mô hình của OpenAI qua API của OpenAI có thể viết nội
+  dung khi không còn cách nào khác. API của Anthropic và API của OpenAI được gọi trực tiếp, mỗi API có trần chi tiêu.
+  Adventure Asia quyết định thứ tự dùng các nhà cung cấp này và có thể thay đổi thứ tự đó, hoặc thay đổi nhà cung cấp,
+  bằng cách cập nhật danh sách này.
 - Mọi tính năng AI chạy trên tài khoản mà Adventure Asia đứng tên công ty với các nhà cung cấp này. Bạn không nhận tài
   khoản hay khoá nào của họ, và không được tìm cách gọi tới họ qua portal ngoài các tính năng AI của portal.
 - Chính sách sử dụng của các nhà cung cấp này áp dụng cho bạn với tư cách người dùng một dịch vụ xây trên mô hình của

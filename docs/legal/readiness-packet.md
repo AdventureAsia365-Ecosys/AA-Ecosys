@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-03
+last_reviewed: 2026-11-06
 review_every_days: 90
 related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, SEC-04-ai-schedule, SEC-04-dpa-pack, AA-886, AA-820, AA-839, AA-877]
 ---
@@ -187,7 +187,11 @@ visas or financing without a qualified person and an AI notice, the monthly AI a
 letter. There is still no real partner, so nobody is notified: the clause **ships in the pilot letter**, and each later
 partner accepts the Schedule with its partner agreement. The Content studio terms §3 and the CRM terms carry a short
 summary of v1.0 (Annex A.4), the Trip Planner terms name the model that writes its AI text, and all of them keep the
-"Draft — pending legal review" banner until the lawyer has read the Schedule. *Business owner decides:* the wording of
+"Draft — pending legal review" banner until the lawyer has read the Schedule. Since 2026-11-06 (portal Draft v0.5)
+the Content studio pages name the direct Anthropic API and OpenAI API as providers that may process the content, with
+Claude called on the Anthropic API first and Amazon Bedrock second (route control version 6, [AI Use
+Register](../architecture/ai-use-register.md) v1.11), no longer as a fallback; they say that Adventure Asia sets the
+order and may change it. The Schedule's own clause text already named both paths and stays v1.0. *Business owner decides:* the wording of
 the pilot letter around the clause, the pilot's monthly AI allowance, and when to bring in the lawyer (before the
 first paying agency at the latest). *Detail:* [AI Schedule v1.0](tenant-ai-schedule.md): where each part ships (§2),
 the Schedule (§3), the pilot-letter clause (§5) and 16 questions for a lawyer (§7). Part 2, the data processing pack
@@ -199,14 +203,18 @@ The text below is copied from the page source as rendered: A.1 and A.2 at AA-Tri
 (2026-10-28), A.3 and A.4 at AA-Partner commit `a33ccf4` (2026-10-28). The portal pages moved from AA-CIS-App to
 AA-Partner with their history (AA-979); their text is the one of 2026-10-20 plus the AA-820 text of A.4 §3
 (2026-10-24) and the AI provider list of A.3 §5–§6 and A.4 §3 (2026-10-31, S262, from the
-[AI Use Register](../architecture/ai-use-register.md)). Each page shows the banner "Draft — pending legal review". The Trip Planner pages show the version
+[AI Use Register](../architecture/ai-use-register.md)), rewritten on 2026-11-06 (S271) for route control version 6
+(register v1.11). Each page shows the banner "Draft — pending legal review". The Trip Planner pages show the version
 "Draft v0.1" (20 October 2026), although their text gained the traveller sign-in and Geoapify parts later; the two
-portal pages show "Draft v0.4" (3 November 2026) since the AI Schedule v1.0 change. Links are shown as their text. The pages
-exist in English only. If a page changes after those commits, the live page wins.
+portal pages show "Draft v0.5" (6 November 2026) since the route control version 6 change (Draft v0.4 of 3 November
+2026 was the AI Schedule v1.0 change). Links are shown as their text. The Trip Planner pages exist in English only; the
+portal pages also show a Vietnamese translation for reading, and their English text applies. If a page changes after
+those commits, the live page wins.
 
 Two page-copy follow-ups are known. The portal privacy notice §6 still says that Vercel hosts the portal pages,
 although the portal now runs on AWS. The Trip Planner pages changed after 2026-10-20 but still showed that date until
-2026-11-03 (Draft v0.2). A.4 §3 below is the 2026-11-03 text (AA-820, AI Schedule v1.0, portal Draft v0.4); A.2 §3 is
+2026-11-03 (Draft v0.2). A.3 §5–§6 and A.4 §3 below are the 2026-11-06 text (AA-820, route control version 6, portal
+Draft v0.5); A.2 §3 is
 older than the live page, which since then names the model that writes the narration and links the Anthropic Usage
 Policy.
 
@@ -406,13 +414,15 @@ expire after 24 hours or when you sign out. We do not use advertising or analyti
 
 The legal basis for each use is [to be confirmed].
 
-**5. AI processing.** Content is generated and checked by AI models. Claude (Anthropic), through Amazon Bedrock, writes
-it; OpenAI models, also through Amazon Bedrock, review, score and check the drafts. When those models are unavailable,
-the review and check steps may fall back to other models on Amazon Bedrock (Amazon Nova, Meta Llama). If Amazon Bedrock
-is unavailable, the Anthropic API or the OpenAI API, used directly and with a spending cap, may be used as a fallback;
-those calls go from Amazon Web Services to Anthropic or OpenAI. For writing, that means Claude through the Anthropic API
-first and, as a last resort, an OpenAI model through the OpenAI API. For some partners, a decision-checking service (Jev, by TypeSafe) also answers
-yes-or-no checks about the drafts. These providers receive tour content, your brand settings and the instructions for each
+**5. AI processing.** Content is generated and checked by AI models of third-party providers, and may be processed by
+any of them. Claude (Anthropic) writes it: Adventure Asia calls Claude through the Anthropic API first and through Amazon
+Bedrock (Amazon Web Services) second. OpenAI models review, score and check the drafts, through Amazon Bedrock or the
+OpenAI API, and other models on Amazon Bedrock (Amazon Nova, Meta Llama) may also review and check them. If no Claude
+model is available, an OpenAI model through the OpenAI API may write the content as a last resort. The Anthropic API and
+the OpenAI API are used directly, each with a spending cap; those calls go from Amazon Web Services to Anthropic or
+OpenAI, on accounts Adventure Asia holds in its own company name. Adventure Asia sets the order in which these providers
+are used and may change it. For some partners, a decision-checking service (Jev, by TypeSafe) also answers yes-or-no
+checks about the drafts. These providers receive tour content, your brand settings and the instructions for each
 piece. Our policy is not to send personal data to these models and not to store any in our AI call records, so please do
 not enter personal data about other people in brand settings or content.
 
@@ -422,8 +432,8 @@ not enter personal data about other people in brand settings or content.
   Asia published for you).
 - **Amazon Web Services** — hosting, database, Amazon Bedrock.
 - **Vercel** — hosts and delivers the portal pages.
-- **AI providers** — Anthropic and OpenAI (through Amazon Bedrock, and directly only as a fallback), and Jev (TypeSafe)
-  for some partners, as described above.
+- **AI providers** — Anthropic and OpenAI (directly through the Anthropic API and the OpenAI API, and through Amazon
+  Bedrock), and Jev (TypeSafe) for some partners, as described above.
 - **Your channels** (for example WordPress or Meta), when you publish to them.
 
 We do not sell personal data.
@@ -464,13 +474,13 @@ pieces about those tours, and tools to export them or publish them to your own c
 
 - Content is generated with AI and can contain mistakes. The portal shows this at review, publish and export: "This
   content was generated with AI. Review it before publishing; you are responsible for what you publish."
-- The content is written and checked with models from third-party providers: Anthropic's Claude, through Amazon Bedrock
-  (Amazon Web Services), writes it, and OpenAI models, also through Amazon Bedrock, review, score and check it. When
-  those models are unavailable, the review and check steps may fall back to other models on Amazon Bedrock (Amazon
-  Nova, Meta Llama), and the Anthropic API or the OpenAI API, used directly and with a spending cap, may be used as a
-  fallback after them. When Claude is unavailable on Amazon Bedrock, the writing step may fall back to Claude through
-  the Anthropic API and, as a last resort, to an OpenAI model through the OpenAI API, used directly and with a spending
-  cap.
+- The content is written and checked with AI models of third-party providers, and may be processed by any of them.
+  Anthropic's Claude writes it: Adventure Asia calls Claude through the Anthropic API first and through Amazon Bedrock
+  (Amazon Web Services) second. OpenAI models review, score and check it, through Amazon Bedrock or the OpenAI API, and
+  other models on Amazon Bedrock (Amazon Nova, Meta Llama) may also review and check it. If no Claude model is
+  available, an OpenAI model through the OpenAI API may write it as a last resort. The Anthropic API and the OpenAI API
+  are used directly, each with a spending cap. Adventure Asia sets the order in which these providers are used and may
+  change that order, or the providers, by updating this list.
 - Every AI feature runs on accounts that Adventure Asia holds in its own company name with these providers. You do not
   get an account or a key with any of them, and you must not try to reach them through the portal other than through
   its AI features.

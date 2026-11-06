@@ -148,8 +148,9 @@ may reach the Anthropic API or the OpenAI API from every T-stage. The tenant ter
 model through the OpenAI API"). The other T-stage writers' rules are unchanged. The judge stages below are
 `vendor_direct`; since CIS 366 (model first) their route runs GPT-6 Luna on acc3, then the same model on the OpenAI API
 (its twin row), before the acc2 Nova Lite hop, so tenant content reaches the OpenAI API as soon as acc3 refuses or
-fails GPT-6 Luna (from 333 to 366 it went there only after the acc2 hop). The tenant terms state this as "may be used
-as a fallback"; the AA-820 follow-up below covers the wider use. **Since route control version 6 (2026-11-05, v1.11)
+fails GPT-6 Luna (from 333 to 366 it went there only after the acc2 hop). The tenant terms stated this as "may be used
+as a fallback" until their Draft v0.5 (2026-11-06), which names the direct APIs as providers; the AA-820 follow-up
+below covers the wider use. **Since route control version 6 (2026-11-05, v1.11)
 the Anthropic API is the first provider of every Claude model, not a fallback**, and while acc3 refuses, the OpenAI
 API answers the judge stages: on Dev today tenant content goes to the two direct APIs on almost every T-stage call.
 
@@ -249,10 +250,11 @@ company's name (ADR 0019 b19); tenants never hold a provider key.
   studio stages ([DPA Annex 3](../legal/dpa-annex-3-subprocessors.md) §1.2), and the pilot contract set incorporates
   the AI Schedule; both wait for the tech lead's read and counsel. *S271:* DPA draft v0.3 Annex 3 names the
   Anthropic API as the first path of Claude and the OpenAI API as the path that answers the judges while acc3
-  refuses; the AI Schedule's clause .1 already names both paths and its facts table follows. **Still open:** the
-  Content studio pages of AA-Partner (`/legal/partner-terms` §3 and `/legal/privacy` §5, EN and VI) still say the
-  direct APIs are used "only as a fallback"; an AA-Partner PR changes them, then the readiness packet's copy of
-  those pages (Annex A) follows.
+  refuses; the AI Schedule's clause .1 already names both paths and its facts table follows. The Content studio pages
+  of AA-Partner (`/legal/partner-terms` §3, `/legal/privacy` §5–§6, EN and VI, Draft v0.5) name both direct APIs as
+  providers that may process the content, Claude on the Anthropic API first, with the order set by AA and open to
+  change; the readiness packet's copy of those pages (Annex A) follows. The CRM and Trip Planner terms are unchanged
+  (both gateways call Bedrock only).
 - **Jev (TypeSafe)**: yes/no decision checks; for tenant content only for allowlisted tenants.
 - **DataForSEO, Geoapify**: keywords and place names only, never tenant text.
 - **Amazon (Nova) and Meta (Llama) models on Bedrock (acc2)**: fallback for judge and validate stages when acc3
