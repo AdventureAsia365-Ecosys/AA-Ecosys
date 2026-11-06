@@ -4,6 +4,7 @@
   "Decision record"). **Proposed** for decisions 10, 11 and 12 (proposed answers to gap §5 items 9, 4 and 1 + 7,
   accepted one by one when their step comes). Uses the number reserved for AA-804 ("AI platform and governance").
   "Not decided here" lists what this ADR leaves open.
+- **Amended by:** [ADR 0020](0020-content-quality-architecture.md#gateway-amendments-adr-0009) (S271): d5 same-model truncation retry owned by the gateway and single-family writer routes; d8 degraded marks for every role and a raw-reply cassette; d10 data-scope exception for the pinned claim instrument; d12 instrument identity and gated route changes.
 - **Scope:** every paid AI or data API called by AA-CIS-App, AA-TripPlanner-Web, AA-Partner (CRM) and AA-Booking (when
   it needs one), on every environment; the AA-CIS-Infra roots that hold their roles, secrets and alarms.
 - **Implements:** root ADR 0001 decision 4 (cost guard).

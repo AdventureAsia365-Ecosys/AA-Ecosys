@@ -93,9 +93,13 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
   `check_response_timeout`; xem `gh run list --event merge_group`.
 - TripPlanner, AA-CIS-Infra, repo gốc: `ship_merge.py` (squash thẳng khi mọi check xanh, không `--auto`: PR đã CLEAN
   thì `--auto` báo lỗi).
-- Nhiều PR backend cùng repo: xếp hàng cùng lúc được; queue có thể đẩy cả nhóm trong một push → một Deploy Dev cho cả
-  nhóm, verify live (§3) cho từng PR của nhóm theo `git_sha` cuối. Deploy đỏ → tìm PR gây lỗi trong nhóm trước khi xếp
-  tiếp.
+- Nhiều PR backend cùng repo: **MẶC ĐỊNH xếp hàng cùng lúc** (S271): mọi PR chỉ có code đã xanh → `mergeq.sh` song song
+  ngay, mỗi PR một tiến trình nền (`mergeq.sh` chờ tới merged nên vòng `for` tuần tự = chạy từng cái). Queue CIS kiểm
+  tới 4 nhóm song song và merge 5 một lượt (`maximumEntriesToBuild` / `ToMerge`). CHỈ chuỗi có phụ thuộc mới tuần tự:
+  migration → copy → apply → PR code dùng migration đó. Không viết script "đợi PR trước deploy xong rồi mới xếp PR sau"
+  cho PR không phụ thuộc nhau (S271: 7 PR W0 tuần tự ước ~4 giờ, xếp song song còn ~1 giờ). Queue có thể đẩy cả nhóm
+  trong một push → một Deploy Dev cho cả nhóm, verify live (§3) cho từng PR của nhóm theo `git_sha` cuối. Deploy đỏ →
+  tìm PR gây lỗi trong nhóm trước khi xếp tiếp.
 - Chờ CI: `gh pr checks <n> --watch` (CI ~3–5′), kiểm một lần, không poll dồn. Nhiều PR phụ thuộc nhau (migration →
   copy → code, nhánh xếp chồng) → merge train chạy nền: `references/merge-trains.md`.
 

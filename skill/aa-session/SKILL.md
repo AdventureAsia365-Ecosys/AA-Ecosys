@@ -67,6 +67,13 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
      `*access-review*` mới nhất thuộc quý trước.
    - Không bao giờ chạy `pg_stat_statements_reset()` trừ ngay sau một rà soát tháng đã lưu snapshot top 50 (C4.3a).
 
+7. **Ngay sau khi Nghiệp chốt danh sách — cập nhật master plan (BẮT BUỘC, tech lead nhắc S264 và S271):**
+   (a) `python3 tools/linear/plan_sync.py --write` sau mọi đổi trạng thái Linear của lượt hội tụ; (b) sửa tay
+   `plan.json`: `session` = phiên này, `next_session`, và `session` / `next` của mọi issue đã chốt (kể cả issue kéo lên
+   sớm); `--validate`; (c) tạo checklist sống + `sessions/S<nnn>.json` (kpis + groups, `s` ∈ done/run/wait/warn/block)
+   + thêm dòng vào `sessions/index.json` (lấy bản live bằng Artifact read, giữ các phiên cũ); (d) **publish tracker**
+   theo `docs/backlog/tracker/README.md` bước 4. Làm xong bước này rồi mới mở lane / bắt đầu việc đầu tiên.
+
 Đầu ra: một khối ngắn gồm trạng thái (3–5 dòng), khối AI gateway (2–4 dòng từ `gateway_status.py`: connection bật,
 deployment denied, chi tiêu / cap, lỗi 24 h, route version), lệch nếu có, danh sách việc kèm slot.
 
