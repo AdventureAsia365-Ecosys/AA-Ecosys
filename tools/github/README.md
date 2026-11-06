@@ -5,7 +5,7 @@ through the org App `aa-agent` (`as-app.sh`, ADR 0011), which reads its key from
 session for `aa365-admin` is needed (renew with `aws sts get-caller-identity --profile aa365-admin`). Orchestrator
 only: these tools push, merge and dispatch inside their own subprocesses, where the subagent guardrail hook cannot see
 the command, so `.claude/hooks/subagent-guardrails.sh` refuses any subagent Bash command that names one of them
-(`ship_merge/train/copy_apply/open_prs.py`, `mergeq.sh`, `dbmig.sh`, `train-lib.sh`, `as-app.sh`; the `test_ship_*.py`
+(`ship_merge/train/copy_apply/open_prs/wave.py`, `mergeq.sh`, `dbmig.sh`, `train-lib.sh`, `as-app.sh`; the `test_ship_*.py`
 tests stay open; red-team cases in `.claude/hooks/test_subagent_guardrails.sh`). The process these
 tools serve, and when to use each: skill `aa-ship` (§1 "Cách merge", `references/merge-trains.md`).
 
@@ -14,6 +14,7 @@ tools serve, and when to use each: skill `aa-ship` (§1 "Cách merge", `referenc
 | `as-app.sh [--repos a,b] -- <cmd>` | runs one command with an `aa-agent` installation token |
 | `mergeq.sh <Repo> <pr> [--dequeue]` | merge-queue enqueue and wait (CIS, Booking, Partner); used by `ship_merge.py` |
 | `ship_merge.py <targets>` | gate + merge one or more PRs (below) |
+| `ship_wave.py <targets>` | a whole wave: independent PRs in parallel, migration chains in order, one deploy wait per app (below) |
 | `ship_train.py <Repo> <worktree> <branch>:<pr>[:<own>] ...` | stacked branches, bottom first (below) |
 | `ship_copy_apply.py <owner> <NNN>` | Infra copy PR + DB Migrate on that file + readiness (below) |
 | `dbmig.sh <owner>/<file or NNN> <check or apply>` | DB Migrate on a file already on Infra main (`ship_copy_apply.py --no-copy`) |
@@ -40,6 +41,29 @@ checkout: `python3 tools/github/<tool>.py --help`.
 - `--check-only` gates and reports; `--serial` keeps the given order and stops at the first failure.
 - Exit 0 merged, 3 a red check (or none reported), 4 refused or merge failed, 5 still pending at `--timeout`.
 - The gate does not read job tables or waves: `aa-ship` §2 still comes first for backend merges.
+- AA-1024: `as-app.sh` refuses `gh pr merge` unless this gate passed (it sets `AA_SHIP_GATED`; `--disable-auto` stays
+  open), and the same merge through the API: `gh api` with a writing method on `pulls/<n>/merge`, or `gh api graphql`
+  with `mergePullRequest` / `enqueuePullRequest` (also from a `-F query=@file` / `--input` body; a GET of the merge
+  endpoint and `dequeuePullRequest` stay open). The Claude hook `.claude/hooks/aa_shell_guard.py` (SHIP-1) refuses the
+  same API forms, a raw `gh pr merge`, `mergeq.sh` run by
+  hand, `ship_merge.py` in a shell loop or twice in one command, and running a hand-written `.tmp-session` script that
+  merges. `mergeq.sh` exits 4 at once when the PR turns DIRTY while it waits.
+
+## ship_wave.py
+
+`python3 tools/github/ship_wave.py cis#1350 'cis#1349>apply:cis/383,cis/384' 'cis#1351@after=cis/384' root#601 --wait-deploy`
+
+- One call per wave (lessons S257, S271: a hand-written script that waited for each PR and its deploy before the next
+  took ~4 h for 7 PRs instead of ~1 h). Every PR without `@after=` is gated and merged at once by `ship_merge.merge_one`,
+  one worker per PR (non-queue repos: one squash at a time per repo).
+- `>apply:<owner>/<NNN>[,...]` marks a migration-only PR: after it merges, its migrations go onto Dev through
+  `ship_copy_apply.py`, one owner's numbers in order as one batch. `@after=<owner>/<NNN>` holds a code PR until those
+  are registered; a hold on a migration nothing in the wave applies must already be registered on Dev (else exit 2).
+- A failure stops only what depends on it (a red migration PR skips its held PRs; independent PRs go on).
+- `--wait-deploy` waits once per deployed app (CIS, Booking, Partner) at the end, until the health `git_sha` contains
+  every merge of the wave (GitHub compare). `--dry-run` prints the plan; `--check-only` gates and merges nothing.
+- Exit 0 all merged/applied/deployed, 2 usage or unapplied hold, 3 red check, 4 refused / merge or apply failed /
+  skipped, 5 timeout.
 
 ## ship_train.py
 

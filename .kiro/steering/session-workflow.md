@@ -28,7 +28,8 @@ Khi nguồn lệch nhau: repo > Notion trang canonical > memory > skill. Báo l�
   `state-snapshot.md`; (3) lessons; (4) **draft Jira → Nghiệp duyệt → đăng** (không tự đăng khi chưa duyệt, S237);
   (5) **rồi mới** ghi log local, prepend session block vào memory HOT (chỉ prepend, không rotate tay), backlog + tracker
   — tất cả lấy số từ snapshot và kết quả Jira; (6) đưa **mọi repo (gốc + 5 con: CIS, Booking, TripPlanner, Partner, Infra) về main/master cây sạch**; root PR chờ
-  thì agent điều phối tự merge (`gh pr merge <n> --squash`, repo gốc không có CI bắt buộc) theo luật merge bên dưới.
+  thì agent điều phối tự merge (`python3 tools/github/ship_merge.py root#<n>`: repo gốc không có CI bắt buộc, tool đòi
+  MỌI check xanh; `gh pr merge` trần bị hook `aa_shell_guard` SHIP-1 chặn, AA-1024) theo luật merge bên dưới.
 
 ## Nguồn sự thật khi thiết kế — CONTEXT.md (BẮT BUỘC)
 Trước khi thiết kế/sửa code một repo, ĐỌC `CONTEXT.md` của repo đó và bám sát (stack, ranh giới, ownership).
@@ -95,8 +96,9 @@ Không tạo nhiều lệnh `sleep N; check` chồng chéo hay mở terminal son
 - Chạy git/terraform từ đường dẫn WSL `/home/nghiep/...` (KHÔNG dùng UNC `\\wsl.localhost`).
 - terraform/boto3 cần MFA. KHÔNG `export $(…)` trần: lệnh lỗi/rỗng thì `export` in toàn bộ env (lộ token, S244). Dùng:
   `C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q '^AWS_ACCESS_KEY_ID=' <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr '\n' ' ' <<<"$C") <lệnh>` (chạy trong `bash -c`). Hết hạn MFA → Nghiệp chạy `aws sts get-caller-identity --profile aa365-admin` và nhập mã.
-- AA-CIS-App / AA-Booking / AA-Partner dùng GitHub merge queue (AA-889): PR xanh → `tools/github/mergeq.sh <Repo> <n>` (rút khỏi hàng: `--dequeue`), queue tự chạy lại CI trên `main` mới nhất rồi squash, không `update-branch` (chi tiết: skill `aa-ship` §1). Repo gốc không có CI bắt buộc →
-  `gh pr merge <n> --squash` sau khi tự kiểm (lệ root PR).
+- AA-CIS-App / AA-Booking / AA-Partner dùng GitHub merge queue (AA-889): PR xanh → `python3 tools/github/ship_merge.py <Repo>#<n>` (gọi `mergeq.sh` bên trong; rút khỏi hàng: `mergeq.sh <Repo> <n> --dequeue`), queue tự chạy lại CI trên `main` mới nhất rồi squash, không `update-branch` (chi tiết: skill `aa-ship` §1). Repo gốc không có CI bắt buộc →
+  `python3 tools/github/ship_merge.py root#<n>` (lệ root PR). Một wave nhiều PR: MỘT lệnh `tools/github/ship_wave.py`
+  (PR độc lập song song; chỉ chuỗi migration → copy → apply → PR code là tuần tự), không viết script ship tay (AA-1024).
 - MCP config ở `.kiro/settings/mcp.json` (gitignored). Linear endpoint `/mcp` (KHÔNG `/sse`).
 - File tạm ghi TRONG workspace tại `/home/nghiep/projects/AA-Ecosys/.tmp-session/` (đã gitignore), KHÔNG ghi ra `~/`. Dọn sau khi dùng.
 - Google API key `aa-cis/dev/gdrive-photo-reader` KHÔNG cần đổi (đã bịt rò rỉ từ PR #535 — Nghiệp chốt 02/10/2026).

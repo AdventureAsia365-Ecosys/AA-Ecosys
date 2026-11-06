@@ -30,11 +30,13 @@ runs inside it, out of the hook's sight). Holds no secrets.
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
 from ship_common import (
     AS_APP,
+    GATE_ENV,
     MERGEQ,
     QUEUE_REPOS,
     Runner,
@@ -150,6 +152,7 @@ def merge_one(runner: Runner, repo: str, n: int, *, check_only: bool = False, ti
     if check_only:
         log(f"{tag}: green, not merged (--check-only)")
         return ""
+    os.environ[GATE_ENV] = "ship_merge"  # as-app.sh lets a gated `gh pr merge` through (AA-1024); inherited below
     if repo in QUEUE_REPOS:
         r = runner.stream([MERGEQ, repo, str(n)], prefix=f"{tag}: ", timeout=queue_timeout)
         why = f"mergeq.sh exit {r.rc}: {r.last_line()}"

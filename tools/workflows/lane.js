@@ -19,6 +19,15 @@ export const meta = {
   ],
 }
 
+// AA-1024 (lesson S252): args must be an object. A placeholder string ("__FROM_FILE__") reaches the script as one
+// string and every field reads undefined (a JSON-encoded object string is parsed by the harness and is fine). .claude/hooks/lane_start_guard.py refuses it before the launch (and a
+// plan.json that is not on args.session); this check is the backstop when the hook is not loaded.
+if (typeof args !== 'object' || args === null || Array.isArray(args)) {
+  throw new Error(`lane.js: args must be a JSON object (got ${args === null ? 'null' : typeof args}); pass it inline`)
+}
+for (const k of ['key', 'goal', 'session', 'date']) {
+  if (!args[k] || typeof args[k] !== 'string') throw new Error(`lane.js: args.${k} is required (a string)`)
+}
 const L = args
 const S = L.session
 const slug = S.toLowerCase()
@@ -59,7 +68,22 @@ HARD RULES for this lane:
   Postgres; and a gitleaks scan of your commits: download gitleaks v8.30.1 (the CI pin) once into <scratchpad>/${L.key}-gitleaks/
   from github.com/gitleaks/gitleaks/releases (linux_x64 tar.gz, verify it against the release checksums file), then in each
   worktree: gitleaks git --log-opts="origin/main..HEAD" --config .gitleaks.toml --redact (root: origin/master; no .gitleaks.toml =
-  no --config). A finding means rewrite the local branch (reset --soft + recommit) before returning; never "fix it in a later commit".
+  no --config). A finding means rewrite the local branch before returning: git fetch, then git reset --soft $(git merge-base HEAD origin/main)
+  and recommit (never reset --soft to a bare origin/main ref: a stale or newer ref makes the squash revert main); never "fix it in a later commit".
+- Local tests never reach AWS: run every test command with the AWS config hidden, so an app import never prompts for MFA or picks up a live
+  profile: env -u AWS_PROFILE AWS_CONFIG_FILE=/dev/null AWS_SHARED_CREDENTIALS_FILE=/dev/null AWS_EC2_METADATA_DISABLED=true <test command>.
+- Before returning, also run the registry / snapshot tests of every repo you touched (they fail when a list you extended is not updated
+  everywhere): job kind lists and the job registry; route policy and role matrix snapshots; module classification; capacity lines;
+  the CIS openapi.json snapshot; the gateway route snapshot. Find them with git grep -l -iE 'snapshot|registry|KINDS|role_matrix|
+  classif|capacity' -- 'tests/**' and run the ones that import a module you changed.
+- One PR per repo per wave: when two lanes of a wave touch the same files (implementation notes, a registry, a snapshot, a kind list),
+  they ship as ONE PR in that repo; say so in pr_body ("joins lane <key>") instead of opening a second PR that goes DIRTY when the first
+  merges. A wave ships ONE migration-only PR per owner (consecutive numbers), never one per lane.
+- The orchestrator ships the whole wave with ONE tools/github/ship_wave.py call (independent PRs in parallel, only migration -> copy ->
+  apply -> code chains in order). In pr_body state the chain: "chain: <owner>/<NNN> applied before this PR" for a code PR that needs a
+  migration of this wave, "applies: <owner>/<NNN>[,...]" for a migration-only PR; nothing for an independent PR.
+- Lessons: report each lesson you hit in followups as "lesson: <principle> | guard: <test|hook|tool|ci|lane> <path> | pending | none: <why>"
+  (skill/aa-lessons/SKILL.md section 3: a new lesson line needs a Guard field).
 - When a change adds a field to a DB query or row shape, also run the integration tests that read it (local Postgres), not only unit tests.
   A migration that creates a table also needs its DM-7.1 retention row (root docs/architecture/data-standards/02-data-management.md):
   return that root PR too, merged before the Infra bot copy (its "Retention rows" check fails without it).

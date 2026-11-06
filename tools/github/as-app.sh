@@ -31,6 +31,47 @@ while [ $# -gt 0 ]; do
   esac
 done
 [ $# -gt 0 ] || { echo "as-app: no command given (usage: as-app.sh [--repos a,b] -- <command>)" >&2; exit 2; }
+# AA-1024: a merge only after the ship gate (every check green, not only required ones; DIRTY / draft / base /
+# deletion refusals). ship_merge.py sets AA_SHIP_GATED once a PR passed it; ship_wave.py and mergeq.sh run under it.
+# `gh pr merge --disable-auto` (mergeq.sh --dequeue) stays open: it takes a PR out, never in.
+if [ "$(basename -- "$1")" = gh ] && [ "${2:-}" = pr ] && [ "${3:-}" = merge ] && [ -z "${AA_SHIP_GATED:-}" ]; then
+  case " $* " in
+    *" --disable-auto "*) ;;
+    *) echo "as-app: refused a raw 'gh pr merge' (it skips the ship gate). Use tools/github/ship_merge.py <Repo>#<pr>, or tools/github/ship_wave.py for a wave." >&2; exit 2 ;;
+  esac
+fi
+# The same merge through the API (S271 review: `gh api -X PUT repos/<org>/<repo>/pulls/<n>/merge` ran 3 times): the
+# REST merge endpoint with a writing method, or a GraphQL mergePullRequest / enqueuePullRequest mutation (also from a
+# `-F query=@file` / `--input file` body). A GET of pulls/<n>/merge (is it merged?) and dequeuePullRequest stay open.
+if [ "$(basename -- "$1")" = gh ] && [ "${2:-}" = api ] && [ -z "${AA_SHIP_GATED:-}" ]; then
+  method="" fields="" rest_merge="" gql_merge="" prev=""
+  for a in "${@:3}"; do
+    case "$prev" in
+      -X|--method) method="$a" ;;
+      --input) [ -r "$a" ] && grep -qE 'mergePullRequest|enqueuePullRequest' -- "$a" && gql_merge=1 ;;
+    esac
+    case "$a" in
+      -X?*) method="${a#-X}" ;;
+      --method=*) method="${a#--method=}" ;;
+      -f|-F|--field|--raw-field|--input|-f?*|-F?*|--field=*|--raw-field=*|--input=*) fields=1 ;;
+    esac
+    case "$a" in
+      *pulls/*/merge|*pulls/*/merge/|*pulls/*/merge\?*) rest_merge=1 ;;
+      *mergePullRequest*|*enqueuePullRequest*) gql_merge=1 ;;
+    esac
+    case "$a" in
+      *=@*) f="${a#*=@}"; [ -r "$f" ] && grep -qE 'mergePullRequest|enqueuePullRequest' -- "$f" && gql_merge=1 ;;
+    esac
+    prev="$a"
+  done
+  method="$(printf '%s' "$method" | tr '[:lower:]' '[:upper:]')"
+  if [ -n "$rest_merge" ] && { [ -n "$method" ] && [ "$method" != GET ] || { [ -z "$method" ] && [ -n "$fields" ]; }; }; then
+    gql_merge=1
+  fi
+  if [ -n "$gql_merge" ]; then
+    echo "as-app: refused a merge through 'gh api' (REST pulls/<n>/merge or GraphQL mergePullRequest/enqueuePullRequest skips the ship gate). Use tools/github/ship_merge.py <Repo>#<pr>, or tools/github/ship_wave.py for a wave." >&2; exit 2
+  fi
+fi
 [ -n "${agent_app_id:-}" ] || { echo "as-app: agent_app_id is empty in $here/apps.env (App not created yet?)" >&2; exit 1; }
 
 b64url() { openssl base64 -A | tr '+/' '-_' | tr -d '='; }

@@ -31,8 +31,9 @@ patterns=(
   # AA-1032: the orchestrator ship tools push, merge and dispatch DB Migrate inside their own subprocesses (through
   # as-app.sh), where this hook never sees the command. Any mention is refused, so `cat`/`git add` of these files is
   # too: subagents editing them use the Read/Edit tools and `git add <dir>`. Their tests (test_ship_*.py) stay open.
-  '(^|[ /"'"'"'=(`;&|])(ship_(merge|train|copy_apply|open_prs)\.py|mergeq\.sh|dbmig\.sh|train-lib\.sh|as-app\.sh)'
-  '(^|[ ;&|(])-m +ship_(merge|train|copy_apply|open_prs)( |$|[;&|)])'
+  # AA-1024: ship_wave.py merges and applies migrations the same way.
+  '(^|[ /"'"'"'=(`;&|])(ship_(merge|train|copy_apply|open_prs|wave)\.py|mergeq\.sh|dbmig\.sh|train-lib\.sh|as-app\.sh)'
+  '(^|[ ;&|(])-m +ship_(merge|train|copy_apply|open_prs|wave)( |$|[;&|)])'
   # AA-1023: the ECS rollback helper runs update-service and the ECS exec wrapper runs execute-command (game-day seed
   # writes shared.job through it) inside the script, out of this hook's sight. Any mention is refused, as for the ship
   # tools above (dry runs too: they need the MFA session; lanes edit these files with Read/Edit and `git add <dir>`).
