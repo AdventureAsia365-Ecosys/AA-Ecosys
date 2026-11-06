@@ -256,6 +256,16 @@ Tenants are told on two channels:
   Pro 15 USD a month with WAF included; VPC origins only from the 200 USD Business plan) is recorded as a cheaper
   option, not used now: the adapter is community-maintained, so it is tried only in a $0 Dev spike if CloudFront and
   WAF cost grows.
+- **Amendment (S271, AA-911 review):** the two staff apps run as **one Fargate Spot service each**
+  (`aa-cis-<env>-admin`, `aa-booking-<env>-admin`, 0.25 vCPU / 0.5 GB per task), not two containers in one task.
+  Each app keeps its own task definition family and execution role, and each app's deploy role may register and pass
+  only its own, so the per-app secret isolation of AA-873 holds. Same cost: Fargate bills per vCPU and per GB, so two
+  0.25 / 0.5 tasks cost what one 0.5 / 1 task does (about 4.9 USD a month on Spot). One crash or deploy no longer
+  restarts both apps. Unchanged: the shared ALB with its REGIONAL web ACL and no CDN. The ALB serves the staff hosts
+  with a wildcard `*.<zone>` certificate, because a certificate that names a host still CNAMEd to Vercel fails the
+  CAA check. The staff hosts get their own WAF rate rule (`StaffWebRateLimit`) instead of the API-sized one, and the
+  geo rule applies to them like any viewer. AA-CIS-Infra `modules/environment/staff_web.tf`, root runbook
+  [staff-web-ecs-cutover](../ops/runbooks/staff-web-ecs-cutover.md).
 
 ### Business decisions taken by the tech lead on the decision page (S265); the business owner may revisit
 
