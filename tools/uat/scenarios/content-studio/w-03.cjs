@@ -21,7 +21,7 @@ const sc = rw({
   title: 'Write the blog article from the chosen angle and see it delivered',
   titleVi: 'Viết bài blog theo góc đã chọn và nhận bài hoàn chỉnh',
   baseURL: HOSTS.partner,
-  allowWrites: allow('write'),
+  allowWrites: allow('write', 'ctaCheck'),
   steps: [
     step('The writer opens on the article the editor started from the chosen angle: the angle, the goal and the channel.',
       'Trình viết mở bài mà biên tập viên đã bắt đầu theo góc đã chọn: góc tiếp cận, mục tiêu và kênh.',

@@ -189,12 +189,13 @@ const T = `${ORIGIN}/api/tenant/v1`;
 
 test('W-01..W-03 allow exactly their writes; W-04 writes nothing', () => {
   const cases = {
-    'w-01.cjs': [[`${T}/tours/pool/${ID}/rewrite`], [`${T}/tours/versions/${ID}/retry`, `${T}/tours/versions/${ID}`, `${T}/subjects/${ID}/pick`]],
+    'w-01.cjs': [[`${T}/tours/pool/${ID}/rewrite`], [`${T}/tours/versions/${ID}/retry`, `${T}/tours/versions/${ID}`, `${T}/subjects/${ID}/pick`,
+      `${T}/content-writing/cta-check`]],
     'w-02.cjs': [[`${T}/slate/refresh`, `${T}/subjects/${ID}/pick`, `${T}/angle-gate/requests/${ID}/goal`,
-      `${T}/angle-gate/requests/${ID}/choose`, `${T}/content-writing/requests/${ID}/write`],
+      `${T}/angle-gate/requests/${ID}/choose`, `${T}/content-writing/requests/${ID}/write`, `${T}/content-writing/cta-check`],
     [`${T}/subjects/${ID}/cut`, `${T}/angle-gate/requests/${ID}/reopen`, `${T}/content-writing/pieces/${ID}`,
       `${T}/tours/pool/${ID}/rewrite`, `${T}/publish-log/${ID}/publish`, `${ORIGIN}/api/tenant/admin/brand-identity`]],
-    'w-03.cjs': [[`${T}/content-writing/requests/${ID}/write`], [`${T}/angle-gate/requests/${ID}/choose`,
+    'w-03.cjs': [[`${T}/content-writing/requests/${ID}/write`, `${T}/content-writing/cta-check`], [`${T}/angle-gate/requests/${ID}/choose`,
       `${T}/content-writing/requests/${ID}/write/extra`, `${T}/publish-log/${ID}/publish`]],
   };
   for (const [f, [ok, no]] of Object.entries(cases)) {
@@ -231,6 +232,18 @@ test('W-02 / W-03 limit every paid call: one goal, one choice, the write at most
   assert.match(src, /max: name === 'write' \? 2 : 1/);
   assert.match(fs.readFileSync(path.join(SCEN, 'content-studio', 'w-03.cjs'), 'utf8'), /name: 'write', path: PATHS\.write, max: 2/);
   assert.match(fs.readFileSync(path.join(SCEN, 'content-studio', 'w-01.cjs'), 'utf8'), /name: 'rewrite', path: PATHS\.rewrite, max: 1/);
+});
+
+test('W-02 / W-03: the live call-to-action check (typed CTA, free, stores nothing) is allowed but never capped', () => {
+  const { PATHS } = require(path.join(SCEN, 'content-studio', '_write.cjs'));
+  assert.ok(PATHS.ctaCheck.test('/api/tenant/v1/content-writing/cta-check'));
+  assert.ok(!PATHS.ctaCheck.test('/api/tenant/v1/content-writing/cta-check/extra'));
+  assert.ok(!PATHS.ctaCheck.test('/api/tenant/v1/content-writing/requests/x/cta-check'));
+  for (const f of ['w-02.cjs', 'w-03.cjs']) {
+    assert.ok(allowed(load(f), `${T}/content-writing/cta-check`), `${f} allows the CTA check`);
+    assert.ok(!/ctaCheck/.test(fs.readFileSync(path.join(SCEN, 'content-studio', f), 'utf8').split('limitWrites(')[1] || ''),
+      `${f} does not cap the CTA check`);
+  }
 });
 
 test('_write freeTour: the first catalog tour not in My Tours and still sold', () => {

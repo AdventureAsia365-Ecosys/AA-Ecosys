@@ -25,7 +25,7 @@ const sc = rw({
   title: 'Pick an article topic and choose an angle',
   titleVi: 'Chọn một chủ đề bài viết và chọn góc tiếp cận',
   baseURL: HOSTS.partner,
-  allowWrites: allow('refresh', 'pick', 'goal', 'choose', 'write'),
+  allowWrites: allow('refresh', 'pick', 'goal', 'choose', 'write', 'ctaCheck'),
   steps: [
     step('Articles ranks topics from what travellers search for and what the agency\'s tours offer.',
       'Mục Bài viết xếp hạng chủ đề theo điều khách tìm kiếm và điều các tour của đại lý có.',

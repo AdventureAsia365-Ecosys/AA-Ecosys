@@ -7,7 +7,9 @@ const chain = require('../../lib/write-chain.cjs');
 const { auditTenant } = require('../../lib/studio-audit.cjs');
 
 const T = '/api/tenant/v1';
-// Pathname patterns of the writes the scenarios make (each one limited to one POST per run, lib/uat-page.cjs).
+// Pathname patterns of the writes the scenarios make (each one limited to one POST per run, lib/uat-page.cjs), plus
+// ctaCheck: the studio's live call-to-action check while the editor types one (POST, free, no DB, nothing stored), so it
+// is allowed but never capped.
 const PATHS = {
   rewrite: /^\/api\/tenant\/v1\/tours\/pool\/[^/]+\/rewrite$/,
   refresh: /^\/api\/tenant\/v1\/slate\/refresh$/,
@@ -15,6 +17,7 @@ const PATHS = {
   goal: /^\/api\/tenant\/v1\/angle-gate\/requests\/[^/]+\/goal$/,
   choose: /^\/api\/tenant\/v1\/angle-gate\/requests\/[^/]+\/choose$/,
   write: /^\/api\/tenant\/v1\/content-writing\/requests\/[^/]+\/write$/,
+  ctaCheck: /^\/api\/tenant\/v1\/content-writing\/cta-check$/,
 };
 // The same writes as allowWrites sources: record.cjs tests them on the full URL (origin + path, no query).
 const allow = (...names) => names.map((n) => `${PATHS[n].source.replace(/^\^/, '')}`);

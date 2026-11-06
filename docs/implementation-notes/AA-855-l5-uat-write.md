@@ -56,6 +56,10 @@ harness (`AA-855-r1-harness.md`).
 - `catalogue.json`: W-01..W-04 (round R1-2026-11; W-01..W-03 writes + paid; W-04 neither). `lib/catalogue.cjs`:
   identity `studio-audit`, `checkWriteSet`.
 - Tests: `tests/write-scenarios.test.cjs` (new) and the write-set cases in `tests/dryrun.test.cjs`.
+- Review fix: typing the call to action fires the studio's live CTA check (`POST /api/tenant/v1/content-writing/cta-check`,
+  CIS `v1_content_writing.py`, no DB, nothing stored). W-02 and W-03 now allow it (`PATHS.ctaCheck`), uncapped since it
+  is free; without it the guard aborted the check and failed a paid take after the article was paid for. W-01 has no
+  CTA field and still refuses it (test).
 
 ## Tradeoffs
 
