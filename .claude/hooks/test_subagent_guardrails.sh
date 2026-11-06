@@ -12,7 +12,8 @@ t 2 tools/llm/anthropic_key_plug_in.sh --apply; t 2 bash tools/llm/anthropic_key
 t 2 python3 tools/github/ship_merge.py cis#1230; t 2 tools/github/ship_merge.py --check-only cis#1230; t 2 ./ship_train.py cis /x feat/a:1
 t 2 tools/github/ship_copy_apply.py cis 330; t 2 python3 -u /home/x/tools/github/ship_open_prs.py wf_1; t 2 tools/github/dbmig.sh cis/330 apply
 t 2 tools/github/mergeq.sh AA-CIS-App 1; t 2 tools/github/as-app.sh --repos AA-Ecosys -- gh api repos/x; t 2 . tools/github/train-lib.sh
-t 2 bash -c "tools/github/ship_merge.py root#1"; t 2 cd tools/github \&\& python3 -m ship_merge root#1; t 2 X=1 ship_copy_apply.py cis 330
+t 2 python3 tools/github/ship_wave.py cis#1 --dry-run; t 2 cd tools/github \&\& python3 -m ship_wave cis#1
+t 2 bash -c "tools/github/ship_merge.py root#1";t 2 cd tools/github \&\& python3 -m ship_merge root#1; t 2 X=1 ship_copy_apply.py cis 330
 t 2 bash tools/ops/ecs_rollback.sh aa-booking-dev-api --previous --apply; t 2 tools/ops/ecs_rollback.sh aa-crm-dev-api --to 118 --apply
 t 2 ./ecs_rollback.sh aa-crm-dev-api --list; t 2 bash -c "tools/ops/ecs_rollback.sh x --to 1 --apply"
 t 2 tools/ecs/ecsx.sh tools/ops/gameday_seed_job.py ACTION=seed; t 2 ECSX_SERVICE=aa-booking-dev-api tools/ecs/ecsx.sh x.py
@@ -22,7 +23,8 @@ t 2 vercel deploy --prod
 # must allow (0)
 t 0 python3 -m unittest discover -s tools/ops -p 'test_*.py'; t 0 python3 tools/ops/test_ecs_rollback.py
 t 0 python3 tools/ecs/test_ecsx.py; t 0 python3 -m unittest tools/ops/test_gameday_seed_job.py; t 0 vercel ls; t 0 vercel inspect u
-t 0 python -m unittest discover -s tools/github -p 'test_*.py'; t 0 python3 tools/github/test_ship_merge.py; t 0 python3 -m unittest test_ship_copy_apply
+t 0 python -m unittest discover -s tools/github -p 'test_*.py'; t 0 python3 tools/github/test_ship_merge.py; t 0 python3 tools/github/test_ship_wave.py
+t 0 python3 -m unittest test_ship_copy_apply
 t 0 python3 tools/github/ship_common.py mfa; t 0 bash tools/llm/test_anthropic_key_plug_in.sh
 t 0 git status; t 0 git -C /x log --oneline; t 0 git commit -m msg; t 0 gh pr view 1; t 0 gh api repos/x; t 0 gh pr checks 1
 t 0 aws --profile p ecs describe-services --cluster c; t 0 aws s3 cp a s3://b; t 0 terraform plan; t 0 aws --profile p secretsmanager get-secret-value --secret-id x

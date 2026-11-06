@@ -5,8 +5,10 @@
 #   tools/github/mergeq.sh <Repo> <pr> --dequeue  take the PR out of the queue (or cancel a pending auto-merge)
 #
 # Orchestrator only: runs gh through the aa-agent App (as-app.sh next to this file); the subagent hook blocks merges.
-# Exit: 0 merged / dequeued | 3 PR checks red | 4 dropped from the queue (group CI red, timeout, conflict) or enqueue
-#       failed | 5 timed out waiting (MAXWAIT seconds, default 5400).
+# Enqueue only under ship_merge.py / ship_wave.py (AA-1024): this script waits for REQUIRED checks only, so as-app.sh
+# refuses the enqueue unless ship_merge's gate (every check green) set AA_SHIP_GATED; --dequeue stays open.
+# Exit: 0 merged / dequeued | 3 PR checks red | 4 dropped from the queue (group CI red, timeout, conflict), DIRTY while
+#       waiting, or enqueue failed | 5 timed out waiting (MAXWAIT seconds, default 5400).
 #
 # Why --dequeue is not `gh pr merge --disable-auto`: once the PR's required checks have passed, `gh pr merge` adds it
 # straight to the queue and no auto-merge request exists, so --disable-auto has nothing to cancel and the entry still
@@ -62,6 +64,8 @@ while [ $(( $(date +%s) - t0 )) -lt "$MAXWAIT" ]; do
   sleep 60
   IFS='|' read -r S SHA M AUTO < <(st)
   [ "$S" = MERGED ] && { echo "$R #$N MERGED ${SHA:0:8} ($SHA)"; exit 0; }
+  # AA-1024: a PR that conflicts with main never enters the queue; waiting MAXWAIT for it hung waves (lesson S271).
+  [ "$M" = DIRTY ] && { echo "$R #$N DIRTY (conflicts with main): not queued; rebase it, then ship it again"; exit 4; }
   IFS='|' read -r Q QS QP < <(inq)
   if [ "$Q" = true ]; then
     seen=1; [ $(( ($(date +%s) - t0) % 300 )) -lt 60 ] && echo "$R #$N in queue: $QS position $QP"

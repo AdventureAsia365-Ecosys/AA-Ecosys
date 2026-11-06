@@ -15,6 +15,8 @@ name: Docs lint
 #   - unit tests of the orchestrator ship tools tools/github/ship_*.py (AA-1032; offline, scripted gh/aws, temp git)
 #   - unit tests of the architecture video gate tools/uat/arch (AA-1021; stdlib, invented names, temp git, no media)
 #   - unit tests of the ops helpers tools/ops (AA-1023: ecs_rollback.sh against a scripted aws/curl, the game-day seed)
+#   - the Claude Code hooks .claude/hooks (AA-1024 G5): every hook's tests, and every hook settings.json registers exists
+#   - the lessons log (AA-1024 G22): a new or changed lesson line carries a valid Guard field
 # Secrets: gitleaks runs on every PR (any path) in secret-scan.yml and nightly over the full history in
 # secret-scan-history.yml (AA-981),
 # so it is not repeated here (secret names are fine in docs, values never are).
@@ -32,6 +34,9 @@ on:
       - "skill/**"
       - ".kiro/steering/**"
       - ".claude/**/*.md"
+      - ".claude/hooks/**"
+      - ".claude/settings.json"
+      - "tools/workflows/**"
       - "tools/docs/**"
       - "tools/linear/**"
       - "tools/github/**"
@@ -87,6 +92,26 @@ jobs:
       - name: Ship tools tests
         if: ${{ !cancelled() }}
         run: python -m unittest discover -s tools/github -p 'test_*.py'
+
+      # AA-1024 G5: a broken hook regex fails open or blocks every call without anyone noticing. Offline: the hooks
+      # read only the command text, temporary files and a fake /proc. Also checks that every hook command in
+      # .claude/settings.json exists, is executable and has a test.
+      - name: Claude hook tests
+        if: ${{ !cancelled() }}
+        run: |
+          bash .claude/hooks/test_subagent_guardrails.sh
+          bash .claude/hooks/test_kit_core_edit_guard.sh
+          python -m unittest discover -s .claude/hooks -p 'test_*.py'
+
+      # AA-1024 G22: every lesson line a PR adds or changes ends with a Guard field (skill/aa-lessons/SKILL.md section
+      # 3): a guard that exists, a planned GRD/AA id, or "none: <judgement|external|one-off> <why>". Old lines pass.
+      - name: Lessons log (Guard field)
+        if: ${{ !cancelled() }}
+        env:
+          BASE_REF: ${{ github.base_ref || 'master' }}
+        run: |
+          git fetch --no-tags --depth=1 origin "$BASE_REF"
+          python tools/docs/check_lessons.py --base FETCH_HEAD
 
       # AA-1021: the public-content gate of the architecture videos (planted brand word, account-ID-shaped number and
       # hostname must each fail every layer that sees text). Stdlib only; no TTS, browser, ffmpeg or OCR in CI.

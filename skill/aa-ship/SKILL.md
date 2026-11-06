@@ -25,7 +25,8 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 - [ ] Commit và PR body ghi **`Refs AA-xxx`**. Không `[AA-xxx]`, không `Fixes`/`Closes`, và tiêu đề PR không có mã
   issue (Linear đọc "fix: AA-xxx …" là câu đóng issue). PR docs/log nhắc issue khác thì ghi tên việc, không ghi mã.
 - [ ] **Danh tính GitHub (ADR 0011):** push/PR/merge bằng App `aa-agent`:
-  `/home/nghiep/projects/AA-Ecosys/tools/github/as-app.sh --repos <Repo> -- <git -C <worktree> push … | gh pr create … | gh pr merge …>`.
+  `/home/nghiep/projects/AA-Ecosys/tools/github/as-app.sh --repos <Repo> -- <git -C <worktree> push … | gh pr create …>`;
+  merge CHỈ qua `ship_merge.py` / `ship_wave.py` (AA-1024: `as-app.sh` từ chối `gh pr merge` chưa qua gate, hook SHIP-1 chặn lệnh trần).
   Cần phiên AWS MFA còn hạn (`aa365-admin`; script đọc key từ Secrets Manager) và `tools/github/apps.env` của repo gốc;
   `git push` cần `gh auth setup-git` một lần. Kiểm `gh pr view <n> --json author` ra `app/aa-agent`. App
   `aa-ecosys-ci-bot` chỉ cho release-please và PR bot của Infra. Hướng dẫn: `docs/security/github-apps.md`.

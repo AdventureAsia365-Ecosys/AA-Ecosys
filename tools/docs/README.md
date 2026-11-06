@@ -15,6 +15,7 @@ are in [`docs/STYLE.md`](../../docs/STYLE.md).
 | `gen_llm_routes.py` | Not a lint: renders `docs/generated/llm-routes.md` (APP-06-routes, AA-900) from the snapshot `docs/generated/llm-routes.snapshot.json`; `dump` runs in a CIS container (read-only, as `cis_app`; schema 2 since AA-1042 adds the connection keys and the deployments, names and states only) and `import` turns its ECS exec output into the snapshot and the page. `test_llm_routes.py` fails when the committed page is not the render of the committed snapshot, or the snapshot holds an account ID or ARN. Root only, not vendored. | error (unit test) |
 | `build_docs_reader.py` | Not a lint: builds the `/admin/docs` reader bundle (manifest + redacted pages) for [`.github/workflows/docs-sync.yml`](../../.github/workflows/docs-sync.yml) (AA-898). Publication rule v1 in its header (rule 8: translations, with `lang` / `translation_of` / `translations` per manifest entry; rule 9: checked SVG images such as the architecture diagrams, published under `assets/`) and in [`docs/README.md`](../../docs/README.md#admin-docs-page-allowlist-aa-898); the redaction guard fails the build when an account or resource ID is left. Tests: `test_docs_reader.py`. Root only, not vendored. | error (guard) |
 | `report_registry.py` | `check`: the report registry [`docs/reports/catalog.yaml`](../../docs/reports/catalog.yaml) and [`kpis.yaml`](../../docs/reports/kpis.yaml) (AA-1003): required fields and allowed values, unique IDs, every KPI a report lists exists and each KPI's `used_by` matches, template paths exist, every KPI source table is in `docs/architecture/db-schema-reference.md` or in `planned_sources` (a planned source that is live now only warns). `--copy DIR` also compares with the CIS vendored copy. `import --force` rebuilds both files from the AA-1001 advisory JSON (one-off; it overwrites hand edits). Tests: `test_report_registry.py`. Root only, not vendored. | error |
+| `check_lessons.py` | AA-1024 G22: every lesson line of `skill/aa-lessons/lessons.md` a PR adds or changes (`--base <ref>`) ends with a valid `Guard:` field: a test/hook/tool/ci/lane target that exists (child-repo paths checked where checked out; `aa_shell_guard:<RULE>` must be a hook rule), `pending GRD-<n>`/`AA-<n>` planned in `docs/backlog/`, or `none: <judgement\|external\|one-off> <why>` (a repeat cannot be one-off). `--pending <file>` checks a session's pending file; `--sweep` lists lines whose guard exists. Tests: `test_check_lessons.py`. Root only. | error |
 | `lychee.toml` | Internal links, offline. | error |
 | `.markdownlint-cli2.jsonc` (repo root) | Markdown style of catalog pages (journals, `docs/archive/`, generated pages ignored). | error |
 
@@ -36,6 +37,7 @@ python3 tools/docs/check_docs_text.py resource-ids --mode warn
 python3 tools/docs/check_alarm_runbooks.py
 python3 tools/docs/check_ai_gateway_names.py
 python3 tools/docs/check_prd_refs.py
+python3 tools/docs/check_lessons.py --base origin/master
 python3 tools/docs/report_registry.py check
 python3 tools/docs/build_docs_reader.py --check
 python3 tools/docs/check_frontmatter.py --freshness-report .tmp-session/freshness.md

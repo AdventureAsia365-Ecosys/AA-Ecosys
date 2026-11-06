@@ -30,6 +30,10 @@ MERGEQ = str(HERE / "mergeq.sh")
 # The main workspace checkout (the tools may run from a worktree copy of the root repo).
 ROOT = Path(os.environ.get("AA_ECOSYS_ROOT", "/home/nghiep/projects/AA-Ecosys"))
 ORG = "AdventureAsia365-Ecosys"
+# AA-1024: as-app.sh refuses `gh pr merge` (and so mergeq.sh's enqueue) unless this is set: only ship_merge.merge_one
+# sets it, after its gate (every check green, settle re-read, DIRTY / draft / base / deletion refusals). A hand merge
+# that skips the gate fails at once; .claude/hooks/aa_shell_guard.py SHIP-1 refuses setting it by hand.
+GATE_ENV = "AA_SHIP_GATED"
 
 REPOS = ("AA-Ecosys", "AA-CIS-App", "AA-Booking", "AA-Partner", "AA-TripPlanner-Web", "AA-CIS-Infra")
 # Repos whose main is protected by the GitHub merge queue (AA-889): merge through mergeq.sh.
