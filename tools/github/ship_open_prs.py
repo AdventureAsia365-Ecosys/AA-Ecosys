@@ -12,7 +12,8 @@ the lane's title and body as given. A final result with ready=false is refused u
 Every PR is checked before anything is pushed (all or nothing): the worktree exists, the branch exists locally and is
 ahead of origin/<base>, no rebase in progress and no modified tracked file (lesson S254), the title is a conventional
 one without an issue id (Linear reads "fix: AA-123" as a closing phrase, lesson S246), the body has "Refs AA-<n>" and
-no Fixes/Closes phrase. Files the branch deletes are listed as a warning (merge gate refuses them).
+no Fixes/Closes phrase, and the repo's pre-push hook is installed when it ships one (core.hooksPath=.githooks, so the
+push runs the repo's checks; AA-1024 l22). Files the branch deletes are listed as a warning (merge gate refuses them).
 
 Then for each PR: push through the aa-agent App (no force), open the PR (or reuse an open PR of that branch), check
 the author is the App, print the URL and the lane's live_steps. --extra-refs adds issue ids to the Refs line; the
@@ -144,6 +145,12 @@ def validate(runner: Runner, p: dict, stacked_on: frozenset[str] = frozenset()) 
             problems.append(f"{wt}: a rebase is in progress")
     if git("status", "--porcelain", "--untracked-files=no").out.strip():
         problems.append(f"{wt}: tracked files are modified (commit or stash first)")
+    # AA-1024 l22 (G6): the repo's pre-push hook (CI checks of the diff, rebase refusal, CIS integration stamp) runs
+    # inside the push only when the clone points git at .githooks; one install covers every worktree of the clone.
+    hooks = git("config", "--get", "core.hooksPath").out.strip()
+    if os.path.isfile(os.path.join(wt, ".githooks", "pre-push")) and hooks != ".githooks":
+        problems.append(f"{wt}: the pre-push hook is not installed (core.hooksPath={hooks or 'unset'}): run "
+                        f"scripts/install-hooks.sh in that repo once (shared by every worktree of the clone)")
     git("fetch", "-q", "origin")
     ref = f"origin/{base}"
     if base in stacked_on and not git("rev-parse", "--verify", "--quiet", f"refs/remotes/{ref}").ok:
@@ -160,6 +167,17 @@ def validate(runner: Runner, p: dict, stacked_on: frozenset[str] = frozenset()) 
     return problems, warnings
 
 
+SKIP_INTEGRATION_NOTE = ("> Pushed with AA_PREPUSH_SKIP_INTEGRATION=1: the integration tests this diff touches were not "
+                         "run locally (pre-push stamp skipped); the CI integration shards are the only run.")
+
+
+def skip_note(body: str) -> str:
+    """AA-1024 l22 (G6): a push that skipped the CIS pre-push integration stamp says so in the PR body."""
+    if os.environ.get("AA_PREPUSH_SKIP_INTEGRATION") != "1" or SKIP_INTEGRATION_NOTE in body:
+        return body
+    return body.rstrip() + "\n\n" + SKIP_INTEGRATION_NOTE + "\n"
+
+
 def open_one(runner: Runner, p: dict, extra_refs: list[str], draft: bool) -> str:
     repo = normalize_repo(str(p["repo"]))
     wt, br = str(p["worktree"]), str(p["branch"])
@@ -174,7 +192,7 @@ def open_one(runner: Runner, p: dict, extra_refs: list[str], draft: bool) -> str
     if url:
         log(f"{tag}: pushed to the open PR {url}")
     else:
-        body = with_attribution(add_refs(str(p.get("pr_body", "")), extra_refs))
+        body = with_attribution(skip_note(add_refs(str(p.get("pr_body", "")), extra_refs)))
         tmpdir = ROOT / ".tmp-session"
         tmpdir.mkdir(parents=True, exist_ok=True)
         fd, fname = tempfile.mkstemp(prefix="pr-body-", suffix=".md", dir=str(tmpdir))
