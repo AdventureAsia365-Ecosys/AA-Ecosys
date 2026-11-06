@@ -133,6 +133,20 @@ class OpenTest(unittest.TestCase):
         self.sb.git(self.sb.wt, "checkout", "-q", "-b", "feat/empty", "origin/main")
         self.assertIn("no commit ahead", " ".join(sop.validate(r, lane_pr(self.sb.wt, branch="feat/empty"))[0]))
 
+    def test_a_repo_with_a_pre_push_hook_must_have_it_installed(self):
+        r, _ = self.runner()
+        hooks = os.path.join(self.sb.wt, ".githooks")
+        os.makedirs(hooks)
+        with open(os.path.join(hooks, "pre-push"), "w", encoding="utf-8") as fh:
+            fh.write("#!/usr/bin/env bash\nexit 0\n")
+        self.sb.git(self.sb.wt, "add", "-A")
+        self.sb.git(self.sb.wt, "commit", "-qm", "chore: hook")
+        problems, _ = sop.validate(r, lane_pr(self.sb.wt))
+        self.assertIn("pre-push hook is not installed (core.hooksPath=unset)", " ".join(problems))
+        self.assertIn("scripts/install-hooks.sh", " ".join(problems))
+        self.sb.git(self.sb.wt, "config", "core.hooksPath", ".githooks")
+        self.assertEqual(sop.validate(r, lane_pr(self.sb.wt))[0], [])
+
     def test_stacked_pr_is_compared_with_the_local_branch_below(self):
         self.sb.git(self.sb.wt, "checkout", "-q", "-b", "feat/lanterns-2")
         self.sb.commit(self.sb.wt, "lantern2.py", "GLOW = 5\n", "feat: brighter lantern")

@@ -56,7 +56,9 @@ HARD RULES for this lane:
   one owner as one batch (one copy + one Migration Apply run), never one at a time.
 - Before returning, run the checks CI runs on your diff, not only unit tests (each red CI round costs the orchestrator a queue cycle):
   the app migration preflight with --infra-tools when a migration changed; the integration tests of every touched module on local
-  Postgres; and a gitleaks scan of your commits: download gitleaks v8.30.1 (the CI pin) once into <scratchpad>/${L.key}-gitleaks/
+  Postgres (AA-CIS-App: scripts/pre-push.sh --integration in the worktree after the last commit; it runs them on a throwaway
+  Postgres and writes the stamp the pre-push hook requires, so the orchestrator's push is refused without it); the repo's
+  scripts/pre-push.sh (fast mode, what the hook runs at push; return its summary in tests); and a gitleaks scan of your commits: download gitleaks v8.30.1 (the CI pin) once into <scratchpad>/${L.key}-gitleaks/
   from github.com/gitleaks/gitleaks/releases (linux_x64 tar.gz, verify it against the release checksums file), then in each
   worktree: gitleaks git --log-opts="origin/main..HEAD" --config .gitleaks.toml --redact (root: origin/master; no .gitleaks.toml =
   no --config). A finding means rewrite the local branch (reset --soft + recommit) before returning; never "fix it in a later commit".
