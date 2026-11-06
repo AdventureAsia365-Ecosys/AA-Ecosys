@@ -9,7 +9,7 @@ audience: [engineer, devops, cto, cio, pm, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-10-31
 review_every_days: 90
-related: [FIN-02, OPS-08, SEC-01, APP-06-ai-register, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-896, AA-884, AA-838, AA-828, AA-1004]
+related: [FIN-02, FIN-03, OPS-08, SEC-01, APP-06-ai-register, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-896, AA-884, AA-838, AA-828, AA-1004]
 ---
 
 # FinOps process
@@ -49,26 +49,21 @@ no cross-account fallback. Its older rows stay in the ledgers and snapshots as h
 
 ## Tags
 
-- `App` (`cis`, `booking`, `tripplanner`, `crm`, `identity`, `shared`) is active as a cost allocation tag since 2026-10-15
-  (AA-828). Untagged spend shows as its own row and is a finding in the monthly review.
-- `Environment` already exists on every Terraform resource through the provider `default_tags`
-  (`Environment = var.environment`). No new `Env` key is added. To report by environment, the tag must be
-  activated as a cost allocation tag. acc2 is a member account, and a member account cannot activate tags
-  (Cost Explorer answers "Linked account doesn't have access to cost allocation tags"), so **the tech lead asks the
-  payer to activate `Environment`**, as was done for `App`. Cost: 0 USD.
+The keys, their allowed values, how Terraform sets them, how CI enforces them and how prod differs are in the
+[tagging standard](../architecture/tagging-standard.md) (FIN-03, S271). In short:
+
+- Every resource carries `Environment`, `Project`, `App`, `Component`, `Owner`, `ManagedBy`, `CostCenter` and
+  `DataClassification`. The AA-CIS-Infra Terraform Plan check refuses a plan whose resource misses one.
+- `App` (`cis`, `booking`, `tripplanner`, `crm`, `identity`, `shared`, `ecosystem`) is active as a cost allocation tag
+  since 2026-10-15 (AA-828). Untagged spend shows as its own row and is a finding in the monthly review, except the
+  lines no tag can reach (data transfer, public IPv4, CloudWatch metrics, Bedrock calls; see the standard).
+- To report by `Environment`, `Component`, `Project` and `CostCenter`, those keys must be activated as cost
+  allocation tags. acc2 is a member account, and a member account cannot activate tags (Cost Explorer answers "Linked
+  account doesn't have access to cost allocation tags"), so **the tech lead asks the payer to activate them**, as was
+  done for `App`. Cost: 0 USD.
 - Tags count only from the day they are set; Cost Explorer does not re-tag older usage.
-
-Where the keys come from in Terraform (INF):
-
-| Root | Provider `default_tags` | `App` |
-|---|---|---|
-| `accounts/aa365` (acc2) | `Project`, `Environment`, `ManagedBy`, `Account` | Set per resource through `local.common_tags` (`cis`), `local.shared_tags` (`shared`) and the per-app maps, never in `default_tags`, so a resource that forgets its own `App` shows as untagged instead of being billed to `cis` (`main.tf`) |
-| `accounts/acc3-bedrock` | `Project`, `Environment`, `ManagedBy`, `Account`, `Issue` | None: Bedrock usage carries no resource tag. Per-app LLM spend comes from the ledger (`app` column), not from tags |
-| `accounts/management` | Same keys plus `App = shared` | Every governance resource is `shared` |
-
-No AWS Organizations tag policy exists. Bedrock calls are attributed per app by the gateway ledger, and the
-capacity plan (S261) adds one invoker role per app and environment on the LLM account, which AWS bills per IAM
-principal without any tag.
+- Bedrock calls are attributed per app by the gateway ledger, not by tags; the capacity plan (S261) adds one invoker
+  role per app and environment on the LLM account, which AWS bills per IAM principal without any tag.
 
 ## Budgets and alerts
 
