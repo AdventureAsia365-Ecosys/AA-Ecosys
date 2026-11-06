@@ -1,6 +1,6 @@
 {
- "updated": "2026-11-06",
- "synced_at": "2026-11-06T13:37Z",
+ "updated": "2026-11-07",
+ "synced_at": "2026-11-06T18:10Z",
  "session": "S271",
  "next_session": "S272",
  "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
@@ -2082,7 +2082,7 @@
   {
    "id": "AA-1024",
    "title": "[AI gateway] CIS core hardening + bypass guards: stage kill switch, prompt_version, embedding ledger, fail-closed tenant budget, dispatch cleanup",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "High",
    "project": "core",
    "milestone": "M1b",
