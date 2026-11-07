@@ -1,0 +1,11 @@
+{
+  "contract": "lead.submitted.v1",
+  "schema": "LeadAck",
+  "expect": "valid",
+  "why": "TripPlanner redacted the delivered lead",
+  "payload": {
+    "lead_id": "7a1c2e3f-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+    "state": "delivered",
+    "already": false
+  }
+}

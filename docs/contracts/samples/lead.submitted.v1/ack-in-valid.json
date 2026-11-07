@@ -1,0 +1,10 @@
+{
+  "contract": "lead.submitted.v1",
+  "schema": "LeadAckIn",
+  "expect": "valid",
+  "why": "The CRM stored the lead",
+  "payload": {
+    "outcome": "stored",
+    "reason": null
+  }
+}

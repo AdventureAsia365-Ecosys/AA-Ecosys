@@ -211,6 +211,21 @@ POLICY: dict[str, Policy] = {
         no_pii=False,
         why="the traveller's contact and verified identity only; never a token, password or one-time code",
     ),
+    # AA-1038 R5 slice 3 (root ADR 0019 d11): a traveller's trip request to ONE agency tenant. The contact the
+    # traveller typed (pii:contact) and the trip wishes (pii:travel) cross; a guest session or token, an access token,
+    # a password or one-time code, an IP address or user agent, and any price (an AA B2B price above all) never do.
+    "lead.submitted.v1": Policy(
+        forbidden_keys=frozenset({"access_token", "id_token", "refresh_token", "token", "guest_token", "password",
+                                  "otp", "session_id", "ip", "ip_address", "user_agent", "b2b_price",
+                                  "supplier_net", "net_amount", "price"}),
+        forbidden_patterns=(r"(^|_)tokens?$", r"(^|_)password", r"(^|_)otp(_|$)", r"(^|_)sessions?(_|$)",
+                            r"^ip(_|$)", r"(^|_)user_agent$", r"supplier_net", r"(^|_)prices?(_|$)",
+                            r"(^|_)net_amount$"),
+        no_pii=False,
+        allowed_pii_classes=frozenset({"contact", "travel"}),
+        why="the traveller's own contact and trip wishes for one agency; never a session, token, IP address, user "
+            "agent or price",
+    ),
 }
 
 # The negative samples the design requires (AA-928 Done-when R case). rule = a forbidden key, or "pii:".
@@ -229,6 +244,8 @@ REQUIRED_NEGATIVES: dict[str, tuple[str, ...]] = {
     "tenant.addons.v1": ("decided_by", "provision_job_id"),
     # AA-908: the hand-off never carries the traveller's token.
     "inquiry.submitted.v1.4": ("access_token",),
+    # AA-1038: a lead never carries the guest session, an AA B2B price or a token.
+    "lead.submitted.v1": ("session_id", "b2b_price", "access_token"),
 }
 
 # JSON Schema contract files that predate the JSON field policy (AA-835): no POLICY entry or sample is required
