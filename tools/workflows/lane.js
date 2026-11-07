@@ -44,7 +44,7 @@ apps/AA-Partner, apps/AA-TripPlanner-Web, infra/AA-CIS-Infra (default branch mai
 
 HARD RULES for this lane:
 - Work ONLY in git worktrees created with ABSOLUTE paths under /home/nghiep/projects/AA-Ecosys/.tmp-session/wt/ :
-  git -C <repo> fetch origin && git -C <repo> worktree add /home/nghiep/projects/AA-Ecosys/.tmp-session/wt/${slug}-${L.key}-<slug> -b <branch> origin/main
+  git -C <repo> fetch origin && git -C <repo> worktree add /home/nghiep/projects/AA-Ecosys/.tmp-session/wt/${slug}-${L.key}-<repo>[-<detail>] -b <branch> origin/main (<repo>: cis, booking, partner, tp, infra or root; the lane start guard looks for these names)
   (root repo uses origin/master). Never edit the main checkouts.
 - You must NOT: git push, open/merge PRs, gh workflow run, terraform apply, DB Migrate, ECS exec, any AWS write, Linear state changes,
   directly or through a helper script. The orchestrator does all of that. Read-only Linear get_issue / list_comments is fine (load via ToolSearch).

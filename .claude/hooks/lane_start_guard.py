@@ -19,8 +19,11 @@ For a launch of tools/workflows/lane.js (by scriptPath, any checkout, or by the 
      `resume: true`: a lane relaunched after a usage limit or a crash redid or overwrote half-done work (10 events,
      S243 ... S270). With `resume: true`, lane.js makes the agent report `resumed_state` (dirty files, commits ahead,
      a decision per file) before it changes anything. Remove a stale worktree (git worktree remove) to start over.
-     A relaunch with `resumeFromRunId` passes: the workflow replays its journal (finished agent results are reused,
-     with the lane's original args, which have no resume flag), so that is the preferred recovery path.
+     A relaunch with `resumeFromRunId` passes gates 2, 3 and 5 (not the RAM gate): the workflow replays its journal (finished agent results are
+     reused, with the lane's original args, which have no resume flag), so that is the preferred recovery path; the
+     plan gates passed when the lane first started (a same-day handover may have moved plan.json on since).
+     Only worktrees named <session>-<key>-<repo>[-<detail>] (repo: cis, booking, partner, tp, infra, root) count, so
+     lane l2 does not see the worktrees of lane l2-w1-factsheet.
 `plan_gate: "skip: <reason>"` in args passes (a hotfix lane), logged to .tmp-session/guard-hits.log. Every other
 Workflow launch (research, review, audits) is not gated. plan.json is read from the main checkout
 ($CLAUDE_PROJECT_DIR), where the orchestrator edits it. Unreadable hook input passes; an unreadable plan.json refuses
@@ -55,12 +58,19 @@ def is_lane(tool_input: dict) -> bool:
     return sp.replace("\\", "/").endswith("tools/workflows/lane.js") or tool_input.get("name") == "aa-lane"
 
 
+# lane.js names a worktree <session>-<key>-<repo>[-<detail>]; <repo> is one of these (S272 review: a bare prefix
+# match took s272-l2-w1-factsheet-cis, of lane l2-w1-factsheet, for a worktree of a new lane l2).
+REPO_SUFFIXES = ("cis", "booking", "partner", "tp", "infra", "root")
+_LANE_REST = re.compile(rf"(?:{'|'.join(REPO_SUFFIXES)})(?:-[a-z0-9]+)*")
+
+
 def lane_worktrees(root: Path, session: str, key: str) -> list[str]:
-    """Worktree directories this lane already made: .tmp-session/wt/<session>-<key>-* (lane.js names them so)."""
+    """Worktree directories this lane already made: .tmp-session/wt/<session>-<key>-<repo>[-<detail>]."""
     wt = root / ".tmp-session" / "wt"
     prefix = f"{session.lower()}-{key}-"
     try:
-        return sorted(str(p) for p in wt.iterdir() if p.is_dir() and p.name.startswith(prefix))
+        return sorted(str(p) for p in wt.iterdir() if p.is_dir() and p.name.startswith(prefix)
+                      and _LANE_REST.fullmatch(p.name[len(prefix):]))
     except OSError:
         return []
 
@@ -73,6 +83,30 @@ def _log(root: Path, what: str) -> None:
             fh.write(json.dumps({"rule": "LANE-1", "what": what[:300]}, ensure_ascii=False) + "\n")
     except OSError:
         pass
+
+
+def _plan_and_worktree_gates(args: dict, session: str, root: Path) -> str | None:
+    try:
+        plan = json.loads((root / PLAN).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as e:
+        return f"cannot read {PLAN} ({type(e).__name__}) to check the master plan before the lane. {FIX}"
+    if str(plan.get("session")) != session:
+        return (f"the master plan is not on this session: {PLAN} has session={plan.get('session')!r}, the lane says "
+                f"{session!r}. {FIX}")
+    m = re.search(r"\bAA-\d+\b", str(args["goal"]))
+    if m:
+        issue = next((i for i in plan.get("issues") or [] if i.get("id") == m.group(0)), None)
+        if issue is not None:
+            slot = str(issue.get("session") or "")
+            if session not in re.findall(r"S\d+", slot):
+                return (f"{m.group(0)} is slotted for {slot!r} in {PLAN}, not {session}: move its session slot "
+                        f"(and `next`) to {session} if it was pulled ahead. {FIX}")
+    existing = lane_worktrees(root, session, str(args["key"]))
+    if existing and args.get("resume") is not True:
+        return (f"the worktree(s) of lane {args['key']} already exist: {', '.join(existing)}. Resume the run with "
+                f"resumeFromRunId (preferred: finished results are reused), or relaunch it with resume: true in args (the lane then reports resumed_state and continues from git status/log), or "
+                f"remove the stale worktree(s) first (git -C <repo> worktree remove <path>) to start over.")
+    return None
 
 
 def check(tool_input: dict, root: Path = ROOT, proc: Path = Path("/proc")) -> str | None:
@@ -102,27 +136,15 @@ def check(tool_input: dict, root: Path = ROOT, proc: Path = Path("/proc")) -> st
     if missing:
         return f"lane.js args lack {', '.join(missing)} (required: {', '.join(REQUIRED)})."
     session = str(args["session"]).strip()
-    try:
-        plan = json.loads((root / PLAN).read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as e:
-        return f"cannot read {PLAN} ({type(e).__name__}) to check the master plan before the lane. {FIX}"
-    if str(plan.get("session")) != session:
-        return (f"the master plan is not on this session: {PLAN} has session={plan.get('session')!r}, the lane says "
-                f"{session!r}. {FIX}")
-    m = re.search(r"\bAA-\d+\b", str(args["goal"]))
-    if m:
-        issue = next((i for i in plan.get("issues") or [] if i.get("id") == m.group(0)), None)
-        if issue is not None:
-            slot = str(issue.get("session") or "")
-            if session not in re.findall(r"S\d+", slot):
-                return (f"{m.group(0)} is slotted for {slot!r} in {PLAN}, not {session}: move its session slot "
-                        f"(and `next`) to {session} if it was pulled ahead. {FIX}")
     replay = bool(str(tool_input.get("resumeFromRunId") or "").strip())
-    existing = [] if replay else lane_worktrees(root, session, str(args["key"]))
-    if existing and args.get("resume") is not True:
-        return (f"the worktree(s) of lane {args['key']} already exist: {', '.join(existing)}. Resume the run with "
-                f"resumeFromRunId (preferred: finished results are reused), or relaunch it with resume: true in args (the lane then reports resumed_state and continues from git status/log), or "
-                f"remove the stale worktree(s) first (git -C <repo> worktree remove <path>) to start over.")
+    if replay:
+        # a replay re-runs a lane that already passed the plan gates, with its original args (S272 review: a same-day
+        # handover moved plan.json to the next session and gate 2 refused the replay of an open lane); RAM still counts
+        _log(root, f"replay {args.get('key')}: {tool_input.get('resumeFromRunId')}")
+    else:
+        refusal = _plan_and_worktree_gates(args, session, root)
+        if refusal:
+            return refusal
     avail = aa_shell_guard.mem_available_mib(proc)
     if avail is not None and avail < LANE_MEM_FLOOR_MIB:
         ram_gate = str(args.get("ram_gate") or "")
