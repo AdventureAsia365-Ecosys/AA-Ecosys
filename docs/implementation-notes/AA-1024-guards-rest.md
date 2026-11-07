@@ -41,14 +41,14 @@ Partner 38f99f53, TripPlanner 91d0608, Infra 75ddf66), 07/11/2026.
 |---|---|---|
 | G1 | yes | nothing |
 | G2 | yes | `aa_shell_guard.py` WT-1 (worktree path), BG-1 (silent background chain), TF-1 (Terraform apply off `main`) |
-| G3 | partly | ECS-1 refuses a raw `execute-command` (typed or in a `.tmp-session` script); the ecsx wrapper (`tools/ecs/`) restarts a lost start once, keeps `.tmp-session/ecsx/<id>.out`, writes a heartbeat, refuses `ECSX_SCRIPT_TIMEOUT` > `ECSX_TIMEOUT`. Left: the CIS deploy gate does not read the heartbeat (needs a CIS deploy workflow change and S3 list rights for the deploy role in Infra) |
+| G3 | yes | ECS-1 refuses a raw `execute-command` (typed or in a `.tmp-session` script); the ecsx wrapper (`tools/ecs/`) restarts a lost start once, keeps `.tmp-session/ecsx/<id>.out`, writes a heartbeat, refuses `ECSX_SCRIPT_TIMEOUT` > `ECSX_TIMEOUT`; its tests run in docs-lint. CIS: the deploy gate (`/admin/job-runner/deploy-gate`, read by the CI guard) blocks while a heartbeat younger than 120 s has no `.done` (`shared/jobs/exec_heartbeat.py`; the api reads S3 with its task role, which already has `s3:ListBucket`, so no Infra grant) |
 | G4 | yes | RAM-1 now also counts a push, the PR opener, the wave shipper and `scripts/pre-push.sh` as heavy, and a running pre-push hook as a heavy process (the S272 crash) |
 | G5 | yes | the new tests run in the existing docs-lint steps; new step "LLM spend tools tests" |
 | G6 | yes | CIS: `export_openapi.py` refuses unpinned FastAPI / Pydantic (exit 2), `pythonpath = ["."]` (parts 1 and 2 shipped in S271) |
 | G11 | yes | root `pr-title.yml`; the same file in CIS and Infra (new) and Booking, Partner, TripPlanner (ids anywhere in the title, ids outside the Refs line); the PR opener refuses stray ids; `tools/linear/done_audit.py`. Left: making `PR title` a required check in CIS / Infra (ruleset, tech lead) |
-| G14 | partly | the PR opener runs gitleaks v8.30.1 on every branch with the BASE's rules before any push; `tools/github/guard_runs.py` in the session-start status. Left: CIS `scripts/pre-push.sh` has no gitleaks step (that file is in the S272 GIT_DIR fix PR; add it after) |
-| G15 | no | not built: the rule "no `vars.*ARN`" needs the 12 Booking / Partner uses moved to secrets first (repo settings, tech lead) |
-| G17 | partly | CIS `wave_report.py`: flags `pending` while the wave's tours have queued / running jobs (exit 5), exit 3 on a true flag; wave runbook updated. Left: `POST /admin/waves` cannot refuse the next wave (no record of the last report: needs a migration) |
+| G14 | yes | the PR opener runs gitleaks v8.30.1 on every branch with the BASE's rules before any push; CIS `scripts/pre-push.sh` runs the same scan on every push (a fix-up push to a PR branch too); `tools/github/guard_runs.py` in the session-start status |
+| G15 | yes | `.github/workflows/workflow-lint.yml` + `.github/scripts/workflow_lint.py` (+ unittest file) in root, CIS, Booking, Partner, TripPlanner: pinned actionlint 1.7.12, then WL2 Playwright on ubuntu-24.04, WL3 `npm ci` with a tracked lockfile, WL1 no sensitive `vars.*`. One script in all six repos (Infra's, gained `--skip`, comment-aware Playwright, unchecked matrix dirs). Booking and Partner run `--skip WL1` until their 7 `vars.AWS_ROLE_ARN` uses move to a secret (repo settings, tech lead). actionlint fixed two CIS errors (undeclared inherited secret) |
+| G17 | yes | CIS `wave_report.py`: flags `pending` while the wave's tours have queued / running jobs (exit 5), exit 3 on a true flag; `POST /admin/waves` recomputes the newest wave's flags (`services/waves/quality.py`, moved from the script, no migration) and answers 409 on true / pending / not computable unless `stop_override` quotes the tech lead's approval; wave runbook updated |
 | G18 | yes | `tools/llm/spend_by_stage.py`, `tools/llm/cost_estimate.py` (+ tests, CI step); the wave runbook quotes only them |
 | G19 | yes | Stop hook `stop-open-work.sh` / `stop_open_work.py` registered in `.claude/settings.json` |
 | G20 | yes | `lane_start_guard.py` refuses a relaunch on an existing worktree without `resume: true`; `lane.js` asks for `resumed_state` |
@@ -85,7 +85,17 @@ Guards G7, G8, G9, G10, G12, G13, G16 were already on main (Step 1) and are unch
   whose generated bodies cite issues.
 - G14: the design's "session-start status of secret-scan-history" became `guard_runs.py`, which lists every scheduled
   workflow's latest run (Secret Scan history, nightly integration, docs-lint sweep, Infra probes), red first.
-- G17 / G3 / G15: the parts that need a migration, IAM or repo settings are left (table above).
+- G17 / G3 / G15 (review fix pass): built in full, except WL1 in Booking / Partner, which waits on a repo-settings
+  step (vars.AWS_ROLE_ARN to a secret). G3's deploy-gate read moved from "CI with an Infra ListBucket grant" to the API's
+  own gate answer, which the CI guard already reads.
+- Stop hook (review fix pass): only the LAST line counts and only an offer to stop / a request to go on that ends it; a
+  paid-run or MFA approval question never blocks; dependency waits (sau khi, chỉ khi, after, once, until) are blocked
+  markers.
+- Lane start guard (review fix pass): a `resumeFromRunId` relaunch passes (the workflow replays its journal); only a
+  fresh launch on an existing worktree needs `resume: true`.
+- PR text rule (review fix pass): an id the Refs line names may appear anywhere; ids in file paths are ignored; bots
+  are exempted by login / head branch, never by `user.type` (the orchestrator's App is a Bot).
+- docs-lint now runs the ecsx tests and triggers on `.githooks/**`, `scripts/pre-push.sh`, `tools/ecs|kit|llm-core|adr/**`.
 
 ## Tradeoffs
 
@@ -99,5 +109,6 @@ Guards G7, G8, G9, G10, G12, G13, G16 were already on main (Step 1) and are unch
   which no longer knows the `portal` consumer); not touched here.
 - The root pre-push runs only the docs and contracts checks; the hook, ship tool and LLM tool tests run in CI
   (docs-lint.yml). Locally: `python3 -m unittest discover -s <dir> -p 'test_*.py'` per directory.
-- Child PRs of this lane: CIS (G17, G11, G6), Booking / Partner / TripPlanner / Infra (G11). Merge the child PR-title
+- Child PRs of this lane: CIS (G17, G11, G6, G14, G3 c, G15), Booking / Partner / TripPlanner (G11, G15), Infra (G11,
+  G15 script). Merge the child PR-title
   PRs before or with this root PR: `guards.md` cites their `pr-title.yml`.

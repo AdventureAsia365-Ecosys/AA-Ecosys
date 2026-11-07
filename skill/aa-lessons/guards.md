@@ -81,8 +81,8 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 - **Không chạy chuỗi verify dài ở nền với output đổ vào `/dev/null`** (S247) → `.claude/hooks/aa_shell_guard.py` BG-1 (guard mới S272, AA-1024)
 - **Terraform apply cục bộ phải chạy từ `main` đã merge, không từ nhánh PR / worktree** (S240) → `.claude/hooks/aa_shell_guard.py` TF-1 (guard mới S272, AA-1024)
 - **WSL 8 GB OOM khi chạy song song 2 `next build` + pytest + gitleaks mirror + VS Code → VM khởi động lại, mất tác vụ nền** (S248, S261) → `.claude/hooks/aa_shell_guard.py` RAM-1, `.claude/hooks/lane_start_guard.py` (RAM gate) (guard mới S272, AA-1024)
-- **gitleaks quét TỪNG commit của PR, sửa ở commit sau không cứu được** (S249, S252, S256) → `tools/github/ship_open_prs.py` (gitleaks v8.30.1 trước mọi push), `tools/workflows/lane.js` (lane chạy gitleaks) (guard mới S272, AA-1024)
-- **Giá trị dạng hash đặt cạnh tên có chữ `token`/`key` trong file JSON sẽ bị gitleaks `generic-api-key` bắt, và job quét TỪNG commit của PR nên sửa ở commit sau vẫn đỏ** (S253, S260) → `tools/github/ship_open_prs.py` (gitleaks v8.30.1 trước mọi push) (guard mới S272, AA-1024)
+- **gitleaks quét TỪNG commit của PR, sửa ở commit sau không cứu được** (S249, S252, S256) → `tools/github/ship_open_prs.py` (gitleaks v8.30.1 trước mọi push), `apps/AA-CIS-App/scripts/pre-push.sh` (gitleaks trên mỗi push CIS, kể cả push sửa sau khi đã mở PR), `tools/workflows/lane.js` (lane chạy gitleaks) (guard mới S272, AA-1024)
+- **Giá trị dạng hash đặt cạnh tên có chữ `token`/`key` trong file JSON sẽ bị gitleaks `generic-api-key` bắt, và job quét TỪNG commit của PR nên sửa ở commit sau vẫn đỏ** (S253, S260) → `tools/github/ship_open_prs.py` (gitleaks v8.30.1 trước mọi push), `apps/AA-CIS-App/scripts/pre-push.sh` (gitleaks trên mỗi push CIS) (guard mới S272, AA-1024)
 - **Secret Scan (full history) đỏ trên main không ai thấy vì không phải required check** (S255) → `tools/github/guard_runs.py` (đầu phiên, run lịch đỏ lên trước) (guard mới S272, AA-1024)
 - **ecsx local mode (CRM/Booking) đôi khi mất output dù script đã chạy** (S266, S269, S268) → `tools/ecs/ecsx_local.py` (nostart → chạy lại một lần, bản output local) (guard mới S272, AA-1024)
 - **`tools/ecs/ecsx.sh` local mode (CRM) đôi khi báo "no result after Ns" dù script đã chạy xong — script ghi output ra file riêng, đọc lại bằng `--resume <run id> 0`; không pipe ecsx qua grep trong lệnh dài** (S267) → `tools/ecs/ecsx_local.py` (bản output `.tmp-session/ecsx/<run id>.out`) (guard mới S272, AA-1024)
@@ -90,6 +90,7 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 - **Điều phối tự chạy Playwright/ecsx cũng tính vào tải RAM của lane — 3 lane code + Playwright của điều phối làm WSL 10 GB khởi động lại** (S270) → `.claude/hooks/aa_shell_guard.py` RAM-1 (cả push / pre-push) (guard mới S272, AA-1024)
 - **Test chạy git trong thư mục tạm phải bỏ `GIT_DIR` / `GIT_WORK_TREE` / `GIT_INDEX_FILE` thừa hưởng từ hook** (S272) → `.githooks/pre-push`, `scripts/pre-push.sh`, `tools/github/test_git_env_isolation.py` (guard mới S272, AA-1024)
 - **Không push / chạy pre-push đầy đủ của CIS (~5.000 unit test) khi máy đang tải nặng** (S272) → `.claude/hooks/aa_shell_guard.py` RAM-1 (push, PR opener, ship_wave, `scripts/pre-push.sh`) (guard mới S272, AA-1024)
+- **Script adhoc chạy lâu (>5′) không chạy trong task api/worker khi còn PR backend chờ merge — deploy thay task giết script** (S234) → `.claude/hooks/aa_shell_guard.py` ECS-1 (không exec trần), `apps/AA-CIS-App/shared/jobs/exec_heartbeat.py` (deploy gate CIS chặn khi heartbeat ecsx còn mới) (guard mới S272, AA-1024)
 
 ## Pipeline và chất lượng
 
@@ -115,6 +116,7 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 - **Probe "đi theo nguồn" phải dùng đúng điều kiện đủ tư cách của stage nó đo** (S253) → `apps/AA-CIS-App/tests/unit/test_aa992_data_coverage.py`
 - **Recall tune cho gate T10 đang chặn/hold: mỗi pattern mở rộng phải qua verifier tự viết câu sạch mới; còn FP thì bỏ pattern, không nới tiếp** (S257) → `apps/AA-CIS-App/tests/unit/test_aa789_t10_recall.py`
 - **Smoke hợp đồng model phải đếm lỗi provider là `failed`** (S263) → `apps/AA-CIS-App/tests/unit/test_aa1026_contract_smoke.py`
+- **Cờ dừng của wave phải đọc lại sau khi hàng đợi chạy hết, trước khi gọi là "dừng"** (S249) → `apps/AA-CIS-App/scripts/aa645/wave_report.py` (cờ `pending` khi tour còn job queued/running, exit 5), `apps/AA-CIS-App/api/routers/admin_waves.py` (`POST /admin/waves` trả 409 khi wave trước còn cờ true / pending) (guard mới S272, AA-1024)
 
 ## Job runner
 

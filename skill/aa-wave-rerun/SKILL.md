@@ -22,7 +22,7 @@ snapshot, merge, DB Migrate) do **phiên điều phối** chạy; subagent chỉ
       `shared.llm_role_config` trước khi enqueue; enqueue kèm model writer mong đợi để lệch là từ chối. Sau mọi Terraform
       apply chạm task def ECS: so tên env revision mới nhất với revision đang chạy (deploy chép revision mới nhất).
 - [ ] **Tạo wave object TRƯỚC khi chạy:** `POST /admin/waves` (`tour_ids` hoặc `country` → mọi raw active của nước) — đó là
-      `expected_set`. Tour cưỡi voi vẫn nằm trong tập, đếm riêng là "chờ người duyệt" (memory `elephant-riding-policy`).
+      `expected_set`. 409 = wave trước còn cờ dừng true / pending (xem mục Điều kiện dừng). Tour cưỡi voi vẫn nằm trong tập, đếm riêng là "chờ người duyệt" (memory `elephant-riding-policy`).
 - [ ] **Snapshot mỗi wave:** RDS manual snapshot (chờ snapshot đang `creating` xong mới tạo) + snapshot dữ liệu tour của
       wave (published + place) để rollback từng wave.
 
@@ -88,6 +88,9 @@ platform-impact-memo.md` §6 — tỉ lệ ở lại bản cũ, đường itiner
 throttle Bedrock, atomize fail không chạy lại được). `wave_report.py` (AA-1024 G17) tự làm việc này: cờ là `pending`
 khi tour của wave còn job queued/running (exit 5: chạy lại sau khi hàng đợi hết), exit 3 = có cờ true (dừng). Wave kế
 chỉ bắt đầu khi lần báo cáo cuối exit 0, hoặc có câu duyệt bằng chữ của tech lead chép nguyên vào báo cáo wave.
+`POST /admin/waves` tự tính lại cờ của wave mới nhất (AA-CIS-App `services/waves/quality.py`, cùng số với báo cáo) và trả
+409 khi có cờ true / pending (hoặc không tính được); chỉ qua được với `stop_override` = câu duyệt của tech lead (≥ 20 ký
+tự, ghi vào đầu notes của wave mới).
 
 **Đóng:** không có điều kiện dừng → `POST /admin/waves/{id}/close`. Có → để wave mở, dừng driver, báo Nghiệp.
 `POST /admin/waves/check` (ops probe gọi hằng ngày) bật chuông khi wave thiếu tour ở trạng thái cuối.
