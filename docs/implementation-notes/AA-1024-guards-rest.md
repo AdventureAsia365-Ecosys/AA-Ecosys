@@ -25,7 +25,7 @@ Partner 38f99f53, TripPlanner 91d0608, Infra 75ddf66), 07/11/2026.
 | G11 PR text guard + Done-evidence audit | no | `pr-title.yml` only in Booking, Partner, TripPlanner and only refuses `[AA-n]`; none in root, CIS, Infra; no `done_audit.py` |
 | G12 master plan gate | yes | `.claude/hooks/lane_start_guard.py` (the publish stamp was left out) |
 | G13 IAM trust inventory | yes | Infra `tools/terraform/iam_trust_inventory.py` (+ allowlist, tests); lessons.md cites it |
-| G14 gitleaks before push + scan status | no | Booking, Partner, TripPlanner, Infra and root pre-push run gitleaks; CIS `scripts/pre-push.sh` does not; no session-start status of scheduled guard runs |
+| G14 gitleaks before push + scan status | no | only the root pre-push runs gitleaks (when a binary is on PATH); Booking, Partner, TripPlanner and Infra list it as CI-only, CIS has no step (corrected in the review fix pass: the first draft said four child repos ran it); no session-start status of scheduled guard runs |
 | G15 workflow lint | partly | Infra `.github/scripts/workflow_lint.py` + `workflow-lint.yml`; nothing in root, CIS, Booking, Partner, TripPlanner |
 | G16 replay failures are errors | yes | CIS `tests/integration/_replay_guard.py` |
 | G17 wave stop flags enforced | no | CIS `scripts/aa645/wave_report.py` computes `stop_conditions` and always exits 0 |
@@ -104,6 +104,10 @@ Guards G7, G8, G9, G10, G12, G13, G16 were already on main (Step 1) and are unch
 - gitleaks in the PR opener adds about a second per PR and needs the binary on the machine.
 
 ## Should know
+
+- G14 scope: a fix-up push to a PR branch (after the PR opener's scan) is scanned locally only in CIS and the root;
+  in Booking, Partner, TripPlanner and Infra only CI's Secret Scan sees it. The gitleaks incidents behind the lessons
+  were CIS PRs; the same pre-push step for the other four is a follow-up.
 
 - `tools/kit/test_kit_sync.sh` fails 9 of 20 cases on master too (it runs the wrapper of the current CIS checkout,
   which no longer knows the `portal` consumer); not touched here.
