@@ -49,7 +49,8 @@ info:
     control characters removed, Unicode NFC, trimmed, then the length in code points (name 1..120, e-mail <= 254,
     phone <= 40), the patterns of Traveller, and for the name at least one letter or digit after NFKD (Unicode
     category L or N: the token the CRM files the traveller by; a name of punctuation, symbols or emoji only is
-    refused). Shared test vectors: docs/contracts/rules/lead.submitted.v1.traveller-rules.json (each app keeps a byte
+    refused). The e-mail is lower-cased first and its length and pattern are checked on the lower-case value, the
+    value sent (lower-casing can lengthen it: U+0130 becomes two code points). Shared test vectors: docs/contracts/rules/lead.submitted.v1.traveller-rules.json (each app keeps a byte
     copy and runs every vector), so a lead the producer accepts is never rejected by the consumer for these fields, and
     a lead the consumer acknowledges stored never fails its intake for them.
 
@@ -186,6 +187,11 @@ components:
           type: string
           format: email
           maxLength: 254
+          description: >-
+            Lower-case. The producer lower-cases the address first and checks the length and the rules file
+            email_pattern (local part at most 64 code points) on that value, so an address lower-casing lengthens
+            (U+0130, capital I with dot above, becomes 'i' and U+0307) is refused before storing, never rejected by the
+            consumer.
           x-pii: contact
         phone:
           type: [string, "null"]

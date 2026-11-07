@@ -52,6 +52,16 @@ Session S272 (lane l10). Root ADR 0019 d10, d11, d2 / b19.
   The contract text also says the per-tenant 24-hour cap is counted under a per-tenant transaction lock
   (`pg_advisory_xact_lock(hashtext('tp_lead_cap:' || tenant_id))` at TripPlanner), so concurrent sends never pass it.
 
+- Review fix pass 4 (S272): the e-mail rule states its order, "lower-case first, then the length and the pattern on
+  the lower-case value, which is the value sent". TripPlanner checked, then lower-cased; `str.lower()` (and JS
+  `toLowerCase()`) turns U+0130, capital I with dot above, into two code points, so `'İ' * 33 + '@example.com'` passed
+  TripPlanner (local part 33) and was sent with a 66-code-point local part that the CRM rejected after TripPlanner had
+  stored it. U+0130 is the only code point whose lower case is longer than one code point. The rules file `about`
+  text, the contract's ONE-rule paragraph and a new `Traveller.email` description say so, and three shared vectors
+  pin it: `dotted_capital_i_fits` (valid), `dotted_capital_i_lengthens_local` (63 + 1 becomes 65) and
+  `dotted_capital_i_lengthens_total` (254 becomes 256). TripPlanner's backend and form and the CRM's
+  `traveller_errors` all lower-case before checking.
+
 ## Tradeoffs
 
 - No separate retention row: tp-026 adds columns to `tripplanner.outbox`, CIS 390 to `shared.tenant_tripplanner_site`;
