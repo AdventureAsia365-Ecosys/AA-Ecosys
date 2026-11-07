@@ -192,7 +192,6 @@ Trong giai đoạn dev, tech lead là kỹ sư trực. Lỗi thông thường g�
 - Tài khoản model chính từ chối model chat từ 29/10/2026, nên **Rewrite (S1)**, **Regenerate** và các bước kiểm tra
   bằng AI sẽ lỗi hoặc chờ cho tới khi có lại đường gọi model. Các job bị từ chối được đưa lại vào hàng đợi từ
   **AI providers** khi nhà cung cấp trả lời lại.
-- Địa chỉ `aa-cis-preview.lumiguides.it.com` là bản sao thử của console dành cho kỹ sư, chỉ đọc với nhân sự.
 
 ## Nguồn (cho người bảo trì)
 
