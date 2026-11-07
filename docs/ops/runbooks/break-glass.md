@@ -6,7 +6,7 @@ type: how-to
 status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
-applies_to: [aa-workforce-dev, aa-cis-frontend, aa-cis-api, aa-cis-dev-db]
+applies_to: [aa-workforce-dev, aa-cis-dev-admin, aa-cis-api, aa-cis-dev-db]
 last_reviewed: 2026-10-28
 review_every_days: 90
 last_tested: 2026-10-19

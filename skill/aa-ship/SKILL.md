@@ -35,7 +35,7 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
   → điều phối push, chờ CI, merge.
 - [ ] **Gate mọi check:** chỉ merge khi không còn check nào đỏ hoặc pending trong `gh pr checks <n>` (đọc đủ, không chỉ
   `--required`; Infra và repo gốc không có required check) — `ship_merge.py` làm đúng việc này. Có gì push vào PR (bot, restack, release-please) → gate lại,
-  lần xanh trước không còn tính. Vercel deploy + UI smoke → PR frontend kiểm thêm `aa-ui-verify`.
+  lần xanh trước không còn tính. `Deploy Admin Dev` (ECS) + UI smoke sau deploy → PR frontend kiểm thêm `aa-ui-verify`.
 - [ ] Test xanh local, đỏ CI → so package đã cài (`pip list` local vs CI/image) trước khi sửa code.
 - [ ] Khẳng định "check xanh khi khớp / đỏ khi lệch" → chứng minh bằng nhánh thử hoặc draft PR có cài sẵn chỗ lệch rồi
   đóng không merge; không merge thứ sai để thử.
@@ -215,6 +215,6 @@ Deploy hỏng mà circuit breaker ECS không tự lùi → lùi app trước, s�
   lệnh 1 dòng; `--apply` mới ghi, rồi chờ stable + so SHA ở health). Bỏ qua revision template Terraform (`bootstrap`).
 - CIS api + worker: `docs/ops/runbooks/rollback-cis.md` (hai service cùng image). Booking: `rollback-booking.md`.
 - Game day $0 (Booking, CRM, Vercel, TP Lambda, gate job-idle của terraform-apply): `docs/ops/drills/rollback-game-day.md`.
-- Vercel (CIS admin, portal, Booking admin, TripPlanner): `docs/ops/runbooks/rollback-vercel.md`.
+- Vercel (chỉ còn TripPlanner): `docs/ops/runbooks/rollback-vercel.md`. Admin CIS / Booking chạy ECS từ AA-911 (S272): `docs/ops/runbooks/rollback-ecs.md` trên `aa-cis-dev-admin` / `aa-booking-dev-admin`.
 - Lambda TripPlanner: `docs/ops/runbooks/rollback-tp-lambda.md`. Terraform: `docs/ops/runbooks/rollback-terraform.md`.
 - Mục lục + playbook sự cố: `docs/ops/README.md`. Sự cố ảnh hưởng người dùng → `docs/ops/incident-response.md`.

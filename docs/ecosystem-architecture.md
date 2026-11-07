@@ -57,10 +57,10 @@ AA-Ecosys is a **multi-repo**. Each app deploys on its own. Locally the repos si
 
 | Local folder | GitHub repo | Role | Deploy |
 |---|---|---|---|
-| `apps/AA-CIS-App` | `AA-CIS-App` | Content system of record: FastAPI backend (CIS core, A-series, T-series, the Content studio API `/v1/*`), durable job worker, admin frontend. The tenant portal UI moved to AA-Partner (AA-979 P2a); the frozen copy left here was deleted at the P2b clean-up. The admin host answers `/portal*` and `/tenant-login` with 308 to `portal.` and `/trip/*` with 308 to the client host | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image) + Vercel `aa-cis-frontend` (admin) |
+| `apps/AA-CIS-App` | `AA-CIS-App` | Content system of record: FastAPI backend (CIS core, A-series, T-series, the Content studio API `/v1/*`), durable job worker, admin frontend. The tenant portal UI moved to AA-Partner (AA-979 P2a); the frozen copy left here was deleted at the P2b clean-up. The admin host answers `/portal*` and `/tenant-login` with 308 to `portal.` and `/trip/*` with 308 to the client host | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image) + ECS `aa-cis-dev-admin` (admin web on `aa-cis.`, `Deploy Admin Dev`; on Vercel until AA-911, S272) |
 | `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | B2C web app: browse destinations, plan a trip, sign in and keep trips. Next.js FE + 3 Lambdas: `browse` (stateless reads, search embeddings), `assembly` (trip writes, narration) and `jobs` (no HTTP route; the `tripplanner.job` worker woken by a daily EventBridge Scheduler tick, tp-021). AI through the shared gateway core (3.3, [AI gateway](architecture/ai-gateway.md)) | Vercel `aa-tripplanner` (FE) + Lambda (BE) |
 | `infra/AA-CIS-Infra` | `AA-CIS-Infra` | Terraform for every AWS resource, one root per account: `accounts/aa365` (acc2: VPC, RDS, ECS, Lambda, API GW, CloudFront, Cognito, OIDC, alarms), `accounts/acc3-bedrock` (the Bedrock chat account) and `accounts/management` (the organization, ADR 0018). DB Migrate, Migration Sync / Apply (ADR 0017) and DB Schema Dump workflows | GitHub Actions (`accounts/aa365`) + a human with MFA (`accounts/acc3-bedrock`, bootstrap objects, `accounts/management`) |
-| `apps/AA-Booking` | `AA-Booking` | AAA: advisor workflow and booking lifecycle. Live on Dev since 2026-10-14: inquiry intake, staff trip cases and proposals, pricing and FX, suppliers and supply, sellable trip plans, operations (supplier bookings, invoices, payments, supplier bills), the B2B API for AA-Partner; staff admin frontend (see 3.4) | ECS Fargate `aa-booking-dev-api` on the CIS cluster `aa-cis-dev-cluster` (acc2, same VPC, ADR 0004) + Vercel `aa-booking-admin` |
+| `apps/AA-Booking` | `AA-Booking` | AAA: advisor workflow and booking lifecycle. Live on Dev since 2026-10-14: inquiry intake, staff trip cases and proposals, pricing and FX, suppliers and supply, sellable trip plans, operations (supplier bookings, invoices, payments, supplier bills), the B2B API for AA-Partner; staff admin frontend (see 3.4) | ECS Fargate `aa-booking-dev-api` on the CIS cluster `aa-cis-dev-cluster` (acc2, same VPC, ADR 0004) + ECS `aa-booking-dev-admin` (staff admin web on `booking.`, `Deploy Admin Dev`; on Vercel until AA-911, S272) |
 | `apps/AA-Partner` (public) | `AA-Partner` | Partner agencies' app (ADR 0010, accepted 2026-10-22): the agency CRM and the tenant Content studio, one agency app in `web/` since AA-1036 (ADR 0019 d6; the studio was moved from AA-CIS-App by AA-979 P2a as `portal/`, merged into `web/` and its separate service retired in R3). Own schema `crm` (`crm-001` to `crm-040`): clients and the identity vault, pipeline, proposals, invoices and payments, e-sign, duty of care, portability and deletion, onboarding and import, AA insights, the AA staff console with owner-granted support access and audited break-glass (crm-033), ops releases to AA ground operations (crm-034), commissions and one-action cancel (crm-035), SMS and WhatsApp on the agency's own Twilio (crm-036), workflow rules and tasks (crm-038), AI drafts in the trip workspace (crm-040), an offline-capable traveller portal on the client host `go-dev.`. AI through its own control plane and ledger on the shared gateway core (ledger v2, crm-032; stage profiles crm-037; the provider was the stub on Dev when checked on 2026-11-01), PII scrubbed first by the F3 scrubber with Bedrock Guardrails. Partner Cognito pool with MFA (ADR 0006b). Integrations are bring-your-own (agency Twilio/WhatsApp, Stripe, mailbox, e-sign); AA provides the maps. The API runs the `crm.job` worker in its own process | ECS Fargate ARM64 on `aa-cis-dev-cluster`: `aa-crm-dev-api` and `aa-crm-dev-web` (CRM + Content studio; "/" lands on Content), both on the agency host `portal.` (its own CloudFront distribution → VPC origin → NLB → ALB host rules: `/crm*` API, every other path the agency web; the service `aa-crm-dev-portal` was retired in AA-1036). The old host `partner-dev.` keeps only the API paths `/crm` and `/crm/*` and answers 301 to `portal.` for everything else (AA-979 P2b clean-up, a CloudFront Function). Images in IMMUTABLE ECR repos tagged with the git SHA; deploy by the GitHub OIDC role `aa-crm-dev-app-deploy`. No Vercel project (the P2a project `aa-cis-portal` was deleted at the clean-up) |
 
 **Boundary rule [FACT]:** *apps own code, Infra owns resources.* TripPlanner shows it best:
@@ -113,6 +113,7 @@ flowchart TB
     subgraph vpc[Shared VPC]
       ECS[ECS Fargate: aa-cis-dev-api + aa-cis-dev-worker]
       BK[ECS Fargate: aa-booking-dev-api]
+      STAFF[ECS Fargate: aa-cis-dev-admin + aa-booking-dev-admin · staff web on aa-cis. and booking. via ALB host rules]
       CRM[ECS Fargate ARM64: aa-crm-dev-api + web + portal]
       RDS[(RDS Postgres · pgvector)]
       VK[(ElastiCache Valkey)]
@@ -130,13 +131,13 @@ flowchart TB
     OIDC[GitHub OIDC: one role per repo and job]
   end
 
-  VERCEL[Vercel: CIS admin, Booking admin, TripPlanner FE]
+  VERCEL[Vercel: TripPlanner FE]
   ACC3[acc3: Bedrock chat models · refusing since 2026-10-29]
   DIRECT[Direct APIs: OpenAI · Anthropic, no key yet]
   DATA[Data APIs: Jev, DataForSEO, Geoapify]
 
   R1 & R2 & R3 & R4 & R5 -.OIDC.-> OIDC
-  OIDC -.deploy.-> ECS & BK & CRM & L3 & MIG
+  OIDC -.deploy.-> ECS & BK & STAFF & CRM & L3 & MIG
   ECS & BK & CRM & MIG & L3 --> RDS
   ECS --> VK
   APIG --> ECS & BK
@@ -144,7 +145,8 @@ flowchart TB
   SCH --> L3
   CF --> CRM
   CF -->|img.| S3
-  VERCEL --> APIG & APIG2
+  VERCEL --> APIG2
+  STAFF -->|BFF to the CIS and Booking APIs| APIG
   CRM -->|BFF to the CIS and Booking APIs| APIG
   ECS & L3 & CRM --> COG
   ECS & L3 --> BRE
@@ -269,7 +271,7 @@ Live on Dev since 2026-10-14 (AA-678, `infra/AA-CIS-Infra/accounts/aa365/booking
 | Runtime | ECS service `aa-booking-dev-api` on `aa-cis-dev-cluster`, own ECR `aa-booking-dev-api`, log group `/ecs/aa-booking-dev`, own execution and task roles |
 | Entry | Separate REST API `aa-booking-dev-api` on the **shared VPC link** → NLB → ALB listener rule `/booking`, `/booking/*` → Booking target group. Custom sub-domain `api-booking.lumiguides.it.com` (ADR 0004 O2) |
 | Database | Schema `booking`, owner role `bk_owner` (since bk-014), login role `booking` (DSN in Secrets Manager `booking/dev/database-url`). Migrations applied through Infra DB Migrate from `bk-001` (2026-10-14) to `bk-035` (2026-10-31); `bk-034` was the first expand file applied with no hand step (ADR 0017) |
-| Slices | `bk-001` foundation (customers, OTP tables, audit log, inbox events) · `bk-002` inquiry intake + `booking.job` worker (AA-681) · `bk-003` staff profiles, trip case workflow, proposal versions · `bk-004` / `bk-006` / `bk-007` pricing engine, rules + FX with maker-checker (AA-810, ADR 0005) · `bk-008` suppliers + contracts (AA-822) · `bk-009` sellable trip plans over the live catalog (AA-679) · `bk-010` hotels, room types, services, supplier net rates (AA-823) · `bk-011` catalog tour key on trip case legs (AA-830) · `bk-020` to `bk-022` departures and holds, B2B commercial rules, B2B event feed · `bk-023` supply outbox and media (AA-835) · `bk-024` customer identities (AA-908) · `bk-026` to `bk-028`, `bk-030` operations MVP: supplier bookings, trip checks, invoices and payments, supplier bills and payouts (AA-682) · `bk-029`, `bk-031` Booking state of CIS countries and destinations, `bk-032` / `bk-033` trip plan supplier and price matrix (AA-996) · `bk-034` index for the tour lifecycle read (AA-993) · `bk-035` inquiry inbox key view for the CIS hand-off check (AA-1003). Staff "new inquiry" e-mail through SES (`bk_notify_email` job, AA-811). Staff admin frontend in `frontend/` (Next.js, Vercel `aa-booking-admin`, AA-683) |
+| Slices | `bk-001` foundation (customers, OTP tables, audit log, inbox events) · `bk-002` inquiry intake + `booking.job` worker (AA-681) · `bk-003` staff profiles, trip case workflow, proposal versions · `bk-004` / `bk-006` / `bk-007` pricing engine, rules + FX with maker-checker (AA-810, ADR 0005) · `bk-008` suppliers + contracts (AA-822) · `bk-009` sellable trip plans over the live catalog (AA-679) · `bk-010` hotels, room types, services, supplier net rates (AA-823) · `bk-011` catalog tour key on trip case legs (AA-830) · `bk-020` to `bk-022` departures and holds, B2B commercial rules, B2B event feed · `bk-023` supply outbox and media (AA-835) · `bk-024` customer identities (AA-908) · `bk-026` to `bk-028`, `bk-030` operations MVP: supplier bookings, trip checks, invoices and payments, supplier bills and payouts (AA-682) · `bk-029`, `bk-031` Booking state of CIS countries and destinations, `bk-032` / `bk-033` trip plan supplier and price matrix (AA-996) · `bk-034` index for the tour lifecycle read (AA-993) · `bk-035` inquiry inbox key view for the CIS hand-off check (AA-1003). Staff "new inquiry" e-mail through SES (`bk_notify_email` job, AA-811). Staff admin frontend in `frontend/` (Next.js, AA-683; ECS `aa-booking-dev-admin` since AA-911, `Deploy Admin Dev`) |
 | Health | `/booking/health` (liveness, reports `git_sha`), `/booking/health/ready` (DB + every required `bk-NNN`) |
 
 ## 4. Data contracts
@@ -306,7 +308,7 @@ Live on Dev since 2026-10-14 (AA-678, `infra/AA-CIS-Infra/accounts/aa365/booking
 
 | Edge | Contract | Source |
 |---|---|---|
-| CIS FE (Vercel) ⇄ CIS API | REST through API GW (REST + VPC Link) → ALB → ECS. Auth: tenant JWT; staff = Cognito WORKFORCE access token as `Authorization: Bearer` (legacy HS256 sessions refused since AA-816 S2, `LEGACY_ADMIN_LOGIN_ENABLED` off by default), plus the admin secret added by the BFF for paths outside the staff prefixes (4.6) | `AA-CIS-App/CONTEXT.md` |
+| CIS admin (ECS `aa-cis-dev-admin`) ⇄ CIS API | REST through API GW (REST + VPC Link) → ALB → ECS. Auth: tenant JWT; staff = Cognito WORKFORCE access token as `Authorization: Bearer` (legacy HS256 sessions refused since AA-816 S2, `LEGACY_ADMIN_LOGIN_ENABLED` off by default), plus the admin secret added by the BFF for paths outside the staff prefixes (4.6) | `AA-CIS-App/CONTEXT.md` |
 | Content studio (in `aa-crm-dev-web`) ⇄ CIS API | The studio BFF of the agency web calls the CIS API. A partner-pool access token is exchanged at `POST /auth/tenant-session` for a 15-minute tenant JWT ([ADR 0010a](adr/0010a-content-studio-partner-sign-in.md)) | `AA-Partner/CONTEXT.md` |
 | AA-Booking ⇄ clients | REST through API GW `aa-booking-dev-api` (shared VPC Link) → ALB `/booking/*` → ECS `aa-booking-dev-api`. The staff admin frontend calls it through its Next.js BFF. Staff auth: see 4.6 | `booking.tf`, ADR 0004 |
 | TripPlanner FE (Vercel) ⇄ BE | The Next.js BFF calls 2 Lambda URLs through API GW HTTP v2: `ANY /browse/{proxy+}` → browse, `ANY /trip/{proxy+}` → assembly; header `X-TripPlanner-Key`. Env `BROWSE_API_URL` / `TRIP_API_URL` | `tripplanner.tf`, `docs/vercel-setup.md` |
@@ -402,9 +404,9 @@ One identity service for the ecosystem: Amazon Cognito in acc2, Essentials plan,
 
 | Population | Pool / client | State |
 |---|---|---|
-| CIS staff | WORKFORCE, client `cis-admin` | **Live.** Email one-time code on managed login at `https://staff-auth.lumiguides.it.com` (AA-branded). The CIS BFF runs auth code + PKCE. The CIS API verifies the access token (WORKFORCE issuer only, `client_id` ∈ {cis-admin, breakglass}, `token_use=access`) and resolves the `shared.admin_users` row by `(iss, sub)`; role = highest `cis-*` group. Legacy password login off since AA-816 S2 (2026-10-22; `LEGACY_ADMIN_LOGIN_ENABLED` off by default, ADR 0006a A12). Preview signs in on `aa-cis-preview.lumiguides.it.com` with client `cis-admin-preview`, capped at viewer (A11) |
+| CIS staff | WORKFORCE, client `cis-admin` | **Live.** Email one-time code on managed login at `https://staff-auth.lumiguides.it.com` (AA-branded). The CIS BFF runs auth code + PKCE. The CIS API verifies the access token (WORKFORCE issuer only, `client_id` ∈ {cis-admin, breakglass}, `token_use=access`) and resolves the `shared.admin_users` row by `(iss, sub)`; role = highest `cis-*` group. Legacy password login off since AA-816 S2 (2026-10-22; `LEGACY_ADMIN_LOGIN_ENABLED` off by default, ADR 0006a A12). The Preview sign-in (`aa-cis-preview.` host, client `cis-admin-preview` capped at viewer, A11) went with the Vercel retirement (AA-911, S272): staff sign in on the production host `aa-cis.` only |
 | Break-glass | WORKFORCE, client `breakglass` | **Live, disabled at rest.** `admin@adventure.asia`, password + TOTP. Secret `aa-identity/dev/breakglass` is readable only by the MFA admin role; every read, write and token issue alerts |
-| Booking staff | WORKFORCE, clients `booking-staff`, `booking-staff-preview` | **Phase 2, in transition.** The Booking API verifies WORKFORCE access tokens (roles from `cognito:groups`, mirrored from CIS `shared.staff_app_grant`). It still accepts the CIS bridge token (ADR 0004 O1, `aud=booking`) until AA-680 removes it (ADR 0006a A6) |
+| Booking staff | WORKFORCE, client `booking-staff` | **Live.** The Booking API verifies WORKFORCE access tokens only (roles from `cognito:groups`, mirrored from CIS `shared.staff_app_grant`). The CIS bridge token is refused since AA-911 (S271, ADR 0006a A13); the Preview-only `booking-staff-preview` client went with the Vercel retirement (S272) |
 | Content studio users | PARTNER pool (ADR 0006b, MFA) | **Live since the AA-979 P2b cutover.** People re-enrol through a CIS-created, CRM-delivered invitation; CIS exchanges the partner access token for a 15-minute tenant JWT ([ADR 0010a](adr/0010a-content-studio-partner-sign-in.md)). Since the P2b clean-up the studio has no API-key sign-in (`PORTAL_API_KEY_SIGNIN=false`, `/tenant-login` → 308 to the partner sign-in); API keys are for machines only |
 | Agency CRM users | PARTNER pool, AA-Partner web | **Live.** Membership in `crm.member` by `(iss, sub)`, then the CRM permission matrix |
 | AA staff in the CRM | WORKFORCE, client `crm-staff`; groups `crm-platform-admin`, `crm-ops`, `crm-support` | **Live.** The AA staff console in CRM web: ops releases, support access inside a window the agency owner grants, audited break-glass (crm-033) |
@@ -416,8 +418,9 @@ One identity service for the ecosystem: Amazon Cognito in acc2, Essentials plan,
   and `shared.staff_app_grant` (per-app roles) are the source of truth. Only owners write it, from the CIS admin
   Staff page. Each write goes to the DB first, then to Cognito through the CIS task role's allow-list.
   A report-only job `staff_directory_reconcile` compares the two.
-- Apex `lumiguides.it.com` is an A record to Vercel (the `aa-cis-frontend` project redirects it to
-  `aa-cis.lumiguides.it.com`); Cognito requires a parent A record for its custom domains.
+- Apex `lumiguides.it.com` is an alias A record to the shared ALB, whose :443 listener redirects it to
+  `aa-cis.lumiguides.it.com` (AA-911, S272; it pointed at Vercel before); Cognito requires a parent A record for its
+  custom domains.
 
 ## 5. OIDC / CI-CD
 

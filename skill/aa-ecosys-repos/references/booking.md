@@ -4,7 +4,7 @@ Live trên Dev (`https://api-booking.lumiguides.it.com/booking/health`). Mọi t
 ap-southeast-1 không thuộc hệ sinh thái. Nguồn sự thật: `apps/AA-Booking/CONTEXT.md` + root ADR 0004 / 0004a / 0005a.
 
 - Layout: `backend/` (FastAPI, asyncpg SQL thuần, `app/` theo miền, `app/jobs/` = runner `booking.job`), `frontend/`
-  (staff admin Next.js, Vercel `aa-booking-admin`), `migrations/` (key `bk-NNN`, nằm ngoài deploy paths). Customer app
+  (staff admin Next.js, ECS `aa-booking-dev-admin` qua `deploy-admin-dev.yml`; Vercel đã bỏ ở AA-911, S272), `migrations/` (key `bk-NNN`, nằm ngoài deploy paths). Customer app
   chưa làm.
 - Runtime: ECS `aa-booking-dev-api` trên `aa-cis-dev-cluster`; worker `booking.job` (kind `bk_*`) chạy trong process
   API. Tài nguyên AWS ở AA-CIS-Infra `accounts/aa365/booking.tf` ("app sở hữu code, Infra sở hữu tài nguyên").

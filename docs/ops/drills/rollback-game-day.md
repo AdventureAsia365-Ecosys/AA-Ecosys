@@ -6,7 +6,7 @@ type: how-to
 status: draft
 owner: nghiep
 audience: [engineer, devops, cto, agent]
-applies_to: [aa-booking-api, aa-crm-api, aa-booking-admin, tripplanner-lambda, aa-cis-infra]
+applies_to: [aa-booking-api, aa-crm-api, aa-tripplanner, tripplanner-lambda, aa-cis-infra]
 last_reviewed: 2026-11-02
 review_every_days: 90
 related: [OPS-03-drills, OPS-02-ecs, OPS-02-booking, OPS-02-vercel, OPS-02-tp-lambda, OPS-10-deploy-gate, AA-1023]
@@ -27,7 +27,7 @@ S241 and are not repeated.
 |---|---|---|---|---|
 | D1 | ECS `aa-booking-dev-api` | [rollback-ecs](../runbooks/rollback-ecs.md) | `--previous` (newest older real build) | the revision running before D1 |
 | D2 | ECS `aa-crm-dev-api` | [rollback-ecs](../runbooks/rollback-ecs.md) | `--previous` | the revision running before D2 |
-| D3 | Vercel `aa-booking-admin` | [rollback-vercel](../runbooks/rollback-vercel.md) | Instant Rollback to the previous production deployment | Promote the deployment that was current |
+| D3 | Vercel `aa-tripplanner` (was `aa-booking-admin`, retired with AA-911, S272) | [rollback-vercel](../runbooks/rollback-vercel.md) | Instant Rollback to the previous production deployment | Promote the deployment that was current |
 | D4 | Lambda `aa-tripplanner-dev-browse` | [rollback-tp-lambda](../runbooks/rollback-tp-lambda.md) path B | the previous `browse.zip` object version | the newest `browse.zip` object version |
 | D5 | AA-CIS-Infra `terraform-apply.yml` job-idle gate | [deploy-gate override](../runbooks/deploy-gate-override.md) (gates table) | red while one seeded `noop_sleep` row is busy | green after the row is cleared |
 
@@ -71,7 +71,10 @@ Run for `<service>` = `aa-booking-dev-api`, then `aa-crm-dev-api`.
 Pass: both directions end `COMPLETED` with the expected SHA on health and readiness 200; the RTO (seconds from the
 update to a healthy SHA) is written down.
 
-## D3: Vercel `aa-booking-admin`
+## D3: Vercel `aa-tripplanner`
+
+The Booking admin left Vercel (AA-911, S272): the drill runs on the one Vercel project left. Its production host is
+`tripplanner.lumiguides.it.com`.
 
 1. List the production deployments (Vercel MCP `list_deployments` for the project with target production, or the
    dashboard). Note the current one (`<current-deployment>`) and the one before it (`<previous-deployment>`, `READY`).
@@ -164,7 +167,7 @@ Pass: red with the seeded row, green before and after it, and `ACTION=status` pr
 |---|---|---|---|---|---|
 | D1 Booking API | | | | | |
 | D2 CRM API | | | | | |
-| D3 Vercel `aa-booking-admin` | | | | | |
+| D3 Vercel `aa-tripplanner` | | | | | |
 | D4 Lambda browse | | | | | |
 | D5 job-idle gate | idle -> seeded -> cleared (`OPEN_COUNT 0`) | - | - | green / red / green | |
 

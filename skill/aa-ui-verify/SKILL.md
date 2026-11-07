@@ -39,23 +39,24 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
 - CRM web: AA-Partner `web/` → `npm test && npm run build`.
 - Máy WSL ít RAM: mỗi lúc chỉ một `next build` / Playwright.
 
-## 3. Kiểm trên preview hoặc Dev
+## 3. Kiểm trước merge (CI) và trên Dev (sau merge)
 
-1. Deploy của PR xanh: Vercel không tự build từ Git — `vercel-deploy.yml` (CIS) tạo preview cho PR chạm `frontend/**`;
-   job deploy xanh và deployment READY. CRM web (`deploy-web-dev.yml`) và Content studio (`deploy-portal-dev.yml`) deploy
-   lên ECS sau merge, không có preview (preview Vercel của portal bỏ ở AA-979 dọn dẹp, S256).
+1. **Không còn preview Vercel** cho admin CIS và Booking admin (AA-911, S272: hai project Vercel, `vercel-deploy.yml`,
+   host Preview cố định `aa-cis-preview.` / `booking-preview.` và label `preview-signin` đều đã bỏ). Trước merge: check
+   bắt buộc **`Visual (next start, …)`** (`visual.yml`, `next build` + `next start` trong runner, trang công khai + kit
+   gallery; Booking có API giả) — đọc artifact ảnh + bảng trang × 4 trong job summary. Trang staff CIS có đăng nhập
+   **không có kiểm trước merge** (xem bảng ở bước 3). Sau merge: `Deploy Admin Dev`
+   (CIS / Booking) deploy lên ECS (`aa-cis-dev-admin`, `aa-booking-dev-admin`) rồi tự chạy smoke + visual trên host thật.
+   CRM web (`deploy-web-dev.yml`) và Content studio deploy lên ECS sau merge, cũng không có preview.
 2. **Smoke tự động** (chỉ là sàn tối thiểu, trang vừa sửa vẫn kiểm tay các bước dưới):
-   - **Preview riêng của từng PR** (`*.vercel.app`): `vercel-deploy.yml` gọi `ui-smoke.yml` sau khi preview xong,
-     **chỉ spec công khai** (project `smoke-public`): Cognito không cho callback wildcard nên preview của PR không có
-     đăng nhập staff. Đọc comment/artifact trên PR trước.
-   - **Smoke có đăng nhập** (project `smoke`, spec gắn tag `@staff`, ảnh desktop/mobile × light/dark), người dùng Cognito
-     E2E, chỉ chạy từ `main`:
-     - Production `https://aa-cis.lumiguides.it.com`: job "UI smoke (production, signed in)" tự chạy sau mỗi production
-       deploy, vai **reviewer**; trang reviewer không được mở phải chuyển về trang đích (`frontend/lib/rbac.ts` `PAGE_RULES`).
-     - Host Preview cố định `https://aa-cis-preview.lumiguides.it.com`: vai **viewer**. Trỏ host vào preview của PR bằng
-       dispatch `vercel-deploy.yml` từ `main` với `alias_only_url=<preview url>` (không tạo deployment mới, tự chạy smoke
-       có đăng nhập), hoặc label `preview-signin` (tạo thêm một deployment — Vercel Hobby giới hạn số deployment/ngày)
-       rồi dispatch `gh workflow run ui-smoke.yml --ref main -f base_url=https://aa-cis-preview.lumiguides.it.com -f staff_session=true`.
+   - **CIS sau mỗi deploy** (`deploy-admin-dev.yml` job `smoke-production` → `ui-smoke.yml`): spec công khai
+     (`smoke-public`) + **smoke có đăng nhập** (project `smoke`, spec gắn tag `@staff`, ảnh desktop/mobile × light/dark)
+     bằng người dùng Cognito E2E trên `https://aa-cis.lumiguides.it.com`, vai **content**; trang vai đó không được mở
+     phải chuyển về trang đích (`frontend/lib/rbac.ts` `PAGE_RULES`). Sau đó `visual-production` chụp các trang push đổi.
+   - **Booking sau mỗi deploy** (`deploy-admin-dev.yml` job `smoke`): `/login` công khai trên
+     `https://booking.lumiguides.it.com` (200, header bảo mật, không lỗi console), rồi visual các trang công khai.
+   - Chạy lại tay (điều phối, từ `main`): dispatch `ui-smoke.yml` với `base_url=https://aa-cis.lumiguides.it.com`,
+     `staff_session=true` (chỉ host production là callback Cognito).
    - Local: `BASE_URL=<URL> npx playwright test --project=smoke-public`. Smoke có đăng nhập **không chạy được từ máy
      local** (role đọc hộp thư chỉ tin `refs/heads/main` + environment `e2e`).
    - Thêm trang = thêm 1 dòng vào danh sách trong `tests/e2e/smoke/ui-smoke.spec.ts`.
@@ -70,9 +71,9 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
 
    | Cần kiểm | Ở đâu, bằng gì |
    |---|---|
-   | Trang công khai, layout chung, trang `/login` | PR preview: smoke công khai (tự chạy) hoặc browser không đăng nhập |
-   | Trang đọc (viewer xem được) trước merge | Host Preview cố định (dispatch `alias_only_url` hoặc label `preview-signin`) + smoke có đăng nhập |
-   | Trang reviewer sau merge | Smoke production có đăng nhập (tự chạy sau deploy) hoặc `e2e-cognito.yml` |
+   | Trang công khai, layout chung, trang `/login` | Trước merge: check `Visual (next start)`; local `next start` + browser không đăng nhập |
+   | Trang staff trước merge | Booking: `Visual (next start, mocked API …)` có trang staff trên API giả. **CIS: không có** — từ AA-911 (S272) không còn đường nào kiểm trang CIS có đăng nhập trên code CHƯA merge (host Preview cố định đã bỏ; `Visual (next start)` CIS chỉ có trang công khai + kit gallery, không phiên, không API giả; mục 3a đăng nhập trên host production nên chỉ chụp code ĐÃ deploy). Trang staff CIS chỉ được kiểm sau merge: `smoke-production` / `visual-production` (tự chạy sau `Deploy Admin Dev`) và mục 3a. Báo cáo PR ghi rõ "trang staff CIS chưa kiểm trước merge" |
+   | Trang vai content sau merge | Smoke production có đăng nhập (tự chạy sau `Deploy Admin Dev`) hoặc `e2e-cognito.yml` |
    | Trang chỉ-admin (`/admin/tenant-qa/quality`, `/admin/writing-memory`, …) | Agent tự chụp local bằng user E2E CIS admin (mục 3a, A10b) |
    | Cut / Edit câu ở Content quality (mẫu AA-916 WM-07) | Cùng phiên mục 3a: chỉ 2 route `…/sentences/apply` mode `cut` / `manual` được ghi, trên tenant tổng hợp Dev |
    | Thao tác ghi admin khác | Phiên E2E admin bị chặn 403 `e2e_read_only`: sau deploy nhờ **Nghiệp** kiểm (hoặc gửi ảnh); báo cáo ghi rõ phần này chưa do agent kiểm |
@@ -89,7 +90,8 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
       thử 1 lệnh ghi phải ra 403 `e2e_read_only`, rồi sign out). Thêm trang = thêm vào `PAGES` trong spec.
    3. Ảnh ở `tests/e2e/results/admin-evidence/` (gitignore) → chép sang root `docs/audits/<ngày>-S<nnn>-<slug>/`.
    Không chụp, không trace khi đang ở `staff-auth` sau khi đã gõ mã. Chưa có user (runbook A10b chưa chạy) thì quay về
-   cách cũ: nhờ Nghiệp.
+   cách cũ: nhờ Nghiệp. Mục 3a chạy trên `https://aa-cis.lumiguides.it.com` (code đã deploy), **không** thay được kiểm
+   trước merge.
 
    Không in hay ghi mã email / token / API key ra file, log hay PR. Rollback đăng nhập mật khẩu (chỉ khi sự cố): runbook
    root `docs/ops/runbooks/legacy-login-flag.md`, mục "Roll back or abort"; cần deploy, không phải bật một công tắc.

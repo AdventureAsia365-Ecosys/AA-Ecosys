@@ -63,8 +63,9 @@ aws cognito-idp admin-list-groups-for-user --user-pool-id $POOL --username <thei
 2. Trigger errors: `aws logs tail /aws/lambda/aa-identity-dev-workforce-pre-token --since 30m --profile aa365-admin --region us-west-1`.
    A broken trigger release: roll back its Terraform change ([rollback-terraform](../runbooks/rollback-terraform.md)).
 3. The custom domain fails but Cognito works: the tech lead points the BFF back at the pool's prefix domain with the
-   workforce-domain override (a Vercel env value on `aa-cis-frontend`). ADR 0006a A5 calls this the zero-deploy
-   rollback because no code changes; Vercel still needs a production redeploy to pick up the value.
+   workforce-domain override (`COGNITO_WORKFORCE_DOMAIN` on the `aa-cis-dev-admin` / `aa-booking-dev-admin` task
+   definitions, AA-CIS-Infra `modules/environment/staff_web.tf`). ADR 0006a A5 calls this the zero-deploy rollback
+   because no code changes; the services still need a new deployment to pick up the value.
 4. Get in while it is broken: [break-glass](../runbooks/break-glass.md). The legacy password login is off since
    AA-816 S2 (2026-10-22); bringing it back is a deploy, not a switch ([legacy login flag](../runbooks/legacy-login-flag.md), Roll back).
 
