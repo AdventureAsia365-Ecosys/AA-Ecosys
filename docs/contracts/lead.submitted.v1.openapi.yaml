@@ -22,7 +22,10 @@ info:
     by TripPlanner (the key is handed to the agency by AA, never stored in CIS); a 2xx answer is delivery, anything
     else is retried by the daily delivery run until the hold window ends. (3) email — the same JSON rendered as a plain
     text e-mail to the agency's own inbox, Reply-To the traveller. No route (lead_channel none): TripPlanner refuses the
-    request (409 lead_route_missing) and stores nothing.
+    request (409 lead_route_missing) and stores nothing. A channel the deployment cannot hand over on (the CRM pull
+    not switched on, no webhook signing key, no e-mail sender) is refused the same way (503 lead_channel_unavailable,
+    nothing stored): a lead is stored only when it can leave. A lead that still expires undelivered after the hold
+    window is reported by TripPlanner's daily delivery run (the run fails loudly), never only redacted in silence.
 
     Never in a lead: a guest session id or token, an access / id token, a password or one-time code, an IP address or
     user agent, an AA B2B price, supplier net or any price (prices come from the agency). Auth of the pull API: M2M
@@ -146,6 +149,11 @@ components:
         phone:
           type: [string, "null"]
           maxLength: 40
+          pattern: "^\\+[1-9][0-9 ()-]{5,39}$"
+          description: >-
+            E.164 with its country code ('+' first); spaces, brackets and dashes as the traveller typed them. The
+            producer refuses a local number (the CRM normalises without a region). A consumer that still cannot
+            normalise a number keeps it as text for the agent, never drops it.
           x-pii: contact
         locale:
           type: string

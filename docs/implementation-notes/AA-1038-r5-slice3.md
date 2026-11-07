@@ -16,12 +16,18 @@ Session S272 (lane l10). Root ADR 0019 d10, d11, d2 / b19.
 
 ## Changed
 
-- `docs/contracts/lead.submitted.v1.openapi.yaml`, `docs/contracts/samples/lead.submitted.v1/` (5 valid, 5 rejected),
+- `docs/contracts/lead.submitted.v1.openapi.yaml`, `docs/contracts/samples/lead.submitted.v1/` (5 valid, 6 rejected),
   `docs/contracts/README.md` (registry rows), `docs/contracts/samples/README.md`, `tools/contracts/check_contracts.py`.
 - `docs/contracts/tenant.entitlements.v1.openapi.yaml` 1.5 (byte copy in AA-CIS-App, its sha256 pin updated there).
 - `docs/adr/0019-b2b-only-ecosystem-model.md` (d11 amendment), `docs/architecture/data-standards/02-data-management.md`
   (DM-7.1 rows of `tripplanner.outbox` and `shared.tenant_tripplanner_site`), `docs/architecture/erd/design/tripplanner.md`
   (tp-026 columns).
+
+- Review fix pass (S272): `Traveller.phone` pinned to E.164 with its country code (pattern + the rejected sample
+  `local-phone-invalid.json`), because the CRM normalises a phone without a region and dropped local numbers; the
+  CRM also keeps a phone it cannot normalise as text. The contract now says a channel the deployment cannot hand over
+  on (the CRM pull switched off, no key, no sender) is refused with 503 and nothing stored, and that an expired
+  undelivered lead is reported, not only redacted.
 
 ## Tradeoffs
 
