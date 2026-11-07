@@ -85,8 +85,9 @@ Wave <nước/tên> <dd/mm> — expected <n>
 
 **Điều kiện dừng** chốt bằng số trước khi chạy (mẫu AA-645: `docs/audits/2026-10-23-S248-aa645-writer-decision/
 platform-impact-memo.md` §6 — tỉ lệ ở lại bản cũ, đường itinerary legacy, atom ở ngày vượt, chi phí/tour vượt mô hình,
-throttle Bedrock, atomize fail không chạy lại được). Cờ nào phụ thuộc job còn queued/running thì đọc lại sau khi hàng đợi
-hết, trước khi gọi là dừng.
+throttle Bedrock, atomize fail không chạy lại được). `wave_report.py` (AA-1024 G17) tự làm việc này: cờ là `pending`
+khi tour của wave còn job queued/running (exit 5: chạy lại sau khi hàng đợi hết), exit 3 = có cờ true (dừng). Wave kế
+chỉ bắt đầu khi lần báo cáo cuối exit 0, hoặc có câu duyệt bằng chữ của tech lead chép nguyên vào báo cáo wave.
 
 **Đóng:** không có điều kiện dừng → `POST /admin/waves/{id}/close`. Có → để wave mở, dừng driver, báo Nghiệp.
 `POST /admin/waves/check` (ops probe gọi hằng ngày) bật chuông khi wave thiếu tour ở trạng thái cuối.
