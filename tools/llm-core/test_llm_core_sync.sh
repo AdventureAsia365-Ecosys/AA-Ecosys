@@ -4,6 +4,8 @@
 # .github/scripts/llm-core-sync.sh in the workspace (or on its origin/main), or LLM_CORE_SYNC_IMPL=<a CIS worktree>/...
 # The copy itself is tested in AA-CIS-App (tests/unit/test_aa642_s8_llm_core_sync.py); this checks the wrapper wiring.
 set -u
+# S272: a git hook exports GIT_DIR and friends; the temporary repos below must never act on the real repo.
+unset $(git rev-parse --local-env-vars)
 S="$(cd "$(dirname "$0")" && pwd)/llm-core-sync.sh"
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
 pass=0; fail=0
