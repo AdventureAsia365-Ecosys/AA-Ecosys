@@ -1,0 +1,295 @@
+openapi: 3.1.0
+info:
+  title: lead.submitted.v1 (AA-TripPlanner-Web → the tenant's CRM (AA-Partner), webhook or e-mail; a traveller's trip request)
+  version: "1.0"
+  description: >-
+    A traveller planning on an agency tenant's TripPlanner site (/{slug}/plan, root ADR 0019 d10) asks the agency for
+    this trip ("Send to advisor"). The request becomes one lead.submitted.v1 for THAT tenant (root ADR 0019 d11): the
+    traveller is a guest, so the lead carries only what the agency needs to answer — a name, an e-mail, an optional
+    phone, the party, the trip draft summary (days, countries, AA tour keys and titles, stops per day, optional start
+    date, budget band and a short message) and the contact consent. Adventure Asia keeps no traveller record: the
+    agency is the controller, AA the processor (b9). TripPlanner keeps the lead in its outbox only until it is
+    delivered (delivered = the payload is redacted at once; undelivered = redacted after the hold window, 7 days),
+    never in a customer table. The AA demo tenant (aa-tripplanner) never emits one (its planner shows a demo notice).
+
+    Delivery, decided per tenant by CIS (catalog.v_tenant_tripplanner_v1 lead_channel, CIS 390):
+    (1) crm — the tenant holds the CRM add-on (crm.core): the CRM pulls its own pending leads with this API
+    (listLeads, one agency per call), stores each one through its intake (idempotent on lead_id) and acknowledges it
+    (ackLead), after which TripPlanner redacts the payload. The CRM holds no database grant on another schema (root
+    ADR 0008a), hence HTTP. (2) webhook — TripPlanner POSTs the LeadSubmitted JSON to the agency's https URL with the
+    headers X-AA-Contract (lead.submitted.v1), Idempotency-Key (= idempotency_key) and X-AA-Signature
+    't=<unix seconds>,v1=<hex HMAC-SHA256 of "<t>." + raw body>' (the catalog.tour.lifecycle.v1 format), keyed per tenant
+    by TripPlanner (the key is handed to the agency by AA, never stored in CIS); a 2xx answer is delivery, anything
+    else is retried by the daily delivery run until the hold window ends. (3) email — the same JSON rendered as a plain
+    text e-mail to the agency's own inbox, Reply-To the traveller. No route (lead_channel none): TripPlanner refuses the
+    request (409 lead_route_missing) and stores nothing.
+
+    Never in a lead: a guest session id or token, an access / id token, a password or one-time code, an IP address or
+    user agent, an AA B2B price, supplier net or any price (prices come from the agency). Auth of the pull API: M2M
+    token of the aa-m2m pool, client = AA-Partner (CRM), scope tripplanner.leads/deliver; the tenant in the path must
+    be the lead's (a lead of another tenant is never listed and its ack is 404). tenant_id is the CIS tenant id, which
+    is the CRM agency id.
+  x-aa-contract: lead.submitted.v1
+  x-aa-producer: AA-TripPlanner-Web
+  x-aa-consumers: [AA-Partner]
+  x-aa-issues: [AA-1038]
+servers:
+  - url: /trip/m2m/v1
+security:
+  - m2m: [tripplanner.leads/deliver]
+paths:
+  /tenants/{tenant_id}/leads:
+    parameters:
+      - name: tenant_id
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    get:
+      operationId: listLeads
+      summary: The tenant's leads waiting for its CRM, oldest first
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema: {type: integer, minimum: 1, maximum: 50, default: 20}
+      responses:
+        "200":
+          description: Pending CRM-channel leads of this tenant only (an empty list when none)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/LeadPage"}
+        "400": {$ref: "#/components/responses/Problem"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
+        "503": {$ref: "#/components/responses/Problem"}
+  /tenants/{tenant_id}/leads/{lead_id}/ack:
+    parameters:
+      - name: tenant_id
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+      - name: lead_id
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    post:
+      operationId: ackLead
+      summary: The CRM stored the lead (or refused it for good); TripPlanner redacts it
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/LeadAckIn"}
+      responses:
+        "200":
+          description: Acknowledged (again, when already acknowledged; nothing changes)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/LeadAck"}
+        "400": {$ref: "#/components/responses/Problem"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
+        "404": {$ref: "#/components/responses/Problem"}
+        "503": {$ref: "#/components/responses/Problem"}
+components:
+  securitySchemes:
+    m2m:
+      type: oauth2
+      description: Cognito M2M pool aa-m2m-<env>, client credentials.
+      flows:
+        clientCredentials:
+          tokenUrl: https://m2m-auth.example.invalid/oauth2/token
+          scopes:
+            tripplanner.leads/deliver: List the tenant's pending leads and acknowledge their delivery
+  responses:
+    Problem:
+      description: Error
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Problem"}
+  schemas:
+    Problem:
+      type: object
+      additionalProperties: false
+      required: [error]
+      properties:
+        error:
+          type: string
+          pattern: "^[a-z][a-z0-9_]{0,39}$"
+          description: >-
+            A stable code: invalid_tenant_id, invalid_lead_id, invalid_limit, invalid_ack (400), unauthorized (401),
+            forbidden (403: wrong client or scope), lead_not_found (404), m2m_not_configured or unavailable (503).
+    TenantRef:
+      type: object
+      additionalProperties: false
+      required: [tenant_id, slug]
+      properties:
+        tenant_id: {type: string, format: uuid}
+        slug:
+          type: string
+          pattern: "^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$"
+    Traveller:
+      type: object
+      additionalProperties: false
+      required: [name, email, phone, locale]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+          x-pii: contact
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          x-pii: contact
+        phone:
+          type: [string, "null"]
+          maxLength: 40
+          x-pii: contact
+        locale:
+          type: string
+          enum: [en, vi]
+    Party:
+      type: object
+      additionalProperties: false
+      required: [adults, child_ages]
+      properties:
+        adults: {type: integer, minimum: 1, maximum: 50}
+        child_ages:
+          type: array
+          maxItems: 20
+          items: {type: integer, minimum: 0, maximum: 17}
+    TourRef:
+      type: object
+      additionalProperties: false
+      required: [source_system, source_id, title]
+      properties:
+        source_system: {type: string, minLength: 1, maxLength: 40}
+        source_id: {type: string, minLength: 1, maxLength: 120}
+        title: {type: string, minLength: 1, maxLength: 300}
+    DayPlan:
+      type: object
+      additionalProperties: false
+      required: [day, stops]
+      properties:
+        day: {type: integer, minimum: 1, maximum: 90}
+        stops:
+          type: array
+          maxItems: 12
+          items: {type: string, minLength: 1, maxLength: 120}
+    Trip:
+      type: object
+      additionalProperties: false
+      required: [days, countries, start_date, budget_band, message, tours, day_plan]
+      properties:
+        days: {type: integer, minimum: 1, maximum: 90}
+        countries:
+          type: array
+          minItems: 1
+          maxItems: 12
+          items: {type: string, minLength: 1, maxLength: 80}
+        start_date:
+          type: [string, "null"]
+          format: date
+          x-pii: travel
+        budget_band:
+          type: [string, "null"]
+          enum: [under_1000, "1000_2000", "2000_3500", "3500_5000", over_5000, not_sure, null]
+          description: Per person, excluding flights, USD (the CRM Stage 1 bands).
+        message:
+          type: [string, "null"]
+          maxLength: 1000
+          x-pii: travel
+          description: The traveller's own words to the agency.
+        tours:
+          type: array
+          maxItems: 30
+          items: {$ref: "#/components/schemas/TourRef"}
+        day_plan:
+          type: array
+          maxItems: 90
+          items: {$ref: "#/components/schemas/DayPlan"}
+    Consent:
+      type: object
+      additionalProperties: false
+      required: [contact, marketing, given_at]
+      properties:
+        contact:
+          const: true
+          description: The traveller ticked "the agency may contact me about this trip"; a lead never exists without it.
+        marketing: {type: boolean}
+        given_at: {type: string, format: date-time}
+    Source:
+      type: object
+      additionalProperties: false
+      required: [app, trip_ref]
+      properties:
+        app:
+          type: string
+          enum: [tripplanner]
+        trip_ref:
+          type: string
+          format: uuid
+          description: TripPlanner's opaque id of the planned trip (no traveller data behind it).
+    LeadSubmitted:
+      type: object
+      additionalProperties: false
+      required: [contract, version, lead_id, idempotency_key, submitted_at, tenant, source, traveller, party, trip,
+                 consent]
+      properties:
+        contract:
+          const: lead.submitted.v1
+        version:
+          type: string
+          enum: ["1.0"]
+        lead_id: {type: string, format: uuid}
+        idempotency_key:
+          type: string
+          pattern: "^tp-lead:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          description: tp-lead:<lead_id>; the consumer stores each key once.
+        submitted_at: {type: string, format: date-time}
+        tenant: {$ref: "#/components/schemas/TenantRef"}
+        source: {$ref: "#/components/schemas/Source"}
+        traveller: {$ref: "#/components/schemas/Traveller"}
+        party: {$ref: "#/components/schemas/Party"}
+        trip: {$ref: "#/components/schemas/Trip"}
+        consent: {$ref: "#/components/schemas/Consent"}
+    LeadPage:
+      type: object
+      additionalProperties: false
+      required: [leads, more]
+      properties:
+        leads:
+          type: array
+          maxItems: 50
+          items: {$ref: "#/components/schemas/LeadSubmitted"}
+        more:
+          type: boolean
+          description: More pending leads than the limit; ask again after acknowledging these.
+    LeadAckIn:
+      type: object
+      additionalProperties: false
+      required: [outcome]
+      properties:
+        outcome:
+          type: string
+          enum: [stored, rejected]
+          description: >-
+            stored = in the CRM's intake (or already there); rejected = the CRM can never store it (the agency is gone
+            or the lead does not validate). Both end TripPlanner's hold: the payload is redacted.
+        reason:
+          type: [string, "null"]
+          pattern: "^[a-z][a-z0-9_]{0,39}$"
+    LeadAck:
+      type: object
+      additionalProperties: false
+      required: [lead_id, state, already]
+      properties:
+        lead_id: {type: string, format: uuid}
+        state:
+          type: string
+          enum: [delivered, rejected]
+        already:
+          type: boolean
+          description: The lead had been acknowledged before; nothing changed.
