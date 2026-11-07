@@ -101,6 +101,8 @@ HARD RULES for this lane:
 - UI: kit components only (ADR 0016); never edit **/_kit/core/** outside apps/AA-CIS-App/frontend/app/_kit/core/; English UI copy; never show AA-xxx ids in UI text.
 - Commit locally early and often, format: "feat|fix|chore|refactor|docs: description" then blank line, "Refs AA-xxx", blank line,
   "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>". Never "Fixes"/"Closes".
+- pr_body: every issue id it names must be on its "Refs AA-<n>, ..." line (ids there may also appear in prose; ids in file paths
+  are fine). Describe other issues' work in words: Linear links any other id and may move it to Done on merge (PR opener + pr-title.yml refuse it).
 - No paid LLM/API calls; mock them in tests.
 - If the worktree already exists with commits (a resumed lane), continue from its git status/log and implementation notes; do not start over.${L.resume ? `
 - THIS IS A RESUMED LANE (resume: true). Before changing anything, fill resumed_state from each existing worktree of this lane:

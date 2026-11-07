@@ -134,10 +134,18 @@ class OpenTest(unittest.TestCase):
         self.assertTrue(sop.validate(r, lane_pr(self.sb.wt, pr_title="lantern glow"))[0])
         # AA-1024 G11: an id outside the Refs line is linked by Linear (and moved to Done on merge)
         stray = lane_pr(self.sb.wt, pr_body="Joins the AA-9002 lane.\n\nRefs AA-9001\n")
-        self.assertIn("AA-9002 outside the Refs line", " ".join(sop.validate(r, stray)[0]))
+        self.assertIn("AA-9002, which the Refs line does not", " ".join(sop.validate(r, stray)[0]))
         self.assertEqual(sop.stray_issue_ids("x\nRefs AA-1, AA-2\n"), [])
         self.assertEqual(sop.stray_issue_ids("see AA-3 and AA-3\nRefs AA-1"), ["AA-3"])
         self.assertEqual(sop.stray_issue_ids("Refs AA-1 (and AA-4 later)"), ["AA-1", "AA-4"])
+        # the PR's own issue in prose is fine: the Refs line already links it
+        own = "AA-9001 lantern retirement, catalogue side.\r\n\r\nRefs AA-9001\r\n"
+        self.assertEqual(sop.stray_issue_ids(own), [])
+        self.assertEqual(sop.validate(r, lane_pr(self.sb.wt, pr_body=own))[0], [])
+        # an id inside a file path is a path (the implementation notes CLAUDE.md asks for), not an issue link
+        notes = "Notes: docs/implementation-notes/AA-9003-lantern-l2.md and AA-9004.md\n\nRefs AA-9001\n"
+        self.assertEqual(sop.stray_issue_ids(notes), [])
+        self.assertEqual(sop.stray_issue_ids("AA-9005. Then docs/x/AA-9001.md\nRefs AA-9001"), ["AA-9005"])
         with open(os.path.join(self.sb.wt, "lantern.py"), "w", encoding="utf-8") as fh:
             fh.write("GLOW = 4\n")
         self.assertIn("modified", " ".join(sop.validate(r, lane_pr(self.sb.wt))[0]))
