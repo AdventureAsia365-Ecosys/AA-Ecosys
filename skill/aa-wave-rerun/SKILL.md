@@ -12,7 +12,9 @@ snapshot, merge, DB Migrate) do **phiên điều phối** chạy; subagent chỉ
 
 - [ ] Đầu phiên theo `aa-session`: STS, api/worker cùng SHA, `shared.job` không còn queued/running.
 - [ ] **Duyệt chi phí:** thang thử 3 tour → ≤ 50 tour → phần còn lại chỉ khi Nghiệp duyệt rõ, có trần $ (memory
-      `paid-runs-subset`). Nêu chi phí ước tính trước khi chạy, từ `llm_call_log` của lần trước, không phỏng đoán.
+      `paid-runs-subset`). Nêu chi phí ước tính trước khi chạy bằng `tools/llm/cost_estimate.py` (qua ecsx:
+      `COST_STAGE=s1_ COST_N=<số tour>`), chép nguyên dòng ESTIMATE + basis; exit 3 (NO BASIS) → chạy thử 3 tour
+      trước, không đoán số (AA-1024 G18).
 - [ ] Jev canary `credit_ok`, số dư DFS đủ, cost guard còn budget ngày; quota Bedrock của account chạy writer.
 - [ ] Raw của nước đúng nguồn; chỗ nào chưa rõ → hỏi trước. Reset toàn bộ derived chỉ theo runbook AA-CIS-App
       `docs/runbooks/clean-rerun.md` (có RDS snapshot trước, assert sau reset).
@@ -75,6 +77,8 @@ Wave <nước/tên> <dd/mm> — expected <n>
   tour ở lại bản cũ, atom live ở ngày vượt số ngày mới (phải 0), "đã publish chưa atomize"; brand-fit chỉ báo cáo
 - Jev coverage: <tour có verdict thật>/<n>
 - Chi phí: theo stage (writer, judge, Jev, flag_fix, atomize, place), DFS, tổng wave, $/tour, luỹ kế so với trần
+  — chỉ lấy từ `tools/llm/spend_by_stage.py` (qua ecsx, `SPEND_FROM/SPEND_TO` = cửa sổ wave); Jev/DFS ở cột
+  non-LLM; dòng "LOWER BOUND" thì chạy lệnh Logs Insights nó in ra rồi chạy lại với `SPEND_WRITE_FAILURES=<n>`
 - Slug: tour đổi slug → slug cũ 308 sang slug mới, slug mới 200 (kiểm sau ≥ 30′)
 - Bất thường: job interrupted, tour kẹt
 ```
