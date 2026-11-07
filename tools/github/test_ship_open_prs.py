@@ -21,6 +21,14 @@ import ship_open_prs as sop
 from ship_common import Result, ShipError
 from ship_fakes import GitSandbox, HybridRunner
 
+# S272: drop git's repo-local variables before any git call in a temporary repo (test_git_env_isolation.py; the
+# safe-hooks test below runs git directly, not only through ship_fakes).
+for _git_var in ("GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_CONFIG", "GIT_CONFIG_PARAMETERS", "GIT_CONFIG_COUNT",
+                 "GIT_OBJECT_DIRECTORY", "GIT_DIR", "GIT_WORK_TREE", "GIT_IMPLICIT_WORK_TREE", "GIT_GRAFT_FILE",
+                 "GIT_INDEX_FILE", "GIT_NO_REPLACE_OBJECTS", "GIT_REPLACE_REF_BASE", "GIT_PREFIX", "GIT_SHALLOW_FILE",
+                 "GIT_COMMON_DIR"):
+    os.environ.pop(_git_var, None)
+
 BODY = "## What\n- A small invented change to the lantern catalogue.\n\nRefs AA-9001\n"
 
 
