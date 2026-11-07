@@ -160,7 +160,7 @@ reviewer's cases as refusal and pass tests.
   9bc1f4a7, each with a cost, approval or Jira-draft ask in its last paragraphs (a missed nudge is the cheap side).
 - **G11 closing keyword**: the pattern accepts markdown and a Linear URL between the keyword and the id
   (`[\s:*_`\[(\-]*(?:(?:https?://)?linear\.app/\S*?/issue/)?AA-\d+`), identical in the PR opener and the six
-  `pr-title.yml` copies (the whole body-rule step hashes the same in all six). `Closes [AA-n](url)`, `Fixes
+  `pr-title.yml` copies (the whole body-rule step hashes the same in all six). `Closes [AA-n](https://linear.app/issue-link)`, `Fixes
   https://linear.app/.../issue/AA-n/slug`, `Fixes **AA-n**`, `` Fixes `AA-n` ``, `Fixes - AA-n` fail; a test checks
   the workflow's pattern equals the opener's.
 - **G17 pending read (CIS)**: the job lookup covers the wave's expected set (requested ids, the window's tours, the
