@@ -42,6 +42,8 @@ class SettingsHooksTest(unittest.TestCase):
 
     def test_matchers_name_real_tools(self):
         for matcher, _ in registered():
+            if not matcher:  # Stop / SessionStart entries have no tool matcher
+                continue
             for part in matcher.split("|"):
                 self.assertTrue(part in KNOWN_TOOLS or part.startswith("mcp__"), f"unknown matcher tool '{part}'")
 
@@ -55,7 +57,8 @@ class SettingsHooksTest(unittest.TestCase):
 
     def test_the_guards_of_aa_1024_are_registered(self):
         cmds = " ".join(c for _, c in registered())
-        for name in ("aa-shell-guard.sh", "lane-start-guard.sh", "subagent-guardrails.sh", "pilot-pii-guard.sh"):
+        for name in ("aa-shell-guard.sh", "lane-start-guard.sh", "subagent-guardrails.sh", "pilot-pii-guard.sh",
+                     "stop-open-work.sh"):
             self.assertIn(name, cmds)
 
 
