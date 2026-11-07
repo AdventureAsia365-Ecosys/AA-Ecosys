@@ -117,6 +117,54 @@ class StopOpenWorkTest(unittest.TestCase):
                 "Anh muốn làm **ngay bây giờ** hay **để đầu phiên sau**? Trong lúc chờ, tôi tiếp tục với L15."):
             self.assertIsNone(self.check(text), text)
 
+    def test_approval_context_a_few_paragraphs_up_passes(self):
+        # S272 review pass 3: the cost, DRY RUN, MFA or options sit in a status block, then a blank line, then a
+        # continue question. Crafted by the reviewer, then three real turn-final messages (tails kept).
+        for text in (
+                "Wave thử 3 tour India xong\n- Chi phí: $0,41 (llm_call_log)\n- 0 lỗi, 3/3 qua gate\n\n"
+                "Anh cho em chạy tiếp 47 tour còn lại không?",
+                "DRY RUN xong:\n- 42 dòng shared.job sẽ bị xoá\n- md5 pin: 3f2a...\n\nAnh cho em làm tiếp không?",
+                "Phiên AWS hết hạn:\n```\naws sts get-caller-identity --profile aa365-admin\n```\n"
+                "Chạy xong anh nhắn em.\n\nEm làm tiếp nhé?",
+                "Ước tính: 50 tour × $0,04 = khoảng 2 USD.\nThời gian: 15–30 phút.\n\nEm tiếp tục chạy wave nhé?",
+                "Phương án:\n- A: chạy 50 tour (~$2)\n- B: dừng ở 3 tour\n\nAnh muốn em làm tiếp không?",
+                # dd256404
+                "**Vercel:** đã xoá 5 project cũ và **342/342 preview** cũ hơn 7 ngày.\n\n"
+                "**Cần Nghiệp quyết cho phiên sau:**\n"
+                "- Duyệt chi phí **alarm tồn đọng job: khoảng $1,97/tháng** (6 alarm + 4 metric CloudWatch).\n"
+                "- Xoay **GitHub token** và **mật khẩu RDS master**.\n\n"
+                "Giờ đã gần 23:00. Nghiệp muốn **dừng phiên** để mình chạy nghi thức cuối phiên (log, backlog, "
+                "memory Notion, nháp Jira, root PR, đưa 5 repo về `main` sạch), hay làm tiếp?",
+                # 3880992d: the decisions section is three paragraphs up
+                "## 6. Cần anh quyết\n"
+                "- **Gộp thẻ trùng:** 8 nhóm / 11 thẻ thừa. DRY RUN đã có, việc chỉ chạy khi anh đồng ý.\n"
+                "- **Jev ở `t10_gates`** vẫn chạy chế độ quan sát (258 lời gọi, $0,014). Giữ hay tắt?\n\n"
+                "## 7. Ghi chú\nShare link Vercel của preview #693 tự hết hạn.\n\nMột dòng nữa.\n\n"
+                "Log phiên, memory Notion, Linear, lessons và thư mục audit đã cập nhật. Anh có muốn **dừng phiên "
+                "S234** ở đây không?",
+                # 4fc53f89
+                "### Còn lại\n1. Đưa migration 224 lên: PR → DB Migrate → merge.\n"
+                "2. AA-773, AA-775, rồi **đo vòng r5** (~$1,2).\n"
+                "3. Lô audit chất lượng đầu tiên do Claude chấm.\n\n"
+                "**Nghiệp làm tay:** bật cost allocation tags trong AWS Billing.\n\n"
+                "Nghiệp muốn em làm tiếp (đưa 224 lên rồi tới AA-773, AA-775, r5), hay chốt phiên ở đây?"):
+            self.assertIsNone(self.check(text), text)
+
+    def test_offers_without_approval_context_stay_blocked(self):
+        # the two turn-final messages the pass-3 replay still blocks (3,004 messages): continue-or-stop offers with a
+        # status list above and no cost, approval, MFA or delete in sight (f3f8c58a, dd256404)
+        for text in (
+                "| Việc | Trạng thái |\n|---|---|\n| AA-756: kiểm tay 30 quyết định Jev | Chưa làm |\n"
+                "| AA-695: chạy shadow `a3_same_moment` | Chưa làm |\n\n"
+                "Phiên đã khá dài: 14 PR merge, 6 migration, 2 issue mới đóng. Em đề xuất **kết thúc phiên S224 ở "
+                "đây**. Phần AA-756 và AA-695 chuyển sang S225. Anh muốn kết thúc, hay làm thêm việc nào?",
+                "**Tổng kết phiên đến giờ:** AA-777 ✅, AA-832 ✅, docs TripPlanner ✅.\n\n**Còn trong hàng đợi:**\n"
+                "- **AA-751 (X6):** template bảng job cho mỗi owner, guard deploy Booking.\n"
+                "- **Nhóm portal** đang bị chặn: Vercel chạm trần deploy.\n\n"
+                "Nghiệp muốn **làm tiếp AA-751** hay **dừng phiên**? Nếu dừng, mình sẽ chạy nghi thức cuối phiên: "
+                "log, backlog, memory Notion, nháp Jira, root PR, đưa 5 repo về `main` sạch."):
+            self.assertIsNotNone(self.check(text), text)
+
     def test_block_text_never_pushes_a_paid_run_or_a_delete(self):
         msg = self.check("Anh có muốn em làm tiếp không?")
         self.assertIn("Never start a paid run, a delete", msg)

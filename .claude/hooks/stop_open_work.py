@@ -12,8 +12,10 @@ stop once (exit 2), listing the open items, only when ALL of these hold:
   phiên luôn không?"), or the message ends with a proposal to close ("I can close the session now.", "Đề xuất dừng
   phiên ở đây.");
 - every question of that paragraph is such an offer (any other question is a real choice or clarification);
-- the last paragraph and the line above it carry no approval context: a cost figure or paid run, MFA / an AWS session, a DRY RUN or a
-  delete, an approval word (duyệt, đồng ý, approve), a new issue, or labelled options ((a)/(b), phương án, chọn);
+- the last 3 paragraphs and the last 15 lines carry no approval context: a cost figure or paid run, MFA / an AWS
+  session, a DRY RUN or a delete, an approval word (duyệt, đồng ý, approve), a new issue, or labelled options ((a)/(b),
+  phương án, chọn); and the message has no decisions section ("Cần anh quyết", "Anh quyết giúp", "needs your
+  decision") anywhere;
 - the newest checklist (changed in the last 24 h) has `- [ ]` items without a blocked marker.
 A plain statement that mentions the close is not touched: the critic of the design showed that a nudge on every stop
 trains tag-gaming. `stop_hook_active` (Claude Code sets it when the turn already continues because of a Stop hook)
@@ -67,8 +69,8 @@ OFFER_PROPOSAL = re.compile(
     rf"|(?:đề xuất|đề nghị|xin phép)\s+(?:\w+\s+){{0,2}}{_CLOSE_VI}[^?!]{{0,80}}[.!]?"
     r")\s*$")
 # A choice the user must make: a paid run (any cost figure), MFA / an AWS session, a DRY RUN or a delete, an approval,
-# a new issue (the Linear rule asks first), or labelled options. Anywhere in the last paragraph (or on the line right
-# above it), the message is never blocked (S272 replay: "Thử 3 tour xong: tổng $0.41.\nAnh cho em chạy tiếp không?" was blocked when only the
+# a new issue (the Linear rule asks first), or labelled options. Anywhere in the last 3 paragraphs or 15 lines, the
+# message is never blocked (S272 replay: "Thử 3 tour xong: tổng $0.41.\nAnh cho em chạy tiếp không?" was blocked when only the
 # last line was read).
 APPROVAL_ASK = re.compile(
     r"(?i)\bpaid\b|\bUSD\b|\$\s*\d|\d\s*\$|\bcosts? (?:about|around|roughly|~|\$|\d)|chi phí|\btốn\b|trả (?:phí|tiền)|/tháng|per month|"
@@ -77,6 +79,15 @@ APPROVAL_ASK = re.compile(
     r"\bduyệt|approv|đồng ý|cho phép|\bconsent|"
     r"tạo (?:một |1 |các |\d+ )?issue|(?:create|open) (?:a |an |the |\d+ )?(?:new )?issue|"
     r"\((?:[a-d]|[1-4])\)|\bphương án\b|\boption [a-d1-4]\b|\bchọn\b")
+# A section that hands the user decisions ("## 6. Cần anh quyết", "Cần Nghiệp quyết:", "Anh quyết giúp em ...") makes
+# the whole message a decision ask, wherever the section sits (S272 review: 3880992d, dd256404).
+DECISION_SECTION = re.compile(
+    r"(?i)\bcần (?:anh|nghiệp|tech lead|bạn|sếp)\s+(?:quyết|chốt|duyệt|chọn|xác nhận)"
+    r"|\b(?:anh|nghiệp) (?:quyết|chốt|chọn) giúp"
+    r"|\b(?:needs?|waiting (?:on|for)) (?:your|the tech lead's) (?:decision|approval|yes|call)"
+    r"|\bdecisions? (?:needed|for you)\b")
+CONTEXT_PARAGRAPHS = 3  # approval context counts in the last 3 paragraphs ...
+CONTEXT_LINES = 15  # ... and in the last 15 lines (a status list above a blank line, then the question)
 SENTENCE_END = re.compile(r"(?<=[.?!])\s+|\n+")
 
 
@@ -88,12 +99,14 @@ def last_paragraphs(text: str, n: int) -> list[str]:
 def is_offer_to_stop(text: str) -> bool:
     """True when the last paragraph asks to go on / to close, has no other question, and no approval context."""
     plain = re.sub(r"[*_`]", "", text)
-    paras = last_paragraphs(plain, 2)
+    paras = last_paragraphs(plain, CONTEXT_PARAGRAPHS)
     if not paras:
         return False
-    # the whole last paragraph, plus the line right above it (a result line, then a blank line, then the question)
-    context = paras[-1] + ("\n" + paras[0].splitlines()[-1] if len(paras) == 2 else "")
-    if APPROVAL_ASK.search(context):
+    # Approval context anywhere in the last few paragraphs or lines (S272 review: a status list with the cost, the
+    # DRY RUN result or the MFA command, then a blank line, then "Anh cho em làm tiếp không?" was blocked when only
+    # the line above the question was read), or a decisions section anywhere in the message.
+    context = "\n".join(paras) + "\n" + "\n".join(plain.strip().splitlines()[-CONTEXT_LINES:])
+    if APPROVAL_ASK.search(context) or DECISION_SECTION.search(plain):
         return False
     sentences = [s.strip() for s in SENTENCE_END.split(paras[-1][-1200:]) if s and s.strip()]
     questions = [s for s in sentences if s.endswith("?")]
