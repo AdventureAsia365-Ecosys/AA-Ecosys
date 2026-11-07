@@ -404,7 +404,7 @@ One identity service for the ecosystem: Amazon Cognito in acc2, Essentials plan,
 |---|---|---|
 | CIS staff | WORKFORCE, client `cis-admin` | **Live.** Email one-time code on managed login at `https://staff-auth.lumiguides.it.com` (AA-branded). The CIS BFF runs auth code + PKCE. The CIS API verifies the access token (WORKFORCE issuer only, `client_id` ∈ {cis-admin, breakglass}, `token_use=access`) and resolves the `shared.admin_users` row by `(iss, sub)`; role = highest `cis-*` group. Legacy password login off since AA-816 S2 (2026-10-22; `LEGACY_ADMIN_LOGIN_ENABLED` off by default, ADR 0006a A12). Preview signs in on `aa-cis-preview.lumiguides.it.com` with client `cis-admin-preview`, capped at viewer (A11) |
 | Break-glass | WORKFORCE, client `breakglass` | **Live, disabled at rest.** `admin@adventure.asia`, password + TOTP. Secret `aa-identity/dev/breakglass` is readable only by the MFA admin role; every read, write and token issue alerts |
-| Booking staff | WORKFORCE, clients `booking-staff`, `booking-staff-preview` | **Phase 2, in transition.** The Booking API verifies WORKFORCE access tokens (roles from `cognito:groups`, mirrored from CIS `shared.staff_app_grant`). It still accepts the CIS bridge token (ADR 0004 O1, `aud=booking`) until AA-680 removes it (ADR 0006a A6) |
+| Booking staff | WORKFORCE, client `booking-staff` | **Live.** The Booking API verifies WORKFORCE access tokens only (roles from `cognito:groups`, mirrored from CIS `shared.staff_app_grant`). The CIS bridge token is refused since AA-911 (S271, ADR 0006a A13); the Preview-only `booking-staff-preview` client went with the Vercel retirement (S272) |
 | Content studio users | PARTNER pool (ADR 0006b, MFA) | **Live since the AA-979 P2b cutover.** People re-enrol through a CIS-created, CRM-delivered invitation; CIS exchanges the partner access token for a 15-minute tenant JWT ([ADR 0010a](adr/0010a-content-studio-partner-sign-in.md)). Since the P2b clean-up the studio has no API-key sign-in (`PORTAL_API_KEY_SIGNIN=false`, `/tenant-login` → 308 to the partner sign-in); API keys are for machines only |
 | Agency CRM users | PARTNER pool, AA-Partner web | **Live.** Membership in `crm.member` by `(iss, sub)`, then the CRM permission matrix |
 | AA staff in the CRM | WORKFORCE, client `crm-staff`; groups `crm-platform-admin`, `crm-ops`, `crm-support` | **Live.** The AA staff console in CRM web: ops releases, support access inside a window the agency owner grants, audited break-glass (crm-033) |
@@ -416,8 +416,9 @@ One identity service for the ecosystem: Amazon Cognito in acc2, Essentials plan,
   and `shared.staff_app_grant` (per-app roles) are the source of truth. Only owners write it, from the CIS admin
   Staff page. Each write goes to the DB first, then to Cognito through the CIS task role's allow-list.
   A report-only job `staff_directory_reconcile` compares the two.
-- Apex `lumiguides.it.com` is an A record to Vercel (the `aa-cis-frontend` project redirects it to
-  `aa-cis.lumiguides.it.com`); Cognito requires a parent A record for its custom domains.
+- Apex `lumiguides.it.com` is an alias A record to the shared ALB, whose :443 listener redirects it to
+  `aa-cis.lumiguides.it.com` (AA-911, S272; it pointed at Vercel before); Cognito requires a parent A record for its
+  custom domains.
 
 ## 5. OIDC / CI-CD
 

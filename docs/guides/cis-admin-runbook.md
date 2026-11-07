@@ -190,7 +190,6 @@ During the dev phase the tech lead is the engineer on duty. Normal issues go to 
 - Chat models are refused since 2026-10-29 on the main model account, so **Rewrite (S1)**, **Regenerate** and the
   AI checks fail or wait until a model path is back. Refused jobs are put back in the queue from **AI providers**
   once the provider answers again.
-- The address `aa-cis-preview.lumiguides.it.com` is a test copy of the console for engineers, read-only for staff.
 
 ## Sources (for maintainers)
 

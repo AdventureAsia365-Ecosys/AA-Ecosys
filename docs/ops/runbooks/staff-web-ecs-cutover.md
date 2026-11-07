@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-frontend, aa-booking-admin, aa-cis-infra]
-last_reviewed: 2026-11-06
+last_reviewed: 2026-11-07
 review_every_days: 90
 last_tested: null
 tested_where: null
@@ -35,7 +35,13 @@ What runs where:
 | Image builds and deploys | `Deploy Admin Dev` in AA-CIS-App and in AA-Booking (each its own service) |
 
 The host names do not change (`aa-cis.lumiguides.it.com`, `booking.lumiguides.it.com`), so Cognito callbacks, links
-and bookmarks stay as they are. Until the switch, Vercel serves both hosts.
+and bookmarks stay as they are. Until the switch, Vercel served both hosts.
+
+> [!NOTE]
+> **Status (07/11/2026, S272): every section is done.** Sections 1-3 ran in S271 (06/11/2026); section 4 ran in S271
+> (step 1) and S272 (steps 2-4). Vercel no longer serves any staff host and both Vercel projects are retired, so the
+> Vercel rollbacks below are history: a bad staff web deploy rolls back on ECS ([rollback-ecs](rollback-ecs.md) on
+> `aa-cis-dev-admin` / `aa-booking-dev-admin`, or a revert on the app repo's `main`).
 
 **WAF and the staff, decided before the flip.** On Vercel no rule of the ALB web ACL ever saw staff traffic. After
 the switch it judges each browser's real IP:
@@ -128,34 +134,45 @@ real use: raise `staff_web_rate_limit` (AA-CIS-Infra PR) before the switch. Scre
 (`StaffWebRateLimit` or `GeoBlockNonAllowed` for a staff host) and the cause is not fixed within the hour (a VPN exit
 can be changed at once; a limit or a country needs an AA-CIS-Infra PR).
 
-**Rollback (normal):** `staff_web_dns_on_ecs = false`, merge, Terraform Apply; resolvers follow within 60 s. Vercel
-keeps serving both hosts until the Vercel retirement below.
-
-**Rollback (emergency, when CI or the apply window cannot wait),** MFA admin, one line:
-
-```bash
-ZONE=$(aws route53 list-hosted-zones-by-name --dns-name lumiguides.it.com --max-items 1 --query 'HostedZones[0].Id' --output text --profile aa365-admin) && aws route53 change-resource-record-sets --hosted-zone-id "$ZONE" --profile aa365-admin --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"aa-cis.lumiguides.it.com","Type":"CNAME","TTL":60,"ResourceRecords":[{"Value":"91b6470228dd7980.vercel-dns-017.com"}]}},{"Action":"UPSERT","ResourceRecordSet":{"Name":"booking.lumiguides.it.com","Type":"CNAME","TTL":60,"ResourceRecords":[{"Value":"faa59191f1f73e21.vercel-dns-017.com"}]}}]}'
-```
-
-The Vercel targets are the values in AA-CIS-Infra `dns.tf` (`aa-cis|CNAME`) and `custom_domains_variables.tf`
-(`booking`). Then, before any other Terraform Apply (it would put the ALB back), the PR `staff_web_dns_on_ecs = false`.
+**Rollback to Vercel: retired (S272).** Until the Vercel retirement, the rollback was `staff_web_dns_on_ecs = false`
+(or a one-line Route 53 UPSERT of the two CNAMEs back to their Vercel targets). Section 4 removed the switch, the
+Vercel targets and both Vercel projects: a CNAME to a deleted Vercel project is a takeover risk, so **never** point
+`aa-cis.` or `booking.` back at a `*.vercel-dns-*.com` target. Roll back a bad staff web deploy on ECS instead
+([rollback-ecs](rollback-ecs.md)).
 
 ## 4. After the switch
 
-In this order:
+In this order. Each step records what ran; the evidence is on Linear AA-911.
 
-1. AA-911 bridge retirement (CIS `POST /auth/booking-token` 404, Booking accepts only the WORKFORCE issuer, the
-   booking JWT signing-key secret scheduled for deletion, the three bridge-era `booking.staff_users` rows linked or
-   deactivated).
-2. **Apex off Vercel, before any Vercel project goes.** The `aa-cis-frontend` project claims `lumiguides.it.com` and
-   the apex A record points at Vercel; Cognito needs that A record for the `staff-auth.` and `auth.` custom domains,
-   and an A record to Vercel with no project claiming it is a takeover risk (AA-CIS-Infra `dns.tf`). PR in
-   AA-CIS-Infra: `staff_web_apex_on_alb = true` in `accounts/aa365/terraform.tfvars`. Expect in the plan: one in-place
-   update of `aws_route53_record.apex` (records -> alias to the ALB). Merge, Terraform Apply. Verify:
+1. **Done (S271, 06/11/2026).** AA-911 bridge retirement: CIS `POST /auth/booking-token` answers 404 (CIS #1339
+   deployed), Booking accepts only the WORKFORCE issuer (Booking #202), the three bridge-era `booking.staff_users`
+   rows are linked or deactivated (AA-CIS-Infra #700 + #704 run-script: `deactivated 2, linked 1`,
+   `active_unlinked=0`). The booking JWT signing-key secret is orphan-delete in the secrets register and is scheduled
+   for deletion (7-day recovery window) with the S272 live steps.
+2. **Done (S272, 07/11/2026). Apex off Vercel, before any Vercel project goes.** The `aa-cis-frontend` project claimed
+   `lumiguides.it.com` and the apex A record pointed at Vercel; Cognito needs that A record for the `staff-auth.` and
+   `auth.` custom domains, and an A record to Vercel with no project claiming it is a takeover risk (AA-CIS-Infra
+   `dns.tf`). AA-CIS-Infra PR `staff_web_apex_on_alb = true` (plan: one in-place update of `aws_route53_record.apex`,
+   records -> alias to the ALB), Terraform Apply. Verify:
    `curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' https://lumiguides.it.com/` prints
    `301 https://aa-cis.lumiguides.it.com/`, `dig +short A lumiguides.it.com` prints ALB addresses, and the managed
-   login on `staff-auth.lumiguides.it.com` still opens. Only then remove the apex domain from the Vercel project.
-3. Vercel retirement of `aa-cis-frontend` and `aa-booking-admin`: the `vercel-deploy.yml` workflows, the Preview hosts
-   `aa-cis-preview.` / `booking-preview.` and their WORKFORCE clients, the `aa-booking-admin.vercel.app` callback, the
-   Vercel secret rows of the register, and the Vercel rollback targets above.
-4. Same AA-CIS-Infra PR as step 3 or after it: `staff_web_dns_switch_window = false` (TTLs back to 1800 s / 300 s).
+   login on `staff-auth.lumiguides.it.com` still opens. Only then the apex domain was removed from the Vercel project.
+3. **Done (S272, 07/11/2026). Vercel retirement of `aa-cis-frontend` and `aa-booking-admin`.**
+   - App PRs (AA-CIS-App, AA-Booking): `vercel-deploy.yml`, `frontend/vercel.json` (and Booking's
+     `check_security_headers.sh`) deleted; the post-deploy UI smoke and the visual run moved to `Deploy Admin Dev`;
+     the BFFs and the APIs no longer accept the Preview-only clients (default ids empty).
+   - Every user of the Preview hosts moved to the production staff hosts: the signed-in UI smoke and the visual run
+     (`ui-smoke.yml` / `visual.yml`, only `https://aa-cis.lumiguides.it.com` and `https://booking.lumiguides.it.com`),
+     the Cognito E2E (`e2e-cognito.yml`, no `booking_base_url` input), the Playwright setup (`auth.setup.ts`, no viewer
+     cap check) and the skills `aa-ui-verify` / `aa-ship`. Per-PR UI evidence is the required `Visual (next start)`
+     check (ADR 0019 d23 R7), which needs no deployment.
+   - AA-CIS-Infra PR: the Preview hosts `aa-cis-preview.` / `booking-preview.` (DNS), their WORKFORCE clients
+     `cis-admin-preview` / `booking-staff-preview` (and managed login styles), the `aa-booking-admin.vercel.app`
+     callback of `booking-staff`, the cut-over switch `staff_web_dns_on_ecs`, the apex switch and every Vercel target
+     of a staff name. The two staff records moved to `staff_web_edge.tf` (moved blocks, never recreated).
+   - Then the Vercel projects were deleted, the secret rows of the register flipped (orphan-delete -> deleted), the
+     repo secrets `VERCEL_TOKEN` (AA-CIS-App, AA-Booking), `VERCEL_AUTOMATION_BYPASS_SECRET` (AA-CIS-App), the `e2e`
+     environment secret `BOOKING_PREVIEW_BYPASS` (if present), the `preview-signin` branches, rulesets and labels
+     removed, and the Vercel rollback targets of section 3 retired.
+4. **Done (S272, 07/11/2026), same AA-CIS-Infra PR as step 3:** `staff_web_dns_switch_window = false` (TTLs back to
+   1800 s / 300 s).

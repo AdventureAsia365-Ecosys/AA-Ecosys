@@ -60,13 +60,15 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 
 1. Generate the new value at the source (vendor console for vendor keys). The tech lead writes it: Secrets Manager console,
    the secret, **Retrieve secret value**, **Edit**. The old version stays as `AWSPREVIOUS`.
-2. Update every copy the register lists (for `admin-secret`: GitHub `ADMIN_SECRET` on AA-CIS-App and Vercel
-   `aa-cis-frontend` Production + Preview) - the tech lead, by hand.
+2. Update every copy the register lists (for `admin-secret`: GitHub `ADMIN_SECRET` on AA-CIS-App; the CIS admin on
+   ECS (`aa-cis-dev-admin`) reads the secret itself at task start, so restart it with the services below; the Vercel
+   `aa-cis-frontend` copies went with the project, AA-911 S272) - the tech lead, by hand.
 3. Restart the consumers so they read the new value:
 
    ```bash
    aws ecs update-service --cluster aa-cis-dev-cluster --service aa-cis-dev-api --force-new-deployment --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text # WRITE
    aws ecs update-service --cluster aa-cis-dev-cluster --service aa-cis-dev-worker --force-new-deployment --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text # WRITE
+   aws ecs update-service --cluster aa-cis-dev-cluster --service aa-cis-dev-admin --force-new-deployment --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text # WRITE
    ```
 
 4. Verify: rollout `COMPLETED`, `/health/ready` 200, an admin page that uses the key works; for `jwt-secret` every
@@ -88,11 +90,13 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 - Other logins (`aa_app_user`, Booking, TripPlanner) are not in `set-password`: plan their rotation in AA-880.
 - Rollback: write the previous DSN back and run `set-password` again.
 
-### 3. Cognito app client secrets (`cis-admin`, `booking-staff`, their `-preview` clients, `breakglass`, `crm-staff`, `cis-portal`, `partner-web`, M2M clients)
+### 3. Cognito app client secrets (`cis-admin`, `booking-staff`, `breakglass`, `crm-staff`, `cis-portal`, `partner-web`, M2M clients)
 
 - Every client with a secret is in AA-CIS-Infra `identity.tf` (WORKFORCE and EXTERNAL client maps),
-  `identity_partner.tf` or `identity_m2m.tf`. The secrets live in Terraform state and in Vercel env or Secrets
-  Manager (register rows). Rotation needs a Cognito client secret rotation and an update of every copy in the same
+  `identity_partner.tf` or `identity_m2m.tf`. The secrets live in Terraform state and in Secrets Manager (register
+  rows; the staff admins read `aa-cis/dev/admin-web` / `booking/dev/admin-web`, refilled by AA-CIS-Infra
+  `tools/identity/staff_web_secret.py`, then force a new deployment of that admin service). The `-preview` clients
+  were deleted with the Vercel retirement (AA-911, S272). Rotation needs a Cognito client secret rotation and an update of every copy in the same
   window; sign-in breaks in between. UNTESTED, planned with the AA-816 cutover. Rollback:
   the previous client secret stays valid until it is deleted, if the rotation adds a second secret instead of
   replacing it.

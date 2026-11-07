@@ -6,7 +6,7 @@ type: how-to
 status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
-applies_to: [aa-cis-frontend, aa-cis-api]
+applies_to: [aa-cis-dev-admin, aa-cis-api]
 last_reviewed: 2026-10-28
 review_every_days: 90
 last_tested: 2026-10-23
@@ -18,15 +18,16 @@ related: [OPS-06, OPS-10, SEC-02-rotation, docs/adr/0006a-identity-phase1-amendm
 # Switch off the legacy staff password login (AA-816 cutover)
 
 > [!NOTE]
-> **Both stages are done.** S1 (2026-10-19, S244): Vercel `aa-cis-frontend` Production holds `false`. S2
+> **Both stages are done.** S1 (2026-10-19, S244): Vercel `aa-cis-frontend` Production held `false`. S2
 > (2026-10-22, S247, CIS #922): the **code default is now off** in the API and the BFF, so every host refuses
-> password sessions, Preview included; previews sign in through Cognito on the fixed Preview host (ADR 0006a A11,
-> A12). Live check 2026-10-23 (S248): api task definition without the variable, `POST /api/auth/login` → 404,
+> password sessions (ADR 0006a A12). Since the AA-911 Vercel retirement (2026-11-07, S272) the BFF runs on ECS
+> (`aa-cis-dev-admin`), whose task definition does not set the flag, and the Vercel project and its Preview host are
+> gone (ADR 0006a A13). Live check 2026-10-23 (S248): api task definition without the variable, `POST /api/auth/login` → 404,
 > an HS256-shaped token on `/auth/verify-admin` → 401 "Password sessions are switched off; sign in again".
 > This page is now the **rollback** reference; steps 1-3 below are the history of S1.
 
 The flag is the legacy admin login flag, `LEGACY_ADMIN_LOGIN_ENABLED`. Its name contains underscores, so the tech
-lead edits it by hand (Vercel dashboard, or Terraform in VSCode). Agents do not write commands that set it.
+lead edits it by hand (Terraform in VSCode). Agents do not write commands that set it.
 
 ## What the flag does (ADR 0006a A6)
 
@@ -37,10 +38,10 @@ lead edits it by hand (Vercel dashboard, or Terraform in VSCode). Agents do not 
   `/auth/verify-admin`.
 - It does **not** gate `/auth/admin-login` or `/auth/booking-token`: Booking staff still sign in through them until
   AA-680 (Phase 2).
-- It is read in two places: the BFF (Vercel `aa-cis-frontend` environment, per target; Production holds `false`)
-  and the API (ECS task definition; not set, so off). The API serves Production and Preview alike.
-- History: S1 turned off only the Production BFF (the tech lead's call N5); S2 flipped the code default once Preview had
-  a Cognito sign-in (ADR 0006a A11).
+- It is read in two places: the BFF (the `aa-cis-dev-admin` ECS task definition, AA-CIS-Infra
+  `modules/environment/staff_web.tf`; not set, so off) and the API (the api task definition; not set, so off).
+- History: S1 turned off only the Production BFF on Vercel (the tech lead's call N5); S2 flipped the code default once
+  Preview had a Cognito sign-in (ADR 0006a A11); the Vercel copy of the flag went with the project (S272).
 
 ## Preconditions (readiness)
 
@@ -62,9 +63,9 @@ lead edits it by hand (Vercel dashboard, or Terraform in VSCode). Agents do not 
    Verify: save the output under `docs/audits/<date>-S<nnn>-aa816-cutover/`.
    Rollback: none - read-only.
 
-2. The tech lead sets the flag to `false` on Vercel `aa-cis-frontend`, **Production** target only (dashboard, Settings,
-   Environment Variables), then redeploys production (Vercel env changes apply only to new deployments): dispatch
-   `vercel-deploy.yml` on AA-CIS-App with target production, or **Redeploy** in the dashboard. # WRITE
+2. (History, S1 on Vercel.) The tech lead set the flag to `false` on Vercel `aa-cis-frontend`, **Production** target
+   only, then redeployed production. Since the Vercel retirement the BFF flag lives in the `aa-cis-dev-admin` task
+   definition (AA-CIS-Infra), and a change reaches the task on the next `Deploy Admin Dev` run. # WRITE
    Expected: a new production deployment `READY`.
    Rollback: step 5.
 

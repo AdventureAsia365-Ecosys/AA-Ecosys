@@ -174,7 +174,9 @@ Brings decision 10's custom domain forward and replaces decision 12's "branding 
   - The issuer is unchanged: it is the pool endpoint, not the domain.
 - **Apex:** Cognito needs an A record on the parent name. The apex `lumiguides.it.com` is now an A record to
   Vercel (`76.76.21.21`), claimed by the `aa-cis-frontend` project, which redirects it to
-  `aa-cis.lumiguides.it.com`.
+  `aa-cis.lumiguides.it.com`. *Update 07/11/2026 (S272, AA-911):* the apex is now an alias A record to the shared ALB,
+  whose :443 listener redirects it to `aa-cis.` (AA-CIS-Infra `dns.tf`, `alb_rules.tf`); the Vercel claim is gone with
+  the project (A13).
 - **DNS:** the custom-domain records are Route 53 alias records (`dns.tf`, `identity.tf`), not Namecheap.
 - **EXTERNAL:** `auth.lumiguides.it.com` exists too, but EXTERNAL keeps the prefix URL until it has its own style.
 - **Branding:** `aws_cognito_managed_login_branding` for the three WORKFORCE clients, now that Infra runs AWS
@@ -617,6 +619,9 @@ mailbox or Google account". That is too strong.
 
 ### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)
 
+> **Superseded by A13 (07/11/2026, S272).** The fixed Preview hosts, the Preview-only clients and the Vercel projects
+> are retired. The text below is the record of what ran from S247 to S272.
+
 Settles the Preview half of the A6 open item: previews get a Cognito sign-in instead of keeping the password form.
 
 - **Host and client:** `aa-cis-preview.lumiguides.it.com` (a Vercel domain of `aa-cis-frontend`) is the only
@@ -679,8 +684,13 @@ A11 Preview design as the way staff sign in outside Production.
   CIS routes removed -> staff rows script -> secret deletion.
 - **Still open (A10 family):** the E2E mailbox exceptions stay until go-live, as decided in S265.
 - **Follow-up:** the Booking endpoint tests still sign in with a test-only bridge issuer; moving them to WORKFORCE
-  tokens lets the bridge profile code be deleted. The Preview hosts and Preview-only clients of A11 go with the
-  Vercel retirement.
+  tokens lets the bridge profile code be deleted.
+- **Closing line (07/11/2026, S272, Vercel retirement; root runbook `staff-web-ecs-cutover.md` section 4):** the
+  apex points at the shared ALB; the Vercel projects `aa-cis-frontend` and `aa-booking-admin`, their deploy workflows,
+  the Preview hosts `aa-cis-preview.` / `booking-preview.`, the WORKFORCE clients `cis-admin-preview` /
+  `booking-staff-preview` and the `aa-booking-admin.vercel.app` callback are removed. Both APIs accept no preview
+  client by default (the viewer / read-only cap code stays for a client set through the env). Per-PR UI evidence is
+  `Visual (next start)` in CI; the signed-in smoke runs on the production staff hosts after each `Deploy Admin Dev`.
 
 ## Phase 1 status (18/10/2026)
 
@@ -712,8 +722,8 @@ A11 Preview design as the way staff sign in outside Production.
   - The reconcile job is a detective control only, and A8 remains a real gap until an alarm exists.
   - Break-glass depends on one IAM role name, so renaming that role makes the secret unreadable until the policy
     changes.
-  - The apex domain now depends on a Vercel project claim. An unclaimed apex A record to Vercel would be a
-    takeover risk.
+  - The apex domain depended on a Vercel project claim until S272 (an unclaimed apex A record to Vercel would have
+    been a takeover risk); since the AA-911 Vercel retirement it is an alias to the shared ALB.
 
 ## Links
 
