@@ -111,6 +111,11 @@ sent with `--path-as-is` so curl does not resolve them) also `HTTP/2 202` with `
 resolves `%2e` to the model route, so the web ACL must match it too: every path match URL-decodes, then normalizes
 (AA-CIS-Infra `tripplanner_web_edge.tf`). A 200 or a model answer here means that transformation is missing: stop.
 
+Leading dot segments: `/%2e%2e/api/browse/search?q=temple` and `/%2e%2e/api/trip/narrate` (POST `{}`), both with
+`--path-as-is`. AWS `NORMALIZE_PATH` keeps a back-reference at the start of the path, so the CloudFront web ACL does
+not match these; the regional ALB web ACL (CommonRuleSet, `GenericLFI_URIPATH` in block) is expected to answer 403.
+Expect 202 with `x-amzn-waf-action: challenge` or 403. A 200 or a model answer means stop.
+
 Model-path rate rule (one IP): `for i in $(seq 1 150); do curl -s -o /dev/null -w '%{http_code}\n' --resolve $H:443:$IP "https://$H/api/browse/search?q=x$i"; done | sort | uniq -c`,
 wait 60 seconds, run one more request. Expect: 202 lines first, then 429 once the rule has counted the window (the last
 request answers 429 with `{"error":"rate_limited"}`). The same IP is blocked on the model paths for up to 5 minutes.
