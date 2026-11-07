@@ -25,6 +25,8 @@ PROTECTED = {
 }
 
 REFUSED = [
+    "SELECT count(*), md5(string_agg(t::text, ',')) FROM crm.traveler t",   # whole-row fingerprint (S271)
+    "SELECT md5(t::text) FROM crm.traveler t",
     "SELECT email FROM crm.traveler",
     "select t.display_name, t.status from crm.traveler t where t.status = 'active'",
     "SELECT * FROM crm.traveler",
@@ -81,6 +83,9 @@ REFUSED = [
     "SELECT count(*) FROM crm.traveler c WHERE c::text = ''",
 ]
 ALLOWED = [
+    # AA-1024 G21: the DRY RUN pin snippet (ids and timestamps, never the row)
+    "SELECT count(*), md5(string_agg(traveler_id::text || updated_at::text, ',' ORDER BY traveler_id)) "
+    "FROM crm.traveler WHERE status = 'stale'",
     "SELECT count(*) AS n FROM crm.traveler",
     "SELECT count(DISTINCT email) AS n FROM crm.traveler",
     "SELECT count(*) FILTER (WHERE email IS NOT NULL) AS n FROM crm.traveler",
@@ -344,6 +349,37 @@ class CommandTest(unittest.TestCase):
         self.assertEqual(code, 2)
         self.assertIn("the guard failed (RecursionError)", err)
         self.assertEqual(run("git status")[0], 0)
+
+
+class CheckModeTest(unittest.TestCase):
+    """AA-1024 G21: --check tells a lane whether the orchestrator's run of a script would be refused."""
+
+    def test_check_files(self):
+        with tempfile.TemporaryDirectory() as d:
+            bad = Path(d) / "dry_bad.py"
+            bad.write_text('Q = "SELECT count(*), md5(string_agg(t::text, \',\')) FROM crm.traveler t"\n')
+            good = Path(d) / "dry_ok.py"
+            good.write_text('Q = ("SELECT count(*), md5(string_agg(traveler_id::text || updated_at::text, \',\' "\n'
+                            '     "ORDER BY traveler_id)) FROM crm.traveler")\n')
+            out = io.StringIO()
+            with mock.patch("sys.stdout", out):
+                self.assertEqual(g.check_files([str(good)], PROTECTED), 0)
+                self.assertEqual(g.check_files([str(good), str(bad)], PROTECTED), 2)
+                self.assertEqual(g.check_files([str(Path(d) / "missing.py")], PROTECTED), 2)
+            self.assertIn("dry_ok.py: OK", out.getvalue())
+            self.assertIn("dry_bad.py: REFUSED", out.getvalue())
+            self.assertIn("md5(string_agg(id::text", out.getvalue())
+
+    def test_cli(self):
+        with tempfile.TemporaryDirectory() as d:
+            ok = Path(d) / "a.sql"
+            ok.write_text("SELECT 1;\n")
+            r = subprocess.run([sys.executable, str(HERE / "pilot_pii_guard.py"), "--check", str(ok)],
+                               capture_output=True, text=True, timeout=60)
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            r = subprocess.run([sys.executable, str(HERE / "pilot_pii_guard.py"), "--check"], capture_output=True,
+                               text=True, timeout=60)
+            self.assertEqual(r.returncode, 2)
 
 
 class ReferenceTest(unittest.TestCase):

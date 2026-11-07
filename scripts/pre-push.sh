@@ -24,6 +24,10 @@
 #
 # Install: scripts/install-hooks.sh. Bypass one push: git push --no-verify. Remove: git config --unset core.hooksPath.
 set -euo pipefail
+# S272: never inherit git's repo-local variables (GIT_DIR, GIT_WORK_TREE, GIT_INDEX_FILE, ...). A hook gets them from
+# git; a test below that runs git in a temporary repo would then act on this repo. The repo is found from the
+# working directory instead (.githooks/pre-push cds to the top level first).
+unset $(git rev-parse --local-env-vars)
 
 SELF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 MODE=fast
@@ -325,6 +329,10 @@ self_test() {
   rc=0; got=$(printf '%s\n' "$del" | bash "$SELF" --hook origin self-test 2>&1) || rc=$?
   if [ "$rc" = 0 ] && ! grep -q '^---- ' <<<"$got"; then ok "hook end to end: deletion only exits 0, no check run"
   else bad "hook end to end: rc=$rc output: $got"; fi
+  # S272: git's repo-local variables are gone (a test that makes a temporary repo must not reach this one)
+  got=$(env | grep -E "^($(git rev-parse --local-env-vars | paste -sd"|" -))=" || true)
+  if [ -z "$got" ]; then ok "no GIT_DIR / GIT_WORK_TREE / GIT_INDEX_FILE in the environment"
+  else bad "git repo-local variables still set: $(cut -d= -f1 <<<"$got" | paste -sd" " -)"; fi
   echo "self-test: $((n - fails))/$n passed"
   [ "$fails" = 0 ]
 }

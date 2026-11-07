@@ -17,6 +17,15 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import aa_shell_guard as g  # noqa: E402
 
+# S272: a git hook (pre-push) exports GIT_DIR and friends; a git command run in a temporary repo below would then act
+# on the real repo (a hook-run test once set core.bare, a fake identity and refs in an app clone). Drop git's
+# repo-local variables for this whole test process (`git rev-parse --local-env-vars`; test_git_env_isolation.py).
+for _git_var in ("GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_CONFIG", "GIT_CONFIG_PARAMETERS", "GIT_CONFIG_COUNT",
+                 "GIT_OBJECT_DIRECTORY", "GIT_DIR", "GIT_WORK_TREE", "GIT_IMPLICIT_WORK_TREE", "GIT_GRAFT_FILE",
+                 "GIT_INDEX_FILE", "GIT_NO_REPLACE_OBJECTS", "GIT_REPLACE_REF_BASE", "GIT_PREFIX", "GIT_SHALLOW_FILE",
+                 "GIT_COMMON_DIR"):
+    os.environ.pop(_git_var, None)
+
 NO_PROC = Path("/nonexistent-proc")  # memory unreadable: RAM-1 stays quiet in the rule tests
 
 
@@ -144,8 +153,28 @@ class ShipTest(unittest.TestCase):
             "for n in 1349 1350; do python3 tools/github/ship_merge.py cis#$n; done",
             "python3 tools/github/ship_merge.py cis#1 && python3 tools/github/ship_merge.py cis#2",
             "while read n; do tools/github/ship_merge.py cis#$n; done < prs.txt",
+            # a merge in the body of a loop that follows another loop
+            "for u in a b; do curl -s $u; done; for n in 1 2; do python3 tools/github/ship_merge.py cis#$n; done",
+            # nested: the merge sits in the inner loop
+            "for r in a b; do for n in 1 2; do python3 tools/github/ship_merge.py $r#$n; done; done",
+            "until python3 tools/github/ship_merge.py cis#1; do sleep 60; done",
         ):
             self.assertEqual(rule(cmd), "SHIP-1", cmd)
+
+    def test_one_merge_beside_a_loop_passes(self):
+        # S272 review: replayed orchestrator one-liners (06/11) that merge once, then verify in a loop, or wait for
+        # checks in a loop, then merge once. The merge is outside every loop body.
+        for cmd in (
+            "python3 tools/github/ship_merge.py 'AA-CIS-App 1344' 2>&1 | tail -1; for s in aa-cis-dev-api "
+            "aa-cis-dev-worker; do aws ecs describe-services --cluster aa-cis-dev-cluster --services $s "
+            "--query 'services[0].deployments[0].rolloutState' --output text; done; "
+            "curl -s https://api-cis.lumiguides.it.com/health",
+            "for x in 'AA-CIS-App 1343' 'AA-Booking 203'; do gh pr checks $n --watch; done; "
+            "python3 tools/github/ship_merge.py 'AA-CIS-App 1343' 'AA-Booking 203'",
+            "python3 tools/github/ship_merge.py cis#1344 && for u in a b; do curl -s $u; done",
+            "while ! gh pr checks 5 >/dev/null; do sleep 30; done\npython3 tools/github/ship_merge.py root#5",
+        ):
+            self.assertIsNone(rule(cmd), cmd)
 
     def test_ship_tools_and_reads_pass(self):
         for cmd in (
@@ -207,6 +236,194 @@ class ShipTest(unittest.TestCase):
                 g.ROOT = old
 
 
+class EcsExecTest(unittest.TestCase):
+    """ECS-1 (AA-1024 G3): raw ECS exec loses output; tools/ecs/ecsx.sh is the way."""
+
+    def test_refused(self):
+        for cmd in (
+            "aws ecs execute-command --cluster c --task $T --container api --interactive --command \"sh -c 'x'\"",
+            "aws --profile aa365-admin --region us-west-1 ecs execute-command --cluster c --task t --command ls",
+            "timeout 90 aws ecs execute-command --cluster c --task t --command ls --profile p",
+            "bash -c 'aws ecs execute-command --cluster c --task t --command ls'",
+            "AA_RAM_OVERRIDE=1 aws ecs execute-command --cluster c --task t --command ls",
+        ):
+            self.assertEqual(rule(cmd), "ECS-1", cmd)
+
+    def test_near_misses_pass(self):
+        for cmd in (
+            "aws ecs describe-services --cluster c --services s",
+            "aws ecs list-tasks --cluster c --service-name s --query 'taskArns[0]'",
+            "grep -n 'aws ecs execute-command' docs/ops/runbooks/ecs-exec-s3-mediated.md",
+            "cat tools/ecs/ecsx_local.py",
+            "echo \"never aws ecs execute-command by hand\"",
+            "tools/ecs/ecsx.sh .tmp-session/S999/check.py LIMIT=5",
+            "AA_ECSX_BYPASS=1 aws ecs execute-command --cluster c --task t --command ls",
+        ):
+            self.assertIsNone(rule(cmd), cmd)
+
+    def test_scripts_that_exec_are_refused(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            s = root / ".tmp-session" / "S999"
+            s.mkdir(parents=True)
+            (s / "one.sh").write_text("#!/bin/bash\nT=$(aws ecs list-tasks)\naws ecs execute-command --task $T\n")
+            (s / "one.py").write_text("import subprocess\nsubprocess.run(['aws', 'ecs', 'execute-command'])\n")
+            (s / "note.sh").write_text("#!/bin/bash\n# aws ecs execute-command was the old way\necho hi\n")
+            old = g.ROOT
+            g.ROOT = root
+            try:
+                self.assertEqual(rule("bash .tmp-session/S999/one.sh", cwd=root), "ECS-1")
+                self.assertEqual(rule("python3 .tmp-session/S999/one.py", cwd=root), "ECS-1")
+                self.assertIsNone(rule("bash .tmp-session/S999/note.sh", cwd=root))
+                self.assertIsNone(rule("cat .tmp-session/S999/one.sh", cwd=root))
+                self.assertIsNone(rule("AA_ECSX_BYPASS=1 bash .tmp-session/S999/one.sh", cwd=root))
+            finally:
+                g.ROOT = old
+
+    def test_scripts_that_only_mention_the_command_pass(self):
+        # S272 review: a helper that prints the fallback was refused as a raw ECS exec
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            s = root / ".tmp-session" / "S272-x"
+            s.mkdir(parents=True)
+            (s / "helper.py").write_text(
+                'print("If ecsx fails, the fallback is: aws ecs execute-command --cluster c --task t")\n')
+            (s / "helper.sh").write_text('#!/bin/bash\necho "fallback: aws ecs execute-command --cluster c"\n')
+            (s / "shell.py").write_text(
+                "import subprocess\nsubprocess.run(f\"aws ecs execute-command --task {t}\", shell=True)\n")
+            (s / "later.py").write_text(
+                "import subprocess\ncmd = f\"aws ecs execute-command --task {t}\"\nsubprocess.run(cmd, shell=True)\n")
+            (s / "argv.py").write_text("import subprocess\nsubprocess.run([\n    'aws', 'ecs', 'execute-command',\n"
+                                       "    '--task', t])\n")
+            (s / "split.py").write_text("import shlex, subprocess\ncmd = f\"timeout 900 aws ecs execute-command "
+                                        "--task {t}\"\nsubprocess.run(shlex.split(cmd))\n")
+            # S272 review (ECS-1 string literal): a message kept in a variable, or a runner on an echo, is no call
+            (s / "msg.py").write_text("HELP = \"If ecsx fails: aws ecs execute-command --cluster c\"\nprint(HELP)\n"
+                                      "msg = f\"run aws ecs execute-command --task {t} by hand\"\nlog.info(msg)\n")
+            (s / "echo.py").write_text("import subprocess\nsubprocess.run(\"echo aws ecs execute-command\", "
+                                       "shell=True)\n")
+            old = g.ROOT
+            g.ROOT = root
+            try:
+                self.assertIsNone(rule("python3 .tmp-session/S272-x/helper.py", cwd=root))
+                self.assertIsNone(rule("bash .tmp-session/S272-x/helper.sh", cwd=root))
+                self.assertIsNone(rule("python3 .tmp-session/S272-x/msg.py", cwd=root))
+                self.assertIsNone(rule("python3 .tmp-session/S272-x/echo.py", cwd=root))
+                for name in ("shell.py", "later.py", "argv.py", "split.py"):
+                    self.assertEqual(rule(f"python3 .tmp-session/S272-x/{name}", cwd=root), "ECS-1", name)
+            finally:
+                g.ROOT = old
+
+
+WS = Path("/home/nghiep/projects/AA-Ecosys")  # the workspace root a session runs in (no file access needed)
+
+
+class WorktreeTest(unittest.TestCase):
+    """WT-1 (G2): a worktree path, resolved the way git resolves it, must be <workspace>/.tmp-session/wt/<name>."""
+
+    def test_refused(self):
+        for cmd in (
+            "git -C infra/AA-CIS-Infra worktree add .tmp-session/wt/s9-x -b feat/x origin/main",
+            "git worktree add -b feat/x ../wt-x origin/main",
+            "git -C apps/AA-CIS-App worktree add --detach wt/x",
+            "git worktree add -q /tmp/x origin/main",
+            "git -C $REPO worktree add wt/x origin/main",
+            "cd apps/AA-Booking && git worktree add .tmp-session/wt/s9-z origin/main",
+            # S272 review: the S247 child-repo shape through ~, a variable, a quoted path and pushd
+            "cd ~/projects/AA-Ecosys/apps/AA-CIS-App && git worktree add .tmp-session/wt/s272-l9-x -b fix/x origin/main",
+            "cd \"$CIS\" && git worktree add .tmp-session/wt/s272-l9-x -b fix/x origin/main",
+            "cd $CIS && git worktree add .tmp-session/wt/s272-l9-x -b fix/x origin/main",
+            "pushd apps/AA-CIS-App && git worktree add .tmp-session/wt/s272-l9-x -b fix/x origin/main",
+            "cd \"$CIS\" && cd sub && git worktree add .tmp-session/wt/s272-l9-x origin/main",
+        ):
+            self.assertEqual(rule(cmd, cwd=WS), "WT-1", cmd)
+
+    def test_near_misses_pass(self):
+        base = f"{WS}/.tmp-session/wt"
+        for cmd in (
+            f"git -C apps/AA-CIS-App worktree add {base}/s272-l8-x -b feat/x origin/main",
+            f"git worktree add -b feat/x -q {base}/s272-l8-y origin/main",
+            "git -C apps/AA-Booking worktree add $W -b feat/x origin/main",
+            "git worktree add \"$WT\" origin/main",
+            "git worktree list --porcelain",
+            "git worktree remove .tmp-session/wt/s9-x",
+            "grep -n 'git worktree add wt' x.md",
+            "git worktree add .tmp-session/wt/s9-rel -b x origin/master",
+            "cd infra/AA-CIS-Infra && git worktree add -q ../../.tmp-session/wt/s9-y -b x origin/main",
+            "git -C apps/AA-Partner worktree add ../../.tmp-session/wt/s9-p origin/main",
+            # absolute lane paths pass from any directory, readable or not
+            f"cd \"$CIS\" && git worktree add {base}/s272-l9-x -b fix/x origin/main",
+            f"pushd apps/AA-CIS-App && git worktree add {base}/s272-l9-x -b fix/x origin/main && popd",
+            f"cd ~ && git -C {WS}/apps/AA-CIS-App worktree add {base}/s272-l9-y origin/main",
+        ):
+            self.assertIsNone(rule(cmd, cwd=WS), cmd)
+
+
+class BackgroundTest(unittest.TestCase):
+    """BG-1 (G2): a background job must keep its output somewhere readable."""
+
+    def test_refused(self):
+        for cmd in (
+            "python3 long.py >/dev/null 2>&1 &",
+            "uvicorn app:app > /dev/null 2>&1 & echo started",
+            "node server.js &>/dev/null &",
+            "nohup python3 long.py > /dev/null 2>&1",
+            "setsid ./run.sh >/dev/null 2>/dev/null &",
+            "(bash .tmp-session/S999/wave.sh > /dev/null 2>&1 &)",
+            "cd site && python3 -m http.server 8765 >/dev/null 2>&1 & echo $! > srv.pid",
+            "cd apps/AA-CIS-App/frontend && npx next dev -p 3005 >/dev/null 2>&1 &",
+            "for u in a b; do curl -s https://x/$u >/dev/null 2>&1 & done; wait; uvicorn app >/dev/null 2>&1 &",
+        ):
+            self.assertEqual(rule(cmd), "BG-1", cmd)
+
+    def test_near_misses_pass(self):
+        for cmd in (
+            "mkdir -p x >/dev/null 2>&1 && cp a b",
+            "command -v gitleaks >/dev/null 2>&1 || echo none",
+            "python3 long.py > .tmp-session/S999/long.log 2>&1 &",
+            "nohup python3 long.py > .tmp-session/S999/long.log 2>&1 &",
+            "nohup x > a.log 2>&1 && cat y >/dev/null",
+            "pg_ctl start -l /tmp/pg.log 2>/dev/null &",
+            "echo 'cmd >/dev/null 2>&1 &'",
+            "(long.sh > .tmp-session/S999/a.log 2>&1; echo rc=$? >> .tmp-session/S999/a.log) </dev/null >/dev/null 2>&1 &",
+            # S272 review: a parallel warm-up the same command collects with a bare wait
+            "for u in a b c; do curl -s https://api-cis.lumiguides.it.com/$u >/dev/null 2>&1 & done; wait",
+            "curl -s https://x/a >/dev/null 2>&1 & curl -s https://x/b >/dev/null 2>&1 &\nwait",
+        ):
+            self.assertIsNone(rule(cmd), cmd)
+
+
+class TerraformTest(unittest.TestCase):
+    """TF-1 (G2): terraform apply only from main, never from a lane worktree."""
+
+    def test_refused_in_a_lane_worktree(self):
+        wt = f"{g.ROOT}/.tmp-session/wt/s999-lane-infra"
+        for cmd in (f"terraform -chdir={wt}/accounts/aa365 apply plan.tfplan",
+                    f"cd {wt}/accounts/aa365 && terraform apply -auto-approve",
+                    f"terraform -chdir={wt} destroy",
+                    # S272 review: env -u took AWS_PROFILE as the program
+                    f"env -u AWS_PROFILE terraform -chdir={wt}/accounts/aa365 apply tfplan",
+                    f"env --unset AWS_PROFILE -C /tmp terraform -chdir={wt} apply tfplan",
+                    f"nice -n 10 terraform -chdir={wt} apply tfplan"):
+            self.assertEqual(rule(cmd), "TF-1", cmd)
+        self.assertEqual(rule("terraform apply", cwd=Path(wt)), "TF-1")
+
+    def test_refused_off_main(self):
+        with tempfile.TemporaryDirectory() as d:
+            subprocess.run(["git", "init", "-q", "-b", "feat/x", d], check=True)
+            self.assertEqual(rule("terraform apply plan.tfplan", cwd=Path(d)), "TF-1")
+            self.assertIsNone(rule("terraform plan -out plan.tfplan", cwd=Path(d)))
+        with tempfile.TemporaryDirectory() as d:
+            subprocess.run(["git", "init", "-q", "-b", "main", d], check=True)
+            self.assertIsNone(rule("terraform apply plan.tfplan", cwd=Path(d)))
+
+    def test_plans_and_reads_pass(self):
+        wt = f"{g.ROOT}/.tmp-session/wt/s999-lane-infra"
+        for cmd in (f"terraform -chdir={wt} plan", f"cd {wt} && terraform validate", "terraform fmt -check",
+                    "grep -n 'terraform apply' README.md"):
+            self.assertIsNone(rule(cmd), cmd)
+
+
 class RamTest(unittest.TestCase):
     def fake_proc(self, d: Path, avail_mib: int, procs: list[tuple[int, str, int]]) -> Path:
         (d / "meminfo").write_text(f"MemTotal: 10000000 kB\nMemAvailable: {avail_mib * 1024} kB\n")
@@ -221,9 +438,18 @@ class RamTest(unittest.TestCase):
         heavy = ["npx next build", "NODE_OPTIONS=--max-old-space-size=2048 npm run build", "npm ci",
                  "npx playwright test --project smoke", "npx vitest run", "npx tsc --noEmit", "docker build .",
                  "pytest tests/unit -q", "python -m pytest -q", "pytest -n 4 tests/unit/test_a.py",
-                 "node tools/uat/run_scenario.cjs"]
+                 "node tools/uat/run_scenario.cjs", "git push -u origin feat/x", "git -C /w/cis push origin b",
+                 "tools/github/as-app.sh --repos AA-CIS-App -- git -C /w push -q -u origin b",
+                 # S272 review: without `--` the words after the helper are still the command
+                 "tools/github/as-app.sh git push origin HEAD",
+                 "tools/github/as-app.sh --repos AA-CIS-App git push origin HEAD",
+                 "bash scripts/pre-push.sh --full", "python3 tools/github/ship_open_prs.py wf_1",
+                 "python3 tools/github/ship_wave.py cis#1 cis#2"]
         light = ["pytest -x -q tests/unit/test_a.py", "python3 -m pytest tests/unit/test_a.py::test_b",
-                 "npm run lint", "node script.js", "git status", "python3 -m unittest discover -s tools"]
+                 "npm run lint", "node script.js", "git status", "python3 -m unittest discover -s tools",
+                 "git push --no-verify origin b", "git push --dry-run origin b", "git push origin --delete b",
+                 "git push origin :b", "bash scripts/pre-push.sh --self-test", "scripts/pre-push.sh --plan",
+                 "python3 tools/github/ship_wave.py --dry-run cis#1", "git log --oneline"]
         for c in heavy:
             self.assertTrue(g.heavy_command(c.split()), c)
         for c in light:
@@ -241,6 +467,20 @@ class RamTest(unittest.TestCase):
             self.assertIsNone(g.check("pytest -x tests/unit/test_one.py", proc=proc))
             self.assertIsNone(g.check("git status", proc=proc))
             self.assertIsNone(g.check("AA_RAM_OVERRIDE=1 npx next build", proc=proc))
+
+    def test_push_counts_as_heavy_and_a_running_hook_counts_as_running(self):
+        # S272: a CIS push ran its pre-push hook (about 5,000 unit tests) while 5 lanes ran, and the VM died
+        with tempfile.TemporaryDirectory() as d:
+            proc = self.fake_proc(Path(d), 1800, [(301, "bash /w/cis/scripts/pre-push.sh --hook origin u", 20),
+                                                  (302, "/usr/bin/python3 -m pytest tests/unit", 1400)])
+            r = g.check("git -C /w/cis push -u origin feat/x", proc=proc)
+            self.assertEqual(r.rule, "RAM-1")
+            self.assertIn("pre-push hook", r.detail)
+            self.assertIsNone(g.check("git -C /w/cis push --no-verify origin feat/x", proc=proc))
+            self.assertIsNone(g.check("AA_RAM_OVERRIDE=1 git push origin feat/x", proc=proc))
+        with tempfile.TemporaryDirectory() as d:
+            proc = self.fake_proc(Path(d), 6000, [])
+            self.assertIsNone(g.check("git push origin feat/x", proc=proc))
 
     def test_busy_machine_refuses_with_three_heavy_running(self):
         with tempfile.TemporaryDirectory() as d:

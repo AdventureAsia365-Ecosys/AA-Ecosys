@@ -10,6 +10,12 @@ For containers whose task role cannot write the bronze bucket (Booking, CRM), th
             offset, length and CRC, prints the bytes, and asks again for anything the SSM terminal dropped.
   4. clean  after the .done marker and the last byte, the /tmp files are removed.
 
+AA-1024 G3: a start the SSM session lost before the runner detached (S269: .out 0 bytes, no .done, no process) shows
+as state "nostart" (no pid claim); poll() starts the run again ONCE (the claim makes a double start impossible). A run
+whose process died without a result ("dead": a deploy, OOM or crash) stops the wait at once instead of after
+ECSX_TIMEOUT. Every byte printed is also written to .tmp-session/ecsx/<run id>.out (ECSX_OUT_DIR), whose path is
+printed at the end, so a long result survives a cut terminal (S267, S268).
+
 Every exec call is bounded by a timeout (an SSM session can hang with no output, lesson log S253) and runs in its own
 process group, so a cut call takes its session-manager-plugin with it.
 
@@ -36,7 +42,8 @@ HERE = Path(__file__).resolve().parent
 RUNNER = HERE / "ecsx_runner.py"
 VAR_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*=[A-Za-z0-9_.:,/@+-]*$")
 ID_RE = re.compile(r"^[A-Za-z0-9_-]+$")
-CHUNK_RE = re.compile(r"ECSX_CHUNK (\d+) (\d+) (-?\d+) (run|missing|rc=-?\d+) ([0-9a-f]{8}) ([A-Za-z0-9+/=]+|-)")
+CHUNK_RE = re.compile(
+    r"ECSX_CHUNK (\d+) (\d+) (-?\d+) (run|missing|nostart|dead|rc=-?\d+) ([0-9a-f]{8}) ([A-Za-z0-9+/=]+|-)")
 # Python code run with `python3 -c "..."` inside `sh -c '...'`: no quotes, $, backslash or backtick allowed in it.
 FETCH_PY = ("import sys,urllib.request as u;a=sys.argv[1:];"
             "[u.urlretrieve(a[i],a[i+1]) for i in range(0,len(a),2)]")
@@ -47,6 +54,13 @@ VERIFY_PY = ("import sys,hashlib,pathlib;a=sys.argv[1:];"
 
 def env_int(name: str, default: int) -> int:
     return int(os.environ.get(name, default))
+
+
+def out_file(run_id: str) -> Path:
+    """Local copy of a run's output: <repo>/.tmp-session/ecsx/<run id>.out (or ECSX_OUT_DIR)."""
+    d = Path(os.environ.get("ECSX_OUT_DIR") or HERE.parents[1] / ".tmp-session" / "ecsx")
+    d.mkdir(parents=True, exist_ok=True)
+    return d / f"{run_id}.out"
 
 
 def log(msg: str) -> None:
@@ -138,7 +152,7 @@ def read_command(run_id: str, offset: int, length: int, count: int) -> str:
 
 def clean_command(run_id: str) -> str:
     p = f"/tmp/ecsx-{run_id}"
-    return (f"sh -c 'rm -f {p}.py {p}.runner.py {p}.out {p}.done {p}.done.tmp {p}.s.b64.* {p}.r.b64.*"
+    return (f"sh -c 'rm -f {p}.py {p}.runner.py {p}.out {p}.done {p}.done.tmp {p}.pid {p}.s.b64.* {p}.r.b64.*"
             " && echo ECSX_CLEANED'")
 
 
@@ -212,13 +226,26 @@ def ship(aws: Aws, run_id: str, script: bytes, runner: bytes, script_path: Path)
     return True
 
 
-def poll(aws: Aws, run_id: str, offset: int) -> tuple[bool, int]:
-    """Print the output from `offset` on. Returns (finished, rc); rc 3/4 with finished=False means gave up."""
+def poll(aws: Aws, run_id: str, offset: int, restart=None, sink=None) -> tuple[bool, int]:
+    """Print the output from `offset` on (and append it to `sink`). Returns (finished, rc); rc 3/4 with
+    finished=False means gave up. `restart` (a callable) is called once when the start never reached the container."""
     length, count = env_int("ECSX_READ_CHUNK", 1024), env_int("ECSX_READ_LINES", 1)
     wait, pause, max_misses = env_int("ECSX_TIMEOUT", 900), env_int("ECSX_POLL", 3), env_int("ECSX_MAX_MISSES", 8)
-    deadline, misses = time.monotonic() + wait, 0
+    nostart_reads = env_int("ECSX_NOSTART_READS", 3)
+    deadline, misses, nostart = time.monotonic() + wait, 0, 0
     while True:
         res = parse_chunks(aws.exec(read_command(run_id, offset, length, count)), offset)
+        if res is not None and res.state == "nostart":
+            nostart += 1
+            if nostart >= nostart_reads:
+                if restart is None:
+                    log(f"the start never reached the container ({nostart} reads: no pid claim)")
+                    return False, 4
+                log("the start was lost before the runner detached (no pid claim): starting the run again, once")
+                restart()
+                restart, nostart = None, 0
+            time.sleep(2)
+            continue
         if res is None or res.state == "missing":
             misses += 1
             if misses >= max_misses:
@@ -231,10 +258,17 @@ def poll(aws: Aws, run_id: str, offset: int) -> tuple[bool, int]:
         if res.data:
             sys.stdout.buffer.write(res.data)
             sys.stdout.buffer.flush()
+            if sink is not None:
+                sink.write(res.data)
+                sink.flush()
         offset = res.offset
         if res.finished:
             log(f"{res.state} bytes={res.size}")
             return True, res.rc
+        if res.state == "dead" and offset >= res.size:
+            log(f"the script process is gone without a result (a deploy, OOM or crash killed it) after {offset} "
+                f"bytes; files kept: /tmp/ecsx-{run_id}.*")
+            return False, 4
         if not res.data:
             if time.monotonic() > deadline:
                 log(f"no result after {wait}s; resume with: tools/ecs/ecsx.sh --resume {run_id} {offset}")
@@ -269,7 +303,14 @@ def main(argv: list[str]) -> int:
     else:
         offset = a.resume
     log(f"run id {a.id}")
-    finished, rc = poll(aws, a.id, offset)
+    restart = None
+    if a.resume is None:
+        def restart() -> None:
+            aws.exec(start_command(a.id, a.env))
+    local = out_file(a.id)
+    with open(local, "ab" if a.resume is not None else "wb") as sink:
+        finished, rc = poll(aws, a.id, offset, restart=restart, sink=sink)
+    log(f"output also in {local}")
     if not finished:
         return rc
     if os.environ.get("ECSX_KEEP") == "1":

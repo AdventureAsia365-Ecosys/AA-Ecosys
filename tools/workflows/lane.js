@@ -7,7 +7,10 @@
 //   { "key": "l3-crm-invoices", "goal": "AA-xxx: <slice + plan doc paths>", "session": "S261", "date": "31/10/2026",
 //     "migStart": { "cis": 318, "crm": 28 }, "lenses": ["...", "..."] }
 // key, goal, session, date are required; migStart (a hint, per owner) and lenses are optional.
-// After a rate limit: resume the run with resumeFromRunId instead of starting over.
+// After a rate limit: resume the run with resumeFromRunId instead of starting over (the guard lets a replay through).
+// A FRESH launch of a lane whose worktree already exists needs "resume": true (AA-1024 G20;
+// .claude/hooks/lane_start_guard.py refuses it otherwise): the agent then reports resumed_state (dirty files, commits
+// ahead, a decision per file) before it changes anything.
 
 export const meta = {
   name: 'aa-lane',
@@ -41,7 +44,7 @@ apps/AA-Partner, apps/AA-TripPlanner-Web, infra/AA-CIS-Infra (default branch mai
 
 HARD RULES for this lane:
 - Work ONLY in git worktrees created with ABSOLUTE paths under /home/nghiep/projects/AA-Ecosys/.tmp-session/wt/ :
-  git -C <repo> fetch origin && git -C <repo> worktree add /home/nghiep/projects/AA-Ecosys/.tmp-session/wt/${slug}-${L.key}-<slug> -b <branch> origin/main
+  git -C <repo> fetch origin && git -C <repo> worktree add /home/nghiep/projects/AA-Ecosys/.tmp-session/wt/${slug}-${L.key}-<repo>[-<detail>] -b <branch> origin/main (<repo>: cis, booking, partner, tp, infra or root; the lane start guard looks for these names)
   (root repo uses origin/master). Never edit the main checkouts.
 - You must NOT: git push, open/merge PRs, gh workflow run, terraform apply, DB Migrate, ECS exec, any AWS write, Linear state changes,
   directly or through a helper script. The orchestrator does all of that. Read-only Linear get_issue / list_comments is fine (load via ToolSearch).
@@ -98,8 +101,13 @@ HARD RULES for this lane:
 - UI: kit components only (ADR 0016); never edit **/_kit/core/** outside apps/AA-CIS-App/frontend/app/_kit/core/; English UI copy; never show AA-xxx ids in UI text.
 - Commit locally early and often, format: "feat|fix|chore|refactor|docs: description" then blank line, "Refs AA-xxx", blank line,
   "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>". Never "Fixes"/"Closes".
+- pr_body: every issue id it names must be on its "Refs AA-<n>, ..." line (ids there may also appear in prose; ids in file paths
+  are fine). Describe other issues' work in words: Linear links any other id and may move it to Done on merge (PR opener + pr-title.yml refuse it).
 - No paid LLM/API calls; mock them in tests.
-- If the worktree already exists with commits (a resumed lane), continue from its git status/log and implementation notes; do not start over.
+- If the worktree already exists with commits (a resumed lane), continue from its git status/log and implementation notes; do not start over.${L.resume ? `
+- THIS IS A RESUMED LANE (resume: true). Before changing anything, fill resumed_state from each existing worktree of this lane:
+  dirty_files (git status --porcelain), commits_ahead (git log --oneline origin/main..HEAD; root: origin/master), and decision_per_file
+  ("<path>: keep | redo | drop - why") for every dirty file. Keep finished work; never reset or overwrite it to start over.` : ''}
 - Write code like the surrounding code. Finish the slice completely; if something is truly blocked, say exactly what.
 - Return one entry in prs[] per PR the orchestrator should open (in merge order), each with exact live_steps the orchestrator must run after merge
   (deploy checks, DB Migrate, curl checks with expected shape, screenshots). notes_vi: 3-6 lines in Vietnamese for the tech lead.`
@@ -132,9 +140,20 @@ const IMPL = {
     summary: { type: 'string' },
     notes_vi: { type: 'string' },
     followups: { type: 'array', items: { type: 'string' } },
+    resumed_state: {
+      type: 'object',
+      properties: {
+        dirty_files: { type: 'array', items: { type: 'string' } },
+        commits_ahead: { type: 'array', items: { type: 'string' } },
+        decision_per_file: { type: 'array', items: { type: 'string' } },
+      },
+      required: ['dirty_files', 'commits_ahead', 'decision_per_file'],
+    },
   },
   required: ['ready', 'prs', 'summary', 'notes_vi'],
 }
+// AA-1024 G20: a resumed lane must report what it found before it acts (lesson: relaunched lanes redid work).
+const IMPL_RUN = L.resume ? { ...IMPL, required: [...IMPL.required, 'resumed_state'] } : IMPL
 
 const REVIEW = {
   type: 'object',
@@ -159,7 +178,7 @@ const REVIEW = {
 }
 
 phase('Implement')
-const impl = await agent(`${COMMON}\n\nLANE ${L.key}: ${L.goal}`, { label: `impl:${L.key}`, phase: 'Implement', schema: IMPL })
+const impl = await agent(`${COMMON}\n\nLANE ${L.key}: ${L.goal}`, { label: `impl:${L.key}`, phase: 'Implement', schema: IMPL_RUN })
 if (!impl || !impl.ready || !impl.prs || impl.prs.length === 0) {
   return { lane: L.key, impl, reviews: [], fix: null }
 }

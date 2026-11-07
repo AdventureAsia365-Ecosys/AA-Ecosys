@@ -57,6 +57,12 @@ WHERE can echo a value: ECS exec scripts must print counts and error classes onl
 function created earlier and only called now; Python run locally with a DSN (no trigger word); a heredoc-like `<<WORD`
 inside quotes (its following lines are read as a body, not as commands); columns without a `pii:` tag.
 
+Check a script before handing it over (AA-1024 G21; a lane cannot run it, the orchestrator's run would be refused):
+  python3 .claude/hooks/pilot_pii_guard.py --check <script.py|.sql> ...   (exit 0 = would pass, 2 = would be refused)
+A DRY RUN pin of the rows a write will touch fingerprints ids and timestamps, never whole rows (`md5(t::text)` is a
+whole-row read and is refused): count(*), md5(string_agg(id::text || updated_at::text, ',' ORDER BY id))
+(skill/aa-cis-schema/references/destructive-ops.md).
+
 Test: python3 -m unittest .claude/hooks/test_pilot_pii_guard.py (or bash .claude/hooks/pilot-pii-guard.sh < input).
 """
 from __future__ import annotations
@@ -987,11 +993,42 @@ def check(data: dict, protected: dict | None = None) -> str | None:
             "table into the agent / a public log, or sends SQL this hook cannot check — "
             + "; ".join(dict.fromkeys(problems))
             + ". Count or aggregate instead (count(...), count(DISTINCT ...), count(*) FILTER (WHERE col IS NULL), "
-            "GROUP BY a non-personal column). Rules: .claude/hooks/pilot_pii_guard.py and AA-CIS-Infra "
-            "db/scripts/README.md.")
+            "GROUP BY a non-personal column). " + PIN_HINT + " Check a script first: python3 "
+            ".claude/hooks/pilot_pii_guard.py --check <file>. Rules: .claude/hooks/pilot_pii_guard.py and "
+            "AA-CIS-Infra db/scripts/README.md.")
+
+
+PIN_HINT = ("A DRY RUN pin fingerprints ids, not rows: count(*), md5(string_agg(id::text || updated_at::text, ',' "
+            "ORDER BY id)) (skill/aa-cis-schema/references/destructive-ops.md).")
+
+
+def check_files(paths: list, protected: dict | None = None) -> int:
+    """--check: what the hook would say about each script. 0 = every file passes, 2 = a file would be refused."""
+    if protected is None:
+        protected = load_protected(REFERENCE.read_text(encoding="utf-8"))
+    rc = 0
+    for p in paths:
+        try:
+            text = Path(p).read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError) as e:
+            print(f"{p}: REFUSED (cannot read it: {type(e).__name__})")
+            rc = 2
+            continue
+        reads = text_reads(text, protected, python=str(p).endswith(".py"))
+        if reads:
+            print(f"{p}: REFUSED: {'; '.join(reads)}\n  {PIN_HINT}")
+            rc = 2
+        else:
+            print(f"{p}: OK (no personal-data read found)")
+    return rc
 
 
 def main() -> int:
+    if len(sys.argv) > 1 and sys.argv[1] == "--check":
+        if len(sys.argv) < 3:
+            print("usage: pilot_pii_guard.py --check <script> ...", file=sys.stderr)
+            return 2
+        return check_files(sys.argv[2:])
     try:
         data = json.loads(sys.stdin.read())
     except Exception:  # noqa: BLE001 — unreadable input passes

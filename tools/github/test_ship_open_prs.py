@@ -21,6 +21,14 @@ import ship_open_prs as sop
 from ship_common import Result, ShipError
 from ship_fakes import GitSandbox, HybridRunner
 
+# S272: drop git's repo-local variables before any git call in a temporary repo (test_git_env_isolation.py; the
+# safe-hooks test below runs git directly, not only through ship_fakes).
+for _git_var in ("GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_CONFIG", "GIT_CONFIG_PARAMETERS", "GIT_CONFIG_COUNT",
+                 "GIT_OBJECT_DIRECTORY", "GIT_DIR", "GIT_WORK_TREE", "GIT_IMPLICIT_WORK_TREE", "GIT_GRAFT_FILE",
+                 "GIT_INDEX_FILE", "GIT_NO_REPLACE_OBJECTS", "GIT_REPLACE_REF_BASE", "GIT_PREFIX", "GIT_SHALLOW_FILE",
+                 "GIT_COMMON_DIR"):
+    os.environ.pop(_git_var, None)
+
 BODY = "## What\n- A small invented change to the lantern catalogue.\n\nRefs AA-9001\n"
 
 
@@ -45,6 +53,8 @@ class TextTest(unittest.TestCase):
         self.assertIn("Refs AA-9001, AA-1032\n", sop.add_refs(BODY, ["AA-1032"]))
         self.assertEqual(sop.add_refs(BODY, ["AA-9001"]), BODY)
         self.assertTrue(sop.add_refs("no refs line", ["AA-1"]).endswith("Refs AA-1\n"))
+        # an id added to a Refs line with free text goes into the id list, not after the text
+        self.assertEqual(sop.add_refs("x\nRefs AA-1 (lane l2)\n", ["AA-2"]), "x\nRefs AA-1, AA-2 (lane l2)\n")
 
     def test_attribution_is_added_once(self):
         once = sop.with_attribution(BODY)
@@ -93,8 +103,11 @@ class OpenTest(unittest.TestCase):
         self.journal = Path(self.sb.tmp.name) / "journal.jsonl"
         self.tmpdir = mock.patch.object(sop, "ROOT", Path(self.sb.tmp.name))
         self.tmpdir.start()
+        self.env = mock.patch.dict(os.environ, {"AA_GITLEAKS": "gitleaks", "AA_SKIP_GITLEAKS": ""})
+        self.env.start()
 
     def tearDown(self):
+        self.env.stop()
         self.tmpdir.stop()
         self.sb.close()
 
@@ -111,6 +124,8 @@ class OpenTest(unittest.TestCase):
             return Result(0, "")
 
         r = HybridRunner()
+        r.on(("gitleaks", "version"), Result(0, "8.30.1\n"))
+        r.on(("gitleaks", "git"), Result(0, ""))
         r.on((ship_common.AS_APP,), app)
         r.on(("gh", "pr", "list"), Result(0, existing))
         r.on(("gh", "pr", "view"), Result(0, "app/aa-agent\n"))
@@ -127,6 +142,21 @@ class OpenTest(unittest.TestCase):
         self.assertIn("Refs AA-<n>", text)
         self.assertIn("closing phrase", text)
         self.assertTrue(sop.validate(r, lane_pr(self.sb.wt, pr_title="lantern glow"))[0])
+        # AA-1024 G11: an id outside the Refs line is linked by Linear (and moved to Done on merge)
+        stray = lane_pr(self.sb.wt, pr_body="Joins the AA-9002 lane.\n\nRefs AA-9001\n")
+        self.assertIn("AA-9002, which the Refs line does not", " ".join(sop.validate(r, stray)[0]))
+        self.assertEqual(sop.stray_issue_ids("x\nRefs AA-1, AA-2\n"), [])
+        self.assertEqual(sop.stray_issue_ids("see AA-3 and AA-3\nRefs AA-1"), ["AA-3"])
+        self.assertEqual(sop.stray_issue_ids("Refs AA-1 (and AA-4 later)"), ["AA-4"])
+        self.assertEqual(sop.stray_issue_ids("Refs AA-1040 (EU AI Act Art. 50(2), root ADR 0019 d19)."), [])
+        # the PR's own issue in prose is fine: the Refs line already links it
+        own = "AA-9001 lantern retirement, catalogue side.\r\n\r\nRefs AA-9001\r\n"
+        self.assertEqual(sop.stray_issue_ids(own), [])
+        self.assertEqual(sop.validate(r, lane_pr(self.sb.wt, pr_body=own))[0], [])
+        # an id inside a file path is a path (the implementation notes CLAUDE.md asks for), not an issue link
+        notes = "Notes: docs/implementation-notes/AA-9003-lantern-l2.md and AA-9004.md\n\nRefs AA-9001\n"
+        self.assertEqual(sop.stray_issue_ids(notes), [])
+        self.assertEqual(sop.stray_issue_ids("AA-9005. Then docs/x/AA-9001.md\nRefs AA-9001"), ["AA-9005"])
         with open(os.path.join(self.sb.wt, "lantern.py"), "w", encoding="utf-8") as fh:
             fh.write("GLOW = 4\n")
         self.assertIn("modified", " ".join(sop.validate(r, lane_pr(self.sb.wt))[0]))
@@ -147,6 +177,38 @@ class OpenTest(unittest.TestCase):
         self.assertIn("scripts/install-hooks.sh", " ".join(problems))
         self.sb.git(self.sb.wt, "config", "core.hooksPath", ".githooks")
         self.assertEqual(sop.validate(r, lane_pr(self.sb.wt))[0], [])
+
+    def test_gitleaks_scans_the_branch_with_the_base_rules_before_any_push(self):
+        # AA-1024 G14: the orchestrator's own commits were never scanned before the push (lessons S250-S266)
+        self.sb.git(self.sb.wt, "checkout", "-q", "main")
+        self.sb.commit(self.sb.wt, ".gitleaks.toml", "[extend]\nuseDefault = true\n", "chore: rules")
+        self.sb.git(self.sb.wt, "push", "-q", "origin", "HEAD:main")
+        self.sb.git(self.sb.wt, "checkout", "-q", "feat/lanterns")
+        self.sb.git(self.sb.wt, "rebase", "-q", "origin/main")
+        r, _ = self.runner()
+        self.assertEqual(sop.validate(r, lane_pr(self.sb.wt))[0], [])
+        [scan] = r.called("gitleaks", "git")
+        self.assertIn("--log-opts=--diff-merges=remerge --no-renames origin/main..feat/lanterns", scan)
+        self.assertIn("--redact", scan)
+        cfg = scan[scan.index("-c") + 1]
+        self.assertTrue(cfg.endswith(".gitleaks.toml") and not cfg.startswith(self.sb.wt), cfg)
+        self.assertNotIn("-i", scan)  # the base has no .gitleaksignore
+        leak = HybridRunner()
+        leak.on(("gitleaks", "version"), Result(0, "v8.30.1"))
+        leak.on(("gitleaks", "git"), Result(1, "", "WRN leaks found: 1"))
+        text = " ".join(sop.validate(leak, lane_pr(self.sb.wt))[0])
+        self.assertIn("gitleaks found a leak", text)
+        self.assertIn("git reset --soft $(git merge-base HEAD origin/main)", text)
+        old = HybridRunner()
+        old.on(("gitleaks", "version"), Result(0, "8.18.0"))
+        self.assertIn("CI uses 8.30.1", " ".join(sop.validate(old, lane_pr(self.sb.wt))[0]))
+        with mock.patch.dict(os.environ, {"AA_GITLEAKS": ""}), \
+                mock.patch.object(sop.shutil, "which", return_value=None):
+            self.assertIn("no gitleaks binary", " ".join(sop.validate(old, lane_pr(self.sb.wt))[0]))
+        with mock.patch.dict(os.environ, {"AA_SKIP_GITLEAKS": "1"}):
+            problems, warnings = sop.validate(old, lane_pr(self.sb.wt))
+        self.assertEqual(problems, [])
+        self.assertIn("gitleaks skipped", " ".join(warnings))
 
     def test_stacked_pr_is_compared_with_the_local_branch_below(self):
         self.sb.git(self.sb.wt, "checkout", "-q", "-b", "feat/lanterns-2")

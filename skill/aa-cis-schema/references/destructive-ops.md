@@ -19,6 +19,16 @@ DM-3.9 là **ngoại lệ, Nghiệp duyệt**, ghi vào registry (mẫu: 8 bản
 ## Năm bước thực thi
 
 1. **DRY RUN** — đếm đúng số dòng/bảng sẽ bị ảnh hưởng, đưa Nghiệp xem. Ghi số vào Dead Table Registry trước apply.
+   Ghim tập dòng bằng id + thời điểm, KHÔNG băm cả dòng (`md5(t::text)` là đọc cả dòng → hook PII chặn, S271):
+
+   ```sql
+   SELECT count(*) AS n,
+          md5(string_agg(id::text || updated_at::text, ',' ORDER BY id)) AS pin
+   FROM <schema>.<table> WHERE <điều kiện xoá>;
+   ```
+
+   Bảng không có `updated_at` → chỉ `id::text`. Kiểm script trước khi giao cho điều phối:
+   `python3 .claude/hooks/pilot_pii_guard.py --check <script.py>` (exit 0 = qua hook, AA-1024 G21).
 2. **Snapshot / bản khôi phục** — RDS snapshot hoặc export, nếu có dữ liệu thật. File khôi phục ghi vào key **riêng, cố
    định** (không phải output của lần DRY RUN — chạy lại DRY RUN sẽ ghi đè). Migration có header `-- migrate: destructive`
    thì DB Migrate `apply` tự chụp `db-migrate-<key>-<run id>-<attempt>`, tag `aa:retain-until` = hôm nay + 30 ngày
