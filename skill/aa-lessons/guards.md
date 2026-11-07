@@ -20,7 +20,7 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 - **Trước khi báo chi phí "LLM fallback" của một stage, kiểm `provider`/`model` trong `llm_call_log`** (S223) → `tools/llm/spend_by_stage.py` (cột LLM / non-LLM theo role) (guard mới S272, AA-1024)
 - **Số chi phí từ `llm_call_log` phải đối chiếu với dashboard nhà cung cấp trước khi báo** (S223, S219, S224) → `tools/llm/spend_by_stage.py` (LOWER BOUND tới khi số `*_log_write_failed` = 0) (guard mới S272, AA-1024)
 - **`git -C <repo> worktree add <đường dẫn tương đối>` tính đường dẫn từ `<repo>`, không từ thư mục đang đứng; không có `-C` thì tính từ cwd, mà cwd có thể đang là repo con** (S246, S247) → `.claude/hooks/aa_shell_guard.py` WT-1 (guard mới S272, AA-1024)
-- **Usage limit 5 giờ có thể giết nhiều lane cùng lúc giữa chừng — chạy lại workflow bằng resume (`resumeFromRunId`) để giữ kết quả lane đã xong, chỉ chạy lại lane chết** (S257, S260, S269) → `.claude/hooks/lane_start_guard.py` (resume: true), `tools/workflows/lane.js` (resumed_state) (guard mới S272, AA-1024)
+- **Usage limit 5 giờ có thể giết nhiều lane cùng lúc giữa chừng — chạy lại workflow bằng resume (`resumeFromRunId`) để giữ kết quả lane đã xong, chỉ chạy lại lane chết** (S257, S260, S269) → `.claude/hooks/lane_start_guard.py` (cho qua `resumeFromRunId`; lane mới trên worktree đã có cần resume: true), `tools/workflows/lane.js` (resumed_state) (guard mới S272, AA-1024)
 
 ## Verify và "Done"
 

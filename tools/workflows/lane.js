@@ -7,9 +7,10 @@
 //   { "key": "l3-crm-invoices", "goal": "AA-xxx: <slice + plan doc paths>", "session": "S261", "date": "31/10/2026",
 //     "migStart": { "cis": 318, "crm": 28 }, "lenses": ["...", "..."] }
 // key, goal, session, date are required; migStart (a hint, per owner) and lenses are optional.
-// After a rate limit: resume the run with resumeFromRunId instead of starting over. A relaunch of a lane whose
-// worktree already exists needs "resume": true (AA-1024 G20; .claude/hooks/lane_start_guard.py refuses it otherwise):
-// the agent then reports resumed_state (dirty files, commits ahead, a decision per file) before it changes anything.
+// After a rate limit: resume the run with resumeFromRunId instead of starting over (the guard lets a replay through).
+// A FRESH launch of a lane whose worktree already exists needs "resume": true (AA-1024 G20;
+// .claude/hooks/lane_start_guard.py refuses it otherwise): the agent then reports resumed_state (dirty files, commits
+// ahead, a decision per file) before it changes anything.
 
 export const meta = {
   name: 'aa-lane',

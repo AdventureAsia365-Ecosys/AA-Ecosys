@@ -94,6 +94,12 @@ class LaneStartGuardTest(unittest.TestCase):
         self.assertIsNotNone(self.check({"scriptPath": LANE, "args": args(resume="yes")}))
         self.assertIsNone(self.check({"scriptPath": LANE, "args": args(key="l2-new")}))
 
+    def test_resume_from_run_id_replays_without_resume_flag(self):
+        # A Workflow replay sends the lane's original args (no resume flag); the journal reuses finished results.
+        (self.root / ".tmp-session/wt/s271-l1-demo-cis").mkdir(parents=True)
+        self.assertIsNone(self.check({"scriptPath": LANE, "resumeFromRunId": "wf_x", "args": args()}))
+        self.assertIn("resumeFromRunId", self.check({"scriptPath": LANE, "resumeFromRunId": " ", "args": args()}))
+
     def test_other_workflows_and_unreadable_plan(self):
         self.assertIsNone(self.check({"script": "export const meta = {name: 'audit'}", "args": "x"}))
         self.assertIsNone(self.check({"scriptPath": "/x/tools/workflows/review.js", "args": None}))
