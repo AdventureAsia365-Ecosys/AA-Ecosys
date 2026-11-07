@@ -62,6 +62,27 @@ class PrTitleBodyRuleTest(unittest.TestCase):
             self.assertEqual(run_step(body + "\n\nRefs AA-9001\n"), 1, body)
         self.assertEqual(run_step("Prefixes AA-9001 nothing\n\nRefs AA-9001\n"), 0)
 
+    def test_closing_keywords_with_markdown_or_a_linear_url_fail(self):
+        # S272 review pass 3: Linear reads a magic word followed by an issue link, and ids are often bold / code
+        for line in ("Closes [AA-9001](https://linear.app/aa/issue/AA-9001)",
+                     "Fixes https://linear.app/aa-ecosys/issue/AA-9001/slug",
+                     "Fixes **AA-9001**", "Fixes `AA-9001`", "Fixes - AA-9001", "Resolves (AA-9001)",
+                     "closes linear.app/aa-ecosys/issue/AA-9001"):
+            body = line + "\n\nRefs AA-9001\n"
+            self.assertEqual(run_step(body), 1, line)
+            self.assertTrue(sop.CLOSING_RE.search(body), line)
+        for line in ("Prefixes **AA-9001** nothing", "The fix itself: see the Refs line.",
+                     "| fix | AA-9001 |", "Refs AA-9001 (fixed in slice 2)"):
+            body = line + "\n\nRefs AA-9001\n"
+            self.assertEqual(run_step(body), 0, line)
+            self.assertIsNone(sop.CLOSING_RE.search(body), line)
+
+    def test_closing_pattern_is_the_openers(self):
+        import re
+        m = re.search(r"closing = (re\.compile\(.*?re\.IGNORECASE\))", body_step()["run"], re.DOTALL)
+        self.assertIsNotNone(m)
+        self.assertEqual(eval(m.group(1), {"re": re}).pattern, sop.CLOSING_RE.pattern)  # noqa: S307 - our own file
+
     def test_same_verdict_as_the_pr_opener(self):
         bodies = [
             "x\nRefs AA-1, AA-2\n",

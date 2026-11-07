@@ -54,7 +54,7 @@ TITLE_RE = re.compile(r"^(feat|fix|chore|refactor|docs|test|perf|ci)(\([^)]+\))?
 ISSUE_RE = re.compile(r"\bAA-\d+\b")
 # Same pattern as pr-title.yml's closing check (S272 review: 'This completes AA-1040.' passed here and failed CI).
 CLOSING_RE = re.compile(r"(?<![0-9A-Za-z])(close[sd]?|closing|fix(e[sd])?|fixing|resolve[sd]?|resolving"
-                        r"|complete[sd]?|completing)[\s:]+AA-\d+", re.IGNORECASE)
+                        r"|complete[sd]?|completing)[\s:*_`\[(\-]*(?:(?:https?://)?linear\.app/\S*?/issue/)?AA-\d+", re.IGNORECASE)
 REFS_RE = re.compile(r"^\s*Refs\s+AA-\d+\b.*$", re.MULTILINE)
 # The Refs line: 'Refs AA-<n>[, AA-<m>...]' at the start of a line, then any free text ("Refs AA-1040 (EU AI Act Art.
 # 50(2), root ADR 0019 d19)." in merged TripPlanner#223). Its ids are the leading list only; pr-title.yml uses the
