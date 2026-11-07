@@ -10,6 +10,7 @@ import contextlib
 import io
 import json
 import os
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -208,6 +209,60 @@ class OpenTest(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(sop.main([str(self.journal)], runner=r), 4)
         self.assertEqual(seen, {})
+
+
+class PushTimeoutTest(unittest.TestCase):
+    """S272: the CIS pre-push hook runs longer than the old fixed 300 s push limit."""
+
+    def test_default_and_env_bounds(self):
+        from unittest import mock
+        import ship_open_prs as m
+        with mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("AA_PUSH_TIMEOUT", None)
+            self.assertEqual(m.push_timeout(), 900)
+        for raw, want in (("1200", 1200), ("5", 60), ("99999", 3600), ("x", 900)):
+            with mock.patch.dict(os.environ, {"AA_PUSH_TIMEOUT": raw}):
+                self.assertEqual(m.push_timeout(), want)
+
+
+class SafeHooksTest(unittest.TestCase):
+    """S272 incident: a hook-run test inherited GIT_DIR and rewrote the real clone. The push goes through
+    safe-hooks/pre-push, which drops the git repo env before running the repo's own hook."""
+
+    def _git(self, *args, cwd):
+        env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+        env.update(GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t", GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t")
+        return subprocess.run(["git", *args], cwd=cwd, env=env, capture_output=True, text=True)
+
+    def _push(self, hooks_path):
+        import shutil
+        d = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, d, True)
+        remote, main = os.path.join(d, "remote.git"), os.path.join(d, "main")
+        self._git("init", "-q", "--bare", remote, cwd=d)
+        self._git("init", "-q", "-b", "main", main, cwd=d)
+        os.makedirs(os.path.join(main, ".githooks"))
+        hook = os.path.join(main, ".githooks", "pre-push")
+        with open(hook, "w") as f:  # what a careless unit test does: git init + config in "its own" temp dir
+            f.write('#!/usr/bin/env bash\nt=$(mktemp -d)\ngit init -q "$t"\ngit -C "$t" config user.name evil\nexit 0\n')
+        os.chmod(hook, 0o755)
+        self._git("add", "-A", cwd=main)
+        self._git("commit", "-q", "-m", "a", cwd=main)
+        wt = os.path.join(d, "wt")
+        self._git("worktree", "add", "-q", "-b", "feat", wt, cwd=main)
+        self._git("-c", f"core.hooksPath={hooks_path}", "push", "-q", remote, "feat", cwd=wt)
+        out = self._git("config", "--file", os.path.join(main, ".git", "config"), "--get", "user.name", cwd=d)
+        return out.stdout.strip()
+
+    def test_wrapper_keeps_the_clone_clean(self):
+        self.assertEqual(self._push(sop.SAFE_HOOKS), "")
+
+    def test_without_the_wrapper_the_clone_is_written(self):
+        # proves the test reproduces the incident; if git ever stops exporting GIT_DIR this turns red, drop it then
+        self.assertEqual(self._push(".githooks"), "evil")
+
+    def test_push_argv_uses_the_wrapper(self):
+        self.assertTrue(os.access(os.path.join(sop.SAFE_HOOKS, "pre-push"), os.X_OK))
 
 
 if __name__ == "__main__":

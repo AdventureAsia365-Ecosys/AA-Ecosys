@@ -113,6 +113,12 @@ checkout: `python3 tools/github/<tool>.py --help`.
 - Pushes (never forced), opens the PR with the lane's title and body (or reuses the branch's open PR), appends the
   Claude Code attribution line when missing, checks the author is the App, and prints each PR's `live_steps`.
 
+Pushes (S272): every push runs the repo's pre-push through `safe-hooks/pre-push`
+(`git -c core.hooksPath=tools/github/safe-hooks push`), which drops `GIT_DIR` / `GIT_WORK_TREE` / `GIT_INDEX_FILE`
+before running the repo's own `.githooks/pre-push`. Git exports them to a hook, and unit tests that run git in a temp
+dir with them wrote into the real clone (core.bare, a fake user, fake commits, rewritten refs) in AA-CIS-App and the
+root repo. The push limit is 900 s (`AA_PUSH_TIMEOUT`, 60..3600): the CIS fast hook runs ~5,000 unit tests.
+
 ## Tests
 
 `python -m unittest discover -s tools/github -p 'test_*.py'` (offline: scripted `gh`/`aws`, real `git` in temporary
