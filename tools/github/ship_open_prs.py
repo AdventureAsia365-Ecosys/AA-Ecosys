@@ -178,12 +178,27 @@ def skip_note(body: str) -> str:
     return body.rstrip() + "\n\n" + SKIP_INTEGRATION_NOTE + "\n"
 
 
+# S272: pushes run the repo's pre-push through this wrapper, which drops GIT_DIR & co. first (see the file).
+SAFE_HOOKS = str(Path(__file__).resolve().parent / "safe-hooks")
+
+
+def push_timeout() -> int:
+    """S272: the push runs the repo's pre-push hook (CIS fast mode runs ~5,000 unit tests, more than 300 s), so the
+    limit is 900 s unless AA_PUSH_TIMEOUT (seconds, 60..3600) says otherwise."""
+    try:
+        return min(3600, max(60, int(os.environ.get("AA_PUSH_TIMEOUT") or 900)))
+    except ValueError:
+        return 900
+
+
 def open_one(runner: Runner, p: dict, extra_refs: list[str], draft: bool) -> str:
     repo = normalize_repo(str(p["repo"]))
     wt, br = str(p["worktree"]), str(p["branch"])
     base = str(p.get("base") or default_branch(repo))
     tag = f"{repo} {br}"
-    r = runner.run([AS_APP, "--repos", repo, "--", "git", "-C", wt, "push", "-q", "-u", "origin", br], timeout=300)
+    r = runner.run([AS_APP, "--repos", repo, "--", "git", "-c", f"core.hooksPath={SAFE_HOOKS}", "-C", wt, "push", "-q",
+                    "-u", "origin", br],
+                   timeout=push_timeout())
     if not r.ok:
         raise ShipError(f"{tag}: push failed (no force push here): {r.last_line()}", 4)
     existing = runner.run(["gh", "pr", "list", "-R", slug(repo), "--head", br, "--state", "open", "--json",

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# S272 incident: git exports GIT_DIR / GIT_WORK_TREE / GIT_INDEX_FILE to a hook. A repo's pre-push runs its unit tests,
+# and tests that run `git init` / `git config` / `git commit` in a temp dir with that env wrote into the real clone
+# (core.bare=true, a fake user, fake commits, rewritten refs), in AA-CIS-App and in the root repo.
+# ship_open_prs.py pushes with `-c core.hooksPath=<this dir>`: this wrapper drops the git repo env, then runs the
+# repo's own hook unchanged (same checks, same refusals). Git runs pre-push in the top level of the working tree, so
+# git finds the repo from the working directory once the variables are gone.
+unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES \
+  GIT_NAMESPACE GIT_PREFIX GIT_CONFIG_PARAMETERS GIT_CONFIG_COUNT
+hook="$(git rev-parse --show-toplevel)/.githooks/pre-push"
+[ -f "$hook" ] || exit 0
+exec bash "$hook" "$@"
