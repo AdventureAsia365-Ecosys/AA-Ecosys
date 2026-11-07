@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-tripplanner, aa-cis-infra]
-last_reviewed: 2026-11-07
+last_reviewed: 2026-11-08
 review_every_days: 90
 last_tested: null
 tested_where: null
@@ -96,6 +96,8 @@ curl -s --resolve $H:443:$IP https://$H/api/health
 curl -s -o /dev/null -D - --resolve $H:443:$IP https://$H/plan | grep -iE '^(HTTP|x-robots-tag|x-frame-options|x-amz-cf-id)'
 curl -s -o /dev/null -D - --resolve $H:443:$IP "https://$H/api/browse/search?q=temple" | grep -iE '^(HTTP|x-amzn-waf-action)'
 curl -s --resolve $H:443:$IP "https://$H/api/browse?resource=search&q=temple"
+curl -s -o /dev/null -D - --path-as-is --resolve $H:443:$IP "https://$H/api/browse/%2e/search?q=temple" | grep -iE '^(HTTP|x-amzn-waf-action)'
+curl -s -o /dev/null -D - --path-as-is --resolve $H:443:$IP -X POST -H 'content-type: application/json' --data '{}' "https://$H/api/trip/%2e/narrate" | grep -iE '^(HTTP|x-amzn-waf-action)'
 ```
 
 Also `curl -s --resolve $H:443:$IP https://$H/ | grep -c 'href="/tours/'` (not 0: the home renders the catalog, not
@@ -104,7 +106,10 @@ the "We couldn't load" state).
 Expect: `{"status":"ok","service":"aa-tripplanner-web","version":"<manifest>","git_sha":"<main sha>"}`; `/plan` 200
 with `x-robots-tag: noindex, nofollow`, `x-frame-options: DENY` and an `x-amz-cf-id` (CloudFront, not Vercel); the
 model path `HTTP/2 202` with `x-amzn-waf-action: challenge`; the older spelling
-`{"error":"use_protected_path"}` (404).
+`{"error":"use_protected_path"}` (404); both dot-segment spellings (`/api/browse/%2e/search`, `/api/trip/%2e/narrate`,
+sent with `--path-as-is` so curl does not resolve them) also `HTTP/2 202` with `x-amzn-waf-action: challenge`. The app
+resolves `%2e` to the model route, so the web ACL must match it too: every path match URL-decodes, then normalizes
+(AA-CIS-Infra `tripplanner_web_edge.tf`). A 200 or a model answer here means that transformation is missing: stop.
 
 Model-path rate rule (one IP): `for i in $(seq 1 150); do curl -s -o /dev/null -w '%{http_code}\n' --resolve $H:443:$IP "https://$H/api/browse/search?q=x$i"; done | sort | uniq -c`,
 wait 60 seconds, run one more request. Expect: 202 lines first, then 429 once the rule has counted the window (the last
@@ -154,8 +159,11 @@ web ACL `aa-tripplanner-dev-web`). Abort: anything red keeps DNS on Vercel; fix 
 
 **A photo withdrawn from the photos CDN** (same file path and `?v=`) stays in this distribution's `/photo-cdn/*` cache
 until its max-age: the CIS photo purge invalidates the photos CDN only. Invalidate this distribution too, MFA admin:
-`aws cloudfront create-invalidation --distribution-id <tripplanner_web_edge.distribution_id> --paths "/photo-cdn/<path>" --profile aa365-admin`
-(the first 1,000 paths a month are free). A replaced photo needs nothing: it has a new `?v=`, which is in the cache key.
+`aws cloudfront create-invalidation --distribution-id <tripplanner_web_edge.distribution_id> --paths "/photo-cdn/<path>*" --profile aa365-admin`
+(the first 1,000 paths a month are free). Keep the trailing `*`: `v` is in this behaviour's cache key, so the edge holds
+the object as `/photo-cdn/<path>?v=<hash>`, and a path with no query and no wildcard does not match it (the command
+succeeds and the photo is still served). The wildcard covers every `?v=` variant; the exact `"/photo-cdn/<path>?v=<hash>"`
+works for one. A replaced photo needs nothing: it has a new `?v=`, which is in the cache key.
 
 **Rollback triggers:** the planner does not load, search or narrate for a traveller; a traveller is blocked by a rule
 without cause and it is not fixed within the hour (a limit is an AA-CIS-Infra variable PR); the task keeps failing its
