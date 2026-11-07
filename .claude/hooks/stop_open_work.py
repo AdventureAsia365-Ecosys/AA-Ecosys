@@ -5,15 +5,17 @@ Lesson family 14, behaviour half (S228, restated S248, S249, S263; memory "finis
 remind"): the orchestrator ended a turn by asking whether to go on, or by proposing to close the session, while
 unchecked items it could do itself were still on the live checklist (.tmp-session/S<nnn>-checklist.md).
 
-When the main session is about to stop, this hook reads the last assistant message of the transcript. Only when that
-message OFFERS TO STOP OR ASKS PERMISSION TO GO ON (close / wrap up the session, "shall I continue", "dừng phiên",
-"tiếp không", ...) AND the newest checklist (changed in the last 24 h) has `- [ ]` items without a blocked marker, it
+When the main session is about to stop, this hook reads the last assistant message of the transcript. Only when the
+LAST LINE of that message ENDS with an offer to stop or a request for permission to go on ("Shall I continue?", "I can
+close the session now.", "Anh có muốn em làm tiếp không?", "Đề xuất dừng phiên ở đây.") and is not a paid-run or MFA
+approval question, AND the newest checklist (changed in the last 24 h) has `- [ ]` items without a blocked marker, it
 blocks the stop once (exit 2), listing those items. A plain question (a real clarification) is not touched: the critic
 of the design showed that a nudge on every stop trains tag-gaming. `stop_hook_active` (Claude Code sets it when the
 turn already continues because of a Stop hook) lets the next stop through, so it never loops.
 
-Blocked markers (the item waits on someone or a date, so it does not count): [blocked ...], chờ / wait / waiting,
-hẹn / ≥<date>, MFA, paid-approval, "tech lead" / "Nghiệp duyệt", Jira draft approval. Reversibility stays judgement.
+Blocked markers (the item waits on someone, a date or another step, so it does not count): [blocked ...], chờ / wait /
+waiting, hẹn / ≥<date>, MFA, paid-approval, "tech lead" / "Nghiệp duyệt", Jira draft approval, and dependency waits
+(sau khi / sau / chỉ khi / khi ... xong / after / once / until). Reversibility stays judgement.
 
 Failure: anything unreadable passes (exit 0). Test: python3 .claude/hooks/test_stop_open_work.py
 """
@@ -31,14 +33,30 @@ ROOT = Path(os.environ.get("CLAUDE_PROJECT_DIR") or Path(__file__).resolve().par
 MAX_AGE_S = 24 * 3600
 MAX_LIST = 8
 
+# Only the LAST line of the message counts, and only an offer to stop or a request for permission to go on that ENDS
+# it (reviewer, S272: unanchored phrases matched plain statements such as "Bước tiếp không cần MFA" or "em ghi vào log
+# khi chốt phiên"). A bare mention of closing the session is not an offer.
 OFFER_STOP = re.compile(
-    r"(?i)\b(?:shall|should|do you want|want me to|would you like|may) (?:i|me to)? ?(?:continue|go on|keep going|"
-    r"proceed|stop|close|wrap)|\b(?:close|end|wrap up|stop) (?:the|this) session\b|\bsession close\b|"
-    r"dừng (?:session|phiên)|(?:chốt|đóng|kết thúc|dừng) phiên|(?:có )?(?:làm )?tiếp (?:không|chứ|nhé\?)|"
-    r"anh (?:có )?muốn (?:em|mình|tôi) (?:làm )?tiếp|(?:em|mình|tôi) (?:có )?(?:nên )?(?:dừng|chốt) (?:ở đây|lại)")
+    r"(?i)(?:"
+    # English: a question that asks to continue / stop, ending the message
+    r"\b(?:shall|should|can|do you want|want me to|would you like|may) (?:i |we |me to )?(?:now )?(?:continue|go on|"
+    r"keep going|proceed|stop|close|wrap(?: up)?|end)\b[^.?!\n]*\?"
+    # English: an offer or a proposal to close the session, ending the message
+    r"|\b(?:i|we) (?:can|could|will|'ll|would|suggest|propose)(?: now)? (?:close|closing|end|ending|wrap up|"
+    r"wrapping up|stop|stopping) (?:the|this) session\b[^.?!\n]*[.!]?"
+    # Vietnamese: "... làm tiếp không?", "anh có muốn em làm tiếp không?"
+    r"|(?:làm|chạy|đi|có|em|mình) tiếp(?: tục)? (?:không|chứ|nhé|nha)\s*\??"
+    # Vietnamese: a proposal or a question to close the session
+    r"|(?:đề xuất|đề nghị|xin phép|em|mình) (?:dừng|chốt|đóng|kết thúc) (?:phiên|session)[^.?!\n]{0,40}[.!?]?"
+    r"|(?:dừng|chốt|đóng|kết thúc) (?:phiên|session)[^.?!\n]{0,30}(?:nhé|nha|không|chứ|ạ)\s*\?"
+    r")\s*$")
+# A question that asks for a paid run or an MFA code is a real approval the agent must ask for (cost rule, MFA).
+APPROVAL_ASK = re.compile(r"(?i)\bpaid\b|\bUSD\b|\$\s*\d|\bcost|\bMFA\b|chi phí|tốn|trả tiền|\bduyệt|approv")
 BLOCKED = re.compile(
     r"(?i)\[blocked|\bblocked\b|\bchờ\b|\bwait(?:ing)?\b|\bhẹn\b|≥\s*\d|>=\s*\d|\bMFA\b|paid-approval|tech lead|"
-    r"Nghiệp (?:duyệt|nhập|chốt|nhắn|bật)|duyệt Jira|Jira draft")
+    r"Nghiệp (?:duyệt|nhập|chốt|nhắn|bật)|duyệt Jira|Jira draft|"
+    # a dependency wait: the item is due only after another step (S272: "Push l5 CIS ... chỉ khi lane CIS đã xong")
+    r"sau khi|\bsau\b|chỉ khi|\bkhi\b.*\bxong\b|\bafter\b|\bonce\b|\buntil\b")
 OPEN_ITEM = re.compile(r"^\s*[-*] \[ \]\s+(.*)$")
 
 
@@ -96,8 +114,9 @@ def check(data: dict, root: Path = ROOT, now: float | None = None) -> str | None
     text = data.get("last_assistant_message") or ""
     if not text and data.get("transcript_path"):
         text = last_assistant_text(Path(data["transcript_path"]))
-    tail = text.strip()[-600:]
-    if not tail or not OFFER_STOP.search(tail):
+    lines = [ln.strip() for ln in text.strip().splitlines() if ln.strip()]
+    last = lines[-1][-400:] if lines else ""
+    if not last or not OFFER_STOP.search(last) or APPROVAL_ASK.search(last):
         return None
     checklist = newest_checklist(root, now)
     if checklist is None:

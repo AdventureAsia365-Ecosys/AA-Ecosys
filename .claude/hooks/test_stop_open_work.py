@@ -67,6 +67,29 @@ class StopOpenWorkTest(unittest.TestCase):
                      "Bảng nào là nguồn đúng cho số liệu này?", ""):
             self.assertIsNone(self.check(text), text)
 
+    def test_statements_mentions_and_approval_asks_pass(self):
+        # S272 reviewer strings: plain statements, a mention of the close, a paid-run / MFA approval question.
+        for text in ("Script gọi trực tiếp không qua wrapper.",
+                     "Bước tiếp không cần MFA",
+                     "Bài học này em ghi vào log khi chốt phiên",
+                     "We will close the session after the merge queue drains, then write the log. Lane l2 is live.",
+                     "Should I proceed with the paid run (about 3 USD)?",
+                     "Anh nhập mã MFA giúp em rồi em làm tiếp nhé?"):
+            self.assertIsNone(self.check(text), text)
+
+    def test_only_the_last_line_counts(self):
+        self.assertIsNone(self.check("Shall I continue?\nLane l4 is merged; all checks green."))
+        self.assertIsNotNone(self.check("Lane l4 is merged.\n\nShall I continue with l5?"))
+
+    def test_dependency_waits_are_blocked_markers(self):
+        (self.root / ".tmp-session" / "S999-checklist.md").write_text(
+            "- [ ] Push l5 CIS (hook chạy ~5.000 test) chỉ khi lane CIS đã xong\n"
+            "- [ ] R2 một lần sau W1/W2\n"
+            "- [ ] Root PR mở sau khi l1 có policy\n"
+            "- [ ] Tag report once the invented wave closes\n"
+            "- [ ] Deploy khi migration xong\n", encoding="utf-8")
+        self.assertIsNone(self.check("Shall I close the session?"))
+
     def test_no_open_items_or_stale_checklist_passes(self):
         (self.root / ".tmp-session" / "S999-checklist.md").write_text("- [x] all done\n- [ ] [blocked: tech lead]\n")
         self.assertIsNone(self.check("Shall I close the session?"))
