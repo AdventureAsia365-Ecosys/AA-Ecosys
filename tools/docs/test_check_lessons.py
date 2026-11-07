@@ -93,6 +93,29 @@ class CheckLineTest(RepoCase):
         ):
             self.assertIsNone(self.why(line), line)
 
+    def test_child_paths_are_checked_on_the_child_main_in_ci(self):
+        # AA-1024 G22: without the child checkout (CI), a child-repo guard path is read through the GitHub API
+        from unittest import mock
+        seen = []
+
+        def fake(repo, rel):
+            seen.append((repo, rel))
+            return {"tests/unit/test_x.py": True, "tests/unit/gone.py": False}.get(rel)
+
+        with mock.patch.dict(os.environ, {"LESSONS_REMOTE_CHECK": "1"}), \
+                mock.patch.object(cl, "remote_exists", fake):
+            cl.REMOTE_WARNINGS.clear()
+            self.assertIsNone(self.why("- **Do X** — y (S271). Guard: test apps/AA-Demo/tests/unit/test_x.py::t"))
+            self.assertIn("does not exist on AA-Demo main",
+                          self.why("- **Do X** — y (S271). Guard: test apps/AA-Demo/tests/unit/gone.py"))
+            self.assertIsNone(self.why("- **Do X** — y (S271). Guard: ci infra/AA-Infra/unknown.yml"))
+            self.assertEqual(len(cl.REMOTE_WARNINGS), 1)  # the API could not tell: a warning, not a failure
+            cl.REMOTE_WARNINGS.clear()
+        self.assertIn(("AA-Demo", "tests/unit/test_x.py"), seen)
+        with mock.patch.dict(os.environ, {"LESSONS_REMOTE_CHECK": ""}), \
+                mock.patch.object(cl, "remote_exists", lambda *a: self.fail("no API call outside CI")):
+            self.assertIsNone(self.why("- **Do X** — y (S271). Guard: test apps/AA-Demo/tests/unit/gone.py"))
+
     def test_bad_forms(self):
         cases = {
             "- **Do X** — y → z (S271). Bắt bằng: a query.": "no Guard field",

@@ -12,7 +12,9 @@ skill/aa-lessons/lessons.md (a top-level `- ` bullet under a `## ` section) ends
   Guard: none: judgement|external|one-off <why>      no machine check is possible; the reason needs 3+ words
 
 Checks: the field is there and well formed; a test/hook/tool/ci/lane target exists (a root path is checked here; a
-path in a child repo, apps/... or infra/..., is checked where that checkout exists, so CI checks root paths only;
+path in a child repo, apps/... or infra/..., is checked in that checkout when it exists, else on the child's main
+through the GitHub contents API when LESSONS_REMOTE_CHECK=1 (CI; public repos, the workflow token; an API error only
+warns);
 `aa_shell_guard:<RULE>` must be a rule of .claude/hooks/aa_shell_guard.py); a pending id is planned; a line that
 cites two or more sessions (a repeat) cannot be `none: one-off`. Old lines are not checked (the backfill is the
 guards list, skill/aa-lessons/guards.md).
@@ -26,9 +28,14 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import json
+import os
 import re
 import subprocess
 import sys
+import urllib.error
+import urllib.parse
+import urllib.request
 from pathlib import Path
 
 from docslib import REPO_ROOT, Finding, emit
@@ -71,6 +78,42 @@ def child_checkout(root: Path, path: str) -> Path | None:
     return d if (d / ".git").exists() else None
 
 
+ORG = "AdventureAsia365-Ecosys"
+REMOTE_WARNINGS: list[str] = []
+
+
+def remote_exists(repo: str, path: str) -> bool | None:
+    """Whether <path> exists on <repo> main (GitHub contents API); None when the API cannot tell."""
+    url = (f"https://api.github.com/repos/{ORG}/{repo}/contents/{urllib.parse.quote(path)}?ref=main")
+    req = urllib.request.Request(url, headers={"Accept": "application/vnd.github+json"})
+    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    if token:
+        req.add_header("Authorization", f"Bearer {token}")
+    try:
+        with urllib.request.urlopen(req, timeout=20) as r:
+            json.load(r)
+            return True
+    except urllib.error.HTTPError as e:
+        return False if e.code == 404 else None
+    except (urllib.error.URLError, OSError, ValueError):
+        return None
+
+
+def check_child(path: str, root: Path, exists=None) -> str | None:
+    """A child-repo guard path: the local checkout when there is one, else (LESSONS_REMOTE_CHECK=1) its main."""
+    co = child_checkout(root, path)
+    if co is not None:
+        return None if (root / path).exists() else f"{path} does not exist in the {co.name} checkout"
+    if os.environ.get("LESSONS_REMOTE_CHECK") != "1":
+        return None
+    repo, rel = path.split("/", 2)[1], path.split("/", 2)[2] if path.count("/") >= 2 else ""
+    found = (exists or remote_exists)(repo, rel)
+    if found is None:
+        REMOTE_WARNINGS.append(f"{path}: the GitHub API could not say whether it exists on {repo} main")
+        return None
+    return None if found else f"{path} does not exist on {repo} main"
+
+
 def check_target(kind: str, target: str, root: Path, rules: set[str]) -> str | None:
     """Why the target is not acceptable, or None."""
     tok = target.split()[0].strip("`'\",;()")
@@ -78,17 +121,13 @@ def check_target(kind: str, target: str, root: Path, rules: set[str]) -> str | N
     if m:
         return None if m.group(1) in rules else f"aa_shell_guard has no rule {m.group(1)} (rules: " \
                                                     f"{', '.join(sorted(rules)) or 'none found'})"
-    path = re.sub(r":[\w.-]+$", "", tok)  # drop :line or ::test_name
-    path = path.split("::")[0]
+    path = re.sub(r":[\w.-]+$", "", tok.split("::")[0])  # drop ::test_name, then :line
     if "/" not in path and "." not in path:
         return f"'{tok}' is not a path or hook rule (use e.g. tools/github/ship_wave.py or aa_shell_guard:PKILL-1)"
     if kind == "lane" and not path.startswith("tools/workflows/"):
         return f"a lane guard lives in tools/workflows/, not {path}"
     if path.startswith(("apps/", "infra/")):
-        co = child_checkout(root, path)
-        if co is not None and not (root / path).exists():
-            return f"{path} does not exist in the {co.name} checkout"
-        return None
+        return check_child(path, root)
     if not (root / path).exists():
         return f"{path} does not exist"
     return None
@@ -183,6 +222,8 @@ def main(argv: list[str] | None = None, root: Path = REPO_ROOT) -> int:
         findings = lint(new, LESSONS.as_posix(), root)
         print(f"check_lessons: {len(new)} new or changed lesson line(s) since {a.base}, {len(findings)} without a "
               f"valid Guard field")
+    for w in REMOTE_WARNINGS:
+        print(f"::warning title=Lesson guard path::{w}")
     emit(findings, "error")
     return 1 if findings else 0
 

@@ -110,6 +110,9 @@ jobs:
         if: ${{ !cancelled() }}
         env:
           BASE_REF: ${{ github.base_ref || 'master' }}
+          # a guard path in a child repo (apps/..., infra/...) is checked on that repo's main (public; read token)
+          LESSONS_REMOTE_CHECK: "1"
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           git fetch --no-tags --depth=1 origin "$BASE_REF"
           python tools/docs/check_lessons.py --base FETCH_HEAD
