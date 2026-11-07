@@ -15,6 +15,10 @@ For a launch of tools/workflows/lane.js (by scriptPath, any checkout, or by the 
   4. (G4) MemAvailable under 4 GiB: a lane builds and tests, and the WSL VM ran out of memory with 3 lanes plus the
      orchestrator's own Playwright (S237 ... S270). The message names the heavy processes running.
      `ram_gate: "skip: <reason>"` in args passes, logged.
+  5. (G20) a lane whose worktree already exists (`.tmp-session/wt/<session>-<key>-*`, lowercase session) without
+     `resume: true`: a lane relaunched after a usage limit or a crash redid or overwrote half-done work (10 events,
+     S243 ... S270). With `resume: true`, lane.js makes the agent report `resumed_state` (dirty files, commits ahead,
+     a decision per file) before it changes anything. Remove a stale worktree (git worktree remove) to start over.
 `plan_gate: "skip: <reason>"` in args passes (a hotfix lane), logged to .tmp-session/guard-hits.log. Every other
 Workflow launch (research, review, audits) is not gated. plan.json is read from the main checkout
 ($CLAUDE_PROJECT_DIR), where the orchestrator edits it. Unreadable hook input passes; an unreadable plan.json refuses
@@ -47,6 +51,16 @@ FIX = ("Update docs/backlog/tracker/plan.json first (session, next_session, and 
 def is_lane(tool_input: dict) -> bool:
     sp = str(tool_input.get("scriptPath") or "")
     return sp.replace("\\", "/").endswith("tools/workflows/lane.js") or tool_input.get("name") == "aa-lane"
+
+
+def lane_worktrees(root: Path, session: str, key: str) -> list[str]:
+    """Worktree directories this lane already made: .tmp-session/wt/<session>-<key>-* (lane.js names them so)."""
+    wt = root / ".tmp-session" / "wt"
+    prefix = f"{session.lower()}-{key}-"
+    try:
+        return sorted(str(p) for p in wt.iterdir() if p.is_dir() and p.name.startswith(prefix))
+    except OSError:
+        return []
 
 
 def _log(root: Path, what: str) -> None:
@@ -101,6 +115,11 @@ def check(tool_input: dict, root: Path = ROOT, proc: Path = Path("/proc")) -> st
             if session not in re.findall(r"S\d+", slot):
                 return (f"{m.group(0)} is slotted for {slot!r} in {PLAN}, not {session}: move its session slot "
                         f"(and `next`) to {session} if it was pulled ahead. {FIX}")
+    existing = lane_worktrees(root, session, str(args["key"]))
+    if existing and args.get("resume") is not True:
+        return (f"the worktree(s) of lane {args['key']} already exist: {', '.join(existing)}. Relaunch it with "
+                f"resume: true in args (the lane then reports resumed_state and continues from git status/log), or "
+                f"remove the stale worktree(s) first (git -C <repo> worktree remove <path>) to start over.")
     avail = aa_shell_guard.mem_available_mib(proc)
     if avail is not None and avail < LANE_MEM_FLOOR_MIB:
         ram_gate = str(args.get("ram_gate") or "")

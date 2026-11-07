@@ -82,6 +82,18 @@ class LaneStartGuardTest(unittest.TestCase):
                                      avail_mib=3000))
         self.assertIsNone(self.check({"scriptPath": "/x/tools/workflows/review.js", "args": {}}, avail_mib=100))
 
+    def test_existing_worktree_needs_resume(self):
+        wt = self.root / ".tmp-session/wt/s271-l1-demo-cis"
+        wt.mkdir(parents=True)
+        (self.root / ".tmp-session/wt/s271-l10-other-root").mkdir()
+        msg = self.check({"scriptPath": LANE, "args": args()})
+        self.assertIn("already exist", msg)
+        self.assertIn("s271-l1-demo-cis", msg)
+        self.assertNotIn("l10-other", msg)
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": args(resume=True)}))
+        self.assertIsNotNone(self.check({"scriptPath": LANE, "args": args(resume="yes")}))
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": args(key="l2-new")}))
+
     def test_other_workflows_and_unreadable_plan(self):
         self.assertIsNone(self.check({"script": "export const meta = {name: 'audit'}", "args": "x"}))
         self.assertIsNone(self.check({"scriptPath": "/x/tools/workflows/review.js", "args": None}))
