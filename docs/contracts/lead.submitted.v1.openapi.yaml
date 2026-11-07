@@ -39,16 +39,19 @@ info:
     not switched on, no webhook signing key, a webhook URL that is not public, no e-mail sender) is refused the same way (503 lead_channel_unavailable,
     nothing stored): a lead is stored only when it can leave. Before storing, TripPlanner also limits "Send to advisor"
     per guest session and per traveller IP (429 rate_limited) and caps one tenant's leads per 24 hours (429
-    lead_cap_reached), and its web front checks the request with a bot check (403 bot_check_failed); in every case
+    lead_cap_reached; the count runs under a per-tenant transaction lock, so concurrent sends never pass the cap), and
+    its web front checks the request with a bot check (403 bot_check_failed); in every case
     nothing is stored. A lead that still expires undelivered after the hold window, or that the CRM acknowledges
     rejected, is reported by TripPlanner's daily delivery run (the run fails loudly; the CRM also raises its ops alert
     tp_lead_rejected), never only redacted in silence.
 
     The traveller's name, e-mail and phone follow ONE rule on every side (the producer's form and API, the consumer):
     control characters removed, Unicode NFC, trimmed, then the length in code points (name 1..120, e-mail <= 254,
-    phone <= 40) and the patterns of Traveller. Shared test vectors: docs/contracts/rules/
-    lead.submitted.v1.traveller-rules.json (each app keeps a byte copy and runs every vector), so a lead the producer
-    accepts is never rejected by the consumer for these fields.
+    phone <= 40), the patterns of Traveller, and for the name at least one letter or digit after NFKD (Unicode
+    category L or N: the token the CRM files the traveller by; a name of punctuation, symbols or emoji only is
+    refused). Shared test vectors: docs/contracts/rules/lead.submitted.v1.traveller-rules.json (each app keeps a byte
+    copy and runs every vector), so a lead the producer accepts is never rejected by the consumer for these fields, and
+    a lead the consumer acknowledges stored never fails its intake for them.
 
     Never in a lead: a guest session id or token, an access / id token, a password or one-time code, an IP address or
     user agent, an AA B2B price, supplier net or any price (prices come from the agency). Auth of the pull API: M2M
@@ -174,6 +177,10 @@ components:
           type: string
           minLength: 1
           maxLength: 120
+          description: >-
+            At least one letter or digit after NFKD (Unicode category L or N; rules file name_token_pattern). A name of
+            punctuation, symbols or emoji only ('-', '...', an em dash) is refused by the producer (422 invalid_lead,
+            fields [name]) and rejected by the consumer (ack rejected), never acknowledged stored.
           x-pii: contact
         email:
           type: string

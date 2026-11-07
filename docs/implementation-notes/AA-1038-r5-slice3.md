@@ -41,10 +41,25 @@ Session S272 (lane l10). Root ADR 0019 d10, d11, d2 / b19.
   TripPlanner (backend and form) and the CRM keep byte copies and run every vector. DM-7.1 row of `tripplanner.outbox`
   says how the maximum holds.
 
+- Review fix pass 3 (S272): the Traveller name rule now matches what the CRM's intake needs. The CRM files every
+  traveller by the name's tokens (`blind_index.name_tokens`: letters and digits after NFKD), so a lead named `-`,
+  `...`, an em dash or an emoji only passed both sides' checks, was acknowledged `stored`, and then failed in
+  `crm_intake_process` with no alert. The rules file adds `name_token_normalisation` (`NFKD`) and `name_token_pattern`
+  (`[\p{L}\p{N}]`) and twelve name vectors (six refused, six valid including a CJK-only and an accented name); the
+  contract text and `Traveller.name` description state it. TripPlanner refuses such a name before storing (422
+  `invalid_lead`, fields `[name]`, backend and form); the CRM rejects such a lead at the pull (ack `rejected`, alert
+  `tp_lead_rejected`, TripPlanner attention `lead_rejected_by_crm`) and its hosted Stage 1 form refuses the name too.
+  The contract text also says the per-tenant 24-hour cap is counted under a per-tenant transaction lock
+  (`pg_advisory_xact_lock(hashtext('tp_lead_cap:' || tenant_id))` at TripPlanner), so concurrent sends never pass it.
+
 ## Tradeoffs
 
 - No separate retention row: tp-026 adds columns to `tripplanner.outbox`, CIS 390 to `shared.tenant_tripplanner_site`;
   both rows are updated in place.
+
+- The name token rule is not a JSON Schema `pattern` on `Traveller.name`: Unicode property classes (`\p{L}`) are not
+  portable across the validators the apps and `tools/contracts/check_contracts.py` use, so the rule lives in the
+  description and the shared vectors (run by each app), and no rejected sample payload can show it.
 
 - The contract is still `1.0`: the changes are text, a new error code and an added `LeadAck.state` value that only
   TripPlanner sends; nothing is live yet (the CRM pull switch is off), so no consumer depends on the old enum.
