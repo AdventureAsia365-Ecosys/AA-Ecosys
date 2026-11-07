@@ -288,6 +288,28 @@ def push_timeout() -> int:
         return 900
 
 
+HOOK_REASON_MAX = 12
+
+
+def push_failure_reason(r) -> str:
+    """S272: a refused push used to report only git's last line ("failed to push some refs"), which hides why the
+    repo's pre-push hook refused. Return the hook's FAIL / missing / install lines (at most HOOK_REASON_MAX) so the
+    caller sees the cause, for example a pre-push run by a python without pytest (AA_PREPUSH_PYTHON points it at a
+    venv that has the hook's modules)."""
+    lines = [x.strip() for x in (r.out + "\n" + r.err).splitlines() if x.strip()]
+    keep = [x for x in lines if x.startswith("FAIL") or x.startswith("missing:") or x.startswith("install:")]
+    if not keep:
+        return r.last_line()
+    extra = len(keep) - HOOK_REASON_MAX
+    text = "\n    ".join(keep[:HOOK_REASON_MAX])
+    if extra > 0:
+        text += f"\n    ... {extra} more"
+    hint = ""
+    if any("python module" in x for x in keep):
+        hint = "\n    hint: set AA_PREPUSH_PYTHON to a venv python that has the hook's modules, then re-run"
+    return f"{r.last_line()}\n    {text}{hint}"
+
+
 def open_one(runner: Runner, p: dict, extra_refs: list[str], draft: bool) -> str:
     repo = normalize_repo(str(p["repo"]))
     wt, br = str(p["worktree"]), str(p["branch"])
@@ -297,7 +319,7 @@ def open_one(runner: Runner, p: dict, extra_refs: list[str], draft: bool) -> str
                     "-u", "origin", br],
                    timeout=push_timeout())
     if not r.ok:
-        raise ShipError(f"{tag}: push failed (no force push here): {r.last_line()}", 4)
+        raise ShipError(f"{tag}: push failed (no force push here): {push_failure_reason(r)}", 4)
     existing = runner.run(["gh", "pr", "list", "-R", slug(repo), "--head", br, "--state", "open", "--json",
                            "number,url", "--jq", ".[0].url // empty"], timeout=60)
     url = existing.out.strip() if existing.ok else ""
