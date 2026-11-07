@@ -22,7 +22,7 @@ Usage: tools/ecs/ecsx.sh <script.py> [VAR=value ...]
 Runs <script.py> with python3 in a running task of the service, cwd /app, /app on sys.path, and prints all of
 its output; exits with the script's exit code. VAR=value pairs become the script's environment. The script reads
 the container's own DATABASE_URL (CIS: cis_app, Booking: booking, CRM: crm_app). The pair
-ECSX_SCRIPT_TIMEOUT=<seconds> sets how long the script may run in the container (default 3300).
+ECSX_SCRIPT_TIMEOUT=<seconds> sets how long the script may run in the container (default 3300, at most 10800).
 
 Environment:
   ECSX_SERVICE        aa-cis-dev-api (default) | aa-cis-dev-worker | aa-booking-dev-api | aa-crm-dev-api
@@ -83,6 +83,8 @@ for kv in "$@"; do
   if [[ $kv == ECSX_SCRIPT_TIMEOUT=* ]]; then
     st=${kv#*=}
     [[ $st =~ ^[0-9]+$ ]] || { echo "ecsx: ECSX_SCRIPT_TIMEOUT must be seconds (got $st)" >&2; exit 2; }
+    # S272 review: a hung script blocks every CIS deploy until it ends; longer than 3 h is a one-off ECS task
+    (( st <= 10800 )) || { echo "ecsx: ECSX_SCRIPT_TIMEOUT=$st is over the 10800 s cap (a hung script blocks every CIS deploy that long): run a long job as a one-off ECS task" >&2; exit 2; }
     (( st <= WAIT )) || { echo "ecsx: ECSX_SCRIPT_TIMEOUT=$st is longer than the wait (ECSX_TIMEOUT=$WAIT): set ECSX_TIMEOUT=$st (or more) too, or run a long job as a one-off ECS task" >&2; exit 2; }
   fi
 done

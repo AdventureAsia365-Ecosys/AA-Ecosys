@@ -44,7 +44,13 @@ APP_DIR = os.environ.get("ECSX_APP_DIR", "/app")
 
 # Test only: S3 objects become files under this directory (no boto3 on a workstation).
 S3_DIR = os.environ.get("ECSX_S3_DIR")
-HEARTBEAT_S = int(os.environ.get("ECSX_HEARTBEAT_S", "30"))
+# Capped (S272 review): the CIS deploy gate counts a heartbeat younger than 120 s as a running script, so a beat
+# slower than 30 s (a VAR=value override reaches this environment) would make a live script look dead.
+HEARTBEAT_MAX_S = 30
+HEARTBEAT_S = max(1, min(HEARTBEAT_MAX_S, int(os.environ.get("ECSX_HEARTBEAT_S", "30"))))
+# The longest a script may run (S272 review): a hung script blocks every CIS deploy until it ends; a longer job runs as
+# a one-off ECS task. The wrapper refuses a larger ECSX_SCRIPT_TIMEOUT; this clamps one that reaches the runner anyway.
+SCRIPT_TIMEOUT_MAX_S = 10800
 
 
 def paths(run_id: str) -> tuple[str, str]:
@@ -101,7 +107,7 @@ def script_env() -> dict:
 
 
 def script_timeout() -> int:
-    return int(os.environ.get("ECSX_SCRIPT_TIMEOUT", "3300"))
+    return max(1, min(SCRIPT_TIMEOUT_MAX_S, int(os.environ.get("ECSX_SCRIPT_TIMEOUT", "3300"))))
 
 
 def detach(started_line: str, run_id: str | None = None) -> bool:
@@ -165,7 +171,11 @@ class _Store:
         self.s3 = None
         if not S3_DIR:
             import boto3
-            self.s3 = boto3.client("s3")
+            from botocore.config import Config
+            # short timeouts and few retries (S272 review): a put stalled in retries for 90 s or more made a running
+            # script's heartbeat look stale to the deploy gate
+            self.s3 = boto3.client("s3", config=Config(connect_timeout=5, read_timeout=15,
+                                                         retries={"max_attempts": 3, "mode": "standard"}))
 
     def put(self, key: str, body: bytes) -> None:
         if self.s3 is None:

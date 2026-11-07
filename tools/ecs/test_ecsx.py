@@ -331,6 +331,50 @@ class S3ModeTest(unittest.TestCase):
             self.assertEqual(r.returncode, 2)
             self.assertIn("longer than the wait", r.stderr)
 
+    def test_script_timeout_over_the_cap_is_refused(self):
+        with tempfile.TemporaryDirectory() as d:
+            r = self.run_ecsx(Path(d), "print(1)\n", "ECSX_SCRIPT_TIMEOUT=20000")
+            self.assertEqual(r.returncode, 2)
+            self.assertIn("10800 s cap", r.stderr)
+
+
+class RunnerCapsTest(unittest.TestCase):
+    """S272 review: the heartbeat interval and the script timeout cannot be raised past what the deploy gate reads."""
+
+    def load(self, **env):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("ecsx_runner_caps", Path(L.HERE) / "ecsx_runner.py")
+        mod = importlib.util.module_from_spec(spec)
+        old = {k: os.environ.get(k) for k in env}
+        os.environ.update(env)
+        try:
+            spec.loader.exec_module(mod)
+        finally:
+            for k, v in old.items():
+                if v is None:
+                    os.environ.pop(k, None)
+                else:
+                    os.environ[k] = v
+        return mod
+
+    def test_heartbeat_is_capped_at_30_s(self):
+        self.assertEqual(self.load(ECSX_HEARTBEAT_S="600").HEARTBEAT_S, 30)
+        self.assertEqual(self.load(ECSX_HEARTBEAT_S="1").HEARTBEAT_S, 1)
+
+    def test_script_timeout_is_clamped(self):
+        mod = self.load()
+        old = os.environ.get("ECSX_SCRIPT_TIMEOUT")
+        try:
+            os.environ["ECSX_SCRIPT_TIMEOUT"] = "99999"
+            self.assertEqual(mod.script_timeout(), mod.SCRIPT_TIMEOUT_MAX_S)
+            os.environ["ECSX_SCRIPT_TIMEOUT"] = "1800"
+            self.assertEqual(mod.script_timeout(), 1800)
+        finally:
+            if old is None:
+                os.environ.pop("ECSX_SCRIPT_TIMEOUT", None)
+            else:
+                os.environ["ECSX_SCRIPT_TIMEOUT"] = old
+
 
 if __name__ == "__main__":
     unittest.main()
