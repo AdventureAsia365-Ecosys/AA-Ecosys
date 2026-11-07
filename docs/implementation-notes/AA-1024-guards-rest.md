@@ -141,6 +141,37 @@ reviewer's real cases as tests (refusal and pass).
   of its canonical ECS exec pattern, which ECS-1 refuses. Ask the tech lead to point that step at `tools/ecs/ecsx.sh`
   (a lane cannot edit that file).
 
+## Review fix pass 3 (S272)
+
+Same rule (no guard that blocks legitimate orchestrator work). Nothing stripped in this pass; each fix carries the
+reviewer's cases as refusal and pass tests.
+
+- **SHIP-1 (c)**: a ship_merge call counts as looped only between a loop's `do` and its matching `done` (or in a
+  while / until condition); the hook tracks do/done depth while it walks the simple commands. The reviewer's replay
+  of 449 commands (06-07/11) found 6 routine "merge once, then verify in a loop" one-liners refused, plus the
+  recommended "wait for checks in a loop, then one merge call" form; both shapes are must-pass tests now, nested and
+  sequential loops with a merge inside stay refused.
+- **G19 Stop hook**: approval context counts in the last 3 paragraphs and the last 15 lines (was: last paragraph +
+  one line above), and a decisions section anywhere ("Cần anh quyết", "Cần Nghiệp quyết", "Anh quyết giúp", "needs
+  your decision") passes the whole message. Replay over 3,004 turn-final messages of 65 transcripts: 9 blocks before,
+  2 now (f3f8c58a, dd256404 first: plain continue-or-stop offers over a status list, no cost / approval / delete in
+  sight; both are tests that must still block). The 3 approval cases (dd256404 second, 3880992d, 4fc53f89) and the
+  reviewer's 5 crafted status-block shapes are must-pass tests. Also let through now: 66389789, 7cadadc6, 2894b372,
+  9bc1f4a7, each with a cost, approval or Jira-draft ask in its last paragraphs (a missed nudge is the cheap side).
+- **G11 closing keyword**: the pattern accepts markdown and a Linear URL between the keyword and the id
+  (`[\s:*_`\[(\-]*(?:(?:https?://)?linear\.app/\S*?/issue/)?AA-\d+`), identical in the PR opener and the six
+  `pr-title.yml` copies (the whole body-rule step hashes the same in all six). `Closes [AA-n](url)`, `Fixes
+  https://linear.app/.../issue/AA-n/slug`, `Fixes **AA-n**`, `` Fixes `AA-n` ``, `Fixes - AA-n` fail; a test checks
+  the workflow's pattern equals the opener's.
+- **G17 pending read (CIS)**: the job lookup covers the wave's expected set (requested ids, the window's tours, the
+  country's active raw tours), so a wave whose rewrites are still queued and have no version yet reads pending (exit
+  5), not STOP; a named set with nothing run yet is pending too. Collect-level tests in CIS. `POST /admin/waves` keeps
+  no quality read (stripped in pass 2; a unit test asserts it).
+- Minors: ECS-1 reads a Python command string only when it starts with `aws` (a `timeout N` allowed) and is handed
+  to a runner (directly, or through a variable / `shlex.split`), so a HELP / log message held in a variable and
+  `run("echo aws ecs ...")` pass. WT-1 (`~`, `$`, quoted `cd`, `pushd`), the opener's closing-pattern parity and the
+  dropped `build:` title type were done in pass 2 and are covered by tests.
+
 ## Tradeoffs
 
 - RAM-1 on every push: an orchestrator push on a loaded machine is refused until memory frees (or `AA_RAM_OVERRIDE=1`,
