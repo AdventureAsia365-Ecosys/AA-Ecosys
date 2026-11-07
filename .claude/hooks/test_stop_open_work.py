@@ -77,9 +77,49 @@ class StopOpenWorkTest(unittest.TestCase):
                      "Anh nhập mã MFA giúp em rồi em làm tiếp nhé?"):
             self.assertIsNone(self.check(text), text)
 
-    def test_only_the_last_line_counts(self):
-        self.assertIsNone(self.check("Shall I continue?\nLane l4 is merged; all checks green."))
+    def test_last_paragraph_counts(self):
+        # an offer followed by one more line in the same paragraph still counts (reviewer, S272)
+        self.assertIsNotNone(self.check("Anh có muốn em làm tiếp không?\nLane l4 đã merge."))
+        self.assertIsNotNone(self.check("Shall I continue?\nLane l4 is merged; all checks green."))
+        self.assertIsNone(self.check("Shall I continue?\n\nLane l4 is merged; all checks green."))
         self.assertIsNotNone(self.check("Lane l4 is merged.\n\nShall I continue with l5?"))
+
+    def test_real_offers_from_the_transcripts_are_blocked(self):
+        # turn-final messages of earlier sessions the reviewer's replay found (S272), plus crafted shapes
+        for text in (
+                "Nghiệp muốn em làm tiếp (đưa 224 lên rồi tới AA-773, AA-775, r5), hay chốt phiên ở đây?",
+                "Anh muốn em làm tiếp gì trong phiên này, hay dừng phiên?",
+                "Giờ đã gần 23:00. Nghiệp muốn **dừng phiên** để mình chạy nghi thức cuối phiên (log, backlog, "
+                "memory Notion, nháp Jira, root PR, đưa 5 repo về `main` sạch), hay làm tiếp?",
+                "Anh muốn tôi chạy nghi thức kết thúc phiên luôn không?",
+                "Anh muốn em vào phần kết phiên luôn không?",
+                "Log phiên, memory Notion, Linear, lessons và thư mục audit đã cập nhật. Anh có muốn **dừng phiên "
+                "S234** ở đây không?",
+                "Em đề xuất **kết thúc phiên S224 ở đây**. Phần AA-756 chuyển sang S225. Anh muốn kết thúc, hay "
+                "làm thêm việc nào?",
+                "Anh có muốn em làm tiếp phần deploy CIS không?",
+                "Em tiếp tục deploy nhé?"):
+            self.assertIsNotNone(self.check(text), text)
+
+    def test_approval_asks_anywhere_in_the_last_paragraph_pass(self):
+        # S272 reviewer replay: the cost, MFA or DRY RUN context sits on the line above the question
+        for text in (
+                "Thử 3 tour xong: tổng $0.41 (llm_call_log), 0 lỗi.\nAnh cho em chạy tiếp không?",
+                "Phiên MFA hết hạn (aws sts báo ExpiredToken).\nAnh chạy `aws sts get-caller-identity --profile "
+                "aa365-admin` rồi nhắn em làm tiếp nhé?",
+                "DRY RUN xong: 42 dòng shared.job sẽ bị xoá (md5 pin ở trên).\nAnh cho em chạy tiếp không?",
+                "Thử 3 tour xong: tổng $0.41.\n\nAnh cho em chạy tiếp không?",
+                "Nghiệp **duyệt $1,97/tháng** cho alarm chứ? Rồi cho mình **dừng phiên** để làm 4 việc chốt nhé?",
+                "Nghiệp duyệt chạy tiếp **50 tour India** nhé? Dự kiến tốn khoảng $2, mất 15–30 phút.",
+                "Anh chọn **(a)** làm tiếp trong phiên này, hay **(b)** chốt phiên ở đây?",
+                "Anh có muốn em tạo issue cho việc này rồi làm tiếp không?",
+                "Nghiệp chốt hướng này chứ? Phiên sau mình làm phần còn lại. Sau đó mình dừng phiên.",
+                "Anh muốn làm **ngay bây giờ** hay **để đầu phiên sau**? Trong lúc chờ, tôi tiếp tục với L15."):
+            self.assertIsNone(self.check(text), text)
+
+    def test_block_text_never_pushes_a_paid_run_or_a_delete(self):
+        msg = self.check("Anh có muốn em làm tiếp không?")
+        self.assertIn("Never start a paid run, a delete", msg)
 
     def test_dependency_waits_are_blocked_markers(self):
         (self.root / ".tmp-session" / "S999-checklist.md").write_text(
