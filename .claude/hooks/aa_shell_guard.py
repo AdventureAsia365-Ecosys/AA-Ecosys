@@ -36,6 +36,18 @@ Rules (main session and subagents alike; exit 2 refuses, the message goes to std
            directory or with -n, a UAT node .cjs scenario) while MemAvailable < 2 GiB, or < 4 GiB with 3 or more heavy
            processes already running: the WSL VM ran out of memory and killed Claude Code and every lane (S237, S248,
            S251, S252, S261). The message names what is running. Override (logged): prefix `AA_RAM_OVERRIDE=1`.
+  ECS-1    A raw `aws ecs execute-command`, typed or inside a .tmp-session / scratchpad script the command runs (S237 ...
+           S269, 10 repeats): the SSM terminal cuts long output silently and a dropped session can kill the script.
+           tools/ecs/ecsx.sh runs the script detached and brings ALL its output back (and resumes a lost start).
+           Read-only mentions (grep, cat) pass. Override, logged (the tech lead only): prefix `AA_ECSX_BYPASS=1`.
+  WT-1     `git worktree add` with a literal relative path, or an absolute one outside .tmp-session/wt/: the path is
+           resolved from `-C <repo>` or the current directory, and worktrees landed inside child repos (S246, S247).
+           A variable path ($W) passes (it cannot be read statically).
+  BG-1     A background job whose stdout goes to /dev/null (`cmd >/dev/null 2>&1 &`, `&>/dev/null &`, `nohup ...
+           >/dev/null`): when it fails nobody can tell why (S236, S270). Write a log file under .tmp-session/ or use
+           the Bash tool's run_in_background. `&&` after a redirect is not a background job.
+  TF-1     `terraform apply|destroy` from a lane worktree (.tmp-session/wt/**) or a checkout that is not on
+           main/master: the state then holds code that is not on main, and the next apply from main reverts it.
 
 How it reads a command: a small shell lexer blanks quoted text and drops comments and heredoc bodies, so a rule never
 fires on text that is only an argument (`grep 'pkill -f' x`); the bodies of `bash -c '...'` / `sh -c` and of
@@ -319,6 +331,142 @@ def _is_ship_merge(prog: str, args: list[str]) -> bool:
     return False
 
 
+def _aws_service_op(args: list[str]) -> tuple[str, str]:
+    """(service, operation) of an aws CLI call, past its global options."""
+    w = [a for a in args if a]
+    i = 0
+    while i < len(w) and w[i].startswith("-"):
+        # --profile x / --region x take a value; --debug / --no-cli-pager do not (a value never starts with '-')
+        i += 2 if "=" not in w[i] and i + 1 < len(w) and not w[i + 1].startswith("-") and w[i] not in (
+            "--debug", "--no-cli-pager", "--no-paginate", "--no-verify-ssl", "--no-sign-request") else 1
+    rest = w[i:]
+    return (rest[0] if rest else "", rest[1] if len(rest) > 1 else "")
+
+
+def _rule_ecs_exec(t: Text) -> str | None:
+    for words in simple_commands(t.skeleton):
+        prog, args = program(words)
+        if prog == "aws" and _aws_service_op(args) == ("ecs", "execute-command"):
+            return "a raw `aws ecs execute-command`"
+    return None
+
+
+ECS_EXEC_IN_SCRIPT = re.compile(
+    r"\baws\b[^\n]*\becs\s+execute-command\b|[\"']ecs[\"']\s*,\s*[\"']execute-command[\"']")
+
+
+WORKSPACE = "/home/nghiep/projects/AA-Ecosys"  # the canonical lane path the lane template prescribes
+
+
+def _wt_bases() -> tuple[str, ...]:
+    return tuple(dict.fromkeys(f"{r}/.tmp-session/wt/" for r in (str(ROOT), WORKSPACE)))
+
+
+def _cd(here: Path, args: list[str]) -> Path:
+    """The directory after `cd <args>` (a variable or quoted target keeps the old one: unknown)."""
+    if args and not args[0].startswith(("$", "-", '"', "'", "~")):
+        return Path(os.path.normpath(args[0] if args[0].startswith("/") else str(here / args[0])))
+    return here
+
+
+WT_VALUE_OPTS = frozenset({"-b", "-B", "--orphan", "--reason"})
+UNKNOWN_DIR = Path("/unknown-dir")
+
+
+def worktree_check(t: Text, here: Path) -> str | None:
+    """WT-1: a `git worktree add` whose path, resolved from -C <repo> or the current directory (cd tracked), is not
+    under <workspace>/.tmp-session/wt/."""
+    for words in simple_commands(t.skeleton):
+        prog, args = program(words)
+        if prog == "cd":
+            here = _cd(here, args)
+            continue
+        if prog != "git":
+            continue
+        a, base = list(args), here
+        while a and a[0].startswith("-"):  # git -C <dir> / -c k=v before the subcommand
+            if a[0] == "-C" and len(a) > 1:
+                base = _cd(base, a[1:2]) if not a[1].startswith(("$", '"', "'")) else UNKNOWN_DIR
+            a = a[2:] if a[0] in ("-C", "-c") else a[1:]
+        if a[:2] != ["worktree", "add"]:
+            continue
+        rest = a[2:]
+        path = None
+        while rest:
+            if rest[0] in WT_VALUE_OPTS:
+                rest = rest[2:]
+            elif rest[0].startswith("-"):
+                rest = rest[1:]
+            else:
+                path = rest[0]
+                break
+        if not path or path.startswith(("$", "~", '"', "'", "`")) or "$" in path:
+            continue  # a variable or quoted path is not readable here
+        if not path.startswith("/") and base == UNKNOWN_DIR:
+            return f"`git worktree add {path}` (a relative path from a -C directory held in a variable)"
+        full = os.path.normpath(path if path.startswith("/") else str(base / path)) + "/"
+        if not any(full.startswith(b) and "/" not in full[len(b):].rstrip("/") for b in _wt_bases()):
+            return f"`git worktree add {path}` (resolves to {full.rstrip('/')}, outside {_wt_bases()[-1]})"
+    return None
+
+
+_BG_NULL = re.compile(
+    r"(?:(?<![0-9&])1?>\s*/dev/null\s*2>\s*(?:&1|/dev/null)|&>\s*/dev/null|>&\s*/dev/null)\s*&(?![&>])")
+_SEGMENT = re.compile(r"&&|\|\||;|\n|(?<![>&])&(?![>&])")
+
+
+def _rule_background(t: Text) -> str | None:
+    sk = t.skeleton
+    for m in _BG_NULL.finditer(sk):
+        start = max((x.end() for x in _SEGMENT.finditer(sk, 0, m.start())), default=0)
+        if ")" in sk[start:m.start()] or "}" in sk[start:m.start()]:
+            continue  # a subshell / group `( ... > log 2>&1 ) >/dev/null &` keeps its output inside
+        return "a background job with its output sent to /dev/null"
+    for seg in _SEGMENT.split(sk):
+        words = seg.split()
+        while words and (words[0] in KEYWORDS or re.fullmatch(r"[A-Za-z_]\w*=\S*", words[0])):
+            words = words[1:]
+        if words and words[0] in ("nohup", "setsid") and re.search(r"(?<![0-9&])1?>\s*/dev/null", seg):
+            return f"`{words[0]} ... >/dev/null` (a detached job whose output is thrown away)"
+    return None
+
+
+def _branch(path: Path) -> str | None:
+    import subprocess
+    try:
+        r = subprocess.run(["git", "-C", str(path), "symbolic-ref", "--short", "-q", "HEAD"], capture_output=True,
+                           text=True, timeout=5)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return r.stdout.strip() if r.returncode == 0 else None
+
+
+def tf_check(t: Text, here: Path) -> tuple[str | None, Path]:
+    """TF-1: terraform apply/destroy from a lane worktree or a checkout off main (cd tracked). Returns (hit, the
+    directory after this text)."""
+    for words in simple_commands(t.skeleton):
+        prog, args = program(words)
+        if prog == "cd":
+            here = _cd(here, args)
+            continue
+        if prog != "terraform":
+            continue
+        chdir = next((a.split("=", 1)[1] for a in args if a.startswith("-chdir=")), None)
+        sub = next((a for a in args if not a.startswith("-")), "")
+        if sub not in ("apply", "destroy"):
+            continue
+        d = here
+        if chdir and not chdir.startswith(("$", '"', "'")):
+            d = Path(chdir) if chdir.startswith("/") else here / chdir
+        where = os.path.normpath(str(d))
+        if "/.tmp-session/wt/" in where + "/":
+            return f"`terraform {sub}` from a lane worktree ({where})", here
+        br = _branch(Path(where)) if Path(where).is_dir() else None
+        if br and br not in ("main", "master"):
+            return f"`terraform {sub}` from a checkout on branch {br}, not main", here
+    return None, here
+
+
 def _rule_ship_command(t: Text) -> str | None:
     sk = t.skeleton
     cmds = simple_commands(sk)
@@ -552,33 +700,69 @@ FIX = {
     "SHIP-1": "Ship a wave with ONE call:python3 tools/github/ship_wave.py cis#1350 cis#1352 'cis#1349>apply:cis/383' "
               "'cis#1353@after=cis/383' --wait-deploy (independent PRs in parallel; only migration -> copy -> apply "
               "-> code is sequenced). One PR: python3 tools/github/ship_merge.py <Repo>#<pr>.",
+    "ECS-1": "Run the script with tools/ecs/ecsx.sh <script.py> [VAR=value ...] (ECSX_SERVICE=<service> for "
+             "Booking/CRM/worker): it runs detached, keeps ALL output (also in .tmp-session/ecsx/<run id>.out) and "
+             "resumes a lost start. Override, logged, tech lead only: prefix AA_ECSX_BYPASS=1.",
+    "WT-1": "Give the absolute lane path: git -C <repo> worktree add "
+            "/home/nghiep/projects/AA-Ecosys/.tmp-session/wt/<session>-<lane>-<slug> -b <branch> origin/main.",
+    "BG-1": "Keep the output: `cmd > .tmp-session/<S>/<name>.log 2>&1 &` (or the Bash tool's run_in_background), "
+            "then read the log when it ends.",
+    "TF-1": "Apply from the main checkout on main (git switch main && git pull), after the PR merged; Infra applies "
+            "normally run in CI (terraform-apply.yml).",
 }
 
 
-RULES = (("PKILL-1", _rule_pkill), ("ZSH-1", _rule_zsh), ("ENV-1", _rule_env), ("SHIP-1", _rule_ship_command))
-RULE_IDS = tuple(r for r, _ in RULES) + ("RAM-1",)
+RULES = (("PKILL-1", _rule_pkill), ("ZSH-1", _rule_zsh), ("ENV-1", _rule_env), ("SHIP-1", _rule_ship_command),
+         ("ECS-1", _rule_ecs_exec), ("BG-1", _rule_background))
+RULE_IDS = tuple(r for r, _ in RULES) + ("RAM-1", "WT-1", "TF-1")
+
+
+def _prefixed(cmd: str, var: str) -> bool:
+    return bool(re.match(rf"\s*(?:\w+=\S*\s+)*{var}=1\b", cmd))
 
 
 def check(cmd: str, cwd: Path | None = None, proc: Path = Path("/proc")) -> Refusal | None:
     cwd = cwd or ROOT
     texts = texts_of(cmd)
-    override = bool(re.match(r"\s*(?:\w+=\S*\s+)*AA_RAM_OVERRIDE=1\b", cmd))
-    # Scripts the command runs are checked for merges (SHIP-1 d). Not for PKILL-1: a script's own command line is
-    # `bash <path>`, so a `pgrep -f <other script>` inside it does not match itself (replay S271: 2 such waits).
+    override = _prefixed(cmd, "AA_RAM_OVERRIDE")
+    ecs_bypass = _prefixed(cmd, "AA_ECSX_BYPASS")
+    # Scripts the command runs are checked for merges (SHIP-1 d) and raw ECS exec (ECS-1). Not for PKILL-1: a
+    # script's own command line is `bash <path>`, so a `pgrep -f <other script>` inside it does not match itself
+    # (replay S271: 2 such waits).
     for t in list(texts):
         for path in _scripts_run(t, cwd):
             body = _read(path)
             if body is None:
                 continue
-            if MERGE_IN_SCRIPT.search(_strip_comments(body)):
+            code = _strip_comments(body)
+            if MERGE_IN_SCRIPT.search(code):
                 return Refusal("SHIP-1", f"{path.name} is a hand-written ship script (it merges PRs itself: "
                                f"serial waits, gate skipped)", FIX["SHIP-1"])
+            if ECS_EXEC_IN_SCRIPT.search(code):
+                if ecs_bypass:
+                    _log("ECS-1 override", f"{path}: {cmd}")
+                    continue
+                return Refusal("ECS-1", f"{path.name} runs a raw `aws ecs execute-command`", FIX["ECS-1"])
     for t in texts:
         where = "" if t.origin == "command" else f" (in {Path(t.origin).name})"
         for rule, fn in RULES:
             hit = fn(t)
             if hit:
+                if rule == "ECS-1" and ecs_bypass:
+                    _log("ECS-1 override", cmd)
+                    continue
                 return Refusal(rule, hit + where, FIX[rule])
+    # WT-1 / TF-1 resolve paths: walk the texts in order, carrying the directory `cd` moved to (the outer text
+    # first, then the bash -c / heredoc bodies it runs).
+    here = cwd
+    for t in texts:
+        where = "" if t.origin == "command" else f" (in {Path(t.origin).name})"
+        hit = worktree_check(t, here)
+        if hit:
+            return Refusal("WT-1", hit + where, FIX["WT-1"])
+        hit, here = tf_check(t, here)
+        if hit:
+            return Refusal("TF-1", hit + where, FIX["TF-1"])
     ram = ram_check(texts, override, proc)
     if ram:
         return Refusal("RAM-1", ram[0], ram[1])

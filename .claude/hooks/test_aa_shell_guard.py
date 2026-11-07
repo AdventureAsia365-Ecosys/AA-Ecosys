@@ -207,6 +207,141 @@ class ShipTest(unittest.TestCase):
                 g.ROOT = old
 
 
+class EcsExecTest(unittest.TestCase):
+    """ECS-1 (AA-1024 G3): raw ECS exec loses output; tools/ecs/ecsx.sh is the way."""
+
+    def test_refused(self):
+        for cmd in (
+            "aws ecs execute-command --cluster c --task $T --container api --interactive --command \"sh -c 'x'\"",
+            "aws --profile aa365-admin --region us-west-1 ecs execute-command --cluster c --task t --command ls",
+            "timeout 90 aws ecs execute-command --cluster c --task t --command ls --profile p",
+            "bash -c 'aws ecs execute-command --cluster c --task t --command ls'",
+            "AA_RAM_OVERRIDE=1 aws ecs execute-command --cluster c --task t --command ls",
+        ):
+            self.assertEqual(rule(cmd), "ECS-1", cmd)
+
+    def test_near_misses_pass(self):
+        for cmd in (
+            "aws ecs describe-services --cluster c --services s",
+            "aws ecs list-tasks --cluster c --service-name s --query 'taskArns[0]'",
+            "grep -n 'aws ecs execute-command' docs/ops/runbooks/ecs-exec-s3-mediated.md",
+            "cat tools/ecs/ecsx_local.py",
+            "echo \"never aws ecs execute-command by hand\"",
+            "tools/ecs/ecsx.sh .tmp-session/S999/check.py LIMIT=5",
+            "AA_ECSX_BYPASS=1 aws ecs execute-command --cluster c --task t --command ls",
+        ):
+            self.assertIsNone(rule(cmd), cmd)
+
+    def test_scripts_that_exec_are_refused(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            s = root / ".tmp-session" / "S999"
+            s.mkdir(parents=True)
+            (s / "one.sh").write_text("#!/bin/bash\nT=$(aws ecs list-tasks)\naws ecs execute-command --task $T\n")
+            (s / "one.py").write_text("import subprocess\nsubprocess.run(['aws', 'ecs', 'execute-command'])\n")
+            (s / "note.sh").write_text("#!/bin/bash\n# aws ecs execute-command was the old way\necho hi\n")
+            old = g.ROOT
+            g.ROOT = root
+            try:
+                self.assertEqual(rule("bash .tmp-session/S999/one.sh", cwd=root), "ECS-1")
+                self.assertEqual(rule("python3 .tmp-session/S999/one.py", cwd=root), "ECS-1")
+                self.assertIsNone(rule("bash .tmp-session/S999/note.sh", cwd=root))
+                self.assertIsNone(rule("cat .tmp-session/S999/one.sh", cwd=root))
+                self.assertIsNone(rule("AA_ECSX_BYPASS=1 bash .tmp-session/S999/one.sh", cwd=root))
+            finally:
+                g.ROOT = old
+
+
+WS = Path("/home/nghiep/projects/AA-Ecosys")  # the workspace root a session runs in (no file access needed)
+
+
+class WorktreeTest(unittest.TestCase):
+    """WT-1 (G2): a worktree path, resolved the way git resolves it, must be <workspace>/.tmp-session/wt/<name>."""
+
+    def test_refused(self):
+        for cmd in (
+            "git -C infra/AA-CIS-Infra worktree add .tmp-session/wt/s9-x -b feat/x origin/main",
+            "git worktree add -b feat/x ../wt-x origin/main",
+            "git -C apps/AA-CIS-App worktree add --detach wt/x",
+            "git worktree add -q /tmp/x origin/main",
+            "git -C $REPO worktree add wt/x origin/main",
+            "cd apps/AA-Booking && git worktree add .tmp-session/wt/s9-z origin/main",
+        ):
+            self.assertEqual(rule(cmd, cwd=WS), "WT-1", cmd)
+
+    def test_near_misses_pass(self):
+        base = f"{WS}/.tmp-session/wt"
+        for cmd in (
+            f"git -C apps/AA-CIS-App worktree add {base}/s272-l8-x -b feat/x origin/main",
+            f"git worktree add -b feat/x -q {base}/s272-l8-y origin/main",
+            "git -C apps/AA-Booking worktree add $W -b feat/x origin/main",
+            "git worktree add \"$WT\" origin/main",
+            "git worktree list --porcelain",
+            "git worktree remove .tmp-session/wt/s9-x",
+            "grep -n 'git worktree add wt' x.md",
+            "git worktree add .tmp-session/wt/s9-rel -b x origin/master",
+            "cd infra/AA-CIS-Infra && git worktree add -q ../../.tmp-session/wt/s9-y -b x origin/main",
+            "git -C apps/AA-Partner worktree add ../../.tmp-session/wt/s9-p origin/main",
+        ):
+            self.assertIsNone(rule(cmd, cwd=WS), cmd)
+
+
+class BackgroundTest(unittest.TestCase):
+    """BG-1 (G2): a background job must keep its output somewhere readable."""
+
+    def test_refused(self):
+        for cmd in (
+            "python3 long.py >/dev/null 2>&1 &",
+            "uvicorn app:app > /dev/null 2>&1 & echo started",
+            "node server.js &>/dev/null &",
+            "nohup python3 long.py > /dev/null 2>&1",
+            "setsid ./run.sh >/dev/null 2>/dev/null &",
+            "(bash .tmp-session/S999/wave.sh > /dev/null 2>&1 &)",
+            "cd site && python3 -m http.server 8765 >/dev/null 2>&1 & echo $! > srv.pid",
+        ):
+            self.assertEqual(rule(cmd), "BG-1", cmd)
+
+    def test_near_misses_pass(self):
+        for cmd in (
+            "mkdir -p x >/dev/null 2>&1 && cp a b",
+            "command -v gitleaks >/dev/null 2>&1 || echo none",
+            "python3 long.py > .tmp-session/S999/long.log 2>&1 &",
+            "nohup python3 long.py > .tmp-session/S999/long.log 2>&1 &",
+            "nohup x > a.log 2>&1 && cat y >/dev/null",
+            "pg_ctl start -l /tmp/pg.log 2>/dev/null &",
+            "echo 'cmd >/dev/null 2>&1 &'",
+            "(long.sh > .tmp-session/S999/a.log 2>&1; echo rc=$? >> .tmp-session/S999/a.log) </dev/null >/dev/null 2>&1 &",
+        ):
+            self.assertIsNone(rule(cmd), cmd)
+
+
+class TerraformTest(unittest.TestCase):
+    """TF-1 (G2): terraform apply only from main, never from a lane worktree."""
+
+    def test_refused_in_a_lane_worktree(self):
+        wt = f"{g.ROOT}/.tmp-session/wt/s999-lane-infra"
+        for cmd in (f"terraform -chdir={wt}/accounts/aa365 apply plan.tfplan",
+                    f"cd {wt}/accounts/aa365 && terraform apply -auto-approve",
+                    f"terraform -chdir={wt} destroy"):
+            self.assertEqual(rule(cmd), "TF-1", cmd)
+        self.assertEqual(rule("terraform apply", cwd=Path(wt)), "TF-1")
+
+    def test_refused_off_main(self):
+        with tempfile.TemporaryDirectory() as d:
+            subprocess.run(["git", "init", "-q", "-b", "feat/x", d], check=True)
+            self.assertEqual(rule("terraform apply plan.tfplan", cwd=Path(d)), "TF-1")
+            self.assertIsNone(rule("terraform plan -out plan.tfplan", cwd=Path(d)))
+        with tempfile.TemporaryDirectory() as d:
+            subprocess.run(["git", "init", "-q", "-b", "main", d], check=True)
+            self.assertIsNone(rule("terraform apply plan.tfplan", cwd=Path(d)))
+
+    def test_plans_and_reads_pass(self):
+        wt = f"{g.ROOT}/.tmp-session/wt/s999-lane-infra"
+        for cmd in (f"terraform -chdir={wt} plan", f"cd {wt} && terraform validate", "terraform fmt -check",
+                    "grep -n 'terraform apply' README.md"):
+            self.assertIsNone(rule(cmd), cmd)
+
+
 class RamTest(unittest.TestCase):
     def fake_proc(self, d: Path, avail_mib: int, procs: list[tuple[int, str, int]]) -> Path:
         (d / "meminfo").write_text(f"MemTotal: 10000000 kB\nMemAvailable: {avail_mib * 1024} kB\n")
