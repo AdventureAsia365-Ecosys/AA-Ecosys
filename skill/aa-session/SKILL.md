@@ -37,6 +37,9 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
      cap; 24 h ok / err; route control version + preset; top lỗi 24 h. Connection bật mà denied, chi tiêu sát cap hay
      err 24 h tăng → báo ngay trong khối trạng thái.
    - Jev canary `credit_ok` và số dư DFS, nếu phiên có chạy pipeline.
+   - **Guard chạy theo lịch (AA-1024 G14):** `python3 tools/github/guard_runs.py` (chỉ đọc) — lượt schedule mới nhất của
+     mọi workflow 6 repo (Secret Scan full history, nightly integration CIS, docs-lint sweep, probe/drift Infra), đỏ
+     lên đầu. Có dòng RED → ghi vào khối trạng thái và checklist (một việc phải xử lý trong phiên, không để trôi).
    - **Chỉ khi Nghiệp nói "dùng kiro-cli"**: chạy `.claude/skills/kiro-delegate/kiro-preflight.sh`, ghi credit Kiro vào
      khối trạng thái. Lỗi / credit thấp → báo và làm phiên này bằng Claude (skill `kiro-delegate`).
 3. **Đề xuất danh sách issue** theo master plan: trước hết issue có `session` = phiên này, rồi slot kế, rồi theo thứ tự
@@ -113,7 +116,9 @@ Thứ tự bắt buộc: **chốt việc → kiểm nguồn thật → bài họ
 Log ghi sau cùng nên có cả kết quả Jira và số liệu đã kiểm, không chép từ trí nhớ của phiên.
 
 1. **Chốt việc + Linear.** Issue đã verify → Done kèm comment bằng chứng; đang dở → In Progress kèm còn lại gì và cái gì
-   chặn.
+   chặn. Rồi `python3 tools/linear/done_audit.py --since <giờ bắt đầu phiên, UTC>` (AA-1024 G11, chỉ đọc): issue nào
+   sang Done mà thiếu comment bằng chứng (mẫu `aa-ship` mục 4) hoặc thiếu gạch Done-when → mở lại (In Review) hoặc
+   thêm comment, không để Done khống (Linear tự chuyển Done khi merge / DB Migrate).
 2. **Kiểm nguồn thật (snapshot), trước khi viết bất cứ log nào.** Mọi con số trong log / memory / tracker lấy từ bước
    này (revision, SHA, migration hay lệch khi phiên dài):
    - STS acc2.
