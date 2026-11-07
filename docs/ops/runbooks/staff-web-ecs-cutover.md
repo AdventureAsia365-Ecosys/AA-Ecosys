@@ -86,8 +86,10 @@ curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' --resolve lumiguides.it
 ```
 
 Expect: `{"status":"ok","app":"cis-admin","sha":"<main sha>"}`, the same with `booking-admin`, `404` for any other
-host (the listener default; the CIS API is never reached on :443) and `301 https://aa-cis.lumiguides.it.com/` for the
-apex (the redirect rule, used once the apex moves in section 4).
+host (the listener default; the CIS API is never reached on :443) and `301 https://aa-cis.lumiguides.it.com:443/` for
+the apex (the redirect rule, used once the apex moves in section 4; the ALB writes the explicit `:443` of the rule
+into `location`, which browsers treat as the same address; match it with
+`grep -E '^301 https://aa-cis\.lumiguides\.it\.com(:443)?/$'`).
 
 Sign-in, a write and real browsing: Chromium started with
 `--host-resolver-rules="MAP aa-cis.lumiguides.it.com <IP>, MAP booking.lumiguides.it.com <IP>"` (Playwright
@@ -155,7 +157,8 @@ In this order. Each step records what ran; the evidence is on Linear AA-911.
    `dns.tf`). AA-CIS-Infra PR `staff_web_apex_on_alb = true` (plan: one in-place update of `aws_route53_record.apex`,
    records -> alias to the ALB), Terraform Apply. Verify:
    `curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' https://lumiguides.it.com/` prints
-   `301 https://aa-cis.lumiguides.it.com/`, `dig +short A lumiguides.it.com` prints ALB addresses, and the managed
+   `301 https://aa-cis.lumiguides.it.com:443/` (the ALB keeps the rule's explicit `:443`; accept it with or without:
+   `grep -E '^301 https://aa-cis\.lumiguides\.it\.com(:443)?/$'`), `dig +short A lumiguides.it.com` prints ALB addresses, and the managed
    login on `staff-auth.lumiguides.it.com` still opens. Only then the apex domain was removed from the Vercel project.
 3. **Done (S272, 07/11/2026). Vercel retirement of `aa-cis-frontend` and `aa-booking-admin`.**
    - App PRs (AA-CIS-App, AA-Booking): `vercel-deploy.yml`, `frontend/vercel.json` (and Booking's

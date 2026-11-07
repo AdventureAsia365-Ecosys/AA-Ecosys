@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
 applies_to: [aa-cis-dev-admin, aa-cis-api]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-11-07
 review_every_days: 90
 last_tested: 2026-10-23
 tested_where: dev-acc2
@@ -104,28 +104,28 @@ lead edits it by hand (Terraform in VSCode). Agents do not write commands that s
 
 ## Verify the result
 
-- Production and the fixed Preview host: password route 404, Cognito sign-in works (Preview capped at viewer).
-- Per-deployment previews: no staff sign-in; their UI smoke runs the public specs only.
+- Production host `aa-cis.lumiguides.it.com` (ECS `aa-cis-dev-admin`): password route 404, Cognito sign-in works.
+  There is no Preview host since the AA-911 Vercel retirement (S272), so there is no second host to check.
+- Pull-request builds run no staff sign-in: CIS `Visual (next start)` covers the public pages and the kit gallery only.
 - AA-Booking: unaffected (`/auth/admin-login` and `/auth/booking-token` are not gated, until AA-911 P6b).
 
 ## Roll back or abort
 
-- Since S2, unset means off, so deleting the Vercel value no longer brings the password form back. Two ways:
-  - **Revert** CIS #922 (`30b64228`) through a PR, then Deploy Dev (api + worker) and a Vercel production deploy.
-    Simplest; restores the old default everywhere.
-  - **Flag on:** set the variable to `true` on the api task definition (AA-CIS-Infra, hand edit in VSCode, Terraform
-    apply of the api service) **and** on the Vercel target (Production and/or Preview), then redeploy both. Both
-    sides are needed: a BFF form whose sessions the API refuses bounces at the first verify.
+- Since S2, unset means off, so removing a value no longer brings the password form back. Two ways:
+  - **Revert** CIS #922 (`30b64228`) through a PR, then run `Deploy Dev` (api + worker) and `Deploy Admin Dev`
+    (the BFF on ECS `aa-cis-dev-admin`). Simplest; restores the old default everywhere.
+  - **Flag on:** set the variable to `true` on the api task definition **and** on the `aa-cis-dev-admin` task
+    definition (AA-CIS-Infra; the admin one is in `modules/environment/staff_web.tf`). The name has underscores, so
+    the tech lead edits both by hand in VSCode. Then Terraform Apply, then `Deploy Dev` and `Deploy Admin Dev` (each
+    deploy copies the latest task definition revision and swaps only the image, so the new value reaches the
+    tasks). Both sides are needed: a BFF form whose sessions the API refuses bounces at the first verify.
   - Either way, a legacy account must be active to use the form: `e2e-claude-code*` are disabled (Staff page).
-- Step 5 above describes the pre-S2 rollback of S1 and no longer works alone.
-- The comment on the Vercel Production variable must say the same, since that is what people read during an
-  incident: `AA-816 S1 (S244) + S2 (S247): code default is off; rollback = revert CIS #922 or set true here AND
-  on the api task definition, then redeploy both (runbook legacy-login-flag.md)`. The S1 comment ("Rollback: set
-  true or delete, redeploy") was replaced in S248.
+- Step 5 above describes the pre-S2 rollback of S1 (on Vercel, now gone) and no longer works.
 
 ## Escalation
 
-- Staff locked out of the admin: SEV2; use step 5 first, then [break-glass](break-glass.md) if nobody can sign in.
+- Staff locked out of the admin: SEV2; use [break-glass](break-glass.md) first (Cognito sign-in is the only path
+  since S2), then "Roll back or abort" above if a password login is truly needed.
 
 ## Tested log
 

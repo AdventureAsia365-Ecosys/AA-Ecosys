@@ -44,7 +44,8 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
 1. **Không còn preview Vercel** cho admin CIS và Booking admin (AA-911, S272: hai project Vercel, `vercel-deploy.yml`,
    host Preview cố định `aa-cis-preview.` / `booking-preview.` và label `preview-signin` đều đã bỏ). Trước merge: check
    bắt buộc **`Visual (next start, …)`** (`visual.yml`, `next build` + `next start` trong runner, trang công khai + kit
-   gallery; Booking có API giả) — đọc artifact ảnh + bảng trang × 4 trong job summary. Sau merge: `Deploy Admin Dev`
+   gallery; Booking có API giả) — đọc artifact ảnh + bảng trang × 4 trong job summary. Trang staff CIS có đăng nhập
+   **không có kiểm trước merge** (xem bảng ở bước 3). Sau merge: `Deploy Admin Dev`
    (CIS / Booking) deploy lên ECS (`aa-cis-dev-admin`, `aa-booking-dev-admin`) rồi tự chạy smoke + visual trên host thật.
    CRM web (`deploy-web-dev.yml`) và Content studio deploy lên ECS sau merge, cũng không có preview.
 2. **Smoke tự động** (chỉ là sàn tối thiểu, trang vừa sửa vẫn kiểm tay các bước dưới):
@@ -71,7 +72,7 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
    | Cần kiểm | Ở đâu, bằng gì |
    |---|---|
    | Trang công khai, layout chung, trang `/login` | Trước merge: check `Visual (next start)`; local `next start` + browser không đăng nhập |
-   | Trang staff trước merge | Booking: `Visual (next start, mocked API …)` có trang staff trên API giả; CIS: chụp local bằng user E2E CIS admin (mục 3a) — không còn host Preview |
+   | Trang staff trước merge | Booking: `Visual (next start, mocked API …)` có trang staff trên API giả. **CIS: không có** — từ AA-911 (S272) không còn đường nào kiểm trang CIS có đăng nhập trên code CHƯA merge (host Preview cố định đã bỏ; `Visual (next start)` CIS chỉ có trang công khai + kit gallery, không phiên, không API giả; mục 3a đăng nhập trên host production nên chỉ chụp code ĐÃ deploy). Trang staff CIS chỉ được kiểm sau merge: `smoke-production` / `visual-production` (tự chạy sau `Deploy Admin Dev`) và mục 3a. Báo cáo PR ghi rõ "trang staff CIS chưa kiểm trước merge" |
    | Trang vai content sau merge | Smoke production có đăng nhập (tự chạy sau `Deploy Admin Dev`) hoặc `e2e-cognito.yml` |
    | Trang chỉ-admin (`/admin/tenant-qa/quality`, `/admin/writing-memory`, …) | Agent tự chụp local bằng user E2E CIS admin (mục 3a, A10b) |
    | Cut / Edit câu ở Content quality (mẫu AA-916 WM-07) | Cùng phiên mục 3a: chỉ 2 route `…/sentences/apply` mode `cut` / `manual` được ghi, trên tenant tổng hợp Dev |
@@ -89,7 +90,8 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
       thử 1 lệnh ghi phải ra 403 `e2e_read_only`, rồi sign out). Thêm trang = thêm vào `PAGES` trong spec.
    3. Ảnh ở `tests/e2e/results/admin-evidence/` (gitignore) → chép sang root `docs/audits/<ngày>-S<nnn>-<slug>/`.
    Không chụp, không trace khi đang ở `staff-auth` sau khi đã gõ mã. Chưa có user (runbook A10b chưa chạy) thì quay về
-   cách cũ: nhờ Nghiệp.
+   cách cũ: nhờ Nghiệp. Mục 3a chạy trên `https://aa-cis.lumiguides.it.com` (code đã deploy), **không** thay được kiểm
+   trước merge.
 
    Không in hay ghi mã email / token / API key ra file, log hay PR. Rollback đăng nhập mật khẩu (chỉ khi sự cố): runbook
    root `docs/ops/runbooks/legacy-login-flag.md`, mục "Roll back or abort"; cần deploy, không phải bật một công tắc.

@@ -17,7 +17,15 @@ in S271 (Linear AA-911 comments).
 
 ## Decisions
 
-- **Every user of the Preview hosts was moved, none left without a replacement** (the condition for the Infra PR):
+- **Every user of the Preview hosts was moved, except one with no replacement** (the condition for the Infra PR; the
+  gap is stated here, in `skill/aa-ui-verify` and in the Infra PR body):
+  - **Gap: CIS signed-in pages before merge.** The fixed Preview host `aa-cis-preview.` (viewer-capped E2E sign-in,
+    label `preview-signin` / `alias_only_url` dispatch) was the only way to see unmerged CIS code signed in. Nothing
+    replaces it: CIS `Visual (next start)` covers the public pages and the kit gallery only (no session, no mocked
+    API), and the A10b `admin-evidence` project signs in on the production host, so it captures deployed code. After
+    AA-911, CIS staff pages are verified signed in only after merge (`smoke-production` / `visual-production` called
+    by `Deploy Admin Dev`, plus A10b). Booking keeps a pre-merge check (`Visual (next start, mocked API …)`). A real
+    replacement (a mocked-API staff run in CIS Visual like Booking's) is a follow-up, not part of this lane.
   - CIS signed-in UI smoke (`ui-smoke.yml` staff job): production host only, called by `deploy-admin-dev.yml` after
     every verified deploy (it was called by `vercel-deploy.yml`).
   - CIS / Booking visual run on the deployed host (`visual.yml` job `deployed`): production host only, called by
@@ -30,7 +38,8 @@ in S271 (Linear AA-911 comments).
     cap code keeps its unit tests (a client set through the env is still capped).
   - Per-PR previews (`*.vercel.app`, public smoke only): replaced by the required `Visual (next start)` check in both
     repos (ADR 0019 d23 R7), already in place before this lane.
-  - Skills `aa-ui-verify` and `aa-ship`: rewritten for "Visual before merge, smoke + visual on ECS after merge".
+  - Skills `aa-ui-verify` and `aa-ship`: rewritten for "Visual before merge, smoke + visual on ECS after merge", with
+    the CIS signed-in gap above stated in the `aa-ui-verify` table.
   - AA-Partner `e2e/smoke-portal/aa911-portal-cross-site.spec.ts` uses `https://booking-preview.lumiguides.it.com` only
     as an Origin header value (a same-site sibling), never as a request target: it keeps working without the host
     (follow-up to rename it, no PR in this lane: one PR per repo per wave and nothing else changes in AA-Partner).
