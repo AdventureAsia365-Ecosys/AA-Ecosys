@@ -127,6 +127,12 @@ class OpenTest(unittest.TestCase):
         self.assertIn("Refs AA-<n>", text)
         self.assertIn("closing phrase", text)
         self.assertTrue(sop.validate(r, lane_pr(self.sb.wt, pr_title="lantern glow"))[0])
+        # AA-1024 G11: an id outside the Refs line is linked by Linear (and moved to Done on merge)
+        stray = lane_pr(self.sb.wt, pr_body="Joins the AA-9002 lane.\n\nRefs AA-9001\n")
+        self.assertIn("AA-9002 outside the Refs line", " ".join(sop.validate(r, stray)[0]))
+        self.assertEqual(sop.stray_issue_ids("x\nRefs AA-1, AA-2\n"), [])
+        self.assertEqual(sop.stray_issue_ids("see AA-3 and AA-3\nRefs AA-1"), ["AA-3"])
+        self.assertEqual(sop.stray_issue_ids("Refs AA-1 (and AA-4 later)"), ["AA-1", "AA-4"])
         with open(os.path.join(self.sb.wt, "lantern.py"), "w", encoding="utf-8") as fh:
             fh.write("GLOW = 4\n")
         self.assertIn("modified", " ".join(sop.validate(r, lane_pr(self.sb.wt))[0]))

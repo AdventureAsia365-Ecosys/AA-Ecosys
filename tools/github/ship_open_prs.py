@@ -11,8 +11,9 @@ the lane's title and body as given. A final result with ready=false is refused u
 
 Every PR is checked before anything is pushed (all or nothing): the worktree exists, the branch exists locally and is
 ahead of origin/<base>, no rebase in progress and no modified tracked file (lesson S254), the title is a conventional
-one without an issue id (Linear reads "fix: AA-123" as a closing phrase, lesson S246), the body has "Refs AA-<n>" and
-no Fixes/Closes phrase, and the repo's pre-push hook is installed when it ships one (core.hooksPath=.githooks, so the
+one without an issue id (Linear reads "fix: AA-123" as a closing phrase, lesson S246), the body has "Refs AA-<n>",
+no Fixes/Closes phrase and no issue id outside that Refs line (Linear links every id it sees in a PR body and its Git
+automation moved such issues to Done on merge; AA-1024 G11, lessons S243-S246), and the repo's pre-push hook is installed when it ships one (core.hooksPath=.githooks, so the
 push runs the repo's checks; AA-1024 l22). Files the branch deletes are listed as a warning (merge gate refuses them).
 
 Then for each PR: push through the aa-agent App (no force), open the PR (or reuse an open PR of that branch), check
@@ -49,6 +50,7 @@ TITLE_RE = re.compile(r"^(feat|fix|chore|refactor|docs|test|perf|ci|build)(\([^)
 ISSUE_RE = re.compile(r"\bAA-\d+\b")
 CLOSING_RE = re.compile(r"\b(fix(es|ed)?|close[sd]?|resolve[sd]?)\b[:\s]+AA-\d+", re.IGNORECASE)
 REFS_RE = re.compile(r"^Refs\s+AA-\d+.*$", re.MULTILINE)
+REFS_LINE_RE = re.compile(r"Refs\s+AA-\d+(?:\s*,\s*AA-\d+)*")  # the one line ids may sit on (pr-title.yml, same rule)
 JOURNAL_GLOBS = (
     "~/.claude/projects/*/*/subagents/workflows/{id}/journal.jsonl",
     "~/.claude/projects/*/subagents/workflows/{id}/journal.jsonl",
@@ -100,6 +102,16 @@ def add_refs(body: str, extra: list[str]) -> str:
     return body[: m.end()] + ", " + ", ".join(add) + body[m.end():]
 
 
+def stray_issue_ids(body: str) -> list[str]:
+    """Issue ids in the body that are not on a `Refs AA-<n>, ...` line."""
+    out: list[str] = []
+    for line in body.splitlines():
+        if REFS_LINE_RE.fullmatch(line.strip()):
+            continue
+        out.extend(x for x in ISSUE_RE.findall(line) if x not in out)
+    return out
+
+
 def with_attribution(body: str) -> str:
     if "Generated with [Claude Code]" in body:
         return body
@@ -126,6 +138,10 @@ def validate(runner: Runner, p: dict, stacked_on: frozenset[str] = frozenset()) 
         problems.append("body has no 'Refs AA-<n>' line")
     if CLOSING_RE.search(body):
         problems.append("body has a closing phrase (Fixes/Closes/Resolves AA-<n>): use Refs")
+    stray = stray_issue_ids(body)
+    if stray:
+        problems.append(f"body names {', '.join(stray[:5])} outside the Refs line (Linear links the issue and may move "
+                        f"it to Done on merge): put every id on the one 'Refs AA-<n>, ...' line, write the rest in words")
     if not os.path.isdir(wt):
         problems.append(f"no worktree at {wt}")
         return problems, warnings
