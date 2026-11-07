@@ -93,8 +93,11 @@ class OpenTest(unittest.TestCase):
         self.journal = Path(self.sb.tmp.name) / "journal.jsonl"
         self.tmpdir = mock.patch.object(sop, "ROOT", Path(self.sb.tmp.name))
         self.tmpdir.start()
+        self.env = mock.patch.dict(os.environ, {"AA_GITLEAKS": "gitleaks", "AA_SKIP_GITLEAKS": ""})
+        self.env.start()
 
     def tearDown(self):
+        self.env.stop()
         self.tmpdir.stop()
         self.sb.close()
 
@@ -111,6 +114,8 @@ class OpenTest(unittest.TestCase):
             return Result(0, "")
 
         r = HybridRunner()
+        r.on(("gitleaks", "version"), Result(0, "8.30.1\n"))
+        r.on(("gitleaks", "git"), Result(0, ""))
         r.on((ship_common.AS_APP,), app)
         r.on(("gh", "pr", "list"), Result(0, existing))
         r.on(("gh", "pr", "view"), Result(0, "app/aa-agent\n"))
@@ -153,6 +158,38 @@ class OpenTest(unittest.TestCase):
         self.assertIn("scripts/install-hooks.sh", " ".join(problems))
         self.sb.git(self.sb.wt, "config", "core.hooksPath", ".githooks")
         self.assertEqual(sop.validate(r, lane_pr(self.sb.wt))[0], [])
+
+    def test_gitleaks_scans_the_branch_with_the_base_rules_before_any_push(self):
+        # AA-1024 G14: the orchestrator's own commits were never scanned before the push (lessons S250-S266)
+        self.sb.git(self.sb.wt, "checkout", "-q", "main")
+        self.sb.commit(self.sb.wt, ".gitleaks.toml", "[extend]\nuseDefault = true\n", "chore: rules")
+        self.sb.git(self.sb.wt, "push", "-q", "origin", "HEAD:main")
+        self.sb.git(self.sb.wt, "checkout", "-q", "feat/lanterns")
+        self.sb.git(self.sb.wt, "rebase", "-q", "origin/main")
+        r, _ = self.runner()
+        self.assertEqual(sop.validate(r, lane_pr(self.sb.wt))[0], [])
+        [scan] = r.called("gitleaks", "git")
+        self.assertIn("--log-opts=--diff-merges=remerge --no-renames origin/main..feat/lanterns", scan)
+        self.assertIn("--redact", scan)
+        cfg = scan[scan.index("-c") + 1]
+        self.assertTrue(cfg.endswith(".gitleaks.toml") and not cfg.startswith(self.sb.wt), cfg)
+        self.assertNotIn("-i", scan)  # the base has no .gitleaksignore
+        leak = HybridRunner()
+        leak.on(("gitleaks", "version"), Result(0, "v8.30.1"))
+        leak.on(("gitleaks", "git"), Result(1, "", "WRN leaks found: 1"))
+        text = " ".join(sop.validate(leak, lane_pr(self.sb.wt))[0])
+        self.assertIn("gitleaks found a leak", text)
+        self.assertIn("git reset --soft $(git merge-base HEAD origin/main)", text)
+        old = HybridRunner()
+        old.on(("gitleaks", "version"), Result(0, "8.18.0"))
+        self.assertIn("CI uses 8.30.1", " ".join(sop.validate(old, lane_pr(self.sb.wt))[0]))
+        with mock.patch.dict(os.environ, {"AA_GITLEAKS": ""}), \
+                mock.patch.object(sop.shutil, "which", return_value=None):
+            self.assertIn("no gitleaks binary", " ".join(sop.validate(old, lane_pr(self.sb.wt))[0]))
+        with mock.patch.dict(os.environ, {"AA_SKIP_GITLEAKS": "1"}):
+            problems, warnings = sop.validate(old, lane_pr(self.sb.wt))
+        self.assertEqual(problems, [])
+        self.assertIn("gitleaks skipped", " ".join(warnings))
 
     def test_stacked_pr_is_compared_with_the_local_branch_below(self):
         self.sb.git(self.sb.wt, "checkout", "-q", "-b", "feat/lanterns-2")
