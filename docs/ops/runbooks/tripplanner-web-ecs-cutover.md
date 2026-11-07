@@ -114,9 +114,11 @@ Real browsing: Chromium started with `--host-resolver-rules="MAP tripplanner.lum
 `launch({ args: [...] })`), a fresh browser context for each path (no `aws-waf-token` cookie carried over). Expect:
 the home, a destination and a tour page render with photos. Then the planner, opened three ways, each in its own
 fresh context and never by typing `/plan` first:
+
 - the home page's search card ("Plan my trip") and the header's "Plan a trip" button;
 - a tour page's "Customise this trip" button;
 - `/plan` typed in the address bar.
+
 On each: the map opens (Mapbox tiles load: the token's URL restriction names this host); a free-text search answers
 with pins; adding a stop and "narrate" answer with text; the network panel shows `challenge.js` loaded from the
 `awswaf.com` host and the two model calls answered 200 (never 202); no console error. `/aa-tripplanner/plan` (the demo
