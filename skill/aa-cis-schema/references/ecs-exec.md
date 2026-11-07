@@ -10,8 +10,8 @@ lách qua script trung gian (`bash run.sh`) — hook chỉ đọc dòng lệnh, 
 
 **Điều phối cũng chỉ chạy qua `tools/ecs/ecsx.sh`** (AA-1024 G3, S272): hook `aa_shell_guard` rule ECS-1 chặn
 `aws ecs execute-command` gõ tay và script `.tmp-session` có lệnh đó (terminal SSM cắt output im lặng 10 lần). ecsx tự
-chạy lại một lần khi lượt khởi động bị mất, giữ bản output ở `.tmp-session/ecsx/<run id>.out`, ghi heartbeat cho
-deploy gate CIS. Mẫu lệnh trần bên dưới chỉ để hiểu ecsx làm gì.
+chạy lại một lần khi lượt khởi động bị mất, giữ bản output ở `.tmp-session/ecsx/<run id>.out`, ghi heartbeat
+(`scripts/out/<id>.txt.running`, deploy gate CIS chưa đọc nó: trước khi deploy tự kiểm còn heartbeat mới không). Mẫu lệnh trần bên dưới chỉ để hiểu ecsx làm gì.
 
 ## Ai đăng nhập DB, được làm gì
 

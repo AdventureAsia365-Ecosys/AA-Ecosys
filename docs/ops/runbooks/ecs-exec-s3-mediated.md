@@ -29,8 +29,8 @@ related: [OPS-05, OPS-05-db-migrate, skill/aa-cis-schema/references/ecs-exec.md,
 > `.claude/hooks/aa_shell_guard.py` rule ECS-1 refuses a typed raw `execute-command` and a `.tmp-session` script that
 > runs one, because the SSM terminal cut long output silently 10 times (S237 to S269). The wrapper also starts a
 > lost start once more (the runner claims the run id, so a script never runs twice), keeps a local copy of the output
-> in `.tmp-session/ecsx/<run id>.out`, writes a heartbeat (`scripts/out/<id>.txt.running`) that the CIS deploy gate
-> reads, and refuses `ECSX_SCRIPT_TIMEOUT` longer than `ECSX_TIMEOUT`. The manual steps below are a reference for what
+> in `.tmp-session/ecsx/<run id>.out`, writes a heartbeat (`scripts/out/<id>.txt.running`, refreshed every 30 s; the CIS
+> deploy gate does not read it yet, so check for a fresh one before a deploy), and refuses `ECSX_SCRIPT_TIMEOUT` longer than `ECSX_TIMEOUT`. The manual steps below are a reference for what
 > it does; only the tech lead runs them by hand (prefix `AA_ECSX_BYPASS=1`, logged).
 
 This page is the canonical copy of the pattern (data standard DM-8.8). The agent quick reference in
