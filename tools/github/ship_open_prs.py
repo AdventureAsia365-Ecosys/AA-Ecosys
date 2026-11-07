@@ -49,11 +49,17 @@ from ship_common import (
 )
 
 ATTRIBUTION = "🤖 Generated with [Claude Code](https://claude.com/claude-code)"
-TITLE_RE = re.compile(r"^(feat|fix|chore|refactor|docs|test|perf|ci|build)(\([^)]+\))?!?: \S.*$")
+# The types every pr-title.yml lists (no 'build': no workflow accepts it).
+TITLE_RE = re.compile(r"^(feat|fix|chore|refactor|docs|test|perf|ci)(\([^)]+\))?!?: \S.*$")
 ISSUE_RE = re.compile(r"\bAA-\d+\b")
-CLOSING_RE = re.compile(r"\b(fix(es|ed)?|close[sd]?|resolve[sd]?)\b[:\s]+AA-\d+", re.IGNORECASE)
-REFS_RE = re.compile(r"^Refs\s+AA-\d+.*$", re.MULTILINE)
-REFS_LINE_RE = re.compile(r"Refs\s+AA-\d+(?:\s*,\s*AA-\d+)*")  # the line that names the PR's issues (pr-title.yml)
+# Same pattern as pr-title.yml's closing check (S272 review: 'This completes AA-1040.' passed here and failed CI).
+CLOSING_RE = re.compile(r"(?<![0-9A-Za-z])(close[sd]?|closing|fix(e[sd])?|fixing|resolve[sd]?|resolving"
+                        r"|complete[sd]?|completing)[\s:]+AA-\d+", re.IGNORECASE)
+REFS_RE = re.compile(r"^\s*Refs\s+AA-\d+\b.*$", re.MULTILINE)
+# The Refs line: 'Refs AA-<n>[, AA-<m>...]' at the start of a line, then any free text ("Refs AA-1040 (EU AI Act Art.
+# 50(2), root ADR 0019 d19)." in merged TripPlanner#223). Its ids are the leading list only; pr-title.yml uses the
+# same pattern.
+REFS_LEAD_RE = re.compile(r"^\s*Refs\s+(AA-\d+(?:\s*,\s*AA-\d+)*)\b")
 # An issue id inside a file name (docs/implementation-notes/AA-1024-guards-rest.md) is a path, not a link to an issue.
 PATH_ID_RE = re.compile(r"[\w./-]*\bAA-\d+[\w-]*\.(?:md|py|json|ya?ml|sh|js|mjs|ts|tsx|sql|txt|html|toml)\b")
 JOURNAL_GLOBS = (
@@ -97,27 +103,33 @@ def load_prs(path: Path) -> tuple[list[dict], dict]:
 def add_refs(body: str, extra: list[str]) -> str:
     if not extra:
         return body
-    m = REFS_RE.search(body)
+    m = re.compile(REFS_LEAD_RE.pattern, re.MULTILINE).search(body)
     if not m:
         return body.rstrip() + "\n\nRefs " + ", ".join(extra) + "\n"
-    have = set(ISSUE_RE.findall(m.group(0)))
+    have = set(ISSUE_RE.findall(m.group(1)))
     add = [x for x in extra if x not in have]
     if not add:
         return body
-    return body[: m.end()] + ", " + ", ".join(add) + body[m.end():]
+    # after the id list, before any free text, so the added ids stay in the list
+    return body[: m.end(1)] + ", " + ", ".join(add) + body[m.end(1):]
 
 
 def stray_issue_ids(body: str) -> list[str]:
     """Issue ids the body names that its `Refs AA-<n>, ...` line does not: Linear links those to an issue the PR does
     not do. An id the PR Refs may appear anywhere (its own issue in prose), and an id inside a file path is ignored
     (the implementation-notes path CLAUDE.md asks for, `docs/implementation-notes/AA-1024-guards-rest.md`). The same
-    rule runs in every repo's pr-title.yml; keep the two in step."""
-    lines = body.replace("\r", "").splitlines()
-    refs = {x for line in lines if REFS_LINE_RE.fullmatch(line.strip()) for x in ISSUE_RE.findall(line)}
+    rule runs in every repo's pr-title.yml; keep the two in step. A Refs line may carry free text after its id list;
+    an id in that free text that the list lacks is stray like any other."""
+    refs: set[str] = set()
+    rest: list[str] = []
+    for line in body.replace("\r", "").splitlines():
+        m = REFS_LEAD_RE.match(line)
+        if m:
+            refs.update(ISSUE_RE.findall(m.group(1)))
+            line = line[m.end():]
+        rest.append(line)
     out: list[str] = []
-    for line in lines:
-        if REFS_LINE_RE.fullmatch(line.strip()):
-            continue
+    for line in rest:
         out.extend(x for x in ISSUE_RE.findall(PATH_ID_RE.sub(" ", line)) if x not in refs and x not in out)
     return out
 
@@ -147,7 +159,7 @@ def validate(runner: Runner, p: dict, stacked_on: frozenset[str] = frozenset()) 
     if not REFS_RE.search(body):
         problems.append("body has no 'Refs AA-<n>' line")
     if CLOSING_RE.search(body):
-        problems.append("body has a closing phrase (Fixes/Closes/Resolves AA-<n>): use Refs")
+        problems.append("body has a closing phrase (Fixes/Closes/Resolves/Completes AA-<n>): use Refs")
     stray = stray_issue_ids(body)
     if stray:
         problems.append(f"body names {', '.join(stray[:5])}, which the Refs line does not (Linear links the issue and "

@@ -53,6 +53,8 @@ class TextTest(unittest.TestCase):
         self.assertIn("Refs AA-9001, AA-1032\n", sop.add_refs(BODY, ["AA-1032"]))
         self.assertEqual(sop.add_refs(BODY, ["AA-9001"]), BODY)
         self.assertTrue(sop.add_refs("no refs line", ["AA-1"]).endswith("Refs AA-1\n"))
+        # an id added to a Refs line with free text goes into the id list, not after the text
+        self.assertEqual(sop.add_refs("x\nRefs AA-1 (lane l2)\n", ["AA-2"]), "x\nRefs AA-1, AA-2 (lane l2)\n")
 
     def test_attribution_is_added_once(self):
         once = sop.with_attribution(BODY)
@@ -145,7 +147,8 @@ class OpenTest(unittest.TestCase):
         self.assertIn("AA-9002, which the Refs line does not", " ".join(sop.validate(r, stray)[0]))
         self.assertEqual(sop.stray_issue_ids("x\nRefs AA-1, AA-2\n"), [])
         self.assertEqual(sop.stray_issue_ids("see AA-3 and AA-3\nRefs AA-1"), ["AA-3"])
-        self.assertEqual(sop.stray_issue_ids("Refs AA-1 (and AA-4 later)"), ["AA-1", "AA-4"])
+        self.assertEqual(sop.stray_issue_ids("Refs AA-1 (and AA-4 later)"), ["AA-4"])
+        self.assertEqual(sop.stray_issue_ids("Refs AA-1040 (EU AI Act Art. 50(2), root ADR 0019 d19)."), [])
         # the PR's own issue in prose is fine: the Refs line already links it
         own = "AA-9001 lantern retirement, catalogue side.\r\n\r\nRefs AA-9001\r\n"
         self.assertEqual(sop.stray_issue_ids(own), [])
