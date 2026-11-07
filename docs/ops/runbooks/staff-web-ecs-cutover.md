@@ -158,8 +158,8 @@ In this order. Each step records what ran; the evidence is on Linear AA-911.
    records -> alias to the ALB), Terraform Apply. Verify:
    `curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' https://lumiguides.it.com/` prints
    `301 https://aa-cis.lumiguides.it.com:443/` (the ALB keeps the rule's explicit `:443`; accept it with or without:
-   `grep -E '^301 https://aa-cis\.lumiguides\.it\.com(:443)?/$'`), `dig +short A lumiguides.it.com` prints ALB addresses, and the managed
-   login on `staff-auth.lumiguides.it.com` still opens. Only then the apex domain was removed from the Vercel project.
+   `grep -E '^301 https://aa-cis\.lumiguides\.it\.com(:443)?/$'`), `dig +short A lumiguides.it.com` prints ALB
+   addresses, and the managed login on `staff-auth.lumiguides.it.com` still opens. Only then the apex domain was removed from the Vercel project.
 3. **Done (S272, 07/11/2026). Vercel retirement of `aa-cis-frontend` and `aa-booking-admin`.**
    - App PRs (AA-CIS-App, AA-Booking): `vercel-deploy.yml`, `frontend/vercel.json` (and Booking's
      `check_security_headers.sh`) deleted; the post-deploy UI smoke and the visual run moved to `Deploy Admin Dev`;
@@ -168,7 +168,11 @@ In this order. Each step records what ran; the evidence is on Linear AA-911.
      (`ui-smoke.yml` / `visual.yml`, only `https://aa-cis.lumiguides.it.com` and `https://booking.lumiguides.it.com`),
      the Cognito E2E (`e2e-cognito.yml`, no `booking_base_url` input), the Playwright setup (`auth.setup.ts`, no viewer
      cap check) and the skills `aa-ui-verify` / `aa-ship`. Per-PR UI evidence is the required `Visual (next start)`
-     check (ADR 0019 d23 R7), which needs no deployment.
+     check (ADR 0019 d23 R7), which needs no deployment. **One use has no replacement:** CIS signed-in pages before
+     merge (the viewer-capped sign-in on `aa-cis-preview.`). CIS `Visual (next start)` has the public pages and the
+     kit gallery only; CIS staff pages are verified signed in after merge (`smoke-production` / `visual-production`
+     in `Deploy Admin Dev`, A10b `admin-evidence` on the production host). Booking keeps its mocked-API staff pages
+     in Visual. A mocked-API staff run for CIS Visual is the follow-up.
    - AA-CIS-Infra PR: the Preview hosts `aa-cis-preview.` / `booking-preview.` (DNS), their WORKFORCE clients
      `cis-admin-preview` / `booking-staff-preview` (and managed login styles), the `aa-booking-admin.vercel.app`
      callback of `booking-staff`, the cut-over switch `staff_web_dns_on_ecs`, the apex switch and every Vercel target
