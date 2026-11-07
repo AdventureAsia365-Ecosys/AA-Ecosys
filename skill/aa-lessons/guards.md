@@ -17,6 +17,10 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 - **Brief lane có lời gọi LLM mới phải nêu các guard toàn cục đã có trên `main` (vd. mọi `record_call` truyền `**billed_fields(resp)`)** (S260) → `apps/AA-CIS-App/tests/unit/test_aa1002_s6_billed_fields.py`
 - **Nhiều lane cùng owner migration không được chia dải số trước — điều phối đánh lại số theo thứ tự merge thật (main max + 1)** (S266) → `apps/AA-CIS-App/.github/scripts/migration_preflight.py`
 - **Tham số `args` của Workflow phải là JSON thật viết inline, không phải chuỗi giữ chỗ (`"__FROM_FILE__"`)** (S252) → `.claude/hooks/lane_start_guard.py`, `tools/workflows/lane.js` (args check) (guard mới S271, AA-1024)
+- **Trước khi báo chi phí "LLM fallback" của một stage, kiểm `provider`/`model` trong `llm_call_log`** (S223) → `tools/llm/spend_by_stage.py` (cột LLM / non-LLM theo role) (guard mới S272, AA-1024)
+- **Số chi phí từ `llm_call_log` phải đối chiếu với dashboard nhà cung cấp trước khi báo** (S223, S219, S224) → `tools/llm/spend_by_stage.py` (LOWER BOUND tới khi số `*_log_write_failed` = 0) (guard mới S272, AA-1024)
+- **`git -C <repo> worktree add <đường dẫn tương đối>` tính đường dẫn từ `<repo>`, không từ thư mục đang đứng; không có `-C` thì tính từ cwd, mà cwd có thể đang là repo con** (S246, S247) → `.claude/hooks/aa_shell_guard.py` WT-1 (guard mới S272, AA-1024)
+- **Usage limit 5 giờ có thể giết nhiều lane cùng lúc giữa chừng — chạy lại workflow bằng resume (`resumeFromRunId`) để giữ kết quả lane đã xong, chỉ chạy lại lane chết** (S257, S260, S269) → `.claude/hooks/lane_start_guard.py` (resume: true), `tools/workflows/lane.js` (resumed_state) (guard mới S272, AA-1024)
 
 ## Verify và "Done"
 
@@ -27,6 +31,10 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 - **Atomize chỉ có ở A3 platform (1 lần khi tour lên Master; tenant không bao giờ atomize — họ dùng atom/Segment/route/hub của platform)** (S224) (lỗi thời: đã thay bằng) → `apps/AA-CIS-App/services/acp_contract/a3_atomize.py`
 - **"Đã lên gateway" phải kiểm theo đường gọi, không theo việc có ghi cost** (S224) → `apps/AA-CIS-App/tests/unit/test_aa685_no_raw_model_calls.py`
 - **Fixture test chỉ dùng tên/địa danh hư cấu, không chép từ DB, audit hay prompt cũ** (S260) → `apps/AA-CIS-App/.github/workflows/ci.yml`
+- **Thân PR chỉ ghi mã issue khi PR thật sự làm issue đó — Linear tự nối PR với mọi mã nhắc tới và có thể tự chuyển issue sang Done khi merge** (S243, S244) → `.github/workflows/pr-title.yml` (mọi repo), `tools/github/ship_open_prs.py` (validate) (guard mới S272, AA-1024)
+- **Tiêu đề PR không được ghi mã issue ngay sau tiền tố `fix:` — Linear đọc "fix: AA-847 …" là câu đóng issue "fix AA-847" và tự chuyển Done khi merge** (S246) → `.github/workflows/pr-title.yml` (mọi repo), `tools/github/ship_open_prs.py` (validate) (guard mới S272, AA-1024)
+- **Linear vẫn tự chuyển Done khi không có câu đóng issue nào** (S246) → `tools/linear/done_audit.py` (cuối phiên, `skill/aa-session`) (guard mới S272, AA-1024)
+- **Trước khi chuyển Done, đọc lại "Done when" trong mô tả issue, không dựa vào việc PR đã merge** (S233) → `tools/linear/done_audit.py` (guard mới S272, AA-1024)
 
 ## Vận hành
 
@@ -69,6 +77,19 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 - **`pkill -f "<mẫu>"` giết luôn chính lệnh chứa mẫu đó** (S268) → `.claude/hooks/aa_shell_guard.py` PKILL-1 (guard mới S271, AA-1024)
 - **Không bao giờ `export $(lệnh)` mà không kiểm đầu ra trước — lệnh lỗi/rỗng thì `export` trần in TOÀN BỘ biến môi trường (token, mật khẩu) ra transcript** (S244) → `.claude/hooks/aa_shell_guard.py` ENV-1 (guard mới S271, AA-1024)
 - **Merge queue nhiều PR: enqueue song song (mỗi PR một tiến trình nền), không chạy `mergeq.sh` tuần tự** (S257) → `.claude/hooks/aa_shell_guard.py` SHIP-1, `tools/github/ship_wave.py` (guard mới S271, AA-1024)
+- **Output dài của ECS exec bị cắt im lặng — không đọc kết quả lớn qua terminal SSM** (S237, S248, S251, S253, S256, S257) → `.claude/hooks/aa_shell_guard.py` ECS-1, `tools/ecs/ecsx.sh` (chạy lại lượt mất, bản output local) (guard mới S272, AA-1024)
+- **Không chạy chuỗi verify dài ở nền với output đổ vào `/dev/null`** (S247) → `.claude/hooks/aa_shell_guard.py` BG-1 (guard mới S272, AA-1024)
+- **Terraform apply cục bộ phải chạy từ `main` đã merge, không từ nhánh PR / worktree** (S240) → `.claude/hooks/aa_shell_guard.py` TF-1 (guard mới S272, AA-1024)
+- **WSL 8 GB OOM khi chạy song song 2 `next build` + pytest + gitleaks mirror + VS Code → VM khởi động lại, mất tác vụ nền** (S248, S261) → `.claude/hooks/aa_shell_guard.py` RAM-1, `.claude/hooks/lane_start_guard.py` (RAM gate) (guard mới S272, AA-1024)
+- **gitleaks quét TỪNG commit của PR, sửa ở commit sau không cứu được** (S249, S252, S256) → `tools/github/ship_open_prs.py` (gitleaks v8.30.1 trước mọi push), `tools/workflows/lane.js` (lane chạy gitleaks) (guard mới S272, AA-1024)
+- **Giá trị dạng hash đặt cạnh tên có chữ `token`/`key` trong file JSON sẽ bị gitleaks `generic-api-key` bắt, và job quét TỪNG commit của PR nên sửa ở commit sau vẫn đỏ** (S253, S260) → `tools/github/ship_open_prs.py` (gitleaks v8.30.1 trước mọi push) (guard mới S272, AA-1024)
+- **Secret Scan (full history) đỏ trên main không ai thấy vì không phải required check** (S255) → `tools/github/guard_runs.py` (đầu phiên, run lịch đỏ lên trước) (guard mới S272, AA-1024)
+- **ecsx local mode (CRM/Booking) đôi khi mất output dù script đã chạy** (S266, S269, S268) → `tools/ecs/ecsx_local.py` (nostart → chạy lại một lần, bản output local) (guard mới S272, AA-1024)
+- **`tools/ecs/ecsx.sh` local mode (CRM) đôi khi báo "no result after Ns" dù script đã chạy xong — script ghi output ra file riêng, đọc lại bằng `--resume <run id> 0`; không pipe ecsx qua grep trong lệnh dài** (S267) → `tools/ecs/ecsx_local.py` (bản output `.tmp-session/ecsx/<run id>.out`) (guard mới S272, AA-1024)
+- **Script live dài qua `tools/ecs/ecsx.sh` phải ghi `> file 2>&1`, không pipe qua `tail`** (S268) → `tools/ecs/ecsx.sh` (luôn giữ bản output local) (guard mới S272, AA-1024)
+- **Điều phối tự chạy Playwright/ecsx cũng tính vào tải RAM của lane — 3 lane code + Playwright của điều phối làm WSL 10 GB khởi động lại** (S270) → `.claude/hooks/aa_shell_guard.py` RAM-1 (cả push / pre-push) (guard mới S272, AA-1024)
+- **Test chạy git trong thư mục tạm phải bỏ `GIT_DIR` / `GIT_WORK_TREE` / `GIT_INDEX_FILE` thừa hưởng từ hook** (S272) → `.githooks/pre-push`, `scripts/pre-push.sh`, `tools/github/test_git_env_isolation.py` (guard mới S272, AA-1024)
+- **Không push / chạy pre-push đầy đủ của CIS (~5.000 unit test) khi máy đang tải nặng** (S272) → `.claude/hooks/aa_shell_guard.py` RAM-1 (push, PR opener, ship_wave, `scripts/pre-push.sh`) (guard mới S272, AA-1024)
 
 ## Pipeline và chất lượng
 
@@ -124,6 +145,7 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 - **Migration có `CREATE POLICY` / `CREATE TRIGGER` phải kèm `DROP … IF EXISTS` trước đó** (S263) → `apps/AA-Partner/api/tests/integration/test_crm_migrations.py`
 - **Job chiếu (projection pull) từ một master mới phải có adoption guard: dòng chưa từng chiếu (projected_at NULL) mà master chưa có thì để nguyên — không suspend, không xoá quyền, không đóng dấu projected_at** (S266) → `apps/AA-Booking/backend/tests/integration/test_aa1028_tenant_pull.py`, `apps/AA-Partner/api/tests/integration/test_crm043_entitlement_feed.py`
 - **Bảng mới có cột `tenant_id` mà RLS tắt có chủ đích không thể là expand: classify đòi ENABLE + FORCE RLS cho bảng tenant_id mới** (S268) → `infra/AA-CIS-Infra/db/rls_catalogue_rules.py`
+- **DRY RUN qua ECS exec không băm cả dòng (`md5(t::text)`)** (S271) → `.claude/hooks/pilot_pii_guard.py` (`--check`), `skill/aa-cis-schema/references/destructive-ops.md` (mẫu pin) (guard mới S272, AA-1024)
 
 ## Frontend
 
