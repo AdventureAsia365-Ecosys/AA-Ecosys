@@ -1,0 +1,350 @@
+openapi: 3.1.0
+info:
+  title: lead.submitted.v1 (AA-TripPlanner-Web → the tenant's CRM (AA-Partner), webhook or e-mail; a traveller's trip request)
+  version: "1.0"
+  description: >-
+    A traveller planning on an agency tenant's TripPlanner site (/{slug}/plan, root ADR 0019 d10) asks the agency for
+    this trip ("Send to advisor"). The request becomes one lead.submitted.v1 for THAT tenant (root ADR 0019 d11): the
+    traveller is a guest, so the lead carries only what the agency needs to answer — a name, an e-mail, an optional
+    phone, the party, the trip draft summary (days, countries, AA tour keys and titles, stops per day, optional start
+    date, budget band and a short message) and the contact consent. Adventure Asia keeps no traveller record: the
+    agency is the controller, AA the processor (b9). TripPlanner keeps the lead in its outbox only until it is
+    delivered (delivered = the payload is redacted at once; undelivered = redacted at the latest 7 days after it was
+    written: the expiry runs daily with a cutoff two run intervals and an hour early, so a lead written just after a
+    run is still redacted inside 7 days when the run that picks it is late or fails and the next daily run ends it;
+    the window is clamped to 3..7 days), never in a customer table. The AA demo tenant (aa-tripplanner) never emits one (its planner shows a demo notice).
+
+    Delivery, decided per tenant by CIS (catalog.v_tenant_tripplanner_v1 lead_channel, CIS 390):
+    (1) crm — the tenant holds the CRM add-on (crm.core): the CRM pulls its own pending leads with this API
+    (listLeads, one agency per call), stores each one through its intake (idempotent on lead_id) and acknowledges it
+    (ackLead), after which TripPlanner redacts the payload. Each listLeads call is that tenant's beacon: TripPlanner
+    takes a crm lead for a tenant only while the CRM listed that tenant within the last 10 minutes (the CRM lists every
+    agency it can serve every minute and skips a locked, offboarding or unknown agency BEFORE the list call), so a
+    tenant the CRM cannot take leads for is refused at once (503 lead_channel_unavailable, nothing stored). The CRM holds no database grant on another schema (root
+    ADR 0008a), hence HTTP. (2) webhook — TripPlanner POSTs the LeadSubmitted JSON to the agency's https URL with the
+    headers X-AA-Contract (lead.submitted.v1), Idempotency-Key (= idempotency_key) and X-AA-Signature
+    't=<unix seconds>,v1=<hex HMAC-SHA256 of "<t>." + raw body>' (the catalog.tour.lifecycle.v1 format), keyed per tenant
+    by TripPlanner (the key is handed to the agency by AA, never stored in CIS); a 2xx answer is delivery, anything
+    else is retried by the daily delivery run until the hold window ends. The key is the 64-character lowercase hex
+    text AA hands over, used AS ASCII BYTES (do not hex-decode it to 32 bytes). Verify:
+    expected = hex(HMAC-SHA256(key_text.encode("ascii"), (t + ".").encode("ascii") + raw_body)), compare in constant
+    time with v1, and refuse a t more than 5 minutes away from your clock (replay). Delivery is at least once and
+    unordered (an inline attempt and the daily retry can both arrive; a retried lead can come after a newer one):
+    deduplicate on Idempotency-Key. TripPlanner posts only to a host whose every address is public (no private,
+    loopback, link-local, carrier-grade NAT or reserved address; error webhook_urlnotpublic) and follows no redirect;
+    it checks this before storing a lead too, so a webhook URL on a non-public address (or a host that does not
+    resolve) refuses the request (503 lead_channel_unavailable, nothing stored). (3) email — the same JSON rendered as a plain
+    text e-mail to the agency's own inbox, Reply-To the traveller. No route (lead_channel none): TripPlanner refuses the
+    request (409 lead_route_missing) and stores nothing. A channel the deployment cannot hand over on (the CRM pull
+    not switched on, no webhook signing key, a webhook URL that is not public, no e-mail sender) is refused the same way (503 lead_channel_unavailable,
+    nothing stored): a lead is stored only when it can leave. Before storing, TripPlanner also limits "Send to advisor"
+    per guest session and per traveller IP (429 rate_limited) and caps one tenant's leads per 24 hours (429
+    lead_cap_reached; the count runs under a per-tenant transaction lock, so concurrent sends never pass the cap), and
+    its web front checks the request with a bot check (403 bot_check_failed); in every case
+    nothing is stored. A lead that still expires undelivered after the hold window, or that the CRM acknowledges
+    rejected, is reported by TripPlanner's daily delivery run (the run fails loudly; the CRM also raises its ops alert
+    tp_lead_rejected), never only redacted in silence.
+
+    The traveller's name, e-mail and phone follow ONE rule on every side (the producer's form and API, the consumer):
+    control characters removed, Unicode NFC, trimmed, then the length in code points (name 1..120, e-mail <= 254,
+    phone <= 40), the patterns of Traveller, and for the name at least one letter or digit after NFKD (Unicode
+    category L or N: the token the CRM files the traveller by; a name of punctuation, symbols or emoji only is
+    refused). The e-mail is lower-cased first and its length and pattern are checked on the lower-case value, the
+    value sent (lower-casing can lengthen it: U+0130 becomes two code points). Shared test vectors: docs/contracts/rules/lead.submitted.v1.traveller-rules.json (each app keeps a byte
+    copy and runs every vector), so a lead the producer accepts is never rejected by the consumer for these fields, and
+    a lead the consumer acknowledges stored never fails its intake for them.
+
+    Never in a lead: a guest session id or token, an access / id token, a password or one-time code, an IP address or
+    user agent, an AA B2B price, supplier net or any price (prices come from the agency). Auth of the pull API: M2M
+    token of the aa-m2m pool, client = AA-Partner (CRM), scope tripplanner.leads/deliver; the tenant in the path must
+    be the lead's (a lead of another tenant is never listed and its ack is 404). tenant_id is the CIS tenant id, which
+    is the CRM agency id. The CRM client is a PLATFORM credential (one client, every tenant; the token names no
+    tenant): TripPlanner serves only a tenant whose lead route is crm at the time of the call (else 404
+    tenant_not_on_crm), so a leaked token reaches no tenant that left the CRM add-on or never had it; tenant isolation
+    inside the CRM is the CRM's agency loop plus its own check of each lead's tenant.
+  x-aa-contract: lead.submitted.v1
+  x-aa-producer: AA-TripPlanner-Web
+  x-aa-consumers: [AA-Partner]
+  x-aa-issues: [AA-1038]
+servers:
+  - url: /trip/m2m/v1
+security:
+  - m2m: [tripplanner.leads/deliver]
+paths:
+  /tenants/{tenant_id}/leads:
+    parameters:
+      - name: tenant_id
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    get:
+      operationId: listLeads
+      summary: The tenant's leads waiting for its CRM, oldest first
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema: {type: integer, minimum: 1, maximum: 50, default: 20}
+      responses:
+        "200":
+          description: >-
+            Pending CRM-channel leads of this tenant only (an empty list when none). The call also records the
+            tenant's beacon (the crm channel takes this tenant's leads while it is fresh).
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/LeadPage"}
+        "400": {$ref: "#/components/responses/Problem"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
+        "404": {$ref: "#/components/responses/Problem"}
+        "503": {$ref: "#/components/responses/Problem"}
+  /tenants/{tenant_id}/leads/{lead_id}/ack:
+    parameters:
+      - name: tenant_id
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+      - name: lead_id
+        in: path
+        required: true
+        schema: {type: string, format: uuid}
+    post:
+      operationId: ackLead
+      summary: The CRM stored the lead (or refused it for good); TripPlanner redacts it
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/LeadAckIn"}
+      responses:
+        "200":
+          description: >-
+            Acknowledged. A lead in a final state never changes again: delivered (any later ack answers already),
+            rejected (any later ack, stored included, answers already rejected), expired by the hold (a later rejected
+            ack answers already expired and the expiry record is kept; a later stored ack marks it delivered, the
+            agency has it). Only a pending lead, or an expired one the CRM did store, changes state.
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/LeadAck"}
+        "400": {$ref: "#/components/responses/Problem"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
+        "404": {$ref: "#/components/responses/Problem"}
+        "503": {$ref: "#/components/responses/Problem"}
+components:
+  securitySchemes:
+    m2m:
+      type: oauth2
+      description: Cognito M2M pool aa-m2m-<env>, client credentials.
+      flows:
+        clientCredentials:
+          tokenUrl: https://m2m-auth.example.invalid/oauth2/token
+          scopes:
+            tripplanner.leads/deliver: List the tenant's pending leads and acknowledge their delivery
+  responses:
+    Problem:
+      description: Error
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Problem"}
+  schemas:
+    Problem:
+      type: object
+      additionalProperties: false
+      required: [error]
+      properties:
+        error:
+          type: string
+          pattern: "^[a-z][a-z0-9_]{0,39}$"
+          description: >-
+            A stable code: invalid_tenant_id, invalid_lead_id, invalid_limit, invalid_ack (400), unauthorized (401),
+            forbidden (403: wrong client or scope), lead_not_found or tenant_not_on_crm (404: the tenant's lead route
+            is not crm now), m2m_not_configured or unavailable (503).
+    TenantRef:
+      type: object
+      additionalProperties: false
+      required: [tenant_id, slug]
+      properties:
+        tenant_id: {type: string, format: uuid}
+        slug:
+          type: string
+          pattern: "^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$"
+    Traveller:
+      type: object
+      additionalProperties: false
+      required: [name, email, phone, locale]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+          description: >-
+            At least one letter or digit after NFKD (Unicode category L or N; rules file name_token_pattern). A name of
+            punctuation, symbols or emoji only ('-', '...', an em dash) is refused by the producer (422 invalid_lead,
+            fields [name]) and rejected by the consumer (ack rejected), never acknowledged stored.
+          x-pii: contact
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          description: >-
+            Lower-case. The producer lower-cases the address first and checks the length and the rules file
+            email_pattern (local part at most 64 code points) on that value, so an address lower-casing lengthens
+            (U+0130, capital I with dot above, becomes 'i' and U+0307) is refused before storing, never rejected by the
+            consumer.
+          x-pii: contact
+        phone:
+          type: [string, "null"]
+          maxLength: 40
+          pattern: "^\\+[1-9][0-9 ()-]{5,39}$"
+          description: >-
+            E.164 with its country code ('+' first); spaces, brackets and dashes as the traveller typed them. The
+            producer refuses a local number (the CRM normalises without a region). A consumer that still cannot
+            normalise a number keeps it as text for the agent, never drops it.
+          x-pii: contact
+        locale:
+          type: string
+          enum: [en, vi]
+    Party:
+      type: object
+      additionalProperties: false
+      required: [adults, child_ages]
+      properties:
+        adults: {type: integer, minimum: 1, maximum: 50}
+        child_ages:
+          type: array
+          maxItems: 20
+          items: {type: integer, minimum: 0, maximum: 17}
+    TourRef:
+      type: object
+      additionalProperties: false
+      required: [source_system, source_id, title]
+      properties:
+        source_system: {type: string, minLength: 1, maxLength: 40}
+        source_id: {type: string, minLength: 1, maxLength: 120}
+        title: {type: string, minLength: 1, maxLength: 300}
+    DayPlan:
+      type: object
+      additionalProperties: false
+      required: [day, stops]
+      properties:
+        day: {type: integer, minimum: 1, maximum: 90}
+        stops:
+          type: array
+          maxItems: 12
+          items: {type: string, minLength: 1, maxLength: 120}
+    Trip:
+      type: object
+      additionalProperties: false
+      required: [days, countries, start_date, budget_band, message, tours, day_plan]
+      properties:
+        days: {type: integer, minimum: 1, maximum: 90}
+        countries:
+          type: array
+          minItems: 1
+          maxItems: 12
+          items: {type: string, minLength: 1, maxLength: 80}
+        start_date:
+          type: [string, "null"]
+          format: date
+          x-pii: travel
+        budget_band:
+          type: [string, "null"]
+          enum: [under_1000, "1000_2000", "2000_3500", "3500_5000", over_5000, not_sure, null]
+          description: Per person, excluding flights, USD (the CRM Stage 1 bands).
+        message:
+          type: [string, "null"]
+          maxLength: 1000
+          x-pii: travel
+          description: The traveller's own words to the agency.
+        tours:
+          type: array
+          maxItems: 30
+          items: {$ref: "#/components/schemas/TourRef"}
+        day_plan:
+          type: array
+          maxItems: 90
+          items: {$ref: "#/components/schemas/DayPlan"}
+    Consent:
+      type: object
+      additionalProperties: false
+      required: [contact, marketing, given_at]
+      properties:
+        contact:
+          const: true
+          description: The traveller ticked "the agency may contact me about this trip"; a lead never exists without it.
+        marketing: {type: boolean}
+        given_at: {type: string, format: date-time}
+    Source:
+      type: object
+      additionalProperties: false
+      required: [app, trip_ref]
+      properties:
+        app:
+          type: string
+          enum: [tripplanner]
+        trip_ref:
+          type: string
+          format: uuid
+          description: TripPlanner's opaque id of the planned trip (no traveller data behind it).
+    LeadSubmitted:
+      type: object
+      additionalProperties: false
+      required: [contract, version, lead_id, idempotency_key, submitted_at, tenant, source, traveller, party, trip,
+                 consent]
+      properties:
+        contract:
+          const: lead.submitted.v1
+        version:
+          type: string
+          enum: ["1.0"]
+        lead_id: {type: string, format: uuid}
+        idempotency_key:
+          type: string
+          pattern: "^tp-lead:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          description: tp-lead:<lead_id>; the consumer stores each key once.
+        submitted_at: {type: string, format: date-time}
+        tenant: {$ref: "#/components/schemas/TenantRef"}
+        source: {$ref: "#/components/schemas/Source"}
+        traveller: {$ref: "#/components/schemas/Traveller"}
+        party: {$ref: "#/components/schemas/Party"}
+        trip: {$ref: "#/components/schemas/Trip"}
+        consent: {$ref: "#/components/schemas/Consent"}
+    LeadPage:
+      type: object
+      additionalProperties: false
+      required: [leads, more]
+      properties:
+        leads:
+          type: array
+          maxItems: 50
+          items: {$ref: "#/components/schemas/LeadSubmitted"}
+        more:
+          type: boolean
+          description: More pending leads than the limit; ask again after acknowledging these.
+    LeadAckIn:
+      type: object
+      additionalProperties: false
+      required: [outcome]
+      properties:
+        outcome:
+          type: string
+          enum: [stored, rejected]
+          description: >-
+            stored = in the CRM's intake (or already there); rejected = the CRM can never store it (the agency is gone
+            or the lead does not validate). Both end TripPlanner's hold: the payload is redacted.
+        reason:
+          type: [string, "null"]
+          pattern: "^[a-z][a-z0-9_]{0,39}$"
+    LeadAck:
+      type: object
+      additionalProperties: false
+      required: [lead_id, state, already]
+      properties:
+        lead_id: {type: string, format: uuid}
+        state:
+          type: string
+          enum: [delivered, rejected, expired]
+        already:
+          type: boolean
+          description: The lead was already in a final state (delivered, rejected or expired); nothing changed.
