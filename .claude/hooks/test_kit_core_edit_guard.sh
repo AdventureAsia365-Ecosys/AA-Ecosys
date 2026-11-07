@@ -2,6 +2,8 @@
 # Table test for kit-core-edit-guard.sh (AA-994, root ADR 0016 decision 8).
 # Run: bash .claude/hooks/test_kit_core_edit_guard.sh   (exit 0 = all pass)
 set -u
+# S272: a git hook exports GIT_DIR and friends; the temporary repos below must never act on the real repo.
+unset $(git rev-parse --local-env-vars)
 H="$(cd "$(dirname "$0")" && pwd)/kit-core-edit-guard.sh"
 pass=0; fail=0
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT

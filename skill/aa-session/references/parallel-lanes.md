@@ -36,8 +36,9 @@ Khi một dòng `COMMON` đã là guard, dòng bài học tương ứng trong `l
 
 - Lane chết giữa chừng → chạy lại Workflow với `resumeFromRunId` của run cũ: lane đã xong giữ kết quả, chỉ lane chết
   chạy lại.
-- Run không resume được → agent mới tiếp từ trạng thái worktree (`git status`, `git log`, implementation notes), không
-  làm lại từ đầu; `lane.js` đã dặn điều này trong `COMMON`.
+- Run không resume được → launch lại lane với `"resume": true` trong args: agent mới tiếp từ trạng thái worktree
+  (`git status`, `git log`, implementation notes) và báo `resumed_state` trước khi sửa gì, không làm lại từ đầu.
+  `lane_start_guard.py` từ chối launch mới (không `resumeFromRunId`) khi worktree của lane đã có mà thiếu `resume: true`.
 
 ## Điều phối kiểm trước khi tin review
 

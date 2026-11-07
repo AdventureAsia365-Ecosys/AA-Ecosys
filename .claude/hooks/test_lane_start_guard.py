@@ -82,6 +82,44 @@ class LaneStartGuardTest(unittest.TestCase):
                                      avail_mib=3000))
         self.assertIsNone(self.check({"scriptPath": "/x/tools/workflows/review.js", "args": {}}, avail_mib=100))
 
+    def test_existing_worktree_needs_resume(self):
+        wt = self.root / ".tmp-session/wt/s271-l1-demo-cis"
+        wt.mkdir(parents=True)
+        (self.root / ".tmp-session/wt/s271-l10-other-root").mkdir()
+        msg = self.check({"scriptPath": LANE, "args": args()})
+        self.assertIn("already exist", msg)
+        self.assertIn("s271-l1-demo-cis", msg)
+        self.assertNotIn("l10-other", msg)
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": args(resume=True)}))
+        self.assertIsNotNone(self.check({"scriptPath": LANE, "args": args(resume="yes")}))
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": args(key="l2-new")}))
+
+    def test_resume_from_run_id_replays_without_resume_flag(self):
+        # A Workflow replay sends the lane's original args (no resume flag); the journal reuses finished results.
+        (self.root / ".tmp-session/wt/s271-l1-demo-cis").mkdir(parents=True)
+        self.assertIsNone(self.check({"scriptPath": LANE, "resumeFromRunId": "wf_x", "args": args()}))
+        self.assertIn("resumeFromRunId", self.check({"scriptPath": LANE, "resumeFromRunId": " ", "args": args()}))
+
+    def test_another_lane_whose_key_starts_the_same_is_not_a_duplicate(self):
+        # S272 review: lane l2 was refused on the worktrees of lane l2-w1-factsheet, l4 on l4-aa911-vercel-retire-*
+        for name in ("s271-l2-w1-factsheet-cis", "s271-l2-w1-factsheet-cis-mig386", "s271-l2-w1-factsheet-root",
+                     "s271-l4-aa911-vercel-retire-infra-apex"):
+            (self.root / ".tmp-session/wt" / name).mkdir(parents=True)
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": args(key="l2")}))
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": args(key="l4")}))
+        self.assertIn("already exist", self.check({"scriptPath": LANE, "args": args(key="l2-w1-factsheet")}))
+        (self.root / ".tmp-session/wt/s271-l2-cis-mig390").mkdir()
+        self.assertIn("s271-l2-cis-mig390", self.check({"scriptPath": LANE, "args": args(key="l2")}))
+
+    def test_replay_passes_the_plan_gate_after_a_handover_but_not_the_ram_gate(self):
+        plan = json.loads((self.root / g.PLAN).read_text())
+        plan["session"] = "S999"
+        (self.root / g.PLAN).write_text(json.dumps(plan))
+        self.assertIn("not on this session", self.check({"scriptPath": LANE, "args": args()}))
+        self.assertIsNone(self.check({"scriptPath": LANE, "resumeFromRunId": "wf_x", "args": args()}))
+        self.assertIn("MemAvailable", self.check({"scriptPath": LANE, "resumeFromRunId": "wf_x", "args": args()},
+                                                 avail_mib=1000))
+
     def test_other_workflows_and_unreadable_plan(self):
         self.assertIsNone(self.check({"script": "export const meta = {name: 'audit'}", "args": "x"}))
         self.assertIsNone(self.check({"scriptPath": "/x/tools/workflows/review.js", "args": None}))

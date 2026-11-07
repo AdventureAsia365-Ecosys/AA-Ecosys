@@ -25,7 +25,8 @@ sau mỗi DB Migrate `apply` (workflow **DB Schema Dump** của AA-CIS-Infra, PR
 - Chỉ acc2 (`aa365-admin`, us-west-1). RDS trong private subnet → **ECS exec + script Python (asyncpg) + S3**. Không psql
   local, không RDS Query Editor. Pattern + log + port-forward: `references/ecs-exec.md`.
 - **Chỉ phiên điều phối (orchestrator) chạy ECS exec.** Hook `.claude/hooks/subagent-guardrails.sh` chặn subagent gọi
-  `aws ecs execute-command`; subagent chỉ soạn script + runbook rồi trả về cho điều phối chạy.
+  `aws ecs execute-command`; subagent chỉ soạn script + runbook rồi trả về cho điều phối chạy. Điều phối chạy script
+  bằng `tools/ecs/ecsx.sh` (hook `aa_shell_guard` ECS-1 chặn lệnh exec trần, AA-1024).
 - Login của script = `DATABASE_URL` của container CIS = **`cis_app`**: đọc/ghi mọi bảng CIS (kể cả bảng RLS), không DDL.
   `booking.*` / `tripplanner.*` chỉ được `SELECT` vài view hợp đồng (`booking.v_ops_*`, `booking.v_supply_*`,
   `tripplanner.v_ops_traffic_daily`); bảng gốc → 42501. Không role AA nào có `USAGE` trên `crm` (cách ly hai chiều,

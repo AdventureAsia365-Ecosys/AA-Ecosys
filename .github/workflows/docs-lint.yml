@@ -17,6 +17,7 @@ name: Docs lint
 #   - unit tests of the ops helpers tools/ops (AA-1023: ecs_rollback.sh against a scripted aws/curl, the game-day seed)
 #   - the Claude Code hooks .claude/hooks (AA-1024 G5): every hook's tests, and every hook settings.json registers exists
 #   - the lessons log (AA-1024 G22): a new or changed lesson line carries a valid Guard field
+#   - the ECS exec wrapper tools/ecs (AA-1024 G3) and the GIT_DIR isolation of the pre-push hook (S272)
 # Secrets: gitleaks runs on every PR (any path) in secret-scan.yml and nightly over the full history in
 # secret-scan-history.yml (AA-981),
 # so it is not repeated here (secret names are fine in docs, values never are).
@@ -42,6 +43,14 @@ on:
       - "tools/github/**"
       - "tools/uat/arch/**"
       - "tools/ops/**"
+      - "tools/llm/**"
+      # AA-1024 S272: the files tools/github/test_git_env_isolation.py and the ecsx tests guard (GIT_DIR, ECS exec)
+      - ".githooks/**"
+      - "scripts/pre-push.sh"
+      - "tools/ecs/**"
+      - "tools/kit/**"
+      - "tools/llm-core/**"
+      - "tools/adr/**"
       - ".markdownlint-cli2.jsonc"
       - ".github/workflows/docs-lint.yml"
   schedule:
@@ -109,6 +118,9 @@ jobs:
         if: ${{ !cancelled() }}
         env:
           BASE_REF: ${{ github.base_ref || 'master' }}
+          # a guard path in a child repo (apps/..., infra/...) is checked on that repo's main (public; read token)
+          LESSONS_REMOTE_CHECK: "1"
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           git fetch --no-tags --depth=1 origin "$BASE_REF"
           python tools/docs/check_lessons.py --base FETCH_HEAD
@@ -124,6 +136,19 @@ jobs:
       - name: Ops tools tests
         if: ${{ !cancelled() }}
         run: python -m unittest discover -s tools/ops -p 'test_*.py'
+
+      # AA-1024 G18: the one cost source (spend_by_stage.py, cost_estimate.py) on invented rows: a typesafe / Jev or
+      # DataForSEO row is never counted as LLM, a total is a lower bound until the log-write failures are 0, and an
+      # estimate without a measured basis refuses to give a number. Offline (asyncpg is imported only in the container).
+      - name: LLM spend tools tests
+        if: ${{ !cancelled() }}
+        run: python -m unittest discover -s tools/llm -p 'test_*.py'
+
+      # AA-1024 G3: the ecsx runner (tools/ecs): pid claim, nostart / dead states, heartbeat, one auto-restart, the
+      # script-timeout refusal, the local output copy. Offline: aws is scripted, files live in a temporary directory.
+      - name: ECS exec wrapper tests
+        if: ${{ !cancelled() }}
+        run: python -m unittest discover -s tools/ecs -p 'test_*.py'
 
       - name: Front-matter schema
         if: ${{ !cancelled() && steps.deps.outcome == 'success' }}

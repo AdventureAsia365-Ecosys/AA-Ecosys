@@ -12,7 +12,9 @@ snapshot, merge, DB Migrate) do **phiên điều phối** chạy; subagent chỉ
 
 - [ ] Đầu phiên theo `aa-session`: STS, api/worker cùng SHA, `shared.job` không còn queued/running.
 - [ ] **Duyệt chi phí:** thang thử 3 tour → ≤ 50 tour → phần còn lại chỉ khi Nghiệp duyệt rõ, có trần $ (memory
-      `paid-runs-subset`). Nêu chi phí ước tính trước khi chạy, từ `llm_call_log` của lần trước, không phỏng đoán.
+      `paid-runs-subset`). Nêu chi phí ước tính trước khi chạy bằng `tools/llm/cost_estimate.py` (qua ecsx:
+      `COST_STAGE=s1_ COST_N=<số tour>`), chép nguyên dòng ESTIMATE + basis; exit 3 (NO BASIS) → chạy thử 3 tour
+      trước, không đoán số (AA-1024 G18).
 - [ ] Jev canary `credit_ok`, số dư DFS đủ, cost guard còn budget ngày; quota Bedrock của account chạy writer.
 - [ ] Raw của nước đúng nguồn; chỗ nào chưa rõ → hỏi trước. Reset toàn bộ derived chỉ theo runbook AA-CIS-App
       `docs/runbooks/clean-rerun.md` (có RDS snapshot trước, assert sau reset).
@@ -20,7 +22,7 @@ snapshot, merge, DB Migrate) do **phiên điều phối** chạy; subagent chỉ
       `shared.llm_role_config` trước khi enqueue; enqueue kèm model writer mong đợi để lệch là từ chối. Sau mọi Terraform
       apply chạm task def ECS: so tên env revision mới nhất với revision đang chạy (deploy chép revision mới nhất).
 - [ ] **Tạo wave object TRƯỚC khi chạy:** `POST /admin/waves` (`tour_ids` hoặc `country` → mọi raw active của nước) — đó là
-      `expected_set`. Tour cưỡi voi vẫn nằm trong tập, đếm riêng là "chờ người duyệt" (memory `elephant-riding-policy`).
+      `expected_set`. Trước đó chạy `wave_report.py` cho wave trước: chỉ tạo wave mới khi nó exit 0 (xem mục Điều kiện dừng; API không tự chặn). Tour cưỡi voi vẫn nằm trong tập, đếm riêng là "chờ người duyệt" (memory `elephant-riding-policy`).
 - [ ] **Snapshot mỗi wave:** RDS manual snapshot (chờ snapshot đang `creating` xong mới tạo) + snapshot dữ liệu tour của
       wave (published + place) để rollback từng wave.
 
@@ -75,14 +77,19 @@ Wave <nước/tên> <dd/mm> — expected <n>
   tour ở lại bản cũ, atom live ở ngày vượt số ngày mới (phải 0), "đã publish chưa atomize"; brand-fit chỉ báo cáo
 - Jev coverage: <tour có verdict thật>/<n>
 - Chi phí: theo stage (writer, judge, Jev, flag_fix, atomize, place), DFS, tổng wave, $/tour, luỹ kế so với trần
+  — chỉ lấy từ `tools/llm/spend_by_stage.py` (qua ecsx, `SPEND_FROM/SPEND_TO` = cửa sổ wave); Jev/DFS ở cột
+  non-LLM; dòng "LOWER BOUND" thì chạy lệnh Logs Insights nó in ra rồi chạy lại với `SPEND_WRITE_FAILURES=<n>`
 - Slug: tour đổi slug → slug cũ 308 sang slug mới, slug mới 200 (kiểm sau ≥ 30′)
 - Bất thường: job interrupted, tour kẹt
 ```
 
 **Điều kiện dừng** chốt bằng số trước khi chạy (mẫu AA-645: `docs/audits/2026-10-23-S248-aa645-writer-decision/
 platform-impact-memo.md` §6 — tỉ lệ ở lại bản cũ, đường itinerary legacy, atom ở ngày vượt, chi phí/tour vượt mô hình,
-throttle Bedrock, atomize fail không chạy lại được). Cờ nào phụ thuộc job còn queued/running thì đọc lại sau khi hàng đợi
-hết, trước khi gọi là dừng.
+throttle Bedrock, atomize fail không chạy lại được). `wave_report.py` (AA-1024 G17) tự làm việc này: cờ là `pending`
+khi tour của wave còn job queued/running (exit 5: chạy lại sau khi hàng đợi hết), exit 3 = có cờ true (dừng). Wave kế
+chỉ bắt đầu khi lần báo cáo cuối exit 0, hoặc có câu duyệt bằng chữ của tech lead chép nguyên vào báo cáo wave.
+`POST /admin/waves` KHÔNG tự chặn (S272: tính lại cờ trong request mất 16–75 s, quá 29 s của API Gateway; bản chặn 409
+đã gỡ, việc tiếp theo ghi ở `docs/implementation-notes/AA-1024-guards-rest.md`): exit code của `wave_report.py` là cổng.
 
 **Đóng:** không có điều kiện dừng → `POST /admin/waves/{id}/close`. Có → để wave mở, dừng driver, báo Nghiệp.
 `POST /admin/waves/check` (ops probe gọi hằng ngày) bật chuông khi wave thiếu tour ở trạng thái cuối.

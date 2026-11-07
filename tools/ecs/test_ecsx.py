@@ -173,5 +173,208 @@ class LocalModeEndToEndTest(unittest.TestCase):
             self.assertNotIn("ECSX_SHIPPED", aws.exec(bad))
 
 
+class RunStateTest(unittest.TestCase):
+    """AA-1024 G3: the pid claim tells a lost start from a dead run, and a run id never starts twice."""
+
+    def test_states(self):
+        with tempfile.TemporaryDirectory() as d, mock.patch.object(R, "TMP_DIR", d):
+            out, done = R.paths("r1")
+            self.assertIn(" nostart ", R.read_chunks(out, done, 0, 10, run_id="r1")[0])
+            self.assertTrue(R.claim("r1"))
+            self.assertFalse(R.claim("r1"))
+            Path(out).write_bytes(b"abc")
+            self.assertIn(" run ", R.read_chunks(out, done, 0, 10, run_id="r1")[0])  # claimed, pid not yet written
+            Path(R.pid_path("r1")).write_text(str(os.getpid()))
+            self.assertIn(" run ", R.read_chunks(out, done, 0, 10, run_id="r1")[0])
+            gone = subprocess.Popen([sys.executable, "-c", "pass"])
+            gone.wait()
+            Path(R.pid_path("r1")).write_text(str(gone.pid))
+            res = L.parse_chunks(R.read_chunks(out, done, 0, 10, run_id="r1")[0], 0)
+            self.assertEqual((res.state, res.data), ("dead", b"abc"))
+            Path(done).write_text("rc=0 bytes=3")
+            self.assertTrue(L.parse_chunks(R.read_chunks(out, done, 0, 10, run_id="r1")[0], 0).finished)
+
+    def test_second_local_start_of_one_id_does_not_run_again(self):
+        with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as app:
+            script = Path(tmp) / "ecsx-t9.py"
+            script.write_text("print('ran')\n")
+            env = dict(os.environ, ECSX_TMP_DIR=tmp, ECSX_APP_DIR=app)
+            cmd = [sys.executable, str(L.RUNNER), "local-start", str(script), "t9"]
+            self.assertIn("ECSX_STARTED", subprocess.run(cmd, env=env, capture_output=True, text=True).stdout)
+            self.assertIn("ECSX_ALREADY", subprocess.run(cmd, env=env, capture_output=True, text=True).stdout)
+            for _ in range(100):
+                if Path(tmp, "ecsx-t9.done").exists():
+                    break
+                time.sleep(0.05)
+            self.assertEqual(Path(tmp, "ecsx-t9.out").read_text(), "ran\n")
+
+
+class LostStartTest(unittest.TestCase):
+    def test_lost_start_is_started_again_once_and_output_is_kept_locally(self):
+        with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as app, \
+                tempfile.TemporaryDirectory() as outdir:
+            script = Path(tmp) / "probe.py"
+            script.write_text("print('hello once')\n")
+            aws = FakeAws(tmp, app)
+            env = {"ECSX_SHIP": "inline", "ECSX_POLL": "0", "ECSX_NOSTART_READS": "2", "ECSX_OUT_DIR": outdir}
+            stdout = io.TextIOWrapper(io.BytesIO())
+            starts = []
+            with mock.patch.dict(os.environ, env), mock.patch.object(sys, "stdout", stdout), \
+                    mock.patch.object(time, "sleep", lambda s: None):
+                self.assertTrue(L.ship(aws, "t5", script.read_bytes(), L.RUNNER.read_bytes(), script))
+                # the first start never reaches the container (the SSM session dropped before the runner ran)
+
+                def restart():
+                    starts.append(1)
+                    aws.exec(L.start_command("t5", []))
+                with open(L.out_file("t5"), "wb") as sink:
+                    finished, rc = L.poll(aws, "t5", 0, restart=restart, sink=sink)
+            self.assertEqual((finished, rc, len(starts)), (True, 0, 1))
+            self.assertEqual(stdout.buffer.getvalue(), b"hello once\n")
+            self.assertEqual(Path(outdir, "t5.out").read_bytes(), b"hello once\n")
+
+    def test_no_restart_gives_up(self):
+        with tempfile.TemporaryDirectory() as tmp, tempfile.TemporaryDirectory() as app:
+            aws = FakeAws(tmp, app)
+            Path(tmp, "ecsx-t6.runner.py").write_bytes(L.RUNNER.read_bytes())
+            with mock.patch.dict(os.environ, {"ECSX_NOSTART_READS": "2"}), mock.patch.object(time, "sleep",
+                                                                                              lambda s: None):
+                self.assertEqual(L.poll(aws, "t6", 0), (False, 4))
+
+
+FAKE_AWS = r'''#!/usr/bin/env python3
+"""A scripted aws CLI for test_ecsx.py: S3 is a directory, ECS exec runs the command here with /tmp mapped."""
+import os, re, subprocess, sys
+S3, TMP, LOG = os.environ["FAKE_S3"], os.environ["ECSX_TMP_DIR"], os.environ["FAKE_LOG"]
+a = [x for x in sys.argv[1:]]
+def opt(name):
+    return a[a.index(name) + 1] if name in a else None
+def local(uri):
+    b, _, k = uri[5:].partition("/")
+    return os.path.join(S3, b, k)
+with open(LOG, "a") as f:
+    f.write(" ".join(a[:2]) + "\n")
+if a[:2] == ["ecs", "list-tasks"]:
+    print("arn:aws:ecs:us-west-1:000000000000:task/fake")
+elif a[:2] == ["s3", "cp"]:
+    src, dst = a[2], a[3]
+    data = open(local(src), "rb").read() if src.startswith("s3://") else open(src, "rb").read()
+    if dst == "-":
+        sys.stdout.buffer.write(data)
+    else:
+        p = local(dst) if dst.startswith("s3://") else dst
+        os.makedirs(os.path.dirname(p), exist_ok=True)
+        open(p, "wb").write(data)
+elif a[:2] == ["s3", "presign"]:
+    print("file://" + local(a[2]))
+elif a[:2] == ["s3", "rm"]:
+    try:
+        os.remove(local(a[2]))
+    except FileNotFoundError:
+        pass
+elif a[:2] == ["s3api", "head-object"]:
+    sys.exit(0 if os.path.exists(os.path.join(S3, opt("--bucket"), opt("--key"))) else 255)
+elif a[:2] == ["ecs", "execute-command"]:
+    n = len([l for l in open(LOG) if l.startswith("ecs execute-command")])
+    if n <= int(os.environ.get("FAKE_DROP_STARTS", "0")):
+        sys.exit(0)  # the session dropped before anything ran
+    cmd = re.sub(r"(?<=\s)/tmp/", TMP + "/", opt("--command"))  # not inside a file:// URL
+    r = subprocess.run(["sh", "-c", cmd], capture_output=True, text=True)
+    sys.stdout.write(r.stdout)
+else:
+    sys.exit("fake aws: unhandled " + " ".join(a))
+'''
+
+
+class S3ModeTest(unittest.TestCase):
+    """ecsx.sh S3 mode end to end against the scripted aws above: heartbeat, one restart, local copy, rc."""
+
+    def run_ecsx(self, d: Path, script_text: str, *pairs: str, drop: int = 0) -> subprocess.CompletedProcess:
+        bin_dir, s3, tmp, app, out = (d / x for x in ("bin", "s3", "tmp", "app", "out"))
+        for x in (bin_dir, s3, tmp, app):
+            x.mkdir(exist_ok=True)
+        (bin_dir / "aws").write_text(FAKE_AWS)
+        (bin_dir / "aws").chmod(0o755)
+        script = d / "probe.py"
+        script.write_text(script_text)
+        env = dict(os.environ, PATH=f"{bin_dir}:{os.environ['PATH']}", FAKE_S3=str(s3), FAKE_LOG=str(d / "aws.log"),
+                   ECSX_TMP_DIR=str(tmp), ECSX_APP_DIR=str(app), ECSX_S3_DIR=str(s3), ECSX_OUT_DIR=str(out),
+                   ECSX_START_WAIT="3", ECSX_HEARTBEAT_S="1", ECSX_TIMEOUT="60", FAKE_DROP_STARTS=str(drop),
+                   ECSX_BUCKET="bucket-x", ECSX_SERVICE="aa-cis-dev-api")
+        return subprocess.run(["bash", str(Path(L.HERE) / "ecsx.sh"), str(script), *pairs], env=env,
+                              capture_output=True, text=True, timeout=120)
+
+    def test_run_prints_output_keeps_a_local_copy_and_cleans_up(self):
+        with tempfile.TemporaryDirectory() as d:
+            r = self.run_ecsx(Path(d), "import os\nprint('ok', os.environ.get('LIMIT'))\nraise SystemExit(5)\n",
+                              "LIMIT=3")
+            self.assertEqual(r.returncode, 5, r.stderr)
+            self.assertEqual(r.stdout, "ok 3\n")
+            copies = list((Path(d) / "out").glob("*.out"))
+            self.assertEqual([c.read_text() for c in copies], ["ok 3\n"])
+            self.assertIn("output also in", r.stderr)
+            left = [p.name for p in (Path(d) / "s3" / "bucket-x").rglob("*") if p.is_file()]
+            self.assertEqual(left, [])  # script, runner, output, .done and .running all removed
+
+    def test_lost_start_is_started_again_once(self):
+        with tempfile.TemporaryDirectory() as d:
+            r = self.run_ecsx(Path(d), "print('after restart')\n", drop=1)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertEqual(r.stdout, "after restart\n")
+            self.assertIn("starting the run again, once", r.stderr)
+            starts = [x for x in (Path(d) / "aws.log").read_text().splitlines() if x == "ecs execute-command"]
+            self.assertEqual(len(starts), 2)
+
+    def test_script_timeout_longer_than_the_wait_is_refused(self):
+        with tempfile.TemporaryDirectory() as d:
+            r = self.run_ecsx(Path(d), "print(1)\n", "ECSX_SCRIPT_TIMEOUT=7200")
+            self.assertEqual(r.returncode, 2)
+            self.assertIn("longer than the wait", r.stderr)
+
+    def test_script_timeout_over_the_cap_is_refused(self):
+        with tempfile.TemporaryDirectory() as d:
+            r = self.run_ecsx(Path(d), "print(1)\n", "ECSX_SCRIPT_TIMEOUT=20000")
+            self.assertEqual(r.returncode, 2)
+            self.assertIn("10800 s cap", r.stderr)
+
+
+class RunnerCapsTest(unittest.TestCase):
+    """S272 review: the heartbeat interval and the script timeout cannot be raised past what the deploy gate reads."""
+
+    def load(self, **env):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("ecsx_runner_caps", Path(L.HERE) / "ecsx_runner.py")
+        mod = importlib.util.module_from_spec(spec)
+        old = {k: os.environ.get(k) for k in env}
+        os.environ.update(env)
+        try:
+            spec.loader.exec_module(mod)
+        finally:
+            for k, v in old.items():
+                if v is None:
+                    os.environ.pop(k, None)
+                else:
+                    os.environ[k] = v
+        return mod
+
+    def test_heartbeat_is_capped_at_30_s(self):
+        self.assertEqual(self.load(ECSX_HEARTBEAT_S="600").HEARTBEAT_S, 30)
+        self.assertEqual(self.load(ECSX_HEARTBEAT_S="1").HEARTBEAT_S, 1)
+
+    def test_script_timeout_is_clamped(self):
+        mod = self.load()
+        old = os.environ.get("ECSX_SCRIPT_TIMEOUT")
+        try:
+            os.environ["ECSX_SCRIPT_TIMEOUT"] = "99999"
+            self.assertEqual(mod.script_timeout(), mod.SCRIPT_TIMEOUT_MAX_S)
+            os.environ["ECSX_SCRIPT_TIMEOUT"] = "1800"
+            self.assertEqual(mod.script_timeout(), 1800)
+        finally:
+            if old is None:
+                os.environ.pop("ECSX_SCRIPT_TIMEOUT", None)
+            else:
+                os.environ["ECSX_SCRIPT_TIMEOUT"] = old
+
+
 if __name__ == "__main__":
     unittest.main()

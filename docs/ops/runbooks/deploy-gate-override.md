@@ -39,7 +39,7 @@ busy jobs.
 
 | Gate | Asks | Exempt kinds | Override input |
 |---|---|---|---|
-| CIS Deploy Dev (`deploy-dev.yml`, job "Pre-deploy job guard") | `GET https://api-cis.lumiguides.it.com/admin/job-runner/deploy-gate` (admin secret). Since AA-993 G5: blocks only while a rerun wave is open or a `deploy_blocking` kind runs or is queued due within 15 min. `GET /admin/job-runner/summary` lists the flag per kind; on 2026-10-28: `data_erasure`, `s1_batch_ingest`, `writing_memory_r2`, `writing_memory_shadow`. Other queued or running jobs are drained and re-claimed | not needed (other queued rows no longer block); `deploy_gate_exempt` only trims the info counts | `override_running_jobs` (workflow_dispatch) |
+| CIS Deploy Dev (`deploy-dev.yml`, job "Pre-deploy job guard", asked again by the step "Re-check the deploy gate just before the roll" of the deploy job) | `GET https://api-cis.lumiguides.it.com/admin/job-runner/deploy-gate` (admin secret). Since AA-993 G5: blocks only while a rerun wave is open or a `deploy_blocking` kind runs or is queued due within 15 min. Since AA-1024 G3 (c) also while an ECS exec script runs (`exec_scripts`, below) or its heartbeat cannot be read. `GET /admin/job-runner/summary` lists the flag per kind; on 2026-10-28: `data_erasure`, `s1_batch_ingest`, `writing_memory_r2`, `writing_memory_shadow`. Other queued or running jobs are drained and re-claimed | not needed (other queued rows no longer block); `deploy_gate_exempt` only trims the info counts | `override_running_jobs` (workflow_dispatch) |
 | Booking Deploy Dev (`deploy-dev.yml`) | `GET https://api-booking.lumiguides.it.com/booking/ops/deploy-gate` with the run's GitHub OIDC token; skipped when the service runs 0 tasks. Since AA-993 G5: blocks only while a retention job (`bk_retention_job`, `bk_retention_inbox_redact`) runs or is queued due within 15 min | info counts leave out `bk_inquiry_pull`, `bk_noop_sleep` | `override_running_jobs` (workflow_dispatch) |
 | Partner Deploy Dev (`deploy-dev.yml`) | `GET /crm/ci/deploy-gate` with the run's GitHub OIDC token; passes when the service runs 0 tasks. Since AA-993 G4b no CRM kind is deploy-blocking (`DEPLOY_BLOCKING_KINDS` is empty), so the gate passes unless it cannot answer or a task is starting | info counts leave out `crm_heartbeat`, `crm_membership_pull`, `crm_booking_sync` | `override_running_jobs` (workflow_dispatch) |
 | DB Migrate (`db-migrate.yml`, apply and writing run-script) | every owner job table and open `shared.rerun_wave`, 3 checks 20 s apart | `owners.yaml` idle-exempt kinds | `override_busy_jobs` (one line, at most 200 characters) |
@@ -47,6 +47,22 @@ busy jobs.
 
 All of them fail closed: an unreachable gate or an unreadable answer blocks. The deploy gates name the reason in
 `blocked_by` (the `deploy-gate: {...}` log line).
+
+### CIS: "ECS exec script <run id> running"
+
+The ecsx runner (`tools/ecs/`) rewrites `scripts/out/<run id>.txt.running` on the bronze bucket every 30 s while a
+script runs in the api or worker container; the gate blocks while one is younger than 120 s and has no `.done` next
+to it. It clears by itself when the script ends, dies, or reaches its `ECSX_SCRIPT_TIMEOUT` (default 3,300 s, capped
+at 10,800 s). To clear it sooner (a hung script), without an override:
+
+1. Read the run id in `blocked_by`, and the local copy of its output, `.tmp-session/ecsx/<run id>.out`, to decide
+   whether it may be stopped (a half-done write script needs its own clean-up first).
+2. Stop it in the container: an ecsx run of a short `kill` script (`tools/ecs/` + a one-line script that reads the
+   pid from `/tmp/ecsx-<run id>.pid` and sends SIGTERM). The heartbeat stops, and the gate passes within 120 s.
+3. Re-run the deploy (or wait for the next push).
+
+"ECS exec heartbeat unreadable" means the api could not list `scripts/out/` (S3 or credentials): fix the access, or
+`DEPLOY_GATE_ECSX=off` on the task definition through Terraform (tech lead), or override as below.
 
 ## Preconditions
 

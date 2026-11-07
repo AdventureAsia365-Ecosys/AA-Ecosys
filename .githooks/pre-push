@@ -4,6 +4,11 @@
 # AA_PREPUSH=full git push. Bypass one push: git push --no-verify.
 set -euo pipefail
 root=$(git rev-parse --show-toplevel)
+# S272: git exports GIT_DIR (and in some setups GIT_WORK_TREE / GIT_INDEX_FILE) to hooks. Every test the checks run
+# that creates a temporary repo would inherit them and rewrite THIS repo (an app clone once got core.bare=true, a
+# [user] ci identity, fake branches and tags). Run the checks from the top level with none of them set.
+cd "$root"
+unset $(git rev-parse --local-env-vars)
 # This hook and the script ship in the same commit, so a missing script means it was deleted: block, do not skip.
 [ -f "$root/scripts/pre-push.sh" ] || {
   echo "pre-push hook: $root/scripts/pre-push.sh missing; run scripts/install-hooks.sh --uninstall or restore it. Bypass once: git push --no-verify" >&2

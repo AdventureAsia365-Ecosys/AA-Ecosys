@@ -3,6 +3,8 @@
 # Run: bash tools/kit/test_kit_sync.sh   (exit 0 = all pass). Since AA-994 S3s it runs the wrapper, so it needs
 # AA-CIS-App .github/scripts/kit-sync.sh on CIS main, or KIT_SYNC_IMPL=<a CIS worktree>/.github/scripts/kit-sync.sh.
 set -u
+# S272: a git hook exports GIT_DIR and friends; the temporary repos below must never act on the real repo.
+unset $(git rev-parse --local-env-vars)
 S="$(cd "$(dirname "$0")" && pwd)/kit-sync.sh"
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
 pass=0; fail=0

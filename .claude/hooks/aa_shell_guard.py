@@ -26,16 +26,30 @@ Rules (main session and subagents alike; exit 2 refuses, the message goes to std
                and the same merge through the API: `gh api` with a writing method on `pulls/<n>/merge`, or
                `gh api graphql` with a mergePullRequest / enqueuePullRequest mutation (dequeuePullRequest stays open);
            (b) the merge-queue wrapper run by hand without --dequeue (it waits for REQUIRED checks only: S263 #1225);
-           (c) ship_merge.py inside a shell loop or more than once in one command (one call takes every target and
-               runs the queue repos in parallel);
+           (c) ship_merge.py inside a shell loop body (between `do` and its `done`) or more than once in one command
+               (one call takes every target and runs the queue repos in parallel); a loop before or after the one
+               merge call (a checks wait, a deploy check) passes;
            (d) running or sourcing a hand-written .tmp-session / scratchpad script that merges (mergeq / gh pr merge /
                ship_merge / ship_train inside).
            ship_wave.py (parallel by default, chains only for migration -> copy -> apply -> code) and ship_merge.py
            with all targets are the way; neither is refused.
   RAM-1    A heavy command (next build, npm ci, playwright, vitest/jest, tsc, docker build, a pytest run of a whole
-           directory or with -n, a UAT node .cjs scenario) while MemAvailable < 2 GiB, or < 4 GiB with 3 or more heavy
-           processes already running: the WSL VM ran out of memory and killed Claude Code and every lane (S237, S248,
-           S251, S252, S261). The message names what is running. Override (logged): prefix `AA_RAM_OVERRIDE=1`.
+           directory or with -n, a UAT node .cjs scenario; a push, the PR opener or ship_wave too, since a push runs
+           the repo's pre-push hook: CIS fast mode is about 5,000 unit tests, the S272 crash) while MemAvailable
+           < 2 GiB, or < 4 GiB with 3 or more heavy processes already running: the WSL VM ran out of memory and
+           killed Claude Code and every lane (S237, S248, S251, S252, S261, S272). The message names what is running. Override (logged): prefix `AA_RAM_OVERRIDE=1`.
+  ECS-1    A raw `aws ecs execute-command`, typed or inside a .tmp-session / scratchpad script the command runs (S237 ...
+           S269, 10 repeats): the SSM terminal cuts long output silently and a dropped session can kill the script.
+           tools/ecs/ecsx.sh runs the script detached and brings ALL its output back (and resumes a lost start).
+           Read-only mentions (grep, cat) pass. Override, logged (the tech lead only): prefix `AA_ECSX_BYPASS=1`.
+  WT-1     `git worktree add` with a literal relative path, or an absolute one outside .tmp-session/wt/: the path is
+           resolved from `-C <repo>` or the current directory, and worktrees landed inside child repos (S246, S247).
+           A variable path ($W) passes (it cannot be read statically).
+  BG-1     A background job whose stdout goes to /dev/null (`cmd >/dev/null 2>&1 &`, `&>/dev/null &`, `nohup ...
+           >/dev/null`): when it fails nobody can tell why (S236, S270). Write a log file under .tmp-session/ or use
+           the Bash tool's run_in_background. `&&` after a redirect is not a background job.
+  TF-1     `terraform apply|destroy` from a lane worktree (.tmp-session/wt/**) or a checkout that is not on
+           main/master: the state then holds code that is not on main, and the next apply from main reverts it.
 
 How it reads a command: a small shell lexer blanks quoted text and drops comments and heredoc bodies, so a rule never
 fires on text that is only an argument (`grep 'pkill -f' x`); the bodies of `bash -c '...'` / `sh -c` and of
@@ -68,6 +82,8 @@ MAX_SCRIPT_BYTES = 1_000_000
 
 SHELLS = frozenset({"bash", "sh", "zsh", "dash"})
 WRAPPERS = frozenset({"sudo", "nohup", "setsid", "command", "time", "exec", "nice", "env", "stdbuf", "builtin"})
+WRAPPER_VALUE_OPTS = {"env": ("-u", "--unset", "-C", "--chdir", "-S", "--split-string"), "nice": ("-n", "--adjustment"),
+                      "sudo": ("-u", "-g", "-U", "-C", "-D", "-h", "-p", "-r", "-t")}
 SEPARATORS = re.compile(r"\|\||&&|[;&|\n]|\$\(|<\(|>\(|`|\(|\)|\{|\}")
 KEYWORDS = frozenset({"do", "then", "else", "elif", "!", "if", "while", "until", "fi", "done", "esac"})
 
@@ -185,6 +201,46 @@ def simple_commands(skeleton: str) -> list[list[str]]:
     return cmds
 
 
+LOOP_HEADS = frozenset({"for", "while", "until", "select"})
+
+
+def commands_with_loop_depth(skeleton: str) -> list[tuple[list[str], int]]:
+    """Simple commands (keywords dropped) with the number of shell loops whose body (or while/until condition) holds
+    them. A command after a loop's `done` is back at depth 0 (S272 review: `<merge>; for s in a b; do aws ecs
+    describe-services ...; done` is a merge, then a check loop, not a merge inside a loop)."""
+    found: list[tuple[list[str], int]] = []
+    depth = 0
+    headers = 0  # loops whose `do` has not been read yet
+    for part in SEPARATORS.split(skeleton):
+        words = part.split()
+        while words:
+            head = words[0]
+            if head in LOOP_HEADS:
+                headers += 1
+                if head in ("for", "select"):
+                    words = []  # `for x in a b`: the word list is not a command
+                    break
+                words = words[1:]  # while / until: the condition runs on every turn
+                continue
+            if head == "do":
+                if headers:
+                    headers -= 1
+                    depth += 1
+                words = words[1:]
+                continue
+            if head == "done":
+                depth = max(0, depth - 1)
+                words = words[1:]
+                continue
+            if head in KEYWORDS:
+                words = words[1:]
+                continue
+            break
+        if words:
+            found.append((words, depth + headers))
+    return found
+
+
 def program(words: list[str]) -> tuple[str, list[str]]:
     """The program a simple command runs (basename) and its arguments, past env assignments and wrappers."""
     w = list(words)
@@ -195,7 +251,9 @@ def program(words: list[str]) -> tuple[str, list[str]]:
         elif head in WRAPPERS:
             w = w[1:]
             while w and w[0].startswith("-"):
-                w = w[1:]
+                # options that take the next word as their value (S272 review: `env -u AWS_PROFILE terraform ...`
+                # read AWS_PROFILE as the program and missed a lane-worktree apply)
+                w = w[2:] if w[0] in WRAPPER_VALUE_OPTS.get(head, ()) else w[1:]
         elif head == "timeout":
             w = w[1:]
             while w and (w[0].startswith("-") or re.fullmatch(r"\d+[smhd]?", w[0])):
@@ -208,7 +266,15 @@ def program(words: list[str]) -> tuple[str, list[str]]:
                 if flag in ("-n", "-I", "-P", "-L", "-d", "-s", "-E") and w:
                     w = w[1:]
         elif os.path.basename(head) == "as-app.sh":
-            w = w[w.index("--") + 1:] if "--" in w else []
+            # the command after `--`; without it (the helper then refuses, but read it anyway: S272 review, RAM-1 let
+            # `as-app.sh git push` through) the words after the --repos option
+            rest = w[1:]
+            if "--" in rest:
+                w = rest[rest.index("--") + 1:]
+            else:
+                while rest[:1] == ["--repos"]:
+                    rest = rest[2:]
+                w = rest
         elif os.path.basename(head) in SHELLS and len(w) > 1:
             # `bash script.sh args`: the script is the program. `bash -c '...'` bodies are read by texts_of().
             rest = w[1:]
@@ -319,11 +385,205 @@ def _is_ship_merge(prog: str, args: list[str]) -> bool:
     return False
 
 
-def _rule_ship_command(t: Text) -> str | None:
+def _aws_service_op(args: list[str]) -> tuple[str, str]:
+    """(service, operation) of an aws CLI call, past its global options."""
+    w = [a for a in args if a]
+    i = 0
+    while i < len(w) and w[i].startswith("-"):
+        # --profile x / --region x take a value; --debug / --no-cli-pager do not (a value never starts with '-')
+        i += 2 if "=" not in w[i] and i + 1 < len(w) and not w[i + 1].startswith("-") and w[i] not in (
+            "--debug", "--no-cli-pager", "--no-paginate", "--no-verify-ssl", "--no-sign-request") else 1
+    rest = w[i:]
+    return (rest[0] if rest else "", rest[1] if len(rest) > 1 else "")
+
+
+def _rule_ecs_exec(t: Text) -> str | None:
+    for words in simple_commands(t.skeleton):
+        prog, args = program(words)
+        if prog == "aws" and _aws_service_op(args) == ("ecs", "execute-command"):
+            return "a raw `aws ecs execute-command`"
+    return None
+
+
+# A Python script runs ECS exec through an argv list (["aws", ..., "ecs", "execute-command", ...]) or a command string
+# handed to subprocess / os.system on the same line. A string that only mentions the command (a print, a help text) is
+# not a call (S272 review: print("If ecsx fails, the fallback is: aws ecs execute-command ...") was refused).
+PY_ECS_ARGV = re.compile(r"[\"']ecs[\"']\s*,\s*[\"']execute-command[\"']")
+PY_RUNNER = r"(?:\bsubprocess\.\w+|\bos\.(?:system|popen)|\bPopen|\bcheck_output|\bcheck_call|\brun)\s*\(\s*"
+# The command string must START with aws (a `timeout N` in front allowed): `run("echo aws ecs execute-command")` and a
+# message that only mentions the command are not calls (S272 review, the ECS-1 string-literal minor).
+PY_ECS_CMD = r"[rfbuRFBU]*[\"']\s*(?:timeout\s+\S+\s+)?aws\b[^\n]*\becs\s+execute-command\b"
+PY_ECS_SHELL = re.compile(PY_RUNNER + PY_ECS_CMD)
+# A command string assigned to a variable counts only when that variable is then handed to a runner
+# (`cmd = f"aws ecs execute-command ..."` + `subprocess.run(cmd, shell=True)`), never a HELP / log message.
+PY_ECS_ASSIGN = re.compile(r"^\s*([A-Za-z_]\w*)\s*=\s*" + PY_ECS_CMD, re.MULTILINE)
+
+
+def script_runs_ecs_exec(path: Path, code: str) -> bool:
+    """ECS-1 inside a script: a shell script is read like a typed command (quoted text blanked, so an `echo "...aws ecs
+    execute-command..."` is not a call); a Python script only through an argv list, a subprocess / os.system call on
+    an aws command string, or such a string kept in a variable that a runner (or shlex.split) then gets."""
+    if path.suffix == ".py":
+        if PY_ECS_ARGV.search(code) or PY_ECS_SHELL.search(code):
+            return True
+        for m in PY_ECS_ASSIGN.finditer(code):
+            name = re.escape(m.group(1))
+            if re.search(PY_RUNNER + r"(?:shlex\.split\(\s*)?" + name + r"\b", code):
+                return True
+        return False
+    return any(_rule_ecs_exec(t) for t in texts_of(code, "bash", str(path)))
+
+
+WORKSPACE = "/home/nghiep/projects/AA-Ecosys"  # the canonical lane path the lane template prescribes
+
+
+def _wt_bases() -> tuple[str, ...]:
+    return tuple(dict.fromkeys(f"{r}/.tmp-session/wt/" for r in (str(ROOT), WORKSPACE)))
+
+
+UNKNOWN_DIR = Path("/unknown-dir")
+
+
+def _unknown(p: Path) -> bool:
+    return p == UNKNOWN_DIR or UNKNOWN_DIR in p.parents
+
+
+def _cd(here: Path, args: list[str]) -> Path:
+    """The directory after `cd` / `pushd <args>`. `~` is expanded; a variable, a quoted target (blanked by scan()),
+    `-` or `+N` is UNKNOWN_DIR (S272 review: `cd "$CIS" && git worktree add .tmp-session/wt/x` kept the old directory
+    and passed). `cd` alone is the home directory."""
+    args = [a for a in args if a not in ("-L", "-P", "-e", "-q")]
+    if not args:
+        return Path.home()
+    target = args[0]
+    if target.startswith("~"):
+        if target != "~" and not target.startswith("~/"):
+            return UNKNOWN_DIR  # ~user
+        target = os.path.expanduser(target)
+    if target.startswith(("$", "-", '"', "'", "`", "+")) or "$" in target:
+        return UNKNOWN_DIR
+    if not target.startswith("/") and _unknown(here):
+        return UNKNOWN_DIR
+    return Path(os.path.normpath(target if target.startswith("/") else str(here / target)))
+
+
+DIR_CHANGERS = frozenset({"cd", "pushd", "popd"})
+
+
+def _move(here: Path, prog: str, args: list[str]) -> Path:
+    """cd and pushd move like cd; popd goes back to a directory this reader does not keep: unknown."""
+    return UNKNOWN_DIR if prog == "popd" else _cd(here, args)
+
+
+WT_VALUE_OPTS = frozenset({"-b", "-B", "--orphan", "--reason"})
+
+
+def worktree_check(t: Text, here: Path) -> str | None:
+    """WT-1: a `git worktree add` whose path, resolved from -C <repo> or the current directory (cd tracked), is not
+    under <workspace>/.tmp-session/wt/."""
+    for words in simple_commands(t.skeleton):
+        prog, args = program(words)
+        if prog in DIR_CHANGERS:
+            here = _move(here, prog, args)
+            continue
+        if prog != "git":
+            continue
+        a, base = list(args), here
+        while a and a[0].startswith("-"):  # git -C <dir> / -c k=v before the subcommand
+            if a[0] == "-C" and len(a) > 1:
+                base = _cd(base, a[1:2])
+            a = a[2:] if a[0] in ("-C", "-c") else a[1:]
+        if a[:2] != ["worktree", "add"]:
+            continue
+        rest = a[2:]
+        path = None
+        while rest:
+            if rest[0] in WT_VALUE_OPTS:
+                rest = rest[2:]
+            elif rest[0].startswith("-"):
+                rest = rest[1:]
+            else:
+                path = rest[0]
+                break
+        if not path or path.startswith(("$", "~", '"', "'", "`")) or "$" in path:
+            continue  # a variable or quoted path is not readable here
+        if not path.startswith("/") and _unknown(base):
+            return (f"`git worktree add {path}` (a relative path from a directory this guard cannot read: a variable, "
+                    f"a quoted path or popd)")
+        full = os.path.normpath(path if path.startswith("/") else str(base / path)) + "/"
+        if not any(full.startswith(b) and "/" not in full[len(b):].rstrip("/") for b in _wt_bases()):
+            return f"`git worktree add {path}` (resolves to {full.rstrip('/')}, outside {_wt_bases()[-1]})"
+    return None
+
+
+_BG_NULL = re.compile(
+    r"(?:(?<![0-9&])1?>\s*/dev/null\s*2>\s*(?:&1|/dev/null)|&>\s*/dev/null|>&\s*/dev/null)\s*&(?![&>])")
+_SEGMENT = re.compile(r"&&|\|\||;|\n|(?<![>&])&(?![>&])")
+
+
+_BARE_WAIT_END = re.compile(r"(?:^|[;&|\n]|\bdone|\bthen|\bdo)\s*wait\s*;?\s*$")
+
+
+def _rule_background(t: Text) -> str | None:
     sk = t.skeleton
-    cmds = simple_commands(sk)
+    # fire-and-wait (`for u in a b; do curl -s $u >/dev/null 2>&1 & done; wait`): the same command collects every job
+    # before it returns, so nothing runs on unseen (S272 review)
+    if _BARE_WAIT_END.search(sk.rstrip()):
+        return None
+    for m in _BG_NULL.finditer(sk):
+        start = max((x.end() for x in _SEGMENT.finditer(sk, 0, m.start())), default=0)
+        if ")" in sk[start:m.start()] or "}" in sk[start:m.start()]:
+            continue  # a subshell / group `( ... > log 2>&1 ) >/dev/null &` keeps its output inside
+        return "a background job with its output sent to /dev/null"
+    for seg in _SEGMENT.split(sk):
+        words = seg.split()
+        while words and (words[0] in KEYWORDS or re.fullmatch(r"[A-Za-z_]\w*=\S*", words[0])):
+            words = words[1:]
+        if words and words[0] in ("nohup", "setsid") and re.search(r"(?<![0-9&])1?>\s*/dev/null", seg):
+            return f"`{words[0]} ... >/dev/null` (a detached job whose output is thrown away)"
+    return None
+
+
+def _branch(path: Path) -> str | None:
+    import subprocess
+    try:
+        r = subprocess.run(["git", "-C", str(path), "symbolic-ref", "--short", "-q", "HEAD"], capture_output=True,
+                           text=True, timeout=5)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return r.stdout.strip() if r.returncode == 0 else None
+
+
+def tf_check(t: Text, here: Path) -> tuple[str | None, Path]:
+    """TF-1: terraform apply/destroy from a lane worktree or a checkout off main (cd tracked). Returns (hit, the
+    directory after this text)."""
+    for words in simple_commands(t.skeleton):
+        prog, args = program(words)
+        if prog in DIR_CHANGERS:
+            here = _move(here, prog, args)
+            continue
+        if prog != "terraform":
+            continue
+        chdir = next((a.split("=", 1)[1] for a in args if a.startswith("-chdir=")), None)
+        sub = next((a for a in args if not a.startswith("-")), "")
+        if sub not in ("apply", "destroy"):
+            continue
+        d = here
+        if chdir and not chdir.startswith(("$", '"', "'")):
+            d = Path(chdir) if chdir.startswith("/") else here / chdir
+        where = os.path.normpath(str(d))
+        if "/.tmp-session/wt/" in where + "/":
+            return f"`terraform {sub}` from a lane worktree ({where})", here
+        br = _branch(Path(where)) if Path(where).is_dir() else None
+        if br and br not in ("main", "master"):
+            return f"`terraform {sub}` from a checkout on branch {br}, not main", here
+    return None, here
+
+
+def _rule_ship_command(t: Text) -> str | None:
     merges = 0
-    for words in cmds:
+    looped = 0
+    for words, depth in commands_with_loop_depth(t.skeleton):
         prog, args = program(words)
         if prog == "gh" and args[:2] == ["pr", "merge"] and "--disable-auto" not in args:
             return ("a raw `gh pr merge` (it skips the ship gate: every check green, settle re-read, deletions, DIRTY); "
@@ -340,10 +600,11 @@ def _rule_ship_command(t: Text) -> str | None:
                     "`python3 tools/github/ship_merge.py <Repo>#<pr> ...` or `ship_wave.py` (--dequeue stays open)")
         if _is_ship_merge(prog, args):
             merges += 1
+            looped += depth > 0
     if merges >= 2:
         return ("ship_merge.py called more than once in one command (serial shipping); give ONE call every target "
                 "(queue repos run in parallel), or `ship_wave.py` for migration chains")
-    if merges and re.search(r"(?:^|[\s;&|(])(?:for|while|until)\s", sk) and re.search(r"(?:^|[\s;&|])done\b", sk):
+    if looped:  # only a merge between a loop's `do` and its `done` (or in a while/until condition)
         return ("ship_merge.py inside a shell loop (one PR after the other); give ONE call every target, or "
                 "`ship_wave.py` for migration chains")
     return None
@@ -436,6 +697,20 @@ def heavy_command(words: list[str]) -> str | None:
         return None
     if prog == "node" and any(re.search(r"(?:^|/)uat/\S*\.cjs$", x) for x in a):
         return "UAT node scenario (Chromium)"
+    # S272: a push runs the repo's pre-push hook (the CIS fast mode is about 5,000 unit tests in one process); one ran
+    # while 5 lanes were busy and the WSL VM ran out of memory. --no-verify, --dry-run and a pure delete skip the hook.
+    if prog == "git":
+        while a and a[0] in ("-C", "-c") and len(a) > 1:
+            a = a[2:]
+        if a[:1] == ["push"] and not {"--no-verify", "-n", "--dry-run", "--delete", "-d"} & set(a[1:]) \
+                and not any(x.startswith(":") for x in a[1:]):
+            return "git push (runs the repo's pre-push hook: the CIS fast mode is about 5,000 unit tests)"
+    if prog == "pre-push.sh" and not {"--self-test", "--plan", "-h", "--help"} & set(a):
+        return "scripts/pre-push.sh (the repo's CI-equivalent checks)"
+    pushers = ("ship_open_prs.py", "ship_wave.py")
+    name = prog if prog in pushers else (os.path.basename(a[0]) if re.fullmatch(r"python[0-9.]*", prog) and a else "")
+    if name in pushers and not {"--dry-run", "--check-only", "-h", "--help"} & set(a):
+        return f"{name} (each push runs that repo's pre-push hook)"
     return None
 
 
@@ -447,6 +722,7 @@ HEAVY_PROC = (
     ("jest", re.compile(r"(?:^|[/\x00])jest(?:\.js)?(?:\x00|$)")),
     ("tsc", re.compile(r"(?:^|[/\x00])tsc(?:\x00|$)")),
     ("docker build", re.compile(r"(?:^|[/\x00])docker\x00(?:buildx\x00)?build")),
+    ("pre-push hook", re.compile(r"(?:^|[/\x00])pre-push(?:\.sh)?(?:\x00|$)")),
 )
 
 
@@ -552,33 +828,69 @@ FIX = {
     "SHIP-1": "Ship a wave with ONE call:python3 tools/github/ship_wave.py cis#1350 cis#1352 'cis#1349>apply:cis/383' "
               "'cis#1353@after=cis/383' --wait-deploy (independent PRs in parallel; only migration -> copy -> apply "
               "-> code is sequenced). One PR: python3 tools/github/ship_merge.py <Repo>#<pr>.",
+    "ECS-1": "Run the script with tools/ecs/ecsx.sh <script.py> [VAR=value ...] (ECSX_SERVICE=<service> for "
+             "Booking/CRM/worker): it runs detached, keeps ALL output (also in .tmp-session/ecsx/<run id>.out) and "
+             "resumes a lost start. Override, logged, tech lead only: prefix AA_ECSX_BYPASS=1.",
+    "WT-1": "Give the absolute lane path: git -C <repo> worktree add "
+            "/home/nghiep/projects/AA-Ecosys/.tmp-session/wt/<session>-<lane>-<slug> -b <branch> origin/main.",
+    "BG-1": "Keep the output: `cmd > .tmp-session/<S>/<name>.log 2>&1 &` (or the Bash tool's run_in_background), "
+            "then read the log when it ends. Jobs the same command collects with a final bare `wait` pass.",
+    "TF-1": "Apply from the main checkout on main (git switch main && git pull), after the PR merged; Infra applies "
+            "normally run in CI (terraform-apply.yml).",
 }
 
 
-RULES = (("PKILL-1", _rule_pkill), ("ZSH-1", _rule_zsh), ("ENV-1", _rule_env), ("SHIP-1", _rule_ship_command))
-RULE_IDS = tuple(r for r, _ in RULES) + ("RAM-1",)
+RULES = (("PKILL-1", _rule_pkill), ("ZSH-1", _rule_zsh), ("ENV-1", _rule_env), ("SHIP-1", _rule_ship_command),
+         ("ECS-1", _rule_ecs_exec), ("BG-1", _rule_background))
+RULE_IDS = tuple(r for r, _ in RULES) + ("RAM-1", "WT-1", "TF-1")
+
+
+def _prefixed(cmd: str, var: str) -> bool:
+    return bool(re.match(rf"\s*(?:\w+=\S*\s+)*{var}=1\b", cmd))
 
 
 def check(cmd: str, cwd: Path | None = None, proc: Path = Path("/proc")) -> Refusal | None:
     cwd = cwd or ROOT
     texts = texts_of(cmd)
-    override = bool(re.match(r"\s*(?:\w+=\S*\s+)*AA_RAM_OVERRIDE=1\b", cmd))
-    # Scripts the command runs are checked for merges (SHIP-1 d). Not for PKILL-1: a script's own command line is
-    # `bash <path>`, so a `pgrep -f <other script>` inside it does not match itself (replay S271: 2 such waits).
+    override = _prefixed(cmd, "AA_RAM_OVERRIDE")
+    ecs_bypass = _prefixed(cmd, "AA_ECSX_BYPASS")
+    # Scripts the command runs are checked for merges (SHIP-1 d) and raw ECS exec (ECS-1). Not for PKILL-1: a
+    # script's own command line is `bash <path>`, so a `pgrep -f <other script>` inside it does not match itself
+    # (replay S271: 2 such waits).
     for t in list(texts):
         for path in _scripts_run(t, cwd):
             body = _read(path)
             if body is None:
                 continue
-            if MERGE_IN_SCRIPT.search(_strip_comments(body)):
+            code = _strip_comments(body)
+            if MERGE_IN_SCRIPT.search(code):
                 return Refusal("SHIP-1", f"{path.name} is a hand-written ship script (it merges PRs itself: "
                                f"serial waits, gate skipped)", FIX["SHIP-1"])
+            if script_runs_ecs_exec(path, code):
+                if ecs_bypass:
+                    _log("ECS-1 override", f"{path}: {cmd}")
+                    continue
+                return Refusal("ECS-1", f"{path.name} runs a raw `aws ecs execute-command`", FIX["ECS-1"])
     for t in texts:
         where = "" if t.origin == "command" else f" (in {Path(t.origin).name})"
         for rule, fn in RULES:
             hit = fn(t)
             if hit:
+                if rule == "ECS-1" and ecs_bypass:
+                    _log("ECS-1 override", cmd)
+                    continue
                 return Refusal(rule, hit + where, FIX[rule])
+    # WT-1 / TF-1 resolve paths: walk the texts in order, carrying the directory `cd` moved to (the outer text
+    # first, then the bash -c / heredoc bodies it runs).
+    here = cwd
+    for t in texts:
+        where = "" if t.origin == "command" else f" (in {Path(t.origin).name})"
+        hit = worktree_check(t, here)
+        if hit:
+            return Refusal("WT-1", hit + where, FIX["WT-1"])
+        hit, here = tf_check(t, here)
+        if hit:
+            return Refusal("TF-1", hit + where, FIX["TF-1"])
     ram = ram_check(texts, override, proc)
     if ram:
         return Refusal("RAM-1", ram[0], ram[1])

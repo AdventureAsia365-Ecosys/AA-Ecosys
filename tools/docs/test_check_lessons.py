@@ -15,6 +15,15 @@ from pathlib import Path
 
 import check_lessons as cl
 
+# S272: a git hook (pre-push) exports GIT_DIR and friends; a git command run in a temporary repo below would then act
+# on the real repo (a hook-run test once set core.bare, a fake identity and refs in an app clone). Drop git's
+# repo-local variables for this whole test process (`git rev-parse --local-env-vars`; test_git_env_isolation.py).
+for _git_var in ("GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_CONFIG", "GIT_CONFIG_PARAMETERS", "GIT_CONFIG_COUNT",
+                 "GIT_OBJECT_DIRECTORY", "GIT_DIR", "GIT_WORK_TREE", "GIT_IMPLICIT_WORK_TREE", "GIT_GRAFT_FILE",
+                 "GIT_INDEX_FILE", "GIT_NO_REPLACE_OBJECTS", "GIT_REPLACE_REF_BASE", "GIT_PREFIX", "GIT_SHALLOW_FILE",
+                 "GIT_COMMON_DIR"):
+    os.environ.pop(_git_var, None)
+
 GIT_ENV = {"GIT_AUTHOR_NAME": "T", "GIT_AUTHOR_EMAIL": "t@example.invalid", "GIT_COMMITTER_NAME": "T",
            "GIT_COMMITTER_EMAIL": "t@example.invalid", "GIT_CONFIG_GLOBAL": os.devnull, "GIT_CONFIG_NOSYSTEM": "1"}
 
@@ -83,6 +92,29 @@ class CheckLineTest(RepoCase):
             "- **Do X** — y (S271). Guard: none: external the vendor portal has no API at all.",
         ):
             self.assertIsNone(self.why(line), line)
+
+    def test_child_paths_are_checked_on_the_child_main_in_ci(self):
+        # AA-1024 G22: without the child checkout (CI), a child-repo guard path is read through the GitHub API
+        from unittest import mock
+        seen = []
+
+        def fake(repo, rel):
+            seen.append((repo, rel))
+            return {"tests/unit/test_x.py": True, "tests/unit/gone.py": False}.get(rel)
+
+        with mock.patch.dict(os.environ, {"LESSONS_REMOTE_CHECK": "1"}), \
+                mock.patch.object(cl, "remote_exists", fake):
+            cl.REMOTE_WARNINGS.clear()
+            self.assertIsNone(self.why("- **Do X** — y (S271). Guard: test apps/AA-Demo/tests/unit/test_x.py::t"))
+            self.assertIn("does not exist on AA-Demo main",
+                          self.why("- **Do X** — y (S271). Guard: test apps/AA-Demo/tests/unit/gone.py"))
+            self.assertIsNone(self.why("- **Do X** — y (S271). Guard: ci infra/AA-Infra/unknown.yml"))
+            self.assertEqual(len(cl.REMOTE_WARNINGS), 1)  # the API could not tell: a warning, not a failure
+            cl.REMOTE_WARNINGS.clear()
+        self.assertIn(("AA-Demo", "tests/unit/test_x.py"), seen)
+        with mock.patch.dict(os.environ, {"LESSONS_REMOTE_CHECK": ""}), \
+                mock.patch.object(cl, "remote_exists", lambda *a: self.fail("no API call outside CI")):
+            self.assertIsNone(self.why("- **Do X** — y (S271). Guard: test apps/AA-Demo/tests/unit/gone.py"))
 
     def test_bad_forms(self):
         cases = {

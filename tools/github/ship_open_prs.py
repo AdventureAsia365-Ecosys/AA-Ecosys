@@ -11,9 +11,12 @@ the lane's title and body as given. A final result with ready=false is refused u
 
 Every PR is checked before anything is pushed (all or nothing): the worktree exists, the branch exists locally and is
 ahead of origin/<base>, no rebase in progress and no modified tracked file (lesson S254), the title is a conventional
-one without an issue id (Linear reads "fix: AA-123" as a closing phrase, lesson S246), the body has "Refs AA-<n>" and
-no Fixes/Closes phrase, and the repo's pre-push hook is installed when it ships one (core.hooksPath=.githooks, so the
-push runs the repo's checks; AA-1024 l22). Files the branch deletes are listed as a warning (merge gate refuses them).
+one without an issue id (Linear reads "fix: AA-123" as a closing phrase, lesson S246), the body has "Refs AA-<n>",
+no Fixes/Closes phrase and no issue id that the Refs line does not name, file paths aside (Linear links every id it
+sees in a PR body and its Git automation moved such issues to Done on merge; AA-1024 G11, lessons S243-S246), and the repo's pre-push hook is installed when it ships one (core.hooksPath=.githooks, so the
+push runs the repo's checks; AA-1024 l22), and gitleaks v8.30.1 (the CI pin) finds nothing in origin/<base>..<branch>
+with the base's .gitleaks.toml (AA-1024 G14; AA_SKIP_GITLEAKS=1 skips it with a warning). Files the branch deletes are
+listed as a warning (merge gate refuses them).
 
 Then for each PR: push through the aa-agent App (no force), open the PR (or reuse an open PR of that branch), check
 the author is the App, print the URL and the lane's live_steps. --extra-refs adds issue ids to the Refs line; the
@@ -29,6 +32,7 @@ import glob
 import json
 import os
 import re
+import shutil
 import sys
 import tempfile
 from pathlib import Path
@@ -45,10 +49,19 @@ from ship_common import (
 )
 
 ATTRIBUTION = "🤖 Generated with [Claude Code](https://claude.com/claude-code)"
-TITLE_RE = re.compile(r"^(feat|fix|chore|refactor|docs|test|perf|ci|build)(\([^)]+\))?!?: \S.*$")
+# The types every pr-title.yml lists (no 'build': no workflow accepts it).
+TITLE_RE = re.compile(r"^(feat|fix|chore|refactor|docs|test|perf|ci)(\([^)]+\))?!?: \S.*$")
 ISSUE_RE = re.compile(r"\bAA-\d+\b")
-CLOSING_RE = re.compile(r"\b(fix(es|ed)?|close[sd]?|resolve[sd]?)\b[:\s]+AA-\d+", re.IGNORECASE)
-REFS_RE = re.compile(r"^Refs\s+AA-\d+.*$", re.MULTILINE)
+# Same pattern as pr-title.yml's closing check (S272 review: 'This completes AA-1040.' passed here and failed CI).
+CLOSING_RE = re.compile(r"(?<![0-9A-Za-z])(close[sd]?|closing|fix(e[sd])?|fixing|resolve[sd]?|resolving"
+                        r"|complete[sd]?|completing)[\s:*_`\[(\-]*(?:(?:https?://)?linear\.app/\S*?/issue/)?AA-\d+", re.IGNORECASE)
+REFS_RE = re.compile(r"^\s*Refs\s+AA-\d+\b.*$", re.MULTILINE)
+# The Refs line: 'Refs AA-<n>[, AA-<m>...]' at the start of a line, then any free text ("Refs AA-1040 (EU AI Act Art.
+# 50(2), root ADR 0019 d19)." in merged TripPlanner#223). Its ids are the leading list only; pr-title.yml uses the
+# same pattern.
+REFS_LEAD_RE = re.compile(r"^\s*Refs\s+(AA-\d+(?:\s*,\s*AA-\d+)*)\b")
+# An issue id inside a file name (docs/implementation-notes/AA-1024-guards-rest.md) is a path, not a link to an issue.
+PATH_ID_RE = re.compile(r"[\w./-]*\bAA-\d+[\w-]*\.(?:md|py|json|ya?ml|sh|js|mjs|ts|tsx|sql|txt|html|toml)\b")
 JOURNAL_GLOBS = (
     "~/.claude/projects/*/*/subagents/workflows/{id}/journal.jsonl",
     "~/.claude/projects/*/subagents/workflows/{id}/journal.jsonl",
@@ -90,14 +103,35 @@ def load_prs(path: Path) -> tuple[list[dict], dict]:
 def add_refs(body: str, extra: list[str]) -> str:
     if not extra:
         return body
-    m = REFS_RE.search(body)
+    m = re.compile(REFS_LEAD_RE.pattern, re.MULTILINE).search(body)
     if not m:
         return body.rstrip() + "\n\nRefs " + ", ".join(extra) + "\n"
-    have = set(ISSUE_RE.findall(m.group(0)))
+    have = set(ISSUE_RE.findall(m.group(1)))
     add = [x for x in extra if x not in have]
     if not add:
         return body
-    return body[: m.end()] + ", " + ", ".join(add) + body[m.end():]
+    # after the id list, before any free text, so the added ids stay in the list
+    return body[: m.end(1)] + ", " + ", ".join(add) + body[m.end(1):]
+
+
+def stray_issue_ids(body: str) -> list[str]:
+    """Issue ids the body names that its `Refs AA-<n>, ...` line does not: Linear links those to an issue the PR does
+    not do. An id the PR Refs may appear anywhere (its own issue in prose), and an id inside a file path is ignored
+    (the implementation-notes path CLAUDE.md asks for, `docs/implementation-notes/AA-1024-guards-rest.md`). The same
+    rule runs in every repo's pr-title.yml; keep the two in step. A Refs line may carry free text after its id list;
+    an id in that free text that the list lacks is stray like any other."""
+    refs: set[str] = set()
+    rest: list[str] = []
+    for line in body.replace("\r", "").splitlines():
+        m = REFS_LEAD_RE.match(line)
+        if m:
+            refs.update(ISSUE_RE.findall(m.group(1)))
+            line = line[m.end():]
+        rest.append(line)
+    out: list[str] = []
+    for line in rest:
+        out.extend(x for x in ISSUE_RE.findall(PATH_ID_RE.sub(" ", line)) if x not in refs and x not in out)
+    return out
 
 
 def with_attribution(body: str) -> str:
@@ -125,7 +159,12 @@ def validate(runner: Runner, p: dict, stacked_on: frozenset[str] = frozenset()) 
     if not REFS_RE.search(body):
         problems.append("body has no 'Refs AA-<n>' line")
     if CLOSING_RE.search(body):
-        problems.append("body has a closing phrase (Fixes/Closes/Resolves AA-<n>): use Refs")
+        problems.append("body has a closing phrase (Fixes/Closes/Resolves/Completes AA-<n>): use Refs")
+    stray = stray_issue_ids(body)
+    if stray:
+        problems.append(f"body names {', '.join(stray[:5])}, which the Refs line does not (Linear links the issue and "
+                        f"may move it to Done on merge): add it to 'Refs AA-<n>, ...' only if the PR does that issue, "
+                        f"else describe the other work in words")
     if not os.path.isdir(wt):
         problems.append(f"no worktree at {wt}")
         return problems, warnings
@@ -164,7 +203,65 @@ def validate(runner: Runner, p: dict, stacked_on: frozenset[str] = frozenset()) 
     gone = [x for x in d.out.splitlines() if x.strip()]
     if gone:
         warnings.append(f"{br} deletes {len(gone)} file(s): {', '.join(gone[:8])}")
+    if r.ok:
+        leak, note = gitleaks_check(runner, wt, ref, br)
+        if leak:
+            problems.append(leak)
+        if note:
+            warnings.append(note)
     return problems, warnings
+
+
+# AA-1024 G14: the orchestrator's own commits (fix-ups, merges of lane branches) were never scanned before the push;
+# each leak then cost a red Secret Scan round and a squash rewrite (lessons S250-S266). Same pin and rules as CI.
+GITLEAKS_VERSION = "8.30.1"  # .github/workflows/secret-scan.yml GITLEAKS_IMAGE (every repo pins the same version)
+GITLEAKS_LOCAL = ".tmp-session/gitleaks-8301/gitleaks"  # where lanes and the orchestrator keep the checked download
+
+
+def gitleaks_bin() -> str | None:
+    env = os.environ.get("AA_GITLEAKS", "").strip()
+    if env:
+        return env
+    found = shutil.which("gitleaks")
+    if found:
+        return found
+    local = ROOT / GITLEAKS_LOCAL
+    return str(local) if local.is_file() and os.access(local, os.X_OK) else None
+
+
+def gitleaks_check(runner: Runner, wt: str, ref: str, br: str) -> tuple[str | None, str | None]:
+    """(problem, warning) of a gitleaks scan of <ref>..<br> with the BASE's .gitleaks.toml / .gitleaksignore (as CI
+    reads them, so a branch cannot allowlist its own leak). AA_SKIP_GITLEAKS=1 skips it with a warning."""
+    if os.environ.get("AA_SKIP_GITLEAKS") == "1":
+        return None, f"{br}: gitleaks skipped (AA_SKIP_GITLEAKS=1); CI's Secret Scan is the only scan"
+    exe = gitleaks_bin()
+    hint = (f"install gitleaks v{GITLEAKS_VERSION} (github.com/gitleaks/gitleaks/releases, linux_x64 tar.gz checked "
+            f"against the release checksums) at {GITLEAKS_LOCAL} or on PATH, or set AA_GITLEAKS; "
+            f"AA_SKIP_GITLEAKS=1 skips the scan")
+    if not exe:
+        return f"{wt}: no gitleaks binary to scan {ref}..{br}: {hint}", None
+    v = runner.run([exe, "version"], timeout=30)
+    have = (re.search(r"\d+\.\d+\.\d+", v.out) or [None])[0] if v.ok else None
+    if have != GITLEAKS_VERSION:
+        return f"{wt}: gitleaks {have or 'unreadable'} at {exe}, CI uses {GITLEAKS_VERSION}: {hint}", None
+    with tempfile.TemporaryDirectory(prefix="ship-gitleaks-") as tmp:
+        args = [exe, "git", wt, f"--log-opts=--diff-merges=remerge --no-renames {ref}..{br}", "--redact", "--no-banner",
+                "--exit-code", "1"]
+        for name, flag in ((".gitleaks.toml", "-c"), (".gitleaksignore", "-i")):
+            shown = runner.run(["git", "-C", wt, "show", f"{ref}:{name}"], timeout=60)
+            if shown.ok:
+                path = os.path.join(tmp, name)
+                with open(path, "w", encoding="utf-8") as fh:
+                    fh.write(shown.out)
+                args += [flag, path]
+        r = runner.run(args, timeout=600)
+    if r.rc == 1:
+        return (f"{br}: gitleaks found a leak in {ref}..{br} ({r.last_line()}); rewrite the branch before pushing: "
+                f"git reset --soft $(git merge-base HEAD {ref}) and recommit without it (never 'fix it in a later "
+                f"commit', the scan reads every commit)"), None
+    if not r.ok:
+        return f"{br}: gitleaks failed (exit {r.rc}): {r.last_line()}", None
+    return None, None
 
 
 SKIP_INTEGRATION_NOTE = ("> Pushed with AA_PREPUSH_SKIP_INTEGRATION=1: the integration tests this diff touches were not "

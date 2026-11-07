@@ -15,6 +15,15 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import gate  # noqa: E402
 
+# S272: a git hook (pre-push) exports GIT_DIR and friends; a git command run in a temporary repo below would then act
+# on the real repo (a hook-run test once set core.bare, a fake identity and refs in an app clone). Drop git's
+# repo-local variables for this whole test process (`git rev-parse --local-env-vars`; test_git_env_isolation.py).
+for _git_var in ("GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_CONFIG", "GIT_CONFIG_PARAMETERS", "GIT_CONFIG_COUNT",
+                 "GIT_OBJECT_DIRECTORY", "GIT_DIR", "GIT_WORK_TREE", "GIT_IMPLICIT_WORK_TREE", "GIT_GRAFT_FILE",
+                 "GIT_INDEX_FILE", "GIT_NO_REPLACE_OBJECTS", "GIT_REPLACE_REF_BASE", "GIT_PREFIX", "GIT_SHALLOW_FILE",
+                 "GIT_COMMON_DIR"):
+    os.environ.pop(_git_var, None)
+
 DENY = """## brand
 Zentrova Travel
 Zentrova
