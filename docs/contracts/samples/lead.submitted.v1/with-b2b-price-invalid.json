@@ -1,0 +1,71 @@
+{
+  "contract": "lead.submitted.v1",
+  "schema": "LeadSubmitted",
+  "expect": "invalid",
+  "why": "An AA B2B price never reaches a traveller's lead",
+  "rule": "b2b_price",
+  "payload": {
+    "contract": "lead.submitted.v1",
+    "version": "1.0",
+    "lead_id": "7a1c2e3f-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+    "idempotency_key": "tp-lead:7a1c2e3f-4b5d-4e6f-8a9b-0c1d2e3f4a5b",
+    "submitted_at": "2026-11-20T09:15:00Z",
+    "tenant": {
+      "tenant_id": "3e4f5a6b-7c8d-4e9f-a0b1-c2d3e4f5a6b7",
+      "slug": "quillmere-voyages"
+    },
+    "source": {
+      "app": "tripplanner",
+      "trip_ref": "1b2c3d4e-5f6a-4b7c-8d9e-0f1a2b3c4d5e"
+    },
+    "traveller": {
+      "name": "Ada Fernwick",
+      "email": "ada.fernwick@example.invalid",
+      "phone": null,
+      "locale": "en"
+    },
+    "party": {
+      "adults": 2,
+      "child_ages": [
+        9
+      ]
+    },
+    "trip": {
+      "days": 6,
+      "countries": [
+        "Vietnam"
+      ],
+      "start_date": "2027-03-10",
+      "budget_band": "2000_3500",
+      "message": "We would like a slower pace with one free afternoon.",
+      "tours": [
+        {
+          "source_system": "aa_master",
+          "source_id": "SYN-TOUR-0042",
+          "title": "Lantern Coast Explorer",
+          "b2b_price": "1200.00"
+        }
+      ],
+      "day_plan": [
+        {
+          "day": 1,
+          "stops": [
+            "Harbour Old Quarter"
+          ]
+        },
+        {
+          "day": 2,
+          "stops": [
+            "Jade Bay",
+            "Kelp Island"
+          ]
+        }
+      ]
+    },
+    "consent": {
+      "contact": true,
+      "marketing": false,
+      "given_at": "2026-11-20T09:14:58Z"
+    }
+  }
+}
