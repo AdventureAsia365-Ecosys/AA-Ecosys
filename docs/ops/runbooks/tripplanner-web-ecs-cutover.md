@@ -44,9 +44,11 @@ deploying it.
 
 - `RateLimitPerIp`: 3000 requests per 5 minutes per viewer IP (pages, chunks and photos included) -> 429.
 - `RateLimitModelPaths`: 100 per 5 minutes per IP on `GET /api/browse/search` and `POST /api/trip/narrate` -> 429.
-- `ChallengeBrowsers`: a silent JavaScript Challenge on a document navigation and on the two model paths. A browser
-  solves it on its first page load (a short interstitial, no puzzle) and keeps a token for 4 hours; a script without
-  the token gets HTTP 202 with `x-amzn-waf-action: challenge` on the model paths. No geo rule.
+- `ChallengePlanner`: a silent JavaScript Challenge on a document navigation of a planner page (`/plan`,
+  `/{tenant}/plan`) and on the two model paths. A browser solves it when it opens the planner (a short interstitial,
+  no puzzle) and keeps a token for 4 hours; a script without the token gets HTTP 202 with
+  `x-amzn-waf-action: challenge` on the model paths. Home, destination and tour pages are never challenged. No geo
+  rule.
 - A traveller blocked by a rule, or a planner whose search or narration fails with a challenge, is a rollback trigger
   in section 3.
 
@@ -102,13 +104,13 @@ request answers 429 with `{"error":"rate_limited"}`). The same IP is blocked on 
 Real browsing: Chromium started with `--host-resolver-rules="MAP tripplanner.lumiguides.it.com <IP>"` (Playwright
 `launch({ args: [...] })`). Expect: the home, a destination and a tour page render with photos; `/plan` opens the map
 (Mapbox tiles load: the token's URL restriction names this host); a free-text search answers; adding a stop and
-"narrate" answer (the Challenge was solved on the page load); `/aa-tripplanner/plan` (the demo tenant) opens; no
+"narrate" answer (the Challenge was solved when `/plan` opened); `/aa-tripplanner/plan` (the demo tenant) opens; no
 console error. Screenshots and the outputs go to `docs/audits/<date>-S<nnn>-tripplanner-web-cutover/`.
 
 WAF view of the test window (CloudWatch metrics, us-east-1 for a CLOUDFRONT web ACL):
 
 ```bash
-for r in RateLimitPerIp RateLimitModelPaths ChallengeBrowsers; do echo "$r $(aws cloudwatch get-metric-statistics --namespace AWS/WAFV2 --metric-name BlockedRequests --dimensions Name=WebACL,Value=aa-tripplanner-dev-web Name=Rule,Value=$r --start-time $(date -u -d '-3 hours' +%FT%TZ) --end-time $(date -u +%FT%TZ) --period 10800 --statistics Sum --region us-east-1 --profile aa365-admin --query 'Datapoints[0].Sum' --output text)"; done
+for r in RateLimitPerIp RateLimitModelPaths ChallengePlanner; do echo "$r $(aws cloudwatch get-metric-statistics --namespace AWS/WAFV2 --metric-name BlockedRequests --dimensions Name=WebACL,Value=aa-tripplanner-dev-web Name=Rule,Value=$r --start-time $(date -u -d '-3 hours' +%FT%TZ) --end-time $(date -u +%FT%TZ) --period 10800 --statistics Sum --region us-east-1 --profile aa365-admin --query 'Datapoints[0].Sum' --output text)"; done
 ```
 
 Expect: blocks only from the rate test above; sampled requests per rule are in the console (WAF, Global (CloudFront),
