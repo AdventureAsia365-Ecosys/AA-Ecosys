@@ -26,8 +26,9 @@ Rules (main session and subagents alike; exit 2 refuses, the message goes to std
                and the same merge through the API: `gh api` with a writing method on `pulls/<n>/merge`, or
                `gh api graphql` with a mergePullRequest / enqueuePullRequest mutation (dequeuePullRequest stays open);
            (b) the merge-queue wrapper run by hand without --dequeue (it waits for REQUIRED checks only: S263 #1225);
-           (c) ship_merge.py inside a shell loop or more than once in one command (one call takes every target and
-               runs the queue repos in parallel);
+           (c) ship_merge.py inside a shell loop body (between `do` and its `done`) or more than once in one command
+               (one call takes every target and runs the queue repos in parallel); a loop before or after the one
+               merge call (a checks wait, a deploy check) passes;
            (d) running or sourcing a hand-written .tmp-session / scratchpad script that merges (mergeq / gh pr merge /
                ship_merge / ship_train inside).
            ship_wave.py (parallel by default, chains only for migration -> copy -> apply -> code) and ship_merge.py
@@ -200,6 +201,46 @@ def simple_commands(skeleton: str) -> list[list[str]]:
     return cmds
 
 
+LOOP_HEADS = frozenset({"for", "while", "until", "select"})
+
+
+def commands_with_loop_depth(skeleton: str) -> list[tuple[list[str], int]]:
+    """Simple commands (keywords dropped) with the number of shell loops whose body (or while/until condition) holds
+    them. A command after a loop's `done` is back at depth 0 (S272 review: `<merge>; for s in a b; do aws ecs
+    describe-services ...; done` is a merge, then a check loop, not a merge inside a loop)."""
+    found: list[tuple[list[str], int]] = []
+    depth = 0
+    headers = 0  # loops whose `do` has not been read yet
+    for part in SEPARATORS.split(skeleton):
+        words = part.split()
+        while words:
+            head = words[0]
+            if head in LOOP_HEADS:
+                headers += 1
+                if head in ("for", "select"):
+                    words = []  # `for x in a b`: the word list is not a command
+                    break
+                words = words[1:]  # while / until: the condition runs on every turn
+                continue
+            if head == "do":
+                if headers:
+                    headers -= 1
+                    depth += 1
+                words = words[1:]
+                continue
+            if head == "done":
+                depth = max(0, depth - 1)
+                words = words[1:]
+                continue
+            if head in KEYWORDS:
+                words = words[1:]
+                continue
+            break
+        if words:
+            found.append((words, depth + headers))
+    return found
+
+
 def program(words: list[str]) -> tuple[str, list[str]]:
     """The program a simple command runs (basename) and its arguments, past env assignments and wrappers."""
     w = list(words)
@@ -368,18 +409,28 @@ def _rule_ecs_exec(t: Text) -> str | None:
 # handed to subprocess / os.system on the same line. A string that only mentions the command (a print, a help text) is
 # not a call (S272 review: print("If ecsx fails, the fallback is: aws ecs execute-command ...") was refused).
 PY_ECS_ARGV = re.compile(r"[\"']ecs[\"']\s*,\s*[\"']execute-command[\"']")
-PY_ECS_SHELL = re.compile(
-    r"(?:\bsubprocess\.\w+|\bos\.(?:system|popen)|\bPopen|\bcheck_output|\bcheck_call|\brun)\s*\("
-    r"[^\n]*\baws\b[^\n]*\becs\s+execute-command\b"
-    # a command string assigned to a variable and run later (`cmd = f"aws ecs execute-command ..."`)
-    r"|^\s*[A-Za-z_]\w*\s*=\s*[rfbuRFBU]*[\"'][^\n]*\baws\b[^\n]*\becs\s+execute-command\b", re.MULTILINE)
+PY_RUNNER = r"(?:\bsubprocess\.\w+|\bos\.(?:system|popen)|\bPopen|\bcheck_output|\bcheck_call|\brun)\s*\(\s*"
+# The command string must START with aws (a `timeout N` in front allowed): `run("echo aws ecs execute-command")` and a
+# message that only mentions the command are not calls (S272 review, the ECS-1 string-literal minor).
+PY_ECS_CMD = r"[rfbuRFBU]*[\"']\s*(?:timeout\s+\S+\s+)?aws\b[^\n]*\becs\s+execute-command\b"
+PY_ECS_SHELL = re.compile(PY_RUNNER + PY_ECS_CMD)
+# A command string assigned to a variable counts only when that variable is then handed to a runner
+# (`cmd = f"aws ecs execute-command ..."` + `subprocess.run(cmd, shell=True)`), never a HELP / log message.
+PY_ECS_ASSIGN = re.compile(r"^\s*([A-Za-z_]\w*)\s*=\s*" + PY_ECS_CMD, re.MULTILINE)
 
 
 def script_runs_ecs_exec(path: Path, code: str) -> bool:
     """ECS-1 inside a script: a shell script is read like a typed command (quoted text blanked, so an `echo "...aws ecs
-    execute-command..."` is not a call); a Python script only through an argv list or a subprocess / os.system line."""
+    execute-command..."` is not a call); a Python script only through an argv list, a subprocess / os.system call on
+    an aws command string, or such a string kept in a variable that a runner (or shlex.split) then gets."""
     if path.suffix == ".py":
-        return bool(PY_ECS_ARGV.search(code) or PY_ECS_SHELL.search(code))
+        if PY_ECS_ARGV.search(code) or PY_ECS_SHELL.search(code):
+            return True
+        for m in PY_ECS_ASSIGN.finditer(code):
+            name = re.escape(m.group(1))
+            if re.search(PY_RUNNER + r"(?:shlex\.split\(\s*)?" + name + r"\b", code):
+                return True
+        return False
     return any(_rule_ecs_exec(t) for t in texts_of(code, "bash", str(path)))
 
 
@@ -530,10 +581,9 @@ def tf_check(t: Text, here: Path) -> tuple[str | None, Path]:
 
 
 def _rule_ship_command(t: Text) -> str | None:
-    sk = t.skeleton
-    cmds = simple_commands(sk)
     merges = 0
-    for words in cmds:
+    looped = 0
+    for words, depth in commands_with_loop_depth(t.skeleton):
         prog, args = program(words)
         if prog == "gh" and args[:2] == ["pr", "merge"] and "--disable-auto" not in args:
             return ("a raw `gh pr merge` (it skips the ship gate: every check green, settle re-read, deletions, DIRTY); "
@@ -550,10 +600,11 @@ def _rule_ship_command(t: Text) -> str | None:
                     "`python3 tools/github/ship_merge.py <Repo>#<pr> ...` or `ship_wave.py` (--dequeue stays open)")
         if _is_ship_merge(prog, args):
             merges += 1
+            looped += depth > 0
     if merges >= 2:
         return ("ship_merge.py called more than once in one command (serial shipping); give ONE call every target "
                 "(queue repos run in parallel), or `ship_wave.py` for migration chains")
-    if merges and re.search(r"(?:^|[\s;&|(])(?:for|while|until)\s", sk) and re.search(r"(?:^|[\s;&|])done\b", sk):
+    if looped:  # only a merge between a loop's `do` and its `done` (or in a while/until condition)
         return ("ship_merge.py inside a shell loop (one PR after the other); give ONE call every target, or "
                 "`ship_wave.py` for migration chains")
     return None

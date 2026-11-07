@@ -153,8 +153,28 @@ class ShipTest(unittest.TestCase):
             "for n in 1349 1350; do python3 tools/github/ship_merge.py cis#$n; done",
             "python3 tools/github/ship_merge.py cis#1 && python3 tools/github/ship_merge.py cis#2",
             "while read n; do tools/github/ship_merge.py cis#$n; done < prs.txt",
+            # a merge in the body of a loop that follows another loop
+            "for u in a b; do curl -s $u; done; for n in 1 2; do python3 tools/github/ship_merge.py cis#$n; done",
+            # nested: the merge sits in the inner loop
+            "for r in a b; do for n in 1 2; do python3 tools/github/ship_merge.py $r#$n; done; done",
+            "until python3 tools/github/ship_merge.py cis#1; do sleep 60; done",
         ):
             self.assertEqual(rule(cmd), "SHIP-1", cmd)
+
+    def test_one_merge_beside_a_loop_passes(self):
+        # S272 review: replayed orchestrator one-liners (06/11) that merge once, then verify in a loop, or wait for
+        # checks in a loop, then merge once. The merge is outside every loop body.
+        for cmd in (
+            "python3 tools/github/ship_merge.py 'AA-CIS-App 1344' 2>&1 | tail -1; for s in aa-cis-dev-api "
+            "aa-cis-dev-worker; do aws ecs describe-services --cluster aa-cis-dev-cluster --services $s "
+            "--query 'services[0].deployments[0].rolloutState' --output text; done; "
+            "curl -s https://api-cis.lumiguides.it.com/health",
+            "for x in 'AA-CIS-App 1343' 'AA-Booking 203'; do gh pr checks $n --watch; done; "
+            "python3 tools/github/ship_merge.py 'AA-CIS-App 1343' 'AA-Booking 203'",
+            "python3 tools/github/ship_merge.py cis#1344 && for u in a b; do curl -s $u; done",
+            "while ! gh pr checks 5 >/dev/null; do sleep 30; done\npython3 tools/github/ship_merge.py root#5",
+        ):
+            self.assertIsNone(rule(cmd), cmd)
 
     def test_ship_tools_and_reads_pass(self):
         for cmd in (
@@ -275,12 +295,21 @@ class EcsExecTest(unittest.TestCase):
                 "import subprocess\ncmd = f\"aws ecs execute-command --task {t}\"\nsubprocess.run(cmd, shell=True)\n")
             (s / "argv.py").write_text("import subprocess\nsubprocess.run([\n    'aws', 'ecs', 'execute-command',\n"
                                        "    '--task', t])\n")
+            (s / "split.py").write_text("import shlex, subprocess\ncmd = f\"timeout 900 aws ecs execute-command "
+                                        "--task {t}\"\nsubprocess.run(shlex.split(cmd))\n")
+            # S272 review (ECS-1 string literal): a message kept in a variable, or a runner on an echo, is no call
+            (s / "msg.py").write_text("HELP = \"If ecsx fails: aws ecs execute-command --cluster c\"\nprint(HELP)\n"
+                                      "msg = f\"run aws ecs execute-command --task {t} by hand\"\nlog.info(msg)\n")
+            (s / "echo.py").write_text("import subprocess\nsubprocess.run(\"echo aws ecs execute-command\", "
+                                       "shell=True)\n")
             old = g.ROOT
             g.ROOT = root
             try:
                 self.assertIsNone(rule("python3 .tmp-session/S272-x/helper.py", cwd=root))
                 self.assertIsNone(rule("bash .tmp-session/S272-x/helper.sh", cwd=root))
-                for name in ("shell.py", "later.py", "argv.py"):
+                self.assertIsNone(rule("python3 .tmp-session/S272-x/msg.py", cwd=root))
+                self.assertIsNone(rule("python3 .tmp-session/S272-x/echo.py", cwd=root))
+                for name in ("shell.py", "later.py", "argv.py", "split.py"):
                     self.assertEqual(rule(f"python3 .tmp-session/S272-x/{name}", cwd=root), "ECS-1", name)
             finally:
                 g.ROOT = old
