@@ -9,29 +9,52 @@ info:
     phone, the party, the trip draft summary (days, countries, AA tour keys and titles, stops per day, optional start
     date, budget band and a short message) and the contact consent. Adventure Asia keeps no traveller record: the
     agency is the controller, AA the processor (b9). TripPlanner keeps the lead in its outbox only until it is
-    delivered (delivered = the payload is redacted at once; undelivered = redacted after the hold window, 7 days),
-    never in a customer table. The AA demo tenant (aa-tripplanner) never emits one (its planner shows a demo notice).
+    delivered (delivered = the payload is redacted at once; undelivered = redacted at the latest 7 days after it was
+    written: the expiry runs daily with a cutoff one run interval early, so a lead written just after a run never
+    waits an extra day; the window is clamped to at most 7 days), never in a customer table. The AA demo tenant (aa-tripplanner) never emits one (its planner shows a demo notice).
 
     Delivery, decided per tenant by CIS (catalog.v_tenant_tripplanner_v1 lead_channel, CIS 390):
     (1) crm — the tenant holds the CRM add-on (crm.core): the CRM pulls its own pending leads with this API
     (listLeads, one agency per call), stores each one through its intake (idempotent on lead_id) and acknowledges it
-    (ackLead), after which TripPlanner redacts the payload. The CRM holds no database grant on another schema (root
+    (ackLead), after which TripPlanner redacts the payload. Each listLeads call is that tenant's beacon: TripPlanner
+    takes a crm lead for a tenant only while the CRM listed that tenant within the last 10 minutes (the CRM lists every
+    agency it can serve every minute and skips a locked, offboarding or unknown agency BEFORE the list call), so a
+    tenant the CRM cannot take leads for is refused at once (503 lead_channel_unavailable, nothing stored). The CRM holds no database grant on another schema (root
     ADR 0008a), hence HTTP. (2) webhook — TripPlanner POSTs the LeadSubmitted JSON to the agency's https URL with the
     headers X-AA-Contract (lead.submitted.v1), Idempotency-Key (= idempotency_key) and X-AA-Signature
     't=<unix seconds>,v1=<hex HMAC-SHA256 of "<t>." + raw body>' (the catalog.tour.lifecycle.v1 format), keyed per tenant
     by TripPlanner (the key is handed to the agency by AA, never stored in CIS); a 2xx answer is delivery, anything
-    else is retried by the daily delivery run until the hold window ends. (3) email — the same JSON rendered as a plain
+    else is retried by the daily delivery run until the hold window ends. The key is the 64-character lowercase hex
+    text AA hands over, used AS ASCII BYTES (do not hex-decode it to 32 bytes). Verify:
+    expected = hex(HMAC-SHA256(key_text.encode("ascii"), (t + ".").encode("ascii") + raw_body)), compare in constant
+    time with v1, and refuse a t more than 5 minutes away from your clock (replay). Delivery is at least once and
+    unordered (an inline attempt and the daily retry can both arrive; a retried lead can come after a newer one):
+    deduplicate on Idempotency-Key. TripPlanner posts only to a host whose every address is public (no private,
+    loopback, link-local, carrier-grade NAT or reserved address; error webhook_urlnotpublic) and follows no redirect. (3) email — the same JSON rendered as a plain
     text e-mail to the agency's own inbox, Reply-To the traveller. No route (lead_channel none): TripPlanner refuses the
     request (409 lead_route_missing) and stores nothing. A channel the deployment cannot hand over on (the CRM pull
     not switched on, no webhook signing key, no e-mail sender) is refused the same way (503 lead_channel_unavailable,
-    nothing stored): a lead is stored only when it can leave. A lead that still expires undelivered after the hold
-    window is reported by TripPlanner's daily delivery run (the run fails loudly), never only redacted in silence.
+    nothing stored): a lead is stored only when it can leave. Before storing, TripPlanner also limits "Send to advisor"
+    per guest session and per traveller IP (429 rate_limited) and caps one tenant's leads per 24 hours (429
+    lead_cap_reached), and its web front checks the request with a bot check (403 bot_check_failed); in every case
+    nothing is stored. A lead that still expires undelivered after the hold window, or that the CRM acknowledges
+    rejected, is reported by TripPlanner's daily delivery run (the run fails loudly; the CRM also raises its ops alert
+    tp_lead_rejected), never only redacted in silence.
+
+    The traveller's name, e-mail and phone follow ONE rule on every side (the producer's form and API, the consumer):
+    control characters removed, Unicode NFC, trimmed, then the length in code points (name 1..120, e-mail <= 254,
+    phone <= 40) and the patterns of Traveller. Shared test vectors: docs/contracts/rules/
+    lead.submitted.v1.traveller-rules.json (each app keeps a byte copy and runs every vector), so a lead the producer
+    accepts is never rejected by the consumer for these fields.
 
     Never in a lead: a guest session id or token, an access / id token, a password or one-time code, an IP address or
     user agent, an AA B2B price, supplier net or any price (prices come from the agency). Auth of the pull API: M2M
     token of the aa-m2m pool, client = AA-Partner (CRM), scope tripplanner.leads/deliver; the tenant in the path must
     be the lead's (a lead of another tenant is never listed and its ack is 404). tenant_id is the CIS tenant id, which
-    is the CRM agency id.
+    is the CRM agency id. The CRM client is a PLATFORM credential (one client, every tenant; the token names no
+    tenant): TripPlanner serves only a tenant whose lead route is crm at the time of the call (else 404
+    tenant_not_on_crm), so a leaked token reaches no tenant that left the CRM add-on or never had it; tenant isolation
+    inside the CRM is the CRM's agency loop plus its own check of each lead's tenant.
   x-aa-contract: lead.submitted.v1
   x-aa-producer: AA-TripPlanner-Web
   x-aa-consumers: [AA-Partner]
@@ -57,13 +80,16 @@ paths:
           schema: {type: integer, minimum: 1, maximum: 50, default: 20}
       responses:
         "200":
-          description: Pending CRM-channel leads of this tenant only (an empty list when none)
+          description: >-
+            Pending CRM-channel leads of this tenant only (an empty list when none). The call also records the
+            tenant's beacon (the crm channel takes this tenant's leads while it is fresh).
           content:
             application/json:
               schema: {$ref: "#/components/schemas/LeadPage"}
         "400": {$ref: "#/components/responses/Problem"}
         "401": {$ref: "#/components/responses/Problem"}
         "403": {$ref: "#/components/responses/Problem"}
+        "404": {$ref: "#/components/responses/Problem"}
         "503": {$ref: "#/components/responses/Problem"}
   /tenants/{tenant_id}/leads/{lead_id}/ack:
     parameters:
@@ -85,7 +111,11 @@ paths:
             schema: {$ref: "#/components/schemas/LeadAckIn"}
       responses:
         "200":
-          description: Acknowledged (again, when already acknowledged; nothing changes)
+          description: >-
+            Acknowledged. A lead in a final state never changes again: delivered (any later ack answers already),
+            rejected (any later ack, stored included, answers already rejected), expired by the hold (a later rejected
+            ack answers already expired and the expiry record is kept; a later stored ack marks it delivered, the
+            agency has it). Only a pending lead, or an expired one the CRM did store, changes state.
           content:
             application/json:
               schema: {$ref: "#/components/schemas/LeadAck"}
@@ -121,7 +151,8 @@ components:
           pattern: "^[a-z][a-z0-9_]{0,39}$"
           description: >-
             A stable code: invalid_tenant_id, invalid_lead_id, invalid_limit, invalid_ack (400), unauthorized (401),
-            forbidden (403: wrong client or scope), lead_not_found (404), m2m_not_configured or unavailable (503).
+            forbidden (403: wrong client or scope), lead_not_found or tenant_not_on_crm (404: the tenant's lead route
+            is not crm now), m2m_not_configured or unavailable (503).
     TenantRef:
       type: object
       additionalProperties: false
@@ -297,7 +328,7 @@ components:
         lead_id: {type: string, format: uuid}
         state:
           type: string
-          enum: [delivered, rejected]
+          enum: [delivered, rejected, expired]
         already:
           type: boolean
-          description: The lead had been acknowledged before; nothing changed.
+          description: The lead was already in a final state (delivered, rejected or expired); nothing changed.
