@@ -137,6 +137,12 @@ generation and the nuanced judgement of hidden promises and voice.
 - **d8 ledger:** every call records the answered model id, rung and effort; a rung > 0 answer, a same-family
   writer/judge pair in one job, or an uncalibrated model on an instrument stage is marked degraded for every role,
   not only writers. A cassette stores the raw reply, request and prompt shas for replay.
+  - *Cassette scope (AA-900, S272).* One row per provider attempt that got a reply: answered, cut, or billed but
+    unusable. An unusable reply is stored as the provider sent it and marked (`stop_reason` `billed_unusable`, with
+    the provider's stop reason after a colon); replay never serves it. A row joins its ledger row on the route trace
+    and attempt number, never on the model name (the ledger names the answering label, the cassette the route key
+    called). Not recorded, by design: embeddings (the reply is a vector, not text; the caller keeps it and a re-embed
+    is deterministic), Jev decisions (their own decision log), and attempts that failed with nothing billed.
 - **d10 data scopes:** exception for the pinned claim instrument (D16): a vendor-direct model may be the first and only
   rung of a check-role route that carries tour text without personal data; `allowed_scopes` records it; the S235
   vendor-last-resort test is updated for that role only.
