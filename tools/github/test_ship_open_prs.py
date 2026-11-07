@@ -327,5 +327,29 @@ class SafeHooksTest(unittest.TestCase):
         self.assertTrue(os.access(os.path.join(sop.SAFE_HOOKS, "pre-push"), os.X_OK))
 
 
+class PushFailureReasonTest(unittest.TestCase):
+    def test_a_refused_push_names_the_failing_hook_steps_and_the_venv_hint(self):
+        err = ("FAIL tf-plan-guard / pytest\n  command (run from the repo root):\n    python3 -m pytest -q tools\n"
+               "  missing: python module pytest (in /usr/bin/python3)\n"
+               "  install: scripts/install-hooks.sh --venv\n"
+               "error: failed to push some refs to 'https://example.invalid/lanterns.git'\n")
+        text = sop.push_failure_reason(Result(1, "", err))
+        self.assertIn("failed to push some refs", text)
+        self.assertIn("FAIL tf-plan-guard / pytest", text)
+        self.assertIn("missing: python module pytest", text)
+        self.assertIn("AA_PREPUSH_PYTHON", text)
+
+    def test_a_plain_git_error_keeps_the_last_line(self):
+        self.assertEqual(sop.push_failure_reason(Result(1, "", "error: rejected (non-fast-forward)\n")),
+                         "error: rejected (non-fast-forward)")
+
+    def test_many_failing_steps_are_capped(self):
+        err = "".join(f"FAIL step {i}\n" for i in range(20)) + "error: failed to push\n"
+        text = sop.push_failure_reason(Result(1, "", err))
+        self.assertIn("FAIL step 11", text)
+        self.assertNotIn("FAIL step 12", text)
+        self.assertIn("8 more", text)
+
+
 if __name__ == "__main__":
     unittest.main()
