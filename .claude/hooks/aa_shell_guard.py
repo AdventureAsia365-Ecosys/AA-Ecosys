@@ -33,7 +33,8 @@ Rules (main session and subagents alike; exit 2 refuses, the message goes to std
            ship_wave.py (parallel by default, chains only for migration -> copy -> apply -> code) and ship_merge.py
            with all targets are the way; neither is refused.
   RAM-1    A heavy command (next build, npm ci, playwright, vitest/jest, tsc, docker build, a pytest run of a whole
-           directory or with -n, a UAT node .cjs scenario) while MemAvailable < 2 GiB, or < 4 GiB with 3 or more heavy
+           directory or with -n, a UAT node .cjs scenario; a push, the PR opener or ship_wave too, since a push runs
+           the repo's pre-push hook: CIS fast mode is about 5,000 unit tests, the S272 crash) while MemAvailable < 2 GiB, or < 4 GiB with 3 or more heavy
            processes already running: the WSL VM ran out of memory and killed Claude Code and every lane (S237, S248,
            S251, S252, S261). The message names what is running. Override (logged): prefix `AA_RAM_OVERRIDE=1`.
   ECS-1    A raw `aws ecs execute-command`, typed or inside a .tmp-session / scratchpad script the command runs (S237 ...
@@ -584,6 +585,20 @@ def heavy_command(words: list[str]) -> str | None:
         return None
     if prog == "node" and any(re.search(r"(?:^|/)uat/\S*\.cjs$", x) for x in a):
         return "UAT node scenario (Chromium)"
+    # S272: a push runs the repo's pre-push hook (the CIS fast mode is about 5,000 unit tests in one process); one ran
+    # while 5 lanes were busy and the WSL VM ran out of memory. --no-verify, --dry-run and a pure delete skip the hook.
+    if prog == "git":
+        while a and a[0] in ("-C", "-c") and len(a) > 1:
+            a = a[2:]
+        if a[:1] == ["push"] and not {"--no-verify", "-n", "--dry-run", "--delete", "-d"} & set(a[1:]) \
+                and not any(x.startswith(":") for x in a[1:]):
+            return "git push (runs the repo's pre-push hook: the CIS fast mode is about 5,000 unit tests)"
+    if prog == "pre-push.sh" and not {"--self-test", "--plan", "-h", "--help"} & set(a):
+        return "scripts/pre-push.sh (the repo's CI-equivalent checks)"
+    pushers = ("ship_open_prs.py", "ship_wave.py")
+    name = prog if prog in pushers else (os.path.basename(a[0]) if re.fullmatch(r"python[0-9.]*", prog) and a else "")
+    if name in pushers and not {"--dry-run", "--check-only", "-h", "--help"} & set(a):
+        return f"{name} (each push runs that repo's pre-push hook)"
     return None
 
 
@@ -595,6 +610,7 @@ HEAVY_PROC = (
     ("jest", re.compile(r"(?:^|[/\x00])jest(?:\.js)?(?:\x00|$)")),
     ("tsc", re.compile(r"(?:^|[/\x00])tsc(?:\x00|$)")),
     ("docker build", re.compile(r"(?:^|[/\x00])docker\x00(?:buildx\x00)?build")),
+    ("pre-push hook", re.compile(r"(?:^|[/\x00])pre-push(?:\.sh)?(?:\x00|$)")),
 )
 
 

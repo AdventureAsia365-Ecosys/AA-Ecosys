@@ -365,9 +365,15 @@ class RamTest(unittest.TestCase):
         heavy = ["npx next build", "NODE_OPTIONS=--max-old-space-size=2048 npm run build", "npm ci",
                  "npx playwright test --project smoke", "npx vitest run", "npx tsc --noEmit", "docker build .",
                  "pytest tests/unit -q", "python -m pytest -q", "pytest -n 4 tests/unit/test_a.py",
-                 "node tools/uat/run_scenario.cjs"]
+                 "node tools/uat/run_scenario.cjs", "git push -u origin feat/x", "git -C /w/cis push origin b",
+                 "tools/github/as-app.sh --repos AA-CIS-App -- git -C /w push -q -u origin b",
+                 "bash scripts/pre-push.sh --full", "python3 tools/github/ship_open_prs.py wf_1",
+                 "python3 tools/github/ship_wave.py cis#1 cis#2"]
         light = ["pytest -x -q tests/unit/test_a.py", "python3 -m pytest tests/unit/test_a.py::test_b",
-                 "npm run lint", "node script.js", "git status", "python3 -m unittest discover -s tools"]
+                 "npm run lint", "node script.js", "git status", "python3 -m unittest discover -s tools",
+                 "git push --no-verify origin b", "git push --dry-run origin b", "git push origin --delete b",
+                 "git push origin :b", "bash scripts/pre-push.sh --self-test", "scripts/pre-push.sh --plan",
+                 "python3 tools/github/ship_wave.py --dry-run cis#1", "git log --oneline"]
         for c in heavy:
             self.assertTrue(g.heavy_command(c.split()), c)
         for c in light:
@@ -385,6 +391,20 @@ class RamTest(unittest.TestCase):
             self.assertIsNone(g.check("pytest -x tests/unit/test_one.py", proc=proc))
             self.assertIsNone(g.check("git status", proc=proc))
             self.assertIsNone(g.check("AA_RAM_OVERRIDE=1 npx next build", proc=proc))
+
+    def test_push_counts_as_heavy_and_a_running_hook_counts_as_running(self):
+        # S272: a CIS push ran its pre-push hook (about 5,000 unit tests) while 5 lanes ran, and the VM died
+        with tempfile.TemporaryDirectory() as d:
+            proc = self.fake_proc(Path(d), 1800, [(301, "bash /w/cis/scripts/pre-push.sh --hook origin u", 20),
+                                                  (302, "/usr/bin/python3 -m pytest tests/unit", 1400)])
+            r = g.check("git -C /w/cis push -u origin feat/x", proc=proc)
+            self.assertEqual(r.rule, "RAM-1")
+            self.assertIn("pre-push hook", r.detail)
+            self.assertIsNone(g.check("git -C /w/cis push --no-verify origin feat/x", proc=proc))
+            self.assertIsNone(g.check("AA_RAM_OVERRIDE=1 git push origin feat/x", proc=proc))
+        with tempfile.TemporaryDirectory() as d:
+            proc = self.fake_proc(Path(d), 6000, [])
+            self.assertIsNone(g.check("git push origin feat/x", proc=proc))
 
     def test_busy_machine_refuses_with_three_heavy_running(self):
         with tempfile.TemporaryDirectory() as d:
