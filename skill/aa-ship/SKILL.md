@@ -24,6 +24,11 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
   (đường dẫn tương đối với `git -C apps/<repo>` rơi vào trong repo con, không bị gitignore).
 - [ ] Commit và PR body ghi **`Refs AA-xxx`**. Không `[AA-xxx]`, không `Fixes`/`Closes`, và tiêu đề PR không có mã
   issue (Linear đọc "fix: AA-xxx …" là câu đóng issue). PR docs/log nhắc issue khác thì ghi tên việc, không ghi mã.
+  **Luật body (AA-1024 G11, check `PR title` ở cả 6 repo + PR opener):** mã AA-n chỉ được nằm trong danh sách đầu dòng
+  `Refs AA-n[, AA-m] <chữ tự do>` (vd. `Refs AA-1040 (EU AI Act Art. 50(2)).`); mã nhắc ở chỗ khác của body / title
+  (kể cả issue phụ thuộc, issue vừa thêm/đóng trong backlog) → CI đỏ: ghi bằng lời, hoặc thêm vào Refs nếu PR làm việc
+  đó. Mã trong đường dẫn file (`docs/implementation-notes/AA-1024-x.md`) được bỏ qua. Không dùng closes/fixes/
+  resolves/completes + mã ở bất kỳ đâu.
 - [ ] **Danh tính GitHub (ADR 0011):** push/PR/merge bằng App `aa-agent`:
   `/home/nghiep/projects/AA-Ecosys/tools/github/as-app.sh --repos <Repo> -- <git -C <worktree> push … | gh pr create …>`;
   merge CHỈ qua `ship_merge.py` / `ship_wave.py` (AA-1024: `as-app.sh` từ chối `gh pr merge` chưa qua gate, hook SHIP-1 chặn lệnh trần).

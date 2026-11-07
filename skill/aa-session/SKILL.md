@@ -173,6 +173,9 @@ Log ghi sau cùng nên có cả kết quả Jira và số liệu đã kiểm, kh
 7. **Linear export + archive:** `python3 tools/linear/linear_export.py --archive` (dry run) rồi thêm `--apply`. Root PR
    gom log / audit / backlog / lessons → chờ Docs lint xanh → điều phối tự merge. Mọi repo (gốc + 5 con) về
    `main`/`master` cây sạch; dọn worktree và file tạm (S3 scripts, `.tmp-session` của phiên).
+   Root PR viết tay cũng qua check `PR title` (AA-1024 G11): title không mã AA-n; body chỉ nêu mã trong dòng
+   `Refs AA-n[, AA-m] <chữ tự do>` (issue đóng / thêm trong backlog → ghi bằng lời, không ghi mã ngoài dòng Refs;
+   mã trong đường dẫn file được bỏ qua) — sai thì merge bị chặn vì root đòi MỌI check xanh.
 8. **KHÔNG dừng môi trường.** Agent không tự `cis-stop`/`cis-start`, scale ECS, stop RDS/NAT — chỉ Nghiệp làm hoặc yêu
    cầu rõ. Tách phiên cùng ngày khi wave đang dở → giữ nguyên cờ/route wave, ghi trong handoff cái gì đang BẬT và wave
    kế tiếp; chỉ trả cờ khi chuỗi wave xong hoặc gặp điều kiện dừng.

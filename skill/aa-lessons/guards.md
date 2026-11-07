@@ -116,7 +116,7 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 - **Probe "đi theo nguồn" phải dùng đúng điều kiện đủ tư cách của stage nó đo** (S253) → `apps/AA-CIS-App/tests/unit/test_aa992_data_coverage.py`
 - **Recall tune cho gate T10 đang chặn/hold: mỗi pattern mở rộng phải qua verifier tự viết câu sạch mới; còn FP thì bỏ pattern, không nới tiếp** (S257) → `apps/AA-CIS-App/tests/unit/test_aa789_t10_recall.py`
 - **Smoke hợp đồng model phải đếm lỗi provider là `failed`** (S263) → `apps/AA-CIS-App/tests/unit/test_aa1026_contract_smoke.py`
-- **Cờ dừng của wave phải đọc lại sau khi hàng đợi chạy hết, trước khi gọi là "dừng"** (S249) → `apps/AA-CIS-App/scripts/aa645/wave_report.py` (cờ `pending` khi tour còn job queued/running, exit 5), `apps/AA-CIS-App/api/routers/admin_waves.py` (`POST /admin/waves` trả 409 khi wave trước còn cờ true / pending) (guard mới S272, AA-1024)
+- **Cờ dừng của wave phải đọc lại sau khi hàng đợi chạy hết, trước khi gọi là "dừng"** (S249) → `apps/AA-CIS-App/scripts/aa645/wave_report.py` (cờ `pending` khi tour còn job queued/running, exit 5) (guard mới S272, AA-1024)
 
 ## Job runner
 

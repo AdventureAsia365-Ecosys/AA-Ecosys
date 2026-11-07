@@ -48,7 +48,7 @@ Partner 38f99f53, TripPlanner 91d0608, Infra 75ddf66), 07/11/2026.
 | G11 | yes | root `pr-title.yml`; the same file in CIS and Infra (new) and Booking, Partner, TripPlanner (ids anywhere in the title, ids outside the Refs line); the PR opener refuses stray ids; `tools/linear/done_audit.py`. Left: making `PR title` a required check in CIS / Infra (ruleset, tech lead) |
 | G14 | yes | the PR opener runs gitleaks v8.30.1 on every branch with the BASE's rules before any push; CIS `scripts/pre-push.sh` runs the same scan on every push (a fix-up push to a PR branch too); `tools/github/guard_runs.py` in the session-start status |
 | G15 | yes | `.github/workflows/workflow-lint.yml` + `.github/scripts/workflow_lint.py` (+ unittest file) in root, CIS, Booking, Partner, TripPlanner: pinned actionlint 1.7.12, then WL2 Playwright on ubuntu-24.04, WL3 `npm ci` with a tracked lockfile, WL1 no sensitive `vars.*`. One script in all six repos (Infra's, gained `--skip`, comment-aware Playwright, unchecked matrix dirs). Booking and Partner run `--skip WL1` until their 7 `vars.AWS_ROLE_ARN` uses move to a secret (repo settings, tech lead). actionlint fixed two CIS errors (undeclared inherited secret) |
-| G17 | yes | CIS `wave_report.py`: flags `pending` while the wave's tours have queued / running jobs (exit 5), exit 3 on a true flag; `POST /admin/waves` recomputes the newest wave's flags (`services/waves/quality.py`, moved from the script, no migration) and answers 409 on true / pending / not computable unless `stop_override` quotes the tech lead's approval; wave runbook updated |
+| G17 | yes | CIS `wave_report.py`: flags `pending` while the wave's tours have queued / running jobs (exit 5), exit 3 on a true flag; the quality read moved to `services/waves/quality.py`; wave runbook updated. The `POST /admin/waves` 409 gate was stripped in review fix pass 2 (see below) |
 | G18 | yes | `tools/llm/spend_by_stage.py`, `tools/llm/cost_estimate.py` (+ tests, CI step); the wave runbook quotes only them |
 | G19 | yes | Stop hook `stop-open-work.sh` / `stop_open_work.py` registered in `.claude/settings.json` |
 | G20 | yes | `lane_start_guard.py` refuses a relaunch on an existing worktree without `resume: true`; `lane.js` asks for `resumed_state` |
@@ -96,6 +96,50 @@ Guards G7, G8, G9, G10, G12, G13, G16 were already on main (Step 1) and are unch
 - PR text rule (review fix pass): an id the Refs line names may appear anywhere; ids in file paths are ignored; bots
   are exempted by login / head branch, never by `user.type` (the orchestrator's App is a Bot).
 - docs-lint now runs the ecsx tests and triggers on `.githooks/**`, `scripts/pre-push.sh`, `tools/ecs|kit|llm-core|adr/**`.
+
+## Review fix pass 2 (S272)
+
+Rule applied: a guard that blocks legitimate orchestrator work is worse than no guard. Every fix below carries the
+reviewer's real cases as tests (refusal and pass).
+
+- **Stripped: the CIS wave-start 409 gate (G17 part).** `POST /admin/waves` recomputed the previous wave's stop flags
+  inside the request: the S1 code checks on both pages of every tour, 16.3 s for 50 dense tours and 74.6 s for 250 on
+  a laptop (reviewer's bench), behind the API Gateway's 29 s timeout on a 0.5 vCPU task. A 504 still inserted the wave
+  and a retry opened a second one. The route is back to main; `wave_report.py` exit 3 / 5 stays the gate (wave
+  runbook). Follow-up, not built: `wave_report.py --wave <id>` stores `stop_state` / `exit_code` / `computed_at` in
+  `shared.rerun_wave.last_check.stop_gate` (jsonb, no migration; `wave_report.check()` must keep that key), the route
+  reads the stored value (never computed or computed while jobs ran = pending = 409 unless overridden), and a create
+  is idempotent on (name, expected set). Details: CIS `docs/implementation-notes/AA-1024-guards-rest.md`.
+- G17 pending read (CIS): also `tour_ids` lists (s1_seo_prefetch, s1_batch_ingest) and t2_rewrite's
+  `published_tour_id` through `published_tours.id` (the old clause compared it with raw tour ids and never matched).
+- G3 (c) (CIS): the deploy job asks the gate again right before the roll (the preflight runs in parallel with the
+  build); an unreadable heartbeat list is a `blocked_by` line (fail closed) instead of an exception that blanked the
+  Platform Apps card. ecsx: `ECSX_HEARTBEAT_S` capped at 30 s, `ECSX_SCRIPT_TIMEOUT` capped at 10,800 s (wrapper
+  refuses, runner clamps), heartbeat puts with short boto timeouts. `deploy-gate-override.md` has the "ECS exec script
+  running" case and how to clear it.
+- G19 Stop hook: reads every sentence of the LAST PARAGRAPH (not only the last line). Blocks only when every question
+  there is an offer to go on / to close (or the message ends with a proposal to close), and neither that paragraph nor
+  the line above it carries approval context (a cost figure, MFA / STS / an `sts get-caller-identity` line, DRY RUN /
+  a delete, duyet / dong y / approve, a new issue, labelled options or "chon"). Replay over 2,838 turn-final messages
+  of the last 60 transcripts: 8 blocks, each a real continue-or-stop offer (the reviewer's 13 misses include ones with
+  approval or choice context, which now pass by design). The block text says never to start a paid run, a delete or
+  anything needing a yes because of it.
+- G11 PR body rule: the Refs line is `Refs AA-n[, AA-m] <free text>` (ids from the leading list only; an id in the
+  free text that the list lacks is stray), identical in the opener and the six `pr-title.yml` copies (root, CIS,
+  Booking, Partner, TripPlanner, Infra). The opener's closing pattern is now the workflow's (closing, fixing,
+  resolving, complete(s|d|ing) too) and `build:` left its title types (no workflow lists it). aa-ship section 1 and
+  aa-session close step 7 say the rule.
+- Shell guard: ECS-1 reads a script's real calls only (shell: quoted text blanked; Python: an argv list, a
+  subprocess / os.system line, or a command string assigned to a variable); WT-1 expands `~`, treats a `$` / quoted /
+  `-` target as unknown (a relative worktree path from it is refused), follows `pushd` like `cd`, `popd` = unknown;
+  BG-1 lets fire-and-wait jobs through (the command ends with a bare `wait`); TF-1 / RAM-1: `env -u NAME`, `env -C DIR`,
+  `nice -n N` values are skipped, and the App helper without `--` still exposes its command.
+- G20 lane start guard: a lane's worktrees are `<session>-<key>-<repo>[-<detail>]` (repo cis, booking, partner, tp,
+  infra, root), so lane `l2` no longer sees `l2-w1-factsheet-*`; lane.js prescribes that name. A `resumeFromRunId`
+  replay skips the plan gates (a same-day handover moves plan.json on) but not the RAM gate.
+- Not changed, for the orchestrator: the user's global `~/.claude/CLAUDE.md` still shows a raw ECS exec call as step 4
+  of its canonical ECS exec pattern, which ECS-1 refuses. Ask the tech lead to point that step at `tools/ecs/ecsx.sh`
+  (a lane cannot edit that file).
 
 ## Tradeoffs
 
