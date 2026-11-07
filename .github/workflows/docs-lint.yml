@@ -42,6 +42,7 @@ on:
       - "tools/github/**"
       - "tools/uat/arch/**"
       - "tools/ops/**"
+      - "tools/llm/**"
       - ".markdownlint-cli2.jsonc"
       - ".github/workflows/docs-lint.yml"
   schedule:
@@ -124,6 +125,13 @@ jobs:
       - name: Ops tools tests
         if: ${{ !cancelled() }}
         run: python -m unittest discover -s tools/ops -p 'test_*.py'
+
+      # AA-1024 G18: the one cost source (spend_by_stage.py, cost_estimate.py) on invented rows: a typesafe / Jev or
+      # DataForSEO row is never counted as LLM, a total is a lower bound until the log-write failures are 0, and an
+      # estimate without a measured basis refuses to give a number. Offline (asyncpg is imported only in the container).
+      - name: LLM spend tools tests
+        if: ${{ !cancelled() }}
+        run: python -m unittest discover -s tools/llm -p 'test_*.py'
 
       - name: Front-matter schema
         if: ${{ !cancelled() && steps.deps.outcome == 'success' }}

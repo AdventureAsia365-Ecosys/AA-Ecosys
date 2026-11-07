@@ -35,8 +35,8 @@ Rules (main session and subagents alike; exit 2 refuses, the message goes to std
   RAM-1    A heavy command (next build, npm ci, playwright, vitest/jest, tsc, docker build, a pytest run of a whole
            directory or with -n, a UAT node .cjs scenario; a push, the PR opener or ship_wave too, since a push runs
            the repo's pre-push hook: CIS fast mode is about 5,000 unit tests, the S272 crash) while MemAvailable
-           < 2 GiB, or < 4 GiB with 3 or more heavy processes already running: the WSL VM ran out of memory and killed Claude Code and every lane (S237, S248,
-           S251, S252, S261). The message names what is running. Override (logged): prefix `AA_RAM_OVERRIDE=1`.
+           < 2 GiB, or < 4 GiB with 3 or more heavy processes already running: the WSL VM ran out of memory and
+           killed Claude Code and every lane (S237, S248, S251, S252, S261, S272). The message names what is running. Override (logged): prefix `AA_RAM_OVERRIDE=1`.
   ECS-1    A raw `aws ecs execute-command`, typed or inside a .tmp-session / scratchpad script the command runs (S237 ...
            S269, 10 repeats): the SSM terminal cuts long output silently and a dropped session can kill the script.
            tools/ecs/ecsx.sh runs the script detached and brings ALL its output back (and resumes a lost start).
