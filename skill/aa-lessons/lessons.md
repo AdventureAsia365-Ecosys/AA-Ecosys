@@ -75,6 +75,7 @@ lỗi, chuyển dòng sang [`guards.md`](guards.md) trong cùng PR.
 - **Test integration không dựa vào dòng seed của bảng dùng chung** — `shared.prompt_version` seed CIS 325: test pass khi chạy riêng, đỏ trong shard CI vì test khác cùng shard (test_aa1017) dựng lại bảng (S267, AA-1039 CIS #1286). Bắt bằng: test tự INSERT dòng của nó trong transaction rollback.
 - **Mỗi file integration test tự đặt repo root vào `sys.path` (như các file khác), không dựa vào file chạy trước** — `No module named 'api'` chỉ ở shard 3, lặp khi rerun: thêm test migration 366 làm đổi cách chia shard nên `test_aa859_main_pool_wait` được collect trước mọi file thêm root (S267, CIS #1294). Bắt bằng: ứng viên guard quét `tests/integration/*.py` import `api`/`services` mà thiếu `sys.path.insert` (hoặc thêm root trong conftest).
 
+- **Pass sửa sau review của lane cũng phải kiểm chứng đối kháng trước khi push khi đụng gate/luật/tiền** — pass sửa l3/l1/l8/l9 đều đưa lỗi mới (gate fail open, guard chặn nhầm câu xin duyệt, trần chi phí R1 không cứng); lane.js chỉ review bản đầu (S272, AA-1047, AA-1024, AA-1048). Guard: pending AA-1024 (lane.js thêm vòng verify sau Fix khi PR risky).
 ## Vận hành
 
 > 39 bài học của mục này đã thành guard (máy chặn) và được chuyển sang [`guards.md`](guards.md#vận-hành) (S271, AA-1024).
@@ -219,6 +220,7 @@ rồi kiểm lại bằng một exec ngắn riêng; exec chỉ đọc thì chạ
 - **Cài Playwright không lockfile với dải `^` sẽ vỡ khi upstream phát hành dở** — `@playwright/test` 1.65.0 lên npm 05/11 18:30Z nhưng `playwright-core@1.65.0` chưa có (ETARGET) → mọi job Visual/UI smoke của CIS (root `npm install`, không lockfile) đỏ, chặn cả merge queue vì Visual là check bắt buộc (S270, CIS #1333 ghim 1.64.1). Bắt bằng: phụ thuộc cài trong CI ghim phiên bản cứng hoặc có lockfile; Partner/TP đã ghim, Booking có lockfile.
 - **Kiểm role tin tài khoản ngoài phải xét cả Federated (SAML/OIDC) và Service, không chỉ Principal.AWS** — S271 bỏ sót role AWSReservedSSO_AdministratorAccess của Identity Center reseller trong acc2 (S271, AA-1004). Guard: tool infra/AA-CIS-Infra/tools/terraform/iam_trust_inventory.py.
 
+- **Chuỗi ship nối `&&` với `| tail` phải bật `set -o pipefail`** — ship_merge #1374 fail (exit 3) mà copy_apply 389 và `gh pr ready` #1368 vẫn chạy vì mã thoát của pipeline là của `tail` (S272, AA-1047). Guard: pending AA-1024 (aa_shell_guard từ chối `ship_*.py … | … &&` không pipefail).
 ## Pipeline và chất lượng
 
 > 22 bài học của mục này đã thành guard (máy chặn) và được chuyển sang [`guards.md`](guards.md#pipeline-và-chất-lượng) (S271, AA-1024).
@@ -249,6 +251,7 @@ rồi kiểm lại bằng một exec ngắn riêng; exec chỉ đọc thì chạ
 - **Script adhoc gọi API trả phí: ghi sổ bằng helper có sẵn và bọc riêng, chạy thử với stub trước** — 2 lượt gọi OpenAI thành công nhưng không vào `llm_call_log` vì script đọc sai tên trường (`tokens_in` thay vì `input_tokens`), AttributeError nổ sau khi đã tính tiền (S262, AA-1018 drill). Bắt bằng: dùng `billed_fields` + `record_call_sync` (hoặc để gateway tự ghi dòng thành công), chạy với stub trước khi gọi thật.
 - **Trần token do gateway giữ theo model + effort, không để call site tự đặt** — max_tokens cắt lặp 3 lần (T8 S270; T9 + judge eval S271), cut rỗng của Sonnet 5.5 rơi âm thầm xuống 4.6 (S271, AA-900). Guard: test apps/AA-CIS-App/tests/unit/test_aa900_s271_w0_gateway.py.
 - **Eval trả phí phải tự từ chối ở $0 khi không thể ra verdict hợp lệ** — 2 lần R2 tốn ~2,4 USD tiền writer dù calibration đã hỏng và 0/15 bài có đối chứng (S271, AA-900). Guard: test apps/AA-CIS-App/tests/unit/test_aa900_w0_eval_interim.py.
+- **Nới gate từ chặn sang cảnh báo không làm bằng regex viết tay trong một lane — phải chờ nhãn chuẩn + bộ chấm đã hiệu chỉnh (W2)** — l1 (số liệu nền D1, độ hiếm, đuôi quốc gia meta) và l3 (F9 claim span, tách mã voi) đều qua 3 vòng sửa + kiểm chứng đối kháng mà không hội tụ: mỗi vòng lộ câu mới lọt (giờ "1030 to 1130" thành năm, câu mệnh lệnh không chủ ngữ) → trả gate về y như main, giữ ý định ở fixture `w2_intent` (S272, AA-1047). Guard: pending AA-1048 (contradiction suite so với origin/main).
 - **Một luật viết chỉ có MỘT nguồn** — chất lượng blog/tour sửa lặp nhiều tuần vì luật trung thực nguồn chép ~10 chỗ, 16 mâu thuẫn (S271 audit). Guard: pending AA-1047.
 
 ## Job runner
