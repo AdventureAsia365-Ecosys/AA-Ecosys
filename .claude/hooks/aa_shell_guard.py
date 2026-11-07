@@ -81,6 +81,8 @@ MAX_SCRIPT_BYTES = 1_000_000
 
 SHELLS = frozenset({"bash", "sh", "zsh", "dash"})
 WRAPPERS = frozenset({"sudo", "nohup", "setsid", "command", "time", "exec", "nice", "env", "stdbuf", "builtin"})
+WRAPPER_VALUE_OPTS = {"env": ("-u", "--unset", "-C", "--chdir", "-S", "--split-string"), "nice": ("-n", "--adjustment"),
+                      "sudo": ("-u", "-g", "-U", "-C", "-D", "-h", "-p", "-r", "-t")}
 SEPARATORS = re.compile(r"\|\||&&|[;&|\n]|\$\(|<\(|>\(|`|\(|\)|\{|\}")
 KEYWORDS = frozenset({"do", "then", "else", "elif", "!", "if", "while", "until", "fi", "done", "esac"})
 
@@ -208,7 +210,9 @@ def program(words: list[str]) -> tuple[str, list[str]]:
         elif head in WRAPPERS:
             w = w[1:]
             while w and w[0].startswith("-"):
-                w = w[1:]
+                # options that take the next word as their value (S272 review: `env -u AWS_PROFILE terraform ...`
+                # read AWS_PROFILE as the program and missed a lane-worktree apply)
+                w = w[2:] if w[0] in WRAPPER_VALUE_OPTS.get(head, ()) else w[1:]
         elif head == "timeout":
             w = w[1:]
             while w and (w[0].startswith("-") or re.fullmatch(r"\d+[smhd]?", w[0])):
@@ -221,7 +225,15 @@ def program(words: list[str]) -> tuple[str, list[str]]:
                 if flag in ("-n", "-I", "-P", "-L", "-d", "-s", "-E") and w:
                     w = w[1:]
         elif os.path.basename(head) == "as-app.sh":
-            w = w[w.index("--") + 1:] if "--" in w else []
+            # the command after `--`; without it (the helper then refuses, but read it anyway: S272 review, RAM-1 let
+            # `as-app.sh git push` through) the words after the --repos option
+            rest = w[1:]
+            if "--" in rest:
+                w = rest[rest.index("--") + 1:]
+            else:
+                while rest[:1] == ["--repos"]:
+                    rest = rest[2:]
+                w = rest
         elif os.path.basename(head) in SHELLS and len(w) > 1:
             # `bash script.sh args`: the script is the program. `bash -c '...'` bodies are read by texts_of().
             rest = w[1:]
@@ -352,8 +364,23 @@ def _rule_ecs_exec(t: Text) -> str | None:
     return None
 
 
-ECS_EXEC_IN_SCRIPT = re.compile(
-    r"\baws\b[^\n]*\becs\s+execute-command\b|[\"']ecs[\"']\s*,\s*[\"']execute-command[\"']")
+# A Python script runs ECS exec through an argv list (["aws", ..., "ecs", "execute-command", ...]) or a command string
+# handed to subprocess / os.system on the same line. A string that only mentions the command (a print, a help text) is
+# not a call (S272 review: print("If ecsx fails, the fallback is: aws ecs execute-command ...") was refused).
+PY_ECS_ARGV = re.compile(r"[\"']ecs[\"']\s*,\s*[\"']execute-command[\"']")
+PY_ECS_SHELL = re.compile(
+    r"(?:\bsubprocess\.\w+|\bos\.(?:system|popen)|\bPopen|\bcheck_output|\bcheck_call|\brun)\s*\("
+    r"[^\n]*\baws\b[^\n]*\becs\s+execute-command\b"
+    # a command string assigned to a variable and run later (`cmd = f"aws ecs execute-command ..."`)
+    r"|^\s*[A-Za-z_]\w*\s*=\s*[rfbuRFBU]*[\"'][^\n]*\baws\b[^\n]*\becs\s+execute-command\b", re.MULTILINE)
+
+
+def script_runs_ecs_exec(path: Path, code: str) -> bool:
+    """ECS-1 inside a script: a shell script is read like a typed command (quoted text blanked, so an `echo "...aws ecs
+    execute-command..."` is not a call); a Python script only through an argv list or a subprocess / os.system line."""
+    if path.suffix == ".py":
+        return bool(PY_ECS_ARGV.search(code) or PY_ECS_SHELL.search(code))
+    return any(_rule_ecs_exec(t) for t in texts_of(code, "bash", str(path)))
 
 
 WORKSPACE = "/home/nghiep/projects/AA-Ecosys"  # the canonical lane path the lane template prescribes
@@ -363,15 +390,41 @@ def _wt_bases() -> tuple[str, ...]:
     return tuple(dict.fromkeys(f"{r}/.tmp-session/wt/" for r in (str(ROOT), WORKSPACE)))
 
 
+UNKNOWN_DIR = Path("/unknown-dir")
+
+
+def _unknown(p: Path) -> bool:
+    return p == UNKNOWN_DIR or UNKNOWN_DIR in p.parents
+
+
 def _cd(here: Path, args: list[str]) -> Path:
-    """The directory after `cd <args>` (a variable or quoted target keeps the old one: unknown)."""
-    if args and not args[0].startswith(("$", "-", '"', "'", "~")):
-        return Path(os.path.normpath(args[0] if args[0].startswith("/") else str(here / args[0])))
-    return here
+    """The directory after `cd` / `pushd <args>`. `~` is expanded; a variable, a quoted target (blanked by scan()),
+    `-` or `+N` is UNKNOWN_DIR (S272 review: `cd "$CIS" && git worktree add .tmp-session/wt/x` kept the old directory
+    and passed). `cd` alone is the home directory."""
+    args = [a for a in args if a not in ("-L", "-P", "-e", "-q")]
+    if not args:
+        return Path.home()
+    target = args[0]
+    if target.startswith("~"):
+        if target != "~" and not target.startswith("~/"):
+            return UNKNOWN_DIR  # ~user
+        target = os.path.expanduser(target)
+    if target.startswith(("$", "-", '"', "'", "`", "+")) or "$" in target:
+        return UNKNOWN_DIR
+    if not target.startswith("/") and _unknown(here):
+        return UNKNOWN_DIR
+    return Path(os.path.normpath(target if target.startswith("/") else str(here / target)))
+
+
+DIR_CHANGERS = frozenset({"cd", "pushd", "popd"})
+
+
+def _move(here: Path, prog: str, args: list[str]) -> Path:
+    """cd and pushd move like cd; popd goes back to a directory this reader does not keep: unknown."""
+    return UNKNOWN_DIR if prog == "popd" else _cd(here, args)
 
 
 WT_VALUE_OPTS = frozenset({"-b", "-B", "--orphan", "--reason"})
-UNKNOWN_DIR = Path("/unknown-dir")
 
 
 def worktree_check(t: Text, here: Path) -> str | None:
@@ -379,15 +432,15 @@ def worktree_check(t: Text, here: Path) -> str | None:
     under <workspace>/.tmp-session/wt/."""
     for words in simple_commands(t.skeleton):
         prog, args = program(words)
-        if prog == "cd":
-            here = _cd(here, args)
+        if prog in DIR_CHANGERS:
+            here = _move(here, prog, args)
             continue
         if prog != "git":
             continue
         a, base = list(args), here
         while a and a[0].startswith("-"):  # git -C <dir> / -c k=v before the subcommand
             if a[0] == "-C" and len(a) > 1:
-                base = _cd(base, a[1:2]) if not a[1].startswith(("$", '"', "'")) else UNKNOWN_DIR
+                base = _cd(base, a[1:2])
             a = a[2:] if a[0] in ("-C", "-c") else a[1:]
         if a[:2] != ["worktree", "add"]:
             continue
@@ -403,8 +456,9 @@ def worktree_check(t: Text, here: Path) -> str | None:
                 break
         if not path or path.startswith(("$", "~", '"', "'", "`")) or "$" in path:
             continue  # a variable or quoted path is not readable here
-        if not path.startswith("/") and base == UNKNOWN_DIR:
-            return f"`git worktree add {path}` (a relative path from a -C directory held in a variable)"
+        if not path.startswith("/") and _unknown(base):
+            return (f"`git worktree add {path}` (a relative path from a directory this guard cannot read: a variable, "
+                    f"a quoted path or popd)")
         full = os.path.normpath(path if path.startswith("/") else str(base / path)) + "/"
         if not any(full.startswith(b) and "/" not in full[len(b):].rstrip("/") for b in _wt_bases()):
             return f"`git worktree add {path}` (resolves to {full.rstrip('/')}, outside {_wt_bases()[-1]})"
@@ -416,8 +470,15 @@ _BG_NULL = re.compile(
 _SEGMENT = re.compile(r"&&|\|\||;|\n|(?<![>&])&(?![>&])")
 
 
+_BARE_WAIT_END = re.compile(r"(?:^|[;&|\n]|\bdone|\bthen|\bdo)\s*wait\s*;?\s*$")
+
+
 def _rule_background(t: Text) -> str | None:
     sk = t.skeleton
+    # fire-and-wait (`for u in a b; do curl -s $u >/dev/null 2>&1 & done; wait`): the same command collects every job
+    # before it returns, so nothing runs on unseen (S272 review)
+    if _BARE_WAIT_END.search(sk.rstrip()):
+        return None
     for m in _BG_NULL.finditer(sk):
         start = max((x.end() for x in _SEGMENT.finditer(sk, 0, m.start())), default=0)
         if ")" in sk[start:m.start()] or "}" in sk[start:m.start()]:
@@ -447,8 +508,8 @@ def tf_check(t: Text, here: Path) -> tuple[str | None, Path]:
     directory after this text)."""
     for words in simple_commands(t.skeleton):
         prog, args = program(words)
-        if prog == "cd":
-            here = _cd(here, args)
+        if prog in DIR_CHANGERS:
+            here = _move(here, prog, args)
             continue
         if prog != "terraform":
             continue
@@ -722,7 +783,7 @@ FIX = {
     "WT-1": "Give the absolute lane path: git -C <repo> worktree add "
             "/home/nghiep/projects/AA-Ecosys/.tmp-session/wt/<session>-<lane>-<slug> -b <branch> origin/main.",
     "BG-1": "Keep the output: `cmd > .tmp-session/<S>/<name>.log 2>&1 &` (or the Bash tool's run_in_background), "
-            "then read the log when it ends.",
+            "then read the log when it ends. Jobs the same command collects with a final bare `wait` pass.",
     "TF-1": "Apply from the main checkout on main (git switch main && git pull), after the PR merged; Infra applies "
             "normally run in CI (terraform-apply.yml).",
 }
@@ -754,7 +815,7 @@ def check(cmd: str, cwd: Path | None = None, proc: Path = Path("/proc")) -> Refu
             if MERGE_IN_SCRIPT.search(code):
                 return Refusal("SHIP-1", f"{path.name} is a hand-written ship script (it merges PRs itself: "
                                f"serial waits, gate skipped)", FIX["SHIP-1"])
-            if ECS_EXEC_IN_SCRIPT.search(code):
+            if script_runs_ecs_exec(path, code):
                 if ecs_bypass:
                     _log("ECS-1 override", f"{path}: {cmd}")
                     continue

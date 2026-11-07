@@ -260,6 +260,31 @@ class EcsExecTest(unittest.TestCase):
             finally:
                 g.ROOT = old
 
+    def test_scripts_that_only_mention_the_command_pass(self):
+        # S272 review: a helper that prints the fallback was refused as a raw ECS exec
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            s = root / ".tmp-session" / "S272-x"
+            s.mkdir(parents=True)
+            (s / "helper.py").write_text(
+                'print("If ecsx fails, the fallback is: aws ecs execute-command --cluster c --task t")\n')
+            (s / "helper.sh").write_text('#!/bin/bash\necho "fallback: aws ecs execute-command --cluster c"\n')
+            (s / "shell.py").write_text(
+                "import subprocess\nsubprocess.run(f\"aws ecs execute-command --task {t}\", shell=True)\n")
+            (s / "later.py").write_text(
+                "import subprocess\ncmd = f\"aws ecs execute-command --task {t}\"\nsubprocess.run(cmd, shell=True)\n")
+            (s / "argv.py").write_text("import subprocess\nsubprocess.run([\n    'aws', 'ecs', 'execute-command',\n"
+                                       "    '--task', t])\n")
+            old = g.ROOT
+            g.ROOT = root
+            try:
+                self.assertIsNone(rule("python3 .tmp-session/S272-x/helper.py", cwd=root))
+                self.assertIsNone(rule("bash .tmp-session/S272-x/helper.sh", cwd=root))
+                for name in ("shell.py", "later.py", "argv.py"):
+                    self.assertEqual(rule(f"python3 .tmp-session/S272-x/{name}", cwd=root), "ECS-1", name)
+            finally:
+                g.ROOT = old
+
 
 WS = Path("/home/nghiep/projects/AA-Ecosys")  # the workspace root a session runs in (no file access needed)
 
@@ -275,6 +300,12 @@ class WorktreeTest(unittest.TestCase):
             "git worktree add -q /tmp/x origin/main",
             "git -C $REPO worktree add wt/x origin/main",
             "cd apps/AA-Booking && git worktree add .tmp-session/wt/s9-z origin/main",
+            # S272 review: the S247 child-repo shape through ~, a variable, a quoted path and pushd
+            "cd ~/projects/AA-Ecosys/apps/AA-CIS-App && git worktree add .tmp-session/wt/s272-l9-x -b fix/x origin/main",
+            "cd \"$CIS\" && git worktree add .tmp-session/wt/s272-l9-x -b fix/x origin/main",
+            "cd $CIS && git worktree add .tmp-session/wt/s272-l9-x -b fix/x origin/main",
+            "pushd apps/AA-CIS-App && git worktree add .tmp-session/wt/s272-l9-x -b fix/x origin/main",
+            "cd \"$CIS\" && cd sub && git worktree add .tmp-session/wt/s272-l9-x origin/main",
         ):
             self.assertEqual(rule(cmd, cwd=WS), "WT-1", cmd)
 
@@ -291,6 +322,10 @@ class WorktreeTest(unittest.TestCase):
             "git worktree add .tmp-session/wt/s9-rel -b x origin/master",
             "cd infra/AA-CIS-Infra && git worktree add -q ../../.tmp-session/wt/s9-y -b x origin/main",
             "git -C apps/AA-Partner worktree add ../../.tmp-session/wt/s9-p origin/main",
+            # absolute lane paths pass from any directory, readable or not
+            f"cd \"$CIS\" && git worktree add {base}/s272-l9-x -b fix/x origin/main",
+            f"pushd apps/AA-CIS-App && git worktree add {base}/s272-l9-x -b fix/x origin/main && popd",
+            f"cd ~ && git -C {WS}/apps/AA-CIS-App worktree add {base}/s272-l9-y origin/main",
         ):
             self.assertIsNone(rule(cmd, cwd=WS), cmd)
 
@@ -307,6 +342,8 @@ class BackgroundTest(unittest.TestCase):
             "setsid ./run.sh >/dev/null 2>/dev/null &",
             "(bash .tmp-session/S999/wave.sh > /dev/null 2>&1 &)",
             "cd site && python3 -m http.server 8765 >/dev/null 2>&1 & echo $! > srv.pid",
+            "cd apps/AA-CIS-App/frontend && npx next dev -p 3005 >/dev/null 2>&1 &",
+            "for u in a b; do curl -s https://x/$u >/dev/null 2>&1 & done; wait; uvicorn app >/dev/null 2>&1 &",
         ):
             self.assertEqual(rule(cmd), "BG-1", cmd)
 
@@ -320,6 +357,9 @@ class BackgroundTest(unittest.TestCase):
             "pg_ctl start -l /tmp/pg.log 2>/dev/null &",
             "echo 'cmd >/dev/null 2>&1 &'",
             "(long.sh > .tmp-session/S999/a.log 2>&1; echo rc=$? >> .tmp-session/S999/a.log) </dev/null >/dev/null 2>&1 &",
+            # S272 review: a parallel warm-up the same command collects with a bare wait
+            "for u in a b c; do curl -s https://api-cis.lumiguides.it.com/$u >/dev/null 2>&1 & done; wait",
+            "curl -s https://x/a >/dev/null 2>&1 & curl -s https://x/b >/dev/null 2>&1 &\nwait",
         ):
             self.assertIsNone(rule(cmd), cmd)
 
@@ -331,7 +371,11 @@ class TerraformTest(unittest.TestCase):
         wt = f"{g.ROOT}/.tmp-session/wt/s999-lane-infra"
         for cmd in (f"terraform -chdir={wt}/accounts/aa365 apply plan.tfplan",
                     f"cd {wt}/accounts/aa365 && terraform apply -auto-approve",
-                    f"terraform -chdir={wt} destroy"):
+                    f"terraform -chdir={wt} destroy",
+                    # S272 review: env -u took AWS_PROFILE as the program
+                    f"env -u AWS_PROFILE terraform -chdir={wt}/accounts/aa365 apply tfplan",
+                    f"env --unset AWS_PROFILE -C /tmp terraform -chdir={wt} apply tfplan",
+                    f"nice -n 10 terraform -chdir={wt} apply tfplan"):
             self.assertEqual(rule(cmd), "TF-1", cmd)
         self.assertEqual(rule("terraform apply", cwd=Path(wt)), "TF-1")
 
@@ -367,6 +411,9 @@ class RamTest(unittest.TestCase):
                  "pytest tests/unit -q", "python -m pytest -q", "pytest -n 4 tests/unit/test_a.py",
                  "node tools/uat/run_scenario.cjs", "git push -u origin feat/x", "git -C /w/cis push origin b",
                  "tools/github/as-app.sh --repos AA-CIS-App -- git -C /w push -q -u origin b",
+                 # S272 review: without `--` the words after the helper are still the command
+                 "tools/github/as-app.sh git push origin HEAD",
+                 "tools/github/as-app.sh --repos AA-CIS-App git push origin HEAD",
                  "bash scripts/pre-push.sh --full", "python3 tools/github/ship_open_prs.py wf_1",
                  "python3 tools/github/ship_wave.py cis#1 cis#2"]
         light = ["pytest -x -q tests/unit/test_a.py", "python3 -m pytest tests/unit/test_a.py::test_b",
