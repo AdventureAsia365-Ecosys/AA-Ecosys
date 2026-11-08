@@ -77,3 +77,17 @@ WSL hết RAM 1 lần buổi sáng (pre-push CIS đầy đủ + 5 lane), chạm 
 - `gh pr edit` qua as-app có thể không đổi body (GraphQL Projects classic) → dùng `gh api -X PATCH`.
 - Panel agent: kiểm đủ dòng; dùng số dòng thay hash.
 - Lane mới cần venv CIS ghim (`.tmp-session/S272/cis-venv`, fastapi 0.161.1 / pydantic 2.14.1); venv CIS chính còn lệch.
+
+## Bổ sung 08/11 chiều (sau chốt; Nghiệp: "làm luôn #2", "chuyển DNS cho hoàn thiện", chọn WAF rẻ)
+- Infra #721 apply LOCAL MFA (5/7/1): scope M2M `tripplanner.leads/deliver`, secret `tripplanner/dev/lead-webhook-key`,
+  env Lambda; CRM :144 có `TRIPPLANNER_API_URL`, `crm_tp_lead_pull` chạy thật. Root #616.
+- TripPlanner web lên ECS + CloudFront: Infra #722 (+ #725 mô tả WAF không được có ngoặc), #726 WAF rẻ (không Bot
+  Control, không web ACL riêng: 3 rule vào ACL ALB `aa-cis-dev-waf` theo host; ~3 USD/tháng, ~9,5 USD khi chạy task),
+  TP #236 (ECS image, vào planner bằng tải cả trang), #240 (verify sitemap pipefail), #243 (visual chấp nhận challenge).
+  Secret `tripplanner/dev/web` (Sentry), biến repo + `TP_MAPBOX_PUBLIC_TOKEN`.
+- **Chuyển DNS** #727 → CloudFront; #728 TTL 300 + gỡ URL Vercel khỏi client Cognito; CIS #1381 purge sang host mới;
+  TP #241 gỡ Vercel/BotID; root #623/#624/#625/#626. **Đã xoá Vercel `aa-tripplanner` + `VERCEL_TOKEN`** (Vercel không
+  còn project). Kiểm: Deploy Web Dev + 2 verify xanh, Visual xanh (`4485ee33`), Playwright thật tìm kiếm 60 điểm,
+  `aa-tripplanner.vercel.app` 404, các host khác 200.
+- Trạng thái cuối: CIS api :1053 / worker :619; crm-api :144; aa-tripplanner-dev-web :2+ 1/1; Infra main `cb092fe`.
+- Còn (S273): lead E2E vào CRM tenant, lọc CRM pull theo add-on TripPlanner (58 đại lý 404), Cost Explorer.
