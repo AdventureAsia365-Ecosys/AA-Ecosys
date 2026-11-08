@@ -82,7 +82,7 @@ jobs:
           echo "checks: $checks"
 
   hygiene:
-    name: ${{ matrix.check }}
+    name: hygiene ${{ matrix.check }}
     needs: plan
     if: needs.plan.outputs.checks != '[]'
     strategy:
