@@ -219,7 +219,7 @@ Deploy hỏng mà circuit breaker ECS không tự lùi → lùi app trước, s�
   + helper `tools/ops/ecs_rollback.sh <service> --list | --previous | --to <rev> | --to-sha <sha>` (mặc định DRY RUN, in
   lệnh 1 dòng; `--apply` mới ghi, rồi chờ stable + so SHA ở health). Bỏ qua revision template Terraform (`bootstrap`).
 - CIS api + worker: `docs/ops/runbooks/rollback-cis.md` (hai service cùng image). Booking: `rollback-booking.md`.
-- Game day $0 (Booking, CRM, Vercel, TP Lambda, gate job-idle của terraform-apply): `docs/ops/drills/rollback-game-day.md`.
+- Game day $0 (Booking, CRM, ECS web TripPlanner `aa-tripplanner-dev-web`, TP Lambda, gate job-idle của terraform-apply): `docs/ops/drills/rollback-game-day.md`.
 - Không còn project Vercel nào (AA-911, AA-1038, S272): admin CIS / Booking và web TripPlanner chạy ECS, rollback bằng `docs/ops/runbooks/rollback-ecs.md` trên `aa-cis-dev-admin` / `aa-booking-dev-admin` / `aa-tripplanner-dev-web` (`rollback-vercel.md` đã superseded).
 - Lambda TripPlanner: `docs/ops/runbooks/rollback-tp-lambda.md`. Terraform: `docs/ops/runbooks/rollback-terraform.md`.
 - Mục lục + playbook sự cố: `docs/ops/README.md`. Sự cố ảnh hưởng người dùng → `docs/ops/incident-response.md`.

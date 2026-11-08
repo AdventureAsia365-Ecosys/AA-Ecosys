@@ -137,7 +137,7 @@ check. A docs-only PR skips the test jobs. Dispatching `ci.yml` on a PR branch r
 | AA-Partner | `ui-smoke-portal.yml` | called by `deploy-web-dev.yml` (AA-1036; was `deploy-portal-dev.yml`, retired); dispatch | Playwright Content studio smoke | always the agency host; signs in with the partner pool (secrets `E2EPORTALEMAIL`, `E2EPORTALPASSWORD`, `E2EPORTALTOTP`) since the AA-979 P2b clean-up |
 | AA-TripPlanner-Web | `ci.yml` | PR to `main`; push `main`, `task/**`, `chore/**`, `feature/**` | Backend (pytest), Security Audit, Migrations (lint, PG 15 replay), Frontend (lint + build) | |
 | AA-TripPlanner-Web | `deploy-lambdas.yml` | push to `main` (`backend/**`); dispatch | Build + deploy Lambda code | deploy role trusts `main` only |
-| AA-TripPlanner-Web | `vercel-deploy.yml` | PR / push `main` (`frontend/**`); dispatch | Vercel deploy | |
+| AA-TripPlanner-Web | `deploy-web-dev.yml` | PR (`frontend/**`, preview image check); push `main` (`frontend/**`); dispatch | Preview (image, `next start` in the runner) on PRs; ECS deploy of `aa-tripplanner-dev-web`, post-deploy verify through CloudFront, release verify (`post-deploy-verify.yml`), visual (`visual.yml`, report-only) | `vercel-deploy.yml` deleted at the TripPlanner Vercel retirement (AA-1038, S272) |
 | AA-CIS-Infra | `terraform-plan.yml` | PR to `main` | Terraform Plan (dev) | plan comment on the PR |
 | AA-CIS-Infra | `terraform-apply.yml` | dispatch from `main` | Terraform Apply (dev) | GitHub environment `dev` = Dev resources (renamed from `prod` in AA-1023, ADR 0012 decision 6) |
 | AA-CIS-Infra | `db-migrate.yml` | dispatch from `main` | Migrate | modes check / apply / set-password / run-script |

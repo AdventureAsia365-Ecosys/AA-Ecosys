@@ -8,7 +8,7 @@ module.exports = {
   id: 'TP-PUB-01',
   app: 'tripplanner',
   title: 'Browse destinations and open a tour',
-  baseURL: process.env.UAT_BASE_URL || 'https://aa-tripplanner.vercel.app',
+  baseURL: process.env.UAT_BASE_URL || 'https://tripplanner.lumiguides.it.com',
   viewport: { width: 1440, height: 900 },
   steps: [
     {
