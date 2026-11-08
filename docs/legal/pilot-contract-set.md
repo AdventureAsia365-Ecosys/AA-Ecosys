@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-partner-portal, aa-crm-web, tripplanner-frontend]
-last_reviewed: 2026-11-06
+last_reviewed: 2026-11-08
 review_every_days: 30
 related: [SEC-04-dpa-agreement, SEC-04-ai-schedule, SEC-04-dpa-pack, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04-dpa-annex4, AA-820]
 ---
@@ -26,7 +26,7 @@ related: [SEC-04-dpa-agreement, SEC-04-ai-schedule, SEC-04-dpa-pack, SEC-04-dpa-
 |---|---|---|---|
 | 1 | Pilot letter: test environment, no service level, at most 8 weeks or until AA's production environment exists, the monthly AI allowance | Business owner's wording | To write; §2 gives its legal clauses |
 | 2 | [AI Schedule: acceptable use of AI features](tenant-ai-schedule.md) | **v1.0** (2026-11-03) | Adopted by the tech lead; counsel review pending |
-| 3 | [Data Processing Agreement](dpa.md) with [Annex 1](dpa-annex-1-processing.md), [Annex 2](dpa-annex-2-security.md), [Annex 3](dpa-annex-3-subprocessors.md), [Annex 4](dpa-annex-4-transfers.md) | **Draft v0.3** (2026-11-06) | Engineering draft; the tech lead reads it, then counsel |
+| 3 | [Data Processing Agreement](dpa.md) with [Annex 1](dpa-annex-1-processing.md), [Annex 2](dpa-annex-2-security.md), [Annex 3](dpa-annex-3-subprocessors.md), [Annex 4](dpa-annex-4-transfers.md) | **Draft v0.3** (2026-11-06); Annex 2 **draft v0.4** (2026-11-08) | Engineering draft; the tech lead reads it, then counsel. Annex 2 §3 lists the points for counsel and the business owner |
 | 4 | EU SCC Module 2 with the fill-ins of Annex 4 §3 | Only if the pilot agency is in the EU, UK or Switzerland | Not needed for a non-EU pilot **[COUNSEL]** |
 | 5 | Model privacy notice for the agency's own clients (§4) | Draft | The agency adapts and publishes it |
 

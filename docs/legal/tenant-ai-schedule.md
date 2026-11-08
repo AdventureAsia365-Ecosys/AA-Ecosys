@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-partner-portal, aa-crm-web, tripplanner-frontend]
-last_reviewed: 2026-11-06
+last_reviewed: 2026-11-08
 review_every_days: 30
 related: [SEC-04, SEC-04-packet, SEC-04-dpa, SEC-04-dpa-pack, APP-06-ai-register, AA-820]
 ---
@@ -24,7 +24,7 @@ related: [SEC-04, SEC-04-packet, SEC-04-dpa, SEC-04-dpa-pack, APP-06-ai-register
 |---|---|
 | Linear | AA-820 part 1 (due 11/11/2026, one day before the Anthropic Usage Policy update takes effect). Part 2 (the DPA pack) is outlined in [dpa-pack-outline.md](dpa-pack-outline.md) |
 | Decision | ADR 0019 [b20](../adr/0019-b2b-only-ecosystem-model.md) (approve the AI-terms draft now; counsel before the first paying agency), b19 (Anthropic account in the AA company's name, AI included per plan with a soft stop), b9 and d16 (pilot on Dev with one agency, a pilot letter and a DPA) |
-| Version | **v1.0, 03/11/2026.** The Schedule text (§3) is unchanged; on 06/11/2026 (S271) the provider facts of §2, §5 and §6 were brought in line with route control version 6 (AI Use Register v1.11). History: v0.1 15/10/2026 (root PRs #72, #74), v0.2 24/10/2026 (root PR #240); the earlier file name was `tenant-terms-ai-clause-draft.md` |
+| Version | **v1.0, 03/11/2026.** The Schedule text (§3) is unchanged; on 06/11/2026 (S271) the provider facts of §2, §5 and §6 were brought in line with route control version 6 (AI Use Register v1.11); on 08/11/2026 (S273) §9 records where each part of AA-820 stands. History: v0.1 15/10/2026 (root PRs #72, #74), v0.2 24/10/2026 (root PR #240); the earlier file name was `tenant-terms-ai-clause-draft.md` |
 | Provider list | Taken from the [AI Use Register](../architecture/ai-use-register.md) (ADR 0009). A route change that adds a provider updates the register, this page and the app pages together |
 | Placeholders | `[●]` = a value the business owner or counsel fills in. *Drafting notes* (in italics) are for the reviewer and are not part of the clause |
 
@@ -323,3 +323,22 @@ The v0.2 questions stay open unless marked. Counsel's answers become v1.1.
   (insurance, visas, transfers, fees; ADR 0019 b6), so no CRM AI feature may advise a specific client on insurance,
   visas, financing, refunds or claims without a qualified agency member's review and an AI disclosure.
 - **AA-Booking `CONTEXT.md`, same heading:** Booking makes no AI calls; the same rule applies if it ever does.
+
+## 9. AA-820 status (checked 2026-11-08)
+
+Where each "done when" item of AA-820 stands, four days before the Anthropic Usage Policy update takes effect
+(2026-11-12). **[COUNSEL]** = a lawyer's answer; **[BUSINESS OWNER]** = the business owner's decision.
+
+| # | Item of AA-820 | State | Evidence | Still open, and whose |
+|---|---|---|---|---|
+| 1 | Usage Policy clause in the tenant terms / contract template (scope point 1) | **Done for the pilot**: the clause is §3 of this page (v1.0, approved by the tech lead under ADR 0019 b20) and clause [●].2 of the pilot letter; the agency-facing summaries are live on the Content studio, CRM and Trip Planner terms pages (§2 (a)-(c)) | This page §3; [pilot contract set](pilot-contract-set.md) §2 clause [●].2; §2 rows (a)-(c) | Counsel review before the first paying agency, then v1.1 **[COUNSEL]**. There is no partner agreement template yet; the clauses move into it unchanged when it exists **[BUSINESS OWNER]** |
+| 2a | Content under the agency's own name without an AI label does not breach the policy's origin and attribution items | Engineering's reading: yes (§7 Q1). The machine-readable AI mark on WordPress posts (AI Use Register, "Machine-readable marking") adds evidence of origin without a visible label | §7 Q1 | **[COUNSEL]** confirms |
+| 2b | The Trip Planner's permanent "AI-assisted" label and narration notices are enough disclosure | Engineering's reading: yes; the policy allows the disclosure "in the product interface" (§1) | §7 Q2; AI Use Register, Trip Planner narration row | **[COUNSEL]** confirms |
+| 2c | Local AI-labelling and advertising law in the agency markets | Not assessed by engineering. The EU AI Act Article 50 marks are being built to 02/12/2026 (ADR 0019 d19) | §7 Q3 | **[COUNSEL]**, once the business owner names the first agency markets **[BUSINESS OWNER]** |
+| 3 | Existing tenants notified of the new clause | **No tenant to notify**: Dev has test tenants only (§6). The first agency receives the Schedule with the pilot letter (§5), before it uses any AI feature | §5, §6 | The pilot letter's wording and the AI allowance `[●]` **[BUSINESS OWNER]** |
+| 4 | AA-Booking boundary for high-risk advice recorded in Booking's `CONTEXT.md` | **Done**: AA-Booking `CONTEXT.md`, "AI boundary for high-risk advice (AA-820)"; since S273 it points at clause .3(8) of this Schedule instead of the retired v0.2 draft. The same rule for the CRM's ancillaries is in AA-Partner `CONTEXT.md` (§8) | §8 | None |
+| 5 | DPA pack (part 2): technical and organisational measures and the sub-processor list | **Drafted** (v0.3 / v0.4): [Annex 2](dpa-annex-2-security.md) (§0 maps hosting region, encryption, access control, tenant isolation, personal data before a model call, retention and incidents to the measures; §3 lists the points for counsel and the business owner) and [Annex 3](dpa-annex-3-subprocessors.md) (AWS including Amazon Bedrock, the Anthropic API, the OpenAI API, Jev, Sentry; Geoapify and DataForSEO receive no agency personal data, so they are listed in its §2, not as sub-processors) | [DPA pack outline](dpa-pack-outline.md) | Annex 2 §3 and the **[COUNSEL]** marks in the [DPA](dpa.md) and Annexes 3-4 |
+
+*Drafting note: Annex 3 was re-checked against the [secrets register](../security/secrets-register.md) on
+2026-11-08 (vendor rows: AWS, Anthropic, OpenAI, Jev, Sentry, Mapbox, Geoapify, DataForSEO, Google Drive): no
+vendor that receives agency personal data is missing from it.*
