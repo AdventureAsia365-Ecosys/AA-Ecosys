@@ -7,7 +7,7 @@
 │   ├── AA-CIS-App/          → FastAPI api (gồm Content studio API `/v1/*`) + job worker (ECS), admin (Vercel); `portal/` là bản copy đóng băng, không deploy (AA-979) — public repo
 │   ├── AA-Booking/          → Booking back office: FastAPI + asyncpg + booking.job worker (ECS, cùng cluster CIS), staff admin (Vercel) — public repo, live từ S235
 │   ├── AA-TripPlanner-Web/  → B2C map-first trip planner (Next.js FE + 2 Lambda) — public repo
-│   └── AA-Partner/          → CRM cho đại lý đối tác: api (chạy cả crm.job worker trong process) + web (ECS ARM64, cùng cluster CIS), tenant portal / Content studio (ECS `aa-crm-dev-portal`, cùng host `portal.`; project Vercel `aa-cis-portal` đã xoá ở AA-979) — public repo
+│   └── AA-Partner/          → CRM cho đại lý đối tác: api (chạy cả crm.job worker trong process) + web (ECS ARM64, cùng cluster CIS), tenant portal / Content studio nằm trong CRM web từ R3 (AA-1036; service `aa-crm-dev-portal` đã gộp vào `aa-crm-dev-web`, host `portal.`) — public repo
 ├── infra/
 │   └── AA-CIS-Infra/        → Terraform ECS/RDS/Lambda/API GW/Cognito, DB Migrate, DB Schema Dump (see infra/AA-CIS-Infra/.claude/CLAUDE.md)
 ├── docs/                    → tài liệu cấp hệ; điểm vào theo vai trò + catalog: docs/README.md; trang cũ: docs/archive/
@@ -52,7 +52,7 @@ Staff sign-in: Cognito WORKFORCE, managed login <https://staff-auth.lumiguides.i
 ID của API Gateway / pool / SG: KHÔNG chép vào đây (đổi được) — tra bằng lệnh 1 dòng hoặc Terraform output.
 
 ## RESOURCES
-ECS cluster: aa-cis-dev-cluster | services: aa-cis-dev-api, aa-cis-dev-worker, aa-booking-dev-api, aa-crm-dev-api, aa-crm-dev-web, aa-crm-dev-portal
+ECS cluster: aa-cis-dev-cluster | services: aa-cis-dev-api, aa-cis-dev-worker, aa-cis-dev-admin, aa-booking-dev-api, aa-booking-dev-admin, aa-crm-dev-api, aa-crm-dev-web (staff admin trên ECS từ AA-911, Vercel staff đã gỡ S272)
 ECR: aa-cis-dev-api (tag `dev-<git sha>`, AA-869), aa-booking-dev-api (tag = git SHA) — cả hai IMMUTABLE; không dùng `:latest`
 RDS: aa-cis-dev-db (PostgreSQL 15, db.t4g.small) | DSN secrets: aa-cis/dev/rds (master — từ X1 S18/S19, 19/10/2026: KHÔNG còn là login runtime CIS, task role CIS bị Deny đọc secret này), mỗi app một secret riêng — danh sách: docs/security/secrets-register.md (AA-878)
 DB từ ECS exec: script dùng `DATABASE_URL` của container (= `cis_app`: schema CIS kể cả bảng RLS, không `booking.*`/`tripplanner.*`, không DDL); việc cần master → DB Migrate `mode=run-script` (docs/ops/runbooks/ecs-exec-s3-mediated.md)

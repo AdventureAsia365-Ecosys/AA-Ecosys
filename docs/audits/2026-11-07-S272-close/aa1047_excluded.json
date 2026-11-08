@@ -1,0 +1,42 @@
+{
+ "excluded_t9": {
+  "channels": {
+   "ads": 4,
+   "blog": 167,
+   "email": 4,
+   "facebook": 4,
+   "instagram": 4,
+   "landing_page": 4,
+   "linkedin": 144,
+   "tiktok": 4
+  },
+  "days": 60,
+  "facts_budget_per_piece": {
+   "max": 0,
+   "mean": 0.0,
+   "n": 335,
+   "p50": 0,
+   "p90": 0,
+   "with_any": 0
+  },
+  "pieces": 335,
+  "reader_budget_per_piece": {
+   "by_kind": {
+    "A": 39,
+    "O": 288,
+    "P": 441
+   },
+   "cap_chars": 16000,
+   "max": 22,
+   "mean": 2.293,
+   "n": 335,
+   "p50": 0,
+   "p90": 18,
+   "still_over_cap": 0,
+   "with_any": 39
+  },
+  "rebuild_errors": {}
+ },
+ "issue": "AA-1047",
+ "measure": "excluded"
+}
