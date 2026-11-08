@@ -17,7 +17,7 @@
 
 - Plan GitHub Free; 2 members, 0 outside collaborators; 2FA required; base repository permission `read`.
 - All six repos: secret scanning and push protection on, Dependabot security updates on, `CODEOWNERS` present.
-- Gaps: members may create public repositories and change repository visibility. New repositories do not get secret
+- Gaps: members may create public repositories (not changeable on the Free plan) and change repository visibility. New repositories do not get secret
   scanning, push protection or Dependabot alerts by default. The org Actions policy (allowed actions, default
   `GITHUB_TOKEN` permissions) could not be read with the token in use (needs `admin:org`). It is listed in the
   follow-ups as "verify".
@@ -68,8 +68,11 @@ public), and `CODEOWNERS`.
 
 The tech lead (org owner) applies these once. Each is a setting, not a purchase:
 
-1. Only owners create repositories, change visibility, delete or transfer repositories. Members cannot create public
-   repositories.
+1. Only owners change repository visibility, delete or transfer repositories (Member privileges: visibility change
+   and deletion/transfer unticked). On the Free plan GitHub does not let an org stop members from creating public
+   repositories (the setting is locked, checked in the org settings on 08/11/2026). Compensation: the member list
+   stays minimal (two accounts today), visibility of existing repositories cannot be changed by members, and the
+   daily hygiene check (decision 5, layer 3) flags any repository that is new or public and not in the known list.
 2. Defaults for new repositories: secret scanning, push protection and Dependabot alerts on.
 3. Actions policy:
    - allow GitHub-owned actions plus an explicit list of third-party actions pinned by full SHA;
