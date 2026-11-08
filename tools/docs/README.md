@@ -49,6 +49,10 @@ Link check, with a [lychee](https://github.com/lycheeverse/lychee) binary on the
 lychee --config tools/docs/lychee.toml 'docs/**/*.md'
 ```
 
+CI takes that binary (lychee v0.24.2) from a cached copy checked against the sha256 pinned in
+`.github/actions/lychee/pins.txt` (S273). The same verified binary locally:
+`python3 .github/scripts/lychee_bin.py fetch --dest /tmp/lychee-cache --bin /tmp/lychee-bin`.
+
 Markdown style, with Node (the version the pinned workflow action uses):
 
 ```bash
