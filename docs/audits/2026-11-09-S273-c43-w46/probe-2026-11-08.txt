@@ -1,0 +1,422 @@
+PROBE [header] login=aa_cis_admin at=2026-11-08T17:02:05Z postmaster_start=2026-10-28 23:41:14.220512+00:00 read_all_stats=True
+PROBE [header] PostgreSQL 15.17 on aarch64-unknown-linux-gnu
+PROBE [setting] autovacuum_analyze_scale_factor=0.05
+PROBE [setting] autovacuum_naptime=15s
+PROBE [setting] autovacuum_vacuum_scale_factor=0.1
+PROBE [setting] effective_cache_size=1056918kB
+PROBE [setting] idle_in_transaction_session_timeout=60000ms
+PROBE [setting] log_lock_waits=on
+PROBE [setting] log_min_duration_statement=500ms
+PROBE [setting] maintenance_work_mem=65536kB
+PROBE [setting] max_connections=181
+PROBE [setting] pg_stat_statements.max=10000
+PROBE [setting] pg_stat_statements.track=top
+PROBE [setting] shared_buffers=528458kB
+PROBE [setting] shared_preload_libraries=rdsutils,pg_stat_statements,rds_casts
+PROBE [setting] statement_timeout=900000ms
+PROBE [setting] superuser_reserved_connections=3
+PROBE [setting] track_io_timing=on
+PROBE [setting] work_mem=4096kB
+PROBE [database] aa_cis_dev size=1629.6MB backends=12 commit=24935640 rollback=41657 cache_hit=99.31% temp_files=5899 temp=41574.3MB deadlocks=0 conflicts=0 xid_age=3179309 stats_reset=None
+PROBE [database] postgres size=7.6MB backends=0 commit=368316 rollback=0 cache_hit=99.98% temp_files=0 temp=0.0MB deadlocks=0 conflicts=0 xid_age=3179309 stats_reset=None
+PROBE [schema] shared tables=96 total=782.0MB heap=386.1MB indexes=371.9MB
+PROBE [schema] geo tables=18 total=353.5MB heap=70.8MB indexes=165.6MB
+PROBE [schema] acp_contract tables=13 total=343.1MB heap=60.8MB indexes=169.5MB
+PROBE [schema] crm tables=108 total=42.4MB heap=16.2MB indexes=15.0MB
+PROBE [schema] acp_shared tables=23 total=32.0MB heap=12.0MB indexes=9.4MB
+PROBE [schema] silver_aa_internal tables=7 total=29.3MB heap=10.2MB indexes=2.9MB
+PROBE [schema] booking tables=73 total=11.4MB heap=4.2MB indexes=6.3MB
+PROBE [schema] gold_aa_internal tables=7 total=8.0MB heap=3.2MB indexes=0.8MB
+PROBE [schema] tripplanner tables=10 total=1.6MB heap=0.6MB indexes=0.7MB
+PROBE [schema] retired tables=2 total=0.1MB heap=0.0MB indexes=0.0MB
+PROBE [schema] acp_deliver tables=1 total=0.0MB heap=0.0MB indexes=0.0MB
+PROBE [schema] public tables=1 total=0.0MB heap=0.0MB indexes=0.0MB
+PROBE [table_size] shared.decision_log total=452.7MB heap=229.6MB idx=223.0MB toast=0.0MB live~493010 dead=0 dead_pct=0.0 seq=686 idx_scan=1219828 ins/upd/del=435831/6/695728 heap_cache_hit=75.1% last_autovac=2026-11-08 16:41:35.170600+00:00 autovac_n=10
+PROBE [table_size] geo.tour_place total=216.4MB heap=6.8MB idx=95.0MB toast=114.7MB live~13490 dead=1064 dead_pct=7.9 seq=7722 idx_scan=7763225 ins/upd/del=30397/8237/16909 heap_cache_hit=99.9% last_autovac=2026-10-28 00:30:39.447579+00:00 autovac_n=31
+PROBE [table_size] shared.llm_call_log total=208.3MB heap=94.9MB idx=113.3MB toast=0.0MB live~395828 dead=200 dead_pct=0.1 seq=12742 idx_scan=28763062 ins/upd/del=279452/0/200 heap_cache_hit=99.2% last_autovac=2026-11-08 14:22:47.551773+00:00 autovac_n=12
+PROBE [table_size] acp_contract.atom_embedding total=205.5MB heap=1.0MB idx=102.0MB toast=102.4MB live~12954 dead=0 dead_pct=0.0 seq=484 idx_scan=120565 ins/upd/del=10374/0/0 heap_cache_hit=96.8% last_autovac=2026-10-24 20:45:24.301277+00:00 autovac_n=3
+PROBE [table_size] acp_contract.atom_ranking total=66.6MB heap=15.5MB idx=51.1MB toast=0.0MB live~97218 dead=0 dead_pct=0.0 seq=37994 idx_scan=13653 ins/upd/del=13800012/13711344/13735302 heap_cache_hit=99.9% last_autovac=2026-11-08 16:48:05.221077+00:00 autovac_n=719
+PROBE [table_size] geo.tour_leg total=60.2MB heap=34.7MB idx=25.4MB toast=0.0MB live~81279 dead=0 dead_pct=0.0 seq=2794 idx_scan=4 ins/upd/del=1516058/0/1434779 heap_cache_hit=98.6% last_autovac=2026-11-08 14:33:50.009080+00:00 autovac_n=80
+PROBE [table_size] geo.tour_junction total=52.6MB heap=16.9MB idx=35.7MB toast=0.0MB live~155162 dead=0 dead_pct=0.0 seq=1270 idx_scan=1 ins/upd/del=2684670/0/2529508 heap_cache_hit=99.6% last_autovac=2026-11-08 14:33:49.379537+00:00 autovac_n=81
+PROBE [table_size] shared.tenant_api_usage total=44.0MB heap=21.7MB idx=22.3MB toast=0.0MB live~178538 dead=269 dead_pct=0.2 seq=9 idx_scan=64369 ins/upd/del=136910/0/200 heap_cache_hit=97.1% last_autovac=2026-11-04 03:32:52.336136+00:00 autovac_n=11
+PROBE [table_size] acp_contract.tour_atoms total=31.9MB heap=28.5MB idx=3.2MB toast=0.2MB live~55064 dead=4919 dead_pct=8.9 seq=41176 idx_scan=18696441 ins/upd/del=43381/36250/0 heap_cache_hit=99.9% last_autovac=2026-10-25 06:54:25.360643+00:00 autovac_n=10
+PROBE [table_size] shared.job total=25.7MB heap=9.4MB idx=2.2MB toast=14.1MB live~9618 dead=79 dead_pct=0.8 seq=20563 idx_scan=2835525 ins/upd/del=8798/76298/0 heap_cache_hit=100.0% last_autovac=2026-11-08 16:43:04.800574+00:00 autovac_n=295
+PROBE [table_size] silver_aa_internal.generated_content total=18.8MB heap=3.9MB idx=2.1MB toast=12.8MB live~2312 dead=96 dead_pct=4.2 seq=7956 idx_scan=1016938 ins/upd/del=1809/858/0 heap_cache_hit=99.1% last_autovac=2026-10-25 04:35:43.323400+00:00 autovac_n=3
+PROBE [table_size] acp_shared.content_piece total=13.1MB heap=0.6MB idx=3.0MB toast=9.4MB live~405 dead=74 dead_pct=18.3 seq=20057 idx_scan=112523 ins/upd/del=405/820/0 heap_cache_hit=99.9% last_autovac=2026-11-06 00:22:01.015815+00:00 autovac_n=11
+PROBE [table_size] shared.llm_shadow_log total=11.9MB heap=10.0MB idx=0.6MB toast=1.3MB live~5888 dead=0 dead_pct=0.0 seq=21 idx_scan=85 ins/upd/del=3067/0/0 heap_cache_hit=50.1% last_autovac=2026-10-08 07:37:51.612199+00:00 autovac_n=1
+PROBE [table_size] acp_contract.question_embedding total=10.1MB heap=0.2MB idx=0.2MB toast=9.7MB live~1219 dead=0 dead_pct=0.0 seq=110 idx_scan=336 ins/upd/del=306/0/0 heap_cache_hit=56.2% last_autovac=None autovac_n=0
+PROBE [table_size] shared.destinations total=9.7MB heap=8.1MB idx=1.5MB toast=0.0MB live~8339 dead=3 dead_pct=0.0 seq=92101 idx_scan=49097423 ins/upd/del=7159/18921/0 heap_cache_hit=100.0% last_autovac=2026-11-01 01:22:04.044978+00:00 autovac_n=11
+PROBE [table_size] crm.job total=8.8MB heap=4.2MB idx=4.5MB toast=0.0MB live~10564 dead=100 dead_pct=0.9 seq=16263 idx_scan=3379466 ins/upd/del=100235/200464/89671 heap_cache_hit=100.0% last_autovac=2026-11-08 16:57:05.754173+00:00 autovac_n=1373
+PROBE [table_size] crm.audit_event_legacy total=8.0MB heap=4.2MB idx=1.8MB toast=2.1MB live~12034 dead=0 dead_pct=0.0 seq=97 idx_scan=3311 ins/upd/del=12034/0/0 heap_cache_hit=93.6% last_autovac=2026-10-31 18:46:35.825818+00:00 autovac_n=5
+PROBE [table_size] geo.tour_stop total=7.8MB heap=2.9MB idx=4.9MB toast=0.0MB live~17852 dead=0 dead_pct=0.0 seq=5877 idx_scan=6298 ins/upd/del=309403/0/291551 heap_cache_hit=99.4% last_autovac=2026-11-08 14:33:50.505100+00:00 autovac_n=78
+PROBE [table_size] acp_contract.atom_segment_member total=7.8MB heap=2.6MB idx=5.1MB toast=0.0MB live~17474 dead=1340 dead_pct=7.7 seq=10379 idx_scan=1888225 ins/upd/del=55945/471/43287 heap_cache_hit=99.4% last_autovac=2026-10-27 05:42:48.216347+00:00 autovac_n=13
+PROBE [table_size] gold_aa_internal.published_tours total=6.8MB heap=3.0MB idx=0.5MB toast=3.3MB live~892 dead=135 dead_pct=15.1 seq=107352 idx_scan=23634464 ins/upd/del=497/2265/0 heap_cache_hit=100.0% last_autovac=2026-10-25 07:36:44.856392+00:00 autovac_n=9
+PROBE [table_size] acp_contract.route total=6.8MB heap=5.1MB idx=1.7MB toast=0.0MB live~11852 dead=305 dead_pct=2.6 seq=1483 idx_scan=8789982 ins/upd/del=11205/10256/0 heap_cache_hit=99.8% last_autovac=2026-10-27 07:15:12.901599+00:00 autovac_n=12
+PROBE [table_size] crm.aa_catalog_tour total=6.7MB heap=0.6MB idx=0.2MB toast=5.8MB live~892 dead=0 dead_pct=0.0 seq=3354 idx_scan=127667 ins/upd/del=892/136874/0 heap_cache_hit=99.9% last_autovac=2026-11-08 17:00:35.852852+00:00 autovac_n=335
+PROBE [table_size] silver_aa_internal.raw_tours total=6.5MB heap=2.8MB idx=0.5MB toast=3.1MB live~987 dead=76 dead_pct=7.7 seq=116808 idx_scan=36849541 ins/upd/del=0/2651/0 heap_cache_hit=100.0% last_autovac=2026-10-25 07:44:45.351006+00:00 autovac_n=8
+PROBE [table_size] booking.job total=4.9MB heap=3.1MB idx=1.7MB toast=0.0MB live~8859 dead=224 dead_pct=2.5 seq=18790 idx_scan=2520746 ins/upd/del=21768/43593/12909 heap_cache_hit=99.3% last_autovac=2026-11-08 10:00:28.600547+00:00 autovac_n=322
+PROBE [table_size] acp_contract.atom_matches total=4.8MB heap=2.1MB idx=2.6MB toast=0.0MB live~16449 dead=0 dead_pct=0.0 seq=22 idx_scan=49335 ins/upd/del=10702/30593/0 heap_cache_hit=96.4% last_autovac=2026-11-08 16:44:05.001897+00:00 autovac_n=3
+PROBE [table_size] shared.cost_explorer_app_snapshot total=4.5MB heap=2.1MB idx=2.4MB toast=0.0MB live~18789 dead=0 dead_pct=0.0 seq=205 idx_scan=137 ins/upd/del=18789/0/0 heap_cache_hit=92.6% last_autovac=2026-11-02 10:07:42.546845+00:00 autovac_n=6
+PROBE [table_size] acp_shared.place_card total=4.5MB heap=3.9MB idx=0.5MB toast=0.0MB live~4785 dead=519 dead_pct=10.8 seq=29928 idx_scan=8954245 ins/upd/del=4803/4183/18 heap_cache_hit=100.0% last_autovac=2026-10-27 07:33:59.017848+00:00 autovac_n=7
+PROBE [table_size] shared.eval_golden_item total=4.3MB heap=0.5MB idx=0.1MB toast=3.7MB live~334 dead=3 dead_pct=0.9 seq=981 idx_scan=1459 ins/upd/del=337/0/0 heap_cache_hit=98.4% last_autovac=None autovac_n=0
+PROBE [table_size] shared.place_photo total=4.2MB heap=3.2MB idx=1.0MB toast=0.0MB live~3232 dead=4 dead_pct=0.1 seq=40012 idx_scan=46857803 ins/upd/del=0/63327/0 heap_cache_hit=99.8% last_autovac=2026-11-07 21:11:23.969540+00:00 autovac_n=30
+PROBE [table_size] crm.audit_export_manifest total=4.1MB heap=3.1MB idx=1.0MB toast=0.0MB live~6662 dead=0 dead_pct=0.0 seq=27 idx_scan=13551 ins/upd/del=6662/0/0 heap_cache_hit=96.7% last_autovac=2026-11-07 08:16:25.874045+00:00 autovac_n=3
+PROBE [table_rows] shared.decision_log live~493010 dead=0 total=452.7MB
+PROBE [table_rows] shared.llm_call_log live~395828 dead=200 total=208.3MB
+PROBE [table_rows] shared.tenant_api_usage live~178538 dead=269 total=44.0MB
+PROBE [table_rows] geo.tour_junction live~155162 dead=0 total=52.6MB
+PROBE [table_rows] acp_contract.atom_ranking live~97218 dead=0 total=66.6MB
+PROBE [table_rows] geo.tour_leg live~81279 dead=0 total=60.2MB
+PROBE [table_rows] acp_contract.tour_atoms live~55064 dead=4919 total=31.9MB
+PROBE [table_rows] acp_shared.atom_place_card live~26774 dead=34 total=3.8MB
+PROBE [table_rows] acp_shared.place_card_alias live~18875 dead=2 total=3.2MB
+PROBE [table_rows] shared.cost_explorer_app_snapshot live~18789 dead=0 total=4.5MB
+PROBE [table_rows] geo.tour_stop live~17852 dead=0 total=7.8MB
+PROBE [table_rows] acp_contract.atom_segment_member live~17474 dead=1340 total=7.8MB
+PROBE [table_rows] acp_contract.atomize_day_fingerprint live~16566 dead=3 total=2.9MB
+PROBE [table_rows] acp_contract.atom_matches live~16449 dead=0 total=4.8MB
+PROBE [table_rows] geo.tour_place live~13490 dead=1064 total=216.4MB
+PROBE [table_rows] acp_contract.atom_embedding live~12954 dead=0 total=205.5MB
+PROBE [table_rows] crm.audit_event_legacy live~12034 dead=0 total=8.0MB
+PROBE [table_rows] acp_contract.route live~11852 dead=305 total=6.8MB
+PROBE [table_rows] acp_contract.atom_segment live~11594 dead=0 total=3.9MB
+PROBE [table_rows] crm.job live~10564 dead=100 total=8.8MB
+PROBE [table_rows] shared.job live~9618 dead=79 total=25.7MB
+PROBE [table_rows] geo.place_name live~9582 dead=0 total=3.0MB
+PROBE [table_rows] booking.job live~8859 dead=224 total=4.9MB
+PROBE [table_rows] shared.destinations live~8339 dead=3 total=9.7MB
+PROBE [table_rows] geo.graph_edge live~7258 dead=0 total=3.2MB
+PROBE [table_rows] geo.tour_day live~6993 dead=741 total=2.8MB
+PROBE [table_rows] crm.audit_export_manifest live~6662 dead=0 total=4.1MB
+PROBE [table_rows] shared.llm_shadow_log live~5888 dead=0 total=11.9MB
+PROBE [table_rows] acp_contract.search_demand live~5495 dead=346 total=1.8MB
+PROBE [table_rows] acp_shared.place_card live~4785 dead=519 total=4.5MB
+PROBE [bloat] tables with dead/live > 20% and >= 1000 dead rows: 0
+PROBE [index_size] acp_contract.idx_atom_embedding_vector on atom_embedding size=101.3MB scans=14 unique=False pk=False
+PROBE [index_size] geo.tour_place_embedding_hnsw on tour_place size=93.2MB scans=7 unique=False pk=False
+PROBE [index_size] shared.decision_log_cache_idx on decision_log size=60.0MB scans=1149781 unique=False pk=False
+PROBE [index_size] shared.decision_log_stage_created_cov_idx on decision_log size=56.5MB scans=2416 unique=False pk=False
+PROBE [index_size] shared.decision_log_question_created_cov_idx on decision_log size=51.8MB scans=18985 unique=False pk=False
+PROBE [index_size] geo.tour_junction_pkey on tour_junction size=35.7MB scans=1 unique=True pk=True
+PROBE [index_size] acp_contract.atom_ranking_pkey on atom_ranking size=30.0MB scans=764 unique=True pk=True
+PROBE [index_size] shared.decision_log_subject_idx on decision_log size=29.2MB scans=11732 unique=False pk=False
+PROBE [index_size] shared.idx_llm_call_log_stage_created on llm_call_log size=28.3MB scans=5108 unique=False pk=False
+PROBE [index_size] shared.idx_llm_call_log_model_created on llm_call_log size=27.5MB scans=2 unique=False pk=False
+PROBE [index_size] geo.tour_leg_pkey on tour_leg size=24.3MB scans=4 unique=True pk=True
+PROBE [index_size] shared.idx_llm_call_log_tenant_created on llm_call_log size=21.5MB scans=6241 unique=False pk=False
+PROBE [index_size] shared.llm_call_log_pkey on llm_call_log size=16.6MB scans=201 unique=True pk=True
+PROBE [index_size] acp_contract.idx_atom_ranking_current_identity on atom_ranking size=15.5MB scans=352 unique=True pk=False
+PROBE [index_size] shared.llm_call_log_created_id_idx on llm_call_log size=15.3MB scans=30995 unique=False pk=False
+PROBE [index_size] shared.decision_log_created_id_idx on decision_log size=13.4MB scans=36906 unique=False pk=False
+PROBE [index_size] shared.decision_log_pkey on decision_log size=9.5MB scans=7 unique=True pk=True
+PROBE [index_size] shared.tenant_api_usage_pkey on tenant_api_usage size=7.5MB scans=200 unique=True pk=True
+PROBE [index_size] shared.tenant_api_usage_tenant_called_idx on tenant_api_usage size=5.7MB scans=41319 unique=False pk=False
+PROBE [index_size] geo.tour_stop_pkey on tour_stop size=4.8MB scans=6298 unique=True pk=True
+PROBE [index_size] shared.idx_tenant_api_usage_called_at on tenant_api_usage size=3.9MB scans=12731 unique=False pk=False
+PROBE [index_size] acp_contract.idx_atom_ranking_market_total_rank_current on atom_ranking size=3.1MB scans=11 unique=False pk=False
+PROBE [index_size] acp_contract.atom_segment_member_pkey on atom_segment_member size=3.1MB scans=1342905 unique=True pk=True
+PROBE [index_size] shared.llm_call_log_job_idx on llm_call_log size=3.0MB scans=28718159 unique=False pk=False
+PROBE [index_size] acp_shared.idx_content_piece_embedding on content_piece size=2.9MB scans=5 unique=False pk=False
+PROBE [index_size] acp_contract.tour_atoms_pkey on tour_atoms size=2.8MB scans=17932806 unique=True pk=True
+PROBE [index_size] shared.decision_log_job_idx on decision_log size=2.5MB scans=1 unique=False pk=False
+PROBE [index_size] acp_contract.idx_atom_ranking_market_tour_current on atom_ranking size=2.5MB scans=12526 unique=False pk=False
+PROBE [index_size] crm.job_finished_idx on job size=2.1MB scans=64836 unique=False pk=False
+PROBE [index_size] acp_contract.idx_atom_segment_member_atom on atom_segment_member size=2.0MB scans=545320 unique=False pk=False
+PROBE [index_size] acp_contract.atom_matches_query_atom_id_key on atom_matches size=1.8MB scans=41295 unique=True pk=False
+PROBE [index_size] shared.idx_tenant_api_usage_admin_user_id on tenant_api_usage size=1.8MB scans=4 unique=False pk=False
+PROBE [index_size] shared.idx_tenant_api_usage_actor_type on tenant_api_usage size=1.7MB scans=5 unique=False pk=False
+PROBE [index_size] shared.idx_tenant_api_usage_tenant_id on tenant_api_usage size=1.7MB scans=10110 unique=False pk=False
+PROBE [index_size] silver_aa_internal.idx_generated_content_metadata_gin on generated_content size=1.7MB scans=2 unique=False pk=False
+PROBE [index_size] shared.cost_explorer_app_snapshot_period_idx on cost_explorer_app_snapshot size=1.6MB scans=134 unique=False pk=False
+PROBE [index_size] geo.graph_edge_pkey on graph_edge size=1.5MB scans=7 unique=True pk=True
+PROBE [index_size] acp_shared.atom_place_card_pkey on atom_place_card size=1.4MB scans=6979709 unique=True pk=True
+PROBE [index_size] acp_shared.place_card_alias_pkey on place_card_alias size=1.1MB scans=62445 unique=True pk=True
+PROBE [index_size] acp_contract.route_pkey on route size=1.1MB scans=11820 unique=True pk=True
+PROBE [index_size] acp_contract.search_demand_pkey on search_demand size=1.1MB scans=2969 unique=True pk=True
+PROBE [index_size] geo.tour_leg_countries_gin on tour_leg size=1.1MB scans=0 unique=False pk=False
+PROBE [index_size] acp_contract.atom_segment_pkey on atom_segment size=1.1MB scans=16614812 unique=True pk=True
+PROBE [index_size] crm.job_idempotency_key_uq on job size=0.9MB scans=157415 unique=True pk=False
+PROBE [index_size] shared.idx_llm_call_log_account on llm_call_log size=0.9MB scans=1512 unique=False pk=False
+PROBE [index_size] crm.job_kind_created_idx on job size=0.9MB scans=118767 unique=False pk=False
+PROBE [index_size] crm.audit_event_legacy_tenant_at_idx on audit_event_legacy size=0.9MB scans=1387 unique=False pk=False
+PROBE [index_size] acp_contract.atomize_day_fingerprint_pkey on atomize_day_fingerprint size=0.8MB scans=16423 unique=True pk=True
+PROBE [index_size] shared.job_idempotency_key_uq on job size=0.8MB scans=31474 unique=True pk=False
+PROBE [index_size] geo.graph_node_pkey on graph_node size=0.8MB scans=101 unique=True pk=True
+PROBE [unused_index] count=184 total=4.4MB (C5.2d: drop candidate only after 30 days at 0)
+PROBE [unused_index] geo.tour_leg_countries_gin on tour_leg size=1.1MB
+PROBE [unused_index] geo.tour_place_unlinked_idx on tour_place size=0.3MB
+PROBE [unused_index] gold_aa_internal.idx_pt_embedding on published_tours size=0.2MB
+PROBE [unused_index] shared.llm_cassette_request_idx on llm_cassette size=0.1MB
+PROBE [unused_index] shared.ai_usage_hourly_tenant_hour_idx on ai_usage_hourly size=0.0MB
+PROBE [unused_index] crm.option_block_day_idx on option_block size=0.0MB
+PROBE [unused_index] shared.llm_cassette_trace_idx on llm_cassette size=0.0MB
+PROBE [unused_index] shared.ix_pipeline_jobs_created on pipeline_jobs size=0.0MB
+PROBE [unused_index] shared.eval_claim_label_claim_idx on eval_claim_label size=0.0MB
+PROBE [unused_index] shared.idx_dfs_call_log_live on dfs_call_log size=0.0MB
+PROBE [unused_index] crm.fx_rate_platform_pair_idx on fx_rate_platform size=0.0MB
+PROBE [unused_index] tripplanner.trip_drafts_tenant_idx on trip_drafts size=0.0MB
+PROBE [unused_index] shared.llm_cassette_created_idx on llm_cassette size=0.0MB
+PROBE [unused_index] booking.suppliers_categories_idx on suppliers size=0.0MB
+PROBE [unused_index] crm.traveler_name_token_bidx_idx on traveler size=0.0MB
+PROBE [ledger] shared.llm_call_log live~395828 retention_days=180 oldest=2026-09-17 07:28:31.346449+00:00 rows_30d=196955 rows_7d=9062 older_than_window=0
+PROBE [ledger] shared.decision_log live~493010 retention_days=180 oldest=2026-09-29 12:09:52.716112+00:00 rows_30d=226921 rows_7d=10520 older_than_window=0
+PROBE [ledger] shared.tenant_api_usage live~178538 retention_days=90 oldest=2026-09-16 13:53:00.669358+00:00 rows_30d=107349 rows_7d=14109 older_than_window=0
+PROBE [ledger] shared.job live~9618 retention_days=30 oldest=2026-09-28 16:35:39.323583+00:00 rows_30d=7686 rows_7d=1410 older_than_window=1717
+PROBE [ledger] booking.job live~8859 retention_days=30
+PROBE [ledger] crm.job live~10564 retention_days=30
+PROBE [retention] retention_cost_explorer_snapshot last=succeeded at=2026-11-07 21:00:16.610422+00:00 mode=live trigger=schedule candidates=0 deleted=0
+PROBE [retention] retention_decision_log last=succeeded at=2026-11-07 21:00:11.558358+00:00 mode=dry_run trigger=schedule candidates=0 deleted=0
+PROBE [retention] retention_job last=succeeded at=2026-11-07 21:00:06.577488+00:00 mode=dry_run trigger=schedule candidates=610 deleted=0
+PROBE [retention] retention_llm_call_log last=succeeded at=2026-11-07 20:59:56.502410+00:00 mode=dry_run trigger=schedule candidates=0 deleted=0
+PROBE [retention] retention_tenant_api_usage last=succeeded at=2026-11-07 21:00:01.494154+00:00 mode=dry_run trigger=schedule candidates=0 deleted=0
+PROBE [retention] kinds with an approved live run (schedule live): 1
+PROBE [retention] live_run retention_cost_explorer_snapshot last_live=2026-11-07 21:00:16.610422+00:00
+PROBE [job_cis] status=cancelled n=7 oldest_due_queued_s=None
+PROBE [job_cis] status=failed n=15 oldest_due_queued_s=None
+PROBE [job_cis] status=queued n=7 oldest_due_queued_s=114
+PROBE [job_cis] status=running n=4 oldest_due_queued_s=None
+PROBE [job_cis] status=succeeded n=9381 oldest_due_queued_s=None
+PROBE [job_cis_kind_30d] place_extract n=1970 p50=1.4s p95=33.7s failed=0
+PROBE [job_cis_kind_30d] a3_atomize n=1167 p50=41.5s p95=122.5s failed=0
+PROBE [job_cis_kind_30d] s1_rewrite n=969 p50=144.4s p95=234.8s failed=0
+PROBE [job_cis_kind_30d] place_cards_build n=918 p50=19.8s p95=85.0s failed=0
+PROBE [job_cis_kind_30d] llm_route_watch n=400 p50=0.1s p95=0.3s failed=0
+PROBE [job_cis_kind_30d] t9_write n=389 p50=60.1s p95=188.7s failed=0
+PROBE [job_cis_kind_30d] ai_usage_rollup n=381 p50=0.0s p95=0.0s failed=0
+PROBE [job_cis_kind_30d] photo_sync n=126 p50=10.0s p95=63.3s failed=0
+PROBE [job_cis_kind_30d] recompute n=117 p50=144.7s p95=227.6s failed=0
+PROBE [job_cis_kind_30d] tenant_account_tick n=112 p50=0.2s p95=0.3s failed=0
+PROBE [job_cis_kind_30d] inquiry_handoff_check n=105 p50=0.1s p95=0.1s failed=0
+PROBE [job_cis_kind_30d] t2_rewrite n=92 p50=86.6s p95=311.5s failed=0
+PROBE [job_cis_kind_30d] report_generate n=87 p50=0.1s p95=4.3s failed=0
+PROBE [job_cis_kind_30d] tour_graph_build n=82 p50=28.4s p95=53.8s failed=0
+PROBE [job_cis_kind_30d] tenant_billing_tick n=82 p50=0.3s p95=0.4s failed=0
+PROBE [job_cis_kind_30d] ops_rds_role_connections n=75 p50=0.1s p95=0.3s failed=0
+PROBE [job_cis_kind_30d] t8_angles n=71 p50=20.8s p95=57.7s failed=4
+PROBE [job_cis_kind_30d] place_geocode n=64 p50=63.0s p95=391.9s failed=0
+PROBE [job_cis_kind_30d] t7_slate n=44 p50=8.7s p95=182.1s failed=0
+PROBE [job_cis_kind_30d] place_dedupe n=42 p50=221.3s p95=682.8s failed=3
+PROBE [job_cis_kind_30d] place_relocate n=30 p50=53.3s p95=515.2s failed=0
+PROBE [job_cis_kind_30d] place_shape n=26 p50=284.1s p95=3447.4s failed=0
+PROBE [job_cis_kind_30d] retention_cost_explorer_snapshot n=25 p50=0.0s p95=0.3s failed=0
+PROBE [job_cis_kind_30d] retention_tenant_api_usage n=25 p50=0.0s p95=0.1s failed=0
+PROBE [job_cis_kind_30d] retention_llm_call_log n=25 p50=0.1s p95=0.2s failed=0
+PROBE [conn] max_connections=181 superuser_reserved=3 ceiling75=135
+PROBE [conn_app] role=booking app=booking-api state=idle n=2
+PROBE [conn_app] role=cis_app app=cis-api state=idle n=1
+PROBE [conn_app] role=cis_app app=cis-worker state=idle n=5
+PROBE [conn_app] role=crm_app app=crm-api state=idle n=2
+PROBE [conn_app] role=rdsadmin app=<empty> state=idle n=1
+PROBE [conn_app] role=rdsadmin app=<empty> state=<not visible> n=1
+PROBE [conn_app] role=rdsadmin app=PostgreSQL JDBC Driver state=idle n=1
+PROBE [conn_app] role=tripplanner app=aa-tripplanner-dev-assembly state=idle n=1
+PROBE [conn] client_sessions=14 (excluding this probe)
+PROBE [conn_role] aa_app_user sessions=0 rolconnlimit=15 pct=0%
+PROBE [conn_role] aa_cis_admin sessions=1 rolconnlimit=-1 pct=-
+PROBE [conn_role] booking sessions=2 rolconnlimit=15 pct=13%
+PROBE [conn_role] cis_app sessions=6 rolconnlimit=90 pct=7%
+PROBE [conn_role] crm_app sessions=2 rolconnlimit=6 pct=33%
+PROBE [conn_role] db_migrator sessions=0 rolconnlimit=5 pct=0%
+PROBE [conn_role] tripplanner sessions=1 rolconnlimit=30 pct=3%
+PROBE [long_xact] visible transactions open > 60 s: 0 (only sessions this login may see)
+PROBE [locks] held+waiting=10 waiting=0 blocked_sessions=0
+PROBE [pgss] schema=public statements=9910 dealloc=9122 stats_reset=2026-10-07 16:35:01.069635+00:00
+PROBE [pgss_role] aa_app_user stmts=61 calls=489002 total=2063.8s share=43.1% mean=4.22ms blks_read=10254 temp_written=226760
+PROBE [pgss_role] rdsadmin stmts=379 calls=26258535 total=1029.8s share=21.5% mean=0.04ms blks_read=821 temp_written=5867361
+PROBE [pgss_role] crm_app stmts=8960 calls=26668165 total=832.7s share=17.4% mean=0.03ms blks_read=10998 temp_written=0
+PROBE [pgss_role] cis_app stmts=389 calls=28038921 total=723.1s share=15.1% mean=0.03ms blks_read=202215 temp_written=9833
+PROBE [pgss_role] booking stmts=34 calls=8471065 total=127.6s share=2.7% mean=0.02ms blks_read=745 temp_written=0
+PROBE [pgss_role] tripplanner stmts=10 calls=240849 total=5.0s share=0.1% mean=0.02ms blks_read=13 temp_written=0
+PROBE [pgss_role] aa_cis_admin stmts=72 calls=152 total=1.0s share=0.0% mean=6.60ms blks_read=4970 temp_written=488
+PROBE [pgss_role] db_migrator stmts=7 calls=534 total=0.1s share=0.0% mean=0.23ms blks_read=0 temp_written=0
+PROBE [pgss_total] role=aa_app_user calls=9306 total=1729.4s mean=185.8ms p95~665.7ms max=1226ms rows=3805946 hit/read=121601222/8924 temp=226760 qid=-2270122270132990547 q=SELECT source_id, day_number, position, place_name, place_display_name, destination_id, destination_name, country, lat, lng, precision FROM catalog.v_tour_place
+PROBE [pgss_total] role=cis_app calls=374316 total=309.6s mean=0.8ms p95~344.4ms max=45294ms rows=374316 hit/read=0/0 temp=0 qid=1238812706996916191 q=SELECT pg_advisory_xact_lock($1)
+PROBE [pgss_total] role=crm_app calls=156869 total=262.9s mean=1.7ms p95~4.0ms max=89ms rows=156869 hit/read=58080759/620 temp=0 qid=-8160857788253416715 q=WITH d AS ( DELETE FROM crm.job WHERE kind = $1 AND status IN ($3, $4) AND finished_at < now() - make_interval(days => $2) RETURNING $5 ) SELECT count(*) FROM d
+PROBE [pgss_total] role=aa_app_user calls=9306 total=251.9s mean=27.1ms p95~106.3ms max=205ms rows=1149544 hit/read=1295477/680 temp=0 qid=4178612002086776518 q=SELECT source_id, day_number, title, body FROM catalog.v_tour_day WHERE source_system = $2 AND tour_id = ANY($1::uuid[])
+PROBE [pgss_total] role=crm_app calls=341569 total=190.9s mean=0.6ms p95~6.5ms max=72ms rows=19 hit/read=234018383/0 temp=0 qid=5895800433230079014 q=SELECT p.proposal_id, p.trip_id, p.version, p.currency, p.accepted_hold_id, p.starts_on, p.room_config, t.party_adults, t.party_child_ages FROM crm.proposal p J
+PROBE [pgss_total] role=rdsadmin calls=18274 total=166.9s mean=9.1ms p95~19.8ms max=35ms rows=827999 hit/read=0/0 temp=2682437 qid=7810954397244927193 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_total] role=rdsadmin calls=2110430 total=154.6s mean=0.1ms p95~0.4ms max=80ms rows=23798 hit/read=43829/0 temp=0 qid=1403808297563888244 q=select pid, usename, client_addr, client_hostname, wait_event_type, wait_event_type || $1 || wait_event as wait_event, query, datname, application_name, backend
+PROBE [pgss_total] role=cis_app calls=1323 total=144.4s mean=109.1ms p95~183.6ms max=524ms rows=1323 hit/read=14649346/104000 temp=0 qid=2841780495399993343 q=SELECT coalesce(sum(cost_usd), $2)::float AS spent FROM shared.llm_call_log WHERE provider = $3 AND $1::date IS NOT NULL AND created_at >= $1::date
+PROBE [pgss_total] role=crm_app calls=1923527 total=103.1s mean=0.1ms p95~0.2ms max=30ms rows=1890195 hit/read=7332316/3 temp=0 qid=745070593527063262 q=SELECT status FROM crm.tenant WHERE tenant_id = $1 AND deleted_at IS NULL
+PROBE [pgss_total] role=rdsadmin calls=7888 total=89.9s mean=11.4ms p95~22.5ms max=42ms rows=386791 hit/read=0/0 temp=1806719 qid=-6403750587481933158 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_total] role=rdsadmin calls=4607 total=76.0s mean=16.5ms p95~80.5ms max=354ms rows=4607 hit/read=0/0 temp=0 qid=2562360558915602188 q=SELECT count(*) FROM pg_show_all_settings() WHERE name = $1 AND setting SIMILAR TO $2
+PROBE [pgss_total] role=rdsadmin calls=6069024 total=63.0s mean=0.0ms p95~0.7ms max=215ms rows=0 hit/read=29/0 temp=0 qid=-1891554663970818548 q=SET statement_timeout=10000
+PROBE [pgss_total] role=rdsadmin calls=35180 total=57.8s mean=1.6ms p95~3.6ms max=90ms rows=9639320 hit/read=0/0 temp=0 qid=-608459722038274307 q=SELECT name,setting FROM pg_settings where vartype in ($1,$2 ,$3)
+PROBE [pgss_total] role=rdsadmin calls=46057 total=50.3s mean=1.1ms p95~11.3ms max=601ms rows=72031 hit/read=0/0 temp=0 qid=1517142475426721381 q=select s.*, extract($1 from s.lastattempt) as lastattempt_ts from rds_get_stat_connections_counters() as s where s.lastattempt > (now() - interval $2 second) li
+PROBE [pgss_total] role=cis_app calls=6129391 total=47.7s mean=0.0ms p95~0.1ms max=51ms rows=0 hit/read=0/0 temp=0 qid=-5283894138513878500 q=RESET ALL
+PROBE [pgss_total] role=rdsadmin calls=3842 total=45.1s mean=11.7ms p95~22.7ms max=35ms rows=192483 hit/read=0/0 temp=921289 qid=-8377007350423718061 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_total] role=rdsadmin calls=46079 total=44.8s mean=1.0ms p95~6.7ms max=366ms rows=201510 hit/read=0/0 temp=0 qid=5417837495212899547 q=select s.*, extract($1 from s.lastattempt) as lastattempt_ts from rds_get_stat_dxl_counters() as s where s.lastattempt > (now() - interval $2 second) limit $3
+PROBE [pgss_total] role=rdsadmin calls=4159339 total=39.2s mean=0.0ms p95~0.6ms max=147ms rows=4159339 hit/read=0/0 temp=0 qid=1147616880456321454 q=SELECT $1
+PROBE [pgss_total] role=rdsadmin calls=35180 total=36.7s mean=1.0ms p95~2.6ms max=51ms rows=35180 hit/read=0/0 temp=0 qid=-5139327563817234773 q=select (select sum(coalesce(authorized, $1) + coalesce(total_auth_failed, $2) + coalesce(bad_conn_packet, $3) + coalesce(startup_packet_timeout, $4)) from rds_g
+PROBE [pgss_total] role=crm_app calls=157414 total=33.0s mean=0.2ms p95~1.6ms max=108ms rows=100234 hit/read=1753770/207 temp=0 qid=-3657805736638556165 q=INSERT INTO crm.job (kind, payload, idempotency_key, max_attempts, created_by, run_after) VALUES ($1, $2::jsonb, $3, $4, $5, now() + make_interval(secs => $6)) 
+PROBE [pgss_total] role=crm_app calls=3445073 total=30.5s mean=0.0ms p95~0.0ms max=8ms rows=0 hit/read=0/0 temp=0 qid=-5283894138513878500 q=RESET ALL
+PROBE [pgss_total] role=rdsadmin calls=35180 total=30.2s mean=0.9ms p95~2.1ms max=43ms rows=35180 hit/read=0/0 temp=0 qid=4053648330666377704 q=select $1 from rds_get_stat_connections_counters() limit $2
+PROBE [pgss_total] role=aa_app_user calls=1033 total=30.0s mean=29.1ms p95~49.1ms max=99ms rows=52170 hit/read=9059597/35 temp=0 qid=7434048248135334813 q=SELECT source_id, tour_id, title, summary, country, duration_days, activities, inclusions, exclusions, published_at, updated_at, text_updated_at FROM catalog.v_
+PROBE [pgss_total] role=rdsadmin calls=193460 total=27.1s mean=0.1ms p95~4.2ms max=207ms rows=193460 hit/read=580426/56 temp=0 qid=-5592978887803537641 q=SELECT COUNT(*) FROM pg_class WHERE relname = $1 AND relkind = $2 AND relnamespace::regnamespace::text = $3
+PROBE [pgss_total] role=booking calls=1015634 total=27.1s mean=0.0ms p95~0.4ms max=102ms rows=19310 hit/read=1396575/113 temp=0 qid=2889662015665828565 q=UPDATE booking.job SET status = $4, attempt = attempt + $5, locked_by = $1, locked_until = now() + make_interval(secs => $3), started_at = coalesce(started_at, 
+PROBE [pgss_total] role=crm_app calls=3896577 total=26.8s mean=0.0ms p95~0.1ms max=31ms rows=3896577 hit/read=0/0 temp=0 qid=5405729535900574943 q=SELECT set_config($2, $1, $3)
+PROBE [pgss_total] role=crm_app calls=366064 total=23.9s mean=0.1ms p95~0.1ms max=9ms rows=57 hit/read=1082179/2 temp=0 qid=-2334586436678448343 q=UPDATE crm.aa_request r SET lease_until = now() + make_interval(secs => $2), attempts = r.attempts + $3 WHERE r.aa_request_id IN ( SELECT q.aa_request_id FROM c
+PROBE [pgss_total] role=cis_app calls=6129391 total=23.8s mean=0.0ms p95~0.1ms max=31ms rows=6129391 hit/read=0/0 temp=0 qid=1122149222608758573 q=SELECT pg_advisory_unlock_all()
+PROBE [pgss_total] role=crm_app calls=100229 total=23.5s mean=0.2ms p95~1.5ms max=88ms rows=100229 hit/read=2034189/47 temp=0 qid=387137321555177500 q=UPDATE crm.job SET status = $4, result = $3::jsonb, error = $5, locked_by = $6, locked_until = $7, finished_at = now() WHERE id = $1::uuid AND status = $8 AND l
+PROBE [pgss_total] role=rdsadmin calls=1954 total=22.1s mean=11.3ms p95~22.5ms max=30ms rows=99689 hit/read=0/0 temp=429739 qid=-5457691484545114402 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_total] role=booking calls=1678864 total=20.7s mean=0.0ms p95~0.5ms max=131ms rows=0 hit/read=0/0 temp=0 qid=-5283894138513878500 q=RESET ALL
+PROBE [pgss_total] role=booking calls=61632 total=19.8s mean=0.3ms p95~6.2ms max=407ms rows=21759 hit/read=453567/519 temp=0 qid=-8248788943587415561 q=INSERT INTO booking.job (kind, payload, idempotency_key, max_attempts, created_by, run_after) VALUES ($1, $2::jsonb, $3, $4, $5, now() + make_interval(secs => $
+PROBE [pgss_total] role=crm_app calls=336072 total=19.7s mean=0.1ms p95~2.8ms max=172ms rows=4 hit/read=4940423/0 temp=0 qid=5925445060397321880 q=SELECT DISTINCT ON (l.bk_hold_id) l.booking_line_id, l.trip_id, l.bk_hold_id, p.proposal_id FROM crm.booking_line l JOIN crm.option o ON o.option_id = l.booking
+PROBE [pgss_total] role=cis_app calls=555 total=19.7s mean=35.4ms p95~696.5ms max=6697ms rows=11722 hit/read=130186/35861 temp=6731 qid=-1239096050431151086 q=INSERT INTO shared.ai_usage_hourly (hour, source, app, provider, account, model, stage, role, tenant_id, status, error_class, traffic, requests, ledger_rows, fa
+PROBE [pgss_total] role=crm_app calls=190721 total=16.3s mean=0.1ms p95~1.5ms max=144ms rows=28770 hit/read=2245681/0 temp=0 qid=5643432135698740821 q=UPDATE crm.job SET status = $6, attempt = attempt + $7, locked_by = $1, locked_until = now() + make_interval(secs => $3), started_at = coalesce(started_at, now(
+PROBE [pgss_total] role=crm_app calls=3445073 total=16.0s mean=0.0ms p95~0.1ms max=45ms rows=3445073 hit/read=0/0 temp=0 qid=1122149222608758573 q=SELECT pg_advisory_unlock_all()
+PROBE [pgss_total] role=cis_app calls=252965 total=15.8s mean=0.1ms p95~0.3ms max=43ms rows=252965 hit/read=6161547/4732 temp=0 qid=-2049398600283500477 q=INSERT INTO acp_contract.atom_ranking (market, tour_id, segment_id, demand_rank, recurrence_rank, questions_rank, said_rank, total_rank, demand_market, demand_v
+PROBE [pgss_total] role=booking calls=1678864 total=14.1s mean=0.0ms p95~0.6ms max=133ms rows=1678864 hit/read=0/0 temp=0 qid=1122149222608758573 q=SELECT pg_advisory_unlock_all()
+PROBE [pgss_total] role=cis_app calls=121506 total=13.6s mean=0.1ms p95~4.0ms max=420ms rows=121506 hit/read=1375923/6 temp=0 qid=6876167737024105096 q=UPDATE shared.job_worker SET last_seen_at = now(), running_jobs = $2, reaped_requeued = reaped_requeued + $3, reaped_failed = reaped_failed + $4, last_reap_at =
+PROBE [pgss_total] role=cis_app calls=373467 total=13.5s mean=0.0ms p95~0.8ms max=222ms rows=6716 hit/read=3104148/34 temp=0 qid=5507061136693551090 q=UPDATE shared.job SET status = $4, attempt = attempt + $5, locked_by = $1, locked_until = now() + make_interval(secs => $3), started_at = coalesce(started_at, n
+PROBE [pgss_total] role=cis_app calls=34223 total=12.6s mean=0.4ms p95~5.3ms max=119ms rows=27185 hit/read=176637/23586 temp=0 qid=6335191632319199341 q=SELECT DISTINCT ON (l.question_key) l.question_key, l.probability::float AS probability, l.choice, l.probabilities FROM shared.decision_log l JOIN unnest($2::te
+PROBE [pgss_total] role=cis_app calls=369059 total=12.3s mean=0.0ms p95~1.1ms max=121ms rows=369059 hit/read=901597/0 temp=0 qid=-393867300499605247 q=SELECT EXISTS (SELECT $2 FROM shared.job_worker WHERE stopped_at IS NULL AND task_revision > $1 AND last_seen_at > now() - interval $3)
+PROBE [pgss_total] role=cis_app calls=6129391 total=11.8s mean=0.0ms p95~0.1ms max=21ms rows=0 hit/read=0/0 temp=0 qid=-7424648664449177856 q=CLOSE ALL
+PROBE [pgss_total] role=aa_app_user calls=9306 total=11.3s mean=1.2ms p95~4.5ms max=12ms rows=451476 hit/read=7604007/8 temp=0 qid=-6044742789074254556 q=SELECT DISTINCT source_id, activity, intensity_level FROM catalog.v_tour_component WHERE source_system = $2 AND tour_id = ANY($1::uuid[])
+PROBE [pgss_total] role=aa_app_user calls=9306 total=10.4s mean=1.1ms p95~4.5ms max=11ms rows=433058 hit/read=4004429/0 temp=0 qid=4532047552954543783 q=SELECT source_id, photo_id, path, place_label, position FROM catalog.v_tour_photo WHERE source_system = $2 AND tour_id = ANY($1::uuid[])
+PROBE [pgss_total] role=rdsadmin calls=47127 total=10.3s mean=0.2ms p95~3.2ms max=166ms rows=47127 hit/read=47127/0 temp=0 qid=7072885359357109236 q=select max(age(datfrozenxid)) from pg_catalog.pg_database where datconnlimit <> $1
+PROBE [pgss_total] role=cis_app calls=6152 total=9.9s mean=1.6ms p95~2.8ms max=27ms rows=916823 hit/read=244769/86 temp=0 qid=168143219591225286 q=SELECT worker_id, started_at, last_seen_at, max_parallel, caps, task_revision, (stopped_at IS NULL AND last_seen_at > now() - interval $1) AS alive, (stopped_at
+PROBE [pgss_total] role=crm_app calls=48364 total=9.8s mean=0.2ms p95~3.0ms max=117ms rows=48364 hit/read=200081/8 temp=0 qid=-2095759865811669791 q=UPDATE crm.membership_feed_state SET last_ok_at = now(), failures = $1
+PROBE [pgss_total] role=crm_app calls=336072 total=9.7s mean=0.0ms p95~0.1ms max=5ms rows=0 hit/read=336399/0 temp=0 qid=8622815267273041076 q=SELECT i.invoice_id, p.hold_id FROM crm.invoice i JOIN crm.proposal p ON p.proposal_id = i.proposal_id WHERE i.status = $3 AND i.hold_extended_at IS NULL AND i.
+PROBE [pgss_total] role=rdsadmin calls=46094 total=9.6s mean=0.2ms p95~3.9ms max=221ms rows=46094 hit/read=184004/372 temp=0 qid=-852767928893412476 q=SELECT count(*) FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = $1 AND c.relname = $2
+PROBE [pgss_mean] role=aa_app_user calls=9306 total=1729.4s mean=185.8ms p95~665.7ms max=1226ms rows=3805946 hit/read=121601222/8924 temp=226760 qid=-2270122270132990547 q=SELECT source_id, day_number, position, place_name, place_display_name, destination_id, destination_name, country, lat, lng, precision FROM catalog.v_tour_place
+PROBE [pgss_mean] role=cis_app calls=6 total=1.1s mean=182.3ms p95~192.7ms max=193ms rows=97218 hit/read=785207/403 temp=0 qid=-85985826470011345 q=UPDATE acp_contract.atom_ranking SET superseded_at = now() WHERE market = $1 AND superseded_at IS NULL AND version < $2
+PROBE [pgss_mean] role=cis_app calls=6 total=0.9s mean=153.0ms p95~184.9ms max=188ms rows=63162 hit/read=44127/3 temp=3102 qid=7486273179250024402 q=SELECT asg.segment_id, asg.canonical_place, asg.canonical_action, array_agg(DISTINCT ta.tour_id) AS tour_ids, COALESCE(SUM(LENGTH(COALESCE(ta.evidence, ta.text,
+PROBE [pgss_mean] role=cis_app calls=6 total=0.8s mean=136.7ms p95~290.1ms max=308ms rows=390 hit/read=296180/414 temp=0 qid=5206767337345401654 q=SELECT kind, status, count(*)::int AS n, coalesce(sum(j.cost_usd + (SELECT coalesce(sum(l.cost_usd), $1) FROM shared.llm_call_log l WHERE l.job_id = j.id)), $2)
+PROBE [pgss_mean] role=cis_app calls=1323 total=144.4s mean=109.1ms p95~183.6ms max=524ms rows=1323 hit/read=14649346/104000 temp=0 qid=2841780495399993343 q=SELECT coalesce(sum(cost_usd), $2)::float AS spent FROM shared.llm_call_log WHERE provider = $3 AND $1::date IS NOT NULL AND created_at >= $1::date
+PROBE [pgss_mean] role=cis_app calls=34 total=3.7s mean=108.5ms p95~628.7ms max=1241ms rows=933 hit/read=515133/4879 temp=0 qid=1797823588124962046 q=SELECT x.a::text AS a, x.b::text AS b, max($3 - (ta.embedding <=> tb.embedding)) AS cos FROM unnest($1::uuid[], $2::uuid[]) AS x(a, b) JOIN geo.tour_place ta ON
+PROBE [pgss_mean] role=cis_app calls=17 total=1.7s mean=100.9ms p95~154.3ms max=196ms rows=68 hit/read=215912/186 temp=0 qid=2533505343162745804 q=WITH per AS ( SELECT j.kind, j.id, sum(coalesce(l.cost_usd, $1))::float AS usd FROM shared.job j JOIN shared.llm_call_log l ON l.job_id = j.id WHERE j.kind IN (
+PROBE [pgss_mean] role=cis_app calls=7 total=0.7s mean=95.3ms p95~114.8ms max=116ms rows=7 hit/read=83832/0 temp=0 qid=6939844014780353083 q=SELECT COALESCE(SUM(cost_usd), $3) FROM shared.llm_call_log WHERE tenant_id = $1 OR ($2 AND tenant_id IS NULL)
+PROBE [pgss_mean] role=cis_app calls=7 total=0.6s mean=80.5ms p95~83.3ms max=83ms rows=7 hit/read=83832/0 temp=0 qid=149752707733412301 q=SELECT COALESCE(SUM(cost_usd), $5) FROM shared.llm_call_log WHERE (tenant_id = $1 OR ($2 AND tenant_id IS NULL)) AND created_at >= $3 AND created_at < $4
+PROBE [pgss_mean] role=cis_app calls=5 total=0.3s mean=55.9ms p95~146.9ms max=147ms rows=4585 hit/read=14822/340 temp=0 qid=-672298246218585319 q=SELECT rt.tour_id::text, rt.src_name, rt.country, rt.pipeline_status::text, rt.ingest_at, rt.batch_id::text, rt.source_id::text, rs.filename, COUNT(gc.id) AS re
+PROBE [pgss_mean] role=cis_app calls=6 total=0.3s mean=51.5ms p95~256.0ms max=280ms rows=6 hit/read=14/3807 temp=0 qid=-4196931475884465701 q=SELECT COALESCE(MAX(version), $2) + $3 FROM acp_contract.atom_ranking WHERE market = $1
+PROBE [pgss_mean] role=cis_app calls=16 total=0.8s mean=49.7ms p95~195.3ms max=300ms rows=1820 hit/read=106942/526 temp=0 qid=-2352322194293224421 q=SELECT DISTINCT ON (l.subject_key, l.question_key) l.subject_key, l.question_key, l.probability::float AS probability, l.choice, l.probabilities FROM shared.dec
+PROBE [pgss_mean] role=aa_app_user calls=100 total=4.7s mean=47.0ms p95~50.0ms max=58ms rows=100 hit/read=363500/0 temp=0 qid=7467886560831665385 q=SELECT count(*)::bigint AS visible, count(*) FILTER (WHERE owner_scope IS NOT NULL AND owner_scope::text IS DISTINCT FROM $1 AND NOT (lower(owner_scope::text) =
+PROBE [pgss_mean] role=cis_app calls=136 total=6.4s mean=47.0ms p95~403.2ms max=1399ms rows=136 hit/read=505/0 temp=0 qid=1859284710365136094 q=SELECT connection_key, last_ok_at, last_error_at, last_error_class, last_error, consecutive_failures, circuit_open_until, open_streak, opened_at, probe_until FR
+PROBE [pgss_mean] role=cis_app calls=6 total=0.3s mean=44.4ms p95~108.6ms max=116ms rows=97218 hit/read=109777/1345 temp=0 qid=-8750396913268203541 q=DELETE FROM acp_contract.atom_ranking WHERE market = $1 AND superseded_at IS NOT NULL
+PROBE [pgss_mean] role=cis_app calls=555 total=19.7s mean=35.4ms p95~696.5ms max=6697ms rows=11722 hit/read=130186/35861 temp=6731 qid=-1239096050431151086 q=INSERT INTO shared.ai_usage_hourly (hour, source, app, provider, account, model, stage, role, tenant_id, status, error_class, traffic, requests, ledger_rows, fa
+PROBE [pgss_mean] role=cis_app calls=17 total=0.5s mean=31.0ms p95~169.8ms max=309ms rows=5798 hit/read=38635/615 temp=0 qid=-8595575692717131483 q=SELECT cp.piece_id::text AS id, cp.channel, cp.status, agr.trip_id::text AS tour_id FROM acp_shared.content_piece cp LEFT JOIN acp_shared.angle_gate_request agr
+PROBE [pgss_mean] role=cis_app calls=301 total=8.9s mean=29.6ms p95~38.4ms max=85ms rows=15351 hit/read=1343664/0 temp=0 qid=-5905522629182725397 q=SELECT a.atom_id, a.tour_id::text AS tour_id, a.owner_scope, a.itinerary_day, btrim(a.place) AS place, a.activity_type, apc.card_id::text AS card_id, COALESCE(r
+PROBE [pgss_mean] role=aa_app_user calls=1033 total=30.0s mean=29.1ms p95~49.1ms max=99ms rows=52170 hit/read=9059597/35 temp=0 qid=7434048248135334813 q=SELECT source_id, tour_id, title, summary, country, duration_days, activities, inclusions, exclusions, published_at, updated_at, text_updated_at FROM catalog.v_
+PROBE [pgss_mean] role=cis_app calls=48 total=1.3s mean=28.0ms p95~229.8ms max=644ms rows=48 hit/read=75995/2773 temp=0 qid=7200253820217445795 q=INSERT INTO geo.tour_place (component_id, source_id, tour_id, day_index, name, name_norm, country, country_norm, locality_norm, destination_id, place_card_id, a
+PROBE [pgss_mean] role=aa_app_user calls=9306 total=251.9s mean=27.1ms p95~106.3ms max=205ms rows=1149544 hit/read=1295477/680 temp=0 qid=4178612002086776518 q=SELECT source_id, day_number, title, body FROM catalog.v_tour_day WHERE source_system = $2 AND tour_id = ANY($1::uuid[])
+PROBE [pgss_mean] role=aa_app_user calls=12 total=0.3s mean=22.2ms p95~74.9ms max=109ms rows=2220 hit/read=39032/517 temp=0 qid=-9083833960722074029 q=SELECT s.subject_id, s.channel, s.state, s.score, s.cleared_bar_reason, s.segment_id, s.route_id, s.created_at, asg.canonical_place, asg.canonical_action, r.hub
+PROBE [pgss_mean] role=booking calls=419 total=8.3s mean=19.7ms p95~27.9ms max=52ms rows=373748 hit/read=1510273/0 temp=0 qid=-4452642439336243179 q=SELECT DISTINCT source_id FROM catalog.v_tour WHERE source_system = $1 ORDER BY source_id
+PROBE [pgss_mean] role=aa_app_user calls=286 total=5.5s mean=19.1ms p95~59.3ms max=152ms rows=608 hit/read=1619799/2 temp=0 qid=-5149081013639033730 q=WITH cover_place AS MATERIALIZED ( SELECT d.destination_id AS destination_id, d.lat, d.lng, lower(btrim(d.country)) AS country FROM catalog.v_destination d WHER
+PROBE [pgss_mean] role=rdsadmin calls=25 total=0.4s mean=16.6ms p95~19.1ms max=20ms rows=1279 hit/read=0/0 temp=10302 qid=-4276966311259948639 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_mean] role=tripplanner calls=119 total=2.0s mean=16.6ms p95~42.0ms max=68ms rows=29490 hit/read=296870/0 temp=0 qid=1647982092651464314 q=SELECT d.destination_id AS id, d.name, d.lat, d.lng, d.located_by, d.precision, d.shape_kind, d.shape_status, d.length_km, d.min_lat, d.min_lng, d.max_lat, d.ma
+PROBE [pgss_mean] role=rdsadmin calls=4607 total=76.0s mean=16.5ms p95~80.5ms max=354ms rows=4607 hit/read=0/0 temp=0 qid=2562360558915602188 q=SELECT count(*) FROM pg_show_all_settings() WHERE name = $1 AND setting SIMILAR TO $2
+PROBE [pgss_mean] role=rdsadmin calls=18 total=0.3s mean=16.4ms p95~19.0ms max=20ms rows=1003 hit/read=0/0 temp=7405 qid=7651300653786171881 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_mean] role=rdsadmin calls=6 total=0.1s mean=15.9ms p95~16.7ms max=17ms rows=332 hit/read=0/0 temp=2459 qid=4525748318379553728 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_mean] role=cis_app calls=8 total=0.1s mean=14.8ms p95~88.6ms max=112ms rows=8 hit/read=1214/170 temp=0 qid=-2988619510025234278 q=SELECT count(*) FROM acp_shared.audit_log a WHERE a.tenant_id = $1 AND a.action = ANY($2::text[])
+PROBE [pgss_mean] role=cis_app calls=15 total=0.2s mean=12.5ms p95~26.5ms max=33ms rows=120 hit/read=1155/0 temp=0 qid=-6086678671921894626 q=SELECT keyword, search_volume, people_also_ask FROM acp_contract.search_demand WHERE market = $1 AND search_volume > $3 AND keyword ILIKE ANY($2::text[])
+PROBE [pgss_mean] role=cis_app calls=15 total=0.2s mean=12.3ms p95~62.9ms max=98ms rows=15 hit/read=17394/418 temp=0 qid=-5406503046177575343 q=SELECT cp.piece_id, cp.tenant_id, agr.atom_id, cp.angle_gate_request_id, $5 - (cp.content_embedding <=> $1::vector) AS similarity FROM acp_shared.content_piece 
+PROBE [pgss_mean] role=rdsadmin calls=3842 total=45.1s mean=11.7ms p95~22.7ms max=35ms rows=192483 hit/read=0/0 temp=921289 qid=-8377007350423718061 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_mean] role=cis_app calls=30 total=0.3s mean=11.6ms p95~14.6ms max=19ms rows=389 hit/read=52973/0 temp=0 qid=2832759098694632371 q=WITH latest_versions AS ( SELECT DISTINCT ON (ttv.published_tour_id) ttv.published_tour_id FROM gold_aa_internal.tenant_tour_versions ttv WHERE ttv.tenant_id = 
+PROBE [pgss_mean] role=rdsadmin calls=7888 total=89.9s mean=11.4ms p95~22.5ms max=42ms rows=386791 hit/read=0/0 temp=1806719 qid=-6403750587481933158 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_mean] role=aa_app_user calls=301 total=3.4s mean=11.3ms p95~18.8ms max=73ms rows=2709 hit/read=519485/7 temp=0 qid=2832759098694632371 q=WITH latest_versions AS ( SELECT DISTINCT ON (ttv.published_tour_id) ttv.published_tour_id FROM gold_aa_internal.tenant_tour_versions ttv WHERE ttv.tenant_id = 
+PROBE [pgss_mean] role=rdsadmin calls=1954 total=22.1s mean=11.3ms p95~22.5ms max=30ms rows=99689 hit/read=0/0 temp=429739 qid=-5457691484545114402 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_mean] role=cis_app calls=15 total=0.2s mean=10.5ms p95~16.6ms max=18ms rows=125085 hit/read=15615/0 temp=0 qid=2605423916419235958 q=SELECT lower(name) AS n, country FROM shared.destinations
+PROBE [pgss_mean] role=aa_app_user calls=104 total=1.1s mean=10.3ms p95~11.0ms max=12ms rows=104 hit/read=279217/7 temp=0 qid=7731416291462541600 q=SELECT source_id, tour_id, title, summary, country, duration_days, activities, inclusions, exclusions, published_at, updated_at, text_updated_at FROM catalog.v_
+PROBE [pgss_mean] role=cis_app calls=140 total=1.4s mean=10.0ms p95~21.7ms max=70ms rows=1364 hit/read=1049032/355 temp=0 qid=6622901402219043930 q=SELECT rq.id, rq.tour_id, rq.generated_content_id, rq.review_status, rq.score_overall, rq.failure_summary, rq.created_at, gc.aa_name, gc.aa_subtitle, gc.aa_summ
+PROBE [pgss_mean] role=aa_app_user calls=876 total=8.0s mean=9.2ms p95~14.2ms max=72ms rows=4258 hit/read=669359/0 temp=0 qid=-1866928375341740692 q=SELECT rt.tour_id::text AS tour_id, tl.state, tl.reason, tl.changed_at FROM silver_aa_internal.raw_tours rt JOIN gold_aa_internal.v_tour_liveness tl ON tl.sourc
+PROBE [pgss_mean] role=rdsadmin calls=18274 total=166.9s mean=9.1ms p95~19.8ms max=35ms rows=827999 hit/read=0/0 temp=2682437 qid=7810954397244927193 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_mean] role=cis_app calls=47 total=0.4s mean=9.1ms p95~12.4ms max=19ms rows=47 hit/read=35315/0 temp=0 qid=-1866928375341740692 q=SELECT rt.tour_id::text AS tour_id, tl.state, tl.reason, tl.changed_at FROM silver_aa_internal.raw_tours rt JOIN gold_aa_internal.v_tour_liveness tl ON tl.sourc
+PROBE [pgss_mean] role=cis_app calls=30 total=0.3s mean=8.9ms p95~15.3ms max=16ms rows=1085 hit/read=2548/0 temp=0 qid=-8863862648974103224 q=SELECT keyword, market, search_volume, people_also_ask FROM acp_contract.search_demand WHERE keyword ILIKE ANY($1::text[]) AND market <> $2 AND jsonb_typeof(peo
+PROBE [pgss_mean] role=cis_app calls=5 total=0.0s mean=8.0ms p95~20.5ms max=20ms rows=880 hit/read=2591/37 temp=0 qid=-3690776274960568866 q=WITH per_market AS ( SELECT ar.segment_id, ar.market, MIN(ar.total_rank) AS total_rank, MAX(ar.demand_volume) AS demand_volume, MAX(ar.questions) AS questions, 
+PROBE [pgss_mean] role=booking calls=419 total=2.8s mean=6.7ms p95~8.9ms max=19ms rows=890 hit/read=1129242/3 temp=0 qid=-8203656840544381629 q=INSERT INTO booking.trip_plans (source_system, source_id, sellable, synced_at) SELECT $2, k, $3, now() FROM unnest($1::text[]) AS k ON CONFLICT (source_system, 
+PROBE [pgss_mean] role=cis_app calls=91 total=0.5s mean=6.0ms p95~9.4ms max=19ms rows=816268 hit/read=32214/0 temp=0 qid=-2425298151950779547 q=SELECT segment_id, canonical_place, canonical_action FROM acp_contract.atom_segment WHERE questions_count IS NOT NULL
+PROBE [pgss_mean] role=cis_app calls=34 total=0.2s mean=5.8ms p95~8.8ms max=13ms rows=102 hit/read=10527/0 temp=0 qid=-7643880141687792318 q=SELECT account, coalesce(sum(cost_usd), $2) AS spent, count(*)::int AS calls FROM shared.llm_call_log WHERE account = ANY($1::text[]) AND created_at >= date_tru
+PROBE [pgss_mean] role=cis_app calls=24 total=0.1s mean=5.7ms p95~28.0ms max=59ms rows=12 hit/read=27610/929 temp=0 qid=-8220897096057438154 q=SELECT CASE WHEN status = $3 AND run_after > now() + make_interval(secs => $2) THEN $4 ELSE status END AS status, count(*)::int AS n FROM shared.job WHERE statu
+PROBE [pgss_mean] role=cis_app calls=61 total=0.3s mean=5.2ms p95~54.9ms max=151ms rows=1736 hit/read=23441/459 temp=0 qid=-1858597068640898166 q=SELECT m.segment_id, ta.atom_id, ta.tour_id::text AS tour_id, ta.place, ta.evidence, rt.country, apc.card_id::text AS card_id FROM acp_contract.atom_segment_mem
+PROBE [pgss_role_total] role=aa_app_user calls=9306 total=1729.4s mean=185.8ms p95~665.7ms max=1226ms rows=3805946 hit/read=121601222/8924 temp=226760 qid=-2270122270132990547 q=SELECT source_id, day_number, position, place_name, place_display_name, destination_id, destination_name, country, lat, lng, precision FROM catalog.v_tour_place
+PROBE [pgss_role_total] role=aa_app_user calls=9306 total=251.9s mean=27.1ms p95~106.3ms max=205ms rows=1149544 hit/read=1295477/680 temp=0 qid=4178612002086776518 q=SELECT source_id, day_number, title, body FROM catalog.v_tour_day WHERE source_system = $2 AND tour_id = ANY($1::uuid[])
+PROBE [pgss_role_total] role=aa_app_user calls=1033 total=30.0s mean=29.1ms p95~49.1ms max=99ms rows=52170 hit/read=9059597/35 temp=0 qid=7434048248135334813 q=SELECT source_id, tour_id, title, summary, country, duration_days, activities, inclusions, exclusions, published_at, updated_at, text_updated_at FROM catalog.v_
+PROBE [pgss_role_total] role=aa_app_user calls=9306 total=11.3s mean=1.2ms p95~4.5ms max=12ms rows=451476 hit/read=7604007/8 temp=0 qid=-6044742789074254556 q=SELECT DISTINCT source_id, activity, intensity_level FROM catalog.v_tour_component WHERE source_system = $2 AND tour_id = ANY($1::uuid[])
+PROBE [pgss_role_total] role=aa_app_user calls=9306 total=10.4s mean=1.1ms p95~4.5ms max=11ms rows=433058 hit/read=4004429/0 temp=0 qid=4532047552954543783 q=SELECT source_id, photo_id, path, place_label, position FROM catalog.v_tour_photo WHERE source_system = $2 AND tour_id = ANY($1::uuid[])
+PROBE [pgss_role_mean] role=aa_app_user calls=9306 total=1729.4s mean=185.8ms p95~665.7ms max=1226ms rows=3805946 hit/read=121601222/8924 temp=226760 qid=-2270122270132990547 q=SELECT source_id, day_number, position, place_name, place_display_name, destination_id, destination_name, country, lat, lng, precision FROM catalog.v_tour_place
+PROBE [pgss_role_mean] role=aa_app_user calls=100 total=4.7s mean=47.0ms p95~50.0ms max=58ms rows=100 hit/read=363500/0 temp=0 qid=7467886560831665385 q=SELECT count(*)::bigint AS visible, count(*) FILTER (WHERE owner_scope IS NOT NULL AND owner_scope::text IS DISTINCT FROM $1 AND NOT (lower(owner_scope::text) =
+PROBE [pgss_role_mean] role=aa_app_user calls=1033 total=30.0s mean=29.1ms p95~49.1ms max=99ms rows=52170 hit/read=9059597/35 temp=0 qid=7434048248135334813 q=SELECT source_id, tour_id, title, summary, country, duration_days, activities, inclusions, exclusions, published_at, updated_at, text_updated_at FROM catalog.v_
+PROBE [pgss_role_mean] role=aa_app_user calls=9306 total=251.9s mean=27.1ms p95~106.3ms max=205ms rows=1149544 hit/read=1295477/680 temp=0 qid=4178612002086776518 q=SELECT source_id, day_number, title, body FROM catalog.v_tour_day WHERE source_system = $2 AND tour_id = ANY($1::uuid[])
+PROBE [pgss_role_mean] role=aa_app_user calls=12 total=0.3s mean=22.2ms p95~74.9ms max=109ms rows=2220 hit/read=39032/517 temp=0 qid=-9083833960722074029 q=SELECT s.subject_id, s.channel, s.state, s.score, s.cleared_bar_reason, s.segment_id, s.route_id, s.created_at, asg.canonical_place, asg.canonical_action, r.hub
+PROBE [pgss_role_total] role=rdsadmin calls=18274 total=166.9s mean=9.1ms p95~19.8ms max=35ms rows=827999 hit/read=0/0 temp=2682437 qid=7810954397244927193 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_role_total] role=rdsadmin calls=2110430 total=154.6s mean=0.1ms p95~0.4ms max=80ms rows=23798 hit/read=43829/0 temp=0 qid=1403808297563888244 q=select pid, usename, client_addr, client_hostname, wait_event_type, wait_event_type || $1 || wait_event as wait_event, query, datname, application_name, backend
+PROBE [pgss_role_total] role=rdsadmin calls=7888 total=89.9s mean=11.4ms p95~22.5ms max=42ms rows=386791 hit/read=0/0 temp=1806719 qid=-6403750587481933158 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_role_total] role=rdsadmin calls=4607 total=76.0s mean=16.5ms p95~80.5ms max=354ms rows=4607 hit/read=0/0 temp=0 qid=2562360558915602188 q=SELECT count(*) FROM pg_show_all_settings() WHERE name = $1 AND setting SIMILAR TO $2
+PROBE [pgss_role_total] role=rdsadmin calls=6069024 total=63.0s mean=0.0ms p95~0.7ms max=215ms rows=0 hit/read=29/0 temp=0 qid=-1891554663970818548 q=SET statement_timeout=10000
+PROBE [pgss_role_mean] role=rdsadmin calls=25 total=0.4s mean=16.6ms p95~19.1ms max=20ms rows=1279 hit/read=0/0 temp=10302 qid=-4276966311259948639 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_role_mean] role=rdsadmin calls=4607 total=76.0s mean=16.5ms p95~80.5ms max=354ms rows=4607 hit/read=0/0 temp=0 qid=2562360558915602188 q=SELECT count(*) FROM pg_show_all_settings() WHERE name = $1 AND setting SIMILAR TO $2
+PROBE [pgss_role_mean] role=rdsadmin calls=18 total=0.3s mean=16.4ms p95~19.0ms max=20ms rows=1003 hit/read=0/0 temp=7405 qid=7651300653786171881 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_role_mean] role=rdsadmin calls=6 total=0.1s mean=15.9ms p95~16.7ms max=17ms rows=332 hit/read=0/0 temp=2459 qid=4525748318379553728 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_role_mean] role=rdsadmin calls=3842 total=45.1s mean=11.7ms p95~22.7ms max=35ms rows=192483 hit/read=0/0 temp=921289 qid=-8377007350423718061 q=select queryid, calls, (total_plan_time + total_exec_time) as total_time, rows, shared_blks_hit, shared_blks_dirtied, shared_blks_read, shared_blks_written, loc
+PROBE [pgss_role_total] role=crm_app calls=156869 total=262.9s mean=1.7ms p95~4.0ms max=89ms rows=156869 hit/read=58080759/620 temp=0 qid=-8160857788253416715 q=WITH d AS ( DELETE FROM crm.job WHERE kind = $1 AND status IN ($3, $4) AND finished_at < now() - make_interval(days => $2) RETURNING $5 ) SELECT count(*) FROM d
+PROBE [pgss_role_total] role=crm_app calls=341569 total=190.9s mean=0.6ms p95~6.5ms max=72ms rows=19 hit/read=234018383/0 temp=0 qid=5895800433230079014 q=SELECT p.proposal_id, p.trip_id, p.version, p.currency, p.accepted_hold_id, p.starts_on, p.room_config, t.party_adults, t.party_child_ages FROM crm.proposal p J
+PROBE [pgss_role_total] role=crm_app calls=1923527 total=103.1s mean=0.1ms p95~0.2ms max=30ms rows=1890195 hit/read=7332316/3 temp=0 qid=745070593527063262 q=SELECT status FROM crm.tenant WHERE tenant_id = $1 AND deleted_at IS NULL
+PROBE [pgss_role_total] role=crm_app calls=157414 total=33.0s mean=0.2ms p95~1.6ms max=108ms rows=100234 hit/read=1753770/207 temp=0 qid=-3657805736638556165 q=INSERT INTO crm.job (kind, payload, idempotency_key, max_attempts, created_by, run_after) VALUES ($1, $2::jsonb, $3, $4, $5, now() + make_interval(secs => $6)) 
+PROBE [pgss_role_total] role=crm_app calls=3445073 total=30.5s mean=0.0ms p95~0.0ms max=8ms rows=0 hit/read=0/0 temp=0 qid=-5283894138513878500 q=RESET ALL
+PROBE [pgss_role_mean] role=crm_app calls=2857 total=8.6s mean=3.0ms p95~12.9ms max=59ms rows=131370 hit/read=1099208/7741 temp=0 qid=1804658123386053045 q=UPDATE crm.aa_catalog_tour SET checked_at = now() WHERE source_system = $2 AND source_id = ANY($1::text[])
+PROBE [pgss_role_mean] role=crm_app calls=156869 total=262.9s mean=1.7ms p95~4.0ms max=89ms rows=156869 hit/read=58080759/620 temp=0 qid=-8160857788253416715 q=WITH d AS ( DELETE FROM crm.job WHERE kind = $1 AND status IN ($3, $4) AND finished_at < now() - make_interval(days => $2) RETURNING $5 ) SELECT count(*) FROM d
+PROBE [pgss_role_mean] role=crm_app calls=104 total=0.2s mean=1.5ms p95~4.4ms max=10ms rows=104 hit/read=3241/277 temp=0 qid=2202105157119327655 q=INSERT INTO crm.aa_catalog_tour (source_id, title, country_code, duration_days, content_hash, etag, served_state, reason, body, fetched_at, checked_at, state_ch
+PROBE [pgss_role_mean] role=crm_app calls=3915 total=4.8s mean=1.2ms p95~3.3ms max=31ms rows=3915 hit/read=292086/214 temp=0 qid=-2319016449691698660 q=SELECT coalesce(extract($1 FROM now() - (SELECT min(exported_until) FROM crm.audit_export_agencies())) / $2, $3)::float8 AS export_lag_min, coalesce((SELECT max
+PROBE [pgss_role_mean] role=crm_app calls=5 total=0.0s mean=1.1ms p95~4.9ms max=5ms rows=9 hit/read=60/29 temp=0 qid=-7237361777402123237 q=SELECT tt.traveler_id, tt.role, t.given_name_enc IS NOT NULL AND t.family_name_enc IS NOT NULL AND t.dob_enc IS NOT NULL AND t.nationality_enc IS NOT NULL AND t
+PROBE [pgss_role_total] role=cis_app calls=374316 total=309.6s mean=0.8ms p95~344.4ms max=45294ms rows=374316 hit/read=0/0 temp=0 qid=1238812706996916191 q=SELECT pg_advisory_xact_lock($1)
+PROBE [pgss_role_total] role=cis_app calls=1323 total=144.4s mean=109.1ms p95~183.6ms max=524ms rows=1323 hit/read=14649346/104000 temp=0 qid=2841780495399993343 q=SELECT coalesce(sum(cost_usd), $2)::float AS spent FROM shared.llm_call_log WHERE provider = $3 AND $1::date IS NOT NULL AND created_at >= $1::date
+PROBE [pgss_role_total] role=cis_app calls=6129391 total=47.7s mean=0.0ms p95~0.1ms max=51ms rows=0 hit/read=0/0 temp=0 qid=-5283894138513878500 q=RESET ALL
+PROBE [pgss_role_total] role=cis_app calls=6129391 total=23.8s mean=0.0ms p95~0.1ms max=31ms rows=6129391 hit/read=0/0 temp=0 qid=1122149222608758573 q=SELECT pg_advisory_unlock_all()
+PROBE [pgss_role_total] role=cis_app calls=555 total=19.7s mean=35.4ms p95~696.5ms max=6697ms rows=11722 hit/read=130186/35861 temp=6731 qid=-1239096050431151086 q=INSERT INTO shared.ai_usage_hourly (hour, source, app, provider, account, model, stage, role, tenant_id, status, error_class, traffic, requests, ledger_rows, fa
+PROBE [pgss_role_mean] role=cis_app calls=6 total=1.1s mean=182.3ms p95~192.7ms max=193ms rows=97218 hit/read=785207/403 temp=0 qid=-85985826470011345 q=UPDATE acp_contract.atom_ranking SET superseded_at = now() WHERE market = $1 AND superseded_at IS NULL AND version < $2
+PROBE [pgss_role_mean] role=cis_app calls=6 total=0.9s mean=153.0ms p95~184.9ms max=188ms rows=63162 hit/read=44127/3 temp=3102 qid=7486273179250024402 q=SELECT asg.segment_id, asg.canonical_place, asg.canonical_action, array_agg(DISTINCT ta.tour_id) AS tour_ids, COALESCE(SUM(LENGTH(COALESCE(ta.evidence, ta.text,
+PROBE [pgss_role_mean] role=cis_app calls=6 total=0.8s mean=136.7ms p95~290.1ms max=308ms rows=390 hit/read=296180/414 temp=0 qid=5206767337345401654 q=SELECT kind, status, count(*)::int AS n, coalesce(sum(j.cost_usd + (SELECT coalesce(sum(l.cost_usd), $1) FROM shared.llm_call_log l WHERE l.job_id = j.id)), $2)
+PROBE [pgss_role_mean] role=cis_app calls=1323 total=144.4s mean=109.1ms p95~183.6ms max=524ms rows=1323 hit/read=14649346/104000 temp=0 qid=2841780495399993343 q=SELECT coalesce(sum(cost_usd), $2)::float AS spent FROM shared.llm_call_log WHERE provider = $3 AND $1::date IS NOT NULL AND created_at >= $1::date
+PROBE [pgss_role_mean] role=cis_app calls=34 total=3.7s mean=108.5ms p95~628.7ms max=1241ms rows=933 hit/read=515133/4879 temp=0 qid=1797823588124962046 q=SELECT x.a::text AS a, x.b::text AS b, max($3 - (ta.embedding <=> tb.embedding)) AS cos FROM unnest($1::uuid[], $2::uuid[]) AS x(a, b) JOIN geo.tour_place ta ON
+PROBE [pgss_role_total] role=booking calls=1015634 total=27.1s mean=0.0ms p95~0.4ms max=102ms rows=19310 hit/read=1396575/113 temp=0 qid=2889662015665828565 q=UPDATE booking.job SET status = $4, attempt = attempt + $5, locked_by = $1, locked_until = now() + make_interval(secs => $3), started_at = coalesce(started_at, 
+PROBE [pgss_role_total] role=booking calls=1678864 total=20.7s mean=0.0ms p95~0.5ms max=131ms rows=0 hit/read=0/0 temp=0 qid=-5283894138513878500 q=RESET ALL
+PROBE [pgss_role_total] role=booking calls=61632 total=19.8s mean=0.3ms p95~6.2ms max=407ms rows=21759 hit/read=453567/519 temp=0 qid=-8248788943587415561 q=INSERT INTO booking.job (kind, payload, idempotency_key, max_attempts, created_by, run_after) VALUES ($1, $2::jsonb, $3, $4, $5, now() + make_interval(secs => $
+PROBE [pgss_role_total] role=booking calls=1678864 total=14.1s mean=0.0ms p95~0.6ms max=133ms rows=1678864 hit/read=0/0 temp=0 qid=1122149222608758573 q=SELECT pg_advisory_unlock_all()
+PROBE [pgss_role_total] role=booking calls=1678864 total=8.8s mean=0.0ms p95~0.4ms max=123ms rows=0 hit/read=0/0 temp=0 qid=-7424648664449177856 q=CLOSE ALL
+PROBE [pgss_role_mean] role=booking calls=419 total=8.3s mean=19.7ms p95~27.9ms max=52ms rows=373748 hit/read=1510273/0 temp=0 qid=-4452642439336243179 q=SELECT DISTINCT source_id FROM catalog.v_tour WHERE source_system = $1 ORDER BY source_id
+PROBE [pgss_role_mean] role=booking calls=419 total=2.8s mean=6.7ms p95~8.9ms max=19ms rows=890 hit/read=1129242/3 temp=0 qid=-8203656840544381629 q=INSERT INTO booking.trip_plans (source_system, source_id, sellable, synced_at) SELECT $2, k, $3, now() FROM unnest($1::text[]) AS k ON CONFLICT (source_system, 
+PROBE [pgss_role_mean] role=booking calls=419 total=1.9s mean=4.4ms p95~6.1ms max=14ms rows=256009 hit/read=470452/2 temp=0 qid=-8768859835368093019 q=SELECT source_id, price_raw FROM catalog.v_tour_price_reference_v1 WHERE source_system = $1
+PROBE [pgss_role_mean] role=booking calls=419 total=0.2s mean=0.6ms p95~0.8ms max=2ms rows=373748 hit/read=12148/0 temp=0 qid=2039739270456456203 q=SELECT source_id, reference_price_raw FROM booking.trip_plans WHERE source_system = $1
+PROBE [pgss_role_mean] role=booking calls=61632 total=19.8s mean=0.3ms p95~6.2ms max=407ms rows=21759 hit/read=453567/519 temp=0 qid=-8248788943587415561 q=INSERT INTO booking.job (kind, payload, idempotency_key, max_attempts, created_by, run_after) VALUES ($1, $2::jsonb, $3, $4, $5, now() + make_interval(secs => $
+PROBE [pgss_role_total] role=tripplanner calls=119 total=2.0s mean=16.6ms p95~42.0ms max=68ms rows=29490 hit/read=296870/0 temp=0 qid=1647982092651464314 q=SELECT d.destination_id AS id, d.name, d.lat, d.lng, d.located_by, d.precision, d.shape_kind, d.shape_status, d.length_km, d.min_lat, d.min_lng, d.max_lat, d.ma
+PROBE [pgss_role_total] role=tripplanner calls=33598 total=1.6s mean=0.0ms p95~0.3ms max=8ms rows=1002 hit/read=120181/0 temp=0 qid=-7893696258217098374 q=SELECT tenant_id, slug, name, kind, served, in_service, crm_core, lead_channel, lead_webhook_url, lead_email FROM catalog.v_tenant_tripplanner_v1 WHERE tenant_i
+PROBE [pgss_role_total] role=tripplanner calls=33668 total=0.4s mean=0.0ms p95~0.0ms max=2ms rows=33668 hit/read=0/0 temp=0 qid=5405729535900574943 q=SELECT set_config($2, $1, $3)
+PROBE [pgss_role_total] role=tripplanner calls=34450 total=0.3s mean=0.0ms p95~0.1ms max=3ms rows=0 hit/read=0/0 temp=0 qid=-5283894138513878500 q=RESET ALL
+PROBE [pgss_role_total] role=tripplanner calls=33656 total=0.3s mean=0.0ms p95~0.1ms max=7ms rows=0 hit/read=0/0 temp=0 qid=3644117482298883270 q=RESET app.tenant_id
+PROBE [pgss_role_mean] role=tripplanner calls=119 total=2.0s mean=16.6ms p95~42.0ms max=68ms rows=29490 hit/read=296870/0 temp=0 qid=1647982092651464314 q=SELECT d.destination_id AS id, d.name, d.lat, d.lng, d.located_by, d.precision, d.shape_kind, d.shape_status, d.length_km, d.min_lat, d.min_lng, d.max_lat, d.ma
+PROBE [pgss_role_mean] role=tripplanner calls=1008 total=0.1s mean=0.1ms p95~0.5ms max=4ms rows=1008 hit/read=5186/13 temp=0 qid=-4792516651212066752 q=INSERT INTO tripplanner.ai_rate_counter (key_hash, window_start, count) VALUES ($1, to_timestamp(floor(extract($3 FROM now()) / $2::int) * $2::int), $4) ON CONF
+PROBE [pgss_role_mean] role=tripplanner calls=33598 total=1.6s mean=0.0ms p95~0.3ms max=8ms rows=1002 hit/read=120181/0 temp=0 qid=-7893696258217098374 q=SELECT tenant_id, slug, name, kind, served, in_service, crm_core, lead_channel, lead_webhook_url, lead_email FROM catalog.v_tenant_tripplanner_v1 WHERE tenant_i
+PROBE [pgss_role_mean] role=tripplanner calls=1000 total=0.0s mean=0.0ms p95~0.0ms max=0ms rows=1 hit/read=3449/0 temp=0 qid=-5385469074387474762 q=SELECT id, payload FROM tripplanner.outbox WHERE event = $3 AND delivery_channel = $4 AND delivered_at IS NULL AND redacted_at IS NULL AND tenant_id = $1 ORDER 
+PROBE [pgss_role_mean] role=tripplanner calls=33668 total=0.4s mean=0.0ms p95~0.0ms max=2ms rows=33668 hit/read=0/0 temp=0 qid=5405729535900574943 q=SELECT set_config($2, $1, $3)
+PROBE [pgss_role_total] role=aa_cis_admin calls=1 total=0.2s mean=206.1ms p95~206.1ms max=206ms rows=1 hit/read=4552/1672 temp=0 qid=-5081321844574539672 q=SELECT min(created_at) AS oldest, count(*) FILTER (WHERE created_at > now() - interval $1) AS last30, count(*) FILTER (WHERE created_at > now() - interval $2) A
+PROBE [pgss_role_total] role=aa_cis_admin calls=1 total=0.2s mean=183.2ms p95~183.2ms max=183ms rows=1 hit/read=6778/1906 temp=0 qid=6691074583090067677 q=SELECT min(created_at) AS oldest, count(*) FILTER (WHERE created_at > now() - interval $1) AS last30, count(*) FILTER (WHERE created_at > now() - interval $2) A
+PROBE [pgss_role_total] role=aa_cis_admin calls=1 total=0.2s mean=173.8ms p95~173.8ms max=174ms rows=12 hit/read=35172/136 temp=0 qid=-669427053512782936 q=SELECT n.nspname AS schema, count(*) AS tables, sum(pg_total_relation_size(c.oid)) AS total, sum(pg_relation_size(c.oid)) AS heap, sum(pg_indexes_size(c.oid)) A
+PROBE [pgss_role_total] role=aa_cis_admin calls=6 total=0.1s mean=22.6ms p95~25.0ms max=25ms rows=30 hit/read=6/0 temp=2933 qid=1095669671625034351 q=SELECT r.rolname AS role, s.calls, s.total_exec_time AS total_ms, s.mean_exec_time AS mean_ms, s.stddev_exec_time AS sd_ms, s.max_exec_time AS max_ms, s.rows, s
+PROBE [pgss_role_total] role=aa_cis_admin calls=6 total=0.1s mean=21.3ms p95~21.5ms max=21ms rows=30 hit/read=6/0 temp=2934 qid=1813678067337155982 q=SELECT r.rolname AS role, s.calls, s.total_exec_time AS total_ms, s.mean_exec_time AS mean_ms, s.stddev_exec_time AS sd_ms, s.max_exec_time AS max_ms, s.rows, s
+PROBE [pgss_role_mean] role=aa_cis_admin calls=7 total=0.2s mean=22.5ms p95~24.8ms max=25ms rows=35 hit/read=7/0 temp=3422 qid=1095669671625034351 q=SELECT r.rolname AS role, s.calls, s.total_exec_time AS total_ms, s.mean_exec_time AS mean_ms, s.stddev_exec_time AS sd_ms, s.max_exec_time AS max_ms, s.rows, s
+PROBE [pgss_role_mean] role=aa_cis_admin calls=6 total=0.1s mean=21.3ms p95~21.5ms max=21ms rows=30 hit/read=6/0 temp=2934 qid=1813678067337155982 q=SELECT r.rolname AS role, s.calls, s.total_exec_time AS total_ms, s.mean_exec_time AS mean_ms, s.stddev_exec_time AS sd_ms, s.max_exec_time AS max_ms, s.rows, s
+PROBE [pgss_role_mean] role=aa_cis_admin calls=6 total=0.0s mean=0.7ms p95~0.8ms max=1ms rows=0 hit/read=126/0 temp=0 qid=6359265354453767936 q=EXPLAIN (VERBOSE, FORMAT JSON) SELECT n_live_tup FROM pg_catalog.pg_stat_user_tables WHERE schemaname = $1 AND relname = $2
+PROBE [pgss_role_mean] role=aa_cis_admin calls=7 total=0.0s mean=0.5ms p95~0.6ms max=1ms rows=0 hit/read=0/0 temp=0 qid=5395933396049655184 q=EXPLAIN (VERBOSE, FORMAT JSON) SELECT r.rolname AS role, s.calls, s.total_exec_time AS total_ms, s.mean_exec_time AS mean_ms, s.stddev_exec_time AS sd_ms, s.max
+PROBE [pgss_role_mean] role=aa_cis_admin calls=7 total=0.0s mean=0.5ms p95~0.5ms max=1ms rows=0 hit/read=0/0 temp=0 qid=-8360216992719961086 q=EXPLAIN (VERBOSE, FORMAT JSON) SELECT r.rolname AS role, s.calls, s.total_exec_time AS total_ms, s.mean_exec_time AS mean_ms, s.stddev_exec_time AS sd_ms, s.max
+PROBE [pgss_role_total] role=db_migrator calls=65 total=0.1s mean=1.6ms p95~2.3ms max=2ms rows=4850 hit/read=17200/0 temp=0 qid=6298617331357342729 q=SELECT kind, name FROM ( SELECT $2 AS kind, d.datname::text AS name, d.datdba AS owner FROM pg_catalog.pg_database d WHERE d.datname = pg_catalog.current_databa
+PROBE [pgss_role_total] role=db_migrator calls=65 total=0.0s mean=0.2ms p95~0.4ms max=1ms rows=65 hit/read=680/0 temp=0 qid=7307658445638762782 q=SELECT rolname, rolcanlogin AS login, rolsuper AS super, rolbypassrls AS bypassrls, rolcreaterole AS createrole, rolcreatedb AS createdb, rolreplication AS repl
+PROBE [pgss_role_total] role=db_migrator calls=65 total=0.0s mean=0.0ms p95~0.1ms max=0ms rows=20 hit/read=235/0 temp=0 qid=-701541266226884869 q=WITH RECURSIVE ch(roleid, depth, path) AS ( SELECT m.roleid, $2, ARRAY[r.oid] FROM pg_catalog.pg_auth_members m JOIN pg_catalog.pg_roles r ON r.oid = m.member W
+PROBE [pgss_role_total] role=db_migrator calls=93 total=0.0s mean=0.0ms p95~0.0ms max=0ms rows=93 hit/read=294/0 temp=0 qid=-8579966083746900816 q=SELECT pg_catalog.to_regclass($1) IS NOT NULL
+PROBE [pgss_role_total] role=db_migrator calls=65 total=0.0s mean=0.0ms p95~0.0ms max=0ms rows=70 hit/read=150/0 temp=0 qid=9101127138143048566 q=SELECT pg_catalog.pg_get_userbyid(m.member)::text AS role FROM pg_catalog.pg_auth_members m JOIN pg_catalog.pg_roles r ON r.oid = m.roleid WHERE r.rolname = $1 
+PROBE [pgss_role_mean] role=db_migrator calls=65 total=0.1s mean=1.6ms p95~2.3ms max=2ms rows=4850 hit/read=17200/0 temp=0 qid=6298617331357342729 q=SELECT kind, name FROM ( SELECT $2 AS kind, d.datname::text AS name, d.datdba AS owner FROM pg_catalog.pg_database d WHERE d.datname = pg_catalog.current_databa
+PROBE [pgss_role_mean] role=db_migrator calls=65 total=0.0s mean=0.2ms p95~0.4ms max=1ms rows=65 hit/read=680/0 temp=0 qid=7307658445638762782 q=SELECT rolname, rolcanlogin AS login, rolsuper AS super, rolbypassrls AS bypassrls, rolcreaterole AS createrole, rolcreatedb AS createdb, rolreplication AS repl
+PROBE [pgss_role_mean] role=db_migrator calls=65 total=0.0s mean=0.0ms p95~0.1ms max=0ms rows=20 hit/read=235/0 temp=0 qid=-701541266226884869 q=WITH RECURSIVE ch(roleid, depth, path) AS ( SELECT m.roleid, $2, ARRAY[r.oid] FROM pg_catalog.pg_auth_members m JOIN pg_catalog.pg_roles r ON r.oid = m.member W
+PROBE [pgss_role_mean] role=db_migrator calls=65 total=0.0s mean=0.0ms p95~0.0ms max=0ms rows=70 hit/read=150/0 temp=0 qid=9101127138143048566 q=SELECT pg_catalog.pg_get_userbyid(m.member)::text AS role FROM pg_catalog.pg_auth_members m JOIN pg_catalog.pg_roles r ON r.oid = m.roleid WHERE r.rolname = $1 
+PROBE [pgss_role_mean] role=db_migrator calls=93 total=0.0s mean=0.0ms p95~0.0ms max=0ms rows=93 hit/read=294/0 temp=0 qid=-8579966083746900816 q=SELECT pg_catalog.to_regclass($1) IS NOT NULL
+PROBE [pgss] statements with calls>=20 and mean>200ms: 0
+PROBE [sli] cis_tenant_reads stmts=79 calls=6323 mean=1.9ms worst_stmt_p95~169.8ms
+PROBE [sli] cis_tenant_versions stmts=22 calls=2010 mean=4.9ms worst_stmt_p95~59.3ms
+PROBE [sli] catalog_views stmts=13 calls=121954 mean=16.9ms worst_stmt_p95~665.7ms
+PROBE [sli] cis_admin_usage stmts=3 calls=274 mean=0.1ms worst_stmt_p95~0.2ms
+PROBE [sli] cis_llm_cost_aggregates stmts=29 calls=18888 mean=9.3ms worst_stmt_p95~696.5ms
+PROBE [sli] cis_job_claim stmts=2 calls=374497 mean=0.8ms worst_stmt_p95~344.4ms
+PROBE [sli] booking_trip_cases stmts=0 calls=None mean=0.0ms worst_stmt_p95~0.0ms
+PROBE [sli] booking_customers stmts=0 calls=None mean=0.0ms worst_stmt_p95~0.0ms
+PROBE [sli] tp_outbox stmts=1 calls=1000 mean=0.0ms worst_stmt_p95~0.0ms
+PROBE [done]

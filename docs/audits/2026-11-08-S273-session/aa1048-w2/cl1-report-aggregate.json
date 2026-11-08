@@ -1,0 +1,106 @@
+{
+ "rows": 450,
+ "claims": 150,
+ "by_labeller_kind": {
+  "agent_panel": 450
+ },
+ "by_lens": {
+  "promise": 150,
+  "skeptic": 150,
+  "source": 150
+ },
+ "by_label": {
+  "ok": 408,
+  "unsure": 15,
+  "violation": 27
+ },
+ "by_adjudication": {
+  "agreed": 198,
+  "audit": 51,
+  "disputed": 201
+ },
+ "by_split": {
+  "held_out": 72,
+  "train": 378
+ },
+ "manifest": {
+  "set_id": "CL-1",
+  "set_version": "1.0.0",
+  "rows": 450,
+  "claims": 150,
+  "objects": 43,
+  "writers": [
+   "t9_blog",
+   "t9_social"
+  ],
+  "policy_sha": [
+   "1c3ec88417b63426601a22abe06fbecf02d232e32d2aaa010ff812fdaf2bcbdf"
+  ],
+  "evidence_sources": {
+   "panel_agreed": 83,
+   "none": 67
+  },
+  "splits": {
+   "train": 126,
+   "held_out": 24
+  },
+  "labels_by_class": {
+   "fact.direction": {
+    "ok": 3,
+    "unsure": 2
+   },
+   "fact.embellish": {
+    "unsure": 15,
+    "ok": 30,
+    "violation": 2
+   },
+   "fact.inclusion": {
+    "ok": 6,
+    "unsure": 10,
+    "violation": 1
+   },
+   "fact.misbinding": {
+    "unsure": 5,
+    "ok": 3
+   },
+   "fact.name": {
+    "ok": 2,
+    "unsure": 1
+   },
+   "fact.number": {
+    "ok": 20
+   },
+   "other.c5": {
+    "unsure": 4,
+    "ok": 1
+   },
+   "other.f6": {
+    "ok": 3,
+    "unsure": 3
+   },
+   "other.f7": {
+    "unsure": 1,
+    "ok": 2
+   },
+   "other.s7": {
+    "unsure": 1
+   },
+   "scope.faq_question_offtopic": {
+    "unsure": 5,
+    "ok": 2
+   },
+   "scope.framing": {
+    "unsure": 8
+   },
+   "scope.persona_promise": {
+    "ok": 6,
+    "unsure": 7
+   },
+   "struct.day_structure": {
+    "unsure": 5,
+    "ok": 2
+   }
+  },
+  "digest": "0f4f48f14cd348d1a903d72a6d8e67542b27c3edb36ba56b9d922992ef7d22a8"
+ }
+}
