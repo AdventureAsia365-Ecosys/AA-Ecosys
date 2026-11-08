@@ -23,7 +23,7 @@ live: §3. Công cụ và mã thoát: `tools/github/README.md` (AA-1032).
     `gate`/`waitcopy`/`restack` cũ đã có bản tool ở trên.
 - Train **dừng ở bước đỏ đầu tiên** (mã thoát khác 0) và báo; điều phối đọc `.txt`, sửa, chạy lại phần còn lại (tool
   bỏ qua PR đã merge). Mọi lần chờ có timeout; tool tự poll (≥ 30 s mỗi vòng), không `gh run watch` trần.
-- Phiên MFA 8 h: tool cảnh báo khi còn < 30 phút (train: < 60 phút) vì `as-app.sh` cần MFA ở mỗi lần push/merge.
+- Phiên MFA 12 h (role `nghiep-admin-12h`): tool cảnh báo khi còn < 30 phút (train: < 60 phút) vì `as-app.sh` cần MFA ở mỗi lần push/merge.
 
 ## Thứ tự merge từng repo
 
