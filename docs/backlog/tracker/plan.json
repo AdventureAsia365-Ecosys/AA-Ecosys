@@ -483,7 +483,7 @@
   {
    "due": "S273",
    "issue": "AA-1038",
-   "text": "S272: apply LOCAL MFA Infra #721 (kênh lead) rồi #722 (TripPlanner web: bootstrap ECR grant → Terraform Apply) → biến repo TP → merge TP #236 → scale 1 → kiểm qua CloudFront (runbook tripplanner-web-ecs-cutover) → lead E2E planner → CRM tenant → (duyệt) chuyển DNS → gỡ Vercel aa-tripplanner; root #616 sau #721"
+   "text": "S272 (xong 08/11: #721/#722/#726 apply, DNS → CloudFront/ECS, Vercel aa-tripplanner đã xoá). Còn: lead E2E planner → CRM tenant (bật kênh CRM trên Tenant 360 cho tenant thử), lọc crm_tp_lead_pull theo add-on TripPlanner (58 đại lý 404 unknown_tenant), đọc Cost Explorer sau vài ngày"
   },
   {
    "due": "S273",
@@ -905,7 +905,8 @@
     "AA-1038 R5 lát 3 live: lead.submitted.v1 → CRM đại lý (kéo qua M2M, chờ Infra #721), thương hiệu tenant, trần AI; CIS 390 + tp-026; lát hosting: runbook + Infra #722 / TP #236 nháp",
     "AA-911: gỡ Vercel aa-cis-frontend + aa-booking-admin, apex → ALB, secret cầu nối lên lịch xoá; còn A10 tới go-live",
     "AA-1040 header X-AI (CIS #1366, Partner #242); AA-1024 guard bài học + công cụ PR (GIT_DIR, 900 s, lý do push lỗi)",
-    "Nháp Jira S272 gom sang S273 (tech lead dặn)"
+    "Nháp Jira S272 gom sang S273 (tech lead dặn)",
+    "08/11 chiều: Infra #721/#722/#726 apply, DNS TripPlanner → CloudFront/ECS (#727/#728), Vercel aa-tripplanner + VERCEL_TOKEN đã xoá"
    ]
   },
   {
