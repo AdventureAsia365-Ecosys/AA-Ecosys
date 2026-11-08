@@ -1,0 +1,37 @@
+{
+ "excluded_s1": {
+  "s1_figures_cap_per_tour": {
+   "max": 29,
+   "mean": 0.053,
+   "n": 917,
+   "p50": 0,
+   "p90": 0,
+   "with_any": 5
+  }
+ },
+ "issue": "AA-1047",
+ "measure": "pointers",
+ "pointers": {
+  "active_sources": 917,
+  "bar_met": false,
+  "builder_errors": {},
+  "by_section": {
+   "numbers": 35
+  },
+  "failing_tour_ids": [
+   "2aa6e292-c82c-4380-a87e-1585933ff3df",
+   "52d03b6b-d7f6-4f7c-a78e-82301a134925",
+   "5757885f-94ae-48bf-893b-206b306ceeaf",
+   "6bf91a8b-aa6d-415a-8a70-70d46e5410b1",
+   "7272b17f-e1c0-4755-bec4-c1f2998ad627",
+   "9cf4b325-60ef-4a69-a5fb-f4a6fbbe7d1a",
+   "ad8dbf20-29b8-4da5-9599-775c9294780c",
+   "c87812bd-98d1-449e-8901-0bfd63510289",
+   "d7e44900-1499-4a9b-9052-465249ac16ec",
+   "ec16a4de-7220-468f-a291-0ff0ddac5af3",
+   "f1b72498-9ee2-4fa6-8835-18076f87b38d"
+  ],
+  "pointer_failures": 35,
+  "sources_with_failures": 11
+ }
+}

@@ -1,0 +1,53 @@
+{
+ "issue": "AA-1047",
+ "master_drift": {
+  "active_masters": 892,
+  "blocking": 232,
+  "blocking_classes": [
+   "number",
+   "name",
+   "inclusion",
+   "day_structure"
+  ],
+  "blocking_rate": 0.2601,
+  "check_errors": {},
+  "checked": 892,
+  "fact_findings_per_master": {
+   "max": 12,
+   "mean": 0.509,
+   "n": 892,
+   "p50": 0,
+   "p90": 2,
+   "with_any": 232
+  },
+  "findings_by_class": {
+   "day_structure": 87,
+   "inclusion": 16,
+   "meta": 19,
+   "name": 289,
+   "number": 62
+  },
+  "findings_by_code": {
+   "DAY_COUNT_VS_DURATION": 3,
+   "DAY_DEPARTURE_MIDTRIP": 13,
+   "DAY_PLACE_MISMATCH": 62,
+   "DAY_SUBDAY_SPLIT": 1,
+   "INCLUSION_CONTRADICTED": 16,
+   "META_CUT": 17,
+   "META_LENGTH": 2,
+   "NAME_NOT_IN_SOURCE": 289,
+   "NUMBER_NOT_IN_SOURCE": 22,
+   "NUMBER_NOUN_MISMATCH": 40,
+   "SOURCE_DAY_CONTRADICTION": 8
+  },
+  "human_edited": 0,
+  "masters_by_fact_class": {
+   "day_structure": 72,
+   "inclusion": 10,
+   "name": 151,
+   "number": 49
+  },
+  "tune_provenance_before_w3": true
+ },
+ "measure": "drift"
+}

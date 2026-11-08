@@ -163,6 +163,43 @@ footer code { font-family: var(--mono); font-size: 12.5px }
 @media (max-width: 560px) { .srow { grid-template-columns: 22px 1fr } .srow .ref { grid-column: 2; text-align: left } }
 details.sdetail summary { cursor: pointer; font-weight: 600; color: var(--muted) }
 
+/* S272: Gantt (milestone windows + open issues per app over the session axis), between the stats and the tabs */
+.pill.done { background: var(--ok-soft); color: var(--ok) }
+.gsec { display: grid; gap: 10px; min-width: 0 }
+.g-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); align-items: center }
+.g-legend i { display: inline-block; width: 14px; height: 10px; border-radius: 3px; vertical-align: -1px; margin-right: 5px; border: 1px solid var(--line) }
+.gantt { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface) }
+.g-grid { display: grid; min-width: 1040px; position: relative }
+.g-grid > * { min-width: 0 }
+.g-lab { position: sticky; left: 0; z-index: 2; background: var(--surface); padding: 5px 10px; font-size: 13px; border-right: 1px solid var(--line);
+  display: grid; align-content: center; gap: 1px; line-height: 1.3 }
+.g-lab b { font: 600 12.5px var(--mono); color: var(--accent) }
+.g-lab small { color: var(--muted); font-size: 11.5px }
+.g-head { font: 500 11.5px/1.25 var(--mono); color: var(--muted); text-align: center; padding: 8px 2px 6px; border-bottom: 1px solid var(--line) }
+.g-head small { display: block; font-size: 10.5px }
+.g-head.now { color: var(--accent); font-weight: 700 }
+.g-sec { grid-column: 1 / -1; font: 600 11.5px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+  background: var(--sunk); padding: 5px 10px; position: sticky; left: 0 }
+.g-now { background: var(--accent-soft); opacity: .55; pointer-events: none; z-index: 0 }
+.g-cell { z-index: 1; padding: 4px 2px; display: flex; align-items: center }
+.g-bar { position: relative; width: 100%; height: 24px; border-radius: 5px; border: 1px solid var(--line); background: var(--sunk); overflow: hidden;
+  font: 500 11.5px/22px var(--mono); color: var(--fg); padding: 0 6px; white-space: nowrap; text-overflow: ellipsis; cursor: default }
+.g-bar u { position: absolute; left: 0; bottom: 0; height: 4px; text-decoration: none; background: var(--muted) }
+.g-bar.done { background: var(--ok-soft); border-color: transparent } .g-bar.done u { background: var(--ok) }
+.g-bar.active { background: var(--info-soft); border-color: transparent } .g-bar.active u { background: var(--info) }
+.g-bar.next { background: var(--accent-soft); border-color: transparent } .g-bar.next u { background: var(--accent) }
+.g-bar.blocked { background: var(--warn-soft); border-color: transparent } .g-bar.blocked u { background: var(--warn) }
+.g-chip { display: block; width: 100%; text-align: center; font: 600 11px/20px var(--mono); border-radius: 4px; text-decoration: none;
+  color: var(--fg); background: var(--sunk); border: 1px solid var(--line); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.g-chip.prog { background: var(--info-soft); color: var(--info); border-color: transparent }
+.g-chip.rev { background: var(--accent-soft); color: var(--accent); border-color: transparent }
+.g-chip.more { color: var(--muted); font-weight: 500 }
+.g-tip { position: fixed; z-index: 50; max-width: 340px; background: var(--fg); color: var(--bg); font-size: 12.5px; line-height: 1.45;
+  padding: 8px 10px; border-radius: 7px; pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,.18) }
+.g-tip b { font-family: var(--mono) }
+@media (forced-colors: active) { .g-bar u { background: CanvasText } .g-now { background: Highlight } }
+@media (max-width: 560px) { .g-lab .nm { display: none } .g-lab { font-size: 12px; padding: 4px 6px } }
+
 @media (prefers-reduced-motion: no-preference) { .bar i { transition: width .4s ease } }
 </style>
 
@@ -172,6 +209,12 @@ details.sdetail summary { cursor: pointer; font-weight: 600; color: var(--muted)
     <h1>Master Plan — CIS, TripPlanner, Booking, CRM</h1>
     <div class="meta" id="meta"><span>Đang tải dữ liệu…</span></div>
     <div class="stats" id="stats"></div>
+    <section class="gsec" aria-labelledby="h-gantt">
+      <div class="sec-head"><h2 id="h-gantt">Tiến độ theo mốc và app</h2><span class="muted" id="g-sub"></span></div>
+      <div class="g-legend" id="g-legend"></div>
+      <div class="gantt"><div class="g-grid" id="gantt"></div></div>
+    </section>
+    <div class="g-tip" id="g-tip" hidden></div>
     <div class="tabs" role="tablist" aria-label="Chế độ xem">
       <button role="tab" id="tab-plan" aria-selected="true" aria-controls="view-plan">Kế hoạch tổng thể</button>
       <button role="tab" id="tab-ses" aria-selected="false" aria-controls="view-ses">Phiên (checklist sống)</button>
@@ -254,7 +297,7 @@ details.sdetail summary { cursor: pointer; font-weight: 600; color: var(--muted)
   var LANES = ["S265","S266","S267","S268","S269","S270","S271","S272","S273","S274","S275","S276","S277","S278","S279","S280"];
   var PRI = { Urgent: 0, High: 1, Medium: 2, Low: 3, None: 4, "No priority": 4 };
   var MS_ORDER = ["M-R0","M1b","M-R1","M-R3","M-R2","M-P1","M-R4","M-P2","M-R6","M-R7","M2a","M5","CRM-after-R3","later","parked"];
-  var STATUS_VI = { active: "đang làm", next: "kế tiếp", blocked: "chờ quyết định", later: "sau" };
+  var STATUS_VI = { active: "đang làm", next: "kế tiếp", blocked: "chờ quyết định", later: "sau", done: "xong" };
   var data, sortKey = "milestone", sortDir = 1;
 
   function $(id) { return document.getElementById(id) }
@@ -314,8 +357,105 @@ details.sdetail summary { cursor: pointer; font-weight: 600; color: var(--muted)
     }).join("") + '<div class="muted" style="font-size:13px">Chú thích: <span class="tag c">Done</span> <span class="tag x">Canceled</span> <span class="tag r">Mở lại</span> <span class="tag n">Mới</span></div>';
 
     $("src").textContent = "Nguồn: " + data.source;
+    renderGantt();
     fillFilters(); renderRows();
   }
+
+  // S272: Gantt. Columns = the session lanes + one "after / date-gated" column. Milestone bars span the S-numbers of
+  // their window (a window with "≥", "từ ngày" or "go-live" runs to the last column; "sau S…" or no S-number sits in
+  // the last column only); the bottom strip is criteria done / total. Each open issue is a chip in its session slot
+  // per app project; issues slotted outside the lanes are counted in the last column.
+  function renderGantt() {
+    var I = data.issues, cols = LANES.length + 1, LAST = cols + 1, rows = [], r = 1;
+    var nowIdx = LANES.indexOf(data.session);
+    var dateOf = {}; (data.log || []).forEach(function (e) { if (e.session && e.date) dateOf[e.session] = e.date.slice(0, 5) });
+    function cell(html, col, span, cls, extra) {
+      return '<div class="' + cls + '" style="grid-row:' + r + ";grid-column:" + col + (span ? " / span " + span : "") + (extra || "") + '">' + html + "</div>";
+    }
+    // header
+    rows.push(cell("Phiên", 1, 0, "g-lab g-head", ";text-align:left"));
+    LANES.forEach(function (L, i) {
+      rows.push(cell(esc(L) + "<small>" + esc(dateOf[L] || (i === nowIdx ? "hiện tại" : "")) + "</small>", i + 2, 0, "g-head" + (i === nowIdx ? " now" : "")));
+    });
+    rows.push(cell("Sau S280<small>theo ngày / trigger</small>", LAST, 0, "g-head")); r++;
+
+    // milestones
+    rows.push(cell("Mốc (Done-when)", 1, 0, "g-sec", ";grid-column:1 / -1")); r++;
+    var doneMs = 0, shownMs = 0;
+    data.milestones.forEach(function (m) {
+      if (m.id === "parked") return;
+      shownMs++;
+      var d = m.criteria.filter(function (c) { return c.done }).length, n = m.criteria.length, w = m.window || "";
+      var st = d === n && n ? "done" : m.status; if (st === "done") doneMs++;
+      var nums = (w.match(/S(\d{3})/g) || []).map(function (s) { return LANES.indexOf(s) }).filter(function (x) { return x >= 0 });
+      var start, end;
+      if (/sau S\d{3}/i.test(w) || !nums.length) { start = LAST; end = LAST }
+      else { start = Math.min.apply(null, nums) + 2; end = Math.max.apply(null, nums) + 2; if (/≥|từ ngày|go-live/i.test(w)) end = LAST }
+      rows.push(cell("<b>" + esc(m.id) + '</b><span class="nm">' + esc(m.name) + "</span>", 1, 0, "g-lab"));
+      var tip = "<b>" + esc(m.id) + "</b> " + esc(m.name) + "<br>" + d + "/" + n + " tiêu chí · " + esc(STATUS_VI[st] || st) + "<br>Cửa sổ: " + esc(w);
+      rows.push(cell('<div class="g-bar ' + esc(st) + '" tabindex="0" data-tip="' + esc(tip) + '" aria-label="' + esc(m.id + ": " + d + " trên " + n + " tiêu chí, " + (STATUS_VI[st] || st)) + '">' +
+        d + "/" + n + (end > start ? " · " + esc(STATUS_VI[st] || st) : "") + '<u style="width:' + (n ? Math.round(100 * d / n) : 0) + '%"></u></div>', start, end - start + 1, "g-cell"));
+      r++;
+    });
+
+    // open issues per app project
+    rows.push(cell("Issue mở theo app (chip = slot phiên)", 1, 0, "g-sec", ";grid-column:1 / -1")); r++;
+    Object.keys(data.projects).forEach(function (pk) {
+      var mine = I.filter(function (x) { return x.project === pk });
+      if (!mine.length) return;
+      var byCol = {}, later = [];
+      mine.forEach(function (x) { var i = LANES.indexOf(laneOf(x.session)); if (i < 0) later.push(x); else (byCol[i] = byCol[i] || []).push(x) });
+      var depth = Math.max(1, Object.keys(byCol).reduce(function (a, k) { return Math.max(a, byCol[k].length) }, 0));
+      var prog = mine.filter(function (x) { return x.status === "In Progress" }).length, rev = mine.filter(function (x) { return x.status === "In Review" }).length;
+      rows.push(cell("<span>" + esc(data.projects[pk]) + "</span><small>" + mine.length + " mở · " + prog + " đang làm · " + rev + " chờ review</small>", 1, 0, "g-lab", ";grid-row:" + r + " / span " + depth));
+      for (var k = 0; k < depth; k++) {
+        Object.keys(byCol).forEach(function (ci) {
+          var x = byCol[ci][k]; if (!x) return;
+          var cls = x.status === "In Progress" ? " prog" : x.status === "In Review" ? " rev" : "";
+          var tip = "<b>" + esc(x.id) + "</b> · " + esc(x.status) + " · " + esc(x.session) + "<br>" + esc(x.title) + (x.next ? "<br>" + esc(x.next) : "");
+          rows.push('<div class="g-cell" style="grid-row:' + (r + k) + ";grid-column:" + (+ci + 2) + '"><a class="g-chip' + cls + '" href="' + LINEAR + esc(x.id) + '" target="_blank" rel="noopener" data-tip="' + esc(tip) + '">' + esc(x.id.replace("AA-", "")) + "</a></div>");
+        });
+      }
+      if (later.length) {
+        var tipL = "<b>" + later.length + " issue sau S280 / theo ngày</b><br>" + later.map(function (x) { return esc(x.id) + " · " + esc(x.session) }).join("<br>");
+        rows.push('<div class="g-cell" style="grid-row:' + r + ";grid-column:" + LAST + '"><span class="g-chip more" tabindex="0" data-tip="' + esc(tipL) + '">+' + later.length + "</span></div>");
+      }
+      r += depth;
+    });
+    // the current session column, behind every row
+    if (nowIdx >= 0) rows.unshift('<div class="g-now" style="grid-row:1 / ' + r + ";grid-column:" + (nowIdx + 2) + '"></div>');
+    var g = $("gantt");
+    var narrow = window.matchMedia && matchMedia("(max-width: 560px)").matches;
+    g.style.gridTemplateColumns = (narrow ? "110px" : "minmax(190px, 230px)") + " repeat(" + cols + ", minmax(46px, 1fr))";
+    g.style.gridTemplateRows = "repeat(" + (r - 1) + ", auto)";
+    g.innerHTML = rows.join("");
+    // narrow screens: open the chart scrolled so the current session column is in view
+    var nowEl = g.querySelector(".g-now"), lab = g.querySelector(".g-lab");
+    if (nowEl && lab && g.parentNode.clientWidth < g.scrollWidth) g.parentNode.scrollLeft = Math.max(0, nowEl.offsetLeft - lab.offsetWidth - 2 * nowEl.offsetWidth);
+    $("g-sub").textContent = doneMs + "/" + shownMs + " mốc xong · phiên hiện tại " + data.session;
+    $("g-legend").innerHTML = '<span><i style="background:var(--ok-soft);border-color:var(--ok)"></i>Mốc xong</span>' +
+      '<span><i style="background:var(--info-soft);border-color:var(--info)"></i>Mốc đang làm</span>' +
+      '<span><i style="background:var(--accent-soft);border-color:var(--accent)"></i>Mốc kế tiếp</span>' +
+      '<span><i style="background:var(--sunk)"></i>Mốc sau</span>' +
+      '<span>Vạch dưới thanh = tiêu chí đã đạt</span>' +
+      '<span><i style="background:var(--info-soft)"></i>Issue đang làm</span><span><i style="background:var(--accent-soft)"></i>Issue chờ review</span>' +
+      '<span><i style="background:var(--sunk)"></i>Issue backlog</span><span><i style="background:var(--accent-soft);opacity:.55"></i>Cột phiên hiện tại</span>';
+  }
+  (function () {
+    var tip = $("g-tip");
+    function show(e) {
+      var t = e.target.closest && e.target.closest("[data-tip]"); if (!t) { tip.hidden = true; return }
+      tip.innerHTML = t.getAttribute("data-tip"); tip.hidden = false;
+      var rc = t.getBoundingClientRect(), x = (e.clientX || rc.left + rc.width / 2) + 12, y = (e.clientY || rc.bottom) + 14;
+      var w = tip.offsetWidth, h = tip.offsetHeight;
+      if (x + w > innerWidth - 8) x = Math.max(8, innerWidth - w - 8);
+      if (y + h > innerHeight - 8) y = Math.max(8, (e.clientY || rc.top) - h - 10);
+      tip.style.left = x + "px"; tip.style.top = y + "px";
+    }
+    var g = $("gantt");
+    g.addEventListener("mousemove", show); g.addEventListener("focusin", show);
+    g.addEventListener("mouseleave", function () { tip.hidden = true }); g.addEventListener("focusout", function () { tip.hidden = true });
+  })();
 
   function opts(sel, label, values, fmt) {
     var cur = sel.value;

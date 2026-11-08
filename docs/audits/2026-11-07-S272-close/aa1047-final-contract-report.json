@@ -1,0 +1,287 @@
+{
+ "schema": "aa1047-final-contract-report/1",
+ "contract_version": "fc-w1-report-1",
+ "masters": 814,
+ "errors": 0,
+ "verdicts": {
+  "publish": 797,
+  "source_hold": 6,
+  "review": 3,
+  "policy_hold": 8
+ },
+ "publish_flip": {
+  "count": 17,
+  "share": 0.0209,
+  "by_code": {
+   "ELEPHANT_RIDING": 9,
+   "SOURCE_DAY_CONTRADICTION": 6,
+   "DAY_COUNT_VS_DURATION": 3
+  }
+ },
+ "warn_codes": {
+  "DAY_CHECK_SKIPPED": 21,
+  "DAY_DEPARTURE_MIDTRIP": 11
+ },
+ "by_country": {
+  "Bhutan": {
+   "masters": 29,
+   "flips": 1,
+   "verdict:source_hold": 1
+  },
+  "China": {
+   "masters": 117
+  },
+  "India": {
+   "masters": 176,
+   "flips": 3,
+   "verdict:review": 1,
+   "verdict:policy_hold": 2
+  },
+  "Japan": {
+   "masters": 77
+  },
+  "Laos": {
+   "masters": 43,
+   "flips": 2,
+   "verdict:policy_hold": 1,
+   "verdict:source_hold": 1
+  },
+  "Mongolia": {
+   "masters": 15
+  },
+  "Nepal": {
+   "masters": 81,
+   "flips": 5,
+   "verdict:policy_hold": 3,
+   "verdict:review": 2
+  },
+  "Pakistan": {
+   "masters": 16
+  },
+  "Philippines": {
+   "masters": 43,
+   "flips": 1,
+   "verdict:source_hold": 1
+  },
+  "South Korea": {
+   "masters": 29
+  },
+  "Sri Lanka": {
+   "masters": 119,
+   "flips": 2,
+   "verdict:source_hold": 2
+  },
+  "Taiwan": {
+   "masters": 31
+  },
+  "Thailand": {
+   "masters": 37,
+   "flips": 2,
+   "verdict:policy_hold": 2
+  },
+  "Vietnam": {
+   "masters": 1,
+   "flips": 1,
+   "verdict:source_hold": 1
+  }
+ },
+ "day_loss": [
+  {
+   "tour_id": "2b3a540f-48d2-4b5d-9eb3-c215d0312d91",
+   "country": "India",
+   "page_days": 14,
+   "duration_days": 15
+  },
+  {
+   "tour_id": "9202cc6b-855b-4b45-82e8-1613e1edf7ed",
+   "country": "Nepal",
+   "page_days": 19,
+   "duration_days": 20
+  },
+  {
+   "tour_id": "5a79ee69-2a64-4ce4-8ea7-31a7dff71461",
+   "country": "Nepal",
+   "page_days": 13,
+   "duration_days": 14
+  }
+ ],
+ "flips": [
+  {
+   "published_tour_id": "f93a3517-7466-42a4-9355-9b51efc54404",
+   "tour_id": "7aaa375d-8fff-4589-90aa-183039fe6826",
+   "version_id": "6445bc04-fc43-4457-b92c-9f8b9b6ffaf0",
+   "country": "Bhutan",
+   "verdict": "source_hold",
+   "block_codes": [
+    "SOURCE_DAY_CONTRADICTION"
+   ]
+  },
+  {
+   "published_tour_id": "0255da50-cd0b-434a-9528-07137731e3cc",
+   "tour_id": "2b3a540f-48d2-4b5d-9eb3-c215d0312d91",
+   "version_id": "81c036a4-9382-4293-8c96-a4d50bd1ef21",
+   "country": "India",
+   "verdict": "review",
+   "block_codes": [
+    "DAY_COUNT_VS_DURATION"
+   ],
+   "page_days": 14,
+   "duration_days": 15
+  },
+  {
+   "published_tour_id": "748c8023-bc69-4c33-8090-c92e35c63004",
+   "tour_id": "6209622d-9ffe-42bb-a7a7-93a8bad098b0",
+   "version_id": "dc9d965b-023a-484b-a320-a98ee443b1a3",
+   "country": "India",
+   "verdict": "policy_hold",
+   "block_codes": [
+    "ELEPHANT_RIDING"
+   ]
+  },
+  {
+   "published_tour_id": "dc6018fd-2dc2-45db-b247-901105d99e2c",
+   "tour_id": "a31d9fad-4680-42d5-a2ba-de23fbbdb875",
+   "version_id": "1343fdce-bae9-4586-9d92-1a343b6a14d0",
+   "country": "India",
+   "verdict": "policy_hold",
+   "block_codes": [
+    "ELEPHANT_RIDING"
+   ]
+  },
+  {
+   "published_tour_id": "3c77d7f1-dbe3-4439-ba55-b508dfc80d05",
+   "tour_id": "1e9a62fc-ccdd-4ec9-92ea-dadbde7f9cba",
+   "version_id": "9e706776-0d6b-40c2-ba7d-dab7ab56d16e",
+   "country": "Laos",
+   "verdict": "policy_hold",
+   "block_codes": [
+    "ELEPHANT_RIDING"
+   ]
+  },
+  {
+   "published_tour_id": "98763def-a758-479b-89e5-3baa7d343523",
+   "tour_id": "69f731ca-a77d-4fb1-87b2-9d98c6ad010f",
+   "version_id": "da27bc4c-0e5a-4de4-9f96-d47ea64b068c",
+   "country": "Laos",
+   "verdict": "source_hold",
+   "block_codes": [
+    "SOURCE_DAY_CONTRADICTION"
+   ]
+  },
+  {
+   "published_tour_id": "7aa14f45-0bca-4eda-a358-0232d3992e8e",
+   "tour_id": "4d841fa9-c8d9-46a6-8213-f7182cb1715d",
+   "version_id": "1a1ab237-aaa6-4a52-9fb3-01cf75f5b558",
+   "country": "Nepal",
+   "verdict": "policy_hold",
+   "block_codes": [
+    "ELEPHANT_RIDING"
+   ]
+  },
+  {
+   "published_tour_id": "55650079-f91f-406e-b633-25505a0d0b14",
+   "tour_id": "5a79ee69-2a64-4ce4-8ea7-31a7dff71461",
+   "version_id": "f464243c-528d-4869-a623-956126854250",
+   "country": "Nepal",
+   "verdict": "review",
+   "block_codes": [
+    "DAY_COUNT_VS_DURATION"
+   ],
+   "page_days": 13,
+   "duration_days": 14
+  },
+  {
+   "published_tour_id": "f1f6abda-6520-411d-bae2-5ee4c0a96a9d",
+   "tour_id": "9202cc6b-855b-4b45-82e8-1613e1edf7ed",
+   "version_id": "48b567da-fc2b-41b4-9a47-d2816ed7b1de",
+   "country": "Nepal",
+   "verdict": "review",
+   "block_codes": [
+    "DAY_COUNT_VS_DURATION",
+    "ELEPHANT_RIDING"
+   ],
+   "page_days": 19,
+   "duration_days": 20
+  },
+  {
+   "published_tour_id": "8a893d0f-86ae-40ee-aef0-a8d4a03494ed",
+   "tour_id": "a8e6904d-cb21-4b54-b5ed-0a1e7b79f8b2",
+   "version_id": "7c24d124-03a4-42af-bb68-9cd589676064",
+   "country": "Nepal",
+   "verdict": "policy_hold",
+   "block_codes": [
+    "ELEPHANT_RIDING"
+   ]
+  },
+  {
+   "published_tour_id": "bd9f1fde-158b-412f-ab85-4e13d640c16e",
+   "tour_id": "b0e5fb21-4a03-472b-8a6f-3f406cedd8e3",
+   "version_id": "022f0c5c-bb26-451c-9c36-408f1f942c6b",
+   "country": "Nepal",
+   "verdict": "policy_hold",
+   "block_codes": [
+    "ELEPHANT_RIDING"
+   ]
+  },
+  {
+   "published_tour_id": "d3333c88-0db2-4c51-a89f-c5834445a281",
+   "tour_id": "54137f3f-62ce-48e7-8e8c-c2643ca494a6",
+   "version_id": "172cccf7-d1f3-4e51-ab2d-c83b530c440c",
+   "country": "Philippines",
+   "verdict": "source_hold",
+   "block_codes": [
+    "SOURCE_DAY_CONTRADICTION"
+   ]
+  },
+  {
+   "published_tour_id": "6d7bb2d4-186f-450c-ab0b-b88b5d7e8570",
+   "tour_id": "256f07bd-c09e-44d7-9efa-0b32b24b0d52",
+   "version_id": "4b1a93de-10f8-44e0-b3fa-86c7596c6d78",
+   "country": "Sri Lanka",
+   "verdict": "source_hold",
+   "block_codes": [
+    "SOURCE_DAY_CONTRADICTION"
+   ]
+  },
+  {
+   "published_tour_id": "85155524-d4a0-47dd-9bb4-cd5f3734ef38",
+   "tour_id": "c8905ad0-e675-4cd1-99aa-13fe9d064cbe",
+   "version_id": "7d1ca6ec-21bf-4660-9ba8-e46adf0bea19",
+   "country": "Sri Lanka",
+   "verdict": "source_hold",
+   "block_codes": [
+    "SOURCE_DAY_CONTRADICTION"
+   ]
+  },
+  {
+   "published_tour_id": "ecead4ec-d9fc-4b26-90a5-daba1fd9be05",
+   "tour_id": "16350d17-8d90-4163-ae4b-0f3d824ea9f6",
+   "version_id": "825672b6-b700-4dd3-99d0-b99b0ac73597",
+   "country": "Thailand",
+   "verdict": "policy_hold",
+   "block_codes": [
+    "ELEPHANT_RIDING"
+   ]
+  },
+  {
+   "published_tour_id": "68effd17-00d6-4415-9819-ae16fce8eac3",
+   "tour_id": "d4897d02-a9c9-4868-9c7f-889b1ba48c51",
+   "version_id": "7ca6dbbd-9d82-4535-af36-c23ca29d94ac",
+   "country": "Thailand",
+   "verdict": "policy_hold",
+   "block_codes": [
+    "ELEPHANT_RIDING"
+   ]
+  },
+  {
+   "published_tour_id": "93108ddc-31a9-42dc-a03d-fe999b02c040",
+   "tour_id": "3fa33633-8502-4b53-a775-a0491fd2e509",
+   "version_id": "89a5039d-ede1-45f3-b5b9-0d7f8d40602f",
+   "country": "Vietnam",
+   "verdict": "source_hold",
+   "block_codes": [
+    "SOURCE_DAY_CONTRADICTION"
+   ]
+  }
+ ]
+}
