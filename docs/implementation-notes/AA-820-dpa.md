@@ -155,3 +155,58 @@ S270 close snapshot.
   Register v1.11 follow-up names it.
 - Business owner: counsel review (DPA C1-C13, AI Schedule Q1-Q16, dossier §7), contracting entity, the pilot letter
   (wording, AI allowance, signature). Engineering: the CRM pilot exception before the pilot letter is signed.
+
+## S273 (lane l5-legal-aimark, 2026-11-08): Annex 2 v0.4 and the AA-820 status table
+
+### Decisions
+
+- **No new DPA part 2 page.** The lane brief asked for "DPA part 2" (the technical and organisational measures and
+  the sub-processor list); both already exist as Annex 2 and Annex 3 (v0.3, S271). Writing a second page would split
+  the source of truth. The lane brings Annex 2 to v0.4 and records where each AA-820 item stands instead.
+- **Annex 2 §0 "At a glance".** One row per theme the brief named (hosting region us-west-1, encryption, access control
+  with the Cognito WORKFORCE pool, RLS tenant isolation, personal data before any model call, retention per DM-7.1,
+  incident handling), each pointing at the existing measure rows. No measure text changed except M-8.
+- **M-8 (WAF):** the Trip Planner's three web rules (per-IP rate limit, rate limit on the model and send paths,
+  browser challenge on the planner pages) live in the regional web ACL since AA-1038 (S272, tech-lead decision on
+  cost), read from AA-CIS-Infra `modules/waf/main.tf` on `main`. The "CloudFront-scope WAF is Planned" note was stale.
+- **Annex 2 §3 "Points for counsel and the business owner":** the brief asked to mark clearly what needs the lawyer or
+  the business owner. Seven points (confidentiality undertakings, the data-protection contact, staff MFA, the pilot
+  standard, pen test and certification promises, the AWS reseller question, SCC Annex II form). The staff MFA design
+  is left to the tech lead (how a second factor fits the e-mail-code sign-in is not settled here).
+- **AI Schedule §9 "AA-820 status":** one row per done-when item (clause, three confirmations, tenant notice, Booking
+  boundary, DPA pack) with evidence and the open owner. The Schedule text (§3) is unchanged, so it stays v1.0.
+- **Annex 3 unchanged.** Re-checked against the secrets register vendor rows on 2026-11-08: every vendor that may
+  receive agency personal data is listed; Geoapify and DataForSEO receive catalogue data only and stay in §2 ("Not
+  sub-processors"), so the brief's list is met without moving them.
+
+### Changed
+
+- `docs/legal/dpa-annex-2-security.md` → draft v0.4 (§0, M-8, §3); `docs/legal/tenant-ai-schedule.md` (§9, version
+  row); `docs/legal/pilot-contract-set.md` (row 3 names Annex 2 v0.4).
+- AA-Booking `CONTEXT.md` (separate PR): the "AI boundary for high-risk advice (AA-820)" section points at Schedule
+  clause .3(8) instead of the retired `tenant-terms-ai-clause-draft.md`.
+
+### Should know
+
+- §9 row 4 says the Booking section points at the Schedule "since S273": true once the AA-Booking PR of this lane
+  merges.
+- No `.vi.md`: none of the touched pages has one.
+
+### Review fix pass (S273)
+
+- **Tenant isolation outside the CRM (reviewer, major).** v0.4 §0 sent the reader to M-9 / M-10 for tenant
+  isolation, and both cover only the CRM; the Content studio (Annex 1 §3) and Booking B2B (Annex 1 §4) had no
+  isolation measure. Verified against the dump of 2026-11-07 and the code on `main`: CIS tenant tables carry
+  `tenant_isolation` policies `TO aa_app_user` and `<table>_cis_app_all` policies `USING (true)` `TO cis_app`;
+  `shared.tenant_members`, `shared.tenant_membership_event` and `shared.tenants` have no RLS (allowlisted in
+  `rls_catalogue_rules.py` as CIS-only, HTTP-only); schema `booking` has no RLS table at all. New rows: **M-9b**
+  (Content studio: session minted from an active membership; RLS on the tenant-pool routes; application-level
+  scoping on the main-pool routes and the membership / account tables) and **M-9c** (Booking B2B: the CRM names the
+  agency, Booking checks the partner row and filters every read by it; no RLS). §0 row rewritten per app; new §2
+  item 8 states the application-level part as a gap against DM-8.4. Not put in §3: moving the remaining routes, or
+  RLS for Booking, is engineering work, not a counsel or business-owner decision.
+- M-9's label now says "CRM database". Annex 4 §D measures row and the Article 20 dossier "Access" line no longer
+  say "row-level isolation per agency" for the whole platform; both name M-9b / M-9c. Neither page's version moved
+  (a cross-reference fix, no new commitment).
+- Which tenant-pool route switches are off on Dev (Redis, `TENANT_POOL_FORCE_ADMIN_FLAGS`) was not re-read: M-9b
+  says so instead of claiming every route runs on the tenant pool.
