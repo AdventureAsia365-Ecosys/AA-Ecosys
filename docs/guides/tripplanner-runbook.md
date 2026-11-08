@@ -106,7 +106,7 @@ There is no password. A code that expired or was mistyped shows a message; ask f
 | A tour page shows "not found" | The tour may be paused or no longer sold; check it in CIS admin › **Master Content** |
 
 During the dev phase the tech lead is the engineer on duty. Rollback for engineers:
-[TripPlanner Lambda rollback](../ops/runbooks/rollback-tp-lambda.md) and [Vercel rollback](../ops/runbooks/rollback-vercel.md).
+[TripPlanner Lambda rollback](../ops/runbooks/rollback-tp-lambda.md) and, for the web app on ECS, [ECS rollback](../ops/runbooks/rollback-ecs.md) (service `aa-tripplanner-dev-web`; the Vercel project was retired, AA-1038).
 
 ## 9. Dev-phase caveats
 

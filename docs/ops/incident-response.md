@@ -35,9 +35,9 @@ When unsure, pick the higher severity and lower it later.
    Note the start time.
 2. **Stop the bleeding.**
    - Bad deploy: roll back ([CIS](runbooks/rollback-cis.md), [Booking](runbooks/rollback-booking.md),
-     [Vercel](runbooks/rollback-vercel.md), [TripPlanner Lambdas](runbooks/rollback-tp-lambda.md),
-     [Terraform](runbooks/rollback-terraform.md)). The CRM API, CRM web and portal services on ECS have no rollback
-     runbook yet; until 2026-11-03 the portal can also fall back to its Vercel project ([Vercel](runbooks/rollback-vercel.md)).
+     [any ECS service](runbooks/rollback-ecs.md): the staff admins, the CRM API and web, the TripPlanner web,
+     [TripPlanner Lambdas](runbooks/rollback-tp-lambda.md), [Terraform](runbooks/rollback-terraform.md)). No frontend
+     runs on Vercel any more (AA-911, AA-1038).
    - Leaked secret: rotate it first and investigate second ([secret rotation](runbooks/secret-rotation.md)).
    - Runaway job or cost: cancel the job or lower its cost-guard budget ([queue stuck](playbooks/queue-stuck.md),
      [cost spike](playbooks/llm-cost-spike.md)). There is no per-kind pause switch ([job kinds](job-kinds.md)).

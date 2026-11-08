@@ -28,7 +28,7 @@ prod. A `last_tested` older than the review window on Dev is a warning, not an o
 
 | Runbook | Blocker or next step |
 |---|---|
-| [rollback-ecs](../runbooks/rollback-ecs.md) (Booking, CRM), [rollback-booking](../runbooks/rollback-booking.md), [rollback-vercel](../runbooks/rollback-vercel.md), [rollback-tp-lambda](../runbooks/rollback-tp-lambda.md), terraform-apply job-idle gate | planned as one 0 USD sitting: [rollback game day plan](rollback-game-day.md) (AA-1023) |
+| [rollback-ecs](../runbooks/rollback-ecs.md) (Booking, CRM, TripPlanner web), [rollback-booking](../runbooks/rollback-booking.md), [rollback-tp-lambda](../runbooks/rollback-tp-lambda.md), terraform-apply job-idle gate | planned as one 0 USD sitting: [rollback game day plan](rollback-game-day.md) (AA-1023) |
 | [rollback-terraform](../runbooks/rollback-terraform.md) | once before prod (DM-9.3); cost 0 USD |
 | [break-glass](../runbooks/break-glass.md) via managed login | AA-816 open item |
 | [legacy-login-flag](../runbooks/legacy-login-flag.md) | the AA-816 cutover itself |

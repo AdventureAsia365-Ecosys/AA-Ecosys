@@ -32,7 +32,7 @@ en, vi = scenes("en"), scenes("vi")
 lines = [
     f"# TripPlanner product intro — storyboard ({TODAY})", "",
     "Audience: the business owner (non-technical). Recorded on the live production site "
-    "(https://aa-tripplanner.vercel.app) at 1440 x 900, plus one phone segment at 390 x 844. "
+    "(https://tripplanner.lumiguides.it.com) at 1440 x 900, plus one phone segment at 390 x 844. "
     "Real pages and real catalogue data only. The contact form is filled with obviously fake demo data and "
     "never submitted (the send request is answered locally with the same \"add your details\" reply the live "
     "site gives a guest); the AI day-by-day narration and free-text search are not used (no paid calls).", "",

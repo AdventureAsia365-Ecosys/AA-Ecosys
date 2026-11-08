@@ -525,7 +525,7 @@ cannot be undone).
 |---|---|---|
 | CIS api and worker (ECS) | Rolling, circuit breaker, deploy gate on open waves and deploy-blocking job kinds (AA-993 G5) | [CIS rollback](ops/runbooks/rollback-cis.md) (previous task definition, api and worker on the same SHA, then revert on `main`) |
 | Booking (ECS) | Rolling, circuit breaker, job guard, SHA smoke | [Booking rollback](ops/runbooks/rollback-booking.md) |
-| Frontends (Vercel) | CI-created deployments when `frontend/**` changes | [Vercel rollback](ops/runbooks/rollback-vercel.md) (instant rollback, or redeploy an older commit) |
+| Frontends (ECS, since AA-911 / AA-1038; was Vercel) | Each app's deploy workflow when `frontend/**` changes | [ECS rollback](ops/runbooks/rollback-ecs.md) (an earlier task-definition revision, or revert on `main`); the old [Vercel rollback](ops/runbooks/rollback-vercel.md) is superseded |
 | TripPlanner Lambdas | Path-filtered deploy | [TP Lambda rollback](ops/runbooks/rollback-tp-lambda.md); `needs: ci` + smoke is AA-879, the `live` alias is AA-703 (U-54) |
 | Database | Forward-only | No schema rollback; roll forward; PITR is the last resort ([PITR restore](ops/runbooks/restore-rds-pitr.md)) |
 | Terraform | Plan in PR, apply from `main` | [Terraform rollback](ops/runbooks/rollback-terraform.md) |

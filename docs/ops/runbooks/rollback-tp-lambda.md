@@ -26,7 +26,7 @@ related: [OPS-02-vercel, OPS-04, AA-703, AA-869, AA-892]
 
 - Trigger: after a `deploy-lambdas.yml` run, the TripPlanner map or trip pages fail, or
   `aa-tripplanner-dev-browse-errors` / `aa-tripplanner-dev-assembly-errors` fires.
-- Not for: the TripPlanner frontend ([rollback-vercel](rollback-vercel.md)) or a bad `tp-NNN` migration
+- Not for: the TripPlanner frontend ([rollback-ecs](rollback-ecs.md) on `aa-tripplanner-dev-web`; it left Vercel with AA-1038) or a bad `tp-NNN` migration
   ([DB Migrate](db-migrate.md): forward only).
 
 ## Facts that shape this runbook (read 2026-10-28)
