@@ -69,10 +69,8 @@ tìm kiếm. Comment gần nhất 06/11 nói về menu admin, không trùng.
 >   tour đại lý, blog và bài mạng xã hội: cả 4 bài dùng phiếu.
 > - **Bài không còn bị cắt giữa chừng** vì hết giới hạn độ dài, và lần sửa thứ ba không còn tốn tiền. Lô viết blog ngày
 >   08/11: 23 lượt gọi AI, 0 lượt bị cắt, không lượt nào phải gọi lại.
-> - **Kiểm lần cuối mỗi khi một bài đi ra** (đăng, duyệt, sửa tay) và ghi lại kết quả. Lượt kiểm trên 814 tour
->   catalogue: 797 đạt, 17 tour được đánh dấu để xem (9 tour có cưỡi voi, 6 tour lệch ngày so với nguồn, 3 tour thiếu
->   một ngày so với thời lượng). Hiện mới ghi nhận, chưa chặn tour nào. Tour có cưỡi voi được giữ nguyên văn và đưa vào
->   hàng duyệt.
+> - **Kiểm lần cuối mỗi khi một bài đi ra** (đăng, duyệt, sửa tay) và ghi lại kết quả. Tour có cưỡi voi được giữ
+>   nguyên văn và đưa vào hàng duyệt.
 > - **Writing Lab nhận 450 nhãn chấm đầu tiên** (150 câu trong bài, mỗi câu chấm theo 3 góc); 84 câu các góc chấm chưa
 >   thống nhất được đưa vào hàng chờ AA xem. Bộ nhãn này dùng để đo độ chính xác của bước kiểm trước khi siết hay nới.
 > - **Chủ đề Blog gợi ý cho đại lý:** sau khi cập nhật dữ liệu nhu cầu tìm kiếm (thị trường Mỹ) cho các địa điểm trong
@@ -302,8 +300,6 @@ trên giao diện 08/11 (comment 04/11 ghi là chưa thử được). Comment g�
 > | 10 | 269,35 | 19,30 |
 > | 11 (tới 08/11) | 15,44 | 0,51 |
 >
-> Hoá đơn hạ tầng AWS theo tháng sẽ có ở kỳ 5.
->
 > **Rủi ro:**
 >
 > - Tài khoản AI chính trên AWS vẫn chờ AWS mở quyền (đã trả lời các câu hỏi của AWS ngày 08/11). AI viết nội dung vẫn
@@ -363,4 +359,22 @@ trong bảng chi phí của #7.
 
 ## Ghi chép sau khi đăng
 
-(điền comment id / link hoặc "chưa đăng: lý do" cho từng nháp)
+Tech lead duyệt 09/11 (qua phiên điều phối): đăng #1–#7, với 2 chỗ sửa đã ghi vào nháp ở trên:
+
+- #1 PR-22: bỏ câu về lượt kiểm 814 tour (797 đạt, 17 đánh dấu để xem, "hiện mới ghi nhận, chưa chặn tour nào");
+  giữ "Kiểm lần cuối mỗi khi một bài đi ra … và ghi lại kết quả" và câu về tour cưỡi voi.
+- #7 PR-20: bỏ hẳn dòng "Hoá đơn hạ tầng AWS theo tháng sẽ có ở kỳ 5" (không nhắc hoá đơn AWS).
+- #8 KAN-90: không đăng (tech lead bỏ).
+
+Thân HTML sẵn để đăng (mention node, bảng HTML): `.tmp-session/S273/jira-html/` (một file mỗi nháp).
+
+| # | Issue | Kết quả |
+|---|---|---|
+| 1 | PR-22 | đăng 09/11 bởi phiên điều phối: https://adventure-asia.atlassian.net/browse/PR-22?focusedCommentId=10622 |
+| 2 | PR-17 | đăng 09/11 bởi phiên điều phối: https://adventure-asia.atlassian.net/browse/PR-17?focusedCommentId=10623 |
+| 3 | PR-23 | đăng 09/11 bởi phiên điều phối (2 ảnh nhúng): https://adventure-asia.atlassian.net/browse/PR-23?focusedCommentId=10626 |
+| 4 | PR-24 | đăng 09/11 bởi phiên điều phối (1 ảnh): https://adventure-asia.atlassian.net/browse/PR-24?focusedCommentId=10627 |
+| 5 | PR-25 | đăng 09/11 bởi phiên điều phối (1 ảnh): https://adventure-asia.atlassian.net/browse/PR-25?focusedCommentId=10628 |
+| 6 | PR-26 | đăng 09/11 bởi phiên điều phối: https://adventure-asia.atlassian.net/browse/PR-26?focusedCommentId=10624 |
+| 7 | PR-20 | đăng 09/11 bởi phiên điều phối: https://adventure-asia.atlassian.net/browse/PR-20?focusedCommentId=10625 |
+| 8 | KAN-90 | không đăng (tech lead bỏ) |
