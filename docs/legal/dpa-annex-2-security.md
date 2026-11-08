@@ -1,34 +1,55 @@
 ---
 id: SEC-04-dpa-annex2
-title: "DPA Annex 2: technical and organisational measures (draft v0.3)"
+title: "DPA Annex 2: technical and organisational measures (draft v0.4)"
 description: "Annex 2 of the partner-agency DPA (and SCC Annex II): each security measure marked Live with its code, Terraform or audit evidence and the data-standard rule or ADR it implements, or Planned with the gate it must pass; no measure is claimed that does not run."
 type: reference
 status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-crm-api, aa-crm-web, aa-partner-portal, aa-cis-api, aa-cis-worker, aa-booking-api, aa-cis-dev-db]
-last_reviewed: 2026-11-06
+last_reviewed: 2026-11-08
 review_every_days: 30
-related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex3, ARCH-08-data-management, SEC-08-s268-crm-security-review, OPS-03-pilot-tenant, AA-820, AA-969, AA-970, AA-1004, AA-1035]
+related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex3, ARCH-08-data-management, SEC-08-s268-crm-security-review, OPS-03-pilot-tenant, AA-820, AA-969, AA-970, AA-1004, AA-1035, AA-1038]
 ---
 
-# DPA Annex 2: technical and organisational measures (draft v0.3)
+# DPA Annex 2: technical and organisational measures (draft v0.4)
 
 > [!WARNING]
 > Draft for counsel, not legal advice. Part of the [Data Processing Agreement](dpa.md); also Annex II of the SCCs
 > ([Annex 4](dpa-annex-4-transfers.md)). This annex takes over the DPA technical annex of AA-970 (paused under ADR 0019
 > d15).
 
-**How to read it.** **Live** = runs on Dev on 2026-11-06, with the evidence named (repo and file on `main`, a pull
+**How to read it.** **Live** = runs on Dev on 2026-11-06 (M-8 and M-12 re-checked on 2026-11-08), with the evidence named (repo and file on `main`, a pull
 request, the live schema dump, an audit folder or a session log in [`docs/sessions/`](../sessions/)). **Planned** = not running; the gate says when it must exist. Rules are the data
 standards ([Part B, data management](../architecture/data-standards/02-data-management.md)) cited as DM-n.n, and the
 ADRs in [`docs/adr/`](../adr/). Repos: CIS = AA-CIS-App, BK = AA-Booking, CRM = AA-Partner, INF = AA-CIS-Infra.
 AA promises the Live measures; the Planned ones are listed so the Agency knows what is not there yet.
 
+**What changed in v0.4 (2026-11-08).** M-8: the Trip Planner's web rules run in the regional WAF web ACL in front
+of the load balancer since its move to AWS ECS (AA-1038, session S272), so the CloudFront-scope WAF listed as
+Planned is no longer planned. New §0 maps the seven themes of the measures (hosting region, encryption, access control, tenant isolation, personal data before a model call, retention, incidents) to the rows below, and new §3 lists
+every point that needs counsel or the business owner. M-12 re-read on AA-CIS-Infra `main`: staff MFA is still
+optional. No other measure changed.
+
 **What changed in v0.3 (2026-11-06).** The five pilot safeguards of ADR 0019 d16 (M-25) moved from Planned to Live
 (AA-969, closed in session S269); automated backups are 14 days (M-29, M-30 merged into it); M-13 names the staff
 roles and the tenant scope that went live with AA-1035 (closed in session S270); M-37 records the load test before
 real data; §2 lists the gaps left. v0.2 was root PR #546 (2026-11-05).
+
+## 0. At a glance
+
+The seven themes of the technical and organisational measures, and the measures below that carry them. A theme is
+only as strong as its weakest Live row; the gaps are in §2.
+
+| Theme | What AA commits to | Measures |
+|---|---|---|
+| Hosting region | Agency Personal Data stored in one AWS region, us-west-1 (United States); the content AI stages may use cross-region inference, a stage that may carry personal data is held to US deployments | M-1, M-19 (and [Annex 3](dpa-annex-3-subprocessors.md) "Where") |
+| Encryption | At rest (database, storage, per-agency CRM field keys in AWS KMS) and in transit (HTTPS everywhere, TLS required on every database connection) | M-2 to M-6 |
+| Access control | Agency users: invitation-only partner sign-in pool with MFA required. AA staff: the Cognito WORKFORCE pool, admin-created accounts only, one-time e-mail codes, deny-by-default roles with a per-agency scope (staff MFA optional today, §2 item 1). No personal database logins; per-app database roles; secrets per app | M-7, M-11 to M-17 |
+| Tenant isolation | Row-level security forced on every CRM table with one tenant policy; no other AA app holds a grant on the CRM schema; a test refuses any other database access path | M-9, M-10 |
+| Personal data before a model call | CRM: personal data scrubbed in three passes before any model call, a failed scrub refuses the call. Content studio and AA content stages: no identifying personal data in prompts, by rule, with the `pii` stage class enforced by the database and the gateway. AI call records keep no prompt or output text | M-18 to M-21 (Trip Planner gap: §2 item 5) |
+| Retention | Windows per table in the DM-7.1 retention table, enforced by owner jobs (first run of each kind under DRY RUN); a table whose window is still proposed keeps its rows until the window is approved (Annex 1 says which); erasure and offboarding with a receipt; backups 14 days | M-29, M-31, M-32 ([Annex 1](dpa-annex-1-processing.md) "Retention" per app) |
+| Incident handling | Severities, a SEV1 for any exposure or loss of personal data, the business owner within 30 minutes, affected agencies within 2 hours, a written review; audit trails in every app and AWS CloudTrail | M-23, M-24, M-26 (DPA clause 8) |
 
 ## 1. Measures
 
@@ -43,7 +64,7 @@ real data; §2 lists the gaps left. v0.2 was root PR #546 (2026-11-05).
 | M-5 | Crypto-shredding: offboarding destroys the agency's keys and checks that a sealed test value no longer opens | Live | CRM `app/lifecycle/offboarding.py`, `KeyProvider.destroy` | DM-6.8 |
 | M-6 | Encryption in transit: HTTPS on every public endpoint; the database refuses non-TLS connections and every app connects with TLS required | Live | INF `modules/rds/main.tf` parameter `rds.force_ssl = 1` | DM-8.8 |
 | M-7 | The database has no public endpoint; humans reach it only through audited AWS Systems Manager sessions, never SSH, and no person has a personal database login | Live | INF `modules/rds/main.tf` (`publicly_accessible = false`); runbook `docs/ops/runbooks/ecs-exec-s3-mediated.md` | DM-8.8 |
-| M-8 | Web application firewall rules (AWS WAF, regional) in front of the APIs, the load balancer and the sign-in pages; a request-body ceiling and fair per-agency request slots in the CRM | Live | INF `modules/waf/main.tf`, `accounts/aa365/identity_partner.tf`; CRM `app/bodylimit.py`, `app/tenant_gate.py` (S268 review F1, F2) | ADR 0019 d23 (a CloudFront-scope WAF for the Trip Planner is Planned) |
+| M-8 | Web application firewall rules (AWS WAF, regional) in front of the APIs, the load balancer and the sign-in pages; a request-body ceiling and fair per-agency request slots in the CRM | Live | INF `modules/waf/main.tf` (since AA-1038, session S272, also the three Trip Planner web rules: a per-IP rate limit, a rate limit on the paths that call a model or send, and a browser challenge on the planner pages, each scoped to the Trip Planner host and to requests that came through AA's CloudFront), `accounts/aa365/identity_partner.tf`; CRM `app/bodylimit.py`, `app/tenant_gate.py` (S268 review F1, F2) | ADR 0019 d23 (the Trip Planner rules sit in this regional web ACL instead of a CloudFront-scope one: tech-lead decision on cost, S272) |
 
 ### Access control
 
@@ -132,3 +153,19 @@ that agency's export failed. It was fixed with a test and a code guard, and a fa
    assembled at run time from parts it cannot read, is outside it (its known limits are listed in the hook). The
    run-script guard is exact for maintenance scripts. Only columns tagged as personal data are protected; the
    DM-6.1 census lists untagged candidate columns still to review.
+
+## 3. Points for counsel and the business owner
+
+Engineering can state what runs; it cannot decide these. **[COUNSEL]** = a lawyer's answer; **[BUSINESS OWNER]** =
+the business owner's decision (whether and when counsel reviews the pack is also the business owner's call, ADR 0019
+b20, b10).
+
+| # | Point | Who | Where it is used |
+|---|---|---|---|
+| 1 | Confidentiality undertakings for staff and contractors exist and cover Agency Personal Data (M-34) | **[BUSINESS OWNER]** | DPA clause on personnel; SCC Annex II |
+| 2 | The named data-protection contact for agencies (M-35) | **[BUSINESS OWNER]** | DPA clause 1.1 and the notices |
+| 3 | Whether staff MFA must be required before real agency data (M-12, §2 item 1). Engineering's proposal: require it before the pilot agency's real data. How it fits the one-time e-mail-code sign-in (a second factor on top of it, or passkeys) is for the tech lead to design; it is an AA-CIS-Infra change to the WORKFORCE pool plus enrolling each staff member | **[BUSINESS OWNER]** (the tech lead implements) | M-12 |
+| 4 | Whether "measures as listed, Live on Dev" is an acceptable standard for a pilot on Dev, or whether the pilot letter must say more (no SLA, test environment) | **[COUNSEL]** | Pilot letter, DPA clause 15.3 |
+| 5 | Whether a penetration test (M-28) and a SOC 2 or ISO 27001 report (§2 item 6) must be promised with a date | **[BUSINESS OWNER]**, then **[COUNSEL]** for the wording | M-28 |
+| 6 | Whether the AWS terms bind through the billing reseller, and whether the reseller is a sub-processor ([Annex 3](dpa-annex-3-subprocessors.md) §1.1) | **[COUNSEL]** | Annex 3, Annex 4 |
+| 7 | Whether this annex can stand as SCC Annex II as written, or needs the SCC wording per measure | **[COUNSEL]** | [Annex 4](dpa-annex-4-transfers.md) |
