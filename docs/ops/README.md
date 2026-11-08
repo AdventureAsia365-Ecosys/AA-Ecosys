@@ -45,6 +45,7 @@ Everything runs on **acc2** (us-west-1) except the LLM calls, which run on acc3;
 | [Roll back the Booking API](runbooks/rollback-booking.md) | draft, UNTESTED | read-only only |
 | [Roll back a Vercel deployment](runbooks/rollback-vercel.md) | draft, UNTESTED | - |
 | [Move the staff frontends from Vercel to ECS (AA-911, ADR 0019 d23)](runbooks/staff-web-ecs-cutover.md) | draft, UNTESTED | - |
+| [Move the TripPlanner frontend from Vercel to ECS behind CloudFront (AA-1038, ADR 0019 d23)](runbooks/tripplanner-web-ecs-cutover.md) | draft, UNTESTED | - |
 | [Roll back the TripPlanner Lambdas](runbooks/rollback-tp-lambda.md) | draft, UNTESTED | read-only only |
 | [Roll back a Terraform change](runbooks/rollback-terraform.md) | draft, UNTESTED | read-only only |
 | [Override a deploy or migration gate](runbooks/deploy-gate-override.md) | draft, UNTESTED | - |

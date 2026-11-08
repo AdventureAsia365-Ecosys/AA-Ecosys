@@ -6,7 +6,7 @@
 
 **Rules:** at session start read §1–§3 and pick the session's parallel items from §3 and §3b by slot (skip items blocked in §2 or by the "blocked by" notes). At session end update the Status column, move closed items to §5, add new items. Re-audit only when this file is older than ~2 weeks or many issues were created outside sessions.
 
-_Last updated: S271, 07/11/2026 (Claude Code, Ultracode; 06/11 06:36 → 07/11 ~03:00 +07). **No issue closed in S271** (every touched issue waits on a live gate or a later slice): AA-900 W0 live (gateway token budget, refusals, cassette, R2 pairing, S1/T2 safety, T9 pass-3 stop, CIS-08 funnel); ADR 0020 content quality architecture accepted (D1–D16 all A) with waves W1–W6 = AA-1047 … AA-1052; CI optimisation in 5 repos (~−50 % minutes); lessons become guards (root #602, Infra #712, the test-guard wave #603 + app PRs); AA-911 phase 1 live (staff web on ECS, the CIS → Booking bridge removed: `/auth/booking-token` 404); RDS backups 14 days; standard tags. Jira: 4 drafts saved, not posted, rolled to S272 (`docs/audits/2026-11-06-S271-writing-quality-audit/jira-drafts.md`)._
+_Last updated: S272, 08/11/2026 (Claude Code, Ultracode; 07/11 ~08:00 → 08/11 ~10:00 +07). **No issue closed in S272** (each touched issue waits on a live gate, a MFA apply or W2 labels): AA-1047 W1 live (policy registry, FactSheet, REPORT final_contract; paid smoke 10/10 ≈ 0.21 USD); AA-1048 W2 tooling + first panel (450 labels, import path open); AA-1049 W3 T9 (#1377) and T2 (#1380) trains live with behaviour changes behind opt-in flags; AA-1038 R5 slice 3 live (leads → agency CRM, brand, AI cap; CIS 390, tp-026) + hosting slice drafts (Infra #721/#722, TP #236, need a local MFA apply); AA-911 Vercel staff projects retired (A10 stays until go-live); AA-1040 X-AI headers; AA-1024 guards + PR tool fixes. S272 Jira drafts roll to S273. Earlier header (S271) kept in git history._
 
 ## 1. Time-gated checks (do these first when due)
 
@@ -142,13 +142,13 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | S280 | AA-1041, AA-1004 | R7 item 7 + visual tests against `next start` → close R7. AA-1004 P2–P6 from the go-live date, or from pilot week 3 at the latest (q-pilot). |
 | after S280 / date-gated | AA-1024, AA-788, AA-1026, AA-998, AA-873, AA-1003, CRM-after-R3, AA-980, AA-881, parked | AA-1024 D8 ≥10/11 ~12:00Z; AA-788 ≥19/11 with an LLM path (~S286+); first session ≥01/12: AA-1026 D6 (November bill), AA-998 acc1 = 0 USD, AA-873 first-month cost read, AA-1004 org invites; AA-1003 R5–R7; CRM add-ons AA-960, AA-963, AA-965, AA-968, AA-970, AA-1011, AA-1012 in the merged app (≥60 % capacity stays on content); AA-980 at go-live; AA-881 05/2027; parked AA-842, AA-781, AA-782, AA-704, AA-948, AA-922 (TL-11 lift). |
 
-### Open issues by slot (after the S271 close: 0 closed, AA-1047 … AA-1052 added; S270 rows below kept)
+### Open issues by slot (after the S272 close: 0 closed, AA-1053 added; rows below updated for AA-1047/1048/1049/1038/911)
 
 | Issue | Work | Milestone | Slot | S265 verdict | Status |
 |---|---|---|---|---|---|
-| AA-1047 | [Quality W1] One policy registry, one FactSheet, one exit contract (report mode) | M2a | S272 | new S271 | Backlog |
-| AA-1048 | [Quality W2] Claim-level ground truth and calibration of the pinned claim instrument | M2a | S273 | new S271 | Backlog |
-| AA-1049 | [Quality W3] Rewire the T9, S1 and T2 control planes in place | M2a | S274 | new S271 | Backlog |
+| AA-1047 | [Quality W1] One policy registry, one FactSheet, one exit contract (report mode) | M2a | S273 (Done check) | new S271 | In Review |
+| AA-1048 | [Quality W2] Claim-level ground truth and calibration of the pinned claim instrument | M2a | S273 | new S271 | In Progress |
+| AA-1049 | [Quality W3] Rewire the T9, S1 and T2 control planes in place | M2a | S273+ | new S271 | In Progress |
 | AA-1050 | [Quality W4] Promote the calibrated claim instrument: shadow first | M2a | S275 | new S271 | Backlog |
 | AA-1051 | [Quality W5] Paid writer proofs on small fixed samples under the D12 caps | M2a | S275 | new S271 | Backlog |
 | AA-1052 | [Quality W6] Lineage, dormant-code cleanup and permanent change control | M2a | S275 | new S271 | Backlog |
@@ -161,10 +161,10 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | AA-741 | [T-series audit] End-to-end T0→T11 test run on controlled tenants + per-mecha… | M2a | S270 | re-scope | In Progress |
 | AA-820 | [Legal] Tenant Terms clause for the Anthropic Usage Policy (effective 12/11/2… | M-P1 | ≤11/11 | re-scope | In Progress |
 | AA-855 | [UAT] Ecosystem UAT with recorded run videos: CIS admin + tenant portal, Trip… | M-P1 | S272 | re-scope | In Progress |
-| AA-1038 | [TripPlanner] R5 multi-tenant white-label TripPlanner: tenant_id + RLS, per-t… | M-P2 | S273 | re-scope | In Progress |
+| AA-1038 | [TripPlanner] R5 multi-tenant white-label TripPlanner: tenant_id + RLS, per-t… | M-P2 | S273 (MFA apply) | re-scope | In Review |
 | AA-1046 | [Booking] R4b B2C drop and VAT e-invoice provider API | M-R4 | S274 | new S270 | Backlog |
 | AA-1024 | [AI gateway] CIS core hardening + bypass guards: stage kill switch, prompt_ve… | M1b | ≥10/11 | re-scope | In Progress |
-| AA-911 | [Identity] Staff sign-in for Booking (and CIS) Vercel Previews, then retire t… | M5 | S275 | re-scope | Backlog |
+| AA-911 | [Identity] Staff sign-in for Booking (and CIS) Vercel Previews, then retire t… | M5 | S273 (split A10) | re-scope | In Review |
 | AA-1041 | [TripPlanner] R7 TripPlanner UX: place photos, activity icons, map/itinerary… | M-R7 | S277 | re-scope | Backlog |
 | AA-960 | [CRM W6] CRM-29b Tags, system tags, coverage, ready-to-travel | CRM-after-R3 | after S280 | pause | Backlog |
 | AA-963 | [CRM W6] CRM-32 Search + library | CRM-after-R3 | after S280 | pause | Backlog |
