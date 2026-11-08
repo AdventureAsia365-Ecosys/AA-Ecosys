@@ -1,0 +1,26 @@
+{
+ "anchors": {
+  "anchored": 25111,
+  "atoms": 26001,
+  "checked": 26001,
+  "no_evidence": 0,
+  "rule": {
+   "min_share": 0.6,
+   "min_words": 2
+  },
+  "tours": 892,
+  "unanchored": 890,
+  "unanchored_share": 0.0342,
+  "unanchored_share_per_tour": {
+   "max": 1.0,
+   "mean": 0.046,
+   "n": 892,
+   "p50": 0.0,
+   "p90": 0.154,
+   "with_any": 260
+  },
+  "unknown_no_raw": 0
+ },
+ "issue": "AA-1047",
+ "measure": "anchors"
+}
