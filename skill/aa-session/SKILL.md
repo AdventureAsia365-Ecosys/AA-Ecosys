@@ -41,6 +41,12 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
    - **Guard chạy theo lịch (AA-1024 G14):** `python3 tools/github/guard_runs.py` (chỉ đọc) — lượt schedule mới nhất của
      mọi workflow 6 repo (Secret Scan full history, nightly integration CIS, docs-lint sweep, probe/drift Infra), đỏ
      lên đầu. Có dòng RED → ghi vào khối trạng thái và checklist (một việc phải xử lý trong phiên, không để trôi).
+   - **Vệ sinh CI (AA-1024, S273):** `python3 tools/github/ci_hygiene.py` (chỉ đọc), chạy cạnh `guard_runs.py` — cache
+     Actions mỗi repo so với trần 10 GB (top key theo dung lượng, tách main / PR / merge queue), cache của PR không còn
+     mở và của merge queue cũ > 2 h, và quét workflow + composite action tìm bước tải binary từ ngoài không có cache +
+     sha256 pin. Dòng RED (repo > 8 GB hoặc tải ngoài chưa cache) → ghi vào khối trạng thái và checklist. Còn cache cũ →
+     `--clean` (chỉ xoá cache PR không còn mở và queue cũ; cache main không bao giờ bị đụng). Cache CodeQL (default
+     setup) chỉ báo dung lượng, không chỉnh được từ workflow.
    - **Chỉ khi Nghiệp nói "dùng kiro-cli"**: chạy `.claude/skills/kiro-delegate/kiro-preflight.sh`, ghi credit Kiro vào
      khối trạng thái. Lỗi / credit thấp → báo và làm phiên này bằng Claude (skill `kiro-delegate`).
 3. **Đề xuất danh sách issue** theo master plan: trước hết issue có `session` = phiên này, rồi slot kế, rồi theo thứ tự
