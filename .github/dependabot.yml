@@ -1,0 +1,18 @@
+# AA-1024 (S273): weekly version updates for the GitHub Actions this repo runs (.github/workflows and the composite
+# actions in .github/actions/<name>/action.yml), grouped into one PR, the same setup as AA-CIS-Infra and the app repos.
+# Every action is pinned to a full-length commit SHA with its release tag in a "# vX.Y.Z" comment (workflow_lint.py
+# WL4, root ADR 0021 decision 2.3); Dependabot moves the SHA and the comment together. Its PRs are reviewed and merged
+# like any other PR, never auto-merged.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directories: ["/", "/.github/actions/*"]
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 1
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: chore
