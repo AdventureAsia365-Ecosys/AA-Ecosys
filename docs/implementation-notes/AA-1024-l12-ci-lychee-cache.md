@@ -46,6 +46,9 @@ repo, AA-Booking, AA-Partner, AA-TripPlanner-Web and AA-CIS-Infra. AA-CIS-App ha
 - `docs-lint.yml`: the "Internal links (offline)" step uses `./.github/actions/lychee` with the same `args`, `fail` and
   `jobSummary` as before. The workflow also has a push trigger (paths: the action and the script) and the warm job.
 - `workflow-lint.yml` runs `test_lychee_bin.py` and lists the two script files in its path filters.
+- `scripts/pre-push.sh`: the hint for a missing lychee no longer names lychee-action. It says how to fetch the same
+  verified binary with `lychee_bin.py fetch`. Only the hint text changed.
+- `tools/docs/README.md`: one paragraph on the pinned binary and the local fetch command.
 
 ## Tradeoffs
 
