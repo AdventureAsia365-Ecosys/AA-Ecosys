@@ -1,7 +1,8 @@
 # ADR 0021 — GitHub organisation security and CI/CD hygiene: org-level controls first, repos stay public, zero added cost
 
 - **Status:** **Accepted** (tech lead, S273, 08/11/2026): decisions 1–6. Decision 7 records the evaluation; it buys
-  nothing.
+  nothing. Rollout (S273): layers 1–4 of decision 5 and the artifact-retention check of decision 4 are built (see the
+  Rollout column); the org settings of decision 2 and the App permission of layer 3 wait for the tech lead.
 - **Amends:** [ADR 0014](0014-repo-visibility-and-github-plan.md) decision 4 (the prod trigger). Org-level controls
   come first at the trigger. Making repos private is the last option, and it needs a new decision with a cost line.
 - **Respects, unchanged:** ADR 0014 decisions 1–3 and Amendment 2 (full-history scan before any visibility switch),
@@ -101,7 +102,11 @@ These keep any later visibility switch from breaking CI. Each one is also good p
   contents) instead of relying on public access.
 - No CI step depends on an unauthenticated download. External tools are cached, sha256-pinned and fetched with an
   authenticated client (decision 5).
-- Artifact retention is short (default 14 days unless a workflow states why it needs longer).
+- Artifact retention is short (default 14 days unless a workflow states why it needs longer). Checked by workflow
+  lint rule WL7 (warn): an `actions/upload-artifact` step without `retention-days`, or above 14 days without a
+  `# retention: <why>` comment, is a warning (`tools/github/ci_hygiene.py`; root Workflow Lint and the daily hygiene
+  run). On 08/11/2026: 36 upload steps in the six repos, 10 warnings left after the root fix; WL7 moves into the shared
+  `workflow_lint.py` in one wave once they are cleared.
 - Runner minutes are tracked in the monthly C8 review against the phase table above.
 
 ### 5. CI/CD hygiene in four automated layers
@@ -112,10 +117,12 @@ Nobody checks these by hand. The session start only reads the result.
 |---|---|---|
 | 1. Policy as code at PR time | A workflow lint fails a PR that adds an external download without cache + sha256 pin + authenticated fetch, or an unpinned third-party action | warn mode first, then enforced |
 | 2. Event and schedule clean-up | A closed PR's caches are deleted. A daily job deletes merge-queue caches older than 2 hours. Caches are saved only on the default branch; PRs and merge-queue runs restore them | at once |
-| 3. Alerts as one issue | A daily job measures cache use per repo (threshold 8 GB of the 10 GB limit), stale caches and uncached downloads. It opens or updates one issue per finding type and closes it when the finding clears. It reads through an App token with read-only Actions permission | at once |
-| 4. Dependency updates | Dependabot for actions, pip and npm (already on). A scheduled check opens a PR when a self-managed pin (lychee, spaCy model, Syft) has a newer release. No auto-merge for third-party updates: CI and review first | at once |
+| 3. Alerts as one issue | A daily job measures cache use per repo (threshold 8 GB of the 10 GB limit), stale caches and uncached downloads, and lists public repositories not in the known list. It opens or updates one issue per finding type and closes it when the finding clears. It reads through an App token with read-only Actions permission | built S273: root `.github/workflows/ci-hygiene.yml` (daily) + `tools/github/hygiene_issues.py`. Until the App has Actions read and its id/key are set in the root repo, the run measures only the root's own caches and keeps a "needs permission" issue open |
+| 4. Dependency updates | Dependabot for actions, pip and npm (already on). A scheduled check opens an issue (not a PR) when a self-managed pin (lychee, spaCy model, Syft, Trivy, actionlint, oasdiff, the gitleaks image) has a newer release. No auto-merge for third-party updates: CI and review first | built S273: the same workflow, weekly, `tools/github/pin_freshness.py`; one issue per outdated pin |
 
-The root tool `tools/github/ci_hygiene.py` holds the checks (layers 1 and 3) and can also be run by hand.
+The root tool `tools/github/ci_hygiene.py` holds the checks (layers 1 and 3) and can also be run by hand;
+`tools/github/pin_freshness.py` holds layer 4. Layer 4 opens an issue rather than a PR (S273): moving a pin needs a new
+sha256 checked against the release's own checksums file in every repo that carries it, which is a reviewed wave.
 
 ### 6. Cost guard
 
@@ -159,7 +166,11 @@ repositories (on public repositories anyone's PR could run code on them).
 
 - Tech lead (org owner): apply decision 2 in the org settings, then confirm by reading them back with a token that has
   `admin:org`. The Actions policy values are not readable today.
-- Agent: layers 1–4 (AA-1024 lanes l12, l14 and their follow-ups); artifact retention; App-token reads for
-  cross-repository workflows.
+- Agent: layers 1–4 (AA-1024 lanes l12, l14, l15, l19): built S273; artifact retention: WL7 warns (S273), the
+  remaining warnings in the five app/infra repos and the move of WL7 into `workflow_lint.py` are one wave; App-token
+  reads for cross-repository workflows.
+- Tech lead: give `aa-ecosys-ci-bot` the repository permission **Actions: Read-only**, install it on all six repos,
+  and set the root repo variable `AA_CI_BOT_APP_ID` and secret `AA_CI_BOT_PRIVATE_KEY`, so the daily hygiene run reads
+  every repo's caches (until then it opens a "needs permission" issue that says the same).
 - Monthly C8 review: runner minutes per phase, cache use per repo, Actions storage.
 - Re-check the private-on-Free feature table against GitHub's plan documentation before any visibility decision.

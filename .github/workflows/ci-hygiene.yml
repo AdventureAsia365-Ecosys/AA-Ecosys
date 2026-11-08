@@ -1,0 +1,178 @@
+name: CI hygiene
+
+# Root ADR 0021 decision 5, layers 3 and 4 (AA-1024, S273). Nobody checks these by hand; the session start reads the
+# issues (and guard_runs.py reads this workflow's latest scheduled run).
+#   caches (daily, after every repo's 02:41 Cache cleanup): tools/github/ci_hygiene.py --json over the six repos, then
+#     tools/github/hygiene_issues.py keeps ONE issue per finding type in this repo (label ci-hygiene, title marker
+#     [ci-hygiene:<type>]): Actions cache above 8 GB of the 10 GB cap, stale pull request / merge-queue caches, uncached
+#     external downloads (WL5), a public repository not in the known list, and "needs permission".
+#   pins (weekly, Monday): tools/github/pin_freshness.py --json compares the self-managed pins (release-bin pins.txt,
+#     lychee pins.txt, the spaCy model wheel URL, ghcr image tags) with the newest GitHub release; one issue per
+#     outdated pin (label ci-pin-update, marker [ci-pin:<key>]). An issue, never a PR: no auto-merge (ADR 0021 layer 4).
+# An issue opens or updates while its finding is present and closes with a comment when it clears; a failed read
+# leaves it as it is.
+#
+# Tokens: reads go through an aa-ecosys-ci-bot installation token minted with read-only Actions + Contents + Pull
+# requests (Actions caches of other repos need actions:read; ADR 0021 decision 4: cross-repo reads use the App). The
+# App is optional here: without the repo variable AA_CI_BOT_APP_ID + secret AA_CI_BOT_PRIVATE_KEY, or when the App lacks
+# Actions read, the run falls back to a narrower token and the "needs permission" issue names what the tech lead must
+# grant (docs/security/github-apps.md). Issue writes use this run's GITHUB_TOKEN (issues: write, this repo only).
+# Public repo: the issue text carries repo names, workflow paths, sizes and versions only. Cost: $0 (standard runner).
+on:
+  schedule:
+    - cron: "17 4 * * *"    # caches, daily 04:17 UTC
+    - cron: "47 4 * * 1"    # pins, weekly Monday 04:47 UTC
+  workflow_dispatch:
+    inputs:
+      check:
+        description: "Which check to run"
+        type: choice
+        options: [caches, pins, both]
+        default: both
+      apply:
+        description: "Write the issues (off: print the plan only)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-hygiene
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  REPOS: "AA-Ecosys,AA-CIS-App,AA-Booking,AA-Partner,AA-TripPlanner-Web,AA-CIS-Infra"
+  HAS_APP: ${{ vars.AA_CI_BOT_APP_ID != '' && secrets.AA_CI_BOT_PRIVATE_KEY != '' }}
+  APPLY: ${{ github.event_name == 'schedule' || inputs.apply }}
+  RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+jobs:
+  plan:
+    name: Which checks
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    outputs:
+      checks: ${{ steps.pick.outputs.checks }}
+    steps:
+      - id: pick
+        env:
+          EVENT: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
+          CHECK: ${{ inputs.check }}
+        run: |
+          case "$EVENT:$SCHEDULE:$CHECK" in
+            "schedule:17 4 * * *:"*) checks='["caches"]' ;;
+            "schedule:47 4 * * 1:"*) checks='["pins"]' ;;
+            workflow_dispatch:*:both) checks='["caches","pins"]' ;;
+            workflow_dispatch:*:caches) checks='["caches"]' ;;
+            workflow_dispatch:*:pins) checks='["pins"]' ;;
+            *) checks='[]' ;;
+          esac
+          echo "checks=$checks" >> "$GITHUB_OUTPUT"
+          echo "checks: $checks"
+
+  hygiene:
+    name: ${{ matrix.check }}
+    needs: plan
+    if: needs.plan.outputs.checks != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        check: ${{ fromJSON(needs.plan.outputs.checks) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read   # check out the tools
+      issues: write    # open / update / close this repo's hygiene issues (GITHUB_TOKEN, this repo only)
+      actions: read    # fallback: this repo's own caches when the App token is not available
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            tools/github
+            .github/scripts
+
+      - name: Setup Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML
+        run: python -m pip install --quiet pyyaml==6.0.2
+
+      # First choice: Actions + Contents + Pull requests read on the six repos. It fails when the App lacks Actions read
+      # or is not installed on one of them; the next step then mints the same token without Actions.
+      - name: Mint the aa-ecosys-ci-bot token (read-only, with Actions)
+        id: app-actions
+        if: env.HAS_APP == 'true'
+        continue-on-error: true
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.AA_CI_BOT_APP_ID }}
+          private-key: ${{ secrets.AA_CI_BOT_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ env.REPOS }}
+          permission-actions: read
+          permission-contents: read
+          permission-pull-requests: read
+
+      - name: Mint the aa-ecosys-ci-bot token (read-only, without Actions)
+        id: app-read
+        if: env.HAS_APP == 'true' && steps.app-actions.outcome != 'success'
+        continue-on-error: true
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.AA_CI_BOT_APP_ID }}
+          private-key: ${{ secrets.AA_CI_BOT_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ env.REPOS }}
+          permission-contents: read
+          permission-pull-requests: read
+
+      - name: Measure
+        id: measure
+        env:
+          GH_TOKEN: ${{ steps.app-actions.outputs.token || steps.app-read.outputs.token || github.token }}
+          TOKEN_SOURCE: ${{ steps.app-actions.outputs.token && 'app+actions' || steps.app-read.outputs.token && 'app' || 'github-token' }}
+          CHECK: ${{ matrix.check }}
+        run: |
+          echo "token_source=$TOKEN_SOURCE" >> "$GITHUB_OUTPUT"
+          echo "Token: $TOKEN_SOURCE" >> "$GITHUB_STEP_SUMMARY"
+          rc=0
+          if [ "$CHECK" = caches ]; then
+            python3 -B tools/github/ci_hygiene.py --json > "$RUNNER_TEMP/report.json" || rc=$?
+          else
+            python3 -B tools/github/pin_freshness.py --json > "$RUNNER_TEMP/report.json" || rc=$?
+          fi
+          echo "rc=$rc" >> "$GITHUB_OUTPUT"
+          echo "Check exit code: $rc (0 clean, 1 findings, 2 something unreadable)"
+          # 1 = findings: the issues carry them. 2 = a read failed: the issues of that data are left as they are and
+          # the job fails at the end so the run shows red.
+          if [ "$rc" -gt 2 ]; then exit "$rc"; fi
+
+      - name: Sync the issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          CHECK: ${{ matrix.check }}
+          TOKEN_SOURCE: ${{ steps.measure.outputs.token_source }}
+        run: |
+          kind=hygiene
+          if [ "$CHECK" = pins ]; then kind=pins; fi
+          args=(sync --kind "$kind" --report "$RUNNER_TEMP/report.json" --repo "$REPO" --token-source "$TOKEN_SOURCE"
+                --run-url "$RUN_URL")
+          if [ "$APPLY" = true ]; then args+=(--apply); fi
+          python3 -B tools/github/hygiene_issues.py "${args[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail on an unreadable repo or upstream
+        if: steps.measure.outputs.rc == '2'
+        run: |
+          echo "::error::the ${{ matrix.check }} check could not read a repo, the org list or an upstream release (see the Measure step); its issues were left as they are"
+          exit 1
