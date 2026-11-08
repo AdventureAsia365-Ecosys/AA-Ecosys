@@ -20,6 +20,8 @@ tools serve, and when to use each: skill `aa-ship` (§1 "Cách merge", `referenc
 | `dbmig.sh <owner>/<file or NNN> <check or apply>` | DB Migrate on a file already on Infra main (`ship_copy_apply.py --no-copy`) |
 | `ship_open_prs.py <journal or wf_ id>` | push lane branches and open their PRs from a workflow journal (below) |
 | `train-lib.sh` | shell functions for a background train; `waitdeploy` waits for a `git_sha` on a health endpoint |
+| `guard_runs.py [--json]` | session start, read-only: the latest scheduled run of every workflow in the 6 repos, red first |
+| `ci_hygiene.py [--json] [--clean]` | session start: Actions cache usage vs the 10 GB cap per repo, stale pull request / merge-queue caches (`--clean` deletes only those), uncached external downloads in workflows; read-only without `--clean` |
 
 All Python tools are stdlib only, print no token, key or credential, and warn when the MFA session ends within
 30 minutes (only the `Expiration` field of `aws configure export-credentials` is read). Run them from the main
