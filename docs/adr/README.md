@@ -37,6 +37,7 @@ An amendment is a separate file `<nnnn>a-<slug>.md` and the amended ADR carries 
 | [0018](0018-lean-aws-account-model.md) | Lean AWS account model: an AA-owned organization (management account), prod in its own account, two environments; supersedes ADR 0012 decisions 1, 2 and 5; prod in us-west-1 (decision 7) (AA-1004; design: [S258 blueprint](../audits/2026-10-29-S258-aws-org-blueprint/README.md) §0) | Accepted 31/10/2026 (S262, tech lead; amended by 0009 d14 and 0019) |
 | [0019](0019-b2b-only-ecosystem-model.md) | B2B-only ecosystem model: AA sells to partner agencies (tenants) only; Content is the base product, CRM and TripPlanner are add-ons, Booking is the B2B back office; tenant master in CIS `shared`, feature keys, staff roles and tenant scope, one agency app (AA-1034; design: [S265 audit](../audits/2026-11-03-S265-ecosystem-restructure/README.md)) | Accepted 03/11/2026 (S265, tech lead; d1–d23; b1–b21 business choices the business owner may revisit) |
 | [0020](0020-content-quality-architecture.md) | Content quality architecture: one policy registry, one FactSheet, measured gates, one exit contract for every AI-written tour page, blog and social post; amends 0009 d5, d8, d10, d12 (AA-900, AA-741; design: [S271 audit](../audits/2026-11-06-S271-writing-quality-audit/README.md)) | Accepted 06/11/2026 (S271, tech lead; D1–D16) |
+| [0021](0021-github-org-security-and-ci-hygiene.md) | GitHub organisation security and CI/CD hygiene: org-level controls first, repos stay public, zero added cost; CI hygiene in four automated layers; amends 0014 d4 (AA-1024, AA-1004) | Accepted 08/11/2026 (S273, tech lead) |
 
 ## Numbering
 
@@ -49,7 +50,7 @@ already cite it.
 |---|---|---|
 | 0013 | Reserved | HTTP API conventions, before any `/booking/v1` prefix (AA-899; cited by the engineering handbook) |
 
-Next free root numbers: **0021**.
+Next free root numbers: **0022**.
 
 AA-901 took 0011 (agent and bot identity, merge rights) and 0014 (repo visibility and GitHub plan), the next free
 numbers when its ADRs were written (S247).
