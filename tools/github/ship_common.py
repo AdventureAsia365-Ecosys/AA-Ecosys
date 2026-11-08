@@ -320,7 +320,7 @@ def removed_files(runner: Runner, repo: str, n: int) -> list[str]:
 
 
 def mfa_expiry(runner: Runner, profile: str = "aa365-admin") -> datetime | None:
-    """Expiry of the cached MFA session (8 h). Only the Expiration field is read; nothing else is kept or printed."""
+    """Expiry of the cached MFA session (12 h, role nghiep-admin-12h). Only the Expiration field is read; nothing else is kept or printed."""
     r = runner.run(["aws", "configure", "export-credentials", "--profile", profile, "--format", "process"],
                    timeout=30)
     if not r.ok:

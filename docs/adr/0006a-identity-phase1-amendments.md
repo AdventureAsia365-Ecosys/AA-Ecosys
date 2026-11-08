@@ -134,7 +134,8 @@ Replaces decision 11's address and makes "readable only by the admin role, retri
     `PutSecretValue` only and rotates without reading the old value. Terraform holds the container, never a
     version.
 - **Resource policy:** denies `GetSecretValue` and `PutSecretValue` to every principal except the MFA admin role
-  `nghiep-admin-8h-session` (by `aws:PrincipalArn`). `DescribeSecret` and `GetResourcePolicy` are not denied,
+  `nghiep-admin-12h` (by `aws:PrincipalArn`). Since AA-1004 (S273) that role is managed in Terraform (AA-CIS-Infra
+  `accounts/aa365/admin_role.tf`); it replaced the hand-made `nghiep-admin-8h-session`. `DescribeSecret` and `GetResourcePolicy` are not denied,
   so Terraform refresh keeps working.
 - **Alerts:**
   - EventBridge rule `aa-identity-dev-breakglass-secret-access` (`ENABLED_WITH_ALL_CLOUDTRAIL_MANAGEMENT_EVENTS`)

@@ -20,7 +20,7 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
      block từ log local.
 2. **Kiểm trạng thái thật**, so với memory (lệnh AWS một dòng, `--profile aa365-admin --region us-west-1`):
    - STS còn hạn: `aws sts get-caller-identity --profile aa365-admin` (hết hạn → Nghiệp nhập MFA), rồi **ghi giờ hết
-     hạn phiên MFA** (~8 h): `python3 tools/github/ship_common.py mfa` — in giờ hết hạn, số phút còn lại và giờ nhắc
+     hạn phiên MFA** (~12 h, role `nghiep-admin-12h`): `python3 tools/github/ship_common.py mfa` — in giờ hết hạn, số phút còn lại và giờ nhắc
      (hết hạn − 30′); chỉ đọc trường `Expiration`, không in key/token. Ghi dòng đó vào khối trạng thái đầu phiên và
      đầu checklist `.tmp-session/S<nnn>-checklist.md`.
    - **Nhắc trước khi hết hạn:** đặt một lời nhắc một lần (CronCreate) đúng giờ nhắc; không có thì kiểm lại giờ đó
