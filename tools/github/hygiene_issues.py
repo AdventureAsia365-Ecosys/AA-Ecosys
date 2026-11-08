@@ -24,6 +24,14 @@ Two open issues with one marker (a race): the oldest is kept, the others are clo
 Without --apply it prints the plan and writes nothing. The plan and a status table are printed as Markdown (the
 workflow appends them to the run summary). Issue text is public: repo names, workflow paths, sizes and versions only.
 Exit: 0 planned/applied | 1 a write failed | 2 the report cannot be read.
+
+    python3 tools/github/hygiene_issues.py read-failures --kind pins --report pins.json
+
+prints one line per failed read in the report (a repo, the org list or an upstream release) and exits 3 when there is
+one, 0 when the report is complete, 2 when it cannot be read. The workflow turns the run red from this, not from the
+check's exit code: both checks exit 1 for a finding before they look at failed reads, so a day with a finding and a
+failed read would otherwise stay green. A cache list that returned HTTP 403 is not a failed read here: it has its own
+"needs permission" issue.
 """
 from __future__ import annotations
 
@@ -38,6 +46,7 @@ from pathlib import Path
 ORG = "AdventureAsia365-Ecosys"
 CAP_GB = 10.0
 APP = "aa-ecosys-ci-bot"
+ENVIRONMENT = "ci-hygiene"           # holds the App key; deployment branches: master only (the key can write elsewhere)
 FOOTER = ("_Kept up to date by the root CI hygiene workflow (`.github/workflows/ci-hygiene.yml`, root ADR 0021 "
           "decision 5). It updates this issue while the finding is present and closes it when the finding clears._")
 LAST_CHANGE = "_Last change:"
@@ -151,9 +160,11 @@ def hygiene_findings(report: dict, *, stale_min_gb: float = 1.0, token_source: s
 def needs_permission_fix(token_source: str, repos: list[str]) -> str:
     steps = []
     if token_source in ("github-token", "unknown"):
-        steps.append(f"Set the root repo variable `AA_CI_BOT_APP_ID` and secret `AA_CI_BOT_PRIVATE_KEY` (GitHub App "
-                     f"`{APP}`, docs/security/github-apps.md part 5) so the workflow can mint an App token; the "
-                     "default `GITHUB_TOKEN` reads only this repository's caches.")
+        steps.append(f"In the root repo create the environment `{ENVIRONMENT}` with deployment branches limited to "
+                     f"`master`, store the secret `AA_CI_BOT_PRIVATE_KEY` in that environment (never at repo level) "
+                     f"and set the repo variable `AA_CI_BOT_APP_ID` (GitHub App `{APP}`, docs/security/github-apps.md "
+                     "part 5), so the workflow can mint an App token; the default `GITHUB_TOKEN` reads only this "
+                     "repository's caches.")
     if token_source in ("github-token", "app", "unknown"):
         steps.append(f"App settings of `{APP}` → Permissions → Repository → **Actions: Read-only** → Save, then accept "
                      "the new permission on the org installation (Org settings → GitHub Apps → Configure → Review "
@@ -190,6 +201,23 @@ def pin_findings(report: dict) -> tuple[dict, bool]:
             + (" A spaCy model's major.minor must match the pinned spaCy library." if "spacy-models" in g["upstream"]
                else ""))
     return out, not (report.get("unreadable") or [])
+
+
+# ------------------------------------------------------------------------------------------- failed reads
+
+def read_failures(report: dict, kind: str) -> list[str]:
+    """What the report could not read, one line each (empty: complete). Decides the run colour (see the module doc)."""
+    out = [f"{repo}: unreadable" for repo in report.get("unreadable") or []]
+    if kind == "hygiene":
+        org = report.get("org")
+        if org is None:
+            out.append("org repository list: not read")
+        elif org.get("error"):
+            out.append(f"org repository list: {org['error']}")
+    else:
+        out += [f"pin {g.get('key')}: upstream release unreadable ({g.get('error') or 'no detail'})"
+                for g in report.get("pins") or [] if g.get("status") == "unknown"]
+    return out
 
 
 # ------------------------------------------------------------------------------------------------- planning
@@ -328,12 +356,22 @@ def main(argv: list[str] | None = None, run=subprocess.run) -> int:
                    help="stale caches below this per repo are no finding (clean-ups leave a few queue entries)")
     s.add_argument("--token-source", default="unknown", choices=["app+actions", "app", "github-token", "unknown"])
     s.add_argument("--run-url", default="")
+    r = sub.add_parser("read-failures", help="list the failed reads in a report; exit 3 when there is one")
+    r.add_argument("--kind", choices=sorted(KINDS), required=True)
+    r.add_argument("--report", type=Path, required=True)
     a = ap.parse_args(argv)
     try:
         report = json.loads(a.report.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        if not isinstance(report, dict):
+            raise ValueError("not a JSON object")
+    except (OSError, ValueError) as exc:
         print(f"cannot read the report {a.report}: {exc}", file=sys.stderr)
         return 2
+    if a.cmd == "read-failures":
+        failures = read_failures(report, a.kind)
+        for line in failures:
+            print(line)
+        return 3 if failures else 0
     meta = KINDS[a.kind]
     if a.kind == "hygiene":
         findings, complete = hygiene_findings(report, stale_min_gb=a.stale_min_gb, token_source=a.token_source), True

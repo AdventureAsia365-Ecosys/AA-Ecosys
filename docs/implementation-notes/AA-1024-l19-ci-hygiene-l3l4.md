@@ -14,6 +14,20 @@ own `gh` login.
   repo's 02:41 Cache cleanup) and weekly Monday 04:47 UTC (pins), plus `workflow_dispatch` (`check`: caches / pins /
   both; `apply` off prints the plan only). A small `plan` job turns the event into a matrix list, because `matrix` is
   not available in a job-level `if:`.
+- **The App key lives only in the root environment `ci-hygiene` (deployment branches: master only)** (review fix,
+  S273). `aa-ecosys-ci-bot` has Contents / Pull requests / Issues write on the child repos and can merge there
+  (ADR 0011a). A repo-level secret in the public root repo would be readable by a workflow edited on any branch an
+  agent pushes (no required CI on root), whatever the job's `if:` says. The environment's branch rule is enforced by
+  GitHub before the job starts, the same pattern as the app repos' `release` environment. Environment secrets are not
+  visible in workflow-level `env`, so "is the App configured" is a step inside the job. A unit test
+  (`test_hygiene_issues.Workflow`) keeps the key out of workflow-level env and in the environment job only.
+- **Red comes from the report, not from the check's exit code** (review fix, S273). Both checks exit 1 for a finding
+  before they look at failed reads, so a day with a finding and an unreadable repo / org list / upstream release was
+  green. `hygiene_issues.py read-failures` lists the failed reads (unreadable repos; caches: org list error or
+  missing; pins: any upstream `unknown`) and exits 3; the Measure step sets `degraded` from it (or from exit 2) and
+  the last step fails the run. A cache list that returned 403 is not a failed read: it has the `needs-permission`
+  issue, and the run stays green until the tech lead grants the permission (otherwise every day is red for a known,
+  tracked gap).
 - **Measure and write are separate steps with separate tokens.** Reads use an `aa-ecosys-ci-bot` installation token
   minted with read-only Actions + Contents + Pull requests on the six repos (`permission-*` inputs narrow the App's
   write permissions to reads). Issue writes use the run's `GITHUB_TOKEN` with `issues: write` on this repo only, so
@@ -56,8 +70,10 @@ own `gh` login.
 - `tools/github/hygiene_issues.py` (new): report → findings → plan → `gh issue` writes; Markdown summary for the run.
 - `.github/workflows/ci-hygiene.yml` (new); `.github/workflows/workflow-lint.yml` (WL7 warn step, trigger on
   `tools/github/ci_hygiene.py`); `.github/workflows/docs-lint.yml` (freshness artifact 30 → 14 days).
-- Tests: `test_ci_hygiene.py` (+9), `test_pin_freshness.py` (8), `test_hygiene_issues.py` (16), fake `gh` only.
-- ADR 0021 Status and Rollout lines; `tools/github/README.md`.
+- Tests: `test_ci_hygiene.py` (+9), `test_pin_freshness.py` (8), `test_hygiene_issues.py` (24: +6 read failures,
+  +2 workflow guards), fake `gh` only.
+- ADR 0021 Status and Rollout lines; `tools/github/README.md`; docs/security/github-apps.md part 5 (root
+  `ci-hygiene` environment, Actions read).
 
 ## Tradeoffs
 
@@ -65,6 +81,11 @@ own `gh` login.
   would mean six times the issues for the same root cause (usually one workflow pattern copied to every repo).
 - Org check reads `orgs/<org>/repos`: public repositories are visible to any token, so the check works with the
   fallback token too. A private repository created by a member is not flagged (not a public-exposure risk).
+- Environment vs a second, read-only App: a dedicated App with only Actions + Contents read would keep any
+  write-capable key out of the root repo entirely, but it is one more App, key and installation for the tech lead to
+  create and rotate. The master-only environment closes the branch path at no cost; the dedicated App stays an option
+  if root `master` itself is ever considered untrusted. Each run of the environment job records a deployment entry
+  in the repo (harmless noise on a public repo).
 - No auto-clean in the scheduled run: deleting caches needs `actions: write` on every repo; the per-repo Cache
   cleanup workflows already hold that right for their own repo.
 
@@ -76,6 +97,9 @@ own `gh` login.
 - WL7 over the six default branches (36 `upload-artifact` steps): 11 warnings, 10 after this PR (root fixed). CIS 1
   (ci.yml SBOM, no retention-days), Booking 2, Partner 2 (ci.yml without retention-days, docs-lint 30 days),
   TripPlanner 1 (docs-lint 30 days), Infra 4 (three DB probes and docs-lint at 30 days).
-- Until the tech lead grants Actions read to the App and sets the App id/key in the root repo, the first scheduled run
+- `plan-sync.yml` already reads `AA_CI_BOT_PRIVATE_KEY` at repo level (not set on root today): a follow-up moves it
+  to an environment as well; this lane does not touch it.
+- Until the tech lead grants Actions read to the App, creates the `ci-hygiene` environment (master only) with the key
+  in it and sets the App id variable in the root repo, the first scheduled run
   opens `needs-permission` and leaves the cache types `unknown` for the five other repos (the root's own caches are
   measured with `GITHUB_TOKEN`). Downloads, org and pins work with the fallback token.

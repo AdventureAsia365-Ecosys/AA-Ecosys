@@ -23,7 +23,7 @@ tools serve, and when to use each: skill `aa-ship` (§1 "Cách merge", `referenc
 | `guard_runs.py [--json]` | session start, read-only: the latest scheduled run of every workflow in the 6 repos, red first |
 | `ci_hygiene.py [--json] [--clean]` | session start: Actions cache usage vs the 10 GB cap per repo, stale pull request / merge-queue caches (`--clean` deletes only those), uncached external downloads in workflows (WL5), artifact retention (WL7, warn), public org repositories not in the known list; read-only without `--clean`. `--retention-scan <checkout>` prints WL7 warnings for one checkout (root Workflow Lint) |
 | `pin_freshness.py [--json]` | read-only: self-managed pins (release-bin and lychee `pins.txt`, spaCy wheel URL, ghcr image tags) of the six repos vs the newest GitHub release |
-| `hygiene_issues.py sync --kind hygiene\|pins --report <json> [--apply]` | turns a `ci_hygiene.py` / `pin_freshness.py` report into one root issue per finding type (open, update, close); plan only without `--apply`. Run by the CI hygiene workflow |
+| `hygiene_issues.py sync --kind hygiene\|pins --report <json> [--apply]` | turns a `ci_hygiene.py` / `pin_freshness.py` report into one root issue per finding type (open, update, close); plan only without `--apply`. `read-failures --kind ... --report <json>` lists the failed reads (exit 3 when there is one). Run by the CI hygiene workflow |
 
 All Python tools are stdlib only, print no token, key or credential, and warn when the MFA session ends within
 30 minutes (only the `Expiration` field of `aws configure export-credentials` is read). Run them from the main
@@ -133,9 +133,12 @@ weekly (Monday 04:47 UTC) `pin_freshness.py --json` → `hygiene_issues.py sync 
   (`[ci-hygiene:<type>]`, `[ci-pin:<key>]`). Types: `cache-over-threshold` (8 GB), `stale-caches` (1 GB or more in a
   repo), `external-downloads` (WL5), `unknown-public-repo`, `needs-permission`; pins: one per outdated pin key.
 - Present → open, or edit when the finding changed; absent → close with a comment; unknown (a read failed) → leave.
-  A run whose read failed ends red after the sync (`guard_runs.py` shows it at session start).
+  A run whose read failed ends red after the sync (`guard_runs.py` shows it at session start). Red is decided from
+  the report (`hygiene_issues.py read-failures`), not from the check's exit code, which is 1 for any finding even when
+  a read failed too.
 - Reads: `aa-ecosys-ci-bot` token minted with Actions + Contents + Pull requests read, else the App without Actions,
-  else `GITHUB_TOKEN` (root caches only); the `needs-permission` issue names what to grant. Writes: `GITHUB_TOKEN`,
+  else `GITHUB_TOKEN` (root caches only); the `needs-permission` issue names what to grant. The App key sits only in
+  the root environment `ci-hygiene` (deployment branches: master), never at repo level. Writes: `GITHUB_TOKEN`,
   `issues: write`, root repo only.
 - By hand (read-only): `python3 tools/github/ci_hygiene.py --json > .tmp-session/r.json && python3
   tools/github/hygiene_issues.py sync --kind hygiene --report .tmp-session/r.json` prints the plan the workflow would apply.

@@ -10,13 +10,18 @@ name: CI hygiene
 #     lychee pins.txt, the spaCy model wheel URL, ghcr image tags) with the newest GitHub release; one issue per
 #     outdated pin (label ci-pin-update, marker [ci-pin:<key>]). An issue, never a PR: no auto-merge (ADR 0021 layer 4).
 # An issue opens or updates while its finding is present and closes with a comment when it clears; a failed read
-# leaves it as it is.
+# leaves it as it is and turns the run red (decided from the report by `hygiene_issues.py read-failures`, not from the
+# check's exit code: both checks exit 1 for a finding before they look at failed reads).
 #
 # Tokens: reads go through an aa-ecosys-ci-bot installation token minted with read-only Actions + Contents + Pull
 # requests (Actions caches of other repos need actions:read; ADR 0021 decision 4: cross-repo reads use the App). The
-# App is optional here: without the repo variable AA_CI_BOT_APP_ID + secret AA_CI_BOT_PRIVATE_KEY, or when the App lacks
-# Actions read, the run falls back to a narrower token and the "needs permission" issue names what the tech lead must
-# grant (docs/security/github-apps.md). Issue writes use this run's GITHUB_TOKEN (issues: write, this repo only).
+# App key can write to the child repos, so it lives ONLY in the environment `ci-hygiene` (deployment branches: master
+# only), never at repo level: a workflow edited on another branch cannot read it (same pattern as the app repos'
+# `release` environment, docs/security/github-apps.md part 5). Environment secrets are not visible in workflow-level
+# env, so the "is the App configured" test is a step inside the job. The App is optional here: without the repo
+# variable AA_CI_BOT_APP_ID + the environment secret AA_CI_BOT_PRIVATE_KEY, or when the App lacks Actions read, the run
+# falls back to a narrower token and the "needs permission" issue names what the tech lead must grant. Issue writes
+# use this run's GITHUB_TOKEN (issues: write, this repo only).
 # Public repo: the issue text carries repo names, workflow paths, sizes and versions only. Cost: $0 (standard runner).
 on:
   schedule:
@@ -47,7 +52,6 @@ defaults:
 
 env:
   REPOS: "AA-Ecosys,AA-CIS-App,AA-Booking,AA-Partner,AA-TripPlanner-Web,AA-CIS-Infra"
-  HAS_APP: ${{ vars.AA_CI_BOT_APP_ID != '' && secrets.AA_CI_BOT_PRIVATE_KEY != '' }}
   APPLY: ${{ github.event_name == 'schedule' || inputs.apply }}
   RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
@@ -87,6 +91,8 @@ jobs:
         check: ${{ fromJSON(needs.plan.outputs.checks) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    # Holds AA_CI_BOT_PRIVATE_KEY; deployment branches limited to master (tech lead sets the rule before the secret).
+    environment: ci-hygiene
     permissions:
       contents: read   # check out the tools
       issues: write    # open / update / close this repo's hygiene issues (GITHUB_TOKEN, this repo only)
@@ -107,11 +113,21 @@ jobs:
       - name: Install PyYAML
         run: python -m pip install --quiet pyyaml==6.0.2
 
+      - name: Is the App configured
+        id: app
+        env:
+          APP_ID: ${{ vars.AA_CI_BOT_APP_ID }}
+          HAS_KEY: ${{ secrets.AA_CI_BOT_PRIVATE_KEY != '' }}
+        run: |
+          if [ -n "$APP_ID" ] && [ "$HAS_KEY" = true ]; then has=true; else has=false; fi
+          echo "has_app=$has" >> "$GITHUB_OUTPUT"
+          echo "App configured: $has"
+
       # First choice: Actions + Contents + Pull requests read on the six repos. It fails when the App lacks Actions read
       # or is not installed on one of them; the next step then mints the same token without Actions.
       - name: Mint the aa-ecosys-ci-bot token (read-only, with Actions)
         id: app-actions
-        if: env.HAS_APP == 'true'
+        if: steps.app.outputs.has_app == 'true'
         continue-on-error: true
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
@@ -125,7 +141,7 @@ jobs:
 
       - name: Mint the aa-ecosys-ci-bot token (read-only, without Actions)
         id: app-read
-        if: env.HAS_APP == 'true' && steps.app-actions.outcome != 'success'
+        if: steps.app.outputs.has_app == 'true' && steps.app-actions.outcome != 'success'
         continue-on-error: true
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
@@ -146,16 +162,28 @@ jobs:
           echo "token_source=$TOKEN_SOURCE" >> "$GITHUB_OUTPUT"
           echo "Token: $TOKEN_SOURCE" >> "$GITHUB_STEP_SUMMARY"
           rc=0
+          kind=hygiene
           if [ "$CHECK" = caches ]; then
             python3 -B tools/github/ci_hygiene.py --json > "$RUNNER_TEMP/report.json" || rc=$?
           else
+            kind=pins
             python3 -B tools/github/pin_freshness.py --json > "$RUNNER_TEMP/report.json" || rc=$?
           fi
-          echo "rc=$rc" >> "$GITHUB_OUTPUT"
           echo "Check exit code: $rc (0 clean, 1 findings, 2 something unreadable)"
-          # 1 = findings: the issues carry them. 2 = a read failed: the issues of that data are left as they are and
-          # the job fails at the end so the run shows red.
           if [ "$rc" -gt 2 ]; then exit "$rc"; fi
+          # Red or green comes from the report, not from rc: rc is 1 whenever there is a finding, even when a repo,
+          # the org list or an upstream release could not be read as well. A report that cannot be parsed fails the
+          # sync step below.
+          frc=0
+          python3 -B tools/github/hygiene_issues.py read-failures --kind "$kind" --report "$RUNNER_TEMP/report.json" \
+            > "$RUNNER_TEMP/read-failures.txt" || frc=$?
+          degraded=false
+          if [ "$frc" = 3 ] || [ "$rc" = 2 ]; then degraded=true; fi
+          echo "degraded=$degraded" >> "$GITHUB_OUTPUT"
+          if [ "$degraded" = true ]; then
+            { echo "**Failed reads** (their issues are left as they are):"; sed 's/^/- /' "$RUNNER_TEMP/read-failures.txt"; } \
+              | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: Sync the issues
         env:
@@ -172,7 +200,9 @@ jobs:
           python3 -B tools/github/hygiene_issues.py "${args[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
 
       - name: Fail on an unreadable repo or upstream
-        if: steps.measure.outputs.rc == '2'
+        if: steps.measure.outputs.degraded == 'true'
+        env:
+          CHECK: ${{ matrix.check }}
         run: |
-          echo "::error::the ${{ matrix.check }} check could not read a repo, the org list or an upstream release (see the Measure step); its issues were left as they are"
+          echo "::error::the $CHECK check could not read a repo, the org list or an upstream release (see the Measure step summary); its issues were left as they are"
           exit 1

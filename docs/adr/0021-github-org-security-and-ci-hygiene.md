@@ -170,7 +170,9 @@ repositories (on public repositories anyone's PR could run code on them).
   remaining warnings in the five app/infra repos and the move of WL7 into `workflow_lint.py` are one wave; App-token
   reads for cross-repository workflows.
 - Tech lead: give `aa-ecosys-ci-bot` the repository permission **Actions: Read-only**, install it on all six repos,
-  and set the root repo variable `AA_CI_BOT_APP_ID` and secret `AA_CI_BOT_PRIVATE_KEY`, so the daily hygiene run reads
-  every repo's caches (until then it opens a "needs permission" issue that says the same).
+  create the root environment `ci-hygiene` with deployment branches limited to `master`, store the secret
+  `AA_CI_BOT_PRIVATE_KEY` in that environment (never at repo level: the key can write to the child repos) and set the
+  root repo variable `AA_CI_BOT_APP_ID`, so the daily hygiene run reads every repo's caches (until then it opens a
+  "needs permission" issue that says the same; steps in docs/security/github-apps.md part 5).
 - Monthly C8 review: runner minutes per phase, cache use per repo, Actions storage.
 - Re-check the private-on-Free feature table against GitHub's plan documentation before any visibility decision.

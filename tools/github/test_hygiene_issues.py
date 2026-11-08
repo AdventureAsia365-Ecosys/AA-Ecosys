@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import io
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -86,6 +87,9 @@ class HygieneFindings(unittest.TestCase):
         self.assertEqual(f["needs-permission"].status, "present")
         self.assertIn("AA_CI_BOT_APP_ID", f["needs-permission"].fix)
         self.assertIn("Actions: Read-only", f["needs-permission"].fix)
+        # the write-capable App key goes into the master-only environment, never a repo-level secret
+        self.assertIn("environment `ci-hygiene`", f["needs-permission"].fix)
+        self.assertIn("never at repo level", f["needs-permission"].fix)
         self.assertEqual(f["cache-over-threshold"].status, "unknown")
         self.assertEqual(f["external-downloads"].status, "absent")   # workflows were still scanned
         f = hi.hygiene_findings(report(rows), token_source="app")
@@ -94,6 +98,70 @@ class HygieneFindings(unittest.TestCase):
     def test_no_rows_at_all_is_unknown(self):
         f = hi.hygiene_findings(report([], unreadable=["AA-Ecosys"]))
         self.assertEqual(f["needs-permission"].status, "unknown")
+
+
+class ReadFailures(unittest.TestCase):
+    """The run colour comes from the report: a finding (check exit 1) must not hide a failed read."""
+
+    def test_clean_report_has_none(self):
+        self.assertEqual(hi.read_failures(CLEAN, "hygiene"), [])
+
+    def test_red_plus_unreadable_repo_is_a_failure(self):
+        r = report([row("AA-CIS-App", 9 * GB)], unreadable=["AA-Booking"])
+        self.assertEqual(hi.read_failures(r, "hygiene"), ["AA-Booking: unreadable"])
+
+    def test_org_error_or_missing_org_is_a_failure(self):
+        self.assertEqual(hi.read_failures(report([row("AA-Ecosys")], org_error="HTTP 502"), "hygiene"),
+                         ["org repository list: HTTP 502"])
+        no_org = {"rows": [row("AA-Ecosys")], "unreadable": []}
+        self.assertEqual(hi.read_failures(no_org, "hygiene"), ["org repository list: not read"])
+
+    def test_cache_403_is_not_a_read_failure(self):   # it has its own "needs permission" issue
+        self.assertEqual(hi.read_failures(report([row("AA-Booking", cache_error="403")]), "hygiene"), [])
+
+    def test_pins_outdated_plus_unknown_upstream_is_a_failure(self):
+        failures = hi.read_failures(Pins.REPORT, "pins")
+        self.assertEqual(len(failures), 1)
+        self.assertTrue(failures[0].startswith("pin scanner: upstream release unreadable"))
+        self.assertEqual(hi.read_failures({"pins": [], "unreadable": ["AA-Partner"]}, "pins"), ["AA-Partner: unreadable"])
+
+    def test_cli_exit_codes(self):
+        with tempfile.TemporaryDirectory() as d:
+            bad, ok = Path(d, "bad.json"), Path(d, "ok.json")
+            bad.write_text(json.dumps(report([row("AA-CIS-App", 9 * GB)], unreadable=["AA-Booking"])))
+            ok.write_text(json.dumps(CLEAN))
+            out = io.StringIO()
+            with mock.patch("sys.stdout", out):
+                self.assertEqual(hi.main(["read-failures", "--kind", "hygiene", "--report", str(bad)]), 3)
+                self.assertEqual(hi.main(["read-failures", "--kind", "hygiene", "--report", str(ok)]), 0)
+            self.assertEqual(out.getvalue(), "AA-Booking: unreadable\n")
+            Path(d, "list.json").write_text("[]")
+            with mock.patch("sys.stderr", io.StringIO()):
+                self.assertEqual(hi.main(["read-failures", "--kind", "pins", "--report", str(Path(d, "list.json"))]), 2)
+
+
+class Workflow(unittest.TestCase):
+    """Guards on .github/workflows/ci-hygiene.yml (text checks: the unit job installs no YAML parser)."""
+
+    TEXT = (Path(__file__).resolve().parents[2] / ".github/workflows/ci-hygiene.yml").read_text(encoding="utf-8")
+
+    def _jobs(self) -> dict[str, str]:
+        body = self.TEXT.split("\njobs:\n", 1)[1]
+        parts = re.split(r"(?m)^  ([a-z][a-z0-9_-]*):\n", body)
+        return dict(zip(parts[1::2], parts[2::2]))
+
+    def test_app_key_only_inside_the_master_only_environment(self):
+        head = self.TEXT.split("\njobs:\n", 1)[0]
+        self.assertNotIn("secrets.", head)          # workflow-level env cannot read environment secrets
+        readers = {name for name, text in self._jobs().items() if "secrets.AA_CI_BOT_PRIVATE_KEY" in text}
+        self.assertEqual(readers, {"hygiene"})
+        self.assertRegex(self._jobs()["hygiene"], rf"(?m)^    environment: {re.escape(hi.ENVIRONMENT)}$")
+
+    def test_red_comes_from_the_report(self):
+        hygiene = self._jobs()["hygiene"]
+        self.assertIn("hygiene_issues.py read-failures", hygiene)
+        self.assertIn("if: steps.measure.outputs.degraded == 'true'", hygiene)
+        self.assertNotIn("outputs.rc ==", hygiene)
 
 
 class Plan(unittest.TestCase):
