@@ -110,7 +110,7 @@ Pick the ones that apply from Annex 2 and say what each protects against at this
 | M-18 Scrub before any CRM model call | | Model providers see placeholders, not identities |
 | M-19 No identifying personal data in Content studio prompts; `pii` stages held to US AWS | | |
 | M-20 No prompt or output text in AI call records | | |
-| M-9 / M-10 Isolation and access control | | |
+| M-9 / M-10 CRM isolation and access control; M-9b / M-9c Content studio and Booking B2B agency scoping (partly application-level, Annex 2 §2 item 8) | | |
 | M-23 / M-24 Audit trails | | |
 | Contractual: notice of access requests, challenge where possible | | |
 

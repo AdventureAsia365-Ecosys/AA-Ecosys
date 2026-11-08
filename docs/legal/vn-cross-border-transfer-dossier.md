@@ -82,7 +82,8 @@ From [Annex 2](dpa-annex-2-security.md), Live measures only:
 
 - **Encryption:** CRM personal fields and files with a key per agency, crypto-shredding at offboarding (M-3 to M-5);
   TLS everywhere, the database refuses other connections (M-6).
-- **Access:** no public database endpoint, audited sessions only (M-7); row-level isolation per agency (M-9, M-10);
+- **Access:** no public database endpoint, audited sessions only (M-7); row-level isolation per agency in the CRM
+  (M-9, M-10); per-agency scoping in the Content studio and Booking B2B, partly in application code (M-9b, M-9c);
   agency users with MFA (M-11); staff roles and tenant scope (M-13); three levels of AA support access, each one in
   the agency's own access log (M-14); agents and maintenance scripts cannot read personal data (M-25 item 2).
 - **AI:** scrub before any CRM model call (M-18); no client personal data in Content studio prompts (M-19); no prompt
