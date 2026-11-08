@@ -54,17 +54,23 @@ before `VpcLinkInternalAllow` / `CloudFrontOriginAllow` (AA-CIS-Infra `modules/w
   what reaches the ALB (pages, BFF calls, cache misses); CloudFront serves cached chunks and photos without it. The
   viewer IP is the header `x-aa-viewer-ip`, written by the distribution's viewer-request function on every request (at
   the ALB the source address is CloudFront's).
-- `TripPlannerRateLimitModelPaths`: 100 per 5 minutes per viewer IP on `GET /api/browse/search` and
-  `POST /api/trip/narrate` -> 429.
-- `TripPlannerChallengePlanner`: a silent JavaScript Challenge (a short interstitial, no puzzle) on the two model paths
+- `TripPlannerRateLimitModelPaths`: 100 per 5 minutes per viewer IP on the protected paths `GET /api/browse/search`,
+  `POST /api/trip/narrate` (the two calls that reach a model) and `POST /api/trip/send` ("Send to advisor", which
+  stores a traveller's contact for an agency) -> 429.
+- `TripPlannerChallengePlanner`: a silent JavaScript Challenge (a short interstitial, no puzzle) on the protected paths
   and on a document navigation of a planner page (`/plan`, `/{tenant}/plan`). That document load is how a browser gets
   its `aws-waf-token` (4 hours): every in-site way into the planner (the header "Plan a trip", the home search "Plan my
   trip", the tour "Customise this trip", the destination buttons) is a full page load, and a planner reached
   client-side anyway reloads itself once. There is no JavaScript SDK: AWS WAF gives `challenge.js` only to a web ACL with
   a paid Bot Control / ATP / ACFP group, and the tech lead declined those (cost). A model call still challenged (the
   token expired) reloads the planner once per 5 minutes, then shows the "please reload" notice. A script without the
-  token gets HTTP 202 with `x-amzn-waf-action: challenge` on the model paths. Home, destination and tour pages are
+  token gets HTTP 202 with `x-amzn-waf-action: challenge` on the protected paths. A challenged "Send to advisor" keeps
+  the form and asks the traveller to reload the page (no automatic reload). Home, destination and tour pages are
   never challenged. No geo rule for this host.
+- On ECS these rules are the whole bot check of the three protected calls: BotID needs the Vercel edge and the image
+  builds it off. The app answers the older spellings (`GET /api/browse?resource=search`, `POST /api/trip` with
+  `op` `narrate` or `send`) 404 `use_protected_path` (task env `TP_EDGE_GATE=on`), so nothing reaches a model or
+  stores a lead outside the rules.
 - A traveller blocked by a rule, or a planner whose search or narration fails with a challenge, is a rollback trigger
   in section 3.
 
@@ -122,6 +128,8 @@ curl -s --resolve $H:443:$IP https://$H/api/health
 curl -s -o /dev/null -D - --resolve $H:443:$IP https://$H/plan | grep -iE '^(HTTP|x-robots-tag|x-frame-options|x-amz-cf-id)'
 curl -s -o /dev/null -D - --resolve $H:443:$IP "https://$H/api/browse/search?q=temple" | grep -iE '^(HTTP|x-amzn-waf-action)'
 curl -s --resolve $H:443:$IP "https://$H/api/browse?resource=search&q=temple"
+curl -s -o /dev/null -D - --resolve $H:443:$IP -X POST -H 'content-type: application/json' --data '{"op":"send","trip_id":"verify","session_id":"verify"}' "https://$H/api/trip/send" | grep -iE '^(HTTP|x-amzn-waf-action)'
+curl -s --resolve $H:443:$IP -X POST -H 'content-type: application/json' --data '{"op":"send","trip_id":"verify","session_id":"verify"}' "https://$H/api/trip"
 curl -s -o /dev/null -D - --path-as-is --resolve $H:443:$IP "https://$H/api/browse/%2e/search?q=temple" | grep -iE '^(HTTP|x-amzn-waf-action)'
 curl -s -o /dev/null -D - --path-as-is --resolve $H:443:$IP -X POST -H 'content-type: application/json' --data '{}' "https://$H/api/trip/%2e/narrate" | grep -iE '^(HTTP|x-amzn-waf-action)'
 ```
@@ -131,17 +139,22 @@ the "We couldn't load" state).
 
 Expect: `{"status":"ok","service":"aa-tripplanner-web","version":"<manifest>","git_sha":"<main sha>"}`; `/plan` 200
 with `x-robots-tag: noindex, nofollow`, `x-frame-options: DENY` and an `x-amz-cf-id` (CloudFront, not Vercel); the
-model path `HTTP/2 202` with `x-amzn-waf-action: challenge` (the ALB web ACL's TripPlanner rules answer through
-CloudFront); the older spelling
-`{"error":"use_protected_path"}` (404); both dot-segment spellings (`/api/browse/%2e/search`, `/api/trip/%2e/narrate`,
+model path and `POST /api/trip/send` both `HTTP/2 202` with `x-amzn-waf-action: challenge` (the ALB web ACL's
+TripPlanner rules answer through CloudFront); the older spellings (`/api/browse?resource=search`, `POST /api/trip`
+with `op` `send`) `{"error":"use_protected_path"}` (404); both dot-segment spellings (`/api/browse/%2e/search`, `/api/trip/%2e/narrate`,
 sent with `--path-as-is` so curl does not resolve them) also `HTTP/2 202` with `x-amzn-waf-action: challenge`. The app
 resolves `%2e` to the model route, so the web ACL must match it too: every path match URL-decodes, then normalizes
 (AA-CIS-Infra `modules/waf`, `local.tp_web_path_normalize` of `tripplanner_web_edge.tf`). A 200 or a model answer
 here means that transformation is missing: stop.
 
-The planner's first document load: `curl -s -o /dev/null -D - --resolve $H:443:$IP -H 'sec-fetch-dest: document' -H 'accept: text/html' https://$H/plan | grep -iE '^(HTTP|x-amzn-waf-action)'`.
-Expect `HTTP/2 202` with `x-amzn-waf-action: challenge` (the interstitial a browser solves silently) or `HTTP/2 200`;
-never 403 or 5xx. The `Deploy Web Dev` verify runs the same two checks.
+The planner's first document load: `curl -s -o /dev/null -D - --resolve $H:443:$IP -H 'sec-fetch-dest: document' -H 'accept: text/html' https://$H/plan | grep -iE '^(HTTP|x-amzn-waf-action)'`,
+and the same for `https://$H/aa-tripplanner/plan`.
+Expect `HTTP/2 202` with `x-amzn-waf-action: challenge` (the interstitial a browser solves silently), on both. Only
+that: the request carries no `aws-waf-token`, so a working rule always challenges it. A `200` means the document
+branch of the rule did not match (`sec-fetch-dest` not forwarded, the path or method match broken, a rule order
+change); every traveller's search, narration and send would then be challenged with no way to get a token: stop.
+A tour page loaded the same way (`-H 'sec-fetch-dest: document'` on `https://$H/tours/<a slug from the home page>`)
+answers `HTTP/2 200` (catalog pages are never challenged). The `Deploy Web Dev` verify runs these checks.
 
 Leading dot segments: `/%2e%2e/api/browse/search?q=temple` and `/%2e%2e/api/trip/narrate` (POST `{}`), both with
 `--path-as-is`. AWS `NORMALIZE_PATH` keeps a back-reference at the start of the path, so the TripPlanner rules do not
@@ -164,7 +177,8 @@ fresh context and never by typing `/plan` first:
 On each: the network panel shows the planner opened as a document request (type `document`, possibly the 202
 Challenge interstitial first, then the page), never as a client-side `?_rsc=` fetch; the map opens (Mapbox tiles load:
 the token's URL restriction names this host); a free-text search answers with pins; adding a stop and "narrate" answer
-with text; the two model calls answered 200 (never 202); no console error and no script from an `awswaf.com` host. `/aa-tripplanner/plan` (the demo
+with text; the two model calls answered 200 (never 202); on the demo tenant's planner, "Send to advisor" with an
+invented test traveller gets the app's own answer (sent, or the demo's refusal line; never the 202 Challenge); no console error and no script from an `awswaf.com` host. `/aa-tripplanner/plan` (the demo
 tenant) opens and searches the same way. A 202 on a model call, or the "We could not confirm this request came from
 the planner page" notice, is a failure. Screenshots and the outputs go to
 `docs/audits/<date>-S<nnn>-tripplanner-web-cutover/`.
