@@ -50,7 +50,7 @@ in its own AWS account, `aa-prod` (ADR 0018, C7.2a, D-17), dated when go-live is
 | `apps/AA-CIS-App` | `AA-CIS-App` | public | `main` | `CONTEXT.md` | ECS `aa-cis-dev-api` + `aa-cis-dev-worker`; ECS `aa-cis-dev-admin` (admin) |
 | `apps/AA-Booking` | `AA-Booking` | public | `main` | `CONTEXT.md`, ADR 0004 | ECS `aa-booking-dev-api`; ECS `aa-booking-dev-admin` (admin) |
 | `apps/AA-Partner` | `AA-Partner` | public | `main` | `CONTEXT.md`, ADR 0010 | ECS `aa-crm-dev-api` and `aa-crm-dev-web` (CRM + tenant Content studio, AA-1036), both on `portal.lumiguides.it.com` |
-| `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | public | `main` | `CONTEXT.md` | Lambdas `aa-tripplanner-dev-browse` / `-assembly`; Vercel |
+| `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | public | `main` | `CONTEXT.md` | Lambdas `aa-tripplanner-dev-browse` / `-assembly`; ECS `aa-tripplanner-dev-web` (web) |
 | `infra/AA-CIS-Infra` | `AA-CIS-Infra` | public (since 2026-10-22) | `main` | `CONTEXT.md`, `README.md` | AWS acc2 (root `accounts/aa365/`) |
 
 The app repos are **public**. Never put account IDs, ARNs, security group IDs, secret lists or security
@@ -97,7 +97,7 @@ The full gate list is `skill/aa-ship/SKILL.md`; this is the shape.
    (`kiro-reviewer` or an independent reviewer subagent).
 8. Deploy happens on merge: CIS, Booking and Partner `Deploy Dev` (blocked only while a rerun wave is open or a
    deploy-blocking job runs or is due, AA-993 G5), Partner web and portal `Deploy Web Dev` / `Deploy Portal Dev`,
-   TripPlanner `deploy-lambdas.yml`, the staff admins through `deploy-admin-dev.yml` (ECS), the TripPlanner frontend through `vercel-deploy.yml`.
+   TripPlanner `deploy-lambdas.yml`, the staff admins through `deploy-admin-dev.yml` (ECS), the TripPlanner frontend through `deploy-web-dev.yml` (ECS).
 9. **Verify live** before you call it done: rollout COMPLETED, `/health` shows your commit, the endpoint or page
    returns what the issue asked. Post the evidence on the Linear issue. Done = merged + CI green + deployed +
    verified live.

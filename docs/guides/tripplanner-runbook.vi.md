@@ -111,7 +111,7 @@ Không có mật khẩu. Mã đã hết hạn hoặc nhập sai sẽ hiện thô
 | Một trang tour báo "not found" | Tour có thể đang tạm dừng hoặc không còn bán; kiểm trong CIS admin › **Master Content** |
 
 Trong giai đoạn dev, tech lead là kỹ sư trực. Rollback dành cho kỹ sư:
-[rollback TripPlanner Lambda](../ops/runbooks/rollback-tp-lambda.md) và [rollback Vercel](../ops/runbooks/rollback-vercel.md).
+[rollback TripPlanner Lambda](../ops/runbooks/rollback-tp-lambda.md) và, với web app trên ECS, [rollback ECS](../ops/runbooks/rollback-ecs.md) (service `aa-tripplanner-dev-web`; project Vercel đã gỡ, AA-1038).
 
 ## 9. Lưu ý giai đoạn Dev
 

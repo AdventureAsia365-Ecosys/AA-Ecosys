@@ -28,7 +28,7 @@ service: api, then worker on the same image).
 - Not for:
   - a deploy that never became healthy. The ECS deployment circuit breaker (enabled, with rollback) already
     returns the service to the previous revision by itself. Check the rollout state first.
-  - frontend-only problems: see [roll back a Vercel deployment](rollback-vercel.md).
+  - frontend-only problems: the CIS admin runs on ECS `aa-cis-dev-admin` ([rollback-ecs](rollback-ecs.md); the Vercel project left with AA-911).
   - a bad migration: the DB does not roll back with the app. Migrations only go forward; the fix is a new
     migration. The old app must run on the new schema (see [DB Migrate](db-migrate.md)).
 

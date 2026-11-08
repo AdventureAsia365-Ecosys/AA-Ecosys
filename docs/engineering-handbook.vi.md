@@ -527,7 +527,7 @@ Rollback trước, điều tra sau. Chỉ roll forward khi rollback không an to
 |---|---|---|
 | CIS api và worker (ECS) | Rolling, circuit breaker, cổng deploy theo wave đang mở và các job kind chặn deploy (AA-993 G5) | [Rollback CIS](ops/runbooks/rollback-cis.md) (task definition trước, api và worker cùng SHA, rồi revert trên `main`) |
 | Booking (ECS) | Rolling, circuit breaker, job guard, smoke SHA | [Rollback Booking](ops/runbooks/rollback-booking.md) |
-| Frontend (Vercel) | Deployment do CI tạo khi `frontend/**` đổi | [Rollback Vercel](ops/runbooks/rollback-vercel.md) (rollback tức thì, hoặc deploy lại commit cũ hơn) |
+| Frontend (ECS từ AA-911 / AA-1038; trước là Vercel) | Workflow deploy của từng app khi `frontend/**` đổi | [Rollback ECS](ops/runbooks/rollback-ecs.md) (revision task definition cũ hơn, hoặc revert trên `main`); [Rollback Vercel](ops/runbooks/rollback-vercel.md) cũ đã bị thay |
 | Lambda TripPlanner | Deploy lọc theo đường dẫn | [Rollback Lambda TP](ops/runbooks/rollback-tp-lambda.md); `needs: ci` + smoke là AA-879, alias `live` là AA-703 (U-54) |
 | Database | Chỉ tiến | Không rollback schema; roll forward; PITR là phương án cuối ([khôi phục PITR](ops/runbooks/restore-rds-pitr.md)) |
 | Terraform | Plan trong PR, apply từ `main` | [Rollback Terraform](ops/runbooks/rollback-terraform.md) |
