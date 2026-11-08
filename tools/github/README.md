@@ -21,7 +21,9 @@ tools serve, and when to use each: skill `aa-ship` (§1 "Cách merge", `referenc
 | `ship_open_prs.py <journal or wf_ id>` | push lane branches and open their PRs from a workflow journal (below) |
 | `train-lib.sh` | shell functions for a background train; `waitdeploy` waits for a `git_sha` on a health endpoint |
 | `guard_runs.py [--json]` | session start, read-only: the latest scheduled run of every workflow in the 6 repos, red first |
-| `ci_hygiene.py [--json] [--clean]` | session start: Actions cache usage vs the 10 GB cap per repo, stale pull request / merge-queue caches (`--clean` deletes only those), uncached external downloads in workflows; read-only without `--clean` |
+| `ci_hygiene.py [--json] [--clean]` | session start: Actions cache usage vs the 10 GB cap per repo, stale pull request / merge-queue caches (`--clean` deletes only those), uncached external downloads in workflows (WL5), artifact retention (WL7, warn), public org repositories not in the known list; read-only without `--clean`. `--retention-scan <checkout>` prints WL7 warnings for one checkout (root Workflow Lint) |
+| `pin_freshness.py [--json]` | read-only: self-managed pins (release-bin and lychee `pins.txt`, spaCy wheel URL, ghcr image tags) of the six repos vs the newest GitHub release |
+| `hygiene_issues.py sync --kind hygiene\|pins --report <json> [--apply]` | turns a `ci_hygiene.py` / `pin_freshness.py` report into one root issue per finding type (open, update, close); plan only without `--apply`. `read-failures --kind ... --report <json>` lists the failed reads (exit 3 when there is one). Run by the CI hygiene workflow |
 
 All Python tools are stdlib only, print no token, key or credential, and warn when the MFA session ends within
 30 minutes (only the `Expiration` field of `aws configure export-credentials` is read). Run them from the main
@@ -120,6 +122,26 @@ Pushes (S272): every push runs the repo's pre-push through `safe-hooks/pre-push`
 before running the repo's own `.githooks/pre-push`. Git exports them to a hook, and unit tests that run git in a temp
 dir with them wrote into the real clone (core.bare, a fake user, fake commits, rewritten refs) in AA-CIS-App and the
 root repo. The push limit is 900 s (`AA_PUSH_TIMEOUT`, 60..3600): the CIS fast hook runs ~5,000 unit tests.
+
+## CI hygiene workflow (root ADR 0021 decision 5, layers 3 and 4)
+
+`.github/workflows/ci-hygiene.yml`: daily 04:17 UTC `ci_hygiene.py --json` → `hygiene_issues.py sync --kind hygiene`;
+weekly (Monday 04:47 UTC) `pin_freshness.py --json` → `hygiene_issues.py sync --kind pins`; `workflow_dispatch` with
+`check` (caches / pins / both) and `apply` (off = plan in the run summary only).
+
+- One open issue per finding type, found by label (`ci-hygiene`, `ci-pin-update`) and title marker
+  (`[ci-hygiene:<type>]`, `[ci-pin:<key>]`). Types: `cache-over-threshold` (8 GB), `stale-caches` (1 GB or more in a
+  repo), `external-downloads` (WL5), `unknown-public-repo`, `needs-permission`; pins: one per outdated pin key.
+- Present → open, or edit when the finding changed; absent → close with a comment; unknown (a read failed) → leave.
+  A run whose read failed ends red after the sync (`guard_runs.py` shows it at session start). Red is decided from
+  the report (`hygiene_issues.py read-failures`), not from the check's exit code, which is 1 for any finding even when
+  a read failed too.
+- Reads: `aa-ecosys-ci-bot` token minted with Actions + Contents + Pull requests read, else the App without Actions,
+  else `GITHUB_TOKEN` (root caches only); the `needs-permission` issue names what to grant. The App key sits only in
+  the root environment `ci-hygiene` (deployment branches: master), never at repo level. Writes: `GITHUB_TOKEN`,
+  `issues: write`, root repo only.
+- By hand (read-only): `python3 tools/github/ci_hygiene.py --json > .tmp-session/r.json && python3
+  tools/github/hygiene_issues.py sync --kind hygiene --report .tmp-session/r.json` prints the plan the workflow would apply.
 
 ## Tests
 

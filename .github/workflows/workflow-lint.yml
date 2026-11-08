@@ -12,6 +12,10 @@ name: Workflow Lint
 # WL6 (S273, AA-1024, root ADR 0021 decision 2.3): every `uses:` names a full-length commit SHA with its release tag
 # in a `# vX.Y.Z` comment (the org setting that refuses tag pins); .github/dependabot.yml moves the pins weekly,
 # in one grouped PR that is never auto-merged (its shape is checked by the unit tests here).
+# WL7 (S273, AA-1024, root ADR 0021 decision 4), warn mode: an actions/upload-artifact step without retention-days, or
+# above 14 days without a `# retention: <why>` comment, is a warning annotation (tools/github/ci_hygiene.py
+# --retention-scan; the daily CI hygiene run reports it for all six repos). It moves into workflow_lint.py, the same
+# file in every repo, in one wave once the six repos are clean.
 # Offline apart from the actionlint download on a cache miss; no secret, no AWS. Not a required check (the ruleset is the tech lead's).
 
 on:
@@ -30,6 +34,7 @@ on:
       - ".github/scripts/test_workflow_lint.py"
       - ".github/scripts/lychee_bin.py"
       - ".github/scripts/test_lychee_bin.py"
+      - "tools/github/ci_hygiene.py"
   push:
     branches: [master]
     paths:
@@ -45,6 +50,7 @@ on:
       - ".github/scripts/test_workflow_lint.py"
       - ".github/scripts/lychee_bin.py"
       - ".github/scripts/test_lychee_bin.py"
+      - "tools/github/ci_hygiene.py"
 
 permissions:
   contents: read
@@ -90,3 +96,6 @@ jobs:
           python -B -m unittest discover -s .github/scripts -p 'test_release_bin.py'
           python -B -m unittest discover -s .github/scripts -p 'test_cache_cleanup.py'
           python -B .github/scripts/workflow_lint.py
+
+      - name: Artifact retention (WL7, warn only)
+        run: python -B tools/github/ci_hygiene.py --retention-scan .

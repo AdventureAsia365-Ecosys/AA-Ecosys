@@ -50,7 +50,8 @@ LLM bị từ chối (`llm_access_denied`, "Error 002") → playbook `docs/ops/p
   `aws ecs update-service --desired-count`, không `rds stop/start-db-instance`, không `ec2 start/stop-instances`.
   Muốn bật/tắt → hỏi Nghiệp, chỉ làm khi Nghiệp yêu cầu rõ. Cuối phiên không nhắc lệnh tắt.
 - Kiểm trạng thái chỉ bằng lệnh đọc (`aws ecs describe-services …`, `cis-status` = trạng thái NAT instance).
-- STS hết hạn sau 8h → Nghiệp chạy `aws sts get-caller-identity --profile aa365-admin` và nhập MFA.
+- Profile `aa365-admin` / `default` assume role `nghiep-admin-12h` (Terraform `admin_role.tf`, AA-1004, thay role tạo tay
+  `nghiep-admin-8h-session`); STS hết hạn sau 12h → Nghiệp chạy `aws sts get-caller-identity --profile aa365-admin` và nhập MFA.
 - Terraform/boto3 cần credential trong env: dùng mẫu `env-no-export` trong steering `session-workflow.md`
   (không `export $(…)` trần — lệnh rỗng thì in toàn bộ env, lộ token).
 
