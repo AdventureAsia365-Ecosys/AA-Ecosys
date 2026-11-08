@@ -1,13 +1,13 @@
 ---
 id: OPS-02-ecs
 title: Roll back any ECS service
-description: One parameterised procedure to point an ECS service (CIS api/worker, Booking api, CRM api, web, portal) at an earlier task-definition revision or image SHA and back, with the helper tools/ops/ecs_rollback.sh.
+description: One parameterised procedure to point an ECS service (CIS api/worker, Booking api, CRM api, web, portal, TripPlanner web) at an earlier task-definition revision or image SHA and back, with the helper tools/ops/ecs_rollback.sh.
 type: how-to
 status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
-applies_to: [aa-cis-api, aa-cis-worker, aa-booking-api, aa-crm-api, aa-crm-web]
-last_reviewed: 2026-11-02
+applies_to: [aa-cis-api, aa-cis-worker, aa-booking-api, aa-crm-api, aa-crm-web, aa-tripplanner]
+last_reviewed: 2026-11-08
 review_every_days: 90
 last_tested: null
 tested_where: null
@@ -32,8 +32,8 @@ This page is the shared procedure. The per-app pages keep their app facts:
 - Not for:
   - a deploy that never became healthy: the ECS deployment circuit breaker (enabled with rollback on every service)
     already returns the service to the previous revision. Check the rollout state first (step 1).
-  - a frontend on Vercel ([rollback-vercel](rollback-vercel.md)) or the TripPlanner Lambdas
-    ([rollback-tp-lambda](rollback-tp-lambda.md));
+  - the TripPlanner Lambdas ([rollback-tp-lambda](rollback-tp-lambda.md)). No frontend runs on Vercel any more
+    ([rollback-vercel](rollback-vercel.md) is superseded by this page);
   - a bad migration: the database does not roll back with the app. Migrations only go forward
     ([DB Migrate](db-migrate.md)); the old build must run on the newer schema.
 
@@ -41,7 +41,7 @@ This page is the shared procedure. The per-app pages keep their app facts:
 
 | Parameter | Values |
 |---|---|
-| `<service>` | `aa-cis-dev-api`, `aa-cis-dev-worker`, `aa-booking-dev-api`, `aa-crm-dev-api`, `aa-crm-dev-web` (CRM + Content studio; `aa-crm-dev-portal` was retired in AA-1036). The task-definition family has the same name. Cluster `aa-cis-dev-cluster` for all. |
+| `<service>` | `aa-cis-dev-api`, `aa-cis-dev-worker`, `aa-booking-dev-api`, `aa-crm-dev-api`, `aa-crm-dev-web` (CRM + Content studio; `aa-crm-dev-portal` was retired in AA-1036), `aa-tripplanner-dev-web` (the TripPlanner frontend since its Vercel retirement, AA-1038). The task-definition family has the same name. Cluster `aa-cis-dev-cluster` for all. |
 | `<target>` | one of: `--previous` (newest older revision with a different real build), `--to <revision>`, `--to-sha <git-sha>` (full or a 7+ character prefix) |
 | `<current-revision>` | the revision the service runs now (step 1); it is the way back |
 
@@ -52,6 +52,7 @@ This page is the shared procedure. The per-app pages keep their app facts:
 | `aa-booking-dev-api` | `<sha>` | 10 | `https://api-booking.lumiguides.it.com/booking/health` (`git_sha`) | `booking.job` (in process) |
 | `aa-crm-dev-api` | `<sha>` | 10 | `https://partner-dev.lumiguides.it.com/crm/health` (`git_sha`) | `crm.job` (in process) |
 | `aa-crm-dev-web` | `<sha>` | 10 | `https://portal.lumiguides.it.com/healthz` (`git_sha`) | none |
+| `aa-tripplanner-dev-web` | `<sha>` | 10 | `https://tripplanner.lumiguides.it.com/api/health` (`git_sha`) | none |
 
 Facts that shape the procedure:
 

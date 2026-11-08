@@ -31,7 +31,7 @@ The shared, parameterised procedure (and its helper `tools/ops/ecs_rollback.sh`,
   a Sentry error burst or `aa-booking-dev-no-healthy-task` right after a deploy.
 - Not for:
   - a deploy that never became healthy: the ECS circuit breaker (enabled, with rollback) handles it;
-  - the Booking admin frontend: [roll back a Vercel deployment](rollback-vercel.md);
+  - the Booking admin frontend: ECS `aa-booking-dev-admin`, [rollback-ecs](rollback-ecs.md) (it left Vercel with AA-911);
   - a bad `bk-NNN` migration: migrations only go forward (see [DB Migrate](db-migrate.md)).
 
 ## Preconditions

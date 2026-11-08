@@ -62,10 +62,10 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  cisfe["CIS admin<br/>[Next.js on Vercel]"]
+  cisfe["CIS admin<br/>[Next.js on ECS Fargate]"]
   partnerfe["Partner CRM web + Content studio<br/>[Next.js on ECS Fargate]"]
-  tpfe["TripPlanner web<br/>[Next.js on Vercel]"]
-  bkfe["Booking staff admin<br/>[Next.js on Vercel]"]
+  tpfe["TripPlanner web<br/>[Next.js on ECS Fargate, CloudFront]"]
+  bkfe["Booking staff admin<br/>[Next.js on ECS Fargate]"]
   cisapi["CIS API + worker<br/>[FastAPI on ECS Fargate]"]
   crmapi["Partner CRM API + job worker<br/>[FastAPI on ECS Fargate]"]
   tpl["TripPlanner browse + assembly + jobs<br/>[Python Lambdas]"]

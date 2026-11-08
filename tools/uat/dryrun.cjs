@@ -39,7 +39,7 @@ const HERE = __dirname;
 const MANIFEST = path.join(HERE, 'scenarios', 'dryrun.cjs');
 const WRITE_SET = path.join(HERE, 'scenarios', 'write-set.cjs');
 const PARTNER = (process.env.UAT_CRM_PARTNER || 'https://portal.lumiguides.it.com').replace(/\/+$/, '');
-const TRIPPLANNER = (process.env.UAT_TRIPPLANNER || 'https://aa-tripplanner.vercel.app').replace(/\/+$/, '');
+const TRIPPLANNER = (process.env.UAT_TRIPPLANNER || 'https://tripplanner.lumiguides.it.com').replace(/\/+$/, '');
 const ORG = 'https://github.com/AdventureAsia365-Ecosys';
 // Where each app says which commit it runs. The two Vercel staff frontends expose no version: the head of the repo's
 // main stands in for them (both deploy from main), marked as such in the table.

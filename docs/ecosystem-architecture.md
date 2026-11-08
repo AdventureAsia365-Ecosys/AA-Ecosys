@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-03
+last_reviewed: 2026-11-08
 review_every_days: 90
 related: [ARCH-01-ai-gateway, ARCH-01-diagrams, ARCH-05, ARCH-08, AA-697, AA-889, AA-998, AA-1020]
 ---
@@ -58,7 +58,7 @@ AA-Ecosys is a **multi-repo**. Each app deploys on its own. Locally the repos si
 | Local folder | GitHub repo | Role | Deploy |
 |---|---|---|---|
 | `apps/AA-CIS-App` | `AA-CIS-App` | Content system of record: FastAPI backend (CIS core, A-series, T-series, the Content studio API `/v1/*`), durable job worker, admin frontend. The tenant portal UI moved to AA-Partner (AA-979 P2a); the frozen copy left here was deleted at the P2b clean-up. The admin host answers `/portal*` and `/tenant-login` with 308 to `portal.` and `/trip/*` with 308 to the client host | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image) + ECS `aa-cis-dev-admin` (admin web on `aa-cis.`, `Deploy Admin Dev`; on Vercel until AA-911, S272) |
-| `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | B2C web app: browse destinations, plan a trip, sign in and keep trips. Next.js FE + 3 Lambdas: `browse` (stateless reads, search embeddings), `assembly` (trip writes, narration) and `jobs` (no HTTP route; the `tripplanner.job` worker woken by a daily EventBridge Scheduler tick, tp-021). AI through the shared gateway core (3.3, [AI gateway](architecture/ai-gateway.md)) | Vercel `aa-tripplanner` (FE) + Lambda (BE) |
+| `apps/AA-TripPlanner-Web` | `AA-TripPlanner-Web` | B2C web app: browse destinations, plan a trip, sign in and keep trips. Next.js FE + 3 Lambdas: `browse` (stateless reads, search embeddings), `assembly` (trip writes, narration) and `jobs` (no HTTP route; the `tripplanner.job` worker woken by a daily EventBridge Scheduler tick, tp-021). AI through the shared gateway core (3.3, [AI gateway](architecture/ai-gateway.md)) | ECS `aa-tripplanner-dev-web` (FE: Next.js standalone, one Fargate Spot task behind its CloudFront distribution and three TripPlanner rules of the ALB web ACL; `Deploy Web Dev`; on Vercel until AA-1038, S272) + Lambda (BE) |
 | `infra/AA-CIS-Infra` | `AA-CIS-Infra` | Terraform for every AWS resource, one root per account: `accounts/aa365` (acc2: VPC, RDS, ECS, Lambda, API GW, CloudFront, Cognito, OIDC, alarms), `accounts/acc3-bedrock` (the Bedrock chat account) and `accounts/management` (the organization, ADR 0018). DB Migrate, Migration Sync / Apply (ADR 0017) and DB Schema Dump workflows | GitHub Actions (`accounts/aa365`) + a human with MFA (`accounts/acc3-bedrock`, bootstrap objects, `accounts/management`) |
 | `apps/AA-Booking` | `AA-Booking` | AAA: advisor workflow and booking lifecycle. Live on Dev since 2026-10-14: inquiry intake, staff trip cases and proposals, pricing and FX, suppliers and supply, sellable trip plans, operations (supplier bookings, invoices, payments, supplier bills), the B2B API for AA-Partner; staff admin frontend (see 3.4) | ECS Fargate `aa-booking-dev-api` on the CIS cluster `aa-cis-dev-cluster` (acc2, same VPC, ADR 0004) + ECS `aa-booking-dev-admin` (staff admin web on `booking.`, `Deploy Admin Dev`; on Vercel until AA-911, S272) |
 | `apps/AA-Partner` (public) | `AA-Partner` | Partner agencies' app (ADR 0010, accepted 2026-10-22): the agency CRM and the tenant Content studio, one agency app in `web/` since AA-1036 (ADR 0019 d6; the studio was moved from AA-CIS-App by AA-979 P2a as `portal/`, merged into `web/` and its separate service retired in R3). Own schema `crm` (`crm-001` to `crm-040`): clients and the identity vault, pipeline, proposals, invoices and payments, e-sign, duty of care, portability and deletion, onboarding and import, AA insights, the AA staff console with owner-granted support access and audited break-glass (crm-033), ops releases to AA ground operations (crm-034), commissions and one-action cancel (crm-035), SMS and WhatsApp on the agency's own Twilio (crm-036), workflow rules and tasks (crm-038), AI drafts in the trip workspace (crm-040), an offline-capable traveller portal on the client host `go-dev.`. AI through its own control plane and ledger on the shared gateway core (ledger v2, crm-032; stage profiles crm-037; the provider was the stub on Dev when checked on 2026-11-01), PII scrubbed first by the F3 scrubber with Bedrock Guardrails. Partner Cognito pool with MFA (ADR 0006b). Integrations are bring-your-own (agency Twilio/WhatsApp, Stripe, mailbox, e-sign); AA provides the maps. The API runs the `crm.job` worker in its own process | ECS Fargate ARM64 on `aa-cis-dev-cluster`: `aa-crm-dev-api` and `aa-crm-dev-web` (CRM + Content studio; "/" lands on Content), both on the agency host `portal.` (its own CloudFront distribution → VPC origin → NLB → ALB host rules: `/crm*` API, every other path the agency web; the service `aa-crm-dev-portal` was retired in AA-1036). The old host `partner-dev.` keeps only the API paths `/crm` and `/crm/*` and answers 301 to `portal.` for everything else (AA-979 P2b clean-up, a CloudFront Function). Images in IMMUTABLE ECR repos tagged with the git SHA; deploy by the GitHub OIDC role `aa-crm-dev-app-deploy`. No Vercel project (the P2a project `aa-cis-portal` was deleted at the clean-up) |
@@ -123,7 +123,8 @@ flowchart TB
     APIG[API GW REST: api-cis + api-booking → VPC link → NLB → ALB]
     APIG2[API GW HTTP v2 → browse + assembly]
     SCH[EventBridge Scheduler: 6 daily or 5-minute schedules]
-    CF[CloudFront: portal. agency host, go-dev. client host, partner-dev. API, img. photos]
+    CF[CloudFront: portal. agency host, go-dev. client host, partner-dev. API, img. photos, tripplanner. web]
+    TPWEB[ECS Fargate: aa-tripplanner-dev-web · TripPlanner web + BFF, behind CloudFront and the ALB web ACL]
     COG[Cognito: WORKFORCE, EXTERNAL, PARTNER, M2M pools · WAF]
     SES[SES: staff mail, CRM inbound mail]
     S3[(S3: bronze photos and scripts, app buckets)]
@@ -131,7 +132,6 @@ flowchart TB
     OIDC[GitHub OIDC: one role per repo and job]
   end
 
-  VERCEL[Vercel: TripPlanner FE]
   ACC3[acc3: Bedrock chat models · refusing since 2026-10-29]
   DIRECT[Direct APIs: OpenAI · Anthropic, no key yet]
   DATA[Data APIs: Jev, DataForSEO, Geoapify]
@@ -145,7 +145,8 @@ flowchart TB
   SCH --> L3
   CF --> CRM
   CF -->|img.| S3
-  VERCEL --> APIG2
+  CF --> TPWEB
+  TPWEB --> APIG2
   STAFF -->|BFF to the CIS and Booking APIs| APIG
   CRM -->|BFF to the CIS and Booking APIs| APIG
   ECS & L3 & CRM --> COG
@@ -311,7 +312,7 @@ Live on Dev since 2026-10-14 (AA-678, `infra/AA-CIS-Infra/accounts/aa365/booking
 | CIS admin (ECS `aa-cis-dev-admin`) ⇄ CIS API | REST through API GW (REST + VPC Link) → ALB → ECS. Auth: tenant JWT; staff = Cognito WORKFORCE access token as `Authorization: Bearer` (legacy HS256 sessions refused since AA-816 S2, `LEGACY_ADMIN_LOGIN_ENABLED` off by default), plus the admin secret added by the BFF for paths outside the staff prefixes (4.6) | `AA-CIS-App/CONTEXT.md` |
 | Content studio (in `aa-crm-dev-web`) ⇄ CIS API | The studio BFF of the agency web calls the CIS API. A partner-pool access token is exchanged at `POST /auth/tenant-session` for a 15-minute tenant JWT ([ADR 0010a](adr/0010a-content-studio-partner-sign-in.md)) | `AA-Partner/CONTEXT.md` |
 | AA-Booking ⇄ clients | REST through API GW `aa-booking-dev-api` (shared VPC Link) → ALB `/booking/*` → ECS `aa-booking-dev-api`. The staff admin frontend calls it through its Next.js BFF. Staff auth: see 4.6 | `booking.tf`, ADR 0004 |
-| TripPlanner FE (Vercel) ⇄ BE | The Next.js BFF calls 2 Lambda URLs through API GW HTTP v2: `ANY /browse/{proxy+}` → browse, `ANY /trip/{proxy+}` → assembly; header `X-TripPlanner-Key`. Env `BROWSE_API_URL` / `TRIP_API_URL` | `tripplanner.tf`, `docs/vercel-setup.md` |
+| TripPlanner FE (ECS `aa-tripplanner-dev-web`) ⇄ BE | The Next.js BFF calls 2 Lambda URLs through API GW HTTP v2: `ANY /browse/{proxy+}` → browse, `ANY /trip/{proxy+}` → assembly; header `X-TripPlanner-Key`. Env `BROWSE_API_URL` / `TRIP_API_URL` | `tripplanner.tf`, `modules/environment/tripplanner_web.tf`, `tripplanner_web_edge.tf` |
 
 Contracts between apps (views, grants, events) are listed in each repo's `CONTEXT.md`
 ("Contracts with other apps").
@@ -505,5 +506,5 @@ names), so only the `sub` match is affected.
 - `infra/AA-CIS-Infra/docs/implementation-notes/AA-TripPlanner-backend.md`: TripPlanner Terraform report.
 - `infra/AA-CIS-Infra/accounts/aa365/{cicd_split.tf, cicd.tf (bootstrap locals), tripplanner.tf, tripplanner_jobs.tf, booking.tf, crm_app.tf}`: OIDC roles and app runtimes; `accounts/management/` and its README: the organization root.
 - `docs/contracts/README.md`: contract rules between apps; `docs/adr/0005-pricing-and-supplier-rates.md`.
-- `apps/AA-TripPlanner-Web/docs/{vercel-setup,architecture-overview,smoke-test-runbook}.md`.
+- `apps/AA-TripPlanner-Web/docs/{architecture-overview,smoke-test-runbook}.md` (the Vercel setup page was removed with the Vercel project, AA-1038).
 - `docs/archive/`: retired one-off pages (org-rename inventory, CIS data reset S182-S183, pre-build Booking hand-off).

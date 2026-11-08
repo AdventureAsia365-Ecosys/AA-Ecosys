@@ -7,9 +7,9 @@ status: draft
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-06
+last_reviewed: 2026-11-08
 review_every_days: 90
-related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, SEC-04-ai-schedule, SEC-04-dpa-pack, AA-886, AA-820, AA-839, AA-877]
+related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, SEC-04-ai-schedule, SEC-04-dpa-pack, AA-886, AA-820, AA-839, AA-877, AA-1038]
 ---
 
 # Legal readiness packet
@@ -42,7 +42,7 @@ to involve a lawyer, and on which topics, is the business owner's call.
 | 8 | Service levels | Response times only until production |
 | 9 | Support address | `support@` to a shared mailbox |
 | 10 | Status page | None until the first paying partner |
-| 11 | Vercel plan | Pro before the first partner is charged (D-18) |
+| 11 | Vercel plan | Closed: no app runs on Vercel since 2026-11-08 |
 | 12 | AI acceptable-use clause | Done as C: the AI Schedule v1.0 is adopted (tech lead, 2026-11-03) and ships in the pilot letter; counsel before the first paying agency |
 
 ## 1. Data controller entity
@@ -56,7 +56,7 @@ the partner agreement and the DPA name the same party. *Detail:* [register](regi
 ## 2. Privacy, cookie and terms wording
 
 *Current fact:* the four draft pages are live:
-`https://aa-tripplanner.vercel.app/privacy`, `https://aa-tripplanner.vercel.app/terms`,
+`https://tripplanner.lumiguides.it.com/privacy`, `https://tripplanner.lumiguides.it.com/terms`,
 `https://portal.lumiguides.it.com/privacy` and `https://portal.lumiguides.it.com/terms`. They are linked from the site
 footers and next to the Trip Planner contact form. Annex A below quotes their full text. On cookies: the Trip Planner
 uses one guest cookie (a random token, stored only as a one-way hash), sign-in cookies only for a traveller who signs
@@ -83,7 +83,7 @@ planned. *Proposed answer:* A now, B only when a marketing use exists. *Detail:*
 partner is the controller for data it puts into the portal and Adventure Asia is the processor, lists the processor
 duties, and has annexes for the processing, the security measures (each marked live or planned) and the service
 providers. The register lists the providers found in the code: AWS (hosting, e-mail, sign-in, AI models through Amazon
-Bedrock), the AI providers Anthropic (direct API, the first path for Claude models since 2026-11-05), OpenAI and Jev, Sentry (error reports), Vercel (websites), Mapbox (maps), Geoapify,
+Bedrock), the AI providers Anthropic (direct API, the first path for Claude models since 2026-11-05), OpenAI and Jev, Sentry (error reports), Mapbox (maps), Geoapify,
 DataForSEO, Google (photo files), the adventure.asia mail host, and work tools. Jev receives partner content only for a short list of test partners, until a data processing and zero-retention
 agreement with Jev is in place; that agreement is an open item. Other open points: whether the AWS resellers
 (TrueIDC for the hosting account, eCloudvalley for the AI account) and the model makers behind Bedrock must be listed,
@@ -120,11 +120,11 @@ before real traveller data is stored; (B) finish the traveller deletion first. *
 ## 7. Data stored in the United States
 
 *Current fact:* the database and servers are in the United States (AWS, us-west-1), and most service providers
-are US companies (AWS, Vercel, Mapbox, Sentry, OpenAI); Vercel and Mapbox serve pages and maps from locations close to
+are US companies (AWS, Mapbox, Sentry, OpenAI); Amazon CloudFront and Mapbox serve pages and maps from locations close to
 the visitor. One point goes beyond "United States": the AI account calls Amazon Bedrock through "global" routing,
 which can process a request (trip contents, tour text, never a name or contact detail) in a region outside the US. The
-Vercel functions that carry the Trip Planner contact form run in Vercel's San Francisco region (`sfo1`) since
-2026-10-28, and the partner portal now runs on AWS in us-west-1. The pages leave the transfer safeguards
+Trip Planner, whose server carries the contact form, runs on AWS in us-west-1 since 2026-11-08, like the partner portal
+and the staff apps: no website is on Vercel any more. The pages leave the transfer safeguards
 "[to be confirmed]". The S245 research notes, for counsel to confirm: Vietnam's personal data
 protection law (Law 91/2025/QH15) and Decree 356/2025/ND-CP took effect on 2026-01-01 and require a transfer impact
 assessment, also for offshore cloud hosting, filed within 60 days of the transfer starting; for EU partners, the
@@ -165,14 +165,12 @@ the first paying partner. *Proposed answer:* C, then A or B in a public reposito
 
 ## 11. Vercel plan
 
-*Current fact:* the Trip Planner, the content system admin and the booking admin run on Vercel's free Hobby plan.
-The partner portal moved from Vercel to AWS in October 2026; its old Vercel project stays only as a fallback until
-2026-11-03. Vercel describes Hobby as "for personal, non-commercial use", per the S245 research. The engineering decision already taken (D-18) is: Hobby until the first
-paying partner, then Pro. Pro costs 20 USD per member per month, plus usage above the amounts the plan includes.
-*Options:* (A) move to Pro before the first partner is charged, as D-18 says; (B) move earlier, when the first partner
-starts using the portal even if it pays nothing, which the S245 research suggests because Hobby is non-commercial.
-Since the portal left Vercel, the Hobby question concerns mainly the Trip Planner, which is the public sales front.
-Any new spend needs the tech lead's approval (DM-10.7). *Proposed answer:* A. *Detail:*
+*Current fact (2026-11-08):* no Adventure Asia app runs on Vercel any more. The partner portal moved to AWS in
+October 2026, the content system admin and the booking admin on 2026-11-07, and the Trip Planner on 2026-11-08 (AWS,
+behind Amazon CloudFront); every Vercel project was deleted (ADR 0019 d23). The question was whether to leave Vercel's
+free Hobby plan ("for personal, non-commercial use", per the S245 research) for Pro (20 USD per member per month)
+before the first paying partner (decision D-18). *Proposed answer:* none needed: the question is closed, with no
+Vercel cost. *Detail:*
 [`04-economics-compliance-security.md`](../audits/2026-10-20-S245-tenant-crm/research/04-economics-compliance-security.md).
 
 ## 12. AI acceptable-use clause
@@ -214,7 +212,9 @@ portal pages also show a Vietnamese translation for reading, and their English t
 that commit or that PR, the live page wins.
 
 Two page-copy follow-ups are known. The portal privacy notice §6 still says that Vercel hosts the portal pages,
-although the portal now runs on AWS. The Trip Planner pages changed after 2026-10-20 but still showed that date until
+although the portal now runs on AWS. Since 2026-11-08 the Trip Planner privacy notice (§3, §6, §7) names Amazon Web
+Services (Amazon CloudFront and its website firewall, with a short-lived security cookie) instead of Vercel; A.2 below
+quotes the older text. The Trip Planner pages changed after 2026-10-20 but still showed that date until
 2026-11-03 (Draft v0.2). A.3 §5–§6 and A.4 §3 below are the 2026-11-06 text (AA-820, route control version 6, portal
 Draft v0.5); A.2 §3 is
 older than the live page, which since then names the model that writes the narration and links the Anthropic Usage

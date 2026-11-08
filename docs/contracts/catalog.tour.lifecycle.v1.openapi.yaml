@@ -14,7 +14,7 @@ info:
     backoff; 2xx = delivered, 408 / 425 / 429 / 5xx / network = retried, any other 4xx = final). TripPlanner stores
     nothing: every step drops a cache, so a replay or a retry gives the same state. Auth: HMAC-SHA256 over
     `<t>.<raw body>` with a secret shared by CIS (Secrets Manager aa-cis/<env>/tripplanner-revalidate-hmac) and
-    TripPlanner (Vercel env CATALOG_REVALIDATE_SECRET), header `X-AA-Signature: t=<unix seconds>,v1=<hex digest>`,
+    TripPlanner (task env CATALOG_REVALIDATE_SECRET), header `X-AA-Signature: t=<unix seconds>,v1=<hex digest>`,
     constant-time compare, a timestamp more than 300 s away is refused. Both sides trim the secret. The route path
     carries no major (a Next.js revalidation route, not a public API); the major is the body's `contract` field, and a
     breaking change is a new `contract` value accepted in parallel, as in contracts rule 2. The body has no personal

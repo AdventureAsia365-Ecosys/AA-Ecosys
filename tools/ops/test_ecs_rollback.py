@@ -263,6 +263,15 @@ class EcsRollbackTest(unittest.TestCase):
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         self.assertNotIn("curl", calls)
 
+    def test_tripplanner_web_checks_the_public_host(self):
+        # AA-1038: the TripPlanner frontend left Vercel; its rollback is this tool on the ECS service.
+        web = {"fam": "aa-tripplanner-dev-web", "running": 5, "revs": {
+            "5": {"image": f"{REGISTRY}/aa-tripplanner-dev-web:{SHA_B}"},
+            "4": {"image": f"{REGISTRY}/aa-tripplanner-dev-web:{SHA_A}"}}}
+        r, _, _ = self.run_tool(web, "aa-tripplanner-dev-web", "--previous", "--apply")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("https://tripplanner.lumiguides.it.com/api/health git_sha=" + SHA_A, r.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

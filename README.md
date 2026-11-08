@@ -16,7 +16,7 @@ DevOps, CTO, CIO, PM, AI agent) and the catalog of every maintained document.
 AA-Ecosys/                      (this repo, public since 22/10/2026 — ADR 0014 amendment, default branch master)
 ├── apps/
 │   ├── AA-CIS-App/             content system of record: FastAPI api + job worker (ECS), admin console (Vercel)
-│   ├── AA-TripPlanner-Web/     B2C map-first trip planner: Next.js (Vercel) + 2 Lambdas
+│   ├── AA-TripPlanner-Web/     B2C map-first trip planner: Next.js (ECS behind CloudFront) + Lambdas
 │   ├── AA-Booking/             booking back office: FastAPI api + booking.job worker (ECS), staff admin (Vercel)
 │   └── AA-Partner/             partner agencies: CRM api + web (ECS), tenant portal / Content studio (Vercel)
 ├── infra/
@@ -37,7 +37,7 @@ owner. Dev only for now; a future prod also lives on acc2 by default (ADR 0001, 
 | Folder | Repo | Deploy |
 |---|---|---|
 | `apps/AA-CIS-App` | `AdventureAsia365-Ecosys/AA-CIS-App` | ECS Fargate (`aa-cis-dev-api` + `aa-cis-dev-worker`, one image per git SHA) via `Deploy Dev`; ECS `aa-cis-dev-admin` (admin, `Deploy Admin Dev`; Vercel retired in S272). Its `portal/` is a frozen, undeployed copy since AA-979 |
-| `apps/AA-TripPlanner-Web` | `AdventureAsia365-Ecosys/AA-TripPlanner-Web` | Vercel (frontend); Lambdas via `deploy-lambdas.yml` |
+| `apps/AA-TripPlanner-Web` | `AdventureAsia365-Ecosys/AA-TripPlanner-Web` | ECS `aa-tripplanner-dev-web` via `deploy-web-dev.yml` (frontend); Lambdas via `deploy-lambdas.yml` |
 | `apps/AA-Booking` | `AdventureAsia365-Ecosys/AA-Booking` | ECS Fargate (`aa-booking-dev-api`, same cluster) via `Deploy Dev`; Vercel (staff admin); live `/booking/health` since S235 |
 | `apps/AA-Partner` | `AdventureAsia365-Ecosys/AA-Partner` | ECS Fargate ARM64 (`aa-crm-dev-api` via `Deploy Dev`, `aa-crm-dev-web` (CRM + tenant Content studio, AA-1036) via `Deploy Web Dev`, same cluster), both on `portal.lumiguides.it.com` since AA-979 P2b |
 | `infra/AA-CIS-Infra` | `AdventureAsia365-Ecosys/AA-CIS-Infra` | `Terraform Apply Dev` (acc2 stack, manual dispatch); acc3 by a human with MFA; `DB Migrate` for every app's migrations; `DB Schema Dump` regenerates the schema reference |

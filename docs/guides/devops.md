@@ -58,7 +58,7 @@ environment `org` with the tech lead as reviewer.
 |---|---|---|---|
 | CIS | Merge to `main` → `Deploy Dev` (`deploy-dev.yml`): image `dev-<sha>` to ECR (immutable tags), new task definitions for api **and** worker on the same image | `deploy-admin-dev.yml` (admin on ECS `aa-cis-dev-admin`), followed by a Playwright UI smoke and the visual run. The portal is no longer deployed from here (AA-979, CIS #997) | Refuses only while a rerun wave is open or a deploy-blocking kind (`data_erasure`, `s1_batch_ingest`, `writing_memory_r2`, `writing_memory_shadow`) runs or is due within 15 min (C6.3a, AA-993 G5); other queued/running jobs are released and re-claimed by the new task |
 | Booking | Merge to `main` → `Deploy Dev`: image tagged with the git SHA, role `aa-booking-dev-app-deploy`, smoke `/booking/health` (same `git_sha`) and `/booking/health/ready` | `deploy-admin-dev.yml` (admin on ECS `aa-booking-dev-admin`), followed by the public smoke and the visual run | Asks `/booking/ops/deploy-gate`; refuses only while a retention job (`bk_retention_job`, `bk_retention_inbox_redact`) runs or is due within 15 min (C6.3a, AA-993 G5) |
-| TripPlanner | Merge to `main` touching `backend/**` → `deploy-lambdas.yml`: zips to the artifacts bucket, `UpdateFunctionCode` on the three Lambdas (browse, assembly, jobs) | `vercel-deploy.yml` | None: `tripplanner.job` (tp-021) has no deploy-blocking kind, and a Lambda deploy does not interrupt a running invocation |
+| TripPlanner | Merge to `main` touching `backend/**` → `deploy-lambdas.yml`: zips to the artifacts bucket, `UpdateFunctionCode` on the three Lambdas (browse, assembly, jobs) | `deploy-web-dev.yml` (web on ECS `aa-tripplanner-dev-web` behind CloudFront: verify through the distribution, then the release verify and the visual run) | None: `tripplanner.job` (tp-021) has no deploy-blocking kind, and a Lambda deploy does not interrupt a running invocation |
 | Partner | Merge to `main` touching `api/**` → `Deploy Dev`: image tagged with the git SHA (native arm64), service `aa-crm-dev-api`; `web/**` → `Deploy Web Dev`, service `aa-crm-dev-web` | The tenant Content studio is part of the web since AA-1036 (`web/app/(studio)`): `Deploy Web Dev` verifies its paths on `portal.lumiguides.it.com` and runs its UI smoke; `portal/`, `Deploy Portal Dev` and the service `aa-crm-dev-portal` are retired. The Vercel project `aa-cis-portal` went at the AA-979 clean-up (S256) | The API deploy has the same guard, but no Partner kind blocks a deploy today (`crm_dispatch` stopped blocking in AA-993 G4b); the web deploy has no job gate |
 | Infra | PR → **Terraform Plan** (read it; Infra has no required checks) → merge → **Terraform Apply Dev** run by hand (`workflow_dispatch` on `main`) | - | Plan read in the PR; OIDC trust only for `refs/heads/main` |
 
@@ -66,9 +66,9 @@ Boundary: *apps own code, Infra owns resources*. Infra creates the ECS services,
 code into them. Bootstrap IAM roles and policies and the `accounts/acc3-bedrock` root are applied by a human with the
 MFA profile, never by CI; the `accounts/management` root applies only through its gated GitHub environment.
 
-Only TripPlanner still deploys to Vercel (Git integration off; CI creates deploys with `VERCEL_TOKEN`, only when
-frontend files change). The CIS and Booking admins left Vercel in S272 (AA-911) and deploy to ECS with
-`deploy-admin-dev.yml`.
+No frontend deploys to Vercel any more. The CIS and Booking admins left Vercel in S272 (AA-911) and deploy to ECS
+with `deploy-admin-dev.yml`; the TripPlanner frontend left in S272 too (AA-1038) and deploys to ECS behind CloudFront
+with `deploy-web-dev.yml`.
 
 The full pre-merge checklist and the live verify are in `skill/aa-ship/SKILL.md`. Rollback steps per app are runbooks
 in [`ops/runbooks/`](../ops/runbooks/), listed on the [operations index](../ops/README.md) (AA-892).

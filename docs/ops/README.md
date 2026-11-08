@@ -43,7 +43,7 @@ Everything runs on **acc2** (us-west-1) except the LLM calls, which run on acc3;
 | [Roll back any ECS service (parameterised, `tools/ops/ecs_rollback.sh`)](runbooks/rollback-ecs.md) | draft, UNTESTED | read-only dry run 2026-11-02; [game day plan](drills/rollback-game-day.md) |
 | [Roll back the CIS API and worker](runbooks/rollback-cis.md) | active | 2026-10-17 drill |
 | [Roll back the Booking API](runbooks/rollback-booking.md) | draft, UNTESTED | read-only only |
-| [Roll back a Vercel deployment](runbooks/rollback-vercel.md) | draft, UNTESTED | - |
+| [Roll back a Vercel deployment](runbooks/rollback-vercel.md) | superseded by rollback-ecs (no ecosystem Vercel project left, AA-1038) | - |
 | [Move the staff frontends from Vercel to ECS (AA-911, ADR 0019 d23)](runbooks/staff-web-ecs-cutover.md) | draft, UNTESTED | - |
 | [Move the TripPlanner frontend from Vercel to ECS behind CloudFront (AA-1038, ADR 0019 d23)](runbooks/tripplanner-web-ecs-cutover.md) | draft, UNTESTED | - |
 | [Roll back the TripPlanner Lambdas](runbooks/rollback-tp-lambda.md) | draft, UNTESTED | read-only only |
@@ -104,7 +104,7 @@ Drills and their evidence: [drill index](drills/README.md).
 | Booking API | ECS `aa-booking-dev-api` (ECR `aa-booking-dev-api`, tag = git SHA, IMMUTABLE, 10 kept) | push to `main` touching the backend, or dispatch | `booking.job` gate over GitHub OIDC: blocks only on a running or soon-due retention kind (AA-993 G5) | `/booking/health` `git_sha`, `/booking/health/ready` | [rollback-booking](runbooks/rollback-booking.md) |
 | Booking admin frontend | ECS `aa-booking-dev-admin` (Vercel retired, AA-911 S272) | push to `main` touching the frontend (`Deploy Admin Dev`) | none (public smoke after deploy) | page check | [rollback-ecs](runbooks/rollback-ecs.md) |
 | TripPlanner Lambdas | `aa-tripplanner-dev-browse`, `aa-tripplanner-dev-assembly` (zip in a versioned S3 bucket, `--publish`, no alias) | push to `main` touching `backend/**`, or dispatch | none | `/api/browse?resource=countries` 200 | [rollback-tp-lambda](runbooks/rollback-tp-lambda.md) |
-| TripPlanner frontend | Vercel `aa-tripplanner` | PR / push to `main` touching `frontend/**` | none | home page 200 | [rollback-vercel](runbooks/rollback-vercel.md) |
+| TripPlanner frontend | ECS `aa-tripplanner-dev-web` behind CloudFront (Vercel retired, AA-1038 S272) | push to `main` touching `frontend/**` (`Deploy Web Dev`) | none | `/api/health` on the commit through CloudFront, the WAF challenge checks, release verify | [rollback-ecs](runbooks/rollback-ecs.md) |
 | Infrastructure | Terraform root `accounts/aa365` (state in S3, versioned) | dispatch `terraform-apply.yml` from `main` after merge | plan on the PR; plan guard; job-idle gate when the plan touches an ECS service or the RDS instance (AA-1023, override `override_busy_jobs`); bootstrap roles by hand with MFA | plan shows no changes | [rollback-terraform](runbooks/rollback-terraform.md) |
 | DB migrations | DB Migrate on AA-CIS-Infra `main` | dispatch `check` then `apply` | idle check over every owner job table (DM-11.4; unlike deploys, `apply` still waits) | version in `shared.schema_versions`, `/health/ready` | forward only ([DB Migrate](runbooks/db-migrate.md)) |
 
@@ -137,7 +137,7 @@ check. A docs-only PR skips the test jobs. Dispatching `ci.yml` on a PR branch r
 | AA-Partner | `ui-smoke-portal.yml` | called by `deploy-web-dev.yml` (AA-1036; was `deploy-portal-dev.yml`, retired); dispatch | Playwright Content studio smoke | always the agency host; signs in with the partner pool (secrets `E2EPORTALEMAIL`, `E2EPORTALPASSWORD`, `E2EPORTALTOTP`) since the AA-979 P2b clean-up |
 | AA-TripPlanner-Web | `ci.yml` | PR to `main`; push `main`, `task/**`, `chore/**`, `feature/**` | Backend (pytest), Security Audit, Migrations (lint, PG 15 replay), Frontend (lint + build) | |
 | AA-TripPlanner-Web | `deploy-lambdas.yml` | push to `main` (`backend/**`); dispatch | Build + deploy Lambda code | deploy role trusts `main` only |
-| AA-TripPlanner-Web | `vercel-deploy.yml` | PR / push `main` (`frontend/**`); dispatch | Vercel deploy | |
+| AA-TripPlanner-Web | `deploy-web-dev.yml` | PR (`frontend/**`, preview image check); push `main` (`frontend/**`); dispatch | Preview (image, `next start` in the runner) on PRs; ECS deploy of `aa-tripplanner-dev-web`, post-deploy verify through CloudFront, release verify (`post-deploy-verify.yml`), visual (`visual.yml`, report-only) | `vercel-deploy.yml` deleted at the TripPlanner Vercel retirement (AA-1038, S272) |
 | AA-CIS-Infra | `terraform-plan.yml` | PR to `main` | Terraform Plan (dev) | plan comment on the PR |
 | AA-CIS-Infra | `terraform-apply.yml` | dispatch from `main` | Terraform Apply (dev) | GitHub environment `dev` = Dev resources (renamed from `prod` in AA-1023, ADR 0012 decision 6) |
 | AA-CIS-Infra | `db-migrate.yml` | dispatch from `main` | Migrate | modes check / apply / set-password / run-script |

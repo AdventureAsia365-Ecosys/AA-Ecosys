@@ -1,15 +1,15 @@
 ---
 id: SEC-04-dpa-annex3
 title: "DPA Annex 3: sub-processors (draft v0.3)"
-description: "Annex 3 of the partner-agency DPA (SCC Annex III): every third party that may receive agency personal data, with data, apps and location, from the live AI gateway and AWS; plus non-sub-processors and the Vercel exit."
+description: "Annex 3 of the partner-agency DPA (SCC Annex III): every third party that may receive agency personal data, with data, apps and location, from the live AI gateway and AWS; plus non-sub-processors and the Vercel exit (completed 2026-11-08)."
 type: reference
 status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-crm-api, aa-crm-web, aa-partner-portal, aa-cis-api, aa-cis-worker, aa-booking-api]
-last_reviewed: 2026-11-06
+last_reviewed: 2026-11-08
 review_every_days: 30
-related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex4, SEC-04, APP-06-ai-register, ARCH-01-ai-gateway, AA-820, AA-1042]
+related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex4, SEC-04, APP-06-ai-register, ARCH-01-ai-gateway, AA-820, AA-1042, AA-1038]
 ---
 
 # DPA Annex 3: sub-processors (draft v0.3)
@@ -69,7 +69,6 @@ the AI Use Register, the AI Schedule, this annex and the app pages together (AI 
 | Sub-processor | Service | Agency data it receives | Apps | Where | Vendor terms to check |
 |---|---|---|---|---|---|
 | **Sentry** (Functional Software, Inc.) | Error tracking | Error events after scrubbing: no default personal data, no request bodies, no cookies, no local variables; a residual risk that an error message quotes a value | CRM, Studio, Booking (and TP) | United States (organisation region `us.sentry.io`, read 2026-11-05) | DPA and transfer terms **[●]** |
-| **Vercel, Inc.** | Hosting of the AA staff apps (CIS admin, Booking admin) and of the Trip Planner frontend | Pages AA staff open (Studio content, agency names and B2B records); the Trip Planner form in transit | Studio and Booking (staff views); TP | Functions in `sfo1` (San Francisco) since 2026-10-28; edge worldwide | **Leaves this list** when each frontend moves to AWS under ADR 0019 d23 (dates in §4). The agency app (CRM and Content studio for agencies) already runs on AWS ECS |
 | **DreamHost** | Mail host of AA's company domain | Only if an Agency or a data subject writes to AA's company mailbox about Agency data (support or privacy requests) | — | **[To confirm]** | **[To confirm]** whether listed; the support address may move to SES-based handling **[●]** |
 
 ## 2. Not sub-processors (no Agency Personal Data)
@@ -102,8 +101,8 @@ is open (register "Tenant CRM (open)"); the BYO decision (S247) treats them as t
 | Date | Change | Notice |
 |---|---|---|
 | 2026-10-28 | Agency portal moved from Vercel to AWS ECS (Vercel project removed) | Before this list existed |
-| [●] (R5, about S272-S277) | Trip Planner frontend to AWS ECS behind CloudFront and a CloudFront-scope WAF | Vercel removed for TP |
-| [●] (AA-911) | CIS admin and Booking admin to one AWS Fargate task | Vercel removed from this list |
+| 2026-11-07 | CIS admin and Booking admin moved to AWS ECS Fargate (their Vercel projects removed) | None needed (a removal) |
+| 2026-11-08 | Trip Planner frontend moved to AWS ECS Fargate behind CloudFront, with its rules in the load balancer's WAF web ACL (Vercel project removed). **Vercel, Inc. left this list**: no AA app runs on Vercel any more | None needed (a removal) |
 
 AA tells the Agency of a new or replaced sub-processor as in DPA clause 6.2. A removal needs no notice; AA updates
 this page.

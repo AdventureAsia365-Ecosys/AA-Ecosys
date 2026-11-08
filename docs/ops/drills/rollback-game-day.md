@@ -1,7 +1,7 @@
 ---
 id: OPS-03-gameday
 title: Rollback game day plan
-description: The 0 USD drill that rolls Booking API, CRM API, one Vercel project and one TripPlanner Lambda back and forward once each, timed, and proves the terraform-apply job-idle gate; with the evidence to capture.
+description: The 0 USD drill that rolls Booking API, CRM API, the TripPlanner web (ECS) and one TripPlanner Lambda back and forward once each, timed, and proves the terraform-apply job-idle gate; with the evidence to capture.
 type: how-to
 status: draft
 owner: nghiep
@@ -27,7 +27,7 @@ S241 and are not repeated.
 |---|---|---|---|---|
 | D1 | ECS `aa-booking-dev-api` | [rollback-ecs](../runbooks/rollback-ecs.md) | `--previous` (newest older real build) | the revision running before D1 |
 | D2 | ECS `aa-crm-dev-api` | [rollback-ecs](../runbooks/rollback-ecs.md) | `--previous` | the revision running before D2 |
-| D3 | Vercel `aa-tripplanner` (was `aa-booking-admin`, retired with AA-911, S272) | [rollback-vercel](../runbooks/rollback-vercel.md) | Instant Rollback to the previous production deployment | Promote the deployment that was current |
+| D3 | ECS `aa-tripplanner-dev-web` (was Vercel `aa-tripplanner`, retired with AA-1038, S272; before that `aa-booking-admin`, AA-911) | [rollback-ecs](../runbooks/rollback-ecs.md) | `--previous` | the revision running before D3 |
 | D4 | Lambda `aa-tripplanner-dev-browse` | [rollback-tp-lambda](../runbooks/rollback-tp-lambda.md) path B | the previous `browse.zip` object version | the newest `browse.zip` object version |
 | D5 | AA-CIS-Infra `terraform-apply.yml` job-idle gate | [deploy-gate override](../runbooks/deploy-gate-override.md) (gates table) | red while one seeded `noop_sleep` row is busy | green after the row is cleared |
 
@@ -71,21 +71,18 @@ Run for `<service>` = `aa-booking-dev-api`, then `aa-crm-dev-api`.
 Pass: both directions end `COMPLETED` with the expected SHA on health and readiness 200; the RTO (seconds from the
 update to a healthy SHA) is written down.
 
-## D3: Vercel `aa-tripplanner`
+## D3: TripPlanner web `aa-tripplanner-dev-web` (ECS)
 
-The Booking admin left Vercel (AA-911, S272): the drill runs on the one Vercel project left. Its production host is
-`tripplanner.lumiguides.it.com`.
+The TripPlanner frontend left Vercel (AA-1038, S272; the Booking admin before it, AA-911): no Vercel project is left, so
+D3 is the D1 procedure on the TripPlanner web service. Its health is `https://tripplanner.lumiguides.it.com/api/health`
+(through CloudFront; field `git_sha`).
 
-1. List the production deployments (Vercel MCP `list_deployments` for the project with target production, or the
-   dashboard). Note the current one (`<current-deployment>`) and the one before it (`<previous-deployment>`, `READY`).
-2. Back: Instant Rollback to `<previous-deployment>` (MCP `request_rollback`, or dashboard: the deployment, menu,
-   Instant Rollback). Time it. Verify the production domain serves it (deployment list shows it as Current; the login
-   page answers 200).
-3. Forward: Promote `<current-deployment>` (MCP `request_promote`, or dashboard Promote). This also switches automatic
-   production domain assignment back on (after a rollback Vercel stops assigning new deployments until a promote).
-4. Verify: the deployment list shows `<current-deployment>` as Current again; the page answers 200.
+1. Baseline, dry run, back and forward exactly as D1 steps 1 to 4 with `<service>` = `aa-tripplanner-dev-web` (no
+   readiness endpoint: the health answer is the check).
+2. After forward: the home page answers 200 and `/plan` loaded as a document answers the WAF Challenge (202 with
+   `x-amzn-waf-action: challenge`), as in the Deploy Web Dev verify.
 
-Pass: both moves take effect within a minute; the project is back on automatic assignment.
+Pass: both directions end `COMPLETED` with the expected SHA on health; the RTO is written down.
 
 ## D4: TripPlanner Lambda `aa-tripplanner-dev-browse`
 
@@ -167,7 +164,7 @@ Pass: red with the seeded row, green before and after it, and `ACTION=status` pr
 |---|---|---|---|---|---|
 | D1 Booking API | | | | | |
 | D2 CRM API | | | | | |
-| D3 Vercel `aa-tripplanner` | | | | | |
+| D3 ECS `aa-tripplanner-dev-web` | | | | | |
 | D4 Lambda browse | | | | | |
 | D5 job-idle gate | idle -> seeded -> cleared (`OPEN_COUNT 0`) | - | - | green / red / green | |
 
@@ -177,7 +174,7 @@ Pass: red with the seeded row, green before and after it, and `ACTION=status` pr
 - In each runbook's front-matter set `last_tested`, `tested_where: drill`, `tested_evidence` (the audit folder), add a
   tested-log row, and set `status: active` for the ones that passed both ways
   ([rollback-ecs](../runbooks/rollback-ecs.md), [rollback-booking](../runbooks/rollback-booking.md),
-  [rollback-vercel](../runbooks/rollback-vercel.md), [rollback-tp-lambda](../runbooks/rollback-tp-lambda.md)).
+  [rollback-tp-lambda](../runbooks/rollback-tp-lambda.md)).
 - Update the [operations index](../README.md) runbook table.
 
 ## Roll back or abort

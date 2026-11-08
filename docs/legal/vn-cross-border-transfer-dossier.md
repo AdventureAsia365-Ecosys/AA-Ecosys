@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-crm-api, aa-crm-web, aa-partner-portal, aa-cis-api, aa-cis-worker, aa-booking-api, tripplanner-frontend]
-last_reviewed: 2026-11-06
+last_reviewed: 2026-11-08
 review_every_days: 30
 related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04-dpa-annex4, SEC-04-dpa-pack, SEC-04-pilot-set, OPS-04, AA-820]
 ---
@@ -66,7 +66,9 @@ they appear only for completeness.
 | 4 | Anthropic, PBC (Anthropic API), location **[to confirm]** | Content studio inputs; no client personal data by rule. The first path of every Claude model since 2026-11-05 | Content studio | Content only; no prompt or output text in AA's AI call records | Annex 3 §1.2; [AI Use Register](../architecture/ai-use-register.md) v1.11 |
 | 5 | OpenAI (OpenAI API), location **[to confirm]** | Content studio inputs; no client personal data by rule. Answers the scoring and checking stages while Bedrock refuses; writes as a last resort | Content studio | As row 4 | Annex 3 §1.2 |
 | 6 | Sentry (Functional Software, Inc.), United States | Error events after scrubbing: no default personal data, no request bodies, cookies or local variables; a residual risk that an error message quotes a value | All apps | Scrubbed events | Annex 2 M-21; Annex 3 §1.3 |
-| 7 | Vercel, Inc., United States (`sfo1`) and edge locations | AA staff views of agency records; the Trip Planner form in transit | Staff apps, Trip Planner | In transit, until each frontend moves to AWS (ADR 0019 d23) | Annex 3 §1.3, §4 |
+
+Vercel, Inc. (United States) is no longer a destination: the staff apps left it on 2026-11-07 and the Trip Planner
+frontend on 2026-11-08; every frontend now runs on AWS (row 1; [Annex 3](dpa-annex-3-subprocessors.md) §4).
 
 Onward transfers: none beyond the rows above. Services the agency connects with its own account (its mailbox, Twilio,
 payment provider, website) are the agency's own processors ([Annex 3](dpa-annex-3-subprocessors.md) §3).
@@ -123,4 +125,4 @@ list and wording **[COUNSEL]**.
 ## 8. Keeping it current
 
 The PR that changes a destination of §3 (a new sub-processor in Annex 3, a route change in the AI Use Register, a
-frontend leaving Vercel, an EU cell) updates this page too. A filed dossier is updated when the transfer changes.
+new hosting provider, an EU cell) updates this page too. A filed dossier is updated when the transfer changes.

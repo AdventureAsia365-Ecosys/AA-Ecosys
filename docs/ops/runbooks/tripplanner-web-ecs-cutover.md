@@ -1,7 +1,7 @@
 ---
 id: OPS-02-tripplanner-web-cutover
 title: Move the TripPlanner frontend from Vercel to ECS
-description: "Bring up the TripPlanner web service behind its CloudFront distribution and the TripPlanner rules of the ALB web ACL, verify it through CloudFront before any DNS change, then point tripplanner. at CloudFront; roll back with the same switch; retire Vercel last."
+description: "Bring up the TripPlanner web service behind its CloudFront distribution and the TripPlanner rules of the ALB web ACL, verify it through CloudFront before any DNS change, then point tripplanner. at CloudFront; retire Vercel last. Done in S272 (cut-over and Vercel retirement, 08/11/2026)."
 type: how-to
 status: draft
 owner: nghiep
@@ -34,16 +34,16 @@ What runs where:
 | Piece | Where |
 |---|---|
 | Service `aa-tripplanner-dev-web` (container `web`, :3000, health `/api/health`), secret shell `tripplanner/dev/web`, the deploy role's web grant | AA-CIS-Infra `modules/environment/tripplanner_web.tf` |
-| CloudFront distribution for `tripplanner.lumiguides.it.com` and its viewer-request function `aa-tripplanner-dev-web-viewer-ip` (writes the viewer address the WAF rate rules key on), ALB :80 host rule, DNS switch `tripplanner_web_dns_on_cloudfront`, TTL window `tripplanner_web_dns_switch_window` | AA-CIS-Infra `accounts/aa365/tripplanner_web_edge.tf`, `alb_rules.tf` |
+| CloudFront distribution for `tripplanner.lumiguides.it.com` and its viewer-request function `aa-tripplanner-dev-web-viewer-ip` (writes the viewer address the WAF rate rules key on), ALB :80 host rule, the `tripplanner.` CNAME (always the distribution since the Vercel retirement; the DNS switch `tripplanner_web_dns_on_cloudfront` and its Vercel target were removed), TTL window `tripplanner_web_dns_switch_window` (off: 300 s) | AA-CIS-Infra `accounts/aa365/tripplanner_web_edge.tf`, `alb_rules.tf` |
 | The three TripPlanner WAF rules in the ALB web ACL `aa-cis-dev-waf` (us-west-1), scoped to the TripPlanner host and the CloudFront origin secret | AA-CIS-Infra `modules/waf` (input `tripplanner_web` of module `waf`, `accounts/aa365/main.tf`) |
-| The CIS catalog purge target (`TRIPPLANNER_REVALIDATE_URL` of the CIS api and worker) | AA-CIS-Infra `modules/ecs`, set by the same switch |
+| The CIS catalog purge target (`TRIPPLANNER_REVALIDATE_URL` of the CIS api and worker, the public host; also the AA-CIS-App default since the Vercel retirement) | AA-CIS-Infra `modules/ecs`, set by `accounts/aa365/main.tf` |
 | Secret values | AA-CIS-Infra `tools/identity/tripplanner_web_secret.py` |
 | Image build and deploy | AA-TripPlanner-Web `Deploy Web Dev` (`.github/workflows/deploy-web-dev.yml`) |
 | The app's edge settings | task env `TP_EDGE_GATE=on` (model calls only on their protected paths), `TP_CLIENT_IP_SOURCE=cloudfront` (per-IP limits on CloudFront-Viewer-Address); every in-site link into the planner is a full page load (`ui/SiteLink.tsx`, `lib/plannerNav.ts`), so the planner gets its WAF token from the Challenge on its own load. No WAF build value or repository variable. |
 
 The host name does not change (`tripplanner.lumiguides.it.com`), so links, the canonical URL, the Mapbox URL
-restriction and the sitemap stay as they are. Until the switch Vercel serves the host and `vercel-deploy.yml` keeps
-deploying it.
+restriction and the sitemap stay as they are. Until the switch Vercel served the host and `vercel-deploy.yml` kept
+deploying it; both are gone since the Vercel retirement (section 4).
 
 **The WAF rules and travellers, decided before the flip.** BotID (Vercel) leaves with Vercel. Three rules of the ALB
 web ACL `aa-cis-dev-waf` take its place, each only for requests with Host `tripplanner.lumiguides.it.com` that carry
@@ -229,35 +229,56 @@ works for one. A replaced photo needs nothing: it has a new `?v=`, which is in t
 without cause and it is not fixed within the hour (a limit is an AA-CIS-Infra variable PR); the task keeps failing its
 health check.
 
-**Rollback (normal):** `tripplanner_web_dns_on_cloudfront = false`, merge, Terraform Apply; resolvers follow within
-60 s, and the CIS purge goes back to the Vercel host (the next CIS deploy). Vercel keeps serving the host until the
-retirement below.
+**Rollback since the Vercel retirement (section 4, 08/11/2026):** there is no DNS rollback any more (the Vercel
+project, its CNAME target and the switch are gone; a CNAME to Vercel with no project claiming the host would be a
+takeover risk). A bad frontend deploy rolls back on ECS: [rollback-ecs](rollback-ecs.md) on `aa-tripplanner-dev-web`,
+or revert on AA-TripPlanner-Web `main` (`Deploy Web Dev` redeploys). A WAF rule that blocks travellers without cause is
+an AA-CIS-Infra variable PR (`tripplanner_web_rate_limit`, `tripplanner_web_model_rate_limit`).
 
-**Rollback (emergency, when CI or the apply window cannot wait),** MFA admin, one line (the target is
-`tripplanner_web_vercel_target` in AA-CIS-Infra `tripplanner_web_edge.tf`):
-
-```bash
-ZONE=$(aws route53 list-hosted-zones-by-name --dns-name lumiguides.it.com --max-items 1 --query 'HostedZones[0].Id' --output text --profile aa365-admin) && aws route53 change-resource-record-sets --hosted-zone-id "$ZONE" --profile aa365-admin --change-batch '{"Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"tripplanner.lumiguides.it.com","Type":"CNAME","TTL":60,"ResourceRecords":[{"Value":"a1520bcb29624260.vercel-dns-017.com"}]}}]}'
-```
-
-Then, before any other Terraform Apply (it would put CloudFront back), the PR `tripplanner_web_dns_on_cloudfront = false`.
+*Before the retirement (kept for the record):* rollback was `tripplanner_web_dns_on_cloudfront = false` (merge,
+Terraform Apply, resolvers within 60 s), or in an emergency an UPSERT of the record to the project's Vercel CNAME target
+by hand.
 
 ## 4. After the switch: retire the Vercel project (a separate, approved step)
 
-At least one working day after the switch, with the watch of section 3 clean. In this order:
+Done in S272 (08/11/2026); the working day of watch after the switch was not waited on Dev (no real traffic; the
+switch-day checks of section 3 were clean). What each step did:
 
-1. AA-TripPlanner-Web PR: remove `vercel-deploy.yml` and the BotID / `@vercel/functions` code paths (`botid`,
-   `dangerouslyDeleteByTag`, `addCacheTag` are no-ops off Vercel), point `visual.yml` and `post-deploy-verify.yml`
-   (app `web`) at `https://tripplanner.lumiguides.it.com`, change the privacy page's hosting line (Vercel -> Amazon
-   Web Services, CloudFront), and update `CONTEXT.md`.
-2. AA-CIS-App PR: the purge job's default URL (`services/jobs/tripplanner_purge_job.py` `DEFAULT_URL`) becomes the
-   public host, so the CIS env is no longer needed for it.
-3. Remove the domain from the Vercel project, then delete the project `aa-tripplanner` (Vercel dashboard or connector;
-   the tech lead approves the delete).
-4. AA-CIS-Infra PR: the record always points at the distribution (drop `tripplanner_web_dns_on_cloudfront` and
-   `tripplanner_web_vercel_target`: a CNAME to Vercel with no project claiming the host is a takeover risk) and close
-   the window (`tripplanner_web_dns_switch_window = false`, TTL 300).
-5. Root PR: the `vercel:aa-tripplanner` rows of the secrets register and GitHub AA-TripPlanner-Web `VERCEL_TOKEN` ->
-   **orphan-delete** then **deleted**; `tripplanner/dev/web` and `TP_MAPBOX_PUBLIC_TOKEN` -> **keep**; the
-   [Vercel rollback runbook](rollback-vercel.md) loses its TripPlanner part (no Vercel project left).
-6. Cost Done-when of AA-1038: a Cost Explorer read of the first days after the move and a monthly forecast.
+1. **AA-TripPlanner-Web PR** "retire the Vercel deploy and every Vercel-only code path": `vercel-deploy.yml`,
+   `frontend/vercel.json`, `instrumentation-client.ts` and the packages `botid` / `@vercel/functions` removed; the BFF
+   no longer calls BotID (the web ACL rules and the edge gate are the bot check, as on ECS since the cut-over); the
+   catalog purge has no CDN step (CloudFront caches no page and no `/api/*`); the Vercel response headers and env
+   fallbacks are gone. `Deploy Web Dev` now also runs `post-deploy-verify.yml` (app web, the release version on the
+   public host) and `visual.yml` (report-only), both on `https://tripplanner.lumiguides.it.com`. Privacy page: hosting
+   by Amazon Web Services (CloudFront and its website firewall), plus the WAF security cookie. `CONTEXT.md` updated.
+   Verify: `Deploy Web Dev` on the merge commit green (deploy, verify, release);
+   `curl -s https://tripplanner.lumiguides.it.com/api/health` answers that commit.
+2. **AA-CIS-App PR** "TripPlanner purge targets the public host": `services/jobs/tripplanner_purge_job.py`
+   `DEFAULT_URL` = `https://tripplanner.lumiguides.it.com/api/revalidate/catalog` (the same value the Infra env sets);
+   the retired `aa-tripplanner.vercel.app` left the sales-link allow list (`services/acp_shared/subject_gate.py`: a
+   deleted `*.vercel.app` name can be claimed by anyone); the admin overview card lost its link to the project's Vercel
+   Analytics. Verify: the next `tripplanner_purge` job succeeds (HTTP 200) on the public host.
+3. **AA-CIS-Infra PR** "tripplanner. always points at the CloudFront distribution", **applied before step 4**:
+   `tripplanner_web_dns_on_cloudfront` and `tripplanner_web_vercel_target` removed (the record names the distribution;
+   a precondition needs the edge); `tripplanner_web_dns_switch_window = false` (TTL 300); `tripplanner_revalidate_url`
+   set without the switch (same value); the EXTERNAL pool's `tripplanner` app client loses its
+   `https://aa-tripplanner.vercel.app/auth/callback` callback and `https://aa-tripplanner.vercel.app/` sign-out URLs
+   (the client is public, PKCE without a secret: once the project is deleted anyone can claim that name and would
+   receive the authorization codes Cognito sends there). Expected Terraform plan: **2 to change, 0 to add, 0 to
+   destroy**, both in place: `aws_route53_record.tripplanner_web[0]` (ttl 60 -> 300) and
+   `aws_cognito_user_pool_client.external["tripplanner"]` (`callback_urls` / `logout_urls` lose the two
+   `vercel.app` entries); nothing else (no CIS task definition change). Verify:
+   `dig +noall +answer tripplanner.lumiguides.it.com @$(dig +short NS lumiguides.it.com | head -1)` shows TTL 300 and
+   the `*.cloudfront.net` name; `aws cognito-idp describe-user-pool-client` of the `tripplanner` client lists no
+   `vercel.app` URL; a traveller sign-in on `https://tripplanner.lumiguides.it.com/sign-in` still reaches the code step.
+4. **Vercel project** `aa-tripplanner`, only after the step 3 apply: domain removed from the project, then the
+   project deleted (the orchestrator, with the tech lead's approval). Verify: the Vercel project list has no
+   `aa-tripplanner`.
+5. **Root PR**: the `vercel:aa-tripplanner` rows of the [secrets register](../../security/secrets-register.md) and
+   GitHub AA-TripPlanner-Web `VERCEL_TOKEN` **-> orphan-delete** (flip to **deleted** once the orchestrator removed
+   them); `tripplanner/dev/web` and `TP_MAPBOX_PUBLIC_TOKEN` **-> keep** (created 08/11/2026); the
+   [Vercel rollback runbook](rollback-vercel.md) is superseded by [rollback-ecs](rollback-ecs.md) (no Vercel project
+   left), which now covers `aa-tripplanner-dev-web` (its helper gained the service); the ecosystem docs say the
+   TripPlanner frontend runs on ECS behind CloudFront. Then the orchestrator deletes the repo secret `VERCEL_TOKEN` of
+   AA-TripPlanner-Web.
+6. Cost Done-when of AA-1038: a Cost Explorer read of the first days after the move and a monthly forecast (open).

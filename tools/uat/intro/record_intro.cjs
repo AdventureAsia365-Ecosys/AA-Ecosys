@@ -15,7 +15,7 @@ const { chromium, expect } = require('@playwright/test');
 
 const LEAD_MS = 250;      // narration starts this long after the step starts (build_intro.py uses the same)
 const TAIL_PAD_MS = 900;  // breathing room after the last sentence of a step
-const BASE = process.env.UAT_BASE_URL || 'https://aa-tripplanner.vercel.app';
+const BASE = process.env.UAT_BASE_URL || 'https://tripplanner.lumiguides.it.com';
 const TOUR = '/tours/western-bhutan-thimphu-punakha-and-paro-7-days-bhutan-8b6ce67b';
 
 const VIEWPORTS = {

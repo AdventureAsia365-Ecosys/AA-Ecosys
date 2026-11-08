@@ -13,9 +13,11 @@ usage() {
 Usage: tools/ops/ecs_rollback.sh <service> --list
        tools/ops/ecs_rollback.sh <service> (--previous | --to <revision> | --to-sha <git sha>) [--apply] [--allow-config-diff]
 
-<service>   aa-cis-dev-api | aa-cis-dev-worker | aa-booking-dev-api | aa-crm-dev-api | aa-crm-dev-web
+<service>   aa-cis-dev-api | aa-cis-dev-worker | aa-booking-dev-api | aa-crm-dev-api | aa-crm-dev-web |
+            aa-tripplanner-dev-web
             (the task-definition family has the same name as the service; aa-crm-dev-web also serves the Content
-            studio since AA-1036, the separate aa-crm-dev-portal is retired)
+            studio since AA-1036, the separate aa-crm-dev-portal is retired; aa-tripplanner-dev-web is the TripPlanner
+            frontend since its Vercel retirement, AA-1038)
 --list      the newest revisions with their image tag and status, the running one marked; read-only
 --previous  the newest revision older than the running one whose image is DIFFERENT and a real build (a redeploy of
             the same image also registers a revision, and a Terraform apply registers template revisions with a
@@ -70,6 +72,8 @@ case "$SERVICE" in
   aa-booking-dev-api) HEALTH="https://api-booking.lumiguides.it.com/booking/health"; FIELD=git_sha ;;
   aa-crm-dev-api) HEALTH="https://partner-dev.lumiguides.it.com/crm/health"; FIELD=git_sha ;;
   aa-crm-dev-web) HEALTH="https://portal.lumiguides.it.com/healthz"; FIELD=git_sha ;;
+  # AA-1038: the TripPlanner frontend (ECS behind CloudFront since the Vercel retirement); git-SHA image tags.
+  aa-tripplanner-dev-web) HEALTH="https://tripplanner.lumiguides.it.com/api/health"; FIELD=git_sha ;;
   *) echo "unknown service: $SERVICE" >&2; usage >&2; exit 2 ;;
 esac
 FAMILY="$SERVICE"

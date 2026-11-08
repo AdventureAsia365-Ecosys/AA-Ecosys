@@ -8,7 +8,7 @@ superseded_by: SEC-04-dpa-agreement
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-11-08
 review_every_days: 90
 related: [SEC-04, SEC-04-packet, SEC-04-dpa-agreement, AA-886, AA-820, AA-839, AA-877]
 ---
@@ -88,8 +88,8 @@ AA shall:
     under the transfer safeguards in [●] (for example SCC Module 2, the UK Addendum, a Vietnamese transfer impact
     assessment). *Drafting note: counsel chooses the instruments per regime. One fact limits "United States": the AI
     account (acc3) calls Amazon Bedrock through `global.` cross-region inference profiles, which can process a prompt
-    outside the US. The Vercel functions of the CIS admin, the Booking admin and the Trip Planner are set to Vercel's
-    `sfo1` region (San Francisco) since 2026-10-28, and the tenant portal runs on AWS us-west-1 (register section (b)).*
+    outside the US. Every frontend (the tenant portal, the CIS admin, the Booking admin and the Trip Planner) runs on
+    AWS us-west-1 since 2026-11-08; none is on Vercel any more (register section (b)).*
 
 ## 3. Tenant obligations
 
@@ -123,7 +123,7 @@ Register rows 5 and 6 of [register.md](register.md) hold the table-level detail.
 | Database encrypted at rest | Live | AA-CIS-Infra `modules/rds/main.tf` (`storage_encrypted = true`) |
 | Database backups and deletion protection | Live | AA-CIS-Infra `modules/rds/main.tf`: 7-day automated backups (`backup_retention_period = 7`), `deletion_protection = true` and a final snapshot on delete (`skip_final_snapshot = false`) |
 | Database not reachable from the internet | Live | AA-CIS-Infra `modules/rds/main.tf` (`publicly_accessible = false`); DM-8.8 |
-| Encryption in transit (TLS) | Live | HTTPS at API Gateway and on the Vercel sites; RDS `rds.force_ssl` set (AA-CIS-Infra `modules/rds/main.tf`) and every app connects with SSL required |
+| Encryption in transit (TLS) | Live | HTTPS at API Gateway, the load balancer and CloudFront; RDS `rds.force_ssl` set (AA-CIS-Infra `modules/rds/main.tf`) and every app connects with SSL required |
 | Tenant isolation by row-level security; per-app database roles | Live | DM-8.4; X1 role split: the CIS runtime signs in as `cis_app`, and its task role is denied the master secret (AA-CIS-Infra `modules/ecs/main.tf`, statement `DenyMasterAndOtherAppSecrets`; DM-8.9) |
 | Credentials stored hashed or in Secrets Manager | Live | `shared.tenants.api_key_hash`; `booking.customer_otps.otp_hash`, `customer_sessions.refresh_token_hash`; channel credentials in Secrets Manager (dump; DM-6.9) |
 | TripPlanner guest token stored only as a hash | Live (AA-827) | Dump: `tripplanner.sessions.guest_token_hash bytea`, CHECK `sessions_guest_token_retired_chk (guest_token IS NULL)` ([`db-schema-reference.md`](../architecture/db-schema-reference.md) lines 3739, 3745) |

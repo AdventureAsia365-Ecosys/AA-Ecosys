@@ -3,7 +3,8 @@
 Nguồn sự thật: `apps/AA-TripPlanner-Web/CONTEXT.md`; yêu cầu sản phẩm: Notion "AA_TripPlanner_AI — PRD Canonical v0.3
 (Map-First)".
 
-- `frontend/` Next.js (Vercel) + BFF same-origin `/api/*` (giữ API key, gửi header `X-TripPlanner-Key`); `backend/` hai
+- `frontend/` Next.js standalone trên ECS `aa-tripplanner-dev-web` sau CloudFront (`deploy-web-dev.yml`; Vercel đã bỏ ở
+  AA-1038, S272) + BFF same-origin `/api/*` (giữ API key, gửi header `X-TripPlanner-Key`); `backend/` hai
   Lambda sau API Gateway HTTP: `browse/handler.py` (đọc, stateless, cache được; gọi model duy nhất là embedding cho
   search) và `assembly/handler.py` (mọi thay đổi trip + gọi Claude qua Bedrock satellite). Endpoint đọc mới đặt ở
   browse, mọi thứ ghi trip hoặc gọi text model đặt ở assembly.

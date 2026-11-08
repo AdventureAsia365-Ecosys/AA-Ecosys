@@ -13,7 +13,7 @@ const HOSTS = {
   cisAdmin: host('UAT_CIS_ADMIN', 'https://aa-cis.lumiguides.it.com'),
   booking: host('UAT_BOOKING', 'https://booking.lumiguides.it.com'),
   partner: host('UAT_CRM_PARTNER', 'https://portal.lumiguides.it.com'),
-  tripplanner: host('UAT_TRIPPLANNER', 'https://aa-tripplanner.vercel.app'),
+  tripplanner: host('UAT_TRIPPLANNER', 'https://tripplanner.lumiguides.it.com'),
 };
 const PHONE = { width: 390, height: 844 };
 

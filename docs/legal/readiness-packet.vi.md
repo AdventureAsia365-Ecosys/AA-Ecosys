@@ -7,9 +7,9 @@ status: draft
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-06
+last_reviewed: 2026-11-08
 review_every_days: 90
-related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, SEC-04-ai-schedule, SEC-04-dpa-pack, AA-886, AA-820, AA-839, AA-877]
+related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, SEC-04-ai-schedule, SEC-04-dpa-pack, AA-886, AA-820, AA-839, AA-877, AA-1038]
 lang: vi
 translation_of: docs/legal/readiness-packet.md
 ---
@@ -44,7 +44,7 @@ hay không, và cho chủ đề nào, là chủ doanh nghiệp quyết định.
 | 8 | Cam kết dịch vụ | Chỉ cam kết thời gian phản hồi tới khi chạy chính thức |
 | 9 | Địa chỉ hỗ trợ | `support@` về một hộp thư chung |
 | 10 | Trang trạng thái | Chưa làm tới khi có đối tác trả tiền đầu tiên |
-| 11 | Gói Vercel | Lên Pro trước lần thu tiền đối tác đầu tiên (D-18) |
+| 11 | Gói Vercel | Đã đóng: từ 2026-11-08 không ứng dụng nào chạy trên Vercel |
 | 12 | Điều khoản sử dụng AI | Đã làm theo C: Phụ lục AI v1.0 được áp dụng (trưởng nhóm kỹ thuật, 03/11/2026) và đi kèm thư pilot; luật sư xem trước đại lý trả tiền đầu tiên |
 
 ## 1. Pháp nhân chịu trách nhiệm dữ liệu
@@ -58,7 +58,7 @@ hợp đồng đối tác và thỏa thuận xử lý dữ liệu cùng nêu m�
 ## 2. Nội dung chính sách, cookie và điều khoản
 
 *Hiện trạng:* bốn trang nháp đang chạy:
-`https://aa-tripplanner.vercel.app/privacy`, `https://aa-tripplanner.vercel.app/terms`,
+`https://tripplanner.lumiguides.it.com/privacy`, `https://tripplanner.lumiguides.it.com/terms`,
 `https://portal.lumiguides.it.com/privacy` và `https://portal.lumiguides.it.com/terms`. Các trang được dẫn link ở chân
 trang và ngay cạnh form liên hệ của Trip Planner. Phụ lục A bên dưới trích đầy đủ nội dung. Về cookie: Trip Planner dùng
 một cookie khách (mã ngẫu nhiên, hệ thống chỉ lưu bản băm một chiều), cookie đăng nhập chỉ khi khách đăng nhập, và bộ nhớ
@@ -84,7 +84,7 @@ B chỉ khi có nhu cầu tiếp thị. *Chi tiết:* [kiểm tra ghi nhận đ�
 dữ liệu họ đưa vào portal và Adventure Asia là bên xử lý, liệt kê nghĩa vụ của bên xử lý, và có các phụ lục về hoạt động
 xử lý, biện pháp bảo mật (mỗi biện pháp ghi rõ đang chạy hay mới dự kiến) và nhà cung cấp dịch vụ. Sổ đăng ký liệt kê các
 nhà cung cấp tìm thấy trong mã nguồn: AWS (máy chủ, e-mail, đăng nhập, mô hình AI qua Amazon Bedrock), các nhà cung cấp
-AI Anthropic (API trực tiếp, đường đầu tiên cho các mô hình Claude từ 2026-11-05), OpenAI và Jev, Sentry (báo lỗi), Vercel (website), Mapbox (bản đồ), Geoapify, DataForSEO, Google (tệp ảnh), nhà cung
+AI Anthropic (API trực tiếp, đường đầu tiên cho các mô hình Claude từ 2026-11-05), OpenAI và Jev, Sentry (báo lỗi), Mapbox (bản đồ), Geoapify, DataForSEO, Google (tệp ảnh), nhà cung
 cấp hộp thư adventure.asia, và các công cụ làm việc. Jev chỉ nhận nội dung của một danh sách ngắn các đối tác thử, cho tới
 khi có thỏa thuận xử lý dữ liệu và không lưu dữ liệu với Jev; thỏa thuận đó là một điểm còn mở. Các điểm mở khác: có phải
 liệt kê các đại lý bán lại AWS (TrueIDC cho tài khoản máy chủ, eCloudvalley cho tài khoản AI) và các hãng làm mô hình phía
@@ -120,12 +120,12 @@ lịch trước. *Đề xuất:* A, và chọn thời hạn trả lời (ví d�
 
 ## 7. Dữ liệu lưu ở Mỹ
 
-*Hiện trạng:* cơ sở dữ liệu và máy chủ đặt tại Mỹ (AWS, us-west-1), và phần lớn nhà cung cấp là công ty Mỹ (AWS, Vercel,
-Mapbox, Sentry, OpenAI); Vercel và Mapbox phục vụ trang web và bản đồ từ điểm gần người xem. Có một điểm vượt ra ngoài
+*Hiện trạng:* cơ sở dữ liệu và máy chủ đặt tại Mỹ (AWS, us-west-1), và phần lớn nhà cung cấp là công ty Mỹ (AWS,
+Mapbox, Sentry, OpenAI); Amazon CloudFront và Mapbox phục vụ trang web và bản đồ từ điểm gần người xem. Có một điểm vượt ra ngoài
 "tại Mỹ": tài khoản AI gọi Amazon Bedrock qua chế độ định tuyến "global", có thể xử lý một yêu cầu (nội dung chuyến đi,
-nội dung tour, không bao giờ có tên hay thông tin liên hệ) ở một vùng ngoài nước Mỹ. Các hàm Vercel chuyển form liên hệ
-của Trip Planner chạy ở vùng San Francisco của Vercel (`sfo1`) từ ngày 28/10/2026, và partner portal nay chạy trên AWS ở
-us-west-1. Các trang đang để biện pháp bảo vệ khi chuyển dữ liệu là "[to be confirmed]". Nghiên cứu phiên S245 ghi lại,
+nội dung tour, không bao giờ có tên hay thông tin liên hệ) ở một vùng ngoài nước Mỹ. Trip Planner, có máy chủ chuyển form liên hệ,
+chạy trên AWS ở us-west-1 từ ngày 08/11/2026, giống partner portal và các trang quản trị: không còn website nào trên
+Vercel. Các trang đang để biện pháp bảo vệ khi chuyển dữ liệu là "[to be confirmed]". Nghiên cứu phiên S245 ghi lại,
 để luật sư xác nhận: Luật Bảo vệ dữ liệu cá nhân của Việt Nam (Luật 91/2025/QH15) và Nghị định 356/2025/NĐ-CP có hiệu
 lực từ 01/01/2026, yêu cầu đánh giá tác động chuyển dữ liệu ra nước ngoài, kể cả khi dùng máy chủ đám mây ở nước ngoài,
 nộp trong vòng 60 ngày kể từ khi bắt đầu chuyển; với đối tác ở EU, áp dụng điều khoản hợp đồng mẫu (Module 2, bên kiểm
@@ -166,15 +166,12 @@ tiên. *Đề xuất:* C, sau đó A hoặc B trong kho mã công khai. *Chi ti�
 
 ## 11. Gói Vercel
 
-*Hiện trạng:* Trip Planner, trang quản trị của hệ thống nội dung và trang quản trị đặt tour chạy trên gói Hobby miễn phí
-của Vercel. Partner portal đã chuyển từ Vercel sang AWS trong tháng 10/2026; dự án Vercel cũ của portal chỉ được giữ làm
-phương án quay lui tới ngày 03/11/2026. Theo nghiên cứu phiên S245, Vercel mô tả gói Hobby là "cho mục đích cá nhân, phi
-thương mại". Quyết định kỹ thuật đã có (D-18) là: dùng Hobby tới khi có đối tác trả tiền đầu tiên, sau đó chuyển lên
-Pro. Gói Pro giá 20 USD mỗi thành viên mỗi tháng, cộng phí theo mức dùng vượt phần gói đã bao gồm. *Phương án:* (A)
-chuyển lên Pro trước lần thu tiền đối tác đầu tiên, đúng như D-18; (B) chuyển sớm hơn, ngay khi đối tác đầu tiên bắt
-đầu dùng portal dù chưa trả tiền, như nghiên cứu S245 gợi ý vì Hobby là gói phi thương mại. Vì portal đã rời Vercel,
-câu hỏi về gói Hobby nay chủ yếu liên quan tới Trip Planner, là trang bán hàng công khai. Mọi khoản chi mới cần trưởng
-nhóm kỹ thuật duyệt (DM-10.7). *Đề xuất:* A. *Chi tiết:*
+*Hiện trạng (08/11/2026):* không còn ứng dụng nào của Adventure Asia chạy trên Vercel. Partner portal chuyển sang AWS
+trong tháng 10/2026, trang quản trị hệ thống nội dung và trang quản trị đặt tour ngày 07/11/2026, và Trip Planner ngày
+08/11/2026 (AWS, sau Amazon CloudFront); mọi dự án Vercel đã bị xoá (ADR 0019 d23). Câu hỏi trước đây là có rời gói
+Hobby miễn phí của Vercel ("cho mục đích cá nhân, phi thương mại", theo nghiên cứu S245) để lên Pro (20 USD mỗi thành
+viên mỗi tháng) trước đối tác trả tiền đầu tiên hay không (quyết định D-18). *Đề xuất:* không cần quyết nữa: câu hỏi đã
+đóng, không phát sinh chi phí Vercel. *Chi tiết:*
 [`04-economics-compliance-security.md`](../audits/2026-10-20-S245-tenant-crm/research/04-economics-compliance-security.md).
 
 ## 12. Điều khoản sử dụng AI
@@ -218,7 +215,9 @@ có thêm bản dịch tiếng Việt để tham khảo, và bản tiếng Anh �
 chữ pháp lý là bản tiếng Anh. Nếu trang thay đổi sau commit hoặc PR trên, trang đang chạy là bản đúng.
 
 Có hai việc cần sửa nội dung trang đã biết. Mục 6 của chính sách quyền riêng tư portal vẫn ghi Vercel lưu trữ các trang
-portal, dù portal nay chạy trên AWS. Hai trang Trip Planner đã đổi sau ngày 20/10/2026 nhưng vẫn ghi ngày đó cho tới
+portal, dù portal nay chạy trên AWS. Từ ngày 08/11/2026, chính sách quyền riêng tư của Trip Planner (mục 3, 6, 7) ghi
+Amazon Web Services (Amazon CloudFront và tường lửa website của nó, kèm một cookie bảo mật ngắn hạn) thay cho Vercel; A.2
+dưới đây trích nội dung cũ hơn. Hai trang Trip Planner đã đổi sau ngày 20/10/2026 nhưng vẫn ghi ngày đó cho tới
 03/11/2026 (Draft v0.2). Mục 5–6 của A.3 và mục 3 của A.4 dưới đây là nội dung ngày 06/11/2026 (AA-820, route control
 phiên bản 6, portal Draft v0.5); mục 3 của A.2 cũ hơn trang đang chạy, trang này từ đó ghi rõ mô hình viết phần thuyết minh và dẫn link Chính sách
 sử dụng của Anthropic.
