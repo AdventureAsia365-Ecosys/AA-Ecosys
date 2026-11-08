@@ -49,6 +49,14 @@ send-to-advisor with 410 `b2b_only` and writes no `inquiry.submitted` outbox row
 The files stay here unchanged for history (rule 2) and stay pinned in the AA-CIS-Infra contract copy guard while
 TripPlanner still keeps its test copies; when TripPlanner removes its leftover hand-off code and copies, it drops their
 manifest entries in the same change.
+**Residual grant, revoke pending:** the tp-009 grants to `booking` (`USAGE` on schema `tripplanner`, `SELECT` on
+`tripplanner.v_inquiry_outbox`) existed only for this contract and are no longer justified. They are still live on Dev,
+and the view's `payload` carries traveller personal data (`pii:contact`, `pii:name`, `pii:free_text`, `pii:travel`)
+of every tenant, because the owner view bypasses the tp-025 shadow RLS. They must be revoked by a TripPlanner-owned
+`tp-` migration (`REVOKE SELECT ON tripplanner.v_inquiry_outbox FROM booking; REVOKE USAGE ON SCHEMA tripplanner FROM
+booking`), shipped with the matching AA-CIS-Infra registry change (the `owners.yaml` consumer grant, the
+`rls_catalogue_rules.py` allowlist rows and the isolation probe's `CONSUMER_GRANTS` row) and the
+[schema ownership](../database/schema-ownership.md) entry. Until then no AA-Booking code may read the view.
 
 | Contract | Producer → consumer | View | Status |
 |---|---|---|---|
