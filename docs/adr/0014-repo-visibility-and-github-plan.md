@@ -3,6 +3,8 @@
 - **Status:** Proposed (2026-10-22, S247). Records S241 D-14 / D-25 as an ADR; the tech lead accepts (AA-901).
   Amended 2026-10-22 (S247): root and Infra made **public** for now, see "Amendment (S247, 2026-10-22)" below.
   Amended 2026-10-23 (S248, AA-981): visibility-switch precondition and secret scanning, see "Amendment 2" below.
+  Decision 4 amended 2026-11-08 (S273) by [ADR 0021](0021-github-org-security-and-ci-hygiene.md): org-level controls
+  first at the prod trigger; making repositories private is the last option and needs its own costed decision.
 - **Scope:** AA-Ecosys: org AdventureAsia365-Ecosys and its repos (AA-Ecosys, AA-CIS-App, AA-Booking,
   AA-TripPlanner-Web, AA-CIS-Infra, and AA-Partner when it is created under [ADR 0010](0010-aa-partner-app.md)).
 - **Amends / Supersedes:** none.
