@@ -60,6 +60,9 @@ Snapshot: `docs/audits/2026-11-08-S273-session/state-snapshot.md`.
   ổn nhưng research không gọi nó và cặp bật/tắt 05/11 chờ ~74 giờ; GAP 1/GAP 2 lan truyền.
 - **C4.3 W46**: không lỡ mục tiêu; `pg_stat_statements` dealloc 2.056 → 9.122 (max 10.000).
 
+## Jira
+- Tech lead duyệt 09/11: đăng 7 comment (PR-22, PR-17, PR-23 + 2 ảnh, PR-24 + ảnh, PR-25 + ảnh, PR-26, PR-20 kỳ 4); bỏ câu 17/814 (PR-22), bỏ dòng hoá đơn AWS (PR-20), không đăng KAN-90. Link: `docs/audits/2026-11-08-S273-session/jira-drafts.md`.
+
 ## Chi phí trả phí trong phiên
 W2 2,58 USD; research 0,547 USD (DFS 0,508); T2 linear 0,064; SEO builder 0,126; route-test 0,0003; S1/W3 thử đầu phiên
 ≈0,42 (0,213 S1 + 0,207 W3). Tổng ≈3,7 USD.
@@ -70,6 +73,7 @@ W2 2,58 USD; research 0,547 USD (DFS 0,508); T2 linear 0,064; SEO builder 0,126;
 2. W2: đóng băng held-out (addendum 1.3.0) → export → panel vòng 2 (CL-1 rồi t2@2) → import → xếp đợt phân xử T9.
 3. Thử Standard queue DFS (~0,1 USD, đã duyệt); rồi AA-1055 PR 1 (T2 + Slate phía đọc) theo `design.vi.md`.
 4. Root #644 (bot schema-ref, check cancel) + dependabot PR các repo (review, không tự merge).
+   (Jira S272 + S273 + PR-20 kỳ 4 đã đăng 09/11.)
 5. Tech lead: gắn label/env `ci-hygiene` + key App + Actions: Read (root #642 live steps); tick "Require SHA pin" ở org.
 6. ≥10/11 12:00Z: apply cis/336 (AA-1024).
 
