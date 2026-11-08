@@ -287,4 +287,5 @@ jobs:
         with:
           name: docs-freshness
           path: freshness/freshness.md
-          retention-days: 30
+          # ADR 0021 decision 4 (WL7): 14 days at most; the same report is in the run summary.
+          retention-days: 14
