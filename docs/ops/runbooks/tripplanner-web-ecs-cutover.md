@@ -65,7 +65,8 @@ before `VpcLinkInternalAllow` / `CloudFrontOriginAllow` (AA-CIS-Infra `modules/w
   a paid Bot Control / ATP / ACFP group, and the tech lead declined those (cost). A model call still challenged (the
   token expired) reloads the planner once per 5 minutes, then shows the "please reload" notice. A script without the
   token gets HTTP 202 with `x-amzn-waf-action: challenge` on the protected paths. A challenged "Send to advisor" keeps
-  the form and asks the traveller to reload the page (no automatic reload). Home, destination and tour pages are
+  the form and asks the traveller to reload the page (no automatic reload), and while the form holds typed input a
+  challenged search or narration does not reload either (it shows the "please reload" notice, so the input is kept). Home, destination and tour pages are
   never challenged. No geo rule for this host.
 - On ECS these rules are the whole bot check of the three protected calls: BotID needs the Vercel edge and the image
   builds it off. The app answers the older spellings (`GET /api/browse?resource=search`, `POST /api/trip` with
@@ -143,9 +144,9 @@ model path and `POST /api/trip/send` both `HTTP/2 202` with `x-amzn-waf-action: 
 TripPlanner rules answer through CloudFront); the older spellings (`/api/browse?resource=search`, `POST /api/trip`
 with `op` `send`) `{"error":"use_protected_path"}` (404); both dot-segment spellings (`/api/browse/%2e/search`, `/api/trip/%2e/narrate`,
 sent with `--path-as-is` so curl does not resolve them) also `HTTP/2 202` with `x-amzn-waf-action: challenge`. The app
-resolves `%2e` to the model route, so the web ACL must match it too: every path match URL-decodes, then normalizes
-(AA-CIS-Infra `modules/waf`, `local.tp_web_path_normalize` of `tripplanner_web_edge.tf`). A 200 or a model answer
-here means that transformation is missing: stop.
+resolves `%2e` to the model route, so the web ACL must match it too: every path match URL-decodes, then normalizes,
+then looks for a protected path with `CONTAINS` (AA-CIS-Infra `modules/waf`, `local.tp_web_path_normalize` of
+`tripplanner_web_edge.tf`). A 200 or a model answer here means that transformation is missing: stop.
 
 The planner's first document load: `curl -s -o /dev/null -D - --resolve $H:443:$IP -H 'sec-fetch-dest: document' -H 'accept: text/html' https://$H/plan | grep -iE '^(HTTP|x-amzn-waf-action)'`,
 and the same for `https://$H/aa-tripplanner/plan`.
@@ -156,10 +157,14 @@ change); every traveller's search, narration and send would then be challenged w
 A tour page loaded the same way (`-H 'sec-fetch-dest: document'` on `https://$H/tours/<a slug from the home page>`)
 answers `HTTP/2 200` (catalog pages are never challenged). The `Deploy Web Dev` verify runs these checks.
 
-Leading dot segments: `/%2e%2e/api/browse/search?q=temple` and `/%2e%2e/api/trip/narrate` (POST `{}`), both with
-`--path-as-is`. AWS `NORMALIZE_PATH` keeps a back-reference at the start of the path, so the TripPlanner rules do not
-match these; `AWSManagedRulesCommonRuleSet` runs first in the same ALB web ACL and its `GenericLFI_URIPATH` (in block)
-is expected to answer 403. Expect 403, or 202 with `x-amzn-waf-action: challenge`. A 200 or a model answer means stop.
+Leading dot segments: `/%2e%2e/api/browse/search?q=temple`, `/%2e%2e/api/trip/narrate` (POST `{}`),
+`/%2e%2e/api/trip/send` (POST the send body above) and `/./api/trip/narrate` (POST `{}`), each with `--path-as-is`.
+The app resolves every one to the protected route. AWS `NORMALIZE_PATH` keeps a back-reference (and a self-reference)
+at the start of the path, so WAF sees `/../api/trip/send`; the TripPlanner rules still match it because they look for
+the protected path with `CONTAINS`, not `EXACTLY` (second review S272). `AWSManagedRulesCommonRuleSet` runs first in
+the same ALB web ACL and its `GenericLFI_URIPATH` (in block) may answer a `..` spelling 403 before them. Expect 403, or
+202 with `x-amzn-waf-action: challenge`; `/./api/trip/narrate` 202 with the challenge. A 200, a model answer or a
+stored lead means the protected-path match is `EXACTLY` again: stop.
 
 Model-path rate rule (one IP): `for i in $(seq 1 150); do curl -s -o /dev/null -w '%{http_code}\n' --resolve $H:443:$IP "https://$H/api/browse/search?q=x$i"; done | sort | uniq -c`,
 wait 60 seconds, run one more request. Expect: 202 lines first, then 429 once the rule has counted the window (the last
