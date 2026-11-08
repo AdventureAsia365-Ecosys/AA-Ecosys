@@ -1,7 +1,7 @@
 ---
 id: OPS-02-tripplanner-web-cutover
 title: Move the TripPlanner frontend from Vercel to ECS
-description: "Bring up the TripPlanner web service behind its CloudFront distribution and web ACL, verify it through CloudFront before any DNS change, then point tripplanner. at CloudFront; roll back with the same switch; retire Vercel last."
+description: "Bring up the TripPlanner web service behind its CloudFront distribution and the TripPlanner rules of the ALB web ACL, verify it through CloudFront before any DNS change, then point tripplanner. at CloudFront; roll back with the same switch; retire Vercel last."
 type: how-to
 status: draft
 owner: nghiep
@@ -21,37 +21,50 @@ related: [OPS-02-vercel, OPS-02-ecs, OPS-02-staff-web-cutover, AA-1038]
 > UNTESTED - do not follow in an incident without checking each step.
 
 Decision: [ADR 0019](../../adr/0019-b2b-only-ecosystem-model.md) d23 and the S265 tech-lead decision recorded on
-Linear AA-1038 (TripPlanner frontend on ECS Dev: one Fargate Spot task + CloudFront + a CLOUDFRONT-scope web ACL, about
-13-15 USD a month; the Fargate and WAF cost yeses are given). Same shape as the
-[staff web cut-over](staff-web-ecs-cutover.md), with a CDN and its own web ACL because TripPlanner is public.
+Linear AA-1038 (TripPlanner frontend on ECS Dev: one Fargate Spot task + CloudFront + WAF; the Fargate and WAF cost
+yeses are given), amended by the tech-lead cost decision of 08/11/2026 (S272): no Bot Control and no web ACL of its
+own; the three TripPlanner rules live in the existing regional web ACL of the ALB, `aa-cis-dev-waf`, scoped to the
+TripPlanner host. About 9.5 USD a month on Dev with the task running (task ~ 6, three WAF rules 3, requests and
+Challenge attempts cents, CloudFront and its viewer-request function inside the free tier); the separate CLOUDFRONT web
+ACL's 5 USD monthly fee is gone. Same shape as the [staff web cut-over](staff-web-ecs-cutover.md), with a CDN and its
+own WAF rules because TripPlanner is public.
 
 What runs where:
 
 | Piece | Where |
 |---|---|
 | Service `aa-tripplanner-dev-web` (container `web`, :3000, health `/api/health`), secret shell `tripplanner/dev/web`, the deploy role's web grant | AA-CIS-Infra `modules/environment/tripplanner_web.tf` |
-| CloudFront distribution for `tripplanner.lumiguides.it.com`, web ACL `aa-tripplanner-dev-web` (us-east-1), ALB :80 host rule, DNS switch `tripplanner_web_dns_on_cloudfront`, TTL window `tripplanner_web_dns_switch_window` | AA-CIS-Infra `accounts/aa365/tripplanner_web_edge.tf`, `alb_rules.tf` |
+| CloudFront distribution for `tripplanner.lumiguides.it.com` and its viewer-request function `aa-tripplanner-dev-web-viewer-ip` (writes the viewer address the WAF rate rules key on), ALB :80 host rule, DNS switch `tripplanner_web_dns_on_cloudfront`, TTL window `tripplanner_web_dns_switch_window` | AA-CIS-Infra `accounts/aa365/tripplanner_web_edge.tf`, `alb_rules.tf` |
+| The three TripPlanner WAF rules in the ALB web ACL `aa-cis-dev-waf` (us-west-1), scoped to the TripPlanner host and the CloudFront origin secret | AA-CIS-Infra `modules/waf` (input `tripplanner_web` of module `waf`, `accounts/aa365/main.tf`) |
 | The CIS catalog purge target (`TRIPPLANNER_REVALIDATE_URL` of the CIS api and worker) | AA-CIS-Infra `modules/ecs`, set by the same switch |
 | Secret values | AA-CIS-Infra `tools/identity/tripplanner_web_secret.py` |
 | Image build and deploy | AA-TripPlanner-Web `Deploy Web Dev` (`.github/workflows/deploy-web-dev.yml`) |
-| The app's edge settings | task env `TP_EDGE_GATE=on` (model calls only on their protected paths), `TP_CLIENT_IP_SOURCE=cloudfront` (per-IP limits on CloudFront-Viewer-Address); build value `NEXT_PUBLIC_TP_WAF_INTEGRATION_URL` (the planner's WAF token, from the repository variable `TP_WAF_INTEGRATION_URL`) |
+| The app's edge settings | task env `TP_EDGE_GATE=on` (model calls only on their protected paths), `TP_CLIENT_IP_SOURCE=cloudfront` (per-IP limits on CloudFront-Viewer-Address); every in-site link into the planner is a full page load (`ui/SiteLink.tsx`, `lib/plannerNav.ts`), so the planner gets its WAF token from the Challenge on its own load. No WAF build value or repository variable. |
 
 The host name does not change (`tripplanner.lumiguides.it.com`), so links, the canonical URL, the Mapbox URL
 restriction and the sitemap stay as they are. Until the switch Vercel serves the host and `vercel-deploy.yml` keeps
 deploying it.
 
-**The web ACL and travellers, decided before the flip.** BotID (Vercel) leaves with Vercel. The web ACL takes its place:
+**The WAF rules and travellers, decided before the flip.** BotID (Vercel) leaves with Vercel. Three rules of the ALB
+web ACL `aa-cis-dev-waf` take its place, each only for requests with Host `tripplanner.lumiguides.it.com` that carry
+the CloudFront origin secret (no other host is counted or challenged). They run after `AWSManagedRulesCommonRuleSet` and
+before `VpcLinkInternalAllow` / `CloudFrontOriginAllow` (AA-CIS-Infra `modules/waf` `local.rule_priorities`):
 
-- `RateLimitPerIp`: 3000 requests per 5 minutes per viewer IP (pages, chunks and photos included) -> 429.
-- `RateLimitModelPaths`: 100 per 5 minutes per IP on `GET /api/browse/search` and `POST /api/trip/narrate` -> 429.
-- `ChallengePlanner`: a silent JavaScript Challenge on the two model paths and on a document navigation of a planner
-  page (`/plan`, `/{tenant}/plan`). The planner gets its token from the web ACL's JavaScript integration
-  (`challenge.js`, AA-TripPlanner-Web `lib/wafToken.ts`) in the background, however it was opened: most ways in (the
-  header link, the home search, the tour and destination buttons) are client-side navigations that the rule never
-  challenges. The integration also refreshes the token after its 4 hours. A call still challenged gets one refresh and
-  retry, then one reload of the planner page (a document load the rule challenges: a short interstitial, no puzzle),
-  then the "please reload" notice. A script without the token gets HTTP 202 with `x-amzn-waf-action: challenge` on the
-  model paths. Home, destination and tour pages are never challenged. No geo rule.
+- `TripPlannerRateLimitPerIp`: 3000 requests per 5 minutes per viewer IP -> 429 `{"error":"rate_limited"}`. It counts
+  what reaches the ALB (pages, BFF calls, cache misses); CloudFront serves cached chunks and photos without it. The
+  viewer IP is the header `x-aa-viewer-ip`, written by the distribution's viewer-request function on every request (at
+  the ALB the source address is CloudFront's).
+- `TripPlannerRateLimitModelPaths`: 100 per 5 minutes per viewer IP on `GET /api/browse/search` and
+  `POST /api/trip/narrate` -> 429.
+- `TripPlannerChallengePlanner`: a silent JavaScript Challenge (a short interstitial, no puzzle) on the two model paths
+  and on a document navigation of a planner page (`/plan`, `/{tenant}/plan`). That document load is how a browser gets
+  its `aws-waf-token` (4 hours): every in-site way into the planner (the header "Plan a trip", the home search "Plan my
+  trip", the tour "Customise this trip", the destination buttons) is a full page load, and a planner reached
+  client-side anyway reloads itself once. There is no JavaScript SDK: AWS WAF gives `challenge.js` only to a web ACL with
+  a paid Bot Control / ATP / ACFP group, and the tech lead declined those (cost). A model call still challenged (the
+  token expired) reloads the planner once per 5 minutes, then shows the "please reload" notice. A script without the
+  token gets HTTP 202 with `x-amzn-waf-action: challenge` on the model paths. Home, destination and tour pages are
+  never challenged. No geo rule for this host.
 - A traveller blocked by a rule, or a planner whose search or narration fails with a challenge, is a rollback trigger
   in section 3.
 
@@ -61,7 +74,8 @@ deploying it.
 2. AA-CIS-Infra PR merged, then the local MFA bootstrap step from `accounts/aa365` on main (the apply role cannot change
    its own policies): `terraform plan -target=aws_iam_policy.tf_apply_crm`, then `terraform apply` with the same target.
    Expect: one in-place update (a new policy version that adds the `aa-tripplanner-dev-web` repository). Nothing else.
-3. Terraform Apply workflow (CI). Expect in the plan: creates for the web ACL, the distribution, the ALB rule, the
+3. Terraform Apply workflow (CI). (Done S272, Infra #722 + #725, with the first design's CLOUDFRONT web ACL; step 3a
+   moves its rules.) Expect in the plan: creates for the web ACL, the distribution, the ALB rule, the
    security group, the ECR repository and its lifecycle policy, the secret shell, the log group, the execution role and
    its policy, the task definition, the target group, the service, the alarm and the deploy role's `app-deploy-web`
    policy; `aws_route53_record.vercel_frontend["tripplanner"]` has moved to `aws_route53_record.tripplanner_web[0]` with
@@ -70,14 +84,26 @@ deploying it.
    Verify: `aws ecs describe-services --cluster aa-cis-dev-cluster --services aa-tripplanner-dev-web --profile aa365-admin --region us-west-1 --query 'services[].[serviceName,status,desiredCount]' --output text`
    prints `ACTIVE 0`, and `aws cloudfront list-distributions --profile aa365-admin --query "DistributionList.Items[?Aliases.Items[0]=='tripplanner.lumiguides.it.com'].[Status,DomainName]" --output text`
    prints `Deployed` and the `*.cloudfront.net` name. Abort: nothing serves traffic yet; fix and re-apply.
+3a. S272 follow-up (AA-CIS-Infra PR "move TripPlanner web WAF rules into the ALB web ACL"), Terraform Apply workflow.
+   Expect in the plan: 1 to add (`aws_cloudfront_function.tripplanner_web_viewer_ip[0]`), 2 to change in place
+   (`module.waf.aws_wafv2_web_acl.main`: three rules added, the five older rules renumbered in the same order, one custom
+   response body; `aws_cloudfront_distribution.tripplanner_web[0]`: `web_acl_id` removed, three function associations
+   added), 1 to destroy (`aws_wafv2_web_acl.tripplanner_web[0]`, the CLOUDFRONT web ACL in us-east-1). Nothing else.
+   Verify: `aws wafv2 list-web-acls --scope CLOUDFRONT --region us-east-1 --profile aa365-admin --query 'WebACLs[].Name' --output text`
+   no longer prints `aa-tripplanner-dev-web`, and
+   `aws wafv2 list-web-acls --scope REGIONAL --region us-west-1 --profile aa365-admin --query "WebACLs[?Name=='aa-cis-dev-waf'].Id" --output text`
+   gives the ID for `aws wafv2 get-web-acl --scope REGIONAL --region us-west-1 --name aa-cis-dev-waf --id <ID> --profile aa365-admin --query 'WebACL.Rules[].[Priority,Name]' --output text`,
+   which prints, in order: 1 `AWSManagedRulesCommonRuleSet`, 2 `TripPlannerRateLimitPerIp`, 3
+   `TripPlannerRateLimitModelPaths`, 4 `TripPlannerChallengePlanner`, 5 `VpcLinkInternalAllow`, 6
+   `CloudFrontOriginAllow`, 7 `RateLimit1000`, 8 `GeoBlockNonAllowed`, 9 `StaffWebRateLimit`. Abort: nothing serves
+   traffic yet (DNS on Vercel); fix and re-apply.
 4. `python3 tools/identity/tripplanner_web_secret.py --apply --sentry-dsn "<the TripPlanner web DSN>"` (AA-CIS-Infra,
    MFA admin; the DSN from Sentry, project of the TripPlanner web; empty switches Sentry off).
    Expect: one line `"action": "written"`. Verify: a re-run prints `"unchanged"`.
-5. AA-TripPlanner-Web repository settings: variables `TP_WEB_ENABLED=true`, `TP_WEB_CLOUDFRONT_DNS` (the
-   `*.cloudfront.net` name above) and `TP_WAF_INTEGRATION_URL` (`terraform output -json tripplanner_web_edge` from
-   `accounts/aa365`, field `waf_integration_url`: an `https://….awswaf.com/…/` URL, public, every planner page loads
-   `challenge.js` from it; the deploy refuses to build without it), secret `TP_MAPBOX_PUBLIC_TOKEN` (the public `pk.`
-   token: the value the Vercel build inlines, read from the Mapbox account or the live bundle).
+5. AA-TripPlanner-Web repository settings: variables `TP_WEB_ENABLED=true` and `TP_WEB_CLOUDFRONT_DNS` (the
+   `*.cloudfront.net` name above), secret `TP_MAPBOX_PUBLIC_TOKEN` (the public `pk.` token: the value the Vercel build
+   inlines, read from the Mapbox account or the live bundle). No WAF variable: if a `TP_WAF_INTEGRATION_URL` variable
+   was created for the first design, delete it (nothing reads it).
 6. Merge the AA-TripPlanner-Web PR. `Deploy Web Dev` runs on main and ends "Deployed at desired count 0: scale the
    service to 1 and re-run to verify". Then:
    `aws ecs update-service --cluster aa-cis-dev-cluster --service aa-tripplanner-dev-web --desired-count 1 --profile aa365-admin --region us-west-1`
@@ -105,16 +131,22 @@ the "We couldn't load" state).
 
 Expect: `{"status":"ok","service":"aa-tripplanner-web","version":"<manifest>","git_sha":"<main sha>"}`; `/plan` 200
 with `x-robots-tag: noindex, nofollow`, `x-frame-options: DENY` and an `x-amz-cf-id` (CloudFront, not Vercel); the
-model path `HTTP/2 202` with `x-amzn-waf-action: challenge`; the older spelling
+model path `HTTP/2 202` with `x-amzn-waf-action: challenge` (the ALB web ACL's TripPlanner rules answer through
+CloudFront); the older spelling
 `{"error":"use_protected_path"}` (404); both dot-segment spellings (`/api/browse/%2e/search`, `/api/trip/%2e/narrate`,
 sent with `--path-as-is` so curl does not resolve them) also `HTTP/2 202` with `x-amzn-waf-action: challenge`. The app
 resolves `%2e` to the model route, so the web ACL must match it too: every path match URL-decodes, then normalizes
-(AA-CIS-Infra `tripplanner_web_edge.tf`). A 200 or a model answer here means that transformation is missing: stop.
+(AA-CIS-Infra `modules/waf`, `local.tp_web_path_normalize` of `tripplanner_web_edge.tf`). A 200 or a model answer
+here means that transformation is missing: stop.
+
+The planner's first document load: `curl -s -o /dev/null -D - --resolve $H:443:$IP -H 'sec-fetch-dest: document' -H 'accept: text/html' https://$H/plan | grep -iE '^(HTTP|x-amzn-waf-action)'`.
+Expect `HTTP/2 202` with `x-amzn-waf-action: challenge` (the interstitial a browser solves silently) or `HTTP/2 200`;
+never 403 or 5xx. The `Deploy Web Dev` verify runs the same two checks.
 
 Leading dot segments: `/%2e%2e/api/browse/search?q=temple` and `/%2e%2e/api/trip/narrate` (POST `{}`), both with
-`--path-as-is`. AWS `NORMALIZE_PATH` keeps a back-reference at the start of the path, so the CloudFront web ACL does
-not match these; the regional ALB web ACL (CommonRuleSet, `GenericLFI_URIPATH` in block) is expected to answer 403.
-Expect 202 with `x-amzn-waf-action: challenge` or 403. A 200 or a model answer means stop.
+`--path-as-is`. AWS `NORMALIZE_PATH` keeps a back-reference at the start of the path, so the TripPlanner rules do not
+match these; `AWSManagedRulesCommonRuleSet` runs first in the same ALB web ACL and its `GenericLFI_URIPATH` (in block)
+is expected to answer 403. Expect 403, or 202 with `x-amzn-waf-action: challenge`. A 200 or a model answer means stop.
 
 Model-path rate rule (one IP): `for i in $(seq 1 150); do curl -s -o /dev/null -w '%{http_code}\n' --resolve $H:443:$IP "https://$H/api/browse/search?q=x$i"; done | sort | uniq -c`,
 wait 60 seconds, run one more request. Expect: 202 lines first, then 429 once the rule has counted the window (the last
@@ -129,21 +161,25 @@ fresh context and never by typing `/plan` first:
 - a tour page's "Customise this trip" button;
 - `/plan` typed in the address bar.
 
-On each: the map opens (Mapbox tiles load: the token's URL restriction names this host); a free-text search answers
-with pins; adding a stop and "narrate" answer with text; the network panel shows `challenge.js` loaded from the
-`awswaf.com` host and the two model calls answered 200 (never 202); no console error. `/aa-tripplanner/plan` (the demo
+On each: the network panel shows the planner opened as a document request (type `document`, possibly the 202
+Challenge interstitial first, then the page), never as a client-side `?_rsc=` fetch; the map opens (Mapbox tiles load:
+the token's URL restriction names this host); a free-text search answers with pins; adding a stop and "narrate" answer
+with text; the two model calls answered 200 (never 202); no console error and no script from an `awswaf.com` host. `/aa-tripplanner/plan` (the demo
 tenant) opens and searches the same way. A 202 on a model call, or the "We could not confirm this request came from
 the planner page" notice, is a failure. Screenshots and the outputs go to
 `docs/audits/<date>-S<nnn>-tripplanner-web-cutover/`.
 
-WAF view of the test window (CloudWatch metrics, us-east-1 for a CLOUDFRONT web ACL):
+WAF view of the test window (CloudWatch metrics of the ALB web ACL, us-west-1; the Challenge rule counts in
+`ChallengeRequests`, the rate rules in `BlockedRequests`):
 
 ```bash
-for r in RateLimitPerIp RateLimitModelPaths ChallengePlanner; do echo "$r $(aws cloudwatch get-metric-statistics --namespace AWS/WAFV2 --metric-name BlockedRequests --dimensions Name=WebACL,Value=aa-tripplanner-dev-web Name=Rule,Value=$r --start-time $(date -u -d '-3 hours' +%FT%TZ) --end-time $(date -u +%FT%TZ) --period 10800 --statistics Sum --region us-east-1 --profile aa365-admin --query 'Datapoints[0].Sum' --output text)"; done
+for r in TripPlannerRateLimitPerIp TripPlannerRateLimitModelPaths; do echo "$r $(aws cloudwatch get-metric-statistics --namespace AWS/WAFV2 --metric-name BlockedRequests --dimensions Name=WebACL,Value=aa-cis-dev-waf Name=Region,Value=us-west-1 Name=Rule,Value=$r --start-time $(date -u -d '-3 hours' +%FT%TZ) --end-time $(date -u +%FT%TZ) --period 10800 --statistics Sum --region us-west-1 --profile aa365-admin --query 'Datapoints[0].Sum' --output text)"; done
+aws cloudwatch get-metric-statistics --namespace AWS/WAFV2 --metric-name ChallengeRequests --dimensions Name=WebACL,Value=aa-cis-dev-waf Name=Region,Value=us-west-1 Name=Rule,Value=TripPlannerChallengePlanner --start-time $(date -u -d '-3 hours' +%FT%TZ) --end-time $(date -u +%FT%TZ) --period 10800 --statistics Sum --region us-west-1 --profile aa365-admin --query 'Datapoints[0].Sum' --output text
 ```
 
-Expect: blocks only from the rate test above; sampled requests per rule are in the console (WAF, Global (CloudFront),
-web ACL `aa-tripplanner-dev-web`). Abort: anything red keeps DNS on Vercel; fix and redeploy.
+Expect: blocks only from the rate test above, challenges from the curl checks and one per fresh browser context. The
+acted-on requests are also in the web ACL's log `aws-waf-logs-aa-cis-dev` (30 days; rule names in
+`terminatingRuleId`). Abort: anything red keeps DNS on Vercel; fix and redeploy.
 
 ## 3. Switch DNS
 
