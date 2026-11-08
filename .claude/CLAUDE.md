@@ -33,7 +33,7 @@ Always verify: aws sts get-caller-identity --profile aa365-admin
 
 **`default` CLI profile = acc2** since AA-517 (02/09/2026) — trước đó `default` trỏ acc1 bằng
 static key, là nguyên nhân gốc của 2 lần ghi nhầm Secrets Manager (22/05, 25/08/2026). Đã đổi
-`default` để assume cùng role với `aa365-admin` (dùng chung STS cache 8h). Key acc1 cũ đổi tên
+`default` để assume cùng role với `aa365-admin` (dùng chung STS cache 12h, role `nghiep-admin-12h` từ S273). Key acc1 cũ đổi tên
 `[acc1-legacy-default]` trong `~/.aws/credentials`; không dùng cho việc hệ sinh thái (AA-998: access key tĩnh đã Inactive).
 
 History: account 1 (867490540162) — compute/network hạ tầng CŨ đã xoá 09/07/2026
