@@ -84,7 +84,7 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
    **3a. Trang chỉ-admin — user E2E CIS admin (AA-816 A10b, root ADR 0006a A10b; chỉ Dev).** `e2e-cis-admin@e2e-mail.lumiguides.it.com`,
    nhóm `cis-admin`, phiên chỉ đọc (mọi ghi khác GET/HEAD/OPTIONS → 403 `e2e_read_only`) trừ Cut / Edit câu ở Content
    quality. Mã đăng nhập vào prefix `inbound-admin/`, **chỉ role MFA admin đọc được**, nên chỉ chạy local, không có CI:
-   1. `aws sts get-caller-identity --profile aa365-admin` (hết hạn MFA 8h → nhờ Nghiệp nhập mã).
+   1. `aws sts get-caller-identity --profile aa365-admin` (hết hạn MFA 12h → nhờ Nghiệp nhập mã).
    2. `cd apps/AA-CIS-App && AWS_PROFILE=aa365-admin E2EADMIN=1 npx playwright test --project admin-evidence`
       (spec `tests/e2e/admin-evidence/admin-pages.spec.ts`: đăng nhập 1 lần, retries 0, chụp 1440 + 390 × light/dark,
       thử 1 lệnh ghi phải ra 403 `e2e_read_only`, rồi sign out). Thêm trang = thêm vào `PAGES` trong spec.
