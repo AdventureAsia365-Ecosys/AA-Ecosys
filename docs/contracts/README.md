@@ -49,19 +49,21 @@ send-to-advisor with 410 `b2b_only` and writes no `inquiry.submitted` outbox row
 The files stay here unchanged for history (rule 2) and stay pinned in the AA-CIS-Infra contract copy guard while
 TripPlanner still keeps its test copies; when TripPlanner removes its leftover hand-off code and copies, it drops their
 manifest entries in the same change.
-**Residual grant, revoke pending:** the tp-009 grants to `booking` (`USAGE` on schema `tripplanner`, `SELECT` on
-`tripplanner.v_inquiry_outbox`) existed only for this contract and are no longer justified. They are still live on Dev,
-and the view's `payload` carries traveller personal data (`pii:contact`, `pii:name`, `pii:free_text`, `pii:travel`)
-of every tenant, because the owner view bypasses the tp-025 shadow RLS. They must be revoked by a TripPlanner-owned
-`tp-` migration (`REVOKE SELECT ON tripplanner.v_inquiry_outbox FROM booking; REVOKE USAGE ON SCHEMA tripplanner FROM
-booking`), shipped with the matching AA-CIS-Infra registry change (the `owners.yaml` consumer grant, the
-`rls_catalogue_rules.py` allowlist rows and the isolation probe's `CONSUMER_GRANTS` row) and the
-[schema ownership](../database/schema-ownership.md) entry. Until then no AA-Booking code may read the view.
+**Residual grant, revoked (tp-027):** the tp-009 grants to `booking` (`USAGE` on schema `tripplanner`, `SELECT` on
+`tripplanner.v_inquiry_outbox`) existed only for this contract. The view's `payload` carries traveller personal data
+(`pii:contact`, `pii:name`, `pii:free_text`, `pii:travel`) of every tenant, because the owner view bypasses the tp-025
+shadow RLS. TripPlanner migration tp-027 revokes both (`REVOKE ALL ON tripplanner.v_inquiry_outbox FROM booking;
+REVOKE USAGE ON SCHEMA tripplanner FROM booking`; `booking` held nothing else in the schema). AA-CIS-Infra dropped the
+`owners.yaml` consumer grant and the isolation probe's `CONSUMER_GRANTS` row, and the probe now asserts that `booking`
+gets 42501 on the view (cross-app cell, expected from tp-027); AA-CIS-App dropped the two `rls_catalogue_rules.py`
+allowlist rows, so a grant back is a guard violation. The view itself stays until a destructive drop with
+TripPlanner's leftover hand-off code ([schema ownership](../database/schema-ownership.md)). No AA-Booking code may
+read it.
 
 | Contract | Producer → consumer | View | Status |
 |---|---|---|---|
 | `inquiry.submitted.v1.json` | TripPlanner → AA-Booking | `tripplanner.v_inquiry_outbox` (tp-008) | **retired** (AA-1046, see the note above the table). Was: superseded by 1.1 (additive) |
-| `inquiry.submitted.v1.1.json` | TripPlanner → AA-Booking | same | **retired** (AA-1046, see the note above the table). Was: superseded by 1.2 (additive); SELECT to `booking` granted (tp-009, applied on Dev) |
+| `inquiry.submitted.v1.1.json` | TripPlanner → AA-Booking | same | **retired** (AA-1046, see the note above the table). Was: superseded by 1.2 (additive); SELECT to `booking` granted (tp-009), revoked by tp-027 |
 | `inquiry.submitted.v1.2.json` | TripPlanner → AA-Booking | same | **retired** (AA-1046, see the note above the table). Was: current once the AA-830 TripPlanner change is deployed: each leg adds the catalog tour key `source_system` + `source_id` (resolved against `catalog.v_tour`; both null when unresolvable), `source_tour_id` kept. AA-Booking accepts 1, 1.1 and 1.2 and stores the key on `booking.trip_case_legs` (bk-011) |
 | `inquiry.submitted.v1.3.json` | TripPlanner → AA-Booking | same | **retired** (AA-1046, see the note above the table). Was: planned (AA-986 L6, ADR 0015 decision 5): every leg and day adds `available`, `reason` (`retired` / `paused` / `stop_removed` / `not_served`, null when available) and `reason_detail` (the CIS lifecycle reason); stops whose tour AA no longer serves are handed off after the served ones with `available: false`. Additive over 1.2. **AA-Booking must accept 1.3 before the TripPlanner change deploys** (Booking marks an unknown version `failed`); TripPlanner reads `catalog.v_tour_retired` (CIS 274) for the reason |
 | `inquiry.submitted.v1.4.json` | TripPlanner → AA-Booking | same | **retired** (AA-1046, see the note above the table). Was: planned (AA-908, root ADR 0006 Phase 4): `customer.identity` = the signed-in traveller's verified `(iss, sub)` from the Cognito EXTERNAL pool (pii online_id), null for a guest; a signed-in send takes the email from the verified token and sets `verified` to its `email_verified`, and `verified` is true only together with an identity. Additive over 1.3. **AA-Booking (bk-024 `booking.customer_identities`) must accept 1.4 before the TripPlanner change deploys**. Samples in `samples/inquiry.submitted.v1.4/`; the token itself never crosses (CI) |

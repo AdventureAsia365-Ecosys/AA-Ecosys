@@ -232,9 +232,10 @@ Source: `apps/AA-TripPlanner-Web/migrations/*`.
 - **Place read models (ADR 0007):** the frozen pilot tables (`itinerary_components`, `tour_day`, `tour_stop`,
   `tour_graph_*`, `tour_leg`, `tour_junction`) were dropped by tp-018 on 2026-10-23. CIS builds places in its own
   schema `geo` and serves them through `catalog.*` views.
-- TripPlanner publishes views to other apps: `v_inquiry_outbox` to Booking (tp-009) and the ops views to `cis_app`
-  (`v_ops_traffic_daily` tp-015; `v_ops_data_totals`, `v_ops_pin_components`, `v_ops_component_id_map` tp-020;
-  `v_ops_inquiry_keys` tp-022 for the CIS inquiry hand-off check).
+- TripPlanner publishes views to other apps: the ops views to `cis_app` (`v_ops_traffic_daily` tp-015;
+  `v_ops_data_totals`, `v_ops_pin_components`, `v_ops_component_id_map` tp-020; `v_ops_inquiry_keys` tp-022 for the
+  CIS inquiry hand-off check). `v_inquiry_outbox` was read by Booking (tp-009) until the `inquiry.submitted` contract
+  was retired; tp-027 revoked that grant and Booking's `USAGE` on schema `tripplanner` (AA-1046).
 
 ### 3.4 AA-Booking — schema `booking` [FACT]
 
@@ -244,7 +245,8 @@ role, API route); there are no new accounts. It never writes another app's schem
 versioned JSON in `docs/contracts/` (rules: [`contracts/README.md`](contracts/README.md)):
 
 - **`inquiry.submitted`** (TripPlanner → AA-Booking, with the multi-tour leg chain; files
-  `docs/contracts/inquiry.submitted.v1*.json`) is carried by a **transactional outbox**. TripPlanner's
+  `docs/contracts/inquiry.submitted.v1*.json`) **is retired** (AA-1046, B2B-only model; the read grant was revoked by
+  tp-027). It was carried by a **transactional outbox**. TripPlanner's
   `tripplanner.v_inquiry_outbox` (grant `tp-009`) is pulled by Booking's `booking.job` worker into
   `booking.inbox_events` with an idempotency key. Booking then creates the lead customer, the trip case and the staff
   notification.
