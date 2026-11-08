@@ -258,15 +258,22 @@ switch-day checks of section 3 were clean). What each step did:
    the retired `aa-tripplanner.vercel.app` left the sales-link allow list (`services/acp_shared/subject_gate.py`: a
    deleted `*.vercel.app` name can be claimed by anyone); the admin overview card lost its link to the project's Vercel
    Analytics. Verify: the next `tripplanner_purge` job succeeds (HTTP 200) on the public host.
-3. **Vercel project** `aa-tripplanner`: domain removed from the project, then the project deleted (the orchestrator,
-   with the tech lead's approval). Verify: the Vercel project list has no `aa-tripplanner`.
-4. **AA-CIS-Infra PR** "tripplanner. always points at the CloudFront distribution": `tripplanner_web_dns_on_cloudfront`
-   and `tripplanner_web_vercel_target` removed (the record names the distribution; a precondition needs the edge);
-   `tripplanner_web_dns_switch_window = false` (TTL 300); `tripplanner_revalidate_url` set without the switch (same
-   value). Expected Terraform plan: one in-place update of `aws_route53_record.tripplanner_web[0]`, ttl 60 -> 300;
-   nothing else (no CIS task definition change). Verify:
+3. **AA-CIS-Infra PR** "tripplanner. always points at the CloudFront distribution", **applied before step 4**:
+   `tripplanner_web_dns_on_cloudfront` and `tripplanner_web_vercel_target` removed (the record names the distribution;
+   a precondition needs the edge); `tripplanner_web_dns_switch_window = false` (TTL 300); `tripplanner_revalidate_url`
+   set without the switch (same value); the EXTERNAL pool's `tripplanner` app client loses its
+   `https://aa-tripplanner.vercel.app/auth/callback` callback and `https://aa-tripplanner.vercel.app/` sign-out URLs
+   (the client is public, PKCE without a secret: once the project is deleted anyone can claim that name and would
+   receive the authorization codes Cognito sends there). Expected Terraform plan: **2 to change, 0 to add, 0 to
+   destroy**, both in place: `aws_route53_record.tripplanner_web[0]` (ttl 60 -> 300) and
+   `aws_cognito_user_pool_client.external["tripplanner"]` (`callback_urls` / `logout_urls` lose the two
+   `vercel.app` entries); nothing else (no CIS task definition change). Verify:
    `dig +noall +answer tripplanner.lumiguides.it.com @$(dig +short NS lumiguides.it.com | head -1)` shows TTL 300 and
-   the `*.cloudfront.net` name.
+   the `*.cloudfront.net` name; `aws cognito-idp describe-user-pool-client` of the `tripplanner` client lists no
+   `vercel.app` URL; a traveller sign-in on `https://tripplanner.lumiguides.it.com/sign-in` still reaches the code step.
+4. **Vercel project** `aa-tripplanner`, only after the step 3 apply: domain removed from the project, then the
+   project deleted (the orchestrator, with the tech lead's approval). Verify: the Vercel project list has no
+   `aa-tripplanner`.
 5. **Root PR**: the `vercel:aa-tripplanner` rows of the [secrets register](../../security/secrets-register.md) and
    GitHub AA-TripPlanner-Web `VERCEL_TOKEN` **-> orphan-delete** (flip to **deleted** once the orchestrator removed
    them); `tripplanner/dev/web` and `TP_MAPBOX_PUBLIC_TOKEN` **-> keep** (created 08/11/2026); the

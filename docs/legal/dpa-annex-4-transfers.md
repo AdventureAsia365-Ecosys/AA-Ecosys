@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-06
+last_reviewed: 2026-11-08
 review_every_days: 30
 related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04-dpa-pack, SEC-04-vn-transfer-dossier, AA-820]
 ---
@@ -28,7 +28,9 @@ related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa
 | United States, AWS us-east-1, us-east-2, us-west-2 (US cross-region inference) | CRM reply-draft text after the F3 scrub (placeholders, no identity fields), when an Agency has AI switched on; Amazon Nova Lite through a `us.` profile, which stays inside the US | Annex 3 §1.2; AA-CIS-Infra `modules/environment/crm_llm.tf` |
 | The Anthropic API and the OpenAI API (location [to confirm]) | Content studio inputs: the Anthropic API is the first path of every Claude model since 2026-11-05 (route control version 6); the OpenAI API answers the GPT scoring and checking stages while Amazon Bedrock refuses, and writes as a last resort | AI Use Register v1.11; Annex 3 §1.2 |
 | Sentry, United States | Scrubbed error events | Annex 3 §1.3 |
-| Vercel, United States (`sfo1`) and edge | Staff views and the Trip Planner form in transit, until ADR 0019 d23 completes | Annex 3 §1.3, §4 |
+
+Vercel is no longer a destination: ADR 0019 d23 completed on 2026-11-08, when the Trip Planner frontend, the last AA
+app on Vercel, moved to AWS (Annex 3 §4).
 
 An EU hosting cell exists only after a d12 trigger: (a) a signed contract requires EU hosting; (b) about 3-5 paying EU
 agencies pay about 3 times the cell's cost; or (c) a legal change under which SCCs plus a TIA no longer hold.
@@ -127,7 +129,7 @@ Pick the ones that apply from Annex 2 and say what each protects against at this
 2. Cross-region AI inference (`global.` profiles): Content studio only.
 3. The Anthropic API: Content studio (and later the Trip Planner and the CRM).
 4. The OpenAI API: Content studio.
-5. Sentry (United States) and Vercel (until d23 completes): low-volume, scrubbed or in-transit data.
+5. Sentry (United States): low-volume, scrubbed data.
 
 *Drafting note: the Vietnamese dossier of §2 and the EU TIA share sections A, B and D; write the facts once. The
 [Vietnam transfer dossier](vn-cross-border-transfer-dossier.md) holds them for the destinations above.*
