@@ -1,8 +1,8 @@
 {
- "updated": "2026-11-08",
- "synced_at": "2026-11-08T03:04Z",
- "session": "S272",
- "next_session": "S273",
+ "updated": "09/11/2026",
+ "synced_at": "2026-11-09T06:20:00+07:00",
+ "session": "S274",
+ "next_session": "S275",
  "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
  "projects": {
   "data": "Data Platform",
@@ -725,7 +725,7 @@
   {
    "who": "AWS Sales",
    "issue": "AA-1004",
-   "text": "S271 06/11: tech lead gửi form AWS Sales (aws.amazon.com/contact-us, Use case AI & ML, Sales Support) cho acc3: xin Account Manager + quyền Bedrock us-west-1 cho Claude Sonnet/Opus/Haiku 5.5, Sonnet 5, GPT-6 Luna/Astra, GPT-5.6 Luna + quota TPM; không cho chia sẻ với AWS Partners. Chờ Sales liên hệ qua mail @adventure.asia (1–3 ngày làm việc); khi có trả lời → agent soạn tiếp, rồi chạy lại probe acc3"
+   "text": "S273 08/11: AWS Account Team hỏi 4 điểm (kinh doanh, use case, người dùng, khối lượng); tech lead đã gửi trả lời 17:09 kèm số liệu thật từ llm_call_log và mức quota xin. Chờ AWS mở quyền 7 model (Claude Sonnet/Opus/Haiku 5.5, Sonnet 5, GPT-6 Luna/Astra, GPT-5.6 Luna) + quota; khi có → agent probe lại acc3, cập nhật route gateway"
   },
   {
    "who": "Tech lead",
@@ -889,6 +889,24 @@
   }
  ],
  "log": [
+  {
+   "session": "S273",
+   "date": "09/11/2026",
+   "closed": [
+    "AA-1053"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-1055"
+   ],
+   "reopened": [],
+   "notes": [
+    "W2 đợt 1: T2 14/14 + T9 blog 14/14 trên tenant audit, 2,58/5 USD",
+    "AA-1050 shadow live (CIS 391 + #1399); AA-1052 lineage live, fan-out/edit gate ở CIS #1400/#1401",
+    "Kiểm toán DFS + thiết kế mới (hướng A) duyệt; research tenant audit 0,55 USD → chủ đề Blog 4 → 31",
+    "Bức tranh hệ thống + trang tổng quan; ADR 0021 + vệ sinh CI 6 repo; AA-1004 apply management; C4.3 W46"
+   ]
+  },
   {
    "session": "S272",
    "date": "08/11/2026",
@@ -1806,9 +1824,9 @@
    "priority": "High",
    "project": "data",
    "milestone": "M5",
-   "session": "S267",
+   "session": "S273",
    "size": "L",
-   "next": "Prod · P0 lát 1 (stack Booking vào modules/environment, Deploy Prod khung tự từ chối, DB Migrate đường prod, env prod có reviewer + chỉ main) và P1 lát 2 (stack CRM, 70 resource) đã apply, plan 0/0/0; kế: stack TripPlanner, identity/SES/DNS, observability; mời org ≥01/12; P2 muộn nhất tuần 3 pilot",
+   "next": "Infra #734 + apply management (OU Transitional, SCP 1, aa-org-member-access) S273 · acc2 role chờ check 1.4 / trả lời bên bán lại; trước 20/11",
    "needs": "Business owner: ngày go-live (b18); tech lead: mời acc2/acc3 vào org (≥01/12)"
   },
   {
@@ -1854,9 +1872,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M-P1",
-   "session": "S271",
+   "session": "S273",
    "size": "",
-   "next": "Pilot 1 · S271: gói DPA phần 2 (phần kỹ thuật) trước 11/11; luật sư + báo tenant qua Jira",
+   "next": "Pilot 1 · S273: DPA phần 2 (kỹ thuật) + điều khoản AUP Anthropic trong Tenant Terms trước 11/11; luật sư + báo tenant qua Jira",
    "needs": "Business owner: duyệt điều khoản AI trước 11/11 (có cần luật sư hay không)",
    "due": "2026-11-11"
   },
@@ -2167,9 +2185,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "M-P1",
-   "session": "S272",
+   "session": "S273",
    "size": "M",
-   "next": "Pilot 1 · notice + dấu máy đọc live mọi bề mặt S266 (export CIS/WordPress, JSON tenant, trang tour TripPlanner, catalog.http.v1 1.3, supply Booking CIS 358–359); còn 1 lượt publish WordPress thật; hạn cứng trước 02/12 (d19)",
+   "next": "Pilot 1 · S273: 1 lượt publish WordPress thật kiểm dấu máy đọc + ảnh mọi bề mặt → Done (hạn cứng trước 02/12, d19)",
    "needs": "Tech lead: site WordPress test mới + Application Password (không gấp)",
    "due": "2026-12-01"
   },
@@ -2207,7 +2225,7 @@
    "session": "S273",
    "size": "",
    "next": "",
-   "needs": "cần xếp slot"
+   "needs": ""
   },
   {
    "id": "AA-1048",
@@ -2216,10 +2234,10 @@
    "priority": "High",
    "project": "core",
    "milestone": "later",
-   "session": "S273",
+   "session": "S274",
    "size": "",
-   "next": "",
-   "needs": "cần xếp slot"
+   "next": "Đợt 1 sinh bài xong (T2 14 + T9 blog 14, 2,58 USD) · S274: đóng băng → panel vòng 2 → import → đợt phân xử T9",
+   "needs": ""
   },
   {
    "id": "AA-1049",
@@ -2228,22 +2246,22 @@
    "priority": "High",
    "project": "core",
    "milestone": "later",
-   "session": "S273",
+   "session": "S274",
    "size": "",
-   "next": "",
-   "needs": "cần xếp slot"
+   "next": "T2 linear đạt; SEO builder sửa meta ngắn · quyết bật cờ theo trang quyết định",
+   "needs": ""
   },
   {
    "id": "AA-1050",
    "title": "[Quality W4] Promote the calibrated claim instrument: shadow first, then holds only for measured classes",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
    "session": "S274",
    "size": "",
-   "next": "",
-   "needs": "cần xếp slot"
+   "next": "Shadow live (CIS 391 + #1399, tắt mặc định) · S274+: bật shadow khi có nhãn W2, đo bất đồng với F9",
+   "needs": ""
   },
   {
    "id": "AA-1051",
@@ -2252,34 +2270,46 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "S274",
+   "session": "S273",
    "size": "",
-   "next": "",
-   "needs": "cần xếp slot"
+   "next": "Quality W5 · S273 (kéo lên, tech lead \"ok list thêm\" 08/11): chạy viết trả phí mẫu nhỏ, trần ~3 USD, số từ llm_call_log",
+   "needs": ""
   },
   {
    "id": "AA-1052",
    "title": "[Quality W6] Lineage, dormant-code cleanup and permanent change control for every writing workflow",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "S275",
+   "session": "S274",
    "size": "",
-   "next": "",
-   "needs": "cần xếp slot"
+   "next": "Lineage live · S274: ship CIS #1400 (mig 392) + #1401 fan-out + chặn sửa runtime, kiểm fan-out 1 tour",
+   "needs": ""
   },
   {
    "id": "AA-1053",
    "title": "[AI gateway] One owner for the token-budget retry and one effort rule per provider (W1 contradictions #13, #14)",
-   "status": "Backlog",
+   "status": "Done",
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "unscheduled",
+   "session": "S273",
    "size": "",
-   "next": "",
-   "needs": "cần xếp slot"
+   "next": "Done S273: lô T9 W2 0 cắt 0 retry; route-test đúng effort",
+   "needs": ""
+  },
+  {
+   "id": "AA-1055",
+   "title": "[SEO data] Keep search-demand research fresh: budgeted refresh after every re-atomize, stale-share guard per market",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "later",
+   "session": "S274",
+   "size": "L",
+   "next": "Thiết kế hướng A đã duyệt S273 (design.vi.md) · S274: thử Standard queue ~0,1 USD; PR 1 phía đọc (T2 + Slate); PR 2 phía mua; R0 → R1 US/UK/AU (~6,9 USD) sau khi PR 1+2 live",
+   "needs": "Tech lead: duyệt R2 sau số R1; nạp DFS sau R2"
   }
  ]
 }

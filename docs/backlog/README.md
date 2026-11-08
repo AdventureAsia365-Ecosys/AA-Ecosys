@@ -142,16 +142,17 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | S280 | AA-1041, AA-1004 | R7 item 7 + visual tests against `next start` → close R7. AA-1004 P2–P6 from the go-live date, or from pilot week 3 at the latest (q-pilot). |
 | after S280 / date-gated | AA-1024, AA-788, AA-1026, AA-998, AA-873, AA-1003, CRM-after-R3, AA-980, AA-881, parked | AA-1024 D8 ≥10/11 ~12:00Z; AA-788 ≥19/11 with an LLM path (~S286+); first session ≥01/12: AA-1026 D6 (November bill), AA-998 acc1 = 0 USD, AA-873 first-month cost read, AA-1004 org invites; AA-1003 R5–R7; CRM add-ons AA-960, AA-963, AA-965, AA-968, AA-970, AA-1011, AA-1012 in the merged app (≥60 % capacity stays on content); AA-980 at go-live; AA-881 05/2027; parked AA-842, AA-781, AA-782, AA-704, AA-948, AA-922 (TL-11 lift). |
 
-### Open issues by slot (after the S272 close: 0 closed, AA-1053 added; rows below updated for AA-1047/1048/1049/1038/911)
+### Open issues by slot (after the S273 close: AA-1053 closed, AA-1055 added; rows below updated for AA-1048/1049/1050/1052/1004)
 
 | Issue | Work | Milestone | Slot | S265 verdict | Status |
 |---|---|---|---|---|---|
 | AA-1047 | [Quality W1] One policy registry, one FactSheet, one exit contract (report mode) | M2a | S273 (Done check) | new S271 | In Review |
-| AA-1048 | [Quality W2] Claim-level ground truth and calibration of the pinned claim instrument | M2a | S273 | new S271 | In Progress |
+| AA-1048 | [Quality W2] Claim-level ground truth and calibration of the pinned claim instrument | M2a | S274 (freeze, panel round 2, adjudication) | new S271 | In Progress |
 | AA-1049 | [Quality W3] Rewire the T9, S1 and T2 control planes in place | M2a | S273+ | new S271 | In Progress |
-| AA-1050 | [Quality W4] Promote the calibrated claim instrument: shadow first | M2a | S275 | new S271 | Backlog |
+| AA-1050 | [Quality W4] Promote the calibrated claim instrument: shadow first | M2a | S274+ (shadow live, off) | new S271 | In Progress |
 | AA-1051 | [Quality W5] Paid writer proofs on small fixed samples under the D12 caps | M2a | S275 | new S271 | Backlog |
-| AA-1052 | [Quality W6] Lineage, dormant-code cleanup and permanent change control | M2a | S275 | new S271 | Backlog |
+| AA-1052 | [Quality W6] Lineage, dormant-code cleanup and permanent change control | M2a | S274 (CIS #1400/#1401) | new S271 | In Progress |
+| AA-1055 | [SEO data] Keep search-demand research fresh (design A approved S273) | M2a | S274 | new S273 | Backlog |
 | AA-1003 | [Reporting] Build the ecosystem report engine and the 63-report catalog (appr… | M-R0 | after S280 | re-scope | In Progress |
 | AA-1004 | [Infra] Implement the lean AWS model: company organization, Identity Center,… | M5 | S268 | re-scope | In Progress |
 | AA-1021 | AA-1021 (content series, details private) | parked | S267 | re-scope | In Progress |

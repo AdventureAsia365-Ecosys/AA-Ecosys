@@ -230,6 +230,16 @@ rồi kiểm lại bằng một exec ngắn riêng; exec chỉ đọc thì chạ
 - **Bước verify deploy dùng `curl … | grep -q` dưới `pipefail` (mặc định GitHub Actions) báo sai khi output lớn — ghi ra file rồi grep** — "sitemap lists no tour" trong khi có 892 tour (TP #240, S272). Guard: pending AA-1024 (lint `curl … | grep -q` trong workflow).
 - **Trang có WAF Challenge trả 202 ở lần tải đầu — mọi bài kiểm tự động (visual, verify) phải chấp nhận 202 + `x-amzn-waf-action: challenge` rồi chờ trang tải lại** — Visual đỏ trên /plan sau khi chuyển DNS (TP #243, S272, AA-1038). Guard: pending AA-1024 (cờ `challenged` trong e2e/visual của AA-TripPlanner-Web; guard cấp repo gốc chưa có).
 - **Sửa mô tả PR bằng `gh pr edit` qua `as-app.sh` có thể không đổi gì (lỗi GraphQL "Projects classic") — dùng `gh api -X PATCH repos/<org>/<repo>/pulls/<n> -F body=@file` rồi đọc lại body** — #1377 chạy lại check "PR title" vẫn đỏ vì body cũ còn mã issue ngoài dòng Refs (S272, AA-1049). Guard: pending AA-1024.
+- **Probe kênh ngoài đòi đúng HTTP 200, không dùng `curl -f`** — site WordPress test hết hạn chuyển 301 về trang chủ nhà cung cấp, preflight báo "sống" (S273, AA-1040). Bắt bằng: so `%{http_code}` = 200. Guard: none: one-off evidence script fixed in place (.tmp-session, not a repo tool)
+- **Chuỗi ship bằng `&&` mà mỗi bước `| tail` thì exit code bị nuốt** — tp-027 được apply trước khi registry Infra #732 merge (S273, AA-1046). Bắt bằng: `set -o pipefail` trong `bash -c`, hoặc một lệnh `ship_wave.py` có chain. Guard: pending AA-1024
+- **`mergeq.sh` có thể báo exit 4 "rời queue" khi CI merge_group của chính PR còn chạy** (nhiều PR CIS cùng trong queue, S273). Bắt bằng: đọc `mergeQueue.entries` trước khi kết luận; tạm thời ship tuần tự theo train. Guard: pending AA-1024
+- **Tool tải từ github.com/releases trong CI phải có cache + sha256 + tải có xác thực** — 08/11 spaCy, lychee, Syft đều đỏ vì GitHub throttle tải không xác thực (S273, ADR 0021). Bắt bằng: WL5 trong `tools/github/ci_hygiene.py` + workflow CI hygiene hằng ngày. Guard: tool tools/github/ci_hygiene.py
+- **Hook pre-push rò `GIT_DIR` có thể ghi `core.bare=true` vào config dùng chung của checkout chính** (worktree dùng chung config) — checkout Infra hỏng tới khi sửa tay (S273, Infra #739). Guard: test tools/github/test_git_env_isolation.py
+- **Allow-list Actions cấp org phải tính action lồng trong composite action** (trivy-action → setup-trivy, sbom-action → download-syft); chỉ tính `uses:` trực tiếp làm Docker Build Check đỏ mọi repo (S273, ADR 0021). Guard: pending AA-1024
+- **Job name `${{ matrix.x }}` không có tiền tố chữ bị coi là có thể trùng check bắt buộc `gitleaks`** → secret-scan đỏ (S273, root #642). Bắt bằng: đặt tên job có tiền tố chữ cố định. Guard: ci .github/workflows/secret-scan.yml
+- **Khi cis/336 (hẹn giờ) còn chờ, `ship_wave 'cis#N>apply:cis/NNN'` dừng exit 4 "out of order"** → `tools/github/dbmig.sh cis/NNN apply --allow-out-of-order`, rồi ship PR code riêng (S273, CIS 391). Guard: pending AA-1024
+- **Đổi tài khoản Claude giữa phiên: workflow/agent nền vẫn sống, nhưng watch artifact bị huỷ** — kiểm journal + mtime transcript trước khi chạy lại (S273). Guard: none: external Claude account switch behaviour
+
 ## Pipeline và chất lượng
 
 > 22 bài học của mục này đã thành guard (máy chặn) và được chuyển sang [`guards.md`](guards.md#pipeline-và-chất-lượng) (S271, AA-1024).
@@ -345,6 +355,13 @@ rồi kiểm lại bằng một exec ngắn riêng; exec chỉ đọc thì chạ
 - **Ngân sách AI theo entitlement phải fail closed trên mọi đường: trial hết hạn chờ tick, override 0, gói add-on chứa key platform, sửa gói bỏ key** — 'không có dòng' = không giới hạn là mặc định nguy hiểm (S266, AA-1028 lát 3).
 - **Fixture test xoá bảng có FK tự tham chiếu (`reverted_from`) theo `created_by` sẽ vỡ khi test khác cùng shard để lại dòng trỏ vào** (S270, CIS #1329, test 376). Bắt bằng: xoá cả dải version trong một câu lệnh (FK NO ACTION kiểm cuối câu lệnh) hoặc dọn dòng trỏ trước.
 - **Test DB không sắp xếp theo id UUID** — test mới của #1350 đỏ ở CI shard vì thứ tự dòng theo uuid ngẫu nhiên (S271, AA-900). Guard: pending AA-1024.
+
+- **Blog Slate ít chủ đề bất thường → kiểm `atom_ranking.demand_volume` NULL và `segment_research_log` trước khi tìm thêm nguồn** — 119/160 place của tenant audit chưa từng research; 91% dòng ranking không có demand (S273, AA-1055). Bắt bằng: guard tỉ lệ place stale theo thị trường (AA-1055). Guard: pending AA-1055
+- **Research xong chưa tới được Slate: phải chạy `recompute` (scope platform) sau `segment_research`** — research + recompute tay đưa chủ đề đủ chuẩn Blog 4 → 31 (S273, AA-1055). Bắt bằng: job research tự enqueue recompute (AA-1055 PR 2). Guard: pending AA-1055
+- **Tắt một cơ chế tự chạy tốn tiền phải thay bằng lịch có trần + guard độ tươi, không chỉ "admin bấm"** — AA-646 tắt research tự động, 12/10→08/11 không ai chạy (S273). Guard: none: judgement design rule (AA-1055 adds the freshness guard)
+- **DataForSEO tính theo task (tối đa 1.000 từ khoá, một nước): batch đầy mới rẻ; SERP mua theo từng nước là khoản lớn nhất** — 25/09 tốn 49 USD vì task chở trung bình 4,5 từ khoá × cả nền tảng × 3 nước (S273 audit DFS). Bắt bằng: thiết kế AA-1055 (1 SERP/địa điểm, một người mua). Guard: none: judgement cost rule (AA-1055 design)
+- **Subject Blog là Segment grain từ AA-741: tour của Subject lấy theo `_resolve_representative_atom`, không theo `route_id`** (S273, W2 script). Guard: none: one-off ad hoc W2 script
+- **Tenant tổng hợp không có brand `default_cta` → T9 `start_write` MissingCTAError**; script staff truyền `cta_override` trung tính (S273). Guard: none: one-off ad hoc W2 script
 
 ## Frontend
 

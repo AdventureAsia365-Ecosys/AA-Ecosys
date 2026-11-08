@@ -1,0 +1,174 @@
+{
+ "wave": {
+  "id": "834b27ee-b00b-4c67-a296-6973bbc0db16",
+  "status": "open"
+ },
+ "tours": [
+  {
+   "tour_id": "fbadec01-765a-46fc-96ce-c92a9db823e8",
+   "job": [
+    {
+     "job_id": "88e78fb3-f615-45e2-8e18-384401c422b7",
+     "status": "succeeded",
+     "job_cost": 0.0,
+     "error": null
+    }
+   ],
+   "version_id": "69c4621f-5180-44b3-8b1f-2bf938037bb9",
+   "status": "approved",
+   "fs_id": "3f858cdb-020f-47dc-965f-0d69578eab52",
+   "fs_row": "s1",
+   "fs_lines": 165,
+   "fs_pointer_failures": 0,
+   "is_live_master": true,
+   "review_rows": 0,
+   "contract": {
+    "verdict": "publish",
+    "actual": "published",
+    "agrees": true,
+    "flip": null,
+    "exit": "auto_publish",
+    "sha_match": true,
+    "block_codes": [],
+    "warn_codes": []
+   },
+   "contract_log_n": 2,
+   "contract_exits": [
+    "auto_publish",
+    "done"
+   ]
+  },
+  {
+   "tour_id": "fed8d5e8-9a63-4c77-b766-df2f8f62b726",
+   "job": [
+    {
+     "job_id": "5fe70b26-da03-4593-93a7-d96127b5a646",
+     "status": "succeeded",
+     "job_cost": 0.0,
+     "error": null
+    }
+   ],
+   "version_id": "1b593cad-f767-4674-bc81-75052afb027c",
+   "status": "approved",
+   "fs_id": "bf4cb446-d496-41a6-8914-149974a28387",
+   "fs_row": "s1",
+   "fs_lines": 68,
+   "fs_pointer_failures": 0,
+   "is_live_master": true,
+   "review_rows": 0,
+   "contract": {
+    "verdict": "publish",
+    "actual": "published",
+    "agrees": true,
+    "flip": null,
+    "exit": "auto_publish",
+    "sha_match": true,
+    "block_codes": [],
+    "warn_codes": []
+   },
+   "contract_log_n": 2,
+   "contract_exits": [
+    "auto_publish",
+    "done"
+   ]
+  },
+  {
+   "tour_id": "e8235227-901e-4023-a7e8-721552dbe2e8",
+   "job": [
+    {
+     "job_id": "f55c2ef5-c298-4e5a-879b-69f76255f63a",
+     "status": "succeeded",
+     "job_cost": 0.0,
+     "error": null
+    }
+   ],
+   "version_id": "e52b5a1d-e4cc-4cf5-8a6e-a900e588fea2",
+   "status": "approved",
+   "fs_id": "d6e89ed3-a23a-4f8b-8862-bce764fa3171",
+   "fs_row": "s1",
+   "fs_lines": 108,
+   "fs_pointer_failures": 0,
+   "is_live_master": true,
+   "review_rows": 0,
+   "contract": {
+    "verdict": "publish",
+    "actual": "published",
+    "agrees": true,
+    "flip": null,
+    "exit": "auto_publish",
+    "sha_match": true,
+    "block_codes": [],
+    "warn_codes": []
+   },
+   "contract_log_n": 2,
+   "contract_exits": [
+    "auto_publish",
+    "done"
+   ]
+  }
+ ],
+ "cost": {
+  "e8235227-901e-4023-a7e8-721552dbe2e8": {
+   "s1_generate": {
+    "calls": 3,
+    "usd": 0.0601
+   },
+   "s1_grounding": {
+    "calls": 26,
+    "usd": 0.0013
+   }
+  },
+  "fbadec01-765a-46fc-96ce-c92a9db823e8": {
+   "s1_flag_fix": {
+    "calls": 1,
+    "usd": 0.0023
+   },
+   "s1_generate": {
+    "calls": 3,
+    "usd": 0.095
+   },
+   "s1_grounding": {
+    "calls": 92,
+    "usd": 0.0059
+   }
+  },
+  "fed8d5e8-9a63-4c77-b766-df2f8f62b726": {
+   "s1_generate": {
+    "calls": 3,
+    "usd": 0.0475
+   },
+   "s1_grounding": {
+    "calls": 19,
+    "usd": 0.0009
+   }
+  }
+ },
+ "cost_by_stage": {
+  "s1_flag_fix": {
+   "calls": 1,
+   "usd": 0.0023,
+   "not_ok": 0,
+   "shadow": 0
+  },
+  "s1_generate": {
+   "calls": 9,
+   "usd": 0.2027,
+   "not_ok": 0,
+   "shadow": 0
+  },
+  "s1_grounding": {
+   "calls": 137,
+   "usd": 0.0081,
+   "not_ok": 0,
+   "shadow": 0
+  }
+ },
+ "cost_total_usd": 0.213,
+ "cost_per_tour_usd": 0.071,
+ "checks": {
+  "tours": 3,
+  "with_fs_id_and_contract": 3,
+  "failed": [],
+  "jobs_active": 0
+ }
+}

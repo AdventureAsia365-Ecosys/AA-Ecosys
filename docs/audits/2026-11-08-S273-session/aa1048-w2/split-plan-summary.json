@@ -1,0 +1,26 @@
+{
+ "target_held_out_claims_per_writer": 784,
+ "writers": {
+  "t2": {
+   "candidates": 76,
+   "held_out_candidates": 7,
+   "need_objects": 14,
+   "missing_objects": 7,
+   "missing_cost_usd": 1.33
+  },
+  "t9_blog": {
+   "candidates": 168,
+   "held_out_candidates": 0,
+   "need_objects": 14,
+   "missing_objects": 14,
+   "missing_cost_usd": 1.54
+  },
+  "t9_social": {
+   "candidates": 170,
+   "held_out_candidates": 10,
+   "need_objects": 66,
+   "missing_objects": 59,
+   "missing_cost_usd": 6.49
+  }
+ }
+}

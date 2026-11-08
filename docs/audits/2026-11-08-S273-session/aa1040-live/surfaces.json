@@ -1,0 +1,135 @@
+[
+ {
+  "id": "b01-booking-hotel-cis-panel",
+  "app": "booking",
+  "surface": "Hotel drawer: CIS content panel with the AI-assisted badge",
+  "file": "shots/b01-booking-hotel-cis-panel.png",
+  "captured": true
+ },
+ {
+  "id": "b02-booking-service-cis-panel",
+  "app": "booking",
+  "surface": "Service detail: CIS content panel with the AI-assisted badge",
+  "file": "shots/b02-booking-service-cis-panel.png",
+  "captured": true
+ },
+ {
+  "id": "b03-booking-service-form",
+  "app": "booking",
+  "surface": "Service form: CIS description with the AI-assisted badge",
+  "file": "shots/b03-booking-service-form.png",
+  "captured": true
+ },
+ {
+  "id": "b04-booking-proposal-builder",
+  "app": "booking",
+  "surface": "Proposal builder: AI-assisted badge on an item with CIS text",
+  "file": "shots/b04-booking-proposal-builder.png",
+  "captured": true
+ },
+ {
+  "id": "b05-booking-proposal-preview",
+  "app": "booking",
+  "surface": "Proposal preview: AI-assisted badge on the item text",
+  "file": "shots/b05-booking-proposal-preview.png",
+  "captured": true
+ },
+ {
+  "id": "c01-crm-ai-draft-panel",
+  "app": "crm",
+  "surface": "Trip workspace: AI draft panel (or the reason it is off for this agency)",
+  "file": "shots/c01-crm-ai-draft-panel.png",
+  "captured": true
+ },
+ {
+  "id": "c02-crm-ai-draft-notice",
+  "app": "crm",
+  "surface": "Staff notice under an AI draft",
+  "captured": false,
+  "note": "CRM_DRAFT=1 not set (writing a draft calls a model)"
+ },
+ {
+  "id": "s01-studio-my-content",
+  "app": "studio",
+  "surface": "My Content: publisher notice under the title, AI-assisted badge under each row's channel",
+  "file": "shots/s01-studio-my-content.png",
+  "captured": true
+ },
+ {
+  "id": "s02-studio-piece-drawer",
+  "app": "studio",
+  "surface": "Piece drawer: AI-assisted badge next to the channel in the title",
+  "file": "shots/s02-studio-piece-drawer.png",
+  "captured": true
+ },
+ {
+  "id": "s03-studio-publish-card",
+  "app": "studio",
+  "surface": "Publish page: AI-assisted badge on each publish card",
+  "file": "shots/s03-studio-publish-card.png",
+  "captured": true
+ },
+ {
+  "id": "s04-studio-published-list",
+  "app": "studio",
+  "surface": "Published list: AI-assisted badge on each published row",
+  "file": "shots/s04-studio-published-list.png",
+  "captured": true
+ },
+ {
+  "id": "s05-studio-catalog-tab",
+  "app": "studio",
+  "surface": "My catalog (tour versions): publisher notice",
+  "file": "shots/s05-studio-catalog-tab.png",
+  "captured": true
+ },
+ {
+  "id": "t01-tp-tour-page-label",
+  "app": "tripplanner",
+  "surface": "Tour page: AI label on the catalog text (blocks carry data-ai-generated, data-ai-source=catalog)",
+  "file": "shots/t01-tp-tour-page-label.png",
+  "captured": true
+ },
+ {
+  "id": "t02-tp-tour-itinerary-notice",
+  "app": "tripplanner",
+  "surface": "Tour page: traveller notice under the itinerary",
+  "file": "shots/t02-tp-tour-itinerary-notice.png",
+  "captured": true
+ },
+ {
+  "id": "t03-tp-planner",
+  "app": "tripplanner",
+  "surface": "Planner with the trip panel (narration card before composing)",
+  "file": "shots/t03-tp-planner.png",
+  "captured": true
+ },
+ {
+  "id": "t04-tp-narration-notice",
+  "app": "tripplanner",
+  "surface": "Narration: AI label, narration or traveller notice, data-ai-generated on the block",
+  "file": "shots/t04-tp-narration-notice.png",
+  "captured": true
+ },
+ {
+  "id": "w01-studio-publish-before",
+  "app": "studio",
+  "surface": "Publish page before the publish (pending card with the AI-assisted badge)",
+  "file": "shots/w01-studio-publish-before.png",
+  "captured": true
+ },
+ {
+  "id": "w02-wordpress-post",
+  "app": "wordpress",
+  "surface": "The published post on the WordPress test site (mark in the HTML: see wp-mark-snippet.txt)",
+  "file": "shots/w02-wordpress-post.png",
+  "captured": true
+ },
+ {
+  "id": "w03-studio-published-row",
+  "app": "studio",
+  "surface": "Published list with the new row and its AI-assisted badge",
+  "file": "shots/w03-studio-published-row.png",
+  "captured": true
+ }
+]

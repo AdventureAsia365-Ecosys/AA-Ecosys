@@ -49,6 +49,20 @@
    "title": "AA-CIS Design System v2",
    "purpose": "Design system / kit",
    "source": "docs (ADR 0016)"
+  },
+  {
+   "id": "4FA5xGDt1WvG9Hmjxud6sk",
+   "url": "https://claude.ai/artifact/4FA5xGDt1WvG9Hmjxud6sk",
+   "title": "Bức tranh hệ thống AA-CIS",
+   "purpose": "Toàn cảnh hệ thống đo live S273: dòng chảy tour → bài đăng, demand, recompute, bật/tắt tour, chi phí, DFS cũ vs mới (Dashboard type, dữ liệu cố định)",
+   "source": "docs/audits/2026-11-08-S273-session/system-picture/ (page-data.json, system-picture.vi.md)"
+  },
+  {
+   "id": "ApQP6Zc1LoFgkMNMTbZUMZ",
+   "url": "https://claude.ai/artifact/ApQP6Zc1LoFgkMNMTbZUMZ",
+   "title": "S273 decisions",
+   "purpose": "Trang quyết định S273 (W2 chi phí, W3 cờ, phân xử); db collection decisions",
+   "source": "docs/audits/2026-11-08-S273-session/decisions/index.html"
   }
  ],
  "superseded": [

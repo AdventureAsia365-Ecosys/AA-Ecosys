@@ -1,0 +1,792 @@
+{
+ "generated": "2026-11-09",
+ "measured_at": "2026-11-08 ~17:45 UTC, Dev, role cis_app (read only)",
+ "funnel": [
+  {
+   "step": "raw_total",
+   "label_vi": "Tour thô, tổng số dòng",
+   "count": 987,
+   "note_vi": "46 file Excel, khai báo 1.063 dòng"
+  },
+  {
+   "step": "raw_live",
+   "label_vi": "Tour thô chưa xoá",
+   "count": 943,
+   "note_vi": "26 bị thay thế, 44 trong thùng rác"
+  },
+  {
+   "step": "raw_live_active",
+   "label_vi": "Tour thô đang sống",
+   "count": 917,
+   "note_vi": "14 nước, không dòng nào thiếu nước"
+  },
+  {
+   "step": "s1_latest_approved",
+   "label_vi": "S1: bản mới nhất được duyệt",
+   "count": 889,
+   "note_vi": "96,8% của 918 tour có bản viết; 27 chờ người duyệt, 2 bị từ chối"
+  },
+  {
+   "step": "master_active",
+   "label_vi": "Master đang hoạt động",
+   "count": 892,
+   "note_vi": "97,3% của 917; 25 tour sống chưa có Master (IN 18)"
+  },
+  {
+   "step": "master_with_atoms",
+   "label_vi": "Master có atom",
+   "count": 892,
+   "note_vi": "100%; 25.989 atom, 29,14/tour"
+  },
+  {
+   "step": "master_with_segment",
+   "label_vi": "Master có segment",
+   "count": 883,
+   "note_vi": "9 tour có atom nhưng không có segment"
+  },
+  {
+   "step": "ranked",
+   "label_vi": "Master có ranking (mỗi thị trường)",
+   "count": 883,
+   "note_vi": "16.203 dòng/thị trường, 14.055 xếp được, phiên bản 135"
+  },
+  {
+   "step": "with_route",
+   "label_vi": "Master có route",
+   "count": 699,
+   "note_vi": "79,2% của 883; 1.267 route, 21/87 hub; JP 22/75"
+  },
+  {
+   "step": "t2_tours",
+   "label_vi": "Tour có bản T2 cho tenant",
+   "count": 28,
+   "note_vi": "3,1% của 892 Master; 93 bản, 9 tenant, 50 cặp"
+  },
+  {
+   "step": "t7_subjects",
+   "label_vi": "T7: chủ đề trong Slate",
+   "count": 1250,
+   "note_vi": "đơn vị: chủ đề; 1.174 đề xuất"
+  },
+  {
+   "step": "t7_used",
+   "label_vi": "T7: chủ đề đã dùng",
+   "count": 67,
+   "note_vi": "5,4% của 1.250"
+  },
+  {
+   "step": "t8_requests",
+   "label_vi": "T8: yêu cầu góc viết",
+   "count": 77,
+   "note_vi": "đơn vị: yêu cầu"
+  },
+  {
+   "step": "t8_approved",
+   "label_vi": "T8: yêu cầu đã duyệt",
+   "count": 70,
+   "note_vi": "90,9%; 5 chờ mục tiêu, 2 chờ chọn"
+  },
+  {
+   "step": "t9_pieces",
+   "label_vi": "T9: bài viết",
+   "count": 405,
+   "note_vi": "đơn vị: bài; từ 70 yêu cầu, 2,21 lần viết/bài"
+  },
+  {
+   "step": "t9_approved",
+   "label_vi": "T9: bài đã duyệt",
+   "count": 254,
+   "note_vi": "62,7%; 151 bị giữ, Blog giữ 54,9%"
+  },
+  {
+   "step": "published_ever",
+   "label_vi": "Bài từng được gửi đăng",
+   "count": 6,
+   "note_vi": "2,4% của 254; 9 dòng log, 2 tenant, 1 lỗi"
+  },
+  {
+   "step": "published_now",
+   "label_vi": "Bài đang đăng hiện tại",
+   "count": 1,
+   "note_vi": "chỉ có 1 WordPress kết nối"
+  }
+ ],
+ "by_country": [
+  {
+   "country": "IN",
+   "raw": 236,
+   "master": 218,
+   "atoms": 218,
+   "ranked": 218,
+   "route": 187,
+   "t2": 7
+  },
+  {
+   "country": "LK",
+   "raw": 126,
+   "master": 122,
+   "atoms": 122,
+   "ranked": 121,
+   "route": 102,
+   "t2": 6
+  },
+  {
+   "country": "CN",
+   "raw": 121,
+   "master": 121,
+   "atoms": 121,
+   "ranked": 120,
+   "route": 82,
+   "t2": 2
+  },
+  {
+   "country": "NP",
+   "raw": 86,
+   "master": 85,
+   "atoms": 85,
+   "ranked": 85,
+   "route": 74,
+   "t2": 2
+  },
+  {
+   "country": "JP",
+   "raw": 79,
+   "master": 79,
+   "atoms": 79,
+   "ranked": 75,
+   "route": 22,
+   "t2": 3
+  },
+  {
+   "country": "LA",
+   "raw": 46,
+   "master": 46,
+   "atoms": 46,
+   "ranked": 46,
+   "route": 44,
+   "t2": 1
+  },
+  {
+   "country": "PH",
+   "raw": 46,
+   "master": 44,
+   "atoms": 44,
+   "ranked": 44,
+   "route": 41,
+   "t2": 3
+  },
+  {
+   "country": "TH",
+   "raw": 43,
+   "master": 43,
+   "atoms": 43,
+   "ranked": 41,
+   "route": 33,
+   "t2": 0
+  },
+  {
+   "country": "TW",
+   "raw": 36,
+   "master": 36,
+   "atoms": 36,
+   "ranked": 35,
+   "route": 23,
+   "t2": 0
+  },
+  {
+   "country": "BT",
+   "raw": 32,
+   "master": 32,
+   "atoms": 32,
+   "ranked": 32,
+   "route": 32,
+   "t2": 2
+  },
+  {
+   "country": "KR",
+   "raw": 30,
+   "master": 30,
+   "atoms": 30,
+   "ranked": 30,
+   "route": 30,
+   "t2": 0
+  },
+  {
+   "country": "PK",
+   "raw": 18,
+   "master": 18,
+   "atoms": 18,
+   "ranked": 18,
+   "route": 17,
+   "t2": 1
+  },
+  {
+   "country": "MN",
+   "raw": 17,
+   "master": 17,
+   "atoms": 17,
+   "ranked": 17,
+   "route": 11,
+   "t2": 1
+  },
+  {
+   "country": "VN",
+   "raw": 1,
+   "master": 1,
+   "atoms": 1,
+   "ranked": 1,
+   "route": 1,
+   "t2": 0
+  }
+ ],
+ "demand_by_market": [
+  {
+   "market": "US",
+   "rows_with_demand": 3090,
+   "rows_total": 16203,
+   "blog_bar_rows": 893,
+   "fresh_places": 361,
+   "places_total": 7323,
+   "newest_demand_age_d": 0.1
+  },
+  {
+   "market": "UK",
+   "rows_with_demand": 2237,
+   "rows_total": 16203,
+   "blog_bar_rows": 494,
+   "fresh_places": 178,
+   "places_total": 7323,
+   "newest_demand_age_d": 41.3
+  },
+  {
+   "market": "AU",
+   "rows_with_demand": 2059,
+   "rows_total": 16203,
+   "blog_bar_rows": 442,
+   "fresh_places": 178,
+   "places_total": 7323,
+   "newest_demand_age_d": 41.3
+  },
+  {
+   "market": "DE",
+   "rows_with_demand": 709,
+   "rows_total": 16203,
+   "blog_bar_rows": 124,
+   "fresh_places": 80,
+   "places_total": 7323,
+   "newest_demand_age_d": 27.4
+  },
+  {
+   "market": "FR",
+   "rows_with_demand": 714,
+   "rows_total": 16203,
+   "blog_bar_rows": 125,
+   "fresh_places": 80,
+   "places_total": 7323,
+   "newest_demand_age_d": 27.4
+  },
+  {
+   "market": "NL",
+   "rows_with_demand": 714,
+   "rows_total": 16203,
+   "blog_bar_rows": 113,
+   "fresh_places": 80,
+   "places_total": 7323,
+   "newest_demand_age_d": 27.4
+  }
+ ],
+ "t9_by_channel": [
+  {
+   "channel": "blog",
+   "by_status": {
+    "approved": 93,
+    "held": 113
+   }
+  },
+  {
+   "channel": "linkedin",
+   "by_status": {
+    "approved": 137,
+    "held": 36
+   }
+  },
+  {
+   "channel": "email",
+   "by_status": {
+    "approved": 2,
+    "held": 2
+   }
+  },
+  {
+   "channel": "facebook",
+   "by_status": {
+    "approved": 6,
+    "held": 0
+   }
+  },
+  {
+   "channel": "ads",
+   "by_status": {
+    "approved": 4,
+    "held": 0
+   }
+  },
+  {
+   "channel": "instagram",
+   "by_status": {
+    "approved": 4,
+    "held": 0
+   }
+  },
+  {
+   "channel": "landing_page",
+   "by_status": {
+    "approved": 4,
+    "held": 0
+   }
+  },
+  {
+   "channel": "tiktok",
+   "by_status": {
+    "approved": 4,
+    "held": 0
+   }
+  }
+ ],
+ "t9_blog_by_month": [
+  {
+   "month": "2026-10",
+   "n": 182,
+   "approved": 86,
+   "held": 96
+  },
+  {
+   "month": "2026-11",
+   "n": 24,
+   "approved": 7,
+   "held": 17
+  }
+ ],
+ "t9_held_top": [
+  {
+   "code": "F9_cta_fact",
+   "n": 63
+  },
+  {
+   "code": "F4_seo_surface",
+   "n": 24
+  },
+  {
+   "code": "F4_extreme_length",
+   "n": 11
+  },
+  {
+   "code": "F17_trip_fact",
+   "n": 10
+  },
+  {
+   "code": "F16_faq",
+   "n": 8
+  },
+  {
+   "code": "F1_grounding",
+   "n": 8
+  }
+ ],
+ "recompute": {
+  "verdict_vi": "Chạy ổn khi được gọi (116/118 lần thành công trong 60 ngày, không tồn đọng, không rò rỉ). Lỗ hổng: research/demand mới không có trigger tự động, và cặp bật/tắt tour 05/11 phải chờ khoảng 74 giờ mới có recompute chạy xong.",
+  "stats": [
+   {
+    "label_vi": "Chạy toàn nền tảng 60 ngày (thành công / lỗi)",
+    "value": "116 / 2"
+   },
+   {
+    "label_vi": "Lần lỗi cuối",
+    "value": "06/10, khoảng 33,4 ngày trước"
+   },
+   {
+    "label_vi": "Thời gian chạy p50 / p95 / max",
+    "value": "150,3 / 291,3 / 543,2 giây"
+   },
+   {
+    "label_vi": "Chờ trong hàng p50 / p95 / max",
+    "value": "411,8 / 1.203,7 / 1.204,7 giây (đúng thiết kế, trần 1.200 giây)"
+   },
+   {
+    "label_vi": "Gom việc",
+    "value": "86 job gom 1.092 lần yêu cầu"
+   },
+   {
+    "label_vi": "Đang chờ / đang chạy",
+    "value": "0 / 0"
+   },
+   {
+    "label_vi": "Lần thành công cuối",
+    "value": "khoảng 58 phút trước khi đo"
+   },
+   {
+    "label_vi": "Phiên bản Score",
+    "value": "135 ở cả 6 thị trường, 0 dòng cũ sót"
+   },
+   {
+    "label_vi": "Segment chưa từng nhận câu hỏi",
+    "value": "1.272 / 10.527"
+   },
+   {
+    "label_vi": "Segment nhận câu hỏi trước demand mới nhất (cận trên)",
+    "value": "7.786 / 10.527"
+   },
+   {
+    "label_vi": "Master có atom nhưng không có segment",
+    "value": "9"
+   },
+   {
+    "label_vi": "segment_gc (apply)",
+    "value": "1.067 mồ côi, xoá 0, giữ 1.067"
+   },
+   {
+    "label_vi": "Độ trễ sau bật/tắt p50 / max (restored)",
+    "value": "201,5 giây / 266.662,4 giây (khoảng 74 giờ)"
+   }
+  ],
+  "issues": [
+   {
+    "issue_vi": "Research và làm mới demand không gọi recompute; không có lưới quét",
+    "severity": "high"
+   },
+   {
+    "issue_vi": "Recompute sau bật/tắt tour không có lưới quét (cặp 05/11 chờ khoảng 74 giờ; nguyên nhân chưa xác định)",
+    "severity": "medium"
+   },
+   {
+    "issue_vi": "Có thể có hai recompute chạy cùng lúc sau deploy (từ code, chưa thấy live)",
+    "severity": "medium"
+   },
+   {
+    "issue_vi": "9 Master không có segment; 1.272 segment chưa từng nhận câu hỏi",
+    "severity": "medium"
+   },
+   {
+    "issue_vi": "segment_gc chạy apply nhưng giữ cả 1.067 segment mồ côi",
+    "severity": "low"
+   },
+   {
+    "issue_vi": "Thị trường được đổi lần lượt, lệch khoảng 96 giây (suy luận từ thời điểm tính)",
+    "severity": "low"
+   },
+   {
+    "issue_vi": "Thử lại không cứu được lần lỗi (2 lần thử lại, 0 thành công)",
+    "severity": "low"
+   },
+   {
+    "issue_vi": "Chi phí recompute không ghi vào job (0,000 USD / 117 lần)",
+    "severity": "low"
+   }
+  ]
+ },
+ "propagation": {
+  "gaps": [
+   {
+    "gap_vi": "Recompute sau bật/tắt không có lưới quét (cặp retire/restore 05/11)",
+    "severity": "medium",
+    "live": "2 sự kiện, chờ khoảng 74 giờ tới khi recompute chạy xong; đã lành",
+    "fix_vi": "Đọc log 05/11; quét 2 giờ một lần; cảnh báo quá 30 phút; test cho retire_source/restore_source"
+   },
+   {
+    "gap_vi": "GAP 1: chủ đề Segment theo sống/chết của một tour đại diện",
+    "severity": "high",
+    "live": "0 hiện tại; phạm vi 1.237 chủ đề Segment",
+    "fix_vi": "Dùng quy tắc segment còn thành viên được phục vụ ở các cổng liveness, hoặc trỏ lại sang thành viên khác"
+   },
+   {
+    "gap_vi": "GAP 2: không trỏ lại sau khi thay thế/viết lại",
+    "severity": "medium",
+    "live": "7 chủ đề đã dùng trên route cũ; 3 yêu cầu góc viết trên atom đã xoá; 0 bản T2",
+    "fix_vi": "Thêm bước retarget trong supersede/rewrite; chạy một lần cho 7 + 3 dòng"
+   },
+   {
+    "gap_vi": "GAP 3: tour tạm dừng im lặng với bên ngoài",
+    "severity": "medium",
+    "live": "0 key tạm dừng; CRM không đo được (no access)",
+    "fix_vi": "Chốt chính sách tạm dừng N ngày = ngừng bán; báo Booking; CRM cảnh báo cả paused"
+   },
+   {
+    "gap_vi": "GAP 4: CRM biết tin ngừng bán muộn",
+    "severity": "medium",
+    "live": "không đo được (no access)",
+    "fix_vi": "CRM kéo outbox lifecycle; đo một lần qua DB Migrate run-script"
+   },
+   {
+    "gap_vi": "GAP 5: đường publish bỏ một phần việc sau commit",
+    "severity": "low",
+    "live": "0; chưa có sự kiện nào qua publish",
+    "fix_vi": "Gọi đủ run_after_commit từ export handler"
+   },
+   {
+    "gap_vi": "Cache trên atom chết",
+    "severity": "low",
+    "live": "6.390 embedding, 785 place card, 9.438 atom_matches",
+    "fix_vi": "GC cache cho atom tắt quá N ngày"
+   },
+   {
+    "gap_vi": "lifecycle_stage không có code ghi",
+    "severity": "low",
+    "live": "892 tour sống đều active",
+    "fix_vi": "Đưa vào lifecycle service hoặc bỏ khỏi catalog.v_tour"
+   },
+   {
+    "gap_vi": "place_extract khi bật lại không qua auto_allowed()",
+    "severity": "low",
+    "live": "6 job / 30 ngày, 0,000 USD",
+    "fix_vi": "Thêm kiểm auto_allowed()"
+   }
+  ]
+ },
+ "spend": {
+  "llm_by_month": [
+   {
+    "month": "2026-09",
+    "usd": 41.69
+   },
+   {
+    "month": "2026-10",
+    "usd": 269.35
+   },
+   {
+    "month": "2026-11 (tới 08/11)",
+    "usd": 15.44
+   }
+  ],
+  "llm_since_1oct_usd": 284.79,
+  "llm_30d_total_usd_summed": 197.65,
+  "llm_30d_by_stage": [
+   {
+    "stage": "s1",
+    "usd": 68.41
+   },
+   {
+    "stage": "adhoc",
+    "usd": 40.04
+   },
+   {
+    "stage": "a3",
+    "usd": 30.12
+   },
+   {
+    "stage": "t9",
+    "usd": 24.94
+   },
+   {
+    "stage": "t2",
+    "usd": 14.42
+   },
+   {
+    "stage": "t5",
+    "usd": 12.67
+   },
+   {
+    "stage": "t10",
+    "usd": 2.88
+   },
+   {
+    "stage": "t8",
+    "usd": 2.35
+   },
+   {
+    "stage": "writing",
+    "usd": 1.41
+   },
+   {
+    "stage": "t7",
+    "usd": 0.23
+   },
+   {
+    "stage": "f10",
+    "usd": 0.12
+   },
+   {
+    "stage": "supply",
+    "usd": 0.04
+   },
+   {
+    "stage": "tp",
+    "usd": 0.03
+   },
+   {
+    "stage": "t3",
+    "usd": 0.01
+   }
+  ],
+  "unit_costs": [
+   {
+    "label_vi": "S1 mỗi job s1_rewrite (tự tính; chi phí mỗi tour không đo được)",
+    "usd": 0.0706
+   },
+   {
+    "label_vi": "T2 mỗi job",
+    "usd": 0.1568
+   },
+   {
+    "label_vi": "T8 mỗi yêu cầu (chỉ chọn góc viết)",
+    "usd": 0.0318
+   },
+   {
+    "label_vi": "Chuỗi T8 → T10 mỗi yêu cầu góc viết",
+    "usd": 0.364
+   },
+   {
+    "label_vi": "T9 mỗi yêu cầu",
+    "usd": 0.3505
+   },
+   {
+    "label_vi": "T9 mỗi bài (tự tính)",
+    "usd": 0.069
+   },
+   {
+    "label_vi": "T9 mỗi bài được duyệt (tự tính)",
+    "usd": 0.11
+   },
+   {
+    "label_vi": "Place card mỗi thẻ (tự tính, tổng 13,59 / 4.785)",
+    "usd": 0.0028
+   }
+  ],
+  "dfs_by_month": [
+   {
+    "month": "2026-09",
+    "usd": 51.68
+   },
+   {
+    "month": "2026-10",
+    "usd": 19.3
+   },
+   {
+    "month": "2026-11",
+    "usd": 0.51
+   }
+  ],
+  "dfs_balance_usd": 27.41,
+  "research_6_markets_note_vi": "Lượt đầu, tắt gợi ý từ khoá, không lọc địa điểm, nhân tuyến tính từ bản xem trước 200 địa điểm. ceiling_usd = DFS + LLM theo trần. real_usd = chỉ DFS theo giá thật đo được (0,0021 USD/địa điểm); LLM thật chưa đo nên chỉ có llm_ceiling_usd. Bỏ mức 45% và 18% của brief (sai cơ sở / không có nguồn).",
+  "research_6_markets": [
+   {
+    "market": "US",
+    "stale": 6962,
+    "ceiling_usd": 26.8,
+    "real_usd": 14.62,
+    "llm_ceiling_usd": 9.75
+   },
+   {
+    "market": "UK",
+    "stale": 7145,
+    "ceiling_usd": 27.51,
+    "real_usd": 15.0,
+    "llm_ceiling_usd": 10.0
+   },
+   {
+    "market": "AU",
+    "stale": 7145,
+    "ceiling_usd": 27.51,
+    "real_usd": 15.0,
+    "llm_ceiling_usd": 10.0
+   },
+   {
+    "market": "DE",
+    "stale": 7243,
+    "ceiling_usd": 27.89,
+    "real_usd": 15.21,
+    "llm_ceiling_usd": 10.14
+   },
+   {
+    "market": "FR",
+    "stale": 7243,
+    "ceiling_usd": 27.89,
+    "real_usd": 15.21,
+    "llm_ceiling_usd": 10.14
+   },
+   {
+    "market": "NL",
+    "stale": 7243,
+    "ceiling_usd": 27.89,
+    "real_usd": 15.21,
+    "llm_ceiling_usd": 10.14
+   }
+  ],
+  "research_6_markets_total": {
+   "ceiling_usd": 165.48,
+   "real_usd": 90.26,
+   "llm_ceiling_usd": 60.17,
+   "runs": 218,
+   "worker_hours_p50": 18.4
+  }
+ },
+ "actions": [
+  {
+   "title_vi": "Cho research và làm mới demand tự gọi recompute, thêm lưới quét",
+   "impact_vi": "Demand mua về mới tới được Score, Questions và thanh Blog; 1.272 segment chưa từng nhận câu hỏi",
+   "cost_vi": "Chỉ code"
+  },
+  {
+   "title_vi": "Chạy research US có kiểm soát (cần duyệt chi)",
+   "impact_vi": "US chỉ 4,9% địa điểm có research mới, 893 dòng qua thanh Blog",
+   "cost_vi": "Khoảng 14,62 USD DFS theo giá thật + LLM tối đa 9,75 USD; làm sau việc 1"
+  },
+  {
+   "title_vi": "Lưới quét recompute sau bật/tắt tour và metric độ trễ",
+   "impact_vi": "Tránh lặp lại khoảng 74 giờ tour vắng khỏi Slate",
+   "cost_vi": "Chỉ code; đọc log 05/11 trước"
+  },
+  {
+   "title_vi": "Giảm tỷ lệ giữ bài Blog (F9_cta_fact, F4)",
+   "impact_vi": "Blog giữ 54,9%; tháng 11 chỉ 7/24 bài được duyệt",
+   "cost_vi": "Wave chất lượng viết ADR 0020, tốn LLM theo wave (T9 khoảng 0,35 USD/yêu cầu)"
+  },
+  {
+   "title_vi": "Dựng tích hợp WordPress/Facebook thử nghiệm lâu dài",
+   "impact_vi": "254 bài duyệt, 6 bài từng đăng, 1 bài đang đăng",
+   "cost_vi": "Thời gian dựng; không có số chi phí trong các file"
+  },
+  {
+   "title_vi": "Sửa GAP 1 trước lần retire tiếp theo",
+   "impact_vi": "Đang ngủ nhưng phạm vi 1.237 chủ đề Segment",
+   "cost_vi": "Chỉ code + test"
+  },
+  {
+   "title_vi": "Gán chi phí đúng chỗ (tour_id, content_piece_id, job_id, app/stage, prompt_version)",
+   "impact_vi": "Đo được chi phí mỗi tour, mỗi bài, mỗi job",
+   "cost_vi": "Chỉ code"
+  },
+  {
+   "title_vi": "Thêm độ trễ nhả job + khoá liên tiến trình cho recompute",
+   "impact_vi": "Chặn hai lần chạy cùng lúc sau deploy",
+   "cost_vi": "Chỉ code"
+  },
+  {
+   "title_vi": "Sửa GAP 2: trỏ lại 7 chủ đề và 3 yêu cầu góc viết",
+   "impact_vi": "Nhỏ nhưng đang xảy ra; 1 yêu cầu đang kẹt",
+   "cost_vi": "Chỉ code"
+  },
+  {
+   "title_vi": "Dọn phần sót: 9 Master không segment, hàng chờ 25 mục, route JP/CN/TW, quy tắc giữ của segment_gc",
+   "impact_vi": "Đưa 9 tour vào ranking; làm rõ 25 tour chưa có Master; JP chỉ 22/75 có route",
+   "cost_vi": "Truy vấn chỉ đọc + chạy segment theo phạm vi"
+  },
+  {
+   "title_vi": "Booking chỉ bán được 2/892 trip plan",
+   "impact_vi": "Cần quyết định sản phẩm và nguồn cung",
+   "cost_vi": "Ngoài phạm vi kỹ thuật"
+  }
+ ],
+ "no_access": [
+  "booking_trip_cases_by_status_channel",
+  "booking_customers_count",
+  "tripplanner_trip_drafts_by_status",
+  "tripplanner_customers_count",
+  "crm_traveler_count",
+  "crm_trip_by_stage",
+  "crm_channel_account_rows",
+  "g.catalog_v_tour",
+  "g.catalog_v_tour_retired",
+  "g.crm_catalog_by_state",
+  "booking.job / crm.job kinds"
+ ]
+}
