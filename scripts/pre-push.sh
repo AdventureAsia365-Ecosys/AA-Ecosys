@@ -51,7 +51,7 @@ while [ $# -gt 0 ]; do
 done
 
 MDL_VERSION=0.23.2      # docs-lint.yml: markdownlint-cli2-action v24.2.0 pins markdownlint-cli2 0.23.2
-LYCHEE_VERSION=0.24.2   # docs-lint.yml: lychee-action v2.9.0 installs lychee v0.24.2 by default
+LYCHEE_VERSION=0.24.2   # docs-lint.yml: .github/actions/lychee/pins.txt pins lychee v0.24.2 (S273)
 GITLEAKS_VERSION=8.30.1 # secret-scan.yml: GITLEAKS_IMAGE
 
 # --- check selection (pure: file list on stdin -> check ids on stdout) -------------------------------------------
@@ -125,7 +125,7 @@ hook_has_refs() {
 # --- tool hints ----------------------------------------------------------------------------------------------------
 install_hint() {
   case "$1" in
-    lychee) echo "install lychee v$LYCHEE_VERSION (the version lychee-action v2.9.0 pins) from https://github.com/lycheeverse/lychee/releases" ;;
+    lychee) echo "install lychee v$LYCHEE_VERSION (the CI binary, sha256-checked: python3 .github/scripts/lychee_bin.py fetch --dest /tmp/lychee-cache --bin ~/.local/bin)" ;;
     gitleaks) echo "install gitleaks v$GITLEAKS_VERSION (secret-scan.yml GITLEAKS_IMAGE) from https://github.com/gitleaks/gitleaks/releases" ;;
     npx) echo "install Node.js (it ships npx); markdownlint-cli2@$MDL_VERSION then runs through npx --yes" ;;
     *) echo "install '$1'" ;;
