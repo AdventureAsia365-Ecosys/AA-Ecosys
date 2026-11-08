@@ -199,6 +199,18 @@ aws secretsmanager delete-secret --secret-id aa-ecosys/github/aa-agent-app-key -
    AA-CIS-Infra is private on GitHub Free, so its environments cannot hold a branch rule (ADR 0014); the secret is
    repo-level there and every job that reads it carries `if: github.ref == 'refs/heads/main'`.
 
+   Root repo `AA-Ecosys` (public), for the daily CI hygiene run (`.github/workflows/ci-hygiene.yml`, root ADR 0021
+   decision 5 layer 3): create the environment `ci-hygiene` with **Selected branches and tags** → rule `master` first,
+   then store the key in that environment only. Never at repo level: the key can write to the child repos, and a
+   repo-level secret is readable by a workflow edited on any pushed branch, whatever its `if:` says. That workflow
+   mints its token with only Actions, Contents and Pull requests **read**; it needs the App permission
+   **Actions: Read-only** (an addition to the table in step 1, accepted on the org installation).
+
+   ```bash
+   gh secret set AA_CI_BOT_PRIVATE_KEY --repo AdventureAsia365-Ecosys/AA-Ecosys --env ci-hygiene < /mnt/c/Users/<windows-user>/Downloads/<pem-file> # WRITE
+   gh variable set AA_CI_BOT_APP_ID --repo AdventureAsia365-Ecosys/AA-Ecosys --body <ci-bot-app-id> # WRITE
+   ```
+
 5. Shred the `.pem` as in part 4 step 2.
 
 Verify (names only, no values):
