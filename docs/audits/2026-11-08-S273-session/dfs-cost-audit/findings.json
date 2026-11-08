@@ -1,0 +1,1383 @@
+[
+ {
+  "answer_en": "DataForSEO (DFS) is used for one thing: measuring what travellers actually type into Google about the places on our itineraries. It answers three questions. How many searches a month a phrase gets, from the search_volume endpoint. Which related phrases people use, from keywords_for_keywords. Which \"People Also Ask\" questions and which ranking websites show up for a phrase, from serp_advanced. The answers are cached in acp_contract.search_demand (one row per keyword and market, holding volume, people_also_ask and serp_domains). acp_contract.segment_research_log records each (place, market) pair researched, and a pair counts as fresh for 182 days. A second, per-tour cache, silver_aa_internal.seo_context, holds the S1/A1 keyword ideas and the tour-level PAA.\n\nA \"market\" is just the buyer country the search numbers come from. The code supports six (US 2840, UK 2826, AU 2036, DE 2276, FR 2250, NL 2528, in DFS_LOCATION_MAP). The markets come from a tenant's target_market.countries, with US as the fallback. In admin research, the admin types them in explicitly. Because DFS bills each keyword lookup once per market, the same keyword in 3 markets costs about 3 times as much. That is why the 25/09 run (US, UK and AU) was expensive.\n\nNothing downstream calls DFS. Every consumer only reads the caches:\n- **Ranking (Score).** search_demand feeds the demand axis and the PAA-landing questions axis of atom_ranking. A Segment with no measured demand takes the median demand rank, so it is neither blocked nor zeroed.\n- **Blog Bar in the Slate.** Blog needs demand ≥ 1000 and questions ≥ 3. Missing demand is read as 0, so the Segment silently fails the Bar and never becomes a Blog Subject. The social Channels and Email/Landing/Ads do not use demand at all.\n- **T8 angles.** The search-demand/PAA block is simply left out of the prompt when there is no data.\n- **T9 blog FAQ.** It reads real questions from the DB through a chain (Segment matches, place PAA, admin top-up, tour PAA). With none, the writer makes up its own FAQ questions, labelled 'writer'.\n- **T2 tenant rewrite.** It reads the tenant-market keywords from search_demand, falls back to the US seo_context row, and otherwise writes with no keywords.\n- **S1/A1 rewrite.** This admin path does buy DFS per tour through process_seo / s1_seo_prefetch. It reuses a tour's row for 180 days and writes without SEO if the budget stops it.\n\nTo answer your question directly: no, a tenant writing a blog does not re-run DFS today. Until 28/09 (AA-646), every tenant T2 rewrite (a tour rewrite, not a blog) launched research over every place on the platform. That one run on 25/09 covered 2,215 places × 3 markets and cost $49.02. Since commit d3921934b (29/09), research runs only when an admin starts it, capped at 200 places per run. The T2/T8/T9/Slate paths only read the DB, and a unit test blocks the paid deep-SERP call from every path except the admin script.",
+  "claims": [
+   {
+    "claim": "search_demand stores keyword, market, search_volume, people_also_ask, retrieved_on, serp_domains, PK (keyword, market); segment_research_log stores (canonical_place, market, researched_at)",
+    "evidence": "docs/architecture/db-schema-reference.md:193-213",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Research writes volume rows (_store_volume), PAA (_store_paa) and organic domains (_store_serp_domains) into search_demand; one SERP call feeds both PAA and domains",
+    "evidence": "apps/AA-CIS-App/services/acp_contract/segment_research.py:285-345, 382-421",
+    "confidence": "verified"
+   },
+   {
+    "claim": "A place counts as researched only when every purchase succeeded; freshness is 182 days per (place, market), checked before any LLM/DFS call",
+    "evidence": "segment_research.py:72 (FRESH_FOR), 573-587 (log insert), 597-608 (_stale_markets), 689-699",
+    "confidence": "verified"
+   },
+   {
+    "claim": "DFS endpoints: search_volume/live takes up to 1000 keywords for one location per task (billed per task); serp/google/organic/live/advanced returns PAA plus organic results; keywords_for_keywords returns related ideas with volume",
+    "evidence": "services/seo_intelligence/dataforseo_client.py:261-300, 331-360; segment_research_batch.py:1-20",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Worst-case price table: search_volume(_bulk) and keywords_for_keywords $0.09/task, serp_advanced $0.002, deep PAA $0.01",
+    "evidence": "apps/AA-CIS-App/shared/cost_guard.py:43-55",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Markets = 2-letter buyer countries mapped to DFS location codes US 2840, UK 2826, AU 2036, DE 2276, FR 2250, NL 2528; tenant target_market.countries drives them, US is the fallback; resolve_buyer_markets returns every declared market, resolve_buyer_market only the top one",
+    "evidence": "services/seo_intelligence/seed_builder.py:50-70, 390-445",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Admin research takes explicit markets validated against DFS_LOCATION_MAP and a mandatory max_places cap of at most 200",
+    "evidence": "api/routers/admin_segment_research.py:1-20, 46-64",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Per keyword lookup is fanned out across every selected market (cost × number of markets); suggestions use only the primary market",
+    "evidence": "segment_research.py:20-31 (docstring items 2-3), 347-379 (_volumes_tool loops markets)",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Before AA-646 run_segment_research fired after every tenant T2 rewrite and swept all platform places; 25/09 run = 2,215 places × AU/US/UK, 1,169 live calls, $49.02; AA-646 Done 28/09",
+    "evidence": "Linear AA-646 description; segment_research.py:655-660; admin_segment_research.py:3-5",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Since commit d3921934b (29/09/2026) the T2 tenant rewrite reads cached SEO only and never calls DataForSEO; research no longer fires from T2",
+    "evidence": "git d3921934b; services/jobs/t2_rewrite_job.py:149-190, 564-567",
+    "confidence": "verified"
+   },
+   {
+    "claim": "The only callers of run_segment_research are the admin router (preview dry run) and the segment_research job",
+    "evidence": "grep: api/routers/admin_segment_research.py:84-112, services/jobs/segment_research_job.py:47-67",
+    "confidence": "verified"
+   },
+   {
+    "claim": "No angle-gate, content-writing, slate or v1 tenant router module imports the DFS client; a unit test fails if anything except question_topup.py/dataforseo_client.py reaches the paid deep SERP",
+    "evidence": "grep DataForSEOClient over services/acp_angle_gate, acp_content_writing, acp_shared, api/routers/v1_*; tests/unit/test_aa779_real_first.py:666-682",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Ranking (Score) runs once per market for all 6 DFS_LOCATION_MAP markets at A3 recompute and only READS search_demand (no DFS call)",
+    "evidence": "services/recompute/stages.py:158-165; atom_ranking.py:894-903",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Demand axis: Segment claims a keyword's volume by word overlap (plus Jev ownership gate); an unmeasured Segment gets the MEDIAN demand rank; if nothing in that market is measured every Segment gets rank 1",
+    "evidence": "services/acp_contract/atom_ranking.py:144-153, 193-263",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Questions axis = PAA questions from search_demand.people_also_ask landed on the Segment's atoms by embedding (Cohere) with claim-by-name fallback; missing → 0 questions",
+    "evidence": "atom_ranking.py:33-44, 710-719, 878-883, 919",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Blog Bar needs demand ≥ 1000 and questions ≥ 3; NULL demand is treated as 0, so a Segment without measured demand silently fails the Blog Bar; social Channels need said ≥ 150 only; Email/Landing/Ads have no bar",
+    "evidence": "services/acp_shared/slate.py:115-140, 190-213",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Blog Bar reads the Segment's numbers in its best market (lowest total_rank) among the tenant's markets",
+    "evidence": "slate.py:272-334",
+    "confidence": "verified"
+   },
+   {
+    "claim": "T8 angle prompt shows the search-demand block (relevance, PAA, related terms) only when data exists; no seo_context row → block omitted; blog reads Segment/place PAA from DB first",
+    "evidence": "services/acp_angle_gate/service.py:308-322; services/acp_angle_gate/prompts.py:222-234; services/acp_shared/dfs_relevance.py:151-162",
+    "confidence": "verified"
+   },
+   {
+    "claim": "T9 blog FAQ uses collect_real_questions (segment_match → place_paa → serp_topup → tour_paa), DB reads only; questions the writer invents are labelled 'writer'",
+    "evidence": "services/acp_content_writing/service.py:1815-1844; services/acp_shared/real_questions.py:1-26",
+    "confidence": "verified"
+   },
+   {
+    "claim": "T9 blog with zero real questions still gets an FAQ written by the model (not blocked)",
+    "evidence": "real_questions.py:23-24 (SOURCE_WRITER); service.py:1360-1375 (FAQ regeneration only adds required real questions when present)",
+    "confidence": "likely"
+   },
+   {
+    "claim": "T9 SEO keyword for title/meta = choose_keyword over the T8 snapshot's related_keywords (from seo_context)",
+    "evidence": "services/acp_content_writing/service.py:1815-1820; acp_angle_gate/service.py:194-204",
+    "confidence": "verified"
+   },
+   {
+    "claim": "T2 tenant rewrite prefers tenant-market keywords + PAA from search_demand (matched by tour title + atom places), falls back to the US seo_context row, else writes with no SEO keywords (logged)",
+    "evidence": "services/seo_intelligence/s1_prefetch.py:421-467; services/jobs/t2_rewrite_job.py:149-190",
+    "confidence": "verified"
+   },
+   {
+    "claim": "S1/A1 SEO (admin path) still buys DFS per tour via process_seo / s1_seo_prefetch: reuses the tour's seo_context row for 180 days, reads search_demand first, batches ≤20 seeds per keywords_for_keywords task, SERP per tour; budget stop → write without fresh SEO, nothing cached",
+    "evidence": "services/seo_intelligence/s1_prefetch.py:1-48; services/seo_intelligence/handler.py:101-133, 225-241; api/routers/admin_pipeline.py:731-750; services/content_generation/s1_batch.py:167-171",
+    "confidence": "verified"
+   },
+   {
+    "claim": "S1 writer prompt uses top 5 target keywords and 3 PAA questions",
+    "evidence": "services/content_generation/prompts.py:489-490, 558-560",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Before AA-653, S1 bought 3 DFS tasks per tour (~$0.18/tour)",
+    "evidence": "s1_prefetch.py:3-5; t2_rewrite_job.py:154",
+    "confidence": "verified"
+   },
+   {
+    "claim": "The October tenant-tagged DFS days (e.g. 412 tours on 08/10) were S1 rewrites tagged with the AA internal tenant id, not tenant blog writing",
+    "evidence": "s1_seo_prefetch_job.py:19,44 (default tenant AA_INTERNAL); handler.py:227 passes tenant_id; spend file shows tenant set on those days",
+    "confidence": "not_verified"
+   },
+   {
+    "claim": "Ms. Thư's reference design: markets fixed at US/UK/AU from Brand Audience, one research loop per place, 182-day cache, measured ~$0.10-0.12 per place",
+    "evidence": "apps/AA-CIS-App/docs/claude_audit/AA-515-step0b-demand-research-loop.md Q3, Q4",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Ms. Thư's aa-social-media repo is not reachable via gh (search finds nothing; AdventureAsia365-Ecosys/aa-social-media returns 404)",
+    "evidence": "gh search repos / gh api run 08/11",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Admin SERP top-up (deep PAA) is admin-script only, US market under its own TOPUP_MARKET key, total cap $3 across all runs",
+    "evidence": "services/acp_shared/question_topup.py:1-23, 40-48",
+    "confidence": "verified"
+   }
+  ],
+  "numbers": [
+   "25/09/2026: 2,215 places x AU/US/UK, 1,169 live DFS calls, $49.02 (AA-646)",
+   "DFS ledger since 19/09: $71.49 total; $52.00 untagged by tenant, $19.49 tenant-tagged",
+   "Price per live call: search_volume_bulk avg $0.0585 at 7.2 keywords per task (up to 1000 allowed); keywords_for_keywords ~$0.084; serp_advanced $0.002",
+   "6 supported markets; research freshness 182 days; S1 SEO reuse 180 days; Redis SEO cache 7 days",
+   "Blog Bar: demand >= 1000 AND questions >= 3; only 8,662 of 97,218 current atom_ranking rows have demand_volume",
+   "Admin research cap: 200 places per run (MAX_PLACES_PER_RUN)",
+   "Ms. Thư's measured budget: ~$0.12 per place, 3 fixed markets"
+  ],
+  "open_questions": [
+   "Which job or route produced the tenant-tagged DFS rows on 01-08/10 (for example 412 tours on 08/10): an S1 rewrite under the AA internal tenant, or another path? Answering needs a dfs_call_log query by tenant_id and tour_id joined to shared.job.",
+   "Since only 8,662 of 97,218 ranking rows carry demand, most Segments silently fail the Blog Bar. Is that intended, or should the Blog Bar fall back (for example to the median, the way ranking does) when demand was never measured?",
+   "Ranking runs for all 6 markets even when a market has little or no search_demand data (DE/FR/NL have 263 rows each). For those markets the demand rank is close to meaningless. Not verified whether any tenant reads those markets."
+  ]
+ },
+ {
+  "answer_en": "I recommend one full research pass per market, platform-wide, before any per-tenant scheme. Buy only search volumes, in near-full 1000-keyword tasks. Buy the People-Also-Ask SERP only for places whose volume clears the Blog demand bar. Stop buying keywords_for_keywords for segment research. Estimated cost: about 4 USD of DataForSEO (DFS) for the US (about 2.7 volumes + about 1.3 SERP), about 3.4 each for UK and AU, plus about 3.4 USD of Haiku once for keyword proposals. That is about 14 USD for all three markets. The AA-1055 plan as written is about 60 USD for the US alone.\n\nWhere the 60 USD comes from: the run estimate (segment_research_batch.py:131-147) for 200 places is 1 volume task (0.09) + 200 SERPs (0.40) + 10 keywords_for_keywords tasks (0.90) + Haiku (0.28), about 1.67 USD. So keywords_for_keywords is about 65% of the DFS spend and SERP about 29%. Volumes are only 6%. The 200-place cap (admin_segment_research.py:45) barely hurts volume cost: 800 keywords still fit one task. Its real cost is about 36 separate approvals per market.\n\nOption 1, full batch: 7,323 places × 4 keywords is about 29,300 keywords, so 30 tasks × 0.09 = 2.7 USD per market (1.35 with only the 2 fixed keywords per place). SERP only at volume ≥1000 is roughly 9% of places in the US, 4-5% in UK/AU, so about 0.6-1.3 USD per market. The share comes from the search_demand cache, keyword rows as a proxy, not verified per place.\n\nOption 2, only places on tours tenants use: the audit tenant's 14 tours are 176 places, about 1.34 USD with keywords_for_keywords and about 0.2 without. The cache is already shared across tenants: search_demand is keyed by (keyword, market) with no tenant column. But once Option 1 costs about 4 USD per market, on-demand research only makes sense as the follow-up queue for new places.\n\nOption 3, refresh and renames: FRESH_FOR is already 182 days, and Google Ads volumes are 12-month averages, so refresh every 6-12 months. That is about 8 USD per market per year, plus a weekly batched run for new places at about 0.09 USD per market per run. Today a rename turns the place stale, because segment_research_log is keyed by canonical_place, and the SERP is always bought live with no cache check. Reuse old research through alias cards and skip the SERP when PAA is already cached and fresh.\n\nOption 4: drop keywords_for_keywords from segment research (use_suggestions=False; the flag already exists). Instead add '<place> <country>' as a second keyword in the same volume task, which costs nothing extra. Ms. Thư's reference config priced 'suggestions' at 0.0144 USD per request. AA-CIS uses Google Ads keywords_for_keywords at about 0.084-0.09. I could not check which endpoint her repo uses (it is not reachable).\n\nOption 5: Google Ads Keyword Planner API is free but needs an Ads account, a developer token approved for Basic access, and OAuth. Accounts without ad spend reportedly get ranges such as 1K-10K, which is still enough for a ≥1000 test. It has no PAA. That is a lot of setup to save about 3 USD per market, so not now.\n\nOption 6: the 1000-search Blog bar is copied literally from Ms. Thư's channels.toml, built for a dense Japan catalogue. Only 178 of 785 US keywords with volume reach 1000, so for niche Asian trekking places it will stay thin. A per-tenant or relative bar (for example top quartile with a floor of 100-200) is a product decision for Nghiệp; test it by replaying the audit tenant.\n\nTo the user's direct question: tenant blog writing does not buy DFS. Since AA-646 it only reads the cache. The big spends were the 25/09 sweep, when every T2 rewrite researched all platform places across 3 markets with about 4.5 keywords per paid task (49 USD), and the October S1 catalogue-rewrite SEO prefetch under the AA-internal tenant id, not real tenants.",
+  "claims": [
+   {
+    "claim": "Tenant actions (T2 rewrite, blog writing) no longer buy DataForSEO; research is admin-triggered only (AA-646). The blog path reads cached search_demand / seo_context only.",
+    "evidence": "apps/AA-CIS-App/services/jobs/t2_rewrite_job.py:564-567; services/acp_shared/real_questions.py:20-23; services/acp_shared/dfs_relevance.py:151-180 (DB read only); api/routers/admin_segment_research.py:1-14",
+    "confidence": "verified"
+   },
+   {
+    "claim": "The 25/09 49 USD spend came from run_segment_research firing after a tenant T2 rewrite and sweeping 2,215 platform places x AU/US/UK; the old per-place loop batcher averaged about 4.5 keywords per paid volume task (678 tasks, 39 USD).",
+    "evidence": "api/routers/admin_segment_research.py:3-5; services/acp_contract/segment_research.py:657-660; segment_research_batch.py:3-6; Linear AA-648 description; dfs_spend.out d=2026-09-25 1169 calls 49.02 USD",
+    "confidence": "verified"
+   },
+   {
+    "claim": "The 'tenant-scoped' October DFS days are the S1 catalogue SEO prefetch, which defaults tenant_id to the AA-internal platform tenant, not real tenant blog activity.",
+    "evidence": "services/jobs/s1_seo_prefetch_job.py:18,44; services/seo_intelligence/s1_prefetch.py:1-17; dfs_spend.out 2026-10 keywords_for_keywords 205 calls 16.65 USD",
+    "confidence": "likely"
+   },
+   {
+    "claim": "Batch research (AA-648) already puts up to 1000 keywords into one search_volume task per market, so volume cost is about 0.09 USD per 1000 keywords.",
+    "evidence": "services/acp_contract/segment_research_batch.py:53,263-307; services/seo_intelligence/dataforseo_client.py:261-311; dfs_spend.out 2026-11 search_volume_bulk 395 kw 0.09 USD",
+    "confidence": "verified"
+   },
+   {
+    "claim": "In the current estimate for 200 places, keywords_for_keywords (10 tasks, 0.90 USD) is the largest DFS item and SERP for every place (200 x 0.002 = 0.40) the second; volumes are 1 task (0.09). This reproduces AA-1055's '~1.7 USD per 200 places, ~60 USD for US'.",
+    "evidence": "services/acp_contract/segment_research_batch.py:131-147 (IDEAS_SEEDS_PER_TASK=20 at :54); shared/cost_guard.py:47-55; Linear AA-1055 scope",
+    "confidence": "verified"
+   },
+   {
+    "claim": "SERP is currently bought for any keyword with volume > 0, not only for places that could clear the Blog bar.",
+    "evidence": "services/acp_contract/segment_research_batch.py:317-324",
+    "confidence": "verified"
+   },
+   {
+    "claim": "The SERP tool never checks the cache: every researched place buys a fresh SERP even if search_demand already holds PAA for that keyword.",
+    "evidence": "services/acp_contract/segment_research.py:382-421 (docstring 387-391)",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Volume answers are cached by (keyword, market) for 182 days and shared across all tenants; staleness of a place is tracked by canonical_place in segment_research_log, so a renamed place counts as stale again.",
+    "evidence": "services/acp_contract/segment_research.py:75,271-282,597-607; docs/architecture/db-schema-reference.md:193-213",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Demand is matched to Segments by keyword word-overlap at ranking time, so cached keyword rows still count after a rename if the words overlap; only the SERP, the LLM proposal and the research_log are repeated.",
+    "evidence": "services/acp_contract/atom_ranking.py:27-30,193-212",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Alias cards already exist and could map renamed places to earlier research.",
+    "evidence": "services/acp_shared/subject_seed.py:236-252",
+    "confidence": "verified"
+   },
+   {
+    "claim": "keywords_for_keywords is optional through use_suggestions (default True) at the admin API and run function.",
+    "evidence": "api/routers/admin_segment_research.py:55; services/acp_contract/segment_research.py:653; segment_research_batch.py:419-420",
+    "confidence": "verified"
+   },
+   {
+    "claim": "The '<place> <country>' seed (the reason keywords_for_keywords is used) can instead go into the same flat-price volume task; the country lookup helper already exists.",
+    "evidence": "services/acp_contract/segment_research_batch.py:342-362 (_place_countries, _idea_seed)",
+    "confidence": "verified"
+   },
+   {
+    "claim": "The admin run cap is 200 places per run (about 36 runs and approvals for 7,116 stale US places).",
+    "evidence": "api/routers/admin_segment_research.py:44-49",
+    "confidence": "verified"
+   },
+   {
+    "claim": "DFS Standard queue mode (task_post/task_get), item 5 of AA-648, was never built; all calls use /live endpoints.",
+    "evidence": "grep for task_post/tasks_ready/task_get in services, shared, api returns nothing; dataforseo_client.py:300,350,454",
+    "confidence": "verified"
+   },
+   {
+    "claim": "The Blog bar (demand >= 1000, questions >= 3) is a literal copy of Ms. Thư's reference/channels.toml numbers.",
+    "evidence": "services/acp_shared/slate.py:95-96,115-118,190-204",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Ms. Thư's own measured budget was about 0.10-0.12 USD per place, and her suggestions call was priced at 0.0144 USD versus about 0.084-0.09 for our keywords_for_keywords.",
+    "evidence": "apps/AA-CIS-App/docs/claude_audit/AA-515-step0b-demand-research-loop.md:89-100; dfs_spend.out cost per live call keywords_for_keywords avg 0.08434",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Ms. Thư's aa-social-media repo is not reachable through gh (search finds nothing, AdventureAsia365-Ecosys/aa-social-media returns 404), so which endpoint her 'suggestions' call uses could not be checked.",
+    "evidence": "gh search repos aa-social-media; gh api repos/AdventureAsia365-Ecosys/aa-social-media -> 404",
+    "confidence": "verified"
+   },
+   {
+    "claim": "The job docstring says the DFS cache lasts 7 days (AA-625), but the code uses FRESH_FOR = 182 days.",
+    "evidence": "services/jobs/segment_research_job.py:5 vs services/acp_contract/segment_research.py:75",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Share of places that would clear 1000 searches (about 9% US, 4-5% UK/AU) is estimated from keyword rows in the search_demand cache, not counted per place.",
+    "evidence": "dfs_spend.out search_demand by market: US 2000/785/178, UK 1484/519/70, AU 1214/442/52",
+    "confidence": "likely"
+   },
+   {
+    "claim": "Google Ads Keyword Planner API is free but needs an Ads account plus an approved developer token; accounts without ad spend get bucketed volume ranges; it has no PAA.",
+    "evidence": "general knowledge, not checked against current Google docs in this read-only run",
+    "confidence": "not_verified"
+   },
+   {
+    "claim": "DFS Standard mode is cheaper per task than Live (about 0.05 vs 0.075 for volume, 0.0006 vs 0.002 for SERP).",
+    "evidence": "recollection of the DFS price list; not fetched (no DFS/web calls allowed). The ledger shows live volume tasks at 0.0585-0.09",
+    "confidence": "not_verified"
+   }
+  ],
+  "numbers": [
+   "Recommended plan US: about 30 volume tasks x 0.09 = 2.70 USD + about 660 SERPs x 0.002 = 1.3 USD, so about 4.0 USD DFS",
+   "Recommended plan UK: about 2.70 + about 0.7 = about 3.4 USD; AU: about 2.70 + about 0.6 = about 3.3 USD",
+   "Haiku proposals once for all markets: 7,323/15 = 489 calls x about 0.007 = about 3.4 USD (upper bound at the 0.02 estimate: 9.8 USD)",
+   "Total recommended one-off for US+UK+AU: about 14 USD (about 11 DFS + 3.4 LLM); deterministic keywords only, no LLM: about 8 USD",
+   "AA-1055 as written: about 1.67 USD per 200 places, 36 runs, about 60 USD for US alone, about 180 USD for 3 markets",
+   "Per-200-place estimate split: keywords_for_keywords 0.90, SERP 0.40, volume 0.09, LLM 0.28",
+   "Option 1 upper bound with SERP for every place: about 14.6 USD SERP per market",
+   "Option 2 audit tenant (14 tours, 176 places): about 1.34 USD with keywords_for_keywords, about 0.2 USD without",
+   "Refresh every 182 days: about 8 USD per market per year; weekly new-place batch: about 0.09 USD per market per run plus SERP",
+   "Ledger: 71.49 USD total since 19/09; 25/09 49.02 USD; keywords_for_keywords 316 calls 26.8 USD; search_volume_bulk Sept 688 tasks avg 7.2 kw 40.14 USD",
+   "Blog bar data: US keywords with volume 785, >=1000: 178 (23%); UK 519/70; AU 442/52"
+  ],
+  "open_questions": [
+   "Should the Blog demand bar stay at 1000 (copied from Ms. Thư's Japan catalogue) or become per-tenant / relative (e.g. top quartile with a floor of 100-200)? This needs Nghiệp's decision and a replay on the audit tenant (176 Segments, 3 Blog Subjects).",
+   "Actual shared.spend_budget values for dfs job:segment_research and dfs global were not read (the fallback defaults are 5 USD per run and 10 USD per day). A full US pass at about 4 USD should fit, but this is not checked live.",
+   "SERP threshold: the Blog bar (1000) or a lower 'questions' threshold? A lower one raises SERP cost from about 1.3 to about 3-6 USD per market.",
+   "Current DFS Live vs Standard prices and Keyword Planner access policy were not checked (no web or DFS calls allowed).",
+   "Ms. Thư's 'suggestions' endpoint (0.0144 USD) could not be identified: the aa-social-media repo is not reachable.",
+   "AA-1055 code scope to add: (1) use_suggestions=False by default (admin_segment_research.py:55, segment_research.py:653); (2) SERP only at >= SERP_MIN_VOLUME (segment_research_batch.py:322) plus a SERP cache check (segment_research.py:382); (3) deterministic '<place> <country>' keyword in _propose (segment_research_batch.py:205-210); (4) replace the 200-place cap with a dollar-estimate gate (admin_segment_research.py:45) and update estimate_cost (segment_research_batch.py:131); (5) alias-aware freshness in _stale_markets (segment_research.py:597) via load_alias_cards; (6) new-place queue after re-atomize (export/handler.py A3) with a weekly approved batch; (7) stale-share guard and the Blog no-data vs below-bar split (already in AA-1055); (8) fix the '7 days' docstring at segment_research_job.py:5."
+  ]
+ },
+ {
+  "answer_en": "No. As of CIS HEAD 8f6f53c1 (08/11/2026), nothing a tenant does buys DataForSEO. That covers T2 rewrite, T7 slate, T8 angles, T9 blog write and A3 export. They only read data that was already bought: the tables acp_contract.search_demand, silver_aa_internal.seo_context and acp_contract.atom_ranking.\n\nOnly three kinds of path can still make a paid DFS call, and an admin starts every one of them:\n(1) Segment research: POST /admin/segment-research/run, then the segment_research job. It needs the admin secret and a max_places cap, runs one at a time, has a per-run budget and checks the balance first.\n(2) The S1 (A1) rewrite of AA's own catalogue: /admin/run-tour, run-tour-async, the s1_rewrite job, s1-batch and the s1_seo_prefetch job. All of these call process_seo or prefetch.\n(3) The AA-779 SERP question top-up. It runs only from scripts/aa779_serp_topup.py, with a $3 lifetime cap. The free balance check (appendix_user_data, $0) also goes through the same client.\n\nThe ledger rows tagged with a tenant (1035 calls, $19.49) come from path (2), not from a tenant action. Their cost adds up exactly from 21/09 ($0.91) plus 01/10–08/10 ($18.58). Those October days match the a1_seo LLM stage window (01/10–08/10) and the AA-653 prefetch going live on 01/10. Both S1 paths stamp tenant_id = AA internal (00000000-...-0001) by default, so these are AA's own catalogue rewrites carrying the AA tenant ID. The ledger aggregate does not show which tenant ID, so 'AA internal' is likely but not verified.\n\nThat path still exists. Since 31/10 (commit 3cfba249) process_seo runs under a $0.50 per-tour budget (dfs / job:s1_rewrite) and stops at it. Before 31/10 process_seo had no budget at all, so the October S1 spend ran outside cost_guard. The prefetch job has had a budget since 01/10.\n\nThe real 'tenant action buys DFS' bug was the 25/09 spike ($49.02, 1169 calls). It was logged as platform-wide (tenants=0) because segment_research never passed tenant_id to the client. Before commit b0dd9bea1 (28/09, AA-646), the tenant T2 rewrite endpoint in v1_tours.py fired run_segment_research for the tenant's markets in the background. After AA-545 made Segments platform-wide, that swept every platform place × AU/US/UK.\n\nAA-646 removed that trigger on 28/09. On 29/09 (d3921934b) the last remaining tenant path closed: T2 used to call process_seo (about $0.18 per tour) when a tour had no seo_context row; now T2 only reads.\n\nAnswer for a tenant blog: T7 offers a Blog subject only when the Segment already has demand ≥1000 and ≥3 questions in atom_ranking, which is filled by earlier admin research. T8 and T9 read seo_context and search_demand. When that data is stale or missing, the blog gets fewer proposals or questions. It never triggers a new purchase.\n\nOne gap: there is no general static test that blocks tenant routes from importing DataForSEOClient. Only the T2 path (test_aa646_t2_no_dfs) and the deep-SERP path (test_aa779_real_first) are guarded by tests.",
+  "claims": [
+   {
+    "claim": "T2 tenant rewrite is cache-only: t2_seo() reads silver_aa_internal.seo_context then tenant_market_seo() (search_demand); on a miss it logs t2_seo_context_missing and never calls DataForSEO",
+    "evidence": "apps/AA-CIS-App/services/jobs/t2_rewrite_job.py:149-203; services/seo_intelligence/s1_prefetch.py:421-470 (docstring 'a tenant action never buys DataForSEO'); test tests/unit/test_aa646_t2_no_dfs.py:34",
+    "confidence": "verified"
+   },
+   {
+    "claim": "T2 used to call process_seo() on a seo_context miss (~$0.18/tour, no budget); removed 29/09/2026",
+    "evidence": "commit d3921934b (AA-646 follow-up, KAN-90) diff of services/jobs/t2_rewrite_job.py",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Before 28/09 the tenant T2 rewrite endpoint fired run_segment_research(tenant_id, target_market) in the background (_run_research_only in v1_tours.py trigger_rewrite); after AA-545 it swept every platform place, which is the 25/09 $49 spike (2,215 places x AU/US/UK). Removed by AA-646",
+    "evidence": "commit b0dd9bea1 (28/09/2026) diff of api/routers/v1_tours.py removing _run_research_only + create_task; api/routers/admin_segment_research.py:1-5; services/jobs/t2_rewrite_job.py:564-567",
+    "confidence": "verified"
+   },
+   {
+    "claim": "The 25/09 spike is logged as platform-wide (tenants=0) because segment_research builds DataForSEOClient without tenant_id",
+    "evidence": "services/acp_contract/segment_research.py:710 (DataForSEOClient(budget=dfs_budget)); dataforseo_client.py:106-111; dfs_spend.out by-day row d=2026-09-25 tenants=0",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Only DFS client constructors with a tenant_id are process_seo (S1 rewrite) and the s1_seo_prefetch job; both admin-only and default tenant = AA internal 00000000-...-0001",
+    "evidence": "services/seo_intelligence/handler.py:227; services/jobs/s1_seo_prefetch_job.py:19,44,62; api/routers/admin_pipeline.py:52 (router /admin + staff policy), 635-636 (TENANT_SLUG_MAP aa_internal), 731, 1443-1461 (seo-prefetch, verify_admin_secret); services/content_generation/s1_batch.py:167,256",
+    "confidence": "verified"
+   },
+   {
+    "claim": "The 1035 tenant-tagged calls ($19.49) are the S1/A1 rewrite of AA's own catalogue (process_seo + s1_seo_prefetch), tagged with the AA internal tenant, not a reseller tenant action",
+    "evidence": "Cost sum of tenant days 21/09 0.910 + 01/10..08/10 (2.342+0.294+1.132+5.786+0.892+1.460+6.674) = 19.490 exactly; a1_seo LLM stage first 2026-10-01 last 2026-10-08 in dfs_spend.out; AA-653 prefetch commit 345877f5f dated 2026-10-01; the tenant_id value itself is not in the aggregate",
+    "confidence": "likely"
+   },
+   {
+    "claim": "The S1 path still exists today; since 31/10 process_seo always loads a DFS run budget (job:s1_rewrite, $0.50/tour, hard stop) and does not cache or persist stopped results; before 31/10 process_seo ran with no budget",
+    "evidence": "services/seo_intelligence/handler.py:39-55,224-241; commit 3cfba249 (2026-10-31) 'DataForSEO cap on every path'; migration 318 commit 49f0d7b1",
+    "confidence": "verified"
+   },
+   {
+    "claim": "S1 prefetch reuses a tour's seo_context for 180 days and the research cache first, buying only shared keywords_for_keywords tasks plus one $0.002 SERP per tour with no PAA",
+    "evidence": "services/seo_intelligence/s1_prefetch.py:37,171-177,307-327,355-356,384-387",
+    "confidence": "verified"
+   },
+   {
+    "claim": "T7 slate makes no DFS call: Blog bar reads atom_ranking demand>=1000 & questions>=3; the only DFS-module use is a free DB write recording an unmapped market",
+    "evidence": "services/acp_shared/slate.py:115-118 (CHANNEL_BARS), 236-268 (record_unmapped_market_request)",
+    "confidence": "verified"
+   },
+   {
+    "claim": "T8 angle gate and T9 writing only read stored demand (seo_context, search_demand) through dfs_relevance and real_questions; real_questions never calls DataForSEO",
+    "evidence": "services/acp_angle_gate/service.py:41-42; services/acp_shared/dfs_relevance.py:79,86,151; services/acp_shared/real_questions.py:20-23,387,456; grep of services/acp_angle_gate, services/acp_content_writing, piece_history.py found no DFS client import",
+    "confidence": "verified"
+   },
+   {
+    "claim": "A3 export/atomize recomputes ranking and routes from the DB only, with no DFS call",
+    "evidence": "services/export/handler.py:77-155 (no DataForSEOClient / segment_research import in file)",
+    "confidence": "verified"
+   },
+   {
+    "claim": "AA-779 SERP question top-up is admin-script-only with a $3 lifetime cap and its own budget kind; a unit test forbids other importers of the deep-SERP path",
+    "evidence": "services/acp_shared/question_topup.py:1-24,40,229-256; scripts/aa779_serp_topup.py; tests/unit/test_aa779_real_first.py:644-690",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Segment research is admin-only: admin secret, explicit markets, mandatory max_places, one run at a time, DFS+Bedrock budgets, refused when balance < run budget",
+    "evidence": "api/routers/admin_segment_research.py:1-18,41,101-137; services/jobs/segment_research_job.py:44-66; shared/cost_guard.py:37-41",
+    "confidence": "verified"
+   },
+   {
+    "claim": "No scheduled job buys DFS; the only automatic DFS traffic is the free balance read (appendix_user_data, $0)",
+    "evidence": "grep of shared/jobs, services/jobs for schedule/cron: only photo_sync and llm_model_lifecycle are scheduled; services/jobs/segment_research_job.py:31-33; shared/dfs_client/balance.py:4; dfs_spend.out appendix_user_data usd=0",
+    "confidence": "likely"
+   },
+   {
+    "claim": "The 08/11 DFS activity (126 calls, $0.508, tenants=0, 1 market, US search_demand rows added) is an admin segment research run, not a tenant action",
+    "evidence": "dfs_spend.out by-day d=2026-11-08 tenants=0; search_demand US last=2026-11-08; orchestrator note: research log manual run 08/11",
+    "confidence": "likely"
+   },
+   {
+    "claim": "There is no general static guard stopping a tenant route from importing DataForSEOClient; guards exist only for T2 and for the deep-SERP path",
+    "evidence": "tests/unit/test_aa646_t2_no_dfs.py:34-41; tests/unit/test_aa779_real_first.py:644-690; test_aa646_647_dfs_research_guard.py has no import-scan test",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Other apps (AA-Partner, AA-Booking, AA-TripPlanner-Web) have no DataForSEO client; the only hits are UI-kit TraceTimeline labels",
+    "evidence": "grep of apps/AA-Partner, AA-Booking, AA-TripPlanner-Web: only web/app/_kit/core/TraceTimeline.tsx and frontend/ui/core/TraceTimeline.tsx",
+    "confidence": "verified"
+   }
+  ],
+  "numbers": [
+   "Tenant-tagged ledger rows: 1035 calls, $19.49. By day: 21/09 $0.910 + 01/10 $2.342 + 02/10 $0.294 + 03/10 $1.132 + 05/10 $5.786 + 06/10 $0.892 + 07/10 $1.460 + 08/10 $6.674 = $19.490",
+   "Paid tenant-day calls add up to 941 (16+73+16+83+133+51+74+495). The other 94 tenant-tagged rows fall on days not shown and are not verified",
+   "25/09 spike: $49.02, 1169 live calls, 3 markets, tenants=0 (this is the T2 tenant rewrite that triggered platform-wide research before AA-646)",
+   "Platform-wide (no tenant) rows: 1730 calls, $52.00",
+   "S1 per-tour DFS cap since 31/10: $0.50 (dfs / job:s1_rewrite)",
+   "seo_context reuse window for S1: 180 days (S1_SEO_REUSE_DAYS)",
+   "SERP top-up lifetime cap: $3",
+   "SAFE_DEFAULTS when spend_budget is missing: dfs global $10/day, dfs job:segment_research $5/run"
+  ],
+  "open_questions": [
+   "Which tenant_id is on the 1035 tenant-tagged rows? One aggregate query (group by tenant_id) would confirm it is AA internal 00000000-...-0001. Not verified.",
+   "Are the live shared.spend_budget rows for dfs/global set to stop or only to alert? Commit f38099dc allows the daily cap to be alert-only. Not verified live.",
+   "The 21/09 tenant-tagged $0.91 (5 tours) could be the old T2 process_seo path (removed 29/09) or a few S1 single-tour runs. Not verified.",
+   "Linear AA-515/545/625/646–649 were not read. The evidence comes from code and commit messages only.",
+   "Ms. Thư's aa-social-media repo was not looked up (not needed for question C)."
+  ]
+ },
+ {
+  "answer_en": "Most of the spend comes from one bug and one design flaw, not from DataForSEO being expensive per tour. The ledger shows 71.49 USD in total. 49.02 USD of it (69%) was spent on a single day, 25/09.\n\n1) What triggered 25/09. Until commit b0dd9bea (28/09), every tenant T2 rewrite started `_run_research_only()` → `run_segment_research()` in v1_tours.py. AA-545 had made Segments platform-wide, so that function's unfiltered `SELECT canonical_place ... FROM acp_contract.atom_segment` covered the whole platform. Each tenant click therefore researched about 2,215 places × AU/US/UK. The S196 WanderLux test rewrites fired it twice (bursts of 563 and 605 live calls).\n\n2) Why each call bought so little. The old per-place ReAct loop ran 4 places at a time (CONCURRENCY=4) with a 5-second batching window (`_VolumeBatcher`). Its 678 search-volume tasks carried 4.5 keywords on average (max 13), at about 0.058 USD per task, which came to 39.24 USD. DataForSEO prices per task, and one task can carry up to 1,000 keywords. The Bhutan pilot (28/09) shows the real price curve: a 152-keyword task cost 0.09 USD, so roughly 0.0006 USD per keyword instead of about 0.013.\n\nThe loop also bought one `keywords_for_keywords` task per zero-volume place: 100 single-seed tasks × 0.09 = 9.00 USD. Tasks with 1, 2 or 4 obscure seeds were later shown to return only the seeds and no ideas, so that money bought almost nothing. SERP calls were cheap (0.84 USD). On top of the DataForSEO bill there were 7,856 Haiku calls (10.27 USD).\n\n3) Per place, the cost was not unusual. The reference repo budgets about 0.10–0.12 USD per place, and our 25/09 run cost about 0.12 USD for each of the roughly 420 places it actually finished. The problem was scale: the whole platform, for 3 markets, on every tenant click. The balance hit -0.12 USD after only about 17% of the intended lookups had been bought.\n\n4) The cache was poisoned, not saved. Once the money ran out, `fetch_volumes_bulk` swallowed the errors. 14,691 NULL volumes were stored and 1,795 places were marked fresh for 182 days with no data. The 28/09 repair deleted 16,311 search_demand rows and 5,859 research_log rows. Everything bought after 08:51 UTC that day was lost or had to be thrown away.\n\n5) Full batching would have cost far less. For the same keywords bought on 25/09 (about 3,050 keyword-market pairs), full batching means about 3–6 volume tasks, roughly 0.3–0.5 USD instead of 39.24. The whole intended sweep (about 19k pairs) would have been about 21 tasks, roughly 1.9 USD. The batch rewrite (AA-648) proved this on Bhutan: 50 places × 3 markets for 0.55 USD, about 0.011 USD per place, 10 times cheaper. The DE/FR/NL run on 12/10 cost 0.70 USD.\n\n6) The October days were a different path. Those days carry a tenant ID (probably AA-internal, through the `s1_seo_prefetch` job) and match the per-tour S1 catalogue rewrite wave. In total they sum to 19.49 USD, together with 21/09 (5 tours) and 02/10. That spend is mostly `keywords_for_keywords`: 205 tasks, 16.65 USD in October, about 10.9 seeds per task where the limit is 20. AA-653 cut S1 from about 0.18 USD per tour (5 tours on 21/09 = exactly 0.91 USD) to about 0.026 USD per tour. Packing tasks to the full 20 seeds would have saved roughly another 6–7 USD. 05/10 (73 tours, 5.79 USD) looks like the one-task-per-tour path; I have not verified that from the per-day endpoint split.\n\n7) What the caches saved. The 7-day Redis cache for `process_seo` (AA-625) logged 114 cache hits, worth roughly 19–20 USD at the 0.18-per-tour price of the time. The research cache keeps one row per market by design, because DataForSEO accepts one location per task. So 3 markets means 3 times as many tasks; AU and UK together cost 27.0 USD of the total. With full batching that is 3 tasks, not 3 × 678.\n\n8) Renamed places make old research useless. Freshness is tracked by the exact `canonical_place` text, and volumes by the exact keyword text. Re-atomize renames places: there were 8,578 orphan Segments after the S1 v2 rewrite. That fits 7,116 of the 7,323 US places now showing as stale, but I have not split renamed places from never-researched ones.\n\n9) Was `keywords_for_keywords` per place needed? Mostly no. It only helped obscure places when about 20 '<place> <country>' seeds were sent in one task. That is now the batch default, with tasks of fewer than 5 seeds skipped.\n\n10) Do tenant blogs re-run DataForSEO? Not since 28–29/09. AA-646 removed the tenant trigger. Since KAN-90, the T2 rewrite job only reads the cached seo_context. The SERP top-up for blog questions (`question_topup.py`) runs only when an admin starts it, with a 3 USD cap across all runs.\n\n11) One warning about the remaining work. A batch run over the 7,116 stale US places has an upper-bound estimate of about 49 USD, and about 32 USD of that is `keywords_for_keywords` tasks. With suggestions turned off the upper bound is about 17 USD; realistically about 5–8 USD.\n\nI could not reach the reference repo (aa-social-media): `gh search repos` does not find it, so it is private or named differently. Everything I say about it comes from the AA-515 step0b doc.",
+  "claims": [
+   {
+    "claim": "Before 28/09 every tenant T2 rewrite triggered run_segment_research via _run_research_only(); removed by AA-646",
+    "evidence": "git show b0dd9bea -- api/routers/v1_tours.py (removed _run_research_only + create_task in trigger_rewrite); commit message b0dd9bea",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Pre-fix run_segment_research read every platform Segment with no filter (SELECT canonical_place, canonical_action FROM acp_contract.atom_segment), because AA-545 dropped tenant_id",
+    "evidence": "git show b0dd9bea^:services/acp_contract/segment_research.py lines ~517-541",
+    "confidence": "verified"
+   },
+   {
+    "claim": "25/09: 1,169 live calls, 49.02 USD, two bursts (563 + 605 calls) aligned with S196 WanderLux test rewrites; search_volume_bulk 39.24, keywords_for_keywords 9.00, serp 0.84; plus 7,856 Haiku calls 10.27 USD",
+    "evidence": "/home/nghiep/projects/AA-Ecosys/docs/architecture/ecosystem-review-2026-09.md:43-77 and :46; dfs_spend.out by-day row",
+    "confidence": "verified"
+   },
+   {
+    "claim": "2,215 places x AU/US/UK were swept on 25/09",
+    "evidence": "apps/AA-CIS-App/services/acp_contract/segment_research.py:657-660; ecosystem-review-2026-09.md:527",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Old loop batcher: CONCURRENCY=4 places, 5 s linger, so the 678 volume tasks averaged 4.5 keywords (max 13) at ~0.057-0.059 USD per task",
+    "evidence": "segment_research.py:83 (CONCURRENCY=4), :213 (linger=5.0), :201-256; ecosystem-review-2026-09.md:529-531; segment_research_batch.py:3-6",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Search-volume task price grows with keyword count only up to a ceiling: <=13 kw ~0.058 USD, ~150 kw 0.09 USD, 501 kw over 3 tasks = 0.09 each",
+    "evidence": "shared/cost_guard.py:43-50; commit 8d61e02f; AA-648 Linear comment 28/09 (3 tasks, 152 kw avg, 0.27 USD); dfs_spend.out 2026-10 search_volume_bulk n=3 kw=501 usd=0.270",
+    "confidence": "verified"
+   },
+   {
+    "claim": "One Live search_volume task = one location, up to 1000 keywords; markets cannot be merged into one task",
+    "evidence": "docs/claude_audit/AA-515-step0c-multimarket-schema.md:79-103; dataforseo_client.py:261-297",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Balance ran out ~09:00 UTC 25/09; failures were swallowed and 14,691 NULL search_demand rows stored, 1,795 places marked researched for 182 days",
+    "evidence": "ecosystem-review-2026-09.md:532-536; segment_research.py:179-183 (_RunGuard docstring)",
+    "confidence": "verified"
+   },
+   {
+    "claim": "28/09 repair deleted 16,311 NULL search_demand rows and 5,859 segment_research_log rows (1,953 places), reset caches on 2,870 segments; 3,474 rows remained",
+    "evidence": "Linear AA-647 comment 28/09 08:34 UTC (COMMITTED output); docs/implementation-notes/AA-646-647.md",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Only ~420 places were actually researched on 25/09, so ~0.12 USD/place, about the same as Ms. Thư's reference budget of 0.10-0.12 USD/place",
+    "evidence": "Linear AA-648 comment 28/09 09:34 ('~$0.12 on 25/09 (≈ $49 for the ~420 places actually bought)'); AA-515-step0b-demand-research-loop.md:90-103",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Old loop bought one single-seed keywords_for_keywords task per zero-volume place (primary market); small tasks of 1/2/4 obscure seeds return only the seeds, no ideas",
+    "evidence": "segment_research.py:424-438, :556-565; segment_research_batch.py:55-58; docs/implementation-notes/AA-648.md (S203 follow-up)",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Batch strategy (AA-648, default since 28/09) packs <=1000 keywords per volume task per market, 20 seeds per ideas task, SERP only where volume exists",
+    "evidence": "segment_research_batch.py:51-58, 263-307, 310-339, 365-403; segment_research.py:652, 702-724",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Bhutan batch pilot: 50 places x US/UK/AU for 0.55 USD DFS (3 volume tasks avg 152 kw, 95 SERP, 1 ideas task), ~0.011 USD/place, ~10x cheaper than 25/09",
+    "evidence": "Linear AA-648 comment 2026-09-28T09:34Z",
+    "confidence": "verified"
+   },
+   {
+    "claim": "With full batching the 25/09 bought volume work (~3,050 keyword-market pairs) would cost ~3-6 tasks ≈ 0.3-0.5 USD instead of 39.24; the full intended sweep (~19k pairs) ~21 tasks ≈ 1.9 USD",
+    "evidence": "Derived: 678 x 4.5 ≈ 3,051 pairs; 19,305 rows written on 25/09 (ecosystem-review :535); 0.09 USD per <=1000-kw task",
+    "confidence": "likely"
+   },
+   {
+    "claim": "Without the balance running out, the old loop's full sweep would have cost on the order of ~250 USD of volume tasks",
+    "evidence": "Extrapolation: ~19k pairs / 4.5 kw per task x 0.058 USD; not measured",
+    "confidence": "likely"
+   },
+   {
+    "claim": "AU+UK locations account for 27.03 USD of the ledger, nearly all from 25/09 (3-market fan-out roughly tripled the volume task count)",
+    "evidence": "dfs_spend.out by location_code (2036: 13.564, 2826: 13.466)",
+    "confidence": "likely"
+   },
+   {
+    "claim": "October tenant-scoped spend is the S1 catalogue-rewrite SEO path (process_seo / s1_seo_prefetch with tenant_id set; prefetch defaults to the AA-internal tenant), not tenant blogs",
+    "evidence": "services/jobs/s1_seo_prefetch_job.py:19,43-62; services/seo_intelligence/handler.py:225-232; dfs_spend.out has tenant-scoped total 19.49 = sum of 21/09 + 01-08/10 days",
+    "confidence": "likely"
+   },
+   {
+    "claim": "Old S1 bought 3 tasks per tour (search_volume 0.09 + keywords_for_keywords 0.09 + SERP 0.002 = 0.182); 21/09 shows exactly 5 tours = 0.91 USD; AA-653 batched ideas and dropped the single-keyword task",
+    "evidence": "services/seo_intelligence/s1_prefetch.py:1-18; dataforseo_client.py:509-532; dfs_spend.out 2026-09-21 row",
+    "confidence": "verified"
+   },
+   {
+    "claim": "October keywords_for_keywords: 205 tasks, 16.65 USD, ~10.9 seeds per task vs limit 20; full packing would be ~112 tasks ≈ 10 USD (waste ~6-7 USD)",
+    "evidence": "dfs_spend.out 2026-10 keywords_for_keywords n=205 kw=2229 usd=16.65; s1_prefetch.py:41 MAX_SEEDS_PER_TASK=20",
+    "confidence": "likely"
+   },
+   {
+    "claim": "AA-747 (09/10) caps each ideas task at the seeds of 5 tours (PREFETCH_COMMIT_BATCH=5, plan_batches per chunk; idea_seeds gives <=4 seeds per tour), so tasks can carry fewer than 20 seeds despite the comment saying no extra cost",
+    "evidence": "s1_prefetch.py:45-47, 337-351; seed_builder.py:217-242; commit f298b05c",
+    "confidence": "verified"
+   },
+   {
+    "claim": "05/10 (73 tours, 5.79 USD) looks like the per-tour fetch_all path (one ideas task per tour)",
+    "evidence": "Arithmetic on dfs_spend.out day row only; per-day endpoint split not available",
+    "confidence": "not_verified"
+   },
+   {
+    "claim": "The 7-day Redis SEO cache (AA-625) logged 114 fetch_all cache hits (104 Sept, 10 Oct), worth ~19-20 USD at 0.18/tour",
+    "evidence": "services/seo_intelligence/handler.py:33-38, 168-184; dfs_spend.out fetch_all live=0 rows",
+    "confidence": "likely"
+   },
+   {
+    "claim": "Research freshness is keyed on exact canonical_place text and volumes on exact keyword text; re-atomize changes places (8,578 orphan Segments after S1 v2), which helps explain 7,116 of 7,323 US places being stale",
+    "evidence": "segment_research.py:271-282, 597-607; segment_gc.py:3-6",
+    "confidence": "likely"
+   },
+   {
+    "claim": "Tenant blog/T2 writing no longer buys DataForSEO: T2 only reads seo_context; the SERP question top-up is admin-script only with a 3 USD cap across all runs",
+    "evidence": "services/jobs/t2_rewrite_job.py:150-157, 564-567; services/acp_shared/question_topup.py:14-22, 39",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Batch run over the 7,116 stale US places: upper bound ≈ 48.9 USD (29 volume tasks 2.61 + 7,116 SERP 14.23 + 356 ideas tasks 32.04); with use_suggestions=False ≈ 16.8 USD",
+    "evidence": "segment_research_batch.py:131-147 estimate_cost applied to 7,116 places x 1 market",
+    "confidence": "likely"
+   },
+   {
+    "claim": "Ms. Thư's reference repo aa-social-media is not reachable via gh search",
+    "evidence": "gh search repos aa-social-media returned only unrelated repos",
+    "confidence": "verified"
+   }
+  ],
+  "numbers": [
+   "Ledger total 71.49 USD since 19/09; 25/09 = 49.02 USD (69%)",
+   "25/09: search_volume_bulk 39.24 + keywords_for_keywords 9.00 + serp 0.84 USD; Haiku 10.27 USD extra",
+   "678 volume tasks x 4.5 kw avg (max 13) at ~0.058 USD/task on 25/09",
+   "Bhutan batch pilot 28/09: 50 places x 3 markets = 0.55 USD (0.011 USD/place) vs ~0.12 USD/place on 25/09",
+   "~420 places actually researched on 25/09; 14,691 NULL rows + 1,795 places poisoned; repair deleted 16,311 + 5,859 rows",
+   "Full batching of 25/09 bought volume work: ~0.3-0.5 USD vs 39.24 USD",
+   "October keywords_for_keywords: 205 tasks, 16.65 USD, 10.9 seeds/task (limit 20)",
+   "S1 per tour: 0.182 USD before AA-653, ~0.026 USD after",
+   "AU+UK locations: 27.03 USD",
+   "Redis 7-day cache hits: 114 (~19-20 USD saved)",
+   "Stale US places batch upper bound: ~48.9 USD (32 USD of it ideas tasks); ~16.8 USD without suggestions",
+   "Reference repo budget: 0.10-0.12 USD/place, 16 workers, 1.1 requests/place"
+  ],
+  "open_questions": [
+   "Per-day endpoint split for 01-08/10 (especially 05/10 and 08/10) to confirm which S1 path (prefetch batch vs per-tour fetch_all) bought the keywords_for_keywords tasks, and which tenant_id was logged",
+   "How many of the 7,116 stale US places are renamed places (old research_log rows orphaned) versus never researched",
+   "Which endpoint Ms. Thư's 'suggestions' used (0.0144 USD/request in search-spend.toml vs our Google Ads keywords_for_keywords at 0.09); a cheaper suggestions endpoint may exist",
+   "search_demand US count is exactly 2000, which may be a query LIMIT in dfs_spend.py rather than the real count",
+   "What triggered the 08/11 calls (119 SERP + 2 ideas + 1 bulk, 0.51 USD)"
+  ]
+ },
+ {
+  "answer_en": "Ms. Thư's reference repo is not on GitHub (gh search found nothing, and the org has only our six repos). A full local copy sits in the CIS repo at apps/AA-CIS-App/docs/AI-gent-for automation works/aa-soscial-media-main/, and I read it directly.\n\nHow her design works. The unit of research is the place, not the Segment and not the trip. One ReAct loop runs per place, with every activity at that place handed to it. Each loop is capped at 4 steps, 8 keywords, 2 SERPs and 1 suggestions call. Places that are pure transit or that name nowhere in particular are skipped. The scope of one run is one workspace, meaning one country export. Her Japan figures: 24 trips, 581 distinct places, of which 368 were worth researching.\n\nHer cost controls:\n- Before any loop starts, every place name is priced in one volume request per market.\n- Concurrent loops (16 workers) pool their volume asks into one request carrying up to 1,000 keywords, throttled to the account's rate limit.\n- Anything bought within 182 days is reused from the cache.\n- Places whose fingerprint has not changed are skipped.\n- The run budget is $0.12 per place.\n- Suggestions use the cheap DataForSEO Labs keyword_suggestions endpoint at about $0.0144.\n\nShe uses a fixed 3 markets (US/UK/AU) with every keyword fanned out to all three. Her coverage figure: matching keywords to Segments by name instead of by embedding lifted Segments with any demand from 14% to 45%. Her measured figures: a simulated 0.75 volume requests per place gives about $25 for a full 368-place Japan run, against $198 without pooling. A sample summary in her README shows a $3.21 run (9 volume requests, 1,487 SERPs). Her README also says research must be a deliberate purchase, never chained unattended behind another stage.\n\nAA-CIS ported the same caps and the same 182-day cache. The big difference is scope and trigger. AA-545 (06/09) made Segments platform-wide, so the research scope became every place in the whole catalog. Until AA-646 (29/09), research also fired automatically after every tenant T2 rewrite. On 25/09 a single tenant rewrite swept about 2,215 places across 3 markets. It spent $49.02 in 1,169 calls and drained the balance from $49.87 to -$0.12. Today 7,323 US places are in scope, against her 368 per country.\n\nPer-call efficiency was also worse in three ways:\n- Volume tasks carried only 4.5 to 7.2 keywords each, against her up to 1,000. The cause: our loop runs only 4 concurrent places, has no place-name pre-pricing, and waits a fixed 5 seconds rather than until all loops are ready. The batch rewrite (AA-648, 28/09) fixed this later.\n- Suggestions use Google Ads keywords_for_keywords at about $0.084 a call, against her $0.0144. That is about 6 times the price, and those 316 calls cost $26.8, about 37% of all DataForSEO spend.\n- No transit or unnamed-place filter shows up in the research scope query.\n\nIn plain terms: one research run per place costs about the same in her design and ours. We paid more because we researched the entire catalog's places, the run was triggered without a person deciding to buy, and the efficiency gaps above added to it.\n\nOn whether a tenant blog re-runs DataForSEO: since 29/09 the code says no. T2 rewrites only read cached SEO data. Research and the question top-up are admin-only, the top-up capped at $3 in total. The October days tagged with a tenant (up to 412 tours on 08/10) are most likely the admin S1 SEO prefetch during master rewrite waves, not tenant blogs. I have not verified that.",
+  "claims": [
+   {
+    "claim": "Ms. Thư's reference repo is not reachable on GitHub, but a full local copy exists inside the CIS repo",
+    "evidence": "gh search repos aa-social-media: no match; gh api orgs/AdventureAsia365-Ecosys/repos lists only 6 own repos; local copy at apps/AA-CIS-App/docs/AI-gent-for automation works/aa-soscial-media-main/",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Reference research unit = one ReAct loop per PLACE (all actions at that place in one loop), not per Segment or per trip",
+    "evidence": "aa-soscial-media-main/src/aa_social/stages/research.py:8-15; step0b doc AA-515-step0b-demand-research-loop.md:13-21",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Reference skips places with only transit actions or that name nowhere in particular",
+    "evidence": "aa-soscial-media-main/src/aa_social/stages/research.py:17-22, 693-716, 806-816",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Reference caps per place: MAX_STEPS 4, MAX_KEYWORDS 8, MAX_SERPS 2, MAX_SUGGESTIONS 1; cache FRESH_FOR 182 days; WORKERS 16",
+    "evidence": "aa-soscial-media-main/src/aa_social/stages/research.py:81-116",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Reference prices all place names up front in one volume request per market for the whole export, then coalesces concurrent loop asks into one request of up to 1000 keywords (waits until all loops park or 1000 keywords; linger 5s backstop) and throttles to the account limit",
+    "evidence": "aa-soscial-media-main/src/aa_social/stages/research.py:172, 178, 252-275, 433-448, 621-654; README.md:194-228",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Reference skips places whose fingerprint has not changed (first full run: 152 of 314 places had nothing left to buy)",
+    "evidence": "aa-soscial-media-main/src/aa_social/stages/research.py:657-680",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Reference markets = fixed brand audience US/UK/AU, each keyword fanned out to every market",
+    "evidence": "aa-soscial-media-main/src/aa_social/stages/research.py:24-26, 419-420; step0b doc :63-73",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Reference DFS endpoints: google_ads/search_volume/live (volumes), serp/google/organic/live/advanced (PAA), dataforseo_labs/google/keyword_suggestions/live (suggestions)",
+    "evidence": "aa-soscial-media-main/src/aa_social/search/dataforseo.py:81, 119, 159",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Reference prices: volumes $0.09/request up to 1000 keywords, serp $0.002, suggestions $0.0144 ($0.012 + $0.00012/row); run budget $0.12 per place, $1 floor; per-place estimate ~$0.068 volume + $0.012 serp + $0.014 suggestions",
+    "evidence": "aa-soscial-media-main/reference/search-spend.toml:7-31; README.md:235-267",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Reference scale: Japan export 24 trips, 581 distinct places (495 on a single day), 368 researched places; simulated 0.75 volume requests/place = ~$25 per full run vs $198 ungathered",
+    "evidence": "aa-soscial-media-main/README.md:111-112, 224-228, 259-266; reference/search-spend.toml:14-18",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Reference README sample run summary: $3.2144 spent, 9 volume requests, 1487 SERPs, budget $30",
+    "evidence": "aa-soscial-media-main/README.md:274-277",
+    "confidence": "likely"
+   },
+   {
+    "claim": "Reference's own known incident: 28/08 suggestions fired on nearly every step, ~1,460 calls, $21, caused by rate-limit rejections read as zero volume",
+    "evidence": "aa-soscial-media-main/README.md:247-251, 196-200",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Reference README warns research is the expensive stage and must be a deliberate purchase, not chained unattended behind atoms",
+    "evidence": "aa-soscial-media-main/README.md:283-311",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Reference demand attribution matches by name (word overlap) rather than embedding; this lifted Segments carrying any demand from 14% to 45%",
+    "evidence": "aa-soscial-media-main/src/aa_social/stages/score.py:703-716; AA-CIS port note services/acp_contract/atom_ranking.py:27-29",
+    "confidence": "verified"
+   },
+   {
+    "claim": "AA-CIS ported the same per-place caps and 182-day cache but ran only 4 concurrent places (vs 16) with a fixed 5s linger batcher and no place-name pre-pricing in the loop version",
+    "evidence": "services/acp_contract/segment_research.py:64-67, 75, 77-83, 202-258, 727-738",
+    "confidence": "verified"
+   },
+   {
+    "claim": "AA-545 (06/09) made Segment/Score/Route platform-wide, so research scope became every platform place instead of one tenant's trips",
+    "evidence": "git 15743a967 2026-09-06 'Segment/Score/Route/Hub -> platform-wide [AA-545]'; services/acp_contract/segment_research.py:661-664; services/jobs/t2_rewrite_job.py:555-567",
+    "confidence": "verified"
+   },
+   {
+    "claim": "On 25/09 one tenant T2 rewrite swept ~2,215 places x AU/US/UK and spent ~$49 of DFS; ledger shows $49.02 in 1,169 live calls; balance went 49.87 -> -0.12, so the sweep was stopped by an empty balance rather than finishing",
+    "evidence": "services/acp_contract/segment_research.py:661-664; .tmp-session/S273/dfs/dfs_spend.out (by day, balance snapshots 25-26/09)",
+    "confidence": "verified"
+   },
+   {
+    "claim": "Volume tasks were tiny: 25/09 batcher averaged 4.5 keywords per paid volume task ($39 for 678 tasks); Sept ledger avg 7.2 keywords per task at $0.0585",
+    "evidence": "services/acp_contract/segment_research_batch.py:3-6; dfs_spend.out cost per live call by endpoint",
+    "confidence": "verified"
+   },
+   {
+    "claim": "AA-CIS suggestions use Google Ads keywords_for_keywords (~$0.084 per call, 316 calls = ~$26.8, ~37% of $71.49) instead of Labs keyword_suggestions (~$0.0144)",
+    "evidence": "services/seo_intelligence/dataforseo_client.py:435-463 (endpoint keywords_data/google_ads/keywords_for_keywords/live); dfs_spend.out by month x endpoint; reference dataforseo.py:159",
+    "confidence": "verified"
+   },
+   {
+    "claim": "AA-CIS SERP fans out across every tenant market for each chosen keyword (cheap at $0.002 each)",
+    "evidence": "services/acp_contract/segment_research.py:25-31, 383-418",
+    "confidence": "verified"
+   },
+   {
+    "claim": "The AA-CIS research scope query has no transit or unnamed-place filter, unlike the reference's worth_researching()",
+    "evidence": "services/acp_contract/segment_research.py:612-643 (_SCOPED_PLACES_SQL / _places_in_scope); grep for transit/names_somewhere in segment_research*.py returns nothing",
+    "confidence": "likely"
+   },
+   {
+    "claim": "Fixes since: AA-646/647 (28-29/09) made research admin-triggered and scoped with max_places <= 200; AA-648 batch strategy (default) packs up to 1000 keywords per volume task and 20 seeds per ideas task; AA-649 budgets",
+    "evidence": "git b0dd9bea, d3921934, c319f2565; api/routers/admin_segment_research.py:45-49; services/acp_contract/segment_research_batch.py:50-56, 131-147; segment_research.py:652-673",
+    "confidence": "verified"
+   },
+   {
+    "claim": "A tenant action (T2 rewrite / blog) does not buy DataForSEO since 29/09: T2 reads cached seo_context / search_demand only; the SERP question top-up is admin-only with a $3 lifetime cap",
+    "evidence": "services/jobs/t2_rewrite_job.py:149-200, 564-567; services/acp_shared/question_topup.py:1-23, 41",
+    "confidence": "verified"
+   },
+   {
+    "claim": "October tenant-tagged spend days (e.g. 412 tours on 08/10) most likely come from the admin S1 SEO prefetch during master rewrite waves, not tenant blogs",
+    "evidence": "services/seo_intelligence/s1_prefetch.py:1-18; dfs_spend.out (a1_seo LLM stage 01-08/10, keywords_for_keywords 205 calls in Oct); not traced to call sites",
+    "confidence": "not_verified"
+   }
+  ],
+  "numbers": [
+   "Reference Japan export: 24 trips, 581 distinct places, 368 researched places",
+   "Reference: 0.75 volume requests per place simulated, ~$25 per full run vs $198 ungathered",
+   "Reference budget: $0.12 per place, $1 floor; volumes $0.09/request (1000 kw), serp $0.002, suggestions $0.0144",
+   "Reference sample run: $3.21 (9 volume requests, 1,487 SERPs)",
+   "Reference coverage: 14% -> 45% Segments with demand (name match vs embedding)",
+   "AA-CIS 25/09: ~2,215 places x 3 markets, $49.02, 1,169 live calls, balance 49.87 -> -0.12",
+   "AA-CIS volume tasks: 4.5 kw/task on 25/09 (678 tasks, $39); Sept avg 7.2 kw/task at $0.0585",
+   "AA-CIS keywords_for_keywords: 316 calls ~$0.084 each = ~$26.8 (~37% of $71.49 total)",
+   "AA-CIS research scope today: 7,323 US places in scope (vs 368 for one reference country)",
+   "AA-CIS loop concurrency 4 vs reference 16 workers; admin run cap max_places 200"
+  ],
+  "open_questions": [
+   "Per-place cost of the 25/09 sweep cannot be computed: the balance ran out mid-run, so how many of the ~2,215 places actually finished is unknown",
+   "Which code path produced the October tenant-tagged DFS days (412 tours on 08/10): S1 prefetch for aa_internal master rewrites is likely but not traced to call sites",
+   "Linear issues AA-515/545/625/646-649 were not read; the evidence comes from code, git history and docs",
+   "Whether switching ideas from Google Ads keywords_for_keywords to Labs keyword_suggestions (~6x cheaper) is an acceptable change in data quality has not been tested",
+   "Whether atom_ranking excludes transit/unnamed places after research (which would make the research spend on them wasted) was not checked"
+  ]
+ },
+ {
+  "checked": [
+   {
+    "claim": "search_demand holds (keyword, market, search_volume, people_also_ask, serp_domains, retrieved_on); segment_research_log holds (canonical_place, market, researched_at)",
+    "verdict": "confirmed",
+    "note": "Matches the writers in segment_research.py:285-345 (_store_volume, _store_paa, _store_serp_domains) and the log insert at :575-583. I did not re-open db-schema-reference.md, but the INSERT/UPDATE column lists agree with it."
+   },
+   {
+    "claim": "One SERP call feeds both PAA and organic domains",
+    "verdict": "confirmed",
+    "note": "segment_research.py:382-421 (_serp_tool): one client._serp_advanced() call per market, then _parse_paa and _parse_organic_domains."
+   },
+   {
+    "claim": "A place counts as researched only when every purchase succeeded; freshness is 182 days per (place, market), checked before any LLM/DFS call",
+    "verdict": "confirmed",
+    "note": "FRESH_FOR is at :75 (not :72). The log is written only when not purchase_failed (:571-583). _stale_markets is at :597-608 and the staleness filter runs before the client is built (:689-699). The batch path does the same (segment_research_batch.py:1-21, phase E)."
+   },
+   {
+    "claim": "DFS endpoints: search_volume/live (≤1000 kw per task, billed per task), serp/google/organic/live/advanced (PAA plus organic results), keywords_for_keywords (ideas with volume)",
+    "verdict": "confirmed",
+    "note": "dataforseo_client.py:254 and :300 (keywords_data/google_ads/search_volume/live), :350 (serp/google/organic/live/advanced), :454 (keywords_for_keywords/live). The 1000-keyword limit is VOLUME_TASK_MAX at segment_research_batch.py:53."
+   },
+   {
+    "claim": "Worst-case price table: search_volume and keywords_for_keywords $0.09, serp_advanced $0.002, deep PAA $0.01",
+    "verdict": "confirmed",
+    "note": "shared/cost_guard.py:47-55. These are pre-call estimates only. The real costs in the ledger are search_volume_bulk avg $0.0585, kfk avg $0.084, serp $0.002."
+   },
+   {
+    "claim": "Markets = DFS_LOCATION_MAP US 2840, UK 2826, AU 2036, DE 2276, FR 2250, NL 2528; driven by tenant target_market.countries, US fallback; resolve_buyer_markets returns all declared markets, resolve_buyer_market only the top one",
+    "verdict": "confirmed",
+    "note": "seed_builder.py:50-57 (map), :63 (MARKET_RANK), :72 (_DEFAULT_MARKET US), :390-445 (both resolvers)."
+   },
+   {
+    "claim": "Admin research takes explicit markets validated against DFS_LOCATION_MAP and a mandatory max_places ≤ 200",
+    "verdict": "confirmed",
+    "note": "admin_segment_research.py:44 (MAX_PLACES_PER_RUN = 200) and :46-63 (ResearchScope with a markets validator). The job passes {\"countries\": markets} (segment_research_job.py:67)."
+   },
+   {
+    "claim": "Each keyword lookup is fanned out across every selected market, so cost scales with the number of markets, and that is why the 25/09 run (US/UK/AU) was expensive",
+    "verdict": "wrong",
+    "note": "The fan-out is real: _volumes_tool at :347-379, and batch phase B runs per market. The cost explanation is wrong. DFS bills per TASK of up to 1000 keywords, not per keyword (s1_prefetch.py:3-4, step0b Q4). The 25/09 run used the old per-place ReAct loop, which packed only ~4.5 keywords into each paid volume task ($39 for 678 tasks, segment_research_batch.py:3-6). It also bought a keywords_for_keywords task per place, ran up to 2 SERPs per place per market, and swept all 2,215 platform places. AA-648 (c319f2565, 28/09) estimates the same full pass in batch mode at 2,222 places × 3 markets ≈ 27 volume tasks, about $25 upper bound and ~$2-5 real (docs/implementation-notes/AA-648.md). Three markets add a few tasks in batch mode. They are not the main multiplier."
+   },
+   {
+    "claim": "Before AA-646, run_segment_research fired after every tenant T2 rewrite and swept all platform places; 25/09 = 2,215 places × AU/US/UK, 1,169 live calls, $49.02",
+    "verdict": "confirmed",
+    "note": "segment_research.py:659-663, admin_segment_research.py:3-5, t2_rewrite_job.py:564-567. Ledger: d=2026-09-25 n=1169 live=1169 usd=49.020 markets=3. One caveat: the ledger shows tenants=0 for 25/09. The T2-triggered research client was built without tenant_id (DataForSEOClient(budget=...)), so this tenant-caused spend sits in the 'untagged' $52 bucket."
+   },
+   {
+    "claim": "Since commit d3921934b (29/09) research runs only when an admin starts it (capped at 200)",
+    "verdict": "wrong",
+    "note": "Wrong commit. Research was removed from T2 and made admin-only with the cap in b0dd9bea1 (28/09, #451, AA-646/647). d3921934b (29/09, #471) did something else: it stopped T2 from calling process_seo() on a seo_context miss, which bought ~$0.18 per tour (t2_rewrite_job.py:149-158). Both statements are true, but they belong to two different fixes."
+   },
+   {
+    "claim": "T2 tenant rewrite reads cached SEO only and never calls DataForSEO",
+    "verdict": "confirmed",
+    "note": "t2_rewrite_job.py:149-190: reads seo_context, then tenant_market_seo(), which reads search_demand only (s1_prefetch.py:421-467). No DFS client import in that path."
+   },
+   {
+    "claim": "The only callers of run_segment_research are the admin router (dry-run preview) and the segment_research job",
+    "verdict": "confirmed",
+    "note": "grep: admin_segment_research.py:87 and :112 (dry_run=True), segment_research_job.py:67. Everything else is tests."
+   },
+   {
+    "claim": "No angle-gate, content-writing, slate or v1 tenant router module calls DFS; a unit test blocks the paid deep SERP outside the admin script",
+    "verdict": "confirmed",
+    "note": "grep for DataForSEOClient(/fetch_keyword_ideas/_serp_advanced(/fetch_people_also_ask/process_seo( finds only seo_intelligence/*, segment_research*, question_topup, s1_batch and admin_pipeline. test_aa779_real_first.py:666-682 guards ONLY the deep-SERP top-up. No test guards against other DFS calls from tenant paths: test_aa646_647 covers failure handling and admin scope, not tenant-path imports."
+   },
+   {
+    "claim": "Ranking runs per market for all 6 DFS_LOCATION_MAP markets at A3 recompute and only READS search_demand",
+    "verdict": "confirmed",
+    "note": "recompute/stages.py:158-165 loops over all of DFS_LOCATION_MAP. atom_ranking.py:896-903 reads search_demand. There is no DFS call, but ranking does make paid Jev decide() calls for demand ownership (atom_ranking.py:236-262, DEMAND_Q)."
+   },
+   {
+    "claim": "Demand axis: claim by word overlap plus the Jev ownership gate; an unmeasured Segment gets the MEDIAN rank; if nothing is measured in the market, every Segment gets rank 1",
+    "verdict": "confirmed",
+    "note": "atom_ranking.py:144-153 (_demand_ranks), :193-210 (compute_demand), :236-262 (resolve_demand)."
+   },
+   {
+    "claim": "Questions axis = PAA landed on Segment atoms by embedding; missing → 0",
+    "verdict": "confirmed",
+    "note": "stages.py:152 (precompute_question_landings) and atom_ranking.py:919 (question_counts.get(..., 0))."
+   },
+   {
+    "claim": "Blog Bar needs demand ≥ 1000 and questions ≥ 3; NULL demand is read as 0 and the Segment silently fails; social needs said ≥ 150; Email/Landing/Ads have no bar",
+    "verdict": "confirmed",
+    "note": "slate.py:115-140 and :190-213 (demand = candidate.demand or 0). One correction: the failure is not fully silent. _clears_bar records a reason (demand_ok false, demand None) in cleared_bar_reason. The tenant still never sees that Segment as a Blog Subject."
+   },
+   {
+    "claim": "Blog Bar reads the Segment's numbers in its best market (lowest total_rank) among the tenant's markets",
+    "verdict": "confirmed",
+    "note": "slate.py:272-300 (_SEGMENT_CANDIDATES_SQL, best CTE ORDER BY total_rank). A consequence the investigator missed is listed under 'missing'."
+   },
+   {
+    "claim": "T8 shows the search-demand block only when data exists; blog reads Segment/place PAA from DB first",
+    "verdict": "confirmed",
+    "note": "acp_angle_gate/service.py:308-323, prompts.py:222-235, dfs_relevance.py:154-162 (returns None with no seo_context row)."
+   },
+   {
+    "claim": "T9 blog FAQ uses collect_real_questions (segment_match → place_paa → serp_topup → tour_paa), DB reads only; writer-invented questions labelled 'writer'",
+    "verdict": "confirmed",
+    "note": "acp_content_writing/service.py:1828-1844 and real_questions.py:1-26."
+   },
+   {
+    "claim": "A T9 blog with zero real questions still gets a model-written FAQ (not blocked)",
+    "verdict": "unproven",
+    "note": "service.py:1366-1373 shows the FAQ regeneration only adds required real questions when there are some, and returns early when the FAQ is already big enough. I did not trace the F16_faq gate outcome for a blog with 0 real questions. Likely true, not proven."
+   },
+   {
+    "claim": "T9 SEO keyword for title/meta = choose_keyword over the T8 snapshot's related_keywords",
+    "verdict": "confirmed",
+    "note": "service.py:1814-1822. When the snapshot is empty, keyword=None and the prompt uses a no-keyword instruction."
+   },
+   {
+    "claim": "T2 prefers tenant-market keywords + PAA from search_demand, falls back to the US seo_context row, else writes with no keywords",
+    "verdict": "confirmed",
+    "note": "s1_prefetch.py:421-467 and t2_rewrite_job.py:160-190 (diag seo_source tenant_market / admin_us_fallback / none)."
+   },
+   {
+    "claim": "S1/A1 still buys DFS per tour via process_seo / s1_seo_prefetch: reuses seo_context for 180 days, reads search_demand first, ≤20 seeds per kfk task, SERP per tour; a budget stop means writing without fresh SEO and nothing cached",
+    "verdict": "confirmed",
+    "note": "s1_prefetch.py:1-48 (REUSE_DAYS 180, MAX_SEEDS_PER_TASK 20), handler.py:101-133 (reuse) and :225-241 (budget_stopped is never cached), admin_pipeline.py:731-750, s1_batch.py:167-178. S1 uses a single market (resolve_buyer_market, s1_seo_prefetch_job.py:22-27), so it is US for the AA internal tenant."
+   },
+   {
+    "claim": "Before AA-653 S1 bought 3 DFS tasks per tour (~$0.18/tour)",
+    "verdict": "confirmed",
+    "note": "s1_prefetch.py:3-5 (~$130 for 736 tours) and t2_rewrite_job.py:154."
+   },
+   {
+    "claim": "October tenant-tagged DFS days (e.g. 412 tours on 08/10) were S1 rewrites tagged with the AA internal tenant id, not tenant blog writing",
+    "verdict": "confirmed",
+    "note": "The investigator marked this not_verified, but the repo backs it up. docs/sessions/2026-10-01-S207 line 56 records 'DFS $2,34' for 01/10 during the catalogue rerun, which matches the ledger exactly ($2.342). The S218 log (08/10) records the end of the 14-country S1 rerun (India 203, Philippines 43, Japan 78, ...) and the close of AA-653. s1_seo_prefetch_job.py:19 and :44 default tenant_id to AA_INTERNAL, and the ledger shows markets=1 on those days. The exact per-tour split would still need a dfs_call_log join to shared.job."
+   },
+   {
+    "claim": "Ms. Thư's reference: markets fixed US/UK/AU from Brand Audience, one loop per place, 182-day cache, ~$0.10-0.12 per place",
+    "verdict": "confirmed",
+    "note": "AA-515-step0b-demand-research-loop.md Q3 (lines ~63-75) and Q4 (~$0.10, rounded to $0.12 per place; volumes $0.09 per request carrying up to 1000 keywords, coalesced across loops)."
+   },
+   {
+    "claim": "Ms. Thư's aa-social-media repo is not reachable via gh",
+    "verdict": "unproven",
+    "note": "I did not re-run gh. I am taking the investigator's statement as reported."
+   },
+   {
+    "claim": "Admin SERP top-up (deep PAA) is admin-script only, US under its own TOPUP_MARKET, $3 total cap",
+    "verdict": "confirmed",
+    "note": "question_topup.py:1-23 and :40-48 (TOPUP_CAP_USD 3.0, TOPUP_LOCATION_CODE 2840). The ledger shows serp_advanced_paa_deep at $0.018 in total."
+   }
+  ],
+  "missing": [
+   "THE REAL REASON 25/09 COST $49: the old per-place ReAct loop bought tiny paid tasks. It averaged ~4.5 keywords per volume task, priced per task like a 1000-keyword task (segment_research_batch.py:3-6). On top of that it bought a keywords_for_keywords task per place and up to 2 SERPs per place per market, over all 2,215 platform places. AA-648 (c319f2565, 28/09) replaced it with batch mode, which estimates a full 2,222-place × 3-market pass at about 27 volume tasks, ≤$25 upper bound and a few dollars real (docs/implementation-notes/AA-648.md). This directly answers 'why did Ms. Thư's hundreds of tours cost little': her code coalesces many places into one $0.09 volume request per market (step0b Q4). Ours did not until AA-648.",
+   "The 25/09 run did not finish. It drained the whole DFS balance (ledger: 49.87 on 24/09 → 24.86 on 25/09 → -0.12 on 26/09; topped up to 49.88 on 28/09). $49 was simply all the money in the account. The fatal-payment abort (AA-647) and the cost guard (AA-649) were added after this. How many of the 2,215 places were actually logged as researched was not verified.",
+   "The 25/09 run also spent about $10.27 on Haiku across 7,856 LLM calls for the research loop (segment_research.py:65-67), on top of the $49 DFS. The investigator left this LLM cost out.",
+   "The tenant/untagged split is misleading. The $49 that a tenant T2 rewrite caused on 25/09 is in the UNTAGGED bucket (ledger tenants=0), because the research client was built without tenant_id. The $19.49 tenant-tagged bucket is mostly the AA-internal S1 catalogue rerun (01-08/10, AA-653: 14 countries, ~917 tours), not tenants. October DFS (~$19.3, mostly keywords_for_keywords $16.65 plus serp $1.73) is S1 prefetch for that rerun.",
+   "Missed consumer: Debate 'contested' (AA-631). search_demand.serp_domains feeds compute_contested(). Slate calls apply_debate() on every GET /v1/slate (slate.py:643) and can cut candidates at CONTESTED_CUT_THRESHOLD 0.5. When domains are missing, contested = 0.0 (atom_ranking.py:389-405), so the Segment is never cut. Admin pages admin_seo.py, admin_overview.py and data_coverage also read search_demand.",
+   "Blog Bar market-choice hazard: slate picks the Segment's 'best' market by lowest total_rank (slate.py:288-292), not by highest demand. In a market where nothing is measured, every Segment gets demand rank 1, and unmeasured Segments get the median rank (atom_ranking.py:144-153). So a thin market (DE/FR/NL, 263 rows each) can win best market with demand_volume NULL, and the Segment fails the Blog Bar even when it has measured US demand. Not verified against live rows. Worth checking for tenants that list several markets.",
+   "Ranking at A3 makes paid Jev decide() calls for demand ownership (atom_ranking.py:228-262) in each of the 6 markets. The decide cache makes repeats free, so this is not DFS spend, but it is not purely a cache read either.",
+   "No guard test covers 'no tenant path calls DFS' in general. The only guard (test_aa779_real_first.py:666-682) covers the deep-SERP top-up. The T2/T8/T9 no-DFS property rests on code reading and grep only, plus the admin_segment_research.py docstring. That docstring also wrongly calls research 'the only path that buys DataForSEO demand data': S1 prefetch and process_seo buy DFS too.",
+   "Today (08/11) the ledger shows 125 live DFS calls ($0.508, app=cis, 119 SERPs + 2 kfk + 1 volume task, 1 market, no tenant). A paid research or top-up path ran today. The investigator did not identify it."
+  ]
+ },
+ {
+  "checked": [
+   {
+    "claim": "Tenant actions (T2 rewrite, blog writing) no longer buy DataForSEO. Research is admin-triggered only (AA-646), and the blog path only reads cached search_demand / seo_context.",
+    "verdict": "confirmed",
+    "note": "t2_rewrite_job.py:564-567 (the AA-646 comment), :154 and :180-182 (T2 calls tenant_market_seo, which only reads the cache: s1_prefetch.py:421-424 and the SQL at :449-452). real_questions.py:1-25 says it does DB reads only. dfs_relevance.py:151-180 is a single seo_context read. A grep of every DFS client caller (services/api/shared) finds only segment_research*, s1_prefetch / s1_seo_prefetch_job, process_seo (S1 batch and admin_pipeline:750), question_topup (admin) and balance reads. None of them is tenant-triggered."
+   },
+   {
+    "claim": "The 25/09 spend of 49 USD came from run_segment_research firing after a tenant T2 rewrite and sweeping 2,215 places x AU/US/UK. The old per-place loop averaged about 4.5 keywords per volume task (678 tasks, 39 USD).",
+    "verdict": "confirmed",
+    "note": "segment_research.py:656-660 docstring; segment_research_batch.py:3-6; admin_segment_research.py:3-5. The ledger shows 1169 calls, 49.02 USD and 3 markets on 2026-09-25."
+   },
+   {
+    "claim": "The 'tenant-scoped' October DFS days are the S1 catalogue SEO prefetch / S1 rewrite under the AA-internal tenant, not real tenant blogs.",
+    "verdict": "confirmed",
+    "note": "s1_seo_prefetch_job.py:18 sets AA_INTERNAL and :44 falls back to it when the payload has no tenant_id. The prefetch shipped on 2026-10-01 (git 345877f5, AA-653). process_seo, which is S1-only, is also reached from s1_batch.py:171 and admin_pipeline.py:750. Which tenant_id the S1 page actually passed is not verified, but both buyers are catalogue S1 paths. The October ledger fits: keywords_for_keywords 205 calls and 16.65 USD, plus 865 SERPs. Tenant-scoped is 19.49 USD in total."
+   },
+   {
+    "claim": "Batch research already puts up to 1000 keywords into one search_volume task per market, so volumes cost about 0.09 USD per 1000 keywords.",
+    "verdict": "unproven",
+    "note": "The code part is confirmed: VOLUME_TASK_MAX=1000 at segment_research_batch.py:53, chunking at :287-291, and the /live endpoint at dataforseo_client.py:300. The price is not. The largest task in the ledger carried 395 keywords (Nov, 0.09 USD). cost_guard.py:44-47 says 'the task price rises with keyword count' (0.057 at 13 keywords or fewer, 0.09 at about 150). That 0.09 stays flat up to 1000 keywords rests only on Ms. Thư's config as quoted in step0b:95-96 ('$0.09/request, up to 1000 keyword'). It is plausible but no 1000-keyword task has been observed."
+   },
+   {
+    "claim": "In the estimate for 200 places, keywords_for_keywords (10 tasks, 0.90 USD) is the largest DFS item, SERP (0.40) is second and volumes are 1 task (0.09). Total about 1.67 USD, which reproduces AA-1055's '~60 USD for the US'.",
+    "verdict": "confirmed",
+    "note": "The arithmetic matches estimate_cost (segment_research_batch.py:131-147) and AA-1055 ('About 1.7 USD per 200 places... about 36 runs, about 60 USD'). But estimate_cost is documented as an UPPER BOUND (:132-134): keywords_for_keywords is bought only for places with zero volume and in tasks of at least 5 seeds (:369-378), and SERP only for places with volume > 0 (:322). The real approved run today (job 287e1c14, 154 stale places) cost 0.508 USD against an estimate of 1.118 DFS: 1 volume task 0.09, 119 SERPs 0.238, 2 keywords_for_keywords tasks 0.18. So the real split was SERP 47%, keywords_for_keywords 35%, volume 18%. The investigator's 'keywords_for_keywords is about 65% of the DFS spend' only holds for the estimate. The '60 USD' should be read as a ceiling; extrapolated from the real run, the AA-1055 batch plan comes to about 24 USD for the US."
+   },
+   {
+    "claim": "SERP is bought for any keyword with volume > 0, not only for places that could clear the Blog bar.",
+    "verdict": "confirmed",
+    "note": "segment_research_batch.py:316-324: the filter is `r[0] > 0`, with one SERP per place per market that has volume."
+   },
+   {
+    "claim": "The SERP tool never checks the cache: every researched place buys a fresh SERP even if search_demand already holds PAA for that keyword.",
+    "verdict": "confirmed",
+    "note": "segment_research.py:382-421, docstring at :387-391 ('Always makes a real call per market'). By contrast, S1 prefetch skips the SERP when the research cache already has PAA (s1_prefetch.py:15-16)."
+   },
+   {
+    "claim": "Volume answers are cached by (keyword, market) for 182 days and shared across tenants. Place staleness is tracked by canonical_place in segment_research_log, so a renamed place counts as stale again.",
+    "verdict": "confirmed",
+    "note": "FRESH_FOR is at segment_research.py:75, the cache read at :271-282 and batch :279-282, the _stale_markets keyed by canonical_place at :597-607. search_demand has no tenant column (upsert at batch :87-92)."
+   },
+   {
+    "claim": "Demand is matched to Segments by keyword word-overlap at ranking time, so cached keyword rows still count after a rename if the words overlap.",
+    "verdict": "confirmed",
+    "note": "atom_ranking.py:27-30 and compute_demand :193-212. It scans every search_demand row with volume, not only that place's own keywords."
+   },
+   {
+    "claim": "Alias cards already exist and could map renamed places to earlier research.",
+    "verdict": "confirmed",
+    "note": "load_alias_cards is at subject_seed.py:236-252 and returns {(alias_norm, country_norm): card_id}. It is used by slate, not by research. Wiring it into _stale_markets is new work, and freshness is per (place, market) while alias cards are per country, so the mapping is not one-to-one."
+   },
+   {
+    "claim": "keywords_for_keywords can be turned off through use_suggestions (default True).",
+    "verdict": "confirmed",
+    "note": "admin_segment_research.py:55; segment_research.py:653; segment_research_batch.py:141, 411, 419-420."
+   },
+   {
+    "claim": "'<place> <country>' can go into the flat-price volume task at no extra cost, and the country helper exists.",
+    "verdict": "unproven",
+    "note": "The helpers exist (_place_countries at :342, _idea_seed at :351). 'No extra cost' is not quite true. It adds about 7.3k keywords per market, roughly 7 more tasks (about 0.6 USD per market) if the flat price holds. It also does not replace what keywords_for_keywords actually returns, which is related ideas with volume ('X trek', 'X festival'). Word-overlap demand uses those ideas (atom_ranking.py:193-212), so dropping it lowers demand coverage for zero-volume places. That loss is not measured."
+   },
+   {
+    "claim": "The admin run cap is 200 places per run (about 36 runs for 7,116 stale US places).",
+    "verdict": "confirmed",
+    "note": "MAX_PLACES_PER_RUN=200 at admin_segment_research.py:45, enforced at :49. 7116/200 rounds up to 36. 'Approvals' is loose wording: each run is an admin-secret POST, plus the tech-lead approval per batch required by AA-1055."
+   },
+   {
+    "claim": "DFS Standard queue mode (task_post/task_get) was never built; every call uses /live endpoints.",
+    "verdict": "confirmed",
+    "note": "grep for task_post/tasks_ready/task_get in services, shared and api returns nothing. The /live URLs are at dataforseo_client.py:254, 300, 350, 454, 631."
+   },
+   {
+    "claim": "The Blog bar (demand >= 1000, questions >= 3) is a literal copy of Ms. Thư's reference/channels.toml.",
+    "verdict": "confirmed",
+    "note": "slate.py:95-96 comment ('literal reference/channels.toml numbers'), :115-117, :190-204. Blog is the only channel with a demand or questions bar (:115-139)."
+   },
+   {
+    "claim": "Ms. Thư's measured budget was about 0.10-0.12 USD per place, and her suggestions call cost 0.0144 USD against about 0.084-0.09 for our keywords_for_keywords.",
+    "verdict": "confirmed",
+    "note": "step0b:89-100 and the ledger (avg 0.08434). The cited lines also show that at 0.12 USD per place and about 24 new places per trip, her own design would cost about 290 USD for 100 trips. That is relevant to the user's point that 'chị Thư chạy cả trăm tour cũng đâu tốn' and the investigator did not raise it."
+   },
+   {
+    "claim": "Ms. Thư's aa-social-media repo is not reachable through gh.",
+    "verdict": "confirmed",
+    "note": "gh api repos/AdventureAsia365-Ecosys/aa-social-media returns 404, re-run in this check."
+   },
+   {
+    "claim": "The job docstring says the DFS cache lasts 7 days, but the code uses 182 days.",
+    "verdict": "confirmed",
+    "note": "segment_research_job.py:5 vs segment_research.py:75."
+   },
+   {
+    "claim": "The share of places that would clear 1000 searches (about 9% US, 4-5% UK/AU) is estimated from keyword rows.",
+    "verdict": "unproven",
+    "note": "The arithmetic matches the ledger (178/2000, 70/1484, 52/1214), but these are keyword rows, not places. That cache is biased toward researched (tour-popular) places. Today's sample had SERP for 119 of 154 places with volume > 0. The share per place is not known."
+   },
+   {
+    "claim": "Recommended plan: about 4.0 USD US, 3.4 UK, 3.3 AU DFS, plus about 3.4 USD Haiku once. About 14 USD in all; about 8 USD without an LLM.",
+    "verdict": "unproven",
+    "note": "The arithmetic holds given the inputs (30 tasks x 0.09, plus SERP at the row-share). It still depends on the unverified flat price at 1000 keywords and on the place share. 'Haiku once' only holds if all three markets go in ONE run, because proposed keywords are not stored per place (segment_research_batch.py:197-210 recomputes them every run). It also leaves out Jev gate asks (about 3 per place, :213-235), though the ledger shows a3_research Jev at about 0.000016 USD per ask, so that is negligible. 'About 8 USD without an LLM' does not reconcile: 2 keywords per place gives about 6.7 USD, 4 keywords gives about 10.7."
+   },
+   {
+    "claim": "Option 2: the audit tenant's 14 tours (176 places) cost about 1.34 USD with keywords_for_keywords and about 0.2 USD without.",
+    "verdict": "wrong",
+    "note": "The 1.34 is the upper-bound estimate (AA-1055 agent notes: 176 in scope, 154 stale, DFS 1.118 + LLM 0.22). Without keywords_for_keywords the same estimate is 0.09 + 154x0.002 = 0.40 DFS (0.62 with LLM), not 0.2. The REAL run of that scope today cost 0.508 USD DFS in total (ledger 2026-11-08)."
+   },
+   {
+    "claim": "Refresh every 182 days costs about 8 USD per market per year; a weekly new-place batch about 0.09 USD per market per run.",
+    "verdict": "unproven",
+    "note": "This follows from the 4 USD per-pass estimate, so it carries the same unverified assumptions. The weekly figure leaves out SERP and LLM."
+   },
+   {
+    "claim": "Google Ads Keyword Planner API is free but needs an Ads account and an approved developer token; accounts without spend get bucketed ranges; it has no PAA.",
+    "verdict": "unproven",
+    "note": "General knowledge only; nothing in the repo or allowed sources verifies it."
+   },
+   {
+    "claim": "DFS Standard mode is cheaper than Live (about 0.05 vs 0.075 for volume, 0.0006 vs 0.002 for SERP).",
+    "verdict": "unproven",
+    "note": "Not fetched. The ledger only shows live prices (0.0585-0.09 for volume, 0.002 for SERP)."
+   }
+  ],
+  "missing": [
+   "A real approved run already happened today and calibrates the model (job 287e1c14, audit-tenant scope, 154 stale places). The ledger on 2026-11-08 shows 0.508 USD: 1 volume task of 395 keywords (0.09), 119 SERPs (0.238) and 2 keywords_for_keywords tasks (0.18), against an estimate of 1.118. Real cost was about 45% of estimate_cost, and SERP, not keywords_for_keywords, was the largest item. The plan should be built on real per-place figures, about 0.0033 USD per place per market today, which puts AA-1055 at about 24 USD for the US, not 60.",
+   "Research does not refresh the ranking. segment_research_job.py:44-80 never runs recompute (landing, score, route). New search_demand rows only reach atom_ranking.demand_volume, and so the Blog bar, after a platform recompute (services/jobs/recompute_job.py:156, recompute_rankings_and_routes at export/handler.py:108). That likely explains part of the 8,662/97,218 gap. Any plan needs 'research pass, then a platform recompute', including whatever the recompute itself costs for landing.",
+   "Unscoped research reads every canonical_place in atom_segment with no liveness or owner_scope filter (segment_research.py:628-633). atom_segment is UPSERT-only, and orphans stay until segment_gc, which runs in report mode by default (export/handler.py:124-125). The 7,323 'places' may include dead or orphan Segments. A full pass should be limited to places on live (served) tours first, so we are not paying for orphans.",
+   "Cutting SERP to places with volume >= 1000 has side effects. PAA in search_demand also feeds the blog FAQ and angles through real_questions tier 'place_paa' for every place of a piece, including Route places (real_questions.py:9-12, :386-411). It also feeds the T2 tenant SEO paa (s1_prefetch.py:449-457). A >= 1000 cut would thin real questions for Blog Route pieces and T2. A lower SERP threshold (e.g. > 0 but de-duplicated by the cache check) may be the better trade-off; SERP is only 0.002 each.",
+   "The proposed keywords are not stored per place. search_demand is keyed by keyword only, and _propose recomputes the keywords on every run (segment_research_batch.py:182-210). Each refresh or market run pays for the LLM again, and a rename loses the place-to-keyword link. Storing place->keywords would make refresh LLM-free and alias reuse easy.",
+   "The second DFS buyer, S1 catalogue SEO (process_seo, s1_prefetch, seo_context), spent about 19 of the 22 October USD. The design answer only covers segment research. S1 still buys keywords_for_keywords per batch of 20 tours and SERP per tour (s1_prefetch.py:355, 386), with 180-day reuse (:37). A cost-first design should also decide whether S1 can read only the segment-research cache, since T2 already does (AA-707).",
+   "The run gate needs DFS balance >= the run's DFS budget (admin_segment_research.py:111-121; segment_research_job.py:59-62). The fallback budget is 5 USD per run and 10 USD per day (cost_guard.py:37-41), and the balance is 27.41 USD now. A full one-run pass has to raise the 200 cap and fit these budgets. That is fine at about 4 USD, but the live spend_budget rows were not read.",
+   "On the user's actual complaint ('chị Thư chạy cả trăm tour cũng đâu tốn'): Ms. Thư's own measured figure is 0.10-0.12 USD per place with about 24 new places per trip (step0b:98-100). By her numbers, 100 trips is about 240 x ... about 2,400 places, roughly 240-290 USD for one market. Our 71.49 USD since 19/09 for about 2,600 researched place-markets plus the S1 catalogue is not out of line with her model. The 25/09 blow-up came from the per-rewrite platform sweep (AA-646), not from per-unit prices. The answer to the user should say this plainly.",
+   "AA-1055 scope mapping should add: (a) trigger a recompute after the research job; (b) restrict scope to places on live tours; (c) persist place->keyword proposals; (d) recalibrate estimate_cost (upper bound vs real) so previews do not overstate cost by about 2x."
+  ]
+ },
+ {
+  "checked": [
+   {
+    "claim": "T2 tenant rewrite is cache-only: t2_seo() reads seo_context, then tenant_market_seo() (search_demand); on a miss it logs t2_seo_context_missing and never calls DataForSEO",
+    "verdict": "confirmed",
+    "note": "services/jobs/t2_rewrite_job.py:149-203 only runs SELECTs; it imports s1_prefetch.tenant_market_seo, and that function only reads acp_contract.search_demand (s1_prefetch.py ~421-460, docstring says 'a tenant action never buys DataForSEO'). Guarded by tests/unit/test_aa646_t2_no_dfs.py:34-38 (m_seo.assert_not_awaited)."
+   },
+   {
+    "claim": "T2 used to call process_seo() on a seo_context miss (~$0.18/tour, no budget); removed 29/09/2026",
+    "verdict": "confirmed",
+    "note": "Commit d3921934b, 2026-09-29 11:32 +0700, 'tenant T2 rewrite reads cached SEO context only, never calls DataForSEO [AA-646] (#471)'. The ~$0.18 figure is from the code comment at t2_rewrite_job.py:154. It is not measured in the ledger."
+   },
+   {
+    "claim": "Before 28/09 the tenant T2 rewrite endpoint fired run_segment_research(tenant_id, target_market) in the background; after AA-545 it swept every platform place (the 25/09 $49 spike). Removed by AA-646",
+    "verdict": "confirmed",
+    "note": "The b0dd9bea1 diff of api/routers/v1_tours.py removes _run_research_only(), which called run_segment_research(tenant_id, cfg.target_market, pool), and its create_task inside trigger_rewrite. Independent evidence in the root repo: docs/sessions/2026-09-28-S199-ecosystem-architecture-review.md:24-34 and :152-155. The WanderLux T2 rewrite finished at 05:04:21 and the first research call came 35 s later. Only US/UK/AU (the tenant's markets) were hit. Cost split: search_volume_bulk $39.24 + keywords_for_keywords $9.00. The investigator did not cite this timing evidence."
+   },
+   {
+    "claim": "The 25/09 spike is logged as platform-wide (tenants=0) because segment_research builds DataForSEOClient without tenant_id",
+    "verdict": "confirmed",
+    "note": "services/acp_contract/segment_research.py:710 calls DataForSEOClient(budget=dfs_budget) with no tenant_id. The pre-AA-646 code did the same: worktree .claude/worktrees/aa-348-work/services/acp_contract/segment_research.py:486 calls DataForSEOClient() with no arguments. The client comment at dataforseo_client.py:106-109 says segment_research has no tenant. dfs_spend.out row for 2026-09-25 shows tenants=0."
+   },
+   {
+    "claim": "Only DFS client constructors with a tenant_id are process_seo (S1 rewrite) and the s1_seo_prefetch job; both admin-only and default tenant = AA internal",
+    "verdict": "confirmed",
+    "note": "Every construction site I found: handler.py:227 (tenant_id, tour_id, budget), s1_seo_prefetch_job.py:62 (tenant_id, budget), segment_research.py:710 (budget only), question_topup.py:256 (budget only), segment_research_job.py:33 (free balance read). Entry points need an admin secret: admin_pipeline.py:1437/1439 run-tour, 1448/1453 s1/seo-prefetch, 1464/1473 run-tour-async, 1583/1593 s1-batch. Caveat: the tenant is whatever the caller supplies (TourRunRequest.tenant_id mapped at admin_pipeline.py:635-636; prefetch payload tenant_id, else AA_INTERNAL at s1_seo_prefetch_job.py:44). An admin can therefore stamp a reseller tenant_id. 'Default' does not mean 'always'."
+   },
+   {
+    "claim": "The 1035 tenant-tagged calls ($19.49) are the S1/A1 rewrite of AA's own catalogue, tagged with the AA internal tenant, not a reseller tenant action",
+    "verdict": "unproven",
+    "note": "The arithmetic checks out: 0.910+2.342+0.294+1.132+5.786+0.892+1.460+6.674 = 19.490, from 941 calls. For the October part ($18.58) S1 is the only possible path. T2's process_seo call was removed on 29/09, no other tenant-tagging constructor exists, and the dates match the a1_seo stage window (2026-10-01..10-08) and AA-653 (345877f5f, 2026-10-01). The 21/09 part ($0.91, 16 calls, 5 tours) comes before the T2 removal, so it may be the old reseller T2 process_seo path. Nothing proves AA internal. The aggregate has no tenant_id or job kind breakdown, and the remaining 94 tenant-tagged rows are unexplained."
+   },
+   {
+    "claim": "The S1 path still exists; since 31/10 process_seo always loads a DFS run budget (job:s1_rewrite, $0.50/tour, hard stop) and does not cache or persist stopped results; before 31/10 process_seo ran with no budget",
+    "verdict": "confirmed",
+    "note": "handler.py:40-55 and 224-241 load the budget, and a stopped result returns before cache.set and before the seo_context insert. Callers pass budget_kind=S1_REWRITE_BUDGET_KIND (admin_pipeline.py ~759, s1_batch.py ~179). Commit 3cfba2497 is dated 2026-10-31 12:39 UTC. At 3cfba249^, handler.py:186 builds DataForSEOClient(tenant_id=..., tour_id=...) with no budget. The $0.50 cap comes from migration 318 (49f0d7b13); I did not check the live row value."
+   },
+   {
+    "claim": "S1 prefetch reuses a tour's seo_context for 180 days and the research cache first, buying only shared keywords_for_keywords tasks plus one $0.002 SERP per tour with no PAA",
+    "verdict": "confirmed",
+    "note": "s1_prefetch.py:37 sets REUSE_DAYS=180 (env S1_SEO_REUSE_DAYS). fresh_tour_ids is at :171-177. The search_demand cache is read first (~:311). It buys fetch_keyword_ideas_multi (~:355) and calls _serp_advanced only 'if not paa' (~:383-388). The prefetch job has had a budget since its first commit 345877f5f (s1_seo_prefetch_job.py:46/57 in that revision). process_seo also reuses a fresh row or waits for the prefetch (handler.py ~101-133)."
+   },
+   {
+    "claim": "T7 slate makes no DFS call: Blog bar reads atom_ranking demand>=1000 & questions>=3; the only DFS-module use is a free DB write recording an unmapped market",
+    "verdict": "confirmed",
+    "note": "slate.py:115-118 is CHANNEL_BARS (blog needs_demand 1000, needs_questions 3). slate.py:256 imports shared.dfs_client.unmapped_market.record_unmapped_market_request, which is a plain INSERT/UPSERT into shared.unmapped_market_requests (unmapped_market.py:26-30) with no HTTP. The T7 slate job enqueued at slate.py:872 imports no DFS client (grep)."
+   },
+   {
+    "claim": "T8 angle gate and T9 writing only read stored demand through dfs_relevance and real_questions; real_questions never calls DataForSEO",
+    "verdict": "confirmed",
+    "note": "A git grep of services/acp_angle_gate, services/acp_content_writing and services/acp_shared (excluding question_topup.py) finds no dataforseo_client, seo_intelligence.handler, segment_research or s1_prefetch import. The top-level imports of dfs_relevance.py, real_questions.py and piece_history.py are stdlib, DB, atom_ranking and decide only. real_questions.py:20-23 states it never calls DataForSEO. I did not open the specific line numbers the investigator cited in acp_angle_gate/service.py."
+   },
+   {
+    "claim": "A3 export/atomize recomputes ranking and routes from the DB only, with no DFS call",
+    "verdict": "confirmed",
+    "note": "services/export/handler.py has no import of seo, DFS, segment_research or research (grep). The S199 log line 155 also says 'Luồng A3 của admin không mua DFS'."
+   },
+   {
+    "claim": "AA-779 SERP question top-up is admin-script-only with a $3 lifetime cap and its own budget kind; a unit test forbids other importers of the deep-SERP path",
+    "verdict": "confirmed",
+    "note": "question_topup.py:15-24 and :229-258 (load_run_budget 'dfs', JOB_KIND 'aa779_serp_topup', hard_stop). Its only caller is scripts/aa779_serp_topup.py:54-58. The AST guard is tests/unit/test_aa779_real_first.py:665-681. The ledger shows serp_advanced_paa_deep at 8 calls, $0.018, tenants=0 on 2026-10-20."
+   },
+   {
+    "claim": "Segment research is admin-only: admin secret, explicit markets, mandatory max_places, one run at a time, DFS+Bedrock budgets, refused when balance < run budget",
+    "verdict": "confirmed",
+    "note": "admin_segment_research.py:36-37 sets a router-level verify_admin_secret plus staff_policy. ResearchScope has markets min_length=1 and max_places 1..200. run_research rejects an active job with 409, checks budgets, and refuses when the balance is below the budget (~101-137). segment_research_job.py:44-66 re-checks at job start, concurrency=1. SAFE_DEFAULTS are at cost_guard.py:37-41."
+   },
+   {
+    "claim": "No scheduled job buys DFS; the only automatic DFS traffic is the free balance read (appendix_user_data, $0)",
+    "verdict": "confirmed",
+    "note": "The conclusion holds but the cited evidence is inaccurate. More kinds are scheduled than 'photo_sync and llm_model_lifecycle': ai_usage_rollup_job.py:104, llm_cost_reconcile_job.py:80-85, llm_probe_job.py:551-557 and llm_route_watch_job.py:90-103 also are. None of them touch DFS (grep of shared/jobs and worker finds no dfs reference). The daily balance read also runs from the Infra Lambda dfs_balance_check (AA-627, S197 log line 25). The ledger shows appendix_user_data usd=0."
+   },
+   {
+    "claim": "The 08/11 DFS activity (126 calls, $0.508, tenants=0, 1 market) is an admin segment research run, not a tenant action",
+    "verdict": "unproven",
+    "note": "The shape fits a batch segment research run: 2 keywords_for_keywords, 1 search_volume_bulk with 395 keywords, 119 serp_advanced, tenants=0, and US search_demand last=2026-11-08. The ledger has no job_id or kind breakdown, so this is likely, not verified. No tenant path could make these calls in any case."
+   },
+   {
+    "claim": "There is no general static guard stopping a tenant route from importing DataForSEOClient; guards exist only for T2 and for the deep-SERP path",
+    "verdict": "wrong",
+    "note": "The first half is true: no test bans DFS imports from tenant routes. 'Only T2 and deep-SERP' is false. tests/unit/test_aa642_s0_dfs_cap.py:269-275 runs git grep over api/services/shared and asserts that every DataForSEOClient( construction passes budget= (the free fetch_balance read is the only exception). tests/unit/test_aa642_s0_dfs_cap.py:264-266 also asserts that prefetch refuses an unbudgeted client. A new tenant path could still buy DFS, but only under a budget. That guard is literal-text and would miss an aliased constructor."
+   },
+   {
+    "claim": "Other apps (AA-Partner, AA-Booking, AA-TripPlanner-Web) have no DataForSEO client",
+    "verdict": "confirmed",
+    "note": "A grep (excluding node_modules, .next, .venv) finds only TraceTimeline.tsx labels and .gitleaks.toml comments. There are no calls to segment-research, run-tour, seo-prefetch or s1-batch from those apps."
+   }
+  ],
+  "missing": [
+   "Root-cause evidence for the 25/09 spike is in docs/sessions/2026-09-28-S199-ecosystem-architecture-review.md:24-34 and :117-155. A WanderLux tenant rewrite finished at 05:04:21 UTC and research started 35 s later, in two waves at 05h and 08h UTC. The money split is search_volume_bulk $39.24 and keywords_for_keywords $9.00, plus about 7.9k Haiku calls. The investigator inferred the cause from code only.",
+   "For the 'why so expensive' part of the user's question, see S199 lines 117-123. DFS charges per task (about $0.057-0.09) and one task can hold up to 1,000 keywords. Before AA-648 the code sent about 4.5-7.2 keywords per task (CONCURRENCY=4 with a 5 s linger), and keywords_for_keywords cost $0.09 per place. After the balance ran out on 25/09, 18,214 of 19,305 rows were stored as NULL and 1,795 places were marked as researched for 182 days. AA-647 repaired this by deleting 16,311 search_demand rows and 5,859 research_log rows. The AA-648 batch pilot then cost about $0.011 per place, roughly 10 times cheaper. Ms. Thư's repo runs 16 batch workers.",
+   "A tenant's blog activity does shape what DFS buys, indirectly. question_topup.find_needs (question_topup.py:55-66) builds its 'need' list from blog Subjects in proposed/picked state and from angle_gate_request rows with channel='blog'. Nothing is bought until an admin runs scripts/aa779_serp_topup.py.",
+   "The S1 path buys DFS in the market of whichever tenant_id it is given (handler.py reads TenantConfigService.get_seo_config(tenant_id); s1_seo_prefetch_job._market). The tenant_id is supplied by the caller (TourRunRequest, prefetch payload). An admin S1 run made for a reseller tenant would therefore produce tenant-tagged rows. Proving that the 1035 rows are AA internal needs a GROUP BY tenant_id, plus job_id joined to shared.job.kind (dfs_call_log.job_id exists since migration 293). Before 01/11, stage and app are NULL on every row.",
+   "The 21/09 tenant-tagged $0.91 (16 calls, 5 tours) comes before the 29/09 removal of T2's process_seo call. It could be a real tenant-action purchase. The S191 log (docs/sessions/2026-09-21-S191-*) does not settle it.",
+   "The daily dfs/global cap of $10 may be alert-only (commit f38099dcb, 2026-09-29). The per-run caps (segment_research $5, s1_rewrite $0.50, aa779 at most $3) are the actual hard stops. I did not check the live spend_budget rows.",
+   "Context for 'the blog needs research': the Blog bar requires demand ≥1000 and ≥3 questions. Only 8,662 of 97,218 atom_ranking rows have demand_volume, and 7,116 of 7,323 US places are stale. So blog proposals are scarce unless an admin buys research. That is a product and data-freshness choice. It does not mean a tenant blog triggers DFS.",
+   "I did not read the Linear issues (AA-515/545/625/646-649) and did not look up the aa-social-media repo. Everything above comes from code, commits, session logs and the ledger aggregate."
+  ]
+ },
+ {
+  "checked": [
+   {
+    "claim": "The reference repo is not on GitHub, but a full local copy sits inside the CIS repo",
+    "verdict": "confirmed",
+    "note": "Local copy exists at apps/AA-CIS-App/docs/AI-gent-for automation works/aa-soscial-media-main/ (src/, README.md, reference/). I did not re-run the gh search."
+   },
+   {
+    "claim": "The reference researches one ReAct loop per PLACE, not per Segment or per trip",
+    "verdict": "confirmed",
+    "note": "research.py:8-15 (docstring). _seeds() at research.py:~693-716 groups Segments by slug(place)."
+   },
+   {
+    "claim": "The reference skips transit-only and unnamed places",
+    "verdict": "confirmed",
+    "note": "research.py:17-22, plus _Gathering.worth_researching() (~806-816), which requires names_somewhere(place) and at least one non-transit action."
+   },
+   {
+    "claim": "Reference caps: MAX_STEPS 4, MAX_KEYWORDS 8, MAX_SERPS 2, MAX_SUGGESTIONS 1, FRESH_FOR 182 days, WORKERS 16",
+    "verdict": "confirmed",
+    "note": "research.py:81-116."
+   },
+   {
+    "claim": "The reference prices every place name up front, coalesces volume asks up to 1,000 keywords, and throttles to 12 requests a minute",
+    "verdict": "confirmed",
+    "note": "_price_the_places at research.py:~621-654 (one request per market per 1,000 names). MOST_KEYWORDS=1000 and LINGER_SECONDS=5.0 at :172-178. CoalescingSearchDemand docstring :252-275. README.md:186-228."
+   },
+   {
+    "claim": "The reference skips places whose fingerprint has not changed (152 of 314 had nothing left to buy)",
+    "verdict": "confirmed",
+    "note": "_still_to_loop at research.py:~657-680. Note that README elsewhere says 368 researched places; 314 was the first full run."
+   },
+   {
+    "claim": "Reference markets are a fixed US/UK/AU, with every keyword fanned out to all three",
+    "verdict": "confirmed",
+    "note": "Markets come from the Brand Identity document (research.py:420), but brand.py:16-25 MARKET_CODES knows only US/UK/AU. The fan-out is stated at research.py:24-26."
+   },
+   {
+    "claim": "Reference DataForSEO endpoints: google_ads search_volume/live, serp organic/live/advanced, dataforseo_labs keyword_suggestions/live",
+    "verdict": "confirmed",
+    "note": "search/dataforseo.py:81, :119, :159."
+   },
+   {
+    "claim": "Reference prices: volumes $0.09 per request, serp $0.002, suggestions $0.0144; budget $0.12 per place with a $1 floor",
+    "verdict": "confirmed",
+    "note": "reference/search-spend.toml:7-31 and README.md:235-267. Its own estimate is about $0.068 volume + $0.012 serp + $0.014 suggestions, roughly $0.09-0.10 per place."
+   },
+   {
+    "claim": "Reference scale: Japan 24 trips, 581 distinct places, 368 researched; 0.75 requests per place gives about $25 against $198",
+    "verdict": "confirmed",
+    "note": "README.md:224-228 and 259-266. The arithmetic holds: 368 x 0.75 x 0.09 = $24.8; 368 x 6 x 0.09 = $198.7. This is the volume cost only, simulated over 64 places, not a measured full run."
+   },
+   {
+    "claim": "Reference README sample summary shows $3.21 (9 volume requests, 1,487 SERPs)",
+    "verdict": "unproven",
+    "note": "The text is at README.md:274-277, but the numbers do not add up: 9 x $0.09 + 1,487 x $0.002 = $3.78, not $3.2144. It reads like an illustrative or harvest-only snippet. It must not be cited as what a full research run costs."
+   },
+   {
+    "claim": "Reference incident on 28/08: about 1,460 suggestions calls, $21, caused by rate-limit rejections read as zero volume",
+    "verdict": "confirmed",
+    "note": "README.md:196-200 and 247-251."
+   },
+   {
+    "claim": "The reference README says research must be a deliberate purchase and must not be chained behind atoms unattended",
+    "verdict": "confirmed",
+    "note": "README.md:283-311."
+   },
+   {
+    "claim": "Matching keywords by name instead of by embedding lifted Segments with demand from 14% to 45%",
+    "verdict": "confirmed",
+    "note": "score.py:703-716 (_demand docstring). The CIS port note is at services/acp_contract/atom_ranking.py:27-30. The 14% figure is the embedding matcher, 45% is name overlap."
+   },
+   {
+    "claim": "AA-CIS ported the same caps and 182-day cache, but the loop runs 4 concurrent places with a fixed 5 s linger and no place-name pre-pricing",
+    "verdict": "confirmed",
+    "note": "segment_research.py:64-67 (caps), :75 (FRESH_FOR), :83 (CONCURRENCY = 4), and _VolumeBatcher at :201-258 (fixed linger, no wait-until-all-parked). The investigator missed one more gap: CIS has NO 12-a-minute throttle at all. A grep for throttle/per_minute in segment_research*.py and dataforseo_client.py finds only a docstring mention."
+   },
+   {
+    "claim": "AA-545 (06/09) made Segments platform-wide, so research scope became every platform place",
+    "verdict": "confirmed",
+    "note": "Commit 15743a967 (2026-09-06). Before b0dd9bea1, run_segment_research ran 'SELECT canonical_place ... FROM acp_contract.atom_segment' with tenant_id unused (git show b0dd9bea1~1:services/acp_contract/segment_research.py:517-545). It was triggered per tenant rewrite from api/routers/v1_tours.py:39-58 (_run_research_only)."
+   },
+   {
+    "claim": "On 25/09 one tenant T2 rewrite swept about 2,215 places x AU/US/UK and spent $49.02 in 1,169 calls; balance went 49.87 -> -0.12, so the sweep was stopped by the empty balance",
+    "verdict": "wrong",
+    "note": "The 2,215 places, the $49 and 'one rewrite' come from code comments and a commit message: segment_research.py:663-664, t2_rewrite_job.py:564-567, commit b0dd9bea1. The ledger (dfs_spend.out) agrees on $49.02 and 1,169 live calls, but records tenants=0 on 25/09, because the research client was built without tenant_id. Balance actually went 48.90 (24/09) -> 24.86 (25/09 snapshot) -> -0.12 (26/09); 49.87 was the 19-21/09 balance. 'Stopped by empty balance' is wrong. The pre-fix code had no circuit breaker: fetch_volumes_bulk 'never raises' and returned {} on failure. The loop kept going: failed volumes were stored as null via _store_volume, and every place was marked fresh in segment_research_log whatever happened (b0dd9bea1~1 segment_research.py:306-330, 480-490). The LLM side also ran: the comment at segment_research.py:71-72 records $10.27 over 7,856 Haiku calls on 25/09, about 3.5 steps per place across 2,215 places. So most places looped, and only the DFS purchases failed once the money ran out."
+   },
+   {
+    "claim": "Volume tasks were tiny: 4.5 keywords per task on 25/09 (678 tasks, $39); September averaged 7.2 keywords per task at $0.0585",
+    "verdict": "unproven",
+    "note": "The 4.5 kw and 678 tasks/$39 come from segment_research_batch.py:3-6 and are confirmed. The 7.2 is the all-months average (5,062 kw / 692 tasks), not September. September alone is 4,166 / 688 = 6.1 kw per task at $40.14 / 688 = $0.0583. Small error."
+   },
+   {
+    "claim": "AA-CIS suggestions use keywords_for_keywords at about $0.084 a call (316 calls, $26.8, 37%), about 6x the Labs keyword_suggestions price",
+    "verdict": "unproven",
+    "note": "The endpoint and the totals are confirmed: dataforseo_client.py:451-455; ledger shows 111 + 205 + 2 = 318 calls, $26.82, 37.5%. The 6x comparison is misleading after AA-648/653. fetch_keyword_ideas_multi (dataforseo_client.py:617-640) puts up to 20 seeds in one task, and October averaged 2,229 / 205 = 10.9 seeds per call, about $0.0076 per seed. That is cheaper than Labs keyword_suggestions, which takes one seed per task (reference dataforseo.py:159). Only September (141 kw / 111 calls, about 1.3 seeds per call) matches the 6x story. The 205 October calls are almost all S1 SEO (master rewrite), not segment research."
+   },
+   {
+    "claim": "AA-CIS fans each chosen SERP keyword out across every tenant market",
+    "verdict": "confirmed",
+    "note": "segment_research.py:25-31 (docstring item 3). The batch phase C now runs SERP only in markets where the keyword has volume (segment_research_batch.py:13-14)."
+   },
+   {
+    "claim": "The AA-CIS research scope query has no transit or unnamed-place filter",
+    "verdict": "confirmed",
+    "note": "_SCOPED_PLACES_SQL and _places_in_scope at segment_research.py:610-643 have no filter; the grep for transit/names_somewhere in segment_research*.py is empty (is_lodging_search at batch:249 filters keywords, not places). Ranking does exclude transit and unnamed places (atom_ranking.py:59, 787-788). So research money spent on those places can never reach a slate, which answers the investigator's open question."
+   },
+   {
+    "claim": "Fixes since then: AA-646/647 admin-only with max_places <= 200; AA-648 batches 1,000 kw per volume task and 20 seeds per ideas task; AA-649 adds budgets",
+    "verdict": "confirmed",
+    "note": "Commits b0dd9bea1, c319f2565, bd5c01ceb (AA-649) and d3921934b. admin_segment_research.py:45-49 (MAX_PLACES_PER_RUN = 200). segment_research_batch.py:50-56."
+   },
+   {
+    "claim": "Since 29/09 a tenant action (T2 rewrite or blog) buys no DataForSEO; the question top-up is admin-only with a $3 lifetime cap",
+    "verdict": "confirmed",
+    "note": "t2_rewrite_job.py:149-160 reads seo_context and search_demand only. The only DataForSEOClient constructors are handler.py:227 (S1 process_seo), s1_seo_prefetch_job.py:62, segment_research.py:710, question_topup.py:256 (admin script) and balance reads. The investigator missed that before 29/09 there was a SECOND tenant path: T2 called process_seo() on a cache miss, about $0.18 per tour outside any budget (t2_rewrite_job.py:152-155, KAN-90). So before 29/09, a tenant rewrite really did trigger DataForSEO twice over."
+   },
+   {
+    "claim": "October tenant-tagged spend days (412 tours on 08/10) come from the admin S1 SEO path, not tenant blogs",
+    "verdict": "confirmed",
+    "note": "Only two DataForSEOClient constructors set tenant_id: handler.py:227 (S1 process_seo, also called from s1_batch.py:167 and admin_pipeline.py:731) and s1_seo_prefetch_job.py:62. Segment research and the top-up never set it, and T2 no longer calls DFS after d3921934b. The tour-level tagging also matches S1's per-tour seo_context. Which of those two S1 callers made each call is not split out."
+   }
+  ],
+  "missing": [
+   "The investigator never confronts Ms. Thư's 'a hundred tours is cheap'. By her own numbers it is NOT cheap on a first full run. Her README says places grow about 24 per extra trip, and a hundred-trip country has roughly 4x Japan's 581 places (search-spend.toml:9-18). At her ~$0.09-0.12 per place that is roughly $100-200 of DataForSEO for one country's first run. It is cheap only on re-runs: a 182-day cache, fingerprint skip, and research run only as a deliberate purchase. What she probably remembers as cheap is writing (about $0.08 per blog piece, README:121-126) or a cached re-run. Not verified what she meant.",
+   "Place density per tour is not higher in CIS. CIS has 7,323 US places over a catalog of about 793 tours (raw_tours = 793 in docs/runbooks/clean-rerun-reset.sql via commit bdd36a558; s1_prefetch.py:5 mentions a 736-tour rerun), about 9 places per tour. Japan has 581 / 24, about 24 per trip (368 researched, about 15). Comparing 7,323 against 368 compares a whole catalog with one country, not two designs.",
+   "Per-place DataForSEO cost on 25/09 was probably no worse than the reference: $49 over about 2,215 places x 3 markets is about $0.022 per place-market, or $0.066 per place, against her ~$0.09. The money went on SCOPE (the whole platform), the TRIGGER (every tenant rewrite, unattended) and the missing transit filter, not on a worse per-place unit price. This cannot be proven, because how many places got real data before the balance hit zero is unknown.",
+   "The 25/09 run very likely reproduced the reference's own 28/08 bug. Before AA-647, a failed volume call (out of money, and possibly rate-limited, since CIS has no 12-a-minute throttle while 3 markets x one batch every 5 s is up to 36 requests a minute) was cached as null volume, and every place was still marked researched for 182 days (b0dd9bea1~1 segment_research.py:306-330, 480-490). This is a strong candidate for why coverage is so thin (only 8,662 of 97,218 atom_ranking rows have demand_volume). Not verified whether the null rows were later cleaned.",
+   "Why the DataForSEO cache does not stop re-buying: segment_research_log is keyed by canonical_place, an LLM-worded string. The AA-653 clean rerun (early October) deleted and re-atomized atom_segment, while keeping search_demand and segment_research_log (clean-rerun.md table, commit bdd36a558). Re-worded places then no longer match the log, which plausibly explains why 7,116 of 7,323 US places show as stale today even though about 2,215 were 'researched' on 25/09. Keyword-level volumes in search_demand are still reused if the wording is identical. Plausible, not verified live.",
+   "The LLM cost of research is missing from the comparison: 25/09 also spent $10.27 on 7,856 Haiku calls (segment_research.py:71-72), so that day cost about $59, not $49. The ledger's a3_research stage starts only on 29/09, so this cost is not in the stage table.",
+   "Today's batch strategy (AA-648) is already far cheaper per place than the reference. Using estimate_cost (segment_research_batch.py:131-147), all 7,323 US places would cost about 30 volume tasks ($2.7) + 7,323 SERPs ($14.6) + 367 ideas tasks ($33), roughly $50 total or about $0.007 per place. The real remaining cost lever is how many places and markets are bought (and dropping transit/unnamed places), not the per-call price.",
+   "The Linear issues (AA-515/545/625/646-649) were not read by either party. The evidence here is code, git history, the docs and the ledger."
+  ]
+ },
+ {
+  "checked": [
+   {
+    "claim": "Before 28/09 every tenant T2 rewrite triggered run_segment_research via _run_research_only(); removed by AA-646",
+    "verdict": "confirmed",
+    "note": "Commit b0dd9bea (28/09) message plus the v1_tours.py diffstat. The leftover comment at services/jobs/t2_rewrite_job.py:564-567 says the same."
+   },
+   {
+    "claim": "Pre-fix run_segment_research read every platform Segment with no filter because AA-545 dropped tenant_id",
+    "verdict": "confirmed",
+    "note": "git show bbfd5c6f:services/acp_contract/segment_research.py:537 has `SELECT canonical_place, canonical_action FROM acp_contract.atom_segment` with no WHERE. AA-545 is 15743a96 (06/09). The 3 markets were the tenant's buyer markets, from resolve_buyer_markets() at :524."
+   },
+   {
+    "claim": "25/09: 1,169 live calls, 49.02 USD, two bursts 563+605; volume 39.24, ideas 9.00, SERP 0.84; plus 7,856 Haiku calls 10.27 USD",
+    "verdict": "confirmed",
+    "note": "The DFS figures match dfs_spend.out (by-day row) and docs/architecture/ecosystem-review-2026-09.md:66-74. Caveat: 7,856 calls / 10.27 USD comes from the §2.2 table, which covers the last 30 days (:43-51), not one day. a3_search_demand logging only began 24/09 (bbfd5c6f), so most of it is plausibly 25/09, but that day's own figure is not proven."
+   },
+   {
+    "claim": "2,215 places x AU/US/UK were swept on 25/09",
+    "verdict": "confirmed",
+    "note": "The b0dd9bea commit message and segment_research.py:657-660 confirm 2,215 places were in scope. Most were never actually researched: the money ran out about 08:51 UTC."
+   },
+   {
+    "claim": "Old loop batcher: CONCURRENCY=4, 5 s linger, 678 tasks averaging 4.5 kw (max 13) at ~0.058 USD",
+    "verdict": "confirmed",
+    "note": "segment_research.py:83 (CONCURRENCY = 4) and :211 (linger 5.0) are the same in bbfd5c6f:78,177. Task figures come from ecosystem-review:529-531. The ledger's Sept bulk average is 6.0 kw/row (4166/696) because it includes the 28/09 Bhutan tasks of about 152 keywords."
+   },
+   {
+    "claim": "Search-volume task price grows with keyword count up to a ceiling (<=13 kw ~0.058, ~150 kw 0.09, 501 kw/3 tasks 0.09 each)",
+    "verdict": "wrong",
+    "note": "The 0.09 ceiling holds (Oct 3 tasks, 501 kw, 0.27; Nov 1 task, 395 kw, 0.09). The 'grows with keyword count' part is contradicted by our own ledger. The single-keyword `search_volume` label calls the SAME endpoint (dataforseo_client.py:252-256 vs :300, both keywords_data/google_ads/search_volume/live). Those 1-keyword tasks were billed 0.09 each: Sept n=5 = 0.45 (21/09), Oct n=7 = 0.63. So the cheap 25/09 tasks (1-13 kw at 0.057-0.059) are an unexplained anomaly, not a price curve. The comment at shared/cost_guard.py:43-46 is a hypothesis, not evidence. The safe model is about 0.09 per task, whatever the keyword count up to 1000."
+   },
+   {
+    "claim": "One Live search_volume task = one location, up to 1000 keywords",
+    "verdict": "confirmed",
+    "note": "dataforseo_client.py:269-294: one location_code in the payload, keywords[:1000]."
+   },
+   {
+    "claim": "Balance ran out ~09:00 UTC; failures swallowed; 14,691 NULL rows, 1,795 places marked fresh for 182 days",
+    "verdict": "confirmed",
+    "note": "Old code bbfd5c6f:483-494 writes segment_research_log for every place at loop end, with no failure check. ecosystem-review:532-536. The repair later counted 1,953 places (5,859 log rows) after the 08:51:02 cutoff; the 1,795 figure covers a narrower 09-10h window."
+   },
+   {
+    "claim": "28/09 repair deleted 16,311 search_demand + 5,859 research_log rows; 3,474 rows remained",
+    "verdict": "confirmed",
+    "note": "AA-647 Linear comment 28/09 08:34 shows the COMMITTED output. The answer text adds 'Everything bought after 08:51 UTC that day was lost or had to be thrown away', which is wrong. The cutoff IS the last paid bulk call, so nothing was bought after it. The repair deleted only NULL rows and kept the 1,311 rows with volume (3,474 - 2,163)."
+   },
+   {
+    "claim": "Only ~420 places were actually researched on 25/09, ~0.12 USD/place, about the same as the reference budget",
+    "verdict": "unproven",
+    "note": "The only source is the AA-648 comment ('≈ $49 for the ~420 places'), with no derivation. Counter-evidence: after the repair the whole-platform preview shows 1,953 stale of 2,222 places for US/UK/AU (AA-648 comment 28/09 09:24). So at most 269 places held a fresh log, and some of those predate 25/09. The old loop wrote the log only at the end of a place, with at most 4 places in flight per run (2 runs). That allows roughly 277 places at most, which means at least about 0.18 USD/place of DFS. That is about 1.5-2x the reference's 0.10-0.12, not 'about the same'."
+   },
+   {
+    "claim": "Old loop bought one single-seed keywords_for_keywords task per zero-volume place; small obscure-seed tasks return only the seeds",
+    "verdict": "confirmed",
+    "note": "bbfd5c6f:475-480: the LLM chose `suggestions`, capped at 1 per place, allowed only when nothing had volume, seed = one keyword, primary market only. The echo finding is in the AA-648 S203 comment and segment_research_batch.py:55-58. The tool was LLM-chosen, not automatic, so '100 tasks' means the LLM picked it on about 100 places."
+   },
+   {
+    "claim": "Batch strategy (AA-648, default since 28/09) packs <=1000 kw per volume task per market, 20 seeds per ideas task, SERP only where volume exists",
+    "verdict": "confirmed",
+    "note": "segment_research_batch.py:1-21, 51-58; segment_research.py:652 strategy='batch' default."
+   },
+   {
+    "claim": "Bhutan batch pilot: 50 places x 3 markets for 0.55 USD, ~0.011/place",
+    "verdict": "confirmed",
+    "note": "AA-648 comment 28/09 09:34: volume 0.27 + SERP 0.19 + ideas 0.09. Once volumes are batched, SERP becomes the main cost."
+   },
+   {
+    "claim": "Full batching of the 25/09 bought volume work ≈ 3-6 tasks ≈ 0.3-0.5 USD; whole intended sweep ~21 tasks ≈ 1.9 USD",
+    "verdict": "unproven",
+    "note": "Directionally right. About 3,050 pairs over 3 markets is about 1,017 per market, which needs 2 tasks per market: 6 tasks x 0.09 = 0.54 USD. The '1.9 USD whole sweep' counts volume tasks only. AA-648's own dry run put a full-platform batch pass at 27 volume tasks and up to 25 USD in total (AA-648 comment 28/09 08:50), because SERP and ideas tasks remain."
+   },
+   {
+    "claim": "Without the balance running out, the old loop's full sweep would have cost ~250 USD",
+    "verdict": "unproven",
+    "note": "This is an extrapolation from about 19k pairs written, mostly NULL rows produced after the failure. Using the per-place rate instead (at least 0.18 x 2,215) gives about 390 USD. Read it only as 'hundreds of USD'."
+   },
+   {
+    "claim": "AU+UK account for 27.03 USD, nearly all from 25/09",
+    "verdict": "confirmed",
+    "note": "dfs_spend.out location_code 2036 = 13.564, 2826 = 13.466. After 25/09 only the 28/09 Bhutan pilot touched AU/UK (part of its 0.55). Each market needs its own task by design; the waste was tiny tasks multiplied by 3, not the 3 markets as such."
+   },
+   {
+    "claim": "October tenant-scoped spend is the S1 catalogue-rewrite SEO path (AA-internal), not tenant blogs",
+    "verdict": "unproven",
+    "note": "Likely, but the tenant identity is not in the aggregates. s1_seo_prefetch_job.py:19,43 defaults to AA_INTERNAL, and the October wave commits (5a9b5e6c 08/10 'during waves') fit. Note that until d3921934 (29/09) tenant T2 also called process_seo on a cache miss (~0.18/tour; see t2_rewrite_job.py:152-155). The 21/09 'tenant' tours could therefore be T2 tenant rewrites rather than S1."
+   },
+   {
+    "claim": "Old S1 bought 3 tasks per tour (0.09+0.09+0.002); 21/09 = 5 tours = 0.91 USD; AA-653 dropped the single-keyword task",
+    "verdict": "confirmed",
+    "note": "s1_prefetch.py:1-18; dataforseo_client.py:509-532 (extra_seeds skips fetch_keywords); ledger Sept search_volume n=5 0.45. 5x0.09 + 5x0.09 + 5x0.002 = 0.91. Which caller produced the 21/09 calls (S1 or T2) is not verified."
+   },
+   {
+    "claim": "October keywords_for_keywords: 205 tasks, 16.65 USD, ~10.9 seeds/task; full packing ≈112 tasks ≈10 USD (waste ~6-7 USD)",
+    "verdict": "unproven",
+    "note": "The counts are right (dfs_spend.out). The waste figure assumes packing across countries, which plan_batches forbids on purpose (s1_prefetch.py:75-93, same country only). The per-tour fallback (AA-653 notes, Tradeoffs) and s1_batch.py:171 (never prefetches) send at most 4 seeds per task (seed_builder.py:217-242 idea_seeds). Achievable savings are smaller and not measured."
+   },
+   {
+    "claim": "AA-747 caps each ideas task at the seeds of 5 tours, so tasks can carry fewer than 20 seeds",
+    "verdict": "unproven",
+    "note": "The code is as described (s1_prefetch.py:45-47, 337-351). But 5 tours x at most 4 seeds = at most 20, so the cap only bites when a chunk spans several countries. More importantly, f298b05c merged 09/10 21:52 +0700, AFTER every paid October day (01-08/10). It cannot explain the October spend."
+   },
+   {
+    "claim": "05/10 (73 tours, 5.79 USD) looks like the per-tour path",
+    "verdict": "unproven",
+    "note": "Arithmetic only: 123 live calls, 0.09n + 0.002m = 5.786, which gives about 63 ideas tasks + 60 SERP. That fits roughly one ideas task per tour (per-tour fallback or the s1_batch path), but there is no per-day endpoint split."
+   },
+   {
+    "claim": "The 7-day Redis cache (AA-625) logged 114 hits worth ~19-20 USD",
+    "verdict": "unproven",
+    "note": "114 fetch_all cache rows exist (handler.py:168-184 logs them). The by-day list is limited to 25 rows and omits the zero-cost days where 104 of them sit, so their timing is unknown. The ledger started 19/09, the same day AA-625 shipped (184a57ee), so it cannot show whether these hits were beyond the old 24h TTL. 'Saved by AA-625' is not shown; at most, Redis avoided about 114 bundles."
+   },
+   {
+    "claim": "Freshness keyed on exact canonical_place / keyword text; renames explain much of the 7,116 stale US places",
+    "verdict": "unproven",
+    "note": "The keying is confirmed (segment_research.py:597-607; segment_research_batch.py:275-276). FRESH_FOR is 182 days, so nothing researched since 25/09 has expired yet. The bigger, provable reasons are: the repair reset 1,953 places; batch research ran only a few scoped times (Bhutan 28-29/09, DE/FR/NL 12/10); and nothing ran between 12/10 and 08/11. Also, the unscoped path reads every atom_segment row, orphans included (segment_research.py:631-633). The renamed vs never-researched split is not measured."
+   },
+   {
+    "claim": "Tenant blog/T2 writing no longer buys DataForSEO; SERP question top-up is admin-script only with a 3 USD cap",
+    "verdict": "confirmed",
+    "note": "t2_rewrite_job.py:150-157; question_topup.py:14-22,39. A grep of every DataForSEOClient()/process_seo/run_segment_research caller finds only admin_pipeline.py:750, s1_batch.py:171, s1_seo_prefetch_job.py:62, segment_research_job.py:67, admin_segment_research.py and question_topup.py. No tenant or blog path."
+   },
+   {
+    "claim": "Batch over 7,116 stale US places: upper bound ≈48.9 USD (ideas 32.04); ≈16.8 USD without suggestions",
+    "verdict": "confirmed",
+    "note": "The arithmetic matches estimate_cost at segment_research_batch.py:131-147: 29x0.09 + 7,116x0.002 + 356x0.09. Operationally, max_places ≤ 200 per run means at least 36 runs, under the per-run DFS budget."
+   },
+   {
+    "claim": "Ms. Thư's reference repo aa-social-media is not reachable via gh",
+    "verdict": "confirmed",
+    "note": "gh search repos finds only unrelated repos. The AdventureAsia365-Ecosys org lists only AA-CIS-Infra, AA-CIS-App, AA-TripPlanner-Web, AA-Ecosys, AA-Booking and AA-Partner."
+   },
+   {
+    "claim": "(open question) search_demand US = 2000 may be a query LIMIT",
+    "verdict": "wrong",
+    "note": ".tmp-session/S273/dfs/dfs_spend.py:47-52: the search_demand-by-market query has no LIMIT, so 2000 is the real count."
+   }
+  ],
+  "missing": [
+   "The balance does not match the ledger. 49.87 → -0.12, top-up +50.00, 49.88 → 27.41 gives about 72.46 USD spent, while the ledger shows 70.98 before 08/11. The balance also fell 28.15 → 27.97 → 27.75 → 27.41 on 27/10, 28/10 and 01/11, days with no paid dfs_call_log rows (every cost-bearing day is in the top-25 list and the day sums equal 71.49). So about 0.7-1.5 USD of DataForSEO spend bypasses shared.dfs_call_log. One possible caller is the claude.ai DataforSEO connector or another tool on the same account; not verified.",
+   "Our own ledger contradicts the per-task price model: 1-keyword search_volume tasks on the same endpoint cost 0.09, while the 25/09 tasks of 1-13 keywords cost 0.058. Unit economics should assume about 0.09 per task, flat, up to 1000 keywords.",
+   "On the evidence, 25/09 cost was at least about 0.18 USD per researched place, not 0.12. At most 269 places were fresh for US/UK/AU after the repair. So our old loop was also more expensive per place than the reference (0.10-0.12), not just applied at a larger scale.",
+   "A second tenant-triggered DataForSEO path existed until d3921934 (29/09): tenant T2 called process_seo() on a seo_context miss, about 0.18/tour and outside every budget (t2_rewrite_job.py:152-155). The answer to 'does each tenant write re-run DFS' should cover both paths, research (AA-646, 28/09) and SEO bundle (KAN-90, 29/09).",
+   "There was no spend cap at all on 25/09. The 50 USD balance was the only stop. The cost guard (bd5c01ce, AA-649) and per-run budgets came on 28/09. Without the balance running out, the sweep would have kept buying.",
+   "Once volumes are batched, SERP (0.002 x places x markets) and ideas tasks are the main cost: Bhutan SERP 0.19 of 0.55, and 14.23 + 32.04 of the 48.9 USD estimate for 7,116 places. The '1.9 USD full sweep' framing hides this. AA-648's own dry run gave up to 25 USD for one full 3-market platform pass.",
+   "AA-747 (f298b05c, 09/10 evening) came after all paid October days, so it cannot explain October under-filled ideas tasks. Candidates are the per-tour fallback when prefetch failed or timed out (AA-653 notes, Tradeoffs: 2 tasks per tour) and the s1_batch.py path, which never prefetches and sends at most 4 seeds at the full 0.09.",
+   "The reference design's own numbers do not support '100 tours cost very little'. step0b:96-103: about 0.10-0.12 USD per place, and a Japan export of 24 trips gave 581 new places, about 24 new places per trip. 100 new tours would then be on the order of 200+ USD unless the places are already cached. Her 'suggestions' price is 0.0144/request, which is a different and cheaper endpoint than our Google Ads keywords_for_keywords at 0.09.",
+   "A research run with no scope reads every atom_segment row, including orphan Segments from re-atomize (segment_research.py:631-633; 8,578 orphans per segment_gc.py:3-6, cleaned only by AA-988). An unscoped run can therefore buy demand for places no live tour uses.",
+   "The 3-market fan-out on 25/09 came from the WanderLux tenant's configured buyer markets (resolve_buyer_markets, bbfd5c6f:524). A single tenant's market setting tripled a platform-wide purchase."
+  ]
+ }
+]

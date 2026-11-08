@@ -1,0 +1,43 @@
+{
+ "pieces": 60,
+ "by_channel": {
+  "facebook": 5,
+  "linkedin": 11,
+  "blog": 24,
+  "ads": 4,
+  "landing_page": 4,
+  "email": 4,
+  "tiktok": 4,
+  "instagram": 4
+ },
+ "cassette_hits": 49,
+ "cassette_misses_f9_needs_rejudge": 0,
+ "cassette_misses_seo_fit": 11,
+ "input_errors": 60,
+ "stored_sha_na": 57,
+ "stored_sha_match": 3,
+ "post_gate_edit": 0,
+ "edited_since_store": 0,
+ "seo_fit_calls": 11,
+ "seo_context_errors": 0,
+ "seo_taken_titles_max": 0,
+ "guard_pairs": 88,
+ "declared": {
+  "D-guard-1": 13,
+  "D-guard-2": 1
+ },
+ "not_compared": {
+  "MISS": 11
+ },
+ "undeclared": 0,
+ "missing_pieces": 0,
+ "guard_status_flips": {},
+ "opt_in": [
+  "guard",
+  "seo"
+ ],
+ "flags": {
+  "T9_SEO_BUILDER": "on",
+  "T9_REGRESSION_GUARD_MODE": "stable_keys"
+ }
+}

@@ -80,3 +80,13 @@ Mốc chờ: 3–5 ngày làm việc từ 30/10 (thứ Sáu) → khoảng **05�
 09:40Z 31/10: Claude Haiku 4.5 + Sonnet 4.6 chạy (acc4 đã qua xác minh); Claude đời 5 (Sonnet 5/5.5, Haiku 5.5,
 Opus 5.5) "not available for this account", như acc1. Nghĩa là: account mới đứng riêng vẫn gọi được Claude 4.x sau
 xác minh, nên Error 002 của acc3 là tình trạng riêng của acc3 (đúng như case đang xử lý).
+
+### AWS Sales / Account Team (S271 → S273)
+
+| Thời điểm (giờ VN) | Nội dung |
+|---|---|
+| 06/11 | Tech lead gửi form AWS Sales (xin Account Manager, quyền 7 model đời mới, quota TPM) |
+| 08/11 14:38 | AWS Account Team (Account Development, cùng Account Manager) trả lời: account "tạo tháng 7, dùng ít"; hỏi 4 điểm: tổng quan kinh doanh, use case, số người dùng, khối lượng Bedrock |
+| 08/11 17:09 | Tech lead gửi trả lời (agent soạn, S273): tổng quan + 4 use case; người dùng nội bộ 5–10, pilot 3 đại lý / 8 tuần, 20–50 đại lý / 12 tháng; khối lượng thật từ `shared.llm_call_log` (09/2026 ≈10.600 lượt, 11,6M token, ≈39 USD; 10/2026 ≈67.600 lượt, 139M token, ≈248 USD; ngày đỉnh 08/10 ≈110M token) và giải thích lịch sử billing nằm ở org reseller 17/08–29/10; dự báo pilot 150–300M token/tháng; xin quota Sonnet/Haiku 5.5 ≈400K TPM, Opus 5.5 / Sonnet 5 / 3 model GPT ≈100K TPM; đề nghị họp ngắn |
+
+Khi AWS trả lời tiếp: làm theo mục 4 (probe lại ma trận, quota, probe qua gateway, cập nhật AA-1004 / AA-1002).

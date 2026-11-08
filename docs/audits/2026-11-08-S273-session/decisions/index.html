@@ -1,0 +1,170 @@
+<title>Chốt W2 và W3 S273</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column of decision cards, each with context, options, a recommended pick and a save button. */
+:root {
+  --bg: #f6f7f4; --surface: #ffffff; --line: #d9ddd3; --fg: #1c211b; --muted: #5d665a;
+  --accent: #2f6b4f; --accent-soft: #dcebe2; --warn: #8a5a00; --warn-soft: #f6ead0; --ok: #24683f; --ok-soft: #dcefe2;
+  --body: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif; --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121512; --surface: #1a1f1a; --line: #2e362d; --fg: #e4e9e2; --muted: #9aa597;
+  --accent: #7cc4a0; --accent-soft: #1f3a2d; --warn: #e2b05a; --warn-soft: #3a2f17; --ok: #7fd09c; --ok-soft: #1c3424; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121512; --surface: #1a1f1a; --line: #2e362d; --fg: #e4e9e2; --muted: #9aa597;
+  --accent: #7cc4a0; --accent-soft: #1f3a2d; --warn: #e2b05a; --warn-soft: #3a2f17; --ok: #7fd09c; --ok-soft: #1c3424; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body) }
+.wrap { max-width: 860px; margin: 0 auto; padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 22px }
+h1 { font-size: clamp(24px, 3.4vw, 32px); margin: 0; line-height: 1.2; text-wrap: balance }
+h2 { font-size: 18px; margin: 0; line-height: 1.3; text-wrap: balance }
+.lede { color: var(--muted); margin: 0; max-width: 68ch }
+.status { font: 500 13px var(--mono); color: var(--muted) }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: grid; gap: 12px; min-width: 0 }
+.card header { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; justify-content: space-between }
+.tag { font: 500 12px var(--mono); color: var(--accent) }
+.ctx { margin: 0; color: var(--fg) }
+.facts { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; display: grid; gap: 2px }
+.opts { display: grid; gap: 8px }
+.opt { display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer }
+.opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft) }
+.opt input { margin-top: 4px }
+.opt b { font-weight: 600 }
+.rec { font: 500 11px var(--mono); color: var(--ok); background: var(--ok-soft); padding: 2px 6px; border-radius: 4px; margin-left: 6px; white-space: nowrap }
+.opt small { display: block; color: var(--muted); font-size: 13px }
+textarea { width: 100%; min-height: 56px; font: 14px var(--body); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; resize: vertical }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center }
+button { font: 600 14px var(--body); color: #fff; background: var(--accent); border: 0; border-radius: 8px; padding: 9px 16px; cursor: pointer }
+:root:not([data-theme="light"]) button { color: var(--bg) }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) button { color: #fff } }
+:root[data-theme="light"] button { color: #fff }
+button:disabled { opacity: .5; cursor: not-allowed }
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.saved { font-size: 13px; color: var(--ok) }
+.saved.warn { color: var(--warn) }
+footer { color: var(--muted); font-size: 13px }
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:8px">
+    <div class="status">S273 · 08/11/2026 · AA-1048 W2 · AA-1049 W3</div>
+    <h1>Chốt W2 và W3</h1>
+    <p class="lede">Năm câu cần tech lead quyết sau các lượt chạy thử tối nay. Mỗi câu có số liệu thật và một đề xuất đã chọn sẵn. Bấm <b>Chốt</b> ở từng câu; lựa chọn được lưu lại để agent đọc và làm theo.</p>
+    <div class="status" id="conn">Đang kết nối nơi lưu…</div>
+  </header>
+
+  <div id="cards"></div>
+
+  <footer>Bằng chứng: root <code>docs/audits/2026-11-08-S273-session/</code> (aa1049-w3-trial, aa1048-w2, aa1047-s1-trial). Chi tiêu AI trong phiên tới lúc này: S1 0,213 USD + W3 0,207 USD + vài cent ảnh CRM/TripPlanner.</footer>
+</div>
+
+<script>
+(function () {
+  var Q = [
+    { id: "w3-guard", tag: "W3 · T9", title: "Cờ T9_REGRESSION_GUARD_MODE=stable_keys",
+      ctx: "Guard này giữ ổn định các khoá đã đạt giữa các vòng sửa bài T9. Replay miễn phí trên 60 bài thật: 0 khác biệt chưa khai báo, chỉ khác biệt guard đã khai báo, không bài nào đổi trạng thái. Chạy thử trả phí 2 bài: 1 đạt, 1 bị giữ đúng lý do.",
+      facts: ["Replay: D-guard-1 13 bài, D-guard-2 1 bài, 0 lật trạng thái", "Hiện chỉ bật được theo từng job cho tenant audit (CIS #1383)"],
+      opts: [
+        { v: "audit-only", t: "Giữ bật theo từng job cho tenant audit, chưa bật cho mọi tenant", d: "Chờ W2 có nhãn để đo lại rồi mới quyết bật rộng.", rec: true },
+        { v: "global", t: "Bật cho mọi tenant trên worker", d: "Áp ngay cho mọi bài T9 mới." },
+        { v: "off", t: "Tắt hẳn", d: "Quay về đường main cho cả tenant audit." } ] },
+    { id: "w3-seo", tag: "W3 · T9", title: "Cờ T9_SEO_BUILDER",
+      ctx: "SEO builder dựng lại tiêu đề và meta description bằng code. Trong lượt chạy thử, bài bị giữ vì meta 119 ký tự (khung 140–155) dù builder đang bật, tức là builder chưa sửa được trường hợp này.",
+      facts: ["2 lượt seo-fit gọi model trong bài bị giữ", "Chưa có bằng chứng builder cải thiện tỉ lệ đạt"],
+      opts: [
+        { v: "keep-off", t: "Giữ tắt cho tới khi builder sửa được độ dài meta", d: "Agent mở việc sửa builder, có test cho trường hợp meta ngắn.", rec: true },
+        { v: "trial-more", t: "Chạy thử thêm 5 bài (khoảng 0,1 USD) trước khi quyết", d: "Thêm số liệu, chưa sửa code." } ] },
+    { id: "w3-t2", tag: "W3 · T2", title: "Cờ T2_ORCHESTRATOR=linear",
+      ctx: "Đường linear viết tour T2 một lượt, rẻ (0,06 USD, điểm 9,75). Nhưng contract kiểm cuối đếm được 0 ngày cho Master 12 ngày, trong khi đường linear tự kiểm là đủ ngày: hai bộ đếm ngày không khớp nhau. Lane l17 đang sửa.",
+      facts: ["Replay 33 bản: 0 khác biệt chưa khai báo; 9 bản chuyển sang cần review", "Lỗi đếm ngày chỉ thấy khi chạy thật"],
+      opts: [
+        { v: "fix-then-retrial", t: "Giữ tắt; sửa lỗi đếm ngày rồi chạy thử lại (dưới 0,5 USD)", d: "Bật chỉ khi lượt thử sau sạch contract.", rec: true },
+        { v: "drop", t: "Bỏ hướng linear, giữ đường main", d: "Không đầu tư thêm vào bộ điều phối mới." } ] },
+    { id: "w2-spend", tag: "W2 · chi phí", title: "Viết thêm bài để đủ claim held-out",
+      ctx: "Để đo bộ chấm claim đúng ngưỡng R1, mỗi bề mặt viết cần 784 claim held-out. Hiện thiếu: T2 7 bài, T9 blog 14 bài, T9 social 59 bài. Ước theo giá thật 30 ngày.",
+      facts: ["T2 +7 bài ≈ 1,33 USD", "T9 blog +14 bài ≈ 1,54 USD", "T9 social +59 bài ≈ 6,49 USD", "Tổng ≈ 9,4 USD"],
+      opts: [
+        { v: "phase1", t: "Duyệt đợt 1: T2 + T9 blog (≈ 2,9 USD), T9 social để sau", d: "Đo được hai bề mặt trước, chi ít.", rec: true },
+        { v: "all", t: "Duyệt cả 9,4 USD", d: "Đủ cả ba bề mặt một lần." },
+        { v: "none", t: "Chưa chi", d: "Chỉ đo trên phần held-out hiện có (ít, độ tin cậy thấp)." } ] },
+    { id: "w2-adjudication", tag: "W2 · phân xử", title: "Thứ tự phân xử tranh chấp",
+      ctx: "Vòng 1 có 84 claim tranh chấp đang chờ tech lead phân xử (trang Writing memory). Với tỉ lệ tranh chấp của vòng 1, đủ 784 claim mỗi bề mặt sẽ ra khoảng 1.400 tranh chấp, vượt xa 2–3 giờ đã định (D11).",
+      facts: ["Vòng 1: 150 claim, 67 tranh chấp + 17 audit", "D11 dự kiến 2–3 giờ cho tech lead"],
+      opts: [
+        { v: "t9-heldout-first", t: "T9 trước, chỉ phân xử claim held-out, mỗi đợt tối đa 2–3 giờ", d: "Agent sắp hàng đợi theo thứ tự này.", rec: true },
+        { v: "lower-bar", t: "Hạ mục tiêu xuống khoảng 400 claim mỗi bề mặt", d: "Ít việc hơn, độ chính xác đo thấp hơn (sửa ADR 0020)." },
+        { v: "all", t: "Giữ mục tiêu 784, phân xử hết", d: "Nhiều giờ công nhất." } ] }
+  ];
+
+  var cards = document.getElementById("cards");
+  var conn = document.getElementById("conn");
+  var db = null, saved = {};
+
+  function el(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs || {}) e.setAttribute(k, attrs[k]); if (html != null) e.innerHTML = html; return e; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  function render() {
+    cards.innerHTML = "";
+    var box = el("div", { style: "display:grid;gap:18px" });
+    Q.forEach(function (q) {
+      var s = saved[q.id];
+      var card = el("section", { class: "card", "aria-labelledby": "h-" + q.id });
+      card.appendChild(el("header", {}, '<h2 id="h-' + q.id + '">' + esc(q.title) + '</h2><span class="tag">' + esc(q.tag) + '</span>'));
+      card.appendChild(el("p", { class: "ctx" }, esc(q.ctx)));
+      card.appendChild(el("ul", { class: "facts" }, q.facts.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("")));
+      var opts = el("div", { class: "opts", role: "radiogroup", "aria-label": q.title });
+      var current = s ? s.choice : (q.opts.filter(function (o) { return o.rec; })[0] || q.opts[0]).v;
+      q.opts.forEach(function (o) {
+        var id = q.id + "-" + o.v;
+        var lab = el("label", { class: "opt", for: id });
+        lab.innerHTML = '<input type="radio" name="' + q.id + '" id="' + id + '" value="' + o.v + '"' + (o.v === current ? " checked" : "") + '>' +
+          '<span><b>' + esc(o.t) + '</b>' + (o.rec ? '<span class="rec">đề xuất</span>' : "") + '<small>' + esc(o.d) + '</small></span>';
+        opts.appendChild(lab);
+      });
+      card.appendChild(opts);
+      var ta = el("textarea", { id: "note-" + q.id, placeholder: "Ghi chú (không bắt buộc)", "aria-label": "Ghi chú cho " + q.title });
+      ta.value = s && s.note ? s.note : "";
+      card.appendChild(ta);
+      var row = el("div", { class: "row" });
+      var btn = el("button", { type: "button", id: "save-" + q.id }, "Chốt");
+      var msg = el("span", { class: "saved", id: "msg-" + q.id }, s ? "Đã chốt: " + esc((q.opts.filter(function (o) { return o.v === s.choice; })[0] || {}).t || s.choice) : "");
+      if (!db) btn.disabled = true;
+      btn.addEventListener("click", function () { save(q, card, btn, msg); });
+      row.appendChild(btn); row.appendChild(msg);
+      card.appendChild(row);
+      box.appendChild(card);
+    });
+    cards.appendChild(box);
+  }
+
+  function save(q, card, btn, msg) {
+    var pick = card.querySelector('input[name="' + q.id + '"]:checked');
+    if (!pick || !db) return;
+    btn.disabled = true; msg.className = "saved"; msg.textContent = "Đang lưu…";
+    db.doc("decisions/" + q.id).set({ question: q.title, choice: pick.value, note: card.querySelector("textarea").value.slice(0, 2000), at: new Date().toISOString() })
+      .then(function () { msg.textContent = "Đã chốt"; btn.disabled = false; })
+      .catch(function (e) { msg.className = "saved warn"; msg.textContent = "Chưa lưu được (" + ((e && e.code) || "lỗi") + "). Bạn có quyền ghi trang này không?"; btn.disabled = false; });
+  }
+
+  render();
+  var timer = setTimeout(function () { if (!db) conn.textContent = "Chưa kết nối được nơi lưu: có thể xem, nhưng chưa chốt được. Mở lại trang khi đã đăng nhập claude.ai."; }, 10000);
+  if (window.claude && window.claude.use) {
+    window.claude.use("db").then(function (d) {
+      if (!d) { clearTimeout(timer); conn.textContent = "Trang này không lưu được ở chế độ xem hiện tại."; return; }
+      db = d; clearTimeout(timer); conn.textContent = "Đã kết nối. Lựa chọn được lưu khi bấm Chốt.";
+      db.collection("decisions").onSnapshot(function (snap) {
+        saved = {};
+        (snap.docs || []).forEach(function (doc) { var v = doc.data ? doc.data() : doc; saved[doc.id] = v; });
+        render();
+      }, function () { render(); });
+      render();
+    }).catch(function () { clearTimeout(timer); conn.textContent = "Chưa kết nối được nơi lưu."; });
+  } else {
+    clearTimeout(timer); conn.textContent = "Mở trang trên claude.ai để chốt.";
+  }
+})();
+</script>

@@ -1,0 +1,241 @@
+{
+ "trial_cost_usd": 0.2066,
+ "checks": {
+  "jobs": 3,
+  "active": 0,
+  "failed": [
+   "cd89cbf6-f116-4de6-bb95-b0cac8c1c219: contract violation in stored text {'verdict': 'needs_review', 'actual': 'ai_generated', 'agrees': False, 'flip': 'unpublish', 'sha_match': True, 'exit': 'done', 'block_codes': ['T2_DAY_COUNT_VS_MASTER']}"
+  ]
+ },
+ "jobs": [
+  {
+   "job_id": "5d110748-8d19-408f-a9de-a9f3b981f8bb",
+   "kind": "t9_write",
+   "status": "succeeded",
+   "trial_flags": {
+    "applied": {
+     "T9_SEO_BUILDER": "on",
+     "T9_REGRESSION_GUARD_MODE": "stable_keys"
+    },
+    "refused": [],
+    "requested": {
+     "T9_SEO_BUILDER": "on",
+     "T9_REGRESSION_GUARD_MODE": "stable_keys"
+    }
+   },
+   "trial": {
+    "piece_id": "83da4917-6c93-4d83-bfe0-e26a9c0edeea",
+    "status": "held",
+    "attempt_number": 2,
+    "repair_rounds": 4,
+    "discarded_attempts": 1,
+    "failing_gates": [
+     "F4_seo_surface",
+     "F9_cta_fact"
+    ],
+    "fs_id": "abe2af6a-aa2b-47d7-b46c-0b3c00112f2c",
+    "seo_fit_calls": 2,
+    "contract": {
+     "verdict": "held",
+     "actual": "held",
+     "agrees": true,
+     "flip": null,
+     "sha_match": true,
+     "exit": "done",
+     "block_codes": [
+      "GATE:F4_seo_surface"
+     ]
+    },
+    "cost_by_stage": {
+     "f10_embed": {
+      "calls": 2,
+      "usd": 0.0003,
+      "not_ok": 0,
+      "shadow": 0,
+      "seo_fit": 0
+     },
+     "t10_judge": {
+      "calls": 2,
+      "usd": 0.0033,
+      "not_ok": 0,
+      "shadow": 0,
+      "seo_fit": 0
+     },
+     "t9_faq_answer_fit": {
+      "calls": 1,
+      "usd": 0.005,
+      "not_ok": 0,
+      "shadow": 0,
+      "seo_fit": 0
+     },
+     "t9_faq_filter": {
+      "calls": 1,
+      "usd": 0.0017,
+      "not_ok": 0,
+      "shadow": 0,
+      "seo_fit": 0
+     },
+     "t9_repair": {
+      "calls": 3,
+      "usd": 0.0041,
+      "not_ok": 0,
+      "shadow": 0,
+      "seo_fit": 2
+     },
+     "t9_write": {
+      "calls": 2,
+      "usd": 0.0606,
+      "not_ok": 0,
+      "shadow": 0,
+      "seo_fit": 0
+     }
+    },
+    "cost_usd": 0.075
+   }
+  },
+  {
+   "job_id": "45b36c8a-26fa-4166-b77d-30b7d1a12f80",
+   "kind": "t9_write",
+   "status": "succeeded",
+   "trial_flags": {
+    "applied": {
+     "T9_SEO_BUILDER": "on",
+     "T9_REGRESSION_GUARD_MODE": "stable_keys"
+    },
+    "refused": [],
+    "requested": {
+     "T9_SEO_BUILDER": "on",
+     "T9_REGRESSION_GUARD_MODE": "stable_keys"
+    }
+   },
+   "trial": {
+    "piece_id": "dfad94b9-3b0c-47ab-b8df-2d322fac64e2",
+    "status": "approved",
+    "attempt_number": 2,
+    "repair_rounds": 2,
+    "discarded_attempts": 1,
+    "failing_gates": [
+     "F9_cta_fact"
+    ],
+    "fs_id": "d0fdf539-fb8d-48a4-8766-017b21286354",
+    "seo_fit_calls": 0,
+    "contract": {
+     "verdict": "approved",
+     "actual": "approved",
+     "agrees": true,
+     "flip": null,
+     "sha_match": true,
+     "exit": "done",
+     "block_codes": []
+    },
+    "cost_by_stage": {
+     "f10_embed": {
+      "calls": 2,
+      "usd": 0.0003,
+      "not_ok": 0,
+      "shadow": 0,
+      "seo_fit": 0
+     },
+     "t10_judge": {
+      "calls": 2,
+      "usd": 0.0021,
+      "not_ok": 0,
+      "shadow": 0,
+      "seo_fit": 0
+     },
+     "t9_faq_answer_fit": {
+      "calls": 1,
+      "usd": 0.0045,
+      "not_ok": 0,
+      "shadow": 0,
+      "seo_fit": 0
+     },
+     "t9_faq_filter": {
+      "calls": 1,
+      "usd": 0.0009,
+      "not_ok": 0,
+      "shadow": 0,
+      "seo_fit": 0
+     },
+     "t9_repair": {
+      "calls": 2,
+      "usd": 0.0026,
+      "not_ok": 0,
+      "shadow": 0,
+      "seo_fit": 0
+     },
+     "t9_write": {
+      "calls": 1,
+      "usd": 0.0594,
+      "not_ok": 0,
+      "shadow": 0,
+      "seo_fit": 0
+     }
+    },
+    "cost_usd": 0.0698
+   }
+  },
+  {
+   "job_id": "cd89cbf6-f116-4de6-bb95-b0cac8c1c219",
+   "kind": "t2_rewrite",
+   "status": "succeeded",
+   "trial_flags": {
+    "applied": {
+     "T2_ORCHESTRATOR": "linear"
+    },
+    "refused": [],
+    "requested": {
+     "T2_ORCHESTRATOR": "linear"
+    }
+   },
+   "trial": {
+    "version_id": "99a34d01-4500-4aaa-9659-5d43b393cd25",
+    "version_number": 5,
+    "status": "ai_generated",
+    "score": 9.75,
+    "qa_status": "passed",
+    "qa_repair_count": 0,
+    "fs_id": "de9f1f97-c0bf-4564-8207-9135c5d2bca3",
+    "linear_path": true,
+    "budget_used": {
+     "usd": 0.061735,
+     "voice": 1,
+     "repair": 0,
+     "writer": 1,
+     "usd_max": 0.25,
+     "voice_max": 1,
+     "repair_max": 3,
+     "writer_max": 2
+    },
+    "contract": {
+     "verdict": "needs_review",
+     "actual": "ai_generated",
+     "agrees": false,
+     "flip": "unpublish",
+     "sha_match": true,
+     "exit": "done",
+     "block_codes": [
+      "T2_DAY_COUNT_VS_MASTER"
+     ]
+    },
+    "cost_by_stage": {
+     "t2_generate": {
+      "calls": 1,
+      "usd": 0.0611,
+      "not_ok": 0,
+      "shadow": 0,
+      "seo_fit": 0
+     },
+     "t2_judge": {
+      "calls": 2,
+      "usd": 0.0007,
+      "not_ok": 1,
+      "shadow": 0,
+      "seo_fit": 0
+     }
+    },
+    "cost_usd": 0.0618
+   }
+  }
+ ]
+}
