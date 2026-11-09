@@ -1,18 +1,18 @@
 ---
 id: SEC-04-dpa-annex2
-title: "DPA Annex 2: technical and organisational measures (draft v0.4)"
+title: "DPA Annex 2: technical and organisational measures (draft v0.5)"
 description: "Annex 2 of the partner-agency DPA (and SCC Annex II): each security measure marked Live with its code, Terraform or audit evidence and the data-standard rule or ADR it implements, or Planned with the gate it must pass; no measure is claimed that does not run."
 type: reference
 status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-crm-api, aa-crm-web, aa-partner-portal, aa-cis-api, aa-cis-worker, aa-booking-api, aa-cis-dev-db]
-last_reviewed: 2026-11-08
+last_reviewed: 2026-11-09
 review_every_days: 30
-related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex3, ARCH-08-data-management, SEC-08-s268-crm-security-review, OPS-03-pilot-tenant, AA-820, AA-969, AA-970, AA-1004, AA-1035, AA-1038]
+related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex3, ARCH-08-data-management, SEC-08-s268-crm-security-review, OPS-03-pilot-tenant, AA-820, AA-900, AA-969, AA-970, AA-1004, AA-1035, AA-1038, AA-1048]
 ---
 
-# DPA Annex 2: technical and organisational measures (draft v0.4)
+# DPA Annex 2: technical and organisational measures (draft v0.5)
 
 > [!WARNING]
 > Draft for counsel, not legal advice. Part of the [Data Processing Agreement](dpa.md); also Annex II of the SCCs
@@ -24,6 +24,12 @@ request, the live schema dump, an audit folder or a session log in [`docs/sessio
 standards ([Part B, data management](../architecture/data-standards/02-data-management.md)) cited as DM-n.n, and the
 ADRs in [`docs/adr/`](../adr/). Repos: CIS = AA-CIS-App, BK = AA-Booking, CRM = AA-Partner, INF = AA-CIS-Infra.
 AA promises the Live measures; the Planned ones are listed so the Agency knows what is not there yet.
+
+**What changed in v0.5 (2026-11-09).** M-20 and §0 no longer say that AA keeps no AI output text at all: the AI call
+records keep none, but since 2026-11-06 the CIS AI gateway also keeps the raw reply of each model attempt in a separate
+reply store (CIS migration 385), with a proposed 30-day window and no deletion job yet. New §2 item 9: the tools that
+pick Content studio samples for the quality panel do not skip the pilot agency. New §3 point 8: whether measuring AA's
+AI checks on agency content is within the Agency's instructions. No other measure changed.
 
 **What changed in v0.4 (2026-11-08).** M-8: the Trip Planner's web rules run in the regional WAF web ACL in front
 of the load balancer since its move to AWS ECS (AA-1038, session S272), so the CloudFront-scope WAF listed as
@@ -50,7 +56,7 @@ only as strong as its weakest Live row; the gaps are in §2.
 | Encryption | At rest (database, storage, per-agency CRM field keys in AWS KMS) and in transit (HTTPS everywhere, TLS required on every database connection) | M-2 to M-6 |
 | Access control | Agency users: invitation-only partner sign-in pool with MFA required. AA staff: the Cognito WORKFORCE pool, admin-created accounts only, one-time e-mail codes, deny-by-default roles with a per-agency scope (staff MFA optional today, §2 item 1). No personal database logins; per-app database roles; secrets per app | M-7, M-11 to M-17 |
 | Tenant isolation | CRM: row-level security forced on every CRM table with one tenant policy; no other AA app holds a grant on the CRM schema; a test refuses any other database access path. Content studio: the agency comes only from a session minted from an active membership; row-level security for the tenant database role on the routes moved to it, application-level scoping on the other routes and on the membership and account tables. Booking B2B: application-level scoping by the agency the CRM names, no row-level security (§2 item 8) | M-9, M-10 (CRM), M-9b (Content studio), M-9c (Booking B2B) |
-| Personal data before a model call | CRM: personal data scrubbed in three passes before any model call, a failed scrub refuses the call. Content studio and AA content stages: no identifying personal data in prompts, by rule, with the `pii` stage class enforced by the database and the gateway. AI call records keep no prompt or output text | M-18 to M-21 (Trip Planner gap: §2 item 5) |
+| Personal data before a model call | CRM: personal data scrubbed in three passes before any model call, a failed scrub refuses the call. Content studio and AA content stages: no identifying personal data in prompts, by rule, with the `pii` stage class enforced by the database and the gateway. AI call records keep no prompt or output text; the CIS gateway's reply store keeps model replies (never prompts, none for a `pii` stage) for a proposed 30 days | M-18 to M-21 (Trip Planner gap: §2 item 5; pilot gap of the quality samples: §2 item 9) |
 | Retention | Windows per table in the DM-7.1 retention table, enforced by owner jobs (first run of each kind under DRY RUN); a table whose window is still proposed keeps its rows until the window is approved (Annex 1 says which); erasure and offboarding with a receipt; backups 14 days | M-29, M-31, M-32 ([Annex 1](dpa-annex-1-processing.md) "Retention" per app) |
 | Incident handling | Severities, a SEV1 for any exposure or loss of personal data, the business owner within 30 minutes, affected agencies within 2 hours, a written review; audit trails in every app and AWS CloudTrail | M-23, M-24, M-26 (DPA clause 8) |
 
@@ -91,7 +97,7 @@ only as strong as its weakest Live row; the gaps are in §2.
 |---|---|---|---|---|
 | M-18 | **Personal data is scrubbed before any CRM model call**: three passes (the trip's known names and contacts, patterns such as e-mail, phone, passport, card, ID numbers, and Amazon Bedrock Guardrails); any error or timeout refuses the call. A corpus of 254 synthetic English and Vietnamese samples must show 0 leaks in CI | Live (CRM AI is off by default per Agency; on Dev the drafts run on Amazon Nova Lite through a `us.` inference profile, always after the scrub) | CRM `app/privacy/`, CONTEXT "F3 PII scrubber", workflow "Scrub corpus"; INF `modules/environment/crm_llm.tf` | DM-6.4; ADR 0008a §5 |
 | M-19 | No identifying personal data in AI prompts of the Content studio and AA content stages; every such stage is classed `content`; a stage classed `pii` may only use AWS and a US deployment, enforced by a database check and the gateway | Live (rule by review; class enforced by CIS 373) | CIS migration 373 (`llm_role_config_pii_scope_check`), `shared/llm_client/vendor_route.py` | DM-6.4; ADR 0019 d12; ADR 0009 decision 10 |
-| M-20 | AI call records keep the stage, model, provider, tokens, cost and time, never the prompt or output text; CRM drafts keep placeholders, and the placeholder map is sealed and expires after 24 hours | Live | `shared.llm_call_log`, `crm.llm_call` (dump); CRM `app/privacy/placeholder_store.py` | DM-6.4; ADR 0009 decision 8 |
+| M-20 | AI call records keep the stage, model, provider, tokens, cost and time, never the prompt or output text; CRM drafts keep placeholders, and the placeholder map is sealed and expires after 24 hours. **Separately**, the CIS AI gateway keeps the raw reply of each model attempt in its reply store (`shared.llm_cassette`, CIS 385): never the prompt text (a hash only), no reply text for a stage classed `pii` (none in CIS today), at most 256 KiB per reply, written by the gateway only, never read by an Agency route or exported, deleted with the Agency by the tenant erasure job. Its 30-day window is proposed and has no deletion job yet (DM-7.1), so rows stay until that job exists. The Trip Planner and CRM gateways have no reply store | Live (the reply store's window: Planned, before production) | `shared.llm_call_log`, `crm.llm_call`, `shared.llm_cassette` (dump); CRM `app/privacy/placeholder_store.py`; CIS `shared/llm_client/cassette.py` (switch `LLM_CASSETTE`, default `record`), `services/erasure/inventory.py` | DM-6.4; ADR 0009 decision 8; ADR 0020 "Gateway amendments" d8 |
 | M-21 | Personal data stays out of job payloads, logs and error reports: job payloads hold ids only (checked at enqueue); log lines and error reports pass a scrubber; request paths with link tokens are logged redacted; error reporting sends no default personal data, no request bodies, no cookies and no local variables | Live | CRM `app/jobs/payload_guard.py`, `app/observability/scrub.py`, `request_id.py` (S268 F4); CIS `shared/sentry_init.py` (AA-870, AA-941); BK and TP same settings (AA-871) | DM-6.3, DM-6.4 |
 | M-22 | Personal data is tagged per column in the database (`pii:` classes), so erasure and access reviews are mechanical; a generated inventory checks every tagged column against the records of processing | Live, partly (the CRM rows of the register are still to be written) | [Register](register.md) "Column inventory"; `tools/data/gen_pii_inventory.py` | DM-6.1 |
 
@@ -165,6 +171,13 @@ that agency's export failed. It was fixed with a test and a code guard, and a fa
    `booking`; the CRM names the agency and Booking filters by it. A missing filter in a new query would therefore not
    be stopped by the database. Moving the remaining Content studio routes to the tenant pool, and whether Booking B2B
    gets row-level security, is engineering work whose timing the tech lead sets.
+9. The quality panel's samples (Annex 1 §3, "Quality records") are picked from stored Content studio outputs by
+   AA-CIS-App `scripts/aa729/select_samples.py` and exported as claim text by `scripts/aa1048/cli.py`; on `main`
+   (read 2026-11-09) neither checks the pilot marker, so M-25 item 3 ("batch jobs skip the pilot agency") does not
+   cover them, and the exported text is read in AA's engineering sessions with AI agents. Agency content there is
+   marketing text, with no client personal data by rule (DPA clause 13.3), but it is the Agency's. Before the pilot
+   agency's real content exists, either the tools skip the pilot agency, or the Agency is told and agrees **[tech lead
+   decides; engineering change in AA-CIS-App]**.
 
 ## 3. Points for counsel and the business owner
 
@@ -181,3 +194,4 @@ b20, b10).
 | 5 | Whether a penetration test (M-28) and a SOC 2 or ISO 27001 report (§2 item 6) must be promised with a date | **[BUSINESS OWNER]**, then **[COUNSEL]** for the wording | M-28 |
 | 6 | Whether the AWS terms bind through the billing reseller, and whether the reseller is a sub-processor ([Annex 3](dpa-annex-3-subprocessors.md) §1.1) | **[COUNSEL]** | Annex 3, Annex 4 |
 | 7 | Whether this annex can stand as SCC Annex II as written, or needs the SCC wording per measure | **[COUNSEL]** | [Annex 4](dpa-annex-4-transfers.md) |
+| 8 | Whether keeping model replies, FactSheets, claim labels and shadow verdicts to measure and improve AA's AI checks ([Annex 1](dpa-annex-1-processing.md) §3, "Quality records") is processing on the Agency's instructions or an AA purpose, and so whether DPA clause 1.3 must name it; and whether the proposed windows (30 days to 12 months) are acceptable | **[COUNSEL]**, then the tech lead approves the windows (DM-7.5) | DPA clauses 1.3, 3.4; AI Schedule clause .8(a) |

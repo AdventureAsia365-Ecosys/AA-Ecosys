@@ -210,3 +210,67 @@ S270 close snapshot.
   (a cross-reference fix, no new commitment).
 - Which tenant-pool route switches are off on Dev (Redis, `TENANT_POOL_FORCE_ADMIN_FLAGS`) was not re-read: M-9b
   says so instead of claiming every route runs on the tenant pool.
+
+## S274 (lane l4-aa820-dpa, 2026-11-09): DPA v0.4 matched to Dev, the Tenant Terms clause
+
+### Decisions
+
+- **Re-check the pack against `main`, not rewrite it.** Annexes 1, 3 and 4 already had full text (v0.3); the lane
+  found what drifted since 2026-11-06 and fixed only that. Drift found: CIS 383 (route control version 7: no OpenAI
+  writer rung, no Nova Lite judge rung), CIS 385 (reply store `shared.llm_cassette`: model output text kept, which
+  contradicted "AA keeps no AI output text" in DPA 3.4, Annex 1 §1, Annex 2 M-20/§0 and AI Schedule §6), CIS 386 / 388 /
+  391 (FactSheets, claim labels, shadow verdicts with agency content), TripPlanner traveller sign-in (tp-019) and lead
+  routing per agency (CIS 379 / 390, tp-026), Zoho in the secrets register vendor rows.
+- **Versions:** DPA v0.4, Annex 1 v0.4, Annex 2 v0.5 (it was v0.4 since S273), Annex 3 v0.4, Annex 4 v0.4. The AI
+  Schedule stays **v1.0**: its clause text is approved (b20), so the cassette and the narrower provider use go into
+  drafting notes (.1, .8(a)) and §6 facts, with a proposed v1.1 sentence for counsel.
+- **The quality purpose is an open question, not decided.** Keeping agency content to measure AA's own checks may be
+  an AA purpose under DPA 1.3. Written as [COUNSEL] in Annex 1 §3, Annex 2 §3 point 8 and DPA C14.
+- **`tenant-terms-ai-clause-draft.md` becomes a real page again** (draft v0.3, catalog id `SEC-04-ai-clause`): the short
+  clause for the main tenant terms, each sentence mapped to Schedule v1.0, so it adds no duty. The pilot letter keeps
+  pilot-set clause [●].2; this clause is for the partner agreement once a template exists. Old links keep working.
+- **AI Use Register v1.13** instead of rewriting every row: a version note says CIS 383 wins over the row chains it
+  names (the v1.1 pattern), and the provider-list bullets are corrected.
+- `dpa-template.md` left as is: it is `status: superseded` (by `dpa.md`); the computed task listed it by name only.
+
+### Changed
+
+- `docs/legal/dpa.md` (v0.4: version row, 3.4 reply-store sentence + drafting note, C14).
+- `docs/legal/dpa-annex-1-processing.md` (v0.4: §1 training row, §3 purpose + "Quality records" row + retention, AI row
+  v7; §5 lead routing, traveller sign-in, retention; schema dump date).
+- `docs/legal/dpa-annex-2-security.md` (v0.5: §0 theme row, M-20, §2 item 9, §3 point 8).
+- `docs/legal/dpa-annex-3-subprocessors.md` (v0.4: sources, §1.1 Cognito / SES, §1.2 intro + Bedrock + OpenAI rows,
+  §1.3 DreamHost / Zoho, §2 Geoapify and DataForSEO split, §4 change row).
+- `docs/legal/dpa-annex-4-transfers.md` (v0.4: §1 OpenAI row, Agency endpoint row).
+- `docs/legal/tenant-terms-ai-clause-draft.md` (new text), `docs/legal/tenant-ai-schedule.md` (version row, two
+  drafting notes, §6, §9), `docs/legal/pilot-contract-set.md` (§1 rows 3 and 6, wired-in row, checks 9-10),
+  `docs/legal/dpa-pack-outline.md` (status line), `docs/legal/readiness-packet.md` + `.vi.md` (§4, §12, Annex A
+  follow-ups), `docs/legal/register.md` (OpenAI row, Zoho row), `docs/architecture/ai-use-register.md` (v1.13).
+
+### Tradeoffs
+
+- Facts that need AWS (acc3 model access today, whether a Dev test tenant holds a Trip Planner subscription) were not
+  read live: the pages say "at the last recorded check (2026-11-06)" and "not checked live" instead.
+- The portal pages (AA-Partner) still say an OpenAI model "may write as a last resort". Over-disclosure misleads no
+  one about where content goes, so the fix is a page-copy follow-up, not part of this docs-only PR.
+
+### Should know
+
+- New engineering gaps surfaced (not fixed here): the quality sample tools (`scripts/aa729/select_samples.py`,
+  `scripts/aa1048/cli.py`) do not skip the pilot agency (Annex 2 §2 item 9, pilot-set check 9); the four quality
+  tables have proposed windows and no deletion jobs (pilot-set check 10).
+- Route control version 7 = CIS 383, applied with CIS 381-385 on 2026-11-06 (S271 session log).
+
+### Review fix pass (S274, 2026-11-09)
+
+- **Trip Planner lead row (reviewer, major).** Annex 4 §1 and its v0.4 note had decided that a lead sent to the
+  Agency's own endpoint "is not an onward transfer by AA", a legal call the page's banner leaves to counsel. Now both
+  state the fact (the request goes to the Agency, its controller) and the engineering reading with **[COUNSEL]**; a new
+  §4 "Open transfer questions (counsel)" item 1 names the webhook (Agency-hosted, possibly outside the EU) and SES
+  e-mail paths, and DPA point C10 carries the question.
+- **Claim labels are exported (reviewer, major; verified on AA-CIS-App `main`).** `scripts/aa1048/cli.py` `cmd_finals`
+  reads `shared.eval_claim_label` (`services/ground_truth/store.read_rows`) and writes `importer.finals_rows`, which
+  include `claim_text`, to a scratch file; `payload` writes claim text too. Annex 1 §3 "Quality records" no longer says
+  all four stores are never exported: the reply store, FactSheets and shadow verdicts are not (no script on `main`
+  reads them), claim labels are, to the git-ignored scratch folder, tied to Annex 2 §2 item 9 and pilot check 9. The
+  register row and Annex 2 M-20 speak only of the reply store and FactSheets, so they stay.

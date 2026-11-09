@@ -1,18 +1,18 @@
 ---
 id: APP-06-ai-register
 title: "AI Use Register"
-description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps, and the machine-readable marking of AI output (EU AI Act Art. 50). v1.12."
+description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps, and the machine-readable marking of AI output (EU AI Act Art. 50). v1.13."
 type: reference
 status: draft
 owner: nghiep
 audience: [engineer, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-api, aa-cis-worker, tripplanner-lambda, aa-crm-api, aa-booking-api, aa-booking-admin]
-last_reviewed: 2026-11-06
+last_reviewed: 2026-11-09
 review_every_days: 30
 related: [ARCH-01-ai-gateway, APP-06-routes, APP-06-eval, APP-06-prompts, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-804, AA-820, AA-1040]
 ---
 
-# AI Use Register (v1.12)
+# AI Use Register (v1.13)
 
 One row per place where the ecosystem calls an AI model or a paid data provider. It answers, for each stage: what it
 is for, who owns the decision to change it, which provider and model family serve it today, which data may leave AWS,
@@ -89,6 +89,19 @@ which human checks the output before anyone relies on it.
   may also check, on the Anthropic API first and Amazon Bedrock second; OpenAI models and Amazon Nova / Meta Llama
   review and check; an OpenAI model may write as a last resort. AA may change the order without notice; adding or
   replacing a provider follows the DPA notice ([DPA](../legal/dpa.md) 6.2). No route change.
+- **v1.13 (2026-11-09, S274, AA-820; records a route change made on 2026-11-06):** CIS migration 383 (AA-900, S271
+  wave W0, tech lead decision D7; applied on Dev on 2026-11-06 as route control version 7) removed GPT-6 Luna on the
+  OpenAI API (`gpt-6-luna-openai`) from all 13 writer routes and Amazon Nova Lite (`nova-lite`) from the 10 judge and
+  instrument rows (every judge row, the two brand audits and `t10_adjudicate` included, and the validate instrument
+  `t10_claims`); the other validate rows (`t9_faq_filter`, `t9_faq_answer_fit`, the `a3_*` rows, `s1_source_facts`)
+  keep any Nova Lite rung on purpose. A writer whose Claude rungs all fail now stops with `queue_retry`; a judge
+  whose GPT rungs all fail returns no verdict. **For the stages it names, migration 383 wins over the "Provider /
+  family today" column of the rows below**, which still show the post-376 chains ("GPT-6 Luna (OpenAI API) last
+  resort", "→ Nova Lite (acc2)"). The provider list for the tenant terms is corrected below: an OpenAI model no
+  longer writes. Also new since 2026-11-06 (CIS 385): the CIS gateway keeps the raw reply of each provider attempt in
+  `shared.llm_cassette` (prompt hash only, no text for a `pii` stage, DM-7.1 30 days proposed), so "no prompt or output
+  text" holds for the ledger, not for every store; [DPA Annex 1](../legal/dpa-annex-1-processing.md) §3 and
+  [Annex 2](../legal/dpa-annex-2-security.md) M-20 say so.
 - **Who updates it:** the PR that adds, removes or re-routes a stage, adds a provider, or changes a stage's data
   scope, budget or human gate updates its row. A new provider also updates the tenant terms list (AA-820).
 
@@ -245,10 +258,11 @@ company's name (ADR 0019 b19); tenants never hold a provider key.
   brand audit, the FAQ checks and the claim extraction), TripPlanner narration (`tp_compose`, once TripPlanner's
   gateway can call them) and, after its own change, the CRM. A Claude model goes to the Anthropic API first (route
   control version 6; before it, only when its AWS deployment refused or failed); GPT-6 Luna goes to the OpenAI API (its twin row) when its acc3
-  deployment refuses or fails, before the next model of a judge or GPT validate route; and GPT-6 Luna on the OpenAI
-  API is the last rung of the writer routes. So an OpenAI model may **write** tenant content when Claude is
-  unavailable. Terms wording: for the OpenAI API writing, "as a last resort"; for the Anthropic API and the OpenAI
-  API scoring and checking, providers that receive the content (v1.11), not "a fallback".
+  deployment refuses or fails, before the next model of a judge or GPT validate route. Until CIS 383 (2026-11-06)
+  GPT-6 Luna on the OpenAI API was also the last rung of the writer routes; since then **no OpenAI model writes**
+  (v1.13). Terms wording: for the Anthropic API and the OpenAI API scoring and checking, providers that receive the
+  content (v1.11), not "a fallback"; the portal pages' "an OpenAI model may write it as a last resort" (Draft v0.5)
+  over-states since 383 and goes in their next version.
 - **Follow-up for the business owner (AA-820):** the tenant terms, the AI Schedule and the DPA must name the Anthropic
   API (Anthropic, PBC, direct) and the OpenAI API (OpenAI, direct) as providers that may receive tenant content and
   TripPlanner traveller text, not only as writing fallbacks of the T-series writers (since CIS 366 the tenant judges
@@ -265,8 +279,10 @@ company's name (ADR 0019 b19); tenants never hold a provider key.
   (both gateways call Bedrock only).
 - **Jev (TypeSafe)**: yes/no decision checks; for tenant content only for allowlisted tenants.
 - **DataForSEO, Geoapify**: keywords and place names only, never tenant text.
-- **Amazon (Nova) and Meta (Llama) models on Bedrock (acc2)**: fallback for judge and validate stages when acc3
-  refuses (CIS 331–333, AWS first, vendor APIs last). On tenant stages only Amazon Nova Lite is routed; Meta Llama 4
+- **Amazon (Nova) and Meta (Llama) models on Bedrock (acc2)**: fallback for validate stages when acc3 refuses (CIS
+  331–333, AWS first, vendor APIs last); since CIS 383 (2026-11-06) no longer for the judge routes, `t10_adjudicate`
+  or `t10_claims`. On tenant stages only Amazon Nova Lite is routed, and only behind the two FAQ checks (flag
+  `T9_FAQ_LLM_FILTER`, default off); Meta Llama 4
   Scout and Llama 4 Maverick serve one platform stage each (`a3_place_card_check`, `a3_place_dedupe`). Terms wording
   (Draft v0.5): "other models on Amazon Bedrock (Amazon Nova, Meta Llama) may also review and check it" (until v0.4:
   "may be used as a fallback"). The other acc2 models (Nova 2 Lite, Moonshot Kimi K3) are on no route and stay out of the tenant terms until one
@@ -329,6 +345,7 @@ decision or issue that closes them, or say "none planned".
 
 | Version | Date | Change |
 |---|---|---|
+| v1.13 | 09/11/2026 (S274, AA-820) | Records CIS 383 (route control version 7, applied 06/11): no OpenAI writer rung, no Nova Lite judge or instrument rung (the other validate rows keep theirs); 383 wins over the row chains it names; provider list for the tenant terms corrected; CIS 385 reply store noted. No new route change. |
 | v1.12 | 06/11/2026 (S271, AA-820) | The AA-Partner Content studio terms and privacy pages moved to Draft v0.5 (EN and VI): Claude models write and may also check, the direct Anthropic API and OpenAI API are providers that may process the content (not a fallback), Amazon Nova / Meta Llama may also review and check, an OpenAI model may write as a last resort; AA may change the order without notice, adding or replacing a provider follows the DPA notice (6.2). Closes the v1.11 open item. Terms-wording notes of the provider list and the T-stage narrative follow. No route change. |
 | v1.11 | 06/11/2026 (S271, AA-820) | Route control version 6 written down (S269, AA-1042): the Anthropic API first for every Claude model, acc3 second; the OpenAI API answers the GPT judges, audits and checks while acc3 refuses (deferred refused rungs, CIS #1332). Rows name each Claude model's providers in that order; provider list for the tenant terms no longer calls the direct APIs fallbacks only; open item: the AA-Partner Content studio terms and privacy pages. No route change. |
 | v1.10 | 05/11/2026 (S269, AA-1042) | CIS 376: every Claude model of the Anthropic API key is in the gateway catalog with an Anthropic API deployment behind AWS (Fable 5.1 / 5, Opus 5 / 4.8 / 4.7 API only; Opus 4.6 / 4.5 switched on; Sonnet 4.6 / Haiku 4.5 now on acc3 and the API). The 18 rows whose chains changed to keep six attempts per request: each drops its lowest Claude rung (tp_compose its OpenAI API rung). No stage routes Sonnet 5, Opus or Fable. |

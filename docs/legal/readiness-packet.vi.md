@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-08
+last_reviewed: 2026-11-09
 review_every_days: 90
 related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, SEC-04-ai-schedule, SEC-04-dpa-pack, AA-886, AA-820, AA-839, AA-877, AA-1038]
 lang: vi
@@ -80,7 +80,7 @@ B chỉ khi có nhu cầu tiếp thị. *Chi tiết:* [kiểm tra ghi nhận đ�
 
 ## 4. Thỏa thuận xử lý dữ liệu và nhà cung cấp
 
-*Hiện trạng:* bản nháp thỏa thuận xử lý dữ liệu cho đối tác (v0.3) đã sẵn sàng để xem. Bản nháp nêu đối tác là bên kiểm soát
+*Hiện trạng:* bản nháp thỏa thuận xử lý dữ liệu cho đối tác (v0.4, 09/11/2026) đã sẵn sàng để xem. Bản nháp nêu đối tác là bên kiểm soát
 dữ liệu họ đưa vào portal và Adventure Asia là bên xử lý, liệt kê nghĩa vụ của bên xử lý, và có các phụ lục về hoạt động
 xử lý, biện pháp bảo mật (mỗi biện pháp ghi rõ đang chạy hay mới dự kiến) và nhà cung cấp dịch vụ. Sổ đăng ký liệt kê các
 nhà cung cấp tìm thấy trong mã nguồn: AWS (máy chủ, e-mail, đăng nhập, mô hình AI qua Amazon Bedrock), các nhà cung cấp
@@ -88,9 +88,12 @@ AI Anthropic (API trực tiếp, đường đầu tiên cho các mô hình Claud
 cấp hộp thư adventure.asia, và các công cụ làm việc. Jev chỉ nhận nội dung của một danh sách ngắn các đối tác thử, cho tới
 khi có thỏa thuận xử lý dữ liệu và không lưu dữ liệu với Jev; thỏa thuận đó là một điểm còn mở. Các điểm mở khác: có phải
 liệt kê các đại lý bán lại AWS (TrueIDC cho tài khoản máy chủ, eCloudvalley cho tài khoản AI) và các hãng làm mô hình phía
-sau Bedrock hay không, và tình trạng hợp đồng với từng nhà cung cấp. *Phương án:* (A) liệt kê đủ mọi nhà cung cấp, kể cả
+sau Bedrock hay không, và tình trạng hợp đồng với từng nhà cung cấp. Bản 0.4 khớp với những gì đang chạy trên Dev ngày 09/11/2026: từ 06/11/2026 mô hình OpenAI chỉ chấm điểm và kiểm tra
+nội dung của đối tác, không còn viết; phần AI nội dung còn giữ câu trả lời của mỗi lần gọi mô hình trong một thời gian
+ngắn (đề xuất 30 ngày, chưa có job xoá) để kiểm tra và cải thiện chính các bước kiểm tra của mình, việc này cần luật sư
+xem (điểm C14); và nhà cung cấp hộp thư công ty (DreamHost hay Zoho) vẫn cần xác nhận. *Phương án:* (A) liệt kê đủ mọi nhà cung cấp, kể cả
 đại lý bán lại, rồi bỏ bớt những bên luật sư cho là không cần; (B) chỉ liệt kê các bên trực tiếp xử lý dữ liệu.
-*Đề xuất:* A. *Chi tiết:* [DPA v0.3](dpa.md) cùng các phụ lục; [sổ đăng ký](register.md), mục (b).
+*Đề xuất:* A. *Chi tiết:* [DPA v0.4](dpa.md) cùng các phụ lục; [sổ đăng ký](register.md), mục (b).
 
 ## 5. Sổ đăng ký hoạt động xử lý
 
@@ -192,12 +195,18 @@ Claude được gọi qua API của Anthropic trước và qua Amazon Bedrock sa
 Register](../architecture/ai-use-register.md) v1.11), không còn gọi là đường dự phòng, và ghi rằng các mô hình Claude
 cũng kiểm tra nội dung. Các trang ghi rằng Adventure Asia có thể thay đổi thứ tự dùng các nhà cung cấp trong danh sách mà
 không cần thông báo, còn việc thêm hoặc thay thế một nhà cung cấp phải được thông báo trước theo thoả thuận xử lý dữ liệu
-([DPA](dpa.md) mục 6.2). Câu chữ của chính Phụ lục AI đã nêu cả hai đường nên giữ bản v1.0.
+([DPA](dpa.md) mục 6.2). Câu chữ của chính Phụ lục AI đã nêu cả hai đường nên giữ bản v1.0. *Cập nhật 09/11/2026:*
+đã soạn một điều khoản ngắn cho phần thân điều khoản đối tác ([điều khoản Tenant Terms](tenant-terms-ai-clause-draft.md),
+bản nháp v0.3): đối tác tuân theo chính sách sử dụng của các nhà cung cấp AI, trong đó có Chính sách sử dụng của
+Anthropic từ 12/11/2026; các cách dùng bị cấm; và quyền của Adventure Asia tạm dừng tính năng AI. Mọi câu đều lấy từ
+Phụ lục v1.0 nên không thêm nghĩa vụ mới; điều khoản chờ mẫu hợp đồng đối tác. Thỏa thuận xử lý dữ liệu ở bản v0.4
+(mục 4). Từ 06/11/2026 không còn mô hình OpenAI nào viết nội dung của đối tác; các trang portal vẫn ghi một mô hình
+OpenAI "có thể viết như phương án cuối cùng", tức nói nhiều hơn thực tế, và sẽ được sửa ở phiên bản trang kế tiếp.
 *Chủ doanh nghiệp quyết định:* câu chữ của thư
 pilot quanh điều khoản này, hạn mức AI hằng tháng của pilot, và thời điểm mời luật sư (muộn nhất là trước đại lý trả
 tiền đầu tiên). *Chi tiết:* [Phụ lục AI v1.0](tenant-ai-schedule.md): từng phần đặt ở đâu (mục 2), phụ lục (mục 3),
-điều khoản cho thư pilot (mục 5) và 16 câu hỏi cho luật sư (mục 7). Phần 2, bộ hồ sơ xử lý dữ liệu cho pilot, có dàn ý
-ở [dpa-pack-outline.md](dpa-pack-outline.md).
+điều khoản cho thư pilot (mục 5), 16 câu hỏi cho luật sư (mục 7) và tình trạng từng phần việc (mục 9). Phần 2, bộ hồ sơ
+xử lý dữ liệu cho pilot: [DPA v0.4](dpa.md) cùng bốn phụ lục ([dàn ý](dpa-pack-outline.md)).
 
 ## Phụ lục A: nội dung hiện tại của bốn trang
 
@@ -214,7 +223,9 @@ thay đổi Phụ lục AI v1.0). Link được ghi bằng chữ hiển thị. C
 có thêm bản dịch tiếng Việt để tham khảo, và bản tiếng Anh được áp dụng. Phần dưới đây là bản dịch để tham khảo, còn câu
 chữ pháp lý là bản tiếng Anh. Nếu trang thay đổi sau commit hoặc PR trên, trang đang chạy là bản đúng.
 
-Có hai việc cần sửa nội dung trang đã biết. Mục 6 của chính sách quyền riêng tư portal vẫn ghi Vercel lưu trữ các trang
+Có ba việc cần sửa nội dung trang đã biết. Từ 06/11/2026 (route control phiên bản 7, migration CIS 383) không còn mô
+hình OpenAI nào viết nội dung Content studio, nhưng mục 5 của A.3 và mục 3 của A.4 (portal Draft v0.5) vẫn ghi một mô
+hình OpenAI "có thể viết như phương án cuối cùng"; phiên bản trang portal kế tiếp sẽ bỏ câu đó. Mục 6 của chính sách quyền riêng tư portal vẫn ghi Vercel lưu trữ các trang
 portal, dù portal nay chạy trên AWS. Từ ngày 08/11/2026, chính sách quyền riêng tư của Trip Planner (mục 3, 6, 7) ghi
 Amazon Web Services (Amazon CloudFront và tường lửa website của nó, kèm một cookie bảo mật ngắn hạn) thay cho Vercel; A.2
 dưới đây trích nội dung cũ hơn. Hai trang Trip Planner đã đổi sau ngày 20/10/2026 nhưng vẫn ghi ngày đó cho tới
