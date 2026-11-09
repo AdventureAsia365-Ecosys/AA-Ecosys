@@ -1,0 +1,24 @@
+# Third-party GitHub Actions the organisation's Actions policy allows (root ADR 0021 decision 2.3: GitHub-owned actions
+# plus this list; every `uses:` stays pinned by full commit SHA in the workflows).
+#
+# This file is the record of the org setting (Settings > Actions > General > "Allow specified actions"); the setting
+# itself is changed by the org owner, and the CI token cannot read it back (admin:org). Change both together.
+#
+# One GitHub allow-list pattern per line: owner/repo@*, owner/repo/path@*, owner/*. A pattern covers only the path it
+# names: aquasecurity/trivy-action@* does NOT cover an action that trivy-action runs inside itself. Actions called from
+# a third-party composite action need their own line (S273: enabling the list turned Docker Build Check red in every
+# repo, because trivy-action runs aquasecurity/setup-trivy). tools/github/ci_hygiene.py (WL8) reads the workflows and
+# composite actions of the six repos, follows each third-party composite action at its pinned SHA, and reports any
+# `uses:` (direct or nested, whatever its `if:`) that no line here covers. GitHub-owned actions (actions/*, github/*)
+# are allowed by the policy and need no line.
+
+DavidAnson/markdownlint-cli2-action@*
+amannn/action-semantic-pull-request@*
+aquasecurity/trivy-action@*
+# run by aquasecurity/trivy-action (composite) even with skip-setup-trivy: "true"
+aquasecurity/setup-trivy@*
+astral-sh/setup-uv@*
+aws-actions/amazon-ecr-login@*
+aws-actions/configure-aws-credentials@*
+googleapis/release-please-action@*
+hashicorp/setup-terraform@*
