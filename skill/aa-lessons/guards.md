@@ -92,6 +92,9 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 - **Test chạy git trong thư mục tạm phải bỏ `GIT_DIR` / `GIT_WORK_TREE` / `GIT_INDEX_FILE` thừa hưởng từ hook** (S272) → `.githooks/pre-push`, `scripts/pre-push.sh`, `tools/github/test_git_env_isolation.py` (guard mới S272, AA-1024)
 - **Không push / chạy pre-push đầy đủ của CIS (~5.000 unit test) khi máy đang tải nặng** (S272) → `.claude/hooks/aa_shell_guard.py` RAM-1 (push, PR opener, ship_wave, `scripts/pre-push.sh`) (guard mới S272, AA-1024)
 - **Script adhoc chạy lâu (>5′) không chạy trong task api/worker khi còn PR backend chờ merge — deploy thay task giết script** (S234) → `.claude/hooks/aa_shell_guard.py` ECS-1 (không exec trần), `apps/AA-CIS-App/shared/jobs/exec_heartbeat.py` (deploy gate CIS chặn khi heartbeat ecsx còn mới) (guard mới S272, AA-1024)
+- **Chuỗi ship nối `&&` với `| tail` / `| head` phải bật `set -o pipefail` — exit code của pipeline là của `tail`, bước sau vẫn chạy** (S272, S273) → `.claude/hooks/aa_shell_guard.py` PIPE-1 (guard mới S274, AA-1024)
+- **Wrapper merge queue không kết luận PR "rời queue" khi `isInMergeQueue` đọc false — còn entry trong `mergeQueue.entries` hoặc run `merge_group` của nhánh nhóm `pr-<n>-` chưa xong thì chờ tiếp** (S273) → `tools/github/mergeq.sh` held(), `tools/github/ship_merge.py` queue_hold, `tools/github/test_ship_merge.py` QueueExitTest + MergeqScriptTest (guard mới S274, AA-1024)
+- **Allow-list Actions cấp org phải tính action lồng trong composite action bên thứ ba (trivy-action → setup-trivy)** (S273, ADR 0021) → `tools/github/ci_hygiene.py` WL8 + `tools/github/actions-allowlist.txt` (guard mới S274, AA-1024)
 
 ## Pipeline và chất lượng
 
