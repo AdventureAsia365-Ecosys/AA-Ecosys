@@ -18,10 +18,10 @@ GB = 10**9
 REPO = "demo-org/root"
 
 
-def row(repo, bytes_=1 * GB, stale_bytes=0, wl5=(), cache_error=None):
+def row(repo, bytes_=1 * GB, stale_bytes=0, wl5=(), cache_error=None, wl8=()):
     return {"repo": repo, "bytes": bytes_, "entries": 10, "by_ref": {"default": bytes_},
             "top": [{"family": "setup-uv-*", "entries": 3, "bytes": bytes_}], "stale": 2 if stale_bytes else 0,
-            "stale_bytes": stale_bytes, "wl5": list(wl5), "cache_error": cache_error}
+            "stale_bytes": stale_bytes, "wl5": list(wl5), "wl8": list(wl8), "cache_error": cache_error}
 
 
 def report(rows, unreadable=(), unknown_public=(), org_error=None):
@@ -56,7 +56,8 @@ class HygieneFindings(unittest.TestCase):
         f = hi.hygiene_findings(CLEAN)
         self.assertEqual({k: v.status for k, v in f.items()},
                          {"cache-over-threshold": "absent", "stale-caches": "absent", "external-downloads": "absent",
-                          "unknown-public-repo": "absent", "needs-permission": "absent"})
+                          "actions-not-allowed": "absent", "unknown-public-repo": "absent",
+                          "needs-permission": "absent"})
 
     def test_present_findings(self):
         rep = report([row("AA-CIS-App", 9 * GB, stale_bytes=GB, wl5=["ci.yml:build:WL5 step 'x' downloads y"])],
@@ -67,6 +68,15 @@ class HygieneFindings(unittest.TestCase):
         self.assertEqual(f["stale-caches"].status, "present")
         self.assertEqual(f["external-downloads"].status, "present")
         self.assertEqual(f["unknown-public-repo"].lines, [f"**scratch-demo** (https://github.com/{hi.ORG}/scratch-demo)"])
+
+    def test_action_outside_the_allow_list_is_present(self):
+        wl8 = [".github/workflows/ci.yml:12:WL8 demo-org/scan-action runs demo-org/setup-tool@0123 inside itself"]
+        f = hi.hygiene_findings(report([row("AA-CIS-App", wl8=wl8)]))
+        self.assertEqual(f["actions-not-allowed"].status, "present")
+        self.assertIn("demo-org/setup-tool", f["actions-not-allowed"].lines[0])
+        self.assertIn("actions-allowlist.txt", f["actions-not-allowed"].fix)
+        f = hi.hygiene_findings(report([row("AA-Ecosys")], unreadable=["AA-Partner"]))
+        self.assertEqual(f["actions-not-allowed"].status, "unknown")
 
     def test_stale_below_the_floor_is_absent(self):
         f = hi.hygiene_findings(report([row("AA-CIS-App", stale_bytes=GB // 10)]))

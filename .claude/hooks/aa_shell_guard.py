@@ -50,6 +50,13 @@ Rules (main session and subagents alike; exit 2 refuses, the message goes to std
            the Bash tool's run_in_background. `&&` after a redirect is not a background job.
   TF-1     `terraform apply|destroy` from a lane worktree (.tmp-session/wt/**) or a checkout that is not on
            main/master: the state then holds code that is not on main, and the next apply from main reverts it.
+  PIPE-1   A ship step (ship_*.py, dbmig.sh, the merge-queue wrapper, as-app.sh around `gh pr merge|ready`, `gh workflow
+           run`, `gh run rerun` or a writing `gh api`) piped through `| tail`, `| head` or `| tee` and chained on with
+           `&&`, without pipefail: the pipeline's exit code is the tail's (0), so the next
+           step runs after a failed one (S272 copy_apply after a red merge; S273 tp-027 applied before its registry
+           PR merged). Pipefail counts when set earlier in the same shell text (`set -o pipefail`, `set -euo
+           pipefail`, zsh `setopt pipefail`) or on the `bash -o pipefail -c` that runs it. Better: one ship_wave.py
+           call with a chain (`'cis#N>apply:cis/NNN'`), which stops at the first red step itself.
 
 How it reads a command: a small shell lexer blanks quoted text and drops comments and heredoc bodies, so a rule never
 fires on text that is only an argument (`grep 'pkill -f' x`); the bodies of `bash -c '...'` / `sh -c` and of
@@ -96,12 +103,13 @@ class Text:
     level: str  # "zsh" (the Bash tool's top-level shell) or "bash" (bash -c, bash heredoc, a script run by bash)
     origin: str = "command"
     raw: str = ""  # the code as written (quotes kept): scan() blanks a quoted API path or GraphQL query
+    pipefail: bool = False  # the shell running this text was started with `-o pipefail` (bash -o pipefail -c '...')
 
 
 @dataclass
 class Scan:
     skeleton: str
-    shell_bodies: list = field(default_factory=list)  # (body, level)
+    shell_bodies: list = field(default_factory=list)  # (body, level, started with -o pipefail)
 
 
 # --- lexer -------------------------------------------------------------------------------------------------------
@@ -136,7 +144,7 @@ def scan(cmd: str) -> Scan:
             lit = cmd[start:j]
             m = _SHELL_C.search("".join(out[-40:]) if out else "")
             if m:
-                bodies.append((lit, "zsh" if m.group(1) == "zsh" else "bash"))
+                bodies.append((lit, "zsh" if m.group(1) == "zsh" else "bash", "pipefail" in m.group(0)))
             out.append(q + q)
             i = j + 1
             continue
@@ -172,7 +180,7 @@ def scan(cmd: str) -> Scan:
                         break
                     body.append(line)
                 if level:
-                    bodies.append(("\n".join(body), level))
+                    bodies.append(("\n".join(body), level, False))
             pending = []
             continue
         out.append(c)
@@ -180,12 +188,13 @@ def scan(cmd: str) -> Scan:
     return Scan("".join(out), bodies)
 
 
-def texts_of(cmd: str, level: str = "zsh", origin: str = "command", depth: int = 0) -> list[Text]:
+def texts_of(cmd: str, level: str = "zsh", origin: str = "command", depth: int = 0,
+             pipefail: bool = False) -> list[Text]:
     s = scan(cmd)
-    found = [Text(s.skeleton, level, origin, cmd)]
+    found = [Text(s.skeleton, level, origin, cmd, pipefail)]
     if depth < 4:
-        for body, lvl in s.shell_bodies:
-            found.extend(texts_of(body, lvl, origin, depth + 1))
+        for body, lvl, pf in s.shell_bodies:
+            found.extend(texts_of(body, lvl, origin, depth + 1, pf))
     return found
 
 
@@ -610,6 +619,76 @@ def _rule_ship_command(t: Text) -> str | None:
     return None
 
 
+SHIP_STEPS = frozenset({"ship_merge.py", "ship_wave.py", "ship_train.py", "ship_copy_apply.py", "ship_open_prs.py",
+                        "dbmig.sh", "mergeq.sh", "as-app.sh"})
+EXIT_SWALLOWERS = frozenset({"tail", "head", "tee"})
+# `set -o pipefail`, `set -euo pipefail`, `set -e -o pipefail`, `set -o errexit -o pipefail`, zsh `setopt pipefail` /
+# `setopt PIPE_FAIL`. Any option groups may come before `-o pipefail` (review S274); `+o pipefail` turns it off.
+_PIPEFAIL_ON = re.compile(
+    r"(?:^|[\s;&|(])(?:set(?:\s+[-+][A-Za-z]+(?:\s+(?!pipefail\b)[a-z]+)?)*\s+-[A-Za-z]*o\s+pipefail\b"
+    r"|setopt\s+(?:pipefail|pipe_fail)\b)",
+    re.IGNORECASE)
+# What the App wrapper runs that a later step depends on (review S274): a merge, a ready flip, a dispatch, a rerun, a
+# writing API call. A push, `gh pr create` and the read-only gh calls (view/checks/list/api GET) are not ship steps.
+_APP_SHIP_GH = frozenset({("pr", "merge"), ("pr", "ready"), ("workflow", "run"), ("run", "rerun")})
+# Redirections that hold '&' or '|' but are not operators: 2>&1, >&2, &>log, &>>log, <&3, >|file.
+_REDIRECT_OPS = re.compile(r"\d*>&\d*-?|&>>?|<&\d*-?|>\|")
+_CHAIN_OPS = re.compile(r"(\|\||&&|\|&|\||;|\n|&)")
+
+
+def _ship_step(words: list[str]) -> str | None:
+    """The ship tool a simple command runs (as itself, through python, bash or as-app.sh), else None."""
+    if not words:
+        return None
+    prog, args = program(words)
+    if prog in SHIP_STEPS:
+        return prog
+    if re.fullmatch(r"python[0-9.]*", prog) and args and os.path.basename(args[0]) in SHIP_STEPS:
+        return os.path.basename(args[0])
+    # program() looks past as-app.sh to the command after `--`: the wrapper counts only around a gh call that changes
+    # state a later step builds on (merge / ready / workflow run / rerun / a writing `gh api`)
+    if prog == "gh" and any(os.path.basename(w) == "as-app.sh" for w in words[:4]):
+        if tuple(args[:2]) in _APP_SHIP_GH:
+            return "as-app.sh"
+        if args[:1] == ["api"]:
+            method = next((args[i + 1] for i, a in enumerate(args[:-1]) if a in ("-X", "--method")), None)
+            method = method or next((a.split("=", 1)[1] for a in args if a.startswith(("-X=", "--method="))), None)
+            if method and method.upper() != "GET":
+                return "as-app.sh"
+    return None
+
+
+def _rule_pipe_exit(t: Text) -> str | None:
+    """PIPE-1: `<ship step> | tail ... && <next step>` without pipefail."""
+    if t.pipefail:
+        return None
+    sk = _REDIRECT_OPS.sub(" ", t.skeleton)
+    sk = re.sub(r"\$\(|[(){}`]", " ", sk)  # a subshell / group / substitution returns its pipeline's status
+    parts = _CHAIN_OPS.split(sk)
+    pipeline: list[list[str]] = []
+    pos = 0  # offset of parts[i] in sk
+    pipe_start = 0  # offset where the current pipeline began
+    for i in range(0, len(parts), 2):
+        words = parts[i].split()
+        while words and words[0] in KEYWORDS:
+            words = words[1:]
+        pipeline.append(words)
+        op = parts[i + 1] if i + 1 < len(parts) else ""
+        pos += len(parts[i]) + len(op)
+        if op in ("|", "|&"):
+            continue
+        stages, pipeline, begin, pipe_start = pipeline, [], pipe_start, pos
+        if op != "&&" or len(stages) < 2:
+            continue
+        step = next((s for s in (_ship_step(w) for w in stages[:-1]) if s), None)
+        sink = next((program(w)[0] for w in stages[1:] if w and program(w)[0] in EXIT_SWALLOWERS), None)
+        if not step or not sink or _PIPEFAIL_ON.search(sk[:begin]):
+            continue
+        return (f"`{step} ... | {sink} ... && <next step>` without pipefail (the pipeline exits with {sink}'s code, so "
+                f"the next step runs even when {step} failed)")
+    return None
+
+
 _SCRIPT_PATH = re.compile(
     r"(?<![\w.-])((?:/[^\s'\"<>|;&()]*)?\.tmp-session/[^\s'\"<>|;&()]+\.(?:sh|bash|py)"
     r"|/tmp/claude-[^\s'\"<>|;&()]+\.(?:sh|bash|py))")
@@ -835,13 +914,16 @@ FIX = {
             "/home/nghiep/projects/AA-Ecosys/.tmp-session/wt/<session>-<lane>-<slug> -b <branch> origin/main.",
     "BG-1": "Keep the output: `cmd > .tmp-session/<S>/<name>.log 2>&1 &` (or the Bash tool's run_in_background), "
             "then read the log when it ends. Jobs the same command collects with a final bare `wait` pass.",
+    "PIPE-1": "Set pipefail first (`set -o pipefail; <step> 2>&1 | tail -20 && <next>`, or `bash -o pipefail -c "
+              "'...'`), drop the `| tail`, or better ship the chain as ONE ship_wave.py call "
+              "(`'cis#N>apply:cis/NNN'`), which stops at the first red step itself.",
     "TF-1": "Apply from the main checkout on main (git switch main && git pull), after the PR merged; Infra applies "
             "normally run in CI (terraform-apply.yml).",
 }
 
 
 RULES = (("PKILL-1", _rule_pkill), ("ZSH-1", _rule_zsh), ("ENV-1", _rule_env), ("SHIP-1", _rule_ship_command),
-         ("ECS-1", _rule_ecs_exec), ("BG-1", _rule_background))
+         ("ECS-1", _rule_ecs_exec), ("BG-1", _rule_background), ("PIPE-1", _rule_pipe_exit))
 RULE_IDS = tuple(r for r, _ in RULES) + ("RAM-1", "WT-1", "TF-1")
 
 

@@ -8,7 +8,8 @@
 # Enqueue only under ship_merge.py / ship_wave.py (AA-1024): this script waits for REQUIRED checks only, so as-app.sh
 # refuses the enqueue unless ship_merge's gate (every check green) set AA_SHIP_GATED; --dequeue stays open.
 # Exit: 0 merged / dequeued | 3 PR checks red | 4 dropped from the queue (group CI red, timeout, conflict), DIRTY while
-#       waiting, or enqueue failed | 5 timed out waiting (MAXWAIT seconds, default 5400).
+#       waiting, or enqueue failed | 5 timed out waiting (MAXWAIT seconds, default 5400). "Dropped" is concluded only
+#       when the queue entries and the PR's merge_group runs agree (held(), S273).
 #
 # Why --dequeue is not `gh pr merge --disable-auto`: once the PR's required checks have passed, `gh pr merge` adds it
 # straight to the queue and no auto-merge request exists, so --disable-auto has nothing to cancel and the entry still
@@ -24,6 +25,20 @@ st() { gh pr view "$N" -R "$ORG/$R" --json state,mergeCommit,mergeStateStatus,au
          --jq '[.state, (.mergeCommit.oid // ""), .mergeStateStatus, (if .autoMergeRequest then "auto" else "" end)] | join("|")'; }
 inq() { gh api graphql -f query='query($o:String!,$r:String!,$n:Int!){repository(owner:$o,name:$r){pullRequest(number:$n){isInMergeQueue mergeQueueEntry{state position}}}}' \
           -f o="$ORG" -f r="$R" -F n="$N" --jq '.data.repository.pullRequest | [(.isInMergeQueue|tostring), (.mergeQueueEntry.state // ""), ((.mergeQueueEntry.position // "")|tostring)] | join("|")'; }
+# held: what still holds the PR when isInMergeQueue reads false. S273 (#1248/#1384/#1385/#1387): with several CIS PRs
+# queued, isInMergeQueue read false while the PR's own merge_group CI still ran, and this script exited 4. Reads the
+# queue's entries and the merge_group runs of the PR's group branch (gh-readonly-queue/main/pr-<n>-<sha>); prints what
+# it found and returns 0 while either holds the PR. A read that fails finds nothing (the old verdict stands).
+held() {
+  local e g
+  e=$(gh api graphql -f query='query($o:String!,$r:String!,$b:String!){repository(owner:$o,name:$r){mergeQueue(branch:$b){entries(first:100){nodes{pullRequest{number}}}}}}' \
+        -f o="$ORG" -f r="$R" -f b=main --jq "[.data.repository.mergeQueue.entries.nodes[]? | select(.pullRequest.number == $N)] | length" 2>/dev/null)
+  [[ "$e" =~ ^[1-9][0-9]*$ ]] && { echo "queue entry still listed"; return 0; }
+  g=$(gh run list -R "$ORG/$R" --event merge_group --limit 50 --json headBranch,status \
+        --jq "[.[] | select((.headBranch | startswith(\"gh-readonly-queue/main/pr-$N-\")) and .status != \"completed\")] | length" 2>/dev/null)
+  [[ "$g" =~ ^[1-9][0-9]*$ ]] && { echo "$g merge_group run(s) of its group still running"; return 0; }
+  return 1
+}
 
 IFS='|' read -r S SHA _ AUTO < <(st)
 [ "$S" = MERGED ] && { echo "$R #$N already merged ${SHA:0:8}"; exit 0; }
@@ -70,6 +85,9 @@ while [ $(( $(date +%s) - t0 )) -lt "$MAXWAIT" ]; do
   if [ "$Q" = true ]; then
     seen=1; [ $(( ($(date +%s) - t0) % 300 )) -lt 60 ] && echo "$R #$N in queue: $QS position $QP"
   elif [ "$seen" = 1 ] || { [ -z "$AUTO" ] && [ $(( $(date +%s) - t0 )) -gt 300 ]; }; then
+    if why=$(held); then
+      seen=1; echo "$R #$N isInMergeQueue reads false, but $why: waiting"; continue
+    fi
     # Left the queue without merging (group CI red, check timeout, conflict, dequeued) or never got in.
     echo "$R #$N not merged and not in the queue (state $S, $M). Group runs:"
     gh run list -R "$ORG/$R" --event merge_group --limit 5 2>&1 | head -6; exit 4
