@@ -1,23 +1,29 @@
 ---
 id: SEC-04-dpa-annex4
-title: "DPA Annex 4: international transfers, SCC fill-ins and TIA template (draft v0.3)"
+title: "DPA Annex 4: international transfers, SCC fill-ins and TIA template (draft v0.4)"
 description: "Annex 4 of the partner-agency DPA: transfer basis per agency market, EU SCC Module 2 option choices and Annex I-III cross-references, and a transfer impact assessment template."
 type: template
 status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-08
+last_reviewed: 2026-11-09
 review_every_days: 30
 related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04-dpa-pack, SEC-04-vn-transfer-dossier, AA-820]
 ---
 
-# DPA Annex 4: international transfers, SCC fill-ins and TIA template (draft v0.3)
+# DPA Annex 4: international transfers, SCC fill-ins and TIA template (draft v0.4)
 
 > [!WARNING]
 > **Draft for counsel, not legal advice.** The choice of transfer mechanism per market, the SCC options and every
 > legal assessment in the TIA are for a lawyer. Engineering filled in only the facts: where the data is, who receives
 > it and what protects it. The business owner decides whether and when counsel reviews it (ADR 0019 b10, b20).
+
+**What changed in v0.4 (2026-11-09).** §1 follows route control version 7 (CIS 383, 2026-11-06): the OpenAI API
+receives Content studio drafts to score and check them, no longer to write them. A new §1 row says where a Trip Planner
+lead goes once an Agency takes the planner: to the Agency itself, which is not an onward transfer by AA. The AI
+gateway's reply store (CIS 385) stays in us-west-1 with the rest of the database, so it adds no destination. The
+destinations to assess first (end of §4) are unchanged.
 
 ## 1. Where the data goes
 
@@ -26,7 +32,8 @@ related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa
 | United States, AWS us-west-1 | Every app's storage and compute | ADR 0018 d7 as amended by ADR 0019 d12 ("US by default, EU cell on triggers"); [Annex 3](dpa-annex-3-subprocessors.md) §1.1 |
 | Any AWS commercial region (cross-region inference) | Content studio inputs only, when a stage uses a Bedrock `global.` profile; never a stage classed `pii` (CIS 373) | Annex 3 §1.2 |
 | United States, AWS us-east-1, us-east-2, us-west-2 (US cross-region inference) | CRM reply-draft text after the F3 scrub (placeholders, no identity fields), when an Agency has AI switched on; Amazon Nova Lite through a `us.` profile, which stays inside the US | Annex 3 §1.2; AA-CIS-Infra `modules/environment/crm_llm.tf` |
-| The Anthropic API and the OpenAI API (location [to confirm]) | Content studio inputs: the Anthropic API is the first path of every Claude model since 2026-11-05 (route control version 6); the OpenAI API answers the GPT scoring and checking stages while Amazon Bedrock refuses, and writes as a last resort | AI Use Register v1.11; Annex 3 §1.2 |
+| The Anthropic API and the OpenAI API (location [to confirm]) | Content studio inputs: the Anthropic API is the first path of every Claude model since 2026-11-05 (route control version 6); the OpenAI API answers the GPT scoring and checking stages while Amazon Bedrock refuses. Since route control version 7 (CIS 383, 2026-11-06) it no longer writes | AI Use Register v1.13; Annex 3 §1.2 |
+| The Agency's own endpoint (only with the Trip Planner, pilot milestone 2) | A traveller's request (`lead.submitted.v1`): into the Agency's CRM account, or to the webhook URL or e-mail address the Agency sets (e-mail sent through Amazon SES in us-west-1). The data goes back to its controller, so this is not an onward transfer by AA; where the Agency's endpoint is hosted is the Agency's choice | CIS 390; AA-TripPlanner-Web `backend/assembly/leads.py`; Annex 1 §5 |
 | Sentry, United States | Scrubbed error events | Annex 3 §1.3 |
 
 Vercel is no longer a destination: ADR 0019 d23 completed on 2026-11-08, when the Trip Planner frontend, the last AA
