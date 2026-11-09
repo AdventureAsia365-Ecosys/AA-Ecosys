@@ -1,0 +1,6 @@
+{'objects': 20, 'spent_usd': 0.09736, 'calls': 192, 'agreement': {'agree': 1, 'disagree': 19, 'unverified': 0, 'no_baseline': 0}, 'cache_hits': 4}
+('t2', 'unsupported', 'pass', 'disagree') 10
+('t9_blog', 'unsupported', 'flag', 'agree') 1
+('t9_blog', 'unsupported', 'pass', 'disagree') 2
+('t9_blog', 'unsupported', 'warn', 'disagree') 7
+Counter({'unsupported:fact.embellish': 14, 'unsupported:fact.misbinding': 3, 'unsupported:source.contradiction': 1, 'unsupported:fact.inclusion': 1, 'unsupported:fact.direction': 1})

@@ -88,5 +88,12 @@ xác minh, nên Error 002 của acc3 là tình trạng riêng của acc3 (đúng
 | 06/11 | Tech lead gửi form AWS Sales (xin Account Manager, quyền 7 model đời mới, quota TPM) |
 | 08/11 14:38 | AWS Account Team (Account Development, cùng Account Manager) trả lời: account "tạo tháng 7, dùng ít"; hỏi 4 điểm: tổng quan kinh doanh, use case, số người dùng, khối lượng Bedrock |
 | 08/11 17:09 | Tech lead gửi trả lời (agent soạn, S273): tổng quan + 4 use case; người dùng nội bộ 5–10, pilot 3 đại lý / 8 tuần, 20–50 đại lý / 12 tháng; khối lượng thật từ `shared.llm_call_log` (09/2026 ≈10.600 lượt, 11,6M token, ≈39 USD; 10/2026 ≈67.600 lượt, 139M token, ≈248 USD; ngày đỉnh 08/10 ≈110M token) và giải thích lịch sử billing nằm ở org reseller 17/08–29/10; dự báo pilot 150–300M token/tháng; xin quota Sonnet/Haiku 5.5 ≈400K TPM, Opus 5.5 / Sonnet 5 / 3 model GPT ≈100K TPM; đề nghị họp ngắn |
+| 08/11 22:33 | Territory Account Manager (AWS) trả lời: đề nghị mở **support ticket** xin quyền các model này càng sớm càng tốt, rồi gửi lại số case để chị ấy theo dõi với team nội bộ; nhờ hai người được cc hướng dẫn cách mở ticket nếu cần |
+| 09/11 (S274) | Agent soạn nội dung ticket (Service limit increase › Bedrock, dự phòng Account and billing) + thư trả lời kèm số case; tech lead mở ticket trên acc3 (gói Basic, chỉ console) |
+| 09/11 (S274) | Tech lead đổi thứ tự: nhắn bên bán lại của acc2 trước (mô tả đủ mô hình: acc4 quản trị + Billing Transfer, acc2 hạ tầng, ưu tiên gom Bedrock về acc2, acc3 chỉ chạy LLM nếu không gom được), chờ tư vấn rồi mới mở case, để khỏi chuyển qua chuyển lại |
+| 09/11 (S274) | Bên bán lại của acc2 tư vấn: mở **2 ticket riêng** (acc2 và acc3), acc2 cũng xin **đủ** 7 model + quota như acc3 (acc2 là đích gom Bedrock về một account). Agent soạn hướng dẫn + nội dung 2 ticket; tech lead mở (acc3 trước, acc2 dẫn số case acc3) |
+| 09/11 (S274) | Ticket acc3 đã gửi (Account and billing › Service Quotas › General, Web; số case giữ trong ghi chú riêng, không ghi vào repo public) |
+| 09/11 (S274) | Ticket acc2 đã gửi (cùng form; 7 model + Cohere Embed v4 → 1.000 rpm; dẫn số case acc3). Hai số case gửi Territory Account Manager + bên bán lại. Khi AWS trả lời: làm mục 4 cho **cả acc2 và acc3** (probe ma trận model trên cả hai) |
+| 09/11 15:44 | AWS Support trả lời ticket acc3: đã **escalate**, đang liên hệ Account Manager để cùng xử lý, sẽ báo quy trình và kết quả. Không cần làm gì thêm; chờ |
 
 Khi AWS trả lời tiếp: làm theo mục 4 (probe lại ma trận, quota, probe qua gateway, cập nhật AA-1004 / AA-1002).

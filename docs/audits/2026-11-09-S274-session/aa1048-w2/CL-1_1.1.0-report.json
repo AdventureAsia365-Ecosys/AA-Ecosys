@@ -1,0 +1,103 @@
+{
+ "by_adjudication": {
+  "agreed": 888,
+  "audit": 222,
+  "disputed": 1494
+ },
+ "by_label": {
+  "ok": 2440,
+  "unsure": 96,
+  "violation": 68
+ },
+ "by_split": {
+  "held_out": 2604
+ },
+ "by_writer": {
+  "t9_blog": 2436,
+  "t9_social": 168
+ },
+ "claims": 868,
+ "contradictions": [],
+ "manifest": {
+  "claims": 868,
+  "digest": "fff46f8873261c9b66fb4fa10eaa131e05588543d3e1ce7bfe141bdceab0a7e4",
+  "evidence_sources": {
+   "none": 498,
+   "panel_agreed": 370
+  },
+  "labels_by_class": {
+   "fact.direction": {
+    "ok": 20,
+    "unsure": 12
+   },
+   "fact.embellish": {
+    "ok": 69,
+    "unsure": 91
+   },
+   "fact.inclusion": {
+    "ok": 45,
+    "unsure": 175,
+    "violation": 2
+   },
+   "fact.misbinding": {
+    "ok": 26,
+    "unsure": 21,
+    "violation": 4
+   },
+   "fact.name": {
+    "ok": 48,
+    "unsure": 18
+   },
+   "fact.number": {
+    "ok": 79,
+    "unsure": 10
+   },
+   "other.c5": {
+    "unsure": 1
+   },
+   "other.f6": {
+    "ok": 8,
+    "unsure": 5
+   },
+   "other.f7": {
+    "ok": 13,
+    "unsure": 24
+   },
+   "other.lexicon": {
+    "unsure": 1
+   },
+   "scope.faq_question_offtopic": {
+    "ok": 42,
+    "unsure": 9
+   },
+   "scope.framing": {
+    "ok": 7,
+    "unsure": 86
+   },
+   "scope.persona_promise": {
+    "ok": 6,
+    "unsure": 28,
+    "violation": 1
+   },
+   "struct.day_structure": {
+    "unsure": 17
+   }
+  },
+  "objects": 20,
+  "policy_sha": [
+   "1c3ec88417b63426601a22abe06fbecf02d232e32d2aaa010ff812fdaf2bcbdf"
+  ],
+  "rows": 2604,
+  "set_id": "CL-1",
+  "set_version": "1.1.0",
+  "splits": {
+   "held_out": 868
+  },
+  "writers": [
+   "t9_blog",
+   "t9_social"
+  ]
+ },
+ "rows": 2604,
+ "set": "CL-1@1.1.0"
+}

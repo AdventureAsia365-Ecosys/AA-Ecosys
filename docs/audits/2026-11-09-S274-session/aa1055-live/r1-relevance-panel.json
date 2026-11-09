@@ -1,0 +1,20 @@
+{
+  "what": "S274 AA-1055 R1 (job 6434f55c, US/UK/AU, Standard queue): 3 independent agent judges scored 30 sampled keyword|place pairs per market from scripts/aa1055/research_quality.py; majority vote per pair",
+  "judges": 3,
+  "markets": {
+    "AU": {"pairs": 30, "relevant_majority": 25, "intent_majority": 24, "kept": 28, "kept_relevant": 25, "rejected": 2, "rejected_irrelevant": 2},
+    "UK": {"pairs": 30, "relevant_majority": 29, "intent_majority": 29, "kept": 29, "kept_relevant": 29, "rejected": 1, "rejected_irrelevant": 1},
+    "US": {"pairs": 30, "relevant_majority": 26, "intent_majority": 27, "kept": 29, "kept_relevant": 26, "rejected": 1, "rejected_irrelevant": 1}
+  },
+  "kept_precision_all": "80/86 = 0.93",
+  "rejections_confirmed": "4/4",
+  "kept_but_judged_irrelevant": [
+    {"market": "AU", "keyword": "ganesh temple", "why": "generic name with many namesakes"},
+    {"market": "AU", "keyword": "kithul tree", "why": "a plant, not a place"},
+    {"market": "AU", "keyword": "eagle s nest", "why": "searches go to a famous namesake elsewhere"},
+    {"market": "US", "keyword": "3 cathedral sightsee", "why": "garbled, not a real search"},
+    {"market": "US", "keyword": "immaculate conception cathedral", "why": "hundreds of namesakes"},
+    {"market": "US", "keyword": "himalaya hotel", "why": "namesake hotels, booking intent"}
+  ],
+  "action": "before R2: qualify generic / namesake place names with locality or country in the keyword map, drop non-place names (plants, garbled), then re-score with Jev"
+}

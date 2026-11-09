@@ -339,6 +339,14 @@ def fetch_changed_since(key: str, since: str) -> list[dict]:
     return _paged(key, CHANGED_SINCE_QUERY, {"team": TEAM_KEY, "since": f"{since}T00:00:00.000Z"})
 
 
+def iso_day(value: str | None) -> str | None:
+    """`updated` as YYYY-MM-DD; a hand-written DD/MM/YYYY (S273 close) is converted instead of breaking the Linear query."""
+    if not value:
+        return None
+    m = re.fullmatch(r"(\d{2})/(\d{2})/(\d{4})", value.strip())
+    return f"{m.group(3)}-{m.group(2)}-{m.group(1)}" if m else value.strip()[:10]
+
+
 def committed_updated(path: Path) -> str | None:
     """`updated` of plan.json as committed at HEAD (a local session-start --write must not move the log window)."""
     if path.resolve() != PLAN.resolve():
@@ -400,7 +408,7 @@ def main(argv: list[str] | None = None) -> int:
 
     key = api_key()
     linear = fetch_open(key)
-    since = args.since or committed_updated(path) or plan.get("updated")
+    since = iso_day(args.since or committed_updated(path) or plan.get("updated"))
     changed = fetch_changed_since(key, since) if since else []
     closed = {n["identifier"]: f"{n['state']['name']} in Linear" for n in changed if n["state"]["type"] in CLOSED}
     closed.update({n["identifier"]: "deleted in Linear" for n in changed if n.get("trashed")})

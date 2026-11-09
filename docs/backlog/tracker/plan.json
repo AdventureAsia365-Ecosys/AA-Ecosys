@@ -1,6 +1,6 @@
 {
- "updated": "09/11/2026",
- "synced_at": "2026-11-09T06:20:00+07:00",
+ "updated": "2026-11-10",
+ "synced_at": "2026-11-09T23:10Z",
  "session": "S274",
  "next_session": "S275",
  "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
@@ -719,13 +719,23 @@
  "waiting": [
   {
    "who": "Tech lead",
+   "issue": "AA-1048",
+   "text": "S274: phân xử 84 mục mở CL-1 1.0.0 trong Writing memory (golden_claim); sau đó agent xếp CL-1 1.1.0 đợt 1 (200)"
+  },
+  {
+   "who": "Tech lead",
+   "issue": "AA-1059",
+   "text": "S274: 25 tour thô sống chưa có Master chờ duyệt S1 (IN 18, LK 4, PH 2, NP 1): 12 qua cổng sạch chỉ cần duyệt, 13 cần sửa"
+  },
+  {
+   "who": "Tech lead",
    "issue": "AA-1049",
    "text": "S272: T9_FAQ_LLM_FILTER=on trên worker CIS — giữ hay tắt (tắt làm FAQ giao ra lỏng hơn)"
   },
   {
    "who": "AWS Sales",
    "issue": "AA-1004",
-   "text": "S273 08/11: AWS Account Team hỏi 4 điểm (kinh doanh, use case, người dùng, khối lượng); tech lead đã gửi trả lời 17:09 kèm số liệu thật từ llm_call_log và mức quota xin. Chờ AWS mở quyền 7 model (Claude Sonnet/Opus/Haiku 5.5, Sonnet 5, GPT-6 Luna/Astra, GPT-5.6 Luna) + quota; khi có → agent probe lại acc3, cập nhật route gateway"
+   "text": "S274 09/11: theo tư vấn TrueIDC (Hoài) đã mở 2 case support: acc3 và acc2, mỗi case xin đủ 7 model + quota; AWS escalate 15:44. Khi có trả lời → agent probe lại, cập nhật route gateway (các bước sau trả lời ở memory acc3-case-notes)"
   },
   {
    "who": "Tech lead",
@@ -746,11 +756,6 @@
    "who": "Tech lead",
    "issue": "AA-1004",
    "text": "S271: VPC interface endpoint (Secrets Manager, ECR api+dkr, CloudWatch Logs, STS, Bedrock runtime; ≈ 75–90 USD/tháng cho 2 AZ) chỉ ghi chú cho prod — hỏi tech lead duyệt trước khi làm, không làm trên Dev"
-  },
-  {
-   "who": "Tech lead",
-   "issue": "AA-1040",
-   "text": "S266: tạo site WordPress test mới + Application Password (không gấp, tech lead 03/11 19:40; site TasteWP cũ hết hạn) → mở khoá 1 lượt publish WP thật cho AA-1040 và kiểm retire→restore của AA-1039"
   },
   {
    "who": "Tech lead",
@@ -889,6 +894,31 @@
   }
  ],
  "log": [
+  {
+   "session": "S274",
+   "date": "10/11/2026",
+   "closed": [
+    "AA-1052",
+    "AA-1057",
+    "AA-1059",
+    "AA-1060"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-1056",
+    "AA-1057",
+    "AA-1058",
+    "AA-1059",
+    "AA-1060"
+   ],
+   "reopened": [],
+   "notes": [
+    "DFS Standard queue live; R1 US 1,62 + UK 0,48 + AU 0,48 USD: dòng ranking có demand 22% → 88%, Segment qua thanh Blog US 391 → 1.593 (UK 1.257, AU 1.060); Slate 9 tenant 75 → 141",
+    "W2 vòng 2: panel 321/321, import CL-1 1.1.0 (2.604) + t2@2 1.0.0 (2.166), 0 mâu thuẫn; W4 replay 24 object 0,12 USD (công cụ chặt hơn F9 rất nhiều, cần nhãn)",
+    "Đo completeness 5 lớp trước/sau (báo cáo completeness/report.vi.md); place card chờ viết 215 → 0; đảo nhỏ ngoài polygon → CIS #1413",
+    "Ticket Bedrock acc3 + acc2 (7 model) theo tư vấn TrueIDC; acc4 ghi nhận; root alert #745/#746; WordPress test sidecar (AA-1060); CI hygiene pins xanh (#654)"
+   ]
+  },
   {
    "session": "S273",
    "date": "09/11/2026",
@@ -1854,27 +1884,15 @@
    "needs": ""
   },
   {
-   "id": "AA-900",
-   "title": "[LLM] LLM operations docs, prompt versioning and eval gate",
-   "status": "In Review",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M2a",
-   "session": "S272",
-   "size": "M",
-   "next": "W0 ship #1349/#1351/#1350/#1352 + T9 interim + T2/S1 safety lanes; then cents calibrate-only",
-   "needs": "Nhãn 40 mẫu (tech lead, ~2 h)"
-  },
-  {
    "id": "AA-820",
    "title": "[Legal] Tenant Terms clause for the Anthropic Usage Policy (effective 12/11/2026) + legal confirmations on AI-content attribution",
    "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M-P1",
-   "session": "S273",
+   "session": "S274",
    "size": "",
-   "next": "Pilot 1 · S273: DPA phần 2 (kỹ thuật) + điều khoản AUP Anthropic trong Tenant Terms trước 11/11; luật sư + báo tenant qua Jira",
+   "next": "Pilot 1 · S274 (hạn 11/11): DPA phần 2 (kỹ thuật) + điều khoản AUP Anthropic trong Tenant Terms; luật sư + báo tenant qua Jira",
    "needs": "Business owner: duyệt điều khoản AI trước 11/11 (có cần luật sư hay không)",
    "due": "2026-11-11"
   },
@@ -1933,9 +1951,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "S271",
+   "session": "S274",
    "size": "XL",
-   "next": "M2a · S271: phase 1 — 3 tour/thương hiệu đủ kênh trên 4 tenant audit (≈ 3–4 USD), rồi phase 2",
+   "next": "M2a · S274 hội tụ In Review: đối chiếu Done-when, đóng hoặc ghi rõ phần còn lại",
    "needs": ""
   },
   {
@@ -2020,18 +2038,6 @@
    "session": "TL-11 lift",
    "size": "M",
    "next": "M2a · WM-30 (logic) + WM-31 (UI) làm trọn khi gỡ băng TL-11, UI vào tab Metrics/Releases của Writing Lab; không xếp vào R6",
-   "needs": ""
-  },
-  {
-   "id": "AA-911",
-   "title": "[Identity] Staff sign-in for Booking (and CIS) Vercel Previews, then retire the CIS → Booking bridge",
-   "status": "In Review",
-   "priority": "Medium",
-   "project": "tpbk",
-   "milestone": "M5",
-   "session": "S273",
-   "size": "M",
-   "next": "Prod · S272: hẹn xoá secret khoá ký, apex sang ALB, gỡ Vercel aa-cis-frontend + aa-booking-admin (tech lead duyệt 07/11)",
    "needs": ""
   },
   {
@@ -2155,41 +2161,16 @@
    "needs": ""
   },
   {
-   "id": "AA-1026",
-   "title": "[AI gateway] Warm paths + route governance: Anthropic key on/off runbook, OpenAI cap, legacy model keys to 5.5 (S11), route change needs eval evidence, failover drill, invoice reconciliation",
-   "status": "In Review",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M1b",
-   "session": "≥01/12",
-   "size": "M",
-   "next": "Gateway · In Review; S267: 367 + sweep ứng viên live (Sonnet 4.5, Opus 4.5/4.6, Maverick, Kimi trả lời). Còn D6 đối soát hoá đơn tháng 11 ≥01/12; cắm key Anthropic khi có",
-   "needs": ""
-  },
-  {
    "id": "AA-1038",
    "title": "[TripPlanner] R5 multi-tenant white-label TripPlanner: tenant_id + RLS, per-tenant brand, leads to the tenant CRM, frontend on ECS (Dev)",
    "status": "In Review",
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M-P2",
-   "session": "S273",
+   "session": "S274",
    "size": "XL",
-   "next": "R5 · S272 (kéo lên): lát 3 — lead.submitted.v1 về CRM của tenant (giữ tới khi giao), brand theo tenant ở /{slug}, trần AI theo tenant cho stage tp; hosting ECS+CloudFront+WAF để lát sau",
+   "next": "R5 · S274 hội tụ: lát 3 + hosting ECS đã live S273; đối chiếu Done-when (brand 2 tenant, lọc add-on) → đóng",
    "needs": ""
-  },
-  {
-   "id": "AA-1040",
-   "title": "[Kit] AI notice and machine-readable AI-content marking across apps (EU AI Act Art. 50) before 02/12/2026",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M-P1",
-   "session": "S273",
-   "size": "M",
-   "next": "Pilot 1 · S273: 1 lượt publish WordPress thật kiểm dấu máy đọc + ảnh mọi bề mặt → Done (hạn cứng trước 02/12, d19)",
-   "needs": "Tech lead: site WordPress test mới + Application Password (không gấp)",
-   "due": "2026-12-01"
   },
   {
    "id": "AA-1041",
@@ -2210,22 +2191,10 @@
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M-R4",
-   "session": "S271",
+   "session": "S274",
    "size": "",
-   "next": "R4b · S271 (kéo lên từ S274): sửa DRY RUN theo guard PII → chạy DRY RUN → review độc lập → tech lead duyệt → drop; e-invoice sau",
+   "next": "R4b · S274 hội tụ: bk-045 (Booking #200) từ 28/11; đối chiếu Done-when, ghi rõ phần còn lại",
    "needs": "cần xếp slot"
-  },
-  {
-   "id": "AA-1047",
-   "title": "[Quality W1] One policy registry, one FactSheet, one exit contract (report mode) for S1, T2, T9 and the eval",
-   "status": "In Review",
-   "priority": "High",
-   "project": "core",
-   "milestone": "later",
-   "session": "S273",
-   "size": "",
-   "next": "",
-   "needs": ""
   },
   {
    "id": "AA-1048",
@@ -2234,10 +2203,10 @@
    "priority": "High",
    "project": "core",
    "milestone": "later",
-   "session": "S274",
+   "session": "S275",
    "size": "",
-   "next": "Đợt 1 sinh bài xong (T2 14 + T9 blog 14, 2,58 USD) · S274: đóng băng → panel vòng 2 → import → đợt phân xử T9",
-   "needs": ""
+   "next": "S275: tech lead xử lý 84 mục mở CL-1 1.0.0 → enqueue CL-1 1.1.0 đợt 1 (200/572) → pull-resolutions → t2@2",
+   "needs": "Tech lead: phân xử hàng đợi golden_claim (Writing memory)"
   },
   {
    "id": "AA-1049",
@@ -2254,14 +2223,14 @@
   {
    "id": "AA-1050",
    "title": "[Quality W4] Promote the calibrated claim instrument: shadow first, then holds only for measured classes",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "S274",
+   "session": "S275",
    "size": "",
-   "next": "Shadow live (CIS 391 + #1399, tắt mặc định) · S274+: bật shadow khi có nhãn W2, đo bất đồng với F9",
-   "needs": ""
+   "next": "S274 replay 24 object (0,12/0,30 USD): 24/24 unsupported, baseline trùng 1 → gắn nhãn ~30 ca bất đồng trước khi bật",
+   "needs": "Tech lead hoặc panel: nhãn ~30 ca bất đồng (đúng ≥ 80% mới có class enforce)"
   },
   {
    "id": "AA-1051",
@@ -2276,40 +2245,52 @@
    "needs": ""
   },
   {
-   "id": "AA-1052",
-   "title": "[Quality W6] Lineage, dormant-code cleanup and permanent change control for every writing workflow",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "core",
-   "milestone": "later",
-   "session": "S274",
-   "size": "",
-   "next": "Lineage live · S274: ship CIS #1400 (mig 392) + #1401 fan-out + chặn sửa runtime, kiểm fan-out 1 tour",
-   "needs": ""
-  },
-  {
-   "id": "AA-1053",
-   "title": "[AI gateway] One owner for the token-budget retry and one effort rule per provider (W1 contradictions #13, #14)",
-   "status": "Done",
-   "priority": "Medium",
-   "project": "core",
-   "milestone": "later",
-   "session": "S273",
-   "size": "",
-   "next": "Done S273: lô T9 W2 0 cắt 0 retry; route-test đúng effort",
-   "needs": ""
-  },
-  {
    "id": "AA-1055",
    "title": "[SEO data] Keep search-demand research fresh: budgeted refresh after every re-atomize, stale-share guard per market",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "High",
    "project": "core",
    "milestone": "later",
-   "session": "S274",
+   "session": "S275",
    "size": "L",
-   "next": "Thiết kế hướng A đã duyệt S273 (design.vi.md) · S274: thử Standard queue ~0,1 USD; PR 1 phía đọc (T2 + Slate); PR 2 phía mua; R0 → R1 US/UK/AU (~6,9 USD) sau khi PR 1+2 live",
-   "needs": "Tech lead: duyệt R2 sau số R1; nạp DFS sau R2"
+   "next": "R1 US/UK/AU xong S274; PR 3 (#1415) guard tỉ lệ cũ + phạm vi re-atomize → verify live, R2 DE/FR/NL ~0,48 USD/nước, rồi đóng",
+   "needs": ""
+  },
+  {
+   "id": "AA-1054",
+   "title": "[Identity] At go-live: remove the E2E staff sign-in exceptions (A10, A10a, A10b) and the dormant bridge code paths",
+   "status": "Backlog",
+   "priority": "Low",
+   "project": "tpbk",
+   "milestone": "later",
+   "session": "at go-live",
+   "size": "",
+   "next": "Identity · lúc go-live: gỡ ngoại lệ E2E A10/A10a/A10b + code bridge",
+   "needs": ""
+  },
+  {
+   "id": "AA-1056",
+   "title": "[Recompute] Sweep after tour retire/restore, latency metric, job release delay and cross-process lock",
+   "status": "In Progress",
+   "priority": "High",
+   "project": "core",
+   "milestone": "later",
+   "session": "S275",
+   "size": "",
+   "next": "#1404 live, metric trễ thấy 4.446 phút (05/11) · còn: retire→restore 1 tour không phái sinh + kiểm 2 recompute không chồng",
+   "needs": ""
+  },
+  {
+   "id": "AA-1058",
+   "title": "[AI gateway] Cost attribution on every ledger row: tour_id, content_piece_id, job_id, mandatory app + stage, S1 prompt_version",
+   "status": "In Progress",
+   "priority": "High",
+   "project": "core",
+   "milestone": "later",
+   "session": "S275",
+   "size": "",
+   "next": "#1408 live: 100% dòng thuộc luật có khoá; còn 1 lượt S1 + 1 bài T9 làm bằng chứng prompt_version / content_piece_id",
+   "needs": ""
   }
  ]
 }
