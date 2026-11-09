@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-partner-portal, aa-crm-web, tripplanner-frontend]
-last_reviewed: 2026-11-08
+last_reviewed: 2026-11-09
 review_every_days: 30
 related: [SEC-04-dpa-agreement, SEC-04-ai-schedule, SEC-04-dpa-pack, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04-dpa-annex4, AA-820]
 ---
@@ -26,9 +26,10 @@ related: [SEC-04-dpa-agreement, SEC-04-ai-schedule, SEC-04-dpa-pack, SEC-04-dpa-
 |---|---|---|---|
 | 1 | Pilot letter: test environment, no service level, at most 8 weeks or until AA's production environment exists, the monthly AI allowance | Business owner's wording | To write; §2 gives its legal clauses |
 | 2 | [AI Schedule: acceptable use of AI features](tenant-ai-schedule.md) | **v1.0** (2026-11-03) | Adopted by the tech lead; counsel review pending |
-| 3 | [Data Processing Agreement](dpa.md) with [Annex 1](dpa-annex-1-processing.md), [Annex 2](dpa-annex-2-security.md), [Annex 3](dpa-annex-3-subprocessors.md), [Annex 4](dpa-annex-4-transfers.md) | **Draft v0.3** (2026-11-06); Annex 2 **draft v0.4** (2026-11-08) | Engineering draft; the tech lead reads it, then counsel. Annex 2 §3 lists the points for counsel and the business owner |
+| 3 | [Data Processing Agreement](dpa.md) with [Annex 1](dpa-annex-1-processing.md), [Annex 2](dpa-annex-2-security.md), [Annex 3](dpa-annex-3-subprocessors.md), [Annex 4](dpa-annex-4-transfers.md) | **Draft v0.4** (2026-11-09): Annex 1 v0.4, Annex 2 v0.5, Annex 3 v0.4, Annex 4 v0.4 | Engineering draft, matched to Dev on 2026-11-09 (route control version 7, the AI gateway's reply store and quality records, the Trip Planner's lead routing and traveller sign-in); the tech lead reads it, then counsel. Annex 2 §3 and DPA §17 (C1-C14) list the points for counsel and the business owner |
 | 4 | EU SCC Module 2 with the fill-ins of Annex 4 §3 | Only if the pilot agency is in the EU, UK or Switzerland | Not needed for a non-EU pilot **[COUNSEL]** |
 | 5 | Model privacy notice for the agency's own clients (§4) | Draft | The agency adapts and publishes it |
+| 6 | [Tenant Terms clause](tenant-terms-ai-clause-draft.md): the provider usage policies, prohibited uses and suspension in the main terms | **Draft v0.3** (2026-11-09) | Engineering draft; each sentence maps to AI Schedule v1.0, so it adds no duty. For the partner agreement once its template exists; the pilot letter keeps clause [●].2 below |
 
 ## 2. Partner-terms clauses (for the pilot letter, later the partner agreement)
 
@@ -74,6 +75,7 @@ moves with it) or to leave, in which case DPA clause 11 (return and deletion) ap
 | Surface | What it says | State on 2026-11-05 |
 |---|---|---|
 | Pilot letter (§2 above, clauses [●].0 and [●].2) | Defines the terms the AI Schedule assumes (Services, Tenant = the Agency, Personal Data); incorporates AI Schedule v1.0 and names the Anthropic Usage Policy effective 12 November 2026 | This draft |
+| Partner agreement, main body | The [Tenant Terms clause](tenant-terms-ai-clause-draft.md) (draft v0.3, 2026-11-09): provider policies passed on, prohibited uses, AA's right to suspend AI features, effective 12 November 2026 for the Anthropic update; the Schedule prevails on details | Drafted; no partner agreement template yet **[BUSINESS OWNER]** |
 | AI Schedule v1.0 clauses .1-.2 | Defines Model Provider Policies, binds the Agency from the provider's effective date | [tenant-ai-schedule.md](tenant-ai-schedule.md) |
 | DPA clause 3.3 | AA need not follow an instruction that breaches the AI Schedule or a Model Provider Policy, "including the Anthropic Usage Policy that takes effect on 12 November 2026" | [dpa.md](dpa.md) |
 | Agency app: Content studio `/terms` §3 and CRM `/legal/terms` §1 | Summary of AI Schedule v1.0 with the three policy links | Live since S266 (AA-820 part 1) |
@@ -154,7 +156,7 @@ Agency's notice (an app change in AA-TripPlanner-Web, outside this pack).*
 
 ## 5. Readiness checks before the pilot letter is signed
 
-| # | Check | Owner | State on 2026-11-06 |
+| # | Check | Owner | State on 2026-11-09 |
 |---|---|---|---|
 | 1 | The tech lead has read the DPA and its annexes (status `draft` → reviewed) | Tech lead | Pending |
 | 2 | Contracting entity and counsel decision (b10, b20) | Business owner | Open |
@@ -164,3 +166,5 @@ Agency's notice (an app change in AA-TripPlanner-Web, outside this pack).*
 | 6 | Vendor terms checked for AWS (through the reseller), the Anthropic API, the OpenAI API (Annex 3). The two direct APIs now carry most AI calls (Annex 3 §1.2), so this check is no longer only about a fallback | Counsel | Open |
 | 7 | Jev allowlist does not include the pilot agency without a DPA / zero-retention agreement | Engineering | Proposal (Annex 3 §1.2) |
 | 8 | The monthly AI allowance number in the pilot letter | Business owner | Open (AI Schedule §5) |
+| 9 | The quality panel's sample tools skip the pilot agency, or the Agency is told (Annex 2 §2 item 9) | Engineering; the tech lead decides | Open: `scripts/aa729/select_samples.py` and `scripts/aa1048/cli.py` (AA-CIS-App) have no pilot check on `main` (read 2026-11-09) |
+| 10 | The quality records of the Content studio (reply store, FactSheets, claim labels, shadow verdicts) have approved windows and deletion jobs, or the pilot letter says they are kept until then (Annex 1 §3; DPA point C14) | Tech lead (windows, DM-7.5); counsel (C14) | Open: all four windows are proposed in DM-7.1, no deletion job yet |

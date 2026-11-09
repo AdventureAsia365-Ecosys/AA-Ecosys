@@ -1,18 +1,18 @@
 ---
 id: SEC-04-dpa-agreement
-title: "Data Processing Agreement for partner agencies (draft v0.3)"
+title: "Data Processing Agreement for partner agencies (draft v0.4)"
 description: "The Art. 28 Data Processing Agreement between Adventure Asia (processor) and a partner agency (controller) for the Content studio, the CRM and Booking B2B, with the breach notice timeline, sub-processor rules, transfers and return or deletion at the end; draft for counsel, not legal advice."
 type: reference
 status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-partner-portal, aa-crm-api, aa-crm-web, aa-cis-api, aa-booking-api]
-last_reviewed: 2026-11-06
+last_reviewed: 2026-11-09
 review_every_days: 30
 related: [SEC-04, SEC-04-dpa-pack, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04-dpa-annex4, SEC-04-pilot-set, SEC-04-ai-schedule, SEC-04-dsar, AA-820]
 ---
 
-# Data Processing Agreement for partner agencies (draft v0.3)
+# Data Processing Agreement for partner agencies (draft v0.4)
 
 > [!WARNING]
 > **DRAFT FOR COUNSEL. NOT LEGAL ADVICE. NOT APPROVED.** Engineering wrote this text from the product facts on
@@ -23,7 +23,7 @@ related: [SEC-04, SEC-04-dpa-pack, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-
 
 | | |
 |---|---|
-| Version | **Draft v0.3, 2026-11-06** (AA-820 part 2): the pilot safeguards of clause 15.3 are in place on Dev (Annex 2 M-25), backups are 14 days (11.3), the breach timeline points to the personal-data breach branch of the incident runbook (8.3), and Annex 3 names the Anthropic API as the first path of Claude models. v0.2 of 2026-11-05 was root PR #546. Replaces the [DPA template v0.1](dpa-template.md) of 2026-10-21, whose clause 1.3 made AA the controller of travellers; ADR 0019 invariant 2 superseded that |
+| Version | **Draft v0.4, 2026-11-09** (AA-820 part 2): clause 3.4 says that the AI call records keep no prompt or output text but that the CIS AI gateway keeps model replies for a short window (Annex 1 §3, Annex 2 M-20), with point C14 for counsel; the annexes follow route control version 7 (CIS 383: the OpenAI API scores and checks but no longer writes) and the Trip Planner's per-agency lead routing and traveller sign-in (Annex 1 §5). Annexes: Annex 1 v0.4, Annex 2 v0.5, Annex 3 v0.4, Annex 4 v0.4. v0.3 of 2026-11-06 (root PR #581): the pilot safeguards of clause 15.3 are in place on Dev (Annex 2 M-25), backups are 14 days (11.3), the breach timeline points to the personal-data breach branch of the incident runbook (8.3), and Annex 3 names the Anthropic API as the first path of Claude models. v0.2 of 2026-11-05 was root PR #546. Replaces the [DPA template v0.1](dpa-template.md) of 2026-10-21, whose clause 1.3 made AA the controller of travellers; ADR 0019 invariant 2 superseded that |
 | Decisions | [ADR 0019](../adr/0019-b2b-only-ecosystem-model.md) invariant 2 and b9 (agency = controller, AA = processor, on every app), b10 (contracting entity and counsel before Vietnamese or EU agencies store data), b11 (worldwide from US hosting with SCCs plus a TIA), d12 (US by default, EU cell on triggers), d16 (pilot on Dev with one agency, a pilot letter and this DPA); ADR 0008a (CRM: agency controller, AA processor) |
 | Annexes | [Annex 1: processing per app](dpa-annex-1-processing.md) · [Annex 2: security measures](dpa-annex-2-security.md) · [Annex 3: sub-processors](dpa-annex-3-subprocessors.md) · [Annex 4: transfers, SCC fill-ins and TIA](dpa-annex-4-transfers.md) |
 | Ships with | The [pilot contract set](pilot-contract-set.md): the partner-terms clauses that incorporate this DPA and the [AI Schedule v1.0](tenant-ai-schedule.md) (Anthropic Usage Policy effective 12 November 2026), the joint-controller clause and the model privacy notice for the agency |
@@ -106,7 +106,14 @@ until the Agency changes the instruction.
 the CRM, personal data the CRM knows or detects is replaced by placeholders before any model call and restored only
 for the Agency's user (Annex 2, M-18; the placeholder map: M-20). In the Content studio, the Agency puts no personal
 data of its clients into brand settings, briefs or content inputs (clause 13.3). AA keeps no prompt or AI output text
-in its AI call records (AI Schedule clause .8(a)).
+in its AI call records (AI Schedule clause .8(a)). The CIS AI gateway keeps the raw reply of each model call, never the
+prompt, in a separate reply store for a short window, to replay and measure AA's checks; Annex 1 §3 ("Quality
+records") and Annex 2 M-20 describe it, and it is deleted with the Agency's data under clause 11.
+
+*Drafting note [COUNSEL] (v0.4): the reply store, the FactSheets, the claim labels and the shadow verdicts of Annex 1
+§3 exist on Dev since 2026-11-06 (CIS migrations 385, 386, 388, 391). Whether keeping them is processing on the
+Agency's instruction or an AA purpose that clause 1.3 must name, and whether AI Schedule clause .8(a) needs a sentence
+on the reply store, is point C14.*
 
 ## 4. Confidentiality
 
@@ -321,7 +328,8 @@ Each is also marked inline.
 | C7 | Exit window length; retention exceptions (accounting, signed agreements, audit archive seven years) | 11.1, 11.2 |
 | C8 | Backup wording after deletion | 11.3 |
 | C9 | Audit right scope and cost; no SOC 2 / ISO today | 12.2 |
-| C10 | Transfer mechanism per Agency market; SCC options; the Vietnamese cross-border dossier; APP 8 | 10, Annex 4 |
+| C10 | Transfer mechanism per Agency market; SCC options; the Vietnamese cross-border dossier; APP 8; whether a Trip Planner lead sent to the Agency's own webhook or e-mail address is an onward transfer by AA (Annex 4 §4, open transfer question 1) | 10, Annex 4 |
 | C11 | Pilot on Dev with real data: is the pilot letter plus this DPA enough (AI Schedule Q16) | 15 |
 | C12 | Liability caps and carve-outs; governing law | 16 |
 | C13 | Anonymous cross-agency statistics: an Agency instruction AA carries out as processor, or AA's own purpose on data it anonymises (Art. 28(10) risk); the opt-out | 1.3, 1.6, Annex 1 §2 |
+| C14 | Quality records of the Content studio (model replies, FactSheets, claim labels, shadow verdicts): within the Agency's instructions or an AA purpose; whether AI Schedule clause .8(a) and the Content studio pages must mention the reply store; the proposed windows (30 days to 12 months) | 1.3, 3.4, Annex 1 §3, Annex 2 §3 point 8 |

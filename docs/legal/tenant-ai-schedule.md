@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-partner-portal, aa-crm-web, tripplanner-frontend]
-last_reviewed: 2026-11-08
+last_reviewed: 2026-11-09
 review_every_days: 30
 related: [SEC-04, SEC-04-packet, SEC-04-dpa, SEC-04-dpa-pack, APP-06-ai-register, AA-820]
 ---
@@ -24,7 +24,7 @@ related: [SEC-04, SEC-04-packet, SEC-04-dpa, SEC-04-dpa-pack, APP-06-ai-register
 |---|---|
 | Linear | AA-820 part 1 (due 11/11/2026, one day before the Anthropic Usage Policy update takes effect). Part 2 (the DPA pack) is outlined in [dpa-pack-outline.md](dpa-pack-outline.md) |
 | Decision | ADR 0019 [b20](../adr/0019-b2b-only-ecosystem-model.md) (approve the AI-terms draft now; counsel before the first paying agency), b19 (Anthropic account in the AA company's name, AI included per plan with a soft stop), b9 and d16 (pilot on Dev with one agency, a pilot letter and a DPA) |
-| Version | **v1.0, 03/11/2026.** The Schedule text (§3) is unchanged; on 06/11/2026 (S271) the provider facts of §2, §5 and §6 were brought in line with route control version 6 (AI Use Register v1.11); on 08/11/2026 (S273) §9 records where each part of AA-820 stands. History: v0.1 15/10/2026 (root PRs #72, #74), v0.2 24/10/2026 (root PR #240); the earlier file name was `tenant-terms-ai-clause-draft.md` |
+| Version | **v1.0, 03/11/2026.** The Schedule text (§3) is unchanged; on 06/11/2026 (S271) the provider facts of §2, §5 and §6 were brought in line with route control version 6 (AI Use Register v1.11); on 08/11/2026 (S273) §9 records where each part of AA-820 stands; on 09/11/2026 (S274) §6 follows route control version 7 (CIS 383: OpenAI models no longer write) and the AI gateway's reply store (CIS 385), two drafting notes are added to §3 (.1 and .8(a)), and the short Tenant Terms clause that carries the Usage Policy into the main terms is in [tenant-terms-ai-clause-draft.md](tenant-terms-ai-clause-draft.md). History: v0.1 15/10/2026 (root PRs #72, #74), v0.2 24/10/2026 (root PR #240); the earlier file name was `tenant-terms-ai-clause-draft.md` |
 | Provider list | Taken from the [AI Use Register](../architecture/ai-use-register.md) (ADR 0009). A route change that adds a provider updates the register, this page and the app pages together |
 | Placeholders | `[●]` = a value the business owner or counsel fills in. *Drafting notes* (in italics) are for the reviewer and are not part of the clause |
 
@@ -79,6 +79,12 @@ agreement. Counsel aligns these terms.*
   Sub-processor. Since Draft v0.5 the Content studio pages say AA may change only the **order** of the listed providers
   without notice, and that adding or replacing a provider follows the DPA notice. Counsel aligns this definition with
   DPA 6.2 (see Q11 in §7).
+
+  *Drafting note (2026-11-09, not a change to v1.0):* since route control version 7 (CIS 383, 2026-11-06) OpenAI
+  models only score and check tenant content, and Meta models run only on platform stages over AA's own catalogue
+  (`a3_place_card_check`, `a3_place_dedupe`), not on any AI Feature. The list above therefore names more than the AI
+  Features use today; it stays as the ceiling the Content studio pages and DPA Annex 3 already disclose. Whether to
+  narrow it in v1.1 is for counsel (Q11).
 - **"AA Provider Accounts"** means the accounts that AA holds **in its own company name** with Amazon Web Services and
   with Model Providers, through which every AI Feature is provided.
 - **"Model Provider Policies"** means the acceptable-use and usage policies of the Model Providers and of the cloud
@@ -200,6 +206,13 @@ the law or the Model Provider Policies require it, or to investigate a suspected
 the Tenant where the law allows.
 (e) The Tenant cooperates in good faith with any investigation by AA or a Model Provider into suspected misuse.
 
+*Drafting note (2026-11-09, not a change to v1.0):* (a) stays true of the AI call records, but since 2026-11-06 the
+Content studio's AI gateway also keeps the raw model reply of each call (never the prompt) in a separate reply store,
+for a proposed 30 days, to replay and measure AA's checks (CIS migration 385; [DPA Annex 1](dpa-annex-1-processing.md)
+§3, "Quality records"; [Annex 2](dpa-annex-2-security.md) M-20). A v1.1 could add, after the second sentence of (a):
+"AA keeps the AI Output of a call in a separate store for up to [30] days to check and improve the quality of the AI
+Features, and deletes it with the Tenant's data." Counsel decides (DPA point C14).*
+
 **[●].9 Changes.** AA may update this Schedule to follow changes in the Model Provider Policies, the law or the AI
 Features, by giving [●] days' notice in the Portal or by e-mail. A shorter period applies where a Model Provider or the
 law requires it. Continued use of the AI Features after the effective date is acceptance.
@@ -280,11 +293,11 @@ agency's plan, and so the number, is the business owner's call.*
 | Fact | Detail |
 |---|---|
 | Tenants | **No real or paying tenant.** The Dev tenants are test tenants. The first real one is the single pilot agency of ADR 0019 d16 (at most 8 weeks, or until `aa-prod` exists) |
-| Content studio AI | Tour rewrites (T2) and social and blog pieces (T9). Claude writes, called on the **Anthropic API first** and on Amazon Bedrock second (a gateway setting since 2026-11-05, route control version 6); OpenAI models review and check, on Amazon Bedrock first and on the OpenAI API second. AA's Bedrock AI account has refused every main model since 2026-10-29, so today the two direct APIs answer these calls. Amazon Nova and Meta Llama on Bedrock are fallbacks for checks; an OpenAI model on the OpenAI API may write as a last resort. Each direct API has a monthly spending cap ([AI Use Register](../architecture/ai-use-register.md) v1.11; CIS migrations 344, 366, 376) |
+| Content studio AI | Tour rewrites (T2) and social and blog pieces (T9). Claude writes, called on the **Anthropic API first** and on Amazon Bedrock second (a gateway setting since 2026-11-05, route control version 6); OpenAI models review and check, on Amazon Bedrock first and on the OpenAI API second. AA's Bedrock AI account has refused the main models since 2026-10-29 (at the last recorded check, 2026-11-06, still the seven newest), so today the two direct APIs answer these calls. Since route control version 7 (CIS 383, 2026-11-06) **no OpenAI model writes**: a writer whose Claude paths all fail stops and is queued again; and no judge falls back to Amazon Nova Lite, which remains only the fallback of the two FAQ checks (off by default). Meta Llama serves platform stages only. Each direct API has a monthly spending cap ([AI Use Register](../architecture/ai-use-register.md) v1.13; CIS migrations 344, 366, 376, 383) |
 | CRM AI | Reply and follow-up drafts (`crm_draft_reply`), Amazon Bedrock only (ADR 0008a §5-6). Personal data the CRM knows or detects is replaced by placeholders before the model call. A person sends every draft. Off by default per agency, and gated by the plan's `ai_assist` feature |
 | Trip Planner AI | Trip narration (`tp_compose`): Claude through Amazon Bedrock only; the Trip Planner's gateway does not call the direct APIs. AI text is labelled on the site |
 | Direct API accounts | Held in the AA company's name (b19), monthly caps with a hard stop: 150 USD for Anthropic (one key for every product, switched on 2026-11-05), 10 USD for OpenAI; tenants never get a key |
-| Records | AI call ledgers (`shared.llm_call_log`, `crm.llm_call`) without prompt or output text, 180 days; publish log; admin audit log |
+| Records | AI call ledgers (`shared.llm_call_log`, `crm.llm_call`) without prompt or output text, 180 days; publish log; admin audit log. Since 2026-11-06 the CIS gateway's reply store (`shared.llm_cassette`, CIS 385): raw model replies, never prompts, proposed 30 days, no deletion job yet (DM-7.1); deleted with the tenant at erasure |
 | AI-content marks (for [●].4) | Notices and "AI-assisted" labels in every app, plus a machine-readable mark on AI Output: stored with each piece, sent in the API answers and downloads, and carried in the HTML of a WordPress post (EU AI Act Art. 50, AA-1040). What each surface carries: [AI Use Register, "Machine-readable marking"](../architecture/ai-use-register.md#machine-readable-marking-eu-ai-act-art-50) |
 
 ## 7. Questions for counsel (before the first paying agency)
@@ -324,21 +337,28 @@ The v0.2 questions stay open unless marked. Counsel's answers become v1.1.
   visas, financing, refunds or claims without a qualified agency member's review and an AI disclosure.
 - **AA-Booking `CONTEXT.md`, same heading:** Booking makes no AI calls; the same rule applies if it ever does.
 
-## 9. AA-820 status (checked 2026-11-08)
+## 9. AA-820 status (checked 2026-11-09)
 
-Where each "done when" item of AA-820 stands, four days before the Anthropic Usage Policy update takes effect
+Where each "done when" item of AA-820 stands, three days before the Anthropic Usage Policy update takes effect
 (2026-11-12). **[COUNSEL]** = a lawyer's answer; **[BUSINESS OWNER]** = the business owner's decision.
 
 | # | Item of AA-820 | State | Evidence | Still open, and whose |
 |---|---|---|---|---|
-| 1 | Usage Policy clause in the tenant terms / contract template (scope point 1) | **Done for the pilot**: the clause is §3 of this page (v1.0, approved by the tech lead under ADR 0019 b20) and clause [●].2 of the pilot letter; the agency-facing summaries are live on the Content studio, CRM and Trip Planner terms pages (§2 (a)-(c)) | This page §3; [pilot contract set](pilot-contract-set.md) §2 clause [●].2; §2 rows (a)-(c) | Counsel review before the first paying agency, then v1.1 **[COUNSEL]**. There is no partner agreement template yet; the clauses move into it unchanged when it exists **[BUSINESS OWNER]** |
+| 1 | Usage Policy clause in the tenant terms / contract template (scope point 1) | **Done for the pilot**: the clause is §3 of this page (v1.0, approved by the tech lead under ADR 0019 b20) and clause [●].2 of the pilot letter; the agency-facing summaries are live on the Content studio, CRM and Trip Planner terms pages (§2 (a)-(c)). Since 2026-11-09 the short clause for the main tenant terms (provider policies passed on, prohibited uses, AA's right to suspend AI features, effective 12 November 2026) is drafted in [tenant-terms-ai-clause-draft.md](tenant-terms-ai-clause-draft.md); every sentence of it maps to a clause of v1.0 | This page §3; [pilot contract set](pilot-contract-set.md) §2 clause [●].2; [Tenant Terms clause](tenant-terms-ai-clause-draft.md); §2 rows (a)-(c) | Counsel review before the first paying agency, then v1.1 **[COUNSEL]**. There is no partner agreement template yet; the clauses move into it unchanged when it exists **[BUSINESS OWNER]** |
 | 2a | Content under the agency's own name without an AI label does not breach the policy's origin and attribution items | Engineering's reading: yes (§7 Q1). The machine-readable AI mark on WordPress posts (AI Use Register, "Machine-readable marking") adds evidence of origin without a visible label | §7 Q1 | **[COUNSEL]** confirms |
 | 2b | The Trip Planner's permanent "AI-assisted" label and narration notices are enough disclosure | Engineering's reading: yes; the policy allows the disclosure "in the product interface" (§1) | §7 Q2; AI Use Register, Trip Planner narration row | **[COUNSEL]** confirms |
 | 2c | Local AI-labelling and advertising law in the agency markets | Not assessed by engineering. The EU AI Act Article 50 marks are being built to 02/12/2026 (ADR 0019 d19) | §7 Q3 | **[COUNSEL]**, once the business owner names the first agency markets **[BUSINESS OWNER]** |
 | 3 | Existing tenants notified of the new clause | **No tenant to notify**: Dev has test tenants only (§6). The first agency receives the Schedule with the pilot letter (§5), before it uses any AI feature | §5, §6 | The pilot letter's wording and the AI allowance `[●]` **[BUSINESS OWNER]** |
 | 4 | AA-Booking boundary for high-risk advice recorded in Booking's `CONTEXT.md` | **Done**: AA-Booking `CONTEXT.md`, "AI boundary for high-risk advice (AA-820)"; since S273 it points at clause .3(8) of this Schedule instead of the retired v0.2 draft. The same rule for the CRM's ancillaries is in AA-Partner `CONTEXT.md` (§8) | §8 | None |
-| 5 | DPA pack (part 2): technical and organisational measures and the sub-processor list | **Drafted** (v0.3 / v0.4): [Annex 2](dpa-annex-2-security.md) (§0 maps hosting region, encryption, access control, tenant isolation, personal data before a model call, retention and incidents to the measures; §3 lists the points for counsel and the business owner) and [Annex 3](dpa-annex-3-subprocessors.md) (AWS including Amazon Bedrock, the Anthropic API, the OpenAI API, Jev, Sentry; Geoapify and DataForSEO receive no agency personal data, so they are listed in its §2, not as sub-processors) | [DPA pack outline](dpa-pack-outline.md) | Annex 2 §3 and the **[COUNSEL]** marks in the [DPA](dpa.md) and Annexes 3-4 |
+| 5 | DPA pack (part 2): technical and organisational measures and the sub-processor list | **Drafted** (DPA v0.4 of 2026-11-09 with Annex 1 v0.4, Annex 2 v0.5, Annex 3 v0.4, Annex 4 v0.4: route control version 7, the AI gateway's reply store and quality records, the Trip Planner's lead routing and traveller sign-in): [Annex 2](dpa-annex-2-security.md) (§0 maps hosting region, encryption, access control, tenant isolation, personal data before a model call, retention and incidents to the measures; §3 lists the points for counsel and the business owner) and [Annex 3](dpa-annex-3-subprocessors.md) (AWS including Amazon Bedrock, the Anthropic API, the OpenAI API, Jev, Sentry; Geoapify and DataForSEO receive no agency personal data, so they are listed in its §2, not as sub-processors) | [DPA pack outline](dpa-pack-outline.md) | Annex 2 §3 and the **[COUNSEL]** marks in the [DPA](dpa.md) and Annexes 3-4 |
 
 *Drafting note: Annex 3 was re-checked against the [secrets register](../security/secrets-register.md) on
 2026-11-08 (vendor rows: AWS, Anthropic, OpenAI, Jev, Sentry, Mapbox, Geoapify, DataForSEO, Google Drive): no
-vendor that receives agency personal data is missing from it.*
+vendor that receives agency personal data is missing from it. Re-checked on 2026-11-09: the vendor rows also name
+Zoho ("mail / business tooling"), now beside DreamHost in Annex 3 §1.3 as company mail to confirm; TrueIDC, Namecheap,
+GitHub and Vercel (no project left) receive no agency personal data.*
+
+*Page-copy follow-up (2026-11-09, AA-Partner, not this page):* the Content studio `/legal/partner-terms` §3 and
+`/legal/privacy` §5–§6 (Draft v0.5) still say that an OpenAI model "may write it as a last resort". Since route control
+version 7 (CIS 383, 2026-11-06) none does. The pages disclose more than happens, which misleads no one about where
+content goes, but the next page version should drop that sentence (readiness packet Annex A follow-ups).

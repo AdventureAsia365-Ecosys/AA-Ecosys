@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-08
+last_reviewed: 2026-11-09
 review_every_days: 90
 related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, SEC-04-ai-schedule, SEC-04-dpa-pack, AA-886, AA-820, AA-839, AA-877, AA-1038]
 ---
@@ -79,7 +79,7 @@ planned. *Proposed answer:* A now, B only when a marketing use exists. *Detail:*
 
 ## 4. DPA template and service providers
 
-*Current fact:* a draft data processing agreement for partners (v0.3) is ready for review. It sets out that the
+*Current fact:* a draft data processing agreement for partners (v0.4, 2026-11-09) is ready for review. It sets out that the
 partner is the controller for data it puts into the portal and Adventure Asia is the processor, lists the processor
 duties, and has annexes for the processing, the security measures (each marked live or planned) and the service
 providers. The register lists the providers found in the code: AWS (hosting, e-mail, sign-in, AI models through Amazon
@@ -87,9 +87,13 @@ Bedrock), the AI providers Anthropic (direct API, the first path for Claude mode
 DataForSEO, Google (photo files), the adventure.asia mail host, and work tools. Jev receives partner content only for a short list of test partners, until a data processing and zero-retention
 agreement with Jev is in place; that agreement is an open item. Other open points: whether the AWS resellers
 (TrueIDC for the hosting account, eCloudvalley for the AI account) and the model makers behind Bedrock must be listed,
-and the contract status of each provider. *Options:* (A) list every provider, including resellers, and remove any that
-counsel says are not needed; (B) list only providers that process data directly. *Proposed answer:* A. *Detail:*
-[DPA v0.3](dpa.md) with its annexes; [register](register.md), section (b).
+and the contract status of each provider. Version 0.4 matches what runs on Dev on 2026-11-09: since 2026-11-06 an
+OpenAI model only scores and checks partner content and no longer writes it; the content AI also keeps each model's
+reply for a short time (proposed 30 days, no deletion job yet) to check and improve its own checks, which a lawyer
+should look at (point C14); and the company mail provider (DreamHost or Zoho) is still to be confirmed. *Options:* (A)
+list every provider, including resellers, and remove any that counsel says are not needed; (B) list only providers
+that process data directly. *Proposed answer:* A. *Detail:* [DPA v0.4](dpa.md) with its annexes; [register](register.md),
+section (b).
 
 ## 5. Records of processing
 
@@ -191,11 +195,18 @@ Claude called on the Anthropic API first and Amazon Bedrock second (route contro
 Register](../architecture/ai-use-register.md) v1.11), no longer as a fallback, and say that Claude models also check
 content. They say that Adventure Asia may change the order in which the listed providers are used without notice, and
 that adding or replacing a provider follows the advance notice of the data processing agreement ([DPA](dpa.md) 6.2).
-The Schedule's own clause text already named both paths and stays v1.0. *Business owner decides:* the wording of
+The Schedule's own clause text already named both paths and stays v1.0. *Update 2026-11-09:* a short clause for the
+main body of the partner terms is drafted ([Tenant Terms clause](tenant-terms-ai-clause-draft.md), draft v0.3): the
+partner follows the AI providers' usage policies, including the Anthropic Usage Policy from 2026-11-12; the
+prohibited uses; and Adventure Asia's right to pause AI features. Every sentence comes from Schedule v1.0, so it adds no
+new duty; it waits for a partner agreement template. The data processing agreement is at v0.4 (topic 4). Since
+2026-11-06 no OpenAI model writes partner content; the portal pages still say one "may write it as a last resort",
+which says more than happens and is fixed in their next version. *Business owner decides:* the wording of
 the pilot letter around the clause, the pilot's monthly AI allowance, and when to bring in the lawyer (before the
 first paying agency at the latest). *Detail:* [AI Schedule v1.0](tenant-ai-schedule.md): where each part ships (§2),
-the Schedule (§3), the pilot-letter clause (§5) and 16 questions for a lawyer (§7). Part 2, the data processing pack
-for the pilot, is outlined in [dpa-pack-outline.md](dpa-pack-outline.md).
+the Schedule (§3), the pilot-letter clause (§5), 16 questions for a lawyer (§7) and where each part of the work stands
+(§9). Part 2, the data processing pack for the pilot: [DPA v0.4](dpa.md) and its four annexes
+([pack outline](dpa-pack-outline.md)).
 
 ## Annex A: current text of the four pages
 
@@ -211,7 +222,9 @@ portal pages show "Draft v0.5" (6 November 2026) since the route control version
 portal pages also show a Vietnamese translation for reading, and their English text applies. If a page changes after
 that commit or that PR, the live page wins.
 
-Two page-copy follow-ups are known. The portal privacy notice §6 still says that Vercel hosts the portal pages,
+Three page-copy follow-ups are known. Since 2026-11-06 (route control version 7, CIS migration 383) no OpenAI model
+writes Content studio content, but A.3 §5 and A.4 §3 (portal Draft v0.5) still say that an OpenAI model "may write it
+as a last resort"; the next portal page version drops that sentence. The portal privacy notice §6 still says that Vercel hosts the portal pages,
 although the portal now runs on AWS. Since 2026-11-08 the Trip Planner privacy notice (§3, §6, §7) names Amazon Web
 Services (Amazon CloudFront and its website firewall, with a short-lived security cookie) instead of Vercel; A.2 below
 quotes the older text. The Trip Planner pages changed after 2026-10-20 but still showed that date until
