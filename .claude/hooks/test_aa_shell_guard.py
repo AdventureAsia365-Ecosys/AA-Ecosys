@@ -41,8 +41,9 @@ class LexerTest(unittest.TestCase):
         self.assertIn("echo done", sk)
 
     def test_bash_c_and_bash_heredoc_bodies_are_read_as_bash(self):
-        levels = [t.level for t in g.texts_of("bash -c 'echo a'; bash -euo pipefail -c \"echo b\"; zsh -c 'x'")]
-        self.assertEqual(levels, ["zsh", "bash", "bash", "zsh"])
+        texts = g.texts_of("bash -c 'echo a'; bash -euo pipefail -c \"echo b\"; zsh -c 'x'")
+        self.assertEqual([t.level for t in texts], ["zsh", "bash", "bash", "zsh"])
+        self.assertEqual([t.pipefail for t in texts], [False, False, True, False])
         texts = g.texts_of("bash <<'EOF'\necho in-body\nEOF")
         self.assertEqual([t.level for t in texts], ["zsh", "bash"])
         self.assertIn("echo in-body", texts[1].skeleton)
@@ -234,6 +235,55 @@ class ShipTest(unittest.TestCase):
                     self.assertIsNone(rule(cmd, cwd=root), cmd)
             finally:
                 g.ROOT = old
+
+
+class PipeExitTest(unittest.TestCase):
+    """PIPE-1 (S272, S273): a ship step piped through tail/head/tee and chained with && runs the next step after a
+    failure, because the pipeline exits with the tail's code."""
+
+    def test_refused(self):
+        for cmd in (
+            # the S273 shape: the registry PR merge failed, the apply still ran
+            "python3 tools/github/ship_merge.py infra#732 2>&1 | tail -5 && tools/github/dbmig.sh tp/tp-027_x.sql "
+            "apply",
+            # the S272 shape: merge red, copy/apply and `gh pr ready` still ran
+            "python3 tools/github/ship_merge.py cis#1374 | tail -3 && python3 tools/github/ship_copy_apply.py "
+            "cis/389 && gh pr ready 1368",
+            "python3 tools/github/ship_wave.py cis#1 'cis#2>apply:cis/390' 2>&1 | head -40 && echo shipped",
+            "tools/github/dbmig.sh cis/390_x.sql apply |& tail -2 && curl -s https://example.invalid/health",
+            "python3 tools/github/ship_open_prs.py --lane x | tee .tmp-session/S999/open.log && gh pr list",
+            "(python3 tools/github/ship_merge.py root#5 2>&1 | tail -1) && git -C . pull",
+            "bash -c 'python3 tools/github/ship_merge.py root#5 | tail -1 && echo next'",
+            "tools/github/as-app.sh --repos AA-Ecosys -- git push origin HEAD 2>&1 | tail -3 && gh pr create",
+            # pipefail set AFTER the pipeline does not count
+            "python3 tools/github/ship_merge.py root#5 | tail -1 && set -o pipefail",
+            "bash -o pipefail -c 'true'; bash -c 'tools/github/dbmig.sh cis/1_x.sql apply | tail -1 && echo next'",
+        ):
+            self.assertEqual(rule(cmd), "PIPE-1", cmd)
+
+    def test_near_misses_pass(self):
+        for cmd in (
+            "set -o pipefail; python3 tools/github/ship_merge.py root#5 2>&1 | tail -1 && echo next",
+            "set -euo pipefail\npython3 tools/github/ship_merge.py root#5 | tail -1 && echo next",
+            "setopt pipefail; tools/github/dbmig.sh cis/1_x.sql apply | tail -3 && echo next",
+            "bash -o pipefail -c 'python3 tools/github/ship_merge.py root#5 | tail -1 && echo next'",
+            "bash -euo pipefail -c 'tools/github/dbmig.sh cis/1_x.sql apply | head -5 && echo next'",
+            # no && after the pipeline: nothing depends on its exit code
+            "python3 tools/github/ship_merge.py root#5 2>&1 | tail -1; echo done",
+            "python3 tools/github/ship_merge.py root#5 2>&1 | tail -1",
+            "echo start && python3 tools/github/ship_merge.py root#5 2>&1 | tail -1",
+            # no pipe: && sees the ship step's own code
+            "python3 tools/github/ship_merge.py root#5 > .tmp-session/S999/m.log 2>&1 && tail -3 "
+            ".tmp-session/S999/m.log",
+            # the piped command is not a ship step
+            "gh pr checks 5 | tail -3 && echo ok",
+            "git log --oneline | head -5 && git status",
+            # grep keeps its own exit code (and -q is the point)
+            "python3 tools/github/ship_merge.py --check-only root#5 2>&1 | grep -q green && echo ok",
+            # quoted text is not code
+            "grep -n 'ship_merge.py root#5 | tail -1 && x' skill/aa-ship/SKILL.md && echo found",
+        ):
+            self.assertIsNone(rule(cmd), cmd)
 
 
 class EcsExecTest(unittest.TestCase):
