@@ -260,3 +260,17 @@ S270 close snapshot.
   `scripts/aa1048/cli.py`) do not skip the pilot agency (Annex 2 §2 item 9, pilot-set check 9); the four quality
   tables have proposed windows and no deletion jobs (pilot-set check 10).
 - Route control version 7 = CIS 383, applied with CIS 381-385 on 2026-11-06 (S271 session log).
+
+### Review fix pass (S274, 2026-11-09)
+
+- **Trip Planner lead row (reviewer, major).** Annex 4 §1 and its v0.4 note had decided that a lead sent to the
+  Agency's own endpoint "is not an onward transfer by AA", a legal call the page's banner leaves to counsel. Now both
+  state the fact (the request goes to the Agency, its controller) and the engineering reading with **[COUNSEL]**; a new
+  §4 "Open transfer questions (counsel)" item 1 names the webhook (Agency-hosted, possibly outside the EU) and SES
+  e-mail paths, and DPA point C10 carries the question.
+- **Claim labels are exported (reviewer, major; verified on AA-CIS-App `main`).** `scripts/aa1048/cli.py` `cmd_finals`
+  reads `shared.eval_claim_label` (`services/ground_truth/store.read_rows`) and writes `importer.finals_rows`, which
+  include `claim_text`, to a scratch file; `payload` writes claim text too. Annex 1 §3 "Quality records" no longer says
+  all four stores are never exported: the reply store, FactSheets and shadow verdicts are not (no script on `main`
+  reads them), claim labels are, to the git-ignored scratch folder, tied to Annex 2 §2 item 9 and pilot check 9. The
+  register row and Annex 2 M-20 speak only of the reply store and FactSheets, so they stay.

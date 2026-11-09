@@ -328,7 +328,7 @@ Each is also marked inline.
 | C7 | Exit window length; retention exceptions (accounting, signed agreements, audit archive seven years) | 11.1, 11.2 |
 | C8 | Backup wording after deletion | 11.3 |
 | C9 | Audit right scope and cost; no SOC 2 / ISO today | 12.2 |
-| C10 | Transfer mechanism per Agency market; SCC options; the Vietnamese cross-border dossier; APP 8 | 10, Annex 4 |
+| C10 | Transfer mechanism per Agency market; SCC options; the Vietnamese cross-border dossier; APP 8; whether a Trip Planner lead sent to the Agency's own webhook or e-mail address is an onward transfer by AA (Annex 4 §4, open transfer question 1) | 10, Annex 4 |
 | C11 | Pilot on Dev with real data: is the pilot letter plus this DPA enough (AI Schedule Q16) | 15 |
 | C12 | Liability caps and carve-outs; governing law | 16 |
 | C13 | Anonymous cross-agency statistics: an Agency instruction AA carries out as processor, or AA's own purpose on data it anonymises (Art. 28(10) risk); the opt-out | 1.3, 1.6, Annex 1 §2 |
