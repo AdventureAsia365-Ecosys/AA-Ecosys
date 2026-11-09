@@ -1,0 +1,95 @@
+{
+ "by_adjudication": {
+  "agreed": 915,
+  "audit": 228,
+  "disputed": 1023
+ },
+ "by_label": {
+  "ok": 1964,
+  "unsure": 76,
+  "violation": 126
+ },
+ "by_split": {
+  "held_out": 2166
+ },
+ "by_writer": {
+  "t2": 2166
+ },
+ "claims": 722,
+ "contradictions": [],
+ "manifest": {
+  "claims": 722,
+  "digest": "cadfe3afc39918d3e63bc90ebe36483f9a97bb34fc47faabbe0cc30bf57752dd",
+  "evidence_sources": {
+   "none": 341,
+   "panel_agreed": 381
+  },
+  "labels_by_class": {
+   "fact.direction": {
+    "ok": 6,
+    "unsure": 7,
+    "violation": 2
+   },
+   "fact.embellish": {
+    "ok": 22,
+    "unsure": 22,
+    "violation": 4
+   },
+   "fact.inclusion": {
+    "ok": 157,
+    "unsure": 230,
+    "violation": 13
+   },
+   "fact.misbinding": {
+    "unsure": 6,
+    "violation": 1
+   },
+   "fact.name": {
+    "ok": 20,
+    "unsure": 8
+   },
+   "fact.number": {
+    "ok": 37,
+    "unsure": 6,
+    "violation": 1
+   },
+   "other.f6": {
+    "ok": 17,
+    "unsure": 9,
+    "violation": 1
+   },
+   "other.f7": {
+    "ok": 14,
+    "unsure": 19,
+    "violation": 1
+   },
+   "scope.framing": {
+    "unsure": 2
+   },
+   "scope.persona_promise": {
+    "ok": 2,
+    "unsure": 17,
+    "violation": 4
+   },
+   "struct.day_structure": {
+    "ok": 79,
+    "unsure": 15
+   }
+  },
+  "objects": 17,
+  "policy_sha": [
+   "1c3ec88417b63426601a22abe06fbecf02d232e32d2aaa010ff812fdaf2bcbdf"
+  ],
+  "rows": 2166,
+  "set_id": "t2@2",
+  "set_version": "1.0.0",
+  "splits": {
+   "held_out": 722
+  },
+  "writers": [
+   "t2"
+  ]
+ },
+ "rows": 2166,
+ "set": "t2@2@1.0.0"
+}

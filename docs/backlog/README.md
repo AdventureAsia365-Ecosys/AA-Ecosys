@@ -6,7 +6,7 @@
 
 **Rules:** at session start read §1–§3 and pick the session's parallel items from §3 and §3b by slot (skip items blocked in §2 or by the "blocked by" notes). At session end update the Status column, move closed items to §5, add new items. Re-audit only when this file is older than ~2 weeks or many issues were created outside sessions.
 
-_Last updated: S272, 08/11/2026 (Claude Code, Ultracode; 07/11 ~08:00 → 08/11 ~10:00 +07). **No issue closed in S272** (each touched issue waits on a live gate, a MFA apply or W2 labels): AA-1047 W1 live (policy registry, FactSheet, REPORT final_contract; paid smoke 10/10 ≈ 0.21 USD); AA-1048 W2 tooling + first panel (450 labels, import path open); AA-1049 W3 T9 (#1377) and T2 (#1380) trains live with behaviour changes behind opt-in flags; AA-1038 R5 slice 3 live (leads → agency CRM, brand, AI cap; CIS 390, tp-026) + hosting slice drafts (Infra #721/#722, TP #236, need a local MFA apply); AA-911 Vercel staff projects retired (A10 stays until go-live); AA-1040 X-AI headers; AA-1024 guards + PR tool fixes. S272 Jira drafts roll to S273. Earlier header (S271) kept in git history._
+_Last updated: S274, 10/11/2026 (Claude Code, Ultracode; 09/11 ~10:00 → 10/11 ~07:00 +07). **Closed in S274:** AA-1052 W6 (CIS #1400/#1401 live), AA-1057, AA-1059, AA-1060 WordPress test site (Infra #748/#750, Booking #215). Earlier S273 close kept below. S274 created AA-1056…AA-1060 (system picture). Live data: DFS Standard queue, R1 US/UK/AU done (ranking rows with demand 22% → 88%; Blog-bar Segments US 391 → 1,593); W2 round 2 imported (4,770 labels); completeness report docs/audits/2026-11-09-S274-session/completeness/report.vi.md._ Previous header: Last updated: S272, 08/11/2026 (Claude Code, Ultracode; 07/11 ~08:00 → 08/11 ~10:00 +07). **No issue closed in S272** (each touched issue waits on a live gate, a MFA apply or W2 labels): AA-1047 W1 live (policy registry, FactSheet, REPORT final_contract; paid smoke 10/10 ≈ 0.21 USD); AA-1048 W2 tooling + first panel (450 labels, import path open); AA-1049 W3 T9 (#1377) and T2 (#1380) trains live with behaviour changes behind opt-in flags; AA-1038 R5 slice 3 live (leads → agency CRM, brand, AI cap; CIS 390, tp-026) + hosting slice drafts (Infra #721/#722, TP #236, need a local MFA apply); AA-911 Vercel staff projects retired (A10 stays until go-live); AA-1040 X-AI headers; AA-1024 guards + PR tool fixes. S272 Jira drafts roll to S273. Earlier header (S271) kept in git history._
 
 ## 1. Time-gated checks (do these first when due)
 
@@ -142,17 +142,18 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | S280 | AA-1041, AA-1004 | R7 item 7 + visual tests against `next start` → close R7. AA-1004 P2–P6 from the go-live date, or from pilot week 3 at the latest (q-pilot). |
 | after S280 / date-gated | AA-1024, AA-788, AA-1026, AA-998, AA-873, AA-1003, CRM-after-R3, AA-980, AA-881, parked | AA-1024 D8 ≥10/11 ~12:00Z; AA-788 ≥19/11 with an LLM path (~S286+); first session ≥01/12: AA-1026 D6 (November bill), AA-998 acc1 = 0 USD, AA-873 first-month cost read, AA-1004 org invites; AA-1003 R5–R7; CRM add-ons AA-960, AA-963, AA-965, AA-968, AA-970, AA-1011, AA-1012 in the merged app (≥60 % capacity stays on content); AA-980 at go-live; AA-881 05/2027; parked AA-842, AA-781, AA-782, AA-704, AA-948, AA-922 (TL-11 lift). |
 
-### Open issues by slot (after the S273 close: AA-1053 closed, AA-1055 added; rows below updated for AA-1048/1049/1050/1052/1004)
+### Open issues by slot (after the S274 close: AA-1052, AA-1057, AA-1059, AA-1060 closed; AA-1056 and AA-1058 open)
 
 | Issue | Work | Milestone | Slot | S265 verdict | Status |
 |---|---|---|---|---|---|
 | AA-1047 | [Quality W1] One policy registry, one FactSheet, one exit contract (report mode) | M2a | S273 (Done check) | new S271 | In Review |
-| AA-1048 | [Quality W2] Claim-level ground truth and calibration of the pinned claim instrument | M2a | S274 (freeze, panel round 2, adjudication) | new S271 | In Progress |
+| AA-1048 | [Quality W2] Claim-level ground truth and calibration of the pinned claim instrument | M2a | S275 (tech lead adjudication: 84 open CL-1 1.0.0, then CL-1 1.1.0 batch 1/3; round 2 imported S274) | new S271 | In Progress |
 | AA-1049 | [Quality W3] Rewire the T9, S1 and T2 control planes in place | M2a | S273+ | new S271 | In Progress |
-| AA-1050 | [Quality W4] Promote the calibrated claim instrument: shadow first | M2a | S274+ (shadow live, off) | new S271 | In Progress |
+| AA-1050 | [Quality W4] Promote the calibrated claim instrument: shadow first | M2a | S275 (label ~30 disagreements of the S274 replay; switch stays off) | new S271 | In Review |
 | AA-1051 | [Quality W5] Paid writer proofs on small fixed samples under the D12 caps | M2a | S275 | new S271 | Backlog |
-| AA-1052 | [Quality W6] Lineage, dormant-code cleanup and permanent change control | M2a | S274 (CIS #1400/#1401) | new S271 | In Progress |
-| AA-1055 | [SEO data] Keep search-demand research fresh (design A approved S273) | M2a | S274 | new S273 | Backlog |
+| AA-1055 | [SEO data] Keep search-demand research fresh (design A approved S273) | M2a | S275 (verify #1415 stale guard live, R2 DE/FR/NL, close) | new S273 | In Progress |
+| AA-1056 | [Recompute] Sweep after tour retire/restore, latency metric, release delay, lock | M2a | S275 (live retire→restore check) | new S274 | In Progress |
+| AA-1058 | [AI gateway] Cost attribution on every ledger row | M1b | S275 (one S1 + one T9 as evidence) | new S274 | In Progress |
 | AA-1003 | [Reporting] Build the ecosystem report engine and the 63-report catalog (appr… | M-R0 | after S280 | re-scope | In Progress |
 | AA-1004 | [Infra] Implement the lean AWS model: company organization, Identity Center,… | M5 | S268 | re-scope | In Progress |
 | AA-1021 | AA-1021 (content series, details private) | parked | S267 | re-scope | In Progress |
@@ -249,6 +250,15 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-697 | Architecture diagrams with official AWS icons — ecosystem + each repo | S256 | **Done S257** (§5c): pilot approved under the S257 session plan (root #320); drift findings closed (Booking ops-docs bucket built S256, EFS removed S257 Infra #492) | — |
 | AA-710 | B2B benchmark: Asian Trails (eConnect, API, Lemax) | M-R4 | **S265:** slot S271 (R4 start): update the note against the R4 design (AA-1037, AA-1029, AA-1030, 'Book with AA' d17), map the gaps to issues, KAN-20 draft at that session's end, then close | — |
 | AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 | **S262:** AA-952, AA-954, AA-956, AA-957, AA-964, AA-971 closed (§5); AA-958 → S263. AA-952 was In Progress since S259 (slice 1 = C-M3 confirm, §3 row 0ah); **re-planned at the S260 close**: slots S261–S266, go-real ≥S267, see §3b "Kế hoạch CRM W5–W8 sau S260" | AA-958 needs a free Twilio trial for the live proof; AA-965 needs an LLM path |
+
+## 5. Closed in S274
+
+- **AA-1052** [Quality W6] Lineage, dormant-code cleanup, change control: CIS #1390 + #1400 (mig 392) + #1401 live; fan-out marks + runtime edit gate verified on Dev.
+- **AA-1060** [Test infra] Permanent WordPress test site as a sidecar on the Booking admin ECS task (0 USD): Infra #748/#750, Booking #215, root #651; connect + publish + retire→draft→restore rehearsal PASS (found the restore-republish gap, AA-1039 follow-up branch in review).
+- **AA-1057** [Lifecycle] Segment Subject liveness + retarget: CIS #1405 + one-off (6 Subjects) + #1414 apply default, live mode verified.
+- **AA-1059** [Platform] Catalog leftovers: CIS #1409 (catch-up correct: 9 Masters all-excluded), 25 tours = 25 pending S1 reviews, routes explained, segment_gc kept 1,067 by alias; #1413 islands → 6 names located, 7 components relinked.
+- AA-1026, AA-900: Done-with-scope (exported + archived this close).
+
 
 ## 5. Closed in S271
 

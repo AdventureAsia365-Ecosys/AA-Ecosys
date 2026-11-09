@@ -1,5 +1,5 @@
 {
- "captured_at": "2026-11-05T15:43Z",
+ "captured_at": "2026-11-09T04:47Z",
  "connections": [
   {
    "connection_key": "acc2",
@@ -68,14 +68,14 @@
    "priority": 10
   },
   {
-   "access_state": "unknown",
+   "access_state": "ok",
    "connection_key": "anthropic-direct",
    "enabled": true,
    "model_key": "fable-5",
    "priority": 100
   },
   {
-   "access_state": "unknown",
+   "access_state": "ok",
    "connection_key": "anthropic-direct",
    "enabled": true,
    "model_key": "fable-5-1",
@@ -152,7 +152,7 @@
    "priority": 20
   },
   {
-   "access_state": "unknown",
+   "access_state": "ok",
    "connection_key": "anthropic-direct",
    "enabled": true,
    "model_key": "haiku-4-5",
@@ -229,7 +229,7 @@
    "priority": 20
   },
   {
-   "access_state": "unknown",
+   "access_state": "ok",
    "connection_key": "anthropic-direct",
    "enabled": true,
    "model_key": "opus-4-5",
@@ -243,7 +243,7 @@
    "priority": 20
   },
   {
-   "access_state": "unknown",
+   "access_state": "ok",
    "connection_key": "anthropic-direct",
    "enabled": true,
    "model_key": "opus-4-6",
@@ -257,21 +257,21 @@
    "priority": 20
   },
   {
-   "access_state": "unknown",
+   "access_state": "ok",
    "connection_key": "anthropic-direct",
    "enabled": true,
    "model_key": "opus-4-7",
    "priority": 100
   },
   {
-   "access_state": "unknown",
+   "access_state": "ok",
    "connection_key": "anthropic-direct",
    "enabled": true,
    "model_key": "opus-4-8",
    "priority": 100
   },
   {
-   "access_state": "unknown",
+   "access_state": "ok",
    "connection_key": "anthropic-direct",
    "enabled": true,
    "model_key": "opus-5",
@@ -313,7 +313,7 @@
    "priority": 10
   },
   {
-   "access_state": "unknown",
+   "access_state": "ok",
    "connection_key": "anthropic-direct",
    "enabled": true,
    "model_key": "sonnet-4-6",
@@ -1112,8 +1112,7 @@
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "haiku-4-5",
-    "gpt-6-luna-openai"
+    "haiku-4-5"
    ],
    "is_active": true,
    "model_id": "haiku-5-5",
@@ -1122,7 +1121,7 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "a0_column_map",
-   "updated_at": "2026-11-05"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
@@ -1278,8 +1277,7 @@
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
-    "gpt-6-luna-openai",
-    "nova-lite"
+    "gpt-6-luna-openai"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -1288,13 +1286,12 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_brand_audit",
-   "updated_at": "2026-11-04"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "haiku-4-5",
-    "gpt-6-luna-openai"
+    "haiku-4-5"
    ],
    "is_active": true,
    "model_id": "haiku-5-5",
@@ -1303,13 +1300,12 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_flag_fix",
-   "updated_at": "2026-11-05"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "sonnet-4-6",
-    "gpt-6-luna-openai"
+    "sonnet-4-6"
    ],
    "is_active": true,
    "model_id": "sonnet-5-5",
@@ -1318,13 +1314,12 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_generate",
-   "updated_at": "2026-11-05"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "haiku-4-5",
-    "gpt-6-luna-openai"
+    "haiku-4-5"
    ],
    "is_active": true,
    "model_id": "haiku-5-5",
@@ -1333,14 +1328,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_itinerary_nudge",
-   "updated_at": "2026-11-05"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
-    "gpt-6-luna-openai",
-    "nova-lite"
+    "gpt-6-luna-openai"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -1349,7 +1343,7 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "s1_judge",
-   "updated_at": "2026-11-04"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
@@ -1370,8 +1364,7 @@
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "haiku-4-5",
-    "gpt-6-luna-openai"
+    "haiku-4-5"
    ],
    "is_active": true,
    "model_id": "haiku-5-5",
@@ -1380,13 +1373,12 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "segment_research",
-   "updated_at": "2026-11-05"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "haiku-4-5",
-    "gpt-6-luna-openai"
+    "haiku-4-5"
    ],
    "is_active": true,
    "model_id": "haiku-5-5",
@@ -1395,13 +1387,12 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "segment_research_batch",
-   "updated_at": "2026-11-05"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "sonnet-4-6",
-    "gpt-6-luna-openai"
+    "sonnet-4-6"
    ],
    "is_active": true,
    "model_id": "sonnet-5-5",
@@ -1410,14 +1401,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "supply_content_writer",
-   "updated_at": "2026-11-05"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
     "gpt-6-luna-openai",
-    "gpt-5.6-luna",
-    "nova-lite"
+    "gpt-5.6-luna"
    ],
    "is_active": true,
    "model_id": "gpt-6-luna",
@@ -1426,14 +1416,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t10_adjudicate",
-   "updated_at": "2026-11-04"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
     "gpt-6-luna-openai",
-    "gpt-5.6-luna",
-    "nova-lite"
+    "gpt-5.6-luna"
    ],
    "is_active": true,
    "model_id": "gpt-6-luna",
@@ -1442,14 +1431,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t10_claims",
-   "updated_at": "2026-11-04"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
-    "gpt-6-luna-openai",
-    "nova-lite"
+    "gpt-6-luna-openai"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -1458,14 +1446,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t10_judge",
-   "updated_at": "2026-11-04"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
-    "gpt-6-luna-openai",
-    "nova-lite"
+    "gpt-6-luna-openai"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -1474,13 +1461,12 @@
    "shadow_model_id": "gpt-6-luna",
    "shadow_sample_pct": 10,
    "stage": "t2_brand_audit",
-   "updated_at": "2026-11-04"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "haiku-4-5",
-    "gpt-6-luna-openai"
+    "haiku-4-5"
    ],
    "is_active": true,
    "model_id": "haiku-5-5",
@@ -1489,13 +1475,12 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t2_flag_fix",
-   "updated_at": "2026-11-05"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "sonnet-4-6",
-    "gpt-6-luna-openai"
+    "sonnet-4-6"
    ],
    "is_active": true,
    "model_id": "sonnet-5-5",
@@ -1504,13 +1489,12 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t2_generate",
-   "updated_at": "2026-11-05"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "haiku-4-5",
-    "gpt-6-luna-openai"
+    "haiku-4-5"
    ],
    "is_active": true,
    "model_id": "haiku-5-5",
@@ -1519,14 +1503,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t2_itinerary_nudge",
-   "updated_at": "2026-11-05"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
-    "gpt-6-luna-openai",
-    "nova-lite"
+    "gpt-6-luna-openai"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -1535,14 +1518,13 @@
    "shadow_model_id": "gpt-6-luna",
    "shadow_sample_pct": 10,
    "stage": "t2_judge",
-   "updated_at": "2026-11-04"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": null,
    "fallback_model_ids": [
     "gpt-6-luna",
-    "gpt-6-luna-openai",
-    "nova-lite"
+    "gpt-6-luna-openai"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -1551,13 +1533,12 @@
    "shadow_model_id": "gpt-6-luna",
    "shadow_sample_pct": 10,
    "stage": "t7_debate_judge",
-   "updated_at": "2026-11-04"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "sonnet-4-6",
-    "gpt-6-luna-openai"
+    "sonnet-4-6"
    ],
    "is_active": true,
    "model_id": "sonnet-5-5",
@@ -1566,7 +1547,7 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t8_angle_gen",
-   "updated_at": "2026-11-05"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
@@ -1601,8 +1582,7 @@
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "haiku-4-5",
-    "gpt-6-luna-openai"
+    "haiku-4-5"
    ],
    "is_active": true,
    "model_id": "haiku-5-5",
@@ -1611,13 +1591,12 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t9_repair",
-   "updated_at": "2026-11-05"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
-    "sonnet-4-6",
-    "gpt-6-luna-openai"
+    "sonnet-4-6"
    ],
    "is_active": true,
    "model_id": "sonnet-5-5",
@@ -1626,7 +1605,7 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "t9_write",
-   "updated_at": "2026-11-05"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": null,
@@ -1687,8 +1666,7 @@
    "account_route": "acc3",
    "fallback_model_ids": [
     "gpt-6-luna",
-    "gpt-6-luna-openai",
-    "nova-lite"
+    "gpt-6-luna-openai"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -1697,14 +1675,13 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "writing_memory_eval",
-   "updated_at": "2026-11-04"
+   "updated_at": "2026-11-06"
   },
   {
    "account_route": "acc3",
    "fallback_model_ids": [
     "gpt-6-luna",
-    "gpt-6-luna-openai",
-    "nova-lite"
+    "gpt-6-luna-openai"
    ],
    "is_active": true,
    "model_id": "gpt-5.6-luna",
@@ -1713,7 +1690,7 @@
    "shadow_model_id": null,
    "shadow_sample_pct": 0,
    "stage": "writing_memory_mine",
-   "updated_at": "2026-11-04"
+   "updated_at": "2026-11-06"
   }
  ],
  "schema": "aa900-llm-routes/2",

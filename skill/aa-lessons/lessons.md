@@ -236,6 +236,20 @@ rồi kiểm lại bằng một exec ngắn riêng; exec chỉ đọc thì chạ
 - **Khi cis/336 (hẹn giờ) còn chờ, `ship_wave 'cis#N>apply:cis/NNN'` dừng exit 4 "out of order"** → `tools/github/dbmig.sh cis/NNN apply --allow-out-of-order`, rồi ship PR code riêng (S273, CIS 391). Guard: pending AA-1024
 - **Đổi tài khoản Claude giữa phiên: workflow/agent nền vẫn sống, nhưng watch artifact bị huỷ** — kiểm journal + mtime transcript trước khi chạy lại (S273). Guard: none: external Claude account switch behaviour
 
+- **Brief lane mở đầu bằng "APPROVED WORK, DO IT"** — agent lane đọc tin nhắn giữa chừng của tech lead là yêu cầu mới và bỏ lane đã duyệt, lane chạy rỗng (S274, AA-1055). Guard: pending AA-1024.
+- **Đóng issue thì xoá luôn dòng waiting/needs/checks nhắc tới nó** — phiên sau vẫn báo "chờ site WordPress" dù issue đã Done (S274, AA-1040). Guard: pending AA-1024.
+- **Base đổi thì push mới / update-branch, không "Re-run failed jobs"** — chạy lại Migration preflight dùng merge ref cũ nên vẫn đỏ "392 is not the next one" (S274, AA-1052). Guard: none: judgement đọc giờ merge migration trên main trước khi chạy lại.
+- **Pre-push CIS phải chạy bằng venv đúng bản ghim** — .venv của checkout chính lệch fastapi/pydantic làm test openapi đỏ giả và chặn push; dùng AA_PREPUSH_PYTHON (S274, AA-1024). Guard: pending AA-1024.
+- **Sau apply cục bộ có resource IAM mới, chạy ngay một CI Terraform Apply no-op** — role apply của CI không đọc được policy mới nên mọi CI apply sau đó hỏng ở refresh (S274, AA-1004). Guard: pending AA-1024.
+- **Cảnh báo đăng nhập root phải chuyển tiếp từ us-east-1, us-east-2 và us-west-2** — CloudTrail ghi đăng nhập root ở cả ba vùng; phiên root 09/11 (us-west-2) không có mail (S274, AA-1004). Guard: ci infra/AA-CIS-Infra sec_alert_check (forward.root-login cases).
+- **Dọn cache codeql-* mỗi lượt CI hygiene, giữ bản mới nhất mỗi tiền tố** — CodeQL default setup đẩy AA-CIS-App lại 8,17 GB cache sau 1 ngày (S274, AA-1024). Guard: pending AA-1024.
+- **Workflow định kỳ mới merge phải có ≥1 run trong 48 giờ** — CI hygiene chưa chạy lần nào vì thiếu môi trường + khoá App, không ai biết vì workflow chưa chạy thì không đỏ (S274, AA-1024). Guard: pending AA-1024.
+- **Không bỏ ram_gate cho lane có pytest/integration/Postgres** — 3 lane + VSCode/Kiro làm WSL hết RAM, ship_merge chết exit 137, máy phải khởi động lại (S274). Guard: pending AA-1024.
+- **Script one-off chạy qua ecsx đọc từng biến riêng, không ARGS có dấu cách** — ecsx từ chối VAR có dấu cách nên --apply AA-1057 không chạy được (S274, AA-1057). Guard: pending AA-1024.
+- **ecsx bỏ chờ ở 900 giây thì lấy kết quả từ S3, không chạy lại** — script vẫn chạy trong container; chạy lại là trả tiền hai lần (S274, AA-1050). Guard: none: judgement đọc s3 scripts/out/<run>.txt trước khi chạy lại.
+- **Ước chi worst case chỉ để chặn trần, số thật đọc ở ledger** — replay W4 ước 0,18 USD cho 4 object, thực tế 0,026 (S274, AA-1050). Guard: none: judgement báo cả ước và số ledger.
+- **Không ghép python3 / git / as-app.sh vào cùng lệnh với ecsx** — hook PII chặn vì lệnh đó có thể sửa script sắp upload (S274). Guard: hook .claude/hooks/pilot_pii_guard.py
+
 ## Pipeline và chất lượng
 
 > 22 bài học của mục này đã thành guard (máy chặn) và được chuyển sang [`guards.md`](guards.md#pipeline-và-chất-lượng) (S271, AA-1024).
@@ -358,6 +372,10 @@ rồi kiểm lại bằng một exec ngắn riêng; exec chỉ đọc thì chạ
 - **DataForSEO tính theo task (tối đa 1.000 từ khoá, một nước): batch đầy mới rẻ; SERP mua theo từng nước là khoản lớn nhất** — 25/09 tốn 49 USD vì task chở trung bình 4,5 từ khoá × cả nền tảng × 3 nước (S273 audit DFS). Bắt bằng: thiết kế AA-1055 (1 SERP/địa điểm, một người mua). Guard: none: judgement cost rule (AA-1055 design)
 - **Subject Blog là Segment grain từ AA-741: tour của Subject lấy theo `_resolve_representative_atom`, không theo `route_id`** (S273, W2 script). Guard: none: one-off ad hoc W2 script
 - **Tenant tổng hợp không có brand `default_cta` → T9 `start_write` MissingCTAError**; script staff truyền `cta_override` trung tính (S273). Guard: none: one-off ad hoc W2 script
+
+- **Không đoán cột khi viết script ECS exec** — đoán `tenant_tour_versions.tour_id` (không có, phải JOIN published_tours) làm lần chạy đầu lỗi (S274, AA-1052). Guard: none: judgement đọc db-schema-reference.md hoặc chép truy vấn từ code đang chạy.
+- **Mỗi route gateway trong migration phải có call site truyền đúng stage** — migration 335 tạo route segment_research nhưng code vẫn đi chuỗi haiku cũ, R1 chết sau 4,52 USD DFS (S274, AA-1055). Guard: pending AA-1024.
+- **Thước đo độ phủ geo dùng chính luật components** — đếm theo luật place card báo 880 tour "thiếu geo" trong khi đúng thiết kế (S274, AA-1059). Guard: none: one-off runner completeness S274 đã sửa định nghĩa.
 
 ## Frontend
 
