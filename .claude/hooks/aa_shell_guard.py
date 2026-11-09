@@ -50,8 +50,9 @@ Rules (main session and subagents alike; exit 2 refuses, the message goes to std
            the Bash tool's run_in_background. `&&` after a redirect is not a background job.
   TF-1     `terraform apply|destroy` from a lane worktree (.tmp-session/wt/**) or a checkout that is not on
            main/master: the state then holds code that is not on main, and the next apply from main reverts it.
-  PIPE-1   A ship step (ship_*.py, dbmig.sh, the merge-queue wrapper, as-app.sh) piped through `| tail`, `| head` or
-           `| tee` and chained on with `&&`, without pipefail: the pipeline's exit code is the tail's (0), so the next
+  PIPE-1   A ship step (ship_*.py, dbmig.sh, the merge-queue wrapper, as-app.sh around `gh pr merge|ready`, `gh workflow
+           run`, `gh run rerun` or a writing `gh api`) piped through `| tail`, `| head` or `| tee` and chained on with
+           `&&`, without pipefail: the pipeline's exit code is the tail's (0), so the next
            step runs after a failed one (S272 copy_apply after a red merge; S273 tp-027 applied before its registry
            PR merged). Pipefail counts when set earlier in the same shell text (`set -o pipefail`, `set -euo
            pipefail`, zsh `setopt pipefail`) or on the `bash -o pipefail -c` that runs it. Better: one ship_wave.py
@@ -621,9 +622,15 @@ def _rule_ship_command(t: Text) -> str | None:
 SHIP_STEPS = frozenset({"ship_merge.py", "ship_wave.py", "ship_train.py", "ship_copy_apply.py", "ship_open_prs.py",
                         "dbmig.sh", "mergeq.sh", "as-app.sh"})
 EXIT_SWALLOWERS = frozenset({"tail", "head", "tee"})
-# `set -o pipefail`, `set -euo pipefail`, `set -eo pipefail`, zsh `setopt pipefail` / `setopt PIPE_FAIL`
-_PIPEFAIL_ON = re.compile(r"(?:^|[\s;&|(])(?:set\s+-[A-Za-z]*o\s+pipefail|setopt\s+(?:pipefail|pipe_fail)\b)",
-                          re.IGNORECASE)
+# `set -o pipefail`, `set -euo pipefail`, `set -e -o pipefail`, `set -o errexit -o pipefail`, zsh `setopt pipefail` /
+# `setopt PIPE_FAIL`. Any option groups may come before `-o pipefail` (review S274); `+o pipefail` turns it off.
+_PIPEFAIL_ON = re.compile(
+    r"(?:^|[\s;&|(])(?:set(?:\s+[-+][A-Za-z]+(?:\s+(?!pipefail\b)[a-z]+)?)*\s+-[A-Za-z]*o\s+pipefail\b"
+    r"|setopt\s+(?:pipefail|pipe_fail)\b)",
+    re.IGNORECASE)
+# What the App wrapper runs that a later step depends on (review S274): a merge, a ready flip, a dispatch, a rerun, a
+# writing API call. A push, `gh pr create` and the read-only gh calls (view/checks/list/api GET) are not ship steps.
+_APP_SHIP_GH = frozenset({("pr", "merge"), ("pr", "ready"), ("workflow", "run"), ("run", "rerun")})
 # Redirections that hold '&' or '|' but are not operators: 2>&1, >&2, &>log, &>>log, <&3, >|file.
 _REDIRECT_OPS = re.compile(r"\d*>&\d*-?|&>>?|<&\d*-?|>\|")
 _CHAIN_OPS = re.compile(r"(\|\||&&|\|&|\||;|\n|&)")
@@ -638,10 +645,16 @@ def _ship_step(words: list[str]) -> str | None:
         return prog
     if re.fullmatch(r"python[0-9.]*", prog) and args and os.path.basename(args[0]) in SHIP_STEPS:
         return os.path.basename(args[0])
-    # program() looks past as-app.sh to the command after `--`; the wrapper itself is a ship step (it pushes/merges)
-    for w in words[:4]:
-        if os.path.basename(w) == "as-app.sh":
+    # program() looks past as-app.sh to the command after `--`: the wrapper counts only around a gh call that changes
+    # state a later step builds on (merge / ready / workflow run / rerun / a writing `gh api`)
+    if prog == "gh" and any(os.path.basename(w) == "as-app.sh" for w in words[:4]):
+        if tuple(args[:2]) in _APP_SHIP_GH:
             return "as-app.sh"
+        if args[:1] == ["api"]:
+            method = next((args[i + 1] for i, a in enumerate(args[:-1]) if a in ("-X", "--method")), None)
+            method = method or next((a.split("=", 1)[1] for a in args if a.startswith(("-X=", "--method="))), None)
+            if method and method.upper() != "GET":
+                return "as-app.sh"
     return None
 
 

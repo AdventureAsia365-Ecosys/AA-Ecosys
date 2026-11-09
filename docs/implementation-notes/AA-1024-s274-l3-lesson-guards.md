@@ -9,8 +9,10 @@
   second-guessed. A failed read counts as "nothing holds it" (the old verdict stands, never an endless wait); the wait
   is bounded by `--queue-timeout`.
 - **PIPE-1 in `.claude/hooks/aa_shell_guard.py`.** Refuses `<ship step> ... | tail|head|tee ... && <next>` without
-  pipefail. Ship steps: the `ship_*.py` tools, the migration dispatcher, the merge-queue wrapper and the App wrapper.
-  Pipefail counts when set earlier in the same shell text (`set -o pipefail`, `set -euo pipefail`, `setopt pipefail`)
+  pipefail. Ship steps: the `ship_*.py` tools, the migration dispatcher, the merge-queue wrapper, and the App wrapper
+  only around a gh call a later step builds on (`pr merge`, `pr ready`, `workflow run`, `run rerun`, a `gh api` with a
+  non-GET `-X/--method`). Pipefail counts when set earlier in the same shell text (`set -o pipefail`, `set -euo
+  pipefail`, `set -e -o pipefail`, `set -o errexit -o pipefail`, `setopt pipefail`; not `+o pipefail`)
   or on the `bash -o pipefail -c` that runs the text (new `Text.pipefail`). Subshells, groups and `$(...)` are
   transparent (their status is the pipeline's). `grep` is not a sink (it keeps its own code).
 - **WL8 in `tools/github/ci_hygiene.py`.** No allow-list file existed in the repo (the org setting is not readable with
@@ -27,9 +29,13 @@
 - Lessons: the four lines in `skill/aa-lessons/lessons.md` now name their guards.
 
 ## Tradeoffs
-- PIPE-1 includes the App wrapper (a push piped through tail, then `&&` opening the PR): the transcript replay finds
-  80 hits, 67 of them that push-then-open shape. Same failure class (a red pre-push still opens a PR on the old remote
-  head); the fix is one `set -o pipefail;` prefix.
+- PIPE-1 and the App wrapper (review S274): the first cut counted every App-wrapper call, which refused 80 of ~37k
+  past commands, ~60 of them the routine push-then-open (`as-app.sh -- git push ... | tail && as-app.sh -- gh pr
+  create`) and read-only calls (`gh pr view | head && ...`). Now only state-changing gh calls through the wrapper
+  count; the replay finds 17 hits, all real ship chains (ship_merge / ship_wave piped, `gh pr ready | tail &&
+  ship_merge`). Push-then-open is accepted: a red push makes `gh pr create` fail or open on the old head, which CI
+  and the merge gate then judge; nothing merges or applies on it.
+- The pipefail regex accepts any option groups before `-o pipefail` (the first cut refused `set -e -o pipefail;`).
 - WL8 matches GitHub's pattern semantics with `fnmatch` (case-sensitive; `owner/repo@*` does not cover
   `owner/repo/sub@ref`). Patterns are `@*` rather than SHAs: the SHA pin lives in the workflows (Dependabot moves it).
 

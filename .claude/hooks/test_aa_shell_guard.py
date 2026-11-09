@@ -254,7 +254,12 @@ class PipeExitTest(unittest.TestCase):
             "python3 tools/github/ship_open_prs.py --lane x | tee .tmp-session/S999/open.log && gh pr list",
             "(python3 tools/github/ship_merge.py root#5 2>&1 | tail -1) && git -C . pull",
             "bash -c 'python3 tools/github/ship_merge.py root#5 | tail -1 && echo next'",
-            "tools/github/as-app.sh --repos AA-Ecosys -- git push origin HEAD 2>&1 | tail -3 && gh pr create",
+            "tools/github/as-app.sh --repos AA-CIS-App -- gh workflow run deploy.yml 2>&1 | tail -3 && echo next",
+            "tools/github/as-app.sh --repos AA-CIS-App -- gh pr ready 5 | tail -1 && python3 tools/github/"
+            "ship_merge.py cis#5",
+            "tools/github/as-app.sh --repos AA-CIS-App -- gh api -X POST repos/o/r/dispatches | head -1 && echo x",
+            # `+o pipefail` turns it off
+            "set +o pipefail; python3 tools/github/ship_merge.py root#5 | tail -1 && echo next",
             # pipefail set AFTER the pipeline does not count
             "python3 tools/github/ship_merge.py root#5 | tail -1 && set -o pipefail",
             "bash -o pipefail -c 'true'; bash -c 'tools/github/dbmig.sh cis/1_x.sql apply | tail -1 && echo next'",
@@ -268,6 +273,17 @@ class PipeExitTest(unittest.TestCase):
             "setopt pipefail; tools/github/dbmig.sh cis/1_x.sql apply | tail -3 && echo next",
             "bash -o pipefail -c 'python3 tools/github/ship_merge.py root#5 | tail -1 && echo next'",
             "bash -euo pipefail -c 'tools/github/dbmig.sh cis/1_x.sql apply | head -5 && echo next'",
+            # option groups before `-o pipefail` (review S274)
+            "set -e -o pipefail; python3 tools/github/ship_merge.py root#5 | tail -1 && echo x",
+            "set -eu -o pipefail; python3 tools/github/ship_merge.py root#5 | tail -1 && echo x",
+            "set -o errexit -o pipefail; python3 tools/github/ship_merge.py root#5 | tail -1 && echo x",
+            "set -euxo pipefail; python3 tools/github/ship_merge.py root#5 | tail -1 && echo x",
+            # the App wrapper around a push, a PR open or a read-only gh call is not a ship step (review S274)
+            "tools/github/as-app.sh --repos AA-Ecosys -- git -C . push origin HEAD 2>&1 | tail -3 && "
+            "tools/github/as-app.sh --repos AA-Ecosys -- gh pr create --fill",
+            "tools/github/as-app.sh --repos AA-CIS-App -- gh pr view 5 --json state | head -3 && echo x",
+            "tools/github/as-app.sh --repos AA-CIS-App -- gh pr checks 5 | tail -3 && echo x",
+            "tools/github/as-app.sh --repos AA-CIS-App -- gh api repos/o/r/pulls/5 | head -3 && echo x",
             # no && after the pipeline: nothing depends on its exit code
             "python3 tools/github/ship_merge.py root#5 2>&1 | tail -1; echo done",
             "python3 tools/github/ship_merge.py root#5 2>&1 | tail -1",
