@@ -236,6 +236,20 @@ rồi kiểm lại bằng một exec ngắn riêng; exec chỉ đọc thì chạ
 - **Khi cis/336 (hẹn giờ) còn chờ, `ship_wave 'cis#N>apply:cis/NNN'` dừng exit 4 "out of order"** → `tools/github/dbmig.sh cis/NNN apply --allow-out-of-order`, rồi ship PR code riêng (S273, CIS 391). Guard: pending AA-1024
 - **Đổi tài khoản Claude giữa phiên: workflow/agent nền vẫn sống, nhưng watch artifact bị huỷ** — kiểm journal + mtime transcript trước khi chạy lại (S273). Guard: none: external Claude account switch behaviour
 
+- Agent lane đọc tin nhắn giữa chừng của tech lead (câu hỏi AA-1040) là "yêu cầu người dùng" và bỏ lane đã duyệt — lane l2 chạy rỗng (S274, AA-1055). Bắt bằng: brief lane mở đầu "APPROVED WORK, DO IT … câu hỏi khác đã được điều phối trả lời". Guard: pending — thêm dòng đó vào COMMON của tools/workflows/lane.js.
+- Đóng issue mà không xoá các dòng waiting/needs/checks nhắc tới nó → phiên sau báo "AA-1040 chờ site WordPress" dù đã Done từ S273 (S274). Bắt bằng: plan_sync cảnh báo dòng waiting/checks có issue Done/archived. Guard: pending — tools/linear/plan_sync.py.
+- "Re-run failed jobs" của Migration preflight dùng lại merge ref cũ: base đổi (391 vừa merge) thì chạy lại vẫn đỏ "392 is not the next one" — phải update-branch / push mới (S274, CIS #1400/#1401). Bắt bằng: đọc thời điểm merge của migration trên main so với giờ chạy preflight. Guard: none (ghi vào aa-ship).
+- Hook pre-push CIS dùng .venv của checkout chính (fastapi 0.110, pydantic 2.13) lệch bản ghim (0.161 / 2.14) → test_aa899 openapi đỏ giả và chặn push; `AA_PREPUSH_PYTHON=<venv đúng bản>` qua được (S274, CIS #1397). Guard: pending — làm mới .venv theo requirements.txt hoặc hook cảnh báo lệch bản trước khi chạy unit.
+- Đưa một resource mới vào Terraform (S273 import aws_iam_user_policy admin_assume) mà role apply của CI không đọc được → mọi CI apply sau đó hỏng ở refresh, chỉ lộ ra khi có apply kế tiếp (S274, run 42599949632). Bắt bằng: sau mỗi apply cục bộ có import/resource IAM mới, chạy ngay một CI Terraform Apply (no-op) để chứng minh CI vẫn apply được. Guard: pending — tf_plan_guard kiểm resource IAM user/group cần quyền đọc tương ứng trong policy apply.
+- Rule cảnh báo root chỉ chuyển tiếp từ us-east-1, nhưng CloudTrail ghi đăng nhập root ở us-east-1, us-east-2 hoặc us-west-2 → phiên root 09/11 (us-west-2) không có mail đăng nhập (S274, Infra #745 review F1). Guard: sec_alert_check.py case forward.root-login.us-east-2/us-west-2.
+- CodeQL default setup (bật ở S273 qua security config của org) tạo một `codeql-overlay-base-database-*` (~210 MB) + `codeql-trap-*` mỗi lần chạy trên main, không bao giờ dọn → AA-CIS-App lại 8,17 GB cache sau 1 ngày (31 bản, 6,47 GB) dù S273 vừa dọn 13,8 GB (S274). Bắt bằng: ci_hygiene caches RED > 8 GB. Guard: pending — `ci_hygiene.py --clean` giữ bản mới nhất mỗi tiền tố codeql-* (đã xoá tay 30 bản S274).
+- Workflow CI hygiene chưa chạy lần nào từ khi merge (root #642, 08/11) vì môi trường `ci-hygiene` + khoá App chưa có; không ai biết vì một workflow chưa từng chạy không đỏ (S274). Bắt bằng: guard_runs.py đòi mỗi workflow định kỳ có ≥1 run trong 48 h. Guard: pending.
+- Mở lane l5b với `ram_gate: skip` trong lúc 2 lane khác (l8, l9) đang chạy test + ship_merge + VSCode/Kiro/3 phiên Claude → WSL (10 GB + swap 4 GB) hết RAM, ship_merge chết exit 137 (SIGKILL), máy phải khởi động lại (S274). Bắt bằng: chỉ skip ram_gate cho lane docs-only; lane có pytest/integration/Postgres tạm luôn qua gate. Guard: pending — lane_start_guard từ chối skip khi goal nhắc pytest/integration/pre-push, hoặc khi đã có ≥2 lane chạy.
+- ecsx chỉ nhận VAR=value không có dấu cách, nhưng script one-off AA-1057 đọc ARGS bằng shlex (cần dấu cách) → không chạy được --apply qua ecsx; phải tạo bản sao ghi sẵn tham số (S274). Guard: pending — ecsx cho phép ARGS dạng phân tách bằng dấu phẩy, hoặc mẫu script one-off đọc từng biến riêng (EXPECT_SUBJECTS=…).
+- ecsx bỏ chờ sau 900 s nhưng script vẫn chạy trong container: lấy kết quả từ s3 .../scripts/out/<run>.txt, không chạy lại (lặp lại = trả tiền 2 lần) (S274 replay W4).
+- Replay W4: ước chi dựa trên worst case (0,18 USD/4 object) cao gấp ~7 lần thực tế (0,026) — ước để chặn trần, số thật đọc ở ledger (S274).
+- Hook PII chặn lệnh có python3 hoặc as-app.sh cùng lệnh ecsx: tách ra lệnh riêng (S274, nhiều lần).
+
 ## Pipeline và chất lượng
 
 > 22 bài học của mục này đã thành guard (máy chặn) và được chuyển sang [`guards.md`](guards.md#pipeline-và-chất-lượng) (S271, AA-1024).
@@ -358,6 +372,10 @@ rồi kiểm lại bằng một exec ngắn riêng; exec chỉ đọc thì chạ
 - **DataForSEO tính theo task (tối đa 1.000 từ khoá, một nước): batch đầy mới rẻ; SERP mua theo từng nước là khoản lớn nhất** — 25/09 tốn 49 USD vì task chở trung bình 4,5 từ khoá × cả nền tảng × 3 nước (S273 audit DFS). Bắt bằng: thiết kế AA-1055 (1 SERP/địa điểm, một người mua). Guard: none: judgement cost rule (AA-1055 design)
 - **Subject Blog là Segment grain từ AA-741: tour của Subject lấy theo `_resolve_representative_atom`, không theo `route_id`** (S273, W2 script). Guard: none: one-off ad hoc W2 script
 - **Tenant tổng hợp không có brand `default_cta` → T9 `start_write` MissingCTAError**; script staff truyền `cta_override` trung tính (S273). Guard: none: one-off ad hoc W2 script
+
+- Script ECS exec viết tay đoán cột `tenant_tour_versions.tour_id` (không có; phải JOIN published_tours qua published_tour_id) → lần chạy đầu lỗi UndefinedColumn (S274, AA-1052). Bắt bằng: đọc db-schema-reference.md hoặc chép truy vấn từ code đang chạy trước khi viết script. Guard: none (quy tắc đã có; nhắc lại).
+- Migration 335 (AA-1024 A2) tạo route gateway cho segment_research / segment_research_batch nhưng nửa code (truyền stage, bỏ model_tier="haiku") không bao giờ merge → research vẫn đi chuỗi legacy chỉ có Haiku acc3, R1 S274 chết sau 4,52 USD DFS khi acc3 từ chối 5.x (CIS #1411). Bắt bằng: test mỗi dòng llm_role_config / SAFE_DEFAULTS phải có ít nhất một call site truyền đúng stage đó. Guard: pending.
+- Script đo "atom chưa vào bản đồ" (completeness l1/l2) đếm theo luật place card chứ không theo luật components.py (transit, logistics, gộp theo ngày+địa điểm) → báo 880 tour/5.550 atom "thiếu" mà thật ra đúng thiết kế; backfill 3 tour thử chứng minh không đổi (S274). Bắt bằng: thước đo dùng chính build_components() để đếm "should pin but not pinned". Guard: pending.
 
 ## Frontend
 
