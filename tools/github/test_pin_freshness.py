@@ -134,6 +134,25 @@ class Check(unittest.TestCase):
         self.assertIn("HTTP 404", g["lychee"]["error"])
         self.assertEqual(report["unreadable"], ["AA-Partner"])
 
+    def test_ip_allow_list_upstream_read_without_token(self):
+        def run(cmd, **kw):
+            msg = ("gh: Although you appear to have the correct authorization credentials, "
+                   "the `aquasecurity` organization has an IP allow list enabled")
+            return subprocess.CompletedProcess(cmd, 1, "", msg)
+        rows = [{"tag_name": "v0.70.0", "html_url": "u70", "draft": False, "prerelease": False},
+                {"tag_name": "v0.71.0-rc1", "html_url": "rc", "draft": False, "prerelease": True},
+                {"tag_name": "v0.69.0", "html_url": "u69", "draft": False, "prerelease": False}]
+        seen = []
+        got = p.latest_release("aquasecurity/trivy", "v", run=run, fetch=lambda url: seen.append(url) or rows)
+        self.assertEqual(got, ("0.70.0", "u70"))
+        self.assertEqual(seen, ["https://api.github.com/repos/aquasecurity/trivy/releases?per_page=100"])
+
+    def test_other_gh_errors_are_not_retried_without_token(self):
+        def run(cmd, **kw):
+            return subprocess.CompletedProcess(cmd, 1, "", "gh: HTTP 404 Not Found")
+        with self.assertRaises(p.h.cc.GhError):
+            p.latest_release("x/y", "v", run=run, fetch=lambda url: self.fail("no anonymous read"))
+
     def test_table_and_local_root(self):
         with tempfile.TemporaryDirectory() as tmp:
             d = Path(tmp, "apps", "AA-Booking", ".github", "actions", "lychee")

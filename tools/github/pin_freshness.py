@@ -117,10 +117,32 @@ def group(pins: list[dict]) -> list[dict]:
     return sorted(out.values(), key=lambda g: g["key"])
 
 
-def latest_release(upstream: str, prefix: str, run=subprocess.run) -> tuple[str, str]:
-    """(version, url) of the newest non-draft, non-prerelease release whose tag is <prefix><digit>..."""
-    out = h.cc.gh(["api", f"repos/{upstream}/releases?per_page=100", "--jq",
-                   '.[] | select((.draft | not) and (.prerelease | not)) | [.tag_name, .html_url] | @tsv'], run)
+IP_ALLOW_LIST = re.compile(r"IP allow list", re.I)
+
+
+def _anonymous_get(url: str) -> list:
+    """GET a public GitHub REST URL with no token (60 requests / hour per runner IP)."""
+    import urllib.request
+    req = urllib.request.Request(url, headers={"Accept": "application/vnd.github+json",
+                                               "User-Agent": "aa-ecosys-pin-freshness"})
+    with urllib.request.urlopen(req, timeout=60) as resp:  # noqa: S310 (fixed https://api.github.com URL)
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def latest_release(upstream: str, prefix: str, run=subprocess.run, fetch=_anonymous_get) -> tuple[str, str]:
+    """(version, url) of the newest non-draft, non-prerelease release whose tag is <prefix><digit>...
+
+    An upstream org with an IP allow list (aquasecurity, S274) refuses EVERY token from outside its list, the
+    App's installation token included, even for a public repo; its public releases are then read with no token."""
+    try:
+        out = h.cc.gh(["api", f"repos/{upstream}/releases?per_page=100", "--jq",
+                       '.[] | select((.draft | not) and (.prerelease | not)) | [.tag_name, .html_url] | @tsv'], run)
+    except h.cc.GhError as exc:
+        if not IP_ALLOW_LIST.search(str(exc)):
+            raise
+        rows = fetch(f"https://api.github.com/repos/{upstream}/releases?per_page=100")
+        out = "\n".join(f"{r.get('tag_name', '')}\t{r.get('html_url', '')}" for r in rows
+                        if isinstance(r, dict) and not r.get("draft") and not r.get("prerelease"))
     best = None
     for line in out.splitlines():
         tag, _, url = line.partition("\t")
