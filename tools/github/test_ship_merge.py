@@ -8,7 +8,12 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import os
+import shutil
+import subprocess
+import tempfile
 import unittest
+from pathlib import Path
 
 import ship_common
 import ship_merge
@@ -161,6 +166,183 @@ class GateAndMergeTest(unittest.TestCase):
             ship_merge.merge_one(r, "AA-CIS-App", 12)
         self.assertEqual(cm.exception.code, 4)
         self.assertIn("dropped from the queue", str(cm.exception))
+
+
+def queue(*numbers: int) -> Result:
+    """The merge-queue entries GraphQL answer with these PR numbers queued."""
+    nodes = [{"state": "AWAITING_CHECKS", "position": i + 1, "pullRequest": {"number": n}}
+             for i, n in enumerate(numbers)]
+    return js({"data": {"repository": {"mergeQueue": {"entries": {"nodes": nodes}}}}})
+
+
+def group_run(n: int, status: str = "in_progress", conclusion: str | None = None, name: str = "CI") -> dict:
+    return {"databaseId": 1000 + n, "name": name, "headBranch": f"gh-readonly-queue/main/pr-{n}-{'c' * 40}",
+            "status": status, "conclusion": conclusion}
+
+
+LEFT = Result(4, "AA-CIS-App #13 not merged and not in the queue (state OPEN, BLOCKED). Group runs:")
+
+
+class QueueExitTest(unittest.TestCase):
+    """S273 (#1248/#1384/#1385/#1387): mergeq.sh printed exit 4 'not merged and not in the queue' while the PR's own
+    merge_group CI was still in progress. Before failing, the queue entries and the PR's group runs are read."""
+
+    def setUp(self):
+        self.redirect = contextlib.redirect_stdout(io.StringIO())
+        self.out = self.redirect.__enter__()
+
+    def tearDown(self):
+        self.redirect.__exit__(None, None, None)
+
+    def test_still_a_queue_entry_waits_then_merged(self):
+        r = (FakeRunner()
+             .on(("gh", "pr", "view"), *[js(pr())] * 6, js(pr(state="MERGED", merge_oid="3" * 40)))
+             .on(("graphql",), queue(12, 13))
+             .on(("gh", "api"), NO_DELETES)
+             .on((ship_common.MERGEQ,), LEFT))
+        self.assertEqual(ship_merge.merge_one(r, "AA-CIS-App", 13), "3" * 40)
+        self.assertIn("queue entry AWAITING_CHECKS at position 2: waiting", self.out.getvalue())
+        [q] = r.called("graphql")
+        self.assertIn("b=main", q)
+        self.assertIn("o=AdventureAsia365-Ecosys", q)
+
+    def test_group_run_in_progress_waits_until_it_finishes(self):
+        other = group_run(99)  # another PR's group: not ours
+        r = (FakeRunner()
+             .on(("gh", "pr", "view"), *[js(pr())] * 7, js(pr(state="MERGED", merge_oid="4" * 40)))
+             .on(("graphql",), queue(99))
+             .on(("--event", "merge_group"), js([other, group_run(13)]),
+                 js([other, group_run(13, "completed", "success")]))
+             .on(("gh", "api"), NO_DELETES)
+             .on((ship_common.MERGEQ,), LEFT))
+        self.assertEqual(ship_merge.merge_one(r, "AA-CIS-App", 13), "4" * 40)
+        self.assertIn("merge_group run CI in_progress: waiting", self.out.getvalue())
+        self.assertEqual(len(r.called("--event", "merge_group")), 2)
+
+    def test_really_left_the_queue_fails_at_once(self):
+        r = (FakeRunner()
+             .on(("gh", "pr", "view"), js(pr()))
+             .on(("graphql",), queue(99))
+             .on(("--event", "merge_group"), js([group_run(99), group_run(13, "completed", "failure")]))
+             .on(("gh", "api"), NO_DELETES)
+             .on((ship_common.MERGEQ,), LEFT))
+        with self.assertRaises(ShipError) as cm:
+            ship_merge.merge_one(r, "AA-CIS-App", 13)
+        self.assertEqual(cm.exception.code, 4)
+        self.assertIn("not in the queue", str(cm.exception))
+        self.assertNotIn("waiting", self.out.getvalue())
+
+    def test_unreadable_queue_falls_back_to_the_old_failure(self):
+        r = (FakeRunner()
+             .on(("gh", "pr", "view"), js(pr()))
+             .on(("graphql",), Result(1, "", "HTTP 502"))
+             .on(("--event", "merge_group"), Result(1, "", "HTTP 502"))
+             .on(("gh", "api"), NO_DELETES)
+             .on((ship_common.MERGEQ,), LEFT))
+        with self.assertRaises(ShipError) as cm:
+            ship_merge.merge_one(r, "AA-CIS-App", 13)
+        self.assertEqual(cm.exception.code, 4)
+        self.assertIn("unreadable", self.out.getvalue())
+
+    def test_held_past_the_queue_timeout_fails(self):
+        r = (FakeRunner()
+             .on(("gh", "pr", "view"), js(pr()))
+             .on(("graphql",), queue(13))
+             .on(("gh", "api"), NO_DELETES)
+             .on((ship_common.MERGEQ,), LEFT))
+        with self.assertRaises(ShipError) as cm:
+            ship_merge.merge_one(r, "AA-CIS-App", 13, queue_timeout=300, interval=60)
+        self.assertEqual(cm.exception.code, 4)
+        self.assertIn("still held in the merge queue after 300s", self.out.getvalue())
+
+    def test_other_exit_4_reasons_do_not_wait(self):
+        # DIRTY / enqueue failed: mergeq.sh's own verdict stands, no queue read.
+        r = (FakeRunner().on(("gh", "pr", "view"), js(pr())).on(("gh", "api"), NO_DELETES)
+             .on((ship_common.MERGEQ,), Result(4, "AA-CIS-App #13 DIRTY (conflicts with main): not queued")))
+        with self.assertRaises(ShipError):
+            ship_merge.merge_one(r, "AA-CIS-App", 13)
+        self.assertFalse(r.called("graphql"))
+
+
+class MergeqScriptTest(unittest.TestCase):
+    """The same S273 guard inside mergeq.sh itself: run against a scripted `gh` (no network, no real sleep)."""
+
+    def run_mergeq(self, answers: dict) -> subprocess.CompletedProcess:
+        tmp = tempfile.TemporaryDirectory(prefix="mergeq-test-")
+        self.addCleanup(tmp.cleanup)
+        d = Path(tmp.name)
+        tools, bin_ = d / "tools", d / "bin"
+        tools.mkdir()
+        bin_.mkdir()
+        shutil.copy(Path(ship_common.MERGEQ), tools / "mergeq.sh")
+        (tools / "as-app.sh").write_text("#!/usr/bin/env bash\nshift 3\necho \"queued via app: $*\"\n")
+        (d / "answers.json").write_text(json.dumps(answers))
+        (bin_ / "sleep").write_text("#!/usr/bin/env bash\nexit 0\n")
+        (bin_ / "gh").write_text(FAKE_GH.replace("@ANSWERS@", str(d / "answers.json")))
+        for f in (tools / "as-app.sh", bin_ / "sleep", bin_ / "gh"):
+            f.chmod(0o755)
+        env = dict(os.environ, PATH=f"{bin_}:{os.environ.get('PATH', '')}", MAXWAIT="600")
+        return subprocess.run(["bash", str(tools / "mergeq.sh"), "AA-CIS-App", "13"], capture_output=True, text=True,
+                              env=env, timeout=60)
+
+    def test_group_run_still_running_keeps_waiting_then_merged(self):
+        p = self.run_mergeq({
+            "st": ["OPEN||CLEAN|auto", "OPEN||CLEAN|", "OPEN||CLEAN|", "MERGED|" + "5" * 40 + "|CLEAN|"],
+            "inq": ["true|AWAITING_CHECKS|1", "false||", "false||"],
+            "entries": ["0"], "groupruns": ["1", "0"]})
+        self.assertEqual(p.returncode, 0, p.stdout + p.stderr)
+        self.assertIn("still running", p.stdout)
+        self.assertIn("MERGED 55555555", p.stdout)
+
+    def test_queue_entry_still_listed_keeps_waiting(self):
+        p = self.run_mergeq({
+            "st": ["OPEN||CLEAN|auto", "OPEN||CLEAN|", "OPEN||CLEAN|", "MERGED|" + "6" * 40 + "|CLEAN|"],
+            "inq": ["true|AWAITING_CHECKS|1", "false||"],
+            "entries": ["1"], "groupruns": ["0"]})
+        self.assertEqual(p.returncode, 0, p.stdout + p.stderr)
+        self.assertIn("queue entry", p.stdout)
+
+    def test_really_left_exits_4(self):
+        p = self.run_mergeq({
+            "st": ["OPEN||CLEAN|auto", "OPEN||BLOCKED|"],
+            "inq": ["true|AWAITING_CHECKS|1", "false||"],
+            "entries": ["0"], "groupruns": ["0"]})
+        self.assertEqual(p.returncode, 4, p.stdout + p.stderr)
+        self.assertIn("not merged and not in the queue", p.stdout)
+
+
+# A scripted `gh` for mergeq.sh: answers each kind of call from answers.json in order (the last answer repeats).
+FAKE_GH = r'''#!/usr/bin/env python3
+import json, sys
+path = "@ANSWERS@"
+args = sys.argv[1:]
+joined = " ".join(args)
+def answer(kind):
+    data = json.load(open(path))
+    seq = data.get(kind) or [""]
+    out = seq.pop(0) if len(seq) > 1 else seq[0]
+    data[kind] = seq
+    json.dump(data, open(path, "w"))
+    print(out)
+    sys.exit(0)
+if args[:2] == ["pr", "checks"]:
+    sys.exit(0)
+if args[:2] == ["pr", "view"] and "id" in args:
+    answer("id")
+if args[:2] == ["pr", "view"]:
+    answer("st")
+if args[:2] == ["api", "graphql"] and "isInMergeQueue" in joined:
+    answer("inq")
+if args[:2] == ["api", "graphql"] and "mergeQueue(" in joined:
+    answer("entries")
+if args[:2] == ["run", "list"] and "headBranch" in joined:
+    answer("groupruns")
+if args[:2] == ["run", "list"]:
+    print("(group runs)")
+    sys.exit(0)
+print("unexpected gh call: " + joined, file=sys.stderr)
+sys.exit(9)
+'''
 
 
 class SettleTest(unittest.TestCase):

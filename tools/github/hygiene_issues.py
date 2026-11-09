@@ -131,6 +131,16 @@ def hygiene_findings(report: dict, *, stale_min_gb: float = 1.0, token_source: s
         "`./.github/actions/release-bin` (cached, sha256-pinned, authenticated fetch) or `./.github/actions/lychee`.",
         f"Not scanned this run: {', '.join(gone)}." if gone else "")
 
+    na = [(r["repo"], f) for r in rows for f in r.get("wl8", [])]
+    out["actions-not-allowed"] = Finding(
+        "actions-not-allowed", _status(bool(na), gone), "Actions outside the org allow-list (WL8)",
+        [f"**{repo}**: `{f}`" for repo, f in na],
+        "The org Actions policy allows GitHub-owned actions plus `tools/github/actions-allowlist.txt`. An action that "
+        "is not listed, or one that a listed composite action runs inside itself (trivy-action runs setup-trivy), "
+        "fails the job at set-up. Add its line to the file and the same pattern to the org setting (org owner), or "
+        "replace the action.",
+        f"Not scanned this run: {', '.join(gone)}." if gone else "")
+
     org = report.get("org")
     if not org or org.get("error"):
         why = (org or {}).get("error") or "not run"

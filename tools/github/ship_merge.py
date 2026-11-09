@@ -17,9 +17,12 @@ refuses a draft PR, a PR that does not target the default branch (a stacked PR s
 and a PR that deletes files unless --allow-deletes (a squash from a stale base shows up as deletions, lessons
 S250/S253). The gate does not see job tables or waves: aa-ship §2 still applies before backend merges.
 
-Merge: AA-CIS-App, AA-Booking, AA-Partner through the merge queue (mergeq.sh); TripPlanner, Infra and the root repo
-squash through the aa-agent App with --match-head-commit (the head that was gated). Queue repos run in parallel (one
-worker per PR, lesson S257); PRs of one non-queue repo run one after the other. --serial keeps the given order for all.
+Merge: AA-CIS-App, AA-Booking, AA-Partner through the merge queue (mergeq.sh). When mergeq.sh exits 4 "not in the
+queue" and the PR is not merged, the merge-queue entries and the PR's merge_group runs are read before failing: while
+either still holds the PR, the tool waits (S273: exit 4 while the PR's own group CI ran). TripPlanner, Infra and the
+root repo squash through the aa-agent App with --match-head-commit (the head that was gated). Queue repos run in
+parallel (one worker per PR, lesson S257); PRs of one non-queue repo run one after the other. --serial keeps the given
+order for all.
 
 Exit: 0 all merged (or green with --check-only) | 2 usage / gh error | 3 a check or workflow run red, or none
 reported | 4 refused (draft, base, DIRTY, deletions, closed) or merge failed | 5 checks still pending at --timeout.
@@ -45,6 +48,7 @@ from ship_common import (
     classify_runs,
     default_branch,
     fmt_list,
+    gh_json,
     log,
     parse_targets,
     pr_view,
@@ -138,6 +142,63 @@ def _merged_sha(runner: Runner, repo: str, n: int, tries: int = 4) -> str | None
     return None
 
 
+# mergeq.sh's "left the queue" line (exit 4). S273: printed while the PR's own merge_group CI was still running with
+# several CIS PRs queued at once; isInMergeQueue read false for a moment while the queue rebuilt its groups.
+LEFT_QUEUE = "not in the queue"
+QUEUE_ENTRIES = ("query($o:String!,$r:String!,$b:String!){repository(owner:$o,name:$r){mergeQueue(branch:$b)"
+                 "{entries(first:100){nodes{state position pullRequest{number}}}}}}")
+
+
+def queue_hold(runner: Runner, repo: str, n: int) -> str:
+    """What still holds the PR in the merge queue: its queue entry, or a merge_group run of its group branch
+    (gh-readonly-queue/<base>/pr-<n>-<sha>) that has not finished. '' when neither (it has really left). A read that
+    fails counts as nothing found (the caller then reports the failure as before)."""
+    base = default_branch(repo)
+    owner, name = slug(repo).split("/", 1)
+    try:
+        data = gh_json(runner, ["gh", "api", "graphql", "-f", f"query={QUEUE_ENTRIES}", "-f", f"o={owner}",
+                                "-f", f"r={name}", "-f", f"b={base}"])
+    except ShipError as e:
+        log(f"{repo}#{n}: merge queue entries unreadable ({e})")
+        data = None
+    queue = (((data or {}).get("data") or {}).get("repository") or {}).get("mergeQueue") if isinstance(data, dict) \
+        else None
+    for node in (((queue or {}).get("entries") or {}).get("nodes") or []):
+        if ((node or {}).get("pullRequest") or {}).get("number") == n:
+            return f"queue entry {node.get('state') or '?'} at position {node.get('position')}"
+    try:
+        runs = gh_json(runner, ["gh", "run", "list", "-R", slug(repo), "--event", "merge_group", "-L", "50",
+                                "--json", "databaseId,name,headBranch,status,conclusion"])
+    except ShipError as e:
+        log(f"{repo}#{n}: merge_group runs unreadable ({e})")
+        runs = []
+    prefix = f"gh-readonly-queue/{base}/pr-{n}-"
+    live = [r for r in (runs if isinstance(runs, list) else [])
+            if str(r.get("headBranch") or "").startswith(prefix) and (r.get("status") or "").lower() != "completed"]
+    if live:
+        return "merge_group run " + ", ".join(f"{r.get('name')} {r.get('status')}" for r in live[:3])
+    return ""
+
+
+def _wait_out_queue(runner: Runner, repo: str, n: int, *, timeout: float, interval: float) -> str | None:
+    """mergeq.sh said the PR left the queue: trust that only once queue_hold() finds nothing, then read the PR state
+    again. Return the merge SHA, or None when it really left (or is still held at the timeout)."""
+    tag = f"{repo}#{n}"
+    t0 = runner.now()
+    while True:
+        hold = queue_hold(runner, repo, n)
+        if not hold:
+            return _merged_sha(runner, repo, n)
+        if runner.now() - t0 >= timeout:
+            log(f"{tag}: still held in the merge queue after {int(timeout)}s ({hold})")
+            return None
+        log(f"{tag}: mergeq.sh reported '{LEFT_QUEUE}', but {hold}: waiting")
+        runner.sleep(interval)
+        pr = pr_view(runner, repo, n)
+        if pr.get("state") == "MERGED":
+            return ((pr.get("mergeCommit") or {}).get("oid")) or ""
+
+
 def merge_one(runner: Runner, repo: str, n: int, *, check_only: bool = False, timeout: float = 2400,
               interval: float = 60, allow_deletes: bool = False, expect_head: str | None = None,
               queue_timeout: float = 5400) -> str:
@@ -162,6 +223,8 @@ def merge_one(runner: Runner, repo: str, n: int, *, check_only: bool = False, ti
                         "--match-head-commit", head], timeout=180)
         why = f"gh pr merge exit {r.rc}: {r.last_line()}"
     sha = _merged_sha(runner, repo, n)
+    if sha is None and repo in QUEUE_REPOS and r.rc == 4 and LEFT_QUEUE in r.out:
+        sha = _wait_out_queue(runner, repo, n, timeout=queue_timeout, interval=interval)
     if sha is None:
         raise ShipError(f"{tag} NOT MERGED ({why})", 4)
     log(f"{tag}: MERGED {sha[:8]}")

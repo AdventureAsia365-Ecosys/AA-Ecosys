@@ -252,6 +252,130 @@ class Retention(unittest.TestCase):
         self.assertEqual(row["red"], [])
 
 
+SHA = "0123456789abcdef0123456789abcdef01234567"
+SCAN_WF = textwrap.dedent(f"""
+    on: push
+    jobs:
+      image:
+        runs-on: ubuntu-24.04
+        steps:
+          - uses: actions/checkout@{SHA} # v6
+          - uses: ./.github/actions/release-bin
+          - uses: demo-sec/scan-action@{SHA} # v1, composite: runs demo-sec/setup-scanner inside
+            with:
+              skip-setup-scanner: "true"
+          - uses: demo-cloud/login-action@{SHA} # node action
+          # - uses: demo-old/retired-action@{SHA} (commented out)
+          - uses: demo-new/unlisted-action@{SHA}
+          - uses: docker://alpine:3
+    """)
+# Fixture action.yml files, by "owner/repo[/path]@ref": what remote_action() would read at the pinned SHA.
+SCAN_ACTION = textwrap.dedent(f"""
+    name: scan
+    runs:
+      using: composite
+      steps:
+        - if: inputs.skip-setup-scanner == 'false'
+          uses: demo-sec/setup-scanner@{SHA}
+        - uses: actions/cache@{SHA}
+        - uses: ./helpers/report
+        - uses: demo-sec/scan-action/upload@{SHA}
+        - shell: bash
+          run: scanner image
+    """)
+SETUP_ACTION = textwrap.dedent(f"""
+    name: setup
+    runs:
+      using: composite
+      steps:
+        - uses: demo-tools/fetch-bin@{SHA}
+    """)
+NODE_ACTION = "name: login\nruns:\n  using: node24\n  main: dist/index.js\n"
+ACTIONS = {f"demo-sec/scan-action@{SHA}": SCAN_ACTION, f"demo-sec/setup-scanner@{SHA}": SETUP_ACTION,
+           f"demo-cloud/login-action@{SHA}": NODE_ACTION, f"demo-tools/fetch-bin@{SHA}": NODE_ACTION,
+           f"demo-sec/scan-action/upload@{SHA}": NODE_ACTION}
+DIRECT_ONLY = ["demo-sec/scan-action@*", "demo-cloud/login-action@*"]
+
+
+class AllowList(unittest.TestCase):
+    """WL8 (S273 lesson): the org allow-list must cover actions run inside third-party composite actions."""
+
+    def fetcher(self, actions=ACTIONS):
+        self.fetched = []
+
+        def fetch(ref):
+            self.fetched.append(ref)
+            return actions.get(ref)
+        return fetch
+
+    def test_pattern_semantics(self):
+        self.assertTrue(h.allowed(f"demo-sec/scan-action@{SHA}", ["demo-sec/scan-action@*"]))
+        self.assertTrue(h.allowed(f"demo-sec/scan-action@{SHA}", ["demo-sec/*"]))
+        self.assertTrue(h.allowed(f"demo-sec/scan-action@{SHA}", ["demo-sec/scan-action"]))
+        self.assertTrue(h.allowed(f"demo-sec/scan-action@{SHA}", [f"demo-sec/scan-action@{SHA}"]))
+        # a pattern names the full path: the repo's sub-action is not covered by the repo's line
+        self.assertFalse(h.allowed(f"demo-sec/scan-action/upload@{SHA}", ["demo-sec/scan-action@*"]))
+        self.assertFalse(h.allowed(f"demo-sec/scan-action@{SHA}", ["demo-sec/scan-action@v1"]))
+        self.assertFalse(h.allowed(f"Demo-Sec/scan-action@{SHA}", ["demo-sec/scan-action@*"]))
+        # GitHub-owned, local and docker actions are not governed by the list
+        for ref in (f"actions/cache@{SHA}", f"github/codeql-action/init@{SHA}", "./.github/actions/x", "docker://a:1"):
+            self.assertTrue(h.allowed(ref, []), ref)
+
+    def test_nested_uses_of_a_listed_composite_action_are_findings(self):
+        files = [(".github/workflows/image.yml", SCAN_WF)]
+        found, unread = h.allowlist_findings(files, DIRECT_ONLY, self.fetcher())
+        self.assertEqual(unread, [f"demo-new/unlisted-action@{SHA}"])
+        text = "\n".join(found)
+        self.assertIn(f".github/workflows/image.yml:14:WL8 demo-new/unlisted-action@{SHA} is not on the org", text)
+        # nested, behind an `if:` that the caller turns off: still resolved by GitHub, still a finding
+        self.assertIn(f":9:WL8 demo-sec/scan-action runs demo-sec/setup-scanner@{SHA} inside itself", text)
+        # two levels deep: setup-scanner runs fetch-bin
+        self.assertIn(f"runs demo-tools/fetch-bin@{SHA} inside itself", text)
+        self.assertIn(f"runs demo-sec/scan-action/upload@{SHA} inside itself", text)
+        self.assertNotIn("actions/cache", text)
+        self.assertNotIn("helpers/report", text)
+        self.assertNotIn("login-action", text)
+        self.assertNotIn("retired-action", text)
+        self.assertNotIn("alpine", text)
+        self.assertEqual(len(found), 4, found)
+
+    def test_complete_list_is_clean_and_each_action_is_read_once(self):
+        files = [(".github/workflows/a.yml", SCAN_WF), (".github/workflows/b.yml", SCAN_WF)]
+        patterns = [*DIRECT_ONLY, "demo-sec/setup-scanner@*", "demo-tools/*", "demo-sec/scan-action/upload@*",
+                    "demo-new/unlisted-action@*"]
+        found, _ = h.allowlist_findings(files, patterns, self.fetcher())
+        self.assertEqual(found, [])
+        self.assertEqual(len(self.fetched), len(set(self.fetched)))
+
+    def test_composite_uses_of_node_and_broken_files(self):
+        self.assertEqual(h.composite_uses(NODE_ACTION), [])
+        self.assertEqual(h.composite_uses(None), [])
+        self.assertEqual(h.composite_uses("runs: [unclosed"), [])
+        self.assertEqual(len(h.composite_uses(SCAN_ACTION)), 4)
+
+    def test_remote_action_reads_the_pinned_ref_through_gh(self):
+        calls = []
+
+        def run(cmd, **kw):
+            calls.append(cmd)
+            if f"repos/demo-sec/scan-action/contents/upload/action.yml?ref={SHA}" in cmd:
+                return subprocess.CompletedProcess(cmd, 1, "", "HTTP 404")
+            return subprocess.CompletedProcess(cmd, 0, base64.b64encode(NODE_ACTION.encode()).decode() + "\n", "")
+        self.assertEqual(h.remote_action(f"demo-sec/scan-action/upload@{SHA}", run), NODE_ACTION)
+        self.assertIn(f"repos/demo-sec/scan-action/contents/upload/action.yaml?ref={SHA}", calls[-1])
+
+    def test_collect_is_red_on_wl8_and_the_shipped_list_parses(self):
+        state = {"AA-Booking": {"caches": [], "open": [], "files": {".github/workflows/image.yml": SCAN_WF}}}
+        row = h.collect("AA-Booking", warn_gb=8, run=FakeGh(state=state), now=NOW, log=lambda m: None,
+                        allowlist=DIRECT_ONLY, fetch=self.fetcher())
+        self.assertEqual(len(row["wl8"]), 4)
+        self.assertEqual(row["red"], ["4 action(s) outside the org Actions allow-list (WL8)"])
+        shipped = h.load_allowlist()
+        self.assertIn("aquasecurity/setup-trivy@*", shipped)   # the S273 case
+        self.assertTrue(all("/" in p and not p.startswith("#") for p in shipped), shipped)
+        self.assertIsNone(h.load_allowlist(Path("/nonexistent/actions-allowlist.txt")))
+
+
 class OrgAndPermissions(unittest.TestCase):
     def test_unknown_public_repo(self):
         repos = [*ORG_REPOS, {"name": "scratch-demo", "visibility": "public", "archived": False},

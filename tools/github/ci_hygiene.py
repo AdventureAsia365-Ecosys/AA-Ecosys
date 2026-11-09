@@ -17,6 +17,10 @@ For each of the 6 repos:
     14 days and no `# retention: <why>` comment in the step (or the comment lines right above it).
   * The organisation's public repositories against the known list (REPOS): a new or unknown public repository is a
     finding (ADR 0021 decision 2.1: on the Free plan members can still create public repositories).
+  * WL8 (RED, ADR 0021 decision 2.3): every third-party `uses:` of the workflows and composite actions, and every
+    `uses:` inside a third-party composite action they call (read at the pinned SHA, followed 3 levels deep), against
+    tools/github/actions-allowlist.txt, the record of the org Actions allow-list. S273: enabling the allow-list with
+    the direct `uses:` only turned Docker Build Check red in every repo (trivy-action runs aquasecurity/setup-trivy).
 
     python3 tools/github/ci_hygiene.py                  # table; RED lines go into the opening status block
     python3 tools/github/ci_hygiene.py --json
@@ -28,18 +32,22 @@ Reads use the local `gh` login by hand, the aa-ecosys-ci-bot token (Actions read
 turns the --json report into one issue per finding type (tools/github/hygiene_issues.py, ADR 0021 decision 5 layer 3).
 A token that cannot read a repo's Actions caches (HTTP 403) does not make the repo unreadable: its row carries
 `cache_error` and its workflows are still scanned. Exit: 0 green | 1 RED (a repo over --warn-gb, default 8 GB, a WL5
-finding, or an unknown public repository) | 2 a repo unreadable. --retention-scan always exits 0 (warn mode).
+or WL8 finding, or an unknown public repository) | 2 a repo unreadable. --retention-scan always exits 0 (warn mode).
 """
 from __future__ import annotations
 
 import argparse
 import base64
+import fnmatch
 import importlib.util
 import json
 import re
 import subprocess
 import sys
 from pathlib import Path
+from typing import Callable
+
+import yaml
 
 ORG = "AdventureAsia365-Ecosys"
 REPOS = ("AA-Ecosys", "AA-CIS-App", "AA-Booking", "AA-Partner", "AA-TripPlanner-Web", "AA-CIS-Infra")
@@ -193,6 +201,118 @@ def retention_scan(files: list[tuple[str, str]]) -> list[str]:
     return out
 
 
+# --- WL8: the org Actions allow-list, nested composite actions included --------------------------------------------
+
+ALLOWLIST = Path(__file__).resolve().with_name("actions-allowlist.txt")
+GITHUB_OWNED = frozenset({"actions", "github"})   # allowed by the policy itself ("allow actions created by GitHub")
+USES = re.compile(r"^\s*(?:-\s*)?uses:\s*['\"]?([^'\"\s#]+)")
+NESTED_DEPTH = 3
+
+
+def load_allowlist(path: Path = ALLOWLIST) -> list[str] | None:
+    """The allow-list patterns; None when the file is missing (WL8 is then skipped, not failed)."""
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return None
+    return [line.strip() for line in text.splitlines() if line.strip() and not line.lstrip().startswith("#")]
+
+
+def is_third_party(ref: str) -> bool:
+    """A `uses:` the allow-list governs: a remote action outside GitHub's own orgs (not ./local, not docker://)."""
+    if ref.startswith(("./", "../", "docker://")) or "@" not in ref:
+        return False
+    return ref.split("/", 1)[0].lower() not in GITHUB_OWNED
+
+
+def allowed(ref: str, patterns: list[str]) -> bool:
+    """GitHub's pattern semantics: `*` matches anything, a pattern names the full action path (`owner/repo@*` does not
+    cover `owner/repo/sub@v1`), a pattern without `@` covers every ref of that path."""
+    if not is_third_party(ref):
+        return True
+    path = ref.split("@", 1)[0]
+    return any(fnmatch.fnmatchcase(ref, p) if "@" in p else fnmatch.fnmatchcase(path, p) for p in patterns)
+
+
+def uses_of(text: str) -> list[tuple[int, str]]:
+    """(line number, ref) of every `uses:` line; commented-out lines are skipped."""
+    out = []
+    for i, line in enumerate(text.splitlines(), 1):
+        if line.lstrip().startswith("#"):
+            continue
+        m = USES.match(line)
+        if m:
+            out.append((i, m.group(1)))
+    return out
+
+
+def composite_uses(text: str | None) -> list[str]:
+    """The `uses:` of a composite action's steps, whatever their `if:` (GitHub resolves them all at job set-up); a
+    node / docker action has none."""
+    try:
+        doc = yaml.safe_load(text or "") or {}
+    except yaml.YAMLError:
+        return []
+    runs = doc.get("runs") if isinstance(doc, dict) else None
+    if not isinstance(runs, dict) or str(runs.get("using", "")).lower() != "composite":
+        return []
+    return [str(s["uses"]) for s in runs.get("steps") or [] if isinstance(s, dict) and s.get("uses")]
+
+
+def remote_action(ref: str, run=subprocess.run) -> str | None:
+    """action.yml (or action.yaml) of `owner/repo[/path]@sha`, read at that ref; None when unreadable."""
+    path, at = ref.split("@", 1)
+    owner, repo, *sub = path.split("/")
+    prefix = "/".join(sub) + "/" if sub else ""
+    for name in ("action.yml", "action.yaml"):
+        try:
+            raw = cc.gh(["api", f"repos/{owner}/{repo}/contents/{prefix}{name}?ref={at}", "--jq", ".content"], run)
+            return base64.b64decode(raw).decode("utf-8")
+        except (cc.GhError, ValueError, OSError, subprocess.TimeoutExpired):
+            continue
+    return None
+
+
+def allowlist_findings(files: list[tuple[str, str]], patterns: list[str],
+                       fetch: Callable[[str], str | None]) -> tuple[list[str], list[str]]:
+    """WL8: third-party `uses:` (direct, or nested in a third-party composite action) that no pattern covers. Returns
+    (findings, refs whose action file could not be read: their nested steps are unchecked, a warning, not RED)."""
+    findings: list[str] = []
+    unread: list[str] = []
+    seen: dict[str, list[str]] = {}
+
+    def nested(ref: str, depth: int) -> list[str]:
+        if ref in seen:
+            return seen[ref]
+        seen[ref] = []
+        found = []
+        text = fetch(ref)
+        if text is None:
+            unread.append(ref)
+        for inner in composite_uses(text):
+            if not is_third_party(inner):
+                continue
+            if not allowed(inner, patterns):
+                found.append(inner)
+            if depth < NESTED_DEPTH:
+                found += nested(inner, depth + 1)
+        seen[ref] = found
+        return found
+
+    for path, text in files:
+        for line, ref in uses_of(text):
+            if not is_third_party(ref):
+                continue
+            if not allowed(ref, patterns):
+                findings.append(f"{path}:{line}:WL8 {ref} is not on the org Actions allow-list "
+                                f"(tools/github/actions-allowlist.txt)")
+            for inner in dict.fromkeys(nested(ref, 1)):
+                findings.append(f"{path}:{line}:WL8 {ref.split('@')[0]} runs {inner} inside itself (composite "
+                                f"action), not on the org Actions allow-list: add '{inner.split('@')[0]}@*' to "
+                                f"tools/github/actions-allowlist.txt and the org setting")
+    return findings, unread
+
+
 def org_repos(run=subprocess.run) -> list[dict]:
     """name / visibility / archived of every repository of the org the token can see (all public ones)."""
     out = cc.gh(["api", "--paginate", f"orgs/{ORG}/repos?per_page=100", "--jq",
@@ -214,7 +334,8 @@ def org_check(run=subprocess.run) -> dict:
 
 
 def collect(repo: str, *, warn_gb: float, clean: bool = False, local_root: Path | None = None,
-            run=subprocess.run, now=None, log=print) -> dict:
+            run=subprocess.run, now=None, log=print, allowlist: list[str] | None = None,
+            fetch: Callable[[str], str | None] | None = None) -> dict:
     branch = default_branch(repo, run)
     cache_error = None
     try:
@@ -236,11 +357,18 @@ def collect(repo: str, *, warn_gb: float, clean: bool = False, local_root: Path 
     row["wl5"] = [f for f in findings if ":WL5 " in f or ":WL0 " in f]
     row["wl4"] = [f for f in findings if ":WL4 " in f]
     row["wl7"] = retention_scan(files)
+    patterns = load_allowlist() if allowlist is None else allowlist
+    if patterns is None:
+        row["wl8"], row["wl8_unread"] = [], ["tools/github/actions-allowlist.txt missing: WL8 skipped"]
+    else:
+        row["wl8"], row["wl8_unread"] = allowlist_findings(files, patterns, fetch or (lambda r: remote_action(r, run)))
     row["files"] = len(files)
     after = row["bytes"] - row["deleted_bytes"]
     row["red"] = [r for r, bad in ((f"cache {after / 1e9:.1f} GB > {warn_gb:g} GB (cap {CAP_GB:g})",
                                     after > warn_gb * 1e9),
-                                   (f"{len(row['wl5'])} uncached external download(s)", bool(row["wl5"])))
+                                   (f"{len(row['wl5'])} uncached external download(s)", bool(row["wl5"])),
+                                   (f"{len(row['wl8'])} action(s) outside the org Actions allow-list (WL8)",
+                                    bool(row["wl8"])))
                   if bad]
     return row
 
@@ -267,8 +395,10 @@ def print_table(rows: list[dict], unreadable: list[str], warn_gb: float, clean: 
         for t in r["top"]:
             note = "  (CodeQL default setup: not configurable)" if t["family"].startswith("codeql") else ""
             print(f"       {t['bytes'] / 1e9:5.2f} GB {t['entries']:>3}x {t['family']}{note}")
-        for f in r["wl5"]:
+        for f in r["wl5"] + r.get("wl8", []):
             print(f"     RED {f}")
+        for ref in r.get("wl8_unread", []):
+            print(f"     ??? WL8 could not read {ref} (its nested actions are unchecked)")
         for f in r["wl4"] if verbose else []:
             print(f"     warn {f}")
         if r["wl4"] and not verbose:
