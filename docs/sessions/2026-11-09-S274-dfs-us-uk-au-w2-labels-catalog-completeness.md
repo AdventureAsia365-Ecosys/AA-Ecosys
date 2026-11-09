@@ -112,7 +112,7 @@ Xem `.tmp-session/S274-lessons-pending.md`:
   - Chưa push. Nhánh nằm trong clone của lane: `.claude/worktrees/agent-aab2ee2027ec9ec08/apps/AA-CIS-App`, branch `fix/aa-1039-restore-republish`.
 
 ## Còn dở / phiên sau
-- **AA-1039:** lấy commit sửa thứ hai → review lần 3 → push → ship → diễn tập trên test-wp. Diễn tập có 2 ca: trang công khai phải được đăng lại; trang đặt riêng tư trước hạn nháp phải giữ riêng tư.
+- **AA-1039 restore-republish:** review lần 3 vẫn BLOCK (2 lỗi lớn + 6 lỗi nhỏ, mỗi vòng sửa lại mở lỗ mới). Nhánh đã push, không PR. Đề xuất A: tenant bấm "Put back online" một lần, không tự đăng. Chờ anh chọn A/B (`aa1060/restore-republish-followup.md`).
 - **AA-1056:** đọc `first_finished_after` của 2 sự kiện 22:59Z, kiểm 2 recompute không chạy chồng, rồi đóng.
 - **AA-1055:** sau R2, kiểm guard DE / FR / NL; chạy preview `reatomized` sau 1 lần re-atomize; đóng.
 - **AA-1058:** 1 lượt S1 + 1 bài T9 có `prompt_version` / `content_piece_id`.

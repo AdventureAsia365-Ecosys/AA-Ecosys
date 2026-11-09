@@ -24,7 +24,7 @@
 ## Open PRs (not bot release PRs)
 - AA-Booking #200: bk-045, from 28/11.
 - AA-Booking #210: docs. Transient check failures were re-run.
-- CIS `fix/aa-1039-restore-republish`: not pushed. A lane is fixing the second review (1 major + minors). Next session: fetch from the lane clone, review again, push, ship, rehearse on test-wp.
+- CIS branch `fix/aa-1039-restore-republish` is pushed with no PR (3 commits, edef9e26). The third review still blocks (2 majors + 6 minors). The tech lead picks a direction (option A, one-click republish by the tenant, is recommended): `aa1060/restore-republish-followup.md`.
 
 ## Blocked on the tech lead (auto mode)
 - acc3 `terraform apply` (accounts/acc3-bedrock): 8 in-place updates, all tag standard (`ManagedBy` / `Project` / `App` / `Component` / `CostCenter` / `Owner` / `DataClassification`), plus the SNS cost-alert topic policy rewritten with the same statements. The plan is saved locally. Run it from the main Infra checkout with auto mode off.
