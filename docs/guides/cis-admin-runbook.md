@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, staff, engineer]
 applies_to: [aa-cis-frontend, aa-cis-api]
-last_reviewed: 2026-11-01
+last_reviewed: 2026-11-10
 review_every_days: 90
 related: [GUIDE-12, GUIDE-12-ai-reports, GUIDE-04, GUIDE-01, OPS-04, AA-1020]
 ---
@@ -92,6 +92,13 @@ The left menu has two sections.
   **SEO Intelligence**); Tenant output (**Content Trace**, **A4 Quality**, **Content Quality**, **Writing memory**).
 
 **Settings** sits at the bottom of the menu. The UI opens in English; switch the language in the top bar.
+
+**Docs** (Platform › Developer) is the reader for this documentation: search or filter the catalog on the left,
+read the page on the right, and switch between English and Vietnamese when a page has a translation.
+
+![The Docs page of the CIS admin: the catalog list with search and filters on the left, the reading pane on the right](images/cis-admin-docs-reader.png)
+
+Screenshot: the **Docs** page on Dev, captured 28 Oct 2026.
 
 ## 7. Day-to-day tasks
 

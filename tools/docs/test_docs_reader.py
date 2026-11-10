@@ -7,9 +7,11 @@ Fixture IDs are fake (zeros and invented hex), never a real account.
 from __future__ import annotations
 
 import json
+import struct
 import sys
 import tempfile
 import unittest
+import zlib
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -307,6 +309,142 @@ class SvgAssets(TreeCase):
         for svg in svgs:
             with self.subTest(svg.name):
                 self.assertEqual(b.svg_problems(svg.read_text(encoding="utf-8")), [])
+
+
+
+# ── rule 10: screenshots (AA-1064) ─────────────────────────────────────────────────────────────────────
+
+def _chunk(kind: bytes, body: bytes) -> bytes:
+    return struct.pack(">I", len(body)) + kind + body + struct.pack(">I", zlib.crc32(kind + body))
+
+
+def png_bytes(text: bytes = b"", pad: int = 0) -> bytes:
+    """A 1x1 PNG built in code; `text` adds a tEXt chunk, `pad` an ancillary chunk of that many bytes."""
+    data = b"\x89PNG\r\n\x1a\n" + _chunk(b"IHDR", struct.pack(">IIBBBBB", 1, 1, 8, 6, 0, 0, 0))
+    if text:
+        data += _chunk(b"tEXt", b"Comment\0" + text)
+    if pad:
+        data += _chunk(b"prVt", b"\0" * pad)
+    return data + _chunk(b"IDAT", zlib.compress(b"\0\0\0\0\0")) + _chunk(b"IEND", b"")
+
+
+def webp_bytes(xmp: bytes = b"") -> bytes:
+    """A RIFF/WEBP container with one lossless chunk; `xmp` adds an XMP chunk."""
+    def chunk(kind: bytes, body: bytes) -> bytes:
+        return kind + struct.pack("<I", len(body)) + body + (b"\0" if len(body) & 1 else b"")
+    body = b"WEBP" + chunk(b"VP8L", b"\x2f\x00\x00\x00\x00\x00") + (chunk(b"XMP ", xmp) if xmp else b"")
+    return b"RIFF" + struct.pack("<I", len(body)) + body
+
+
+class ScreenshotAssets(TreeCase):
+    def write_bytes(self, rel: str, data: bytes) -> None:
+        p = self.root / rel
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_bytes(data)
+
+    def test_linked_png_published_byte_for_byte(self):
+        png = png_bytes()
+        self.write_bytes("docs/guides/images/screen-one.png", png)
+        self.write("docs/guides/run.md", _page("GUIDE-01", body="![The list page](images/screen-one.png)\n"))
+        m = self.build()
+        self.assertEqual(m["counts"]["screenshots"], 1)
+        (asset,) = m["assets"]
+        self.assertEqual(asset["path"], "docs/guides/images/screen-one.png")
+        self.assertEqual(asset["key"], "assets/AA-Ecosys/docs/guides/images/screen-one.png")
+        self.assertEqual(asset["type"], "image/png")
+        self.assertEqual(asset["access"], "staff")
+        self.assertEqual(asset["bytes"], len(png))
+        self.assertEqual((self.out / asset["key"]).read_bytes(), png)
+
+    def test_webp_published_with_its_type(self):
+        self.write_bytes("docs/guides/images/screen.webp", webp_bytes())
+        self.write("docs/guides/run.md", _page("GUIDE-01", body="![Screen](images/screen.webp)\n"))
+        (asset,) = self.build()["assets"]
+        self.assertEqual(asset["type"], "image/webp")
+
+    def test_only_linked_published_images_go_out(self):
+        self.write_bytes("docs/AAA/design/export.png", png_bytes())               # not linked: a design export
+        self.write_bytes("docs/audits/2026-x/shot.png", png_bytes())             # linked but never published
+        self.write_bytes("docs/notes/images/draft.png", png_bytes())             # linked only by a draft page
+        self.write_bytes("docs/guides/images/in-code.png", png_bytes())          # only inside a code block
+        self.write("docs/guides/run.md", _page("GUIDE-01", body=(
+            "![Evidence](../audits/2026-x/shot.png)\n\n```markdown\n![x](images/in-code.png)\n```\n"
+            "Inline `![x](images/in-code.png)` too.\n")))
+        self.write("docs/notes/draft.md", "# Draft\n\n![Draft](images/draft.png)\n")
+        m = self.build()
+        self.assertEqual(m["assets"], [])
+        self.assertEqual(m["counts"]["screenshots"], 0)
+
+    def test_access_is_the_most_open_linking_page(self):
+        self.write_bytes("docs/legal/images/owner-only.png", png_bytes())
+        self.write_bytes("docs/legal/images/shared.png", png_bytes())
+        self.write("docs/legal/terms.md", _page("SEC-01", body="![A](images/owner-only.png)\n![B](images/shared.png)\n"))
+        self.write("docs/guides/run.md", _page("GUIDE-01", body="![B](../legal/images/shared.png)\n"))
+        access = {a["path"]: a["access"] for a in self.build()["assets"]}
+        self.assertEqual(access, {"docs/legal/images/owner-only.png": "owner", "docs/legal/images/shared.png": "staff"})
+
+    def test_translation_shares_the_image(self):
+        self.write_bytes("docs/guides/images/screen.png", png_bytes())
+        self.write("docs/guides/run.md", _page("GUIDE-01", body="![Screen](images/screen.png)\n"))
+        self.write("docs/guides/run.vi.md", _page("GUIDE-01", extra="lang: vi\ntranslation_of: docs/guides/run.md\n",
+                                                  body="![Man hinh](images/screen.png)\n"))
+        m = self.build()
+        self.assertEqual(m["counts"]["translations"], 1)
+        self.assertEqual([a["path"] for a in m["assets"]], ["docs/guides/images/screen.png"])
+
+    def test_bad_linked_images_fail_the_build(self):
+        bad = {
+            "oversize.png": png_bytes(pad=b.MAX_RASTER_BYTES),
+            "fake.png": b"<svg xmlns='http://www.w3.org/2000/svg'/>",
+            "account.png": png_bytes(text=f"role {FAKE_ACCOUNT}".encode()),
+            "fake.webp": png_bytes(),
+            "account.webp": webp_bytes(xmp=f"<x>{FAKE_ACCOUNT}</x>".encode()),
+            "truncated.png": png_bytes()[:-6],
+        }
+        for name, data in bad.items():
+            with self.subTest(name):
+                self.assertTrue(b.raster_problems(data, Path(name).suffix), f"{name} should be refused")
+        self.write_bytes("docs/guides/images/oversize.png", bad["oversize.png"])
+        self.write("docs/guides/run.md", _page("GUIDE-01", body="![Too big](images/oversize.png)\n"))
+        with self.assertRaises(SystemExit):
+            self.build()
+        self.assertFalse((self.out / "manifest.json").exists(), "nothing is written when a screenshot is refused")
+
+    def test_good_images_pass_the_raster_check(self):
+        self.assertEqual(b.raster_problems(png_bytes(text=b"Captured on Dev"), ".png"), [])
+        self.assertEqual(b.raster_problems(webp_bytes(xmp=b"<x>plain</x>"), ".webp"), [])
+        self.assertEqual(b.raster_problems(png_bytes(pad=b.MAX_RASTER_BYTES - 200), ".png"), [])
+        self.assertTrue(b.raster_problems(png_bytes(), ".jpg"))
+
+    def test_resolve_image_matches_the_reader(self):
+        cases = {
+            ("images/x.png", "docs/guides/a.md"): "docs/guides/images/x.png",
+            ("../ops/x.png", "docs/guides/a.md"): "docs/ops/x.png",
+            ("./x.png?v=2#top", "docs/a.md"): "docs/x.png",
+            ("/docs/x.png", "docs/guides/a.md"): "docs/x.png",
+            ("my%20shot.png", "docs/a.md"): "docs/my shot.png",
+            ("../../../x.png", "docs/a.md"): None,
+            ("https://example.com/x.png", "docs/a.md"): None,
+            ("//example.com/x.png", "docs/a.md"): None,
+            ("data:image/png;base64,AAAA", "docs/a.md"): None,
+            ("#frag", "docs/a.md"): None,
+            ("", "docs/a.md"): None,
+        }
+        for (src, page), want in cases.items():
+            with self.subTest(src):
+                self.assertEqual(b.resolve_image(src, page), want)
+
+    def test_image_links_skip_code(self):
+        text = ('![A](a.png "title")\n`![B](b.png)`\n~~~\n![C](c.png)\n~~~\n![](<d e.png>)\n'
+                "```\n![F](f.png)\n```\n")
+        self.assertEqual(b.image_links(text), [(1, "A", "a.png"), (6, "", "d e.png")])
+
+    def test_committed_screenshots_pass(self):
+        """Every PNG / WebP a committed docs page links passes the raster check (the guide proof included)."""
+        root = Path(__file__).resolve().parents[2]
+        result = b.collect(root)
+        _assets, problems = b.collect_raster_assets(result.pages, root)
+        self.assertEqual(problems, [])
 
 
 if __name__ == "__main__":

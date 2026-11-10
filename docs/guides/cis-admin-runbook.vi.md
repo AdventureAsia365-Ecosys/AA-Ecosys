@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, staff, engineer]
 applies_to: [aa-cis-frontend, aa-cis-api]
-last_reviewed: 2026-11-01
+last_reviewed: 2026-11-10
 review_every_days: 90
 related: [GUIDE-12, GUIDE-12-ai-reports, GUIDE-04, GUIDE-01, OPS-04, AA-1020]
 lang: vi
@@ -93,6 +93,13 @@ Menu bên trái có hai phần.
   **SEO Intelligence**); Tenant output (**Content Trace**, **A4 Quality**, **Content Quality**, **Writing memory**).
 
 **Settings** nằm ở cuối menu. Giao diện mở bằng tiếng Anh; đổi ngôn ngữ ở thanh trên cùng.
+
+**Docs** (Platform › Developer) là trang đọc bộ tài liệu này: tìm hoặc lọc danh mục ở bên trái, đọc trang ở bên
+phải, và chuyển giữa tiếng Anh và tiếng Việt khi trang có bản dịch.
+
+![Trang Docs của CIS admin: danh mục tài liệu với ô tìm kiếm và bộ lọc ở bên trái, khung đọc ở bên phải](images/cis-admin-docs-reader.png)
+
+Ảnh chụp: trang **Docs** trên Dev, chụp ngày 28/10/2026.
 
 ## 7. Việc hằng ngày
 
