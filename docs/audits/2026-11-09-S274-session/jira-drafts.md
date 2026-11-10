@@ -78,3 +78,8 @@ Vì sao: S273 bức tranh hệ thống mục 11 — Booking có 892 trip plan nh
 |---|---|
 | 892/892, 2 bán được | run2 `l5_booking.data_totals` trip_plans, trip_plans_sellable; `live_tours_without_plan=0` |
 | 5 nhà cung cấp, 9 bảng giá, 4 ngày khởi hành | `suppliers_active`, `rates_current`, `departures_open` |
+
+
+## Đăng (S275, 10/11)
+
+Tech lead duyệt trong S275. Nháp 1 đăng ở **PR-22** (comment 10629), không phải KAN-90. Nháp 2 → PR-22 comment 10630. Nháp 3 → PR-25 comment 10632. Chi tiết: `docs/audits/2026-11-10-S275-session/jira-drafts.md`.

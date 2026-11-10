@@ -6,7 +6,7 @@
 
 **Rules:** at session start read §1–§3 and pick the session's parallel items from §3 and §3b by slot (skip items blocked in §2 or by the "blocked by" notes). At session end update the Status column, move closed items to §5, add new items. Re-audit only when this file is older than ~2 weeks or many issues were created outside sessions.
 
-_Last updated: S274, 10/11/2026 (Claude Code, Ultracode; 09/11 ~10:00 → 10/11 ~07:00 +07). **Closed in S274:** AA-1052 W6 (CIS #1400/#1401 live), AA-1057, AA-1059, AA-1060 WordPress test site (Infra #748/#750, Booking #215). Earlier S273 close kept below. S274 created AA-1056…AA-1060 (system picture). Live data: DFS Standard queue, R1 US/UK/AU done (ranking rows with demand 22% → 88%; Blog-bar Segments US 391 → 1,593); W2 round 2 imported (4,770 labels); completeness report docs/audits/2026-11-09-S274-session/completeness/report.vi.md._ Previous header: Last updated: S272, 08/11/2026 (Claude Code, Ultracode; 07/11 ~08:00 → 08/11 ~10:00 +07). **No issue closed in S272** (each touched issue waits on a live gate, a MFA apply or W2 labels): AA-1047 W1 live (policy registry, FactSheet, REPORT final_contract; paid smoke 10/10 ≈ 0.21 USD); AA-1048 W2 tooling + first panel (450 labels, import path open); AA-1049 W3 T9 (#1377) and T2 (#1380) trains live with behaviour changes behind opt-in flags; AA-1038 R5 slice 3 live (leads → agency CRM, brand, AI cap; CIS 390, tp-026) + hosting slice drafts (Infra #721/#722, TP #236, need a local MFA apply); AA-911 Vercel staff projects retired (A10 stays until go-live); AA-1040 X-AI headers; AA-1024 guards + PR tool fixes. S272 Jira drafts roll to S273. Earlier header (S271) kept in git history._
+_Last updated: S275, 10/11/2026 (Claude Code, Ultracode; ~06:30 → ~16:40 +07). **Closed in S275:** AA-1056, AA-1058, AA-1064 (guide screenshots), AA-1062 (legal v0.6), **AA-1066** (CRM retail pricing, crm-048, Playwright 8/8); Done-with-scope AA-1055, AA-820, AA-1046. S275 created AA-1061…AA-1075 (AA-1065 Odoo study → milestone M-OD AA-1066…1075). Live: CL-1 complete (1,018 claims), Writing Lab review (CIS #1419, mig 394), W3 switches on (worker :648), AA-741 phase 2 done (48/48, 6.77 USD)._ Previous header: Last updated: S274, 10/11/2026 (Claude Code, Ultracode; 09/11 ~10:00 → 10/11 ~07:00 +07). **Closed in S274:** AA-1052 W6 (CIS #1400/#1401 live), AA-1057, AA-1059, AA-1060 WordPress test site (Infra #748/#750, Booking #215). Earlier S273 close kept below. S274 created AA-1056…AA-1060 (system picture). Live data: DFS Standard queue, R1 US/UK/AU done (ranking rows with demand 22% → 88%; Blog-bar Segments US 391 → 1,593); W2 round 2 imported (4,770 labels); completeness report docs/audits/2026-11-09-S274-session/completeness/report.vi.md._ Previous header: Last updated: S272, 08/11/2026 (Claude Code, Ultracode; 07/11 ~08:00 → 08/11 ~10:00 +07). **No issue closed in S272** (each touched issue waits on a live gate, a MFA apply or W2 labels): AA-1047 W1 live (policy registry, FactSheet, REPORT final_contract; paid smoke 10/10 ≈ 0.21 USD); AA-1048 W2 tooling + first panel (450 labels, import path open); AA-1049 W3 T9 (#1377) and T2 (#1380) trains live with behaviour changes behind opt-in flags; AA-1038 R5 slice 3 live (leads → agency CRM, brand, AI cap; CIS 390, tp-026) + hosting slice drafts (Infra #721/#722, TP #236, need a local MFA apply); AA-911 Vercel staff projects retired (A10 stays until go-live); AA-1040 X-AI headers; AA-1024 guards + PR tool fixes. S272 Jira drafts roll to S273. Earlier header (S271) kept in git history._
 
 ## 1. Time-gated checks (do these first when due)
 
@@ -55,6 +55,7 @@ _Last updated: S274, 10/11/2026 (Claude Code, Ultracode; 09/11 ~10:00 → 10/11 
 
 ## 2. Waiting on Nghiệp (decisions / manual steps)
 
+- **Waiting after S275:** (a) the business owner's answers to the 10 M-OD default questions (Jira PR-26 comment 10636); the system uses the proposed defaults until then. (b) acc3 tag `terraform apply` (auto mode off). (c) The TrueIDC Zalo message before 20/11 (`.tmp-session/S275/trueidc-zalo.txt`).
 - **Settled in S265 (ADR 0019, B2B-only):** the decision page (44/44 items) and the plan/issue review (all 52 verdicts approved). Frontends: the two staff apps (CIS admin, Booking admin) leave Vercel on **Dev first**, in one Fargate Spot task (0.5 vCPU / 1 GB), and TripPlanner runs as one Spot task with CloudFront + WAF, about 20–22 USD a month on Dev; production sizing later (ADR 0019 d23, settled item 2). **q-pilot:** if the Dev pilot starts with no go-live date, the `aa-prod` build (P2) starts at the latest in pilot week 3. **q-ses:** yes to SES mail for the tour-retirement fan-out (a few cents a month, AA-1039). **q-aa741:** yes to the AA-741 paid T-series run, at most 20 USD and 50 tours, through the interim OpenAI / acc2 path while acc3 is closed (inside the OpenAI 10 USD/month hard cap, CIS 327). Every session's list explains each issue in plain words before the tech lead approves it.
 - **Waiting after S269:** (a) **AA-1008 H3**: the tech lead's GitHub sign-in to make the visual job and Kit provenance required checks in the kit repos (branch protection; AA-1036 is merged, so nothing else blocks it); (b) **AA-820**: the tech lead reads the DPA pack, then the business owner decides whether counsel reviews it (AI clause before 11/11); (c) **AA-710 KAN-20** Jira draft: rolled to S270 together with the S268 and S269 drafts (one approval at the S270 close); (d) an **E2E tenant that has both a CIS account and a CRM-only owner** (follow-up from S269), so the cross-product checks have a fixture.
 - **Waiting after S267:** (a) ~~the Anthropic API key from the business owner~~ **done S269**: plugged with the one-command runbook (secret `aa-llm/dev/anthropic-direct`, budget 150 USD a month hard stop, probe ok), the preferred route is control version 6, 13/13 Claude models probed ok (AA-1026, AA-1042); (b) the AWS case for acc3 (Claude 5.x, GPT-6 Luna, GPT-5.6 Luna + quotas; resent by the tech lead 04/11) — until then writers run on Claude 4.x @acc3 and the GPT stages on the OpenAI API (cap 10 USD/month); (c) approval of the CIS 369 DROP of `shared.tenants.api_key_hash` after its DRY RUN (AA-1036); (d) the public case-study posts and video (AA-1021) need the tech lead review before anything is posted.
@@ -142,30 +143,38 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | S280 | AA-1041, AA-1004 | R7 item 7 + visual tests against `next start` → close R7. AA-1004 P2–P6 from the go-live date, or from pilot week 3 at the latest (q-pilot). |
 | after S280 / date-gated | AA-1024, AA-788, AA-1026, AA-998, AA-873, AA-1003, CRM-after-R3, AA-980, AA-881, parked | AA-1024 D8 ≥10/11 ~12:00Z; AA-788 ≥19/11 with an LLM path (~S286+); first session ≥01/12: AA-1026 D6 (November bill), AA-998 acc1 = 0 USD, AA-873 first-month cost read, AA-1004 org invites; AA-1003 R5–R7; CRM add-ons AA-960, AA-963, AA-965, AA-968, AA-970, AA-1011, AA-1012 in the merged app (≥60 % capacity stays on content); AA-980 at go-live; AA-881 05/2027; parked AA-842, AA-781, AA-782, AA-704, AA-948, AA-922 (TL-11 lift). |
 
-### Open issues by slot (after the S274 close: AA-1052, AA-1057, AA-1059, AA-1060 closed; AA-1056 and AA-1058 open)
+### Open issues by slot (after the S275 close: AA-1055, AA-1056, AA-1058, AA-820, AA-1046, AA-1062, AA-1064, AA-1066 closed)
 
 | Issue | Work | Milestone | Slot | S265 verdict | Status |
 |---|---|---|---|---|---|
 | AA-1047 | [Quality W1] One policy registry, one FactSheet, one exit contract (report mode) | M2a | S273 (Done check) | new S271 | In Review |
-| AA-1048 | [Quality W2] Claim-level ground truth and calibration of the pinned claim instrument | M2a | S275 (tech lead adjudication: 84 open CL-1 1.0.0, then CL-1 1.1.0 batch 1/3; round 2 imported S274) | new S271 | In Progress |
-| AA-1049 | [Quality W3] Rewire the T9, S1 and T2 control planes in place | M2a | S273+ | new S271 | In Progress |
-| AA-1050 | [Quality W4] Promote the calibrated claim instrument: shadow first | M2a | S275 (label ~30 disagreements of the S274 replay; switch stays off) | new S271 | In Review |
-| AA-1051 | [Quality W5] Paid writer proofs on small fixed samples under the D12 caps | M2a | S275 | new S271 | Backlog |
-| AA-1055 | [SEO data] Keep search-demand research fresh (design A approved S273) | M2a | S275 (verify #1415 stale guard live, R2 DE/FR/NL, close) | new S273 | In Progress |
-| AA-1056 | [Recompute] Sweep after tour retire/restore, latency metric, release delay, lock | M2a | S275 (live retire→restore check) | new S274 | In Progress |
-| AA-1058 | [AI gateway] Cost attribution on every ledger row | M1b | S275 (one S1 + one T9 as evidence) | new S274 | In Progress |
+| AA-1048 | [Quality W2] Claim-level ground truth and calibration of the pinned claim instrument | M2a | S276 (R1: no class has n_pos ≥ 20, max 9 → more violations or change the ADR 0020 bar) | new S271 | In Progress |
+| AA-1049 | [Quality W3] Rewire the T9, S1 and T2 control planes in place | M2a | S276 (switches on, worker :648; S1 train $0) | new S271 | In Progress |
+| AA-1050 | [Quality W4] Promote the calibrated claim instrument: shadow first | M2a | after W2 per class (enforce OFF, tech lead S275) | new S271 | In Review |
+| AA-1051 | [Quality W5] Paid writer proofs on small fixed samples under the D12 caps | M2a | after W2 R1 + W4 (tech lead S275) | new S271 | Backlog |
+| AA-1063 | [Writing Lab] Claim ground truth in the admin: review queue, label set browser, bulk accept, Jev pre-filter | M2a | S276 (t2@2 341 disputed claims into the queue → one tech-lead batch; Jev rule as code) | new S275 | In Review |
+| AA-1039 | [Lifecycle] Put back online after a tour restore (option A) | M2a | S276 (test-wp drill with a new piece) | re-scope | In Review |
+| AA-1065 | [Research] Odoo tour & travel app: feature and data model comparison | M-OD | close with the S275 root PR | new S275 | In Review |
+| AA-1067 | [CRM retail] Payment schedule, reminders, cancellation policy, charge / refund | M-OD | S276 | new S275 | Backlog |
+| AA-1068 | [CRM finance] Profit per trip, 'Bookings with AA', supplier bills vs plan | M-OD | S277 | new S275 | Backlog |
+| AA-1069 | [CRM ops] Agency service catalogue, supplier booking requests | M-OD | S277 | new S275 | Backlog |
+| AA-1070 | [CRM ops] Departure roster, vouchers, rooming list, passport / visa tracker | M-OD | S278 | new S275 | Backlog |
+| AA-1071 | [CRM partners] Sub-agent / referral commission payable, sub-agent portal | M-OD | S278 | new S275 | Backlog |
+| AA-1072 | [CRM retail] 'Book now' on the agency's tour page, online deposit | M-OD | S279 | new S275 | Backlog |
+| AA-1073 | [Booking departures] Minimum to operate, cutoff, generator, allotments | M-OD | S279 | new S275 | Backlog |
+| AA-1074 | [Booking finance] FX costs, supplier POs, profit per case / departure / agency | M-OD | S280 | new S275 | Backlog |
+| AA-1075 | [Booking ops] Staff-entered bookings, vouchers, manifest, cancellation override | M-OD | S280 | new S275 | Backlog |
+| AA-1061 | [Booking] R4c bk-045 B2C table drop | M-R4 | ≥28/11 (slot ≥01/12) | new S275 | Backlog |
 | AA-1003 | [Reporting] Build the ecosystem report engine and the 63-report catalog (appr… | M-R0 | after S280 | re-scope | In Progress |
-| AA-1004 | [Infra] Implement the lean AWS model: company organization, Identity Center,… | M5 | S268 | re-scope | In Progress |
+| AA-1004 | [Infra] Implement the lean AWS model: company organization, Identity Center,… | M5 | before 20/11 | re-scope | Backlog |
 | AA-1021 | AA-1021 (content series, details private) | parked | S267 | re-scope | In Progress |
 | AA-1036 | [Portal] R3 one agency app: merge portal/ into web/, one sign-in, Content hom… | M-R3 | S268 | re-scope | In Progress |
 | AA-969 | [CRM W7] CRM-37a Security review, SLOs, bounded load test | M-P1 | S269 | re-scope | Backlog |
 | AA-1040 | [Kit] AI notice and machine-readable AI-content marking across apps (EU AI Ac… | M-P1 | S269 | keep | In Progress |
-| AA-741 | [T-series audit] End-to-end T0→T11 test run on controlled tenants + per-mecha… | M2a | S270 | re-scope | In Progress |
-| AA-820 | [Legal] Tenant Terms clause for the Anthropic Usage Policy (effective 12/11/2… | M-P1 | ≤11/11 | re-scope | In Progress |
+| AA-741 | [T-series audit] End-to-end T0→T11 test run on controlled tenants + per-mecha… | M2a | S276 (phase 3 report; phase 2 done S275) | re-scope | In Progress |
 | AA-855 | [UAT] Ecosystem UAT with recorded run videos: CIS admin + tenant portal, Trip… | M-P1 | S272 | re-scope | In Progress |
-| AA-1038 | [TripPlanner] R5 multi-tenant white-label TripPlanner: tenant_id + RLS, per-t… | M-P2 | S273 (MFA apply) | re-scope | In Review |
-| AA-1046 | [Booking] R4b B2C drop and VAT e-invoice provider API | M-R4 | S274 | new S270 | Backlog |
-| AA-1024 | [AI gateway] CIS core hardening + bypass guards: stage kill switch, prompt_ve… | M1b | ≥10/11 | re-scope | In Progress |
+| AA-1038 | [TripPlanner] R5 multi-tenant white-label TripPlanner: tenant_id + RLS, per-t… | M-P2 | S276 (teal brand test + Playwright) | re-scope | In Review |
+| AA-1024 | [AI gateway] CIS core hardening + bypass guards: stage kill switch, prompt_ve… | M1b | S276 (D8: CIS 336 + DB_AUTO_APPLY_CONTRACT) | re-scope | In Review |
 | AA-911 | [Identity] Staff sign-in for Booking (and CIS) Vercel Previews, then retire t… | M5 | S273 (split A10) | re-scope | In Review |
 | AA-1041 | [TripPlanner] R7 TripPlanner UX: place photos, activity icons, map/itinerary… | M-R7 | S277 | re-scope | Backlog |
 | AA-960 | [CRM W6] CRM-29b Tags, system tags, coverage, ready-to-travel | CRM-after-R3 | after S280 | pause | Backlog |
@@ -250,6 +259,15 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-697 | Architecture diagrams with official AWS icons — ecosystem + each repo | S256 | **Done S257** (§5c): pilot approved under the S257 session plan (root #320); drift findings closed (Booking ops-docs bucket built S256, EFS removed S257 Infra #492) | — |
 | AA-710 | B2B benchmark: Asian Trails (eConnect, API, Lemax) | M-R4 | **S265:** slot S271 (R4 start): update the note against the R4 design (AA-1037, AA-1029, AA-1030, 'Book with AA' d17), map the gaps to issues, KAN-20 draft at that session's end, then close | — |
 | AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 | **S262:** AA-952, AA-954, AA-956, AA-957, AA-964, AA-971 closed (§5); AA-958 → S263. AA-952 was In Progress since S259 (slice 1 = C-M3 confirm, §3 row 0ah); **re-planned at the S260 close**: slots S261–S266, go-real ≥S267, see §3b "Kế hoạch CRM W5–W8 sau S260" | AA-958 needs a free Twilio trial for the live proof; AA-965 needs an LLM path |
+
+## 5. Closed in S275
+
+- **AA-1066** [CRM retail] Price per traveller type, price rules, discount with owner approval: root #663, Partner #258 (crm-048) + #259 `451e5011`; Playwright live 8/8 (`docs/audits/2026-11-10-S275-session/aa1066-live/`).
+- **AA-1056** [Recompute] sweep after retire/restore: recompute 69′ after the event, metric late=4.
+- **AA-1058** [AI gateway] cost attribution: S1 + T9 + recompute rows carry tour_id / content_piece_id / job_id / prompt_version.
+- **AA-1064** [Docs] guide screenshots: CIS #1420 + root #660.
+- **AA-1062** [Legal] studio legal pages v0.6: Partner #257 + root #659.
+- Done-with-scope: **AA-1055** (DE/FR/NL stale 99% → 8.4%), **AA-820** (Booking #210; counsel / pilot letter = triggers), **AA-1046** (rest → AA-1061).
 
 ## 5. Closed in S274
 
