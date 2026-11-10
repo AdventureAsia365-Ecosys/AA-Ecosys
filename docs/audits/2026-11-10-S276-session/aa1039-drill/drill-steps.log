@@ -1,0 +1,121 @@
+=== STEP=publish PIECE=b5f11e37 APPLY=1
+[run] STEP=publish APPLY=True tenant=atlas-hearth 9149d3c6 test_site=test-wp.lumiguides.it.com page=- at=14:54:18Z
+[candidates] pending blog pieces=3 needs_change=0 with_page_to_put_back=0 keys_checked=3 keys_ok=1 not_about_key=0 publishable_on_clean_key=1
+  refused key reasons: {"non_e2e_tenant": 2, "other_live_posts": 2, "pending_reviews": 2}
+[publish] piece b5f11e37 status=held about_key=True segment_subject=True served_segment_members_outside_key=0 (tours=0) | key=66a568bd state=served versions=1 live_versions=1 master=active derivative_tenants=1 non_e2e_tenants=0 live_posts=0 own_listed=False other_live_posts=0 queued_jobs=0 pending_reviews=0 claims_in_flight=0 open_retired_flags=0 outstanding_warned=0 outstanding_retired_notices=0 deleted_by_set=False live_tour=a00d5823 ok=True reasons=[]
+  PASS POST publish -> published on the test site: publish=804a822e status=published replayed=False remote_id=5
+  PASS WordPress status publish (signed-in GET): http=200 status=publish same_post=True ai_mark=True
+  PASS fan-out LIVE_POSTS_SQL lists the new post for its key (retire would flag it): key=66a568bd live_posts=1 about_key=True segment_subject=True served_segment_members_outside_key=0 (tours=0)
+[publish] next: PUBLISH=804a822e  (undo, if ever needed: Unpublish in the Content studio)
+[publish] PASS (3/3 checks)
+ecsx: rc=0 bytes=1331 (output also in <local>
+rc=0
+PUB=804a822e
+=== STEP=aboutcheck PUBLISH=804a822e
+[run] STEP=aboutcheck APPLY=False tenant=atlas-hearth 9149d3c6 test_site=test-wp.lumiguides.it.com page=804a822e at=14:54:57Z
+[aboutcheck] READ ONLY page 804a822e request 65f20caf key 66a568bd versions=1 publish_log=published about_key=True segment_subject=True served_segment_members_outside_key=0 (tours=0)
+  PASS publish_log row live (published, not unpublished): status=published
+  PASS fan-out LIVE_POSTS_SQL lists the page for its key: key=66a568bd live_posts=1
+[aboutcheck] PASS (2/2 checks)
+ecsx: rc=0 bytes=499 (output also in <local>
+rc=0
+=== STEP=retire PUBLISH=804a822e APPLY=1
+[run] STEP=retire APPLY=True tenant=atlas-hearth 9149d3c6 test_site=test-wp.lumiguides.it.com page=804a822e at=14:55:35Z
+[retire] page 804a822e status=published | key=66a568bd state=served versions=1 live_versions=1 master=active derivative_tenants=1 non_e2e_tenants=0 live_posts=1 own_listed=True other_live_posts=0 queued_jobs=0 pending_reviews=0 claims_in_flight=0 open_retired_flags=0 outstanding_warned=0 outstanding_retired_notices=0 deleted_by_set=False live_tour=a00d5823 ok=True reasons=[]
+[retire] fan-out lists the page=True (live_posts=1) about_key=True segment_subject=True served_segment_members_outside_key=0 (tours=0)
+[retire] remote before: http=200 status=publish same_post=True
+[retire] tenant retirement policy: auto_draft=False notice_days=7 cis_395=True (default: notice only, the page stays online)
+[retire] preview: allowed=True events=['retired:source_deleted'] notifies_tenants=1 queued_jobs=0
+[retire] UNDO if this step does not end in PASS: STEP=undo PUBLISH=804a822e APPLY=1
+  PASS retire_source committed: served -> retired: events=['retired:source_deleted'] masters_off=1 tenants_notified=1 jobs_cancelled=0
+  retire effects: tripplanner_purge_jobs=1 fanout_jobs=1 trip_pages_rechecked=yes recompute_place_graph=skipped cancelled_jobs=0
+  job 17ea720a tour_retirement_fanout status=succeeded attempt=1 result={"status": "done", "event": "retired", "flags_created": 1, "live_posts": 1, "tenants_noticed": 1, "tenants_already_told": 0, "new_immediate_notices": 1, "mail_jobs": 1, "auto_draft_pages": 0, "tenants_told_pages_to_review": 1}
+  PASS fan-out succeeded, one flag, no automatic draft page, the tenant told pages to review: flags_created=1 live_posts=1 auto_draft_pages=0 tenants_told_pages_to_review=1 tenants_noticed=1
+  PASS the page is flagged notice_only, open, draft_due_at NULL (no automatic draft): flag=5cc2aaa8 action=notice_only state=open draft_due_at=NULL detail.auto_draft=false
+  PASS WordPress STILL publish (signed-in GET, same post): http=200 status=publish same_post=True
+  PASS publish_log still published (nothing changed on the site): status=published by=None
+  PASS retired notice for the tenant, immediate, lists 1 page (the page): notice=0b3f11c2 delivery=immediate pages=1 has_page=True
+  job 9630d715 tour_notice_email status=succeeded attempt=1 result={"status": "done", "mode": "immediate", "tenants": 1, "sent": 1}
+  PASS notice mail job ended: mail_jobs=['succeeded'] (SES 'sent' is reported, not required)
+  PASS bell tour.discontinued for the tenant: rows=1
+  PASS one bell row tour.pages_to_review with the page: rows=1 has_page=True
+  PASS GET /v1/publish-log/retired-pages lists the page: can_move_to_draft, no draft date: total=1 listed=True can_move_to_draft=True draft_due_at=NULL
+  PASS key is retired now: state=retired
+[retire] PASS (11/11 checks)
+[retire] next: STEP=movedraft PUBLISH=804a822e (dry run, then APPLY=1)
+ecsx: rc=0 bytes=2898 (output also in <local>
+rc=0
+=== STEP=movedraft PUBLISH=804a822e APPLY=1
+[run] STEP=movedraft APPLY=True tenant=atlas-hearth 9149d3c6 test_site=test-wp.lumiguides.it.com page=804a822e at=14:56:27Z
+[movedraft] page 804a822e publish_log=published by=None key 66a568bd state=retired retired_by_drill=True flag=5cc2aaa8 open/notice_only/None drafted_by=None remote=publish same_post=True audit_moved=0 retired_pages_total=1 listed=True
+  PASS POST move-to-draft -> drafted (not replayed): outcome=drafted status=unpublished replayed=False url_host=test-wp.lumiguides.it.com
+  PASS WordPress status draft (signed-in GET, same post): http=200 status=draft same_post=True
+  PASS publish_log unpublished by the retirement (the restore / Put back online read it): status=unpublished by=system:tour_retirement
+  PASS flag resolved drafted by the tenant (WordPress drafted): state=resolved resolution=drafted wordpress=drafted drafted_by=tenant resolved_by_tenant=True draft_error=False
+  PASS exactly one audit row content_piece.moved_to_draft: rows=1 (before=0)
+  PASS POST move-to-draft again -> already_drafted (replayed): outcome=already_drafted replayed=True status=unpublished
+  PASS the replay wrote no audit row: rows=1
+  PASS WordPress still draft after the replay: status=draft
+  PASS off GET /v1/publish-log/retired-pages: total=0
+[movedraft] PASS (9/9 checks)
+[movedraft] next: STEP=restore PUBLISH=804a822e (dry run, then APPLY=1)
+ecsx: rc=0 bytes=1361 (output also in <local>
+rc=0
+=== STEP=restore PUBLISH=804a822e APPLY=1 ACTIVATE=1
+[run] STEP=restore APPLY=True tenant=atlas-hearth 9149d3c6 test_site=test-wp.lumiguides.it.com page=804a822e at=14:57:06Z
+[restore] page 804a822e key 66a568bd state=retired retired_by_drill=True version a00d5823 source_status=trashed flag=resolved/drafted
+  restore restore_source: retired -> served events=['restored:restore'] masters_on=1 tenants_reinstated=1
+  restore effects: tripplanner_purge_jobs=1 fanout_jobs=1 trip_pages_rechecked=yes recompute_place_graph=skipped cancelled_jobs=0
+  PASS key served again: state=served
+  PASS Master active (served on the catalog): master_status=active
+  job 68e51de4 tour_retirement_fanout status=succeeded attempt=1 result={"status": "done", "event": "restored", "flags_resolved": 0, "tenants_noticed": 1, "new_immediate_notices": 1, "mail_jobs": 1, "pages_drafted": 1, "tenants_told_put_back": 1}
+  PASS restored fan-out succeeded: status=succeeded
+  PASS fan-out: pages_drafted >= 1, tenant told to put back: pages_drafted=1 tenants_told_put_back=1 flags_resolved=0
+  PASS the page was drafted by the agency (Move to draft): drafted_by=tenant flag_action=notice_only
+  PASS restore notice: summary.pages_drafted has the page, immediate: notice=62890eb7 delivery=immediate pages_drafted=1
+  job f5b29288 tour_notice_email status=succeeded attempt=1 result={"status": "done", "mode": "immediate", "tenants": 1, "sent": 1}
+  restore mail jobs: ['succeeded'] (SES 'sent' reported, not required)
+  PASS one bell row tour.pages_to_put_back with the page: rows=1 has_page=True
+  bell tour.reinstated rows since the step started: 1
+  PASS nothing republished: publish_log still the retirement's draft: status=unpublished by=system:tour_retirement flag=resolved/drafted
+  PASS WordPress STILL draft: status=draft
+  PASS the page is offered to put back (MAIN rule): listed=True
+[restore] PASS (10/10 checks)
+ecsx: rc=0 bytes=1846 (output also in <local>
+rc=0
+=== STEP=api PUBLISH=804a822e ACTION=list EXPECT=present
+[run] STEP=api APPLY=False tenant=atlas-hearth 9149d3c6 test_site=test-wp.lumiguides.it.com page=804a822e at=14:57:53Z
+  PASS GET /v1/publish-log/put-back: page present: total=1 on_list=True
+[api list] PASS (1/1 checks)
+ecsx: rc=0 bytes=220 (output also in <local>
+rc=0
+=== STEP=api PUBLISH=804a822e ACTION=put_back APPLY=1
+[run] STEP=api APPLY=True tenant=atlas-hearth 9149d3c6 test_site=test-wp.lumiguides.it.com page=804a822e at=14:58:31Z
+  PASS POST put-back -> published: outcome=published status=published wordpress=publish replayed=False
+[api put_back] PASS (1/1 checks)
+ecsx: rc=0 bytes=254 (output also in <local>
+rc=0
+=== STEP=api PUBLISH=804a822e ACTION=put_back APPLY=1 EXPECT_REPLAY=1
+[run] STEP=api APPLY=True tenant=atlas-hearth 9149d3c6 test_site=test-wp.lumiguides.it.com page=804a822e at=14:59:05Z
+  PASS POST put-back again -> replayed: outcome=published replayed=True
+[api put_back] PASS (1/1 checks)
+ecsx: rc=0 bytes=223 (output also in <local>
+rc=0
+=== STEP=verify PUBLISH=804a822e EXPECT=online
+[run] STEP=verify APPLY=False tenant=atlas-hearth 9149d3c6 test_site=test-wp.lumiguides.it.com page=804a822e at=14:59:39Z
+[verify] page 804a822e remote=publish same_post=True publish_log=published unpublished_by=None flag=resolved/drafted note_outcome=published note_by_tenant=True audit_put_back=1 put_back_list_total=0 on_list=False
+  PASS WordPress publish: status=publish
+  PASS publish_log published, unpublished_by cleared: status=published by=None
+  PASS flag note put_back outcome published by the tenant: outcome=published
+  PASS exactly one audit row content_piece.put_back_online: rows=1
+  PASS off the put-back list: total=0
+[verify online] PASS (5/5 checks)
+ecsx: rc=0 bytes=671 (output also in <local>
+rc=0
+=== STEP=api PUBLISH=804a822e ACTION=list EXPECT=absent
+[run] STEP=api APPLY=False tenant=atlas-hearth 9149d3c6 test_site=test-wp.lumiguides.it.com page=804a822e at=15:00:13Z
+  PASS GET /v1/publish-log/put-back: page absent: total=0 on_list=False
+[api list] PASS (1/1 checks)
+ecsx: rc=0 bytes=220 (output also in <local>
+rc=0
+DRILL DONE
