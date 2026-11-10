@@ -1,0 +1,140 @@
+ecsx: started (session output not seen, normal when SSM drops it); checking the heartbeat
+TENANTS n=4 [('audit-atlas-hearth', 'b8611143'), ('audit-terra-family', '7348dbd4'), ('audit-trail-pulse', 'd6de5b7c'), ('audit-wildkind-travel', 'c3182dd9')] exclude8=['d67e3178']
+TOTAL P2 window=2026-11-10T05:49Z..2026-11-10T10:25Z chain calls=1612 usd=6.7747 tok_in=2511738 tok_out=1048390 cache_read=7959 cache_write=0 reasoning=187881 not_ok=7 not_ok_usd=0.1162 max_tokens=5 usd_per_call=0.0042 avg_out=650 gap_calls=0 gap_usd=0.0000 other_usd=0.0000 dfs_calls=0 dfs_live=0 dfs_usd=0.0000 chain_plus_dfs_usd=6.7747
+STAGE P2 stage=t2_generate role=writer calls=35 usd=2.7612 tok_in=318361 tok_out=212445 cache_read=0 cache_write=0 reasoning=0 not_ok=1 not_ok_usd=0.1039 max_tokens=1 usd_per_call=0.0789 avg_out=6070 share_pct=40.8
+STAGE P2 stage=t9_write role=writer calls=50 usd=2.3093 tok_in=611718 tok_out=108582 cache_read=0 cache_write=0 reasoning=0 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0462 avg_out=2172 share_pct=34.1
+STAGE P2 stage=t8_angle_gen role=writer calls=30 usd=1.1208 tok_in=136365 tok_out=84806 cache_read=0 cache_write=0 reasoning=0 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0374 avg_out=2827 share_pct=16.5
+STAGE P2 stage=t7_debate_judge role=judge calls=1220 usd=0.1416 tok_in=589837 tok_out=165118 cache_read=0 cache_write=0 reasoning=75110 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0001 avg_out=135 share_pct=2.1
+STAGE P2 stage=t9_repair role=writer calls=73 usd=0.1329 tok_in=272226 tok_out=211439 cache_read=0 cache_write=0 reasoning=0 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0018 avg_out=2896 share_pct=2.0
+STAGE P2 stage=t9_faq_answer_fit role=validate calls=27 usd=0.1234 tok_in=28105 tok_out=6721 cache_read=0 cache_write=0 reasoning=0 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0046 avg_out=249 share_pct=1.8
+STAGE P2 stage=t10_judge role=judge calls=52 usd=0.0823 tok_in=261373 tok_out=113769 cache_read=7959 cache_write=0 reasoning=94613 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0016 avg_out=2188 share_pct=1.2
+STAGE P2 stage=t9_faq_filter role=validate calls=28 usd=0.0518 tok_in=101838 tok_out=83297 cache_read=0 cache_write=0 reasoning=0 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0019 avg_out=2975 share_pct=0.8
+STAGE P2 stage=t2_judge role=judge calls=34 usd=0.0221 tok_in=100906 tok_out=23972 cache_read=0 cache_write=0 reasoning=18158 not_ok=2 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0006 avg_out=705 share_pct=0.3
+STAGE P2 stage=t2_flag_fix role=writer calls=6 usd=0.0198 tok_in=31380 tok_out=33329 cache_read=0 cache_write=0 reasoning=0 not_ok=4 not_ok_usd=0.0123 max_tokens=4 usd_per_call=0.0033 avg_out=5555 share_pct=0.3
+STAGE P2 stage=f10_embed role=embed calls=52 usd=0.0067 tok_in=55636 tok_out=0 cache_read=0 cache_write=0 reasoning=0 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0001 avg_out=0 share_pct=0.1
+STAGE P2 stage=t2_itinerary_nudge role=writer calls=5 usd=0.0029 tok_in=3993 tok_out=4912 cache_read=0 cache_write=0 reasoning=0 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0006 avg_out=982 share_pct=0.0
+VENDOR P2 conn=anthropic-direct model=sonnet-5-5 calls=142 usd=6.3146 not_ok=1
+VENDOR P2 conn=openai-direct model=gpt-6-luna-openai calls=1304 usd=0.2460 not_ok=0
+VENDOR P2 conn=anthropic-direct model=haiku-5-5 calls=112 usd=0.2074 not_ok=4
+VENDOR P2 conn=acc2 model=cohere-embed-v4 calls=52 usd=0.0067 not_ok=0
+VENDOR P2 conn=acc3 model=gpt-6-luna calls=1 usd=0.0000 not_ok=1
+VENDOR P2 conn=acc3 model=gpt-5.6-luna calls=1 usd=0.0000 not_ok=1
+TENANT P2 audit-atlas-hearth calls=393 usd=1.4749 t2=0.6331 t7=0.0352 piece=0.8066 chain_other=0.0000 dfs=0.0000
+TENANT P2 audit-terra-family calls=403 usd=1.5699 t2=0.6479 t7=0.0359 piece=0.8861 chain_other=0.0000 dfs=0.0000
+TENANT P2 audit-trail-pulse calls=398 usd=1.7437 t2=0.7654 t7=0.0353 piece=0.9430 chain_other=0.0000 dfs=0.0000
+TENANT P2 audit-wildkind-travel calls=418 usd=1.9861 t2=0.7594 t7=0.0351 piece=1.1916 chain_other=0.0000 dfs=0.0000
+KIND P2 kind=t2_rewrite jobs=36 statuses={'succeeded': 36} ledger_usd=2.8059 job_cost_usd=0.0000
+KIND P2 kind=t7_slate jobs=12 statuses={'succeeded': 12} ledger_usd=0.1416 job_cost_usd=0.0000
+KIND P2 kind=t8_angles jobs=28 statuses={'succeeded': 28} ledger_usd=1.1208 job_cost_usd=0.0000
+KIND P2 kind=t9_write jobs=28 statuses={'succeeded': 28} ledger_usd=2.7065 job_cost_usd=0.0000
+DFS_TENANT P2 audit-atlas-hearth usd=0.0000
+DFS_TENANT P2 audit-terra-family usd=0.0000
+DFS_TENANT P2 audit-trail-pulse usd=0.0000
+DFS_TENANT P2 audit-wildkind-travel usd=0.0000
+UNIT_T2 P2 versions=36 delivered=36 by_status={'ai_generated/passed': 30, 'needs_review/escalated': 6} edit_source={'ai_generated': 36} pairs=36 versions_per_pair={1: 36} attributed_usd=2.8059 unattributed_t2_usd=0.0000 usd_per_delivered_version=0.0779 usd_per_pair=0.0779 min=0.0 median=0.0782 max=0.2099 calls_per_version=2.2222 dfs_usd=0.0000 dfs_per_version=0.0
+T2_TOP P2 v=5fb66ca5 tenant=audit-wildkind-travel tour=2d0ee81a n=1 st=ai_generated/passed calls=3 usd=0.2099
+T2_TOP P2 v=4c6b941b tenant=audit-trail-pulse tour=207e4efa n=1 st=needs_review/escalated calls=3 usd=0.1793
+T2_TOP P2 v=cd501210 tenant=audit-trail-pulse tour=7fe02d1a n=1 st=needs_review/escalated calls=3 usd=0.1098
+T2_TOP P2 v=1f7ae655 tenant=audit-atlas-hearth tour=56b61f58 n=1 st=ai_generated/passed calls=2 usd=0.0971
+T2_TOP P2 v=98b2cbbb tenant=audit-atlas-hearth tour=2d0ee81a n=1 st=ai_generated/passed calls=3 usd=0.0960
+UNIT_PIECE P2 channel=blog status=approved pieces=7 usd=0.8642 usd_per_piece=0.1235 dfs_usd=0.0000
+UNIT_PIECE P2 channel=blog status=failed pieces=1 usd=0.1044 usd_per_piece=0.1044 dfs_usd=0.0000
+UNIT_PIECE P2 channel=blog status=held pieces=20 usd=2.8587 usd_per_piece=0.1429 dfs_usd=0.0000
+UNIT_BLOG P2 blog_pieces=28 by_status={'approved': 7, 'held': 20, 'failed': 1} blog_usd=3.8272 usd_per_blog=0.1367 usd_per_approved_blog=0.5467 usd_per_delivered_blog=0.1417
+UNIT_ALL P2 pieces=28 by_status={'approved': 7, 'held': 20, 'failed': 1} piece_usd=3.8272 t7_overhead_usd=0.1416 t7_jobs=12 no_piece_request_usd=0.0000 loaded_usd=3.9688 usd_per_piece=0.1367 usd_per_approved=0.5467 loaded_per_piece=0.1417 loaded_per_approved=0.567 loaded_per_delivered=0.147 discarded_attempts=25
+HELD_SHARE P2 held_pieces=20 held_usd=2.8587 piece_usd=3.8272 held_share_pct=74.7 held_piece_share_pct=71.4 failed_usd=0.1044
+HELD_HEAD P2 head=F4_extreme_length pieces=13 usd=1.8645
+HELD_HEAD P2 head=F17_trip_fact pieces=5 usd=0.6687
+HELD_HEAD P2 head=F13_repeat pieces=2 usd=0.3255
+HELD_GATESET P2 gates=F4_extreme_length pieces=9 usd=1.2984 calls=107 usd_per_piece=0.1443
+HELD_GATESET P2 gates=F17_trip_fact pieces=4 usd=0.5372 calls=44 usd_per_piece=0.1343
+HELD_GATESET P2 gates=F13_repeat,F4_extreme_length pieces=2 usd=0.2781 calls=26 usd_per_piece=0.1391
+HELD_GATESET P2 gates=F13_repeat,F17_trip_fact pieces=1 usd=0.1773 calls=12 usd_per_piece=0.1773
+HELD_GATESET P2 gates=F17_trip_fact,F4_extreme_length pieces=1 usd=0.1546 calls=11 usd_per_piece=0.1546
+HELD_GATESET P2 gates=F13_repeat pieces=1 usd=0.1482 calls=12 usd_per_piece=0.1482
+HELD_GATESET P2 gates=F4_extreme_length,F9_cta_fact pieces=1 usd=0.1334 calls=11 usd_per_piece=0.1334
+HELD_GATESET P2 gates=F17_trip_fact,F9_cta_fact pieces=1 usd=0.1315 calls=12 usd_per_piece=0.1315
+WASTE P2 not_ok_calls=7 not_ok_usd=0.1162 max_tokens=5 no_piece_requests=0 no_piece_usd=0.0000 by_channel={} unattributed_piece_usd=0.0000 unattributed_chain_other_usd=0.0000 dfs_unattributed_usd=0.0000
+EXPERIMENT P2 calls=0 usd=0.0000 tok_in=0 tok_out=0 cache_read=0 cache_write=0 reasoning=0 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=None avg_out=0 (kept out of every number above)
+TOTAL P1 window=2026-11-05T23:44Z..2026-11-07T00:00Z chain calls=451 usd=4.3454 tok_in=1083350 tok_out=432861 cache_read=49060 cache_write=0 reasoning=69642 not_ok=16 not_ok_usd=0.8795 max_tokens=8 usd_per_call=0.0096 avg_out=960 gap_calls=0 gap_usd=0.0000 other_usd=0.0000 dfs_calls=0 dfs_live=0 dfs_usd=0.0000 chain_plus_dfs_usd=4.3454
+STAGE P1 stage=t9_write role=writer calls=57 usd=2.6466 tok_in=432409 tok_out=174070 cache_read=0 cache_write=0 reasoning=0 not_ok=6 not_ok_usd=0.8743 max_tokens=6 usd_per_call=0.0464 avg_out=3054 share_pct=60.9
+STAGE P1 stage=t8_angle_gen role=writer calls=32 usd=0.8723 tok_in=118312 tok_out=63565 cache_read=0 cache_write=0 reasoning=0 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0273 avg_out=1986 share_pct=20.1
+STAGE P1 stage=t2_generate role=writer calls=10 usd=0.6919 tok_in=94845 tok_out=50224 cache_read=0 cache_write=0 reasoning=0 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0692 avg_out=5022 share_pct=15.9
+STAGE P1 stage=t10_judge role=judge calls=73 usd=0.0446 tok_in=169842 tok_out=56019 cache_read=4666 cache_write=0 reasoning=45140 not_ok=8 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0006 avg_out=767 share_pct=1.0
+STAGE P1 stage=t9_repair role=writer calls=25 usd=0.0294 tok_in=74286 tok_out=32623 cache_read=0 cache_write=0 reasoning=0 not_ok=2 not_ok_usd=0.0052 max_tokens=2 usd_per_call=0.0012 avg_out=1305 share_pct=0.7
+STAGE P1 stage=t7_debate_judge role=judge calls=154 usd=0.0186 tok_in=75983 tok_out=21914 cache_read=0 cache_write=0 reasoning=10339 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0001 avg_out=142 share_pct=0.4
+STAGE P1 stage=t9_faq_answer_fit role=validate calls=4 usd=0.0175 tok_in=4336 tok_out=883 cache_read=0 cache_write=0 reasoning=0 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0044 avg_out=221 share_pct=0.4
+STAGE P1 stage=t2_judge role=judge calls=24 usd=0.0126 tok_in=73781 tok_out=18428 cache_read=44394 cache_write=0 reasoning=14163 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0005 avg_out=768 share_pct=0.3
+STAGE P1 stage=t9_faq_filter role=validate calls=4 usd=0.0081 tok_in=15125 tok_out=13085 cache_read=0 cache_write=0 reasoning=0 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.002 avg_out=3271 share_pct=0.2
+STAGE P1 stage=f10_embed role=embed calls=65 usd=0.0027 tok_in=22496 tok_out=0 cache_read=0 cache_write=0 reasoning=0 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0 avg_out=0 share_pct=0.1
+STAGE P1 stage=t2_itinerary_nudge role=writer calls=3 usd=0.0012 tok_in=1935 tok_out=2050 cache_read=0 cache_write=0 reasoning=0 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=0.0004 avg_out=683 share_pct=0.0
+VENDOR P1 conn=anthropic-direct model=sonnet-5-5 calls=101 usd=4.1051 not_ok=6
+VENDOR P1 conn=anthropic-direct model=sonnet-4-6 calls=2 usd=0.1231 not_ok=0
+VENDOR P1 conn=openai-direct model=gpt-6-luna-openai calls=243 usd=0.0757 not_ok=0
+VENDOR P1 conn=anthropic-direct model=haiku-5-5 calls=31 usd=0.0324 not_ok=2
+VENDOR P1 conn=anthropic-direct model=haiku-4-5 calls=1 usd=0.0063 not_ok=0
+VENDOR P1 conn=acc2 model=cohere-embed-v4 calls=65 usd=0.0027 not_ok=0
+VENDOR P1 conn=acc3 model=gpt-6-luna calls=4 usd=0.0000 not_ok=4
+VENDOR P1 conn=acc3 model=gpt-5.6-luna calls=4 usd=0.0000 not_ok=4
+TENANT P1 audit-atlas-hearth calls=93 usd=1.4866 t2=0.1469 t7=0.0010 piece=1.3387 chain_other=0.0000 dfs=0.0000
+TENANT P1 audit-terra-family calls=155 usd=1.1317 t2=0.3330 t7=0.0088 piece=0.7899 chain_other=0.0000 dfs=0.0000
+TENANT P1 audit-trail-pulse calls=152 usd=1.2697 t2=0.2259 t7=0.0087 piece=1.0350 chain_other=0.0000 dfs=0.0000
+TENANT P1 audit-wildkind-travel calls=51 usd=0.4574 t2=0.0000 t7=0.0000 piece=0.4574 chain_other=0.0000 dfs=0.0000
+KIND P1 kind=t2_rewrite jobs=5 statuses={'succeeded': 5} ledger_usd=0.7057 job_cost_usd=0.0000
+KIND P1 kind=t7_slate jobs=7 statuses={'succeeded': 7} ledger_usd=0.0186 job_cost_usd=0.0000
+KIND P1 kind=t8_angles jobs=32 statuses={'succeeded': 32} ledger_usd=0.8723 job_cost_usd=0.0000
+KIND P1 kind=t9_write jobs=32 statuses={'succeeded': 32} ledger_usd=2.7489 job_cost_usd=0.0000
+DFS_TENANT P1 audit-atlas-hearth usd=0.0000
+DFS_TENANT P1 audit-terra-family usd=0.0000
+DFS_TENANT P1 audit-trail-pulse usd=0.0000
+DFS_TENANT P1 audit-wildkind-travel usd=0.0000
+UNIT_T2 P1 versions=5 delivered=5 by_status={'ai_generated/passed': 4, 'needs_review/passed': 1} edit_source={'ai_generated': 5} pairs=5 versions_per_pair={1: 5} attributed_usd=0.7057 unattributed_t2_usd=0.0000 usd_per_delivered_version=0.1411 usd_per_pair=0.1411 min=0.0672 median=0.1526 max=0.1804 calls_per_version=7.4 dfs_usd=0.0000 dfs_per_version=0.0
+T2_TOP P1 v=bf0a3e0f tenant=audit-terra-family tour=caf4bf16 n=1 st=ai_generated/passed calls=10 usd=0.1804
+T2_TOP P1 v=f934a291 tenant=audit-trail-pulse tour=caf4bf16 n=1 st=ai_generated/passed calls=8 usd=0.1587
+T2_TOP P1 v=84c45b1a tenant=audit-terra-family tour=2cf487be n=1 st=ai_generated/passed calls=9 usd=0.1526
+T2_TOP P1 v=be79395a tenant=audit-atlas-hearth tour=d7ec4329 n=1 st=needs_review/passed calls=6 usd=0.1469
+T2_TOP P1 v=ed62012d tenant=audit-trail-pulse tour=2cf487be n=1 st=ai_generated/passed calls=4 usd=0.0672
+UNIT_PIECE P1 channel=ads status=approved pieces=4 usd=0.2366 usd_per_piece=0.0591 dfs_usd=0.0000
+UNIT_PIECE P1 channel=blog status=approved pieces=1 usd=0.2934 usd_per_piece=0.2934 dfs_usd=0.0000
+UNIT_PIECE P1 channel=blog status=held pieces=3 usd=1.5000 usd_per_piece=0.5 dfs_usd=0.0000
+UNIT_PIECE P1 channel=email status=approved pieces=2 usd=0.1498 usd_per_piece=0.0749 dfs_usd=0.0000
+UNIT_PIECE P1 channel=email status=held pieces=2 usd=0.2044 usd_per_piece=0.1022 dfs_usd=0.0000
+UNIT_PIECE P1 channel=facebook status=approved pieces=4 usd=0.2409 usd_per_piece=0.0602 dfs_usd=0.0000
+UNIT_PIECE P1 channel=instagram status=approved pieces=4 usd=0.2295 usd_per_piece=0.0574 dfs_usd=0.0000
+UNIT_PIECE P1 channel=landing_page status=approved pieces=4 usd=0.2657 usd_per_piece=0.0664 dfs_usd=0.0000
+UNIT_PIECE P1 channel=linkedin status=approved pieces=4 usd=0.2397 usd_per_piece=0.0599 dfs_usd=0.0000
+UNIT_PIECE P1 channel=tiktok status=approved pieces=4 usd=0.2613 usd_per_piece=0.0653 dfs_usd=0.0000
+UNIT_BLOG P1 blog_pieces=4 by_status={'held': 3, 'approved': 1} blog_usd=1.7933 usd_per_blog=0.4483 usd_per_approved_blog=1.7933 usd_per_delivered_blog=0.4483
+UNIT_ALL P1 pieces=32 by_status={'held': 5, 'approved': 27} piece_usd=3.6211 t7_overhead_usd=0.0186 t7_jobs=4 no_piece_request_usd=0.0000 loaded_usd=3.6397 usd_per_piece=0.1132 usd_per_approved=0.1341 loaded_per_piece=0.1137 loaded_per_approved=0.1348 loaded_per_delivered=0.1137 discarded_attempts=32
+HELD_SHARE P1 held_pieces=5 held_usd=1.7043 piece_usd=3.6211 held_share_pct=47.1 held_piece_share_pct=15.6 failed_usd=0.0000
+HELD_HEAD P1 head=F10_cannibalization_cross_tenant pieces=2 usd=1.1308
+HELD_HEAD P1 head=F4_extreme_length pieces=1 usd=0.3692
+HELD_HEAD P1 head=F0_complete pieces=2 usd=0.2044
+WASTE P1 not_ok_calls=16 not_ok_usd=0.8795 max_tokens=8 no_piece_requests=0 no_piece_usd=0.0000 by_channel={} unattributed_piece_usd=0.0000 unattributed_chain_other_usd=0.0000 dfs_unattributed_usd=0.0000
+EXPERIMENT P1 calls=0 usd=0.0000 tok_in=0 tok_out=0 cache_read=0 cache_write=0 reasoning=0 not_ok=0 not_ok_usd=0.0000 max_tokens=0 usd_per_call=None avg_out=0 (kept out of every number above)
+COMPARE_STAGE stage=f10_embed p1_calls=65 p1_usd=0.0027 p1_usd_per_call=0.0 p1_avg_out=0 p2_calls=52 p2_usd=0.0067 p2_usd_per_call=0.0001 p2_avg_out=0 usd_per_call_change_pct=None
+COMPARE_STAGE stage=t10_judge p1_calls=73 p1_usd=0.0446 p1_usd_per_call=0.0006 p1_avg_out=767 p2_calls=52 p2_usd=0.0823 p2_usd_per_call=0.0016 p2_avg_out=2188 usd_per_call_change_pct=166.7
+COMPARE_STAGE stage=t2_flag_fix p1_calls=0 p1_usd=0 p1_usd_per_call=None p1_avg_out=None p2_calls=6 p2_usd=0.0198 p2_usd_per_call=0.0033 p2_avg_out=5555 usd_per_call_change_pct=None
+COMPARE_STAGE stage=t2_generate p1_calls=10 p1_usd=0.6919 p1_usd_per_call=0.0692 p1_avg_out=5022 p2_calls=35 p2_usd=2.7612 p2_usd_per_call=0.0789 p2_avg_out=6070 usd_per_call_change_pct=14.0
+COMPARE_STAGE stage=t2_itinerary_nudge p1_calls=3 p1_usd=0.0012 p1_usd_per_call=0.0004 p1_avg_out=683 p2_calls=5 p2_usd=0.0029 p2_usd_per_call=0.0006 p2_avg_out=982 usd_per_call_change_pct=50.0
+COMPARE_STAGE stage=t2_judge p1_calls=24 p1_usd=0.0126 p1_usd_per_call=0.0005 p1_avg_out=768 p2_calls=34 p2_usd=0.0221 p2_usd_per_call=0.0007 p2_avg_out=705 usd_per_call_change_pct=40.0
+COMPARE_STAGE stage=t7_debate_judge p1_calls=154 p1_usd=0.0186 p1_usd_per_call=0.0001 p1_avg_out=142 p2_calls=1220 p2_usd=0.1416 p2_usd_per_call=0.0001 p2_avg_out=135 usd_per_call_change_pct=0.0
+COMPARE_STAGE stage=t8_angle_gen p1_calls=32 p1_usd=0.8723 p1_usd_per_call=0.0273 p1_avg_out=1986 p2_calls=30 p2_usd=1.1208 p2_usd_per_call=0.0374 p2_avg_out=2827 usd_per_call_change_pct=37.0
+COMPARE_STAGE stage=t9_faq_answer_fit p1_calls=4 p1_usd=0.0175 p1_usd_per_call=0.0044 p1_avg_out=221 p2_calls=27 p2_usd=0.1234 p2_usd_per_call=0.0046 p2_avg_out=249 usd_per_call_change_pct=4.5
+COMPARE_STAGE stage=t9_faq_filter p1_calls=4 p1_usd=0.0081 p1_usd_per_call=0.002 p1_avg_out=3271 p2_calls=28 p2_usd=0.0518 p2_usd_per_call=0.0018 p2_avg_out=2975 usd_per_call_change_pct=-10.0
+COMPARE_STAGE stage=t9_repair p1_calls=25 p1_usd=0.0294 p1_usd_per_call=0.0012 p1_avg_out=1305 p2_calls=73 p2_usd=0.1329 p2_usd_per_call=0.0018 p2_avg_out=2896 usd_per_call_change_pct=50.0
+COMPARE_STAGE stage=t9_write p1_calls=57 p1_usd=2.6466 p1_usd_per_call=0.0464 p1_avg_out=3054 p2_calls=50 p2_usd=2.3093 p2_usd_per_call=0.0462 p2_avg_out=2172 usd_per_call_change_pct=-0.4
+COMPARE_UNIT usd_per_t2_version p1=0.1411 p2=0.0779
+COMPARE_UNIT usd_per_blog p1=0.4483 p2=0.1367
+COMPARE_UNIT usd_per_approved_blog p1=1.7933 p2=0.5467
+COMPARE_UNIT usd_per_piece_all_channels p1=0.1132 p2=0.1367
+COMPARE_UNIT loaded_per_approved_piece p1=0.1348 p2=0.567
+COMPARE_UNIT held_share_pct p1=47.1 p2=74.7
+DAY 2026-11-05 chain_calls=749 chain_usd=2.8230 experiment_calls=0 experiment_usd=0.0000
+DAY 2026-11-06 chain_calls=389 chain_usd=3.5372 experiment_calls=0 experiment_usd=0.0000
+DAY 2026-11-07 chain_calls=29 chain_usd=0.1992 experiment_calls=0 experiment_usd=0.0000
+DAY 2026-11-10 chain_calls=1612 chain_usd=6.7747 experiment_calls=0 experiment_usd=0.0000
+RECON pre_phase2 from=2026-11-05T12:12Z all_stage_usd=6.5594 chain_usd=6.5594 phase01_used_by_p2_spend=6.5594 p1_window_chain_usd=4.3454 p1_readme_usd=3.6671 p1_window_minus_readme=0.6783 p2_chain_usd=6.7747 aa741_total_ledger=13.3341/20
+PROJECTION growth_cap=40.0 plan_t2_per_month=200 usd_per_t2=0.0779 t2_month_usd=15.58 t2_share_of_cap_pct=39.0 blogs_left_after_full_t2=178 blogs_for_cap_alone=292 approved_blogs_for_cap_alone=73
+JSON_SUMMARY {"p2":{"window":["2026-11-10T05:49:46+00:00","2026-11-10T10:25:05.147612+00:00"],"chain_usd":6.7747,"chain_calls":1612,"dfs_usd":0.0,"dfs_calls":0,"experiment_usd":0.0,"gap_usd":0.0,"stage":{"t9_faq_answer_fit":{"calls":27,"usd":0.1234,"tok_in":28105,"tok_out":6721,"not_ok":0,"max_tokens":0},"t10_judge":{"calls":52,"usd":0.0823,"tok_in":261373,"tok_out":113769,"not_ok":0,"max_tokens":0},"f10_embed":{"calls":52,"usd":0.0067,"tok_in":55636,"tok_out":0,"not_ok":0,"max_tokens":0},"t9_write":{"calls":50,"usd":2.3093,"tok_in":611718,"tok_out":108582,"not_ok":0,"max_tokens":0},"t9_repair":{"calls":73,"usd":0.1329,"tok_in":272226,"tok_out":211439,"not_ok":0,"max_tokens":0},"t9_faq_filter":{"calls":28,"usd":0.0518,"tok_in":101838,"tok_out":83297,"not_ok":0,"max_tokens":0},"t8_angle_gen":{"calls":30,"usd":1.1208,"tok_in":136365,"tok_out":84806,"not_ok":0,"max_tokens":0},"t7_debate_judge":{"calls":1220,"usd":0.1416,"tok_in":589837,"tok_out":165118,"not_ok":0,"max_tokens":0},"t2_judge":{"calls":34,"usd":0.0221,"tok_in":100906,"tok_out":23972,"not_ok":2,"max_tokens":0},"t2_generate":{"calls":35,"usd":2.7612,"tok_in":318361,"tok_out":212445,"not_ok":1,"max_tokens":1},"t2_itinerary_nudge":{"calls":5,"usd":0.0029,"tok_in":3993,"tok_out":4912,"not_ok":0,"max_tokens":0},"t2_flag_fix":{"calls":6,"usd":0.0198,"tok_in":31380,"tok_out":33329,"not_ok":4,"max_tokens":4}},"tenant":{"audit-terra-family":{"piece":0.8861,"t7":0.0359,"t2":0.6479,"chain_other":0.0},"audit-atlas-hearth":{"piece":0.8066,"t7":0.0352,"t2":0.6331,"chain_other":0.0},"audit-wildkind-travel":{"piece":1.1916,"t7":0.0351,"t2":0.7594,"chain_other":0.0},"audit-trail-pulse":{"piece":0.943,"t7":0.0353,"t2":0.7654,"chain_other":0.0}},"t2":{"versions":36,"delivered":36,"usd":2.8059,"usd_per_version":0.0779,"unattributed_usd":0.0},"pieces":{"n":28,"by_status":{"approved":7,"held":20,"failed":1},"usd":3.8272,"usd_per_piece":0.1367,"usd_per_approved":0.5467,"loaded_per_approved":0.567,"t7_usd":0.1416,"no_piece_usd":0},"blog":{"n":28,"by_status":{"approved":7,"held":20,"failed":1},"usd":3.8272,"usd_per_blog":0.1367,"usd_per_approved_blog":0.5467},"held":{"pieces":20,"usd":2.8587,"share_pct":74.7,"gate_sets":{"F4_extreme_length":{"pieces":9,"usd":1.2984},"F17_trip_fact":{"pieces":4,"usd":0.5372},"F13_repeat,F4_extreme_length":{"pieces":2,"usd":0.2781},"F13_repeat,F17_trip_fact":{"pieces":1,"usd":0.1773},"F17_trip_fact,F4_extreme_length":{"pieces":1,"usd":0.1546},"F13_repeat":{"pieces":1,"usd":0.1482},"F4_extreme_length,F9_cta_fact":{"pieces":1,"usd":0.1334},"F17_trip_fact,F9_cta_fact":{"pieces":1,"usd":0.1315}}},"waste":{"not_ok_usd":0.1162,"max_tokens":5}},"p1":{"window":["2026-11-05T23:44:00+00:00","2026-11-07T00:00:00+00:00"],"chain_usd":4.3454,"chain_calls":451,"dfs_usd":0.0,"dfs_calls":0,"experiment_usd":0.0,"gap_usd":0.0,"stage":{"t10_judge":{"calls":73,"usd":0.0446,"tok_in":169842,"tok_out":56019,"not_ok":8,"max_tokens":0},"f10_embed":{"calls":65,"usd":0.0027,"tok_in":22496,"tok_out":0,"not_ok":0,"max_tokens":0},"t9_repair":{"calls":25,"usd":0.0294,"tok_in":74286,"tok_out":32623,"not_ok":2,"max_tokens":2},"t9_write":{"calls":57,"usd":2.6466,"tok_in":432409,"tok_out":174070,"not_ok":6,"max_tokens":6},"t9_faq_answer_fit":{"calls":4,"usd":0.0175,"tok_in":4336,"tok_out":883,"not_ok":0,"max_tokens":0},"t9_faq_filter":{"calls":4,"usd":0.0081,"tok_in":15125,"tok_out":13085,"not_ok":0,"max_tokens":0},"t8_angle_gen":{"calls":32,"usd":0.8723,"tok_in":118312,"tok_out":63565,"not_ok":0,"max_tokens":0},"t7_debate_judge":{"calls":154,"usd":0.0186,"tok_in":75983,"tok_out":21914,"not_ok":0,"max_tokens":0},"t2_judge":{"calls":24,"usd":0.0126,"tok_in":73781,"tok_out":18428,"not_ok":0,"max_tokens":0},"t2_generate":{"calls":10,"usd":0.6919,"tok_in":94845,"tok_out":50224,"not_ok":0,"max_tokens":0},"t2_itinerary_nudge":{"calls":3,"usd":0.0012,"tok_in":1935,"tok_out":2050,"not_ok":0,"max_tokens":0}},"tenant":{"audit-terra-family":{"piece":0.7899,"t7":0.0088,"t2":0.333,"chain_other":0.0},"audit-atlas-hearth":{"piece":1.3387,"t7":0.001,"t2":0.1469,"chain_other":0.0},"audit-wildkind-travel":{"piece":0.4574,"t2":0.0,"t7":0.0,"chain_other":0.0},"audit-trail-pulse":{"piece":1.035,"t7":0.0087,"t2":0.2259,"chain_other":0.0}},"t2":{"versions":5,"delivered":5,"usd":0.7057,"usd_per_version":0.1411,"unattributed_usd":0.0},"pieces":{"n":32,"by_status":{"held":5,"approved":27},"usd":3.6211,"usd_per_piece":0.1132,"usd_per_approved":0.1341,"loaded_per_approved":0.1348,"t7_usd":0.0186,"no_piece_usd":0},"blog":{"n":4,"by_status":{"held":3,"approved":1},"usd":1.7933,"usd_per_blog":0.4483,"usd_per_approved_blog":1.7933},"held":{"pieces":5,"usd":1.7043,"share_pct":47.1,"gate_sets":{}},"waste":{"not_ok_usd":0.8795,"max_tokens":8}},"t2_month_usd":15.58}
+ecsx: rc=0 bytes=23141
