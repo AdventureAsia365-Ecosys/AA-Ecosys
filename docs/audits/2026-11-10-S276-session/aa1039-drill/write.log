@@ -1,0 +1,39 @@
+[run] STEP=write APPLY=True tenant=atlas-hearth 9149d3c6 test_site=test-wp.lumiguides.it.com page=- at=14:48:52Z
+[estimate] window=30d T9 blog piece: n=237 mean=0.11 p90=0.1492 succeeded_n=237 succeeded_p90=0.1492 | T8 blog angle set: n=56 mean=0.0671 p90=0.0981 succeeded_n=55 succeeded_p90=0.0981 | cap=0.25 approved=0.11 (one T9 piece)
+[write] KEY=66a568bd path=pick SUBJECT=cd485c7d stages=T8+T9 est_p90=0.2473 tour=a00d5823 in_tenant_catalogue=True request_cta=False grain=segment walk_segments=0 about_key=True segment_subject=True served_segment_members_outside_key=0 (tours=0)
+  key=66a568bd state=served versions=1 live_versions=1 master=active derivative_tenants=1 non_e2e_tenants=0 live_posts=0 own_listed=False other_live_posts=0 queued_jobs=0 pending_reviews=0 claims_in_flight=0 open_retired_flags=0 outstanding_warned=0 outstanding_retired_notices=0 deleted_by_set=False live_tour=a00d5823 ok=True reasons=[]
+[candidates] pending blog pieces=2 needs_change=0 with_page_to_put_back=0 keys_checked=2 keys_ok=0 not_about_key=0 publishable_on_clean_key=0
+  refused key reasons: {"non_e2e_tenant": 2, "other_live_posts": 2, "pending_reviews": 2}
+[paid jobs] in flight / held=0 t9_write since 2026-11-10 00:00Z=5 publishable pieces on a clean key=0 SECOND_PIECE=True
+  t9_write job 6b8a7581 at=11-10 00:30Z status=succeeded attempt=1 piece=fb3c36c9 piece_status=approved
+  t9_write job 32f5ba80 at=11-10 06:17Z status=succeeded attempt=1 piece=05a5b95b piece_status=approved
+  t9_write job 93b610c7 at=11-10 06:18Z status=succeeded attempt=1 piece=d6b885d5 piece_status=approved
+  t9_write job a4b1800d at=11-10 06:18Z status=succeeded attempt=1 piece=60524860 piece_status=approved
+  t9_write job d500704b at=11-10 10:31Z status=succeeded attempt=1 piece=05384b74 piece_status=held
+  tenant AI budget: monthly=40.0 spent=0.8185 used_pct=2.0463 approval_pct=100 hard_stop=True state=ok after_this_run_pct=2.7 (api env switch on=True)
+  plan: path=pick goal=introduction_awareness choose=recommended (free) cta_source=brand_default est_p90=0.2473 cap=0.25 approved=0.11 api_sha=987dccdc workers=['987dccdc'] trial_flags=none (worker env)
+  HOLD every CIS merge / deploy until the job is terminal: t9_write / t8_angles have max_attempts=2 and are not deploy_blocking, so a worker restart re-runs the whole write (2x spend)
+  PASS pick -> a pending_goal request on the checked key: REQUEST=65f20caf status=pending_goal key=66a568bd
+  PASS guard still clean before the T8 spend: reasons=[] live_posts=0
+  PASS the request is about the key before the T8 spend (the fan-out would list its post): about_key=True segment_subject=True served_segment_members_outside_key=0 (tours=0)
+  goal set -> generating=True; waiting for the t8_angles job
+  job d8d83083 t8_angles status=succeeded attempt=1 result={"angles": 3, "recommended_index": 1}
+  PASS t8_angles succeeded, request pending_choice: job=succeeded request=pending_choice
+  PASS an angle with no piece to choose: idx=1
+  PASS choose -> approved: idx=1 status=approved
+  PASS latest piece of the chosen angle is none or failed (the UI would write): piece=- status=-
+  PASS guard still clean before the T9 spend: reasons=[]
+  PASS the request is about the key before the T9 spend (the fan-out would list its post): about_key=True segment_subject=True served_segment_members_outside_key=0 (tours=0)
+[write] REQUEST=65f20caf PIECE=b5f11e37 JOB=38d867ae (key t9_write:b5f11e37...) ready_state=in_progress cta_warning=False; waiting up to 900s. Status any time: STEP=write STATUS=1 (read only)
+  job 38d867ae t9_write status=succeeded attempt=1 result={"piece_status": "held"}
+  piece b5f11e37 status=held attempt=2 held_gate=F13_repeat
+[cost] T9 calls=13 usd=0.1261 (approved 0.11) | T8 calls=9 usd=0.156 (llm_call_log; Jev / DFS calls are not in it)
+  WARN the T9 cost 0.1261 is OVER the approved 0.11 USD: tell the tech lead
+  PASS t9_write succeeded: status=succeeded
+  PASS one attempt (no second paid write): attempt=1
+  PASS the request's latest piece is approved or held (publishable): piece=b5f11e37 status=held
+  guard after: key=66a568bd state=served versions=1 live_versions=1 master=active derivative_tenants=1 non_e2e_tenants=0 live_posts=0 own_listed=False other_live_posts=0 queued_jobs=0 pending_reviews=0 claims_in_flight=0 open_retired_flags=0 outstanding_warned=0 outstanding_retired_notices=0 deleted_by_set=False live_tour=a00d5823 ok=True reasons=[]
+[next] STEP=preflight (expect PUBLISH STEP PIECE=b5f11e37), then STEP=publish PIECE=b5f11e37
+[write] PASS (12/12 checks)
+ecsx: rc=0 bytes=4545 (output also in <local>
+rc=0

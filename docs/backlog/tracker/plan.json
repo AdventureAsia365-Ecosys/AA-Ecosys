@@ -1,8 +1,8 @@
 {
  "updated": "2026-11-10",
- "synced_at": "2026-11-10T09:34Z",
- "session": "S275",
- "next_session": "S276",
+ "synced_at": "2026-11-10T15:44Z",
+ "session": "S276",
+ "next_session": "S277",
  "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
  "projects": {
   "data": "Data Platform",
@@ -918,6 +918,36 @@
   }
  ],
  "log": [
+  {
+   "session": "S276",
+   "date": "10/11/2026",
+   "closed": [
+    "AA-1038",
+    "AA-1024",
+    "AA-1067",
+    "AA-1068",
+    "AA-1065",
+    "AA-1063"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-1076",
+    "AA-1077",
+    "AA-1078",
+    "AA-1079",
+    "AA-1080",
+    "AA-1081",
+    "AA-1082"
+   ],
+   "reopened": [],
+   "notes": [
+    "Done: AA-1038 (tp-028 FORCE RLS, probe 99/99, Playwright 3/3), AA-1024 (D8: CIS 336 + DB_AUTO_APPLY_CONTRACT=true), AA-1067 (trả góp, nhắc, chính sách huỷ; mặc định khớp 3A), AA-1068 (lãi lỗ chuyến, Đặt với AA, hoá đơn NCC).",
+    "AA-1039 luật mới: tour ngừng bán chỉ báo, đại lý tự 'Move to draft' hoặc bật tự ẩn; drill 44/44 PASS trên WordPress thử.",
+    "AA-1049: S1_CONTROL=contract bật trên worker sau replay 817 bản (0 khác biệt ngoài khai báo) và smoke 3 tour (0 vi phạm, 0,049 USD/tour); 280 tour cũ chờ AA-1076.",
+    "AA-1063: Jev lọc trước thành code; 417 câu t2@2 có nguồn + đề xuất panel trong Writing Lab, chờ tech lead duyệt một đợt.",
+    "AA-741 phase 3: báo cáo cơ chế; 13/13 bài giữ vì quá ngắn; 6 issue AA-1077..1082. Mới: AA-1076 Batch lane. Trang so sánh Odoo (73 tính năng)."
+   ]
+  },
   {
    "session": "S275",
    "date": "10/11/2026",
@@ -2005,7 +2035,7 @@
    "milestone": "M2a",
    "session": "S276",
    "size": "XL",
-   "next": "M2a · S276: phase 3 báo cáo theo cơ chế (phase 2 xong 48/48, 6,77 USD; blog giữ vì F4_extreme_length 13/20)",
+   "next": "M2a — đóng khi root PR S276 merge",
    "needs": ""
   },
   {
@@ -2201,30 +2231,6 @@
    "needs": ""
   },
   {
-   "id": "AA-1024",
-   "title": "[AI gateway] CIS core hardening + bypass guards: stage kill switch, prompt_version, embedding ledger, fail-closed tenant budget, dispatch cleanup",
-   "status": "In Review",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M1b",
-   "session": "S276",
-   "size": "L",
-   "next": "Gateway · S276 đầu phiên: áp mig 336 (DB Migrate), bật lại DB_AUTO_APPLY_CONTRACT → đóng",
-   "needs": ""
-  },
-  {
-   "id": "AA-1038",
-   "title": "[TripPlanner] R5 multi-tenant white-label TripPlanner: tenant_id + RLS, per-tenant brand, leads to the tenant CRM, frontend on ECS (Dev)",
-   "status": "In Review",
-   "priority": "Medium",
-   "project": "tpbk",
-   "milestone": "M-P2",
-   "session": "S276",
-   "size": "XL",
-   "next": "R5 · S276: test brand teal + Playwright → đóng",
-   "needs": ""
-  },
-  {
    "id": "AA-1041",
    "title": "[TripPlanner] R7 TripPlanner UX: place photos, activity icons, map/itinerary sync, mobile reorder, planning chat bound to AA tours",
    "status": "Backlog",
@@ -2251,13 +2257,13 @@
   {
    "id": "AA-1049",
    "title": "[Quality W3] Rewire the T9, S1 and T2 control planes in place (code-composed fields, local source-aware repair, one exit)",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "High",
    "project": "core",
    "milestone": "later",
-   "session": "S276",
+   "session": "S277",
    "size": "",
-   "next": "M2a · S276: 2 công tắc đã bật (worker :648), bằng chứng đường thật AA-741 phase 2 → phần S1 train $0",
+   "next": "M2a — S277: soi lượt s1_flag_fix còn sót; kế hoạch sửa 280 tour cũ sau AA-1076",
    "needs": ""
   },
   {
@@ -2308,54 +2314,6 @@
    "next": "",
    "needs": "cần xếp slot",
    "due": "2026-11-29"
-  },
-  {
-   "id": "AA-1063",
-   "title": "[Writing Lab] Claim ground truth in the admin: plain-language review queue, label set browser, bulk accept, Jev pre-filter",
-   "status": "In Review",
-   "priority": "High",
-   "project": "core",
-   "milestone": "later",
-   "session": "S276",
-   "size": "",
-   "next": "M2a · S276: đưa 341 câu tranh chấp t2@2 vào hàng duyệt (0 queue item) → tech lead duyệt 1 đợt trong Writing Lab; luật Jev lọc trước thành code; gỡ 2 tenant demo khỏi allowlist Jev",
-   "needs": "cần xếp slot"
-  },
-  {
-   "id": "AA-1065",
-   "title": "[Research] Odoo tour & travel plugin (Modvanta mdv_tour_travel 19.0): feature and data model comparison with Booking, CRM and CIS",
-   "status": "In Review",
-   "priority": "Medium",
-   "project": "tpbk",
-   "milestone": "later",
-   "session": "S275",
-   "size": "",
-   "next": "Đóng khi root PR S275 (báo cáo Odoo) merge",
-   "needs": "cần xếp slot"
-  },
-  {
-   "id": "AA-1067",
-   "title": "[CRM retail] Payment schedule with instalments, reminders, traveller cancellation policy and charge / refund",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "M-OD",
-   "session": "S276",
-   "size": "M",
-   "next": "CRM bán lẻ · trả nhiều đợt, nhắc trả tiền, bảng phí huỷ, hoá đơn phí huỷ/hoàn tiền",
-   "needs": "cần xếp slot"
-  },
-  {
-   "id": "AA-1068",
-   "title": "[CRM finance] Profit per trip, 'Bookings with AA' cost page, supplier bills vs plan, profit reports, group departure P&L",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "M-OD",
-   "session": "S277",
-   "size": "L",
-   "next": "CRM tài chính · lãi từng chuyến, trang 'Đặt với AA', hoá đơn NCC vs dự kiến, báo cáo lãi, lãi đoàn",
-   "needs": "cần xếp slot"
   },
   {
    "id": "AA-1069",
@@ -2440,6 +2398,90 @@
    "size": "L",
    "next": "Booking · AA nhập booking thay đại lý, voucher, manifest, huỷ, giá trẻ em/em bé, điều khoản cọc",
    "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1076",
+   "title": "[AI gateway] Batch lane for direct APIs (Anthropic first, then OpenAI): half-price bulk runs for catalogue rewrites, A3 re-atomize and backfills",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M1b",
+   "session": "S277",
+   "size": "",
+   "next": "Gateway — S277: đường Batch Anthropic (giảm 50%) trước đợt sửa tour cũ sau replay AA-1049",
+   "needs": ""
+  },
+  {
+   "id": "AA-1077",
+   "title": "[T9 quality] Blog length contract: one length floor, F4 re-check after the normalizer, extend repair for short pieces",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "S277",
+   "size": "",
+   "next": "M2a — S277: một ngưỡng độ dài + đo lại F4 sau chuẩn hoá + viết bổ sung (thử ~3 bài)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1078",
+   "title": "[T-series ops] Make hidden failures visible: failed piece code, job cost from the ledger, flag_fix output limit",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "S277",
+   "size": "",
+   "next": "M2a — S277: lỗi bị che ($0): mã lỗi bài hỏng, chi phí job từ sổ, giới hạn chữ flag_fix",
+   "needs": ""
+  },
+  {
+   "id": "AA-1079",
+   "title": "[T7/T10 judges] Debate rank-only until calibrated, brand-fit calibration on the golden set, serving model first in judge routes",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "S278",
+   "size": "",
+   "next": "M2a — S278: Debate chỉ xếp hạng, hiệu chỉnh brand-fit, model trả lời lên đầu route judge",
+   "needs": ""
+  },
+  {
+   "id": "AA-1080",
+   "title": "[T0/T2 brand and market] Brief import fills the brand pack; unsupported markets reported, not dropped; T2 keywords follow the agency's markets",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "S278",
+   "size": "",
+   "next": "M2a — S278: nhập brief điền đủ brand pack, báo thị trường không hỗ trợ, từ khoá T2 theo thị trường",
+   "needs": ""
+  },
+  {
+   "id": "AA-1081",
+   "title": "[T7 Blog topics] No-topic reason shown to the agency, at least one topic per adopted tour with a free candidate, incremental slate",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "S279",
+   "size": "",
+   "next": "M2a — S279: lý do không có chủ đề blog, ≥1 chủ đề/tour, slate tăng dần",
+   "needs": ""
+  },
+  {
+   "id": "AA-1082",
+   "title": "[CRM ops] Agency web high availability before the pilot: two tasks or an on-demand base for aa-crm-dev-web",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "M5",
+   "session": "S279",
+   "size": "",
+   "next": "CRM — S279: CRM web 2 task trước pilot (báo chi phí, chờ yes)",
+   "needs": "duyệt chi phí"
   }
  ]
 }
