@@ -37,16 +37,25 @@ Publication rule (v1; docs/README.md "Docs reader" and docs/engineering-handbook
      (data:image/png;base64); (b) its text outside those inline PNGs passes the same guard as a page body (no account
      or resource ID). Assets are "staff" tier: an SVG must not carry owner-only content. An SVG larger than
      MAX_ASSET_BYTES is skipped.
+ 10. Screenshots (AA-1064, docs/STYLE.md "Diagrams and images"): a tracked PNG or WebP under docs/ is published as an
+     asset only when a published page links it with ``![alt](relative.png)`` (rule 9 publishes every SVG; a screenshot
+     goes out only when a page shows it, so design exports and evidence folders never leave git). It is published byte
+     for byte and must pass the raster check or the build fails: at most MAX_RASTER_BYTES (300 KB), the PNG / WebP
+     signature, and no account or resource ID in its text metadata (PNG tEXt / iTXt / zTXt / eXIf, WebP EXIF / XMP).
+     The pixels cannot be checked: crop a screenshot before committing it. Its access tier is the most open tier of the
+     pages that link it (a screenshot linked only from owner pages is owner tier). An image in a never-published folder,
+     outside docs/ or with a path the reader cannot serve (letters, digits, '.', '_', '-' only) is not published.
+     tools/docs/check_images.py checks the same rule on every catalog page in the docs lint.
 
 Output layout (OUT_DIR, default _site/docs-reader):
 
   manifest.json                    format 1, below
   pages/<repo>/<repo-relative path> the redacted Markdown body of each published page
-  assets/<repo>/<repo-relative path> each published SVG, unchanged (rule 9)
+  assets/<repo>/<repo-relative path> each published SVG (rule 9) or screenshot (rule 10), unchanged
 
 manifest.json:
   {"format": 1, "rule": "v1", "generated_at": ISO, "source": {"repo", "sha", "ref"},
-   "counts": {"published", "owner_only", "translations", "skipped", "assets"},
+   "counts": {"published", "owner_only", "translations", "skipped", "assets", "screenshots"},
    "pages": [{"repo", "path", "key", "id", "title", "description", "type", "status", "audience", "owner",
               "last_reviewed", "generated", "access", "bytes", "sha256", "redactions",
               "lang", "translation_of", "translations"}],
@@ -59,7 +68,8 @@ manifest.json:
                   offers a language toggle from `translations` / `translation_of`.
 
 `key` is the object key relative to the S3 prefix (pages/<repo>/<path>, assets/<repo>/<path>); the API reads only keys
-listed here. A reader that predates rule 9 ignores "assets".
+listed here. A reader that predates rule 9 ignores "assets"; one that predates rule 10 drops the PNG / WebP entries
+(its asset shape check accepts .svg only), so either deploy order is safe.
 Skipped pages are counted, never named, in the manifest.
 
 Usage:
@@ -74,11 +84,14 @@ import argparse
 import datetime as dt
 import hashlib
 import json
+import posixpath
 import re
 import shutil
 import subprocess
 import sys
 import tempfile
+import urllib.parse
+import zlib
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -115,7 +128,22 @@ OWNER_ONLY_ID_PREFIXES = ("SEC-", "ARCH-02", "ARCH-03", "ARCH-04")
 MAX_PAGE_BYTES = 1_000_000
 # Rule 9: an SVG bigger than this is skipped (the diagrams with inline icons are 0.2-0.4 MB).
 MAX_ASSET_BYTES = 1_000_000
-ASSET_SUFFIXES = {".svg": "image/svg+xml"}
+SVG_SUFFIXES = {".svg": "image/svg+xml"}
+# Rule 10 (AA-1064): screenshots a published page links. docs/STYLE.md caps them at 300 KB; the CIS API refuses a
+# larger stored object too (api/services/docs_reader.py MAX_RASTER_BYTES, same value).
+RASTER_SUFFIXES = {".png": "image/png", ".webp": "image/webp"}
+MAX_RASTER_BYTES = 300 * 1024
+ASSET_SUFFIXES = {**SVG_SUFFIXES, **RASTER_SUFFIXES}
+# The asset path shape the CIS API accepts (docs_reader._ASSET_PATH): ASCII letters, digits, '.', '_', '-' per segment.
+ASSET_PATH = re.compile(r"^(?:[A-Za-z0-9._-]+/)*[A-Za-z0-9._-]+$")
+PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+PNG_TEXT_CHUNKS = (b"tEXt", b"iTXt", b"zTXt", b"eXIf")
+WEBP_TEXT_CHUNKS = (b"EXIF", b"XMP ")
+# A Markdown image: ![alt](src) or ![alt](<src with spaces> "title"). Fenced code and inline code spans are skipped.
+IMAGE_LINK = re.compile(r"!\[([^\]\n]*)\]\(\s*(<[^>\n]*>|[^)\s]+)(?:\s+(?:\"[^\"\n]*\"|'[^'\n]*'))?\s*\)")
+FENCE = re.compile(r"^\s*(```|~~~)")
+INLINE_CODE = re.compile(r"`[^`\n]*`")
+EXTERNAL = re.compile(r"^(?://|[a-z][a-z0-9+.-]*:)", re.I)
 
 # Rule 6: (marker, pattern). Order matters: the ARN / bucket forms are covered by the account pattern, which runs
 # last so the other patterns still see the full text.
@@ -268,6 +296,125 @@ def svg_tree_problems(text: str) -> list[str]:
     return sorted(set(problems))
 
 
+# ── rule 10: image links and the raster check (shared with check_images.py) ─────────────────────────────
+
+def image_links(text: str) -> list[tuple[int, str, str]]:
+    """(line number, alt text, src) of every Markdown image outside fenced code blocks and inline code spans."""
+    found: list[tuple[int, str, str]] = []
+    fence: str | None = None
+    for n, line in enumerate(text.splitlines(), 1):
+        m = FENCE.match(line)
+        if m:
+            if fence is None:
+                fence = m.group(1)
+            elif m.group(1) == fence:
+                fence = None
+            continue
+        if fence is not None:
+            continue
+        for img in IMAGE_LINK.finditer(INLINE_CODE.sub("", line)):
+            src = img.group(2)
+            if src.startswith("<") and src.endswith(">"):
+                src = src[1:-1]
+            found.append((n, img.group(1).strip(), src.strip()))
+    return found
+
+
+def is_external_image(src: str) -> bool:
+    """A remote (http, https, protocol-relative) or other-scheme (data:, javascript:) image: the reader never loads it."""
+    return bool(EXTERNAL.match(src.strip()))
+
+
+def resolve_image(src: str, from_path: str) -> str | None:
+    """The repo-relative path an image link on page `from_path` points at, the way the CIS reader resolves it
+    (frontend/lib/docsReader.ts resolveImage): relative to the page folder, a leading '/' from the repo root, query and
+    fragment dropped, percent-decoded. None for an external image, an empty or fragment-only src, or a path that climbs
+    above the repo root."""
+    s = src.strip()
+    if not s or s.startswith("#") or is_external_image(s):
+        return None
+    s = s.split("#")[0].split("?")[0]
+    try:
+        s = urllib.parse.unquote(s, errors="strict")
+    except UnicodeDecodeError:
+        return None
+    joined = s[1:] if s.startswith("/") else posixpath.join(posixpath.dirname(from_path), s)
+    parts: list[str] = []
+    for seg in joined.split("/"):
+        if seg in ("", "."):
+            continue
+        if seg == "..":
+            if not parts:
+                return None
+            parts.pop()
+            continue
+        parts.append(seg)
+    return "/".join(parts) or None
+
+
+def _png_text(data: bytes) -> tuple[str, bool]:
+    """(text of the metadata chunks, well-formed) of a PNG that starts with the signature."""
+    texts: list[bytes] = []
+    i = len(PNG_SIGNATURE)
+    while i + 8 <= len(data):
+        size = int.from_bytes(data[i:i + 4], "big")
+        kind = data[i + 4:i + 8]
+        body = data[i + 8:i + 8 + size]
+        if len(body) != size or i + 12 + size > len(data):
+            return "", False
+        if kind == b"zTXt":
+            _, _, rest = body.partition(b"\0")
+            try:
+                # bounded: a small compressed chunk must not inflate without limit
+                texts.append(zlib.decompressobj().decompress(rest[1:], 4 * MAX_RASTER_BYTES))
+            except zlib.error:
+                return "", False
+        elif kind in PNG_TEXT_CHUNKS:
+            texts.append(body)
+        if kind == b"IEND":
+            return b"\n".join(texts).decode("latin-1"), True
+        i += 12 + size
+    return "", False
+
+
+def _webp_text(data: bytes) -> tuple[str, bool]:
+    """(text of the metadata chunks, well-formed) of a RIFF/WEBP file."""
+    texts: list[bytes] = []
+    i = 12
+    while i + 8 <= len(data):
+        kind = data[i:i + 4]
+        size = int.from_bytes(data[i + 4:i + 8], "little")
+        body = data[i + 8:i + 8 + size]
+        if len(body) != size:
+            return "", False
+        if kind in WEBP_TEXT_CHUNKS:
+            texts.append(body)
+        i += 8 + size + (size & 1)
+    return b"\n".join(texts).decode("latin-1"), i == len(data)
+
+
+def raster_problems(data: bytes, suffix: str) -> list[str]:
+    """Rule 10: why a PNG / WebP may not be published (empty list = publishable)."""
+    suffix = suffix.lower()
+    if suffix not in RASTER_SUFFIXES:
+        return [f"{suffix or 'no extension'} is not a screenshot type (PNG or WebP)"]
+    problems: list[str] = []
+    if len(data) > MAX_RASTER_BYTES:
+        problems.append(f"{len(data)} bytes, over the {MAX_RASTER_BYTES // 1024} KB cap (crop it or save it as WebP)")
+    if suffix == ".png":
+        if not data.startswith(PNG_SIGNATURE):
+            return problems + ["not a PNG file"]
+        text, ok = _png_text(data)
+    else:
+        if not (data[:4] == b"RIFF" and data[8:12] == b"WEBP"):
+            return problems + ["not a WebP file"]
+        text, ok = _webp_text(data)
+    if not ok:
+        problems.append("malformed image file")
+    problems += [f"{label} in the image metadata" for label in guard_hits(text)]
+    return problems
+
+
 def _adr_meta(relpath: str, text: str) -> dict | None:
     name = Path(relpath).name
     if not ADR_FILE.match(name):
@@ -371,6 +518,7 @@ def _link_translations(result: Result) -> Result:
 class Asset:
     path: str
     data: bytes
+    access: str = "staff"
 
     @property
     def key(self) -> str:
@@ -379,15 +527,17 @@ class Asset:
     def entry(self) -> dict:
         return {"repo": REPO_NAME, "path": self.path, "key": self.key,
                 "type": ASSET_SUFFIXES[Path(self.path).suffix.lower()], "bytes": len(self.data),
-                "sha256": hashlib.sha256(self.data).hexdigest(), "access": "staff"}
+                "sha256": hashlib.sha256(self.data).hexdigest(), "access": self.access}
 
 
-def list_assets(root: Path = REPO_ROOT) -> list[str]:
-    """Tracked asset files under docs/ (git ls-files); a filesystem walk outside a git checkout (unit tests)."""
+def list_assets(root: Path = REPO_ROOT, suffixes=None) -> list[str]:
+    """Tracked image files under docs/ (git ls-files); a filesystem walk outside a git checkout (unit tests).
+    `suffixes` defaults to the SVG suffix (rule 9)."""
+    suffixes = SVG_SUFFIXES if suffixes is None else suffixes
     try:
         out = subprocess.run(["git", "-C", str(root), "ls-files", "-z", "--", *SCOPE],
                              check=True, capture_output=True).stdout.decode("utf-8")
-        files = [f for f in out.split("\0") if Path(f).suffix.lower() in ASSET_SUFFIXES]
+        files = [f for f in out.split("\0") if Path(f).suffix.lower() in suffixes]
         if files or (root / ".git").exists():
             return sorted(files)
     except (OSError, subprocess.CalledProcessError):
@@ -397,12 +547,40 @@ def list_assets(root: Path = REPO_ROOT) -> list[str]:
         base = root / scope
         if base.is_dir():
             found += [p.relative_to(root).as_posix() for p in base.rglob("*")
-                      if p.is_file() and p.suffix.lower() in ASSET_SUFFIXES]
+                      if p.is_file() and p.suffix.lower() in suffixes]
     return sorted(found)
 
 
+def collect_raster_assets(pages: list[Page], root: Path = REPO_ROOT) -> tuple[list[Asset], list[str]]:
+    """Rule 10: (screenshots the published pages link, problems that fail the build)."""
+    linked: dict[str, str] = {}
+    for page in pages:
+        for _line, _alt, src in image_links(page.body):
+            target = resolve_image(src, page.path)
+            if (target is None or Path(target).suffix.lower() not in RASTER_SUFFIXES
+                    or not target.startswith("docs/") or is_never(target) or not ASSET_PATH.match(target)):
+                continue
+            linked[target] = "staff" if page.access == "staff" or linked.get(target) == "staff" else "owner"
+    tracked = set(list_assets(root, RASTER_SUFFIXES))
+    assets: list[Asset] = []
+    problems: list[str] = []
+    for relpath in sorted(linked):
+        if relpath not in tracked:
+            continue   # a missing image: the page shows its alt text; check_images.py fails the docs lint on it
+        try:
+            data = (root / relpath).read_bytes()
+        except OSError:
+            continue
+        found = raster_problems(data, Path(relpath).suffix)
+        if found:
+            problems += [f"{relpath}: {p}" for p in found]
+            continue
+        assets.append(Asset(relpath, data, linked[relpath]))
+    return assets, problems
+
+
 def collect_assets(root: Path = REPO_ROOT) -> tuple[list[Asset], list[str]]:
-    """Rule 9: (publishable assets, problems that fail the build)."""
+    """Rule 9: (publishable SVG assets, problems that fail the build)."""
     assets: list[Asset] = []
     problems: list[str] = []
     for relpath in list_assets(root):
@@ -458,6 +636,9 @@ def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "") -> di
     """Write the bundle to `out` (emptied first) and return the manifest. Raises SystemExit on a guard hit."""
     result = collect(root)
     assets, problems = collect_assets(root)
+    rasters, raster_problems_found = collect_raster_assets(result.pages, root)
+    assets += rasters
+    problems += raster_problems_found
     for page in result.pages:
         # Everything a reader sees: the body and the manifest's text fields (not the sha256, which is hex).
         visible = {k: v for k, v in _entry(page).items() if k not in ("sha256", "bytes", "redactions")}
@@ -492,6 +673,7 @@ def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "") -> di
             "translations": sum(1 for e in entries if e["translation_of"]),
             "skipped": result.skipped,
             "assets": len(assets),
+            "screenshots": len(rasters),
         },
         "pages": entries,
         "assets": [a.entry() for a in assets],
@@ -523,7 +705,7 @@ def main(argv: list[str] | None = None) -> int:
     c = manifest["counts"]
     redacted = sum(p["redactions"] for p in manifest["pages"])
     print(f"docs reader: {c['published']} pages published ({c['owner_only']} owner only, {c['translations']} translations), "
-          f"{c['skipped']} skipped, {c['assets']} SVG assets, "
+          f"{c['skipped']} skipped, {c['assets']} assets ({c['screenshots']} screenshots), "
           f"{redacted} values redacted, source {manifest['source']['sha'][:12] or 'unknown'}")
     return 0
 
