@@ -1,0 +1,419 @@
+ecsx: started (session output not seen, normal when SSM drops it); checking the heartbeat
+TENANT audit-atlas-hearth id=b8611143 kind=demo status=active active=True
+TENANT audit-terra-family id=7348dbd4 kind=demo status=active active=True
+TENANT audit-trail-pulse id=d6de5b7c kind=demo status=active active=True
+TENANT audit-wildkind-travel id=c3182dd9 kind=demo status=active active=True
+T0_BRAND audit-atlas-hearth expected=1_active got_active=1 versions=2 v=2 name=True system_prompt_len=0 style_guide_len=1045 forbidden=15 voice_examples=7 core_idea_len=282 good_examples_len=417 cta_len=0 markets=['US', 'UK', 'UAE', 'Saudi Arabia', 'Singapore', 'Hong Kong'] lang=en docx=False updated=2026-11-05T13:12Z
+T0_MARKETS audit-atlas-hearth tenant_config.markets=None channels=None seo_provider=dataforseo seo_target_market={"unknown": [], "declared": ["US", "UK", "UAE", "Saudi Arabia", "Singapore", "Hong Kong"], "language": "en", "countries"
+T0_BRAND audit-terra-family expected=1_active got_active=1 versions=2 v=2 name=True system_prompt_len=0 style_guide_len=1052 forbidden=10 voice_examples=7 core_idea_len=304 good_examples_len=383 cta_len=0 markets=['UAE', 'Singapore', 'Hong Kong', 'UK', 'Australia'] lang=en docx=False updated=2026-11-05T13:12Z
+T0_MARKETS audit-terra-family tenant_config.markets=None channels=None seo_provider=dataforseo seo_target_market={"unknown": [], "declared": ["UAE", "Singapore", "Hong Kong", "UK", "Australia"], "language": "en", "countries": ["AE", 
+T0_BRAND audit-trail-pulse expected=1_active got_active=1 versions=2 v=2 name=True system_prompt_len=0 style_guide_len=1043 forbidden=11 voice_examples=7 core_idea_len=327 good_examples_len=407 cta_len=0 markets=['Europe', 'Australia', 'North America', 'Singapore'] lang=en docx=False updated=2026-11-05T13:12Z
+T0_MARKETS audit-trail-pulse tenant_config.markets=None channels=None seo_provider=dataforseo seo_target_market={"unknown": [], "declared": ["Europe", "Australia", "North America", "Singapore"], "language": "en", "countries": ["UK",
+T0_BRAND audit-wildkind-travel expected=1_active got_active=1 versions=2 v=2 name=True system_prompt_len=0 style_guide_len=1176 forbidden=13 voice_examples=7 core_idea_len=321 good_examples_len=448 cta_len=0 markets=['Europe', 'Australia', 'Canada', 'New Zealand', 'US'] lang=en docx=False updated=2026-11-05T13:13Z
+T0_MARKETS audit-wildkind-travel tenant_config.markets=None channels=None seo_provider=dataforseo seo_target_market={"unknown": [], "declared": ["Europe", "Australia", "Canada", "New Zealand", "US"], "language": "en", "countries": ["UK"
+T5_TOUR tour=8602c1d4 active_atoms=89 markets_ranked=['AU', 'DE', 'FR', 'NL', 'UK', 'US'] segs_max=55
+T5_SEG tour=8602c1d4 market=AU segs=55 blog_bar_segs=19 max_demand=27100 max_questions=12
+T5_SEG tour=8602c1d4 market=DE segs=55 blog_bar_segs=19 max_demand=90500 max_questions=12
+T5_SEG tour=8602c1d4 market=FR segs=55 blog_bar_segs=16 max_demand=90500 max_questions=12
+T5_SEG tour=8602c1d4 market=NL segs=55 blog_bar_segs=12 max_demand=27100 max_questions=12
+T5_SEG tour=8602c1d4 market=UK segs=55 blog_bar_segs=24 max_demand=74000 max_questions=12
+T5_SEG tour=8602c1d4 market=US segs=55 blog_bar_segs=28 max_demand=301000 max_questions=12
+T5_TOUR tour=2cf487be active_atoms=39 markets_ranked=['AU', 'DE', 'FR', 'NL', 'UK', 'US'] segs_max=21
+T5_SEG tour=2cf487be market=AU segs=21 blog_bar_segs=3 max_demand=3600 max_questions=15
+T5_SEG tour=2cf487be market=DE segs=21 blog_bar_segs=4 max_demand=4400 max_questions=15
+T5_SEG tour=2cf487be market=FR segs=21 blog_bar_segs=4 max_demand=5400 max_questions=15
+T5_SEG tour=2cf487be market=NL segs=21 blog_bar_segs=2 max_demand=1600 max_questions=15
+T5_SEG tour=2cf487be market=UK segs=21 blog_bar_segs=5 max_demand=5400 max_questions=15
+T5_SEG tour=2cf487be market=US segs=21 blog_bar_segs=5 max_demand=8100 max_questions=15
+T5_TOUR tour=84e392c3 active_atoms=37 markets_ranked=['AU', 'DE', 'FR', 'NL', 'UK', 'US'] segs_max=24
+T5_SEG tour=84e392c3 market=AU segs=24 blog_bar_segs=2 max_demand=2900 max_questions=18
+T5_SEG tour=84e392c3 market=DE segs=24 blog_bar_segs=1 max_demand=1600 max_questions=18
+T5_SEG tour=84e392c3 market=FR segs=24 blog_bar_segs=1 max_demand=2400 max_questions=18
+T5_SEG tour=84e392c3 market=NL segs=24 blog_bar_segs=1 max_demand=2900 max_questions=18
+T5_SEG tour=84e392c3 market=UK segs=24 blog_bar_segs=2 max_demand=2400 max_questions=18
+T5_SEG tour=84e392c3 market=US segs=24 blog_bar_segs=2 max_demand=6600 max_questions=18
+T5_TOUR tour=caf4bf16 active_atoms=52 markets_ranked=['AU', 'DE', 'FR', 'NL', 'UK', 'US'] segs_max=22
+T5_SEG tour=caf4bf16 market=AU segs=22 blog_bar_segs=0 max_demand=390 max_questions=4
+T5_SEG tour=caf4bf16 market=DE segs=22 blog_bar_segs=0 max_demand=170 max_questions=4
+T5_SEG tour=caf4bf16 market=FR segs=22 blog_bar_segs=0 max_demand=140 max_questions=4
+T5_SEG tour=caf4bf16 market=NL segs=22 blog_bar_segs=0 max_demand=70 max_questions=4
+T5_SEG tour=caf4bf16 market=UK segs=22 blog_bar_segs=0 max_demand=590 max_questions=4
+T5_SEG tour=caf4bf16 market=US segs=22 blog_bar_segs=0 max_demand=1300 max_questions=4
+T5_TOUR tour=ac574bfe active_atoms=95 markets_ranked=['AU', 'DE', 'FR', 'NL', 'UK', 'US'] segs_max=31
+T5_SEG tour=ac574bfe market=AU segs=31 blog_bar_segs=14 max_demand=12100 max_questions=14
+T5_SEG tour=ac574bfe market=DE segs=31 blog_bar_segs=16 max_demand=27100 max_questions=14
+T5_SEG tour=ac574bfe market=FR segs=31 blog_bar_segs=11 max_demand=27100 max_questions=14
+T5_SEG tour=ac574bfe market=NL segs=31 blog_bar_segs=11 max_demand=5400 max_questions=14
+T5_SEG tour=ac574bfe market=UK segs=31 blog_bar_segs=18 max_demand=14800 max_questions=14
+T5_SEG tour=ac574bfe market=US segs=31 blog_bar_segs=11 max_demand=27100 max_questions=14
+T5_TOUR tour=56b61f58 active_atoms=68 markets_ranked=['AU', 'DE', 'FR', 'NL', 'UK', 'US'] segs_max=40
+T5_SEG tour=56b61f58 market=AU segs=40 blog_bar_segs=7 max_demand=27100 max_questions=14
+T5_SEG tour=56b61f58 market=DE segs=40 blog_bar_segs=8 max_demand=90500 max_questions=14
+T5_SEG tour=56b61f58 market=FR segs=40 blog_bar_segs=5 max_demand=90500 max_questions=14
+T5_SEG tour=56b61f58 market=NL segs=40 blog_bar_segs=4 max_demand=27100 max_questions=14
+T5_SEG tour=56b61f58 market=UK segs=40 blog_bar_segs=12 max_demand=74000 max_questions=14
+T5_SEG tour=56b61f58 market=US segs=40 blog_bar_segs=15 max_demand=301000 max_questions=14
+T5_TOUR tour=207e4efa active_atoms=83 markets_ranked=['AU', 'DE', 'FR', 'NL', 'UK', 'US'] segs_max=52
+T5_SEG tour=207e4efa market=AU segs=52 blog_bar_segs=14 max_demand=18100 max_questions=19
+T5_SEG tour=207e4efa market=DE segs=52 blog_bar_segs=14 max_demand=22200 max_questions=19
+T5_SEG tour=207e4efa market=FR segs=52 blog_bar_segs=12 max_demand=18100 max_questions=19
+T5_SEG tour=207e4efa market=NL segs=52 blog_bar_segs=11 max_demand=9900 max_questions=19
+T5_SEG tour=207e4efa market=UK segs=52 blog_bar_segs=13 max_demand=33100 max_questions=19
+T5_SEG tour=207e4efa market=US segs=52 blog_bar_segs=18 max_demand=201000 max_questions=19
+T5_TOUR tour=2d0ee81a active_atoms=58 markets_ranked=['AU', 'DE', 'FR', 'NL', 'UK', 'US'] segs_max=52
+T5_SEG tour=2d0ee81a market=AU segs=52 blog_bar_segs=11 max_demand=22200 max_questions=9
+T5_SEG tour=2d0ee81a market=DE segs=52 blog_bar_segs=5 max_demand=40500 max_questions=9
+T5_SEG tour=2d0ee81a market=FR segs=52 blog_bar_segs=4 max_demand=40500 max_questions=9
+T5_SEG tour=2d0ee81a market=NL segs=52 blog_bar_segs=2 max_demand=12100 max_questions=9
+T5_SEG tour=2d0ee81a market=UK segs=52 blog_bar_segs=8 max_demand=40500 max_questions=9
+T5_SEG tour=2d0ee81a market=US segs=52 blog_bar_segs=15 max_demand=135000 max_questions=9
+T5_TOUR tour=c9716429 active_atoms=54 markets_ranked=['AU', 'DE', 'FR', 'NL', 'UK', 'US'] segs_max=32
+T5_SEG tour=c9716429 market=AU segs=32 blog_bar_segs=9 max_demand=33100 max_questions=16
+T5_SEG tour=c9716429 market=DE segs=32 blog_bar_segs=13 max_demand=74000 max_questions=16
+T5_SEG tour=c9716429 market=FR segs=32 blog_bar_segs=10 max_demand=60500 max_questions=16
+T5_SEG tour=c9716429 market=NL segs=32 blog_bar_segs=9 max_demand=18100 max_questions=16
+T5_SEG tour=c9716429 market=UK segs=32 blog_bar_segs=10 max_demand=60500 max_questions=16
+T5_SEG tour=c9716429 market=US segs=32 blog_bar_segs=13 max_demand=165000 max_questions=16
+T5_TOUR tour=a8560125 active_atoms=52 markets_ranked=['AU', 'DE', 'FR', 'NL', 'UK', 'US'] segs_max=30
+T5_SEG tour=a8560125 market=AU segs=30 blog_bar_segs=5 max_demand=74000 max_questions=12
+T5_SEG tour=a8560125 market=DE segs=30 blog_bar_segs=8 max_demand=90500 max_questions=12
+T5_SEG tour=a8560125 market=FR segs=30 blog_bar_segs=4 max_demand=90500 max_questions=12
+T5_SEG tour=a8560125 market=NL segs=30 blog_bar_segs=3 max_demand=27100 max_questions=12
+T5_SEG tour=a8560125 market=UK segs=30 blog_bar_segs=13 max_demand=74000 max_questions=12
+T5_SEG tour=a8560125 market=US segs=30 blog_bar_segs=16 max_demand=301000 max_questions=12
+T5_TOUR tour=7fe02d1a active_atoms=39 markets_ranked=['AU', 'DE', 'FR', 'NL', 'UK', 'US'] segs_max=19
+T5_SEG tour=7fe02d1a market=AU segs=19 blog_bar_segs=14 max_demand=9900 max_questions=14
+T5_SEG tour=7fe02d1a market=DE segs=19 blog_bar_segs=14 max_demand=27100 max_questions=14
+T5_SEG tour=7fe02d1a market=FR segs=19 blog_bar_segs=11 max_demand=18100 max_questions=14
+T5_SEG tour=7fe02d1a market=NL segs=19 blog_bar_segs=14 max_demand=5400 max_questions=14
+T5_SEG tour=7fe02d1a market=UK segs=19 blog_bar_segs=14 max_demand=14800 max_questions=14
+T5_SEG tour=7fe02d1a market=US segs=19 blog_bar_segs=12 max_demand=18100 max_questions=14
+T5_TOUR tour=b56704c5 active_atoms=35 markets_ranked=['AU', 'DE', 'FR', 'NL', 'UK', 'US'] segs_max=18
+T5_SEG tour=b56704c5 market=AU segs=18 blog_bar_segs=8 max_demand=12100 max_questions=15
+T5_SEG tour=b56704c5 market=DE segs=18 blog_bar_segs=7 max_demand=14800 max_questions=15
+T5_SEG tour=b56704c5 market=FR segs=18 blog_bar_segs=6 max_demand=27100 max_questions=15
+T5_SEG tour=b56704c5 market=NL segs=18 blog_bar_segs=6 max_demand=5400 max_questions=15
+T5_SEG tour=b56704c5 market=UK segs=18 blog_bar_segs=10 max_demand=14800 max_questions=15
+T5_SEG tour=b56704c5 market=US segs=18 blog_bar_segs=7 max_demand=27100 max_questions=15
+PAIR tenant=audit-atlas-hearth tour=8602c1d4 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=50.0 t2_versions_in_window=1 atoms=89 blog_bar_segs_any=28 blog_bar_segs_tenant_mkts=28 subjects={'ads:proposed': 14, 'blog:proposed': 7, 'blog:used': 1, 'email:proposed': 11, 'facebook:proposed': 11, 'instagram:proposed': 7, 'landing_page:proposed': 12, 'linkedin:proposed': 13, 'tiktok:proposed': 6} requests={'blog:approved': 1} pieces={'blog:approved': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-atlas-hearth tour=2cf487be t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=222.0 t2_versions_in_window=0 atoms=39 blog_bar_segs_any=5 blog_bar_segs_tenant_mkts=5 subjects={'ads:proposed': 3, 'blog:used': 2, 'email:proposed': 4, 'facebook:proposed': 1, 'instagram:proposed': 1, 'instagram:used': 1, 'landing_page:proposed': 4, 'linkedin:proposed': 1, 'linkedin:used': 1, 'tiktok:proposed': 2} requests={'blog:approved': 1} pieces={'blog:approved': 1} blog_exported=1 t2_docx_exports=0
+PAIR tenant=audit-atlas-hearth tour=84e392c3 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=135.0 t2_versions_in_window=0 atoms=37 blog_bar_segs_any=2 blog_bar_segs_tenant_mkts=2 subjects={'ads:proposed': 5, 'ads:used': 1, 'email:proposed': 6, 'email:used': 1, 'facebook:proposed': 4, 'facebook:used': 1, 'instagram:proposed': 5, 'landing_page:proposed': 6, 'landing_page:used': 1, 'linkedin:picked': 1, 'linkedin:proposed': 3, 'tiktok:proposed': 4} requests={} pieces={} blog_exported=0 t2_docx_exports=0
+PAIR tenant=audit-atlas-hearth tour=caf4bf16 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=214.0 t2_versions_in_window=0 atoms=52 blog_bar_segs_any=0 blog_bar_segs_tenant_mkts=0 subjects={'ads:proposed': 7, 'email:proposed': 7, 'facebook:proposed': 2, 'instagram:proposed': 4, 'landing_page:proposed': 7, 'linkedin:proposed': 2, 'linkedin:used': 1, 'tiktok:proposed': 4, 'tiktok:used': 1} requests={} pieces={} blog_exported=0 t2_docx_exports=0
+PAIR tenant=audit-atlas-hearth tour=ac574bfe t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=56.0 t2_versions_in_window=1 atoms=95 blog_bar_segs_any=18 blog_bar_segs_tenant_mkts=18 subjects={'ads:proposed': 7, 'blog:proposed': 4, 'blog:used': 1, 'email:proposed': 4, 'facebook:proposed': 2, 'instagram:proposed': 4, 'landing_page:proposed': 6, 'linkedin:proposed': 2, 'tiktok:proposed': 4} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-atlas-hearth tour=56b61f58 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=75.0 t2_versions_in_window=1 atoms=68 blog_bar_segs_any=15 blog_bar_segs_tenant_mkts=15 subjects={'ads:proposed': 7, 'blog:proposed': 7, 'blog:used': 1, 'email:proposed': 12, 'facebook:proposed': 11, 'instagram:proposed': 13, 'landing_page:proposed': 10, 'linkedin:proposed': 8, 'tiktok:proposed': 7} requests={'blog:approved': 1} pieces={'blog:approved': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-atlas-hearth tour=207e4efa t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=67.0 t2_versions_in_window=1 atoms=83 blog_bar_segs_any=18 blog_bar_segs_tenant_mkts=18 subjects={'ads:proposed': 8, 'blog:proposed': 1, 'blog:used': 1, 'email:proposed': 7, 'facebook:proposed': 6, 'instagram:proposed': 3, 'landing_page:proposed': 8, 'linkedin:proposed': 8, 'tiktok:proposed': 4} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-atlas-hearth tour=2d0ee81a t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=79.0 t2_versions_in_window=1 atoms=58 blog_bar_segs_any=15 blog_bar_segs_tenant_mkts=15 subjects={'ads:proposed': 6, 'blog:proposed': 1, 'blog:used': 1, 'email:proposed': 7, 'facebook:proposed': 8, 'instagram:proposed': 8, 'landing_page:proposed': 4, 'linkedin:proposed': 8, 'tiktok:proposed': 9} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-atlas-hearth tour=c9716429 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=52.0 t2_versions_in_window=1 atoms=54 blog_bar_segs_any=13 blog_bar_segs_tenant_mkts=13 subjects={'ads:proposed': 4, 'blog:proposed': 2, 'blog:used': 1, 'email:proposed': 2, 'facebook:proposed': 5, 'instagram:proposed': 4, 'landing_page:proposed': 2, 'linkedin:proposed': 4, 'tiktok:proposed': 3} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-atlas-hearth tour=a8560125 t2=needs_review/escalated t2_repairs=0 t2_auto=True t2_job=succeeded t2_job_attempt=1 t2_run_s=1.0 t2_versions_in_window=1 atoms=52 blog_bar_segs_any=16 blog_bar_segs_tenant_mkts=16 subjects={'ads:proposed': 8, 'blog:proposed': 8, 'blog:used': 1, 'email:proposed': 7, 'facebook:proposed': 5, 'instagram:proposed': 5, 'landing_page:proposed': 8, 'linkedin:proposed': 4, 'tiktok:proposed': 3} requests={'blog:approved': 1} pieces={'blog:approved': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-atlas-hearth tour=7fe02d1a t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=35.0 t2_versions_in_window=1 atoms=39 blog_bar_segs_any=14 blog_bar_segs_tenant_mkts=14 subjects={'ads:proposed': 4, 'blog:proposed': 2, 'blog:used': 1, 'email:proposed': 3, 'facebook:proposed': 2, 'instagram:proposed': 2, 'landing_page:proposed': 4, 'linkedin:proposed': 2, 'tiktok:proposed': 2} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-atlas-hearth tour=b56704c5 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=42.0 t2_versions_in_window=1 atoms=35 blog_bar_segs_any=10 blog_bar_segs_tenant_mkts=10 subjects={'ads:proposed': 6, 'blog:proposed': 1, 'blog:used': 1, 'email:proposed': 4, 'facebook:proposed': 2, 'instagram:proposed': 2, 'landing_page:proposed': 6, 'linkedin:proposed': 2, 'tiktok:proposed': 1} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+FUNNEL audit-atlas-hearth pairs=12 t2_version_in_window=9 t2_ok=12 t3_passed=11 t3_escalated=1 t4_pool=12 t5_atoms=12 blog_bar_any_market=11 blog_bar_tenant_market=11 t7_blog_subject=10 t8_blog_request=10 t9_blog_piece=10 t10_blog_terminal=10 t10_blog_approved=4 export_blog_piece=10 export_t2_docx=9
+PAIR tenant=audit-terra-family tour=8602c1d4 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=102.0 t2_versions_in_window=1 atoms=89 blog_bar_segs_any=28 blog_bar_segs_tenant_mkts=24 subjects={'ads:proposed': 10, 'blog:proposed': 5, 'blog:used': 1, 'email:proposed': 9, 'facebook:proposed': 10, 'instagram:proposed': 9, 'landing_page:proposed': 9, 'linkedin:proposed': 9, 'tiktok:proposed': 8} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-terra-family tour=2cf487be t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=129.0 t2_versions_in_window=0 atoms=39 blog_bar_segs_any=5 blog_bar_segs_tenant_mkts=5 subjects={'ads:proposed': 4, 'ads:used': 1, 'blog:proposed': 1, 'blog:used': 1, 'email:proposed': 6, 'email:used': 1, 'facebook:proposed': 1, 'instagram:proposed': 2, 'instagram:used': 1, 'landing_page:proposed': 5, 'landing_page:used': 1, 'linkedin:proposed': 3, 'tiktok:proposed': 3, 'tiktok:used': 1} requests={'blog:approved': 1} pieces={'blog:approved': 1} blog_exported=1 t2_docx_exports=0
+PAIR tenant=audit-terra-family tour=84e392c3 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=120.0 t2_versions_in_window=0 atoms=37 blog_bar_segs_any=2 blog_bar_segs_tenant_mkts=2 subjects={'ads:proposed': 2, 'blog:used': 1, 'email:proposed': 5, 'facebook:proposed': 1, 'instagram:proposed': 3, 'landing_page:proposed': 3, 'linkedin:proposed': 1, 'tiktok:proposed': 3} requests={'blog:approved': 1} pieces={'blog:approved': 1} blog_exported=1 t2_docx_exports=0
+PAIR tenant=audit-terra-family tour=caf4bf16 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=53.0 t2_versions_in_window=0 atoms=52 blog_bar_segs_any=0 blog_bar_segs_tenant_mkts=0 subjects={'ads:proposed': 6, 'email:proposed': 3, 'facebook:proposed': 4, 'facebook:used': 1, 'instagram:proposed': 3, 'landing_page:proposed': 5, 'linkedin:proposed': 6, 'linkedin:used': 1, 'tiktok:proposed': 4} requests={} pieces={} blog_exported=0 t2_docx_exports=0
+PAIR tenant=audit-terra-family tour=ac574bfe t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=54.0 t2_versions_in_window=1 atoms=95 blog_bar_segs_any=18 blog_bar_segs_tenant_mkts=18 subjects={'ads:proposed': 10, 'blog:proposed': 4, 'blog:used': 1, 'email:proposed': 3, 'facebook:proposed': 2, 'landing_page:proposed': 7, 'linkedin:proposed': 4} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-terra-family tour=56b61f58 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=67.0 t2_versions_in_window=1 atoms=68 blog_bar_segs_any=15 blog_bar_segs_tenant_mkts=12 subjects={'ads:proposed': 11, 'blog:proposed': 5, 'blog:used': 1, 'email:proposed': 10, 'facebook:proposed': 8, 'instagram:proposed': 6, 'landing_page:proposed': 11, 'linkedin:proposed': 8, 'tiktok:proposed': 7} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-terra-family tour=207e4efa t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=54.0 t2_versions_in_window=1 atoms=83 blog_bar_segs_any=18 blog_bar_segs_tenant_mkts=13 subjects={'ads:proposed': 5, 'blog:proposed': 2, 'blog:used': 1, 'email:proposed': 5, 'facebook:proposed': 7, 'instagram:proposed': 7, 'landing_page:proposed': 4, 'linkedin:proposed': 7, 'tiktok:proposed': 5} requests={'blog:approved': 1} pieces={'blog:approved': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-terra-family tour=2d0ee81a t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=66.0 t2_versions_in_window=1 atoms=58 blog_bar_segs_any=15 blog_bar_segs_tenant_mkts=8 subjects={'ads:proposed': 5, 'blog:proposed': 1, 'blog:used': 1, 'email:proposed': 10, 'facebook:proposed': 9, 'instagram:proposed': 13, 'landing_page:proposed': 8, 'linkedin:proposed': 8, 'tiktok:proposed': 15} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-terra-family tour=c9716429 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=56.0 t2_versions_in_window=1 atoms=54 blog_bar_segs_any=13 blog_bar_segs_tenant_mkts=10 subjects={'ads:proposed': 4, 'blog:proposed': 1, 'blog:used': 1, 'email:proposed': 3, 'facebook:proposed': 5, 'instagram:proposed': 3, 'landing_page:proposed': 3, 'linkedin:proposed': 5, 'tiktok:proposed': 2} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-terra-family tour=a8560125 t2=needs_review/escalated t2_repairs=0 t2_auto=True t2_job=succeeded t2_job_attempt=1 t2_run_s=0.0 t2_versions_in_window=1 atoms=52 blog_bar_segs_any=16 blog_bar_segs_tenant_mkts=13 subjects={'ads:proposed': 6, 'blog:proposed': 6, 'blog:used': 1, 'email:proposed': 9, 'facebook:proposed': 2, 'instagram:proposed': 4, 'landing_page:proposed': 10, 'linkedin:proposed': 2, 'tiktok:proposed': 6} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-terra-family tour=7fe02d1a t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=41.0 t2_versions_in_window=1 atoms=39 blog_bar_segs_any=14 blog_bar_segs_tenant_mkts=14 subjects={'ads:proposed': 5, 'blog:proposed': 4, 'blog:used': 1, 'email:proposed': 4, 'facebook:proposed': 4, 'instagram:proposed': 3, 'landing_page:proposed': 3, 'linkedin:proposed': 4, 'tiktok:proposed': 3} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-terra-family tour=b56704c5 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=55.0 t2_versions_in_window=1 atoms=35 blog_bar_segs_any=10 blog_bar_segs_tenant_mkts=10 subjects={'ads:proposed': 5, 'blog:proposed': 1, 'blog:used': 1, 'email:proposed': 4, 'facebook:proposed': 5, 'instagram:proposed': 4, 'landing_page:proposed': 5, 'linkedin:proposed': 5, 'tiktok:proposed': 1} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+FUNNEL audit-terra-family pairs=12 t2_version_in_window=9 t2_ok=12 t3_passed=11 t3_escalated=1 t4_pool=12 t5_atoms=12 blog_bar_any_market=11 blog_bar_tenant_market=11 t7_blog_subject=11 t8_blog_request=11 t9_blog_piece=11 t10_blog_terminal=11 t10_blog_approved=3 export_blog_piece=11 export_t2_docx=9
+PAIR tenant=audit-trail-pulse tour=8602c1d4 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=87.0 t2_versions_in_window=1 atoms=89 blog_bar_segs_any=28 blog_bar_segs_tenant_mkts=0 subjects={'ads:proposed': 10, 'blog:proposed': 8, 'blog:used': 1, 'email:proposed': 8, 'facebook:proposed': 8, 'instagram:proposed': 5, 'landing_page:proposed': 10, 'linkedin:proposed': 8, 'tiktok:proposed': 3} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-trail-pulse tour=2cf487be t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=55.0 t2_versions_in_window=0 atoms=39 blog_bar_segs_any=5 blog_bar_segs_tenant_mkts=0 subjects={'ads:proposed': 6, 'blog:proposed': 1, 'blog:used': 1, 'email:proposed': 6, 'facebook:proposed': 2, 'instagram:proposed': 4, 'landing_page:proposed': 4, 'linkedin:proposed': 2, 'tiktok:proposed': 4, 'tiktok:used': 1} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=0
+PAIR tenant=audit-trail-pulse tour=84e392c3 t2=needs_review/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=161.0 t2_versions_in_window=0 atoms=37 blog_bar_segs_any=2 blog_bar_segs_tenant_mkts=0 subjects={'ads:proposed': 2, 'blog:used': 1, 'email:proposed': 4, 'facebook:proposed': 1, 'instagram:proposed': 1, 'landing_page:proposed': 4, 'linkedin:proposed': 1, 'tiktok:proposed': 2} requests={'blog:approved': 1} pieces={'blog:failed': 1} blog_exported=0 t2_docx_exports=0
+PAIR tenant=audit-trail-pulse tour=caf4bf16 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=134.0 t2_versions_in_window=0 atoms=52 blog_bar_segs_any=0 blog_bar_segs_tenant_mkts=0 subjects={'ads:proposed': 4, 'ads:used': 1, 'email:proposed': 2, 'email:used': 1, 'facebook:proposed': 4, 'facebook:used': 1, 'instagram:proposed': 4, 'instagram:used': 1, 'landing_page:proposed': 3, 'landing_page:used': 1, 'linkedin:proposed': 4, 'linkedin:used': 1, 'tiktok:proposed': 4} requests={} pieces={} blog_exported=0 t2_docx_exports=0
+PAIR tenant=audit-trail-pulse tour=ac574bfe t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=55.0 t2_versions_in_window=1 atoms=95 blog_bar_segs_any=18 blog_bar_segs_tenant_mkts=0 subjects={'ads:proposed': 4, 'blog:proposed': 4, 'blog:used': 1, 'email:proposed': 7, 'facebook:proposed': 3, 'instagram:proposed': 3, 'landing_page:proposed': 6, 'linkedin:proposed': 4, 'tiktok:proposed': 2} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-trail-pulse tour=56b61f58 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=64.0 t2_versions_in_window=1 atoms=68 blog_bar_segs_any=15 blog_bar_segs_tenant_mkts=0 subjects={'ads:proposed': 9, 'blog:proposed': 7, 'blog:used': 1, 'email:proposed': 11, 'facebook:proposed': 7, 'instagram:proposed': 6, 'landing_page:proposed': 10, 'linkedin:proposed': 7, 'tiktok:proposed': 6} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-trail-pulse tour=207e4efa t2=needs_review/escalated t2_repairs=1 t2_auto=True t2_job=succeeded t2_job_attempt=1 t2_run_s=88.0 t2_versions_in_window=1 atoms=83 blog_bar_segs_any=18 blog_bar_segs_tenant_mkts=0 subjects={'ads:proposed': 5, 'blog:proposed': 2, 'blog:used': 1, 'email:proposed': 6, 'facebook:proposed': 9, 'instagram:proposed': 8, 'landing_page:proposed': 5, 'linkedin:proposed': 7, 'tiktok:proposed': 6} requests={'blog:approved': 1} pieces={'blog:approved': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-trail-pulse tour=2d0ee81a t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=65.0 t2_versions_in_window=1 atoms=58 blog_bar_segs_any=15 blog_bar_segs_tenant_mkts=0 subjects={'ads:proposed': 9, 'blog:proposed': 6, 'blog:used': 1, 'email:proposed': 10, 'facebook:proposed': 12, 'instagram:proposed': 10, 'landing_page:proposed': 12, 'linkedin:proposed': 13, 'tiktok:proposed': 12} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-trail-pulse tour=c9716429 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=43.0 t2_versions_in_window=1 atoms=54 blog_bar_segs_any=13 blog_bar_segs_tenant_mkts=0 subjects={'ads:proposed': 4, 'blog:proposed': 1, 'blog:used': 1, 'email:proposed': 3, 'facebook:proposed': 1, 'instagram:proposed': 3, 'landing_page:proposed': 2, 'linkedin:proposed': 3, 'tiktok:proposed': 3} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-trail-pulse tour=a8560125 t2=needs_review/escalated t2_repairs=0 t2_auto=True t2_job=succeeded t2_job_attempt=1 t2_run_s=1.0 t2_versions_in_window=1 atoms=52 blog_bar_segs_any=16 blog_bar_segs_tenant_mkts=0 subjects={'ads:proposed': 9, 'blog:proposed': 8, 'blog:used': 1, 'email:proposed': 6, 'facebook:proposed': 4, 'instagram:proposed': 2, 'landing_page:proposed': 7, 'linkedin:proposed': 5, 'tiktok:proposed': 4} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-trail-pulse tour=7fe02d1a t2=needs_review/escalated t2_repairs=1 t2_auto=True t2_job=succeeded t2_job_attempt=1 t2_run_s=60.0 t2_versions_in_window=1 atoms=39 blog_bar_segs_any=14 blog_bar_segs_tenant_mkts=0 subjects={'ads:proposed': 3, 'blog:proposed': 4, 'blog:used': 1, 'email:proposed': 5, 'facebook:proposed': 1, 'instagram:proposed': 3, 'landing_page:proposed': 4, 'linkedin:proposed': 1, 'tiktok:proposed': 3} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-trail-pulse tour=b56704c5 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=45.0 t2_versions_in_window=1 atoms=35 blog_bar_segs_any=10 blog_bar_segs_tenant_mkts=0 subjects={'ads:proposed': 4, 'blog:used': 1, 'email:proposed': 5, 'facebook:proposed': 5, 'instagram:proposed': 7, 'landing_page:proposed': 5, 'linkedin:proposed': 3, 'tiktok:proposed': 7} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+FUNNEL audit-trail-pulse pairs=12 t2_version_in_window=9 t2_ok=12 t3_passed=9 t3_escalated=3 t4_pool=12 t5_atoms=12 blog_bar_any_market=11 blog_bar_tenant_market=0 t7_blog_subject=11 t8_blog_request=11 t9_blog_piece=11 t10_blog_terminal=10 t10_blog_approved=1 export_blog_piece=10 export_t2_docx=9
+PAIR tenant=audit-wildkind-travel tour=8602c1d4 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=94.0 t2_versions_in_window=1 atoms=89 blog_bar_segs_any=28 blog_bar_segs_tenant_mkts=28 subjects={'ads:proposed': 7, 'blog:proposed': 5, 'blog:used': 1, 'email:proposed': 8, 'facebook:proposed': 4, 'instagram:proposed': 5, 'landing_page:proposed': 8, 'linkedin:proposed': 5, 'tiktok:proposed': 9} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-wildkind-travel tour=2cf487be t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=60.0 t2_versions_in_window=0 atoms=39 blog_bar_segs_any=5 blog_bar_segs_tenant_mkts=5 subjects={'ads:proposed': 7, 'ads:used': 1, 'blog:proposed': 1, 'blog:used': 1, 'email:proposed': 5, 'email:used': 1, 'facebook:proposed': 3, 'facebook:used': 1, 'instagram:proposed': 2, 'instagram:used': 1, 'landing_page:proposed': 6, 'landing_page:used': 1, 'linkedin:proposed': 2, 'linkedin:used': 2, 'tiktok:proposed': 2} requests={'blog:approved': 1} pieces={'blog:approved': 1} blog_exported=1 t2_docx_exports=0
+PAIR tenant=audit-wildkind-travel tour=84e392c3 t2=needs_review/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=178.0 t2_versions_in_window=0 atoms=37 blog_bar_segs_any=2 blog_bar_segs_tenant_mkts=2 subjects={'ads:proposed': 11, 'email:proposed': 8, 'facebook:proposed': 4, 'instagram:proposed': 2, 'landing_page:proposed': 9, 'linkedin:proposed': 3, 'tiktok:proposed': 2} requests={} pieces={} blog_exported=0 t2_docx_exports=0
+PAIR tenant=audit-wildkind-travel tour=caf4bf16 t2=needs_review/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=235.0 t2_versions_in_window=0 atoms=52 blog_bar_segs_any=0 blog_bar_segs_tenant_mkts=0 subjects={'ads:proposed': 8, 'email:proposed': 5, 'facebook:proposed': 4, 'instagram:proposed': 6, 'landing_page:proposed': 7, 'linkedin:proposed': 5, 'tiktok:proposed': 3, 'tiktok:used': 1} requests={} pieces={} blog_exported=0 t2_docx_exports=0
+PAIR tenant=audit-wildkind-travel tour=ac574bfe t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=52.0 t2_versions_in_window=1 atoms=95 blog_bar_segs_any=18 blog_bar_segs_tenant_mkts=11 subjects={'ads:proposed': 6, 'blog:proposed': 3, 'blog:used': 1, 'email:proposed': 9, 'facebook:proposed': 3, 'instagram:proposed': 4, 'landing_page:proposed': 7, 'linkedin:proposed': 4, 'tiktok:proposed': 3} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-wildkind-travel tour=56b61f58 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=57.0 t2_versions_in_window=1 atoms=68 blog_bar_segs_any=15 blog_bar_segs_tenant_mkts=15 subjects={'ads:proposed': 9, 'blog:proposed': 7, 'blog:used': 1, 'email:proposed': 12, 'facebook:proposed': 7, 'instagram:proposed': 7, 'landing_page:proposed': 11, 'linkedin:proposed': 7, 'tiktok:proposed': 6} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-wildkind-travel tour=207e4efa t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=55.0 t2_versions_in_window=1 atoms=83 blog_bar_segs_any=18 blog_bar_segs_tenant_mkts=18 subjects={'ads:proposed': 7, 'blog:proposed': 3, 'blog:used': 1, 'email:proposed': 6, 'facebook:proposed': 9, 'instagram:proposed': 4, 'landing_page:proposed': 6, 'linkedin:proposed': 9, 'tiktok:proposed': 4} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-wildkind-travel tour=2d0ee81a t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=125.0 t2_versions_in_window=1 atoms=58 blog_bar_segs_any=15 blog_bar_segs_tenant_mkts=15 subjects={'ads:proposed': 6, 'blog:proposed': 3, 'blog:used': 1, 'email:proposed': 7, 'facebook:proposed': 5, 'instagram:proposed': 8, 'landing_page:proposed': 7, 'linkedin:proposed': 5, 'tiktok:proposed': 10} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-wildkind-travel tour=c9716429 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=49.0 t2_versions_in_window=1 atoms=54 blog_bar_segs_any=13 blog_bar_segs_tenant_mkts=13 subjects={'ads:proposed': 2, 'blog:proposed': 1, 'blog:used': 1, 'email:proposed': 3, 'facebook:proposed': 3, 'instagram:proposed': 3, 'landing_page:proposed': 3, 'linkedin:proposed': 3, 'tiktok:proposed': 5} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-wildkind-travel tour=a8560125 t2=needs_review/escalated t2_repairs=0 t2_auto=True t2_job=succeeded t2_job_attempt=1 t2_run_s=1.0 t2_versions_in_window=1 atoms=52 blog_bar_segs_any=16 blog_bar_segs_tenant_mkts=16 subjects={'ads:proposed': 5, 'blog:proposed': 6, 'blog:used': 1, 'email:proposed': 5, 'facebook:proposed': 3, 'instagram:proposed': 3, 'landing_page:proposed': 6, 'linkedin:proposed': 3, 'tiktok:proposed': 1} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-wildkind-travel tour=7fe02d1a t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=42.0 t2_versions_in_window=1 atoms=39 blog_bar_segs_any=14 blog_bar_segs_tenant_mkts=12 subjects={'ads:proposed': 5, 'blog:proposed': 5, 'blog:used': 1, 'email:proposed': 3, 'facebook:proposed': 4, 'instagram:proposed': 4, 'landing_page:proposed': 3, 'linkedin:proposed': 4, 'tiktok:proposed': 2} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+PAIR tenant=audit-wildkind-travel tour=b56704c5 t2=ai_generated/passed t2_repairs=0 t2_auto=False t2_job=succeeded t2_job_attempt=1 t2_run_s=48.0 t2_versions_in_window=1 atoms=35 blog_bar_segs_any=10 blog_bar_segs_tenant_mkts=7 subjects={'ads:proposed': 6, 'blog:proposed': 2, 'blog:used': 1, 'email:proposed': 6, 'facebook:proposed': 6, 'instagram:proposed': 6, 'landing_page:proposed': 5, 'linkedin:proposed': 5, 'tiktok:proposed': 3} requests={'blog:approved': 1} pieces={'blog:held': 1} blog_exported=1 t2_docx_exports=1
+FUNNEL audit-wildkind-travel pairs=12 t2_version_in_window=9 t2_ok=12 t3_passed=11 t3_escalated=1 t4_pool=12 t5_atoms=12 blog_bar_any_market=11 blog_bar_tenant_market=11 t7_blog_subject=10 t8_blog_request=10 t9_blog_piece=10 t10_blog_terminal=10 t10_blog_approved=1 export_blog_piece=10 export_t2_docx=9
+JOB kind=t2_rewrite tenant=audit-terra-family status=succeeded n=9 retried=0 max_attempt=1 run_s_p50=55.3 run_s_p90=74.1 run_s_max=102.3 wait_s_p50=4.1 wait_s_p90=4.5 job_cost_usd=0.0
+JOB kind=t2_rewrite tenant=audit-atlas-hearth status=succeeded n=9 retried=0 max_attempt=1 run_s_p50=52.4 run_s_p90=76.2 run_s_max=79.4 wait_s_p50=2.6 wait_s_p90=3.2 job_cost_usd=0.0
+JOB kind=t2_rewrite tenant=audit-wildkind-travel status=succeeded n=9 retried=0 max_attempt=1 run_s_p50=51.6 run_s_p90=100.1 run_s_max=124.6 wait_s_p50=2.1 wait_s_p90=3.1 job_cost_usd=0.0
+JOB kind=t2_rewrite tenant=audit-trail-pulse status=succeeded n=9 retried=0 max_attempt=1 run_s_p50=60.3 run_s_p90=86.9 run_s_max=87.5 wait_s_p50=2.3 wait_s_p90=3.4 job_cost_usd=0.0
+JOB kind=t7_slate tenant=audit-terra-family status=succeeded n=3 retried=0 max_attempt=1 run_s_p50=246.8 run_s_p90=411.4 run_s_max=452.6 wait_s_p50=1.8 wait_s_p90=4.1 job_cost_usd=0.0
+JOB kind=t7_slate tenant=audit-atlas-hearth status=succeeded n=3 retried=0 max_attempt=1 run_s_p50=229.4 run_s_p90=377.1 run_s_max=414.0 wait_s_p50=0.1 wait_s_p90=3.2 job_cost_usd=0.0
+JOB kind=t7_slate tenant=audit-wildkind-travel status=succeeded n=3 retried=0 max_attempt=1 run_s_p50=194.2 run_s_p90=381.5 run_s_max=428.3 wait_s_p50=3.1 wait_s_p90=4.6 job_cost_usd=0.0
+JOB kind=t7_slate tenant=audit-trail-pulse status=succeeded n=3 retried=0 max_attempt=1 run_s_p50=234.6 run_s_p90=388.1 run_s_max=426.5 wait_s_p50=3.6 wait_s_p90=3.7 job_cost_usd=0.0
+JOB kind=t8_angles tenant=audit-terra-family status=succeeded n=7 retried=0 max_attempt=1 run_s_p50=24.5 run_s_p90=27.4 run_s_max=29.9 wait_s_p50=2.8 wait_s_p90=4.6 job_cost_usd=0.0
+JOB kind=t8_angles tenant=audit-atlas-hearth status=succeeded n=6 retried=0 max_attempt=1 run_s_p50=24.4 run_s_p90=35.9 run_s_max=42.0 wait_s_p50=1.3 wait_s_p90=2.3 job_cost_usd=0.0
+JOB kind=t8_angles tenant=audit-wildkind-travel status=succeeded n=8 retried=0 max_attempt=1 run_s_p50=25.4 run_s_p90=36.5 run_s_max=52.2 wait_s_p50=1.5 wait_s_p90=2.9 job_cost_usd=0.0
+JOB kind=t8_angles tenant=audit-trail-pulse status=succeeded n=7 retried=0 max_attempt=1 run_s_p50=22.7 run_s_p90=24.4 run_s_max=25.7 wait_s_p50=2.9 wait_s_p90=4.0 job_cost_usd=0.0
+JOB kind=t9_write tenant=audit-terra-family status=succeeded n=7 retried=0 max_attempt=1 run_s_p50=142.5 run_s_p90=161.4 run_s_max=162.8 wait_s_p50=2.9 wait_s_p90=4.2 job_cost_usd=0.0
+JOB kind=t9_write tenant=audit-atlas-hearth status=succeeded n=6 retried=0 max_attempt=1 run_s_p50=145.1 run_s_p90=166.2 run_s_max=167.5 wait_s_p50=3.0 wait_s_p90=3.5 job_cost_usd=0.0
+JOB kind=t9_write tenant=audit-wildkind-travel status=succeeded n=8 retried=0 max_attempt=1 run_s_p50=155.6 run_s_p90=168.2 run_s_max=177.7 wait_s_p50=3.4 wait_s_p90=4.7 job_cost_usd=0.0
+JOB kind=t9_write tenant=audit-trail-pulse status=succeeded n=7 retried=0 max_attempt=1 run_s_p50=137.0 run_s_p90=159.0 run_s_max=160.3 wait_s_p50=2.2 wait_s_p90=3.1 job_cost_usd=0.0
+JOB_KIND kind=t2_rewrite stage=T2+T3 rewrite/QA n=36 ok=36 failed=0 open=0 stopped=0 retried=0 ok_after_error=0 run50=55.1 run90=87.1 wait50=2.7 wait90=4.4
+JOB_KIND kind=t7_slate stage=T7 slate n=12 ok=12 failed=0 open=0 stopped=0 retried=0 ok_after_error=0 run50=232.0 run90=428.1 wait50=2.6 wait90=4.6
+JOB_KIND kind=t8_angles stage=T8 angle n=28 ok=28 failed=0 open=0 stopped=0 retried=0 ok_after_error=0 run50=24.3 run90=29.8 wait50=2.0 wait90=4.0
+JOB_KIND kind=t9_write stage=T9 write + T10 gates n=28 ok=28 failed=0 open=0 stopped=0 retried=0 ok_after_error=0 run50=143.0 run90=164.4 wait50=2.8 wait90=4.2
+JOB_LLM kind=t2_rewrite jobs=36 calls_p50=2.0 calls_p90=4.0 calls_max=5 usd_p50=0.0782 usd_p90=0.0966 usd_sum=2.8059
+JOB_LLM kind=t7_slate jobs=12 calls_p50=81.0 calls_p90=165.0 calls_max=165 usd_p50=0.0094 usd_p90=0.019 usd_sum=0.1416
+JOB_LLM kind=t8_angles jobs=28 calls_p50=1.0 calls_p90=1.0 calls_max=2 usd_p50=0.0377 usd_p90=0.0441 usd_sum=1.1208
+JOB_LLM kind=t9_write jobs=28 calls_p50=10.5 calls_p90=12.0 calls_max=12 usd_p50=0.0986 usd_p90=0.1236 usd_sum=2.7065
+JOB_RESULT kind=t2_rewrite key=brand_loaded {"n": 36, "true": 36}
+JOB_RESULT kind=t2_rewrite key=em_dashes.after {"n": 4, "mean": 0.0, "p50": 0.0, "max": 0.0}
+JOB_RESULT kind=t2_rewrite key=em_dashes.before {"n": 4, "mean": 0.0, "p50": 0.0, "max": 0.0}
+JOB_RESULT kind=t2_rewrite key=em_dashes.fields[] {"n": 8, "mean": 1.5, "p50": 3.0, "max": 3.0}
+JOB_RESULT kind=t2_rewrite key=em_dashes.fixed_in_t3 {"n": 4, "mean": 2.0, "p50": 2.0, "max": 2.0}
+JOB_RESULT kind=t2_rewrite key=facts.mode {"n": 36, "values": {"off": 36}}
+JOB_RESULT kind=t2_rewrite key=final_contract.agrees {"n": 32, "true": 31}
+JOB_RESULT kind=t2_rewrite key=final_contract.flip {"n": 1, "values": {"unpublish": 1}}
+JOB_RESULT kind=t2_rewrite key=final_contract.sha_match {"n": 32, "true": 32}
+JOB_RESULT kind=t2_rewrite key=final_contract.verdict {"n": 32, "values": {"ai_generated": 29, "needs_review": 2, "policy_hold": 1}}
+JOB_RESULT kind=t2_rewrite key=judge.binding {"n": 4, "values": {"brand_fit": 4}}
+JOB_RESULT kind=t2_rewrite key=judge.brand_claims_unsupported {"n": 4, "mean": 0.0, "p50": 0.0, "max": 0.0}
+JOB_RESULT kind=t2_rewrite key=market {"n": 32, "values": {"US": 24, "UK": 8}}
+JOB_RESULT kind=t2_rewrite key=policy_hold.hits[] {"n": 4, "mean": 3.0, "p50": 3.0, "max": 3.0}
+JOB_RESULT kind=t2_rewrite key=policy_hold.llm_calls {"n": 4, "mean": 0.0, "p50": 0.0, "max": 0.0}
+JOB_RESULT kind=t2_rewrite key=policy_hold.reason {"n": 4, "values": {"elephant_riding": 4}}
+JOB_RESULT kind=t2_rewrite key=qa_status {"n": 36, "values": {"passed": 30, "escalated": 6}}
+JOB_RESULT kind=t2_rewrite key=route_degraded.entries[] {"n": 32, "mean": 1.0, "p50": 1.0, "max": 1.0}
+JOB_RESULT kind=t2_rewrite key=score {"n": 32, "mean": 9.954, "p50": 10.0, "max": 10.0}
+JOB_RESULT kind=t2_rewrite key=seo_keywords.in {"n": 32, "mean": 10.0, "p50": 10.0, "max": 10.0}
+JOB_RESULT kind=t2_rewrite key=seo_keywords.kept {"n": 32, "mean": 5.0, "p50": 5.0, "max": 5.0}
+JOB_RESULT kind=t2_rewrite key=seo_keywords.language_blocked {"n": 32, "true": 0}
+JOB_RESULT kind=t2_rewrite key=seo_source {"n": 32, "values": {"tenant_market": 32}}
+JOB_RESULT kind=t2_rewrite key=t2_orchestrator.resumed {"n": 28, "true": 0}
+JOB_RESULT kind=t2_rewrite key=t2_orchestrator.status {"n": 28, "values": {"ai_generated": 26, "needs_review": 2}}
+JOB_RESULT kind=t2_rewrite key=t2_orchestrator.version {"n": 28, "values": {"t2-linear-1": 28}}
+JOB_RESULT kind=t2_rewrite key=t3.background_cleared {"n": 4, "mean": 0.0, "p50": 0.0, "max": 0.0}
+JOB_RESULT kind=t2_rewrite key=t3.best_draft_restored {"n": 4, "true": 0}
+JOB_RESULT kind=t2_rewrite key=t3.chosen_attempt {"n": 32, "mean": 0.062, "p50": 0.0, "max": 1.0}
+JOB_RESULT kind=t2_rewrite key=t3.chosen_via {"n": 32, "values": {"initial": 30, "field_regen": 2}}
+JOB_RESULT kind=t2_rewrite key=t3.degraded[] {"n": 32, "mean": 0.0, "p50": 0.0, "max": 0.0}
+JOB_RESULT kind=t2_rewrite key=t3.drafts[] {"n": 4, "mean": 1.0, "p50": 1.0, "max": 1.0}
+JOB_RESULT kind=t2_rewrite key=t3.graph_degraded[] {"n": 4, "mean": 0.25, "p50": 0.0, "max": 1.0}
+JOB_RESULT kind=t2_rewrite key=t3.graph_draft_scores[] {"n": 4, "mean": 1.0, "p50": 1.0, "max": 1.0}
+JOB_RESULT kind=t2_rewrite key=t3.sentence_repairs {"n": 32, "mean": 0.0, "p50": 0.0, "max": 0.0}
+JOB_RESULT kind=t2_rewrite key=version_status {"n": 36, "values": {"ai_generated": 30, "needs_review": 6}}
+JOB_RESULT kind=t2_rewrite key=writing_release.ignored {"n": 32, "true": 0}
+JOB_RESULT kind=t2_rewrite key=writing_release.tenant {"n": 32, "all_null": true}
+JOB_RESULT kind=t2_rewrite key=writing_release.writer {"n": 32, "values": {"t2": 32}}
+JOB_RESULT kind=t7_slate key=channels[] {"n": 12, "mean": 8.0, "p50": 8.0, "max": 8.0}
+JOB_RESULT kind=t7_slate key=proposed_per_channel.ads {"n": 12, "mean": 52.75, "p50": 62.0, "max": 77.0}
+JOB_RESULT kind=t7_slate key=proposed_per_channel.blog {"n": 12, "mean": 22.25, "p50": 26.0, "max": 40.0}
+JOB_RESULT kind=t7_slate key=proposed_per_channel.email {"n": 12, "mean": 53.5, "p50": 63.0, "max": 78.0}
+JOB_RESULT kind=t7_slate key=proposed_per_channel.facebook {"n": 12, "mean": 36.833, "p50": 42.0, "max": 56.0}
+JOB_RESULT kind=t7_slate key=proposed_per_channel.instagram {"n": 12, "mean": 36.583, "p50": 42.0, "max": 56.0}
+JOB_RESULT kind=t7_slate key=proposed_per_channel.landing_page {"n": 12, "mean": 53.25, "p50": 62.0, "max": 78.0}
+JOB_RESULT kind=t7_slate key=proposed_per_channel.linkedin {"n": 12, "mean": 37.083, "p50": 42.0, "max": 56.0}
+JOB_RESULT kind=t7_slate key=proposed_per_channel.tiktok {"n": 12, "mean": 36.25, "p50": 41.0, "max": 55.0}
+JOB_RESULT kind=t7_slate key=routes_seen {"n": 12, "mean": 0.0, "p50": 0.0, "max": 0.0}
+JOB_RESULT kind=t7_slate key=segments_seen {"n": 12, "mean": 129.167, "p50": 142.0, "max": 186.0}
+JOB_RESULT kind=t7_slate key=unmatched_markets[] {"n": 12, "mean": 0.0, "p50": 0.0, "max": 0.0}
+JOB_RESULT kind=t8_angles key=angles {"n": 28, "mean": 3.0, "p50": 3.0, "max": 3.0}
+JOB_RESULT kind=t8_angles key=recommended_index {"n": 28, "mean": 0.464, "p50": 0.0, "max": 2.0}
+JOB_RESULT kind=t9_write key=piece_status {"n": 28, "values": {"held": 20, "approved": 7, "failed": 1}}
+LLM_STAGE stage=f10_embed tenant=audit-terra-family calls=13 usd=0.0018 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=382.0 latency_ms_p90=408.0
+LLM_STAGE stage=f10_embed tenant=audit-atlas-hearth calls=11 usd=0.0014 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=390.0 latency_ms_p90=507.0
+LLM_STAGE stage=f10_embed tenant=audit-wildkind-travel calls=16 usd=0.0021 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=365.0 latency_ms_p90=737.0
+LLM_STAGE stage=f10_embed tenant=audit-trail-pulse calls=12 usd=0.0015 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=408.0 latency_ms_p90=982.0
+LLM_STAGE stage=t10_judge tenant=audit-terra-family calls=13 usd=0.0199 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=13 no_job_id=0 latency_ms_p50=20228.0 latency_ms_p90=26991.0
+LLM_STAGE stage=t10_judge tenant=audit-atlas-hearth calls=11 usd=0.0167 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=11 no_job_id=0 latency_ms_p50=21947.0 latency_ms_p90=33784.0
+LLM_STAGE stage=t10_judge tenant=audit-wildkind-travel calls=16 usd=0.0266 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=16 no_job_id=0 latency_ms_p50=19258.0 latency_ms_p90=29286.0
+LLM_STAGE stage=t10_judge tenant=audit-trail-pulse calls=12 usd=0.0192 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=12 no_job_id=0 latency_ms_p50=18362.0 latency_ms_p90=28047.0
+LLM_STAGE stage=t2_flag_fix tenant=audit-terra-family calls=2 usd=0.0062 not_ok=1 max_tokens=1 attempt_no_gt1=0 truncation_retry=1 fallback=0 no_job_id=0 latency_ms_p50=20318.0 latency_ms_p90=22916.0
+LLM_STAGE stage=t2_flag_fix tenant=audit-wildkind-travel calls=2 usd=0.0072 not_ok=2 max_tokens=2 attempt_no_gt1=0 truncation_retry=1 fallback=0 no_job_id=0 latency_ms_p50=21635.0 latency_ms_p90=25965.0
+LLM_STAGE stage=t2_flag_fix tenant=audit-trail-pulse calls=2 usd=0.0064 not_ok=1 max_tokens=1 attempt_no_gt1=0 truncation_retry=1 fallback=0 no_job_id=0 latency_ms_p50=18248.0 latency_ms_p90=20743.0
+LLM_STAGE stage=t2_generate tenant=audit-terra-family calls=8 usd=0.6345 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=37816.0 latency_ms_p90=43032.0
+LLM_STAGE stage=t2_generate tenant=audit-atlas-hearth calls=8 usd=0.6262 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=36171.0 latency_ms_p90=47780.0
+LLM_STAGE stage=t2_generate tenant=audit-wildkind-travel calls=9 usd=0.7471 not_ok=1 max_tokens=1 attempt_no_gt1=0 truncation_retry=1 fallback=0 no_job_id=0 latency_ms_p50=37228.0 latency_ms_p90=53262.0
+LLM_STAGE stage=t2_generate tenant=audit-trail-pulse calls=10 usd=0.7534 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=33530.0 latency_ms_p90=45165.0
+LLM_STAGE stage=t2_itinerary_nudge tenant=audit-terra-family calls=3 usd=0.0014 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=3652.0 latency_ms_p90=3786.0
+LLM_STAGE stage=t2_itinerary_nudge tenant=audit-atlas-hearth calls=2 usd=0.0015 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=5537.0 latency_ms_p90=6811.0
+LLM_STAGE stage=t2_judge tenant=audit-terra-family calls=8 usd=0.0059 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=8 no_job_id=0 latency_ms_p50=11370.0 latency_ms_p90=15409.0
+LLM_STAGE stage=t2_judge tenant=audit-atlas-hearth calls=10 usd=0.0055 not_ok=2 max_tokens=0 attempt_no_gt1=2 truncation_retry=0 fallback=8 no_job_id=0 latency_ms_p50=8259.0 latency_ms_p90=12284.0
+LLM_STAGE stage=t2_judge tenant=audit-wildkind-travel calls=8 usd=0.0051 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=8 no_job_id=0 latency_ms_p50=8540.0 latency_ms_p90=9689.0
+LLM_STAGE stage=t2_judge tenant=audit-trail-pulse calls=8 usd=0.0056 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=8 no_job_id=0 latency_ms_p50=9941.0 latency_ms_p90=12086.0
+LLM_STAGE stage=t7_debate_judge tenant=audit-terra-family calls=305 usd=0.0359 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=305 no_job_id=0 latency_ms_p50=2428.0 latency_ms_p90=3415.0
+LLM_STAGE stage=t7_debate_judge tenant=audit-atlas-hearth calls=305 usd=0.0352 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=305 no_job_id=0 latency_ms_p50=2170.0 latency_ms_p90=3240.0
+LLM_STAGE stage=t7_debate_judge tenant=audit-wildkind-travel calls=305 usd=0.0351 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=305 no_job_id=0 latency_ms_p50=2026.0 latency_ms_p90=2593.0
+LLM_STAGE stage=t7_debate_judge tenant=audit-trail-pulse calls=305 usd=0.0353 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=305 no_job_id=0 latency_ms_p50=2312.0 latency_ms_p90=3193.0
+LLM_STAGE stage=t8_angle_gen tenant=audit-terra-family calls=7 usd=0.268 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=23123.0 latency_ms_p90=25420.0
+LLM_STAGE stage=t8_angle_gen tenant=audit-atlas-hearth calls=7 usd=0.2503 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=21284.0 latency_ms_p90=23878.0
+LLM_STAGE stage=t8_angle_gen tenant=audit-wildkind-travel calls=9 usd=0.345 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=23329.0 latency_ms_p90=28497.0
+LLM_STAGE stage=t8_angle_gen tenant=audit-trail-pulse calls=7 usd=0.2576 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=20829.0 latency_ms_p90=22612.0
+LLM_STAGE stage=t9_faq_answer_fit tenant=audit-terra-family calls=7 usd=0.0295 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=1857.0 latency_ms_p90=2328.0
+LLM_STAGE stage=t9_faq_answer_fit tenant=audit-atlas-hearth calls=6 usd=0.0297 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=2112.0 latency_ms_p90=3825.0
+LLM_STAGE stage=t9_faq_answer_fit tenant=audit-wildkind-travel calls=8 usd=0.038 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=2026.0 latency_ms_p90=2870.0
+LLM_STAGE stage=t9_faq_answer_fit tenant=audit-trail-pulse calls=6 usd=0.0262 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=1955.0 latency_ms_p90=2160.0
+LLM_STAGE stage=t9_faq_filter tenant=audit-terra-family calls=7 usd=0.013 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=11629.0 latency_ms_p90=12467.0
+LLM_STAGE stage=t9_faq_filter tenant=audit-atlas-hearth calls=6 usd=0.0116 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=12408.0 latency_ms_p90=14301.0
+LLM_STAGE stage=t9_faq_filter tenant=audit-wildkind-travel calls=8 usd=0.0144 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=11777.0 latency_ms_p90=13057.0
+LLM_STAGE stage=t9_faq_filter tenant=audit-trail-pulse calls=7 usd=0.0129 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=11503.0 latency_ms_p90=12713.0
+LLM_STAGE stage=t9_repair tenant=audit-terra-family calls=18 usd=0.0327 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=9816.0 latency_ms_p90=19603.0
+LLM_STAGE stage=t9_repair tenant=audit-atlas-hearth calls=17 usd=0.0317 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=15565.0 latency_ms_p90=19534.0
+LLM_STAGE stage=t9_repair tenant=audit-wildkind-travel calls=21 usd=0.042 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=14617.0 latency_ms_p90=18950.0
+LLM_STAGE stage=t9_repair tenant=audit-trail-pulse calls=17 usd=0.0265 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=11665.0 latency_ms_p90=14789.0
+LLM_STAGE stage=t9_write tenant=audit-terra-family calls=12 usd=0.5212 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=16032.0 latency_ms_p90=18482.0
+LLM_STAGE stage=t9_write tenant=audit-atlas-hearth calls=10 usd=0.4653 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=14480.0 latency_ms_p90=16187.0
+LLM_STAGE stage=t9_write tenant=audit-wildkind-travel calls=16 usd=0.7235 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=14010.0 latency_ms_p90=16627.0
+LLM_STAGE stage=t9_write tenant=audit-trail-pulse calls=12 usd=0.5992 not_ok=0 max_tokens=0 attempt_no_gt1=0 truncation_retry=0 fallback=0 no_job_id=0 latency_ms_p50=14842.0 latency_ms_p90=17322.0
+LLM_HEALTH stage=f10_embed status=ok error_class=- stop_reason=- n=52
+LLM_HEALTH stage=t10_judge status=ok error_class=- stop_reason=stop n=52
+LLM_HEALTH stage=t2_flag_fix status=billed_unusable error_class=- stop_reason=max_tokens n=3
+LLM_HEALTH stage=t2_flag_fix status=ok error_class=- stop_reason=end_turn n=2
+LLM_HEALTH stage=t2_flag_fix status=truncated error_class=truncated stop_reason=max_tokens n=1
+LLM_HEALTH stage=t2_generate status=ok error_class=- stop_reason=end_turn n=34
+LLM_HEALTH stage=t2_generate status=truncated error_class=truncated stop_reason=max_tokens n=1
+LLM_HEALTH stage=t2_itinerary_nudge status=ok error_class=- stop_reason=end_turn n=5
+LLM_HEALTH stage=t2_judge status=ok error_class=- stop_reason=stop n=32
+LLM_HEALTH stage=t2_judge status=refused error_class=access_denied stop_reason=- n=2
+LLM_HEALTH stage=t7_debate_judge status=ok error_class=- stop_reason=stop n=1220
+LLM_HEALTH stage=t8_angle_gen status=ok error_class=- stop_reason=end_turn n=30
+LLM_HEALTH stage=t9_faq_answer_fit status=ok error_class=- stop_reason=end_turn n=27
+LLM_HEALTH stage=t9_faq_filter status=ok error_class=- stop_reason=end_turn n=28
+LLM_HEALTH stage=t9_repair status=ok error_class=- stop_reason=end_turn n=73
+LLM_HEALTH stage=t9_write status=ok error_class=- stop_reason=end_turn n=50
+LLM_NOJOB tenant_null_rows_of_audit_jobs=0 usd=0.0 shadow_rows=122
+T7_SUBJECTS tenant=audit-terra-family channel=ads state=proposed total=67 created_in_window=60 route_grain=0
+T7_SUBJECTS tenant=audit-terra-family channel=ads state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-terra-family channel=blog state=proposed total=28 created_in_window=28 route_grain=0
+T7_SUBJECTS tenant=audit-terra-family channel=blog state=used total=8 created_in_window=7 route_grain=1
+T7_SUBJECTS tenant=audit-terra-family channel=email state=proposed total=67 created_in_window=58 route_grain=0
+T7_SUBJECTS tenant=audit-terra-family channel=email state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-terra-family channel=facebook state=proposed total=55 created_in_window=54 route_grain=0
+T7_SUBJECTS tenant=audit-terra-family channel=facebook state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-terra-family channel=instagram state=proposed total=55 created_in_window=55 route_grain=0
+T7_SUBJECTS tenant=audit-terra-family channel=instagram state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-terra-family channel=landing_page state=proposed total=67 created_in_window=59 route_grain=0
+T7_SUBJECTS tenant=audit-terra-family channel=landing_page state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-terra-family channel=linkedin state=proposed total=55 created_in_window=54 route_grain=0
+T7_SUBJECTS tenant=audit-terra-family channel=linkedin state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-terra-family channel=tiktok state=proposed total=54 created_in_window=53 route_grain=0
+T7_SUBJECTS tenant=audit-terra-family channel=tiktok state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=ads state=proposed total=76 created_in_window=67 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=ads state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=blog state=proposed total=31 created_in_window=31 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=blog state=used total=9 created_in_window=6 route_grain=2
+T7_SUBJECTS tenant=audit-atlas-hearth channel=email state=proposed total=77 created_in_window=65 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=email state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=facebook state=proposed total=51 created_in_window=51 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=facebook state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=instagram state=proposed total=50 created_in_window=49 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=instagram state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=landing_page state=proposed total=77 created_in_window=66 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=landing_page state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=linkedin state=picked total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=linkedin state=proposed total=50 created_in_window=49 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=linkedin state=used total=2 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=tiktok state=proposed total=50 created_in_window=48 route_grain=0
+T7_SUBJECTS tenant=audit-atlas-hearth channel=tiktok state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=ads state=proposed total=74 created_in_window=62 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=ads state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=blog state=picked total=1 created_in_window=0 route_grain=1
+T7_SUBJECTS tenant=audit-wildkind-travel channel=blog state=proposed total=33 created_in_window=33 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=blog state=used total=8 created_in_window=8 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=email state=proposed total=75 created_in_window=65 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=email state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=facebook state=proposed total=51 created_in_window=51 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=facebook state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=instagram state=proposed total=50 created_in_window=49 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=instagram state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=landing_page state=proposed total=74 created_in_window=61 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=landing_page state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=linkedin state=proposed total=50 created_in_window=48 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=linkedin state=used total=2 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=tiktok state=proposed total=50 created_in_window=49 route_grain=0
+T7_SUBJECTS tenant=audit-wildkind-travel channel=tiktok state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-trail-pulse channel=ads state=proposed total=66 created_in_window=58 route_grain=0
+T7_SUBJECTS tenant=audit-trail-pulse channel=ads state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-trail-pulse channel=blog state=proposed total=39 created_in_window=39 route_grain=0
+T7_SUBJECTS tenant=audit-trail-pulse channel=blog state=used total=8 created_in_window=7 route_grain=1
+T7_SUBJECTS tenant=audit-trail-pulse channel=email state=proposed total=67 created_in_window=60 route_grain=0
+T7_SUBJECTS tenant=audit-trail-pulse channel=email state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-trail-pulse channel=facebook state=proposed total=52 created_in_window=50 route_grain=0
+T7_SUBJECTS tenant=audit-trail-pulse channel=facebook state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-trail-pulse channel=instagram state=proposed total=52 created_in_window=52 route_grain=0
+T7_SUBJECTS tenant=audit-trail-pulse channel=instagram state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-trail-pulse channel=landing_page state=proposed total=67 created_in_window=60 route_grain=0
+T7_SUBJECTS tenant=audit-trail-pulse channel=landing_page state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-trail-pulse channel=linkedin state=proposed total=54 created_in_window=52 route_grain=0
+T7_SUBJECTS tenant=audit-trail-pulse channel=linkedin state=used total=1 created_in_window=0 route_grain=0
+T7_SUBJECTS tenant=audit-trail-pulse channel=tiktok state=proposed total=52 created_in_window=51 route_grain=0
+T7_SUBJECTS tenant=audit-trail-pulse channel=tiktok state=used total=1 created_in_window=0 route_grain=0
+T8_REQ tenant=audit-terra-family channel=blog status=approved goal=introduction_awareness n=7 no_subject=0 no_piece=0
+T8_REQ tenant=audit-atlas-hearth channel=blog status=approved goal=introduction_awareness n=6 no_subject=0 no_piece=0
+T8_REQ tenant=audit-wildkind-travel channel=blog status=approved goal=introduction_awareness n=8 no_subject=0 no_piece=0
+T8_REQ tenant=audit-trail-pulse channel=blog status=approved goal=introduction_awareness n=7 no_subject=0 no_piece=0
+T8_OPTIONS tenant=audit-terra-family options=3 chosen=1 recommended=1 requests=7
+T8_OPTIONS tenant=audit-atlas-hearth options=3 chosen=1 recommended=1 requests=6
+T8_OPTIONS tenant=audit-wildkind-travel options=3 chosen=1 recommended=1 requests=8
+T8_OPTIONS tenant=audit-trail-pulse options=3 chosen=1 recommended=1 requests=7
+TEST_EXCLUDED test_flagged_pieces_all_time=0 in_window=0
+T9_PIECES tenant=audit-terra-family channel=blog status=approved n=3 held_reason_set=0 no_job_id=0
+T9_PIECES tenant=audit-terra-family channel=blog status=held n=4 held_reason_set=4 no_job_id=0
+T9_PIECES tenant=audit-atlas-hearth channel=blog status=approved n=2 held_reason_set=0 no_job_id=0
+T9_PIECES tenant=audit-atlas-hearth channel=blog status=held n=4 held_reason_set=4 no_job_id=0
+T9_PIECES tenant=audit-wildkind-travel channel=blog status=approved n=1 held_reason_set=0 no_job_id=0
+T9_PIECES tenant=audit-wildkind-travel channel=blog status=held n=7 held_reason_set=7 no_job_id=0
+T9_PIECES tenant=audit-trail-pulse channel=blog status=approved n=1 held_reason_set=0 no_job_id=0
+T9_PIECES tenant=audit-trail-pulse channel=blog status=failed n=1 held_reason_set=1 no_job_id=0
+T9_PIECES tenant=audit-trail-pulse channel=blog status=held n=5 held_reason_set=5 no_job_id=0
+T9_SHAPE tenant=audit-terra-family channel=blog pieces=7 attempt_avg=1.86 attempt_max=2 repair_log_avg=3.0 repair_log_max=4 discarded_avg=0.86 ledger_entries_avg=23.0 chars_avg=4957.0
+T9_SHAPE tenant=audit-atlas-hearth channel=blog pieces=6 attempt_avg=1.83 attempt_max=2 repair_log_avg=3.33 repair_log_max=5 discarded_avg=0.83 ledger_entries_avg=23.0 chars_avg=4173.0
+T9_SHAPE tenant=audit-wildkind-travel channel=blog pieces=8 attempt_avg=2.0 attempt_max=2 repair_log_avg=4.0 repair_log_max=5 discarded_avg=1.0 ledger_entries_avg=23.0 chars_avg=4333.0
+T9_SHAPE tenant=audit-trail-pulse channel=blog pieces=7 attempt_avg=1.86 attempt_max=2 repair_log_avg=3.43 repair_log_max=5 discarded_avg=0.86 ledger_entries_avg=19.71 chars_avg=3530.0
+T10_HOLD tenant=audit-atlas-hearth channel=blog status=held pieces=4 gate:F4_extreme_length=3 code:length=3 gate:F13_repeat=1 code:text_hygiene=1 gate:F17_trip_fact=1 code:unsupported_trip_fact=1
+T10_HOLD tenant=audit-terra-family channel=blog status=held pieces=4 gate:F17_trip_fact=2 code:unsupported_trip_fact=2 gate:F13_repeat=1 code:text_hygiene=1 gate:F9_cta_fact=1 code:unsupported_trip_promise=1 gate:F4_extreme_length=1 code:length=1
+T10_HOLD tenant=audit-trail-pulse channel=blog status=failed pieces=1
+T10_HOLD tenant=audit-trail-pulse channel=blog status=held pieces=5 gate:F4_extreme_length=5 code:length=5 gate:F13_repeat=1 code:text_hygiene=1 gate:F9_cta_fact=1 code:unsupported_trip_promise=1
+T10_HOLD tenant=audit-wildkind-travel channel=blog status=held pieces=7 gate:F17_trip_fact=4 code:unsupported_trip_fact=4 gate:F4_extreme_length=4 code:length=4 gate:F13_repeat=1 code:text_hygiene=1
+EXPORT tenant=audit-terra-family action=content_piece.exported channel=blog format=html mode=document n=7 distinct_objects=7
+EXPORT tenant=audit-terra-family action=content_piece.exported channel=blog format=html mode=fragment n=7 distinct_objects=7
+EXPORT tenant=audit-terra-family action=content_piece.exported channel=blog format=text mode=- n=7 distinct_objects=7
+EXPORT tenant=audit-terra-family action=tenant_tour_version.exported channel=- format=docx mode=- n=9 distinct_objects=9
+EXPORT tenant=audit-atlas-hearth action=content_piece.exported channel=blog format=html mode=document n=6 distinct_objects=6
+EXPORT tenant=audit-atlas-hearth action=content_piece.exported channel=blog format=html mode=fragment n=6 distinct_objects=6
+EXPORT tenant=audit-atlas-hearth action=content_piece.exported channel=blog format=text mode=- n=6 distinct_objects=6
+EXPORT tenant=audit-atlas-hearth action=tenant_tour_version.exported channel=- format=docx mode=- n=9 distinct_objects=9
+EXPORT tenant=audit-wildkind-travel action=content_piece.exported channel=blog format=html mode=document n=8 distinct_objects=8
+EXPORT tenant=audit-wildkind-travel action=content_piece.exported channel=blog format=html mode=fragment n=8 distinct_objects=8
+EXPORT tenant=audit-wildkind-travel action=content_piece.exported channel=blog format=text mode=- n=8 distinct_objects=8
+EXPORT tenant=audit-wildkind-travel action=tenant_tour_version.exported channel=- format=docx mode=- n=9 distinct_objects=9
+EXPORT tenant=audit-trail-pulse action=content_piece.exported channel=blog format=html mode=document n=6 distinct_objects=6
+EXPORT tenant=audit-trail-pulse action=content_piece.exported channel=blog format=html mode=fragment n=6 distinct_objects=6
+EXPORT tenant=audit-trail-pulse action=content_piece.exported channel=blog format=text mode=- n=6 distinct_objects=6
+EXPORT tenant=audit-trail-pulse action=tenant_tour_version.exported channel=- format=docx mode=- n=9 distinct_objects=9
+TERMINAL pieces_processing=0 versions_pending=0 requests_pending_goal=0 jobs_open=0
+FLAGFIX_PARAMS rows_above_or_none (none = call site value or LLMRequest default 4096; grounding.repair sends max_tokens=4096; _rerepair_meta sends none)
+FLAGFIX_CATALOG model=haiku-4-5 family=anthropic max_output_tokens=None capabilities.min_output_tokens=None
+FLAGFIX_CATALOG model=haiku-5-5 family=anthropic max_output_tokens=128000 capabilities.min_output_tokens=None
+FLAGFIX_CALL at=05:57:31Z tenant=audit-terra-family job=ffded869 pub_tour=8602c1d4 task=unknown(unusable_or_other) model=haiku-5-5@anthropic-direct status=billed_unusable error_class=None stop_reason=max_tokens tokens_in=5266 tokens_out=4096 reasoning_tokens=None effort=None latency_ms=17070 attempt_no=1 usd=0.00258 pricing=catalog prompt_v=v3 qs.sentences=None qs.fields_changed=None qs.meta_landed=None qs.candidate_len=None qs.attempt=None qs.truncation_retry=None qs.max_tokens=None qs.retry_reason=None qs.keys=['account', 'billed_unusable', 'error', 'gateway_attempt', 'model', 'position', 'route_position', 'route_trace']
+FLAGFIX_CALL at=05:57:55Z tenant=audit-terra-family job=ffded869 pub_tour=8602c1d4 task=unknown(unusable_or_other) model=haiku-5-5@anthropic-direct status=ok error_class=None stop_reason=end_turn tokens_in=5266 tokens_out=6132 reasoning_tokens=None effort=medium latency_ms=23565 attempt_no=1 usd=0.00359 pricing=catalog prompt_v=v3 qs.sentences=None qs.fields_changed=None qs.meta_landed=None qs.candidate_len=None qs.attempt=None qs.truncation_retry=True qs.max_tokens=8192 qs.retry_reason=billed_unusable_cut qs.keys=['fields_fixed', 'fields_requested', 'max_tokens', 'retry_reason', 'route_position', 'route_trace', 'truncation_retry']
+FLAGFIX_CALL at=06:03:23Z tenant=audit-trail-pulse job=6868fe21 pub_tour=8602c1d4 task=unknown(unusable_or_other) model=haiku-5-5@anthropic-direct status=billed_unusable error_class=None stop_reason=max_tokens tokens_in=5149 tokens_out=4096 reasoning_tokens=None effort=None latency_ms=15128 attempt_no=1 usd=0.00256 pricing=catalog prompt_v=v3 qs.sentences=None qs.fields_changed=None qs.meta_landed=None qs.candidate_len=None qs.attempt=None qs.truncation_retry=None qs.max_tokens=None qs.retry_reason=None qs.keys=['account', 'billed_unusable', 'error', 'gateway_attempt', 'model', 'position', 'route_position', 'route_trace']
+FLAGFIX_CALL at=06:03:45Z tenant=audit-trail-pulse job=6868fe21 pub_tour=8602c1d4 task=unknown(unusable_or_other) model=haiku-5-5@anthropic-direct status=ok error_class=None stop_reason=end_turn tokens_in=5149 tokens_out=6717 reasoning_tokens=None effort=medium latency_ms=21367 attempt_no=1 usd=0.00387 pricing=catalog prompt_v=v3 qs.sentences=None qs.fields_changed=None qs.meta_landed=None qs.candidate_len=None qs.attempt=None qs.truncation_retry=True qs.max_tokens=8192 qs.retry_reason=billed_unusable_cut qs.keys=['fields_fixed', 'fields_requested', 'max_tokens', 'retry_reason', 'route_position', 'route_trace', 'truncation_retry']
+FLAGFIX_CALL at=06:09:12Z tenant=audit-wildkind-travel job=178f506b pub_tour=8602c1d4 task=unknown(unusable_or_other) model=haiku-5-5@anthropic-direct status=billed_unusable error_class=None stop_reason=max_tokens tokens_in=5275 tokens_out=4096 reasoning_tokens=None effort=None latency_ms=16222 attempt_no=1 usd=0.00258 pricing=catalog prompt_v=v3 qs.sentences=None qs.fields_changed=None qs.meta_landed=None qs.candidate_len=None qs.attempt=None qs.truncation_retry=None qs.max_tokens=None qs.retry_reason=None qs.keys=['account', 'billed_unusable', 'error', 'gateway_attempt', 'model', 'position', 'route_position', 'route_trace']
+FLAGFIX_CALL at=06:09:40Z tenant=audit-wildkind-travel job=178f506b pub_tour=8602c1d4 task=unknown(unusable_or_other) model=haiku-5-5@anthropic-direct status=truncated error_class=truncated stop_reason=max_tokens tokens_in=5275 tokens_out=8192 reasoning_tokens=None effort=medium latency_ms=27048 attempt_no=1 usd=0.00462 pricing=catalog prompt_v=v3 qs.sentences=None qs.fields_changed=None qs.meta_landed=None qs.candidate_len=None qs.attempt=None qs.truncation_retry=True qs.max_tokens=8192 qs.retry_reason=billed_unusable_cut qs.keys=['fields_fixed', 'fields_requested', 'max_tokens', 'retry_reason', 'route_position', 'route_trace', 'truncation_retry']
+FLAGFIX_JOB job=178f506b kind=t2_rewrite status=succeeded attempt=1 error_class=- result={"t3.drafts[]": 1, "t3.degraded[]": 0, "t3.chosen_via": "initial", "t3.chosen_attempt": 0, "t3.graph_degraded[]": 1, "t3.sentence_repairs": 0, "t3.background_cleared": 0, "t3.graph_draft_scores[]": 1, "t3.best_draft_restored": false, "score": 10.0, "em_dashes.after": 0, "em_dashes.before": 0, "em_dashes.fields[]": 0, "em_dashes.fixed_in_t3": 2, "qa_status": "passed", "route_degraded.entries[]": 1, "version_status": "ai_generated"}
+FLAGFIX_JOB job=6868fe21 kind=t2_rewrite status=succeeded attempt=1 error_class=- result={"t3.drafts[]": 1, "t3.degraded[]": 0, "t3.chosen_via": "initial", "t3.chosen_attempt": 0, "t3.graph_degraded[]": 0, "t3.sentence_repairs": 0, "t3.background_cleared": 0, "t3.graph_draft_scores[]": 1, "t3.best_draft_restored": false, "score": 10.0, "em_dashes.after": 0, "em_dashes.before": 0, "em_dashes.fields[]": 0, "em_dashes.fixed_in_t3": 2, "qa_status": "passed", "route_degraded.entries[]": 1, "version_status": "ai_generated"}
+FLAGFIX_JOB job=ffded869 kind=t2_rewrite status=succeeded attempt=1 error_class=- result={"t3.drafts[]": 1, "t3.degraded[]": 0, "t3.chosen_via": "initial", "t3.chosen_attempt": 0, "t3.graph_degraded[]": 0, "t3.sentence_repairs": 0, "t3.background_cleared": 0, "t3.graph_draft_scores[]": 1, "t3.best_draft_restored": false, "score": 9.63, "em_dashes.after": 0, "em_dashes.before": 0, "em_dashes.fields[]": 0, "em_dashes.fixed_in_t3": 2, "qa_status": "passed", "route_degraded.entries[]": 1, "version_status": "ai_generated"}
+FLAGFIX_30D days=30 stage=s1_flag_fix model=haiku-4-5 status=null stop_reason=end_turn n=455 tokens_out_avg=772 tokens_out_max=3061 reasoning_avg=None meta_regenerate_calls=8 sentence_repair_calls=54 tenant_rows=4
+FLAGFIX_30D days=30 stage=s1_flag_fix model=haiku-5-5 status=ok stop_reason=end_turn n=1 tokens_out_avg=3786 tokens_out_max=3786 reasoning_avg=None meta_regenerate_calls=0 sentence_repair_calls=0 tenant_rows=0
+FLAGFIX_30D days=30 stage=t2_flag_fix model=haiku-4-5 status=null stop_reason=end_turn n=37 tokens_out_avg=104 tokens_out_max=510 reasoning_avg=None meta_regenerate_calls=16 sentence_repair_calls=5 tenant_rows=37
+FLAGFIX_30D days=30 stage=t2_flag_fix model=haiku-5-5 status=ok stop_reason=end_turn n=13 tokens_out_avg=2165 tokens_out_max=6717 reasoning_avg=None meta_regenerate_calls=0 sentence_repair_calls=0 tenant_rows=13
+FLAGFIX_30D days=30 stage=t2_flag_fix model=haiku-5-5 status=billed_unusable stop_reason=max_tokens n=3 tokens_out_avg=4096 tokens_out_max=4096 reasoning_avg=None meta_regenerate_calls=0 sentence_repair_calls=0 tenant_rows=3
+FLAGFIX_30D days=30 stage=t2_flag_fix model=haiku-5-5 status=truncated stop_reason=max_tokens n=1 tokens_out_avg=8192 tokens_out_max=8192 reasoning_avg=None meta_regenerate_calls=0 sentence_repair_calls=0 tenant_rows=1
+SUMMARY_JSON {"window":["2026-11-10T05:49:46+00:00","2026-11-10T10:23:20.758868+00:00"],"tours":12,"t0":{"audit-atlas-hearth":{"active":1,"system_prompt_len":0,"markets":null,"brand_markets":["US","UK","UAE","Saudi Arabia","Singapore","Hong Kong"]},"audit-terra-family":{"active":1,"system_prompt_len":0,"markets":null,"brand_markets":["UAE","Singapore","Hong Kong","UK","Australia"]},"audit-trail-pulse":{"active":1,"system_prompt_len":0,"markets":null,"brand_markets":["Europe","Australia","North America","Singapore"]},"audit-wildkind-travel":{"active":1,"system_prompt_len":0,"markets":null,"brand_markets":["Europe","Australia","Canada","New Zealand","US"]}},"t5":{"tours_with_atoms":12,"expected":12},"funnel":{"audit-atlas-hearth":{"pairs":12,"t2_version_in_window":9,"t2_ok":12,"t3_passed":11,"t3_escalated":1,"t4_pool":12,"t5_atoms":12,"blog_bar_any_market":11,"blog_bar_tenant_market":11,"t7_blog_subject":10,"t8_blog_request":10,"t9_blog_piece":10,"t10_blog_terminal":10,"t10_blog_approved":4,"export_blog_piece":10,"export_t2_docx":9},"audit-terra-family":{"pairs":12,"t2_version_in_window":9,"t2_ok":12,"t3_passed":11,"t3_escalated":1,"t4_pool":12,"t5_atoms":12,"blog_bar_any_market":11,"blog_bar_tenant_market":11,"t7_blog_subject":11,"t8_blog_request":11,"t9_blog_piece":11,"t10_blog_terminal":11,"t10_blog_approved":3,"export_blog_piece":11,"export_t2_docx":9},"audit-trail-pulse":{"pairs":12,"t2_version_in_window":9,"t2_ok":12,"t3_passed":9,"t3_escalated":3,"t4_pool":12,"t5_atoms":12,"blog_bar_any_market":11,"blog_bar_tenant_market":0,"t7_blog_subject":11,"t8_blog_request":11,"t9_blog_piece":11,"t10_blog_terminal":10,"t10_blog_approved":1,"export_blog_piece":10,"export_t2_docx":9},"audit-wildkind-travel":{"pairs":12,"t2_version_in_window":9,"t2_ok":12,"t3_passed":11,"t3_escalated":1,"t4_pool":12,"t5_atoms":12,"blog_bar_any_market":11,"blog_bar_tenant_market":11,"t7_blog_subject":10,"t8_blog_request":10,"t9_blog_piece":10,"t10_blog_terminal":10,"t10_blog_approved":1,"export_blog_piece":10,"export_t2_docx":9}},"jobs":{"t2_rewrite":{"n":36,"ok":36,"failed":0,"open":0,"stopped":0,"retried":0,"ok_after_error":0,"run50":55.1,"run90":87.1,"wait50":2.7,"wait90":4.4},"t7_slate":{"n":12,"ok":12,"failed":0,"open":0,"stopped":0,"retried":0,"ok_after_error":0,"run50":232.0,"run90":428.1,"wait50":2.6,"wait90":4.6},"t8_angles":{"n":28,"ok":28,"failed":0,"open":0,"stopped":0,"retried":0,"ok_after_error":0,"run50":24.3,"run90":29.8,"wait50":2.0,"wait90":4.0},"t9_write":{"n":28,"ok":28,"failed":0,"open":0,"stopped":0,"retried":0,"ok_after_error":0,"run50":143.0,"run90":164.4,"wait50":2.8,"wait90":4.2}},"job_errors":[],"llm_stage":{"f10_embed":{"n":52,"not_ok":0,"max_tok":0,"retry_rows":0,"trunc_retry":0,"fallback":0,"no_job":0,"usd_x1e4":64},"t10_judge":{"n":52,"not_ok":0,"max_tok":0,"retry_rows":0,"trunc_retry":0,"fallback":52,"no_job":0,"usd_x1e4":821},"t2_flag_fix":{"n":6,"not_ok":4,"max_tok":4,"retry_rows":0,"trunc_retry":3,"fallback":0,"no_job":0,"usd_x1e4":197},"t2_generate":{"n":35,"not_ok":1,"max_tok":1,"retry_rows":0,"trunc_retry":1,"fallback":0,"no_job":0,"usd_x1e4":27609},"t2_itinerary_nudge":{"n":5,"not_ok":0,"max_tok":0,"retry_rows":0,"trunc_retry":0,"fallback":0,"no_job":0,"usd_x1e4":28},"t2_judge":{"n":34,"not_ok":2,"max_tok":0,"retry_rows":2,"trunc_retry":0,"fallback":32,"no_job":0,"usd_x1e4":220},"t7_debate_judge":{"n":1220,"not_ok":0,"max_tok":0,"retry_rows":0,"trunc_retry":0,"fallback":1220,"no_job":0,"usd_x1e4":1414},"t8_angle_gen":{"n":30,"not_ok":0,"max_tok":0,"retry_rows":0,"trunc_retry":0,"fallback":0,"no_job":0,"usd_x1e4":11205},"t9_faq_answer_fit":{"n":27,"not_ok":0,"max_tok":0,"retry_rows":0,"trunc_retry":0,"fallback":0,"no_job":0,"usd_x1e4":1233},"t9_faq_filter":{"n":28,"not_ok":0,"max_tok":0,"retry_rows":0,"trunc_retry":0,"fallback":0,"no_job":0,"usd_x1e4":516},"t9_repair":{"n":73,"not_ok":0,"max_tok":0,"retry_rows":0,"trunc_retry":0,"fallback":0,"no_job":0,"usd_x1e4":1328},"t9_write":{"n":50,"not_ok":0,"max_tok":0,"retry_rows":0,"trunc_retry":0,"fallback":0,"no_job":0,"usd_x1e4":23091}},"t9_pieces":{"audit-terra-family":{"blog:approved":3,"blog:held":4},"audit-atlas-hearth":{"blog:approved":2,"blog:held":4},"audit-wildkind-travel":{"blog:approved":1,"blog:held":7},"audit-trail-pulse":{"blog:approved":1,"blog:failed":1,"blog:held":5}},"t10_hold":{"audit-trail-pulse|blog|held":{"pieces":5,"gate:F4_extreme_length":5,"code:length":5,"gate:F13_repeat":1,"code:text_hygiene":1,"gate:F9_cta_fact":1,"code:unsupported_trip_promise":1},"audit-atlas-hearth|blog|held":{"pieces":4,"gate:F4_extreme_length":3,"gate:F13_repeat":1,"code:length":3,"code:text_hygiene":1,"gate:F17_trip_fact":1,"code:unsupported_trip_fact":1},"audit-terra-family|blog|held":{"pieces":4,"gate:F13_repeat":1,"code:text_hygiene":1,"gate:F17_trip_fact":2,"code:unsupported_trip_fact":2,"gate:F9_cta_fact":1,"code:unsupported_trip_promise":1,"gate:F4_extreme_length":1,"code:length":1},"audit-wildkind-travel|blog|held":{"pieces":7,"gate:F17_trip_fact":4,"code:unsupported_trip_fact":4,"gate:F4_extreme_length":4,"code:length":4,"gate:F13_repeat":1,"code:text_hygiene":1},"audit-trail-pulse|blog|failed":{"pieces":1}},"exports":{"audit-terra-family":{"content_piece.exported|blog|html":7,"content_piece.exported|blog|text":7,"tenant_tour_version.exported|-|docx":9},"audit-atlas-hearth":{"content_piece.exported|blog|html":6,"content_piece.exported|blog|text":6,"tenant_tour_version.exported|-|docx":9},"audit-wildkind-travel":{"content_piece.exported|blog|html":8,"content_piece.exported|blog|text":8,"tenant_tour_version.exported|-|docx":9},"audit-trail-pulse":{"content_piece.exported|blog|html":6,"content_piece.exported|blog|text":6,"tenant_tour_version.exported|-|docx":9}},"terminal":{"pieces_processing":0,"versions_pending":0,"requests_pending_goal":0,"jobs_open":0},"flagfix":[{"task":"unknown(unusable_or_other)","stop_reason":"max_tokens","status":"billed_unusable","n":3},{"task":"unknown(unusable_or_other)","stop_reason":"end_turn","status":"ok","n":2},{"task":"unknown(unusable_or_other)","stop_reason":"max_tokens","status":"truncated","n":1}]}
+ecsx: rc=0 bytes=81990

@@ -1,0 +1,302 @@
+ecsx: started (session output not seen, normal when SSM drops it); checking the heartbeat
+HDR since=2026-11-10T05:49:46+00:00 f4_blog_band_chars=4700-13000 (fixed config, channel only: not tour length, not angle) writer_target_words=900-1300 writer_max_words=1600 rewrite_target_chars=12000 trim_target_chars=12500 max_attempts=3 last_attempt_mode=stop_and_label
+TOURS 8602c1d4:IN/d28/a89 2cf487be:LA/d12/a39 84e392c3:BT/d10/a37 caf4bf16:MN/d15/a52 ac574bfe:LK/d22/a95 56b61f58:IN/d15/a68 207e4efa:CN/d20/a83 2d0ee81a:KR/d10/a58 c9716429:CN/d14/a54 a8560125:IN/d15/a52 7fe02d1a:LK/d15/a39 b56704c5:LK/d17/a35
+PIECES n=28 status={'held': 20, 'approved': 7, 'failed': 1}
+PIECE c0121d62 tenant=audit-terra-family status=held attempts=2 held_head=F13_repeat final_hold=F13_repeat codes=text_hygiene subject=5b7e8493 grain=segment tours=56b61f58,8602c1d4,a8560125 days=15 atoms=68 walk_ids=10
+  LEN chars=5047 words=887 body_words=742 faq_words=145 sections=5 faq=1 cpw=5.69 f4_side=in delta_chars=+0 f4_ledger=in:None writer=under vs_floor_words=-13
+  ATT a1=F4_extreme_length(F4 short:4227) a2=F13_repeat(F4 in:None) fin=F13_repeat(F4 in:None)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['text_hygiene']
+  CODES nviol={'F13_hygiene': 1, 'F15_voice': 1, 'F9_cta_fact': 1, 'F13_repeat': 1} classes={'F13_repeat': {'repeat_sentence': 1}, 'F9_cta_fact': {'unsupported_other': 1}}
+  SEED seed_words=991 facts_lines=0 route_moments=6 moment_seed_words=991 walk_focus=1 faq_pairs={'real': 2, 'pairs': 4}->{'real': 1, 'pairs': 3} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out204/$0.004/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out2811/$0.0018/haiku-5-5 t9_repair:n3/cut0/bad0/out7826/$0.005/haiku-5-5 t9_write:n2/cut0/bad0/out4932/$0.0964/sonnet-5-5
+  DISC a1:4227c/758w/F4 short
+PIECE 5b3ae9c4 tenant=audit-terra-family status=approved attempts=2 held_head=- final_hold=- codes=- subject=e62d5f9c grain=segment tours=2cf487be days=12 atoms=39 walk_ids=12
+  LEN chars=6210 words=1082 body_words=856 faq_words=226 sections=6 faq=1 cpw=5.74 f4_side=in delta_chars=+0 f4_ledger=in:None writer=in vs_floor_words=+182
+  ATT a1=F4_extreme_length(F4 short:4542) fin=-(F4 in:None)
+  REP modes=a1:full_rewrite trims=- label_codes=None
+  CODES nviol={'F15_voice': 1} classes={}
+  SEED seed_words=1374 facts_lines=3 route_moments=7 moment_seed_words=1374 walk_focus=1 faq_pairs={'real': 2, 'pairs': 4}->{'real': 4, 'pairs': 5} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out214/$0.0043/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out3181/$0.002/haiku-5-5 t9_repair:n3/cut0/bad0/out16425/$0.0096/haiku-5-5 t9_write:n2/cut0/bad0/out5177/$0.104/sonnet-5-5
+  DISC a1:4542c/802w/F4 short
+PIECE 4dde01f8 tenant=audit-terra-family status=approved attempts=1 held_head=- final_hold=- codes=- subject=e9f642d6 grain=segment tours=84e392c3 days=10 atoms=37 walk_ids=10
+  LEN chars=4658 words=794 body_words=625 faq_words=169 sections=5 faq=1 cpw=5.87 f4_side=short delta_chars=-42 f4_ledger=in:None writer=under vs_floor_words=-106
+  ATT a1=pass fin=-(F4 in:None)
+  REP modes=- trims=- label_codes=None
+  CODES nviol={'F13_hygiene': 1, 'F9_cta_fact': 1} classes={'F9_cta_fact': {'unsupported_other': 2}}
+  SEED seed_words=1210 facts_lines=0 route_moments=7 moment_seed_words=1210 walk_focus=1 faq_pairs={'real': 2, 'pairs': 4}->{'real': 2, 'pairs': 3} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out221/$0.0045/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out2597/$0.0017/haiku-5-5 t9_repair:n3/cut0/bad0/out5458/$0.0037/haiku-5-5 t9_write:n1/cut0/bad0/out2604/$0.0511/sonnet-5-5
+PIECE c6cc3a29 tenant=audit-terra-family status=held attempts=2 held_head=F17_trip_fact final_hold=F17_trip_fact,F9_cta_fact codes=unsupported_trip_fact,unsupported_trip_promise subject=f401db08 grain=segment tours=7fe02d1a,ac574bfe,b56704c5 days=15 atoms=39 walk_ids=0
+  LEN chars=5055 words=901 body_words=789 faq_words=112 sections=6 faq=1 cpw=5.61 f4_side=in delta_chars=+0 f4_ledger=in:None writer=in vs_floor_words=+1
+  ATT a1=F13_repeat,F17_trip_fact,F4_extreme_length,F9_cta_fact(F4 short:4248) a2=F17_trip_fact,F9_cta_fact(F4 in:None) fin=F17_trip_fact,F9_cta_fact(F4 in:None)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['unsupported_trip_fact', 'unsupported_trip_promise']
+  CODES nviol={'F13_hygiene': 1, 'F17_trip_fact': 1, 'F9_cta_fact': 1} classes={'F17_trip_fact': {'pace_promise': 1}, 'F9_cta_fact': {'trip_promise': 1, 'unsupported_other': 5}}
+  SEED seed_words=146 facts_lines=0 route_moments=0 moment_seed_words=0 walk_focus=0 faq_pairs={'real': 2, 'pairs': 4}->{'real': 1, 'pairs': 3} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out158/$0.0032/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out2833/$0.0017/haiku-5-5 t9_repair:n3/cut0/bad0/out9023/$0.0052/haiku-5-5 t9_write:n2/cut0/bad0/out4608/$0.0844/sonnet-5-5
+  DISC a1:4248c/732w/F4 short
+PIECE 1cfd4b8a tenant=audit-terra-family status=approved attempts=2 held_head=- final_hold=- codes=- subject=a9590cc0 grain=segment tours=207e4efa days=20 atoms=83 walk_ids=18
+  LEN chars=4426 words=749 body_words=559 faq_words=190 sections=5 faq=1 cpw=5.91 f4_side=short delta_chars=-274 f4_ledger=in:None writer=under vs_floor_words=-151
+  ATT a1=F9_cta_fact(F4 in:None) fin=-(F4 in:None)
+  REP modes=a1:sentences trims=- label_codes=None
+  CODES nviol={'F15_voice': 1, 'F9_cta_fact': 1, 'F9_brand_style': 1} classes={'F9_cta_fact': {'seo_field_claim': 1}}
+  SEED seed_words=2613 facts_lines=0 route_moments=15 moment_seed_words=2613 walk_focus=1 faq_pairs={'real': 3, 'pairs': 4}->{'real': 3, 'pairs': 4} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out249/$0.0047/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out3041/$0.0019/haiku-5-5 t9_repair:n2/cut0/bad0/out5127/$0.0034/haiku-5-5 t9_write:n2/cut0/bad0/out2472/$0.0707/sonnet-5-5
+  DISC a1:4803c/814w/F4 in
+PIECE acfebc24 tenant=audit-terra-family status=held attempts=2 held_head=F17_trip_fact final_hold=F17_trip_fact codes=unsupported_trip_fact subject=e1ced7fa grain=segment tours=2d0ee81a days=10 atoms=58 walk_ids=27
+  LEN chars=5016 words=815 body_words=575 faq_words=240 sections=3 faq=1 cpw=6.15 f4_side=in delta_chars=+0 f4_ledger=in:None writer=under vs_floor_words=-85
+  ATT a1=F13_repeat,F17_trip_fact(F4 in:None) a2=F17_trip_fact(F4 in:None) fin=F17_trip_fact(F4 in:None)
+  REP modes=a1:sentences a2:- trims=- label_codes=['unsupported_trip_fact']
+  CODES nviol={'F13_hygiene': 1, 'F17_trip_fact': 1, 'F9_cta_fact': 1} classes={'F17_trip_fact': {'optional_as_planned': 1}, 'F9_cta_fact': {'unsupported_other': 2}}
+  SEED seed_words=3530 facts_lines=0 route_moments=23 moment_seed_words=3530 walk_focus=1 faq_pairs={'real': 3, 'pairs': 4}->{'real': 4, 'pairs': 5} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out256/$0.0049/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out3365/$0.0021/haiku-5-5 t9_repair:n3/cut0/bad0/out5280/$0.0037/haiku-5-5 t9_write:n1/cut0/bad0/out2376/$0.0606/sonnet-5-5
+  DISC a1:5061c/826w/F4 in
+PIECE cda38200 tenant=audit-terra-family status=held attempts=2 held_head=F4_extreme_length final_hold=F4_extreme_length codes=length subject=5c12a4ac grain=segment tours=c9716429 days=14 atoms=54 walk_ids=8
+  LEN chars=4289 words=746 body_words=617 faq_words=129 sections=5 faq=1 cpw=5.75 f4_side=short delta_chars=-411 f4_ledger=short:4586 writer=under vs_floor_words=-154
+  ATT a1=F13_leak,F13_repeat(F4 in:None) a2=F4_extreme_length(F4 short:4586) fin=F4_extreme_length(F4 short:4586)
+  REP modes=a1:sentences a2:- trims=- label_codes=['length']
+  CODES nviol={'F4_extreme_length': 1} classes={}
+  SEED seed_words=936 facts_lines=0 route_moments=6 moment_seed_words=936 walk_focus=1 faq_pairs={'real': 3, 'pairs': 4}->{'real': 2, 'pairs': 3} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out196/$0.0039/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out3017/$0.0019/haiku-5-5 t9_repair:n1/cut0/bad0/out3135/$0.002/haiku-5-5 t9_write:n2/cut0/bad0/out2681/$0.054/sonnet-5-5
+  DISC a1:4915c/853w/F4 in
+PIECE 4e956cae tenant=audit-atlas-hearth status=approved attempts=1 held_head=- final_hold=- codes=- subject=14dee28f grain=segment tours=56b61f58,8602c1d4,a8560125 days=15 atoms=68 walk_ids=10
+  LEN chars=4434 words=780 body_words=574 faq_words=206 sections=6 faq=1 cpw=5.68 f4_side=short delta_chars=-266 f4_ledger=in:None writer=under vs_floor_words=-120
+  ATT a1=pass fin=-(F4 in:None)
+  REP modes=- trims=- label_codes=None
+  CODES nviol={'F9_cta_fact': 1} classes={'F9_cta_fact': {'unsupported_other': 1}}
+  SEED seed_words=991 facts_lines=0 route_moments=6 moment_seed_words=991 walk_focus=1 faq_pairs={'real': 3, 'pairs': 4}->{'real': 2, 'pairs': 4} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out264/$0.0049/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out2907/$0.0018/haiku-5-5 t9_repair:n2/cut0/bad0/out5735/$0.0035/haiku-5-5 t9_write:n1/cut0/bad0/out2459/$0.0481/sonnet-5-5
+PIECE 59c950aa tenant=audit-atlas-hearth status=approved attempts=2 held_head=- final_hold=- codes=- subject=915d32e0 grain=segment tours=2cf487be days=12 atoms=39 walk_ids=12
+  LEN chars=5212 words=897 body_words=649 faq_words=248 sections=7 faq=1 cpw=5.81 f4_side=in delta_chars=+0 f4_ledger=in:None writer=under vs_floor_words=-3
+  ATT a1=F13_leak,F4_extreme_length(F4 short:4637) fin=-(F4 in:None)
+  REP modes=a1:full_rewrite trims=- label_codes=None
+  CODES nviol={'F15_voice': 1} classes={}
+  SEED seed_words=1374 facts_lines=3 route_moments=7 moment_seed_words=1374 walk_focus=1 faq_pairs={'real': 2, 'pairs': 4}->{'real': 4, 'pairs': 5} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out206/$0.0043/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out3323/$0.002/haiku-5-5 t9_repair:n4/cut0/bad0/out10649/$0.0069/haiku-5-5 t9_write:n2/cut0/bad0/out4707/$0.0999/sonnet-5-5
+  DISC a1:4637c/824w/F4 short
+PIECE da055040 tenant=audit-atlas-hearth status=held attempts=2 held_head=F4_extreme_length final_hold=F13_repeat,F4_extreme_length codes=length,text_hygiene subject=3470f5ed grain=segment tours=7fe02d1a,ac574bfe,b56704c5 days=15 atoms=39 walk_ids=0
+  LEN chars=3436 words=579 body_words=472 faq_words=107 sections=5 faq=1 cpw=5.93 f4_side=short delta_chars=-1264 f4_ledger=short:3947 writer=under vs_floor_words=-321
+  ATT a1=F4_extreme_length,F9_cta_fact(F4 short:4175) a2=F13_repeat,F4_extreme_length(F4 short:3947) fin=F13_repeat,F4_extreme_length(F4 short:3947)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['length', 'text_hygiene']
+  CODES nviol={'F4_extreme_length': 1, 'F13_hygiene': 1, 'F15_voice': 1, 'F9_cta_fact': 1, 'F13_repeat': 2} classes={'F13_repeat': {'repeat_sentence': 2}, 'F9_cta_fact': {'unsupported_other': 2}}
+  SEED seed_words=146 facts_lines=0 route_moments=0 moment_seed_words=0 walk_focus=0 faq_pairs={'real': 1, 'pairs': 4}->{'real': 1, 'pairs': 3} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out581/$0.0078/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out2951/$0.0018/haiku-5-5 t9_repair:n4/cut0/bad0/out12843/$0.0072/haiku-5-5 t9_write:n2/cut0/bad0/out4033/$0.0791/sonnet-5-5
+  DISC a1:4175c/708w/F4 short
+PIECE a6e7e93f tenant=audit-atlas-hearth status=held attempts=2 held_head=F4_extreme_length final_hold=F4_extreme_length codes=length subject=b2bdb1c8 grain=segment tours=207e4efa days=20 atoms=83 walk_ids=6
+  LEN chars=3788 words=652 body_words=512 faq_words=140 sections=5 faq=1 cpw=5.81 f4_side=short delta_chars=-912 f4_ledger=short:4090 writer=under vs_floor_words=-248
+  ATT a1=F4_extreme_length(F4 short:4090) a2=F17_trip_fact,F4_extreme_length(F4 short:4466) fin=F4_extreme_length(F4 short:4090)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['length']
+  CODES nviol={'F4_extreme_length': 1, 'F9_cta_fact': 1, 'F9_brand_style': 1} classes={'F9_cta_fact': {'unsupported_other': 1}}
+  SEED seed_words=493 facts_lines=0 route_moments=3 moment_seed_words=493 walk_focus=1 faq_pairs={'real': 1, 'pairs': 4}->{'real': 1, 'pairs': 3} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out217/$0.0041/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out2979/$0.0018/haiku-5-5 t9_repair:n2/cut0/bad0/out8004/$0.0046/haiku-5-5 t9_write:n2/cut0/bad0/out4455/$0.0874/sonnet-5-5
+  DISC a2:4466c/767w/F4 short
+PIECE 2a31bdd6 tenant=audit-atlas-hearth status=held attempts=2 held_head=F17_trip_fact final_hold=F17_trip_fact codes=unsupported_trip_fact subject=7303d33a grain=segment tours=2d0ee81a days=10 atoms=58 walk_ids=27
+  LEN chars=4956 words=806 body_words=568 faq_words=238 sections=6 faq=1 cpw=6.15 f4_side=in delta_chars=+0 f4_ledger=in:None writer=under vs_floor_words=-94
+  ATT a1=F17_trip_fact(F4 in:None) a2=F17_trip_fact(F4 in:None) fin=F17_trip_fact(F4 in:None)
+  REP modes=a1:sentences a2:- trims=- label_codes=['unsupported_trip_fact']
+  CODES nviol={'F17_trip_fact': 1} classes={'F17_trip_fact': {'optional_as_planned': 1}}
+  SEED seed_words=3530 facts_lines=0 route_moments=23 moment_seed_words=3530 walk_focus=1 faq_pairs={'real': 1, 'pairs': 4}->{'real': 3, 'pairs': 5} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out238/$0.0046/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out3673/$0.0022/haiku-5-5 t9_repair:n2/cut0/bad0/out5275/$0.0034/haiku-5-5 t9_write:n1/cut0/bad0/out2410/$0.0612/sonnet-5-5
+  DISC a1:4956c/806w/F4 in
+PIECE 37e97e7e tenant=audit-atlas-hearth status=held attempts=2 held_head=F4_extreme_length final_hold=F4_extreme_length codes=length subject=66f8c5ef grain=segment tours=c9716429 days=14 atoms=54 walk_ids=8
+  LEN chars=3214 words=546 body_words=454 faq_words=92 sections=5 faq=1 cpw=5.89 f4_side=short delta_chars=-1486 f4_ledger=short:3448 writer=under vs_floor_words=-354
+  ATT a1=F13_repeat,F17_trip_fact,F4_extreme_length,F9_cta_fact(F4 short:4524) a2=F4_extreme_length(F4 short:3448) fin=F4_extreme_length(F4 short:3448)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['length']
+  CODES nviol={'F4_extreme_length': 1, 'F13_hygiene': 1, 'F15_voice': 1, 'F9_cta_fact': 2} classes={'F9_cta_fact': {'seo_field_claim': 1, 'unsupported_other': 1}}
+  SEED seed_words=936 facts_lines=0 route_moments=6 moment_seed_words=936 walk_focus=1 faq_pairs={'real': 2, 'pairs': 4}->{'real': 1, 'pairs': 3} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out211/$0.0039/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out3065/$0.0019/haiku-5-5 t9_repair:n3/cut0/bad0/out10173/$0.0061/haiku-5-5 t9_write:n2/cut0/bad0/out4228/$0.0897/sonnet-5-5
+  DISC a1:4524c/767w/F4 short
+PIECE 62117c16 tenant=audit-wildkind-travel status=held attempts=2 held_head=F17_trip_fact final_hold=F17_trip_fact codes=unsupported_trip_fact subject=dc74df43 grain=segment tours=8602c1d4 days=28 atoms=89 walk_ids=14
+  LEN chars=4810 words=836 body_words=692 faq_words=144 sections=5 faq=1 cpw=5.75 f4_side=in delta_chars=+0 f4_ledger=in:None writer=under vs_floor_words=-64
+  ATT a1=F13_leak,F13_repeat,F17_trip_fact(F4 in:None) a2=F17_trip_fact(F4 in:None) fin=F17_trip_fact(F4 in:None)
+  REP modes=a1:sentences a2:- trims=- label_codes=['unsupported_trip_fact']
+  CODES nviol={'F13_hygiene': 1, 'F17_trip_fact': 1, 'F9_cta_fact': 1} classes={'F17_trip_fact': {'optional_as_planned': 1}, 'F9_cta_fact': {'unsupported_other': 1}}
+  SEED seed_words=1568 facts_lines=0 route_moments=10 moment_seed_words=1568 walk_focus=1 faq_pairs={'real': 1, 'pairs': 4}->{'real': 2, 'pairs': 3} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out224/$0.0043/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out1369/$0.0011/haiku-5-5 t9_repair:n1/cut0/bad0/out3519/$0.0024/haiku-5-5 t9_write:n2/cut0/bad0/out2955/$0.0619/sonnet-5-5
+  DISC a1:5344c/937w/F4 in
+PIECE ee4c8db6 tenant=audit-wildkind-travel status=approved attempts=2 held_head=- final_hold=- codes=- subject=1f13b549 grain=segment tours=2cf487be days=12 atoms=39 walk_ids=12
+  LEN chars=5274 words=905 body_words=672 faq_words=233 sections=5 faq=1 cpw=5.83 f4_side=in delta_chars=+0 f4_ledger=in:None writer=in vs_floor_words=+5
+  ATT a1=F13_leak,F17_trip_fact,F18_rarity(F4 in:None) fin=-(F4 in:None)
+  REP modes=a1:sentences trims=- label_codes=None
+  CODES nviol={'F15_voice': 1, 'F9_cta_fact': 1} classes={'F9_cta_fact': {'unsupported_other': 1}}
+  SEED seed_words=1374 facts_lines=3 route_moments=7 moment_seed_words=1374 walk_focus=1 faq_pairs={'real': 2, 'pairs': 4}->{'real': 3, 'pairs': 5} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out198/$0.0042/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out3224/$0.002/haiku-5-5 t9_repair:n2/cut0/bad0/out5803/$0.0037/haiku-5-5 t9_write:n2/cut0/bad0/out2657/$0.0625/sonnet-5-5
+  DISC a1:5392c/926w/F4 in
+PIECE d16dfc5b tenant=audit-wildkind-travel status=held attempts=2 held_head=F4_extreme_length final_hold=F4_extreme_length codes=length subject=cd642113 grain=segment tours=7fe02d1a,ac574bfe,b56704c5 days=15 atoms=39 walk_ids=0
+  LEN chars=3261 words=547 body_words=505 faq_words=42 sections=5 faq=1 cpw=5.96 f4_side=short delta_chars=-1439 f4_ledger=short:3818 writer=under vs_floor_words=-353
+  ATT a1=F4_extreme_length(F4 short:3818) a2=F13_repeat,F1_grounding,F4_extreme_length,F9_cta_fact(F4 short:4295) fin=F4_extreme_length(F4 short:3818)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['length']
+  CODES nviol={'F4_extreme_length': 1, 'F13_hygiene': 2, 'F15_voice': 1, 'F9_cta_fact': 1, 'F9_brand_style': 1} classes={'F9_cta_fact': {'unsupported_other': 2}}
+  SEED seed_words=146 facts_lines=0 route_moments=0 moment_seed_words=0 walk_focus=0 faq_pairs={'real': 1, 'pairs': 4}->{'real': 0, 'pairs': 1} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out212/$0.0039/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out2782/$0.0017/haiku-5-5 t9_repair:n4/cut0/bad0/out10060/$0.0059/haiku-5-5 t9_write:n2/cut0/bad0/out4411/$0.0824/sonnet-5-5
+  DISC a2:4295c/731w/F4 short
+PIECE b08b585c tenant=audit-wildkind-travel status=held attempts=2 held_head=F4_extreme_length final_hold=F4_extreme_length codes=length subject=7719d206 grain=segment tours=56b61f58 days=15 atoms=68 walk_ids=18
+  LEN chars=3459 words=572 body_words=475 faq_words=97 sections=5 faq=1 cpw=6.05 f4_side=short delta_chars=-1241 f4_ledger=short:3759 writer=under vs_floor_words=-328
+  ATT a1=F4_extreme_length(F4 short:3759) a2=F13_repeat,F16_faq,F17_trip_fact,F4_extreme_length,F9_cta_fact(F4 short:3802) fin=F4_extreme_length(F4 short:3759)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['length']
+  CODES nviol={'F4_extreme_length': 1, 'F13_hygiene': 1, 'F15_voice': 1, 'F9_cta_fact': 1} classes={'F9_cta_fact': {'unsupported_other': 1}}
+  SEED seed_words=1995 facts_lines=0 route_moments=13 moment_seed_words=1995 walk_focus=1 faq_pairs={'real': 0, 'pairs': 4}->{'real': 1, 'pairs': 3} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out228/$0.0042/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out3166/$0.002/haiku-5-5 t9_repair:n3/cut0/bad0/out10094/$0.0066/haiku-5-5 t9_write:n2/cut0/bad0/out4534/$0.1046/sonnet-5-5
+  DISC a2:3802c/638w/F4 short
+PIECE 5a3e82fb tenant=audit-wildkind-travel status=held attempts=2 held_head=F17_trip_fact final_hold=F17_trip_fact codes=unsupported_trip_fact subject=2d3fa5ba grain=segment tours=207e4efa days=20 atoms=83 walk_ids=18
+  LEN chars=5064 words=857 body_words=626 faq_words=231 sections=5 faq=1 cpw=5.91 f4_side=in delta_chars=+0 f4_ledger=in:None writer=under vs_floor_words=-43
+  ATT a1=F17_trip_fact,F4_extreme_length(F4 short:4248) a2=F17_trip_fact(F4 in:None) fin=F17_trip_fact(F4 in:None)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['unsupported_trip_fact']
+  CODES nviol={'F17_trip_fact': 2, 'F15_voice': 1, 'F9_cta_fact': 1} classes={'F17_trip_fact': {'optional_as_planned': 1, 'pace_promise': 1}, 'F9_cta_fact': {'unsupported_other': 2}}
+  SEED seed_words=2613 facts_lines=0 route_moments=15 moment_seed_words=2613 walk_focus=1 faq_pairs={'real': 1, 'pairs': 4}->{'real': 4, 'pairs': 4} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out261/$0.0049/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out3127/$0.0019/haiku-5-5 t9_repair:n3/cut0/bad0/out8504/$0.0058/haiku-5-5 t9_write:n2/cut0/bad0/out4598/$0.1099/sonnet-5-5
+  DISC a1:4248c/710w/F4 short
+PIECE 175f6886 tenant=audit-wildkind-travel status=held attempts=2 held_head=F13_repeat final_hold=F13_repeat,F17_trip_fact codes=unsupported_trip_fact,text_hygiene subject=49bdc1e7 grain=segment tours=2d0ee81a days=10 atoms=58 walk_ids=25
+  LEN chars=5098 words=863 body_words=757 faq_words=106 sections=6 faq=1 cpw=5.91 f4_side=in delta_chars=+0 f4_ledger=in:None writer=under vs_floor_words=-37
+  ATT a1=F13_repeat,F4_extreme_length(F4 short:3702) a2=F13_repeat,F17_trip_fact(F4 in:None) fin=F13_repeat,F17_trip_fact(F4 in:None)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['unsupported_trip_fact', 'text_hygiene']
+  CODES nviol={'F17_trip_fact': 1, 'F15_voice': 1, 'F9_cta_fact': 1, 'F13_repeat': 3} classes={'F17_trip_fact': {'time_not_in_source': 1}, 'F13_repeat': {'dedupe_echo': 1, 'moment_under_other_heading': 1, 'repeat_sentence': 1}, 'F9_cta_fact': {'unsupported_other': 1}}
+  SEED seed_words=2945 facts_lines=0 route_moments=15 moment_seed_words=2945 walk_focus=1 faq_pairs={'real': 2, 'pairs': 4}->{'real': 3, 'pairs': 3} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out263/$0.0047/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out2995/$0.0019/haiku-5-5 t9_repair:n3/cut0/bad0/out10070/$0.0066/haiku-5-5 t9_write:n2/cut0/bad0/out5237/$0.12/sonnet-5-5
+  DISC a1:3702c/625w/F4 short
+PIECE 6a2ecc16 tenant=audit-wildkind-travel status=held attempts=2 held_head=F4_extreme_length final_hold=F4_extreme_length codes=length subject=5121fc03 grain=segment tours=c9716429 days=14 atoms=54 walk_ids=8
+  LEN chars=3579 words=624 body_words=486 faq_words=138 sections=5 faq=1 cpw=5.74 f4_side=short delta_chars=-1121 f4_ledger=short:4083 writer=under vs_floor_words=-276
+  ATT a1=F17_trip_fact,F4_extreme_length(F4 short:4532) a2=F4_extreme_length(F4 short:4083) fin=F4_extreme_length(F4 short:4083)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['length']
+  CODES nviol={'F4_extreme_length': 1, 'F13_hygiene': 2} classes={}
+  SEED seed_words=936 facts_lines=0 route_moments=6 moment_seed_words=936 walk_focus=1 faq_pairs={'real': 3, 'pairs': 4}->{'real': 0, 'pairs': 3} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out535/$0.0075/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out2999/$0.0019/haiku-5-5 t9_repair:n3/cut0/bad0/out9627/$0.0058/haiku-5-5 t9_write:n2/cut0/bad0/out4105/$0.0878/sonnet-5-5
+  DISC a1:4532c/767w/F4 short
+PIECE dc07bc6a tenant=audit-wildkind-travel status=held attempts=2 held_head=F4_extreme_length final_hold=F17_trip_fact,F4_extreme_length codes=length,unsupported_trip_fact subject=75a86131 grain=segment tours=a8560125 days=15 atoms=52 walk_ids=10
+  LEN chars=4119 words=697 body_words=516 faq_words=181 sections=7 faq=1 cpw=5.91 f4_side=short delta_chars=-581 f4_ledger=short:4311 writer=under vs_floor_words=-203
+  ATT a1=F17_trip_fact,F4_extreme_length,F9_cta_fact(F4 short:4007) a2=F17_trip_fact,F4_extreme_length(F4 short:4311) fin=F17_trip_fact,F4_extreme_length(F4 short:4311)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['length', 'unsupported_trip_fact']
+  CODES nviol={'F4_extreme_length': 1, 'F17_trip_fact': 4, 'F15_voice': 1, 'F9_cta_fact': 1} classes={'F17_trip_fact': {'optional_as_planned': 3, 'time_not_in_source': 1}, 'F9_cta_fact': {'unsupported_other': 5}}
+  SEED seed_words=1248 facts_lines=0 route_moments=7 moment_seed_words=1248 walk_focus=1 faq_pairs={'real': 2, 'pairs': 4}->{'real': 2, 'pairs': 4} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out231/$0.0044/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out3168/$0.002/haiku-5-5 t9_repair:n2/cut0/bad0/out8643/$0.0053/haiku-5-5 t9_write:n2/cut0/bad0/out4306/$0.0944/sonnet-5-5
+  DISC a1:4007c/689w/F4 short
+PIECE 1b3b70ec tenant=audit-trail-pulse status=held attempts=2 held_head=F4_extreme_length final_hold=F4_extreme_length codes=length subject=6ccb5e71 grain=segment tours=56b61f58,8602c1d4,a8560125 days=15 atoms=68 walk_ids=10
+  LEN chars=3938 words=701 body_words=494 faq_words=207 sections=6 faq=1 cpw=5.62 f4_side=short delta_chars=-762 f4_ledger=short:4213 writer=under vs_floor_words=-199
+  ATT a1=F4_extreme_length(F4 short:4213) a2=F17_trip_fact,F9_cta_fact(F4 in:None) fin=F4_extreme_length(F4 short:4213)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['length']
+  CODES nviol={'F4_extreme_length': 1, 'F15_voice': 1, 'F9_cta_fact': 1} classes={'F9_cta_fact': {'unsupported_other': 1}}
+  SEED seed_words=991 facts_lines=0 route_moments=6 moment_seed_words=991 walk_focus=1 faq_pairs={'real': 1, 'pairs': 4}->{'real': 2, 'pairs': 4} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out250/$0.0048/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out2734/$0.0017/haiku-5-5 t9_repair:n4/cut0/bad0/out8992/$0.0058/haiku-5-5 t9_write:n2/cut0/bad0/out4799/$0.0949/sonnet-5-5
+  DISC a2:4726c/843w/F4 in
+PIECE 05231e11 tenant=audit-trail-pulse status=held attempts=2 held_head=F4_extreme_length final_hold=F13_repeat,F4_extreme_length codes=length,text_hygiene subject=849a94dd grain=segment tours=2cf487be days=12 atoms=39 walk_ids=12
+  LEN chars=4153 words=728 body_words=557 faq_words=171 sections=6 faq=1 cpw=5.7 f4_side=short delta_chars=-547 f4_ledger=short:4153 writer=under vs_floor_words=-172
+  ATT a1=F13_repeat,F4_extreme_length(F4 short:4153) a2=F13_repeat,F9_cta_fact(F4 in:None) fin=F13_repeat,F4_extreme_length(F4 short:4153)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['length', 'text_hygiene']
+  CODES nviol={'F4_extreme_length': 1, 'F9_cta_fact': 1, 'F13_repeat': 1} classes={'F13_repeat': {'dedupe_echo': 1}, 'F9_cta_fact': {'unsupported_other': 1}}
+  SEED seed_words=1374 facts_lines=3 route_moments=7 moment_seed_words=1374 walk_focus=1 faq_pairs={'real': 2, 'pairs': 4}->{'real': 3, 'pairs': 4} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out184/$0.0038/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out3361/$0.0021/haiku-5-5 t9_repair:n4/cut0/bad0/out8159/$0.0056/haiku-5-5 t9_write:n2/cut0/bad0/out4546/$0.0973/sonnet-5-5
+  DISC a2:4739c/857w/F4 in
+PIECE e16fbbfb tenant=audit-trail-pulse status=failed attempts=1 held_head=free_text final_hold=- codes=- subject=8cda702a grain=segment tours=84e392c3 days=10 atoms=37 walk_ids=10
+  LEN chars=0 words=0 body_words=0 faq_words=0 sections=0 faq=0 cpw=- f4_side=short delta_chars=-4700 f4_ledger=in:None writer=under vs_floor_words=-900
+  ATT a1=pass fin=-(F4 in:None)
+  REP modes=- trims=- label_codes=None
+  CODES nviol={} classes={}
+  SEED seed_words=0 facts_lines=0 route_moments=0 moment_seed_words=0 walk_focus=0 faq_pairs=None->None writer_prompt=-
+  LLM t9_faq_filter:n1/cut0/bad0/out2901/$0.0018/haiku-5-5 t9_write:n1/cut0/bad0/out4157/$0.0664/sonnet-5-5
+PIECE ebfcc20e tenant=audit-trail-pulse status=held attempts=2 held_head=F4_extreme_length final_hold=F4_extreme_length codes=length subject=6c1dbafc grain=segment tours=7fe02d1a,ac574bfe,b56704c5 days=15 atoms=39 walk_ids=0
+  LEN chars=3347 words=604 body_words=449 faq_words=155 sections=6 faq=1 cpw=5.54 f4_side=short delta_chars=-1353 f4_ledger=short:3740 writer=under vs_floor_words=-296
+  ATT a1=F13_repeat,F4_extreme_length,F9_cta_fact(F4 short:3541) a2=F4_extreme_length(F4 short:3740) fin=F4_extreme_length(F4 short:3740)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['length']
+  CODES nviol={'F4_extreme_length': 1, 'F13_hygiene': 2, 'F9_cta_fact': 1, 'F9_brand_style': 1} classes={'F9_cta_fact': {'unsupported_other': 1}}
+  SEED seed_words=146 facts_lines=0 route_moments=0 moment_seed_words=0 walk_focus=0 faq_pairs={'real': 3, 'pairs': 4}->{'real': 1, 'pairs': 3} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out244/$0.0045/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out2694/$0.0016/haiku-5-5 t9_repair:n2/cut0/bad0/out5950/$0.0034/haiku-5-5 t9_write:n2/cut0/bad0/out3927/$0.0771/sonnet-5-5
+  DISC a1:3541c/638w/F4 short
+PIECE a14126dc tenant=audit-trail-pulse status=approved attempts=2 held_head=- final_hold=- codes=- subject=f58ab11c grain=segment tours=207e4efa days=20 atoms=83 walk_ids=18
+  LEN chars=4859 words=824 body_words=595 faq_words=229 sections=6 faq=1 cpw=5.9 f4_side=in delta_chars=+0 f4_ledger=in:None writer=under vs_floor_words=-76
+  ATT a1=F17_trip_fact(F4 in:None) fin=-(F4 in:None)
+  REP modes=a1:sentences trims=- label_codes=None
+  CODES nviol={} classes={}
+  SEED seed_words=2613 facts_lines=0 route_moments=15 moment_seed_words=2613 walk_focus=1 faq_pairs={'real': 4, 'pairs': 4}->{'real': 3, 'pairs': 5} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out228/$0.0045/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out3053/$0.0019/haiku-5-5 t9_repair:n2/cut0/bad0/out2856/$0.0024/haiku-5-5 t9_write:n1/cut0/bad0/out2597/$0.0572/sonnet-5-5
+  DISC a1:4824c/820w/F4 in
+PIECE 2cfe5543 tenant=audit-trail-pulse status=held attempts=2 held_head=F4_extreme_length final_hold=F4_extreme_length codes=length subject=afbb785f grain=segment tours=2d0ee81a days=10 atoms=58 walk_ids=27
+  LEN chars=4622 words=775 body_words=579 faq_words=196 sections=3 faq=1 cpw=5.96 f4_side=short delta_chars=-78 f4_ledger=short:4622 writer=under vs_floor_words=-125
+  ATT a1=F17_trip_fact,F4_extreme_length(F4 short:4626) a2=F4_extreme_length(F4 short:4622) fin=F4_extreme_length(F4 short:4622)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['length']
+  CODES nviol={'F4_extreme_length': 1, 'F9_cta_fact': 1} classes={'F9_cta_fact': {'seo_field_claim': 1}}
+  SEED seed_words=3530 facts_lines=0 route_moments=23 moment_seed_words=3530 walk_focus=1 faq_pairs={'real': 3, 'pairs': 4}->{'real': 3, 'pairs': 4} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out183/$0.0039/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out2998/$0.0019/haiku-5-5 t9_repair:n3/cut0/bad0/out7820/$0.0054/haiku-5-5 t9_write:n2/cut0/bad0/out4724/$0.1212/sonnet-5-5
+  DISC a1:4626c/755w/F4 short
+PIECE 10c39b5a tenant=audit-trail-pulse status=held attempts=2 held_head=F4_extreme_length final_hold=F4_extreme_length,F9_cta_fact codes=length,unsupported_trip_promise subject=418fca04 grain=segment tours=c9716429 days=14 atoms=54 walk_ids=8
+  LEN chars=3788 words=652 body_words=419 faq_words=233 sections=6 faq=1 cpw=5.81 f4_side=short delta_chars=-912 f4_ledger=short:3788 writer=under vs_floor_words=-248
+  ATT a1=F13_repeat,F17_trip_fact,F4_extreme_length(F4 short:3963) a2=F4_extreme_length,F9_cta_fact(F4 short:3788) fin=F4_extreme_length,F9_cta_fact(F4 short:3788)
+  REP modes=a1:full_rewrite a2:- trims=- label_codes=['length', 'unsupported_trip_promise']
+  CODES nviol={'F4_extreme_length': 1, 'F15_voice': 1, 'F9_cta_fact': 1} classes={'F9_cta_fact': {'trip_promise': 1}}
+  SEED seed_words=936 facts_lines=0 route_moments=6 moment_seed_words=936 walk_focus=1 faq_pairs={'real': 2, 'pairs': 4}->{'real': 2, 'pairs': 5} writer_prompt=cc9b4979
+  LLM t9_faq_answer_fit:n1/cut0/bad0/out265/$0.0048/sonnet-5-5 t9_faq_filter:n1/cut0/bad0/out2983/$0.0019/haiku-5-5 t9_repair:n2/cut0/bad0/out6389/$0.004/haiku-5-5 t9_write:n2/cut0/bad0/out3887/$0.085/sonnet-5-5
+  DISC a1:3963c/696w/F4 short
+FAILED piece=e16fbbfb tenant=audit-trail-pulse held_head=free_text job=0c2fbe6d job_kind=t9_write job_status=succeeded job_attempt=1/2 error_class=- error_len=0 result_keys=['piece_id', 'piece_status']
+  FAILED_LLM stage=t9_faq_filter status=ok error_class=- stop=end_turn n=1
+  FAILED_LLM stage=t9_write status=ok error_class=- stop=end_turn n=1
+SUM_F4 {"n": 13, "short": 13, "long": 0, "in_now": 0, "delta_short": {"n": 13, "min": -1486, "med": -912, "max": -78, "mean": -931.3}, "delta_long": {"n": 0}, "words": {"n": 13, "min": 546, "med": 652, "max": 775, "mean": 647.9}}
+SUM_F4_ONLY {"n": 9, "short": 9, "long": 0, "delta": {"n": 9, "min": -1486, "med": -1121, "max": -78, "mean": -978.1}, "words": {"n": 9, "min": 546, "med": 624, "max": 775, "mean": 640.8}, "pieces": ["cda38200", "a6e7e93f", "37e97e7e", "d16dfc5b", "b08b585c", "6a2ecc16", "1b3b70ec", "ebfcc20e", "2cfe5543"]}
+SUM_LEN words_by_status={"held": {"n": 20, "min": 546, "med": 714.5, "max": 901, "mean": 719.4}, "approved": {"n": 7, "min": 749, "med": 824, "max": 1082, "mean": 861.6}, "failed": {"n": 1, "min": 0, "med": 0, "max": 0, "mean": 0.0}} chars_by_status={"held": {"n": 20, "min": 3214, "med": 4136.0, "max": 5098, "mean": 4201.9}, "approved": {"n": 7, "min": 4426, "med": 4859, "max": 6210, "mean": 5010.4}, "failed": {"n": 1, "min": 0, "med": 0, "max": 0, "mean": 0.0}} writer_side={'under': 25, 'in': 3} f4_side_all={'in': 11, 'short': 17} cpw={'n': 27, 'min': 5.54, 'med': 5.8, 'max': 6.15, 'mean': 5.8} chars_at_writer_floor~5245.0
+SUM_FIRST_FINAL first_sets={'F4_extreme_length': 6, 'pass': 3, 'F13_repeat,F17_trip_fact,F4_extreme_length,F9_cta_fact': 2, 'F9_cta_fact': 1, 'F13_repeat,F17_trip_fact': 1, 'F13_leak,F13_repeat': 1, 'F13_leak,F4_extreme_length': 1, 'F4_extreme_length,F9_cta_fact': 1, 'F17_trip_fact': 2, 'F13_leak,F13_repeat,F17_trip_fact': 1, 'F13_leak,F17_trip_fact,F18_rarity': 1, 'F17_trip_fact,F4_extreme_length': 3, 'F13_repeat,F4_extreme_length': 2, 'F17_trip_fact,F4_extreme_length,F9_cta_fact': 1, 'F13_repeat,F4_extreme_length,F9_cta_fact': 1, 'F13_repeat,F17_trip_fact,F4_extreme_length': 1} final_sets={'F13_repeat': 1, 'F17_trip_fact,F9_cta_fact': 1, 'F17_trip_fact': 4, 'F4_extreme_length': 9, 'F13_repeat,F4_extreme_length': 2, 'F13_repeat,F17_trip_fact': 1, 'F17_trip_fact,F4_extreme_length': 1, 'F4_extreme_length,F9_cta_fact': 1} first_f4_side={'short': 18, 'in': 10} per_gate={'F4_extreme_length': {'fixed': 6, 'introduced': 1, 'kept': 12}, 'F13_repeat': {'introduced': 2, 'fixed': 7, 'kept': 2}, 'F17_trip_fact': {'kept': 6, 'fixed': 6, 'introduced': 1}, 'F9_cta_fact': {'kept': 1, 'fixed': 5, 'introduced': 1}, 'F13_leak': {'fixed': 4}, 'F18_rarity': {'fixed': 1}}
+SUM_ATTEMPTS all={2: 25, 1: 3} held={2: 20} modes={'full_rewrite': 18, '-': 20, 'sentences': 7} trimmed_pieces=0 t9_write_calls={'n': 28, 'min': 1, 'med': 2.0, 'max': 2, 'mean': 1.8} t9_write_cut_pieces=0
+SUM_CLASSES F17={'pace_promise': 2, 'optional_as_planned': 7, 'time_not_in_source': 2} F13={'repeat_sentence': 4, 'dedupe_echo': 2, 'moment_under_other_heading': 1} F9={'unsupported_other': 27, 'trip_promise': 2, 'seo_field_claim': 2}
+SUM_DRIVERS r(seed+moment words, words)=0.424 r(days, words)=0.098 r(atoms, words)=0.176 pieces_per_subject={1: 28} tours_per_piece={3: 7, 1: 21} writer_prompt_versions={'cc9b4979': 27, '-': 1}
+PAIR_TENANT audit-atlas-hearth markets=US/UK tenant_tours=13 candidates=386 seeded=372 held_blog_segments=7 held_blog_places=7 thin=7
+PAIR tenant=audit-atlas-hearth tour=8602c1d4 seg=55 in_mk=55 bar={'below_bar': 21, 'cleared': 28, 'few_questions': 4, 'no_data': 2} cleared=28 no_seed=0 held=2 thin=1 free=25/19pl debate_flag=25 subj={'used': 1, 'proposed': 7} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'approved': 1} pieces_before={}
+PAIR tenant=audit-atlas-hearth tour=2cf487be seg=21 in_mk=21 bar={'no_data': 4, 'few_questions': 3, 'cleared': 5, 'below_bar': 9} cleared=5 no_seed=0 held=3 thin=0 free=2/2pl debate_flag=2 subj={'used': 2} req=2(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'approved': 1} pieces_before={'held': 1}
+PAIR tenant=audit-atlas-hearth tour=84e392c3 seg=24 in_mk=24 bar={'below_bar': 14, 'few_questions': 3, 'no_data': 5, 'cleared': 2} cleared=2 no_seed=0 held=0 thin=0 free=2/2pl debate_flag=2 subj={} req=0(p2 0 {} opts=0 chosen=0) pieces_p2={} pieces_before={} NOSUBJ reason=no_proposed_subject
+PAIR tenant=audit-atlas-hearth tour=caf4bf16 seg=22 in_mk=22 bar={'below_bar': 16, 'few_questions': 5, 'no_data': 1} cleared=0 no_seed=0 held=0 thin=0 free=0/0pl debate_flag=0 subj={} req=0(p2 0 {} opts=0 chosen=0) pieces_p2={} pieces_before={} NOSUBJ reason=bar_miss
+PAIR tenant=audit-atlas-hearth tour=ac574bfe seg=31 in_mk=31 bar={'cleared': 18, 'no_data': 1, 'below_bar': 9, 'few_questions': 3} cleared=18 no_seed=0 held=1 thin=1 free=16/11pl debate_flag=16 subj={'used': 1, 'proposed': 4} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-atlas-hearth tour=56b61f58 seg=40 in_mk=40 bar={'below_bar': 17, 'cleared': 16, 'few_questions': 3, 'no_data': 4} cleared=16 no_seed=0 held=2 thin=0 free=14/13pl debate_flag=14 subj={'proposed': 7, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'approved': 1} pieces_before={}
+PAIR tenant=audit-atlas-hearth tour=207e4efa seg=52 in_mk=52 bar={'below_bar': 20, 'cleared': 18, 'few_questions': 10, 'no_data': 4} cleared=18 no_seed=1 held=1 thin=3 free=13/10pl debate_flag=13 subj={'used': 1, 'proposed': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-atlas-hearth tour=2d0ee81a seg=52 in_mk=52 bar={'cleared': 15, 'below_bar': 28, 'no_data': 4, 'few_questions': 5} cleared=15 no_seed=0 held=1 thin=0 free=14/13pl debate_flag=14 subj={'used': 1, 'proposed': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-atlas-hearth tour=c9716429 seg=32 in_mk=32 bar={'below_bar': 13, 'no_data': 2, 'cleared': 13, 'few_questions': 4} cleared=13 no_seed=3 held=1 thin=2 free=7/7pl debate_flag=7 subj={'proposed': 2, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-atlas-hearth tour=a8560125 seg=30 in_mk=30 bar={'few_questions': 6, 'below_bar': 7, 'cleared': 16, 'no_data': 1} cleared=16 no_seed=1 held=2 thin=0 free=13/11pl debate_flag=13 subj={'used': 1, 'proposed': 8} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'approved': 1} pieces_before={}
+PAIR tenant=audit-atlas-hearth tour=7fe02d1a seg=19 in_mk=19 bar={'cleared': 15, 'below_bar': 3, 'few_questions': 1} cleared=15 no_seed=0 held=1 thin=0 free=14/9pl debate_flag=14 subj={'used': 1, 'proposed': 2} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-atlas-hearth tour=b56704c5 seg=18 in_mk=18 bar={'below_bar': 8, 'cleared': 10} cleared=10 no_seed=0 held=1 thin=1 free=8/7pl debate_flag=8 subj={'proposed': 1, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR_TENANT audit-terra-family markets=UK/AU tenant_tours=13 candidates=379 seeded=365 held_blog_segments=7 held_blog_places=7 thin=3
+PAIR tenant=audit-terra-family tour=8602c1d4 seg=55 in_mk=55 bar={'below_bar': 25, 'cleared': 24, 'few_questions': 4, 'no_data': 2} cleared=24 no_seed=0 held=2 thin=1 free=21/15pl debate_flag=20 subj={'proposed': 5, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-terra-family tour=2cf487be seg=21 in_mk=21 bar={'no_data': 4, 'few_questions': 2, 'below_bar': 10, 'cleared': 5} cleared=5 no_seed=0 held=2 thin=0 free=3/3pl debate_flag=3 subj={'proposed': 1, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'approved': 1} pieces_before={}
+PAIR tenant=audit-terra-family tour=84e392c3 seg=24 in_mk=24 bar={'below_bar': 15, 'no_data': 6, 'few_questions': 1, 'cleared': 2} cleared=2 no_seed=0 held=1 thin=0 free=1/1pl debate_flag=1 subj={'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'approved': 1} pieces_before={}
+PAIR tenant=audit-terra-family tour=caf4bf16 seg=22 in_mk=22 bar={'below_bar': 20, 'no_data': 2} cleared=0 no_seed=0 held=0 thin=0 free=0/0pl debate_flag=0 subj={} req=0(p2 0 {} opts=0 chosen=0) pieces_p2={} pieces_before={} NOSUBJ reason=bar_miss
+PAIR tenant=audit-terra-family tour=ac574bfe seg=31 in_mk=31 bar={'cleared': 18, 'no_data': 1, 'below_bar': 9, 'few_questions': 3} cleared=18 no_seed=0 held=1 thin=1 free=16/11pl debate_flag=16 subj={'proposed': 4, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-terra-family tour=56b61f58 seg=40 in_mk=40 bar={'below_bar': 21, 'cleared': 12, 'few_questions': 3, 'no_data': 4} cleared=12 no_seed=0 held=2 thin=0 free=10/10pl debate_flag=10 subj={'proposed': 5, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-terra-family tour=207e4efa seg=52 in_mk=52 bar={'below_bar': 29, 'cleared': 14, 'few_questions': 5, 'no_data': 4} cleared=14 no_seed=1 held=1 thin=0 free=12/9pl debate_flag=12 subj={'used': 1, 'proposed': 2} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'approved': 1} pieces_before={}
+PAIR tenant=audit-terra-family tour=2d0ee81a seg=52 in_mk=52 bar={'cleared': 11, 'below_bar': 35, 'no_data': 3, 'few_questions': 3} cleared=11 no_seed=0 held=1 thin=0 free=10/9pl debate_flag=10 subj={'used': 1, 'proposed': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-terra-family tour=c9716429 seg=32 in_mk=32 bar={'below_bar': 16, 'no_data': 3, 'cleared': 10, 'few_questions': 3} cleared=10 no_seed=3 held=1 thin=0 free=6/6pl debate_flag=6 subj={'proposed': 1, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-terra-family tour=a8560125 seg=30 in_mk=30 bar={'few_questions': 4, 'below_bar': 11, 'no_data': 2, 'cleared': 13} cleared=13 no_seed=0 held=2 thin=0 free=11/9pl debate_flag=11 subj={'used': 1, 'proposed': 6} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-terra-family tour=7fe02d1a seg=19 in_mk=19 bar={'cleared': 14, 'below_bar': 4, 'few_questions': 1} cleared=14 no_seed=0 held=1 thin=0 free=13/8pl debate_flag=13 subj={'used': 1, 'proposed': 4} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-terra-family tour=b56704c5 seg=18 in_mk=18 bar={'below_bar': 8, 'cleared': 10} cleared=10 no_seed=0 held=1 thin=1 free=8/7pl debate_flag=8 subj={'used': 1, 'proposed': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR_TENANT audit-trail-pulse markets=US/UK/AU/DE/FR/NL tenant_tours=12 candidates=379 seeded=365 held_blog_segments=7 held_blog_places=7 thin=7
+PAIR tenant=audit-trail-pulse tour=8602c1d4 seg=55 in_mk=55 bar={'below_bar': 22, 'cleared': 28, 'few_questions': 4, 'no_data': 1} cleared=28 no_seed=0 held=2 thin=1 free=25/19pl debate_flag=25 subj={'proposed': 8, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-trail-pulse tour=2cf487be seg=21 in_mk=21 bar={'no_data': 4, 'few_questions': 5, 'cleared': 5, 'below_bar': 7} cleared=5 no_seed=0 held=2 thin=0 free=3/3pl debate_flag=3 subj={'proposed': 1, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-trail-pulse tour=84e392c3 seg=24 in_mk=24 bar={'below_bar': 14, 'few_questions': 3, 'no_data': 5, 'cleared': 2} cleared=2 no_seed=0 held=1 thin=0 free=1/1pl debate_flag=1 subj={'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'failed': 1} pieces_before={}
+PAIR tenant=audit-trail-pulse tour=caf4bf16 seg=22 in_mk=22 bar={'below_bar': 17, 'few_questions': 5} cleared=0 no_seed=0 held=0 thin=0 free=0/0pl debate_flag=0 subj={} req=0(p2 0 {} opts=0 chosen=0) pieces_p2={} pieces_before={} NOSUBJ reason=bar_miss
+PAIR tenant=audit-trail-pulse tour=ac574bfe seg=31 in_mk=31 bar={'cleared': 18, 'no_data': 1, 'below_bar': 9, 'few_questions': 3} cleared=18 no_seed=0 held=1 thin=1 free=16/11pl debate_flag=15 subj={'proposed': 4, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-trail-pulse tour=56b61f58 seg=40 in_mk=40 bar={'below_bar': 17, 'cleared': 16, 'few_questions': 3, 'no_data': 4} cleared=16 no_seed=0 held=2 thin=0 free=14/13pl debate_flag=14 subj={'proposed': 7, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-trail-pulse tour=207e4efa seg=52 in_mk=52 bar={'below_bar': 18, 'cleared': 19, 'few_questions': 12, 'no_data': 3} cleared=19 no_seed=1 held=1 thin=3 free=14/11pl debate_flag=13 subj={'used': 1, 'proposed': 2} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'approved': 1} pieces_before={}
+PAIR tenant=audit-trail-pulse tour=2d0ee81a seg=52 in_mk=52 bar={'cleared': 15, 'below_bar': 29, 'no_data': 3, 'few_questions': 5} cleared=15 no_seed=0 held=1 thin=0 free=14/13pl debate_flag=14 subj={'proposed': 6, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-trail-pulse tour=c9716429 seg=32 in_mk=32 bar={'below_bar': 9, 'no_data': 2, 'cleared': 14, 'few_questions': 7} cleared=14 no_seed=3 held=1 thin=2 free=8/8pl debate_flag=8 subj={'proposed': 1, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-trail-pulse tour=a8560125 seg=30 in_mk=30 bar={'few_questions': 6, 'below_bar': 7, 'cleared': 16, 'no_data': 1} cleared=16 no_seed=1 held=2 thin=0 free=13/11pl debate_flag=13 subj={'used': 1, 'proposed': 8} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-trail-pulse tour=7fe02d1a seg=19 in_mk=19 bar={'cleared': 16, 'below_bar': 2, 'few_questions': 1} cleared=16 no_seed=0 held=1 thin=0 free=15/10pl debate_flag=15 subj={'proposed': 4, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-trail-pulse tour=b56704c5 seg=18 in_mk=18 bar={'below_bar': 8, 'cleared': 10} cleared=10 no_seed=0 held=1 thin=1 free=8/7pl debate_flag=8 subj={'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR_TENANT audit-wildkind-travel markets=US/UK/AU/DE/FR/NL tenant_tours=12 candidates=379 seeded=365 held_blog_segments=8 held_blog_places=8 thin=7
+PAIR tenant=audit-wildkind-travel tour=8602c1d4 seg=55 in_mk=55 bar={'below_bar': 22, 'cleared': 28, 'few_questions': 4, 'no_data': 1} cleared=28 no_seed=0 held=2 thin=1 free=25/18pl debate_flag=25 subj={'proposed': 5, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-wildkind-travel tour=2cf487be seg=21 in_mk=21 bar={'no_data': 4, 'few_questions': 5, 'cleared': 5, 'below_bar': 7} cleared=5 no_seed=0 held=1 thin=0 free=4/3pl debate_flag=4 subj={'used': 1, 'proposed': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'approved': 1} pieces_before={}
+PAIR tenant=audit-wildkind-travel tour=84e392c3 seg=24 in_mk=24 bar={'below_bar': 14, 'few_questions': 3, 'no_data': 5, 'cleared': 2} cleared=2 no_seed=0 held=0 thin=0 free=2/2pl debate_flag=2 subj={} req=0(p2 0 {} opts=0 chosen=0) pieces_p2={} pieces_before={} NOSUBJ reason=no_proposed_subject
+PAIR tenant=audit-wildkind-travel tour=caf4bf16 seg=22 in_mk=22 bar={'below_bar': 17, 'few_questions': 5} cleared=0 no_seed=0 held=0 thin=0 free=0/0pl debate_flag=0 subj={} req=0(p2 0 {} opts=0 chosen=0) pieces_p2={} pieces_before={} NOSUBJ reason=bar_miss
+PAIR tenant=audit-wildkind-travel tour=ac574bfe seg=31 in_mk=31 bar={'cleared': 18, 'no_data': 1, 'below_bar': 9, 'few_questions': 3} cleared=18 no_seed=0 held=1 thin=1 free=16/11pl debate_flag=16 subj={'proposed': 3, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-wildkind-travel tour=56b61f58 seg=40 in_mk=40 bar={'below_bar': 17, 'cleared': 16, 'few_questions': 3, 'no_data': 4} cleared=16 no_seed=0 held=2 thin=0 free=14/12pl debate_flag=14 subj={'proposed': 7, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-wildkind-travel tour=207e4efa seg=52 in_mk=52 bar={'below_bar': 18, 'cleared': 19, 'few_questions': 12, 'no_data': 3} cleared=19 no_seed=1 held=2 thin=3 free=13/11pl debate_flag=13 subj={'used': 1, 'proposed': 3} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-wildkind-travel tour=2d0ee81a seg=52 in_mk=52 bar={'cleared': 15, 'below_bar': 29, 'no_data': 3, 'few_questions': 5} cleared=15 no_seed=0 held=1 thin=0 free=14/13pl debate_flag=14 subj={'used': 1, 'proposed': 3} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-wildkind-travel tour=c9716429 seg=32 in_mk=32 bar={'below_bar': 9, 'no_data': 2, 'cleared': 14, 'few_questions': 7} cleared=14 no_seed=3 held=1 thin=2 free=8/8pl debate_flag=8 subj={'proposed': 1, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-wildkind-travel tour=a8560125 seg=30 in_mk=30 bar={'few_questions': 6, 'below_bar': 7, 'cleared': 16, 'no_data': 1} cleared=16 no_seed=1 held=2 thin=0 free=13/11pl debate_flag=13 subj={'proposed': 6, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-wildkind-travel tour=7fe02d1a seg=19 in_mk=19 bar={'cleared': 16, 'below_bar': 2, 'few_questions': 1} cleared=16 no_seed=0 held=1 thin=0 free=15/10pl debate_flag=15 subj={'proposed': 5, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+PAIR tenant=audit-wildkind-travel tour=b56704c5 seg=18 in_mk=18 bar={'below_bar': 8, 'cleared': 10} cleared=10 no_seed=0 held=1 thin=1 free=8/7pl debate_flag=8 subj={'proposed': 2, 'used': 1} req=1(p2 1 {'approved': 1} opts=3 chosen=1) pieces_p2={'held': 1} pieces_before={}
+SUM_PAIRS pairs=48 nosubj=6 reasons={'no_proposed_subject': 2, 'bar_miss': 4} nosubj_with_pieces_before=0
+T7JOB 049f4947 tenant=audit-atlas-hearth status=succeeded at=05:51 segments_seen=63 routes_seen=0 blog_proposed=8 blog_bar={'cleared': 17, 'no_data': 5, 'few_said': 0, 'below_bar': 32, 'few_questions': 9} unmatched_markets=0
+T7JOB 878ec086 tenant=audit-terra-family status=succeeded at=05:58 segments_seen=60 routes_seen=0 blog_proposed=7 blog_bar={'cleared': 16, 'no_data': 6, 'few_said': 0, 'below_bar': 34, 'few_questions': 4} unmatched_markets=0
+T7JOB 5749bd43 tenant=audit-trail-pulse status=succeeded at=06:03 segments_seen=60 routes_seen=0 blog_proposed=8 blog_bar={'cleared': 17, 'no_data': 6, 'few_said': 0, 'below_bar': 26, 'few_questions': 11} unmatched_markets=0
+T7JOB ad9e85e6 tenant=audit-wildkind-travel status=succeeded at=06:09 segments_seen=60 routes_seen=0 blog_proposed=7 blog_bar={'cleared': 10, 'no_data': 9, 'few_said': 0, 'below_bar': 29, 'few_questions': 12} unmatched_markets=0
+T7JOB d1179fad tenant=audit-atlas-hearth status=succeeded at=07:00 segments_seen=146 routes_seen=0 blog_proposed=24 blog_bar={'cleared': 49, 'no_data': 10, 'few_said': 0, 'below_bar': 67, 'few_questions': 20} unmatched_markets=0
+T7JOB d6f279c9 tenant=audit-terra-family status=succeeded at=07:09 segments_seen=142 routes_seen=0 blog_proposed=21 blog_bar={'cleared': 41, 'no_data': 13, 'few_said': 0, 'below_bar': 79, 'few_questions': 9} unmatched_markets=0
+T7JOB dbf1b82f tenant=audit-trail-pulse status=succeeded at=07:19 segments_seen=142 routes_seen=0 blog_proposed=30 blog_bar={'cleared': 56, 'no_data': 11, 'few_said': 0, 'below_bar': 57, 'few_questions': 18} unmatched_markets=0
+T7JOB cbe16af1 tenant=audit-wildkind-travel status=succeeded at=07:29 segments_seen=142 routes_seen=0 blog_proposed=26 blog_bar={'cleared': 44, 'no_data': 12, 'few_said': 0, 'below_bar': 64, 'few_questions': 22} unmatched_markets=0
+T7JOB 9518b459 tenant=audit-atlas-hearth status=succeeded at=07:58 segments_seen=186 routes_seen=0 blog_proposed=32 blog_bar={'cleared': 71, 'no_data': 10, 'few_said': 0, 'below_bar': 80, 'few_questions': 25} unmatched_markets=0
+T7JOB 4361e511 tenant=audit-terra-family status=succeeded at=08:03 segments_seen=183 routes_seen=0 blog_proposed=29 blog_bar={'cleared': 63, 'no_data': 13, 'few_said': 0, 'below_bar': 95, 'few_questions': 12} unmatched_markets=0
+T7JOB f9c9f882 tenant=audit-trail-pulse status=succeeded at=08:09 segments_seen=183 routes_seen=0 blog_proposed=40 blog_bar={'cleared': 79, 'no_data': 12, 'few_said': 0, 'below_bar': 69, 'few_questions': 23} unmatched_markets=0
+T7JOB 61acdefc tenant=audit-wildkind-travel status=succeeded at=08:15 segments_seen=183 routes_seen=0 blog_proposed=35 blog_bar={'cleared': 68, 'no_data': 12, 'few_said': 0, 'below_bar': 77, 'few_questions': 26} unmatched_markets=0
+JSON {"n": 28, "held": 20, "approved": 7, "failed": 1, "band_chars": [4700, 13000], "writer_words": [900, 1300, 1600], "f4_held": {"n": 13, "short": 13, "long": 0, "in_now": 0, "delta_short": {"n": 13, "min": -1486, "med": -912, "max": -78, "mean": -931.3}, "delta_long": {"n": 0}, "words": {"n": 13, "min": 546, "med": 652, "max": 775, "mean": 647.9}}, "f4_only": {"n": 9, "short": 9, "long": 0, "delta": {"n": 9, "min": -1486, "med": -1121, "max": -78, "mean": -978.1}, "words": {"n": 9, "min": 546, "med": 624, "max": 775, "mean": 640.8}, "pieces": ["cda38200", "a6e7e93f", "37e97e7e", "d16dfc5b", "b08b585c", "6a2ecc16", "1b3b70ec", "ebfcc20e", "2cfe5543"]}, "words_by_status": {"held": {"n": 20, "min": 546, "med": 714.5, "max": 901, "mean": 719.4}, "approved": {"n": 7, "min": 749, "med": 824, "max": 1082, "mean": 861.6}, "failed": {"n": 1, "min": 0, "med": 0, "max": 0, "mean": 0.0}}, "chars_by_status": {"held": {"n": 20, "min": 3214, "med": 4136.0, "max": 5098, "mean": 4201.9}, "approved": {"n": 7, "min": 4426, "med": 4859, "max": 6210, "mean": 5010.4}, "failed": {"n": 1, "min": 0, "med": 0, "max": 0, "mean": 0.0}}, "writer_side": {"under": 25, "in": 3}, "f4_side_all": {"in": 11, "short": 17}, "cpw": {"n": 27, "min": 5.54, "med": 5.8, "max": 6.15, "mean": 5.8}, "chars_at_writer_floor": 5245.0, "attempts": {"2": 25, "1": 3}, "attempts_held": {"2": 20}, "repair_modes": {"full_rewrite": 18, "-": 20, "sentences": 7}, "trimmed_pieces": 0, "final_gate_sets": {"F13_repeat": 1, "F17_trip_fact,F9_cta_fact": 1, "F17_trip_fact": 4, "F4_extreme_length": 9, "F13_repeat,F4_extreme_length": 2, "F13_repeat,F17_trip_fact": 1, "F17_trip_fact,F4_extreme_length": 1, "F4_extreme_length,F9_cta_fact": 1}, "first_gate_sets": {"F4_extreme_length": 6, "pass": 3, "F13_repeat,F17_trip_fact,F4_extreme_length,F9_cta_fact": 2, "F9_cta_fact": 1, "F13_repeat,F17_trip_fact": 1, "F13_leak,F13_repeat": 1, "F13_leak,F4_extreme_length": 1, "F4_extreme_length,F9_cta_fact": 1, "F17_trip_fact": 2, "F13_leak,F13_repeat,F17_trip_fact": 1, "F13_leak,F17_trip_fact,F18_rarity": 1, "F17_trip_fact,F4_extreme_length": 3, "F13_repeat,F4_extreme_length": 2, "F17_trip_fact,F4_extreme_length,F9_cta_fact": 1, "F13_repeat,F4_extreme_length,F9_cta_fact": 1, "F13_repeat,F17_trip_fact,F4_extreme_length": 1}, "first_f4_side": {"short": 18, "in": 10}, "seed_vs_words_r": 0.424, "days_vs_words_r": 0.098, "atoms_vs_words_r": 0.176, "f17_classes": {"pace_promise": 2, "optional_as_planned": 7, "time_not_in_source": 2}, "f13_classes": {"repeat_sentence": 4, "dedupe_echo": 2, "moment_under_other_heading": 1}, "f9_classes": {"unsupported_other": 27, "trip_promise": 2, "seo_field_claim": 2}, "t9_write_cut_pieces": 0, "t9_write_calls": {"n": 28, "min": 1, "med": 2.0, "max": 2, "mean": 1.8}, "pieces_per_subject": {"1": 28}, "pairs_per_piece": {"3": 7, "1": 21}, "writer_prompt_versions": {"cc9b4979": 27, "-": 1}, "first_vs_final": {"F4_extreme_length": {"fixed": 6, "introduced": 1, "kept": 12}, "F13_repeat": {"introduced": 2, "fixed": 7, "kept": 2}, "F17_trip_fact": {"kept": 6, "fixed": 6, "introduced": 1}, "F9_cta_fact": {"kept": 1, "fixed": 5, "introduced": 1}, "F13_leak": {"fixed": 4}, "F18_rarity": {"fixed": 1}}, "pairs_nosubj": [{"tenant": "audit-atlas-hearth", "tour": "84e392c3", "reason": "no_proposed_subject", "cleared": 2, "held": 0, "thin": 0, "free": 2, "subjects": {}, "req_all": 0, "req_p2": 0, "pieces_before": {}}, {"tenant": "audit-atlas-hearth", "tour": "caf4bf16", "reason": "bar_miss", "cleared": 0, "held": 0, "thin": 0, "free": 0, "subjects": {}, "req_all": 0, "req_p2": 0, "pieces_before": {}}, {"tenant": "audit-terra-family", "tour": "caf4bf16", "reason": "bar_miss", "cleared": 0, "held": 0, "thin": 0, "free": 0, "subjects": {}, "req_all": 0, "req_p2": 0, "pieces_before": {}}, {"tenant": "audit-trail-pulse", "tour": "caf4bf16", "reason": "bar_miss", "cleared": 0, "held": 0, "thin": 0, "free": 0, "subjects": {}, "req_all": 0, "req_p2": 0, "pieces_before": {}}, {"tenant": "audit-wildkind-travel", "tour": "84e392c3", "reason": "no_proposed_subject", "cleared": 2, "held": 0, "thin": 0, "free": 2, "subjects": {}, "req_all": 0, "req_p2": 0, "pieces_before": {}}, {"tenant": "audit-wildkind-travel", "tour": "caf4bf16", "reason": "bar_miss", "cleared": 0, "held": 0, "thin": 0, "free": 0, "subjects": {}, "req_all": 0, "req_p2": 0, "pieces_before": {}}]}
+ecsx: rc=0 bytes=56314
