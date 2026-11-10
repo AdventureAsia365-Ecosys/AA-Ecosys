@@ -28,6 +28,12 @@ because a provider circuit was open, so nothing was sent (on 09/11 one Jev burst
 real failures that opened the circuit). The failures are rows of their own; the refusals are counted apart, never as
 errors. Marked ``quality_signal.refusal = circuit_open`` since S275; older rows are matched by the refusal text
 ("... circuit open (<class>) until ...: nothing was sent to the provider").
+
+S276 (lane l6): CIS LLM gateway rows of a deployment skipped behind an open circuit carry the same mark and, since
+then, their connection (before, a model none of whose deployments was called wrote its refused row with a NULL
+connection: never expected, always an error). Such a row of a model with no access yet matches both rules; it is
+counted once, as circuit-open (nothing was sent), so the expected column keeps the real calls that were refused and
+ok + err + expected + circuit-open adds up to the connection's 24 h rows.
 """
 import asyncio
 import os
@@ -43,6 +49,8 @@ EXPECTED = """(l.status = 'refused' AND l.error_class = 'access_denied' AND EXIS
 CIRCUIT = """(l.status = 'refused' AND (l.quality_signal ->> 'refusal' = 'circuit_open'
     OR l.quality_signal ->> 'error' LIKE '%circuit open (%nothing was sent to the provider'))"""
 NOT_ERROR = f"({EXPECTED} OR {CIRCUIT})"
+# S276: an expected refusal that is also a circuit-open refusal is counted as circuit-open only.
+EXPECTED_SENT = f"({EXPECTED} AND NOT {CIRCUIT})"
 
 CONNECTIONS_SQL = f"""
 SELECT p.connection_key, p.enabled, p.access_state, p.last_probe_at, p.monthly_budget_usd,
@@ -53,7 +61,7 @@ SELECT p.connection_key, p.enabled, p.access_state, p.last_probe_at, p.monthly_b
          WHERE l.connection_key = p.connection_key AND l.created_at > now() - interval '24 hours') AS ok24,
        (SELECT count(*) FILTER (WHERE coalesce(l.status, 'ok') <> 'ok' AND NOT {NOT_ERROR}) FROM shared.llm_call_log l
          WHERE l.connection_key = p.connection_key AND l.created_at > now() - interval '24 hours') AS err24,
-       (SELECT count(*) FILTER (WHERE {EXPECTED}) FROM shared.llm_call_log l
+       (SELECT count(*) FILTER (WHERE {EXPECTED_SENT}) FROM shared.llm_call_log l
          WHERE l.connection_key = p.connection_key AND l.created_at > now() - interval '24 hours') AS exp24,
        (SELECT count(*) FILTER (WHERE {CIRCUIT}) FROM shared.llm_call_log l
          WHERE l.connection_key = p.connection_key AND l.created_at > now() - interval '24 hours') AS circ24
@@ -93,7 +101,7 @@ GROUP BY 1, 2, 3 ORDER BY 4 DESC LIMIT 6
 EXPECTED_SQL = f"""
 SELECT l.connection_key, l.model, count(*) AS n
 FROM shared.llm_call_log l
-WHERE l.created_at > now() - interval '24 hours' AND {EXPECTED}
+WHERE l.created_at > now() - interval '24 hours' AND {EXPECTED_SENT}
 GROUP BY 1, 2 ORDER BY 1, 2
 """
 
