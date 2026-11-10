@@ -214,7 +214,7 @@ Each step goes shadow → 3 tours → at most about 50 tours, and reports cost p
 |---|---|
 | TripPlanner | Hides the tour at once |
 | Pending publish items | Cancelled |
-| WordPress | Tenant notice plus a flag; the page goes to draft after the notice period (default 7 days, b7) |
+| WordPress | Tenant notice plus a flag; the page stays online unless the agency moves it to draft (one click) or turned automatic drafts on (amended S276, below; was: draft after the notice period, default 7 days, b7) |
 | Facebook | Notice plus a flag; nothing is deleted |
 | CRM | The line is marked and the agent gets a task |
 | Booking | New holds are blocked; confirmed bookings stay |
@@ -225,6 +225,12 @@ Tenants are told on two channels:
 
 - **In the portal:** already built (`tour.discontinued` in `shared.notifications`, the bell).
 - **E-mail through SES (R6):** sent at once when a `retired` tour still has live pages or posts for the tenant; otherwise folded into a daily digest. Recipients are the owner and the content members. The mail names the tour, the stop date, what the system already did, when the WordPress page goes to draft, which Facebook posts to edit, and a replacement tour if any. A `restored` tour gets a "back on sale" mail; a `paused` tour gets no mail. Wording is content-style, never "flag" or "QA".
+
+- **Amendment (S276, 10/11/2026, tech lead decision; AA-1039 follow-up): notice only by default.** Adventure Asia does not change an agency's WordPress site when it retires a tour, unless the agency asked for it.
+  - **Default:** every live post about the retired tour, WordPress and Facebook alike, gets a `notice_only` flag (no draft date). The agency gets the bell and the e-mail, which list each page and say what it can do: rewrite it around another AA tour, move it to draft with one click, or keep it. Neither ever says AA will change the site.
+  - **One click:** the Content studio (AA-Partner CRM web, Publish, beside "Put back online") and the bell offer **Move to draft** on each listed WordPress page. CIS `POST /v1/publish-log/{publish_id}/move-to-draft` moves exactly that page to draft through the same path as the old automatic draft. It accepts only the tenant's own published page with an open `tour_retired` flag (404 otherwise), is idempotent (a repeat click answers "already a draft") and writes the audit row `content_piece.moved_to_draft`. A page drafted this way is put back with "Put back online" after a restore, like an automatic draft (S275 option A).
+  - **Opt-in:** Content studio Settings has "Automatically move posts about a discontinued tour to draft after N days", off by default, N from 1 to 30 (default 7), owner only. It is stored in `acp_shared.tour_retirement_policy.auto_draft` (CIS 395, agency rows only: the platform row can never opt every agency in). Only an opted-in agency gets `draft_after_notice` with `draft_due_at` = event + N days. The draft job re-reads the setting, so turning it off also cancels drafts already scheduled. Facebook is never changed.
+  - **Existing data:** open `draft_after_notice` flags written before this change are left as they are; the S276 rollout reports their count.
 
 **d21 Content gate without an LLM (TL-21).** When a piece is created and again before it is published:
 
