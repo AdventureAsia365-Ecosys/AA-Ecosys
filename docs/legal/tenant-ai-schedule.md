@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-partner-portal, aa-crm-web, tripplanner-frontend]
-last_reviewed: 2026-11-09
+last_reviewed: 2026-11-10
 review_every_days: 30
 related: [SEC-04, SEC-04-packet, SEC-04-dpa, SEC-04-dpa-pack, APP-06-ai-register, AA-820]
 ---
@@ -358,7 +358,8 @@ vendor that receives agency personal data is missing from it. Re-checked on 2026
 Zoho ("mail / business tooling"), now beside DreamHost in Annex 3 §1.3 as company mail to confirm; TrueIDC, Namecheap,
 GitHub and Vercel (no project left) receive no agency personal data.*
 
-*Page-copy follow-up (2026-11-09, AA-Partner, not this page):* the Content studio `/legal/partner-terms` §3 and
-`/legal/privacy` §5–§6 (Draft v0.5) still say that an OpenAI model "may write it as a last resort". Since route control
-version 7 (CIS 383, 2026-11-06) none does. The pages disclose more than happens, which misleads no one about where
-content goes, but the next page version should drop that sentence (readiness packet Annex A follow-ups).
+*Page-copy follow-up (2026-11-09, AA-Partner, not this page; done 2026-11-10):* the Content studio
+`/legal/partner-terms` §3 and `/legal/privacy` §5 said in Draft v0.5 that an OpenAI model "may write it as a last
+resort", which none does since route control version 7 (CIS 383, 2026-11-06). Draft v0.6 (2026-11-10) says that only
+Claude models write and that a writing step with no Claude model available waits and is tried again later; an
+AA-Partner guard test keeps any other maker out of the pages' sentences about writing.

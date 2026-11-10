@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-09
+last_reviewed: 2026-11-10
 review_every_days: 90
 related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, SEC-04-ai-schedule, SEC-04-dpa-pack, AA-886, AA-820, AA-839, AA-877, AA-1038]
 ---
@@ -200,8 +200,9 @@ main body of the partner terms is drafted ([Tenant Terms clause](tenant-terms-ai
 partner follows the AI providers' usage policies, including the Anthropic Usage Policy from 2026-11-12; the
 prohibited uses; and Adventure Asia's right to pause AI features. Every sentence comes from Schedule v1.0, so it adds no
 new duty; it waits for a partner agreement template. The data processing agreement is at v0.4 (topic 4). Since
-2026-11-06 no OpenAI model writes partner content; the portal pages still say one "may write it as a last resort",
-which says more than happens and is fixed in their next version. *Business owner decides:* the wording of
+2026-11-06 no OpenAI model writes partner content; since 2026-11-10 (portal Draft v0.6) the portal pages say so: only
+Claude models write, and a writing step with no Claude model available waits and is tried again later (the Draft v0.5
+"may write it as a last resort" sentence is gone). *Business owner decides:* the wording of
 the pilot letter around the clause, the pilot's monthly AI allowance, and when to bring in the lawyer (before the
 first paying agency at the latest). *Detail:* [AI Schedule v1.0](tenant-ai-schedule.md): where each part ships (§2),
 the Schedule (§3), the pilot-letter clause (§5), 16 questions for a lawyer (§7) and where each part of the work stands
@@ -211,25 +212,27 @@ the Schedule (§3), the pilot-letter clause (§5), 16 questions for a lawyer (§
 ## Annex A: current text of the four pages
 
 The text below is copied from the page source as rendered: A.1 and A.2 at AA-TripPlanner-Web commit `8327bb0`
-(2026-10-28), A.3 and A.4 from the AA-Partner Draft v0.5 pages (2026-11-06, as merged by the S271 pages PR). The portal pages moved from AA-CIS-App to
+(2026-10-28), A.3 and A.4 from the AA-Partner Draft v0.6 pages (2026-11-10; the S271 Draft v0.5 text with the writer
+sentence of A.3 §5 and A.4 §3 changed). The portal pages moved from AA-CIS-App to
 AA-Partner with their history (AA-979); their text is the one of 2026-10-20 plus the AA-820 text of A.4 §3
 (2026-10-24) and the AI provider list of A.3 §5–§6 and A.4 §3 (2026-10-31, S262, from the
 [AI Use Register](../architecture/ai-use-register.md)), rewritten on 2026-11-06 (S271) for route control version 6
 (register v1.11). Each page shows the banner "Draft — pending legal review". The Trip Planner pages show the version
 "Draft v0.1" (20 October 2026), although their text gained the traveller sign-in and Geoapify parts later; the two
-portal pages show "Draft v0.5" (6 November 2026) since the route control version 6 change (Draft v0.4 of 3 November
-2026 was the AI Schedule v1.0 change). Links are shown as their text. The Trip Planner pages exist in English only; the
+portal pages show "Draft v0.6" (10 November 2026) since the route control version 7 change (CIS 383: only Claude
+models write); Draft v0.5 (6 November 2026) was the route control version 6 change and Draft v0.4 (3 November 2026)
+the AI Schedule v1.0 change. Links are shown as their text. The Trip Planner pages exist in English only; the
 portal pages also show a Vietnamese translation for reading, and their English text applies. If a page changes after
 that commit or that PR, the live page wins.
 
-Three page-copy follow-ups are known. Since 2026-11-06 (route control version 7, CIS migration 383) no OpenAI model
-writes Content studio content, but A.3 §5 and A.4 §3 (portal Draft v0.5) still say that an OpenAI model "may write it
-as a last resort"; the next portal page version drops that sentence. The portal privacy notice §6 still says that Vercel hosts the portal pages,
+Two page-copy follow-ups are known (a third, the OpenAI "last resort" writer sentence of A.3 §5 and A.4 §3, is fixed
+in portal Draft v0.6 of 2026-11-10: since route control version 7, CIS migration 383, only Claude models write). The
+portal privacy notice §6 still says that Vercel hosts the portal pages,
 although the portal now runs on AWS. Since 2026-11-08 the Trip Planner privacy notice (§3, §6, §7) names Amazon Web
 Services (Amazon CloudFront and its website firewall, with a short-lived security cookie) instead of Vercel; A.2 below
 quotes the older text. The Trip Planner pages changed after 2026-10-20 but still showed that date until
-2026-11-03 (Draft v0.2). A.3 §5–§6 and A.4 §3 below are the 2026-11-06 text (AA-820, route control version 6, portal
-Draft v0.5); A.2 §3 is
+2026-11-03 (Draft v0.2). A.3 §5–§6 and A.4 §3 below are the 2026-11-10 text (AA-820, route control version 7, portal
+Draft v0.6); A.2 §3 is
 older than the live page, which since then names the model that writes the narration and links the Anthropic Usage
 Policy.
 
@@ -433,8 +436,8 @@ The legal basis for each use is [to be confirmed].
 any of them. Claude models (Anthropic) write it and may also check it: Adventure Asia calls Claude through the Anthropic
 API first and through Amazon
 Bedrock (Amazon Web Services) second. OpenAI models review, score and check the drafts, through Amazon Bedrock or the
-OpenAI API, and other models on Amazon Bedrock (Amazon Nova, Meta Llama) may also review and check them. If no Claude
-model is available, an OpenAI model through the OpenAI API may write the content as a last resort. The Anthropic API and
+OpenAI API, and other models on Amazon Bedrock (Amazon Nova, Meta Llama) may also review and check them. Only Claude
+models write the content: if no Claude model is available, the writing step waits and is tried again later. The Anthropic API and
 the OpenAI API are used directly, each with a spending cap; those calls go from Amazon Web Services to Anthropic or
 OpenAI, on accounts Adventure Asia holds in its own company name. Adventure Asia may change the order in which the
 providers listed here are used without notice. Adding or replacing a provider follows the advance notice set out in the
@@ -494,8 +497,8 @@ pieces about those tours, and tools to export them or publish them to your own c
 - The content is written and checked with AI models of third-party providers, and may be processed by any of them.
   Anthropic's Claude models write it and may also check it: Adventure Asia calls Claude through the Anthropic API first and through Amazon Bedrock
   (Amazon Web Services) second. OpenAI models review, score and check it, through Amazon Bedrock or the OpenAI API, and
-  other models on Amazon Bedrock (Amazon Nova, Meta Llama) may also review and check it. If no Claude model is
-  available, an OpenAI model through the OpenAI API may write it as a last resort. The Anthropic API and the OpenAI API
+  other models on Amazon Bedrock (Amazon Nova, Meta Llama) may also review and check it. Only Claude models write it:
+  if no Claude model is available, the writing step waits and is tried again later. The Anthropic API and the OpenAI API
   are used directly, each with a spending cap. Adventure Asia may change the order in which the providers listed here
   are used without notice. Adding or replacing a provider follows the advance notice set out in the data processing
   agreement between you and Adventure Asia.

@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-crm-api, aa-crm-web, aa-partner-portal, aa-cis-api, aa-cis-worker, aa-booking-api, tripplanner-frontend]
-last_reviewed: 2026-11-08
+last_reviewed: 2026-11-10
 review_every_days: 30
 related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04-dpa-annex4, SEC-04-dpa-pack, SEC-04-pilot-set, OPS-04, AA-820]
 ---
@@ -64,7 +64,7 @@ they appear only for completeness.
 | 2 | United States, Amazon Bedrock in AWS US regions (us-east-1, us-east-2, us-west-1, us-west-2) | CRM reply-draft text after the scrub: placeholders, never identity fields; only for an agency with AI switched on (off by default) | CRM | Scrubbed text; no prompt or output text in the AI call records | Annex 2 M-18, M-20; Annex 3 §1.2 |
 | 3 | Amazon Bedrock, any AWS commercial region (`global.` inference profiles) | Content studio inputs; no client personal data by rule | Content studio | Content only | Annex 2 M-19 |
 | 4 | Anthropic, PBC (Anthropic API), location **[to confirm]** | Content studio inputs; no client personal data by rule. The first path of every Claude model since 2026-11-05 | Content studio | Content only; no prompt or output text in AA's AI call records | Annex 3 §1.2; [AI Use Register](../architecture/ai-use-register.md) v1.11 |
-| 5 | OpenAI (OpenAI API), location **[to confirm]** | Content studio inputs; no client personal data by rule. Answers the scoring and checking stages while Bedrock refuses; writes as a last resort | Content studio | As row 4 | Annex 3 §1.2 |
+| 5 | OpenAI (OpenAI API), location **[to confirm]** | Content studio inputs; no client personal data by rule. Answers the scoring and checking stages while Bedrock refuses; no longer writes (CIS 383, 2026-11-06) | Content studio | As row 4 | Annex 3 §1.2 |
 | 6 | Sentry (Functional Software, Inc.), United States | Error events after scrubbing: no default personal data, no request bodies, cookies or local variables; a residual risk that an error message quotes a value | All apps | Scrubbed events | Annex 2 M-21; Annex 3 §1.3 |
 
 Vercel, Inc. (United States) is no longer a destination: the staff apps left it on 2026-11-07 and the Trip Planner
