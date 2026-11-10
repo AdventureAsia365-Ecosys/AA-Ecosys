@@ -9,6 +9,7 @@ name: Docs lint
 #   - internal links, offline (lychee): no network, no external sites; the binary comes from a cached, hash-checked
 #     copy (.github/actions/lychee, S273), warmed on master by the lychee-cache job
 #   - every alarm row of docs/generated/alarms.md links to an existing runbook (AA-893)
+#   - every image a docs page shows resolves, has alt text and stays under the 300 KB screenshot cap (AA-1064)
 #   - the AI gateway guide names only stages, models, connections and secrets that exist (AA-1042)
 #   - PRDs (docs/product/): required PRD fields, acceptance criteria, and every referenced path exists (AA-894)
 #   - the report registry docs/reports/*.yaml (AA-1003): shape, KPI references, templates, source tables
@@ -184,6 +185,13 @@ jobs:
       - name: Single-line AWS CLI
         if: ${{ !cancelled() }}
         run: python tools/docs/check_docs_text.py aws-multiline
+
+      # AA-1064: every image a docs page shows can be published to the CIS docs reader: alt text, a committed file
+      # under docs/ outside the never-published folders, SVG / PNG / WebP, a screenshot at most 300 KB with no ID in its
+      # metadata (the bundle builder's rule 9 and 10 checks, imported, so lint and bundle agree).
+      - name: Docs images
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: python tools/docs/check_images.py
 
       # AA-893: every alarm in the generated catalog (docs/generated/alarms.md) links to a runbook that exists here.
       - name: Alarm runbook links
