@@ -1,6 +1,6 @@
 {
  "updated": "2026-11-10",
- "synced_at": "2026-11-10T15:04Z",
+ "synced_at": "2026-11-10T15:44Z",
  "session": "S276",
  "next_session": "S277",
  "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
@@ -926,7 +926,8 @@
     "AA-1024",
     "AA-1067",
     "AA-1068",
-    "AA-1065"
+    "AA-1065",
+    "AA-1063"
    ],
    "canceled": [],
    "created": [
@@ -2313,18 +2314,6 @@
    "next": "",
    "needs": "cần xếp slot",
    "due": "2026-11-29"
-  },
-  {
-   "id": "AA-1063",
-   "title": "[Writing Lab] Claim ground truth in the admin: plain-language review queue, label set browser, bulk accept, Jev pre-filter",
-   "status": "In Review",
-   "priority": "High",
-   "project": "core",
-   "milestone": "later",
-   "session": "S277",
-   "size": "",
-   "next": "M2a — S277: tech lead duyệt một đợt t2@2 trong Writing Lab → đóng",
-   "needs": "cần xếp slot"
   },
   {
    "id": "AA-1069",

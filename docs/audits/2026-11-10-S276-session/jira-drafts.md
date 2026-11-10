@@ -69,7 +69,7 @@ toán / huỷ đã lên Dev và đã kiểm bằng trình duyệt. Bảng phí h
 | Lịch 30 / 40 trước 60 ngày / phần còn lại trước 30 ngày; sửa ở Settings và trên đề xuất | AA-Partner #261 (`6dd244de`, mẫu mặc định `deposit 30 / instalment 40 before_start 60`); ảnh `01a-settings-payments-schedule`, `01c-builder-instalments` |
 | Nhắc trước 7 ngày, quá hạn 3 ngày, tối đa 1 lần / 3 ngày, thêm ở trạng thái tạm dừng | ảnh `01e-automations-payment-reminders` (chữ trên trang: "Added paused: read the message, then switch it on. Nothing is sent to travellers until you do.") |
 | Bảng gợi ý 10 / 25 / 50 / 100 theo mốc 31 / 15 / 8 / 0 ngày | `DEFAULT_TIERS = ((31, "10"), (15, "25"), (8, "50"), (0, "100"))` trong #261; ảnh `01b-settings-cancellation-policy` |
-| "phương án đề xuất ở câu 3, thêm mức 10%" | comment 10636 câu 3A: ≤30 ngày 25%, ≤14 ngày 50%, ≤7 ngày 100% (các mốc trùng; bản code thêm 10% từ 31 ngày) |
+| "phương án đề xuất ở câu 3, thêm mức 10%" | comment 10636 câu 3A: ≤30 ngày 25%, ≤14 ngày 50%, ≤7 ngày 100% (các mốc trùng; bản code ban đầu thêm 10%, đã sửa về 0% (Partner #266) từ 31 ngày) |
 | Chốt vào đề xuất khi khách chấp nhận | chữ trên trang `01b`: "The client accepts it with the proposal"; migration crm-050 `proposal.cancellation_policy_id` niêm phong sau bản nháp |
 | Hộp huỷ: 0 USD, 79,27 USD, cảnh báo; chỉ xem trước | ảnh `01d-trip-cancel-dialog-preview` (phiên điều phối: không bấm huỷ) |
 | Chưa thử phí theo chính sách thật | phiên điều phối: chưa chuyến thử nào gắn chính sách |
@@ -181,7 +181,7 @@ lên kế hoạch sửa. Nếu muốn nói rõ hơn với chị: câu "lô 09/11
 ## Ghi chú cho tech lead trước khi duyệt
 
 1. **Bảng phí huỷ gợi ý khác câu 3A một chút:** câu 3A (đã đăng 10636) không có mức nào cho huỷ từ 31 ngày trở lên (tức
-   0%), bản code thêm 10%. Nháp 1 nói rõ điều này. Nếu muốn khớp đúng 3A, đổi mức 31 ngày về 0% trong code trước khi
+   0%), bản code ban đầu thêm 10%, đã sửa về 0% (Partner #266). Nháp 1 nói rõ điều này. Nếu muốn khớp đúng 3A, đổi mức 31 ngày về 0% trong code trước khi
    đăng, rồi sửa câu trong nháp.
 2. **Chi phí TripPlanner** (Nháp 3): kiểm lại con số 12–14 USD/tháng như ghi ở bảng bằng chứng.
 3. **PR-23** (Nháp 2): nếu vòng đầy đủ trên site WordPress thử xong trước lúc đăng, thay dòng cuối bằng kết quả thật.
@@ -194,3 +194,14 @@ lên kế hoạch sửa. Nếu muốn nói rõ hơn với chị: câu "lô 09/11
 4. PR-22: Nháp 4.
 
 Trạng thái đăng: chưa đăng (chờ duyệt).
+
+## Kết quả đăng (10/11/2026)
+
+Tech lead duyệt "đăng hết" (~23:05 +07). Điều phối đăng (hook chặn agent con ghi Jira):
+
+| Nháp | Issue | Comment | Ảnh |
+|---|---|---|---|
+| 1 CRM | PR-26 | 10637 | 4 (bảng phí huỷ chụp lại sau Partner #266: 0 / 25 / 50 / 100%) |
+| 2 Content studio | PR-23 | 10638 | 1 |
+| 3 TripPlanner | PR-24 | 10639 | 1 |
+| 4 CIS nội dung | PR-22 | 10640 | 0 |

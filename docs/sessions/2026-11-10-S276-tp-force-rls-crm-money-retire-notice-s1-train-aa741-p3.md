@@ -86,7 +86,7 @@ Snapshot: `docs/audits/2026-11-10-S276-session/state-snapshot.md`.
   ghi repo variables.
 - Kèm theo: CIS #1421 và root #667 (ở trên).
 
-**AA-1063 (In Review)**
+**AA-1063 (Done)**
 - Enqueue t2@2/1.0.0: 417 câu; gọi lần hai thêm 0.
 - Allowlist Jev đã rỗng (không còn tenant demo).
 - Đề xuất panel agent đã nhập Lab:
@@ -138,7 +138,8 @@ Snapshot: `docs/audits/2026-11-10-S276-session/state-snapshot.md`.
   - AA-1067: kiểm UI live PASS trên đại lý thử Sen Vàng.
   - AA-1068: kiểm UI live PASS; vai trò assistant nhận 403 ở các API tiền.
   - Ảnh: `docs/audits/2026-11-10-S276-session/ui-verify/`.
-- **In Review:** AA-1063 (chờ tech lead duyệt một đợt), AA-1049 (s1_flag_fix + quyết định 280 tour),
+- **Done thêm cuối phiên:** AA-1063 (tech lead "đồng ý tất cả đề xuất": 417/417 câu chấp nhận qua API của nút Lab, t2@2 đủ 722/722 câu có nhãn, 76 audit 0 lật).
+- **In Review:** AA-1049 (s1_flag_fix + quyết định 280 tour),
   AA-1039 (bằng chứng drill).
 - **Đóng khi root PR này merge:** AA-741.
 - **Issue mới:**
@@ -151,7 +152,7 @@ Snapshot: `docs/audits/2026-11-10-S276-session/state-snapshot.md`.
   - AA-1082 CRM web HA, báo chi phí trước (S279).
 
 ## Jira
-chờ tech lead duyệt 4 nháp (PR-26, PR-23, PR-24, PR-22) — xem `docs/audits/2026-11-10-S276-session/jira-drafts.md`
+đã đăng 4 comment (PR-26 #10637, PR-23 #10638, PR-24 #10639, PR-22 #10640), ghi ở `docs/audits/2026-11-10-S276-session/jira-drafts.md`
 
 Nháp: `docs/audits/2026-11-10-S276-session/jira-drafts.md`.
 
