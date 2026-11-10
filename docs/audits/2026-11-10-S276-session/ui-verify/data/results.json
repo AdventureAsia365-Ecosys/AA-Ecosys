@@ -1,0 +1,1028 @@
+[
+ {
+  "key": "01a-settings-payments-schedule",
+  "role": "owner",
+  "path": "/settings/payments",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/settings/payments",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "lines": [
+    "Deposit Share (%) When the client accepts",
+    "Instalment 1 Share (%) Days before departure Remove",
+    "Balance Days before departure Remove"
+   ],
+   "isDefault": [
+    "You use the Adventure Asia default: 30% now, 40% 60 days before departure, the rest 30 days before."
+   ],
+   "card": "PAYMENT SCHEDULE TEMPLATE New proposals start with these lines. Agents can change them on each proposal before it is published. You use the Adventure Asia default: 30% now, 40% 60 days before departure, the rest 30 days before. Deposit Share (%) When the client accepts Instalment 1 Share (%) Days before departure Remove Balance Days before departure Remove Add an instalment Save template Use the A"
+  },
+  "act": null,
+  "file": "01a-settings-payments-schedule-1440-light.png",
+  "size": 90279,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "01a-settings-payments-schedule",
+  "role": "owner",
+  "path": "/settings/payments",
+  "variant": "390-dark",
+  "status": 200,
+  "finalPath": "/settings/payments",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "lines": [
+    "Deposit Share (%) When the client accepts",
+    "Instalment 1 Share (%) Days before departure Remove",
+    "Balance Days before departure Remove"
+   ],
+   "isDefault": [
+    "You use the Adventure Asia default: 30% now, 40% 60 days before departure, the rest 30 days before."
+   ],
+   "card": "PAYMENT SCHEDULE TEMPLATE New proposals start with these lines. Agents can change them on each proposal before it is published. You use the Adventure Asia default: 30% now, 40% 60 days before departure, the rest 30 days before. Deposit Share (%) When the client accepts Instalment 1 Share (%) Days before departure Remove Balance Days before departure Remove Add an instalment Save template Use the A"
+  },
+  "act": null,
+  "file": "01a-settings-payments-schedule-390-dark.png",
+  "size": 44417,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "01b-settings-cancellation-policy",
+  "role": "owner",
+  "path": "/settings/cancellation",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/settings/cancellation",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "empty": [
+    "No cancellation policy yet. 31 days or more before departure: 10% 15 days or more before departure: 25% 8 days or more before departure: 50% 0 days or more before departure: 100% Start from the Adventure Asia table"
+   ],
+   "cards": [],
+   "startAa": 1,
+   "main": "A mailbox is disconnected: messages to clients are on hold. Reconnect ← Settings Cancellation policy The charge to your travellers when they cancel, by days before departure. The client accepts it with the proposal. Booking terms can show it with {{cancellation.policy}}. No cancellation policy yet. 31 days or more before departure: 10% 15 days or more before departure: 25% 8 days or more before departure: 50% 0 days or more before departure: 100% Start from the Adventure Asia table"
+  },
+  "act": null,
+  "file": "01b-settings-cancellation-policy-1440-light.png",
+  "size": 60403,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "01b-settings-cancellation-policy",
+  "role": "owner",
+  "path": "/settings/cancellation",
+  "variant": "390-dark",
+  "status": 200,
+  "finalPath": "/settings/cancellation",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "empty": [
+    "No cancellation policy yet. 31 days or more before departure: 10% 15 days or more before departure: 25% 8 days or more before departure: 50% 0 days or more before departure: 100% Start from the Adventure Asia table"
+   ],
+   "cards": [],
+   "startAa": 1,
+   "main": "A mailbox is disconnected: messages to clients are on hold. Reconnect ← Settings Cancellation policy The charge to your travellers when they cancel, by days before departure. The client accepts it with the proposal. Booking terms can show it with {{cancellation.policy}}. No cancellation policy yet. 31 days or more before departure: 10% 15 days or more before departure: 25% 8 days or more before departure: 50% 0 days or more before departure: 100% Start from the Adventure Asia table"
+  },
+  "act": null,
+  "file": "01b-settings-cancellation-policy-390-dark.png",
+  "size": 32727,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "01c-builder-instalments",
+  "role": "owner",
+  "path": "/pipeline/<uuid>/proposal/<uuid>",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/pipeline/<uuid>/proposal/<uuid>",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "lines": [
+    "Deposit Share (%) When the client accepts 224.40 USD",
+    "Instalment 1 Share (%) Due on Read as: 6 Oct 2026 299.20 USD Remove",
+    "Balance The rest: 30% Due on Read as: 5 Nov 2026 224.40 USD"
+   ],
+   "policy": [
+    "Cancellation policy: the agency default when published Change the cancellation policy"
+   ],
+   "schedule": "Payment schedule The deposit is due when the client accepts. Each instalment is a share of the total; the balance is the rest. Deposit Share (%) When the client accepts 224.40 USD Instalment 1 Share (%) Due on Read as: 6 Oct 2026 299.20 USD Remove Balance The rest: 30% Due on Read as: 5 Nov 2026 224.40 USD Add an instalment Save schedule Use the agency template Cancellation policy: the agency defa"
+  },
+  "act": null,
+  "file": "01c-builder-instalments-1440-light.png",
+  "size": 95386,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "01c-builder-instalments",
+  "role": "owner",
+  "path": "/pipeline/<uuid>/proposal/<uuid>",
+  "variant": "390-dark",
+  "status": 200,
+  "finalPath": "/pipeline/<uuid>/proposal/<uuid>",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "lines": [
+    "Deposit Share (%) When the client accepts 224.40 USD",
+    "Instalment 1 Share (%) Due on Read as: 6 Oct 2026 299.20 USD Remove",
+    "Balance The rest: 30% Due on Read as: 5 Nov 2026 224.40 USD"
+   ],
+   "policy": [
+    "Cancellation policy: the agency default when published Change the cancellation policy"
+   ],
+   "schedule": "Payment schedule The deposit is due when the client accepts. Each instalment is a share of the total; the balance is the rest. Deposit Share (%) When the client accepts 224.40 USD Instalment 1 Share (%) Due on Read as: 6 Oct 2026 299.20 USD Remove Balance The rest: 30% Due on Read as: 5 Nov 2026 224.40 USD Add an instalment Save schedule Use the agency template Cancellation policy: the agency defa"
+  },
+  "act": null,
+  "file": "01c-builder-instalments-390-dark.png",
+  "size": 46829,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "01d-trip-cancel-dialog-preview",
+  "role": "owner",
+  "path": "/pipeline/<uuid>",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/pipeline/<uuid>",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {},
+  "act": {
+   "reason": "client_request",
+   "dryRunAttr": "true",
+   "charge": [
+    "Charge to the client Cancelled 16 days before departure This trip has no cancellation policy: nothing is charged unless you set an amount. Charge: 0.00 USD Paid so far: 540.00 USD Kept towards the charge: 0.00 USD Refund due: 540.00 USD Adventure Asia's cancellation fees: 79.27 USD The charge is below Adventure Asia's cancellation fees: you would refund below your own cost. Charge As the policy sa"
+   ],
+   "refunds": [
+    "Refunds to the client Terms the client accepted: rv202610317-2 on 1 Nov 2026 Set what you give back under the terms the client accepted. What you keep stays on the ledger. Each refund still needs approval. INV-000018, paid 540.00 USD on 1 Nov 2026 Refund (USD) At most 540.00 USD"
+   ],
+   "aa": [
+    "AA bookings Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days Fee 79.27 USD (50 %, 17 days before departure)"
+   ],
+   "effects": "What happens when you cancel: Queued messages cancelled: 3 Open tasks closed: 4 Client links that stop working: 2 AA bookings cancelled with AA (a fee may apply): 1 Unpaid balances voided: 1 Refund requests to approve: 1 Traveller details withdrawn from AA's ground team: 1 AA bookings Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days Fee 79.27 USD (50 %, 17 days before departure) Charge to t",
+   "confirmPresent": 1
+  },
+  "file": "01d-trip-cancel-dialog-preview-1440-light.png",
+  "size": 177140,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "01d-trip-cancel-dialog-preview",
+  "role": "owner",
+  "path": "/pipeline/<uuid>",
+  "variant": "390-dark",
+  "status": 200,
+  "finalPath": "/pipeline/<uuid>",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {},
+  "act": {
+   "reason": "client_request",
+   "dryRunAttr": "true",
+   "charge": [
+    "Charge to the client Cancelled 16 days before departure This trip has no cancellation policy: nothing is charged unless you set an amount. Charge: 0.00 USD Paid so far: 540.00 USD Kept towards the charge: 0.00 USD Refund due: 540.00 USD Adventure Asia's cancellation fees: 79.27 USD The charge is below Adventure Asia's cancellation fees: you would refund below your own cost. Charge As the policy sa"
+   ],
+   "refunds": [
+    "Refunds to the client Terms the client accepted: rv202610317-2 on 1 Nov 2026 Set what you give back under the terms the client accepted. What you keep stays on the ledger. Each refund still needs approval. INV-000018, paid 540.00 USD on 1 Nov 2026 Refund (USD) At most 540.00 USD"
+   ],
+   "aa": [
+    "AA bookings Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days Fee 79.27 USD (50 %, 17 days before departure)"
+   ],
+   "effects": "What happens when you cancel: Queued messages cancelled: 3 Open tasks closed: 4 Client links that stop working: 2 AA bookings cancelled with AA (a fee may apply): 1 Unpaid balances voided: 1 Refund requests to approve: 1 Traveller details withdrawn from AA's ground team: 1 AA bookings Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days Fee 79.27 USD (50 %, 17 days before departure) Charge to t",
+   "confirmPresent": 1
+  },
+  "file": "01d-trip-cancel-dialog-preview-390-dark.png",
+  "size": 58853,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "01e-automations-payment-reminders",
+  "role": "owner",
+  "path": "/automations",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/automations",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {},
+  "act": {
+   "rows": [
+    "Remind the traveller of a payment due Add with our starter message Add Seven days before each payment is due (deposit, instalment, balance) and while it is not paid in full, an e-mail to the lead traveller from your mailbox. At most one reminder every 3 days per payment. 7 days before a payment is due · Pick your message template after adding it. Added paused: read the message, then switch it on. ",
+    "Remind the traveller of an overdue payment Add with our starter message Add Three days after a payment was due and is still open, an e-mail to the lead traveller from your mailbox. 3 days after a payment was due · Pick your message template after adding it. Added paused: read the message, then switch it on. Nothing is sent to travellers until you do."
+   ]
+  },
+  "file": "01e-automations-payment-reminders-1440-light.png",
+  "size": 115755,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "01e-automations-payment-reminders",
+  "role": "owner",
+  "path": "/automations",
+  "variant": "390-dark",
+  "status": 200,
+  "finalPath": "/automations",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {},
+  "act": {
+   "rows": [
+    "Remind the traveller of a payment due Add with our starter message Add Seven days before each payment is due (deposit, instalment, balance) and while it is not paid in full, an e-mail to the lead traveller from your mailbox. At most one reminder every 3 days per payment. 7 days before a payment is due · Pick your message template after adding it. Added paused: read the message, then switch it on. ",
+    "Remind the traveller of an overdue payment Add with our starter message Add Three days after a payment was due and is still open, an e-mail to the lead traveller from your mailbox. 3 days after a payment was due · Pick your message template after adding it. Added paused: read the message, then switch it on. Nothing is sent to travellers until you do."
+   ]
+  },
+  "file": "01e-automations-payment-reminders-390-dark.png",
+  "size": 60902,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "02a-trip-money-card",
+  "role": "owner",
+  "path": "/pipeline/<uuid>",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/pipeline/<uuid>",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "profit": [
+    "Profit 381.46 USD Margin 70.64 %"
+   ],
+   "revenue": [
+    "Revenue 540.00 USD"
+   ],
+   "costs": [
+    "Costs 158.54 USD"
+   ],
+   "perPax": [
+    "Per traveller 190.73 USD × 2"
+   ],
+   "bills": "Supplier bills No bill recorded for this trip yet. No confirmed line of your own suppliers on this trip."
+  },
+  "act": null,
+  "file": "02a-trip-money-card-1440-light.png",
+  "size": 109641,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "02a-trip-money-card",
+  "role": "owner",
+  "path": "/pipeline/<uuid>",
+  "variant": "390-dark",
+  "status": 200,
+  "finalPath": "/pipeline/<uuid>",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "profit": [
+    "Profit 381.46 USD Margin 70.64 %"
+   ],
+   "revenue": [
+    "Revenue 540.00 USD"
+   ],
+   "costs": [
+    "Costs 158.54 USD"
+   ],
+   "perPax": [
+    "Per traveller 190.73 USD × 2"
+   ],
+   "bills": "Supplier bills No bill recorded for this trip yet. No confirmed line of your own suppliers on this trip."
+  },
+  "act": null,
+  "file": "02a-trip-money-card-390-dark.png",
+  "size": 52167,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "02b-trip-supplier-bills",
+  "role": "owner",
+  "path": "/pipeline/<uuid>",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/pipeline/<uuid>",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {},
+  "act": null,
+  "file": "02b-trip-supplier-bills-1440-light.png",
+  "size": 115660,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "02c-aa-bookings",
+  "role": "owner",
+  "path": "/aa-bookings",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/aa-bookings",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "count": [
+    "AA bookings 19"
+   ],
+   "overdue": [
+    "Overdue AA invoices 0"
+   ],
+   "mismatch": [
+    "Differs from quote 0"
+   ],
+   "rows": 19,
+   "invoices": 0,
+   "forbidden": 0
+  },
+  "act": null,
+  "file": "02c-aa-bookings-1440-light.png",
+  "size": 102863,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "02c-aa-bookings",
+  "role": "owner",
+  "path": "/aa-bookings",
+  "variant": "390-dark",
+  "status": 200,
+  "finalPath": "/aa-bookings",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 149,
+   "main": 149
+  },
+  "checks": {
+   "count": [
+    "AA bookings 19"
+   ],
+   "overdue": [
+    "Overdue AA invoices 0"
+   ],
+   "mismatch": [
+    "Differs from quote 0"
+   ],
+   "rows": 0,
+   "invoices": 0,
+   "forbidden": 0
+  },
+  "act": null,
+  "file": "02c-aa-bookings-390-dark.png",
+  "size": 46707,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "02d-reports-profit",
+  "role": "owner",
+  "path": "/reports",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/reports",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "profit": "PROFIT By: Lead source AA tours or your own Travel month Owner Sales partner Download CSV Booked trips that travel in the period. Revenue is invoices net of tax, less refunds. Columns No booked trip travels in this period yet."
+  },
+  "act": null,
+  "file": "02d-reports-profit-1440-light.png",
+  "size": 95901,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "02d-reports-profit",
+  "role": "owner",
+  "path": "/reports",
+  "variant": "390-dark",
+  "status": 200,
+  "finalPath": "/reports",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "profit": "PROFIT By: Lead source AA tours or your own Travel month Owner Sales partner Download CSV Booked trips that travel in the period. Revenue is invoices net of tax, less refunds. Columns No booked trip travels in this period yet."
+  },
+  "act": null,
+  "file": "02d-reports-profit-390-dark.png",
+  "size": 44515,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "02e-home-tiles",
+  "role": "owner",
+  "path": "/home",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/home",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "agenda": "TODAY Open proposals 5 Deposits due this week 0 Overdue payments 16 Passport details missing 15 Trips leaving within 60 days Overdue AA invoices 0 Next group departures 2d3f3d0c-f10f-44f9-8709-e7a2f5396080 26 Nov 2026 · trips: 1 · travellers: 2",
+   "departures": [
+    "2d3f3d0c-f10f-44f9-8709-e7a2f5396080 26 Nov 2026 · trips: 1 · travellers: 2"
+   ]
+  },
+  "act": null,
+  "file": "02e-home-tiles-1440-light.png",
+  "size": 105664,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "02e-home-tiles",
+  "role": "owner",
+  "path": "/home",
+  "variant": "390-dark",
+  "status": 200,
+  "finalPath": "/home",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "agenda": "TODAY Open proposals 5 Deposits due this week 0 Overdue payments 16 Passport details missing 15 Trips leaving within 60 days Overdue AA invoices 0 Next group departures 2d3f3d0c-f10f-44f9-8709-e7a2f5396080 26 Nov 2026 · trips: 1 · travellers: 2",
+   "departures": [
+    "2d3f3d0c-f10f-44f9-8709-e7a2f5396080 26 Nov 2026 · trips: 1 · travellers: 2"
+   ]
+  },
+  "act": null,
+  "file": "02e-home-tiles-390-dark.png",
+  "size": 47289,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "02f-agent-trip",
+  "role": "agent",
+  "path": "/pipeline/<uuid>",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/pipeline/<uuid>",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "money": 1,
+   "margin": [
+    "Profit 381.46 USD Margin 70.64 %"
+   ],
+   "navAaBookings": 1,
+   "pnlApi": 200,
+   "billsApi": 200
+  },
+  "act": null,
+  "file": "02f-agent-trip-1440-light.png",
+  "size": 108661,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "02g-agent-reports",
+  "role": "agent",
+  "path": "/reports",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/reports",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "profit": 1,
+   "profitApi": 200
+  },
+  "act": null,
+  "file": "02g-agent-reports-1440-light.png",
+  "size": 96029,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "02h-agent-aa-bookings",
+  "role": "agent",
+  "path": "/aa-bookings",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/aa-bookings",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "forbidden": 0,
+   "rows": 19,
+   "api": 200
+  },
+  "act": null,
+  "file": "02h-agent-aa-bookings-1440-light.png",
+  "size": 98847,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "02i-agent-home",
+  "role": "agent",
+  "path": "/home",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/home",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "agenda": "TODAY Open proposals 5 Deposits due this week 0 Overdue payments 16 Passport details missing 15 Trips leaving within 60 days Overdue AA invoices 0 Next group departures 2d3f3d0c-f10f-44f9-8709-e7a2f5396080 26 Nov 2026 · trips: 1 · travellers: 2"
+  },
+  "act": null,
+  "file": "02i-agent-home-1440-light.png",
+  "size": 104086,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "02f-assistant-trip",
+  "role": "assistant",
+  "path": "/pipeline/<uuid>",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/pipeline/<uuid>",
+  "errors": [
+   "/pipeline/<uuid>: Failed to load resource: the server responded with a status of 403 ()",
+   "/pipeline/<uuid>: Failed to load resource: the server responded with a status of 403 ()"
+  ],
+  "bad": [
+   "GET /bff/trips/<uuid>/pnl 403",
+   "GET /bff/supplier-bills 403"
+  ],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "money": 0,
+   "margin": [],
+   "navAaBookings": 0,
+   "pnlApi": 403,
+   "billsApi": 403
+  },
+  "act": null,
+  "file": "02f-assistant-trip-1440-light.png",
+  "size": 140162,
+  "masked": 0,
+  "note": "focus [data-testid=\"trip-money\"] not found"
+ },
+ {
+  "key": "02g-assistant-reports",
+  "role": "assistant",
+  "path": "/reports",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/reports",
+  "errors": [
+   "/reports: Failed to load resource: the server responded with a status of 403 ()"
+  ],
+  "bad": [
+   "GET /bff/reports/profit 403"
+  ],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "profit": 0,
+   "profitApi": 403
+  },
+  "act": null,
+  "file": "02g-assistant-reports-1440-light.png",
+  "size": 105461,
+  "masked": 0,
+  "note": "focus [data-testid=\"reports-profit\"] not found"
+ },
+ {
+  "key": "02h-assistant-aa-bookings",
+  "role": "assistant",
+  "path": "/aa-bookings",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/aa-bookings",
+  "errors": [
+   "/aa-bookings: Failed to load resource: the server responded with a status of 403 ()"
+  ],
+  "bad": [
+   "GET /bff/aa-bookings 403"
+  ],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "forbidden": 1,
+   "rows": 0,
+   "api": 403
+  },
+  "act": null,
+  "file": "02h-assistant-aa-bookings-1440-light.png",
+  "size": 36009,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "02i-assistant-home",
+  "role": "assistant",
+  "path": "/home",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/home",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "agenda": "TODAY Open proposals 5 Deposits due this week 0 Overdue payments 16 Passport details missing 15 Trips leaving within 60 days Next group departures 2d3f3d0c-f10f-44f9-8709-e7a2f5396080 26 Nov 2026 · trips: 1 · travellers: 2"
+  },
+  "act": null,
+  "file": "02i-assistant-home-1440-light.png",
+  "size": 96546,
+  "masked": 0,
+  "note": ""
+ },
+ {
+  "key": "03a-owner-studio-publish",
+  "role": "owner",
+  "path": "/portal/content/publish",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/portal-access/none",
+  "errors": [
+   "/portal-access/none: Failed to load resource: the server responded with a status of 401 ()",
+   "/portal-access/none: Failed to load resource: the server responded with a status of 401 ()"
+  ],
+  "bad": [
+   "GET /api/tenant/v1/publish-log/retired-pages 401",
+   "GET /api/tenant/v1/account/tour-retirement 401"
+  ],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "retiredApi": 401,
+   "retiredCount": null,
+   "settingsApi": 401,
+   "settings": {
+    "error": "Unauthorized"
+   },
+   "list": null,
+   "card": null,
+   "auto": null
+  },
+  "act": null,
+  "file": "03a-owner-studio-publish-1440-light.png",
+  "size": 28190,
+  "masked": 2,
+  "note": "focus [data-testid=\"retired-pages-list\"] not found"
+ },
+ {
+  "key": "03a-owner-studio-publish",
+  "role": "owner",
+  "path": "/portal/content/publish",
+  "variant": "390-dark",
+  "status": 200,
+  "finalPath": "/portal-access/none",
+  "errors": [
+   "/portal-access/none: Failed to load resource: the server responded with a status of 401 ()",
+   "/portal-access/none: Failed to load resource: the server responded with a status of 401 ()"
+  ],
+  "bad": [
+   "GET /api/tenant/v1/publish-log/retired-pages 401",
+   "GET /api/tenant/v1/account/tour-retirement 401"
+  ],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "retiredApi": 401,
+   "retiredCount": null,
+   "settingsApi": 401,
+   "settings": {
+    "error": "Unauthorized"
+   },
+   "list": null,
+   "card": null,
+   "auto": null
+  },
+  "act": null,
+  "file": "03a-owner-studio-publish-390-dark.png",
+  "size": 21348,
+  "masked": 2,
+  "note": "focus [data-testid=\"retired-pages-list\"] not found"
+ },
+ {
+  "key": "03b-owner-studio-account-settings",
+  "role": "owner",
+  "path": "/portal/account/settings",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/portal-access/none",
+  "errors": [
+   "/portal-access/none: Failed to load resource: the server responded with a status of 401 ()",
+   "/portal-access/none: Failed to load resource: the server responded with a status of 401 ()"
+  ],
+  "bad": [
+   "GET /api/tenant/v1/publish-log/retired-pages 401",
+   "GET /api/tenant/v1/account/tour-retirement 401"
+  ],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "retiredApi": 401,
+   "retiredCount": null,
+   "settingsApi": 401,
+   "settings": {
+    "error": "Unauthorized"
+   },
+   "list": null,
+   "card": null,
+   "auto": null
+  },
+  "act": null,
+  "file": "03b-owner-studio-account-settings-1440-light.png",
+  "size": 28190,
+  "masked": 2,
+  "note": "focus [data-testid=\"tour-retirement-settings\"] not found"
+ },
+ {
+  "key": "03b-owner-studio-account-settings",
+  "role": "owner",
+  "path": "/portal/account/settings",
+  "variant": "390-dark",
+  "status": 200,
+  "finalPath": "/portal-access/none",
+  "errors": [
+   "/portal-access/none: Failed to load resource: the server responded with a status of 401 ()",
+   "/portal-access/none: Failed to load resource: the server responded with a status of 401 ()"
+  ],
+  "bad": [
+   "GET /api/tenant/v1/publish-log/retired-pages 401",
+   "GET /api/tenant/v1/account/tour-retirement 401"
+  ],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "retiredApi": 401,
+   "retiredCount": null,
+   "settingsApi": 401,
+   "settings": {
+    "error": "Unauthorized"
+   },
+   "list": null,
+   "card": null,
+   "auto": null
+  },
+  "act": null,
+  "file": "03b-owner-studio-account-settings-390-dark.png",
+  "size": 21348,
+  "masked": 2,
+  "note": "focus [data-testid=\"tour-retirement-settings\"] not found"
+ },
+ {
+  "key": "03a-studio-studio-publish",
+  "role": "studio",
+  "path": "/portal/content/publish",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/portal/content/publish",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "retiredApi": 200,
+   "retiredCount": 0,
+   "settingsApi": 200,
+   "settings": {
+    "auto_draft": false,
+    "notice_days": 7,
+    "min_days": 1,
+    "max_days": 30,
+    "default_notice_days": 7
+   },
+   "list": null,
+   "card": null,
+   "auto": null
+  },
+  "act": null,
+  "file": "03a-studio-studio-publish-1440-light.png",
+  "size": 101177,
+  "masked": 0,
+  "note": "focus [data-testid=\"retired-pages-list\"] not found"
+ },
+ {
+  "key": "03a-studio-studio-publish",
+  "role": "studio",
+  "path": "/portal/content/publish",
+  "variant": "390-dark",
+  "status": 200,
+  "finalPath": "/portal/content/publish",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "retiredApi": 200,
+   "retiredCount": 0,
+   "settingsApi": 200,
+   "settings": {
+    "auto_draft": false,
+    "notice_days": 7,
+    "min_days": 1,
+    "max_days": 30,
+    "default_notice_days": 7
+   },
+   "list": null,
+   "card": null,
+   "auto": null
+  },
+  "act": null,
+  "file": "03a-studio-studio-publish-390-dark.png",
+  "size": 48285,
+  "masked": 0,
+  "note": "focus [data-testid=\"retired-pages-list\"] not found"
+ },
+ {
+  "key": "03b-studio-studio-account-settings",
+  "role": "studio",
+  "path": "/portal/account/settings",
+  "variant": "1440-light",
+  "status": 200,
+  "finalPath": "/portal/account/settings",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "retiredApi": 200,
+   "retiredCount": 0,
+   "settingsApi": 200,
+   "settings": {
+    "auto_draft": false,
+    "notice_days": 7,
+    "min_days": 1,
+    "max_days": 30,
+    "default_notice_days": 7
+   },
+   "list": null,
+   "card": "Automatically move posts about a discontinued tour to draft Off by default: when Adventure Asia stops offering a tour, you are told by e-mail and in the bell, and your WordPress pages stay online until you act. Turn this on to have them moved to draft after the number of days below. Facebook posts are never changed. Save Off: you are told, and your site is left as it is.",
+   "auto": false
+  },
+  "act": null,
+  "file": "03b-studio-studio-account-settings-1440-light.png",
+  "size": 80726,
+  "masked": 1,
+  "note": ""
+ },
+ {
+  "key": "03b-studio-studio-account-settings",
+  "role": "studio",
+  "path": "/portal/account/settings",
+  "variant": "390-dark",
+  "status": 200,
+  "finalPath": "/portal/account/settings",
+  "errors": [],
+  "bad": [],
+  "overflow": {
+   "doc": 0,
+   "main": 0
+  },
+  "checks": {
+   "retiredApi": 200,
+   "retiredCount": 0,
+   "settingsApi": 200,
+   "settings": {
+    "auto_draft": false,
+    "notice_days": 7,
+    "min_days": 1,
+    "max_days": 30,
+    "default_notice_days": 7
+   },
+   "list": null,
+   "card": "Automatically move posts about a discontinued tour to draft Off by default: when Adventure Asia stops offering a tour, you are told by e-mail and in the bell, and your WordPress pages stay online until you act. Turn this on to have them moved to draft after the number of days below. Facebook posts are never changed. Save Off: you are told, and your site is left as it is.",
+   "auto": false
+  },
+  "act": null,
+  "file": "03b-studio-studio-account-settings-390-dark.png",
+  "size": 41700,
+  "masked": 1,
+  "note": ""
+ }
+]

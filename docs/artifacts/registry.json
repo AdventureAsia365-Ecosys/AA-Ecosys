@@ -63,6 +63,13 @@
    "title": "S273 decisions",
    "purpose": "Trang quyết định S273 (W2 chi phí, W3 cờ, phân xử); db collection decisions",
    "source": "docs/audits/2026-11-08-S273-session/decisions/index.html"
+  },
+  {
+   "id": "T389pCPUPDSDsmEorAJV6W",
+   "url": "https://claude.ai/artifact/T389pCPUPDSDsmEorAJV6W",
+   "title": "Odoo và AA: bảng tính năng",
+   "purpose": "So sánh 73 tính năng app Odoo tour & travel với CRM đại lý và AA-Booking (S276); cập nhật khi các issue M-OD ship",
+   "source": ".tmp-session/S276/odoo-compare/index.html (dữ liệu từ docs/research/2026-11-10-odoo-tour-travel-plugin-comparison.md + kiểm code S276)"
   }
  ],
  "superseded": [
