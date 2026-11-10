@@ -58,6 +58,15 @@ class GatewayStatusTest(unittest.TestCase):
         self.assertIn("AS circ24", gs.CONNECTIONS_SQL)
         self.assertIn(gs.CIRCUIT, gs.CIRCUIT_SQL)
 
+    def test_a_circuit_refusal_of_a_model_without_access_is_counted_once(self):
+        """S276: a row matching both rules (a skipped deployment of a model with no access yet) is circuit-open only."""
+        self.assertEqual(gs.EXPECTED_SENT, f"({gs.EXPECTED} AND NOT {gs.CIRCUIT})")
+        self.assertIn(f"FILTER (WHERE {gs.EXPECTED_SENT})", gs.CONNECTIONS_SQL)
+        self.assertIn(f"FILTER (WHERE {gs.CIRCUIT})", gs.CONNECTIONS_SQL)
+        self.assertIn(f"AND {gs.EXPECTED_SENT}", gs.EXPECTED_SQL)
+        self.assertNotIn(gs.EXPECTED_SENT, gs.CIRCUIT_SQL)
+        self.assertIn(f"NOT {gs.NOT_ERROR}", gs.ERRORS_SQL)          # errors: still neither rule
+
     def test_the_report_prints_the_circuit_refusals_apart(self):
         conn = _Conn()
 
