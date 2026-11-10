@@ -77,6 +77,7 @@ definitions were read on 2026-10-28; Redis keys, Vercel and Lambda values are fr
 | `aa859:reviews_pool` | GET the content-writing reviews and one review | 265, 266 |
 | `aa986:tenant_notifications_pool` | GET `/v1/notifications`, POST `.../read` | 274 |
 | `aa814:facts_pool` | GET / POST `/v1/facts`, PATCH / DELETE `/v1/facts/{id}` (tenant Facts Entries) | 302 |
+| `aa1039:put_back_pool` | POST `/v1/publish-log/{publish_id}/put-back` ("Put back online" of a page the tour retirement drafted) | - |
 
 "Needs migration" names the CIS migration whose RLS and grants the route relies on: before rolling that migration back,
 turn the flag off. A new route flag is added to `ALL_TENANT_POOL_FLAGS` (a unit test checks it), to the flag tool's
