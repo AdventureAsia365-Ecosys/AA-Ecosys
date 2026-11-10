@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-api, aa-cis-worker, tripplanner-lambda, aa-crm-api, aa-booking-api, aa-booking-admin]
-last_reviewed: 2026-11-09
+last_reviewed: 2026-11-10
 review_every_days: 30
 related: [ARCH-01-ai-gateway, APP-06-routes, APP-06-eval, APP-06-prompts, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-804, AA-820, AA-1040]
 ---
@@ -162,9 +162,12 @@ preferred, not AWS only; model first) each tenant writer has its Claude family c
 Haiku 4.5, or Haiku 5.5 → Haiku 4.5 → Sonnet 4.6), run model first: the 5.x primary on acc3, then the same model on
 the Anthropic API, then the 4.x rows on acc3, GPT-6 Luna on the OpenAI API last. Every other active T-stage (the
 brand audit, the FAQ filter / answer fit, the claim extraction) is `vendor_direct` too since 366, so tenant content
-may reach the Anthropic API or the OpenAI API from every T-stage. The tenant terms name this (Draft v0.5: "Adventure
-Asia calls Claude through the Anthropic API first and through Amazon Bedrock (Amazon Web Services) second", and "an
-OpenAI model through the OpenAI API may write it as a last resort"). The other T-stage writers' rules are unchanged. The judge stages below are
+may reach the Anthropic API or the OpenAI API from every T-stage. Since CIS migration 383 (route control version 7,
+2026-11-06, v1.13) the writers no longer have the GPT-6 Luna rung: only Claude writes, and a writer whose Claude rungs
+all fail waits (`queue_retry`). The tenant terms name this (Draft v0.6, 2026-11-10: "Adventure Asia calls Claude
+through the Anthropic API first and through Amazon Bedrock (Amazon Web Services) second", and "Only Claude models write
+it: if no Claude model is available, the writing step waits and is tried again later"; Draft v0.5 still said an OpenAI
+model "may write it as a last resort"). The other T-stage writers' rules are unchanged. The judge stages below are
 `vendor_direct`; since CIS 366 (model first) their route runs GPT-6 Luna on acc3, then the same model on the OpenAI API
 (its twin row), before the acc2 Nova Lite hop, so tenant content reaches the OpenAI API as soon as acc3 refuses or
 fails GPT-6 Luna (from 333 to 366 it went there only after the acc2 hop). The tenant terms stated this as "may be used
@@ -261,8 +264,9 @@ company's name (ADR 0019 b19); tenants never hold a provider key.
   deployment refuses or fails, before the next model of a judge or GPT validate route. Until CIS 383 (2026-11-06)
   GPT-6 Luna on the OpenAI API was also the last rung of the writer routes; since then **no OpenAI model writes**
   (v1.13). Terms wording: for the Anthropic API and the OpenAI API scoring and checking, providers that receive the
-  content (v1.11), not "a fallback"; the portal pages' "an OpenAI model may write it as a last resort" (Draft v0.5)
-  over-states since 383 and goes in their next version.
+  content (v1.11), not "a fallback"; since the portal pages' Draft v0.6 (2026-11-10) they say "Only Claude models write
+  it", and the Draft v0.5 sentence "an OpenAI model ... may write it as a last resort" is gone (an AA-Partner guard
+  test checks every sentence about writing on both pages, EN and VI, against the writer providers of this list).
 - **Follow-up for the business owner (AA-820):** the tenant terms, the AI Schedule and the DPA must name the Anthropic
   API (Anthropic, PBC, direct) and the OpenAI API (OpenAI, direct) as providers that may receive tenant content and
   TripPlanner traveller text, not only as writing fallbacks of the T-series writers (since CIS 366 the tenant judges

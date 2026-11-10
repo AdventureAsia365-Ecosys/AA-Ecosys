@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, cio]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-09
+last_reviewed: 2026-11-10
 review_every_days: 90
 related: [SEC-04, SEC-04-dpa, SEC-04-dsar, SEC-04-retention, SEC-04-consent-query, SEC-04-ai-schedule, SEC-04-dpa-pack, AA-886, AA-820, AA-839, AA-877, AA-1038]
 lang: vi
@@ -200,8 +200,9 @@ không cần thông báo, còn việc thêm hoặc thay thế một nhà cung c�
 bản nháp v0.3): đối tác tuân theo chính sách sử dụng của các nhà cung cấp AI, trong đó có Chính sách sử dụng của
 Anthropic từ 12/11/2026; các cách dùng bị cấm; và quyền của Adventure Asia tạm dừng tính năng AI. Mọi câu đều lấy từ
 Phụ lục v1.0 nên không thêm nghĩa vụ mới; điều khoản chờ mẫu hợp đồng đối tác. Thỏa thuận xử lý dữ liệu ở bản v0.4
-(mục 4). Từ 06/11/2026 không còn mô hình OpenAI nào viết nội dung của đối tác; các trang portal vẫn ghi một mô hình
-OpenAI "có thể viết như phương án cuối cùng", tức nói nhiều hơn thực tế, và sẽ được sửa ở phiên bản trang kế tiếp.
+(mục 4). Từ 06/11/2026 không còn mô hình OpenAI nào viết nội dung của đối tác; từ 10/11/2026 (portal Draft v0.6) các
+trang portal ghi đúng như vậy: chỉ các mô hình Claude viết, và khi không có mô hình Claude nào khả dụng thì bước viết
+chờ và được thử lại sau (câu "có thể viết như phương án cuối cùng" của Draft v0.5 đã bỏ).
 *Chủ doanh nghiệp quyết định:* câu chữ của thư
 pilot quanh điều khoản này, hạn mức AI hằng tháng của pilot, và thời điểm mời luật sư (muộn nhất là trước đại lý trả
 tiền đầu tiên). *Chi tiết:* [Phụ lục AI v1.0](tenant-ai-schedule.md): từng phần đặt ở đâu (mục 2), phụ lục (mục 3),
@@ -211,26 +212,27 @@ xử lý dữ liệu cho pilot: [DPA v0.4](dpa.md) cùng bốn phụ lục ([dà
 ## Phụ lục A: nội dung hiện tại của bốn trang
 
 Nội dung dưới đây được chép từ mã nguồn trang, đúng như hiển thị: A.1 và A.2 tại commit `8327bb0` (28/10/2026) của
-AA-TripPlanner-Web, A.3 và A.4 theo các trang Draft v0.5 của AA-Partner (06/11/2026, bản được merge qua PR các trang
-pháp lý của phiên S271). Các trang portal được chuyển từ
+AA-TripPlanner-Web, A.3 và A.4 theo các trang Draft v0.6 của AA-Partner (10/11/2026; nội dung Draft v0.5 của phiên S271, đổi câu
+về mô hình viết ở mục 5 của A.3 và mục 3 của A.4). Các trang portal được chuyển từ
 AA-CIS-App sang AA-Partner cùng lịch sử thay đổi (AA-979); nội dung của chúng là bản ngày 20/10/2026 cộng nội dung AA-820
 ở mục 3 của A.4 (24/10/2026) và danh sách nhà cung cấp AI ở mục 5–6 của A.3 và mục 3 của A.4 (31/10/2026, S262, lấy từ
 [AI Use Register](../architecture/ai-use-register.md)), được viết lại ngày 06/11/2026 (S271) theo route control phiên
 bản 6 (register v1.11). Mỗi trang có nhãn "Draft — pending legal review". Hai trang Trip Planner ghi phiên bản
 "Draft v0.1" (20 October 2026), dù nội dung đã được thêm phần đăng nhập của khách và phần Geoapify về sau; hai trang
-portal ghi "Draft v0.5" (6 November 2026) từ thay đổi route control phiên bản 6 (Draft v0.4 ngày 3 November 2026 là
-thay đổi Phụ lục AI v1.0). Link được ghi bằng chữ hiển thị. Các trang Trip Planner chỉ có bản tiếng Anh; các trang portal
+portal ghi "Draft v0.6" (10 November 2026) từ thay đổi route control phiên bản 7 (CIS 383: chỉ các mô hình Claude
+viết); Draft v0.5 (6 November 2026) là thay đổi route control phiên bản 6 và Draft v0.4 (3 November 2026) là thay đổi
+Phụ lục AI v1.0. Link được ghi bằng chữ hiển thị. Các trang Trip Planner chỉ có bản tiếng Anh; các trang portal
 có thêm bản dịch tiếng Việt để tham khảo, và bản tiếng Anh được áp dụng. Phần dưới đây là bản dịch để tham khảo, còn câu
 chữ pháp lý là bản tiếng Anh. Nếu trang thay đổi sau commit hoặc PR trên, trang đang chạy là bản đúng.
 
-Có ba việc cần sửa nội dung trang đã biết. Từ 06/11/2026 (route control phiên bản 7, migration CIS 383) không còn mô
-hình OpenAI nào viết nội dung Content studio, nhưng mục 5 của A.3 và mục 3 của A.4 (portal Draft v0.5) vẫn ghi một mô
-hình OpenAI "có thể viết như phương án cuối cùng"; phiên bản trang portal kế tiếp sẽ bỏ câu đó. Mục 6 của chính sách quyền riêng tư portal vẫn ghi Vercel lưu trữ các trang
+Có hai việc cần sửa nội dung trang đã biết (việc thứ ba, câu mô hình OpenAI "có thể viết như phương án cuối cùng" ở
+mục 5 của A.3 và mục 3 của A.4, đã sửa ở portal Draft v0.6 ngày 10/11/2026: từ route control phiên bản 7, migration
+CIS 383, chỉ các mô hình Claude viết). Mục 6 của chính sách quyền riêng tư portal vẫn ghi Vercel lưu trữ các trang
 portal, dù portal nay chạy trên AWS. Từ ngày 08/11/2026, chính sách quyền riêng tư của Trip Planner (mục 3, 6, 7) ghi
 Amazon Web Services (Amazon CloudFront và tường lửa website của nó, kèm một cookie bảo mật ngắn hạn) thay cho Vercel; A.2
 dưới đây trích nội dung cũ hơn. Hai trang Trip Planner đã đổi sau ngày 20/10/2026 nhưng vẫn ghi ngày đó cho tới
-03/11/2026 (Draft v0.2). Mục 5–6 của A.3 và mục 3 của A.4 dưới đây là nội dung ngày 06/11/2026 (AA-820, route control
-phiên bản 6, portal Draft v0.5); mục 3 của A.2 cũ hơn trang đang chạy, trang này từ đó ghi rõ mô hình viết phần thuyết minh và dẫn link Chính sách
+03/11/2026 (Draft v0.2). Mục 5–6 của A.3 và mục 3 của A.4 dưới đây là nội dung ngày 10/11/2026 (AA-820, route control
+phiên bản 7, portal Draft v0.6); mục 3 của A.2 cũ hơn trang đang chạy, trang này từ đó ghi rõ mô hình viết phần thuyết minh và dẫn link Chính sách
 sử dụng của Anthropic.
 
 ### A.0 Các điểm cần xác nhận trên bốn trang
@@ -441,8 +443,8 @@ bởi bất kỳ nhà cung cấp nào trong số đó. Các mô hình Claude (An
 Adventure Asia gọi Claude qua API của
 Anthropic trước và qua Amazon Bedrock (Amazon Web Services) sau. Các mô hình của OpenAI xem lại, chấm điểm và kiểm tra
 bản nháp, qua Amazon Bedrock hoặc API của OpenAI, và các mô hình khác trên Amazon Bedrock (Amazon Nova, Meta Llama) cũng
-có thể xem lại và kiểm tra bản nháp. Nếu không có mô hình Claude nào dùng được, một mô hình của OpenAI qua API của OpenAI
-có thể viết nội dung khi không còn cách nào khác. API của Anthropic và API của OpenAI được gọi trực tiếp, mỗi API có trần
+có thể xem lại và kiểm tra bản nháp. Chỉ các mô hình Claude viết nội dung: nếu không có mô hình Claude nào dùng được,
+bước viết sẽ chờ và được thử lại sau. API của Anthropic và API của OpenAI được gọi trực tiếp, mỗi API có trần
 chi tiêu; các lần gọi đó đi từ Amazon Web Services tới Anthropic hoặc OpenAI, trên tài khoản Adventure Asia đứng tên công
 ty. Adventure Asia có thể thay đổi thứ tự dùng các nhà cung cấp nêu ở đây mà không cần thông báo. Việc thêm hoặc thay thế
 một nhà cung cấp phải được thông báo trước theo thoả thuận xử lý dữ liệu giữa bạn và Adventure Asia (mục 10). Với một số
@@ -506,8 +508,8 @@ Pháp nhân vận hành là [to be confirmed].
   Asia gọi Claude qua API của Anthropic trước và
   qua Amazon Bedrock (Amazon Web Services) sau. Các mô hình của OpenAI xem lại, chấm điểm và kiểm tra nội dung, qua
   Amazon Bedrock hoặc API của OpenAI, và các mô hình khác trên Amazon Bedrock (Amazon Nova, Meta Llama) cũng có thể xem
-  lại và kiểm tra. Nếu không có mô hình Claude nào dùng được, một mô hình của OpenAI qua API của OpenAI có thể viết nội
-  dung khi không còn cách nào khác. API của Anthropic và API của OpenAI được gọi trực tiếp, mỗi API có trần chi tiêu.
+  lại và kiểm tra. Chỉ các mô hình Claude viết nội dung: nếu không có mô hình Claude nào dùng được, bước viết sẽ chờ và
+  được thử lại sau. API của Anthropic và API của OpenAI được gọi trực tiếp, mỗi API có trần chi tiêu.
   Adventure Asia có thể thay đổi thứ tự dùng các nhà cung cấp nêu ở đây mà không cần thông báo. Việc thêm hoặc thay thế
   một nhà cung cấp phải được thông báo trước theo thoả thuận xử lý dữ liệu giữa bạn và Adventure Asia.
 - Mọi tính năng AI chạy trên tài khoản mà Adventure Asia đứng tên công ty với các nhà cung cấp này. Bạn không nhận tài
