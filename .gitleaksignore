@@ -99,3 +99,5 @@ e089300c97f2d2a6c3b4e69d3e6a2398a3da47b0:canary/aa981-canary.tfvars:terraform-pl
 97a3c2b872fc91140b6c3156e0c1854df30ce0b6:tools/docs/test_docs_reader.py:aws-access-token:146
 b1fe235863298252281a28f5685ce75af001d139:tools/docs/test_docs_reader.py:aws-access-token:138
 b1fe235863298252281a28f5685ce75af001d139:tools/docs/test_docs_reader.py:aws-access-token:146
+# - docs/linear-export/tripplanner-aa-booking/AA-1038.md:190 (S276): a Secrets Manager secret NAME in an exported Linear comment, not a credential.
+994deca9e8de9f9c84b6e6b8dc0e86d926d6ab4b:docs/linear-export/tripplanner-aa-booking/AA-1038.md:generic-api-key:190
