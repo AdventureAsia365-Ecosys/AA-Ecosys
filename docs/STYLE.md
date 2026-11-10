@@ -173,8 +173,8 @@ flowchart LR
 
 - Screenshots only for UI how-tos (mostly for the business owner and UAT): cropped, alt text, capture date in the caption,
   PNG or WebP under 300 KB. Keep them in an `images/` folder next to the page and link them with a relative path
-  (`![what it shows](images/page-name.png)`); the CIS admin docs reader shows a screenshot only when a published page
-  links it. Nothing on a screenshot may show an account ID, a resource ID, a secret or a person's data: crop it.
+  (`![what it shows](images/page-name.png)`); the CIS admin docs reader (and the AI gateway Guide tab, for its own
+  page) shows a screenshot only when a published page links it. Nothing on a screenshot may show an account ID, a resource ID, a secret or a person's data: crop it.
   `tools/docs/check_images.py` (docs lint) refuses a missing image, an image without alt text, a remote image and a
   screenshot over 300 KB. UAT videos stay on Google Drive; docs link to them.
 
