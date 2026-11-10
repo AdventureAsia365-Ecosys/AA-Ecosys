@@ -28,6 +28,8 @@ ALLOWED = {
     "aa986:tenant_notifications_pool",
     # AA-814 (S257): GET / POST / PATCH / DELETE /v1/facts (tenant Facts Entries), needs CIS 302
     "aa814:facts_pool",
+    # AA-1039 (S275, option A): POST /v1/publish-log/{publish_id}/put-back ("Put back online"), no new grant
+    "aa1039:put_back_pool",
 }
 ON_VALUE, OFF_VALUE = "true", "false"   # must match FLAG_ON_VALUE / FLAG_OFF_VALUE in aa544_tenant_pool.py
 
