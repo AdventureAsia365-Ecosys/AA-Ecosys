@@ -52,3 +52,6 @@ docs/audits/**/*.webm
 # Python bytecode (docs lint tools, S243 AA-897 walkthrough)
 __pycache__/
 _site/
+
+# Third-party commercial plugin under study (OPL-1): never commit (AA-1065)
+docs/plugin/
