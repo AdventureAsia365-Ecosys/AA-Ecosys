@@ -1,0 +1,268 @@
+<title>Chốt việc S275</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column of decision cards grouped by issue, each with context, options, a recommended pick and a save button. */
+:root {
+  --bg: #f6f7f4; --surface: #ffffff; --line: #d9ddd3; --fg: #1c211b; --muted: #5d665a;
+  --accent: #2f6b4f; --accent-soft: #dcebe2; --warn: #8a5a00; --warn-soft: #f6ead0; --ok: #24683f; --ok-soft: #dcefe2;
+  --body: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif; --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121512; --surface: #1a1f1a; --line: #2e362d; --fg: #e4e9e2; --muted: #9aa597;
+  --accent: #7cc4a0; --accent-soft: #1f3a2d; --warn: #e2b05a; --warn-soft: #3a2f17; --ok: #7fd09c; --ok-soft: #1c3424; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121512; --surface: #1a1f1a; --line: #2e362d; --fg: #e4e9e2; --muted: #9aa597;
+  --accent: #7cc4a0; --accent-soft: #1f3a2d; --warn: #e2b05a; --warn-soft: #3a2f17; --ok: #7fd09c; --ok-soft: #1c3424; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body) }
+.wrap { max-width: 860px; margin: 0 auto; padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 22px }
+h1 { font-size: clamp(24px, 3.4vw, 32px); margin: 0; line-height: 1.2; text-wrap: balance }
+h2 { font-size: 18px; margin: 0; line-height: 1.3; text-wrap: balance }
+h3.grp { font-size: 13px; margin: 10px 0 0; font-family: var(--mono); color: var(--muted); letter-spacing: .05em; text-transform: uppercase }
+.lede { color: var(--muted); margin: 0; max-width: 68ch }
+.status { font: 500 13px var(--mono); color: var(--muted) }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: grid; gap: 12px; min-width: 0 }
+.card.done { border-color: var(--ok) }
+.card header { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; justify-content: space-between }
+.tag { font: 500 12px var(--mono); color: var(--accent) }
+.ctx { margin: 0; color: var(--fg) }
+.facts { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; display: grid; gap: 2px }
+.opts { display: grid; gap: 8px }
+.opt { display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer }
+.opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft) }
+.opt input { margin-top: 4px }
+.opt b { font-weight: 600 }
+.rec { font: 500 11px var(--mono); color: var(--ok); background: var(--ok-soft); padding: 2px 6px; border-radius: 4px; margin-left: 6px; white-space: nowrap }
+.opt small { display: block; color: var(--muted); font-size: 13px }
+textarea { width: 100%; min-height: 56px; font: 14px var(--body); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; resize: vertical }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center }
+button { font: 600 14px var(--body); color: #fff; background: var(--accent); border: 0; border-radius: 8px; padding: 9px 16px; cursor: pointer }
+:root:not([data-theme="light"]) button { color: var(--bg) }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) button { color: #fff } }
+:root[data-theme="light"] button { color: #fff }
+button.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent) }
+button:disabled { opacity: .5; cursor: not-allowed }
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.saved { font-size: 13px; color: var(--ok) }
+.saved.warn { color: var(--warn) }
+.bar { position: sticky; top: 0; z-index: 2; background: var(--bg); padding: 10px 0; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center }
+footer { color: var(--muted); font-size: 13px }
+code { font: 13px var(--mono) }
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:8px">
+    <div class="status">S275 · 10/11/2026 · AA-741 · AA-1046 · AA-1004 · AA-820 · AA-1038 · AA-1050 · AA-1049 · AA-1051</div>
+    <h1>Chốt việc S275</h1>
+    <p class="lede">16 câu từ lượt chuẩn bị đầu phiên và các lần kiểm live sáng nay. Mỗi câu có số liệu thật và một đề xuất đã chọn sẵn. Bấm <b>Chốt</b> ở từng câu, hoặc <b>Chốt tất cả theo đề xuất</b> nếu anh đồng ý hết; câu nào muốn đổi thì chọn lại rồi bấm Chốt riêng câu đó. Agent đọc lựa chọn đã lưu và làm theo.</p>
+    <div class="status" id="conn">Đang kết nối nơi lưu…</div>
+  </header>
+
+  <div class="bar"><button type="button" id="save-all" disabled>Chốt tất cả theo đề xuất</button><span class="saved" id="msg-all"></span><span class="status" id="count"></span></div>
+
+  <div id="cards"></div>
+
+  <footer>Đã xong trong phiên trước khi có trang này: AA-1056, AA-1058, AA-1055 (Done-with-scope), AA-820 (Done-with-scope, Booking #210). Bằng chứng và script: <code>.tmp-session/S275/</code> (không commit); báo cáo phiên: root <code>docs/audits/2026-11-10-S275-session/</code>. Chi AI trong phiên tới lúc này: 0,125 USD (AA-1058).</footer>
+</div>
+
+<script>
+(function () {
+  var Q = [
+    { grp: "Hội tụ In Review", id: "aa741-path", tag: "AA-741 · T-series audit", title: "Cách đi tiếp với AA-741",
+      ctx: "AA-741 chưa đóng được: mới có 13/48 cặp tenant × tour (mốc 48 = 12 tour chung × 4 thương hiệu audit), chưa có báo cáo phase 3. Hai lỗi chặn phase 2 đã sửa từ 06/11 (CIS #1341, #1342). Ngân sách đã duyệt 20 USD, đã chi 6,56 USD.",
+      facts: ["Live 10/11: 13 cặp có bản T2, 3 tour chung cả 4 brand", "Phase 2 ước 9–12 USD, thử 1 tour × 4 brand (~0,8 USD) trước", "Còn lại trong mức đã duyệt: ~13,4 USD"],
+      opts: [
+        { v: "A-run-phase2", t: "Giữ issue mở (về In Progress), chạy phase 2 rồi viết báo cáo phase 3", d: "Trong mức 20 USD đã duyệt; thử 1 × 4 trước, dừng nếu chạm mức còn lại.", rec: true },
+        { v: "B-scope", t: "Đóng Done-with-scope cho phase 0–1, chuyển phase 2–3 sang issue mới", d: "Tốn thêm 1 chỗ Linear Free." } ] },
+    { grp: "Hội tụ In Review", id: "aa741-findings", tag: "AA-741", title: "3 phát hiện chưa có issue",
+      ctx: "Ba phát hiện: (1) file .docx của T0 không điền system_prompt (rỗng ở 4/4 tenant), (2) T2 chọn một thị trường theo xếp hạng toàn cầu, (3) trần AI gói Growth gần chạm (~38/40 USD với 200 lượt viết lại).",
+      facts: ["Done-when 4 của AA-741 yêu cầu anh duyệt trước khi tạo issue follow-up"],
+      opts: [
+        { v: "in-report", t: "Ghi vào báo cáo phase 3, tạo một issue gộp sau khi anh duyệt báo cáo", d: "Không tốn chỗ Linear bây giờ.", rec: true },
+        { v: "issue-now", t: "Tạo issue ngay bây giờ", d: "Một issue gộp cho cả ba." } ] },
+    { grp: "Hội tụ In Review", id: "aa1046-close", tag: "AA-1046 · Booking R4b", title: "Đóng AA-1046 và tách bk-045",
+      ctx: "Gỡ B2C ở 4 app đã live (kiểm 10/11: route customer 404, TripPlanner /api/me/payments 404, Booking health 200). Còn lại migration bk-045 xoá bảng B2C, chỉ được áp từ 28/11 23:50Z (khoá 30 ngày từ lần ghi B2C cuối). PR #200 đang xung đột, cần dựng lại nhánh từ main.",
+      facts: ["E-invoice VAT: chưa có nhà cung cấp và sandbox", "Linear: đóng AA-1046 + archive thì quota không tăng"],
+      opts: [
+        { v: "scope-plus-followup", t: "Đóng Done-with-scope, tạo 1 issue follow-up “[Booking] R4c bk-045 B2C table drop (from 28/11)”", d: "E-invoice chỉ ghi thành trigger chờ nhà cung cấp.", rec: true },
+        { v: "keep", t: "Giữ In Review tới 28/11", d: "Không tạo issue mới." } ] },
+    { grp: "Hội tụ In Review", id: "aa1004-status", tag: "AA-1004 · AWS org", title: "Trạng thái AA-1004 tới ngày 01/12",
+      ctx: "AA-1004 không đóng được trước khi acc2 vào org (Billing Transfer 01/12). Không có gì chờ review. Drift run 09/11 xanh cả aa365 và management.",
+      facts: ["Việc agent còn trước 20/11: kết quả check 1.4, tag Cost Explorer (quá hạn từ 08/11)"],
+      opts: [
+        { v: "backlog-due-2011", t: "Chuyển về Backlog, hạn 20/11; về In Progress từ 01/12", d: "Đúng trạng thái thật, giảm WIP.", rec: true },
+        { v: "keep-review", t: "Giữ In Review", d: "" } ] },
+    { grp: "Hội tụ In Review", id: "aa1004-trueidc", tag: "AA-1004", title: "Câu hỏi R1–R6 và yêu cầu tag đã gửi TrueIDC chưa?",
+      ctx: "Runbook mục 3 có 6 câu hỏi cho bên bán lại (R1–R6) và yêu cầu bật cost-allocation tag ngày 07/11. Repo chưa có dấu vết là đã gửi. Đây là rủi ro lớn nhất trước 20/11.",
+      facts: [],
+      opts: [
+        { v: "not-sent-draft", t: "Chưa gửi: agent soạn một tin Zalo gộp cả hai, anh gửi trước 20/11", d: "Tin soạn theo giọng tin nhắn cho bên bán lại.", rec: true },
+        { v: "sent", t: "Đã gửi rồi", d: "Ghi chú ngày gửi / trả lời bên dưới." } ] },
+    { grp: "Hội tụ In Review", id: "aa820-copy", tag: "AA-820 (đã đóng)", title: "Trang pháp lý studio còn câu “OpenAI viết khi không còn đường khác”",
+      ctx: "Trang điều khoản đối tác và quyền riêng tư (EN + VI) còn ghi một model OpenAI có thể viết nội dung “as a last resort”, đã lỗi thời từ CIS 383. Không gây hại (khai nhiều hơn thực tế) nhưng nên sửa.",
+      facts: ["Sửa: 1 PR AA-Partner (Draft v0.6 + test chặn) + bản Annex A ở root"],
+      opts: [
+        { v: "new-small-issue", t: "Tạo 1 issue nhỏ trong project portal/legal và làm trong phiên", d: "", rec: true },
+        { v: "under-aa1040", t: "Làm dưới AA-1040 (AI notice), không tạo issue", d: "" },
+        { v: "later", t: "Để sau", d: "" } ] },
+    { grp: "Hội tụ In Review", id: "aa1038-close", tag: "AA-1038 · TripPlanner R5", title: "Khi nào đóng AA-1038",
+      ctx: "Đã đạt live: lead vào đúng CRM tenant A; web chạy ECS sau CloudFront + WAF; preview chạy next start trong CI. Còn thiếu: RLS FORCE + ô tenant TripPlanner trong probe cô lập (S276), bằng chứng live “chỉ tour AA”.",
+      facts: ["v_tenant_tour_v1 có trong Scope nhưng không có trong Done-when, chưa có slot"],
+      opts: [
+        { v: "A-close-s276", t: "Giữ In Review, đóng ở S276 khi RLS FORCE + probe xanh; chuyển v_tenant_tour_v1 sang AA-1041 (R7)", d: "Không tạo issue mới.", rec: true },
+        { v: "B-scope", t: "Đóng Done-with-scope bây giờ, tạo issue R5b cho phần còn lại", d: "Tốn 1 chỗ Linear." } ] },
+    { grp: "Hội tụ In Review", id: "aa1038-brand", tag: "AA-1038", title: "Cách chứng minh brand riêng của tenant",
+      ctx: "Done-when cần 2 tenant có brand khác nhau trên TripPlanner. Resolver của kit nhận đủ token theme teal (không token nào bị loại).",
+      facts: [],
+      opts: [
+        { v: "ecs-exec-theme", t: "Ghi theme teal cho tenant tổng hợp audit-terra-family qua ECS exec (có MODE=clear để gỡ)", d: "0 USD, làm ngay trong phiên.", rec: true },
+        { v: "ui-first", t: "Thêm trường theme vào trình sửa site của Tenant 360 trước, rồi đặt theme qua UI", d: "Thêm một lát code CIS." } ] },
+    { grp: "Chất lượng (M2a)", id: "aa1050-gate", tag: "AA-1050 · W4", title: "Kết quả panel W4 và bước tiếp",
+      ctx: "Panel 3 góc nhìn gắn nhãn mù 201 câu (163 câu công cụ cờ + 38 câu đối chứng) trên 19 bài. Tính theo bài: khi công cụ nói “unsupported” một bài T9, nó đúng 8/9 (88,9%) ≥ 80%. Tính theo câu: chỉ ~18% câu bị cờ là vi phạm thật, tức cờ thừa gấp ~5 lần.",
+      facts: ["T2 so với kiểm brand: đúng 6/7 (85,7%), 3 chưa ngã ngũ", "55 mục chờ anh xem: 19 panel không thống nhất + 36 mục kiểm ngẫu nhiên", "Các Done-when khác: chi shadow 0,12 USD, 0 hold từ rung chưa ghim"],
+      opts: [
+        { v: "object-gate-keep-off", t: "Tính mốc 80% theo bài (đạt). Giữ công tắc enforce TẮT; chỉ bật từng class khi W2 đo đạt; issue mở tới lúc đó", d: "Cờ thừa theo câu quá cao để cắt câu (truth-cut). Anh xem 55 mục khi rảnh.", rec: true },
+        { v: "sentence-gate", t: "Tính theo câu: W4 chưa đạt, chạy replay thêm ≤20 bài T9 (~0,10 USD)", d: "" },
+        { v: "enable-holds", t: "Bật hold theo bài cho T9 ngay", d: "Rủi ro giữ nhầm bài." } ] },
+    { grp: "Chất lượng (M2a)", id: "aa1049-t2", tag: "AA-1049 · W3", title: "Bật T2_ORCHESTRATOR=linear cho cả worker?",
+      ctx: "Đường linear viết T2 một lượt, rẻ. Lượt thử lại sau #1394 sạch: contract khớp, điểm 10, 0,064 USD. Nhưng mới có 1 tour trả phí sau bản sửa; replay 33 bản chạy trước #1394.",
+      facts: ["Thử 5 tour audit ~0,32 USD (dừng ở 0,5) + replay miễn phí trên main hiện tại", "Bật qua biến Terraform mới, không sửa tay"],
+      opts: [
+        { v: "trial-then-on", t: "Có, sau khi replay 0 khác biệt chưa khai báo và thử 5 tour đều sạch", d: "", rec: true },
+        { v: "keep-off", t: "Giữ tắt", d: "" } ] },
+    { grp: "Chất lượng (M2a)", id: "aa1049-seo", tag: "AA-1049 · W3", title: "Bật T9_SEO_BUILDER cho cả worker?",
+      ctx: "#1396 hoàn thiện meta ngắn từ một câu có nguồn. Nhưng hai bài thử S273 chạy chung với stable_keys, nên chưa có bằng chứng chỉ riêng SEO builder.",
+      facts: ["Thử 3 bài chỉ bật cờ này ~0,2 USD, chọn từ các bài từng bị giữ vì meta ngắn"],
+      opts: [
+        { v: "trial-then-on", t: "Có, nếu 3 bài thử: 0 bài bị giữ vì độ dài meta và sha_match đúng", d: "Không đạt thì giữ tắt, sửa prompt fit.", rec: true },
+        { v: "keep-off", t: "Giữ tắt", d: "" } ] },
+    { grp: "Chất lượng (M2a)", id: "aa1049-guard", tag: "AA-1049 · W3", title: "T9_REGRESSION_GUARD_MODE=stable_keys",
+      ctx: "Replay 60 bài sạch, nhưng còn 2 lỗi lớn từ review: một lượt viết lại có thể đổi lỗi văn phong lấy một lỗi sai sự thật mới; khoá F14 có thể để lọt bài LinkedIn quá ngắn.",
+      facts: ["Sửa ở mức 0 USD rồi replay lại; không chặn hai câu trên"],
+      opts: [
+        { v: "fix-first", t: "Giữ tắt; agent sửa 2 lỗi + thêm test rồi hỏi lại", d: "", rec: true },
+        { v: "on", t: "Bật ngay", d: "" } ] },
+    { grp: "Chất lượng (M2a)", id: "aa1049-faq", tag: "AA-1049 · W3", title: "T9_FAQ_LLM_FILTER (đang bật từ S272)",
+      ctx: "Tốn ~0,005–0,007 USD mỗi bài blog, độ chính xác lọc 0,987. Bước answer-fit đôi khi để lại < 3 cặp hỏi-đáp, contract ghi FAQ_COUNT.",
+      facts: [],
+      opts: [
+        { v: "keep-on", t: "Giữ bật; nếu FAQ_COUNT gây giữ bài thì sửa bằng code (sinh lại 1 cặp)", d: "", rec: true },
+        { v: "off", t: "Tắt", d: "" } ] },
+    { grp: "Chất lượng (M2a)", id: "aa1049-scope", tag: "AA-1049 · W3", title: "Phạm vi và điều kiện đóng AA-1049",
+      ctx: "Đã xong: chuỗi T9, chuỗi T2, cờ thử, replay T9/T2. Chưa làm nhưng sẵn sàng ở mức 0 USD: chuỗi S1 (route, dry store, replay khác biệt khai báo, sửa cục bộ sau cờ tắt), sửa stable_keys, contract cho payload gửi ra kênh, profile kênh Facebook. Chỉ bật enforce S1 phải chờ nhãn W2.",
+      facts: ["Đóng khi: cờ đã quyết có bằng chứng live, replay S1 trên ~892 Master chỉ ra khác biệt đã khai báo, smoke S1 ~1 USD sạch"],
+      opts: [
+        { v: "build-zero-cost", t: "Giữ mở, làm các phần 0 USD trong phiên này và phiên sau; chuyển riêng cờ enforce S1 sang AA-1048", d: "Không tách issue mới (quota).", rec: true },
+        { v: "scope-now", t: "Đóng Done-with-scope bây giờ, phần chưa làm sang issue mới", d: "" } ] },
+    { grp: "Chất lượng (M2a)", id: "aa1051-slot", tag: "AA-1051 · W5", title: "Dời AA-1051 (viết trả phí mẫu nhỏ)",
+      ctx: "W5 chưa chạy được: W2 chưa có lượt R1 đạt (còn 84 mục chờ anh), W4 vừa đo (xem câu trên), cờ W3 còn tắt. Code CIS còn thiếu phần eval W5 (R2 dùng judge chung, split GATE, nhánh A', power check, file pre-registration).",
+      facts: ["Bước trả phí đầu tiên khi đủ điều kiện: lượt null t9_blog 12 mục, trần 5 USD (ước ~2,4 USD), xin duyệt riêng"],
+      opts: [
+        { v: "after-r1-w4", t: "Để Backlog tới khi W2 có R1 đạt và W4 xong; làm trước phần code eval 0 USD khi còn chỗ trong phiên", d: "Phần code cần 1 migration (split DEV/CAL/GATE).", rec: true },
+        { v: "after-only", t: "Để Backlog, chưa code gì", d: "" } ] }
+  ];
+
+  var cards = document.getElementById("cards");
+  var conn = document.getElementById("conn");
+  var allBtn = document.getElementById("save-all"), allMsg = document.getElementById("msg-all"), count = document.getElementById("count");
+  var db = null, saved = {};
+
+  function el(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs || {}) e.setAttribute(k, attrs[k]); if (html != null) e.innerHTML = html; return e; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function recOf(q) { return (q.opts.filter(function (o) { return o.rec; })[0] || q.opts[0]).v; }
+  function optText(q, v) { return (q.opts.filter(function (o) { return o.v === v; })[0] || {}).t || v; }
+
+  function render() {
+    // keep unsaved picks and notes across re-renders
+    var pending = {};
+    Q.forEach(function (q) {
+      var p = cards.querySelector('input[name="' + q.id + '"]:checked'), t = document.getElementById("note-" + q.id);
+      if (p || t) pending[q.id] = { choice: p ? p.value : null, note: t ? t.value : "" };
+    });
+    cards.innerHTML = "";
+    var box = el("div", { style: "display:grid;gap:18px" }), lastGrp = null;
+    Q.forEach(function (q) {
+      if (q.grp !== lastGrp) { box.appendChild(el("h3", { class: "grp" }, esc(q.grp))); lastGrp = q.grp; }
+      var s = saved[q.id], pd = pending[q.id];
+      var card = el("section", { class: "card" + (s ? " done" : ""), "aria-labelledby": "h-" + q.id });
+      card.appendChild(el("header", {}, '<h2 id="h-' + q.id + '">' + esc(q.title) + '</h2><span class="tag">' + esc(q.tag) + '</span>'));
+      card.appendChild(el("p", { class: "ctx" }, esc(q.ctx)));
+      if (q.facts.length) card.appendChild(el("ul", { class: "facts" }, q.facts.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("")));
+      var opts = el("div", { class: "opts", role: "radiogroup", "aria-label": q.title });
+      var current = (pd && pd.choice) || (s ? s.choice : recOf(q));
+      q.opts.forEach(function (o) {
+        var id = q.id + "-" + o.v;
+        var lab = el("label", { class: "opt", for: id });
+        lab.innerHTML = '<input type="radio" name="' + q.id + '" id="' + id + '" value="' + o.v + '"' + (o.v === current ? " checked" : "") + '>' +
+          '<span><b>' + esc(o.t) + '</b>' + (o.rec ? '<span class="rec">đề xuất</span>' : "") + (o.d ? '<small>' + esc(o.d) + '</small>' : "") + '</span>';
+        opts.appendChild(lab);
+      });
+      card.appendChild(opts);
+      var ta = el("textarea", { id: "note-" + q.id, placeholder: "Ghi chú (không bắt buộc)", "aria-label": "Ghi chú cho " + q.title });
+      ta.value = pd ? pd.note : (s && s.note ? s.note : "");
+      card.appendChild(ta);
+      var row = el("div", { class: "row" });
+      var btn = el("button", { type: "button", id: "save-" + q.id }, "Chốt");
+      var msg = el("span", { class: "saved", id: "msg-" + q.id }, s ? "Đã chốt: " + esc(optText(q, s.choice)) : "");
+      if (!db) btn.disabled = true;
+      btn.addEventListener("click", function () { save(q, card, btn, msg); });
+      row.appendChild(btn); row.appendChild(msg);
+      card.appendChild(row);
+      box.appendChild(card);
+    });
+    cards.appendChild(box);
+    var n = Q.filter(function (q) { return saved[q.id]; }).length;
+    count.textContent = n + "/" + Q.length + " câu đã chốt";
+    allBtn.disabled = !db;
+  }
+
+  function put(q, choice, note) {
+    return db.doc("decisions/" + q.id).set({ question: q.title, choice: choice, note: (note || "").slice(0, 2000), at: new Date().toISOString() });
+  }
+
+  function save(q, card, btn, msg) {
+    var pick = card.querySelector('input[name="' + q.id + '"]:checked');
+    if (!pick || !db) return;
+    btn.disabled = true; msg.className = "saved"; msg.textContent = "Đang lưu…";
+    put(q, pick.value, card.querySelector("textarea").value)
+      .then(function () { msg.textContent = "Đã chốt"; btn.disabled = false; })
+      .catch(function (e) { msg.className = "saved warn"; msg.textContent = "Chưa lưu được (" + ((e && e.code) || "lỗi") + "). Bạn có quyền ghi trang này không?"; btn.disabled = false; });
+  }
+
+  allBtn.addEventListener("click", function () {
+    if (!db) return;
+    var todo = Q.filter(function (q) { return !saved[q.id]; });
+    if (!todo.length) { allMsg.textContent = "Mọi câu đã được chốt."; return; }
+    allBtn.disabled = true; allMsg.className = "saved"; allMsg.textContent = "Đang lưu " + todo.length + " câu…";
+    var i = 0;
+    (function next() {
+      if (i >= todo.length) { allMsg.textContent = "Đã chốt " + todo.length + " câu theo đề xuất."; allBtn.disabled = false; return; }
+      var q = todo[i++], t = document.getElementById("note-" + q.id);
+      put(q, recOf(q), t ? t.value : "").then(next).catch(function (e) {
+        allMsg.className = "saved warn"; allMsg.textContent = "Dừng ở câu “" + q.title + "” (" + ((e && e.code) || "lỗi") + ")."; allBtn.disabled = false;
+      });
+    })();
+  });
+
+  render();
+  var timer = setTimeout(function () { if (!db) conn.textContent = "Chưa kết nối được nơi lưu: có thể xem, nhưng chưa chốt được. Mở lại trang khi đã đăng nhập claude.ai."; }, 10000);
+  if (window.claude && window.claude.use) {
+    window.claude.use("db").then(function (d) {
+      if (!d) { clearTimeout(timer); conn.textContent = "Trang này không lưu được ở chế độ xem hiện tại."; return; }
+      db = d; clearTimeout(timer); conn.textContent = "Đã kết nối. Lựa chọn được lưu khi bấm Chốt.";
+      db.collection("decisions").onSnapshot(function (snap) {
+        saved = {};
+        (snap.docs || []).forEach(function (doc) { var v = doc.data ? doc.data() : doc; saved[doc.id] = v; });
+        render();
+      }, function () { render(); });
+      render();
+    }).catch(function () { clearTimeout(timer); conn.textContent = "Chưa kết nối được nơi lưu."; });
+  } else {
+    clearTimeout(timer); conn.textContent = "Mở trang trên claude.ai để chốt.";
+  }
+})();
+</script>

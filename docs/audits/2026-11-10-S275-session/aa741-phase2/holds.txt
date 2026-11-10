@@ -1,0 +1,6 @@
+STATUS {'held': 20, 'approved': 7, 'failed': 1}
+HELD_REASON_HEAD {'F4_extreme_length': 13, 'F17_trip_fact': 5, 'F13_repeat': 2}
+HOLD_GATES {'F4_extreme_length': 13, 'F17_trip_fact': 7, 'F13_repeat': 4, 'F9_cta_fact': 2}
+HOLD_GATE_SETS {'F4_extreme_length': 9, 'F17_trip_fact': 4, 'F13_repeat,F4_extreme_length': 2, 'F13_repeat': 1, 'F17_trip_fact,F9_cta_fact': 1, 'F4_extreme_length,F9_cta_fact': 1, 'F13_repeat,F17_trip_fact': 1, 'F17_trip_fact,F4_extreme_length': 1}
+HOLD_CODES {'length': 13, 'unsupported_trip_fact': 7, 'text_hygiene': 4, 'unsupported_trip_promise': 2}
+F9_CLASSES {'unsupported_other': 27, 'seo_field_claim': 2, 'trip_promise': 2}

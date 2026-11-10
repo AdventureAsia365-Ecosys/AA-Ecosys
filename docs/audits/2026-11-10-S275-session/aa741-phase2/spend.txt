@@ -1,0 +1,40 @@
+SPEND_TOTAL since=2026-11-10T05:49Z calls=1612 usd=6.7747 gap_calls=0 gap_usd=0.0000 phase2_usd=6.7747 cap=13.44 left=6.6653 aa741_total=13.3341/20
+SPEND_STAGE stage=t2_generate role=writer calls=35 not_ok=1 max_tokens=1 usd=2.7612
+SPEND_STAGE stage=t9_write role=writer calls=50 not_ok=0 max_tokens=0 usd=2.3093
+SPEND_STAGE stage=t8_angle_gen role=writer calls=30 not_ok=0 max_tokens=0 usd=1.1208
+SPEND_STAGE stage=t7_debate_judge role=judge calls=1220 not_ok=0 max_tokens=0 usd=0.1416
+SPEND_STAGE stage=t9_repair role=writer calls=73 not_ok=0 max_tokens=0 usd=0.1329
+SPEND_STAGE stage=t9_faq_answer_fit role=validate calls=27 not_ok=0 max_tokens=0 usd=0.1234
+SPEND_STAGE stage=t10_judge role=judge calls=52 not_ok=0 max_tokens=0 usd=0.0823
+SPEND_STAGE stage=t9_faq_filter role=validate calls=28 not_ok=0 max_tokens=0 usd=0.0518
+SPEND_STAGE stage=t2_judge role=judge calls=34 not_ok=2 max_tokens=0 usd=0.0221
+SPEND_STAGE stage=t2_flag_fix role=writer calls=6 not_ok=4 max_tokens=4 usd=0.0198
+SPEND_STAGE stage=f10_embed role=embed calls=52 not_ok=0 max_tokens=0 usd=0.0067
+SPEND_STAGE stage=t2_itinerary_nudge role=writer calls=5 not_ok=0 max_tokens=0 usd=0.0029
+SPEND_MODEL stage=f10_embed served=cohere-embed-v4@acc2 calls=52 usd=0.0067 route_versions=[7] prompt_versions=['-']
+SPEND_MODEL stage=t10_judge served=gpt-6-luna-openai@openai-direct calls=52 usd=0.0823 route_versions=[7] prompt_versions=['v3']
+SPEND_MODEL stage=t2_flag_fix served=haiku-5-5@anthropic-direct calls=6 usd=0.0198 route_versions=[7] prompt_versions=['v3']
+SPEND_MODEL stage=t2_generate served=sonnet-5-5@anthropic-direct calls=35 usd=2.7612 route_versions=[7] prompt_versions=['v3']
+SPEND_MODEL stage=t2_itinerary_nudge served=haiku-5-5@anthropic-direct calls=5 usd=0.0029 route_versions=[7] prompt_versions=['v1']
+SPEND_MODEL stage=t2_judge served=gpt-6-luna-openai@openai-direct calls=32 usd=0.0221 route_versions=[7] prompt_versions=['v3']
+SPEND_MODEL stage=t2_judge served=gpt-6-luna@acc3 calls=1 usd=0.0000 route_versions=[7] prompt_versions=['v3']
+SPEND_MODEL stage=t2_judge served=gpt-5.6-luna@acc3 calls=1 usd=0.0000 route_versions=[7] prompt_versions=['v3']
+SPEND_MODEL stage=t7_debate_judge served=gpt-6-luna-openai@openai-direct calls=1220 usd=0.1416 route_versions=[7] prompt_versions=['v1']
+SPEND_MODEL stage=t8_angle_gen served=sonnet-5-5@anthropic-direct calls=30 usd=1.1208 route_versions=[7] prompt_versions=['v2']
+SPEND_MODEL stage=t9_faq_answer_fit served=sonnet-5-5@anthropic-direct calls=27 usd=0.1234 route_versions=[7] prompt_versions=['v3']
+SPEND_MODEL stage=t9_faq_filter served=haiku-5-5@anthropic-direct calls=28 usd=0.0518 route_versions=[7] prompt_versions=['v1']
+SPEND_MODEL stage=t9_repair served=haiku-5-5@anthropic-direct calls=73 usd=0.1329 route_versions=[7] prompt_versions=['v3']
+SPEND_MODEL stage=t9_write served=sonnet-5-5@anthropic-direct calls=50 usd=2.3093 route_versions=[7] prompt_versions=['v5']
+SPEND_TENANT audit-terra-family calls=403 usd=1.5699
+SPEND_TENANT audit-atlas-hearth calls=393 usd=1.4749
+SPEND_TENANT audit-wildkind-travel calls=418 usd=1.9861
+SPEND_TENANT audit-trail-pulse calls=398 usd=1.7437
+UNIT t2_versions=36 usd_per_t2=0.0779 blog_pieces=28 usd_per_blog=0.1367 t7_usd=0.1416 (est. if none yet: t2 0.17, blog 0.13; chunk of k new tours x 4 = 4k*(t2+blog)*1.15 + 0.05)
+== tenant AI budgets (gateway hard stop at the approval %, plan Growth 40 USD; no row = plan)
+BUDGET audit-atlas-hearth resolved=40.00 row=no mtd_usd=3.9562 stops_at=40.0 headroom=36.04 stopped_budget_jobs=0
+BUDGET audit-terra-family resolved=40.00 row=no mtd_usd=3.0273 stops_at=40.0 headroom=36.97 stopped_budget_jobs=0
+BUDGET audit-trail-pulse resolved=40.00 row=no mtd_usd=3.1884 stops_at=40.0 headroom=36.81 stopped_budget_jobs=0
+BUDGET audit-wildkind-travel resolved=40.00 row=no mtd_usd=3.1622 stops_at=40.0 headroom=36.84 stopped_budget_jobs=0
+CONN anthropic-direct cap=150.00 mtd_usd=22.3778
+CONN openai-direct cap=10.00 mtd_usd=0.7432
+GATE ok spent=6.7747 next_est=0.0000 cap=13.44 (stop: do not start the next chunk; shrink it to the tours that fit, or end phase 2 and report)
