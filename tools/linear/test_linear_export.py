@@ -22,6 +22,8 @@ import linear_export as le  # noqa: E402
 # time: written out in this file they are exactly what the CI secret scan flags (generic-api-key).
 SECRETS_COLON = "Secret" + "s:"
 S276_SHAPE = f"- {SECRETS_COLON} `orbitquill/dev/zephyr` written (Sentry on)."
+# A random token pasted as a value (invented, not a real key); joined at run time for the same reason.
+VALUE_SHAPE = "Secret" + ": `Xk29fJq8LmZp2Rt7`"
 
 STUB = textwrap.dedent("""\
     #!{python}
@@ -67,9 +69,19 @@ class SecretLabelTest(unittest.TestCase):
         manager = "Secrets Manager" + ":"
         self.assertEqual(le.neutralise_secret_labels(f"* {manager} `orbitquill/dev/zephyr` stored"),
                          "* Secrets Manager — `orbitquill/dev/zephyr` stored")
-        self.assertEqual(le.neutralise_secret_labels("secret:`lanternkey`"), "secret — `lanternkey`")
-        two = le.neutralise_secret_labels("Secret: `a-b-c` and later Secrets: `d-e-f`")
-        self.assertEqual(two, "Secret — `a-b-c` and later Secrets — `d-e-f`")
+        self.assertEqual(le.neutralise_secret_labels("secret:`lantern/key`"), "secret — `lantern/key`")
+        two = le.neutralise_secret_labels(f"Secret: `a-b/c` and later {SECRETS_COLON} `d.e/f-g`")
+        self.assertEqual(two, "Secret — `a-b/c` and later Secrets — `d.e/f-g`")
+
+    def test_a_token_that_is_not_a_path_shaped_name_is_left_for_the_gate(self):
+        # A pasted value must reach gitleaks as written (colon and all): rewriting it would hide it from the rule.
+        label = "Secret" + ":"  # joined at run time, like SECRETS_COLON
+        tokens = ("lanternkey", "a-b-c", "Orbit/Dev/Zephyr", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYLANTERNKEY",
+                  "orbitquill/", "/orbitquill/dev", "orbit quill/dev")
+        for text in (VALUE_SHAPE, label.lower() + "`lanternkey`", *(f"{label} `{t}`" for t in tokens)):
+            self.assertEqual(le.neutralise_secret_labels(text), text, text)
+        mixed = le.neutralise_secret_labels(f"{SECRETS_COLON} `orbitquill/dev/zephyr`; {VALUE_SHAPE}")
+        self.assertEqual(mixed, f"Secrets — `orbitquill/dev/zephyr`; {VALUE_SHAPE}")
 
     def test_other_text_is_left_as_written(self):
         for text in ("Secrets rotated on 02/11.", "Secret named orbitquill/dev/zephyr written.",
@@ -116,7 +128,7 @@ class GateTest(unittest.TestCase):
         self.assertEqual(args[0], "dir")
         self.assertEqual(args[args.index("--config") + 1], str(le.GITLEAKS_CONFIG))
         self.assertIn("--redact", args)
-        self.assertTrue(args[1].endswith("tree"))  # a copy of only the files just written, not the whole export
+        self.assertTrue(args[1].endswith("tree"))  # a copy of only the run's files, not the whole export folder
 
     def test_a_finding_stops_with_file_line_and_rule(self):
         rc, _, err = self.gate("leak")
@@ -182,10 +194,27 @@ class MainTest(unittest.TestCase):
         self.assertIn("closed issues: 1 | files written/updated: 1", out)
         gql.assert_called_once()
 
-    def test_unchanged_files_are_not_rescanned(self):
+    def test_unchanged_files_are_scanned_again_after_a_red_or_unscanned_run(self):
+        # Run 1 writes the files and stops on the gate (no gitleaks / a finding); run 2 rewrites nothing. Run 2 must
+        # still scan the issue file and the index, and must not archive when that scan is red.
+        page = self.out / "lantern-works" / "AA-9001.md"
+        for first_rc in (le.EXIT_NO_GITLEAKS, le.EXIT_LEAKS):
+            rc, _, _, _ = self.run_main(["--archive", "--apply"], first_rc)
+            self.assertEqual(rc, first_rc)
+            before = page.stat().st_mtime_ns
+            rc, gql, gate, out = self.run_main(["--archive", "--apply"], le.EXIT_LEAKS)
+            self.assertEqual(page.stat().st_mtime_ns, before)  # nothing rewritten
+            self.assertEqual(sorted(p.name for p in gate.call_args.args[0]), ["AA-9001.md", "README.md"])
+            self.assertEqual(rc, le.EXIT_LEAKS)
+            gql.assert_not_called()
+        rc, gql, gate, out = self.run_main(["--archive", "--apply"], 0)
+        self.assertIn("files written/updated: 0", out)
+        gql.assert_called_once()
+
+    def test_only_scans_the_named_issue_files_even_when_unchanged(self):
         self.run_main([], 0)
         _, _, gate, _ = self.run_main(["--only", "AA-9001"], 0)
-        self.assertEqual(gate.call_args.args[0], [])
+        self.assertEqual([p.name for p in gate.call_args.args[0]], ["AA-9001.md"])
         self.assertFalse(gate.call_args.args[1])
 
 
@@ -212,6 +241,9 @@ class RealGitleaksTest(unittest.TestCase):
         self.assertEqual(self.scan(le.render(issue(comment=S276_SHAPE))), [])
         # stripping the backticks alone does not help: the colon is what the rule reads as an assignment
         self.assertEqual(len(self.scan(S276_SHAPE.replace("`", "") + "\n")), 1)
+
+    def test_a_pasted_value_after_a_secret_label_still_fires_after_render(self):
+        self.assertEqual([x["rule"] for x in self.scan(le.render(issue(comment=VALUE_SHAPE)))], ["generic-api-key"])
 
 
 if __name__ == "__main__":

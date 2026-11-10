@@ -96,7 +96,7 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 - **Chuỗi ship nối `&&` với `| tail` / `| head` phải bật `set -o pipefail` — exit code của pipeline là của `tail`, bước sau vẫn chạy** (S272, S273) → `.claude/hooks/aa_shell_guard.py` PIPE-1 (guard mới S274, AA-1024)
 - **Wrapper merge queue không kết luận PR "rời queue" khi `isInMergeQueue` đọc false — còn entry trong `mergeQueue.entries` hoặc run `merge_group` của nhánh nhóm `pr-<n>-` chưa xong thì chờ tiếp** (S273) → `tools/github/mergeq.sh` held(), `tools/github/ship_merge.py` queue_hold, `tools/github/test_ship_merge.py` QueueExitTest + MergeqScriptTest (guard mới S274, AA-1024)
 - **Allow-list Actions cấp org phải tính action lồng trong composite action bên thứ ba (trivy-action → setup-trivy)** (S273, ADR 0021) → `tools/github/ci_hygiene.py` WL8 + `tools/github/actions-allowlist.txt` (guard mới S274, AA-1024)
-- **File sinh tự động từ nguồn ngoài (Linear export) cũng phải qua gitleaks trước khi commit** (S276) → `tools/linear/linear_export.py` (gitleaks trên file vừa xuất, bỏ dấu hai chấm sau nhãn secret), `tools/linear/test_linear_export.py` (guard mới S277, AA-1024)
+- **File sinh tự động từ nguồn ngoài (Linear export) cũng phải qua gitleaks trước khi commit** (S276) → `tools/linear/linear_export.py` (gitleaks trên mọi file xuất của lượt chạy, kể cả file không đổi; chỉ bỏ dấu hai chấm sau nhãn secret khi token là tên dạng đường dẫn, giá trị lạ giữ nguyên cho gitleaks bắt), `tools/linear/test_linear_export.py` (guard mới S277, AA-1024)
 
 ## Pipeline và chất lượng
 

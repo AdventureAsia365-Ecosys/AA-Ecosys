@@ -19,14 +19,18 @@ are gone after 30 days.
 - Every archived or trashed issue is exported whatever its state. `--rescue-trash` restores an exported trashed issue and archives it (Linear may report the new state a few seconds late; re-run to confirm).
 - The key is read from Secrets Manager `aa-ecosys/ops/linear-api-key` (acc2) into memory only.
   `LINEAR_API_KEY` in the environment overrides it.
-- gitleaks gate (S276): the files a run writes are scanned with gitleaks and the root `.gitleaks.toml` before it
-  reports success or archives anything, so the session-close root PR does not go red on the secret scan. The binary
+- gitleaks gate (S276): the export file of every issue in the run (changed or not) and the index are scanned with
+  gitleaks and the root `.gitleaks.toml` before it reports success or archives anything, so the session-close root
+  PR does not go red on the secret scan. Unchanged files are scanned too: a re-run after a red or unscanned run
+  must not pass on files it did not rewrite (the full export scans in a few seconds). The binary
   is `GITLEAKS_BIN=<path>` or `gitleaks` on PATH (CI pin v8.30.1). Missing binary: exit 2 (files written, not
   scanned, nothing archived); a finding: exit 3 with file, line and rule (values redacted). `--no-gitleaks` skips
   the scan on purpose (scan before committing then).
-- One rewrite of Linear text: a secret label with a colon before a backticked name ("Secrets" + ": `<name>`")
-  is exported without the colon ("Secrets — `<name>`"); the colon is what the generic-api-key rule reads as an
-  assignment. Stripping the backticks would not help (the rule still fires) and on a name list makes it worse.
+- One rewrite of Linear text: a secret label with a colon before a backticked secret NAME ("Secrets" +
+  ": `<app>/<env>/<name>`", path-shaped and lower-case like every ecosystem secret name) is exported without the
+  colon ("Secrets — `<app>/<env>/<name>`"); the colon is what the generic-api-key rule reads as an assignment.
+  Stripping the backticks would not help (the rule still fires) and on a name list makes it worse. Any other
+  backticked token after a secret label may be a pasted value and is left as written, so the gate still flags it.
 
 Issue size rule (S245): one Linear issue = one deliverable slice (about one PR or a small PR group); the
 detailed task list lives in local plans (`docs/backlog/tracker/plan.json`, wave files).

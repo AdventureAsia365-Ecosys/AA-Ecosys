@@ -18,13 +18,17 @@ Rules:
 - The API key is read from Secrets Manager (aa-ecosys/ops/linear-api-key, acc2) into memory only; it is
   never printed or written. LINEAR_API_KEY in the environment overrides it (CI / testing). Key lookup and the GraphQL
   call live in linear_api.py (shared with plan_sync.py).
-- The files just written are scanned with gitleaks and the root .gitleaks.toml before the run reports success or
-  archives anything (S276: an exported comment "Secrets: `<name>`" made the generic-api-key rule fire and blocked the
-  session-close PR). gitleaks is GITLEAKS_BIN or `gitleaks` on PATH (CI pin v8.30.1); without it the run stops
-  non-zero unless --no-gitleaks. A finding stops the run (exit 3) with file, line and rule, values redacted.
-- Linear text is exported as written except one rewrite: a secret label followed by a colon and a backticked name
-  ("Secrets: `<name>`", "**Secret:** `<name>`") loses the colon ("Secrets — `<name>`"). The colon is the
-  assignment the generic-api-key rule looks for; the backticks stay (they stop the rule on a name list).
+- The export file of every issue in the run (changed or not) and the index are scanned with gitleaks and the root
+  .gitleaks.toml before the run reports success or archives anything (S276: an exported comment "Secrets: `<name>`"
+  made the generic-api-key rule fire and blocked the session-close PR). Unchanged files are scanned too, so a re-run
+  after a failed or unscanned run cannot pass on files it did not rewrite. gitleaks is GITLEAKS_BIN or `gitleaks` on
+  PATH (CI pin v8.30.1); without it the run stops non-zero unless --no-gitleaks. A finding stops the run (exit 3)
+  with file, line and rule, values redacted.
+- Linear text is exported as written except one rewrite: a secret label followed by a colon and a backticked secret
+  NAME, path-shaped and lower-case like the ecosystem's names ("Secrets: `<app>/<env>/<name>`", "**Secret:**
+  `<app>/<env>/<name>`"), loses the colon ("Secrets — `<app>/<env>/<name>`"). The colon is the assignment the
+  generic-api-key rule looks for; the backticks stay (they stop the rule on a name list). Any other backticked token
+  after a secret label (a value such as "Secret: `Xk29...`") is left as written, so the gate still sees it.
 """
 from __future__ import annotations
 
@@ -101,15 +105,20 @@ def path_for(issue: dict) -> Path:
     return OUT / slug((issue.get("project") or {}).get("name")) / f"{issue['identifier']}.md"
 
 
-# "Secrets: `name`" / "**Secret:** `name`" / "Secrets Manager: `name`": a secret label, a colon, then a backticked
-# name. gitleaks generic-api-key reads `<keyword>[ \t\w.-]{0,20}:` as an assignment and the name as its value.
-_SECRET_LABEL = re.compile(r"(?i)(\bsecrets?\b[ \t\w.-]{0,20}?)(\*\*)?:(\*\*)?[ \t]*(?=`)")
+# "Secrets: `app/env/name`" / "**Secret:** `app/env/name`" / "Secrets Manager: `app/env/name`": a secret label, a
+# colon, then a backticked secret NAME. gitleaks generic-api-key reads `<keyword>[ \t\w.-]{0,20}:` as an assignment
+# and the name as its value. Only a path-shaped, lower-case token counts as a name (how every ecosystem secret is
+# named, e.g. <app>/<env>/<name>); a random-looking token is a possible VALUE and must reach the gitleaks gate as
+# written, colon and all. The label match is case-insensitive, the name match is not.
+_SECRET_NAME = r"`[a-z0-9][a-z0-9._-]*(?:/[a-z0-9._-]+)+`"
+_SECRET_LABEL = re.compile(r"(\b(?i:secrets?)\b[ \t\w.-]{0,20}?)(\*\*)?:(\*\*)?[ \t]*(?=" + _SECRET_NAME + ")")
 
 
 def neutralise_secret_labels(text: str) -> str:
-    """Drop the colon after a secret label that introduces a backticked name, so a name is not read as a value
-    (S276, AA-1038 export: "- Secrets: `<name>` written" fired generic-api-key). Backticks stay: on a name list they
-    are what stops the rule (`a_key`, `b` without them reads as key=value). Everything else is left as written."""
+    """Drop the colon after a secret label that introduces a backticked, path-shaped secret name, so a name is not
+    read as a value (S276 export: "- Secrets: `<name>` written" fired generic-api-key). Backticks stay: on a name list
+    they are what stop the rule (`a_key`, `b` without them reads as key=value). Everything else, including a
+    backticked token that is not path-shaped (it may be a real value), is left as written for the gitleaks gate."""
     return _SECRET_LABEL.sub(lambda m: f"{m.group(1).rstrip()}{m.group(2) or ''}{m.group(3) or ''} — ", text)
 
 
@@ -233,7 +242,7 @@ def scan_files(paths: list[Path], binary: str, config: Path = GITLEAKS_CONFIG) -
 
 
 def gitleaks_gate(paths: list[Path], skip: bool) -> int:
-    """0 when the files just written are clean (or there are none, or --no-gitleaks); EXIT_NO_GITLEAKS when no
+    """0 when the run's export files are clean (or there are none, or --no-gitleaks); EXIT_NO_GITLEAKS when no
     gitleaks binary is found; EXIT_LEAKS on a finding or a gitleaks failure. Prints what to do."""
     if not paths:
         return 0
@@ -316,7 +325,10 @@ def main(argv: list[str] | None = None) -> int:
             print(f"removed {len(stale)} stale files: {', '.join(f.stem for f in stale[:10])}")
         write_index(issues)
         written.append(OUT / "README.md")
-    gate = gitleaks_gate(written, args.no_gitleaks)
+    # Scan every file of this run's issues, not only the ones rewritten now: a run that stopped on the gate (or had
+    # no gitleaks) leaves its files on disk, and a re-run that rewrites nothing must still not pass on them.
+    scan = [path_for(i) for i in issues] + ([] if args.only else [OUT / "README.md"])
+    gate = gitleaks_gate(scan, args.no_gitleaks)
     if gate:
         return gate
     print(f"closed issues: {len(issues)} | files written/updated: {len(written) - (0 if args.only else 1)} | "

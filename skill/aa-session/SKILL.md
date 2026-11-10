@@ -178,7 +178,7 @@ Log ghi sau cùng nên có cả kết quả Jira và số liệu đã kiểm, kh
 6. **Skill đổi trong phiên → đóng gói cho claude.ai:** `tools/skills/package_skills.sh --changed <commit đầu phiên>` →
    `skill/dist/<tên>.zip` (mỗi zip một skill); báo Nghiệp danh sách zip cần upload (`skill/README.md`).
 7. **Linear export + archive:** `python3 tools/linear/linear_export.py --archive` (dry run) rồi thêm `--apply`; tool
-   tự quét gitleaks file vừa xuất (cần `GITLEAKS_BIN` hoặc `gitleaks` trên PATH, exit 2/3 thì không archive). Root PR
+   tự quét gitleaks mọi file xuất của lượt chạy (cả file không đổi) (cần `GITLEAKS_BIN` hoặc `gitleaks` trên PATH, exit 2/3 thì không archive). Root PR
    gom log / audit / backlog / lessons → chờ Docs lint xanh → điều phối tự merge. Mọi repo (gốc + 5 con) về
    `main`/`master` cây sạch; dọn worktree và file tạm (S3 scripts, `.tmp-session` của phiên).
    Root PR viết tay cũng qua check `PR title` (AA-1024 G11): title không mã AA-n; body chỉ nêu mã trong dòng
