@@ -7,8 +7,8 @@
 Reads Claude Code transcripts (read-only; default ~/.claude/projects/-home-nghiep-projects-AA-Ecosys/*.jsonl), takes
 every Bash tool_use command once (deduplicated by text), runs the hook's rules on it and prints, per rule, how many
 commands it would refuse. RAM-1 depends on the live memory, so the replay counts the commands the heavy classifier
-picks (they are refused only while memory is low). Scripts a command ran are read from disk as they are now (a script
-deleted since is skipped). --out writes every hit (rule, detail, command) as JSON lines for review. Prints no command
+picks (they are refused only while memory is low), plus the lane pytest runs it refuses whatever the memory. Scripts a
+command ran are read from disk as they are now (a script deleted since is skipped). --out writes every hit (rule, detail, command) as JSON lines for review. Prints no command
 text unless --show N is given. Nothing is written except --out.
 """
 
@@ -88,7 +88,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"transcripts: {len(paths)}  distinct Bash commands: {total}")
     for rule in guard.RULE_IDS:
         if rule == "RAM-1":
-            print(f"  RAM-1   heavy commands (refused only while MemAvailable is low): {heavy}")
+            print(f"  RAM-1   heavy commands (refused only while MemAvailable is low): {heavy}; refused whatever the "
+                  f"memory (lane pytest -n > 2 / whole test directory): {counts.get(rule, 0)}")
         else:
             print(f"  {rule:7} would refuse: {counts.get(rule, 0)}")
     if counts.get("ERROR"):

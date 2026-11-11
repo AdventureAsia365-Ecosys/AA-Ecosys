@@ -37,7 +37,13 @@ Rules (main session and subagents alike; exit 2 refuses, the message goes to std
            directory or with -n, a UAT node .cjs scenario; a push, the PR opener or ship_wave too, since a push runs
            the repo's pre-push hook: CIS fast mode is about 5,000 unit tests, the S272 crash) while MemAvailable
            < 2 GiB, or < 4 GiB with 3 or more heavy processes already running: the WSL VM ran out of memory and
-           killed Claude Code and every lane (S237, S248, S251, S252, S261, S272). The message names what is running. Override (logged): prefix `AA_RAM_OVERRIDE=1`.
+           killed Claude Code and every lane (S237, S248, S251, S252, S261, S272). The message names what is running.
+           In a lane worktree (.tmp-session/wt/**: the current directory after `cd`, `env -C`, `--rootdir` or a test
+           path there) a pytest run is refused whatever the free memory when it asks for more than 2 xdist workers
+           (`-n N` / `-nN` / `--numprocesses N` with N > 2, or `-n auto|logical`) or collects a whole test
+           directory (no test path at all, or `.`, `tests`, `tests/unit`, `tests/integration`, `backend/tests`, ...):
+           S276 a lane ran `pytest -n 8 tests/unit` while memory was still fine at the start and the VM swapped.
+           A lane runs the touched test files, `-n` 2 at most. Override (logged): prefix `AA_RAM_OVERRIDE=1`.
   ECS-1    A raw `aws ecs execute-command`, typed or inside a .tmp-session / scratchpad script the command runs (S237 ...
            S269, 10 repeats): the SSM terminal cuts long output silently and a dropped session can kill the script.
            tools/ecs/ecsx.sh runs the script detached and brings ALL its output back (and resumes a lost start).
@@ -742,6 +748,157 @@ def _strip_comments(text: str) -> str:
 # --- RAM ---------------------------------------------------------------------------------------------------------
 
 
+# --- pytest in a lane worktree (RAM-1, deterministic) ------------------------------------------------------------
+
+LANE_MAX_WORKERS = 2  # the lane brief: `-n` 2 at most
+# pytest / xdist / common plugin options that take the next word as their value (so `-k name` is not a test path)
+PYTEST_VALUE_OPTS = frozenset({
+    "-k", "-m", "-p", "-c", "-o", "-W", "-r", "-n", "--numprocesses", "--maxprocesses", "--dist", "--rootdir",
+    "--confcutdir", "--basetemp", "--deselect", "--ignore", "--ignore-glob", "--junitxml", "--junit-xml",
+    "--maxfail", "--durations", "--durations-min", "--tb", "--log-level", "--log-file", "--log-cli-level",
+    "--log-format", "--cov", "--cov-report", "--cov-config", "--cov-fail-under", "--import-mode", "--override-ini",
+    "--capture", "--color", "--code-highlight", "--pythonwarnings", "--cache-dir", "--timeout", "--reruns", "--seed",
+    "--randomly-seed", "--count", "--tx", "--rsyncdir", "--inifile", "--config-file", "--deselect-file",
+})
+WHOLE_TEST_DIR = re.compile(r"(?:\./)?(?:(?:backend|src|app|api|web|portal)/)?tests?(?:/(?:unit|integration|e2e))?/?|\.?/?")
+RUNNERS = frozenset({"uv", "poetry", "pipenv", "pdm", "hatch", "rye"})
+
+
+def _pytest_args(words: list[str]) -> list[str] | None:
+    """The arguments of a pytest run (`pytest`, `py.test`, `python -m pytest`, `.venv/bin/pytest`, `uv run pytest`,
+    `coverage run -m pytest`), or None when the command is not one."""
+    prog, a = program(words)
+    while prog in RUNNERS and a[:1] == ["run"]:
+        rest = a[1:]
+        while rest and rest[0].startswith("-"):
+            rest = rest[2:] if rest[0] in ("--directory", "--project", "--with", "--python", "-p", "--env-file",
+                                             "--group", "--extra") else rest[1:]
+        if not rest:
+            return None
+        prog, a = os.path.basename(rest[0]), rest[1:]
+    if prog == "coverage" and a[:1] == ["run"]:
+        rest = a[1:]
+        while rest and rest[0].startswith("-") and rest[0] != "-m":
+            rest = rest[1:]
+        return rest[2:] if rest[:2] == ["-m", "pytest"] else None
+    if prog == "pytest" or prog.startswith("py.test"):
+        return a
+    if re.fullmatch(r"python[0-9.]*", prog):
+        rest = list(a)
+        while rest and rest[0].startswith("-") and rest[0] != "-m":
+            rest = rest[2:] if rest[0] in ("-X", "-W") else rest[1:]
+        if rest[:2] == ["-m", "pytest"]:
+            return rest[2:]
+    return None
+
+
+def _pytest_targets(args: list[str]) -> list[str]:
+    """Test paths given to pytest: words that are not an option or an option's value. A quoted word (blanked by
+    scan() to '' / \"\"), a variable or a command substitution stays in the list as written: it is unreadable here."""
+    out, skip = [], False
+    for x in args:
+        if skip:
+            skip = False
+            continue
+        if x.startswith("-"):
+            skip = x in PYTEST_VALUE_OPTS
+            continue
+        out.append(x)
+    return out
+
+
+def _unreadable(word: str) -> bool:
+    """A word whose value is only known at run time: a blanked quote, a variable, a command substitution."""
+    return word in ("''", '""') or "$" in word or "`" in word
+
+
+def _is_test_file(target: str) -> bool:
+    return target.endswith(".py") or "::" in target
+
+
+def _xdist_workers(args: list[str]) -> str | None:
+    """The xdist worker count asked for (`-n 4`, `-n4`, `-n=4`, `--numprocesses 4`, `--numprocesses=auto`), or None."""
+    for i, x in enumerate(args):
+        if x in ("-n", "--numprocesses"):
+            return args[i + 1] if i + 1 < len(args) else ""
+        if x.startswith("--numprocesses="):
+            return x.split("=", 1)[1]
+        if re.fullmatch(r"-n=?\w+", x):
+            return x[2:].lstrip("=")
+    return None
+
+
+def _in_lane(path: str) -> bool:
+    return "/.tmp-session/wt/" in os.path.normpath(path) + "/"
+
+
+_SUBST = re.compile(r"\$\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)|`[^`]*`")
+_WT_ROOT = re.compile(r"^.*?/\.tmp-session/wt/[^/]+/?")
+
+
+def _in_worktree(target: str) -> str:
+    """A test path relative to its worktree root: an absolute path under .tmp-session/wt/<lane>/ loses that prefix
+    (the worktree root itself is ''), a relative one stays as given."""
+    if target.startswith("/"):
+        norm = os.path.normpath(target)
+        m = _WT_ROOT.match(norm + "/")
+        return (norm + "/")[m.end():].rstrip("/") if m else norm
+    return target
+
+
+def _env_chdir(words: list[str], here: Path) -> Path:
+    """The directory an `env -C <dir>` / `env --chdir=<dir>` in front of the command moves to."""
+    for i, w in enumerate(words):
+        if os.path.basename(w) != "env":
+            continue
+        j = i + 1
+        while j < len(words) and (words[j].startswith("-") or re.fullmatch(r"[A-Za-z_]\w*=\S*", words[j])):
+            if words[j] in ("-C", "--chdir") and j + 1 < len(words):
+                here = _cd(here, [words[j + 1]])
+                j += 2
+                continue
+            if words[j].startswith("--chdir="):
+                here = _cd(here, [words[j].split("=", 1)[1]])
+            j += 2 if words[j] in ("-u", "--unset", "-S", "--split-string") else 1
+        break
+    return here
+
+
+def lane_pytest_check(t: Text, here: Path) -> str | None:
+    """RAM-1 (deterministic, S276): a pytest run in a lane worktree with more than LANE_MAX_WORKERS xdist workers, or
+    over a whole test directory, whatever the free memory. The directory is tracked through cd / pushd / env -C."""
+    # a command substitution becomes one unreadable word, so `pytest -q $(git diff --name-only ...)` keeps its paths
+    sk = _SUBST.sub(" $SUBST ", t.skeleton)
+    for words in simple_commands(sk):
+        prog, args = program(words)
+        if prog in DIR_CHANGERS:
+            here = _move(here, prog, args)
+            continue
+        pa = _pytest_args(words)
+        if pa is None:
+            continue
+        d = _env_chdir(words, here)
+        targets = _pytest_targets(pa)
+        rootdir = next((pa[i + 1] for i, x in enumerate(pa[:-1]) if x == "--rootdir"), None) or next(
+            (x.split("=", 1)[1] for x in pa if x.startswith("--rootdir=")), None)
+        places = [str(d)] + [x for x in targets + [rootdir or ""] if x.startswith("/")]
+        if not any(_in_lane(p) for p in places):
+            continue
+        where = next(p for p in places if _in_lane(p))
+        workers = _xdist_workers(pa)
+        if workers is not None and not _unreadable(workers) and not (
+                workers.isdigit() and int(workers) <= LANE_MAX_WORKERS):
+            return (f"`pytest -n {workers or '?'}` in a lane worktree ({where}): a lane runs at most "
+                    f"{LANE_MAX_WORKERS} xdist workers, whatever the free memory (S276: `-n 8` swapped the VM)")
+        files = [x for x in targets if _is_test_file(x)]
+        whole = [x for x in targets if not _is_test_file(x) and WHOLE_TEST_DIR.fullmatch(_in_worktree(x))]
+        if not files and not any(_unreadable(x) for x in targets) and (not targets or whole):
+            what = f"`pytest {whole[0]}`" if whole else "`pytest` without a test path"
+            return (f"{what} in a lane worktree ({where}) collects a whole test directory: a lane runs the touched "
+                    f"test files only (CIS tests/unit is about 5,000 tests, TP backend/tests > 5 GB)")
+    return None
+
+
 def heavy_command(words: list[str]) -> str | None:
     """Name of the heavy work a simple command starts, or None."""
     prog, args = program(words)
@@ -762,16 +919,11 @@ def heavy_command(words: list[str]) -> str | None:
         return "tsc"
     if prog == "docker" and ("build" in a[:2] or a[:2] == ["compose", "build"]):
         return "docker build"
-    pytest_args = None
-    if prog == "pytest" or prog.startswith("py.test"):
-        pytest_args = a
-    elif re.fullmatch(r"python[0-9.]*", prog) and a[:2] == ["-m", "pytest"]:
-        pytest_args = a[2:]
+    pytest_args = _pytest_args(words)
     if pytest_args is not None:
-        targets = [x for x in pytest_args if not x.startswith("-")]
-        if "-n" in pytest_args or any(x.startswith("-n") and x[2:].isdigit() for x in pytest_args):
+        if _xdist_workers(pytest_args) is not None:
             return "pytest -n (xdist)"
-        if not any(x.endswith(".py") or "::" in x for x in targets):
+        if not any(_is_test_file(x) for x in _pytest_targets(pytest_args)):
             return "pytest over a whole directory"
         return None
     if prog == "node" and any(re.search(r"(?:^|/)uat/\S*\.cjs$", x) for x in a):
@@ -965,14 +1117,22 @@ def check(cmd: str, cwd: Path | None = None, proc: Path = Path("/proc")) -> Refu
     # WT-1 / TF-1 resolve paths: walk the texts in order, carrying the directory `cd` moved to (the outer text
     # first, then the bash -c / heredoc bodies it runs).
     here = cwd
+    lane_pytest = None
     for t in texts:
         where = "" if t.origin == "command" else f" (in {Path(t.origin).name})"
         hit = worktree_check(t, here)
         if hit:
             return Refusal("WT-1", hit + where, FIX["WT-1"])
+        if not lane_pytest:
+            hit = lane_pytest_check(t, here)
+            lane_pytest = hit + where if hit else None
         hit, here = tf_check(t, here)
         if hit:
             return Refusal("TF-1", hit + where, FIX["TF-1"])
+    if lane_pytest:
+        if not override:
+            return Refusal("RAM-1", lane_pytest, FIX["RAM-1"])
+        _log("RAM-1 override", lane_pytest)
     ram = ram_check(texts, override, proc)
     if ram:
         return Refusal("RAM-1", ram[0], ram[1])

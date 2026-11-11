@@ -571,6 +571,113 @@ class RamTest(unittest.TestCase):
             self.assertEqual([x[2] for x in g.processes(Path(d))], [""])
 
 
+class LanePytestTest(unittest.TestCase):
+    """RAM-1, deterministic part (S276): in a lane worktree, pytest with more than 2 xdist workers or over a whole
+    test directory is refused whatever the free memory (the S276 lane ran `pytest -n 8 tests/unit` with RAM fine at
+    the start)."""
+
+    WT = "/home/nghiep/projects/AA-Ecosys/.tmp-session/wt/s999-l1-x-cis"
+    MAIN = Path("/home/nghiep/projects/AA-Ecosys")
+
+    def lane_rule(self, cmd: str, cwd: Path | None = None) -> str | None:
+        return rule(cmd, cwd=cwd or self.MAIN)
+
+    def test_refused_in_a_lane_worktree(self):
+        wt = self.WT
+        for cmd in (
+            f"cd {wt} && pytest -n 8 tests/unit",  # the S276 command
+            f"cd {wt} && pytest -n 8 tests/unit/test_a.py",
+            f"cd {wt} && pytest -n3 -x tests/unit/test_a.py",
+            f"cd {wt} && pytest -n=4 tests/unit/test_a.py",
+            f"cd {wt} && pytest --numprocesses 4 tests/unit/test_a.py",
+            f"cd {wt} && pytest --numprocesses=auto tests/unit/test_a.py",
+            f"cd {wt} && pytest -n auto tests/unit/test_a.py",
+            f"cd {wt} && pytest -n logical tests/unit/test_a.py",
+            f"cd {wt} && pytest tests/unit",
+            f"cd {wt} && pytest -x -q tests/unit/",
+            f"cd {wt} && pytest tests",
+            f"cd {wt} && pytest tests/integration -q",
+            f"cd {wt} && pytest .",
+            f"cd {wt} && pytest -q",  # no path: the whole testpaths
+            f"cd {wt} && pytest -k gateway",  # -k takes a value, not a path
+            f"cd {wt} && pytest --deselect tests/unit/test_a.py::t tests/unit",
+            f"cd {wt}/backend && python -m pytest -q tests",
+            f"cd {wt} && pytest backend/tests",
+            f"pytest {wt}/tests/unit -q",  # an absolute path into a lane
+            f"pytest {wt}",
+            f"pytest --rootdir {wt} -n 8 {wt}/tests/unit/test_a.py",
+            f"pytest --rootdir={wt}",
+            f"env -C {wt} pytest tests/unit",
+            f"cd {wt} && env -u AWS_PROFILE AWS_CONFIG_FILE=/dev/null AWS_EC2_METADATA_DISABLED=true "
+            f".venv/bin/python -m pytest -n 8 tests/unit/test_a.py",
+            f"cd {wt} && python3 -X dev -m pytest tests/unit",
+            f"cd {wt} && uv run pytest tests/unit",
+            f"cd {wt} && uv run --with pytest-xdist pytest -n 4 tests/unit/test_a.py",
+            f"cd {wt} && coverage run -m pytest tests/unit",
+            f"bash -c 'cd {wt} && pytest -n 8 tests/unit'",
+            f"pushd {wt} && pytest tests",
+        ):
+            self.assertEqual(self.lane_rule(cmd), "RAM-1", cmd)
+        self.assertEqual(self.lane_rule("pytest -n 8 tests/unit/test_a.py", cwd=Path(wt)), "RAM-1")
+        self.assertEqual(self.lane_rule("pytest tests/unit", cwd=Path(wt)), "RAM-1")
+
+    def test_message_names_the_rule_and_keeps_the_fix(self):
+        r = g.check(f"cd {self.WT} && pytest -n 8 tests/unit", cwd=self.MAIN, proc=NO_PROC)
+        self.assertEqual(r.rule, "RAM-1")
+        self.assertIn("-n 8", r.detail)
+        self.assertIn("at most 2", r.detail)
+        self.assertEqual(r.fix, g.FIX["RAM-1"])
+        r = g.check(f"cd {self.WT} && pytest tests/unit", cwd=self.MAIN, proc=NO_PROC)
+        self.assertIn("whole test directory", r.detail)
+
+    def test_near_misses_pass(self):
+        wt = self.WT
+        for cmd in (
+            f"cd {wt} && pytest -x -q tests/unit/test_a.py",
+            f"cd {wt} && pytest -n 2 tests/unit/test_a.py tests/unit/test_b.py",
+            f"cd {wt} && pytest -n2 tests/unit/test_a.py",
+            f"cd {wt} && pytest -n 0 tests/unit/test_a.py",
+            f"cd {wt} && pytest tests/unit/test_a.py::test_one",
+            f"cd {wt} && pytest -k gateway tests/unit/test_a.py",
+            f"cd {wt} && pytest tests/unit/llm_gateway",  # a sub-package, not the whole suite
+            f"cd {wt} && pytest tests/integration/test_x.py -m integration",
+            f"pytest {wt}/tests/unit/test_a.py",
+            f"cd {wt} && env -u AWS_PROFILE AWS_CONFIG_FILE=/dev/null .venv/bin/python -m pytest -x -q "
+            f"tests/unit/test_a.py",
+            f"cd {wt} && scripts/pre-push.sh --plan",
+            f"cd {wt} && grep -n 'pytest -n 8 tests/unit' README.md",
+            f"cd {wt} && python3 .claude/hooks/test_aa_shell_guard.py",
+            f"cd {wt} && python3 -m unittest discover -s tools",
+            # paths known only at run time (replay S272: both were file lists)
+            f"cd {wt} && python -m pytest -q $(ls tests/unit/test_aa795*.py) 2>&1 | tail -3",
+            f"cd {wt}/backend && python3 -m pytest -q $(git diff --name-only | sed 's#^backend/##' | grep test) -p x",
+            f"cd {wt} && pytest -q $FILES",
+            f'cd {wt} && pytest -q "tests/unit/test_a.py"',
+            f"cd {wt} && pytest -q `git diff --name-only | grep test_`",
+            # outside a lane worktree the deterministic part does not apply (RAM-1 still checks free memory)
+            "pytest -n 8 tests/unit",
+            "cd /home/nghiep/projects/AA-Ecosys/apps/AA-CIS-App && pytest tests/unit",
+            # the override, logged
+            f"AA_RAM_OVERRIDE=1 pytest -n 8 {wt}/tests/unit",
+            f"AA_RAM_OVERRIDE=1 bash -c 'cd {wt} && pytest tests/unit'",
+        ):
+            self.assertIsNone(self.lane_rule(cmd), cmd)
+
+    def test_pytest_argument_readers(self):
+        self.assertEqual(g._pytest_args("uv run --directory x pytest -q a.py".split()), ["-q", "a.py"])
+        self.assertEqual(g._pytest_args("python3 -I -m pytest a.py".split()), ["a.py"])
+        self.assertIsNone(g._pytest_args("python3 -m unittest a".split()))
+        self.assertIsNone(g._pytest_args("uv run ruff check".split()))
+        self.assertEqual(g._pytest_targets(["-k", "x", "-p", "no:cacheprovider", "tests/a.py", "-q"]),
+                         ["tests/a.py"])
+        self.assertEqual(g._xdist_workers(["-q", "-n", "8"]), "8")
+        self.assertEqual(g._xdist_workers(["-n4"]), "4")
+        self.assertEqual(g._xdist_workers(["--numprocesses=auto"]), "auto")
+        self.assertIsNone(g._xdist_workers(["-q", "--no-header"]))
+        self.assertEqual(g._in_worktree(f"{self.WT}/tests/unit/"), "tests/unit")
+        self.assertEqual(g._in_worktree(self.WT), "")
+
+
 class HookIoTest(unittest.TestCase):
     def run_hook(self, payload) -> subprocess.CompletedProcess:
         env = dict(os.environ, CLAUDE_PROJECT_DIR=tempfile.gettempdir())

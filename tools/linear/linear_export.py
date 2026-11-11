@@ -18,18 +18,37 @@ Rules:
 - The API key is read from Secrets Manager (aa-ecosys/ops/linear-api-key, acc2) into memory only; it is
   never printed or written. LINEAR_API_KEY in the environment overrides it (CI / testing). Key lookup and the GraphQL
   call live in linear_api.py (shared with plan_sync.py).
+- The export file of every issue in the run (changed or not) and the index are scanned with gitleaks and the root
+  .gitleaks.toml before the run reports success or archives anything (S276: an exported comment "Secrets: `<name>`"
+  made the generic-api-key rule fire and blocked the session-close PR). Unchanged files are scanned too, so a re-run
+  after a failed or unscanned run cannot pass on files it did not rewrite. gitleaks is GITLEAKS_BIN or `gitleaks` on
+  PATH (CI pin v8.30.1); without it the run stops non-zero unless --no-gitleaks. A finding stops the run (exit 3)
+  with file, line and rule, values redacted.
+- Linear text is exported as written except one rewrite: a secret label followed by a colon and a backticked secret
+  NAME, path-shaped and lower-case like the ecosystem's names ("Secrets: `<app>/<env>/<name>`", "**Secret:**
+  `<app>/<env>/<name>`"), loses the colon ("Secrets — `<app>/<env>/<name>`"). The colon is the assignment the
+  generic-api-key rule looks for; the backticks stay (they stop the rule on a name list). Any other backticked token
+  after a secret label (a value such as "Secret: `Xk29...`") is left as written, so the gate still sees it.
 """
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
+import shutil
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
 
 from linear_api import api_key, gql
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "docs" / "linear-export"
+GITLEAKS_CONFIG = ROOT / ".gitleaks.toml"
+EXIT_NO_GITLEAKS = 2
+EXIT_LEAKS = 3
 CLOSED = ("completed", "canceled")
 
 ISSUE_FIELDS = """
@@ -86,6 +105,23 @@ def path_for(issue: dict) -> Path:
     return OUT / slug((issue.get("project") or {}).get("name")) / f"{issue['identifier']}.md"
 
 
+# "Secrets: `app/env/name`" / "**Secret:** `app/env/name`" / "Secrets Manager: `app/env/name`": a secret label, a
+# colon, then a backticked secret NAME. gitleaks generic-api-key reads `<keyword>[ \t\w.-]{0,20}:` as an assignment
+# and the name as its value. Only a path-shaped, lower-case token counts as a name (how every ecosystem secret is
+# named, e.g. <app>/<env>/<name>); a random-looking token is a possible VALUE and must reach the gitleaks gate as
+# written, colon and all. The label match is case-insensitive, the name match is not.
+_SECRET_NAME = r"`[a-z0-9][a-z0-9._-]*(?:/[a-z0-9._-]+)+`"
+_SECRET_LABEL = re.compile(r"(\b(?i:secrets?)\b[ \t\w.-]{0,20}?)(\*\*)?:(\*\*)?[ \t]*(?=" + _SECRET_NAME + ")")
+
+
+def neutralise_secret_labels(text: str) -> str:
+    """Drop the colon after a secret label that introduces a backticked, path-shaped secret name, so a name is not
+    read as a value (S276 export: "- Secrets: `<name>` written" fired generic-api-key). Backticks stay: on a name list
+    they are what stop the rule (`a_key`, `b` without them reads as key=value). Everything else, including a
+    backticked token that is not path-shaped (it may be a real value), is left as written for the gitleaks gate."""
+    return _SECRET_LABEL.sub(lambda m: f"{m.group(1).rstrip()}{m.group(2) or ''}{m.group(3) or ''} — ", text)
+
+
 def render(issue: dict) -> str:
     meta = {
         "identifier": issue["identifier"],
@@ -110,7 +146,7 @@ def render(issue: dict) -> str:
     # against the catalog schema, and these generated pages are not catalog pages.
     lines = [f"# {issue['identifier']} — {issue['title']}", "", "```yaml"]
     lines += [f"{k}: {json.dumps(v, ensure_ascii=False)}" for k, v in meta.items()] + ["```", ""]
-    lines += [issue.get("description") or "_(no description)_", ""]
+    lines += [neutralise_secret_labels(issue.get("description") or "_(no description)_"), ""]
     atts = issue["attachments"]["nodes"]
     if atts:
         lines += ["## Links", ""] + [f"- [{a['title']}]({a['url']})" for a in atts] + [""]
@@ -119,7 +155,8 @@ def render(issue: dict) -> str:
         lines += ["## Comments", ""]
         for c in comments:
             who = (c.get("user") or {}).get("name") or "unknown"
-            lines += [f"### {c['createdAt'][:16].replace('T', ' ')} — {who}", "", c["body"], ""]
+            lines += [f"### {c['createdAt'][:16].replace('T', ' ')} — {who}", "", neutralise_secret_labels(c["body"]),
+                      ""]
     return "\n".join(lines).rstrip() + "\n"
 
 
@@ -162,6 +199,81 @@ def move_from_trash(key: str, issue_id: str) -> str:
     return "archived (restore + archive)" if st["archivedAt"] and not st["trashed"] else f"NOT moved: {st}"
 
 
+def gitleaks_bin() -> str | None:
+    """GITLEAKS_BIN (a path) when set, else `gitleaks` on PATH, else None."""
+    env = os.environ.get("GITLEAKS_BIN", "").strip()
+    if env:
+        return env if Path(env).is_file() and os.access(env, os.X_OK) else None
+    return shutil.which("gitleaks")
+
+
+def scan_files(paths: list[Path], binary: str, config: Path = GITLEAKS_CONFIG) -> list[dict]:
+    """gitleaks findings in `paths` (each a file under OUT), as {file, line, rule}; values are never kept (--redact).
+    The files are copied into one temporary tree (same relative paths) and scanned once with `gitleaks dir`.
+    Raises RuntimeError when gitleaks itself fails (exit code other than 0 / 1, or an unreadable report)."""
+    if not paths:
+        return []
+    out_dir = OUT.resolve()
+    with tempfile.TemporaryDirectory(prefix="linear-export-scan-") as tmp:
+        tree = Path(tmp) / "tree"
+        for p in paths:
+            dest = tree / p.resolve().relative_to(out_dir)
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(p, dest)
+        report = Path(tmp) / "report.json"
+        cmd = [binary, "dir", str(tree), "--config", str(config), "--redact", "--no-banner", "--log-level", "error",
+               "--report-format", "json", "--report-path", str(report), "--exit-code", "1"]
+        r = subprocess.run(cmd, capture_output=True, text=True)
+        if r.returncode not in (0, 1):
+            raise RuntimeError(f"gitleaks exited {r.returncode}: {(r.stderr or r.stdout).strip()[:400]}")
+        try:
+            found = json.loads(report.read_text(encoding="utf-8") or "[]") if report.exists() else []
+        except json.JSONDecodeError as e:
+            raise RuntimeError(f"gitleaks report unreadable: {e}") from e
+        if r.returncode == 1 and not found:
+            raise RuntimeError("gitleaks reported leaks but wrote no findings")
+        out = []
+        for f in found or []:
+            hit = Path(f.get("File", "")).resolve()
+            src = out_dir / hit.relative_to(tree.resolve()) if hit.is_relative_to(tree.resolve()) else hit
+            shown = src.relative_to(ROOT).as_posix() if src.is_relative_to(ROOT) else str(src)
+            out.append({"file": shown, "line": f.get("StartLine"), "rule": f.get("RuleID")})
+        return sorted(out, key=lambda x: (x["file"], x["line"] or 0, x["rule"] or ""))
+
+
+def gitleaks_gate(paths: list[Path], skip: bool) -> int:
+    """0 when the run's export files are clean (or there are none, or --no-gitleaks); EXIT_NO_GITLEAKS when no
+    gitleaks binary is found; EXIT_LEAKS on a finding or a gitleaks failure. Prints what to do."""
+    if not paths:
+        return 0
+    if skip:
+        print(f"WARNING: --no-gitleaks: {len(paths)} exported file(s) NOT scanned; run gitleaks on docs/linear-export "
+              f"before committing (root .gitleaks.toml, CI secret scan).", file=sys.stderr)
+        return 0
+    binary = gitleaks_bin()
+    if not binary:
+        print("ERROR: gitleaks not found (set GITLEAKS_BIN=<path> or put gitleaks v8.30.1 on PATH). The "
+              f"{len(paths)} exported file(s) were written but NOT scanned, and nothing was archived. Scan them, or "
+              "re-run with --no-gitleaks to skip the scan on purpose.", file=sys.stderr)
+        return EXIT_NO_GITLEAKS
+    try:
+        findings = scan_files(paths, binary)
+    except (OSError, RuntimeError) as e:
+        print(f"ERROR: gitleaks scan of the export failed: {e}. Nothing was archived.", file=sys.stderr)
+        return EXIT_LEAKS
+    if not findings:
+        print(f"gitleaks: {len(paths)} exported file(s) clean")
+        return 0
+    print(f"ERROR: gitleaks found {len(findings)} finding(s) in the export (values redacted). Nothing was archived; "
+          "the CI secret scan would refuse the commit:", file=sys.stderr)
+    for f in findings:
+        print(f"  {f['file']}:{f['line']}  {f['rule']}", file=sys.stderr)
+    print("Fix: edit that text in Linear (or in the exported file before committing: a secret NAME after a label "
+          "with a colon reads as key=value; write 'Secret named <name>' instead). A real secret: rotate it first.",
+          file=sys.stderr)
+    return EXIT_LEAKS
+
+
 def write_index(issues: list[dict]) -> None:
     rows = sorted(issues, key=lambda i: (slug((i.get("project") or {}).get("name")), i["identifier"]))
     lines = ["# Linear export", "",
@@ -179,7 +291,7 @@ def write_index(issues: list[dict]) -> None:
     (OUT / "README.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--archive", action="store_true", help="archive exported closed issues (dry run unless --apply)")
     ap.add_argument("--apply", action="store_true", help="with --archive: really archive")
@@ -188,18 +300,20 @@ def main() -> None:
                     help="move exported issues from Linear's 30-day trash to the archive (dry run unless --apply)")
     ap.add_argument("--rescue-open-archived", action="store_true",
                     help="unarchive open issues archived with their parent and detach them (dry run unless --apply)")
-    args = ap.parse_args()
+    ap.add_argument("--no-gitleaks", action="store_true",
+                    help="do not scan the files just written with gitleaks (default: scan, and stop on a finding)")
+    args = ap.parse_args(argv)
 
     key = api_key()
     issues = fetch(key, args.only)
-    written = 0
+    written: list[Path] = []
     for issue in issues:
         p = path_for(issue)
         text = render(issue)
         if not p.exists() or p.read_text(encoding="utf-8") != text:
             p.parent.mkdir(parents=True, exist_ok=True)
             p.write_text(text, encoding="utf-8")
-            written += 1
+            written.append(p)
     if not args.only:
         # A file is stale when its issue was reopened (no longer closed/archived/trashed) or now lives under another
         # project folder. Stale files are removed so the export stays one file per issue (history keeps the rest).
@@ -210,7 +324,14 @@ def main() -> None:
         if stale:
             print(f"removed {len(stale)} stale files: {', '.join(f.stem for f in stale[:10])}")
         write_index(issues)
-    print(f"closed issues: {len(issues)} | files written/updated: {written} | "
+        written.append(OUT / "README.md")
+    # Scan every file of this run's issues, not only the ones rewritten now: a run that stopped on the gate (or had
+    # no gitleaks) leaves its files on disk, and a re-run that rewrites nothing must still not pass on them.
+    scan = [path_for(i) for i in issues] + ([] if args.only else [OUT / "README.md"])
+    gate = gitleaks_gate(scan, args.no_gitleaks)
+    if gate:
+        return gate
+    print(f"closed issues: {len(issues)} | files written/updated: {len(written) - (0 if args.only else 1)} | "
           f"trashed: {sum(1 for i in issues if i.get('trashed'))} | archived: {sum(1 for i in issues if i.get('archivedAt'))}")
 
     if args.rescue_trash:
@@ -226,7 +347,7 @@ def main() -> None:
                 print(f"  {i['identifier']}  {i['state']['name']}  {i['title'][:80]}")
                 continue
             print(f"  {i['identifier']}: {move_from_trash(key, i['id'])}")
-        return
+        return 0
     if args.rescue_open_archived:
         # An archived open issue disappears from every Linear view. Unarchive it and detach it from its closed
         # parent, so archiving the parent again cannot take it along.
@@ -243,9 +364,9 @@ def main() -> None:
             st = gql(key, STATE_QUERY, {"id": i["id"]})["issue"]
             print(f"  {i['identifier']}: {'unarchived' if not st['archivedAt'] else 'STILL ARCHIVED'}"
                   f"{f', detached from {parent}' if parent else ''}")
-        return
+        return 0
     if not args.archive:
-        return
+        return 0
     todo = [i for i in issues if not i.get("archivedAt") and not i.get("trashed") and exported_matches(i)]
     held = [i for i in todo if open_children(i)]
     for i in held:
@@ -259,7 +380,8 @@ def main() -> None:
             continue
         ok = gql(key, ARCHIVE_MUTATION, {"id": i["id"]})["issueArchive"]["success"]
         print(f"  {i['identifier']}: {'archived' if ok else 'NOT archived'}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
