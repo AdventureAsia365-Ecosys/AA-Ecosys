@@ -1,0 +1,37 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "EventPage",
+  "expect": "valid",
+  "why": "1.6 (AA-1073): the decision date came with the minimum not met, then the caller's allotment went back to sale; ids only",
+  "payload": {
+    "items": [
+      {
+        "event_id": "6f0d2a41-0000-4000-8000-000000001073",
+        "cursor": "bk1.1073",
+        "type": "departure.at_risk",
+        "occurred_at": "2027-02-08T01:05:00Z",
+        "hold_id": null,
+        "booking_id": null,
+        "line_ref": null,
+        "departure_id": "9f000000-0000-4000-8000-000000001073",
+        "incident_code": null,
+        "decline_code": null,
+        "new_start_time": null
+      },
+      {
+        "event_id": "6f0d2a41-0000-4000-8000-000000001074",
+        "cursor": "bk1.1074",
+        "type": "allotment.released",
+        "occurred_at": "2027-02-19T01:05:00Z",
+        "hold_id": null,
+        "booking_id": null,
+        "line_ref": null,
+        "departure_id": "9f000000-0000-4000-8000-000000001073",
+        "incident_code": null,
+        "decline_code": null,
+        "new_start_time": null
+      }
+    ],
+    "next_cursor": "bk1.1074"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "DepartureAllotment",
+  "expect": "invalid",
+  "why": "1.6 (AA-1073): an allotment answer never names another agency (seat counts and a date only)",
+  "payload": {"seats": 4, "used": 1, "available": 3, "release_date": "2027-02-19", "agency_name": "Copperbay Trips"}
+}
