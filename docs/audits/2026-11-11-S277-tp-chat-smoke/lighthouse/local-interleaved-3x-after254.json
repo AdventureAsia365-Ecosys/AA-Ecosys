@@ -1,0 +1,153 @@
+{
+  "method": "interleaved, 3 rounds, order alternates each round, same local servers and data as the 3-run set",
+  "urls": {
+    "/plan?country=Laos": {
+      "before-0d6b5eb": {
+        "median": {
+          "score": 50,
+          "lcp_ms": 5639,
+          "tbt_ms": 1808,
+          "cls": 0.009,
+          "fcp_ms": 911,
+          "si_ms": 4177
+        },
+        "runs": [
+          {
+            "score": 50,
+            "lcp_ms": 5622,
+            "tbt_ms": 1808,
+            "cls": 0.009,
+            "fcp_ms": 913,
+            "si_ms": 4224
+          },
+          {
+            "score": 50,
+            "lcp_ms": 5639,
+            "tbt_ms": 1798,
+            "cls": 0.009,
+            "fcp_ms": 909,
+            "si_ms": 4173
+          },
+          {
+            "score": 49,
+            "lcp_ms": 5719,
+            "tbt_ms": 2128,
+            "cls": 0.009,
+            "fcp_ms": 911,
+            "si_ms": 4177
+          }
+        ]
+      },
+      "after254-63a2aa2a": {
+        "median": {
+          "score": 53,
+          "lcp_ms": 5393,
+          "tbt_ms": 1309,
+          "cls": 0.007,
+          "fcp_ms": 760,
+          "si_ms": 4188
+        },
+        "runs": [
+          {
+            "score": 53,
+            "lcp_ms": 5369,
+            "tbt_ms": 1309,
+            "cls": 0.007,
+            "fcp_ms": 760,
+            "si_ms": 4188
+          },
+          {
+            "score": 54,
+            "lcp_ms": 5393,
+            "tbt_ms": 1164,
+            "cls": 0.007,
+            "fcp_ms": 760,
+            "si_ms": 4160
+          },
+          {
+            "score": 53,
+            "lcp_ms": 5416,
+            "tbt_ms": 1325,
+            "cls": 0,
+            "fcp_ms": 765,
+            "si_ms": 4365
+          }
+        ]
+      }
+    },
+    "/plan": {
+      "before-0d6b5eb": {
+        "median": {
+          "score": 50,
+          "lcp_ms": 5566,
+          "tbt_ms": 1916,
+          "cls": 0.009,
+          "fcp_ms": 909,
+          "si_ms": 4094
+        },
+        "runs": [
+          {
+            "score": 49,
+            "lcp_ms": 5618,
+            "tbt_ms": 1941,
+            "cls": 0.009,
+            "fcp_ms": 910,
+            "si_ms": 4300
+          },
+          {
+            "score": 50,
+            "lcp_ms": 5566,
+            "tbt_ms": 1916,
+            "cls": 0.009,
+            "fcp_ms": 908,
+            "si_ms": 4094
+          },
+          {
+            "score": 50,
+            "lcp_ms": 5492,
+            "tbt_ms": 1816,
+            "cls": 0.009,
+            "fcp_ms": 909,
+            "si_ms": 4018
+          }
+        ]
+      },
+      "after254-63a2aa2a": {
+        "median": {
+          "score": 55,
+          "lcp_ms": 5231,
+          "tbt_ms": 1157,
+          "cls": 0.007,
+          "fcp_ms": 757,
+          "si_ms": 4036
+        },
+        "runs": [
+          {
+            "score": 55,
+            "lcp_ms": 5233,
+            "tbt_ms": 1230,
+            "cls": 0,
+            "fcp_ms": 757,
+            "si_ms": 4036
+          },
+          {
+            "score": 56,
+            "lcp_ms": 5224,
+            "tbt_ms": 1105,
+            "cls": 0.007,
+            "fcp_ms": 757,
+            "si_ms": 3991
+          },
+          {
+            "score": 55,
+            "lcp_ms": 5231,
+            "tbt_ms": 1157,
+            "cls": 0.007,
+            "fcp_ms": 758,
+            "si_ms": 4183
+          }
+        ]
+      }
+    }
+  }
+}

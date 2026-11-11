@@ -23,7 +23,7 @@
 |---|---|---|---|
 | **Acc2 — hạ tầng chính** (RDS/ECS/S3/Lambda thật, DUY NHẤT chứa hạ tầng) | 005097885195 | us-west-1 | `aa365-admin` |
 | **Acc3 — LLM satellite** (Bedrock chat models; DUY NHẤT ngoài acc2 dùng cho LLM) | 786888028788 | us-west-1 | `nghiep_aa365` |
-| Acc1 — tài khoản CÁ NHÂN của Nghiệp, **ĐÃ GỠ khỏi hệ sinh thái** (AA-998, S255) | 867490540162 | — | `pqnghiep-admin` (chỉ việc cá nhân) |
+| Acc1 — tài khoản CÁ NHÂN của Nghiệp, **ĐÃ GỠ khỏi hệ sinh thái** (AA-998, S255); từ 11/11/2026 (S277) là management/payer của org chứa acc3 — chỉ trả tiền, KHÔNG workload (ADR 0001a, Note S277) | 867490540162 | — | `pqnghiep-admin` (SSO, Identity Center ap-southeast-1); acc3 qua SSO: `acc3-sso` |
 
 LLM chỉ chạy trên **acc3** (Bedrock satellite) + các model Bedrock native acc2 đang dùng hôm nay (vd. Cohere Embed v4).
 Không còn fallback chéo account: acc3 lỗi → fallback model cùng acc3 / job retry (Nghiệp chấp nhận, AA-998).

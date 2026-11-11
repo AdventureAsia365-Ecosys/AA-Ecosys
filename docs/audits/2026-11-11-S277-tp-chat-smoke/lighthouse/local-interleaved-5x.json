@@ -1,0 +1,217 @@
+{
+  "method": "interleaved, 5 rounds, order alternates each round, same local servers and data as the 3-run set",
+  "urls": {
+    "/plan?country=Laos": {
+      "before-0d6b5eb": {
+        "median": {
+          "score": 48,
+          "lcp_ms": 5777,
+          "tbt_ms": 2203,
+          "cls": 0.009,
+          "fcp_ms": 914,
+          "si_ms": 4410
+        },
+        "runs": [
+          {
+            "score": 46,
+            "lcp_ms": 5970,
+            "tbt_ms": 2447,
+            "cls": 0.009,
+            "fcp_ms": 921,
+            "si_ms": 4768
+          },
+          {
+            "score": 49,
+            "lcp_ms": 5767,
+            "tbt_ms": 1826,
+            "cls": 0.009,
+            "fcp_ms": 921,
+            "si_ms": 4280
+          },
+          {
+            "score": 48,
+            "lcp_ms": 5777,
+            "tbt_ms": 2112,
+            "cls": 0.009,
+            "fcp_ms": 914,
+            "si_ms": 4448
+          },
+          {
+            "score": 48,
+            "lcp_ms": 5768,
+            "tbt_ms": 2445,
+            "cls": 0.009,
+            "fcp_ms": 914,
+            "si_ms": 4346
+          },
+          {
+            "score": 48,
+            "lcp_ms": 5857,
+            "tbt_ms": 2203,
+            "cls": 0.009,
+            "fcp_ms": 913,
+            "si_ms": 4410
+          }
+        ]
+      },
+      "after-60e5db1": {
+        "median": {
+          "score": 39,
+          "lcp_ms": 5813,
+          "tbt_ms": 2271,
+          "cls": 0.009,
+          "fcp_ms": 4752,
+          "si_ms": 4752
+        },
+        "runs": [
+          {
+            "score": 39,
+            "lcp_ms": 5792,
+            "tbt_ms": 2118,
+            "cls": 0.009,
+            "fcp_ms": 4765,
+            "si_ms": 4815
+          },
+          {
+            "score": 48,
+            "lcp_ms": 5862,
+            "tbt_ms": 2246,
+            "cls": 0.009,
+            "fcp_ms": 914,
+            "si_ms": 4524
+          },
+          {
+            "score": 39,
+            "lcp_ms": 5806,
+            "tbt_ms": 2271,
+            "cls": 0.009,
+            "fcp_ms": 4752,
+            "si_ms": 4752
+          },
+          {
+            "score": 47,
+            "lcp_ms": 5820,
+            "tbt_ms": 2501,
+            "cls": 0.009,
+            "fcp_ms": 912,
+            "si_ms": 4557
+          },
+          {
+            "score": 37,
+            "lcp_ms": 5813,
+            "tbt_ms": 2776,
+            "cls": 0.009,
+            "fcp_ms": 4774,
+            "si_ms": 4824
+          }
+        ]
+      }
+    },
+    "/plan": {
+      "before-0d6b5eb": {
+        "median": {
+          "score": 49,
+          "lcp_ms": 5639,
+          "tbt_ms": 2185,
+          "cls": 0.009,
+          "fcp_ms": 910,
+          "si_ms": 4201
+        },
+        "runs": [
+          {
+            "score": 49,
+            "lcp_ms": 5603,
+            "tbt_ms": 1998,
+            "cls": 0.009,
+            "fcp_ms": 910,
+            "si_ms": 4199
+          },
+          {
+            "score": 54,
+            "lcp_ms": 4447,
+            "tbt_ms": 2674,
+            "cls": 0.009,
+            "fcp_ms": 909,
+            "si_ms": 3936
+          },
+          {
+            "score": 47,
+            "lcp_ms": 5704,
+            "tbt_ms": 2703,
+            "cls": 0.009,
+            "fcp_ms": 910,
+            "si_ms": 4320
+          },
+          {
+            "score": 49,
+            "lcp_ms": 5644,
+            "tbt_ms": 2075,
+            "cls": 0.009,
+            "fcp_ms": 910,
+            "si_ms": 4201
+          },
+          {
+            "score": 49,
+            "lcp_ms": 5639,
+            "tbt_ms": 2185,
+            "cls": 0.009,
+            "fcp_ms": 910,
+            "si_ms": 4212
+          }
+        ]
+      },
+      "after-60e5db1": {
+        "median": {
+          "score": 48,
+          "lcp_ms": 5819,
+          "tbt_ms": 2439,
+          "cls": 0.009,
+          "fcp_ms": 909,
+          "si_ms": 4407
+        },
+        "runs": [
+          {
+            "score": 47,
+            "lcp_ms": 5913,
+            "tbt_ms": 2612,
+            "cls": 0.009,
+            "fcp_ms": 909,
+            "si_ms": 4551
+          },
+          {
+            "score": 48,
+            "lcp_ms": 5843,
+            "tbt_ms": 2439,
+            "cls": 0.009,
+            "fcp_ms": 909,
+            "si_ms": 4407
+          },
+          {
+            "score": 48,
+            "lcp_ms": 5807,
+            "tbt_ms": 2393,
+            "cls": 0.009,
+            "fcp_ms": 910,
+            "si_ms": 4308
+          },
+          {
+            "score": 48,
+            "lcp_ms": 5755,
+            "tbt_ms": 2473,
+            "cls": 0.009,
+            "fcp_ms": 909,
+            "si_ms": 4408
+          },
+          {
+            "score": 48,
+            "lcp_ms": 5819,
+            "tbt_ms": 2353,
+            "cls": 0.009,
+            "fcp_ms": 908,
+            "si_ms": 4359
+          }
+        ]
+      }
+    }
+  }
+}

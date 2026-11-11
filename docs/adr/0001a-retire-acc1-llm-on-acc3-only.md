@@ -65,3 +65,22 @@ definition or us-west-1 secret left in acc1.
   `shared.llm_call_log` shows no `account = 'acc1'` row after the cut-over.
 - **Reversal:** adding a second satellite later means a new account under the same rules as acc3 (Terraform root,
   ExternalId, catalog profiles, budgets), not a return to the personal account.
+
+## Note — 11/11/2026 (S277): acc1 becomes the payer of acc3, still no workload
+
+On the reseller's advice (TrueIDC, for the Bedrock model access and quota cases), the tech lead invited acc3 into
+the AWS Organization whose management account is acc1, and acc3 accepted on 11/11/2026. What changes and what does not:
+
+- **Billing only.** acc1 pays acc3's bill. The two AWS Lift promotional credits (one per account, 1/9–31/12/2026) are
+  pooled. Lift credits do not cover Claude on Bedrock: it is billed as "Claude … (Amazon Bedrock Edition)" and paid by
+  card (Cost Explorer on acc1, September and October 2026).
+- **No workload on acc1.** The decision of this ADR stands: no resource, deploy, secret or LLM route on acc1. acc1
+  runs IAM Identity Center for its own organization; the tech lead's sign-in to acc3 can use it (permission set
+  AA-Admin), next to the existing acc3 access.
+- **Runtime paths unchanged.** Calls from acc2 to acc3 use the cross-account role in acc3 and do not depend on the
+  organization. acc3 sits at the organization root; no SCP of acc1's organization applies to it today. Moving acc3
+  into an OU with SCPs needs a check that the SCPs allow Bedrock in us-west-1.
+- **Open:** the billing transfer of acc2 to the management account acc4 (ADR 0018) is a separate track. If acc3 later
+  moves to acc4's organization it must leave acc1's organization first.
+- A support case for the model access was also opened from acc1 as the management account (case number in the private
+  case notes).

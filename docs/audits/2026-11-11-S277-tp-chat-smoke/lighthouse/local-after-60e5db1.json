@@ -1,0 +1,235 @@
+{
+  "label": "local-after-60e5db1",
+  "base": "http://127.0.0.1:3102",
+  "lighthouse": "12.8.2",
+  "preset": "mobile (Lighthouse default: Moto G Power emulation, simulated slow 4G throttling); headless Chrome with software WebGL (SwiftShader) so the Mapbox map can start",
+  "category": "performance",
+  "runs_per_url": 3,
+  "urls": {
+    "/plan?country=Laos": {
+      "url": "http://127.0.0.1:3102/plan?country=Laos",
+      "median": {
+        "score": 41,
+        "lcp_ms": 5966,
+        "tbt_ms": 2470,
+        "cls": 0.009,
+        "fcp_ms": 920,
+        "si_ms": 5574,
+        "transfer_kb": 931,
+        "script_kb": 560
+      },
+      "runs": [
+        {
+          "run": 0,
+          "warmup": true,
+          "score": 50,
+          "lcp_ms": 5659,
+          "tbt_ms": 1729,
+          "cls": 0.009,
+          "fcp_ms": 913,
+          "si_ms": 4335,
+          "doc_status": 200,
+          "final_url": "http://127.0.0.1:3102/plan?country=Laos",
+          "requests": 81,
+          "transfer_kb": 931,
+          "script_kb": 560,
+          "mapbox_statuses": [
+            200,
+            204,
+            403,
+            -1
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        },
+        {
+          "run": 1,
+          "warmup": false,
+          "score": 49,
+          "lcp_ms": 5673,
+          "tbt_ms": 2064,
+          "cls": 0.009,
+          "fcp_ms": 910,
+          "si_ms": 4415,
+          "doc_status": 200,
+          "final_url": "http://127.0.0.1:3102/plan?country=Laos",
+          "requests": 79,
+          "transfer_kb": 931,
+          "script_kb": 560,
+          "mapbox_statuses": [
+            200,
+            204,
+            403,
+            -1
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        },
+        {
+          "run": 2,
+          "warmup": false,
+          "score": 41,
+          "lcp_ms": 6707,
+          "tbt_ms": 6500,
+          "cls": 0.009,
+          "fcp_ms": 920,
+          "si_ms": 6003,
+          "doc_status": 200,
+          "final_url": "http://127.0.0.1:3102/plan?country=Laos",
+          "requests": 76,
+          "transfer_kb": 931,
+          "script_kb": 560,
+          "mapbox_statuses": [
+            200,
+            204,
+            403
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        },
+        {
+          "run": 3,
+          "warmup": false,
+          "score": 36,
+          "lcp_ms": 5966,
+          "tbt_ms": 2470,
+          "cls": 0.009,
+          "fcp_ms": 4853,
+          "si_ms": 5574,
+          "doc_status": 200,
+          "final_url": "http://127.0.0.1:3102/plan?country=Laos",
+          "requests": 78,
+          "transfer_kb": 931,
+          "script_kb": 560,
+          "mapbox_statuses": [
+            200,
+            204,
+            403,
+            -1
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        }
+      ]
+    },
+    "/plan": {
+      "url": "http://127.0.0.1:3102/plan",
+      "median": {
+        "score": 48,
+        "lcp_ms": 5780,
+        "tbt_ms": 2114,
+        "cls": 0.009,
+        "fcp_ms": 911,
+        "si_ms": 4331,
+        "transfer_kb": 1457,
+        "script_kb": 560
+      },
+      "runs": [
+        {
+          "run": 0,
+          "warmup": true,
+          "score": 39,
+          "lcp_ms": 5771,
+          "tbt_ms": 2065,
+          "cls": 0.009,
+          "fcp_ms": 4626,
+          "si_ms": 4626,
+          "doc_status": 200,
+          "final_url": "http://127.0.0.1:3102/plan",
+          "requests": 62,
+          "transfer_kb": 1457,
+          "script_kb": 560,
+          "mapbox_statuses": [
+            200,
+            204,
+            403
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        },
+        {
+          "run": 1,
+          "warmup": false,
+          "score": 38,
+          "lcp_ms": 5886,
+          "tbt_ms": 2055,
+          "cls": 0.009,
+          "fcp_ms": 4848,
+          "si_ms": 4848,
+          "doc_status": 200,
+          "final_url": "http://127.0.0.1:3102/plan",
+          "requests": 62,
+          "transfer_kb": 1458,
+          "script_kb": 560,
+          "mapbox_statuses": [
+            200,
+            204,
+            403
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        },
+        {
+          "run": 2,
+          "warmup": false,
+          "score": 48,
+          "lcp_ms": 5780,
+          "tbt_ms": 2331,
+          "cls": 0.009,
+          "fcp_ms": 910,
+          "si_ms": 4331,
+          "doc_status": 200,
+          "final_url": "http://127.0.0.1:3102/plan",
+          "requests": 62,
+          "transfer_kb": 1457,
+          "script_kb": 560,
+          "mapbox_statuses": [
+            200,
+            204,
+            403
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        },
+        {
+          "run": 3,
+          "warmup": false,
+          "score": 49,
+          "lcp_ms": 5665,
+          "tbt_ms": 2114,
+          "cls": 0.009,
+          "fcp_ms": 911,
+          "si_ms": 4201,
+          "doc_status": 200,
+          "final_url": "http://127.0.0.1:3102/plan",
+          "requests": 61,
+          "transfer_kb": 1457,
+          "script_kb": 560,
+          "mapbox_statuses": [
+            200,
+            204,
+            403
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        }
+      ]
+    }
+  }
+}
