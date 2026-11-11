@@ -210,6 +210,10 @@ run-script, never shown in a task log.
 - `booking.b2b_desk_bookings.override_reason` and `booking.b2b_cancellations.waive_reason` (bk-047, staff text on
   agency bookings, never traveller data by rule): when a match is found, set the column to `[redacted]` and change
   nothing else (the bk-047 guard triggers allow only that move; run as `bk_owner`)
+- `booking.departure_fees.note`, `booking.departure_price_adjustments.reason` and `booking.departures.ops_note`
+  (bk-048, staff text on departures, never traveller data by rule): when a match is found, set the column to
+  `[redacted]` and change nothing else (the bk-048 guard triggers allow only that move on fees and adjustments; run as
+  `bk_owner`)
 - `booking.retired_b2c_record.record` (the bk-045 archive of the customer invoices and payments, accounting
   exception DM-7.1): redact the personal keys in place, never delete (section 3 step 4)
 - gone since bk-045 (dropped, not archived, so nothing to erase): `booking.customers`, `customer_identities`,
