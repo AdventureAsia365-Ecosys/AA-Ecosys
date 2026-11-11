@@ -1,0 +1,24 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "ProductPage",
+  "expect": "valid",
+  "why": "1.7 (AA-1075): a live product says which ages AA prices as children and infants on the tour",
+  "payload": {
+    "items": [
+      {
+        "tour": {"source_system": "cis", "source_id": "5a000000-0000-4000-8000-000000001075"},
+        "trip_plan_id": "8e000000-0000-4000-8000-000000001075",
+        "sellable": true,
+        "has_fixed_departures": false,
+        "components": [
+          {"component_id": "tp:8e000000-0000-4000-8000-000000001075", "kind": "trip_plan", "day_no": null, "destination_id": null}
+        ],
+        "updated_at": "2026-11-11T08:00:00Z",
+        "withdrawn": false,
+        "withdrawn_reason": null,
+        "age_bands": {"child_age_max": 11, "infant_age_max": 1}
+      }
+    ],
+    "next_cursor": null
+  }
+}

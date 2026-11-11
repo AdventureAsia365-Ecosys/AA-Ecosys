@@ -49,7 +49,9 @@ info:
     /terms?source_id= (the payment terms of one tour, with PaymentTerms.scope); event types booking.created_by_aa (AA
     staff entered a booking for the agency: import it by booking_id), booking.line_reduced and booking.fee_changed (AA
     lowered or waived a cancellation fee). A child pays the rule's child share of the adult price on a tour line and an
-    infant adds the rule's infant price (the quote's line price already holds both).
+    infant adds the rule's infant price (the quote's line price already holds both). Product.age_bands says which
+    ages count as a child or an infant on a tour; TariffItem gains child_price_per_person, infant_price and
+    single_supplement_per_person (sell prices from the quote engine, never a net), also as the last three CSV columns.
   x-aa-contract: booking.b2b.v1
   x-aa-producer: AA-Booking
   x-aa-consumers: [AA-Partner]
@@ -542,7 +544,8 @@ paths:
         price. Rows AA cannot quote today are left out. format=csv returns the same rows as a
         CSV file (columns tour_key, title, country, duration_days, season, valid_from, valid_to, pax_min, pax_max,
         priced_for_pax, currency, price_per_person, price_for_party, agency_discount_pct, rrp_per_person,
-        rrp_currency; an open pax band has an empty pax_max).
+        rrp_currency, then since 1.7 child_price_per_person, infant_price, single_supplement_per_person; an open pax
+        band has an empty pax_max, a missing supplement an empty cell).
       security:
         - m2m: [booking.b2b/read]
       parameters:
@@ -797,6 +800,24 @@ components:
           type: [string, "null"]
           maxLength: 64
           description: On a withdrawn row, why (source_deleted, master_trashed, superseded_orphan).
+        age_bands:
+          oneOf:
+            - {type: "null"}
+            - {$ref: "#/components/schemas/AgeBands"}
+          description: >-
+            1.7 (AA-1075). Which travellers AA prices as children and infants on this tour; null on a withdrawn row.
+            Split the party into pax.adult / child / infant with it before POST /quotes.
+    AgeBands:
+      type: object
+      additionalProperties: false
+      description: >-
+        1.7 (AA-1075). The oldest age, in whole years on the departure date, at the child price and at the infant
+        price: the tour's own bands, else AA's defaults. Older than child_age_max = adult; infant_age_max is always
+        below child_age_max.
+      required: [child_age_max, infant_age_max]
+      properties:
+        child_age_max: {type: integer, minimum: 2, maximum: 17}
+        infant_age_max: {type: integer, minimum: 0, maximum: 4}
     ProductPage:
       type: object
       additionalProperties: false
@@ -1411,6 +1432,27 @@ components:
             - {type: "null"}
             - {$ref: "#/components/schemas/Money"}
           description: AA's public suggested retail price per person of the window and band (price.from.v1 basis).
+        child_price_per_person:
+          oneOf:
+            - {type: "null"}
+            - {$ref: "#/components/schemas/Money"}
+          description: >-
+            1.7 (AA-1075). The quote engine's price of one child of this party (the rule's child share of the adult
+            price; = price_per_person when AA sets none): a quote of a adults and c children charges a x
+            price_per_person + c x child_price_per_person, within the line's rounding.
+        infant_price:
+          oneOf:
+            - {type: "null"}
+            - {$ref: "#/components/schemas/Money"}
+          description: 1.7 (AA-1075). What one infant adds to the price of this party (0 when infants travel free).
+        single_supplement_per_person:
+          oneOf:
+            - {type: "null"}
+            - {$ref: "#/components/schemas/Money"}
+          description: >-
+            1.7 (AA-1075). What each traveller adds when the party sleeps in single rooms instead of twin share (0 on a
+            tour without hotel rooms or for a party of one); null when a single room has no rate in force (ask a
+            quote with rooms).
     AgencyInvoiceSummary:
       type: object
       additionalProperties: false
