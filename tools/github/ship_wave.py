@@ -11,6 +11,15 @@ Targets ('<Repo>#<pr>', repo aliases as ship_merge.py):
                                            ship_copy_apply.py (Infra copy PR -> merge -> apply -> readiness)
   <Repo>#<pr>@after=<owner>/<NNN>[,...]    held until those migrations are applied (MIG-4 code PR)
 
+A held code PR whose branch was stacked on the migration branch still carries the migration commit after the migration
+PR squash-merged; main has the same file under another commit and the code PR's Migration preflight goes red (S277:
+CIS #1436 and #1439, Booking #217, Partner #268 and #271, each one more CI round plus a hand merge of main). So once
+its migrations are applied and before it is gated, the tool checks the head: when it changes a migrations/*.sql file
+that the default branch already has, it merges origin/<default> into the branch (no rebase, no force) in the clean lane
+worktree of that branch or a temporary worktree under .tmp-session/wt/, runs `scripts/pre-push.sh --integration` when
+the repo has that mode (the stamp key changes with the diff), pushes through as-app.sh with the repo's pre-push hook,
+and gates the new head. A merge conflict stops that PR (never resolved automatically). AA-1084.
+
 Why (lessons S257, S271): a hand-written script that waits for one PR (and its deploy) before it queues the next ran a
 7-PR wave in ~4 h instead of ~1 h. Here every PR that does not wait for a migration is gated and merged at the same
 time (ship_merge.merge_one: EVERY check green, settle re-read, DIRTY / draft / base / deletion refusals; merge queue for
@@ -30,15 +39,33 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
+from pathlib import Path
 
 import ship_copy_apply
 import ship_merge
-from ship_common import QUEUE_REPOS, Runner, ShipError, gh_json, log, parse_target, slug, warn_mfa
+from ship_common import (
+    AS_APP,
+    QUEUE_REPOS,
+    ROOT,
+    Result,
+    Runner,
+    ShipError,
+    default_branch,
+    gh_json,
+    local_checkout,
+    log,
+    parse_target,
+    pr_view,
+    slug,
+    warn_mfa,
+)
+from ship_open_prs import SAFE_HOOKS, push_failure_reason, push_timeout
 
 # Deployed apps: health endpoint that reports the running git_sha (as tools/github/train-lib.sh waitdeploy).
 DEPLOY_URL = {
@@ -118,16 +145,174 @@ def plan_lines(items: list[Item]) -> list[str]:
     return lines
 
 
+# --- AA-1084: a held code PR stacked on its migration branch ---------------------------------------------------------
+
+# A migration file of an app repo: CIS / Partner api/migrations/NNN_x.sql, Booking / TripPlanner migrations/NNN_x.sql
+# (not migrations/tests/...).
+MIGRATION_RE = re.compile(r"(^|/)migrations/[^/]+\.sql$")
+# Temporary worktrees for the merge (gitignored; the CIS pre-push finds the workspace gitleaks from here).
+TMP_WT = ROOT / ".tmp-session" / "wt"
+INTEGRATION_TIMEOUT = 1800  # scripts/pre-push.sh --integration: a throwaway Postgres and the touched test files
+
+
+def _git(runner: Runner, wt, *args: str, timeout: float = 120) -> Result:
+    return runner.run(["git", "-C", str(wt), *args], timeout=timeout)
+
+
+def carried_migrations(runner: Runner, co, base_ref: str, head: str) -> list[str]:
+    """Migration files the branch changes (merge-base..head) that `base_ref` already has: after a squash merge of the
+    migration PR, a branch stacked on it still adds the same file under its own commit."""
+    r = _git(runner, co, "-c", "core.quotePath=false", "diff", "--name-only", "--no-renames", "--diff-filter=AM",
+             f"{base_ref}...{head}")
+    if not r.ok:
+        raise ShipError(f"cannot diff {head[:8]} against {base_ref}: {r.last_line()}", 4)
+    files = [f.strip() for f in r.out.splitlines() if MIGRATION_RE.search(f.strip())]
+    return [f for f in files if _git(runner, co, "cat-file", "-e", f"{base_ref}:{f}").ok]
+
+
+def _busy(runner: Runner, wt: str) -> bool:
+    """A merge or rebase in progress in that worktree."""
+    for name in ("MERGE_HEAD", "rebase-merge", "rebase-apply"):
+        p = _git(runner, wt, "rev-parse", "--git-path", name).out.strip()
+        if p and not os.path.isabs(p):
+            p = os.path.join(wt, p)
+        if p and os.path.exists(p):
+            return True
+    return False
+
+
+def lane_worktree(runner: Runner, co, branch: str, head: str) -> str | None:
+    """The lane worktree that has `branch` checked out at exactly the PR head, with no modified tracked file and no
+    merge or rebase in progress; None otherwise (the caller then uses a temporary worktree). Never the main checkout."""
+    r = _git(runner, co, "worktree", "list", "--porcelain")
+    if not r.ok:
+        return None
+    for block in r.out.replace("\r", "").split("\n\n"):
+        fields = dict(line.split(" ", 1) for line in block.splitlines() if " " in line)
+        path = fields.get("worktree", "")
+        if fields.get("branch") != f"refs/heads/{branch}" or not path or not os.path.isdir(path):
+            continue
+        if os.path.realpath(path) == os.path.realpath(str(co)):
+            return None
+        if fields.get("HEAD") != head:
+            log(f"  lane worktree {path} is at {fields.get('HEAD', '?')[:8]}, not the PR head {head[:8]}: not reused")
+            return None
+        st = _git(runner, path, "status", "--porcelain", "--untracked-files=no")
+        if not st.ok or st.out.strip() or _busy(runner, path):
+            log(f"  lane worktree {path} is not clean: not reused")
+            return None
+        return path
+    return None
+
+
+def stamp_integration(runner: Runner, tag: str, wt: str) -> None:
+    """The CIS pre-push hook refuses a push whose touched integration tests have no stamp for this code. The stamp key
+    names the changed files, and the merge drops the migration from the diff, so the lane's stamp no longer matches:
+    run the mode once on the merged code (it is a no-op when no integration test is touched)."""
+    try:
+        with open(os.path.join(wt, "scripts", "pre-push.sh"), encoding="utf-8") as fh:
+            has_mode = "--integration)" in fh.read()
+    except OSError:
+        return
+    if not has_mode:
+        return
+    if os.environ.get("AA_PREPUSH_SKIP_INTEGRATION") == "1":
+        log(f"{tag}: AA_PREPUSH_SKIP_INTEGRATION=1: no integration run on the merged code (CI's shards are the only run)")
+        return
+    log(f"{tag}: scripts/pre-push.sh --integration on the merged code (throwaway Postgres)")
+    r = runner.run(["bash", "-c", 'cd -- "$1" && exec bash scripts/pre-push.sh --integration', "ship-wave", wt],
+                   timeout=INTEGRATION_TIMEOUT)
+    if not r.ok:
+        raise ShipError(f"{tag}: scripts/pre-push.sh --integration failed on the merged code (exit {r.rc}: "
+                        f"{r.last_line()}); the merge is kept in {wt}: fix it there, push, then ship it again", 4)
+    log(f"{tag}: integration: {r.last_line() or 'passed'}")
+
+
+def update_stacked_branch(runner: Runner, repo: str, n: int) -> str | None:
+    """Before gating a held code PR: when its head still carries a migration file the default branch already has,
+    merge origin/<default> into the branch (no force) and push it. Return the pushed head, or None when nothing
+    changed. A conflict, a failed integration run or a refused push raises ShipError (exit 4)."""
+    tag = f"{repo}#{n}"
+    pr = pr_view(runner, repo, n)
+    if pr.get("state") != "OPEN":
+        return None
+    br, head = str(pr.get("headRefName") or ""), str(pr.get("headRefOid") or "")
+    co = local_checkout(repo)
+    if not br or not head or not (Path(co) / ".git").exists():
+        log(f"WARN {tag}: no local clone at {co} (or no head): stacked-branch check skipped")
+        return None
+    base = default_branch(repo)
+    base_ref = f"origin/{base}"
+    f = _git(runner, co, "fetch", "-q", "origin", f"+refs/heads/{base}:refs/remotes/origin/{base}",
+             f"+refs/heads/{br}:refs/remotes/origin/{br}", timeout=300)
+    if not f.ok:
+        log(f"WARN {tag}: git fetch failed ({f.last_line()}): stacked-branch check skipped")
+        return None
+    carried = carried_migrations(runner, co, base_ref, head)
+    if not carried:
+        log(f"{tag}: head {head[:8]} carries no migration file of {base}: gating as is")
+        return None
+    log(f"{tag}: head {head[:8]} still carries {', '.join(carried)}, already on {base} (branch stacked on the "
+        f"migration branch): merging {base_ref} into {br}, no force")
+    wt = lane_worktree(runner, co, br, head)
+    temp = wt is None
+    if wt is None:
+        TMP_WT.mkdir(parents=True, exist_ok=True)
+        wt = str(TMP_WT / f"ship-wave-{repo}-{n}-{os.getpid()}")
+        r = _git(runner, co, "worktree", "add", "-q", "--detach", wt, head, timeout=600)
+        if not r.ok:
+            raise ShipError(f"{tag}: cannot add a worktree at {wt}: {r.last_line()}", 4)
+        log(f"{tag}: temporary worktree {wt} at {head[:8]}")
+    else:
+        log(f"{tag}: reusing the clean lane worktree {wt}")
+    # What the finally block does: "undo" (temporary worktree removed, lane worktree reset to the PR head), "keep"
+    # (a failure after the merge: left in place for the tech lead to fix and push) or "done" (pushed).
+    outcome = "undo"
+    try:
+        m = _git(runner, wt, "merge", "--no-edit", "-m", f"Merge {base_ref} into {br}", base_ref, timeout=300)
+        if not m.ok:
+            u = _git(runner, wt, "diff", "--name-only", "--diff-filter=U")
+            files = ", ".join(x.strip() for x in u.out.splitlines() if x.strip())
+            _git(runner, wt, "merge", "--abort")
+            raise ShipError(f"{tag}: merging {base_ref} into {br} conflicts{' in ' + files if files else ''} "
+                            f"({m.last_line()}): not resolved automatically; resolve it in a worktree of {br} "
+                            f"(git merge {base_ref}), push, then ship it again", 4)
+        still = [x for x in carried if not _git(runner, wt, "diff", "--quiet", base_ref, "HEAD", "--", x).ok]
+        if still:
+            raise ShipError(f"{tag}: after the merge {', '.join(still)} still differs from {base}: the code PR changes "
+                            f"an applied migration; take {base}'s version by hand", 4)
+        new = _git(runner, wt, "rev-parse", "HEAD").out.strip()
+        log(f"{tag}: merged {base_ref}: {head[:8]} -> {new[:8]}")
+        outcome = "keep"
+        stamp_integration(runner, tag, wt)
+        p = runner.run([AS_APP, "--repos", repo, "--", "git", "-c", f"core.hooksPath={SAFE_HOOKS}", "-C", wt, "push",
+                        "-q", "origin", f"HEAD:refs/heads/{br}"], timeout=push_timeout())
+        if not p.ok:
+            raise ShipError(f"{tag}: push of the merge failed (no force; the merge is kept in {wt}): "
+                            f"{push_failure_reason(p)}", 4)
+        outcome = "done"
+        log(f"{tag}: pushed {new[:8]} to {br} (pre-push hook passed); gating the new head")
+        return new
+    finally:
+        if temp and outcome != "keep":
+            _git(runner, co, "worktree", "remove", "--force", wt, timeout=300)
+        elif not temp and outcome == "undo":
+            _git(runner, wt, "reset", "-q", "--keep", head)  # the lane worktree back as it was (it was clean)
+
+
 class Wave:
     """Runs the items: merge workers, one apply worker per owner, held PRs released by their migrations."""
 
-    def __init__(self, runner: Runner, items: list[Item], *, merge_kw: dict, apply_fn, fetch, check_only: bool):
+    def __init__(self, runner: Runner, items: list[Item], *, merge_kw: dict, apply_fn, fetch, check_only: bool,
+                 restack=update_stacked_branch):
         self.runner = runner
         self.items = items
         self.merge_kw = merge_kw
         self.apply_fn = apply_fn
         self.fetch = fetch
         self.check_only = check_only
+        self.restack = restack
+        self.restack_locks = {r: threading.Lock() for r in {it.repo for it in items}}
         self.results: dict[str, tuple[int, str]] = {}
         self.merged_sha: dict[str, str] = {}
         self.merge_done = {it.tag: threading.Event() for it in items}
@@ -150,14 +335,20 @@ class Wave:
                 if bad:
                     self._set(it.tag, 4, f"skipped: migration(s) {', '.join(bad)} not applied")
                     return
-                log(f"{it.tag}: migrations {', '.join(f'{o}/{n}' for o, n in it.after)} applied, gating")
+                log(f"{it.tag}: migrations {', '.join(f'{o}/{n}' for o, n in it.after)} applied, checking the branch")
+            expect = None
+            if it.after and not self.check_only and self.restack:
+                # AA-1084: a branch stacked on the migration branch gets origin/<default> merged in (and pushed)
+                # before the gate; one at a time per repo (shared clone, and the CIS pre-push is heavy).
+                with self.restack_locks[it.repo]:
+                    expect = self.restack(self.runner, it.repo, it.n)
+            kw = dict(self.merge_kw, expect_head=expect) if expect else self.merge_kw
             lock = self.repo_locks.get(it.repo)
             if lock:
                 with lock:
-                    sha = ship_merge.merge_one(self.runner, it.repo, it.n, check_only=self.check_only,
-                                               **self.merge_kw)
+                    sha = ship_merge.merge_one(self.runner, it.repo, it.n, check_only=self.check_only, **kw)
             else:
-                sha = ship_merge.merge_one(self.runner, it.repo, it.n, check_only=self.check_only, **self.merge_kw)
+                sha = ship_merge.merge_one(self.runner, it.repo, it.n, check_only=self.check_only, **kw)
             self.merged_sha[it.tag] = sha
             self._set(it.tag, 0, f"MERGED {sha[:8]}" if sha else "green (not merged)")
         except ShipError as e:
@@ -268,7 +459,7 @@ def wait_deploys(runner: Runner, wave: Wave, fetch, *, timeout: float, interval:
 
 
 def main(argv: list[str] | None = None, runner: Runner | None = None, apply_fn=None,
-         fetch=ship_copy_apply.fetch_ready) -> int:
+         fetch=ship_copy_apply.fetch_ready, restack=update_stacked_branch) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("targets", nargs="+", help="<Repo>#<pr>[>apply:<owner>/<NNN>,...][@after=<owner>/<NNN>,...]")
     ap.add_argument("--wait-deploy", action="store_true", help="at the end, wait once per deployed app")
@@ -301,7 +492,7 @@ def main(argv: list[str] | None = None, runner: Runner | None = None, apply_fn=N
     if apply_fn is None:
         def apply_fn(owner: str, nnn: str) -> int:
             return ship_copy_apply.main([owner, nnn], runner=runner, fetch=fetch)
-    wave = Wave(runner, items, apply_fn=apply_fn, fetch=fetch, check_only=a.check_only,
+    wave = Wave(runner, items, apply_fn=apply_fn, fetch=fetch, check_only=a.check_only, restack=restack,
                 merge_kw={"timeout": a.timeout, "interval": max(30.0, a.interval), "allow_deletes": a.allow_deletes,
                           "queue_timeout": a.queue_timeout})
     wave.run()

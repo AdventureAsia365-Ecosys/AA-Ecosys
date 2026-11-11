@@ -8,13 +8,18 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import os
+import tempfile
 import threading
 import unittest
+from pathlib import Path
+from unittest import mock
 
 import ship_common
+import ship_merge
 import ship_wave
-from ship_common import Result, ShipError
-from ship_fakes import FakeRunner, pr
+from ship_common import Result, Runner, ShipError
+from ship_fakes import FakeRunner, GitSandbox, HybridRunner, pr
 
 MERGE_SHA = {1350: "c" * 40, 1351: "d" * 40, 1349: "e" * 40, 601: "f" * 40}
 
@@ -104,9 +109,67 @@ class WaveTest(unittest.TestCase):
         self.out = io.StringIO()
         self._redirect = contextlib.redirect_stdout(self.out)
         self._redirect.__enter__()
+        # The default stacked-branch check of a held PR finds no local clone here (it is tested on its own below).
+        self._tmp = tempfile.TemporaryDirectory(prefix="ship-wave-")
+        self._clone = mock.patch.object(ship_wave, "local_checkout", lambda repo: Path(self._tmp.name) / "no-clone")
+        self._clone.start()
 
     def tearDown(self):
+        self._clone.stop()
+        self._tmp.cleanup()
         self._redirect.__exit__(None, None, None)
+
+    def test_held_pr_branch_is_updated_after_apply_and_before_its_gate(self):
+        # AA-1084: the stacked-branch update runs once the migration is applied, before the held PR is gated, and
+        # the gate then waits for the pushed head; the independent PR is never touched.
+        rec = Recorder()
+        r = scripted([1349, 1350, 1351], rec)
+
+        def apply_fn(owner, nnn):
+            rec.add(f"apply {owner}/{nnn}")
+            return 0
+
+        seen = []
+
+        def restack(runner, repo, n):
+            rec.add(f"restack {n}")
+            seen.append((repo, n))
+            return "a" * 40  # the head the scripted PR view shows
+
+        with mock.patch.object(ship_merge, "merge_one", wraps=ship_merge.merge_one) as m1:
+            code = ship_wave.main(["cis#1349>apply:cis/383", "cis#1351@after=cis/383", "cis#1350"], runner=r,
+                                  apply_fn=apply_fn, fetch=lambda url: {}, restack=restack)
+        self.assertEqual(code, 0, self.out.getvalue())
+        self.assertEqual(seen, [("AA-CIS-App", 1351)])
+        ev = rec.events
+        self.assertLess(ev.index("apply cis/383"), ev.index("restack 1351"))
+        self.assertLess(ev.index("restack 1351"), ev.index("merge-start 1351"))
+        heads = {c.args[2]: c.kwargs.get("expect_head") for c in m1.call_args_list}
+        self.assertEqual(heads, {1349: None, 1350: None, 1351: "a" * 40})
+
+    def test_failed_branch_update_stops_that_pr_only(self):
+        rec = Recorder()
+        r = scripted([1349, 1350, 1351], rec)
+
+        def restack(runner, repo, n):
+            raise ShipError(f"{repo}#{n}: merging origin/main into feat/x conflicts in api/x.py", 4)
+
+        code = ship_wave.main(["cis#1349>apply:cis/383", "cis#1351@after=cis/383", "cis#1350"], runner=r,
+                              apply_fn=lambda o, n: 0, fetch=lambda url: {}, restack=restack)
+        self.assertEqual(code, 4)
+        self.assertNotIn("merge-start 1351", rec.events)
+        self.assertIn("merged 1350", rec.events)
+        self.assertIn("AA-CIS-App#1351: exit 4 - AA-CIS-App#1351: merging origin/main into feat/x conflicts",
+                      self.out.getvalue())
+
+    def test_check_only_never_updates_a_branch(self):
+        r = scripted([1349, 1351], Recorder())
+        called = []
+        code = ship_wave.main(["cis#1349>apply:cis/383", "cis#1351@after=cis/383", "--check-only"], runner=r,
+                              apply_fn=lambda o, n: 0, fetch=lambda url: {},
+                              restack=lambda runner, repo, n: called.append(n))
+        self.assertEqual(code, 0, self.out.getvalue())
+        self.assertEqual(called, [])
 
     def test_independent_prs_are_merged_in_parallel(self):
         # Each merge call waits until the other one has started: only a parallel run gets both through.
@@ -217,6 +280,197 @@ class WaveTest(unittest.TestCase):
         ship_wave.main(["cis#1350"], runner=r, apply_fn=lambda o, n: 0, fetch=lambda url: {})
         self.assertEqual(os.environ.get(ship_common.GATE_ENV), "ship_merge")
         os.environ.pop(ship_common.GATE_ENV, None)
+
+
+MIG = "api/migrations/400_add_widget.sql"
+MIG_SQL = "CREATE TABLE demo.widget (id int);\n"
+
+
+class StackedBranchTest(unittest.TestCase):
+    """update_stacked_branch on real git: a bare origin, a 'clone' (the app checkout) and an 'other' clone that plays
+    the lane and GitHub's squash merge. gh and as-app.sh are scripted; the scripted push runs the real git push."""
+
+    def setUp(self):
+        self.s = GitSandbox()
+        self.out = io.StringIO()
+        self._redirect = contextlib.redirect_stdout(self.out)
+        self._redirect.__enter__()
+        self.tmp_wt = os.path.join(self.s.tmp.name, "tmp-wt")
+        self._patches = [mock.patch.object(ship_wave, "local_checkout", lambda repo: Path(self.s.wt)),
+                         mock.patch.object(ship_wave, "TMP_WT", Path(self.tmp_wt)),
+                         mock.patch.dict(os.environ, {"AA_PREPUSH_SKIP_INTEGRATION": ""})]
+        for p in self._patches:
+            p.start()
+        self.pushes: list[list[str]] = []
+
+    def tearDown(self):
+        for p in reversed(self._patches):
+            p.stop()
+        self._redirect.__exit__(None, None, None)
+        self.s.close()
+
+    # -- scenario helpers ------------------------------------------------------------------------------------------
+
+    def git(self, cwd, *args):
+        return self.s.git(cwd, *args)
+
+    def stacked_branch(self, *, main_sql: str = MIG_SQL, extra_code: dict | None = None) -> str:
+        """Lane: feat/mig adds the migration, feat/code is stacked on it; then the migration PR squash-merges (main
+        gets the same file under another commit, plus an unrelated commit). Return the code head."""
+        o = self.s.other
+        self.git(o, "checkout", "-q", "-b", "feat/mig", "origin/main")
+        self.s.commit(o, MIG, MIG_SQL, "feat: add widget table")
+        self.git(o, "checkout", "-q", "-b", "feat/code")
+        self.s.commit(o, "api/widget.py", "WIDGET = 1\n", "feat: widget reader")
+        for path, text in (extra_code or {}).items():
+            self.s.commit(o, path, text, f"chore: {path}")
+        self.git(o, "push", "-q", "origin", "feat/mig", "feat/code")
+        head = self.git(o, "rev-parse", "HEAD")
+        self.git(o, "checkout", "-q", "main")
+        self.s.commit(o, MIG, main_sql, "feat: add widget table (#1)")
+        self.s.commit(o, "docs/other.md", "unrelated\n", "docs: unrelated")
+        self.git(o, "push", "-q", "origin", "main")
+        return head
+
+    def runner(self, head: str, *, push_result: Result | None = None, bash: list | None = None) -> HybridRunner:
+        r = HybridRunner()
+        r.on(("gh", "pr", "view", "7"), Result(0, json.dumps(pr(7, head=head, branch="feat/code"))))
+
+        def push(argv):
+            self.pushes.append(argv)
+            if push_result is not None:
+                return push_result
+            return Runner().run(argv[argv.index("--") + 1:], timeout=120)
+
+        r.on((ship_common.AS_APP,), push)
+        r.on(("bash",), *(bash or [Result(0, "integration: passed; stamp x written")]))
+        return r
+
+    def remote(self, ref: str) -> str:
+        self.git(self.s.wt, "fetch", "-q", "origin")
+        return self.git(self.s.wt, "rev-parse", f"origin/{ref}")
+
+    def tmp_worktrees(self) -> list[str]:
+        return sorted(os.listdir(self.tmp_wt)) if os.path.isdir(self.tmp_wt) else []
+
+    # -- cases -----------------------------------------------------------------------------------------------------
+
+    def test_stacked_branch_gets_main_merged_and_pushed_without_force(self):
+        head = self.stacked_branch()
+        r = self.runner(head)
+        new = ship_wave.update_stacked_branch(r, "AA-CIS-App", 7)
+        self.assertEqual(new, self.remote("feat/code"))
+        self.assertNotEqual(new, head)
+        # a fast-forward of the old head (no force), now containing main, and the PR diff lost the migration
+        self.git(self.s.wt, "merge-base", "--is-ancestor", head, "origin/feat/code")
+        self.git(self.s.wt, "merge-base", "--is-ancestor", "origin/main", "origin/feat/code")
+        diff = self.git(self.s.wt, "diff", "--name-only", "origin/main...origin/feat/code").split()
+        self.assertEqual(diff, ["api/widget.py"])
+        argv = self.pushes[0]
+        self.assertNotIn("--force", " ".join(argv))
+        self.assertIn(f"core.hooksPath={ship_wave.SAFE_HOOKS}", argv)
+        self.assertEqual(argv[-1], "HEAD:refs/heads/feat/code")
+        self.assertEqual(self.tmp_worktrees(), [])  # the temporary worktree is removed
+        log = self.out.getvalue()
+        self.assertIn(f"still carries {MIG}, already on main", log)
+        self.assertIn("temporary worktree", log)
+        self.assertIn("pushed", log)
+
+    def test_clean_lane_worktree_is_reused(self):
+        head = self.stacked_branch()
+        lane = os.path.join(self.s.tmp.name, "lane")
+        self.git(self.s.wt, "fetch", "-q", "origin")
+        self.git(self.s.wt, "worktree", "add", "-q", "-b", "feat/code", lane, "origin/feat/code")
+        new = ship_wave.update_stacked_branch(self.runner(head), "AA-CIS-App", 7)
+        self.assertEqual(self.git(lane, "rev-parse", "HEAD"), new)
+        self.assertEqual(new, self.remote("feat/code"))
+        self.assertEqual(self.tmp_worktrees(), [])
+        self.assertIn(f"reusing the clean lane worktree {lane}", self.out.getvalue())
+
+    def test_lane_worktree_with_modified_files_is_left_alone(self):
+        head = self.stacked_branch()
+        lane = os.path.join(self.s.tmp.name, "lane")
+        self.git(self.s.wt, "fetch", "-q", "origin")
+        self.git(self.s.wt, "worktree", "add", "-q", "-b", "feat/code", lane, "origin/feat/code")
+        with open(os.path.join(lane, "api", "widget.py"), "w", encoding="utf-8") as fh:
+            fh.write("WIDGET = 2\n")
+        new = ship_wave.update_stacked_branch(self.runner(head), "AA-CIS-App", 7)
+        self.assertEqual(new, self.remote("feat/code"))
+        self.assertEqual(self.git(lane, "rev-parse", "HEAD"), head)  # untouched, edit kept
+        self.assertIn("M api/widget.py", self.git(lane, "status", "--porcelain"))
+        self.assertIn("not clean: not reused", self.out.getvalue())
+
+    def test_branch_without_a_main_migration_is_left_as_is(self):
+        o = self.s.other
+        self.git(o, "checkout", "-q", "-b", "feat/code", "origin/main")
+        head = self.s.commit(o, "api/widget.py", "WIDGET = 1\n", "feat: widget reader")
+        self.git(o, "push", "-q", "origin", "feat/code")
+        r = self.runner(head)
+        self.assertIsNone(ship_wave.update_stacked_branch(r, "AA-CIS-App", 7))
+        self.assertEqual(self.pushes, [])
+        self.assertIn("carries no migration file of main: gating as is", self.out.getvalue())
+
+    def test_own_new_migration_is_not_mistaken_for_a_stacked_one(self):
+        # A code branch that adds a migration main does not have (a normal expand PR) is not touched.
+        o = self.s.other
+        self.git(o, "checkout", "-q", "-b", "feat/code", "origin/main")
+        head = self.s.commit(o, "api/migrations/401_more.sql", "SELECT 1;\n", "feat: more")
+        self.git(o, "push", "-q", "origin", "feat/code")
+        self.assertIsNone(ship_wave.update_stacked_branch(self.runner(head), "AA-CIS-App", 7))
+        self.assertEqual(self.pushes, [])
+
+    def test_conflict_stops_with_a_clear_message_and_pushes_nothing(self):
+        head = self.stacked_branch(main_sql="CREATE TABLE demo.widget (id bigint);\n")  # main's squash differs
+        with self.assertRaises(ShipError) as cm:
+            ship_wave.update_stacked_branch(self.runner(head), "AA-CIS-App", 7)
+        self.assertEqual(cm.exception.code, 4)
+        self.assertIn(f"conflicts in {MIG}", str(cm.exception))
+        self.assertIn("not resolved automatically", str(cm.exception))
+        self.assertEqual(self.pushes, [])
+        self.assertEqual(self.remote("feat/code"), head)
+        self.assertEqual(self.tmp_worktrees(), [])
+
+    def test_integration_mode_runs_before_the_push(self):
+        head = self.stacked_branch(extra_code={"scripts/pre-push.sh": "case $1 in --integration) ;; esac\n"})
+        r = self.runner(head)
+        ship_wave.update_stacked_branch(r, "AA-CIS-App", 7)
+        order = [c[0] for c in r.calls if c[0] in ("bash", ship_common.AS_APP)]
+        self.assertEqual(order, ["bash", ship_common.AS_APP])
+        self.assertEqual(r.called("bash")[0][-2:][0], "ship-wave")
+        self.assertIn("pre-push.sh --integration", r.called("bash")[0][2])
+
+    def test_failed_integration_keeps_the_merge_and_pushes_nothing(self):
+        head = self.stacked_branch(extra_code={"scripts/pre-push.sh": "case $1 in --integration) ;; esac\n"})
+        r = self.runner(head, bash=[Result(1, "!! [integration] failed (exit 1): no stamp written")])
+        with self.assertRaises(ShipError) as cm:
+            ship_wave.update_stacked_branch(r, "AA-CIS-App", 7)
+        self.assertIn("the merge is kept in", str(cm.exception))
+        self.assertEqual(self.pushes, [])
+        self.assertEqual(len(self.tmp_worktrees()), 1)
+
+    def test_skip_integration_env_skips_the_run(self):
+        head = self.stacked_branch(extra_code={"scripts/pre-push.sh": "case $1 in --integration) ;; esac\n"})
+        r = self.runner(head)
+        with mock.patch.dict(os.environ, {"AA_PREPUSH_SKIP_INTEGRATION": "1"}):
+            ship_wave.update_stacked_branch(r, "AA-CIS-App", 7)
+        self.assertEqual(r.called("bash"), [])
+        self.assertEqual(len(self.pushes), 1)
+
+    def test_refused_push_reports_the_hook_and_keeps_the_merge(self):
+        head = self.stacked_branch()
+        refused = Result(1, "", "FAIL  unit  2 failed\nerror: failed to push some refs")
+        with self.assertRaises(ShipError) as cm:
+            ship_wave.update_stacked_branch(self.runner(head, push_result=refused), "AA-CIS-App", 7)
+        self.assertIn("FAIL  unit  2 failed", str(cm.exception))
+        self.assertIn("no force", str(cm.exception))
+        self.assertEqual(self.remote("feat/code"), head)
+        self.assertEqual(len(self.tmp_worktrees()), 1)
+
+    def test_merged_pr_is_not_touched(self):
+        r = HybridRunner()
+        r.on(("gh", "pr", "view", "7"), Result(0, json.dumps(pr(7, state="MERGED", merge_oid="e" * 40))))
+        self.assertIsNone(ship_wave.update_stacked_branch(r, "AA-CIS-App", 7))
+        self.assertEqual([c for c in r.calls if c[0] == "git"], [])
 
 
 if __name__ == "__main__":
