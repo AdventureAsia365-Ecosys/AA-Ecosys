@@ -408,7 +408,24 @@ class StackedBranchTest(unittest.TestCase):
         r = self.runner(head)
         self.assertIsNone(ship_wave.update_stacked_branch(r, "AA-CIS-App", 7))
         self.assertEqual(self.pushes, [])
-        self.assertIn("carries no migration file of main: gating as is", self.out.getvalue())
+        self.assertIn("already contains origin/main: gating as is", self.out.getvalue())
+
+    def test_code_branch_built_before_the_migration_merged_gets_main_merged(self):
+        # S277 (Booking #224, #229): the code branch was cut from main before the migration PR merged, so it carries
+        # no migration file but is behind main; its PR checks ran without the migration. Main is merged in and pushed.
+        o = self.s.other
+        self.git(o, "checkout", "-q", "-b", "feat/code", "origin/main")
+        head = self.s.commit(o, "api/widget.py", "WIDGET = 1\n", "feat: widget reader")
+        self.git(o, "push", "-q", "origin", "feat/code")
+        self.git(o, "checkout", "-q", "main")
+        self.s.commit(o, MIG, MIG_SQL, "feat: add widget table (#1)")
+        self.git(o, "push", "-q", "origin", "main")
+        new = ship_wave.update_stacked_branch(self.runner(head), "AA-CIS-App", 7)
+        self.assertEqual(new, self.remote("feat/code"))
+        self.git(self.s.wt, "merge-base", "--is-ancestor", head, "origin/feat/code")
+        self.git(self.s.wt, "merge-base", "--is-ancestor", "origin/main", "origin/feat/code")
+        self.assertNotIn("--force", " ".join(self.pushes[0]))
+        self.assertIn("is behind origin/main", self.out.getvalue())
 
     def test_own_new_migration_is_not_mistaken_for_a_stacked_one(self):
         # A code branch that adds a migration main does not have (a normal expand PR) is not touched.
