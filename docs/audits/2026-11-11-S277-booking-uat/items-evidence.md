@@ -53,6 +53,9 @@ cancelled agency cases exist, TC-000027 (USD) and TC-000012 (VND).
 | bk-09 Departure fees (minimum shortfall, unreleased allotment) | Not built: no `departure_fees` table, no `departure_fee` settlement role, no "Charge fee" action | none | **NOT VERIFIED (not built)** |
 | bk-17 Departure price adjustments + early-booking rule | Not built: no `departure_price_adjustments` table. `GET pricing/rules` 200 has no `early_days` / `early_discount_pts` | none | **NOT VERIFIED (not built)** |
 
+Update: bk-04, bk-16, bk-09 and bk-17 shipped later the same day (#228 / #229). See the section "AA-1073 remaining
+items (after #229)" at the end. Bug 1 below was fixed by #227.
+
 ## AA-1074: finance
 
 | Item | Live check (route / page → status → key fields seen) | CI test evidence | Verdict |
@@ -140,3 +143,82 @@ already in this folder or `after-fix/`:
 | `trip-plan-departures-tab-agency-terms` (1440 only) | the same panel under the Departures tab | Bug 1 |
 | `vouchers-page` (1440 light only) | the staff vouchers HTML of TC-000033, rendered from the live response (served as a download) | AA-1075 bk-12 |
 | `manifest-print-html` (1440 light only) | the printable manifest HTML of the 20 Nov departure | AA-1075 bk-13 |
+
+## AA-1073 remaining items (after #229)
+
+Re-checked on 11/11/2026 around 11:30 UTC, against API and staff admin both on main 69c4ffb (Booking #228 is the
+bk-048 migration, #229 the code). `GET /booking/health` reports `git_sha` 69c4ffb, `/booking/health/ready` reports
+`schema_version` bk-048, and the admin `healthz` reports `sha` 69c4ffb. Same method as above: the read-only E2E
+staff session, GETs through the BFF, and every non-GET aborted in the browser (0 attempted). Pages: 0 page errors,
+0 same-origin HTTP >= 400, 0 horizontal overflow.
+
+**CI.** Merge-queue CI of #229 is AA-Booking Actions run 43024811924: all 8 jobs green. Its "Integration Tests"
+job ("no skips allowed") shows **648 passed**. The 12 tests named below all show PASSED in that job's log, together
+with the earlier `test_aa1073_departures` pair. Push runs of 69c4ffb: Deploy Dev and Deploy Admin Dev green.
+
+**B2B agency API.** Still not called, because no synthetic agency credential is documented. Contract
+`booking.b2b.v1` 1.8 (root #700) adds `Departure.meeting_point` / `meeting_time` and the events
+`departure.updated` / `departure.fee_charged`. Its agency-facing side is covered by
+`test_aa1073_rest::test_board_ops_and_fees`: "meeting point and time reach the agency; the note does not".
+
+**Dev data.** November has 4 departures (6 / 13 / 20 / 27 Nov) with 8 of 12 seats sold, and December has 1.
+None is at risk, and there is no allotment, no fee, no price adjustment, no ops sheet, no departure staff and no
+rule with early booking.
+
+| Item | Live check (route / page → status → key fields seen) | CI test evidence | Verdict |
+|---|---|---|---|
+| bk-04 Departure board (calendar, occupancy, filters, drawer with seats by agency, price column) | `GET b2b-desk/departure-board?from=2026-11-01&to=2026-11-30` 200: 4 items, `totals` {departures 4, capacity 12, sold 8, held 0, free 4, at_risk 0, incidents 0}, `countries` [Philippines], `plans` 1. Each item has `occupancy_pct` (100.0 / 0.0 / 75.0 / 75.0), `agencies_count`, `allotted`, `min_to_operate`, `open_incident` and `price`. Filters answer: December window → the 4 Dec departure only; `at_risk=true` → 0; `country=Philippines&status=scheduled` → 4. `GET b2b-desk/departure-board/{20 Nov}` 200: `agencies` [the agency with 3 sold, 0 held, case TC-000033, allotment null], plus the `ops`, `fees`, `fee_suggestions`, `price_adjustments` and `partner_options` sections. Page `/departures` (Operations → Departures): KPI tiles 4 / 8 of 12 / 0 / 0. The calendar shows each departure on its Friday with its occupancy bar (shot `items/departure-board-calendar`). Table with the Country + Status filters applied, and a Price column reading "from 400.00 USD" (`items/departure-board-table-filtered`). The drawer has Seats by agency, Ops, Departure fees and Price, with links "Open on the trip plan" and "Manifest" (`items/departure-board-drawer-fees-price`; smoke `after-1073/departure-board-drawer`) | `test_aa1073_rest::test_board_ops_and_fees` (window, view seats, filters, drill-down); `test_bk048_schema::test_occupancy_view_counts_like_the_app` | **LIVE**. See BUG 2 (smoke wait) |
+| bk-16 Ops sheet (meeting point, time, ops note, departure staff) | Board detail `ops` {meeting_point null, meeting_time null, ops_note null, staff []}, with `staff_options` (Booking staff users) and `supplier_options` (one guide / transport supplier). Board list rows carry `meeting_point` / `meeting_time`. The drawer's Ops section renders: meeting point, meeting time ("Local time on the start date"), ops note ("Staff only, never sent to an agency"), "Save ops sheet", and Role (Guide …) + Who + Assign. No ops sheet is saved on Dev; writes are `PATCH .../ops`, `POST .../staff` and `DELETE departure-staff/{id}` | `test_aa1073_rest::test_board_ops_and_fees` (agency sees point and time, never the note; content role refused); `test_bk048_schema::test_ops_sheet_checks_and_departure_updated`, `::test_departure_staff_one_kind_of_person`, `::test_erasure_marks_staff_text_only` | **CI-ONLY** for the write and the `departure.updated` event. The read and UI are live |
+| bk-09 Departure fees (minimum shortfall, unreleased allotment) | `GET b2b-desk/departure-fees` 200: `items` [], `total` 0, `pending` 0; by `departure_id` also empty. Board detail `fees` [] and `fee_suggestions` [] (nothing at risk, no allotment). The drawer shows "No fee on this departure." and the generic "Charge fee" button. The suggested "Charge minimum shortfall / allotted seats not released" buttons and the "Charge fee" action on at-risk desk rows and on allotments render only for an at-risk departure or an allotment in force or released (code: `B2BDeskView.tsx` `d.at_risk`, `DeparturesPanel.tsx` allotment state, `DepartureBoardDrawer.tsx` `fee_suggestions`). Dev has none, so they were not seen. Terms clause: `GET partner-terms-clauses` 200 lists `departure_fees` "Departure fees", status **draft**, `updated_by` `system:bk-048`, so `GET /terms` does not show it until the business owner approves the wording (by design). Settlement role: bk-048 widens the `agency_invoice_line` role CHECK to `departure_fee`, with `source_fee_id`. The migration is applied (readiness bk-048), but the role cannot be read from a staff session, and the root schema reference is still at bk-046 | `test_aa1073_rest::test_board_ops_and_fees` (maker sales, second person approves, the settlement draft bills the fee once); `test_bk048_schema::test_fee_maker_checker_final_and_event` (`departure.fee_charged`), `::test_settlement_line_bills_a_fee_once` | **CI-ONLY** (no fee on Dev; the at-risk / allotment actions are not reachable with Dev data) |
+| bk-17 Price adjustments + early booking | Board detail `price_adjustments` []. Each board row has `price` {hint 400.00 USD per person, adjustment null, early_booking null}, shown in the table's Price column as "from 400.00 USD". `GET pricing/rules` 200: all 5 rules carry `early_days` / `early_discount_pts`, null on every rule. The "New pricing rule" drawer (B2B channel) shows "Early booking: days before start" and "Early booking: margin points off" (shot `items/pricing-rule-drawer-early-booking`). The drawer's Price section renders (no adjustment) | `test_aa1073_rest::test_price_adjustment_and_early_booking_on_quotes` (10 % off proposed by contracting, refused for sales and for the maker, approved by admin; sells under the floor with a note; withdrawn; then an early-booking rule lowers the next quote); `test_bk048_schema::test_price_adjustments_one_in_force_maker_checker`, `::test_early_booking_rule_columns`, `::test_quote_line_price_note_is_an_object` | **CI-ONLY** for the effect on quotes (nothing set on Dev). Fields, price column and form are live |
+
+**BUG 2 (test wait, bk-04 signed-in smoke): the calendar screenshots are taken before the board query answers.**
+The shots `after-1073/departure-board__*.png` show skeleton KPI tiles and an empty November grid. The page is not
+at fault. Loading `/departures` and waiting for `GET /api/booking/b2b-desk/departure-board` to answer, the
+calendar shows the 4 departures on 6 / 13 / 20 / 27 Nov and the tiles read 4 / 8 of 12 / 0 / 0 (shots
+`items/departure-board-calendar__*`, 1440 and 390, light and dark). Measured in one run:
+
+- The month header is visible 0.8–1.3 s after load, with no `main [aria-busy="true"]` element.
+- The board response arrived up to 4.5 s after load (390 light).
+- In 3 of the 4 viewport / theme runs, the header was up while no chip was rendered yet.
+
+The cause is in `frontend/e2e/signed-in/departure-board.spec.ts`. The `ready` callback passed to
+`capture(page, "departure-board", …)` waits only for `pageSettled` and `getByTestId("board-month")`:
+
+- The month header is static: it renders before the query starts.
+- `pageSettled` looks for `aria-busy`, but neither the kit KpiTile skeleton (`role="status"`, no `aria-busy`) nor
+  the desktop calendar marks its loading state.
+
+The `bffGet` call just before is the test's own request; it does not wait for the page's query. Fix: in that
+`ready`, wait for the board response (`page.waitForResponse` on `b2b-desk/departure-board`, armed before the
+reload in `capture`), or for the KPI "Departures" value / the first `board-chip` / the empty-month text. The table
+and drawer captures are unaffected: they wait for `tableSettled` and for the drawer. A side note on the page: the
+desktop calendar draws no loading state (only the phone list says "Loading…"), so a slow board looks like an
+empty month until it answers. This is cosmetic, not a defect.
+
+**Bug 1 (Agency terms panel) re-checked after #227 (18bd127): fixed.**
+
+- Departures tab: no "Agency terms" heading (shots `items/trip-plan-departures-after-227__*`).
+- Overview at 1440: the panel sits in the right-hand column (heading x = 1060, the same column as the price card).
+- Overview at 390: the panel is inside the page gutter (x = 53, like the other cards; shots
+  `items/trip-plan-overview-after-227__*`).
+
+**Observations.**
+
+- **Price column "from" is not the agency price.** The board's "from" price is the trip plan's commercial price
+  hint (400.00 USD per person on Dev). That is not the B2B price agencies are quoted (79.27–128.05 USD per person
+  on the agency tariff of the same tour). The notes say this is on purpose ("a hint + the adjustment", the quote
+  is the price of record), but a label such as "price hint" would avoid staff reading it as the agency price.
+- **The E2E user is assignable as departure staff.** The Ops "Who" list (`staff_options`) includes the E2E staff
+  user, like the trip case StaffPicker; SIGNED-IN-SMOKE.md already flags this.
+- **Root schema reference is behind.** `docs/architecture/db-schema-reference.md` still reads Booking bk-046 (dump
+  of 05:58 UTC). The bk-048 objects appear after the next DB Schema Dump run.
+
+Shots added to `items/` (1440 and 390, light and dark):
+
+- `departure-board-calendar`
+- `departure-board-table-filtered`
+- `departure-board-drawer-fees-price`
+- `pricing-rule-drawer-early-booking`
+- `trip-plan-departures-after-227`
+- `trip-plan-overview-after-227`
