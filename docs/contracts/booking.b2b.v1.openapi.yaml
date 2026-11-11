@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: booking.b2b.v1 (AA-Booking → AA-Partner CRM, B2B products, quotes, holds, bookings, events)
-  version: "1.5"
+  version: "1.6"
   description: >-
     The AA inventory API of the partner CRM spec (§9), owned by AA-Booking (root ADR 0005, 0005a) and called by the
     AA-Partner CRM API server to server (root ADR 0010). Auth: an M2M access token of the aa-m2m pool (root ADR 0006b
@@ -34,10 +34,17 @@ info:
     /billing-status, its credit status and the last day its software fee is paid for; and the Problem error
     invoice_not_found. Never a staff note, a void reason, a staff name, a payment bank reference or document, or the
     bill-to snapshot.
+    Minor 1.6 (AA-1073, additive; S275 study items bk-01 and bk-03): Departure gains min_to_operate,
+    seats_to_guarantee, last_sale_date and allotment (the calling agency's own seat allotment on the departure, never
+    another agency's); available is what the calling agency can hold (its own unused allotment counted, the other
+    agencies' unused allotments left out); a line on a departure past its last sale date is sold_out. Event types
+    departure.at_risk (on the departure's decision date the minimum is not met; AA decides to run or cancel) and
+    allotment.released (the caller's allotment went back to general sale). A reader ignores event types it does not
+    know (rule 2 of the contracts README).
   x-aa-contract: booking.b2b.v1
   x-aa-producer: AA-Booking
   x-aa-consumers: [AA-Partner]
-  x-aa-issues: [AA-928, AA-952, AA-972, AA-973, AA-974, AA-975, AA-986, AA-1030, AA-1037]
+  x-aa-issues: [AA-928, AA-952, AA-972, AA-973, AA-974, AA-975, AA-986, AA-1030, AA-1037, AA-1073]
 servers:
   - url: /booking/b2b/v1
 security:
@@ -801,6 +808,37 @@ components:
         available: {type: integer, minimum: 0}
         status: {type: string, enum: [scheduled, guaranteed, cancelled]}
         auto_confirm: {type: boolean}
+        min_to_operate:
+          type: integer
+          minimum: 0
+          description: 1.6 (AA-1073). Sold seats the departure needs to run; 0 = no minimum (AA decides by hand).
+        seats_to_guarantee:
+          type: [integer, "null"]
+          minimum: 0
+          description: >-
+            1.6 (AA-1073). Seats still to sell before the minimum is met; null without a minimum, 0 once met or when
+            the departure is no longer scheduled.
+        last_sale_date:
+          type: string
+          format: date
+          description: 1.6 (AA-1073). The last day the departure sells; from the next day every line on it is sold_out.
+        allotment:
+          oneOf:
+            - $ref: "#/components/schemas/DepartureAllotment"
+            - type: "null"
+          description: 1.6 (AA-1073). The calling agency's own allotment in force on the departure; null without one.
+    DepartureAllotment:
+      type: object
+      additionalProperties: false
+      required: [seats, used, available, release_date]
+      description: >-
+        1.6 (AA-1073). Seats AA keeps for the calling agency on a departure until release_date; on that day the unused
+        seats go back to general sale (event allotment.released). Seat counts and a date only.
+      properties:
+        seats: {type: integer, minimum: 0}
+        used: {type: integer, minimum: 0, description: The agency's own held and sold seats counted against it.}
+        available: {type: integer, minimum: 0, description: Seats of the allotment not used yet.}
+        release_date: {type: string, format: date}
     DeparturePage:
       type: object
       additionalProperties: false
@@ -1088,7 +1126,11 @@ components:
         type:
           type: string
           enum: [hold.expired, hold.extended, line.confirmed, line.declined, booking.cancelled, departure.guaranteed,
-                 departure.cancelled, departure.incident, departure.incident_cleared, departure.time_change]
+                 departure.cancelled, departure.incident, departure.incident_cleared, departure.time_change,
+                 departure.at_risk, allotment.released]
+          description: >-
+            1.6 (AA-1073) adds departure.at_risk (to every agency on the departure) and allotment.released (to the
+            agency whose allotment was released); both name the departure_id.
         occurred_at: {type: string, format: date-time}
         hold_id: {type: [string, "null"], maxLength: 64}
         booking_id: {type: [string, "null"], maxLength: 64}

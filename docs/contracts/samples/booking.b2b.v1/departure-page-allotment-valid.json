@@ -1,0 +1,40 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "DeparturePage",
+  "expect": "valid",
+  "why": "1.6 (AA-1073): a departure with a minimum of 6 (2 sold), sales until 3 days before, and the caller's own allotment of 4 seats (1 used) released 10 days before; seat counts and dates only",
+  "payload": {
+    "items": [
+      {
+        "departure_id": "9f000000-0000-4000-8000-000000001073",
+        "tour": {"source_system": "cis", "source_id": "e1000000-0000-4000-8000-000000001073"},
+        "start_date": "2027-03-01",
+        "capacity": 16,
+        "held": 1,
+        "sold": 2,
+        "available": 10,
+        "status": "scheduled",
+        "auto_confirm": true,
+        "min_to_operate": 6,
+        "seats_to_guarantee": 4,
+        "last_sale_date": "2027-02-25",
+        "allotment": {"seats": 4, "used": 1, "available": 3, "release_date": "2027-02-19"}
+      },
+      {
+        "departure_id": "9f000000-0000-4000-8000-000000001074",
+        "tour": {"source_system": "cis", "source_id": "e1000000-0000-4000-8000-000000001073"},
+        "start_date": "2027-03-08",
+        "capacity": 16,
+        "held": 0,
+        "sold": 0,
+        "available": 16,
+        "status": "scheduled",
+        "auto_confirm": false,
+        "min_to_operate": 0,
+        "seats_to_guarantee": null,
+        "last_sale_date": "2027-03-07",
+        "allotment": null
+      }
+    ]
+  }
+}
