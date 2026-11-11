@@ -1,0 +1,62 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "Tariff",
+  "expect": "valid",
+  "why": "1.7 (AA-1075): a tariff row with the child price per person, the infant price and the single supplement (sell prices only); a band whose single room has no rate leaves the supplement null",
+  "payload": {
+    "currency": "USD",
+    "priced_on": "2026-11-11",
+    "basis": "per_person_band_min_twin_share",
+    "tier_code": "standard",
+    "fx": {
+      "base_currency": "USD",
+      "quote_currency": "USD",
+      "rate_per_usd": "1",
+      "rate_date": "2026-11-11",
+      "source": "base"
+    },
+    "items": [
+      {
+        "tour": {"source_system": "cis", "source_id": "e1000000-0000-4000-8000-000000001075"},
+        "title": "Invented Lantern Valley Trail",
+        "country": "Invented Land",
+        "duration_days": 3,
+        "season": "Dry",
+        "valid_from": "2027-01-01",
+        "valid_to": "2027-03-31",
+        "pax_min": 2,
+        "pax_max": 2,
+        "priced_for_pax": 2,
+        "priced_for_date": "2027-01-01",
+        "price": {"amount": "640.00", "currency": "USD"},
+        "price_per_person": {"amount": "320.00", "currency": "USD"},
+        "agency_discount_pct": "0.0000",
+        "rrp_per_person": null,
+        "child_price_per_person": {"amount": "224.00", "currency": "USD"},
+        "infant_price": {"amount": "20.00", "currency": "USD"},
+        "single_supplement_per_person": {"amount": "85.00", "currency": "USD"}
+      },
+      {
+        "tour": {"source_system": "cis", "source_id": "e1000000-0000-4000-8000-000000001075"},
+        "title": "Invented Lantern Valley Trail",
+        "country": "Invented Land",
+        "duration_days": 3,
+        "season": "Dry",
+        "valid_from": "2027-01-01",
+        "valid_to": "2027-03-31",
+        "pax_min": 3,
+        "pax_max": 4,
+        "priced_for_pax": 3,
+        "priced_for_date": "2027-01-01",
+        "price": {"amount": "900.00", "currency": "USD"},
+        "price_per_person": {"amount": "300.00", "currency": "USD"},
+        "agency_discount_pct": "0.0000",
+        "rrp_per_person": null,
+        "child_price_per_person": {"amount": "210.00", "currency": "USD"},
+        "infant_price": {"amount": "0.00", "currency": "USD"},
+        "single_supplement_per_person": null
+      }
+    ],
+    "truncated": false
+  }
+}
