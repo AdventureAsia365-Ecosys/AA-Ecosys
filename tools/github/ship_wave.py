@@ -229,8 +229,9 @@ def stamp_integration(runner: Runner, tag: str, wt: str) -> None:
 
 
 def update_stacked_branch(runner: Runner, repo: str, n: int) -> str | None:
-    """Before gating a held code PR: when its head still carries a migration file the default branch already has,
-    merge origin/<default> into the branch (no force) and push it. Return the pushed head, or None when nothing
+    """Before gating a held code PR: when its head still carries a migration file the default branch already has, or
+    when it is behind origin/<default> (built before the migration merged), merge origin/<default> into the branch
+    (no force) and push it. Return the pushed head, or None when nothing
     changed. A conflict, a failed integration run or a refused push raises ShipError (exit 4)."""
     tag = f"{repo}#{n}"
     pr = pr_view(runner, repo, n)
@@ -249,11 +250,17 @@ def update_stacked_branch(runner: Runner, repo: str, n: int) -> str | None:
         log(f"WARN {tag}: git fetch failed ({f.last_line()}): stacked-branch check skipped")
         return None
     carried = carried_migrations(runner, co, base_ref, head)
-    if not carried:
-        log(f"{tag}: head {head[:8]} carries no migration file of {base}: gating as is")
+    if carried:
+        log(f"{tag}: head {head[:8]} still carries {', '.join(carried)}, already on {base} (branch stacked on the "
+            f"migration branch): merging {base_ref} into {br}, no force")
+    elif _git(runner, co, "merge-base", "--is-ancestor", base_ref, head).ok:
+        log(f"{tag}: head {head[:8]} already contains {base_ref}: gating as is")
         return None
-    log(f"{tag}: head {head[:8]} still carries {', '.join(carried)}, already on {base} (branch stacked on the "
-        f"migration branch): merging {base_ref} into {br}, no force")
+    else:
+        # S277 (Booking #224, #229): a code branch built from the default branch BEFORE the migration merged runs its
+        # PR checks without the migration file (Migration preflight and integration go red): bring the base in too.
+        log(f"{tag}: head {head[:8]} is behind {base_ref} (the applied migration is not in it): merging {base_ref} "
+            f"into {br}, no force")
     wt = lane_worktree(runner, co, br, head)
     temp = wt is None
     if wt is None:
