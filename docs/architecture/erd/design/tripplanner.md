@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [engineer, agent]
 applies_to: [aa-cis-dev-db, tripplanner-lambda]
-last_reviewed: 2026-11-07
+last_reviewed: 2026-11-11
 review_every_days: 90
 generated: false
 related: [APP-04, APP-04-erd, APP-04-erd-design, APP-04-erd-tripplanner, AA-894, AA-861, AA-1015, AA-1038]
@@ -34,7 +34,7 @@ counter; no foreign key) is gone from the page. Updated for **tp-025** (AA-1038 
 `trip_drafts`, `trip_events` and `outbox` gain `tenant_id uuid NOT NULL` (backfilled to the demo tenant `aa-tripplanner`,
 default from the `app.tenant_id` setting with that tenant as fallback) under shadow row-level security (ENABLE, not
 FORCE; one permissive policy TO `tripplanner` per table). No table, primary key or foreign key changes: `tenant_id` is a
-soft key to `shared.tenants.tenant_id`, so no tenant edge is drawn. Updated for **tp-026** (AA-1038 R5 slice 3, root ADR 0019 d11) in S272, next to the migration copy: `outbox` gains `delivery_channel`, `delivered_at`, `delivery_attempts` and `delivery_error` for the `lead.submitted` rows (a guest's trip request to one agency, kept until delivered) and the partial index `outbox_lead_pending_idx`; no table, primary key or foreign key changes. Noted for **tp-028** (AA-1038 FORCE slice) in S276: row-level security on the four tables becomes FORCED and enforcing (policies `<table>_tenant`, `<table>_system`, `<table>_owner_read`), the `tenant_id` default loses the demo fallback; no table, primary key or foreign key changes. The page draws tables only; the views are listed on the generated page. It is **enforced**: the nightly DB Schema Dump fails its drift step when the live tables, primary keys or
+soft key to `shared.tenants.tenant_id`, so no tenant edge is drawn. Updated for **tp-026** (AA-1038 R5 slice 3, root ADR 0019 d11) in S272, next to the migration copy: `outbox` gains `delivery_channel`, `delivered_at`, `delivery_attempts` and `delivery_error` for the `lead.submitted` rows (a guest's trip request to one agency, kept until delivered) and the partial index `outbox_lead_pending_idx`; no table, primary key or foreign key changes. Updated for **tp-029** (AA-1041 slice 2) in S277, before the migration copy: the new `ai_spend_month` table (the planning chat's monthly spend sums per stage, scope `app` | `tenant:<uuid>` and UTC month; composite primary key `(stage, scope, month)`, no foreign key, no personal data). Noted for **tp-028** (AA-1038 FORCE slice) in S276: row-level security on the four tables becomes FORCED and enforcing (policies `<table>_tenant`, `<table>_system`, `<table>_owner_read`), the `tenant_id` default loses the demo fallback; no table, primary key or foreign key changes. The page draws tables only; the views are listed on the generated page. It is **enforced**: the nightly DB Schema Dump fails its drift step when the live tables, primary keys or
 foreign keys differ from this page. A TripPlanner migration that changes
 them updates this page in the same change (root PR next to the migration copy).
 
@@ -46,6 +46,14 @@ erDiagram
         text key_hash PK
         timestamptz window_start PK
         integer count
+    }
+    ai_spend_month {
+        text stage PK
+        text scope PK
+        date month PK
+        numeric cost_usd
+        integer calls
+        timestamptz updated_at
     }
     component_id_map {
         uuid old_id PK
