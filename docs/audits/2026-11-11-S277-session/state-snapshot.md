@@ -1,8 +1,3 @@
----
-title: S277 state snapshot
-lang: vi
----
-
 # S277: snapshot trạng thái cuối phiên (11/11/2026, ~20:45 +07, tác nhân: Claude Code)
 
 Chỉ tên và số; không account ID, ARN hay giá trị secret.

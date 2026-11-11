@@ -1,8 +1,3 @@
----
-title: S277 Jira drafts
-lang: vi
----
-
 # S277: nháp Jira (chờ tech lead duyệt rồi mới đăng)
 
 Bốn comment, mỗi comment trên epic của một app. Mỗi comment tag @thule bằng mention node khi đăng. Ảnh đính kèm ghi ở cuối mỗi nháp.
