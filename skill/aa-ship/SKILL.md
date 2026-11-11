@@ -58,6 +58,8 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
   Nghiệp). File **destructive** luôn tay: DRY RUN → `ship_copy_apply.py … --allow-destructive` (snapshot). Nhiều
   migration cùng owner trong một wave → gộp (một PR chỉ migration số liên tiếp, hoặc merge liền nhau) để một vòng copy +
   apply phủ hết. Bước, idle check, log `ran as: <owner>`, Schema Dump/Isolation Probe: `docs/ops/runbooks/db-migrate.md`.
+  PR code dựng từ `origin/main`, không xếp chồng lên nhánh migration; nhánh lỡ xếp chồng thì `ship_wave.py` tự merge
+  main vào trước gate (không force; xung đột → dừng PR đó) — `references/merge-trains.md` mục Migration (AA-1084).
   - Migration đổi bảng/khoá/FK của schema có trang ERD thiết kế `enforce=true`
     (`docs/architecture/erd/design/<schema>.md`, repo gốc) → sửa trang đó trong cùng đợt thay đổi, không thì DB Schema
     Dump đêm đó đỏ bước drift.
