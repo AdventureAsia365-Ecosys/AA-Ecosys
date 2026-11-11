@@ -54,6 +54,17 @@ live: §3. Công cụ và mã thoát: `tools/github/README.md` (AA-1032).
 - **Nhiều migration một owner trong một wave:** gộp thành một PR chỉ migration (số liên tiếp) hoặc merge liền nhau
   theo đúng thứ tự số, rồi một lần chờ copy + apply cho cả nhóm (Migration Apply chạy hết theo thứ tự trong một task).
   Bước, idle check và output của DB Migrate: `docs/ops/runbooks/db-migrate.md` (không chép vào train).
+- **PR code `@after=` lỡ xếp chồng lên nhánh migration (AA-1084):** PR migration squash-merge → main có file migration
+  dưới commit khác, nhánh code vẫn mang commit cũ → Migration preflight đỏ. `ship_wave.py` tự xử lý: sau khi migration
+  apply và **trước** gate PR đó, nếu head còn đổi một `migrations/*.sql` mà main đã có, tool `git merge --no-edit
+  origin/<default>` (không rebase, không force) trong worktree lane sạch đúng head hoặc worktree tạm
+  `.tmp-session/wt/ship-wave-<repo>-<n>-<pid>`, chạy `scripts/pre-push.sh --integration` khi repo có mode này (CIS),
+  push qua `as-app.sh` với pre-push của repo (như `ship_open_prs.py`, `AA_PREPUSH_PYTHON` /
+  `AA_PREPUSH_SKIP_INTEGRATION` giữ nguyên nghĩa), rồi gate đúng head mới. Mỗi bước in một dòng log. Xung đột merge,
+  file migration vẫn khác main sau merge, integration hay push lỗi → dừng **riêng PR đó** (exit 4, giữ merge trong
+  worktree để giải tay), không bao giờ tự giải xung đột. `--check-only` không đụng nhánh. Lane mới không còn tạo nhánh
+  xếp chồng (luật COMMON `tools/workflows/lane.js`): nhánh code dựng từ `origin/main`, không chứa file migration,
+  pr_body ghi `chain: <owner>/<NNN> applied before this PR`.
 
 ## Nhánh xếp chồng (stacked)
 

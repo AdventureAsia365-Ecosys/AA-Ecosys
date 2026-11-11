@@ -87,6 +87,12 @@ HARD RULES for this lane:
 - The orchestrator ships the whole wave with ONE tools/github/ship_wave.py call (independent PRs in parallel, only migration -> copy ->
   apply -> code chains in order). In pr_body state the chain: "chain: <owner>/<NNN> applied before this PR" for a code PR that needs a
   migration of this wave, "applies: <owner>/<NNN>[,...]" for a migration-only PR; nothing for an independent PR.
+- A code PR that needs a migration of this wave (MIG-4 chain): its branch is created from origin/main in its own worktree, NOT
+  stacked on the migration branch, and it must not contain the migration file (git diff --name-only origin/main...HEAD shows no
+  migrations/*.sql of that chain); its pr_body lists "chain: <owner>/<NNN> applied before this PR". Local tests that need the new
+  schema run from the migration worktree or apply the migration file to the local test DB first. A stacked branch keeps the
+  migration commit after the migration PR squash-merges, so its Migration preflight goes red (ship_wave.py then merges main into
+  it before the gate, but that costs a pre-push and a CI round).
 - Lessons: report each lesson you hit in followups as "lesson: <principle> | guard: <test|hook|tool|ci|lane> <path> | pending | none: <why>"
   (skill/aa-lessons/SKILL.md section 3: a new lesson line needs a Guard field).
 - When a change adds a field to a DB query or row shape, also run the integration tests that read it (local Postgres), not only unit tests.

@@ -63,6 +63,13 @@ checkout: `python3 tools/github/<tool>.py --help`.
 - `>apply:<owner>/<NNN>[,...]` marks a migration-only PR: after it merges, its migrations go onto Dev through
   `ship_copy_apply.py`, one owner's numbers in order as one batch. `@after=<owner>/<NNN>` holds a code PR until those
   are registered; a hold on a migration nothing in the wave applies must already be registered on Dev (else exit 2).
+- Stacked code branch (AA-1084): once its migrations are applied and before its gate, a held `@after=` PR whose head
+  still changes a `migrations/*.sql` the default branch already has gets `git merge --no-edit origin/<default>` (no
+  rebase, no force) in its clean lane worktree or a temporary one under `.tmp-session/wt/`, the CIS
+  `scripts/pre-push.sh --integration` run when the repo has it, and a push through `as-app.sh` with the repo's pre-push
+  hook (as `ship_open_prs.py`); the new head is gated. A conflict, a migration still differing from main, a failed
+  integration run or a refused push stops that PR (exit 4) and keeps the merge for a hand fix. `--check-only` never
+  touches a branch.
 - A failure stops only what depends on it (a red migration PR skips its held PRs; independent PRs go on).
 - `--wait-deploy` waits once per deployed app (CIS, Booking, Partner) at the end, until the health `git_sha` contains
   every merge of the wave (GitHub compare). `--dry-run` prints the plan; `--check-only` gates and merges nothing.
