@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: booking.b2b.v1 (AA-Booking → AA-Partner CRM, B2B products, quotes, holds, bookings, events)
-  version: "1.6"
+  version: "1.7"
   description: >-
     The AA inventory API of the partner CRM spec (§9), owned by AA-Booking (root ADR 0005, 0005a) and called by the
     AA-Partner CRM API server to server (root ADR 0010). Auth: an M2M access token of the aa-m2m pool (root ADR 0006b
@@ -41,10 +41,21 @@ info:
     departure.at_risk (on the departure's decision date the minimum is not met; AA decides to run or cancel) and
     allotment.released (the caller's allotment went back to general sale). A reader ignores event types it does not
     know (rule 2 of the contracts README).
+    Minor 1.7 (AA-1075, additive; S275 study items bk-11, bk-12, bk-14, bk-18): GET /bookings/{booking_id}/vouchers
+    (one service voucher per confirmed supplier booking: service, date, time, pick-up and drop-off, the supplier's
+    name and confirmation ref, travellers by age band, AA's operations desk; no traveller names, no prices; JSON or
+    printable HTML); POST /bookings/{booking_id}/lines/{line_ref}/reduce (a partial cancellation:
+    fewer travellers on one per-person line, the fee by the locked policy on the removed share, dry_run); GET
+    /terms?source_id= (the payment terms of one tour, with PaymentTerms.scope); event types booking.created_by_aa (AA
+    staff entered a booking for the agency: import it by booking_id), booking.line_reduced and booking.fee_changed (AA
+    lowered or waived a cancellation fee). A child pays the rule's child share of the adult price on a tour line and an
+    infant adds the rule's infant price (the quote's line price already holds both). Product.age_bands says which
+    ages count as a child or an infant on a tour; TariffItem gains child_price_per_person, infant_price and
+    single_supplement_per_person (sell prices from the quote engine, never a net), also as the last three CSV columns.
   x-aa-contract: booking.b2b.v1
   x-aa-producer: AA-Booking
   x-aa-consumers: [AA-Partner]
-  x-aa-issues: [AA-928, AA-952, AA-972, AA-973, AA-974, AA-975, AA-986, AA-1030, AA-1037, AA-1073]
+  x-aa-issues: [AA-928, AA-952, AA-972, AA-973, AA-974, AA-975, AA-986, AA-1030, AA-1037, AA-1073, AA-1075]
 servers:
   - url: /booking/b2b/v1
 security:
@@ -334,6 +345,81 @@ paths:
             text/html:
               schema: {type: string}
         "404": {$ref: "#/components/responses/Problem"}
+  /bookings/{booking_id}/vouchers:
+    parameters:
+      - name: booking_id
+        in: path
+        required: true
+        schema: {type: string, minLength: 1, maxLength: 64}
+    get:
+      operationId: getBookingVouchers
+      summary: The service vouchers of a confirmed booking (1.7), JSON or a printable HTML file
+      description: >-
+        1.7 (AA-1075). One voucher per supplier booking AA confirmed for the booking: the service, its date and local
+        time, the pick-up and drop-off points, the supplier's name and confirmation ref, the travellers of the line by
+        age band and AA's 24-hour operations desk (when set). No contact field crosses the API (field policy). No traveller names and no prices: the
+        CRM adds its lead traveller's name on its own copy. A cancelled booking has no voucher (empty list).
+        format=html answers one self-contained HTML file, one voucher per page. 404 unknown or another agency's booking.
+      security:
+        - m2m: [booking.b2b/read]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+        - name: format
+          in: query
+          required: false
+          schema: {type: string, enum: [json, html], default: json}
+      responses:
+        "200":
+          description: The vouchers
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/BookingVouchers"}
+            text/html:
+              schema: {type: string}
+        "404": {$ref: "#/components/responses/Problem"}
+  /bookings/{booking_id}/lines/{line_ref}/reduce:
+    parameters:
+      - name: booking_id
+        in: path
+        required: true
+        schema: {type: string, minLength: 1, maxLength: 64}
+      - name: line_ref
+        in: path
+        required: true
+        schema: {type: string, minLength: 1, maxLength: 64}
+    post:
+      operationId: reduceBookingLine
+      summary: Fewer travellers on one line of a confirmed booking (1.7), or a dry run
+      description: >-
+        1.7 (AA-1075). A per-person line only (a tour, an activity, an entrance or a meal; rooms, transfers and guides
+        are re-quoted). At least one adult stays. The removed share of the line price = its current price x removed
+        seats / current seats (infants hold no seat); the fee = that share x the policy % on today's days before
+        departure (the policy locked on the booking; none on a departure AA cancelled); the rest is refundable. The
+        seats go back on sale at once and the agency gets booking.line_reduced. Idempotent on the Idempotency-Key of
+        the booking. 404 unknown booking or line; 422 invalid (more travellers than the line holds, no adult left, a
+        line priced per room or vehicle: reason line_not_reducible).
+      security:
+        - m2m: [booking.b2b/book]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: dry_run
+          in: query
+          required: false
+          schema: {type: boolean, default: false}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/ReduceRequest"}
+      responses:
+        "200":
+          description: The reduction (or preview)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/LineReduction"}
+        "404": {$ref: "#/components/responses/Problem"}
+        "422": {$ref: "#/components/responses/Problem"}
   /terms:
     get:
       operationId: getPartnerTerms
@@ -348,6 +434,13 @@ paths:
         - m2m: [booking.b2b/read]
       parameters:
         - $ref: "#/components/parameters/TenantHeader"
+        - name: source_id
+          in: query
+          required: false
+          description: >-
+            1.7 (AA-1075). A CIS tour id: the payment terms of that tour (the agency's terms for the tour, else the
+            tour's terms, else the agency's, else AA's default; PaymentTerms.scope says which).
+          schema: {type: string, minLength: 1, maxLength: 128}
       responses:
         "200":
           description: The agency's terms
@@ -451,7 +544,8 @@ paths:
         price. Rows AA cannot quote today are left out. format=csv returns the same rows as a
         CSV file (columns tour_key, title, country, duration_days, season, valid_from, valid_to, pax_min, pax_max,
         priced_for_pax, currency, price_per_person, price_for_party, agency_discount_pct, rrp_per_person,
-        rrp_currency; an open pax band has an empty pax_max).
+        rrp_currency, then since 1.7 child_price_per_person, infant_price, single_supplement_per_person; an open pax
+        band has an empty pax_max, a missing supplement an empty cell).
       security:
         - m2m: [booking.b2b/read]
       parameters:
@@ -706,6 +800,24 @@ components:
           type: [string, "null"]
           maxLength: 64
           description: On a withdrawn row, why (source_deleted, master_trashed, superseded_orphan).
+        age_bands:
+          oneOf:
+            - {type: "null"}
+            - {$ref: "#/components/schemas/AgeBands"}
+          description: >-
+            1.7 (AA-1075). Which travellers AA prices as children and infants on this tour; null on a withdrawn row.
+            Split the party into pax.adult / child / infant with it before POST /quotes.
+    AgeBands:
+      type: object
+      additionalProperties: false
+      description: >-
+        1.7 (AA-1075). The oldest age, in whole years on the departure date, at the child price and at the infant
+        price: the tour's own bands, else AA's defaults. Older than child_age_max = adult; infant_age_max is always
+        below child_age_max.
+      required: [child_age_max, infant_age_max]
+      properties:
+        child_age_max: {type: integer, minimum: 2, maximum: 17}
+        infant_age_max: {type: integer, minimum: 0, maximum: 4}
     ProductPage:
       type: object
       additionalProperties: false
@@ -1054,6 +1166,10 @@ components:
               minimum: 0
               description: The balance is billed this many days before departure (booked later = billed in full).
             settlement_due_days: {type: integer, minimum: 0}
+            scope:
+              type: [string, "null"]
+              enum: [agency_tour, tour, agency, default, null]
+              description: 1.7 (AA-1075). Which terms row the deposit % and balance days come from.
         credit:
           type: object
           additionalProperties: false
@@ -1116,6 +1232,82 @@ components:
             days_before_departure: {type: integer}
             fee_pct: {type: string, pattern: "^\\d+(\\.\\d{1,2})?$"}
         cancelled_at: {type: [string, "null"], format: date-time}
+    ReduceRequest:
+      type: object
+      additionalProperties: false
+      required: [reason_code]
+      properties:
+        adult: {type: integer, minimum: 0, maximum: 60, default: 0}
+        child: {type: integer, minimum: 0, maximum: 60, default: 0}
+        infant: {type: integer, minimum: 0, maximum: 20, default: 0}
+        reason_code: {type: string, enum: [client_cancelled, agency_cancelled, other]}
+    LineReduction:
+      type: object
+      additionalProperties: false
+      required: [booking_id, line_ref, dry_run, removed, seats_after, removed_b2b_amount, fee, refundable_b2b_amount,
+                 fee_basis]
+      properties:
+        booking_id: {type: string, maxLength: 64}
+        line_ref: {type: string, maxLength: 64}
+        dry_run: {type: boolean}
+        removed: {$ref: "#/components/schemas/Travellers"}
+        seats_after: {type: integer, minimum: 1}
+        removed_b2b_amount: {$ref: "#/components/schemas/Money"}
+        fee: {$ref: "#/components/schemas/Money"}
+        refundable_b2b_amount: {$ref: "#/components/schemas/Money"}
+        fee_basis:
+          type: object
+          additionalProperties: false
+          required: [policy_id, days_before_departure, fee_pct]
+          properties:
+            policy_id: {type: string, maxLength: 64}
+            days_before_departure: {type: integer}
+            fee_pct: {type: string, pattern: "^\\d+(\\.\\d{1,2})?$"}
+        reduced_at: {type: [string, "null"], format: date-time}
+    BookingVouchers:
+      type: object
+      additionalProperties: false
+      required: [booking_id, trip_case_code, proposal_ref, status, issued_at, vouchers]
+      properties:
+        booking_id: {type: string, maxLength: 64}
+        trip_case_code: {type: string, maxLength: 32}
+        proposal_ref: {type: string, maxLength: 64}
+        status: {type: string, enum: [confirmed, cancelled]}
+        issued_at: {type: string, format: date-time}
+        start_date: {type: [string, "null"], format: date}
+        end_date: {type: [string, "null"], format: date}
+        ops_contact:
+          type: [object, "null"]
+          additionalProperties: false
+          required: [label]
+          properties:
+            label:
+              type: string
+              maxLength: 200
+              description: AA's 24-hour operations desk as AA publishes it (a company line, never a person).
+        vouchers:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [voucher_no, service, supplier, travellers]
+            properties:
+              voucher_no: {type: string, maxLength: 32}
+              line_ref: {type: [string, "null"], maxLength: 64}
+              service: {type: string, maxLength: 500}
+              service_date: {type: [string, "null"], format: date}
+              service_time: {type: [string, "null"], maxLength: 5, description: "Local time HH:MM."}
+              pickup_point: {type: [string, "null"], maxLength: 200}
+              dropoff_point: {type: [string, "null"], maxLength: 200}
+              supplier:
+                type: object
+                additionalProperties: false
+                required: [name]
+                properties:
+                  name: {type: string, maxLength: 200}
+              confirmation_ref: {type: [string, "null"], maxLength: 100}
+              travellers: {$ref: "#/components/schemas/Travellers"}
+              note: {type: [string, "null"], maxLength: 500}
     Event:
       type: object
       additionalProperties: false
@@ -1127,10 +1319,13 @@ components:
           type: string
           enum: [hold.expired, hold.extended, line.confirmed, line.declined, booking.cancelled, departure.guaranteed,
                  departure.cancelled, departure.incident, departure.incident_cleared, departure.time_change,
-                 departure.at_risk, allotment.released]
+                 departure.at_risk, allotment.released, booking.created_by_aa, booking.line_reduced,
+                 booking.fee_changed]
           description: >-
             1.6 (AA-1073) adds departure.at_risk (to every agency on the departure) and allotment.released (to the
-            agency whose allotment was released); both name the departure_id.
+            agency whose allotment was released); both name the departure_id. 1.7 (AA-1075) adds
+            booking.created_by_aa (AA staff entered a booking for the agency; booking_id and hold_id), booking.line_reduced
+            (line_ref names the line) and booking.fee_changed (the cancellation fee was lowered or waived).
         occurred_at: {type: string, format: date-time}
         hold_id: {type: [string, "null"], maxLength: 64}
         booking_id: {type: [string, "null"], maxLength: 64}
@@ -1237,6 +1432,27 @@ components:
             - {type: "null"}
             - {$ref: "#/components/schemas/Money"}
           description: AA's public suggested retail price per person of the window and band (price.from.v1 basis).
+        child_price_per_person:
+          oneOf:
+            - {type: "null"}
+            - {$ref: "#/components/schemas/Money"}
+          description: >-
+            1.7 (AA-1075). The quote engine's price of one child of this party (the rule's child share of the adult
+            price; = price_per_person when AA sets none): a quote of a adults and c children charges a x
+            price_per_person + c x child_price_per_person, within the line's rounding.
+        infant_price:
+          oneOf:
+            - {type: "null"}
+            - {$ref: "#/components/schemas/Money"}
+          description: 1.7 (AA-1075). What one infant adds to the price of this party (0 when infants travel free).
+        single_supplement_per_person:
+          oneOf:
+            - {type: "null"}
+            - {$ref: "#/components/schemas/Money"}
+          description: >-
+            1.7 (AA-1075). What each traveller adds when the party sleeps in single rooms instead of twin share (0 on a
+            tour without hotel rooms or for a party of one); null when a single room has no rate in force (ask a
+            quote with rooms).
     AgencyInvoiceSummary:
       type: object
       additionalProperties: false
