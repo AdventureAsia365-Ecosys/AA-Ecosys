@@ -4,56 +4,6 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 
 | Issue | Title | State | Closed | Project |
 |---|---|---|---|---|
-| [AA-677](aa-booking-aaa-foundation/AA-677.md) | [AAA] ERD v2 — re-evaluate the Quanskill ERD and redesign it for the ecosystem (schema booking.* on acc2 RDS) | Done | 2026-10-11 | AA-Booking (AAA) — Foundation |
-| [AA-176](acpv2-admin-tenant-split-a-t/AA-176.md) | [DEPLOY-01] Immutable image tags + ECS/Lambda safe rollout (rollback-first) | Done | 2026-09-04 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-177](acpv2-admin-tenant-split-a-t/AA-177.md) | [SEC-01] Container + Lambda image scanning + SBOM in CI (Trivy + syft) | Done | 2026-09-04 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-264](acpv2-admin-tenant-split-a-t/AA-264.md) | [ACP-Portal][SECURITY] Hardening — httpOnly cookie + Next.js middleware guard (từ AA-261) | Done | 2026-08-28 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-279](acpv2-admin-tenant-split-a-t/AA-279.md) | [SEC-PIPELINE] Prompt injection surface — S0 brand brief .docx + S2 competitor content feed LLM prompts unsanitized | Done | 2026-08-28 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-282](acpv2-admin-tenant-split-a-t/AA-282.md) | [OPS] schema_versions gap đợt 2 — migrations 043–050 không có trong log (AA-102 chỉ fix 027/029–034) | Done | 2026-09-04 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-310](acpv2-admin-tenant-split-a-t/AA-310.md) | [Infra] AA-295 Direction 3 — nới ECS stopTimeout để khớp với graceful shutdown drain (25s) đã merge | Done | 2026-09-24 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-318](acpv2-admin-tenant-split-a-t/AA-318.md) | [Gap thiết kế — chưa chốt] Không log nội dung prompt thật gửi LLM — chỉ log prompt_len, chặn khả năng verify bug liên quan nội dung prompt | Done | 2026-09-04 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-324](acpv2-admin-tenant-split-a-t/AA-324.md) | [COST/PERF] Prompt caching thật sự vô hiệu trên production — mọi call S1-old đi qua acc1 satellite, cache_control chỉ hoạt động trên acc2 Bedrock trực tiếp | Done | 2026-09-04 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-331](acpv2-admin-tenant-split-a-t/AA-331.md) | [ACPv2-N6] Ô reactive 10% → đổi thành buffer chạy lại slot HELD (Q5=C) | Done | 2026-09-03 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-332](acpv2-admin-tenant-split-a-t/AA-332.md) | [ACPv2-N7] Tầng 4 chống cannibalization — dedup pgvector cross-tenant cosine >0.92 trước publish (Q6=B) | Done | 2026-08-28 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-342](acpv2-admin-tenant-split-a-t/AA-342.md) | [Platform] Rà soát ngược: cơ chế ghi trạng thái đã đánh Done nhưng chưa từng persist thật (ADR-2026-037) | Done | 2026-08-28 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-344](acpv2-admin-tenant-split-a-t/AA-344.md) | Upload History: surface rows_landed/rows_dropped (not just parsed count) on /admin/upload | Done | 2026-09-04 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-348](acpv2-admin-tenant-split-a-t/AA-348.md) | [CIS-S1] Lệch version hằng số BEDROCK_SONNET (4-5) vs model thật gọi qua satellite (4-6) | Done | 2026-09-05 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-383](acpv2-admin-tenant-split-a-t/AA-383.md) | [acp-brand-brief-parser Lambda] INSERT branch thiếu brand_name — cùng lỗi NOT NULL đã fix ở create_tenant() (AA-309), Lambda chưa được vá | Done | 2026-08-28 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-395](acpv2-admin-tenant-split-a-t/AA-395.md) | [ACPv2-N8][ADR-2026-030] Landing page engine — tự host trang giới thiệu tour per-tenant, ghi acp_deliver.tenant_tour_pages (quyết định 13/07 chưa từng lên issue) | Done | 2026-08-28 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-406](acpv2-admin-tenant-split-a-t/AA-406.md) | [ACPv2][N7][Chờ Ms. Thư] F2 atom density (§1.6.1, CONTEXT.md) — chưa build trong ACPv2, cần xác nhận có còn cần thiết hay đã cố ý bỏ vĩnh viễn | Done | 2026-08-28 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-428](acpv2-admin-tenant-split-a-t/AA-428.md) | [Bug] CatalogTab.tsx gọi /api/tenant/v1/quota không tồn tại — lỗi nuốt câm lặng | Done | 2026-08-28 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-434](acpv2-admin-tenant-split-a-t/AA-434.md) | [STEP0] Audit theo dõi usage LLM theo tenant + T-stage — đã có chưa, liên quan AA-118/AA-258/AA-255 | Done | 2026-08-28 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-435](acpv2-admin-tenant-split-a-t/AA-435.md) | [SECURITY] Admin login JWT lộ qua JSON body + cookie không httpOnly — cùng họ AA-427, chưa vá | Done | 2026-09-03 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-462](acpv2-admin-tenant-split-a-t/AA-462.md) | [T11] Mở rộng Publish sang 6 kênh còn lại (facebook/tiktok/instagram/linkedin/email/ads) — hiện chỉ blog-only | Done | 2026-09-04 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-463](acpv2-admin-tenant-split-a-t/AA-463.md) | [INVESTIGATE] 4 mục hypothesis còn treo từ audit AA-438/439 — brand_audit strict, published_tours count lệch, seo_context null, DFS batch-cost | Done | 2026-09-21 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-464](acpv2-admin-tenant-split-a-t/AA-464.md) | [A4] Nối dây suggest_ramp_transition() — gợi ý chuyển Trust Ramp state, admin vẫn duyệt tay | Done | 2026-09-05 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-465](acpv2-admin-tenant-split-a-t/AA-465.md) | [URGENT][PATCH TẠM] Tăng API Gateway integration timeout /v1/* — /goal (30.3s) và /write (57.2s) đã vượt trần 29s thật | Done | 2026-08-27 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-466](acpv2-admin-tenant-split-a-t/AA-466.md) | [ARCH] Chuyển /goal, /write sang pattern async (202+poll) — thay patch timeout tạm AA-465 | Done | 2026-08-26 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-467](acpv2-admin-tenant-split-a-t/AA-467.md) | [CLEANUP] Dọn dẹp kiến trúc: worktree rác + điều tra archive AA-ACP-App/Core + rà soát trang admin N0-N8 cũ | Done | 2026-08-26 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-468](acpv2-admin-tenant-split-a-t/AA-468.md) | [ADMIN] Dọn trang N0-N8 cũ + bỏ bắt buộc tạo plan/chọn tour khi tạo tenant mới | Done | 2026-08-26 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-469](acpv2-admin-tenant-split-a-t/AA-469.md) | [REDESIGN] T-series: tách T4/T5 độc lập, T7 sửa được + xem lịch sử, fix 28/71 tour, xác nhận T8-T11, A4 feedback loop | Done | 2026-08-30 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-470](acpv2-admin-tenant-split-a-t/AA-470.md) | [FIX] /goal: client.generate() thiếu asyncio.to_thread() — block event loop ECS khi chờ Bedrock | Done | 2026-08-28 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-471](acpv2-admin-tenant-split-a-t/AA-471.md) | [AUDIT] tenant test-n1-flow thiếu default brand_rules row — fallback rubric generic, cần xác nhận có tenant khác cùng thiếu | Done | 2026-08-28 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-474](acpv2-admin-tenant-split-a-t/AA-474.md) | [INVESTIGATE] channels trong tenant_config nên là input tenant chọn hay kết quả tính — Planning tab admin đang là nguồn ghi duy nhất, không xoá được | Done | 2026-08-28 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-476](acpv2-admin-tenant-split-a-t/AA-476.md) | [DASHBOARD] 6 mục audit AA-438 còn treo — #3 double-fire ingestion (P1), #1/#2/#11 sai số hiển thị (P3), #4/#6 đã đóng | Done | 2026-08-28 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-478](acpv2-admin-tenant-split-a-t/AA-478.md) | [INVESTIGATE] 9 mục còn mơ hồ từ ACP v2/Phase 2 — vấn đề gốc còn thật, cơ chế đề xuất đã lỗi thời, cần xác nhận lại cho T-series | Done | 2026-09-05 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-479](acpv2-admin-tenant-split-a-t/AA-479.md) | [AUDIT] Dump toàn bộ schema DB thật, xác nhận lại phạm vi migration 121, viết lại skill aa-cis-schema từ đầu | Done | 2026-08-27 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-480](acpv2-admin-tenant-split-a-t/AA-480.md) | [SKILL] Bổ sung FK Reference đầy đủ (81 quan hệ) vào skill aa-cis-schema — chuẩn bị sẵn sàng dựng ERD | Done | 2026-08-28 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-481](acpv2-admin-tenant-split-a-t/AA-481.md) | [DB] Dọn 6 bảng chết bổ sung phát hiện ở AA-479 — acp_cms_publish_queue, idempotency_keys, lessons_registry, 3 bảng LangGraph checkpoint mồ côi | Done | 2026-08-27 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-493](acpv2-admin-tenant-split-a-t/AA-493.md) | [shared/llm_client] stop_reason/finish_reason bị vứt đi im lặng — không phân biệt được LLM viết xong vs bị cắt cụt max_tokens | Done | 2026-09-04 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-494](acpv2-admin-tenant-split-a-t/AA-494.md) | [REDESIGN] Atom/Angle/Piece reuse model — schema hiện tại là "1 request = dùng 1 lần", cần chuyển sang N:N tái sử dụng | Done | 2026-09-03 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-497](acpv2-admin-tenant-split-a-t/AA-497.md) | [AA-494 Decision 3] Build: status mới sau approved + API chọn lại angle | Done | 2026-09-03 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-498](acpv2-admin-tenant-split-a-t/AA-498.md) | [AA-494 Decision 4] Build: lịch sử piece cũ đưa vào prompt sinh angle | Done | 2026-09-03 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-499](acpv2-admin-tenant-split-a-t/AA-499.md) | [AA-494 Decision 5] Build: pgvector embedding cho within/cross-tenant reuse | Done | 2026-09-03 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-500](acpv2-admin-tenant-split-a-t/AA-500.md) | [AA-494 Decision 6] Build: fix fetch_trips() tenant filter + xác nhận connector RunwayMap↔atom planning | Done | 2026-09-01 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-501](acpv2-admin-tenant-split-a-t/AA-501.md) | [T9-T11] UI xem bài viết đã chấm — góc AA (trạng thái/điểm/retry/lỗi qua A4) + góc Tenant (nội dung + đầy đủ ngữ cảnh atom/goal/angle/DFS-PAA) | Done | 2026-08-30 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-504](acpv2-admin-tenant-split-a-t/AA-504.md) | [Blog channel] Thiết kế cơ chế multi-atom/pillar content cho Blog — 4 hướng phân tích, chờ quyết định content-strategy với Ms. Thư | Done | 2026-09-01 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-505](acpv2-admin-tenant-split-a-t/AA-505.md) | [LLM Cost Tracking] Persist per-call usage (tenant/T-stage/model/tokens/cost) — build, tách từ AA-434 audit | Done | 2026-09-03 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-506](acpv2-admin-tenant-split-a-t/AA-506.md) | [SECURITY][Urgent] JWT_SECRET hardcoded fallback đang sống trên production — bất kỳ ai đọc code đều giả mạo được JWT cho mọi tenant | Done | 2026-09-01 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-516](acpv2-admin-tenant-split-a-t/AA-516.md) | [CLEANUP] Dead code layer N4-N6 (fetch_trips/runway_map/plan_quarter/allocate_month) — không route nào gọi tới | Done | 2026-09-03 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-518](acpv2-admin-tenant-split-a-t/AA-518.md) | [LLM Ops] Model selection qua UI admin (writer: Claude/Palmyra X5, judge: GPT-5.6) — STEP0 Bedrock 3-account trước, liên kết AA-495 cho brand identity A1 | Done | 2026-09-03 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-520](acpv2-admin-tenant-split-a-t/AA-520.md) | [AUDIT] Rà soát backlog sau AA-507 — issue nào premise đã lỗi thời do kiến trúc Segment/Route/Slate mới | Done | 2026-09-05 | ACPv2 — Admin/Tenant Split (A/T) |
-| [AA-521](acpv2-admin-tenant-split-a-t/AA-521.md) | [SECURITY] Admin logout() không clear được cis_admin_token httpOnly — session sống tới hết hạn 24h | Done | 2026-09-04 | ACPv2 — Admin/Tenant Split (A/T) |
 | [AA-1016](cis-core-pipeline-llm-platform/AA-1016.md) | [Content studio] Per-tenant AI budget: alert at 100 %, staff approval from 150 %, T9 counted in plan quota | Done | 2026-10-31 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1017](cis-core-pipeline-llm-platform/AA-1017.md) | [AI gateway] Registry v2: provider kinds, model families, stage × model params, routing UI | Done | 2026-10-31 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1018](cis-core-pipeline-llm-platform/AA-1018.md) | [AI gateway] Reliability: warm Anthropic + OpenAI paths, probes, circuit, re-queue, monthly drill | Done | 2026-10-31 | CIS Core — Pipeline, LLM & Platform |
@@ -80,6 +30,9 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1062](cis-core-pipeline-llm-platform/AA-1062.md) | [Legal] Studio legal pages drop the OpenAI "last resort" writer sentence (Draft v0.6) | Done | 2026-11-10 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1063](cis-core-pipeline-llm-platform/AA-1063.md) | [Writing Lab] Claim ground truth in the admin: plain-language review queue, label set browser, bulk accept, Jev pre-filter | Done | 2026-11-10 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1064](cis-core-pipeline-llm-platform/AA-1064.md) | [Docs] Guides and the admin docs reader show screenshots (PNG/WebP), not only SVG | Done | 2026-11-10 | CIS Core — Pipeline, LLM & Platform |
+| [AA-1076](cis-core-pipeline-llm-platform/AA-1076.md) | [AI gateway] Batch lane for direct APIs (Anthropic first, then OpenAI): half-price bulk runs for catalogue rewrites, A3 re-atomize and backfills | Done | 2026-11-11 | CIS Core — Pipeline, LLM & Platform |
+| [AA-1078](cis-core-pipeline-llm-platform/AA-1078.md) | [T-series ops] Make hidden failures visible: failed piece code, job cost from the ledger, flag_fix output limit | Done | 2026-11-11 | CIS Core — Pipeline, LLM & Platform |
+| [AA-1083](cis-core-pipeline-llm-platform/AA-1083.md) | [Jev spend] Platform recompute asks Jev only for what changed, with a spend estimate and cap before large runs | Done | 2026-11-11 | CIS Core — Pipeline, LLM & Platform |
 | [AA-594](cis-core-pipeline-llm-platform/AA-594.md) | [EPIC] CIS Data Reset & Pipeline Rerun — giữ raw_tours, reset dẫn xuất, chạy lại S1/atom/social, verify UI | Done | 2026-10-12 | CIS Core — Pipeline, LLM & Platform |
 | [AA-628](cis-core-pipeline-llm-platform/AA-628.md) | [Future] Engagement feedback loop for T-series (rebuild on content_piece/publish_log) | Canceled | 2026-11-03 | CIS Core — Pipeline, LLM & Platform |
 | [AA-634](cis-core-pipeline-llm-platform/AA-634.md) | [RESEARCH] TypeSafe AI "Jev" (System One Model) — khảo sát toàn diện A/T-series + TripPlanner + AAA cho quyết định có cấu trúc | Done | 2026-10-15 | CIS Core — Pipeline, LLM & Platform |
@@ -116,6 +69,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-738](cis-core-pipeline-llm-platform/AA-738.md) | [S1 pipeline] Deterministic forbidden-word strip on body + tighter writer prompt (stop paying for Sonnet twice) | Done | 2026-10-08 | CIS Core — Pipeline, LLM & Platform |
 | [AA-739](cis-core-pipeline-llm-platform/AA-739.md) | [Review Queue UX] A high score + hard-code block reads as contradictory — lead with the block reason, not the score | Done | 2026-10-08 | CIS Core — Pipeline, LLM & Platform |
 | [AA-740](cis-core-pipeline-llm-platform/AA-740.md) | [S1 pipeline] Deterministic seo_meta / seo_title length fit after the last LLM repair — length codes block Master with no repair path | Done | 2026-10-08 | CIS Core — Pipeline, LLM & Platform |
+| [AA-741](cis-core-pipeline-llm-platform/AA-741.md) | [T-series audit] End-to-end T0→T11 test run on controlled tenants + per-mechanism audit report (same method as the S218 A-series audit) | Done | 2026-11-10 | CIS Core — Pipeline, LLM & Platform |
 | [AA-742](cis-core-pipeline-llm-platform/AA-742.md) | [Jev] decision_log growth — stop writing a full row per cache hit; A3 ranking re-asks every segment on each recompute | Done | 2026-10-09 | CIS Core — Pipeline, LLM & Platform |
 | [AA-743](cis-core-pipeline-llm-platform/AA-743.md) | [A3] Incremental recompute — scoped Score/Route on tour removal + one debounced recompute per wave | Done | 2026-10-09 | CIS Core — Pipeline, LLM & Platform |
 | [AA-744](cis-core-pipeline-llm-platform/AA-744.md) | [Data] Deterministic backfill — 927 atoms with brand forbidden words + 32 legacy Masters with short seo_meta | Done | 2026-10-09 | CIS Core — Pipeline, LLM & Platform |
@@ -195,43 +149,6 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-989](cis-core-pipeline-llm-platform/AA-989.md) | [S1 propagation] Places and embeddings follow the S1 v2 atoms (geo.tour_place re-sync, atom embeddings, content_embedding decision) | Done | 2026-10-27 | CIS Core — Pipeline, LLM & Platform |
 | [AA-992](cis-core-pipeline-llm-platform/AA-992.md) | [Admin] Data coverage page: one live numbers table from raw uploads to TripPlanner, Booking and CRM | Done | 2026-10-26 | CIS Core — Pipeline, LLM & Platform |
 | [AA-999](cis-core-pipeline-llm-platform/AA-999.md) | [Research] Calling LLM models through Kiro instead of Bedrock: feasibility, terms, cost, integration | Done | 2026-10-29 | CIS Core — Pipeline, LLM & Platform |
-| [AA-588](cis-data-reset-pipeline-rerun-audit/AA-588.md) | [INFRA][G5] Gỡ OIDC trust org cũ (AdventureAsia365-CIS) sau khi ổn định | Done | 2026-09-21 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-595](cis-data-reset-pipeline-rerun-audit/AA-595.md) | [G0] Dựng bastion EC2 + SSM tunnel + BACKUP toàn bộ (chặn mọi việc sau) | Done | 2026-09-16 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-596](cis-data-reset-pipeline-rerun-audit/AA-596.md) | [G1] Điều tra hiện trạng DB (read-only) — đếm row mọi bảng/schema, xác nhận ranh giới raw vs dẫn xuất | Done | 2026-09-16 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-597](cis-data-reset-pipeline-rerun-audit/AA-597.md) | [G2] Chốt danh sách bảng xóa + thứ tự + script DELETE (Nghiệp DUYỆT trước khi chạy) | Done | 2026-09-16 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-598](cis-data-reset-pipeline-rerun-audit/AA-598.md) | [G3] Reset dữ liệu dẫn xuất (chạy sau backup + duyệt G2) | Done | 2026-09-16 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-599](cis-data-reset-pipeline-rerun-audit/AA-599.md) | [G4] Chạy lại S1 → master content, verify S1 hoạt động + UI | Done | 2026-10-09 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-600](cis-data-reset-pipeline-rerun-audit/AA-600.md) | [G5] Atomize + segment/score/route + social content admin, verify (+ rebuild TripPlanner extraction) | Done | 2026-10-09 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-601](cis-data-reset-pipeline-rerun-audit/AA-601.md) | [G6] Audit UI admin — verify mọi trang hiển thị đúng, dữ liệu thật (không mock) sau rerun | Done | 2026-10-09 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-602](cis-data-reset-pipeline-rerun-audit/AA-602.md) | [CLEANUP] Terminate bastion EC2 + revert SG sau khi audit xong | Done | 2026-09-17 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-603](cis-data-reset-pipeline-rerun-audit/AA-603.md) | [CLEANUP] DROP cụm bảng N7/N8 dead sau khi gỡ code reader + deploy | Done | 2026-09-21 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-604](cis-data-reset-pipeline-rerun-audit/AA-604.md) | [BUG] S0 "Tours Ready" đếm 793 nhưng 30 tour thiếu itinerary không viết được (S1=763) — lọc + cảnh báo ngay khi upload | Done | 2026-09-17 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-605](cis-data-reset-pipeline-rerun-audit/AA-605.md) | [UIUX] Đồng bộ phong cách admin portal với trang chính adventure.asia (điều tra kỹ + design pass) | Done | 2026-09-24 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-606](cis-data-reset-pipeline-rerun-audit/AA-606.md) | [BUILD] Bedrock Batch Inference cho S1 rewrite (~100 tour/lần) — xin IAM Batch trên acc3 + re-architect submit/poll/ingest | Done | 2026-09-17 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-607](cis-data-reset-pipeline-rerun-audit/AA-607.md) | [EPIC] Đánh giá lại &amp; redesign 2 luồng viết (admin S1 + social content) — đồng bộ cả tenant | Done | 2026-09-23 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-608](cis-data-reset-pipeline-rerun-audit/AA-608.md) | [S1][Rubric/Gate+Model] H3 đo batch 20-50 tour → H2 nới gate + quyết haiku↔sonnet | Done | 2026-09-17 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-609](cis-data-reset-pipeline-rerun-audit/AA-609.md) | [Curation] Gỡ "star" no-op (dead) khỏi UI + backend | Done | 2026-09-17 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-610](cis-data-reset-pipeline-rerun-audit/AA-610.md) | [Enhancement] Nâng cấp score ranking atom/segment theo rank-sum 4 chiều (mô hình Ms.Thư) | Done | 2026-09-21 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-611](cis-data-reset-pipeline-rerun-audit/AA-611.md) | [Cleanup] Gỡ hẳn s1-from-atom (route + s1_from_atom.py + eval) | Done | 2026-09-17 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-612](cis-data-reset-pipeline-rerun-audit/AA-612.md) | [Tenant sync] Fix bug T2 brand fetch (làm luôn) + điều tra T7-T11 đối chiếu Ms.Thư | Done | 2026-09-19 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-613](cis-data-reset-pipeline-rerun-audit/AA-613.md) | [Social tenant][Sub1-BE] Gate severity + metrics table + dọn leak /pieces + held→approved cho tenant + fix blog publish MD→HTML + export/publish audit | Done | 2026-09-19 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-614](cis-data-reset-pipeline-rerun-audit/AA-614.md) | [Social tenant][Sub2-FE tenant] My Content phẳng (ẩn gate/held) + khóa copy màn hình (chừa ô edit) + publish/export rõ | Done | 2026-09-19 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-615](cis-data-reset-pipeline-rerun-audit/AA-615.md) | [Social tenant][Sub3-FE admin] Monitor telemetry gate/severity/retry/publish theo tenant/kênh (mở rộng run-health/platform-stats) | Done | 2026-09-19 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-625](cis-data-reset-pipeline-rerun-audit/AA-625.md) | [DFS][COST] Nâng TTL cache SEO 24h → 7 ngày (giảm chi phí DataForSEO khi rerun) | Done | 2026-09-19 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-626](cis-data-reset-pipeline-rerun-audit/AA-626.md) | [UI] Review Queue làm lại (bảng + expand + dismiss version fail) + Master Content thêm cột version/link dismiss | Done | 2026-09-19 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-627](cis-data-reset-pipeline-rerun-audit/AA-627.md) | [DFS][Ops] Cảnh báo số dư DataForSEO thấp (đọc balance 1 lần/ngày, alert dưới ngưỡng) — OpenAI để platform tự quản | Done | 2026-09-19 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-629](cis-data-reset-pipeline-rerun-audit/AA-629.md) | [BUG] Tenant market ngoài 6 whitelist bị silent-fallback về US (đọc nhầm dữ liệu, không lỗi) | Done | 2026-09-22 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-630](cis-data-reset-pipeline-rerun-audit/AA-630.md) | [TECH DEBT] questions_count cache (AA-610) never invalidated when search_demand/PAA data changes | Done | 2026-09-22 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-631](cis-data-reset-pipeline-rerun-audit/AA-631.md) | [Enhancement] Debate stage for Slate — contested metric + brand-fit filter before tenant sees candidates | Done | 2026-09-22 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-632](cis-data-reset-pipeline-rerun-audit/AA-632.md) | [Debate follow-up] Extend "not already on slate" place de-dup across Channels | Done | 2026-09-23 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-633](cis-data-reset-pipeline-rerun-audit/AA-633.md) | [Pre-G4] Sweep admin UI for dead-route calls before rerun (found via Trust Ramp 404) | Done | 2026-09-23 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-636](cis-data-reset-pipeline-rerun-audit/AA-636.md) | [Tenant Portal] Trust fixes: real quota reset date, working bell/search, hide internal cost & jargon, page headers | Done | 2026-09-25 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-637](cis-data-reset-pipeline-rerun-audit/AA-637.md) | [Tenant Portal] Live writing progress: stream steps + text while a tour / social post is being written | Done | 2026-09-25 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-638](cis-data-reset-pipeline-rerun-audit/AA-638.md) | [Tenant Portal] Product polish: onboarding checklist, skeleton loading, notifications, ⌘K palette, usage chart | Done | 2026-09-25 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-639](cis-data-reset-pipeline-rerun-audit/AA-639.md) | [T2 pipeline] Tour rewrite needs 3+ full revisions before passing checks — find why the first draft fails | Done | 2026-09-25 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-640](cis-data-reset-pipeline-rerun-audit/AA-640.md) | [Billing] One source for plan tour quota (membership_plans); over-quota rewrites allowed + billed as overage | Done | 2026-09-25 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-641](cis-data-reset-pipeline-rerun-audit/AA-641.md) | [T2 pipeline] Stop flag_fix from creating new hard failures: deterministic seo_meta fit + forbidden-word guard | Done | 2026-10-07 | CIS Data Reset & Pipeline Rerun (Audit) |
-| [AA-724](cis-data-reset-pipeline-rerun-audit/AA-724.md) | [S1 writer] Cycle/bike tours fail brand-fit — writer emits hype/persona tone + forbidden words, regenerate can't fix | Done | 2026-10-07 | CIS Data Reset & Pipeline Rerun (Audit) |
 | [AA-1006](cis-portal-admin-tenant-ui/AA-1006.md) | [UI] CIS admin pages on the kit (S6b rest): suppressions 659 → 0, delete adminUi.tsx | Done | 2026-11-02 | CIS Portal — Admin & Tenant UI |
 | [AA-1008](cis-portal-admin-tenant-ui/AA-1008.md) | [UI] Kit shell, visual job and close-out (S6e + S1d/S2c + S6f/H3): shared ShellFrame, visual job 1440/390 light/dark for CIS/portal/CRM web, empty suppressions, required checks | Done | 2026-11-05 | CIS Portal — Admin & Tenant UI |
 | [AA-1009](cis-portal-admin-tenant-ui/AA-1009.md) | [UAT] Dry-run scenario harness: fast mode, sign-in setup per identity, ~20 public/read-only scenarios as regression | Done | 2026-10-31 | CIS Portal — Admin & Tenant UI |
@@ -351,23 +268,6 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-981](data-platform-schema-ops-scale/AA-981.md) | Secret scanning guard for public repos: push protection, full-history gitleaks, tfvars password rule | Done | 2026-10-23 | Data Platform — Schema, Ops & Scale |
 | [AA-991](data-platform-schema-ops-scale/AA-991.md) | [S1 propagation] Downstream freshness probe + proof that automatic sync works (atom → segment/route/ranking/geo/place/tenant) | Done | 2026-10-27 | Data Platform — Schema, Ops & Scale |
 | [AA-993](data-platform-schema-ops-scale/AA-993.md) | [DevOps] Delivery pipeline: merge queue, deploy without job-idle waits, migrations in the app PR, automatic post-deploy verify | Done | 2026-10-30 | Data Platform — Schema, Ops & Scale |
-| [AA-650](ecosystem-foundation-cost-guard-jobs-docs/AA-650.md) | [P1] Durable job runner — Postgres queue + worker ECS service (replaces in-process asyncio tasks and the Bedrock Batch dependency) | Done | 2026-09-28 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-651](ecosystem-foundation-cost-guard-jobs-docs/AA-651.md) | [P1][INFRA] Worker ECS service for the job runner (AA-CIS-Infra) | Done | 2026-10-05 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-652](ecosystem-foundation-cost-guard-jobs-docs/AA-652.md) | [P1] Move T2 rewrite, T9 write, research and A3 atomize onto jobs; job-based status in the portal (fixes stuck "Writing…") | Done | 2026-09-28 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-653](ecosystem-foundation-cost-guard-jobs-docs/AA-653.md) | [P2] A/T flow sync audit + clean-rerun runbook (Bhutan pilot wave, Jev in shadow) | Done | 2026-10-08 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-654](ecosystem-foundation-cost-guard-jobs-docs/AA-654.md) | [DOCS] English README + complete CONTEXT.md for every repo; translate root docs; refresh App .claude/CLAUDE.md | Done | 2026-10-11 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-656](ecosystem-foundation-cost-guard-jobs-docs/AA-656.md) | [SEC] Staff auth hardening — real JWT for the content role, BFF proxy coverage, single role model across CIS and AA-Booking | Done | 2026-10-11 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-684](ecosystem-foundation-cost-guard-jobs-docs/AA-684.md) | [DB] Schema ownership map + migration cleanup across repos (shared RDS) | Done | 2026-10-11 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-702](ecosystem-foundation-cost-guard-jobs-docs/AA-702.md) | [Admin UI audit] Fix broken notifications list + inconsistent counts/costs before the platform rerun | Done | 2026-09-30 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-711](ecosystem-foundation-cost-guard-jobs-docs/AA-711.md) | [BUG][Jobs] Draining ECS task keeps claiming jobs after a deploy — runs them on the old code | Done | 2026-10-01 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-723](ecosystem-foundation-cost-guard-jobs-docs/AA-723.md) | [P1] Move ALL remaining in-process API background tasks onto the worker (shared.job) — S1 rewrite, revalidate, recompute; survive deploys + show on Jobs | Done | 2026-10-06 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-725](ecosystem-foundation-cost-guard-jobs-docs/AA-725.md) | [CI] Deploy guard on shared.job + post-deploy live smoke verify + api/worker same image SHA | Done | 2026-10-07 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-730](ecosystem-foundation-cost-guard-jobs-docs/AA-730.md) | [SEC] Narrow IAM role for agent sessions (Kiro / Claude Code); prod migrations only via workflow | Done | 2026-10-11 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-733](ecosystem-foundation-cost-guard-jobs-docs/AA-733.md) | [Docs][Skills] Restructure AA skills — slim SKILL.md + references, delete superseded content, 6 workflow skills, one source in repo skill/ | Done | 2026-10-07 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-734](ecosystem-foundation-cost-guard-jobs-docs/AA-734.md) | [Jobs] atom_ranking versioned-swap so recompute never dips the live count (ADR 0003 nac 2) | Done | 2026-10-06 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-735](ecosystem-foundation-cost-guard-jobs-docs/AA-735.md) | [Jobs] Job-model modularization follow-ups (ADR 0003 nac 3-6) | Done | 2026-10-09 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-750](ecosystem-foundation-cost-guard-jobs-docs/AA-750.md) | [Infra] Audit the 7 CIS Lambdas with 0 invocations in 30 days — confirm still needed vs obsolete, then retire the obsolete ones safely | Done | 2026-10-11 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
-| [AA-755](ecosystem-foundation-cost-guard-jobs-docs/AA-755.md) | [Jobs] Jobs page redesign — server-side pagination, sort and filters on every column, sticky header/toolbar, tabs | Done | 2026-10-10 | Ecosystem Foundation — Cost Guard, Jobs, Docs |
 | [AA-1](no-project/AA-1.md) | Get familiar with Linear | Done | 2026-05-13 | — |
 | [AA-101](no-project/AA-101.md) | [M6] Master Content — Golden Tours 20 import + 3-config rewrite + Quality Showcase Dashboard for Ms. Thu | Done | 2026-05-22 | — |
 | [AA-102](no-project/AA-102.md) | [OPS] Fix schema_versions gap — record migrations 027/029-034 in shared.schema_versions | Done | 2026-05-21 | — |
@@ -384,6 +284,8 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-17](no-project/AA-17.md) | Get 6 decisions from Ms. Thư — D-01 to D-06 (schema + image + CIS) | Canceled | 2026-08-21 | — |
 | [AA-170](no-project/AA-170.md) | [EPIC] CIS Admin UI — Complete pipeline view S2→S4.2 + remove B2B tenant portal | Done | 2026-06-06 | — |
 | [AA-174](no-project/AA-174.md) | [INVESTIGATION] ACP E2E attempt → discovered S1→S4.2 pipeline is not orchestrated | Done | 2026-06-11 | — |
+| [AA-176](no-project/AA-176.md) | [DEPLOY-01] Immutable image tags + ECS/Lambda safe rollout (rollback-first) | Done | 2026-09-04 | — |
+| [AA-177](no-project/AA-177.md) | [SEC-01] Container + Lambda image scanning + SBOM in CI (Trivy + syft) | Done | 2026-09-04 | — |
 | [AA-178](no-project/AA-178.md) | [LEARN-DVA] DynamoDB deep-dive — single-table, GSI/LSI, streams (cert-only) | Canceled | 2026-08-21 | — |
 | [AA-18](no-project/AA-18.md) | Migrate geographic content — areas, countries, destinations, users from legacy MySQL | Canceled | 2026-08-21 | — |
 | [AA-181](no-project/AA-181.md) | [INFRA] ACP tenant-auth contract inconsistent across 3 layers (API GW / FastAPI / JWT) | Done | 2026-06-11 | — |
@@ -418,41 +320,74 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-26](no-project/AA-26.md) | [CIS] Upload pipeline + DB audit — verify end-to-end, schema alignment, fix src_itineraries REQUIRED | Done | 2026-05-12 | — |
 | [AA-261](no-project/AA-261.md) | [ACP-Portal][SECURITY] STEP 0 audit — sessionStorage-only auth, 0 server-side middleware | Done | 2026-07-06 | — |
 | [AA-263](no-project/AA-263.md) | [CIS][S1] Tách node editor độc lập khỏi validate_node trong S1 graph (từ ADR-2026-020) | Canceled | 2026-09-04 | — |
+| [AA-264](no-project/AA-264.md) | [ACP-Portal][SECURITY] Hardening — httpOnly cookie + Next.js middleware guard (từ AA-261) | Done | 2026-08-28 | — |
 | [AA-265](no-project/AA-265.md) | [Track B][Terraform] Account-2 root config riêng — reuse modules, scope WAF/APIGW/SF/EventBridge | Done | 2026-07-15 | — |
 | [AA-266](no-project/AA-266.md) | [URGENT] RDS password drift account 1 — TF_VAR_DB_PASSWORD (GitHub secret) lệch khỏi giá trị thật, block merge develop | Done | 2026-07-07 | — |
 | [AA-27](no-project/AA-27.md) | [Admin] Catalog — filter bar, bỏ char limit, fix format Highlights/Inclusions/Exclusions, SEO keywords, Audit panel | Done | 2026-05-13 | — |
 | [AA-277](no-project/AA-277.md) | Trunk-based CI/CD migration — remove develop branch (ADR-2026-023) | Done | 2026-07-09 | — |
+| [AA-279](no-project/AA-279.md) | [SEC-PIPELINE] Prompt injection surface — S0 brand brief .docx + S2 competitor content feed LLM prompts unsanitized | Done | 2026-08-28 | — |
 | [AA-28](no-project/AA-28.md) | [Admin+Tenant] Catalog — multi-select tours để export CSV/Excel | Done | 2026-05-13 | — |
+| [AA-282](no-project/AA-282.md) | [OPS] schema_versions gap đợt 2 — migrations 043–050 không có trong log (AA-102 chỉ fix 027/029–034) | Done | 2026-09-04 | — |
 | [AA-29](no-project/AA-29.md) | [Tenant] My Catalog — fix Itinerary format xuống dòng per day + bỏ char limit AI rewrite | Done | 2026-05-13 | — |
 | [AA-3](no-project/AA-3.md) | Connect your tools | Done | 2026-05-13 | — |
 | [AA-30](no-project/AA-30.md) | [Admin] Catalog — fix Highlights format: JSON array string → bullet list xuống dòng | Done | 2026-05-15 | — |
 | [AA-31](no-project/AA-31.md) | [Admin] Catalog — SEO section: hiển thị keywords nguồn DFS (KEYWORD_SEARCH, PAA, RELATED, IDEAS) | Done | 2026-05-15 | — |
+| [AA-310](no-project/AA-310.md) | [Infra] AA-295 Direction 3 — nới ECS stopTimeout để khớp với graceful shutdown drain (25s) đã merge | Done | 2026-09-24 | — |
 | [AA-311](no-project/AA-311.md) | [Bug] Upload S0 báo "Commit failed (500)" sai — data đã lưu DB đúng, lỗi thật là StartExecution AccessDenied gọi thừa sau khi INSERT xong | Done | 2026-07-20 | — |
 | [AA-312](no-project/AA-312.md) | [Bug][Frontend?] Upload S0 Commit — 4/14 file "0 tours saved" vì request chưa từng tới backend (không phải lỗi mất dữ liệu) | Done | 2026-07-20 | — |
 | [AA-313](no-project/AA-313.md) | [Bug] country_resolver.py thiếu/sai alias — PAKISTAN không có trong COUNTRY_MASTER, SRI-LANDKA (typo toàn công ty) không match Sri Lanka | Done | 2026-07-20 | — |
+| [AA-318](no-project/AA-318.md) | [Gap thiết kế — chưa chốt] Không log nội dung prompt thật gửi LLM — chỉ log prompt_len, chặn khả năng verify bug liên quan nội dung prompt | Done | 2026-09-04 | — |
 | [AA-32](no-project/AA-32.md) | [Admin] Catalog — thêm Audit/Validation status panel (AUDIT_STATUS, FAILURE_CODES, ISSUES, FIELDS_UPDATED) | Done | 2026-05-15 | — |
+| [AA-324](no-project/AA-324.md) | [COST/PERF] Prompt caching thật sự vô hiệu trên production — mọi call S1-old đi qua acc1 satellite, cache_control chỉ hoạt động trên acc2 Bedrock trực tiếp | Done | 2026-09-04 | — |
 | [AA-33](no-project/AA-33.md) | [Admin] Catalog — Inclusions/Exclusions: render xuống dòng per item thay vì inline text | Done | 2026-05-15 | — |
+| [AA-331](no-project/AA-331.md) | [ACPv2-N6] Ô reactive 10% → đổi thành buffer chạy lại slot HELD (Q5=C) | Done | 2026-09-03 | — |
+| [AA-332](no-project/AA-332.md) | [ACPv2-N7] Tầng 4 chống cannibalization — dedup pgvector cross-tenant cosine >0.92 trước publish (Q6=B) | Done | 2026-08-28 | — |
 | [AA-338](no-project/AA-338.md) | [ACPv2-Model] 3 dữ kiện chưa giải quyết từ AA-335 — Nova Batch, Nova Lite caching, giá Cohere Embed v4 | Canceled | 2026-09-04 | — |
 | [AA-34](no-project/AA-34.md) | [Admin] Catalog — multi-select tours để export CSV/Excel | Done | 2026-05-15 | — |
 | [AA-341](no-project/AA-341.md) | [CIS-S1] Gom nợ kỹ thuật S1 cũ — 2 gap code + persist stop_reason + max_tokens override (làm 1 lượt, không làm lẻ) | Canceled | 2026-09-04 | — |
+| [AA-342](no-project/AA-342.md) | [Platform] Rà soát ngược: cơ chế ghi trạng thái đã đánh Done nhưng chưa từng persist thật (ADR-2026-037) | Done | 2026-08-28 | — |
+| [AA-344](no-project/AA-344.md) | Upload History: surface rows_landed/rows_dropped (not just parsed count) on /admin/upload | Done | 2026-09-04 | — |
+| [AA-348](no-project/AA-348.md) | [CIS-S1] Lệch version hằng số BEDROCK_SONNET (4-5) vs model thật gọi qua satellite (4-6) | Done | 2026-09-05 | — |
 | [AA-35](no-project/AA-35.md) | [Tenant] My Catalog — Itinerary: giữ format xuống dòng per day (không collapse thành paragraph) | Done | 2026-05-15 | — |
 | [AA-36](no-project/AA-36.md) | [Tenant] My Catalog — bỏ giới hạn chữ cho tất cả fields AI rewrite | Done | 2026-05-15 | — |
 | [AA-37](no-project/AA-37.md) | [Tenant] My Catalog — multi-select tours để export CSV/Excel | Done | 2026-05-15 | — |
+| [AA-383](no-project/AA-383.md) | [acp-brand-brief-parser Lambda] INSERT branch thiếu brand_name — cùng lỗi NOT NULL đã fix ở create_tenant() (AA-309), Lambda chưa được vá | Done | 2026-08-28 | — |
+| [AA-395](no-project/AA-395.md) | [ACPv2-N8][ADR-2026-030] Landing page engine — tự host trang giới thiệu tour per-tenant, ghi acp_deliver.tenant_tour_pages (quyết định 13/07 chưa từng lên issue) | Done | 2026-08-28 | — |
 | [AA-4](no-project/AA-4.md) | Import your data | Done | 2026-05-13 | — |
 | [AA-40](no-project/AA-40.md) | [ACP-CORE] EventBridge bus + S3 buckets + API GW routes — Terraform | Done | 2026-05-13 | — |
+| [AA-406](no-project/AA-406.md) | [ACPv2][N7][Chờ Ms. Thư] F2 atom density (§1.6.1, CONTEXT.md) — chưa build trong ACPv2, cần xác nhận có còn cần thiết hay đã cố ý bỏ vĩnh viễn | Done | 2026-08-28 | — |
 | [AA-407](no-project/AA-407.md) | [ACPv2][N7][Chờ Ms. Thư] F10 AI-detector trend logger — chưa build, signal-only không chặn gate, cần bàn giá trị trước khi đầu tư | Canceled | 2026-09-04 | — |
 | [AA-41](no-project/AA-41.md) | [ACP-CORE] DB schema migration — 5 new schemas + RLS + pgvector | Done | 2026-05-12 | — |
+| [AA-428](no-project/AA-428.md) | [Bug] CatalogTab.tsx gọi /api/tenant/v1/quota không tồn tại — lỗi nuốt câm lặng | Done | 2026-08-28 | — |
 | [AA-43](no-project/AA-43.md) | [ACP-S2] Market & Competitor Research Agent — FastAPI + DataForSEO + Apify + LLM | Done | 2026-05-20 | — |
+| [AA-434](no-project/AA-434.md) | [STEP0] Audit theo dõi usage LLM theo tenant + T-stage — đã có chưa, liên quan AA-118/AA-258/AA-255 | Done | 2026-08-28 | — |
+| [AA-435](no-project/AA-435.md) | [SECURITY] Admin login JWT lộ qua JSON body + cookie không httpOnly — cùng họ AA-427, chưa vá | Done | 2026-09-03 | — |
 | [AA-44](no-project/AA-44.md) | [ACP-S0] Input Manager — XLSX upload + Data Quality Review Page + Manual S1 Gate | Done | 2026-05-19 | — |
 | [AA-447](no-project/AA-447.md) | [A/T-SYNC-AUDIT] Rà soát đồng bộ BE+FE+hạ tầng cho từng T-stage/A-stage — tránh build lệch tầng | Canceled | 2026-09-03 | — |
 | [AA-45](no-project/AA-45.md) | [ACP-S3] Content & Campaign Planner — Lambda + LLM + Content Calendar + Ads + TikTok | Done | 2026-05-20 | — |
 | [AA-46](no-project/AA-46.md) | [ACP-S4] Blog Engine — Draft + Self-Critique + SEO + HITL + CMS Publish | Done | 2026-05-21 | — |
+| [AA-462](no-project/AA-462.md) | [T11] Mở rộng Publish sang 6 kênh còn lại (facebook/tiktok/instagram/linkedin/email/ads) — hiện chỉ blog-only | Done | 2026-09-04 | — |
+| [AA-463](no-project/AA-463.md) | [INVESTIGATE] 4 mục hypothesis còn treo từ audit AA-438/439 — brand_audit strict, published_tours count lệch, seo_context null, DFS batch-cost | Done | 2026-09-21 | — |
+| [AA-464](no-project/AA-464.md) | [A4] Nối dây suggest_ramp_transition() — gợi ý chuyển Trust Ramp state, admin vẫn duyệt tay | Done | 2026-09-05 | — |
+| [AA-465](no-project/AA-465.md) | [URGENT][PATCH TẠM] Tăng API Gateway integration timeout /v1/* — /goal (30.3s) và /write (57.2s) đã vượt trần 29s thật | Done | 2026-08-27 | — |
+| [AA-466](no-project/AA-466.md) | [ARCH] Chuyển /goal, /write sang pattern async (202+poll) — thay patch timeout tạm AA-465 | Done | 2026-08-26 | — |
+| [AA-467](no-project/AA-467.md) | [CLEANUP] Dọn dẹp kiến trúc: worktree rác + điều tra archive AA-ACP-App/Core + rà soát trang admin N0-N8 cũ | Done | 2026-08-26 | — |
+| [AA-468](no-project/AA-468.md) | [ADMIN] Dọn trang N0-N8 cũ + bỏ bắt buộc tạo plan/chọn tour khi tạo tenant mới | Done | 2026-08-26 | — |
+| [AA-469](no-project/AA-469.md) | [REDESIGN] T-series: tách T4/T5 độc lập, T7 sửa được + xem lịch sử, fix 28/71 tour, xác nhận T8-T11, A4 feedback loop | Done | 2026-08-30 | — |
 | [AA-47](no-project/AA-47.md) | [ACP-UAT] Full E2E pipeline test — 1 country, all stages, all HITL gates | Done | 2026-05-22 | — |
+| [AA-470](no-project/AA-470.md) | [FIX] /goal: client.generate() thiếu asyncio.to_thread() — block event loop ECS khi chờ Bedrock | Done | 2026-08-28 | — |
+| [AA-471](no-project/AA-471.md) | [AUDIT] tenant test-n1-flow thiếu default brand_rules row — fallback rubric generic, cần xác nhận có tenant khác cùng thiếu | Done | 2026-08-28 | — |
 | [AA-472](no-project/AA-472.md) | [TENANT ONBOARDING] Bỏ ràng buộc bắt buộc portfolio_id khi tạo tenant — Hướng B | Done | 2026-08-26 | — |
 | [AA-473](no-project/AA-473.md) | [ADMIN] Chuyển atomize (N0-N2) + curation (N3) Master Content sang tenant tự làm, xoá /admin/atomize + /admin/curation | Done | 2026-08-27 | — |
+| [AA-474](no-project/AA-474.md) | [INVESTIGATE] channels trong tenant_config nên là input tenant chọn hay kết quả tính — Planning tab admin đang là nguồn ghi duy nhất, không xoá được | Done | 2026-08-28 | — |
 | [AA-475](no-project/AA-475.md) | [ADMIN] Xoá hẳn /admin/atomize + /admin/curation + toàn bộ 2551 atom owner_scope='platform' | Done | 2026-08-27 | — |
+| [AA-476](no-project/AA-476.md) | [DASHBOARD] 6 mục audit AA-438 còn treo — #3 double-fire ingestion (P1), #1/#2/#11 sai số hiển thị (P3), #4/#6 đã đóng | Done | 2026-08-28 | — |
 | [AA-477](no-project/AA-477.md) | [INVESTIGATE] Cụm 14 bảng ACPv1 (gốc acp_runs) + 6 router + 2 Lambda — 0 row/0 invocation nhưng chưa xác nhận độc lập với A/T-series | Done | 2026-08-27 | — |
+| [AA-478](no-project/AA-478.md) | [INVESTIGATE] 9 mục còn mơ hồ từ ACP v2/Phase 2 — vấn đề gốc còn thật, cơ chế đề xuất đã lỗi thời, cần xác nhận lại cho T-series | Done | 2026-09-05 | — |
+| [AA-479](no-project/AA-479.md) | [AUDIT] Dump toàn bộ schema DB thật, xác nhận lại phạm vi migration 121, viết lại skill aa-cis-schema từ đầu | Done | 2026-08-27 | — |
 | [AA-48](no-project/AA-48.md) | [INFRA] Setup Claude Code + Chat Workflow — CLAUDE.md + Hooks + Skills + Subagents | Done | 2026-05-11 | — |
+| [AA-480](no-project/AA-480.md) | [SKILL] Bổ sung FK Reference đầy đủ (81 quan hệ) vào skill aa-cis-schema — chuẩn bị sẵn sàng dựng ERD | Done | 2026-08-28 | — |
+| [AA-481](no-project/AA-481.md) | [DB] Dọn 6 bảng chết bổ sung phát hiện ở AA-479 — acp_cms_publish_queue, idempotency_keys, lessons_registry, 3 bảng LangGraph checkpoint mồ côi | Done | 2026-08-27 | — |
 | [AA-482](no-project/AA-482.md) | [BUILD] Landing page engine — tự host trang giới thiệu tour per-tenant (ADR-2026-030, tách từ AA-395) | Done | 2026-09-04 | — |
 | [AA-483](no-project/AA-483.md) | [INVESTIGATE] Race condition nghi vấn ở process_export() — batch completion check thiếu lock, có thể tái diễn | Done | 2026-09-03 | — |
 | [AA-484](no-project/AA-484.md) | [BUILD] Cannibalization gate T10 — ưu tiên case tenant thiếu tenant_brand_rules | Done | 2026-09-03 | — |
@@ -465,10 +400,20 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-490](no-project/AA-490.md) | [FOLLOW-UP AA-488] dry_run preview chưa có in-file dedup — trùng dòng chỉ phát hiện sau khi Commit | Done | 2026-09-04 | — |
 | [AA-491](no-project/AA-491.md) | [FOLLOW-UP] Gỡ --ignore cho test_h3_rule_extractor.py + test_run_health.py sau khi sửa 7 test fail sẵn | Done | 2026-09-04 | — |
 | [AA-492](no-project/AA-492.md) | [CLEANUP] services/export/handler.py — dọn nhánh ACP-S1 EventBridge chết (0 consumer từ đầu, không ảnh hưởng A/T) | Done | 2026-09-05 | — |
+| [AA-493](no-project/AA-493.md) | [shared/llm_client] stop_reason/finish_reason bị vứt đi im lặng — không phân biệt được LLM viết xong vs bị cắt cụt max_tokens | Done | 2026-09-04 | — |
+| [AA-494](no-project/AA-494.md) | [REDESIGN] Atom/Angle/Piece reuse model — schema hiện tại là "1 request = dùng 1 lần", cần chuyển sang N:N tái sử dụng | Done | 2026-09-03 | — |
 | [AA-495](no-project/AA-495.md) | [RESET] Xóa sạch dữ liệu A/T-series, giữ >700 tour thô — chạy E2E A0-T11 với dữ liệu sạch, 2 phase | Canceled | 2026-09-16 | — |
 | [AA-496](no-project/AA-496.md) | /api/admin/billing trả 401 trên mọi trang /portal/* — layout.tsx gọi endpoint admin từ tenant portal | Done | 2026-09-04 | — |
+| [AA-497](no-project/AA-497.md) | [AA-494 Decision 3] Build: status mới sau approved + API chọn lại angle | Done | 2026-09-03 | — |
+| [AA-498](no-project/AA-498.md) | [AA-494 Decision 4] Build: lịch sử piece cũ đưa vào prompt sinh angle | Done | 2026-09-03 | — |
+| [AA-499](no-project/AA-499.md) | [AA-494 Decision 5] Build: pgvector embedding cho within/cross-tenant reuse | Done | 2026-09-03 | — |
+| [AA-500](no-project/AA-500.md) | [AA-494 Decision 6] Build: fix fetch_trips() tenant filter + xác nhận connector RunwayMap↔atom planning | Done | 2026-09-01 | — |
+| [AA-501](no-project/AA-501.md) | [T9-T11] UI xem bài viết đã chấm — góc AA (trạng thái/điểm/retry/lỗi qua A4) + góc Tenant (nội dung + đầy đủ ngữ cảnh atom/goal/angle/DFS-PAA) | Done | 2026-08-30 | — |
 | [AA-502](no-project/AA-502.md) | [T7 planning] Làm rõ UX chọn tour để tính plan + giải thích cơ chế "Finalize this quarter" | Canceled | 2026-08-31 | — |
 | [AA-503](no-project/AA-503.md) | [/portal] Audit toàn bộ trang tenant-facing — đảm bảo chỉ dùng tiếng Anh, không lẫn tiếng Việt | Canceled | 2026-09-05 | — |
+| [AA-504](no-project/AA-504.md) | [Blog channel] Thiết kế cơ chế multi-atom/pillar content cho Blog — 4 hướng phân tích, chờ quyết định content-strategy với Ms. Thư | Done | 2026-09-01 | — |
+| [AA-505](no-project/AA-505.md) | [LLM Cost Tracking] Persist per-call usage (tenant/T-stage/model/tokens/cost) — build, tách từ AA-434 audit | Done | 2026-09-03 | — |
+| [AA-506](no-project/AA-506.md) | [SECURITY][Urgent] JWT_SECRET hardcoded fallback đang sống trên production — bất kỳ ai đọc code đều giả mạo được JWT cho mọi tenant | Done | 2026-09-01 | — |
 | [AA-507](no-project/AA-507.md) | [EPIC][REDESIGN T5-T11] Segment/Route/Slate — rebuild theo aa-social-media reference (Ms. Thư) | Done | 2026-09-03 | — |
 | [AA-508](no-project/AA-508.md) | [T5] Atom identity content-hash + cache theo ngày + partial commit | Done | 2026-09-01 | — |
 | [AA-509](no-project/AA-509.md) | [Segment] Lớp mới — group atom cùng moment thật, schema + thuật toán matching | Done | 2026-09-03 | — |
@@ -478,8 +423,12 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-513](no-project/AA-513.md) | [T9] Route-aware write — nhiều Segment trong 1 bài Blog, mở rộng provenance tag | Done | 2026-09-02 | — |
 | [AA-514](no-project/AA-514.md) | [T10] Bổ sung gate "promises an option" + SEO surface + structural variance route-aware | Done | 2026-09-02 | — |
 | [AA-515](no-project/AA-515.md) | [Ranking/Atom Score] Stage xếp hạng atom — điều kiện tiên quyết cho AA-510 (Route/Hub) | Done | 2026-09-01 | — |
+| [AA-516](no-project/AA-516.md) | [CLEANUP] Dead code layer N4-N6 (fetch_trips/runway_map/plan_quarter/allocate_month) — không route nào gọi tới | Done | 2026-09-03 | — |
 | [AA-517](no-project/AA-517.md) | [INFRA] Điều tra chi phí RDS + Secrets Manager lạc trên acc 1 (867490540162) — nghi setup nhầm acc, kiểm tra luôn GPT-4.1 key rotation | Done | 2026-09-02 | — |
+| [AA-518](no-project/AA-518.md) | [LLM Ops] Model selection qua UI admin (writer: Claude/Palmyra X5, judge: GPT-5.6) — STEP0 Bedrock 3-account trước, liên kết AA-495 cho brand identity A1 | Done | 2026-09-03 | — |
 | [AA-519](no-project/AA-519.md) | [T5-T11] UI polish + route/hub metadata thread-through (từ audit AA-507) | Done | 2026-09-03 | — |
+| [AA-520](no-project/AA-520.md) | [AUDIT] Rà soát backlog sau AA-507 — issue nào premise đã lỗi thời do kiến trúc Segment/Route/Slate mới | Done | 2026-09-05 | — |
+| [AA-521](no-project/AA-521.md) | [SECURITY] Admin logout() không clear được cis_admin_token httpOnly — session sống tới hết hạn 24h | Done | 2026-09-04 | — |
 | [AA-522](no-project/AA-522.md) | [URGENT][T7-T9] Luồng viết mới từ Slate không lưu bài vào Review — luồng cũ Atom/Goal/Angle/Channel song song vẫn còn sống, gây nhầm lẫn | Done | 2026-09-05 | — |
 | [AA-523](no-project/AA-523.md) | [T5-T7][UI GAP] Thiếu UI truy vết Tour→Atom hóa→Slate — không rõ Segment/Hub/Picked từ đâu ra, chọn theo logic nào | Canceled | 2026-09-05 | — |
 | [AA-524](no-project/AA-524.md) | [T5-T11][UI POLISH] Layout hẹp, header mất khi cuộn, còn sót tiếng Việt — rà lại thiết kế toàn portal | Done | 2026-09-11 | — |
@@ -547,8 +496,30 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-585](no-project/AA-585.md) | [SECURITY][INVESTIGATE] GET /tours + /tours/{tour_id} — route legacy không auth, xác nhận có sống qua đường ALB bypass (giống AA-577) không | Done | 2026-09-11 | — |
 | [AA-586](no-project/AA-586.md) | [BUG] Ô search chung trên topbar tự điều hướng sang t1-rewrite khi focus, làm mất trang đang xem | Done | 2026-09-11 | — |
 | [AA-587](no-project/AA-587.md) | [DOCS] AA-CIS-Infra CLAUDE.md ghi sai account/profile — root Terraform cũ trỏ state bucket đã bị xóa | Done | 2026-09-11 | — |
+| [AA-588](no-project/AA-588.md) | [INFRA][G5] Gỡ OIDC trust org cũ (AdventureAsia365-CIS) sau khi ổn định | Done | 2026-09-21 | — |
 | [AA-59](no-project/AA-59.md) | [ACP-SECURITY] Secrets Manager + audit_log + WAF ACP rules + git-secrets + pip-audit CI | Done | 2026-05-20 | — |
+| [AA-595](no-project/AA-595.md) | [G0] Dựng bastion EC2 + SSM tunnel + BACKUP toàn bộ (chặn mọi việc sau) | Done | 2026-09-16 | — |
+| [AA-596](no-project/AA-596.md) | [G1] Điều tra hiện trạng DB (read-only) — đếm row mọi bảng/schema, xác nhận ranh giới raw vs dẫn xuất | Done | 2026-09-16 | — |
+| [AA-597](no-project/AA-597.md) | [G2] Chốt danh sách bảng xóa + thứ tự + script DELETE (Nghiệp DUYỆT trước khi chạy) | Done | 2026-09-16 | — |
+| [AA-598](no-project/AA-598.md) | [G3] Reset dữ liệu dẫn xuất (chạy sau backup + duyệt G2) | Done | 2026-09-16 | — |
+| [AA-599](no-project/AA-599.md) | [G4] Chạy lại S1 → master content, verify S1 hoạt động + UI | Done | 2026-10-09 | — |
+| [AA-600](no-project/AA-600.md) | [G5] Atomize + segment/score/route + social content admin, verify (+ rebuild TripPlanner extraction) | Done | 2026-10-09 | — |
+| [AA-601](no-project/AA-601.md) | [G6] Audit UI admin — verify mọi trang hiển thị đúng, dữ liệu thật (không mock) sau rerun | Done | 2026-10-09 | — |
+| [AA-602](no-project/AA-602.md) | [CLEANUP] Terminate bastion EC2 + revert SG sau khi audit xong | Done | 2026-09-17 | — |
+| [AA-603](no-project/AA-603.md) | [CLEANUP] DROP cụm bảng N7/N8 dead sau khi gỡ code reader + deploy | Done | 2026-09-21 | — |
+| [AA-604](no-project/AA-604.md) | [BUG] S0 "Tours Ready" đếm 793 nhưng 30 tour thiếu itinerary không viết được (S1=763) — lọc + cảnh báo ngay khi upload | Done | 2026-09-17 | — |
+| [AA-605](no-project/AA-605.md) | [UIUX] Đồng bộ phong cách admin portal với trang chính adventure.asia (điều tra kỹ + design pass) | Done | 2026-09-24 | — |
+| [AA-606](no-project/AA-606.md) | [BUILD] Bedrock Batch Inference cho S1 rewrite (~100 tour/lần) — xin IAM Batch trên acc3 + re-architect submit/poll/ingest | Done | 2026-09-17 | — |
+| [AA-607](no-project/AA-607.md) | [EPIC] Đánh giá lại &amp; redesign 2 luồng viết (admin S1 + social content) — đồng bộ cả tenant | Done | 2026-09-23 | — |
+| [AA-608](no-project/AA-608.md) | [S1][Rubric/Gate+Model] H3 đo batch 20-50 tour → H2 nới gate + quyết haiku↔sonnet | Done | 2026-09-17 | — |
+| [AA-609](no-project/AA-609.md) | [Curation] Gỡ "star" no-op (dead) khỏi UI + backend | Done | 2026-09-17 | — |
 | [AA-61](no-project/AA-61.md) | [ACP-RELIABILITY] DLQ + checkpoint janitor + S3 mirror + cost caps + stage retry API | Done | 2026-05-18 | — |
+| [AA-610](no-project/AA-610.md) | [Enhancement] Nâng cấp score ranking atom/segment theo rank-sum 4 chiều (mô hình Ms.Thư) | Done | 2026-09-21 | — |
+| [AA-611](no-project/AA-611.md) | [Cleanup] Gỡ hẳn s1-from-atom (route + s1_from_atom.py + eval) | Done | 2026-09-17 | — |
+| [AA-612](no-project/AA-612.md) | [Tenant sync] Fix bug T2 brand fetch (làm luôn) + điều tra T7-T11 đối chiếu Ms.Thư | Done | 2026-09-19 | — |
+| [AA-613](no-project/AA-613.md) | [Social tenant][Sub1-BE] Gate severity + metrics table + dọn leak /pieces + held→approved cho tenant + fix blog publish MD→HTML + export/publish audit | Done | 2026-09-19 | — |
+| [AA-614](no-project/AA-614.md) | [Social tenant][Sub2-FE tenant] My Content phẳng (ẩn gate/held) + khóa copy màn hình (chừa ô edit) + publish/export rõ | Done | 2026-09-19 | — |
+| [AA-615](no-project/AA-615.md) | [Social tenant][Sub3-FE admin] Monitor telemetry gate/severity/retry/publish theo tenant/kênh (mở rộng run-health/platform-stats) | Done | 2026-09-19 | — |
 | [AA-616](no-project/AA-616.md) | [EPIC] Giám sát chi phí LLM/DFS + tối ưu model/batch từng stage | Done | 2026-10-09 | — |
 | [AA-617](no-project/AA-617.md) | [Sub A][BE] LLM instrumentation — thêm account/fallback/provider vào llm_call_log + thread satellite_account | Done | 2026-09-18 | — |
 | [AA-618](no-project/AA-618.md) | [Sub B][BE] DFS/DataForSEO usage logging — bảng dfs_call_log (cost/cache_hit/live) tại điểm gọi | Done | 2026-09-18 | — |
@@ -559,8 +530,22 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-622](no-project/AA-622.md) | [Sub E][FE+BE] UI admin "External Spend" thống nhất — LLM theo account/model/stage/fallback + DFS + reconcile Cost Explorer | Done | 2026-09-18 | — |
 | [AA-623](no-project/AA-623.md) | [Sub F][BE+INFRA] AWS Cost Explorer reconcile — đối chiếu hóa đơn Bedrock/AWS thật với cost tính từ token | Done | 2026-09-23 | — |
 | [AA-624](no-project/AA-624.md) | [BLOCKER] Bedrock Batch chưa enable trên acc3 (AWS case 178979743800653) + DFS hết tiền — chặn AA-621/606/G4/G5 | Canceled | 2026-10-12 | — |
+| [AA-625](no-project/AA-625.md) | [DFS][COST] Nâng TTL cache SEO 24h → 7 ngày (giảm chi phí DataForSEO khi rerun) | Done | 2026-09-19 | — |
+| [AA-626](no-project/AA-626.md) | [UI] Review Queue làm lại (bảng + expand + dismiss version fail) + Master Content thêm cột version/link dismiss | Done | 2026-09-19 | — |
+| [AA-627](no-project/AA-627.md) | [DFS][Ops] Cảnh báo số dư DataForSEO thấp (đọc balance 1 lần/ngày, alert dưới ngưỡng) — OpenAI để platform tự quản | Done | 2026-09-19 | — |
+| [AA-629](no-project/AA-629.md) | [BUG] Tenant market ngoài 6 whitelist bị silent-fallback về US (đọc nhầm dữ liệu, không lỗi) | Done | 2026-09-22 | — |
 | [AA-63](no-project/AA-63.md) | [ACP-PRODUCT] Brand brief reuse + admin onboarding + GDPR off-boarding + run comparison | Done | 2026-05-21 | — |
+| [AA-630](no-project/AA-630.md) | [TECH DEBT] questions_count cache (AA-610) never invalidated when search_demand/PAA data changes | Done | 2026-09-22 | — |
+| [AA-631](no-project/AA-631.md) | [Enhancement] Debate stage for Slate — contested metric + brand-fit filter before tenant sees candidates | Done | 2026-09-22 | — |
+| [AA-632](no-project/AA-632.md) | [Debate follow-up] Extend "not already on slate" place de-dup across Channels | Done | 2026-09-23 | — |
+| [AA-633](no-project/AA-633.md) | [Pre-G4] Sweep admin UI for dead-route calls before rerun (found via Trust Ramp 404) | Done | 2026-09-23 | — |
 | [AA-635](no-project/AA-635.md) | [BE] llm_call_log under-reports Bedrock spend vs AWS bill (acc1 ~99% missing, acc3 ~20%) | Done | 2026-09-24 | — |
+| [AA-636](no-project/AA-636.md) | [Tenant Portal] Trust fixes: real quota reset date, working bell/search, hide internal cost & jargon, page headers | Done | 2026-09-25 | — |
+| [AA-637](no-project/AA-637.md) | [Tenant Portal] Live writing progress: stream steps + text while a tour / social post is being written | Done | 2026-09-25 | — |
+| [AA-638](no-project/AA-638.md) | [Tenant Portal] Product polish: onboarding checklist, skeleton loading, notifications, ⌘K palette, usage chart | Done | 2026-09-25 | — |
+| [AA-639](no-project/AA-639.md) | [T2 pipeline] Tour rewrite needs 3+ full revisions before passing checks — find why the first draft fails | Done | 2026-09-25 | — |
+| [AA-640](no-project/AA-640.md) | [Billing] One source for plan tour quota (membership_plans); over-quota rewrites allowed + billed as overage | Done | 2026-09-25 | — |
+| [AA-641](no-project/AA-641.md) | [T2 pipeline] Stop flag_fix from creating new hard failures: deterministic seo_meta fit + forbidden-word guard | Done | 2026-10-07 | — |
 | [AA-643](no-project/AA-643.md) | [EVAL] Jev (TypeSafe) offline eval on real CIS data — F8, T3 grounding, A3 keyword/PAA gates | Duplicate | 2026-09-29 | — |
 | [AA-644](no-project/AA-644.md) | [EVAL] GPT-4.1 → GPT-5.6 Luna on Bedrock acc3 for judges (s1_judge, brand audit, Debate, T10 F8/F9) — A/B then staged switch | Duplicate | 2026-10-10 | — |
 | [AA-646](no-project/AA-646.md) | [P0][BUG] DFS research runs platform-wide after every tenant rewrite — scope it and make it admin-triggered | Done | 2026-09-28 | — |
@@ -568,6 +553,12 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-648](no-project/AA-648.md) | [P0] DFS batching is ineffective (~4.5 keywords per paid task) — two-phase research with real bulk tasks + Standard queue mode | Done | 2026-09-28 | — |
 | [AA-649](no-project/AA-649.md) | [P0] Cost guard — DB-configured budgets for DFS / LLM / Jev per run and per day, hard stop, pre-run estimate | Done | 2026-09-28 | — |
 | [AA-65](no-project/AA-65.md) | T-05: AWS DB Setup — DEV RDS 19-table schema migration | Canceled | 2026-08-21 | — |
+| [AA-650](no-project/AA-650.md) | [P1] Durable job runner — Postgres queue + worker ECS service (replaces in-process asyncio tasks and the Bedrock Batch dependency) | Done | 2026-09-28 | — |
+| [AA-651](no-project/AA-651.md) | [P1][INFRA] Worker ECS service for the job runner (AA-CIS-Infra) | Done | 2026-10-05 | — |
+| [AA-652](no-project/AA-652.md) | [P1] Move T2 rewrite, T9 write, research and A3 atomize onto jobs; job-based status in the portal (fixes stuck "Writing…") | Done | 2026-09-28 | — |
+| [AA-653](no-project/AA-653.md) | [P2] A/T flow sync audit + clean-rerun runbook (Bhutan pilot wave, Jev in shadow) | Done | 2026-10-08 | — |
+| [AA-654](no-project/AA-654.md) | [DOCS] English README + complete CONTEXT.md for every repo; translate root docs; refresh App .claude/CLAUDE.md | Done | 2026-10-11 | — |
+| [AA-656](no-project/AA-656.md) | [SEC] Staff auth hardening — real JWT for the content role, BFF proxy coverage, single role model across CIS and AA-Booking | Done | 2026-10-11 | — |
 | [AA-657](no-project/AA-657.md) | [INFRA] acc3 invoker IAM — allow Sonnet 5, Opus 5.5, GPT-5.6 Luna, GPT-6 Astra (inference profiles + foundation ARNs) | Done | 2026-09-28 | — |
 | [AA-658](no-project/AA-658.md) | [Gateway P0] Bedrock Converse provider + model catalog table (single source for admin dropdowns and pricing) | Done | 2026-09-28 | — |
 | [AA-659](no-project/AA-659.md) | [Gateway P1] Stage routing for every call site + acc3-first fallback chain + shadow model | Done | 2026-09-28 | — |
@@ -575,15 +566,28 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-660](no-project/AA-660.md) | [Gateway P2] Jev `decide()` seam + shared.decision_log + cost logging (shadow mode first) | Done | 2026-09-29 | — |
 | [AA-661](no-project/AA-661.md) | [RESEARCH] Jev confidence thresholds — when may Jev block content? Calibration study + 3-zone policy | Done | 2026-09-29 | — |
 | [AA-67](no-project/AA-67.md) | T-09: CIS→AAA sync job (6h) + Mobile API contract (Sanctum) | Canceled | 2026-08-21 | — |
+| [AA-677](no-project/AA-677.md) | [AAA] ERD v2 — re-evaluate the Quanskill ERD and redesign it for the ecosystem (schema booking.* on acc2 RDS) | Done | 2026-10-11 | — |
 | [AA-68](no-project/AA-68.md) | T-10: Trip Case lifecycle — versioning, HITL approval, wishlist-to-trip | Canceled | 2026-08-21 | — |
+| [AA-684](no-project/AA-684.md) | [DB] Schema ownership map + migration cleanup across repos (shared RDS) | Done | 2026-10-11 | — |
 | [AA-685](no-project/AA-685.md) | [Gateway P1b] Move the 5 unlogged model call sites + TripPlanner behind the gateway (cost log for every call) | Done | 2026-09-28 | — |
 | [AA-686](no-project/AA-686.md) | [Gateway P1c] Admin UI — edit stage routes (fallback chain, shadow model + sample %), catalog view, shadow A/B report | Done | 2026-10-09 | — |
 | [AA-69](no-project/AA-69.md) | T-12: Payments & invoices — Stripe/Xendit integration | Canceled | 2026-08-21 | — |
 | [AA-7](no-project/AA-7.md) | Legacy image migration → S3 + CloudFront CDN | Canceled | 2026-08-21 | — |
 | [AA-70](no-project/AA-70.md) | T-14: Flutter app integration + full UAT (Ms. Thu sign-off) | Canceled | 2026-08-21 | — |
+| [AA-702](no-project/AA-702.md) | [Admin UI audit] Fix broken notifications list + inconsistent counts/costs before the platform rerun | Done | 2026-09-30 | — |
+| [AA-711](no-project/AA-711.md) | [BUG][Jobs] Draining ECS task keeps claiming jobs after a deploy — runs them on the old code | Done | 2026-10-01 | — |
 | [AA-715](no-project/AA-715.md) | [OPS] GitHub Actions "Ops" workflow — AWS status/logs/read queries/migrations/scripts from cloud Claude sessions | Canceled | 2026-10-03 | — |
+| [AA-723](no-project/AA-723.md) | [P1] Move ALL remaining in-process API background tasks onto the worker (shared.job) — S1 rewrite, revalidate, recompute; survive deploys + show on Jobs | Done | 2026-10-06 | — |
+| [AA-724](no-project/AA-724.md) | [S1 writer] Cycle/bike tours fail brand-fit — writer emits hype/persona tone + forbidden words, regenerate can't fix | Done | 2026-10-07 | — |
+| [AA-725](no-project/AA-725.md) | [CI] Deploy guard on shared.job + post-deploy live smoke verify + api/worker same image SHA | Done | 2026-10-07 | — |
 | [AA-73](no-project/AA-73.md) | Setup ADR tracking: viết 7 ADR backfill từ các quyết định đã đưa ra | Canceled | 2026-08-21 | — |
+| [AA-730](no-project/AA-730.md) | [SEC] Narrow IAM role for agent sessions (Kiro / Claude Code); prod migrations only via workflow | Done | 2026-10-11 | — |
+| [AA-733](no-project/AA-733.md) | [Docs][Skills] Restructure AA skills — slim SKILL.md + references, delete superseded content, 6 workflow skills, one source in repo skill/ | Done | 2026-10-07 | — |
+| [AA-734](no-project/AA-734.md) | [Jobs] atom_ranking versioned-swap so recompute never dips the live count (ADR 0003 nac 2) | Done | 2026-10-06 | — |
+| [AA-735](no-project/AA-735.md) | [Jobs] Job-model modularization follow-ups (ADR 0003 nac 3-6) | Done | 2026-10-09 | — |
 | [AA-75](no-project/AA-75.md) | Cert: DVA-C02 prep — Q3 2026 (aligned P4-S5/S6 + ACP) | Canceled | 2026-08-21 | — |
+| [AA-750](no-project/AA-750.md) | [Infra] Audit the 7 CIS Lambdas with 0 invocations in 30 days — confirm still needed vs obsolete, then retire the obsolete ones safely | Done | 2026-10-11 | — |
+| [AA-755](no-project/AA-755.md) | [Jobs] Jobs page redesign — server-side pagination, sort and filters on every column, sticky header/toolbar, tabs | Done | 2026-10-10 | — |
 | [AA-86](no-project/AA-86.md) | [ACP-v1.2] Audit S1 quality scoring — why 10.0 score but tenant rejects tours | Done | 2026-05-19 | — |
 | [AA-87](no-project/AA-87.md) | [ACP-v1.2] Fix S1 brand injection — system_prompt not applied to LLM rewrite call | Done | 2026-05-19 | — |
 | [AA-88](no-project/AA-88.md) | [ACP-v1.2] Competitor URL management — table + UI for B2B tenant self-input | Done | 2026-05-19 | — |
@@ -600,6 +604,9 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1066](partner-crm-aa-partner/AA-1066.md) | [CRM retail] Price per traveller type, season / group / early-booking rules, discount with owner approval | Done | 2026-11-10 | Partner CRM — AA-Partner |
 | [AA-1067](partner-crm-aa-partner/AA-1067.md) | [CRM retail] Payment schedule with instalments, reminders, traveller cancellation policy and charge / refund | Done | 2026-11-10 | Partner CRM — AA-Partner |
 | [AA-1068](partner-crm-aa-partner/AA-1068.md) | [CRM finance] Profit per trip, 'Bookings with AA' cost page, supplier bills vs plan, profit reports, group departure P&L | Done | 2026-11-10 | Partner CRM — AA-Partner |
+| [AA-1071](partner-crm-aa-partner/AA-1071.md) | [CRM partners] Sub-agent / referral commission payable and a sub-agent portal | Done | 2026-11-11 | Partner CRM — AA-Partner |
+| [AA-1072](partner-crm-aa-partner/AA-1072.md) | [CRM retail] 'Book now' on the agency's public tour page and online deposit / instalment payment | Done | 2026-11-11 | Partner CRM — AA-Partner |
+| [AA-1085](partner-crm-aa-partner/AA-1085.md) | [CRM security] Legal-hold guard on cascade deletes reads holds across agencies (RLS is bypassed in FK cascades) | Done | 2026-11-11 | Partner CRM — AA-Partner |
 | [AA-928](partner-crm-aa-partner/AA-928.md) | [CRM W0] CRM-01a ADRs + contracts + spec errata | Done | 2026-10-22 | Partner CRM — AA-Partner |
 | [AA-929](partner-crm-aa-partner/AA-929.md) | [CRM W0] CRM-01b Data-standards bump | Done | 2026-10-22 | Partner CRM — AA-Partner |
 | [AA-930](partner-crm-aa-partner/AA-930.md) | [CRM W0] CRM-02 Readiness checks (read-only) | Done | 2026-10-22 | Partner CRM — AA-Partner |
@@ -652,8 +659,12 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1030](tripplanner-aa-booking/AA-1030.md) | [Pricing] Agency price tiers: B2B margin per partner tier or contract rate card, suggested retail markup in the CRM | Done | 2026-11-05 | TripPlanner & AA-Booking |
 | [AA-1037](tripplanner-aa-booking/AA-1037.md) | [Booking] R4 Booking B2B only: drop the B2C side, every invoice issued from Booking (SaaS + settlement) | Done | 2026-11-05 | TripPlanner & AA-Booking |
 | [AA-1038](tripplanner-aa-booking/AA-1038.md) | [TripPlanner] R5 multi-tenant white-label TripPlanner: tenant_id + RLS, per-tenant brand, leads to the tenant CRM, frontend on ECS (Dev) | Done | 2026-11-10 | TripPlanner & AA-Booking |
+| [AA-1041](tripplanner-aa-booking/AA-1041.md) | [TripPlanner] R7 TripPlanner UX: place photos, activity icons, map/itinerary sync, mobile reorder, planning chat bound to AA tours | Done | 2026-11-11 | TripPlanner & AA-Booking |
 | [AA-1046](tripplanner-aa-booking/AA-1046.md) | [Booking] R4b B2C drop and VAT e-invoice provider API | Done | 2026-11-10 | TripPlanner & AA-Booking |
 | [AA-1065](tripplanner-aa-booking/AA-1065.md) | [Research] Odoo tour & travel plugin (Modvanta mdv_tour_travel 19.0): feature and data model comparison with Booking, CRM and CIS | Done | 2026-11-10 | TripPlanner & AA-Booking |
+| [AA-1073](tripplanner-aa-booking/AA-1073.md) | [Booking departures] Minimum to operate, cutoff, recurring generator, agency allotments, departure board, ops sheet, departure fees, price adjustments | Done | 2026-11-11 | TripPlanner & AA-Booking |
+| [AA-1074](tripplanner-aa-booking/AA-1074.md) | [Booking finance] FX-normalised costs, departure shared costs, supplier purchase orders, planned vs actual cost, profit per case / departure / agency | Done | 2026-11-11 | TripPlanner & AA-Booking |
+| [AA-1075](tripplanner-aa-booking/AA-1075.md) | [Booking ops] Staff-entered agency bookings, vouchers, manifest and rooming list, cancellation override, child / infant / single net prices, deposit terms | Done | 2026-11-11 | TripPlanner & AA-Booking |
 | [AA-589](tripplanner-aa-booking/AA-589.md) | [EPIC] TripPlanner — Ms.Thư tasks (data cleanup, upload raw, auto-edit, arrival/departure map, suggest next) | Done | 2026-09-16 | TripPlanner & AA-Booking |
 | [AA-590](tripplanner-aa-booking/AA-590.md) | [#5][MAP] Suggest next place theo itinerary — kết hợp taste-similarity + geography | Done | 2026-09-16 | TripPlanner & AA-Booking |
 | [AA-591](tripplanner-aa-booking/AA-591.md) | [#4][MAP] Arrival/departure trên bản đồ — vẽ gateway airport + flight arc fly-in/fly-out | Done | 2026-09-16 | TripPlanner & AA-Booking |

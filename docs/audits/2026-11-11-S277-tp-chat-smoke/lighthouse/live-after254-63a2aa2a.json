@@ -1,0 +1,228 @@
+{
+  "label": "live-after254-63a2aa2a",
+  "base": "https://tripplanner.lumiguides.it.com",
+  "lighthouse": "12.8.2",
+  "preset": "mobile (Lighthouse default: Moto G Power emulation, simulated slow 4G throttling); headless Chrome with software WebGL (SwiftShader) so the Mapbox map can start",
+  "category": "performance",
+  "runs_per_url": 3,
+  "urls": {
+    "/plan?country=Laos": {
+      "url": "https://tripplanner.lumiguides.it.com/plan?country=Laos",
+      "median": {
+        "score": 62,
+        "lcp_ms": 2575,
+        "tbt_ms": 1611,
+        "cls": 0.008,
+        "fcp_ms": 1225,
+        "si_ms": 9065,
+        "transfer_kb": 2256,
+        "script_kb": 568
+      },
+      "runs": [
+        {
+          "run": 0,
+          "warmup": true,
+          "score": 65,
+          "lcp_ms": 2572,
+          "tbt_ms": 1179,
+          "cls": 0.008,
+          "fcp_ms": 1222,
+          "si_ms": 9133,
+          "doc_status": 200,
+          "final_url": "https://tripplanner.lumiguides.it.com/plan?country=Laos",
+          "requests": 93,
+          "transfer_kb": 2255,
+          "script_kb": 568,
+          "mapbox_statuses": [
+            200,
+            204,
+            -1
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        },
+        {
+          "run": 1,
+          "warmup": false,
+          "score": 61,
+          "lcp_ms": 2584,
+          "tbt_ms": 1753,
+          "cls": 0.008,
+          "fcp_ms": 1234,
+          "si_ms": 9030,
+          "doc_status": 200,
+          "final_url": "https://tripplanner.lumiguides.it.com/plan?country=Laos",
+          "requests": 97,
+          "transfer_kb": 2259,
+          "script_kb": 568,
+          "mapbox_statuses": [
+            200,
+            204,
+            -1
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        },
+        {
+          "run": 2,
+          "warmup": false,
+          "score": 68,
+          "lcp_ms": 2575,
+          "tbt_ms": 863,
+          "cls": 0.008,
+          "fcp_ms": 1225,
+          "si_ms": 9065,
+          "doc_status": 200,
+          "final_url": "https://tripplanner.lumiguides.it.com/plan?country=Laos",
+          "requests": 93,
+          "transfer_kb": 2255,
+          "script_kb": 568,
+          "mapbox_statuses": [
+            200,
+            204,
+            -1
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        },
+        {
+          "run": 3,
+          "warmup": false,
+          "score": 62,
+          "lcp_ms": 2574,
+          "tbt_ms": 1611,
+          "cls": 0.008,
+          "fcp_ms": 1224,
+          "si_ms": 9143,
+          "doc_status": 200,
+          "final_url": "https://tripplanner.lumiguides.it.com/plan?country=Laos",
+          "requests": 93,
+          "transfer_kb": 2256,
+          "script_kb": 568,
+          "mapbox_statuses": [
+            200,
+            204,
+            -1
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        }
+      ]
+    },
+    "/plan": {
+      "url": "https://tripplanner.lumiguides.it.com/plan",
+      "median": {
+        "score": 61,
+        "lcp_ms": 2562,
+        "tbt_ms": 2325,
+        "cls": 0.008,
+        "fcp_ms": 1212,
+        "si_ms": 7938,
+        "transfer_kb": 2432,
+        "script_kb": 568
+      },
+      "runs": [
+        {
+          "run": 0,
+          "warmup": true,
+          "score": 64,
+          "lcp_ms": 2561,
+          "tbt_ms": 1456,
+          "cls": 0.008,
+          "fcp_ms": 1211,
+          "si_ms": 8036,
+          "doc_status": 200,
+          "final_url": "https://tripplanner.lumiguides.it.com/plan",
+          "requests": 72,
+          "transfer_kb": 2432,
+          "script_kb": 568,
+          "mapbox_statuses": [
+            200,
+            204
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        },
+        {
+          "run": 1,
+          "warmup": false,
+          "score": 62,
+          "lcp_ms": 2552,
+          "tbt_ms": 1874,
+          "cls": 0.008,
+          "fcp_ms": 1202,
+          "si_ms": 7938,
+          "doc_status": 200,
+          "final_url": "https://tripplanner.lumiguides.it.com/plan",
+          "requests": 72,
+          "transfer_kb": 2432,
+          "script_kb": 568,
+          "mapbox_statuses": [
+            200,
+            204
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        },
+        {
+          "run": 2,
+          "warmup": false,
+          "score": 61,
+          "lcp_ms": 2562,
+          "tbt_ms": 2325,
+          "cls": 0.008,
+          "fcp_ms": 1212,
+          "si_ms": 7925,
+          "doc_status": 200,
+          "final_url": "https://tripplanner.lumiguides.it.com/plan",
+          "requests": 72,
+          "transfer_kb": 2432,
+          "script_kb": 568,
+          "mapbox_statuses": [
+            200,
+            204
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        },
+        {
+          "run": 3,
+          "warmup": false,
+          "score": 61,
+          "lcp_ms": 2563,
+          "tbt_ms": 2338,
+          "cls": 0.008,
+          "fcp_ms": 1213,
+          "si_ms": 8081,
+          "doc_status": 200,
+          "final_url": "https://tripplanner.lumiguides.it.com/plan",
+          "requests": 72,
+          "transfer_kb": 2432,
+          "script_kb": 568,
+          "mapbox_statuses": [
+            200,
+            204
+          ],
+          "runtime_error": null,
+          "lcp_element": "Search experiences — e.g. sunrise trek, street food, temples",
+          "console_errors": 0,
+          "warnings": []
+        }
+      ]
+    }
+  }
+}
