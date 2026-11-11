@@ -1,0 +1,39 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "EventPage",
+  "expect": "valid",
+  "why": "1.8 (AA-1073): the meeting point of a departure changed (ids only: re-read GET /departures), then AA charged the caller a departure fee (fee id, amount and currency, no reason text)",
+  "payload": {
+    "items": [
+      {
+        "event_id": "6f0d2a41-0000-4000-8000-000000001081",
+        "cursor": "bk1.1081",
+        "type": "departure.updated",
+        "occurred_at": "2027-02-10T03:05:00Z",
+        "hold_id": null,
+        "booking_id": null,
+        "line_ref": null,
+        "departure_id": "9f000000-0000-4000-8000-000000001073",
+        "incident_code": null,
+        "decline_code": null,
+        "new_start_time": null,
+        "fee": null
+      },
+      {
+        "event_id": "6f0d2a41-0000-4000-8000-000000001082",
+        "cursor": "bk1.1082",
+        "type": "departure.fee_charged",
+        "occurred_at": "2027-02-12T08:30:00Z",
+        "hold_id": null,
+        "booking_id": null,
+        "line_ref": null,
+        "departure_id": "9f000000-0000-4000-8000-000000001073",
+        "incident_code": null,
+        "decline_code": null,
+        "new_start_time": null,
+        "fee": {"fee_id": "f1000000-0000-4000-8000-000000001073", "amount": "102.00", "currency": "USD"}
+      }
+    ],
+    "next_cursor": "bk1.1082"
+  }
+}

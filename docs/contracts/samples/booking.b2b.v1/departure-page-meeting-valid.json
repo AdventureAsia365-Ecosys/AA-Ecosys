@@ -1,0 +1,44 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "DeparturePage",
+  "expect": "valid",
+  "why": "1.8 (AA-1073): a departure with its meeting point and time set by AA operations, and one without them yet",
+  "payload": {
+    "items": [
+      {
+        "departure_id": "9f000000-0000-4000-8000-000000001073",
+        "tour": {"source_system": "cis", "source_id": "e1000000-0000-4000-8000-000000001073"},
+        "start_date": "2027-03-01",
+        "capacity": 16,
+        "held": 1,
+        "sold": 6,
+        "available": 9,
+        "status": "guaranteed",
+        "auto_confirm": true,
+        "min_to_operate": 6,
+        "seats_to_guarantee": 0,
+        "last_sale_date": "2027-02-25",
+        "allotment": null,
+        "meeting_point": "Lantern Square fountain, north gate",
+        "meeting_time": "07:30"
+      },
+      {
+        "departure_id": "9f000000-0000-4000-8000-000000001074",
+        "tour": {"source_system": "cis", "source_id": "e1000000-0000-4000-8000-000000001073"},
+        "start_date": "2027-03-08",
+        "capacity": 16,
+        "held": 0,
+        "sold": 0,
+        "available": 16,
+        "status": "scheduled",
+        "auto_confirm": false,
+        "min_to_operate": 0,
+        "seats_to_guarantee": null,
+        "last_sale_date": "2027-03-07",
+        "allotment": null,
+        "meeting_point": null,
+        "meeting_time": null
+      }
+    ]
+  }
+}

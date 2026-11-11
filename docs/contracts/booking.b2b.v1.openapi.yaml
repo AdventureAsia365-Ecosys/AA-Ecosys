@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: booking.b2b.v1 (AA-Booking → AA-Partner CRM, B2B products, quotes, holds, bookings, events)
-  version: "1.7"
+  version: "1.8"
   description: >-
     The AA inventory API of the partner CRM spec (§9), owned by AA-Booking (root ADR 0005, 0005a) and called by the
     AA-Partner CRM API server to server (root ADR 0010). Auth: an M2M access token of the aa-m2m pool (root ADR 0006b
@@ -52,6 +52,15 @@ info:
     infant adds the rule's infant price (the quote's line price already holds both). Product.age_bands says which
     ages count as a child or an infant on a tour; TariffItem gains child_price_per_person, infant_price and
     single_supplement_per_person (sell prices from the quote engine, never a net), also as the last three CSV columns.
+    Minor 1.8 (AA-1073, additive; S275 study items bk-16, bk-09, bk-17): Departure gains meeting_point and
+    meeting_time (where and when the group meets on the start date: a public place and a local time; never a
+    traveller's address, never a guide's or staff member's name or contact); event types departure.updated (the meeting
+    point or time changed: re-read GET /departures; to every agency on the departure) and departure.fee_charged (AA
+    charged the calling agency a departure fee: Event.fee carries its id, amount and currency; it is billed on the
+    agency's next settlement invoice, where its line reads as an adjustment described "Departure fee ..."). A quote
+    line on a departure may cost less or more than before when AA set a price adjustment on that departure or the
+    quote is early enough for the early-booking discount (the line price already holds both; price_hash changes). A
+    reader ignores event types it does not know (rule 2 of the contracts README).
   x-aa-contract: booking.b2b.v1
   x-aa-producer: AA-Booking
   x-aa-consumers: [AA-Partner]
@@ -939,6 +948,16 @@ components:
             - $ref: "#/components/schemas/DepartureAllotment"
             - type: "null"
           description: 1.6 (AA-1073). The calling agency's own allotment in force on the departure; null without one.
+        meeting_point:
+          type: [string, "null"]
+          maxLength: 300
+          description: >-
+            1.8 (AA-1073). Where the group meets on the start date (a public place such as a hotel lobby or a station);
+            null until AA sets it. Never a traveller's address. A change emits departure.updated.
+        meeting_time:
+          type: [string, "null"]
+          pattern: "^([01]\\d|2[0-3]):[0-5]\\d$"
+          description: 1.8 (AA-1073). The meeting time, local time of the meeting point (HH:MM, 24 h); null until set.
     DepartureAllotment:
       type: object
       additionalProperties: false
@@ -1320,12 +1339,14 @@ components:
           enum: [hold.expired, hold.extended, line.confirmed, line.declined, booking.cancelled, departure.guaranteed,
                  departure.cancelled, departure.incident, departure.incident_cleared, departure.time_change,
                  departure.at_risk, allotment.released, booking.created_by_aa, booking.line_reduced,
-                 booking.fee_changed]
+                 booking.fee_changed, departure.updated, departure.fee_charged]
           description: >-
             1.6 (AA-1073) adds departure.at_risk (to every agency on the departure) and allotment.released (to the
             agency whose allotment was released); both name the departure_id. 1.7 (AA-1075) adds
             booking.created_by_aa (AA staff entered a booking for the agency; booking_id and hold_id), booking.line_reduced
-            (line_ref names the line) and booking.fee_changed (the cancellation fee was lowered or waived).
+            (line_ref names the line) and booking.fee_changed (the cancellation fee was lowered or waived). 1.8 (AA-1073)
+            adds departure.updated (the meeting point or time changed; departure_id; to every agency on the departure)
+            and departure.fee_charged (AA charged the calling agency a departure fee; departure_id and fee).
         occurred_at: {type: string, format: date-time}
         hold_id: {type: [string, "null"], maxLength: 64}
         booking_id: {type: [string, "null"], maxLength: 64}
@@ -1342,6 +1363,22 @@ components:
             1.1. For line.declined: why AA declined an on-request line (the CRM pre-selects the Lost reason "AA
             on-request declined"); null otherwise.
         new_start_time: {type: [string, "null"], format: date-time}
+        fee:
+          oneOf:
+            - $ref: "#/components/schemas/DepartureFeeCharge"
+            - type: "null"
+          description: 1.8 (AA-1073). The fee of departure.fee_charged; null on every other event.
+    DepartureFeeCharge:
+      type: object
+      additionalProperties: false
+      required: [fee_id, amount, currency]
+      description: >-
+        1.8 (AA-1073). A departure fee AA charged the calling agency (the departure's minimum not reached, or allotted
+        seats kept past their release date). Ids and money only: no reason text, no staff name.
+      properties:
+        fee_id: {type: string, maxLength: 64}
+        amount: {type: string, pattern: "^\\d+(\\.\\d{1,2})?$"}
+        currency: {type: string, pattern: "^[A-Z]{3}$"}
     EventPage:
       type: object
       additionalProperties: false
@@ -1553,6 +1590,7 @@ components:
       description: >-
         1.5 (AA-1037). saas lines: subscription, extra_seats, adjustment; settlement lines: deposit, balance, full,
         cancellation_fee (each from one booking: hold_id and booking_id), adjustment. An adjustment may be negative.
+        Since 1.8 (AA-1073) a departure fee AA charged the agency is an adjustment line described "Departure fee ...".
       required: [line_no, line_role, description, quantity, unit_price, amount, hold_id, booking_id, voided]
       properties:
         line_no: {type: integer, minimum: 1}
