@@ -674,7 +674,8 @@ mailbox or Google account". That is too strong.
 - **Created outside the CIS directory,** like A10a / A10c: AA-CIS-Infra `tools/identity/crm_dev_identity.py
   e2e-booking-writers --apply` (AdminCreateUser SUPPRESS, `email_verified=true`, no password, exact groups; refuses a
   user in any other group). No secret: sign-in is the email code. The first sign-in creates each one's
-  `booking.staff_users` row.
+  `booking.staff_users` row. The CIS staff directory reconcile (AA-816) lists each one under `known_e2e_exceptions`,
+  not as drift, on Dev only and only with its exact group, as it does A10a / A10c.
 - **Exposure.** Code readers: the MFA admin role and whoever controls mail for `e2e-mail.lumiguides.it.com` (A10's
   domain dependency). What a code yields: the role's reads of Dev Booking data and at most the writes above, on
   synthetic agencies only. A CIS admin who marks a real tenant `is_canary` widens the scope (the A10b-1 trust).
@@ -685,8 +686,10 @@ mailbox or Google account". That is too strong.
   `BOOKING_E2E_WRITERS_DRY_RUN=1`; a unit test keeps every workflow from setting the switch). Never CI.
 - **Removal (AA-1054, with A10 / A10a / A10b / A10c / A10d):** delete the three Cognito users; drop the trigger entries,
   the mailbox recipients and the `e2e-booking-writers` command (AA-CIS-Infra), Terraform Apply; drop
-  `app/auth/e2e_staff.py` and its call (AA-Booking); deactivate the three staff rows; a closing line here. Faster
-  stop on Dev: disable a user, or clear `is_canary` on the synthetic tenants.
+  `app/auth/e2e_staff.py` and its call (AA-Booking); drop the three A10e entries of the CIS staff directory reconcile
+  (`KNOWN_E2E_STAFF` in `services/staff_reconcile.py` and their constants in `api/core/e2e_staff.py`, AA-CIS-App);
+  deactivate the three staff rows; a closing line here. Faster stop on Dev: disable a user, or clear `is_canary` on
+  the synthetic tenants.
 
 ### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)
 
