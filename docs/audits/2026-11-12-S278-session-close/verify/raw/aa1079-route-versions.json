@@ -1,0 +1,77 @@
+{
+  "errors": [],
+  "signed_in": "/admin/overview",
+  "versions_status": 200,
+  "versions": [
+    {
+      "version": 8,
+      "preset": "serving_first",
+      "note": "AA-1079 S277: serving model first on t2_judge / t7_debate_judge / t10_judge while the acc3 rungs refuse",
+      "by": "admin:claude-code-s277",
+      "at": "2026-11-11T03:33:59.454572+00:00",
+      "keys": [
+        "version",
+        "created_at",
+        "created_by",
+        "action",
+        "preset",
+        "reverted_from",
+        "note",
+        "diff"
+      ]
+    },
+    {
+      "version": 7,
+      "preset": null,
+      "note": "CIS 383 (S271 W0, tech lead D7): break-glass, uncalibrated rungs removed: GPT-6 Luna on the OpenAI API off every writer route, Nova Lite off every judge route a",
+      "by": "migration-383-aa900",
+      "at": "2026-11-06T13:48:40.663715+00:00",
+      "keys": [
+        "version",
+        "created_at",
+        "created_by",
+        "action",
+        "preset",
+        "reverted_from",
+        "note",
+        "diff"
+      ]
+    },
+    {
+      "version": 6,
+      "preset": "prefer_anthropic_api",
+      "note": "S269: tech lead asked to prefer the Anthropic API for now (anthropic-direct key plugged in 05/11)",
+      "by": "admin:c26f6938-2ae4-4977-b5e4-c185ff24981e",
+      "at": "2026-11-05T06:26:25.490646+00:00",
+      "keys": [
+        "version",
+        "created_at",
+        "created_by",
+        "action",
+        "preset",
+        "reverted_from",
+        "note",
+        "diff"
+      ]
+    },
+    {
+      "version": 5,
+      "preset": null,
+      "note": "CIS 376 (S269): Anthropic API deployments for every Claude model of the key, chains fitted to the six attempts per request.",
+      "by": "migration-376-aa1042",
+      "at": "2026-11-05T06:24:08.650323+00:00",
+      "keys": [
+        "version",
+        "created_at",
+        "created_by",
+        "action",
+        "preset",
+        "reverted_from",
+        "note",
+        "diff"
+      ]
+    }
+  ],
+  "top_text_light": "AI & spend\n/\nAI gateway\nAI gateway\nEvery paid AI and data provider in one place: is it answering, what it cost, how close it is to its cap, which model each stage uses, and every spending cap. The numbers come from our own logs; opening the page calls no provider. \nNew here? Read the Guide\nRefresh\nProviders\nRouting\nRoute control\nModels & trials\nBudgets\nCalls\nBatches\nTrace\nGuide\nRoute control\nChange which models each stage uses and in which order, with no deploy. Every change is checked by the server and previewed before it is saved, saved as a new version with who and when, and can be undone in one click. The gateway picks a change up within about 20 seconds.\nVERSION 8\nRead only: your role can see the routes but not change them.\nOrder mode\nSame model first: every provider of a model, then the next model\nAWS first: every AWS model of the chain, then the vendor APIs\nHow the gateway walks a",
+  "top_text_dark": "AI & spend\n/\nAI gateway\nAI gateway\nEvery paid AI and data provider in one place: is it answering, what it cost, how close it is to its cap, which model each stage uses, and every spending cap. The numbers come from our own logs; opening the page calls no provider. \nNew here? Read the Guide\nRefresh\nProviders\nRouting\nRoute control\nModels & trials\nBudgets\nCalls\nBatches\nTrace\nGuide\nRoute control\nChange which models each stage uses and in which order, with no deploy. Every change is checked by the server and previewed before it is saved, saved as a new version with who and when, and can be undone in one click. The gateway picks a change up within about 20 seconds.\nVERSION 8\nRead only: your role can see the routes but not change them.\nOrder mode\nSame model first: every provider of a model, then the next model\nAWS first: every AWS model of the chain, then the vendor APIs\nHow the gateway walks a"
+}

@@ -1,8 +1,8 @@
 {
- "updated": "2026-11-11",
- "synced_at": "2026-11-11T14:05Z",
- "session": "S277",
- "next_session": "S278",
+ "updated": "2026-11-12",
+ "synced_at": "2026-11-12T11:45Z",
+ "session": "S278",
+ "next_session": "S279",
  "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
  "projects": {
   "data": "Data Platform",
@@ -918,6 +918,41 @@
   }
  ],
  "log": [
+  {
+   "session": "S278",
+   "date": "12/11/2026",
+   "closed": [
+    "AA-960",
+    "AA-1049",
+    "AA-1069",
+    "AA-1080",
+    "AA-1081",
+    "AA-1084"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-1086",
+    "AA-1087",
+    "AA-1088",
+    "AA-1089",
+    "AA-1090",
+    "AA-1091",
+    "AA-1092",
+    "AA-1093",
+    "AA-1094",
+    "AA-1095"
+   ],
+   "reopened": [
+    "AA-1088"
+   ],
+   "notes": [
+    "Done có bằng chứng live: AA-1049 (scope), AA-1084, AA-1080, AA-1069, AA-960 (tags 8/8), AA-1081 (slate 12,3 s, 0 lượt judge).",
+    "Công cụ giá Booking: workbench, Pricing › Policy (bk-050/051), phiên bản giá + lịch mùa bk-054/055 đã áp; code #242 còn 1 test tích hợp đỏ.",
+    "AA-1095: Bedrock chạy từ acc1 (13/13 model ok), route v10 (Claude: Anthropic API → acc1 → acc3; GPT: acc1 → acc3 → OpenAI API) + v11 (judge GPT-6 Luna trên acc1).",
+    "AA-1092: khoá assertion TripPlanner cũ bị từ chối, bind tenant B2B + bk-053, trần Book now crm-062; chờ quyết chi phí rủi ro 2–3.",
+    "Bị chặn → S279: ecsx local mode (Booking/CRM) cho bước live AA-1087/1088/1070; tenant giả lập kind=demo cho AA-1094; R1 chưa instrument nào đạt (AA-1048)."
+   ]
+  },
   {
    "session": "S277",
    "date": "11/11/2026",
@@ -2155,18 +2190,6 @@
    "needs": "Tech lead: hướng dùng chung engine sau R7 thay T13 + đồng ý chi phí Mapbox"
   },
   {
-   "id": "AA-960",
-   "title": "[CRM W6] CRM-29b Tags, system tags, coverage, ready-to-travel",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "CRM-after-R3",
-   "session": "after S280",
-   "size": "M",
-   "next": "CRM · tạm dừng (TL-15); mở lại sau R3 trong app đã gộp, kiểm theo feature key",
-   "needs": ""
-  },
-  {
    "id": "AA-963",
    "title": "[CRM W6] CRM-32 Search + library",
    "status": "Backlog",
@@ -2257,45 +2280,33 @@
    "priority": "High",
    "project": "core",
    "milestone": "later",
-   "session": "S276",
-   "size": "",
-   "next": "M2a · S276: R1 thiếu vi phạm (max n_pos 9 < 20) → thêm vi phạm từ bài AA-741 phase 2 hoặc đổi thanh đo ADR 0020",
-   "needs": "Tech lead: phân xử hàng đợi golden_claim (Writing memory)"
-  },
-  {
-   "id": "AA-1049",
-   "title": "[Quality W3] Rewire the T9, S1 and T2 control planes in place (code-composed fields, local source-aware repair, one exit)",
-   "status": "In Review",
-   "priority": "High",
-   "project": "core",
-   "milestone": "later",
    "session": "S278",
    "size": "",
-   "next": "M2a — S278: hướng A đã bỏ (S277, 2 lần thử); chốt phần còn lại của W3 S1 hoặc đóng Done-with-scope",
-   "needs": ""
+   "next": "M2a — S278: đếm lại $0 có t2@2; gom class trước (tech lead chốt), R1 trần 2 USD",
+   "needs": "Tech lead: phân xử hàng đợi golden_claim (Writing memory)"
   },
   {
    "id": "AA-1050",
    "title": "[Quality W4] Promote the calibrated claim instrument: shadow first, then holds only for measured classes",
-   "status": "In Review",
+   "status": "Backlog",
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "S276",
+   "session": "after S280",
    "size": "",
-   "next": "M2a · chờ W2 đo từng class (enforce OFF, tech lead chốt S275)",
+   "next": "M2a — Backlog S278 (trần WIP): chờ AA-1048 đo đạt một class (gộp)",
    "needs": "Tech lead hoặc panel: nhãn ~30 ca bất đồng (đúng ≥ 80% mới có class enforce)"
   },
   {
    "id": "AA-1051",
    "title": "[Quality W5] Paid writer proofs on small fixed samples (eval null run, T9, S1, T2) under the D12 caps",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "S276",
+   "session": "S278",
    "size": "",
-   "next": "M2a · dời tới khi W2 R1 đạt + W4 xong (tech lead chốt S275)",
+   "next": "M2a — S278 kéo lên: phần code $0 (split DEV/CAL/GATE, pre-registration, power check, runner DRY); lượt trả phí chờ R1 + W4 (lane l7)",
    "needs": ""
   },
   {
@@ -2324,18 +2335,6 @@
    "due": "2026-11-29"
   },
   {
-   "id": "AA-1069",
-   "title": "[CRM ops] Agency service catalogue and supplier booking requests grouped per supplier",
-   "status": "In Review",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "M-OD",
-   "session": "S278",
-   "size": "M",
-   "next": "CRM điều hành — S278: kiểm live từng mục rồi đóng",
-   "needs": "cần xếp slot"
-  },
-  {
    "id": "AA-1070",
    "title": "[CRM ops] Departure roster, vouchers, server PDFs, rooming list, passport check, visa tracker, inclusions, AA-cancelled departure flow",
    "status": "In Review",
@@ -2344,7 +2343,7 @@
    "milestone": "M-OD",
    "session": "S278",
    "size": "L",
-   "next": "M-OD — S278: kiểm live từng mục rồi đóng",
+   "next": "M-OD — S278: kiểm live 6 mục + làm crm-35 (crm-059) và crm-13 trong phiên (tech lead chốt)",
    "needs": "cần xếp slot"
   },
   {
@@ -2356,7 +2355,7 @@
    "milestone": "M2a",
    "session": "S278",
    "size": "",
-   "next": "M2a — S278: đóng sau 1 lượt blog audit T-series dưới sàn 600 (length holds phải hết)",
+   "next": "M2a — S278: remeasure $0 sau sàn 600; chưa có bài thì blog nhỏ (trong trần 3,5 USD) → Done-with-scope",
    "needs": ""
   },
   {
@@ -2368,31 +2367,7 @@
    "milestone": "M2a",
    "session": "S278",
    "size": "",
-   "next": "M2a — S278: đo brand-fit + 0 lượt từ chối ở stage judge khi có traffic",
-   "needs": ""
-  },
-  {
-   "id": "AA-1080",
-   "title": "[T0/T2 brand and market] Brief import fills the brand pack; unsupported markets reported, not dropped; T2 keywords follow the agency's markets",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M2a",
-   "session": "S278",
-   "size": "",
-   "next": "M2a — S278: bằng chứng UI (tab Batches, lý do không có chủ đề, ghi chú thị trường Atlas)",
-   "needs": ""
-  },
-  {
-   "id": "AA-1081",
-   "title": "[T7 Blog topics] No-topic reason shown to the agency, at least one topic per adopted tour with a free candidate, incremental slate",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "core",
-   "milestone": "M2a",
-   "session": "S278",
-   "size": "",
-   "next": "M2a — S278: đọc blog_coverage ở t7_slate kế tiếp + ảnh Content studio",
+   "next": "M2a — S278: 10 dòng circuit-open, nhãn brand-fit panel + kappa, ảnh Route control",
    "needs": ""
   },
   {
@@ -2408,16 +2383,124 @@
    "needs": "duyệt chi phí"
   },
   {
-   "id": "AA-1084",
-   "title": "[CI/CD] Ship speed: balanced CIS unit shards (fresh durations, 4 shards) and no stacked code branches after a migration squash",
-   "status": "In Progress",
+   "id": "AA-1086",
+   "title": "[Pilot] Synthetic pilot rehearsal: onboarding runbook and one tenant end to end across every app",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "data",
+   "milestone": "M5",
+   "session": "S279",
+   "size": "",
+   "next": "Pilot — S279: runbook + diễn tập 13 bước trên pilot-rehearsal-01 (sau khi xong AA-1087/1088)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1087",
+   "title": "[Identity] Dev-only write-capable E2E staff identities for CIS admin and Booking staff (pilot rehearsal)",
+   "status": "In Review",
    "priority": "High",
    "project": "data",
    "milestone": "M5",
    "session": "S278",
    "size": "",
-   "next": "CI/CD — S278: kiểm trung vị 2 ngày (13/11) + lượt chạy bot durations đầu tiên",
-   "needs": "cần xếp slot"
+   "next": "Identity — S278: danh tính E2E staff ghi được (Dev, synthetic) cho CIS admin + Booking (tech lead chốt B2: làm trước)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1088",
+   "title": "[Pre-pilot] Quick fixes from the S278 system audit (held blog publish, voucher end date, preview brief, legal page)",
+   "status": "In Review",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M5",
+   "session": "S278",
+   "size": "",
+   "next": "Pre-pilot — S278: sửa nhanh M3 (bài held đăng được), M13 (voucher end_date), M6 (preview lộ brief), M9 (trang pháp lý)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1089",
+   "title": "[CRM] Small add-ons from the Odoo tour and travel study (ranks 45–53)",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "CRM-after-R3",
+   "session": "after S280",
+   "size": "",
+   "next": "CRM — add-on nhỏ từ nghiên cứu Odoo hạng 45–53 (D13 NEW-C)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1090",
+   "title": "[TripPlanner R8] Tenant custom domain for the agency's TripPlanner (CloudFront + ACM)",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "tpbk",
+   "milestone": "later",
+   "session": "after S280",
+   "size": "",
+   "next": "R8 — tên miền riêng của tenant cho TripPlanner (D10/D13 NEW-D), báo giá trước apply",
+   "needs": ""
+  },
+  {
+   "id": "AA-1091",
+   "title": "[Booking pricing] Price setup workbench for the customer-service team: components suggested from the CIS itinerary, bulk Excel import, readiness per tour",
+   "status": "In Review",
+   "priority": "Urgent",
+   "project": "tpbk",
+   "milestone": "M5",
+   "session": "S278",
+   "size": "",
+   "next": "Booking pricing — S278: workbench LIVE (#233), giá CIS (#1457/#1458); tiếp: phiên bản giá + trang Chính sách giá sửa được (13 tham số tech lead duyệt S278), lịch mùa, báo giá ghim phiên bản, bảng giá đại lý có phiên bản",
+   "needs": ""
+  },
+  {
+   "id": "AA-1092",
+   "title": "[Security] Pre-PII hardening sweep: TripPlanner tenant signing key, new public CRM routes, b2b_partners RLS, WAF on new hosts",
+   "status": "In Review",
+   "priority": "High",
+   "project": "data",
+   "milestone": "M5",
+   "session": "S278",
+   "size": "",
+   "next": "Security — S278: khoá ký tenant TP riêng, rà route CRM công khai, RLS b2b_partners, WAF host mới (audit M19/M24)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1093",
+   "title": "[Cross-app] Lifecycle events across apps: tour discontinued in CRM, tenant offboarding erase in every app, per-tenant restore for CIS and TripPlanner",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "data",
+   "milestone": "M5",
+   "session": "S279",
+   "size": "",
+   "next": "Cross-app — S279: tour.discontinued ở CRM, xoá dữ liệu khi tenant rời ở mọi app (DRY RUN), khôi phục theo tenant CIS/TP",
+   "needs": ""
+  },
+  {
+   "id": "AA-1094",
+   "title": "[TripPlanner tenant] v_tenant_tour_v1 view, agency branding kept off AA tour pages, CIS tour page carries source_id for Book now",
+   "status": "In Review",
+   "priority": "High",
+   "project": "tpbk",
+   "milestone": "M-R7",
+   "session": "S278",
+   "size": "",
+   "next": "TripPlanner — S278: v_tenant_tour_v1, thương hiệu không rò sang trang AA, source_id cho Đặt ngay (audit M12/M20/M21)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1095",
+   "title": "[LLM] Serve Bedrock LLM from acc1 while acc3 is blocked: invoker role, gateway connection acc1, ADR 0001a amendment",
+   "status": "In Review",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M2a",
+   "session": "S278",
+   "size": "",
+   "next": "S278: role Bedrock trên acc1 + connection acc1 trong AI gateway (13/13 model chạy được), acc3 xếp sau; sửa ADR 0001a — lane l22",
+   "needs": ""
   }
  ]
 }

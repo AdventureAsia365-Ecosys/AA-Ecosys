@@ -1,0 +1,118 @@
+{
+  "plan": "Phase plan after R7, sessions S279-S292 (plan.md in this folder)",
+  "drafted": "2026-11-12, S278 advisory lane (Claude Code), read-only",
+  "decisions": [
+    {
+      "id": "D1",
+      "question": "Keep the rule 'at least 60 % of capacity on content' for S279-S292?",
+      "context_plain": "The rule comes from S262 TL-3 and the S265 restructure (README section 11, backlog section 3b). Its purpose was to stop CRM work piling onto R4/R5/R7, which are now done. S276 kept it (5 of 8 issues content); S277 did not (about 5 of 12). The draft slot table keeps it at 35 of 58 slots (60 %).",
+      "options": ["Keep >= 60 % content (count issue slots per session, dated checks excluded)", "Lower to 50 % now that R4/R5/R7 are done", "Drop the rule; order purely by value"],
+      "proposed": "Keep >= 60 % content (count issue slots per session, dated checks excluded)"
+    },
+    {
+      "id": "D2",
+      "question": "Re-cut milestone M2a into 'M2b Content quality proven' with the ADR 0020 targets as Done-when?",
+      "context_plain": "M2a's criteria are a cost rule, AA-741 (Done), AA-788 and the Writing Lab (done in R6). None measures whether writing got better. ADR 0020 states targets: T9 first-pass yield from 2 % to >= 30 % (50 % target), median <= 5 model requests and <= 0.25 USD per delivered blog.",
+      "options": ["New M2b: W2-W5 closed (AA-1048, 1050, 1051) + the three ADR 0020 targets measured in one report", "Keep M2a as it is and only tick what is done"],
+      "proposed": "New M2b: W2-W5 closed (AA-1048, 1050, 1051) + the three ADR 0020 targets measured in one report"
+    },
+    {
+      "id": "D3",
+      "question": "AA-1048 (W2): what if no merged claim class reaches n_pos >= 20 after the S278 merge?",
+      "context_plain": "R1 needs a class with at least 20 positive examples before the instrument can be calibrated; the best class had 9 (backlog section 3). S278 already decided to merge classes first. If that still falls short there are two ways forward.",
+      "options": ["Seed more real violations through a small paid run inside the existing 2 USD R1 cap", "Amend ADR 0020 to accept n_pos >= 10 for the first class (weaker calibration)", "Wait for D11 monthly labels to accumulate (slow, weeks)"],
+      "proposed": "Seed more real violations through a small paid run inside the existing 2 USD R1 cap"
+    },
+    {
+      "id": "D4",
+      "question": "When is the TL-11 freeze (writing memory + eval track: AA-790, AA-920, AA-921, AA-922, AA-1000) lifted?",
+      "context_plain": "TL-11 (S262) froze this track 'until the T9 blog completes one full round'. The other blocker, no LLM path, is gone: the Anthropic direct key is live since S269 and OpenAI has a 10 USD cap. AA-1077 (blog length) closes with one clean T9 blog audit round.",
+      "options": ["Lift when AA-1077 closes with a clean T9 round AND AA-1050 enforces at least one measured class", "Lift as soon as AA-1077 closes", "Keep frozen until the M2b report"],
+      "proposed": "Lift when AA-1077 closes with a clean T9 round AND AA-1050 enforces at least one measured class"
+    },
+    {
+      "id": "D5",
+      "question": "Give the four ADR 0020 W5 paid-proof yeses now (AA-1051), each run only when its gate is green?",
+      "context_plain": "ADR 0020 D12 caps: eval null run <= 5 USD, T9 <= 15, S1 <= 8, T2 <= 5 (<= 33 USD total), each after its own yes. Money is Anthropic direct / OpenAI card money. Each proof runs only after W2 R1 + W4 per the S275 decision.",
+      "options": ["Yes to all four now, each run after its gate, cost reported per stage", "Yes one at a time when each is ready", "Not this window"],
+      "proposed": "Yes to all four now, each run after its gate, cost reported per stage"
+    },
+    {
+      "id": "D6",
+      "question": "OpenAI monthly hard cap (10 USD, CIS 327) during W4/W5: keep or raise for the window?",
+      "context_plain": "If the pinned claim instrument is GPT-6 Luna on the OpenAI API (an ADR 0020 D7 candidate), W4 shadow/enforce plus W5 checks may hit the 10 USD stop mid-run; the gateway then refuses and the run stops (it does not switch model silently). The current November OpenAI spend was not checked in this review.",
+      "options": ["Keep 10 USD; check the spend at S279 start and re-ask only if a run would cross it", "Raise to 20 USD until 31/12, alert at 80 %"],
+      "proposed": "Keep 10 USD; check the spend at S279 start and re-ask only if a run would cross it"
+    },
+    {
+      "id": "D7",
+      "question": "Yes to the AA-788 pilot of 20 pieces from 19/11 (estimate 2-5 USD)?",
+      "context_plain": "AA-788 promotes F12_scope, F14 under-length and F9_brand_style to blocking. The $0 replay is done; the paid pilot of 20 pieces is the last step (plan.json). The cost is an estimate from the ADR 0020 target of <= 0.25 USD per blog plus repairs.",
+      "options": ["Yes, cap 5 USD, trial 3 first", "Wait for the M2b report"],
+      "proposed": "Yes, cap 5 USD, trial 3 first"
+    },
+    {
+      "id": "D8",
+      "question": "R7 criterion 'visual test against next start in CI replaces Vercel previews': how to close it?",
+      "context_plain": "TripPlanner's visual.yml captures 1440/390 light/dark after every deploy on the public host, report-only. It is not a per-PR check, so a bad layout is found after merge. A per-PR job against next start costs no money (public repo Actions minutes). The criterion 'tp_plan_chat moved to R8' is superseded: AA-1041 built the chat.",
+      "options": ["A: accept the post-deploy run as met-with-scope, strike the chat criterion, close M-R7", "B: create NEW-B 'PR visual job against next start' (required check), then close M-R7"],
+      "proposed": "A: accept the post-deploy run as met-with-scope, strike the chat criterion, close M-R7"
+    },
+    {
+      "id": "D9",
+      "question": "M-P2 criterion 'AA-855 round 2 (TripPlanner) video + report': drop it?",
+      "context_plain": "Routine UAT videos stopped in S271; Playwright + CI + curl are the evidence, and a video is made only for an owner sign-off or pilot onboarding. Every other M-P2 criterion is delivered by AA-1038 (Done 10/11).",
+      "options": ["Mark M-P2 done with scope (criterion dropped per the S271 rule); AA-855 stays Backlog for an owner sign-off video", "Record one TripPlanner video now"],
+      "proposed": "Mark M-P2 done with scope (criterion dropped per the S271 rule); AA-855 stays Backlog for an owner sign-off video"
+    },
+    {
+      "id": "D10",
+      "question": "Which R8 slices start in this window?",
+      "context_plain": "R8 (ADR 0019, clarifications section 6) has four parts: Booking staff screens merged into AA Admin (only after the B2C screens are gone, AA-1061 >= 28/11), tenant custom domains on CloudFront + ACM, more languages than en/vi (machine translation tokens need a yes), a machine API for agencies (only when a paying tenant asks).",
+      "options": ["Only NEW-D tenant custom domain now (about 0 USD, estimate); Booking-screens issue at the S292 re-cut; languages and agency API wait for their triggers", "Start the Booking-screens merge too", "No R8 this window"],
+      "proposed": "Only NEW-D tenant custom domain now (about 0 USD, estimate); Booking-screens issue at the S292 re-cut; languages and agency API wait for their triggers"
+    },
+    {
+      "id": "D11",
+      "question": "CRM-after-R3 lane: order, and may AA-965 (AI on ancillary suppliers) start now?",
+      "context_plain": "Seven paused cards were slotted 'after S280'. AA-965 was blocked on an LLM path, which now exists through the gateway (pii_class us, R1 AI budget). AA-1011 needs your Entra app registration; AA-1012 needs the prod certificate decision at go-live. Each card gets a security review before it is enabled for a pilot tenant.",
+      "options": ["Order AA-960, AA-963, AA-968, AA-970, AA-965 (<= 1 USD dev test), NEW-C; AA-1011 when Entra exists; AA-1012 parked to go-live", "Same order without AA-965", "Pause the CRM lane for content only"],
+      "proposed": "Order AA-960, AA-963, AA-968, AA-970, AA-965 (<= 1 USD dev test), NEW-C; AA-1011 when Entra exists; AA-1012 parked to go-live"
+    },
+    {
+      "id": "D12",
+      "question": "AA-948 (builder map fork) and AA-704 (in-app AI assistant): their triggers are met; unpark?",
+      "context_plain": "AA-948 waited for R7 ('one engine, two surfaces') and needs your call on a shared TripPlanner engine plus a separate Mapbox cost yes. AA-704 waited for pilot milestone 2, the control plane, the AI notice and per-tenant AI caps, all done; it adds LLM cost per question (not quoted).",
+      "options": ["Keep both parked this window; revisit at the S292 re-cut once a pilot agency uses the app", "Unpark AA-948 with a Mapbox quote first", "Unpark AA-704 with a cost quote first"],
+      "proposed": "Keep both parked this window; revisit at the S292 re-cut once a pilot agency uses the app"
+    },
+    {
+      "id": "D13",
+      "question": "Create the proposed NEW issues in Linear?",
+      "context_plain": "39 issues are open (Free plan limit 250 unarchived). NEW-A pilot onboarding runbook + synthetic dry run (0 USD); NEW-C Odoo small add-ons ranks 45-53 (0 USD); NEW-D R8 tenant custom domain (about 0 USD, estimate); NEW-B only if D8 = B.",
+      "options": ["Create NEW-A, NEW-C, NEW-D (+ NEW-B if D8 = B)", "Create NEW-A only", "None; fold into existing issues"],
+      "proposed": "Create NEW-A, NEW-C, NEW-D (+ NEW-B if D8 = B)"
+    },
+    {
+      "id": "D14",
+      "question": "Business owner items to send as calm proposals in the session-end Jira drafts?",
+      "context_plain": "Nothing here blocks the plan. Without a go-live date (b18) and a first pilot agency, the q-pilot timer (P2 by pilot week 3) never starts. Also pending: the 10 M-OD defaults (PR-26 comment 10636, system uses the proposed defaults), the Booking departure_fees terms wording (draft, S277), the TrueIDC Billing Transfer appendix signature.",
+      "options": ["One Jira draft on the relevant PR epics proposing a pilot start window + the open defaults, for your approval at the session end", "Hold until the M2b report"],
+      "proposed": "One Jira draft on the relevant PR epics proposing a pilot start window + the open defaults, for your approval at the session end"
+    },
+    {
+      "id": "D15",
+      "question": "Run AA-1004 P0 slices 2-4 (move the CIS, CRM and TripPlanner stacks into modules/environment) now?",
+      "context_plain": "Only slice 1 (Booking stack, Deploy Prod skeleton, guarded DB Migrate prod path, Infra #633, S266) is done. P0 is 0 USD and must show 'no change' on the Dev plan. Doing it now shortens P2-P3 when a go-live date arrives.",
+      "options": ["Yes, lane B S280-S284, one Terraform apply window per slice", "Wait for the go-live date"],
+      "proposed": "Yes, lane B S280-S284, one Terraform apply window per slice"
+    },
+    {
+      "id": "D16",
+      "question": "AA-1061 (B2C table drop) must take a new migration key: approve the scope note?",
+      "context_plain": "AA-1061 says 'rebuild Booking #200 (bk-045)', but key 045 is now used by migrations/045_finance_costs_orders_profit.sql (AA-1074). Reusing it would clash. The 30-day freeze guard (apply on or after 28/11 23:50Z) stays.",
+      "options": ["Rebuild on the next free key (bk-049 or later) with the same guard; add a Linear comment", "Leave as is and resolve at build time"],
+      "proposed": "Rebuild on the next free key (bk-049 or later) with the same guard; add a Linear comment"
+    }
+  ]
+}

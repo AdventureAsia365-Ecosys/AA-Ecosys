@@ -1,0 +1,35 @@
+{
+  "errors": [],
+  "modes": {
+    "1440-light": {
+      "sideways": false,
+      "error_page": 0
+    },
+    "1440-dark": {
+      "sideways": false,
+      "error_page": 0
+    },
+    "390-light": {
+      "sideways": false,
+      "error_page": 0
+    },
+    "390-dark": {
+      "sideways": false,
+      "error_page": 0
+    }
+  },
+  "before": 0,
+  "doc_status": 200,
+  "page_testid": 1,
+  "add_panel": 1,
+  "add": {
+    "status": 201,
+    "id": "40ef43d2-1d22-46db-afa6-fd04887e8cbd",
+    "kind": "not_included"
+  },
+  "row_visible": 1,
+  "delete": {
+    "status": 200
+  },
+  "after": 0
+}

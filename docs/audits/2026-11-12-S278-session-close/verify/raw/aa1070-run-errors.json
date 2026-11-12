@@ -1,0 +1,35 @@
+[
+  {
+    "kind": "network",
+    "status": 422,
+    "method": "POST",
+    "url": "https://portal.lumiguides.it.com/bff/departures/824ac043-95cd-4b98-9e6a-9ba539a26202/manifest"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/pipeline",
+    "text": "Failed to load resource: the server responded with a status of 422 ()"
+  },
+  {
+    "kind": "network",
+    "status": 422,
+    "method": "PUT",
+    "url": "https://portal.lumiguides.it.com/bff/trips/18c61c49-8f83-4119-a1e2-bca441f11752/rooming"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/pipeline",
+    "text": "Failed to load resource: the server responded with a status of 422 ()"
+  },
+  {
+    "kind": "network",
+    "status": 422,
+    "method": "PUT",
+    "url": "https://portal.lumiguides.it.com/bff/trips/9f0976dc-6a3e-4d77-bc6d-9d63980358be/rooming"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/pipeline",
+    "text": "Failed to load resource: the server responded with a status of 422 ()"
+  }
+]

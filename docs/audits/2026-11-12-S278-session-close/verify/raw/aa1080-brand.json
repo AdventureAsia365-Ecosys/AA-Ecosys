@@ -1,0 +1,116 @@
+{
+  "res": {
+    "steps": [
+      {
+        "w": "1440",
+        "theme": "light",
+        "sideways": false
+      },
+      {
+        "w": "1440",
+        "theme": "dark",
+        "sideways": false
+      },
+      {
+        "w": "390",
+        "theme": "light",
+        "sideways": false
+      },
+      {
+        "w": "390",
+        "theme": "dark",
+        "sideways": false
+      }
+    ],
+    "select_url": "/portal-access/select",
+    "options": [
+      "Atlas & Hearth\nOwner\nOpen",
+      "Atlas & Hearth (Audit)\nEditor\nOpen",
+      "Terra Family Expeditions (Audit)\nEditor\nOpen",
+      "Trail Pulse (Audit)\nEditor\nOpen",
+      "WildKind Travel (Audit)\nEditor\nOpen"
+    ],
+    "brand_api": {
+      "status": 200,
+      "keys": [
+        "configured",
+        "system_prompt",
+        "style_guide",
+        "forbidden_words",
+        "version",
+        "updated_at",
+        "history",
+        "brand_name",
+        "brand_type",
+        "core_idea",
+        "customer_segment",
+        "customer_mindset",
+        "tone_of_voice",
+        "good_examples",
+        "target_markets",
+        "default_cta",
+        "signature_words",
+        "markets"
+      ],
+      "context_len": 747,
+      "brand_name": "Atlas & Hearth",
+      "default_cta": "Get in touch with Atlas & Hearth to plan this trip.",
+      "system_prompt_len": 747,
+      "target_markets": [
+        "US",
+        "UK",
+        "UAE",
+        "Saudi Arabia",
+        "Singapore",
+        "Hong Kong"
+      ],
+      "markets": {
+        "countries": [
+          "US",
+          "UK",
+          "AE",
+          "SA",
+          "SG",
+          "HK"
+        ],
+        "supported": [
+          "US",
+          "UK"
+        ],
+        "unsupported": [
+          "AE",
+          "SA",
+          "SG",
+          "HK"
+        ],
+        "unknown": [],
+        "seo_market": "US",
+        "defaulted": false,
+        "notes": [
+          {
+            "country": "AE",
+            "reason": "no_search_data",
+            "uses": "US"
+          },
+          {
+            "country": "SA",
+            "reason": "no_search_data",
+            "uses": "US"
+          },
+          {
+            "country": "SG",
+            "reason": "no_search_data",
+            "uses": "US"
+          },
+          {
+            "country": "HK",
+            "reason": "no_search_data",
+            "uses": "US"
+          }
+        ]
+      }
+    },
+    "note_text": "Search data for your markets\nTour page keywords use United States search data (the first market you listed that we cover).\nUAE: no search data for this market yet. Your content uses United States search data until it is added; we have recorded the request.\nSaudi Arabia: no search data for this market yet. Your content uses United States search data until it is added; we have recorded the request.\nSingapore: no search data for this market yet. Your content uses United States search data until it is added; we have recorded the request.\nHong Kong: no search data for this market yet. Your content uses United States search data until it is added; we have recorded the request."
+  },
+  "errors": []
+}

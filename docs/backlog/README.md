@@ -139,8 +139,8 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | S275 | AA-1038, AA-911 | R5 `lead.submitted.v1` → CRM (no `inquiry.submitted` again), kit brand tokens, frontend ECS + CloudFront + WAF Terraform (yeses given). AA-911: staff frontends on ECS on Dev (d23) and the CIS → Booking bridge retired. |
 | S276 (done) | AA-1063, AA-1024, AA-1038, AA-1039, AA-741, AA-1067, AA-1068, AA-1049 | **Done:** AA-1038 (tp-028 FORCE RLS), AA-1024 (D8), AA-1067, AA-1068. AA-741 phase 3 report (closes with the root PR). AA-1063: 417 t2@2 claims queued + T2 claim source resolver (CIS #1424), waits on one tech-lead batch. AA-1049: S1 train on (`S1_CONTROL=contract`), smoke 3/3. AA-1039: notice-only rule shipped, drill at the close. AA-921 not touched (LLM path). |
 | S277 (done) | AA-1041, AA-1071–1075, AA-1076, AA-1078, AA-1083, AA-1085, AA-1077, AA-1049 | **Done:** AA-1041, AA-1071, AA-1072, AA-1073, AA-1074, AA-1075, AA-1076, AA-1078, AA-1083, AA-1085. AA-1049 path A rejected (pilots restored). AA-1077 waits on one blog audit run. Was planned: **S276 order:** AA-1063 tech-lead batch → close; AA-1039 close with the drill evidence; AA-1076 Batch lane; then the fix plan for the 280 old Masters (propagation map + batch cost) → tech lead decides; AA-1077, AA-1078; CI guards from the S276 lessons. **Pilot milestone 2 gate**: EXTERNAL clients frozen, guest abuse limit as WAF rules, AA-855 round 2. R7 starts. |
-| S278 | AA-1084, AA-1077, AA-1079, AA-1080, AA-1081, AA-1069, AA-1070, AA-1049, AA-1021 | Converge the In Progress / In Review set first (live checks, then close). R7 is done (AA-1041). Was planned: R7 items 1–3. AA-1021 episodes on the R3 / R4 / R5 areas once shipped. |
-| S279 | AA-1041, AA-900 | R7 items 4–6. AA-900 labels + the paid trial run inside the OpenAI hard cap. |
+| S278 (done) | AA-1049, 1084, 1080, 1069, 960, 1081 closed; 1070, 1077, 1079, 1048, 1051, 1086–1095 opened or advanced | **Done:** AA-1049 (scope), AA-1084, AA-1080, AA-1069, AA-960, AA-1081. Pricing tools for the customer-service team (workbench, Policy page, versions + seasons migrations), pre-PII security sweep (TP assertion key, WAF, b2b_partners RLS + tenant binding, Book now ceilings), E2E synthetic fixtures + A10b-4/A10e-1, Bedrock moved to acc1 (AA-1095). Details: `docs/sessions/2026-11-12-S278-pricing-tools-prepii-e2e-bedrock-acc1.md`. |
+| S279 | AA-1095, AA-1091, AA-1087, AA-1088, AA-1070, AA-1094, AA-1092, AA-1077, AA-1048, AA-1086 | **Converge first (WIP 11 > 8):** AA-1095 route on acc1 + probe if not done; Booking #242 (coverage) → versions/seasons live; fix ecsx local mode → run the Booking seeder, e2e-writers, Partner aa-cancel, legacy case backfill (closes AA-1087/1088/1070); TripPlanner DEMO_KIND rule → AA-1094 live; AA-1092 cross-tenant live check; AA-1077 v7 trial result + topic seed floor; AA-1048 FP adjudication ($0). Then AA-1086 rehearsal. |
 | S280 | AA-1041, AA-1004 | R7 item 7 + visual tests against `next start` → close R7. AA-1004 P2–P6 from the go-live date, or from pilot week 3 at the latest (q-pilot). |
 | after S280 / date-gated | AA-788, AA-1026, AA-998, AA-873, AA-1003, CRM-after-R3, AA-980, AA-881, parked | (AA-1024 D8 done S276); AA-788 ≥19/11 with an LLM path (~S286+); first session ≥01/12: AA-1026 D6 (November bill), AA-998 acc1 = 0 USD, AA-873 first-month cost read, AA-1004 org invites; AA-1003 R5–R7; CRM add-ons AA-960, AA-963, AA-965, AA-968, AA-970, AA-1011, AA-1012 in the merged app (≥60 % capacity stays on content); AA-980 at go-live; AA-881 05/2027; parked AA-842, AA-781, AA-782, AA-704, AA-948, AA-922 (TL-11 lift). |
 
@@ -255,6 +255,17 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-697 | Architecture diagrams with official AWS icons — ecosystem + each repo | S256 | **Done S257** (§5c): pilot approved under the S257 session plan (root #320); drift findings closed (Booking ops-docs bucket built S256, EFS removed S257 Infra #492) | — |
 | AA-710 | B2B benchmark: Asian Trails (eConnect, API, Lemax) | M-R4 | **S265:** slot S271 (R4 start): update the note against the R4 design (AA-1037, AA-1029, AA-1030, 'Book with AA' d17), map the gaps to issues, KAN-20 draft at that session's end, then close | — |
 | AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 | **S262:** AA-952, AA-954, AA-956, AA-957, AA-964, AA-971 closed (§5); AA-958 → S263. AA-952 was In Progress since S259 (slice 1 = C-M3 confirm, §3 row 0ah); **re-planned at the S260 close**: slots S261–S266, go-real ≥S267, see §3b "Kế hoạch CRM W5–W8 sau S260" | AA-958 needs a free Twilio trial for the live proof; AA-965 needs an LLM path |
+
+## 5. Closed in S278
+
+- **AA-1049** W3 writers (Done-with-scope: 0 s1_flag_fix since #1434; final_contract S1 53/53, T2 58/58, T9 54/55).
+- **AA-1084** CI speed (median 4.68 min, shard max 233 s; ship_wave merges main into stale branches).
+- **AA-1080** Brand Identity market note + CTA + brand context (live 5/5).
+- **AA-1069** CRM service catalogue + supplier booking requests (12/13 then the requested filter fixed in Partner #285, re-verify 6/6).
+- **AA-960** CRM tags, system tags, bulk with preview, Ready to travel again (crm-061; live 8/8).
+- **AA-1081** T7 no-topic reason (44/49 tours with a topic, 5 typed reasons) + incremental slate (12.3 s and 0 judge calls vs 756–894 s and 344–362).
+- Created in S278 (approved): AA-1086 … AA-1095.
+- Evidence: root `docs/audits/2026-11-12-S278-session-close/` (state snapshot, verify, system audit, pricing advice, decisions, Jira drafts).
 
 ## 5. Closed in S277
 

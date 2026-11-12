@@ -1,0 +1,1649 @@
+[
+  {
+    "name": "GET builder",
+    "status": 200,
+    "body": {
+      "proposal_id": "c1f95cba-206d-4e7a-90e2-e0a4b9411a31",
+      "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+      "trip_stage": "inquiry",
+      "version": 1,
+      "status": "draft",
+      "kind": "builder",
+      "edit_seq": 2,
+      "selection_seq": 0,
+      "currency": "USD",
+      "price_visibility": "total_with_deltas",
+      "room_config": [
+        {
+          "type": "double",
+          "adults": 2,
+          "children": 0
+        }
+      ],
+      "deposit_pct": "30.00",
+      "starts_on": null,
+      "balance_due_on": null,
+      "schedule": [
+        {
+          "kind": "deposit",
+          "seq": 1,
+          "percent": "30",
+          "due_on": null,
+          "days_before": null
+        },
+        {
+          "kind": "instalment",
+          "seq": 1,
+          "percent": "40",
+          "due_on": null,
+          "days_before": 60
+        },
+        {
+          "kind": "balance",
+          "seq": 1,
+          "percent": null,
+          "due_on": null,
+          "days_before": 30
+        }
+      ],
+      "cancellation_policy": null,
+      "terms_doc_id": "f19309a1-fc5d-4ff6-96e4-fe1bfd9dc10d",
+      "terms_status": "published",
+      "intro": "",
+      "price_hash": null,
+      "published_at": null,
+      "based_on": null,
+      "days": [
+        {
+          "proposal_day_id": "b4c99d13-6453-402f-a040-2348105a1432",
+          "day_no": 0,
+          "before_you_go": true,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": []
+        },
+        {
+          "proposal_day_id": "a154d1d8-2b0b-4dcf-a2ea-746e2c66a8a5",
+          "day_no": 1,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "7ab3cac0-f739-4c06-a5fe-4e6ccc0b4dbf",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "0bc9464f-3271-43e5-96e0-6790b61cfe7d",
+          "day_no": 2,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "75b6f091-0b3e-4a16-9b03-2e241ca0c7df",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "9d31cb18-d3e3-4e84-aeda-11ea2f182a81",
+          "day_no": 3,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "dec1606e-31e2-49aa-94b9-9616bd45d1fd",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "8672283f-e5e8-4a6b-9305-a514e3044bb2",
+          "day_no": 4,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "0822749f-9525-4854-863a-d2d208b08d87",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "ab0dac99-5cea-43c1-9011-4cac8bb05d81",
+          "day_no": 5,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": []
+        }
+      ],
+      "rules": [],
+      "picks": [],
+      "totals": {
+        "currency": "USD",
+        "sell_total": "0.00",
+        "pay_on_arrival_total": "0.00",
+        "deposit": "0.00",
+        "balance": "0.00",
+        "schedule": [
+          {
+            "kind": "deposit",
+            "seq": 1,
+            "percent": "30",
+            "due_on": null,
+            "days_before": null,
+            "amount": "0.00"
+          },
+          {
+            "kind": "instalment",
+            "seq": 1,
+            "percent": "40",
+            "due_on": null,
+            "days_before": 60,
+            "amount": "0.00"
+          },
+          {
+            "kind": "balance",
+            "seq": 1,
+            "percent": null,
+            "due_on": null,
+            "days_before": 30,
+            "amount": "0.00"
+          }
+        ],
+        "net_total": "0.00",
+        "margin_total": "0.00"
+      },
+      "checks": {
+        "publishable": false,
+        "blocking": [
+          "no_options",
+          "nothing_to_charge"
+        ],
+        "warnings": []
+      },
+      "stage2": {
+        "accommodation_tier": null,
+        "group_pref": null,
+        "pace": null,
+        "party_adults": 2,
+        "party_children": 0
+      },
+      "before_you_go": {
+        "aa_items": 0,
+        "countries": [],
+        "fitness_warning": false,
+        "insurance_reminder": true,
+        "selected": [],
+        "suggested": [],
+        "packs_not_chosen": false
+      },
+      "pricing": {
+        "bands": {
+          "child_age_max": 11,
+          "infant_age_max": 1
+        },
+        "party": {
+          "adult": 2,
+          "child": 0,
+          "infant": 0,
+          "single_supp": 0
+        },
+        "discount": {
+          "discount_pct": null,
+          "limit_pct": "10.00",
+          "above_limit": false,
+          "below_cost": false,
+          "needs_approval": false,
+          "approved_pct": null,
+          "pending": null,
+          "history": []
+        }
+      }
+    }
+  },
+  {
+    "name": "POST block Flights",
+    "status": 201,
+    "body": {
+      "proposal_id": "c1f95cba-206d-4e7a-90e2-e0a4b9411a31",
+      "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+      "trip_stage": "inquiry",
+      "version": 1,
+      "status": "draft",
+      "kind": "builder",
+      "edit_seq": 3,
+      "selection_seq": 0,
+      "currency": "USD",
+      "price_visibility": "total_with_deltas",
+      "room_config": [
+        {
+          "type": "double",
+          "adults": 2,
+          "children": 0
+        }
+      ],
+      "deposit_pct": "30.00",
+      "starts_on": null,
+      "balance_due_on": null,
+      "schedule": [
+        {
+          "kind": "deposit",
+          "seq": 1,
+          "percent": "30",
+          "due_on": null,
+          "days_before": null
+        },
+        {
+          "kind": "instalment",
+          "seq": 1,
+          "percent": "40",
+          "due_on": null,
+          "days_before": 60
+        },
+        {
+          "kind": "balance",
+          "seq": 1,
+          "percent": null,
+          "due_on": null,
+          "days_before": 30
+        }
+      ],
+      "cancellation_policy": null,
+      "terms_doc_id": "f19309a1-fc5d-4ff6-96e4-fe1bfd9dc10d",
+      "terms_status": "published",
+      "intro": "",
+      "price_hash": null,
+      "published_at": null,
+      "based_on": null,
+      "days": [
+        {
+          "proposal_day_id": "b4c99d13-6453-402f-a040-2348105a1432",
+          "day_no": 0,
+          "before_you_go": true,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": []
+        },
+        {
+          "proposal_day_id": "a154d1d8-2b0b-4dcf-a2ea-746e2c66a8a5",
+          "day_no": 1,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "7ab3cac0-f739-4c06-a5fe-4e6ccc0b4dbf",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            },
+            {
+              "option_block_id": "10a6f3dd-f941-4d31-894b-ddb6ab3fff18",
+              "title": "Flights",
+              "type": "transport",
+              "sort_order": 1,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "0bc9464f-3271-43e5-96e0-6790b61cfe7d",
+          "day_no": 2,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "75b6f091-0b3e-4a16-9b03-2e241ca0c7df",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "9d31cb18-d3e3-4e84-aeda-11ea2f182a81",
+          "day_no": 3,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "dec1606e-31e2-49aa-94b9-9616bd45d1fd",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "8672283f-e5e8-4a6b-9305-a514e3044bb2",
+          "day_no": 4,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "0822749f-9525-4854-863a-d2d208b08d87",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "ab0dac99-5cea-43c1-9011-4cac8bb05d81",
+          "day_no": 5,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": []
+        }
+      ],
+      "rules": [],
+      "picks": [],
+      "totals": {
+        "currency": "USD",
+        "sell_total": "0.00",
+        "pay_on_arrival_total": "0.00",
+        "deposit": "0.00",
+        "balance": "0.00",
+        "schedule": [
+          {
+            "kind": "deposit",
+            "seq": 1,
+            "percent": "30",
+            "due_on": null,
+            "days_before": null,
+            "amount": "0.00"
+          },
+          {
+            "kind": "instalment",
+            "seq": 1,
+            "percent": "40",
+            "due_on": null,
+            "days_before": 60,
+            "amount": "0.00"
+          },
+          {
+            "kind": "balance",
+            "seq": 1,
+            "percent": null,
+            "due_on": null,
+            "days_before": 30,
+            "amount": "0.00"
+          }
+        ],
+        "net_total": "0.00",
+        "margin_total": "0.00"
+      },
+      "checks": {
+        "publishable": false,
+        "blocking": [
+          "no_options",
+          "nothing_to_charge"
+        ],
+        "warnings": []
+      },
+      "stage2": {
+        "accommodation_tier": null,
+        "group_pref": null,
+        "pace": null,
+        "party_adults": 2,
+        "party_children": 0
+      },
+      "before_you_go": {
+        "aa_items": 0,
+        "countries": [],
+        "fitness_warning": false,
+        "insurance_reminder": true,
+        "selected": [],
+        "suggested": [],
+        "packs_not_chosen": false
+      },
+      "pricing": {
+        "bands": {
+          "child_age_max": 11,
+          "infant_age_max": 1
+        },
+        "party": {
+          "adult": 2,
+          "child": 0,
+          "infant": 0,
+          "single_supp": 0
+        },
+        "discount": {
+          "discount_pct": null,
+          "limit_pct": "10.00",
+          "above_limit": false,
+          "below_cost": false,
+          "needs_approval": false,
+          "approved_pct": null,
+          "pending": null,
+          "history": []
+        }
+      }
+    }
+  },
+  {
+    "name": "POST block Fees",
+    "status": 201,
+    "body": {
+      "proposal_id": "c1f95cba-206d-4e7a-90e2-e0a4b9411a31",
+      "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+      "trip_stage": "inquiry",
+      "version": 1,
+      "status": "draft",
+      "kind": "builder",
+      "edit_seq": 4,
+      "selection_seq": 0,
+      "currency": "USD",
+      "price_visibility": "total_with_deltas",
+      "room_config": [
+        {
+          "type": "double",
+          "adults": 2,
+          "children": 0
+        }
+      ],
+      "deposit_pct": "30.00",
+      "starts_on": null,
+      "balance_due_on": null,
+      "schedule": [
+        {
+          "kind": "deposit",
+          "seq": 1,
+          "percent": "30",
+          "due_on": null,
+          "days_before": null
+        },
+        {
+          "kind": "instalment",
+          "seq": 1,
+          "percent": "40",
+          "due_on": null,
+          "days_before": 60
+        },
+        {
+          "kind": "balance",
+          "seq": 1,
+          "percent": null,
+          "due_on": null,
+          "days_before": 30
+        }
+      ],
+      "cancellation_policy": null,
+      "terms_doc_id": "f19309a1-fc5d-4ff6-96e4-fe1bfd9dc10d",
+      "terms_status": "published",
+      "intro": "",
+      "price_hash": null,
+      "published_at": null,
+      "based_on": null,
+      "days": [
+        {
+          "proposal_day_id": "b4c99d13-6453-402f-a040-2348105a1432",
+          "day_no": 0,
+          "before_you_go": true,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": []
+        },
+        {
+          "proposal_day_id": "a154d1d8-2b0b-4dcf-a2ea-746e2c66a8a5",
+          "day_no": 1,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "7ab3cac0-f739-4c06-a5fe-4e6ccc0b4dbf",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            },
+            {
+              "option_block_id": "10a6f3dd-f941-4d31-894b-ddb6ab3fff18",
+              "title": "Flights",
+              "type": "transport",
+              "sort_order": 1,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            },
+            {
+              "option_block_id": "e4fc89fe-4fe4-4338-9b9d-e11e086135b5",
+              "title": "Fees",
+              "type": "other",
+              "sort_order": 2,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "0bc9464f-3271-43e5-96e0-6790b61cfe7d",
+          "day_no": 2,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "75b6f091-0b3e-4a16-9b03-2e241ca0c7df",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "9d31cb18-d3e3-4e84-aeda-11ea2f182a81",
+          "day_no": 3,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "dec1606e-31e2-49aa-94b9-9616bd45d1fd",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "8672283f-e5e8-4a6b-9305-a514e3044bb2",
+          "day_no": 4,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "0822749f-9525-4854-863a-d2d208b08d87",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "ab0dac99-5cea-43c1-9011-4cac8bb05d81",
+          "day_no": 5,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": []
+        }
+      ],
+      "rules": [],
+      "picks": [],
+      "totals": {
+        "currency": "USD",
+        "sell_total": "0.00",
+        "pay_on_arrival_total": "0.00",
+        "deposit": "0.00",
+        "balance": "0.00",
+        "schedule": [
+          {
+            "kind": "deposit",
+            "seq": 1,
+            "percent": "30",
+            "due_on": null,
+            "days_before": null,
+            "amount": "0.00"
+          },
+          {
+            "kind": "instalment",
+            "seq": 1,
+            "percent": "40",
+            "due_on": null,
+            "days_before": 60,
+            "amount": "0.00"
+          },
+          {
+            "kind": "balance",
+            "seq": 1,
+            "percent": null,
+            "due_on": null,
+            "days_before": 30,
+            "amount": "0.00"
+          }
+        ],
+        "net_total": "0.00",
+        "margin_total": "0.00"
+      },
+      "checks": {
+        "publishable": false,
+        "blocking": [
+          "no_options",
+          "nothing_to_charge"
+        ],
+        "warnings": []
+      },
+      "stage2": {
+        "accommodation_tier": null,
+        "group_pref": null,
+        "pace": null,
+        "party_adults": 2,
+        "party_children": 0
+      },
+      "before_you_go": {
+        "aa_items": 0,
+        "countries": [],
+        "fitness_warning": false,
+        "insurance_reminder": true,
+        "selected": [],
+        "suggested": [],
+        "packs_not_chosen": false
+      },
+      "pricing": {
+        "bands": {
+          "child_age_max": 11,
+          "infant_age_max": 1
+        },
+        "party": {
+          "adult": 2,
+          "child": 0,
+          "infant": 0,
+          "single_supp": 0
+        },
+        "discount": {
+          "discount_pct": null,
+          "limit_pct": "10.00",
+          "above_limit": false,
+          "below_cost": false,
+          "needs_approval": false,
+          "approved_pct": null,
+          "pending": null,
+          "history": []
+        }
+      }
+    }
+  },
+  {
+    "name": "UI POST catalogue-options (flight)",
+    "status": 201
+  },
+  {
+    "name": "GET builder (after flight)",
+    "status": 200,
+    "body": {
+      "proposal_id": "c1f95cba-206d-4e7a-90e2-e0a4b9411a31",
+      "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+      "trip_stage": "inquiry",
+      "version": 1,
+      "status": "draft",
+      "kind": "builder",
+      "edit_seq": 5,
+      "selection_seq": 0,
+      "currency": "USD",
+      "price_visibility": "total_with_deltas",
+      "room_config": [
+        {
+          "type": "double",
+          "adults": 2,
+          "children": 0
+        }
+      ],
+      "deposit_pct": "30.00",
+      "starts_on": null,
+      "balance_due_on": null,
+      "schedule": [
+        {
+          "kind": "deposit",
+          "seq": 1,
+          "percent": "30",
+          "due_on": null,
+          "days_before": null
+        },
+        {
+          "kind": "instalment",
+          "seq": 1,
+          "percent": "40",
+          "due_on": null,
+          "days_before": 60
+        },
+        {
+          "kind": "balance",
+          "seq": 1,
+          "percent": null,
+          "due_on": null,
+          "days_before": 30
+        }
+      ],
+      "cancellation_policy": null,
+      "terms_doc_id": "f19309a1-fc5d-4ff6-96e4-fe1bfd9dc10d",
+      "terms_status": "published",
+      "intro": "",
+      "price_hash": null,
+      "published_at": null,
+      "based_on": null,
+      "days": [
+        {
+          "proposal_day_id": "b4c99d13-6453-402f-a040-2348105a1432",
+          "day_no": 0,
+          "before_you_go": true,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": []
+        },
+        {
+          "proposal_day_id": "a154d1d8-2b0b-4dcf-a2ea-746e2c66a8a5",
+          "day_no": 1,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "7ab3cac0-f739-4c06-a5fe-4e6ccc0b4dbf",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            },
+            {
+              "option_block_id": "10a6f3dd-f941-4d31-894b-ddb6ab3fff18",
+              "title": "Flights",
+              "type": "transport",
+              "sort_order": 1,
+              "client_may_swap": true,
+              "default_option_id": "7af4fcdb-1f32-4140-b853-a33750369154",
+              "default_pinned": false,
+              "options": [
+                {
+                  "option_id": "7af4fcdb-1f32-4140-b853-a33750369154",
+                  "source": "agency",
+                  "title": "E2E s278sbnml Flight HAN-SGN x 2",
+                  "tier": null,
+                  "agency_supplier_id": "2be5cbbe-9366-4284-877d-28360283108e",
+                  "sell_amount": "200.00",
+                  "sell_delta": "0.00",
+                  "pay_on_arrival": false,
+                  "choose_later_allowed": false,
+                  "availability": "agency",
+                  "availability_checked_at": null,
+                  "is_default": true,
+                  "picked": false,
+                  "prices": [],
+                  "price_rules": null,
+                  "suggested_prices": [
+                    {
+                      "pax_type": "adult",
+                      "unit_sell": "100.00",
+                      "qty": 2
+                    }
+                  ],
+                  "net_amount": "160.00",
+                  "net_delta": "0.00"
+                }
+              ]
+            },
+            {
+              "option_block_id": "e4fc89fe-4fe4-4338-9b9d-e11e086135b5",
+              "title": "Fees",
+              "type": "other",
+              "sort_order": 2,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "0bc9464f-3271-43e5-96e0-6790b61cfe7d",
+          "day_no": 2,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "75b6f091-0b3e-4a16-9b03-2e241ca0c7df",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "9d31cb18-d3e3-4e84-aeda-11ea2f182a81",
+          "day_no": 3,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "dec1606e-31e2-49aa-94b9-9616bd45d1fd",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "8672283f-e5e8-4a6b-9305-a514e3044bb2",
+          "day_no": 4,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "0822749f-9525-4854-863a-d2d208b08d87",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "ab0dac99-5cea-43c1-9011-4cac8bb05d81",
+          "day_no": 5,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": []
+        }
+      ],
+      "rules": [],
+      "picks": [],
+      "totals": {
+        "currency": "USD",
+        "sell_total": "200.00",
+        "pay_on_arrival_total": "0.00",
+        "deposit": "60.00",
+        "balance": "140.00",
+        "schedule": [
+          {
+            "kind": "deposit",
+            "seq": 1,
+            "percent": "30",
+            "due_on": null,
+            "days_before": null,
+            "amount": "60.00"
+          },
+          {
+            "kind": "instalment",
+            "seq": 1,
+            "percent": "40",
+            "due_on": null,
+            "days_before": 60,
+            "amount": "80.00"
+          },
+          {
+            "kind": "balance",
+            "seq": 1,
+            "percent": null,
+            "due_on": null,
+            "days_before": 30,
+            "amount": "60.00"
+          }
+        ],
+        "net_total": "160.00",
+        "margin_total": "40.00"
+      },
+      "checks": {
+        "publishable": false,
+        "blocking": [
+          "schedule_dates_required"
+        ],
+        "warnings": []
+      },
+      "stage2": {
+        "accommodation_tier": null,
+        "group_pref": null,
+        "pace": null,
+        "party_adults": 2,
+        "party_children": 0
+      },
+      "before_you_go": {
+        "aa_items": 0,
+        "countries": [],
+        "fitness_warning": false,
+        "insurance_reminder": true,
+        "selected": [],
+        "suggested": [],
+        "packs_not_chosen": false
+      },
+      "pricing": {
+        "bands": {
+          "child_age_max": 11,
+          "infant_age_max": 1
+        },
+        "party": {
+          "adult": 2,
+          "child": 0,
+          "infant": 0,
+          "single_supp": 0
+        },
+        "discount": {
+          "discount_pct": null,
+          "limit_pct": "10.00",
+          "above_limit": false,
+          "below_cost": false,
+          "needs_approval": false,
+          "approved_pct": null,
+          "pending": null,
+          "history": []
+        }
+      }
+    }
+  },
+  {
+    "name": "POST catalogue-options fee",
+    "status": 201,
+    "body": {
+      "proposal_id": "c1f95cba-206d-4e7a-90e2-e0a4b9411a31",
+      "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+      "trip_stage": "inquiry",
+      "version": 1,
+      "status": "draft",
+      "kind": "builder",
+      "edit_seq": 6,
+      "selection_seq": 0,
+      "currency": "USD",
+      "price_visibility": "total_with_deltas",
+      "room_config": [
+        {
+          "type": "double",
+          "adults": 2,
+          "children": 0
+        }
+      ],
+      "deposit_pct": "30.00",
+      "starts_on": null,
+      "balance_due_on": null,
+      "schedule": [
+        {
+          "kind": "deposit",
+          "seq": 1,
+          "percent": "30",
+          "due_on": null,
+          "days_before": null
+        },
+        {
+          "kind": "instalment",
+          "seq": 1,
+          "percent": "40",
+          "due_on": null,
+          "days_before": 60
+        },
+        {
+          "kind": "balance",
+          "seq": 1,
+          "percent": null,
+          "due_on": null,
+          "days_before": 30
+        }
+      ],
+      "cancellation_policy": null,
+      "terms_doc_id": "f19309a1-fc5d-4ff6-96e4-fe1bfd9dc10d",
+      "terms_status": "published",
+      "intro": "",
+      "price_hash": null,
+      "published_at": null,
+      "based_on": null,
+      "days": [
+        {
+          "proposal_day_id": "b4c99d13-6453-402f-a040-2348105a1432",
+          "day_no": 0,
+          "before_you_go": true,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": []
+        },
+        {
+          "proposal_day_id": "a154d1d8-2b0b-4dcf-a2ea-746e2c66a8a5",
+          "day_no": 1,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "7ab3cac0-f739-4c06-a5fe-4e6ccc0b4dbf",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            },
+            {
+              "option_block_id": "10a6f3dd-f941-4d31-894b-ddb6ab3fff18",
+              "title": "Flights",
+              "type": "transport",
+              "sort_order": 1,
+              "client_may_swap": true,
+              "default_option_id": "7af4fcdb-1f32-4140-b853-a33750369154",
+              "default_pinned": false,
+              "options": [
+                {
+                  "option_id": "7af4fcdb-1f32-4140-b853-a33750369154",
+                  "source": "agency",
+                  "title": "E2E s278sbnml Flight HAN-SGN x 2",
+                  "tier": null,
+                  "agency_supplier_id": "2be5cbbe-9366-4284-877d-28360283108e",
+                  "sell_amount": "200.00",
+                  "sell_delta": "0.00",
+                  "pay_on_arrival": false,
+                  "choose_later_allowed": false,
+                  "availability": "agency",
+                  "availability_checked_at": null,
+                  "is_default": true,
+                  "picked": false,
+                  "prices": [],
+                  "price_rules": null,
+                  "suggested_prices": [
+                    {
+                      "pax_type": "adult",
+                      "unit_sell": "100.00",
+                      "qty": 2
+                    }
+                  ],
+                  "net_amount": "160.00",
+                  "net_delta": "0.00"
+                }
+              ]
+            },
+            {
+              "option_block_id": "e4fc89fe-4fe4-4338-9b9d-e11e086135b5",
+              "title": "Fees",
+              "type": "other",
+              "sort_order": 2,
+              "client_may_swap": true,
+              "default_option_id": "f1dbbe89-4399-4ed9-b6d3-d19b1c08d617",
+              "default_pinned": false,
+              "options": [
+                {
+                  "option_id": "f1dbbe89-4399-4ed9-b6d3-d19b1c08d617",
+                  "source": "agency",
+                  "title": "E2E s278sbnml Service fee",
+                  "tier": null,
+                  "agency_supplier_id": null,
+                  "sell_amount": "25.00",
+                  "sell_delta": "0.00",
+                  "pay_on_arrival": false,
+                  "choose_later_allowed": false,
+                  "availability": "agency",
+                  "availability_checked_at": null,
+                  "is_default": true,
+                  "picked": false,
+                  "prices": [],
+                  "price_rules": null,
+                  "suggested_prices": [
+                    {
+                      "pax_type": "adult",
+                      "unit_sell": "12.50",
+                      "qty": 2
+                    }
+                  ],
+                  "net_amount": "0.00",
+                  "net_delta": "0.00"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "0bc9464f-3271-43e5-96e0-6790b61cfe7d",
+          "day_no": 2,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "75b6f091-0b3e-4a16-9b03-2e241ca0c7df",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "9d31cb18-d3e3-4e84-aeda-11ea2f182a81",
+          "day_no": 3,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "dec1606e-31e2-49aa-94b9-9616bd45d1fd",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "8672283f-e5e8-4a6b-9305-a514e3044bb2",
+          "day_no": 4,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "0822749f-9525-4854-863a-d2d208b08d87",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "ab0dac99-5cea-43c1-9011-4cac8bb05d81",
+          "day_no": 5,
+          "before_you_go": false,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": []
+        }
+      ],
+      "rules": [],
+      "picks": [],
+      "totals": {
+        "currency": "USD",
+        "sell_total": "225.00",
+        "pay_on_arrival_total": "0.00",
+        "deposit": "67.50",
+        "balance": "157.50",
+        "schedule": [
+          {
+            "kind": "deposit",
+            "seq": 1,
+            "percent": "30",
+            "due_on": null,
+            "days_before": null,
+            "amount": "67.50"
+          },
+          {
+            "kind": "instalment",
+            "seq": 1,
+            "percent": "40",
+            "due_on": null,
+            "days_before": 60,
+            "amount": "90.00"
+          },
+          {
+            "kind": "balance",
+            "seq": 1,
+            "percent": null,
+            "due_on": null,
+            "days_before": 30,
+            "amount": "67.50"
+          }
+        ],
+        "net_total": "160.00",
+        "margin_total": "65.00"
+      },
+      "checks": {
+        "publishable": false,
+        "blocking": [
+          "schedule_dates_required"
+        ],
+        "warnings": []
+      },
+      "stage2": {
+        "accommodation_tier": null,
+        "group_pref": null,
+        "pace": null,
+        "party_adults": 2,
+        "party_children": 0
+      },
+      "before_you_go": {
+        "aa_items": 0,
+        "countries": [],
+        "fitness_warning": false,
+        "insurance_reminder": true,
+        "selected": [],
+        "suggested": [],
+        "packs_not_chosen": false
+      },
+      "pricing": {
+        "bands": {
+          "child_age_max": 11,
+          "infant_age_max": 1
+        },
+        "party": {
+          "adult": 2,
+          "child": 0,
+          "infant": 0,
+          "single_supp": 0
+        },
+        "discount": {
+          "discount_pct": null,
+          "limit_pct": "10.00",
+          "above_limit": false,
+          "below_cost": false,
+          "needs_approval": false,
+          "approved_pct": null,
+          "pending": null,
+          "history": []
+        }
+      },
+      "catalogue": {
+        "service_id": "187fc7c6-3057-44ff-8322-b2946bb064c4",
+        "name": "E2E s278sbnml Service fee",
+        "qty_basis": "per_booking",
+        "quantity": 1,
+        "travellers": 2,
+        "adults": 2,
+        "rooms": 1,
+        "nights": 4,
+        "unit_sell": "25.00",
+        "currency": "USD",
+        "sell_amount": "25.00",
+        "fx": null,
+        "unit_net": "0.00",
+        "net_amount": "0.00"
+      }
+    }
+  },
+  {
+    "name": "POST line",
+    "status": 201,
+    "body": {
+      "booking_line_id": "cb1f47ed-df1b-4453-b4a4-fdf6c558f9a8",
+      "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+      "supplier_kind": "agency",
+      "agency_supplier_id": "2be5cbbe-9366-4284-877d-28360283108e",
+      "supplier_name": "E2E s278sbnml Air Desk",
+      "status": "planning",
+      "aa_sub_status": null,
+      "title": "E2E s278sbnml Flight HAN-SGN x 2",
+      "confirmation_no": null,
+      "service_from": "2026-12-10",
+      "service_to": "2026-12-10",
+      "collect": "agency",
+      "confirm_class": null,
+      "visible_to_travelers": false,
+      "confirmed_at": null,
+      "requested_at": null,
+      "request_ref": null,
+      "read_only": false,
+      "money": {
+        "cost": null,
+        "sell": null,
+        "commission_expected": null
+      }
+    }
+  },
+  {
+    "name": "GET trip lines",
+    "status": 200,
+    "body": {
+      "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+      "lines": [
+        {
+          "booking_line_id": "cb1f47ed-df1b-4453-b4a4-fdf6c558f9a8",
+          "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+          "supplier_kind": "agency",
+          "agency_supplier_id": "2be5cbbe-9366-4284-877d-28360283108e",
+          "supplier_name": "E2E s278sbnml Air Desk",
+          "status": "planning",
+          "aa_sub_status": null,
+          "title": "E2E s278sbnml Flight HAN-SGN x 2",
+          "confirmation_no": null,
+          "service_from": "2026-12-10",
+          "service_to": "2026-12-10",
+          "collect": "agency",
+          "confirm_class": null,
+          "visible_to_travelers": false,
+          "confirmed_at": null,
+          "requested_at": null,
+          "request_ref": null,
+          "read_only": false,
+          "money": {
+            "cost": null,
+            "sell": null,
+            "commission_expected": null
+          },
+          "supplier_thread": null,
+          "commission": null
+        }
+      ],
+      "base_currency": "USD",
+      "booking_validation_level": "basic",
+      "lost_reason_hint": null
+    }
+  },
+  {
+    "name": "UI POST supplier-requests (prepare)",
+    "status": 200
+  },
+  {
+    "name": "UI POST supplier-requests/send",
+    "status": 202
+  },
+  {
+    "name": "GET trip lines (after send)",
+    "status": 200,
+    "body": {
+      "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+      "lines": [
+        {
+          "booking_line_id": "cb1f47ed-df1b-4453-b4a4-fdf6c558f9a8",
+          "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+          "supplier_kind": "agency",
+          "agency_supplier_id": "2be5cbbe-9366-4284-877d-28360283108e",
+          "supplier_name": "E2E s278sbnml Air Desk",
+          "status": "requested",
+          "aa_sub_status": null,
+          "title": "E2E s278sbnml Flight HAN-SGN x 2",
+          "confirmation_no": null,
+          "service_from": "2026-12-10",
+          "service_to": "2026-12-10",
+          "collect": "agency",
+          "confirm_class": null,
+          "visible_to_travelers": false,
+          "confirmed_at": null,
+          "requested_at": "2026-11-12T00:05:35.631066+00:00",
+          "request_ref": "76cd85b1-5813-4b08-98bf-c3c8b4ac972c",
+          "read_only": false,
+          "money": {
+            "cost": null,
+            "sell": null,
+            "commission_expected": null
+          },
+          "supplier_thread": {
+            "conversation_id": "c6b05da6-71f8-4aa2-97f5-4d6d542180a8",
+            "last_reply_at": null,
+            "replied": false
+          },
+          "commission": null
+        }
+      ],
+      "base_currency": "USD",
+      "booking_validation_level": "basic",
+      "lost_reason_hint": null
+    }
+  },
+  {
+    "name": "GET /bookings?status=requested",
+    "status": 422,
+    "body": {
+      "detail": [
+        {
+          "type": "literal_error",
+          "loc": [
+            "query",
+            "status"
+          ],
+          "msg": "Input should be 'planning', 'confirmed' or 'cancelled'",
+          "input": "requested",
+          "ctx": {
+            "expected": "'planning', 'confirmed' or 'cancelled'"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "UI POST lines/{id}/confirm",
+    "status": 409
+  },
+  {
+    "name": "GET trip lines (after confirm)",
+    "status": 200,
+    "body": {
+      "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+      "lines": [
+        {
+          "booking_line_id": "cb1f47ed-df1b-4453-b4a4-fdf6c558f9a8",
+          "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+          "supplier_kind": "agency",
+          "agency_supplier_id": "2be5cbbe-9366-4284-877d-28360283108e",
+          "supplier_name": "E2E s278sbnml Air Desk",
+          "status": "requested",
+          "aa_sub_status": null,
+          "title": "E2E s278sbnml Flight HAN-SGN x 2",
+          "confirmation_no": null,
+          "service_from": "2026-12-10",
+          "service_to": "2026-12-10",
+          "collect": "agency",
+          "confirm_class": null,
+          "visible_to_travelers": false,
+          "confirmed_at": null,
+          "requested_at": "2026-11-12T00:05:35.631066+00:00",
+          "request_ref": "76cd85b1-5813-4b08-98bf-c3c8b4ac972c",
+          "read_only": false,
+          "money": {
+            "cost": null,
+            "sell": null,
+            "commission_expected": null
+          },
+          "supplier_thread": {
+            "conversation_id": "c6b05da6-71f8-4aa2-97f5-4d6d542180a8",
+            "last_reply_at": null,
+            "replied": false
+          },
+          "commission": null
+        }
+      ],
+      "base_currency": "USD",
+      "booking_validation_level": "basic",
+      "lost_reason_hint": null
+    }
+  },
+  {
+    "name": "GET conversations",
+    "status": 404,
+    "body": {
+      "detail": "not_found"
+    }
+  }
+]
