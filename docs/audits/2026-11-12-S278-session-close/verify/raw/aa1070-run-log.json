@@ -1,0 +1,1058 @@
+[
+  {
+    "name": "GET /departures?scope=upcoming",
+    "status": 200,
+    "body": {
+      "scope": "upcoming",
+      "departures": [
+        {
+          "departure_id": "9f7d807d-1b10-4477-9136-02a7911f4875",
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "service_from": "2026-11-13",
+          "service_to": "2026-11-18",
+          "state": {
+            "status": "scheduled",
+            "guaranteed_at": null,
+            "cancelled_at": null,
+            "min_to_operate": null
+          },
+          "trips": 1,
+          "pax": {
+            "adults": 1,
+            "children": 0,
+            "infants": 0
+          },
+          "stage3_complete": 0
+        },
+        {
+          "departure_id": "824ac043-95cd-4b98-9e6a-9ba539a26202",
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "service_from": "2026-11-20",
+          "service_to": "2026-11-25",
+          "state": {
+            "status": "scheduled",
+            "guaranteed_at": null,
+            "cancelled_at": null,
+            "min_to_operate": null
+          },
+          "trips": 1,
+          "pax": {
+            "adults": 2,
+            "children": 1,
+            "infants": 0
+          },
+          "stage3_complete": 0
+        },
+        {
+          "departure_id": "2d3f3d0c-f10f-44f9-8709-e7a2f5396080",
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "service_from": "2026-11-27",
+          "service_to": "2026-12-02",
+          "state": {
+            "status": "scheduled",
+            "guaranteed_at": null,
+            "cancelled_at": null,
+            "min_to_operate": null
+          },
+          "trips": 2,
+          "pax": {
+            "adults": 3,
+            "children": 0,
+            "infants": 0
+          },
+          "stage3_complete": 0
+        },
+        {
+          "departure_id": "af6ca5eb-64b0-4fb4-930a-2fafbe63dc2b",
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "service_from": "2026-12-04",
+          "service_to": "2026-12-09",
+          "state": {
+            "status": "scheduled",
+            "guaranteed_at": null,
+            "cancelled_at": null,
+            "min_to_operate": null
+          },
+          "trips": 1,
+          "pax": {
+            "adults": 2,
+            "children": 0,
+            "infants": 0
+          },
+          "stage3_complete": 0
+        }
+      ]
+    }
+  },
+  {
+    "name": "GET roster",
+    "status": 200,
+    "body": {
+      "departure_id": "824ac043-95cd-4b98-9e6a-9ba539a26202",
+      "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "service_from": "2026-11-20",
+      "service_to": "2026-11-25",
+      "state": {
+        "status": "scheduled",
+        "guaranteed_at": null,
+        "cancelled_at": null,
+        "min_to_operate": null
+      },
+      "pax": {
+        "adults": 2,
+        "children": 1,
+        "infants": 0
+      },
+      "stage3_complete": 0,
+      "trips": [
+        {
+          "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "stage": "booked",
+          "start_date": "2026-11-20",
+          "end_date": "2026-11-25",
+          "pax": {
+            "adults": 2,
+            "children": 1,
+            "infants": 0
+          },
+          "s3": 0,
+          "travellers": 1,
+          "rooms_placed": 0,
+          "passport_issues": 0
+        }
+      ],
+      "travellers": [
+        {
+          "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+          "traveler_id": "cc5f0fde-dc45-4c6f-997b-5a2b22c2b25e",
+          "name": "E2E mwbyt1cv Booker",
+          "role": "lead",
+          "details_done": false,
+          "passport": "missing",
+          "room": null
+        }
+      ],
+      "manifest_fields": [
+        "name",
+        "trip_ref",
+        "age_band",
+        "room",
+        "passport_check",
+        "dietary",
+        "mobility",
+        "arrival_flight",
+        "departure_flight"
+      ],
+      "manifest_default": [
+        "name",
+        "trip_ref",
+        "age_band",
+        "room"
+      ]
+    }
+  },
+  {
+    "name": "POST manifest",
+    "status": 200,
+    "body": {
+      "keys": [
+        "filename",
+        "watermark",
+        "row_count",
+        "fields",
+        "reason",
+        "csv"
+      ],
+      "header": "watermark,no,name,trip_ref,age_band,room\r",
+      "rows": 1
+    }
+  },
+  {
+    "name": "POST manifest with a health field, no reason",
+    "status": 422,
+    "body": {
+      "detail": "reason_required",
+      "message": "a manifest of more than 5 travellers or with health codes needs a reason",
+      "reasons": [
+        "duty_of_care",
+        "incident_response",
+        "contact_client",
+        "ops_handoff",
+        "client_request"
+      ],
+      "threshold": 5
+    }
+  },
+  {
+    "name": "GET passports T",
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "valid_months": 6,
+      "valid_until_needed": "2027-05-25",
+      "issues": 0,
+      "travellers": [
+        {
+          "traveler_id": "cc5f0fde-dc45-4c6f-997b-5a2b22c2b25e",
+          "role": "lead",
+          "status": "missing"
+        }
+      ]
+    }
+  },
+  {
+    "name": "GET passports R",
+    "status": 200,
+    "body": {
+      "trip_id": "18c61c49-8f83-4119-a1e2-bca441f11752",
+      "valid_months": 6,
+      "valid_until_needed": "2027-06-05",
+      "issues": 0,
+      "travellers": [
+        {
+          "traveler_id": "e8e6652d-9376-473a-8d28-c2276442acc8",
+          "role": "lead",
+          "status": "missing"
+        },
+        {
+          "traveler_id": "d87d3de0-84bd-4e7e-90f8-8ae74a832127",
+          "role": "companion",
+          "status": "missing"
+        },
+        {
+          "traveler_id": "78c1be72-8548-4c4c-b9e8-fea9244c9b30",
+          "role": "companion",
+          "status": "missing"
+        }
+      ]
+    }
+  },
+  {
+    "name": "GET rooming R",
+    "status": 200,
+    "body": {
+      "trip_id": "18c61c49-8f83-4119-a1e2-bca441f11752",
+      "rooms": [],
+      "unassigned": [
+        {
+          "traveler_id": "e8e6652d-9376-473a-8d28-c2276442acc8",
+          "name": "E2E S261 Lead vwye3w",
+          "role": "lead"
+        },
+        {
+          "traveler_id": "d87d3de0-84bd-4e7e-90f8-8ae74a832127",
+          "name": "E2E S261 Adult vwye3w",
+          "role": "companion"
+        },
+        {
+          "traveler_id": "78c1be72-8548-4c4c-b9e8-fea9244c9b30",
+          "name": "E2E S261 Child vwye3w",
+          "role": "companion"
+        }
+      ],
+      "room_config": null,
+      "room_types": [
+        "single",
+        "double",
+        "twin",
+        "triple",
+        "quad",
+        "family"
+      ],
+      "capacity": {
+        "single": 1,
+        "double": 2,
+        "twin": 2,
+        "triple": 3,
+        "quad": 4,
+        "family": 6
+      },
+      "bed_prefs": [
+        "double_bed",
+        "twin_beds",
+        "extra_bed",
+        "cot"
+      ]
+    }
+  },
+  {
+    "name": "PUT rooming R: 3 in a double",
+    "status": 422,
+    "body": {
+      "detail": "room_over_capacity",
+      "message": "a double room takes 2",
+      "room_no": 1
+    }
+  },
+  {
+    "name": "PUT rooming R: 3 in a triple",
+    "status": 200,
+    "body": {
+      "trip_id": "18c61c49-8f83-4119-a1e2-bca441f11752",
+      "rooms": [
+        {
+          "room_no": 1,
+          "room_type": "triple",
+          "travellers": [
+            {
+              "traveler_id": "78c1be72-8548-4c4c-b9e8-fea9244c9b30",
+              "name": "E2E S261 Child vwye3w",
+              "role": "companion",
+              "bed_pref": null
+            },
+            {
+              "traveler_id": "d87d3de0-84bd-4e7e-90f8-8ae74a832127",
+              "name": "E2E S261 Adult vwye3w",
+              "role": "companion",
+              "bed_pref": null
+            },
+            {
+              "traveler_id": "e8e6652d-9376-473a-8d28-c2276442acc8",
+              "name": "E2E S261 Lead vwye3w",
+              "role": "lead",
+              "bed_pref": null
+            }
+          ]
+        }
+      ],
+      "unassigned": [],
+      "room_config": null,
+      "room_types": [
+        "single",
+        "double",
+        "twin",
+        "triple",
+        "quad",
+        "family"
+      ],
+      "capacity": {
+        "single": 1,
+        "double": 2,
+        "twin": 2,
+        "triple": 3,
+        "quad": 4,
+        "family": 6
+      },
+      "bed_prefs": [
+        "double_bed",
+        "twin_beds",
+        "extra_bed",
+        "cot"
+      ]
+    }
+  },
+  {
+    "name": "GET rooming R (after)",
+    "status": 200,
+    "body": {
+      "trip_id": "18c61c49-8f83-4119-a1e2-bca441f11752",
+      "rooms": [
+        {
+          "room_no": 1,
+          "room_type": "triple",
+          "travellers": [
+            {
+              "traveler_id": "78c1be72-8548-4c4c-b9e8-fea9244c9b30",
+              "name": "E2E S261 Child vwye3w",
+              "role": "companion",
+              "bed_pref": null
+            },
+            {
+              "traveler_id": "d87d3de0-84bd-4e7e-90f8-8ae74a832127",
+              "name": "E2E S261 Adult vwye3w",
+              "role": "companion",
+              "bed_pref": null
+            },
+            {
+              "traveler_id": "e8e6652d-9376-473a-8d28-c2276442acc8",
+              "name": "E2E S261 Lead vwye3w",
+              "role": "lead",
+              "bed_pref": null
+            }
+          ]
+        }
+      ],
+      "unassigned": [],
+      "room_config": null,
+      "room_types": [
+        "single",
+        "double",
+        "twin",
+        "triple",
+        "quad",
+        "family"
+      ],
+      "capacity": {
+        "single": 1,
+        "double": 2,
+        "twin": 2,
+        "triple": 3,
+        "quad": 4,
+        "family": 6
+      },
+      "bed_prefs": [
+        "double_bed",
+        "twin_beds",
+        "extra_bed",
+        "cot"
+      ]
+    }
+  },
+  {
+    "name": "GET rooming T",
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "rooms": [],
+      "unassigned": [
+        {
+          "traveler_id": "cc5f0fde-dc45-4c6f-997b-5a2b22c2b25e",
+          "name": "E2E mwbyt1cv Booker",
+          "role": "lead"
+        }
+      ],
+      "room_config": {
+        "family": 1
+      },
+      "room_types": [
+        "single",
+        "double",
+        "twin",
+        "triple",
+        "quad",
+        "family"
+      ],
+      "capacity": {
+        "single": 1,
+        "double": 2,
+        "twin": 2,
+        "triple": 3,
+        "quad": 4,
+        "family": 6
+      },
+      "bed_prefs": [
+        "double_bed",
+        "twin_beds",
+        "extra_bed",
+        "cot"
+      ]
+    }
+  },
+  {
+    "name": "PUT rooming T: a single (config says family)",
+    "status": 422,
+    "body": {
+      "detail": "rooms_not_in_proposal",
+      "message": "more rooms of a type than the accepted proposal",
+      "types": [
+        "single"
+      ]
+    }
+  },
+  {
+    "name": "PUT rooming T: family room",
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "rooms": [
+        {
+          "room_no": 1,
+          "room_type": "family",
+          "travellers": [
+            {
+              "traveler_id": "cc5f0fde-dc45-4c6f-997b-5a2b22c2b25e",
+              "name": "E2E mwbyt1cv Booker",
+              "role": "lead",
+              "bed_pref": "double_bed"
+            }
+          ]
+        }
+      ],
+      "unassigned": [],
+      "room_config": {
+        "family": 1
+      },
+      "room_types": [
+        "single",
+        "double",
+        "twin",
+        "triple",
+        "quad",
+        "family"
+      ],
+      "capacity": {
+        "single": 1,
+        "double": 2,
+        "twin": 2,
+        "triple": 3,
+        "quad": 4,
+        "family": 6
+      },
+      "bed_prefs": [
+        "double_bed",
+        "twin_beds",
+        "extra_bed",
+        "cot"
+      ]
+    }
+  },
+  {
+    "name": "POST visa-template PH",
+    "status": 201,
+    "body": {
+      "visa_template_id": "8588e949-07e0-4113-bf75-37e3f51583e2",
+      "country": "PH",
+      "visa_type": "evisa",
+      "processing_days": 5,
+      "fee": "0.00",
+      "fee_currency": "USD",
+      "documents": [
+        "E2E passport copy",
+        "E2E return ticket"
+      ],
+      "official_url": "https://example.invalid/visa",
+      "active": true
+    }
+  },
+  {
+    "name": "GET visa-templates",
+    "status": 200,
+    "body": {
+      "templates": [
+        {
+          "visa_template_id": "8588e949-07e0-4113-bf75-37e3f51583e2",
+          "country": "PH",
+          "visa_type": "evisa",
+          "processing_days": 5,
+          "fee": "0.00",
+          "fee_currency": "USD",
+          "documents": [
+            "E2E passport copy",
+            "E2E return ticket"
+          ],
+          "official_url": "https://example.invalid/visa",
+          "active": true
+        }
+      ],
+      "visa_types": [
+        "evisa",
+        "visa_on_arrival",
+        "embassy",
+        "visa_exempt",
+        "transit",
+        "other"
+      ]
+    }
+  },
+  {
+    "name": "GET visa suggestions T",
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "countries": [],
+      "can_add": true,
+      "suggestions": []
+    }
+  },
+  {
+    "name": "GET visa suggestions R",
+    "status": 200,
+    "body": {
+      "trip_id": "18c61c49-8f83-4119-a1e2-bca441f11752",
+      "countries": [
+        "VN"
+      ],
+      "can_add": true,
+      "suggestions": [
+        {
+          "traveler_id": "e8e6652d-9376-473a-8d28-c2276442acc8",
+          "traveler_name": "E2E S261 Lead vwye3w",
+          "country": "VN",
+          "nationality_known": false,
+          "template": null
+        },
+        {
+          "traveler_id": "d87d3de0-84bd-4e7e-90f8-8ae74a832127",
+          "traveler_name": "E2E S261 Adult vwye3w",
+          "country": "VN",
+          "nationality_known": false,
+          "template": null
+        },
+        {
+          "traveler_id": "78c1be72-8548-4c4c-b9e8-fea9244c9b30",
+          "traveler_name": "E2E S261 Child vwye3w",
+          "country": "VN",
+          "nationality_known": false,
+          "template": null
+        }
+      ]
+    }
+  },
+  {
+    "name": "POST visa T",
+    "status": 201,
+    "body": {
+      "visa_application_id": "217cb565-1984-4af0-a715-1cb03c6da304",
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "traveler_id": "cc5f0fde-dc45-4c6f-997b-5a2b22c2b25e",
+      "traveler_name": null,
+      "visa_template_id": "8588e949-07e0-4113-bf75-37e3f51583e2",
+      "country": "PH",
+      "visa_type": "evisa",
+      "status": "to_do",
+      "deadline": "2026-11-18",
+      "submitted_on": null,
+      "decided_on": null,
+      "visa_no": null,
+      "valid_from": null,
+      "valid_until": null,
+      "checklist": [
+        {
+          "visa_checklist_item_id": "e433a35a-9599-411e-b86e-a5678b6f9f21",
+          "label": "E2E passport copy",
+          "done": false,
+          "done_by_kind": null
+        },
+        {
+          "visa_checklist_item_id": "d0b168e4-e0f5-41d7-8baa-a6a0291d5fa8",
+          "label": "E2E return ticket",
+          "done": false,
+          "done_by_kind": null
+        }
+      ],
+      "checklist_done": 0
+    }
+  },
+  {
+    "name": "POST checklist item",
+    "status": 201,
+    "body": {
+      "visa_checklist_item_id": "e6ad2230-56bc-48c2-94d8-20952735c013",
+      "visa_application_id": "217cb565-1984-4af0-a715-1cb03c6da304"
+    }
+  },
+  {
+    "name": "PATCH checklist tick",
+    "status": 200,
+    "body": {
+      "visa_checklist_item_id": "e6ad2230-56bc-48c2-94d8-20952735c013",
+      "done": true,
+      "done_by_kind": "member"
+    }
+  },
+  {
+    "name": "PATCH visa status collecting",
+    "status": 200,
+    "body": {
+      "visa_application_id": "217cb565-1984-4af0-a715-1cb03c6da304",
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "traveler_id": "cc5f0fde-dc45-4c6f-997b-5a2b22c2b25e",
+      "traveler_name": null,
+      "visa_template_id": "8588e949-07e0-4113-bf75-37e3f51583e2",
+      "country": "PH",
+      "visa_type": "evisa",
+      "status": "collecting",
+      "deadline": "2026-11-18",
+      "submitted_on": null,
+      "decided_on": null,
+      "visa_no": null,
+      "valid_from": null,
+      "valid_until": null,
+      "checklist": [
+        {
+          "visa_checklist_item_id": "e433a35a-9599-411e-b86e-a5678b6f9f21",
+          "label": "E2E passport copy",
+          "done": false,
+          "done_by_kind": null
+        },
+        {
+          "visa_checklist_item_id": "d0b168e4-e0f5-41d7-8baa-a6a0291d5fa8",
+          "label": "E2E return ticket",
+          "done": false,
+          "done_by_kind": null
+        },
+        {
+          "visa_checklist_item_id": "e6ad2230-56bc-48c2-94d8-20952735c013",
+          "label": "E2E photo 4x6",
+          "done": true,
+          "done_by_kind": "member"
+        }
+      ],
+      "checklist_done": 1
+    }
+  },
+  {
+    "name": "GET trip visas T",
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "can_add": true,
+      "applications": [
+        {
+          "visa_application_id": "217cb565-1984-4af0-a715-1cb03c6da304",
+          "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+          "traveler_id": "cc5f0fde-dc45-4c6f-997b-5a2b22c2b25e",
+          "traveler_name": "E2E mwbyt1cv Booker",
+          "visa_template_id": "8588e949-07e0-4113-bf75-37e3f51583e2",
+          "country": "PH",
+          "visa_type": "evisa",
+          "status": "collecting",
+          "deadline": "2026-11-18",
+          "submitted_on": null,
+          "decided_on": null,
+          "visa_no": null,
+          "valid_from": null,
+          "valid_until": null,
+          "checklist": [
+            {
+              "visa_checklist_item_id": "e433a35a-9599-411e-b86e-a5678b6f9f21",
+              "label": "E2E passport copy",
+              "done": false,
+              "done_by_kind": null
+            },
+            {
+              "visa_checklist_item_id": "d0b168e4-e0f5-41d7-8baa-a6a0291d5fa8",
+              "label": "E2E return ticket",
+              "done": false,
+              "done_by_kind": null
+            },
+            {
+              "visa_checklist_item_id": "e6ad2230-56bc-48c2-94d8-20952735c013",
+              "label": "E2E photo 4x6",
+              "done": true,
+              "done_by_kind": "member"
+            }
+          ],
+          "checklist_done": 1
+        }
+      ],
+      "visa_types": [
+        "evisa",
+        "visa_on_arrival",
+        "embassy",
+        "visa_exempt",
+        "transit",
+        "other"
+      ],
+      "statuses": [
+        "to_do",
+        "collecting",
+        "submitted",
+        "approved",
+        "refused",
+        "not_needed",
+        "cancelled"
+      ]
+    }
+  },
+  {
+    "name": "GET vouchers T (before)",
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "agency_name": "Lữ hành Sen Vàng",
+      "trip_title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-25",
+      "lead_traveller": "E2E mwbyt1cv Booker",
+      "pax": 3,
+      "vouchers": [
+        {
+          "booking_line_id": "e066c8a6-b725-488c-8f70-3e081ed936d6",
+          "voucher_no": "E066C8A6",
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "service_from": "2026-11-20",
+          "service_to": "2026-11-25",
+          "confirmation_no": "TC-000033",
+          "supplier": {
+            "name": "Adventure Asia",
+            "category": "dmc",
+            "contact_name": null,
+            "aa_booking_ref": "ad6bb9fd",
+            "aa_departure_id": "824ac043-95cd-4b98-9e6a-9ba539a26202"
+          },
+          "pickup": null,
+          "dropoff": null,
+          "service_time": null,
+          "pnr": null,
+          "note": null,
+          "released": false,
+          "not_released_reason": "line_hidden"
+        }
+      ]
+    }
+  },
+  {
+    "name": "POST agency line (visible)",
+    "status": 201,
+    "body": {
+      "booking_line_id": "0fee253c-1201-4688-a9c0-59419e453ee0",
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "supplier_kind": "agency",
+      "agency_supplier_id": "5e1eace4-1931-4e31-b9c3-fa37dc7b5025",
+      "supplier_name": "E2E 1029170848 Ha Long Cruise",
+      "status": "planning",
+      "aa_sub_status": null,
+      "title": "E2E S278 airport transfer (voucher check)",
+      "confirmation_no": null,
+      "service_from": "2026-11-20",
+      "service_to": "2026-11-20",
+      "collect": "agency",
+      "confirm_class": null,
+      "visible_to_travelers": true,
+      "confirmed_at": null,
+      "requested_at": null,
+      "request_ref": null,
+      "read_only": false,
+      "money": {
+        "cost": null,
+        "sell": null,
+        "commission_expected": null
+      }
+    }
+  },
+  {
+    "name": "PUT line money",
+    "status": 200,
+    "body": {
+      "booking_line_id": "0fee253c-1201-4688-a9c0-59419e453ee0",
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "supplier_kind": "agency",
+      "agency_supplier_id": "5e1eace4-1931-4e31-b9c3-fa37dc7b5025",
+      "supplier_name": "E2E 1029170848 Ha Long Cruise",
+      "status": "planning",
+      "aa_sub_status": null,
+      "title": "E2E S278 airport transfer (voucher check)",
+      "confirmation_no": null,
+      "service_from": "2026-11-20",
+      "service_to": "2026-11-20",
+      "collect": "agency",
+      "confirm_class": null,
+      "visible_to_travelers": true,
+      "confirmed_at": null,
+      "requested_at": null,
+      "request_ref": null,
+      "read_only": false,
+      "money": {
+        "cost": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "sell": {
+          "amount": "15.00",
+          "currency": "USD"
+        },
+        "commission_expected": null
+      }
+    }
+  },
+  {
+    "name": "POST confirm",
+    "status": 200,
+    "body": {
+      "booking_line_id": "0fee253c-1201-4688-a9c0-59419e453ee0",
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "supplier_kind": "agency",
+      "agency_supplier_id": "5e1eace4-1931-4e31-b9c3-fa37dc7b5025",
+      "supplier_name": "E2E 1029170848 Ha Long Cruise",
+      "status": "confirmed",
+      "aa_sub_status": null,
+      "title": "E2E S278 airport transfer (voucher check)",
+      "confirmation_no": "E2E-S278-V1",
+      "service_from": "2026-11-20",
+      "service_to": "2026-11-20",
+      "collect": "agency",
+      "confirm_class": null,
+      "visible_to_travelers": true,
+      "confirmed_at": "2026-11-12T00:12:05.221360+00:00",
+      "requested_at": null,
+      "request_ref": null,
+      "read_only": false,
+      "money": {
+        "cost": {
+          "amount": "10.00",
+          "currency": "USD",
+          "amount_base": "10.00",
+          "base_currency": "USD",
+          "fx": {
+            "rate": "1.0000000000",
+            "rate_date": "2026-11-12",
+            "source": "platform_daily",
+            "stale_days": 0
+          }
+        },
+        "sell": {
+          "amount": "15.00",
+          "currency": "USD",
+          "amount_base": "15.00",
+          "base_currency": "USD",
+          "fx": {
+            "rate": "1.0000000000",
+            "rate_date": "2026-11-12",
+            "source": "platform_daily",
+            "stale_days": 0
+          }
+        },
+        "commission_expected": null,
+        "margin_base": "5.00"
+      },
+      "frozen": 2,
+      "stale_days": 0
+    }
+  },
+  {
+    "name": "PUT voucher",
+    "status": 200,
+    "body": {
+      "booking_line_id": "0fee253c-1201-4688-a9c0-59419e453ee0",
+      "pickup": "E2E hotel lobby",
+      "dropoff": "E2E airport",
+      "pnr": null,
+      "note": "Synthetic voucher (S278 verify)",
+      "service_time": "08:30"
+    }
+  },
+  {
+    "name": "GET voucher",
+    "status": 200,
+    "body": {
+      "booking_line_id": "0fee253c-1201-4688-a9c0-59419e453ee0",
+      "pickup": "E2E hotel lobby",
+      "dropoff": "E2E airport",
+      "service_time": "08:30",
+      "pnr": null,
+      "note": "Synthetic voucher (S278 verify)"
+    }
+  },
+  {
+    "name": "GET vouchers T (after)",
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "agency_name": "Lữ hành Sen Vàng",
+      "trip_title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-25",
+      "lead_traveller": "E2E mwbyt1cv Booker",
+      "pax": 3,
+      "vouchers": [
+        {
+          "booking_line_id": "e066c8a6-b725-488c-8f70-3e081ed936d6",
+          "voucher_no": "E066C8A6",
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "service_from": "2026-11-20",
+          "service_to": "2026-11-25",
+          "confirmation_no": "TC-000033",
+          "supplier": {
+            "name": "Adventure Asia",
+            "category": "dmc",
+            "contact_name": null,
+            "aa_booking_ref": "ad6bb9fd",
+            "aa_departure_id": "824ac043-95cd-4b98-9e6a-9ba539a26202"
+          },
+          "pickup": null,
+          "dropoff": null,
+          "service_time": null,
+          "pnr": null,
+          "note": null,
+          "released": false,
+          "not_released_reason": "line_hidden"
+        },
+        {
+          "booking_line_id": "0fee253c-1201-4688-a9c0-59419e453ee0",
+          "voucher_no": "0FEE253C",
+          "title": "E2E S278 airport transfer (voucher check)",
+          "service_from": "2026-11-20",
+          "service_to": "2026-11-20",
+          "confirmation_no": "E2E-S278-V1",
+          "supplier": {
+            "name": "E2E 1029170848 Ha Long Cruise",
+            "category": "activity",
+            "contact_name": null,
+            "aa_booking_ref": null,
+            "aa_departure_id": null
+          },
+          "pickup": "E2E hotel lobby",
+          "dropoff": "E2E airport",
+          "service_time": "08:30",
+          "pnr": null,
+          "note": "Synthetic voucher (S278 verify)",
+          "released": true,
+          "not_released_reason": null
+        }
+      ]
+    }
+  },
+  {
+    "name": "POST pdfs confirmation",
+    "status": 202,
+    "body": {
+      "queued": true,
+      "kind": "confirmation",
+      "document_kind": "confirmation_pdf"
+    }
+  },
+  {
+    "name": "POST pdfs voucher",
+    "status": 202,
+    "body": {
+      "queued": true,
+      "kind": "voucher",
+      "document_kind": "voucher"
+    }
+  },
+  {
+    "name": "GET documents (after pdfs)",
+    "status": 200,
+    "body": [
+      {
+        "id": "78bde01f-9122-4504-9991-2ae65fbee179",
+        "kind": "voucher",
+        "name": "voucher-0FEE253C.pdf",
+        "size": 214387
+      },
+      {
+        "id": "41528635-7792-4966-b732-902531ab8c01",
+        "kind": "confirmation_pdf",
+        "name": "confirmation-9f0976dc.pdf",
+        "size": 214517
+      }
+    ]
+  },
+  {
+    "name": "POST portal-access",
+    "status": 201,
+    "body": {
+      "access_id": "5691c14f-1980-483d-bf8d-25098a6af668",
+      "traveler_id": "cc5f0fde-dc45-4c6f-997b-5a2b22c2b25e",
+      "role": "lead",
+      "link_path": "<redacted>",
+      "expires_at": "2026-12-12T00:13:10.632335+00:00",
+      "dispatch_id": "7299cda6-4286-493c-aac5-7a17c33f69e3",
+      "reissued_from": "56ac13a2-bb42-4f8f-85bb-96273559045f"
+    }
+  },
+  {
+    "name": "GET /crm/public/v1/traveller/travel",
+    "status": 200,
+    "body": {
+      "status": 200,
+      "keys": [
+        "vouchers",
+        "voucher_header",
+        "rooming",
+        "visas"
+      ],
+      "vouchers": [
+        {
+          "title": "E2E S278 airport transfer (voucher check)",
+          "pickup": "E2E hotel lobby",
+          "time": "08:30"
+        }
+      ],
+      "rooming": "{\"trip_id\":\"9f0976dc-6a3e-4d77-bc6d-9d63980358be\",\"rooms\":[{\"room_no\":1,\"room_type\":\"family\",\"travellers\":[{\"traveler_id\":\"cc5f0fde-dc45-4c6f-997b-5a2b22c2b25e\",\"name\":\"E2E mwbyt1cv Booker\",\"role\":\"le",
+      "visas": 1
+    }
+  }
+]

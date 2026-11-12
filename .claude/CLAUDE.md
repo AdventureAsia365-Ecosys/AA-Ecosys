@@ -22,12 +22,13 @@
 | Vai trò | Account | Region | Profile |
 |---|---|---|---|
 | **Acc2 — hạ tầng chính** (RDS/ECS/S3/Lambda thật, DUY NHẤT chứa hạ tầng) | 005097885195 | us-west-1 | `aa365-admin` |
-| **Acc3 — LLM satellite** (Bedrock chat models; DUY NHẤT ngoài acc2 dùng cho LLM) | 786888028788 | us-west-1 | `nghiep_aa365` |
-| Acc1 — tài khoản CÁ NHÂN của Nghiệp, **ĐÃ GỠ khỏi hệ sinh thái** (AA-998, S255); từ 11/11/2026 (S277) là management/payer của org chứa acc3 — chỉ trả tiền, KHÔNG workload (ADR 0001a, Note S277) | 867490540162 | — | `pqnghiep-admin` (SSO, Identity Center ap-southeast-1); acc3 qua SSO: `acc3-sso` |
+| **Acc3 — LLM satellite (dự phòng)** (Bedrock chat models; AWS chặn 7 model ở cấp tài khoản từ 29/10 → xếp sau acc1 từ S278) | 786888028788 | us-west-1 | `nghiep_aa365` |
+| Acc1 — tài khoản CÁ NHÂN của Nghiệp, **ĐÃ GỠ khỏi hệ sinh thái** (AA-998, S255); từ 11/11/2026 (S277) là management/payer của org chứa acc3; **từ 12/11/2026 (S278, AA-1095) phục vụ Bedrock LLM** qua đúng 1 role `AA1-Bedrock-Invoker` (root Terraform `accounts/acc1-bedrock`), ngoài ra KHÔNG workload (ADR 0001a, Note S277 + Note S278); đường vào dự phòng: profile `acc1-admin` | 867490540162 | — | `pqnghiep-admin` (SSO, Identity Center ap-southeast-1); acc3 qua SSO: `acc3-sso` |
 
-LLM chỉ chạy trên **acc3** (Bedrock satellite) + các model Bedrock native acc2 đang dùng hôm nay (vd. Cohere Embed v4).
-Không còn fallback chéo account: acc3 lỗi → fallback model cùng acc3 / job retry (Nghiệp chấp nhận, AA-998).
-KHÔNG tạo resource, deploy, ghi secret hay route LLM vào acc1; không thêm lại acc1 vào code/Terraform/catalog.
+LLM Bedrock chạy trên **acc1** (từ S278, AA-1095; route-control v10/v11: Claude = Anthropic API → acc1 → acc3, GPT = acc1 →
+acc3 → OpenAI API) + các model Bedrock native acc2 đang dùng hôm nay (vd. Cohere Embed v4); acc3 xếp sau, giữ cấu hình.
+Trên acc1 chỉ có role gọi Bedrock (và role break-glass `AA-BreakGlass-Admin`): KHÔNG tạo resource, data, secret hay workload
+khác trên acc1. acc1 giữ độc lập (ngoài org acc4) tới khi tech lead xem lại đầu tháng 12.
 
 Always verify: aws sts get-caller-identity --profile aa365-admin
 

@@ -1,0 +1,51 @@
+{
+  "res": {
+    "services": [
+      {
+        "file": "shots/aa1069-services-1440-light.png",
+        "sideways": false
+      },
+      {
+        "file": "shots/aa1069-services-1440-dark.png",
+        "sideways": false
+      },
+      {
+        "file": "shots/aa1069-services-390-light.png",
+        "sideways": false
+      },
+      {
+        "file": "shots/aa1069-services-390-dark.png",
+        "sideways": false
+      }
+    ],
+    "builder": [
+      {
+        "file": "shots/aa1069-builder-1440-light.png",
+        "sideways": false
+      },
+      {
+        "file": "shots/aa1069-builder-390-dark.png",
+        "sideways": false
+      }
+    ],
+    "bookings": [
+      {
+        "file": "shots/aa1069-bookings-1440-light.png",
+        "sideways": false
+      },
+      {
+        "file": "shots/aa1069-bookings-1440-dark.png",
+        "sideways": false
+      },
+      {
+        "file": "shots/aa1069-bookings-390-light.png",
+        "sideways": false
+      },
+      {
+        "file": "shots/aa1069-bookings-390-dark.png",
+        "sideways": false
+      }
+    ]
+  },
+  "errors": []
+}

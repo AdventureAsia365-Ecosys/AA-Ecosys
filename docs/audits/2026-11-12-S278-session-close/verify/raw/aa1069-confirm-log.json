@@ -1,0 +1,150 @@
+[
+  {
+    "name": "UI /bookings?status=requested document",
+    "status": 200
+  },
+  {
+    "name": "GET confirm-check",
+    "status": 404,
+    "body": {
+      "detail": "not_found"
+    }
+  },
+  {
+    "name": "PUT line money",
+    "status": 200,
+    "body": {
+      "booking_line_id": "cb1f47ed-df1b-4453-b4a4-fdf6c558f9a8",
+      "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+      "supplier_kind": "agency",
+      "agency_supplier_id": "2be5cbbe-9366-4284-877d-28360283108e",
+      "supplier_name": "E2E s278sbnml Air Desk",
+      "status": "requested",
+      "aa_sub_status": null,
+      "title": "E2E s278sbnml Flight HAN-SGN x 2",
+      "confirmation_no": null,
+      "service_from": "2026-12-10",
+      "service_to": "2026-12-10",
+      "collect": "agency",
+      "confirm_class": null,
+      "visible_to_travelers": false,
+      "confirmed_at": null,
+      "requested_at": "2026-11-12T00:05:35.631066+00:00",
+      "request_ref": "76cd85b1-5813-4b08-98bf-c3c8b4ac972c",
+      "read_only": false,
+      "money": {
+        "cost": {
+          "amount": "160.00",
+          "currency": "USD"
+        },
+        "sell": {
+          "amount": "200.00",
+          "currency": "USD"
+        },
+        "commission_expected": null
+      }
+    }
+  },
+  {
+    "name": "GET confirm-check (after money)",
+    "status": 404,
+    "body": {
+      "detail": "not_found"
+    }
+  },
+  {
+    "name": "UI POST lines/{id}/confirm",
+    "status": 200,
+    "body": {
+      "status": "confirmed",
+      "confirmation_no": "E2E-S278SBNML"
+    }
+  },
+  {
+    "name": "GET trip lines (after confirm)",
+    "status": 200,
+    "body": {
+      "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+      "lines": [
+        {
+          "booking_line_id": "cb1f47ed-df1b-4453-b4a4-fdf6c558f9a8",
+          "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+          "supplier_kind": "agency",
+          "agency_supplier_id": "2be5cbbe-9366-4284-877d-28360283108e",
+          "supplier_name": "E2E s278sbnml Air Desk",
+          "status": "confirmed",
+          "aa_sub_status": null,
+          "title": "E2E s278sbnml Flight HAN-SGN x 2",
+          "confirmation_no": "E2E-S278SBNML",
+          "service_from": "2026-12-10",
+          "service_to": "2026-12-10",
+          "collect": "agency",
+          "confirm_class": null,
+          "visible_to_travelers": false,
+          "confirmed_at": "2026-11-12T00:06:46.465478+00:00",
+          "requested_at": "2026-11-12T00:05:35.631066+00:00",
+          "request_ref": "76cd85b1-5813-4b08-98bf-c3c8b4ac972c",
+          "read_only": false,
+          "money": {
+            "cost": {
+              "amount": "160.00",
+              "currency": "USD",
+              "amount_base": "160.00",
+              "base_currency": "USD",
+              "fx": {
+                "rate": "1.0000000000",
+                "rate_date": "2026-11-12",
+                "source": "platform_daily",
+                "stale_days": 0
+              }
+            },
+            "sell": {
+              "amount": "200.00",
+              "currency": "USD",
+              "amount_base": "200.00",
+              "base_currency": "USD",
+              "fx": {
+                "rate": "1.0000000000",
+                "rate_date": "2026-11-12",
+                "source": "platform_daily",
+                "stale_days": 0
+              }
+            },
+            "commission_expected": null,
+            "margin_base": "40.00"
+          },
+          "supplier_thread": {
+            "conversation_id": "c6b05da6-71f8-4aa2-97f5-4d6d542180a8",
+            "last_reply_at": null,
+            "replied": false
+          },
+          "commission": null
+        }
+      ],
+      "base_currency": "USD",
+      "booking_validation_level": "basic",
+      "lost_reason_hint": null
+    }
+  },
+  {
+    "name": "GET conversations?trip_id",
+    "status": 200,
+    "body": {
+      "conversations": [
+        {
+          "conversation_id": "c6b05da6-71f8-4aa2-97f5-4d6d542180a8",
+          "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+          "traveler_id": null,
+          "channel": "email",
+          "last_message_at": "2026-11-12T00:05:33.901913+00:00",
+          "message_count": 1,
+          "held_count": 1,
+          "last_direction": "out",
+          "unmatched": false,
+          "agency_supplier_id": "2be5cbbe-9366-4284-877d-28360283108e",
+          "supplier_name": "E2E s278sbnml Air Desk"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,80 @@
+{
+  "s277_system_tags": [
+    {
+      "code": "sys_aa_multi_day",
+      "reasons": [
+        {
+          "code": "aa_tour",
+          "tour": "000e3340-d9f5-4b7b-8609-4cdaa9c272dc"
+        }
+      ]
+    },
+    {
+      "code": "sys_aa_cultural_heritage",
+      "reasons": [
+        {
+          "code": "aa_tour",
+          "tour": "000e3340-d9f5-4b7b-8609-4cdaa9c272dc"
+        }
+      ]
+    },
+    {
+      "code": "sys_aa_local_immersion",
+      "reasons": [
+        {
+          "code": "aa_tour",
+          "tour": "000e3340-d9f5-4b7b-8609-4cdaa9c272dc"
+        }
+      ]
+    },
+    {
+      "code": "sys_aa_water_activities",
+      "reasons": [
+        {
+          "code": "aa_tour",
+          "tour": "000e3340-d9f5-4b7b-8609-4cdaa9c272dc"
+        }
+      ]
+    },
+    {
+      "code": "sys_aa_wildlife_nature",
+      "reasons": [
+        {
+          "code": "aa_tour",
+          "tour": "000e3340-d9f5-4b7b-8609-4cdaa9c272dc"
+        }
+      ]
+    }
+  ],
+  "sys_unlink": {
+    "status": 409,
+    "detail": "system_tag"
+  },
+  "system_tags_ui": "Set by the app\nAA MULTI-DAY TOUR\nFrom the AA tour 000e3340-d9f5-4b7b-8609-4cdaa9c272dc\nCULTURE AND HERITAGE\nFrom the AA tour 000e3340-d9f5-4b7b-8609-4cdaa9c272dc\nLOCAL LIFE\nFrom the AA tour 000e3340-d9f5-4b7b-8609-4cdaa9c272dc\nWATER ACTIVITIES\nFrom the AA tour 000e3340-d9f5-4b7b-8609-4cdaa9c272dc\nWILDLIFE AND NATURE\nFrom the AA tour 000e3340-d9f5-4b7b-8609-4cdaa9c272dc",
+  "system_tag_remove_buttons": 0,
+  "deletes": [
+    {
+      "code": "e2e_s278txdd0_trip_tag",
+      "status": 200,
+      "body": {
+        "tag_id": "e7c8c8a1-2717-43c4-bc03-962fca8b271d",
+        "deleted": true,
+        "removed_links": 1
+      }
+    },
+    {
+      "code": "e2e_s278txdd0_client_tag",
+      "status": 200,
+      "body": {
+        "tag_id": "9f89a6d1-bc7c-477e-a0c2-76afcf3c0fec",
+        "deleted": true,
+        "removed_links": 1
+      }
+    }
+  ],
+  "trash_trip": 200,
+  "trash_lead": 200,
+  "agency_tags_left": [],
+  "qualifying_end": 0,
+  "inquiry_end": 38
+}

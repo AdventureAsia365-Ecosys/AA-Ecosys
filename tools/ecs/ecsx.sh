@@ -88,6 +88,11 @@ for kv in "$@"; do
     (( st <= WAIT )) || { echo "ecsx: ECSX_SCRIPT_TIMEOUT=$st is longer than the wait (ECSX_TIMEOUT=$WAIT): set ECSX_TIMEOUT=$st (or more) too, or run a long job as a one-off ECS task" >&2; exit 2; }
   fi
 done
+# S278 lesson: ECSX_SCRIPT_TIMEOUT set in the environment is ignored (it is a VAR=value argument); two paid R1 runs
+# were cut at the 3300 s default that way. Refuse instead of silently using the default.
+if [[ -n ${ECSX_SCRIPT_TIMEOUT:-} ]] && ! printf '%s\n' "$@" | grep -q '^ECSX_SCRIPT_TIMEOUT='; then
+  echo "ecsx: ECSX_SCRIPT_TIMEOUT is set in the environment, where it has no effect: pass it after the script path as ECSX_SCRIPT_TIMEOUT=$ECSX_SCRIPT_TIMEOUT" >&2; exit 2
+fi
 base=$(basename "$script" .py); base=${base//[^A-Za-z0-9_-]/_}
 id=$(date -u +%Y%m%dT%H%M%S)-$$-$base
 

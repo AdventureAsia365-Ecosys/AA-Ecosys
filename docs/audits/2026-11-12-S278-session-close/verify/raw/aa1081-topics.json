@@ -1,0 +1,195 @@
+{
+  "terra": {
+    "errors": [],
+    "loads": [
+      {
+        "status": 200,
+        "refresh": {
+          "status": "succeeded",
+          "refreshing": false,
+          "finished_at": "2026-11-12T00:28:19.623900+00:00"
+        },
+        "blog_topics": {
+          "total": 12,
+          "keys": [
+            "tours",
+            "total",
+            "with_topic"
+          ],
+          "no_topic": [
+            "low_search_interest",
+            "not_ready"
+          ]
+        }
+      },
+      {
+        "status": 200,
+        "refresh": {
+          "status": "succeeded",
+          "refreshing": false,
+          "finished_at": "2026-11-12T00:28:19.623900+00:00"
+        },
+        "blog_topics": {
+          "total": 12,
+          "keys": [
+            "tours",
+            "total",
+            "with_topic"
+          ],
+          "no_topic": [
+            "low_search_interest",
+            "not_ready"
+          ]
+        }
+      },
+      {
+        "status": 200,
+        "refresh": {
+          "status": "succeeded",
+          "refreshing": false,
+          "finished_at": "2026-11-12T00:28:19.623900+00:00"
+        },
+        "blog_topics": {
+          "total": 12,
+          "keys": [
+            "tours",
+            "total",
+            "with_topic"
+          ],
+          "no_topic": [
+            "low_search_interest",
+            "not_ready"
+          ]
+        }
+      },
+      {
+        "status": 200,
+        "refresh": {
+          "status": "succeeded",
+          "refreshing": false,
+          "finished_at": "2026-11-12T00:28:19.623900+00:00"
+        },
+        "blog_topics": {
+          "total": 12,
+          "keys": [
+            "tours",
+            "total",
+            "with_topic"
+          ],
+          "no_topic": [
+            "low_search_interest",
+            "not_ready"
+          ]
+        }
+      }
+    ],
+    "note": 1,
+    "rows": [
+      "Khovsgol and Gobi Tour, Mongolia — 15 Days — Too few people search for this tour's places yet to carry an article. It still gets social post topics.",
+      "Rajasthan Palaces, Forts & Tiger Reserves — 15 Days — Topics for this tour are still being prepared. Check again after the next update."
+    ],
+    "title": "2 of your 12 tours have no article topic yet",
+    "forbidden": false,
+    "page_debate": false,
+    "sideways_1440_light": false,
+    "sideways_1440_dark": false,
+    "sideways_390_light": false,
+    "sideways_390_dark": false
+  },
+  "atlas": {
+    "errors": [],
+    "loads": [
+      {
+        "status": 200,
+        "refresh": {
+          "status": "succeeded",
+          "refreshing": false,
+          "finished_at": "2026-11-12T00:14:08.965469+00:00"
+        },
+        "blog_topics": {
+          "total": 13,
+          "keys": [
+            "tours",
+            "total",
+            "with_topic"
+          ],
+          "no_topic": [
+            "not_ready"
+          ]
+        }
+      }
+    ],
+    "note": 1,
+    "rows": [
+      "Rajasthan Palaces, Forts & Tiger Reserves — 15 Days — Topics for this tour are still being prepared. Check again after the next update."
+    ],
+    "title": "1 of your 13 tours has no article topic yet",
+    "forbidden": false,
+    "page_debate": false,
+    "sideways_1440_light": false
+  },
+  "trail": {
+    "errors": [],
+    "loads": [
+      {
+        "status": 200,
+        "refresh": {
+          "status": "succeeded",
+          "refreshing": false,
+          "finished_at": "2026-11-12T00:42:42.521646+00:00"
+        },
+        "blog_topics": {
+          "total": 12,
+          "keys": [
+            "tours",
+            "total",
+            "with_topic"
+          ],
+          "no_topic": [
+            "not_ready"
+          ]
+        }
+      }
+    ],
+    "note": 1,
+    "rows": [
+      "Rajasthan Palaces, Forts & Tiger Reserves — 15 Days — Topics for this tour are still being prepared. Check again after the next update."
+    ],
+    "title": "1 of your 12 tours has no article topic yet",
+    "forbidden": false,
+    "page_debate": false,
+    "sideways_1440_light": false
+  },
+  "wildkind": {
+    "errors": [],
+    "loads": [
+      {
+        "status": 200,
+        "refresh": {
+          "status": "succeeded",
+          "refreshing": false,
+          "finished_at": "2026-11-12T00:56:17.091496+00:00"
+        },
+        "blog_topics": {
+          "total": 12,
+          "keys": [
+            "tours",
+            "total",
+            "with_topic"
+          ],
+          "no_topic": [
+            "not_ready"
+          ]
+        }
+      }
+    ],
+    "note": 1,
+    "rows": [
+      "Rajasthan Palaces, Forts & Tiger Reserves — 15 Days — Topics for this tour are still being prepared. Check again after the next update."
+    ],
+    "title": "1 of your 12 tours has no article topic yet",
+    "forbidden": false,
+    "page_debate": false,
+    "sideways_1440_light": false
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "errors": [
+    {
+      "kind": "network",
+      "status": 409,
+      "method": "POST",
+      "url": "https://portal.lumiguides.it.com/api/tenant/v1/publish-log/7b80e4ca-ec7f-45cb-aaa2-7c5314fa6a40/publish"
+    },
+    {
+      "kind": "console",
+      "url": "https://portal.lumiguides.it.com/portal/content/publish",
+      "text": "Failed to load resource: the server responded with a status of 409 ()"
+    }
+  ],
+  "audit": {
+    "pending": 13,
+    "held_blog": 9,
+    "editor_publish": {
+      "piece": "7b80e4ca-ec7f-45cb-aaa2-7c5314fa6a40",
+      "title": "Three Designations, One Reserve: Ranthambore's Long Protection",
+      "status": 409,
+      "code": "content_needs_final_check",
+      "can_publish_anyway": false,
+      "detail": "Before this piece goes live, please read it through once more: we could not confirm every detail in it against the trip (dates, places, what is included). An account owner can then publish it.",
+      "forbidden_words": false
+    },
+    "publish_buttons": 0
+  },
+  "owner": {
+    "pending": 4,
+    "held_blog_unique": 0
+  }
+}

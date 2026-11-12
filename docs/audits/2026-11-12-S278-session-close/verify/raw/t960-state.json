@@ -1,0 +1,309 @@
+{
+  "run": "s278txdd0",
+  "layout": {
+    "aa960-trip-tagbar-1440-light": {
+      "sideways": false
+    },
+    "aa960-trip-tagbar-1440-dark": {
+      "sideways": false
+    },
+    "aa960-trip-tagbar-390-light": {
+      "sideways": false
+    },
+    "aa960-trip-tagbar-390-dark": {
+      "sideways": false
+    },
+    "aa960-client-tagbar-1440-light": {
+      "sideways": false
+    },
+    "aa960-client-tagbar-1440-dark": {
+      "sideways": false
+    },
+    "aa960-client-tagbar-390-light": {
+      "sideways": false
+    },
+    "aa960-client-tagbar-390-dark": {
+      "sideways": false
+    },
+    "aa960-clients-tag-filter-1440-light": {
+      "sideways": false
+    },
+    "aa960-clients-tag-filter-1440-dark": {
+      "sideways": false
+    },
+    "aa960-clients-tag-filter-390-light": {
+      "sideways": false
+    },
+    "aa960-clients-tag-filter-390-dark": {
+      "sideways": false
+    },
+    "aa960-board-1440-light": {
+      "sideways": false
+    },
+    "aa960-board-1440-dark": {
+      "sideways": false
+    },
+    "aa960-board-390-light": {
+      "sideways": false
+    },
+    "aa960-board-390-dark": {
+      "sideways": false
+    },
+    "aa960-marketing-1440-light": {
+      "sideways": false
+    },
+    "aa960-marketing-1440-dark": {
+      "sideways": false
+    },
+    "aa960-marketing-390-light": {
+      "sideways": false
+    },
+    "aa960-marketing-390-dark": {
+      "sideways": false
+    },
+    "aa960-settings-tags-1440-light": {
+      "sideways": false
+    },
+    "aa960-settings-tags-1440-dark": {
+      "sideways": false
+    },
+    "aa960-settings-tags-390-light": {
+      "sideways": false
+    },
+    "aa960-settings-tags-390-dark": {
+      "sideways": false
+    }
+  },
+  "tags_before": [
+    {
+      "code": "sys_ready_to_travel",
+      "kind": "system",
+      "applies_to": "client",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_day_tour",
+      "kind": "system",
+      "applies_to": "trip",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_multi_day",
+      "kind": "system",
+      "applies_to": "trip",
+      "uses": 42
+    },
+    {
+      "code": "sys_aa_adventure_sport",
+      "kind": "system",
+      "applies_to": "trip",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_challenging",
+      "kind": "system",
+      "applies_to": "trip",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_cultural_heritage",
+      "kind": "system",
+      "applies_to": "trip",
+      "uses": 42
+    },
+    {
+      "code": "sys_aa_easy",
+      "kind": "system",
+      "applies_to": "trip",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_culinary",
+      "kind": "system",
+      "applies_to": "trip",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_local_immersion",
+      "kind": "system",
+      "applies_to": "trip",
+      "uses": 42
+    },
+    {
+      "code": "sys_aa_trekking",
+      "kind": "system",
+      "applies_to": "trip",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_water_activities",
+      "kind": "system",
+      "applies_to": "trip",
+      "uses": 42
+    },
+    {
+      "code": "sys_aa_wellness_relaxation",
+      "kind": "system",
+      "applies_to": "trip",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_wildlife_nature",
+      "kind": "system",
+      "applies_to": "trip",
+      "uses": 42
+    }
+  ],
+  "trip_id": "827e8be4-f4b8-483a-b230-3d4fe55f44fe",
+  "lead_id": "e769fc3a-bcf6-4bcb-b530-2f169d03482a",
+  "qualifying_before": 0,
+  "trip_tag_calls": [
+    "POST /bff/tags 201",
+    "PUT /bff/trips/{id}/tags/{id} 200"
+  ],
+  "trip_tag": {
+    "tag_id": "e7c8c8a1-2717-43c4-bc03-962fca8b271d",
+    "code": "e2e_s278txdd0_trip_tag",
+    "link_id": "9d884fbf-5956-46c2-b272-a21db84578d5"
+  },
+  "trip_chips": [
+    "E2E S278TXDD0 TRIP TAG"
+  ],
+  "client_tag_calls": [
+    "POST /bff/tags 201",
+    "PUT /bff/travelers/{id}/tags/{id} 200"
+  ],
+  "client_tag": {
+    "tag_id": "9f89a6d1-bc7c-477e-a0c2-76afcf3c0fec",
+    "code": "e2e_s278txdd0_client_tag",
+    "link_id": "ef1c95d2-2c5d-4602-b181-bc1f4a16c47a"
+  },
+  "client_chips": [
+    "E2E S278TXDD0 CLIENT TAG"
+  ],
+  "directory_rows_text": "A mailbox is disconnected: messages to clients are on hold.\nReconnect\nClients\n\nYour agency's travellers. Lists show names only; contact details, identity documents and health open on Reveal, and each view is logged.\n\nSearch\nActive\nArchived\nEveryone\nOnly mine\nDuplicate clients\nTag:\nAny tag\nE2E s278txdd0 client tag\nReady to travel again\nTag these\n+ New client\nE2E s278txdd0 Tags\ne-mail on file\n1 trip\nSample data\n12 Nov 2026\nE2E S278TXDD0 CLIENT TAG",
+  "directory_has_client": true,
+  "card_text": "Việt Nam, 6 đêm\nE2E s278txdd0 T. · USD 2–3.5k\nME · REPLY IN 2 H\nPLANNING 0 %\nUnassigned\nE2E S278TXDD0 TRIP TAG",
+  "single_remove": 200,
+  "qualifying_now": 1,
+  "bulk_preview": {
+    "status": 200,
+    "body": {
+      "tag_id": "e7c8c8a1-2717-43c4-bc03-962fca8b271d",
+      "action": "add",
+      "applies_to": "trip",
+      "total": 1,
+      "count": 1,
+      "already": 0,
+      "held": 0,
+      "archived_suppressed": 0,
+      "sample": [
+        "827e8be4-f4b8-483a-b230-3d4fe55f44fe"
+      ],
+      "dry_run": true
+    }
+  },
+  "bulk_preview_ui": "1 trips will get the tag E2E s278txdd0 trip tag.",
+  "bulk_apply_label": "Apply to 1",
+  "bulk_apply": {
+    "status": 200,
+    "body": {
+      "tag_id": "e7c8c8a1-2717-43c4-bc03-962fca8b271d",
+      "action": "add",
+      "applies_to": "trip",
+      "total": 1,
+      "count": 1,
+      "already": 0,
+      "held": 0,
+      "archived_suppressed": 0,
+      "sample": [
+        "827e8be4-f4b8-483a-b230-3d4fe55f44fe"
+      ],
+      "dry_run": false,
+      "workflows_started": 0
+    }
+  },
+  "trip_tags_after_bulk": [
+    "e2e_s278txdd0_trip_tag"
+  ],
+  "ready": {
+    "status": 200,
+    "count": 0,
+    "sample": []
+  },
+  "ready_rows_ui": 0,
+  "ready_text": "READY TO TRAVEL AGAIN\n\nPast clients who came home at least 9 months ago and have no open trip. Each row says why. Sending needs their marketing consent.\n\nAll clients\nMy clients\n0 clients\nReady to travel again\nNo client is ready to travel again yet. The list updates every morning.",
+  "system_tags": [
+    {
+      "code": "sys_ready_to_travel",
+      "applies_to": "client",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_day_tour",
+      "applies_to": "trip",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_multi_day",
+      "applies_to": "trip",
+      "uses": 42
+    },
+    {
+      "code": "sys_aa_adventure_sport",
+      "applies_to": "trip",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_challenging",
+      "applies_to": "trip",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_cultural_heritage",
+      "applies_to": "trip",
+      "uses": 42
+    },
+    {
+      "code": "sys_aa_easy",
+      "applies_to": "trip",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_culinary",
+      "applies_to": "trip",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_local_immersion",
+      "applies_to": "trip",
+      "uses": 42
+    },
+    {
+      "code": "sys_aa_trekking",
+      "applies_to": "trip",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_water_activities",
+      "applies_to": "trip",
+      "uses": 42
+    },
+    {
+      "code": "sys_aa_wellness_relaxation",
+      "applies_to": "trip",
+      "uses": 0
+    },
+    {
+      "code": "sys_aa_wildlife_nature",
+      "applies_to": "trip",
+      "uses": 42
+    }
+  ],
+  "sys_put": 409,
+  "sys_patch": 409,
+  "sys_delete": 409,
+  "sys_bulk": 409,
+  "sys_client_put": 409,
+  "settings_rows": 15
+}

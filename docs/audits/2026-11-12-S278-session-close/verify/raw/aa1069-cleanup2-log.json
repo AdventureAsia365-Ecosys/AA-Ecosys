@@ -1,0 +1,82 @@
+[
+  {
+    "name": "PATCH cancelled line supplier",
+    "status": 422,
+    "body": {
+      "detail": "line_not_editable",
+      "message": "the supplier of a confirmed line does not change; cancel it"
+    }
+  },
+  {
+    "name": "GET /suppliers",
+    "status": 200,
+    "body": {
+      "suppliers": [
+        {
+          "agency_supplier_id": "1db4e657-d87a-4665-8371-49b03a975e4a",
+          "kind": "aa",
+          "builtin": true,
+          "name": "Adventure Asia",
+          "category": "dmc",
+          "default_commission_pct": null,
+          "commission_due_days": null,
+          "confirmation_unique": false,
+          "has_contact_name": false,
+          "has_contact_email": false,
+          "line_count": 41
+        },
+        {
+          "agency_supplier_id": "5e1eace4-1931-4e31-b9c3-fa37dc7b5025",
+          "kind": "own",
+          "builtin": false,
+          "name": "E2E 1029170848 Ha Long Cruise",
+          "category": "activity",
+          "default_commission_pct": "83.35",
+          "commission_due_days": null,
+          "confirmation_unique": false,
+          "has_contact_name": false,
+          "has_contact_email": false,
+          "line_count": 10
+        },
+        {
+          "agency_supplier_id": "2be5cbbe-9366-4284-877d-28360283108e",
+          "kind": "own",
+          "builtin": false,
+          "name": "E2E s278sbnml Air Desk",
+          "category": "flight",
+          "default_commission_pct": null,
+          "commission_due_days": null,
+          "confirmation_unique": false,
+          "has_contact_name": true,
+          "has_contact_email": true,
+          "line_count": 1
+        },
+        {
+          "agency_supplier_id": "706d08e9-df33-476e-a42c-de85a8ebbb3c",
+          "kind": "own",
+          "builtin": false,
+          "name": "S957A Mekong Delta Cruises",
+          "category": "accommodation",
+          "default_commission_pct": "10.00",
+          "commission_due_days": 10,
+          "confirmation_unique": false,
+          "has_contact_name": false,
+          "has_contact_email": false,
+          "line_count": 6
+        }
+      ],
+      "categories": [
+        "accommodation",
+        "transport",
+        "activity",
+        "guide",
+        "restaurant",
+        "flight",
+        "insurance",
+        "visa",
+        "dmc",
+        "other"
+      ]
+    }
+  }
+]

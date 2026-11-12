@@ -1,0 +1,112 @@
+[
+  {
+    "name": "GET text email",
+    "status": 200,
+    "body": {
+      "status": 200,
+      "keys": [
+        "proposal_id",
+        "trip_id",
+        "version",
+        "kind",
+        "status",
+        "format",
+        "locale",
+        "subject",
+        "body",
+        "price_hash",
+        "reference",
+        "unfilled",
+        "link"
+      ],
+      "lang": "vi",
+      "excerpt": "- Lodging: Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days (theo yêu cầu)\\n\\nNgày 2 · Thứ Bảy, 12/12/2026\\n\\nNgày 3 · Chủ Nhật, 13/12/2026\\n\\nNgày 4 · Thứ Hai, 14/12/2026\\n\\nNgày 5 · Thứ Ba, 15/12/2026\\n\\nNgày 6 · Thứ Tư, 16/12/2026\\n\\nĐã bao gồm\\n- E2E s278i52rv Hướng dẫn viên riêng suốt chuyến (gõ tay)\\n- E2E s278i52rv Đưa đón sân bay khi đến và khi về\\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days:\\n- Accommodations as indicated / Meal as indicated / Transfer and\\n- Sightseeing tours / Boat rides / A separate * multi-lingual guide is\\n- provided for a minimum of 4 full paying person. .\\n- English or German or French or Spanish or Italian\\n\\nChưa bao gồm\\n- E2E s278i52rv International flights\\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days:\\n- Domestic air ticket is not included\\n\\nGiá\\nTổng cộng: 1.500,00 USD\\nĐặt cọc để xác nhận: 450,00 USD\\nĐợt thanh toán 1: 600,00 USD, hạn 12/10/2026\\nSố còn lại: 450,00 USD, hạn 27/11/2026\\n\\nMã tham chiếu đề xuất: bc53c1719656\\n\",\"price_hash\":\"bc53c17196564e386fcdb3341a76faee2bb72f9818fb185d1a268650121f9267\",\"referen"
+    }
+  },
+  {
+    "name": "GET text whatsapp",
+    "status": 200,
+    "body": {
+      "status": 200,
+      "keys": [
+        "proposal_id",
+        "trip_id",
+        "version",
+        "kind",
+        "status",
+        "format",
+        "locale",
+        "subject",
+        "body",
+        "price_hash",
+        "reference",
+        "unfilled",
+        "link"
+      ],
+      "lang": "vi",
+      "excerpt": "pical Jewels: Bohol, Dumaguete and Siquijor — 6 Days (theo yêu cầu)\\n\\n*Ngày 2 · Thứ Bảy, 12/12/2026*\\n\\n*Ngày 3 · Chủ Nhật, 13/12/2026*\\n\\n*Ngày 4 · Thứ Hai, 14/12/2026*\\n\\n*Ngày 5 · Thứ Ba, 15/12/2026*\\n\\n*Ngày 6 · Thứ Tư, 16/12/2026*\\n\\n*Đã bao gồm*\\n- E2E s278i52rv Hướng dẫn viên riêng suốt chuyến (gõ tay)\\n- E2E s278i52rv Đưa đón sân bay khi đến và khi về\\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days:\\n- Accommodations as indicated / Meal as indicated / Transfer and\\n- Sightseeing tours / Boat rides / A separate * multi-lingual guide is\\n- provided for a minimum of 4 full paying person. .\\n- English or German or French or Spanish or Italian\\n\\n*Chưa bao gồm*\\n- E2E s278i52rv International flights\\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days:\\n- Domestic air ticket is not included\\n\\n*Giá*\\nTổng cộng: 1.500,00 USD\\nĐặt cọc để xác nhận: 450,00 USD\\nĐợt thanh toán 1: 600,00 USD, hạn 12/10/2026\\nSố còn lại: 450,00 USD, hạn 27/11/2026\\n\\nMã tham chiếu đề xuất: bc53c1719656\\n\",\"price_hash\":\"bc53c17196564e386fcdb3341a76faee2bb72f9818fb185d1a268650121f9267\",\"refer"
+    }
+  },
+  {
+    "name": "POST stage -> proposal",
+    "status": 409,
+    "body": {
+      "detail": "stage2_incomplete",
+      "message": "Stage 2 is 0 %; 80 % or an override reason is needed",
+      "s2": 0,
+      "missing": [
+        "fitness_band",
+        "accommodation_tier",
+        "group_pref",
+        "interests",
+        "occasion",
+        "budget_flex",
+        "decision_maker",
+        "booking_timeline",
+        "competing_quotes"
+      ],
+      "override_reasons": [
+        "client_in_hurry",
+        "repeat_client",
+        "info_by_phone",
+        "other"
+      ]
+    }
+  },
+  {
+    "name": "POST stage -> proposal (override)",
+    "status": 200,
+    "body": {
+      "trip_id": "e519c16e-679f-4da4-8dd7-d30a17a8540b",
+      "from_stage": "qualifying",
+      "stage": "proposal",
+      "waiting_on": "client",
+      "override_reason_code": "other",
+      "allowed_moves": [
+        "qualifying",
+        "booked",
+        "lost"
+      ],
+      "undo": {
+        "history_id": "f6ff79a6-6b84-4a67-bb39-52901b29522c",
+        "undo_until": "2026-11-12T03:23:17.223503+00:00"
+      },
+      "workflow_runs": 0
+    }
+  },
+  {
+    "name": "POST send",
+    "status": 200,
+    "body": {
+      "proposal_id": "0c37b213-f5f2-4530-a230-0164e9591e69",
+      "status": "sent",
+      "price_hash": "bc53c17196564e386fcdb3341a76faee2bb72f9818fb185d1a268650121f9267",
+      "sent_at": "2026-11-12T03:23:07.702685+00:00",
+      "link_path": "<redacted>",
+      "link_reused": false,
+      "expires_at": "2026-11-26T03:23:07.702685+00:00",
+      "dispatch_id": "5d45323f-a13b-46b3-b32b-a3b5dcc200a4",
+      "superseded": null
+    }
+  }
+]

@@ -9,6 +9,8 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 
 ## Cách làm việc
 
+- **Tham số `@pytest.mark.parametrize` không sinh lúc import bằng uuid4()/random/time** (S278: #1454, #1456 cùng đỏ lint) → `apps/AA-CIS-App/tests/unit/test_s276_parametrize_determinism_lint.py` + `tools/workflows/lane.js` (COMMON)
+- **Không bịt finding gitleaks bằng comment allow inline của gitleaks: Secret Scan đọc mọi commit BASE..HEAD, phải viết lại dòng và squash nhánh** (S278 Booking #235) → `tools/workflows/lane.js` (COMMON) + Secret Scan workflow
 - **Prompt cho agent trong workflow phải nói rõ "chỉ làm task này"** (S239) → `tools/workflows/lane.js`
 - **Số migration ghi trong plan chưa phải là đã giữ chỗ — lane song song lấy mất trong lúc mình code** (S246) (lỗi thời: đã thay bằng) → `apps/AA-CIS-App/.github/scripts/migration_preflight.py`
 - **Nhánh xếp chồng sau khi nhánh dưới squash-merge: `git rebase --onto origin/main <SHA cũ của commit dưới>` — SHA mốc đổi sau mỗi lần rebase** (S243) → `tools/github/ship_train.py`
@@ -39,6 +41,7 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 
 ## Vận hành
 
+- **`ECSX_SCRIPT_TIMEOUT` là tham số sau đường dẫn script, không phải biến môi trường** (S278 AA-1048: 2 lượt R1 trả phí bị cắt ở 3300 s) → `tools/ecs/ecsx.sh` (từ chối khi chỉ có biến môi trường)
 - **`UnblendedCost` của Cost Explorer đã trừ credit/refund vào từng service — tài khoản trả bằng credit (acc3 từ 29/10) hiện ~$0 hoặc âm cho ngày dùng thật** (S260) → `apps/AA-CIS-App/shared/aws_client/cost_explorer.py`, `apps/AA-CIS-App/tests/unit/test_aa1002_s10_budget_reconcile.py`
 - **`gh run watch` có thể treo trên run đã xong (21 phút, S252 window11) và `mergeq.sh` đợi mãi khi PR thành DIRTY** (S252) → `tools/github/ship_merge.py`
 - **WAF CommonRuleSet: link tương đối `../` trong nội dung (HTML href/src hoặc markdown) khớp `GenericLFI_BODY`, không phải XSS** (S235, S239) → `infra/AA-CIS-Infra/modules/waf/main.tf`
@@ -100,6 +103,7 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 
 ## Pipeline và chất lượng
 
+- **Vòng sửa bài phải giữ độ dài ròng: lệnh cắt (F17/F13/F9) đi trước, rồi một bước mở rộng có nguồn; câu lệnh model không chứa nhãn nguồn nội bộ** (S278 AA-1077: bài co 3957→3546 ký tự; "The source notes name…" thành F13_leak) → `apps/AA-CIS-App/tests/unit/test_aa1077_s278_round2.py`
 - **Keyword DFS là chuỗi truy vấn thô, không được ép nguyên văn vào title/meta** (S233) → `apps/AA-CIS-App/tests/unit/test_aa768_s233_completeness.py`
 - **Tham số gửi cho model phải kiểm ở request thật, không chỉ ở LLMRequest** (S224) → `apps/AA-CIS-App/tests/unit/test_s224_claude_temperature.py`
 - **Repair step có thể tạo lỗi mới (flag_fix thêm forbidden word)** (n/a) → `apps/AA-CIS-App/tests/unit/test_aa738_forbidden_strip.py`

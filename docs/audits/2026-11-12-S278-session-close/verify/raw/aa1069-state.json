@@ -1,0 +1,83 @@
+{
+  "run": "s278sbnml",
+  "lead_name": "E2E s278sbnml Catalogue",
+  "trip_id": "851ce184-c02d-49ed-acfd-fa79acf4f366",
+  "supplier_id": "2be5cbbe-9366-4284-877d-28360283108e",
+  "svc_flight": "db6ab56d-491c-495c-be46-34d51c87aa00",
+  "svc_fee": "187fc7c6-3057-44ff-8322-b2946bb064c4",
+  "proposal_id": "c1f95cba-206d-4e7a-90e2-e0a4b9411a31",
+  "block_flights": "10a6f3dd-f941-4d31-894b-ddb6ab3fff18",
+  "block_fees": "e4fc89fe-4fe4-4338-9b9d-e11e086135b5",
+  "ui_default_qty": "",
+  "ui_preview": "2 x 100.00 USD = 200.00 USD · Supplier cost per unit: 80.00 USD",
+  "flight_option": {
+    "option_id": "7af4fcdb-1f32-4140-b853-a33750369154",
+    "source": "agency",
+    "title": "E2E s278sbnml Flight HAN-SGN x 2",
+    "tier": null,
+    "agency_supplier_id": "2be5cbbe-9366-4284-877d-28360283108e",
+    "sell_amount": "200.00",
+    "sell_delta": "0.00",
+    "pay_on_arrival": false,
+    "choose_later_allowed": false,
+    "availability": "agency",
+    "availability_checked_at": null,
+    "is_default": true,
+    "picked": false,
+    "prices": [],
+    "price_rules": null,
+    "suggested_prices": [
+      {
+        "pax_type": "adult",
+        "unit_sell": "100.00",
+        "qty": 2
+      }
+    ],
+    "net_amount": "160.00",
+    "net_delta": "0.00"
+  },
+  "fee_option": {
+    "option_id": "f1dbbe89-4399-4ed9-b6d3-d19b1c08d617",
+    "source": "agency",
+    "title": "E2E s278sbnml Service fee",
+    "tier": null,
+    "agency_supplier_id": null,
+    "sell_amount": "25.00",
+    "sell_delta": "0.00",
+    "pay_on_arrival": false,
+    "choose_later_allowed": false,
+    "availability": "agency",
+    "availability_checked_at": null,
+    "is_default": true,
+    "picked": false,
+    "prices": [],
+    "price_rules": null,
+    "suggested_prices": [
+      {
+        "pax_type": "adult",
+        "unit_sell": "12.50",
+        "qty": 2
+      }
+    ],
+    "net_amount": "0.00",
+    "net_delta": "0.00"
+  },
+  "line_id": "cb1f47ed-df1b-4453-b4a4-fdf6c558f9a8",
+  "draft_count": 1,
+  "draft_suppliers": [
+    "E2E s278sbnml Air Desk"
+  ],
+  "line_status_after_send": "requested",
+  "line_requested_at": "2026-11-12T00:05:35.631066+00:00",
+  "line_status_after_confirm": "confirmed",
+  "line_conf": "E2E-S278SBNML",
+  "bookings_requested_page_text": "A mailbox is disconnected: messages to clients are on hold.\nReconnect\nThe CRM service is not answering right now. Try again in a minute.",
+  "conversations": [
+    {
+      "id": "c6b05da6-71f8-4aa2-97f5-4d6d542180a8",
+      "channel": "email",
+      "agency_supplier_id": "2be5cbbe-9366-4284-877d-28360283108e"
+    }
+  ],
+  "lead_traveler_id": "33e10e1a-a7f0-4616-b738-74775ab0b523"
+}

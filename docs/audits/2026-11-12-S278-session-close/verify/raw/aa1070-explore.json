@@ -1,0 +1,424 @@
+{
+  "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+  "/trips/9f0976dc-6a3e-4d77-bc6d-9d63980358be": {
+    "status": 200,
+    "body": {
+      "trip": {
+        "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+        "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+        "stage": "booked",
+        "stage_entered_at": "2026-11-11T10:21:43.784269+00:00",
+        "waiting_on": "client",
+        "start_date": "2026-11-20",
+        "end_date": "2026-11-25",
+        "month": null,
+        "date_flex_days": 0,
+        "nights": 5,
+        "destinations": [],
+        "party_adults": 2,
+        "party_child_ages": [
+          7
+        ],
+        "party_type": "family",
+        "budget_band": null,
+        "trip_style": null,
+        "owner_member_id": null,
+        "is_mine": false,
+        "lead_source": "web_booking",
+        "sales_partner_id": "bfab5378-2d11-4693-b01b-89e97406a9be",
+        "lost_reason_code": null,
+        "last_inquiry_at": "2026-11-11T10:17:54.203589+00:00",
+        "created_at": "2026-11-11T10:17:54.203589+00:00",
+        "intake_completeness": {
+          "s1": 0,
+          "s2": 0,
+          "s3": 0
+        },
+        "cancel_reason_code": null,
+        "last_activity_at": "2026-11-11T10:21:43.784269+00:00",
+        "quiet_days": 0,
+        "quiet": false,
+        "cancellation_pending": false
+      },
+      "party": [
+        {
+          "traveler_id": "cc5f0fde-dc45-4c6f-997b-5a2b22c2b25e",
+          "role": "lead",
+          "display_name": "E2E mwbyt1cv Booker",
+          "preferred_channel": "email",
+          "has_email": true,
+          "has_phone": false,
+          "passport": "missing"
+        }
+      ],
+      "passport_check": {
+        "valid_months": 6,
+        "valid_until_needed": "2027-05-25",
+        "issues": 0
+      },
+      "tasks": [
+        {
+          "task_id": "1c877216-a4ba-4801-93ea-04959d768930",
+          "kind": "ops_release_incomplete",
+          "title": null,
+          "workflow_run_id": null,
+          "due_anchor": "ops_handoff",
+          "due_offset_days": null,
+          "priority": "urgent",
+          "assignee_member_id": null,
+          "status": "open",
+          "due_at": "2026-11-11T10:21:45.309043+00:00",
+          "done_at": null,
+          "created_at": "2026-11-11T10:21:45.309043+00:00"
+        },
+        {
+          "task_id": "ad51da4d-02a1-488e-b73a-97e773a5ee7d",
+          "kind": "stage3_due_t21",
+          "title": null,
+          "workflow_run_id": null,
+          "due_anchor": "departure",
+          "due_offset_days": null,
+          "priority": "normal",
+          "assignee_member_id": null,
+          "status": "open",
+          "due_at": "2026-11-11T11:00:08.980412+00:00",
+          "done_at": null,
+          "created_at": "2026-11-11T11:00:08.980412+00:00"
+        },
+        {
+          "task_id": "144b163d-59ec-4b11-b4a3-a40cae1af1af",
+          "kind": "collect_deposit",
+          "title": null,
+          "workflow_run_id": null,
+          "due_anchor": "hold_expiry",
+          "due_offset_days": null,
+          "priority": "normal",
+          "assignee_member_id": null,
+          "status": "done",
+          "due_at": "2026-11-13T10:17:56.799916+00:00",
+          "done_at": "2026-11-11T10:21:43.784269+00:00",
+          "created_at": "2026-11-11T10:17:57.412270+00:00"
+        }
+      ],
+      "notes": [],
+      "history": [
+        {
+          "from_stage": null,
+          "to_stage": "proposal",
+          "reason_code": "web_booking",
+          "at": "2026-11-11T10:17:54.203589+00:00",
+          "actor": "intake_form:662dcd44-59a7-4652-82e7-99bef2c2d05e",
+          "history_id": "731fb4c0-7f36-4f7a-a71f-79fa0a7ea8a9",
+          "override_reason_code": null,
+          "undo_of": null,
+          "batch_id": null
+        },
+        {
+          "from_stage": "proposal",
+          "to_stage": "booked",
+          "reason_code": "deposit_paid",
+          "at": "2026-11-11T10:21:43.784269+00:00",
+          "actor": "member:b85c6b16-7246-4a71-b3ea-9f8f40a03ab4",
+          "history_id": "7400582b-358c-4dbb-a91f-cff1de79d7a7",
+          "override_reason_code": null,
+          "undo_of": null,
+          "batch_id": null
+        }
+      ],
+      "submissions": [],
+      "allowed_moves": [
+        "pre_departure",
+        "travelling"
+      ],
+      "can_cancel": true,
+      "cancellation": null,
+      "stage2_link": null
+    }
+  },
+  "/trips/9f0976dc-6a3e-4d77-bc6d-9d63980358be/lines": {
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "lines": [
+        {
+          "booking_line_id": "e066c8a6-b725-488c-8f70-3e081ed936d6",
+          "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+          "supplier_kind": "aa",
+          "agency_supplier_id": "1db4e657-d87a-4665-8371-49b03a975e4a",
+          "supplier_name": "Adventure Asia",
+          "status": "confirmed",
+          "aa_sub_status": null,
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "confirmation_no": "TC-000033",
+          "service_from": "2026-11-20",
+          "service_to": "2026-11-25",
+          "collect": "agency",
+          "confirm_class": "confirmed",
+          "visible_to_travelers": false,
+          "confirmed_at": "2026-11-11T10:21:45.285801+00:00",
+          "requested_at": null,
+          "request_ref": null,
+          "read_only": true,
+          "aa": {
+            "sub_status": null,
+            "tour_source_id": "000e3340-d9f5-4b7b-8609-4cdaa9c272dc",
+            "component_kind": "trip_plan",
+            "currency": "USD",
+            "pax": {
+              "adult": 2,
+              "child": 1,
+              "rooms": [
+                {
+                  "count": 1,
+                  "occupancy": "family"
+                }
+              ],
+              "infant": 0
+            },
+            "quote_valid_until": null,
+            "hold_expires_at": "2026-11-13T10:17:56.799916+00:00",
+            "hold_id": "b616686c-6bae-4b1a-bcbc-650fba4a4b62",
+            "booking_id": "ad6bb9fd-12d3-4e22-b1d4-754e7779e917",
+            "from_price": null,
+            "below_from_price": null,
+            "decline_code": null,
+            "result_code": null,
+            "no_longer_offered": false,
+            "pending": null,
+            "actions": []
+          },
+          "money": {
+            "cost": {
+              "amount": "189.03",
+              "currency": "USD",
+              "amount_base": "189.03",
+              "base_currency": "USD",
+              "fx": {
+                "rate": "1.0000000000",
+                "rate_date": "2026-11-11",
+                "source": "aa_quote_lock",
+                "stale_days": 0
+              }
+            },
+            "sell": {
+              "amount": "300.00",
+              "currency": "USD",
+              "amount_base": "300.00",
+              "base_currency": "USD",
+              "fx": {
+                "rate": "1.0000000000",
+                "rate_date": "2026-11-11",
+                "source": "aa_quote_lock",
+                "stale_days": 0
+              }
+            },
+            "commission_expected": null,
+            "margin_base": "110.97"
+          }
+        }
+      ],
+      "base_currency": "USD",
+      "booking_validation_level": "basic",
+      "lost_reason_hint": null
+    }
+  },
+  "/trips/9f0976dc-6a3e-4d77-bc6d-9d63980358be/vouchers": {
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "agency_name": "Lữ hành Sen Vàng",
+      "trip_title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-25",
+      "lead_traveller": "E2E mwbyt1cv Booker",
+      "pax": 3,
+      "vouchers": [
+        {
+          "booking_line_id": "e066c8a6-b725-488c-8f70-3e081ed936d6",
+          "voucher_no": "E066C8A6",
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "service_from": "2026-11-20",
+          "service_to": "2026-11-25",
+          "confirmation_no": "TC-000033",
+          "supplier": {
+            "name": "Adventure Asia",
+            "category": "dmc",
+            "contact_name": null,
+            "aa_booking_ref": "ad6bb9fd",
+            "aa_departure_id": "824ac043-95cd-4b98-9e6a-9ba539a26202"
+          },
+          "pickup": null,
+          "dropoff": null,
+          "service_time": null,
+          "pnr": null,
+          "note": null,
+          "released": false,
+          "not_released_reason": "line_hidden"
+        }
+      ]
+    }
+  },
+  "/trips/9f0976dc-6a3e-4d77-bc6d-9d63980358be/passports": {
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "valid_months": 6,
+      "valid_until_needed": "2027-05-25",
+      "issues": 0,
+      "travellers": [
+        {
+          "traveler_id": "cc5f0fde-dc45-4c6f-997b-5a2b22c2b25e",
+          "role": "lead",
+          "status": "missing"
+        }
+      ]
+    }
+  },
+  "/trips/9f0976dc-6a3e-4d77-bc6d-9d63980358be/rooming": {
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "rooms": [],
+      "unassigned": [
+        {
+          "traveler_id": "cc5f0fde-dc45-4c6f-997b-5a2b22c2b25e",
+          "name": "E2E mwbyt1cv Booker",
+          "role": "lead"
+        }
+      ],
+      "room_config": {
+        "family": 1
+      },
+      "room_types": [
+        "single",
+        "double",
+        "twin",
+        "triple",
+        "quad",
+        "family"
+      ],
+      "capacity": {
+        "single": 1,
+        "double": 2,
+        "twin": 2,
+        "triple": 3,
+        "quad": 4,
+        "family": 6
+      },
+      "bed_prefs": [
+        "double_bed",
+        "twin_beds",
+        "extra_bed",
+        "cot"
+      ]
+    }
+  },
+  "/trips/9f0976dc-6a3e-4d77-bc6d-9d63980358be/visas": {
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "can_add": true,
+      "applications": [],
+      "visa_types": [
+        "evisa",
+        "visa_on_arrival",
+        "embassy",
+        "visa_exempt",
+        "transit",
+        "other"
+      ],
+      "statuses": [
+        "to_do",
+        "collecting",
+        "submitted",
+        "approved",
+        "refused",
+        "not_needed",
+        "cancelled"
+      ]
+    }
+  },
+  "/trips/9f0976dc-6a3e-4d77-bc6d-9d63980358be/visas/suggestions": {
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "countries": [],
+      "can_add": true,
+      "suggestions": []
+    }
+  },
+  "/trips/9f0976dc-6a3e-4d77-bc6d-9d63980358be/documents": {
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "documents": []
+    }
+  },
+  "/departures/824ac043-95cd-4b98-9e6a-9ba539a26202/roster": {
+    "status": 200,
+    "body": {
+      "departure_id": "824ac043-95cd-4b98-9e6a-9ba539a26202",
+      "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "service_from": "2026-11-20",
+      "service_to": "2026-11-25",
+      "state": {
+        "status": "scheduled",
+        "guaranteed_at": null,
+        "cancelled_at": null,
+        "min_to_operate": null
+      },
+      "pax": {
+        "adults": 2,
+        "children": 1,
+        "infants": 0
+      },
+      "stage3_complete": 0,
+      "trips": [
+        {
+          "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "stage": "booked",
+          "start_date": "2026-11-20",
+          "end_date": "2026-11-25",
+          "pax": {
+            "adults": 2,
+            "children": 1,
+            "infants": 0
+          },
+          "s3": 0,
+          "travellers": 1,
+          "rooms_placed": 0,
+          "passport_issues": 0
+        }
+      ],
+      "travellers": [
+        {
+          "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+          "traveler_id": "cc5f0fde-dc45-4c6f-997b-5a2b22c2b25e",
+          "name": "E2E mwbyt1cv Booker",
+          "role": "lead",
+          "details_done": false,
+          "passport": "missing",
+          "room": null
+        }
+      ],
+      "manifest_fields": [
+        "name",
+        "trip_ref",
+        "age_band",
+        "room",
+        "passport_check",
+        "dietary",
+        "mobility",
+        "arrival_flight",
+        "departure_flight"
+      ],
+      "manifest_default": [
+        "name",
+        "trip_ref",
+        "age_band",
+        "room"
+      ]
+    }
+  }
+}

@@ -75,11 +75,16 @@ HARD RULES for this lane:
   worktree: gitleaks git --log-opts="origin/main..HEAD" --config .gitleaks.toml --redact (root: origin/master; no .gitleaks.toml =
   no --config). A finding means rewrite the local branch before returning: git fetch, then git reset --soft $(git merge-base HEAD origin/main)
   and recommit (never reset --soft to a bare origin/main ref: a stale or newer ref makes the squash revert main); never "fix it in a later commit".
+  Never silence a finding with an inline gitleaks allow comment (CI Secret Scan refuses a PR that adds one until a reviewer labels it): rewrite the line so
+  the rule no longer matches (S278 Booking #235: WHERE key IN ('a_setting_name') instead of key = '...').
+- Test parameters are fixed values: never uuid.uuid4(), random or time at import inside @pytest.mark.parametrize or a module-level constant used
+  there (pytest-xdist workers collect different ids and CI goes red). AA-CIS-App: run tests/unit/test_s276_parametrize_determinism_lint.py
+  whenever you add or change a parametrize (S278: #1454 and #1456 both went red on it).
 - Local tests never reach AWS: run every test command with the AWS config hidden, so an app import never prompts for MFA or picks up a live
   profile: env -u AWS_PROFILE AWS_CONFIG_FILE=/dev/null AWS_SHARED_CREDENTIALS_FILE=/dev/null AWS_EC2_METADATA_DISABLED=true <test command>.
 - Before returning, also run the registry / snapshot tests of every repo you touched (they fail when a list you extended is not updated
   everywhere): job kind lists and the job registry; route policy and role matrix snapshots; module classification; capacity lines;
-  the CIS openapi.json snapshot; the gateway route snapshot. Find them with git grep -l -iE 'snapshot|registry|KINDS|role_matrix|
+  the CIS openapi.json snapshot; the gateway route snapshot; the CIS final-contract topology (every AI text write is a listed exit). Find them with git grep -l -iE 'snapshot|registry|topology|KINDS|role_matrix|
   classif|capacity' -- 'tests/**' and run the ones that import a module you changed.
 - One PR per repo per wave: when two lanes of a wave touch the same files (implementation notes, a registry, a snapshot, a kind list),
   they ship as ONE PR in that repo; say so in pr_body ("joins lane <key>") instead of opening a second PR that goes DIRTY when the first

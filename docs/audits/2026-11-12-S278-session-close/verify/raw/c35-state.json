@@ -1,0 +1,206 @@
+{
+  "run": "s278i52rv",
+  "layout": {
+    "aa1070-crm35-settings-1440-light": {
+      "sideways": false
+    },
+    "aa1070-crm35-settings-1440-dark": {
+      "sideways": false
+    },
+    "aa1070-crm35-settings-390-light": {
+      "sideways": false
+    },
+    "aa1070-crm35-settings-390-dark": {
+      "sideways": false
+    },
+    "aa1070-crm35-panel-draft-1440-light": {
+      "sideways": false
+    },
+    "aa1070-crm35-panel-draft-1440-dark": {
+      "sideways": false
+    },
+    "aa1070-crm35-panel-draft-390-light": {
+      "sideways": false
+    },
+    "aa1070-crm35-panel-draft-390-dark": {
+      "sideways": false
+    }
+  },
+  "settings_page_error": 1,
+  "library_after": [
+    {
+      "id": "2966bc92",
+      "kind": "included",
+      "en": "E2E s278i52rv Airport transfers on arrival and departure",
+      "vi": "E2E s278i52rv Đưa đón sân bay khi đến và khi về",
+      "archived": false
+    },
+    {
+      "id": "6f624543",
+      "kind": "included",
+      "en": "E2E s278i52rv Daily breakfast",
+      "vi": null,
+      "archived": true
+    },
+    {
+      "id": "02493341",
+      "kind": "not_included",
+      "en": "E2E s278i52rv International flights",
+      "vi": null,
+      "archived": false
+    }
+  ],
+  "trip_id": "e519c16e-679f-4da4-8dd7-d30a17a8540b",
+  "proposal_id": "0c37b213-f5f2-4530-a230-0164e9591e69",
+  "aa_component": {
+    "id": "tp:77740b45-af7b-4a07-a53d-6134fe99f836",
+    "kind": "trip_plan"
+  },
+  "aa_option_status": 201,
+  "offered_included": "From your library\n+ E2E s278i52rv Airport transfers on arrival and departure",
+  "items": {
+    "i1": "2966bc92-a8f7-4e21-aece-7b678c199932",
+    "i2": "6f624543-d64a-4cee-a10d-534f795fc8ae",
+    "n1": "02493341-4fad-4aef-86c3-4c514284a083"
+  },
+  "reorder": {
+    "before": [
+      "E2E s278i52rv Airport transfers on arrival and departure · E2E s278i52rv Đưa đón sân bay khi đến và khi về",
+      "E2E s278i52rv Private guide for the whole trip (typed) · E2E s278i52rv Hướng dẫn viên riêng suốt chuyến (gõ tay)"
+    ],
+    "after": [
+      "E2E s278i52rv Private guide for the whole trip (typed) · E2E s278i52rv Hướng dẫn viên riêng suốt chuyến (gõ tay)",
+      "E2E s278i52rv Airport transfers on arrival and departure · E2E s278i52rv Đưa đón sân bay khi đến và khi về"
+    ]
+  },
+  "draft_lines": [
+    {
+      "kind": "included",
+      "source": "custom",
+      "en": "E2E s278i52rv Private guide for the whole trip (typed)",
+      "vi": "E2E s278i52rv Hướng dẫn viên riêng suốt chuyến (gõ tay)"
+    },
+    {
+      "kind": "included",
+      "source": "library",
+      "en": "E2E s278i52rv Airport transfers on arrival and departure",
+      "vi": "E2E s278i52rv Đưa đón sân bay khi đến và khi về"
+    },
+    {
+      "kind": "not_included",
+      "source": "library",
+      "en": "E2E s278i52rv International flights",
+      "vi": null
+    }
+  ],
+  "aa_tours_draft": [
+    {
+      "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "included": 4,
+      "not_included": 1
+    }
+  ],
+  "aa_block_ui": [
+    "From the tour Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days\nAccommodations as indicated / Meal as indicated / Transfer and\nSightseeing tours / Boat rides / A separate * multi-lingual guide is\nprovided for a minimum of 4 full paying person. .\nEnglish or German or French or Spanish or Italian",
+    "From the tour Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days\nDomestic air ticket is not included"
+  ],
+  "aa_block_buttons": 0,
+  "publish": 200,
+  "status_after_publish": "published",
+  "published_lines": [
+    {
+      "kind": "included",
+      "source": "custom",
+      "en": "E2E s278i52rv Private guide for the whole trip (typed)"
+    },
+    {
+      "kind": "included",
+      "source": "library",
+      "en": "E2E s278i52rv Airport transfers on arrival and departure"
+    },
+    {
+      "kind": "not_included",
+      "source": "library",
+      "en": "E2E s278i52rv International flights"
+    }
+  ],
+  "frozen_put": {
+    "status": 409,
+    "detail": "proposal_not_draft"
+  },
+  "frozen_patch": {
+    "status": 409,
+    "detail": "proposal_not_draft"
+  },
+  "text_email": {
+    "status": 200,
+    "keys": [
+      "proposal_id",
+      "trip_id",
+      "version",
+      "kind",
+      "status",
+      "format",
+      "locale",
+      "subject",
+      "body",
+      "price_hash",
+      "reference",
+      "unfilled",
+      "link"
+    ],
+    "lang": "vi",
+    "excerpt": "- Lodging: Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days (theo yêu cầu)\\n\\nNgày 2 · Thứ Bảy, 12/12/2026\\n\\nNgày 3 · Chủ Nhật, 13/12/2026\\n\\nNgày 4 · Thứ Hai, 14/12/2026\\n\\nNgày 5 · Thứ Ba, 15/12/2026\\n\\nNgày 6 · Thứ Tư, 16/12/2026\\n\\nĐã bao gồm\\n- E2E s278i52rv Hướng dẫn viên riêng suốt chuyến (gõ tay)\\n- E2E s278i52rv Đưa đón sân bay khi đến và khi về\\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days:\\n- Accommodations as indicated / Meal as indicated / Transfer and\\n- Sightseeing tours / Boat rides / A separate * multi-lingual guide is\\n- provided for a minimum of 4 full paying person. .\\n- English or German or French or Spanish or Italian\\n\\nChưa bao gồm\\n- E2E s278i52rv International flights\\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days:\\n- Domestic air ticket is not included\\n\\nGiá\\nTổng cộng: 1.500,00 USD\\nĐặt cọc để xác nhận: 450,00 USD\\nĐợt thanh toán 1: 600,00 USD, hạn 12/10/2026\\nSố còn lại: 450,00 USD, hạn 27/11/2026\\n\\nMã tham chiếu đề xuất: bc53c1719656\\n\",\"price_hash\":\"bc53c17196564e386fcdb3341a76faee2bb72f9818fb185d1a268650121f9267\",\"referen"
+  },
+  "text_whatsapp": {
+    "status": 200,
+    "keys": [
+      "proposal_id",
+      "trip_id",
+      "version",
+      "kind",
+      "status",
+      "format",
+      "locale",
+      "subject",
+      "body",
+      "price_hash",
+      "reference",
+      "unfilled",
+      "link"
+    ],
+    "lang": "vi",
+    "excerpt": "pical Jewels: Bohol, Dumaguete and Siquijor — 6 Days (theo yêu cầu)\\n\\n*Ngày 2 · Thứ Bảy, 12/12/2026*\\n\\n*Ngày 3 · Chủ Nhật, 13/12/2026*\\n\\n*Ngày 4 · Thứ Hai, 14/12/2026*\\n\\n*Ngày 5 · Thứ Ba, 15/12/2026*\\n\\n*Ngày 6 · Thứ Tư, 16/12/2026*\\n\\n*Đã bao gồm*\\n- E2E s278i52rv Hướng dẫn viên riêng suốt chuyến (gõ tay)\\n- E2E s278i52rv Đưa đón sân bay khi đến và khi về\\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days:\\n- Accommodations as indicated / Meal as indicated / Transfer and\\n- Sightseeing tours / Boat rides / A separate * multi-lingual guide is\\n- provided for a minimum of 4 full paying person. .\\n- English or German or French or Spanish or Italian\\n\\n*Chưa bao gồm*\\n- E2E s278i52rv International flights\\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days:\\n- Domestic air ticket is not included\\n\\n*Giá*\\nTổng cộng: 1.500,00 USD\\nĐặt cọc để xác nhận: 450,00 USD\\nĐợt thanh toán 1: 600,00 USD, hạn 12/10/2026\\nSố còn lại: 450,00 USD, hạn 27/11/2026\\n\\nMã tham chiếu đề xuất: bc53c1719656\\n\",\"price_hash\":\"bc53c17196564e386fcdb3341a76faee2bb72f9818fb185d1a268650121f9267\",\"refer"
+  },
+  "pdf_request": 202,
+  "pdf_doc": [
+    {
+      "id": "4a564384-75eb-491e-b3b8-e65e8b65e50a",
+      "kind": "proposal_pdf",
+      "name": "proposal-e519c16e-v1.pdf",
+      "size": 215420
+    }
+  ],
+  "pdf_download": {
+    "status": 200,
+    "content_type": "application/pdf",
+    "magic": "%PDF-",
+    "bytes": 215420
+  },
+  "send": 200,
+  "panel_pub_sideways_1440_light": false,
+  "panel_published_text": "INCLUDED AND NOT INCLUDED\n\nThis version is published: its lists no longer change. Start a new version to edit them.\n\nIncluded\nE2E s278i52rv Private guide for the whole trip (typed) · E2E s278i52rv Hướng dẫn viên riêng suốt chuyến (gõ tay)\nTYPED FOR THIS PROPOSAL\nE2E s278i52rv Airport transfers on arrival and departure · E2E s278i52rv Đưa đón sân bay khi đến và khi về\nFrom the tour Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days\nAccommodations as indicated / Meal as indicated / Transfer and\nSightseeing tours / Boat rides / A separate * multi-lingual guide is\nprovided for a minimum of 4 ",
+  "panel_pub_sideways_1440_dark": false,
+  "panel_pub_sideways_390_light": false,
+  "panel_pub_sideways_390_dark": false,
+  "client_url_clean": "/c/p",
+  "client_en": "What's included\nE2E s278i52rv Private guide for the whole trip (typed)\nE2E s278i52rv Airport transfers on arrival and departure\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days\nAccommodations as indicated / Meal as indicated / Transfer and\nSightseeing tours / Boat rides / A separate * multi-lingual guide is\nprovided for a minimum of 4 full paying person. .\nEnglish or German or French or Spanish or Italian\nNot included\nE2E s278i52rv International flights\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days\nDomestic air ticket is not included",
+  "client_sideways_1440_light": false,
+  "client_sideways_1440_dark": false,
+  "client_sideways_390_light": false,
+  "client_sideways_390_dark": false,
+  "client_vi": "Đã bao gồm\nE2E s278i52rv Hướng dẫn viên riêng suốt chuyến (gõ tay)\nE2E s278i52rv Đưa đón sân bay khi đến và khi về\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days\nAccommodations as indicated / Meal as indicated / Transfer and\nSightseeing tours / Boat rides / A separate * multi-lingual guide is\nprovided for a minimum of 4 full paying person. .\nEnglish or German or French or Spanish or Italian\nChưa bao gồm\nE2E s278i52rv International flights\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days\nDomestic air ticket is not included",
+  "client_vi_sideways_1440": false,
+  "client_vi_sideways_390": false,
+  "client_errors": []
+}

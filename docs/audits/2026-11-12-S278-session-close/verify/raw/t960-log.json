@@ -1,0 +1,261 @@
+[
+  {
+    "name": "GET /tags (before)",
+    "status": 200,
+    "body": {
+      "tags": [
+        {
+          "tag_id": "9997e9e5-5cda-43ea-9f5a-1e6468159c40",
+          "kind": "system",
+          "applies_to": "client",
+          "code": "sys_ready_to_travel",
+          "name": "Ready to travel again",
+          "tone": "info",
+          "archived": false,
+          "uses": 0
+        },
+        {
+          "tag_id": "e1aea613-fc69-428f-b4fc-b5e2ba2bdf72",
+          "kind": "system",
+          "applies_to": "trip",
+          "code": "sys_aa_day_tour",
+          "name": "AA day tour",
+          "tone": "info",
+          "archived": false,
+          "uses": 0
+        },
+        {
+          "tag_id": "7c504e8c-b2c1-4e70-b5e7-cdaa8fa7c7b7",
+          "kind": "system",
+          "applies_to": "trip",
+          "code": "sys_aa_multi_day",
+          "name": "AA multi-day tour",
+          "tone": "info",
+          "archived": false,
+          "uses": 42
+        },
+        {
+          "tag_id": "757c402f-190c-4043-b833-117a926b2506",
+          "kind": "system",
+          "applies_to": "trip",
+          "code": "sys_aa_adventure_sport",
+          "name": "Adventure sport",
+          "tone": "info",
+          "archived": false,
+          "uses": 0
+        },
+        {
+          "tag_id": "8ea91507-f50f-4b76-83ef-91b0278fdc04",
+          "kind": "system",
+          "applies_to": "trip",
+          "code": "sys_aa_challenging",
+          "name": "Challenging",
+          "tone": "info",
+          "archived": false,
+          "uses": 0
+        },
+        {
+          "tag_id": "7cdb5681-da78-44fb-8ea5-2b26634fd4cb",
+          "kind": "system",
+          "applies_to": "trip",
+          "code": "sys_aa_cultural_heritage",
+          "name": "Culture and heritage",
+          "tone": "info",
+          "archived": false,
+          "uses": 42
+        },
+        {
+          "tag_id": "6c7122f9-77b8-4a56-9444-ab69e5e8cefc",
+          "kind": "system",
+          "applies_to": "trip",
+          "code": "sys_aa_easy",
+          "name": "Easy pace",
+          "tone": "info",
+          "archived": false,
+          "uses": 0
+        },
+        {
+          "tag_id": "8ae79f5e-3d48-47d1-b3ac-0ee35ade4b3d",
+          "kind": "system",
+          "applies_to": "trip",
+          "code": "sys_aa_culinary",
+          "name": "Food and cooking",
+          "tone": "info",
+          "archived": false,
+          "uses": 0
+        },
+        {
+          "tag_id": "4e39f08c-21ec-4169-9b38-6321690ecdc0",
+          "kind": "system",
+          "applies_to": "trip",
+          "code": "sys_aa_local_immersion",
+          "name": "Local life",
+          "tone": "info",
+          "archived": false,
+          "uses": 42
+        },
+        {
+          "tag_id": "915a1158-825d-4222-a723-ac05b8c64803",
+          "kind": "system",
+          "applies_to": "trip",
+          "code": "sys_aa_trekking",
+          "name": "Trekking",
+          "tone": "info",
+          "archived": false,
+          "uses": 0
+        },
+        {
+          "tag_id": "6230611c-eeb6-493d-a356-9c6ec32730b1",
+          "kind": "system",
+          "applies_to": "trip",
+          "code": "sys_aa_water_activities",
+          "name": "Water activities",
+          "tone": "info",
+          "archived": false,
+          "uses": 42
+        },
+        {
+          "tag_id": "87ecdbaf-8a68-488f-8f3e-e23a6ccdf49e",
+          "kind": "system",
+          "applies_to": "trip",
+          "code": "sys_aa_wellness_relaxation",
+          "name": "Wellness",
+          "tone": "info",
+          "archived": false,
+          "uses": 0
+        },
+        {
+          "tag_id": "f492647e-cc5d-4a44-9806-540afdd2e9fc",
+          "kind": "system",
+          "applies_to": "trip",
+          "code": "sys_aa_wildlife_nature",
+          "name": "Wildlife and nature",
+          "tone": "info",
+          "archived": false,
+          "uses": 42
+        }
+      ],
+      "tones": [
+        "neutral",
+        "accent",
+        "success",
+        "warning",
+        "danger",
+        "info",
+        "purple"
+      ],
+      "can_manage": true,
+      "can_bulk": true
+    }
+  },
+  {
+    "name": "intake",
+    "status": 202
+  },
+  {
+    "name": "POST stage -> qualifying",
+    "status": 200,
+    "body": {
+      "trip_id": "827e8be4-f4b8-483a-b230-3d4fe55f44fe",
+      "from_stage": "inquiry",
+      "stage": "qualifying",
+      "waiting_on": "agency",
+      "override_reason_code": null,
+      "allowed_moves": [
+        "inquiry",
+        "proposal",
+        "lost"
+      ],
+      "undo": {
+        "history_id": "f6323ec0-9b0b-4d9f-a650-594229526dc4",
+        "undo_until": "2026-11-12T05:01:00.247259+00:00"
+      },
+      "completeness": {
+        "s1": 57,
+        "s2": 0,
+        "s3": 0,
+        "missing_s1": [
+          "when",
+          "party_type",
+          "trip_style"
+        ],
+        "missing_s2": [
+          "fitness_band",
+          "accommodation_tier",
+          "group_pref",
+          "interests",
+          "occasion",
+          "budget_flex",
+          "decision_maker",
+          "booking_timeline",
+          "competing_quotes"
+        ],
+        "stage2_gate": 80
+      },
+      "workflow_runs": 0
+    }
+  },
+  {
+    "name": "POST bulk add with a stale expected (expect 409)",
+    "status": 409,
+    "body": {
+      "detail": "count_changed",
+      "message": "the selection changed since the preview: check the count again",
+      "count": 0
+    }
+  },
+  {
+    "name": "GET /marketing/ready-to-travel",
+    "status": 200,
+    "body": {
+      "items": [],
+      "total": 0,
+      "page": 1,
+      "has_more": false,
+      "ready_after_months": 9,
+      "filter": {
+        "owner": "anyone"
+      }
+    }
+  },
+  {
+    "name": "PUT system tag on the trip (expect 409)",
+    "status": 409,
+    "body": {
+      "detail": "system_tag",
+      "message": "the app keeps its own tags"
+    }
+  },
+  {
+    "name": "PATCH system tag (expect 409)",
+    "status": 409,
+    "body": {
+      "detail": "system_tag",
+      "message": "the app keeps its own tags"
+    }
+  },
+  {
+    "name": "DELETE system tag (expect 409)",
+    "status": 409,
+    "body": {
+      "detail": "system_tag",
+      "message": "the app keeps its own tags"
+    }
+  },
+  {
+    "name": "POST bulk with a system tag (expect 409)",
+    "status": 409,
+    "body": {
+      "detail": "system_tag",
+      "message": "the app keeps its own tags"
+    }
+  },
+  {
+    "name": "PUT system client tag (expect 409)",
+    "status": 409,
+    "body": {
+      "detail": "system_tag",
+      "message": "the app keeps its own tags"
+    }
+  }
+]

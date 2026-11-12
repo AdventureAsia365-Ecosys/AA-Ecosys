@@ -1,0 +1,54 @@
+[
+  {
+    "name": "context",
+    "w": "1440",
+    "theme": "light",
+    "found": 1
+  },
+  {
+    "name": "cta",
+    "w": "1440",
+    "theme": "light",
+    "found": 1
+  },
+  {
+    "name": "context",
+    "w": "1440",
+    "theme": "dark",
+    "found": 1
+  },
+  {
+    "name": "cta",
+    "w": "1440",
+    "theme": "dark",
+    "found": 1
+  },
+  {
+    "name": "context",
+    "w": "390",
+    "theme": "light",
+    "found": 1
+  },
+  {
+    "name": "cta",
+    "w": "390",
+    "theme": "light",
+    "found": 1
+  },
+  {
+    "name": "context",
+    "w": "390",
+    "theme": "dark",
+    "found": 1
+  },
+  {
+    "name": "cta",
+    "w": "390",
+    "theme": "dark",
+    "found": 1
+  },
+  {
+    "ctx_value_len": 747,
+    "cta_value": "Get in touch with Atlas & Hearth to plan this trip."
+  }
+]
