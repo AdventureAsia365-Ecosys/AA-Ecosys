@@ -2,7 +2,8 @@
 
 - **Status:** **Accepted** (tech lead, S271, 06/11/2026). The decision page recorded 16 policy and product choices,
   all on the recommended option (D1–D16 below). The wave roadmap (W0–W6) is accepted as the order of work; each paid
-  step still needs its own yes (D12).
+  step still needs its own yes (D12). **Amended S278 (12/11/2026):** pooled claim classes, see
+  [Amendment (S278)](#amendment-s278-12112026-pooled-claim-classes--measure-a-pool-first-split-later).
 - **Design and evidence:** the S271 writing-quality audit,
   [`docs/audits/2026-11-06-S271-writing-quality-audit/`](../audits/2026-11-06-S271-writing-quality-audit/README.md):
   `README.md` (findings, verdicts, roadmap, targets), `decisions.md` (the choices), `data/` (three pipeline audits,
@@ -148,6 +149,67 @@ generation and the nuanced judgement of hidden promises and voice.
   vendor-last-resort test is updated for that role only.
 - **d12 qualification:** an instrument is a base model with calibrated connections; its id hashes the wire model,
   deployment and returned model id; a route change on a gated stage needs an eval run id or a break-glass reason.
+
+## Amendment (S278, 12/11/2026): pooled claim classes — measure a pool first, split later
+
+- **Status:** Accepted (tech lead, S278 start: "gom class trước, tách sau"). The rules below make that decision
+  operational; they change no bar and no default (every class still warns until a measured flip).
+- **Amends:** "A gate may hold content only with a passing measurement record" (One production graph, step 3) and D7
+  (the R1 record per class).
+
+### Context
+
+The R1 bar for an LLM claim instrument is per writer surface and per class: precision >= 0.90 with a Wilson-95 lower
+bound >= 0.80 over every fire on the writer, and n_pos >= 20 labelled held-out violations of the class. The S275
+count on the adjudicated held-out labels (CL-1 1.0.0 + 1.1.0) found at most 9 violations for any (writer, class), so
+no class could pass, while the unsupported-trip-claim classes of t9_blog together had 21 (embellish 5, inclusion 6,
+misbinding 9, number 1, over 629 held-out t9_blog claims in the decision record). At those rates (0.8-1.4% of claims
+per class) reaching 20 per class needs about 1,400-2,500 held-out t9_blog claims for each class, two to four times
+what exists, and the adjudication time grows with it, far beyond D11's 2-3 hours of tech-lead work. The claim instrument
+does not need the split to work: it calls a sentence "not supported by the source" whatever the class, and its
+precision is already measured over every fire on the writer.
+
+### Decision
+
+1. **A pooled claim class (pool)** is a declared union of two or more policy classes on named writer surfaces that
+   the R1 record measures as one class. The bar is not lowered; it is applied to the pool, per writer:
+   - the writer's precision and lower bound over every fire (unchanged: fires on claims of any class count);
+   - the pool's n_pos on that writer (labelled held-out violations of all its members) >= 20, and at least one caught;
+   - the held-out split and the instrument conditions (test-retest >= 0.95, ok-cleared >= 0.85, hard subset caught,
+     unverified <= 5%) as for a class.
+   The record lists a passing pool as `<writer>:<pool id>` and keeps every member's own n_pos, caught and recall.
+2. **Who decides a pool.** The tech lead declares a pool in code, in a reviewed PR (CIS
+   `services/ground_truth/pools.py`: id, members, writers, who decided and when). Rules of a declaration:
+   - it is made **before** the measurement that uses it, never after reading the votes: the record carries the
+     declaration's sha (`pools_sha`), and a record made under another declaration does not count for this one;
+   - the members are policy classes of every writer the pool names, and they ask the instrument the same question
+     (is this claim about the trip stated by the source?); a class is in at most one pool per writer;
+   - nothing derives a pool from the data (no automatic grouping by count).
+   First pool (S278): `pool.fact_unsupported` = fact.embellish + fact.inclusion + fact.misbinding + fact.number on
+   t2, t9_blog and t9_social. fact.name, fact.direction and fact.self_contradiction stay separate classes.
+3. **A pool's record gates enforce only for the pool's members.** A passing pool calibrates the `<writer>:<member>`
+   keys of that writer and nothing else (`calibrated` = passing classes plus the members of passing pools). The
+   enforce map stays per (writer, class): a class holds only when it is calibrated AND the tech lead lists it in the
+   enforce overrides (CIS `services/quality/claim_shadow.py` `CALIBRATED` and `ENFORCE_OVERRIDES`). At run time the
+   class of a fire is the one the instrument names in extraction mode (the pinned mode of the shadow); a fire
+   classed outside the pool's members warns, as does an unclassified fire. An entailment-mode instrument names no
+   class, so its pool record stays report-only until the claim it reads carries a class.
+4. **Split later.** Each member keeps its own counts in every record. A member that reaches the bar alone
+   (`split_ready`) is measured as its own class from then on and leaves the pool in the next declaration; a pool
+   with fewer than two members left retires. A changed declaration is a new sha and needs a new measurement before
+   a gate reads it. The tech lead may leave a member out of the enforce overrides when its own recall in the pool
+   record is weak; the record shows it.
+
+### Consequences
+
+- A gate can leave warn earlier for the commonest failure (an unsupported claim about the trip) on the writers that
+  reach 20 pooled violations, without lowering the precision bar that protects agencies from false holds.
+- Per-member recall stays less certain than a per-class record would show (fewer positives per member); the record
+  states it, and the per-class flip still needs the tech lead's override per member.
+- The live R1 run measures only the writers whose pool or class reaches the bar (a writer is taken whole: every
+  held-out item of it), which keeps it inside the 2 USD cap.
+- Code: CIS `services/ground_truth/pools.py` (declaration, checks, `calibrated_keys`) and `services/ground_truth/r1.py`
+  (`pools`, `passing_pools`, `calibrated`, `pools_sha` in the record); evidence: AA-1048.
 
 ## Consequences
 
