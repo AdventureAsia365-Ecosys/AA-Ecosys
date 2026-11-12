@@ -101,16 +101,24 @@ ADR stands.
   invoke the chat models and nothing else. No data, no secret, no compute, no Batch, no Cost Explorer reader and no
   paid budget or anomaly monitor (the role and the state bucket cost under 0.01 USD a month). acc1 stays the payer of
   acc3's organization (Note S277).
-- **Gateway.** acc1 is a registry connection (CIS migration 413), not a key in code: its account ID comes from a task
-  environment variable set by AA-CIS-Infra, so the public app repos still carry no account ID. Its spend is read from
+- **Gateway.** acc1 is a registry connection (CIS migration 406), not a key in code: its account ID comes from a task
+  environment variable set by AA-CIS-Infra from a repository secret, so neither the public app repos nor AA-CIS-Infra
+  carry it. Its spend is read from
   the gateway ledger (no Cost Explorer reader on acc1), under a monthly cap copied from acc3's.
-- **Route order per model family** (one audited route-control version, revertible in one click): Claude models use
-  the Anthropic API first (no cost to us at the moment), then Bedrock on acc1, then acc3; GPT models use Bedrock on
-  acc1 first, then the OpenAI API, then acc3. acc3 is not removed: its connection and deployments stay configured
-  behind acc1, and the gateway skips its refused deployments at no cost.
+- **Route order per model family** (one audited route-control version, revertible in one click, model-first
+  order): Claude models use the Anthropic API first (no cost to us at the moment), then Bedrock on acc1, then acc3.
+  GPT models use Bedrock on acc1 first, then acc3, then the OpenAI API: the OpenAI API path of a GPT model is a
+  separate "twin" catalog model right behind it on the stage chain (an OpenAI connection serves only OpenAI catalog
+  rows), so it always comes after every Bedrock deployment of the model. While acc3 refuses, the gateway skips its
+  deployments at no cost and the calls follow the decided order (acc1, then the OpenAI API). acc3 is not removed and
+  not switched off: its connection and deployments stay configured behind acc1. Switching the acc3 GPT deployments
+  off (the "or disabled" option) needs an audited per-deployment switch that does not exist yet; it is a follow-up
+  if wanted.
 - **Reversal.** When acc3's case is solved: revert the route-control version (or move acc3 back to first), switch
   the acc1 connection off, then remove the acc1 deployments and connection with a forward CIS migration, remove the
   task environment variable and the role grant in AA-CIS-Infra, and tear down the `accounts/acc1-bedrock` root with its
   state bucket (a human with the acc1 sign-in).
 - **Watch.** `shared.llm_call_log` rows with `account = 'acc1'` are expected again (Claude only behind the Anthropic
-  API); card spend for Claude on Bedrock moves from acc3's bill to acc1's.
+  API); card spend for Claude on Bedrock moves from acc3's bill to acc1's. If acc3 starts answering again before the
+  reversal, GPT calls go to acc3 before the OpenAI API (AWS preferred): do the reversal then, or switch the acc3 GPT
+  deployments off.

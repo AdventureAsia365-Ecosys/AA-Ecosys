@@ -4,11 +4,14 @@ route-control version. DRY RUN (preview) by default.
 Decision (tech lead, 12/11/2026, root ADR 0001a Note S278): AWS refuses the gateway's chat models on acc3; acc1
 answers all of them. Order per model family:
   - Claude: Anthropic API first (free for us now), then Bedrock on acc1, then acc3;
-  - GPT on Bedrock: acc1 first, then the OpenAI API, then acc3.
+  - GPT on Bedrock: acc1 first, then acc3. The OpenAI API path of a GPT model is its twin catalog model right behind
+    it on the stage chain (an OpenAI connection serves only OpenAI catalog rows), so the model-first walk is
+    gpt@acc1 > gpt@acc3 > gpt-twin@openai-direct: while acc3 refuses it is skipped at 0 USD and the calls go acc1,
+    then the OpenAI API; a recovered acc3 is tried before the OpenAI API (root ADR 0001a Note S278, Watch).
 The order itself is computed by AA-CIS-App api/services/llm_family_order.py (pure, unit tested there); this script
 only checks the preconditions, prints the chain per stage before / after, and saves.
 
-Runs inside the CIS api container through tools/ecs/ecsx.sh (after migration 413 is applied, the CIS code that knows
+Runs inside the CIS api container through tools/ecs/ecsx.sh (after migration 406 is applied, the CIS code that knows
 BEDROCK_ACCT_PAYER is deployed and AA-CIS-Infra has set that env on the api task):
     tools/ecs/ecsx.sh tools/llm/aa1095_acc1_route_order.py ROUTE_ACTOR=<who-and-why, e.g. s278-acc1-switch>
         [APPLY=1]
@@ -51,9 +54,9 @@ def env_problem(environ: Mapping[str, str]) -> Optional[str]:
 
 
 def connection_problems(row: Optional[Mapping[str, Any]], deployments: list) -> list[str]:
-    """What stops the switch: the registry row of migration 413 and its deployments."""
+    """What stops the switch: the registry row of migration 406 and its deployments."""
     if row is None:
-        return [f"no connection {LEAD!r} (migration 413 not applied)"]
+        return [f"no connection {LEAD!r} (migration 406 not applied)"]
     out = []
     if row["kind"] != "bedrock" or row["auth_mode"] != "assume_role":
         out.append(f"connection {LEAD!r} is {row['kind']}/{row['auth_mode']}, not bedrock/assume_role")

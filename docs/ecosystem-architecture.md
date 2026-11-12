@@ -82,8 +82,8 @@ acc1 (a personal account) was removed from the ecosystem on 2026-10-28 (AA-998,
 [ADR 0001a](adr/0001a-retire-acc1-llm-on-acc3-only.md)). Since 2026-11-11 it is the payer of acc3's organization
 (billing only), and since 2026-11-12 (S278, AA-1095, ADR 0001a Note S278) it serves the Bedrock chat models while AWS
 blocks acc3: one invoker role (Terraform root `accounts/acc1-bedrock`), trusted by the CIS task role, nothing else.
-Route order: Claude on the Anthropic API first, then acc1, then acc3; GPT on acc1 first, then the OpenAI API, then
-acc3. Account IDs and profiles: the account map in
+Route order: Claude on the Anthropic API first, then acc1, then acc3; GPT on acc1 first, then acc3 (skipped while it
+refuses), then the OpenAI API twin model. Account IDs and profiles: the account map in
 [onboarding](onboarding.md); never in a repo page.
 
 ## 2. System diagram
@@ -362,7 +362,7 @@ The full as-built description, with a live / planned table: [AI gateway](archite
   task role and the TripPlanner Lambda role (it refuses every model since 2026-10-29). Since 2026-11-12 (AA-1095,
   ADR 0001a Note S278) acc1 serves the same chat models to the CIS gateway through its own invoker role (a registry
   connection; TripPlanner does not call it): Claude on the Anthropic API first, then acc1, then acc3; GPT on acc1
-  first, then the OpenAI API, then acc3. acc2 serves embeddings
+  first, then acc3 (skipped while it refuses), then the OpenAI API twin model. acc2 serves embeddings
   (Cohere Embed v4), the CRM guardrail and, as fallbacks of judge and validate routes, three of the five catalogued
   chat models (Nova Lite, Llama 4 Scout, Llama 4 Maverick; CIS 331–333, 339). The OpenAI API is the last rung of the
   judge routes and of the A-series and tenant writer routes (CIS 327, 344: the writers may leave AWS only when every
