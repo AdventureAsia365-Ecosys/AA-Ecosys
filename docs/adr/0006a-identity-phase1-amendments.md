@@ -704,10 +704,14 @@ mailbox or Google account". That is too strong.
 - **Scope, enforced by AA-Booking (`backend/app/auth/e2e_staff.py`, called from `current_staff`), on top of A10e:**
   - **Fixed body** (`BODY_RULES`): any other body (a capacity, a rule, another status, an extra key) is 403
     `e2e_read_only` before any DB access.
-  - **Synthetic departure** (`DEPARTURE_SYNTHETIC_SQL`): at least one agency hold line on the departure, and every
-    agency that ever held a line on it (any hold status) synthetic in CIS (`catalog.v_tenant_account_v1.is_synthetic`,
-    the A10b-1 rule). An empty departure, one any real agency held seats on, an unknown id, a missing column or a DB
-    error: 403 `e2e_synthetic_only`, before the staff row sync or the route.
+  - **Seeded, synthetic departure** (`DEPARTURE_SYNTHETIC_SQL`): the A10e staff address itself created the departure
+    (`booking.departures.created_by` is its staff key: only the fixture seeder below makes such departures, so no
+    catalogue departure staff made is in scope), at least one agency hold line is on it, and every agency tied to it in
+    any departure-scoped table is synthetic in CIS (`catalog.v_tenant_account_v1.is_synthetic`, the A10b-1 rule): hold
+    lines (any hold status), allotments (`booking.departure_allotments`, any state: a cancel ends every open one,
+    pending included) and departure fees (`booking.departure_fees`, any status). A catalogue departure, an empty one,
+    one a real agency has a hold, an allotment or a fee on, an unknown id, a missing column or a DB error: 403
+    `e2e_synthetic_only`, before the staff row sync or the route.
   - **Route-scoped grant:** cancelling a departure needs `trip_plan.write` (admin, contracting), which the address's
     `sales` role lacks. Only after every check above passed does that one request hold `trip_plan.write`
     (`E2EWriter.grants` -> `Staff.e2e_grants`, never stored); no other request of the address, and no other address,
@@ -715,15 +719,16 @@ mailbox or Google account". That is too strong.
 - **Alternatives not taken:** a fourth address in `booking-contracting` (an Infra trigger entry, a Cognito user, the
   CIS reconcile list and a Terraform Apply for one write; contracting also holds pricing and bill approval) or moving
   the staff address to contracting (the same extra rights on every request).
-- **Exposure added.** Whoever reads an A10e code can cancel a Dev departure that only synthetic agencies booked: the
-  cancel fans `departure.cancelled` out to those agencies' feeds (their CRM opens a case, Booking charges no fee). No
-  real agency, no pilot, no capacity or rule change.
+- **Exposure added.** Whoever reads an A10e code can cancel a Dev departure that the seeder made and that only
+  synthetic agencies have anything on (seats, allotments, fees): the cancel ends those allotments and fans
+  `departure.cancelled` out to the agencies holding seats (their CRM opens a case, Booking charges no fee). No real
+  agency's seats, allotment or fee, no pilot, no shared catalogue departure, no capacity or rule change.
 - **Audit:** the route runs unchanged: `booking.audit_logs` row `departure.updated` with the address's staff key as
   actor; `booking_e2e_write_allowed identity=booking_staff`; refusals `booking_e2e_writer_refused reason=body /
   not_synthetic / not_allowlisted`.
-- **Fixtures (no hand rows):** AA-Booking `python -m app.e2e_fixtures` (Dev only, DRY RUN first) makes per run a
-  departure, a synthetic agency's booking on it, a pending supplier booking and an issued invoice through the
-  services; AA-CIS-App `python -m services.tenant_account.e2e_fixtures` registers the CRM E2E agency as a synthetic CIS
+- **Fixtures (no hand rows):** AA-Booking `python -m app.e2e_fixtures` (Dev only, DRY RUN first; default agency the
+  CRM's E2E agency) makes per run a departure, that agency's booking on it, a pending supplier booking and an issued
+  invoice through the services, as the A10e staff address; AA-CIS-App `python -m services.tenant_account.e2e_fixtures` registers the CRM E2E agency as a synthetic CIS
   tenant under its own id (tenant provisioning saga, Dev `demo` only) and opens a subject gate flag on a synthetic
   tenant by running the real gate. Both temporary like A10e.
 - **Revoke (any time):** drop `DEPARTURE_CANCEL` from the staff writer, `BODY_RULES` and its grant, update the guard
