@@ -1,0 +1,11 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "Problem",
+  "expect": "valid",
+  "why": "1.9 (AA-1091, root ADR 0005b d5): a quote whose trip_plan line has no published price version for its service date is refused with the affected line refs",
+  "payload": {
+    "error": "price_not_published",
+    "message": "line opt-d3-a: no published price for the departure date 2028-12-02; drop the line or offer another date",
+    "line_refs": ["opt-d3-a"]
+  }
+}

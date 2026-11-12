@@ -1,0 +1,99 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "Tariff",
+  "expect": "valid",
+  "why": "1.9 (AA-1091, root ADR 0005b): the next tariff year's published version, counts of what changed, one provisional row",
+  "payload": {
+    "currency": "USD",
+    "priced_on": "2026-11-12",
+    "basis": "per_person_band_min_twin_share",
+    "tier_code": "silver",
+    "fx": {
+      "base_currency": "USD",
+      "quote_currency": "USD",
+      "rate_per_usd": "1",
+      "rate_date": "2026-11-12",
+      "source": "base"
+    },
+    "items": [
+      {
+        "tour": {
+          "source_system": "cis",
+          "source_id": "e1000000-0000-4000-8000-000000001091"
+        },
+        "title": "Invented River Valley Trail",
+        "country": "Invented Land",
+        "duration_days": 5,
+        "season": "high",
+        "valid_from": "2027-11-01",
+        "valid_to": "2028-02-29",
+        "pax_min": 2,
+        "pax_max": 3,
+        "priced_for_pax": 2,
+        "priced_for_date": "2027-11-01",
+        "price": {
+          "amount": "1552.00",
+          "currency": "USD"
+        },
+        "price_per_person": {
+          "amount": "776.00",
+          "currency": "USD"
+        },
+        "agency_discount_pct": "0.0300",
+        "rrp_per_person": {
+          "amount": "970.00",
+          "currency": "USD"
+        },
+        "price_version_id": "pv_01HP8R",
+        "provisional": false
+      },
+      {
+        "tour": {
+          "source_system": "cis",
+          "source_id": "e1000000-0000-4000-8000-000000001091"
+        },
+        "title": "Invented River Valley Trail",
+        "country": "Invented Land",
+        "duration_days": 5,
+        "season": "high",
+        "valid_from": "2028-03-01",
+        "valid_to": "2028-10-31",
+        "pax_min": 2,
+        "pax_max": 3,
+        "priced_for_pax": 2,
+        "priced_for_date": "2028-03-01",
+        "price": {
+          "amount": "1624.00",
+          "currency": "USD"
+        },
+        "price_per_person": {
+          "amount": "812.00",
+          "currency": "USD"
+        },
+        "agency_discount_pct": "0.0300",
+        "rrp_per_person": {
+          "amount": "970.00",
+          "currency": "USD"
+        },
+        "price_version_id": "pv_01HP8S",
+        "provisional": true
+      }
+    ],
+    "truncated": false,
+    "tariff_version_id": "tv_2027_28_v1",
+    "tariff_version_no": 1,
+    "tariff_year": "2027-28",
+    "travel_from": "2027-11-01",
+    "travel_to": "2028-10-31",
+    "published_at": "2027-08-30T03:00:00Z",
+    "status": "published",
+    "changes": {
+      "tours_changed": 1,
+      "rows_up": 0,
+      "rows_down": 0,
+      "rows_added": 2,
+      "rows_removed": 0
+    },
+    "next_tariff_version_id": null
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "Tariff",
+  "expect": "valid",
+  "why": "1.9 (AA-1091, root ADR 0005b): period=current with no published tariff version covering today answers 200 with no rows and every version field null (never 404)",
+  "payload": {
+    "currency": "USD",
+    "priced_on": "2026-11-12",
+    "basis": "per_person_band_min_twin_share",
+    "tier_code": "silver",
+    "fx": {
+      "base_currency": "USD",
+      "quote_currency": "USD",
+      "rate_per_usd": "1",
+      "rate_date": "2026-11-12",
+      "source": "base"
+    },
+    "items": [],
+    "truncated": false,
+    "tariff_version_id": null,
+    "tariff_version_no": null,
+    "tariff_year": null,
+    "travel_from": null,
+    "travel_to": null,
+    "published_at": null,
+    "status": null,
+    "changes": null,
+    "next_tariff_version_id": null
+  }
+}

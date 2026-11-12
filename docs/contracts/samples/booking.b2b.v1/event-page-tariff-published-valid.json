@@ -1,0 +1,24 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "EventPage",
+  "expect": "valid",
+  "why": "1.9 (AA-1091): tariff.published names the new tariff version; the agency re-reads GET /tariff",
+  "payload": {
+    "items": [
+      {
+        "event_id": "ev_91",
+        "cursor": "c_000901",
+        "type": "tariff.published",
+        "occurred_at": "2027-08-30T03:00:00Z",
+        "hold_id": null,
+        "booking_id": null,
+        "line_ref": null,
+        "departure_id": null,
+        "incident_code": null,
+        "new_start_time": null,
+        "tariff_version_id": "tv_2027_28_v1"
+      }
+    ],
+    "next_cursor": "c_000901"
+  }
+}
