@@ -135,6 +135,16 @@ confirm or decline the supplier booking on the case's **Suppliers** tab, and the
 2. Hotel and service descriptions are content: **Edit in CIS** opens them in the CIS admin (**Supply (Booking)**).
 3. **Pricing rules & FX**: **New rule**, **New FX rate**. Another person approves the row.
 4. Supplier bills: **Enter bill** on the supplier; another person approves; a Booking admin records the payout.
+5. **Pricing policy** (Pricing › Pricing policy): the business rules prices and quotes follow, such as the quote
+   validity, the group size quoted on request, the surcharge rules after confirmation, the deposits and the
+   provisional price uplift. None of them is fixed in code. To change one: **Change** on its row, type the new
+   value, the day it takes effect (today or later) and the reason, then **Save** (ticked = sent for approval, else a
+   draft you submit later). Nothing changes until a second person approves it: the pricing lead approves the price
+   parameters, finance approves the FX, tax, surcharge and payment ones. The approver sees **Approve** and
+   **Reject** (a reject needs a reason); the maker can **Withdraw** a draft or a pending change. **History** shows
+   every value with who proposed and who approved it. A change applies to new quotes, versions and tariffs only,
+   never to a booking already confirmed. Margins, exchange rates, cancellation fees, agency tiers and deposit terms
+   keep their own pages, linked at the bottom of the policy page.
 
 ## 8. When something looks wrong
 
