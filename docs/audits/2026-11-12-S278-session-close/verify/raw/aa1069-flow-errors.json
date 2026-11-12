@@ -1,0 +1,35 @@
+[
+  {
+    "kind": "network",
+    "status": 422,
+    "method": "GET",
+    "url": "https://portal.lumiguides.it.com/bff/bookings"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/pipeline/851ce184-c02d-49ed-acfd-fa79acf4f366",
+    "text": "Failed to load resource: the server responded with a status of 422 ()"
+  },
+  {
+    "kind": "network",
+    "status": 409,
+    "method": "POST",
+    "url": "https://portal.lumiguides.it.com/bff/lines/cb1f47ed-df1b-4453-b4a4-fdf6c558f9a8/confirm"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/pipeline/851ce184-c02d-49ed-acfd-fa79acf4f366",
+    "text": "Failed to load resource: the server responded with a status of 409 ()"
+  },
+  {
+    "kind": "network",
+    "status": 404,
+    "method": "GET",
+    "url": "https://portal.lumiguides.it.com/bff/trips/851ce184-c02d-49ed-acfd-fa79acf4f366/conversations"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/pipeline/851ce184-c02d-49ed-acfd-fa79acf4f366",
+    "text": "Failed to load resource: the server responded with a status of 404 ()"
+  }
+]

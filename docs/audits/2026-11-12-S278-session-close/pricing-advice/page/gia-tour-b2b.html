@@ -1,0 +1,831 @@
+<title>Giá tour B2B</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a rate-sheet reading room — narrow column, contents rail on wide screens, tariff-style tables. */
+:root {
+  --bg: #f6f7f5; --surface: #ffffff; --ink: #1b2420; --muted: #5d6a64; --line: #d8dfdb;
+  --accent: #1f6f5c; --accent-soft: #dcefe8; --warn: #9a5b00; --warn-soft: #f6ead3;
+  --display: "Source Serif 4", Georgia, serif; --body: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111614; --surface: #18201d; --ink: #e4ebe7; --muted: #9aaaa3; --line: #2b3733;
+  --accent: #5cc4a6; --accent-soft: #173a31; --warn: #e3ac55; --warn-soft: #3a2c14; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #111614; --surface: #18201d; --ink: #e4ebe7; --muted: #9aaaa3; --line: #2b3733;
+  --accent: #5cc4a6; --accent-soft: #173a31; --warn: #e3ac55; --warn-soft: #3a2c14; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font: 16px/1.65 var(--body); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 32px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px }
+@media (min-width: 980px) { .wrap { grid-template-columns: 230px minmax(0, 1fr) } }
+header { grid-column: 1 / -1; display: grid; gap: 10px; border-bottom: 1px solid var(--line); padding-bottom: 22px }
+.eyebrow { font: 500 12px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted) }
+h1 { font: 700 clamp(30px, 4.4vw, 44px)/1.1 var(--display); margin: 0; text-wrap: balance }
+.lede { max-width: 68ch; color: var(--muted); margin: 0 }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 500 12.5px/1 var(--mono); padding: 6px 9px; border-radius: 6px; background: var(--accent-soft); color: var(--accent) }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; font-size: 14px; display: none }
+@media (min-width: 980px) { nav.toc { display: block } }
+nav.toc ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px }
+nav.toc a { color: var(--muted); text-decoration: none } nav.toc a:hover { color: var(--accent) }
+article { min-width: 0; max-width: 78ch }
+article h2 { font: 700 26px/1.2 var(--display); margin: 44px 0 12px; text-wrap: balance; scroll-margin-top: 16px }
+article h3 { font: 600 18px/1.3 var(--body); margin: 26px 0 8px }
+article p, article li { overflow-wrap: anywhere }
+article a { color: var(--accent) }
+article code { font: 13.5px var(--mono); background: var(--accent-soft); padding: 1px 5px; border-radius: 4px }
+article strong { font-weight: 600 }
+article hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0 }
+article blockquote { margin: 0; padding: 10px 14px; border-left: 3px solid var(--warn); background: var(--warn-soft); border-radius: 0 6px 6px 0 }
+.dg { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 12px; margin: 14px 0 }
+.dg pre { margin: 0; background: transparent }
+.tw { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); margin: 14px 0 }
+table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 620px }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--line) }
+th { font: 600 12px var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); background: var(--bg) }
+td { font-variant-numeric: tabular-nums }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+footer { grid-column: 1 / -1; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 14px }
+</style>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">AA-1091 · tư vấn giá · 12/11/2026</div>
+    <h1>Giá tour B2B và phiên bản giá</h1>
+    <p class="lede">Ngành định giá và bán tour cho đại lý thế nào, hệ thống mình đang ở đâu, thiết kế "phiên bản giá" cho công cụ nhập giá của team CSKH, và 12 câu chính sách cần chủ doanh nghiệp chốt. Mỗi ý có link nguồn.</p>
+    <div class="chips"><span class="chip">Giá NET cho đại lý</span><span class="chip">Hợp đồng NCC theo năm</span><span class="chip">Mùa theo ngày đi</span><span class="chip">Không sửa đè giá</span><span class="chip">Báo giá ghim phiên bản</span></div>
+  </header>
+  <nav class="toc" aria-label="Mục lục"><div class="toc">
+<ul><li><a href="#so-do-gia">Sơ đồ mô hình giá</a></li><li><a href="#tinh-nang-booking">Tính năng Booking</a></li>
+<li><a href="#1-tom-tat-10-dong">1. Tóm tắt (10 dòng)</a></li>
+<li><a href="#2-nganh-lam-gia-tour-b2b-the-nao">2. Ngành làm giá tour B2B thế nào</a></li>
+<li><a href="#3-cach-ban-cho-ai-ly">3. Cách bán cho đại lý</a></li>
+<li><a href="#4-phan-mem-trong-nganh-quan-ly-phien-ban-gia-ra-sao">4. Phần mềm trong ngành quản lý phiên bản giá ra sao</a></li>
+<li><a href="#5-he-thong-minh-hom-nay-so-voi-cach-lam-cua-nganh">5. Hệ thống mình hôm nay so với cách làm của ngành</a></li>
+<li><a href="#6-thiet-ke-e-xuat-cho-phien-ban-gia-trong-aa-1091">6. Thiết kế đề xuất cho "phiên bản giá" trong AA-1091</a></li>
+<li><a href="#7-cau-hoi-cho-chu-doanh-nghiep-chinh-sach-gia-la-viec-kinh-doanh">7. Câu hỏi cho chủ doanh nghiệp (chính sách giá là việc kinh doanh)</a></li>
+<li><a href="#8-thu-tu-trien-khai">8. Thứ tự triển khai</a></li>
+</ul>
+</div>
+</nav>
+  <article><h2 id="so-do-gia">Sơ đồ mô hình giá dự kiến</h2>
+<p>Giá đi một chiều: từ hợp đồng nhà cung cấp, qua phiên bản giá đã duyệt, tới bảng giá đại lý, báo giá và booking. Khung xanh là phần đã có, khung vàng là phần AA-1091 thêm.</p>
+<div class="dg"><pre class="mermaid">
+flowchart LR
+  subgraph NCC["Nhà cung cấp"]
+    C["Hợp đồng NCC<br/>năm riêng, giá net<br/>(có: hiệu lực, khoá khi phát hành)"]
+    S["Lịch mùa + ngày lễ<br/>theo hợp đồng và điểm đến<br/>(mới)"]
+  end
+  subgraph AA["Booking - giá AA"]
+    K["Thành phần từng ngày<br/>KS + loại phòng, dịch vụ<br/>(mới: gợi ý từ lịch trình CIS)"]
+    CS["Bảng giá vốn<br/>thành phần x giá NCC<br/>theo mùa x nhóm khách"]
+    R["Luật giá<br/>biên mục tiêu/sàn, phụ thu cao điểm,<br/>tỉ giá (có, người thứ hai duyệt)"]
+    V["PHIÊN BẢN GIÁ<br/>nháp → chờ duyệt → phát hành<br/>lý do, so sánh, tác động<br/>(mới)"]
+    H["Giá tay CSKH / nhập Excel<br/>(mới: thành phiên bản)"]
+    P["Giá tạm tính<br/>năm trước +5% hoặc giá tham khảo CIS<br/>(mới, có cờ)"]
+  end
+  subgraph DL["Bán cho đại lý"]
+    T["Bảng giá đại lý<br/>có phiên bản, ETag, năm sau<br/>hạng 0/3/6% hoặc giá riêng"]
+    Q["Báo giá B2B<br/>ghim phiên bản, hạn 14 ngày"]
+    B["Booking đã xác nhận<br/>không tính lại giá<br/>(chỉ phụ thu theo điều khoản)"]
+  end
+  subgraph KH["Đại lý bán cho khách"]
+    CRM["CRM: giá bán lẻ<br/>% lời của đại lý hoặc RRP"]
+    TP["TripPlanner: Từ $X/khách"]
+  end
+  C --> CS
+  S --> CS
+  K --> CS
+  CS --> V
+  R --> V
+  H --> V
+  P --> V
+  V --> T --> Q --> B
+  Q --> CRM
+  V --> TP
+  classDef have fill:#dcefe8,stroke:#1f6f5c,color:#1b2420
+  classDef new fill:#f6ead3,stroke:#9a5b00,color:#1b2420
+  class C,R,CS,T,Q,B,CRM,TP have
+  class S,K,V,H,P new
+</pre></div>
+
+<h3>Vòng đời một phiên bản giá</h3>
+<div class="dg"><pre class="mermaid">
+stateDiagram-v2
+  [*] --> Nhap: CSKH tạo hoặc nhập Excel
+  Nhap --> ChoDuyet: gửi duyệt (bắt buộc lý do)
+  ChoDuyet --> PhatHanh: người thứ hai duyệt sau khi xem so sánh
+  ChoDuyet --> TuChoi: từ chối (có lý do)
+  ChoDuyet --> RutLai: người nhập rút lại
+  PhatHanh --> BiThay: bản mới cùng phạm vi được phát hành
+  TuChoi --> [*]
+  RutLai --> [*]
+  BiThay --> [*]
+  Nhap: Nháp
+  ChoDuyet: Chờ duyệt
+  PhatHanh: Phát hành (có hiệu lực theo ngày đi)
+  TuChoi: Từ chối
+  RutLai: Rút lại
+  BiThay: Bị thay (báo giá cũ vẫn giữ bản này)
+</pre></div>
+
+<h3>Ví dụ một tour qua mô hình</h3>
+<div class="tw"><table>
+<thead><tr><th>Bước</th><th>Ví dụ (USD, 2 khách, mùa Cao)</th><th>Ai làm</th></tr></thead>
+<tbody>
+<tr><td>Giá vốn từ thành phần × giá NCC</td><td>150 / khách</td><td>Hệ thống tính lại khi NCC hoặc thành phần đổi</td></tr>
+<tr><td>Luật giá b2b: biên 20%</td><td>150 ÷ (1 − 0,20 − phí thẻ) ≈ 185</td><td>Trưởng sản phẩm đặt, người thứ hai duyệt</td></tr>
+<tr><td>Phiên bản giá "2027 v1" phát hành</td><td>185 hiệu lực đi 1/11/2026–31/10/2027</td><td>CSKH gửi, trưởng sản phẩm duyệt</td></tr>
+<tr><td>Bảng giá đại lý hạng Bạc (−3%)</td><td>≈ 179,5</td><td>Tự động từ phiên bản</td></tr>
+<tr><td>Báo giá cho đại lý, ghim "2027 v1"</td><td>179,5, hạn 14 ngày</td><td>Đại lý tự lấy trong CRM</td></tr>
+<tr><td>NCC tăng giá → "2027 v2" phát hành</td><td>Báo giá cũ vẫn 179,5 tới hết hạn; booking đã xác nhận không đổi</td><td>Hệ thống hiện chênh margin cho nhân viên</td></tr>
+<tr><td>Đại lý bán cho khách</td><td>RRP gợi ý 235 hoặc giá đại lý tự cộng</td><td>Đại lý</td></tr>
+</tbody></table></div>
+
+<h2 id="tinh-nang-booking">Tính năng Booking: đang có, đang làm, sẽ làm</h2>
+<p>Booking chỉ bán B2B cho đại lý (ADR 0019). Trạng thái lấy từ bản kiểm kê hệ thống ngày 12/11 và các PR của phiên này.</p>
+<h3>Đang có, đã kiểm live</h3>
+<div class="tw"><table>
+<thead><tr><th>Nhóm</th><th>Tính năng</th><th>Lưu ý</th></tr></thead>
+<tbody>
+<tr><td>Bán cho đại lý</td><td>API B2B: sản phẩm, tỉ giá, báo giá có giá, giữ chỗ, xác nhận thành case B2B</td><td>Mới có một client máy cho CRM; đại lý chọn qua tenant id</td></tr>
+<tr><td>Bán cho đại lý</td><td>Hạng đại lý (0/3/6%), giá riêng theo hợp đồng, bảng giá đối tác</td><td>Hạng vàng 6% đang dưới sàn biên 10%: câu hỏi kinh doanh</td></tr>
+<tr><td>Giá</td><td>Engine giá, luật giá + tỉ giá có người duyệt, tính lại giá vốn, giá gợi ý (RRP), lịch sử ma trận giá</td><td>Mới 2/892 tour bán được vì thiếu dữ liệu NCC</td></tr>
+<tr><td>Khởi hành</td><td>Luật tối thiểu để chạy, hạn chốt bán, ngày quyết định, theo dõi hằng ngày; bảng khởi hành (lịch, lấp đầy)</td><td>Chưa thấy khởi hành rủi ro nào live (Dev chưa có dữ liệu)</td></tr>
+<tr><td>Tài chính</td><td>Chi phí quy USD, chênh tỉ giá, kế hoạch so với thực tế, lãi theo case/khởi hành/đại lý</td><td></td></tr>
+<tr><td>Tài chính</td><td>Hoá đơn đại lý (SaaS + quyết toán, số liên tục), thanh toán có người duyệt</td><td>Số hoá đơn VAT điện tử còn nhập tay</td></tr>
+<tr><td>Nền tảng</td><td>Đồng bộ tenant từ CIS; đóng băng B2C; admin staff chạy trên ECS</td><td>Bảng B2C xoá hẳn từ 28/11 (AA-1061)</td></tr>
+</tbody></table></div>
+<h3>Đã code, chưa kiểm live đủ</h3>
+<div class="tw"><table>
+<thead><tr><th>Tính năng</th><th>Còn thiếu gì</th><th>Issue</th></tr></thead>
+<tbody>
+<tr><td>Phiếu xác nhận, voucher, điều khoản đại lý</td><td>Ngày kết thúc đã sửa (S278, #231); điều khoản phí khởi hành còn nháp</td><td>AA-1088, chủ doanh nghiệp</td></tr>
+<tr><td>Tạo khởi hành định kỳ, allotment theo đại lý + nhả chỗ</td><td>Dev chưa có allotment để chạy thử</td><td>AA-1086 (diễn tập)</td></tr>
+<tr><td>Bảng điều hành khởi hành, phí khởi hành, điều chỉnh giá, ưu đãi đặt sớm</td><td>Mọi lệnh ghi cần người duyệt, chưa chạy live</td><td>AA-1087 (danh tính ghi) → AA-1086</td></tr>
+<tr><td>Giá trẻ em / em bé / phòng đơn, cọc và số dư theo sản phẩm</td><td>Chưa có luật nào đặt % trẻ em trên Dev</td><td>AA-1091 (phiên bản giá)</td></tr>
+<tr><td>Hậu mãi: đặt NCC, kiểm chuyến, vòng đời case, hoá đơn NCC + chi trả</td><td>Chưa chạy trọn trên một case đại lý</td><td>AA-1087 → AA-1086</td></tr>
+<tr><td>Chi phí chung khởi hành theo cỡ đoàn, đơn đặt NCC qua e-mail</td><td>Chưa có danh sách lượt chạy cho staff; SES chưa gửi thật</td><td>AA-1086</td></tr>
+</tbody></table></div>
+<h3>Đang làm trong phiên này (S278)</h3>
+<div class="tw"><table>
+<thead><tr><th>Tính năng</th><th>Trạng thái</th><th>Issue</th></tr></thead>
+<tbody>
+<tr><td>Bàn làm việc giá (Price setup): 7 mục kiểm mỗi tour, việc kế tiếp, thao tác hàng loạt</td><td>PR #233 đang ship</td><td>AA-1091</td></tr>
+<tr><td>Gợi ý thành phần từ lịch trình CIS (nhận / sửa / bỏ)</td><td>PR #233</td><td>AA-1091</td></tr>
+<tr><td>File Excel 4 sheet (tour, thành phần, giá, khởi hành), chạy thử trước khi ghi</td><td>PR #233</td><td>AA-1091</td></tr>
+<tr><td>Giá tham khảo CIS có cấu trúc + trang sửa hàng loạt + quyền "team giá"</td><td>CIS #1457/#1458 đang ship</td><td>AA-1091</td></tr>
+<tr><td>Danh tính E2E ghi được (staff, finance maker/checker), chỉ trên đại lý giả</td><td>#232 đang vào hàng merge; cần tắt auto mode để tạo user</td><td>AA-1087</td></tr>
+<tr><td>RLS cho b2b_partners</td><td>Lane bảo mật đang code</td><td>AA-1092</td></tr>
+</tbody></table></div>
+<h3>Sẽ làm tiếp (theo thứ tự)</h3>
+<div class="tw"><table>
+<thead><tr><th>#</th><th>Tính năng</th><th>Vì sao</th><th>Issue</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Giá tay CSKH thành phiên bản: nháp → duyệt → phát hành, lý do, so sánh</td><td>Lỗ hổng lớn nhất hiện nay</td><td>AA-1091 (ADR 0005b)</td></tr>
+<tr><td>2</td><td>Lịch mùa có cấu trúc + ngày lễ theo năm; bỏ dò chữ "peak"</td><td>Báo giá B2B đang chạy với mùa thường</td><td>AA-1091</td></tr>
+<tr><td>3</td><td>Xem trước tác động trước khi duyệt; từ chối / rút lại; hợp đồng NCC có bản thay thế</td><td>Người duyệt biết trước báo giá nào bị ảnh hưởng</td><td>AA-1091</td></tr>
+<tr><td>4</td><td>Báo giá ghim phiên bản; hạn báo giá theo chính sách; báo lại giá có so sánh</td><td>48 giờ hiện tại quá ngắn so với ngành</td><td>AA-1091</td></tr>
+<tr><td>5</td><td>Bảng giá đại lý có phiên bản (năm hiện tại + năm sau), CRM đọc theo phiên bản</td><td>Đại lý xem trước giá năm sau</td><td>AA-1091, hợp đồng 1.9</td></tr>
+<tr><td>6</td><td>"Đặt với AA" cho đại lý chỉ dùng Content (form báo giá/giữ chỗ trên trang tour)</td><td>ADR 0019 d17 còn thiếu</td><td>cần issue</td></tr>
+<tr><td>7</td><td>Danh sách tên phòng gửi điều hành (rooming), sau khi sửa chuẩn dữ liệu DM-6.8</td><td>Khách sạn cần tên khách</td><td>AA-1070</td></tr>
+<tr><td>8</td><td>Hoá đơn VAT điện tử qua API nhà cung cấp</td><td>Hiện nhập tay</td><td>chờ chủ doanh nghiệp chọn nhà cung cấp</td></tr>
+<tr><td>9</td><td>Sau: khung tuổi trẻ em, phụ thu đơn/giường phụ, FOC đoàn, phụ thu gala tự động, KPI giá</td><td>Theo bản tư vấn mục 8</td><td>AA-1091 lát sau</td></tr>
+</tbody></table></div>
+<p><em>12/11/2026, viết cho tech lead. Nguồn: 4 nhánh research, đọc code AA-Booking (HEAD 69c4ffb, bk-048) và một vòng critic.</em></p>
+<p><strong>Cách đọc số liệu.</strong> Số có ghi <strong>[ví dụ]</strong> lấy từ blog của hãng phần mềm (dmcquote, phptravels, Softrip, Peakflo…). Chỉ dùng để hình dung, không phải chuẩn ngành; số thật phải lấy theo hợp đồng NCC của mình. Số có ghi <strong>[snippet]</strong> chỉ thấy qua kết quả tìm kiếm, chưa mở được trang gốc.</p>
+<hr />
+<h2 id="1-tom-tat-10-dong">1. Tóm tắt (10 dòng)</h2>
+<ol>
+<li>Ngành bán cho đại lý bằng giá <strong>NET</strong>: không hoa hồng, bảo mật, tính bằng USD; đại lý tự cộng lời. Mình đang đúng hướng này (ADR 0019, RRP = net + 25% chỉ là giá gợi ý).</li>
+<li>Giá bắt đầu từ <strong>hợp đồng NCC theo năm</strong>. Mỗi NCC có năm hợp đồng riêng (theo năm dương lịch, 11–10 hoặc 4–3). Đông Nam Á không có một "năm giá" chung.</li>
+<li><strong>Mùa</strong> là các khoảng ngày nằm trong hợp đồng, có thể lặp lại; ở qua ranh mùa thì tính giá từng đêm. Có thêm các khoản lễ bắt buộc: gala 24/25 và 31/12, phụ thu Tết.</li>
+<li>Không phần mềm ngành nào sửa đè giá. Mỗi thay đổi tạo bản mới, có ngày hiệu lực và lịch sử ai đổi.</li>
+<li>Báo giá và booking ghim giá tại lúc tạo. <strong>Booking đã xác nhận không đổi giá</strong>, trừ phụ thu nhiên liệu, thuế hoặc tỉ giá khi điều khoản cho phép, báo trước ≥ 20 ngày, có cách tính, và khi chi phí giảm thì cũng trả lại cho đại lý.</li>
+<li>Hệ thống mình đã có nhiều mảnh đúng: hợp đồng NCC khoá khi publish; quy tắc, tỉ giá, hạng đại lý và thẻ giá có người thứ hai duyệt; lịch sử ma trận giá; báo giá có <code>price_hash</code>.</li>
+<li>Lỗ hổng lớn nhất nằm ở <strong>giá nhập tay</strong> (<code>PUT …/prices</code>), đúng chỗ CSKH sẽ dùng: không cần duyệt, không bắt ghi lý do, có hiệu lực ngay.</li>
+<li>Còn thiếu thêm: lịch mùa có cấu trúc (hiện "peak" được nhận ra bằng cách dò chữ, và báo giá B2B chạy với <code>peak = false</code>); bảng giá đại lý chưa có phiên bản; không xem trước tác động trước khi duyệt; chưa có xuất Excel.</li>
+<li>Đề xuất: tạo một thực thể <strong>"phiên bản bảng giá"</strong> cho mỗi tour và kỳ, đi qua các trạng thái nháp → chờ duyệt → phát hành → bị thay. Mỗi bản có lý do, bảng so sánh với bản trước và phần tác động. Báo giá và bảng giá đại lý ghim theo id phiên bản.</li>
+<li>Trước khi code, chủ doanh nghiệp cần chốt khoảng 12 chính sách (năm bảng giá, hạn báo giá, đổi giá sau xác nhận, cọc và huỷ mùa cao, đoàn, hạng đại lý…). Mục 7 có sẵn đáp án gợi ý cho từng câu.</li>
+</ol>
+<hr />
+<h2 id="2-nganh-lam-gia-tour-b2b-the-nao">2. Ngành làm giá tour B2B thế nào</h2>
+<h3 id="21-hop-ong-ncc-theo-nam">2.1 Hợp đồng NCC theo năm</h3>
+<ul>
+<li><strong>Hai loại giá khách sạn tồn tại song song.</strong></li>
+<li>Giá tĩnh theo hợp đồng ("FIT / seasonal net"), ký trước 6–12 tháng và không đổi trong suốt hợp đồng (<a href="https://www.duettocloud.com/en-us/library/dynamic-wholesale-rates-new-frontier-hotel-distribution" target="_blank" rel="noopener">Duetto</a>).</li>
+<li>Giá động bám theo giá công khai hằng ngày, gọi là BAR (<a href="https://hotelhelpcentre.hotelbeds.com/inventory/portalpartner" target="_blank" rel="noopener">Hotelbeds</a>).</li>
+<li><strong>Mỗi NCC một năm hợp đồng.</strong></li>
+<li>Asian Trails Thái: đi 1/4–31/10/2025 (<a href="https://www.asiantrails.travel/?p=1043033" target="_blank" rel="noopener">link</a>).</li>
+<li>WebBeds Bali: 01/04/26–31/03/27 (<a href="https://apac-marketing.webbeds.com/current-hotel-deals" target="_blank" rel="noopener">link</a>).</li>
+<li>Chatrium: hiệu lực đến 31/10/2026, chặn bán 20/12/2025–5/1/2026 (<a href="https://lacolkhaoyai.chatrium.com/2025-11-11-End-of-Year-EN/index.html" target="_blank" rel="noopener">link</a>).</li>
+<li>Một khách sạn Hà Nội để giá 2026 là <em>"provisional rollover from 2025 contract"</em> (<a href="https://vietnambookingcenter.com/hotel/acoustic-hotel-spa" target="_blank" rel="noopener">link</a>).</li>
+<li>→ Năm hợp đồng là thuộc tính của từng hợp đồng. Trạng thái "tạm dùng giá năm cũ" là chuyện bình thường. Mô hình hiện tại của mình (<code>valid_from</code>/<code>valid_to</code> trên mỗi hợp đồng) đã đúng.</li>
+<li><strong>Rủi ro khi giữ giá tĩnh.</strong> Khi thị trường yếu, giá công khai có thể xuống thấp hơn giá net mình đã ký (<a href="https://dmcquote.com/blog/post/dynamic-static-hotel-pricing-what-agents-should-know" target="_blank" rel="noopener">dmcquote</a>, [ví dụ]). Với công ty tour, cách thực tế là gắn cờ "NCC giá động → định giá tay trên báo giá" như <a href="https://learn.tourwriter.com/portal/en/kb/articles/how-should-i-manage-dynamic-priced-suppliers" target="_blank" rel="noopener">Tourwriter</a>, không cần làm feed BAR.</li>
+<li><strong>Rủi ro NCC xé hợp đồng.</strong> Năm 2012, khách sạn ở Yangon phát hành lại hợp đồng giữa kỳ, có nơi tăng tới 300% (<a href="https://travelmole.com/news/myanmar-hotels-accused-of-tearing-up-contracts" target="_blank" rel="noopener">TravelMole</a>). → Nên đàm phán hợp đồng 12 tháng giá cố định, không có điều khoản "NCC được tự tăng giá".</li>
+</ul>
+<h3 id="22-mua">2.2 Mùa</h3>
+<ul>
+<li>Mùa là các khoảng ngày, không cần liền nhau và có thể lặp lại, ví dụ mùa cao xuất hiện 2 lần trong năm (<a href="https://www.assets.travelbooster.com/Help/Contracts.htm" target="_blank" rel="noopener">Travelbooster</a>, <a href="https://manual.tourpaq.com/hotel-contracts/periods-hotel-contract-configuration" target="_blank" rel="noopener">Tourpaq</a>).</li>
+<li><strong>Bảng giá mẫu [ví dụ]</strong> (<a href="https://dmcquote.com/blog/post/hotel-b2b-rate-sheet-format-how-to-read" target="_blank" rel="noopener">dmcquote</a>):</li>
+<li>hiệu lực 1/11–31/10, Peak 20/12–10/1;</li>
+<li>ở tối thiểu 3 đêm trong Peak, 5 đêm nếu kỳ ở có 31/12;</li>
+<li>chặn bán 28/12–2/1: lúc đó allotment không dùng được, mọi yêu cầu đều phải hỏi lại NCC.</li>
+<li><strong>Ở qua ranh mùa thì tính từng đêm.</strong> TourPlan còn hiện cảnh báo "Service rate crosses season" (<a href="https://goway.freshdesk.com/support/solutions/articles/44002538566-how-to-load-and-update-product-setup" target="_blank" rel="noopener">link</a>). Một số khách sạn lại tính cả kỳ theo mùa của ngày đến, nên đây phải là một cờ trên từng hợp đồng, mặc định là tính từng đêm.</li>
+<li><strong>Bẫy ngày cuối.</strong> Ví dụ của Lemax: nhập nguyên văn hai khoảng 7.10–15.11 và 16.11–24.12 theo quy ước "ngày cuối không tính" thì đêm 15.11 và 24.12 không có giá (<a href="https://support.lemax.net/price-list-schedules" target="_blank" rel="noopener">Lemax</a>).</li>
+<li><strong>Lễ bắt buộc.</strong></li>
+<li><strong>Gala 24/25 và 31/12</strong> bị thu dù khách không dự, không trả tại chỗ được, DMC xuất hoá đơn trước (<a href="https://www.asiantrails.travel/destinations/vietnam-terms-and-conditions/" target="_blank" rel="noopener">Asian Trails</a>). Giá thật: Sukhothai Bangkok NYE 6.900++ THB/người, 2025 (<a href="https://bangkok.sukhothai.com/file/webpage/shared/20251126-tsb-festive-booklet.pdf" target="_blank" rel="noopener">link</a>); Athenée 16.500 THB net/người, 2024 (<a href="https://assetworldcorp-th.com/en/newsroom/news-activities/859/awc-affiliated-hotels-festive-season-promotion-2024" target="_blank" rel="noopener">link</a>).</li>
+<li><strong>Tết:</strong> giá tour cao hơn năm trước 5–15% (<a href="https://bizhub.vietnamnews.vn/rising-tet-travel-prices-fail-to-dampen-spending-on-experiences-post398569.html" target="_blank" rel="noopener">Vietnam News</a>); Amara Tours phụ thu 15% cho 20/1–5/2/2025 (<a href="https://amaratours.vn/en/vung-tau-2-days-tour.html" target="_blank" rel="noopener">link</a>).</li>
+<li><strong>Songkran</strong> lên xuống theo cầu: +33% năm này, −2,3% năm khác (<a href="https://www.siteminder.com/news/songkran-thailand-hotel-room-rates/" target="_blank" rel="noopener">SiteMinder</a>); năm 2026 khách sạn Thái giảm 20–40% (<a href="https://www.ttgasia.com/?p=116548" target="_blank" rel="noopener">TTG Asia</a>).</li>
+<li>→ Tết và Lebaran đổi ngày mỗi năm. Không được viết cứng ngày vào code.</li>
+</ul>
+<h3 id="23-gia-net-va-hoa-hong">2.3 Giá net và hoa hồng</h3>
+<ul>
+<li>Asian Trails và Destination Asia ghi rõ: <em>"All rates quoted are nett and non-commissionable"</em>, giá bảo mật, tính bằng USD. Đại lý không được hiển thị giá hay bán online, trừ khi đã đóng gói cùng dịch vụ khác (<a href="https://www.asiantrails.travel/?p=1025009" target="_blank" rel="noopener">Asian Trails</a>, <a href="https://onlinebooking.destination-asia.com/DNN_DA_LIVE/Terms" target="_blank" rel="noopener">Destination Asia</a>).</li>
+<li>Hotelbeds hợp tác với RateGain để săn giá net bị rò ra kênh bán lẻ, và loại khỏi hệ thống những đại lý vi phạm nhiều lần (<a href="https://travolution.com/articles/113527/hotelbeds-and-rategain-join-forces-to-hunt-down-opaque-rates-in-consumer-channels" target="_blank" rel="noopener">Travolution</a>).</li>
+<li>Mô hình hoa hồng (Gross = Net + hoa hồng; chuỗi ITO 30% / wholesaler 20% / đại lý lẻ 10%, theo <a href="https://www.tourism.australia.com/en/resources/industry-resources/trade-show-tips/the-travel-distribution-system.html" target="_blank" rel="noopener">Tourism Australia</a>) dành cho NCC bán qua đại lý bán lẻ. <strong>Mình không cần xây phần hoa hồng.</strong> Giữ RRP làm số gợi ý, và ghi điều khoản bảo mật cùng luật "chỉ bán khi đóng gói" vào điều khoản đối tác.</li>
+</ul>
+<h3 id="24-markup-va-margin-hay-bi-nham">2.4 Markup và margin (hay bị nhầm)</h3>
+<ul>
+<li>Markup = (bán − net) / net. Margin = (bán − net) / bán.</li>
+<li>Markup 25% chỉ cho margin 20%.</li>
+<li>Muốn margin 25% thì phải markup 33,3%.</li>
+<li>Markup 20% chỉ cho margin 16,7% (<a href="https://www.patriotsoftware.com/blog/accounting/margin-vs-markup-chart-infographic/" target="_blank" rel="noopener">Patriot</a>).</li>
+<li>Engine của mình đang tính theo <strong>margin trên giá bán</strong>: <code>sell = net / (1 − margin − card_fee)</code>. Ví dụ net 100 USD, margin 20%, phí thẻ 3% thì giá bán là 129,87 USD, tương đương markup 29,9%. Màn hình CSKH nên hiện cả hai con số để khỏi nhầm.</li>
+<li>Chưa có benchmark margin đáng tin cho DMC.</li>
+<li>Các hãng phần mềm nêu 20–35% [ví dụ].</li>
+<li>Con số duy nhất do chính doanh nghiệp công bố: Exoticca khoảng 20% năm 2019 (<a href="https://www.phocuswire.com/pcw-europe-2024-evolution-of-tours" target="_blank" rel="noopener">PhocusWire</a>).</li>
+</ul>
+<h3 id="25-nhom-so-khach">2.5 Nhóm số khách</h3>
+<ul>
+<li>Tour riêng tính giá mỗi người theo nhóm số khách, ở phòng đôi, cộng phụ thu phòng đơn. Amara Tours chia 2–3 / 4–5 / 6–7 / 8+ (<a href="https://amaratours.vn/en/vung-tau-2-days-tour.html" target="_blank" rel="noopener">link</a>). EXO coi 1–8 khách là FIT, từ 9 khách là đoàn (<a href="https://www.exotravel.com/assets/pdf/EXO%20-Terms-and-Conditions-January-2026.pdf" target="_blank" rel="noopener">EXO T&amp;C 01/2026</a>).</li>
+<li><strong>Chi phí cố định (hướng dẫn viên, xe, thuyền) chia theo đầu người.</strong> Lấy giá của nhóm 2 khách áp cho 1 khách thì lỗ, áp cho 6 khách thì bán quá đắt.</li>
+<li><strong>Số khách thực đi quyết định lời lỗ</strong> <a href="https://peakflo.co/blog/tour-operator-departure-margin-visibility-automation" target="_blank" rel="noopener">ví dụ, Peakflo</a>: đoàn tính giá cho 20 khách lời 25%, nếu chỉ đi 12 khách thì còn khoảng 5%.</li>
+<li><strong>Trẻ em:</strong> em bé 0 đến dưới 2 tuổi, trẻ em 2 đến dưới 12, và chỉ được giảm khi có 2 người lớn trả đủ giá (<a href="https://www.asiantrails.travel/destinations/vietnam-terms-and-conditions/" target="_blank" rel="noopener">Asian Trails</a>). Có sản phẩm lại dùng 4–10 tuổi (<a href="https://www.asiantrails.travel/?p=1043033" target="_blank" rel="noopener">Asian Trails Phuket</a>). → Khung tuổi phải theo từng sản phẩm, không để một tỉ lệ % chung.</li>
+<li><strong>FOC trưởng đoàn</strong> thường là 1 suất miễn phí trên 15 khách trả tiền, hoặc 2 trên 30 [ví dụ]. Lấy theo từng hợp đồng.</li>
+</ul>
+<h3 id="26-hieu-luc-gia-hai-truc-ngay">2.6 Hiệu lực giá: hai trục ngày</h3>
+<ul>
+<li><strong>Ngày đi</strong> quyết định mùa. Câu của TripWorks: <em>"Seasons match on when the trip runs, not when it's booked"</em> (<a href="https://help.tripworks.com/en_US/experience-pricing/raise-your-prices" target="_blank" rel="noopener">link</a>).</li>
+<li><strong>Ngày đặt</strong> chỉ dùng cho ưu đãi đặt sớm và khuyến mãi. Travelbooster còn cho hai mùa trùng ngày đi miễn khác ngày đặt (<a href="https://www.assets.travelbooster.com/Help/Editing_a_price_list_for_a_hotel_contract.htm" target="_blank" rel="noopener">link</a>).</li>
+<li><strong>Hạn báo giá.</strong></li>
+<li>Khiri: 30 ngày (đã kiểm, <a href="https://khiri.com/quotation-terms" target="_blank" rel="noopener">link</a>).</li>
+<li>EXO: tối đa 7 ngày [snippet, chưa kiểm PDF].</li>
+<li>Mình: mặc định 48 giờ (<code>DEFAULT_VALID_HOURS = 48</code>), code cho tối đa 720 giờ tức 30 ngày.</li>
+<li><strong>Giá NCC hết hạn.</strong> Theo dữ liệu khách hàng của TourConnect, khoảng 5% yêu cầu gửi tới DMC có dịch vụ đã hết hạn giá (01–09/2025). Cách xử lý của họ: lấy giá năm trước cùng mùa, cộng % tăng, gắn cờ "tạm tính" (<a href="https://tourconnect-ai.squarespace.com/resources/new-expired-rate-automation-for-tourplan" target="_blank" rel="noopener">link</a>).</li>
+</ul>
+<h3 id="27-allotment-release-stop-sale">2.7 Allotment, release, stop-sale</h3>
+<ul>
+<li><strong>Các loại tồn kho</strong> (<a href="https://support.lemax.net/article/types-of-capacities/" target="_blank" rel="noopener">Lemax</a>):</li>
+<li>Allotment: đặt thẳng khi còn chỗ và còn trong hạn release;</li>
+<li>Fixed: mua trước, bán được hay không vẫn trả tiền;</li>
+<li>On request: lần nào cũng phải hỏi NCC;</li>
+<li>Free sale.</li>
+<li><strong>Release và stop-sale</strong> (<a href="https://manual.tourpaq.com/stop-sales" target="_blank" rel="noopener">Tourpaq</a>):</li>
+<li>Ngày release = ngày của allotment trừ đi số ngày release.</li>
+<li>Stop-sale chặn allotment nhưng không chặn phòng đã bảo đảm.</li>
+<li>Phòng bị huỷ trong thời gian stop-sale không được mở lại để bán.</li>
+<li>Các ràng buộc khác: CTA/CTD (không cho đến / không cho đi vào ngày đó), số đêm tối thiểu và tối đa (<a href="https://help-platform.siteminder.com/en/articles/9458959-set-up-and-manage-restrictions" target="_blank" rel="noopener">SiteMinder</a>).</li>
+<li>Release thường 14–21 ngày, mùa cao 21–45 ngày [ví dụ]. Giảm giá cho allotment thường 10–50% (<a href="https://en.wikipedia.org/wiki/Allotment_(travel_industry)" target="_blank" rel="noopener">Wikipedia</a>).</li>
+<li>Mình hiện chỉ có release cho allotment của đại lý trên departure (<code>b2b/allotments.py</code>), chưa có trên giá khách sạn.</li>
+</ul>
+<h3 id="28-ti-gia">2.8 Tỉ giá</h3>
+<ul>
+<li>Trả NCC bằng VND, THB, IDR; bán bằng USD. DMC trong vùng ghi rõ không bảo đảm tỉ giá quy đổi (<a href="https://www.asiantrails.travel/?p=1024461" target="_blank" rel="noopener">Asian Trails</a>, <a href="https://destination-asia.com/terms-conditions" target="_blank" rel="noopener">Destination Asia</a>). Phí thanh toán thẻ 3–5%.</li>
+<li>Tourwriter: dùng tỉ giá cố định theo ngày cộng một khoản đệm. Ví dụ đệm 5% biến 1,7320 thành 1,8186. Đổi bảng tỉ giá không làm đổi các báo giá đã có (<a href="https://learn.tourwriter.com/portal/en/kb/articles/organisation-default-tab-explained" target="_blank" rel="noopener">link</a>).</li>
+<li>Một wholesaler châu Á lỗ 15% với khách châu Âu đặt trước 6–10 tháng (<a href="https://www.ttgasia.com/2016/06/03/coping-with-currency-woes/" target="_blank" rel="noopener">TTG Asia 2016</a>).</li>
+<li><strong>Việt Nam:</strong> Thông tư 32/2013 (sửa bởi Thông tư 03/2019) bắt niêm yết và báo giá bằng VND, trừ các ngoại lệ. Bên cư trú bán dịch vụ cho bên không cư trú được báo giá và thu ngoại tệ qua chuyển khoản (<a href="https://www.mondaq.com/financial-services/314242/circular-32-provides-guidance-on-the-restrictions-on-the-use-of-foreign-currencies-in-vietnam" target="_blank" rel="noopener">Mondaq</a>, <a href="https://www.dfdl.com/insights/legal-and-tax-updates/vietnam-legal-update-additional-permitted-cases-on-the-use-of-foreign-currency-in-the-territory-of-vietnam" target="_blank" rel="noopener">DFDL</a>). <strong>Cần luật sư hoặc kế toán kiểm</strong>, nhất là VAT cho dịch vụ tour tiêu dùng tại Việt Nam (0% hay 8/10%) và tiền tệ trên hoá đơn điện tử.</li>
+<li>Mình đã có: bảng tỉ giá (số đơn vị trên 1 USD, đệm, ngày <code>as_of</code>, nguồn), báo giá khoá tỉ giá, chụp tỉ giá lúc xác nhận và lúc xuất hoá đơn (bk-045).</li>
+</ul>
+<h3 id="29-bang-gia-nam-va-bao-gia-theo-yeu-cau">2.9 Bảng giá năm và báo giá theo yêu cầu</h3>
+<ul>
+<li>Asian Trails công bố giá 2027 ngày 21/8/2026, năm trước công bố ngày 22/8/2025 cho kỳ "11/2025 đến 2026" (<a href="https://www.asiantrails.travel/?p=1051893" target="_blank" rel="noopener">2027</a>, <a href="https://www.asiantrails.travel/?p=1047131" target="_blank" rel="noopener">2025</a>). Tức là họ phát hành khoảng 2–3 tháng trước khi kỳ bắt đầu.</li>
+<li>Họ tách công cụ xem giá (Cloud Tariff) khỏi công cụ đặt chỗ live có API (eConnect). EXO Create cũng có tariff, bảng tình trạng chỗ, đặt ngay hoặc "Book with Review" do tư vấn viên duyệt (<a href="https://www.exotravel.com/exo-create" target="_blank" rel="noopener">link</a>).</li>
+<li>Các tổng cục du lịch khuyên chốt giá trước 12–18 tháng (<a href="https://destinationnsw.com.au/destination-nsw-business-support/nsw-first-program/how-to-create-your-sales-kit" target="_blank" rel="noopener">Destination NSW</a>, <a href="https://industry.travelalberta.com/test/becoming-export-ready" target="_blank" rel="noopener">Travel Alberta</a>).</li>
+<li>Báo giá theo yêu cầu (tour riêng, đoàn) không giữ chỗ: <em>"nothing is booked"</em> cho tới khi xác nhận (<a href="https://khiri.com/quotation-terms" target="_blank" rel="noopener">Khiri</a>).</li>
+</ul>
+<h3 id="210-fit-va-oan">2.10 FIT và đoàn</h3>
+<ul>
+<li><strong>Huỷ với khách lẻ, tối đa 8 người</strong> (<a href="https://www.exotravel.com/assets/pdf/EXO%20-Terms-and-Conditions-January-2026.pdf" target="_blank" rel="noopener">EXO</a>):</li>
+</ul>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Trước ngày đến</th>
+<th>Phí huỷ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>từ 31 ngày</td>
+<td>chỉ mất cọc không hoàn</td>
+</tr>
+<tr>
+<td>30–22 ngày</td>
+<td>10%</td>
+</tr>
+<tr>
+<td>21–15 ngày</td>
+<td>25%</td>
+</tr>
+<tr>
+<td>14–8 ngày</td>
+<td>50%</td>
+</tr>
+<tr>
+<td>7 ngày đến 48 giờ</td>
+<td>75%</td>
+</tr>
+<tr>
+<td>dưới 48 giờ</td>
+<td>100%</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>Đoàn từ 9 người</strong>, cùng các mốc ngày trên: 20% / 40% / 60% / 75% / 100%.</li>
+<li><strong>Khiri với đoàn:</strong> cọc 25% trước 8 tuần, rooming list nộp trước 10 tuần (<a href="https://khiri.com/terms-conditions/" target="_blank" rel="noopener">link</a>).</li>
+<li>Mình có nhóm số khách nhưng chưa có bảng giá đoàn, quy tắc FOC hay bảng huỷ riêng cho đoàn.</li>
+</ul>
+<h3 id="211-hang-ai-ly">2.11 Hạng đại lý</h3>
+<ul>
+<li>Arival khuyên <strong>tối đa 4 mức giá</strong>, hạn chế deal riêng lẻ vì các đối tác so giá với nhau và sinh mâu thuẫn (<a href="https://arival.travel/how-to-set-net-rates-for-tours/" target="_blank" rel="noopener">Arival</a>). Họ cũng đưa khoảng giảm so với giá lẻ cho từng kênh (đây là ngành tour và hoạt động trải nghiệm):</li>
+</ul>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Kênh</th>
+<th>Giảm so với giá lẻ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ITO</td>
+<td>25–30%</td>
+</tr>
+<tr>
+<td>Wholesaler hoặc OTA</td>
+<td>20–25%</td>
+</tr>
+<tr>
+<td>Đại lý</td>
+<td>10–15%</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>Asian Trails: <em>"Special rates depend on the client delivering the agreed business volume"</em>.</li>
+<li>Mình hiện có 3 hạng (0 / 3 / 6%) cộng thẻ giá riêng cho từng đối tác, vậy là đủ. Không cần thêm hạng. Nên siết thẻ giá riêng: có ngày hết hạn, có cam kết sản lượng, xét lại mỗi năm.</li>
+</ul>
+<hr />
+<h2 id="3-cach-ban-cho-ai-ly">3. Cách bán cho đại lý</h2>
+<ul>
+<li><strong>Bảng giá và cổng B2B.</strong></li>
+<li>Đại lý xem bảng giá online, đặt live trong phần allotment; ngoài allotment thì gửi yêu cầu và chờ xác nhận (<a href="https://destination-asia.com/terms-conditions" target="_blank" rel="noopener">Destination Asia</a>).</li>
+<li>Có lựa chọn "đặt có tư vấn viên duyệt". API hoặc XML cho wholesaler để sau.</li>
+<li>Phát hành bảng giá năm sau khoảng 3 tháng trước khi kỳ bắt đầu, cho bản hiện hành và bản năm sau chạy song song.</li>
+<li><strong>Cọc và thanh toán.</strong></li>
+<li>Asian Trails: trả đủ 30 ngày trước ngày đến nếu không có hạn mức tín dụng; quá hạn có thể tự huỷ.</li>
+<li>Destination Asia: 14 ngày.</li>
+<li>EXO: số dư trả 30 ngày trước; đặt trong vòng 30 ngày thì trả khi nhận hoá đơn.</li>
+<li>Indochina Voyages: cọc 30%, phần còn lại trả trước 45 ngày (<a href="https://www.indochinavoyages.com/?p=2529" target="_blank" rel="noopener">link</a>).</li>
+<li>Mùa lễ chặt hơn nhiều. Mandarin Oriental Bangkok bắt trả đủ tiền phòng lễ và gala NYE trước 30/9, không hoàn (<a href="https://photos.mandarinoriental.com/is/content/MandarinOriental/bangkok-festive-tandc" target="_blank" rel="noopener">link</a>). Thang huỷ thường của Asian Trails không áp cho mùa cao điểm.</li>
+<li>Hạn mức tín dụng gắn theo từng đại lý và được kiểm lúc đặt.</li>
+<li><strong>Ưu đãi đặt sớm.</strong> Tính theo ngày đặt, kèm cờ "có cộng dồn với ưu đãi khác không" (hợp đồng mẫu của <a href="https://support.clock-software.com/en/support/solutions/articles/9000270814-sample-tour-operator-contract-preparation" target="_blank" rel="noopener">Clock</a> ghi: đặt sớm không cộng với ở dài). Mình đã có <code>early_days</code> và <code>early_discount_pts</code>.</li>
+<li>Không cần định giá động kiểu bán lẻ (giữ giá 3 ngày của Trafalgar, giảm giá phút chót). Mình bán B2B; bảng giá mà đại lý bán lại thì càng ít đổi càng tốt.</li>
+<li><strong>Giữ giá trên báo giá.</strong></li>
+<li>Báo giá là lời hứa giá cho tới khi hết hạn. Hết hạn thì tính lại và cho đại lý thấy chênh lệch.</li>
+<li>Booking đã xác nhận thì khoá giá (<a href="https://www.gadventures.com/terms" target="_blank" rel="noopener">G Adventures</a>, <a href="https://www.intrepidtravel.com/uk-booking-conditions" target="_blank" rel="noopener">Intrepid</a>).</li>
+<li>Xu hướng 2026–27: Intrepid (<a href="https://www.intrepidtravel.com/en/newsroom/releases/commits-to-no-surcharges-on-trips-booked-in-2026-reinforcing-transparent-pricing-and-traveller-confidence" target="_blank" rel="noopener">link</a>), Goway (<a href="https://www.travelmarketreport.com/packaged-travel/articles/goway-commits-to-no-surcharges-on-confirmed-2026-bookings" target="_blank" rel="noopener">link</a>) và Back Roads (đến hết 2027, <a href="https://travelweekly.com.au/back-roads-guarantees-no-surcharges-on-bookings-through-to-end-of-2027/" target="_blank" rel="noopener">link</a>) công khai cam kết <strong>không phụ thu sau khi đã xác nhận</strong>. Đại lý coi "chắc giá" là một lý do để chọn nhà cung cấp.</li>
+<li><strong>Đổi giá giữa năm.</strong></li>
+<li>Giá mới chỉ áp cho báo giá và booking mới.</li>
+<li>Với booking đã xác nhận, theo luật du lịch trọn gói EU (PTD Art. 10) và Anh (PTR 2018 reg. 10):<ul>
+<li>chỉ được tăng vì nhiên liệu, thuế hoặc phí của bên thứ ba, hoặc tỉ giá;</li>
+<li>hợp đồng phải ghi sẵn quyền này, và phải có cả quyền giảm khi chi phí giảm;</li>
+<li>báo trên văn bản, kèm cách tính, ít nhất 20 ngày trước khởi hành;</li>
+<li>tăng quá 8% thì khách được huỷ miễn phí (<a href="https://eur-lex.europa.eu/eli/dir/2015/2302/oj/eng" target="_blank" rel="noopener">EUR-Lex</a>, <a href="https://www.legislation.gov.uk/uksi/2018/634/regulation/10" target="_blank" rel="noopener">legislation.gov.uk</a>).</li>
+</ul>
+</li>
+<li>Luật này ràng buộc đại lý EU/UK chứ không ràng buộc trực tiếp AA. Nhưng Art. 20/22, và reg. 29B của Anh (áp từ 6/4/2027, <a href="https://assets.publishing.service.gov.uk/media/6ae0b2c9779378370fd80a19/guidance-on-the-package-travel-and-linked-travel-arrangements-regulations-2018-amended-2026.pdf" target="_blank" rel="noopener">gov.uk</a>), cho phép họ đòi lại mình phần thiệt hại. Vì vậy điều khoản B2B của mình nên viết khớp luật này.</li>
+<li>Bản sửa PTD năm 2026 <em>chưa kiểm</em> với văn bản cuối xem có đổi mốc 8% và 20 ngày hay không. Cần luật sư xác nhận trước khi ghi vào điều khoản.</li>
+<li><strong>Lỗi giá.</strong></li>
+<li>Asian Trails được sửa giá khi chênh lệch từ 70% giá đúng hoặc từ 500 USD/EUR mỗi booking; chênh dưới 20% thì bỏ qua; đại lý có 7 ngày để xác nhận lại (<a href="https://www.asiantrails.travel/?p=36" target="_blank" rel="noopener">link</a>).</li>
+<li>Mình đã có clause <code>price_error</code> trong partner terms, kèm số ngày huỷ miễn phí. Nội dung clause nằm trong DB, cần đối chiếu trước khi đề xuất ngưỡng mới.</li>
+</ul>
+<hr />
+<h2 id="4-phan-mem-trong-nganh-quan-ly-phien-ban-gia-ra-sao">4. Phần mềm trong ngành quản lý phiên bản giá ra sao</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Phần mềm</th>
+<th>Cách làm</th>
+<th>Mình nên học gì</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Recranet</strong> (<a href="https://help.recranet.com/en/articles/520845-new-pricing-structure-version-control" target="_blank" rel="noopener">link</a>)</td>
+<td>Mỗi lần lưu giá là một bản: thời gian, người, loại thay đổi (tay, batch, CSV), số giá bị đổi. Xem bản cũ có tô các ô đã đổi. Không ghi nhận có nút quay lại</td>
+<td>Lịch sử và diff theo từng ô</td>
+</tr>
+<tr>
+<td><strong>Travelbooster</strong> (<a href="https://www.assets.travelbooster.com/Help/Editing_a_price_list_for_a_hotel_contract.htm" target="_blank" rel="noopener">link</a>)</td>
+<td>"Track Changes" ghi ai, khi nào, đổi gì; "Show History" hiện các mùa đã hết. Khuyên gỡ publish khi sửa rồi publish lại. Mùa tính theo ngày đi hoặc ngày đặt</td>
+<td>Cổng publish, hai trục ngày</td>
+</tr>
+<tr>
+<td><strong>Lemax</strong> (<a href="https://support.lemax.net/?p=7271" target="_blank" rel="noopener">link</a>)</td>
+<td>Đặt năm vào tên lịch giá. "Keep selling price" (05/2025): cập nhật giá vốn trên booking nhưng giữ nguyên giá bán và hoa hồng. Đổi lịch giá không hoàn tác được</td>
+<td>Tách giá vốn khỏi giá đã hứa</td>
+</tr>
+<tr>
+<td><strong>Tourwriter</strong> (<a href="https://learn.tourwriter.com/portal/en/kb/articles/editing-locking-booking-prices" target="_blank" rel="noopener">lock</a>, <a href="https://learn.tourwriter.com/portal/en/kb/articles/how-to-import-supplier-rates-csv" target="_blank" rel="noopener">CSV</a>)</td>
+<td>Đổi giá trong thư viện không tự sửa hành trình đã có. Khoá theo net, markup, gross hoặc tất cả. Nhập CSV: xuất template, ngày dạng YYYY-MM-DD, một dòng lỗi thì không nhập dòng nào, cấm chồng lấn. Cập nhật hàng loạt cần quyền admin</td>
+<td>Vòng xuất → sửa → nhập; "một lỗi là dừng cả file"</td>
+</tr>
+<tr>
+<td><strong>TourConnect</strong> (lớp giá cho Tourplan) (<a href="https://intercom.help/tourconnect/en/articles/1140838-update-a-season" target="_blank" rel="noopener">link</a>)</td>
+<td>Mỗi kỳ hợp đồng một template. Giá hết hạn thì dùng giá cũ + % tăng, gắn cờ tạm tính. Gửi cập nhật cho đối tác</td>
+<td>Giá tạm tính, báo cho đối tác</td>
+</tr>
+<tr>
+<td><strong>Tourpaq</strong> (<a href="https://manual.tourpaq.com/booking/new-booking/history" target="_blank" rel="noopener">link</a>)</td>
+<td>Lịch sử chỉ đọc; sửa nghĩa là thêm dòng mới. Có log riêng cho stop-sale và release</td>
+<td>Lịch sử chỉ được thêm, không sửa</td>
+</tr>
+<tr>
+<td><strong>TripWorks, Rezdy</strong></td>
+<td>Booking giữ giá lúc đặt. Sửa hàng loạt không đụng tới lịch đã có đơn</td>
+<td>Không tính lại giá booking cũ</td>
+</tr>
+<tr>
+<td><strong>Bokun</strong> [snippet]</td>
+<td>Đại lý chọn "giá mới nhất của NCC" hay "giá chụp lúc ký hợp đồng"</td>
+<td>Ghim theo snapshot</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Điểm chung.</strong> Không hãng nào sửa đè giá. Đơn vị phiên bản thường là hợp đồng hoặc kỳ giá; hiếm hãng đánh số phiên bản chính thức. <strong>Không hãng nào công bố quy trình hai người duyệt.</strong> Họ chỉ có phân quyền, cổng publish và một bước kiểm tra chất lượng riêng (Open Destinations, <a href="https://www.opendestinations.com/contract-loading-structure/" target="_blank" rel="noopener">link</a>). Ở điểm này mình đang chặt hơn ngành.</p>
+<p><strong>Nhập giá sai rất phổ biến.</strong>
+- Lanyon tìm thấy sai lệch trong 32% lần kiểm giá khách sạn (số của mảng công tác doanh nghiệp, [snippet]).
+- Ví dụ của TourWriter: một báo giá lấy từ bảng giá tháng 3 bị hụt €360 so với giá vốn (€45 × 8 đêm), và công ty phải tự chịu (<a href="https://www.tourwriter.com/?p=21147" target="_blank" rel="noopener">link</a>).</p>
+<p><strong>Chưa xác nhận được:</strong> Tourplan NX, Kaptio, Juniper, Travelify để tài liệu sau đăng nhập. Không nên chép theo các hãng này khi chưa xem demo.</p>
+<hr />
+<h2 id="5-he-thong-minh-hom-nay-so-voi-cach-lam-cua-nganh">5. Hệ thống mình hôm nay so với cách làm của ngành</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Hạng mục</th>
+<th>Đã có</th>
+<th>Thiếu</th>
+<th>Nên làm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Hợp đồng NCC</td>
+<td>Có hiệu lực từ–đến; publish xong thì trigger DB khoá; người publish phải khác người viết (bk-008)</td>
+<td>Không ghi hợp đồng mới thay hợp đồng nào; không diff; không có trạng thái từ chối; hai hợp đồng chồng nhau thì âm thầm lấy bản có <code>valid_from</code> mới nhất</td>
+<td>Thêm <code>supersedes_id</code>; diff từng dòng giá (ví dụ "85 → 92 USD từ 01/04") khi duyệt</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Mùa</td>
+<td>Nhãn chữ tự do trên từng dòng giá</td>
+<td>Không có lịch mùa; "peak" nhận ra bằng cách dò chữ "peak"; báo giá B2B chạy <code>peak = false</code>, nên RRP và giá đại lý đi theo hai logic mùa khác nhau</td>
+<td>Lịch mùa theo hợp đồng và theo điểm đến, có chặn bán và sự kiện lễ theo từng năm; một logic mùa chung</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Hai trục ngày</td>
+<td>Chỉ có ngày đi; đặt sớm tính theo ngày báo giá</td>
+<td>Không có cửa sổ ngày bán, không có stop-sale</td>
+<td>Thêm ngày bán từ–đến trên giá và ưu đãi</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Giá tay của CSKH</strong></td>
+<td>Lịch sử ghi ai sửa (<code>trip_plan_price_history</code>)</td>
+<td>Không cần duyệt, không bắt lý do (trừ khi dưới sàn), có hiệu lực ngay, mỗi lần thay cả bộ</td>
+<td>Nháp → chờ duyệt → phát hành, lý do bắt buộc, diff</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Quy tắc, tỉ giá, hạng, thẻ giá</td>
+<td>Chỉ thêm không sửa, có người duyệt thứ hai</td>
+<td>Quy tắc không có ngày hết hạn và không giới hạn theo tour hay mùa; bản đang chờ không từ chối hay rút lại được; ghi chú không bắt buộc</td>
+<td>Áp khuôn của bk-048</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Điều chỉnh giá theo departure (bk-048)</td>
+<td><strong>Đầy đủ nhất:</strong> lý do bắt buộc, chuỗi <code>replaces_id</code>, duyệt hai người, các trạng thái rejected/withdrawn</td>
+<td>Không thiếu gì</td>
+<td>Lấy làm khuôn chung cho mọi loại giá</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Báo giá</td>
+<td>Ghim đầu vào (id giá NCC, quy tắc, tỉ giá, hạng, thẻ); <code>price_hash</code>; hạn 48 giờ; trả 409 <code>price_changed</code> khi giá đổi</td>
+<td>Không ghim id phiên bản (quy tắc chỉ lưu theo giá trị); 48 giờ ngắn hơn ngành</td>
+<td>Thêm <code>price_version_id</code> và <code>tariff_version_id</code>; hạn báo giá theo chính sách (mục 7)</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Xác nhận booking</td>
+<td>Khoá phiên bản trip case, khoá chính sách huỷ, chụp tỉ giá</td>
+<td>Chưa có quy tắc phụ thu sau xác nhận dưới dạng dữ liệu</td>
+<td>Dòng phụ thu riêng theo điều khoản (6.8)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Bảng giá đại lý</td>
+<td>Tính live với <code>priced_on</code> = hôm nay</td>
+<td>Không id, không phiên bản; CRM không biết khi giá đổi; không có bản năm sau</td>
+<td>Bản chụp đã phát hành, có id, ngày hiệu lực, ghi chú thay đổi và ETag; chạy hai bản song song</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Xem trước tác động</td>
+<td>Dry-run của rate sheet cho biết plan nào sẽ chuyển sang có giá</td>
+<td>Duyệt hợp đồng, quy tắc hay tỉ giá là <code>bk_price_recompute</code> chạy ngay; không ai thấy giá cũ và giá mới trước khi lên</td>
+<td>Bước xem trước: cũ → mới, % mỗi tour, cờ dưới sàn</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Excel</td>
+<td>Nhập từng hợp đồng một, có dry-run, một lỗi là không ghi gì, người thứ hai publish</td>
+<td>Không xuất được; không nhập ma trận hay mùa; file không mang phiên bản</td>
+<td>Xuất có id phiên bản và id dòng, nhập ra bản nháp mới, chép sang năm sau</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Giá tạm tính</td>
+<td>Giá tham khảo CIS là chữ, phân tích một lần, có cờ đã xem</td>
+<td>Plan chỉ có giá tay (<code>hand_priced</code>) không bán được cho đại lý; "tạm tính" chưa có định nghĩa</td>
+<td>Định nghĩa trạng thái tạm tính (6.11)</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Trẻ em, phòng đơn, đoàn</td>
+<td><code>child %</code> và phí em bé chung; nhóm số khách</td>
+<td>Khung tuổi theo sản phẩm, điều kiện 2 người lớn, phụ thu đơn, giường phụ, FOC, bảng huỷ đoàn</td>
+<td>Đưa vào phiên bản hợp đồng và phiên bản giá</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Gala và phụ thu lễ</td>
+<td>Không có</td>
+<td>Chưa có gì</td>
+<td>Phụ thu bắt buộc theo ngày, tự thêm khi kỳ ở chạm ngày đó</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Allotment và release khách sạn</td>
+<td>Chỉ có allotment của đại lý theo departure</td>
+<td>Release trên giá NCC, loại tồn kho</td>
+<td><code>inventory_type</code> và <code>release_days</code> (giai đoạn sau)</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Thuế và hoá đơn</td>
+<td><code>booking.tax_rule</code> theo loại hoá đơn và nước, có hiệu lực</td>
+<td>Giá net đã gồm VAT chưa; VAT 0% hay 8/10%; tiền tệ trên hoá đơn</td>
+<td>Ghi <code>tax_rule</code> áp dụng vào phiên bản giá; kế toán Việt Nam kiểm</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Markup và margin</td>
+<td>Engine dùng margin trên giá bán</td>
+<td>Màn hình chưa hiện cả hai</td>
+<td>Hiện cả hai %</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Bối cảnh quan trọng.</strong> Hôm nay chỉ 2 trên 892 plan có giá; 890 plan ở trạng thái <code>no_components</code>. Nút thắt bán hàng trước mắt là dữ liệu thành phần tour, chưa phải phiên bản. Chính vì vậy nên xây phiên bản ngay trong workbench AA-1091, để 890 plan khi có giá thì có phiên bản luôn từ đầu, không phải sửa lại sau.</p>
+<hr />
+<h2 id="6-thiet-ke-e-xuat-cho-phien-ban-gia-trong-aa-1091">6. Thiết kế đề xuất cho "phiên bản giá" trong AA-1091</h2>
+<h3 id="61-nam-nguyen-tac">6.1 Năm nguyên tắc</h3>
+<ol>
+<li>Không sửa đè. Mọi thay đổi giá là một bản mới.</li>
+<li>Một bản chỉ có hiệu lực khi người thứ hai duyệt. Tự duyệt đã bị chặn trong code, giữ nguyên.</li>
+<li>Báo giá và bảng giá đại lý ghim theo id phiên bản.</li>
+<li>Booking đã xác nhận không bao giờ bị tính lại giá.</li>
+<li>Ngày đi quyết định mùa và phiên bản. Ngày đặt chỉ quyết định ưu đãi.</li>
+</ol>
+<h3 id="62-thuc-the-price_list_version-booking-migration-bk-049-tro-i">6.2 Thực thể <code>price_list_version</code> (Booking, migration bk-049 trở đi)</h3>
+<ul>
+<li><strong>Phạm vi:</strong> <code>trip_plan_id</code> cho ma trận giá bán. Với giá NCC thì <strong>chính hợp đồng là phiên bản</strong>: chỉ cần thêm <code>supersedes_id</code> và diff, không tạo bảng mới.</li>
+<li><strong>Định danh:</strong> <code>version_no</code> tăng dần trong phạm vi, <code>label</code> dễ đọc (ví dụ "2027 v3"), <code>tariff_year</code>.</li>
+<li><strong>Trạng thái:</strong> <code>draft</code> → <code>pending</code> → <code>published</code> → <code>superseded</code>, thêm <code>rejected</code> và <code>withdrawn</code>, theo đúng khuôn bk-048.</li>
+<li><strong>Hiệu lực:</strong> <code>travel_from</code>/<code>travel_to</code> (ngày đi; bên trong lưu dạng nửa mở, xem 6.10) và <code>sale_from</code>/<code>sale_to</code> (ngày đặt, không bắt buộc).</li>
+<li><strong>Người và lý do:</strong> <code>created_by</code> (người nhập), <code>approved_by</code>/<code>approved_at</code>, <code>reason</code> bắt buộc (≤ 300 ký tự), <code>replaces_id</code>.</li>
+<li><strong>Nguồn:</strong> <code>staff</code> / <code>import</code> / <code>cost_sheet</code> / <code>provisional</code>, kèm hash của file Excel nếu nhập từ file.</li>
+<li><strong>Đi kèm:</strong> <code>diff</code> và <code>impact</code> (json) được tính lúc gửi duyệt.</li>
+<li><strong>Dòng giá:</strong> dùng lại hình dạng ma trận hiện tại, thêm <code>version_id</code> và <code>season_id</code> (thay cho nhãn chữ). <code>trip_plan_price_history</code> trở thành các dòng thuộc từng phiên bản.</li>
+<li>Quy tắc, tỉ giá, hạng và thẻ giá giữ cấu trúc hiện tại, chỉ bổ sung từ chối và rút lại cho bản đang chờ, bắt buộc ghi lý do, và thêm <code>valid_to</code> cho quy tắc.</li>
+</ul>
+<h3 id="63-mua">6.3 Mùa</h3>
+<ul>
+<li><code>season_calendar</code> theo hợp đồng (mùa của NCC) và theo điểm đến (mùa của bảng giá bán AA).</li>
+<li>Mỗi lịch gồm các khoảng ngày Low / High / Peak / Festive, cho phép lặp; khoảng chặn bán; sự kiện lễ có ngày riêng cho từng năm (Tết, Songkran, Lebaran, Tết Trung Hoa, Giáng sinh và năm mới).</li>
+<li>Cờ peak lấy từ lịch, bỏ cách dò chữ "peak". Báo giá B2B và RRP dùng cùng một logic mùa.</li>
+<li>Mỗi hợp đồng có cờ "tính từng đêm" (mặc định) hoặc "tính cả kỳ theo mùa của ngày đến".</li>
+</ul>
+<h3 id="64-ban-nao-ap-cho-bao-gia">6.4 Bản nào áp cho báo giá</h3>
+<p>Bản áp dụng là <strong>bản đã phát hành tại thời điểm báo giá và có hiệu lực cho ngày đi</strong>. Ưu đãi đặt sớm xét theo ngày báo giá. Khi có bản năm sau đã phát hành, đại lý báo giá năm sau thì dùng bản đó.</p>
+<h3 id="65-ai-nhap-ai-duyet">6.5 Ai nhập, ai duyệt</h3>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Vai trò</th>
+<th>Việc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CSKH</td>
+<td>Người nhập: tạo bản nháp, nhập Excel, gửi duyệt</td>
+</tr>
+<tr>
+<td>Trưởng sản phẩm / định giá</td>
+<td>Người duyệt: phát hành hoặc từ chối, kèm lý do</td>
+</tr>
+<tr>
+<td><code>finance</code> (ADR 0019 d3)</td>
+<td>Duyệt tỉ giá, quy tắc thuế, phụ thu</td>
+</tr>
+</tbody>
+</table></div>
+<p>Tuỳ chính sách, có thể cho bản do <code>bk_price_recompute</code> sinh ra tự phát hành nếu nằm trong ngưỡng ±X%. Ngoài ngưỡng thì vào hàng chờ duyệt (câu 4, mục 7). Sau khi phát hành, hệ thống tự kiểm 4 ngày mẫu: ngày đầu, ngày cuối, một ngày peak và một ngày không bị ảnh hưởng.</p>
+<h3 id="66-ly-do-so-sanh-tac-ong">6.6 Lý do, so sánh, tác động</h3>
+<ul>
+<li><strong>Diff từng dòng:</strong> mùa × nhóm số khách × kênh, giá cũ → giá mới, %. Tô đậm những dòng thay đổi lớn hơn X%; gắn cờ những dòng dưới sàn margin.</li>
+<li><strong>Impact:</strong> số báo giá đang mở sẽ bị tính lại khi hết hạn, số dòng bảng giá đại lý thay đổi, giá "from" công khai thay đổi, và margin mỗi khách ở số khách dự kiến.</li>
+<li>Người duyệt chỉ thấy nút "Phát hành" sau khi đã xem diff.</li>
+</ul>
+<h3 id="67-bao-gia-ghim-phien-ban">6.7 Báo giá ghim phiên bản</h3>
+<ul>
+<li><code>b2b_quotes</code> thêm <code>price_version_id</code> và <code>tariff_version_id</code>; vẫn giữ <code>price_hash</code>.</li>
+<li>Hạn báo giá theo chính sách, code cho tối đa 30 ngày.</li>
+<li>Báo giá hết hạn thì tính lại và hiện cho đại lý "giá cũ X, giá mới Y". Muốn giữ giá cũ thì dùng điều chỉnh giá đã có sẵn (bk-048), kèm lý do.</li>
+</ul>
+<h3 id="68-booking-a-xac-nhan">6.8 Booking đã xác nhận</h3>
+<ul>
+<li>Không bao giờ tính lại giá. Nếu giá vốn NCC đổi, nhân viên thấy phần chênh dưới dạng <strong>chênh lệch margin</strong> (cách "Keep selling price" của Lemax); đại lý không thấy gì.</li>
+<li>Ngoại lệ duy nhất là một <strong>dòng phụ thu theo điều khoản</strong>:</li>
+<li>nguyên nhân chỉ là nhiên liệu, thuế hoặc tỉ giá;</li>
+<li>có cách tính, được duyệt;</li>
+<li>báo đại lý ≥ 20 ngày trước khởi hành;</li>
+<li>khi chi phí giảm thì cũng trả lại;</li>
+<li>tăng quá 8% thì đại lý được huỷ miễn phí.</li>
+<li>Mọi thay đổi khác do mình tự chịu.</li>
+</ul>
+<h3 id="69-bang-gia-ai-ly-co-phien-ban">6.9 Bảng giá đại lý có phiên bản</h3>
+<ul>
+<li><code>tariff_version</code> là bản chụp được dựng từ các phiên bản giá đã phát hành: có id, ngày hiệu lực, ghi chú thay đổi, ETag.</li>
+<li>Bản hiện hành và bản năm sau chạy song song. CRM nhận ra khi bảng giá đổi qua ETag hoặc qua event.</li>
+<li>Cập nhật hợp đồng <code>booking.b2b.v1</code> (lên bản 1.9).</li>
+</ul>
+<h3 id="610-excel-co-phien-ban">6.10 Excel có phiên bản</h3>
+<ul>
+<li><strong>Xuất:</strong> từ bản đã phát hành ra .xlsx, mang <code>version_id</code> và <code>row_id</code>, ngày dạng YYYY-MM-DD <strong>tính cả ngày cuối</strong> giống bảng giá NCC. Hệ thống tự đổi sang nửa mở ở bên trong, để tránh bẫy "đêm không có giá" như ví dụ Lemax.</li>
+<li><strong>Nhập:</strong> tạo bản nháp mới với <code>replaces_id</code> = bản đã xuất. Nếu bản gốc không còn là bản mới nhất thì báo xung đột và không nhập.</li>
+<li>Một dòng lỗi thì không nhập dòng nào. Dry-run cho thấy diff và impact.</li>
+<li><strong>"Chép sang năm sau +x%":</strong> tạo bản nháp có trạng thái tạm tính.</li>
+</ul>
+<h3 id="611-gia-tam-tinh">6.11 Giá tạm tính</h3>
+<ul>
+<li><code>source = provisional</code>, lấy từ giá năm trước cùng mùa + % tăng, hoặc từ giá tham khảo CIS đã có cấu trúc (AA-1091 mục 5).</li>
+<li>Cờ "tạm tính" hiện cho cả CSKH và đại lý. Báo giá có dòng tạm tính thì đi theo luồng "cần xác nhận / đặt có duyệt", không tự xác nhận.</li>
+<li>Cách này cũng giải bài toán plan chỉ có giá tay không bán được cho đại lý.</li>
+</ul>
+<h3 id="612-man-hinh-workbench">6.12 Màn hình workbench</h3>
+<ul>
+<li>Dòng thời gian phiên bản cho mỗi tour, ví dụ: "v3 · phát hành 01/09 · nhập: A · duyệt: B · lý do: hợp đồng KS 2027".</li>
+<li>Xem diff giữa hai bản bất kỳ; hàng chờ duyệt cho người duyệt; trạng thái sẵn sàng (readiness) như hiện nay.</li>
+</ul>
+<p><strong>ADR.</strong> Thay đổi chạm cả Booking, CRM (đọc bảng giá có phiên bản) và hợp đồng API, nên cần viết ADR ở repo gốc (0005b, bổ sung cho 0005). Đây là PR chạm schema và hợp đồng API, nên cho agent review trước khi merge.</p>
+<hr />
+<h2 id="7-cau-hoi-cho-chu-doanh-nghiep-chinh-sach-gia-la-viec-kinh-doanh">7. Câu hỏi cho chủ doanh nghiệp (chính sách giá là việc kinh doanh)</h2>
+<p><em>Mỗi câu kèm đáp án gợi ý. Chủ doanh nghiệp chọn hoặc sửa; kỹ thuật làm theo.</em></p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Câu hỏi</th>
+<th>Gợi ý</th>
+<th>Vì sao</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Năm bảng giá bán cho đại lý</td>
+<td>1/11–31/10, công bố cuối tháng 8. Hợp đồng NCC vẫn theo từng NCC</td>
+<td>Khớp mùa du lịch khu vực và cách của Asian Trails</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Hạn báo giá B2B</td>
+<td>14 ngày cho tour thường; 3 ngày cho dịp lễ (Tết, Giáng sinh, năm mới)</td>
+<td>48 giờ hiện tại ngắn hơn ngành (Khiri 30 ngày); dịp lễ giá NCC đổi nhanh</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Booking đã xác nhận có được đổi giá không</td>
+<td>Cam kết không đổi. Chỉ giữ quyền với thuế nhà nước và tỉ giá biến động quá X% (đề nghị 5%; ngành không có chuẩn), báo ≥ 20 ngày, có cả giảm</td>
+<td>Đại lý EU/UK bắt buộc; thị trường đang chuyển sang "chắc giá"</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Ngưỡng tự phát hành</td>
+<td>Mọi giá nhập tay cần duyệt. Tính lại tự động trong ±3% thì tự phát hành, ngoài ngưỡng thì chờ duyệt</td>
+<td>Giữ an toàn mà không nghẽn việc</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Ai duyệt giá</td>
+<td>Trưởng sản phẩm hoặc điều hành duyệt giá; kế toán duyệt tỉ giá và thuế</td>
+<td>Tách người nhập và người duyệt</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Mùa của bảng giá bán</td>
+<td>Một bộ mùa chung theo điểm đến (Low / High / Peak / Festive), hợp đồng NCC giữ mùa riêng</td>
+<td>Đại lý dễ đọc; giá vốn vẫn đúng</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Gala và phụ thu lễ</td>
+<td>Gala bắt buộc tính nguyên giá cộng margin chuẩn; phụ thu Tết theo từng khách sạn</td>
+<td>Bỏ sót gala là lỗ trực tiếp</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Cọc và huỷ</td>
+<td>Khách lẻ trả đủ 30 ngày trước; thang huỷ 30–22 ngày 10%, 21–15 ngày 25%, 14–8 ngày 50%, 7 ngày–48 giờ 75%, dưới 48 giờ 100%. Đoàn cọc 25% trước 8 tuần. Dịp lễ không hoàn trong 30 ngày</td>
+<td>Phỏng theo EXO, Khiri và Asian Trails</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Đoàn từ 9 khách</td>
+<td>Năm đầu báo giá theo yêu cầu; FOC theo hợp đồng NCC (thường 1/15)</td>
+<td>Chưa đủ dữ liệu để làm bảng giá đoàn</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Hạng đại lý</td>
+<td>Giữ 3 hạng 0 / 3 / 6%. Thẻ giá riêng chỉ cho đối tác lớn, có hạn và cam kết sản lượng, xét lại mỗi năm</td>
+<td>Arival khuyên tối đa 4 mức</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Tiền tệ</td>
+<td>USD cho đại lý nước ngoài, VND cho đại lý Việt Nam; khoá tỉ giá lúc báo giá cộng khoản đệm hiện có</td>
+<td>Thông tư 32 và VAT cần luật sư hoặc kế toán xác nhận</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Giá tạm tính khi NCC chưa gửi giá năm mới</td>
+<td>Cho phép: giá năm trước + 5%, gắn cờ, chỉ "cần xác nhận"</td>
+<td>Không để báo giá bị kẹt (khoảng 5% yêu cầu gặp tình huống này)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Nên hỏi thêm một câu ngoài bảng: <strong>margin mục tiêu và margin sàn cho từng kênh</strong> (b2b, fixed departure), ghi rõ là margin trên giá bán.</p>
+<hr />
+<h2 id="8-thu-tu-trien-khai">8. Thứ tự triển khai</h2>
+<ol>
+<li><strong>Chốt chính sách.</strong> Câu 1–5 cần có trước khi code; các câu còn lại chốt dần.</li>
+<li><strong>ADR 0005b và hợp đồng API.</strong> Mô hình phiên bản, hai trục ngày, quy tắc sau xác nhận, <code>booking.b2b.v1</code> bản 1.9. Agent review trước khi merge.</li>
+<li><strong>Giá tay của CSKH thành phiên bản</strong> (lỗ hổng lớn nhất, rủi ro thấp): nháp → duyệt → phát hành, lý do bắt buộc, diff. Làm cùng workbench AA-1091.</li>
+<li><strong>Lịch mùa có cấu trúc</strong> và sự kiện lễ theo năm; bỏ dò chữ "peak"; thống nhất peak giữa báo giá và RRP.</li>
+<li><strong>Xem trước tác động</strong> trước khi duyệt hợp đồng, quy tắc, tỉ giá; tính lại ngoài ngưỡng thì vào hàng chờ. Thêm từ chối và rút lại cho bản đang chờ; thêm <code>supersedes_id</code> cho hợp đồng.</li>
+<li><strong>Báo giá ghim <code>price_version_id</code></strong>; hạn báo giá theo chính sách; màn hình báo lại giá có diff.</li>
+<li><strong>Bảng giá đại lý có phiên bản</strong> (id, ETag, bản năm sau); CRM đọc theo phiên bản.</li>
+<li><strong>Excel xuất và nhập có phiên bản</strong>, chép sang năm sau, giá tạm tính (gộp với mục nhập Excel và mục giá tạm tính của AA-1091).</li>
+<li><strong>Sau đó:</strong>
+   - khung tuổi trẻ em, phụ thu đơn và giường phụ, FOC, bảng huỷ đoàn;
+   - phụ thu gala tự động;
+   - loại tồn kho và release cho khách sạn;
+   - dòng phụ thu sau xác nhận;
+   - báo cáo chênh lệch hoá đơn NCC so với báo giá;
+   - KPI: tỉ lệ báo giá thành booking theo từng đại lý, % báo giá dùng giá tạm tính, % chênh lệch giá vốn, số lần đổi giá sau xác nhận.</li>
+</ol>
+<p><strong>File chính đã đối chiếu:</strong>
+- <code>/home/nghiep/projects/AA-Ecosys/apps/AA-Booking/CONTEXT.md</code>
+- <code>/home/nghiep/projects/AA-Ecosys/apps/AA-Booking/backend/app/b2b/quotes.py</code> (<code>DEFAULT_VALID_HOURS = 48</code>, <code>MAX_VALID_HOURS = 720</code>)
+- <code>/home/nghiep/projects/AA-Ecosys/apps/AA-Booking/backend/app/pricing/engine.py</code>
+- <code>/home/nghiep/projects/AA-Ecosys/apps/AA-Booking/backend/app/catalog/price_history.py</code>
+- <code>/home/nghiep/projects/AA-Ecosys/apps/AA-Booking/backend/app/b2b/price_adjustments.py</code>
+- <code>/home/nghiep/projects/AA-Ecosys/apps/AA-Booking/backend/app/b2b/tariff.py</code>
+- <code>/home/nghiep/projects/AA-Ecosys/docs/adr/0005-pricing-and-supplier-rates.md</code>
+- <code>/home/nghiep/projects/AA-Ecosys/docs/adr/0019-b2b-only-ecosystem-model.md</code>
+- <code>/home/nghiep/projects/AA-Ecosys/docs/contracts/booking.b2b.v1.openapi.yaml</code></p></article>
+  <footer>Nguồn: nghiên cứu web (blog hãng phần mềm được ghi là [ví dụ], không phải chuẩn ngành) và đọc code AA-Booking. ADR 0005b ghi lại thiết kế; chính sách là tham số có mặc định, chủ doanh nghiệp đổi được.</footer>
+</div>

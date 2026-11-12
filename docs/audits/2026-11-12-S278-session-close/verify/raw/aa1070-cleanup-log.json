@@ -1,0 +1,262 @@
+[
+  {
+    "name": "POST documents/{id}/download (confirmation_pdf)",
+    "status": 200,
+    "body": {
+      "status": 200,
+      "ct": "application/json",
+      "keys": [
+        "document_id",
+        "trip_id",
+        "traveler_id",
+        "kind",
+        "filename",
+        "size_bytes",
+        "content_type",
+        "visible_to_travelers",
+        "write_only",
+        "created_at",
+        "content_b64"
+      ],
+      "url": false
+    }
+  },
+  {
+    "name": "DELETE document voucher",
+    "status": 200,
+    "body": {
+      "document_id": "78bde01f-9122-4504-9991-2ae65fbee179",
+      "trashed": true
+    }
+  },
+  {
+    "name": "DELETE document confirmation_pdf",
+    "status": 200,
+    "body": {
+      "document_id": "41528635-7792-4966-b732-902531ab8c01",
+      "trashed": true
+    }
+  },
+  {
+    "name": "DELETE visa",
+    "status": 200,
+    "body": {
+      "visa_application_id": "217cb565-1984-4af0-a715-1cb03c6da304",
+      "deleted": true
+    }
+  },
+  {
+    "name": "DELETE visa-template",
+    "status": 200,
+    "body": {
+      "visa_template_id": "8588e949-07e0-4113-bf75-37e3f51583e2",
+      "deleted": true
+    }
+  },
+  {
+    "name": "PUT rooming T []",
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "rooms": [],
+      "unassigned": [
+        {
+          "traveler_id": "cc5f0fde-dc45-4c6f-997b-5a2b22c2b25e",
+          "name": "E2E mwbyt1cv Booker",
+          "role": "lead"
+        }
+      ],
+      "room_config": {
+        "family": 1
+      },
+      "room_types": [
+        "single",
+        "double",
+        "twin",
+        "triple",
+        "quad",
+        "family"
+      ],
+      "capacity": {
+        "single": 1,
+        "double": 2,
+        "twin": 2,
+        "triple": 3,
+        "quad": 4,
+        "family": 6
+      },
+      "bed_prefs": [
+        "double_bed",
+        "twin_beds",
+        "extra_bed",
+        "cot"
+      ]
+    }
+  },
+  {
+    "name": "PUT rooming R []",
+    "status": 200,
+    "body": {
+      "trip_id": "18c61c49-8f83-4119-a1e2-bca441f11752",
+      "rooms": [],
+      "unassigned": [
+        {
+          "traveler_id": "e8e6652d-9376-473a-8d28-c2276442acc8",
+          "name": "E2E S261 Lead vwye3w",
+          "role": "lead"
+        },
+        {
+          "traveler_id": "d87d3de0-84bd-4e7e-90f8-8ae74a832127",
+          "name": "E2E S261 Adult vwye3w",
+          "role": "companion"
+        },
+        {
+          "traveler_id": "78c1be72-8548-4c4c-b9e8-fea9244c9b30",
+          "name": "E2E S261 Child vwye3w",
+          "role": "companion"
+        }
+      ],
+      "room_config": null,
+      "room_types": [
+        "single",
+        "double",
+        "twin",
+        "triple",
+        "quad",
+        "family"
+      ],
+      "capacity": {
+        "single": 1,
+        "double": 2,
+        "twin": 2,
+        "triple": 3,
+        "quad": 4,
+        "family": 6
+      },
+      "bed_prefs": [
+        "double_bed",
+        "twin_beds",
+        "extra_bed",
+        "cot"
+      ]
+    }
+  },
+  {
+    "name": "POST cancel voucher line",
+    "status": 200,
+    "body": {
+      "booking_line_id": "0fee253c-1201-4688-a9c0-59419e453ee0",
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "supplier_kind": "agency",
+      "agency_supplier_id": "5e1eace4-1931-4e31-b9c3-fa37dc7b5025",
+      "supplier_name": "E2E 1029170848 Ha Long Cruise",
+      "status": "cancelled",
+      "aa_sub_status": null,
+      "title": "E2E S278 airport transfer (voucher check)",
+      "confirmation_no": "E2E-S278-V1",
+      "service_from": "2026-11-20",
+      "service_to": "2026-11-20",
+      "collect": "agency",
+      "confirm_class": null,
+      "visible_to_travelers": false,
+      "confirmed_at": "2026-11-12T00:12:05.221360+00:00",
+      "requested_at": null,
+      "request_ref": null,
+      "read_only": false,
+      "money": {
+        "cost": {
+          "amount": "10.00",
+          "currency": "USD",
+          "amount_base": "10.00",
+          "base_currency": "USD",
+          "fx": {
+            "rate": "1.0000000000",
+            "rate_date": "2026-11-12",
+            "source": "platform_daily",
+            "stale_days": 0
+          }
+        },
+        "sell": {
+          "amount": "15.00",
+          "currency": "USD",
+          "amount_base": "15.00",
+          "base_currency": "USD",
+          "fx": {
+            "rate": "1.0000000000",
+            "rate_date": "2026-11-12",
+            "source": "platform_daily",
+            "stale_days": 0
+          }
+        },
+        "commission_expected": null,
+        "margin_base": "5.00"
+      }
+    }
+  },
+  {
+    "name": "POST revoke portal access",
+    "status": 200,
+    "body": {
+      "access_id": "5691c14f-1980-483d-bf8d-25098a6af668",
+      "status": "revoked"
+    }
+  },
+  {
+    "name": "GET visa-templates",
+    "status": 200,
+    "body": {
+      "templates": [],
+      "visa_types": [
+        "evisa",
+        "visa_on_arrival",
+        "embassy",
+        "visa_exempt",
+        "transit",
+        "other"
+      ]
+    }
+  },
+  {
+    "name": "GET visas T",
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "can_add": true,
+      "applications": [],
+      "visa_types": [
+        "evisa",
+        "visa_on_arrival",
+        "embassy",
+        "visa_exempt",
+        "transit",
+        "other"
+      ],
+      "statuses": [
+        "to_do",
+        "collecting",
+        "submitted",
+        "approved",
+        "refused",
+        "not_needed",
+        "cancelled"
+      ]
+    }
+  },
+  {
+    "name": "GET documents T",
+    "status": 200,
+    "body": {
+      "trip_id": "9f0976dc-6a3e-4d77-bc6d-9d63980358be",
+      "documents": []
+    }
+  },
+  {
+    "name": "GET settings/travel",
+    "status": 200,
+    "body": {
+      "passport_valid_months": 6,
+      "default": 6,
+      "max": 24
+    }
+  }
+]

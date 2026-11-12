@@ -1,0 +1,68 @@
+[
+  {
+    "kind": "network",
+    "status": 409,
+    "method": "POST",
+    "url": "https://portal.lumiguides.it.com/bff/tags/e7c8c8a1-2717-43c4-bc03-962fca8b271d/bulk"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/pipeline",
+    "text": "Failed to load resource: the server responded with a status of 409 ()"
+  },
+  {
+    "kind": "network",
+    "status": 409,
+    "method": "PUT",
+    "url": "https://portal.lumiguides.it.com/bff/trips/827e8be4-f4b8-483a-b230-3d4fe55f44fe/tags/e1aea613-fc69-428f-b4fc-b5e2ba2bdf72"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/marketing",
+    "text": "Failed to load resource: the server responded with a status of 409 ()"
+  },
+  {
+    "kind": "network",
+    "status": 409,
+    "method": "PATCH",
+    "url": "https://portal.lumiguides.it.com/bff/tags/e1aea613-fc69-428f-b4fc-b5e2ba2bdf72"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/marketing",
+    "text": "Failed to load resource: the server responded with a status of 409 ()"
+  },
+  {
+    "kind": "network",
+    "status": 409,
+    "method": "DELETE",
+    "url": "https://portal.lumiguides.it.com/bff/tags/e1aea613-fc69-428f-b4fc-b5e2ba2bdf72"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/marketing",
+    "text": "Failed to load resource: the server responded with a status of 409 ()"
+  },
+  {
+    "kind": "network",
+    "status": 409,
+    "method": "POST",
+    "url": "https://portal.lumiguides.it.com/bff/tags/e1aea613-fc69-428f-b4fc-b5e2ba2bdf72/bulk"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/marketing",
+    "text": "Failed to load resource: the server responded with a status of 409 ()"
+  },
+  {
+    "kind": "network",
+    "status": 409,
+    "method": "PUT",
+    "url": "https://portal.lumiguides.it.com/bff/travelers/e769fc3a-bcf6-4bcb-b530-2f169d03482a/tags/9997e9e5-5cda-43ea-9f5a-1e6468159c40"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/marketing",
+    "text": "Failed to load resource: the server responded with a status of 409 ()"
+  }
+]

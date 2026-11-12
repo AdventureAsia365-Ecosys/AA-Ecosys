@@ -1,0 +1,28 @@
+[
+  {
+    "kind": "marker",
+    "text": "--- end of /bookings?status=requested page ---"
+  },
+  {
+    "kind": "network",
+    "status": 404,
+    "method": "GET",
+    "url": "https://portal.lumiguides.it.com/bff/lines/cb1f47ed-df1b-4453-b4a4-fdf6c558f9a8/confirm-check"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/bookings?status=requested",
+    "text": "Failed to load resource: the server responded with a status of 404 ()"
+  },
+  {
+    "kind": "network",
+    "status": 404,
+    "method": "GET",
+    "url": "https://portal.lumiguides.it.com/bff/lines/cb1f47ed-df1b-4453-b4a4-fdf6c558f9a8/confirm-check"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/bookings?status=requested",
+    "text": "Failed to load resource: the server responded with a status of 404 ()"
+  }
+]

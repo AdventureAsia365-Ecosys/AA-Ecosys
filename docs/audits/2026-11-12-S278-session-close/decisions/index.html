@@ -1,0 +1,558 @@
+<title>Kế hoạch sau R7 · S278</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column of decision cards grouped by issue, each with context, options, a recommended pick and a save button. */
+:root {
+  --bg: #f6f7f4; --surface: #ffffff; --line: #d9ddd3; --fg: #1c211b; --muted: #5d665a;
+  --accent: #2f6b4f; --accent-soft: #dcebe2; --warn: #8a5a00; --warn-soft: #f6ead0; --ok: #24683f; --ok-soft: #dcefe2;
+  --body: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif; --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121512; --surface: #1a1f1a; --line: #2e362d; --fg: #e4e9e2; --muted: #9aa597;
+  --accent: #7cc4a0; --accent-soft: #1f3a2d; --warn: #e2b05a; --warn-soft: #3a2f17; --ok: #7fd09c; --ok-soft: #1c3424; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121512; --surface: #1a1f1a; --line: #2e362d; --fg: #e4e9e2; --muted: #9aa597;
+  --accent: #7cc4a0; --accent-soft: #1f3a2d; --warn: #e2b05a; --warn-soft: #3a2f17; --ok: #7fd09c; --ok-soft: #1c3424; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body) }
+.wrap { max-width: 860px; margin: 0 auto; padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 22px }
+h1 { font-size: clamp(24px, 3.4vw, 32px); margin: 0; line-height: 1.2; text-wrap: balance }
+h2 { font-size: 18px; margin: 0; line-height: 1.3; text-wrap: balance }
+h3.grp { font-size: 13px; margin: 10px 0 0; font-family: var(--mono); color: var(--muted); letter-spacing: .05em; text-transform: uppercase }
+.lede { color: var(--muted); margin: 0; max-width: 68ch }
+.status { font: 500 13px var(--mono); color: var(--muted) }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: grid; gap: 12px; min-width: 0 }
+.card.done { border-color: var(--ok) }
+.card header { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; justify-content: space-between }
+.tag { font: 500 12px var(--mono); color: var(--accent) }
+.ctx { margin: 0; color: var(--fg) }
+.facts { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; display: grid; gap: 2px }
+.opts { display: grid; gap: 8px }
+.opt { display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer }
+.opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft) }
+.opt input { margin-top: 4px }
+.opt b { font-weight: 600 }
+.rec { font: 500 11px var(--mono); color: var(--ok); background: var(--ok-soft); padding: 2px 6px; border-radius: 4px; margin-left: 6px; white-space: nowrap }
+.opt small { display: block; color: var(--muted); font-size: 13px }
+textarea { width: 100%; min-height: 56px; font: 14px var(--body); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; resize: vertical }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center }
+button { font: 600 14px var(--body); color: #fff; background: var(--accent); border: 0; border-radius: 8px; padding: 9px 16px; cursor: pointer }
+:root:not([data-theme="light"]) button { color: var(--bg) }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) button { color: #fff } }
+:root[data-theme="light"] button { color: #fff }
+button.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent) }
+button:disabled { opacity: .5; cursor: not-allowed }
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.saved { font-size: 13px; color: var(--ok) }
+.saved.warn { color: var(--warn) }
+.bar { position: sticky; top: 0; z-index: 2; background: var(--bg); padding: 10px 0; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center }
+footer { color: var(--muted); font-size: 13px }
+code { font: 13px var(--mono) }
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:8px">
+    <div class="status">S278 · 12/11/2026 · kế hoạch S279–S292 · 16 quyết định</div>
+    <h1>Kế hoạch sau R7 · S278</h1>
+    <p class="lede">R0–R7 và hai mốc pilot đã xong trên thực tế; slot S279/S280 gần hết. Đây là 16 câu để chốt kế hoạch S279–S292 (4 lane song song: chất lượng nội dung W2→W5, chuẩn bị pilot + prod, card CRM sau R3, mở R8 bằng tên miền riêng). Mỗi câu có bối cảnh bằng lời thường và một đề xuất đã chọn sẵn. Bấm <b>Chốt</b> từng câu, hoặc <b>Chốt tất cả theo đề xuất</b>; agent đọc lựa chọn đã lưu và cập nhật plan.json / backlog.</p>
+    <div class="status" id="conn">Đang kết nối nơi lưu…</div>
+  </header>
+
+  <div class="bar"><button type="button" id="save-all" disabled>Chốt tất cả theo đề xuất</button><span class="saved" id="msg-all"></span><span class="status" id="count"></span></div>
+
+  <div id="cards"></div>
+
+  <footer>Bản kế hoạch đầy đủ (tiếng Anh): <code>docs/audits/2026-11-12-S278-session/plan-after-r7/plan.md</code> (root PR cuối phiên). Chi trả phí ước cho cả đợt ≈ 45–52 USD, chủ yếu W5 (≤ 33 USD). Phát hiện phụ: plan.json chưa tick M-P2, M-R7, M-OD và mục D8 của M1b — sửa trong root PR.</footer>
+</div>
+
+<script>
+(function () {
+  var Q = [
+   {
+    "grp": "Nội dung (M2a / ADR 0020)",
+    "id": "d1-content-share",
+    "tag": "D1 · luật 60 %",
+    "title": "Giữ luật ≥ 60 % sức làm cho chất lượng nội dung (S279–S292)?",
+    "ctx": "Luật từ S262/S265 để CRM không lấn R4/R5/R7. R4, R5, R7 nay đã xong. S276 giữ (5/8 issue), S277 tụt (~5/12). Bảng slot nháp giữ được 35/58 slot = 60 %.",
+    "facts": [
+     "Đếm theo slot issue mỗi phiên, không tính các mục kiểm theo ngày"
+    ],
+    "opts": [
+     {
+      "v": "keep60",
+      "t": "Giữ ≥ 60 % nội dung",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "50",
+      "t": "Hạ xuống 50 %",
+      "d": ""
+     },
+     {
+      "v": "drop",
+      "t": "Bỏ luật, xếp theo giá trị",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Nội dung (M2a / ADR 0020)",
+    "id": "d2-m2b",
+    "tag": "D2 · mốc mới",
+    "title": "Tách mốc mới M2b “Chất lượng nội dung đã chứng minh”?",
+    "ctx": "Tiêu chí M2a hiện chỉ là luật chi phí, AA-741 (xong), AA-788, Writing Lab — không đo bài có tốt lên không. ADR 0020 có mục tiêu: tỉ lệ bài blog T9 đạt ngay lần đầu từ 2 % lên ≥ 30 % (đích 50 %), trung vị ≤ 5 lượt gọi model và ≤ 0,25 USD mỗi bài.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "m2b",
+      "t": "Tạo M2b: W2–W5 đóng (AA-1048, 1050, 1051) + 3 mục tiêu ADR 0020 đo trong một báo cáo",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "keep",
+      "t": "Giữ M2a, chỉ tick cái đã xong",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Nội dung (M2a / ADR 0020)",
+    "id": "d3-w2-fallback",
+    "tag": "D3 · AA-1048",
+    "title": "Nếu gom class rồi vẫn không đủ 20 vi phạm thì làm gì?",
+    "ctx": "Đầu phiên anh đã chọn đo class gộp trước (vd. fact.* của t9_blog ≈ 21). Câu này chỉ dùng khi lượt đếm lại hôm nay vẫn dưới 20.",
+    "facts": [
+     "Lane AA-1048 đang dựng script đếm lại (thêm bộ nhãn t2@2) — kết quả trong phiên này"
+    ],
+    "opts": [
+     {
+      "v": "seed-paid",
+      "t": "Sinh thêm vi phạm thật bằng một lượt nhỏ trả phí, nằm trong trần 2 USD của R1",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "n10",
+      "t": "Sửa ADR 0020 cho phép n_pos ≥ 10 cho class đầu (hiệu chuẩn yếu hơn)",
+      "d": ""
+     },
+     {
+      "v": "wait",
+      "t": "Chờ nhãn tích luỹ hằng tháng (chậm, nhiều tuần)",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Nội dung (M2a / ADR 0020)",
+    "id": "d4-tl11",
+    "tag": "D4 · TL-11",
+    "title": "Khi nào gỡ băng TL-11 (writing memory + eval: AA-790, 920, 921, 922, 1000)?",
+    "ctx": "TL-11 (S262) đóng băng tới khi blog T9 chạy trọn một vòng. Chặn thứ hai (không có đường LLM) đã hết: key Anthropic direct chạy từ S269, OpenAI có trần 10 USD.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "1077-and-1050",
+      "t": "Gỡ khi AA-1077 đóng với một vòng T9 sạch VÀ AA-1050 bật enforce cho ít nhất một class đã đo",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "1077",
+      "t": "Gỡ ngay khi AA-1077 đóng",
+      "d": ""
+     },
+     {
+      "v": "m2b",
+      "t": "Giữ băng tới báo cáo M2b",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Nội dung (M2a / ADR 0020)",
+    "id": "d5-w5-yes",
+    "tag": "D5 · AA-1051",
+    "title": "Duyệt trước 4 lượt chứng minh trả phí W5 (mỗi lượt chạy khi cổng của nó xanh)?",
+    "ctx": "Trần ADR 0020 D12: eval null ≤ 5 USD, T9 ≤ 15, S1 ≤ 8, T2 ≤ 5 (tổng ≤ 33 USD), tiền thẻ Anthropic/OpenAI. Mỗi lượt chỉ chạy sau W2 R1 + W4 (quyết định S275).",
+    "facts": [],
+    "opts": [
+     {
+      "v": "all-now",
+      "t": "Đồng ý cả 4 ngay, mỗi lượt chạy khi cổng xanh, báo chi phí từng stage",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "one-by-one",
+      "t": "Duyệt từng lượt khi sẵn sàng",
+      "d": ""
+     },
+     {
+      "v": "not-now",
+      "t": "Chưa trong đợt này",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Nội dung (M2a / ADR 0020)",
+    "id": "d6-openai-cap",
+    "tag": "D6 · trần OpenAI",
+    "title": "Trần cứng OpenAI 10 USD/tháng trong lúc chạy W4/W5: giữ hay nâng?",
+    "ctx": "Nếu thước đo claim được ghim là GPT-6 Luna (OpenAI), W4/W5 có thể chạm trần 10 USD giữa chừng; gateway từ chối và lượt chạy dừng (không tự đổi model). Đầu phiên hôm nay OpenAI tháng 11 mới tiêu 0,96 USD.",
+    "facts": [
+     "Số kiểm live 12/11: openai-direct 0,96 / 10 USD"
+    ],
+    "opts": [
+     {
+      "v": "keep10",
+      "t": "Giữ 10 USD; kiểm số đầu mỗi phiên, chỉ hỏi lại khi một lượt sắp vượt",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "raise20",
+      "t": "Nâng 20 USD tới 31/12, cảnh báo ở 80 %",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Nội dung (M2a / ADR 0020)",
+    "id": "d7-aa788",
+    "tag": "D7 · AA-788",
+    "title": "Duyệt pilot AA-788 (20 bài) từ 19/11, ước 2–5 USD?",
+    "ctx": "AA-788 đưa F12_scope, F14 thiếu độ dài và F9_brand_style thành chặn. Replay $0 đã xong; pilot 20 bài là bước cuối.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "yes5",
+      "t": "Đồng ý, trần 5 USD, thử 3 bài trước",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "wait",
+      "t": "Chờ báo cáo M2b",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Mốc và phạm vi",
+    "id": "d8-r7-visual",
+    "tag": "D8 · M-R7",
+    "title": "Tiêu chí R7 “test giao diện chạy với next start trong CI” — đóng thế nào?",
+    "ctx": "TripPlanner chụp 1440/390 sáng/tối sau mỗi deploy (chỉ báo cáo), chưa phải check mỗi PR, nên lỗi bố cục chỉ thấy sau merge. Job theo PR không tốn tiền (Actions repo public). Tiêu chí “chat chuyển R8” không còn đúng: AA-1041 đã làm chat.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "A",
+      "t": "Chấp nhận bản chạy sau deploy (đạt theo phạm vi), bỏ tiêu chí chat, đóng M-R7",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "B",
+      "t": "Tạo issue mới cho job test giao diện mỗi PR (check bắt buộc), rồi đóng",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Mốc và phạm vi",
+    "id": "d9-mp2-video",
+    "tag": "D9 · M-P2",
+    "title": "Bỏ tiêu chí “video AA-855 vòng 2 (TripPlanner)” của M-P2?",
+    "ctx": "Từ S271 ngừng quay video UAT định kỳ; bằng chứng là Playwright + CI + curl. Mọi tiêu chí khác của M-P2 đã có qua AA-1038 (Done 10/11).",
+    "facts": [],
+    "opts": [
+     {
+      "v": "drop",
+      "t": "Đánh M-P2 xong theo phạm vi; AA-855 để Backlog cho video ký duyệt của chủ doanh nghiệp",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "record",
+      "t": "Quay một video TripPlanner bây giờ",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "R8 và CRM",
+    "id": "d10-r8",
+    "tag": "D10 · R8",
+    "title": "Mở lát R8 nào trong đợt này?",
+    "ctx": "R8 có 4 phần: gộp màn Booking staff vào AA Admin (chỉ sau khi xoá bảng B2C, AA-1061 ≥ 28/11), tên miền riêng của tenant (CloudFront + ACM), thêm ngôn ngữ ngoài en/vi (cần duyệt tiền dịch máy), API máy cho đại lý (chỉ khi tenant trả tiền yêu cầu).",
+    "facts": [],
+    "opts": [
+     {
+      "v": "domain-only",
+      "t": "Chỉ tên miền riêng của tenant (≈ 0 USD, ước tính); gộp màn Booking xét ở lần cắt S292",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "plus-booking",
+      "t": "Làm cả gộp màn Booking",
+      "d": ""
+     },
+     {
+      "v": "none",
+      "t": "Không R8 trong đợt này",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "R8 và CRM",
+    "id": "d11-crm-order",
+    "tag": "D11 · CRM sau R3",
+    "title": "Thứ tự lane CRM, và AA-965 (AI cho dịch vụ phụ) bắt đầu luôn?",
+    "ctx": "7 card tạm dừng được xếp “sau S280”. AA-965 từng chờ đường LLM, nay đã có qua gateway (pii_class us, trần AI R1). AA-1011 cần anh đăng ký app Entra; AA-1012 cần quyết định chứng chỉ prod lúc go-live. Mỗi card qua review bảo mật trước khi bật cho tenant pilot.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "with-965",
+      "t": "AA-960 → 963 → 968 → 970 → 965 (thử dev ≤ 1 USD) → add-on Odoo nhỏ; AA-1011 khi có Entra; AA-1012 tới go-live",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "no-965",
+      "t": "Cùng thứ tự, bỏ AA-965",
+      "d": ""
+     },
+     {
+      "v": "pause",
+      "t": "Dừng lane CRM, chỉ làm nội dung",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "R8 và CRM",
+    "id": "d12-unpark",
+    "tag": "D12 · AA-948 / AA-704",
+    "title": "AA-948 (fork bản đồ builder) và AA-704 (trợ lý AI trong app): mở lại?",
+    "ctx": "AA-948 chờ R7 (“một engine, hai bề mặt”), cần anh quyết engine TripPlanner dùng chung + duyệt riêng tiền Mapbox. AA-704 chờ pilot mốc 2, control plane, AI notice, trần AI theo tenant — đều đã xong; nó thêm chi phí LLM mỗi câu hỏi (chưa báo giá).",
+    "facts": [],
+    "opts": [
+     {
+      "v": "keep-parked",
+      "t": "Giữ cả hai ở parked; xét lại ở lần cắt S292 khi có đại lý pilot dùng app",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "948",
+      "t": "Mở AA-948, báo giá Mapbox trước",
+      "d": ""
+     },
+     {
+      "v": "704",
+      "t": "Mở AA-704, báo giá chi phí trước",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "R8 và CRM",
+    "id": "d13-new-issues",
+    "tag": "D13 · Linear",
+    "title": "Tạo issue mới trên Linear?",
+    "ctx": "Đang mở 39 issue (gói Free tối đa 250). NEW-A: runbook đón đại lý pilot + chạy thử trên tenant giả (0 USD). NEW-C: add-on Odoo nhỏ hạng 45–53 (0 USD). NEW-D: tên miền riêng R8 (≈ 0 USD). NEW-B chỉ khi D8 = B.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "acd",
+      "t": "Tạo NEW-A, NEW-C, NEW-D (+ NEW-B nếu D8 = B)",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "a-only",
+      "t": "Chỉ NEW-A",
+      "d": ""
+     },
+     {
+      "v": "none",
+      "t": "Không tạo, gộp vào issue có sẵn",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Chủ doanh nghiệp và prod",
+    "id": "d14-owner",
+    "tag": "D14 · Jira",
+    "title": "Gửi các mục cho chủ doanh nghiệp dạng đề xuất nhẹ trong nháp Jira cuối phiên?",
+    "ctx": "Không chặn kế hoạch. Chưa có ngày go-live và đại lý pilot đầu tiên thì mốc “P2 trễ nhất tuần 3 của pilot” không bao giờ bắt đầu. Còn chờ: 10 giá trị mặc định M-OD (PR-26 comment 10636, hệ thống đang dùng đề xuất), điều khoản phí ngày khởi hành Booking (nháp S277), ký phụ lục Billing Transfer của TrueIDC.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "draft",
+      "t": "Một nháp Jira trên epic liên quan: đề xuất khung thời gian pilot + các mặc định còn mở, anh duyệt cuối phiên",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "hold",
+      "t": "Giữ lại tới báo cáo M2b",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Chủ doanh nghiệp và prod",
+    "id": "d15-p0",
+    "tag": "D15 · AA-1004",
+    "title": "Chạy AA-1004 P0 lát 2–4 (chuyển stack CIS, CRM, TripPlanner vào modules/environment) ngay?",
+    "ctx": "Mới xong lát 1 (stack Booking, khung Deploy Prod, DB Migrate prod có guard, Infra #633). P0 tốn 0 USD và plan Dev phải ra “no change”. Làm trước giúp P2–P3 nhanh khi có ngày go-live.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "now",
+      "t": "Làm, lane B S280–S284, mỗi lát một cửa sổ Terraform apply",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "wait",
+      "t": "Chờ ngày go-live",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Chủ doanh nghiệp và prod",
+    "id": "d16-bk045",
+    "tag": "D16 · AA-1061",
+    "title": "AA-1061 (xoá bảng B2C) đổi sang key migration mới?",
+    "ctx": "AA-1061 ghi “dựng lại Booking #200 (bk-045)”, nhưng key 045 nay đã thuộc migration finance của AA-1074. Dùng lại sẽ đụng. Guard đóng băng 30 ngày (áp từ 28/11 23:50Z) giữ nguyên.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "rekey",
+      "t": "Dựng lại trên key trống kế tiếp (bk-049 trở đi), cùng guard; ghi comment Linear",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "later",
+      "t": "Để nguyên, xử lý lúc làm",
+      "d": ""
+     }
+    ]
+   }
+  ];
+
+  var cards = document.getElementById("cards");
+  var conn = document.getElementById("conn");
+  var allBtn = document.getElementById("save-all"), allMsg = document.getElementById("msg-all"), count = document.getElementById("count");
+  var db = null, saved = {};
+
+  function el(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs || {}) e.setAttribute(k, attrs[k]); if (html != null) e.innerHTML = html; return e; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function recOf(q) { return (q.opts.filter(function (o) { return o.rec; })[0] || q.opts[0]).v; }
+  function optText(q, v) { return (q.opts.filter(function (o) { return o.v === v; })[0] || {}).t || v; }
+
+  function render() {
+    // keep unsaved picks and notes across re-renders
+    var pending = {};
+    Q.forEach(function (q) {
+      var p = cards.querySelector('input[name="' + q.id + '"]:checked'), t = document.getElementById("note-" + q.id);
+      if (p || t) pending[q.id] = { choice: p ? p.value : null, note: t ? t.value : "" };
+    });
+    cards.innerHTML = "";
+    var box = el("div", { style: "display:grid;gap:18px" }), lastGrp = null;
+    Q.forEach(function (q) {
+      if (q.grp !== lastGrp) { box.appendChild(el("h3", { class: "grp" }, esc(q.grp))); lastGrp = q.grp; }
+      var s = saved[q.id], pd = pending[q.id];
+      var card = el("section", { class: "card" + (s ? " done" : ""), "aria-labelledby": "h-" + q.id });
+      card.appendChild(el("header", {}, '<h2 id="h-' + q.id + '">' + esc(q.title) + '</h2><span class="tag">' + esc(q.tag) + '</span>'));
+      card.appendChild(el("p", { class: "ctx" }, esc(q.ctx)));
+      if (q.facts.length) card.appendChild(el("ul", { class: "facts" }, q.facts.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("")));
+      var opts = el("div", { class: "opts", role: "radiogroup", "aria-label": q.title });
+      var current = (pd && pd.choice) || (s ? s.choice : recOf(q));
+      q.opts.forEach(function (o) {
+        var id = q.id + "-" + o.v;
+        var lab = el("label", { class: "opt", for: id });
+        lab.innerHTML = '<input type="radio" name="' + q.id + '" id="' + id + '" value="' + o.v + '"' + (o.v === current ? " checked" : "") + '>' +
+          '<span><b>' + esc(o.t) + '</b>' + (o.rec ? '<span class="rec">đề xuất</span>' : "") + (o.d ? '<small>' + esc(o.d) + '</small>' : "") + '</span>';
+        opts.appendChild(lab);
+      });
+      card.appendChild(opts);
+      var ta = el("textarea", { id: "note-" + q.id, placeholder: "Ghi chú (không bắt buộc)", "aria-label": "Ghi chú cho " + q.title });
+      ta.value = pd ? pd.note : (s && s.note ? s.note : "");
+      card.appendChild(ta);
+      var row = el("div", { class: "row" });
+      var btn = el("button", { type: "button", id: "save-" + q.id }, "Chốt");
+      var msg = el("span", { class: "saved", id: "msg-" + q.id }, s ? "Đã chốt: " + esc(optText(q, s.choice)) : "");
+      if (!db) btn.disabled = true;
+      btn.addEventListener("click", function () { save(q, card, btn, msg); });
+      row.appendChild(btn); row.appendChild(msg);
+      card.appendChild(row);
+      box.appendChild(card);
+    });
+    cards.appendChild(box);
+    var n = Q.filter(function (q) { return saved[q.id]; }).length;
+    count.textContent = n + "/" + Q.length + " câu đã chốt";
+    allBtn.disabled = !db;
+  }
+
+  function put(q, choice, note) {
+    return db.doc("decisions/" + q.id).set({ question: q.title, choice: choice, note: (note || "").slice(0, 2000), at: new Date().toISOString() });
+  }
+
+  function save(q, card, btn, msg) {
+    var pick = card.querySelector('input[name="' + q.id + '"]:checked');
+    if (!pick || !db) return;
+    btn.disabled = true; msg.className = "saved"; msg.textContent = "Đang lưu…";
+    put(q, pick.value, card.querySelector("textarea").value)
+      .then(function () { msg.textContent = "Đã chốt"; btn.disabled = false; })
+      .catch(function (e) { msg.className = "saved warn"; msg.textContent = "Chưa lưu được (" + ((e && e.code) || "lỗi") + "). Bạn có quyền ghi trang này không?"; btn.disabled = false; });
+  }
+
+  allBtn.addEventListener("click", function () {
+    if (!db) return;
+    var todo = Q.filter(function (q) { return !saved[q.id]; });
+    if (!todo.length) { allMsg.textContent = "Mọi câu đã được chốt."; return; }
+    allBtn.disabled = true; allMsg.className = "saved"; allMsg.textContent = "Đang lưu " + todo.length + " câu…";
+    var i = 0;
+    (function next() {
+      if (i >= todo.length) { allMsg.textContent = "Đã chốt " + todo.length + " câu theo đề xuất."; allBtn.disabled = false; return; }
+      var q = todo[i++], t = document.getElementById("note-" + q.id);
+      put(q, recOf(q), t ? t.value : "").then(next).catch(function (e) {
+        allMsg.className = "saved warn"; allMsg.textContent = "Dừng ở câu “" + q.title + "” (" + ((e && e.code) || "lỗi") + ")."; allBtn.disabled = false;
+      });
+    })();
+  });
+
+  render();
+  var timer = setTimeout(function () { if (!db) conn.textContent = "Chưa kết nối được nơi lưu: có thể xem, nhưng chưa chốt được. Mở lại trang khi đã đăng nhập claude.ai."; }, 10000);
+  if (window.claude && window.claude.use) {
+    window.claude.use("db").then(function (d) {
+      if (!d) { clearTimeout(timer); conn.textContent = "Trang này không lưu được ở chế độ xem hiện tại."; return; }
+      db = d; clearTimeout(timer); conn.textContent = "Đã kết nối. Lựa chọn được lưu khi bấm Chốt.";
+      db.collection("decisions").onSnapshot(function (snap) {
+        saved = {};
+        (snap.docs || []).forEach(function (doc) { var v = doc.data ? doc.data() : doc; saved[doc.id] = v; });
+        render();
+      }, function () { render(); });
+      render();
+    }).catch(function () { clearTimeout(timer); conn.textContent = "Chưa kết nối được nơi lưu."; });
+  } else {
+    clearTimeout(timer); conn.textContent = "Mở trang trên claude.ai để chốt.";
+  }
+})();
+</script>

@@ -1,0 +1,72 @@
+[
+  {
+    "name": "POST withdraw proposal",
+    "status": 200,
+    "body": {
+      "proposal_id": "0c37b213-f5f2-4530-a230-0164e9591e69",
+      "status": "withdrawn"
+    }
+  },
+  {
+    "name": "DELETE proposal pdf",
+    "status": 200,
+    "body": {
+      "document_id": "4a564384-75eb-491e-b3b8-e65e8b65e50a",
+      "trashed": true
+    }
+  },
+  {
+    "name": "DELETE inclusion-item i1",
+    "status": 200,
+    "body": {
+      "inclusion_item_id": "2966bc92-a8f7-4e21-aece-7b678c199932",
+      "deleted": true
+    }
+  },
+  {
+    "name": "DELETE inclusion-item i2",
+    "status": 200,
+    "body": {
+      "inclusion_item_id": "6f624543-d64a-4cee-a10d-534f795fc8ae",
+      "deleted": true
+    }
+  },
+  {
+    "name": "DELETE inclusion-item n1",
+    "status": 200,
+    "body": {
+      "inclusion_item_id": "02493341-4fad-4aef-86c3-4c514284a083",
+      "deleted": true
+    }
+  },
+  {
+    "name": "DELETE trip",
+    "status": 200,
+    "body": {
+      "kind": "trip",
+      "id": "e519c16e-679f-4da4-8dd7-d30a17a8540b",
+      "purge_after": "2026-11-19T03:25:46.936406+00:00"
+    }
+  },
+  {
+    "name": "DELETE lead traveller",
+    "status": 200,
+    "body": {
+      "kind": "traveler",
+      "id": "34883188-4741-4ea5-90c4-3f39a248579c",
+      "purge_after": "2026-11-19T03:25:47.325781+00:00"
+    }
+  },
+  {
+    "name": "GET inclusion-items (end)",
+    "status": 200,
+    "body": {
+      "items": [],
+      "kinds": [
+        "included",
+        "not_included"
+      ],
+      "max_items": 200
+    }
+  }
+]

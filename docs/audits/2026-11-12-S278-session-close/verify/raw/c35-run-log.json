@@ -1,0 +1,745 @@
+[
+  {
+    "name": "GET inclusion-items (before, archived too)",
+    "status": 200,
+    "body": {
+      "items": [],
+      "kinds": [
+        "included",
+        "not_included"
+      ],
+      "max_items": 200
+    }
+  },
+  {
+    "name": "POST inclusion-items i1",
+    "status": 201,
+    "body": {
+      "inclusion_item_id": "2966bc92-a8f7-4e21-aece-7b678c199932",
+      "kind": "included",
+      "text_en": "E2E s278i52rv Airport transfers on arrival and departure",
+      "text_vi": "E2E s278i52rv Đưa đón sân bay khi đến và khi về",
+      "sort_order": 0,
+      "archived": false
+    }
+  },
+  {
+    "name": "POST inclusion-items i2",
+    "status": 201,
+    "body": {
+      "inclusion_item_id": "6f624543-d64a-4cee-a10d-534f795fc8ae",
+      "kind": "included",
+      "text_en": "E2E s278i52rv Daily breakfast",
+      "text_vi": null,
+      "sort_order": 1,
+      "archived": false
+    }
+  },
+  {
+    "name": "POST inclusion-items n1",
+    "status": 201,
+    "body": {
+      "inclusion_item_id": "02493341-4fad-4aef-86c3-4c514284a083",
+      "kind": "not_included",
+      "text_en": "E2E s278i52rv International flights",
+      "text_vi": null,
+      "sort_order": 0,
+      "archived": false
+    }
+  },
+  {
+    "name": "PATCH archive i2",
+    "status": 200,
+    "body": {
+      "inclusion_item_id": "6f624543-d64a-4cee-a10d-534f795fc8ae",
+      "kind": "included",
+      "text_en": "E2E s278i52rv Daily breakfast",
+      "text_vi": null,
+      "sort_order": 1,
+      "archived": true
+    }
+  },
+  {
+    "name": "GET inclusion-items (after)",
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "inclusion_item_id": "2966bc92-a8f7-4e21-aece-7b678c199932",
+          "kind": "included",
+          "text_en": "E2E s278i52rv Airport transfers on arrival and departure",
+          "text_vi": "E2E s278i52rv Đưa đón sân bay khi đến và khi về",
+          "sort_order": 0,
+          "archived": false
+        },
+        {
+          "inclusion_item_id": "6f624543-d64a-4cee-a10d-534f795fc8ae",
+          "kind": "included",
+          "text_en": "E2E s278i52rv Daily breakfast",
+          "text_vi": null,
+          "sort_order": 1,
+          "archived": true
+        },
+        {
+          "inclusion_item_id": "02493341-4fad-4aef-86c3-4c514284a083",
+          "kind": "not_included",
+          "text_en": "E2E s278i52rv International flights",
+          "text_vi": null,
+          "sort_order": 0,
+          "archived": false
+        }
+      ],
+      "kinds": [
+        "included",
+        "not_included"
+      ],
+      "max_items": 200
+    }
+  },
+  {
+    "name": "GET proposal inclusions (draft, before)",
+    "status": 200,
+    "body": {
+      "proposal_id": "0c37b213-f5f2-4530-a230-0164e9591e69",
+      "status": "draft",
+      "lines": [],
+      "aa_tours": [
+        {
+          "source_id": "000e3340-d9f5-4b7b-8609-4cdaa9c272dc",
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "included": [
+            "Accommodations as indicated / Meal as indicated / Transfer and",
+            "Sightseeing tours / Boat rides / A separate * multi-lingual guide is",
+            "provided for a minimum of 4 full paying person. .",
+            "English or German or French or Spanish or Italian"
+          ],
+          "not_included": [
+            "Domestic air ticket is not included"
+          ]
+        }
+      ],
+      "library": [
+        {
+          "inclusion_item_id": "2966bc92-a8f7-4e21-aece-7b678c199932",
+          "kind": "included",
+          "text_en": "E2E s278i52rv Airport transfers on arrival and departure",
+          "text_vi": "E2E s278i52rv Đưa đón sân bay khi đến và khi về",
+          "sort_order": 0,
+          "archived": false
+        },
+        {
+          "inclusion_item_id": "02493341-4fad-4aef-86c3-4c514284a083",
+          "kind": "not_included",
+          "text_en": "E2E s278i52rv International flights",
+          "text_vi": null,
+          "sort_order": 0,
+          "archived": false
+        }
+      ],
+      "max_lines": 60
+    }
+  },
+  {
+    "name": "PUT pick an archived line (expect 409)",
+    "status": 409,
+    "body": {
+      "detail": "inclusion_item_archived",
+      "message": "this library line is archived"
+    }
+  },
+  {
+    "name": "UI PUT inclusions (save)",
+    "status": 200
+  },
+  {
+    "name": "GET proposal inclusions (draft, after save)",
+    "status": 200,
+    "body": {
+      "proposal_id": "0c37b213-f5f2-4530-a230-0164e9591e69",
+      "status": "draft",
+      "lines": [
+        {
+          "proposal_inclusion_id": "eb487f01-fd8c-402a-b9f7-2de2f96fecc9",
+          "kind": "included",
+          "source": "custom",
+          "inclusion_item_id": null,
+          "text_en": "E2E s278i52rv Private guide for the whole trip (typed)",
+          "text_vi": "E2E s278i52rv Hướng dẫn viên riêng suốt chuyến (gõ tay)"
+        },
+        {
+          "proposal_inclusion_id": "db3e47d9-c854-49b7-a520-a2162ba0b46a",
+          "kind": "included",
+          "source": "library",
+          "inclusion_item_id": "2966bc92-a8f7-4e21-aece-7b678c199932",
+          "text_en": "E2E s278i52rv Airport transfers on arrival and departure",
+          "text_vi": "E2E s278i52rv Đưa đón sân bay khi đến và khi về"
+        },
+        {
+          "proposal_inclusion_id": "ae4fc45d-ef61-47b5-92e5-f7bfd2f2e6bc",
+          "kind": "not_included",
+          "source": "library",
+          "inclusion_item_id": "02493341-4fad-4aef-86c3-4c514284a083",
+          "text_en": "E2E s278i52rv International flights",
+          "text_vi": null
+        }
+      ],
+      "aa_tours": [
+        {
+          "source_id": "000e3340-d9f5-4b7b-8609-4cdaa9c272dc",
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "included": [
+            "Accommodations as indicated / Meal as indicated / Transfer and",
+            "Sightseeing tours / Boat rides / A separate * multi-lingual guide is",
+            "provided for a minimum of 4 full paying person. .",
+            "English or German or French or Spanish or Italian"
+          ],
+          "not_included": [
+            "Domestic air ticket is not included"
+          ]
+        }
+      ],
+      "library": [
+        {
+          "inclusion_item_id": "2966bc92-a8f7-4e21-aece-7b678c199932",
+          "kind": "included",
+          "text_en": "E2E s278i52rv Airport transfers on arrival and departure",
+          "text_vi": "E2E s278i52rv Đưa đón sân bay khi đến và khi về",
+          "sort_order": 0,
+          "archived": false
+        },
+        {
+          "inclusion_item_id": "02493341-4fad-4aef-86c3-4c514284a083",
+          "kind": "not_included",
+          "text_en": "E2E s278i52rv International flights",
+          "text_vi": null,
+          "sort_order": 0,
+          "archived": false
+        }
+      ],
+      "max_lines": 60
+    }
+  },
+  {
+    "name": "POST publish",
+    "status": 200,
+    "body": {
+      "proposal_id": "0c37b213-f5f2-4530-a230-0164e9591e69",
+      "trip_id": "e519c16e-679f-4da4-8dd7-d30a17a8540b",
+      "trip_stage": "inquiry",
+      "version": 1,
+      "status": "published",
+      "kind": "builder",
+      "edit_seq": 6,
+      "selection_seq": 0,
+      "currency": "USD",
+      "price_visibility": "total_with_deltas",
+      "room_config": [
+        {
+          "type": "double",
+          "adults": 2,
+          "children": 0
+        }
+      ],
+      "deposit_pct": "30.00",
+      "starts_on": "2026-12-11",
+      "balance_due_on": "2026-11-27",
+      "schedule": [
+        {
+          "kind": "deposit",
+          "seq": 1,
+          "percent": "30",
+          "due_on": null,
+          "days_before": null
+        },
+        {
+          "kind": "instalment",
+          "seq": 1,
+          "percent": "40",
+          "due_on": "2026-10-12",
+          "days_before": 60
+        },
+        {
+          "kind": "balance",
+          "seq": 1,
+          "percent": null,
+          "due_on": "2026-11-27",
+          "days_before": null
+        }
+      ],
+      "cancellation_policy": null,
+      "terms_doc_id": "f19309a1-fc5d-4ff6-96e4-fe1bfd9dc10d",
+      "terms_status": "published",
+      "intro": "",
+      "price_hash": "bc53c17196564e386fcdb3341a76faee2bb72f9818fb185d1a268650121f9267",
+      "published_at": "2026-11-12T03:19:58.062621+00:00",
+      "based_on": null,
+      "days": [
+        {
+          "proposal_day_id": "3548442b-9d95-454a-9697-791ea893fb5a",
+          "day_no": 0,
+          "before_you_go": true,
+          "date": null,
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": []
+        },
+        {
+          "proposal_day_id": "273d18b0-25ee-449e-bc16-57f69a931321",
+          "day_no": 1,
+          "before_you_go": false,
+          "date": "2026-12-11",
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "ec5304ba-9457-459f-99ee-da2b62e73975",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": "56b8fef9-1151-4d21-87c2-d553a0efaaa3",
+              "default_pinned": false,
+              "options": [
+                {
+                  "option_id": "56b8fef9-1151-4d21-87c2-d553a0efaaa3",
+                  "source": "aa",
+                  "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+                  "tier": null,
+                  "agency_supplier_id": null,
+                  "sell_amount": "1500.00",
+                  "sell_delta": "0.00",
+                  "pay_on_arrival": false,
+                  "choose_later_allowed": false,
+                  "availability": "on_request",
+                  "availability_checked_at": "2026-11-12T03:17:43.625687+00:00",
+                  "is_default": true,
+                  "picked": false,
+                  "prices": [],
+                  "price_rules": null,
+                  "suggested_prices": [
+                    {
+                      "pax_type": "adult",
+                      "unit_sell": "110.00",
+                      "qty": 2
+                    }
+                  ],
+                  "aa": {
+                    "tour_source_id": "000e3340-d9f5-4b7b-8609-4cdaa9c272dc",
+                    "component_id": "tp:77740b45-af7b-4a07-a53d-6134fe99f836",
+                    "component_kind": "trip_plan",
+                    "departure_id": null,
+                    "nights": null,
+                    "unpriced": false,
+                    "quote_valid_until": "2026-11-14T03:17:43.507808+00:00",
+                    "quote_expired": false,
+                    "from_price": "100.00",
+                    "below_from_price": false,
+                    "no_longer_offered": false,
+                    "suggested_sell": "220.00",
+                    "suggested_basis": "aa_rrp",
+                    "suggested_rules": [
+                      {
+                        "rule_id": "09c5a10a-2bbb-4518-b099-e4cdf3eecae8",
+                        "name": "S275 AA-1066 check season +10%",
+                        "adjust_pct": "10"
+                      }
+                    ]
+                  },
+                  "net_amount": "158.54",
+                  "net_delta": "0.00"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "9984a0ae-5593-43f7-8a9c-133a4729e579",
+          "day_no": 2,
+          "before_you_go": false,
+          "date": "2026-12-12",
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "54af637e-af99-4cc6-8cc0-2493e87c93d1",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "3d893f81-59b0-4c59-9910-182bda78efe2",
+          "day_no": 3,
+          "before_you_go": false,
+          "date": "2026-12-13",
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "31eb29b6-130b-4623-98cc-83a083a588e8",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "2fe79c3f-5a73-418e-a019-e216f3b5bc41",
+          "day_no": 4,
+          "before_you_go": false,
+          "date": "2026-12-14",
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "b3c21d60-cea8-4dab-a8c7-9b767ad87f57",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "6471cd59-23ee-48cd-be7a-37caca556ba9",
+          "day_no": 5,
+          "before_you_go": false,
+          "date": "2026-12-15",
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": [
+            {
+              "option_block_id": "b458bb80-6159-456b-9b1e-54ebde0e5387",
+              "title": "Lodging",
+              "type": "lodging",
+              "sort_order": 0,
+              "client_may_swap": true,
+              "default_option_id": null,
+              "default_pinned": false,
+              "options": []
+            }
+          ]
+        },
+        {
+          "proposal_day_id": "a46c8dee-3bdc-4397-9765-035def95d428",
+          "day_no": 6,
+          "before_you_go": false,
+          "date": "2026-12-16",
+          "title": null,
+          "place": null,
+          "tz": "Asia/Ho_Chi_Minh",
+          "utc_offset": "+07:00",
+          "notes": null,
+          "blocks": []
+        }
+      ],
+      "rules": [],
+      "picks": [],
+      "totals": {
+        "currency": "USD",
+        "sell_total": "1500.00",
+        "pay_on_arrival_total": "0.00",
+        "deposit": "450.00",
+        "balance": "1050.00",
+        "schedule": [
+          {
+            "kind": "deposit",
+            "seq": 1,
+            "percent": "30",
+            "due_on": null,
+            "days_before": null,
+            "amount": "450.00"
+          },
+          {
+            "kind": "instalment",
+            "seq": 1,
+            "percent": "40",
+            "due_on": "2026-10-12",
+            "days_before": 60,
+            "amount": "600.00"
+          },
+          {
+            "kind": "balance",
+            "seq": 1,
+            "percent": null,
+            "due_on": "2026-11-27",
+            "days_before": null,
+            "amount": "450.00"
+          }
+        ],
+        "net_total": "158.54",
+        "margin_total": "1341.46"
+      },
+      "checks": {
+        "publishable": true,
+        "blocking": [],
+        "warnings": []
+      },
+      "stage2": {
+        "accommodation_tier": null,
+        "group_pref": null,
+        "pace": null,
+        "party_adults": 2,
+        "party_children": 0
+      },
+      "before_you_go": {
+        "aa_items": 1,
+        "countries": [
+          "PH"
+        ],
+        "fitness_warning": false,
+        "insurance_reminder": true,
+        "selected": [],
+        "suggested": [],
+        "packs_not_chosen": false
+      },
+      "inclusions": {
+        "lines": [
+          {
+            "proposal_inclusion_id": "eb487f01-fd8c-402a-b9f7-2de2f96fecc9",
+            "kind": "included",
+            "source": "custom",
+            "inclusion_item_id": null,
+            "text_en": "E2E s278i52rv Private guide for the whole trip (typed)",
+            "text_vi": "E2E s278i52rv Hướng dẫn viên riêng suốt chuyến (gõ tay)"
+          },
+          {
+            "proposal_inclusion_id": "db3e47d9-c854-49b7-a520-a2162ba0b46a",
+            "kind": "included",
+            "source": "library",
+            "inclusion_item_id": "2966bc92-a8f7-4e21-aece-7b678c199932",
+            "text_en": "E2E s278i52rv Airport transfers on arrival and departure",
+            "text_vi": "E2E s278i52rv Đưa đón sân bay khi đến và khi về"
+          },
+          {
+            "proposal_inclusion_id": "ae4fc45d-ef61-47b5-92e5-f7bfd2f2e6bc",
+            "kind": "not_included",
+            "source": "library",
+            "inclusion_item_id": "02493341-4fad-4aef-86c3-4c514284a083",
+            "text_en": "E2E s278i52rv International flights",
+            "text_vi": null
+          }
+        ],
+        "aa_tours": [
+          {
+            "source_id": "000e3340-d9f5-4b7b-8609-4cdaa9c272dc",
+            "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+            "included": [
+              "Accommodations as indicated / Meal as indicated / Transfer and",
+              "Sightseeing tours / Boat rides / A separate * multi-lingual guide is",
+              "provided for a minimum of 4 full paying person. .",
+              "English or German or French or Spanish or Italian"
+            ],
+            "not_included": [
+              "Domestic air ticket is not included"
+            ]
+          }
+        ],
+        "library": [
+          {
+            "inclusion_item_id": "2966bc92-a8f7-4e21-aece-7b678c199932",
+            "kind": "included",
+            "text_en": "E2E s278i52rv Airport transfers on arrival and departure",
+            "text_vi": "E2E s278i52rv Đưa đón sân bay khi đến và khi về",
+            "sort_order": 0,
+            "archived": false
+          },
+          {
+            "inclusion_item_id": "02493341-4fad-4aef-86c3-4c514284a083",
+            "kind": "not_included",
+            "text_en": "E2E s278i52rv International flights",
+            "text_vi": null,
+            "sort_order": 0,
+            "archived": false
+          }
+        ],
+        "max_lines": 60
+      },
+      "pricing": {
+        "bands": {
+          "child_age_max": 11,
+          "infant_age_max": 1
+        },
+        "party": {
+          "adult": 2,
+          "child": 0,
+          "infant": 0,
+          "single_supp": 0
+        },
+        "discount": {
+          "discount_pct": null,
+          "limit_pct": "10.00",
+          "above_limit": false,
+          "below_cost": false,
+          "needs_approval": false,
+          "approved_pct": null,
+          "pending": null,
+          "history": []
+        }
+      },
+      "publish": {
+        "published_at": "2026-11-12T03:19:58.062621+00:00",
+        "price_hash": "bc53c17196564e386fcdb3341a76faee2bb72f9818fb185d1a268650121f9267",
+        "superseded": [],
+        "picks_carried": 0
+      }
+    }
+  },
+  {
+    "name": "GET proposal inclusions (published)",
+    "status": 200,
+    "body": {
+      "proposal_id": "0c37b213-f5f2-4530-a230-0164e9591e69",
+      "status": "published",
+      "lines": [
+        {
+          "proposal_inclusion_id": "eb487f01-fd8c-402a-b9f7-2de2f96fecc9",
+          "kind": "included",
+          "source": "custom",
+          "inclusion_item_id": null,
+          "text_en": "E2E s278i52rv Private guide for the whole trip (typed)",
+          "text_vi": "E2E s278i52rv Hướng dẫn viên riêng suốt chuyến (gõ tay)"
+        },
+        {
+          "proposal_inclusion_id": "db3e47d9-c854-49b7-a520-a2162ba0b46a",
+          "kind": "included",
+          "source": "library",
+          "inclusion_item_id": "2966bc92-a8f7-4e21-aece-7b678c199932",
+          "text_en": "E2E s278i52rv Airport transfers on arrival and departure",
+          "text_vi": "E2E s278i52rv Đưa đón sân bay khi đến và khi về"
+        },
+        {
+          "proposal_inclusion_id": "ae4fc45d-ef61-47b5-92e5-f7bfd2f2e6bc",
+          "kind": "not_included",
+          "source": "library",
+          "inclusion_item_id": "02493341-4fad-4aef-86c3-4c514284a083",
+          "text_en": "E2E s278i52rv International flights",
+          "text_vi": null
+        }
+      ],
+      "aa_tours": [
+        {
+          "source_id": "000e3340-d9f5-4b7b-8609-4cdaa9c272dc",
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "included": [
+            "Accommodations as indicated / Meal as indicated / Transfer and",
+            "Sightseeing tours / Boat rides / A separate * multi-lingual guide is",
+            "provided for a minimum of 4 full paying person. .",
+            "English or German or French or Spanish or Italian"
+          ],
+          "not_included": [
+            "Domestic air ticket is not included"
+          ]
+        }
+      ],
+      "library": [
+        {
+          "inclusion_item_id": "2966bc92-a8f7-4e21-aece-7b678c199932",
+          "kind": "included",
+          "text_en": "E2E s278i52rv Airport transfers on arrival and departure",
+          "text_vi": "E2E s278i52rv Đưa đón sân bay khi đến và khi về",
+          "sort_order": 0,
+          "archived": false
+        },
+        {
+          "inclusion_item_id": "02493341-4fad-4aef-86c3-4c514284a083",
+          "kind": "not_included",
+          "text_en": "E2E s278i52rv International flights",
+          "text_vi": null,
+          "sort_order": 0,
+          "archived": false
+        }
+      ],
+      "max_lines": 60
+    }
+  },
+  {
+    "name": "PUT inclusions on published (expect 409)",
+    "status": 409,
+    "body": {
+      "detail": "proposal_not_draft",
+      "message": "a published version never changes; start a new version from it"
+    }
+  },
+  {
+    "name": "PATCH builder on published (expect 409)",
+    "status": 409,
+    "body": {
+      "detail": "proposal_not_draft",
+      "message": "a published version never changes; start a new version from it"
+    }
+  },
+  {
+    "name": "GET text email",
+    "status": 200,
+    "body": {
+      "status": 200,
+      "has_included": false,
+      "has_not_included": false,
+      "has_i1": false,
+      "has_n1": true,
+      "has_typed": false,
+      "excerpt": null
+    }
+  },
+  {
+    "name": "GET text whatsapp",
+    "status": 200,
+    "body": {
+      "status": 200,
+      "has_included": false,
+      "has_not_included": false,
+      "has_i1": false,
+      "has_n1": true,
+      "has_typed": false,
+      "excerpt": null
+    }
+  },
+  {
+    "name": "POST pdfs proposal",
+    "status": 202,
+    "body": {
+      "queued": true,
+      "kind": "proposal",
+      "document_kind": "proposal_pdf"
+    }
+  },
+  {
+    "name": "POST send",
+    "status": 409,
+    "body": {
+      "detail": "trip_not_in_proposal",
+      "message": "move the trip to Proposal first (the Stage 2 gate)"
+    }
+  }
+]

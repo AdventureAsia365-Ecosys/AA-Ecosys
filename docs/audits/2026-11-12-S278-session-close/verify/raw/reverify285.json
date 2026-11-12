@@ -1,0 +1,104 @@
+{
+  "pages": {
+    "aa1069-requested-1440-light": {
+      "sw": 1440,
+      "iw": 1440,
+      "down": false,
+      "text": "A mailbox is disconnected: messages to clients are on hold.\nReconnect\nBookings\n\nEvery booking line across your trips. Only confirmed lines count in the totals.\n\nTOTALS IN YOUR BASE CURRENCY\nConfirmed sell\n4,425.60 USD\nConfirmed cost\n2,319.97 USD\nConfirmed margin\n2,105.63 USD\nAA cancellation fees\n277",
+      "file": "shots/aa1069-requested-1440-light.png",
+      "errors": []
+    },
+    "aa1069-requested-1440-dark": {
+      "sw": 1440,
+      "iw": 1440,
+      "down": false,
+      "text": "A mailbox is disconnected: messages to clients are on hold.\nReconnect\nBookings\n\nEvery booking line across your trips. Only confirmed lines count in the totals.\n\nTOTALS IN YOUR BASE CURRENCY\nConfirmed sell\n4,425.60 USD\nConfirmed cost\n2,319.97 USD\nConfirmed margin\n2,105.63 USD\nAA cancellation fees\n277",
+      "file": "shots/aa1069-requested-1440-dark.png",
+      "errors": []
+    },
+    "aa1069-requested-390-light": {
+      "sw": 390,
+      "iw": 390,
+      "down": false,
+      "text": "A mailbox is disconnected: messages to clients are on hold.\nReconnect\nBookings\n\nEvery booking line across your trips. Only confirmed lines count in the totals.\n\nTOTALS IN YOUR BASE CURRENCY\nConfirmed sell\n4,425.60 USD\nConfirmed cost\n2,319.97 USD\nConfirmed margin\n2,105.63 USD\nAA cancellation fees\n277",
+      "file": "shots/aa1069-requested-390-light.png",
+      "errors": []
+    },
+    "aa1069-requested-390-dark": {
+      "sw": 390,
+      "iw": 390,
+      "down": false,
+      "text": "A mailbox is disconnected: messages to clients are on hold.\nReconnect\nBookings\n\nEvery booking line across your trips. Only confirmed lines count in the totals.\n\nTOTALS IN YOUR BASE CURRENCY\nConfirmed sell\n4,425.60 USD\nConfirmed cost\n2,319.97 USD\nConfirmed margin\n2,105.63 USD\nAA cancellation fees\n277",
+      "file": "shots/aa1069-requested-390-dark.png",
+      "errors": []
+    },
+    "aa1070-roster-fixed-1440-light": {
+      "sw": 1440,
+      "iw": 1440,
+      "down": false,
+      "trip_cell": {
+        "right": 582,
+        "height": 17,
+        "lines": 1,
+        "text": "Trip"
+      },
+      "file": "shots/aa1070-roster-fixed-1440-light.png",
+      "errors": []
+    },
+    "aa1070-roster-fixed-1440-dark": {
+      "sw": 1440,
+      "iw": 1440,
+      "down": false,
+      "trip_cell": {
+        "right": 582,
+        "height": 17,
+        "lines": 1,
+        "text": "Trip"
+      },
+      "file": "shots/aa1070-roster-fixed-1440-dark.png",
+      "errors": []
+    },
+    "aa1070-roster-fixed-390-light": {
+      "sw": 390,
+      "iw": 390,
+      "down": false,
+      "trip_cell": {
+        "right": 342,
+        "height": 40,
+        "lines": 2,
+        "text": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days"
+      },
+      "file": "shots/aa1070-roster-fixed-390-light.png",
+      "errors": []
+    },
+    "aa1070-roster-fixed-390-dark": {
+      "sw": 390,
+      "iw": 390,
+      "down": false,
+      "trip_cell": {
+        "right": 342,
+        "height": 40,
+        "lines": 2,
+        "text": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days"
+      },
+      "file": "shots/aa1070-roster-fixed-390-dark.png",
+      "errors": []
+    }
+  },
+  "requested": {
+    "status": 200,
+    "count": 0,
+    "statuses": []
+  },
+  "booked": {
+    "status": 422,
+    "detail": "{\"detail\":[{\"type\":\"literal_error\",\"loc\":[\"query\",\"status\"],\"msg\":\"Input should be 'planning', 'requested', 'confirmed' or 'cancelled'\",\"input\":\"booked\",\"ctx\":{\"expected\":\"'planning', 'requested', 'co"
+  },
+  "patch_cancelled": {
+    "status": 422,
+    "body": {
+      "detail": "line_not_editable",
+      "message": "this line is cancelled; its supplier does not change"
+    }
+  }
+}

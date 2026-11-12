@@ -1,0 +1,126 @@
+[
+  {
+    "kind": "network",
+    "status": 500,
+    "method": "GET",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions",
+    "text": "Failed to load resource: the server responded with a status of 500 ()"
+  },
+  {
+    "kind": "pageerror",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions",
+    "text": "Error: Minified React error #441; visit https://react.dev/errors/441 for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+  },
+  {
+    "kind": "network",
+    "status": 500,
+    "method": "GET",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions",
+    "text": "Failed to load resource: the server responded with a status of 500 ()"
+  },
+  {
+    "kind": "pageerror",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions",
+    "text": "Error: Minified React error #441; visit https://react.dev/errors/441 for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+  },
+  {
+    "kind": "network",
+    "status": 500,
+    "method": "GET",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions",
+    "text": "Failed to load resource: the server responded with a status of 500 ()"
+  },
+  {
+    "kind": "pageerror",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions",
+    "text": "Error: Minified React error #441; visit https://react.dev/errors/441 for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+  },
+  {
+    "kind": "network",
+    "status": 500,
+    "method": "GET",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions",
+    "text": "Failed to load resource: the server responded with a status of 500 ()"
+  },
+  {
+    "kind": "pageerror",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions",
+    "text": "Error: Minified React error #441; visit https://react.dev/errors/441 for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+  },
+  {
+    "kind": "network",
+    "status": 500,
+    "method": "GET",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions",
+    "text": "Failed to load resource: the server responded with a status of 500 ()"
+  },
+  {
+    "kind": "pageerror",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions",
+    "text": "Error: Minified React error #441; visit https://react.dev/errors/441 for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+  },
+  {
+    "kind": "network",
+    "status": 409,
+    "method": "PUT",
+    "url": "https://portal.lumiguides.it.com/bff/proposals/0c37b213-f5f2-4530-a230-0164e9591e69/inclusions"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/settings/inclusions",
+    "text": "Failed to load resource: the server responded with a status of 409 ()"
+  },
+  {
+    "kind": "network",
+    "status": 409,
+    "method": "PUT",
+    "url": "https://portal.lumiguides.it.com/bff/proposals/0c37b213-f5f2-4530-a230-0164e9591e69/inclusions"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/pipeline/e519c16e-679f-4da4-8dd7-d30a17a8540b/proposal/0c37b213-f5f2-4530-a230-0164e9591e69",
+    "text": "Failed to load resource: the server responded with a status of 409 ()"
+  },
+  {
+    "kind": "network",
+    "status": 409,
+    "method": "PATCH",
+    "url": "https://portal.lumiguides.it.com/bff/proposals/0c37b213-f5f2-4530-a230-0164e9591e69/builder"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/pipeline/e519c16e-679f-4da4-8dd7-d30a17a8540b/proposal/0c37b213-f5f2-4530-a230-0164e9591e69",
+    "text": "Failed to load resource: the server responded with a status of 409 ()"
+  },
+  {
+    "kind": "network",
+    "status": 409,
+    "method": "POST",
+    "url": "https://portal.lumiguides.it.com/bff/proposals/0c37b213-f5f2-4530-a230-0164e9591e69/send"
+  },
+  {
+    "kind": "console",
+    "url": "https://portal.lumiguides.it.com/pipeline/e519c16e-679f-4da4-8dd7-d30a17a8540b/proposal/0c37b213-f5f2-4530-a230-0164e9591e69",
+    "text": "Failed to load resource: the server responded with a status of 409 ()"
+  }
+]

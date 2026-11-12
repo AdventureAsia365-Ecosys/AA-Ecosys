@@ -1,0 +1,62 @@
+{
+  "errors": [],
+  "filter": {
+    "status": 200,
+    "cards": 0,
+    "flagged": 0
+  },
+  "filter_bad": {
+    "status": 422
+  },
+  "requote_crm35_trip": {
+    "status": 404,
+    "body": {
+      "detail": "aa_cancel_case_not_found",
+      "message": "aa_cancel_case_not_found"
+    }
+  },
+  "requote_s277_booked_trip": {
+    "status": 404,
+    "body": {
+      "detail": "aa_cancel_case_not_found",
+      "message": "aa_cancel_case_not_found"
+    }
+  },
+  "requote_bad_body": {
+    "status": 422,
+    "detail": [
+      "string_pattern_mismatch",
+      "date_from_datetime_parsing"
+    ]
+  },
+  "trip_s277_booked_trip": {
+    "rendered": 1,
+    "card": 0,
+    "cardText": 0
+  },
+  "trip_crm35_trip": {
+    "rendered": 1,
+    "card": 0,
+    "cardText": 0
+  },
+  "board_1440_light": {
+    "sideways": false,
+    "cards": 0,
+    "url": "?issue=aa_cancelled"
+  },
+  "board_1440_dark": {
+    "sideways": false,
+    "cards": 0,
+    "url": "?issue=aa_cancelled"
+  },
+  "board_390_light": {
+    "sideways": false,
+    "cards": 0,
+    "url": "?issue=aa_cancelled"
+  },
+  "board_390_dark": {
+    "sideways": false,
+    "cards": 0,
+    "url": "?issue=aa_cancelled"
+  }
+}

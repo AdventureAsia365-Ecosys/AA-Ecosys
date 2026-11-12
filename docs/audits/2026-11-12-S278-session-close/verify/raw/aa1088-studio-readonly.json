@@ -1,0 +1,122 @@
+{
+  "studios": {
+    "atlas-audit": {
+      "pending": [],
+      "integration_calls": [
+        {
+          "p": "/api/tenant/v1/integrations/wordpress",
+          "s": 200,
+          "body": "{\"connected\":false,\"site_url\":null,\"connected_at\":null,\"last_verified_at\":null,\"last_verify_error\":null}"
+        },
+        {
+          "p": "/api/tenant/v1/integrations/facebook",
+          "s": 200,
+          "body": "{\"connected\":false,\"page_id\":null,\"connected_at\":null,\"last_verified_at\":null,\"last_verify_error\":null}"
+        }
+      ],
+      "publish_buttons": 0,
+      "connect_first": 17,
+      "page_text_head": "Publish\nPublish your content to your WordPress blog and your Facebook Page, and unpublish it from here when you need to.\nConnect WordPress\n\nPublishing writes directly to your own WordPress site. You’ll need your site URL and a WordPress Application Password — generate one under Users → Profile → Application Passwords in your WordPress admin.\n\nSITE URL\nUSERNAME\nAPPLICATION PASSWORD\nTEST & CONNECT\nConnect Facebook Page\n\nPublish posts to your own Facebook Page. You need two things from Meta:\n\nPage "
+    },
+    "terra-audit": {
+      "pending": [],
+      "integration_calls": [
+        {
+          "p": "/api/tenant/v1/integrations/wordpress",
+          "s": 200,
+          "body": "{\"connected\":false,\"site_url\":null,\"connected_at\":null,\"last_verified_at\":null,\"last_verify_error\":null}"
+        },
+        {
+          "p": "/api/tenant/v1/integrations/facebook",
+          "s": 200,
+          "body": "{\"connected\":false,\"page_id\":null,\"connected_at\":null,\"last_verified_at\":null,\"last_verify_error\":null}"
+        }
+      ],
+      "publish_buttons": 0,
+      "connect_first": 16,
+      "page_text_head": "Publish\nPublish your content to your WordPress blog and your Facebook Page, and unpublish it from here when you need to.\nConnect WordPress\n\nPublishing writes directly to your own WordPress site. You’ll need your site URL and a WordPress Application Password — generate one under Users → Profile → Application Passwords in your WordPress admin.\n\nSITE URL\nUSERNAME\nAPPLICATION PASSWORD\nTEST & CONNECT\nConnect Facebook Page\n\nPublish posts to your own Facebook Page. You need two things from Meta:\n\nPage "
+    },
+    "trail-audit": {
+      "pending": [],
+      "integration_calls": [
+        {
+          "p": "/api/tenant/v1/integrations/wordpress",
+          "s": 200,
+          "body": "{\"connected\":false,\"site_url\":null,\"connected_at\":null,\"last_verified_at\":null,\"last_verify_error\":null}"
+        },
+        {
+          "p": "/api/tenant/v1/integrations/facebook",
+          "s": 200,
+          "body": "{\"connected\":false,\"page_id\":null,\"connected_at\":null,\"last_verified_at\":null,\"last_verify_error\":null}"
+        }
+      ],
+      "publish_buttons": 0,
+      "connect_first": 15,
+      "page_text_head": "Publish\nPublish your content to your WordPress blog and your Facebook Page, and unpublish it from here when you need to.\nConnect WordPress\n\nPublishing writes directly to your own WordPress site. You’ll need your site URL and a WordPress Application Password — generate one under Users → Profile → Application Passwords in your WordPress admin.\n\nSITE URL\nUSERNAME\nAPPLICATION PASSWORD\nTEST & CONNECT\nConnect Facebook Page\n\nPublish posts to your own Facebook Page. You need two things from Meta:\n\nPage "
+    },
+    "wildkind-audit": {
+      "pending": [],
+      "integration_calls": [
+        {
+          "p": "/api/tenant/v1/integrations/wordpress",
+          "s": 200,
+          "body": "{\"connected\":false,\"site_url\":null,\"connected_at\":null,\"last_verified_at\":null,\"last_verify_error\":null}"
+        },
+        {
+          "p": "/api/tenant/v1/integrations/facebook",
+          "s": 200,
+          "body": "{\"connected\":false,\"page_id\":null,\"connected_at\":null,\"last_verified_at\":null,\"last_verify_error\":null}"
+        }
+      ],
+      "publish_buttons": 0,
+      "connect_first": 12,
+      "page_text_head": "Publish\nPublish your content to your WordPress blog and your Facebook Page, and unpublish it from here when you need to.\nConnect WordPress\n\nPublishing writes directly to your own WordPress site. You’ll need your site URL and a WordPress Application Password — generate one under Users → Profile → Application Passwords in your WordPress admin.\n\nSITE URL\nUSERNAME\nAPPLICATION PASSWORD\nTEST & CONNECT\nConnect Facebook Page\n\nPublish posts to your own Facebook Page. You need two things from Meta:\n\nPage "
+    },
+    "atlas-own": {
+      "pending": [],
+      "integration_calls": [
+        {
+          "p": "/api/tenant/v1/integrations/facebook",
+          "s": 200,
+          "body": "{\"connected\":false,\"page_id\":null,\"connected_at\":null,\"last_verified_at\":null,\"last_verify_error\":null}"
+        },
+        {
+          "p": "/api/tenant/v1/integrations/wordpress",
+          "s": 200,
+          "body": "{\"connected\":true,\"site_url\":\"https://test-wp.lumiguides.it.com\",\"connected_at\":\"2026-11-08T10:32:44.744094+00:00\",\"last_verified_at\":\"2026-11-09T15:53:26.126270+00:00\",\"last_verify_error\":null}"
+        }
+      ],
+      "publish_buttons": 4,
+      "connect_first": 3,
+      "page_text_head": "Publish\nPublish your content to your WordPress blog and your Facebook Page, and unpublish it from here when you need to.\nManage connections\nWordPress\nhttps://test-wp.lumiguides.it.com · Working\nManage\nConnect Facebook Page\n\nPublish posts to your own Facebook Page. You need two things from Meta:\n\nPage ID — the number under your Page’s About → Page transparency.\nPage Access Token — a long-lived Page token with the permissions pages_show_list, pages_read_engagement and pages_manage_posts.\n\nYour Met"
+    }
+  },
+  "errors": [],
+  "drawer_text": "Three Designations, One Reserve: Ranthambore's Long Protection\nBLOG\nAI-assisted\n\nRanthambore National Park is a protected area in Rajasthan, in northwestern India. Its status has changed three times, and each change is dated. Understanding those dates gives a safari drive here a context that a list of wildlife cannot.\n\nWhy Ranthambore National Park\n\nThe park lies amid the hills of the Aravalli and Vindhya ranges. Its landscape includes dry deciduous forest, rocky terrain and lakes, and Ranthambore Fort stands within its boundaries.\n\nBengal tigers are among the wildlife found in the park. On this journey, Ranthambore comes on days 5 and 6, after Delhi, Agra and the Chambal River.\n\nThree designations, in order\n\nThe protected area was established as Sawai Madhopur Game Sanctuary in 1955.\n\nIt became a tiger reserve in 1973.\n\nIn 1980 it was declared a national park. The name you read on the gate today is the third the area has held.\n\nSo a drive here passes through land that has been under formal protection since the middle of the twentieth century, under a name that changed as its purpose was defined more precisely.\n\nThe safari drive with local rangers\n\nOn day 5, in the afternoon, you go on a safari drive with local rangers. The rangers look for deer, birds, leopards and monkeys and, with luck, tigers.\n\nThe wording is honest about the tigers: a sighting is a hope, and the drive is shaped around the whole community of animals that the dry forest, rocky ground and lakes support.\n\nThe hills, the woodland and the lakes are the setting for each of those animals, and a ranger's knowledge of them is what turns the drive into a reading of the reserve's long protection. Knowing that the area was a sanctuary before it was a reserve, and a reserve before it was a park, gives the drive its sequence.\n\nOn day 6 you take a morning safari in Ranthambore National Park. After it, the journey continues by road to Jaipur.\n\nThe road that leads here\n\nDay 2 is given to Delhi. It begins with the Qutb Complex, whose construction began in the late 12th century under Qutb al-Din Aibak, and the neighbouring Mehrauli Archaeological Park. In the afternoon a guided walk of Old Delhi, listed at four hours, passes through the bylanes of Kinari Bazaar and the old havelis of Chandni Chowk.\n\nThe day includes Jama Masjid, whose courtyard holds up to 25,000 worshippers, and Gurdwara Sis Ganj Sahib, established in 1783.\n\nDay 3 takes the train from Delhi to Agra for the Taj Mahal. You then stay in stone cottages at Narsingh Bagh.\n\nDay 4: the Chambal River and Talab-e-Shahi\n\nThe morning is a motor-boat safari on the Chambal River, looking for migratory birds, wildlife along the banks and the endangered Gharial, a narrow-jawed crocodilian that mainly feeds on fish.\n\nIn the later afternoon a cycle birding tour of 45 minutes heads to Talab-e-Shahi, with stops for birding and photography. The lake was created in 1617 during the reign of Jahangir for Prince Khurram, later known as Shah Jahan, and",
+  "drawer_forbidden": [],
+  "drawer_ai_notice": true,
+  "drawer_sideways_1440_light": false,
+  "drawer_sideways_1440_dark": false,
+  "drawer_sideways_390_light": false,
+  "drawer_sideways_390_dark": false,
+  "legal_partner-terms": {
+    "status": 200,
+    "api_key": false,
+    "api_word": 4,
+    "version": "v0.7 · last updated 12 November 2026",
+    "sign_in": true,
+    "sideways_1440_light": false,
+    "sideways_390_light": false,
+    "sideways_390_dark": false
+  },
+  "legal_privacy": {
+    "status": 200,
+    "api_key": false,
+    "api_word": 6,
+    "version": "v0.7 · last updated 12 November 2026",
+    "sign_in": true,
+    "sideways_1440_light": false,
+    "sideways_390_light": false,
+    "sideways_390_dark": false
+  }
+}
