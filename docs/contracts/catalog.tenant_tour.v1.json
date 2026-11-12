@@ -1,0 +1,195 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://adventure.asia/contracts/catalog.tenant_tour.v1.json",
+ "title": "catalog.tenant_tour v1 (CIS → TripPlanner)",
+ "description": "The tours an agency tenant made its own, with the tenant's own text, as the CIS view catalog.v_tenant_tour_v1 exposes them (AA-1094, CIS migration 404; root ADR 0019 d10: 'tours from catalog.v_tenant_tour_v1'). `tours` = rows of the view: one row per (tenant, AA catalogue key) for a tenant in service (trial, active, past_due; kind internal excluded) holding a TripPlanner subscription, for every LIVE AA tour (catalog.v_tour, root ADR 0015: a retired or paused tour is never a row) of which the tenant has a version publishable on its site: one the tenant approved (status approved), the agency's own edit (edit_source tenant_edit, status pending, as the portal writes it), or a model's rewrite at status ai_generated whose T3 QA gate passed. Never served: needs_review text (below the T2 pass line, a T3 hard code left, a held fallback writer or a policy hold), ai_generated text whose QA did not clear, a pending AI rewrite, failed or rejected versions; the tenant still sees all of them in its portal, this rule is only what goes public under its brand (tech-lead decision pending in S278 on widening it). The served version of a key: the tenant's own (approved or edited) before a model's, then the latest (created_at, then version_number; a version written for an older AA source version of the same key counts), so newer unreviewed AI text never replaces what the agency approved or wrote. A blank text field is null; a blank title falls back to AA's. The facts (country, duration, best time, cover, photo count) are AA's of the live tour; tour_id and slug are the live AA tour's. A tour still being written, or with no publishable version, is not listed (no AA-text fallback under the agency's brand). SELECT to `tripplanner` only (contracts rule 5); TripPlanner reads it after resolving a served tenant (catalog.v_tenant_tripplanner_v1) and filters by tenant_id. Read on demand; consumers re-read on content_hash. Columns may be appended (minor); removing or renaming one needs a v2 view (contracts README rule 2). No price (the agency is the merchant of record, root ADR 0019 b5), no score or gate output (the tenant projection rule), no personal data.",
+ "type": "object",
+ "required": [
+  "contract",
+  "version"
+ ],
+ "additionalProperties": false,
+ "properties": {
+  "contract": {
+   "const": "catalog.tenant_tour"
+  },
+  "version": {
+   "enum": [
+    1
+   ],
+   "description": "Contract version."
+  },
+  "tours": {
+   "type": "array",
+   "items": {
+    "$ref": "#/$defs/tenant_tour"
+   }
+  }
+ },
+ "$defs": {
+  "tenant_tour": {
+   "type": "object",
+   "description": "One catalog.v_tenant_tour_v1 row.",
+   "required": [
+    "tenant_id",
+    "source_system",
+    "source_id",
+    "tour_id",
+    "slug",
+    "title",
+    "subtitle",
+    "summary",
+    "highlights",
+    "itinerary_text",
+    "seo_title",
+    "seo_meta",
+    "country",
+    "duration_raw",
+    "duration_days",
+    "best_time_to_go",
+    "cover_photo_path",
+    "photo_count",
+    "version_id",
+    "edit_source",
+    "text_updated_at",
+    "human_edited",
+    "content_hash"
+   ],
+   "additionalProperties": false,
+   "properties": {
+    "tenant_id": {
+     "type": "string",
+     "format": "uuid",
+     "description": "The agency tenant (shared.tenants key)."
+    },
+    "source_system": {
+     "const": "cis",
+     "description": "The catalogue key's system."
+    },
+    "source_id": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 128,
+     "description": "The AA catalogue key (catalog.v_tour source_id); stable across AA source re-uploads."
+    },
+    "tour_id": {
+     "type": "string",
+     "format": "uuid",
+     "description": "The live AA tour version of the key (catalog.v_tour tour_id)."
+    },
+    "slug": {
+     "type": "string",
+     "pattern": "^[a-z0-9-]{1,120}$",
+     "description": "The live AA tour's slug (catalog.v_tour slug; its suffix is the first 8 hex characters of source_id)."
+    },
+    "title": {
+     "type": "string",
+     "minLength": 1,
+     "description": "The tenant's title (AA's when the tenant's is blank)."
+    },
+    "subtitle": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "summary": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "highlights": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     },
+     "description": "The tenant's highlights ([] when its version holds no list)."
+    },
+    "itinerary_text": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "description": "The tenant's day-by-day text as one string; a version stored as the writer's JSON day list reads as \"Day N — Title\" blocks separated by a blank line (CIS day_parse.written_itinerary_text)."
+    },
+    "seo_title": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "seo_meta": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "country": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "description": "AA's country of the live tour (free text, as catalog.v_tour)."
+    },
+    "duration_raw": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "duration_days": {
+     "type": [
+      "integer",
+      "null"
+     ],
+     "minimum": 1
+    },
+    "best_time_to_go": {
+     "type": [
+      "string",
+      "null"
+     ]
+    },
+    "cover_photo_path": {
+     "type": [
+      "string",
+      "null"
+     ],
+     "description": "The live AA tour's cover photo path (catalog.v_tour), served by the CIS photo route."
+    },
+    "photo_count": {
+     "type": "integer",
+     "minimum": 0
+    },
+    "version_id": {
+     "type": "string",
+     "format": "uuid",
+     "description": "The tenant tour version whose text this row carries."
+    },
+    "edit_source": {
+     "enum": [
+      "ai_generated",
+      "re_rewrite",
+      "tenant_edit"
+     ],
+     "description": "Who wrote the version: a model's rewrite, or the tenant's edit of earlier text."
+    },
+    "text_updated_at": {
+     "type": "string",
+     "format": "date-time",
+     "description": "When the version was created (the AI mark's generated_at for a model's rewrite, EU AI Act Art. 50(2))."
+    },
+    "human_edited": {
+     "type": "boolean",
+     "description": "edit_source = tenant_edit."
+    },
+    "content_hash": {
+     "type": "string",
+     "pattern": "^[0-9a-f]{32}$",
+     "description": "md5 of the served text, facts and version id; re-read on change."
+    }
+   }
+  }
+ }
+}

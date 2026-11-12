@@ -1,0 +1,39 @@
+{
+  "contract": "catalog.tenant_tour.v1",
+  "expect": "valid",
+  "why": "One live AA tour of an invented agency with the agency's own finished text",
+  "payload": {
+    "contract": "catalog.tenant_tour",
+    "version": 1,
+    "tours": [
+      {
+        "tenant_id": "4b1d7e57-0000-4000-8000-0000000000a1",
+        "source_system": "cis",
+        "source_id": "5f1e0c2a-7d3b-4c9e-8a61-2b4d6f8e0a13",
+        "tour_id": "770a38dd-4e7b-4b55-9ded-0e9ced757301",
+        "slug": "invented-ridge-walk-laos-5f1e0c2a",
+        "title": "Quillmere's Misty Ridge Walk",
+        "subtitle": "Five slow days on invented hill trails",
+        "summary": "An invented walking journey along quiet ridges.",
+        "highlights": [
+          "Sunrise over an invented valley",
+          "A cooking class in a hill village"
+        ],
+        "itinerary_text": "Day 1 — Arrive\nMeet your guide.\n\nDay 2 — Ridge trail\nA gentle walk.",
+        "seo_title": null,
+        "seo_meta": null,
+        "country": "Laos",
+        "duration_raw": "5 days",
+        "duration_days": 5,
+        "best_time_to_go": "November to March",
+        "cover_photo_path": "/v1/photos/invented/cover",
+        "photo_count": 4,
+        "version_id": "0b0e5d7a-1111-4222-8333-444455556666",
+        "edit_source": "ai_generated",
+        "text_updated_at": "2031-03-04T05:06:00Z",
+        "human_edited": false,
+        "content_hash": "0123456789abcdef0123456789abcdef"
+      }
+    ]
+  }
+}

@@ -199,6 +199,17 @@ POLICY: dict[str, Policy] = {
         forbidden_patterns=(r"supplier_net", r"(^|_)prices?(_|$)"),
         why="ISO 3166-1 reference data and destination country keys only; no prices, no personal data",
     ),
+    # AA-1094 (CIS 404, root ADR 0019 d10 / b5): an agency's own tour text for its TripPlanner pages. The agency is the
+    # merchant of record, so no AA price of any kind; the T2 gate output (scores, QA state, judge verdict, generation
+    # metadata, the admin FactSheet) stays admin-side (the CIS tenant projection rule); no personal data.
+    "catalog.tenant_tour.v1": Policy(
+        forbidden_keys=frozenset({"price", "from_price", "b2b_price", "supplier_net", "quality_score", "qa_status",
+                                  "judge_breakdown", "generation_meta", "fs_id"}),
+        forbidden_patterns=(r"(^|_)prices?(_|$)", r"supplier_net", r"(^|_)scores?(_|$)", r"^qa_", r"judge",
+                            r"generation_meta"),
+        why="an agency's own tour text and AA's facts of the live tour only; no price, no gate output, no personal "
+            "data",
+    ),
     # ADR 0004a decision 3 (AA-835): supply facts only. Supplier identity, contracts, rates, margins and internal
     # notes never reach CIS; photos travel as entity_media ids, never a free URL (SSRF, unlicensed images).
     "supply.hotel.v1": _SUPPLY_POLICY,
@@ -244,6 +255,8 @@ REQUIRED_NEGATIVES: dict[str, tuple[str, ...]] = {
     "tenant.addons.v1": ("decided_by", "provision_job_id"),
     # AA-908: the hand-off never carries the traveller's token.
     "inquiry.submitted.v1.4": ("access_token",),
+    # AA-1094: a tenant tour row never carries a price or a T2 score.
+    "catalog.tenant_tour.v1": ("price", "quality_score"),
     # AA-1038: a lead never carries the guest session, an AA B2B price or a token.
     "lead.submitted.v1": ("session_id", "b2b_price", "access_token"),
 }
