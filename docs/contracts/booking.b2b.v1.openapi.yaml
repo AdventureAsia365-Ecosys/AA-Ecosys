@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: booking.b2b.v1 (AA-Booking → AA-Partner CRM, B2B products, quotes, holds, bookings, events)
-  version: "1.8"
+  version: "1.9"
   description: >-
     The AA inventory API of the partner CRM spec (§9), owned by AA-Booking (root ADR 0005, 0005a) and called by the
     AA-Partner CRM API server to server (root ADR 0010). Auth: an M2M access token of the aa-m2m pool (root ADR 0006b
@@ -61,10 +61,28 @@ info:
     line on a departure may cost less or more than before when AA set a price adjustment on that departure or the
     quote is early enough for the early-booking discount (the line price already holds both; price_hash changes). A
     reader ignores event types it does not know (rule 2 of the contracts README).
+    Minor 1.9 (AA-1091, additive; root ADR 0005b price versions): every QuoteLine names the price list version it was
+    priced from (price_version_id, null on a hotel_room or service line, which a supplier contract prices) and the
+    agency tariff version that covers its service date (tariff_version_id), both covered by price_hash, and carries
+    provisional (true = priced from a provisional version while the supplier's new rates are missing; such a line is
+    always on_request and AA confirms it by hand, never automatically). A trip_plan line whose plan has published
+    versions but none covering its service date is not quotable: POST /quotes answers 409 price_not_published with
+    Problem.line_refs naming those lines (a plan with no published version yet keeps the 1.8 live pricing, with
+    price_version_id null, so no quote that works under 1.8 starts failing). Quote.valid_until follows AA's quote
+    validity policy (at most 30 days after the quote). GET /tariff answers one published tariff version (Tariff gains
+    tariff_version_id, tariff_version_no, tariff_year, travel_from, travel_to, published_at, changes and
+    next_tariff_version_id; TariffItem gains price_version_id and provisional), takes period (current or next: the
+    next tariff year once AA publishes it, both run in parallel) or tariff_version_id, and answers an ETag header
+    (a SHA-256 of the exact body answered) and 304 on a matching If-None-Match; with no published tariff version
+    covering today, period=current answers 200 with no rows and every version field null. Event type
+    tariff.published (a new tariff version is published:
+    Event.tariff_version_id; to every agency). Never a maker, a checker, a reason, a cost or a margin. A reader that
+    ignores unknown fields and event types keeps working; until Booking serves 1.9 the new fields are absent (read a
+    missing provisional as false, a missing ETag as always changed).
   x-aa-contract: booking.b2b.v1
   x-aa-producer: AA-Booking
   x-aa-consumers: [AA-Partner]
-  x-aa-issues: [AA-928, AA-952, AA-972, AA-973, AA-974, AA-975, AA-986, AA-1030, AA-1037, AA-1073, AA-1075]
+  x-aa-issues: [AA-928, AA-952, AA-972, AA-973, AA-974, AA-975, AA-986, AA-1030, AA-1037, AA-1073, AA-1075, AA-1091]
 servers:
   - url: /booking/b2b/v1
 security:
@@ -104,7 +122,17 @@ paths:
       description: >-
         Quote currencies are Booking's selling currencies plus VND. The FX lock is the approved rate in force on the
         pricing day (UTC). Each line's b2b_price is rounded up to the cent, a VND line up to 1,000 VND (AA-974); the
-        total is the exact sum of the lines, and the rounding rule is part of the price_hash.
+        total is the exact sum of the lines, and the rounding rule is part of the price_hash. 1.9 (AA-1091, root ADR
+        0005b): a trip_plan line is priced from the price list version of its plan that is published at the quote
+        time and covers the line's service date (the travel date decides season and version; the quote date decides
+        only the early-booking discount and a version's sale window); the line names it in price_version_id. When
+        several published versions cover the date, a non-provisional one wins over a provisional one, then the one
+        approved last. A line whose only covering version is provisional answers provisional true and on_request.
+        When the plan has published versions but none covers the line's service date, the quote is refused with 409
+        price_not_published and Problem.line_refs naming every such line (no partial quote); a plan with no
+        published version yet is priced live as in 1.8 (price_version_id null). valid_until follows AA's quote
+        validity policy, at most 30 days after the quote; after it a new quote prices on the versions then in
+        force.
       security:
         - m2m: [booking.b2b/quote]
       parameters:
@@ -554,11 +582,40 @@ paths:
         CSV file (columns tour_key, title, country, duration_days, season, valid_from, valid_to, pax_min, pax_max,
         priced_for_pax, currency, price_per_person, price_for_party, agency_discount_pct, rrp_per_person,
         rrp_currency, then since 1.7 child_price_per_person, infant_price, single_supplement_per_person; an open pax
-        band has an empty pax_max, a missing supplement an empty cell).
+        band has an empty pax_max, a missing supplement an empty cell). 1.9 (AA-1091, root ADR 0005b): the rows are
+        those of one published tariff version: the price list versions in force for its tariff year, one or more per
+        tour (a mid-year change adds a version; each row names its own price_version_id), priced with the agency's
+        discount and the FX rate in force today. period=current (default) answers the version of the tariff year
+        covering today; when no published tariff version covers today (before the first one, or a gap between two
+        tariff years) it answers 200 with items empty, truncated false and tariff_version_id, tariff_version_no,
+        tariff_year, travel_from, travel_to, published_at, status, changes and next_tariff_version_id all null
+        (never 404). period=next answers the next tariff year's version (404 not_found until AA publishes it);
+        tariff_version_id answers that version (a superseded one stays readable; 404 not_found for an unknown or
+        withdrawn id; period is then ignored); 404 applies only to these two. The ETag is a strong validator: the
+        SHA-256 of the exact body answered (the canonical JSON or the CSV bytes) for this agency and these query
+        parameters, so it changes whenever anything in the body changes (priced_on and the cut to today, the
+        version, its status, next_tariff_version_id, the RRP, the agency discount, the FX rate, the tours served):
+        a matching If-None-Match answers 304. The CSV adds, after the 1.7 columns, tariff_version_id,
+        price_version_id and provisional.
       security:
         - m2m: [booking.b2b/read]
       parameters:
         - $ref: "#/components/parameters/TenantHeader"
+        - name: period
+          in: query
+          required: false
+          description: 1.9. The tariff year to answer, current or next.
+          schema: {type: string, enum: [current, next], default: current}
+        - name: tariff_version_id
+          in: query
+          required: false
+          description: 1.9. One tariff version by id (overrides period).
+          schema: {type: string, minLength: 1, maxLength: 64}
+        - name: If-None-Match
+          in: header
+          required: false
+          description: 1.9. The ETag of an earlier answer; 304 when nothing changed.
+          schema: {type: string, maxLength: 100}
         - name: currency
           in: query
           required: false
@@ -576,13 +633,20 @@ paths:
       responses:
         "200":
           description: The tariff
+          headers:
+            ETag:
+              description: 1.9 (AA-1091). Strong validator, the SHA-256 of the exact body answered (quoted hex).
+              schema: {type: string, maxLength: 100}
           content:
             application/json:
               schema: {$ref: "#/components/schemas/Tariff"}
             text/csv:
               schema: {type: string}
+        "304":
+          description: 1.9 (AA-1091). Not modified (If-None-Match matched the ETag).
         "401": {$ref: "#/components/responses/Problem"}
         "403": {$ref: "#/components/responses/Problem"}
+        "404": {$ref: "#/components/responses/Problem"}  # not_found: unknown/withdrawn tariff_version_id, or period=next before it is published
         "422": {$ref: "#/components/responses/Problem"}  # invalid: not a quote currency
         "503": {$ref: "#/components/responses/Problem"}  # unavailable: no b2b rule, no FX rate, catalog unreadable
   /invoices:
@@ -719,7 +783,11 @@ components:
         error:
           type: string
           enum: [unauthorized, forbidden, unknown_partner, not_found, invoice_not_found, price_changed, hold_expired,
-                 sold_out, rehold_limit, extend_limit, tour_not_served, credit_hold_overdue, invalid, unavailable]
+                 sold_out, rehold_limit, extend_limit, tour_not_served, credit_hold_overdue, price_not_published,
+                 invalid, unavailable]
+          description: >-
+            1.9 (AA-1091, root ADR 0005b) adds price_not_published (409 on POST /quotes: a trip_plan line's plan has
+            published price versions but none covering the line's service date; line_refs names the lines).
         message: {type: string, maxLength: 500}
         tour:
           $ref: "#/components/schemas/TourKey"
@@ -739,6 +807,13 @@ components:
         price_hash:
           type: string
           description: On price_changed, the new price hash to re-quote against.
+        line_refs:
+          type: array
+          maxItems: 200
+          items: {type: string, maxLength: 64}
+          description: >-
+            1.9 (AA-1091). On price_not_published, the line_ref of every line with no published price version for
+            its service date (drop those lines or offer other dates).
         retry_after_s:
           type: integer
           minimum: 0
@@ -891,6 +966,25 @@ components:
         unit: {type: string, enum: [per_person, per_group, per_room_night, per_line]}
         availability: {type: string, enum: [available, on_request, sold_out]}
         departure_id: {type: [string, "null"], maxLength: 64}
+        price_version_id:
+          type: [string, "null"]
+          maxLength: 64
+          description: >-
+            1.9 (AA-1091, root ADR 0005b). The published price list version of the trip plan this line was priced
+            from; null on a hotel_room or service line (priced from the supplier rates in force) and on a trip_plan
+            line of a plan with no published version yet (priced live, as in 1.8). Covered by price_hash.
+        tariff_version_id:
+          type: [string, "null"]
+          maxLength: 64
+          description: >-
+            1.9. The agency tariff version that covers the line's service date (the one GET /tariff shows for it);
+            null when none is published yet. Covered by price_hash.
+        provisional:
+          type: boolean
+          default: false
+          description: >-
+            1.9. True when the price comes from a provisional version (the supplier's new rates are not in yet): the
+            line is then always on_request and AA confirms it by hand. Absent = false.
     Quote:
       type: object
       additionalProperties: false
@@ -1339,14 +1433,16 @@ components:
           enum: [hold.expired, hold.extended, line.confirmed, line.declined, booking.cancelled, departure.guaranteed,
                  departure.cancelled, departure.incident, departure.incident_cleared, departure.time_change,
                  departure.at_risk, allotment.released, booking.created_by_aa, booking.line_reduced,
-                 booking.fee_changed, departure.updated, departure.fee_charged]
+                 booking.fee_changed, departure.updated, departure.fee_charged, tariff.published]
           description: >-
             1.6 (AA-1073) adds departure.at_risk (to every agency on the departure) and allotment.released (to the
             agency whose allotment was released); both name the departure_id. 1.7 (AA-1075) adds
             booking.created_by_aa (AA staff entered a booking for the agency; booking_id and hold_id), booking.line_reduced
             (line_ref names the line) and booking.fee_changed (the cancellation fee was lowered or waived). 1.8 (AA-1073)
             adds departure.updated (the meeting point or time changed; departure_id; to every agency on the departure)
-            and departure.fee_charged (AA charged the calling agency a departure fee; departure_id and fee).
+            and departure.fee_charged (AA charged the calling agency a departure fee; departure_id and fee). 1.9
+            (AA-1091) adds tariff.published (AA published a new tariff version; tariff_version_id; to every agency):
+            re-read GET /tariff.
         occurred_at: {type: string, format: date-time}
         hold_id: {type: [string, "null"], maxLength: 64}
         booking_id: {type: [string, "null"], maxLength: 64}
@@ -1368,6 +1464,10 @@ components:
             - $ref: "#/components/schemas/DepartureFeeCharge"
             - type: "null"
           description: 1.8 (AA-1073). The fee of departure.fee_charged; null on every other event.
+        tariff_version_id:
+          type: [string, "null"]
+          maxLength: 64
+          description: 1.9 (AA-1091). The new tariff version of tariff.published; null on every other event.
     DepartureFeeCharge:
       type: object
       additionalProperties: false
@@ -1422,7 +1522,7 @@ components:
     Tariff:
       type: object
       additionalProperties: false
-      description: 1.4 (AA-1030 G3).
+      description: 1.4 (AA-1030 G3); 1.9 (AA-1091) names the published tariff version of the rows.
       required: [currency, priced_on, basis, tier_code, fx, items, truncated]
       properties:
         currency: {type: string, pattern: "^[A-Z]{3}$"}
@@ -1434,6 +1534,58 @@ components:
           type: array
           items: {$ref: "#/components/schemas/TariffItem"}
         truncated: {type: boolean, description: More rows than one answer holds (ask per tour with source_id).}
+        tariff_version_id:
+          type: [string, "null"]
+          maxLength: 64
+          description: >-
+            1.9 (AA-1091, root ADR 0005b). The published tariff version these rows come from; null (with every other
+            version field) when no published tariff version covers today, and items is then empty.
+        tariff_version_no:
+          type: [integer, "null"]
+          minimum: 1
+          description: 1.9. Its number within its tariff year (1, 2, 3 ...).
+        tariff_year:
+          type: [string, "null"]
+          maxLength: 32
+          description: 1.9. The tariff year's label (for example "2026-27").
+        travel_from:
+          type: [string, "null"]
+          format: date
+          description: 1.9. First travel date of the tariff year.
+        travel_to:
+          type: [string, "null"]
+          format: date
+          description: 1.9. Last travel date of the tariff year (inclusive).
+        published_at:
+          type: [string, "null"]
+          format: date-time
+          description: 1.9. When AA published this tariff version.
+        status:
+          type: [string, "null"]
+          enum: [published, superseded, null]
+          description: 1.9. superseded = a newer version of the same tariff year exists (read by tariff_version_id).
+        changes:
+          oneOf:
+            - $ref: "#/components/schemas/TariffChanges"
+            - type: "null"
+          description: 1.9. What changed against the version before, as counts only.
+        next_tariff_version_id:
+          type: [string, "null"]
+          maxLength: 64
+          description: 1.9. The next tariff year's published version, when there is one (read it with period=next).
+    TariffChanges:
+      type: object
+      additionalProperties: false
+      description: >-
+        1.9 (AA-1091). Counts of the rows of this tariff version against the version before; never a reason or a
+        staff member.
+      required: [tours_changed, rows_up, rows_down, rows_added, rows_removed]
+      properties:
+        tours_changed: {type: integer, minimum: 0}
+        rows_up: {type: integer, minimum: 0}
+        rows_down: {type: integer, minimum: 0}
+        rows_added: {type: integer, minimum: 0}
+        rows_removed: {type: integer, minimum: 0}
     TariffItem:
       type: object
       additionalProperties: false
@@ -1490,6 +1642,16 @@ components:
             1.7 (AA-1075). What each traveller adds when the party sleeps in single rooms instead of twin share (0 on a
             tour without hotel rooms or for a party of one); null when a single room has no rate in force (ask a
             quote with rooms).
+        price_version_id:
+          type: [string, "null"]
+          maxLength: 64
+          description: 1.9 (AA-1091, root ADR 0005b). The tour's published price list version this row comes from.
+        provisional:
+          type: boolean
+          default: false
+          description: >-
+            1.9. True when the row comes from a provisional version (the supplier's new rates are not in yet): a quote
+            of it is on_request and AA confirms it by hand. Absent = false.
     AgencyInvoiceSummary:
       type: object
       additionalProperties: false

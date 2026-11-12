@@ -5,6 +5,10 @@
   the business owner before the first price load.
 - **Amended by:** [ADR 0005a](0005a-b2b-resale-warn-and-vnd.md) (Accepted 22/10/2026, S247): decision 9
   (warn, not block, below the "from" price; no subscription line), VND quotes, `b2b_price` naming.
+- **Amended by:** [ADR 0005b](0005b-price-versions.md) (Proposed 2026-11-12, S278, AA-1091): every price change is a
+  version published by a second person (decision 2 extended to hand prices, rules and provisional prices), seasons
+  from calendars (decision 3), quote validity as a policy parameter (decision 5), a versioned price list and agency
+  tariff (decision 6, contract `booking.b2b.v1` 1.9) and a versioned Excel import and export (decision 7).
 - **Amended by:** [ADR 0019](0019-b2b-only-ecosystem-model.md) (Accepted 2026-11-03, S265, AA-1034): the B2C channel rows of decision 4 are retired
   (AA no longer sells to travellers). The "from" price of decision 6 becomes the suggested retail price (RRP = net +
   25 %, ADR 0019 b15), kept as policy data in `booking.pricing_rules`; agency prices follow b15 (one net price per tour
