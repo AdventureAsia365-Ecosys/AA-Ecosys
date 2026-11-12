@@ -403,7 +403,7 @@ These meanings are binding. A new column MUST NOT reuse a name below with a diff
 
 **S268 rows (AA-1045, AI gateway usage explorer).** Added in a root PR merged before the Infra copy of CIS 372 (DM-7.1): `shared.ai_usage_hourly` (the hourly usage rollup of the CIS paid-call ledgers, DM-7.4: the explorer reads history from it; 400 days proposed) and `shared.ai_usage_saved_view` (configuration per staff member). CIS 372 changes no existing table; the raw ledgers keep their own windows.
 
-**S278 row (AA-1051, Quality W5 eval code).** Added in a root PR merged before the Infra copy of CIS 399 (DM-7.1): `shared.eval_golden_split`, the frozen DEV / CAL / GATE side of each golden item that the R2 runner and the W5 proof runner read (the S275 decision "code eval part first"). CIS 399 changes no existing table.
+**S278 row (AA-1051, Quality W5 eval code).** Added in a root PR merged before the Infra copy of CIS 400 (DM-7.1): `shared.eval_golden_split`, the frozen DEV / CAL / GATE side of each golden item that the R2 runner and the W5 proof runner read (the S275 decision "code eval part first"). CIS 400 changes no existing table.
 
 **S275 rows (AA-1063, Writing Lab claim review).** Added in a root PR merged before the Infra copy of CIS 394 (DM-7.1): `shared.eval_claim_proposal`, the agent proposals the Writing Lab review view shows for the W2 claim items of the disagreement queue, and `shared.eval_claim_relabel`, the append-only corrections of a final claim label. CIS 394 changes no existing table.
 
