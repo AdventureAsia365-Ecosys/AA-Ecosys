@@ -12,7 +12,9 @@
   routes and A10b-2 (05/11/2026, S268) a read-only view-as session, both on synthetic tenants only. A10c (01/11/2026,
   S262) adds a fourth, Dev-only E2E address for the AA-Partner staff console (crm-ops + crm-support, synthetic agencies only).
   A10d (05/11/2026, S270) adds a fifth, Dev-only E2E address for a CIS customer_success member, read-only with no write
-  allow-list, synthetic tenants only in its book. A11 and A12 (22/10/2026,
+  allow-list, synthetic tenants only in its book. A10b-3 (12/11/2026, S278) lets the A10b admin release a held piece of
+  a synthetic tenant, and A10e (12/11/2026, S278) adds three Dev-only write-capable AA-Booking E2E addresses (supplier
+  ops; a finance maker / checker pair), each held to its own writes on synthetic agencies. A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2). A13
   (06/11/2026, S271) retires the CIS -> Booking bridge once the staff frontends run on ECS (ADR 0019 d23).
 - **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) was unchanged and still pending on 18/10/2026.
@@ -512,6 +514,29 @@ mailbox or Google account". That is too strong.
   sessions) or clear `is_canary` on the synthetic tenants. Add a closing line here. The A10b removal list covers this
   as well.
 
+##### A10b-3. Amendment: release a held piece on synthetic tenants (12/11/2026, S278, AA-1087)
+
+- **Decision (tech lead, S278: build Dev-only write-capable E2E staff identities before the synthetic pilot rehearsal;
+  system audit gap B2; designed by the orchestrated lane under the dev-phase merge rule, independent review before
+  merge):** the A10b identity may call one more write route, the staff review "approve" of an agency's held content:
+  - POST `/admin/tenant-qa/compliance/{flag_id}/release` (resolve an open subject_gate flag as released for the text
+    the gate read, so exactly that text may publish).
+  The Review Queue approve (`/admin/review-queue/{id}/approve`) is NOT added: it only claims rows of the AA master
+  tenant and publishes AA master content, which no E2E identity may change.
+- **Scope, enforced by CIS (AA-CIS-App `api/core/e2e_staff.py` `E2E_COMPLIANCE_RELEASE_WRITES`,
+  `api/routers/admin_tenant_compliance.py`):** the route joins `E2E_ALLOWED_WRITES` and `E2E_ALLOWED_WRITE_PATHS`;
+  for the A10b session the route reads the flag's tenant and refuses with 403 `e2e_read_only` unless it is synthetic
+  (`is_canary IS TRUE` and not the pilot, the A10b-1 rule), before the flag is resolved or audited (log
+  `compliance_release_e2e_refused reason=tenant_not_synthetic`); A10d and any other Dev-only E2E identity is refused
+  outright. Dev only, unchanged from A10b.
+- **Audit.** The AA-884 `staff.request` row (actor `admin:<A10b id>`) for every call that passes the bearer cap; an
+  accepted release also writes `content_compliance.released`.
+- **Exposure added.** Whoever reads an A10b code can let a synthetic Dev tenant's held text publish to that tenant's
+  (test) channels. No real tenant, no pilot, no AA master content.
+- **Revoke (any time):** drop the route from `E2E_COMPLIANCE_RELEASE_WRITES` and `_refuse_e2e` in AA-CIS-App, update
+  the guard test of the write allow-list, deploy; faster on Dev: disable the A10b user or clear `is_canary`. Add a
+  closing line here. The A10b removal list covers this as well.
+
 #### A10c. Fourth E2E address: the AA-Partner staff console, Dev only, synthetic agencies only (01/11/2026, S262, AA-1019)
 
 - **Decision (S262, orchestrator under the tech lead's standing approval and the dev-phase merge rule; the AA-1019
@@ -616,7 +641,55 @@ mailbox or Google account". That is too strong.
   RAISEs while a row still uses an E2E address); drop the CIS constants and the `e2e_allowlisted_writes` split with the
   rest of `api/core/e2e_staff.py`, the assignment guard, the trigger entry, the receipt-rule recipient and the AA-Partner
   `E2E_CIS_CS_EMAIL` rule (`Caller.e2e_no_write`); Terraform Apply; a closing line here. Faster stop on Dev: disable the
-  user. The full end-of-project removal list is therefore A10, A10a, A10b (with A10b-1 and A10b-2), A10c and A10d.
+  user. The full end-of-project removal list is therefore A10, A10a, A10b (with A10b-1, A10b-2 and A10b-3), A10c, A10d
+  and A10e (AA-1054).
+
+#### A10e. Dev-only write-capable AA-Booking E2E addresses (12/11/2026, S278, AA-1087)
+
+- **Decision (tech lead, S278; system audit gap B2; independent review before merge):** the synthetic pilot rehearsal
+  must prove the Booking staff steps through the browser, and the A10a Booking E2E user is read-only (every POST is
+  403, including dry runs). Three more WORKFORCE identities, Dev only, each with exactly one group:
+  `e2e-booking-staff@e2e-mail.lumiguides.it.com` (`booking-sales`), `e2e-booking-maker@…` and
+  `e2e-booking-checker@…` (both `booking-finance`). A10a is not widened: its codes sit in the CI-readable `inbound/`.
+- **Groups (trigger):** three more entries of the Dev-only map of A10b (`workforce.E2E_DEV_ONLY_TEST_STAFF`), behind
+  the same `E2E_DEV_ONLY_STAFF_ENABLED` flag (exactly `"true"` on dev only, a Terraform precondition elsewhere). Any
+  other group set denies the token; same ASCII-only exact lookup. The maker and the checker share one tuple on purpose:
+  AA-Booking separates them by address.
+- **Scope, enforced by AA-Booking (`backend/app/auth/e2e_staff.py`, called from `current_staff`):**
+  - **Dev only:** the process `ENVIRONMENT` must be exactly `dev`, else every request of the identity, reads included,
+    is 403 `e2e_not_allowed_here` before any DB access.
+  - **Exact groups:** else 403 `e2e_scope`.
+  - **Its own writes only** (before any DB access, else 403 `e2e_read_only`): staff — POST
+    `/booking/supplier-bookings/{id}/request` and `/confirm`; maker — POST `/booking/agency-invoices/{ref}/payments`;
+    checker — POST `/booking/agency-payments/{id}/approve` and `/reject`. The maker never approves, the checker never
+    records (and the `agency_payment_maker_checker_chk` CHECK refuses an approve by the recorder anyway).
+  - **Synthetic agencies only:** an allowed write is refused 403 `e2e_synthetic_only`, before the staff row is synced
+    or the route runs, unless the record (supplier booking -> trip case `party_tenant_id`; invoice; payment ->
+    invoice) belongs to an agency whose `catalog.v_tenant_account_v1.is_synthetic` is true (CIS 401, contract
+    tenant.entitlements.v1 1.6: `is_canary IS TRUE` and not the pilot, the A10b-1 rule). A record of no agency (a B2C
+    case, a departure-owned supplier booking), an unknown id, a missing column or a database error count as real.
+  - Reads keep the role's permissions (`sales`, `finance`), like A10a's admin reads.
+- **Mailbox:** recipients of the A10b rule `e2e-cognito-admin` (dev only), so the codes land under `inbound-admin/`,
+  which only the MFA admin role reads; never recipients of `e2e-cognito`.
+- **Created outside the CIS directory,** like A10a / A10c: AA-CIS-Infra `tools/identity/crm_dev_identity.py
+  e2e-booking-writers --apply` (AdminCreateUser SUPPRESS, `email_verified=true`, no password, exact groups; refuses a
+  user in any other group). No secret: sign-in is the email code. The first sign-in creates each one's
+  `booking.staff_users` row. The CIS staff directory reconcile (AA-816) lists each one under `known_e2e_exceptions`,
+  not as drift, on Dev only and only with its exact group, as it does A10a / A10c.
+- **Exposure.** Code readers: the MFA admin role and whoever controls mail for `e2e-mail.lumiguides.it.com` (A10's
+  domain dependency). What a code yields: the role's reads of Dev Booking data and at most the writes above, on
+  synthetic agencies only. A CIS admin who marks a real tenant `is_canary` widens the scope (the A10b-1 trust).
+- **Audit and detection:** the routes run unchanged, so `booking.audit_logs` names the identity's staff key
+  (`cog:<sub>`) as the actor; `workforce_e2e_test_token_issued`, Booking `booking_e2e_writer_refused identity=…
+  reason=…` and `booking_e2e_write_allowed`.
+- **Used only by the agent, locally** (AA-Booking Playwright project `e2e-writers`, `BOOKING_E2E_WRITERS=1`, dry run
+  `BOOKING_E2E_WRITERS_DRY_RUN=1`; a unit test keeps every workflow from setting the switch). Never CI.
+- **Removal (AA-1054, with A10 / A10a / A10b / A10c / A10d):** delete the three Cognito users; drop the trigger entries,
+  the mailbox recipients and the `e2e-booking-writers` command (AA-CIS-Infra), Terraform Apply; drop
+  `app/auth/e2e_staff.py` and its call (AA-Booking); drop the three A10e entries of the CIS staff directory reconcile
+  (`KNOWN_E2E_STAFF` in `services/staff_reconcile.py` and their constants in `api/core/e2e_staff.py`, AA-CIS-App);
+  deactivate the three staff rows; a closing line here. Faster stop on Dev: disable a user, or clear `is_canary` on
+  the synthetic tenants.
 
 ### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)
 
