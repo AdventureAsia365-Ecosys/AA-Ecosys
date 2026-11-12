@@ -13,7 +13,8 @@
   S262) adds a fourth, Dev-only E2E address for the AA-Partner staff console (crm-ops + crm-support, synthetic agencies only).
   A10d (05/11/2026, S270) adds a fifth, Dev-only E2E address for a CIS customer_success member, read-only with no write
   allow-list, synthetic tenants only in its book. A10b-3 (12/11/2026, S278) lets the A10b admin release a held piece of
-  a synthetic tenant, and A10e (12/11/2026, S278) adds three Dev-only write-capable AA-Booking E2E addresses (supplier
+  a synthetic tenant, A10b-4 (12/11/2026, S278) lets it attach or cancel the TripPlanner add-on of a synthetic tenant,
+  and A10e (12/11/2026, S278) adds three Dev-only write-capable AA-Booking E2E addresses (supplier
   ops; a finance maker / checker pair), each held to its own writes on synthetic agencies; A10e-1 (12/11/2026, S278)
   lets its staff address cancel a synthetic departure (crm-13). A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2). A13
@@ -538,6 +539,32 @@ mailbox or Google account". That is too strong.
   the guard test of the write allow-list, deploy; faster on Dev: disable the A10b user or clear `is_canary`. Add a
   closing line here. The A10b removal list covers this as well.
 
+##### A10b-4. Amendment: the TripPlanner add-on of a synthetic tenant (12/11/2026, S278, AA-1094)
+
+- **Decision (S278 lane, orchestrator under the tech lead's standing approval and the dev-phase merge rule; the AA-1094
+  live check needs a synthetic agency served by TripPlanner, and only a person could attach the add-on):** the A10b
+  identity may call two more write routes, the `tenant_provision` saga behind Tenant 360 > Subscription "Add an add-on"
+  / "Cancel":
+  - POST `/admin/tenants/{tenant_id}/provision` (attach add-ons to an existing tenant, one job);
+  - POST `/admin/tenants/{tenant_id}/provision/cancel` (cancel add-ons; the subscription row stays, `canceled`).
+  The create route `POST /admin/tenants/provision` is NOT added: a new tenant is never an E2E write. The TripPlanner
+  plans carry no price (CIS 355), so this is not a money write and needs no maker-checker.
+- **Scope, enforced by CIS (AA-CIS-App `api/core/e2e_staff.py` `E2E_TRIPPLANNER_ADDON_WRITES` /
+  `E2E_ADDON_PRODUCTS`, `api/routers/admin_tenant_provision.py` `_refuse_e2e`):** the two routes join
+  `E2E_ALLOWED_WRITES` and `E2E_ALLOWED_WRITE_PATHS`; for the A10b session the route refuses with 403 `e2e_read_only`
+  before a job is enqueued unless every product of the request is `tripplanner` (a CRM add-on carries seats, a licence
+  count: never an E2E write) and the tenant is synthetic (`is_canary IS TRUE` and not the pilot, the A10b-1 rule); log
+  `tenant_provision_e2e_refused` with `reason` (`not_allowlisted`, `product_not_allowed`, `tenant_not_synthetic`). A10d
+  and any other Dev-only E2E identity is refused outright. Dev only, unchanged from A10b.
+- **Audit.** The AA-884 `staff.request` row (actor `admin:<A10b id>`) for every call that passes the bearer cap; the job
+  writes its `acp_shared.audit_log` row naming the request key and the CIS 353 triggers the `subscription.changed` /
+  `entitlement.changed` feed rows (actor `job:tenant_provision:<job id>`), as for any admin.
+- **Exposure added.** Whoever reads an A10b code can serve or stop serving a synthetic Dev agency's TripPlanner site.
+  No real tenant, no pilot, no CRM seat, no content plan, no new tenant.
+- **Revoke (any time):** drop the two routes from `E2E_TRIPPLANNER_ADDON_WRITES` and `_refuse_e2e` in AA-CIS-App, update
+  the guard test of the write allow-list, deploy; faster on Dev: disable the A10b user or clear `is_canary`. Add a
+  closing line here. The A10b removal list covers this as well.
+
 #### A10c. Fourth E2E address: the AA-Partner staff console, Dev only, synthetic agencies only (01/11/2026, S262, AA-1019)
 
 - **Decision (S262, orchestrator under the tech lead's standing approval and the dev-phase merge rule; the AA-1019
@@ -642,7 +669,7 @@ mailbox or Google account". That is too strong.
   RAISEs while a row still uses an E2E address); drop the CIS constants and the `e2e_allowlisted_writes` split with the
   rest of `api/core/e2e_staff.py`, the assignment guard, the trigger entry, the receipt-rule recipient and the AA-Partner
   `E2E_CIS_CS_EMAIL` rule (`Caller.e2e_no_write`); Terraform Apply; a closing line here. Faster stop on Dev: disable the
-  user. The full end-of-project removal list is therefore A10, A10a, A10b (with A10b-1, A10b-2 and A10b-3), A10c, A10d
+  user. The full end-of-project removal list is therefore A10, A10a, A10b (with A10b-1, A10b-2, A10b-3 and A10b-4), A10c, A10d
   and A10e (AA-1054).
 
 #### A10e. Dev-only write-capable AA-Booking E2E addresses (12/11/2026, S278, AA-1087)
