@@ -19,6 +19,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1044](cis-core-pipeline-llm-platform/AA-1044.md) | [Photos] Trial copying tour photos from Google Drive into S3 so the pipeline can drop the Google API key | Done | 2026-11-04 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1045](cis-core-pipeline-llm-platform/AA-1045.md) | [AI gateway] Usage analytics explorer | Done | 2026-11-05 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1047](cis-core-pipeline-llm-platform/AA-1047.md) | [Quality W1] One policy registry, one FactSheet, one exit contract (report mode) for S1, T2, T9 and the eval | Done | 2026-11-08 | CIS Core — Pipeline, LLM & Platform |
+| [AA-1049](cis-core-pipeline-llm-platform/AA-1049.md) | [Quality W3] Rewire the T9, S1 and T2 control planes in place (code-composed fields, local source-aware repair, one exit) | Done | 2026-11-11 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1052](cis-core-pipeline-llm-platform/AA-1052.md) | [Quality W6] Lineage, dormant-code cleanup and permanent change control for every writing workflow | Done | 2026-11-09 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1053](cis-core-pipeline-llm-platform/AA-1053.md) | [AI gateway] One owner for the token-budget retry and one effort rule per provider (W1 contradictions #13, #14) | Done | 2026-11-08 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1055](cis-core-pipeline-llm-platform/AA-1055.md) | [SEO data] Keep search-demand research fresh: budgeted refresh after every re-atomize, stale-share guard per market | Done | 2026-11-10 | CIS Core — Pipeline, LLM & Platform |
@@ -32,6 +33,8 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1064](cis-core-pipeline-llm-platform/AA-1064.md) | [Docs] Guides and the admin docs reader show screenshots (PNG/WebP), not only SVG | Done | 2026-11-10 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1076](cis-core-pipeline-llm-platform/AA-1076.md) | [AI gateway] Batch lane for direct APIs (Anthropic first, then OpenAI): half-price bulk runs for catalogue rewrites, A3 re-atomize and backfills | Done | 2026-11-11 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1078](cis-core-pipeline-llm-platform/AA-1078.md) | [T-series ops] Make hidden failures visible: failed piece code, job cost from the ledger, flag_fix output limit | Done | 2026-11-11 | CIS Core — Pipeline, LLM & Platform |
+| [AA-1080](cis-core-pipeline-llm-platform/AA-1080.md) | [T0/T2 brand and market] Brief import fills the brand pack; unsupported markets reported, not dropped; T2 keywords follow the agency's markets | Done | 2026-11-12 | CIS Core — Pipeline, LLM & Platform |
+| [AA-1081](cis-core-pipeline-llm-platform/AA-1081.md) | [T7 Blog topics] No-topic reason shown to the agency, at least one topic per adopted tour with a free candidate, incremental slate | Done | 2026-11-12 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1083](cis-core-pipeline-llm-platform/AA-1083.md) | [Jev spend] Platform recompute asks Jev only for what changed, with a spend estimate and cap before large runs | Done | 2026-11-11 | CIS Core — Pipeline, LLM & Platform |
 | [AA-594](cis-core-pipeline-llm-platform/AA-594.md) | [EPIC] CIS Data Reset & Pipeline Rerun — giữ raw_tours, reset dẫn xuất, chạy lại S1/atom/social, verify UI | Done | 2026-10-12 | CIS Core — Pipeline, LLM & Platform |
 | [AA-628](cis-core-pipeline-llm-platform/AA-628.md) | [Future] Engagement feedback loop for T-series (rebuild on content_piece/publish_log) | Canceled | 2026-11-03 | CIS Core — Pipeline, LLM & Platform |
@@ -209,6 +212,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1023](data-platform-schema-ops-scale/AA-1023.md) | [Ops] $0 rollback game day (Booking, CRM, Vercel, TP Lambda) + parameterised ECS runbook + job-idle gate in terraform-apply | Done | 2026-11-03 | Data Platform — Schema, Ops & Scale |
 | [AA-1032](data-platform-schema-ops-scale/AA-1032.md) | [Ops] Faster ship loop: Dev auto-applies contract migrations when idle, merge queue batching, faster CI, ship helpers as repo tools | Done | 2026-11-01 | Data Platform — Schema, Ops & Scale |
 | [AA-1034](data-platform-schema-ops-scale/AA-1034.md) | [Platform] R0 B2B-only model: ADR 0019, B2C paths off by flag, backlog re-scope | Done | 2026-11-03 | Data Platform — Schema, Ops & Scale |
+| [AA-1084](data-platform-schema-ops-scale/AA-1084.md) | [CI/CD] Ship speed: balanced CIS unit shards (fresh durations, 4 shards) and no stacked code branches after a migration squash | Done | 2026-11-12 | Data Platform — Schema, Ops & Scale |
 | [AA-751](data-platform-schema-ops-scale/AA-751.md) | [Jobs] X6 per-owner job tables (ADR 0003a): DDL template + comparison test, booking.job parity, Booking deploy guard, DB Migrate idle check, backlog-age alarms, acp_runs readers | Done | 2026-10-17 | Data Platform — Schema, Ops & Scale |
 | [AA-824](data-platform-schema-ops-scale/AA-824.md) | [Data/Ops] RDS guardrails + connection budget — storage autoscaling, parameter group, pg_stat_statements, log export, alarms, CONNECTION LIMIT per role, Lambda reserved concurrency | Done | 2026-10-15 | Data Platform — Schema, Ops & Scale |
 | [AA-825](data-platform-schema-ops-scale/AA-825.md) | [Data] Retention + rollups for log tables — llm_call_log 180 d + daily rollup, tenant_api_usage 90 d + monthly, job TTL, sargable usage view, S3 Parquet archive | Done | 2026-10-25 | Data Platform — Schema, Ops & Scale |
@@ -604,6 +608,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1066](partner-crm-aa-partner/AA-1066.md) | [CRM retail] Price per traveller type, season / group / early-booking rules, discount with owner approval | Done | 2026-11-10 | Partner CRM — AA-Partner |
 | [AA-1067](partner-crm-aa-partner/AA-1067.md) | [CRM retail] Payment schedule with instalments, reminders, traveller cancellation policy and charge / refund | Done | 2026-11-10 | Partner CRM — AA-Partner |
 | [AA-1068](partner-crm-aa-partner/AA-1068.md) | [CRM finance] Profit per trip, 'Bookings with AA' cost page, supplier bills vs plan, profit reports, group departure P&L | Done | 2026-11-10 | Partner CRM — AA-Partner |
+| [AA-1069](partner-crm-aa-partner/AA-1069.md) | [CRM ops] Agency service catalogue and supplier booking requests grouped per supplier | Done | 2026-11-12 | Partner CRM — AA-Partner |
 | [AA-1071](partner-crm-aa-partner/AA-1071.md) | [CRM partners] Sub-agent / referral commission payable and a sub-agent portal | Done | 2026-11-11 | Partner CRM — AA-Partner |
 | [AA-1072](partner-crm-aa-partner/AA-1072.md) | [CRM retail] 'Book now' on the agency's public tour page and online deposit / instalment payment | Done | 2026-11-11 | Partner CRM — AA-Partner |
 | [AA-1085](partner-crm-aa-partner/AA-1085.md) | [CRM security] Legal-hold guard on cascade deletes reads holds across agencies (RLS is bypassed in FK cascades) | Done | 2026-11-11 | Partner CRM — AA-Partner |
@@ -638,6 +643,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-957](partner-crm-aa-partner/AA-957.md) | [CRM W5] CRM-27 Commission + cancel trip | Done | 2026-11-01 | Partner CRM — AA-Partner |
 | [AA-958](partner-crm-aa-partner/AA-958.md) | [CRM W6] CRM-28 Module 9 WhatsApp + SMS | Done | 2026-11-01 | Partner CRM — AA-Partner |
 | [AA-959](partner-crm-aa-partner/AA-959.md) | [CRM W6] CRM-29a Module 10 engine + tasks | Done | 2026-11-02 | Partner CRM — AA-Partner |
+| [AA-960](partner-crm-aa-partner/AA-960.md) | [CRM W6] CRM-29b Tags, system tags, coverage, ready-to-travel | Done | 2026-11-12 | Partner CRM — AA-Partner |
 | [AA-961](partner-crm-aa-partner/AA-961.md) | [CRM W6] CRM-30 Duty of care + calendar | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-962](partner-crm-aa-partner/AA-962.md) | [CRM W6] CRM-31 Onboarding + import | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-964](partner-crm-aa-partner/AA-964.md) | [CRM W7] CRM-33a AI gateway + drafts + guardrails | Done | 2026-10-31 | Partner CRM — AA-Partner |
