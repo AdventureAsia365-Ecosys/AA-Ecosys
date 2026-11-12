@@ -2,6 +2,7 @@
 
 - **Status:** Accepted (28/10/2026, S255, AA-998: the tech lead asked for acc1 to leave the ecosystem and accepts
   losing the cross-account LLM fallback). Separate file, following the `0003a` pattern; ADR 0001 itself only gets a pointer.
+  Partly reversed for Bedrock chat serving only by the Note S278 at the end (12/11/2026, AA-1095).
 - **Amends:** ADR 0001 decision 2 ("Single Model Gateway"), the sentence "The fallback stays inside acc3 (previous
   model) until acc1 accepts the same agreements". The fallback now stays inside acc3 for good.
 - **Amended by:** [ADR 0009](0009-ai-platform-and-provider-gateway.md) decision 14 (Accepted 2026-10-31, S261):
@@ -84,3 +85,32 @@ the AWS Organization whose management account is acc1, and acc3 accepted on 11/1
   moves to acc4's organization it must leave acc1's organization first.
 - A support case for the model access was also opened from acc1 as the management account (case number in the private
   case notes).
+
+## Note — 12/11/2026 (S278): Bedrock chat models served from acc1 while acc3 is blocked
+
+**Decision (tech lead, AA-1095):** "if acc1 can use every model of the system, use acc1 instead of acc3". This
+reverses decision 1 above for ONE purpose only: serving the gateway's Bedrock chat models. Everything else in this
+ADR stands.
+
+- **Evidence.** AWS refuses the gateway's chat models on acc3 at account level (seven models refused, token quota 0
+  on five; cases open with AWS and the reseller). On 12/11/2026 every chat model the gateway uses (the Claude 5.5,
+  5 and 4.x models and the GPT-6, 6.1 and 5.6 models) answered a real Converse call on acc1 through its `global.`
+  inference profile in us-west-1, with global token quotas of 2M to 30M.
+- **Scope on acc1.** One IAM role for Bedrock invocation (Terraform root `accounts/acc1-bedrock` in AA-CIS-Infra,
+  with its own state bucket on acc1), trusted only by the CIS ECS task role on acc2 with an ExternalId, allowed to
+  invoke the chat models and nothing else. No data, no secret, no compute, no Batch, no Cost Explorer reader and no
+  paid budget or anomaly monitor (the role and the state bucket cost under 0.01 USD a month). acc1 stays the payer of
+  acc3's organization (Note S277).
+- **Gateway.** acc1 is a registry connection (CIS migration 413), not a key in code: its account ID comes from a task
+  environment variable set by AA-CIS-Infra, so the public app repos still carry no account ID. Its spend is read from
+  the gateway ledger (no Cost Explorer reader on acc1), under a monthly cap copied from acc3's.
+- **Route order per model family** (one audited route-control version, revertible in one click): Claude models use
+  the Anthropic API first (no cost to us at the moment), then Bedrock on acc1, then acc3; GPT models use Bedrock on
+  acc1 first, then the OpenAI API, then acc3. acc3 is not removed: its connection and deployments stay configured
+  behind acc1, and the gateway skips its refused deployments at no cost.
+- **Reversal.** When acc3's case is solved: revert the route-control version (or move acc3 back to first), switch
+  the acc1 connection off, then remove the acc1 deployments and connection with a forward CIS migration, remove the
+  task environment variable and the role grant in AA-CIS-Infra, and tear down the `accounts/acc1-bedrock` root with its
+  state bucket (a human with the acc1 sign-in).
+- **Watch.** `shared.llm_call_log` rows with `account = 'acc1'` are expected again (Claude only behind the Anthropic
+  API); card spend for Claude on Bedrock moves from acc3's bill to acc1's.

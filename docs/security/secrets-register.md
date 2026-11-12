@@ -205,7 +205,11 @@ nothing to flag, but the rows were stale); the three TripPlanner Lambda `pending
    rows. acc1 (a personal account) was removed from the ecosystem on 2026-10-28 (AA-998): the re-inventory after
    the clean-up found 0 Secrets Manager secrets in us-west-1. The us-east-1 tag listing of the same inventory still
    showed one old secret `aa/dev/db_credentials` (pre-acc2 stack), outside the us-west-1 clean-up; the tech lead
-   deletes it after a DRY RUN. No ecosystem secret may be created there.
+   deletes it after a DRY RUN. No ecosystem secret may be created there. That still holds after AA-1095 (S278, ADR
+   0001a Note S278): acc1 serves the Bedrock chat models through one invoker role and holds no secret. The gateway
+   reaches it with the CIS task role and an ExternalId (an identifier, not a secret); the account ID reaches the CIS
+   tasks as the plain environment variable `BEDROCK_ACCT_PAYER` set by AA-CIS-Infra, like `BEDROCK_ACCT_PRIMARY` for
+   acc3.
 10. **CI apply role secret access:** narrowed in S261 (Infra #541, boundary Denies, AA-873). Remaining follow-ups
     and their detail: Linear AA-873 / AA-806.
 11. **Infra main lost the S250 Terraform for four secrets (S250 close):** AA-CIS-Infra `main` af8ac53 (#380, schema
