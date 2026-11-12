@@ -137,6 +137,16 @@ hoặc từ chối booking nhà cung cấp trên tab **Suppliers** của case, v
 3. **Pricing rules & FX**: **New rule**, **New FX rate**. Một người khác duyệt dòng đó.
 4. Hoá đơn nhà cung cấp: **Enter bill** trên nhà cung cấp; một người khác duyệt; một Booking admin ghi nhận khoản chi
    trả.
+5. **Pricing policy** (Pricing › Pricing policy): các quy tắc kinh doanh mà giá và báo giá tuân theo, ví dụ hạn báo
+   giá, cỡ đoàn được báo giá theo yêu cầu, quy tắc phụ thu sau xác nhận, đặt cọc và mức tăng của giá tạm tính. Không
+   giá trị nào được cố định trong code. Để đổi một giá trị: bấm **Change** trên dòng đó, nhập giá trị mới, ngày có hiệu
+   lực (hôm nay hoặc sau đó) và lý do, rồi **Save** (có đánh dấu = gửi duyệt, không đánh dấu = lưu nháp để gửi sau).
+   Không có gì thay đổi cho tới khi người thứ hai duyệt: trưởng sản phẩm/giá duyệt các tham số giá, kế toán duyệt các
+   tham số tỷ giá, thuế, phụ thu và thanh toán. Người duyệt thấy **Approve** và **Reject** (từ chối phải có lý do);
+   người tạo có thể **Withdraw** bản nháp hoặc thay đổi đang chờ. **History** cho thấy mọi giá trị cùng người đề xuất
+   và người duyệt. Thay đổi chỉ áp dụng cho báo giá, phiên bản và bảng giá mới, không bao giờ cho booking đã xác
+   nhận. Margin, tỷ giá, phí huỷ, hạng đại lý và điều khoản đặt cọc vẫn ở trang riêng, có liên kết ở cuối trang chính
+   sách.
 
 ## 8. Khi có gì đó sai
 
