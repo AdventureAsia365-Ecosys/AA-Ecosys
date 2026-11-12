@@ -199,7 +199,7 @@ POLICY: dict[str, Policy] = {
         forbidden_patterns=(r"supplier_net", r"(^|_)prices?(_|$)"),
         why="ISO 3166-1 reference data and destination country keys only; no prices, no personal data",
     ),
-    # AA-1094 (CIS 403, root ADR 0019 d10 / b5): an agency's own tour text for its TripPlanner pages. The agency is the
+    # AA-1094 (CIS 404, root ADR 0019 d10 / b5): an agency's own tour text for its TripPlanner pages. The agency is the
     # merchant of record, so no AA price of any kind; the T2 gate output (scores, QA state, judge verdict, generation
     # metadata, the admin FactSheet) stays admin-side (the CIS tenant projection rule); no personal data.
     "catalog.tenant_tour.v1": Policy(
