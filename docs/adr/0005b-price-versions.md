@@ -91,7 +91,10 @@ A **price list version** is one approved, immutable set of selling prices of one
 | rows | today's `booking.trip_plan_prices` row shape (channel × season × pax band × currency, with RRP, child, infant and single supplement), plus `version_id` and `season_id` in place of the free-text label |
 
 The history table `booking.trip_plan_price_history` becomes the rows of past versions: the existing history is
-migrated into versions with `source` taken from its `change_source`, so nothing is lost.
+migrated into versions with `source` taken from its `change_source`, so nothing is lost. The rows in force today in
+`booking.trip_plan_prices` become each priced plan's latest version, `published`, and the migration publishes tariff
+version 1 of the tariff year covering today from them (d7), so the tariff and the quotes of today's priced plans keep
+their prices.
 
 Pricing rules, FX rows, tier discounts and partner rate cards keep their own append-only tables and their approval
 tables (`booking.policy_approvals`, `booking.partner_price_approvals`). They gain three things, following the bk-048
@@ -108,12 +111,27 @@ price adjustments of bk-048.
 | `draft` | the maker creates it (form, Excel import, copy to next year) | editable by its maker; prices nothing |
 | `pending` | the maker submits it; the diff and impact are computed and frozen | read-only; prices nothing |
 | `published` | the checker approves it, or the auto-publish rule of d8 | prices quotes, the tariff and the RRP from that moment |
-| `superseded` | a newer published version of the same plan covers the same travel dates | prices nothing new; pinned quotes keep it |
+| `superseded` | newer published versions of the same plan together cover **every** date of its travel window | prices nothing new; pinned quotes keep it |
 | `rejected` | the checker refuses a pending version, with a reason | final |
 | `withdrawn` | the maker withdraws a draft or pending version, or the checker withdraws a published one with a reason | final; a withdrawn published version prices nothing new, pinned quotes keep it |
 
-At most one pending version per plan and travel window at a time (a second submit is refused until the first is
-decided). A version is never deleted.
+At most one pending version per plan and overlapping travel window at a time (a second submit is refused until the
+first is decided). A version is never deleted.
+
+**Overlap rule (which published version prices a date).** Among the published versions of a plan whose travel window
+covers the service date (and whose sale window, when set, covers the quote day), a non-provisional version wins over a
+provisional one (d12); among the rest, the one with the latest `approved_at` wins, then the highest `version_no`. A
+partially overlapped version stays `published` and keeps pricing the dates no newer version covers (for example v2
+covers November to October and v3 changes prices from 2027-04-01: v2 prices November to March, v3 from April). It
+becomes `superseded` only when newer published versions cover all of its window. `superseded` is derived from the
+published set, so Booking recomputes it on every publish and withdrawal.
+
+**Withdrawal of a published version.** The withdrawn version leaves the published set and the overlap rule is applied
+again to the versions that remain: a version it had superseded returns to `published` for the dates no remaining newer
+version covers, because that price was approved by a checker for those dates and was never edited. Dates no remaining
+version covers become unquotable (d5). The withdraw dialog shows this outcome (which version prices each date again,
+which dates become unquotable) as its diff and impact (d9) before the checker confirms. A withdrawal publishes the next
+tariff version of each tariff year it touches (d7), like a publish.
 
 ### d3 Supplier contracts are versions
 
@@ -136,31 +154,51 @@ Seasons become data, never a substring or a hard-coded date:
 - a **season calendar** belongs either to one supplier contract (the supplier's seasons) or to one destination (the
   seasons of AA's sell-side price list);
 - a calendar holds date ranges, each with a season code `low`, `high`, `peak` or `festive`; one season may have
-  several ranges in a year (high season twice);
-- a calendar also holds **stop-sale ranges** (no sale from an allotment; every request goes on request);
+  several ranges in a year (high season twice). The season ranges of one calendar never overlap (a save that makes
+  two ranges cover one date is refused), and a date no range covers takes the calendar's `default_season` (`low`
+  unless set), so every date has exactly one season;
+- a calendar also holds **stop-sale ranges** (no sale from an allotment; every request goes on request). Stop-sale is
+  an overlay, independent of the season: it changes availability, never the season or the price, and compulsory
+  surcharges still apply on a stop-sale date;
 - **holiday events** (Tet, Songkran, Lebaran, Chinese New Year, Christmas, New Year and others) are rows per country
-  and **per year**, entered as data each year. No Tet or Lebaran date is ever written in code;
+  and **per year**, entered as data each year. No Tet or Lebaran date is ever written in code. A holiday event is
+  **referenced, never copied**: a `festive` range of a calendar may name a holiday event (with optional days before
+  and after) instead of fixed dates, and then takes its dates from that event's row for the year. Entering the event
+  row for a year therefore fills the festive range of every calendar that references it; a calendar that references
+  no event has no festive range from it. Holiday events also feed the compulsory surcharges below and nothing else;
 - a supplier contract may attach a **compulsory surcharge** (a gala dinner on 24/25 or 31 December, a Tet surcharge)
   to a date or a holiday event; a stay that touches that date adds it.
 
 The `peak` flag of a price row comes from the calendar. B2B quotes and the RRP use the same season logic, so the
 `peak = false` path of the B2B quote goes away.
 
-A trip plan's sell-side row is chosen by the **departure date** of the tour. The cost sheet under it prices each
-night and service by its own day and each contract's stay pricing flag (d3).
+**Which calendar a trip plan uses.** A trip plan names one sell-side calendar in `season_calendar_id`. When the plan
+is created it defaults to the calendar of the destination of its first day; staff may change it (for example a plan
+that starts with one night in a gateway city and spends the rest in another destination). A multi-destination plan
+is never priced by several sell-side calendars at once: its sell-side row is chosen by the **departure date** in its
+own calendar. The cost sheet under it prices each night and service by its own day, in the calendar of the supplier
+contract that prices it, with that contract's stay pricing flag (d3).
 
 ### d5 Which version applies to a quote
 
 For a `trip_plan` line, Booking uses the version of that plan that is **published at the moment of the quote** and
-whose **travel window covers the line's service date** (and whose sale window, when set, covers the quote day). The
-season row inside it is the one for the service date (d4).
+whose **travel window covers the line's service date** (and whose sale window, when set, covers the quote day). When
+several qualify, the overlap rule of d2 picks one. The season row inside it is the one for the service date (d4).
 
 - When the next tariff year's version is published, a quote for a date in that year uses it, even while the current
   year is still on sale.
 - The early-booking discount is judged on the quote day, as today.
 - The agency discount (tier or rate card), the departure price adjustment, the FX lock and the rounding apply on top,
   as today.
-- When no published version covers the date, the line is not quotable, unless a provisional version covers it (d12).
+- When the plan has published versions but none covers the date (a provisional one counts, d12), the line is **not
+  quotable**: `POST /quotes` answers **409 `price_not_published`** with `line_refs` naming every such line, and no
+  partial quote is written (contract 1.9; sample `problem-price-not-published-valid.json`). The CRM drops those lines
+  or offers other dates.
+- **Transition.** A plan with no published version at all (none of the 890 unpriced plans has one yet) keeps the 1.8
+  pricing of its line, live from components × supplier rates, with `price_version_id` null, so no quote that works
+  under contract 1.8 starts failing. The first published version of the plan switches it to version pricing. The
+  existing matrix rows of the plans priced today are migrated into each plan's version 1 (d1), published, so those
+  plans keep their prices.
 
 This changes the B2B quote of a trip plan line: its agency price now comes from the published version, not from a
 live re-computation of components × supplier rates. Booking still computes the live cost of the line for staff (the
@@ -185,16 +223,28 @@ Staff page grant (AA-1091 item 6), never from an engineer. The exact role-to-per
 
 ### d7 Agency tariff versions
 
-A **tariff version** is a published snapshot of the B2B price list for one tariff year: which price list version of
-each sellable plan it contains, with an id, a version number, `travel_from` / `travel_to` (the tariff year),
-`published_at` and a change summary (how many tours and rows went up, down, in or out).
+A **tariff version** is a published snapshot of the B2B price list for one tariff year: the price list versions in
+force for that tariff year, **one or more per sellable plan** (a mid-year change such as the d2 example adds a
+version; each tariff row names its own `price_version_id`), with an id, a version number, `travel_from` /
+`travel_to` (the tariff year), `published_at` and a change summary (how many tours and rows went up, down, in or out).
 
-- Publishing price list versions (one approval, or one auto-publish run) publishes the next tariff version of each
-  tariff year they touch. The previous one becomes `superseded`.
+- Publishing or withdrawing price list versions (one approval, one withdrawal, or one auto-publish run) publishes the
+  next tariff version of each tariff year they touch. The previous one becomes `superseded`.
 - The **current** and the **next** tariff year run in parallel once the next one is published (decision 15, Q1).
 - `GET /booking/b2b/v1/tariff` answers one tariff version for the calling agency: the version's rows, priced with the
-  agency's discount and the FX rate in force today. It names `tariff_version_id` and carries an **ETag** over the
-  version id, the agency discount row, the FX row, the currency and the format; `If-None-Match` answers 304.
+  agency's discount and the FX rate in force today, cut from today at the earliest as in contract 1.4, and only for
+  tours AA serves today (ADR 0015).
+- **No version covering today.** `period=current` with no published tariff version covering today (before the first
+  one, or a gap between two tariff years) answers **200** with no rows and every version field
+  (`tariff_version_id`, `tariff_version_no`, `tariff_year`, `travel_from`, `travel_to`, `published_at`, `status`,
+  `changes`, `next_tariff_version_id`) null; a 1.4 reader sees an empty tariff, never an error. 404 `not_found`
+  applies only to `period=next` before it is published and to an unknown or withdrawn `tariff_version_id`.
+- **ETag.** The answer carries a strong ETag: the SHA-256 of the exact body answered (the canonical JSON or the CSV
+  bytes) for this agency, currency, `source_id`, `period` or `tariff_version_id`, and format. It therefore changes
+  whenever anything the body shows changes: `priced_on` and the cut to today (so at least daily), the tariff version,
+  its `status`, `next_tariff_version_id`, the RRP (from `booking.pricing_rules`), the agency discount, the FX rate and
+  the set of tours served. `If-None-Match` with that value answers 304. The 304 saves the transfer, not the
+  computation.
 - An event `tariff.published` tells every agency that a new tariff version exists.
 - A tariff row is information, not a promise; the quote stays the binding price (as in contract 1.4).
 
@@ -202,8 +252,8 @@ each sellable plan it contains, with an id, a version number, `travel_from` / `t
 
 `bk_price_recompute` no longer writes the matrix directly. It writes a version with `source = cost_sheet`:
 
-- the version **publishes automatically** when every row it changes moves within ± the policy threshold (decision
-  15, Q4, default 3 %) of the version it replaces, no row falls below the floor margin and no row is added or removed;
+- the version **publishes automatically** when every row it changes moves within ± the policy threshold
+  (`recompute_auto_publish_pct`, decision 15, Q4, default 3 %) of the version it replaces, no row falls below the floor margin and no row is added or removed;
 - otherwise it is **pending** and waits for the checker, with its diff and impact;
 - the first version of a plan, and every hand-entered or imported version, always waits for a checker.
 
@@ -215,8 +265,9 @@ version's rows.
 
 When a version is submitted Booking computes and freezes:
 
-- the **diff** per row (season × pax band × channel × currency): old price, new price, change in percent; rows above
-  the highlight threshold are marked, rows below the floor margin are flagged;
+- the **diff** per row (season × pax band × channel × currency): old price, new price, change in percent; rows whose
+  change in either direction is above the highlight threshold (`diff_highlight_pct`, decision 15, default 10 %) are
+  marked, rows below the floor margin are flagged;
 - the **impact**: the open quotes that will re-price when they expire, the tariff rows that change, the public "from"
   price change, and the margin per traveller at the expected party size.
 
@@ -239,14 +290,17 @@ A confirmed booking is never repriced. When a supplier cost changes after confir
 The only exception is a separate **contract surcharge line** added to the booking, never a change to an existing line.
 All of these must hold:
 
-- the cause is one the agency terms allow and the policy enables (decision 15, Q3: government tax and an FX move above
-  the threshold by default; fuel only if enabled);
+- the cause is one the agency terms allow and the policy enables (`surcharge_causes`, decision 15, Q3: government tax
+  and an FX move by default; fuel only if enabled). An FX move counts only when the rate in force on the day the line
+  is raised differs from the rate **locked on the booking** (the quote's rate, ADR 0005a d3) by more than
+  `surcharge_fx_threshold_pct` (default 5 %), measured in the agency's currency against USD;
 - the partner terms clause exists, states the method of calculation and gives the same right when the cost goes down
   (a decrease is passed back as a negative line);
 - finance approves the line (maker-checker);
-- the agency is told in writing at least the notice period before departure (default 20 days);
-- an increase above the free-cancellation threshold (default 8 % of the booking price) lets the agency cancel free of
-  charge.
+- the agency is told in writing at least the notice period before departure (`surcharge_notice_days`, default 20
+  days);
+- an increase above the free-cancellation threshold (`surcharge_free_cancel_pct`, default 8 % of the booking price)
+  lets the agency cancel free of charge.
 
 Every other change is AA's cost. These conditions follow the EU package travel directive (Art. 10) and the UK Package
 Travel Regulations (reg. 10), which bind AA's EU and UK agencies, who may recover their loss from AA. A lawyer confirms
@@ -257,15 +311,17 @@ reaches the CRM in a later minor of `booking.b2b.v1`, not in 1.9.
 
 A **provisional** version (`source = provisional`) fills a gap when a supplier has not sent next year's rates:
 
-- it is built from last year's price of the same season plus the policy uplift (decision 15, Q12, default 5 %), or from
+- it is built from last year's price of the same season plus the policy uplift (`provisional_uplift_pct`, decision
+  15, Q12, default 5 %), or from
   the structured CIS reference price (AA-1091 item 5);
 - it is flagged for staff and agencies (`provisional: true` on the quote line and the tariff row);
 - a quote line priced from it is always `on_request`: AA staff confirm it by hand (the "book with review" path) and it
   is never confirmed automatically. On review staff either confirm at the provisional price (AA bears any difference)
   or decline the line so the agency re-quotes; the price never changes silently;
 - a provisional version built from the CIS reference price serves the RRP and "from" display only, and is quoted to
-  agencies only when the policy allows it (Q12, default: not quoted);
-- a non-provisional version that covers the same dates supersedes it.
+  agencies only when the policy allows it (`provisional_cis_ref_quotable`, Q12, default false);
+- a non-provisional published version wins over it on every date both cover (the overlap rule of d2), whatever their
+  approval order; the provisional version becomes `superseded` once non-provisional versions cover all its window.
 
 This also makes a hand-priced plan with no components sellable: its hand-entered version is published by a checker
 and priced like any other version.
@@ -274,16 +330,22 @@ and priced like any other version.
 
 - **Export** from a published version to `.xlsx`: every row carries `version_id` and `row_id`; dates are
   `YYYY-MM-DD` with inclusive end dates (d10).
-- **Import** creates a new **draft** with `replaces_id` = the exported version. When the exported version is no longer
-  the latest of its plan (a newer version is published or pending), the import is refused as a conflict.
+- **Import** creates a new **draft** with `replaces_id` = the exported version. It is refused as a conflict when,
+  after the export, another version of the same plan **whose travel window overlaps the exported version's travel
+  window** was published or submitted (pending). Versions that do not overlap it, such as the next tariff year's
+  version or the provisional draft of "copy to next year", never block a round-trip of the current year.
 - One error anywhere means nothing is written. The dry run shows the errors by sheet, row and column, then the diff
   and impact (d9).
 - **Copy to next year + x %** creates a provisional draft for the next tariff year.
 
 ### d14 Quote validity
 
-The quote validity becomes policy data (decision 15, Q2) in place of the hard-coded 48 hours: default 14 days, 3 days
-for a quote that touches a festive period of the calendar. The code allows at most 30 days. Inside the validity the
+The quote validity becomes policy data (decision 15, Q2: `quote_validity_days`, `quote_validity_festive_days`) in
+place of the hard-coded 48 hours: default 14 days, 3 days for a quote that touches a festive period. A quote touches a
+festive period when a service date of any of its lines falls in a `festive` range of the sell-side calendar used for
+that line (d4): the plan's `season_calendar_id` for a `trip_plan` line, the calendar of the hotel's or service's
+destination otherwise. One festive line shortens the whole quote. The code refuses a parameter value outside 1–30
+days. Inside the validity the
 quote is the promise (`price_hash`, 409 `price_changed` as today). After it expires, a re-quote prices on the
 versions in force and the CRM shows "old price X, new price Y". Honouring the old price is an explicit departure
 price adjustment with a reason (bk-048), never a silent re-use.
@@ -294,10 +356,10 @@ Pricing policy is a business decision. Each item below is a **policy parameter**
 and approved by a second person like the pricing rules, never a code constant. The system ships with the proposed
 default; the business owner may change any of them, and the change applies to new versions and quotes only.
 
-| # | Question for the business owner | Proposed default (parameter) |
+| # | Question for the business owner | Proposed default |
 |---|---|---|
 | Q1 | When does the agency tariff year run, and when is it published? | 1 November to 31 October; the next year published by 31 August. Supplier contracts keep their own years |
-| Q2 | How long is a B2B quote valid? | 14 days; 3 days when the trip touches a festive period. The code allows at most 30 days |
+| Q2 | How long is a B2B quote valid? | 14 days; 3 days when the trip touches a festive period (d14). At most 30 days |
 | Q3 | May the price of a confirmed booking change? | No, except a surcharge line for government tax and an FX move above 5 %; at least 20 days' notice; decreases passed back; above 8 % the agency may cancel free. Fuel off |
 | Q4 | Which price changes publish without a second person? | None entered by hand or imported. A recompute publishes by itself when every row moves within ± 3 %; outside that it waits for approval |
 | Q5 | Who approves prices? | The product or operations lead approves prices; finance approves FX rates, tax rules and surcharges |
@@ -309,6 +371,31 @@ default; the business owner may change any of them, and the change applies to ne
 | Q11 | Currencies | USD for foreign agencies, VND for Vietnamese agencies; FX locked at the quote with the existing buffer (ADR 0005a d3). Circular 32 and VAT are checked by a lawyer or accountant |
 | Q12 | Provisional prices when a supplier has not sent next year's rates | Allowed: last year's same-season price + 5 %, flagged, on request only. From the CIS reference price: display only, not quoted |
 
+**The parameters.** Each scalar answer above is one named policy parameter. Booking validates a new value against the
+allowed range and refuses anything outside it; the range is the code's only bound.
+
+| Key | Question | Type | Unit | Default | Allowed range |
+|---|---|---|---|---|---|
+| `tariff_year_start` | Q1 | month-day | MM-DD | `11-01` | any valid month-day |
+| `tariff_next_publish_by` | Q1 | month-day | MM-DD | `08-31` | a month-day before `tariff_year_start`; a reminder date, it blocks nothing |
+| `quote_validity_days` | Q2 | integer | days | 14 | 1–30 |
+| `quote_validity_festive_days` | Q2 | integer | days | 3 | 1 to `quote_validity_days` |
+| `surcharge_causes` | Q3 | set of `tax`, `fx`, `fuel` | — | `{tax, fx}` | any subset; empty = no surcharge line ever |
+| `surcharge_fx_threshold_pct` | Q3 | decimal | % against the rate locked on the booking (d11) | 5 | 0.5–50 |
+| `surcharge_notice_days` | Q3 | integer | days before departure | 20 | 20–90 (20 is the legal minimum) |
+| `surcharge_free_cancel_pct` | Q3 | decimal | % of the booking price | 8 | 1–8 (8 is the legal maximum) |
+| `recompute_auto_publish_pct` | Q4 | decimal | % per row against the replaced version | 3 | 0–10; 0 = a recompute never publishes by itself |
+| `diff_highlight_pct` | d9 | decimal | % per row | 10 | 1–50 |
+| `provisional_uplift_pct` | Q12 | decimal | % on last year's same-season price | 5 | 0–25 |
+| `provisional_cis_ref_quotable` | Q12 | boolean | — | false | true or false |
+| `group_on_request_min_pax` | Q9 | integer | travellers | 9 | 2–60 |
+
+The other answers are not scalar parameters; they are data Booking already has or this ADR adds: Q5 is the
+role-to-permission table (d6, Booking `CONTEXT.md`); Q6 the season calendars (d4); Q7 the compulsory surcharges of
+supplier contracts (d4) priced with the margin of `booking.pricing_rules`; Q8 the deposit and cancellation policy of
+ADR 0019 b16; Q9's free places the supplier contract; Q10 the tier discounts and partner rate cards; Q11 the FX rows
+and their buffer (ADR 0005a d3).
+
 One more parameter set is not new: the target and floor margin per channel (`booking.pricing_rules`), always a
 margin on the selling price, not a markup. The staff screens show both the margin and the equivalent markup.
 
@@ -319,8 +406,10 @@ margin on the selling price, not a markup. The staff screens show both the margi
 - `Tariff` gains `tariff_version_id`, `tariff_version_no`, `tariff_year`, `travel_from`, `travel_to`,
   `published_at`, `status` (published or superseded), `changes` (counts only) and `next_tariff_version_id`;
   `TariffItem` gains `price_version_id` and `provisional`.
-- `GET /tariff` takes `period` (`current` or `next`) and `tariff_version_id`, answers an `ETag` header and 304 on a
-  matching `If-None-Match`.
+- `GET /tariff` takes `period` (`current` or `next`) and `tariff_version_id`, answers a strong `ETag` (SHA-256 of
+  the body) and 304 on a matching `If-None-Match`; with no published tariff version covering today, `period=current`
+  answers 200 with no rows and the version fields null (d7).
+- `POST /quotes` may answer 409 `price_not_published` with `Problem.line_refs` (d5).
 - The event type `tariff.published` with `Event.tariff_version_id`.
 - No maker, checker, reason, cost or margin ever crosses the API (the root contract policy rejects `*_by`, net and cost
   fields; a rejected sample proves it).
@@ -361,7 +450,8 @@ A reader that ignores unknown fields and event types keeps working (contracts RE
 
 ## Delivery order
 
-1. The business owner confirms Q1–Q5 (the code needs them); the system ships with the defaults for the rest.
+1. Booking ships the policy parameters of d15 with the proposed defaults; the business owner may change any of them
+   at any time as policy data, and a change applies to new versions and quotes only.
 2. This ADR and `booking.b2b.v1` 1.9 (contract only).
 3. Hand prices as versions: draft → pending → published, required reason, diff (inside the AA-1091 workbench).
 4. Season calendars and holiday events; the `peak` substring goes; one peak logic for quotes and the RRP.
