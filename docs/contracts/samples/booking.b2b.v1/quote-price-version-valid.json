@@ -1,0 +1,64 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "Quote",
+  "expect": "valid",
+  "why": "1.9 (AA-1091, root ADR 0005b): each line names its price list version and tariff version; a line priced from a provisional version is on_request",
+  "payload": {
+    "quote_id": "q_01HP91",
+    "currency": "USD",
+    "fx": {
+      "base_currency": "USD",
+      "quote_currency": "USD",
+      "rate_per_usd": "1",
+      "rate_date": "2026-11-12",
+      "source": "base"
+    },
+    "valid_until": "2026-11-26T00:00:00Z",
+    "price_hash": "4b1d0c9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b10",
+    "lines": [
+      {
+        "line_ref": "opt-d1-a",
+        "b2b_price": {
+          "amount": "776.00",
+          "currency": "USD"
+        },
+        "unit": "per_person",
+        "availability": "available",
+        "departure_id": null,
+        "price_version_id": "pv_01HP7Q",
+        "tariff_version_id": "tv_2026_27_v4",
+        "provisional": false
+      },
+      {
+        "line_ref": "opt-d1-b",
+        "b2b_price": {
+          "amount": "812.00",
+          "currency": "USD"
+        },
+        "unit": "per_person",
+        "availability": "on_request",
+        "departure_id": null,
+        "price_version_id": "pv_01HP8R",
+        "tariff_version_id": "tv_2027_28_v1",
+        "provisional": true
+      },
+      {
+        "line_ref": "opt-d2-a",
+        "b2b_price": {
+          "amount": "94.00",
+          "currency": "USD"
+        },
+        "unit": "per_room_night",
+        "availability": "on_request",
+        "departure_id": null,
+        "price_version_id": null,
+        "tariff_version_id": null
+      }
+    ],
+    "total_b2b_price": {
+      "amount": "1682.00",
+      "currency": "USD"
+    },
+    "cancellation_policy": null
+  }
+}

@@ -11,6 +11,8 @@
   superseded. Tenants pay subscriptions (Content tiers, ADR 0019 b2); CRM and TripPlanner are paid add-ons (b3, b4);
   every agency invoice is issued from Booking in two kinds, software fee and tour settlement (d9). The warn-below-"from"
   rule gains a suspend step after a 7-day notice (b7). Decisions 2–4 (naming, VND quotes, cancellation fees) stay.
+- **Amended by:** [ADR 0005b](0005b-price-versions.md) (Proposed 2026-11-12, S278, AA-1091): the agency tariff of
+  decision 1 gains a version id, an ETag and a next-year edition (`booking.b2b.v1` 1.9). Decision 3 (FX lock) stays.
 - **Implements:** the business owner's questionnaire answers Q1 1.1 (free for agencies now), Q2 1.1 (B2B price at the existing
   15 % margin, the agency sets its sell price), Q2 1.2 (AA bills the agency under the current B2B terms, outside the
   CRM), Q2 1.3 (below the public price: contract clause only); contradictions X10 and X11 of the CRM design.
