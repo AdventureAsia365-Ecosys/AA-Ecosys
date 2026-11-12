@@ -14,7 +14,8 @@
   A10d (05/11/2026, S270) adds a fifth, Dev-only E2E address for a CIS customer_success member, read-only with no write
   allow-list, synthetic tenants only in its book. A10b-3 (12/11/2026, S278) lets the A10b admin release a held piece of
   a synthetic tenant, and A10e (12/11/2026, S278) adds three Dev-only write-capable AA-Booking E2E addresses (supplier
-  ops; a finance maker / checker pair), each held to its own writes on synthetic agencies. A11 and A12 (22/10/2026,
+  ops; a finance maker / checker pair), each held to its own writes on synthetic agencies; A10e-1 (12/11/2026, S278)
+  lets its staff address cancel a synthetic departure (crm-13). A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2). A13
   (06/11/2026, S271) retires the CIS -> Booking bridge once the staff frontends run on ECS (ADR 0019 d23).
 - **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) was unchanged and still pending on 18/10/2026.
@@ -689,7 +690,45 @@ mailbox or Google account". That is too strong.
   `app/auth/e2e_staff.py` and its call (AA-Booking); drop the three A10e entries of the CIS staff directory reconcile
   (`KNOWN_E2E_STAFF` in `services/staff_reconcile.py` and their constants in `api/core/e2e_staff.py`, AA-CIS-App);
   deactivate the three staff rows; a closing line here. Faster stop on Dev: disable a user, or clear `is_canary` on
-  the synthetic tenants.
+  the synthetic tenants. With A10e-1: its departure-cancel write and grant, AA-Booking `app/e2e_fixtures.py`, AA-CIS-App
+  `services/tenant_account/e2e_fixtures.py` and the provisioning saga's `tenant_id` create field.
+
+##### A10e-1. Amendment: the staff address cancels a synthetic departure (12/11/2026, S278, AA-1087 / AA-1070)
+
+- **Decision (tech lead, S278: make the live E2E write checks runnable on Dev by fixing the system; designed by the
+  orchestrated lane l18 under the dev-phase merge rule, independent review before merge because it widens auth):**
+  the crm-13 check (AA cancels a departure, the agency CRM opens its `crm.aa_cancel_case`) needs one identity that may
+  cancel a departure, and no A10 identity could (the S278 live verify: PATCH departure 403 `e2e_read_only`). The A10e
+  staff address `e2e-booking-staff@` gets one more write:
+  - PATCH `/booking/catalog/departures/{departure_id}` with a body of exactly `{"status": "cancelled"}`.
+- **Scope, enforced by AA-Booking (`backend/app/auth/e2e_staff.py`, called from `current_staff`), on top of A10e:**
+  - **Fixed body** (`BODY_RULES`): any other body (a capacity, a rule, another status, an extra key) is 403
+    `e2e_read_only` before any DB access.
+  - **Synthetic departure** (`DEPARTURE_SYNTHETIC_SQL`): at least one agency hold line on the departure, and every
+    agency that ever held a line on it (any hold status) synthetic in CIS (`catalog.v_tenant_account_v1.is_synthetic`,
+    the A10b-1 rule). An empty departure, one any real agency held seats on, an unknown id, a missing column or a DB
+    error: 403 `e2e_synthetic_only`, before the staff row sync or the route.
+  - **Route-scoped grant:** cancelling a departure needs `trip_plan.write` (admin, contracting), which the address's
+    `sales` role lacks. Only after every check above passed does that one request hold `trip_plan.write`
+    (`E2EWriter.grants` -> `Staff.e2e_grants`, never stored); no other request of the address, and no other address,
+    holds it. A unit test pins it as the only grant.
+- **Alternatives not taken:** a fourth address in `booking-contracting` (an Infra trigger entry, a Cognito user, the
+  CIS reconcile list and a Terraform Apply for one write; contracting also holds pricing and bill approval) or moving
+  the staff address to contracting (the same extra rights on every request).
+- **Exposure added.** Whoever reads an A10e code can cancel a Dev departure that only synthetic agencies booked: the
+  cancel fans `departure.cancelled` out to those agencies' feeds (their CRM opens a case, Booking charges no fee). No
+  real agency, no pilot, no capacity or rule change.
+- **Audit:** the route runs unchanged: `booking.audit_logs` row `departure.updated` with the address's staff key as
+  actor; `booking_e2e_write_allowed identity=booking_staff`; refusals `booking_e2e_writer_refused reason=body /
+  not_synthetic / not_allowlisted`.
+- **Fixtures (no hand rows):** AA-Booking `python -m app.e2e_fixtures` (Dev only, DRY RUN first) makes per run a
+  departure, a synthetic agency's booking on it, a pending supplier booking and an issued invoice through the
+  services; AA-CIS-App `python -m services.tenant_account.e2e_fixtures` registers the CRM E2E agency as a synthetic CIS
+  tenant under its own id (tenant provisioning saga, Dev `demo` only) and opens a subject gate flag on a synthetic
+  tenant by running the real gate. Both temporary like A10e.
+- **Revoke (any time):** drop `DEPARTURE_CANCEL` from the staff writer, `BODY_RULES` and its grant, update the guard
+  test, deploy; faster on Dev: disable the user. The A10e removal list (AA-1054) covers this, plus the two fixture
+  modules and the saga's `tenant_id` field.
 
 ### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)
 
