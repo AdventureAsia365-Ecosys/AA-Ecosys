@@ -214,12 +214,12 @@ run-script, never shown in a task log.
   (bk-048, staff text on departures, never traveller data by rule): when a match is found, set the column to
   `[redacted]` and change nothing else (the bk-048 guard triggers allow only that move on fees and adjustments; run as
   `bk_owner`)
-- `booking.price_list_versions.label` / `reason` / `reject_reason` / `withdraw_reason` (bk-052) and
+- `booking.price_list_versions.label` / `reason` / `reject_reason` / `withdraw_reason` (bk-053) and
   `booking.season_calendars.name` / `default_request_reason`, `booking.season_ranges.note` / `reject_reason` /
   `withdraw_reason` / `end_reason`, `booking.holiday_events.name` / `reason` / `reject_reason` / `withdraw_reason` /
-  `end_reason` and `booking.trip_plans.season_calendar_request_reason` (bk-053), staff text about prices and seasons,
+  `end_reason` and `booking.trip_plans.season_calendar_request_reason` (bk-054), staff text about prices and seasons,
   never traveller data by rule: when a match is found, set the column to `[redacted]` and change nothing else (the
-  bk-052 guard trigger allows only that move, the label or one reason alone, on a version that left draft; run as
+  bk-053 guard trigger allows only that move, the label or one reason alone, on a version that left draft; run as
   `bk_owner`)
 - `booking.retired_b2c_record.record` (the bk-045 archive of the customer invoices and payments, accounting
   exception DM-7.1): redact the personal keys in place, never delete (section 3 step 4)
