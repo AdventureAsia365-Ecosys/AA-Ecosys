@@ -97,6 +97,11 @@ function describeWrite(sc, file) {
   if (!Array.isArray(sc.allowWrites) || !sc.allowWrites.length) throw new Error(`${file}: a write-set scenario names the writes it makes (allowWrites)`);
   if (typeof sc.paid !== 'boolean') throw new Error(`${file}: a write-set scenario states paid: true or false`);
   if (sc.fastOnly) throw new Error(`${file}: data steps (fastOnly) are not write-set scenarios`);
+  // A paid take may open a paid path only by naming the exact PAID_URLS entry (record.cjs blockSources).
+  for (const u of sc.allowPaidUrls || []) {
+    if (!sc.paid) throw new Error(`${file}: allowPaidUrls on a scenario that is not paid`);
+    if (!PAID_URLS.includes(u)) throw new Error(`${file}: allowPaidUrls names ${u}, not a PAID_URLS entry`);
+  }
   // The steps that may write are marked, so a --preview knows where the read-only part ends.
   if (!sc.steps.some((s) => s && s.writes)) throw new Error(`${file}: a write-set scenario marks the steps that write (step(..., { writes: true }))`);
   return { id: sc.id, app: sc.app, identity, title: sc.title || '', file, steps: sc.steps.length, readOnly: true,
@@ -107,6 +112,19 @@ function describeWrite(sc, file) {
 function previewSteps(sc) {
   const i = sc.steps.findIndex((s) => s && s.writes);
   return i < 0 ? sc.steps.length : i;
+}
+
+/**
+ * The URL blocks of one take (record.cjs): the scenario's own blockUrls plus the runner's (UAT_BLOCK_URLS, PAID_URLS
+ * in every dry-run child). A paid scenario names in `allowPaidUrls` the PAID_URLS entries it needs (the pilot
+ * rehearsal's planner search), and only those, only when the take may pay (UAT_ALLOW_PAID=1, never a preview), are
+ * dropped from the runner's list; every other paid path stays blocked. A scenario's own block always holds.
+ */
+function blockSources({ blockUrls = [], allowPaidUrls = [] } = {}, env = process.env) {
+  const runner = JSON.parse(env.UAT_BLOCK_URLS || '[]');
+  const pays = env.UAT_ALLOW_PAID === '1' && env.UAT_PREVIEW !== '1';
+  const open = new Set(pays ? allowPaidUrls : []);
+  return [...blockUrls, ...runner.filter((x) => !open.has(x))];
 }
 
 // parseArgs upper-cases --only / --record ids; ids with a lower-case part (a split letter REH-08a, a phone variant
@@ -173,7 +191,9 @@ function signinPlan(entries) {
 
 // Link tokens and long opaque values never reach the report (record.cjs uses this same function). The report may be
 // copied to the public root repo: AWS ARNs and 12-digit account numbers (an AccessDenied message names both, a bucket
-// name may end in one) are masked too.
+// name may end in one) are masked too. Query values of key-like parameters are masked whatever their length: an
+// agency's intake form key (`f=`, 22 characters, the Book now link) is shorter than the 30-character rule.
+const SECRET_PARAMS = /([?&](?:f|key|form_key|token|code|secret|sig|signature)=)([^&#\s"'<>]+)/gi;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 function redact(x) {
   if (x == null) return x;
@@ -182,7 +202,8 @@ function redact(x) {
     // A uuid's last group can be 12 digits: the uuid alternative matches first and is kept whole.
     .replace(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|(?<![0-9A-Za-z])\d{12}(?![0-9A-Za-z])/gi,
       (m) => (m.length === 36 ? m : '<account>'))
-    .replace(/([/=])([A-Za-z0-9_.~%-]{30,})/g, (m, lead, seg) => (UUID.test(seg) ? m : `${lead}<redacted>`));
+    .replace(/([/=])([A-Za-z0-9_.~%-]{30,})/g, (m, lead, seg) => (UUID.test(seg) ? m : `${lead}<redacted>`))
+    .replace(SECRET_PARAMS, '$1<redacted>');
 }
 
 /** One-line, table-safe text (no pipes, no newlines, capped). */
@@ -331,6 +352,6 @@ function stamp(d = new Date()) {
 }
 
 module.exports = {
-  IDENTITIES, NO_SIGNIN, WRITABLE_IDENTITIES, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, parseArgs, describe, describeWrite, previewSteps, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
+  IDENTITIES, NO_SIGNIN, WRITABLE_IDENTITIES, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, blockSources, parseArgs, describe, describeWrite, previewSteps, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
   renderMarkdown, renderTsv, stamp,
 };

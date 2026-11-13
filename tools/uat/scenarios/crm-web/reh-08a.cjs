@@ -6,7 +6,7 @@
 // The decoy p= key proves the fix: the panel must book the page's own catalogue key (CIS GET /v1/trip/<id>
 // source_id), never the key in the link.
 // Needs: the agency's Book now switch on and its intake form key (CRM Settings > Online booking; env
-// UAT_REH_FORM_KEY, never committed), tour X sellable for the agency (a departure inside the window, a retail price) and
+// UAT_REH_FORM_KEY, never committed; result.json masks the f= value, lib/dryrun-core.cjs redact), tour X sellable for the agency (a departure inside the window, a retail price) and
 // adopted on its planner (the page id is read from the agency's TripPlanner tour list; env UAT_REH_TOUR_X, or
 // UAT_REH_TRIP_PAGE = the tour id of the page). The CRM half (the trip's AA line carries the same source id, in the
 // agency's pipeline) is the CRM group's read. Record after the CRM read of step 6, so that read sees one lead only.
@@ -36,12 +36,12 @@ const sc = rw({
   allowWrites: [`^${R.esc(R.CLIENT)}/crm/public/v1/book/[A-Za-z0-9_-]+/(?:price|bookings)$`],
   meta,
   steps: [
-    step('A traveller follows the agency\'s link to an Adventure Asia tour page. The agency\'s Book now panel sits under the itinerary.',
-      'Khách du lịch theo đường dẫn của đại lý tới một trang tour của Adventure Asia. Khung Đặt ngay của đại lý nằm dưới lịch trình.',
+    step('A traveller opens an Adventure Asia tour page through the agency\'s link. Its Book now panel is below.',
+      'Khách du lịch mở một trang tour của Adventure Asia qua đường dẫn của đại lý. Khung Đặt ngay nằm bên dưới.',
       async (page, h) => {
         counts = await limitWrites(page, [
-          { name: 'price', path: /^\/crm\/public\/v1\/book\/[A-Za-z0-9_-]+\/price$/, max: 1 },
-          { name: 'bookings', path: /^\/crm\/public\/v1\/book\/[A-Za-z0-9_-]+\/bookings$/, max: 1 },
+          { name: 'price', path: /^\/crm\/public\/v1\/book\/[A-Za-z0-9_-]+\/price$/, max: 1, accept: (req) => req.method() === 'POST' },
+          { name: 'bookings', path: /^\/crm\/public\/v1\/book\/[A-Za-z0-9_-]+\/bookings$/, max: 1, accept: (req) => req.method() === 'POST' },
         ]);
         const key = (process.env.UAT_REH_FORM_KEY || '').trim();
         if (!FORM_KEY.test(key)) throw new Error('UAT_REH_FORM_KEY is missing or not a form key (CRM Settings > Online booking of the rehearsal agency)');
@@ -112,13 +112,14 @@ const sc = rw({
         await page.waitForURL((u) => u.pathname === '/c/p', { timeout: 60_000 });
         await h.expect(page.getByTestId('client-proposal')).toBeVisible({ timeout: 60_000 });
       }, { writes: true }),
-    step('The proposal names the same tour the page showed. The agency now holds this trip in its pipeline. This is the end of the scenario.',
-      'Đề xuất ghi đúng tour mà trang đã hiển thị. Đại lý giờ có chuyến đi này trong danh sách bán hàng. Kết thúc kịch bản.',
+    step('The proposal names the same tour as the page. This is the end of the scenario.',
+      'Đề xuất ghi đúng tour mà trang đã hiển thị. Kết thúc kịch bản.',
       async (page, h) => {
         const proposal = page.getByTestId('client-proposal');
         await h.expect(proposal).toContainText(widget.title, { timeout: 30_000 });
         await h.hover(proposal.getByText(widget.title).first());
         if (counts.bookings !== 1) throw new Error(`${counts.bookings} booking requests in this run (exactly one expected)`);
+        if (counts.price_refused || counts.bookings_refused) throw new Error('the page tried a Book now write this take does not make (aborted)');
       }),
   ],
 });
