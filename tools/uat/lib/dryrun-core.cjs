@@ -6,7 +6,12 @@
 // The identities a dry-run scenario may name (lib/signin.cjs signs each one in once, outside the recorded context).
 // studio-editor (AA-855): the Content studio EDITOR of the E2E tenant; it can write, so only write scenarios use it.
 // studio-audit (AA-855 W-01..W-04): the editor of the four synthetic audit tenants (lib/studio-audit.cjs), one per run.
-const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'crm'];
+// crm-rehearsal, crm-rehearsal-agent, crm-staff: the pilot rehearsal's agency owner and agent (pinned to
+// pilot-rehearsal-01 by the pilot guard) and the AA staff console's E2E user (root ADR 0006a A10c). They are only in the
+// rehearsal write set and the rehearsal scenarios (scenarios/crm/reh-*.cjs), never in the read-only dry-run set.
+const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'crm',
+  'crm-rehearsal', 'crm-rehearsal-agent', 'crm-staff'];
+const REHEARSAL_IDENTITIES = ['crm-rehearsal', 'crm-rehearsal-agent', 'crm-staff'];
 // Paths that reach a paid model or data provider: aborted in every dry-run scenario (record.cjs UAT_BLOCK_URLS), so a
 // dry run can never start one, even by a stray click. TripPlanner free-text search (embedding) and narration (chat
 // model), in both spellings (lib/botCheck.ts in AA-TripPlanner-Web); the writes among them are also non-GET.
@@ -16,11 +21,14 @@ const PAID_URLS = ['/api/browse/search(?:[?#]|$)', '/api/browse\\?(?:.*&)?resour
 // guard of record.cjs keeps those scenarios read-only, so they run only on an explicit --include-writable. The other
 // signed-in identities are refused writes by their backend too (403 e2e_read_only for the CIS / Booking E2E staff,
 // 403 studio_role_forbidden for the Content studio viewer). The studio editor can write too (AA-855).
-const WRITABLE_IDENTITIES = ['crm', 'studio-editor', 'studio-audit'];
+// The rehearsal owner and agent write like the review owner; the staff console user writes its own session rows and
+// can open break-glass (ADR 0006a A10c), so it counts as writable too.
+const WRITABLE_IDENTITIES = ['crm', 'studio-editor', 'studio-audit', 'crm-rehearsal', 'crm-rehearsal-agent', 'crm-staff'];
 // Exit code of a run stopped by the pilot guard (lib/pilot-guard.cjs EXIT_PILOT_GUARD).
 const EXIT_PILOT_GUARD = 5;
 // Order in which identities sign in: the cheap ones first, so a code-mail wait never delays the public pages.
-const SIGNIN_ORDER = ['public', 'studio', 'studio-editor', 'studio-audit', 'crm', 'cis-admin', 'booking'];
+const SIGNIN_ORDER = ['public', 'studio', 'studio-editor', 'studio-audit', 'crm', 'crm-rehearsal', 'crm-rehearsal-agent', 'cis-admin',
+  'crm-staff', 'booking'];
 
 /** Parse the runner's argv (without node and the script). Throws on an unknown option or a missing value. */
 function parseArgs(argv) {
@@ -316,6 +324,6 @@ function stamp(d = new Date()) {
 }
 
 module.exports = {
-  IDENTITIES, WRITABLE_IDENTITIES, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, parseArgs, describe, describeWrite, previewSteps, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
+  IDENTITIES, REHEARSAL_IDENTITIES, WRITABLE_IDENTITIES, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, parseArgs, describe, describeWrite, previewSteps, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
   renderMarkdown, renderTsv, stamp,
 };
