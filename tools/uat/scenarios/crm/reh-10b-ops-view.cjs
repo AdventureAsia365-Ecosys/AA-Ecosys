@@ -47,7 +47,7 @@ const sc = ro({
         await h.expect(link).toBeVisible({ timeout: 20_000 });
         await h.expect(link).toHaveAttribute('href', new RegExp(`/staff/ops/${R.AGENCY_ID}/${s.trip_id}`));
         const row = page.locator('[data-testid="staff-ops-board"] tr, [data-testid="staff-ops-board"] [data-testid="kit-datatable-row"]')
-          .filter({ has: link }).last();
+          .filter({ has: page.locator(`a[href*="${s.trip_id}"]`) }).last(); // `has` is relative to the row
         // The departure id wraps in its cell (break opportunities inside it): compare without whitespace / zero-width.
         await h.expect.poll(async () => flat(await row.innerText()), { timeout: 20_000 }).toContain(flat(s.departure.departure_id));
         await h.scrollTo(link);
