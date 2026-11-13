@@ -17,6 +17,10 @@ const PAID_URLS = ['/api/browse/search(?:[?#]|$)', '/api/browse\\?(?:.*&)?resour
 // signed-in identities are refused writes by their backend too (403 e2e_read_only for the CIS / Booking E2E staff,
 // 403 studio_role_forbidden for the Content studio viewer). The studio editor can write too (AA-855).
 const WRITABLE_IDENTITIES = ['crm', 'studio-editor', 'studio-audit'];
+// AA staff identities a write-set scenario may sign in: their backend refuses every write of the E2E session except a
+// short, named allow-list on synthetic tenants (cis-admin: the tenant offboarding erasure drill, root ADR 0006a A10b-5).
+// They stay in every dry run (read only there); a write-set scenario of theirs runs only by id with --include-writable.
+const WRITE_SET_STAFF = ['cis-admin'];
 // Exit code of a run stopped by the pilot guard (lib/pilot-guard.cjs EXIT_PILOT_GUARD).
 const EXIT_PILOT_GUARD = 5;
 // Order in which identities sign in: the cheap ones first, so a code-mail wait never delays the public pages.
@@ -87,7 +91,9 @@ function describeWrite(sc, file) {
   if (!sc || typeof sc !== 'object') throw new Error(`${file}: not a scenario module`);
   if (!sc.id || !sc.app || !Array.isArray(sc.steps) || !sc.steps.length) throw new Error(`${file}: id, app and steps are required`);
   const identity = sc.identity || 'public';
-  if (!WRITABLE_IDENTITIES.includes(identity)) throw new Error(`${file}: a write-set scenario signs in a writable identity (${WRITABLE_IDENTITIES.join(', ')})`);
+  if (!WRITABLE_IDENTITIES.includes(identity) && !WRITE_SET_STAFF.includes(identity)) {
+    throw new Error(`${file}: a write-set scenario signs in a writable identity (${[...WRITABLE_IDENTITIES, ...WRITE_SET_STAFF].join(', ')})`);
+  }
   if (sc.readOnly !== true) throw new Error(`${file}: a write-set scenario keeps the browser guard on (build it with rw())`);
   if (!Array.isArray(sc.allowWrites) || !sc.allowWrites.length) throw new Error(`${file}: a write-set scenario names the writes it makes (allowWrites)`);
   if (typeof sc.paid !== 'boolean') throw new Error(`${file}: a write-set scenario states paid: true or false`);
@@ -111,7 +117,8 @@ const matches = (e, opts) => (!opts.only || !opts.only.length || opts.only.inclu
 /**
  * The entries the options select, in manifest order. Unknown --only ids throw (a typo must not pass as "0 run").
  * Scenarios of a WRITABLE identity are left out unless opts.includeWritable; naming one explicitly (--only its id or
- * --identity crm) without the flag throws, so it is never skipped silently.
+ * --identity crm) without the flag throws, so it is never skipped silently. A write-set id needs the flag too, whatever
+ * its identity (a staff identity of WRITE_SET_STAFF writes only there).
  */
 function select(entries, opts) {
   const ids = new Set(entries.map((e) => e.id));
@@ -135,7 +142,7 @@ function select(entries, opts) {
   }
   if (!opts.includeWritable) {
     const named = [...(opts.identities || []).filter((x) => WRITABLE_IDENTITIES.includes(x)),
-      ...entries.filter((e) => (opts.only || []).includes(e.id) && WRITABLE_IDENTITIES.includes(e.identity)).map((e) => e.id)];
+      ...entries.filter((e) => (opts.only || []).includes(e.id) && (WRITABLE_IDENTITIES.includes(e.identity) || e.writeSet)).map((e) => e.id)];
     if (named.length) {
       throw new Error(`${named.join(', ')}: signs in an account that can write (no read-only role); add --include-writable to run it`);
     }
@@ -316,6 +323,6 @@ function stamp(d = new Date()) {
 }
 
 module.exports = {
-  IDENTITIES, WRITABLE_IDENTITIES, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, parseArgs, describe, describeWrite, previewSteps, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
+  IDENTITIES, WRITABLE_IDENTITIES, WRITE_SET_STAFF, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, parseArgs, describe, describeWrite, previewSteps, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
   renderMarkdown, renderTsv, stamp,
 };
