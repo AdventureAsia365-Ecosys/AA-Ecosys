@@ -45,22 +45,45 @@ async function studioCall(page, method, p, body) {
   }, { method, p, body });
 }
 
+const WRITE_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
+
 /**
- * A page route in front of the browser guard that lets at most `max` POSTs of each rule through and aborts the rest
- * before they leave the browser (a run never pays twice for the same model call, e.g. a retry click or a re-render).
- * rules = [{ name, path: RegExp on the URL pathname, max }]. Returns the live counts { name: n } (aborted ones too),
- * so a step can assert "exactly one". Register it in the first step, before any page loads.
+ * A page route in front of the browser guard that lets at most `max` requests of each rule through and aborts the rest
+ * before they leave the browser (a run never pays twice for the same model call, e.g. a retry click or a re-render,
+ * and never edits, publishes or deletes more than it means to).
+ * rules = [{ name, path: RegExp on the URL pathname, max, method = 'POST' }]: a rule counts and caps its own method
+ * only (POST, PUT, PATCH or DELETE). Reads pass. Another write method on the same path falls through to the next rule
+ * and then to the browser guard, which refuses it unless allowWrites names that method too (lib/net-guard.cjs
+ * compileAllow: "<METHOD> <regex>"). `max` is read when each request arrives, so a step may set it after a read (e.g.
+ * the number of live posts). Returns the live counts { name: n } (aborted ones too), so a step can assert "exactly
+ * one". Register it in the first step, before any page loads.
  */
 async function limitWrites(page, rules) {
   const counts = Object.fromEntries(rules.map((r) => [r.name, 0]));
   for (const r of rules) {
+    const method = String(r.method || 'POST').toUpperCase();
+    if (!WRITE_METHODS.includes(method)) throw new Error(`limitWrites ${r.name}: method ${method} is not a write`);
     await page.route((u) => r.path.test(u.pathname), (route) => {
-      if (route.request().method() !== 'POST') return route.fallback();
+      if (route.request().method().toUpperCase() !== method) return route.fallback();
       counts[r.name] += 1;
       return counts[r.name] <= r.max ? route.fallback() : route.abort('blockedbyclient');
     });
   }
   return counts;
+}
+
+/**
+ * Preview only (UAT_PREVIEW=1, $0): answer the free, storage-less POSTs on `paths` (RegExp on the pathname, e.g. the
+ * studio's live call-to-action check) inside the browser with `{}`, so a page that sends one on load does not trip the
+ * preview's empty allow-list. Nothing leaves the browser. Outside a preview it does nothing: the call goes out as an
+ * allowWrites entry. Returns true when the stub is on.
+ */
+async function stubFreeChecksInPreview(page, paths) {
+  if (process.env.UAT_PREVIEW !== '1') return false;
+  await page.route((u) => paths.some((re) => re.test(u.pathname)), (route) => (route.request().method() === 'POST'
+    ? route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
+    : route.fallback()));
+  return true;
 }
 
 /** The bytes of a Playwright download (the browser's temp file; Playwright removes it when the context closes). */
@@ -114,4 +137,4 @@ const AI_MARK = {
   docxKeywords: /<cp:keywords>[^<]*\bai-generated\b[^<]*<\/cp:keywords>/i,
 };
 
-module.exports = { rw, studioCall, limitWrites, downloadBytes, zipEntry, AI_MARK };
+module.exports = { rw, studioCall, limitWrites, stubFreeChecksInPreview, downloadBytes, zipEntry, AI_MARK };

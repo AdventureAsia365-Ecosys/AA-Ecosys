@@ -26,7 +26,7 @@ const sc = rw({
   allowWrites: R.allow('write', 'ctaCheck'),
   steps: [
     step('The writer opens on the article the owner started: the angle, the goal and the channel.',
-      'Trình viết mở bài mà chủ đại lý đã bắt đầu: góc tiếp cận, mục tiêu và kênh.',
+      'Người viết mở bài mà chủ đại lý đã bắt đầu: góc tiếp cận, mục tiêu và kênh.',
       async (page, h) => {
         counts = await limitWrites(page, [{ name: 'write', path: R.PATHS.write, max: 2 }]);
         await check(page, h, '/portal/content', { heading: 'My Content' });

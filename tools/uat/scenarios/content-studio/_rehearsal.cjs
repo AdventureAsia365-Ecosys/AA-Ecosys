@@ -29,8 +29,15 @@ const PATHS = {
   fbSave: /^\/api\/tenant\/v1\/integrations\/facebook$/,
   fbTest: /^\/api\/tenant\/v1\/integrations\/facebook\/test$/,
 };
-// allowWrites sources: record.cjs tests them on the full URL (origin + path, no query), so no leading ^.
-const allow = (...names) => names.map((n) => PATHS[n].source.replace(/^\^/, ''));
+// The one method each write uses (AA-Partner web: the viewer edit is a PATCH, Unpublish a DELETE, the rest POST). The
+// allow-list and limitWrites both pin it, so e.g. a DELETE (disconnect) on the integration path stays refused.
+const METHODS = { piece: 'PATCH', unpublish: 'DELETE' };
+const methodOf = (name) => METHODS[name] || 'POST';
+// allowWrites entries "<METHOD> <source>": record.cjs tests the source on the full URL (origin + path, no query), so
+// no leading ^; the method must match too (lib/net-guard.cjs compileAllow).
+const allow = (...names) => names.map((n) => `${methodOf(n)} ${PATHS[n].source.replace(/^\^/, '')}`);
+/** limitWrites rules for `names` (method from METHODS), each capped at `max(name)`. */
+const capRules = (names, max = () => 1) => names.map((name) => ({ name, path: PATHS[name], method: methodOf(name), max: max(name) }));
 const isCall = (res, re, method = 'POST') => res.request().method() === method && re.test(new URL(res.url()).pathname);
 
 async function getJson(page, p, what) {
@@ -95,8 +102,8 @@ function socialSteps(channel, label, state) {
     step(`Social Posts holds a topic list for each channel. The owner opens the ${label} tab.`,
       `Mục Bài mạng xã hội có danh sách chủ đề cho từng kênh. Chủ đại lý mở thẻ ${label}.`,
       async (page, h) => {
-        state.counts = await require('../../lib/uat-page.cjs').limitWrites(page, ['pick', 'goal', 'choose', 'write']
-          .map((name) => ({ name, path: PATHS[name], max: name === 'write' ? 2 : 1 })));
+        state.counts = await require('../../lib/uat-page.cjs').limitWrites(page,
+          capRules(['pick', 'goal', 'choose', 'write'], (name) => (name === 'write' ? 2 : 1)));
         await check(page, h, '/portal/create/social', { heading: 'Social Posts' });
         await h.expect(page.getByRole('button', { name: /^(Update topics|Updating…)$/ })).toBeVisible({ timeout: 30_000 });
         await h.expect(page.locator('[aria-busy="true"]')).toHaveCount(0, { timeout: 30_000 });
@@ -110,7 +117,7 @@ function socialSteps(channel, label, state) {
         }
       }),
     step('The owner picks the top topic. The writer asks for the goal of the post.',
-      'Chủ đại lý chọn chủ đề đứng đầu. Trình viết hỏi mục tiêu của bài.',
+      'Chủ đại lý chọn chủ đề đứng đầu. Người viết hỏi mục tiêu của bài.',
       async (page, h) => {
         const picked = page.waitForResponse((r) => isCall(r, PATHS.pick), { timeout: 60_000 });
         await h.click(page.getByRole('button', { name: 'Pick to write' }).first());
@@ -119,7 +126,7 @@ function socialSteps(channel, label, state) {
         await h.expect(panel(page)).toBeVisible({ timeout: 60_000 });
       }, { writes: true }),
     step('After the goal, the writer proposes three angles. This takes about a minute.',
-      'Sau khi chọn mục tiêu, trình viết đề xuất ba góc tiếp cận. Việc này mất khoảng một phút.',
+      'Sau khi chọn mục tiêu, người viết đề xuất ba góc tiếp cận. Việc này mất khoảng một phút.',
       async (page, h) => {
         const p = panel(page);
         const preferred = p.getByTestId('goal-introduction_awareness');
@@ -153,6 +160,6 @@ function socialSteps(channel, label, state) {
 }
 
 module.exports = {
-  IDENTITY, T, BRAND, PATHS, allow, isCall, getJson, quota, adopted, slate, publishLog, findTourX, readyPiece, panel,
+  IDENTITY, T, BRAND, PATHS, METHODS, methodOf, allow, capRules, isCall, getJson, quota, adopted, slate, publishLog, findTourX, readyPiece, panel,
   socialSteps, reh, W,
 };

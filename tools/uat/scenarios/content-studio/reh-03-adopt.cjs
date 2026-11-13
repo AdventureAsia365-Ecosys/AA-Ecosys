@@ -45,8 +45,8 @@ const sc = rw({
         await search.fill(x.aa_name);
         await h.expect(card(page, x.aa_name)).toBeVisible({ timeout: 30_000 });
       }),
-    step('Tour X shows its photo, its length and its price from Adventure Asia. The owner ticks it.',
-      'Tour X hiện ảnh, số ngày và giá của Adventure Asia. Chủ đại lý đánh dấu chọn tour này.',
+    step('The tour shows its photo, its length and its price from Adventure Asia. The owner selects it, unless the agency already has it.',
+      'Tour hiện ảnh, số ngày và giá của Adventure Asia. Chủ đại lý chọn tour này, trừ khi đại lý đã có tour này rồi.',
       async (page, h) => {
         const c = card(page, x.aa_name);
         await h.hover(c);
@@ -63,41 +63,46 @@ const sc = rw({
       'Thêm hai tour nữa để đại lý bắt đầu với ba tour. Mỗi tour sẽ được viết lại theo giọng của đại lý.',
       async (page, h) => {
         const search = page.getByRole('textbox', { name: 'Search tours by name' });
-        // The grid's own list read (first page, no search): the two more tours are chosen among the cards on screen.
-        const listed = page.waitForResponse((r) => new URL(r.url()).pathname === `${R.T}/tours/pool`
-          && !new URL(r.url()).searchParams.get('search') && r.request().method() === 'GET' && r.status() === 200, { timeout: 60_000 });
         await search.fill('');
-        const pool = await (await listed).json();
         await h.expect(page.getByTestId('marketplace-grid')).toBeVisible({ timeout: 30_000 });
+        // The catalog's first page read directly (the grid may answer from its 30 s query cache and send no request):
+        // the two more tours are the first free ones whose card is on screen once the search is cleared.
+        const pool = await R.getJson(page, `${R.T}/tours/pool?page=1&page_size=100`, 'the tour catalog');
         const picked = await R.adopted(page);
         const have = new Set(picked.map((t) => t.published_tour_id));
         const room = Math.max(0, TARGET - have.size - toStart.length);
         const free = (pool.data || []).filter((t) => t.id !== x.id && !have.has(t.id) && !t.already_rewritten
-          && !t.served_notice && (!t.served_status || t.served_status === 'served')).slice(0, room);
+          && !t.served_notice && (!t.served_status || t.served_status === 'served'));
+        // The grid has left the search result (one card) and shows the catalog's first page again.
+        await h.expect.poll(() => page.getByRole('checkbox', { name: /^Select / }).count(), { timeout: 30_000 }).toBeGreaterThan(1);
+        let added = 0;
         for (const t of free) {
+          if (added >= room) break;
           const box = tick(page, t.aa_name);
+          if (!(await box.isVisible({ timeout: 5_000 }).catch(() => false))) continue; // not on the grid's first page
           await h.scrollTo(box, 'center');
           await h.click(box);
           toStart.push(t);
+          added += 1;
         }
         if (have.size + toStart.length < TARGET) throw new Error(`only ${have.size + toStart.length} tours can be adopted on the first catalog page`);
         if (!toStart.length) throw new Error('the three tours are already adopted: nothing to rewrite (record the export only)');
         await h.expect(page.getByTestId('marketplace-bulk-bar')).toContainText(`${toStart.length} selected`, { timeout: 15_000 });
       }),
     step('Rewrite starts one rewrite per tour in the background. The usage meter counts each one.',
-      'Bấm Viết lại để bắt đầu viết lại từng tour ở chế độ nền. Đồng hồ hạn mức tính từng lượt.',
+      'Bấm Viết lại để bắt đầu viết lại từng tour ở chế độ nền. Thanh hạn mức cộng thêm một lượt cho mỗi tour.',
       async (page, h) => {
         const bar = page.getByTestId('marketplace-bulk-bar');
         await h.scrollTo(bar, 'center');
         const label = toStart.length === 1 ? 'Rewrite 1 tour' : `Rewrite ${toStart.length} tours`;
         await h.click(bar.getByRole('button', { name: label }));
-        await h.expect(page.getByText(/rewrites? started\. Follow (it|them) here or in My Tours\./).first()).toBeVisible({ timeout: 90_000 });
+        await h.expect(page.getByText(/rewrites? started\. Follow (it|them) here or in My Tours\./i).first()).toBeVisible({ timeout: 90_000 });
         if (counts.rewrite !== toStart.length) throw new Error(`${counts.rewrite} rewrite requests for ${toStart.length} tours`);
         await h.expect.poll(async () => Number((await R.quota(page)).rewrites_used) - used0, { timeout: 60_000, intervals: [3_000] })
           .toBe(toStart.length);
       }, { writes: true }),
-    step('My Tours follows tour X while the writer works on it. A rewrite takes a few minutes.',
-      'Tour của tôi theo dõi tour X trong lúc người viết làm việc. Mỗi lần viết lại mất vài phút.',
+    step('My Tours shows the progress of the first tour while it is rewritten. A rewrite takes a few minutes.',
+      'Mục Tour của tôi cho thấy tiến độ của tour đầu tiên trong lúc tour được viết lại. Mỗi lần viết lại mất vài phút.',
       async (page, h) => {
         await h.goto(`/portal/tours/mine?tour_id=${encodeURIComponent(x.tour_id)}`);
         await h.expect(page.locator('h1').first()).toContainText('My Tours', { timeout: 30_000 });

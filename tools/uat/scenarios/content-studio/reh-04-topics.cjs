@@ -9,7 +9,7 @@
 // Given: the rehearsal owner, three adopted tours. When: Articles -> Update topics -> wait -> Pick to write -> goal ->
 //        Generate 3 angles -> Write with this angle. Then: the writer panel shows the article being written. 1440 x 900.
 const { HOSTS, step, check } = require('../../lib/dryrun-page.cjs');
-const { rw, limitWrites } = require('../../lib/uat-page.cjs');
+const { rw, limitWrites, stubFreeChecksInPreview } = require('../../lib/uat-page.cjs');
 const R = require('./_rehearsal.cjs');
 
 const { reh, W } = R;
@@ -31,8 +31,9 @@ const sc = rw({
     step('Articles ranks blog topics from what travellers search for and what the agency\'s tours offer.',
       'Mục Bài viết xếp hạng chủ đề blog theo điều khách tìm kiếm và điều các tour của đại lý có.',
       async (page, h) => {
-        counts = await limitWrites(page, ['refresh', 'pick', 'goal', 'choose', 'write']
-          .map((name) => ({ name, path: R.PATHS[name], max: name === 'write' ? 2 : 1 })));
+        counts = await limitWrites(page, R.capRules(['refresh', 'pick', 'goal', 'choose', 'write'], (name) => (name === 'write' ? 2 : 1)));
+        // A preview sends no write: the free call-to-action check a page may run on load is answered in the browser.
+        await stubFreeChecksInPreview(page, [R.PATHS.ctaCheck]);
         sc.meta = sc.meta || {};
         await check(page, h, '/portal/create/article', { heading: 'Articles' });
         await h.expect(page.getByRole('button', { name: /^(Update topics|Updating…)$/ })).toBeVisible({ timeout: 30_000 });
@@ -85,7 +86,7 @@ const sc = rw({
         await h.expect(page.getByRole('button', { name: PICK }).first()).toBeVisible({ timeout: 30_000 });
       }),
     step('The owner picks the top topic. The writer asks for the goal, then proposes three angles. This takes about a minute.',
-      'Chủ đại lý chọn chủ đề đứng đầu. Trình viết hỏi mục tiêu, rồi đề xuất ba góc tiếp cận. Việc này mất khoảng một phút.',
+      'Chủ đại lý chọn chủ đề đứng đầu. Người viết hỏi mục tiêu, rồi đề xuất ba góc tiếp cận. Việc này mất khoảng một phút.',
       async (page, h) => {
         const picked = page.waitForResponse((r) => R.isCall(r, R.PATHS.pick), { timeout: 60_000 });
         await h.click(page.getByRole('button', { name: PICK }).first());
@@ -104,11 +105,17 @@ const sc = rw({
     step('Each angle says why it works. One is recommended; the agency always chooses.',
       'Mỗi góc nói vì sao hiệu quả. Một góc được đề xuất; đại lý luôn là người chọn.',
       async (page, h) => {
+        const p = R.panel(page);
         for (const i of [0, 1, 2]) {
-          const c = R.panel(page).getByTestId(`angle-${i}`);
+          const c = p.getByTestId(`angle-${i}`);
           await h.scrollTo(c, 'center');
           await h.hover(c);
+          // "Why it works:" followed by the angle's own reason (not an empty line).
+          await h.expect(c).toContainText(/Why it works:\s*\S/);
         }
+        const badges = p.locator('[data-testid^="angle-"]').filter({ has: page.getByText('Recommended', { exact: true }) });
+        await h.expect(badges).toHaveCount(1);
+        await h.hover(badges.first());
       }),
     step('Write with this angle starts the article at once. The next scenario follows the writing. This is the end of the scenario.',
       'Viết theo góc này sẽ bắt đầu viết bài ngay. Kịch bản sau theo dõi phần viết. Kết thúc kịch bản.',
