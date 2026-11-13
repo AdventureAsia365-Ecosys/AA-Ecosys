@@ -2,7 +2,7 @@
 
 *13/11/2026, ảnh chụp cho tech lead. Chụp trên máy local trước khi merge: `next dev` của nhánh code CIS chạy với một API
 giả (dữ liệu bịa, nhân viên "Linh Tran" là tên bịa), các định nghĩa và phần giải thích lấy từ `compiled_defaults.json`
-của nhánh migration CIS 417 (lượt đầu đánh số 415; lượt sửa đổi sang 417). Trang staff CIS chưa kiểm được trên Dev trước khi merge (skill aa-ui-verify); sau deploy
+của nhánh migration CIS 416 (lượt đầu đánh số 415; lượt sửa đổi sang 417; lượt tiếp tục 13/11 chốt 416). Trang staff CIS chưa kiểm được trên Dev trước khi merge (skill aa-ui-verify); sau deploy
 cần chụp lại bằng phiên E2E admin.*
 
 Phản hồi của tech lead: "các ngưỡng ở Settings nhìn khó hiểu, phải giải thích hay định nghĩa là gì thì mới biết khi
@@ -58,8 +58,17 @@ không đổi).
 
 ## Kiểm sau deploy (live_steps)
 
-- Migration CIS 414-417 được Migration Apply áp (class contract, theo thứ tự), rồi deploy CIS api + admin.
-- Platform › Settings: mỗi khoá có dòng "điều chỉnh gì" và nút Explain mở đủ 5 phần (184 khoá CIS + 17 khoá
+- Migration CIS 416 được Migration Apply áp (class contract; 412-415 đã có trên Dev), rồi deploy CIS api + admin.
+- Platform › Settings: mỗi khoá có dòng "điều chỉnh gì" và nút Explain mở đủ 5 phần (179 khoá CIS + 17 khoá
   TripPlanner).
 - Hộp thoại Change của "Blog length per source word": gõ `3,364`, không có lỗi (không lưu).
 - Booking › Pricing › Policy: mỗi tham số có phần giải thích (39 tham số).
+
+## Lượt tiếp tục (13/11/2026, sau khi main có CIS 412-415)
+
+- Nhánh migration merge main (CIS 412-415 đã áp trên Dev, code chất lượng và saga đã merge). Migration giải thích đổi số
+  417 → 416 và chỉ phủ khoá đã có trên main: 28 + 151 + 17 = 196 khoá, khoá nào cũng có nhãn dễ đọc và giải thích
+  EN + VI (lint với baseline rỗng xanh).
+- 5 khoá bài thử bộ kiểm khẳng định (lane l22) rời nhánh này; lane đó ship sau dưới số 417 và tự mang giải thích trên
+  dòng seed (chữ đã viết ở lượt sửa đầu của lane này, đã giao lại cho lane đó).
+- Giao diện không đổi, nên không chụp lại ảnh.
