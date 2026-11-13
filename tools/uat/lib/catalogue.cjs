@@ -17,7 +17,8 @@ const KINDS = ['uat', 'guide', 'release', 'regression', 'data'];
 // The dry-run identities (lib/dryrun-core.cjs) plus the ones only plans name yet: the CRM assistant, a traveller on the
 // client host, several identities in one story, and a story recorded by hand.
 // booking-staff / booking-maker / booking-checker: the Booking E2E writers (root ADR 0006a A10e), write set only.
-const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'crm', 'crm-assistant', 'traveller', 'multi', 'manual',
+// studio-rehearsal: the E2E owner of the pilot rehearsal agency in the Content studio (AA-1086), write set only.
+const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'studio-rehearsal', 'crm', 'crm-assistant', 'traveller', 'multi', 'manual',
   'booking-staff', 'booking-maker', 'booking-checker'];
 const REQUIRED = { id: 'string', app: 'string', module: 'string', story: 'string', roles: 'array', kinds: 'array', covers: 'array',
   screens: 'array', status: 'string', round: 'round', identity: 'string', writes: 'boolean', paid: 'boolean' };

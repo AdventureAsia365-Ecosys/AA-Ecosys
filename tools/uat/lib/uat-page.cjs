@@ -103,6 +103,20 @@ async function limitWrites(page, rules) {
   return counts;
 }
 
+/**
+ * Preview only (UAT_PREVIEW=1, $0): answer the free, storage-less POSTs on `paths` (RegExp on the pathname, e.g. the
+ * studio's live call-to-action check) inside the browser with `{}`, so a page that sends one on load does not trip the
+ * preview's empty allow-list. Nothing leaves the browser. Outside a preview it does nothing: the call goes out as an
+ * allowWrites entry. Returns true when the stub is on.
+ */
+async function stubFreeChecksInPreview(page, paths) {
+  if (process.env.UAT_PREVIEW !== '1') return false;
+  await page.route((u) => paths.some((re) => re.test(u.pathname)), (route) => (route.request().method() === 'POST'
+    ? route.fulfill({ status: 200, contentType: 'application/json', body: '{}' })
+    : route.fallback()));
+  return true;
+}
+
 /** The bytes of a Playwright download (the browser's temp file; Playwright removes it when the context closes). */
 async function downloadBytes(download) {
   const file = await download.path();
@@ -154,4 +168,4 @@ const AI_MARK = {
   docxKeywords: /<cp:keywords>[^<]*\bai-generated\b[^<]*<\/cp:keywords>/i,
 };
 
-module.exports = { rw, studioCall, limitWrites, WRITE_METHODS, downloadBytes, zipEntry, AI_MARK };
+module.exports = { rw, studioCall, limitWrites, WRITE_METHODS, stubFreeChecksInPreview, downloadBytes, zipEntry, AI_MARK };

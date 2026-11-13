@@ -143,6 +143,10 @@ node tools/uat/dryrun.cjs --record W-04 --include-writable   # W-04 chỉ đọc
   khi token gần hết hạn (proxy làm mới) và mở lại yêu cầu.
 - Mỗi lệnh ghi qua `limitWrites()` (`lib/uat-page.cjs`): tối đa 1 lần (write tối đa 2 khi lần đầu 422 thiếu CTA),
   lệnh thừa bị huỷ trước khi rời trình duyệt. Bước có thể ghi đánh `step(..., { writes: true })`.
+  Mỗi rule giới hạn đúng một method (`method`, mặc định POST; PATCH / PUT / DELETE cũng phải có rule), và `allowWrites`
+  ghi `"<METHOD> <regex>"` để chỉ cho đúng method đó (`lib/net-guard.cjs` `compileAllow`; regex trần = mọi method).
+- Studio của owner đại lý rehearsal: tech lead mời owner (Tenant 360 › Members › Invite, role owner) rồi
+  `node tools/uat/accept-owner-invite.cjs --since <ISO trước lúc mời>` nhận lời mời từ hộp thư e2e (tài khoản có sẵn).
 - Thứ tự quay: W-01 riêng; W-02 (chọn chủ đề + góc, bài bắt đầu viết) → W-03 ngay sau (theo dõi tới khi bài giao) →
   W-04 (xuất HTML có dấu AI + bài mạng xã hội). Bàn giao id qua `work/uat-write-chain.json`, thiếu thì đọc lại Dev.
 

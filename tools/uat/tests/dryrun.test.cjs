@@ -86,7 +86,7 @@ test('select: naming a writable-identity scenario without --include-writable thr
   assert.throws(() => core.select(SET, { only: ['CRM-01'] }), /CRM-01: signs in an account that can write.*--include-writable/);
   assert.throws(() => core.select(SET, { identities: ['crm'] }), /crm: signs in an account that can write/);
   assert.deepEqual(core.select(SET, { only: ['CRM-01'], includeWritable: true }).map((e) => e.id), ['CRM-01']);
-  assert.deepEqual(core.WRITABLE_IDENTITIES, ['crm', 'studio-editor', 'studio-audit', 'booking-staff', 'booking-maker', 'booking-checker', 'traveller']);
+  assert.deepEqual(core.WRITABLE_IDENTITIES, ['crm', 'studio-editor', 'studio-audit', 'studio-rehearsal', 'booking-staff', 'booking-maker', 'booking-checker', 'traveller']);
 });
 
 test('select: an id with a lower-case part (split letter, phone variant) is found from the upper-cased --only', () => {
