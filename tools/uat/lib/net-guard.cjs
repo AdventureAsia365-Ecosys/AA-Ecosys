@@ -11,10 +11,16 @@ const TELEMETRY = [/\/_vercel\//, /\/monitoring(?:[?#]|$)/, /sentry/i, /^https:\
 // /api/auth/refresh on every admin page load). Still aborted (a refresh could rotate the saved session's refresh token);
 // the page keeps its session (the keep-alive retries in a minute, navigations refresh through GET in proxy.ts).
 const SESSION = [/\/api\/auth\/refresh(?:[?#]|$)/];
+// The AWS WAF silent JavaScript Challenge (pilot rehearsal, S279): a planner page of TripPlanner answers its first
+// document load with the web ACL's challenge page, whose script POSTs its proof to AWS WAF's token host and reloads
+// with the aws-waf-token cookie. No app data: let it through in a read-only run too, or no planner page ever loads.
+const CHALLENGE_PROOF = [/^https:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*\.token\.awswaf\.com\//];
 // Hosts that count as the app itself, besides the scenario's own base URL host.
 const FIRST_PARTY = /(^|\.)lumiguides\.it\.com$/;
 
 const isRead = (method) => READ_METHODS.includes(String(method || 'GET').toUpperCase());
+/** A web ACL challenge proof (not a write to any app): passed through by the read-only guard. */
+const isChallengeProof = (url) => CHALLENGE_PROOF.some((r) => r.test(String(url)));
 
 /**
  * Kind of an aborted non-read request: 'write' (a write to the app: fails a read-only scenario) or 'other'
@@ -58,4 +64,4 @@ function guardRequestContext(rq, { allow = [], onBlocked = () => {} } = {}) {
   return rq;
 }
 
-module.exports = { READ_METHODS, TELEMETRY, SESSION, isRead, classify, guardRequestContext };
+module.exports = { READ_METHODS, TELEMETRY, SESSION, CHALLENGE_PROOF, isRead, isChallengeProof, classify, guardRequestContext };

@@ -46,7 +46,7 @@ const MIN_HOLD_MS = 2500;
 // Link tokens travel in URL path segments and query values: never write one to timeline.json / result.json / logs.
 // (A uuid is an object id, not a credential: kept for debugging.)
 // Same rule as the dry-run report (lib/dryrun-core.cjs): also masks AWS ARNs and 12-digit account numbers.
-const { redact } = require('./lib/dryrun-core.cjs');
+const { redact, blockSources } = require('./lib/dryrun-core.cjs');
 const TAIL_PAD_MS = 600;
 // Which aborted request is a write to the app (fails a read-only scenario) and which is telemetry / session upkeep /
 // third party (listed apart): lib/net-guard.cjs.
@@ -138,7 +138,8 @@ async function main() {
   const blockedOther = [];
   // The dry-run runner forces both for every scenario it starts: UAT_READ_ONLY=1, UAT_BLOCK_URLS=<JSON regex list>.
   const readOnly = !!sc.readOnly || process.env.UAT_READ_ONLY === '1';
-  const blockSrc = [...(sc.blockUrls || []), ...JSON.parse(process.env.UAT_BLOCK_URLS || '[]')];
+  // A paid take may open only the paid paths its scenario names (allowPaidUrls); the rest of the runner's list holds.
+  const blockSrc = blockSources(sc);
   if (readOnly || blockSrc.length) {
     const allow = (sc.allowWrites || []).map((x) => new RegExp(x));
     const block = blockSrc.map((x) => new RegExp(x));
@@ -150,7 +151,8 @@ async function main() {
         blockedUrls.push(redact(`${req.method()} ${where()}`));
         return route.abort('blockedbyclient');
       }
-      if (readOnly && !guard.isRead(req.method()) && !allow.some((r) => r.test(url))) {
+      // The AWS WAF challenge proof carries no app data (lib/net-guard.cjs): it always goes on, preview included.
+      if (readOnly && !guard.isRead(req.method()) && !allow.some((r) => r.test(url)) && !guard.isChallengeProof(url)) {
         // Aborted either way; only a write to the app itself fails the scenario. Telemetry beacons (map events, error
         // reports, Vercel analytics), the staff session keep-alive and third-party posts are listed apart.
         (guard.classify(url, sc.baseURL) === 'write' ? blockedWrites : blockedOther).push(redact(`${req.method()} ${where()}`));
