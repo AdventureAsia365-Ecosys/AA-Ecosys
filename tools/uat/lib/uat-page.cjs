@@ -45,17 +45,32 @@ async function studioCall(page, method, p, body) {
   }, { method, p, body });
 }
 
+/** The write methods a limitWrites rule caps: `method` is one method, a list, or '*' (every non-read method). */
+function ruleMethods(r) {
+  const m = r.method === undefined ? 'POST' : r.method;
+  if (m === '*') return null;
+  const list = [].concat(m).map((x) => String(x).toUpperCase());
+  if (!list.length || list.some((x) => ['GET', 'HEAD', 'OPTIONS'].includes(x))) {
+    throw new Error(`limitWrites rule ${r.name}: method must be POST, PUT, PATCH, DELETE (or a list of them, or '*')`);
+  }
+  return list;
+}
+
 /**
- * A page route in front of the browser guard that lets at most `max` POSTs of each rule through and aborts the rest
- * before they leave the browser (a run never pays twice for the same model call, e.g. a retry click or a re-render).
- * rules = [{ name, path: RegExp on the URL pathname, max }]. Returns the live counts { name: n } (aborted ones too),
- * so a step can assert "exactly one". Register it in the first step, before any page loads.
+ * A page route in front of the browser guard that lets at most `max` writes of each rule through and aborts the rest
+ * before they leave the browser (a run never pays twice for the same model call, a retry click or a re-render never
+ * creates, mails or deletes twice). rules = [{ name, path: RegExp on the URL pathname, max, method? }]: `method` is
+ * 'POST' (the default), 'PUT', 'PATCH', 'DELETE', a list of them, or '*' for every non-read method. A request whose
+ * method the rule does not cap falls through to the next rule and then the guard. Returns the live counts { name: n }
+ * (aborted ones too), so a step can assert "exactly one". Register it in the first step, before any page loads.
  */
 async function limitWrites(page, rules) {
   const counts = Object.fromEntries(rules.map((r) => [r.name, 0]));
   for (const r of rules) {
+    const methods = ruleMethods(r);
     await page.route((u) => r.path.test(u.pathname), (route) => {
-      if (route.request().method() !== 'POST') return route.fallback();
+      const m = route.request().method().toUpperCase();
+      if (methods ? !methods.includes(m) : ['GET', 'HEAD', 'OPTIONS'].includes(m)) return route.fallback();
       counts[r.name] += 1;
       return counts[r.name] <= r.max ? route.fallback() : route.abort('blockedbyclient');
     });

@@ -4,11 +4,14 @@
 // When:  the agent starts the day-by-day builder in USD, adds the agency's own hotel on night 1, puts tour X (an
 //        Adventure Asia line, live quote from Booking) on day 2 for the chosen departure, writes what is included and not
 //        included, sets the balance date, gives a discount above the agency's limit and asks the owner to approve it.
-// Then:  the AA option comes back with a net cost (the Booking quote for the agency's tier) and its availability; the
+// Then:  the builder has the trip's days (tour X's days + the arrival day); the AA option names tour X and the chosen
+//        departure and comes back with a net cost (the Booking quote for the agency's tier) and its availability; the
 //        inclusion lists are saved; the discount needs the owner (badge, "discount_needs_approval" blocks Publish, the
 //        Publish button is disabled for the agent); the request is pending and the owner has an urgent task.
-// Writes: one builder draft on the rehearsal trip (start, two options, one block, inclusions, settings, the discount)
-// and one discount approval request. Adding an AA option takes no seat (only a client hold does). REH-07b-approve
+// Writes (method and path allowed, each capped at the count the steps need): POST trips/<id>/builder (1), POST
+// blocks/<id>/options (1), POST days/<id>/blocks (1), POST blocks/<id>/aa-options (1), PUT inclusions (1), PATCH
+// builder (2: balance date, discount), POST discount-approval (1); no DELETE, no reorder. That is one builder draft
+// on the rehearsal trip and one discount approval request. Adding an AA option takes no seat (only a client hold does). REH-07b-approve
 // follows. No LLM call, no AI button. Cost $0.
 const R = require('./_reh.cjs');
 
@@ -28,12 +31,28 @@ module.exports = R.scenario({
   titleVi: 'Diễn tập: nhân viên tư vấn báo giá tour Adventure Asia cùng dịch vụ riêng của đại lý',
   // Start the builder, then the draft's own writes: builder (PATCH: settings, discount), blocks, options, aa-options,
   // inclusions, discount-approval (the request). Never publish or send (the agent cannot publish this one anyway).
-  allowWrites: R.bffWrites(`trips/${R.UUID}/builder`, `proposals/${R.UUID}/(?:builder|blocks|options|days|inclusions|discount-approval)(?:/[a-z0-9/_-]*)?`),
+  allowWrites: R.bffWrites(
+    ['POST', `trips/${R.UUID}/builder`],
+    ['POST', `proposals/${R.UUID}/blocks/${R.UUID}/(?:options|aa-options)`],
+    ['POST', `proposals/${R.UUID}/days/${R.UUID}/blocks`],
+    ['PUT', `proposals/${R.UUID}/inclusions`],
+    ['PATCH', `proposals/${R.UUID}/builder`],
+    ['POST', `proposals/${R.UUID}/discount-approval`],
+  ),
   steps: [
     step('The agent opens the trip the owner handed over. It is at Proposal, with the dates set.',
       'Nhân viên tư vấn mở chuyến chủ đại lý vừa giao. Chuyến đang ở Proposal, đã có ngày đi.',
       async (page, h) => {
-        s = R.need(R.load(), ['trip_id', 'departure', 'adults', 'r06_done_at'], 'REH-06-lead');
+        module.exports.meta.writes = await R.cap(page, [
+          ['start', 'POST', R.bffPath(`trips/${R.UUID}/builder`), 1],
+          ['own_option', 'POST', R.bffPath(`proposals/${R.UUID}/blocks/${R.UUID}/options`), 1],
+          ['block', 'POST', R.bffPath(`proposals/${R.UUID}/days/${R.UUID}/blocks`), 1],
+          ['aa_option', 'POST', R.bffPath(`proposals/${R.UUID}/blocks/${R.UUID}/aa-options`), 1],
+          ['inclusions', 'PUT', R.bffPath(`proposals/${R.UUID}/inclusions`), 1],
+          ['settings', 'PATCH', R.bffPath(`proposals/${R.UUID}/builder`), 2],
+          ['approval', 'POST', R.bffPath(`proposals/${R.UUID}/discount-approval`), 1],
+        ]);
+        s = R.need(R.load(), ['trip_id', 'departure', 'adults', 'trip_days', 'r06_done_at'], 'REH-06-lead');
         await R.sha(page, module.exports, 'start');
         await R.openTrip(page, h, s.trip_id);
         const m = await R.me(page, 'agent');
@@ -61,6 +80,8 @@ module.exports = R.scenario({
         const v = await view(page);
         h.expect(v.status).toBe('draft');
         await h.expect(page.getByTestId('builder-day')).toHaveCount(v.days.length);
+        // Same tour at every stage (runbook "Tour X"): day 0 is Before you go, days 1..n the trip (tour X + arrival).
+        h.expect(v.days.filter((d) => d.day_no >= 1).length, 'the builder has the trip\'s days').toBe(s.trip_days);
       }, { writes: true }),
     step('For the first night she adds the agency\'s own hotel, with its selling price and net cost.',
       'Cho đêm đầu, chị thêm khách sạn riêng của đại lý, với giá bán và giá vốn.',
@@ -100,8 +121,8 @@ module.exports = R.scenario({
         await h.click(block.getByRole('button', { name: '+ Add' }));
         const drawer = block.getByTestId('builder-drawer');
         await h.click(drawer.getByRole('button', { name: 'AA inventory' }));
-        const words = String(s.departure.tour_title || '').split(/\s+/).filter(Boolean).slice(0, 3).join(' ');
-        await R.type(page, h, drawer.getByTestId('builder-aa-search'), words || s.departure.tour_source_id);
+        const words = String(s.departure.tour_title).split(/\s+/).filter(Boolean).slice(0, 3).join(' ');
+        await R.type(page, h, drawer.getByTestId('builder-aa-search'), words);
         await h.click(drawer.getByRole('button', { name: 'Search', exact: true }));
         const tour = drawer.getByTestId('builder-aa-tour');
         await h.expect(tour.locator(`option[value="${s.departure.tour_source_id}"]`)).toHaveCount(1, { timeout: 30_000 });
@@ -131,6 +152,8 @@ module.exports = R.scenario({
         const v = await view(page);
         const aa = v.days.flatMap((d) => d.blocks).flatMap((b) => b.options).find((o) => o.source === 'aa');
         h.expect(aa, 'an AA option').toBeTruthy();
+        h.expect(aa.aa && aa.aa.tour_source_id, 'the AA option is tour X').toBe(s.departure.tour_source_id);
+        h.expect(aa.aa && aa.aa.departure_id, 'on the chosen departure').toBe(s.departure.departure_id);
         h.expect(aa.net_amount, 'the Booking quote (net) is on the option').not.toBeNull();
         h.expect(['instant', 'on_request']).toContain(aa.availability);
         s = R.save({ aa_option: { option_id: aa.option_id || aa.proposal_option_id || null, net_amount: aa.net_amount, currency: v.currency || 'USD', availability: aa.availability } });
@@ -178,9 +201,11 @@ module.exports = R.scenario({
       'Để chốt khách, chị đưa mức giảm giá cao hơn giới hạn của đại lý. Trình dựng báo rằng chủ đại lý phải duyệt trước.',
       async (page, h) => {
         let v = await view(page);
+        // The limit is the agency's own (Settings > Pricing; a new agency starts with the settings registry's
+        // crm.agency_defaults.discount_owner_limit_pct): read live, never a literal. 100 is the builder's validation bound.
         const limit = Number(v.pricing.discount.limit_pct);
-        const pct = Math.min(limit + 5, 50);
-        if (pct <= limit) throw new Error(`the agency's discount limit is ${limit} %: no discount above it can be rehearsed`);
+        const pct = limit + 5;
+        if (!(pct <= 100)) throw new Error(`the agency's discount limit is ${limit} %: no discount above it can be rehearsed`);
         const box = page.getByTestId('builder-discount');
         await h.scrollTo(box);
         if (Number(v.pricing.discount.discount_pct || 0) !== pct) {

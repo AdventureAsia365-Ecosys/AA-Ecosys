@@ -8,7 +8,9 @@
 // Then:  the row is confirmed with a booking id, its quoted price equals the net of the AA option the agent added
 //        (the Booking quote for the agency's tier); the trip line is confirmed; the portal link is kept in
 //        work/rehearsal/.crm-secrets.json (r10_link with its trip id) for REH-10-portal.
-// Writes: one portal access link for the lead traveller, on the rehearsal trip only. Everything else reads. A tour that
+// Writes (method and path allowed, capped at 1): POST trips/<id>/portal-access (one portal access link for the lead
+// traveller, which mails the lead), plus the address search, on the rehearsal trip only; step 4 first proves the lead's
+// address is the invented hand-off one (R.checkTraveller). Everything else reads. A tour that
 // AA has not confirmed yet stops the step with that reason (record again after the Booking step). No LLM call. $0.
 const R = require('./_reh.cjs');
 
@@ -20,11 +22,15 @@ module.exports = R.scenario({
   id: 'REH-08c-aa-confirmed',
   title: 'Rehearsal: Adventure Asia confirms the tour and the agency sees it',
   titleVi: 'Diễn tập: Adventure Asia xác nhận tour và đại lý thấy kết quả',
-  allowWrites: R.bffWrites(`trips/${R.UUID}/portal-access`),
+  allowWrites: R.bffWrites(['POST', `trips/${R.UUID}/portal-access`], R.searchWrite),
   steps: [
     step('The owner opens Bookings with AA: every Adventure Asia booking of the agency, read live from Adventure Asia.',
       'Chủ đại lý mở Bookings with AA: mọi đặt chỗ của đại lý với Adventure Asia, đọc trực tiếp từ Adventure Asia.',
       async (page, h) => {
+        module.exports.meta.writes = await R.cap(page, [
+          ['portal_access', 'POST', R.bffPath(`trips/${R.UUID}/portal-access`), 1],
+          ['search', 'POST', R.bffPath('travelers/search'), R.SEARCH_CAP],
+        ]);
         s = R.need(R.load(), ['trip_id', 'lead_name', 'aa_line', 'aa_option', 'r08b_done_at'], 'REH-08b-deposit');
         await R.sha(page, module.exports, 'start');
         await R.open(page, h, '/aa-bookings', 'crm-aa-bookings');
@@ -72,6 +78,7 @@ module.exports = R.scenario({
         const tab = page.getByTestId('trip-proposal');
         const prow = tab.getByTestId('portal-row').filter({ hasText: s.lead_name }).first();
         await h.scrollTo(prow);
+        await R.checkTraveller(page, s); // mail guard: the portal link is mailed to the lead
         await h.click(prow.getByRole('button', { name: /portal link/i }));
         const link = await tab.getByTestId('proposal-copy-link').first().inputValue({ timeout: 20_000 });
         if (!/\/c\/[a-z]+\/[A-Za-z0-9_-]{30,}$/.test(link)) throw new Error('the portal link has an unexpected shape');

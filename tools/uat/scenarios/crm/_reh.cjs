@@ -18,13 +18,22 @@
 //   UAT_REH_TOUR_X     / tour_x      the CIS source id of tour X (runbook "Tour X": a sellable trip plan with an open
 //                                    fixed departure); the CRM looks it up through AA (GET /bff/aa/products/<id>)
 //   UAT_REH_LEAD_NAME  / lead_name   the invented traveller name the TripPlanner step 6 sent to the agency
+//   UAT_REH_TRAVELLER_EMAIL / traveller_email   the invented address the TripPlanner step 6 sent (the TripPlanner
+//                                    group's variable and default, rehearsal.traveller@example.invalid)
+// Agency setup on the fresh pilot-rehearsal-01 seed (scenarios/crm/REHEARSAL.md): the seed adds the agency and its
+// members only. Before REH-06, REH-02b-agency-setup (owner, in the UI) saves the bank-transfer instructions and
+// publishes booking terms and a waiver; REH-08b step 3 and REH-10 step 5 fail without them.
+// Mail guard: before any step that makes the CRM mail the traveller (proposal send, the deposit's portal invites, the
+// portal link, the portal sign-in and signing codes), checkTraveller() proves the trip's lead address is the hand-off
+// address and that it is on an invented domain (*.invalid, or the E2E mailbox domain), and that no other traveller of
+// the trip has an address; otherwise the step stops before the click.
 // Run state between the scenarios: work/rehearsal/crm.json (ids only). The client and portal links: work/rehearsal/
 // .crm-secrets.json (chmod 600), each kept with its trip id; never in a log, a caption or result.json.
 'use strict';
 const fs = require('fs');
 const path = require('path');
 const crm = require('../../lib/crm-signin.cjs');
-const { rw } = require('../../lib/uat-page.cjs');
+const { rw, limitWrites } = require('../../lib/uat-page.cjs');
 const { step, DESKTOP, PHONE } = require('../../lib/dryrun-page.cjs');
 const { REHEARSAL_AGENCY, CRM_NAMESPACE, uuid5 } = require('../../lib/pilot-guard.cjs');
 const { REAL_ADDRESS, sha, bff, bffOk, waitForCard, type, choose, day, reuse } = require('./_crm.cjs');
@@ -86,7 +95,53 @@ function handoff() {
   return {
     tour_x: (process.env.UAT_REH_TOUR_X || f.tour_x || '').trim() || null,
     lead_name: (process.env.UAT_REH_LEAD_NAME || f.lead_name || '').trim() || null,
+    // Same variable and default as the TripPlanner group's step 6 (scenarios/tripplanner/_rehearsal.cjs).
+    traveller_email: (process.env.UAT_REH_TRAVELLER_EMAIL || f.traveller_email || 'rehearsal.traveller@example.invalid').trim(),
   };
+}
+
+// ── mail guard: the traveller's address must be an invented one ──────────────────────────────────────────────────
+
+// Domains that never reach a person: the reserved .invalid TLD (RFC 2606; the runbook's example.invalid) and the E2E
+// mailbox domain, whose mail lands only in the E2E S3 bucket.
+const INVENTED_DOMAINS = [/(^|\.)invalid$/, /^e2e-mail\.lumiguides\.it\.com$/];
+
+/** True when `addr` is one e-mail address on an invented domain. */
+function inventedAddress(addr) {
+  const m = /^[^@\s]+@([^@\s]+)$/.exec(String(addr || '').trim().toLowerCase());
+  return !!m && INVENTED_DOMAINS.some((r) => r.test(m[1]));
+}
+
+/**
+ * Stop before a step that makes the CRM mail the trip's travellers unless every address it would mail is invented.
+ * On a CRM page (live): the hand-off address is invented, a blind-index search for it (POST travelers/search, an exact
+ * e-mail match; the address itself is never revealed or logged) finds the trip's lead, and no other traveller of the
+ * trip has an address. Off the agency host (the client and portal steps): the live check of an earlier step of the same
+ * trip must exist (work/rehearsal/crm.json traveller_check). Each scenario that calls it live allows and caps
+ * POST travelers/search (searchWrite / CAP.search).
+ */
+async function checkTraveller(page, s) {
+  const addr = handoff().traveller_email;
+  if (!inventedAddress(addr)) {
+    throw new Error('the hand-off traveller address is not on an invented domain (*.invalid or the E2E mailbox): stop before any mail');
+  }
+  if (new URL(page.url()).origin !== crm.PARTNER) {
+    const c = load().traveller_check;
+    if (!c || c.trip_id !== s.trip_id) throw new Error('no traveller address check for this trip: run the agency steps (REH-06 onwards) first');
+    return c;
+  }
+  const t = await bffOk(page, 'GET', `trips/${s.trip_id}`);
+  const lead = (t.party || []).find((p) => p.role === 'lead');
+  if (!lead) throw new Error('the trip has no lead traveller');
+  const others = (t.party || []).filter((p) => p.has_email && p.traveler_id !== lead.traveler_id);
+  if (others.length) throw new Error(`${others.length} other traveller(s) of the trip have an e-mail address the run cannot check: stop before any mail`);
+  const r = await bffOk(page, 'POST', 'travelers/search', { q: addr });
+  if (!(r.items || []).some((x) => x.traveler_id === lead.traveler_id)) {
+    throw new Error('the lead traveller\'s address is not the invented hand-off address: stop before any mail');
+  }
+  const check = { trip_id: s.trip_id, traveler_id: lead.traveler_id, at: new Date().toISOString() };
+  save({ traveller_check: check });
+  return check;
 }
 
 /** The state a step needs, or a clear "run X first" error. */
@@ -98,10 +153,27 @@ function need(s, keys, before) {
 
 // ── writes the scenarios may make ───────────────────────────────────────────────────────────────────────────────────
 
-/** allowWrites sources for CRM BFF paths on the agency host (each a regex source after /bff/, anchored at the end). */
-const bffWrites = (...paths) => paths.map((p) => `^${esc(crm.PARTNER)}/bff/${p}(?:[?#]|$)`);
-/** allowWrites source for the client host's public API: proposal (accept, hold, pay claim) or traveller (portal). */
-const clientWrites = (area) => [`^${esc(crm.CLIENT)}/crm/public/v1/${area}/`];
+// Each entry is [method, path regex source]: the method is matched too (lib/net-guard.cjs parseAllow), so an allowed
+// create path never lets a DELETE or a PATCH of the same path through.
+/** allowWrites entries for CRM BFF paths on the agency host ([method, regex source after /bff/], anchored at the end). */
+const bffWrites = (...pairs) => pairs.map(([m, p]) => `${m} ^${esc(crm.PARTNER)}/bff/${p}(?:[?#]|$)`);
+/** allowWrites entries for the client host's public API ([method, path after /crm/public/v1/], anchored at the end). */
+const clientWrites = (...pairs) => pairs.map(([m, p]) => `${m} ^${esc(crm.CLIENT)}/crm/public/v1/${p}(?:[?#]|$)`);
+/** The traveller address check of checkTraveller() (a search, no data written; the API logs a list view). */
+const searchWrite = ['POST', 'travelers/search'];
+
+/**
+ * Cap every write of a scenario (lib/uat-page.cjs limitWrites, every method): rules [name, method, pathname regex
+ * source, max]; a retry, a double click or a re-render never creates, mails or deletes twice. Call it first thing in
+ * step 1, before any page loads. Returns the live counts.
+ */
+const cap = (page, rules) => limitWrites(page, rules.map(([name, method, p, max]) => ({ name, method, path: new RegExp(`^${p}$`), max })));
+/** The pathname regex source of a BFF path (for cap()). */
+const bffPath = (p) => `/bff/${p}`;
+/** The pathname regex source of a client-host public API path (for cap()). */
+const clientPath = (p) => `/crm/public/v1/${p}`;
+/** checkTraveller()'s search: at most this many per scenario (one per mail-sending step plus a re-run). */
+const SEARCH_CAP = 3;
 
 // ── the scenario shell ──────────────────────────────────────────────────────────────────────────────────────────────
 
@@ -144,19 +216,29 @@ async function me(page, role) {
   return m;
 }
 
-/** Tour X as AA sells it to this agency: { source_id, title, departures, from_price }. */
+/**
+ * Tour X as AA sells it to this agency: { source_id, title, days, departures, from_price }. GET aa/products/<id>
+ * (AA-Partner api/app/routers/aa.py get_product) answers Booking's product and departures plus `tour`, the CRM's
+ * catalogue row (title, duration_days); a tour the CRM catalogue does not hold cannot be searched in the builder.
+ */
 async function tourX(page) {
   const { tour_x: id } = handoff();
   if (!id) throw new Error('no tour X: set UAT_REH_TOUR_X or work/rehearsal/handoff.json tour_x (runbook "Tour X")');
   const prod = await bffOk(page, 'GET', `aa/products/${encodeURIComponent(id)}?currency=USD`);
-  return { source_id: id, title: (prod.tour && prod.tour.title) || prod.title || null, departures: prod.departures || [], from_price: prod.from_price || null };
+  const tour = prod.tour || null;
+  if (!tour || !tour.title) throw new Error('tour X is not in the CRM\'s AA catalogue (no title): wait for the catalogue sync or pick X\'');
+  if (!(Number(tour.duration_days) >= 1)) throw new Error('tour X has no number of days in the CRM\'s AA catalogue: pick X\'');
+  return { source_id: id, title: tour.title, days: Number(tour.duration_days), departures: prod.departures || [], from_price: prod.from_price || null };
 }
+
+// Booking departure states a client can book (AA-Booking backend/app/b2b/departures.py STATUSES minus cancelled).
+const BOOKABLE = ['scheduled', 'guaranteed'];
 
 /** The first open fixed departure of tour X with seats for `adults`, at least `minDays` days ahead. */
 function pickDeparture(tour, adults, minDays = 3) {
   const earliest = day(minDays);
   const deps = tour.departures
-    .filter((d) => d.status === 'scheduled' && d.available >= adults && d.start_date >= earliest)
+    .filter((d) => BOOKABLE.includes(d.status) && d.available >= adults && d.start_date >= earliest)
     .sort((a, b) => a.start_date.localeCompare(b.start_date) || a.departure_id.localeCompare(b.departure_id));
   if (!deps.length) {
     throw new Error(`tour X has no open departure with ${adults} free seat(s) (${tour.departures.map((d) => `${d.start_date}:${d.status}:${d.available}`).join(', ') || 'no departures'}): pick X' (runbook "Tour X")`);
@@ -175,6 +257,7 @@ async function aaLines(page, tripId) {
 
 module.exports = {
   crm, AGENCY_NAME, AGENCY_ID, REHEARSAL_AGENCY, DESKTOP, PHONE, UUID, step, scenario, open, openTrip, me, tourX, pickDeparture,
-  builderView, aaLines, bffWrites, clientWrites, load, save, saveLink, link, handoff, need,
+  BOOKABLE, builderView, aaLines, bffWrites, clientWrites, searchWrite, cap, bffPath, clientPath, SEARCH_CAP, load, save,
+  saveLink, link, handoff, need, inventedAddress, checkTraveller,
   sha, bff, bffOk, waitForCard, type, choose, day, reuse,
 };

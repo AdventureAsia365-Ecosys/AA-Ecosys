@@ -11,6 +11,7 @@ const g = require('../lib/pilot-guard.cjs');
 const core = require('../lib/dryrun-core.cjs');
 const cat = require('../lib/catalogue.cjs');
 const crm = require('../lib/crm-signin.cjs');
+const guard = require('../lib/net-guard.cjs');
 
 const SCEN = path.join(__dirname, '..', 'scenarios');
 const REH = fs.readdirSync(path.join(SCEN, 'crm')).filter((f) => /^reh-.*\.cjs$/.test(f)).sort();
@@ -55,7 +56,7 @@ test('identities: the rehearsal ones are writable, never in the read-only dry-ru
 });
 
 test('every REH scenario: id REH-<nn>-<slug>, English and Vietnamese captions, no issue ids in captions, rehearsal identity', () => {
-  assert.ok(REH.length >= 8, REH.join(', '));
+  assert.ok(REH.length >= 9, REH.join(', '));
   for (const f of REH) {
     const sc = load(f);
     assert.match(sc.id, cat.ID, f);
@@ -71,7 +72,7 @@ test('every REH scenario: id REH-<nn>-<slug>, English and Vietnamese captions, n
   }
 });
 
-test('writes: only the CRM BFF of the agency host and the public proposal / traveller API of the client host', () => {
+test('writes: method + path on the CRM BFF of the agency host and the public proposal / traveller API of the client host', () => {
   const partner = crm.PARTNER.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const client = crm.CLIENT.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   for (const f of REH) {
@@ -82,25 +83,71 @@ test('writes: only the CRM BFF of the agency host and the public proposal / trav
     }
     assert.ok(sc.allowWrites.length > 0, f);
     for (const w of sc.allowWrites) {
-      assert.ok(w.startsWith(`^${partner}/bff/`) || w.startsWith(`^${client}/crm/public/v1/proposal/`)
-        || w.startsWith(`^${client}/crm/public/v1/traveller/`), `${f}: ${w}`);
+      const a = guard.parseAllow(w);
+      assert.ok(a.methods && a.methods.length, `${f}: ${w} names its method(s)`);
+      const src = w.slice(w.indexOf(' ') + 1); // the regex source after the method list
+      assert.ok(src.startsWith(`^${partner}/bff/`) || src.startsWith(`^${client}/crm/public/v1/proposal/`)
+        || src.startsWith(`^${client}/crm/public/v1/traveller/`), `${f}: ${w}`);
+      assert.ok(src.endsWith('(?:[?#]|$)'), `${f}: ${w} is anchored at the end of the path`);
     }
     assert.equal(sc.paid, false, `${f}: no paid model call`);
     assert.ok(sc.steps.some((s) => s.writes), `${f}: marks its writing steps`);
+    // Every writing scenario caps its writes in step 1 (R.cap -> limitWrites), before any page loads.
+    assert.match(fs.readFileSync(path.join(SCEN, 'crm', f), 'utf8'), /meta\.writes = await R\.cap\(page, \[/, `${f}: caps its writes`);
   }
-  // Spot checks: the agent never publishes or sends; the client steps never reach the agency's BFF.
-  const quote = load('reh-07-quote.cjs').allowWrites.map((x) => new RegExp(x));
+  const allowed = (f, method, url) => guard.allowsWrite(guard.compileAllow(load(f).allowWrites), method, url);
+  const T = `${crm.PARTNER}/bff/trips/${OTHER}`;
   const P = `${crm.PARTNER}/bff/proposals/${OTHER}`;
-  assert.ok(quote.some((r) => r.test(`${P}/discount-approval`)));
-  assert.ok(quote.some((r) => r.test(`${P}/blocks/${OTHER}/aa-options`)));
-  assert.ok(!quote.some((r) => r.test(`${P}/publish`)) && !quote.some((r) => r.test(`${P}/send`)));
-  const accept = load('reh-08-accept.cjs').allowWrites.map((x) => new RegExp(x));
-  assert.ok(!accept.some((r) => r.test(`${crm.PARTNER}/bff/trips/${OTHER}`)));
+  // REH-06: the owner, the dates and the stage, each by its own method only; never a trip DELETE.
+  assert.ok(allowed('reh-06-lead.cjs', 'POST', `${T}/owner`) && allowed('reh-06-lead.cjs', 'PATCH', T) && allowed('reh-06-lead.cjs', 'POST', `${T}/stage`));
+  assert.ok(!allowed('reh-06-lead.cjs', 'DELETE', T) && !allowed('reh-06-lead.cjs', 'PATCH', `${T}/owner`) && !allowed('reh-06-lead.cjs', 'POST', `${T}/stage/undo`));
+  // REH-07: the agent never publishes, sends, deletes or reorders.
+  for (const [m, u] of [['POST', `${P}/discount-approval`], ['POST', `${P}/blocks/${OTHER}/aa-options`], ['POST', `${P}/blocks/${OTHER}/options`],
+    ['POST', `${P}/days/${OTHER}/blocks`], ['PUT', `${P}/inclusions`], ['PATCH', `${P}/builder`], ['POST', `${T}/builder`]]) {
+    assert.ok(allowed('reh-07-quote.cjs', m, u), `REH-07 ${m} ${u}`);
+  }
+  for (const [m, u] of [['POST', `${P}/publish`], ['POST', `${P}/send`], ['DELETE', `${P}/options/${OTHER}`], ['DELETE', `${P}/blocks/${OTHER}`],
+    ['PUT', `${P}/days/order`], ['DELETE', `${P}/days/${OTHER}`], ['POST', `${P}/discount-approval/${OTHER}`], ['PATCH', `${P}/options/${OTHER}`]]) {
+    assert.ok(!allowed('reh-07-quote.cjs', m, u), `REH-07 must refuse ${m} ${u}`);
+  }
+  // Client host: the named actions only, never decline / sign-out / companions / rooming.
+  const C = `${crm.CLIENT}/crm/public/v1`;
+  assert.ok(allowed('reh-08-accept.cjs', 'POST', `${C}/proposal/hold`) && allowed('reh-08-accept.cjs', 'POST', `${C}/proposal/accept`));
+  assert.ok(!allowed('reh-08-accept.cjs', 'POST', `${C}/proposal/change-request`) && !allowed('reh-08-accept.cjs', 'POST', `${crm.PARTNER}/bff/trips/${OTHER}`));
+  assert.ok(allowed('reh-10-portal.cjs', 'PUT', `${C}/traveller/stage3`) && !allowed('reh-10-portal.cjs', 'POST', `${C}/traveller/stage3`));
+  for (const x of ['sign-out', 'companions', 'rooming', 'switch']) assert.ok(!allowed('reh-10-portal.cjs', 'POST', `${C}/traveller/${x}`), x);
+  assert.ok(allowed('reh-08b-deposit.cjs', 'POST', `${C}/proposal/invoices/${OTHER}/claim`) && !allowed('reh-08b-deposit.cjs', 'POST', `${C}/proposal/invoices/${OTHER}/card`));
+  // The setup: payment instructions (PUT) and agreements (POST) only; no disconnect.
+  assert.ok(allowed('reh-02b-agency-setup.cjs', 'PUT', `${crm.PARTNER}/bff/settings/payment-methods/manual`));
+  assert.ok(!allowed('reh-02b-agency-setup.cjs', 'POST', `${crm.PARTNER}/bff/settings/payment-methods/${OTHER}/disconnect`));
+  assert.ok(!allowed('reh-02b-agency-setup.cjs', 'PATCH', `${crm.PARTNER}/bff/agreements/${OTHER}`));
+});
+
+test('mail guard: invented addresses only; every mail-sending step checks the traveller before its click', () => {
+  const R = require(path.join(SCEN, 'crm', '_reh.cjs'));
+  for (const a of ['rehearsal.traveller@example.invalid', 'x@sub.example.invalid', 'e2e-traveller@e2e-mail.lumiguides.it.com']) assert.ok(R.inventedAddress(a), a);
+  for (const a of ['someone@gmail.com', 'x@invalid.com', 'x@example.invalid.com', 'x@e2e-mail.lumiguides.it.com.evil.io', 'not-an-address', '', null,
+    'a@b@example.invalid']) assert.ok(!R.inventedAddress(a), String(a));
+  // The step text before each mail-sending click calls R.checkTraveller first.
+  const src = (f) => fs.readFileSync(path.join(SCEN, 'crm', f), 'utf8');
+  const before = (f, click) => {
+    const s = src(f);
+    const i = s.indexOf(click);
+    assert.ok(i > 0, `${f}: ${click}`);
+    assert.ok(s.lastIndexOf('R.checkTraveller(page, s)', i) > s.lastIndexOf('step(', i), `${f}: checkTraveller before ${click}`);
+  };
+  before('reh-07b-approve.cjs', "tab.getByTestId('builder-send')");
+  before('reh-08b-deposit.cjs', "name: 'Record payment'");
+  before('reh-08c-aa-confirmed.cjs', 'name: /portal link/i');
+  before('reh-10-portal.cjs', "page.getByTestId('portal-send-code')");
+  before('reh-10-portal.cjs', "page.getByTestId('portal-sign-code')");
+  before('reh-08-accept.cjs', "page.getByTestId('client-accept')");
+  assert.match(src('reh-06-lead.cjs'), /R\.checkTraveller\(page, s\)/);
 });
 
 test('write set: the rehearsal entries follow the runbook order; the staff view is not in it', () => {
   const ws = require(path.join(SCEN, 'write-set.cjs')).filter((x) => x.startsWith('crm/reh-'));
-  assert.deepEqual(ws, ['crm/reh-06-lead.cjs', 'crm/reh-07-quote.cjs', 'crm/reh-07b-approve.cjs', 'crm/reh-08-accept.cjs',
+  assert.deepEqual(ws, ['crm/reh-02b-agency-setup.cjs', 'crm/reh-06-lead.cjs', 'crm/reh-07-quote.cjs', 'crm/reh-07b-approve.cjs', 'crm/reh-08-accept.cjs',
     'crm/reh-08b-deposit.cjs', 'crm/reh-08c-aa-confirmed.cjs', 'crm/reh-10-portal.cjs']);
   for (const f of ws) assert.doesNotThrow(() => core.describeWrite(require(path.join(SCEN, f)), f));
 });

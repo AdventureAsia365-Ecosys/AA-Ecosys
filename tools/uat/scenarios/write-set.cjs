@@ -17,6 +17,8 @@ module.exports = [
   // Record in this order, each after the step before it in the whole rehearsal: REH-06 after the TripPlanner send;
   // REH-08c after Adventure Asia confirmed (instant departure, or the Booking staff step). REH-10b-ops-view (crm-staff,
   // read only) is not a write-set entry: record it with run.sh after REH-10.
+  // REH-02b-agency-setup first, once per fresh seed (scenarios/crm/REHEARSAL.md): payment instructions, terms, waiver.
+  'crm/reh-02b-agency-setup.cjs',
   'crm/reh-06-lead.cjs',
   'crm/reh-07-quote.cjs',
   'crm/reh-07b-approve.cjs',
