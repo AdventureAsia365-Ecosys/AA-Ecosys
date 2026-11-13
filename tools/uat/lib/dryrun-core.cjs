@@ -6,7 +6,8 @@
 // The identities a dry-run scenario may name (lib/signin.cjs signs each one in once, outside the recorded context).
 // studio-editor (AA-855): the Content studio EDITOR of the E2E tenant; it can write, so only write scenarios use it.
 // studio-audit (AA-855 W-01..W-04): the editor of the four synthetic audit tenants (lib/studio-audit.cjs), one per run.
-const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'crm'];
+// studio-rehearsal (AA-1086 REH-*): the E2E OWNER of the synthetic pilot rehearsal agency (lib/rehearsal.cjs); write only.
+const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'studio-rehearsal', 'crm'];
 // Paths that reach a paid model or data provider: aborted in every dry-run scenario (record.cjs UAT_BLOCK_URLS), so a
 // dry run can never start one, even by a stray click. TripPlanner free-text search (embedding) and narration (chat
 // model), in both spellings (lib/botCheck.ts in AA-TripPlanner-Web); the writes among them are also non-GET.
@@ -16,11 +17,11 @@ const PAID_URLS = ['/api/browse/search(?:[?#]|$)', '/api/browse\\?(?:.*&)?resour
 // guard of record.cjs keeps those scenarios read-only, so they run only on an explicit --include-writable. The other
 // signed-in identities are refused writes by their backend too (403 e2e_read_only for the CIS / Booking E2E staff,
 // 403 studio_role_forbidden for the Content studio viewer). The studio editor can write too (AA-855).
-const WRITABLE_IDENTITIES = ['crm', 'studio-editor', 'studio-audit'];
+const WRITABLE_IDENTITIES = ['crm', 'studio-editor', 'studio-audit', 'studio-rehearsal'];
 // Exit code of a run stopped by the pilot guard (lib/pilot-guard.cjs EXIT_PILOT_GUARD).
 const EXIT_PILOT_GUARD = 5;
 // Order in which identities sign in: the cheap ones first, so a code-mail wait never delays the public pages.
-const SIGNIN_ORDER = ['public', 'studio', 'studio-editor', 'studio-audit', 'crm', 'cis-admin', 'booking'];
+const SIGNIN_ORDER = ['public', 'studio', 'studio-editor', 'studio-audit', 'studio-rehearsal', 'crm', 'cis-admin', 'booking'];
 
 /** Parse the runner's argv (without node and the script). Throws on an unknown option or a missing value. */
 function parseArgs(argv) {
@@ -104,6 +105,15 @@ function previewSteps(sc) {
   return i < 0 ? sc.steps.length : i;
 }
 
+/**
+ * opts with --only / --record ids mapped to the manifest's own spelling (the arguments are upper-cased; the pilot
+ * rehearsal ids end in a lower-case slug, REH-03-brand). An unknown id is kept as given (select() refuses it).
+ */
+function canonIds(entries, opts) {
+  const canon = new Map(entries.map((e) => [String(e.id).toUpperCase(), e.id]));
+  return { ...opts, only: (opts.only || []).map((x) => canon.get(String(x).toUpperCase()) || x) };
+}
+
 const matches = (e, opts) => (!opts.only || !opts.only.length || opts.only.includes(e.id))
   && (!opts.apps || !opts.apps.length || opts.apps.includes(e.app))
   && (!opts.identities || !opts.identities.length || opts.identities.includes(e.identity));
@@ -114,6 +124,7 @@ const matches = (e, opts) => (!opts.only || !opts.only.length || opts.only.inclu
  * --identity crm) without the flag throws, so it is never skipped silently.
  */
 function select(entries, opts) {
+  opts = canonIds(entries, opts);
   const ids = new Set(entries.map((e) => e.id));
   const dup = entries.find((e, i) => entries.findIndex((x) => x.id === e.id) !== i);
   if (dup) throw new Error(`duplicate scenario id ${dup.id}`);
@@ -146,6 +157,7 @@ function select(entries, opts) {
 
 /** Ids the options would select but leave out because their identity can write (said in the report). */
 function skippedWritable(entries, opts) {
+  opts = canonIds(entries, opts);
   if (opts.includeWritable) return [];
   return entries.filter((e) => !e.writeSet && matches(e, opts) && WRITABLE_IDENTITIES.includes(e.identity)).map((e) => e.id);
 }
@@ -316,6 +328,6 @@ function stamp(d = new Date()) {
 }
 
 module.exports = {
-  IDENTITIES, WRITABLE_IDENTITIES, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, parseArgs, describe, describeWrite, previewSteps, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
+  IDENTITIES, WRITABLE_IDENTITIES, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, parseArgs, canonIds, describe, describeWrite, previewSteps, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
   renderMarkdown, renderTsv, stamp,
 };

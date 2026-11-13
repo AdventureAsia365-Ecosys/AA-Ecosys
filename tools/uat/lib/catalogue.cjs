@@ -16,13 +16,13 @@ const STATUSES = ['live', 'after-lane', 'blocked', 'retired'];
 const KINDS = ['uat', 'guide', 'release', 'regression', 'data'];
 // The dry-run identities (lib/dryrun-core.cjs) plus the ones only plans name yet: the CRM assistant, a traveller on the
 // client host, several identities in one story, and a story recorded by hand.
-const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'crm', 'crm-assistant', 'traveller', 'multi', 'manual'];
+const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'studio-rehearsal', 'crm', 'crm-assistant', 'traveller', 'multi', 'manual'];
 const REQUIRED = { id: 'string', app: 'string', module: 'string', story: 'string', roles: 'array', kinds: 'array', covers: 'array',
   screens: 'array', status: 'string', round: 'round', identity: 'string', writes: 'boolean', paid: 'boolean' };
 const OPTIONAL = { file: 'string', note: 'string', issues: 'array' };
 // <APP>-<NN>, <APP>-PUB-<NN>, a split letter (PRT-07b), a phone variant (.m), a role variant (@account-manager); the CRM
-// review chapters CRM-REV-<NN> and its two data steps.
-const ID = /^(?:[A-Z]+(?:-PUB)?-\d{2}[a-z]?(?:\.m)?(?:@[a-z][a-z-]*)?|CRM-REV-(?:\d{2}|PREP|CLEANUP))$/;
+// review chapters CRM-REV-<NN> and its two data steps; the pilot rehearsal REH-<nn>[letter]-<slug> (one per runbook step).
+const ID = /^(?:[A-Z]+(?:-PUB)?-\d{2}[a-z]?(?:\.m)?(?:@[a-z][a-z-]*)?|CRM-REV-(?:\d{2}|PREP|CLEANUP)|REH-\d{2}[a-z]?-[a-z][a-z0-9]*(?:-[a-z0-9]+)*)$/;
 const ROUND = /^R\d+[a-z]?-\d{4}-\d{2}$/;
 const ISSUE_ID = /\bAA-?\d{3,4}\b/;
 
