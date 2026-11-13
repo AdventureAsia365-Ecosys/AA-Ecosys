@@ -1,0 +1,38 @@
+{
+  "contract": "tenant.erasure.v1",
+  "schema": "ErasureReport",
+  "expect": "valid",
+  "why": "A CRM verification: nothing left but kept rows, census 0",
+  "payload": {
+    "report_id": "1c9b8a7d-6e5f-4d3c-8b2a-1f0e9d8c7b62",
+    "request_id": "4e1d2c3b-5a69-4f78-8a9b-0c1d2e3f4a51",
+    "tenant_id": "7a0b1c2d-3e4f-4a5b-9c6d-7e8f9a0b1c22",
+    "app": "crm",
+    "round": 2,
+    "mode": "verify",
+    "status": "ok",
+    "error_code": null,
+    "plan_hash": null,
+    "tables": [
+      {
+        "table": "crm.trip",
+        "action": "delete",
+        "rows": 0,
+        "digest": "d41d8cd98f00b204e9800998ecf8427e"
+      },
+      {
+        "table": "crm.audit_event",
+        "action": "keep",
+        "rows": 220,
+        "digest": null
+      }
+    ],
+    "blockers": [],
+    "census": {
+      "pii_columns_checked": 57,
+      "pii_rows_found": 0
+    },
+    "job_id": "5d4c3b2a-1f0e-4d9c-8b7a-6f5e4d3c2b11",
+    "reported_at": "2027-03-02T10:05:00Z"
+  }
+}
