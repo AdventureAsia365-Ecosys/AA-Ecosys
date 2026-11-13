@@ -10,7 +10,8 @@
 // booking request + confirm; agency payment record; its approval), synthetic agencies only. Write set only.
 // traveller (pilot rehearsal, AA-1086): a guest on a public page who WRITES (a trip, a request to an agency, a booking);
 // it never signs in, so only write scenarios use it.
-const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'crm',
+// studio-rehearsal (AA-1086 REH-*): the E2E OWNER of the synthetic pilot rehearsal agency (lib/rehearsal.cjs); write only.
+const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'studio-rehearsal', 'crm',
   'booking-staff', 'booking-maker', 'booking-checker', 'traveller'];
 // Identities with no sign-in: the runner starts them with no saved session.
 const NO_SIGNIN = ['public', 'traveller'];
@@ -24,9 +25,9 @@ const PAID_URLS = ['/api/browse/search(?:[?#]|$)', '/api/browse\\?(?:.*&)?resour
 // signed-in identities are refused writes by their backend too (403 e2e_read_only for the CIS / Booking E2E staff,
 // 403 studio_role_forbidden for the Content studio viewer). The studio editor can write too (AA-855), and so can the
 // guest traveller of the pilot rehearsal (it sends a trip to an agency, it books).
-const WRITABLE_IDENTITIES = ['crm', 'studio-editor', 'studio-audit', 'booking-staff', 'booking-maker', 'booking-checker', 'traveller'];
+const WRITABLE_IDENTITIES = ['crm', 'studio-editor', 'studio-audit', 'studio-rehearsal', 'booking-staff', 'booking-maker', 'booking-checker', 'traveller'];
 // Identities that only write scenarios sign in: no dry-run scenario uses them.
-const WRITE_SET_ONLY_IDENTITIES = ['studio-editor', 'booking-staff', 'booking-maker', 'booking-checker', 'traveller'];
+const WRITE_SET_ONLY_IDENTITIES = ['studio-editor', 'studio-rehearsal', 'booking-staff', 'booking-maker', 'booking-checker', 'traveller'];
 // AA staff identities a write-set scenario may sign in: their backend refuses every write of the E2E session except a
 // short, named allow-list on synthetic tenants (cis-admin: the tenant offboarding erasure drill, root ADR 0006a A10b-5).
 // They stay in every dry run (read only there); a write-set scenario of theirs runs only by id with --include-writable.
@@ -34,8 +35,8 @@ const WRITE_SET_STAFF = ['cis-admin'];
 // Exit code of a run stopped by the pilot guard (lib/pilot-guard.cjs EXIT_PILOT_GUARD).
 const EXIT_PILOT_GUARD = 5;
 // Order in which identities sign in: the cheap ones first, so a code-mail wait never delays the public pages.
-const SIGNIN_ORDER = ['public', 'studio', 'studio-editor', 'studio-audit', 'crm', 'cis-admin', 'booking', 'booking-staff',
-  'booking-maker', 'booking-checker'];
+const SIGNIN_ORDER = ['public', 'studio', 'studio-editor', 'studio-audit', 'studio-rehearsal', 'crm', 'cis-admin', 'booking',
+  'booking-staff', 'booking-maker', 'booking-checker'];
 
 /** Parse the runner's argv (without node and the script). Throws on an unknown option or a missing value. */
 function parseArgs(argv) {
@@ -365,6 +366,6 @@ function stamp(d = new Date()) {
 }
 
 module.exports = {
-  IDENTITIES, NO_SIGNIN, WRITABLE_IDENTITIES, WRITE_SET_ONLY_IDENTITIES, WRITE_SET_STAFF, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, blockSources, parseArgs, describe, describeWrite, previewSteps, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
+  IDENTITIES, NO_SIGNIN, WRITABLE_IDENTITIES, WRITE_SET_ONLY_IDENTITIES, WRITE_SET_STAFF, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, blockSources, parseArgs, canonIds: canonicalIds, canonicalIds, describe, describeWrite, previewSteps, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
   renderMarkdown, renderTsv, stamp,
 };

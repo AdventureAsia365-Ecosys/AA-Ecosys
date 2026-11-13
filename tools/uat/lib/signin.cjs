@@ -28,6 +28,11 @@
 //              Booking to its own writes on synthetic agencies. Same managed login as booking; their codes land under
 //              inbound-admin/ (MFA admin profile only). They CAN write: only write-set scenarios use them. The saved
 //              session is kept only while staff/me answers for that same address.
+//   studio-rehearsal  the E2E OWNER of the synthetic pilot rehearsal agency pilot-rehearsal-01 (AA-1086 REH-*;
+//              lib/rehearsal.cjs): secret crm/dev/e2e-test-crm/pilot-rehearsal-01-owner (UAT_STUDIO_REHEARSAL_SECRET), same
+//              partner flow; the studio opens on "E2E Pilot Rehearsal Travel". Needs the owner's Content studio
+//              membership (runbook step 2: the tech lead's owner invitation, accepted from the e2e inbox by
+//              tools/uat/accept-owner-invite.cjs). It CAN write and pay: only the REH write scenarios use it.
 //   crm        Owner of the invented agency of the CRM review set: lib/crm-signin.cjs identity A, with its own state
 //              file (work/dryrun/.state-crm.json, never the review set's). This account CAN write (the CRM has no
 //              read-only role yet): the runner leaves its scenarios out unless --include-writable (dryrun-core.cjs).
@@ -40,6 +45,7 @@ const crm = require('./crm-signin.cjs');
 const mailbox = require('./mailbox.cjs');
 const { redact } = require('./dryrun-core.cjs');
 const studioAudit = require('./studio-audit.cjs');
+const rehearsal = require('./rehearsal.cjs');
 
 const CIS = (process.env.UAT_CIS_ADMIN || 'https://aa-cis.lumiguides.it.com').replace(/\/+$/, '');
 const BOOKING = crm.BOOKING;
@@ -50,6 +56,7 @@ const STUDIO_SECRETS = {
   studio: process.env.UAT_STUDIO_SECRET || 'crm/dev/e2e-test-studio/viewer',
   'studio-editor': process.env.UAT_STUDIO_EDITOR_SECRET || 'crm/dev/e2e-test-studio/editor',
   'studio-audit': studioAudit.secretId(),
+  'studio-rehearsal': rehearsal.secretId(),
 };
 const STUDIO_IDENTITIES = Object.keys(STUDIO_SECRETS);
 
@@ -301,7 +308,8 @@ async function ensureState(who) {
           if (!(await bookingAlive(page, cfg.email))) throw new Error('signed in, but /api/booking/staff/me did not answer 200 for this address');
         }
       } else {
-        const tenantName = who === 'studio-audit' ? studioAudit.auditTenant().name : null;
+        const tenantName = who === 'studio-audit' ? studioAudit.auditTenant().name
+          : who === 'studio-rehearsal' ? rehearsal.TENANT.name : null;
         reused = await studioAlive(page);
         if (!reused) {
           if (!studioCreds) studioCreds = crm.secretCreds(STUDIO_SECRETS[who]);
@@ -324,7 +332,7 @@ async function ensureState(who) {
   }
 }
 
-module.exports = { ensureState, statePath, CIS, BOOKING, PARTNER, STAFF_AUTH_HOST, STUDIO_SECRETS, BOOKING_WRITERS };
+module.exports = { ensureState, statePath, partnerLogin, CIS, BOOKING, PARTNER, STAFF_AUTH_HOST, STUDIO_SECRETS, BOOKING_WRITERS };
 
 if (require.main === module) {
   (async () => {

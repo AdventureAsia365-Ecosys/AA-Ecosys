@@ -22,6 +22,24 @@ const isRead = (method) => READ_METHODS.includes(String(method || 'GET').toUpper
 /** A web ACL challenge proof (not a write to any app): passed through by the read-only guard. */
 const isChallengeProof = (url) => CHALLENGE_PROOF.some((r) => r.test(String(url)));
 
+// An allowWrites entry is a regex source tested on the full URL (any write method), or "<METHOD> <regex source>" to
+// allow that one method only (e.g. "DELETE /api/tenant/v1/publish-log/[^/]+$": a POST on the same path stays refused).
+const METHOD_ENTRY = /^(POST|PUT|PATCH|DELETE) (\S.*)$/s;
+
+/** Compile allowWrites entries: [{ method: 'PATCH' | null, re }]. */
+function compileAllow(list = []) {
+  return (list || []).map((src) => {
+    const m = METHOD_ENTRY.exec(String(src));
+    return m ? { method: m[1], re: new RegExp(m[2]) } : { method: null, re: new RegExp(src) };
+  });
+}
+
+/** True when a compiled entry (or a bare RegExp, any method) allows `method` on `url`. */
+function allowMatches(allow, method, url) {
+  const M = String(method || 'GET').toUpperCase();
+  return (allow || []).some((a) => (a instanceof RegExp ? a.test(url) : (!a.method || a.method === M) && a.re.test(url)));
+}
+
 /**
  * Kind of an aborted non-read request: 'write' (a write to the app: fails a read-only scenario) or 'other'
  * (telemetry, session upkeep or a third-party post: listed apart, verdict unchanged).
@@ -43,8 +61,8 @@ function classify(url, baseURL) {
 
 /**
  * Make an APIRequestContext read-only in place: any fetch / post / put / patch / delete whose method is not GET / HEAD /
- * OPTIONS (and whose URL no `allow` regex matches) is refused before it leaves Node: onBlocked(method, url) is called
- * and the call throws. Every helper of APIRequestContext goes through this.fetch(), so wrapping fetch covers them all.
+ * OPTIONS (and that no `allow` entry allows: compileAllow() entries or bare regexes) is refused before it leaves Node:
+ * onBlocked(method, url) is called and the call throws. Every helper of APIRequestContext goes through this.fetch(), so wrapping fetch covers them all.
  */
 function guardRequestContext(rq, { allow = [], onBlocked = () => {} } = {}) {
   if (!rq || typeof rq.fetch !== 'function' || rq.__uatReadOnly) return rq;
@@ -54,7 +72,7 @@ function guardRequestContext(rq, { allow = [], onBlocked = () => {} } = {}) {
     const url = isStr ? urlOrRequest : (urlOrRequest && typeof urlOrRequest.url === 'function' ? urlOrRequest.url() : String(urlOrRequest));
     const method = String(options.method || (!isStr && urlOrRequest && typeof urlOrRequest.method === 'function'
       ? urlOrRequest.method() : 'GET')).toUpperCase();
-    if (!isRead(method) && !allow.some((r) => r.test(url))) {
+    if (!isRead(method) && !allowMatches(allow, method, url)) {
       onBlocked(method, url);
       throw new Error(`read-only run: ${method} request from the scenario code refused`);
     }
@@ -64,4 +82,4 @@ function guardRequestContext(rq, { allow = [], onBlocked = () => {} } = {}) {
   return rq;
 }
 
-module.exports = { READ_METHODS, TELEMETRY, SESSION, CHALLENGE_PROOF, isRead, isChallengeProof, classify, guardRequestContext };
+module.exports = { READ_METHODS, TELEMETRY, SESSION, CHALLENGE_PROOF, isRead, isChallengeProof, classify, compileAllow, allowMatches, guardRequestContext };
