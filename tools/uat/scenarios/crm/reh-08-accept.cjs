@@ -8,7 +8,9 @@
 //        terms, types her name and accepts.
 // Then:  the link leaves the address bar (cookie); the hold box turns active with a "held until"; the page shows the
 //        acceptance; no 429 on the client host (two anonymous writes, >= 14 s apart).
-// Writes: one client hold on Booking (the party on tour X's departure) and the acceptance, on the rehearsal trip only.
+// Writes (method and path allowed, each capped at 1): POST proposal/hold (one client hold on Booking: the party on tour
+// X's departure) and POST proposal/accept, on the rehearsal trip only. Mail: the acceptance may mail the lead a
+// confirmation, so step 6 first requires the address check of the agency steps for this trip (R.checkTraveller).
 // No LLM call. Cost $0.
 const R = require('./_reh.cjs');
 
@@ -22,11 +24,15 @@ module.exports = R.scenario({
   title: 'Rehearsal: the client accepts the quote on her phone',
   titleVi: 'Diễn tập: khách chấp nhận báo giá trên điện thoại',
   viewport: R.PHONE,
-  allowWrites: R.clientWrites('proposal'),
+  allowWrites: R.clientWrites(['POST', 'proposal/hold'], ['POST', 'proposal/accept']),
   steps: [
     step('The client opens the agency\'s link on her phone. The page swaps the link for a private cookie, so it never stays in the address bar.',
       'Khách mở đường dẫn của đại lý trên điện thoại. Trang đổi đường dẫn thành một cookie riêng, nên nó không nằm lại trên thanh địa chỉ.',
       async (page, h) => {
+        module.exports.meta.writes = await R.cap(page, [
+          ['hold', 'POST', R.clientPath('proposal/hold'), 1],
+          ['accept', 'POST', R.clientPath('proposal/accept'), 1],
+        ]);
         s = R.need(R.load(), ['trip_id', 'proposal_id', 'lead_name', 'r07b_done_at'], 'REH-07b-approve');
         const link = R.link('r08_link', s.trip_id);
         if (!link) throw new Error('no client link of the rehearsal trip: run REH-07b-approve first');
@@ -94,6 +100,7 @@ module.exports = R.scenario({
       'Khách bấm chấp nhận. Đại lý được báo ngay; bước tiếp theo là tiền đặt cọc.',
       async (page, h) => {
         if (!accepted) {
+          await R.checkTraveller(page, s); // mail guard (client host: the agency steps' check of this trip)
           await crm.paceClientWrite();
           await h.click(page.getByTestId('client-accept'));
         }

@@ -1,16 +1,21 @@
 // Pilot rehearsal step 8, part 2 (runbook docs/ops/runbooks/pilot-rehearsal.md, "pays the deposit ('I've paid')"):
 // the deposit invoice, the client's "I have paid", the payment and the trip booked.
 // Given: REH-08-accept: the client accepted version 1 under a live Adventure Asia hold; the owner (crm-rehearsal) is
-//        signed in outside the recording; the client link is in work/rehearsal/.crm-secrets.json (r08_link).
+//        signed in outside the recording; the client link is in work/rehearsal/.crm-secrets.json (r08_link); the agency
+//        has bank-transfer instructions (Settings > Payments, REH-02b-agency-setup; scenarios/crm/REHEARSAL.md): without
+//        them the client page shows no pay details (claims.py pay_by None) and step 3 fails.
 // When:  the owner raises the deposit invoice from the accepted payment plan and issues it; the client (same browser,
 //        client host) opens her link and says "I have paid" by bank transfer; the owner sees the claim and records the
 //        payment with a bank reference.
 // Then:  the invoice moves open -> payment_claimed -> paid; the trip is Booked; the CRM asks Adventure Asia to confirm
 //        the held tour (crm_booking_sync: one confirm request for the hold set). An instant departure confirms at once;
 //        an on-request one waits for Booking staff (the Booking group's step 8), then REH-08c-aa-confirmed reads it.
-// Writes: one deposit invoice (create, issue), the client's claim, one payment, on the rehearsal trip only. VNPay /
-// card payment is not used (the runbook: stub only). Mail: the paid deposit makes the CRM invite each traveller to the
-// portal through the agency's connected mailbox (the planner traveller's invented address). No LLM call. Cost $0.
+// Writes (method and path allowed, each capped at 1): POST trips/<id>/invoices (the deposit invoice), POST
+// invoices/<id>/issue, POST proposal/invoices/<id>/claim (client host), POST invoices/<id>/payments, plus the address
+// search, on the rehearsal trip only. VNPay / card payment is not used (the runbook: stub only). Mail: the paid deposit
+// makes the CRM invite each traveller to the portal (through the agency's connected mailbox; with none it stays held),
+// so step 5 first proves the lead's address is the invented hand-off one and no other traveller has an address
+// (R.checkTraveller). No LLM call. Cost $0.
 const R = require('./_reh.cjs');
 
 const { step, crm } = R;
@@ -25,13 +30,20 @@ module.exports = R.scenario({
   title: 'Rehearsal: the deposit is claimed, checked and recorded, and the trip is booked',
   titleVi: 'Diễn tập: khách báo đã cọc, đại lý kiểm tra và ghi nhận, chuyến được đặt',
   allowWrites: [
-    ...R.bffWrites(`trips/${R.UUID}/invoices`, `invoices/${R.UUID}/(?:issue|payments)`),
-    ...R.clientWrites('proposal'),
+    ...R.bffWrites(['POST', `trips/${R.UUID}/invoices`], ['POST', `invoices/${R.UUID}/(?:issue|payments)`], R.searchWrite),
+    ...R.clientWrites(['POST', `proposal/invoices/${R.UUID}/claim`]),
   ],
   steps: [
     step('Back at the agency, the trip shows the accepted proposal and its payment plan: the deposit is not invoiced yet.',
       'Ở đại lý, chuyến hiện đề xuất đã được chấp nhận và kế hoạch thanh toán: khoản cọc chưa được lập hoá đơn.',
       async (page, h) => {
+        module.exports.meta.writes = await R.cap(page, [
+          ['invoice', 'POST', R.bffPath(`trips/${R.UUID}/invoices`), 1],
+          ['issue', 'POST', R.bffPath(`invoices/${R.UUID}/issue`), 1],
+          ['claim', 'POST', R.clientPath(`proposal/invoices/${R.UUID}/claim`), 1],
+          ['payment', 'POST', R.bffPath(`invoices/${R.UUID}/payments`), 1],
+          ['search', 'POST', R.bffPath('travelers/search'), R.SEARCH_CAP],
+        ]);
         s = R.need(R.load(), ['trip_id', 'proposal_id', 'accepted_at'], 'REH-08-accept');
         seen429 = crm.watch429(page);
         await R.sha(page, module.exports, 'start');
@@ -109,6 +121,7 @@ module.exports = R.scenario({
       async (page, h) => {
         const row = invoiceRow(page);
         if ((await row.getAttribute('data-status')) === 'paid') return R.reuse(h, 'the recorded payment');
+        await R.checkTraveller(page, s); // mail guard: the paid deposit mails the portal invites
         await h.click(row.getByRole('button', { name: 'Record payment' }));
         const form = row.getByTestId('payment-form');
         await h.expect(form).toBeVisible();
@@ -131,7 +144,7 @@ module.exports = R.scenario({
           if (!l || !l.aa) return 'no AA line yet';
           if (l.status === 'confirmed' || l.aa.sub_status === 'confirmed') return 'confirmed';
           return l.aa.pending && l.aa.pending.kind === 'confirm' ? 'confirm asked' : `${l.aa.sub_status || '-'}`;
-        }, { timeout: 120_000, intervals: [3_000, 5_000, 10_000] }).toMatch(/^(confirmed|confirm asked|held)$/);
+        }, { timeout: 180_000, intervals: [3_000, 5_000, 10_000] }).toMatch(/^(confirmed|confirm asked)$/);
         const l = lines[0];
         R.save({ aa_line: { booking_line_id: l.booking_line_id, title: l.title, status: l.status, sub_status: l.aa.sub_status }, r08b_done_at: new Date().toISOString() });
         module.exports.meta.aa_line = { status: l.status, sub_status: l.aa.sub_status, pending: l.aa.pending ? l.aa.pending.kind : null };

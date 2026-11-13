@@ -6,9 +6,11 @@
 //        version 1 and sends it from the trip (the client link is shown once, blurred).
 // Then:  the task closes, the discount reads approved, Publish is enabled and the version goes published then sent;
 //        the client link is kept in work/rehearsal/.crm-secrets.json (r08_link with its trip id) for REH-08-accept.
-// Writes: the owner's decision, the publish and the send, on the rehearsal trip only. Mail: sending makes the CRM mail
-// the planner traveller's invented address through the agency's connected mailbox (undeliverable, *.invalid expected
-// from the planner step). No LLM call. Cost $0.
+// Writes (method and path allowed, each capped at 1): the owner's decision (POST discount-approval/<id>), the publish
+// and the send (or, on a re-run, the reissued link), plus the address search, on the rehearsal trip only. Mail: sending
+// makes the CRM mail the client link to the lead traveller (through the agency's connected mailbox; with none it stays
+// held). Step 5 first proves the lead's address is the invented hand-off one (R.checkTraveller) and stops otherwise.
+// No LLM call. Cost $0.
 const R = require('./_reh.cjs');
 
 const { step } = R;
@@ -18,12 +20,18 @@ module.exports = R.scenario({
   id: 'REH-07b-approve',
   title: 'Rehearsal: the owner approves the discount and sends the quote',
   titleVi: 'Diễn tập: chủ đại lý duyệt mức giảm giá và gửi báo giá',
-  // The decision (discount-approval/<id>), publish, send and reissue-link of this trip's proposal.
-  allowWrites: R.bffWrites(`proposals/${R.UUID}/(?:discount-approval/${R.UUID}|publish|send|reissue-link)`),
+  // The decision (discount-approval/<id>), publish, send and reissue-link of this trip's proposal: POST only.
+  allowWrites: R.bffWrites(['POST', `proposals/${R.UUID}/(?:discount-approval/${R.UUID}|publish|send|reissue-link)`], R.searchWrite),
   steps: [
     step('The owner opens the trip. An urgent task waits for her: approve the agent\'s discount.',
       'Chủ đại lý mở chuyến. Một việc gấp đang chờ: duyệt mức giảm giá của nhân viên tư vấn.',
       async (page, h) => {
+        module.exports.meta.writes = await R.cap(page, [
+          ['decision', 'POST', R.bffPath(`proposals/${R.UUID}/discount-approval/${R.UUID}`), 1],
+          ['publish', 'POST', R.bffPath(`proposals/${R.UUID}/publish`), 1],
+          ['send', 'POST', R.bffPath(`proposals/${R.UUID}/(?:send|reissue-link)`), 1],
+          ['search', 'POST', R.bffPath('travelers/search'), R.SEARCH_CAP],
+        ]);
         s = R.need(R.load(), ['trip_id', 'proposal_id', 'discount_pct', 'r07_done_at'], 'REH-07-quote');
         await R.sha(page, module.exports, 'start');
         await R.openTrip(page, h, s.trip_id);
@@ -65,6 +73,10 @@ module.exports = R.scenario({
         h.expect(v.pricing.discount.needs_approval).toBe(false);
         h.expect(Number(v.pricing.discount.approved_pct)).toBeGreaterThanOrEqual(Number(s.discount_pct));
         h.expect(v.checks.blocking).not.toContain('discount_needs_approval');
+        // The task closes (the decision closes every open discount_approval task of the trip).
+        const t = await R.bffOk(page, 'GET', `trips/${s.trip_id}`);
+        const open = (t.tasks || []).filter((x) => x.kind === 'discount_approval' && x.status === 'open');
+        h.expect(open.length, 'no open discount approval task').toBe(0);
       }, { writes: true }),
     step('She publishes version one. Only a published version can go to the client.',
       'Chị phát hành phiên bản một. Chỉ bản đã phát hành mới gửi được cho khách.',
@@ -87,6 +99,7 @@ module.exports = R.scenario({
       'Trên trang chuyến, chị gửi báo giá cho khách. Đường dẫn riêng chỉ hiện một lần; trong video này nó được che đi.',
       async (page, h) => {
         await R.openTrip(page, h, s.trip_id);
+        await R.checkTraveller(page, s); // mail guard: the send mails the lead
         const tab = page.getByTestId('trip-proposal');
         const send = tab.getByTestId('builder-send').getByRole('button');
         if (await send.count()) {

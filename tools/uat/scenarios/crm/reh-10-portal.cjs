@@ -2,15 +2,22 @@
 // portal on her phone at go-dev.lumiguides.it.com/c/t.
 // Given: REH-08c-aa-confirmed: the trip is booked, tour X confirmed by Adventure Asia, and the lead's portal link is in
 //        work/rehearsal/.crm-secrets.json (r10_link). The run signs the owner in (crm-rehearsal) only for the pilot
-//        guard; the traveller has no account and the client host gets none of the agency host's cookies.
+//        guard; the traveller has no account and the client host gets none of the agency host's cookies. The agency
+//        published booking terms and a waiver (REH-02b-agency-setup; scenarios/crm/REHEARSAL.md): without a published
+//        waiver the portal builds no signing envelope (portal/public.py WAIVER_SQL) and step 5 fails.
 // When:  she opens the link on a 390 x 844 phone, signs in with a one-time code (echoed on Dev, blurred), fills her
 //        passport details (invented), adds her arrival flight, signs the agency's documents with a second code, then
 //        reads her day-by-day itinerary and the voucher of the Adventure Asia tour.
 // Then:  portal home as lead; details done; flight saved in airport time; envelope signed; the itinerary lists the
-//        trip's days; one voucher (or more) for the confirmed tour, released by the agency's travel panel. The AA ops
+//        trip's days (tour X's days + the arrival day, the same count as the builder) and the confirmed AA line; one
+//        voucher (or more) for the confirmed tour, released once the trip is booked and the line confirmed. The AA ops
 //        side of the same trip (the release AA ground operations read) is REH-10b-ops-view.
-// Writes: the lead's portal data on the rehearsal trip (details, flight, signature). Anonymous writes (code, session)
-// >= 14 s apart; signed-in portal writes stay far under 30/min. Masks: hint, code boxes and signing code asserted
+// Writes (method and path allowed, each capped): POST traveller/code (2: sign-in, signing), POST traveller/session (2:
+// the code, the lead pick), PUT traveller/stage3 (1), PUT traveller/flights (1), POST traveller/sign (1): the lead's
+// portal data on the rehearsal trip. Mail: both codes are mailed to the lead, so steps 1 and 5 first require the
+// address check of the agency steps for this trip (R.checkTraveller). Anonymous writes (code, session) >= 14 s apart
+// (crm.paceClientWrite, for the registry's crm.rate.intake_per_minute of 5); signed-in portal writes stay far under
+// the per-minute limit. Masks: hint, code boxes and signing code asserted
 // blurred. No LLM call. Cost $0.
 const R = require('./_reh.cjs');
 
@@ -24,12 +31,19 @@ module.exports = R.scenario({
   title: 'Rehearsal: the traveller portal, from sign-in to the voucher',
   titleVi: 'Diễn tập: cổng khách, từ đăng nhập tới phiếu dịch vụ',
   viewport: R.PHONE,
-  allowWrites: R.clientWrites('traveller'),
+  allowWrites: R.clientWrites(['POST', 'traveller/(?:code|session|sign)'], ['PUT', 'traveller/(?:stage3|flights)']),
   steps: [
     step('The lead traveller opens her personal portal link on her phone and asks for a one-time sign-in code.',
       'Khách đứng tên mở đường dẫn cổng riêng trên điện thoại và xin một mã đăng nhập dùng một lần.',
       async (page, h) => {
-        s = R.need(R.load(), ['trip_id', 'lead_name', 'start_date', 'aa_line', 'r08c_done_at'], 'REH-08c-aa-confirmed');
+        module.exports.meta.writes = await R.cap(page, [
+          ['code', 'POST', R.clientPath('traveller/code'), 2],
+          ['session', 'POST', R.clientPath('traveller/session'), 2],
+          ['stage3', 'PUT', R.clientPath('traveller/stage3'), 1],
+          ['flights', 'PUT', R.clientPath('traveller/flights'), 1],
+          ['sign', 'POST', R.clientPath('traveller/sign'), 1],
+        ]);
+        s = R.need(R.load(), ['trip_id', 'lead_name', 'start_date', 'trip_days', 'aa_line', 'r08c_done_at'], 'REH-08c-aa-confirmed');
         const link = R.link('r10_link', s.trip_id);
         if (!link) throw new Error('no portal link of the rehearsal trip: run REH-08c-aa-confirmed first');
         seen429 = crm.watch429(page);
@@ -37,6 +51,7 @@ module.exports = R.scenario({
         await h.goto(link);
         await h.expect(page.getByTestId('portal-sign-in').or(page.getByTestId('portal-home'))).toBeVisible({ timeout: 20_000 });
         if (await page.getByTestId('portal-home').isVisible()) return R.reuse(h, 'a signed-in portal session');
+        await R.checkTraveller(page, s); // mail guard: the sign-in code is mailed to the lead
         await crm.paceClientWrite();
         await h.click(page.getByTestId('portal-send-code'));
         await h.expect(page.getByTestId('portal-hint')).toBeVisible({ timeout: 20_000 });
@@ -101,6 +116,7 @@ module.exports = R.scenario({
         await h.expect(env.getByTestId('portal-doc-booking_terms')).toBeVisible();
         if (await page.getByTestId('portal-insurance-insured').count()) await h.click(page.getByTestId('portal-insurance-insured'));
         await portalPause(h);
+        await R.checkTraveller(page, s); // mail guard: the signing code is mailed to the lead
         await h.click(page.getByTestId('portal-sign-code'));
         const hint = page.getByTestId('portal-sign-hint');
         await h.expect(hint).toBeVisible({ timeout: 20_000 });
@@ -121,7 +137,14 @@ module.exports = R.scenario({
         const day1 = page.getByTestId('portal-day-1');
         await h.scrollTo(day1);
         await h.expect(day1).toBeVisible({ timeout: 20_000 });
-        await h.expect(page.getByTestId('portal-day-2')).toBeVisible();
+        // Same tour at every stage: the trip's days (tour X's days + the arrival day), no more, no fewer.
+        const days = page.locator('[data-testid^="portal-day-"]:not([data-testid="portal-day-0"])');
+        await h.expect(days).toHaveCount(s.trip_days);
+        await h.expect(page.getByTestId(`portal-day-${s.trip_days}`)).toBeVisible();
+        // The confirmed Adventure Asia line is among the trip's services.
+        const services = page.getByTestId('portal-services');
+        await h.expect(services).toBeVisible();
+        if (s.aa_line.title) await h.expect(services).toContainText(s.aa_line.title);
         await h.hover(page.getByTestId('portal-day-2'));
       }),
     step('The voucher of the confirmed tour is there to show on the day, or to print.',
