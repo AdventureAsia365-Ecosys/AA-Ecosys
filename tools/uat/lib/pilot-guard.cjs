@@ -64,6 +64,10 @@ const SYNTHETIC = [
   { slug: 'audit-terra-family', name: 'Terra Family Expeditions (Audit)' },
   { slug: 'audit-trail-pulse', name: 'Trail Pulse (Audit)' },
   { slug: 'audit-wildkind-travel', name: 'WildKind Travel (Audit)' },
+  // The synthetic pilot rehearsal agency (root docs/ops/runbooks/pilot-rehearsal.md, Fixtures): kind demo, is_canary
+  // true, invented name. Its CIS tenant id is the CRM seed's id for the key (public in the runbook), so both scopes
+  // match it by id only; the marker tenant of steps 1b / 12b is the pilot and is never on this list.
+  { slug: 'pilot-rehearsal-01', name: 'E2E Pilot Rehearsal Travel', crmKey: 'pilot-rehearsal-01' },
 ];
 const SCOPES = {
   // nameMatch: whether an unpinned invented display name is enough. Content: yes (the studio session returns no slug and
@@ -72,7 +76,9 @@ const SCOPES = {
   crm: { path: '/bff/me', nameField: 'display_name', what: 'CRM agency', nameMatch: false },
 };
 // Identities whose session has no tenant (AA staff): their list pages are masked per scenario (allowRows), not here.
-const STAFF_IDENTITIES = ['cis-admin', 'booking'];
+// The Booking E2E writers (A10e: staff, finance maker, finance checker) are AA staff too: their writes are held to
+// synthetic agencies by Booking itself, and each write scenario checks its record's agency before the first write.
+const STAFF_IDENTITIES = ['cis-admin', 'booking', 'booking-staff', 'booking-maker', 'booking-checker'];
 const IDENTITY_SCOPES = { studio: ['content'], 'studio-editor': ['content'], 'studio-audit': ['content'], crm: ['crm'] };
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 

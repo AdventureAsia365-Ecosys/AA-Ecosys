@@ -22,6 +22,12 @@
 //              partner flow; the studio opens on THIS run's audit tenant (env UAT_STUDIO_TENANT, default
 //              audit-atlas-hearth), chosen on the studio chooser by its invented display name and checked through
 //              GET /api/tenant/me. One state file per audit tenant. It CAN write: only the write scenarios use it.
+//   booking-staff / booking-maker / booking-checker  the Dev-only Booking E2E writers (root ADR 0006a A10e):
+//              e2e-booking-staff@ (booking-sales: supplier booking request + confirm), e2e-booking-maker@ (booking-finance:
+//              record an agency payment), e2e-booking-checker@ (booking-finance: approve or reject it), each held by
+//              Booking to its own writes on synthetic agencies. Same managed login as booking; their codes land under
+//              inbound-admin/ (MFA admin profile only). They CAN write: only write-set scenarios use them. The saved
+//              session is kept only while staff/me answers for that same address.
 //   crm        Owner of the invented agency of the CRM review set: lib/crm-signin.cjs identity A, with its own state
 //              file (work/dryrun/.state-crm.json, never the review set's). This account CAN write (the CRM has no
 //              read-only role yet): the runner leaves its scenarios out unless --include-writable (dryrun-core.cjs).
@@ -50,7 +56,12 @@ const STUDIO_IDENTITIES = Object.keys(STUDIO_SECRETS);
 const STAFF = {
   'cis-admin': { origin: CIS, email: 'e2e-cis-admin@e2e-mail.lumiguides.it.com', prefix: 'inbound-admin/' },
   booking: { origin: BOOKING, email: 'e2e-booking@e2e-mail.lumiguides.it.com', prefix: 'inbound/' },
+  // A10e writers (AA-Booking app/auth/e2e_staff.py E2E_WRITERS); codes in the MFA-admin-only prefix.
+  'booking-staff': { origin: BOOKING, email: 'e2e-booking-staff@e2e-mail.lumiguides.it.com', prefix: 'inbound-admin/' },
+  'booking-maker': { origin: BOOKING, email: 'e2e-booking-maker@e2e-mail.lumiguides.it.com', prefix: 'inbound-admin/' },
+  'booking-checker': { origin: BOOKING, email: 'e2e-booking-checker@e2e-mail.lumiguides.it.com', prefix: 'inbound-admin/' },
 };
+const BOOKING_WRITERS = ['booking-staff', 'booking-maker', 'booking-checker'];
 
 function statePath(who) {
   // studio-audit: one session per audit tenant (the studio cookies name the tenant they were exchanged for).
@@ -115,12 +126,18 @@ async function cisAlive(page) {
   return page.getByRole('button', { name: 'Account menu' }).isVisible({ timeout: 15_000 }).catch(() => false);
 }
 
-/** Is the Booking session alive? The BFF's staff/me answers 200 for the E2E staff. */
-async function bookingAlive(page) {
+/**
+ * Is the Booking session alive? The BFF's staff/me answers 200 for the E2E staff. With `email` (the A10e writers) the
+ * answer must also name that address, so a writer's run never goes on with another person's session.
+ */
+async function bookingAlive(page, email = null) {
   await page.goto(`${BOOKING}/`, { waitUntil: 'domcontentloaded' });
   if (new URL(page.url()).pathname.startsWith('/login')) return false;
   const res = await page.context().request.get(`${BOOKING}/api/booking/staff/me`, { timeout: 20_000 });
-  return res.status() === 200;
+  if (res.status() !== 200) return false;
+  if (!email) return true;
+  const me = await res.json().catch(() => null);
+  return !!me && typeof me.email === 'string' && me.email.trim().toLowerCase() === email;
 }
 
 /** Partner pool managed login with password + authenticator code (the studio user; never logged). */
@@ -240,7 +257,7 @@ async function ensureState(who) {
     }
     return { file, reused: existed };
   }
-  if (!['cis-admin', 'booking', ...STUDIO_IDENTITIES].includes(who)) throw new Error(`unknown identity ${who}`);
+  if (!['cis-admin', 'booking', ...BOOKING_WRITERS, ...STUDIO_IDENTITIES].includes(who)) throw new Error(`unknown identity ${who}`);
   // A studio identity's secret is read before any browser starts: a missing one (the editor not enrolled yet) is a
   // clear BLOCKED reason, not a crash half-way through a sign-in. Never printed.
   let studioCreds = null;
@@ -274,6 +291,15 @@ async function ensureState(who) {
           await staffLogin(page, STAFF.booking);
           if (!(await bookingAlive(page))) throw new Error('signed in, but /api/booking/staff/me did not answer 200');
         }
+      } else if (BOOKING_WRITERS.includes(who)) {
+        const cfg = STAFF[who];
+        reused = await bookingAlive(page, cfg.email);
+        if (!reused) {
+          // A stale session of the same browser profile must not survive into the new sign-in.
+          await context.clearCookies();
+          await staffLogin(page, cfg);
+          if (!(await bookingAlive(page, cfg.email))) throw new Error('signed in, but /api/booking/staff/me did not answer 200 for this address');
+        }
       } else {
         const tenantName = who === 'studio-audit' ? studioAudit.auditTenant().name : null;
         reused = await studioAlive(page);
@@ -298,7 +324,7 @@ async function ensureState(who) {
   }
 }
 
-module.exports = { ensureState, statePath, CIS, BOOKING, PARTNER, STAFF_AUTH_HOST, STUDIO_SECRETS };
+module.exports = { ensureState, statePath, CIS, BOOKING, PARTNER, STAFF_AUTH_HOST, STUDIO_SECRETS, BOOKING_WRITERS };
 
 if (require.main === module) {
   (async () => {

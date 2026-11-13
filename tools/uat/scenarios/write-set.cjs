@@ -12,4 +12,10 @@ module.exports = [
   // The E2E tenant's studio editor (its identity must be enrolled first).
   'content-studio/prt-02.cjs',
   'content-studio/prt-06.cjs',
+  // Pilot rehearsal (root docs/ops/runbooks/pilot-rehearsal.md), the Booking E2E writers (root ADR 0006a A10e) on the
+  // synthetic rehearsal agency only, each with the run's Booking seeder output (env UAT_BOOKING_FIXTURES). $0. Record
+  // in this order, after the agency's trip is booked (step 8): REH-09-supplier; REH-11-maker, then REH-11-checker.
+  'booking/reh-09-supplier.cjs',
+  'booking/reh-11-maker.cjs',
+  'booking/reh-11-checker.cjs',
 ];
