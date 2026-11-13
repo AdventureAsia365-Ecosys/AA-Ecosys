@@ -32,7 +32,7 @@ architecture §4.3, §4.4). Workloads use these two accounts only; a third, the 
 organization and runs no workload (below). LLM chat calls run on acc3
 ([ADR 0001a](adr/0001a-retire-acc1-llm-on-acc3-only.md)), and since 2026-11-12, while AWS blocks acc3, also on acc1
 through one Bedrock invoker role (AA-1095, ADR 0001a Note S278; Terraform root `accounts/acc1-bedrock/`, applied by a
-human); since [ADR 0009](adr/0009-ai-platform-and-provider-gateway.md)
+human; spend there is alert only, ADR 0001a Note S279); since [ADR 0009](adr/0009-ai-platform-and-provider-gateway.md)
 decision 14 (accepted 2026-10-31) acc2 may also serve chat models for eval, judge and validate stages once a model
 passes the qualification ladder, and the direct Anthropic and OpenAI APIs are capped warm paths outside AWS.
 
@@ -54,7 +54,9 @@ History: acc1 (a personal account, ID 867490540162, profile `pqnghiep-admin`) wa
 [security baseline](security/baseline.md). Since 2026-11-11 it is the payer of acc3's organization (billing only), and
 since 2026-11-12 it serves the Bedrock chat models through one invoker role only (AA-1095, ADR 0001a Note S278; the
 app and Infra repos read its ID from a task environment variable and a repository secret, never a committed file).
-Never create any other resource there, route anything else to it or use it for other AA work.
+Since 2026-11-13 the same root also holds a free, alert-only spend guard: budget `aa1-llm-monthly-total` (100 USD a
+month, e-mail at 50/80/100 % actual and 100 % forecast) and a daily cost anomaly e-mail, never a stop (AA-1096, ADR
+0001a Note S279). Never create any other resource there, route anything else to it or use it for other AA work.
 
 > [!WARNING]
 > The `default` profile points at **acc2** since AA-517 (2026-09-02). Before that it was a static key of another account and caused
