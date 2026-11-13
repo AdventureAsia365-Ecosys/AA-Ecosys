@@ -18,19 +18,21 @@ const R = require('./_rehearsal.cjs');
 const CH = {
   wordpress: {
     channel: 'blog', label: 'WordPress', heading: 'Connect WordPress', piece: 'blog', summary: 'publish-wp-summary', status: `${R.T}/integrations/wordpress`,
-    save: 'wpSave', test: 'wpTest', connected: 'Connected — WordPress verified successfully.',
+    save: 'wpSave', test: 'wpTest', disconnect: 'wpDisconnect', disconnectLabel: 'Disconnect WordPress', connected: 'Connected — WordPress verified successfully.',
     fields: (c) => [['e.g. https://yourblog.com', c.site_url], ['e.g. your WordPress username', c.app_user],
       ['xxxx xxxx xxxx xxxx xxxx xxxx', c.app_password]],
     // The live post's byline usually names the WordPress user (app_user): blurred on the post page too.
+    // The Facebook card shares the page: its summary names the test Page owner's Page id, blurred here too (S279: a
+    // WordPress take showed it in clear once the Page connection existed).
     mask: ['input[placeholder="e.g. your WordPress username"]', 'input[type="password"]', '.byline', '.author', '.entry-meta',
-      '.posted-by', '.wp-block-post-author', '.wp-block-post-author-name', 'a[rel="author"]'],
+      '.posted-by', '.wp-block-post-author', '.wp-block-post-author-name', 'a[rel="author"]', '[data-testid="publish-fb-summary"]'],
     connectedMask: [],
     // The byline selectors of common themes; checked on the live post (any that is on screen must be blurred).
     bylineMask: ['.byline', '.author', '.posted-by', '.wp-block-post-author', '.wp-block-post-author-name', 'a[rel="author"]'],
   },
   facebook: {
     channel: 'facebook', label: 'Facebook', heading: 'Connect Facebook Page', piece: 'facebook', summary: 'publish-fb-summary', status: `${R.T}/integrations/facebook`,
-    save: 'fbSave', test: 'fbTest', connected: 'Connected — Facebook Page verified successfully.',
+    save: 'fbSave', test: 'fbTest', disconnect: 'fbDisconnect', disconnectLabel: 'Disconnect Facebook', connected: 'Connected — Facebook Page verified successfully.',
     fields: (c) => [['e.g. 104123456789012', c.page_id], ['e.g. EAAB…', c.page_access_token]],
     // The Page id is the test Page owner's own Page: blurred in the form, the summary card and the post links.
     mask: ['input[inputmode="numeric"]', 'input[type="password"]', '[data-testid="publish-fb-summary"]'],
@@ -42,7 +44,7 @@ const CH = {
 /** The writes a publish scenario of `name` may make (allowWrites sources). */
 function allowFor(name) {
   const c = CH[name];
-  return R.allow(c.save, c.test, 'publish', 'unpublish');
+  return R.allow(c.save, c.test, c.disconnect, 'publish', 'unpublish');
 }
 
 /** The pending card of a piece title (the innermost block holding the title and a Publish button). */
@@ -113,6 +115,7 @@ function publishSteps(name, state) {
           { name: 'save', path: R.PATHS[c.save], method: 'POST', max: 1 }, { name: 'test', path: R.PATHS[c.test], method: 'POST', max: 1 },
           { name: 'publish', path: R.PATHS.publish, method: 'POST', max: 2 },
           { name: 'unpublish', path: R.PATHS.unpublish, method: R.methodOf('unpublish'), max: 1 },
+          state.disconnectRule = { name: 'disconnect', path: R.PATHS[c.disconnect], method: 'DELETE', max: 0 },
         ]);
         await check(page, h, '/portal/content/publish', { heading: 'Publish' });
         state.piece = await R.readyPiece(page, c.piece);
@@ -128,8 +131,24 @@ function publishSteps(name, state) {
     step(`The agency connects its ${c.label}: the details are pasted once, then tested. They never show again.`,
       `Đại lý kết nối ${c.label}: dán thông tin một lần rồi kiểm tra. Thông tin này không bao giờ hiện lại.`,
       async (page, h) => {
-        const st = await studioCall(page, 'GET', c.status);
+        let st = await studioCall(page, 'GET', c.status);
         if (st.status !== 200) throw new Error(`reading the ${c.label} connection answered ${st.status}`);
+        if (st.data && st.data.connected && st.data.last_verify_error) {
+          // A stored connection that failed its last check (e.g. an expired token): the owner disconnects it on the
+          // integrations page and connects again with the current details. Exactly one disconnect is let through.
+          state.disconnectRule.max = 1;
+          await h.click(page.getByTestId(c.summary).getByRole('link').first());
+          await page.waitForURL('**/portal/account/integrations', { timeout: 30_000 });
+          await h.click(page.getByRole('button', { name: c.disconnectLabel, exact: true }).first());
+          const gone = page.waitForResponse((r) => R.isCall(r, R.PATHS[c.disconnect], 'DELETE'), { timeout: 60_000 });
+          await h.click(page.getByRole('dialog').getByRole('button', { name: 'Disconnect', exact: true }));
+          const res = await gone;
+          if (res.status() >= 300) throw new Error(`disconnecting the stale ${c.label} connection answered ${res.status()}`);
+          state.reconnected = true;
+          await check(page, h, '/portal/content/publish', { heading: 'Publish' });
+          st = await studioCall(page, 'GET', c.status);
+          if (st.status !== 200 || (st.data && st.data.connected)) throw new Error(`the ${c.label} connection is still there after Disconnect`);
+        }
         if (st.data && st.data.connected) {
           await h.expect(page.getByTestId(c.summary)).toBeVisible({ timeout: 30_000 });
           if (c.connectedMask.length) await h.assertMasked(c.connectedMask);
@@ -191,7 +210,9 @@ function publishSteps(name, state) {
         if (!rows.some((r) => r.status === 'unpublished')) throw new Error('the first post is not recorded as unpublished');
         if (body.external_url) await checkLivePost(page, h, body.external_url);
         const n = state.counts;
-        if (n.publish !== 2 || n.unpublish !== 1 || n.save > 1 || n.test > 1) throw new Error(`unexpected write counts ${JSON.stringify(n)}`);
+        if (n.publish !== 2 || n.unpublish !== 1 || n.save > 1 || n.test > 1 || n.disconnect !== (state.reconnected ? 1 : 0)) {
+          throw new Error(`unexpected write counts ${JSON.stringify(n)}`);
+        }
       }, { writes: true }),
   ];
 }

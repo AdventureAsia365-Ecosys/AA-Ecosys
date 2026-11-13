@@ -28,10 +28,14 @@ const PATHS = {
   wpTest: /^\/api\/tenant\/v1\/integrations\/wordpress\/test$/,
   fbSave: /^\/api\/tenant\/v1\/integrations\/facebook$/,
   fbTest: /^\/api\/tenant\/v1\/integrations\/facebook\/test$/,
+  // Disconnect (DELETE on the connection): allowed by the browser guard, but capped at 0 by the publish scenarios unless
+  // the stored connection failed its last check (a stale token); then exactly one disconnect, then a fresh connect.
+  wpDisconnect: /^\/api\/tenant\/v1\/integrations\/wordpress$/,
+  fbDisconnect: /^\/api\/tenant\/v1\/integrations\/facebook$/,
 };
 // The one method each write uses (AA-Partner web: the viewer edit is a PATCH, Unpublish a DELETE, the rest POST). The
-// allow-list and limitWrites both pin it, so e.g. a DELETE (disconnect) on the integration path stays refused.
-const METHODS = { piece: 'PATCH', unpublish: 'DELETE' };
+// allow-list and limitWrites both pin it; a disconnect is its own named write (capped at 0 unless the connection is stale).
+const METHODS = { piece: 'PATCH', unpublish: 'DELETE', wpDisconnect: 'DELETE', fbDisconnect: 'DELETE' };
 const methodOf = (name) => METHODS[name] || 'POST';
 // allowWrites entries "<METHOD> <source>": record.cjs tests the source on the full URL (origin + path, no query), so
 // no leading ^; the method must match too (lib/net-guard.cjs compileAllow).
