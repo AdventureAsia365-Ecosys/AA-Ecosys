@@ -136,11 +136,11 @@ test('REH scenarios allow exactly their writes, each for its own method only', (
     'reh-04-edit': [[['PATCH', `${T}/content-writing/pieces/${ID}`]], [P(`${T}/content-writing/pieces/${ID}`),
       ['DELETE', `${T}/content-writing/pieces/${ID}`], ['PUT', `${T}/content-writing/pieces/${ID}`],
       ['PATCH', `${T}/content-writing/pieces/${ID}/export`], P(`${T}/content-writing/requests/${ID}/write`), ...pub]],
-    'reh-04b-wordpress': [[P(`${T}/integrations/wordpress`), P(`${T}/integrations/wordpress/test`), ...pub],
-      [P(`${T}/integrations/facebook`), ['DELETE', `${T}/integrations/wordpress`], P(`${T}/publish-log/${ID}`),
+    'reh-04b-wordpress': [[P(`${T}/integrations/wordpress`), P(`${T}/integrations/wordpress/test`), ['DELETE', `${T}/integrations/wordpress`], ...pub],
+      [P(`${T}/integrations/facebook`), ['DELETE', `${T}/integrations/facebook`], P(`${T}/publish-log/${ID}`),
         ['DELETE', `${T}/publish-log/${ID}/publish`], ['PATCH', `${T}/content-writing/pieces/${ID}`], P(`${T}/content-writing/requests/${ID}/write`)]],
-    'reh-04b-facebook': [[P(`${T}/integrations/facebook`), P(`${T}/integrations/facebook/test`), ...pub],
-      [P(`${T}/integrations/wordpress`), ['DELETE', `${T}/integrations/facebook`], P(`${T}/content-writing/requests/${ID}/write`)]],
+    'reh-04b-facebook': [[P(`${T}/integrations/facebook`), P(`${T}/integrations/facebook/test`), ['DELETE', `${T}/integrations/facebook`], ...pub],
+      [P(`${T}/integrations/wordpress`), ['DELETE', `${T}/integrations/wordpress`], P(`${T}/content-writing/requests/${ID}/write`)]],
     'reh-04b-takedown': [[['DELETE', `${T}/publish-log/${ID}`]], [P(`${T}/publish-log/${ID}`), P(`${T}/publish-log/${ID}/publish`),
       ['DELETE', `${T}/integrations/wordpress`]]],
   };
@@ -247,4 +247,16 @@ test('catalogue id rule: REH-<nn>[letter]-<slug> accepted; other spellings refus
     kinds: ['uat'], covers: [], screens: [], status: 'live', round: null, identity: 'studio-rehearsal', writes: true, paid: false }] });
   for (const id of ['REH-03-brand', 'REH-04b-wordpress', 'REH-12b-end-pilot', 'REH-04-x2']) assert.deepEqual(cat.validate(row(id)), [], id);
   for (const id of ['REH-3-brand', 'REH-03-Brand', 'REH-03-', 'REH-03--x', 'REH-03_brand']) assert.match(cat.validate(row(id)).join(), /id does not follow/, id);
+});
+
+test('publish scenarios blur the Facebook Page summary whatever channel they record (S279)', () => {
+  const P = require('../scenarios/content-studio/_publish.cjs');
+  for (const ch of ['wordpress', 'facebook']) assert.ok(P.CH[ch].mask.includes('[data-testid="publish-fb-summary"]'), ch);
+});
+
+test('publish scenarios cap the disconnect at 0 unless the stored connection is stale (S279)', () => {
+  const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'scenarios', 'content-studio', '_publish.cjs'), 'utf8');
+  assert.match(src, /state\.disconnectRule = \{ name: 'disconnect', path: R\.PATHS\[c\.disconnect\], method: 'DELETE', max: 0 \}/);
+  assert.match(src, /last_verify_error\) \{[\s\S]{0,400}state\.disconnectRule\.max = 1;/);
+  assert.match(src, /n\.disconnect !== \(state\.reconnected \? 1 : 0\)/);
 });
