@@ -126,8 +126,8 @@ function htmlToText(html) {
     .replace(/[ \t ]+/g, ' ');
 }
 
-/** Decoded text bodies: plain parts first, HTML parts (as text) after. */
-function textBodies(raw) {
+/** Decoded text bodies: plain parts first, HTML parts (as text, or as decoded HTML with keepHtml) after. */
+function textBodies(raw, { keepHtml = false } = {}) {
   const plain = [];
   const html = [];
   const walk = (part, depth) => {
@@ -148,7 +148,7 @@ function textBodies(raw) {
     if (type === 'message/rfc822') { walk(body, depth + 1); return; }
     if (!type.startsWith('text/')) return;
     const text = decode(body, (h.get('content-transfer-encoding') || ['7bit'])[0], param(ct, 'charset'));
-    if (type === 'text/html') html.push(htmlToText(text)); else plain.push(text);
+    if (type === 'text/html') html.push(keepHtml ? text : htmlToText(text)); else plain.push(text);
   };
   walk(raw, 0);
   return [...plain, ...html];
@@ -184,10 +184,24 @@ async function baseline(prefix) {
 }
 
 /**
- * Poll `prefix` until a NEW message (not in `before`, written after `since`) to `recipient` yields a code.
- * Hard cap `timeoutMs` (default 90 s). The error never carries mail content.
+ * The invitation link of a studio / CRM invitation mail (AA-Partner sends https://<partner host>/join?t=<43-char token>),
+ * from the decoded bodies (quoted-printable soft breaks and =3D undone), or null. The link is a live credential: never
+ * logged, printed or written.
  */
-async function waitForCode({ recipient, prefix, before, since, timeoutMs = 90_000 }) {
+function extractInviteLink(raw) {
+  // The HTML part is kept as HTML: the link may sit in an href only (the visible text is "Open invitation").
+  for (const t of textBodies(raw, { keepHtml: true })) {
+    const m = /(https:\/\/[^\s"'<>]+\/join\?t=[A-Za-z0-9_-]{43})(?![A-Za-z0-9_-])/.exec(t);
+    if (m) return m[1];
+  }
+  return null;
+}
+
+/**
+ * Poll `prefix` until a NEW message (not in `before`, written after `since`) to `recipient` yields `extract(raw)`.
+ * Hard cap `timeoutMs`. The error never carries mail content.
+ */
+async function waitForMail({ recipient, prefix, before, since, timeoutMs, extract, what }) {
   const deadline = Date.now() + timeoutMs;
   const notBefore = since.getTime() - CLOCK_SKEW_MS;
   const checked = new Set(before);
@@ -201,8 +215,8 @@ async function waitForCode({ recipient, prefix, before, since, timeoutMs = 90_00
         const raw = await read(o.key);
         checked.add(o.key);
         if (!isAddressedTo(raw, recipient)) continue;
-        const code = extractCode(raw);
-        if (code) return code;
+        const hit = extract(raw);
+        if (hit) return hit;
       }
       lastError = '';
     } catch (e) {
@@ -210,7 +224,17 @@ async function waitForCode({ recipient, prefix, before, since, timeoutMs = 90_00
     }
     await new Promise((r) => setTimeout(r, Math.min(POLL_MS, Math.max(0, deadline - Date.now()))));
   }
-  throw new Error(`no sign-in code for ${recipient} under ${prefix} within ${Math.round(timeoutMs / 1000)} s${lastError ? ` (${lastError})` : ''}`);
+  throw new Error(`no ${what} for ${recipient} under ${prefix} within ${Math.round(timeoutMs / 1000)} s${lastError ? ` (${lastError})` : ''}`);
 }
 
-module.exports = { baseline, waitForCode, extractCode, isAddressedTo, textBodies, parseHeaders, awsErrorCode };
+/** The sign-in code of a NEW mail to `recipient` (default cap 90 s). */
+function waitForCode({ recipient, prefix, before, since, timeoutMs = 90_000 }) {
+  return waitForMail({ recipient, prefix, before, since, timeoutMs, extract: extractCode, what: 'sign-in code' });
+}
+
+/** The invitation link of a NEW mail to `recipient` (default cap 3 min). `before` may be an empty Set with `since`. */
+function waitForInviteLink({ recipient, prefix = 'inbound/', before = new Set(), since, timeoutMs = 180_000 }) {
+  return waitForMail({ recipient, prefix, before, since, timeoutMs, extract: extractInviteLink, what: 'invitation link' });
+}
+
+module.exports = { baseline, waitForCode, waitForInviteLink, extractCode, extractInviteLink, isAddressedTo, textBodies, parseHeaders, awsErrorCode };

@@ -6,7 +6,19 @@
 // The identities a dry-run scenario may name (lib/signin.cjs signs each one in once, outside the recorded context).
 // studio-editor (AA-855): the Content studio EDITOR of the E2E tenant; it can write, so only write scenarios use it.
 // studio-audit (AA-855 W-01..W-04): the editor of the four synthetic audit tenants (lib/studio-audit.cjs), one per run.
-const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'crm'];
+// booking-staff / booking-maker / booking-checker (root ADR 0006a A10e): the Dev-only Booking E2E writers (supplier
+// booking request + confirm; agency payment record; its approval), synthetic agencies only. Write set only.
+// traveller (pilot rehearsal, AA-1086): a guest on a public page who WRITES (a trip, a request to an agency, a booking);
+// it never signs in, so only write scenarios use it.
+// studio-rehearsal (AA-1086 REH-*): the E2E OWNER of the synthetic pilot rehearsal agency (lib/rehearsal.cjs); write only.
+// crm-rehearsal, crm-rehearsal-agent, crm-staff: the pilot rehearsal's agency owner and agent (pinned to
+// pilot-rehearsal-01 by the pilot guard) and the AA staff console's E2E user (root ADR 0006a A10c). They are only in the
+// rehearsal write set and the rehearsal scenarios (scenarios/crm/reh-*.cjs), never in the read-only dry-run set.
+const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'studio-rehearsal', 'crm',
+  'booking-staff', 'booking-maker', 'booking-checker', 'traveller', 'crm-rehearsal', 'crm-rehearsal-agent', 'crm-staff'];
+const REHEARSAL_IDENTITIES = ['crm-rehearsal', 'crm-rehearsal-agent', 'crm-staff'];
+// Identities with no sign-in: the runner starts them with no saved session.
+const NO_SIGNIN = ['public', 'traveller'];
 // Paths that reach a paid model or data provider: aborted in every dry-run scenario (record.cjs UAT_BLOCK_URLS), so a
 // dry run can never start one, even by a stray click. TripPlanner free-text search (embedding) and narration (chat
 // model), in both spellings (lib/botCheck.ts in AA-TripPlanner-Web); the writes among them are also non-GET.
@@ -15,12 +27,24 @@ const PAID_URLS = ['/api/browse/search(?:[?#]|$)', '/api/browse\\?(?:.*&)?resour
 // (roles owner / agent / assistant), so the dry run signs in the OWNER of the invented review agency. Only the browser
 // guard of record.cjs keeps those scenarios read-only, so they run only on an explicit --include-writable. The other
 // signed-in identities are refused writes by their backend too (403 e2e_read_only for the CIS / Booking E2E staff,
-// 403 studio_role_forbidden for the Content studio viewer). The studio editor can write too (AA-855).
-const WRITABLE_IDENTITIES = ['crm', 'studio-editor', 'studio-audit'];
+// 403 studio_role_forbidden for the Content studio viewer). The studio editor can write too (AA-855), and so can the
+// guest traveller of the pilot rehearsal (it sends a trip to an agency, it books). The CRM rehearsal owner and agent
+// write like the review owner; the staff console user writes its own session rows and can open break-glass (ADR 0006a
+// A10c), so it counts as writable too.
+const WRITABLE_IDENTITIES = ['crm', 'studio-editor', 'studio-audit', 'studio-rehearsal', 'booking-staff', 'booking-maker', 'booking-checker', 'traveller',
+  'crm-rehearsal', 'crm-rehearsal-agent', 'crm-staff'];
+// Identities that only write scenarios sign in: no dry-run scenario uses them.
+const WRITE_SET_ONLY_IDENTITIES = ['studio-editor', 'studio-rehearsal', 'booking-staff', 'booking-maker', 'booking-checker', 'traveller',
+  ...REHEARSAL_IDENTITIES];
+// AA staff identities a write-set scenario may sign in: their backend refuses every write of the E2E session except a
+// short, named allow-list on synthetic tenants (cis-admin: the tenant offboarding erasure drill, root ADR 0006a A10b-5).
+// They stay in every dry run (read only there); a write-set scenario of theirs runs only by id with --include-writable.
+const WRITE_SET_STAFF = ['cis-admin'];
 // Exit code of a run stopped by the pilot guard (lib/pilot-guard.cjs EXIT_PILOT_GUARD).
 const EXIT_PILOT_GUARD = 5;
 // Order in which identities sign in: the cheap ones first, so a code-mail wait never delays the public pages.
-const SIGNIN_ORDER = ['public', 'studio', 'studio-editor', 'studio-audit', 'crm', 'cis-admin', 'booking'];
+const SIGNIN_ORDER = ['public', 'studio', 'studio-editor', 'studio-audit', 'studio-rehearsal', 'crm', 'crm-rehearsal', 'crm-rehearsal-agent',
+  'cis-admin', 'crm-staff', 'booking', 'booking-staff', 'booking-maker', 'booking-checker'];
 
 /** Parse the runner's argv (without node and the script). Throws on an unknown option or a missing value. */
 function parseArgs(argv) {
@@ -71,7 +95,7 @@ function describe(sc, file) {
   if (sc.fastOnly) throw new Error(`${file}: data steps (fastOnly) are not dry-run scenarios`);
   // Read-only by construction, not only by the runner's guard: a signed-in scenario is built with ro(), no scenario
   // lets a write through, and none runs its own prepare() (the runner signs the identity in; a prepare could write).
-  if (identity !== 'public' && sc.readOnly !== true) throw new Error(`${file}: a signed-in dry-run scenario must be readOnly (build it with ro())`);
+  if (!NO_SIGNIN.includes(identity) && sc.readOnly !== true) throw new Error(`${file}: a signed-in dry-run scenario must be readOnly (build it with ro())`);
   if (Array.isArray(sc.allowWrites) ? sc.allowWrites.length : sc.allowWrites) throw new Error(`${file}: allowWrites is not allowed in a dry-run scenario`);
   if (sc.prepare) throw new Error(`${file}: prepare() is not allowed in a dry-run scenario (the runner signs in)`);
   return { id: sc.id, app: sc.app, identity, title: sc.title || '', file, steps: sc.steps.length, readOnly: !!sc.readOnly };
@@ -87,11 +111,18 @@ function describeWrite(sc, file) {
   if (!sc || typeof sc !== 'object') throw new Error(`${file}: not a scenario module`);
   if (!sc.id || !sc.app || !Array.isArray(sc.steps) || !sc.steps.length) throw new Error(`${file}: id, app and steps are required`);
   const identity = sc.identity || 'public';
-  if (!WRITABLE_IDENTITIES.includes(identity)) throw new Error(`${file}: a write-set scenario signs in a writable identity (${WRITABLE_IDENTITIES.join(', ')})`);
+  if (!WRITABLE_IDENTITIES.includes(identity) && !WRITE_SET_STAFF.includes(identity)) {
+    throw new Error(`${file}: a write-set scenario signs in a writable identity (${[...WRITABLE_IDENTITIES, ...WRITE_SET_STAFF].join(', ')})`);
+  }
   if (sc.readOnly !== true) throw new Error(`${file}: a write-set scenario keeps the browser guard on (build it with rw())`);
   if (!Array.isArray(sc.allowWrites) || !sc.allowWrites.length) throw new Error(`${file}: a write-set scenario names the writes it makes (allowWrites)`);
   if (typeof sc.paid !== 'boolean') throw new Error(`${file}: a write-set scenario states paid: true or false`);
   if (sc.fastOnly) throw new Error(`${file}: data steps (fastOnly) are not write-set scenarios`);
+  // A paid take may open a paid path only by naming the exact PAID_URLS entry (record.cjs blockSources).
+  for (const u of sc.allowPaidUrls || []) {
+    if (!sc.paid) throw new Error(`${file}: allowPaidUrls on a scenario that is not paid`);
+    if (!PAID_URLS.includes(u)) throw new Error(`${file}: allowPaidUrls names ${u}, not a PAID_URLS entry`);
+  }
   // The steps that may write are marked, so a --preview knows where the read-only part ends.
   if (!sc.steps.some((s) => s && s.writes)) throw new Error(`${file}: a write-set scenario marks the steps that write (step(..., { writes: true }))`);
   return { id: sc.id, app: sc.app, identity, title: sc.title || '', file, steps: sc.steps.length, readOnly: true,
@@ -104,6 +135,27 @@ function previewSteps(sc) {
   return i < 0 ? sc.steps.length : i;
 }
 
+/**
+ * The URL blocks of one take (record.cjs): the scenario's own blockUrls plus the runner's (UAT_BLOCK_URLS, PAID_URLS
+ * in every dry-run child). A paid scenario names in `allowPaidUrls` the PAID_URLS entries it needs (the pilot
+ * rehearsal's planner search), and only those, only when the take may pay (UAT_ALLOW_PAID=1, never a preview), are
+ * dropped from the runner's list; every other paid path stays blocked. A scenario's own block always holds.
+ */
+function blockSources({ blockUrls = [], allowPaidUrls = [] } = {}, env = process.env) {
+  const runner = JSON.parse(env.UAT_BLOCK_URLS || '[]');
+  const pays = env.UAT_ALLOW_PAID === '1' && env.UAT_PREVIEW !== '1';
+  const open = new Set(pays ? allowPaidUrls : []);
+  return [...blockUrls, ...runner.filter((x) => !open.has(x))];
+}
+
+// parseArgs upper-cases --only / --record ids; ids with a lower-case part (a split letter REH-08a, a phone variant
+// REH-05.m) are matched back to their catalogue spelling here. Unknown ids stay as typed (select() then throws).
+function canonicalIds(entries, opts) {
+  if (!opts.only || !opts.only.length) return opts;
+  const by = new Map(entries.map((e) => [e.id.toUpperCase(), e.id]));
+  return { ...opts, only: opts.only.map((id) => by.get(String(id).toUpperCase()) || id) };
+}
+
 const matches = (e, opts) => (!opts.only || !opts.only.length || opts.only.includes(e.id))
   && (!opts.apps || !opts.apps.length || opts.apps.includes(e.app))
   && (!opts.identities || !opts.identities.length || opts.identities.includes(e.identity));
@@ -111,9 +163,11 @@ const matches = (e, opts) => (!opts.only || !opts.only.length || opts.only.inclu
 /**
  * The entries the options select, in manifest order. Unknown --only ids throw (a typo must not pass as "0 run").
  * Scenarios of a WRITABLE identity are left out unless opts.includeWritable; naming one explicitly (--only its id or
- * --identity crm) without the flag throws, so it is never skipped silently.
+ * --identity crm) without the flag throws, so it is never skipped silently. A write-set id needs the flag too, whatever
+ * its identity (a staff identity of WRITE_SET_STAFF writes only there).
  */
 function select(entries, opts) {
+  opts = canonicalIds(entries, opts);
   const ids = new Set(entries.map((e) => e.id));
   const dup = entries.find((e, i) => entries.findIndex((x) => x.id === e.id) !== i);
   if (dup) throw new Error(`duplicate scenario id ${dup.id}`);
@@ -135,7 +189,7 @@ function select(entries, opts) {
   }
   if (!opts.includeWritable) {
     const named = [...(opts.identities || []).filter((x) => WRITABLE_IDENTITIES.includes(x)),
-      ...entries.filter((e) => (opts.only || []).includes(e.id) && WRITABLE_IDENTITIES.includes(e.identity)).map((e) => e.id)];
+      ...entries.filter((e) => (opts.only || []).includes(e.id) && (WRITABLE_IDENTITIES.includes(e.identity) || e.writeSet)).map((e) => e.id)];
     if (named.length) {
       throw new Error(`${named.join(', ')}: signs in an account that can write (no read-only role); add --include-writable to run it`);
     }
@@ -146,19 +200,22 @@ function select(entries, opts) {
 
 /** Ids the options would select but leave out because their identity can write (said in the report). */
 function skippedWritable(entries, opts) {
+  opts = canonicalIds(entries, opts);
   if (opts.includeWritable) return [];
   return entries.filter((e) => !e.writeSet && matches(e, opts) && WRITABLE_IDENTITIES.includes(e.identity)).map((e) => e.id);
 }
 
-/** The identities to sign in for the selected entries (public needs none), in SIGNIN_ORDER. */
+/** The identities to sign in for the selected entries (public and traveller need none), in SIGNIN_ORDER. */
 function signinPlan(entries) {
   const need = new Set(entries.map((e) => e.identity));
-  return SIGNIN_ORDER.filter((x) => x !== 'public' && need.has(x));
+  return SIGNIN_ORDER.filter((x) => !NO_SIGNIN.includes(x) && need.has(x));
 }
 
 // Link tokens and long opaque values never reach the report (record.cjs uses this same function). The report may be
 // copied to the public root repo: AWS ARNs and 12-digit account numbers (an AccessDenied message names both, a bucket
-// name may end in one) are masked too.
+// name may end in one) are masked too. Query values of key-like parameters are masked whatever their length: an
+// agency's intake form key (`f=`, 22 characters, the Book now link) is shorter than the 30-character rule.
+const SECRET_PARAMS = /([?&](?:f|key|form_key|token|code|secret|sig|signature)=)([^&#\s"'<>]+)/gi;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 function redact(x) {
   if (x == null) return x;
@@ -167,7 +224,8 @@ function redact(x) {
     // A uuid's last group can be 12 digits: the uuid alternative matches first and is kept whole.
     .replace(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|(?<![0-9A-Za-z])\d{12}(?![0-9A-Za-z])/gi,
       (m) => (m.length === 36 ? m : '<account>'))
-    .replace(/([/=])([A-Za-z0-9_.~%-]{30,})/g, (m, lead, seg) => (UUID.test(seg) ? m : `${lead}<redacted>`));
+    .replace(/([/=])([A-Za-z0-9_.~%-]{30,})/g, (m, lead, seg) => (UUID.test(seg) ? m : `${lead}<redacted>`))
+    .replace(SECRET_PARAMS, '$1<redacted>');
 }
 
 /** One-line, table-safe text (no pipes, no newlines, capped). */
@@ -316,6 +374,6 @@ function stamp(d = new Date()) {
 }
 
 module.exports = {
-  IDENTITIES, WRITABLE_IDENTITIES, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, parseArgs, describe, describeWrite, previewSteps, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
+  IDENTITIES, NO_SIGNIN, REHEARSAL_IDENTITIES, WRITABLE_IDENTITIES, WRITE_SET_ONLY_IDENTITIES, WRITE_SET_STAFF, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, blockSources, parseArgs, canonIds: canonicalIds, canonicalIds, describe, describeWrite, previewSteps, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
   renderMarkdown, renderTsv, stamp,
 };

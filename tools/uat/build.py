@@ -45,8 +45,8 @@ def write_subs(cues, lang, out_base: Path):
     for i, (a, b, text) in enumerate(cues, 1):
         srt += [str(i), f"{ts(a, ',')} --> {ts(b, ',')}", text, ""]
         vtt += [f"{ts(a, '.')} --> {ts(b, '.')}", text, ""]
-    p_srt = out_base.with_suffix(f".{lang}.srt")
-    p_vtt = out_base.with_suffix(f".{lang}.vtt")
+    p_srt = out_base.with_name(out_base.name + f".{lang}.srt")
+    p_vtt = out_base.with_name(out_base.name + f".{lang}.vtt")
     p_srt.write_text("\n".join(srt), encoding="utf-8")
     p_vtt.write_text("\n".join(vtt), encoding="utf-8")
     return p_srt, p_vtt
@@ -177,10 +177,10 @@ def main(work: Path, out_dir: Path, burn: bool = True, soft: bool = False) -> No
     cmd += ["-c:v", "libx264", "-preset", "medium", "-crf", "26", "-pix_fmt", "yuv420p", "-r", "25",
             "-c:a", "aac", "-b:a", "96k", "-movflags", "+faststart", *end]
     cmd += mux_args(audio_meta, soft_srts)
-    cmd += [str(base.with_suffix(".mp4"))]
+    cmd += [str(base.with_name(base.name + ".mp4"))]
     subprocess.run(cmd, check=True)
-    base.with_suffix(".result.json").write_text(json.dumps({**result, "burned": burn, "soft_subs": soft}, indent=2), encoding="utf-8")
-    print(base.with_suffix(".mp4"))
+    base.with_name(base.name + ".result.json").write_text(json.dumps({**result, "burned": burn, "soft_subs": soft}, indent=2), encoding="utf-8")
+    print(base.with_name(base.name + ".mp4"))
 
 
 if __name__ == "__main__":

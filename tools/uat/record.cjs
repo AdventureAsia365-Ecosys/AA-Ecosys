@@ -17,7 +17,7 @@
 // result.json for the Vietnamese chapter list of longform.py. Errors and URLs written to timeline.json / result.json
 // have link tokens (path or query segments of 30+ characters, uuids excepted) replaced by <redacted>.
 // Dry-run guards (AA-1009, tools/uat/dryrun.cjs): scenario.readOnly aborts every request that is not GET / HEAD / OPTIONS
-// (scenario.allowWrites = [regex sources on the URL] lets named ones through) and lists them in result.json
+// (scenario.allowWrites = [regex sources on the URL, or "<METHOD> <regex>" for one method only] lets named ones through) and lists them in result.json
 // blocked_writes; scenario.blockUrls = [regex sources] aborts any matching request (e.g. paid model paths) and lists it
 // in blocked_urls (env UAT_READ_ONLY=1 / UAT_BLOCK_URLS=<JSON list> add both to any scenario). Telemetry beacons, the
 // staff session keep-alive (POST /api/auth/refresh) and third-party posts are aborted but listed in blocked_other
@@ -46,7 +46,7 @@ const MIN_HOLD_MS = 2500;
 // Link tokens travel in URL path segments and query values: never write one to timeline.json / result.json / logs.
 // (A uuid is an object id, not a credential: kept for debugging.)
 // Same rule as the dry-run report (lib/dryrun-core.cjs): also masks AWS ARNs and 12-digit account numbers.
-const { redact } = require('./lib/dryrun-core.cjs');
+const { redact, blockSources } = require('./lib/dryrun-core.cjs');
 const TAIL_PAD_MS = 600;
 // Which aborted request is a write to the app (fails a read-only scenario) and which is telemetry / session upkeep /
 // third party (listed apart): lib/net-guard.cjs.
@@ -138,9 +138,10 @@ async function main() {
   const blockedOther = [];
   // The dry-run runner forces both for every scenario it starts: UAT_READ_ONLY=1, UAT_BLOCK_URLS=<JSON regex list>.
   const readOnly = !!sc.readOnly || process.env.UAT_READ_ONLY === '1';
-  const blockSrc = [...(sc.blockUrls || []), ...JSON.parse(process.env.UAT_BLOCK_URLS || '[]')];
+  // A paid take may open only the paid paths its scenario names (allowPaidUrls); the rest of the runner's list holds.
+  const blockSrc = blockSources(sc);
   if (readOnly || blockSrc.length) {
-    const allow = (sc.allowWrites || []).map((x) => new RegExp(x));
+    const allow = guard.compileAllow(sc.allowWrites);
     const block = blockSrc.map((x) => new RegExp(x));
     await context.route('**/*', (route) => {
       const req = route.request();
@@ -150,7 +151,8 @@ async function main() {
         blockedUrls.push(redact(`${req.method()} ${where()}`));
         return route.abort('blockedbyclient');
       }
-      if (readOnly && !guard.isRead(req.method()) && !allow.some((r) => r.test(url))) {
+      // The AWS WAF challenge proof carries no app data (lib/net-guard.cjs): it always goes on, preview included.
+      if (readOnly && !guard.isRead(req.method()) && !guard.allowMatches(allow, req.method(), url) && !guard.isChallengeProof(url)) {
         // Aborted either way; only a write to the app itself fails the scenario. Telemetry beacons (map events, error
         // reports, Vercel analytics), the staff session keep-alive and third-party posts are listed apart.
         (guard.classify(url, sc.baseURL) === 'write' ? blockedWrites : blockedOther).push(redact(`${req.method()} ${where()}`));
@@ -163,7 +165,7 @@ async function main() {
     // context.route() never sees two other ways out of the browser context: Node-side APIRequestContext calls
     // (page.request / context.request, one shared object) and WebSockets. No app opens a WebSocket today, so every one
     // is closed and listed; a scenario's own non-read request call is refused and counts as a write.
-    const allow = (sc.allowWrites || []).map((x) => new RegExp(x));
+    const allow = guard.compileAllow(sc.allowWrites);
     guard.guardRequestContext(context.request, { allow,
       onBlocked: (method, url) => {
         let w = url;
