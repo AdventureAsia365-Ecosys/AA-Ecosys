@@ -27,7 +27,7 @@ module.exports = (() => {
       step('A second finance person opens the same invoice. One payment waits for approval.',
         'Một nhân viên tài chính thứ hai mở cùng hoá đơn đó. Có một khoản thanh toán đang chờ duyệt.',
         async (page, h) => {
-          counts = await limitWrites(page, [{ name: 'approve', path: /\/agency-payments\/[0-9a-f-]{36}\/approve$/, max: 1 }]);
+          counts = await limitWrites(page, [{ name: 'approve', path: /\/agency-payments\/[0-9a-f-]{36}\/approve$/, max: 1, strict: true }]);
           await h.goto(`/agency-billing/invoices/${encodeURIComponent(fx.invoice.number)}`);
           await h.expect(page.locator('h1').first()).toContainText(fx.invoice.number, { timeout: 30_000 });
           const waiting = payments(page).filter({ hasText: 'Waiting for approval' });

@@ -36,8 +36,8 @@ const sc = rw({
       'Chuyến đi của đại lý đã được đặt. Nhân viên mở thẻ Nhà cung cấp: có một khách sạn hoặc dịch vụ đang chờ gửi yêu cầu.',
       async (page, h) => {
         counts = await limitWrites(page, [
-          { name: 'request', path: new RegExp(`/supplier-bookings/${fx.supplier_booking.id}/request$`), max: 1 },
-          { name: 'confirm', path: new RegExp(`/supplier-bookings/${fx.supplier_booking.id}/confirm$`), max: 1 },
+          { name: 'request', path: new RegExp(`/supplier-bookings/${fx.supplier_booking.id}/request$`), max: 1, strict: true },
+          { name: 'confirm', path: new RegExp(`/supplier-bookings/${fx.supplier_booking.id}/confirm$`), max: 1, strict: true },
         ]);
         await h.goto(`/cases/${encodeURIComponent(fx.trip_case.code)}?tab=suppliers`);
         await h.expect(page.locator('h1').first()).toBeVisible({ timeout: 30_000 });

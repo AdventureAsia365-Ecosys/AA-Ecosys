@@ -29,7 +29,7 @@ const sc = rw({
     step('AA invoiced the rehearsal agency. Finance opens the invoice: it is issued and has an amount left to pay.',
       'AA đã xuất hoá đơn cho đại lý diễn tập. Bộ phận tài chính mở hoá đơn: hoá đơn đã phát hành và còn số tiền phải trả.',
       async (page, h) => {
-        counts = await limitWrites(page, [{ name: 'record', path: new RegExp(`/agency-invoices/${fx.invoice.id}/payments$`), max: 1 }]);
+        counts = await limitWrites(page, [{ name: 'record', path: new RegExp(`/agency-invoices/${fx.invoice.id}/payments$`), max: 1, strict: true }]);
         await h.goto(`/agency-billing/invoices/${encodeURIComponent(fx.invoice.number)}`);
         await h.expect(page.locator('h1').first()).toContainText(fx.invoice.number, { timeout: 30_000 });
         await h.expect(page.getByText('Issued', { exact: true }).first()).toBeVisible({ timeout: 30_000 });

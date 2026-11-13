@@ -102,6 +102,7 @@ test('rehearsal write scenarios cap their writes per method (limitWrites rules n
     const src = fs.readFileSync(path.join(__dirname, '..', 'scenarios', rel), 'utf8');
     assert.match(src, /limitWrites\(page, \[/, `${rel} registers limitWrites`);
     assert.ok(!/method: '(?:PUT|PATCH|DELETE)'/i.test(src), `${rel}: POST writes only`);
+    assert.ok(/strict: true/.test(src), `${rel}: a stray method on a capped path is aborted (strict)`);
   }
 });
 

@@ -1,4 +1,5 @@
-// Unit tests of limitWrites (lib/uat-page.cjs): every write method on a rule's path is capped, not only POST.
+// Unit tests of limitWrites (lib/uat-page.cjs) with strict: true: every write method on a rule's path is capped, not
+// only the rule's own method (the Booking writer scenarios of the pilot rehearsal use it).
 // No browser, no network:   node --test tools/uat/tests/*.test.cjs
 'use strict';
 const test = require('node:test');
@@ -22,13 +23,13 @@ async function harness(rules) {
   return { counts, seen, fire };
 }
 
-test('limitWrites: PUT, PATCH and DELETE on a POST rule are aborted and counted; reads pass uncounted', async () => {
-  const first = await harness([{ name: 'record', path: /^\/x\/payments$/, max: 1 }]);
+test('limitWrites strict: PUT, PATCH and DELETE on a POST rule are aborted and counted; reads pass uncounted', async () => {
+  const first = await harness([{ name: 'record', path: /^\/x\/payments$/, max: 1, strict: true }]);
   await first.fire('/x/payments', 'POST');
   await first.fire('/x/payments', 'POST');
   assert.deepEqual(first.seen, ['go POST /x/payments', 'abort POST /x/payments blockedbyclient']);
 
-  const { counts, seen, fire } = await harness([{ name: 'record', path: /^\/x\/payments$/, max: 1 }]);
+  const { counts, seen, fire } = await harness([{ name: 'record', path: /^\/x\/payments$/, max: 1, strict: true }]);
   for (const m of ['GET', 'HEAD', 'OPTIONS']) await fire('/x/payments', m);
   await fire('/x/payments', 'DELETE');
   await fire('/x/payments', 'patch');
@@ -45,10 +46,10 @@ test('limitWrites: PUT, PATCH and DELETE on a POST rule are aborted and counted;
   assert.deepEqual(counts, { record: 5 });
 });
 
-test('limitWrites: a rule with method PATCH (or DELETE) caps that method and refuses the others', async () => {
+test('limitWrites strict: a rule with method PATCH (or DELETE) caps that method and refuses the others', async () => {
   const { counts, seen, fire } = await harness([
-    { name: 'edit', path: /^\/x\/pieces\/1$/, max: 1, method: 'PATCH' },
-    { name: 'unpublish', path: /^\/x\/log\/1$/, max: 1, method: 'delete' },
+    { name: 'edit', path: /^\/x\/pieces\/1$/, max: 1, method: 'PATCH', strict: true },
+    { name: 'unpublish', path: /^\/x\/log\/1$/, max: 1, method: 'delete', strict: true },
   ]);
   await fire('/x/pieces/1', 'PATCH');
   await fire('/x/pieces/1', 'PATCH');
