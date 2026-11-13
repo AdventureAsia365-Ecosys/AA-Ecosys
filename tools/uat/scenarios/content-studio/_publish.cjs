@@ -148,11 +148,9 @@ function publishSteps(name, state) {
           await f.fill(value);
         }
         await h.assertMasked(c.mask.filter((m) => !m.startsWith('[data-testid')));
-        // Both channel cards have a Test & Connect button: click the one of this channel's card (the innermost block
-        // holding its heading and a button).
-        const cardOf = page.locator('div').filter({ has: page.getByText(c.heading, { exact: true }) })
-          .filter({ has: page.getByRole('button', { name: 'Test & Connect' }) }).last();
-        await h.click(cardOf.getByRole('button', { name: 'Test & Connect' }));
+        // Both channel cards have a Test & Connect button: click the first one after this channel's card heading.
+        await h.click(page.getByText(c.heading, { exact: true }).first()
+          .locator('xpath=following::button[normalize-space(.)="Test & Connect"][1]'));
         await h.expect(page.getByText(c.connected).or(page.getByTestId(c.summary)).first()).toBeVisible({ timeout: 60_000 });
       }, { writes: true }),
     step(`Publish sends the piece to ${c.label}. The post goes live with the text the agency approved.`,
