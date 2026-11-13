@@ -3,6 +3,7 @@
 //
 //   const crm = require('../../lib/crm-signin.cjs');
 //   const file = await crm.ensureState('A');     // A = owner, B = assistant of the synthetic agency "Lữ hành Sen Vàng"
+//                                                // RO = owner, RA = agent of the pilot rehearsal agency
 //   node tools/uat/lib/crm-signin.cjs A B         // sign in (or check the saved session) from the shell
 //
 // Identities (plan docs/audits/2026-10-31-S261-crm-progress-video-plan §3): A and B sign in through the partner pool's
@@ -28,6 +29,10 @@ const WORK = path.join(__dirname, '..', 'work', 'crm');
 const IDENTITIES = {
   A: { secret: 'crm/dev/e2e-test-crm/sen-vang-owner', role: 'owner' },
   B: { secret: 'crm/dev/e2e-test-crm/sen-vang-assistant', role: 'assistant' },
+  // The pilot rehearsal agency (runbook docs/ops/runbooks/pilot-rehearsal.md, Fixtures): its E2E owner and agent. When
+  // the account is a member of more than one agency, the agency chooser picks this one by its invented name.
+  RO: { secret: 'crm/dev/e2e-test-crm/pilot-rehearsal-01-owner', role: 'owner', agency: 'E2E Pilot Rehearsal Travel' },
+  RA: { secret: 'crm/dev/e2e-test-crm/pilot-rehearsal-01-agent', role: 'agent', agency: 'E2E Pilot Rehearsal Travel' },
 };
 // Blur on screen (every CRM review chunk): the echoed one-time codes and the code boxes (portal sign-in and e-sign),
 // the client / portal links the agency copies once (they carry the link token), the calendar feed URL, and the real
@@ -148,9 +153,12 @@ async function managedLogin(page, who) {
   await page.waitForURL((u) => u.origin === PARTNER, { timeout: 30_000 });
 }
 
-async function landOnAgency(page) {
+async function landOnAgency(page, agency = null) {
   if (new URL(page.url()).pathname === '/select-agency') {
-    await page.getByTestId('agency-option').first().getByRole('button').click();
+    const options = page.getByTestId('agency-option');
+    const pick = agency ? options.filter({ hasText: agency }) : options;
+    if (agency && !(await pick.count())) throw new Error('the agency chooser does not list the expected agency');
+    await pick.first().getByRole('button').click();
     await page.waitForURL((u) => u.pathname !== '/select-agency', { timeout: 30_000 });
   }
 }
@@ -161,7 +169,7 @@ function onPartnerApp(page) {
 }
 
 /**
- * A valid storageState file for identity A or B: the saved one, renewed through /auth/refresh, when the CRM still
+ * A valid storageState file for identity A, B, RO or RA: the saved one, renewed through /auth/refresh, when the CRM still
  * accepts it, else a fresh managed login. Runs its own headless Chromium, closed before returning (one browser at a time). Returns the file path.
  * `file` (default work/crm/.state-<who>.json) lets the dry run keep its own session file apart from the review set.
  */
@@ -182,7 +190,7 @@ async function ensureState(who, file = statePath(who)) {
     await page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => {});
     let reused = onPartnerApp(page);
     if (reused) {
-      await landOnAgency(page);
+      await landOnAgency(page, IDENTITIES[who].agency);
       const me = await bffCall(page, 'GET', 'members');
       reused = me.status === 200;
     }
@@ -192,7 +200,7 @@ async function ensureState(who, file = statePath(who)) {
         if (await go.isVisible().catch(() => false)) await go.click();
       }
       await managedLogin(page, who);
-      await landOnAgency(page);
+      await landOnAgency(page, IDENTITIES[who].agency);
       await page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => {});
       if (!onPartnerApp(page)) throw new Error(`sign-in of ${who} did not land on the CRM`);
     }

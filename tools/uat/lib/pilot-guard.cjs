@@ -5,7 +5,8 @@
 //
 //   const guard = require('./pilot-guard.cjs');
 //   const v = await guard.check(browser, storageStateFile, guard.scopesFor(sc, storageState));   // { ok, reason, ... }
-//   node tools/uat/lib/pilot-guard.cjs studio|studio-editor|studio-audit|crm   read the saved session's tenant, ok / refused
+//   node tools/uat/lib/pilot-guard.cjs studio|studio-editor|studio-audit|studio-rehearsal|crm|crm-rehearsal|crm-rehearsal-agent
+//                                                                  read the saved session's tenant, ok / refused
 //
 // Where the active tenant is read (AA-Partner web, one agency host since AA-1036):
 //   content  GET /api/tenant/me  -> { tenant_id, tenant_name, ... }   the Content studio session (web/app/api/tenant/me)
@@ -15,7 +16,7 @@
 //
 // Allow-list (synthetic tenants only, all invented):
 //   built in   the four E2E Content tenants and the four audit tenants (AA-855 write scenarios) by their invented
-//              display name; the three CRM review agencies by id only
+//              display name; the three CRM review agencies and the pilot rehearsal agency by id only
 //              (a UUIDv5 of their key, AA-Partner api/app/seed/catalogue.py, public there): their slugs are pinned to
 //              those ids, so an agency that merely renames itself "Lữ hành Sen Vàng" is refused.
 //   by scope   the CRM scope never matches by name: an agency sets its own display_name. A Content tenant checked in the
@@ -55,15 +56,19 @@ const SYNTHETIC = [
   { slug: 'terra-family', name: 'Terra Family Expeditions', aliases: ['terra-family-expeditions'] },
   { slug: 'trail-pulse', name: 'Trail Pulse' },
   { slug: 'wildkind-travel', name: 'WildKind Travel' },
-  { slug: 'sen-vang', name: 'Lữ hành Sen Vàng', crmKey: 'sen-vang' },
-  { slug: 'southern-cross', name: 'Southern Cross Journeys', crmKey: 'southern-cross' },
-  { slug: 'harbour-lights', name: 'Harbour Lights Travel Co.', crmKey: 'harbour-lights' },
+  { slug: 'sen-vang', name: 'Lữ hành Sen Vàng', crmSlug: 'sen-vang' },
+  { slug: 'southern-cross', name: 'Southern Cross Journeys', crmSlug: 'southern-cross' },
+  { slug: 'harbour-lights', name: 'Harbour Lights Travel Co.', crmSlug: 'harbour-lights' },
   // AA-855 write scenarios (W-01..W-04): the four synthetic audit tenants of the T-series audit (kind demo, invented
   // brands). Only the studio-audit identity writes there, and always on exactly one of them (lib/studio-audit.cjs).
   { slug: 'audit-atlas-hearth', name: 'Atlas & Hearth (Audit)' },
   { slug: 'audit-terra-family', name: 'Terra Family Expeditions (Audit)' },
   { slug: 'audit-trail-pulse', name: 'Trail Pulse (Audit)' },
   { slug: 'audit-wildkind-travel', name: 'WildKind Travel (Audit)' },
+  // The synthetic pilot rehearsal agency (root docs/ops/runbooks/pilot-rehearsal.md, Fixtures): kind demo, is_canary
+  // true, invented name. Its CIS tenant id is the CRM seed's id for the key (public in the runbook), so both scopes
+  // match it by id only; the marker tenant of steps 1b / 12b is the pilot and is never on this list.
+  { slug: 'pilot-rehearsal-01', name: 'E2E Pilot Rehearsal Travel', crmSlug: 'pilot-rehearsal-01' },
 ];
 const SCOPES = {
   // nameMatch: whether an unpinned invented display name is enough. Content: yes (the studio session returns no slug and
@@ -72,8 +77,17 @@ const SCOPES = {
   crm: { path: '/bff/me', nameField: 'display_name', what: 'CRM agency', nameMatch: false },
 };
 // Identities whose session has no tenant (AA staff): their list pages are masked per scenario (allowRows), not here.
-const STAFF_IDENTITIES = ['cis-admin', 'booking'];
-const IDENTITY_SCOPES = { studio: ['content'], 'studio-editor': ['content'], 'studio-audit': ['content'], crm: ['crm'] };
+// The Booking E2E writers (A10e: staff, finance maker, finance checker) are AA staff too: their writes are held to
+// synthetic agencies by Booking itself, and each write scenario checks its record's agency before the first write.
+// crm-staff (root ADR 0006a A10c): the AA staff console's E2E user; the CRM itself keeps it to synthetic agencies.
+const STAFF_IDENTITIES = ['cis-admin', 'booking', 'booking-staff', 'booking-maker', 'booking-checker', 'crm-staff'];
+// The pilot rehearsal's owner and agent: the studio owner (studio-rehearsal) and the CRM owner / agent (lib/crm-signin.cjs
+// RO / RA) are pinned to the rehearsal agency, whatever the scenario says (they write and may pay).
+const REHEARSAL_SLUG = 'pilot-rehearsal-01';
+const REHEARSAL_AGENCY = REHEARSAL_SLUG;
+const REHEARSAL_IDENTITIES = ['crm-rehearsal', 'crm-rehearsal-agent'];
+const IDENTITY_SCOPES = { studio: ['content'], 'studio-editor': ['content'], 'studio-audit': ['content'], 'studio-rehearsal': ['content'], crm: ['crm'],
+  'crm-rehearsal': ['crm'], 'crm-rehearsal-agent': ['crm'] };
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const norm = (s) => String(s).normalize('NFC').trim();
@@ -96,9 +110,9 @@ function buildAllowlist(local = null) {
   if (builtin) {
     for (const e of SYNTHETIC) {
       names.set(norm(e.name), e.slug);
-      if (e.crmKey) {
+      if (e.crmSlug) {
         // A built-in agency id pins its slug: that slug then matches by id only, never by its (agency-set) name.
-        const id = uuid5(CRM_NAMESPACE, `aa-crm-synthetic-agency:${e.crmKey}`);
+        const id = uuid5(CRM_NAMESPACE, `aa-crm-synthetic-agency:${e.crmSlug}`);
         ids.set(id, e.slug);
         pinned.set(e.slug, new Set([id]));
       }
@@ -186,6 +200,8 @@ function evaluate(answer, { scope, allow, only = null } = {}) {
 function scopesFor(sc, storageState) {
   // A scenario's own pilotGuard never widens the studio-audit pin (checked first).
   if (sc.identity === 'studio-audit' && sc.pilotGuard) throw new Error(`${CODE}: ${sc.id}: a studio-audit scenario takes the run's audit tenant, not its own pilotGuard`);
+  if (sc.identity === 'studio-rehearsal' && sc.pilotGuard) throw new Error(`${CODE}: ${sc.id}: a studio-rehearsal scenario runs on ${REHEARSAL_SLUG} only, not its own pilotGuard`);
+  if (REHEARSAL_IDENTITIES.includes(sc.identity) && sc.pilotGuard) throw new Error(`${CODE}: ${sc.id}: a rehearsal scenario runs on ${REHEARSAL_AGENCY} only, not its own pilotGuard`);
   const pg = sc.pilotGuard;
   if (pg) {
     const scopes = Array.isArray(pg) ? pg : pg.scopes;
@@ -195,6 +211,9 @@ function scopesFor(sc, storageState) {
   const identity = sc.identity || 'public';
   // The audit editor writes and may pay: it is pinned to the ONE audit tenant of this run, whatever the scenario says.
   if (identity === 'studio-audit') return { scopes: IDENTITY_SCOPES[identity], only: [require('./studio-audit.cjs').auditTenant().slug] };
+  // The rehearsal owner (AA-1086) writes and pays on the synthetic rehearsal agency only.
+  if (identity === 'studio-rehearsal') return { scopes: IDENTITY_SCOPES[identity], only: [REHEARSAL_SLUG] };
+  if (REHEARSAL_IDENTITIES.includes(identity)) return { scopes: IDENTITY_SCOPES[identity], only: [REHEARSAL_AGENCY] };
   if (IDENTITY_SCOPES[identity]) return { scopes: IDENTITY_SCOPES[identity], only: null };
   if (STAFF_IDENTITIES.includes(identity)) return { scopes: [], only: null };
   if (!storageState) return { scopes: [], only: null };
@@ -276,14 +295,14 @@ function syntheticRowPatterns() {
 }
 
 module.exports = {
-  EXIT_PILOT_GUARD, CODE, SYNTHETIC, SCOPES, STAFF_IDENTITIES, CRM_NAMESPACE, ALLOWLIST_FILE,
+  EXIT_PILOT_GUARD, CODE, SYNTHETIC, REHEARSAL_SLUG, SCOPES, STAFF_IDENTITIES, REHEARSAL_AGENCY, REHEARSAL_IDENTITIES, CRM_NAMESPACE, ALLOWLIST_FILE,
   uuid5, buildAllowlist, loadLocal, evaluate, scopesFor, readActive, check, checkState, describeVerdict, syntheticRowPatterns,
 };
 
 if (require.main === module) {
   (async () => {
     const who = process.argv[2];
-    if (!IDENTITY_SCOPES[who]) throw new Error('usage: node tools/uat/lib/pilot-guard.cjs studio|studio-editor|studio-audit|crm');
+    if (!IDENTITY_SCOPES[who]) throw new Error(`usage: node tools/uat/lib/pilot-guard.cjs ${Object.keys(IDENTITY_SCOPES).join('|')}`);
     const { ensureState } = require('./signin.cjs');
     const { file } = await ensureState(who);
     const v = await checkState(file, scopesFor({ id: who, identity: who }, file));

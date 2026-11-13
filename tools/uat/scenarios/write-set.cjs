@@ -12,4 +12,48 @@ module.exports = [
   // The E2E tenant's studio editor (its identity must be enrolled first).
   'content-studio/prt-02.cjs',
   'content-studio/prt-06.cjs',
+  // The E2E CIS admin (cis-admin, a staff identity: lib/dryrun-core.cjs WRITE_SET_STAFF) on one synthetic audit tenant:
+  // the tenant offboarding erasure drill (offboard, drill, Run now, Stop for good, restore; never approved). $0, about
+  // 15 min (the DRY RUN reports). Record it alone: --record DRILL-01 --include-writable.
+  'cis-admin/drill-01.cjs',
+  // Pilot rehearsal (root docs/ops/runbooks/pilot-rehearsal.md), the Booking E2E writers (root ADR 0006a A10e) on the
+  // synthetic rehearsal agency only, each with the run's Booking seeder output (env UAT_BOOKING_FIXTURES). $0. Record
+  // in this order, after the agency's trip is booked (step 8): REH-09-supplier; REH-11-maker, then REH-11-checker.
+  'booking/reh-09-supplier.cjs',
+  'booking/reh-11-maker.cjs',
+  'booking/reh-11-checker.cjs',
+  // The pilot rehearsal's guest traveller (identity traveller, no sign-in) on the synthetic agency pilot-rehearsal-01
+  // (runbook docs/ops/runbooks/pilot-rehearsal.md). Record in this order, each after its runbook prerequisite:
+  // REH-05 (paid) and REH-05.m after step 3 (tour X adopted); REH-06 after them; REH-08a after the CRM read of step 6.
+  'tripplanner/reh-05.cjs',
+  'tripplanner/reh-05-phone.cjs',
+  'tripplanner/reh-06.cjs',
+  'crm-web/reh-08a.cjs',
+  // AA-1086 pilot rehearsal, steps 3-4b (root docs/ops/runbooks/pilot-rehearsal.md): the E2E OWNER of the synthetic
+  // agency pilot-rehearsal-01 (studio-rehearsal, pinned to that agency). Record in this order; the paid ones need
+  // --allow-paid; env UAT_REH_TOUR_X names tour X. REH-04b-takedown is the teardown of the two publish scenarios.
+  'content-studio/reh-03-brand.cjs',
+  'content-studio/reh-03-adopt.cjs',
+  'content-studio/reh-04-topics.cjs',
+  'content-studio/reh-04-blog.cjs',
+  'content-studio/reh-04-linkedin.cjs',
+  'content-studio/reh-04-facebook.cjs',
+  'content-studio/reh-04-edit.cjs',
+  'content-studio/reh-04b-wordpress.cjs',
+  'content-studio/reh-04b-facebook.cjs',
+  'content-studio/reh-04b-takedown.cjs',
+  // The pilot rehearsal, CRM part (runbook docs/ops/runbooks/pilot-rehearsal.md steps 6, 7, 8, 10; scenarios/crm/_reh.cjs):
+  // the owner (crm-rehearsal) and the agent (crm-rehearsal-agent) of pilot-rehearsal-01, pinned there by the pilot guard.
+  // Record in this order, each after the step before it in the whole rehearsal: REH-06 after the TripPlanner send;
+  // REH-08c after Adventure Asia confirmed (instant departure, or the Booking staff step). REH-10b-ops-view (crm-staff,
+  // read only) is not a write-set entry: record it with run.sh after REH-10.
+  // REH-02b-agency-setup first, once per fresh seed (scenarios/crm/REHEARSAL.md): payment instructions, terms, waiver.
+  'crm/reh-02b-agency-setup.cjs',
+  'crm/reh-06-lead.cjs',
+  'crm/reh-07-quote.cjs',
+  'crm/reh-07b-approve.cjs',
+  'crm/reh-08-accept.cjs',
+  'crm/reh-08b-deposit.cjs',
+  'crm/reh-08c-aa-confirmed.cjs',
+  'crm/reh-10-portal.cjs',
 ];
