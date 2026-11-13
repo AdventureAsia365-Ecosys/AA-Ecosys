@@ -3,7 +3,8 @@
 // Given: the E2E Booking admin (A10a, read-only session). When: they open Agency tiers, then the rehearsal agency's
 // tariff, found by its name through the same read the Agencies tab uses (the list itself is not shown: it names every
 // agency). Then: Booking holds the agency as an active partner projected from CIS, with a tier, and its tariff page
-// opens. Nothing is written. $0. The priced tours on that tariff are REH-01-prices.
+// opens. Nothing is written. $0. The priced tours on that tariff are REH-01-prices. Not in the dry run: it needs the
+// rehearsal fixture (record it with run.sh during step 1).
 const { HOSTS, step, ro, check } = require('../../lib/dryrun-page.cjs');
 const { REHEARSAL } = require('../../lib/rehearsal-admin.cjs');
 

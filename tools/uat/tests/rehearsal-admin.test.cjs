@@ -1,5 +1,5 @@
 // Unit tests of the pilot rehearsal's staff-side helpers (lib/rehearsal-admin.cjs) and of the rehearsal agency on the
-// pilot guard's allow-list. No browser, no network:  node --test tools/uat/tests
+// pilot guard's allow-list. No browser, no network:  node --test tools/uat/tests/*.test.cjs
 // Fixture files use invented ids only (the rehearsal agency's id is public: root docs/ops/runbooks/pilot-rehearsal.md).
 'use strict';
 const test = require('node:test');
@@ -75,5 +75,46 @@ test('rehearsal write scenarios: narrow allowWrites, every write step marked, $0
     assert.equal(sc.readOnly, true, rel);
     assert.ok(sc.allowWrites.length === 1 && sc.allowWrites.every((x) => !x.startsWith('^') && x.endsWith('$')), rel);
     assert.ok(sc.steps.some((s) => s.writes) && !sc.steps[0].writes, `${rel}: a read-only first step, then marked writes`);
+  }
+});
+
+test('markerId: a uuid from UAT_REH_MARKER_ID, never the rehearsal agency; assertMarker stops on any other tenant', () => {
+  const M = '0f0e0d0c-0b0a-4908-8706-050403020100'; // invented
+  assert.equal(reh.markerId({ UAT_REH_MARKER_ID: ` ${M.toUpperCase()} ` }), M);
+  assert.throws(() => reh.markerId({}), /^Error: BLOCKED: set UAT_REH_MARKER_ID/);
+  assert.throws(() => reh.markerId({ UAT_REH_MARKER_ID: 'pilot-rehearsal-01-marker' }), /^Error: BLOCKED/);
+  assert.throws(() => reh.markerId({ UAT_REH_MARKER_ID: ID }), /is the rehearsal agency/);
+  const marker = { tenant_id: M, name: reh.MARKER.name, kind: 'agency', is_pilot: true, pilot_ends_at: '2026-11-20T00:00:00Z' };
+  assert.equal(reh.assertMarker(marker, { pilot: true }), marker);
+  assert.doesNotThrow(() => reh.assertMarker({ ...marker, is_pilot: false, pilot_ends_at: null }, { pilot: false }));
+  // Another name or kind is a pilot_guard stop, whatever its pilot state (a real pilot is never opened).
+  for (const other of [{ ...marker, name: 'Lotus Lantern Journeys' }, { ...marker, kind: 'demo' }, null, {}]) {
+    assert.throws(() => reh.assertMarker(other, { pilot: true }), /^Error: pilot_guard:/);
+  }
+  // The right tenant in the wrong state is a plain failure: the tech lead's step is not done yet.
+  assert.throws(() => reh.assertMarker({ ...marker, is_pilot: false }, { pilot: true }), /not in pilot mode yet/);
+  assert.throws(() => reh.assertMarker({ ...marker, pilot_ends_at: null }, { pilot: true }), /not in pilot mode yet/);
+  assert.throws(() => reh.assertMarker(marker, { pilot: false }), /still the pilot/);
+});
+
+test('rehearsal write scenarios cap their writes per method (limitWrites rules name no PUT / PATCH / DELETE)', () => {
+  for (const rel of ['booking/reh-09-supplier.cjs', 'booking/reh-11-maker.cjs', 'booking/reh-11-checker.cjs']) {
+    const src = fs.readFileSync(path.join(__dirname, '..', 'scenarios', rel), 'utf8');
+    assert.match(src, /limitWrites\(page, \[/, `${rel} registers limitWrites`);
+    assert.ok(!/method: '(?:PUT|PATCH|DELETE)'/i.test(src), `${rel}: POST writes only`);
+  }
+});
+
+test('pilot observation scenarios: read only, marker id from the environment, not in the dry run', () => {
+  const manifest = require('../scenarios/dryrun.cjs');
+  for (const rel of ['cis-admin/reh-01b-pilot-on.cjs', 'cis-admin/reh-12b-pilot-off.cjs']) {
+    const sc = require(path.join(__dirname, '..', 'scenarios', rel));
+    assert.equal(sc.readOnly, true, rel);
+    assert.ok(!sc.allowWrites || !sc.allowWrites.length, rel);
+    assert.ok(!manifest.includes(rel), `${rel} is not in the dry run`);
+  }
+  // The rehearsal-fixture scenarios stay out of the routine dry run (they fail until the fixture exists).
+  for (const rel of ['cis-admin/reh-01-provisioned.cjs', 'cis-admin/reh-01-crm-agency.cjs', 'booking/reh-01-booking-partner.cjs']) {
+    assert.ok(!manifest.includes(rel), `${rel} is not in the dry run`);
   }
 });

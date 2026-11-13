@@ -35,13 +35,23 @@ module.exports = ro({
         await h.expect(row).toBeVisible({ timeout: 30_000 });
         await h.expect(row).toContainText('Active');
         await h.expect(row).toContainText(/0\.05/);
+        // Columns (Tenant360Subscription.tsx ovCols): feature, value, reason, granted by, ends + Active/Ended badge.
+        // The runbook (X1 item 1) asks for a reason and an expiry: the reason and "by" cells are not empty, and the
+        // end cell holds a date, not the "—" of an override without an end.
+        const cells = (await row.locator('td').allTextContents()).map((s) => s.replace(/\s+/g, ' ').trim());
+        if (cells.length < 5) throw new Error(`the override row has ${cells.length} cells (expected 5)`);
+        if (!cells[2]) throw new Error('the override has no reason');
+        if (!cells[3]) throw new Error('the override does not say who set it');
+        const ends = cells[4].replace(/\b(Active|Ended)\b/g, '').trim();
+        if (!ends || ends === '—' || !/\d/.test(ends)) throw new Error('the override has no end date');
       }),
     step('The Cost tab says the budget now comes from that override. This is the end of the scenario.',
       'Thẻ Chi phí cho biết ngân sách hiện lấy từ mục ghi đè đó. Kết thúc kịch bản.',
       async (page, h) => {
         await openTab(page, h, 'Cost');
-        await h.expect(page.getByText('Set by an override on the Subscription tab: it wins over the budget set here').first())
-          .toBeVisible({ timeout: 30_000 });
+        const source = page.getByTestId('tenant-ai-budget-source');
+        await h.expect(source).toBeVisible({ timeout: 30_000 });
+        await h.expect(source).toContainText('Set by an override on the Subscription tab: it wins over the budget set here');
       }),
   ],
 });

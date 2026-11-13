@@ -4,7 +4,8 @@
 // tenant AI budgets render (each tenant row that is not one of the invented synthetic tenants is blurred before the
 // first paint and the step fails if one shows unblurred). Nothing is written. $0.
 // Not on camera (orchestrator, read only, in baseline.json): sts get-caller-identity, the ECS image per service, the
-// Booking / CRM / TripPlanner job tables, the pilot slot (SELECT slug FROM shared.tenants WHERE is_pilot: no row), the
+// CIS / Booking / CRM / TripPlanner job tables (idle; the queue page is filmed as the starting state, not asserted
+// idle: recurring pulls may run at any moment), the pilot slot (SELECT slug FROM shared.tenants WHERE is_pilot: no row), the
 // WordPress test site JSON check and the SES sandbox state. No page shows the pilot slot today.
 const { HOSTS, step, ro, check, openTab, rowsOrEmpty } = require('../../lib/dryrun-page.cjs');
 const { syntheticRowPatterns } = require('../../lib/pilot-guard.cjs');
@@ -26,8 +27,8 @@ module.exports = ro({
       async (page, h) => {
         await check(page, h, '/admin/platform/apps', { heading: 'Apps', ready: '[data-testid="platform-apps-ready"]' });
       }),
-    step('The job queue shows what waits and which workers run. Nothing should be busy when we start.',
-      'Hàng đợi tác vụ cho biết việc nào đang chờ và worker nào đang chạy. Lúc bắt đầu không nên có việc nào đang bận.',
+    step('The job queue shows what waits and which workers run: the starting state of the background work.',
+      'Hàng đợi tác vụ cho biết việc nào đang chờ và worker nào đang chạy: trạng thái ban đầu của các tác vụ nền.',
       async (page, h) => {
         await check(page, h, '/admin/jobs', { heading: 'Jobs' });
         await openTab(page, h, 'Queue & workers', {
@@ -36,8 +37,8 @@ module.exports = ro({
         });
         await rowsOrEmpty(page, h);
       }),
-    step('AI gateway, Budgets: the platform caps and each agency\'s AI budget. We note the spend before the run.',
-      'Cổng AI, mục Ngân sách: các mức trần của nền tảng và ngân sách AI của từng đại lý. Ta ghi lại mức chi trước buổi chạy.',
+    step('AI gateway, Budgets: the platform caps and each agency\'s AI budget, with this month\'s spend so far.',
+      'Cổng AI, mục Ngân sách: các mức trần của nền tảng và ngân sách AI của từng đại lý, kèm mức chi từ đầu tháng.',
       async (page, h) => {
         await check(page, h, '/admin/ai-gateway?tab=budgets', { heading: 'AI gateway' });
         await h.expect(page.getByTestId('ai-gateway-budgets-central-tier')).toBeVisible({ timeout: 30_000 });
