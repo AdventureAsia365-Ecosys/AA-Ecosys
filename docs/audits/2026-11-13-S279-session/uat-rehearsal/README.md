@@ -1,7 +1,8 @@
 # Pilot rehearsal UAT videos (S279, 2026-11-13)
 
 The AA-1086 synthetic pilot rehearsal ([runbook](../../../ops/runbooks/pilot-rehearsal.md)) recorded as UAT videos,
-one take per scenario, on Dev. Harness: `tools/uat/` (branch `feat/aa1086-uat-rehearsal`, the five rehearsal scenario
+one take per scenario, on Dev. The Booking takes (REH-09, REH-11) ran on the seeder output of run `s279reh` for this
+agency (trip case, supplier booking and invoice seeded by the orchestrator). Harness: `tools/uat/` (branch `feat/aa1086-uat-rehearsal`, the five rehearsal scenario
 branches merged). Each video has burned-in English subtitles, an English (Kokoro) and a Vietnamese (VieNeu) narration
 track, and SRT/VTT sidecars; each is packaged as one zip and stored on the team drive (link not in this public repo).
 
@@ -45,6 +46,10 @@ Length in seconds. "Failed at" is the step and its start / end time in the video
 | 8c | REH-08c-aa-confirmed (v1) | CRM | PASS | 33 | - | AA booking confirmed (instant-confirm departure); the AA B2B price equals the net quoted in the builder (168.84 USD) |
 | 10 | REH-10-portal (v1) | CRM portal | FAIL | 72 | step 6, 63.1-69.5 s | Traveller code sign-in, passport details, arrival flight and e-sign pass. The itinerary lists 7 dated days (right count) but no day titles or places and no services block: the confirmed AA tour is not listed, so the voucher step is not reached |
 | 10b | REH-10b-ops-view (v4) | CRM staff console | PASS | 24 | - | AA ground operations board lists the trip with tour X's departure; the release shows the departure and the lead's name |
+| 9 | REH-09-supplier (v1) | Booking | PASS | 26 | - | Booking staff (A10e) request the seeded supplier booking of the agency's trip case and record the supplier's confirmation |
+| 11 | REH-11-maker (v1) | Booking | PASS | 23 | - | Finance maker records the agency's payment on its seeded invoice |
+| 11 | REH-11-checker (v1) | Booking | PASS | 17 | - | A second finance user (checker) approves that payment |
+| - | DRILL-01 (v5) | CIS admin | PASS | 719 | - | Tenant offboarding erasure drill on a synthetic audit tenant: offboard, start the drill, DRY RUN reports per app, approval closed, stop for good, restore (recorded in the drill worktree; Vietnamese track added afterwards like the others) |
 
 Takes that were scenario bugs and were fixed, then re-taken (the earlier takes are not kept as evidence):
 REH-03-adopt v1 (photo assert), REH-04-topics v1 (an automatic topic update was still running after the adoption;
@@ -57,7 +62,6 @@ WordPress card's Test & Connect button), REH-10b-ops-view v1/v2 (row locator), v
 |---|---|
 | REH-04-blog, REH-04-edit, REH-04b-wordpress | No article topic exists (REH-04-topics), so no blog article to write, edit or publish. The WordPress test site answers JSON on `/wp-json/` |
 | REH-08a (Book now) | Needs the agency's Book now switch and its form key (not set) |
-| REH-09-supplier, REH-11-maker, REH-11-checker | Need the Booking seeder output for this agency (`python -m app.e2e_fixtures --apply ... --agency-tenant`, ECS exec): an orchestrator step |
 | REH-01-price-import, REH-01-prices, REH-01-from-price | Price import and its approvals are tech-lead steps; only 2 tours are priced on Dev |
 | REH-01b, REH-12b (pilot marker), REH-12-budget-* (X1) | Need the tech lead: no marker tenant and no budget override today |
 | REH-02-owner-invite | Tech-lead act (done earlier today, off camera) |
@@ -70,8 +74,12 @@ Product or data gaps (each needs an owner decision; no issue was opened by this 
    cannot run on this tour set. Either richer tour descriptions for the rehearsal tour or an adoption choice that
    includes a tour with a long description.
 2. **Traveller portal itinerary is empty of content** (REH-10, step 6): dated days only, no day titles/places, no
-   services, so the confirmed AA tour is not shown. Could be the hourly ops-release sync not having run yet; re-check
-   before treating it as a code gap.
+   services, so the confirmed AA tour is not shown. Not a sync delay: the portal lists only the trip's lines the agency
+   marked `visible_to_travelers` (AA-Partner `api/app/portal/person.py`, `SERVICES_SQL`), and its days are the accepted
+   proposal's days with their own title and place (`ITINERARY_SQL`). The AA line of the quote is not visible to
+   travellers by default and the proposal days carry no title or place, so the portal has nothing to show. Owner
+   decision: show a confirmed AA line to travellers by default (or have the scenario mark it), and fill the proposal
+   days from the AA tour's days. Not re-taken.
 3. **Facebook test Page token expired** (REH-04b-facebook): the tech lead renews the long-lived Page token in the
    test-channel secret; then REH-04b-facebook and REH-04b-takedown are re-recorded.
 4. Tour X has no catalog photo (studio card shows the placeholder).

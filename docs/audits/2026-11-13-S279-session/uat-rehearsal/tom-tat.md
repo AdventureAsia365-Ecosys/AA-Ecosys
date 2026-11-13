@@ -7,7 +7,8 @@ phụ đề SRT/VTT, kịch bản lời đọc.
 
 ## Kết quả
 
-- **24 video: 20 PASS, 4 FAIL.** Tổng chi phí LLM **0,29 USD** (trần 10 USD).
+- **28 video: 24 PASS, 4 FAIL** (gồm 3 video Booking REH-09/REH-11 và video DRILL-01 v5). Tổng chi phí LLM **0,29 USD**
+  (trần 10 USD; các video Booking và DRILL-01 không gọi LLM).
 - Đại lý tổng hợp `pilot-rehearsal-01`. Tour X là tour 6 ngày ở Philippines: không có tour Laos nào có giá hay
   được bán cho đại lý trên Dev, nên bên điều phối chọn tour này cho mọi bước. Ở bước 5, khách tìm "Bohol" thay vì "Laos".
 - **Chạy trọn từ đầu đến cuối:**
@@ -16,6 +17,9 @@ phụ đề SRT/VTT, kịch bản lời đọc.
   - Trang lập kế hoạch của đại lý: tìm kiếm, thêm tour, chat 3 lượt, xem trên điện thoại.
   - CRM: nhận lead, báo giá có tour AA và giảm giá cần duyệt, chủ duyệt và gửi, khách chấp nhận, đặt cọc, AA xác nhận
     (giá B2B khớp giá trong báo giá), bảng điều hành AA thấy chuyến.
+  - Booking (dùng dữ liệu seeder `s279reh` của đại lý): nhân viên gửi và xác nhận đặt chỗ nhà cung cấp; kế toán (maker)
+    ghi nhận thanh toán của đại lý, người thứ hai (checker) duyệt.
+  - DRILL-01: diễn tập xoá dữ liệu khi offboard tenant (DRY RUN), khoảng 12 phút.
 
 ## 4 video FAIL
 
@@ -27,15 +31,17 @@ phụ đề SRT/VTT, kịch bản lời đọc.
    Video FAIL do phần đếm lần gửi lặp của kịch bản. Chưa quay lại để không tạo lead thứ hai cho đại lý.
 4. **REH-10-portal:** đăng nhập bằng mã, hộ chiếu, chuyến bay đến và ký điện tử đều đạt. Lịch trình có đủ 7 ngày nhưng
    không có tên ngày, nơi đến hay mục dịch vụ, nên không thấy tour AA đã xác nhận và chưa tới bước phiếu dịch vụ.
-   Có thể là do bước đồng bộ chuyển giao (chạy mỗi giờ) chưa chạy; cần kiểm lại trước khi coi là lỗi code.
+   Không phải do đồng bộ mỗi giờ: cổng khách chỉ hiện các dòng dịch vụ đại lý đánh dấu "cho khách xem"
+   (`visible_to_travelers`), mà dòng tour AA mặc định không được đánh dấu; các ngày lấy từ ngày của báo giá đã chấp
+   nhận, mà ngày trong báo giá chưa có tên và nơi đến. Cần quyết định: dòng AA đã xác nhận có mặc định hiện cho khách
+   không, và có chép ngày của tour AA vào báo giá không. Chưa quay lại.
 
 ## Cần tech lead
 
 - Gia hạn token Page Facebook thử nghiệm, rồi quay lại REH-04b-facebook và REH-04b-takedown.
 - Muốn chạy bằng tour Laos: cần nhập giá một tour Laos và được người thứ hai duyệt (REH-01-price-import).
 - Bước 12 (đặt giới hạn ngân sách AI) và bước pilot (tenant marker): chưa làm hôm nay, nên chưa quay.
-- Booking (REH-09 nhà cung cấp, REH-11 maker/checker): cần chạy seeder Booking cho đại lý này (ECS exec, việc của bên
-  điều phối), rồi mới quay được.
+- Quyết định cho cổng khách (mục REH-10 ở trên).
 - Chọn cách cho chủ đề blog: dùng tour có mô tả dài hơn, hoặc bổ sung mô tả cho tour X.
 
 ## Ghi chú khác
