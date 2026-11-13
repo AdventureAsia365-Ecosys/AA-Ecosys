@@ -1,18 +1,18 @@
 ---
 id: SEC-04-dpa-agreement
-title: "Data Processing Agreement for partner agencies (draft v0.4)"
+title: "Data Processing Agreement for partner agencies (draft v0.5)"
 description: "The Art. 28 Data Processing Agreement between Adventure Asia (processor) and a partner agency (controller) for the Content studio, the CRM and Booking B2B, with the breach notice timeline, sub-processor rules, transfers and return or deletion at the end; draft for counsel, not legal advice."
 type: reference
 status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-partner-portal, aa-crm-api, aa-crm-web, aa-cis-api, aa-booking-api]
-last_reviewed: 2026-11-09
+last_reviewed: 2026-11-13
 review_every_days: 30
-related: [SEC-04, SEC-04-dpa-pack, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04-dpa-annex4, SEC-04-pilot-set, SEC-04-ai-schedule, SEC-04-dsar, AA-820]
+related: [SEC-04, SEC-04-dpa-pack, AA-1093, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04-dpa-annex4, SEC-04-pilot-set, SEC-04-ai-schedule, SEC-04-dsar, AA-820]
 ---
 
-# Data Processing Agreement for partner agencies (draft v0.4)
+# Data Processing Agreement for partner agencies (draft v0.5)
 
 > [!WARNING]
 > **DRAFT FOR COUNSEL. NOT LEGAL ADVICE. NOT APPROVED.** Engineering wrote this text from the product facts on
@@ -23,7 +23,7 @@ related: [SEC-04, SEC-04-dpa-pack, SEC-04-dpa-annex1, SEC-04-dpa-annex2, SEC-04-
 
 | | |
 |---|---|
-| Version | **Draft v0.4, 2026-11-09** (AA-820 part 2): clause 3.4 says that the AI call records keep no prompt or output text but that the CIS AI gateway keeps model replies for a short window (Annex 1 §3, Annex 2 M-20), with point C14 for counsel; the annexes follow route control version 7 (CIS 383: the OpenAI API scores and checks but no longer writes) and the Trip Planner's per-agency lead routing and traveller sign-in (Annex 1 §5). Annexes: Annex 1 v0.4, Annex 2 v0.5, Annex 3 v0.4, Annex 4 v0.4. v0.3 of 2026-11-06 (root PR #581): the pilot safeguards of clause 15.3 are in place on Dev (Annex 2 M-25), backups are 14 days (11.3), the breach timeline points to the personal-data breach branch of the incident runbook (8.3), and Annex 3 names the Anthropic API as the first path of Claude models. v0.2 of 2026-11-05 was root PR #546. Replaces the [DPA template v0.1](dpa-template.md) of 2026-10-21, whose clause 1.3 made AA the controller of travellers; ADR 0019 invariant 2 superseded that |
+| Version | **Draft v0.5, 2026-11-13** (AA-1093): clause 11 follows the offboarding schedule the tech lead decided on 2026-11-13: an exit window of 90 days for the CRM (after it AA erases the Agency's CRM data without a further click by the Agency's owner) and 30 days for the Content studio, Booking B2B and the Trip Planner; a full export is offered at offboarding; one erasure process across every app with a dry run, one approval and a receipt (11.4); the Trip Planner has its own row in 11.2. Annex 3 v0.5 names what serves the AI models today (Amazon Bedrock from a second AWS account held by the tech lead, the AI account behind it). v0.4 of 2026-11-09 (AA-820 part 2): clause 3.4 says that the AI call records keep no prompt or output text but that the CIS AI gateway keeps model replies for a short window (Annex 1 §3, Annex 2 M-20), with point C14 for counsel; the annexes follow route control version 7 (CIS 383: the OpenAI API scores and checks but no longer writes) and the Trip Planner's per-agency lead routing and traveller sign-in (Annex 1 §5). Annexes: Annex 1 v0.4, Annex 2 v0.5, Annex 3 v0.4, Annex 4 v0.4. v0.3 of 2026-11-06 (root PR #581): the pilot safeguards of clause 15.3 are in place on Dev (Annex 2 M-25), backups are 14 days (11.3), the breach timeline points to the personal-data breach branch of the incident runbook (8.3), and Annex 3 names the Anthropic API as the first path of Claude models. v0.2 of 2026-11-05 was root PR #546. Replaces the [DPA template v0.1](dpa-template.md) of 2026-10-21, whose clause 1.3 made AA the controller of travellers; ADR 0019 invariant 2 superseded that |
 | Decisions | [ADR 0019](../adr/0019-b2b-only-ecosystem-model.md) invariant 2 and b9 (agency = controller, AA = processor, on every app), b10 (contracting entity and counsel before Vietnamese or EU agencies store data), b11 (worldwide from US hosting with SCCs plus a TIA), d12 (US by default, EU cell on triggers), d16 (pilot on Dev with one agency, a pilot letter and this DPA); ADR 0008a (CRM: agency controller, AA processor) |
 | Annexes | [Annex 1: processing per app](dpa-annex-1-processing.md) · [Annex 2: security measures](dpa-annex-2-security.md) · [Annex 3: sub-processors](dpa-annex-3-subprocessors.md) · [Annex 4: transfers, SCC fill-ins and TIA](dpa-annex-4-transfers.md) |
 | Ships with | The [pilot contract set](pilot-contract-set.md): the partner-terms clauses that incorporate this DPA and the [AI Schedule v1.0](tenant-ai-schedule.md) (Anthropic Usage Policy effective 12 November 2026), the joint-controller clause and the model privacy notice for the agency |
@@ -222,26 +222,48 @@ affected processing in the meantime.
 
 ## 11. Return and deletion at the end
 
-**11.1** When the Agreement or a service ends, the Agency may export its data with the self-serve tools during the
-term and for **[30]** days after it (the "**exit window**"). After the exit window, or earlier on the Agency's written
-confirmation, AA deletes the Agency Personal Data of that service, and confirms the deletion in writing with a receipt.
+**11.1** When the Agreement or a service ends, AA offboards the Agency: every service stops serving it on the same
+day ("**offboarding**", which AA can still undo until the first deletion starts) and AA offers the Agency's owner a full
+export of its CRM data. The Agency may export its data with the self-serve tools during the term and until the end of
+the "**exit window**" of each service: **[90]** days after offboarding for the CRM and **[30]** days for the Content
+studio, Booking B2B and the Trip Planner. After the exit window of a service, or earlier on the Agency's written
+confirmation, AA deletes the Agency Personal Data of that service without any further action of the Agency (for the
+CRM, without the owner's confirmation click that the owner's own offboarding asks for), and confirms the deletion in
+writing with a receipt (11.4).
+
+*Drafting note: the two windows are the tech lead's decision of 2026-11-13 (AA-1093, D1 and D2). The longer CRM window
+gives the Agency time to move its client records; the 30-day windows match the Content studio retention window that ran
+in the Dev drill. Both values are settings AA can change for a contract; a change of the default is a new draft
+[COUNSEL].*
 
 **11.2 How each service returns and deletes.**
 
 | Service | Return (export) | Deletion | What stays, and why |
 |---|---|---|---|
-| **CRM** (live, AA-Partner) | The Agency owner exports the whole agency or one client from Settings > Data and privacy: a ZIP sealed under the Agency's own export key, its SHA-256 shown, downloaded through a single-use link valid 5 minutes; the export expires after 7 days. Offboarding builds its own full export (every table in the export catalogue, personal fields decrypted, internal indexes and secrets left out) before anything is deleted | Offboarding: request with dry-run counts, export, download, typed confirmation, then a **cool-off of 72 hours** during which the owner may cancel; then every row is erased through one database function, the Agency's encryption keys are destroyed (crypto-shredding), a sealed test value must no longer open, and a receipt with a verification block is written. Document and export files are deleted last | The Agency's audit trail (codes and ids, no traveller names) stays: 12 months in the database, and its hourly export in write-once storage up to 7 years in total (on Dev: governance mode only until go-live). Receipts of erasures, exports and data requests stay (ids, codes and counts, no personal data). Offboarding deletes everything else, including the Agency's invoices, payments and signed agreements, so the Agency keeps what its own law requires from the offboarding export **[COUNSEL]**. (On a single-client erasure during the term, invoices and payments stay for the Agency's statutory period and signed agreements until trip end + 3 years (est.); the receipt says so) |
-| **Content studio** (live, AA-CIS) | Per item during the term: export of each piece as a full HTML document or an HTML fragment, and the tour rewrite as a DOCX file. A whole-account export is prepared by AA staff on request **[not built as a self-serve tool]** | AA offboards the Agency (reversible), then after a retention window (default 30 days) runs the tenant erasure job: a dry run with counts and a fingerprint, the tech lead's approval of that fingerprint, a database snapshot, the erasure in one transaction with a recount that must find 0, then the files and stored channel credentials outside the database. Tested once on Dev on a synthetic agency (2026-10-23) | The audit log (append-only hash chain) and one "erased" row. AI cost records are kept without the Agency link (they hold no text). Archived cost and usage files hold no personal data (DSAR runbook §4 step 8) |
-| **Booking B2B** (live, AA-Booking) | The Agency's own copies are in its CRM (AA lines, invoices from AA) | Not applicable to Agency Personal Data: Booking holds no traveller identity for the Agency (DM-6.8) | AA's commercial and accounting records of the Agency's bookings, for AA's statutory period (AA as controller, 1.4(c)) |
+| **CRM** (live, AA-Partner) | The Agency owner exports the whole agency or one client from Settings > Data and privacy: a ZIP sealed under the Agency's own export key, its SHA-256 shown, downloaded through a single-use link valid 5 minutes; the export expires after 7 days. **At offboarding AA offers the owner this full export** (every table in the export catalogue, personal fields decrypted, internal indexes and secrets left out), and the owner can download it during the 90-day exit window | Two ways, the same erasure. (a) The owner's own offboarding during the term: request with dry-run counts, export, download, typed confirmation, then a **cool-off of 72 hours** during which the owner may cancel. (b) **After AA offboards the Agency, at the end of the 90-day exit window, AA runs the erasure without the owner's click** (11.4; planned, AA-1093). Either way every row is erased through one database function, the Agency's encryption keys are destroyed (crypto-shredding), a sealed test value must no longer open, and a receipt with a verification block is written. Document and export files are deleted last | The Agency's audit trail (codes and ids, no traveller names) stays: 12 months in the database, and its hourly export in write-once storage up to 7 years in total (on Dev: governance mode only until go-live). Receipts of erasures, exports and data requests stay (ids, codes and counts, no personal data). The erasure deletes everything else, including the Agency's invoices, payments and signed agreements, so the Agency keeps what its own law requires from the offboarding export **[COUNSEL]**. (On a single-client erasure during the term, invoices and payments stay for the Agency's statutory period and signed agreements until trip end + 3 years (est.); the receipt says so) |
+| **Content studio** (live, AA-CIS) | Per item during the term: export of each piece as a full HTML document or an HTML fragment, and the tour rewrite as a DOCX file. A whole-account export is prepared by AA staff on request **[not built as a self-serve tool]** | After the 30-day exit window, the tenant erasure: a dry run with counts and a fingerprint, the tech lead's approval, a database snapshot, the erasure in one transaction with a recount that must find 0, then the files and stored channel credentials outside the database. Tested once on Dev on a synthetic agency (2026-10-23); part of the one process of 11.4 once it is built (AA-1093). Posts already published on the Agency's own website or social pages stay there: they are the Agency's, and the receipt says so | The audit log (append-only hash chain) and one "erased" row. AI cost records are kept without the Agency link (they hold no text). Archived cost and usage files hold no personal data (DSAR runbook §4) |
+| **Booking B2B** (live, AA-Booking) | The Agency's own copies are in its CRM (AA lines, invoices from AA) | Booking holds no traveller identity for the Agency (DM-6.8). After the 30-day exit window AA anonymises what it holds about the Agency (planned, AA-1093): the Agency's name is replaced, free text in its trip cases and emergency-contact fields is removed, and the before / after values of its audit rows are redacted | AA's commercial and accounting records of the Agency's bookings (amounts, invoices, payments and the bill-to snapshot of issued invoices), for AA's statutory period (AA as controller, 1.4(c)) |
+| **Trip Planner** (live for an Agency that takes it, AA-TripPlanner-Web) | Nothing to return: the trip requests of the Agency's travellers were delivered to the Agency (its CRM, webhook or e-mail) when they were made, and the planner keeps a lead only until it is delivered | After the 30-day exit window AA deletes every Trip Planner row of the Agency (guest sessions, trip drafts and their events, undelivered outbox rows) (planned, AA-1093) | The Agency's AI spend totals are merged into the planner's own totals (amounts and call counts, no text and no personal data) |
 
 **11.3 Backups.** Deleted data leaves AA's automated database backups when they expire, within **14 days**, and is never
 restored into the live Services except in a disaster recovery that covers every app; after such a restore AA erases
-the data again before the Services reopen **[COUNSEL]**. A manual snapshot taken for an erasure is deleted once the
-erasure is verified. The CRM erasure receipt states a backup purge date of erasure + 30 days, a conservative bound.
+the data again before the Services reopen **[COUNSEL]**. The manual snapshot taken just before an erasure (11.4) is
+deleted once the erasure is verified. The CRM erasure receipt states a backup purge date of erasure + 30 days, a
+conservative bound.
 
 *Drafting note: automated backups are 14 days (`backup_retention_period = 14`, AA-CIS-Infra `modules/rds/main.tf`,
 PR #694, the ADR 0019 d16 option with its cost yes), applied on 2026-11-06; 7 days before. The one-agency nightly export of the pilot
-(Annex 2 M-25 item 4) is kept 7 days.*
+(Annex 2 M-25 item 4) is kept 7 days, in the CRM and, once its nightly run is switched on, in the Content studio.*
+
+**11.4 One process and the receipt.** One erasure process runs across every service (AA's offboarding saga;
+contract `tenant.erasure.v1`, planned, AA-1093): (a) when a service's exit window ends, the service computes a dry run
+of what it would erase (counts per table and a hash, no content); (b) AA's tech lead approves one combined fingerprint
+of those dry runs; (c) AA takes one database snapshot; (d) the Trip Planner, Booking B2B and the CRM erase in
+parallel, each only if its data still matches the approved dry run, then the Content studio last; (e) a check that
+the Agency has no personal data left in any column marked as personal data must find none; (f) AA removes what lives
+outside the database (stored files, the Agency's stored channel credentials, sign-in accounts used only for this
+Agency, error-tracker events); (g) AA sends the receipt: per service the date, the counts, what stayed and why, and
+the backup age-out date. Every step is recorded in AA's audit trail (ids, counts and hashes only).
 
 ## 12. Audits and information
 
@@ -325,7 +347,7 @@ Each is also marked inline.
 | C4 | Vendor terms: AWS through a reseller; direct Anthropic and OpenAI APIs (retention, zero-retention, location); Jev | 6.3, Annex 3 |
 | C5 | Breach notice limit (24 hours proposed) and update cadence; the Vietnamese controller deadline | 8.1, 8.3 |
 | C6 | Data-subject request help period; whole-account Content studio export as a manual step | 7.2, 7.3, 11.2 |
-| C7 | Exit window length; retention exceptions (accounting, signed agreements, audit archive seven years) | 11.1, 11.2 |
+| C7 | Exit window lengths (CRM 90 days, other services 30 days) and deleting CRM data after the window without the owner's confirmation; retention exceptions (accounting, signed agreements, audit archive seven years) | 11.1, 11.2 |
 | C8 | Backup wording after deletion | 11.3 |
 | C9 | Audit right scope and cost; no SOC 2 / ISO today | 12.2 |
 | C10 | Transfer mechanism per Agency market; SCC options; the Vietnamese cross-border dossier; APP 8; whether a Trip Planner lead sent to the Agency's own webhook or e-mail address is an onward transfer by AA (Annex 4 §4, open transfer question 1) | 10, Annex 4 |
