@@ -17,7 +17,7 @@ const R = require('./_rehearsal.cjs');
 
 const CH = {
   wordpress: {
-    channel: 'blog', label: 'WordPress', piece: 'blog', summary: 'publish-wp-summary', status: `${R.T}/integrations/wordpress`,
+    channel: 'blog', label: 'WordPress', heading: 'Connect WordPress', piece: 'blog', summary: 'publish-wp-summary', status: `${R.T}/integrations/wordpress`,
     save: 'wpSave', test: 'wpTest', connected: 'Connected — WordPress verified successfully.',
     fields: (c) => [['e.g. https://yourblog.com', c.site_url], ['e.g. your WordPress username', c.app_user],
       ['xxxx xxxx xxxx xxxx xxxx xxxx', c.app_password]],
@@ -29,7 +29,7 @@ const CH = {
     bylineMask: ['.byline', '.author', '.posted-by', '.wp-block-post-author', '.wp-block-post-author-name', 'a[rel="author"]'],
   },
   facebook: {
-    channel: 'facebook', label: 'Facebook', piece: 'facebook', summary: 'publish-fb-summary', status: `${R.T}/integrations/facebook`,
+    channel: 'facebook', label: 'Facebook', heading: 'Connect Facebook Page', piece: 'facebook', summary: 'publish-fb-summary', status: `${R.T}/integrations/facebook`,
     save: 'fbSave', test: 'fbTest', connected: 'Connected — Facebook Page verified successfully.',
     fields: (c) => [['e.g. 104123456789012', c.page_id], ['e.g. EAAB…', c.page_access_token]],
     // The Page id is the test Page owner's own Page: blurred in the form, the summary card and the post links.
@@ -148,7 +148,11 @@ function publishSteps(name, state) {
           await f.fill(value);
         }
         await h.assertMasked(c.mask.filter((m) => !m.startsWith('[data-testid')));
-        await h.click(page.getByRole('button', { name: 'Test & Connect' }).first());
+        // Both channel cards have a Test & Connect button: click the one of this channel's card (the innermost block
+        // holding its heading and a button).
+        const cardOf = page.locator('div').filter({ has: page.getByText(c.heading, { exact: true }) })
+          .filter({ has: page.getByRole('button', { name: 'Test & Connect' }) }).last();
+        await h.click(cardOf.getByRole('button', { name: 'Test & Connect' }));
         await h.expect(page.getByText(c.connected).or(page.getByTestId(c.summary)).first()).toBeVisible({ timeout: 60_000 });
       }, { writes: true }),
     step(`Publish sends the piece to ${c.label}. The post goes live with the text the agency approved.`,
