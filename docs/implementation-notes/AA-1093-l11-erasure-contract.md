@@ -46,6 +46,15 @@ Booking, TripPlanner and AA-Partner lanes keep their own `AA-1093-<lane>.md`.
 - **Restore drill evidence** is committed as `docs/audits/2026-11-13-S279-cis-restore-drill/restore-drill.json` (the
   drill's own JSON plus run metadata; ids, table names and counts only), the same shape as the CRM drill evidence.
 
+- **Review fix pass (S279):** the CRM export at offboarding is marked planned in DPA 11.1 / 11.2, the DSAR runbook
+  4.1 T0 row and the contract text: today the CRM locks an offboarded agency and every member request gets 403
+  `tenant_locked` (AA-Partner `api/app/tenancy.py`), so the owner cannot reach Settings > Data and privacy. The CRM
+  lane must build the exception into the lock (owner export and download stay open until the CRM `not_before`); until
+  then the operator tells the owner before T0. DPA 11.4(d) and runbook 4.4 step 7 now describe the two stages (day 30:
+  TripPlanner and Booking in parallel, CIS last; day 90: the CRM alone with its own dry run, approval and snapshot).
+  Annex 1 and Annex 4 went to v0.5 so the whole pack matches Annex 3 v0.5 (GPT stages on Amazon Bedrock first, the
+  OpenAI API last); pilot contract set row 3 and AI Schedule row 5 name the v0.5 pack.
+
 ## Changed
 
 - New: `docs/contracts/tenant.erasure.v1.openapi.yaml`, 11 samples in `docs/contracts/samples/tenant.erasure.v1/`,
@@ -56,6 +65,8 @@ Booking, TripPlanner and AA-Partner lanes keep their own `AA-1093-<lane>.md`.
   `docs/contracts/README.md` (new row, 1.7 note); `docs/contracts/samples/README.md` (required negatives list).
 - `docs/legal/dpa.md` v0.5 (clause 11, C7), `docs/legal/dpa-annex-3-subprocessors.md` v0.5 (§1.2, rows, change log),
   `docs/legal/register.md` (acc1 note, Annex 3 version), `docs/legal/dpa-pack-outline.md` (status line).
+- `docs/legal/dpa-annex-1-processing.md` v0.5 and `docs/legal/dpa-annex-4-transfers.md` v0.5 (AI routing rows),
+  `docs/legal/pilot-contract-set.md` row 3, `docs/legal/tenant-ai-schedule.md` row 5 (pack versions).
 - `docs/legal/dsar-erasure-runbook.md` section 4 (4.1-4.7).
 - `docs/architecture/data-standards/02-data-management.md`: four DM-7.1 rows + the S279 rows paragraph.
 - `docs/ops/job-kinds.md`: `tenant_erasure_saga`, `tenant_backup`, `bk_tenant_erase`, a CRM table

@@ -18,7 +18,8 @@ info:
     Schedule. T0 = the soft offboard (POST /admin/tenants/{id}/offboard; account.status_changed to offboarding and
     account.erasure_requested on tenant.entitlements.v1 1.7). Every app stops serving the tenant at T0. Each app has
     its own not_before: T0 + 90 days for the CRM (D2: after that AA erases the agency's CRM data without the owner's
-    click; the CRM offers the owner a full export at T0), T0 + 30 days for CIS, Booking and TripPlanner (D1). The
+    click; the CRM offers the owner a full export at T0, planned: its lock must leave the owner's export and download
+    open until the CRM not_before), T0 + 30 days for CIS, Booking and TripPlanner (D1). The
     windows and the approval validity (24 hours) are CIS settings in the admin-editable settings registry, seeded
     with those defaults; CIS computes not_before and approval_expires_at, so a consumer never computes a window. A
     CIS restore of the tenant before the first not_before cancels the request (phase cancelled); after an app has
@@ -27,9 +28,9 @@ info:
     computes its plan and reports mode dry_run; before the first not_before no step is active and nothing happens.
     awaiting_approval: every active step reported an ok dry run of the current round; CIS shows the combined
     fingerprint to the tech lead (Cognito admin only). apply: approved; approved_plan_hash is set on every active
-    step and is valid until approval_expires_at; TripPlanner, Booking and the CRM apply in parallel, each recomputes
-    its plan first and refuses with error_code plan_changed when the hash differs (nothing is erased), then CIS
-    applies last; verify: every active step runs a census of its pii:-tagged columns for the tenant and reports mode
+    step and is valid until approval_expires_at; the active non-CIS apps apply in parallel (stage 1 at T0 + 30 days:
+    TripPlanner and Booking; stage 2 at T0 + 90 days: the CRM alone), each recomputes its plan first and refuses with
+    error_code plan_changed when the hash differs (nothing is erased), then CIS applies last within its stage; verify: every active step runs a census of its pii:-tagged columns for the tenant and reports mode
     verify (pii_rows_found must be 0). When steps remain whose not_before is later (the CRM at T0 + 90 days), the
     request goes back to dry_run with the next round and those steps become active at their not_before. done: every
     step is done. failed: a step failed or refused; the tech lead decides (a new round, or stop). cancelled: stop.

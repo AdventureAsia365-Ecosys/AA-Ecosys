@@ -382,7 +382,7 @@ restored.
 
 | When | What happens |
 |---|---|
-| **T0**, the soft offboard | Every app stops serving the tenant (CIS revokes its key and cancels its jobs; Booking's `bk_tenant_pull` suspends its partner; TripPlanner stops serving its `/{slug}` site; the CRM locks the agency through `crm_entitlement_pull`). CIS opens the erasure request (`shared.tenant_erasure_request`, phase `dry_run`, round 1) with one step per app and its `not_before`, and writes `account.erasure_requested` on `tenant.entitlements.v1` 1.7. The CRM offers the agency owner a full export of its CRM data |
+| **T0**, the soft offboard | Every app stops serving the tenant (CIS revokes its key and cancels its jobs; Booking's `bk_tenant_pull` suspends its partner; TripPlanner stops serving its `/{slug}` site; the CRM locks the agency through `crm_entitlement_pull`). CIS opens the erasure request (`shared.tenant_erasure_request`, phase `dry_run`, round 1) with one step per app and its `not_before`, and writes `account.erasure_requested` on `tenant.entitlements.v1` 1.7. The CRM offers the agency owner a full export of its CRM data (**planned**, AA-1093: the lock must leave the owner's Settings > Data and privacy export and download open until T0 + 90 days. Today a locked agency gets 403 `tenant_locked` on every member request, the owner's included, so until the CRM part ships the operator tells the owner before T0 and the owner exports during the term) |
 | Before the first `not_before` | A CIS restore of the tenant (`/restore`) cancels the request (phase `cancelled`); nothing was erased |
 | **T0 + 30 days** (D1) | Stage 1: CIS, Booking and TripPlanner run the steps of section 4.4 together |
 | **T0 + 90 days** (D2) | Stage 2: the CRM runs the same steps for its own data, without the owner's click (the CRM18 rule changes for this AA-run path; the owner's own offboarding with its 72-hour cool-off stays as it is) |
@@ -439,9 +439,9 @@ the CRM through `POST /tenant/v1/erasure-requests/{id}/reports`. Reports hold id
    Expected: `available`. It holds the tenant's data: no `keep-` prefix, deleted in step 10.
 6. **Apply switches on** for the apps of the stage (approved AA-CIS-Infra change, then deploy), as in section 4.6
    step 6 for CIS.
-7. **Apply.** Phase `apply`: TripPlanner, Booking and the CRM apply in parallel, each recomputing its plan first; then
-   CIS applies last (section 4.6 step 7, with the approved fingerprint and the snapshot id). Expected: every report
-   mode `apply`, `status` `ok`. Abort: a `refused` report (`plan_changed`: the tenant's data moved since the DRY RUN)
+7. **Apply.** Phase `apply`: the apps of the stage other than CIS apply in parallel (stage 1: TripPlanner and Booking;
+   stage 2: the CRM alone), each recomputing its plan first; in stage 1 CIS then applies last (section 4.6 step 7,
+   with the approved fingerprint and the snapshot id). Expected: every report mode `apply`, `status` `ok`. Abort: a `refused` report (`plan_changed`: the tenant's data moved since the DRY RUN)
    → nothing of that app was erased; the saga starts a new round from step 3; a `failed` report → the app's
    transaction rolled back; read the app's job, fix, new round.
 8. **Verify.** Phase `verify`: each app runs a census of its `pii:`-tagged columns (DM-6.1 column comments) for the
