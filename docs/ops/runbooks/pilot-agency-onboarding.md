@@ -53,8 +53,9 @@ one pilot at most, unique index `tenants_one_pilot_key`; a CHECK makes it `kind`
 > On Dev the CRM creates synthetic agencies only (AA-Partner `app/agencies.py`, `SYNTHETIC_ONLY_ENVIRONMENTS`), so the
 > pilot's CRM agency carries `crm.tenant.is_synthetic` true like every other Dev agency. The CRM's Dev-only E2E staff
 > check (AA-Partner `api/app/tenancy.py`, `E2E_SYNTHETIC_SQL`) therefore also reads the pilot marker
-> (`crm.tenant.is_pilot`, crm-044): the A10c identity never reaches the pilot agency (gap G9, closed by AA-1086 in
-> S279). Step 5 of [Before you start](#before-you-start) checks it.
+> (`crm.tenant.is_pilot`, crm-044), and `crm_entitlement_pull` sets `is_synthetic` false for good the first time it
+> sees the marker (audit `tenant_real_marker`): the A10c identity never reaches the pilot agency, during the pilot or
+> after it ends (gap G9, closed by AA-1086 in S279). Step 5 of [Before you start](#before-you-start) checks it.
 
 ## Before you start
 
@@ -84,8 +85,9 @@ one pilot at most, unique index `tenants_one_pilot_key`; a CHECK makes it `kind`
    accepted the risk in writing.
 5. Confirm the Dev-only CRM staff identity (A10c, `e2e-crm-staff@`) cannot reach the pilot. **Abort unless** the CRM E2E
    staff check excludes `crm.tenant.is_pilot` (gap G9, closed by AA-1086: `E2E_SYNTHETIC_SQL` on `origin/main` of
-   AA-Partner reads `is_synthetic IS TRUE AND is_pilot IS NOT TRUE`, and the deployed `aa-crm-dev-api` image carries
-   that commit) **or** A10c is switched off on the CRM. Otherwise that identity can open S-02 views and S-04 support sessions on the real
+   AA-Partner reads `is_synthetic IS TRUE AND is_pilot IS NOT TRUE`, `crm_entitlement_pull` clears `is_synthetic` of
+   a pilot agency for good, and the deployed `aa-crm-dev-api` image carries both) **or** A10c is switched off on the
+   CRM. Otherwise that identity can open S-02 views and S-04 support sessions on the real
    agency, which breaks root ADR 0006a A10b-1 (E2E writes on synthetic tenants only) and the pilot personal-data rule.
    There is no waiver for this check.
 
@@ -241,9 +243,13 @@ Gap G2 is closed (AA-1086, S279): the CIS administrator ends the pilot.
 2. A tenant that is not the pilot answers 200 with `changed` false and nothing is written; a second click is harmless.
    Any account status is accepted, an offboarded pilot included.
 3. The route does not change `kind`: on Dev a non-pilot `agency` is then offboarded (root ADR 0019 d16).
+4. Ending the pilot does not open the agency to the Dev-only E2E identities: CIS still reads it as real (`is_canary`
+   false), and the CRM agency keeps `is_synthetic` false, which `crm_entitlement_pull` set when it first saw the marker
+   (gap G9). Ending first and offboarding afterwards is therefore safe; offboarding first works too.
 
 - **Expected:** `SELECT slug FROM shared.tenants WHERE is_pilot` returns no row.
-- **Verify:** the CRM agency's pilot marker is false after one pull; `crm_pilot_backup` stops queuing its export.
+- **Verify:** the CRM agency's pilot marker is false after one pull and its `is_synthetic` stays false;
+  `crm_pilot_backup` stops queuing its export.
 
 ## Step 9: exit (offboarding)
 
@@ -265,7 +271,7 @@ an exit is a manual, per-app job with the destructive-ops procedure (`skill/aa-c
 |---|---|---|---|
 | G2 | Closed (S279): `POST /admin/tenants/<tenant-id>/pilot/end` and Tenant 360 › Subscription › **End pilot** ([Step 8](#step-8-leave-pilot-mode)) | AA-CIS-App | AA-1086 |
 | G2a | The New tenant modal cannot create the pilot or add add-ons (API only). Still open: it needs the async saga call, job polling and three new fields; add-ons can be added on Tenant 360 › Subscription after the create | AA-CIS-App | follow-up of AA-1086 |
-| G9 | Closed (S279): the CRM's Dev-only E2E staff check and the studio relay's synthetic check also exclude the pilot agency (`crm.tenant.is_pilot`), because Dev agencies are all synthetic. Still a stop check of Before you start, step 5 (the deployed image) | AA-Partner | AA-1086 |
+| G9 | Closed (S279): the CRM's Dev-only E2E staff check and the studio relay's synthetic check also exclude the pilot agency (`crm.tenant.is_pilot`), because Dev agencies are all created synthetic, and `crm_entitlement_pull` clears `is_synthetic` of a pilot agency for good, so the former pilot stays out after the pilot ends. Still a stop check of Before you start, step 5 (the deployed image) | AA-Partner | AA-1086 |
 | G12 | Two AI budget pots (CIS + TripPlanner, CRM) | AA-Partner, AA-CIS-App | none yet |
 | G13 | No TripPlanner theme editor; the brand is set by hand | AA-CIS-App, AA-TripPlanner-Web | none yet (system audit M32) |
 | - | Agency web on one Spot task | AA-CIS-Infra | AA-1082 |

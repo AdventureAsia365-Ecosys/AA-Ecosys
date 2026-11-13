@@ -51,25 +51,34 @@ single pilot tenant instead, every row marked "E2E identity" below becomes a tec
 
 ### The synthetic agency `pilot-rehearsal-01`
 
-Created through the CIS provisioning path, the `tenant_provision` saga (AA-CIS-App
-`services/tenant_account/provision.py`, job kind `tenant_provision`), by the tech lead, because no E2E identity may
-create a tenant (ADR 0006a A10b-4):
+Three commands, **in this order** (each a one-time setup; the CIS tenant comes last):
 
-- AA-CIS-App fixture (gap G1, closed by AA-1086): `python -m services.tenant_account.e2e_fixtures rehearsal-tenant --run
-  <run>` through ECS Exec on `aa-cis-dev-api`, DRY RUN first, then `--apply`. It enqueues the same saga as
-  `POST /admin/tenants/provision` with `name` "E2E Pilot Rehearsal Travel", `slug` `pilot-rehearsal-01`, `plan_tier`
-  `growth`, `posts_per_week` 2, `kind` `demo`, `add_ons` `crm` (`crm.core`, 3 seats) and `tripplanner`
-  (`tripplanner.hosted`), request key `aa1086-pilot-rehearsal-01-<run>`, under the id AA-Partner's seed catalogue
-  gives the agency key `pilot-rehearsal-01` (`41ea21ee-77ee-5474-bd6d-aa738d2da990`). It prints the tenant id and the
-  job to poll; a tenant that already exists is reported with its subscriptions, never created twice.
-- Its E2E owner and agent: AA-CIS-Infra `tools/identity/crm_e2e_users.json` lists
-  `e2e-test-crm-pilot-rehearsal-01-owner` and `-agent`; `crm_dev_identity.py --pool partner e2e-users --apply
-  --write-secrets` creates them (credentials in `crm/dev/e2e-test-crm/pilot-rehearsal-01-<role>`) and prints their
-  subjects.
-- Its CRM agency and members: AA-Partner `python -m app.seed --apply --agency pilot-rehearsal-01 --member
-  pilot-rehearsal-01:owner:<sub> --member pilot-rehearsal-01:agent:<sub>` through ECS Exec on `aa-crm-dev-api`. The
-  CRM and portal specs then run on it with `E2ECRMPARTNER` = the tenant id and the owner's `E2ECRMEMAIL`,
-  `E2ECRMPASSWORD` and `E2ECRMTOTP`.
+1. Its E2E owner and agent: AA-CIS-Infra `tools/identity/crm_e2e_users.json` lists
+   `e2e-test-crm-pilot-rehearsal-01-owner` and `-agent`; `crm_dev_identity.py --pool partner e2e-users --apply
+   --write-secrets` creates them (credentials in `crm/dev/e2e-test-crm/pilot-rehearsal-01-<role>`) and prints their
+   subjects.
+2. Its CRM agency and members: AA-Partner `python -m app.seed --apply --agency pilot-rehearsal-01 --member
+   pilot-rehearsal-01:owner:<sub> --member pilot-rehearsal-01:agent:<sub>` through ECS Exec on `aa-crm-dev-api`. The
+   seed needs no CIS tenant: the agency id is the seed catalogue's fixed id for the key `pilot-rehearsal-01`
+   (`41ea21ee-77ee-5474-bd6d-aa738d2da990`).
+3. The CIS tenant, through the CIS provisioning path, the `tenant_provision` saga (AA-CIS-App
+   `services/tenant_account/provision.py`, job kind `tenant_provision`), by the tech lead, because no E2E identity may
+   create a tenant (ADR 0006a A10b-4). AA-CIS-App fixture (gap G1, closed by AA-1086): `python -m
+   services.tenant_account.e2e_fixtures rehearsal-tenant --run <run>` through ECS Exec on `aa-cis-dev-api`, DRY RUN
+   first, then `--apply`. It enqueues the same saga as `POST /admin/tenants/provision` with `name` "E2E Pilot
+   Rehearsal Travel", `slug` `pilot-rehearsal-01`, `plan_tier` `growth`, `posts_per_week` 2, `kind` `demo`, `add_ons`
+   `crm` (`crm.core`, 3 seats) and `tripplanner` (`tripplanner.hosted`), request key
+   `aa1086-pilot-rehearsal-01-<run>`, under the same id. It prints the tenant id and the job to poll; a tenant that
+   already exists is reported with its subscriptions, never created twice.
+
+Why this order: `crm_entitlement_pull` re-reads only the tenants a feed page names, plus an hourly reconcile of every
+agency it holds (AA-Partner `api/app/cis/entitlement_feed.py`). If the saga ran first, its account and subscription
+events would name an agency the CRM does not hold yet; the pull skips it ("ignored") and projects it only at the next
+hourly reconcile, up to an hour later, and step 1's "projected within one slot" check would fail. Seeded first, the
+agency is projected in the first slot after the saga.
+
+The CRM and portal specs then run on it with `E2ECRMPARTNER` = the tenant id and the owner's `E2ECRMEMAIL`,
+`E2ECRMPASSWORD` and `E2ECRMTOTP`.
 
 The `pilot-rehearsal-01-marker` tenant uses the same route with `kind` `agency`, `pilot_weeks` 1 and no add-ons.
 
@@ -261,7 +270,9 @@ Cap 10 USD, estimate 2-4 USD (system audit S278, section 4). The infrastructure 
 Run after X3, in this order. Each write below is the tech lead's; the evidence folder records each result.
 
 1. **Marker tenant out of pilot mode (step 12b).** Tenant 360 › Subscription › **End pilot** (or the route) as in
-   [onboarding Step 8](pilot-agency-onboarding.md#step-8-leave-pilot-mode). Then step 12b's check.
+   [onboarding Step 8](pilot-agency-onboarding.md#step-8-leave-pilot-mode). Then step 12b's check. The marker has
+   no CRM agency (no add-ons); for a real pilot the CRM agency stays real after this step (gap G9), so ending before
+   offboarding is safe.
 2. **Marker tenant removed.** `pilot-rehearsal-01-marker` is `kind` agency with `is_canary` false: a non-synthetic
    tenant that root ADR 0019 d16 does not allow on Dev once it is no longer the pilot. Soft offboard it (`POST
    /admin/tenants/<tenant-id>/offboard`, reason "pilot rehearsal teardown"), then erase it with the `data_erasure` job:

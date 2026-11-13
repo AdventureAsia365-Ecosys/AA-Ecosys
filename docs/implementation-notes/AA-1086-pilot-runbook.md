@@ -89,3 +89,8 @@ Seven reviewer findings, all confirmed against `origin/main` of the child repos 
 - **G9** (E2E staff vs pilot): AA-Partner `E2E_SYNTHETIC_SQL` and `SYNTHETIC_AGENCY_SQL` read
   `is_synthetic IS TRUE AND is_pilot IS NOT TRUE` (crm-044 marker, no migration). Before-you-start step 5 stays a stop
   check on the deployed image.
+- **Review fixes.** (1) The marker alone reopened a former pilot once the end-pilot route clears it, so
+  `crm_entitlement_pull` now also sets `crm.tenant.is_synthetic` false for good the first time it sees the marker
+  (audit `tenant_real_marker`); onboarding Step 8 says ending before offboarding is safe. (2) The rehearsal Fixtures
+  order is now Infra E2E users, CRM seed, then the CIS `rehearsal-tenant` saga: the pull skips feed events for an
+  agency the CRM does not hold yet and would only project it at the hourly reconcile.
