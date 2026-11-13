@@ -1,0 +1,58 @@
+{
+  "contract": "crm.ops.v1",
+  "schema": "Settings",
+  "expect": "valid",
+  "why": "1.13 (AA-1096 L4): one CRM setting as the CIS Platform > Settings CRM tab reads it, overridden by its env var for one release, with a decided platform change",
+  "payload": {
+    "app": "crm",
+    "areas": ["rate_limit"],
+    "settings": [
+      {
+        "key": "crm.rate.public_per_minute",
+        "app": "crm",
+        "area": "rate_limit",
+        "label": "Public routes per address",
+        "description": "Requests per client address per minute on the unauthenticated routes.",
+        "value_type": "int",
+        "unit": "requests/min",
+        "min_value": 0,
+        "max_value": 10000,
+        "allowed_values": null,
+        "default_value": 60,
+        "scope_kind": "platform",
+        "impact": "medium",
+        "approval": "maker_checker",
+        "evidence_required": false,
+        "env_override": "RATE_LIMIT_PUBLIC_PER_MINUTE",
+        "cache_s": 30,
+        "enforced": true,
+        "value": 60,
+        "source": "env",
+        "version": 1,
+        "overridden_by_env": true,
+        "env_ignored": null,
+        "refused": null,
+        "last_change": {
+          "id": "00000000-0000-4000-8000-00000000c001",
+          "key": "crm.rate.public_per_minute",
+          "tenant_id": null,
+          "value": 60,
+          "version": 1,
+          "status": "approved",
+          "effective_from": "2026-11-13T05:00:00Z",
+          "proposed_by": "platform:00000000-0000-4000-8000-00000000aa01",
+          "proposed_at": "2026-11-13T05:00:00Z",
+          "reason": "keep the value Terraform sets today",
+          "evidence_ref": null,
+          "self_approved": true,
+          "decided_by": "platform:00000000-0000-4000-8000-00000000aa01",
+          "decided_at": "2026-11-13T05:00:00Z",
+          "decision_note": null
+        },
+        "pending": []
+      }
+    ],
+    "two_person_approval": false,
+    "reader_error": null
+  }
+}
