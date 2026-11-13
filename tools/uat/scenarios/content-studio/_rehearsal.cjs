@@ -152,7 +152,8 @@ function socialSteps(channel, label, state) {
       `Bài ${label} hoàn thành kèm thông báo về AI và được lưu trong Nội dung của tôi. Kết thúc kịch bản.`,
       async (page, h) => {
         await h.expect(page.getByTestId('writer-panel-result').first()).toBeVisible({ timeout: 900_000 });
-        await h.expect(panel(page).getByTestId('ai-notice').first()).toBeVisible({ timeout: 30_000 });
+        // The notice sits beside the export / publish actions, in the drawer footer (outside writer-panel).
+        await h.expect(page.getByTestId('ai-notice').filter({ visible: true }).first()).toBeVisible({ timeout: 30_000 });
         const c = state.counts;
         if (c.pick !== 1 || c.choose !== 1 || c.write < 1 || c.write > 2) throw new Error(`unexpected write counts ${JSON.stringify(c)}`);
       }),
