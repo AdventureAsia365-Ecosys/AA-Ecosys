@@ -55,7 +55,7 @@ function ruleMethods(r) {
   const list = m === '*' ? WRITE_METHODS : [].concat(m).map((x) => String(x).toUpperCase());
   if (!list.length) throw new Error(`limitWrites ${r.name}: no method`);
   for (const x of list) {
-    if (READ_METHODS.includes(x) && !r.read) throw new Error(`limitWrites ${r.name}: method ${x} is not a write (set read: true to cap a paid read)`);
+    if (READ_METHODS.includes(x) && !r.read) throw new Error(`limitWrites ${r.name}: method ${x} is not a write: method must be POST, PUT, PATCH, DELETE (a list of them, or '*'), or set read: true to cap a paid read`);
     if (!READ_METHODS.includes(x) && !WRITE_METHODS.includes(x)) throw new Error(`limitWrites ${r.name}: unknown method ${x}`);
   }
   return list;

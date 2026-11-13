@@ -18,8 +18,9 @@ const KINDS = ['uat', 'guide', 'release', 'regression', 'data'];
 // client host, several identities in one story, and a story recorded by hand.
 // booking-staff / booking-maker / booking-checker: the Booking E2E writers (root ADR 0006a A10e), write set only.
 // studio-rehearsal: the E2E owner of the pilot rehearsal agency in the Content studio (AA-1086), write set only.
+// crm-rehearsal / crm-rehearsal-agent / crm-staff: the rehearsal agency's CRM owner and agent, and the AA staff console user.
 const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'studio-rehearsal', 'crm', 'crm-assistant', 'traveller', 'multi', 'manual',
-  'booking-staff', 'booking-maker', 'booking-checker'];
+  'booking-staff', 'booking-maker', 'booking-checker', 'crm-rehearsal', 'crm-rehearsal-agent', 'crm-staff'];
 const REQUIRED = { id: 'string', app: 'string', module: 'string', story: 'string', roles: 'array', kinds: 'array', covers: 'array',
   screens: 'array', status: 'string', round: 'round', identity: 'string', writes: 'boolean', paid: 'boolean' };
 const OPTIONAL = { file: 'string', note: 'string', issues: 'array' };

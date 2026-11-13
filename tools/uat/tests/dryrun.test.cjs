@@ -86,7 +86,8 @@ test('select: naming a writable-identity scenario without --include-writable thr
   assert.throws(() => core.select(SET, { only: ['CRM-01'] }), /CRM-01: signs in an account that can write.*--include-writable/);
   assert.throws(() => core.select(SET, { identities: ['crm'] }), /crm: signs in an account that can write/);
   assert.deepEqual(core.select(SET, { only: ['CRM-01'], includeWritable: true }).map((e) => e.id), ['CRM-01']);
-  assert.deepEqual(core.WRITABLE_IDENTITIES, ['crm', 'studio-editor', 'studio-audit', 'studio-rehearsal', 'booking-staff', 'booking-maker', 'booking-checker', 'traveller']);
+  assert.deepEqual(core.WRITABLE_IDENTITIES, ['crm', 'studio-editor', 'studio-audit', 'studio-rehearsal', 'booking-staff', 'booking-maker', 'booking-checker', 'traveller',
+    'crm-rehearsal', 'crm-rehearsal-agent', 'crm-staff']);
 });
 
 test('select: an id with a lower-case part (split letter, phone variant) is found from the upper-cased --only', () => {
@@ -488,10 +489,11 @@ test('manifest: every listed scenario loads, is a read-only dry-run scenario, id
   assert.ok(entries.length >= 20, `at least 20 scenarios (${entries.length})`);
   core.select(entries, {}); // throws on a duplicate id
   const identities = new Set(entries.map((e) => e.identity));
-  // The studio editor, the Booking E2E writers and the guest traveller write, so only write scenarios use them
-  // (AA-855, AA-1086): the read-only set covers every other identity.
+  // The studio editor, the Booking E2E writers, the guest traveller and the pilot rehearsal identities write, so only
+  // write scenarios use them (AA-855, AA-1086): the read-only set covers every other identity.
   for (const who of core.IDENTITIES.filter((x) => !core.WRITE_SET_ONLY_IDENTITIES.includes(x))) assert.ok(identities.has(who), `the set covers identity ${who}`);
   for (const who of core.WRITE_SET_ONLY_IDENTITIES) assert.ok(!identities.has(who), `no dry-run scenario signs in ${who}`);
+  for (const who of core.REHEARSAL_IDENTITIES) assert.ok(!identities.has(who), `no dry-run scenario signs in ${who}`);
   // The default run leaves the writable identity's scenarios out and says so.
   const def = core.select(entries, {});
   assert.ok(def.length >= 20 && def.every((e) => !core.WRITABLE_IDENTITIES.includes(e.identity)));

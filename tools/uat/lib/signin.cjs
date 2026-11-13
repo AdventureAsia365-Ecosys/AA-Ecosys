@@ -36,6 +36,13 @@
 //   crm        Owner of the invented agency of the CRM review set: lib/crm-signin.cjs identity A, with its own state
 //              file (work/dryrun/.state-crm.json, never the review set's). This account CAN write (the CRM has no
 //              read-only role yet): the runner leaves its scenarios out unless --include-writable (dryrun-core.cjs).
+//   crm-rehearsal, crm-rehearsal-agent  Owner and agent of the pilot rehearsal agency pilot-rehearsal-01 (runbook
+//              docs/ops/runbooks/pilot-rehearsal.md): lib/crm-signin.cjs identities RO and RA, secrets
+//              crm/dev/e2e-test-crm/pilot-rehearsal-01-owner / -agent. They CAN write; the pilot guard pins every
+//              scenario of theirs to that agency. Only the rehearsal write set (scenarios/crm/reh-*.cjs) uses them.
+//   crm-staff  The AA staff console's E2E user e2e-crm-staff@e2e-mail… (root ADR 0006a A10c, WORKFORCE groups crm-ops +
+//              crm-support) on the CRM web /staff: managed login with an e-mail code from inbound-admin/ (MFA admin
+//              profile only). The CRM keeps it to synthetic agencies (403 e2e_synthetic_only elsewhere).
 // Secrets and codes are read at run time and never printed, logged or written; the state files go to
 // work/dryrun/.state-<identity>.json (chmod 600, gitignored). No screenshot or trace is ever taken here.
 'use strict';
@@ -69,6 +76,10 @@ const STAFF = {
   'booking-checker': { origin: BOOKING, email: 'e2e-booking-checker@e2e-mail.lumiguides.it.com', prefix: 'inbound-admin/' },
 };
 const BOOKING_WRITERS = ['booking-staff', 'booking-maker', 'booking-checker'];
+  'crm-staff': { origin: PARTNER, email: 'e2e-crm-staff@e2e-mail.lumiguides.it.com', prefix: 'inbound-admin/' },
+};
+// The CRM identities of the pilot rehearsal: lib/crm-signin.cjs identity per harness identity.
+const CRM_REHEARSAL = { 'crm-rehearsal': 'RO', 'crm-rehearsal-agent': 'RA' };
 
 function statePath(who) {
   // studio-audit: one session per audit tenant (the studio cookies name the tenant they were exchanged for).
@@ -122,6 +133,34 @@ async function staffLogin(page, cfg) {
   await field.fill(code);
   await page.getByRole('button', { name: /^(continue|sign in|next)$/i }).first().click({ timeout: 10_000 });
   await page.waitForURL((u) => u.origin === cfg.origin && !u.pathname.startsWith('/login'), { timeout: 45_000 });
+}
+
+/**
+ * AA staff console of the CRM web (/staff, WORKFORCE crm-staff client): its own sign-in route goes straight to the
+ * managed login (no "Sign in with company email" page), then the e-mail code, then back on /staff.
+ */
+async function crmStaffLogin(page, cfg) {
+  await page.goto(`${cfg.origin}/staff/auth/sign-in?next=${encodeURIComponent('/staff/ops')}`, { waitUntil: 'domcontentloaded' });
+  await page.waitForURL((u) => u.host === STAFF_AUTH_HOST, { timeout: 30_000 });
+  await fillSettled(page, page.getByLabel(/email/i).first(), cfg.email);
+  const before = await mailbox.baseline(cfg.prefix);
+  const since = new Date();
+  await page.getByRole('button', { name: /^next$/i }).click({ timeout: 10_000 });
+  const field = await reachCodeStep(page);
+  const code = await mailbox.waitForCode({ recipient: cfg.email, prefix: cfg.prefix, before, since });
+  await field.fill(code);
+  await page.getByRole('button', { name: /^(continue|sign in|next)$/i }).first().click({ timeout: 10_000 });
+  await page.waitForURL((u) => u.origin === cfg.origin && u.pathname.startsWith('/staff/') && !u.pathname.startsWith('/staff/auth')
+    && !u.pathname.startsWith('/staff/signed-out'), { timeout: 45_000 });
+}
+
+/** Is the staff console session alive, with the crm-ops group? The S-02 board renders on /staff/ops. */
+async function crmStaffAlive(page) {
+  await page.goto(`${PARTNER}/staff/ops`, { waitUntil: 'domcontentloaded' });
+  await page.waitForLoadState('networkidle', { timeout: 15_000 }).catch(() => {});
+  const u = new URL(page.url());
+  if (u.origin !== PARTNER || u.pathname !== '/staff/ops') return false;
+  return page.getByTestId('staff-ops-board').isVisible({ timeout: 15_000 }).catch(() => false);
 }
 
 /** Is the CIS admin session alive? /admin/overview opens (admin only) without a bounce to /login. */
@@ -264,7 +303,18 @@ async function ensureState(who) {
     }
     return { file, reused: existed };
   }
-  if (!['cis-admin', 'booking', ...BOOKING_WRITERS, ...STUDIO_IDENTITIES].includes(who)) throw new Error(`unknown identity ${who}`);
+  if (CRM_REHEARSAL[who]) {
+    const target = statePath(who);
+    const existed = fs.existsSync(target);
+    let file;
+    try {
+      file = await crm.ensureState(CRM_REHEARSAL[who], target);
+    } catch (e) {
+      throw new Error(`${who}: ${redact(String(e.message || e).split('\n')[0])}`);
+    }
+    return { file, reused: existed };
+  }
+  if (!['cis-admin', 'booking', 'crm-staff', ...BOOKING_WRITERS, ...STUDIO_IDENTITIES].includes(who)) throw new Error(`unknown identity ${who}`);
   // A studio identity's secret is read before any browser starts: a missing one (the editor not enrolled yet) is a
   // clear BLOCKED reason, not a crash half-way through a sign-in. Never printed.
   let studioCreds = null;
@@ -291,6 +341,12 @@ async function ensureState(who) {
         if (!reused) {
           await staffLogin(page, STAFF['cis-admin']);
           if (!(await cisAlive(page))) throw new Error('signed in, but /admin/overview did not open (is the user still cis-admin?)');
+        }
+      } else if (who === 'crm-staff') {
+        reused = await crmStaffAlive(page);
+        if (!reused) {
+          await crmStaffLogin(page, STAFF['crm-staff']);
+          if (!(await crmStaffAlive(page))) throw new Error('signed in, but the S-02 board did not render (is the user still in crm-ops?)');
         }
       } else if (who === 'booking') {
         reused = await bookingAlive(page);
