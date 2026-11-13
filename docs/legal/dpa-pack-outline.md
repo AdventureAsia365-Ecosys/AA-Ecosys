@@ -21,8 +21,11 @@ related: [SEC-04, SEC-04-dpa, SEC-04-ai-schedule, SEC-04-packet, SEC-04-dpa-agre
 **Drafted on 2026-11-05 (S269), draft v0.2; brought to draft v0.3 on 2026-11-06 (S271)** to match what runs on Dev
 (pilot safeguards live, 14-day backups, the Anthropic API as the first path of Claude models); **DPA draft v0.4 on
 2026-11-09 (S274)** with Annex 1 v0.4, Annex 2 v0.5, Annex 3 v0.4 and Annex 4 v0.4 (route control version 7, the AI
-gateway's reply store and quality records, the Trip Planner's per-agency lead routing and traveller sign-in). Every
-item below now has text:
+gateway's reply store and quality records, the Trip Planner's per-agency lead routing and traveller sign-in); **DPA
+draft v0.5 on 2026-11-13 (S279, AA-1093)** with Annex 1 v0.5, Annex 2 v0.5, Annex 3 v0.5 and Annex 4 v0.5 (clause 11:
+CRM exit window 90 days, other services 30 days, one erasure process with a receipt; the Amazon Bedrock chat models
+served from the tech lead's AWS account, with the GPT stages on Amazon Bedrock first and the OpenAI API as their last
+fallback in Annexes 1, 3 and 4). Every item below now has text:
 
 | Item | Page |
 |---|---|

@@ -1,0 +1,34 @@
+{
+  "contract": "tenant.entitlements.v1",
+  "schema": "AccountEventPage",
+  "expect": "valid",
+  "why": "1.7: the soft offboard writes the status change, then the erasure request hint",
+  "payload": {
+    "items": [
+      {
+        "event_id": "4b8a7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c71",
+        "cursor": "djE6MjAwOjQ2",
+        "type": "account.status_changed",
+        "occurred_at": "2026-12-01T08:00:00.000000Z",
+        "tenant_id": "0b9d6c7e-3f43-4c1e-9a52-6d0c3b8f1a01",
+        "change": {
+          "status": "offboarding",
+          "previous_status": "active",
+          "suspend_reason": null
+        }
+      },
+      {
+        "event_id": "5b8a7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c72",
+        "cursor": "djE6MjAwOjQ3",
+        "type": "account.erasure_requested",
+        "occurred_at": "2026-12-01T08:00:00.000000Z",
+        "tenant_id": "0b9d6c7e-3f43-4c1e-9a52-6d0c3b8f1a01",
+        "change": {
+          "op": "requested",
+          "request_id": "4e1d2c3b-5a69-4f78-8a9b-0c1d2e3f4a51"
+        }
+      }
+    ],
+    "next_cursor": "djE6MjAwOjQ3"
+  }
+}

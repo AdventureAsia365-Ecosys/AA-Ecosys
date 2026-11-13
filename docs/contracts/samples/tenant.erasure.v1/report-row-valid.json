@@ -1,0 +1,35 @@
+{
+  "contract": "tenant.erasure.v1",
+  "schema": "ErasureReportRow",
+  "expect": "valid",
+  "why": "A TripPlanner apply row of tripplanner.v_tenant_erasure_report_v1",
+  "payload": {
+    "report_id": "3c9b8a7d-6e5f-4d3c-8b2a-1f0e9d8c7b64",
+    "request_id": "4e1d2c3b-5a69-4f78-8a9b-0c1d2e3f4a51",
+    "tenant_id": "7a0b1c2d-3e4f-4a5b-9c6d-7e8f9a0b1c22",
+    "app": "tripplanner",
+    "round": 1,
+    "mode": "apply",
+    "status": "ok",
+    "error_code": null,
+    "plan_hash": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+    "tables": [
+      {
+        "table": "tripplanner.trip_drafts",
+        "action": "delete",
+        "rows": 6,
+        "digest": "0cc175b9c0f1b6a831c399e269772661"
+      },
+      {
+        "table": "tripplanner.ai_spend_month",
+        "action": "merge",
+        "rows": 2,
+        "digest": "92eb5ffee6ae2fec3ad71c777531578f"
+      }
+    ],
+    "blockers": [],
+    "census": null,
+    "job_id": "6d4c3b2a-1f0e-4d9c-8b7a-6f5e4d3c2b12",
+    "reported_at": "2026-12-31T10:04:00Z"
+  }
+}

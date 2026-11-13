@@ -30,7 +30,9 @@ How to read it:
 - **Live** means the control runs on Dev today. **Planned** means it does not run yet; the open work item is named.
 - `[to be confirmed]` is a point for the business owner or counsel. AWS accounts are named acc2 and acc3 only; the
   account map is in [onboarding](../onboarding.md). acc1 (a personal account) was removed from the ecosystem on
-  2026-10-28 (AA-998): no AA data or LLM call goes there any more.
+  2026-10-28 (AA-998); since 2026-11-12 it serves the Amazon Bedrock chat models again as a billing-only exception
+  (one invoker role, no AA data stored, no secret, no compute; ADR 0001a Notes S278 and S279, AA-1095; DPA Annex 3
+  §1.2).
 
 ## (a) Records of processing (RoPA)
 
@@ -245,7 +247,7 @@ Generated from the *Personal and confidential data tags (DM-6.1)* section of [`d
 
 Contract and DPA status is `[to be confirmed]` for every vendor: no DPA has been signed or checked in this repo.
 The agency-facing list, by app and with the AI gateway providers of CIS 366, is
-[DPA Annex 3](dpa-annex-3-subprocessors.md) (draft v0.4, 2026-11-09); a vendor change updates both.
+[DPA Annex 3](dpa-annex-3-subprocessors.md) (draft v0.5, 2026-11-13); a vendor change updates both.
 
 | Vendor | Service | Data | PII | Region | Contract / DPA | Evidence |
 |---|---|---|---|---|---|---|

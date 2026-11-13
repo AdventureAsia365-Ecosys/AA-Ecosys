@@ -1,0 +1,827 @@
+{
+  "run_at_utc": "2026-11-13T02:11Z",
+  "tenant": "audit-atlas-hearth (synthetic)",
+  "tenant_id": "b8611143-9ee9-4410-9a51-534076b78b0b",
+  "backup_id": "c84a17d0-3fa4-4f51-b36f-55b021845518",
+  "backup_finished_at": "2026-11-13T01:36:58.057484+00:00",
+  "schema_version_backup": 406,
+  "checksums_verified": 77,
+  "ok": true,
+  "complete": true,
+  "table_count": 76,
+  "manifest_rows": 1565,
+  "restored_rows": 1565,
+  "mismatched_tables": [],
+  "live_differs": [],
+  "skipped": [],
+  "unregistered": [],
+  "note": "AA-CIS-App python -m services.tenant_backup.restore_drill --tenant <uuid> in the CIS api container (ecsx s3 mode, exit 0); the backup was one tenant_backup job queued by hand the same morning. The drill report as printed: ids, table names, counts and reasons only, never a row value.",
+  "excluded": [
+    {
+      "reason": "audit_chain: append-only hash chain, never erased; it cannot be re-inserted",
+      "table": "acp_shared.audit_log"
+    },
+    {
+      "reason": "platform_ledger: cost history the erasure detaches from the tenant",
+      "table": "geo.geocode_call"
+    },
+    {
+      "reason": "platform_ledger: usage rollup the erasure merges into the platform row",
+      "table": "shared.ai_usage_hourly"
+    },
+    {
+      "reason": "platform_ledger: cost history the erasure detaches from the tenant",
+      "table": "shared.decision_log"
+    },
+    {
+      "reason": "platform_ledger: cost history the erasure detaches from the tenant",
+      "table": "shared.dfs_call_log"
+    },
+    {
+      "reason": "job_history: operational queue rows (the backup job itself is one)",
+      "table": "shared.job"
+    },
+    {
+      "reason": "platform_ledger: usage rollup the erasure merges into the platform row",
+      "table": "shared.llm_call_daily"
+    },
+    {
+      "reason": "platform_ledger: cost history the erasure detaches from the tenant",
+      "table": "shared.llm_call_log"
+    },
+    {
+      "reason": "model_reply_cache: raw model replies kept for replays, not tenant state",
+      "table": "shared.llm_cassette"
+    },
+    {
+      "reason": "job_history: retired run-tour jobs",
+      "table": "shared.pipeline_jobs"
+    },
+    {
+      "reason": "usage_ledger: per-request metering (the monthly rollup is backed up)",
+      "table": "shared.tenant_api_usage"
+    }
+  ],
+  "tables": [
+    {
+      "live_identical": 1,
+      "live_pk_matched": 1,
+      "live_rows": 1,
+      "live_table": true,
+      "manifest_rows": 1,
+      "ok": true,
+      "restored_rows": 1,
+      "table": "shared.tenants"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_shared.year_plan"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_shared.quarter_plan"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_shared.quarter_plan_version"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.pipeline_runs"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "silver_aa_internal.raw_sources"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "silver_aa_internal.raw_tours"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_contract.route"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "silver_aa_internal.generated_content"
+    },
+    {
+      "live_identical": 795,
+      "live_pk_matched": 795,
+      "live_rows": 795,
+      "live_table": true,
+      "manifest_rows": 795,
+      "ok": true,
+      "restored_rows": 795,
+      "table": "acp_shared.subject"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "silver_aa_internal.quality_scores"
+    },
+    {
+      "live_identical": 30,
+      "live_pk_matched": 30,
+      "live_rows": 30,
+      "live_table": true,
+      "manifest_rows": 30,
+      "ok": true,
+      "restored_rows": 30,
+      "table": "acp_shared.angle_gate_request"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "gold_aa_internal.published_tours"
+    },
+    {
+      "live_identical": 87,
+      "live_pk_matched": 87,
+      "live_rows": 87,
+      "live_table": true,
+      "manifest_rows": 87,
+      "ok": true,
+      "restored_rows": 87,
+      "table": "acp_shared.angle_gate_option"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.writing_memory_release"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.writing_memory_disagreement"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.writing_exemplar"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.eval_golden_item"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.eval_claim_label"
+    },
+    {
+      "live_identical": 13,
+      "live_pk_matched": 13,
+      "live_rows": 13,
+      "live_table": true,
+      "manifest_rows": 13,
+      "ok": true,
+      "restored_rows": 13,
+      "table": "gold_aa_internal.tenant_tour_versions"
+    },
+    {
+      "live_identical": 29,
+      "live_pk_matched": 29,
+      "live_rows": 29,
+      "live_table": true,
+      "manifest_rows": 29,
+      "ok": true,
+      "restored_rows": 29,
+      "table": "acp_shared.content_piece"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_contract.tour_atoms"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "silver_aa_internal.upload_staging"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "silver_aa_internal.seo_context"
+    },
+    {
+      "live_identical": 1,
+      "live_pk_matched": 1,
+      "live_rows": 1,
+      "live_table": true,
+      "manifest_rows": 1,
+      "ok": true,
+      "restored_rows": 1,
+      "table": "silver_aa_internal.review_queue"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.writing_signal"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.writing_rule"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.writing_memory_shadow"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.writing_memory_release_exemplar"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.writing_memory_keep"
+    },
+    {
+      "live_identical": 4,
+      "live_pk_matched": 4,
+      "live_rows": 4,
+      "live_table": true,
+      "manifest_rows": 4,
+      "ok": true,
+      "restored_rows": 4,
+      "table": "shared.unmapped_market_requests"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.tenant_tripplanner_site"
+    },
+    {
+      "live_identical": 3,
+      "live_pk_matched": 3,
+      "live_rows": 3,
+      "live_table": true,
+      "manifest_rows": 3,
+      "ok": true,
+      "restored_rows": 3,
+      "table": "shared.tenant_subscription"
+    },
+    {
+      "live_identical": 1,
+      "live_pk_matched": 1,
+      "live_rows": 1,
+      "live_table": true,
+      "manifest_rows": 1,
+      "ok": true,
+      "restored_rows": 1,
+      "table": "shared.tenant_seo_config"
+    },
+    {
+      "live_identical": 1,
+      "live_pk_matched": 1,
+      "live_rows": 1,
+      "live_table": true,
+      "manifest_rows": 1,
+      "ok": true,
+      "restored_rows": 1,
+      "table": "shared.tenant_rewrite_usage"
+    },
+    {
+      "live_identical": 5,
+      "live_pk_matched": 5,
+      "live_rows": 5,
+      "live_table": true,
+      "manifest_rows": 5,
+      "ok": true,
+      "restored_rows": 5,
+      "table": "shared.tenant_membership_event"
+    },
+    {
+      "live_identical": 3,
+      "live_pk_matched": 3,
+      "live_rows": 3,
+      "live_table": true,
+      "manifest_rows": 3,
+      "ok": true,
+      "restored_rows": 3,
+      "table": "shared.tenant_members"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.tenant_integrations"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.tenant_export_config"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.tenant_entitlement_override"
+    },
+    {
+      "live_identical": 17,
+      "live_pk_matched": 17,
+      "live_rows": 17,
+      "live_table": true,
+      "manifest_rows": 17,
+      "ok": true,
+      "restored_rows": 17,
+      "table": "shared.tenant_entitlement"
+    },
+    {
+      "live_identical": 3,
+      "live_pk_matched": 3,
+      "live_rows": 3,
+      "live_table": true,
+      "manifest_rows": 3,
+      "ok": true,
+      "restored_rows": 3,
+      "table": "shared.tenant_brand_rules"
+    },
+    {
+      "live_identical": null,
+      "live_pk_matched": null,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.tenant_api_usage_monthly"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.tenant_ai_budget"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.tenant_addon_request"
+    },
+    {
+      "live_identical": 21,
+      "live_pk_matched": 21,
+      "live_rows": 21,
+      "live_table": true,
+      "manifest_rows": 21,
+      "ok": true,
+      "restored_rows": 21,
+      "table": "shared.tenant_account_event"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.staff_view_as_session"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.staff_tenant_assignment"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.place_photo"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.notifications"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.jev_tenant_allowlist"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.eval_item_result"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.eval_golden_split"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.eval_claim_relabel"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.eval_claim_proposal"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "shared.claim_shadow_verdict"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "gold_aa_internal.webhook_deliveries"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "gold_aa_internal.content_exports"
+    },
+    {
+      "live_identical": null,
+      "live_pk_matched": null,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_shared.tour_retirement_policy"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_shared.tenant_tour_notice"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_shared.tenant_config"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_shared.publish_log"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_shared.facts"
+    },
+    {
+      "live_identical": 27,
+      "live_pk_matched": 27,
+      "live_rows": 27,
+      "live_table": true,
+      "manifest_rows": 27,
+      "ok": true,
+      "restored_rows": 27,
+      "table": "acp_shared.fact_sheet"
+    },
+    {
+      "live_identical": 524,
+      "live_pk_matched": 524,
+      "live_rows": 524,
+      "live_table": true,
+      "manifest_rows": 524,
+      "ok": true,
+      "restored_rows": 524,
+      "table": "acp_shared.debate_brand_fit_cache"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_shared.content_piece_label"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_shared.content_label"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_shared.content_compliance_flag"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_shared.atom_place_card"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_shared.acp_quota_ledger"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_deliver.tenant_tour_pages"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_contract.atomize_day_fingerprint"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_contract.atom_segment_member"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_contract.atom_ranking"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_contract.atom_matches"
+    },
+    {
+      "live_identical": 0,
+      "live_pk_matched": 0,
+      "live_rows": 0,
+      "live_table": true,
+      "manifest_rows": 0,
+      "ok": true,
+      "restored_rows": 0,
+      "table": "acp_contract.atom_embedding"
+    }
+  ]
+}
