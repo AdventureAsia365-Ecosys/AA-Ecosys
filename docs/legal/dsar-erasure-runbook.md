@@ -397,7 +397,7 @@ computes a window. A drill on a synthetic tenant sets the windows to 0 for that 
 | App | Reads the request | DRY RUN | Apply | What stays | Job kind | Apply switch |
 |---|---|---|---|---|---|---|
 | CIS | its own tables | the `data_erasure` DRY RUN (section 4.6): counts per table and action, blockers, fingerprint | the inventory: delete, detach, merge (section 4.6); **always last** | the audit hash chain and one `tenant.erased` row; cost rows detached | `tenant_erasure_saga` (planned) drives `data_erasure` | `ERASURE_APPLY_ENABLED` (AA-CIS-Infra, default off) |
-| Booking | `catalog.v_tenant_erasure_v1` (its rows) | plan per table (D3), hash | **anonymise**: the agency name replaced, free text of its trip cases and `trip_case_checks` emergency-contact fields removed, `booking.audit_logs` before / after redacted; `bk_tenant_pull` skips an erased partner from then on | money rows and the bill-to snapshot of issued agency invoices (accounting exception) | `bk_tenant_erase` (planned) | Booking's own switch, default off |
+| Booking | `catalog.v_tenant_erasure_v1` (its rows) | plan per table (D3), hash | **anonymise** (the agency's footprint, `booking.tenant_erase_scope`, bk-057): the agency name replaced; staff free text of its B2B trip cases, status notes (cancel reasons), supplier bookings, trip checks (emergency contact, notes, custom titles), cancellations (`waive_reason`), agency invoices (`staff_note`, `void_reason`) and payments (`note`, `reject_reason`) redacted; notification titles and messages redacted; `booking.audit_logs` before / after, label and summary redacted; `bk_tenant_pull` skips an erased partner from then on | money rows, invoice numbers and amounts, the bill-to snapshot, payment references and decisions (accounting exception); `b2b_desk_bookings.override_reason` and `departure_fees.note` until the step 9 run-script | `bk_tenant_erase` (planned) | `TENANT_ERASE_APPLY_ENABLED`, default off |
 | TripPlanner | `catalog.v_tenant_erasure_v1` (its rows) | plan per table (D4), hash | **delete** the tenant's rows (`sessions`, `trip_drafts`, `trip_events`, `outbox`) and merge its `ai_spend_month` rows into the app scope | nothing of the tenant | `tp_tenant_erase` (planned, jobs Lambda) | TripPlanner's own switch, default off |
 | CRM | `GET /tenant/v1/erasure-requests` (scope `cis.tenant/erasure`) | its offboarding DRY RUN counts, hash | `crm.erase_subject('tenant')` and crypto-shredding of the agency keys, run by the platform after the 90-day window (D2); documents and exports deleted last | the agency audit trail (12 months, its write-once export up to 7 years) and the receipts | the CRM's erasure kind (planned, crm-064) | `LIFECYCLE_DRY_RUN` off for this path, default on |
 
@@ -452,7 +452,10 @@ the CRM through `POST /tenant/v1/erasure-requests/{id}/reports`. Reports hold id
    section 4.6 step 8; the tenant's backup prefix in the gold bucket (`exports/tenants/<tenant>/cis/`, gone by itself
    7 days after the last backup); Cognito partner users whose only membership was this tenant (D6; their other
    memberships keep them); Sentry events tagged with the tenant; the retention archives decision of section 4.6
-   step 8. The CRM removes its own documents and exports inside its erase.
+   step 8; Booking's two staff-text columns its role may not write (`b2b_desk_bookings.override_reason`,
+   `departure_fees.note` of the agency's partner row, set to `[redacted]` by a reviewed bk_owner DB Migrate
+   run-script as in section 3; Booking's census lists them as kept by rule). The CRM removes its own documents and
+   exports inside its erase.
 10. **Receipt and clean-up.** Send the agency the receipt: per app the date, the counts, what stayed and why (Booking's
     accounting records, the audit trails, posts on the agency's own channels, D5) and the backup age-out date
     (erasure + 14 days; the CRM receipt keeps its erasure + 30 days bound). Delete the step 5 snapshot; set the apply
