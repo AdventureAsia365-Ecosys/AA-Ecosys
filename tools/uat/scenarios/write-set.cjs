@@ -16,4 +16,10 @@ module.exports = [
   // the tenant offboarding erasure drill (offboard, drill, Run now, Stop for good, restore; never approved). $0, about
   // 15 min (the DRY RUN reports). Record it alone: --record DRILL-01 --include-writable.
   'cis-admin/drill-01.cjs',
+  // Pilot rehearsal (root docs/ops/runbooks/pilot-rehearsal.md), the Booking E2E writers (root ADR 0006a A10e) on the
+  // synthetic rehearsal agency only, each with the run's Booking seeder output (env UAT_BOOKING_FIXTURES). $0. Record
+  // in this order, after the agency's trip is booked (step 8): REH-09-supplier; REH-11-maker, then REH-11-checker.
+  'booking/reh-09-supplier.cjs',
+  'booking/reh-11-maker.cjs',
+  'booking/reh-11-checker.cjs',
 ];

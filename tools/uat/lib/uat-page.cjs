@@ -46,17 +46,25 @@ async function studioCall(page, method, p, body) {
 }
 
 /**
- * A page route in front of the browser guard that lets at most `max` POSTs of each rule through and aborts the rest
- * before they leave the browser (a run never pays twice for the same model call, e.g. a retry click or a re-render).
- * rules = [{ name, path: RegExp on the URL pathname, max }]. Returns the live counts { name: n } (aborted ones too),
- * so a step can assert "exactly one". Register it in the first step, before any page loads.
+ * A page route in front of the browser guard that caps every write (any method but GET / HEAD / OPTIONS) on each
+ * rule's path: at most `max` requests of the rule's `method` (default POST) go on, and the rest are aborted before
+ * they leave the browser (a run never pays or writes twice, e.g. a retry click or a re-render). A write of any OTHER
+ * method on that path (a PUT, PATCH or DELETE where the scenario means a POST) is always aborted. Both kinds count
+ * against the same `max` (fail closed), so a step's "exactly one" check also fails on a stray method. The browser
+ * guard's allowWrites matches the URL only; this route is what pins the method.
+ * rules = [{ name, path: RegExp on the URL pathname, max, method? }]. Returns the live counts { name: n } (aborted ones
+ * too). Register it in the first step, before any page loads.
  */
 async function limitWrites(page, rules) {
+  const { isRead } = require('./net-guard.cjs');
   const counts = Object.fromEntries(rules.map((r) => [r.name, 0]));
   for (const r of rules) {
+    const want = String(r.method || 'POST').toUpperCase();
     await page.route((u) => r.path.test(u.pathname), (route) => {
-      if (route.request().method() !== 'POST') return route.fallback();
+      const method = String(route.request().method() || 'GET').toUpperCase();
+      if (isRead(method)) return route.fallback();
       counts[r.name] += 1;
+      if (method !== want) return route.abort('blockedbyclient');
       return counts[r.name] <= r.max ? route.fallback() : route.abort('blockedbyclient');
     });
   }

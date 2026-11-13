@@ -80,7 +80,8 @@ agency is projected in the first slot after the saga.
 The CRM and portal specs then run on it with `E2ECRMPARTNER` = the tenant id and the owner's `E2ECRMEMAIL`,
 `E2ECRMPASSWORD` and `E2ECRMTOTP`.
 
-The `pilot-rehearsal-01-marker` tenant uses the same route with `kind` `agency`, `pilot_weeks` 1 and no add-ons.
+The `pilot-rehearsal-01-marker` tenant uses the same route with `name` "E2E Pilot Rehearsal Marker", `kind` `agency`,
+`pilot_weeks` 1 and no add-ons. The staff evidence scenarios of steps 1b and 12b open it only under that exact name.
 
 ### Tour X
 
