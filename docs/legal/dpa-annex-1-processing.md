@@ -1,18 +1,18 @@
 ---
 id: SEC-04-dpa-annex1
-title: "DPA Annex 1: description of the processing per app (draft v0.4)"
+title: "DPA Annex 1: description of the processing per app (draft v0.5)"
 description: "Annex 1 of the partner-agency DPA (and SCC Annex I.B): subject matter, purposes, data subjects, data categories, special categories, storage, recipients and retention for the CRM, the Content studio, Booking B2B and the Trip Planner, from the live schema dump and the DM-7.1 retention table."
 type: reference
 status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-crm-api, aa-crm-web, aa-partner-portal, aa-cis-api, aa-booking-api]
-last_reviewed: 2026-11-09
+last_reviewed: 2026-11-13
 review_every_days: 30
 related: [SEC-04-dpa-agreement, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04, ARCH-08-data-management, AA-820, AA-900, AA-1038]
 ---
 
-# DPA Annex 1: description of the processing per app (draft v0.4)
+# DPA Annex 1: description of the processing per app (draft v0.5)
 
 > [!WARNING]
 > Draft for counsel, not legal advice. Part of the [Data Processing Agreement](dpa.md). The table and column names
@@ -20,6 +20,11 @@ related: [SEC-04-dpa-agreement, SEC-04-dpa-annex2, SEC-04-dpa-annex3, SEC-04, AR
 > 2026-11-08 11:46 UTC: CIS 390, TripPlanner tp-027, Booking bk-044, CRM crm-047); retention windows come from the [DM-7.1 retention table](../architecture/data-standards/02-data-management.md#7-retention-and-archival).
 > Windows marked "(est.)" are estimates that counsel or the tech lead still confirms. A window marked "proposed" in
 > DM-7.1 has no deletion job yet: until the job exists, rows of that table are kept (Annex 2 §0, "Retention").
+
+**What changed in v0.5 (2026-11-13).** The AI row of the Content studio section (§3) is aligned to
+[Annex 3](dpa-annex-3-subprocessors.md) v0.5 (route control versions 10 and 11, 2026-11-12): Amazon Bedrock now serves
+the chat models from a second AWS account held by the tech lead, AA's AI account behind it, and the GPT scoring and
+checking stages run on Amazon Bedrock first, with the OpenAI API as the last fallback. Nothing else changed.
 
 **What changed in v0.4 (2026-11-09).** The Content studio section (§3) adds the quality records the writing-quality
 work created on Dev from 2026-11-06 (CIS migrations 385, 386, 388 and 391): the gateway's store of raw model replies,
@@ -78,7 +83,7 @@ the Agency's own website and social pages on its instruction.
 | Data subjects | The Agency's users; people the Agency names in its own brand settings, briefs or content (for example a guide named in a blog post) |
 | Personal data | Users: Cognito issuer and subject (`shared.tenant_members`), membership changes (`shared.tenant_membership_event`); account and billing contact of the Agency (`shared.tenants` `legal_entity_name`, `tax_id`, `billing_email`, `billing_address`; AA as controller, DPA 1.4(a)); free text in add-on requests (`shared.tenant_addon_request.note`); whatever the Agency types into brand settings, briefs and content; edits and labels the Agency makes, which feed its own writing rules (`shared.writing_signal`, `shared.writing_rule`); channel credentials for its website and social pages, stored in AWS Secrets Manager and `shared.tenant_integrations`; publish and audit records naming the Agency account or an AA staff member (`acp_shared.audit_log`) |
 | Special categories | None intended. The Agency must not put its clients' personal data into Content studio inputs (DPA clause 13.3) |
-| AI | Content inputs (brand settings, briefs, tour text, the Agency's text) are sent to the AI models of [Annex 3](dpa-annex-3-subprocessors.md) §1.2: Claude on the Anthropic API first and on Amazon Bedrock second (a live gateway setting since 2026-11-05); OpenAI models on Amazon Bedrock and then the OpenAI API for scoring and checking (while Bedrock refuses, the OpenAI API answers them); Amazon Nova Lite on Bedrock only as the fallback of the two FAQ checks, which are off by default. Since route control version 7 (CIS 383, 2026-11-06) no OpenAI model writes and no Nova model judges. Every Content studio stage is classed `content`, not `pii` (CIS migration 373), because it receives no personal data of the Agency's clients by rule (DM-6.4) |
+| AI | Content inputs (brand settings, briefs, tour text, the Agency's text) are sent to the AI models of [Annex 3](dpa-annex-3-subprocessors.md) §1.2: Claude on the Anthropic API first and on Amazon Bedrock second (a live gateway setting since 2026-11-05); OpenAI models on Amazon Bedrock first and the OpenAI API only as the last fallback, for scoring and checking (since route control versions 10 and 11 of 2026-11-12; Amazon Bedrock is called in the tech lead's AWS account, then in AA's AI account, Annex 3 §1.2); Amazon Nova Lite on Bedrock only as the fallback of the two FAQ checks, which are off by default. Since route control version 7 (CIS 383, 2026-11-06) no OpenAI model writes and no Nova model judges. Every Content studio stage is classed `content`, not `pii` (CIS migration 373), because it receives no personal data of the Agency's clients by rule (DM-6.4) |
 | Quality records (since 2026-11-06) | **Reply store** `shared.llm_cassette` (CIS 385): the raw reply of every model attempt the CIS AI gateway receives, at most 256 KiB, with the request and system-prompt hashes (never the prompt text), the model, the provider and links to the job, the Agency and the piece; written by the gateway only (switch `LLM_CASSETTE`, default `record`: AA-CIS-App `shared/llm_client/cassette.py`), no text kept for a stage classed `pii`. **FactSheets** `acp_shared.fact_sheet` (CIS 386): the typed facts a writer and its checks read, including the Agency's own facts, brand and audience lines. **Claim labels** `shared.eval_claim_label` (CIS 388): claims quoted from the Agency's pieces with a judgement and a reason, made by AA's review panel or the tech lead. **Shadow verdicts** `shared.claim_shadow_verdict` (CIS 391): a second check's verdict next to the live one, with spans and hashes only, no text. All four: never read by an Agency route, deleted with the Agency by the tenant erasure job (AA-CIS-App `services/erasure/inventory.py`). The reply store, the FactSheets and the shadow verdicts are never exported. Claim labels are: AA's claim-label tool (AA-CIS-App `scripts/aa1048/cli.py`, commands `finals` and `payload`) writes them with the quoted claim text to a file in AA's git-ignored scratch folder, for the panel and the calibration of the checks, and the panel reads that text in AA's engineering sessions with AI agents **[open item, tech lead: neither the sample selection nor this export skips the pilot agency yet; Annex 2 §2 item 9, pilot contract set check 9]** |
 | Recipients inside AA | AA staff in roles that may read tenant content (content lead, tenant QA, AI operations, admin), each view through role-scoped routes; customer success only for the agencies assigned to it, support for those and the unassigned pool (Annex 2 M-13); read-only "view as tenant" sessions, audited (DPA clause 14) |
 | Retention | While the account is active. AI call records: 180 days, no text. Tenant writing rules and edits: while the account is active, deleted with it. Quality records (DM-7.1, all **proposed**, no deletion job yet, the tech lead approves each window before production): reply store 30 days; FactSheets while a stored version or piece names them, then 90 days; claim labels while their label set is in use, a superseded set 12 months; shadow verdicts 180 days. Audit log: kept (window to be set before production). After offboarding: the tenant erasure job of DPA clause 11 |

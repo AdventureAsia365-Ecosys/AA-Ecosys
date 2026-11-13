@@ -46,6 +46,19 @@ class Policy(unittest.TestCase):
         self.assertEqual(cc.key_violation(p, "crm_role"), "crm_role")
         self.assertEqual(cc.key_violation(p, "email"), "email")
 
+    def test_erasure_reports_ids_counts_and_hashes_only(self) -> None:
+        p = cc.POLICY["tenant.erasure.v1"]
+        for key, rule in (("approved_by", "approved_by"), ("decided_by", "approved_by"), ("row_values", "row_values"),
+                          ("trading_name", "trading_name"), ("slug", "slug"), ("before", "before"),
+                          ("snapshot_id", "snapshot_id"), ("reason", "reason"), ("pii:contact", "pii:")):
+            self.assertEqual(cc.key_violation(p, key), rule, key)
+        for key in ("agency_name", "staff_note", "old_values", "owner_email"):
+            self.assertIsNotNone(cc.key_violation(p, key), key)
+        for key in ("request_id", "tenant_id", "phase", "round", "not_before", "approved_plan_hash", "plan_hash",
+                    "tables", "rows", "digest", "census", "pii_rows_found", "pii_columns_checked", "error_code",
+                    "is_synthetic", "is_pilot", "step_status", "report_id", "job_id", "cursor"):
+            self.assertIsNone(cc.key_violation(p, key), key)
+
     def test_x_pii_forbidden_in_no_pii_contract(self) -> None:
         doc = {"components": {"schemas": {"T": {"properties": {"note": {"type": "string", "x-pii": "free_text"}}}}}}
         self.assertTrue(cc.scan_schema_doc("crm.ops.v1", doc, cc.POLICY["crm.ops.v1"]))

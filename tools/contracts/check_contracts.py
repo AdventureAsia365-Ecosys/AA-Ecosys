@@ -187,6 +187,17 @@ POLICY: dict[str, Policy] = {
         why="add-on states and the agency's own requests only: no staff actor, requester name or e-mail, CRM role, "
             "plan key, attach job, price or billing field",
     ),
+    # AA-1093 (tenant offboarding erasure saga): requests and reports carry ids, counts, codes and hashes only. The
+    # approver and every other actor stay in CIS; a row value, a before / after audit value, the tenant's name, slug or
+    # trading name, a free-text reason or note and personal data never cross.
+    "tenant.erasure.v1": Policy(
+        forbidden_keys=frozenset({"approved_by", "actor", "name", "trading_name", "slug", "email", "reason", "note",
+                                  "row_values", "values", "before", "after", "snapshot_id"}),
+        forbidden_patterns=(r"_by$", r"^actor$", r"(^|_)names?$", r"^slug$", r"(^|_)notes?$", r"(^|_)reasons?$",
+                            r"(^|_)values?$", r"^(before|after)$", r"(^|_)snapshot(_|$)"),
+        why="erasure requests and reports: ids, counts, codes and hashes only; no actor or approver, row value, "
+            "audit before / after value, tenant name or slug, free-text reason or note, snapshot id or personal data",
+    ),
     # Signed cache purge notice (AA-987): served-state events only; no prices, no personal data.
     "catalog.tour.lifecycle.v1": Policy(
         forbidden_keys=frozenset({"supplier_net", "b2b_price", "price"}),
@@ -253,6 +264,8 @@ REQUIRED_NEGATIVES: dict[str, tuple[str, ...]] = {
     "tenant.entitlements.v1": ("billing_email", "price_usd_monthly", "actor"),
     # AA-1036 R3: the staff member who decided and the attach job are each refused.
     "tenant.addons.v1": ("decided_by", "provision_job_id"),
+    # AA-1093: an erasure report never names the approver, never carries a row value or the tenant's trading name.
+    "tenant.erasure.v1": ("approved_by", "row_values", "trading_name"),
     # AA-908: the hand-off never carries the traveller's token.
     "inquiry.submitted.v1.4": ("access_token",),
     # AA-1094: a tenant tour row never carries a price or a T2 score.

@@ -7,20 +7,20 @@ status: draft
 owner: nghiep
 audience: [engineer, cio]
 applies_to: [aa-booking, tripplanner-lambda, aa-cis-worker, ecosystem]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-11-13
 review_every_days: 90
 last_tested: 2026-10-23
 tested_where: dev-acc2
 tested_evidence: docs/audits/2026-10-23-S248-aa839-erasure-drill/README.md
-related: [SEC-04, SEC-04-retention, SEC-04-consent-query, AA-839, AA-825, AA-877]
+related: [SEC-04, SEC-04-retention, SEC-04-consent-query, SEC-04-dpa-agreement, AA-839, AA-825, AA-877, AA-1093]
 ---
 
 # Data-subject requests and erasure runbook
 
 > [!WARNING]
-> Partly tested - check each step before you rely on it. The tenant erasure (section 4) ran once on Dev on a
-> synthetic tenant on 2026-10-23. The traveller part (sections 2 and 3) has not run on Dev, and the Booking and
-> TripPlanner scripts are not written yet.
+> Partly tested - check each step before you rely on it. The CIS tenant erasure (section 4.6) ran once on Dev on a
+> synthetic tenant on 2026-10-23. The offboarding saga across the four apps (section 4.4) is planned (AA-1093). The
+> traveller part (sections 2 and 3) has not run on Dev, and the Booking and TripPlanner scripts are not written yet.
 
 This page is the working procedure for a traveller who asks to see or delete their personal data (sections 1-3) and
 for erasing a tenant after offboarding (section 4). Data standards DM-6.7 points here. AA-839 moves it to `active`
@@ -363,14 +363,109 @@ section 2 lookup only**, held as constants: no address, name or phone in the cod
     in the [retention log](retention-log.md), and a reply to the person that the data is erased and that the backup
     copies expire within 14 days.
 
-## 4. Tenant erasure (after offboarding)
+## 4. Tenant erasure (after offboarding): the offboarding saga
+
+> [!IMPORTANT]
+> **Target procedure, planned (AA-1093).** The saga below is the design the tech lead approved on 2026-11-13
+> (decisions D1-D11). Its parts are being built: the CIS job `tenant_erasure_saga` with its admin tab, Booking
+> `bk_tenant_erase`, TripPlanner `tp_tenant_erase`, the CRM erasure feed, and the contract
+> [`tenant.erasure.v1`](../contracts/tenant.erasure.v1.openapi.yaml). Until every part runs on Dev, a tenant is erased
+> with the **CIS-only procedure of section 4.7**, which is tested, and the other apps by hand under the DRY RUN
+> procedure. A section here says "planned" until its app ships; this page moves to the saga as each part lands.
 
 `POST /admin/tenants/{id}/offboard` is **soft only**: it revokes the key and cancels queued jobs, deletes nothing, and
-`/restore` brings the tenant back. Erasure is the separate, final step: after it the tenant cannot be restored. It
-runs only after offboarding plus a retention window (`ERASURE_TENANT_RETENTION_DAYS`, default 30 days until the tech
-lead sets the value), with the tech lead's explicit approval.
+`/restore` brings the tenant back. Erasure is the separate, final step, run by one saga across the four apps
+(orchestrator: CIS, the master of the tenant account, root ADR 0019 d1). After an app has erased, the tenant cannot be
+restored.
 
-**What it covers in CIS** (inventory `services/erasure/inventory.py`; `GET /admin/job-runner/erasure` lists it live):
+### 4.1 Schedule
+
+| When | What happens |
+|---|---|
+| **T0**, the soft offboard | Every app stops serving the tenant (CIS revokes its key and cancels its jobs; Booking's `bk_tenant_pull` suspends its partner; TripPlanner stops serving its `/{slug}` site; the CRM locks the agency through `crm_entitlement_pull`). CIS opens the erasure request (`shared.tenant_erasure_request`, phase `dry_run`, round 1) with one step per app and its `not_before`, and writes `account.erasure_requested` on `tenant.entitlements.v1` 1.7. The CRM offers the agency owner a full export of its CRM data (**planned**, AA-1093: the lock must leave the owner's Settings > Data and privacy export and download open until T0 + 90 days. Today a locked agency gets 403 `tenant_locked` on every member request, the owner's included, so until the CRM part ships the operator tells the owner before T0 and the owner exports during the term) |
+| Before the first `not_before` | A CIS restore of the tenant (`/restore`) cancels the request (phase `cancelled`); nothing was erased |
+| **T0 + 30 days** (D1) | Stage 1: CIS, Booking and TripPlanner run the steps of section 4.4 together |
+| **T0 + 90 days** (D2) | Stage 2: the CRM runs the same steps for its own data, without the owner's click (the CRM18 rule changes for this AA-run path; the owner's own offboarding with its 72-hour cool-off stays as it is) |
+| Erasure + 14 days | The erased rows have left the automated RDS backups (DPA 11.3) |
+
+The windows (30 and 90 days) and the approval validity (24 hours) are CIS settings in the admin-editable settings
+registry (administrator role, audited), seeded with those defaults; CIS computes each step's `not_before`, so no app
+computes a window. A drill on a synthetic tenant sets the windows to 0 for that tenant only (section 5).
+
+### 4.2 What each app does
+
+| App | Reads the request | DRY RUN | Apply | What stays | Job kind | Apply switch |
+|---|---|---|---|---|---|---|
+| CIS | its own tables | the `data_erasure` DRY RUN (section 4.6): counts per table and action, blockers, fingerprint | the inventory: delete, detach, merge (section 4.6); **always last** | the audit hash chain and one `tenant.erased` row; cost rows detached | `tenant_erasure_saga` (planned) drives `data_erasure` | `ERASURE_APPLY_ENABLED` (AA-CIS-Infra, default off) |
+| Booking | `catalog.v_tenant_erasure_v1` (its rows) | plan per table (D3), hash | **anonymise**: the agency name replaced, free text of its trip cases and `trip_case_checks` emergency-contact fields removed, `booking.audit_logs` before / after redacted; `bk_tenant_pull` skips an erased partner from then on | money rows and the bill-to snapshot of issued agency invoices (accounting exception) | `bk_tenant_erase` (planned) | Booking's own switch, default off |
+| TripPlanner | `catalog.v_tenant_erasure_v1` (its rows) | plan per table (D4), hash | **delete** the tenant's rows (`sessions`, `trip_drafts`, `trip_events`, `outbox`) and merge its `ai_spend_month` rows into the app scope | nothing of the tenant | `tp_tenant_erase` (planned, jobs Lambda) | TripPlanner's own switch, default off |
+| CRM | `GET /tenant/v1/erasure-requests` (scope `cis.tenant/erasure`) | its offboarding DRY RUN counts, hash | `crm.erase_subject('tenant')` and crypto-shredding of the agency keys, run by the platform after the 90-day window (D2); documents and exports deleted last | the agency audit trail (12 months, its write-once export up to 7 years) and the receipts | the CRM's erasure kind (planned, crm-064) | `LIFECYCLE_DRY_RUN` off for this path, default on |
+
+Each app reports back (contract `tenant.erasure.v1`): Booking and TripPlanner through their report views
+`booking.v_tenant_erasure_report_v1` / `tripplanner.v_tenant_erasure_report_v1` (rows of their `tenant_erasure_log`),
+the CRM through `POST /tenant/v1/erasure-requests/{id}/reports`. Reports hold ids, counts, codes and hashes only.
+
+### 4.3 Guards (every app enforces them on its own too)
+
+- The saga refuses the pilot tenant (`is_pilot`, D8); an app that sees `is_pilot` true refuses.
+- On Dev, apply runs only for a synthetic tenant (`is_synthetic`: `is_canary` true and not the pilot, D8).
+- Each app's apply switch is off by default; turning one on is a reviewed AA-CIS-Infra change.
+- An app applies only when its recomputed plan hash equals the `approved_plan_hash` of the current round and the
+  approval has not expired; otherwise it refuses (`plan_changed`, `approval_expired`) and erases nothing.
+- CIS erases last, after every other active step reported its apply: the request rows have no foreign key to
+  `shared.tenants`, so the apps keep reading their request after CIS has erased the tenant.
+
+### 4.4 The saga, step by step (one stage)
+
+1. **Account check.** `aws sts get-caller-identity --profile aa365-admin` → acc2. Abort on any other account.
+2. **The request.** The CIS admin erasure tab of the tenant (Tenant 360, planned) shows the request: phase, round,
+   each step's `not_before` and status. Expected: phase `dry_run` and the stage's steps `active` once their
+   `not_before` passed. Abort: `is_pilot` true, or on Dev `is_synthetic` false → stop, it is refused by design.
+3. **DRY RUN per app.** The saga asks each active app for its plan; each app reports mode `dry_run`. Expected: every
+   report `status` `ok` with a `plan_hash`, its tables and counts, `blockers` empty. Abort: `blocked` → resolve the
+   blocker (live jobs, a held booking, a cross-tenant row: a question for the tech lead), then the saga starts a new
+   round. CIS's own plan is the `data_erasure` DRY RUN of section 4.6 (copy its `s3_refs[].outside_keys` into the
+   work item: it is the only pointer to those objects once the rows are gone).
+4. **Approval** (D7). Phase `awaiting_approval`: the tab shows each app's plan hash and totals and one combined
+   fingerprint. Post the job ids, the plan hashes, the combined fingerprint and the totals per app and action in the
+   work item (a Linear comment); the tech lead approves that fingerprint once, from a Cognito admin session
+   (destructive-ops.md step 1). The approval is valid 24 hours (setting). Abort: no approval, no erasure.
+5. **Snapshot** (destructive-ops.md step 2), one for the stage:
+
+   ```bash
+   aws rds create-db-snapshot --db-instance-identifier aa-cis-dev-db --db-snapshot-identifier tenant-erase-<yyyymmdd>-pre --profile aa365-admin --region us-west-1 # WRITE
+   ```
+
+   Expected: `available`. It holds the tenant's data: no `keep-` prefix, deleted in step 10.
+6. **Apply switches on** for the apps of the stage (approved AA-CIS-Infra change, then deploy), as in section 4.6
+   step 6 for CIS.
+7. **Apply.** Phase `apply`: the apps of the stage other than CIS apply in parallel (stage 1: TripPlanner and Booking;
+   stage 2: the CRM alone), each recomputing its plan first; in stage 1 CIS then applies last (section 4.6 step 7,
+   with the approved fingerprint and the snapshot id). Expected: every report mode `apply`, `status` `ok`. Abort: a `refused` report (`plan_changed`: the tenant's data moved since the DRY RUN)
+   → nothing of that app was erased; the saga starts a new round from step 3; a `failed` report → the app's
+   transaction rolled back; read the app's job, fix, new round.
+8. **Verify.** Phase `verify`: each app runs a census of its `pii:`-tagged columns (DM-6.1 column comments) for the
+   tenant and reports `census.pii_rows_found`. Expected: 0 in every app; CIS's verification DRY RUN (section 4.6
+   step 9) shows every `delete`, `cascade`, `detach`, `merge` row 0. Abort: anything above 0 → stop, incident
+   ([incident response](../ops/incident-response.md)), the snapshot stays until it is explained.
+9. **Outside the database** (manual checklist, only after step 8): the CIS S3 prefixes, secrets and outside keys of
+   section 4.6 step 8; the tenant's backup prefix in the gold bucket (`exports/tenants/<tenant>/cis/`, gone by itself
+   7 days after the last backup); Cognito partner users whose only membership was this tenant (D6; their other
+   memberships keep them); Sentry events tagged with the tenant; the retention archives decision of section 4.6
+   step 8. The CRM removes its own documents and exports inside its erase.
+10. **Receipt and clean-up.** Send the agency the receipt: per app the date, the counts, what stayed and why (Booking's
+    accounting records, the audit trails, posts on the agency's own channels, D5) and the backup age-out date
+    (erasure + 14 days; the CRM receipt keeps its erasure + 30 days bound). Delete the step 5 snapshot; set the apply
+    switches back off; add a row to the [retention log](retention-log.md) (tenant id, date, stage, totals per app,
+    job ids, the combined fingerprint; no tenant content). The saga marks the stage's steps `done`; the request is
+    `done` when every step is.
+
+Stage 2 (the CRM at T0 + 90 days) repeats steps 1-10 for the CRM step alone: a new round, its own approval and its own
+snapshot.
+
+### 4.5 What the CIS part covers
+
+Inventory: AA-CIS-App `services/erasure/inventory.py` (`GET /admin/job-runner/erasure` lists it live).
 
 - **Deleted:** content and planning (T9 pieces, labels, publish log, T7/T8 subjects and angles, quarter/year plans,
   route picks), brand identity and its history, planning, export and SEO config, integrations rows, T2 versions,
@@ -384,11 +479,16 @@ lead sets the value), with the tech lead's explicit approval.
   row.
 - **Outside the database** (operator steps below): bronze S3 `raw-inbox/<tenant>/` and `brand-identity/<tenant>/`,
   Secrets Manager `acp/cms/<tenant>` and `acp/social/<tenant>`; the tenant's CRM rows in AA-Partner (`crm`, DM-6.8);
-  Cognito tenant users once AA-813 exists; Sentry events tagged with the tenant; automated backups (14 days).
+  Cognito partner users whose only membership was this tenant (D6); Sentry events tagged with the tenant; the
+  tenant's backups in the gold bucket (`exports/tenants/<tenant>/cis/`, 7 days); automated backups (14 days).
 
 A table that has `tenant_id` but no inventory entry is reported as `unregistered` and blocks the apply (CI fails on
 it too). A row of another tenant, a kept row or another owner's row that points at a row to erase is a blocker, never
 deleted.
+
+### 4.6 The CIS part, step by step
+
+These are the CIS steps the saga runs (and section 4.7 runs alone today). The steps refer to each other by number.
 
 1. **Account check.** `aws sts get-caller-identity --profile aa365-admin` → acc2. Abort on any other account.
 2. **Offboarded?** The tenant shows "offboarded" on `/admin/tenants` (include inactive). If not, offboard it first
@@ -469,6 +569,13 @@ deleted.
 10. **Clean up:** delete the step 5 snapshot; set the apply back off (Terraform, then deploy CIS); add a row to the
     [retention log](retention-log.md) (tenant id, date, totals, job ids; no tenant content).
 
+### 4.7 Today: the CIS-only procedure (until the saga ships)
+
+Until the saga runs on Dev, run section 4.6 steps 1-10 by hand for CIS, and the other apps by hand under the DRY RUN
+procedure: Booking and TripPlanner rows through DB Migrate `mode=run-script` (section 3), the CRM through its owner's
+offboarding (AA cannot run a CRM erasure before the CRM erasure feed ships). This is the procedure the 2026-10-23 drill
+tested.
+
 ## 5. Test data and the Dev drill
 
 Three linked test rows from the DM-6.5 consent check are kept for the first Dev test of the traveller part: see the
@@ -476,13 +583,13 @@ Three linked test rows from the DM-6.5 consent check are kept for the first Dev 
 its hash is the traveller of the drill (CIS DRY RUN expected: all 0).
 
 The synthetic tenant of the drill is made through the admin API, never with SQL (all with the admin secret and
-`x-admin-role: admin`, as in section 4 step 3):
+`x-admin-role: admin`, as in section 4.6 step 3):
 
 1. `POST /admin/tenants` with a name and slug starting `aa839-drill-` (the response holds the tenant id);
 2. `PUT /admin/tenants/{id}/config` (one market, one channel) and `PUT /admin/tenants/{id}/brand-identity`, so the
    DRY RUN has rows to count;
 3. `POST /admin/tenants/{id}/offboard` with reason `AA-839 erasure drill`;
-4. section 4 steps 3-10, with `erasure_drill = true` in AA-CIS-Infra for the drill (apply on, retention 0 days;
+4. section 4.6 steps 3-10, with `erasure_drill = true` in AA-CIS-Infra for the drill (apply on, retention 0 days;
    approved with step 6), and `erasure_drill = false` again in step 10.
 
 This tenant drill ran on 2026-10-23 on the synthetic tenant `aa839-drill-1`: DRY RUN, approval, apply and

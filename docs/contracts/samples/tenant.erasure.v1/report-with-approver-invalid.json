@@ -1,0 +1,49 @@
+{
+  "contract": "tenant.erasure.v1",
+  "schema": "ErasureReport",
+  "expect": "invalid",
+  "why": "The approver stays in CIS; a report never names it",
+  "rule": "approved_by",
+  "payload": {
+    "report_id": "0c9b8a7d-6e5f-4d3c-8b2a-1f0e9d8c7b61",
+    "request_id": "4e1d2c3b-5a69-4f78-8a9b-0c1d2e3f4a51",
+    "tenant_id": "7a0b1c2d-3e4f-4a5b-9c6d-7e8f9a0b1c22",
+    "app": "crm",
+    "round": 2,
+    "mode": "dry_run",
+    "status": "ok",
+    "error_code": null,
+    "plan_hash": "3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f",
+    "tables": [
+      {
+        "table": "crm.trip",
+        "action": "delete",
+        "rows": 12,
+        "digest": "9e107d9d372bb6826bd81d3542a419d6"
+      },
+      {
+        "table": "crm.traveler",
+        "action": "delete",
+        "rows": 31,
+        "digest": "e4d909c290d0fb1ca068ffaddf22cbd0"
+      },
+      {
+        "table": "crm.tenant_key",
+        "action": "shred",
+        "rows": 4,
+        "digest": null
+      },
+      {
+        "table": "crm.audit_event",
+        "action": "keep",
+        "rows": 220,
+        "digest": null
+      }
+    ],
+    "blockers": [],
+    "census": null,
+    "job_id": "5d4c3b2a-1f0e-4d9c-8b7a-6f5e4d3c2b11",
+    "reported_at": "2027-03-01T08:20:00Z",
+    "approved_by": "admin:example"
+  }
+}

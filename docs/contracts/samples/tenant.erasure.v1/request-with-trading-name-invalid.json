@@ -1,0 +1,53 @@
+{
+  "contract": "tenant.erasure.v1",
+  "schema": "ErasureRequestPage",
+  "expect": "invalid",
+  "why": "The request never names the agency (no trading name, no slug)",
+  "rule": "trading_name",
+  "payload": {
+    "items": [
+      {
+        "request_id": "4e1d2c3b-5a69-4f78-8a9b-0c1d2e3f4a51",
+        "tenant_id": "7a0b1c2d-3e4f-4a5b-9c6d-7e8f9a0b1c22",
+        "phase": "dry_run",
+        "round": 1,
+        "opened_at": "2026-12-01T08:00:00Z",
+        "approval_expires_at": null,
+        "is_pilot": false,
+        "is_synthetic": true,
+        "steps": [
+          {
+            "app": "crm",
+            "status": "waiting",
+            "not_before": "2027-03-01T08:00:00Z",
+            "approved_plan_hash": null
+          }
+        ],
+        "updated_at": "2026-12-01T08:00:01Z",
+        "cursor": "djE6MTIwOjc",
+        "trading_name": "Example Travel Co"
+      },
+      {
+        "request_id": "4e1d2c3b-5a69-4f78-8a9b-0c1d2e3f4a51",
+        "tenant_id": "7a0b1c2d-3e4f-4a5b-9c6d-7e8f9a0b1c22",
+        "phase": "apply",
+        "round": 2,
+        "opened_at": "2026-12-01T08:00:00Z",
+        "approval_expires_at": "2027-03-02T09:30:00Z",
+        "is_pilot": false,
+        "is_synthetic": true,
+        "steps": [
+          {
+            "app": "crm",
+            "status": "active",
+            "not_before": "2027-03-01T08:00:00Z",
+            "approved_plan_hash": "3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f"
+          }
+        ],
+        "updated_at": "2027-03-01T09:30:00Z",
+        "cursor": "djE6MTQ0Ojk"
+      }
+    ],
+    "next_cursor": "djE6MTQ0Ojk"
+  }
+}
