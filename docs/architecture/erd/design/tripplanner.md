@@ -7,10 +7,10 @@ status: active
 owner: nghiep
 audience: [engineer, agent]
 applies_to: [aa-cis-dev-db, tripplanner-lambda]
-last_reviewed: 2026-11-11
+last_reviewed: 2026-11-13
 review_every_days: 90
 generated: false
-related: [APP-04, APP-04-erd, APP-04-erd-design, APP-04-erd-tripplanner, AA-894, AA-861, AA-1015, AA-1038]
+related: [APP-04, APP-04-erd, APP-04-erd-design, APP-04-erd-tripplanner, AA-894, AA-861, AA-1015, AA-1038, AA-1093]
 ---
 
 # ERD design: tripplanner schema
@@ -34,7 +34,7 @@ counter; no foreign key) is gone from the page. Updated for **tp-025** (AA-1038 
 `trip_drafts`, `trip_events` and `outbox` gain `tenant_id uuid NOT NULL` (backfilled to the demo tenant `aa-tripplanner`,
 default from the `app.tenant_id` setting with that tenant as fallback) under shadow row-level security (ENABLE, not
 FORCE; one permissive policy TO `tripplanner` per table). No table, primary key or foreign key changes: `tenant_id` is a
-soft key to `shared.tenants.tenant_id`, so no tenant edge is drawn. Updated for **tp-026** (AA-1038 R5 slice 3, root ADR 0019 d11) in S272, next to the migration copy: `outbox` gains `delivery_channel`, `delivered_at`, `delivery_attempts` and `delivery_error` for the `lead.submitted` rows (a guest's trip request to one agency, kept until delivered) and the partial index `outbox_lead_pending_idx`; no table, primary key or foreign key changes. Updated for **tp-029** (AA-1041 slice 2) in S277, before the migration copy: the new `ai_spend_month` table (the planning chat's monthly spend sums per stage, scope `app` | `tenant:<uuid>` and UTC month; composite primary key `(stage, scope, month)`, no foreign key, no personal data). Noted for **tp-028** (AA-1038 FORCE slice) in S276: row-level security on the four tables becomes FORCED and enforcing (policies `<table>_tenant`, `<table>_system`, `<table>_owner_read`), the `tenant_id` default loses the demo fallback; no table, primary key or foreign key changes. The page draws tables only; the views are listed on the generated page. It is **enforced**: the nightly DB Schema Dump fails its drift step when the live tables, primary keys or
+soft key to `shared.tenants.tenant_id`, so no tenant edge is drawn. Updated for **tp-026** (AA-1038 R5 slice 3, root ADR 0019 d11) in S272, next to the migration copy: `outbox` gains `delivery_channel`, `delivered_at`, `delivery_attempts` and `delivery_error` for the `lead.submitted` rows (a guest's trip request to one agency, kept until delivered) and the partial index `outbox_lead_pending_idx`; no table, primary key or foreign key changes. Updated for **tp-029** (AA-1041 slice 2) in S277, before the migration copy: the new `ai_spend_month` table (the planning chat's monthly spend sums per stage, scope `app` | `tenant:<uuid>` and UTC month; composite primary key `(stage, scope, month)`, no foreign key, no personal data). Noted for **tp-028** (AA-1038 FORCE slice) in S276: row-level security on the four tables becomes FORCED and enforcing (policies `<table>_tenant`, `<table>_system`, `<table>_owner_read`), the `tenant_id` default loses the demo fallback; no table, primary key or foreign key changes. Updated for **tp-030** and **tp-031** (AA-1093, tenant offboarding saga) in S279, next to the tp-031 migration copy: the new `tenant_erasure_log` table (tp-030 keyed it by `(request_id, mode)`; tp-031 reshapes it in place to the append-only report log of contract `tenant.erasure.v1`, primary key `report_id`, columns in live order: the renamed tp-030 columns first, then the added ones). Ids, codes, counts and hashes only, no personal data, soft `tenant_id` key (no FK). The page draws tables only; the views are listed on the generated page. It is **enforced**: the nightly DB Schema Dump fails its drift step when the live tables, primary keys or
 foreign keys differ from this page. A TripPlanner migration that changes
 them updates this page in the same change (root PR next to the migration copy).
 
@@ -127,6 +127,24 @@ erDiagram
         bytea guest_token_hash "conf:credential"
         uuid account_id FK
         uuid tenant_id
+    }
+    tenant_erasure_log {
+        uuid request_id
+        uuid tenant_id
+        text mode
+        text plan_hash
+        jsonb tables
+        text status
+        text error_code
+        uuid job_id
+        timestamptz reported_at
+        timestamptz legacy_updated_at
+        uuid report_id PK
+        text app
+        integer round
+        jsonb blockers
+        jsonb census
+        text source
     }
     traveller_accounts {
         uuid id PK
