@@ -96,7 +96,7 @@ At every stage the evidence checks the same tour: source id, name, number of day
 
 | Identity (ADR 0006a) | Address | Writes it may make | Steps |
 |---|---|---|---|
-| A10b CIS admin | `e2e-cis-admin@e2e-mail.lumiguides.it.com` | Studio invitations (viewer or editor), view-as, release of a held piece, TripPlanner add-on: synthetic tenants only | 1, 4, evidence views |
+| A10b CIS admin | `e2e-cis-admin@e2e-mail.lumiguides.it.com` | Studio invitations (viewer or editor), view-as, release of a held piece, TripPlanner add-on; the erasure saga DRY RUN drill (offboard, start drill, run now, stop, restore; A10b-5): synthetic tenants only | 1, 4, evidence views |
 | A10e Booking staff | `e2e-booking-staff@` | Supplier booking request and confirm; cancel a seeded synthetic departure (A10e-1) | 8, 9, X3 |
 | A10e maker / checker | `e2e-booking-maker@`, `e2e-booking-checker@` | Record a payment / approve or reject it | 11 |
 | A10a Booking admin | `e2e-booking@` | None (reads the audit log) | 8-11 reads |
