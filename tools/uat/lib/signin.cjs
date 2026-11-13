@@ -74,10 +74,9 @@ const STAFF = {
   'booking-staff': { origin: BOOKING, email: 'e2e-booking-staff@e2e-mail.lumiguides.it.com', prefix: 'inbound-admin/' },
   'booking-maker': { origin: BOOKING, email: 'e2e-booking-maker@e2e-mail.lumiguides.it.com', prefix: 'inbound-admin/' },
   'booking-checker': { origin: BOOKING, email: 'e2e-booking-checker@e2e-mail.lumiguides.it.com', prefix: 'inbound-admin/' },
-};
-const BOOKING_WRITERS = ['booking-staff', 'booking-maker', 'booking-checker'];
   'crm-staff': { origin: PARTNER, email: 'e2e-crm-staff@e2e-mail.lumiguides.it.com', prefix: 'inbound-admin/' },
 };
+const BOOKING_WRITERS = ['booking-staff', 'booking-maker', 'booking-checker'];
 // The CRM identities of the pilot rehearsal: lib/crm-signin.cjs identity per harness identity.
 const CRM_REHEARSAL = { 'crm-rehearsal': 'RO', 'crm-rehearsal-agent': 'RA' };
 
