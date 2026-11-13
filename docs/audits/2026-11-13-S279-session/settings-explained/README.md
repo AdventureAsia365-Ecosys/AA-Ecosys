@@ -20,8 +20,9 @@ duyệt.
 | `settings-change-dialog-guide-*.png` | Hộp thoại Change: phần giải thích nằm trên các ô nhập |
 | `settings-change-dialog-3364-*.png` | Gõ `3,364`: được nhận là 3.364, không còn "Enter a number", nút Save and approve bật (không bấm lưu) |
 | `settings-last-change-name.png` | Cột Last change hiện tên nhân viên ("Linh Tran"), mã nhân viên nằm trong tooltip |
+| `booking-policy-layout-mock-1440-light.png`, `booking-policy-layout-mock-390-light.png` | Booking › Pricing › Policy trên bản build production với API giả của layout-mock (chữ giải thích trong ảnh là chữ bịa của fixture): dòng "điều chỉnh gì" và nút Explain mỗi tham số; layout-mock 12/12 xanh (1440/1400/1280/960/390, không tràn ngang) |
 
-Console: 0 lỗi ở cả 4 lượt (1440/390 × sáng/tối).
+Console: 0 lỗi ở cả 4 lượt CIS (1440/390 × sáng/tối).
 
 ## Kiểm sau deploy (live_steps)
 
