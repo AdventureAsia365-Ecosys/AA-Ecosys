@@ -150,7 +150,8 @@ async function main() {
         blockedUrls.push(redact(`${req.method()} ${where()}`));
         return route.abort('blockedbyclient');
       }
-      if (readOnly && !guard.isRead(req.method()) && !allow.some((r) => r.test(url))) {
+      // The AWS WAF challenge proof carries no app data (lib/net-guard.cjs): it always goes on, preview included.
+      if (readOnly && !guard.isRead(req.method()) && !allow.some((r) => r.test(url)) && !guard.isChallengeProof(url)) {
         // Aborted either way; only a write to the app itself fails the scenario. Telemetry beacons (map events, error
         // reports, Vercel analytics), the staff session keep-alive and third-party posts are listed apart.
         (guard.classify(url, sc.baseURL) === 'write' ? blockedWrites : blockedOther).push(redact(`${req.method()} ${where()}`));

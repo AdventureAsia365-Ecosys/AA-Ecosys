@@ -18,7 +18,7 @@ function rw({ identity, allowWrites = [], paid = false, ...rest }) {
     if (paid && process.env.UAT_ALLOW_PAID !== '1' && process.env.UAT_PREVIEW !== '1') {
       throw new Error(`SKIPPED: ${sc.id} calls a paid model; run it only with UAT_ALLOW_PAID=1 (at most one piece per run)`);
     }
-    if (process.env.UAT_STORAGE_STATE || identity === 'public') return;
+    if (process.env.UAT_STORAGE_STATE || ['public', 'traveller'].includes(identity)) return; // a guest never signs in
     const { ensureState } = require('./signin.cjs');
     sc.storageState = (await ensureState(identity)).file;
   };

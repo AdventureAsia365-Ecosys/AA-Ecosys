@@ -12,4 +12,11 @@ module.exports = [
   // The E2E tenant's studio editor (its identity must be enrolled first).
   'content-studio/prt-02.cjs',
   'content-studio/prt-06.cjs',
+  // The pilot rehearsal's guest traveller (identity traveller, no sign-in) on the synthetic agency pilot-rehearsal-01
+  // (runbook docs/ops/runbooks/pilot-rehearsal.md). Record in this order, each after its runbook prerequisite:
+  // REH-05 (paid) and REH-05.m after step 3 (tour X adopted); REH-06 after them; REH-08a after the CRM read of step 6.
+  'tripplanner/reh-05.cjs',
+  'tripplanner/reh-05-phone.cjs',
+  'tripplanner/reh-06.cjs',
+  'crm-web/reh-08a.cjs',
 ];
