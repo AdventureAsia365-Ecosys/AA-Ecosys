@@ -15,7 +15,7 @@ track, and SRT/VTT sidecars; each is packaged as one zip and stored on the team 
 | Booking fixtures | The Booking E2E seeder run `s279reh` for this agency (trip case, supplier booking, invoice, on tour X), seeded by the orchestrator |
 | Identities | E2E CIS admin (A10b), E2E Booking admin (A10a), E2E Booking writers (A10e), E2E CRM staff (A10c), the agency's E2E owner and agent, an invented traveller on `example.invalid` |
 | Egress | VN for every take (checked before each take); RAM at least 2.5 GB free before each take |
-| App versions | AA-Partner (CRM, portal) `d3cd905` for the CRM takes up to REH-10, redeployed to `0f2baf4` during the REH-10b takes (v4 ran on `0f2baf4`) |
+| App versions | AA-Partner (CRM, portal) `d3cd905` for the CRM takes up to REH-10, redeployed to `0f2baf4` during the REH-10b takes (v4 ran on `0f2baf4`); REH-10a and REH-10c ran on `3ed93c8` (the #306/#307 fix) |
 
 ## Takes
 
@@ -50,13 +50,15 @@ Length in seconds. "Failed at" is the step and its start / end time in the video
 | 8b | REH-08b-deposit (v1) | CRM | PASS | 48 | - | Deposit invoice, client "I've paid", agency records the payment, trip booked |
 | 8c | REH-08c-aa-confirmed (v1) | CRM | PASS | 33 | - | AA booking confirmed (instant-confirm departure); the AA B2B price equals the net quoted in the builder (168.84 USD) |
 | 9 | REH-09-supplier (v1) | Booking | PASS | 26 | - | Booking staff (A10e) request the seeded supplier booking of the agency's trip case and record the supplier's confirmation |
-| 10 | REH-10-portal (v1) | CRM portal | FAIL | 72 | step 6, 63.1-69.5 s | Traveller code sign-in, passport details, arrival flight and e-sign pass. The itinerary lists 7 dated days (right count) but no day titles or places and no services block: the confirmed AA tour is not listed, so the voucher step is not reached (finding 2) |
+| 10 | REH-10-portal (v1) | CRM portal | FAIL | 72 | step 6, 63.1-69.5 s | Traveller code sign-in, passport details, arrival flight and e-sign pass. The itinerary lists 7 dated days (right count) but no day titles or places and no services block: the confirmed AA tour is not listed, so the voucher step is not reached (finding 2; fixed since, see REH-10a and REH-10c) |
+| 10 | REH-10a-show-aa-line (v1) | CRM | PASS | 22 | - | After the CRM fix (AA-Partner #306/#307), the owner shows the trip's confirmed AA line to travellers from the Bookings panel ("Show to travellers"); the line was confirmed before the fix, so it started hidden |
+| 10 | REH-10c-itinerary (v1) | CRM portal | PASS | 36 | - | The traveller signs in again: the itinerary lists the 7 days with the tour's day titles and places (6 days with content), "What is booked" lists the confirmed tour, and the tour voucher is there |
 | 10b | REH-10b-ops-view (v4) | CRM staff console | PASS | 24 | - | AA ground operations board lists the trip with tour X's departure; the release shows the departure and the lead's name |
 | 11 | REH-11-maker (v1) | Booking | PASS | 23 | - | Finance maker records the agency's payment on its seeded invoice |
 | 11 | REH-11-checker (v1) | Booking | PASS | 17 | - | A second finance user (checker) approves that payment |
 | - | DRILL-01 (v5) | CIS admin | PASS | 719 | - | Tenant offboarding erasure drill on a synthetic audit tenant: offboard, start the drill, DRY RUN reports per app, approval closed, stop for good, restore (recorded in the drill worktree; Vietnamese track added afterwards) |
 
-**32 videos: 30 PASS, 2 FAIL.**
+**34 videos: 32 PASS, 2 FAIL.** The two FAILs: REH-06 (harness, fixed) and REH-10-portal v1 (the product gap of finding 2, fixed and re-checked by REH-10c).
 
 Earlier takes kept on the drive as evidence of what changed: REH-04-topics v2 (FAIL: every adopted tour
 `seed_too_thin`), REH-04b-facebook v3 (FAIL: "Invalid or expired Page Access Token", before the token was renewed),
@@ -85,12 +87,14 @@ Product or data gaps (no issue opened by this run):
    3.364)` = 1,398 seed words). Tour X and the two other auto-picked tours were all `seed_too_thin` (tour X's itinerary
    is about 240 words). Tour Y (itinerary about 1,900 words) got 8 topics at once. Of the 841 adoptable tours in the
    pool, 23 have an itinerary of 1,400 words or more, and none of those is priced.
-2. **Traveller portal itinerary is empty of content** (REH-10, step 6): dated days only, no day titles/places, no
-   services. Not a sync delay: the portal lists only the trip's lines the agency marked `visible_to_travelers`
-   (AA-Partner `api/app/portal/person.py`, `SERVICES_SQL`), and its days are the accepted proposal's days with their
-   own title and place (`ITINERARY_SQL`). The AA line of the quote is not visible to travellers by default and the
-   proposal days carry no title or place, so the portal has nothing to show. Owner decision: show a confirmed AA line to
-   travellers by default (or have the scenario mark it), and fill the proposal days from the AA tour's days.
+2. **Traveller portal itinerary was empty of content** (REH-10-portal v1, step 6): dated days only, no titles or
+   places, no services. Cause: the portal lists only lines marked `visible_to_travelers`, and the AA line was hidden by
+   default; the accepted proposal's days had no title or place. **Fixed** by AA-Partner #306 (crm-065) and #307: a
+   confirmed AA line is shown to travellers when the sync confirms it, the agency can show or hide it on the trip's
+   Bookings panel, a whole AA tour added to a proposal brings its days' titles and places, and the portal falls back to
+   the shown AA line's days for versions accepted before. The rehearsal trip's line was confirmed before the fix, so
+   REH-10a shows it through the new control, and REH-10c reads the itinerary and the voucher (PASS). The first visit's
+   details, flight and signature are not re-recorded: a recorded take never narrates work that is already done.
 3. **The studio integrations page shows the Facebook Page id in clear** and gives no test id or class to blur it in a
    recording (`FacebookStatusCard`). The publish scenarios now never open that page; a `data-testid` on the Page line
    would let a future take show it safely.
@@ -139,5 +143,5 @@ one/list/`'*'`, `read`, `accept`, `strict`; method-aware `allowWrites` in `net-g
 REH-05 search term from `UAT_REH_SEARCH`, REH-03-adopt photo as a data gap and an unpriced blog-chain tour behind
 `UAT_REH_PRICE_OPTIONAL`, the AI-notice locator of the social posts, the Test & Connect button and the form-only blur
 check of the publish scenarios, the Facebook summary blurred in every publish take and the capped reconnect of a stale
-channel, `build.py` names for ids with a dot (REH-05.m), the REH-10b row locator and wrap-tolerant departure match, and
-the REH-06 replay accounting.
+channel, `build.py` names for ids with a dot (REH-05.m), the REH-10b row locator and wrap-tolerant departure match, the REH-06 replay accounting, and the
+new REH-10a (show the AA line) and REH-10c (second portal visit) scenarios.

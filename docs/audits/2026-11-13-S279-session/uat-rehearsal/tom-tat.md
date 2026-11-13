@@ -7,7 +7,7 @@ phụ đề SRT/VTT và kịch bản lời đọc.
 
 ## Kết quả
 
-- **32 video: 30 PASS, 2 FAIL.** Tổng chi phí LLM **0,49 USD** (trần 10 USD).
+- **34 video: 32 PASS, 2 FAIL.** Tổng chi phí LLM **0,49 USD** (trần 10 USD).
 - Đại lý tổng hợp `pilot-rehearsal-01`. Tour X là tour 6 ngày ở Philippines, vì không có tour Laos nào có giá hay
   được bán cho đại lý trên Dev. Bước 5 tìm "Bohol".
 - Chuỗi bài blog dùng **tour Y** (tour Trung Quốc 20 ngày, có ảnh, chưa có giá), tech lead đã duyệt: mô tả của tour X
@@ -26,9 +26,11 @@ phụ đề SRT/VTT và kịch bản lời đọc.
 
 1. **REH-06:** về sản phẩm thì đạt. Bấm Gửi hai lần chỉ ra một yêu cầu, và CRM nhận đúng một lead. Video FAIL do kịch
    bản đếm sai lần gửi lặp. Lỗi kịch bản đã sửa và có unit test; chưa quay lại để không tạo thêm một lead.
-2. **REH-10-portal:** đăng nhập bằng mã, hộ chiếu, chuyến bay đến và ký điện tử đều đạt. Lịch trình có đủ 7 ngày nhưng
-   không có tên ngày, nơi đến hay mục dịch vụ. Lý do: cổng khách chỉ hiện các dòng dịch vụ mà đại lý đánh dấu "cho khách
-   xem", còn dòng tour AA mặc định không được đánh dấu; ngày trong báo giá cũng chưa có tên và nơi đến.
+2. **REH-10-portal (v1):** lần đầu, lịch trình chỉ có ngày, không có tên ngày, nơi đến hay dịch vụ (dòng tour AA bị ẩn
+   với khách, ngày trong báo giá chưa có nội dung). **Đã sửa** trong AA-Partner #306 (crm-065) và #307. Sau đó quay
+   thêm hai video, cả hai PASS: **REH-10a**, chủ đại lý bấm "Show to travellers" cho dòng tour AA (dòng này được xác
+   nhận trước bản sửa nên đang ẩn), và **REH-10c**, khách đăng nhập lại và thấy 7 ngày có tên và nơi đến của tour, tour
+   đã xác nhận trong mục "What is booked", cùng phiếu dịch vụ.
 
 ## Phát hiện cần tech lead quyết
 
@@ -36,7 +38,6 @@ phụ đề SRT/VTT và kịch bản lời đọc.
   4.700 ký tự chia cho tỷ lệ 3,364 ký tự mỗi từ hạt giống (setting `cis.t7.blog_chars_per_seed_word`), và không dưới
   mức phẳng 600 từ. Lịch trình tour X chỉ khoảng 240 từ, tour Y khoảng 1.900 từ. Trong 841 tour có thể nhận, chỉ 23 tour
   có lịch trình từ 1.400 từ trở lên, và không tour nào trong số đó có giá.
-- **Cổng khách:** dòng AA đã xác nhận có nên mặc định hiện cho khách không, và có chép ngày của tour AA vào báo giá không?
 - **Trang Integrations của studio hiện Page id Facebook rõ ràng**, không có chỗ nào để làm mờ khi quay. Kịch bản giờ
   không mở trang này nữa. Hai video lỡ hiện Page id đã bị xoá trên máy, chưa từng upload.
 - **"Test & Connect" thất bại vẫn lưu kết nối Facebook** (trạng thái "Needs attention" với token hỏng). Muốn thay token
