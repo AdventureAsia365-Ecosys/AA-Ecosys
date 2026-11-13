@@ -55,6 +55,8 @@ Everything runs on **acc2** (us-west-1) except the LLM calls, which run on acc3;
 | [Restore the shared RDS to a point in time](runbooks/restore-rds-pitr.md) | draft (tested) | 2026-10-17 drill |
 | [Restore one schema or table](runbooks/restore-schema.md) | draft, UNTESTED | - (AA-829) |
 | [Restore one tenant's CRM data from its nightly export (pilot drill)](runbooks/pilot-tenant-restore-drill.md) | draft (tested) | 2026-11-05 drill (AA-969 d16) |
+| [Onboard a pilot agency (provision, owner, brand, add-ons, AI budget, pilot mode, exit)](runbooks/pilot-agency-onboarding.md) | draft, UNTESTED | - (AA-1086) |
+| [Rehearse a pilot with a synthetic agency (13 steps across every app)](runbooks/pilot-rehearsal.md) | draft, UNTESTED | - (AA-1086) |
 | [Rotate a secret](runbooks/secret-rotation.md) | draft, UNTESTED | two classes once |
 | [Switch off the legacy staff password login](runbooks/legacy-login-flag.md) | draft, UNTESTED | readiness read only |
 | [Use a break-glass path](runbooks/break-glass.md) | draft, UNTESTED | API path 2026-10-18 |
