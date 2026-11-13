@@ -147,7 +147,8 @@ function publishSteps(name, state) {
           await h.click(f);
           await f.fill(value);
         }
-        await h.assertMasked(c.mask.filter((m) => !m.startsWith('[data-testid')));
+        // Only the form's own fields here: the byline selectors of the mask belong to the live post page (bylineMask).
+        await h.assertMasked(c.mask.filter((m) => m.startsWith('input')));
         // Both channel cards have a Test & Connect button: click the first one after this channel's card heading.
         await h.click(page.getByText(c.heading, { exact: true }).first()
           .locator('xpath=following::button[normalize-space(.)="Test & Connect"][1]'));
