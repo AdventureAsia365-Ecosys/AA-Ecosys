@@ -127,7 +127,7 @@ async function tokenLeftS(page) {
 /** Opens this run's request in the detail pane (component state, so a page load closes it). */
 async function openRequest(page, h) {
   const rows = page.getByTestId('tenant-erasure-requests').getByTestId('kit-datatable-row')
-    .filter({ hasText: T.name }).filter({ hasText: new RegExp(`\\b(${OPEN_PHASES.join('|')})\\b`) });
+    .filter({ hasText: T.name }).filter({ hasText: new RegExp(`\\b(${OPEN_PHASES.join('|')})\\b`, 'i') });
   await h.expect(rows).toHaveCount(1, { timeout: 30_000 });
   await h.click(rows.getByRole('button', { name: 'Open', exact: true }));
   await h.expect(detail(page)).toBeVisible({ timeout: 30_000 });
