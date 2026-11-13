@@ -12,4 +12,8 @@ module.exports = [
   // The E2E tenant's studio editor (its identity must be enrolled first).
   'content-studio/prt-02.cjs',
   'content-studio/prt-06.cjs',
+  // The E2E CIS admin (cis-admin, a staff identity: lib/dryrun-core.cjs WRITE_SET_STAFF) on one synthetic audit tenant:
+  // the tenant offboarding erasure drill (offboard, drill, Run now, Stop for good, restore; never approved). $0, about
+  // 15 min (the DRY RUN reports). Record it alone: --record DRILL-01 --include-writable.
+  'cis-admin/drill-01.cjs',
 ];
