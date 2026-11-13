@@ -8,7 +8,8 @@
 // Env: UAT_REH_TOUR_X = tour X's id (the catalog tour_id or its published id; runbook Fixtures).
 // Given: the rehearsal owner, the brand of REH-03-brand saved. When: Marketplace -> search tour X -> tick it -> tick two
 //        more -> Rewrite 3 tours -> My Tours -> X ready -> Export DOCX.
-// Then:  tour X's card shows a photo and a price; the usage meter rises by the number of rewrites started; the three
+// Then:  tour X's card shows its price (and its photo: a tour without one in the catalog is recorded as a data gap in
+//        meta.gaps, not a FAIL; S279: the only agency-sellable Dev tour has no photo); the usage meter rises by the number of rewrites started; the three
 //        tours finish; the DOCX answer carries X-AI-Generated: true and "ai-generated" in its properties. 1440 x 900.
 const { HOSTS, step, check } = require('../../lib/dryrun-page.cjs');
 const { rw, limitWrites, downloadBytes, zipEntry, AI_MARK } = require('../../lib/uat-page.cjs');
@@ -19,6 +20,7 @@ let counts = null;
 let x = null; // tour X's catalog row
 let used0 = 0; // rewrites used before
 let toStart = []; // catalog rows ticked for the bulk rewrite
+const meta = { gaps: [] };
 const card = (page, name) => page.getByRole('button', { name: `Open ${name}`, exact: true }).first();
 const tick = (page, name) => page.getByRole('checkbox', { name: `Select ${name}`, exact: true }).first();
 
@@ -31,6 +33,7 @@ const sc = rw({
   titleVi: 'Diễn tập pilot: nhận ba tour và xuất một tour ra file Word',
   baseURL: HOSTS.partner,
   allowWrites: R.allow('rewrite'),
+  meta,
   steps: [
     step('The Marketplace holds every Adventure Asia tour the agency can sell. The owner searches for the first tour to offer.',
       'Kho tour chứa mọi tour của Adventure Asia mà đại lý có thể bán. Chủ đại lý tìm tour đầu tiên muốn chào bán.',
@@ -45,14 +48,15 @@ const sc = rw({
         await search.fill(x.aa_name);
         await h.expect(card(page, x.aa_name)).toBeVisible({ timeout: 30_000 });
       }),
-    step('The tour shows its photo, its length and its price from Adventure Asia. The owner selects it, unless the agency already has it.',
-      'Tour hiện ảnh, số ngày và giá của Adventure Asia. Chủ đại lý chọn tour này, trừ khi đại lý đã có tour này rồi.',
+    step('The tour shows its length and its price from Adventure Asia, with its photo when it has one. The owner selects it, unless the agency already has it.',
+      'Tour hiện số ngày và giá của Adventure Asia, kèm ảnh nếu tour có ảnh. Chủ đại lý chọn tour này, trừ khi đại lý đã có tour này rồi.',
       async (page, h) => {
         const c = card(page, x.aa_name);
         await h.hover(c);
-        if (!x.cover_image_url) throw new Error('tour X has no photo in the catalog');
         if (!x.from_price) throw new Error('tour X has no Booking price in the catalog (not sellable)');
-        await h.expect(c.locator('img').first()).toBeVisible({ timeout: 30_000 });
+        meta.photo = !!x.cover_image_url;
+        if (meta.photo) await h.expect(c.locator('img').first()).toBeVisible({ timeout: 30_000 });
+        else meta.gaps.push('tour X has no photo in the catalog (card shows the placeholder)');
         await h.expect(c).toContainText(/per person|From/i);
         const picked = await R.adopted(page);
         const have = new Set(picked.map((t) => t.published_tour_id));
