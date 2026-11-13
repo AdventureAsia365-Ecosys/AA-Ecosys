@@ -45,9 +45,10 @@ module.exports = rw({
         ]);
         page.on('response', async (r) => {
           if (new URL(r.url()).pathname !== '/api/trip/send' || r.request().method() !== 'POST') return;
+          // The take's own repeat (replaySend) records its answer itself, from inside the page.
+          if (r.request().headers()[R.REPLAY_HEADER]) return;
           if (!firstSend) firstSend = { body: r.request().postData(), headers: r.request().headers() };
-          const body = await r.json().catch(() => ({}));
-          answers.push({ status: r.status(), already_sent: body.already_sent, handoff_id: body.handoff_id || null, error: body.error });
+          answers.push(R.sendAnswer(r.status(), await r.text().catch(() => '')));
         });
         await R.openPlanner(page, h, meta);
       }),
@@ -121,15 +122,19 @@ module.exports = rw({
 
 /**
  * Send the first request once more from the page (same body; the content type and the planner's tenant headers): the
- * double click the form's busy state kept inside the page. Its answer lands in `answers` like the first.
+ * double click the form's busy state kept inside the page. The page reads the answer itself and the take records it
+ * here: the response listener skips this request (R.REPLAY_HEADER), so the repeat is counted exactly once (S279: the
+ * listener missed the repeat's answer when the page never read its body, and the take failed with one answer).
  */
 async function replaySend(page) {
   if (!firstSend || !firstSend.body) throw new Error('no first send request to repeat');
-  const headers = Object.fromEntries(Object.entries(firstSend.headers).filter(([k]) => k === 'content-type' || k.startsWith('x-tp-')));
-  const answered = page.waitForResponse((r) => new URL(r.url()).pathname === '/api/trip/send' && r.request().method() === 'POST', { timeout: 60_000 });
-  await page.evaluate(({ body, headers }) => fetch('/api/trip/send', { method: 'POST', headers, body, credentials: 'same-origin' }).then(() => null),
-    { body: firstSend.body, headers });
-  await answered;
+  const headers = R.replayHeaders(firstSend.headers);
+  const res = await page.evaluate(async ({ body, headers }) => {
+    const r = await fetch('/api/trip/send', { method: 'POST', headers, body, credentials: 'same-origin' });
+    return { status: r.status, text: await r.text().catch(() => '') };
+  }, { body: firstSend.body, headers });
+  answers.push(R.sendAnswer(res.status, res.text));
+  meta.replay_status = res.status;
 }
 
 /** Click a field and type like a person (instant in fast mode). */

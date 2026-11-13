@@ -193,7 +193,25 @@ async function tripStopCount(page, h, min = 1) {
   return stops.count();
 }
 
+// REH-06's own repeat of the send carries this header, so the response listener does not count it twice.
+const REPLAY_HEADER = 'x-uat-replay';
+
+/** The headers of the repeated send: the content type and the planner's tenant headers of the first, plus the marker. */
+function replayHeaders(first = {}) {
+  const out = Object.fromEntries(Object.entries(first).filter(([k]) => k.toLowerCase() === 'content-type' || k.toLowerCase().startsWith('x-tp-')));
+  out[REPLAY_HEADER] = '1';
+  return out;
+}
+
+/** One send answer as REH-06 records it, from the HTTP status and the raw body (not JSON: no fields). */
+function sendAnswer(status, text) {
+  let body = {};
+  try { body = JSON.parse(text || '{}') || {}; } catch { body = {}; }
+  return { status, already_sent: body.already_sent, handoff_id: body.handoff_id || null, error: body.error };
+}
+
 module.exports = {
+  REPLAY_HEADER, replayHeaders, sendAnswer,
   SLUG, AGENCY, PLAN, CLIENT, CIS_API, WRITES, PATHS, SEARCH_PAID, NO_NARRATION, REGISTRY, esc,
   paidBlocks, tripOps, registryHint, traveller, pickTour, openPlanner, assertBrand, addTourX, tripDays, tripStopCount,
 };
