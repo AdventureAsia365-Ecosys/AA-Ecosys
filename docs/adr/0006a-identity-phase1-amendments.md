@@ -17,7 +17,9 @@
   A10b-5 (13/11/2026, S279) lets it run the DRY RUN drill of the tenant offboarding erasure saga on a synthetic tenant
   (never approve), and A10e (12/11/2026, S278) adds three Dev-only write-capable AA-Booking E2E addresses (supplier
   ops; a finance maker / checker pair), each held to its own writes on synthetic agencies; A10e-1 (12/11/2026, S278)
-  lets its staff address cancel a synthetic departure (crm-13). A11 and A12 (22/10/2026,
+  lets its staff address cancel a synthetic departure (crm-13); A10e-2 (14/11/2026, S279) adds a pricing maker / checker
+  pair (the A10d address with the "Pricing team" preset, and a Dev-only Booking contracting address) for the AA-1091
+  live check with synthetic prices on synthetic trip plans. A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2). A13
   (06/11/2026, S271) retires the CIS -> Booking bridge once the staff frontends run on ECS (ADR 0019 d23).
 - **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) was unchanged and still pending on 18/10/2026.
@@ -709,7 +711,7 @@ mailbox or Google account". That is too strong.
   rest of `api/core/e2e_staff.py`, the assignment guard, the trigger entry, the receipt-rule recipient and the AA-Partner
   `E2E_CIS_CS_EMAIL` rule (`Caller.e2e_no_write`); Terraform Apply; a closing line here. Faster stop on Dev: disable the
   user. The full end-of-project removal list is therefore A10, A10a, A10b (with A10b-1, A10b-2, A10b-3, A10b-4 and A10b-5), A10c, A10d
-  and A10e (AA-1054).
+  and A10e (with A10e-1 and A10e-2) (AA-1054).
 
 #### A10e. Dev-only write-capable AA-Booking E2E addresses (12/11/2026, S278, AA-1087)
 
@@ -800,6 +802,64 @@ mailbox or Google account". That is too strong.
 - **Revoke (any time):** drop `DEPARTURE_CANCEL` from the staff writer, `BODY_RULES` and its grant, update the guard
   test, deploy; faster on Dev: disable the user. The A10e removal list (AA-1054) covers this, plus the two fixture
   modules and the saga's `tenant_id` field.
+
+##### A10e-2. Amendment: a pricing maker / checker pair for the synthetic price check (14/11/2026, S279, AA-1091)
+
+- **Decision (tech lead, S279: run the AA-1091 live check on Dev with SYNTHETIC prices and E2E identities, option G1
+  of the AA-1091 runbook "identity gate"; designed by the orchestrated lane l29 under the dev-phase merge rule,
+  independent review before merge because it widens auth):** the AA-1091 Done-when is signed in as a customer-service
+  member holding only the "Pricing team" preset (CIS `customer_success` + Booking `contracting`), and price versions
+  need a second person to approve. No E2E identity could do either: the directory refused any Booking grant for an E2E
+  address, A10a is read-only, the A10e addresses are `booking-sales` / `booking-finance`. Two identities, Dev only:
+  - **Maker:** the A10d address `e2e-cis-cs@e2e-mail.lumiguides.it.com` once an owner gives it the preset on the CIS
+    Staff page (one audited `roles_changed` row). Its groups are then exactly `cis-customer_success` +
+    `booking-contracting`. Its CIS session is unchanged (A10d: read-only, no write allow-list).
+  - **Checker:** a new address `e2e-booking-pricing-checker@e2e-mail.lumiguides.it.com`, exactly
+    `booking-contracting`, never in the CIS directory (like A10e).
+- **Groups (trigger):** the checker is one more entry of the Dev-only map (`workforce.E2E_DEV_ONLY_TEST_STAFF`); the
+  A10d address may hold exactly its own set or exactly the preset's pair (`E2E_DEV_ONLY_EXTRA_GROUP_SETS`, behind the
+  same `E2E_DEV_ONLY_STAFF_ENABLED` flag), so it keeps signing in after the preset is removed. Any other set denies the
+  token.
+- **Directory (CIS):** `require_e2e_test_scope` lets the A10d address hold the one Booking grant `contracting`, only
+  where `ENVIRONMENT` is exactly `dev` (`api/core/e2e_staff.e2e_booking_role_allowed`); every other E2E address keeps
+  "no Booking role", and any other Booking role for A10d stays 400 `e2e_test_scope`. No migration: CIS 378's CHECK
+  constrains `shared.admin_users` (address, CIS role, owner, password) and the preset keeps the CIS role
+  `customer_success`; the Booking grant is a `shared.staff_app_grant` row, which carries no E2E rule. The reconcile
+  lists both identities as known E2E exceptions (the checker under clause `ADR 0006a A10e-2`).
+- **Scope, enforced by AA-Booking (`backend/app/auth/e2e_staff.py`, called from `current_staff`), on top of A10e**
+  (Dev only, exact groups, its own writes only, all before any DB access):
+  - **Maker writes:** PUT `/booking/catalog/trip-plans/{source_id}/components`; POST `/booking/catalog/price-import`
+    (DRY RUN and import); POST `/booking/catalog/price-workbench/actions` with a body of exactly `{"action":
+    "make_sellable" | "make_not_sellable", "tour_keys": [...]}`; PUT `/booking/catalog/price-versions/{id}` and POST
+    its `/submit` and `/withdraw`; POST `/approve` and `/reject`, which reach only the maker's own versions, so the
+    service refuses them (403 `maker_checker`) and the live probe exercises that rule.
+  - **Checker writes:** POST `/booking/catalog/price-versions/{id}/approve`, `/reject` and `/withdraw`.
+  - **Synthetic plans only** (403 `e2e_synthetic_only`, before the staff row sync or the route): the writes touch trip
+    plans, so "synthetic" is per plan: no agency that CIS does not mark synthetic has a quote line on the plan, a hold
+    line, an allotment or a departure fee on one of its departures. A price version also needs the E2E maker as its
+    creator, so the checker never decides a real staff member's version. The workbench body's tour keys are checked
+    in one query. The workbook import is checked inside the route (the guard cannot parse a workbook): every tour key
+    of the parsed file must be a known synthetic plan, and a file with a Departures row is 403 `e2e_read_only`, before
+    the DRY RUN preview or any write.
+  - No route-scoped grant: `contracting` already holds `trip_plan.write` and `price_version.*`; the allow-list is what
+    limits them. Reads keep the `contracting` permissions.
+- **Exposure added.** Whoever reads a code of the pair can, on Dev, save components, import hand prices as draft
+  versions, approve them as the second person and switch sellable, on plans no real agency has used. Prices are
+  catalogue-wide while published: every agency tariff and the TripPlanner "From $X" show the synthetic seasons of those
+  tours until the versions are withdrawn (the runbook withdraws them and switches sellable back at cleanup). Writes stay
+  maker-checker: the maker never approves.
+- **Mailbox:** the checker is a recipient of the A10b rule `e2e-cognito-admin` (codes under `inbound-admin/`, MFA admin
+  role only); A10d already is.
+- **Audit and detection:** the routes run unchanged (`booking.audit_logs` names each identity's staff key); CIS
+  `roles_changed` with `details.preset` for the grant; `workforce_e2e_test_token_issued`; Booking
+  `booking_e2e_writer_refused identity=pricing_maker|pricing_checker reason=…` and `booking_e2e_write_allowed`.
+- **Used only by the agent, locally** (the AA-1091 runbook scripts), never CI.
+- **Revoke and removal:** after the check the owner removes the grant (`PATCH /admin/platform/staff/{id}/roles
+  {"booking_role": null}`; the CIS role stays `customer_success`). Removed with the A10 family (AA-1054): delete the
+  checker's Cognito user; drop the trigger entry, the extra group set, the recipient and its `e2e-booking-writers` row
+  (AA-CIS-Infra), Terraform Apply; drop the Booking-role exception and the reconcile entry (AA-CIS-App); drop the two
+  writers, the plan / version SQL and the import check (AA-Booking); deactivate the staff rows; a closing line here.
+  Faster stop on Dev: remove the grant, or disable the checker.
 
 ### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)
 
