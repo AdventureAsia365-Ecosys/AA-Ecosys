@@ -32,8 +32,8 @@ Reviewer độc lập nêu 7 điểm; đã sửa cả 7:
   baseline, mọi khoá đều có nhãn dễ đọc và giải thích EN + VI: 28 khoá cũ + 151 khoá chất lượng + 17 khoá TripPlanner
   (CIS 414, lane l21) + 5 khoá bài thử bộ kiểm khẳng định (CIS 416, lane l22) = 201 khoá. Migration đổi số 415 → 417
   (l21 giữ 414-415, l22 giữ 416); nhánh mang theo commit của l21/l22 để guard và post-check thấy khoá của họ.
-- 81 khoá "Quality check mode" ghi rõ: chế độ chỉ đổi cách báo cáo chất lượng và đánh giá tính bước kiểm, không đổi
-  cách xử lý bài (đã kiểm code: `registry.classes()` chỉ dùng mode để suy ra bước kiểm chính của loại lỗi).
+- 81 khoá "Quality check mode" ghi rõ: chế độ không đổi cách xử lý bài (lượt review thứ hai sửa tiếp: cũng không đổi
+  báo cáo hay đánh giá) (đã kiểm code: `registry.classes()` chỉ dùng mode để suy ra bước kiểm chính của loại lỗi).
 - "Tour rewrite attempts before human review": ghi rõ bộ viết hiện tại (chế độ contract, Dev đang chạy) tự quyết số lần
   viết lại và bỏ qua con số này; chỉ luồng chấm điểm cũ đọc nó.
 - "Agency tour rewrite: voice checks per version": bỏ câu "kiểm tra lần hai cho báo cáo ổn định hơn"; lần thứ hai chỉ
@@ -50,7 +50,7 @@ Reviewer độc lập nêu 7 điểm; đã sửa cả 7:
 | `fix-desktop-light-in-force-line.png`, `fix-desktop-dark-in-force-line.png`, `fix-mobile-light-in-force-line.png` | "Blog length per source word" đang áp dụng 3,364 (API giả): ví dụ ghi mặc định 5,8, dòng "In force now" tính 1.398 từ nguồn |
 | `fix-desktop-light-in-force-line-vi.png` | Cùng dòng bằng tiếng Việt ("Đang áp dụng") |
 | `fix-change-dialog-draft-line.png` | Hộp thoại Change, gõ `3,0`: dòng "With the value you enter" tính 1.567 từ nguồn (không lưu) |
-| `fix-*-check-modes-overview.png`, `fix-*-check-mode-explained.png`, `fix-desktop-light-check-mode-explained-vi.png` | Tab quality_detectors: nhãn "Quality check mode: ..." thay cho "fact.number · F1_grounding", giải thích nói rõ chỉ ảnh hưởng báo cáo |
+| `fix-*-check-modes-overview.png`, `fix-*-check-mode-explained.png`, `fix-desktop-light-check-mode-explained-vi.png` | Tab quality_detectors: nhãn "Quality check mode: ..." thay cho "fact.number · F1_grounding"; giải thích (chụp lại ở lượt review thứ hai) nói rõ chế độ chỉ đánh dấu bước kiểm chính của loại lỗi, không đổi bài, điểm, giữ bài, báo cáo hay đánh giá |
 | `fix-tripplanner-overview.png` | Tab TripPlanner: 17 khoá có dòng "điều chỉnh gì" |
 
 Console: 0 lỗi; không tràn ngang (1440 sáng/tối, 390 sáng). Ảnh Booking không chụp lại (đổi chữ tiêu đề và ví dụ; bố cục
@@ -72,3 +72,28 @@ không đổi).
 - 5 khoá bài thử bộ kiểm khẳng định (lane l22) rời nhánh này; lane đó ship sau dưới số 417 và tự mang giải thích trên
   dòng seed (chữ đã viết ở lượt sửa đầu của lane này, đã giao lại cho lane đó).
 - Giao diện không đổi, nên không chụp lại ảnh.
+
+## Lượt review thứ hai (13/11/2026)
+
+Reviewer độc lập đối chiếu chữ giải thích với code, nêu 5 điểm; cả 5 đúng và đã sửa trong migration CIS 416
+(`compiled_defaults.json` sinh lại):
+
+- Ngưỡng đề xuất chủ đề theo kênh (8 khoá): `needs_said` là số ký tự lịch trình viết về khoảnh khắc đó, cộng dồn mọi tour
+  (`atom_ranking.py`: `SUM(LENGTH(COALESCE(evidence, text)))`), không phải "số lần nhắc"; ví dụ đổi thành "ít nhất 150 ký
+  tự mô tả trong lịch trình".
+- `most_per_hub` (5 khoá có giới hạn hub) được giải thích riêng: 0 chặn mọi chủ đề thuộc một hub, số cao hơn là nới hơn
+  (`slate.py` từ chối khi đã đủ số chủ đề của hub). "0 = không có ngưỡng" chỉ còn áp cho các số needs_*.
+- 81 khoá chế độ bước kiểm: code chỉ dùng chế độ để suy ra bước kiểm chính (`owner_gates`), và chỉ lint chất lượng đọc nó
+  (cảnh báo khi một loại lỗi nghiêm trọng không còn bước kiểm nào ở enforce). Chữ cũ nói báo cáo và đánh giá thay đổi là
+  sai; nay ghi rõ không đổi gì ở bài, điểm, giữ bài, báo cáo hay đánh giá. "golden-set" đổi thành "một lần chạy đánh giá
+  trên một bộ bài đã được duyệt cố định".
+- 2 khoá giới hạn lead của TripPlanner (`send`, `send_ip`) không gọi model: tăng / giảm / khi nào nay nói về lead giả đổ
+  vào hộp thư và CRM của đại lý, không còn "lượt gọi có phí" hay "nhật ký gọi AI".
+- Ví dụ tiếng Việt của 6 giới hạn theo khung giờ / phút đặt số thứ tự đúng chỗ ("lead thứ 6 trong cùng một giờ").
+
+| Ảnh | Nội dung |
+|---|---|
+| `review2-en-topic-bar-explained.png`, `review2-vi-topic-bar-explained.png` | "Topic planning: bar for Facebook" mở Explain: needs_said tính bằng ký tự, most_per_hub giải thích riêng |
+| `review2-en-lead-limit-explained.png`, `review2-vi-lead-limit-explained.png` | "Leads per visitor session per hour": lead giả, hộp thư và CRM của đại lý; ví dụ VI "lead thứ 6 trong cùng một giờ" |
+
+Các ảnh `fix-*-check-mode*.png` ở trên đã chụp lại với chữ mới. Console: 0 lỗi; không tràn ngang.
