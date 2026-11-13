@@ -86,7 +86,7 @@ test('select: naming a writable-identity scenario without --include-writable thr
   assert.throws(() => core.select(SET, { only: ['CRM-01'] }), /CRM-01: signs in an account that can write.*--include-writable/);
   assert.throws(() => core.select(SET, { identities: ['crm'] }), /crm: signs in an account that can write/);
   assert.deepEqual(core.select(SET, { only: ['CRM-01'], includeWritable: true }).map((e) => e.id), ['CRM-01']);
-  assert.deepEqual(core.WRITABLE_IDENTITIES, ['crm', 'studio-editor', 'studio-audit']);
+  assert.deepEqual(core.WRITABLE_IDENTITIES, ['crm', 'studio-editor', 'studio-audit', 'booking-staff', 'booking-maker', 'booking-checker']);
 });
 
 test('select: --only, --app and --identity combine (AND)', () => {
@@ -452,9 +452,10 @@ test('manifest: every listed scenario loads, is a read-only dry-run scenario, id
   assert.ok(entries.length >= 20, `at least 20 scenarios (${entries.length})`);
   core.select(entries, {}); // throws on a duplicate id
   const identities = new Set(entries.map((e) => e.identity));
-  // The studio editor can write, so only write scenarios use it (AA-855): the read-only set covers every other identity.
-  for (const who of core.IDENTITIES.filter((x) => x !== 'studio-editor')) assert.ok(identities.has(who), `the set covers identity ${who}`);
-  assert.ok(!identities.has('studio-editor'), 'no dry-run scenario signs in the studio editor');
+  // The studio editor and the Booking E2E writers can write, so only write scenarios use them (AA-855, AA-1086): the
+  // read-only set covers every other identity.
+  for (const who of core.IDENTITIES.filter((x) => !core.WRITE_SET_ONLY_IDENTITIES.includes(x))) assert.ok(identities.has(who), `the set covers identity ${who}`);
+  for (const who of core.WRITE_SET_ONLY_IDENTITIES) assert.ok(!identities.has(who), `no dry-run scenario signs in ${who}`);
   // The default run leaves the writable identity's scenarios out and says so.
   const def = core.select(entries, {});
   assert.ok(def.length >= 20 && def.every((e) => !core.WRITABLE_IDENTITIES.includes(e.identity)));

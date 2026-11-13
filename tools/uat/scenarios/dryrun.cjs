@@ -47,4 +47,11 @@ module.exports = [
   'booking/bk-07.cjs',
   'booking/bk-08.cjs',
   'booking/bk-10.cjs',
+  // Pilot rehearsal (root docs/ops/runbooks/pilot-rehearsal.md), the staff evidence that holds while the synthetic
+  // rehearsal agency is kept as a fixture: step 0 baseline and the step 1 results in CIS, the CRM console and Booking.
+  // The state-dependent ones (prices, members, the budget override) are recorded with run.sh, not in the dry run.
+  'cis-admin/reh-00-baseline.cjs',
+  'cis-admin/reh-01-provisioned.cjs',
+  'cis-admin/reh-01-crm-agency.cjs',
+  'booking/reh-01-booking-partner.cjs',
 ];
