@@ -2,7 +2,8 @@
 
 - **Status:** Accepted (28/10/2026, S255, AA-998: the tech lead asked for acc1 to leave the ecosystem and accepts
   losing the cross-account LLM fallback). Separate file, following the `0003a` pattern; ADR 0001 itself only gets a pointer.
-  Partly reversed for Bedrock chat serving only by the Note S278 at the end (12/11/2026, AA-1095).
+  Partly reversed for Bedrock chat serving only by the Note S278 at the end (12/11/2026, AA-1095); the Note S279
+  (13/11/2026, AA-1096) adds a billing-only spend alert on acc1 (e-mail only, never a stop).
 - **Amends:** ADR 0001 decision 2 ("Single Model Gateway"), the sentence "The fallback stays inside acc3 (previous
   model) until acc1 accepts the same agreements". The fallback now stays inside acc3 for good.
 - **Amended by:** [ADR 0009](0009-ai-platform-and-provider-gateway.md) decision 14 (Accepted 2026-10-31, S261):
@@ -122,3 +123,26 @@ ADR stands.
   API); card spend for Claude on Bedrock moves from acc3's bill to acc1's. If acc3 starts answering again before the
   reversal, GPT calls go to acc3 before the OpenAI API (AWS preferred): do the reversal then, or switch the acc3 GPT
   deployments off.
+
+## Note — 13/11/2026 (S279): acc1 Bedrock spend is alert only
+
+**Decision (tech lead, AA-1096):** acc1's Bedrock spend raises alerts and is never stopped. This narrows the "no paid
+budget or anomaly monitor" line of Note S278: acc1 now also holds a free spend alert. Everything else in Note S278
+stands.
+
+- **Gateway side.** The CIS gateway connection `acc1` has a monthly budget of 100 USD with a warning at 80 % and no
+  hard stop: calls keep flowing above the budget, the admin pages and the gateway's alert show the overrun.
+- **AWS side.** The same Terraform root `accounts/acc1-bedrock` in AA-CIS-Infra adds three free resources: a monthly
+  COST budget of 100 USD on acc1's own usage (filtered to acc1 as a linked account, since acc1 also pays acc3's bill;
+  credits and refunds excluded) that e-mails at 50, 80 and 100 % of actual spend and at 100 % of forecast spend; a
+  cost anomaly monitor on acc1's own spend; and a daily anomaly e-mail for an impact of 10 USD or more. No budget
+  action, no SNS topic, no IAM for an action: nothing on acc1 can stop or limit a call. The recipient address comes
+  from an untracked variables file, never a committed file.
+- **Why a budget at all.** Claude on Bedrock is paid by card on acc1's bill (the pooled AWS Lift credits do not cover
+  it, Note S277), and the gateway ledger only sees calls that reach the gateway. An AWS budget also catches spend that
+  bypasses the ledger, at no cost.
+- **Scope still minimal.** acc1 holds the invoker role, a break-glass admin role, the state bucket and these three
+  billing resources. Still no data, secret, compute, Batch or Cost Explorer reader.
+- **Reversal.** Removed with the rest of the `accounts/acc1-bedrock` root when acc3 serves again (Note S278,
+  Reversal). Values (budget, percentages, anomaly floor) are Terraform variables of that root; the gateway values are
+  settings of the `acc1` connection.

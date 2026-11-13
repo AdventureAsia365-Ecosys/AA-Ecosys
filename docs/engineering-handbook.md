@@ -692,7 +692,7 @@ decision: **quote the monthly cost before applying any new AWS service or resour
 | Cost Anomaly Detection | Free; live (Infra #213, `cost_anomaly.tf`): immediate alerts to the existing SNS e-mail for anomalies of at least 5 USD. AA-896 stays open for the rest (FinOps page, monthly report tool). Per-tag monitors exist only in the management account; per-app budgets cover that |
 | LLM and external API caps | `shared.spend_budget` (DM-10.5) |
 | Cost per app | Admin cost page and API (AA-884, CIS #838) and the overview for the business owner on the same module (AA-858, CIS #840): deployed in CIS `dba9b72`; Done after the `aa-ship` live verify |
-| Budget and anomaly alert on acc3 (LLM satellite) | Live (`accounts/acc3-bedrock` `cost_guard.tf`, `cost_anomaly_immediate.tf`). acc1 left the ecosystem (AA-998) |
+| Budget and anomaly alert on acc3 (LLM satellite) | Live (`accounts/acc3-bedrock` `cost_guard.tf`, `cost_anomaly_immediate.tf`). acc1, the Bedrock chat account while acc3 is blocked, has an alert-only budget (100 USD a month) and a daily anomaly e-mail, never a stop (`accounts/acc1-bedrock` `cost_guard.tf`, AA-1096, ADR 0001a Note S279) |
 
 ### 8.3 Monthly review
 
