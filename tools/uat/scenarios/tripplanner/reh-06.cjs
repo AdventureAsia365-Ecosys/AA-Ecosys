@@ -1,10 +1,13 @@
 // UAT scenario REH-06 (pilot rehearsal step 6, the traveller half; runbook docs/ops/runbooks/pilot-rehearsal.md): a
 // guest on the synthetic agency's planner sends the trip to the agency with the contact consent ticked, and presses
 // Send twice in a row. 1440 x 900. $0: no model call (search, chat and narration blocked).
-// Writes: the guest trip (POST /api/trip: apply tour X's route) and the request (POST /api/trip/send), at most twice:
-// the second press may reach the server, which must answer it as the same hand-off (already_sent, the same
-// handoff_id; AA-TripPlanner-Web backend/assembly/handler.py). The traveller is invented (env UAT_REH_TRAVELLER_EMAIL,
-// default on example.invalid). The web ACL challenges the send without a token: the planner's document load got one.
+// Writes, capped by limitWrites: the guest trip (POST /api/trip, op apply_route only) and the request (POST
+// /api/trip/send), exactly twice. The form's busy state usually stops the second click inside the page; then the take
+// sends the same request once more from the page (same body, same tenant header), so the server's double-click answer
+// is proven on every take: already_sent with the same handoff_id (AA-TripPlanner-Web backend/assembly/handler.py
+// _send_lead). meta.second_send says which way it went. The traveller is invented (env UAT_REH_TRAVELLER_EMAIL, an
+// address on .invalid; any other address stops the take). The web ACL challenges the send without a token: the
+// planner's document load got one. The send limits are TripPlanner settings of the CIS registry (a 429 names them).
 // Needs: tour X adopted by the agency (step 3), the agency's CRM add-on (its leads go to the CRM); env UAT_REH_TOUR_X.
 // The CRM half of step 6 (one lead in /pipeline within about a minute, not visible to other agencies, the
 // TripPlanner outbox row redacted) is the CRM group's scenario and a database read.
@@ -18,6 +21,7 @@ const R = require('./_rehearsal.cjs');
 
 const meta = {};
 let counts = null;
+let firstSend = null; // the first send request that left the page: { body, headers }
 const answers = []; // { status, already_sent, handoff_id } per send that reached the server
 
 module.exports = rw({
@@ -35,20 +39,24 @@ module.exports = rw({
     step('A traveller is on the agency\'s planner, under the agency\'s own name.',
       'Khách du lịch đang ở trang lập kế hoạch của đại lý, mang tên riêng của đại lý.',
       async (page, h) => {
-        counts = await limitWrites(page, [{ name: 'send', path: R.PATHS.send, max: 2 }]);
+        counts = await limitWrites(page, [
+          { name: 'send', path: R.PATHS.send, max: 2, accept: (req) => req.method() === 'POST' },
+          { name: 'trip', path: R.PATHS.trip, max: 2, accept: R.tripOps('apply_route') },
+        ]);
         page.on('response', async (r) => {
           if (new URL(r.url()).pathname !== '/api/trip/send' || r.request().method() !== 'POST') return;
+          if (!firstSend) firstSend = { body: r.request().postData(), headers: r.request().headers() };
           const body = await r.json().catch(() => ({}));
           answers.push({ status: r.status(), already_sent: body.already_sent, handoff_id: body.handoff_id || null, error: body.error });
         });
-        await R.openPlanner(page, h);
+        await R.openPlanner(page, h, meta);
       }),
     step('They pin the route of the rehearsal tour from the agency\'s list of tours.',
       'Khách thêm lộ trình của tour diễn tập từ danh sách tour của đại lý.',
       async (page, h) => {
         await R.addTourX(page, h, meta);
         await h.click(page.getByRole('button', { name: 'Map', exact: true }));
-        meta.stops = (await R.tripStops(page, h, 1)).length;
+        meta.days = (await R.tripDays(page, h, 1)).length;
       }, { writes: true }),
     step('Send to the agency opens a short request form. Their details go only to this agency.',
       'Nút gửi cho đại lý mở một biểu mẫu ngắn. Thông tin của khách chỉ gửi tới đại lý này.',
@@ -60,8 +68,8 @@ module.exports = rw({
         await h.expect(form).toBeVisible({ timeout: 15_000 });
         await h.expect(form).toContainText(`Your details go only to ${R.AGENCY}`);
       }),
-    step('The traveller fills in a name, an email and a short message, and ticks the box that lets the agency contact them.',
-      'Khách điền tên, email và một lời nhắn ngắn, rồi đánh dấu ô cho phép đại lý liên hệ.',
+    step('They give a name, an email and a short message, and allow the agency to contact them.',
+      'Khách điền tên, email và một lời nhắn ngắn, rồi cho phép đại lý liên hệ.',
       async (page, h) => {
         const t = R.traveller();
         const form = page.getByTestId('lead-form');
@@ -85,15 +93,20 @@ module.exports = rw({
         await first;
         await h.expect(page.getByText(`Sent to ${R.AGENCY}. They will contact you about this trip.`)).toBeVisible({ timeout: 30_000 });
         await h.pause(1500); // a second send, if the page let one out, answers within this
+        // counts.send = the send requests that left the page (an answer may still be on its way).
+        meta.second_send = counts.send > 1 ? 'double_click' : 'replay';
+        if (counts.send === 1 && answers.length === 1 && answers[0].status === 200) await replaySend(page);
+        await h.expect.poll(() => answers.length, { timeout: 15_000 }).toBeGreaterThanOrEqual(Math.min(counts.send, 2));
         meta.send_posts = counts.send;
         meta.send_answers = answers.map((a) => ({ status: a.status, already_sent: a.already_sent }));
-        if (!answers.length || answers.length > 2) throw new Error(`${answers.length} send answers (one or two expected)`);
         const bad = answers.find((a) => a.status !== 200);
-        if (bad) throw new Error(`a send answered ${bad.status}${bad.error ? ` ${bad.error}` : ''}`);
+        if (bad) throw new Error(`a send answered ${bad.status}${bad.error ? ` ${bad.error}` : ''}${R.registryHint('send', bad.status, bad.error)}`);
+        if (answers.length !== 2) throw new Error(`${answers.length} send answers (two expected: the first and the repeat)`);
         const ids = new Set(answers.map((a) => a.handoff_id));
         if (ids.size !== 1 || ids.has(null)) throw new Error(`the sends carried ${ids.size} hand-off ids (one expected)`);
         const fresh = answers.filter((a) => a.already_sent === false).length;
         if (fresh !== 1) throw new Error(`${fresh} new hand-offs (exactly one expected)`);
+        if (counts.send_refused || counts.trip_refused) throw new Error('the page tried a trip write this take does not make (aborted)');
       }, { writes: true }),
     step('The panel confirms the request was sent, and the send button stays off. This is the end of the scenario.',
       'Bảng chuyến đi xác nhận yêu cầu đã gửi, và nút gửi không bấm được nữa. Kết thúc kịch bản.',
@@ -101,10 +114,23 @@ module.exports = rw({
         const done = page.getByRole('button', { name: /Sent to advisor/ });
         await h.expect(done).toBeDisabled({ timeout: 15_000 });
         await h.hover(done);
-        if (counts.send > 2) throw new Error(`${counts.send} send presses left the page (at most two expected)`);
+        if (counts.send !== 2) throw new Error(`${counts.send} send requests left the page (exactly two expected)`);
       }),
   ],
 });
+
+/**
+ * Send the first request once more from the page (same body; the content type and the planner's tenant headers): the
+ * double click the form's busy state kept inside the page. Its answer lands in `answers` like the first.
+ */
+async function replaySend(page) {
+  if (!firstSend || !firstSend.body) throw new Error('no first send request to repeat');
+  const headers = Object.fromEntries(Object.entries(firstSend.headers).filter(([k]) => k === 'content-type' || k.startsWith('x-tp-')));
+  const answered = page.waitForResponse((r) => new URL(r.url()).pathname === '/api/trip/send' && r.request().method() === 'POST', { timeout: 60_000 });
+  await page.evaluate(({ body, headers }) => fetch('/api/trip/send', { method: 'POST', headers, body, credentials: 'same-origin' }).then(() => null),
+    { body: firstSend.body, headers });
+  await answered;
+}
 
 /** Click a field and type like a person (instant in fast mode). */
 async function typeInto(page, h, loc, text) {

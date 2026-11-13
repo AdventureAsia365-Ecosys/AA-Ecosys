@@ -117,9 +117,9 @@ function readJson(file) {
 }
 
 function childEnv(state, { paid = false, preview = false } = {}) {
-  // A paid write-set run (--allow-paid) may reach the paid paths its own scenario needs (the pilot rehearsal's planner
-  // search); the scenario's own blockUrls and limitWrites still keep the rest out.
-  const env = { ...process.env, UAT_READ_ONLY: '1', UAT_BLOCK_URLS: JSON.stringify(paid ? [] : core.PAID_URLS) };
+  // Every child blocks the paid paths; a paid write-set take (--allow-paid) opens only the ones its scenario names in
+  // allowPaidUrls (record.cjs, core.blockSources), so the safety net holds for every other paid path.
+  const env = { ...process.env, UAT_READ_ONLY: '1', UAT_BLOCK_URLS: JSON.stringify(core.PAID_URLS) };
   delete env.UAT_STORAGE_STATE;
   delete env.UAT_BASE_URL; // one base URL for every app would send each scenario to the wrong host
   delete env.UAT_ALLOW_PAID; // only an explicit --allow-paid on a paid write-set scenario sets it

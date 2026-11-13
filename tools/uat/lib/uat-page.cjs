@@ -45,17 +45,34 @@ async function studioCall(page, method, p, body) {
   }, { method, p, body });
 }
 
+// The methods a limitWrites rule counts unless it names its own: every write (a PATCH / PUT / DELETE on a capped path
+// is capped too, never let through unchecked).
+const WRITE_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
+
 /**
- * A page route in front of the browser guard that lets at most `max` POSTs of each rule through and aborts the rest
+ * A page route in front of the browser guard that lets at most `max` requests of each rule through and aborts the rest
  * before they leave the browser (a run never pays twice for the same model call, e.g. a retry click or a re-render).
- * rules = [{ name, path: RegExp on the URL pathname, max }]. Returns the live counts { name: n } (aborted ones too),
- * so a step can assert "exactly one". Register it in the first step, before any page loads.
+ * rules = [{ name, path: RegExp on the URL pathname, max, method?, accept? }]:
+ *   method  one method or a list (default WRITE_METHODS: POST, PUT, PATCH and DELETE are all counted and capped); a
+ *           read that costs money (a search that calls a model) is capped with method 'GET'. Other methods fall through.
+ *   accept  (request) => boolean: the requests of the rule's path and methods the scenario may make at all (e.g. one
+ *           JSON `op`, or POST only). A refused one is aborted at once, counted in `<name>_refused`, never forwarded.
+ * Returns the live counts { name: n } (aborted ones too; `<name>_refused` for a rule with `accept`), so a step can
+ * assert "exactly one" or "none refused". Register it in the first step, before any page loads.
  */
 async function limitWrites(page, rules) {
-  const counts = Object.fromEntries(rules.map((r) => [r.name, 0]));
+  const counts = {};
   for (const r of rules) {
+    const methods = (Array.isArray(r.method) ? r.method : r.method ? [r.method] : WRITE_METHODS).map((m) => String(m).toUpperCase());
+    counts[r.name] = 0;
+    if (r.accept) counts[`${r.name}_refused`] = 0;
     await page.route((u) => r.path.test(u.pathname), (route) => {
-      if (route.request().method() !== 'POST') return route.fallback();
+      const req = route.request();
+      if (!methods.includes(String(req.method()).toUpperCase())) return route.fallback();
+      if (r.accept && !r.accept(req)) {
+        counts[`${r.name}_refused`] += 1;
+        return route.abort('blockedbyclient');
+      }
       counts[r.name] += 1;
       return counts[r.name] <= r.max ? route.fallback() : route.abort('blockedbyclient');
     });
@@ -114,4 +131,4 @@ const AI_MARK = {
   docxKeywords: /<cp:keywords>[^<]*\bai-generated\b[^<]*<\/cp:keywords>/i,
 };
 
-module.exports = { rw, studioCall, limitWrites, downloadBytes, zipEntry, AI_MARK };
+module.exports = { rw, studioCall, limitWrites, WRITE_METHODS, downloadBytes, zipEntry, AI_MARK };
