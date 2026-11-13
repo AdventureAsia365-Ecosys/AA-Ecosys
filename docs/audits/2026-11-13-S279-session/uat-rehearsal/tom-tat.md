@@ -2,54 +2,54 @@
 
 Bản tóm tắt cho tech lead. Chi tiết từng bước (tiếng Anh): [README.md](README.md).
 Video: Drive `01 Video/UAT (kiểm thử nghiệm thu)/Diễn tập pilot (13-11-2026)`, mỗi app một thư mục con (cis-admin,
-booking, content-studio, tripplanner, crm). Mỗi video là một file zip: MP4 tiếng Anh và tiếng Việt, MP3 lời đọc,
-phụ đề SRT/VTT, kịch bản lời đọc.
+booking, content-studio, tripplanner, crm). Mỗi video là một file zip gồm MP4 tiếng Anh và tiếng Việt, MP3 lời đọc,
+phụ đề SRT/VTT và kịch bản lời đọc.
 
 ## Kết quả
 
-- **28 video: 24 PASS, 4 FAIL** (gồm 3 video Booking REH-09/REH-11 và video DRILL-01 v5). Tổng chi phí LLM **0,29 USD**
-  (trần 10 USD; các video Booking và DRILL-01 không gọi LLM).
-- Đại lý tổng hợp `pilot-rehearsal-01`. Tour X là tour 6 ngày ở Philippines: không có tour Laos nào có giá hay
-  được bán cho đại lý trên Dev, nên bên điều phối chọn tour này cho mọi bước. Ở bước 5, khách tìm "Bohol" thay vì "Laos".
+- **32 video: 30 PASS, 2 FAIL.** Tổng chi phí LLM **0,49 USD** (trần 10 USD).
+- Đại lý tổng hợp `pilot-rehearsal-01`. Tour X là tour 6 ngày ở Philippines, vì không có tour Laos nào có giá hay
+  được bán cho đại lý trên Dev. Bước 5 tìm "Bohol".
+- Chuỗi bài blog dùng **tour Y** (tour Trung Quốc 20 ngày, có ảnh, chưa có giá), tech lead đã duyệt: mô tả của tour X
+  quá ngắn để viết một bài blog (xem mục "Phát hiện").
 - **Chạy trọn từ đầu đến cuối:**
-  - Tạo đại lý (CIS, CRM, Booking).
-  - Studio: nhập cẩm nang thương hiệu, nhận 3 tour, viết bài LinkedIn và Facebook.
+  - Tạo đại lý trên CIS, CRM và Booking.
+  - Studio: nhập cẩm nang thương hiệu, nhận tour, cập nhật chủ đề, viết blog, LinkedIn và Facebook, sửa bài (thêm link
+    lập kế hoạch), đăng / gỡ / đăng lại trên WordPress và trên Page Facebook thử nghiệm (token mới), rồi gỡ hết bài thử.
   - Trang lập kế hoạch của đại lý: tìm kiếm, thêm tour, chat 3 lượt, xem trên điện thoại.
-  - CRM: nhận lead, báo giá có tour AA và giảm giá cần duyệt, chủ duyệt và gửi, khách chấp nhận, đặt cọc, AA xác nhận
-    (giá B2B khớp giá trong báo giá), bảng điều hành AA thấy chuyến.
-  - Booking (dùng dữ liệu seeder `s279reh` của đại lý): nhân viên gửi và xác nhận đặt chỗ nhà cung cấp; kế toán (maker)
-    ghi nhận thanh toán của đại lý, người thứ hai (checker) duyệt.
-  - DRILL-01: diễn tập xoá dữ liệu khi offboard tenant (DRY RUN), khoảng 12 phút.
+  - CRM: nhận lead, báo giá, chủ duyệt giảm giá và gửi, khách chấp nhận, đặt cọc, AA xác nhận, bảng điều hành AA thấy
+    chuyến.
+  - Booking: đặt chỗ nhà cung cấp, maker ghi nhận thanh toán, checker duyệt.
+  - DRILL-01: diễn tập xoá dữ liệu khi offboard tenant (DRY RUN).
 
-## 4 video FAIL
+## 2 video FAIL
 
-1. **REH-04-topics:** cả 3 tour đã nhận đều không có chủ đề bài viết (`seed_too_thin`, mô tả tour quá ngắn cho bài
-   khoảng 900 chữ). Trang ghi rõ lý do từng tour. Vì không có chủ đề, chuỗi bài blog (viết, sửa, đăng WordPress) không quay được.
-2. **REH-04b-facebook:** Facebook từ chối kết nối Page thử nghiệm: "Invalid or expired Page Access Token". Token của
-   Page thử nghiệm trong secret đã hết hạn.
-3. **REH-06:** về sản phẩm thì đạt: bấm Gửi hai lần chỉ ra một yêu cầu, và CRM nhận đúng một lead (REH-06-lead PASS).
-   Video FAIL do phần đếm lần gửi lặp của kịch bản. Chưa quay lại để không tạo lead thứ hai cho đại lý.
-4. **REH-10-portal:** đăng nhập bằng mã, hộ chiếu, chuyến bay đến và ký điện tử đều đạt. Lịch trình có đủ 7 ngày nhưng
-   không có tên ngày, nơi đến hay mục dịch vụ, nên không thấy tour AA đã xác nhận và chưa tới bước phiếu dịch vụ.
-   Không phải do đồng bộ mỗi giờ: cổng khách chỉ hiện các dòng dịch vụ đại lý đánh dấu "cho khách xem"
-   (`visible_to_travelers`), mà dòng tour AA mặc định không được đánh dấu; các ngày lấy từ ngày của báo giá đã chấp
-   nhận, mà ngày trong báo giá chưa có tên và nơi đến. Cần quyết định: dòng AA đã xác nhận có mặc định hiện cho khách
-   không, và có chép ngày của tour AA vào báo giá không. Chưa quay lại.
+1. **REH-06:** về sản phẩm thì đạt. Bấm Gửi hai lần chỉ ra một yêu cầu, và CRM nhận đúng một lead. Video FAIL do kịch
+   bản đếm sai lần gửi lặp. Lỗi kịch bản đã sửa và có unit test; chưa quay lại để không tạo thêm một lead.
+2. **REH-10-portal:** đăng nhập bằng mã, hộ chiếu, chuyến bay đến và ký điện tử đều đạt. Lịch trình có đủ 7 ngày nhưng
+   không có tên ngày, nơi đến hay mục dịch vụ. Lý do: cổng khách chỉ hiện các dòng dịch vụ mà đại lý đánh dấu "cho khách
+   xem", còn dòng tour AA mặc định không được đánh dấu; ngày trong báo giá cũng chưa có tên và nơi đến.
 
-## Cần tech lead
+## Phát hiện cần tech lead quyết
 
-- Gia hạn token Page Facebook thử nghiệm, rồi quay lại REH-04b-facebook và REH-04b-takedown.
-- Muốn chạy bằng tour Laos: cần nhập giá một tour Laos và được người thứ hai duyệt (REH-01-price-import).
-- Bước 12 (đặt giới hạn ngân sách AI) và bước pilot (tenant marker): chưa làm hôm nay, nên chưa quay.
-- Quyết định cho cổng khách (mục REH-10 ở trên).
-- Chọn cách cho chủ đề blog: dùng tour có mô tả dài hơn, hoặc bổ sung mô tả cho tour X.
+- **Chất lượng dữ liệu: mô tả tour X quá mỏng để viết blog.** Ngưỡng hạt giống cho blog là khoảng 1.398 từ: lấy
+  4.700 ký tự chia cho tỷ lệ 3,364 ký tự mỗi từ hạt giống (setting `cis.t7.blog_chars_per_seed_word`), và không dưới
+  mức phẳng 600 từ. Lịch trình tour X chỉ khoảng 240 từ, tour Y khoảng 1.900 từ. Trong 841 tour có thể nhận, chỉ 23 tour
+  có lịch trình từ 1.400 từ trở lên, và không tour nào trong số đó có giá.
+- **Cổng khách:** dòng AA đã xác nhận có nên mặc định hiện cho khách không, và có chép ngày của tour AA vào báo giá không?
+- **Trang Integrations của studio hiện Page id Facebook rõ ràng**, không có chỗ nào để làm mờ khi quay. Kịch bản giờ
+  không mở trang này nữa. Hai video lỡ hiện Page id đã bị xoá trên máy, chưa từng upload.
+- **"Test & Connect" thất bại vẫn lưu kết nối Facebook** (trạng thái "Needs attention" với token hỏng). Muốn thay token
+  phải ngắt kết nối trước. Kịch bản giờ ngắt một lần khi kết nối hỏng rồi kết nối lại.
+- Bước 12 (giới hạn ngân sách AI) và bước pilot (tenant marker) chưa làm hôm nay nên chưa quay. REH-08a (Đặt ngay) cần
+  bật Book now và có form key.
 
 ## Ghi chú khác
 
-- Tour X không có ảnh trong catalogue.
-- Chuyến 6 ngày hiện ra 4 nhóm ngày trên trang lập kế hoạch, và mục "Getting there" gợi ý bay vào Đài Bắc.
-- Bảng điều hành ghi "0 of 1 complete" dù khách đã nhập hộ chiếu (cùng nghi vấn đồng bộ).
+- Tour X không có ảnh; tour Y chưa có giá.
+- Chuyến 6 ngày hiện thành 4 nhóm ngày trên trang lập kế hoạch, và mục "Getting there" gợi ý bay vào Đài Bắc.
+- Bảng điều hành ghi "0 of 1 complete" dù khách đã nhập hộ chiếu.
 - Hai bài mạng xã hội viết về tour khác, không phải tour X.
-- Lời đọc tiếng Việt được ghép sau khi quay (lúc quay worktree thiếu `venv-vi`). Mọi đoạn đều có tiếng; đoạn dài nhất
-  lố 1,7 giây so với bước của nó.
+- Lời đọc tiếng Việt của các video đầu được ghép sau khi quay. Mọi đoạn đều có tiếng; đoạn dài nhất lố 1,7 giây so với
+  bước của nó.
 - CRM được deploy lại giữa lúc quay REH-10b; video cuối (v4) quay trên bản mới.
