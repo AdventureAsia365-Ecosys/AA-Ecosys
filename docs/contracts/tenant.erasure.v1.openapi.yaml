@@ -43,7 +43,9 @@ info:
     and never crosses this contract except as approved_plan_hash per app. Ids, counts, codes and hashes only: no row
     value, no tenant name, slug or trading name, no actor, no approver, no free text, no personal data (CI policy).
     Guards every app also enforces on its own: refuse is_pilot (D8); on Dev apply only when is_synthetic is true
-    (D8); its own apply switch is off by default. Per-app actions (D3-D5): CIS erases from its erasure inventory;
+    (D8); its own apply switch is off by default. The request keeps is_pilot and is_synthetic as copied at T0 and has no
+    foreign key to shared.tenants (nor does the request view join it), so every app still reads its request after CIS
+    has erased the tenant (CIS erases in stage 1, the CRM in stage 2). Per-app actions (D3-D5): CIS erases from its erasure inventory;
     Booking anonymises (free text redacted, the agency name replaced, audit before / after fields redacted, money
     rows and the bill-to snapshot kept under the accounting exception) and bk_tenant_pull skips an erased partner;
     TripPlanner deletes the tenant's rows and merges its spend rows into the app scope; the CRM runs its erase with
