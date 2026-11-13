@@ -102,6 +102,15 @@ stores one before step 5: an invented accent set (tokens `accent`, `accent-deep`
 through ECS Exec on `aa-cis-dev-api` as `cis_app` (DRY RUN first, then `--apply`). TripPlanner renders it as a
 `tenant-brand` style block that sets the tokens on `body`.
 
+### UAT scenarios of the CRM steps
+
+Steps 6, 7, 8 and 10 have recordable UAT scenarios in the root repo, `tools/uat/scenarios/crm/`: REH-06-lead,
+REH-07-quote, REH-07b-approve, REH-08-accept, REH-08b-deposit, REH-08c-aa-confirmed, REH-10-portal and REH-10b-ops-view.
+The fresh seed lacks the agency's payment instructions, booking terms and waiver. REH-02b-agency-setup sets them in the
+owner's UI, once, before step 6. `tools/uat/scenarios/crm/REHEARSAL.md` lists that setup, the hand-off inputs (tour X,
+the lead's name and invented address) and the run order. Every step that mails the traveller first checks that the
+address is an invented one.
+
 ### Identities
 
 | Identity (ADR 0006a) | Address | Writes it may make | Steps |

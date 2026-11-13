@@ -131,6 +131,12 @@ node tools/uat/dryrun.cjs --record W-04 --include-writable   # W-04 chỉ đọc
 - `scenarios/write-set.cjs` liệt kê kịch bản ghi (W-01..W-03, PRT-02, PRT-06, DRILL-01): không bao giờ chạy trong cả
   bộ hay qua `--app` / `--identity`; chỉ gọi theo id. Kịch bản trả phí bị từ chối nếu thiếu `--allow-paid` (cờ này kéo theo
   `--include-writable`). Catalogue đánh `paid` khớp với kịch bản (test `checkWriteSet`).
+- Diễn tập pilot, phần CRM (AA-1086): REH-02b-agency-setup → REH-06 … REH-10 trong write set, danh tính
+  `crm-rehearsal` (chủ) / `crm-rehearsal-agent` (tư vấn) ghim vào `pilot-rehearsal-01`; REH-10b chỉ đọc, danh tính
+  `crm-staff`. Thiết lập đại lý + thứ tự + bàn giao: `tools/uat/scenarios/crm/REHEARSAL.md`. Bước nào khiến CRM gửi
+  mail cho khách phải gọi `R.checkTraveller()` trước (địa chỉ bịa: `*.invalid` hoặc miền hộp thư E2E).
+- `allowWrites` ghi được cả phương thức: `'POST ^https://…/bff/x$'`, `'PUT|PATCH ^…'` (`lib/net-guard.cjs`
+  `parseAllow`); nguồn không có tiền tố vẫn cho mọi phương thức ghi như cũ. Kịch bản mới nên ghi rõ phương thức.
 - Danh tính `studio-audit` (người partner E2E, EDITOR ở 4 tenant audit tổng hợp; secret
   `crm/dev/e2e-test-crm/harbour-lights-owner`, chỉ đọc trong bộ nhớ): mỗi lượt chạy đúng MỘT tenant audit
   (`UAT_STUDIO_TENANT`, mặc định `audit-atlas-hearth`; giá trị khác bị từ chối). Pilot guard ghim mọi kịch bản
@@ -143,8 +149,11 @@ node tools/uat/dryrun.cjs --record W-04 --include-writable   # W-04 chỉ đọc
   khi token gần hết hạn (proxy làm mới) và mở lại yêu cầu.
 - Mỗi lệnh ghi qua `limitWrites()` (`lib/uat-page.cjs`): tối đa 1 lần (write tối đa 2 khi lần đầu 422 thiếu CTA),
   lệnh thừa bị huỷ trước khi rời trình duyệt. Bước có thể ghi đánh `step(..., { writes: true })`.
-  Mỗi rule giới hạn đúng một method (`method`, mặc định POST; PATCH / PUT / DELETE cũng phải có rule), và `allowWrites`
-  ghi `"<METHOD> <regex>"` để chỉ cho đúng method đó (`lib/net-guard.cjs` `compileAllow`; regex trần = mọi method).
+  Rule mặc định giới hạn POST; `method: 'PUT' | 'PATCH' | 'DELETE'`, một danh sách, hoặc `'*'` (mọi phương thức ghi)
+  giới hạn phương thức khác; `read: true` cho phép giới hạn một GET trả phí (tìm kiếm có model); `accept(req)` lọc
+  thêm (từ chối đếm vào `<name>_refused`); `strict: true` huỷ và đếm mọi phương thức ghi khác trên cùng path. Không
+  `strict` thì phương thức khác rơi xuống guard trình duyệt: `allowWrites` ghi `"<METHOD> <regex>"` (hoặc
+  `"PUT|PATCH <regex>"`) để chỉ cho đúng method đó (`lib/net-guard.cjs` `compileAllow`; regex trần = mọi method).
 - Studio của owner đại lý rehearsal: tech lead mời owner (Tenant 360 › Members › Invite, role owner) rồi
   `node tools/uat/accept-owner-invite.cjs --since <ISO trước lúc mời>` nhận lời mời từ hộp thư e2e (tài khoản có sẵn).
 - Thứ tự quay: W-01 riêng; W-02 (chọn chủ đề + góc, bài bắt đầu viết) → W-03 ngay sau (theo dõi tới khi bài giao) →
