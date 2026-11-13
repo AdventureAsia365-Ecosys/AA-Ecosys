@@ -1,15 +1,15 @@
 ---
 id: APP-09
 title: Job-kind register and kill switches
-description: Every background job kind in CIS and Booking with its limits, the kinds that block a deploy, and how to stop one; hand-written from the code on main.
+description: Every background job kind in CIS, Booking, TripPlanner and the CRM with its limits, the kinds that block a deploy, and how to stop one; hand-written from the code on main.
 type: reference
 status: draft
 owner: nghiep
 audience: [engineer, devops, agent]
-applies_to: [aa-cis-worker, aa-booking-api, aa-crm-api]
-last_reviewed: 2026-10-28
+applies_to: [aa-cis-worker, aa-booking-api, aa-crm-api, tripplanner-lambda]
+last_reviewed: 2026-11-13
 review_every_days: 90
-related: [OPS-04-queue-stuck, OPS-04-llm-cost-spike, OPS-10-deploy-gate, OPS-06, docs/adr/0003-one-durable-job-model.md, docs/adr/0003a-per-owner-job-tables.md, AA-650, AA-892]
+related: [OPS-04-queue-stuck, OPS-04-llm-cost-spike, OPS-10-deploy-gate, OPS-06, docs/adr/0003-one-durable-job-model.md, docs/adr/0003a-per-owner-job-tables.md, AA-650, AA-892, AA-1093]
 ---
 
 # Job-kind register and kill switches
@@ -101,6 +101,8 @@ free slots; **blocks** = `deploy_blocking` in the registry.
 | `retention_llm_call_log`, `retention_tenant_api_usage`, `retention_job`, `retention_decision_log`, `retention_cost_explorer_snapshot` | `services/jobs/retention_job.py` (policy `services/retention/policy.py`) | 1 | 2 | 1800 | yes | no | - (DRY RUN by default when run by hand) |
 | `staff_directory_reconcile` | `services/jobs/staff_reconcile_job.py` | 1 | 2 | 120 | yes | no | - (daily, scheduled by the ops probe) |
 | `data_erasure` | `services/jobs/erasure_job.py` (inventory `services/erasure/inventory.py`) | 1 | 1 | 900 | yes | **yes** (an apply uses up its single-use DRY RUN approval) | - (manual only, DRY RUN by default; apply off unless `ERASURE_APPLY_ENABLED=true`; an apply is never retried (409), AA-839, [runbook](../legal/dsar-erasure-runbook.md)) |
+| `tenant_erasure_saga` | planned (AA-1093; AA-CIS-App, tables `shared.tenant_erasure_request` / `shared.tenant_erasure_step`, CIS 408) | 1 | 1 | 900 (planned) | yes | **yes** (planned: an apply uses up the tech lead's single-use approval) | - (drives the offboarding erasure across the apps, contract `tenant.erasure.v1`; DRY RUN first, apply only with the approved combined fingerprint, refuses the pilot tenant and, on Dev, a non-synthetic one; [runbook](../legal/dsar-erasure-runbook.md) section 4). Values marked planned are set by the CIS change |
+| `tenant_backup` | `services/jobs/tenant_backup_job.py` (logic `services/tenant_backup/`) | 1 | 2 | 900 | yes | no | - (database and S3 only: one tenant's rows to the gold bucket `exports/tenants/<t>/cis/`, kept 7 days; on demand, and nightly for the pilot tenant only when `TENANT_BACKUP_PILOT=on`, default off; AA-1093, [restore drill](runbooks/tenant-restore-drill.md)) |
 | `staff_invite_email` | `services/jobs/staff_invite_email_job.py` | 2 | 5 | 60 | no | no | SES |
 | `ops_alert_email` | `services/jobs/ops_alert_email_job.py` | 1 | 5 | 60 | no | no | SES |
 | `llm_cost_reconcile` | `services/jobs/llm_cost_reconcile_job.py` (logic `services/llm_cost/reconcile.py`) | 1 | 2 | 300 | yes | no | - (nightly from 02:00 UTC by the ops metrics sampler, last 3 days, switch `LLM_COST_RECONCILE`; reads the stored Cost Explorer snapshot, never a live CE call; the Anthropic / OpenAI usage APIs only for a connection that names a read-only usage key, not billed; AA-1002 S10) |
@@ -123,6 +125,7 @@ not counted (`shared/jobs/queue.py` `release`).
 | `bk_ops_reminders` | 120 | released on a deploy | ops reminders (AA-682) |
 | `bk_retention_job` | 900 | **blocks** (no checkpoint) | retention |
 | `bk_retention_inbox_redact` | 900 | **blocks** (no checkpoint) | retention |
+| `bk_tenant_erase` | planned | planned: **blocks** (an apply uses up its approval) | planned (AA-1093, bk-057): the Booking step of the offboarding erasure saga; reads `catalog.v_tenant_erasure_v1`, DRY RUN plan hash, apply anonymises the agency (money rows and the bill-to snapshot kept) only with the approved hash, writes `booking.tenant_erasure_log` (report view `booking.v_tenant_erasure_report_v1`) |
 | `bk_noop_sleep` | 3660 | exempt | test-only, `JOB_TEST_KINDS` on Dev (AA-993 G4) |
 
 Source: `backend/app/jobs/kinds.py` (`EXPECTED_SECONDS`, `DEPLOY_BLOCKING_KINDS`, `DEPLOY_GATE_EXEMPT`).
@@ -131,8 +134,24 @@ Source: `backend/app/jobs/kinds.py` (`EXPECTED_SECONDS`, `DEPLOY_BLOCKING_KINDS`
 
 The CRM kinds (`crm_*`) and their schedules are listed in AA-Partner `CONTEXT.md`, section "Job runner (`crm.job`, ADR 0003a)". None blocks a deploy
 since AA-993 G4b (`DEPLOY_BLOCKING_KINDS` is empty in `api/app/jobs/kinds.py`). Stop all CRM jobs only by scaling
-`aa-crm-dev-api`, which also stops the CRM API.
+`aa-crm-dev-api`, which also stops the CRM API. Kinds added by AA-1093:
 
-## TripPlanner
+| Kind | Notes |
+|---|---|
+| `crm_tour_retired_fanout` | crm-063: one job per served → retired or retired → served transition the hourly `crm_catalog_sync` sees (idempotency key per AA tour, transition and change time). Per agency, in its own transaction: raises or clears `crm.tour_retired_flag` rows (open option, held, quoted or confirmed AA booking line) and one task per affected trip to the trip owner; never writes a booking line or an option. `paused` is ignored (ADR 0015 decision 5) |
+| CRM erasure step (name set by crm-064) | planned: reads `GET /tenant/v1/erasure-requests` (scope `cis.tenant/erasure`) and, at the CRM's `not_before` (T0 + 90 days), runs the agency erasure with crypto-shredding without the owner's click, reporting through `POST /tenant/v1/erasure-requests/{id}/reports` (`tenant.erasure.v1`) |
 
-`tripplanner.job` is planned (AA-861); today TripPlanner work runs inside the Lambda requests.
+## TripPlanner (`tripplanner.job`, jobs Lambda `aa-tripplanner-<env>-jobs`)
+
+Worker: the jobs Lambda (AA-TripPlanner-Web `backend/jobs/handler.py`), woken daily by the EventBridge Scheduler
+(AA-CIS-Infra `accounts/aa365/tripplanner_jobs.tf`) or invoked by an operator through IAM (`op` `tick`, `enqueue`,
+`run`, `status`). Every kind matches `^tp_[a-z0-9_]+$` (tp-021). Source: `HANDLERS`, `DAILY` and `MAX_ATTEMPTS` in
+`backend/jobs/handler.py`.
+
+| Kind | Schedule | Notes |
+|---|---|---|
+| `tp_retention_outbox_redact` | daily | redacts `tripplanner.outbox` payloads past their window (AA-861; DRY RUN when run by hand) |
+| `tp_retention_ai_rate_counter` | daily | deletes AI limiter windows older than 2 days (AA-1015) |
+| `tp_lead_deliver` | daily + on demand | delivers and redacts `lead.submitted` rows, retries (AA-1038) |
+| `tp_tenant_erase` | planned (on request) | AA-1093, tp-030: the TripPlanner step of the offboarding erasure saga; reads `catalog.v_tenant_erasure_v1`, DRY RUN plan hash, apply deletes the tenant's rows and merges its spend rows only with the approved hash, writes `tripplanner.tenant_erasure_log` (report view `tripplanner.v_tenant_erasure_report_v1`) |
+| `tp_tenant_backup` | planned (on demand) | AA-1093 L4: one tenant's TripPlanner rows to its own backup prefix; drilled by the jobs Lambda `restore_drill` op ([restore drill](runbooks/tenant-restore-drill.md), TripPlanner section) |
