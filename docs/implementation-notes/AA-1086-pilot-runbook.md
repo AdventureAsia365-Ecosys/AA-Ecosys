@@ -75,3 +75,17 @@ Seven reviewer findings, all confirmed against `origin/main` of the child repos 
 - **TripPlanner reason codes.** The tenant cap is `tenant_budget_cap` (narration `ai_budget_exhausted`), no budget
   `tenant_budget_none`, unreadable `tenant_budget_unreadable` (`backend/shared/tenant_budget.py`); `cap_reached` /
   `spend_unreadable` are the app-wide caps (`backend/aa_llm/budget.py`) and count as a FAIL of X1.
+
+## S279 lane l16: G1, G2 and G9 closed
+
+- **G1** (rehearsal fixture): AA-CIS-App `e2e_fixtures rehearsal-tenant --run <run> [--apply]` enqueues the saga for
+  `pilot-rehearsal-01` (`demo`, both add-ons) under the AA-Partner seed id of the same key; the CRM seed catalogue holds
+  the agency (owner + agent); AA-CIS-Infra `crm_e2e_users.json` lists the two E2E users. The rehearsal Fixtures section
+  now names the three commands in order.
+- **G2** (leave pilot mode): AA-CIS-App `POST /admin/tenants/{tenant_id}/pilot/end` (administrator, reason required,
+  audited `tenant.pilot_ended`, idempotent) and the Tenant 360 › Subscription "End pilot" button. Onboarding Step 8,
+  rehearsal step 12b and Teardown 1 use it; the DB Migrate hand write is gone.
+- **G2a** stays open as a follow-up (the New tenant modal still calls the synchronous create).
+- **G9** (E2E staff vs pilot): AA-Partner `E2E_SYNTHETIC_SQL` and `SYNTHETIC_AGENCY_SQL` read
+  `is_synthetic IS TRUE AND is_pilot IS NOT TRUE` (crm-044 marker, no migration). Before-you-start step 5 stays a stop
+  check on the deployed image.
