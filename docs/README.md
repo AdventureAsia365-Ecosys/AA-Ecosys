@@ -109,6 +109,7 @@ Templates: [`templates/`](templates/). Terms: [glossary](glossary.md).
 | OPS-09 | Data subject request (manual delete/export) | How | root `docs/ops/runbooks/data-subject-request.md` | H, dry-run | nghiep | when a request arrives | E D A | planned, draft. Runbook part of AA-839 (D-11: manual until there is a button) |
 | OPS-10 | Break-glass | How | root `docs/ops/runbooks/break-glass.md` | H | nghiep | 90; after each use | E D A | draft (AA-892): [`break-glass.md`](ops/runbooks/break-glass.md) (Cognito `breakglass`, RDS master DM-8.9, tenant-pool emergency switch) + [deploy-gate override](ops/runbooks/deploy-gate-override.md) |
 | OPS-11 | Isolation probe | How | root `docs/ops/runbooks/isolation-probe.md` | H | nghiep | when RLS or roles change | E D A | draft (AA-892): [`isolation-probe.md`](ops/runbooks/isolation-probe.md) (INF `db-isolation-probe.yml`, U-16) |
+| OPS-12 | Pilot agency onboarding and the synthetic pilot rehearsal | How | root `docs/ops/runbooks/pilot-agency-onboarding.md`, `pilot-rehearsal.md` | H | nghiep | 90; before each pilot | E D CT A | draft, UNTESTED (AA-1086): [onboarding](ops/runbooks/pilot-agency-onboarding.md), [rehearsal](ops/runbooks/pilot-rehearsal.md); evidence of a run in `docs/audits/<date>-S<nnn>-pilot-rehearsal/` |
 
 ### Security and compliance
 
