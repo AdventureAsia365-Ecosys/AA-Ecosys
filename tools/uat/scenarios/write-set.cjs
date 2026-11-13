@@ -55,5 +55,7 @@ module.exports = [
   'crm/reh-08-accept.cjs',
   'crm/reh-08b-deposit.cjs',
   'crm/reh-08c-aa-confirmed.cjs',
+  'crm/reh-10a-show-aa-line.cjs',
   'crm/reh-10-portal.cjs',
+  'crm/reh-10c-itinerary.cjs',
 ];

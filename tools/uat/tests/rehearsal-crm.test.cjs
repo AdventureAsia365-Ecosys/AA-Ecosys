@@ -141,6 +141,7 @@ test('mail guard: invented addresses only; every mail-sending step checks the tr
   before('reh-08c-aa-confirmed.cjs', 'name: /portal link/i');
   before('reh-10-portal.cjs', "page.getByTestId('portal-send-code')");
   before('reh-10-portal.cjs', "page.getByTestId('portal-sign-code')");
+  before('reh-10c-itinerary.cjs', "page.getByTestId('portal-send-code')");
   before('reh-08-accept.cjs', "page.getByTestId('client-accept')");
   assert.match(src('reh-06-lead.cjs'), /R\.checkTraveller\(page, s\)/);
 });
@@ -148,6 +149,7 @@ test('mail guard: invented addresses only; every mail-sending step checks the tr
 test('write set: the rehearsal entries follow the runbook order; the staff view is not in it', () => {
   const ws = require(path.join(SCEN, 'write-set.cjs')).filter((x) => x.startsWith('crm/reh-'));
   assert.deepEqual(ws, ['crm/reh-02b-agency-setup.cjs', 'crm/reh-06-lead.cjs', 'crm/reh-07-quote.cjs', 'crm/reh-07b-approve.cjs', 'crm/reh-08-accept.cjs',
-    'crm/reh-08b-deposit.cjs', 'crm/reh-08c-aa-confirmed.cjs', 'crm/reh-10-portal.cjs']);
+    'crm/reh-08b-deposit.cjs', 'crm/reh-08c-aa-confirmed.cjs', 'crm/reh-10a-show-aa-line.cjs', 'crm/reh-10-portal.cjs',
+    'crm/reh-10c-itinerary.cjs']);
   for (const f of ws) assert.doesNotThrow(() => core.describeWrite(require(path.join(SCEN, f)), f));
 });
