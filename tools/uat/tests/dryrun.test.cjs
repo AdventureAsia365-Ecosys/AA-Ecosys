@@ -157,6 +157,24 @@ test('select: a paid write-set id needs --allow-paid; a free one needs --include
   assert.deepEqual(core.select(WSET, { only: ['W-93'], includeWritable: true }).map((e) => e.id), ['W-93']);
 });
 
+test('write set: a staff identity (cis-admin) is accepted there, needs --include-writable by id, stays in the dry run', () => {
+  assert.deepEqual(core.WRITE_SET_STAFF, ['cis-admin']);
+  assert.ok(!core.WRITABLE_IDENTITIES.includes('cis-admin'), 'cis-admin dry-run scenarios stay in the default run');
+  const d = core.describeWrite(wsc({ id: 'DRILL-91', app: 'cis-admin', identity: 'cis-admin', paid: false }), 'cis-admin/drill-91.cjs');
+  assert.equal(d.identity, 'cis-admin');
+  assert.equal(d.paid, false);
+  assert.throws(() => core.describeWrite(wsc({ identity: 'booking' }), 'a.cjs'), /writable identity/);
+  const set = [...SET, { ...entry('DRILL-91', 'cis-admin', 'cis-admin'), writeSet: true, paid: false, preview: 1 }];
+  assert.throws(() => core.select(set, { only: ['DRILL-91'] }), /DRILL-91: signs in an account that can write.*--include-writable/);
+  assert.deepEqual(core.select(set, { only: ['DRILL-91'], includeWritable: true }).map((e) => e.id), ['DRILL-91']);
+  // Never through the whole set, --app or --identity; the read-only cis-admin scenarios still run by default.
+  const ids = (o) => core.select(set, o).map((e) => e.id);
+  assert.ok(!ids({}).includes('DRILL-91') && ids({}).includes('CIS-01'));
+  assert.ok(!ids({ identities: ['cis-admin'], includeWritable: true }).includes('DRILL-91'));
+  assert.ok(!ids({ apps: ['cis-admin'], includeWritable: true }).includes('DRILL-91'));
+  assert.deepEqual(core.select(set, { only: ['DRILL-91'], preview: true }).map((e) => e.id), ['DRILL-91']);
+});
+
 test('select: --preview takes write-set ids with a read-only part only', () => {
   assert.deepEqual(core.select(WSET, { only: ['W-91', 'W-93'], preview: true }).map((e) => e.id), ['W-91', 'W-93']);
   assert.throws(() => core.select(WSET, { only: ['W-92'], preview: true }), /W-92: no read-only part to preview/);
