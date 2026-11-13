@@ -15,6 +15,8 @@ const { step, ro } = require('../../lib/dryrun-page.cjs');
 const { syntheticRowPatterns } = require('../../lib/pilot-guard.cjs');
 const R = require('./_reh.cjs');
 
+const flat = (t) => String(t || '').replace(/[\s\u00ad\u200b-\u200d\u2060]+/g, '');
+
 let s;
 
 const sc = ro({
@@ -46,7 +48,8 @@ const sc = ro({
         await h.expect(link).toHaveAttribute('href', new RegExp(`/staff/ops/${R.AGENCY_ID}/${s.trip_id}`));
         const row = page.locator('[data-testid="staff-ops-board"] tr, [data-testid="staff-ops-board"] [data-testid="kit-datatable-row"]')
           .filter({ has: link }).last();
-        await h.expect(row).toContainText(s.departure.departure_id);
+        // The departure id wraps in its cell (break opportunities inside it): compare without whitespace / zero-width.
+        await h.expect.poll(async () => flat(await row.innerText()), { timeout: 20_000 }).toContain(flat(s.departure.departure_id));
         await h.scrollTo(link);
         await h.hover(row);
       }),
@@ -57,7 +60,7 @@ const sc = ro({
         await page.waitForURL(`**/staff/ops/${R.AGENCY_ID}/${s.trip_id}`, { timeout: 20_000 });
         const rel = page.getByTestId('staff-release');
         await h.expect(rel).toBeVisible({ timeout: 30_000 });
-        await h.expect(rel).toContainText(s.departure.departure_id);
+        await h.expect.poll(async () => flat(await rel.innerText()), { timeout: 20_000 }).toContain(flat(s.departure.departure_id));
         await h.expect(rel).toContainText(s.lead_name.split(' ')[0]);
         await h.hover(rel);
         await R.sha(page, sc, 'end');
