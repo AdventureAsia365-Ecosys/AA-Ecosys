@@ -259,4 +259,5 @@ test('publish scenarios cap the disconnect at 0 unless the stored connection is 
   assert.match(src, /state\.disconnectRule = \{ name: 'disconnect', path: R\.PATHS\[c\.disconnect\], method: 'DELETE', max: 0 \}/);
   assert.match(src, /last_verify_error\) \{[\s\S]{0,400}state\.disconnectRule\.max = 1;/);
   assert.match(src, /n\.disconnect !== \(state\.reconnected \? 1 : 0\)/);
+  assert.ok(!src.includes('portal/account/integrations'), 'never opens the integrations page (Page id in clear there)');
 });
