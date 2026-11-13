@@ -937,10 +937,16 @@ paths:
           description: "`unknown_setting`, `tenant_not_found`"
         "409":
           $ref: "#/components/responses/Conflict"
-          description: "`stale_version` (base_version is not the version in force), `open_change`, `second_person_required`"
+          description: >-
+            `stale_version` (base_version is not the version in force), `open_change`, `second_person_required`,
+            `env_override_active` (an agency's own value of a key whose env override is in force: the env var wins over
+            every agency, so the change would do nothing)
         "422":
           $ref: "#/components/responses/Invalid"
-          description: "`invalid_request`, `out_of_bounds`, `reason_too_short`, `evidence_required`, `not_tenant_scoped`"
+          description: >-
+            `invalid_request`, `out_of_bounds`, `reason_too_short`, `evidence_required`, `not_tenant_scoped`,
+            `range_inconsistent` (a key of a range group, the new-agency default and the `_min` / `_max` an agency owner
+            may pick, would break min <= default <= max with the values in force at the same scope)
         "503":
           $ref: "#/components/responses/Unavailable"
           description: "`settings_unavailable`"
@@ -975,10 +981,12 @@ paths:
           description: "`unknown_change` (no open change with this id at this scope), `tenant_not_found`"
         "409":
           $ref: "#/components/responses/Conflict"
-          description: "`already_decided`, `second_person_required`"
+          description: "`already_decided`, `second_person_required`, `env_override_active` (an approval, as on a change)"
         "422":
           $ref: "#/components/responses/Invalid"
-          description: "`invalid_request`, `note_required` (a rejection says why)"
+          description: >-
+            `invalid_request`, `note_required` (a rejection says why), `range_inconsistent` (an approval is checked
+            again against the values in force then)
         "503":
           $ref: "#/components/responses/Unavailable"
           description: "`settings_unavailable`"
