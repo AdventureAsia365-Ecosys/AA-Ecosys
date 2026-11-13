@@ -12,4 +12,16 @@ module.exports = [
   // The E2E tenant's studio editor (its identity must be enrolled first).
   'content-studio/prt-02.cjs',
   'content-studio/prt-06.cjs',
+  // The pilot rehearsal, CRM part (runbook docs/ops/runbooks/pilot-rehearsal.md steps 6, 7, 8, 10; scenarios/crm/_reh.cjs):
+  // the owner (crm-rehearsal) and the agent (crm-rehearsal-agent) of pilot-rehearsal-01, pinned there by the pilot guard.
+  // Record in this order, each after the step before it in the whole rehearsal: REH-06 after the TripPlanner send;
+  // REH-08c after Adventure Asia confirmed (instant departure, or the Booking staff step). REH-10b-ops-view (crm-staff,
+  // read only) is not a write-set entry: record it with run.sh after REH-10.
+  'crm/reh-06-lead.cjs',
+  'crm/reh-07-quote.cjs',
+  'crm/reh-07b-approve.cjs',
+  'crm/reh-08-accept.cjs',
+  'crm/reh-08b-deposit.cjs',
+  'crm/reh-08c-aa-confirmed.cjs',
+  'crm/reh-10-portal.cjs',
 ];
