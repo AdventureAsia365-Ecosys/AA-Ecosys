@@ -154,3 +154,19 @@ test('assertBrand: fails with no block, no accent, the kit accent on body, or an
   await assert.rejects(R.assertBrand(brandPage({ css: CSS, body: '#db9628' }), {}), /kit accent/);
   await assert.rejects(R.assertBrand(brandPage({ css: CSS, body: '#abcdef' }), {}), /not the agency's/);
 });
+
+// ── REH-06: the repeated send is recorded once (S279 fix) ───────────────────────────────────────────────────────────
+
+test('REH-06 replay: headers keep content type and x-tp-*, add the marker; answers parse or stay empty', () => {
+  const h = R.replayHeaders({ 'content-type': 'application/json', 'x-tp-tenant': 'pilot-rehearsal-01', cookie: 'no', 'user-agent': 'no' });
+  assert.deepEqual(h, { 'content-type': 'application/json', 'x-tp-tenant': 'pilot-rehearsal-01', [R.REPLAY_HEADER]: '1' });
+  assert.deepEqual(R.sendAnswer(200, '{"already_sent":true,"handoff_id":"h1"}'), { status: 200, already_sent: true, handoff_id: 'h1', error: undefined });
+  assert.deepEqual(R.sendAnswer(202, '<html>challenge</html>'), { status: 202, already_sent: undefined, handoff_id: null, error: undefined });
+});
+
+test('REH-06 replay: the listener skips the marked repeat and replaySend records its own answer', () => {
+  const src = require('fs').readFileSync(path.join(SCEN, 'tripplanner', 'reh-06.cjs'), 'utf8');
+  assert.match(src, /headers\(\)\[R\.REPLAY_HEADER\]\) return;/);
+  assert.match(src, /answers\.push\(R\.sendAnswer\(res\.status, res\.text\)\)/);
+  assert.ok(!/waitForResponse\([^)]*\/api\/trip\/send[^)]*\)[\s\S]{0,200}fetch\('\/api\/trip\/send'/.test(src), 'no listener-dependent wait for the repeat');
+});
