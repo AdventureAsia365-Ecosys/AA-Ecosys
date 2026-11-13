@@ -13,7 +13,9 @@
 // site (shared.tenant_tripplanner_site.theme, accent tokens; the planner shows the kit colours until a theme is stored).
 // Env UAT_REH_TOUR_X names tour X (scenarios/tripplanner/_rehearsal.cjs). Rate limits and the chat budget are the
 // TripPlanner settings of the CIS registry: a 429 names the setting (never a value copied here).
-// Given: a guest on the agency's planner. When: they search "Laos", pin tour X from the agency's tour list and ask the
+// Env UAT_REH_SEARCH = the search term of step 5 (default "Bohol": tour X's destination; the runbook's "Laos" applies
+// when tour X is a Laos tour).
+// Given: a guest on the agency's planner. When: they search UAT_REH_SEARCH, pin tour X from the agency's tour list and ask the
 // planning chat three questions. Then: the planner carries the agency's name and colours, lists only the agency's
 // tours, holds tour X's days, and the chat answers each turn.
 // The phone half of step 5 (reorder at 390 px) is REH-05.m.
@@ -23,6 +25,10 @@ const R = require('./_rehearsal.cjs');
 
 const meta = {};
 let counts = null;
+// The step 5 search term: tour X's destination (S279 rehearsal: the only agency-sellable Dev tour is in the Philippines).
+const SEARCH = (process.env.UAT_REH_SEARCH || 'Bohol').trim();
+if (!/^[\p{L}][\p{L} .'-]{1,40}$/u.test(SEARCH)) throw new Error('UAT_REH_SEARCH must be a place name');
+const reEsc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 // Three short questions that fit any tour: the chat may answer with a proposal card, which is not applied here.
 const QUESTIONS = [
   'We are two adults travelling in March. Is the pace of this trip relaxed enough?',
@@ -55,22 +61,22 @@ module.exports = rw({
         meta.accent = await R.assertBrand(page, h);
         await h.hover(page.locator('header').first().getByText(R.AGENCY).first());
       }),
-    step('They search for Laos. The map shows the places that match, best first.',
-      'Khách tìm "Laos". Bản đồ hiện các địa điểm phù hợp, phù hợp nhất ở trên.',
+    step(`They search for ${SEARCH}. The map shows the places that match, best first.`,
+      `Khách tìm "${SEARCH}". Bản đồ hiện các địa điểm phù hợp, phù hợp nhất ở trên.`,
       async (page, h) => {
         const input = page.getByRole('textbox', { name: 'Search experiences' });
         const searched = page.waitForResponse((r) => {
           const u = new URL(r.url());
-          return u.pathname === '/api/browse/search' && u.searchParams.get('q') === 'Laos';
+          return u.pathname === '/api/browse/search' && u.searchParams.get('q') === SEARCH;
         }, { timeout: 60_000 });
         await h.click(input);
-        await input.pressSequentially('Laos', { delay: h.fast ? 0 : 120 });
+        await input.pressSequentially(SEARCH, { delay: h.fast ? 0 : 120 });
         const res = await searched;
         if (res.status() !== 200) {
           const err = (await res.json().catch(() => ({}))).error;
           throw new Error(`the search answered ${res.status()} (202 = the web ACL challenged it)${R.registryHint('search', res.status(), err)}`);
         }
-        await h.expect(page.getByText(/\d+ places? match “Laos”, best first\./)).toBeVisible({ timeout: 30_000 });
+        await h.expect(page.getByText(new RegExp(`\\d+ places? match “${reEsc(SEARCH)}”, best first\\.`))).toBeVisible({ timeout: 30_000 });
       }, { writes: true }), // paid (an embedding call): a --preview stops here
     step('The list of tours holds only this agency\'s own tours. The traveller pins the route of the rehearsal tour.',
       'Danh sách tour chỉ gồm các tour của chính đại lý. Khách thêm lộ trình của tour diễn tập vào chuyến đi.',
