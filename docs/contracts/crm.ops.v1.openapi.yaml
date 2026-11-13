@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: crm.ops.v1 (AA-Partner CRM → CIS admin, L1 platform console)
-  version: "1.12"
+  version: "1.13"
   description: >-
     Platform console API of the partner CRM (AA-Partner, root ADR 0010), served under /crm/ops/v1 and called by the
     CIS admin screen S-01 "Agencies (CRM)" (AA-941) and the CIS platform-ops pages (AA-936: job summary, LLM usage).
@@ -89,13 +89,25 @@ info:
     membership of that tenant with the role `viewer` or `editor`: 403 `owner_invitation_not_allowed` (the owner seat
     stays with cis-admin / crm-platform-admin), 403 `invitation_not_invited` (no open invitation with that id on that
     tenant).
+    Version 1.13 (AA-1096 lane L4, S279 thresholds audit; additive): the admin-editable CRM settings (crm-064,
+    crm.setting_definition / crm.setting_value, the CIS 407 shape): GET /settings (every CRM setting with the value in
+    force and its source env / platform / default, bounds, the last decided platform change and the open one, as
+    `pending`), GET /settings/{key}/history (one scope: the platform, or one agency with `tenant_id`), POST
+    /settings/{key}/changes and POST /settings/changes/{value_id}/approve|reject (crm-platform-admin). Relayed by the
+    CIS admin Platform > Settings page (CRM tab) with the staff member's own token. Maker-checker: a self-approval only
+    while crm.settings.two_person_approval is off (the dev phase). The values are policy numbers and switches, never a
+    business figure of an agency; the change rows name AA staff by actor id (`platform:<staff sub>`), never by name or
+    address. A platform value writes no agency audit event (CIS audits the relayed write); an agency's own value
+    (a platform+tenant key: its AI budget ceiling, its inquiry-form quota) is written in that agency's context and writes
+    one `setting_change` event in its audit, and its history read one `ops_read`. 503 `settings_unavailable` before
+    crm-064.
     Errors are
     `{detail, message?, fields?, state?, member_limit?}` (Problem); a 422 names the failing fields only, never the
     submitted values.
   x-aa-contract: crm.ops.v1
   x-aa-producer: AA-Partner
   x-aa-consumers: [AA-CIS-App]
-  x-aa-issues: [AA-928, AA-941, AA-939, AA-936, AA-933, AA-978, AA-979, AA-992, AA-966, AA-964, AA-1025, AA-1035]
+  x-aa-issues: [AA-928, AA-941, AA-939, AA-936, AA-933, AA-978, AA-979, AA-992, AA-966, AA-964, AA-1025, AA-1035, AA-1096]
 servers:
   - url: /crm/ops/v1
 security:
@@ -853,6 +865,123 @@ paths:
         "422":
           $ref: "#/components/responses/Invalid"
           description: "`invalid_request`, `invalid_range` (`to` before `from`, or more than 31 days), `invalid_cursor`"
+  /settings:
+    get:
+      operationId: listSettings
+      summary: Every admin-editable CRM setting with its value in force (1.13; full OPS readers)
+      parameters:
+        - name: area
+          in: query
+          required: false
+          schema: {type: string, pattern: "^[a-z][a-z0-9_]{0,39}$"}
+      responses:
+        "200":
+          description: The settings, grouped by area by the caller
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/Settings"}
+        "401": {$ref: "#/components/responses/Unauthorized"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "503":
+          $ref: "#/components/responses/Unavailable"
+          description: "`settings_unavailable` (crm-064 not applied)"
+  /settings/{key}/history:
+    get:
+      operationId: getSettingHistory
+      summary: The value history of one setting at one scope, newest first (1.13; full OPS readers)
+      parameters:
+        - {$ref: "#/components/parameters/SettingKey"}
+        - name: tenant_id
+          in: query
+          required: false
+          description: One agency's own values (a platform+tenant key); omitted = the platform values.
+          schema: {type: string, format: uuid}
+      responses:
+        "200":
+          description: The rows, each with the value it replaced
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/SettingHistory"}
+        "401": {$ref: "#/components/responses/Unauthorized"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "404":
+          $ref: "#/components/responses/NotFound"
+          description: "`unknown_setting`, `tenant_not_found`"
+        "422":
+          $ref: "#/components/responses/Invalid"
+          description: "`invalid_request`, `not_tenant_scoped`"
+        "503":
+          $ref: "#/components/responses/Unavailable"
+          description: "`settings_unavailable`"
+  /settings/{key}/changes:
+    post:
+      operationId: proposeSetting
+      summary: Propose a new value (and approve it in the same step with `apply`) (1.13; write, crm-platform-admin)
+      parameters:
+        - {$ref: "#/components/parameters/SettingKey"}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/SettingChangeIn"}
+      responses:
+        "201":
+          description: The change row (status proposed, or approved with `apply`)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/SettingRow"}
+        "401": {$ref: "#/components/responses/Unauthorized"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "404":
+          $ref: "#/components/responses/NotFound"
+          description: "`unknown_setting`, `tenant_not_found`"
+        "409":
+          $ref: "#/components/responses/Conflict"
+          description: "`stale_version` (base_version is not the version in force), `open_change`, `second_person_required`"
+        "422":
+          $ref: "#/components/responses/Invalid"
+          description: "`invalid_request`, `out_of_bounds`, `reason_too_short`, `evidence_required`, `not_tenant_scoped`"
+        "503":
+          $ref: "#/components/responses/Unavailable"
+          description: "`settings_unavailable`"
+  /settings/changes/{value_id}/{decision}:
+    post:
+      operationId: decideSetting
+      summary: Approve or reject an open change (1.13; write, crm-platform-admin)
+      parameters:
+        - name: value_id
+          in: path
+          required: true
+          schema: {type: string, format: uuid}
+        - name: decision
+          in: path
+          required: true
+          schema: {type: string, enum: [approve, reject]}
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/SettingDecisionIn"}
+      responses:
+        "200":
+          description: The decided row
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/SettingRow"}
+        "401": {$ref: "#/components/responses/Unauthorized"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "404":
+          $ref: "#/components/responses/NotFound"
+          description: "`unknown_change` (no open change with this id at this scope), `tenant_not_found`"
+        "409":
+          $ref: "#/components/responses/Conflict"
+          description: "`already_decided`, `second_person_required`"
+        "422":
+          $ref: "#/components/responses/Invalid"
+          description: "`invalid_request`, `note_required` (a rejection says why)"
+        "503":
+          $ref: "#/components/responses/Unavailable"
+          description: "`settings_unavailable`"
 components:
   securitySchemes:
     workforceStaff:
@@ -861,6 +990,12 @@ components:
       bearerFormat: JWT
       description: WORKFORCE access token, client cis-admin; groups cis-admin (read) or crm-platform-admin (read, write).
   parameters:
+    SettingKey:
+      name: key
+      in: path
+      required: true
+      description: A CRM setting key, `crm.<area>.<name>`.
+      schema: {type: string, pattern: "^crm(\\.[a-z0-9_]+){2,}$", maxLength: 120}
     TenantId:
       name: tenant_id
       in: path
@@ -1266,6 +1401,128 @@ components:
           description: 0 to 100000 USD, at most 4 decimals; null = no daily budget
         degrade_mode: {type: string, enum: [manual_reply_needed], default: manual_reply_needed}
         disabled_reason: {type: [string, "null"], maxLength: 500}
+    SettingValue:
+      description: A setting value, typed by its definition's value_type (number, boolean, string, list or object).
+      type: [number, integer, boolean, string, array, object]
+    SettingRow:
+      type: object
+      additionalProperties: false
+      required: [id, key, tenant_id, value, version, status, effective_from, proposed_by, proposed_at, reason,
+                 evidence_ref, self_approved, decided_by, decided_at, decision_note]
+      properties:
+        id: {type: string, format: uuid}
+        key: {type: string}
+        tenant_id: {type: [string, "null"], format: uuid, description: "null = the platform value"}
+        value: {$ref: "#/components/schemas/SettingValue"}
+        version: {type: integer, minimum: 1}
+        status: {type: string, enum: [proposed, approved, rejected, superseded]}
+        effective_from: {type: [string, "null"], format: date-time}
+        proposed_by: {type: string, description: "AA staff actor id, platform:<staff sub>"}
+        proposed_at: {type: [string, "null"], format: date-time}
+        reason: {type: string, minLength: 20, maxLength: 2000, description: "A business reason typed by AA staff"}
+        evidence_ref: {type: [string, "null"], maxLength: 500}
+        self_approved: {type: boolean}
+        decided_by: {type: [string, "null"], description: "AA staff actor id, platform:<staff sub>"}
+        decided_at: {type: [string, "null"], format: date-time}
+        decision_note: {type: [string, "null"], maxLength: 2000}
+        previous_value:
+          description: History only, the approved value in force before this row (the page's diff)
+          oneOf: [{$ref: "#/components/schemas/SettingValue"}, {type: "null"}]
+    SettingDefinition:
+      type: object
+      additionalProperties: false
+      required: [key, app, area, label, description, value_type, unit, min_value, max_value, allowed_values,
+                 default_value, scope_kind, impact, approval, evidence_required, env_override, cache_s, enforced]
+      properties:
+        key: {type: string}
+        app: {type: string, const: crm}
+        area: {type: string}
+        label: {type: string}
+        description: {type: string}
+        value_type: {type: string, enum: [int, numeric, bool, enum, duration_s, usd, pct, list, json]}
+        unit: {type: [string, "null"]}
+        min_value: {type: [number, "null"]}
+        max_value: {type: [number, "null"]}
+        allowed_values: {type: [array, "null"]}
+        default_value: {$ref: "#/components/schemas/SettingValue"}
+        scope_kind: {type: string, enum: [platform, platform+tenant]}
+        impact: {type: string, enum: [high, medium, low]}
+        approval: {type: string, enum: [single, maker_checker]}
+        evidence_required: {type: boolean}
+        env_override: {type: [string, "null"], description: "The emergency env var (one release)"}
+        cache_s: {type: integer}
+        enforced: {type: boolean}
+    Setting:
+      description: A SettingDefinition and the value in force (one flat object).
+      type: object
+      additionalProperties: false
+      required: [key, app, area, label, description, value_type, unit, min_value, max_value, allowed_values,
+                 default_value, scope_kind, impact, approval, evidence_required, env_override, cache_s, enforced,
+                 value, source, version, overridden_by_env, env_ignored, refused, last_change, pending]
+      properties:
+        key: {type: string}
+        app: {type: string, const: crm}
+        area: {type: string}
+        label: {type: string}
+        description: {type: string}
+        value_type: {type: string, enum: [int, numeric, bool, enum, duration_s, usd, pct, list, json]}
+        unit: {type: [string, "null"]}
+        min_value: {type: [number, "null"]}
+        max_value: {type: [number, "null"]}
+        allowed_values: {type: [array, "null"]}
+        default_value: {$ref: "#/components/schemas/SettingValue"}
+        scope_kind: {type: string, enum: [platform, platform+tenant]}
+        impact: {type: string, enum: [high, medium, low]}
+        approval: {type: string, enum: [single, maker_checker]}
+        evidence_required: {type: boolean}
+        env_override: {type: [string, "null"], description: "The emergency env var (one release)"}
+        cache_s: {type: integer}
+        enforced: {type: boolean}
+        value: {$ref: "#/components/schemas/SettingValue"}
+        source: {type: string, enum: [env, tenant, platform, default]}
+        version: {type: [integer, "null"]}
+        overridden_by_env: {type: boolean}
+        env_ignored: {type: [string, "null"]}
+        refused: {type: [string, "null"]}
+        last_change: {oneOf: [{$ref: "#/components/schemas/SettingRow"}, {type: "null"}]}
+        pending: {type: array, items: {$ref: "#/components/schemas/SettingRow"}}
+    Settings:
+      type: object
+      additionalProperties: false
+      required: [app, areas, settings, two_person_approval, reader_error]
+      properties:
+        app: {type: string, const: crm}
+        areas: {type: array, items: {type: string}}
+        settings: {type: array, items: {$ref: "#/components/schemas/Setting"}}
+        two_person_approval: {type: boolean}
+        reader_error: {type: [string, "null"]}
+    SettingHistory:
+      type: object
+      additionalProperties: false
+      required: [key, tenant_id, definition, history]
+      properties:
+        key: {type: string}
+        tenant_id: {type: [string, "null"], format: uuid}
+        definition: {$ref: "#/components/schemas/SettingDefinition"}
+        history: {type: array, items: {$ref: "#/components/schemas/SettingRow"}}
+    SettingChangeIn:
+      type: object
+      additionalProperties: false
+      required: [value, reason]
+      properties:
+        value: {$ref: "#/components/schemas/SettingValue"}
+        reason: {type: string, minLength: 1, maxLength: 2000, description: "At least 20 characters once trimmed"}
+        evidence_ref: {type: [string, "null"], maxLength: 500}
+        effective_from: {type: [string, "null"], format: date-time}
+        tenant_id: {type: [string, "null"], format: uuid, description: "One agency's own value (platform+tenant key)"}
+        base_version: {type: [integer, "null"], minimum: 0, description: "The approved version the person saw"}
+        apply: {type: boolean, default: false}
+    SettingDecisionIn:
+      type: object
+      additionalProperties: false
+      properties:
+        note: {type: [string, "null"], maxLength: 2000}
+        tenant_id: {type: [string, "null"], format: uuid, description: "The agency of an agency's own change"}
     InsightsOptOutState:
       type: object
       additionalProperties: false
