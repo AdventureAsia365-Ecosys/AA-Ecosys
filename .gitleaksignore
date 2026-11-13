@@ -99,3 +99,9 @@ e089300c97f2d2a6c3b4e69d3e6a2398a3da47b0:canary/aa981-canary.tfvars:terraform-pl
 97a3c2b872fc91140b6c3156e0c1854df30ce0b6:tools/docs/test_docs_reader.py:aws-access-token:146
 b1fe235863298252281a28f5685ce75af001d139:tools/docs/test_docs_reader.py:aws-access-token:138
 b1fe235863298252281a28f5685ce75af001d139:tools/docs/test_docs_reader.py:aws-access-token:146
+# - tools/uat/lib/pilot-guard.cjs: the crmKey field of the synthetic rehearsal agency is its slug, not a credential (S279).
+# - tools/uat/tests/rehearsal-traveller.test.cjs: an invented 22-character form key in a redaction test (S279).
+ffb03e8cfee4b150f24aa8793f7d1700f6bf6204:tools/uat/tests/rehearsal-traveller.test.cjs:generic-api-key:114
+4f3d6ce8c34bb7db418064ce1e79e94a0a4facc2:tools/uat/lib/pilot-guard.cjs:generic-api-key:70
+7211dd4ce194ecc77f818e966315c88afdfe3889:tools/uat/lib/pilot-guard.cjs:generic-api-key:69
+a8b0a9b856bb36cdffe31396c770bf7d306b9601:tools/uat/lib/pilot-guard.cjs:generic-api-key:71
