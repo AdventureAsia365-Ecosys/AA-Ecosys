@@ -14,7 +14,8 @@
   A10d (05/11/2026, S270) adds a fifth, Dev-only E2E address for a CIS customer_success member, read-only with no write
   allow-list, synthetic tenants only in its book. A10b-3 (12/11/2026, S278) lets the A10b admin release a held piece of
   a synthetic tenant, A10b-4 (12/11/2026, S278) lets it attach or cancel the TripPlanner add-on of a synthetic tenant,
-  and A10e (12/11/2026, S278) adds three Dev-only write-capable AA-Booking E2E addresses (supplier
+  A10b-5 (13/11/2026, S279) lets it run the DRY RUN drill of the tenant offboarding erasure saga on a synthetic tenant
+  (never approve), and A10e (12/11/2026, S278) adds three Dev-only write-capable AA-Booking E2E addresses (supplier
   ops; a finance maker / checker pair), each held to its own writes on synthetic agencies; A10e-1 (12/11/2026, S278)
   lets its staff address cancel a synthetic departure (crm-13). A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2). A13
@@ -565,6 +566,44 @@ mailbox or Google account". That is too strong.
   the guard test of the write allow-list, deploy; faster on Dev: disable the A10b user or clear `is_canary`. Add a
   closing line here. The A10b removal list covers this as well.
 
+##### A10b-5. Amendment: the erasure saga DRY RUN drill on a synthetic tenant (13/11/2026, S279, AA-1093)
+
+- **Decision (S279 lane, orchestrator under the tech lead's standing approval and the dev-phase merge rule; the AA-1093
+  done-when asks for a synthetic tenant offboarded end to end on Dev with every destructive step through DRY RUN, and
+  the live drill could only be driven by a person because the five writes it needs answered 403 `e2e_read_only`):**
+  the A10b identity may call five more write routes, the tenant offboarding erasure saga drill behind admin > Data
+  erasure > Tenant offboarding:
+  - POST `/admin/tenants/{tenant_id}/offboard` (soft offboard; T0 of the saga: one erasure request, nothing erased);
+  - POST `/admin/tenants/{tenant_id}/restore` (undo the offboard; cancels the open erasure request, refused once an
+    app may have erased its part);
+  - POST `/admin/job-runner/erasure/requests/drill` (window 0 for every app, offboarded synthetic tenant only, as
+    before for every admin);
+  - POST `/admin/job-runner/erasure/requests/{request_id}/advance` (run the saga job now: DRY RUN steps, never an
+    approval or an apply);
+  - POST `/admin/job-runner/erasure/requests/{request_id}/stop` (the request stays failed for good).
+  NOT added: `…/{request_id}/approve` (the only step after which the apps erase: a person, a Cognito administrator,
+  always approves), `…/{request_id}/new-round` (the tech lead's decision) and the subject erasure
+  `/admin/job-runner/erasure/run`. The apply switch `cis.erasure.saga_apply_enabled` stays off on Dev, so even an
+  approval could not apply.
+- **Scope, enforced by CIS (AA-CIS-App `api/core/e2e_staff.py` `E2E_ERASURE_DRILL_WRITES` /
+  `synthetic_write_refusal`, `api/core/e2e_tenant_writes.py`):** the five routes join `E2E_ALLOWED_WRITES` and
+  `E2E_ALLOWED_WRITE_PATHS`; for the A10b session each route refuses with 403 `e2e_read_only`, before any write, job or
+  audit row, unless the tenant is synthetic (`is_canary IS TRUE` and not the pilot, the A10b-1 rule): the path
+  tenant for offboard / restore (a route dependency), the body's tenant for drill, the request's tenant for advance /
+  stop (after the 404 of an unknown request). Log `tenant_offboarding_e2e_refused` / `tenant_erasure_e2e_refused`
+  with `reason` (`not_allowlisted`, `tenant_not_synthetic`). Approve and new-round refuse every Dev-only E2E identity
+  inside the route as well (a third layer behind the middleware and `staff_authz`). A10d and any other Dev-only E2E
+  identity is refused outright. Dev only, unchanged from A10b.
+- **Audit.** The AA-884 `staff.request` row (actor `admin:<A10b id>`) for every call that passes the bearer cap; the
+  routes write their own `acp_shared.audit_log` rows (`agency.offboard`, the restore, the drill, the stop) with that
+  actor, and the saga job its step rows, as for any admin.
+- **Exposure added.** Whoever reads an A10b code can offboard and restore a synthetic Dev tenant (soft: no data is
+  deleted, restore brings it back whole) and run its erasure DRY RUNs across CIS, Booking, TripPlanner and the CRM
+  (read-only plans and hashes). No real tenant, no pilot, no approval, no apply, nothing erased.
+- **Revoke (any time):** drop the five routes from `E2E_ERASURE_DRILL_WRITES` and the route checks in AA-CIS-App,
+  update the guard test of the write allow-list, deploy; faster on Dev: disable the A10b user or clear `is_canary`.
+  Add a closing line here. The A10b removal list covers this as well.
+
 #### A10c. Fourth E2E address: the AA-Partner staff console, Dev only, synthetic agencies only (01/11/2026, S262, AA-1019)
 
 - **Decision (S262, orchestrator under the tech lead's standing approval and the dev-phase merge rule; the AA-1019
@@ -669,7 +708,7 @@ mailbox or Google account". That is too strong.
   RAISEs while a row still uses an E2E address); drop the CIS constants and the `e2e_allowlisted_writes` split with the
   rest of `api/core/e2e_staff.py`, the assignment guard, the trigger entry, the receipt-rule recipient and the AA-Partner
   `E2E_CIS_CS_EMAIL` rule (`Caller.e2e_no_write`); Terraform Apply; a closing line here. Faster stop on Dev: disable the
-  user. The full end-of-project removal list is therefore A10, A10a, A10b (with A10b-1, A10b-2, A10b-3 and A10b-4), A10c, A10d
+  user. The full end-of-project removal list is therefore A10, A10a, A10b (with A10b-1, A10b-2, A10b-3, A10b-4 and A10b-5), A10c, A10d
   and A10e (AA-1054).
 
 #### A10e. Dev-only write-capable AA-Booking E2E addresses (12/11/2026, S278, AA-1087)
