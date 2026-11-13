@@ -47,11 +47,9 @@ module.exports = [
   'booking/bk-07.cjs',
   'booking/bk-08.cjs',
   'booking/bk-10.cjs',
-  // Pilot rehearsal (root docs/ops/runbooks/pilot-rehearsal.md), the staff evidence that holds while the synthetic
-  // rehearsal agency is kept as a fixture: step 0 baseline and the step 1 results in CIS, the CRM console and Booking.
-  // The state-dependent ones (prices, members, the budget override) are recorded with run.sh, not in the dry run.
+  // Pilot rehearsal (root docs/ops/runbooks/pilot-rehearsal.md) step 0 baseline: platform pages only, no fixture. The
+  // REH scenarios that need the rehearsal agency (step 1 results, prices, members, the budget override, the pilot
+  // marker) are not here: they fail until the fixture or the tech lead's step exists, so they are recorded with run.sh
+  // during the rehearsal (catalogue notes).
   'cis-admin/reh-00-baseline.cjs',
-  'cis-admin/reh-01-provisioned.cjs',
-  'cis-admin/reh-01-crm-agency.cjs',
-  'booking/reh-01-booking-partner.cjs',
 ];

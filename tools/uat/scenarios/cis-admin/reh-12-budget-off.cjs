@@ -38,7 +38,12 @@ module.exports = ro({
       async (page, h) => {
         await openTab(page, h, 'Cost');
         await h.expect(page.getByText(/AI budget \(this month\)/).first()).toBeVisible({ timeout: 30_000 });
-        await h.expect(page.getByText('Set by an override on the Subscription tab: it wins over the budget set here')).toHaveCount(0);
+        // The tile label renders before the budget read; the source line only once the effective budget has loaded
+        // (Tenant360AiBudget.tsx), so wait for it before asserting what it says.
+        const source = page.getByTestId('tenant-ai-budget-source');
+        await h.expect(source).toBeVisible({ timeout: 30_000 });
+        await h.expect(source).not.toContainText('Set by an override');
+        await h.expect(source).toContainText(/^(From the plan's included AI spend|Set here)/);
       }),
   ],
 });
