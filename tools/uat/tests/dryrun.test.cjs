@@ -86,7 +86,14 @@ test('select: naming a writable-identity scenario without --include-writable thr
   assert.throws(() => core.select(SET, { only: ['CRM-01'] }), /CRM-01: signs in an account that can write.*--include-writable/);
   assert.throws(() => core.select(SET, { identities: ['crm'] }), /crm: signs in an account that can write/);
   assert.deepEqual(core.select(SET, { only: ['CRM-01'], includeWritable: true }).map((e) => e.id), ['CRM-01']);
-  assert.deepEqual(core.WRITABLE_IDENTITIES, ['crm', 'studio-editor', 'studio-audit']);
+  assert.deepEqual(core.WRITABLE_IDENTITIES, ['crm', 'studio-editor', 'studio-audit', 'traveller']);
+});
+
+test('select: an id with a lower-case part (split letter, phone variant) is found from the upper-cased --only', () => {
+  const set = [entry('REH-08a', 'public'), entry('REH-05.m', 'public'), entry('TP-01')];
+  const o = core.parseArgs(['--only', 'reh-08a,REH-05.m']);
+  assert.deepEqual(core.select(set, o).map((e) => e.id), ['REH-08a', 'REH-05.m']);
+  assert.throws(() => core.select(set, { only: ['REH-09A'] }), /no scenario REH-09A/);
 });
 
 test('select: --only, --app and --identity combine (AND)', () => {
@@ -105,6 +112,9 @@ test('signinPlan: one sign-in per identity, public needs none, cheap ones first'
   assert.deepEqual(core.signinPlan(SET), ['studio', 'crm', 'cis-admin', 'booking']);
   assert.deepEqual(core.signinPlan([entry('TP-01')]), []);
   assert.deepEqual(core.signinPlan([entry('BK-01', 'booking'), entry('BK-02', 'booking')]), ['booking']);
+  // The pilot rehearsal's guest traveller writes but never signs in.
+  assert.deepEqual(core.signinPlan([entry('REH-06', 'traveller')]), []);
+  assert.ok(core.NO_SIGNIN.includes('traveller') && core.WRITABLE_IDENTITIES.includes('traveller'));
 });
 
 // ── the write set (AA-855) ──────────────────────────────────────────────────────────────────────────────────────────
@@ -381,6 +391,14 @@ test('shaTable: a version-read error is redacted', () => {
 
 // ── net-guard (record.cjs read-only guard) ──────────────────────────────────────────────────────────────────────────
 
+test('net-guard isChallengeProof: only the AWS WAF token host, never the app or a look-alike', () => {
+  assert.ok(guard.isChallengeProof('https://abc123.def456.us-west-1.token.awswaf.com/abc123/x/y/mp_verify'));
+  for (const u of ['https://tripplanner.example.invalid/api/trip/send', 'https://token.awswaf.com.example.invalid/verify',
+    'http://abc.us-west-1.token.awswaf.com/verify', 'https://example.invalid/?u=https://a.token.awswaf.com/']) {
+    assert.equal(guard.isChallengeProof(u), false, u);
+  }
+});
+
 test('net-guard classify: app writes fail, telemetry / session keep-alive / third party are listed apart', () => {
   const base = 'https://admin.example.lumiguides.it.com';
   assert.equal(guard.classify(`${base}/api/admin/tours/7/notes`, base), 'write');
@@ -452,8 +470,9 @@ test('manifest: every listed scenario loads, is a read-only dry-run scenario, id
   assert.ok(entries.length >= 20, `at least 20 scenarios (${entries.length})`);
   core.select(entries, {}); // throws on a duplicate id
   const identities = new Set(entries.map((e) => e.identity));
-  // The studio editor can write, so only write scenarios use it (AA-855): the read-only set covers every other identity.
-  for (const who of core.IDENTITIES.filter((x) => x !== 'studio-editor')) assert.ok(identities.has(who), `the set covers identity ${who}`);
+  // The studio editor and the guest traveller write, so only write scenarios use them (AA-855, pilot rehearsal): the
+  // read-only set covers every other identity.
+  for (const who of core.IDENTITIES.filter((x) => !['studio-editor', 'traveller'].includes(x))) assert.ok(identities.has(who), `the set covers identity ${who}`);
   assert.ok(!identities.has('studio-editor'), 'no dry-run scenario signs in the studio editor');
   // The default run leaves the writable identity's scenarios out and says so.
   const def = core.select(entries, {});

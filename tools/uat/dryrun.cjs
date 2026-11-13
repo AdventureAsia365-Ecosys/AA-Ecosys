@@ -117,7 +117,9 @@ function readJson(file) {
 }
 
 function childEnv(state, { paid = false, preview = false } = {}) {
-  const env = { ...process.env, UAT_READ_ONLY: '1', UAT_BLOCK_URLS: JSON.stringify(core.PAID_URLS) };
+  // A paid write-set run (--allow-paid) may reach the paid paths its own scenario needs (the pilot rehearsal's planner
+  // search); the scenario's own blockUrls and limitWrites still keep the rest out.
+  const env = { ...process.env, UAT_READ_ONLY: '1', UAT_BLOCK_URLS: JSON.stringify(paid ? [] : core.PAID_URLS) };
   delete env.UAT_STORAGE_STATE;
   delete env.UAT_BASE_URL; // one base URL for every app would send each scenario to the wrong host
   delete env.UAT_ALLOW_PAID; // only an explicit --allow-paid on a paid write-set scenario sets it
@@ -139,7 +141,7 @@ async function signIn(who) {
 async function record(entries, id, opts) {
   const [e] = core.select(entries, { only: [id], includeWritable: opts.includeWritable, allowPaid: opts.allowPaid });
   let state = null;
-  if (e.identity !== 'public') {
+  if (!core.NO_SIGNIN.includes(e.identity)) {
     await ramGuard();
     state = (await signIn(e.identity)).file;
   }
@@ -207,7 +209,7 @@ async function main() {
   const outcomes = [];
   for (const e of sel) {
     let o;
-    if (e.identity !== 'public' && !states[e.identity]) {
+    if (!core.NO_SIGNIN.includes(e.identity) && !states[e.identity]) {
       o = core.outcome(e, { blocked: signins[e.identity] || 'not signed in', pilotGuard: !!refused[e.identity] });
     } else {
       await ramGuard();

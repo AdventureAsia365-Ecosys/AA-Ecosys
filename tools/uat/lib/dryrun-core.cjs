@@ -6,7 +6,11 @@
 // The identities a dry-run scenario may name (lib/signin.cjs signs each one in once, outside the recorded context).
 // studio-editor (AA-855): the Content studio EDITOR of the E2E tenant; it can write, so only write scenarios use it.
 // studio-audit (AA-855 W-01..W-04): the editor of the four synthetic audit tenants (lib/studio-audit.cjs), one per run.
-const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'crm'];
+// traveller (pilot rehearsal, AA-1086): a guest on a public page who WRITES (a trip, a request to an agency, a booking);
+// it never signs in, so only write scenarios use it.
+const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor', 'studio-audit', 'crm', 'traveller'];
+// Identities with no sign-in: the runner starts them with no saved session.
+const NO_SIGNIN = ['public', 'traveller'];
 // Paths that reach a paid model or data provider: aborted in every dry-run scenario (record.cjs UAT_BLOCK_URLS), so a
 // dry run can never start one, even by a stray click. TripPlanner free-text search (embedding) and narration (chat
 // model), in both spellings (lib/botCheck.ts in AA-TripPlanner-Web); the writes among them are also non-GET.
@@ -15,8 +19,9 @@ const PAID_URLS = ['/api/browse/search(?:[?#]|$)', '/api/browse\\?(?:.*&)?resour
 // (roles owner / agent / assistant), so the dry run signs in the OWNER of the invented review agency. Only the browser
 // guard of record.cjs keeps those scenarios read-only, so they run only on an explicit --include-writable. The other
 // signed-in identities are refused writes by their backend too (403 e2e_read_only for the CIS / Booking E2E staff,
-// 403 studio_role_forbidden for the Content studio viewer). The studio editor can write too (AA-855).
-const WRITABLE_IDENTITIES = ['crm', 'studio-editor', 'studio-audit'];
+// 403 studio_role_forbidden for the Content studio viewer). The studio editor can write too (AA-855), and so can the
+// guest traveller of the pilot rehearsal (it sends a trip to an agency, it books).
+const WRITABLE_IDENTITIES = ['crm', 'studio-editor', 'studio-audit', 'traveller'];
 // Exit code of a run stopped by the pilot guard (lib/pilot-guard.cjs EXIT_PILOT_GUARD).
 const EXIT_PILOT_GUARD = 5;
 // Order in which identities sign in: the cheap ones first, so a code-mail wait never delays the public pages.
@@ -71,7 +76,7 @@ function describe(sc, file) {
   if (sc.fastOnly) throw new Error(`${file}: data steps (fastOnly) are not dry-run scenarios`);
   // Read-only by construction, not only by the runner's guard: a signed-in scenario is built with ro(), no scenario
   // lets a write through, and none runs its own prepare() (the runner signs the identity in; a prepare could write).
-  if (identity !== 'public' && sc.readOnly !== true) throw new Error(`${file}: a signed-in dry-run scenario must be readOnly (build it with ro())`);
+  if (!NO_SIGNIN.includes(identity) && sc.readOnly !== true) throw new Error(`${file}: a signed-in dry-run scenario must be readOnly (build it with ro())`);
   if (Array.isArray(sc.allowWrites) ? sc.allowWrites.length : sc.allowWrites) throw new Error(`${file}: allowWrites is not allowed in a dry-run scenario`);
   if (sc.prepare) throw new Error(`${file}: prepare() is not allowed in a dry-run scenario (the runner signs in)`);
   return { id: sc.id, app: sc.app, identity, title: sc.title || '', file, steps: sc.steps.length, readOnly: !!sc.readOnly };
@@ -104,6 +109,14 @@ function previewSteps(sc) {
   return i < 0 ? sc.steps.length : i;
 }
 
+// parseArgs upper-cases --only / --record ids; ids with a lower-case part (a split letter REH-08a, a phone variant
+// REH-05.m) are matched back to their catalogue spelling here. Unknown ids stay as typed (select() then throws).
+function canonicalIds(entries, opts) {
+  if (!opts.only || !opts.only.length) return opts;
+  const by = new Map(entries.map((e) => [e.id.toUpperCase(), e.id]));
+  return { ...opts, only: opts.only.map((id) => by.get(String(id).toUpperCase()) || id) };
+}
+
 const matches = (e, opts) => (!opts.only || !opts.only.length || opts.only.includes(e.id))
   && (!opts.apps || !opts.apps.length || opts.apps.includes(e.app))
   && (!opts.identities || !opts.identities.length || opts.identities.includes(e.identity));
@@ -114,6 +127,7 @@ const matches = (e, opts) => (!opts.only || !opts.only.length || opts.only.inclu
  * --identity crm) without the flag throws, so it is never skipped silently.
  */
 function select(entries, opts) {
+  opts = canonicalIds(entries, opts);
   const ids = new Set(entries.map((e) => e.id));
   const dup = entries.find((e, i) => entries.findIndex((x) => x.id === e.id) !== i);
   if (dup) throw new Error(`duplicate scenario id ${dup.id}`);
@@ -146,14 +160,15 @@ function select(entries, opts) {
 
 /** Ids the options would select but leave out because their identity can write (said in the report). */
 function skippedWritable(entries, opts) {
+  opts = canonicalIds(entries, opts);
   if (opts.includeWritable) return [];
   return entries.filter((e) => !e.writeSet && matches(e, opts) && WRITABLE_IDENTITIES.includes(e.identity)).map((e) => e.id);
 }
 
-/** The identities to sign in for the selected entries (public needs none), in SIGNIN_ORDER. */
+/** The identities to sign in for the selected entries (public and traveller need none), in SIGNIN_ORDER. */
 function signinPlan(entries) {
   const need = new Set(entries.map((e) => e.identity));
-  return SIGNIN_ORDER.filter((x) => x !== 'public' && need.has(x));
+  return SIGNIN_ORDER.filter((x) => !NO_SIGNIN.includes(x) && need.has(x));
 }
 
 // Link tokens and long opaque values never reach the report (record.cjs uses this same function). The report may be
@@ -316,6 +331,6 @@ function stamp(d = new Date()) {
 }
 
 module.exports = {
-  IDENTITIES, WRITABLE_IDENTITIES, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, parseArgs, describe, describeWrite, previewSteps, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
+  IDENTITIES, NO_SIGNIN, WRITABLE_IDENTITIES, SIGNIN_ORDER, EXIT_PILOT_GUARD, PAID_URLS, parseArgs, describe, describeWrite, previewSteps, select, skippedWritable, signinPlan, redact, cell, outcome, shaTable, counts, exitCode,
   renderMarkdown, renderTsv, stamp,
 };

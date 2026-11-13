@@ -228,7 +228,7 @@ async function studioAlive(page) {
  * sign-in. Returns { file, reused }. Throws with a one-line, redacted reason.
  */
 async function ensureState(who) {
-  if (who === 'public') return { file: null, reused: true };
+  if (who === 'public' || who === 'traveller') return { file: null, reused: true }; // guests: no session
   if (who === 'crm') {
     const target = statePath('crm');
     const existed = fs.existsSync(target);
