@@ -698,7 +698,7 @@ trình quanh các luật là [trang FinOps](ops/finops.md) (FIN-01).
 | Cost Anomaly Detection | Miễn phí; live (Infra #213, `cost_anomaly.tf`): cảnh báo tức thì tới e-mail SNS sẵn có cho các bất thường từ 5 USD. AA-896 vẫn mở cho phần còn lại (trang FinOps, công cụ báo cáo hằng tháng). Monitor theo tag chỉ có ở tài khoản quản lý; ngân sách theo app bù phần đó |
 | Trần LLM và API bên ngoài | `shared.spend_budget` (DM-10.5) |
 | Chi phí theo app | Trang và API chi phí trong admin (AA-884, CIS #838) và trang tổng quan cho chủ doanh nghiệp trên cùng module (AA-858, CIS #840): đã deploy trong CIS `dba9b72`; Xong sau khi kiểm live theo `aa-ship` |
-| Ngân sách và cảnh báo bất thường trên acc3 (vệ tinh LLM) | Live (`accounts/acc3-bedrock` `cost_guard.tf`, `cost_anomaly_immediate.tf`). acc1 đã rời hệ sinh thái (AA-998) |
+| Ngân sách và cảnh báo bất thường trên acc3 (vệ tinh LLM) | Live (`accounts/acc3-bedrock` `cost_guard.tf`, `cost_anomaly_immediate.tf`). acc1, tài khoản Bedrock chat khi acc3 bị chặn, có ngân sách chỉ cảnh báo (100 USD một tháng) và e-mail bất thường hằng ngày, không bao giờ dừng (`accounts/acc1-bedrock` `cost_guard.tf`, AA-1096, ADR 0001a Note S279) |
 
 ### 8.3 Review hằng tháng
 

@@ -81,7 +81,9 @@ Terraform `ignore_changes` covers the code attributes, so it never overwrites th
 acc1 (a personal account) was removed from the ecosystem on 2026-10-28 (AA-998,
 [ADR 0001a](adr/0001a-retire-acc1-llm-on-acc3-only.md)). Since 2026-11-11 it is the payer of acc3's organization
 (billing only), and since 2026-11-12 (S278, AA-1095, ADR 0001a Note S278) it serves the Bedrock chat models while AWS
-blocks acc3: one invoker role (Terraform root `accounts/acc1-bedrock`), trusted by the CIS task role, nothing else.
+blocks acc3: one invoker role (Terraform root `accounts/acc1-bedrock`), trusted by the CIS task role, plus since
+2026-11-13 a free spend alert in the same root (budget and anomaly e-mails, never a stop; AA-1096, ADR 0001a Note S279);
+nothing else.
 Route order: Claude on the Anthropic API first, then acc1, then acc3; GPT on acc1 first, then acc3 (skipped while it
 refuses), then the OpenAI API twin model. Account IDs and profiles: the account map in
 [onboarding](onboarding.md); never in a repo page.
@@ -137,7 +139,7 @@ flowchart TB
   end
 
   ACC3[acc3: Bedrock chat models · refusing since 2026-10-29]
-  ACC1[acc1: Bedrock chat models while acc3 is blocked · invoker role only]
+  ACC1[acc1: Bedrock chat models while acc3 is blocked · invoker role + alert-only budget]
   DIRECT[Direct APIs: OpenAI · Anthropic, no key yet]
   DATA[Data APIs: Jev, DataForSEO, Geoapify]
 
