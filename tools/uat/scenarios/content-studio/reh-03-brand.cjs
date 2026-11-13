@@ -9,7 +9,7 @@
 // Then:  the form holds the guide's brand name, call to action and words to avoid; the active version is one higher
 //        ("brand rules +1"). Desktop 1440 x 900.
 const { HOSTS, step } = require('../../lib/dryrun-page.cjs');
-const { rw, studioCall, limitWrites } = require('../../lib/uat-page.cjs');
+const { rw, studioCall, limitWrites, stubFreeChecksInPreview } = require('../../lib/uat-page.cjs');
 const R = require('./_rehearsal.cjs');
 
 const { reh } = R;
@@ -33,6 +33,9 @@ const sc = rw({
           { name: 'parse', path: R.PATHS.brandParse, max: 1 },
           { name: 'save', path: R.PATHS.brandSave, max: 1 },
         ]);
+        // The brand page runs the free call-to-action check on load when the saved brand has one (a re-run): in a
+        // preview, where no write may leave the browser, that check is answered in the browser instead.
+        await stubFreeChecksInPreview(page, [R.PATHS.ctaCheck]);
         await h.goto('/portal/brand');
         await h.expect(page.getByRole('heading', { name: 'Brand Identity' })).toBeVisible({ timeout: 30_000 });
         const r = await studioCall(page, 'GET', R.BRAND);

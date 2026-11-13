@@ -114,36 +114,87 @@ test('signin: studio-rehearsal reads the owner secret and opens the studio on th
 
 // ── the scenarios ───────────────────────────────────────────────────────────────────────────────────────────────────
 
-const allowed = (sc, url) => (sc.allowWrites || []).map((x) => new RegExp(x)).some((r) => r.test(url));
+const guard = require('../lib/net-guard.cjs');
+// Compiled the way record.cjs compiles allowWrites (lib/net-guard.cjs: "<METHOD> <regex>" entries pin the method).
+const allowed = (sc, method, url) => guard.allowMatches(guard.compileAllow(sc.allowWrites), method, url);
+const P = (u) => ['POST', u];
 
-test('REH scenarios allow exactly their writes', () => {
-  const pub = [`${T}/publish-log/${ID}/publish`, `${T}/publish-log/${ID}`];
+test('REH scenarios allow exactly their writes, each for its own method only', () => {
+  const pub = [P(`${T}/publish-log/${ID}/publish`), ['DELETE', `${T}/publish-log/${ID}`]];
   const cases = {
-    'reh-03-brand': [[`${ORIGIN}/api/tenant/admin/brand-identity`, `${ORIGIN}/api/tenant/admin/brand-identity/upload`,
-      `${ORIGIN}/api/tenant/admin/brand-identity/parse`, `${T}/content-writing/cta-check`],
-    [`${T}/tours/pool/${ID}/rewrite`, ...pub, `${ORIGIN}/api/tenant/admin/brand-identity/other`]],
-    'reh-03-adopt': [[`${T}/tours/pool/${ID}/rewrite`], [`${T}/tours/versions/${ID}/retry`, `${T}/slate/refresh`, ...pub]],
-    'reh-04-topics': [[`${T}/slate/refresh`, `${T}/subjects/${ID}/pick`, `${T}/angle-gate/requests/${ID}/goal`,
-      `${T}/angle-gate/requests/${ID}/choose`, `${T}/content-writing/requests/${ID}/write`], [`${T}/tours/pool/${ID}/rewrite`, ...pub]],
-    'reh-04-blog': [[`${T}/content-writing/requests/${ID}/write`], [`${T}/slate/refresh`, `${T}/angle-gate/requests/${ID}/choose`, ...pub]],
-    'reh-04-linkedin': [[`${T}/subjects/${ID}/pick`, `${T}/content-writing/requests/${ID}/write`], [`${T}/slate/refresh`, ...pub]],
-    'reh-04-facebook': [[`${T}/subjects/${ID}/pick`, `${T}/angle-gate/requests/${ID}/choose`], [`${T}/tours/pool/${ID}/rewrite`, ...pub]],
-    'reh-04-edit': [[`${T}/content-writing/pieces/${ID}`], [`${T}/content-writing/pieces/${ID}/export`, `${T}/content-writing/requests/${ID}/write`, ...pub]],
-    'reh-04b-wordpress': [[`${T}/integrations/wordpress`, `${T}/integrations/wordpress/test`, ...pub],
-      [`${T}/integrations/facebook`, `${T}/content-writing/pieces/${ID}`, `${T}/content-writing/requests/${ID}/write`]],
-    'reh-04b-facebook': [[`${T}/integrations/facebook`, `${T}/integrations/facebook/test`, ...pub],
-      [`${T}/integrations/wordpress`, `${T}/content-writing/requests/${ID}/write`]],
-    'reh-04b-takedown': [[`${T}/publish-log/${ID}`], [`${T}/publish-log/${ID}/publish`, `${T}/integrations/wordpress`]],
+    'reh-03-brand': [[P(`${ORIGIN}/api/tenant/admin/brand-identity`), P(`${ORIGIN}/api/tenant/admin/brand-identity/upload`),
+      P(`${ORIGIN}/api/tenant/admin/brand-identity/parse`), P(`${T}/content-writing/cta-check`)],
+    [P(`${T}/tours/pool/${ID}/rewrite`), ...pub, P(`${ORIGIN}/api/tenant/admin/brand-identity/other`),
+      ['DELETE', `${ORIGIN}/api/tenant/admin/brand-identity`], ['PUT', `${ORIGIN}/api/tenant/admin/brand-identity`]]],
+    'reh-03-adopt': [[P(`${T}/tours/pool/${ID}/rewrite`)], [P(`${T}/tours/versions/${ID}/retry`), P(`${T}/slate/refresh`), ...pub,
+      ['DELETE', `${T}/tours/pool/${ID}/rewrite`]]],
+    'reh-04-topics': [[P(`${T}/slate/refresh`), P(`${T}/subjects/${ID}/pick`), P(`${T}/angle-gate/requests/${ID}/goal`),
+      P(`${T}/angle-gate/requests/${ID}/choose`), P(`${T}/content-writing/requests/${ID}/write`)], [P(`${T}/tours/pool/${ID}/rewrite`), ...pub]],
+    'reh-04-blog': [[P(`${T}/content-writing/requests/${ID}/write`)], [P(`${T}/slate/refresh`), P(`${T}/angle-gate/requests/${ID}/choose`), ...pub]],
+    'reh-04-linkedin': [[P(`${T}/subjects/${ID}/pick`), P(`${T}/content-writing/requests/${ID}/write`)], [P(`${T}/slate/refresh`), ...pub]],
+    'reh-04-facebook': [[P(`${T}/subjects/${ID}/pick`), P(`${T}/angle-gate/requests/${ID}/choose`)], [P(`${T}/tours/pool/${ID}/rewrite`), ...pub]],
+    'reh-04-edit': [[['PATCH', `${T}/content-writing/pieces/${ID}`]], [P(`${T}/content-writing/pieces/${ID}`),
+      ['DELETE', `${T}/content-writing/pieces/${ID}`], ['PUT', `${T}/content-writing/pieces/${ID}`],
+      ['PATCH', `${T}/content-writing/pieces/${ID}/export`], P(`${T}/content-writing/requests/${ID}/write`), ...pub]],
+    'reh-04b-wordpress': [[P(`${T}/integrations/wordpress`), P(`${T}/integrations/wordpress/test`), ...pub],
+      [P(`${T}/integrations/facebook`), ['DELETE', `${T}/integrations/wordpress`], P(`${T}/publish-log/${ID}`),
+        ['DELETE', `${T}/publish-log/${ID}/publish`], ['PATCH', `${T}/content-writing/pieces/${ID}`], P(`${T}/content-writing/requests/${ID}/write`)]],
+    'reh-04b-facebook': [[P(`${T}/integrations/facebook`), P(`${T}/integrations/facebook/test`), ...pub],
+      [P(`${T}/integrations/wordpress`), ['DELETE', `${T}/integrations/facebook`], P(`${T}/content-writing/requests/${ID}/write`)]],
+    'reh-04b-takedown': [[['DELETE', `${T}/publish-log/${ID}`]], [P(`${T}/publish-log/${ID}`), P(`${T}/publish-log/${ID}/publish`),
+      ['DELETE', `${T}/integrations/wordpress`]]],
   };
   for (const [f, [ok, no]] of Object.entries(cases)) {
     const sc = load(f);
-    for (const u of ok) assert.ok(allowed(sc, u), `${sc.id}: ${u} should be allowed`);
-    for (const u of no) assert.ok(!allowed(sc, u), `${sc.id}: ${u} should be refused`);
-    for (const src of sc.allowWrites) assert.ok(!src.startsWith('^') && !src.includes('\\\\/'), `${sc.id}: ${src} matches the full URL`);
+    for (const [m, u] of ok) assert.ok(allowed(sc, m, u), `${sc.id}: ${m} ${u} should be allowed`);
+    for (const [m, u] of no) assert.ok(!allowed(sc, m, u), `${sc.id}: ${m} ${u} should be refused`);
+    for (const src of sc.allowWrites) {
+      assert.match(src, /^(POST|PATCH|DELETE) [^^]/, `${sc.id}: ${src} names its method and matches the full URL`);
+      assert.ok(!src.includes('\\\\/'), `${sc.id}: ${src} has a doubled escape`);
+    }
     assert.equal(sc.identity, 'studio-rehearsal');
     assert.equal(sc.pilotGuard, undefined, `${sc.id} takes the rehearsal pin`);
   }
   assert.deepEqual(Object.keys(cases).sort(), [...FILES].sort());
+});
+
+test('REH-04-edit, the publish pair and the takedown cap their PATCH / DELETE writes with limitWrites', () => {
+  const src = (f) => fs.readFileSync(path.join(SCEN, 'content-studio', `${f}.cjs`), 'utf8');
+  assert.match(src('reh-04-edit'), /limitWrites\(page, R\.capRules\(\['piece'\]\)\)/);
+  assert.match(src('reh-04-edit'), /counts\.piece !== 1/);
+  assert.match(src('_publish'), /name: 'unpublish', path: R\.PATHS\.unpublish, method: R\.methodOf\('unpublish'\), max: 1/);
+  assert.match(src('_publish'), /n\.unpublish !== 1/);
+  assert.match(src('reh-04b-takedown'), /method: R\.methodOf\('unpublish'\), max: 0/);
+  assert.match(src('reh-04b-takedown'), /cap\[0\]\.max = Math\.min\(live\.length, MAX_POSTS\)/);
+  const R = require(path.join(SCEN, 'content-studio', '_rehearsal.cjs'));
+  assert.equal(R.methodOf('piece'), 'PATCH');
+  assert.equal(R.methodOf('unpublish'), 'DELETE');
+  assert.equal(R.methodOf('publish'), 'POST');
+  assert.deepEqual(R.capRules(['piece']).map((r) => [r.name, r.method, r.max]), [['piece', 'PATCH', 1]]);
+});
+
+test('REH-04-edit writes the planner line as a Markdown link (CIS does not autolink a bare URL)', () => {
+  const src = fs.readFileSync(path.join(SCEN, 'content-studio', 'reh-04-edit.cjs'), 'utf8');
+  assert.match(src, /const plannerLine = \(url\) => `\[\$\{TEXT\}\]\(\$\{url\}\)`/);
+  // The old bare-URL line of an earlier take is replaced too.
+  assert.match(src, /l\.startsWith\(`\$\{TEXT\}:`\)/);
+});
+
+test('REH-03-adopt: the rewrite toast matches one tour and several; the catalog page is read, not awaited', () => {
+  const src = fs.readFileSync(path.join(SCEN, 'content-studio', 'reh-03-adopt.cjs'), 'utf8');
+  const re = /rewrites? started\. Follow (it|them) here or in My Tours\./i;
+  assert.ok(re.test('Rewrite started. Follow it here or in My Tours.'));
+  assert.ok(re.test('3 rewrites started. Follow them here or in My Tours.'));
+  assert.ok(src.includes(re.source), 'the scenario uses the case-insensitive toast pattern');
+  assert.doesNotMatch(src, /waitForResponse\(\(r\) => new URL\(r\.url\(\)\)\.pathname === `\$\{R\.T\}\/tours\/pool`/);
+});
+
+test('REH captions never read the fixture name "tour X" aloud', () => {
+  for (const f of FILES) {
+    for (const s of load(f).steps) {
+      for (const t of [s.caption.en, s.caption.vi]) assert.doesNotMatch(t, /\btour X\b|Trình viết/i, `${f}: ${t}`);
+    }
+  }
 });
 
 test('REH scenarios: both titles, en + vi captions, the last step ends the scenario, no issue ids, a writing step', () => {

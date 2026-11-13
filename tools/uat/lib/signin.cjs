@@ -25,7 +25,8 @@
 //   studio-rehearsal  the E2E OWNER of the synthetic pilot rehearsal agency pilot-rehearsal-01 (AA-1086 REH-*;
 //              lib/rehearsal.cjs): secret crm/dev/e2e-test-crm/pilot-rehearsal-01-owner (UAT_STUDIO_REHEARSAL_SECRET), same
 //              partner flow; the studio opens on "E2E Pilot Rehearsal Travel". Needs the owner's Content studio
-//              membership (runbook step 2). It CAN write and pay: only the REH write scenarios use it.
+//              membership (runbook step 2: the tech lead's owner invitation, accepted from the e2e inbox by
+//              tools/uat/accept-owner-invite.cjs). It CAN write and pay: only the REH write scenarios use it.
 //   crm        Owner of the invented agency of the CRM review set: lib/crm-signin.cjs identity A, with its own state
 //              file (work/dryrun/.state-crm.json, never the review set's). This account CAN write (the CRM has no
 //              read-only role yet): the runner leaves its scenarios out unless --include-writable (dryrun-core.cjs).
@@ -305,7 +306,7 @@ async function ensureState(who) {
   }
 }
 
-module.exports = { ensureState, statePath, CIS, BOOKING, PARTNER, STAFF_AUTH_HOST, STUDIO_SECRETS };
+module.exports = { ensureState, statePath, partnerLogin, CIS, BOOKING, PARTNER, STAFF_AUTH_HOST, STUDIO_SECRETS };
 
 if (require.main === module) {
   (async () => {
