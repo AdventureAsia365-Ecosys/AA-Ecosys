@@ -55,6 +55,7 @@ Everything runs on **acc2** (us-west-1) except the LLM calls, which run on acc3;
 | [Restore the shared RDS to a point in time](runbooks/restore-rds-pitr.md) | draft (tested) | 2026-10-17 drill |
 | [Restore one schema or table](runbooks/restore-schema.md) | draft, UNTESTED | - (AA-829) |
 | [Restore one tenant's CRM data from its nightly export (pilot drill)](runbooks/pilot-tenant-restore-drill.md) | draft (tested) | 2026-11-05 drill (AA-969 d16) |
+| [Restore one tenant's CIS and TripPlanner data from its own backup](runbooks/tenant-restore-drill.md) | draft (CIS tested; TripPlanner planned) | 2026-11-13 CIS drill (AA-1093) |
 | [Onboard a pilot agency (provision, owner, brand, add-ons, AI budget, pilot mode, exit)](runbooks/pilot-agency-onboarding.md) | draft, UNTESTED | - (AA-1086) |
 | [Rehearse a pilot with a synthetic agency (13 steps across every app)](runbooks/pilot-rehearsal.md) | draft, UNTESTED | - (AA-1086) |
 | [Rotate a secret](runbooks/secret-rotation.md) | draft, UNTESTED | two classes once |
