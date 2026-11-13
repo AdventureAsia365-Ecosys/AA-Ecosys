@@ -12,4 +12,17 @@ module.exports = [
   // The E2E tenant's studio editor (its identity must be enrolled first).
   'content-studio/prt-02.cjs',
   'content-studio/prt-06.cjs',
+  // AA-1086 pilot rehearsal, steps 3-4b (root docs/ops/runbooks/pilot-rehearsal.md): the E2E OWNER of the synthetic
+  // agency pilot-rehearsal-01 (studio-rehearsal, pinned to that agency). Record in this order; the paid ones need
+  // --allow-paid; env UAT_REH_TOUR_X names tour X. REH-04b-takedown is the teardown of the two publish scenarios.
+  'content-studio/reh-03-brand.cjs',
+  'content-studio/reh-03-adopt.cjs',
+  'content-studio/reh-04-topics.cjs',
+  'content-studio/reh-04-blog.cjs',
+  'content-studio/reh-04-linkedin.cjs',
+  'content-studio/reh-04-facebook.cjs',
+  'content-studio/reh-04-edit.cjs',
+  'content-studio/reh-04b-wordpress.cjs',
+  'content-studio/reh-04b-facebook.cjs',
+  'content-studio/reh-04b-takedown.cjs',
 ];

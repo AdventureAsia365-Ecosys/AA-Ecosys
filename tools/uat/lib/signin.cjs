@@ -22,6 +22,10 @@
 //              partner flow; the studio opens on THIS run's audit tenant (env UAT_STUDIO_TENANT, default
 //              audit-atlas-hearth), chosen on the studio chooser by its invented display name and checked through
 //              GET /api/tenant/me. One state file per audit tenant. It CAN write: only the write scenarios use it.
+//   studio-rehearsal  the E2E OWNER of the synthetic pilot rehearsal agency pilot-rehearsal-01 (AA-1086 REH-*;
+//              lib/rehearsal.cjs): secret crm/dev/e2e-test-crm/pilot-rehearsal-01-owner (UAT_STUDIO_REHEARSAL_SECRET), same
+//              partner flow; the studio opens on "E2E Pilot Rehearsal Travel". Needs the owner's Content studio
+//              membership (runbook step 2). It CAN write and pay: only the REH write scenarios use it.
 //   crm        Owner of the invented agency of the CRM review set: lib/crm-signin.cjs identity A, with its own state
 //              file (work/dryrun/.state-crm.json, never the review set's). This account CAN write (the CRM has no
 //              read-only role yet): the runner leaves its scenarios out unless --include-writable (dryrun-core.cjs).
@@ -34,6 +38,7 @@ const crm = require('./crm-signin.cjs');
 const mailbox = require('./mailbox.cjs');
 const { redact } = require('./dryrun-core.cjs');
 const studioAudit = require('./studio-audit.cjs');
+const rehearsal = require('./rehearsal.cjs');
 
 const CIS = (process.env.UAT_CIS_ADMIN || 'https://aa-cis.lumiguides.it.com').replace(/\/+$/, '');
 const BOOKING = crm.BOOKING;
@@ -44,6 +49,7 @@ const STUDIO_SECRETS = {
   studio: process.env.UAT_STUDIO_SECRET || 'crm/dev/e2e-test-studio/viewer',
   'studio-editor': process.env.UAT_STUDIO_EDITOR_SECRET || 'crm/dev/e2e-test-studio/editor',
   'studio-audit': studioAudit.secretId(),
+  'studio-rehearsal': rehearsal.secretId(),
 };
 const STUDIO_IDENTITIES = Object.keys(STUDIO_SECRETS);
 
@@ -275,7 +281,8 @@ async function ensureState(who) {
           if (!(await bookingAlive(page))) throw new Error('signed in, but /api/booking/staff/me did not answer 200');
         }
       } else {
-        const tenantName = who === 'studio-audit' ? studioAudit.auditTenant().name : null;
+        const tenantName = who === 'studio-audit' ? studioAudit.auditTenant().name
+          : who === 'studio-rehearsal' ? rehearsal.TENANT.name : null;
         reused = await studioAlive(page);
         if (!reused) {
           if (!studioCreds) studioCreds = crm.secretCreds(STUDIO_SECRETS[who]);
