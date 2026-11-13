@@ -145,6 +145,8 @@ confirm or decline the supplier booking on the case's **Suppliers** tab, and the
    every value with who proposed and who approved it. A change applies to new quotes, versions and tariffs only,
    never to a booking already confirmed. Margins, exchange rates, cancellation fees, agency tiers and deposit terms
    keep their own pages, linked at the bottom of the policy page.
+6. Tour prices (Price setup, the price workbook, price versions, seasons): step by step in the
+   [Booking price setup guide](booking-price-setup.md).
 
 ## 8. When something looks wrong
 

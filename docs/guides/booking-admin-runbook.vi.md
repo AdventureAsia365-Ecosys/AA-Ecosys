@@ -147,6 +147,8 @@ hoặc từ chối booking nhà cung cấp trên tab **Suppliers** của case, v
    và người duyệt. Thay đổi chỉ áp dụng cho báo giá, phiên bản và bảng giá mới, không bao giờ cho booking đã xác
    nhận. Margin, tỷ giá, phí huỷ, hạng đại lý và điều khoản đặt cọc vẫn ở trang riêng, có liên kết ở cuối trang chính
    sách.
+6. Giá tour (Price setup, file Excel nhập giá, phiên bản giá, mùa): từng bước trong
+   [hướng dẫn thiết lập giá trong Booking](booking-price-setup.vi.md).
 
 ## 8. Khi có gì đó sai
 
