@@ -51,8 +51,9 @@ one pilot at most, unique index `tenants_one_pilot_key`; a CHECK makes it `kind`
 
 > [!NOTE]
 > On Dev the CRM creates synthetic agencies only (AA-Partner `app/agencies.py`, `SYNTHETIC_ONLY_ENVIRONMENTS`), so the
-> pilot's CRM agency carries `crm.tenant.is_synthetic` true like every other Dev agency. The pilot marker, not the
-> synthetic flag, protects it there. See gap G9.
+> pilot's CRM agency carries `crm.tenant.is_synthetic` true like every other Dev agency. The CRM's Dev-only E2E staff
+> check (AA-Partner `api/app/tenancy.py`, `E2E_SYNTHETIC_SQL`) reads only that flag, so today it does **not** keep
+> the A10c identity away from the pilot. That is gap G9, a stop check in [Before you start](#before-you-start).
 
 ## Before you start
 
@@ -80,6 +81,11 @@ one pilot at most, unique index `tenants_one_pilot_key`; a CHECK makes it `kind`
 4. Confirm the agency web can carry a real agency. The CRM web and the studio run as one Fargate Spot task today, and
    a second task needs the tech lead's cost approval (AA-1082). Abort if AA-1082 is not done and the tech lead has not
    accepted the risk in writing.
+5. Confirm the Dev-only CRM staff identity (A10c, `e2e-crm-staff@`) cannot reach the pilot. **Abort unless** gap G9 is
+   closed (the CRM E2E staff check also excludes `crm.tenant.is_pilot`, read on `origin/main` of AA-Partner) **or**
+   A10c is switched off on the CRM. Otherwise that identity can open S-02 views and S-04 support sessions on the real
+   agency, which breaks root ADR 0006a A10b-1 (E2E writes on synthetic tenants only) and the pilot personal-data rule.
+   There is no waiver for this check.
 
 ## Step 1: provision the tenant
 
@@ -108,7 +114,8 @@ The `tenant_provision` saga (AA-CIS-App `services/tenant_account/provision.py`, 
 
    `<agency-slug>` is the lower-case slug the agency's TripPlanner path will use. `pilot_weeks` is 1 to 8. Add
    `trial_days` only if the agreement starts with a trial.
-2. Poll `GET /admin/tenants/provision/<job-id>` until `status` is `done`. `<job-id>` is the `job_id` of the 202 answer.
+2. Poll `GET /admin/tenants/provision/<job-id>` until `status` is `succeeded` (the `shared.job` status). `<job-id>` is
+   the `job_id` of the 202 answer. `failed` (read its `error`), `cancelled` or `stopped_budget` means abort.
 
 - **Expected:** steps `tenant_created`, `pilot_marked`, `content_active` (or `content_trialing`), `crm_subscribed`,
   `tripplanner_subscribed`. Tenant 360 › Subscription shows the "Pilot until ..." badge.
@@ -200,8 +207,11 @@ The AI budget lives in two pots today.
 2. Ask the owner to set the CRM budget and switch AI on if the plan includes it.
 
 - **Expected:** Tenant 360 › Cost shows the effective budget and its source.
-- **Verify:** TripPlanner fails closed: a tenant with no resolved budget gets no AI (`spend_unreadable`, AA-TripPlanner-Web
-  `backend/shared/tenant_budget.py`). Read Tenant 360 › Cost after the owner's first session.
+- **Verify:** TripPlanner fails closed per tenant (AA-TripPlanner-Web `backend/shared/tenant_budget.py`): a tenant
+  with no resolved budget gets no AI with reason `tenant_budget_none`, a budget that cannot be read gives
+  `tenant_budget_unreadable`, and a spent or 0 USD budget gives `tenant_budget_cap` (narration says
+  `ai_budget_exhausted`). `cap_reached` and `spend_unreadable` are the app-wide gateway caps (`backend/aa_llm/budget.py`),
+  not the tenant budget. Read Tenant 360 › Cost after the owner's first session.
 
 > [!NOTE]
 > **Gap G12.** A CIS override does not reach CRM drafts: the CRM has its own pot and ledger. Whether one budget should
@@ -251,7 +261,7 @@ an exit is a manual, per-app job with the destructive-ops procedure (`skill/aa-c
 |---|---|---|---|
 | G2 | No tool clears the pilot marker: leaving pilot mode is a hand write | AA-CIS-App | AA-1086 |
 | G2a | The New tenant modal cannot create the pilot or add add-ons (API only) | AA-CIS-App | AA-1086 |
-| G9 | The CRM's Dev-only E2E staff check (`crm.tenant.is_synthetic`) is true for the pilot's CRM agency too, because Dev agencies are all synthetic; add the pilot exclusion before real data | AA-Partner | none yet (pre-pilot gate) |
+| G9 | The CRM's Dev-only E2E staff check (`crm.tenant.is_synthetic`) is true for the pilot's CRM agency too, because Dev agencies are all synthetic; add the pilot exclusion before real data. A stop check of Before you start, step 5 | AA-Partner | AA-1086 holds it as a pre-pilot gate until the tech lead approves its own AA-Partner issue |
 | G12 | Two AI budget pots (CIS + TripPlanner, CRM) | AA-Partner, AA-CIS-App | none yet |
 | G13 | No TripPlanner theme editor; the brand is set by hand | AA-CIS-App, AA-TripPlanner-Web | none yet (system audit M32) |
 | - | Agency web on one Spot task | AA-CIS-Infra | AA-1082 |

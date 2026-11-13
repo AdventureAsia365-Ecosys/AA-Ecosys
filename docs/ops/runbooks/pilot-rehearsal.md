@@ -118,8 +118,8 @@ orchestrator does it in the UI or through the API, no spec; **gap** = it cannot 
 
 | Step | Actor | Surface | Automation today | Expected evidence | Status |
 |---|---|---|---|---|---|
-| 1. Provision `pilot-rehearsal-01` and its CRM agency; set its AI budget; try a second real agency | Tech lead | CIS admin, `POST /admin/tenants/provision`; `/admin/tenants/agencies` | None for the create. TripPlanner add-on alone: AA-CIS-App `tests/e2e/admin-evidence/tp-addon.spec.ts`, project `admin-evidence`, `E2EADMIN=1`, `TENANT_SYNTHETIC`, `TP_PLAN`, `E2E_DRY_RUN`, `E2E_CANCEL` (A10b) | Job `done` with `tenant_created`, `content_active`, `crm_subscribed`, `tripplanner_subscribed`; `GET /tenant/v1/tenants/<tenant-id>/account` 200; CRM agency projected within one `crm_entitlement_pull` slot; Booking partner within about 5 minutes (`bk_tenant_pull`); `kind` agency without `pilot_weeks` refused 422 `dev_real_tenant_refused`, nothing written | manual (G1) |
-| 1b. Enter pilot mode on the marker tenant; try a second pilot | Tech lead | `POST /admin/tenants/provision` (`kind` agency, `pilot_weeks` 1) | None | Steps `tenant_created`, `pilot_marked`; Tenant 360 › Subscription badge "Pilot until ..."; a second pilot refused `pilot_taken` | manual |
+| 1. Provision `pilot-rehearsal-01` and its CRM agency; set its AI budget; try a second real agency | Tech lead | CIS admin, `POST /admin/tenants/provision`; `/admin/tenants/agencies` | None for the create. TripPlanner add-on alone: AA-CIS-App `tests/e2e/admin-evidence/tp-addon.spec.ts`, project `admin-evidence`, `E2EADMIN=1`, `TENANT_SYNTHETIC`, `TP_PLAN`, `E2E_DRY_RUN`, `E2E_CANCEL` (A10b) | Job `status` `succeeded` (`failed` with `error` = abort) with `tenant_created`, `content_active`, `crm_subscribed`, `tripplanner_subscribed`; `GET /tenant/v1/tenants/<tenant-id>/account` 200; CRM agency projected within one `crm_entitlement_pull` slot; Booking partner within about 5 minutes (`bk_tenant_pull`); `kind` agency without `pilot_weeks` refused 422 `dev_real_tenant_refused`, nothing written | manual (G1) |
+| 1b. Enter pilot mode on the marker tenant; try a second pilot. **Only** once G2 has landed, or once the tech lead has accepted in writing, before 1b, the hand write of step 12b | Tech lead | `POST /admin/tenants/provision` (`kind` agency, `pilot_weeks` 1) | None | Steps `tenant_created`, `pilot_marked`; Tenant 360 › Subscription badge "Pilot until ..."; a second pilot refused `pilot_taken` | manual |
 | 2. Invite the owner; owner signs in with MFA | Tech lead, then agency owner | Tenant 360 › Members › Invite (`owner`); agency drawer › Invite owner; `portal.lumiguides.it.com` | AA-Partner `e2e/phase2/phase2.spec.ts` (`e2e/playwright.phase2.config.ts`, `E2EP2=1`, `E2EP2STAFF`, `E2EP2SINCE`, `E2EP2OUT`) claims a viewer or editor invitation only; CRM `e2e/tests/invite.spec.ts` (`E2ECRMINVITE=1`, `E2ECRMINVITEE`) an assistant | Owner sees Content studio, CRM and TripPlanner in the app switcher; no "no active owner" banner; Tenant 360 › Members lists the owner `active` | manual (G1, G10) |
 | 3. Import a brand guide (.docx), adopt tour X and two more tours, Rewrite, export DOCX | Agency owner | Studio `/portal/brand`, `/portal/tours`, `/portal/tours/mine` | AA-Partner `e2e/playwright.portal.config.ts` projects `portal-setup` + `portal` (`BASE_URL`, `PORTAL_TARGET=fargate`, `E2EPORTALEMAIL`, `E2EPORTALPASSWORD`, `E2EPORTALTOTP`): `aa1040-export-marks.spec.ts` (AI mark on exports), `s268-studio-price-vi.spec.ts` (marketplace price). No spec for brand import or Rewrite | Brand rules +1; tour cards with photo and price; usage meter +1; DOCX carries `X-AI-Generated` and the AI mark in its properties | manual (G3) |
 | 4. Refresh topics (time it), pick an angle, write one blog and one LinkedIn post, edit in the viewer; release a held piece | Agency owner; A10b for the release | Studio `/portal/create`, `/portal/content`; CIS **Tenant content QA › Compliance** | Release: AA-CIS-App `tests/e2e/admin-evidence/compliance-release.spec.ts` (`E2EADMIN=1`, `FLAG_SYNTHETIC`, `FLAG_REAL`, `E2E_DRY_RUN`) and the flag seeder `python -m services.tenant_account.e2e_fixtures subject-gate-flag --tenant <tenant-id> --run <run>` (ECS exec on `aa-cis-dev-api`, DRY RUN first). No spec for topics, angle or writing | Every adopted tour has a topic or a stated reason; slate time recorded; the viewer shows no writer brief and no search context; the held piece released by A10b with a `content_compliance.released` audit row | manual (G3); release automated |
@@ -133,7 +133,7 @@ orchestrator does it in the UI or through the API, no spec; **gap** = it cannot 
 | 10. Traveller portal: code sign-in, passport and flight, e-sign, itinerary and voucher; send to AA ops | Traveller; A10c reads the ops view | `go-dev.lumiguides.it.com/c/t`; CRM staff console `/staff` | `lifecycle-thin.spec.ts` (portal link, code sign-in, stage 3 lock, e-sign envelope) | The itinerary matches tour X; the ops view shows the departure | automated (G1 for this tenant) |
 | 11. AA agency invoice (AAT), payment by maker, approval by checker, overdue blocks a hold (409) until paid | A10e maker and checker | Booking `/agency-billing`; CIS Tenant 360 › Booking billing (read) | `writes.spec.ts` tests 2-3 (`SYNTHETIC_AGENCY_INVOICE`, `PAYMENT_AMOUNT`); invoice from the seeder `python -m app.e2e_fixtures --apply --run <run> --agency-tenant <tenant-id>` (ECS exec on `aa-booking-dev-api`, DRY RUN first) | Payment recorded and approved by two identities, each the actor of its audit row; 409 on a hold while overdue, then open again | maker-checker automated; overdue gap (G7) |
 | 12. Budget fail-closed in three apps (X1); then reset the budgets | Tech lead; agency owner; traveller | Tenant 360 › Subscription override; CRM **Settings › AI**; studio and planner | None live (`planner.spec.ts` mocks the paused chat) | See [X1](#x1-ai-budget-fails-closed-in-three-apps) | manual (G8) |
-| 12b. Leave pilot mode on the marker tenant | Tech lead | none | None | `SELECT slug FROM shared.tenants WHERE is_pilot` returns no row; Dev pilot slot free | gap (G2) |
+| 12b. Leave pilot mode on the marker tenant | Tech lead | Until G2: DB Migrate `mode=run-script` as in [onboarding Step 8](pilot-agency-onboarding.md#step-8-leave-pilot-mode) (DRY RUN first, the tech lead approves the one statement); then [Teardown](#teardown) | None | `SELECT slug FROM shared.tenants WHERE is_pilot` returns no row; Dev pilot slot free | gap (G2) |
 
 The tour retirement (X2) and the AA-cancelled departure (X3) run after step 12, so they cannot break the main chain.
 
@@ -146,8 +146,10 @@ The tour retirement (X2) and the AA-cancelled departure (X3) run after step 12, 
    may not do this.
 2. Content studio: Rewrite a tour. Expected: refused before any model call (`shared.cost_guard`), one refused row
    in `shared.llm_call_log`.
-3. TripPlanner: send one chat turn on `/pilot-rehearsal-01/plan`. Expected: the chat says it is paused at the money
-   cap (`cap_reached`); search falls back to keyword ranking.
+3. TripPlanner: send one chat turn on `/pilot-rehearsal-01/plan`. Expected: the per-tenant refusal
+   `tenant_budget_cap` (AA-TripPlanner-Web `backend/shared/tenant_budget.py`; the narration answer carries
+   `ai_budget_exhausted`); search falls back to keyword ranking. `cap_reached` or `spend_unreadable` is the app-wide
+   gateway cap (`backend/aa_llm/budget.py`), not the tenant budget: record it as a **FAIL** of X1, not a PASS.
 4. CRM: the owner sets **Settings › AI** budget to 0 and asks for a draft. Expected: `budget_exhausted`, no model
    call. The CRM has its own pot (`crm.tenant_settings.ai_budget_usd`, ledger `crm.llm_call`); the CIS override does
    not reach it (onboarding gap G12).
@@ -155,14 +157,44 @@ The tour retirement (X2) and the AA-cancelled departure (X3) run after step 12, 
 
 ### X2: tour retirement
 
-Retiring a tour on Dev hides it for every Dev tenant, so X2 runs last and restores at once.
+Retiring a tour on Dev hides it for every Dev tenant, so X2 runs last and restores at once. It changes shared Dev
+state: `tour_retirement_fanout` (AA-CIS-App `services/tour_lifecycle/fanout.py`) flags every live post about the tour
+for every tenant, sends `tour_notice_email` mails to every tenant holding a derivative, and schedules
+`retired_page_draft` for agencies that opted into the automatic move to draft; Booking notifies staff on every open
+trip case; the restore then mails a "back on sale" notice. So it starts with a read-only blast-radius check.
 
-1. Tech lead: trash tour X's Master in the CIS admin, then wait for `tour_retirement_fanout`.
+0. **Pre-check (read only, abort on any doubt):**
+   - CIS dry run: `GET /admin/tours/<tour-id>/lifecycle-preview?action=trash_master` (the confirm dialog's dry run,
+     rolled back). Expected `allowed` true; note `derivatives` (tenants, live posts) and `notifies_tenants`.
+   - The tenants behind those counts, through [ECS exec and S3](ecs-exec-s3-mediated.md) on `aa-cis-dev-api`
+     (container role `cis_app`, which reads these RLS tables): run `services.tour_lifecycle.derivatives.tenant_derivatives`
+     with the key's tour ids, then for those ids:
+
+     ```sql
+     SELECT t.slug, t.kind, t.is_canary, t.is_pilot, coalesce(p.auto_draft, false) AS auto_draft
+       FROM shared.tenants t
+       LEFT JOIN acp_shared.tour_retirement_policy p ON p.tenant_id = t.tenant_id
+      WHERE t.tenant_id = ANY($1::uuid[]);
+     ```
+
+   - Booking: the open trip cases and active holds on X, read-only through ECS exec (local mode) on
+     `aa-booking-dev-api` with the queries the pull itself uses (AA-Booking `backend/app/catalog/lifecycle.py`,
+     `AFFECTED_CASES_SQL` and `PLAN_SQL`, with X's source id).
+   - **Abort unless** every tenant listed is synthetic (`is_canary` true, `is_pilot` false), none is the pilot or the
+     marker tenant, and every open Booking case and hold on X is a synthetic fixture. Pick X' instead if X fails.
+   - The restore (step 4) must finish before the earliest `draft_due_at` (event time + the notice period, default
+     7 days), so no opted-in WordPress page is moved to draft. Plan X2 for one sitting.
+1. Tech lead: trash tour X's Master in the CIS admin (`PATCH /admin/master/<tour-id>/trash`), then wait for
+   `tour_retirement_fanout`.
 2. Expected: the agency gets the `tour.discontinued` notice; Booking (`bk_tour_lifecycle_pull`) notifies staff per
    open trip case and refuses new quotes and holds (409 `tour_not_served`); the TripPlanner trip lists the stop as
    unavailable.
 3. The CRM has no handler yet (AA-1093): record that the trip with tour X is **not** flagged.
-4. Restore: `PATCH /admin/master/<tour-id>/restore`; expected `tour.reinstated` and the tour served again.
+4. Restore, in two calls. `PATCH /admin/master/<tour-id>/restore` takes the Master out of the trash but leaves it
+   `inactive` (paused): the tour is still not served. Then `PATCH /admin/master/<tour-id>/activate`. A 409
+   `source_not_live` means restore the source tour first; a 409 for the elephant-riding policy means the Review Queue
+   approve. Expected only **after the activate**: `tour.reinstated` notices, `gold_aa_internal.v_tour_liveness` shows
+   the key served (Master `active`), Booking quotes and holds on X answer again and the planner lists the stop.
 
 Status: manual; CRM part is a gap owned by AA-1093.
 
@@ -195,21 +227,50 @@ Cap 10 USD, estimate 2-4 USD (system audit S278, section 4). The infrastructure 
 | CRM AI draft | 1 | < 0.01 (0 on the stub model) |
 | Budget probes (X1) | refused | <= 0.05 |
 
-- **Stop rule:** read the running total after steps 3, 4 and 5. Above 6 USD, stop and ask the tech lead; never pass
-  10 USD.
+- **Stop rule:** read the running total after steps 3, 4 and 5: every CIS ledger row of the window, shadow rows
+  included, plus the CRM's `crm.llm_call` of the tenant. Above 6 USD, stop and ask the tech lead; never pass 10 USD.
 - **Report per stage** from the CIS ledger (read through [ECS exec and S3](ecs-exec-s3-mediated.md), container
   role `cis_app`):
 
   ```sql
-  SELECT app, stage, status, count(*) AS calls, round(sum(coalesce(cost_usd, 0)), 4) AS usd
+  SELECT coalesce(app, quality_signal->>'app', 'cis') AS app, stage, status,
+         coalesce(is_shadow, quality_signal @> '{"shadow": true}') AS shadow,
+         count(*) AS calls, round(sum(coalesce(cost_usd, 0)), 4) AS usd
     FROM shared.llm_call_log
-   WHERE tenant_id = '<tenant-id>'::uuid AND created_at >= '<run-start>'::timestamptz AND is_shadow IS NOT TRUE
-   GROUP BY app, stage, status ORDER BY usd DESC;
+   WHERE tenant_id = '<tenant-id>'::uuid AND created_at >= '<run-start>'::timestamptz
+   GROUP BY 1, 2, 3, 4 ORDER BY usd DESC;
   ```
 
   `<tenant-id>` is the id of `pilot-rehearsal-01`; `<run-start>` is the time step 1 began. Report the rows of the same
-  window without a tenant id as one "untagged" line (step 0 made sure no other paid run shares the window). The CRM's
-  draft spend is on **Settings › AI** (ledger `crm.llm_call`, `cost_usd_est`).
+  window without a tenant id as one "untagged" line (step 0 made sure no other paid run shares the window). Shadow
+  rows are billed A/B calls (CIS migration 319): they count toward the cap and the stop rule. Rows written before 319
+  have `app` and `is_shadow` NULL, hence the `coalesce` from `quality_signal`. The CRM's draft spend is on
+  **Settings › AI** (ledger `crm.llm_call`, `cost_usd_est`) and is added to the total.
+
+## Teardown
+
+Run after X3, in this order. Each write below is the tech lead's; the evidence folder records each result.
+
+1. **Marker tenant out of pilot mode (step 12b).** Until G2 lands, the one hand write of
+   [onboarding Step 8](pilot-agency-onboarding.md#step-8-leave-pilot-mode): DB Migrate `mode=run-script` with the master
+   role, DRY RUN first, the tech lead approves that one statement on `shared.tenants`. Then step 12b's check.
+2. **Marker tenant removed.** `pilot-rehearsal-01-marker` is `kind` agency with `is_canary` false: a non-synthetic
+   tenant that root ADR 0019 d16 does not allow on Dev once it is no longer the pilot. Soft offboard it (`POST
+   /admin/tenants/<tenant-id>/offboard`, reason "pilot rehearsal teardown"), then erase it with the `data_erasure` job:
+   `POST /admin/job-runner/erasure/run` with `subject` tenant (DRY RUN by default), the tech lead approves the DRY RUN
+   fingerprint, then the apply ([DSAR erasure runbook](../../legal/dsar-erasure-runbook.md)). The apply refuses a tenant
+   offboarded less than `ERASURE_TENANT_RETENTION_DAYS` ago; until then the offboarded marker stays, and the README
+   names the date of the apply.
+3. **`pilot-rehearsal-01` is kept** as a synthetic fixture (`kind` demo, `is_canary` true) for the next rehearsal and
+   for G1, with its CRM agency and E2E members. Its budget override (X1) is removed and its CRM AI budget restored. If
+   the tech lead decides otherwise, offboard it like the marker (CIS offboard, CRM **Settings › Data** leave) and list
+   it in the README.
+4. **Channel posts taken down.** Every WordPress post of step 4b is removed by the agency owner in the studio (**Remove
+   post**, `DELETE /v1/publish-log/<publish-id>`), and the Facebook test Page post likewise; the publish log shows each
+   as unpublished. If the free WordPress test site has expired, write that in the README.
+5. **Booking fixtures.** The seeder rows of steps 8-11 and X3 are synthetic and stay, tagged by their run id; cancel any
+   still-open synthetic hold so it does not block the next run.
+6. **Final read:** step 0 checks 3 and 5 again (job tables idle, pilot slot free) and the spend total.
 
 ## Evidence
 

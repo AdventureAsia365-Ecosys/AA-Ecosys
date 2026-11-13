@@ -50,3 +50,28 @@ Docs only, root repo. Two pages: `docs/ops/runbooks/pilot-agency-onboarding.md` 
 - The New tenant modal calls the synchronous `POST /admin/tenants` (no pilot, no add-ons): the pilot is API-only (G2a).
 - Step 5 depends on this wave's TripPlanner change (the AA catalogue keyed on the AA-hosted tenant): before it, a
   `demo` agency's planner lists the AA catalogue instead of its adopted tours.
+
+## Review fix pass (S279)
+
+Seven reviewer findings, all confirmed against `origin/main` of the child repos and fixed:
+
+- **X2 restore is two calls.** `restore_master` (AA-CIS-App `services/tour_lifecycle/service.py`) brings the Master back
+  `inactive`; only `PATCH /admin/master/<tour-id>/activate` serves it again (409 `source_not_live` or the
+  elephant-riding policy refusal are named).
+- **Job status.** `GET /admin/tenants/provision/<job-id>` returns the `shared.job.status` column: `succeeded`, never
+  `done` (`job_status_check`).
+- **G9 is a stop check.** Onboarding "Before you start" step 5 aborts unless the CRM E2E staff check excludes the pilot
+  or A10c is off on the CRM. G9 is held by AA-1086 as a pre-pilot gate until the tech lead approves an AA-Partner issue.
+- **Teardown section** in the rehearsal: the 12b hand write (DB Migrate run-script, DRY RUN), soft offboard and
+  `data_erasure` of the marker tenant (DRY RUN fingerprint; the apply waits for the retention window),
+  `pilot-rehearsal-01` kept as a synthetic fixture, channel posts removed. Step 1b now waits for G2 or the tech lead's
+  written acceptance of the hand write.
+- **X2 blast radius.** A read-only pre-check first: the CIS `lifecycle-preview` dry run, the tenants behind the
+  derivative counts with their `is_canary` / `is_pilot` / `auto_draft`, and the Booking open cases and holds (the
+  pull's own `AFFECTED_CASES_SQL` / `PLAN_SQL`); abort unless all are synthetic; restore before any `draft_due_at`.
+- **Spend report.** Shadow rows are billed A/B calls (CIS 319), so the query keeps them and groups by
+  `coalesce(is_shadow, quality_signal @> '{"shadow": true}')`, with `coalesce(app, quality_signal->>'app', 'cis')`; the
+  stop rule counts shadow rows and `crm.llm_call`.
+- **TripPlanner reason codes.** The tenant cap is `tenant_budget_cap` (narration `ai_budget_exhausted`), no budget
+  `tenant_budget_none`, unreadable `tenant_budget_unreadable` (`backend/shared/tenant_budget.py`); `cap_reached` /
+  `spend_unreadable` are the app-wide caps (`backend/aa_llm/budget.py`) and count as a FAIL of X1.
