@@ -35,6 +35,8 @@ What each app does for the business is in the [CEO guide](ceo.md). Engineering a
 Inside the CIS admin, two areas have their own runbook because the business owner reads them often:
 [AI providers and reports](ai-providers-and-reports-runbook.md) (AI and data spend, model health, the report
 register).
+Inside the Booking admin, the customer-service team who enter tour prices have their own guide:
+[Booking price setup](booking-price-setup.md).
 
 ## Three kinds of sign-in
 

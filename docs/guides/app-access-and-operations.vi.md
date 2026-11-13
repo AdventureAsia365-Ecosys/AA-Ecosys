@@ -36,6 +36,8 @@ Vercel) nằm ở [onboarding](../onboarding.md); trang này chỉ nói về b�
 Trong CIS admin, có hai khu vực có runbook riêng vì chủ doanh nghiệp xem thường xuyên:
 [nhà cung cấp AI và báo cáo](ai-providers-and-reports-runbook.vi.md) (chi phí AI và dữ liệu, tình trạng các model, sổ
 đăng ký báo cáo).
+Trong Booking admin, nhóm chăm sóc khách hàng nhập giá tour có hướng dẫn riêng:
+[thiết lập giá trong Booking](booking-price-setup.vi.md).
 
 ## Ba kiểu đăng nhập
 
