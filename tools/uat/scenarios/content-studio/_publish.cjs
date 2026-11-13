@@ -134,16 +134,12 @@ function publishSteps(name, state) {
         let st = await studioCall(page, 'GET', c.status);
         if (st.status !== 200) throw new Error(`reading the ${c.label} connection answered ${st.status}`);
         if (st.data && st.data.connected && st.data.last_verify_error) {
-          // A stored connection that failed its last check (e.g. an expired token): the owner disconnects it on the
-          // integrations page and connects again with the current details. Exactly one disconnect is let through.
+          // A stored connection that failed its last check (e.g. an expired token): it is removed (the Disconnect of the
+          // integrations page, sent from this page: that page shows the Page id in clear, with no hook to blur it) and
+          // connected again with the current details. Exactly one disconnect is let through.
           state.disconnectRule.max = 1;
-          await h.click(page.getByTestId(c.summary).getByRole('link').first());
-          await page.waitForURL('**/portal/account/integrations', { timeout: 30_000 });
-          await h.click(page.getByRole('button', { name: c.disconnectLabel, exact: true }).first());
-          const gone = page.waitForResponse((r) => R.isCall(r, R.PATHS[c.disconnect], 'DELETE'), { timeout: 60_000 });
-          await h.click(page.getByRole('dialog').getByRole('button', { name: 'Disconnect', exact: true }));
-          const res = await gone;
-          if (res.status() >= 300) throw new Error(`disconnecting the stale ${c.label} connection answered ${res.status()}`);
+          const res = await studioCall(page, 'DELETE', c.status);
+          if (res.status >= 300) throw new Error(`disconnecting the stale ${c.label} connection answered ${res.status}`);
           state.reconnected = true;
           await check(page, h, '/portal/content/publish', { heading: 'Publish' });
           st = await studioCall(page, 'GET', c.status);
