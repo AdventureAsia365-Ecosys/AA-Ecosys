@@ -34,7 +34,8 @@ Tên nút và tên trang bên dưới là chữ tiếng Anh trên màn hình (m�
 
 Mẫu này chỉ thêm quyền. Nếu bạn đang giữ một vai trò khác trong một ứng dụng (ví dụ Booking **Sales** hoặc
 **Finance**), nút bị tắt và nêu tên vai trò đó: mỗi ứng dụng chỉ cho một vai trò mỗi người, nên chủ nền tảng đổi
-bằng tay. Booking **Sales** xem được mọi trang giá nhưng không đổi được gì.
+bằng tay. Booking **Sales** mở được **Price setup**, **Price readiness**, **Agency tiers**, **Pricing policy**,
+**Seasons** và **Holiday events** ở chế độ chỉ xem (không mở được **Pricing rules & FX**) và không đổi được gì.
 
 Mọi thay đổi giá cần **hai người**: bạn lập, một người thứ hai có vai trò Contracting hoặc Booking admin duyệt. Bạn
 không bao giờ tự duyệt thay đổi của mình.
@@ -53,8 +54,8 @@ Cột **Next step** (Bước tiếp theo) cho biết tour đang chờ gì:
 | **Add hotels & services** (Thêm khách sạn & dịch vụ) | Mở **Hotels & services** của tour (mục 3) hoặc dùng file Excel (mục 4) |
 | **Replace an inactive item** (Thay mục đã ngừng) | Một khách sạn, loại phòng hay dịch vụ đã bị tắt: thay nó trong **Hotels & services** |
 | **Load supplier rates** (Nhập giá nhà cung cấp) | Một thành phần chưa có giá nhà cung cấp đã duyệt: nhập bảng giá của nhà cung cấp (mục 3, bước cuối) |
-| **Approve an exchange rate** (Duyệt tỷ giá) | Một đơn vị tiền của giá chưa có tỷ giá được duyệt hôm nay: đề nghị trên **Pricing rules & FX** |
-| **Approve a pricing rule** (Duyệt quy tắc giá) | Chưa có quy tắc giá đại lý đã duyệt đang áp dụng: nhờ trưởng nhóm giá trên **Pricing rules & FX** |
+| **Approve an exchange rate** (Duyệt tỷ giá) | Một đơn vị tiền của giá chưa có tỷ giá được duyệt hôm nay: đề xuất tỷ giá trên **Pricing rules & FX**; một người thứ hai có vai trò Contracting hoặc Booking admin duyệt |
+| **Approve a pricing rule** (Duyệt quy tắc giá) | Chưa có quy tắc giá đại lý đã duyệt đang áp dụng: đề xuất quy tắc trên **Pricing rules & FX**; một người thứ hai có vai trò Contracting hoặc Booking admin duyệt |
 | **Recompute prices** (Tính lại giá) | Đã đủ mọi thứ nhưng giá chưa được tính: chọn các tour, bấm **Recompute prices** (mỗi lần 50 tour) |
 | **Make sellable** (Mở bán) | Chọn các tour, bấm **Make sellable** |
 | **Ready to sell** (Sẵn sàng bán) | Không còn gì phải làm |
@@ -94,15 +95,29 @@ dịch vụ và giá nhà cung cấp của chúng.
 
 Sheet **Prices**, mỗi dòng một nhóm số khách và một khoảng ngày:
 
-- **Channel**: `b2b` (mặc định) hoặc `fixed_departure`. **Currency**: để trống = USD; bước **Check** báo mọi đơn vị
-  tiền không phải tiền bán.
-- **Pax min** / **Pax max**: số khách của nhóm, ví dụ 2–2, 3–4, 11 và để trống (để trống = không giới hạn trên). Các
-  dòng cùng kênh và cùng đơn vị tiền không được chồng nhau về ngày và số khách.
+- **Channel**: `b2b` (mặc định) là giá mỗi khách dành cho đại lý; biểu giá đại lý và giá **From** trên TripPlanner
+  chỉ đọc các dòng này. `fixed_departure` là giá một chỗ trên một chuyến khởi hành theo lịch cố định (đi ghép đoàn),
+  tính theo quy tắc giá của kênh khởi hành cố định. **Currency**: để trống = USD; bước **Check** báo mọi đơn vị tiền
+  không phải tiền bán.
+- **Pax min** / **Pax max** (pax = số khách): số khách của nhóm, ví dụ 2–2, 3–4, 11 và để trống (để trống = không
+  giới hạn trên). Các dòng cùng kênh và cùng đơn vị tiền không được chồng nhau về ngày và số khách.
 - **Valid from** / **Valid to**: ngày khởi hành; ngày cuối được tính.
 - **Season** là nhãn cho người đọc. **Peak** vẫn được đọc nhưng không quyết định gì: lịch mùa của tour quyết định mùa
   và phụ thu cao điểm (mục 6).
 - Tour có trong sheet này nhận một **phiên bản giá nháp** với đúng các giá nhập tay này. Giá tính từ giá nhà cung cấp
   được giữ, trừ khi một dòng giá tay phủ cùng ngày và số khách.
+
+Sheet **Departures**, mỗi dòng một ngày khởi hành mới:
+
+- **Capacity** (bắt buộc): số chỗ của chuyến, tối đa 1.000.
+- **Min to operate**: số chỗ đã bán tối thiểu để chuyến chạy (không quá số chỗ); 0 hoặc để trống = không có mức tối
+  thiểu. Khi số chỗ đã bán đạt mức này, lượt kiểm hằng ngày chuyển chuyến sang đảm bảo khởi hành.
+- **Sales cutoff days**: ngừng bán trước ngày khởi hành bấy nhiêu ngày (tính cả ngày đó), tối đa 90; 0 hoặc để trống
+  = bán tới ngày trước ngày khởi hành.
+- **Decision days before**: kiểm mức tối thiểu bao nhiêu ngày trước ngày khởi hành (để trống = 21, tối đa 365). Nếu
+  tới lúc đó bán chưa đủ chỗ, chuyến bị gắn cờ rủi ro và nhân viên quyết định trên B2B desk: vẫn chạy hay huỷ.
+- **Auto confirm**: `yes` (hoặc để trống) = booking của đại lý còn chỗ được xác nhận ngay; `no` = mọi booking trên
+  chuyến này chờ bộ phận điều hành xác nhận.
 
 ### Kiểm tra, rồi nhập
 
@@ -123,8 +138,8 @@ Mỗi lần đổi giá là một **phiên bản** mới; không có gì bị gh
 3. Nhập **Reason for the change** (Lý do thay đổi; bắt buộc, tối đa 300 ký tự) và bấm **Submit for approval** (Gửi
    duyệt).
 4. Người thứ hai mở cùng tab và đọc **Changes against the prices in force** (Thay đổi so với giá đang áp dụng): mỗi
-   dòng trước và sau, thay đổi lớn được đánh dấu, dòng dưới biên lợi nhuận sàn được gắn cờ, các dòng sẽ dừng. **What
-   it touches** (Ảnh hưởng) đếm số báo giá còn hạn, chuyến khởi hành và dòng giá đại lý trong các ngày đó.
+   dòng trước và sau, thay đổi lớn được đánh dấu, dòng dưới mức lợi nhuận thấp nhất cho phép được gắn cờ, và các dòng
+   giá kết thúc cùng phiên bản này. **What it touches** (Ảnh hưởng) đếm số báo giá còn hạn, chuyến khởi hành và dòng giá đại lý trong các ngày đó.
 5. Người thứ hai bấm **Approve** (Duyệt) (hoặc **Reject** (Từ chối) kèm lý do). Phiên bản thành **Published** (Đã
    áp dụng) và giá của tour được cập nhật.
 
@@ -142,8 +157,9 @@ policy**. Đổi chúng cũng cần người thứ hai; xem [runbook Booking adm
 
 ## 6. Lịch mùa và ngày lễ
 
-Mỗi điểm đến có một lịch mùa; tour dùng lịch của điểm đến ngày đầu tiên. Khi lịch chưa có khoảng nào được duyệt,
-mọi ngày là thấp điểm và không giá nào thay đổi.
+Mỗi điểm đến có một lịch mùa; tour dùng lịch của điểm đến ngày đầu tiên. Khi lịch chưa có khoảng nào được duyệt và
+chưa đặt mùa mặc định khác (**Season of the other dates** khác Low), báo giá và biểu giá đại lý coi mọi ngày là thấp
+điểm, còn giá hiện có giữ cờ cao điểm cũ: không giá nào thay đổi.
 
 1. Mở **Supply › Seasons** (Mùa) và mở lịch.
 2. **Add a range** (Thêm khoảng): **Kind** (**Season** hoặc **Stop-sale**), **Season** (Low, High, Peak,
@@ -170,6 +186,9 @@ Giá tạm không bao giờ là giá hợp đồng. Nó không bao giờ đượ
 hiện trên TripPlanner: các nơi đó chỉ dùng giá nhà cung cấp và giá nhập tay. Tour bị bỏ qua khi CIS chưa có số tiền
 tham khảo, khi tour đã có giá nhà cung cấp, hoặc khi nhân viên đã gõ tay giá gợi ý.
 
+Công tắc **Quote provisional CIS prices** (Báo giá theo giá tham khảo CIS; mặc định tắt) trên **Pricing policy** hiện
+chỉ được lưu và chưa thay đổi điều này: giá tạm vẫn chỉ để hiển thị.
+
 ## 8. Giá tham khảo CIS
 
 Giá tham khảo là giá mà file nguồn ghi cho một tour: số tiền, đơn vị tiền và cách tính. Nhân viên Booking so nó với
@@ -193,8 +212,8 @@ Giá **Per group** không cho Booking số tiền mỗi khách, nên không dùn
 
 ## 9. Kiểm một tour đã mở bán
 
-1. **Price setup**: bước tiếp theo của tour là **Ready to sell**, trạng thái **Priced** (Có giá), và mục
-   **Sellable** đã đạt. **Supply › Price readiness** hiện cùng trạng thái cho mọi tour.
+1. **Price setup**: bước tiếp theo của tour là **Ready to sell**, trạng thái **Priced** (Có giá) (hoặc **Priced by
+   hand** (Giá nhập tay)), và mục **Sellable** đã đạt. **Supply › Price readiness** hiện cùng trạng thái cho mọi tour.
 2. **Biểu giá đại lý**: **Supply › Agency tiers**, tab **Agencies**, bấm **View tariff** ở một đại lý. Tour có
    trong danh sách với giá theo mùa và nhóm số khách. Tour đang bán mà báo giá không tính được thì nằm ở danh sách
    riêng kèm lý do.
@@ -208,7 +227,7 @@ Giá **Per group** không cho Booking số tiền mỗi khách, nên không dùn
 | **Check** liệt kê lỗi | Sửa đúng sheet, dòng, cột được nêu trong file rồi kiểm lại; chưa có gì được ghi |
 | Tour cứ ở **Load supplier rates** | Một bảng giá vẫn là nháp, hoặc giá không phủ năm tới: nhờ người thứ hai công bố |
 | Không thấy nút duyệt | Bạn lập phiên bản này: người thứ hai duyệt |
-| Dải thông báo **No approved agency pricing rule is in force** | Không tour nào có giá từ giá nhà cung cấp; báo trưởng nhóm giá |
+| Dải thông báo **No approved agency pricing rule is in force** | Không tour nào có giá từ giá nhà cung cấp; đề xuất quy tắc trên **Pricing rules & FX**; một người thứ hai có vai trò Contracting hoặc Booking admin duyệt |
 | Trang từ chối một thay đổi | Vai trò của bạn không có quyền đó; hỏi chủ nền tảng |
 
 Trong giai đoạn dev, tech lead là kỹ sư trực: tạo issue Jira cho vấn đề thường, nhắn trực tiếp khi gấp. Gửi kèm địa
