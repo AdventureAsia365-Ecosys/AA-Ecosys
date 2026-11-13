@@ -5,7 +5,8 @@
 // Runs only with --allow-paid, on pilot-rehearsal-01 only (pilot guard). Writes exactly the rewrite POSTs (a page route
 // lets at most 3 through and aborts any further one); every other write is aborted and fails the take. Re-run safe: a
 // tour already adopted is not rewritten again; only the missing ones up to three adopted tours are started.
-// Env: UAT_REH_TOUR_X = tour X's id (the catalog tour_id or its published id; runbook Fixtures).
+// Env: UAT_REH_TOUR_X = tour X's id (the catalog tour_id or its published id; runbook Fixtures). UAT_REH_PRICE_OPTIONAL=1
+// lets an unpriced tour through (recorded in meta.gaps): only for the blog-chain tour, never for tour X.
 // Given: the rehearsal owner, the brand of REH-03-brand saved. When: Marketplace -> search tour X -> tick it -> tick two
 //        more -> Rewrite 3 tours -> My Tours -> X ready -> Export DOCX.
 // Then:  tour X's card shows its price (and its photo: a tour without one in the catalog is recorded as a data gap in
@@ -53,11 +54,15 @@ const sc = rw({
       async (page, h) => {
         const c = card(page, x.aa_name);
         await h.hover(c);
-        if (!x.from_price) throw new Error('tour X has no Booking price in the catalog (not sellable)');
+        // A tour adopted for the blog chain only (tour Y, S279: tour X's description is too thin for an article) may be
+        // unpriced: UAT_REH_PRICE_OPTIONAL=1 records that as a data gap; the rehearsal's tour X must have its price.
+        meta.priced = !!x.from_price;
+        if (!meta.priced && process.env.UAT_REH_PRICE_OPTIONAL !== '1') throw new Error('tour X has no Booking price in the catalog (not sellable)');
+        if (!meta.priced) meta.gaps.push('the tour has no Booking price (not sold to agencies)');
         meta.photo = !!x.cover_image_url;
         if (meta.photo) await h.expect(c.locator('img').first()).toBeVisible({ timeout: 30_000 });
         else meta.gaps.push('tour X has no photo in the catalog (card shows the placeholder)');
-        await h.expect(c).toContainText(/per person|From/i);
+        if (meta.priced) await h.expect(c).toContainText(/per person|From/i);
         const picked = await R.adopted(page);
         const have = new Set(picked.map((t) => t.published_tour_id));
         toStart = have.has(x.id) ? [] : [x];
