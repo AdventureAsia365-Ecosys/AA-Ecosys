@@ -34,7 +34,8 @@ manifest.json:
    "modules": [{"id", "title", "tier", "status", "version", "owner", "last_reviewed", "review_every_days",
                 "languages", "objectives", "prerequisites", "lab", "stale",
                 "lessons": [{"id", "title", "type", "minutes", "objective", "key", "translations": [{"lang", "key"}],
-                             "stale", "sources": [{"ref", "key", "pinned", "current", "stale"}]}],
+                             "stale", "sources": [{"ref", "key", "pinned", "current", "stale"}],
+                             "video"}],
                 "quiz": {"key", "items", "suspended"}}],
    "sections": [{"ref", "kind", "name", "anchor", "path", "key", "sha", "tier", "redactions", "available"}]}
 
@@ -43,6 +44,10 @@ manifest.json:
   stale       a cited section changed since the lesson was pinned, or an external section could not be read. The
               learning API opens a content review item for the module owner and hides suspended quiz items.
   key         object key relative to learn/; null when the section could not be read (stale).
+  video       additive field of format 1 (AA-1105, decision D8): null, or {"key", "captions": [{"lang", "key"}]}. The
+              keys are object keys in the bronze bucket under learn-media/ (not under learn/): the learning API
+              presigns them after its access check. The bundle never uploads a video; tools/uat builds and uploads
+              them, so a key may not exist yet (the API answers 404 for it).
 
 Usage:
   python tools/docs/build_learn_bundle.py --out _site/learn --ext-root _ext --sha "$GITHUB_SHA" --ref master
@@ -142,9 +147,15 @@ def build(out: Path, root: Path = REPO_ROOT, ext_roots: list[Path] | None = None
                                 "stale": is_stale})
             lesson_stale = any(x["stale"] for x in sources)
             stale_lessons += lesson_stale
+            video = None
+            if lesson.get("video"):
+                video = {"key": lesson["video"]["key"],
+                         "captions": [{"lang": lang, "key": ckey}
+                                      for lang, ckey in cl.video_caption_keys(lesson["video"])]}
             lessons.append({"id": lesson["id"], "title": lesson["title"], "type": lesson["type"],
                             "minutes": lesson["minutes"], "objective": lesson["objective"], "key": key,
-                            "translations": translations, "stale": lesson_stale, "sources": sources})
+                            "translations": translations, "stale": lesson_stale, "sources": sources,
+                            "video": video})
         quiz_entry = None
         hit = course.quizzes.get(m["id"])
         if hit is not None:

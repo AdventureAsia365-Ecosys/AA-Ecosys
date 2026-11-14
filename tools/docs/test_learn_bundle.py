@@ -167,6 +167,20 @@ class BuildTest(BundleCase):
         self.assertTrue(src["stale"])
         self.assertIsNone(src["key"])
 
+    def test_lesson_without_video_has_a_null_video(self):
+        self.assertIsNone(self.build()["modules"][0]["lessons"][0]["video"])
+
+    def test_lesson_video_passes_into_the_manifest_with_caption_keys(self):
+        text = (self.mod / "module.yaml").read_text(encoding="utf-8")
+        text = text.replace("    sources:\n", "    video:\n      key: learn-media/F1/01-reading.mp4\n"
+                                               "      captions: [en, vi]\n    sources:\n", 1)
+        (self.mod / "module.yaml").write_text(text, encoding="utf-8")
+        video = self.build()["modules"][0]["lessons"][0]["video"]
+        self.assertEqual(video, {"key": "learn-media/F1/01-reading.mp4",
+                                 "captions": [{"lang": "en", "key": "learn-media/F1/01-reading.en.vtt"},
+                                              {"lang": "vi", "key": "learn-media/F1/01-reading.vi.vtt"}]})
+        self.assertFalse((self.out / "learn-media").exists(), "the bundle never uploads a video")
+
     def test_course_error_fails_and_writes_nothing(self):
         (self.mod / "lessons/01-reading.md").write_text("# Another title\n", encoding="utf-8")
         with contextlib.redirect_stdout(io.StringIO()), self.assertRaises(blb.BuildError):

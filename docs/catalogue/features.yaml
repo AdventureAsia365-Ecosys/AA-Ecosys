@@ -652,6 +652,18 @@ features:
     owner: tech_lead
 
   # ── AA-Booking ────────────────────────────────────────────────────────────────────────────────────────────────────
+  - id: CIS-F048
+    app: cis
+    module: academy
+    name: AA Academy learning (courses, progress, quizzes, certificates)
+    name_vi: Học viện AA (khoá học, tiến độ, bài kiểm tra, chứng chỉ)
+    summary_vi: "Khoá học dựng từ tài liệu nội bộ; nhân viên học trên trang academy, máy chủ chấm bài và cấp chứng chỉ. Đang xây (lược đồ và API chưa áp dụng)."
+    summary: Courses built from the repo docs; staff learn on the academy host, the server grades quizzes and issues certificates. Being built (schema and API not applied yet).
+    roles: [admin, content, viewer]
+    status: planned
+    surface: []
+    depends_on: [CIS-F032]
+    owner: tech_lead
   - id: BK-F001
     app: booking
     module: shell

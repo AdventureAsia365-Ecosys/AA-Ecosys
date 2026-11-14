@@ -198,6 +198,19 @@ POLICY: dict[str, Policy] = {
         why="erasure requests and reports: ids, counts, codes and hashes only; no actor or approver, row value, "
             "audit before / after value, tenant name or slug, free-text reason or note, snapshot id or personal data",
     ),
+    # AA-1105 (root ADR 0022): the AA Academy learning API to the CRM web academy host. Quiz answers never leave the
+    # server before a submission (the graded result names `correct_choices`, never an `answer` key); the learner's
+    # display name is the only personal data (pii:name, shown on the verify view); no e-mail, identity subject,
+    # verification-code hash or token crosses.
+    "learn.http.v1": Policy(
+        forbidden_keys=frozenset({"answer", "answers", "email", "iss", "sub", "code_sha256", "token", "access_token",
+                                  "id_token", "refresh_token", "password", "admin_user_id"}),
+        forbidden_patterns=(r"(^|_)answers?$", r"(^|_)e?mail(_|$)", r"sha256", r"(^|_)tokens?$", r"(^|_)password"),
+        no_pii=False,
+        allowed_pii_classes=frozenset({"name"}),
+        why="learning progress, server-graded results and the certificate verify view; no correct answer before a "
+            "submission, no e-mail, identity subject, code hash or token; the display name is the only personal data",
+    ),
     # Signed cache purge notice (AA-987): served-state events only; no prices, no personal data.
     "catalog.tour.lifecycle.v1": Policy(
         forbidden_keys=frozenset({"supplier_net", "b2b_price", "price"}),
@@ -266,6 +279,8 @@ REQUIRED_NEGATIVES: dict[str, tuple[str, ...]] = {
     "tenant.addons.v1": ("decided_by", "provision_job_id"),
     # AA-1093: an erasure report never names the approver, never carries a row value or the tenant's trading name.
     "tenant.erasure.v1": ("approved_by", "row_values", "trading_name"),
+    # AA-1105: a quiz attempt never carries an answer, the verify view never an e-mail or the code hash.
+    "learn.http.v1": ("answer", "email", "code_sha256"),
     # AA-908: the hand-off never carries the traveller's token.
     "inquiry.submitted.v1.4": ("access_token",),
     # AA-1094: a tenant tour row never carries a price or a T2 score.

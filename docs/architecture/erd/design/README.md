@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, agent]
 applies_to: [aa-cis-dev-db, ecosystem]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-11-14
 review_every_days: 90
 generated: false
 related: [APP-04, APP-04-erd, AA-894]
@@ -23,6 +23,7 @@ writes here.
 | Schema | Owner | Page | Live? | Drift check |
 |---|---|---|---|---|
 | `crm` | AA-Partner | [crm.md](crm.md) | yes, since `crm-001` (78 tables and 6 views at `crm-023`); the page is not in sync yet | report only (`enforce=false`) |
+| `learn` | AA-CIS-App | [learn.md](learn.md) | not yet (planned CIS 420, AA Academy) | report only (`enforce=false`) until the first in-sync dump |
 | `tripplanner` | AA-TripPlanner-Web | [tripplanner.md](tripplanner.md) | yes | enforced (`enforce=true`) |
 
 ## Drift check

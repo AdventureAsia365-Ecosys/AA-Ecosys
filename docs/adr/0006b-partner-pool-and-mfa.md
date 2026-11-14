@@ -106,6 +106,7 @@ their tenant and content (AA-979).
 | `/crm/v1` (agency UI) | PARTNER × {the AA-Partner web client}; on Dev before AA-939 only, EXTERNAL × {`cis-portal`} | CRM membership + role from `crm.member` |
 | `/crm/ops/v1` (L1 console) | WORKFORCE × {`cis-admin`} (the CIS admin BFF forwards the staff token) | group `cis-admin` reads; `crm-platform-admin` writes |
 | `/crm/staff/v1` (ops, support) | WORKFORCE × {`crm-staff`} | groups `crm-ops`, `crm-support`; support also needs an active owner grant |
+| `/learn/v1` (AA Academy learning API on CIS; [ADR 0022](0022-aa-academy-learning-platform.md) decisions 6 and 7, added S280, proposed until the tech lead reviews them) | WORKFORCE × {`academy-web`} (the CRM web BFF on the academy host forwards the learner's token); `/learn/public/v1` is public | active CIS staff directory row matched on `(iss, sub)`, any role; draft modules need the CIS capability `learn.preview`; partner tokens refused until P7 |
 | Client host (travellers) | no Cognito token; CRM link tokens and email codes (ADR 0008a decision 4) | per-person access rows |
 
 - `cis-admin` and `breakglass` tokens are **refused** on `/crm/v1`, with a negative test per route group.

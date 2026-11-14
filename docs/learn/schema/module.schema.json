@@ -34,6 +34,16 @@
           "type": {"description": "GUIDE-13 §4.1 lesson types (quiz and lab are module files).", "enum": ["reading", "walkthrough", "worked-example"]},
           "minutes": {"type": "integer", "minimum": 2, "maximum": 30},
           "objective": {"type": "string", "minLength": 10, "maxLength": 200},
+          "video": {
+            "description": "Optional lesson video (decision D8): an MP4 or WebM object under the private learn-media/ prefix of the bronze bucket, played through a short-lived presigned URL the learning API issues. Caption files sit next to it as <key without extension>.<lang>.vtt. Built locally with tools/uat, never kept in git.",
+            "type": "object",
+            "required": ["key", "captions"],
+            "additionalProperties": false,
+            "properties": {
+              "key": {"description": "learn-media/<module id>/<NN>-<slug>.mp4 (or .webm); the folder is the module id and the name starts with the lesson number.", "type": "string", "pattern": "^learn-media/[A-Z][0-9]{1,2}/[0-9]{2}-[a-z0-9-]+\\.(mp4|webm)$"},
+              "captions": {"description": "Caption languages; en is required.", "type": "array", "uniqueItems": true, "minItems": 1, "items": {"enum": ["en", "vi"]}, "contains": {"const": "en"}}
+            }
+          },
           "sources": {
             "description": "The sections the lesson teaches from. Never copied: the reader renders the live section.",
             "type": "array",
