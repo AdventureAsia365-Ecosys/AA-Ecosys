@@ -53,6 +53,7 @@ How to read it:
 | What is next, what is done, what we will not do | [§9](#9-roadmap) |
 | Why something is the way it is | [§10](#10-decisions-log) |
 | A word you do not know | [§11](#11-glossary) |
+| How to start a new project or app | [New-project playbook](playbook/README.md); AA's own rules for agents in [§2.4](#24-two-working-rules-decide-dont-ask-no-agent-made-gates) and [§2.5](#25-more-working-rules-for-agents) |
 
 ---
 
@@ -181,6 +182,26 @@ decision D10 (S279) so that they can be taught and checked.
 
 Where they are applied: the session ritual (`skill/aa-session/SKILL.md`, issue list and "questions for the tech
 lead").
+
+### 2.5 More working rules for agents
+
+Five more rules set by the tech lead lived only in agent memory until S280 (AA-1102 R1, new-project kit decision D11).
+They continue the numbering of [§2.4](#24-two-working-rules-decide-dont-ask-no-agent-made-gates): W1 is "decide,
+don't ask" and W2 is "no agent-made gates". All seven hold for every agent session, the orchestrator and its lanes. The
+generic form, with limits a new project fills in, is the tolerance table of the
+[new-project playbook](playbook/principles.md).
+
+| # | Rule | What it means in practice | Set | Enforced by |
+|---|---|---|---|---|
+| W3 | **Paid runs: a small subset** | A batch that spends LLM or API money on Dev runs a trial of about 3 items, then at most about 50, then stops. Never the whole catalog unless the tech lead asks for it. State the expected cost before and the actual cost after (from the ledger) | S202 | DM-10.6; `--limit` flags; [AI gateway](architecture/ai-gateway.md) budgets |
+| W4 | **Quote before any paid item, and wait for its own yes** | Before a change adds a billable cloud resource or service, state its monthly cost and the assumption. A new paid service or paid feature is turned on only after an explicit yes to that item; a blanket approval or a quote in an audit is not a yes. On any account other than the main infrastructure account, name the account first | S239, S255, S259 | D-19; [PR template](../.github/pull_request_template.md) cost section; [FinOps](ops/finops.md) |
+| W5 | **Verify live before claiming** | A status that can change (a key, a credit, access, a rotation, a deploy, a quota) is checked live in the same turn, or reported as "not checked". Audits, registers, memory and old session logs are leads, not facts; every status line carries the check that backs it | S261 | Review; lane briefs; [`aa-ship`](../skill/aa-ship/SKILL.md) Definition of Done |
+| W6 | **One report page for the business owner** | Material for the business owner (cloud needs, vendor questions, an incident, the scale picture) is one detailed report page with tables, not several drafts in chat. Dev cost and usage numbers are marked as unstable. Lead with long-term advice (target state, options, roadmap), not a patch for today | S258 | Review; [`aa-jira-update`](../skill/aa-jira-update/SKILL.md) for posting |
+| W7 | **Every threshold is an admin-editable setting** | Every business policy value and every operational threshold or limit (quality gates, floors, rate limits, caps, budgets, retention windows) is stored as versioned data with an admin page for the administrator role and seeded with the approved default. Code reads it through one reader; an environment variable or a YAML value alone is not enough | S278, S279 | AA-1096; [S279 thresholds audit](audits/2026-11-13-S279-session/thresholds-audit/); per-app settings pages |
+
+W1 and W2 go together with two habits the tech lead asked for at the same time: a doable leftover (a live check, a
+remaining slice) is done in the session, not listed back as a reminder; and a session is not proposed for closing
+while unblocked work remains.
 
 ---
 
@@ -580,8 +601,9 @@ of data change.
 What makes the prod gate real later: a separate agent identity (GitHub Apps `aa-agent` and `aa-ci-bot`,
 [ADR 0011](adr/0011-github-app-identity-and-merge-rights.md), AA-901), CODEOWNERS on the risky paths (in all five repos
 since AA-901, not enforced in the dev phase) and code-owner review turned on at the prod trigger (U-25). GitHub Team is
-not bought (D-14, [ADR 0014](adr/0014-repo-visibility-and-github-plan.md)); the private repos rely on `main`-only OIDC
-trust and job guards instead, and ADR 0014 lists the choice to make for them at the prod trigger.
+not bought (D-14, [ADR 0014](adr/0014-repo-visibility-and-github-plan.md)). Every repo is public for now, so GitHub Free
+branch protection is available on all of them; `main`-only OIDC trust and job guards back it up, and
+[ADR 0021](adr/0021-github-org-security-and-ci-hygiene.md) sets org-level controls first at the prod trigger.
 
 ---
 
@@ -876,7 +898,7 @@ Each item is deliberate, with its reason. Reopening one needs a new decision in 
 |---|---|
 | A permanent staging environment, multi-region, active-active | Dev + previews + promoting the same image are enough until prod with large customers |
 | Creating the prod account or building prod before a go-live date | [ADR 0018](adr/0018-lean-aws-account-model.md) (accepted S262): `aa-prod` is created by the management root when the go-live date is set; D-16, D-17 |
-| GitHub Team or Enterprise, GHAS for private repos, making Infra public | D-14: Free plan, app repos public, root and Infra private; gitleaks and `main`-only OIDC instead |
+| GitHub Team or Enterprise, GHAS, making repos private again before the prod trigger | D-14 as updated in S280: Free plan, every repo public for now (ADR 0014 amendments, [ADR 0021](adr/0021-github-org-security-and-ci-hygiene.md)); gitleaks, org-level controls and `main`-only OIDC instead |
 | Vercel Pro before the first paying tenant | D-18 |
 | A human approval on every PR during the dev phase | DM-11.5 / D-13 |
 | A least-privilege agent role switch before prod | D-15, N-8 (trigger item U-53) |
@@ -935,7 +957,7 @@ S243 session record for N-x. Where a decision changed a standard, the standard i
 | D-11 | No erasure/export feature yet; manual runbook on request; button after Cognito customer sign-in | AA-839 |
 | D-12 | Tenant pool fails closed globally; per-route rollback kept | C2.3g, DM-8.4, SEC-10 (v1.1); [flag register](ops/feature-flags.md) |
 | D-13 | Merge rights by risk and phase: dev phase agent self-merges incl. security/infra; human gate from prod or first paying tenant | DM-11.5 (v1.1); `.claude/CLAUDE.md`; `session-workflow.md`; subagent hook |
-| D-14 | App repos public, root private, GitHub Free | [STYLE, where a page may live](STYLE.md#where-a-page-may-live-sec-06); [ADR 0014](adr/0014-repo-visibility-and-github-plan.md); U-25 |
+| D-14 | App repos public, root private, GitHub Free. **Updated S280 (AA-1102 R1):** root and Infra are public since 2026-10-22 (ADR 0014 amendment S247); making a repo private again is the last option at the prod trigger and needs its own costed decision ([ADR 0021](adr/0021-github-org-security-and-ci-hygiene.md), amends 0014 decision 4); the new-project template repo is public too (ADR 0014 amendment 3). GitHub Free stays | [STYLE, where a page may live](STYLE.md#where-a-page-may-live-sec-06); [ADR 0014](adr/0014-repo-visibility-and-github-plan.md); [ADR 0021](adr/0021-github-org-security-and-ci-hygiene.md); U-25 |
 | D-15 | Agent keeps the `aa365-admin` profile | DM-8.7; [§7.6](#76-access) |
 | D-16 | Prod layout and gate chosen with the go-live date | [ADR 0012](adr/0012-environment-model.md), accepted S257: layout decision 5, gate decision 8; build at the go-live date (decision 11); AA-880 |
 | D-17 | Prod in its own AWS account, `aa-prod`, in us-west-1 (S262; was "prod on acc2 by default" until ADR 0018 was accepted) | [ADR 0018](adr/0018-lean-aws-account-model.md) decisions 3 and 7; C7.2a (v1.9); AA-1004; AA-880 |
@@ -992,6 +1014,8 @@ S17 password generation); they are recorded in the S243 session log.
 | # | Decision | Enforced in |
 |---|---|---|
 | S279-D10 | The two working rules that lived only in private agent notes, "decide, don't ask" and "no agent-made gates", are written into the operating model (AA Academy decision D10, AA-1098) | [§2.4](#24-two-working-rules-decide-dont-ask-no-agent-made-gates); review; `skill/aa-session` |
+| S279-K1 | The new-project kit design (AA-1099) is approved with its fourteen decisions D1 to D14: a thin profile over named standards, nine phases with red / amber / green gates, Kanban with a WIP cap and an appetite per issue, PRINCE2-style tolerances for agents, pages in `docs/playbook/`, templates in `docs/templates/`, a public Copier template repo, ASVS level 1 at every release, prod controls switched on at G7 | [New-project playbook](playbook/README.md); [research](research/new-project-playbook/README.md) section 7; AA-1102, AA-1103 |
+| S279-K2 | Rules that lived only in agent memory move into the repo before the kit copies anything (kit decision D11) | [§2.5](#25-more-working-rules-for-agents) (done in S280, AA-1102 R1; the first two rules are in §2.4) |
 
 ---
 
@@ -1030,6 +1054,7 @@ Full glossary (by area, with the Vietnamese terms): [`glossary.md`](glossary.md)
 | 2026-10-19 | S243 | This handbook: one page for process, docs, versioning, releases, operations, cost, roadmap and decisions; every reconciliation correction applied; six documents marked superseded: the S241 review and roadmap and the four S243 advisory files (AA-887) |
 | 2026-10-28 | S255 | Docs review: Vietnamese summaries moved to the translation `engineering-handbook.vi.md`; people named by role; generated references, `/admin/docs`, the deploy gate (AA-993 G5), the budget and the acc1 exit (AA-998) brought up to date; S255 language decision |
 | 2026-11-14 | S280 | §2.4 adds the two working rules of AA Academy decision D10 (AA-1104); §10.4 records the decision |
+| 2026-11-14 | S280 | New-project kit clean-up (AA-1102 R1): working rules W3 to W7 moved from agent memory into [§2.5](#25-more-working-rules-for-agents); D-14 and the related rows updated to the public repos (ADR 0014 amendments, ADR 0021); S279 kit decisions in [§10.4](#104-s279-2026-11-13) |
 
 ### 12.2 Superseded documents
 

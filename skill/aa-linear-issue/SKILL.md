@@ -88,9 +88,9 @@ Thiếu → bổ sung trước, chưa giao.
 ## Đóng
 
 - Commit/PR ghi `Refs AA-xxx` trong thân. Tiêu đề PR không chứa mã issue (kể cả dạng `fix: AA-123 …` — Linear đọc
-  thành câu đóng issue). Thân PR chỉ nhắc mã của issue mà PR thật sự làm. CI `pr-title` đã chặn `[AA-xxx]` trong tiêu đề
-  và từ khoá đóng issue trong thân ở AA-Booking, AA-Partner, AA-TripPlanner-Web; repo gốc, AA-CIS-App, AA-CIS-Infra
-  chưa có guard nên tự kiểm.
+  thành câu đóng issue). Thân PR chỉ nhắc mã của issue mà PR thật sự làm. CI `pr-title` chạy ở cả 6 repo (AA-1024 G11):
+  chặn mã issue trong tiêu đề, mã nằm ngoài dòng `Refs` và từ khoá đóng issue trong thân. Luật đầy đủ: `skill/aa-ship`
+  mục kiểm trước merge (nguồn duy nhất, skill này chỉ trỏ tới).
 - Linear vẫn có thể tự chuyển Done khi merge/deploy/DB Migrate dù chỉ có `Refs`: sau mỗi merge/apply/deploy của issue
   còn mở, `get_issue` kiểm status và mở lại nếu bị đóng nhầm (bài học trong `lessons.md`, mục Verify và "Done").
 - Chỉ chuyển Done khi `aa-ship` (verify live + Đánh Done) pass, kèm comment "Verified live …" có bằng chứng.

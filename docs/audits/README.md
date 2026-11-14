@@ -1,5 +1,9 @@
 # Audits — AA-CIS pipeline
 
+> Bảng dưới là **danh sách chọn lọc** các audit chính (chủ yếu pipeline CIS và các bản tư vấn lớn), không phải mục lục
+> đầy đủ: thư mục `docs/audits/` có nhiều audit hơn. Xem hết bằng `git ls-files docs/audits | cut -d/ -f3 | sort -u`;
+> mỗi phiên ghi thư mục audit của mình trong log phiên (`docs/sessions/`) và `state-snapshot.md` (S280, AA-1102 R1).
+
 | Ngày | Phạm vi | Bản xem | Ghi chú |
 |---|---|---|---|
 | 13/11/2026 | AA-1093: drill khôi phục một tenant của CIS trên Dev (tenant giả lập `audit-atlas-hearth`): job `tenant_backup` + `restore_drill` vào schema tạm — `ok`, `complete`, 77 checksum, 76 bảng, 1565/1565 dòng | [JSON](2026-11-13-S279-cis-restore-drill/restore-drill.json) · [runbook](../ops/runbooks/tenant-restore-drill.md) | $0 (DB + S3). Chỉ id, tên bảng, số dòng; không giá trị dòng nào |
