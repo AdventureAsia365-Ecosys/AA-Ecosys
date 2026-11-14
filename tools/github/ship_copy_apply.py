@@ -31,9 +31,13 @@ the tool refuses (exit 4) while an OPEN bot/migration-copy/<owner>-<lower NNN> P
 /health/ready lacks the key of a lower file on Infra main (above keys_baseline) or cannot be read. Applying 331 while
 330 waits makes 330 out-of-order for auto-apply (AA-920: 297 applied after 299). --allow-out-of-order bypasses it.
 
+An apply refused because a job table is busy or a rerun wave is open (the run's log: `exit code: 7`, "apply refused: a
+job table is busy", "MIGRATE ERROR: refusing apply — busy") prints "apply held: job tables busy (<table: kinds>)" and
+exits 7: nothing ran, the file goes on once idle (S281: a tour trash/restore queued a platform recompute of 16-52 min).
+
 Exit: 0 applied / checked and (apply) the key is registered | 1 run not green or key not registered |
 2 usage, dispatch failed or run not found | 3 copy PR red | 4 refused (destructive, closed, out of order) |
-5 timed out. dbmig.sh calls this with --no-copy. Orchestrator only: .claude/hooks/subagent-guardrails.sh refuses any
+5 timed out | 7 apply held: a job table busy or a rerun wave open (nothing ran; re-dispatch once idle). dbmig.sh calls this with --no-copy. Orchestrator only: .claude/hooks/subagent-guardrails.sh refuses any
 subagent command that names this tool or dbmig.sh (the merge and the dispatch run inside, out of the hook's sight).
 Holds no secrets.
 """
@@ -74,6 +78,18 @@ LEGACY_FLOOR = {"cis": 263}
 # the job log also prints the step's script, where the same words follow `echo "` or `if [`.
 LOCK_HELD = re.compile(r"^(exit code: 17\b|(##\[error\]|::error::)the apply lock is held)")
 EXIT_LINE = re.compile(r"^exit code: \S+")
+# S281: the apply was refused because a job table is busy or a rerun wave is open (Infra db/run_migration.py exit 7,
+# DM-11.4): nothing ran, the file can be applied once every job table is idle. Anchored like LOCK_HELD (the job log
+# also prints the step script, where the same words follow `echo "` or `if [`).
+BUSY_REFUSED = re.compile(r"^(exit code: 7\b|(##\[error\]|::error::)apply refused: a job table is busy|"
+                          r"(MIGRATE )?ERROR: (refusing apply|idle-gate refused)\b.*\bbusy:)")
+# "MIGRATE busy: shared.job running=1 queued=0 due=0 kinds=[recompute:running=1]" (BusyState.line()), also the
+# unreadable / open-wave forms.
+BUSY_LINE = re.compile(r"^(?:MIGRATE )?busy: (\S+) (.*)$")
+BUSY_KINDS = re.compile(r"kinds=\[([^\]]*)\]")
+# Exit code of an apply held by busy job tables (nothing ran; re-dispatch once idle). Distinct from 1 (a real
+# failure) so a wave can stay resumable; same number as DB Migrate's own refusal.
+EXIT_HELD = 7
 
 
 def parse_target(owner: str, target: str) -> tuple[str, str, str | None]:
@@ -325,6 +341,23 @@ def lock_held(lines: list[str]) -> bool:
     return any(LOCK_HELD.match(x) for x in lines)
 
 
+def busy_refusal(lines: list[str]) -> str | None:
+    """None, or what kept the apply out when the run's own log says it was refused for busy job tables (exit 7):
+    "shared.job: recompute:running=1; shared.rerun_wave open=1" from the MIGRATE busy lines (the last report wins,
+    a re-check repeats them), "busy" when the log names no table."""
+    if not any(BUSY_REFUSED.match(x) for x in lines):
+        return None
+    busy: dict[str, str] = {}
+    for x in lines:
+        m = BUSY_LINE.match(x)
+        if not m:
+            continue
+        name, rest = m.group(1), m.group(2)
+        k = BUSY_KINDS.search(rest)
+        busy[name] = k.group(1).strip() if k and k.group(1).strip() else rest.strip()
+    return "; ".join(f"{n}: {v}" if v else n for n, v in busy.items()) or "busy"
+
+
 def exit_line(lines: list[str]) -> str:
     hits = [x for x in lines if EXIT_LINE.match(x)]
     return hits[-1] if hits else "no 'exit code:' line in the run log"
@@ -376,7 +409,9 @@ def check_ready(runner: Runner, owner: str, num: str, *, timeout: float, interva
 # --- main --------------------------------------------------------------------------------------------------------
 
 
-def main(argv: list[str] | None = None, runner: Runner | None = None, fetch=fetch_ready) -> int:
+def main(argv: list[str] | None = None, runner: Runner | None = None, fetch=fetch_ready,
+         report: dict | None = None) -> int:
+    """`report` (optional, the wave passes one): gets "held" = the busy job tables when the exit is EXIT_HELD."""
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("owner", help="cis | booking | crm | tripplanner")
     ap.add_argument("migration", help="NNN, <prefix>-NNN or the file name")
@@ -441,6 +476,15 @@ def main(argv: list[str] | None = None, runner: Runner | None = None, fetch=fetc
                     log(f"WARN run {rid} found the apply lock held (exit 17, nothing ran), and the key is "
                         f"registered: applied by the run that held the lock")
                     return 0
+            held = busy_refusal(lines) if a.mode == "apply" else None
+            if held:
+                # S281: a tour state change queued a platform recompute (16-52 min) and the apply refused (DM-11.4).
+                # Nothing ran: the file goes on once every job table is idle (Migration Apply, or a re-dispatch).
+                log(f"apply held: job tables busy ({held}); nothing ran, {path} is not applied. Re-dispatch once "
+                    f"idle (ship_wave --wait-idle N does it), or let Migration Apply take it (exit {EXIT_HELD})")
+                if report is not None:
+                    report["held"] = held
+                return EXIT_HELD
             return 1
         if a.mode == "check":
             return 0
