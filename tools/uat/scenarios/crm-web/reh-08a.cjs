@@ -24,6 +24,7 @@ const meta = {};
 let counts = null;
 let page0 = null; // { tourId, sourceId, title }
 let widget = null; // the panel's answer
+let pick = null; // the departure the take books (seats for the party)
 
 const sc = rw({
   id: 'REH-08a',
@@ -59,6 +60,13 @@ const sc = rw({
         // The link belongs to the rehearsal agency: nothing is written for any other agency.
         if (widget.agency_name !== R.AGENCY) throw new Error('the form key belongs to another agency than the rehearsal agency');
         if (!Array.isArray(widget.departures) || !widget.departures.length) throw new Error('the panel offers no departure (tour X has none open in the booking window)');
+        meta.departures = widget.departures.map((d) => ({ start_date: d.start_date, seats_left: d.seats_left }));
+        // The party is two adults: pick the departure with the most seats left (earliest on a tie), never one that
+        // cannot seat the party. The kept S279 fixtures hold seats on the first departures of tour X.
+        pick = [...widget.departures].filter((d) => (d.seats_left ?? 0) >= 2)
+          .sort((a, b) => (b.seats_left - a.seats_left) || a.start_date.localeCompare(b.start_date))[0];
+        if (!pick) throw new Error('no departure of tour X has two seats left for the party');
+        meta.departure_picked = { start_date: pick.start_date, seats_left: pick.seats_left };
         const panel = page.getByTestId('book-now');
         await h.scrollTo(panel, 'center');
         await h.expect(panel).toHaveAttribute('data-hydrated', 'true', { timeout: 30_000 });
@@ -71,7 +79,7 @@ const sc = rw({
         const select = page.getByTestId('book-now-departure');
         // A native select: point at it and choose (a click would leave the browser's own list open on a headed take).
         await h.moveTo(select);
-        await select.selectOption(widget.departures[0].departure_id);
+        await select.selectOption(pick.departure_id);
         const adults = page.getByTestId('book-now-adults');
         await h.click(adults);
         await adults.fill('2');
