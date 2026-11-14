@@ -667,6 +667,54 @@
    "app": "cis",
    "area": "retention"
   },
+  "cis.learn.final_quiz_items_per_module": {
+   "app": "cis",
+   "area": "learn"
+  },
+  "cis.learn.final_quiz_pass_mark_pct": {
+   "app": "cis",
+   "area": "learn"
+  },
+  "cis.learn.learner_retention_days": {
+   "app": "cis",
+   "area": "learn"
+  },
+  "cis.learn.quiz_items_per_attempt": {
+   "app": "cis",
+   "area": "learn"
+  },
+  "cis.learn.quiz_pass_mark_pct": {
+   "app": "cis",
+   "area": "learn"
+  },
+  "cis.learn.quiz_retake_delay_hours": {
+   "app": "cis",
+   "area": "learn"
+  },
+  "cis.learn.recert_months": {
+   "app": "cis",
+   "area": "learn"
+  },
+  "cis.learn.recert_paths": {
+   "app": "cis",
+   "area": "learn"
+  },
+  "cis.learn.review_max_cards_per_day": {
+   "app": "cis",
+   "area": "learn"
+  },
+  "cis.learn.review_target_retention": {
+   "app": "cis",
+   "area": "learn"
+  },
+  "cis.learn.verify_requests_per_minute": {
+   "app": "cis",
+   "area": "learn"
+  },
+  "cis.learn.video_url_ttl_seconds": {
+   "app": "cis",
+   "area": "learn"
+  },
   "cis.lifecycle.tour_retirement_notice_days": {
    "app": "cis",
    "area": "lifecycle"
