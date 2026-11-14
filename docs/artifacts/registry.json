@@ -70,6 +70,20 @@
    "title": "Odoo và AA: bảng tính năng",
    "purpose": "So sánh 73 tính năng app Odoo tour & travel với CRM đại lý và AA-Booking (S276); cập nhật khi các issue M-OD ship",
    "source": ".tmp-session/S276/odoo-compare/index.html (dữ liệu từ docs/research/2026-11-10-odoo-tour-travel-plugin-comparison.md + kiểm code S276)"
+  },
+  {
+   "id": "EVDADk6THo63rFSfbWcxHv",
+   "url": "https://claude.ai/artifact/EVDADk6THo63rFSfbWcxHv",
+   "title": "Bảng ngưỡng AA_Ecosys",
+   "purpose": "Mọi ngưỡng/giới hạn/trần đang chạy (S279 audit, 780 giá trị) + lộ trình AA-1096; cập nhật khi mỗi lane chuyển ngưỡng lên trang admin",
+   "source": "docs/audits/2026-11-13-S279-session/thresholds-audit/ (index.html + inventory.json)"
+  },
+  {
+   "id": "9KCRRJ1cuGULqBHZeVeAmC",
+   "url": "https://claude.ai/artifact/9KCRRJ1cuGULqBHZeVeAmC",
+   "title": "Video diễn tập pilot",
+   "purpose": "37 video diễn tập pilot S279 theo hành trình đại lý (mỗi video quay gì, kết quả, lời đọc, link Drive); cập nhật khi quay lại REH-06 / REH-08a / bước nhập giá",
+   "source": ".tmp-session/S279/videos-page (build.py; bản repo không link Drive: docs/audits/2026-11-13-S279-session/uat-rehearsal/videos.html)"
   }
  ],
  "superseded": [

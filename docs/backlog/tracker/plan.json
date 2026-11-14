@@ -1,8 +1,8 @@
 {
- "updated": "2026-11-12",
- "synced_at": "2026-11-12T11:45Z",
- "session": "S278",
- "next_session": "S279",
+ "updated": "2026-11-14",
+ "synced_at": "2026-11-14T02:39Z",
+ "session": "S279",
+ "next_session": "S280",
  "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
  "projects": {
   "data": "Data Platform",
@@ -918,6 +918,37 @@
   }
  ],
  "log": [
+  {
+   "session": "S279",
+   "date": "13–14/11/2026",
+   "closed": [
+    "AA-1087",
+    "AA-1088",
+    "AA-1070",
+    "AA-1092",
+    "AA-1094",
+    "AA-1095",
+    "AA-1079",
+    "AA-1097",
+    "AA-1098",
+    "AA-1099",
+    "AA-998",
+    "AA-741"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-1102",
+    "AA-1103",
+    "AA-1104",
+    "AA-1105",
+    "AA-1106"
+   ],
+   "reopened": [],
+   "notes": [
+    "Done có bằng chứng: AA-1087, 1088, 1070, 1092, 1094 (hội tụ), AA-1097 (ratchet + tách admin_pipeline), AA-1098/1099 (thiết kế, 31 quyết định duyệt); AA-1082, AA-781 đóng Duplicate khi rà Linear",
+    "AA-1096 L1–L6 live; AA-1093 saga + drill video, xoá thật để S280; AA-1091 cặp E2E định giá live; AA-1086 34 video; AA-1048 v2 no_go; Jira PR-22/25/26/20 đã đăng"
+   ]
+  },
   {
    "session": "S278",
    "date": "12/11/2026",
@@ -1984,19 +2015,6 @@
  ],
  "issues": [
   {
-   "id": "AA-998",
-   "title": "[Infra] Remove acc1 (personal AWS account) from the whole ecosystem: audit, cut over to acc2/acc3, delete every acc1 resource",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M1b",
-   "session": "≥01/12",
-   "size": "L",
-   "next": "Ops · 4/5 Done-when đạt; phiên đầu tiên ≥01/12 đọc Cost Explorer acc1 tháng 11 = 0 USD → đóng (cùng phiên AA-873, AA-1026 D6)",
-   "needs": "",
-   "due": "2026-12-01"
-  },
-  {
    "id": "AA-1003",
    "title": "[Reporting] Build the ecosystem report engine and the 63-report catalog (approved S258), slices R0–R7",
    "status": "Backlog",
@@ -2119,7 +2137,7 @@
   },
   {
    "id": "AA-782",
-   "title": "[T9 cost] A/B a cheaper blog writer (gpt-5.6-luna vs Sonnet) on 8 paired blogs, blind panel",
+   "title": "[T9 cost] A/B a cheaper non-OpenAI blog writer vs Sonnet 5.5 on 8 paired blogs, blind panel",
    "status": "Backlog",
    "priority": "Medium",
    "project": "core",
@@ -2127,18 +2145,6 @@
    "session": "parked",
    "size": "S",
    "next": "Parked · sau d18 bước 2 (stage viết tenant lên Anthropic, sau AA-820) + AA-1039; đổi model ứng viên khác family judge",
-   "needs": ""
-  },
-  {
-   "id": "AA-781",
-   "title": "[F9 v2] Fix place_background / opinion claim classification, replay as a one-off ECS task, wire only at ≥90%",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "core",
-   "milestone": "parked",
-   "session": "parked",
-   "size": "M",
-   "next": "Parked · sau Writing Lab (R6) + đường LLM, chạy như experiment (~0,40 USD)",
    "needs": ""
   },
   {
@@ -2280,9 +2286,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "later",
-   "session": "S278",
+   "session": "S280",
    "size": "",
-   "next": "M2a — S278: đếm lại $0 có t2@2; gom class trước (tech lead chốt), R1 trần 2 USD",
+   "next": "M2a — S279: prompt v2 no_go (FP dropped 48% < 60%, TP kept 90%, 0,03 USD). Kế: v3 cho câu diễn đạt lại, $0 trên phiếu lưu rồi 1 lượt có cổng",
    "needs": "Tech lead: phân xử hàng đợi golden_claim (Writing memory)"
   },
   {
@@ -2300,18 +2306,18 @@
   {
    "id": "AA-1051",
    "title": "[Quality W5] Paid writer proofs on small fixed samples (eval null run, T9, S1, T2) under the D12 caps",
-   "status": "In Review",
+   "status": "Backlog",
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "S278",
+   "session": "S279",
    "size": "",
    "next": "M2a — S278 kéo lên: phần code $0 (split DEV/CAL/GATE, pre-registration, power check, runner DRY); lượt trả phí chờ R1 + W4 (lane l7)",
    "needs": ""
   },
   {
    "id": "AA-1054",
-   "title": "[Identity] At go-live: remove the E2E staff sign-in exceptions (A10, A10a, A10b) and the dormant bridge code paths",
+   "title": "[Identity] At go-live: remove every Dev-only E2E staff exception (A10, A10a, A10b + A10b-1..4, A10c, A10d, A10e + A10e-1) and the dormant Booking bridge code",
    "status": "Backlog",
    "priority": "Low",
    "project": "tpbk",
@@ -2323,7 +2329,7 @@
   },
   {
    "id": "AA-1061",
-   "title": "[Booking] R4c bk-045 B2C table drop (from 28/11)",
+   "title": "[Booking] R4c B2C table drop (next free bk- key; apply from 2026-11-28 23:50Z)",
    "status": "Backlog",
    "priority": "Medium",
    "project": "tpbk",
@@ -2335,87 +2341,27 @@
    "due": "2026-11-29"
   },
   {
-   "id": "AA-1070",
-   "title": "[CRM ops] Departure roster, vouchers, server PDFs, rooming list, passport check, visa tracker, inclusions, AA-cancelled departure flow",
-   "status": "In Review",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "M-OD",
-   "session": "S278",
-   "size": "L",
-   "next": "M-OD — S278: kiểm live 6 mục + làm crm-35 (crm-059) và crm-13 trong phiên (tech lead chốt)",
-   "needs": "cần xếp slot"
-  },
-  {
    "id": "AA-1077",
    "title": "[T9 quality] Blog length contract: one length floor, F4 re-check after the normalizer, extend repair for short pieces",
    "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "S278",
+   "session": "S280",
    "size": "",
-   "next": "M2a — S278: remeasure $0 sau sàn 600; chưa có bài thì blog nhỏ (trong trần 3,5 USD) → Done-with-scope",
+   "next": "M2a — S279: repeat drop đọc F13_hygiene (#1489), replay $0 = 0 drop. Kế: đường độ dài F4 (25/37 bài giữ vì ngắn)",
    "needs": ""
-  },
-  {
-   "id": "AA-1079",
-   "title": "[T7/T10 judges] Debate rank-only until calibrated, brand-fit calibration on the golden set, serving model first in judge routes",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "core",
-   "milestone": "M2a",
-   "session": "S278",
-   "size": "",
-   "next": "M2a — S278: 10 dòng circuit-open, nhãn brand-fit panel + kappa, ảnh Route control",
-   "needs": ""
-  },
-  {
-   "id": "AA-1082",
-   "title": "[CRM ops] Agency web high availability before the pilot: two tasks or an on-demand base for aa-crm-dev-web",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "M5",
-   "session": "at go-live",
-   "size": "",
-   "next": "M5 — go-live: task thứ 2 khi có khách thật; Dev đã deploy không gián đoạn (min healthy 100), 0 USD thêm (S277)",
-   "needs": "duyệt chi phí"
   },
   {
    "id": "AA-1086",
    "title": "[Pilot] Synthetic pilot rehearsal: onboarding runbook and one tenant end to end across every app",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M5",
-   "session": "S279",
-   "size": "",
-   "next": "Pilot — S279: runbook + diễn tập 13 bước trên pilot-rehearsal-01 (sau khi xong AA-1087/1088)",
-   "needs": ""
-  },
-  {
-   "id": "AA-1087",
-   "title": "[Identity] Dev-only write-capable E2E staff identities for CIS admin and Booking staff (pilot rehearsal)",
    "status": "In Review",
    "priority": "High",
    "project": "data",
    "milestone": "M5",
-   "session": "S278",
+   "session": "S280",
    "size": "",
-   "next": "Identity — S278: danh tính E2E staff ghi được (Dev, synthetic) cho CIS admin + Booking (tech lead chốt B2: làm trước)",
-   "needs": ""
-  },
-  {
-   "id": "AA-1088",
-   "title": "[Pre-pilot] Quick fixes from the S278 system audit (held blog publish, voucher end date, preview brief, legal page)",
-   "status": "In Review",
-   "priority": "High",
-   "project": "core",
-   "milestone": "M5",
-   "session": "S278",
-   "size": "",
-   "next": "Pre-pilot — S278: sửa nhanh M3 (bài held đăng được), M13 (voucher end_date), M6 (preview lộ brief), M9 (trang pháp lý)",
+   "next": "Pilot — S279: 34 video (32 PASS), trang tóm tắt artifact. Còn: REH-06 quay lại, REH-08a Book now, bước giá (sau AA-1091), X1/marker",
    "needs": ""
   },
   {
@@ -2449,58 +2395,94 @@
    "priority": "Urgent",
    "project": "tpbk",
    "milestone": "M5",
-   "session": "S278",
+   "session": "S280",
    "size": "",
-   "next": "Booking pricing — S278: workbench LIVE (#233), giá CIS (#1457/#1458); tiếp: phiên bản giá + trang Chính sách giá sửa được (13 tham số tech lead duyệt S278), lịch mùa, báo giá ghim phiên bản, bảng giá đại lý có phiên bản",
-   "needs": ""
-  },
-  {
-   "id": "AA-1092",
-   "title": "[Security] Pre-PII hardening sweep: TripPlanner tenant signing key, new public CRM routes, b2b_partners RLS, WAF on new hosts",
-   "status": "In Review",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M5",
-   "session": "S278",
-   "size": "",
-   "next": "Security — S278: khoá ký tenant TP riêng, rà route CRM công khai, RLS b2b_partners, WAF host mới (audit M19/M24)",
+   "next": "Booking pricing — S279: cặp E2E định giá live (#833/#1490/#249/#762, checker đã tạo). S280: owner cấp preset → runbook giá giả lập bước 2–10 → gỡ preset",
    "needs": ""
   },
   {
    "id": "AA-1093",
    "title": "[Cross-app] Lifecycle events across apps: tour discontinued in CRM, tenant offboarding erase in every app, per-tenant restore for CIS and TripPlanner",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "High",
    "project": "data",
    "milestone": "M5",
-   "session": "S279",
+   "session": "S280",
    "size": "",
-   "next": "Cross-app — S279: tour.discontinued ở CRM, xoá dữ liệu khi tenant rời ở mọi app (DRY RUN), khôi phục theo tenant CIS/TP",
+   "next": "Cross-app — S279: saga + drill DRY RUN có video; A1–A6 chuẩn bị xong (tenant aa1093-erase-01). S280: B–F xoá thật, tech lead bấm 3 lần (bật setting, duyệt fingerprint, tắt)",
    "needs": ""
   },
   {
-   "id": "AA-1094",
-   "title": "[TripPlanner tenant] v_tenant_tour_v1 view, agency branding kept off AA tour pages, CIS tour page carries source_id for Book now",
+   "id": "AA-1096",
+   "title": "[Platform] Every threshold, limit and cap editable on an admin page (administrator)",
    "status": "In Review",
    "priority": "High",
-   "project": "tpbk",
-   "milestone": "M-R7",
-   "session": "S278",
-   "size": "",
-   "next": "TripPlanner — S278: v_tenant_tour_v1, thương hiệu không rò sang trang AA, source_id cho Đặt ngay (audit M12/M20/M21)",
+   "project": "data",
+   "milestone": "M5",
+   "session": "S280",
+   "size": "L",
+   "next": "Platform — S279: L1–L6 live (Settings có giải thích, env bỏ khỏi Terraform). Còn: đổi thử 1 giá trị/app, settings-lint bắt buộc 3 repo, trang Platform › Infra",
    "needs": ""
   },
   {
-   "id": "AA-1095",
-   "title": "[LLM] Serve Bedrock LLM from acc1 while acc3 is blocked: invoker role, gateway connection acc1, ADR 0001a amendment",
-   "status": "In Review",
-   "priority": "High",
+   "id": "AA-1102",
+   "title": "[Playbook] Build the new-project kit, part 1 — clean-up, templates and playbook pages (R1–R2b)",
+   "status": "Backlog",
+   "priority": "Medium",
    "project": "core",
-   "milestone": "M2a",
-   "session": "S278",
-   "size": "",
-   "next": "S278: role Bedrock trên acc1 + connection acc1 trong AI gateway (13/13 model chạy được), acc3 xếp sau; sửa ADR 0001a — lane l22",
-   "needs": ""
+   "milestone": "later",
+   "session": "after S280",
+   "size": "M",
+   "next": "Playbook — S279: R1 dọn quy tắc, R2a templates, R2b trang docs/playbook (EN+VI)",
+   "needs": []
+  },
+  {
+   "id": "AA-1103",
+   "title": "[Playbook] Build the new-project kit, part 2 — Copier template repo, generic skills, pilot (R3–R6)",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "later",
+   "session": "after S280",
+   "size": "L",
+   "next": "Playbook — S279: Copier repo v1.0.0, skill chung, pilot, gắn khoá Academy",
+   "needs": []
+  },
+  {
+   "id": "AA-1104",
+   "title": "[Academy] Build part 1 — close shared doc gaps and the lesson format + bundle (P1–P2)",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "later",
+   "session": "after S280",
+   "size": "M",
+   "next": "Academy — S279: trang lấp gap G2/G5/G6/G7/G13 + định dạng bài học docs/learn",
+   "needs": []
+  },
+  {
+   "id": "AA-1105",
+   "title": "[Academy] Build part 2 — learn schema, API, academy UI, quizzes and certificates (P3–P4)",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "core",
+   "milestone": "later",
+   "session": "after S280",
+   "size": "L",
+   "next": "Academy — S279: schema learn, API, academy. trên CRM web, quiz, chứng chỉ",
+   "needs": []
+  },
+  {
+   "id": "AA-1106",
+   "title": "[Platform] Feature and integration catalogue for every app — capabilities, links, enabling conditions",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "data",
+   "milestone": "later",
+   "session": "after S280",
+   "size": "M",
+   "next": "Platform — S279: features.yaml + integrations.yaml, guard CI, UI CIS admin › Product map (Ultracode)",
+   "needs": []
   }
  ]
 }

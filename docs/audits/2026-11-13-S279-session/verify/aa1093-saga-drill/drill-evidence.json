@@ -1,0 +1,53 @@
+{
+ "started_at": "2026-11-13T08:11:29.167Z",
+ "candidates": [
+  {
+   "slug": "audit-wildkind-travel",
+   "found": true,
+   "status": "active",
+   "synthetic": true,
+   "offboarded": false
+  },
+  {
+   "slug": "audit-trail-pulse",
+   "found": true,
+   "status": "active",
+   "synthetic": true,
+   "offboarded": false
+  }
+ ],
+ "tenant": "audit-wildkind-travel",
+ "settings": {
+  "apply_enabled": false,
+  "apply_switch": "cis.erasure.saga_apply_enabled",
+  "approval_valid_hours": 24,
+  "window_days": {
+   "cis": 30,
+   "booking": 30,
+   "tripplanner": 30,
+   "crm": 90
+  },
+  "environment": "dev"
+ },
+ "requests_before": [],
+ "write_probes": {
+  "drill": {
+   "status": 403,
+   "detail": "e2e_read_only"
+  },
+  "advance": {
+   "status": 403,
+   "detail": "e2e_read_only"
+  },
+  "stop": {
+   "status": 403,
+   "detail": "e2e_read_only"
+  },
+  "restore": {
+   "status": 403,
+   "detail": "e2e_read_only"
+  }
+ },
+ "outcome": "blocked: the A10b session is read-only on the saga routes (403 e2e_read_only)",
+ "finished_at": "2026-11-13T08:12:05.529Z"
+}

@@ -1,0 +1,33 @@
+{
+ "board_http": 200,
+ "cards": [
+  {
+   "trip_id": "b26b66d4-7ec0-4ffc-be19-949b5c249544",
+   "stage": "inquiry",
+   "title": "Nepal, 6 đêm",
+   "cases": [
+    {
+     "id": "0b4adddc-d127-461c-96f2-f8ba0bca72ab",
+     "departure_id": "8fecbe57-debe-4e36-8f7a-6b3ba58968de",
+     "active": true,
+     "can_requote": true,
+     "tour_source_id": "000e3340-d9f5-4b7b-8609-4cdaa9c272dc"
+    }
+   ]
+  },
+  {
+   "trip_id": "8d190e98-05bd-445e-b034-ef35e8abd1f7",
+   "stage": "inquiry",
+   "title": "Nepal, 6 đêm",
+   "cases": [
+    {
+     "id": "f1549639-004a-428a-affd-2627e57e33df",
+     "departure_id": "8fecbe57-debe-4e36-8f7a-6b3ba58968de",
+     "active": true,
+     "can_requote": true,
+     "tour_source_id": "000e3340-d9f5-4b7b-8609-4cdaa9c272dc"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,8 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 [e2e-writers] › e2e/e2e-writers/s279-probe.spec.ts:33:5 › read back + pick a staff-made departure (13.4s)
+  ✓  2 [e2e-writers] › e2e/e2e-writers/s279-probe.spec.ts:58:5 › staff PATCH cancel on the staff-made departure is refused 403 e2e_synthetic_only and leaves it unchanged (10.6s)
+
+  2 passed (24.9s)
+exit 0

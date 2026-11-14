@@ -1,0 +1,9 @@
+
+Running 2 tests using 1 worker
+
+  -  1 tests/aa-cancel.spec.ts:96:7 › crm-13: AA cancels a departure the agency has a trip on (Dev, agent-only) › prepare: a CRM trip with the seeded tour as an AA item on the seeded departure
+  ✓  2 tests/aa-cancel.spec.ts:159:7 › crm-13: AA cancels a departure the agency has a trip on (Dev, agent-only) › verify: the CRM opened the aa_cancel_case after AA cancelled the departure (14.1s)
+
+  1 skipped
+  1 passed (14.7s)
+exit 0

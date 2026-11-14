@@ -1,0 +1,196 @@
+PIECE 4e956cae audit-atlas-hearth tour=fa0112cf subject=14dee28f status=approved writer=cc9b4979 chars=4434 side=short t7_words=1131 t9_words=1982 ratio=3.92
+PIECE 59c950aa audit-atlas-hearth tour=2aa6e292 subject=915d32e0 status=approved writer=cc9b4979 chars=5212 side=in t7_words=383 t9_words=2748 ratio=13.608
+PIECE da055040 audit-atlas-hearth tour=69fe6398 subject=3470f5ed status=held writer=cc9b4979 chars=3436 side=short t7_words=146 t9_words=146 ratio=23.534
+PIECE a6e7e93f audit-atlas-hearth tour=80172001 subject=b2bdb1c8 status=held writer=cc9b4979 chars=3788 side=short t7_words=640 t9_words=986 ratio=5.919
+PIECE 2a31bdd6 audit-atlas-hearth tour=44281611 subject=7303d33a status=held writer=cc9b4979 chars=4956 side=in t7_words=925 t9_words=7060 ratio=5.358
+PIECE 37e97e7e audit-atlas-hearth tour=d33d1c3f subject=66f8c5ef status=held writer=cc9b4979 chars=3214 side=short t7_words=1065 t9_words=1872 ratio=3.018
+PIECE 72f7028e audit-atlas-hearth tour=fa0112cf subject=d4d5b3e6 status=held writer=cc9b4979 chars=4812 side=in t7_words=1711 t9_words=3136 ratio=2.812
+PIECE f97aeb18 audit-atlas-hearth tour=1823ab0e subject=74739d9a status=held writer=cc9b4979 chars=3218 side=short t7_words=761 t9_words=1168 ratio=4.229
+PIECE 7b80e4ca audit-atlas-hearth tour=b4d315a6 subject=6f802a6e status=held writer=cc9b4979 chars=4699 side=short t7_words=2188 t9_words=4080 ratio=2.148
+PIECE fd26d633 audit-atlas-hearth tour=fa0112cf subject=b469c0eb status=approved writer=cc9b4979 chars=4955 side=in t7_words=1428 t9_words=2574 ratio=3.47
+PIECE 73e6a233 audit-atlas-hearth tour=69fe6398 subject=a9851c15 status=held writer=cc9b4979 chars=3546 side=short t7_words=1053 t9_words=1806 ratio=3.368
+PIECE 6610ac8d audit-atlas-hearth tour=b4d315a6 subject=e3892971 status=held writer=cc9b4979 chars=5078 side=in t7_words=2202 t9_words=4080 ratio=2.306
+PIECE 37480d6c audit-atlas-hearth tour=b4d315a6 subject=5d404614 status=approved writer=cc9b4979 chars=5136 side=in t7_words=2189 t9_words=4080 ratio=2.346
+PIECE 9131cc81 audit-atlas-hearth tour=8908e6ad subject=67eaea48 status=held writer=cc9b4979 chars=4425 side=short t7_words=830 t9_words=1420 ratio=5.331
+PIECE af6edc90 audit-atlas-hearth tour=b4d315a6 subject=d0165872 status=held writer=cc9b4979 chars=5724 side=in t7_words=2317 t9_words=4282 ratio=2.47
+PIECE c0121d62 audit-terra-family tour=fa0112cf subject=5b7e8493 status=held writer=cc9b4979 chars=5047 side=in t7_words=1131 t9_words=1982 ratio=4.462
+PIECE 5b3ae9c4 audit-terra-family tour=2aa6e292 subject=e62d5f9c status=approved writer=cc9b4979 chars=6210 side=in t7_words=575 t9_words=2748 ratio=10.8
+PIECE 4dde01f8 audit-terra-family tour=fe697018 subject=e9f642d6 status=approved writer=cc9b4979 chars=4658 side=short t7_words=216 t9_words=2420 ratio=21.565
+PIECE c6cc3a29 audit-terra-family tour=69fe6398 subject=f401db08 status=held writer=cc9b4979 chars=5055 side=in t7_words=146 t9_words=146 ratio=34.623
+PIECE 1cfd4b8a audit-terra-family tour=80172001 subject=a9590cc0 status=approved writer=cc9b4979 chars=4426 side=short t7_words=2760 t9_words=5226 ratio=1.604
+PIECE acfebc24 audit-terra-family tour=44281611 subject=e1ced7fa status=held writer=cc9b4979 chars=5016 side=in t7_words=915 t9_words=7060 ratio=5.482
+PIECE cda38200 audit-terra-family tour=d33d1c3f subject=5c12a4ac status=held writer=cc9b4979 chars=4289 side=short t7_words=1065 t9_words=1872 ratio=4.027
+PIECE 6e451e36 audit-terra-family tour=fa0112cf subject=ce18c3b1 status=held writer=cc9b4979 chars=4830 side=in t7_words=1711 t9_words=3136 ratio=2.823
+PIECE e083d9c2 audit-terra-family tour=1823ab0e subject=604f948c status=held writer=cc9b4979 chars=4455 side=short t7_words=761 t9_words=1168 ratio=5.854
+PIECE 89ec7b6c audit-terra-family tour=b4d315a6 subject=af122d6b status=approved writer=cc9b4979 chars=5590 side=in t7_words=2188 t9_words=4080 ratio=2.555
+PIECE 1b3b70ec audit-trail-pulse tour=fa0112cf subject=6ccb5e71 status=held writer=cc9b4979 chars=3938 side=short t7_words=1131 t9_words=1982 ratio=3.482
+PIECE 05231e11 audit-trail-pulse tour=2aa6e292 subject=849a94dd status=held writer=cc9b4979 chars=4153 side=short t7_words=575 t9_words=2748 ratio=7.223
+PIECE ebfcc20e audit-trail-pulse tour=69fe6398 subject=6c1dbafc status=held writer=cc9b4979 chars=3347 side=short t7_words=146 t9_words=146 ratio=22.925
+PIECE a14126dc audit-trail-pulse tour=80172001 subject=f58ab11c status=approved writer=cc9b4979 chars=4859 side=in t7_words=2760 t9_words=5226 ratio=1.761
+PIECE 2cfe5543 audit-trail-pulse tour=44281611 subject=afbb785f status=held writer=cc9b4979 chars=4622 side=short t7_words=915 t9_words=7060 ratio=5.051
+PIECE 10c39b5a audit-trail-pulse tour=d33d1c3f subject=418fca04 status=held writer=cc9b4979 chars=3788 side=short t7_words=1065 t9_words=1872 ratio=3.557
+PIECE c91806b4 audit-trail-pulse tour=fa0112cf subject=25a83e61 status=held writer=cc9b4979 chars=5283 side=in t7_words=1711 t9_words=3136 ratio=3.088
+PIECE fbc75fe7 audit-trail-pulse tour=69fe6398 subject=55721f1c status=held writer=cc9b4979 chars=3869 side=short t7_words=1053 t9_words=1806 ratio=3.674
+PIECE 3612fd6a audit-trail-pulse tour=b4d315a6 subject=fbc0e9d8 status=held writer=cc9b4979 chars=4696 side=short t7_words=2202 t9_words=4080 ratio=2.133
+PIECE 62117c16 audit-wildkind-travel tour=fa0112cf subject=dc74df43 status=held writer=cc9b4979 chars=4810 side=in t7_words=1715 t9_words=3136 ratio=2.805
+PIECE ee4c8db6 audit-wildkind-travel tour=2aa6e292 subject=1f13b549 status=approved writer=cc9b4979 chars=5274 side=in t7_words=383 t9_words=2748 ratio=13.77
+PIECE d16dfc5b audit-wildkind-travel tour=69fe6398 subject=cd642113 status=held writer=cc9b4979 chars=3261 side=short t7_words=146 t9_words=146 ratio=22.336
+PIECE b08b585c audit-wildkind-travel tour=b4d315a6 subject=7719d206 status=held writer=cc9b4979 chars=3459 side=short t7_words=493 t9_words=3990 ratio=7.016
+PIECE 5a3e82fb audit-wildkind-travel tour=80172001 subject=2d3fa5ba status=held writer=cc9b4979 chars=5064 side=in t7_words=2734 t9_words=5226 ratio=1.852
+PIECE 175f6886 audit-wildkind-travel tour=44281611 subject=49bdc1e7 status=held writer=cc9b4979 chars=5098 side=in t7_words=1269 t9_words=5890 ratio=4.017
+PIECE 6a2ecc16 audit-wildkind-travel tour=d33d1c3f subject=5121fc03 status=held writer=cc9b4979 chars=3579 side=short t7_words=1065 t9_words=1872 ratio=3.361
+PIECE dc07bc6a audit-wildkind-travel tour=0ae89a30 subject=75a86131 status=held writer=cc9b4979 chars=4119 side=short t7_words=0 t9_words=2496 ratio=1.65
+NEEDED 4e956cae tour=fa0112cf ratio=3.92 needed_seed_words=1199
+NEEDED da055040 tour=69fe6398 ratio=23.534 needed_seed_words=200
+NEEDED a6e7e93f tour=80172001 ratio=5.919 needed_seed_words=795
+NEEDED 37e97e7e tour=d33d1c3f ratio=3.018 needed_seed_words=1558
+NEEDED f97aeb18 tour=1823ab0e ratio=4.229 needed_seed_words=1112
+NEEDED 7b80e4ca tour=b4d315a6 ratio=2.148 needed_seed_words=2189
+NEEDED 73e6a233 tour=69fe6398 ratio=3.368 needed_seed_words=1396
+NEEDED 9131cc81 tour=8908e6ad ratio=5.331 needed_seed_words=882
+NEEDED 4dde01f8 tour=fe697018 ratio=21.565 needed_seed_words=218
+NEEDED 1cfd4b8a tour=80172001 ratio=1.604 needed_seed_words=2931
+NEEDED cda38200 tour=d33d1c3f ratio=4.027 needed_seed_words=1168
+NEEDED e083d9c2 tour=1823ab0e ratio=5.854 needed_seed_words=803
+NEEDED 1b3b70ec tour=fa0112cf ratio=3.482 needed_seed_words=1350
+NEEDED 05231e11 tour=2aa6e292 ratio=7.223 needed_seed_words=651
+NEEDED ebfcc20e tour=69fe6398 ratio=22.925 needed_seed_words=206
+NEEDED 2cfe5543 tour=44281611 ratio=5.051 needed_seed_words=931
+NEEDED 10c39b5a tour=d33d1c3f ratio=3.557 needed_seed_words=1322
+NEEDED fbc75fe7 tour=69fe6398 ratio=3.674 needed_seed_words=1280
+NEEDED 3612fd6a tour=b4d315a6 ratio=2.133 needed_seed_words=2204
+NEEDED d16dfc5b tour=69fe6398 ratio=22.336 needed_seed_words=211
+NEEDED b08b585c tour=b4d315a6 ratio=7.016 needed_seed_words=670
+NEEDED 6a2ecc16 tour=d33d1c3f ratio=3.361 needed_seed_words=1399
+NEEDED dc07bc6a tour=0ae89a30 ratio=1.65 needed_seed_words=2849
+SUBJECT configured 14dee28f audit-atlas-hearth tour=fa0112cf status=approved side=short seed=1131 floor=811 -> keep
+SUBJECT configured 5b7e8493 audit-terra-family tour=fa0112cf status=held side=in seed=1131 floor=811 -> keep
+SUBJECT configured 6ccb5e71 audit-trail-pulse tour=fa0112cf status=held side=short seed=1131 floor=811 -> keep
+SUBJECT configured dc74df43 audit-wildkind-travel tour=fa0112cf status=held side=in seed=1715 floor=811 -> keep
+SUBJECT configured 915d32e0 audit-atlas-hearth tour=2aa6e292 status=approved side=in seed=383 floor=811 -> seed_below_min
+SUBJECT configured e62d5f9c audit-terra-family tour=2aa6e292 status=approved side=in seed=575 floor=811 -> seed_below_min
+SUBJECT configured e9f642d6 audit-terra-family tour=fe697018 status=approved side=short seed=216 floor=811 -> seed_below_min
+SUBJECT configured 849a94dd audit-trail-pulse tour=2aa6e292 status=held side=short seed=575 floor=811 -> seed_below_min
+SUBJECT configured 1f13b549 audit-wildkind-travel tour=2aa6e292 status=approved side=in seed=383 floor=811 -> seed_below_min
+SUBJECT configured 3470f5ed audit-atlas-hearth tour=69fe6398 status=held side=short seed=146 floor=811 -> seed_below_min
+SUBJECT configured b2bdb1c8 audit-atlas-hearth tour=80172001 status=held side=short seed=640 floor=811 -> seed_below_length_floor
+SUBJECT configured 7303d33a audit-atlas-hearth tour=44281611 status=held side=in seed=925 floor=811 -> keep
+SUBJECT configured f401db08 audit-terra-family tour=69fe6398 status=held side=in seed=146 floor=811 -> seed_below_min
+SUBJECT configured a9590cc0 audit-terra-family tour=80172001 status=approved side=short seed=2760 floor=811 -> keep
+SUBJECT configured e1ced7fa audit-terra-family tour=44281611 status=held side=in seed=915 floor=811 -> keep
+SUBJECT configured 6c1dbafc audit-trail-pulse tour=69fe6398 status=held side=short seed=146 floor=811 -> seed_below_min
+SUBJECT configured f58ab11c audit-trail-pulse tour=80172001 status=approved side=in seed=2760 floor=811 -> keep
+SUBJECT configured afbb785f audit-trail-pulse tour=44281611 status=held side=short seed=915 floor=811 -> keep
+SUBJECT configured cd642113 audit-wildkind-travel tour=69fe6398 status=held side=short seed=146 floor=811 -> seed_below_min
+SUBJECT configured 7719d206 audit-wildkind-travel tour=b4d315a6 status=held side=short seed=493 floor=811 -> seed_below_min
+SUBJECT configured 2d3fa5ba audit-wildkind-travel tour=80172001 status=held side=in seed=2734 floor=811 -> keep
+SUBJECT configured 49bdc1e7 audit-wildkind-travel tour=44281611 status=held side=in seed=1269 floor=811 -> keep
+SUBJECT configured 66f8c5ef audit-atlas-hearth tour=d33d1c3f status=held side=short seed=1065 floor=811 -> keep
+SUBJECT configured 5c12a4ac audit-terra-family tour=d33d1c3f status=held side=short seed=1065 floor=811 -> keep
+SUBJECT configured 418fca04 audit-trail-pulse tour=d33d1c3f status=held side=short seed=1065 floor=811 -> keep
+SUBJECT configured 5121fc03 audit-wildkind-travel tour=d33d1c3f status=held side=short seed=1065 floor=811 -> keep
+SUBJECT configured 75a86131 audit-wildkind-travel tour=0ae89a30 status=held side=short seed=2496 floor=811 -> keep
+SUBJECT configured d4d5b3e6 audit-atlas-hearth tour=fa0112cf status=held side=in seed=1711 floor=811 -> keep
+SUBJECT configured 74739d9a audit-atlas-hearth tour=1823ab0e status=held side=short seed=761 floor=811 -> seed_below_length_floor
+SUBJECT configured 6f802a6e audit-atlas-hearth tour=b4d315a6 status=held side=short seed=2188 floor=811 -> keep
+SUBJECT configured ce18c3b1 audit-terra-family tour=fa0112cf status=held side=in seed=1711 floor=811 -> keep
+SUBJECT configured 604f948c audit-terra-family tour=1823ab0e status=held side=short seed=761 floor=811 -> seed_below_length_floor
+SUBJECT configured af122d6b audit-terra-family tour=b4d315a6 status=approved side=in seed=2188 floor=811 -> keep
+SUBJECT configured 25a83e61 audit-trail-pulse tour=fa0112cf status=held side=in seed=1711 floor=811 -> keep
+SUBJECT configured 55721f1c audit-trail-pulse tour=69fe6398 status=held side=short seed=1053 floor=811 -> keep
+SUBJECT configured fbc0e9d8 audit-trail-pulse tour=b4d315a6 status=held side=short seed=2202 floor=811 -> keep
+SUBJECT configured b469c0eb audit-atlas-hearth tour=fa0112cf status=approved side=in seed=1428 floor=811 -> keep
+SUBJECT configured a9851c15 audit-atlas-hearth tour=69fe6398 status=held side=short seed=1053 floor=811 -> keep
+SUBJECT configured e3892971 audit-atlas-hearth tour=b4d315a6 status=held side=in seed=2202 floor=811 -> keep
+SUBJECT configured 5d404614 audit-atlas-hearth tour=b4d315a6 status=approved side=in seed=2189 floor=811 -> keep
+SUBJECT configured 67eaea48 audit-atlas-hearth tour=8908e6ad status=held side=short seed=830 floor=811 -> keep
+SUBJECT configured d0165872 audit-atlas-hearth tour=b4d315a6 status=held side=in seed=2317 floor=811 -> keep
+SUBJECT at_measured 14dee28f audit-atlas-hearth tour=fa0112cf status=approved side=short seed=1131 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured 5b7e8493 audit-terra-family tour=fa0112cf status=held side=in seed=1131 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured 6ccb5e71 audit-trail-pulse tour=fa0112cf status=held side=short seed=1131 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured dc74df43 audit-wildkind-travel tour=fa0112cf status=held side=in seed=1715 floor=1398 -> keep
+SUBJECT at_measured 915d32e0 audit-atlas-hearth tour=2aa6e292 status=approved side=in seed=383 floor=1398 -> seed_below_min
+SUBJECT at_measured e62d5f9c audit-terra-family tour=2aa6e292 status=approved side=in seed=575 floor=1398 -> seed_below_min
+SUBJECT at_measured e9f642d6 audit-terra-family tour=fe697018 status=approved side=short seed=216 floor=1398 -> seed_below_min
+SUBJECT at_measured 849a94dd audit-trail-pulse tour=2aa6e292 status=held side=short seed=575 floor=1398 -> seed_below_min
+SUBJECT at_measured 1f13b549 audit-wildkind-travel tour=2aa6e292 status=approved side=in seed=383 floor=1398 -> seed_below_min
+SUBJECT at_measured 3470f5ed audit-atlas-hearth tour=69fe6398 status=held side=short seed=146 floor=1398 -> seed_below_min
+SUBJECT at_measured b2bdb1c8 audit-atlas-hearth tour=80172001 status=held side=short seed=640 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured 7303d33a audit-atlas-hearth tour=44281611 status=held side=in seed=925 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured f401db08 audit-terra-family tour=69fe6398 status=held side=in seed=146 floor=1398 -> seed_below_min
+SUBJECT at_measured a9590cc0 audit-terra-family tour=80172001 status=approved side=short seed=2760 floor=1398 -> keep
+SUBJECT at_measured e1ced7fa audit-terra-family tour=44281611 status=held side=in seed=915 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured 6c1dbafc audit-trail-pulse tour=69fe6398 status=held side=short seed=146 floor=1398 -> seed_below_min
+SUBJECT at_measured f58ab11c audit-trail-pulse tour=80172001 status=approved side=in seed=2760 floor=1398 -> keep
+SUBJECT at_measured afbb785f audit-trail-pulse tour=44281611 status=held side=short seed=915 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured cd642113 audit-wildkind-travel tour=69fe6398 status=held side=short seed=146 floor=1398 -> seed_below_min
+SUBJECT at_measured 7719d206 audit-wildkind-travel tour=b4d315a6 status=held side=short seed=493 floor=1398 -> seed_below_min
+SUBJECT at_measured 2d3fa5ba audit-wildkind-travel tour=80172001 status=held side=in seed=2734 floor=1398 -> keep
+SUBJECT at_measured 49bdc1e7 audit-wildkind-travel tour=44281611 status=held side=in seed=1269 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured 66f8c5ef audit-atlas-hearth tour=d33d1c3f status=held side=short seed=1065 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured 5c12a4ac audit-terra-family tour=d33d1c3f status=held side=short seed=1065 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured 418fca04 audit-trail-pulse tour=d33d1c3f status=held side=short seed=1065 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured 5121fc03 audit-wildkind-travel tour=d33d1c3f status=held side=short seed=1065 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured 75a86131 audit-wildkind-travel tour=0ae89a30 status=held side=short seed=2496 floor=1398 -> keep
+SUBJECT at_measured d4d5b3e6 audit-atlas-hearth tour=fa0112cf status=held side=in seed=1711 floor=1398 -> keep
+SUBJECT at_measured 74739d9a audit-atlas-hearth tour=1823ab0e status=held side=short seed=761 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured 6f802a6e audit-atlas-hearth tour=b4d315a6 status=held side=short seed=2188 floor=1398 -> keep
+SUBJECT at_measured ce18c3b1 audit-terra-family tour=fa0112cf status=held side=in seed=1711 floor=1398 -> keep
+SUBJECT at_measured 604f948c audit-terra-family tour=1823ab0e status=held side=short seed=761 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured af122d6b audit-terra-family tour=b4d315a6 status=approved side=in seed=2188 floor=1398 -> keep
+SUBJECT at_measured 25a83e61 audit-trail-pulse tour=fa0112cf status=held side=in seed=1711 floor=1398 -> keep
+SUBJECT at_measured 55721f1c audit-trail-pulse tour=69fe6398 status=held side=short seed=1053 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured fbc0e9d8 audit-trail-pulse tour=b4d315a6 status=held side=short seed=2202 floor=1398 -> keep
+SUBJECT at_measured b469c0eb audit-atlas-hearth tour=fa0112cf status=approved side=in seed=1428 floor=1398 -> keep
+SUBJECT at_measured a9851c15 audit-atlas-hearth tour=69fe6398 status=held side=short seed=1053 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured e3892971 audit-atlas-hearth tour=b4d315a6 status=held side=in seed=2202 floor=1398 -> keep
+SUBJECT at_measured 5d404614 audit-atlas-hearth tour=b4d315a6 status=approved side=in seed=2189 floor=1398 -> keep
+SUBJECT at_measured 67eaea48 audit-atlas-hearth tour=8908e6ad status=held side=short seed=830 floor=1398 -> seed_below_length_floor
+SUBJECT at_measured d0165872 audit-atlas-hearth tour=b4d315a6 status=held side=in seed=2317 floor=1398 -> keep
+SUBJECT flat_only 14dee28f audit-atlas-hearth tour=fa0112cf status=approved side=short seed=1131 floor=600 -> keep
+SUBJECT flat_only 5b7e8493 audit-terra-family tour=fa0112cf status=held side=in seed=1131 floor=600 -> keep
+SUBJECT flat_only 6ccb5e71 audit-trail-pulse tour=fa0112cf status=held side=short seed=1131 floor=600 -> keep
+SUBJECT flat_only dc74df43 audit-wildkind-travel tour=fa0112cf status=held side=in seed=1715 floor=600 -> keep
+SUBJECT flat_only 915d32e0 audit-atlas-hearth tour=2aa6e292 status=approved side=in seed=383 floor=600 -> seed_below_min
+SUBJECT flat_only e62d5f9c audit-terra-family tour=2aa6e292 status=approved side=in seed=575 floor=600 -> seed_below_min
+SUBJECT flat_only e9f642d6 audit-terra-family tour=fe697018 status=approved side=short seed=216 floor=600 -> seed_below_min
+SUBJECT flat_only 849a94dd audit-trail-pulse tour=2aa6e292 status=held side=short seed=575 floor=600 -> seed_below_min
+SUBJECT flat_only 1f13b549 audit-wildkind-travel tour=2aa6e292 status=approved side=in seed=383 floor=600 -> seed_below_min
+SUBJECT flat_only 3470f5ed audit-atlas-hearth tour=69fe6398 status=held side=short seed=146 floor=600 -> seed_below_min
+SUBJECT flat_only b2bdb1c8 audit-atlas-hearth tour=80172001 status=held side=short seed=640 floor=600 -> keep
+SUBJECT flat_only 7303d33a audit-atlas-hearth tour=44281611 status=held side=in seed=925 floor=600 -> keep
+SUBJECT flat_only f401db08 audit-terra-family tour=69fe6398 status=held side=in seed=146 floor=600 -> seed_below_min
+SUBJECT flat_only a9590cc0 audit-terra-family tour=80172001 status=approved side=short seed=2760 floor=600 -> keep
+SUBJECT flat_only e1ced7fa audit-terra-family tour=44281611 status=held side=in seed=915 floor=600 -> keep
+SUBJECT flat_only 6c1dbafc audit-trail-pulse tour=69fe6398 status=held side=short seed=146 floor=600 -> seed_below_min
+SUBJECT flat_only f58ab11c audit-trail-pulse tour=80172001 status=approved side=in seed=2760 floor=600 -> keep
+SUBJECT flat_only afbb785f audit-trail-pulse tour=44281611 status=held side=short seed=915 floor=600 -> keep
+SUBJECT flat_only cd642113 audit-wildkind-travel tour=69fe6398 status=held side=short seed=146 floor=600 -> seed_below_min
+SUBJECT flat_only 7719d206 audit-wildkind-travel tour=b4d315a6 status=held side=short seed=493 floor=600 -> seed_below_min
+SUBJECT flat_only 2d3fa5ba audit-wildkind-travel tour=80172001 status=held side=in seed=2734 floor=600 -> keep
+SUBJECT flat_only 49bdc1e7 audit-wildkind-travel tour=44281611 status=held side=in seed=1269 floor=600 -> keep
+SUBJECT flat_only 66f8c5ef audit-atlas-hearth tour=d33d1c3f status=held side=short seed=1065 floor=600 -> keep
+SUBJECT flat_only 5c12a4ac audit-terra-family tour=d33d1c3f status=held side=short seed=1065 floor=600 -> keep
+SUBJECT flat_only 418fca04 audit-trail-pulse tour=d33d1c3f status=held side=short seed=1065 floor=600 -> keep
+SUBJECT flat_only 5121fc03 audit-wildkind-travel tour=d33d1c3f status=held side=short seed=1065 floor=600 -> keep
+SUBJECT flat_only 75a86131 audit-wildkind-travel tour=0ae89a30 status=held side=short seed=2496 floor=600 -> keep
+SUBJECT flat_only d4d5b3e6 audit-atlas-hearth tour=fa0112cf status=held side=in seed=1711 floor=600 -> keep
+SUBJECT flat_only 74739d9a audit-atlas-hearth tour=1823ab0e status=held side=short seed=761 floor=600 -> keep
+SUBJECT flat_only 6f802a6e audit-atlas-hearth tour=b4d315a6 status=held side=short seed=2188 floor=600 -> keep
+SUBJECT flat_only ce18c3b1 audit-terra-family tour=fa0112cf status=held side=in seed=1711 floor=600 -> keep
+SUBJECT flat_only 604f948c audit-terra-family tour=1823ab0e status=held side=short seed=761 floor=600 -> keep
+SUBJECT flat_only af122d6b audit-terra-family tour=b4d315a6 status=approved side=in seed=2188 floor=600 -> keep
+SUBJECT flat_only 25a83e61 audit-trail-pulse tour=fa0112cf status=held side=in seed=1711 floor=600 -> keep
+SUBJECT flat_only 55721f1c audit-trail-pulse tour=69fe6398 status=held side=short seed=1053 floor=600 -> keep
+SUBJECT flat_only fbc0e9d8 audit-trail-pulse tour=b4d315a6 status=held side=short seed=2202 floor=600 -> keep
+SUBJECT flat_only b469c0eb audit-atlas-hearth tour=fa0112cf status=approved side=in seed=1428 floor=600 -> keep
+SUBJECT flat_only a9851c15 audit-atlas-hearth tour=69fe6398 status=held side=short seed=1053 floor=600 -> keep
+SUBJECT flat_only e3892971 audit-atlas-hearth tour=b4d315a6 status=held side=in seed=2202 floor=600 -> keep
+SUBJECT flat_only 5d404614 audit-atlas-hearth tour=b4d315a6 status=approved side=in seed=2189 floor=600 -> keep
+SUBJECT flat_only 67eaea48 audit-atlas-hearth tour=8908e6ad status=held side=short seed=830 floor=600 -> keep
+SUBJECT flat_only d0165872 audit-atlas-hearth tour=b4d315a6 status=held side=in seed=2317 floor=600 -> keep
+TARGET configured all_short_skipped=None short=0 short_skipped=0
+TARGET at_measured all_short_skipped=None short=0 short_skipped=0
+TARGET flat_only all_short_skipped=None short=0 short_skipped=0
+SUMMARY {"at_measured": {"approved_skipped": 5, "floor": {"chars_per_seed_word": 3.364, "flat": 600, "floor_chars": 4700, "min_seed_words": 1398, "sized": 1398}, "kept": 15, "short_skipped": 19, "short_total": 23, "skipped": 27}, "configured": {"approved_skipped": 4, "floor": {"chars_per_seed_word": 5.8, "flat": 600, "floor_chars": 4700, "min_seed_words": 811, "sized": 811}, "kept": 29, "short_skipped": 9, "short_total": 23, "skipped": 13}, "flat_only": {"approved_skipped": 4, "floor": {"chars_per_seed_word": 0.0, "flat": 600, "floor_chars": 4700, "min_seed_words": 600, "sized": 0}, "kept": 32, "short_skipped": 6, "short_total": 23, "skipped": 10}, "measured": {"max": 23.534, "median": 4.027, "min": 1.604, "n": 23, "needed_max": 2931, "ratio": 3.364, "rule": "p25", "writer": "cc9b4979"}, "pieces": 42, "recommended_env": {"T7_BLOG_CHARS_PER_SEED_WORD": 3.364, "sized_min_seed_words": 1398}, "subjects": 42, "target": {"at_measured": {"all_short_skipped": null, "short": 0, "short_skipped": 0}, "configured": {"all_short_skipped": null, "short": 0, "short_skipped": 0}, "flat_only": {"all_short_skipped": null, "short": 0, "short_skipped": 0}, "tours": ["ac574bfe"]}}
+ecsx: rc=0 bytes=24121 (output also in /home/nghiep/projects/AA-Ecosys/.tmp-session/ecsx/20261113T004637-437558-seed_floor_replay.out)

@@ -1,0 +1,87 @@
+{
+ "results": [
+  {
+   "width": 1440,
+   "scheme": "light",
+   "http": 200,
+   "path": "/settings/inclusions",
+   "testid": true,
+   "couldntLoad": false,
+   "errorState": true,
+   "dataTheme": "light",
+   "scrollW": 1440,
+   "clientW": 1440,
+   "bodyScrollW": 1440,
+   "title": "Proposal lines",
+   "sideways": false,
+   "consoleErrors": [],
+   "badResponses": [],
+   "shot": "inclusions-1440-light.png"
+  },
+  {
+   "width": 390,
+   "scheme": "light",
+   "http": 200,
+   "path": "/settings/inclusions",
+   "testid": true,
+   "couldntLoad": false,
+   "errorState": true,
+   "dataTheme": "light",
+   "scrollW": 390,
+   "clientW": 390,
+   "bodyScrollW": 390,
+   "title": "Proposal lines",
+   "sideways": false,
+   "consoleErrors": [],
+   "badResponses": [],
+   "shot": "inclusions-390-light.png"
+  },
+  {
+   "width": 1440,
+   "scheme": "dark",
+   "http": 200,
+   "path": "/settings/inclusions",
+   "testid": true,
+   "couldntLoad": false,
+   "errorState": true,
+   "dataTheme": "dark",
+   "scrollW": 1440,
+   "clientW": 1440,
+   "bodyScrollW": 1440,
+   "title": "Proposal lines",
+   "sideways": false,
+   "consoleErrors": [],
+   "badResponses": [],
+   "shot": "inclusions-1440-dark.png"
+  },
+  {
+   "width": 390,
+   "scheme": "dark",
+   "http": 200,
+   "path": "/settings/inclusions",
+   "testid": true,
+   "couldntLoad": false,
+   "errorState": true,
+   "dataTheme": "dark",
+   "scrollW": 390,
+   "clientW": 390,
+   "bodyScrollW": 390,
+   "title": "Proposal lines",
+   "sideways": false,
+   "consoleErrors": [],
+   "badResponses": [],
+   "shot": "inclusions-390-dark.png"
+  }
+ ],
+ "library_before": {
+  "status": 200,
+  "count": 0,
+  "items": []
+ },
+ "library_after": {
+  "status": 200,
+  "count": 0,
+  "items": []
+ },
+ "unchanged": true
+}

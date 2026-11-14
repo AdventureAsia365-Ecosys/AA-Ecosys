@@ -1,0 +1,211 @@
+<title>Academy and Playbook Decisions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one reading column; a sticky band with the tally and the language switch; one row per decision, the proposed
+   answer set off as the thing to approve, the three choices on the right (below on phones). */
+:root {
+  --bg: #f6f7f4; --surface: #ffffff; --ink: #1d2320; --muted: #5d6862; --line: #dfe3dc;
+  --accent: #1f6f5c; --accent-soft: #e2f0eb; --approve: #1f7a4d; --change: #a85d12; --later: #5d6862;
+  --approve-soft: #e3f3ea; --change-soft: #f8ecdc; --later-soft: #eceeea;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "Source Sans 3", "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #141816; --surface: #1c211f; --ink: #e7ebe8; --muted: #9aa59f; --line: #2d3531;
+  --accent: #5fc2a6; --accent-soft: #1d332c; --approve: #6fd39c; --change: #e8a861; --later: #9aa59f;
+  --approve-soft: #1b3326; --change-soft: #3a2b18; --later-soft: #262c29; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #141816; --surface: #1c211f; --ink: #e7ebe8; --muted: #9aa59f; --line: #2d3531;
+  --accent: #5fc2a6; --accent-soft: #1d332c; --approve: #6fd39c; --change: #e8a861; --later: #9aa59f;
+  --approve-soft: #1b3326; --change-soft: #3a2b18; --later-soft: #262c29; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font: 16px/1.5 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg) }
+.wrap { max-width: 980px; margin: 0 auto; padding-block: 28px 64px }
+h1 { font: 700 clamp(1.6rem, 3.4vw, 2.2rem)/1.15 var(--display); margin: 0 0 8px; text-wrap: balance }
+.lede { color: var(--muted); max-width: 68ch; margin: 0 0 18px }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 10px;
+  border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center }
+.tally { display: flex; gap: 8px; flex-wrap: wrap; font-variant-numeric: tabular-nums }
+.pill { font: 600 0.82rem/1 var(--body); padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface) }
+.pill.approve { color: var(--approve); background: var(--approve-soft); border-color: transparent }
+.pill.change { color: var(--change); background: var(--change-soft); border-color: transparent }
+.pill.later { color: var(--later); background: var(--later-soft); border-color: transparent }
+.spacer { flex: 1 }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden }
+.seg button { font: 600 0.85rem var(--body); padding: 6px 12px; border: 0; background: var(--surface); color: var(--muted); cursor: pointer }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--surface) }
+.status { font-size: 0.85rem; color: var(--muted) }
+section { margin-top: 30px }
+.sechead { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: baseline; justify-content: space-between }
+h2 { font: 600 1.3rem/1.2 var(--display); margin: 0 }
+.issue { font: 500 0.8rem var(--mono); color: var(--accent); letter-spacing: 0.02em }
+.bulk { font: 600 0.85rem var(--body); color: var(--accent); background: none; border: 1px solid var(--accent); border-radius: 8px; padding: 6px 12px; cursor: pointer }
+.list { display: grid; gap: 10px; margin-top: 14px }
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px 18px }
+.item[data-choice="approve"] { border-left: 4px solid var(--approve) }
+.item[data-choice="change"] { border-left: 4px solid var(--change) }
+.item[data-choice="later"] { border-left: 4px solid var(--later) }
+.head { display: flex; gap: 10px; align-items: baseline; min-width: 0 }
+.code { font: 500 0.78rem var(--mono); color: var(--muted); flex: none }
+.t { font: 600 1.02rem/1.3 var(--display); margin: 0 }
+.label { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-top: 8px }
+.a { background: var(--accent-soft); border-radius: 8px; padding: 8px 10px; margin-top: 4px; overflow-wrap: anywhere }
+.w { color: var(--muted); font-size: 0.93rem; margin-top: 4px; overflow-wrap: anywhere }
+.choices { display: flex; flex-direction: column; gap: 6px; align-self: start }
+.choices button { font: 600 0.85rem var(--body); padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; white-space: nowrap }
+.choices button[aria-pressed="true"][data-v="approve"] { background: var(--approve); color: var(--surface); border-color: var(--approve) }
+.choices button[aria-pressed="true"][data-v="change"] { background: var(--change); color: var(--surface); border-color: var(--change) }
+.choices button[aria-pressed="true"][data-v="later"] { background: var(--later); color: var(--surface); border-color: var(--later) }
+.note { grid-column: 1 / -1 }
+.note textarea { width: 100%; min-height: 64px; font: 0.95rem var(--body); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px }
+.note .row { display: flex; gap: 10px; align-items: center; margin-top: 6px }
+.note button { font: 600 0.85rem var(--body); padding: 6px 12px; border-radius: 8px; border: 0; background: var(--change); color: var(--surface); cursor: pointer }
+button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.foot { margin-top: 36px; color: var(--muted); font-size: 0.9rem; max-width: 70ch }
+@media (max-width: 640px) { .item { grid-template-columns: minmax(0, 1fr) } .choices { flex-direction: row; flex-wrap: wrap } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important } }
+</style>
+
+<div class="wrap">
+  <h1 id="h1">Academy and new-project kit: decisions</h1>
+  <p class="lede" id="lede">Each row is one decision from the S279 research, with the answer the research proposes. Approve it, ask for a change (write what you want instead), or leave it for later. Your choices are saved here and read back by Claude to start the build.</p>
+  <div class="bar">
+    <div class="tally" id="tally"></div>
+    <div class="spacer"></div>
+    <span class="status" id="status"></span>
+    <div class="seg" role="group" aria-label="Language">
+      <button id="lang-vi" type="button" aria-pressed="true">Tiếng Việt</button>
+      <button id="lang-en" type="button" aria-pressed="false">English</button>
+    </div>
+  </div>
+  <section id="sec-lms">
+    <div class="sechead"><h2 id="h-lms">AA Academy (learning site)</h2><span class="issue">AA-1098</span>
+      <button class="bulk" type="button" data-group="lms" id="bulk-lms">Approve all not yet decided</button></div>
+    <div class="list" id="list-lms"></div>
+  </section>
+  <section id="sec-pb">
+    <div class="sechead"><h2 id="h-pb">New-project kit (playbook)</h2><span class="issue">AA-1099</span>
+      <button class="bulk" type="button" data-group="pb" id="bulk-pb">Approve all not yet decided</button></div>
+    <div class="list" id="list-pb"></div>
+  </section>
+  <p class="foot" id="foot">Sources: docs/research/lms/README.md §9 and docs/research/new-project-playbook/README.md §7 (root repo, merged in #757). D17 answers the question on where the Academy should live.</p>
+</div>
+
+<script>
+const DATA = {"lms": [{"id": "lms-D1", "code": "D1", "en": {"t": "Platform", "a": "(a) built into CIS admin and CRM web", "w": "Single source, zero licence, no new infrastructure, reuses tiers and EN/VI"}, "vi": {"t": "Nền tảng", "a": "(a) xây trong CIS admin và CRM web", "w": "Một nguồn, không giấy phép, không thêm hạ tầng, dùng lại tầng truy cập và EN/VI"}}, {"id": "lms-D2", "code": "D2", "en": {"t": "Name", "a": "AA Academy", "w": "Short, clear for staff and agencies"}, "vi": {"t": "Tên gọi", "a": "AA Academy", "w": "Ngắn, rõ với cả nhân viên và đại lý"}}, {"id": "lms-D3", "code": "D3", "en": {"t": "Schema owner", "a": "New schema `learn`, owned by AA-CIS-App in the CIS key space", "w": "CIS already owns the shared platform (tenants, staff directory, docs reader)"}, "vi": {"t": "Chủ sở hữu schema", "a": "Schema mới `learn`, AA-CIS-App sở hữu, dùng dải số của CIS", "w": "CIS đã sở hữu nền tảng dùng chung (tenant, danh bạ nhân viên, trình đọc tài liệu)"}}, {"id": "lms-D4", "code": "D4", "en": {"t": "First paths", "a": "Fundamentals, then engineer on duty", "w": "Largest reach plus the highest-risk role"}, "vi": {"t": "Lộ trình đầu tiên", "a": "Nền tảng, rồi kỹ sư trực", "w": "Phủ rộng nhất cộng vai trò rủi ro cao nhất"}}, {"id": "lms-D5", "code": "D5", "en": {"t": "Vietnamese scope", "a": "Staff paths EN first. Fundamentals, ops and support, content, finance and booking, and business owner get VI once the path has had no major change for 30 days; engineer-on-duty and tech-lead paths stay EN. Agency paths EN and VI from day one", "w": "Only 22 docs pages have VI today, and the agency runbooks already do; engineers work in English"}, "vi": {"t": "Phạm vi tiếng Việt", "a": "Lộ trình nhân viên EN trước. Nền tảng, vận hành và hỗ trợ, nội dung, tài chính và booking, và chủ doanh nghiệp có VI khi lộ trình không đổi lớn trong 30 ngày; lộ trình kỹ sư trực và tech lead giữ EN. Lộ trình đại lý EN và VI ngay từ đầu", "w": "Hiện chỉ 22 trang tài liệu có VI, và runbook đại lý đã có VI; kỹ sư làm việc bằng tiếng Anh"}}, {"id": "lms-D6", "code": "D6", "en": {"t": "Agency academy timing", "a": "After the staff paths (P7), before the first paying tenant is onboarded", "w": "The partner tier needs its own review; agencies benefit most at onboarding"}, "vi": {"t": "Thời điểm mở Academy cho đại lý", "a": "Sau các lộ trình nhân viên (P7), trước khi onboarding tenant trả tiền đầu tiên", "w": "Tầng đối tác cần review riêng; đại lý được lợi nhiều nhất lúc onboarding"}}, {"id": "lms-D7", "code": "D7", "en": {"t": "Pass mark and recertification", "a": "80%, retake after 24 hours, recertify on a major module version or after 12 months (on-duty and tech-lead paths)", "w": "Common practice; all values are settings"}, "vi": {"t": "Mức đạt và cấp lại chứng chỉ", "a": "80%, làm lại sau 24 giờ, cấp lại khi module lên phiên bản lớn hoặc sau 12 tháng (lộ trình kỹ sư trực và tech lead)", "w": "Thực hành phổ biến; mọi giá trị đều là setting"}}, {"id": "lms-D8", "code": "D8", "en": {"t": "Lesson videos", "a": "Only for UI-heavy lessons, built locally with `tools/uat/`, stored in private S3 and played through presigned URLs that the learning API issues", "w": "Keeps the \"no routine videos\" rule for UAT while giving UI learners what they need; API Gateway cannot carry video"}, "vi": {"t": "Video bài học", "a": "Chỉ cho bài nặng về giao diện, dựng local bằng `tools/uat/`, lưu ở S3 riêng tư và phát qua URL ký trước do API học tập cấp", "w": "Giữ quy tắc \"không quay video UAT định kỳ\" mà vẫn cho người học giao diện thứ họ cần; API Gateway không chở được video"}}, {"id": "lms-D9", "code": "D9", "en": {"t": "Agent-drafted lessons and quiz items", "a": "Allowed through the AI gateway on stage `learn_draft` with its own budget, a 3-module trial first (about 1 to 2 USD), about 35 to 45 USD for all 62 modules, and human approval", "w": "Saves authoring time; cost stays visible and capped (§6.3)"}, "vi": {"t": "Agent soạn nháp bài học và câu trắc nghiệm", "a": "Cho phép qua AI gateway trên stage `learn_draft` có ngân sách riêng, thử 3 module trước (khoảng 1 tới 2 USD), khoảng 35 tới 45 USD cho cả 62 module, có người duyệt", "w": "Tiết kiệm công soạn; chi phí luôn thấy được và có trần (§6.3)"}}, {"id": "lms-D10", "code": "D10", "en": {"t": "Rules still in private agent notes", "a": "Add \"decide, don't ask\" and \"no agent-made gates\" to the handbook operating model in P1; the other rules are taught from the repo pages that already hold them (G5)", "w": "A course cannot teach what is not in the source, and most rules already are"}, "vi": {"t": "Quy tắc còn nằm trong ghi chú riêng của agent", "a": "Thêm \"tự quyết, không hỏi\" và \"không tự đặt cổng chặn\" vào mô hình vận hành của handbook ở P1; các quy tắc khác dạy từ trang repo đã chứa chúng (G5)", "w": "Khoá học không dạy được thứ không có trong nguồn, và phần lớn quy tắc đã có"}}, {"id": "lms-D11", "code": "D11", "en": {"t": "Learner data retention", "a": "Active account plus 365 days; agency owner sees own staff; AA sees counts", "w": "Privacy by default, consistent with tenant-data rules"}, "vi": {"t": "Thời hạn lưu dữ liệu người học", "a": "Tài khoản còn hoạt động cộng 365 ngày; chủ đại lý thấy nhân viên mình; AA chỉ thấy số đếm", "w": "Riêng tư mặc định, nhất quán với quy tắc dữ liệu tenant"}}, {"id": "lms-D12", "code": "D12", "en": {"t": "Catalog entry", "a": "Done in this PR: GUIDE-13 \"AA Academy\" is in `docs/README.md` with status planned and links to this research; the row's target path becomes `docs/learn/` when P2 lands", "w": "Keeps the catalog the single index, as the AA-1098 DoR asks"}, "vi": {"t": "Mục trong catalog", "a": "Đã làm trong PR này: GUIDE-13 \"AA Academy\" có trong `docs/README.md` với trạng thái planned và trỏ tới nghiên cứu này; đường dẫn đích của dòng đó đổi thành `docs/learn/` khi P2 lên", "w": "Giữ catalog là mục lục duy nhất, đúng như DoR của AA-1098 yêu cầu"}}, {"id": "lms-D13", "code": "D13", "en": {"t": "Widen the docs reader", "a": "Yes, in P2: add a `staff` tier that every staff role can read, next to `owner`. Publish sections of skills, steering files and `CONTEXT.md` only through an explicit allowlist, one line per section, default deny, with the same redaction guard and the SEC-06 rules. Review the change as a risky change (auth and access) before merge", "w": "Learners outside the admin role need the pages their lessons cite. The sources are already in public repos, so the risk is mostly showing internal procedure to the wrong role; the allowlist and the tier keep that small"}, "vi": {"t": "Mở rộng trình đọc tài liệu", "a": "Có, ở P2: thêm tầng `staff` mà mọi vai trò nhân viên đọc được, cạnh `owner`. Chỉ xuất bản các mục của skill, file steering và `CONTEXT.md` qua một allowlist rõ ràng, mỗi mục một dòng, mặc định từ chối, cùng guard che thông tin và quy tắc SEC-06. Review thay đổi này như thay đổi rủi ro (xác thực và quyền truy cập) trước khi merge", "w": "Người học ngoài vai trò admin cần các trang mà bài học của họ dẫn. Nguồn vốn đã nằm trong repo public, nên rủi ro chủ yếu là cho sai vai trò thấy thủ tục nội bộ; allowlist và tầng truy cập giữ rủi ro đó nhỏ"}}, {"id": "lms-D14", "code": "D14", "en": {"t": "Lab isolation and budget", "a": "No lab runs A-series stages (E11 traces read-only). T-series labs run on the learner's lab tenant with a hard-stop tenant AI budget. Eval labs run on a lab-only stage (`learn_lab`) with its own stage budget and the `dev` capacity class; no lab adds a shadow to a real stage", "w": "The tenant budget does not cap A1 or shadows, and A1 writes the shared master pool (§4.5)"}, "vi": {"t": "Cách ly và ngân sách cho bài thực hành", "a": "Không bài thực hành nào chạy stage A-series (E11 chỉ đọc lại). Bài thực hành T-series chạy trên tenant thực hành của người học với ngân sách AI có hard stop của tenant. Bài eval chạy trên stage chỉ dành cho thực hành (`learn_lab`) có ngân sách stage riêng và lớp dung lượng `dev`; không bài nào thêm shadow vào stage thật", "w": "Ngân sách tenant không chặn được A1 hay shadow, và A1 ghi vào kho master dùng chung (§4.5)"}}, {"id": "lms-D15", "code": "D15", "en": {"t": "Lab provisioning and sandbox repo", "a": "Test the pilot rehearsal end to end first, then build `learn.lab_provision` and `learn.lab_erase` jobs across CIS, CRM and Booking (about 3 sessions in P4b). Create one public docs-only sandbox repo for E2 with the app repos' branch ruleset (about 0.5 session, 0 USD)", "w": "Per-learner labs need automation that does not exist yet; a real PR gate needs a repo that is safe to break"}, "vi": {"t": "Tạo môi trường thực hành và repo thử", "a": "Kiểm diễn tập pilot trọn vẹn trước, rồi dựng job `learn.lab_provision` và `learn.lab_erase` trên CIS, CRM và Booking (khoảng 3 phiên ở P4b). Tạo một repo public chỉ chứa tài liệu cho E2, dùng ruleset nhánh của các repo app (khoảng 0,5 phiên, 0 USD)", "w": "Bài thực hành cho từng người cần tự động hoá chưa có; một cổng PR thật cần một repo làm hỏng cũng không sao"}}, {"id": "lms-D16", "code": "D16", "en": {"t": "Rollback game day for learners", "a": "Real rollbacks only in a scheduled cohort sitting, at most monthly, run by the engineer on duty, when the deploy gate would allow a deploy, never with an override; every learner does the read-only dry run", "w": "A rollback on shared Dev affects everyone using it"}, "vi": {"t": "Rollback game day cho người học", "a": "Chỉ rollback thật trong một buổi theo nhóm có lịch, tối đa mỗi tháng một lần, do kỹ sư trực điều khiển, khi cổng deploy cho phép deploy, không bao giờ override; mọi người học làm bản chạy thử chỉ đọc", "w": "Rollback trên Dev dùng chung ảnh hưởng mọi người đang dùng nó"}}, {"id": "lms-D17", "code": "D17", "en": {"t": "Where the Academy lives", "a": "A subdomain academy.<env domain> (Dev: academy.lumiguides.it.com) served by the CRM web, which already serves several hosts and has both sign-ins (AA staff and agencies); courses and progress stay in the CIS API; CIS admin links to it", "w": "One address for every learner at about 0 USD (certificate, DNS record, one ALB host rule). Alternatives: stay inside the apps (two entry points) or a separate paid domain (only for external learners)"}, "vi": {"t": "Academy nằm ở đâu", "a": "Subdomain academy.<domain môi trường> (Dev: academy.lumiguides.it.com) chạy trên CRM web, nơi đã phục vụ nhiều host và có cả hai kiểu đăng nhập (nhân viên AA và đại lý); khoá học và tiến độ nằm ở API CIS; CIS admin chỉ đặt link", "w": "Một địa chỉ cho mọi người học, gần 0 USD (chứng chỉ, bản ghi DNS, một rule host ALB). Phương án khác: để trong các app (hai cổng vào) hoặc tên miền riêng trả phí (chỉ khi có học viên bên ngoài)"}}], "pb": [{"id": "pb-D1", "code": "D1", "en": {"t": "Shape of the kit", "a": "A thin AA profile over named standards, not a new method", "w": "Most rules exist; standards give names, the profile keeps AA's lean choices"}, "vi": {"t": "Hình dạng bộ kit", "a": "Một bản áp dụng AA mỏng đặt trên các chuẩn có tên, không phải phương pháp mới", "w": "Phần lớn luật đã có; chuẩn cho tên gọi, bản áp dụng giữ các lựa chọn gọn của AA"}}, {"id": "pb-D2", "code": "D2", "en": {"t": "Lifecycle spine", "a": "The nine phases in 2.1, mapped to GDS, with red / amber / green gate checklists (an AA choice)", "w": "GDS is the best public model with discovery and retirement"}, "vi": {"t": "Xương sống vòng đời", "a": "Chín pha ở 2.1, ánh xạ sang GDS, với checklist cổng chấm đỏ / vàng / xanh (lựa chọn của AA)", "w": "GDS là mô hình công khai tốt nhất có cả discovery và retirement"}}, {"id": "pb-D3", "code": "D3", "en": {"t": "Delivery cadence", "a": "Kanban with the WIP cap of 8, the four flow metrics and an appetite per issue; no sprints", "w": "Fits session-sized agent work; matches the existing convergence rule"}, "vi": {"t": "Nhịp delivery", "a": "Kanban với trần WIP 8, bốn chỉ số luồng và appetite cho từng issue; không sprint", "w": "Hợp với việc của agent theo cỡ phiên; khớp luật hội tụ đang có"}}, {"id": "pb-D4", "code": "D4", "en": {"t": "Agent autonomy", "a": "PRINCE2-style tolerances (table in 5.6); escalate only on a forecast breach", "w": "Writes \"decide, don't ask\" down as a rule that can be taught and checked"}, "vi": {"t": "Mức tự chủ của agent", "a": "Dung sai kiểu PRINCE2 (bảng ở 5.6); chỉ báo lên khi dự báo vượt", "w": "Viết \"quyết thay vì hỏi\" thành luật dạy được và kiểm được"}}, {"id": "pb-D5", "code": "D5", "en": {"t": "Where the kit lives", "a": "Pages in `docs/playbook/`, templates in `docs/templates/`, scaffold in a new public template repo in the organisation", "w": "One home per fact; the template must be shareable"}, "vi": {"t": "Bộ kit nằm ở đâu", "a": "Trang trong `docs/playbook/`, mẫu trong `docs/templates/`, khung trong một repo mẫu public mới của tổ chức", "w": "Mỗi dữ kiện một nhà; mẫu phải chia sẻ được"}}, {"id": "pb-D6", "code": "D6", "en": {"t": "Scaffold tool", "a": "Copier, with the repo also marked as a GitHub template", "w": "Copier has updates and per-version migrations built in: one tool, no wrapper (cookiecutter needs cruft for the same update path) and no portal; its questions are Jinja templates with conditions, which the optional modules need"}, "vi": {"t": "Công cụ dựng khung", "a": "Copier, đồng thời đánh dấu repo là GitHub template", "w": "Copier có sẵn cập nhật và migration theo phiên bản: một công cụ, không cần lớp bọc (cookiecutter cần thêm cruft để có cùng đường cập nhật) và không cần portal; câu hỏi của nó là mẫu Jinja có điều kiện, đúng thứ các module tuỳ chọn cần"}}, {"id": "pb-D7", "code": "D7", "en": {"t": "Agent instruction source", "a": "`AGENTS.md` in the kit, `CLAUDE.md` imports it; AA keeps `.kiro/steering` for now", "w": "Vendor-neutral, open format"}, "vi": {"t": "Nguồn chỉ dẫn agent", "a": "`AGENTS.md` trong bộ kit, `CLAUDE.md` import nó; AA tạm giữ `.kiro/steering`", "w": "Không phụ thuộc nhà cung cấp, định dạng mở"}}, {"id": "pb-D8", "code": "D8", "en": {"t": "Skill language", "a": "Generic skills in English; the AA overlay may stay Vietnamese", "w": "Matches the language convention for products"}, "vi": {"t": "Ngôn ngữ của skill", "a": "Skill chung tiếng Anh; lớp phủ AA có thể giữ tiếng Việt", "w": "Khớp quy ước ngôn ngữ cho sản phẩm"}}, {"id": "pb-D9", "code": "D9", "en": {"t": "Security gate", "a": "ASVS 5.0 level 1 at every release; level 2 for auth, payment and personal data; one light SAMM self-check per project", "w": "Checkable, free, not \"full SAMM\""}, "vi": {"t": "Cổng bảo mật", "a": "ASVS 5.0 mức 1 ở mỗi lần phát hành; mức 2 cho xác thực, thanh toán và dữ liệu cá nhân; mỗi dự án một lần tự kiểm SAMM nhẹ", "w": "Kiểm được, miễn phí, không phải \"full SAMM\""}}, {"id": "pb-D10", "code": "D10", "en": {"t": "Prod-phase switch", "a": "SLO and error budget, on-call, enforced code owners and the least-privilege agent role switch on at G7 (first prod or first paying tenant), the same trigger as DM-11.5", "w": "Keeps Dev lean; one trigger for all prod controls"}, "vi": {"t": "Công tắc giai đoạn prod", "a": "SLO và error budget, trực sự cố, code owner được cưỡng chế và role agent quyền tối thiểu bật ở G7 (prod đầu tiên hoặc tenant trả tiền đầu tiên), cùng trigger với DM-11.5", "w": "Giữ Dev gọn; một trigger cho mọi biện pháp prod"}}, {"id": "pb-D11", "code": "D11", "en": {"t": "Private rules", "a": "Move the memory-only rules (gap 7) into the handbook or skills in R1, before the kit copies anything", "w": "A rule that is not in the repo cannot be taught or reused"}, "vi": {"t": "Luật riêng", "a": "Chuyển các luật chỉ nằm trong memory (khoảng trống 7) vào handbook hoặc skill ở R1, trước khi bộ kit chép bất cứ gì", "w": "Một luật không nằm trong repo thì không dạy và không dùng lại được"}}, {"id": "pb-D12", "code": "D12", "en": {"t": "AA adoption", "a": "AA is the reference application; new repos start from the template; existing AA repos align by hand when touched", "w": "Avoids a big-bang migration of live repos"}, "vi": {"t": "AA áp dụng", "a": "AA là ứng dụng tham chiếu; repo mới bắt đầu từ mẫu; repo AA hiện có chỉnh tay cho khớp khi đụng tới", "w": "Tránh chuyển đổi ồ ạt các repo đang chạy"}}, {"id": "pb-D13", "code": "D13", "en": {"t": "Template repo name and visibility", "a": "Name `project-template`, public in the GitHub organisation. It depends on ADR 0014 being accepted or amended in R1 to cover a public template repo, and on the stale handbook decision D-14 being updated", "w": "A public repo must rest on an accepted visibility rule; today ADR 0014 is Proposed and D-14 still says \"root private\""}, "vi": {"t": "Tên và chế độ hiển thị của repo mẫu", "a": "Tên `project-template`, public trong tổ chức GitHub. Điều này phụ thuộc vào việc ADR 0014 được chấp nhận hoặc sửa ở R1 để phủ một repo mẫu public, và quyết định D-14 đã cũ trong handbook được cập nhật", "w": "Một repo public phải dựa trên luật hiển thị đã được chấp nhận; hôm nay ADR 0014 còn Proposed và D-14 vẫn ghi \"repo gốc private\""}}, {"id": "pb-D14", "code": "D14", "en": {"t": "Pilot deploy", "a": "R5 generates and checks the pilot without deploying it (0 USD). Option: deploy it to the shared Dev platform for a few days (under 5 USD, quoted first) and remove it with the phase 9 checklist", "w": "The option measures \"generate to live\" and tests the retirement checklist on a real service; the default keeps the build free"}, "vi": {"t": "Deploy khi chạy thử", "a": "R5 sinh và kiểm dự án chạy thử mà không deploy (0 USD). Tuỳ chọn: deploy nó lên nền tảng Dev dùng chung vài ngày (dưới 5 USD, báo giá trước) rồi gỡ bằng checklist pha 9", "w": "Tuỳ chọn này đo được \"sinh tới live\" và thử checklist ngừng trên một service thật; mặc định giữ việc dựng bộ kit miễn phí"}}]};
+const TXT = {
+  vi: { h1: "Academy và bộ kit dự án mới: các quyết định", lede: "Mỗi dòng là một quyết định từ nghiên cứu S279, kèm câu trả lời đề xuất. Chọn Đồng ý, Đổi (ghi điều Nghiệp muốn thay) hoặc Để sau. Lựa chọn được lưu ở đây và Claude đọc lại để bắt đầu làm.",
+        hl: "AA Academy (trang học liệu)", hp: "Bộ kit dự án mới (playbook)", bulk: "Đồng ý tất cả mục chưa chọn",
+        approve: "Đồng ý", change: "Đổi", later: "Để sau", prop: "Đề xuất", why: "Lý do", note: "Nghiệp muốn thay bằng gì?", save: "Lưu ghi chú", saved: "Đã lưu",
+        open: "chưa chọn", nA: "đồng ý", nC: "cần đổi", nL: "để sau", offline: "Không lưu được ở chế độ xem này: lựa chọn chỉ nằm trên màn hình.", loading: "Đang tải lựa chọn đã lưu…",
+        foot: "Nguồn: docs/research/lms/README.vi.md §9 và docs/research/new-project-playbook/README.vi.md §7 (repo gốc, đã merge ở #757). D17 trả lời câu hỏi Academy nên nằm ở đâu." },
+  en: { h1: "Academy and new-project kit: decisions", lede: "Each row is one decision from the S279 research, with the answer the research proposes. Approve it, ask for a change (write what you want instead), or leave it for later. Your choices are saved here and read back by Claude to start the build.",
+        hl: "AA Academy (learning site)", hp: "New-project kit (playbook)", bulk: "Approve all not yet decided",
+        approve: "Approve", change: "Change", later: "Later", prop: "Proposed", why: "Why", note: "What do you want instead?", save: "Save note", saved: "Saved",
+        open: "open", nA: "approved", nC: "to change", nL: "later", offline: "Choices cannot be saved in this view: they stay on screen only.", loading: "Loading saved choices…",
+        foot: "Sources: docs/research/lms/README.md §9 and docs/research/new-project-playbook/README.md §7 (root repo, merged in #757). D17 answers the question on where the Academy should live." },
+};
+let lang = "vi";
+try { lang = localStorage.getItem("dec-lang") || "vi"; } catch (e) {}
+const state = {};          // id -> {choice, note}
+let db = null, meId = null;
+
+function el(tag, cls, text) { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+
+function render() {
+  const T = TXT[lang];
+  document.documentElement.lang = lang;
+  document.getElementById("h1").textContent = T.h1;
+  document.getElementById("lede").textContent = T.lede;
+  document.getElementById("h-lms").textContent = T.hl;
+  document.getElementById("h-pb").textContent = T.hp;
+  document.getElementById("bulk-lms").textContent = T.bulk;
+  document.getElementById("bulk-pb").textContent = T.bulk;
+  document.getElementById("foot").textContent = T.foot;
+  document.getElementById("lang-vi").setAttribute("aria-pressed", String(lang === "vi"));
+  document.getElementById("lang-en").setAttribute("aria-pressed", String(lang === "en"));
+  for (const g of ["lms", "pb"]) {
+    const list = document.getElementById("list-" + g);
+    list.textContent = "";
+    for (const d of DATA[g]) {
+      const s = state[d.id] || {};
+      const c = d[lang];
+      const item = el("article", "item"); item.dataset.choice = s.choice || "";
+      const main = el("div"); main.style.minWidth = "0";
+      const head = el("div", "head"); head.append(el("span", "code", d.code), el("h3", "t", c.t)); main.append(head);
+      main.append(el("div", "label", T.prop), el("div", "a", c.a));
+      if (c.w) main.append(el("div", "label", T.why), el("div", "w", c.w));
+      const ch = el("div", "choices");
+      for (const v of ["approve", "change", "later"]) {
+        const b = el("button", null, T[v]); b.type = "button"; b.dataset.v = v; b.id = `b-${d.id}-${v}`;
+        b.setAttribute("aria-pressed", String(s.choice === v));
+        b.addEventListener("click", () => choose(d.id, v));
+        ch.append(b);
+      }
+      item.append(main, ch);
+      if (s.choice === "change") {
+        const box = el("div", "note");
+        const ta = el("textarea"); ta.id = `n-${d.id}`; ta.placeholder = T.note; ta.value = s.note || "";
+        const row = el("div", "row"); const sv = el("button", null, T.save); sv.type = "button";
+        const ok = el("span", "status");
+        sv.addEventListener("click", async () => { await save(d.id, { choice: "change", note: ta.value.trim() }); ok.textContent = T.saved; });
+        row.append(sv, ok); box.append(ta, row); item.append(box);
+      }
+      list.append(item);
+    }
+  }
+  tally();
+}
+
+function tally() {
+  const T = TXT[lang]; const all = [...DATA.lms, ...DATA.pb];
+  const n = { approve: 0, change: 0, later: 0 };
+  for (const d of all) { const c = (state[d.id] || {}).choice; if (n[c] != null) n[c]++; }
+  const open = all.length - n.approve - n.change - n.later;
+  const t = document.getElementById("tally"); t.textContent = "";
+  t.append(el("span", "pill approve", `${n.approve} ${T.nA}`), el("span", "pill change", `${n.change} ${T.nC}`),
+           el("span", "pill later", `${n.later} ${T.nL}`), el("span", "pill", `${open} ${T.open}`));
+}
+
+async function save(id, s) {
+  state[id] = { ...(state[id] || {}), ...s };
+  if (!db) { document.getElementById("status").textContent = TXT[lang].offline; return; }
+  try {
+    await db.collection("decisions").doc(id).set({ choice: state[id].choice, note: state[id].note || "", by: meId || "", at: new Date().toISOString() });
+    document.getElementById("status").textContent = "";
+  } catch (e) { document.getElementById("status").textContent = TXT[lang].offline; }
+}
+async function choose(id, v) { await save(id, { choice: v }); render(); }
+
+document.getElementById("lang-vi").addEventListener("click", () => { lang = "vi"; try { localStorage.setItem("dec-lang", lang); } catch (e) {} render(); });
+document.getElementById("lang-en").addEventListener("click", () => { lang = "en"; try { localStorage.setItem("dec-lang", lang); } catch (e) {} render(); });
+for (const g of ["lms", "pb"]) document.getElementById("bulk-" + g).addEventListener("click", async () => {
+  for (const d of DATA[g]) if (!(state[d.id] || {}).choice) await save(d.id, { choice: "approve" });
+  render();
+});
+
+render();
+(async () => {
+  if (!window.claude || !window.claude.use) return;
+  document.getElementById("status").textContent = TXT[lang].loading;
+  const timer = setTimeout(() => { document.getElementById("status").textContent = ""; }, 10000);
+  try {
+    const user = await window.claude.use("user");
+    if (user) { try { meId = await user.id(); } catch (e) {} }
+    db = await window.claude.use("db");
+    if (!db) { clearTimeout(timer); document.getElementById("status").textContent = TXT[lang].offline; return; }
+    db.collection("decisions").onSnapshot((snap) => {
+      clearTimeout(timer);
+      for (const doc of snap.docs) { const v = doc.data() || {}; state[doc.id] = { choice: v.choice, note: v.note }; }
+      document.getElementById("status").textContent = "";
+      render();
+    }, () => { clearTimeout(timer); document.getElementById("status").textContent = TXT[lang].offline; });
+  } catch (e) { clearTimeout(timer); document.getElementById("status").textContent = TXT[lang].offline; }
+})();
+</script>

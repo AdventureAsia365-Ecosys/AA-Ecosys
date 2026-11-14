@@ -1,0 +1,33 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 tests/s279-inclusions.spec.ts:8:5 › inclusions (37.1s)
+
+
+  1) tests/s279-inclusions.spec.ts:8:5 › inclusions ────────────────────────────────────────────────
+
+    TimeoutError: page.waitForURL: Timeout 30000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+      navigated to "https://portal.lumiguides.it.com/settings/inclusions"
+      navigated to "https://portal.lumiguides.it.com/settings/inclusions"
+    ============================================================
+
+       at ../helpers/signin.ts:54
+
+      52 | /** After managed login: back on the partner host, the agency picked when the chooser shows. */
+      53 | export async function landOnPartner(page: Page, partner: string): Promise<void> {
+    > 54 |   await page.waitForURL((u) => u.origin === partner, { timeout: 30_000 });
+         |              ^
+      55 |   if (new URL(page.url()).pathname === "/select-agency") {
+      56 |     await page.getByTestId("agency-option").first().getByRole("button").click(); // plain form POST, no JS needed
+      57 |   }
+        at landOnPartner (/home/nghiep/projects/AA-Ecosys/.tmp-session/wt/s279-verify3-partner/e2e/helpers/signin.ts:54:14)
+        at /home/nghiep/projects/AA-Ecosys/.tmp-session/wt/s279-verify3-partner/e2e/tests/s279-inclusions.spec.ts:15:22
+
+    Error Context: test-results/s279-inclusions-inclusions/error-context.md
+
+  1 failed
+    tests/s279-inclusions.spec.ts:8:5 › inclusions ─────────────────────────────────────────────────
+
+exit 1

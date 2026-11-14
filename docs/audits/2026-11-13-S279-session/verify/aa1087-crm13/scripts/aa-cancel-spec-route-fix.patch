@@ -1,0 +1,13 @@
+diff --git a/e2e/tests/aa-cancel.spec.ts b/e2e/tests/aa-cancel.spec.ts
+index ec956ef2..f215717a 100644
+--- a/e2e/tests/aa-cancel.spec.ts
++++ b/e2e/tests/aa-cancel.spec.ts
+@@ -148,7 +148,7 @@ test.describe("crm-13: AA cancels a departure the agency has a trip on (Dev, age
+       .flatMap((d) => d.blocks.flatMap((b) => b.options))
+       .find((o) => o.source === "aa");
+     expect(aa?.aa?.departure_id, "the AA item is on the seeded departure").toBe(seeded.departureId);
+-    await page.goto(`${PARTNER}/proposal/${proposalId}`);
++    await page.goto(`${PARTNER}/pipeline/${tripId}/proposal/${proposalId}`);
+     await hydrated(page, "builder");
+     await shot(page, "1-prepared");
+     fs.mkdirSync(path.dirname(STATE_FILE), { recursive: true });

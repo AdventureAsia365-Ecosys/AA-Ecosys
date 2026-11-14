@@ -1,0 +1,10 @@
+
+Running 1 test using 1 worker
+
+[1/1] [admin-evidence] › tests/e2e/admin-evidence/tp-addon.spec.ts:79:5 › A10b admin: TripPlanner add-on of a synthetic tenant; refused on a real tenant
+[admin-evidence] › tests/e2e/admin-evidence/tp-addon.spec.ts:79:5 › A10b admin: TripPlanner add-on of a synthetic tenant; refused on a real tenant
+[tp-addon] Atlas & Hearth (Audit): kind demo, active, subscriptions content:active, crm:active
+
+[tp-addon] dry run: read only, no write
+
+  1 passed (16.5s)

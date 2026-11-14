@@ -1,0 +1,84 @@
+{
+ "supplier_booking": {
+  "http": 200,
+  "id": "972a4f54-81ba-4528-904b-1e9bfdef1742",
+  "code": "SB-000010",
+  "status": "confirmed",
+  "confirmation_ref": "aa1087-1794528411536",
+  "confirmed_at": "2026-11-13T00:07:07.503958Z"
+ },
+ "invoice": {
+  "http": 200,
+  "id": "8b65183e-c604-487a-a4b8-66443fe8e571",
+  "number": "AAT-2026-000002",
+  "status": "paid",
+  "currency": "USD",
+  "total": "25.00",
+  "paid": "25.00",
+  "waiting": "0"
+ },
+ "payments": {
+  "http": 200,
+  "items": [
+   {
+    "id": "d2a83d8e-fe30-47c7-9d76-85ac00613e1b",
+    "status": "approved",
+    "amount": "25.00",
+    "invoice_number": "AAT-2026-000002",
+    "recorded_by": "cog:e919692e-00f1-70d9-b6c4-8a14351d2e01",
+    "approved_by": "cog:5989698e-30e1-70a7-5937-6ad50e4cd29a"
+   }
+  ]
+ },
+ "departures_http": 200,
+ "seeded_departure": {
+  "id": "8fecbe57-debe-4e36-8f7a-6b3ba58968de",
+  "status": "cancelled",
+  "start_date": "2027-01-12",
+  "capacity": 12,
+  "held": 0,
+  "sold": 2,
+  "updated_at": "2026-11-13T00:07:43.397010Z"
+ },
+ "candidates_count": 3,
+ "real_departure_before": {
+  "id": "af6ca5eb-64b0-4fb4-930a-2fafbe63dc2b",
+  "status": "scheduled",
+  "start_date": "2026-12-04",
+  "capacity": 4,
+  "held": 0,
+  "sold": 2,
+  "updated_at": "2026-10-23T06:33:33.214220Z"
+ },
+ "audit_departure": {
+  "http": 200,
+  "items": [
+   {
+    "at": "2026-11-13T00:07:43.397010Z",
+    "action": "departure.updated",
+    "actor_id": "cog:e929790e-50e1-706f-71e9-197d6dc323db",
+    "actor_name": "e2e-booking-staff"
+   },
+   {
+    "at": "2026-11-13T00:02:04.201212Z",
+    "action": "departure.created",
+    "actor_id": "cog:e929790e-50e1-706f-71e9-197d6dc323db",
+    "actor_name": "e2e-booking-staff"
+   }
+  ]
+ },
+ "negative_patch": {
+  "departure_id": "af6ca5eb-64b0-4fb4-930a-2fafbe63dc2b",
+  "http": 403,
+  "detail": "e2e_synthetic_only"
+ },
+ "real_departure_after": {
+  "id": "af6ca5eb-64b0-4fb4-930a-2fafbe63dc2b",
+  "status": "scheduled",
+  "start_date": "2026-12-04",
+  "capacity": 4,
+  "held": 0,
+  "sold": 2,
+  "updated_at": "2026-10-23T06:33:33.214220Z"
+ }
+}
