@@ -1612,3 +1612,101 @@ journeys:
         features: [CIS-F040, TP-F007]
         integrations: [INT-005, INT-001]
     uat: [X-03, PRT-12]
+  - id: J-03
+    name: CRM review - an agency works a lead to a paid trip
+    name_vi: Duyệt CRM - đại lý đưa một lead thành chuyến đi đã thanh toán
+    summary: >-
+      An agency signs in to its CRM, takes an inquiry onto the pipeline, builds a proposal with an AA tour at a live
+      price, the client accepts and signs on a phone, the deposit is invoiced and recorded, AA confirms the tour, and
+      the traveller uses the portal before the trip.
+    summary_vi: >-
+      Đại lý đăng nhập CRM, đưa một yêu cầu vào pipeline, lập đề xuất có tour AA với giá trực tiếp, khách chấp nhận và
+      ký trên điện thoại, hoá đơn đặt cọc được lập và ghi nhận thanh toán, AA xác nhận tour, và khách du lịch dùng cổng
+      khách trước chuyến đi.
+    steps:
+      - name: Sign in, home and getting started
+        name_vi: Đăng nhập, trang chủ và các bước bắt đầu
+        features: [CRM-F001, CRM-F003, CRM-F023]
+        integrations: [INT-030, INT-031]
+      - name: An inquiry lands on the pipeline
+        name_vi: Một yêu cầu vào pipeline
+        features: [CRM-F004, CRM-F005, TP-F006]
+        integrations: [INT-011]
+      - name: The client profile, masked by default
+        name_vi: Hồ sơ khách, che thông tin theo mặc định
+        features: [CRM-F006]
+      - name: A proposal with an AA tour at a live price
+        name_vi: Đề xuất có tour AA với giá trực tiếp
+        features: [CRM-F007, CRM-F008, CRM-F012, CRM-F013]
+        integrations: [INT-002, INT-024]
+      - name: The client accepts on a phone and signs the agreements
+        name_vi: Khách chấp nhận trên điện thoại và ký các thoả thuận
+        features: [CRM-F009, CRM-F010, CRM-F013]
+        integrations: [INT-024]
+      - name: The deposit invoiced, claimed and recorded
+        name_vi: Hoá đơn đặt cọc được lập, khách báo đã trả và thanh toán được ghi nhận
+        features: [CRM-F011, CRM-F009]
+      - name: AA confirms the tour and the trip is booked
+        name_vi: AA xác nhận tour và chuyến đi được đặt
+        features: [CRM-F013, BK-F017, BK-F011]
+        integrations: [INT-024]
+      - name: The traveller portal before the trip
+        name_vi: Cổng khách du lịch trước chuyến đi
+        features: [CRM-F009, CRM-F019]
+      - name: Messages, calendar and duty of care
+        name_vi: Thư từ, lịch và chăm sóc khách đang đi
+        features: [CRM-F016, CRM-F018]
+        integrations: [INT-070]
+      - name: Reports and the client's data request
+        name_vi: Báo cáo và yêu cầu dữ liệu của khách
+        features: [CRM-F020, CRM-F025]
+    uat: [CRM-01, CRM-02, CRM-03, CRM-04, CRM-05, CRM-06.m, CRM-07, X-02]
+    uat_prefix: CRM-REV-
+  - id: J-04
+    name: Booking operations - AA confirms and operates an agency booking
+    name_vi: Điều hành Booking - AA xác nhận và vận hành một booking của đại lý
+    summary: >-
+      An agency books an AA tour at its own price tier through the B2B API; Booking staff work the on-request lines on
+      the B2B desk, book each service with its supplier, run the departure board and manifest, hand the trip to ground
+      operations, then bill the agency and pay the suppliers with a second person approving.
+    summary_vi: >-
+      Đại lý đặt một tour AA theo bậc giá riêng qua B2B API; nhân viên Booking xử lý các dòng chờ xác nhận trên bàn B2B,
+      đặt từng dịch vụ với nhà cung cấp, điều phối bảng khởi hành và danh sách khách, bàn giao chuyến đi cho điều hành
+      mặt đất, rồi thu tiền đại lý và trả nhà cung cấp với người thứ hai duyệt.
+    steps:
+      - name: The agency is a B2B partner with a price tier
+        name_vi: Đại lý là đối tác B2B có bậc giá
+        features: [BK-F016, BK-F008, CIS-F020]
+        integrations: [INT-034, INT-031]
+      - name: Sellable tours with approved prices
+        name_vi: Tour bán được với giá đã duyệt
+        features: [BK-F004, BK-F005, BK-F006, BK-F007]
+        integrations: [INT-001, INT-007]
+      - name: The agency quotes, holds and books through the B2B API
+        name_vi: Đại lý báo giá, giữ chỗ và đặt qua B2B API
+        features: [BK-F017, CRM-F013]
+        integrations: [INT-024]
+      - name: The B2B desk answers on-request lines
+        name_vi: Bàn B2B trả lời các dòng chờ xác nhận
+        features: [BK-F015, BK-F003]
+        integrations: [INT-024]
+      - name: Each service booked with its supplier and the trip checks passed
+        name_vi: Đặt từng dịch vụ với nhà cung cấp và qua các bước kiểm tra chuyến đi
+        features: [BK-F011, BK-F009, BK-F010]
+      - name: Departure board, manifest and ground operations
+        name_vi: Bảng khởi hành, danh sách khách và điều hành mặt đất
+        features: [BK-F015, CRM-F019, CRM-F027]
+      - name: The agency billed, its payment recorded and approved
+        name_vi: Thu tiền đại lý, ghi nhận và duyệt thanh toán
+        features: [BK-F013]
+        integrations: [INT-024]
+      - name: Supplier bills paid, costs and profit
+        name_vi: Trả hoá đơn nhà cung cấp, chi phí và lợi nhuận
+        features: [BK-F012, BK-F014]
+      - name: Audit log and the overview in CIS
+        name_vi: Nhật ký kiểm toán và tổng quan trong CIS
+        features: [BK-F018, CIS-F002, CIS-F030]
+        integrations: [INT-022]
+    uat: [BK-01, BK-03, BK-04, BK-05, BK-06, BK-07, BK-08, BK-09, BK-10, BK-11, X-02, REH-01-booking-partner,
+          REH-01-prices, REH-08c-aa-confirmed, REH-09-supplier, REH-09-voucher, REH-11-maker, REH-11-checker,
+          REH-11-overdue, REH-10b-ops-view]
