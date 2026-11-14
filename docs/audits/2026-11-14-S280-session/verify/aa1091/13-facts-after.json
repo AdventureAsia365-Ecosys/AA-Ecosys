@@ -1,0 +1,390 @@
+{
+ "today": "2026-11-14",
+ "tours": [
+  "043868cf-a3e7-46ce-9385-82502d52feb2",
+  "253c095c-0873-4fbe-a424-df0a35cc68af",
+  "3bb94eae-f2b2-49af-915a-e102c3591d40",
+  "8f6d7604-fdd3-4e66-9354-fee88c693403"
+ ],
+ "readiness": {
+  "043868cf-a3e7-46ce-9385-82502d52feb2": {
+   "status": "priced",
+   "reason": null,
+   "sellable": true,
+   "components": 1,
+   "rated": "1/1",
+   "computed_rows": 9,
+   "hand_rows": 6,
+   "from": "1250.00"
+  },
+  "253c095c-0873-4fbe-a424-df0a35cc68af": {
+   "status": "priced",
+   "reason": null,
+   "sellable": true,
+   "components": 1,
+   "rated": "1/1",
+   "computed_rows": 9,
+   "hand_rows": 6,
+   "from": "1500.00"
+  },
+  "3bb94eae-f2b2-49af-915a-e102c3591d40": {
+   "status": "priced",
+   "reason": null,
+   "sellable": true,
+   "components": 1,
+   "rated": "1/1",
+   "computed_rows": 9,
+   "hand_rows": 6,
+   "from": "1750.00"
+  },
+  "8f6d7604-fdd3-4e66-9354-fee88c693403": {
+   "status": "priced",
+   "reason": null,
+   "sellable": true,
+   "components": 1,
+   "rated": "1/1",
+   "computed_rows": 9,
+   "hand_rows": 6,
+   "from": "2000.00"
+  }
+ },
+ "from_prices": {
+  "043868cf-a3e7-46ce-9385-82502d52feb2": {
+   "amount": "1250.00",
+   "currency": "USD",
+   "season": "Synthetic low (S279, not real)",
+   "valid_from": "2026-11-14",
+   "valid_to": "2027-03-31"
+  },
+  "253c095c-0873-4fbe-a424-df0a35cc68af": {
+   "amount": "1500.00",
+   "currency": "USD",
+   "season": "Synthetic low (S279, not real)",
+   "valid_from": "2026-11-14",
+   "valid_to": "2027-03-31"
+  },
+  "3bb94eae-f2b2-49af-915a-e102c3591d40": {
+   "amount": "1750.00",
+   "currency": "USD",
+   "season": "Synthetic low (S279, not real)",
+   "valid_from": "2026-11-14",
+   "valid_to": "2027-03-31"
+  },
+  "8f6d7604-fdd3-4e66-9354-fee88c693403": {
+   "amount": "2000.00",
+   "currency": "USD",
+   "season": "Synthetic low (S279, not real)",
+   "valid_from": "2026-11-14",
+   "valid_to": "2027-03-31"
+  }
+ },
+ "versions": [
+  {
+   "source_id": "043868cf-a3e7-46ce-9385-82502d52feb2",
+   "version_no": 1,
+   "status": "published",
+   "source": "import",
+   "label": null,
+   "travel_from": "2026-11-14",
+   "travel_to": "2027-11-01",
+   "synthetic_reason": null
+  },
+  {
+   "source_id": "253c095c-0873-4fbe-a424-df0a35cc68af",
+   "version_no": 1,
+   "status": "published",
+   "source": "import",
+   "label": null,
+   "travel_from": "2026-11-14",
+   "travel_to": "2027-11-01",
+   "synthetic_reason": null
+  },
+  {
+   "source_id": "3bb94eae-f2b2-49af-915a-e102c3591d40",
+   "version_no": 1,
+   "status": "published",
+   "source": "import",
+   "label": null,
+   "travel_from": "2026-11-14",
+   "travel_to": "2027-11-01",
+   "synthetic_reason": null
+  },
+  {
+   "source_id": "8f6d7604-fdd3-4e66-9354-fee88c693403",
+   "version_no": 1,
+   "status": "published",
+   "source": "import",
+   "label": null,
+   "travel_from": "2026-11-14",
+   "travel_to": "2027-11-01",
+   "synthetic_reason": null
+  }
+ ],
+ "matrix": {
+  "043868cf-a3e7-46ce-9385-82502d52feb2": {
+   "computed": 9,
+   "hand": 6,
+   "from_version": 6,
+   "by_channel": {
+    "b2b": 9,
+    "fixed_departure": 6
+   },
+   "b2b_2to6_rows": [
+    [
+     "hand",
+     "2026-11-14",
+     "2027-03-31",
+     2,
+     2,
+     "USD",
+     "1250.00"
+    ],
+    [
+     "hand",
+     "2026-11-14",
+     "2027-03-31",
+     3,
+     4,
+     "USD",
+     "1125.00"
+    ],
+    [
+     "hand",
+     "2026-11-14",
+     "2027-03-31",
+     5,
+     6,
+     "USD",
+     "1000.00"
+    ],
+    [
+     "hand",
+     "2027-04-01",
+     "2027-10-31",
+     2,
+     2,
+     "USD",
+     "1500.00"
+    ],
+    [
+     "hand",
+     "2027-04-01",
+     "2027-10-31",
+     3,
+     4,
+     "USD",
+     "1375.00"
+    ],
+    [
+     "hand",
+     "2027-04-01",
+     "2027-10-31",
+     5,
+     6,
+     "USD",
+     "1250.00"
+    ]
+   ]
+  },
+  "253c095c-0873-4fbe-a424-df0a35cc68af": {
+   "computed": 9,
+   "hand": 6,
+   "from_version": 6,
+   "by_channel": {
+    "b2b": 9,
+    "fixed_departure": 6
+   },
+   "b2b_2to6_rows": [
+    [
+     "hand",
+     "2026-11-14",
+     "2027-03-31",
+     2,
+     2,
+     "USD",
+     "1500.00"
+    ],
+    [
+     "hand",
+     "2026-11-14",
+     "2027-03-31",
+     3,
+     4,
+     "USD",
+     "1375.00"
+    ],
+    [
+     "hand",
+     "2026-11-14",
+     "2027-03-31",
+     5,
+     6,
+     "USD",
+     "1250.00"
+    ],
+    [
+     "hand",
+     "2027-04-01",
+     "2027-10-31",
+     2,
+     2,
+     "USD",
+     "1750.00"
+    ],
+    [
+     "hand",
+     "2027-04-01",
+     "2027-10-31",
+     3,
+     4,
+     "USD",
+     "1625.00"
+    ],
+    [
+     "hand",
+     "2027-04-01",
+     "2027-10-31",
+     5,
+     6,
+     "USD",
+     "1500.00"
+    ]
+   ]
+  },
+  "3bb94eae-f2b2-49af-915a-e102c3591d40": {
+   "computed": 9,
+   "hand": 6,
+   "from_version": 6,
+   "by_channel": {
+    "b2b": 9,
+    "fixed_departure": 6
+   },
+   "b2b_2to6_rows": [
+    [
+     "hand",
+     "2026-11-14",
+     "2027-03-31",
+     2,
+     2,
+     "USD",
+     "1750.00"
+    ],
+    [
+     "hand",
+     "2026-11-14",
+     "2027-03-31",
+     3,
+     4,
+     "USD",
+     "1625.00"
+    ],
+    [
+     "hand",
+     "2026-11-14",
+     "2027-03-31",
+     5,
+     6,
+     "USD",
+     "1500.00"
+    ],
+    [
+     "hand",
+     "2027-04-01",
+     "2027-10-31",
+     2,
+     2,
+     "USD",
+     "2000.00"
+    ],
+    [
+     "hand",
+     "2027-04-01",
+     "2027-10-31",
+     3,
+     4,
+     "USD",
+     "1875.00"
+    ],
+    [
+     "hand",
+     "2027-04-01",
+     "2027-10-31",
+     5,
+     6,
+     "USD",
+     "1750.00"
+    ]
+   ]
+  },
+  "8f6d7604-fdd3-4e66-9354-fee88c693403": {
+   "computed": 9,
+   "hand": 6,
+   "from_version": 6,
+   "by_channel": {
+    "b2b": 9,
+    "fixed_departure": 6
+   },
+   "b2b_2to6_rows": [
+    [
+     "hand",
+     "2026-11-14",
+     "2027-03-31",
+     2,
+     2,
+     "USD",
+     "2000.00"
+    ],
+    [
+     "hand",
+     "2026-11-14",
+     "2027-03-31",
+     3,
+     4,
+     "USD",
+     "1875.00"
+    ],
+    [
+     "hand",
+     "2026-11-14",
+     "2027-03-31",
+     5,
+     6,
+     "USD",
+     "1750.00"
+    ],
+    [
+     "hand",
+     "2027-04-01",
+     "2027-10-31",
+     2,
+     2,
+     "USD",
+     "2250.00"
+    ],
+    [
+     "hand",
+     "2027-04-01",
+     "2027-10-31",
+     3,
+     4,
+     "USD",
+     "2125.00"
+    ],
+    [
+     "hand",
+     "2027-04-01",
+     "2027-10-31",
+     5,
+     6,
+     "USD",
+     "2000.00"
+    ]
+   ]
+  }
+ },
+ "agencies": {
+  "synthetic": 8,
+  "not_synthetic": 14,
+  "not_synthetic_in_service": 5
+ }
+}

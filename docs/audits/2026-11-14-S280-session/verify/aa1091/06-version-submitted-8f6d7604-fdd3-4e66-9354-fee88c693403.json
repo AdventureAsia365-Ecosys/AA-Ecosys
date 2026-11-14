@@ -1,0 +1,107 @@
+{
+ "status": 200,
+ "body": {
+  "id": "59eb0940-110f-40fc-8225-8f2e9279dcfe",
+  "version_no": 1,
+  "status": "pending",
+  "label": "S279 synthetic rehearsal prices - not real",
+  "reason": "S279 synthetic rehearsal prices - not real. Round USD numbers made up for the AA-1091 live check; no real price exists yet.",
+  "travel_from": "2026-11-14",
+  "travel_to": "2027-10-31",
+  "diff_sha256": "a041879b9a41e6b9db607f16163a5e095898ce42f759303aa0b6654fcd2dbae3",
+  "impact_counts": {
+   "departures": 0,
+   "open_quotes": 0,
+   "rows_removed": 9,
+   "b2b_rows_changed": 6
+  },
+  "diff_rows": 6,
+  "synthetic_rows": [
+   {
+    "channel": "b2b",
+    "season": "Synthetic low (S279, not real)",
+    "peak": false,
+    "valid_from": "2026-11-14",
+    "valid_to": "2027-03-31",
+    "pax_min": 2,
+    "pax_max": 2,
+    "currency": "USD",
+    "amount": "1600.00",
+    "child_amount": "800.00",
+    "infant_amount": "100.00",
+    "single_supplement_amount": "300.00"
+   },
+   {
+    "channel": "b2b",
+    "season": "Synthetic low (S279, not real)",
+    "peak": false,
+    "valid_from": "2026-11-14",
+    "valid_to": "2027-03-31",
+    "pax_min": 3,
+    "pax_max": 4,
+    "currency": "USD",
+    "amount": "1500.00",
+    "child_amount": "750.00",
+    "infant_amount": "100.00",
+    "single_supplement_amount": "300.00"
+   },
+   {
+    "channel": "b2b",
+    "season": "Synthetic low (S279, not real)",
+    "peak": false,
+    "valid_from": "2026-11-14",
+    "valid_to": "2027-03-31",
+    "pax_min": 5,
+    "pax_max": 6,
+    "currency": "USD",
+    "amount": "1400.00",
+    "child_amount": "700.00",
+    "infant_amount": "100.00",
+    "single_supplement_amount": "300.00"
+   },
+   {
+    "channel": "b2b",
+    "season": "Synthetic high (S279, not real)",
+    "peak": false,
+    "valid_from": "2027-04-01",
+    "valid_to": "2027-10-31",
+    "pax_min": 2,
+    "pax_max": 2,
+    "currency": "USD",
+    "amount": "1800.00",
+    "child_amount": "900.00",
+    "infant_amount": "100.00",
+    "single_supplement_amount": "300.00"
+   },
+   {
+    "channel": "b2b",
+    "season": "Synthetic high (S279, not real)",
+    "peak": false,
+    "valid_from": "2027-04-01",
+    "valid_to": "2027-10-31",
+    "pax_min": 3,
+    "pax_max": 4,
+    "currency": "USD",
+    "amount": "1700.00",
+    "child_amount": "850.00",
+    "infant_amount": "100.00",
+    "single_supplement_amount": "300.00"
+   },
+   {
+    "channel": "b2b",
+    "season": "Synthetic high (S279, not real)",
+    "peak": false,
+    "valid_from": "2027-04-01",
+    "valid_to": "2027-10-31",
+    "pax_min": 5,
+    "pax_max": 6,
+    "currency": "USD",
+    "amount": "1600.00",
+    "child_amount": "800.00",
+    "infant_amount": "100.00",
+    "single_supplement_amount": "300.00"
+   }
+  ],
+  "rows_with_net_cost": 0
+ }
+}

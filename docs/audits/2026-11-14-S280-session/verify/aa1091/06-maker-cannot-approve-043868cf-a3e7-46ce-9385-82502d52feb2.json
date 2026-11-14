@@ -1,0 +1,7 @@
+{
+ "status": 403,
+ "body": {
+  "detail": "maker_checker",
+  "message": "a second person approves, rejects or withdraws a price version"
+ }
+}

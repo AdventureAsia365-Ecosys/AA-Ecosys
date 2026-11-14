@@ -1,0 +1,18 @@
+{
+ "status": 200,
+ "body": {
+  "trip_plan_id": "d4579550-a403-4b28-bca7-8f2e1f441f84",
+  "source_id": "8f6d7604-fdd3-4e66-9354-fee88c693403",
+  "items": [
+   {
+    "component_id": "sv:deed2a29-3bec-4943-bae2-6639f92d1d83",
+    "kind": "activity",
+    "day_no": 1,
+    "hotel_room_type_id": null,
+    "service_id": "deed2a29-3bec-4943-bae2-6639f92d1d83",
+    "label": "SVC-000011 SYNTHETIC S280 activity 4 (not real)",
+    "active": true
+   }
+  ]
+ }
+}

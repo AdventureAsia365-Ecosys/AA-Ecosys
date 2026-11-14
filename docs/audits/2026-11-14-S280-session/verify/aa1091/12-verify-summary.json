@@ -1,0 +1,210 @@
+{
+ "at": "2026-11-14T12:09:20.578Z",
+ "tours": [
+  "043868cf-a3e7-46ce-9385-82502d52feb2",
+  "253c095c-0873-4fbe-a424-df0a35cc68af",
+  "3bb94eae-f2b2-49af-915a-e102c3591d40",
+  "8f6d7604-fdd3-4e66-9354-fee88c693403"
+ ],
+ "partners": [],
+ "expected": {
+  "043868cf-a3e7-46ce-9385-82502d52feb2": 1250,
+  "253c095c-0873-4fbe-a424-df0a35cc68af": 1500,
+  "3bb94eae-f2b2-49af-915a-e102c3591d40": 1750,
+  "8f6d7604-fdd3-4e66-9354-fee88c693403": 2000
+ },
+ "summary": {
+  "043868cf-a3e7-46ce-9385-82502d52feb2": {
+   "readiness": {
+    "status": "priced",
+    "reason": null,
+    "sellable": true,
+    "computed_rows": 9,
+    "hand_rows": 6,
+    "components": 1,
+    "from_price": {
+     "amount": "1250.00",
+     "currency": "USD",
+     "season": "Synthetic low (S279, not real)"
+    }
+   },
+   "version": {
+    "id": "b5daac6c-e7e3-4ee0-991f-bd81df32720f",
+    "version_no": 1,
+    "label": "<scrubbed>",
+    "status": "published",
+    "travel_from": "2026-11-14",
+    "travel_to": "2027-10-31",
+    "created_by": "<scrubbed>",
+    "approved_by": "<scrubbed>"
+   },
+   "in_force": [
+    {
+     "version_id": "b5daac6c-e7e3-4ee0-991f-bd81df32720f",
+     "version_no": 1,
+     "from": "2026-11-14",
+     "to": "2027-10-31"
+    }
+   ],
+   "from_price_expected": 1250,
+   "tp_1440": {
+    "http": 200,
+    "url": "/tours/okinawa-mangroves-kayaking-in-gesashi-bay-japan-043868cf",
+    "from_shown": 1250
+   },
+   "tp_390": {
+    "http": 200,
+    "url": "/tours/okinawa-mangroves-kayaking-in-gesashi-bay-japan-043868cf",
+    "from_shown": 1250
+   },
+   "studio": {
+    "tenant": "Atlas & Hearth",
+    "from_seen": true
+   }
+  },
+  "253c095c-0873-4fbe-a424-df0a35cc68af": {
+   "readiness": {
+    "status": "priced",
+    "reason": null,
+    "sellable": true,
+    "computed_rows": 9,
+    "hand_rows": 6,
+    "components": 1,
+    "from_price": {
+     "amount": "1500.00",
+     "currency": "USD",
+     "season": "Synthetic low (S279, not real)"
+    }
+   },
+   "version": {
+    "id": "2951f217-df76-449e-bd61-45ab73abcc68",
+    "version_no": 1,
+    "label": "<scrubbed>",
+    "status": "published",
+    "travel_from": "2026-11-14",
+    "travel_to": "2027-10-31",
+    "created_by": "<scrubbed>",
+    "approved_by": "<scrubbed>"
+   },
+   "in_force": [
+    {
+     "version_id": "2951f217-df76-449e-bd61-45ab73abcc68",
+     "version_no": 1,
+     "from": "2026-11-14",
+     "to": "2027-10-31"
+    }
+   ],
+   "from_price_expected": 1500,
+   "tp_1440": {
+    "http": 200,
+    "url": "/tours/tomioka-silk-mill-guided-tour-40-min-japan-253c095c",
+    "from_shown": 1500
+   },
+   "tp_390": {
+    "http": 200,
+    "url": "/tours/tomioka-silk-mill-guided-tour-40-min-japan-253c095c",
+    "from_shown": 1500
+   },
+   "studio": {
+    "tenant": "Atlas & Hearth",
+    "from_seen": true
+   }
+  },
+  "3bb94eae-f2b2-49af-915a-e102c3591d40": {
+   "readiness": {
+    "status": "priced",
+    "reason": null,
+    "sellable": true,
+    "computed_rows": 9,
+    "hand_rows": 6,
+    "components": 1,
+    "from_price": {
+     "amount": "1750.00",
+     "currency": "USD",
+     "season": "Synthetic low (S279, not real)"
+    }
+   },
+   "version": {
+    "id": "52053bae-a950-4cce-8382-47adb6858a09",
+    "version_no": 1,
+    "label": "<scrubbed>",
+    "status": "published",
+    "travel_from": "2026-11-14",
+    "travel_to": "2027-10-31",
+    "created_by": "<scrubbed>",
+    "approved_by": "<scrubbed>"
+   },
+   "in_force": [
+    {
+     "version_id": "52053bae-a950-4cce-8382-47adb6858a09",
+     "version_no": 1,
+     "from": "2026-11-14",
+     "to": "2027-10-31"
+    }
+   ],
+   "from_price_expected": 1750,
+   "tp_1440": {
+    "http": 200,
+    "url": "/tours/iriomote-mangrove-river-stargazing-kayak-2-hours-japan-3bb94eae",
+    "from_shown": 1750
+   },
+   "tp_390": {
+    "http": 200,
+    "url": "/tours/iriomote-mangrove-river-stargazing-kayak-2-hours-japan-3bb94eae",
+    "from_shown": 1750
+   },
+   "studio": {
+    "tenant": "Atlas & Hearth",
+    "from_seen": true
+   }
+  },
+  "8f6d7604-fdd3-4e66-9354-fee88c693403": {
+   "readiness": {
+    "status": "priced",
+    "reason": null,
+    "sellable": true,
+    "computed_rows": 9,
+    "hand_rows": 6,
+    "components": 1,
+    "from_price": {
+     "amount": "2000.00",
+     "currency": "USD",
+     "season": "Synthetic low (S279, not real)"
+    }
+   },
+   "version": {
+    "id": "59eb0940-110f-40fc-8225-8f2e9279dcfe",
+    "version_no": 1,
+    "label": "<scrubbed>",
+    "status": "published",
+    "travel_from": "2026-11-14",
+    "travel_to": "2027-10-31",
+    "created_by": "<scrubbed>",
+    "approved_by": "<scrubbed>"
+   },
+   "in_force": [
+    {
+     "version_id": "59eb0940-110f-40fc-8225-8f2e9279dcfe",
+     "version_no": 1,
+     "from": "2026-11-14",
+     "to": "2027-10-31"
+    }
+   ],
+   "from_price_expected": 2000,
+   "tp_1440": {
+    "http": 200,
+    "url": "/tours/sutra-tracing-in-nikko-1-day-japan-8f6d7604",
+    "from_shown": 2000
+   },
+   "tp_390": {
+    "http": 200,
+    "url": "/tours/sutra-tracing-in-nikko-1-day-japan-8f6d7604",
+    "from_shown": 2000
+   },
+   "studio": {
+    "tenant": "Atlas & Hearth",
+    "from_seen": true
+   }
+  }
+ }
+}

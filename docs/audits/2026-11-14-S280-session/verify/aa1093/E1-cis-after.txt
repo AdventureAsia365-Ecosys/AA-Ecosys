@@ -1,0 +1,16 @@
+INFO catalog.v_tenant_account_v1 unreadable for cis_app (InsufficientPrivilegeError)
+TENANT shared.tenants rows=0 catalog.v_tenant_account_v1 rows=None
+INFO key columns ['tenant_id', 'owner_scope', 'tenant']; column `tenant` matched by id and slug
+KEEP acp_shared.audit_log.tenant_id rows=7
+KEEP shared.tenant_erasure_request.tenant_id rows=1
+AUDIT agency.offboard rows=1
+AUDIT agency.onboard rows=1
+AUDIT tenant.brand_updated rows=1
+AUDIT tenant.config_updated rows=1
+AUDIT tenant.erased rows=1
+AUDIT tenant.erasure_approved rows=1
+AUDIT tenant.erasure_drill rows=1
+COUNTS_DIGEST 09353ee15e99f16d4fc1059045ea8e19dc20e842fd5d5a1b0dba16907d611a44 (tables=72, without ['acp_shared.audit_log', 'shared.job', 'shared.tenant_erasure_request']; compare B5 vs D0)
+SUMMARY tables_checked=74 unreadable=0 left_tables=0 left_rows=0 keep_tables=2 tenant.erased=1
+PASS CIS re-read after the erasure (tenant row gone, 0 rows left outside KEEP, tenant.erased audit row present)
+ecsx: rc=0 bytes=964 (output also in /home/nghiep/projects/AA-Ecosys/.tmp-session/ecsx/20261114T110511-1002286-c30_cis_reread.out)

@@ -1,0 +1,4 @@
+PASS env ERASURE_APPLY_ENABLED (expect on)
+PASS setting cis.erasure.saga_apply_enabled (expect on)
+PASS effective cis.erasure.tenant_retention_days (expect on)
+PASS CIS gates on
