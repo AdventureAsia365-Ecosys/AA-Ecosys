@@ -26,7 +26,7 @@ the AA source that holds the rule. When the two disagree, the AA source wins for
 | 2 Architecture | [Ecosystem architecture](../ecosystem-architecture.md); [ADR index and placement rule](../adr/README.md); [contracts](../contracts/README.md); [data standards](../architecture/data-standards/README.md); [schema ownership](../database/schema-ownership.md); [AI use register](../architecture/ai-use-register.md); [environment model](../adr/0012-environment-model.md) |
 | 3 Setup | ADR 0008 section 3, the twelve-step playbook for a new app (design, owner registration, roles, first migration, tenancy, contract reads, events, identity, platform services, personal data, ops, isolation probe); [onboarding](../onboarding.md); [tagging standard](../architecture/tagging-standard.md); [secrets register](../security/secrets-register.md) |
 | 4 Build | [Definition of Ready](../templates/definition-of-ready.md); skill `aa-linear-issue`; the root PR template; migration rules MIG-1 to MIG-14 in [data standards Part A](../architecture/data-standards/01-engineering.md); parallel lanes in skill `aa-session` |
-| 5 Test | Each app's CI workflows (UI smoke, eval regression); skill `aa-ui-verify`; [UAT report](../templates/uat-report.md); [isolation probe](../ops/runbooks/isolation-probe.md) |
+| 5 Test | [Testing strategy](../architecture/testing-strategy.md) (ARCH-10, the AA instance of the test strategy template); each app's CI workflows (UI smoke, eval regression); skill `aa-ui-verify`; [UAT report](../templates/uat-report.md); [isolation probe](../ops/runbooks/isolation-probe.md) |
 | 6 Release | Skill `aa-ship` (the Definition of Done, merge tools, deploy gate, verify live); [release note](../templates/release-note.md); [feature flags](../ops/feature-flags.md); skill `aa-jira-update` for the business update |
 | 7 Operate | [Operations index](../ops/README.md); [incident response](../ops/incident-response.md); [postmortems](../ops/postmortems/README.md); [drills](../ops/drills/README.md); [FinOps](../ops/finops.md) |
 | 8 Scale | [Scaling standard](../architecture/data-standards/03-scaling.md); [lean account model](../adr/0018-lean-aws-account-model.md); merge rights by phase (DM-11.5, handbook section 6.5) |
@@ -45,7 +45,8 @@ the AA source that holds the rule. When the two disagree, the AA source wins for
 
 The working rules W1 to W7 (decide, don't ask; no agent-made gates; paid-run subset; quote before any paid item; verify
 live before claiming; one report page for the business owner; every threshold an admin-editable setting) are in
-[handbook section 2.4](../engineering-handbook.md#24-working-rules-for-agents).
+handbook sections [2.4](../engineering-handbook.md#24-two-working-rules-decide-dont-ask-no-agent-made-gates) (W1, W2)
+and [2.5](../engineering-handbook.md#25-more-working-rules-for-agents) (W3 to W7).
 
 ## What AA does differently from the generic kit today
 

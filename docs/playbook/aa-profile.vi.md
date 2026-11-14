@@ -28,7 +28,7 @@ Khi hai bên lệch nhau, nguồn AA thắng cho việc của AA và playbook nh
 | 2 Kiến trúc | [Kiến trúc hệ sinh thái](../ecosystem-architecture.md); [mục lục ADR và luật đặt ADR](../adr/README.md); [hợp đồng](../contracts/README.md); [data standards](../architecture/data-standards/README.md); [sở hữu schema](../database/schema-ownership.md); [sổ đăng ký dùng AI](../architecture/ai-use-register.md); [mô hình môi trường](../adr/0012-environment-model.md) |
 | 3 Dựng khung | Mục 3 của ADR 0008, playbook mười hai bước cho một app mới (thiết kế, đăng ký chủ sở hữu, role, migration đầu tiên, tenancy, đọc qua hợp đồng, sự kiện, danh tính, dịch vụ nền tảng, dữ liệu cá nhân, vận hành, probe cách ly); [onboarding](../onboarding.md); [chuẩn gắn tag](../architecture/tagging-standard.md); [sổ đăng ký secret](../security/secrets-register.md) |
 | 4 Xây dựng | [Definition of Ready](../templates/definition-of-ready.md); skill `aa-linear-issue`; PR template của repo gốc; luật migration MIG-1 tới MIG-14 trong [data standards Part A](../architecture/data-standards/01-engineering.md); lane song song trong skill `aa-session` |
-| 5 Kiểm thử | Các workflow CI của từng app (UI smoke, eval regression); skill `aa-ui-verify`; [báo cáo UAT](../templates/uat-report.md); [probe cách ly](../ops/runbooks/isolation-probe.md) |
+| 5 Kiểm thử | [Chiến lược kiểm thử](../architecture/testing-strategy.md) (ARCH-10, bản AA của mẫu chiến lược kiểm thử); các workflow CI của từng app (UI smoke, eval regression); skill `aa-ui-verify`; [báo cáo UAT](../templates/uat-report.md); [probe cách ly](../ops/runbooks/isolation-probe.md) |
 | 6 Phát hành | Skill `aa-ship` (Definition of Done, công cụ merge, cổng deploy, kiểm live); [ghi chú phát hành](../templates/release-note.md); [feature flag](../ops/feature-flags.md); skill `aa-jira-update` cho cập nhật kinh doanh |
 | 7 Vận hành | [Mục lục vận hành](../ops/README.md); [xử lý sự cố](../ops/incident-response.md); [postmortem](../ops/postmortems/README.md); [diễn tập](../ops/drills/README.md); [FinOps](../ops/finops.md) |
 | 8 Mở rộng | [Chuẩn mở rộng](../architecture/data-standards/03-scaling.md); [mô hình tài khoản gọn](../adr/0018-lean-aws-account-model.md); quyền merge theo giai đoạn (DM-11.5, mục 6.5 của sổ tay) |
@@ -47,7 +47,8 @@ Khi hai bên lệch nhau, nguồn AA thắng cho việc của AA và playbook nh
 
 Các quy tắc làm việc W1 tới W7 (tự quyết, không hỏi; không tự đặt cổng chặn; lượt chạy tốn tiền chỉ một tập nhỏ; báo
 giá trước mọi mục trả phí; kiểm live trước khi khẳng định; một trang báo cáo cho chủ doanh nghiệp; mọi ngưỡng là setting
-sửa được trên trang admin) nằm ở [mục 2.4 của sổ tay](../engineering-handbook.vi.md#24-quy-tắc-làm-việc-cho-agent).
+sửa được trên trang admin) nằm ở các mục [2.4](../engineering-handbook.vi.md#24-hai-luật-làm-việc-tự-quyết-không-hỏi-không-tự-đặt-cổng-chặn) (W1,
+W2) và [2.5](../engineering-handbook.vi.md#25-thêm-các-quy-tắc-làm-việc-cho-agent) (W3 tới W7) của sổ tay.
 
 ## Hôm nay AA làm khác bộ kit chung ở đâu
 
