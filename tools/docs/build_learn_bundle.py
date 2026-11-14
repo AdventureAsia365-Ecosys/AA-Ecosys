@@ -40,7 +40,7 @@ manifest.json:
    "sections": [{"ref", "kind", "name", "anchor", "path", "key", "sha", "tier", "redactions", "available"}]}
 
   tier        staff or partner. A module and a path carry their own; a section is partner when an agency module may
-              read it (a catalog page in the allowlist's partner_pages, or an allowlist section of tier partner).
+              read it: the allowlist lists it with tier partner (a catalog page section is granted one by one).
   stale       a cited section changed since the lesson was pinned, or an external section could not be read. The
               learning API opens a content review item for the module owner and hides suspended quiz items.
   key         object key relative to learn/; null when the section could not be read (stale).
@@ -80,10 +80,8 @@ def _module_folder(rel: str) -> str:
     return Path(rel).name
 
 
-def _section_tier(ref: cl.Ref, allowed: dict[str, str], partner_pages: set[str]) -> str:
-    if ref.kind in cl.ALLOWLIST_KINDS:
-        return allowed.get(ref.raw, "staff")
-    return "partner" if ref.kind == "doc" and ref.name in partner_pages else "staff"
+def _section_tier(ref: cl.Ref, allowed: dict[str, str]) -> str:
+    return allowed.get(ref.canonical, "staff")
 
 
 def _guarded(text: str, where: str, problems: list[str]) -> tuple[str, int]:
@@ -103,14 +101,13 @@ def build(out: Path, root: Path = REPO_ROOT, ext_roots: list[Path] | None = None
         raise BuildError(f"{len(blocking)} course errors (tools/docs/check_learn.py)")
 
     allowed = cl._allowed_sections(course)
-    partner_pages = set(course.allowlist.get("partner_pages", []))
     problems: list[str] = []
     files: dict[str, str] = {}
 
     sections: dict[str, dict] = {}
     for raw, r in sorted(resolved.items()):
         entry = {"ref": raw, "kind": r.ref.kind, "name": r.ref.name, "anchor": r.ref.anchor, "path": r.path,
-                 "key": None, "sha": r.sha, "tier": _section_tier(r.ref, allowed, partner_pages), "redactions": 0,
+                 "key": None, "sha": r.sha, "tier": _section_tier(r.ref, allowed), "redactions": 0,
                  "available": r.text is not None}
         if r.text is not None:
             body, n = _guarded(r.text, raw, problems)

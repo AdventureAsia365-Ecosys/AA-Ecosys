@@ -36,6 +36,8 @@ that has both opens the studio from the CRM menu (**Open Content studio**), and 
 
 ## 3. Get an account
 
+<!-- learn-tier: staff -->
+
 1. **Adventure Asia creates the tenant.** An admin opens CIS admin › **Tenants**, chooses **New Tenant**, fills the
    form and presses **Create Tenant**.
 2. **Adventure Asia invites the first member.** The invitation names the address and the studio role (owner, editor or
@@ -116,6 +118,8 @@ search for any page.
 
 ## 8. When something looks wrong
 
+<!-- learn-tier: staff -->
+
 | You see | Then |
 |---|---|
 | The page reloads or asks you to sign in again | Your session ended; sign in again |
@@ -130,6 +134,8 @@ phase, the tech lead) checks **Tenants** and **Content Trace** in the CIS admin 
 
 ## 9. Dev-phase caveats
 
+<!-- learn-tier: staff -->
+
 - Only synthetic test tenants exist on Dev.
 - AI writing (rewrites, posts, articles) needs a chat model. The main model account has refused calls since
   2026-10-29, so writing fails or waits on Dev until a model path is back.
@@ -137,6 +143,8 @@ phase, the tech lead) checks **Tenants** and **Content Trace** in the CIS admin 
 - Sign-in by tenant API key is off for people; API keys are for machines only.
 
 ## Sources (for maintainers)
+
+<!-- learn-tier: staff -->
 
 Read from AA-Partner `main` on 2026-11-01: `portal/app/_kit/local/portalNav.tsx` (menu), `portal/app/portal-access/*`,
 `web/lib/i18n.ts` (`join.*` strings), `CONTEXT.md` ("Tenant portal", "Content studio invitations"); AA-CIS-App
