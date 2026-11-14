@@ -865,11 +865,10 @@ mailbox or Google account". That is too strong.
 
 ##### A10e-3. Amendment: the pricing pair loads a synthetic supplier for the price check (14/11/2026, S280, AA-1091)
 
-- **Status:** Proposed (14/11/2026, S280). Not in force until the tech lead's yes is recorded here: on that yes, this
-  line becomes "Accepted (<date>, tech lead)" and the bullet below "Decision (tech lead, <date>)". Neither the
-  AA-Booking change nor this amendment merges before then.
+- **Status:** Accepted (14/11/2026, tech lead, S280), together with the content-draft spend of about 0.42 USD (at most 14
+  synthetic supply records).
 
-- **Proposed decision (for the tech lead, S280; designed by the orchestrated lane aa1091sup under the dev-phase merge
+- **Decision (tech lead, 14/11/2026, S280; designed by the orchestrated lane aa1091sup under the dev-phase merge
   rule, independent review before merge because it widens auth):** the S280 facts showed the A10e-2 run cannot start:
   of 892 Booking trip plans on Dev, 890 have no components and no supplier rate matches the CIS itineraries (component
   suggestions of every probed tour: 0 suggested). Only 2 plans are rate-complete: the rehearsal's Tour X (excluded from
