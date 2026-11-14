@@ -29,12 +29,12 @@ FEATURES = {
     ],
     "features": [
         {"id": "CIS-F001", "app": "cis", "module": "tours", "name": "Tours", "name_vi": "Tour",
-         "summary": "Tour pages.", "roles": ["admin"], "status": "live", "owner": "content_lead",
+         "summary": "Tour pages.", "summary_vi": "Trang tour.", "roles": ["admin"], "status": "live", "owner": "content_lead",
          "surface": ["page:/admin/tours/**", "route:tours"],
          "conditions": {"settings": ["cis.a"], "entitlements": ["content.rewrite"], "connections": ["openai-direct"],
                         "secrets": ["aa-cis/dev/openai-key"], "tenant_kinds": ["agency"]}},
         {"id": "CRM-F001", "app": "crm", "module": "home", "name": "Home", "name_vi": "Trang chu",
-         "summary": "Home page.", "roles": ["owner"], "status": "live", "owner": "tech_lead",
+         "summary": "Home page.", "summary_vi": "Trang chu.", "roles": ["owner"], "status": "live", "owner": "tech_lead",
          "surface": ["page:/home", "route:agency"], "depends_on": ["CIS-F001"], "guide": "docs/catalogue/README.md"},
     ],
     "journeys": [
@@ -174,10 +174,11 @@ class CatalogueCheckTest(unittest.TestCase):
         f["id"] = "CRM-F002"
         f["status"] = "done"
         f["summary"] = "Built in AA-123."
+        del self.fx.features["features"][1]["summary_vi"]
         self.fx.integrations["integrations"][0]["failure"] = "See AA-1106"
         problems = self.fx.problems()
         for needle in ("id prefix does not match app cis", "status must be one of", "feature CRM-F002: a text value",
-                       "integration INT-001: a text value"):
+                       "integration INT-001: a text value", "feature CRM-F001: summary_vi missing"):
             self.assertTrue(any(needle in p for p in problems), needle)
 
     def test_guide_must_be_a_published_staff_page(self):
@@ -200,6 +201,7 @@ class CatalogueCheckTest(unittest.TestCase):
         bundle = cat_mod.build_bundle(self.fx.write(), sha="abc", ref="master")
         feat = {f["id"]: f for f in bundle["features"]}
         self.assertEqual(feat["CIS-F001"]["uat"], ["CIS-01"])
+        self.assertEqual(feat["CIS-F001"]["summary_vi"], "Trang tour.")
         self.assertEqual(feat["CRM-F001"]["integrations"], ["INT-001"])
         self.assertEqual(bundle["settings"], {"cis.a": {"app": "cis", "area": "content"}})
         self.assertEqual(bundle["journeys"][0]["uat"], ["CIS-01"])

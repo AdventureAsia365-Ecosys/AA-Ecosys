@@ -1,11 +1,16 @@
 name: Catalogue
 # AA-1106: the product catalogue guard (docs/catalogue/README.md, tools/catalogue/catalogue.py).
-#   check    on every pull request that touches the catalogue, the contracts, the UAT catalogue, the settings or
-#            routes snapshots it reads, or the tool: every contract file has an integration row, every UAT scenario
+#   check    on EVERY pull request to master (no path filter): every contract file has an integration row, every UAT scenario
 #            names real feature ids, every setting / plan feature key / AI gateway connection / secret named in a
 #            condition exists, every page and API route group of the surface snapshot maps to a feature, no stale
 #            pattern, no account ID / ARN / e-mail address. Unit tests of the tool first (each rule fails on a missing
 #            row). Meant to be a required check of the root repo (branch protection: the tech lead's step).
+#            No `paths:` filter on purpose. GitHub leaves a required check whose workflow a path filter skipped in
+#            "Expected", which would block every other root PR (the auto-merging bot/db-schema-reference PRs, and the
+#            root merge tool, which wants every check green). The guard also reads more than its own folders: rule C6
+#            checks guide pages anywhere under docs/ (id, tier, never-published folders) against
+#            tools/docs/build_docs_reader.py, so a docs-only PR that renames, demotes or moves a guide page fails here,
+#            not later in Docs sync (whose catalogue step only warns).
 #   surface  nightly and on demand: checks the four public app repos out side by side and runs
 #            `surface.py check`, so a new page or router in any app that is missing from the committed snapshot
 #            (and so from the feature mapping) turns this run red within a day.
@@ -13,14 +18,6 @@ name: Catalogue
 on:
   pull_request:
     branches: [master]
-    paths:
-      - "docs/catalogue/**"
-      - "docs/contracts/**"
-      - "docs/generated/llm-routes.snapshot.json"
-      - "docs/security/secrets-register.md"
-      - "tools/uat/catalogue.json"
-      - "tools/catalogue/**"
-      - ".github/workflows/catalogue.yml"
   schedule:
     - cron: "40 3 * * *"
   workflow_dispatch:

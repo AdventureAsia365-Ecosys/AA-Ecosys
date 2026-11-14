@@ -36,7 +36,7 @@ the C4 context and container levels of the [ecosystem architecture](../ecosystem
 |---|---|
 | `id` | `<APP>-F<nnn>`: `CIS`, `BK` (Booking), `CRM` (AA-Partner: CRM and Content studio), `TP` (TripPlanner), `INF` (shared platform). Never reused |
 | `app`, `module` | The app and a short module name |
-| `name`, `name_vi`, `summary` | Plain words for the business owner; no internal issue id |
+| `name`, `name_vi`, `summary`, `summary_vi` | Plain words for the business owner, in English and Vietnamese (the Product map shows the Vietnamese pair when the viewer picks VI); no internal issue id |
 | `roles` | Who uses it (staff roles, agency roles, `traveller`, `public`, `machine`) |
 | `status` | `live`, `beta`, `planned` or `retired`, as the code on Dev does it today |
 | `surface` | The pages (`page:/path`) and API route groups (`route:module`) the feature owns; `/**` covers the pages below |

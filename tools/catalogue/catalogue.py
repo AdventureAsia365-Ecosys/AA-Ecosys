@@ -212,7 +212,7 @@ def check(cat: Catalogue) -> list[str]:
             errs.append(f"{where}: unknown app {app}")
         elif isinstance(fid, str) and not fid.startswith(APP_PREFIX[app] + "-"):
             errs.append(f"{where}: id prefix does not match app {app} ({APP_PREFIX[app]}-F<nnn>)")
-        for k in ("module", "name", "name_vi", "summary"):
+        for k in ("module", "name", "name_vi", "summary", "summary_vi"):
             if not (isinstance(f.get(k), str) and f[k].strip()):
                 errs.append(f"{where}: {k} missing")
         if not (_str_list(f.get("roles")) and f["roles"]):
@@ -455,7 +455,7 @@ def build_bundle(cat: Catalogue, sha: str = "", ref: str = "") -> dict:
     for f in cat.features:
         features.append({
             "id": f["id"], "app": f["app"], "module": f["module"], "name": f["name"], "name_vi": f["name_vi"],
-            "summary": f["summary"], "roles": f["roles"], "status": f["status"], "owner": f["owner"],
+            "summary": f["summary"], "summary_vi": f["summary_vi"], "roles": f["roles"], "status": f["status"], "owner": f["owner"],
             "surface": f.get("surface") or [], "conditions": cond(f.get("conditions")),
             "depends_on": f.get("depends_on") or [], "guide": f.get("guide"),
             "uat": uat.get(f["id"], []), "integrations": links_by_feature.get(f["id"], []),

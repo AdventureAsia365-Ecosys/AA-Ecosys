@@ -196,19 +196,21 @@ integrations:
     owner: tech_lead
     status: retired
   - id: INT-013
-    name: Trip case status back to the planner
+    name: Trip case status back to the planner (retired before it was built)
     producer: booking
     consumers: [tripplanner]
     kind: event_outbox
     contracts: []
-    auth: Planned - SELECT on a Booking outbox view
-    cadence: Planned
-    failure: Planned
-    kill_switch: Planned
+    auth: None. It would have answered the planner's inquiries, which stopped when the business moved to agencies only
+    conditions:
+      note: No contract file was ever published. Agencies follow their travellers' trips in the CRM through the leads link.
+    cadence: None
+    failure: Not applicable
+    kill_switch: Never built
     personal_data: false
     features: [BK-F003]
     owner: tech_lead
-    status: planned
+    status: retired
   - id: INT-020
     name: Booking hotels to CIS for customer content
     producer: booking

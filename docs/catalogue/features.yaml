@@ -84,6 +84,7 @@ features:
     module: admin-shell
     name: Admin shell, sign-in and search
     name_vi: Khung trang quản trị, đăng nhập và tìm kiếm
+    summary_vi: "Nhân viên đăng nhập bằng tài khoản công ty, di chuyển bằng thanh bên và bảng lệnh, tìm nhanh tour, đại lý và trang."
     summary: Staff sign in with the company account, move around with the sidebar and the command palette, and search across tours, tenants and pages.
     roles: [admin, content, content_lead, tenant_qa, customer_success, support, finance, ai_ops, viewer]
     status: live
@@ -94,6 +95,7 @@ features:
     module: overview
     name: Overview dashboard
     name_vi: Bảng tổng quan
+    summary_vi: "Một trang xem toàn hệ thống: từ phễu pipeline tới chi phí, job và cảnh báo."
     summary: One page with the whole system at a glance, from the pipeline funnel to spend, jobs and alerts.
     roles: [admin]
     status: live
@@ -104,6 +106,7 @@ features:
     module: catalogue-pipeline
     name: Tour upload and intake (A0)
     name_vi: Tải tour lên và tiếp nhận (A0)
+    summary_vi: "Nhân viên tải lên bảng tính tour gốc; từng dòng được kiểm, đưa vào hàng chờ và thành tour thô."
     summary: Staff upload the source tour spreadsheets; each row is checked, staged and becomes a raw tour.
     roles: [admin, content, content_lead]
     status: live
@@ -116,6 +119,7 @@ features:
     module: catalogue-pipeline
     name: Catalogue rewrite (A1) and rerun waves
     name_vi: Viết lại catalogue (A1) và các đợt chạy lại
+    summary_vi: "AI viết lại từng tour gốc thành nội dung catalogue Adventure Asia; nhân viên chạy từng tour hoặc cả đợt với danh sách tour dự kiến và mức trần."
     summary: The AI writer rewrites each source tour into the Adventure Asia catalogue text; staff run single tours or whole waves with an expected tour set and a cap.
     roles: [admin, content, content_lead]
     status: live
@@ -130,6 +134,7 @@ features:
     module: catalogue-pipeline
     name: Review queue (A2)
     name_vi: Hàng chờ duyệt (A2)
+    summary_vi: "Tour bị cổng chất lượng giữ lại chờ ở đây; một người đọc các nhận định rồi duyệt, từ chối hoặc thay thế."
     summary: Tours the quality gate holds wait here for a person, who reads the claims, approves, rejects or supersedes them.
     roles: [admin, content, content_lead, viewer]
     status: live
@@ -142,6 +147,7 @@ features:
     module: catalogue-pipeline
     name: Master content
     name_vi: Nội dung chuẩn (Master)
+    summary_vi: "Các tour catalogue đã xuất bản, kèm mọi phiên bản, nguồn, ngữ cảnh SEO, bản xuất và công cụ sửa quốc gia."
     summary: The published catalogue tours with every version, the source, the SEO context, exports and the country fix.
     roles: [admin, content, content_lead, tenant_qa, ai_ops, viewer]
     status: live
@@ -152,6 +158,7 @@ features:
     module: catalogue-pipeline
     name: Social content atoms (A3)
     name_vi: Nguyên liệu nội dung mạng xã hội (A3)
+    summary_vi: "Mỗi tour chính được cắt thành các mẩu nội dung (câu mở, dữ kiện, điểm nổi bật) cho người viết của đại lý; nhân viên tuyển chọn chúng."
     summary: Each master tour is cut into atoms (hooks, facts, highlights) that the agency writers use; staff curate them.
     roles: [admin, content_lead]
     status: live
@@ -162,6 +169,7 @@ features:
     module: places
     name: Places, geocoding and place cards
     name_vi: Địa điểm, định vị và thẻ địa điểm
+    summary_vi: "Mọi địa điểm tour đi qua được định vị trên bản đồ và có thẻ địa điểm; nhân viên xem độ phủ, sửa địa điểm và chạy bổ sung có giới hạn."
     summary: Every place a tour visits is located on the map and gets a place card; staff see coverage, fix places and run bounded backfills.
     roles: [admin, content_lead, tenant_qa]
     status: live
@@ -175,6 +183,7 @@ features:
     module: photos
     name: AA photos
     name_vi: Ảnh AA
+    summary_vi: "Ảnh marketing đồng bộ từ thư mục dùng chung của nhóm nội dung, theo quốc gia và tour, phục vụ từ máy chủ ảnh."
     summary: Marketing photos synced from the content team's shared drive, per country and tour, served from the image host.
     roles: [admin, content_lead]
     status: live
@@ -187,6 +196,7 @@ features:
     module: seo
     name: SEO intelligence and search-demand research
     name_vi: Thông tin SEO và nghiên cứu nhu cầu tìm kiếm
+    summary_vi: "Mọi tín hiệu SEO của pipeline trên một trang; nhân viên có thể chạy một lượt nghiên cứu nhu cầu tìm kiếm (có trả phí) cho một nhóm tour."
     summary: Every SEO signal of the pipeline on one page; staff start a paid search-demand research run for a segment.
     roles: [admin, content_lead]
     status: live
@@ -200,6 +210,7 @@ features:
     module: facts
     name: Platform facts
     name_vi: Dữ kiện nền tảng
+    summary_vi: "Các dữ kiện đã kiểm (giờ mở cửa, giá, quy định) mà người viết được trích dẫn, do nhân viên quản lý, có hạn dùng."
     summary: Checked facts (opening times, prices, rules) the writers may cite, kept by staff with an expiry.
     roles: [admin, content_lead]
     status: live
@@ -210,6 +221,7 @@ features:
     module: content-settings
     name: Brand identity and content settings
     name_vi: Bản sắc thương hiệu và cấu hình nội dung
+    summary_vi: "Bộ nhận diện thương hiệu Adventure Asia (giọng văn, từ cấm, lời kêu gọi) và quy tắc độ dài SEO mà người viết tuân theo."
     summary: The Adventure Asia brand identity rows (tone, forbidden words, call to action) and the SEO length rules the writers follow.
     roles: [admin, content, content_lead, viewer]
     status: live
@@ -222,6 +234,7 @@ features:
     module: aa-content
     name: AA content for agencies
     name_vi: Nội dung AA cho đại lý
+    summary_vi: "Gói chuẩn bị, mẫu khởi đầu và khối chiến dịch do AA viết, CRM của đại lý đọc về."
     summary: Prep packs, starter templates and campaign blocks written by AA and read by the agency CRM.
     roles: [admin, content, content_lead, viewer]
     status: live
@@ -232,6 +245,7 @@ features:
     module: catalogue
     name: Reference prices
     name_vi: Giá tham chiếu
+    summary_vi: "Giá tham khảo có cấu trúc của từng tour AA, do bộ phận chăm sóc khách hàng giữ, Booking đọc làm điểm xuất phát."
     summary: The structured reference price of each AA tour, kept by customer service and read by Booking as a starting point.
     roles: [admin, content_lead, content, customer_success, finance]
     status: live
@@ -242,6 +256,7 @@ features:
     module: supply-content
     name: Supply content for Booking hotels and services
     name_vi: Nội dung dịch vụ cho khách sạn và dịch vụ của Booking
+    summary_vi: "CIS viết nội dung cho khách về khách sạn và dịch vụ mà Booking quản lý; nhân viên duyệt trước khi Booking hiển thị."
     summary: CIS writes the customer text of the hotels and services Booking holds; staff review it before Booking shows it.
     roles: [admin, content_lead]
     status: live
@@ -252,6 +267,7 @@ features:
     module: tenant-qa
     name: Tenant content QA
     name_vi: Kiểm soát chất lượng nội dung của đại lý
+    summary_vi: "Tín hiệu chất lượng, cờ tuân thủ, nhật ký duyệt và vết xử lý của nội dung đại lý viết; đại lý luôn nhận bài, tín hiệu chỉ nằm ở đây."
     summary: Quality signals, compliance flags, the review log, slates and traces of the content agencies write; agencies always get their text, the signals stay here.
     roles: [admin, content_lead, tenant_qa, customer_success]
     status: live
@@ -262,6 +278,7 @@ features:
     module: writing-lab
     name: Writing Lab and quality measurement
     name_vi: Writing Lab và đo chất lượng
+    summary_vi: "Các trang theo từng bước của người viết AI, bộ nhớ viết có kiểm soát, nhãn nhận định, phễu chất lượng và nguồn gốc của mọi kết quả."
     summary: Stage pages of the writers, the governed writing memory, claim labels and shadow verdicts, the quality funnel and lineage of every output.
     roles: [admin, content_lead, tenant_qa, ai_ops]
     status: live
@@ -275,6 +292,7 @@ features:
     module: tenants
     name: Tenant directory and Tenant 360
     name_vi: Danh bạ đại lý và Tenant 360
+    summary_vi: "Danh sách mọi đại lý kèm mức sử dụng, thành viên, nhật ký, gói dịch vụ và góc nhìn hỗ trợ, lọc theo nhóm khách nhân viên phụ trách."
     summary: Every agency tenant with its usage, members, audit trail, subscription and support view, filtered to the staff member's own book.
     roles: [admin, customer_success, support, finance]
     status: live
@@ -285,6 +303,7 @@ features:
     module: tenants
     name: Plans, subscriptions and add-on requests
     name_vi: Gói dịch vụ, đăng ký và yêu cầu add-on
+    summary_vi: "Danh mục gói (gói Content studio, add-on CRM và TripPlanner), gói và quyền của từng đại lý, cùng các yêu cầu add-on chủ đại lý gửi."
     summary: The plan catalogue (Content studio plans, CRM and TripPlanner add-ons), each tenant's subscription and entitlements, and the add-on requests owners send.
     roles: [admin, finance]
     status: live
@@ -297,6 +316,7 @@ features:
     module: tenants
     name: One-action tenant provisioning
     name_vi: Tạo đại lý bằng một thao tác
+    summary_vi: "Một quy trình tạo đại lý ở mọi ứng dụng mà đại lý đăng ký (CIS, CRM, đối tác Booking, TripPlanner) và báo kết quả từng bước."
     summary: A saga that creates a tenant in every app it subscribes to (CIS, CRM, Booking partner, TripPlanner) and reports each step.
     roles: [admin]
     status: live
@@ -309,6 +329,7 @@ features:
     module: tenants
     name: Tenant assignments
     name_vi: Phân công phụ trách đại lý
+    summary_vi: "Ai phụ trách đại lý nào (chính, dự phòng, hỗ trợ); mọi danh sách của nhân viên được lọc theo phạm vi này."
     summary: Who looks after which tenant (owner, backup, support); the scope every staff list is filtered to.
     roles: [admin, customer_success, support]
     status: live
@@ -319,6 +340,7 @@ features:
     module: tenants
     name: View as tenant (read only)
     name_vi: Xem như đại lý (chỉ đọc)
+    summary_vi: "Nhân viên hỗ trợ mở phiên chỉ đọc dưới tư cách đại lý, phải nêu lý do và được ghi nhật ký."
     summary: A support person opens a read-only session as the tenant, with a reason and an audit row.
     roles: [admin, customer_success, support]
     status: live
@@ -329,6 +351,7 @@ features:
     module: tenants
     name: Agencies console (CRM)
     name_vi: Bảng điều khiển đại lý (CRM)
+    summary_vi: "Góc nhìn của nhân viên AA về mọi đại lý trong CRM đối tác (thành viên, khôi phục chủ sở hữu, job), lấy qua hợp đồng vận hành của CRM."
     summary: The AA staff view of every agency in the partner CRM (members, owner recovery, jobs), relayed over the CRM ops contract.
     roles: [admin, customer_success, support]
     status: live
@@ -340,6 +363,7 @@ features:
     module: tenants
     name: Tenant offboarding and data erasure
     name_vi: Ngừng phục vụ đại lý và xoá dữ liệu
+    summary_vi: "Quy trình xoá dữ liệu của đại lý đã ngừng dịch vụ trên mọi ứng dụng: duyệt, chạy thử, báo cáo từng ứng dụng và lưu bằng chứng."
     summary: The erasure saga of an offboarded tenant across every app, with approval, a dry run, per-app reports and the evidence trail.
     roles: [admin]
     status: live
@@ -354,6 +378,7 @@ features:
     module: ai-gateway
     name: AI gateway
     name_vi: Cổng AI
+    summary_vi: "Mọi nhà cung cấp AI và dữ liệu có trả phí đi qua một cổng; nhân viên xem tình trạng, tuyến gọi, thứ tự nhà cung cấp, vết gọi, cảnh báo và đổi tuyến."
     summary: Every paid AI and data provider behind one gateway; staff see health, routes, provider order, traces, alerts and the quality guard, and change routes.
     roles: [admin, ai_ops, finance]
     status: live
@@ -368,6 +393,7 @@ features:
     module: spend
     name: Spend and budgets
     name_vi: Chi phí và ngân sách
+    summary_vi: "Chi phí AI và dữ liệu theo nhà cung cấp, ứng dụng và bước, cùng ngân sách mà bộ chặn chi phí áp dụng."
     summary: AI and data spend per provider, app and stage, with the budgets the cost guard enforces.
     roles: [admin, ai_ops, finance]
     status: live
@@ -380,6 +406,7 @@ features:
     module: spend
     name: Usage explorer
     name_vi: Khám phá mức sử dụng
+    summary_vi: "Cắt lát mức dùng và chi phí theo khoảng thời gian, ứng dụng, đại lý, bước và model, có xuất file."
     summary: Slice usage and cost by window, app, tenant, stage and model, with export.
     roles: [admin, ai_ops, finance]
     status: live
@@ -390,6 +417,7 @@ features:
     module: decisions
     name: Decision layer (Jev)
     name_vi: Lớp ra quyết định (Jev)
+    summary_vi: "Bước nào hỏi dịch vụ ra quyết định câu gì, ở chế độ nào, ngưỡng nào và tốn bao nhiêu."
     summary: Which stage asks the decision service which question, in what mode, with what floors and at what cost.
     roles: [admin]
     status: live
@@ -404,6 +432,7 @@ features:
     module: platform-ops
     name: Job runner
     name_vi: Bộ chạy job
+    summary_vi: "Hàng đợi job bền vững của CIS (và liên kết tới hàng đợi của ứng dụng khác): loại job, trạng thái, lần thử lại và dữ liệu."
     summary: "The durable job queue of CIS (and links to the other apps' queues): kinds, states, retries and payloads."
     roles: [admin]
     status: live
@@ -416,6 +445,7 @@ features:
     module: platform-ops
     name: Data coverage
     name_vi: Độ phủ dữ liệu
+    summary_vi: "Số lượng ở mọi bước, từ tệp tải lên tới CRM, cho toàn hệ thống."
     summary: Counts at every stage from the raw upload to the CRM, for the whole system.
     roles: [admin]
     status: live
@@ -426,6 +456,7 @@ features:
     module: reports
     name: Reports and KPI scorecards
     name_vi: Báo cáo và bảng KPI
+    summary_vi: "Danh mục báo cáo, các lượt chạy theo lịch hoặc theo yêu cầu, và bảng KPI."
     summary: The report register, scheduled and on-request runs and the KPI scorecard.
     roles: [admin]
     status: live
@@ -436,6 +467,7 @@ features:
     module: developer
     name: Developer docs, API docs and data model
     name_vi: Tài liệu kỹ thuật, tài liệu API và mô hình dữ liệu
+    summary_vi: "Danh mục tài liệu đã xuất bản (tiếng Anh và tiếng Việt), trình đọc OpenAPI và sơ đồ dữ liệu sống từ bản dump schema hằng đêm."
     summary: The published docs catalogue (English and Vietnamese), the OpenAPI reader and the live ERD from the nightly schema dump.
     roles: [admin]
     status: live
@@ -447,6 +479,7 @@ features:
     module: people-access
     name: Staff directory and roles
     name_vi: Danh bạ nhân viên và vai trò
+    summary_vi: "Mọi tài khoản nhân viên và vai trò; quản trị viên mời, đổi vai trò, khoá, đăng xuất và đồng bộ với đăng nhập công ty."
     summary: Every staff account with its roles; admins invite, change roles, disable, sign out and sync with the company sign-in.
     roles: [admin]
     status: live
@@ -458,6 +491,7 @@ features:
     module: people-access
     name: Alert recipients
     name_vi: Người nhận cảnh báo
+    summary_vi: "Ai nhận e-mail cảnh báo của nền tảng, luôn khớp với danh sách đăng ký kênh cảnh báo."
     summary: Who receives the platform alert e-mails, kept in step with the alert topic subscriptions.
     roles: [admin]
     status: live
@@ -469,6 +503,7 @@ features:
     module: platform-ops
     name: App health and audit log
     name_vi: Sức khoẻ ứng dụng và nhật ký kiểm toán
+    summary_vi: "Thẻ tình trạng và phiên bản của từng ứng dụng (CIS, Booking, CRM, TripPlanner) kèm job, và nhật ký thao tác nhân viên không sửa được."
     summary: A health and version card per app (CIS, Booking, CRM, TripPlanner) with its jobs, and the tamper-evident audit log of staff actions.
     roles: [admin]
     status: live
@@ -479,6 +514,7 @@ features:
     module: settings-registry
     name: Settings registry
     name_vi: Sổ đăng ký cấu hình
+    summary_vi: "Mọi ngưỡng, giới hạn, mức trần và giá trị chính sách của CIS, TripPlanner và CRM, sửa được kèm lý do, lịch sử và tuỳ chọn duyệt hai người; Booking có trang chính sách riêng."
     summary: Every threshold, limit, cap and policy value of CIS, TripPlanner and the CRM, editable with a reason, history and optional two-person approval; Booking keeps its own policy page.
     roles: [admin]
     status: live
@@ -491,6 +527,7 @@ features:
     module: developer
     name: UI kit gallery
     name_vi: Thư viện giao diện (UI kit)
+    summary_vi: "Mọi thành phần giao diện dùng chung ở cả hai giao diện sáng và tối, là mẫu để các ứng dụng khác sao chép."
     summary: Every shared UI component in both themes, the reference the other apps copy.
     roles: [admin]
     status: live
@@ -501,6 +538,7 @@ features:
     module: developer
     name: Product map (this catalogue)
     name_vi: Bản đồ sản phẩm (catalogue này)
+    summary_vi: "Mỗi ứng dụng làm được gì, các ứng dụng nối với nhau thế nào và mỗi kết nối cần gì, hiển thị từ chính danh mục này."
     summary: What each app can do, how the apps link and what each link needs, rendered from this catalogue.
     roles: [admin]
     status: beta
@@ -514,6 +552,7 @@ features:
     module: studio-api
     name: Studio sign-in, account and notifications API
     name_vi: API đăng nhập, tài khoản và thông báo của Studio
+    summary_vi: "Đăng nhập Content studio bằng nhóm tài khoản đối tác, các trang tài khoản (hoạt động, thành viên, add-on, cài đặt ngừng tour) và chuông thông báo."
     summary: Studio sign-in with the partner pool, the account pages (activity, members, add-ons, tour retirement setting) and the notification bell.
     roles: [studio-owner, studio-editor, studio-viewer]
     status: live
@@ -526,6 +565,7 @@ features:
     module: studio-api
     name: Marketplace and tour rewrites API (T1, T2)
     name_vi: API Marketplace và viết lại tour (T1, T2)
+    summary_vi: "Các tour đại lý được nhận về và bản viết lại theo giọng thương hiệu của đại lý, có tiến độ trực tiếp."
     summary: The tours an agency may adopt and its own rewrites of them in its brand voice, with live progress.
     roles: [studio-owner, studio-editor]
     status: live
@@ -539,6 +579,7 @@ features:
     module: studio-api
     name: Content planning and angles API (T7, T8)
     name_vi: API lên kế hoạch nội dung và góc viết (T7, T8)
+    summary_vi: "Kế hoạch chủ đề theo quý cho từng kênh và ba góc viết để biên tập viên chọn trước khi viết."
     summary: The quarter plan of topics per channel and the three angles an editor chooses from before writing.
     roles: [studio-owner, studio-editor]
     status: live
@@ -552,6 +593,7 @@ features:
     module: studio-api
     name: Writing and quality gates API (T9, T10)
     name_vi: API viết bài và cổng chất lượng (T9, T10)
+    summary_vi: "Viết bài và bài mạng xã hội từ góc viết đã chọn, chạy cổng chất lượng ngay khi viết; đại lý luôn nhận được bài."
     summary: Writes articles and social posts from the chosen angle and runs the quality gates inline; the agency always receives its text.
     roles: [studio-owner, studio-editor]
     status: live
@@ -565,6 +607,7 @@ features:
     module: studio-api
     name: Tenant facts API
     name_vi: API dữ kiện của đại lý
+    summary_vi: "Dữ kiện riêng của đại lý và các chỉnh sửa của đại lý trên dữ kiện nền tảng, để người viết của đại lý trích dẫn."
     summary: An agency's own facts and its overrides of the platform facts, which its writers cite.
     roles: [studio-owner, studio-editor]
     status: live
@@ -575,6 +618,7 @@ features:
     module: studio-api
     name: Publish channels API (T11)
     name_vi: API kênh xuất bản (T11)
+    summary_vi: "Kết nối WordPress và Facebook của đại lý cùng nhật ký đăng (đăng, gỡ)."
     summary: The agency's WordPress and Facebook connections and the publish log (publish, unpublish).
     roles: [studio-owner, studio-editor]
     status: live
@@ -588,6 +632,7 @@ features:
     module: studio-api
     name: Hosted tour pages
     name_vi: Trang tour do AA lưu trữ
+    summary_vi: "AA lưu trữ một trang mang thương hiệu đại lý cho mỗi phiên bản tour, để đại lý dùng làm đường dẫn."
     summary: AA hosts a white-label page per agency tour version for the agency's links.
     roles: [public]
     status: live
@@ -598,6 +643,7 @@ features:
     module: contract-apis
     name: Contract APIs for the other apps
     name_vi: API hợp đồng cho các ứng dụng khác
+    summary_vi: "Các API máy mà ứng dụng khác gọi: catalogue qua HTTP, tài khoản và quyền của đại lý, add-on, thành viên và yêu cầu xoá dữ liệu."
     summary: The machine APIs other apps call - catalogue over HTTP, tenant account and entitlements, add-ons, membership and erasure requests.
     roles: [machine]
     status: live
@@ -610,6 +656,7 @@ features:
     module: shell
     name: Staff shell, dashboard and notifications
     name_vi: Khung trang, bảng điều khiển và thông báo cho nhân viên
+    summary_vi: "Nhân viên Booking đăng nhập bằng tài khoản công ty, xem bảng điều khiển và luồng thông báo của mình."
     summary: Booking staff sign in with the company account and see the dashboard and their notification feed.
     roles: [booking-admin, sales, contracting, finance]
     status: live
@@ -621,6 +668,7 @@ features:
     module: platform
     name: Health, API docs and deploy gate
     name_vi: Health, tài liệu API và cổng deploy
+    summary_vi: "Kiểm tra sống và sẵn sàng, tài liệu API có bảo vệ, và điểm gọi máy mà quy trình deploy hỏi trước khi triển khai."
     summary: Liveness and readiness checks, the gated API docs and the machine endpoint the deploy workflow asks before it rolls out.
     roles: [machine]
     status: live
@@ -631,6 +679,7 @@ features:
     module: trip-cases
     name: Trip cases and proposal versions
     name_vi: Hồ sơ chuyến đi và các phiên bản đề xuất
+    summary_vi: "Nhân viên dựng hồ sơ chuyến đi theo từng ngày, tính giá, giữ các phiên bản đề xuất và xem trước những gì khách thấy."
     summary: Staff build a trip case day by day, price it, keep proposal versions and preview what the client sees.
     roles: [booking-admin, sales]
     status: live
@@ -643,6 +692,7 @@ features:
     module: catalog
     name: Catalogue browse (countries, destinations)
     name_vi: Xem catalogue (quốc gia, điểm đến)
+    summary_vi: "Catalogue CIS theo cách Booking đọc: quốc gia, điểm đến và tour."
     summary: The CIS catalogue as Booking reads it - countries, destinations and their tours.
     roles: [booking-admin, sales, contracting]
     status: live
@@ -653,6 +703,7 @@ features:
     module: catalog
     name: Sellable trip plans and price versions
     name_vi: Lịch trình bán được và phiên bản giá
+    summary_vi: "Mỗi tour catalogue thành một kế hoạch chuyến đi bán được, kèm điều khoản thương mại và các phiên bản bảng giá."
     summary: Each catalogue tour as a sellable trip plan with its commercial terms and price list versions.
     roles: [booking-admin, sales, contracting]
     status: live
@@ -663,6 +714,7 @@ features:
     module: pricing
     name: Pricing rules, FX, seasons and the price workbench
     name_vi: Quy tắc giá, tỷ giá, mùa và bàn làm giá
+    summary_vi: "Quy tắc giá và tỷ giá có duyệt hai bước, lịch mùa và ngày lễ, máy tính giá, kiểm tra sẵn sàng và nhập bảng tính."
     summary: Pricing rules and FX with maker-checker approval, season calendars and holiday events, the calculator, the readiness check and the workbook import.
     roles: [booking-admin, contracting, finance]
     status: live
@@ -675,6 +727,7 @@ features:
     module: pricing
     name: Pricing policy
     name_vi: Chính sách giá
+    summary_vi: "Mọi giá trị chính sách giá và tài chính (hiệu lực báo giá, giữ chỗ, đặt cọc, phụ thu, lưu trữ), thay đổi có duyệt hai bước."
     summary: Every pricing and finance policy value (quote validity, holds, deposits, surcharges, retention) with maker-checker changes.
     roles: [booking-admin, finance]
     status: live
@@ -687,6 +740,7 @@ features:
     module: pricing
     name: Agency price tiers and tariff
     name_vi: Bậc giá đại lý và biểu giá
+    summary_vi: "Bậc giá mà từng đại lý đối tác được mua, và các bảng giá hợp đồng đứng sau biểu giá công bố."
     summary: The price tier each partner agency buys at and the contract rate cards behind the published tariff.
     roles: [booking-admin, finance]
     status: live
@@ -699,6 +753,7 @@ features:
     module: supply
     name: Suppliers, contracts and rate sheets
     name_vi: Nhà cung cấp, hợp đồng và bảng giá
+    summary_vi: "Danh sách nhà cung cấp kèm hợp đồng và bảng giá."
     summary: The supplier register with contracts and rate sheets.
     roles: [booking-admin, contracting]
     status: live
@@ -709,6 +764,7 @@ features:
     module: supply
     name: Hotels and services
     name_vi: Khách sạn và dịch vụ
+    summary_vi: "Khách sạn và loại phòng, dịch vụ (hoạt động, đưa đón, hướng dẫn viên, vé vào cửa, bữa ăn) kèm giá nhà cung cấp."
     summary: Hotels with room types, and services (activities, transfers, guides, entrances, meals) with their supplier rates.
     roles: [booking-admin, contracting, sales]
     status: live
@@ -719,6 +775,7 @@ features:
     module: operations
     name: Supplier bookings and trip checks
     name_vi: Đặt dịch vụ nhà cung cấp và kiểm tra chuyến đi
+    summary_vi: "Đặt từng dịch vụ với nhà cung cấp, chứng từ vận hành và các bước kiểm tra hồ sơ trước ngày khởi hành."
     summary: Booking each service with its supplier, the operations documents and the checks a case passes before departure.
     roles: [booking-admin, sales, contracting]
     status: live
@@ -731,6 +788,7 @@ features:
     module: operations
     name: Supplier bills and payouts
     name_vi: Hoá đơn nhà cung cấp và chi trả
+    summary_vi: "Khoản phải trả của AA: hoá đơn cần duyệt và thanh toán, có người thứ hai duyệt."
     summary: AA's own payables - bills to approve and pay, with a second person approving.
     roles: [booking-admin, sales, contracting, finance]
     status: live
@@ -743,6 +801,7 @@ features:
     module: finance
     name: Agency billing
     name_vi: Thu tiền đại lý
+    summary_vi: "Hoá đơn gửi đại lý đối tác cho tour AA họ đặt, thanh toán do một người ghi và người khác duyệt, nhắc nợ và chặn khi quá hạn."
     summary: Invoices to partner agencies for the AA tours they book, payments recorded by a maker and approved by a checker, reminders and the overdue block.
     roles: [booking-admin, finance]
     status: live
@@ -755,6 +814,7 @@ features:
     module: finance
     name: Costs and profit
     name_vi: Chi phí và lợi nhuận
+    summary_vi: "Chi phí quy đổi tỷ giá, chi phí chung theo đợt khởi hành, đơn mua hàng nhà cung cấp và lợi nhuận theo hồ sơ và đợt khởi hành."
     summary: FX-normalised costs, departure shared costs, supplier purchase orders and the profit per case and departure.
     roles: [booking-admin, finance]
     status: live
@@ -765,6 +825,7 @@ features:
     module: b2b
     name: B2B desk and departures
     name_vi: Bàn B2B và các chuyến khởi hành
+    summary_vi: "Các dòng chờ xác nhận và sự cố khởi hành của booking đại lý, bảng đợt khởi hành và danh sách khách mỗi đợt."
     summary: On-request lines and departure incidents of agency bookings, the departure board and the manifest of each departure.
     roles: [booking-admin, sales, contracting]
     status: live
@@ -777,6 +838,7 @@ features:
     module: b2b
     name: B2B partners
     name_vi: Đối tác B2B
+    summary_vi: "Các đại lý đối tác được phép đặt qua API B2B, kèm trạng thái."
     summary: The partner agencies allowed to book through the B2B API, with their state.
     roles: [booking-admin]
     status: live
@@ -787,6 +849,7 @@ features:
     module: b2b
     name: B2B API (Book with AA)
     name_vi: API B2B (Đặt với AA)
+    summary_vi: "API máy mà CRM của đại lý gọi để báo giá, giữ chỗ và đặt tour AA theo giá B2B của đại lý."
     summary: The machine API the agency CRM calls to quote, hold and book AA tours at the agency's B2B price.
     roles: [machine]
     status: live
@@ -801,6 +864,7 @@ features:
     module: admin
     name: Staff, audit log and reference data
     name_vi: Nhân viên, nhật ký kiểm toán và dữ liệu tham chiếu
+    summary_vi: "Hồ sơ và vai trò nhân viên Booking, nhật ký quản trị và dữ liệu tham chiếu (cài đặt, quốc gia)."
     summary: Booking staff profiles and roles, the admin audit log and the reference rows (settings, countries).
     roles: [booking-admin]
     status: live
@@ -811,6 +875,7 @@ features:
     module: admin
     name: Preferences and retention
     name_vi: Tuỳ chọn và lưu giữ dữ liệu
+    summary_vi: "Tuỳ chọn cá nhân, cài đặt đăng nhập và thông báo, cùng quy tắc lưu trữ dữ liệu Booking."
     summary: Personal preferences, sign-in and notification settings, and the retention rules of Booking data.
     roles: [booking-admin, sales, contracting, finance]
     status: live
@@ -825,6 +890,7 @@ features:
     module: shell
     name: Agency app shell and sign-in
     name_vi: Khung ứng dụng đại lý và đăng nhập
+    summary_vi: "Người của đại lý đăng nhập bằng nhóm tài khoản đối tác, chọn đại lý và chuyển giữa CRM và Content studio."
     summary: Agency people sign in with the partner pool, pick their agency and move between the CRM and the Content studio.
     roles: [owner, agent, assistant]
     status: live
@@ -839,6 +905,7 @@ features:
     module: team
     name: Invitations and joining an agency
     name_vi: Lời mời và tham gia đại lý
+    summary_vi: "Chủ đại lý mời thành viên; người được mời mở đường dẫn và tham gia bằng đăng nhập đối tác."
     summary: An owner invites a member; the invitee claims the link and joins with the partner sign-in.
     roles: [owner]
     status: live
@@ -851,6 +918,7 @@ features:
     module: onboarding
     name: Home, getting started and client import
     name_vi: Trang chủ, bắt đầu và nhập khách hàng
+    summary_vi: "Trang chủ với KPI, các bước bắt đầu và nhập khách hàng từ bảng tính có kiểm trùng."
     summary: The home page with KPIs, the getting-started steps and the import of clients from a spreadsheet with duplicate checks.
     roles: [owner, agent]
     status: live
@@ -861,6 +929,7 @@ features:
     module: intake
     name: Inquiry forms
     name_vi: Biểu mẫu yêu cầu
+    summary_vi: "Biểu mẫu hỏi tour và biểu mẫu lên kế hoạch công khai trên trang khách của đại lý; mỗi câu trả lời thành một chuyến đi trên bảng."
     summary: The agency's public inquiry form and planning form on its client host; each answer becomes a trip on the board.
     roles: [owner, traveller]
     status: live
@@ -873,6 +942,7 @@ features:
     module: pipeline
     name: Pipeline, trips, tasks and automations
     name_vi: Pipeline, chuyến đi, công việc và tự động hoá
+    summary_vi: "Bảng chuyến đi từ lúc hỏi tới lúc đã đi, các thẻ của từng chuyến, việc cần làm và quy tắc tự động của đại lý."
     summary: The trip board from inquiry to travelled, each trip's tabs, tasks and the agency's automation rules.
     roles: [owner, agent, assistant]
     status: live
@@ -883,6 +953,7 @@ features:
     module: clients
     name: Clients and travellers
     name_vi: Khách hàng và khách du lịch
+    summary_vi: "Hồ sơ khách che thông tin mặc định, mỗi lần mở xem đều được ghi lại; đoàn khách của từng chuyến và giấy tờ của họ."
     summary: Client profiles masked by default with every reveal logged, the party of each trip and their documents.
     roles: [owner, agent, assistant]
     status: live
@@ -893,6 +964,7 @@ features:
     module: proposals
     name: Proposal builder
     name_vi: Công cụ dựng đề xuất
+    summary_vi: "Đề xuất theo từng ngày gồm tour AA với giá trực tiếp, khách sạn và dịch vụ riêng của đại lý, phần bao gồm và lịch thanh toán."
     summary: Day-by-day proposals with AA tours at a live price, the agency's own hotels and services, inclusions and the payment schedule.
     roles: [owner, agent]
     status: live
@@ -905,6 +977,7 @@ features:
     module: proposals
     name: Written proposal, Before you go and templates
     name_vi: Đề xuất dạng văn bản, "Trước khi đi" và mẫu tin
+    summary_vi: "Bản chữ của đề xuất, ngày Trước khi đi và thư viện mẫu tin nhắn."
     summary: The text version of a proposal, the Before you go day and the message template library.
     roles: [owner, agent]
     status: live
@@ -915,6 +988,7 @@ features:
     module: client-pages
     name: Client pages and traveller portal
     name_vi: Trang cho khách và cổng khách du lịch
+    summary_vi: "Các trang có chữ ký trên trang khách: đề xuất khách chấp nhận ngay trên điện thoại và cổng khách du lịch với thông tin, giấy tờ, ký và hoá đơn."
     summary: Signed pages on the client host - the proposal a client accepts on a phone and the traveller portal with details, documents, signing and invoices.
     roles: [traveller]
     status: live
@@ -925,6 +999,7 @@ features:
     module: agreements
     name: Agreements and e-sign
     name_vi: Hợp đồng và ký điện tử
+    summary_vi: "Điều khoản đặt tour của đại lý, chấp nhận lại khi điều khoản đổi, và ký điện tử các thoả thuận của chuyến đi."
     summary: The agency's booking terms, re-accept on change and the e-sign of a trip's agreements.
     roles: [owner, agent, traveller]
     status: live
@@ -935,6 +1010,7 @@ features:
     module: money
     name: Invoices and payments
     name_vi: Hoá đơn và thanh toán
+    summary_vi: "Hoá đơn đặt cọc và phần còn lại, nút Tôi đã thanh toán của khách, ghi nhận và kiểm thanh toán, hoàn tiền và phương thức thanh toán."
     summary: Deposit and balance invoices, the client's I have paid, payments checked and recorded, refunds and payment methods.
     roles: [owner, agent]
     status: live
@@ -948,6 +1024,7 @@ features:
     module: suppliers
     name: Suppliers, service catalogue and bookings ledger
     name_vi: Nhà cung cấp, danh mục dịch vụ và sổ đặt chỗ
+    summary_vi: "Nhà cung cấp của đại lý, danh mục dịch vụ riêng (vé máy bay, bảo hiểm, visa, phí) và sổ ghi mọi dòng đặt chỗ."
     summary: The agency's suppliers, its own service catalogue (flights, insurance, visas, fees) and the ledger of every booking line.
     roles: [owner, agent]
     status: live
@@ -958,6 +1035,7 @@ features:
     module: aa-supply
     name: Book with AA
     name_vi: Đặt với AA
+    summary_vi: "Tour AA ngay trong chuyến đi của đại lý: biểu giá AA, trang tour AA, Đặt ngay, giữ chỗ và các booking với AA do Booking xác nhận."
     summary: AA tours inside the agency's trips - the AA tariff, the AA tour page, Book now, holds and Bookings with AA confirmed by Booking.
     roles: [owner, agent, traveller]
     status: live
@@ -972,6 +1050,7 @@ features:
     module: partners
     name: Commissions and sales partners
     name_vi: Hoa hồng và đối tác bán hàng
+    summary_vi: "Hoa hồng theo từng booking, đối tác bán hàng có trang ký riêng và đường dẫn giới thiệu."
     summary: Commissions per booking, sales partners with their own signed page and referral link.
     roles: [owner, agent]
     status: live
@@ -982,6 +1061,7 @@ features:
     module: money
     name: Trip profit and costs
     name_vi: Lợi nhuận và chi phí chuyến đi
+    summary_vi: "Lợi nhuận chuyến đi, hoá đơn nhà cung cấp, chi phí booking với AA và chi phí đoàn khởi hành."
     summary: Trip profit, supplier bills, Bookings with AA costs and group departure costs.
     roles: [owner]
     status: live
@@ -992,6 +1072,7 @@ features:
     module: messages
     name: Mail inbox and saved replies
     name_vi: Hộp thư và câu trả lời mẫu
+    summary_vi: "Hộp thư của đại lý kết nối qua OAuth, luồng thư theo chuyến đi, hộp thư chưa ghép và câu trả lời mẫu."
     summary: The agency mailbox connected over OAuth, trip threads, the unmatched inbox and saved replies.
     roles: [owner, agent, assistant]
     status: live
@@ -1004,6 +1085,7 @@ features:
     module: messages
     name: SMS and WhatsApp
     name_vi: SMS và WhatsApp
+    summary_vi: "Kênh SMS và WhatsApp của đại lý trong khung soạn tin của chuyến đi và trong hộp thư."
     summary: The agency's SMS and WhatsApp channels in the trip composer and the inbox.
     roles: [owner, agent]
     status: beta
@@ -1017,6 +1099,7 @@ features:
     module: travel
     name: Calendar and duty of care
     name_vi: Lịch và trách nhiệm chăm sóc khách
+    summary_vi: "Lịch của đại lý với nguồn ICS, và mục Đang đi du lịch cho biết khách nào đang ở đâu."
     summary: The agency calendar with ICS feeds and Travelling now, which shows where every travelling client is.
     roles: [owner, agent]
     status: live
@@ -1027,6 +1110,7 @@ features:
     module: travel
     name: Travel operations and ops release
     name_vi: Điều hành chuyến đi và bàn giao cho điều hành
+    summary_vi: "Danh sách đoàn khởi hành, voucher cho khách, quy định hộ chiếu và visa, và bàn giao chuyến đi cho bộ phận điều hành mặt đất của AA."
     summary: Departure rosters, traveller vouchers, the passport and visa rules, and the release of a trip to AA ground operations.
     roles: [owner, agent]
     status: live
@@ -1037,6 +1121,7 @@ features:
     module: reports
     name: Reports
     name_vi: Báo cáo
+    summary_vi: "Phễu, tiền, khoản khách còn nợ, đội ngũ và xuất CSV."
     summary: Funnel, money, what clients owe, the team and CSV export.
     roles: [owner]
     status: live
@@ -1049,6 +1134,7 @@ features:
     module: marketing
     name: Marketing and tags
     name_vi: Marketing và nhãn
+    summary_vi: "Nhãn cho khách và chuyến đi, và danh sách khách cũ Sẵn sàng đi tiếp."
     summary: Tags on clients and trips, and the Ready to travel again list of past clients.
     roles: [owner, agent]
     status: live
@@ -1059,6 +1145,7 @@ features:
     module: ai
     name: AI drafts
     name_vi: Bản nháp AI
+    summary_vi: "AI soạn nháp câu trả lời và cài đặt AI của đại lý, trong ngân sách AI hằng tháng."
     summary: AI reply drafts and the agency's AI settings, within a monthly AI budget.
     roles: [owner, agent]
     status: beta
@@ -1072,6 +1159,7 @@ features:
     module: team
     name: Team, roles, plan and agency settings
     name_vi: Nhóm, vai trò, gói và cấu hình đại lý
+    summary_vi: "Thành viên và vai trò, gói và số chỗ, khôi phục chủ sở hữu, cùng trang cài đặt của đại lý: kết nối, giá và quy tắc huỷ."
     summary: Members and their roles, the plan and seats, owner recovery and the agency's settings home, connections, pricing and cancellation rules.
     roles: [owner]
     status: live
@@ -1084,6 +1172,7 @@ features:
     module: team
     name: Add-ons
     name_vi: Add-on
+    summary_vi: "Các add-on của đại lý (CRM, TripPlanner) và yêu cầu add-on của chủ đại lý, được trả lời trong CIS."
     summary: The agency's add-ons (CRM, TripPlanner) and the owner's request for one, answered in CIS.
     roles: [owner]
     status: live
@@ -1095,6 +1184,7 @@ features:
     module: privacy
     name: Data, privacy and lifecycle
     name_vi: Dữ liệu, quyền riêng tư và vòng đời
+    summary_vi: "Xuất dữ liệu mang đi, nhật ký yêu cầu dữ liệu, nhật ký truy cập, thùng rác, lưu trữ, giữ dữ liệu theo pháp lý, xoá dữ liệu và ngừng dịch vụ."
     summary: Portability exports, the data-request log, the access log, trash, archive, legal holds, erasure and offboarding.
     roles: [owner]
     status: live
@@ -1107,6 +1197,7 @@ features:
     module: support
     name: AA support access (agency side)
     name_vi: Quyền hỗ trợ của AA (phía đại lý)
+    summary_vi: "Chủ đại lý cấp cho bộ phận hỗ trợ AA quyền truy cập có thời hạn và xem được mọi lần sử dụng."
     summary: The owner grants AA support time-boxed access to the agency and sees every use.
     roles: [owner]
     status: live
@@ -1117,6 +1208,7 @@ features:
     module: staff-console
     name: AA staff console (support and ground operations)
     name_vi: Bảng điều khiển nhân viên AA (hỗ trợ và điều hành mặt đất)
+    summary_vi: "Nhân viên AA mở đại lý mà chủ đại lý đã cấp quyền; bộ phận điều hành mặt đất đọc các chuyến đi được bàn giao cho họ."
     summary: AA staff open an agency the owner granted access to, and ground operations read the trips released to them.
     roles: [aa-staff]
     status: live
@@ -1128,6 +1220,7 @@ features:
     module: ops-contract
     name: Platform ops API and CRM settings
     name_vi: API vận hành nền tảng và cấu hình CRM
+    summary_vi: "Hợp đồng vận hành mà CIS admin gọi (đại lý, thành viên, job) và các cài đặt CRM hiển thị qua trang Cài đặt nền tảng."
     summary: The ops contract CIS admin calls (agencies, members, jobs) and the CRM settings relayed by Platform › Settings.
     roles: [machine]
     status: live
@@ -1140,6 +1233,7 @@ features:
     module: legal
     name: Legal pages
     name_vi: Trang pháp lý
+    summary_vi: "Điều khoản sử dụng, điều khoản đối tác và thông báo quyền riêng tư."
     summary: The terms of use, partner terms and privacy notice.
     roles: [public]
     status: live
@@ -1151,6 +1245,7 @@ features:
     module: studio
     name: Studio access and dashboard
     name_vi: Truy cập Studio và bảng điều khiển
+    summary_vi: "Vào Content studio từ ứng dụng đại lý, chọn đại lý cho studio, và bảng điều khiển studio."
     summary: Entering the Content studio from the agency app, choosing the studio tenant, and the studio dashboard.
     roles: [studio-owner, studio-editor, studio-viewer]
     status: live
@@ -1162,6 +1257,7 @@ features:
     module: studio
     name: Brand identity (T0)
     name_vi: Bản sắc thương hiệu (T0)
+    summary_vi: "Giọng thương hiệu, lời kêu gọi và quy tắc của đại lý, nhập vào hoặc gõ tay, mà mọi người viết AI tuân theo."
     summary: The agency's brand voice, call to action and rules, imported or typed, that every writer follows.
     roles: [studio-owner, studio-editor]
     status: live
@@ -1173,6 +1269,7 @@ features:
     module: studio
     name: Marketplace and My tours
     name_vi: Marketplace và Tour của tôi
+    summary_vi: "Duyệt catalogue AA, nhận tour (từng tour hoặc hàng loạt) và theo dõi bản viết lại theo giọng của đại lý."
     summary: Browse the AA catalogue, adopt tours (one or in bulk) and follow their rewrites in the agency's voice.
     roles: [studio-owner, studio-editor, studio-viewer]
     status: live
@@ -1186,6 +1283,7 @@ features:
     module: studio
     name: Create - slate, articles and social posts
     name_vi: Sáng tạo - danh sách chủ đề, bài viết và bài mạng xã hội
+    summary_vi: "Chủ đề theo kênh và cho bài viết, ba góc viết để chọn, và người viết AI hoàn thành bài."
     summary: Topics per channel and for articles, three angles to choose from, and the writer that delivers the piece.
     roles: [studio-owner, studio-editor]
     status: live
@@ -1199,6 +1297,7 @@ features:
     module: studio
     name: My content, export and publish
     name_vi: Nội dung của tôi, xuất file và xuất bản
+    summary_vi: "Mọi bài kèm dấu AI, xuất HTML hoặc văn bản, và đăng lên WordPress hoặc Facebook."
     summary: Every piece with its AI mark, export as HTML or text, and publish to WordPress or Facebook.
     roles: [studio-owner, studio-editor, studio-viewer]
     status: live
@@ -1212,6 +1311,7 @@ features:
     module: studio
     name: Studio facts
     name_vi: Dữ kiện trong Studio
+    summary_vi: "Dữ kiện riêng của đại lý mà người viết AI trích dẫn."
     summary: The agency's own facts that the writers cite.
     roles: [studio-owner, studio-editor]
     status: live
@@ -1223,6 +1323,7 @@ features:
     module: studio
     name: Studio account
     name_vi: Tài khoản Studio
+    summary_vi: "Hoạt động, thành viên, add-on, mức dùng tính phí, tích hợp và cài đặt studio."
     summary: Activity, members, add-ons, billing usage, integrations and the studio settings.
     roles: [studio-owner]
     status: live
@@ -1236,6 +1337,7 @@ features:
     module: browse
     name: Browse destinations and tours
     name_vi: Xem điểm đến và tour
+    summary_vi: "Trang chủ, điểm đến, một quốc gia với tour và địa điểm, và trang tour kèm giá từ."
     summary: The home page, destinations, a country with its tours and places, and a tour page with its from price.
     roles: [public]
     status: live
@@ -1248,6 +1350,7 @@ features:
     module: planner
     name: Map planner
     name_vi: Lên lịch trình trên bản đồ
+    summary_vi: "Ghim địa điểm, đổi thứ tự, chia ngày, bắt đầu từ một tour có thật và chia sẻ kế hoạch."
     summary: Pin places, reorder, set days, start from a real tour and share the plan.
     roles: [public, traveller]
     status: live
@@ -1258,6 +1361,7 @@ features:
     module: ai
     name: AI narration and plan chat
     name_vi: Thuyết minh AI và trò chuyện lên lịch trình
+    summary_vi: "AI viết lời dẫn cho chuyến đi và trò chuyện lên kế hoạch, có nhãn AI, giới hạn lượt và mức trần hằng tháng."
     summary: AI-written narration of a trip and the planning chat, with AI labels, rate limits and a monthly cap.
     roles: [public, traveller]
     status: live
@@ -1271,6 +1375,7 @@ features:
     module: account
     name: Sign in and My trips
     name_vi: Đăng nhập và Chuyến đi của tôi
+    summary_vi: "Khách du lịch đăng nhập bằng nhóm tài khoản khách, lưu và mở lại chuyến đi của mình."
     summary: Travellers sign in with the traveller pool, keep their trips and reopen them.
     roles: [traveller]
     status: live
@@ -1284,6 +1389,7 @@ features:
     module: agency-planner
     name: Agency planner (white label)
     name_vi: Công cụ lên lịch trình của đại lý (mang thương hiệu đại lý)
+    summary_vi: "Trang lên kế hoạch và trang tour riêng của một đại lý đang được phục vụ, mang thương hiệu, tour và nội dung của đại lý."
     summary: A served agency's own planner and tour pages under its brand, with its own tours and text.
     roles: [public, traveller]
     status: live
@@ -1299,6 +1405,7 @@ features:
     module: leads
     name: Send a trip to the agency (lead hand-off)
     name_vi: Gửi chuyến đi cho đại lý (bàn giao lead)
+    summary_vi: "Khách gửi chuyến đi kèm đồng ý; khách tiềm năng chờ CRM của đại lý kéo về, hoặc đi tới webhook hay e-mail của đại lý."
     summary: The traveller sends the trip with consent; the lead waits for the agency's CRM to pull it, or goes to its webhook or e-mail.
     roles: [traveller]
     status: live
@@ -1313,6 +1420,7 @@ features:
     module: catalogue-sync
     name: Catalogue revalidation
     name_vi: Làm mới catalogue
+    summary_vi: "CIS báo cho TripPlanner trang tour nào đã đổi; các trang được dựng lại trong vài phút."
     summary: CIS tells TripPlanner which tour pages changed; the pages are rebuilt within minutes.
     roles: [machine]
     status: live
@@ -1325,6 +1433,7 @@ features:
     module: legal
     name: Legal pages and health
     name_vi: Trang pháp lý và health
+    summary_vi: "Thông báo quyền riêng tư, điều khoản sử dụng và kiểm tra tình trạng."
     summary: The privacy notice, the terms of use and the health check.
     roles: [public]
     status: live
@@ -1335,6 +1444,7 @@ features:
     module: jobs
     name: Tenant data jobs (erasure, backup, retention)
     name_vi: Job dữ liệu đại lý (xoá, sao lưu, lưu giữ)
+    summary_vi: "Tiến trình chạy theo lịch: xoá dữ liệu của đại lý đã ngừng dịch vụ, sao lưu đại lý, che dữ liệu trong outbox và dọn bộ đếm giới hạn."
     summary: The scheduled worker that erases an offboarded tenant's data, backs tenants up, redacts the outbox and purges rate counters.
     roles: [machine]
     status: live
@@ -1348,6 +1458,7 @@ features:
     module: identity
     name: Staff sign-in (company accounts)
     name_vi: Đăng nhập nhân viên (tài khoản công ty)
+    summary_vi: "Một đăng nhập công ty cho mọi ứng dụng nhân viên, với các nhóm ánh xạ sang vai trò của từng ứng dụng."
     summary: One company sign-in for every staff app, with groups that map to each app's roles.
     roles: [admin, booking-admin, aa-staff]
     status: live
@@ -1357,6 +1468,7 @@ features:
     module: identity
     name: Partner, traveller and machine sign-in pools
     name_vi: Nhóm đăng nhập đối tác, khách du lịch và máy
+    summary_vi: "Các nhóm đăng nhập riêng cho người của đại lý, khách du lịch và ứng dụng gọi nhau bằng tài khoản máy."
     summary: Separate sign-in pools for agency people, travellers and app-to-app machine clients.
     roles: [owner, agent, traveller, machine]
     status: live
@@ -1366,6 +1478,7 @@ features:
     module: edge
     name: API edge and web hosting
     name_vi: Cổng API và lưu trữ web
+    summary_vi: "Cổng API đứng trước mọi backend, máy chủ phân phối nội dung web và tường lửa web."
     summary: The API gateways in front of every backend, the content delivery hosts and the web firewall.
     roles: [machine]
     status: live
@@ -1375,6 +1488,7 @@ features:
     module: database
     name: DB Migrate and schema dump
     name_vi: DB Migrate và dump schema
+    summary_vi: "Migration được áp bằng một quy trình duy nhất dưới vai trò của từng chủ schema, và bản dump hằng đêm giữ tài liệu schema và sơ đồ dữ liệu luôn mới."
     summary: Migrations are applied by one workflow under each owner's role, and a nightly dump keeps the schema reference and ERD current.
     roles: [machine]
     status: live
@@ -1384,6 +1498,7 @@ features:
     module: observability
     name: Alarms and alert e-mail
     name_vi: Cảnh báo và e-mail cảnh báo
+    summary_vi: "Cảnh báo trên mọi dịch vụ, kèm runbook, gửi tới người nhận cảnh báo."
     summary: Alarms on every service, with runbooks, sent to the alert recipients.
     roles: [admin]
     status: live
@@ -1393,6 +1508,7 @@ features:
     module: docs
     name: Docs and catalogue publishing
     name_vi: Xuất bản tài liệu và catalogue
+    summary_vi: "Repo gốc xuất bản gói tài liệu và danh mục này lên kho lưu trữ sau mỗi lần merge; CIS admin đọc được trong vài phút."
     summary: The root repo publishes the docs reader bundle and this catalogue to storage on every merge; CIS admin reads them within minutes.
     roles: [machine]
     status: live
