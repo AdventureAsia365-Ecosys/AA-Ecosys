@@ -32,7 +32,7 @@ the check turns red or the lesson is marked stale, so no lesson drifts away from
 ```text
 docs/learn/
   README.md                         this page
-  allowlist.yaml                    skill, steering and CONTEXT.md sections the bundle may publish; agency pages
+  allowlist.yaml                    skill, steering and CONTEXT.md sections the bundle may publish; agency grants
   schema/*.schema.json              JSON Schemas of every file below
   paths/<path id>.yaml              one learning path: modules in order, required or elective, planned modules
   modules/<ID>-<slug>/
@@ -51,8 +51,8 @@ The first module written in this format is [F3 How work flows](modules/F3-how-wo
 - **Module ID** is the code from the research paths (F1 to F6, E1 to E15, L1 to L9, S, C, B, O, A). The folder
   starts with it: `F3-how-work-flows`. A lesson ID is `<module>-NN`: `F3-01`.
 - **Tier** is who may read the module: `staff` (every staff role) or `partner` (agency owners and agents). A path
-  holds modules of its own tier only. A `partner` module cites only the catalog pages listed under `partner_pages`
-  in the allowlist and allowlist sections of tier `partner` (decision D13).
+  holds modules of its own tier only. A `partner` module cites only the sections the allowlist lists with tier
+  `partner`, catalog page sections included (decision D13).
 - **Status** is `draft` until the tech lead approved the module, `active` when learners see it, `retired` when it
   is withdrawn. A second person approves every module (maker-checker); for quiz items an agent drafted, the approver
   is a human owner.
@@ -102,16 +102,34 @@ sources:
 ## The allowlist
 
 [`allowlist.yaml`](allowlist.yaml) is the only way a section of a skill, a steering file or a `CONTEXT.md` reaches
-the learn bundle: one entry per section, with a tier and a reason; anything not listed is never published (default
-deny). Its second list, `partner_pages`, names the catalog pages an agency module may cite. The redaction guard of the
-docs reader runs on every listed section. A change to the allowlist widens who can read what, so it is reviewed as
-a risky change (auth and access) before merge.
+the learn bundle, and the only way a catalog page section reaches an agency: one entry per section, with a tier and a
+reason; anything not listed is never published (default deny). The redaction guard of the docs reader runs on every
+listed section. A change to the allowlist widens who can read what, so it is reviewed as a risky change (auth and
+access) before merge.
+
+- **Agency grants.** Every staff role reads catalog pages without an entry. An agency module cites a catalog page
+  only through a `doc:<catalog id>#<anchor>` entry of tier `partner`: one section, never a whole page, and only the
+  exact section granted (a grant does not cover its subsections or its parent). A `doc:` entry of tier `staff` is an
+  error.
+- **Staff-only sections.** A page that mixes agency and Adventure Asia staff text marks each section that is not for
+  agency learners with `<!-- learn-tier: staff -->` on its own line below the heading (English page only; the docs
+  reader does not show it). A grant of a marked section, or of a section around a marked subsection, fails the
+  check. Mark a section when it describes a staff console, an admin page or an internal procedure, even when part of
+  it is for agencies.
+
+```markdown
+### Adventure Asia staff console
+
+<!-- learn-tier: staff -->
+
+The console uses the staff sign-in...
+```
 
 ## Checks
 
 | Where | What runs | Fails on |
 |---|---|---|
-| Docs lint, every root pull request that touches `docs/**` or `tools/docs/**` | `python tools/docs/check_learn.py`, and the unit tests `tools/docs/test_check_learn.py` and `tools/docs/test_learn_bundle.py` | a file that breaks its schema, a duplicate ID, a reference that does not resolve, a missing or changed pin, a partner module citing a staff page, a section cited outside the allowlist, a prerequisite cycle, an account or resource ID in course text |
+| Docs lint, every root pull request that touches `docs/**` or `tools/docs/**` | `python tools/docs/check_learn.py`, and the unit tests `tools/docs/test_check_learn.py` and `tools/docs/test_learn_bundle.py` | a file that breaks its schema, a duplicate ID, a reference that does not resolve, a missing or changed pin, a partner module citing a section not granted to agencies, a partner grant of a section marked staff only, a section cited outside the allowlist, a prerequisite cycle, an account or resource ID in course text |
 | Docs sync, on master | `python tools/docs/build_learn_bundle.py`, with the app repos' `CONTEXT.md` files checked out | any course error except drift; drift is published as stale (below) |
 
 Run them locally before pushing:

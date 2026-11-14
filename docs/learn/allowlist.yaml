@@ -1,8 +1,10 @@
 # AA Academy publication allowlist (decision D13). Default deny: the learn bundle publishes a section of a skill, a
 # steering file or an app repo's CONTEXT.md only when it is listed here, one entry per section, and an agency
-# (partner tier) module cites only the catalog pages under partner_pages. A change to this file is an access change:
-# review it as a risky change before merge. Schema: docs/learn/schema/allowlist.schema.json; checked by
-# tools/docs/check_learn.py (the redaction guard runs on every listed section).
+# (partner tier) module cites only the catalog page sections granted here with tier partner (doc:<id>#<anchor>, one
+# entry per section, exact match; never a whole page). A section marked `<!-- learn-tier: staff -->` on its page, or
+# one around a marked subsection, cannot be granted. A change to this file is an access change: review it as a risky
+# change before merge. Schema: docs/learn/schema/allowlist.schema.json; checked by tools/docs/check_learn.py (the
+# redaction guard runs on every listed section).
 version: 1
 sections:
   # F2 "The ecosystem map" and E1: each repo's own statement of its role. English, public repos.
@@ -21,7 +23,67 @@ sections:
   - ref: context:AA-CIS-Infra#what-it-is-role-in-the-aa-ecosystem
     tier: staff
     reason: F2 and E1 teach the rule "app owns code, Infra owns resources" from the Terraform repo itself.
-# Agency modules (A1 to A7, phase P7) teach from the agency runbooks only.
-partner_pages:
-  - GUIDE-12-content-studio
-  - GUIDE-12-crm
+  # Agency modules (A1 to A7, phase P7; research GUIDE-13-lms) teach from the agency runbooks, and only from the
+  # sections written for agency users. The runbooks' staff sections (staff console, CIS admin, internal escalation,
+  # dev caveats) carry the staff-only marker; the overview sections ("1. Who uses it") serve every group and are not
+  # granted.
+  - ref: doc:GUIDE-12-crm#joining-an-agency-every-member
+    tier: partner
+    reason: A1 teaches how a new member accepts the invitation and sets up two-step sign-in.
+  - ref: doc:GUIDE-12-crm#the-owner-invites-the-team
+    tier: partner
+    reason: A7 teaches the owner to invite members and change roles.
+  - ref: doc:GUIDE-12-crm#agency-team
+    tier: partner
+    reason: A1 teaches the agency team to sign in with two-step sign-in, pick an agency and sign out.
+  - ref: doc:GUIDE-12-crm#travellers
+    tier: partner
+    reason: A3 teaches what travellers open from the links the agency sends.
+  - ref: doc:GUIDE-12-crm#6-the-menu-agency-app
+    tier: partner
+    reason: A3 teaches the agency app menu and the language setting.
+  - ref: doc:GUIDE-12-crm#first-day-owner
+    tier: partner
+    reason: A7 teaches the owner's first-day checklist, the agency's own connections and client import.
+  - ref: doc:GUIDE-12-crm#receive-inquiries
+    tier: partner
+    reason: A3 teaches inquiry forms and where inquiries land.
+  - ref: doc:GUIDE-12-crm#work-a-trip-from-inquiry-to-booking
+    tier: partner
+    reason: A3 and A4 teach a trip from inquiry through proposal, holds and payment to booking.
+  - ref: doc:GUIDE-12-crm#clients
+    tier: partner
+    reason: A3 and A5 teach the client list and the reveal rule for personal data.
+  - ref: doc:GUIDE-12-crm#money-and-follow-up
+    tier: partner
+    reason: A3 teaches payments, bookings, commissions, the calendar and reports.
+  - ref: doc:GUIDE-12-crm#allow-adventure-asia-support-owner
+    tier: partner
+    reason: A5 teaches the owner to grant and end an Adventure Asia support window.
+  - ref: doc:GUIDE-12-crm#leave-or-delete-data-owner
+    tier: partner
+    reason: A5 teaches the owner export, erasure and the other data and privacy settings.
+  - ref: doc:GUIDE-12-content-studio#2-address
+    tier: partner
+    reason: A2 teaches where the Content studio opens.
+  - ref: doc:GUIDE-12-content-studio#4-sign-in-and-out
+    tier: partner
+    reason: A1 and A2 teach studio sign-in, choosing a studio and sign-out.
+  - ref: doc:GUIDE-12-content-studio#5-roles
+    tier: partner
+    reason: A2 teaches what the owner, editor and viewer roles can do.
+  - ref: doc:GUIDE-12-content-studio#6-the-menu
+    tier: partner
+    reason: A2 teaches the studio menu.
+  - ref: doc:GUIDE-12-content-studio#set-up-the-brand-once
+    tier: partner
+    reason: A2 teaches the brand identity and facts setup.
+  - ref: doc:GUIDE-12-content-studio#pick-and-rewrite-tours
+    tier: partner
+    reason: A2 teaches picking tours on Marketplace and rewriting them.
+  - ref: doc:GUIDE-12-content-studio#write-and-publish-content
+    tier: partner
+    reason: A2 teaches writing social posts and articles and publishing them.
+  - ref: doc:GUIDE-12-content-studio#keep-an-eye-on-the-account
+    tier: partner
+    reason: A2 teaches the billing, activity and API key pages.

@@ -53,7 +53,6 @@ sections:
   - ref: context:AA-Booking#run-it-locally
     tier: staff
     reason: The lesson teaches the local run of the invented app.
-partner_pages: []
 """
 
 
@@ -142,6 +141,19 @@ class BuildTest(BundleCase):
         quiz = json.loads((self.out / "quizzes/F1.json").read_text(encoding="utf-8"))
         self.assertEqual(quiz["items"][0]["answer"], [1])
 
+    def test_granted_page_section_is_partner_tier(self):
+        (self.root / "docs/guides").mkdir(parents=True)
+        (self.root / "docs/guides/runbook.md").write_text(
+            "---\nid: GUIDE-90-runbook\ntitle: Invented runbook\ntype: how-to\n---\n\n# Invented runbook\n\n"
+            "## Agency team\n\nAgencies sign in here.\n", encoding="utf-8")
+        (self.root / cl.ALLOWLIST).write_text(
+            ALLOWLIST + "  - ref: doc:GUIDE-90-runbook#agency-team\n    tier: partner\n"
+            "    reason: An invented agency module teaches the sign-in.\n", encoding="utf-8")
+        tiers = {s["ref"]: s["tier"] for s in self.build()["sections"]}
+        self.assertEqual(tiers["doc:GUIDE-90-runbook#agency-team"], "partner")
+        self.assertEqual(tiers["adr:0001#decision"], "staff")
+        self.assertTrue((self.out / "sections/doc/GUIDE-90-runbook/agency-team.md").is_file())
+
     def test_manifest_never_holds_an_answer(self):
         text = json.dumps(self.build())
         self.assertNotIn('"answer"', text)
@@ -212,9 +224,7 @@ class CommittedCourseTest(unittest.TestCase):
         self.course, self.resolved = cl.run(REPO_ROOT)
         # A copy of the course plus every root page it cites (the docs index walks the copy, not git).
         shutil.copytree(REPO_ROOT / cl.LEARN_DIR, self.root / cl.LEARN_DIR)
-        index = cl.Sources(REPO_ROOT).docs_index()
         pages = {r.path for r in self.resolved.values() if r.path and not r.ref.external}
-        pages |= {index[p][0] for p in self.course.allowlist.get("partner_pages", []) if p in index}
         for relpath in pages:
             if (REPO_ROOT / relpath).is_file():
                 target = self.root / relpath
@@ -228,13 +238,24 @@ class CommittedCourseTest(unittest.TestCase):
         course, _ = cl.run(root)
         return [f.message for f in course.errors]
 
+    def test_committed_allowlist_grants_no_staff_only_section(self):
+        grants = [str(s["ref"]) for s in self.course.allowlist.get("sections", []) if s["tier"] == "partner"]
+        self.assertTrue(grants, "the agency path has partner grants")
+        for raw in grants:
+            r = self.resolved[raw]
+            self.assertIsNotNone(r.text, raw)
+            self.assertFalse(cl.staff_only(r.text), raw)
+            self.assertIsNotNone(r.ref.anchor, raw)
+
     def test_committed_course_is_green(self):
         self.assertEqual([f.message for f in self.course.errors], [])
         self.assertGreaterEqual(len(self.course.modules), 1)
 
     def test_copy_is_green_then_red_after_a_source_change(self):
         self.assertEqual(self.errors(self.root), [])
-        root_sources = [r for r in self.resolved.values() if not r.ref.external and r.text]
+        cited = {str(src["ref"])
+                 for _, m in self.course.modules for lesson in m["lessons"] for src in lesson["sources"]}
+        root_sources = [r for raw, r in self.resolved.items() if raw in cited and not r.ref.external and r.text]
         self.assertTrue(root_sources, "the sample module cites at least one root section")
         r = root_sources[0]
         page = self.root / r.path

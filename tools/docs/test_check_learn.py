@@ -221,5 +221,108 @@ class PinTest(LearnCase):
         self.assertEqual(cl._sha_text("0123456789abcdef"), "0123456789abcdef")
 
 
+RUNBOOK = """---
+id: GUIDE-90-runbook
+title: Invented agency runbook
+type: how-to
+---
+
+# Invented agency runbook
+
+## Sign in
+
+### Agency team
+
+Agencies sign in here.
+
+### Staff console
+
+<!-- learn-tier: staff -->
+
+Staff open the console here.
+
+## Daily work
+
+The agency works a trip.
+
+## Escalation
+
+<!-- learn-tier: staff -->
+
+The engineer on duty follows the incident rules.
+"""
+
+PARTNER_ALLOWLIST = """version: 1
+sections:
+{grants}
+"""
+
+
+class PartnerGrantTest(LearnCase):
+    """Partner grants are catalog page sections, never a section marked staff only (or one around it)."""
+
+    def setUp(self) -> None:
+        super().setUp()
+        (self.root / "docs/guides").mkdir(parents=True)
+        (self.root / "docs/guides/runbook.md").write_text(RUNBOOK, encoding="utf-8")
+        body = cl.strip_front_matter(RUNBOOK)
+        self.sha = {a: cl.section_sha(cl.section(body, a)) for a in ("agency-team", "daily-work")}
+        self.write_module(f"      - ref: adr:0001#decision\n        sha: {self.decision_sha()}")
+
+    def write_allowlist(self, *grants: tuple[str, str]) -> None:
+        text = "".join(f"  - ref: {ref}\n    tier: {tier}\n    reason: An invented agency module teaches it.\n"
+                       for ref, tier in grants)
+        (self.root / cl.ALLOWLIST).write_text(PARTNER_ALLOWLIST.format(grants=text or "  []"), encoding="utf-8")
+
+    def make_partner_module(self, ref: str, sha: str) -> None:
+        text = module_yaml(f"      - ref: {ref}\n        sha: {sha}").replace("tier: staff", "tier: partner")
+        (self.mod / "module.yaml").write_text(text, encoding="utf-8")
+        self.write_quiz(ref)
+
+    def test_grant_to_agency_sections_passes(self):
+        self.write_allowlist(("doc:GUIDE-90-runbook#agency-team", "partner"),
+                             ("doc:GUIDE-90-runbook#daily-work", "partner"))
+        self.assertEqual(self.messages(self.run_check()), [])
+
+    def test_grant_to_a_staff_only_section_fails(self):
+        self.write_allowlist(("doc:GUIDE-90-runbook#staff-console", "partner"))
+        msgs = self.messages(self.run_check())
+        self.assertEqual(len(msgs), 1, msgs)
+        self.assertIn("doc:GUIDE-90-runbook#staff-console is marked staff only", msgs[0])
+
+    def test_grant_around_a_staff_only_subsection_fails(self):
+        self.write_allowlist(("doc:GUIDE-90-runbook#sign-in", "partner"))
+        self.assertTrue(any("marked staff only" in m for m in self.messages(self.run_check())))
+
+    def test_staff_tier_doc_entry_fails(self):
+        self.write_allowlist(("doc:GUIDE-90-runbook#daily-work", "staff"))
+        self.assertTrue(any("a doc: entry only grants tier partner" in m for m in self.messages(self.run_check())))
+
+    def test_whole_page_grant_fails_the_schema(self):
+        self.write_allowlist(("doc:GUIDE-90-runbook", "partner"))
+        self.assertTrue(any("does not match" in m for m in self.messages(self.run_check())))
+
+    def test_partner_module_cites_a_granted_section(self):
+        self.write_allowlist(("doc:GUIDE-90-runbook#agency-team", "partner"))
+        self.make_partner_module("doc:GUIDE-90-runbook#agency-team", self.sha["agency-team"])
+        self.assertEqual(self.messages(self.run_check()), [])
+
+    def test_bare_reference_matches_the_doc_grant(self):
+        self.write_allowlist(("doc:GUIDE-90-runbook#agency-team", "partner"))
+        self.make_partner_module("GUIDE-90-runbook#agency-team", self.sha["agency-team"])
+        self.assertEqual(self.messages(self.run_check()), [])
+
+    def test_partner_module_citing_an_ungranted_section_of_a_granted_page_fails(self):
+        self.write_allowlist(("doc:GUIDE-90-runbook#agency-team", "partner"))
+        self.make_partner_module("doc:GUIDE-90-runbook#daily-work", self.sha["daily-work"])
+        msgs = self.messages(self.run_check())
+        self.assertEqual(len(msgs), 1, msgs)
+        self.assertIn("a partner module cites only catalog sections the allowlist grants", msgs[0])
+
+    def test_marker_inside_fenced_code_does_not_count(self):
+        self.assertFalse(cl.staff_only("## A\n\n```md\n<!-- learn-tier: staff -->\n```\n"))
+        self.assertTrue(cl.staff_only("## A\n\n<!-- learn-tier: staff -->\n"))
+
+
 if __name__ == "__main__":
     unittest.main()
