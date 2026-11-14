@@ -1,0 +1,1554 @@
+{
+ "apps": {
+  "booking": [
+   "page:/",
+   "page:/agency-billing",
+   "page:/agency-billing/invoices/[ref]",
+   "page:/audit-log",
+   "page:/b2b-desk",
+   "page:/b2b-desk/manifest/[id]",
+   "page:/billing",
+   "page:/cases",
+   "page:/cases/[code]",
+   "page:/cases/[code]/proposals/[n]",
+   "page:/cases/[code]/proposals/[n]/preview",
+   "page:/catalog/countries",
+   "page:/catalog/countries/[iso]",
+   "page:/catalog/destinations",
+   "page:/catalog/trip-plans",
+   "page:/catalog/trip-plans/[sourceId]",
+   "page:/catalog/trip-plans/[sourceId]/commercial",
+   "page:/departures",
+   "page:/finance",
+   "page:/hotels",
+   "page:/kit-gallery",
+   "page:/login",
+   "page:/notifications",
+   "page:/pricing/agency-tiers",
+   "page:/pricing/agency-tiers/tariff",
+   "page:/pricing/calculator",
+   "page:/pricing/holiday-events",
+   "page:/pricing/policy",
+   "page:/pricing/readiness",
+   "page:/pricing/rules",
+   "page:/pricing/seasons",
+   "page:/pricing/workbench",
+   "page:/proposals",
+   "page:/services",
+   "page:/services/[id]",
+   "page:/settings",
+   "page:/staff",
+   "page:/staff/[cisUserId]",
+   "page:/suppliers",
+   "page:/suppliers/[id]",
+   "page:/suppliers/[id]/edit",
+   "page:/suppliers/new",
+   "page:/suppliers/rate-sheets/[id]",
+   "page:/trip-checks",
+   "route:agency_billing",
+   "route:agency_pricing",
+   "route:b2b",
+   "route:b2b_desk",
+   "route:b2b_partners",
+   "route:catalog",
+   "route:docs",
+   "route:finance",
+   "route:health",
+   "route:notifications",
+   "route:ops",
+   "route:price_versions",
+   "route:pricing",
+   "route:reference",
+   "route:retention",
+   "route:staff",
+   "route:supplier_bills",
+   "route:supplier_bookings",
+   "route:suppliers",
+   "route:supply",
+   "route:trip_cases",
+   "route:trip_checks"
+  ],
+  "cis": [
+   "page:/",
+   "page:/admin/aa-content",
+   "page:/admin/ai-gateway",
+   "page:/admin/api-docs",
+   "page:/admin/atom-curation",
+   "page:/admin/data-coverage",
+   "page:/admin/data-model",
+   "page:/admin/decisions",
+   "page:/admin/docs",
+   "page:/admin/facts",
+   "page:/admin/jobs",
+   "page:/admin/lab",
+   "page:/admin/lab/[stage]",
+   "page:/admin/lab/writing-memory",
+   "page:/admin/master-content",
+   "page:/admin/overview",
+   "page:/admin/photos",
+   "page:/admin/places",
+   "page:/admin/places/cards",
+   "page:/admin/platform",
+   "page:/admin/platform/alerts",
+   "page:/admin/platform/apps",
+   "page:/admin/platform/audit",
+   "page:/admin/platform/catalogue",
+   "page:/admin/platform/settings",
+   "page:/admin/platform/staff",
+   "page:/admin/platform/staff/[id]",
+   "page:/admin/platform/ui-kit",
+   "page:/admin/reference-prices",
+   "page:/admin/reports",
+   "page:/admin/review",
+   "page:/admin/s1-rewrite",
+   "page:/admin/seo-intelligence",
+   "page:/admin/settings",
+   "page:/admin/spend",
+   "page:/admin/supply-content",
+   "page:/admin/supply-content/[id]",
+   "page:/admin/tenant-qa",
+   "page:/admin/tenant-qa/compliance",
+   "page:/admin/tenant-qa/quality",
+   "page:/admin/tenant-qa/review-log",
+   "page:/admin/tenant-qa/slate",
+   "page:/admin/tenant-qa/trace",
+   "page:/admin/tenants",
+   "page:/admin/tenants/[id]",
+   "page:/admin/tenants/agencies",
+   "page:/admin/tenants/assignments",
+   "page:/admin/tenants/data-erasure",
+   "page:/admin/tenants/plans",
+   "page:/admin/tenants/view-as",
+   "page:/admin/upload",
+   "page:/admin/usage",
+   "page:/kit-gallery",
+   "page:/login",
+   "route:admin",
+   "route:admin_a4",
+   "route:admin_aa_content",
+   "route:admin_ai_gateway",
+   "route:admin_alert_recipients",
+   "route:admin_api_docs",
+   "route:admin_atoms",
+   "route:admin_budgets",
+   "route:admin_claim_labels",
+   "route:admin_claim_shadow",
+   "route:admin_content_quality",
+   "route:admin_crm_console",
+   "route:admin_dashboard",
+   "route:admin_data_coverage",
+   "route:admin_data_model",
+   "route:admin_decisions",
+   "route:admin_docs",
+   "route:admin_facts",
+   "route:admin_job_runner",
+   "route:admin_llm_ops",
+   "route:admin_llm_route",
+   "route:admin_llm_route_control",
+   "route:admin_overview",
+   "route:admin_photos",
+   "route:admin_pipeline/billing",
+   "route:admin_pipeline/brand_identity",
+   "route:admin_pipeline/brands",
+   "route:admin_pipeline/metrics",
+   "route:admin_pipeline/review",
+   "route:admin_pipeline/runs",
+   "route:admin_pipeline/tour_detail",
+   "route:admin_pipeline/tours",
+   "route:admin_pipeline/uploads",
+   "route:admin_pipeline/versions",
+   "route:admin_places",
+   "route:admin_plans",
+   "route:admin_platform",
+   "route:admin_platform_ops",
+   "route:admin_product_catalogue",
+   "route:admin_quality_funnel",
+   "route:admin_quality_lineage",
+   "route:admin_quality_thresholds",
+   "route:admin_reference_prices",
+   "route:admin_reports",
+   "route:admin_search",
+   "route:admin_segment_research",
+   "route:admin_seo",
+   "route:admin_settings",
+   "route:admin_settings_registry",
+   "route:admin_supply_content",
+   "route:admin_tenant360",
+   "route:admin_tenant_addon_requests",
+   "route:admin_tenant_assignments",
+   "route:admin_tenant_compliance",
+   "route:admin_tenant_erasure",
+   "route:admin_tenant_provision",
+   "route:admin_tenant_subscription",
+   "route:admin_usage_explorer",
+   "route:admin_view_as",
+   "route:admin_waves",
+   "route:admin_writing_memory",
+   "route:auth",
+   "route:catalog_http",
+   "route:tenant_account",
+   "route:tenant_addons",
+   "route:tenant_erasure",
+   "route:tenant_membership",
+   "route:tenant_session",
+   "route:v1_account",
+   "route:v1_account_addons",
+   "route:v1_account_members",
+   "route:v1_account_tour_retirement",
+   "route:v1_angle_gate",
+   "route:v1_content_writing",
+   "route:v1_facts",
+   "route:v1_integrations",
+   "route:v1_marketplace",
+   "route:v1_notifications",
+   "route:v1_pipeline",
+   "route:v1_planning",
+   "route:v1_progress",
+   "route:v1_publish",
+   "route:v1_tours",
+   "route:v1_trip_page"
+  ],
+  "crm": [
+   "page:/",
+   "page:/[section]",
+   "page:/aa-bookings",
+   "page:/aa-tariff",
+   "page:/automations",
+   "page:/bookings",
+   "page:/c/[...slug]",
+   "page:/c/a",
+   "page:/c/f/[publicKey]",
+   "page:/c/p",
+   "page:/c/r/[token]",
+   "page:/c/s/[token]",
+   "page:/c/t",
+   "page:/calendar",
+   "page:/clients",
+   "page:/clients/[travelerId]",
+   "page:/clients/duplicates",
+   "page:/commissions",
+   "page:/departures",
+   "page:/departures/[ref]",
+   "page:/health",
+   "page:/help",
+   "page:/home",
+   "page:/inbox",
+   "page:/join/accept",
+   "page:/join/invite",
+   "page:/kit-gallery",
+   "page:/legal/partner-terms",
+   "page:/legal/privacy",
+   "page:/legal/terms",
+   "page:/marketing",
+   "page:/onboarding",
+   "page:/partners",
+   "page:/payments",
+   "page:/pipeline",
+   "page:/pipeline/[tripId]",
+   "page:/pipeline/[tripId]/proposal/[proposalId]",
+   "page:/pipeline/[tripId]/proposal/[proposalId]/text",
+   "page:/portal",
+   "page:/portal-access/none",
+   "page:/portal-access/select",
+   "page:/portal/account",
+   "page:/portal/account/activity",
+   "page:/portal/account/add-ons",
+   "page:/portal/account/billing",
+   "page:/portal/account/integrations",
+   "page:/portal/account/members",
+   "page:/portal/account/settings",
+   "page:/portal/brand",
+   "page:/portal/content",
+   "page:/portal/content/publish",
+   "page:/portal/create",
+   "page:/portal/create/article",
+   "page:/portal/create/social",
+   "page:/portal/create/write",
+   "page:/portal/dashboard",
+   "page:/portal/facts",
+   "page:/portal/help/facebook",
+   "page:/portal/tours",
+   "page:/portal/tours/mine",
+   "page:/reports",
+   "page:/select-agency",
+   "page:/services",
+   "page:/settings",
+   "page:/settings/access-log",
+   "page:/settings/add-ons",
+   "page:/settings/agreements",
+   "page:/settings/ai",
+   "page:/settings/cancellation",
+   "page:/settings/channels",
+   "page:/settings/connections",
+   "page:/settings/data",
+   "page:/settings/forms",
+   "page:/settings/import",
+   "page:/settings/inclusions",
+   "page:/settings/mailbox",
+   "page:/settings/payments",
+   "page:/settings/pricing",
+   "page:/settings/saved-replies",
+   "page:/settings/tags",
+   "page:/settings/team",
+   "page:/settings/templates",
+   "page:/settings/travel",
+   "page:/signed-out",
+   "page:/staff",
+   "page:/staff/ops",
+   "page:/staff/ops/[tenantId]/[tripId]",
+   "page:/staff/signed-out",
+   "page:/staff/support",
+   "page:/staff/support/[tenantId]",
+   "page:/staff/support/[tenantId]/trips/[tripId]",
+   "page:/suppliers",
+   "page:/tasks",
+   "page:/travelling",
+   "page:/trip/[tourId]",
+   "route:aa",
+   "route:addons",
+   "route:agency",
+   "route:ai",
+   "route:audit",
+   "route:builder",
+   "route:calendar",
+   "route:catalogue",
+   "route:ci",
+   "route:client_pages",
+   "route:commissions",
+   "route:data",
+   "route:duty",
+   "route:esign",
+   "route:finance",
+   "route:health",
+   "route:inclusions",
+   "route:invitations",
+   "route:invoices",
+   "route:ledger",
+   "route:lifecycle",
+   "route:mail",
+   "route:messaging",
+   "route:onboarding",
+   "route:ops",
+   "route:ops_release",
+   "route:ops_settings",
+   "route:partner_pages",
+   "route:partners",
+   "route:payments",
+   "route:pipeline",
+   "route:proposal_text",
+   "route:proposals",
+   "route:public",
+   "route:reports",
+   "route:staff",
+   "route:staff_ops",
+   "route:support_access",
+   "route:tags",
+   "route:team",
+   "route:travel_ops",
+   "route:travellers",
+   "route:workflows"
+  ],
+  "tripplanner": [
+   "page:/",
+   "page:/[tenant]",
+   "page:/[tenant]/plan",
+   "page:/[tenant]/plan/shared",
+   "page:/[tenant]/tours/[tour]",
+   "page:/destinations",
+   "page:/destinations/[country]",
+   "page:/plan",
+   "page:/plan/shared",
+   "page:/privacy",
+   "page:/sign-in",
+   "page:/terms",
+   "page:/tours/[slug]",
+   "page:/trips",
+   "route:bff/auth",
+   "route:bff/browse",
+   "route:bff/health",
+   "route:bff/me",
+   "route:bff/revalidate",
+   "route:bff/trip",
+   "route:lambda/assembly",
+   "route:lambda/browse",
+   "route:lambda/jobs"
+  ]
+ },
+ "entitlements": {
+  "ai.budget_usd_monthly": {
+   "kind": "limit",
+   "product": "platform"
+  },
+  "api.access": {
+   "kind": "flag",
+   "product": "content"
+  },
+  "api.calls_monthly": {
+   "kind": "limit",
+   "product": "content"
+  },
+  "channel.facebook": {
+   "kind": "flag",
+   "product": "content"
+  },
+  "channel.wordpress": {
+   "kind": "flag",
+   "product": "content"
+  },
+  "content.article": {
+   "kind": "flag",
+   "product": "content"
+  },
+  "content.rate_limit_rpm": {
+   "kind": "limit",
+   "product": "content"
+  },
+  "content.rewrite": {
+   "kind": "limit",
+   "product": "content"
+  },
+  "content.social": {
+   "kind": "flag",
+   "product": "content"
+  },
+  "crm.ai_assist": {
+   "kind": "flag",
+   "product": "crm"
+  },
+  "crm.campaigns": {
+   "kind": "flag",
+   "product": "crm"
+  },
+  "crm.core": {
+   "kind": "flag",
+   "product": "crm"
+  },
+  "crm.custom_domain": {
+   "kind": "flag",
+   "product": "crm"
+  },
+  "crm.insights_export": {
+   "kind": "flag",
+   "product": "crm"
+  },
+  "crm.seats": {
+   "kind": "seats",
+   "product": "crm"
+  },
+  "crm.stripe_connect": {
+   "kind": "flag",
+   "product": "crm"
+  },
+  "crm.whatsapp_sms": {
+   "kind": "flag",
+   "product": "crm"
+  },
+  "policy.notice_days": {
+   "kind": "policy",
+   "product": "platform"
+  },
+  "tp.ai_sessions": {
+   "kind": "limit",
+   "product": "tripplanner"
+  },
+  "tp.api": {
+   "kind": "flag",
+   "product": "tripplanner"
+  },
+  "tp.branding": {
+   "kind": "flag",
+   "product": "tripplanner"
+  },
+  "tp.custom_domain": {
+   "kind": "flag",
+   "product": "tripplanner"
+  },
+  "tp.embed": {
+   "kind": "flag",
+   "product": "tripplanner"
+  },
+  "tp.hosted": {
+   "kind": "flag",
+   "product": "tripplanner"
+  },
+  "tp.launcher": {
+   "kind": "flag",
+   "product": "tripplanner"
+  },
+  "trade.book": {
+   "kind": "flag",
+   "product": "content"
+  }
+ },
+ "schema": 1,
+ "settings": {
+  "booking.policy.agency_currency_by_country": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.agency_reminder_steps_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.b2b_child_age_max": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.b2b_hold_extend_hours": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.b2b_hold_hours": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.b2b_hold_max_extensions": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.b2b_infant_age_max": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.b2b_on_request_answer_business_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.b2b_on_request_due_soon_hours": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.b2b_rehold_limit_per_day": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.departure_decision_days_default": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.diff_highlight_pct": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.emergency_contact_keep_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.festive_non_refundable_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.fit_full_payment_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.foc_one_per_pax": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.gala_dinner_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.group_deposit_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.group_deposit_pct": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.group_on_request_min_pax": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.pre_departure_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.provisional_cis_ref_quotable": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.provisional_uplift_pct": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.quote_validity_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.quote_validity_festive_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.recompute_auto_publish_pct": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.retention_inbox_redact_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.retention_job_failed_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.retention_job_succeeded_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.rounding_increment_by_currency": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.supplier_answer_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.supplier_bill_due_soon_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.surcharge_causes": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.surcharge_free_cancel_pct": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.surcharge_fx_threshold_pct": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.surcharge_notice_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.tariff_next_publish_by": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.tariff_year_start": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.trip_check_reminder_days": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "cis.a1.attempts_before_review": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.billing.rewrite_over_quota_mode": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.content.trash_retention_days": {
+   "app": "cis",
+   "area": "retention"
+  },
+  "cis.erasure.crm_window_days": {
+   "app": "cis",
+   "area": "retention"
+  },
+  "cis.erasure.saga_apply_enabled": {
+   "app": "cis",
+   "area": "retention"
+  },
+  "cis.erasure.saga_approval_valid_hours": {
+   "app": "cis",
+   "area": "retention"
+  },
+  "cis.erasure.tenant_retention_days": {
+   "app": "cis",
+   "area": "retention"
+  },
+  "cis.lifecycle.tour_retirement_notice_days": {
+   "app": "cis",
+   "area": "lifecycle"
+  },
+  "cis.publish.daily_limit_default": {
+   "app": "cis",
+   "area": "publish"
+  },
+  "cis.quality.a1_missing_field_cap": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.auto_upgrade_threshold": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.brand_fit_repeat_band_high": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.brand_fit_repeat_band_low": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.instrument_eval_fp_drop_min_pct": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.instrument_eval_tp_keep_min_pct": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.judge_mission_absent_cap": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.judge_tie_band": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.pass_line": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.review_score_band_low": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.t10_reuse_similarity": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.t2_cross_brand_overlap_warn": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.t9_blog_length_target_margin": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.ui_score_band_top": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality_claims.f9_cta_not_reflected": {
+   "app": "cis",
+   "area": "quality_claims"
+  },
+  "cis.quality_claims.f9_fact_check_unquoted": {
+   "app": "cis",
+   "area": "quality_claims"
+  },
+  "cis.quality_claims.f9_judge_unavailable": {
+   "app": "cis",
+   "area": "quality_claims"
+  },
+  "cis.quality_claims.f9_other": {
+   "app": "cis",
+   "area": "quality_claims"
+  },
+  "cis.quality_claims.f9_reasonless": {
+   "app": "cis",
+   "area": "quality_claims"
+  },
+  "cis.quality_claims.f9_seo_field_claim": {
+   "app": "cis",
+   "area": "quality_claims"
+  },
+  "cis.quality_claims.f9_text_integrity": {
+   "app": "cis",
+   "area": "quality_claims"
+  },
+  "cis.quality_claims.f9_trip_promise": {
+   "app": "cis",
+   "area": "quality_claims"
+  },
+  "cis.quality_claims.f9_unsupported_other": {
+   "app": "cis",
+   "area": "quality_claims"
+  },
+  "cis.quality_claims.rules_hypothetical": {
+   "app": "cis",
+   "area": "quality_claims"
+  },
+  "cis.quality_claims.rules_uncited_background": {
+   "app": "cis",
+   "area": "quality_claims"
+  },
+  "cis.quality_detectors.fact_direction.a1_claim_supported": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_embellish.f18_rarity": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_embellish.f19_authenticity": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_embellish.f2_superlatives": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_embellish.name_superlative": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_embellish.stock_superlative": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_inclusion.a1_promise_unsupported": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_inclusion.f2_platform_truth": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_inclusion.f9_cta_fact": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_inclusion.inclusion_contradicted": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_inclusion.itinerary_meal_time_invented": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_inclusion.unsupported_claim": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_misbinding.a1_claim_supported": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_misbinding.f17_trip_fact": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_misbinding.f9_cta_fact": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_misbinding.number_noun_mismatch": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_name.a1_claim_supported": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_name.f9_cta_fact": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_name.name_not_in_source": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_number.f1_grounding": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_number.f9_cta_fact": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_number.number_not_in_source": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_number.t3_grounding": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.fact_number.unsupported_number": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_c1.a1_keyword_about_tour": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_c3.f17_trip_fact": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_c5.f16_faq": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_c5.f6_cta_present": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_degraded_detector.degraded": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_degraded_detector.degraded_detector": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_f6.f17_trip_fact": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_f6.highlights_optional_language": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_f7.f17_trip_fact": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_f7.itinerary_meal_time_invented": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_length_shape.f14_first_line": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_length_shape.f14_social_shape": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_length_shape.f4_extreme_length": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_length_shape.meta_length": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_length_shape.seo_meta_too_long": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_lexicon.f2_lexicon": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_lexicon.f2_style_warn": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_lexicon.forbidden_word": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_s3.f13_repeat": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_s4.f13_leak": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_s5.f16_faq": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_s7.f13_hygiene": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_s7.name_all_caps": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_v1.a1_brand_fit": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_v1.f15_voice": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_v1.f2_lexicon": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.other_v1.f9_brand_style": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.safety_tenant_isolation.f10_cannibalization_cross_tenant": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.safety_tenant_isolation.f11_brand_name": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.scope_faq_question_offtopic.a3_question_about_here": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.scope_faq_question_offtopic.a3_question_foreign": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.scope_framing.f12_scope": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.scope_framing.f4_seo_surface": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.scope_persona_promise.f13_leak": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.scope_persona_promise.f15_voice": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.source_contradiction.source_day_contradiction": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_day_structure.day_count_vs_duration": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_day_structure.day_departure_midtrip": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_day_structure.day_output_duplicate": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_day_structure.day_output_extra": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_day_structure.day_output_gap": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_day_structure.day_output_order": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_day_structure.day_place_mismatch": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_day_structure.day_subday_split": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_day_structure.itinerary_day_count_mismatch": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_day_structure.itinerary_still_compressed": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_day_structure.itinerary_structure_weak": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_day_structure.repair_contract": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_leaked_instruction.f13_hygiene": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_leaked_instruction.f13_leak": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_truncated.f0_complete": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_truncated.meta_cut": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_truncated.meta_cut_signature": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_truncated.meta_incomplete_sentence": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_truncated.missing_field": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_truncated.repair_contract": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_detectors.struct_truncated.text_truncated": {
+   "app": "cis",
+   "area": "quality_detectors"
+  },
+  "cis.quality_modes.t10_adjudicate": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_adjudicate_faq_non_answer": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_adjudicate_naming_note_leak": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_adjudicate_paraphrased_repeat": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_adjudicate_scopeless_superlative": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_f12_scope": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_f14_floor": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_f9_brand_style": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_f9_policy": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_seed_align": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_seed_align_brief_recipe_leak": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_seed_align_difficulty_promise": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_seed_align_naming_note_leak": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_seed_align_near_as_at": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_seed_align_optional_as_planned": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_seed_align_orphan_opener": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_seed_align_paraphrased_repeat": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_seed_align_planned_as_optional": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_seed_align_scopeless_superlative": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t10_seed_align_world_share_unsupported": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t2_judge_gate": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t3_background_facts": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t7_debate": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.quality_modes.t9_brief_grounding": {
+   "app": "cis",
+   "area": "quality_modes"
+  },
+  "cis.retention.job_failed_days": {
+   "app": "cis",
+   "area": "retention"
+  },
+  "cis.retention.job_succeeded_days": {
+   "app": "cis",
+   "area": "retention"
+  },
+  "cis.retention.llm_call_log_days": {
+   "app": "cis",
+   "area": "retention"
+  },
+  "cis.retention.tenant_api_usage_days": {
+   "app": "cis",
+   "area": "retention"
+  },
+  "cis.seo.aim_s1_meta_max": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.aim_s1_meta_min": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.aim_t2_meta_max": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.aim_t2_meta_min": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.aim_t9_meta_max": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.aim_t9_meta_min": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.meta_max": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.meta_min": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.slug_max": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.title_max": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.title_min": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.settings.two_person_approval": {
+   "app": "cis",
+   "area": "platform"
+  },
+  "cis.spend.dfs_call_estimate_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.instrument_eval_cap_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.instrument_eval_max_claims": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.instrument_eval_trial_claims": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.place_backfill_max_tours": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.question_topup_cap_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.rerun_wave_max_tours": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.segment_research_max_usd_per_run": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.t2.version_repair_max": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.t2.version_usd_max": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.t2.version_voice_max": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.t2.version_writer_max": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.t7.blog_chars_per_seed_word": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.t7.blog_min_seed_words": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.t7.channel_bar_ads": {
+   "app": "cis",
+   "area": "t7"
+  },
+  "cis.t7.channel_bar_blog": {
+   "app": "cis",
+   "area": "t7"
+  },
+  "cis.t7.channel_bar_email": {
+   "app": "cis",
+   "area": "t7"
+  },
+  "cis.t7.channel_bar_facebook": {
+   "app": "cis",
+   "area": "t7"
+  },
+  "cis.t7.channel_bar_instagram": {
+   "app": "cis",
+   "area": "t7"
+  },
+  "cis.t7.channel_bar_landing_page": {
+   "app": "cis",
+   "area": "t7"
+  },
+  "cis.t7.channel_bar_linkedin": {
+   "app": "cis",
+   "area": "t7"
+  },
+  "cis.t7.channel_bar_tiktok": {
+   "app": "cis",
+   "area": "t7"
+  },
+  "cis.t7.debate_contested_cut": {
+   "app": "cis",
+   "area": "t7"
+  },
+  "cis.t7.debate_max_cut_fraction": {
+   "app": "cis",
+   "area": "t7"
+  },
+  "cis.t9.blog_chars_max": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.t9.blog_chars_min": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.t9.max_attempts": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.t9.repeat_drop_near_exact": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.writing_memory.month_cap_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "crm.agency_defaults.auto_archive_months": {
+   "app": "crm",
+   "area": "agency_defaults"
+  },
+  "crm.agency_defaults.auto_archive_months_max": {
+   "app": "crm",
+   "area": "agency_defaults"
+  },
+  "crm.agency_defaults.auto_archive_months_min": {
+   "app": "crm",
+   "area": "agency_defaults"
+  },
+  "crm.agency_defaults.discount_owner_limit_pct": {
+   "app": "crm",
+   "area": "agency_defaults"
+  },
+  "crm.agency_defaults.markup_max_pct": {
+   "app": "crm",
+   "area": "agency_defaults"
+  },
+  "crm.agency_defaults.price_checks_per_minute": {
+   "app": "crm",
+   "area": "agency_defaults"
+  },
+  "crm.agency_defaults.price_checks_per_minute_max": {
+   "app": "crm",
+   "area": "agency_defaults"
+  },
+  "crm.agency_defaults.price_checks_per_minute_min": {
+   "app": "crm",
+   "area": "agency_defaults"
+  },
+  "crm.agency_defaults.trash_days": {
+   "app": "crm",
+   "area": "agency_defaults"
+  },
+  "crm.agency_defaults.trash_days_max": {
+   "app": "crm",
+   "area": "agency_defaults"
+  },
+  "crm.agency_defaults.trash_days_min": {
+   "app": "crm",
+   "area": "agency_defaults"
+  },
+  "crm.ai.budget_default_usd": {
+   "app": "crm",
+   "area": "ai"
+  },
+  "crm.ai.budget_max_usd": {
+   "app": "crm",
+   "area": "ai"
+  },
+  "crm.ai.draft_reply_max_tokens": {
+   "app": "crm",
+   "area": "ai"
+  },
+  "crm.payments.invoice_reminder_every_days": {
+   "app": "crm",
+   "area": "payments"
+  },
+  "crm.payments.invoice_reminder_max": {
+   "app": "crm",
+   "area": "payments"
+  },
+  "crm.payments.refund_owner_threshold_default": {
+   "app": "crm",
+   "area": "payments"
+  },
+  "crm.rate.ai_per_minute": {
+   "app": "crm",
+   "area": "rate_limit"
+  },
+  "crm.rate.intake_form_per_hour": {
+   "app": "crm",
+   "area": "rate_limit"
+  },
+  "crm.rate.intake_per_minute": {
+   "app": "crm",
+   "area": "rate_limit"
+  },
+  "crm.rate.member_per_minute": {
+   "app": "crm",
+   "area": "rate_limit"
+  },
+  "crm.rate.public_per_minute": {
+   "app": "crm",
+   "area": "rate_limit"
+  },
+  "crm.retention.audit_dry_run": {
+   "app": "crm",
+   "area": "retention"
+  },
+  "crm.retention.job_dry_run": {
+   "app": "crm",
+   "area": "retention"
+  },
+  "crm.retention.lifecycle_dry_run": {
+   "app": "crm",
+   "area": "retention"
+  },
+  "crm.retention.partner_account_cleanup_dry_run": {
+   "app": "crm",
+   "area": "retention"
+  },
+  "crm.settings.two_person_approval": {
+   "app": "crm",
+   "area": "platform"
+  },
+  "tripplanner.ai.narration_cache_ttl_hours": {
+   "app": "tripplanner",
+   "area": "ai"
+  },
+  "tripplanner.ai.narration_max_tokens": {
+   "app": "tripplanner",
+   "area": "ai"
+  },
+  "tripplanner.ai.plan_chat_max_steps": {
+   "app": "tripplanner",
+   "area": "ai"
+  },
+  "tripplanner.ai.plan_chat_max_tokens": {
+   "app": "tripplanner",
+   "area": "ai"
+  },
+  "tripplanner.handoff.advisor_demo": {
+   "app": "tripplanner",
+   "area": "handoff"
+  },
+  "tripplanner.handoff.require_registration": {
+   "app": "tripplanner",
+   "area": "handoff"
+  },
+  "tripplanner.leads.hold_days": {
+   "app": "tripplanner",
+   "area": "leads"
+  },
+  "tripplanner.leads.tenant_daily_cap": {
+   "app": "tripplanner",
+   "area": "leads"
+  },
+  "tripplanner.rate.chat_ip_per_hour": {
+   "app": "tripplanner",
+   "area": "rate"
+  },
+  "tripplanner.rate.chat_per_hour": {
+   "app": "tripplanner",
+   "area": "rate"
+  },
+  "tripplanner.rate.narrate_per_hour": {
+   "app": "tripplanner",
+   "area": "rate"
+  },
+  "tripplanner.rate.search_per_minute": {
+   "app": "tripplanner",
+   "area": "rate"
+  },
+  "tripplanner.rate.send_ip_per_hour": {
+   "app": "tripplanner",
+   "area": "rate"
+  },
+  "tripplanner.rate.send_per_hour": {
+   "app": "tripplanner",
+   "area": "rate"
+  },
+  "tripplanner.rate.signed_in_factor": {
+   "app": "tripplanner",
+   "area": "rate"
+  },
+  "tripplanner.spend.plan_chat_monthly_cap_usd": {
+   "app": "tripplanner",
+   "area": "spend"
+  },
+  "tripplanner.spend.plan_chat_tenant_monthly_cap_usd": {
+   "app": "tripplanner",
+   "area": "spend"
+  }
+ }
+}

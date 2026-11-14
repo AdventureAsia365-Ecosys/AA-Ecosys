@@ -1,0 +1,634 @@
+# AA-1106 — every link between the AA apps and every outside provider they depend on (one source; the CIS admin
+# Platform › Product map renders it).
+#
+# Format and rules: docs/catalogue/README.md. Checked by tools/catalogue/check_catalogue.py: every contract file in
+# docs/contracts/ (top level and rules/) belongs to an integration here, every contract named here exists, every
+# feature, setting, entitlement, connection and secret named here exists.
+# Modelled on the Backstage catalog API entity (producer = providesApis, consumers = consumesApis) and a DDD context map
+# (kind: db_view = published language over a read view; http_api = open host service; event_outbox = outbox -> pull
+# consumer -> inbox; webhook = push; provider = an outside vendor behind the AI gateway or a vendor account).
+# status is what the code does on Dev on 2026-11-14; the registry table in docs/contracts/README.md keeps each
+# contract's own history.
+# Public repo: names only. No account ID, ARN, e-mail address, secret value or real tenant name.
+format: 1
+
+integrations:
+  # ── Catalogue: CIS publishes, the other apps read ─────────────────────────────────────────────────────────────────
+  - id: INT-001
+    name: Catalogue tours (read views)
+    producer: cis
+    consumers: [booking, tripplanner]
+    kind: db_view
+    contracts:
+      - {file: catalog.tour.v1.json, version: "1"}
+      - {file: catalog.tour.v1.1.json, version: "1.1"}
+      - {file: catalog.tour.v1.2.json, version: "1.2"}
+      - {file: catalog.tour.v1.3.json, version: "1.3"}
+    auth: SELECT on the catalog views granted to each consumer's database role by the CIS migration
+    conditions:
+      note: Only live tours are listed; retired and paused tours answer from the tombstone view (410 / 404).
+    cadence: Consumers poll and re-sync on the content hash
+    failure: A consumer keeps its last copy; a missing tour is shown as not served, never invented
+    kill_switch: Revoke the grant in a CIS migration
+    personal_data: false
+    features: [CIS-F006, BK-F004, BK-F005, TP-F001]
+    owner: tech_lead
+    status: live
+  - id: INT-002
+    name: Catalogue over HTTP for the agency CRM
+    producer: cis
+    consumers: [crm]
+    kind: http_api
+    contracts:
+      - {file: catalog.http.v1.openapi.yaml, version: "1.3"}
+    auth: M2M access token with the catalogue read scope
+    conditions:
+      entitlements: [trade.book]
+      note: Tours and destinations for every agency; AA-authored content blocks for agencies with the CRM.
+    cadence: On demand, ETag and 304
+    failure: The CRM shows its cached copy and marks AA prices as unavailable
+    kill_switch: Remove the M2M client's scope
+    personal_data: false
+    features: [CIS-F047, CIS-F013, CRM-F007, CRM-F013]
+    owner: tech_lead
+    status: live
+  - id: INT-003
+    name: Catalogue tour graph (places, routes, embeddings)
+    producer: cis
+    consumers: [tripplanner]
+    kind: db_view
+    contracts:
+      - {file: catalog.graph.v1.json, version: "1"}
+      - {file: catalog.graph.v1.1.json, version: "1.1"}
+      - {file: catalog.graph.v1.2.json, version: "1.2"}
+    auth: SELECT on the graph views granted to the TripPlanner role
+    cadence: Read on demand, no events
+    failure: The planner falls back to the tour's day list without the map graph
+    kill_switch: Revoke the grant in a CIS migration
+    personal_data: false
+    features: [CIS-F008, TP-F002]
+    owner: tech_lead
+    status: live
+  - id: INT-004
+    name: Countries (ISO reference)
+    producer: cis
+    consumers: [booking, tripplanner]
+    kind: db_view
+    contracts:
+      - {file: catalog.country.v1.json, version: "1"}
+    auth: SELECT on the country view granted to each consumer role
+    cadence: Read on demand
+    failure: Country names fall back to the destination's own text
+    kill_switch: Revoke the grant in a CIS migration
+    personal_data: false
+    features: [BK-F004, TP-F001]
+    owner: tech_lead
+    status: live
+  - id: INT-005
+    name: Tour lifecycle notice (page revalidation)
+    producer: cis
+    consumers: [tripplanner]
+    kind: webhook
+    contracts:
+      - {file: catalog.tour.lifecycle.v1.openapi.yaml, version: "1"}
+    auth: HMAC signature over the body with a shared secret
+    conditions:
+      secrets: [aa-cis/dev/tripplanner-revalidate-hmac]
+    cadence: One delivery per lifecycle outbox row, retried by the CIS job runner
+    failure: Pages refresh on their normal cache expiry instead
+    kill_switch: Pause the CIS delivery job kind
+    personal_data: false
+    features: [CIS-F029, TP-F007]
+    owner: tech_lead
+    status: live
+  - id: INT-006
+    name: Agency tours for the white-label planner
+    producer: cis
+    consumers: [tripplanner]
+    kind: db_view
+    contracts:
+      - {file: catalog.tenant_tour.v1.json, version: "1"}
+    auth: SELECT on the tenant tour view granted to the TripPlanner role
+    conditions:
+      entitlements: [tp.hosted]
+      tenant_kinds: [pilot, agency]
+      note: One row per agency in service with a TripPlanner subscription and a publishable version of a live AA tour.
+    cadence: Read on demand
+    failure: The agency planner shows no agency tours; the AA catalogue stays on the demo planner
+    kill_switch: Cancel the TripPlanner add-on of the tenant
+    personal_data: false
+    features: [CIS-F041, TP-F005]
+    owner: tech_lead
+    status: live
+  - id: INT-007
+    name: Reference prices for Booking
+    producer: cis
+    consumers: [booking]
+    kind: db_view
+    contracts:
+      - {file: catalog.tour.v1.3.json, version: "1.3 (price reference views)"}
+    auth: SELECT on the price reference views granted to the Booking role
+    conditions:
+      note: A reference for staff only - never a selling price, never shown to an agency or a traveller.
+    cadence: Booking's trip plan sync job
+    failure: The trip plan shows no reference; staff price it by hand
+    kill_switch: Revoke the grant in a CIS migration
+    personal_data: false
+    features: [CIS-F014, BK-F005]
+    owner: finance
+    status: live
+  # ── Prices, leads and operations ──────────────────────────────────────────────────────────────────────────────────
+  - id: INT-010
+    name: From prices
+    producer: booking
+    consumers: [tripplanner, cis]
+    kind: db_view
+    contracts:
+      - {file: price.from.v1.md, version: "1"}
+    auth: SELECT on the from-price view granted to each consumer role
+    conditions:
+      note: Suggested retail price per person for two travellers; never a net, an agency price or a margin.
+    cadence: Read on demand
+    failure: Readers fail soft - no row means no price is shown
+    kill_switch: Revoke the grant in a Booking migration
+    personal_data: false
+    features: [BK-F006, TP-F001, CRM-F042]
+    owner: finance
+    status: live
+  - id: INT-011
+    name: Leads from the planner to the agency
+    producer: tripplanner
+    consumers: [crm]
+    kind: http_api
+    contracts:
+      - {file: lead.submitted.v1.openapi.yaml, version: "1"}
+      - {file: rules/lead.submitted.v1.traveller-rules.json, version: "1"}
+    auth: M2M access token per agency tenant; the agency's webhook or e-mail as the other delivery paths
+    conditions:
+      entitlements: [crm.core, tp.hosted]
+      settings: [tripplanner.leads.hold_days, tripplanner.leads.tenant_daily_cap]
+      tenant_kinds: [pilot, agency]
+      note: The traveller gives consent before sending; the demo tenant sends nothing.
+    cadence: The CRM pulls; TripPlanner holds an unclaimed lead for the hold window
+    failure: The lead waits until the hold window ends, then is redacted
+    kill_switch: The tenant daily cap set to 0
+    personal_data: true
+    features: [TP-F006, CRM-F005]
+    owner: tech_lead
+    status: live
+  - id: INT-012
+    name: Inquiries from the planner to Booking (retired)
+    producer: tripplanner
+    consumers: [booking]
+    kind: event_outbox
+    contracts:
+      - {file: inquiry.submitted.v1.json, version: "1"}
+      - {file: inquiry.submitted.v1.1.json, version: "1.1"}
+      - {file: inquiry.submitted.v1.2.json, version: "1.2"}
+      - {file: inquiry.submitted.v1.3.json, version: "1.3"}
+      - {file: inquiry.submitted.v1.4.json, version: "1.4"}
+    auth: The grant was revoked when the business moved to agencies only
+    cadence: None
+    failure: Not applicable
+    kill_switch: Already removed
+    personal_data: true
+    features: [TP-F006]
+    owner: tech_lead
+    status: retired
+  - id: INT-013
+    name: Trip case status back to the planner
+    producer: booking
+    consumers: [tripplanner]
+    kind: event_outbox
+    contracts: []
+    auth: Planned - SELECT on a Booking outbox view
+    cadence: Planned
+    failure: Planned
+    kill_switch: Planned
+    personal_data: false
+    features: [BK-F003]
+    owner: tech_lead
+    status: planned
+  - id: INT-020
+    name: Booking hotels to CIS for customer content
+    producer: booking
+    consumers: [cis]
+    kind: event_outbox
+    contracts:
+      - {file: supply.hotel.v1.json, version: "1"}
+    auth: SELECT on the supply outbox and current-state views granted to the CIS role; CIS content read back by Booking
+    cadence: CIS pulls the outbox with a job
+    failure: Booking shows the contracting name until CIS content is reviewed
+    kill_switch: Pause the CIS pull job kind
+    personal_data: false
+    features: [BK-F010, CIS-F015]
+    owner: content_lead
+    status: beta
+  - id: INT-021
+    name: Booking services to CIS for customer content
+    producer: booking
+    consumers: [cis]
+    kind: event_outbox
+    contracts:
+      - {file: supply.service.v1.json, version: "1"}
+    auth: Same views and grants as the hotel stream
+    cadence: CIS pulls the outbox with a job
+    failure: Booking shows the contracting name until CIS content is reviewed
+    kill_switch: Pause the CIS pull job kind
+    personal_data: false
+    features: [BK-F010, CIS-F015]
+    owner: content_lead
+    status: planned
+  - id: INT-022
+    name: Operations overview for CIS admin
+    producer: booking
+    consumers: [cis]
+    kind: db_view
+    contracts:
+      - {file: ops.overview.v1.md, version: "1"}
+    auth: Owner contract views granted to the CIS role in the owner's migration (Booking and TripPlanner)
+    conditions:
+      note: Aggregates only, no personal or commercial column. TripPlanner publishes the same family.
+    cadence: Read on demand by the overview and data coverage pages
+    failure: The tile shows unavailable
+    kill_switch: Revoke the grant in the owner's migration
+    personal_data: false
+    features: [CIS-F002, CIS-F030]
+    owner: tech_lead
+    status: live
+  - id: INT-023
+    name: CRM platform console for CIS admin
+    producer: crm
+    consumers: [cis]
+    kind: http_api
+    contracts:
+      - {file: crm.ops.v1.openapi.yaml, version: "1.13"}
+    auth: The staff member's own company sign-in token; writes need the CRM platform admin group
+    conditions:
+      settings: [crm.settings.two_person_approval]
+    cadence: On demand from the admin pages
+    failure: The admin page shows the CRM as unavailable
+    kill_switch: Remove the group from the staff member
+    personal_data: false
+    features: [CRM-F028, CIS-F023, CIS-F035, CIS-F036]
+    owner: tech_lead
+    status: live
+  - id: INT-024
+    name: Book with AA (B2B API)
+    producer: booking
+    consumers: [crm]
+    kind: http_api
+    contracts:
+      - {file: booking.b2b.v1.openapi.yaml, version: "1.1"}
+    auth: M2M access token of the CRM plus the agency tenant id header
+    conditions:
+      entitlements: [trade.book]
+      settings: [booking.policy.b2b_hold_hours, booking.policy.b2b_hold_max_extensions]
+      secrets: [aa-crm/dev/m2m-booking-client]
+      tenant_kinds: [pilot, agency]
+      note: The agency must be an active B2B partner in Booking with a price tier; an overdue agency invoice blocks a new hold.
+    cadence: On demand for quotes and holds; an events cursor for confirmations
+    failure: The CRM keeps the AA line on request and shows the error to the agent
+    kill_switch: Set the B2B partner inactive in Booking
+    personal_data: true
+    features: [BK-F017, BK-F016, CRM-F013]
+    owner: tech_lead
+    status: live
+  - id: INT-025
+    name: Traveller payments for My trips (retired)
+    producer: booking
+    consumers: [tripplanner]
+    kind: http_api
+    contracts:
+      - {file: booking.customer.v1.openapi.yaml, version: "1"}
+    auth: Removed with the move to agencies only
+    cadence: None
+    failure: Not applicable
+    kill_switch: Already removed
+    personal_data: true
+    features: [TP-F004]
+    owner: tech_lead
+    status: retired
+  # ── Tenants: CIS is the account source ────────────────────────────────────────────────────────────────────────────
+  - id: INT-030
+    name: Agency membership
+    producer: cis
+    consumers: [crm]
+    kind: http_api
+    contracts:
+      - {file: tenant.membership.v1.openapi.yaml, version: "1"}
+    auth: M2M access token; members keyed by their sign-in identity
+    conditions:
+      note: CIS is the revocation and lifecycle source, not a positive gate for CRM members.
+    cadence: A cursor feed behind a snapshot horizon
+    failure: The CRM keeps its members until the feed answers again
+    kill_switch: Remove the M2M client's scope
+    personal_data: true
+    features: [CIS-F047, CIS-F018, CRM-F002, CRM-F023]
+    owner: tech_lead
+    status: live
+  - id: INT-031
+    name: Tenant account and entitlements
+    producer: cis
+    consumers: [crm, booking, tripplanner]
+    kind: http_api
+    contracts:
+      - {file: tenant.entitlements.v1.openapi.yaml, version: "1"}
+    auth: M2M access token
+    conditions:
+      note: Apps check feature keys, never plan names; a tenant not in service is refused every feature.
+    cadence: A snapshot with ETag plus an account events cursor
+    failure: Each app keeps its last snapshot; a tenant never seen is refused
+    kill_switch: End the tenant's subscription in CIS
+    personal_data: false
+    features: [CIS-F047, CIS-F019, CRM-F023, TP-F005, BK-F016]
+    owner: tech_lead
+    status: live
+  - id: INT-032
+    name: Agency add-ons and requests
+    producer: cis
+    consumers: [crm]
+    kind: http_api
+    contracts:
+      - {file: tenant.addons.v1.openapi.yaml, version: "1"}
+    auth: M2M access token
+    cadence: On demand
+    failure: The CRM shows the add-ons as unknown and hides the request button
+    kill_switch: Remove the M2M client's scope
+    personal_data: false
+    features: [CIS-F019, CRM-F024]
+    owner: customer_success
+    status: live
+  - id: INT-033
+    name: Tenant erasure requests and reports
+    producer: cis
+    consumers: [crm, booking, tripplanner]
+    kind: http_api
+    contracts:
+      - {file: tenant.erasure.v1.openapi.yaml, version: "1"}
+    auth: Requests through a CIS view or route; each app reports back through the same contract
+    conditions:
+      settings: [cis.erasure.saga_apply_enabled, cis.erasure.crm_window_days]
+      note: Each consumer feature-detects the request; nothing is deleted until the saga's apply step is switched on.
+    cadence: Every five minutes per app
+    failure: The saga waits for the missing report and shows it in Data erasure
+    kill_switch: The saga apply setting off
+    personal_data: true
+    features: [CIS-F024, CRM-F025, TP-F009, BK-F019]
+    owner: tech_lead
+    status: beta
+  - id: INT-034
+    name: Tenant provisioning saga
+    producer: cis
+    consumers: [crm, booking, tripplanner]
+    kind: m2m
+    contracts: []
+    auth: The CIS job calls each app's own provisioning route with an M2M token
+    conditions:
+      tenant_kinds: [demo, pilot, agency]
+      note: On Dev the default kind is demo; an agency only as the one pilot.
+    cadence: One job per request, idempotent per request key
+    failure: The job stops at the failed step and shows it; a retry resumes there
+    kill_switch: Pause the provisioning job kind
+    personal_data: false
+    features: [CIS-F020, CRM-F001, BK-F016, TP-F005]
+    owner: customer_success
+    status: live
+  # ── Outside providers ─────────────────────────────────────────────────────────────────────────────────────────────
+  - id: INT-050
+    name: Publish to the agency's WordPress
+    producer: cis
+    consumers: [external]
+    kind: webhook
+    contracts: []
+    auth: The agency's own WordPress application password, stored per tenant
+    conditions:
+      entitlements: [channel.wordpress]
+      settings: [cis.publish.daily_limit_default]
+    cadence: On publish and unpublish
+    failure: The publish log shows the error; nothing is retried silently
+    kill_switch: The daily publish limit set to 0
+    personal_data: false
+    features: [CIS-F045, CRM-F044]
+    owner: content_lead
+    status: live
+  - id: INT-051
+    name: Publish to the agency's Facebook Page
+    producer: cis
+    consumers: [external]
+    kind: webhook
+    contracts: []
+    auth: The agency's Page token, stored per tenant
+    conditions:
+      entitlements: [channel.facebook]
+      settings: [cis.publish.daily_limit_default]
+    cadence: On publish and unpublish
+    failure: The publish log shows the error
+    kill_switch: The daily publish limit set to 0
+    personal_data: false
+    features: [CIS-F045, CRM-F044]
+    owner: content_lead
+    status: live
+  - id: INT-060
+    name: Anthropic API (Claude models)
+    producer: external
+    consumers: [cis]
+    kind: provider
+    contracts: []
+    auth: API key behind the AI gateway
+    conditions:
+      connections: [anthropic-direct]
+      secrets: [aa-llm/dev/anthropic-direct]
+      note: First route for Claude models; Bedrock follows when it fails.
+    cadence: Per AI call, one ledger row per attempt
+    failure: The gateway falls through to the next connection in the route
+    kill_switch: Disable the connection on AI gateway › Route control
+    personal_data: false
+    features: [CIS-F025, CIS-F004, CIS-F043]
+    owner: ai_ops
+    status: live
+  - id: INT-061
+    name: Amazon Bedrock chat models
+    producer: external
+    consumers: [cis, tripplanner, crm]
+    kind: provider
+    contracts: []
+    auth: Cross-account invoker role assumed by the app task role
+    conditions:
+      connections: [acc3, acc2]
+      note: The serving chat account changes with the route order (Anthropic API, then Bedrock); see the AI gateway guide.
+    cadence: Per AI call
+    failure: The gateway falls through to the next connection
+    kill_switch: Disable the connection on AI gateway › Route control
+    personal_data: false
+    features: [CIS-F025, TP-F003, CRM-F022]
+    owner: ai_ops
+    status: live
+  - id: INT-062
+    name: Geoapify geocoding
+    producer: external
+    consumers: [cis]
+    kind: provider
+    contracts: []
+    auth: API key behind the AI gateway
+    conditions:
+      connections: [geoapify]
+      secrets: [aa-cis/dev/geoapify]
+      settings: [cis.spend.place_backfill_max_tours]
+    cadence: Place pipeline runs
+    failure: The place stays unlocated and is listed for a fix
+    kill_switch: Disable the connection
+    personal_data: false
+    features: [CIS-F008]
+    owner: content_lead
+    status: live
+  - id: INT-063
+    name: DataForSEO search demand
+    producer: external
+    consumers: [cis]
+    kind: provider
+    contracts: []
+    auth: API login behind the AI gateway
+    conditions:
+      connections: [dataforseo]
+      secrets: [aa-cis/dev/dataforseo]
+      settings: [cis.spend.segment_research_max_usd_per_run]
+    cadence: Only when staff start a research run
+    failure: The run stops and reports what it bought
+    kill_switch: Disable the connection
+    personal_data: false
+    features: [CIS-F010]
+    owner: content_lead
+    status: live
+  - id: INT-064
+    name: Jev decision service
+    producer: external
+    consumers: [cis]
+    kind: provider
+    contracts: []
+    auth: API key behind the AI gateway
+    conditions:
+      connections: [typesafe]
+      secrets: [aa-cis/dev/typesafe]
+      note: Fails open - a call count is not proof it ran; read the decision log.
+    cadence: Per decision of a pipeline stage
+    failure: Fails open with the stage's default
+    kill_switch: Disable the connection
+    personal_data: false
+    features: [CIS-F028]
+    owner: ai_ops
+    status: live
+  - id: INT-065
+    name: OpenAI API (GPT models)
+    producer: external
+    consumers: [cis]
+    kind: provider
+    contracts: []
+    auth: API key behind the AI gateway
+    conditions:
+      connections: [openai-direct]
+      secrets: [aa-cis/dev/openai-key]
+      note: The twin of the Bedrock GPT models, used after Bedrock in the route.
+    cadence: Per AI call
+    failure: The gateway falls through to the next connection
+    kill_switch: Disable the connection
+    personal_data: false
+    features: [CIS-F025, CIS-F004]
+    owner: ai_ops
+    status: live
+  - id: INT-067
+    name: Google Drive photo sync
+    producer: external
+    consumers: [cis]
+    kind: provider
+    contracts: []
+    auth: A read-only API key on the content team's shared folders
+    conditions:
+      secrets: [aa-cis/dev/gdrive-photo-reader]
+    cadence: Photo sync job
+    failure: Photos already synced stay; the sync reports what it skipped
+    kill_switch: Pause the photo sync job kind
+    personal_data: false
+    features: [CIS-F009]
+    owner: content_lead
+    status: live
+  - id: INT-070
+    name: Agency mailbox (OAuth)
+    producer: external
+    consumers: [crm]
+    kind: provider
+    contracts: []
+    auth: The agency's own mailbox connected over OAuth
+    conditions:
+      secrets: [crm/dev/mail-oauth]
+      note: The agency brings its own mail account and is the controller of its mail.
+    cadence: Mail sync and send-as
+    failure: The inbox shows the connection as broken and asks the owner to reconnect
+    kill_switch: The owner disconnects the mailbox
+    personal_data: true
+    features: [CRM-F016]
+    owner: tech_lead
+    status: live
+  - id: INT-071
+    name: Card payments on the agency's Stripe
+    producer: external
+    consumers: [crm]
+    kind: provider
+    contracts: []
+    auth: Stripe Connect on the agency's own account
+    conditions:
+      entitlements: [crm.stripe_connect]
+    cadence: Planned
+    failure: Planned - bank transfer stays available
+    kill_switch: Planned
+    personal_data: true
+    features: [CRM-F011]
+    owner: finance
+    status: planned
+  - id: INT-072
+    name: SMS and WhatsApp vendor
+    producer: external
+    consumers: [crm]
+    kind: provider
+    contracts: []
+    auth: The agency's own messaging vendor account
+    conditions:
+      entitlements: [crm.whatsapp_sms]
+    cadence: Per message, delivery webhooks back
+    failure: The composer shows the message as not sent
+    kill_switch: The owner disconnects the channel
+    personal_data: true
+    features: [CRM-F017]
+    owner: tech_lead
+    status: beta
+  # ── Platform plumbing ─────────────────────────────────────────────────────────────────────────────────────────────
+  - id: INT-080
+    name: Docs and catalogue publishing
+    producer: infra
+    consumers: [cis]
+    kind: db_view
+    contracts: []
+    auth: The root repo's docs sync role writes the bundle; the CIS task role reads it, read only
+    conditions:
+      note: The bundle is built from a clean checkout of the root repo on every merge; account IDs are redacted.
+    cadence: Every merge of a docs or catalogue change; CIS caches for five minutes
+    failure: CIS admin keeps serving the last bundle
+    kill_switch: Remove the docs sync repo secrets
+    personal_data: false
+    features: [INF-F006, CIS-F032, CIS-F038]
+    owner: tech_lead
+    status: live
+  - id: INT-081
+    name: Schema reference and ERD
+    producer: infra
+    consumers: [cis]
+    kind: db_view
+    contracts: []
+    auth: A temporary task reads the catalog (never row data) and opens a pull request on the root repo
+    cadence: Nightly and after every DB Migrate apply
+    failure: The reference shows its last verified date
+    kill_switch: Disable the scheduled workflow
+    personal_data: false
+    features: [INF-F004, CIS-F032]
+    owner: tech_lead
+    status: live

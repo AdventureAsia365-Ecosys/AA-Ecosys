@@ -1,0 +1,1486 @@
+# AA-1106 — the feature catalogue of every AA app (one source; the CIS admin Platform › Product map renders it).
+#
+# Format and rules: docs/catalogue/README.md. Checked by tools/catalogue/check_catalogue.py (workflow "Catalogue"):
+# every page and API route group in surface.snapshot.json maps to a feature here, every setting / entitlement /
+# connection / secret named in a condition exists, every UAT scenario points to a real feature id.
+# Public repo: names only. No account ID, ARN, e-mail address, secret value or real tenant name.
+#
+# surface patterns: "page:<url>" or "route:<module>" of the feature's own app; "/**" at the end also matches every page
+# below that path. conditions: entitlements (shared.entitlement_feature keys of the tenant's plan or add-on), settings
+# (settings registry keys), connections (AI gateway connection keys), secrets (Secrets Manager names, the register's
+# names), tenant_kinds (demo / pilot / agency), note (plain words).
+format: 1
+
+apps:
+  - id: cis
+    name: AA-CIS (content system)
+    name_vi: AA-CIS (hệ thống nội dung)
+    repo: AA-CIS-App
+    kind: system
+    summary: >-
+      The content system of record. Staff upload Adventure Asia tours, the AI pipeline rewrites them into the master
+      catalogue, and agencies rewrite them for their own brand in the Content studio. Also the staff admin of the
+      whole platform: tenants, plans, AI spend, jobs, settings and docs.
+    summary_vi: >-
+      Hệ thống gốc của nội dung. Nhân viên tải tour Adventure Asia lên, quy trình AI viết lại thành catalogue chuẩn,
+      đại lý viết lại theo thương hiệu riêng trong Content studio. Đây cũng là trang quản trị cho nhân viên của cả nền
+      tảng: đại lý, gói dịch vụ, chi phí AI, job, cấu hình và tài liệu.
+    owner: tech_lead
+  - id: booking
+    name: AA-Booking (back office)
+    name_vi: AA-Booking (văn phòng điều hành)
+    repo: AA-Booking
+    kind: system
+    summary: >-
+      The Adventure Asia back office: trip cases and proposals, pricing and FX, suppliers, hotels and services,
+      supplier bookings, bills, agency billing and the B2B desk that serves agencies booking AA tours.
+    summary_vi: >-
+      Văn phòng điều hành của Adventure Asia: hồ sơ chuyến đi và đề xuất, giá và tỷ giá, nhà cung cấp, khách sạn và
+      dịch vụ, đặt dịch vụ với nhà cung cấp, hoá đơn, thu tiền đại lý và bàn B2B phục vụ đại lý đặt tour AA.
+    owner: tech_lead
+  - id: crm
+    name: "AA-Partner (agency app: CRM + Content studio)"
+    name_vi: "AA-Partner (ứng dụng đại lý: CRM + Content studio)"
+    repo: AA-Partner
+    kind: system
+    summary: >-
+      The partner agency's app. The CRM runs the agency's sales and trips (pipeline, clients, proposals, invoices,
+      suppliers, traveller portal); the Content studio rewrites AA tours and writes articles and social posts for the
+      agency's brand. Includes the AA staff console for support and ground operations.
+    summary_vi: >-
+      Ứng dụng của đại lý đối tác. CRM quản lý bán hàng và chuyến đi của đại lý (pipeline, khách hàng, đề xuất, hoá
+      đơn, nhà cung cấp, cổng khách du lịch); Content studio viết lại tour AA, viết bài và bài mạng xã hội theo thương
+      hiệu đại lý. Có cả bảng điều khiển cho nhân viên AA hỗ trợ và điều hành mặt đất.
+    owner: tech_lead
+  - id: tripplanner
+    name: AA-TripPlanner (white-label trip planner)
+    name_vi: AA-TripPlanner (công cụ lên lịch trình mang thương hiệu đại lý)
+    repo: AA-TripPlanner-Web
+    kind: system
+    summary: >-
+      A map-first trip planner each agency offers to its own travellers under its brand. Travellers browse tours and
+      places, build a trip on the map with AI help, and send it to the agency, whose CRM receives the lead.
+    summary_vi: >-
+      Công cụ lên lịch trình trên bản đồ mà mỗi đại lý cung cấp cho khách của mình dưới thương hiệu riêng. Khách xem
+      tour và địa điểm, dựng chuyến đi trên bản đồ với trợ giúp của AI rồi gửi cho đại lý; CRM của đại lý nhận lead.
+    owner: tech_lead
+  - id: infra
+    name: AA-CIS-Infra (shared platform edge)
+    name_vi: AA-CIS-Infra (hạ tầng dùng chung)
+    repo: AA-CIS-Infra
+    kind: system
+    summary: >-
+      The shared AWS platform every app runs on: sign-in pools, the API edge, the database migration and schema dump
+      workflows, alarms and the docs and catalogue publishing.
+    summary_vi: >-
+      Nền tảng AWS dùng chung cho mọi ứng dụng: nhóm đăng nhập, cổng API, quy trình migration và dump schema của
+      database, cảnh báo và việc xuất bản tài liệu, catalogue.
+    owner: tech_lead
+
+features:
+  # ── AA-CIS: staff admin ───────────────────────────────────────────────────────────────────────────────────────────
+  - id: CIS-F001
+    app: cis
+    module: admin-shell
+    name: Admin shell, sign-in and search
+    name_vi: Khung trang quản trị, đăng nhập và tìm kiếm
+    summary: Staff sign in with the company account, move around with the sidebar and the command palette, and search across tours, tenants and pages.
+    roles: [admin, content, content_lead, tenant_qa, customer_success, support, finance, ai_ops, viewer]
+    status: live
+    surface: ["page:/", "page:/login", "page:/admin/platform", "route:admin_search"]
+    owner: tech_lead
+  - id: CIS-F002
+    app: cis
+    module: overview
+    name: Overview dashboard
+    name_vi: Bảng tổng quan
+    summary: One page with the whole system at a glance, from the pipeline funnel to spend, jobs and alerts.
+    roles: [admin]
+    status: live
+    surface: ["page:/admin/overview", "route:admin_overview", "route:admin_dashboard", "route:admin_pipeline/metrics"]
+    owner: tech_lead
+  - id: CIS-F003
+    app: cis
+    module: catalogue-pipeline
+    name: Tour upload and intake (A0)
+    name_vi: Tải tour lên và tiếp nhận (A0)
+    summary: Staff upload the source tour spreadsheets; each row is checked, staged and becomes a raw tour.
+    roles: [admin, content, content_lead]
+    status: live
+    surface: ["page:/admin/upload", "route:admin_pipeline/uploads"]
+    conditions:
+      settings: [cis.content.trash_retention_days]
+    owner: content_lead
+  - id: CIS-F004
+    app: cis
+    module: catalogue-pipeline
+    name: Catalogue rewrite (A1) and rerun waves
+    name_vi: Viết lại catalogue (A1) và các đợt chạy lại
+    summary: The AI writer rewrites each source tour into the Adventure Asia catalogue text; staff run single tours or whole waves with an expected tour set and a cap.
+    roles: [admin, content, content_lead]
+    status: live
+    surface: ["page:/admin/s1-rewrite", "route:admin_pipeline/runs", "route:admin_waves"]
+    conditions:
+      settings: [cis.a1.attempts_before_review, cis.spend.rerun_wave_max_tours, cis.quality.pass_line]
+      connections: [anthropic-direct, openai-direct, acc3, acc2]
+      note: Paid AI calls through the AI gateway; a wave is limited by the rerun wave cap.
+    owner: content_lead
+  - id: CIS-F005
+    app: cis
+    module: catalogue-pipeline
+    name: Review queue (A2)
+    name_vi: Hàng chờ duyệt (A2)
+    summary: Tours the quality gate holds wait here for a person, who reads the claims, approves, rejects or supersedes them.
+    roles: [admin, content, content_lead, viewer]
+    status: live
+    surface: ["page:/admin/review", "route:admin_pipeline/review", "route:v1_pipeline"]
+    conditions:
+      settings: [cis.quality.review_score_band_low]
+    owner: content_lead
+  - id: CIS-F006
+    app: cis
+    module: catalogue-pipeline
+    name: Master content
+    name_vi: Nội dung chuẩn (Master)
+    summary: The published catalogue tours with every version, the source, the SEO context, exports and the country fix.
+    roles: [admin, content, content_lead, tenant_qa, ai_ops, viewer]
+    status: live
+    surface: ["page:/admin/master-content", "route:admin_pipeline/tours", "route:admin_pipeline/tour_detail", "route:admin_pipeline/versions"]
+    owner: content_lead
+  - id: CIS-F007
+    app: cis
+    module: catalogue-pipeline
+    name: Social content atoms (A3)
+    name_vi: Nguyên liệu nội dung mạng xã hội (A3)
+    summary: Each master tour is cut into atoms (hooks, facts, highlights) that the agency writers use; staff curate them.
+    roles: [admin, content_lead]
+    status: live
+    surface: ["page:/admin/atom-curation", "route:admin_atoms"]
+    owner: content_lead
+  - id: CIS-F008
+    app: cis
+    module: places
+    name: Places, geocoding and place cards
+    name_vi: Địa điểm, định vị và thẻ địa điểm
+    summary: Every place a tour visits is located on the map and gets a place card; staff see coverage, fix places and run bounded backfills.
+    roles: [admin, content_lead, tenant_qa]
+    status: live
+    surface: ["page:/admin/places/**", "route:admin_places"]
+    conditions:
+      connections: [geoapify]
+      settings: [cis.spend.place_backfill_max_tours]
+    owner: content_lead
+  - id: CIS-F009
+    app: cis
+    module: photos
+    name: AA photos
+    name_vi: Ảnh AA
+    summary: Marketing photos synced from the content team's shared drive, per country and tour, served from the image host.
+    roles: [admin, content_lead]
+    status: live
+    surface: ["page:/admin/photos", "route:admin_photos"]
+    conditions:
+      secrets: [aa-cis/dev/gdrive-photo-reader]
+    owner: content_lead
+  - id: CIS-F010
+    app: cis
+    module: seo
+    name: SEO intelligence and search-demand research
+    name_vi: Thông tin SEO và nghiên cứu nhu cầu tìm kiếm
+    summary: Every SEO signal of the pipeline on one page; staff start a paid search-demand research run for a segment.
+    roles: [admin, content_lead]
+    status: live
+    surface: ["page:/admin/seo-intelligence", "route:admin_seo", "route:admin_segment_research"]
+    conditions:
+      connections: [dataforseo]
+      settings: [cis.spend.segment_research_max_usd_per_run, cis.spend.dfs_call_estimate_usd]
+    owner: content_lead
+  - id: CIS-F011
+    app: cis
+    module: facts
+    name: Platform facts
+    name_vi: Dữ kiện nền tảng
+    summary: Checked facts (opening times, prices, rules) the writers may cite, kept by staff with an expiry.
+    roles: [admin, content_lead]
+    status: live
+    surface: ["page:/admin/facts", "route:admin_facts"]
+    owner: content_lead
+  - id: CIS-F012
+    app: cis
+    module: content-settings
+    name: Brand identity and content settings
+    name_vi: Bản sắc thương hiệu và cấu hình nội dung
+    summary: The Adventure Asia brand identity rows (tone, forbidden words, call to action) and the SEO length rules the writers follow.
+    roles: [admin, content, content_lead, viewer]
+    status: live
+    surface: ["page:/admin/settings", "route:admin_settings", "route:admin_pipeline/brand_identity", "route:admin_pipeline/brands"]
+    conditions:
+      settings: [cis.seo.meta_max, cis.seo.title_max]
+    owner: content_lead
+  - id: CIS-F013
+    app: cis
+    module: aa-content
+    name: AA content for agencies
+    name_vi: Nội dung AA cho đại lý
+    summary: Prep packs, starter templates and campaign blocks written by AA and read by the agency CRM.
+    roles: [admin, content, content_lead, viewer]
+    status: live
+    surface: ["page:/admin/aa-content", "route:admin_aa_content"]
+    owner: content_lead
+  - id: CIS-F014
+    app: cis
+    module: catalogue
+    name: Reference prices
+    name_vi: Giá tham chiếu
+    summary: The structured reference price of each AA tour, kept by customer service and read by Booking as a starting point.
+    roles: [admin, content_lead, content, customer_success, finance]
+    status: live
+    surface: ["page:/admin/reference-prices", "route:admin_reference_prices"]
+    owner: customer_success
+  - id: CIS-F015
+    app: cis
+    module: supply-content
+    name: Supply content for Booking hotels and services
+    name_vi: Nội dung dịch vụ cho khách sạn và dịch vụ của Booking
+    summary: CIS writes the customer text of the hotels and services Booking holds; staff review it before Booking shows it.
+    roles: [admin, content_lead]
+    status: live
+    surface: ["page:/admin/supply-content/**", "route:admin_supply_content"]
+    owner: content_lead
+  - id: CIS-F016
+    app: cis
+    module: tenant-qa
+    name: Tenant content QA
+    name_vi: Kiểm soát chất lượng nội dung của đại lý
+    summary: Quality signals, compliance flags, the review log, slates and traces of the content agencies write; agencies always get their text, the signals stay here.
+    roles: [admin, content_lead, tenant_qa, customer_success]
+    status: live
+    surface: ["page:/admin/tenant-qa/**", "route:admin_content_quality", "route:admin_tenant_compliance", "route:admin_a4"]
+    owner: content_lead
+  - id: CIS-F017
+    app: cis
+    module: writing-lab
+    name: Writing Lab and quality measurement
+    name_vi: Writing Lab và đo chất lượng
+    summary: Stage pages of the writers, the governed writing memory, claim labels and shadow verdicts, the quality funnel and lineage of every output.
+    roles: [admin, content_lead, tenant_qa, ai_ops]
+    status: live
+    surface: ["page:/admin/lab/**", "route:admin_writing_memory", "route:admin_claim_labels", "route:admin_claim_shadow", "route:admin_quality_funnel", "route:admin_quality_lineage", "route:admin_quality_thresholds"]
+    conditions:
+      settings: [cis.quality.pass_line, cis.writing_memory.month_cap_usd, cis.spend.instrument_eval_cap_usd]
+    owner: ai_ops
+  # ── AA-CIS: tenants ───────────────────────────────────────────────────────────────────────────────────────────────
+  - id: CIS-F018
+    app: cis
+    module: tenants
+    name: Tenant directory and Tenant 360
+    name_vi: Danh bạ đại lý và Tenant 360
+    summary: Every agency tenant with its usage, members, audit trail, subscription and support view, filtered to the staff member's own book.
+    roles: [admin, customer_success, support, finance]
+    status: live
+    surface: ["page:/admin/tenants", "page:/admin/tenants/[id]", "route:admin", "route:admin_tenant360"]
+    owner: customer_success
+  - id: CIS-F019
+    app: cis
+    module: tenants
+    name: Plans, subscriptions and add-on requests
+    name_vi: Gói dịch vụ, đăng ký và yêu cầu add-on
+    summary: The plan catalogue (Content studio plans, CRM and TripPlanner add-ons), each tenant's subscription and entitlements, and the add-on requests owners send.
+    roles: [admin, finance]
+    status: live
+    surface: ["page:/admin/tenants/plans", "route:admin_plans", "route:admin_tenant_subscription", "route:admin_tenant_addon_requests", "route:admin_pipeline/billing"]
+    conditions:
+      settings: [cis.billing.rewrite_over_quota_mode]
+    owner: finance
+  - id: CIS-F020
+    app: cis
+    module: tenants
+    name: One-action tenant provisioning
+    name_vi: Tạo đại lý bằng một thao tác
+    summary: A saga that creates a tenant in every app it subscribes to (CIS, CRM, Booking partner, TripPlanner) and reports each step.
+    roles: [admin]
+    status: live
+    surface: ["route:admin_tenant_provision"]
+    conditions:
+      tenant_kinds: [demo, pilot, agency]
+    owner: customer_success
+  - id: CIS-F021
+    app: cis
+    module: tenants
+    name: Tenant assignments
+    name_vi: Phân công phụ trách đại lý
+    summary: Who looks after which tenant (owner, backup, support); the scope every staff list is filtered to.
+    roles: [admin, customer_success, support]
+    status: live
+    surface: ["page:/admin/tenants/assignments", "route:admin_tenant_assignments"]
+    owner: customer_success
+  - id: CIS-F022
+    app: cis
+    module: tenants
+    name: View as tenant (read only)
+    name_vi: Xem như đại lý (chỉ đọc)
+    summary: A support person opens a read-only session as the tenant, with a reason and an audit row.
+    roles: [admin, customer_success, support]
+    status: live
+    surface: ["page:/admin/tenants/view-as", "route:admin_view_as"]
+    owner: customer_success
+  - id: CIS-F023
+    app: cis
+    module: tenants
+    name: Agencies console (CRM)
+    name_vi: Bảng điều khiển đại lý (CRM)
+    summary: The AA staff view of every agency in the partner CRM (members, owner recovery, jobs), relayed over the CRM ops contract.
+    roles: [admin, customer_success, support]
+    status: live
+    surface: ["page:/admin/tenants/agencies", "route:admin_crm_console"]
+    depends_on: [CRM-F028]
+    owner: customer_success
+  - id: CIS-F024
+    app: cis
+    module: tenants
+    name: Tenant offboarding and data erasure
+    name_vi: Ngừng phục vụ đại lý và xoá dữ liệu
+    summary: The erasure saga of an offboarded tenant across every app, with approval, a dry run, per-app reports and the evidence trail.
+    roles: [admin]
+    status: live
+    surface: ["page:/admin/tenants/data-erasure", "route:admin_tenant_erasure"]
+    conditions:
+      settings: [cis.erasure.saga_apply_enabled, cis.erasure.saga_approval_valid_hours, cis.erasure.tenant_retention_days, cis.erasure.crm_window_days]
+      note: The apply step stays off until the setting is switched on; the dry run always works.
+    owner: tech_lead
+  # ── AA-CIS: AI and spend ──────────────────────────────────────────────────────────────────────────────────────────
+  - id: CIS-F025
+    app: cis
+    module: ai-gateway
+    name: AI gateway
+    name_vi: Cổng AI
+    summary: Every paid AI and data provider behind one gateway; staff see health, routes, provider order, traces, alerts and the quality guard, and change routes.
+    roles: [admin, ai_ops, finance]
+    status: live
+    surface: ["page:/admin/ai-gateway", "route:admin_ai_gateway", "route:admin_llm_ops", "route:admin_llm_route", "route:admin_llm_route_control"]
+    conditions:
+      connections: [anthropic-direct, openai-direct, acc2, acc3, dataforseo, geoapify, typesafe]
+      secrets: [aa-llm/dev/anthropic-direct, aa-cis/dev/openai-key]
+    guide: docs/architecture/ai-gateway.md
+    owner: ai_ops
+  - id: CIS-F026
+    app: cis
+    module: spend
+    name: Spend and budgets
+    name_vi: Chi phí và ngân sách
+    summary: AI and data spend per provider, app and stage, with the budgets the cost guard enforces.
+    roles: [admin, ai_ops, finance]
+    status: live
+    surface: ["page:/admin/spend", "route:admin_budgets"]
+    conditions:
+      settings: [cis.retention.llm_call_log_days]
+    owner: finance
+  - id: CIS-F027
+    app: cis
+    module: spend
+    name: Usage explorer
+    name_vi: Khám phá mức sử dụng
+    summary: Slice usage and cost by window, app, tenant, stage and model, with export.
+    roles: [admin, ai_ops, finance]
+    status: live
+    surface: ["page:/admin/usage", "route:admin_usage_explorer"]
+    owner: finance
+  - id: CIS-F028
+    app: cis
+    module: decisions
+    name: Decision layer (Jev)
+    name_vi: Lớp ra quyết định (Jev)
+    summary: Which stage asks the decision service which question, in what mode, with what floors and at what cost.
+    roles: [admin]
+    status: live
+    surface: ["page:/admin/decisions", "route:admin_decisions"]
+    conditions:
+      connections: [typesafe]
+      secrets: [aa-cis/dev/typesafe]
+    owner: ai_ops
+  # ── AA-CIS: platform operations ───────────────────────────────────────────────────────────────────────────────────
+  - id: CIS-F029
+    app: cis
+    module: platform-ops
+    name: Job runner
+    name_vi: Bộ chạy job
+    summary: "The durable job queue of CIS (and links to the other apps' queues): kinds, states, retries and payloads."
+    roles: [admin]
+    status: live
+    surface: ["page:/admin/jobs", "route:admin_job_runner"]
+    conditions:
+      settings: [cis.retention.job_failed_days, cis.retention.job_succeeded_days]
+    owner: tech_lead
+  - id: CIS-F030
+    app: cis
+    module: platform-ops
+    name: Data coverage
+    name_vi: Độ phủ dữ liệu
+    summary: Counts at every stage from the raw upload to the CRM, for the whole system.
+    roles: [admin]
+    status: live
+    surface: ["page:/admin/data-coverage", "route:admin_data_coverage"]
+    owner: tech_lead
+  - id: CIS-F031
+    app: cis
+    module: reports
+    name: Reports and KPI scorecards
+    name_vi: Báo cáo và bảng KPI
+    summary: The report register, scheduled and on-request runs and the KPI scorecard.
+    roles: [admin]
+    status: live
+    surface: ["page:/admin/reports", "route:admin_reports"]
+    owner: business_owner
+  - id: CIS-F032
+    app: cis
+    module: developer
+    name: Developer docs, API docs and data model
+    name_vi: Tài liệu kỹ thuật, tài liệu API và mô hình dữ liệu
+    summary: The published docs catalogue (English and Vietnamese), the OpenAPI reader and the live ERD from the nightly schema dump.
+    roles: [admin]
+    status: live
+    surface: ["page:/admin/docs", "page:/admin/api-docs", "page:/admin/data-model", "route:admin_docs", "route:admin_api_docs", "route:admin_data_model"]
+    depends_on: [INF-F006]
+    owner: tech_lead
+  - id: CIS-F033
+    app: cis
+    module: people-access
+    name: Staff directory and roles
+    name_vi: Danh bạ nhân viên và vai trò
+    summary: Every staff account with its roles; admins invite, change roles, disable, sign out and sync with the company sign-in.
+    roles: [admin]
+    status: live
+    surface: ["page:/admin/platform/staff/**", "route:admin_platform"]
+    depends_on: [INF-F001]
+    owner: tech_lead
+  - id: CIS-F034
+    app: cis
+    module: people-access
+    name: Alert recipients
+    name_vi: Người nhận cảnh báo
+    summary: Who receives the platform alert e-mails, kept in step with the alert topic subscriptions.
+    roles: [admin]
+    status: live
+    surface: ["page:/admin/platform/alerts", "route:admin_alert_recipients"]
+    depends_on: [INF-F005]
+    owner: tech_lead
+  - id: CIS-F035
+    app: cis
+    module: platform-ops
+    name: App health and audit log
+    name_vi: Sức khoẻ ứng dụng và nhật ký kiểm toán
+    summary: A health and version card per app (CIS, Booking, CRM, TripPlanner) with its jobs, and the tamper-evident audit log of staff actions.
+    roles: [admin]
+    status: live
+    surface: ["page:/admin/platform/apps", "page:/admin/platform/audit", "route:admin_platform_ops"]
+    owner: tech_lead
+  - id: CIS-F036
+    app: cis
+    module: settings-registry
+    name: Settings registry
+    name_vi: Sổ đăng ký cấu hình
+    summary: Every threshold, limit, cap and policy value of CIS, TripPlanner and the CRM, editable with a reason, history and optional two-person approval; Booking keeps its own policy page.
+    roles: [admin]
+    status: live
+    surface: ["page:/admin/platform/settings", "route:admin_settings_registry"]
+    conditions:
+      settings: [cis.settings.two_person_approval, crm.settings.two_person_approval]
+    owner: tech_lead
+  - id: CIS-F037
+    app: cis
+    module: developer
+    name: UI kit gallery
+    name_vi: Thư viện giao diện (UI kit)
+    summary: Every shared UI component in both themes, the reference the other apps copy.
+    roles: [admin]
+    status: live
+    surface: ["page:/admin/platform/ui-kit", "page:/kit-gallery"]
+    owner: tech_lead
+  - id: CIS-F038
+    app: cis
+    module: developer
+    name: Product map (this catalogue)
+    name_vi: Bản đồ sản phẩm (catalogue này)
+    summary: What each app can do, how the apps link and what each link needs, rendered from this catalogue.
+    roles: [admin]
+    status: beta
+    surface: ["page:/admin/platform/catalogue", "route:admin_product_catalogue"]
+    depends_on: [INF-F006]
+    guide: docs/catalogue/README.md
+    owner: tech_lead
+  # ── AA-CIS: Content studio API (the UI lives in AA-Partner) ───────────────────────────────────────────────────────
+  - id: CIS-F040
+    app: cis
+    module: studio-api
+    name: Studio sign-in, account and notifications API
+    name_vi: API đăng nhập, tài khoản và thông báo của Studio
+    summary: Studio sign-in with the partner pool, the account pages (activity, members, add-ons, tour retirement setting) and the notification bell.
+    roles: [studio-owner, studio-editor, studio-viewer]
+    status: live
+    surface: ["route:tenant_session", "route:auth", "route:v1_account", "route:v1_account_members", "route:v1_account_addons", "route:v1_account_tour_retirement", "route:v1_notifications"]
+    conditions:
+      settings: [cis.lifecycle.tour_retirement_notice_days]
+    owner: tech_lead
+  - id: CIS-F041
+    app: cis
+    module: studio-api
+    name: Marketplace and tour rewrites API (T1, T2)
+    name_vi: API Marketplace và viết lại tour (T1, T2)
+    summary: The tours an agency may adopt and its own rewrites of them in its brand voice, with live progress.
+    roles: [studio-owner, studio-editor]
+    status: live
+    surface: ["route:v1_tours", "route:v1_marketplace", "route:v1_progress"]
+    conditions:
+      entitlements: [content.rewrite]
+      settings: [cis.t2.version_usd_max, cis.billing.rewrite_over_quota_mode]
+    owner: content_lead
+  - id: CIS-F042
+    app: cis
+    module: studio-api
+    name: Content planning and angles API (T7, T8)
+    name_vi: API lên kế hoạch nội dung và góc viết (T7, T8)
+    summary: The quarter plan of topics per channel and the three angles an editor chooses from before writing.
+    roles: [studio-owner, studio-editor]
+    status: live
+    surface: ["route:v1_planning", "route:v1_angle_gate"]
+    conditions:
+      entitlements: [content.social, content.article]
+      settings: [cis.t7.channel_bar_blog, cis.t7.debate_contested_cut]
+    owner: content_lead
+  - id: CIS-F043
+    app: cis
+    module: studio-api
+    name: Writing and quality gates API (T9, T10)
+    name_vi: API viết bài và cổng chất lượng (T9, T10)
+    summary: Writes articles and social posts from the chosen angle and runs the quality gates inline; the agency always receives its text.
+    roles: [studio-owner, studio-editor]
+    status: live
+    surface: ["route:v1_content_writing"]
+    conditions:
+      entitlements: [content.social, content.article, ai.budget_usd_monthly]
+      settings: [cis.t9.max_attempts, cis.t9.blog_chars_max, cis.quality.t10_reuse_similarity]
+    owner: content_lead
+  - id: CIS-F044
+    app: cis
+    module: studio-api
+    name: Tenant facts API
+    name_vi: API dữ kiện của đại lý
+    summary: An agency's own facts and its overrides of the platform facts, which its writers cite.
+    roles: [studio-owner, studio-editor]
+    status: live
+    surface: ["route:v1_facts"]
+    owner: content_lead
+  - id: CIS-F045
+    app: cis
+    module: studio-api
+    name: Publish channels API (T11)
+    name_vi: API kênh xuất bản (T11)
+    summary: The agency's WordPress and Facebook connections and the publish log (publish, unpublish).
+    roles: [studio-owner, studio-editor]
+    status: live
+    surface: ["route:v1_integrations", "route:v1_publish"]
+    conditions:
+      entitlements: [channel.wordpress, channel.facebook]
+      settings: [cis.publish.daily_limit_default]
+    owner: content_lead
+  - id: CIS-F046
+    app: cis
+    module: studio-api
+    name: Hosted tour pages
+    name_vi: Trang tour do AA lưu trữ
+    summary: AA hosts a white-label page per agency tour version for the agency's links.
+    roles: [public]
+    status: live
+    surface: ["route:v1_trip_page"]
+    owner: tech_lead
+  - id: CIS-F047
+    app: cis
+    module: contract-apis
+    name: Contract APIs for the other apps
+    name_vi: API hợp đồng cho các ứng dụng khác
+    summary: The machine APIs other apps call - catalogue over HTTP, tenant account and entitlements, add-ons, membership and erasure requests.
+    roles: [machine]
+    status: live
+    surface: ["route:catalog_http", "route:tenant_account", "route:tenant_addons", "route:tenant_membership", "route:tenant_erasure"]
+    guide: docs/contracts/README.md
+    owner: tech_lead
+
+  # ── AA-Booking ────────────────────────────────────────────────────────────────────────────────────────────────────
+  - id: BK-F001
+    app: booking
+    module: shell
+    name: Staff shell, dashboard and notifications
+    name_vi: Khung trang, bảng điều khiển và thông báo cho nhân viên
+    summary: Booking staff sign in with the company account and see the dashboard and their notification feed.
+    roles: [booking-admin, sales, contracting, finance]
+    status: live
+    surface: ["page:/", "page:/login", "page:/kit-gallery", "page:/notifications", "route:notifications"]
+    depends_on: [INF-F001]
+    owner: tech_lead
+  - id: BK-F002
+    app: booking
+    module: platform
+    name: Health, API docs and deploy gate
+    name_vi: Health, tài liệu API và cổng deploy
+    summary: Liveness and readiness checks, the gated API docs and the machine endpoint the deploy workflow asks before it rolls out.
+    roles: [machine]
+    status: live
+    surface: ["route:health", "route:docs", "route:ops"]
+    owner: tech_lead
+  - id: BK-F003
+    app: booking
+    module: trip-cases
+    name: Trip cases and proposal versions
+    name_vi: Hồ sơ chuyến đi và các phiên bản đề xuất
+    summary: Staff build a trip case day by day, price it, keep proposal versions and preview what the client sees.
+    roles: [booking-admin, sales]
+    status: live
+    surface: ["page:/cases/**", "page:/proposals", "route:trip_cases"]
+    conditions:
+      settings: [booking.policy.quote_validity_days, booking.policy.diff_highlight_pct]
+    owner: tech_lead
+  - id: BK-F004
+    app: booking
+    module: catalog
+    name: Catalogue browse (countries, destinations)
+    name_vi: Xem catalogue (quốc gia, điểm đến)
+    summary: The CIS catalogue as Booking reads it - countries, destinations and their tours.
+    roles: [booking-admin, sales, contracting]
+    status: live
+    surface: ["page:/catalog/countries/**", "page:/catalog/destinations", "route:catalog"]
+    owner: tech_lead
+  - id: BK-F005
+    app: booking
+    module: catalog
+    name: Sellable trip plans and price versions
+    name_vi: Lịch trình bán được và phiên bản giá
+    summary: Each catalogue tour as a sellable trip plan with its commercial terms and price list versions.
+    roles: [booking-admin, sales, contracting]
+    status: live
+    surface: ["page:/catalog/trip-plans/**", "route:price_versions"]
+    owner: tech_lead
+  - id: BK-F006
+    app: booking
+    module: pricing
+    name: Pricing rules, FX, seasons and the price workbench
+    name_vi: Quy tắc giá, tỷ giá, mùa và bàn làm giá
+    summary: Pricing rules and FX with maker-checker approval, season calendars and holiday events, the calculator, the readiness check and the workbook import.
+    roles: [booking-admin, contracting, finance]
+    status: live
+    surface: ["page:/pricing/rules", "page:/pricing/calculator", "page:/pricing/readiness", "page:/pricing/workbench", "page:/pricing/seasons", "page:/pricing/holiday-events", "route:pricing", "route:price_versions"]
+    conditions:
+      settings: [booking.policy.rounding_increment_by_currency, booking.policy.provisional_uplift_pct]
+    owner: finance
+  - id: BK-F007
+    app: booking
+    module: pricing
+    name: Pricing policy
+    name_vi: Chính sách giá
+    summary: Every pricing and finance policy value (quote validity, holds, deposits, surcharges, retention) with maker-checker changes.
+    roles: [booking-admin, finance]
+    status: live
+    surface: ["page:/pricing/policy"]
+    conditions:
+      settings: [booking.policy.quote_validity_days, booking.policy.b2b_hold_hours, booking.policy.group_deposit_pct, booking.policy.surcharge_notice_days]
+    owner: finance
+  - id: BK-F008
+    app: booking
+    module: pricing
+    name: Agency price tiers and tariff
+    name_vi: Bậc giá đại lý và biểu giá
+    summary: The price tier each partner agency buys at and the contract rate cards behind the published tariff.
+    roles: [booking-admin, finance]
+    status: live
+    surface: ["page:/pricing/agency-tiers/**", "route:agency_pricing"]
+    conditions:
+      settings: [booking.policy.tariff_year_start, booking.policy.tariff_next_publish_by]
+    owner: finance
+  - id: BK-F009
+    app: booking
+    module: supply
+    name: Suppliers, contracts and rate sheets
+    name_vi: Nhà cung cấp, hợp đồng và bảng giá
+    summary: The supplier register with contracts and rate sheets.
+    roles: [booking-admin, contracting]
+    status: live
+    surface: ["page:/suppliers/**", "route:suppliers"]
+    owner: tech_lead
+  - id: BK-F010
+    app: booking
+    module: supply
+    name: Hotels and services
+    name_vi: Khách sạn và dịch vụ
+    summary: Hotels with room types, and services (activities, transfers, guides, entrances, meals) with their supplier rates.
+    roles: [booking-admin, contracting, sales]
+    status: live
+    surface: ["page:/hotels", "page:/services/**", "route:supply"]
+    owner: tech_lead
+  - id: BK-F011
+    app: booking
+    module: operations
+    name: Supplier bookings and trip checks
+    name_vi: Đặt dịch vụ nhà cung cấp và kiểm tra chuyến đi
+    summary: Booking each service with its supplier, the operations documents and the checks a case passes before departure.
+    roles: [booking-admin, sales, contracting]
+    status: live
+    surface: ["page:/trip-checks", "route:supplier_bookings", "route:trip_checks"]
+    conditions:
+      settings: [booking.policy.supplier_answer_days, booking.policy.trip_check_reminder_days, booking.policy.pre_departure_days]
+    owner: tech_lead
+  - id: BK-F012
+    app: booking
+    module: operations
+    name: Supplier bills and payouts
+    name_vi: Hoá đơn nhà cung cấp và chi trả
+    summary: AA's own payables - bills to approve and pay, with a second person approving.
+    roles: [booking-admin, sales, contracting, finance]
+    status: live
+    surface: ["page:/billing", "route:supplier_bills"]
+    conditions:
+      settings: [booking.policy.supplier_bill_due_soon_days]
+    owner: finance
+  - id: BK-F013
+    app: booking
+    module: finance
+    name: Agency billing
+    name_vi: Thu tiền đại lý
+    summary: Invoices to partner agencies for the AA tours they book, payments recorded by a maker and approved by a checker, reminders and the overdue block.
+    roles: [booking-admin, finance]
+    status: live
+    surface: ["page:/agency-billing/**", "route:agency_billing"]
+    conditions:
+      settings: [booking.policy.agency_reminder_steps_days, booking.policy.agency_currency_by_country]
+    owner: finance
+  - id: BK-F014
+    app: booking
+    module: finance
+    name: Costs and profit
+    name_vi: Chi phí và lợi nhuận
+    summary: FX-normalised costs, departure shared costs, supplier purchase orders and the profit per case and departure.
+    roles: [booking-admin, finance]
+    status: live
+    surface: ["page:/finance", "route:finance"]
+    owner: finance
+  - id: BK-F015
+    app: booking
+    module: b2b
+    name: B2B desk and departures
+    name_vi: Bàn B2B và các chuyến khởi hành
+    summary: On-request lines and departure incidents of agency bookings, the departure board and the manifest of each departure.
+    roles: [booking-admin, sales, contracting]
+    status: live
+    surface: ["page:/b2b-desk/**", "page:/departures", "route:b2b_desk"]
+    conditions:
+      settings: [booking.policy.b2b_on_request_answer_business_days, booking.policy.departure_decision_days_default]
+    owner: tech_lead
+  - id: BK-F016
+    app: booking
+    module: b2b
+    name: B2B partners
+    name_vi: Đối tác B2B
+    summary: The partner agencies allowed to book through the B2B API, with their state.
+    roles: [booking-admin]
+    status: live
+    surface: ["route:b2b_partners"]
+    owner: tech_lead
+  - id: BK-F017
+    app: booking
+    module: b2b
+    name: B2B API (Book with AA)
+    name_vi: API B2B (Đặt với AA)
+    summary: The machine API the agency CRM calls to quote, hold and book AA tours at the agency's B2B price.
+    roles: [machine]
+    status: live
+    surface: ["route:b2b"]
+    conditions:
+      entitlements: [trade.book]
+      settings: [booking.policy.b2b_hold_hours, booking.policy.b2b_hold_max_extensions, booking.policy.b2b_rehold_limit_per_day]
+      secrets: [aa-crm/dev/m2m-booking-client]
+    owner: tech_lead
+  - id: BK-F018
+    app: booking
+    module: admin
+    name: Staff, audit log and reference data
+    name_vi: Nhân viên, nhật ký kiểm toán và dữ liệu tham chiếu
+    summary: Booking staff profiles and roles, the admin audit log and the reference rows (settings, countries).
+    roles: [booking-admin]
+    status: live
+    surface: ["page:/staff/**", "page:/audit-log", "route:staff", "route:reference"]
+    owner: tech_lead
+  - id: BK-F019
+    app: booking
+    module: admin
+    name: Preferences and retention
+    name_vi: Tuỳ chọn và lưu giữ dữ liệu
+    summary: Personal preferences, sign-in and notification settings, and the retention rules of Booking data.
+    roles: [booking-admin, sales, contracting, finance]
+    status: live
+    surface: ["page:/settings", "route:retention"]
+    conditions:
+      settings: [booking.policy.retention_job_failed_days, booking.policy.retention_inbox_redact_days]
+    owner: tech_lead
+
+  # ── AA-Partner: CRM ───────────────────────────────────────────────────────────────────────────────────────────────
+  - id: CRM-F001
+    app: crm
+    module: shell
+    name: Agency app shell and sign-in
+    name_vi: Khung ứng dụng đại lý và đăng nhập
+    summary: Agency people sign in with the partner pool, pick their agency and move between the CRM and the Content studio.
+    roles: [owner, agent, assistant]
+    status: live
+    surface: ["page:/", "page:/[section]", "page:/select-agency", "page:/signed-out", "page:/health", "page:/kit-gallery", "page:/help", "route:agency", "route:health", "route:ci"]
+    conditions:
+      entitlements: [crm.core]
+      tenant_kinds: [pilot, agency]
+    depends_on: [INF-F002]
+    owner: tech_lead
+  - id: CRM-F002
+    app: crm
+    module: team
+    name: Invitations and joining an agency
+    name_vi: Lời mời và tham gia đại lý
+    summary: An owner invites a member; the invitee claims the link and joins with the partner sign-in.
+    roles: [owner]
+    status: live
+    surface: ["page:/join/**", "route:invitations"]
+    conditions:
+      settings: [crm.rate.member_per_minute]
+    owner: customer_success
+  - id: CRM-F003
+    app: crm
+    module: onboarding
+    name: Home, getting started and client import
+    name_vi: Trang chủ, bắt đầu và nhập khách hàng
+    summary: The home page with KPIs, the getting-started steps and the import of clients from a spreadsheet with duplicate checks.
+    roles: [owner, agent]
+    status: live
+    surface: ["page:/home", "page:/onboarding", "page:/settings/import", "page:/clients/duplicates", "route:onboarding"]
+    owner: customer_success
+  - id: CRM-F004
+    app: crm
+    module: intake
+    name: Inquiry forms
+    name_vi: Biểu mẫu yêu cầu
+    summary: The agency's public inquiry form and planning form on its client host; each answer becomes a trip on the board.
+    roles: [owner, traveller]
+    status: live
+    surface: ["page:/c/f/[publicKey]", "page:/c/s/[token]", "page:/settings/forms", "route:public"]
+    conditions:
+      settings: [crm.rate.public_per_minute, crm.rate.intake_form_per_hour, crm.rate.intake_per_minute]
+    owner: tech_lead
+  - id: CRM-F005
+    app: crm
+    module: pipeline
+    name: Pipeline, trips, tasks and automations
+    name_vi: Pipeline, chuyến đi, công việc và tự động hoá
+    summary: The trip board from inquiry to travelled, each trip's tabs, tasks and the agency's automation rules.
+    roles: [owner, agent, assistant]
+    status: live
+    surface: ["page:/pipeline", "page:/pipeline/[tripId]", "page:/tasks", "page:/automations", "route:pipeline", "route:workflows"]
+    owner: tech_lead
+  - id: CRM-F006
+    app: crm
+    module: clients
+    name: Clients and travellers
+    name_vi: Khách hàng và khách du lịch
+    summary: Client profiles masked by default with every reveal logged, the party of each trip and their documents.
+    roles: [owner, agent, assistant]
+    status: live
+    surface: ["page:/clients", "page:/clients/[travelerId]", "route:travellers"]
+    owner: tech_lead
+  - id: CRM-F007
+    app: crm
+    module: proposals
+    name: Proposal builder
+    name_vi: Công cụ dựng đề xuất
+    summary: Day-by-day proposals with AA tours at a live price, the agency's own hotels and services, inclusions and the payment schedule.
+    roles: [owner, agent]
+    status: live
+    surface: ["page:/pipeline/[tripId]/proposal/[proposalId]", "page:/settings/inclusions", "route:builder", "route:proposals", "route:inclusions"]
+    conditions:
+      settings: [crm.agency_defaults.price_checks_per_minute, crm.agency_defaults.markup_max_pct, crm.agency_defaults.discount_owner_limit_pct]
+    owner: tech_lead
+  - id: CRM-F008
+    app: crm
+    module: proposals
+    name: Written proposal, Before you go and templates
+    name_vi: Đề xuất dạng văn bản, "Trước khi đi" và mẫu tin
+    summary: The text version of a proposal, the Before you go day and the message template library.
+    roles: [owner, agent]
+    status: live
+    surface: ["page:/pipeline/[tripId]/proposal/[proposalId]/text", "page:/settings/templates", "route:proposal_text"]
+    owner: tech_lead
+  - id: CRM-F009
+    app: crm
+    module: client-pages
+    name: Client pages and traveller portal
+    name_vi: Trang cho khách và cổng khách du lịch
+    summary: Signed pages on the client host - the proposal a client accepts on a phone and the traveller portal with details, documents, signing and invoices.
+    roles: [traveller]
+    status: live
+    surface: ["page:/c/[...slug]", "page:/c/p", "page:/c/t", "route:client_pages"]
+    owner: tech_lead
+  - id: CRM-F010
+    app: crm
+    module: agreements
+    name: Agreements and e-sign
+    name_vi: Hợp đồng và ký điện tử
+    summary: The agency's booking terms, re-accept on change and the e-sign of a trip's agreements.
+    roles: [owner, agent, traveller]
+    status: live
+    surface: ["page:/settings/agreements", "route:esign"]
+    owner: tech_lead
+  - id: CRM-F011
+    app: crm
+    module: money
+    name: Invoices and payments
+    name_vi: Hoá đơn và thanh toán
+    summary: Deposit and balance invoices, the client's I have paid, payments checked and recorded, refunds and payment methods.
+    roles: [owner, agent]
+    status: live
+    surface: ["page:/payments", "page:/settings/payments", "route:invoices", "route:payments"]
+    conditions:
+      settings: [crm.payments.invoice_reminder_every_days, crm.payments.invoice_reminder_max, crm.payments.refund_owner_threshold_default]
+      note: Card payments on the agency's own Stripe need the Stripe Connect entitlement; bank transfer works without it.
+    owner: finance
+  - id: CRM-F012
+    app: crm
+    module: suppliers
+    name: Suppliers, service catalogue and bookings ledger
+    name_vi: Nhà cung cấp, danh mục dịch vụ và sổ đặt chỗ
+    summary: The agency's suppliers, its own service catalogue (flights, insurance, visas, fees) and the ledger of every booking line.
+    roles: [owner, agent]
+    status: live
+    surface: ["page:/suppliers", "page:/bookings", "page:/services", "route:ledger", "route:catalogue"]
+    owner: tech_lead
+  - id: CRM-F013
+    app: crm
+    module: aa-supply
+    name: Book with AA
+    name_vi: Đặt với AA
+    summary: AA tours inside the agency's trips - the AA tariff, the AA tour page, Book now, holds and Bookings with AA confirmed by Booking.
+    roles: [owner, agent, traveller]
+    status: live
+    surface: ["page:/aa-bookings", "page:/aa-tariff", "page:/trip/[tourId]", "route:aa"]
+    conditions:
+      entitlements: [trade.book]
+      tenant_kinds: [pilot, agency]
+    depends_on: [BK-F017]
+    owner: tech_lead
+  - id: CRM-F014
+    app: crm
+    module: partners
+    name: Commissions and sales partners
+    name_vi: Hoa hồng và đối tác bán hàng
+    summary: Commissions per booking, sales partners with their own signed page and referral link.
+    roles: [owner, agent]
+    status: live
+    surface: ["page:/commissions", "page:/partners", "page:/c/a", "page:/c/r/[token]", "route:commissions", "route:partners", "route:partner_pages"]
+    owner: finance
+  - id: CRM-F015
+    app: crm
+    module: money
+    name: Trip profit and costs
+    name_vi: Lợi nhuận và chi phí chuyến đi
+    summary: Trip profit, supplier bills, Bookings with AA costs and group departure costs.
+    roles: [owner]
+    status: live
+    surface: ["route:finance"]
+    owner: finance
+  - id: CRM-F016
+    app: crm
+    module: messages
+    name: Mail inbox and saved replies
+    name_vi: Hộp thư và câu trả lời mẫu
+    summary: The agency mailbox connected over OAuth, trip threads, the unmatched inbox and saved replies.
+    roles: [owner, agent, assistant]
+    status: live
+    surface: ["page:/inbox", "page:/settings/mailbox", "page:/settings/saved-replies", "route:mail"]
+    conditions:
+      secrets: [crm/dev/mail-oauth]
+    owner: tech_lead
+  - id: CRM-F017
+    app: crm
+    module: messages
+    name: SMS and WhatsApp
+    name_vi: SMS và WhatsApp
+    summary: The agency's SMS and WhatsApp channels in the trip composer and the inbox.
+    roles: [owner, agent]
+    status: beta
+    surface: ["page:/settings/channels", "route:messaging"]
+    conditions:
+      entitlements: [crm.whatsapp_sms]
+      note: The agency brings its own messaging vendor account.
+    owner: tech_lead
+  - id: CRM-F018
+    app: crm
+    module: travel
+    name: Calendar and duty of care
+    name_vi: Lịch và trách nhiệm chăm sóc khách
+    summary: The agency calendar with ICS feeds and Travelling now, which shows where every travelling client is.
+    roles: [owner, agent]
+    status: live
+    surface: ["page:/calendar", "page:/travelling", "route:calendar", "route:duty"]
+    owner: tech_lead
+  - id: CRM-F019
+    app: crm
+    module: travel
+    name: Travel operations and ops release
+    name_vi: Điều hành chuyến đi và bàn giao cho điều hành
+    summary: Departure rosters, traveller vouchers, the passport and visa rules, and the release of a trip to AA ground operations.
+    roles: [owner, agent]
+    status: live
+    surface: ["page:/departures/**", "page:/settings/travel", "route:travel_ops", "route:ops_release"]
+    owner: tech_lead
+  - id: CRM-F020
+    app: crm
+    module: reports
+    name: Reports
+    name_vi: Báo cáo
+    summary: Funnel, money, what clients owe, the team and CSV export.
+    roles: [owner]
+    status: live
+    surface: ["page:/reports", "route:reports"]
+    conditions:
+      entitlements: [crm.insights_export]
+    owner: business_owner
+  - id: CRM-F021
+    app: crm
+    module: marketing
+    name: Marketing and tags
+    name_vi: Marketing và nhãn
+    summary: Tags on clients and trips, and the Ready to travel again list of past clients.
+    roles: [owner, agent]
+    status: live
+    surface: ["page:/marketing", "page:/settings/tags", "route:tags"]
+    owner: tech_lead
+  - id: CRM-F022
+    app: crm
+    module: ai
+    name: AI drafts
+    name_vi: Bản nháp AI
+    summary: AI reply drafts and the agency's AI settings, within a monthly AI budget.
+    roles: [owner, agent]
+    status: beta
+    surface: ["page:/settings/ai", "route:ai"]
+    conditions:
+      entitlements: [crm.ai_assist]
+      settings: [crm.ai.budget_default_usd, crm.ai.budget_max_usd, crm.ai.draft_reply_max_tokens, crm.rate.ai_per_minute]
+    owner: ai_ops
+  - id: CRM-F023
+    app: crm
+    module: team
+    name: Team, roles, plan and agency settings
+    name_vi: Nhóm, vai trò, gói và cấu hình đại lý
+    summary: Members and their roles, the plan and seats, owner recovery and the agency's settings home, connections, pricing and cancellation rules.
+    roles: [owner]
+    status: live
+    surface: ["page:/settings", "page:/settings/team", "page:/settings/connections", "page:/settings/pricing", "page:/settings/cancellation", "route:team"]
+    conditions:
+      entitlements: [crm.seats]
+    owner: customer_success
+  - id: CRM-F024
+    app: crm
+    module: team
+    name: Add-ons
+    name_vi: Add-on
+    summary: The agency's add-ons (CRM, TripPlanner) and the owner's request for one, answered in CIS.
+    roles: [owner]
+    status: live
+    surface: ["page:/settings/add-ons", "route:addons"]
+    depends_on: [CIS-F019]
+    owner: customer_success
+  - id: CRM-F025
+    app: crm
+    module: privacy
+    name: Data, privacy and lifecycle
+    name_vi: Dữ liệu, quyền riêng tư và vòng đời
+    summary: Portability exports, the data-request log, the access log, trash, archive, legal holds, erasure and offboarding.
+    roles: [owner]
+    status: live
+    surface: ["page:/settings/data", "page:/settings/access-log", "route:data", "route:audit", "route:lifecycle"]
+    conditions:
+      settings: [crm.agency_defaults.trash_days, crm.agency_defaults.auto_archive_months, crm.retention.lifecycle_dry_run]
+    owner: tech_lead
+  - id: CRM-F026
+    app: crm
+    module: support
+    name: AA support access (agency side)
+    name_vi: Quyền hỗ trợ của AA (phía đại lý)
+    summary: The owner grants AA support time-boxed access to the agency and sees every use.
+    roles: [owner]
+    status: live
+    surface: ["route:support_access"]
+    owner: customer_success
+  - id: CRM-F027
+    app: crm
+    module: staff-console
+    name: AA staff console (support and ground operations)
+    name_vi: Bảng điều khiển nhân viên AA (hỗ trợ và điều hành mặt đất)
+    summary: AA staff open an agency the owner granted access to, and ground operations read the trips released to them.
+    roles: [aa-staff]
+    status: live
+    surface: ["page:/staff", "page:/staff/**", "route:staff", "route:staff_ops"]
+    depends_on: [INF-F001]
+    owner: customer_success
+  - id: CRM-F028
+    app: crm
+    module: ops-contract
+    name: Platform ops API and CRM settings
+    name_vi: API vận hành nền tảng và cấu hình CRM
+    summary: The ops contract CIS admin calls (agencies, members, jobs) and the CRM settings relayed by Platform › Settings.
+    roles: [machine]
+    status: live
+    surface: ["route:ops", "route:ops_settings"]
+    conditions:
+      settings: [crm.settings.two_person_approval, crm.retention.job_dry_run]
+    owner: tech_lead
+  - id: CRM-F029
+    app: crm
+    module: legal
+    name: Legal pages
+    name_vi: Trang pháp lý
+    summary: The terms of use, partner terms and privacy notice.
+    roles: [public]
+    status: live
+    surface: ["page:/legal/**"]
+    owner: business_owner
+  # ── AA-Partner: Content studio ────────────────────────────────────────────────────────────────────────────────────
+  - id: CRM-F040
+    app: crm
+    module: studio
+    name: Studio access and dashboard
+    name_vi: Truy cập Studio và bảng điều khiển
+    summary: Entering the Content studio from the agency app, choosing the studio tenant, and the studio dashboard.
+    roles: [studio-owner, studio-editor, studio-viewer]
+    status: live
+    surface: ["page:/portal", "page:/portal-access/**", "page:/portal/dashboard"]
+    depends_on: [CIS-F040]
+    owner: content_lead
+  - id: CRM-F041
+    app: crm
+    module: studio
+    name: Brand identity (T0)
+    name_vi: Bản sắc thương hiệu (T0)
+    summary: The agency's brand voice, call to action and rules, imported or typed, that every writer follows.
+    roles: [studio-owner, studio-editor]
+    status: live
+    surface: ["page:/portal/brand"]
+    depends_on: [CIS-F040]
+    owner: content_lead
+  - id: CRM-F042
+    app: crm
+    module: studio
+    name: Marketplace and My tours
+    name_vi: Marketplace và Tour của tôi
+    summary: Browse the AA catalogue, adopt tours (one or in bulk) and follow their rewrites in the agency's voice.
+    roles: [studio-owner, studio-editor, studio-viewer]
+    status: live
+    surface: ["page:/portal/tours/**"]
+    conditions:
+      entitlements: [content.rewrite]
+    depends_on: [CIS-F041]
+    owner: content_lead
+  - id: CRM-F043
+    app: crm
+    module: studio
+    name: Create - slate, articles and social posts
+    name_vi: Sáng tạo - danh sách chủ đề, bài viết và bài mạng xã hội
+    summary: Topics per channel and for articles, three angles to choose from, and the writer that delivers the piece.
+    roles: [studio-owner, studio-editor]
+    status: live
+    surface: ["page:/portal/create/**"]
+    conditions:
+      entitlements: [content.social, content.article]
+    depends_on: [CIS-F042, CIS-F043]
+    owner: content_lead
+  - id: CRM-F044
+    app: crm
+    module: studio
+    name: My content, export and publish
+    name_vi: Nội dung của tôi, xuất file và xuất bản
+    summary: Every piece with its AI mark, export as HTML or text, and publish to WordPress or Facebook.
+    roles: [studio-owner, studio-editor, studio-viewer]
+    status: live
+    surface: ["page:/portal/content/**", "page:/portal/help/facebook"]
+    conditions:
+      entitlements: [channel.wordpress, channel.facebook]
+    depends_on: [CIS-F045]
+    owner: content_lead
+  - id: CRM-F045
+    app: crm
+    module: studio
+    name: Studio facts
+    name_vi: Dữ kiện trong Studio
+    summary: The agency's own facts that the writers cite.
+    roles: [studio-owner, studio-editor]
+    status: live
+    surface: ["page:/portal/facts"]
+    depends_on: [CIS-F044]
+    owner: content_lead
+  - id: CRM-F046
+    app: crm
+    module: studio
+    name: Studio account
+    name_vi: Tài khoản Studio
+    summary: Activity, members, add-ons, billing usage, integrations and the studio settings.
+    roles: [studio-owner]
+    status: live
+    surface: ["page:/portal/account/**"]
+    depends_on: [CIS-F040, CIS-F045]
+    owner: customer_success
+
+  # ── AA-TripPlanner ────────────────────────────────────────────────────────────────────────────────────────────────
+  - id: TP-F001
+    app: tripplanner
+    module: browse
+    name: Browse destinations and tours
+    name_vi: Xem điểm đến và tour
+    summary: The home page, destinations, a country with its tours and places, and a tour page with its from price.
+    roles: [public]
+    status: live
+    surface: ["page:/", "page:/destinations/**", "page:/tours/[slug]", "route:bff/browse", "route:lambda/browse"]
+    conditions:
+      settings: [tripplanner.rate.search_per_minute]
+    owner: tech_lead
+  - id: TP-F002
+    app: tripplanner
+    module: planner
+    name: Map planner
+    name_vi: Lên lịch trình trên bản đồ
+    summary: Pin places, reorder, set days, start from a real tour and share the plan.
+    roles: [public, traveller]
+    status: live
+    surface: ["page:/plan", "page:/plan/shared", "route:bff/trip", "route:lambda/assembly"]
+    owner: tech_lead
+  - id: TP-F003
+    app: tripplanner
+    module: ai
+    name: AI narration and plan chat
+    name_vi: Thuyết minh AI và trò chuyện lên lịch trình
+    summary: AI-written narration of a trip and the planning chat, with AI labels, rate limits and a monthly cap.
+    roles: [public, traveller]
+    status: live
+    surface: ["route:bff/trip", "route:lambda/assembly"]
+    conditions:
+      entitlements: [tp.ai_sessions]
+      settings: [tripplanner.ai.narration_max_tokens, tripplanner.ai.plan_chat_max_steps, tripplanner.rate.narrate_per_hour, tripplanner.rate.chat_per_hour, tripplanner.spend.plan_chat_monthly_cap_usd, tripplanner.spend.plan_chat_tenant_monthly_cap_usd]
+    owner: ai_ops
+  - id: TP-F004
+    app: tripplanner
+    module: account
+    name: Sign in and My trips
+    name_vi: Đăng nhập và Chuyến đi của tôi
+    summary: Travellers sign in with the traveller pool, keep their trips and reopen them.
+    roles: [traveller]
+    status: live
+    surface: ["page:/sign-in", "page:/trips", "route:bff/auth", "route:bff/me"]
+    conditions:
+      settings: [tripplanner.rate.signed_in_factor]
+    depends_on: [INF-F002]
+    owner: tech_lead
+  - id: TP-F005
+    app: tripplanner
+    module: agency-planner
+    name: Agency planner (white label)
+    name_vi: Công cụ lên lịch trình của đại lý (mang thương hiệu đại lý)
+    summary: A served agency's own planner and tour pages under its brand, with its own tours and text.
+    roles: [public, traveller]
+    status: live
+    surface: ["page:/[tenant]", "page:/[tenant]/plan/**", "page:/[tenant]/tours/[tour]"]
+    conditions:
+      entitlements: [tp.hosted, tp.branding]
+      tenant_kinds: [pilot, agency]
+      secrets: [tripplanner/dev/tenant-assertion-key]
+      note: The agency must be in service and subscribe to the TripPlanner add-on.
+    owner: tech_lead
+  - id: TP-F006
+    app: tripplanner
+    module: leads
+    name: Send a trip to the agency (lead hand-off)
+    name_vi: Gửi chuyến đi cho đại lý (bàn giao lead)
+    summary: The traveller sends the trip with consent; the lead waits for the agency's CRM to pull it, or goes to its webhook or e-mail.
+    roles: [traveller]
+    status: live
+    surface: ["route:bff/trip", "route:lambda/assembly", "route:lambda/jobs"]
+    conditions:
+      settings: [tripplanner.leads.hold_days, tripplanner.leads.tenant_daily_cap, tripplanner.rate.send_per_hour, tripplanner.handoff.advisor_demo, tripplanner.handoff.require_registration]
+      tenant_kinds: [pilot, agency]
+      note: The demo tenant shows a demo notice instead of sending.
+    owner: tech_lead
+  - id: TP-F007
+    app: tripplanner
+    module: catalogue-sync
+    name: Catalogue revalidation
+    name_vi: Làm mới catalogue
+    summary: CIS tells TripPlanner which tour pages changed; the pages are rebuilt within minutes.
+    roles: [machine]
+    status: live
+    surface: ["route:bff/revalidate"]
+    conditions:
+      secrets: [aa-cis/dev/tripplanner-revalidate-hmac]
+    owner: tech_lead
+  - id: TP-F008
+    app: tripplanner
+    module: legal
+    name: Legal pages and health
+    name_vi: Trang pháp lý và health
+    summary: The privacy notice, the terms of use and the health check.
+    roles: [public]
+    status: live
+    surface: ["page:/privacy", "page:/terms", "route:bff/health"]
+    owner: business_owner
+  - id: TP-F009
+    app: tripplanner
+    module: jobs
+    name: Tenant data jobs (erasure, backup, retention)
+    name_vi: Job dữ liệu đại lý (xoá, sao lưu, lưu giữ)
+    summary: The scheduled worker that erases an offboarded tenant's data, backs tenants up, redacts the outbox and purges rate counters.
+    roles: [machine]
+    status: live
+    surface: ["route:lambda/jobs"]
+    depends_on: [CIS-F024]
+    owner: tech_lead
+
+  # ── AA-CIS-Infra: shared platform edge (no app surface; checked by the Infra repo itself) ─────────────────────────
+  - id: INF-F001
+    app: infra
+    module: identity
+    name: Staff sign-in (company accounts)
+    name_vi: Đăng nhập nhân viên (tài khoản công ty)
+    summary: One company sign-in for every staff app, with groups that map to each app's roles.
+    roles: [admin, booking-admin, aa-staff]
+    status: live
+    owner: tech_lead
+  - id: INF-F002
+    app: infra
+    module: identity
+    name: Partner, traveller and machine sign-in pools
+    name_vi: Nhóm đăng nhập đối tác, khách du lịch và máy
+    summary: Separate sign-in pools for agency people, travellers and app-to-app machine clients.
+    roles: [owner, agent, traveller, machine]
+    status: live
+    owner: tech_lead
+  - id: INF-F003
+    app: infra
+    module: edge
+    name: API edge and web hosting
+    name_vi: Cổng API và lưu trữ web
+    summary: The API gateways in front of every backend, the content delivery hosts and the web firewall.
+    roles: [machine]
+    status: live
+    owner: tech_lead
+  - id: INF-F004
+    app: infra
+    module: database
+    name: DB Migrate and schema dump
+    name_vi: DB Migrate và dump schema
+    summary: Migrations are applied by one workflow under each owner's role, and a nightly dump keeps the schema reference and ERD current.
+    roles: [machine]
+    status: live
+    owner: tech_lead
+  - id: INF-F005
+    app: infra
+    module: observability
+    name: Alarms and alert e-mail
+    name_vi: Cảnh báo và e-mail cảnh báo
+    summary: Alarms on every service, with runbooks, sent to the alert recipients.
+    roles: [admin]
+    status: live
+    owner: tech_lead
+  - id: INF-F006
+    app: infra
+    module: docs
+    name: Docs and catalogue publishing
+    name_vi: Xuất bản tài liệu và catalogue
+    summary: The root repo publishes the docs reader bundle and this catalogue to storage on every merge; CIS admin reads them within minutes.
+    roles: [machine]
+    status: live
+    guide: docs/catalogue/README.md
+    owner: tech_lead
+
+journeys:
+  - id: J-01
+    name: Pilot rehearsal - one agency end to end
+    name_vi: Diễn tập pilot - một đại lý từ đầu đến cuối
+    summary: >-
+      The synthetic rehearsal agency goes through the whole product - provisioned, branded, writing content, offering
+      the planner, quoting an AA tour, the client accepting and paying, Booking confirming, the traveller portal and
+      AA operations - then leaves pilot mode.
+    summary_vi: >-
+      Đại lý diễn tập đi qua toàn bộ sản phẩm - được tạo, có thương hiệu, viết nội dung, cung cấp công cụ lên lịch
+      trình, báo giá tour AA, khách chấp nhận và thanh toán, Booking xác nhận, cổng khách du lịch và điều hành AA - rồi
+      rời chế độ pilot.
+    steps:
+      - name: Baseline and provisioning
+        name_vi: Mốc ban đầu và tạo đại lý
+        features: [CIS-F035, CIS-F020, CIS-F018, CIS-F023, BK-F008]
+        integrations: [INT-034, INT-030, INT-023]
+      - name: Prices for the rehearsal tours
+        name_vi: Giá cho các tour diễn tập
+        features: [BK-F006, BK-F005, TP-F001]
+        integrations: [INT-007, INT-010]
+      - name: Pilot mode on and the owner invited
+        name_vi: Bật chế độ pilot và mời chủ đại lý
+        features: [CIS-F018, CIS-F019, CRM-F002]
+        integrations: [INT-031, INT-030]
+      - name: Brand and adopted tours
+        name_vi: Thương hiệu và tour được chọn
+        features: [CRM-F041, CRM-F042, CIS-F041]
+        integrations: [INT-060]
+      - name: Topics, an article and social posts, published
+        name_vi: Chủ đề, một bài viết và bài mạng xã hội, đã xuất bản
+        features: [CRM-F043, CRM-F044, CIS-F043, CIS-F045]
+        integrations: [INT-060, INT-050, INT-051]
+      - name: A guest plans on the agency's planner and sends the trip
+        name_vi: Khách lên lịch trình trên công cụ của đại lý và gửi chuyến đi
+        features: [TP-F005, TP-F002, TP-F006]
+        integrations: [INT-006, INT-011]
+      - name: The lead reaches the pipeline and the agent quotes
+        name_vi: Lead vào pipeline và nhân viên báo giá
+        features: [CRM-F005, CRM-F007]
+        integrations: [INT-011, INT-002]
+      - name: The client accepts and pays the deposit
+        name_vi: Khách chấp nhận và đặt cọc
+        features: [CRM-F009, CRM-F011, CRM-F013]
+        integrations: [INT-024]
+      - name: Booking confirms with the supplier
+        name_vi: Booking xác nhận với nhà cung cấp
+        features: [BK-F011, BK-F015, CRM-F013]
+        integrations: [INT-024]
+      - name: Traveller portal and AA operations
+        name_vi: Cổng khách du lịch và điều hành AA
+        features: [CRM-F009, CRM-F019, CRM-F027]
+      - name: Agency billing, AI budget and leaving pilot mode
+        name_vi: Thu tiền đại lý, ngân sách AI và rời chế độ pilot
+        features: [BK-F013, CIS-F018, CIS-F025]
+        integrations: [INT-031]
+    uat_prefix: REH-
+  - id: J-02
+    name: Catalogue - from a source spreadsheet to every app
+    name_vi: Catalogue - từ bảng tính nguồn tới mọi ứng dụng
+    summary: >-
+      A source tour is uploaded, rewritten, reviewed and published, then appears the same in the planner, the
+      Marketplace, the CRM tariff and Booking.
+    summary_vi: >-
+      Một tour nguồn được tải lên, viết lại, duyệt và xuất bản, rồi hiện giống nhau trong công cụ lên lịch trình,
+      Marketplace, biểu giá CRM và Booking.
+    steps:
+      - name: Upload and rewrite
+        name_vi: Tải lên và viết lại
+        features: [CIS-F003, CIS-F004, CIS-F005, CIS-F006]
+        integrations: [INT-060, INT-065]
+      - name: Places and photos
+        name_vi: Địa điểm và ảnh
+        features: [CIS-F008, CIS-F009]
+        integrations: [INT-062, INT-067]
+      - name: Shown in every app
+        name_vi: Hiển thị trong mọi ứng dụng
+        features: [TP-F001, CRM-F042, CRM-F013, BK-F004, BK-F005]
+        integrations: [INT-001, INT-002, INT-003, INT-004, INT-006]
+      - name: A tour stops selling
+        name_vi: Một tour ngừng bán
+        features: [CIS-F040, TP-F007]
+        integrations: [INT-005, INT-001]
+    uat: [X-03, PRT-12]
