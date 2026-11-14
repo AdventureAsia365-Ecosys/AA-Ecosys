@@ -57,3 +57,34 @@ Catalogue rows in `tools/uat/catalogue.json`; helper `tools/uat/lib/rehearsal-ad
   2026-11-13); `REH-02-members` fails until the owner accepted; `REH-12-budget-on` fails until the override is set.
 - The Booking seeder copies a template hold of the agency: run it for the rehearsal agency only after step 8 booked a
   trip for it.
+
+## S280 update: who makes the admin writes
+
+### Decisions
+
+- **The admin-role writes are not the tech lead's alone.** Provisioning the marker as the Dev pilot, the second-pilot
+  probe, the `ai.budget_usd_monthly` override and its removal, End pilot and the marker's offboarding are admin-role
+  writes on existing routes (`tenant.write`, `_require_tenant_admin`). What keeps the Dev-only E2E admin (A10b) out is
+  its read-only session, not a person-only rule. The orchestrator can make them through the admin route with the main
+  admin secret and `x-admin-role: admin` (the same pattern as the existing orchestrator-only LLM key tool under
+  `tools/llm/`), with its own `x-admin-user-id` as the audit actor. So the narration of `REH-01b-pilot-on`,
+  `REH-12-budget-on`, `REH-12-budget-off` and `REH-12b-pilot-off` names "an administrator", not "the tech lead": the
+  take stays true whoever made the write.
+- The erasure approval of the offboarded marker stays a person's act (the erasure saga's own rule).
+
+### Changed
+
+- Four CIS admin scenarios: English and Vietnamese narration and the header comments are actor-neutral. Asserts are
+  unchanged.
+- Catalogue notes of `REH-01b-pilot-start`, `REH-12-budget-set` and `REH-12b-pilot-end` name the admin-role write
+  (orchestrator or tech lead); status and identity are unchanged (`blocked`, `manual`: no scenario films the write).
+
+### Tradeoffs
+
+- The main admin secret carries header trust (any role it names). Using it for these writes matches the existing
+  orchestrator tooling and the dev-phase rule; the audit rows name the agent, so they stay apart from the tech lead's.
+
+### Should know
+
+- The override row's "granted by" cell then reads `admin:<the agent's actor id>`; `REH-12-budget-on` only asserts
+  that the cell is not empty.
