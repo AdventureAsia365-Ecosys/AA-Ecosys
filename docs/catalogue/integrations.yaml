@@ -634,3 +634,18 @@ integrations:
     features: [INF-F004, CIS-F032]
     owner: tech_lead
     status: live
+  - id: INT-082
+    name: AA Academy learning API for the academy web
+    producer: cis
+    consumers: [crm]
+    kind: http_api
+    contracts:
+      - {file: learn.http.v1.openapi.yaml, version: "1"}
+    auth: Staff token of the academy web client, accepted only by the learn route class (proposed in ADR 0022)
+    cadence: On request
+    failure: The academy page shows that learning is not available; no other app depends on it
+    kill_switch: Remove the learn API Gateway resource
+    personal_data: true
+    features: [CIS-F048]
+    owner: tech_lead
+    status: planned
