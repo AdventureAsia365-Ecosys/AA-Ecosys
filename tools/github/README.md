@@ -134,8 +134,10 @@ checkout: `python3 tools/github/<tool>.py --help`.
 - gitleaks v8.30.1 scans `origin/<base>..<branch>` with the base's rules before any push. The binary comes from
   `gitleaks_resolve.py`, shared with the root `scripts/pre-push.sh` (S281): `AA_GITLEAKS`, then
   `.tmp-session/gitleaks-8301/gitleaks` (only at the CI pin), then every `gitleaks` on PATH; a candidate whose
-  `gitleaks version` fails is skipped and named (a mise shim with no version set answers "No version is set for shim:
-  gitleaks" and used to block every push). `python3 tools/github/gitleaks_resolve.py` prints the one it would use.
+  `gitleaks version` fails is passed over and named (a mise shim with no version set answers "No version is set for
+  shim: gitleaks"). No working gitleaks is still a refusal, in the PR opener and in the root pre-push alike; only
+  `AA_SKIP_GITLEAKS=1` skips the scan, with an explicit warning, and a resolver that crashes is a refusal too.
+  `python3 tools/github/gitleaks_resolve.py` prints the one it would use.
 - Pushes (never forced), opens the PR with the lane's title and body (or reuses the branch's open PR), appends the
   Claude Code attribution line when missing, checks the author is the App, and prints each PR's `live_steps`.
 

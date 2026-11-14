@@ -15,8 +15,13 @@ agency time zone in AA-Partner date tests (already fixed in AA-Partner #314).
   else the first working one so the caller can report the version gap). A candidate whose `gitleaks version` fails
   or prints no version is skipped and named in the message.
 - **Pre-push looks in two roots:** the checkout it runs in and the clone's main checkout (`git rev-parse
-  --git-common-dir`), because a lane worktree has no `.tmp-session` of its own. No working gitleaks is a skip with the
-  reason (as before for a missing binary), never a block: CI's Secret Scan still runs.
+  --git-common-dir`), because a lane worktree has no `.tmp-session` of its own.
+- **No working gitleaks fails the push (review fix):** the first cut made it a skip, which turned the broken-shim case
+  from a block into a silent pass and made a deliberate skip look like an accidental one. Now the root pre-push
+  follows the PR opener: in local and hook mode no working binary is a FAIL naming the passed-over candidates and the
+  install line; `AA_SKIP_GITLEAKS=1` is the only skip (printed as "gitleaks skipped (AA_SKIP_GITLEAKS=1)" and listed
+  in the summary). A resolver that exits non-zero without its "no working gitleaks" line (a crash), or exits 0 with no
+  path, is a FAIL too, never read as "none found". `--ci` is unchanged (it never plans gitleaks).
 - **Busy job tables are read from the refusal, not the database:** the wave tool has no AWS. `ship_copy_apply`
   recognises the DB Migrate run's own lines (`exit code: 7`, `##[error]apply refused: a job table is busy`,
   `MIGRATE ERROR: refusing apply — busy`), anchored at the line start like the lock-held check so the printed step
@@ -58,3 +63,6 @@ agency time zone in AA-Partner date tests (already fixed in AA-Partner #314).
   file stays with the orchestrator (`none:` guard, not in this lane).
 - Tests: `python -m unittest discover -s tools/github -p 'test_*.py'`, `.claude/hooks`, and
   `tools/uat/tests/test_check_takes_uploaded.py`; `scripts/pre-push.sh --self-test` covers the bash wiring.
+- Behaviour change for the root pre-push: on master a clone with no `gitleaks` on PATH skipped the scan; now it
+  blocks the push until gitleaks v8.30.1 is installed (`.tmp-session/gitleaks-8301/gitleaks` is found from a lane
+  worktree too) or `AA_SKIP_GITLEAKS=1` is set for that push.
