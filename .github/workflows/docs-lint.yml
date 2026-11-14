@@ -16,6 +16,7 @@ name: Docs lint
 #   - the tracker docs/backlog/tracker/plan.json (S263): plan_sync.py tests, shape, no account ID or ARN
 #   - unit tests of the orchestrator ship tools tools/github/ship_*.py (AA-1032; offline, scripted gh/aws, temp git)
 #   - unit tests of the architecture video gate tools/uat/arch (AA-1021; stdlib, invented names, temp git, no media)
+#   - unit tests of the UAT take upload check tools/uat/check_takes_uploaded.py (S281; stdlib, scripted rclone)
 #   - unit tests of the ops helpers tools/ops (AA-1023: ecs_rollback.sh against a scripted aws/curl, the game-day seed)
 #   - the Claude Code hooks .claude/hooks (AA-1024 G5): every hook's tests, and every hook settings.json registers exists
 #   - the lessons log (AA-1024 G22): a new or changed lesson line carries a valid Guard field
@@ -46,6 +47,9 @@ on:
       - "tools/linear/**"
       - "tools/github/**"
       - "tools/uat/arch/**"
+      # S281: the UAT take upload check that the UAT-1 hook rule loads
+      - "tools/uat/check_takes_uploaded.py"
+      - "tools/uat/tests/test_check_takes_uploaded.py"
       - "tools/ops/**"
       - "tools/llm/**"
       # AA-1024 S272: the files tools/github/test_git_env_isolation.py and the ecsx tests guard (GIT_DIR, ECS exec)
@@ -150,6 +154,12 @@ jobs:
       - name: Architecture video gate tests
         if: ${{ !cancelled() }}
         run: python -m unittest discover -s tools/uat/arch/tests -p 'test_*.py'
+
+      # S281: PASS UAT takes not packaged + rclone-checked (the hook rule UAT-1 refuses removing their worktree).
+      # Stdlib only, invented take names, a scripted rclone.
+      - name: UAT take upload check tests
+        if: ${{ !cancelled() }}
+        run: python -m unittest discover -s tools/uat/tests -p 'test_check_takes_uploaded.py'
 
       # AA-1023: the ECS rollback helper (dry run by default) against a scripted aws and curl, and the game-day seed
       # script's logic on a fake connection. Offline; needs bash and jq (on the runner image).

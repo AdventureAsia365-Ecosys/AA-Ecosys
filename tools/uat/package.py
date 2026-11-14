@@ -148,3 +148,5 @@ if __name__ == "__main__":
     kind = sys.argv[1]
     zp = uat(sys.argv[2], sys.argv[3]) if kind in ("uat", "pilot") else intro(sys.argv[2], sys.argv[3], sys.argv[4])
     print(zp, zp.stat().st_size)
+    print(f"next: python3 tools/uat/check_takes_uploaded.py upload --remote \"<rclone dir>\" {zp.stem}  "
+          "(rclone copy + check, then the .uploaded marker; before removing a worktree)")

@@ -183,7 +183,9 @@ Log ghi sau cùng nên có cả kết quả Jira và số liệu đã kiểm, kh
 7. **Linear export + archive:** `python3 tools/linear/linear_export.py --archive` (dry run) rồi thêm `--apply`; tool
    tự quét gitleaks mọi file xuất của lượt chạy (cả file không đổi) (cần `GITLEAKS_BIN` hoặc `gitleaks` trên PATH, exit 2/3 thì không archive). Root PR
    gom log / audit / backlog / lessons → chờ Docs lint xanh → điều phối tự merge. Mọi repo (gốc + 5 con) về
-   `main`/`master` cây sạch; dọn worktree và file tạm (S3 scripts, `.tmp-session` của phiên).
+   `main`/`master` cây sạch; dọn worktree và file tạm (S3 scripts, `.tmp-session` của phiên). Trước khi dọn worktree:
+   `python3 tools/uat/check_takes_uploaded.py .tmp-session/wt/<lane>` phải xanh (take UAT PASS đã đóng gói + `rclone
+   check` 0 differences); hook `aa_shell_guard` UAT-1 chặn `git worktree remove` / `rm -r` khi còn take chưa upload.
    Root PR viết tay cũng qua check `PR title` (AA-1024 G11): title không mã AA-n; body chỉ nêu mã trong dòng
    `Refs AA-n[, AA-m] <chữ tự do>` (issue đóng / thêm trong backlog → ghi bằng lời, không ghi mã ngoài dòng Refs;
    mã trong đường dẫn file được bỏ qua) — sai thì merge bị chặn vì root đòi MỌI check xanh.

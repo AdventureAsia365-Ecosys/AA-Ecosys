@@ -9,7 +9,8 @@
 # conclusion, the key log lines (ran as, busy/idle, wave, applied) and, after an apply, the owner app's readiness.
 # Exit 0 only on success; 2 = dispatch failed or the run never appeared; 1 = run not green (or key not registered);
 # 4 = refused: an apply while a lower file of the owner is not copied or not registered on Dev (owner order;
-# --allow-out-of-order bypasses it); 5 = still running after DBMIG_TIMEOUT seconds (default 1500).
+# --allow-out-of-order bypasses it); 5 = still running after DBMIG_TIMEOUT seconds (default 1500); 7 = apply held:
+# a job table is busy or a rerun wave is open (nothing ran; re-dispatch once idle).
 # For a fresh migration (copy PR not merged yet) use ship_copy_apply.py without --no-copy.
 # Orchestrator only: the dispatch runs inside the Python tool through the aa-agent App (as-app.sh), out of the hook's
 # sight, so .claude/hooks/subagent-guardrails.sh refuses any subagent command that names dbmig.sh.

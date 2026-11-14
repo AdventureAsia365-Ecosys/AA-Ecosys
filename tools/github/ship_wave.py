@@ -29,9 +29,18 @@ owner order); a held PR starts the moment its migrations are registered. A failu
 --wait-deploy waits ONCE per deployed app (CIS, Booking, Partner) at the end, until its health endpoint reports a
 git_sha that contains every merge of the wave in that repo; never once per PR.
 
+Busy job tables (S281): Migration Apply / DB Migrate refuse a contract apply while any owner job table has a queued or
+running job or a rerun wave is open (DM-11.4); a tour trash / restore / Master activation queues a platform recompute
+of 16-52 min. This tool cannot read the job tables (no AWS here), so it reads the refusal instead: an apply whose run
+says so (ship_copy_apply exit 7) prints "<owner>/<NNN>: apply held: job tables busy (<table: kinds>)", holds that
+migration, the owner's higher ones and the code PRs waiting on them (nothing ran), and the wave ends with exit 7 and a
+RESUME line: run the same command again once idle. --wait-idle N re-dispatches a held apply up to N times, 5 minutes
+apart, before giving up. Apply migrations before a tour lifecycle drill, not after.
+
 Exit: 0 all merged (and applied / deployed) | 2 usage, or a hold on a migration nothing in the wave applies and Dev
 has not registered | 3 a red check | 4 refused, merge failed, apply failed, or skipped because a dependency failed |
-5 timed out (checks, queue or deploy). Orchestrator only: .claude/hooks/subagent-guardrails.sh refuses any subagent
+5 timed out (checks, queue or deploy) | 7 held only: an apply was refused because job tables are busy (resumable; a
+real failure 1-5 anywhere in the wave wins over 7). Orchestrator only: .claude/hooks/subagent-guardrails.sh refuses any subagent
 command naming this tool (the merges run inside it). Holds no secrets.
 """
 
@@ -75,6 +84,20 @@ DEPLOY_URL = {
 }
 
 Key = tuple[str, str]  # (owner, NNN)
+
+# S281: an apply refused because a job table is busy or a rerun wave is open (DM-11.4; a tour trash / restore queues a
+# platform recompute of 16-52 min) exits ship_copy_apply.EXIT_HELD: nothing ran, the wave can be run again once idle.
+EXIT_HELD = ship_copy_apply.EXIT_HELD
+IDLE_INTERVAL = 300.0  # --wait-idle: seconds between re-dispatches of a held apply (CLI flag, orchestrator tooling)
+
+
+def final_exit(codes: list[int]) -> int:
+    """A real failure (1-5) wins over a hold (EXIT_HELD), which wins over success: a hold must never hide a failure,
+    and a held wave must not look failed."""
+    real = [c for c in codes if c not in (0, EXIT_HELD)]
+    if real:
+        return max(real)
+    return EXIT_HELD if EXIT_HELD in codes else 0
 
 
 @dataclass
@@ -142,6 +165,10 @@ def plan_lines(items: list[Item]) -> list[str]:
     for it in items:
         if it.after:
             lines.append(f"hold {it.tag} until applied: {', '.join(f'{o}/{n}' for o, n in it.after)}")
+    if by_owner:
+        lines.append("note: a contract apply needs every job table idle (DM-11.4; a tour trash / restore queues a "
+                     "16-52 min recompute): a refusal shows as 'apply held: job tables busy' (exit 7, resumable); "
+                     "--wait-idle N re-dispatches")
     return lines
 
 
@@ -311,8 +338,11 @@ class Wave:
     """Runs the items: merge workers, one apply worker per owner, held PRs released by their migrations."""
 
     def __init__(self, runner: Runner, items: list[Item], *, merge_kw: dict, apply_fn, fetch, check_only: bool,
-                 restack=update_stacked_branch):
+                 restack=update_stacked_branch, wait_idle: int = 0, idle_interval: float = IDLE_INTERVAL):
         self.runner = runner
+        self.wait_idle = max(0, wait_idle)
+        self.idle_interval = idle_interval
+        self.held: dict[Key, str] = {}  # migrations held by busy job tables (nothing ran): the wave is resumable
         self.items = items
         self.merge_kw = merge_kw
         self.apply_fn = apply_fn
@@ -338,9 +368,15 @@ class Wave:
             if it.after and not self.check_only:  # --check-only gates a held PR at once (nothing gets applied)
                 for k in it.after:
                     self.applied[k].wait()
-                bad = [f"{o}/{n}" for o, n in it.after if not self.apply_ok.get((o, n))]
+                bad = [(o, n) for o, n in it.after if not self.apply_ok.get((o, n))]
                 if bad:
-                    self._set(it.tag, 4, f"skipped: migration(s) {', '.join(bad)} not applied")
+                    names = ", ".join(f"{o}/{n}" for o, n in bad)
+                    if all(k in self.held for k in bad):
+                        # S281: held, not failed: re-run the same wave once the job tables are idle
+                        self._set(it.tag, EXIT_HELD, f"held: migration(s) {names} not applied yet "
+                                                     f"({self.held[bad[0]]})")
+                    else:
+                        self._set(it.tag, 4, f"skipped: migration(s) {names} not applied")
                     return
                 log(f"{it.tag}: migrations {', '.join(f'{o}/{n}' for o, n in it.after)} applied, checking the branch")
             expect = None
@@ -367,15 +403,27 @@ class Wave:
         finally:
             self.merge_done[it.tag].set()
 
+    def _apply(self, owner: str, nnn: str) -> tuple[int, str]:
+        """apply_fn returns an exit code, or (exit code, what held it) for an apply held by busy job tables."""
+        res = self.apply_fn(owner, nnn)
+        if isinstance(res, tuple):
+            return int(res[0]), str(res[1] or "")
+        return int(res), ""
+
     def apply_owner(self, owner: str, keys: list[tuple[str, Item]]) -> None:
-        """Apply one owner's migrations in number order; a failure fails every higher one (owner order)."""
+        """Apply one owner's migrations in number order; a failure fails every higher one (owner order). An apply held
+        by busy job tables (exit EXIT_HELD, nothing ran) is re-dispatched up to --wait-idle times, idle_interval apart;
+        still held, it and every higher one are held, not failed (the wave can be run again once idle)."""
         failed = None
+        held_by = None
         for nnn, it in sorted(keys, key=lambda x: int(x[0])):
             key = (owner, nnn)
             try:
                 if failed:
                     log(f"apply {owner}/{nnn}: skipped ({failed})")
                     self.apply_ok[key] = False
+                    if held_by:
+                        self.held[key] = held_by
                     continue
                 self.merge_done[it.tag].wait()
                 code = self.results.get(it.tag, (4, ""))[0]
@@ -385,9 +433,22 @@ class Wave:
                     self.apply_ok[key] = False
                     continue
                 log(f"apply {owner}/{nnn}: {it.tag} merged, copy + apply")
-                rc = self.apply_fn(owner, nnn)
+                rc, detail = self._apply(owner, nnn)
+                tries = 0
+                while rc == EXIT_HELD and tries < self.wait_idle:
+                    tries += 1
+                    log(f"{owner}/{nnn}: apply held: job tables busy ({detail or 'busy'}); re-dispatching in "
+                        f"{int(self.idle_interval)}s (--wait-idle {tries}/{self.wait_idle})")
+                    self.runner.sleep(self.idle_interval)
+                    rc, detail = self._apply(owner, nnn)
                 self.apply_ok[key] = rc == 0
-                if rc != 0:
+                if rc == EXIT_HELD:
+                    held_by = f"apply held: job tables busy ({detail or 'busy'})"
+                    self.held[key] = held_by
+                    failed = f"{owner}/{nnn} {held_by}"
+                    self._set(it.tag, EXIT_HELD, f"merged {self.merged_sha.get(it.tag, '')[:8]} but {failed}")
+                    log(f"{owner}/{nnn}: {held_by}; not applied, nothing ran (exit {EXIT_HELD}: resumable)")
+                elif rc != 0:
                     failed = f"{owner}/{nnn} apply exit {rc}"
                     self._set(it.tag, 4, f"merged {self.merged_sha.get(it.tag, '')[:8]} but {failed}")
                     log(f"ERROR apply {owner}/{nnn}: exit {rc}")
@@ -477,7 +538,14 @@ def main(argv: list[str] | None = None, runner: Runner | None = None, apply_fn=N
     ap.add_argument("--interval", type=float, default=60, help="seconds between check reads (min 30)")
     ap.add_argument("--queue-timeout", type=float, default=5400, help="max seconds in the merge queue")
     ap.add_argument("--deploy-timeout", type=float, default=1800, help="max seconds per app for --wait-deploy")
+    ap.add_argument("--wait-idle", type=int, default=0, metavar="N",
+                    help="an apply held by busy job tables (exit 7) is re-dispatched up to N times, "
+                         "--wait-idle-interval apart (default 0: report the hold and stop that chain)")
+    ap.add_argument("--wait-idle-interval", type=float, default=IDLE_INTERVAL, help=argparse.SUPPRESS)
     a = ap.parse_args(argv)
+    if a.wait_idle < 0:
+        print("ERROR --wait-idle must be 0 or more", file=sys.stderr)
+        return 2
     runner = runner or Runner()
     try:
         items = parse_items(a.targets)
@@ -497,23 +565,32 @@ def main(argv: list[str] | None = None, runner: Runner | None = None, apply_fn=N
     if not a.check_only:
         warn_mfa(runner)
     if apply_fn is None:
-        def apply_fn(owner: str, nnn: str) -> int:
-            return ship_copy_apply.main([owner, nnn], runner=runner, fetch=fetch)
+        def apply_fn(owner: str, nnn: str) -> tuple[int, str]:
+            report: dict = {}
+            rc = ship_copy_apply.main([owner, nnn], runner=runner, fetch=fetch, report=report)
+            return rc, str(report.get("held") or "")
     wave = Wave(runner, items, apply_fn=apply_fn, fetch=fetch, check_only=a.check_only, restack=restack,
                 merge_kw={"timeout": a.timeout, "interval": max(30.0, a.interval), "allow_deletes": a.allow_deletes,
-                          "queue_timeout": a.queue_timeout})
+                          "queue_timeout": a.queue_timeout},
+                wait_idle=a.wait_idle, idle_interval=a.wait_idle_interval)
     wave.run()
-    worst = 0
+    codes: list[int] = []
     if a.wait_deploy and not a.check_only:
-        worst = wait_deploys(runner, wave, fetch, timeout=a.deploy_timeout)
+        codes.append(wait_deploys(runner, wave, fetch, timeout=a.deploy_timeout))
     log("SUMMARY")
     for it in items:
         code, msg = wave.results.get(it.tag, (4, "not run"))
-        log(f"  {it.tag}: {'ok' if code == 0 else f'exit {code}'} - {msg}")
-        worst = max(worst, code)
+        log(f"  {it.tag}: {'ok' if code == 0 else 'held' if code == EXIT_HELD else f'exit {code}'} - {msg}")
+        codes.append(code)
     for k in sorted(wave.apply_ok):
         if any(k in it.applies for it in items):
-            log(f"  apply {k[0]}/{k[1]}: {'applied' if wave.apply_ok[k] else 'NOT applied'}")
+            state = "applied" if wave.apply_ok[k] else f"HELD ({wave.held[k]})" if k in wave.held else "NOT applied"
+            log(f"  apply {k[0]}/{k[1]}: {state}")
+    worst = final_exit(codes)
+    if wave.held:
+        log(f"RESUME: the wave is held, not failed (exit {EXIT_HELD}): once every job table is idle (no recompute or "
+            f"other job queued/running, no open rerun wave), run the same ship_wave.py command again (merged PRs are "
+            f"kept, registered migrations are not dispatched again), or add --wait-idle N")
     log(json.dumps({"exit": worst}))
     return worst
 

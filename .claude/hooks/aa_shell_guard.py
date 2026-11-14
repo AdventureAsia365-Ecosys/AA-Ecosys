@@ -51,6 +51,10 @@ Rules (main session and subagents alike; exit 2 refuses, the message goes to std
   WT-1     `git worktree add` with a literal relative path, or an absolute one outside .tmp-session/wt/: the path is
            resolved from `-C <repo>` or the current directory, and worktrees landed inside child repos (S246, S247).
            A variable path ($W) passes (it cannot be read statically).
+  UAT-1    `git worktree remove <path>` or `rm -r <path>` of a directory whose tools/uat/out/ still holds a PASS UAT take
+           (out/<stem>.mp4 + result.json verdict PASS) with no zip in out/packages/ or no .uploaded marker of a clean
+           `rclone check` (tools/uat/check_takes_uploaded.py): the take dies with the worktree (S280 REH-08a PASS lost,
+           recorded again in S281). Override, logged: prefix `AA_UAT_DISCARD_TAKES=1`.
   BG-1     A background job whose stdout goes to /dev/null (`cmd >/dev/null 2>&1 &`, `&>/dev/null &`, `nohup ...
            >/dev/null`): when it fails nobody can tell why (S236, S270). Write a log file under .tmp-session/ or use
            the Bash tool's run_in_background. `&&` after a redirect is not a background job.
@@ -528,6 +532,69 @@ def worktree_check(t: Text, here: Path) -> str | None:
         full = os.path.normpath(path if path.startswith("/") else str(base / path)) + "/"
         if not any(full.startswith(b) and "/" not in full[len(b):].rstrip("/") for b in _wt_bases()):
             return f"`git worktree add {path}` (resolves to {full.rstrip('/')}, outside {_wt_bases()[-1]})"
+    return None
+
+
+TAKES_TOOL = Path(__file__).resolve().parents[2] / "tools" / "uat" / "check_takes_uploaded.py"
+RM_RECURSIVE = re.compile(r"^-(?:[a-zA-Z]*[rR][a-zA-Z]*)$|^--recursive$")
+
+
+def _pending_takes(path: Path) -> list[str]:
+    """PASS UAT takes under <path>/tools/uat/out without a checked upload (tools/uat/check_takes_uploaded.py); [] when
+    the tool cannot be loaded (fail open, like every rule here)."""
+    import importlib.util
+    try:
+        spec = importlib.util.spec_from_file_location("check_takes_uploaded", TAKES_TOOL)
+        if spec is None or spec.loader is None:
+            return []
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return [t.stem for t in mod.pending_takes(mod.uat_dir(path))]
+    except Exception:  # noqa: BLE001 - a broken tool must not block every worktree removal
+        return []
+
+
+def takes_check(t: Text, here: Path) -> str | None:
+    """UAT-1: `git worktree remove <path>` or `rm -r <path>` of a directory whose tools/uat/out still holds a PASS take
+    that was never packaged + rclone-checked (lesson S280/S281: REH-08a lost with its worktree). cd / -C tracked; a
+    variable or quoted path is not readable here and passes."""
+    for words in simple_commands(t.skeleton):
+        prog, args = program(words)
+        if prog in DIR_CHANGERS:
+            here = _move(here, prog, args)
+            continue
+        targets: list[tuple[str, Path]] = []
+        if prog == "git":
+            a, base = list(args), here
+            while a and a[0].startswith("-"):
+                if a[0] == "-C" and len(a) > 1:
+                    base = _cd(base, a[1:2])
+                a = a[2:] if a[0] in ("-C", "-c") else a[1:]
+            if a[:2] != ["worktree", "remove"]:
+                continue
+            paths = [x for x in a[2:] if not x.startswith("-")][:1]
+            targets = [("git worktree remove", base) for _ in paths]
+            what = paths
+        elif prog == "rm" and any(RM_RECURSIVE.match(x) for x in args):
+            what = [x for x in args if not x.startswith("-")]
+            targets = [("rm -r", here) for _ in what]
+        else:
+            continue
+        for path, (verb, base) in zip(what, targets):
+            if path.startswith(("$", '"', "'", "`")) or "$" in path or "*" in path:
+                continue
+            if path.startswith("~"):
+                path = os.path.expanduser(path)
+            if not path.startswith("/") and _unknown(base):
+                continue
+            full = Path(os.path.normpath(path if path.startswith("/") else str(base / path)))
+            if not (full / "tools" / "uat" / "out").is_dir():
+                continue
+            pending = _pending_takes(full)
+            if pending:
+                more = f" (+{len(pending) - 5} more)" if len(pending) > 5 else ""
+                return (f"`{verb} {path}`: {len(pending)} PASS UAT take(s) in {full}/tools/uat/out not packaged + "
+                        f"uploaded: {', '.join(pending[:5])}{more}")
     return None
 
 
@@ -1071,12 +1138,16 @@ FIX = {
               "(`'cis#N>apply:cis/NNN'`), which stops at the first red step itself.",
     "TF-1": "Apply from the main checkout on main (git switch main && git pull), after the PR merged; Infra applies "
             "normally run in CI (terraform-apply.yml).",
+    "UAT-1": "Package each take (python3 -I tools/uat/package.py uat <stem> \"<title>\" in that worktree), then "
+             "python3 tools/uat/check_takes_uploaded.py upload --remote \"<rclone dir>\" --uat <worktree>/tools/uat "
+             "<stem> (or verify after a hand upload: it writes the .uploaded marker on 0 differences); copy the zips "
+             "out of the worktree too. Discard on purpose, logged: prefix AA_UAT_DISCARD_TAKES=1.",
 }
 
 
 RULES = (("PKILL-1", _rule_pkill), ("ZSH-1", _rule_zsh), ("ENV-1", _rule_env), ("SHIP-1", _rule_ship_command),
          ("ECS-1", _rule_ecs_exec), ("BG-1", _rule_background), ("PIPE-1", _rule_pipe_exit))
-RULE_IDS = tuple(r for r, _ in RULES) + ("RAM-1", "WT-1", "TF-1")
+RULE_IDS = tuple(r for r, _ in RULES) + ("RAM-1", "WT-1", "TF-1", "UAT-1")
 
 
 def _prefixed(cmd: str, var: str) -> bool:
@@ -1123,6 +1194,11 @@ def check(cmd: str, cwd: Path | None = None, proc: Path = Path("/proc")) -> Refu
         hit = worktree_check(t, here)
         if hit:
             return Refusal("WT-1", hit + where, FIX["WT-1"])
+        hit = takes_check(t, here)
+        if hit:
+            if not _prefixed(cmd, "AA_UAT_DISCARD_TAKES"):
+                return Refusal("UAT-1", hit + where, FIX["UAT-1"])
+            _log("UAT-1 override", hit)
         if not lane_pytest:
             hit = lane_pytest_check(t, here)
             lane_pytest = hit + where if hit else None

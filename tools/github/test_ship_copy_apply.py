@@ -31,6 +31,18 @@ SCRIPT_ECHO = ("2026-10-28T03:00:59.0000000Z   if [ \"$EXIT\" = \"17\" ]; then\n
                "2026-10-28T03:00:59.0000000Z     echo \"::error::the apply lock is held by another DB Migrate run\"\n")
 LOCK_LOG = (SCRIPT_ECHO + "2026-10-28T03:26:00.0000000Z exit code: 17  status: STOPPED  stopped: exited\n"
             "2026-10-28T03:26:00.0000000Z ##[error]the apply lock is held by another DB Migrate or auto-apply run\n")
+# S281: Infra db/run_migration.py refused the apply (exit 7) while a recompute ran; the script lines come first.
+BUSY_SCRIPT = ("2026-10-28T03:00:59.0000000Z   if [ \"$EXIT\" = \"7\" ]; then\n"
+               "2026-10-28T03:00:59.0000000Z     echo \"::error::apply refused: a job table is busy or a rerun wave is "
+               "open (see the MIGRATE busy lines)\"\n")
+BUSY_LOG = (BUSY_SCRIPT +
+            "2026-10-28T03:02:00.0000000Z MIGRATE idle: booking.job running=0 queued=0\n"
+            "2026-10-28T03:02:00.0000000Z MIGRATE busy: shared.job running=1 queued=0 due=0 "
+            "kinds=[recompute:running=1]\n"
+            "2026-10-28T03:03:00.0000000Z MIGRATE ERROR: refusing apply — busy: shared.job (running=1). Wait until "
+            "every job table is idle, or re-dispatch with override_busy_jobs=<reason> (tech lead only)\n"
+            "2026-10-28T03:03:01.0000000Z exit code: 7  status: STOPPED  stopped: exited\n"
+            "2026-10-28T03:03:01.0000000Z ##[error]apply refused: a job table is busy or a rerun wave is open\n")
 POSTCHECK_LOG = (SCRIPT_ECHO + "2026-10-28T03:05:00.0000000Z exit code: 9  status: STOPPED  stopped: exited\n"
                  "2026-10-28T03:05:00.0000000Z ##[error]ownership post-check failed: clean up by hand\n")
 
@@ -242,6 +254,41 @@ class MainFlowTest(unittest.TestCase):
         out = self.out.getvalue()
         self.assertIn("exit code: 9", out)
         self.assertNotIn("WARN run", out)
+
+    def test_busy_refusal_is_held_not_failed(self):
+        # S281: a platform recompute was running, the apply refused (exit 7) and nothing ran.
+        r = self.runner("CREATE TABLE crm.task (id int);\n", conclusion="failure", copy_state="MERGED",
+                        job_log=BUSY_LOG)
+        report: dict = {}
+        code = sca.main(["crm", "038"], runner=r, fetch=self.ready(["crm-036", "crm-037"]), report=report)
+        out = self.out.getvalue()
+        self.assertEqual(code, sca.EXIT_HELD, out)
+        self.assertEqual(report["held"], "shared.job: recompute:running=1")
+        self.assertIn("apply held: job tables busy (shared.job: recompute:running=1)", out)
+        # a plain red run is still a failure (exit 1), and a check-mode run is never 'held'
+        r = self.runner("CREATE TABLE crm.task (id int);\n", conclusion="failure", copy_state="MERGED",
+                        job_log=POSTCHECK_LOG)
+        self.assertEqual(sca.main(["crm", "038"], runner=r, fetch=self.ready(["crm-036", "crm-037"])), 1)
+
+    def test_busy_refusal_reading(self):
+        def lines(text):
+            return [sca.re.sub(r"^\S+Z\s", "", x).strip() for x in text.splitlines()]
+
+        self.assertEqual(sca.busy_refusal(lines(BUSY_LOG)), "shared.job: recompute:running=1")
+        # the printed step script alone is not a refusal
+        self.assertIsNone(sca.busy_refusal(lines(BUSY_SCRIPT + GREEN_LOG)))
+        self.assertIsNone(sca.busy_refusal(lines(LOCK_LOG)))
+        self.assertIsNone(sca.busy_refusal(lines(POSTCHECK_LOG)))
+        wave = ("MIGRATE busy: shared.rerun_wave open=1\nMIGRATE busy: booking.job unreadable (Timeout), counted as "
+                "busy\nMIGRATE ERROR: refusing apply — busy: booking.job (unreadable), shared.rerun_wave (open=1).\n")
+        self.assertEqual(sca.busy_refusal(lines(wave)),
+                         "shared.rerun_wave: open=1; booking.job: unreadable (Timeout), counted as busy")
+        self.assertEqual(sca.busy_refusal(["exit code: 7  status: STOPPED"]), "busy")
+        # a later re-check report replaces the earlier one for the same table
+        again = ("MIGRATE busy: shared.job running=1 queued=2 due=2 kinds=[recompute:running=1, recompute:queued=2]\n"
+                 "MIGRATE busy: shared.job running=1 queued=0 due=0 kinds=[recompute:running=1]\n"
+                 "exit code: 7  status: STOPPED  stopped: exited\n")
+        self.assertEqual(sca.busy_refusal(lines(again)), "shared.job: recompute:running=1")
 
     def test_lock_line_match_ignores_the_printed_script(self):
         lines = [sca.re.sub(r"^\S+Z\s", "", x).strip() for x in POSTCHECK_LOG.splitlines()]

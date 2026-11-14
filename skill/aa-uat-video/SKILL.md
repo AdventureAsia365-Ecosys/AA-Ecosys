@@ -186,6 +186,16 @@ rclone check <thư mục local> "<remote vừa copy>" --one-way     # phải ra 
 ```
 
 Upload xong khi `rclone check` báo 0 differences. Di chuyển trên Drive bằng `rclone moveto` (link giữ nguyên).
+Mỗi zip một lệnh, ghi marker `out/packages/<stem>.uploaded` khi check sạch (S281):
+
+```bash
+python3 tools/uat/check_takes_uploaded.py upload --remote "<remote dir>" <stem>   # rclone copy + check + marker
+python3 tools/uat/check_takes_uploaded.py verify --remote "<remote dir>" <stem>   # đã upload tay: chỉ check + marker
+python3 tools/uat/check_takes_uploaded.py <worktree>                              # take PASS còn chờ? exit 1 nếu có
+```
+
+Quay trong worktree thì đóng gói + upload ngay sau mỗi take PASS, trước khi dọn worktree: hook `aa_shell_guard`
+UAT-1 từ chối `git worktree remove` / `rm -r` worktree còn take PASS chưa có marker (S280 mất REH-08a).
 Nghiệp tự mở quyền chia sẻ. rclone đang dùng client_id chung sắp bị khai tử trong 2026: khi rclone cảnh báo/ngừng,
 tạo OAuth client riêng (Google Cloud project miễn phí) rồi `rclone config update aadrive client_id=… client_secret=…`
 — giá trị không ghi vào repo hay skill.

@@ -11,6 +11,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import unittest.mock
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -676,6 +677,82 @@ class LanePytestTest(unittest.TestCase):
         self.assertIsNone(g._xdist_workers(["-q", "--no-header"]))
         self.assertEqual(g._in_worktree(f"{self.WT}/tests/unit/"), "tests/unit")
         self.assertEqual(g._in_worktree(self.WT), "")
+
+
+class UatTakesTest(unittest.TestCase):
+    """UAT-1 (lesson S280/S281): a worktree with a PASS UAT take never packaged + rclone-checked is not removed."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory(prefix="uat1-")
+        self.base = Path(self.tmp.name)
+        self.wt = self.base / "wt" / "s999-l2-lanterns"
+        out = self.wt / "tools" / "uat" / "out"
+        (out / "packages").mkdir(parents=True)
+        (out / "LANTERN-01_20261101_v1.mp4").write_bytes(b"x")
+        (out / "LANTERN-01_20261101_v1.result.json").write_text(json.dumps({"verdict": "PASS"}), encoding="utf-8")
+        (out / "LANTERN-02_20261101_v1.mp4").write_bytes(b"x")
+        (out / "LANTERN-02_20261101_v1.result.json").write_text(json.dumps({"verdict": "FAIL"}), encoding="utf-8")
+        self.out = out
+        self.clean = self.base / "wt" / "s999-l3-clean"
+        (self.clean / "tools" / "uat" / "out").mkdir(parents=True)
+        self.log = mock_hits(self)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_refused(self):
+        wt, base = str(self.wt), self.base
+        for cmd, cwd in (
+            (f"git worktree remove {wt}", None),
+            (f"git worktree remove --force {wt}", None),
+            (f"git -C {base} worktree remove -f wt/s999-l2-lanterns", None),
+            ("git worktree remove wt/s999-l2-lanterns", base),
+            (f"cd {base}/wt && git worktree remove s999-l2-lanterns", None),
+            (f"rm -rf {wt}", None),
+            (f"rm -r --one-file-system {wt} {self.clean}", None),
+            (f"bash -c 'git worktree remove {wt}'", None),
+        ):
+            self.assertEqual(rule(cmd, cwd=cwd), "UAT-1", cmd)
+        r = g.check(f"git worktree remove {wt}", proc=NO_PROC)
+        self.assertIn("LANTERN-01_20261101_v1", r.message())
+        self.assertNotIn("LANTERN-02", r.message())  # a FAIL take is re-recorded, not kept
+        self.assertIn("check_takes_uploaded.py upload", r.message())
+
+    def test_near_misses_pass(self):
+        wt = str(self.wt)
+        for cmd in (
+            f"git worktree remove {self.clean}",
+            f"rm -f {wt}/tools/uat/out/LANTERN-01_20261101_v1.mp4",  # not recursive
+            f"rm -rf {wt}/tools/uat/out/packages",  # no tools/uat/out under it
+            "git worktree remove \"$WT\"",
+            "git worktree remove $WT",
+            f"ls {wt}",
+            f"grep -n 'git worktree remove {wt}' notes.md",
+            "git worktree list --porcelain",
+            f"AA_UAT_DISCARD_TAKES=1 git worktree remove {wt}",
+        ):
+            self.assertIsNone(rule(cmd), cmd)
+
+    def test_packaged_and_checked_take_passes(self):
+        sys.path.insert(0, str(g.TAKES_TOOL.parent))
+        import check_takes_uploaded as ctu
+        (self.out / "packages" / "LANTERN-01_20261101_v1.zip").write_bytes(b"zip")
+        self.assertEqual(rule(f"git worktree remove {self.wt}"), "UAT-1")  # zipped, never checked
+        err = ctu.verify(self.wt / "tools" / "uat", "LANTERN-01_20261101_v1", "drive:L", lambda argv: (0, "ok"))
+        self.assertIsNone(err)
+        self.assertIsNone(rule(f"git worktree remove {self.wt}"))
+
+    def test_broken_tool_fails_open(self):
+        with unittest.mock.patch.object(g, "TAKES_TOOL", self.base / "missing.py"):
+            self.assertIsNone(rule(f"git worktree remove {self.wt}"))
+
+
+def mock_hits(case: unittest.TestCase):
+    """Keep guard-hits.log writes (refusals and overrides) inside the test's temporary directory."""
+    p = unittest.mock.patch.object(g, "HITS_LOG", Path(case.tmp.name) / "guard-hits.log")
+    p.start()
+    case.addCleanup(p.stop)
+    return p
 
 
 class HookIoTest(unittest.TestCase):
