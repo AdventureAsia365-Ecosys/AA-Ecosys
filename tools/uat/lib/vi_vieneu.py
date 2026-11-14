@@ -2,6 +2,8 @@
 
   venv-vi/bin/python -I lib/vi_vieneu.py <work/ID> [voice]   -> <work/ID>/audio/vi/NN.wav
   voice = a preset name (default "Thục Đoan") or an enrolled clone own-voice/work/voice_w<k>.npz
+  A clone .npz may also carry its reading settings (temperature, top_k, repetition_penalty, max_chars, tempo):
+  they are used as saved, and tempo < 1 slows each caption with ffmpeg atempo (pitch kept).
 
 Runs in its own venv (venv-vi: vieneu SDK, torch-free ONNX Runtime on CPU). Model + preset voices are
 Apache-2.0 (https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo, "Usage Rights & Licensing FAQ": presets
@@ -12,6 +14,7 @@ external-data file that resolves outside the folder of its graph, so the snapsho
 """
 import json
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -57,19 +60,28 @@ def main(work: Path, voice: str) -> None:
     out = work / "audio" / "vi"
     out.mkdir(parents=True, exist_ok=True)
     tts = load()
+    params, tempo = {}, 1.0
     if voice.endswith(".npz"):  # an enrolled own-voice clone from own-voice/clone.py
         z = np.load(voice)
         voice_arg = {"speaker_emb": z["speaker_emb"], "codes": z["codes"]}
+        for k, cast in (("temperature", float), ("top_k", int), ("repetition_penalty", float), ("max_chars", int)):
+            if k in z.files:
+                params[k] = cast(z[k])
+        tempo = float(z["tempo"]) if "tempo" in z.files else 1.0
     else:
         voice_arg = voice
     sr = getattr(tts, "sample_rate", None) or 48000
     for c in caps:
         if not c.get("vi"):
             continue
-        a = np.asarray(tts.infer(c["vi"], voice=voice_arg), dtype=np.float32).reshape(-1)
+        a = np.asarray(tts.infer(c["vi"], voice=voice_arg, **params), dtype=np.float32).reshape(-1)
         p = out / f"{c['n']:02d}.wav"
         sf.write(p, a, sr)
-        print(f"vi step {c['n']}: {len(a) / sr:.2f}s ({voice})", flush=True)
+        if tempo != 1.0:  # slow the clip, keep the pitch; durations are measured after this step
+            tmp = p.with_name(p.stem + ".tempo.wav")
+            subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(p), "-af", f"atempo={tempo}", str(tmp)], check=True)
+            os.replace(tmp, p)
+        print(f"vi step {c['n']}: {sf.info(p).duration:.2f}s ({voice})", flush=True)
 
 
 if __name__ == "__main__":

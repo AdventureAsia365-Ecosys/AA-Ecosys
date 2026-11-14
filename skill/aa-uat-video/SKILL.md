@@ -63,6 +63,10 @@ thoại), header Given/When/Then, danh sách `steps`.
   (vd. `Adam` = nam miền Nam, hoặc file giọng clone `own-voice/work/voice_w<k>.npz`).
 - **Giọng của chính người đọc:** chỉ khi người đó đồng ý (ghi rõ trong báo cáo phiên), mẫu ≤ 8 s; hướng dẫn thu và
   script: `tools/uat/own-voice/README.vi.md` + `clone.py`.
+- **Giọng riêng của tech lead (đã đồng ý, S279):** `own-voice/work/voice_nghiep_v1.npz` (gitignored) — dấu giọng trung bình 12 clip
+  giọng thật, giọng miền Nam; file mang luôn thông số đọc (temperature 0,6, top_k 20, chậm 8 %) và `lib/vi_vieneu.py` dùng đúng
+  thông số đó: `UAT_VI_VOICE=$PWD/tools/uat/own-voice/work/voice_nghiep_v1.npz bash tools/uat/run.sh <kịch bản>`. Fine-tune LoRA
+  trên audio lớp học (nén, vang) cho kết quả kém hơn zero-shot; chỉ fine-tune khi có 15–30 phút thu sạch.
 - **Chỉ TTS miễn phí chạy local.** Giọng chưa đủ hay → thử model mã nguồn mở khác. Piper `vi_VN-vais1000` (giọng Bắc)
   đã bị loại. Dịch vụ TTS trả tiền nằm ngoài phạm vi (luật dịch vụ trả tiền: `aa-lessons/lessons.md` mục Cách làm việc).
 - **Luật giấy phép:** code, trọng số và giọng preset đều phải cho phép dùng thương mại. Danh sách đã loại (NC / CPML /
