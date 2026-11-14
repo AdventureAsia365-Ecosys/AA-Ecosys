@@ -526,11 +526,12 @@ These are the CIS steps the saga runs (and section 4.7 runs alone today). The st
 
    Expected: `available`. It holds the tenant's data: no `keep-` prefix, deleted in step 10.
 6. **Enable the apply** (approved Terraform change in AA-CIS-Infra): `ERASURE_APPLY_ENABLED=true` on the api and
-   worker task definitions, and `ERASURE_TENANT_RETENTION_DAYS` if the tech lead set a value; apply, then deploy CIS.
-   Without it the API answers 403 and the job refuses. The only switch in Terraform today is the local
-   `erasure_drill` in `accounts/aa365/main.tf`: `true` turns the apply on **and** sets the retention window to 0 days,
-   so it is for a drill on a synthetic tenant only. A real tenant erasure needs a change that turns on the apply
-   alone and keeps the window.
+   worker task definitions; apply, then deploy CIS. Without it the API answers 403 and the job refuses. The only
+   switch in Terraform is the local `erasure_drill` in `accounts/aa365/main.tf`: `true` turns the apply on. The
+   retention window is not in Terraform: it is the admin setting `cis.erasure.tenant_retention_days` (Platform ›
+   Settings, default 30 days; its env override was retired in November 2026). A drill on a synthetic tenant sets it to
+   0 on that page for the run (the administrator may approve their own change in the dev phase) and puts 30 back
+   after; a real tenant erasure keeps the window.
 7. **Apply**, within 24 hours of the DRY RUN, from a Cognito staff session (admin role): the apply panel of
    `/admin/tenants/data-erasure` on that DRY RUN, or:
 
