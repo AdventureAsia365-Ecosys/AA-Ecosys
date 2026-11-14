@@ -88,3 +88,42 @@ Catalogue rows in `tools/uat/catalogue.json`; helper `tools/uat/lib/rehearsal-ad
 
 - The override row's "granted by" cell then reads `admin:<the agent's actor id>`; `REH-12-budget-on` only asserts
   that the cell is not empty.
+
+## S280 update 2: the runbook matches the catalogue
+
+### Decisions
+
+- **The canonical runbook names the actor the same way as the catalogue.** `docs/ops/runbooks/pilot-rehearsal.md` now
+  has an "Administrator (admin role)" row in the Identities table: the tech lead's own session, or the orchestrator
+  through the admin route. Steps 1, 1b, 12, 12b, X1 item 1 and Teardown 1-2 name the administrator. The tech lead
+  keeps the CRM agency seed, owner invitations, the tour retirement (X2) and the approval of an erasure apply.
+- **The reason is written down with the header-trust note.** ADR 0006a forbids these writes to the E2E identities
+  (A10b-4, gap G8). That is an admin-role rule, not a person-only rule. The orchestrator's calls use the main admin
+  secret's header trust (`x-admin-role: admin`, its own `x-admin-user-id`), which ADR 0006a keeps for secret-only calls
+  until plan C9. The audit rows name the agent. Once Dev header trust ends, or before a production pilot, the rows
+  fall back to the tech lead.
+- **Kept records are stated, not cleaned.** The `REH-06` and `REH-08a` takes and their dry runs leave synthetic CRM and
+  TripPlanner records on the kept fixture `pilot-rehearsal-01`. Teardown item 6 says they stay as evidence, like the
+  Booking seeder rows. Agency settings a take changed are put back in the same run.
+- **The marker's Booking partner is read at the end.** Teardown item 7 adds a read-only check:
+  `booking.b2b_partners` for the marker reads `suspended` after the offboard, or has no row. It is read on the Booking
+  admin's agency list or through a DB Migrate run-script SELECT.
+
+### Changed
+
+- Runbook: Identities table split (Administrator / Tech lead) plus the Administrator paragraph; the actor cells of
+  steps 1, 1b, 12 and 12b; X1 item 1; the Fixtures item 3 actor; the Teardown intro; new Teardown items 6 (records that
+  stay) and 7 (final read with the Booking partner check); G8 now says X1 items 2-3 stay hand steps and that step 12
+  does not PASS on the CRM probe alone. `last_reviewed` is 2026-11-14.
+- Catalogue: the notes of `REH-01b-pilot-on`, `REH-12-budget-on`, `REH-12-budget-off` and `REH-12b-pilot-off` say
+  "an administrator", like their narration. `REH-01c-real-refused` and `REH-01-ai-budget` name the admin-role write.
+
+### Tradeoffs
+
+- A Booking partner check scripted in the repo would need a Booking admin read path for the agent or a run-script
+  file. A read-only step in the runbook is enough for one rehearsal; a script can follow if the check repeats.
+
+### Should know
+
+- `REH-01-price-import` and `REH-01-prices` wait on AA-1091; the session's evidence index should name AA-1091 on those
+  rows so the Done-when "PASS, or FAIL with its fixing issue" holds.
