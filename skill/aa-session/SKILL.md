@@ -5,6 +5,9 @@ description: Nghi thức bắt đầu và kết thúc một phiên làm việc A
 
 # aa-session
 
+Bản quy tắc chuẩn tiếng Anh (người và bài học AA Academy đọc): `docs/guides/working-rules/sessions.md`. Skill này
+giữ quy trình; sửa quy tắc thì sửa cả hai trong cùng PR, lệch nhau thì áp bên chặt hơn.
+
 Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory > skill. Lệch thì báo Nghiệp, không im lặng chọn.
 
 ## Bắt đầu phiên

@@ -5,6 +5,9 @@ description: Soạn và đăng cập nhật trên Jira của Adventure Asia cho 
 
 # aa-jira-update
 
+Bản quy tắc chuẩn tiếng Anh: `docs/guides/working-rules/stakeholder-communication.md`. Skill này giữ quy trình; sửa
+quy tắc thì sửa cả hai trong cùng PR, lệch nhau thì áp bên chặt hơn.
+
 Người đọc là phía nghiệp vụ, ngoài nhóm kỹ thuật. Một comment sai đi thẳng tới người ra quyết định, nên đây là chỗ cổng
 duyệt luôn bắt buộc.
 

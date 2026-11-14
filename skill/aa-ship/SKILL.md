@@ -5,6 +5,9 @@ description: Quy trình từ PR tới "Done" cho các repo AA_Ecosys (CIS, Booki
 
 # aa-ship
 
+Bản quy tắc chuẩn tiếng Anh: `docs/guides/working-rules/planning-and-issues.md` (mục "When an issue is Done"). Skill này
+giữ quy trình; sửa quy tắc thì sửa cả hai trong cùng PR, lệch nhau thì áp bên chặt hơn.
+
 Mục tiêu: "Done" luôn nghĩa là đã chạy đúng trên môi trường thật, có bằng chứng.
 Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "Vận hành" — đọc trước khi merge/deploy.
 

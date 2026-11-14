@@ -19,6 +19,8 @@ name: Docs lint
 #   - unit tests of the ops helpers tools/ops (AA-1023: ecs_rollback.sh against a scripted aws/curl, the game-day seed)
 #   - the Claude Code hooks .claude/hooks (AA-1024 G5): every hook's tests, and every hook settings.json registers exists
 #   - the lessons log (AA-1024 G22): a new or changed lesson line carries a valid Guard field
+#   - the AA Academy course files under docs/learn/ (AA-1104): shape, references, pinned source hashes (a cited
+#     section that changed turns the check red until the module owner re-pins), tiers and the allowlist
 #   - the ECS exec wrapper tools/ecs (AA-1024 G3) and the GIT_DIR isolation of the pre-push hook (S272)
 # Secrets: gitleaks runs on every PR (any path) in secret-scan.yml and nightly over the full history in
 # secret-scan-history.yml (AA-981),
@@ -171,6 +173,16 @@ jobs:
       - name: Front-matter schema
         if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
         run: python tools/docs/check_frontmatter.py
+
+      # AA-1104 (AA Academy, GUIDE-13): the course files under docs/learn/ against docs/learn/schema/, every lesson and quiz
+      # reference resolves, every source carries the hash of the section it cites (a change to that section fails here
+      # until the module owner reads it and runs `check_learn.py --pin`), partner modules cite partner pages only, and
+      # skill / steering / CONTEXT.md sections only through docs/learn/allowlist.yaml. App CONTEXT.md files are not
+      # checked out here (a notice); Docs sync reads them. Its tests (test_check_learn.py, test_learn_bundle.py) run in
+      # the unit test step above, including the committed sample module turning red on a source change.
+      - name: AA Academy course files
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: python tools/docs/check_learn.py
 
       # AA-894: every path a PRD front matter lists (adrs, contracts, erd, migrations) exists; PRDs under docs/product/
       # carry those fields, Linear keys and an acceptance-criteria list (rules: docs/product/README.md).

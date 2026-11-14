@@ -1,0 +1,41 @@
+# AA Academy module F3 (Fundamentals path). Format: docs/learn/README.md. Checked by tools/docs/check_learn.py.
+# The first module written in the format (AA-1104 P2 sample): two reading lessons and a quiz. The sha pins are written
+# by `python tools/docs/check_learn.py --pin` after the owner has read the cited sections.
+id: F3
+title: How work flows
+tier: staff
+status: draft
+version: 0.1.0
+owner: nghiep
+last_reviewed: 2026-11-14
+review_every_days: 180
+languages: [en]
+objectives:
+  - Say which source wins when the repo, the canonical Notion page, memory and a skill disagree.
+  - Apply "decide, don't ask" and "no agent-made gates" to a routine follow-up call.
+  - Tell when an issue is Done, and what happens to scope found on the way.
+prerequisites: [F2]
+quiz: quiz.yaml
+lessons:
+  - id: F3-01
+    file: lessons/01-which-source-wins.md
+    title: Which source wins
+    type: reading
+    minutes: 8
+    objective: Find where each kind of process state lives and which source wins when two disagree.
+    sources:
+      - ref: doc:CAT-01#22-sources-of-truth-for-process-state
+        sha: 9c7ffcfcea34737f
+      - ref: doc:GUIDE-15-sessions#sources-of-state
+        sha: 748dcf4706d000f4
+  - id: F3-02
+    file: lessons/02-decide-and-done.md
+    title: Decide, then prove it is done
+    type: reading
+    minutes: 10
+    objective: Make a routine call without waiting, and close an issue only on live evidence.
+    sources:
+      - ref: doc:CAT-01#24-two-working-rules-decide-dont-ask-no-agent-made-gates
+        sha: 9ca8c1732c095dcd
+      - ref: doc:GUIDE-15-planning#when-an-issue-is-done
+        sha: 2a81c8fab65668f2

@@ -58,7 +58,8 @@ findings in them ([where a page may live](../STYLE.md#where-a-page-may-live-sec-
 
 ## First local run per repo
 
-Each repo README has the exact commands; these are the shortest paths that work without AWS access.
+Each repo README has the exact commands, and each repo's `CONTEXT.md` has a short "Run it locally" section (AA Academy
+gap G7); these are the shortest paths that work without AWS access.
 
 | Repo | Run | Test |
 |---|---|---|

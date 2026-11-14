@@ -1,0 +1,70 @@
+# Quiz of module F3. Every item cites the lesson source section it tests; when that section changes, the item is
+# suspended until the owner reviews it. The pass mark and the retake delay are settings, never in this file.
+module: F3
+items:
+  - id: F3-Q1
+    kind: single
+    prompt: The repo and an agent's memory disagree about the state of a process. Which one wins?
+    choices:
+      - The agent's memory, because it is the most recent
+      - The repo
+      - A skill, because agents follow skills
+      - Whichever the person asking prefers
+    answer: [1]
+    source: doc:CAT-01#22-sources-of-truth-for-process-state
+    explain: The order is repo, then the canonical Notion page, then memory, then a skill; the disagreement is reported too.
+  - id: F3-Q2
+    kind: single
+    prompt: Where does the order of work live?
+    choices:
+      - The live backlog
+      - Linear
+      - The session memory
+      - Jira
+    answer: [0]
+    source: doc:CAT-01#22-sources-of-truth-for-process-state
+    explain: The live backlog holds the order; Linear holds the state of each issue.
+  - id: F3-Q3
+    kind: single
+    prompt: You did not check a deploy status in this turn. What do you write in your report?
+    choices:
+      - The status from last week's audit
+      - The status you remember from the start of the session
+      - That the status was not checked
+      - Nothing; leave the line out
+    answer: [2]
+    source: doc:GUIDE-15-sessions#sources-of-state
+    explain: A status that can change is checked live in the same turn or reported as "not checked" (rule W5).
+  - id: F3-Q4
+    kind: single
+    prompt: The tech lead approved a plan. On the way you must choose the order of two follow-up steps. What do you do?
+    choices:
+      - Stop and ask which order to use
+      - Choose, carry on, and report the choice in the summary
+      - Wait for the next session
+      - Open a new issue and wait for it to be approved
+    answer: [1]
+    source: doc:CAT-01#24-two-working-rules-decide-dont-ask-no-agent-made-gates
+    explain: Routine follow-up calls are made and reported; only a real block stops the work.
+  - id: F3-Q5
+    kind: multi
+    prompt: Which of these must be true before an issue with backend code is Done? Choose every one that applies.
+    choices:
+      - The pull request is merged
+      - The deploy to Dev completed its rollout
+      - The live endpoint shows the result
+      - The issue was In Progress for at least one day
+    answer: [0, 1, 2]
+    source: doc:GUIDE-15-planning#when-an-issue-is-done
+    explain: Merged and green is not enough; Done means deployed and verified live. Time in progress does not matter.
+  - id: F3-Q6
+    kind: single
+    prompt: Halfway through an issue you find new scope it does not cover. What happens to its Done-when lines?
+    choices:
+      - Rewrite them to include the new scope
+      - Delete the lines that no longer fit
+      - Keep them as they are and put the new scope in a new issue
+      - Mark the issue Done and forget the new scope
+    answer: [2]
+    source: doc:GUIDE-15-planning#when-an-issue-is-done
+    explain: Done-when lines are frozen once the issue is In Progress; new scope becomes a new issue.

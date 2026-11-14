@@ -5,6 +5,9 @@ description: Tạo, cập nhật và đóng issue Linear cho AA_Ecosys theo chu�
 
 # aa-linear-issue
 
+Bản quy tắc chuẩn tiếng Anh: `docs/guides/working-rules/planning-and-issues.md`. Skill này giữ quy trình; sửa quy
+tắc thì sửa cả hai trong cùng PR, lệch nhau thì áp bên chặt hơn.
+
 Team: `AA_Ecosys` (key `AA`). Issue (title, description) và comment viết bằng **tiếng Anh**
 (`.kiro/steering/language-convention.md`); trao đổi về issue với Nghiệp trong chat thì tiếng Việt.
 

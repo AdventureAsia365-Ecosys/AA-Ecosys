@@ -180,8 +180,9 @@ decision D10 (S279) so that they can be taught and checked.
    - An open question is never a blocker. Write the proposed answer, act on it, and report it so the tech lead can
      overrule it.
 
-Where they are applied: the session ritual (`skill/aa-session/SKILL.md`, issue list and "questions for the tech
-lead").
+Where they are applied: the [session rules](guides/working-rules/sessions.md) (the issue list and the questions for the
+tech lead), whose procedure is `skill/aa-session/SKILL.md`. The canonical English rule pages for sessions, planning and
+issues, and stakeholder communication are indexed in [working rules](guides/working-rules/README.md) (AA Academy gap G6).
 
 ### 2.5 More working rules for agents
 
@@ -1054,6 +1055,7 @@ Full glossary (by area, with the Vietnamese terms): [`glossary.md`](glossary.md)
 | 2026-10-19 | S243 | This handbook: one page for process, docs, versioning, releases, operations, cost, roadmap and decisions; every reconciliation correction applied; six documents marked superseded: the S241 review and roadmap and the four S243 advisory files (AA-887) |
 | 2026-10-28 | S255 | Docs review: Vietnamese summaries moved to the translation `engineering-handbook.vi.md`; people named by role; generated references, `/admin/docs`, the deploy gate (AA-993 G5), the budget and the acc1 exit (AA-998) brought up to date; S255 language decision |
 | 2026-11-14 | S280 | §2.4 adds the two working rules of AA Academy decision D10 (AA-1104); §10.4 records the decision |
+| 2026-11-14 | S280 | §2.4 links the canonical English working-rules pages (`docs/guides/working-rules/`, AA Academy gap G6, AA-1104) |
 | 2026-11-14 | S280 | New-project kit clean-up (AA-1102 R1): working rules W3 to W7 moved from agent memory into [§2.5](#25-more-working-rules-for-agents); D-14 and the related rows updated to the public repos (ADR 0014 amendments, ADR 0021); S279 kit decisions in [§10.4](#104-s279-2026-11-13) |
 
 ### 12.2 Superseded documents
