@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AdventureAsia365-Ecosys/AA-Ecosys/docs/learn/schema/quiz.schema.json",
+  "title": "AA Academy module quiz",
+  "description": "docs/learn/modules/<ID>-<slug>/quiz.yaml: 5 to 10 retrieval items, each citing the source section it tests. The pass mark and retake delay are settings, never in this file (GUIDE-13 §7.4). Checked by tools/docs/check_learn.py (AA-1104).",
+  "type": "object",
+  "required": ["module", "items"],
+  "additionalProperties": false,
+  "properties": {
+    "module": {"type": "string", "pattern": "^[A-Z][0-9]{1,2}$"},
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "prompt", "choices", "answer", "source"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"description": "<module id>-Q<n>, e.g. F3-Q1. Never reused for a different question.", "type": "string", "pattern": "^[A-Z][0-9]{1,2}-Q[0-9]{1,2}$"},
+          "kind": {"enum": ["single", "multi"]},
+          "prompt": {"type": "string", "minLength": 10, "maxLength": 400},
+          "choices": {"type": "array", "minItems": 2, "maxItems": 6, "items": {"type": "string", "minLength": 1, "maxLength": 200}},
+          "answer": {"description": "Zero-based indexes of the correct choices.", "type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "integer", "minimum": 0}},
+          "source": {"description": "One of the module's lesson source refs, with an anchor; the item is suspended when that section changes.", "type": "string", "minLength": 3},
+          "explain": {"description": "Shown after the answer: why it is right, in one or two sentences.", "type": "string", "maxLength": 400}
+        }
+      }
+    }
+  }
+}

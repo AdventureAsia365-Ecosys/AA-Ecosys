@@ -158,6 +158,30 @@ When repo, Notion and memory disagree: repo > canonical Notion page > memory > s
 
 Merge rights by phase: [§6.5](#65-merge-rights-by-phase).
 
+### 2.4 Two working rules: decide, don't ask; no agent-made gates
+
+Both rules apply to agents and people. The tech lead set them (S202 and S248); they were written here by AA Academy
+decision D10 (S279) so that they can be taught and checked.
+
+1. **Decide, don't ask.** Once the tech lead approves a direction (an issue list, a plan, a design), carry it through
+   end to end. Make the routine follow-up calls yourself: the order of steps, where a follow-up is tracked (an existing
+   issue before a new one), a smoke run before the full run, fixing the bugs found on the way. Report each call in the
+   summary instead of ending with a question.
+   - Stop only for a real block: a rule or the harness refuses the step (a refused call is the signal, not a guess),
+     the choice is costly or cannot be undone, or the spend needs the tech lead's explicit yes
+     ([FinOps](ops/finops.md), DM-10). Name the one action needed and keep working on the rest.
+2. **No agent-made gates.** Never invent a cap, slot or waiting period the tech lead did not set, such as "at most
+   one item of this kind per session", "wait for session N" or "needs clarification first".
+   - A slot in the master plan is an order, not a gate: pull a later item forward when its technical prerequisites
+     are met.
+   - Only real dependencies block: a migration that must be applied first, a busy job table or an open wave (DM-11.4),
+     an MFA session, money, or a decision only the tech lead or the business owner can make.
+   - An open question is never a blocker. Write the proposed answer, act on it, and report it so the tech lead can
+     overrule it.
+
+Where they are applied: the session ritual (`skill/aa-session/SKILL.md`, issue list and "questions for the tech
+lead").
+
 ---
 
 ## 3. Lifecycle stages
@@ -963,6 +987,12 @@ S17 password generation); they are recorded in the S243 session log.
 |---|---|---|
 | S255-L1 | Catalog pages are English only. Vietnamese lives in complete sibling translations `<name>.vi.md` (`lang: vi`, `translation_of`), never mixed into an English page; this replaces the bilingual pages of N-7 | [§4.8](#48-language); front-matter schema and [STYLE](STYLE.md#language) to follow |
 
+### 10.4 S279 (2026-11-13)
+
+| # | Decision | Enforced in |
+|---|---|---|
+| S279-D10 | The two working rules that lived only in private agent notes, "decide, don't ask" and "no agent-made gates", are written into the operating model (AA Academy decision D10, AA-1098) | [§2.4](#24-two-working-rules-decide-dont-ask-no-agent-made-gates); review; `skill/aa-session` |
+
 ---
 
 ## 11. Glossary
@@ -999,6 +1029,7 @@ Full glossary (by area, with the Vietnamese terms): [`glossary.md`](glossary.md)
 | 2026-10-19 | S243 | SDLC/docs/versioning guide, docs standard proposal, professional docs practice, and the reconciliation with S241 and data standards (conflicts K-xx, corrections, decisions N-1…N-12) |
 | 2026-10-19 | S243 | This handbook: one page for process, docs, versioning, releases, operations, cost, roadmap and decisions; every reconciliation correction applied; six documents marked superseded: the S241 review and roadmap and the four S243 advisory files (AA-887) |
 | 2026-10-28 | S255 | Docs review: Vietnamese summaries moved to the translation `engineering-handbook.vi.md`; people named by role; generated references, `/admin/docs`, the deploy gate (AA-993 G5), the budget and the acc1 exit (AA-998) brought up to date; S255 language decision |
+| 2026-11-14 | S280 | §2.4 adds the two working rules of AA Academy decision D10 (AA-1104); §10.4 records the decision |
 
 ### 12.2 Superseded documents
 
