@@ -1,0 +1,12 @@
+# AA Academy learning path: Fundamentals, every staff member (GUIDE-13 research §3.2). Format: docs/learn/README.md.
+# Modules are listed once written; the rest stay under planned in learning order.
+id: fundamentals
+title: Fundamentals
+tier: staff
+audience: Every staff member, before any role path
+owner: nghiep
+modules:
+  - id: F3
+    required: true
+planned: [F1, F2, F4, F5, F6]
+final_quiz: true

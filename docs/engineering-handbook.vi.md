@@ -181,7 +181,10 @@ D10 của AA Academy (S279) để dạy được và kiểm được.
    - Câu hỏi mở không bao giờ là lý do chặn. Viết câu trả lời đề xuất, làm theo nó, rồi báo để tech lead đảo lại nếu
      muốn.
 
-Nơi áp dụng: nghi thức phiên (`skill/aa-session/SKILL.md`, danh sách issue và "câu hỏi cho tech lead").
+Nơi áp dụng: [quy tắc phiên làm việc](guides/working-rules/sessions.vi.md) (danh sách issue và các câu hỏi cho tech
+lead), quy trình của chúng là `skill/aa-session/SKILL.md`. Các trang quy tắc chuẩn bằng tiếng Anh cho phiên làm việc, kế
+hoạch và issue, và giao tiếp với người liên quan có mục lục ở [quy tắc làm việc](guides/working-rules/README.vi.md)
+(khoảng trống G6 của AA Academy).
 
 ### 2.5 Thêm các quy tắc làm việc cho agent
 
@@ -1059,6 +1062,7 @@ này dựa vào nhiều nhất:
 | 2026-10-19 | S243 | Sổ tay này: một trang cho quy trình, tài liệu, phiên bản, phát hành, vận hành, chi phí, lộ trình và quyết định; áp mọi điểm sửa từ bản đối chiếu; sáu tài liệu được đánh dấu bị thay thế: review và lộ trình S241 và bốn file tư vấn S243 (AA-887) |
 | 2026-10-28 | S255 | Review tài liệu: các tóm tắt tiếng Việt chuyển sang bản dịch `engineering-handbook.vi.md`; người được gọi theo vai trò; reference sinh tự động, `/admin/docs`, cổng deploy (AA-993 G5), ngân sách và việc acc1 rời hệ (AA-998) được cập nhật; quyết định ngôn ngữ S255 |
 | 2026-11-14 | S280 | §2.4 thêm hai luật làm việc theo quyết định D10 của AA Academy (AA-1104); §10.4 ghi quyết định |
+| 2026-11-14 | S280 | §2.4 dẫn tới các trang quy tắc làm việc chuẩn bằng tiếng Anh (`docs/guides/working-rules/`, khoảng trống G6 của AA Academy, AA-1104) |
 | 2026-11-14 | S280 | Dọn dẹp cho bộ kit dự án mới (AA-1102 R1): quy tắc làm việc W3 tới W7 chuyển từ memory của agent vào [§2.5](#25-thêm-các-quy-tắc-làm-việc-cho-agent); D-14 và các dòng liên quan cập nhật theo việc các repo đã public (các amendment của ADR 0014, ADR 0021); quyết định bộ kit S279 ở [§10.4](#104-s279-2026-11-13) |
 
 ### 12.2 Các tài liệu bị thay thế
