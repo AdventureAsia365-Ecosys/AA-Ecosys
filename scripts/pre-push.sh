@@ -5,8 +5,11 @@
 #   - .github/workflows/docs-lint.yml : lint-tool unit tests, front-matter, PRD refs, ADR index, single-line AWS CLI,
 #     alarm runbook links, literal resource IDs (warn-only), markdownlint-cli2 0.23.2, lychee offline links;
 #   - .github/workflows/contracts.yml : contract/ADR unit tests, check_contracts.py, check_adr_numbers.py;
-#   - .github/workflows/secret-scan.yml: gitleaks on the pushed commits, only when a `gitleaks` binary is on PATH
-#     (local convenience; CI keeps its own pull_request_target job, so --ci never runs it).
+#   - .github/workflows/secret-scan.yml: gitleaks on the pushed commits, only when a working gitleaks is found
+#     (local convenience; CI keeps its own pull_request_target job, so --ci never runs it). The binary comes from
+#     tools/github/gitleaks_resolve.py (S281): AA_GITLEAKS, then .tmp-session/gitleaks-8301/gitleaks of this checkout
+#     or of the clone's main checkout, then PATH; a candidate whose `gitleaks version` fails (a mise shim with no
+#     version set) is skipped instead of blocking the push.
 # Every command below is copied from those workflow files. When a workflow step changes, change it here too.
 #
 # Modes:
@@ -29,7 +32,8 @@ set -euo pipefail
 # working directory instead (.githooks/pre-push cds to the top level first).
 unset $(git rev-parse --local-env-vars)
 
-SELF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
+SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SELF="$SELF_DIR/$(basename "${BASH_SOURCE[0]}")"
 MODE=fast
 CI_MODE=0
 HOOK=0
@@ -140,9 +144,28 @@ local_version() {
   local raw=""
   case "$1" in
     lychee) raw=$(lychee --version 2>/dev/null) || true ;;
-    gitleaks) raw=$(gitleaks version 2>/dev/null) || true ;;
+    gitleaks) if [ -n "$GITLEAKS_EXE" ]; then raw=$("$GITLEAKS_EXE" version 2>/dev/null) || true; fi ;;
   esac
   { grep -oE '[0-9]+\.[0-9]+\.[0-9]+' <<<"$raw" | head -1; } || true
+}
+# bin_path <bin>: the executable a check runs, empty when there is none. gitleaks: resolve_gitleaks sets it.
+bin_path() {
+  case "$1" in
+    gitleaks) echo "$GITLEAKS_EXE" ;;
+    *) command -v "$1" 2>/dev/null || true ;;
+  esac
+}
+# resolve_gitleaks <workspace root>...: sets GITLEAKS_EXE (empty: none works) and GITLEAKS_NOTE (skipped candidates).
+# S281: `command -v gitleaks` found a mise shim with no version set; the check then failed and blocked the push.
+GITLEAKS_EXE=""
+GITLEAKS_NOTE=""
+resolve_gitleaks() {
+  local args=() r err
+  for r in "$@"; do args+=(--root "$r"); done
+  err=$(mktemp)
+  GITLEAKS_EXE=$("$PY" -B "$SELF_DIR/../tools/github/gitleaks_resolve.py" "${args[@]}" 2>"$err") || GITLEAKS_EXE=""
+  GITLEAKS_NOTE=$(grep -m1 '^gitleaks candidates skipped:' "$err" | sed 's/^gitleaks candidates skipped: //' || true)
+  rm -f "$err"
 }
 
 # --- running and reporting -----------------------------------------------------------------------------------------
@@ -164,10 +187,11 @@ run_check() {
       fi ;;
     bin:*)
       bin="${needs#bin:}"
-      if ! command -v "$bin" >/dev/null 2>&1; then
+      if [ -z "$(bin_path "$bin")" ]; then
         if [ "$CI_MODE" = 1 ]; then echo "FAIL $id: '$bin' not installed; $(install_hint "$bin")"; FAILED+=("$id|$step|$shown")
         else
-          echo "skip $id: '$bin' not on PATH (CI still runs it: $step)"
+          echo "skip $id: no working '$bin' (CI still runs it: $step)"
+          if [ "$bin" = gitleaks ] && [ -n "$GITLEAKS_NOTE" ]; then echo "     skipped: $GITLEAKS_NOTE"; fi
           echo "     $(install_hint "$bin")"
           SKIPPED+=("$id")
         fi
@@ -251,7 +275,11 @@ run_planned() {
       gitleaks)
         local range="$BASE..HEAD"
         git rev-parse -q --verify "$BASE^{commit}" >/dev/null || range="-1 HEAD"
-        run_check "$id" "secret-scan.yml: gitleaks (local copy)" bin:gitleaks gitleaks git . --log-opts="--no-renames $range" -c .gitleaks.toml -i .gitleaksignore --redact --no-banner ;;
+        # this checkout, then the clone's main checkout (a lane worktree has no .tmp-session of its own)
+        local common
+        common=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null) || common=""
+        resolve_gitleaks "$ROOT" ${common:+"$(dirname "$common")"}
+        run_check "$id" "secret-scan.yml: gitleaks (local copy)" bin:gitleaks "${GITLEAKS_EXE:-gitleaks}" git . --log-opts="--no-renames $range" -c .gitleaks.toml -i .gitleaksignore --redact --no-banner ;;
     esac
   done
 }
@@ -320,6 +348,25 @@ self_test() {
          CI_MODE=1 run_check stub "self-test step" bin:aa-prepush-no-such-tool true >/dev/null
          echo "${#FAILED[@]}"; summarize >/dev/null || exit 1 ) || rc=$?
   if [ "$got" = 1 ] && [ "$rc" = 1 ]; then ok "--ci: a missing tool fails"; else bad "--ci missing tool: FAILED=$got rc=$rc"; fi
+  # S281: gitleaks resolution skips a mise shim with no version set (it blocked every push) for the checked download
+  local gl py
+  gl=$(mktemp -d); py=$(command -v "$PY")
+  mkdir -p "$gl/shims" "$gl/ws/.tmp-session/gitleaks-8301"
+  printf '#!/bin/sh\necho "mise ERROR No version is set for shim: gitleaks" >&2\nexit 1\n' >"$gl/shims/gitleaks"
+  printf '#!/bin/sh\necho "8.30.1"\n' >"$gl/ws/.tmp-session/gitleaks-8301/gitleaks"
+  chmod +x "$gl/shims/gitleaks" "$gl/ws/.tmp-session/gitleaks-8301/gitleaks"
+  got=$( PY="$py"; PATH="$gl/shims:/usr/bin:/bin"; unset AA_GITLEAKS; resolve_gitleaks "$gl/ws"; echo "$GITLEAKS_EXE" )
+  if [ "$got" = "$gl/ws/.tmp-session/gitleaks-8301/gitleaks" ]; then ok "gitleaks: broken shim on PATH, the checked download is used"
+  else bad "gitleaks resolution (download): got '$got'"; fi
+  got=$( PY="$py"; PATH="$gl/shims:/usr/bin:/bin"; unset AA_GITLEAKS; resolve_gitleaks "$gl/none"; echo "$GITLEAKS_EXE|$GITLEAKS_NOTE" )
+  case "$got" in "$gl/shims/gitleaks|"*) bad "gitleaks resolution picked the broken shim: '$got'" ;;
+    *"No version is set for shim"*) ok "gitleaks: a broken shim is skipped and named" ;;
+    *) bad "gitleaks resolution (shim only): got '$got'" ;; esac
+  rm -rf "$gl"
+  got=$( FAILED=(); SKIPPED=(); GITLEAKS_EXE=""; GITLEAKS_NOTE="/x/shims/gitleaks: exit 1"
+         CI_MODE=0 run_check gitleaks "self-test step" bin:gitleaks true; echo "${#FAILED[@]}/${#SKIPPED[@]}" )
+  case "$got" in *"skipped: /x/shims/gitleaks: exit 1"*"0/1") ok "gitleaks: none working is a skip with the reason, not a block" ;;
+    *) bad "gitleaks skip: got '$got'" ;; esac
   # hook input: a push that only deletes refs runs nothing
   local del="(delete) 0000000000000000000000000000000000000000 refs/heads/x 1111111111111111111111111111111111111111"
   rc=0; printf '%s\n' "$del" | hook_has_refs >/dev/null || rc=$?

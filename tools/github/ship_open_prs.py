@@ -15,8 +15,10 @@ one without an issue id (Linear reads "fix: AA-123" as a closing phrase, lesson 
 no Fixes/Closes phrase and no issue id that the Refs line does not name, file paths aside (Linear links every id it
 sees in a PR body and its Git automation moved such issues to Done on merge; AA-1024 G11, lessons S243-S246), and the repo's pre-push hook is installed when it ships one (core.hooksPath=.githooks, so the
 push runs the repo's checks; AA-1024 l22), and gitleaks v8.30.1 (the CI pin) finds nothing in origin/<base>..<branch>
-with the base's .gitleaks.toml (AA-1024 G14; AA_SKIP_GITLEAKS=1 skips it with a warning). Files the branch deletes are
-listed as a warning (merge gate refuses them).
+with the base's .gitleaks.toml (AA-1024 G14; AA_SKIP_GITLEAKS=1 skips it with a warning; the binary comes from
+gitleaks_resolve.py: AA_GITLEAKS, then .tmp-session/gitleaks-8301/, then PATH, a candidate whose `gitleaks version`
+fails, such as a mise shim with no version set, is skipped: S281). Files the branch deletes are listed as a warning
+(merge gate refuses them).
 
 Then for each PR: push through the aa-agent App (no force), open the PR (or reuse an open PR of that branch), check
 the author is the App, print the URL and the lane's live_steps. --extra-refs adds issue ids to the Refs line; the
@@ -32,11 +34,11 @@ import glob
 import json
 import os
 import re
-import shutil
 import sys
 import tempfile
 from pathlib import Path
 
+import gitleaks_resolve
 from ship_common import (
     AS_APP,
     ROOT,
@@ -214,19 +216,20 @@ def validate(runner: Runner, p: dict, stacked_on: frozenset[str] = frozenset()) 
 
 # AA-1024 G14: the orchestrator's own commits (fix-ups, merges of lane branches) were never scanned before the push;
 # each leak then cost a red Secret Scan round and a squash rewrite (lessons S250-S266). Same pin and rules as CI.
-GITLEAKS_VERSION = "8.30.1"  # .github/workflows/secret-scan.yml GITLEAKS_IMAGE (every repo pins the same version)
-GITLEAKS_LOCAL = ".tmp-session/gitleaks-8301/gitleaks"  # where lanes and the orchestrator keep the checked download
+GITLEAKS_VERSION = gitleaks_resolve.PIN  # .github/workflows/secret-scan.yml GITLEAKS_IMAGE
+GITLEAKS_LOCAL = gitleaks_resolve.LOCAL_REL  # where lanes and the orchestrator keep the checked download
 
 
-def gitleaks_bin() -> str | None:
-    env = os.environ.get("AA_GITLEAKS", "").strip()
-    if env:
-        return env
-    found = shutil.which("gitleaks")
-    if found:
-        return found
-    local = ROOT / GITLEAKS_LOCAL
-    return str(local) if local.is_file() and os.access(local, os.X_OK) else None
+def gitleaks_bin(runner: Runner) -> gitleaks_resolve.Found:
+    """S281: AA_GITLEAKS, then the checked download under ROOT, then PATH, skipping a candidate whose `gitleaks
+    version` fails (a mise shim with no version set used to be picked first and refused every push). The same
+    resolver as the root pre-push (gitleaks_resolve.py)."""
+
+    def run_version(exe: str) -> tuple[str | None, str]:
+        r = runner.run([exe, "version"], timeout=30)
+        return gitleaks_resolve.version_of(r.rc, r.out + "\n" + r.err)
+
+    return gitleaks_resolve.resolve([ROOT], run_version=run_version)
 
 
 def gitleaks_check(runner: Runner, wt: str, ref: str, br: str) -> tuple[str | None, str | None]:
@@ -234,16 +237,16 @@ def gitleaks_check(runner: Runner, wt: str, ref: str, br: str) -> tuple[str | No
     reads them, so a branch cannot allowlist its own leak). AA_SKIP_GITLEAKS=1 skips it with a warning."""
     if os.environ.get("AA_SKIP_GITLEAKS") == "1":
         return None, f"{br}: gitleaks skipped (AA_SKIP_GITLEAKS=1); CI's Secret Scan is the only scan"
-    exe = gitleaks_bin()
+    found = gitleaks_bin(runner)
+    exe, have = found.path, found.version
     hint = (f"install gitleaks v{GITLEAKS_VERSION} (github.com/gitleaks/gitleaks/releases, linux_x64 tar.gz checked "
             f"against the release checksums) at {GITLEAKS_LOCAL} or on PATH, or set AA_GITLEAKS; "
             f"AA_SKIP_GITLEAKS=1 skips the scan")
+    skipped = f" (skipped: {found.note()})" if found.skipped else ""
     if not exe:
-        return f"{wt}: no gitleaks binary to scan {ref}..{br}: {hint}", None
-    v = runner.run([exe, "version"], timeout=30)
-    have = (re.search(r"\d+\.\d+\.\d+", v.out) or [None])[0] if v.ok else None
+        return f"{wt}: no gitleaks binary to scan {ref}..{br}{skipped}: {hint}", None
     if have != GITLEAKS_VERSION:
-        return f"{wt}: gitleaks {have or 'unreadable'} at {exe}, CI uses {GITLEAKS_VERSION}: {hint}", None
+        return f"{wt}: gitleaks {have or 'unreadable'} at {exe}, CI uses {GITLEAKS_VERSION}{skipped}: {hint}", None
     with tempfile.TemporaryDirectory(prefix="ship-gitleaks-") as tmp:
         args = [exe, "git", wt, f"--log-opts=--diff-merges=remerge --no-renames {ref}..{br}", "--redact", "--no-banner",
                 "--exit-code", "1"]
