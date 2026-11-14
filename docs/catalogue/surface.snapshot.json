@@ -93,6 +93,7 @@
    "page:/admin/platform/apps",
    "page:/admin/platform/audit",
    "page:/admin/platform/catalogue",
+   "page:/admin/platform/infra",
    "page:/admin/platform/settings",
    "page:/admin/platform/staff",
    "page:/admin/platform/staff/[id]",
@@ -730,6 +731,22 @@
    "app": "cis",
    "area": "quality"
   },
+  "cis.quality.writer_proof_null_run_min_items": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.writer_proof_s1_min_items": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.writer_proof_t2_min_items": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.writer_proof_t9_min_items": {
+   "app": "cis",
+   "area": "quality"
+  },
   "cis.quality_claims.f9_cta_not_reflected": {
    "app": "cis",
    "area": "quality_claims"
@@ -1290,6 +1307,26 @@
    "app": "cis",
    "area": "spend"
   },
+  "cis.spend.writer_proof_null_run_cap_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.writer_proof_s1_cap_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.writer_proof_t2_cap_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.writer_proof_t9_cap_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.writer_proof_total_cap_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
   "cis.t2.version_repair_max": {
    "app": "cis",
    "area": "content"
@@ -1359,6 +1396,10 @@
    "area": "content"
   },
   "cis.t9.blog_chars_min": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.t9.blog_length_extend": {
    "app": "cis",
    "area": "content"
   },

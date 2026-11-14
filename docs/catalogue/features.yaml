@@ -514,13 +514,14 @@ features:
     module: settings-registry
     name: Settings registry
     name_vi: Sổ đăng ký cấu hình
-    summary_vi: "Mọi ngưỡng, giới hạn, mức trần và giá trị chính sách của CIS, TripPlanner và CRM, sửa được kèm lý do, lịch sử và tuỳ chọn duyệt hai người; Booking có trang chính sách riêng."
-    summary: Every threshold, limit, cap and policy value of CIS, TripPlanner and the CRM, editable with a reason, history and optional two-person approval; Booking keeps its own policy page.
+    summary_vi: "Mọi ngưỡng, giới hạn, mức trần và giá trị chính sách của CIS, TripPlanner và CRM, sửa được kèm lý do, lịch sử và tuỳ chọn duyệt hai người; Booking có trang chính sách riêng. Trang Infra limits hiển thị (chỉ đọc) các giới hạn vẫn giữ trong Terraform, mỗi giới hạn kèm nơi sửa."
+    summary: Every threshold, limit, cap and policy value of CIS, TripPlanner and the CRM, editable with a reason, history and optional two-person approval; Booking keeps its own policy page. The Infra limits page shows, read-only, the limits that stay in Terraform, each with where it is changed.
     roles: [admin]
     status: live
-    surface: ["page:/admin/platform/settings", "route:admin_settings_registry"]
+    surface: ["page:/admin/platform/settings", "page:/admin/platform/infra", "route:admin_settings_registry"]
     conditions:
       settings: [cis.settings.two_person_approval, crm.settings.two_person_approval]
+    depends_on: [INF-F006]
     owner: tech_lead
   - id: CIS-F037
     app: cis
