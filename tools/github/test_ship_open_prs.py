@@ -203,8 +203,28 @@ class OpenTest(unittest.TestCase):
         old.on(("gitleaks", "version"), Result(0, "8.18.0"))
         self.assertIn("CI uses 8.30.1", " ".join(sop.validate(old, lane_pr(self.sb.wt))[0]))
         with mock.patch.dict(os.environ, {"AA_GITLEAKS": ""}), \
-                mock.patch.object(sop.shutil, "which", return_value=None):
+                mock.patch.object(sop.gitleaks_resolve, "which_all", return_value=[]):
             self.assertIn("no gitleaks binary", " ".join(sop.validate(old, lane_pr(self.sb.wt))[0]))
+        # S281: a mise shim with no version set is skipped, the checked download under ROOT is used instead
+        shim = HybridRunner()
+        shim.on(("/fake/shims/gitleaks", "version"), Result(1, "", "mise ERROR No version is set for shim: gitleaks"))
+        local = Path(self.sb.tmp.name) / sop.GITLEAKS_LOCAL
+        local.parent.mkdir(parents=True, exist_ok=True)
+        local.write_text("#!/bin/sh\n", encoding="utf-8")
+        local.chmod(0o755)
+        shim.on((str(local), "version"), Result(0, "8.30.1\n"))
+        shim.on((str(local), "git"), Result(0, ""))
+        with mock.patch.dict(os.environ, {"AA_GITLEAKS": ""}), \
+                mock.patch.object(sop.gitleaks_resolve, "which_all", return_value=["/fake/shims/gitleaks"]):
+            self.assertEqual(sop.validate(shim, lane_pr(self.sb.wt))[0], [])
+        self.assertEqual(len(shim.called(str(local), "git")), 1)
+        self.assertEqual(shim.called("/fake/shims/gitleaks", "git"), [])
+        local.unlink()
+        with mock.patch.dict(os.environ, {"AA_GITLEAKS": ""}), \
+                mock.patch.object(sop.gitleaks_resolve, "which_all", return_value=["/fake/shims/gitleaks"]):
+            text = " ".join(sop.validate(shim, lane_pr(self.sb.wt))[0])
+        self.assertIn("no gitleaks binary", text)
+        self.assertIn("No version is set for shim", text)
         with mock.patch.dict(os.environ, {"AA_SKIP_GITLEAKS": "1"}):
             problems, warnings = sop.validate(old, lane_pr(self.sb.wt))
         self.assertEqual(problems, [])

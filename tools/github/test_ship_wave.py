@@ -208,6 +208,102 @@ class WaveTest(unittest.TestCase):
         self.assertNotIn("merge-start 1351", rec.events)
         self.assertIn("AA-CIS-App#1351: exit 4 - skipped: migration(s) cis/383 not applied", self.out.getvalue())
 
+    def test_busy_job_tables_hold_the_chain_and_the_wave_is_resumable(self):
+        # S281: a recompute kept shared.job busy; the apply refused (exit 7), nothing ran. The held code PR and the
+        # owner's higher migration are held (not failed), the independent PR merges, the exit is 7 with a RESUME line.
+        rec = Recorder()
+        r = scripted([1349, 1350, 1351], rec)
+        calls = []
+
+        def apply_fn(owner, nnn):
+            calls.append(f"{owner}/{nnn}")
+            return ship_wave.EXIT_HELD, "shared.job: recompute:running=1"
+
+        code = ship_wave.main(["cis#1349>apply:cis/383,cis/384", "cis#1351@after=cis/384", "cis#1350"], runner=r,
+                              apply_fn=apply_fn, fetch=lambda url: {})
+        out = self.out.getvalue()
+        self.assertEqual(code, ship_wave.EXIT_HELD, out)
+        self.assertEqual(calls, ["cis/383"])  # 384 is never dispatched past a held 383 (owner order)
+        self.assertIn("cis/383: apply held: job tables busy (shared.job: recompute:running=1)", out)
+        self.assertIn("AA-CIS-App#1351: held - held: migration(s) cis/384 not applied yet", out)
+        self.assertIn("apply cis/384: HELD (apply held: job tables busy", out)
+        self.assertIn("RESUME: the wave is held, not failed", out)
+        self.assertIn("merged 1350", rec.events)
+        self.assertNotIn("merge-start 1351", rec.events)
+        self.assertIn("RESUME", out)
+
+    def test_wait_idle_redispatches_until_the_apply_goes_through(self):
+        rec = Recorder()
+        r = scripted([1349, 1351], rec)
+        naps = []
+        real_sleep = r.sleep
+        r.sleep = lambda s: (naps.append(s), real_sleep(s))
+        answers = iter([(ship_wave.EXIT_HELD, "shared.job: recompute:running=1"),
+                        (ship_wave.EXIT_HELD, "shared.job: recompute:queued=1"), 0])
+        calls = []
+
+        def apply_fn(owner, nnn):
+            calls.append(nnn)
+            return next(answers)
+
+        code = ship_wave.main(["cis#1349>apply:cis/383", "cis#1351@after=cis/383", "--wait-idle", "3"], runner=r,
+                              apply_fn=apply_fn, fetch=lambda url: {})
+        out = self.out.getvalue()
+        self.assertEqual(code, 0, out)
+        self.assertEqual(calls, ["383", "383", "383"])
+        self.assertEqual(naps.count(ship_wave.IDLE_INTERVAL), 2)  # 5 minutes apart, once per re-dispatch
+        self.assertIn("re-dispatching in 300s (--wait-idle 1/3)", out)
+        self.assertIn("merged 1351", rec.events)
+        self.assertNotIn("RESUME", out)
+
+    def test_wait_idle_gives_up_after_n_and_stays_held(self):
+        r = scripted([1349], Recorder())
+        calls = []
+
+        def apply_fn(owner, nnn):
+            calls.append(nnn)
+            return ship_wave.EXIT_HELD, ""
+
+        code = ship_wave.main(["cis#1349>apply:cis/383", "--wait-idle", "2"], runner=r, apply_fn=apply_fn,
+                              fetch=lambda url: {})
+        self.assertEqual(code, ship_wave.EXIT_HELD, self.out.getvalue())
+        self.assertEqual(len(calls), 3)  # the first try and 2 re-dispatches
+        self.assertIn("apply held: job tables busy (busy)", self.out.getvalue())
+
+    def test_a_real_failure_wins_over_a_hold(self):
+        r = scripted([1349, 1352, 1350], Recorder(), dirty=(1350,))
+        code = ship_wave.main(["cis#1349>apply:cis/383", "cis#1352>apply:crm/41", "cis#1350"], runner=r,
+                              apply_fn=lambda o, n: (ship_wave.EXIT_HELD, "x") if o == "cis" else 1,
+                              fetch=lambda url: {})
+        self.assertEqual(code, 4, self.out.getvalue())
+        self.assertEqual(ship_wave.final_exit([0, ship_wave.EXIT_HELD, 5]), 5)
+        self.assertEqual(ship_wave.final_exit([0, ship_wave.EXIT_HELD]), ship_wave.EXIT_HELD)
+        self.assertEqual(ship_wave.final_exit([0, 0]), 0)
+
+    def test_plan_names_the_busy_rule_when_the_wave_applies(self):
+        lines = ship_wave.plan_lines(ship_wave.parse_items(["cis#1349>apply:cis/383", "cis#1350"]))
+        self.assertIn("apply held: job tables busy", lines[-1])
+        self.assertNotIn("note:", " ".join(ship_wave.plan_lines(ship_wave.parse_items(["cis#1350"]))))
+
+    def test_wait_idle_must_not_be_negative(self):
+        with contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(ship_wave.main(["cis#1350", "--wait-idle", "-1"], runner=FakeRunner()), 2)
+
+    def test_default_apply_passes_the_hold_reason_from_copy_apply(self):
+        seen = {}
+
+        def fake_main(argv, runner=None, fetch=None, report=None):
+            seen["argv"] = argv
+            report["held"] = "crm.job: send_mail:running=1"
+            return ship_wave.EXIT_HELD
+
+        r = scripted([1352], Recorder())
+        with mock.patch.object(ship_wave.ship_copy_apply, "main", fake_main):
+            code = ship_wave.main(["cis#1352>apply:crm/41"], runner=r, fetch=lambda url: {})
+        self.assertEqual(code, ship_wave.EXIT_HELD, self.out.getvalue())
+        self.assertEqual(seen["argv"], ["crm", "041"])
+        self.assertIn("crm/041: apply held: job tables busy (crm.job: send_mail:running=1)", self.out.getvalue())
+
     def test_dirty_pr_is_refused_without_blocking_the_rest(self):
         rec = Recorder()
         r = scripted([1350, 1351], rec, dirty=(1350,))

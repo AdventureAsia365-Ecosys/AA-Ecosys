@@ -73,8 +73,15 @@ checkout: `python3 tools/github/<tool>.py --help`.
 - A failure stops only what depends on it (a red migration PR skips its held PRs; independent PRs go on).
 - `--wait-deploy` waits once per deployed app (CIS, Booking, Partner) at the end, until the health `git_sha` contains
   every merge of the wave (GitHub compare). `--dry-run` prints the plan; `--check-only` gates and merges nothing.
+- Busy job tables (S281): a contract apply refused because a job table is busy or a rerun wave is open (DM-11.4; a tour
+  trash / restore / Master activation queues a platform `recompute` of 16-52 min) is a hold, not a failure. The tool
+  cannot read the job tables (no AWS), so it reads the refusal: `<owner>/<NNN>: apply held: job tables busy (<table:
+  kinds>)`; that migration, the owner's higher ones and the `@after=` PRs on them are held, the rest of the wave goes
+  on, and the run ends with exit 7 and a `RESUME` line (run the same command again once idle: merged PRs and
+  registered migrations are skipped). `--wait-idle N` re-dispatches a held apply up to N times, 5 minutes apart. The
+  plan prints the rule when the wave applies migrations. Run migration waves before a tour lifecycle drill.
 - Exit 0 all merged/applied/deployed, 2 usage or unapplied hold, 3 red check, 4 refused / merge or apply failed /
-  skipped, 5 timeout.
+  skipped, 5 timeout, 7 held only (busy job tables; any real failure 1-5 wins over 7).
 
 ## ship_train.py
 
@@ -109,8 +116,11 @@ checkout: `python3 tools/github/<tool>.py --help`.
   lock was held (`exit code: 17`, nothing ran) and the key shows up within 5 minutes; any other red run is exit 1
   even when the key is registered (exit 9 commits and registers the file but needs hand cleanup), and the run's
   `exit code:` line is printed.
+- A run whose own log says the apply was refused for busy job tables (`exit code: 7`, "apply refused: a job table is
+  busy", `MIGRATE ERROR: refusing apply — busy`) prints `apply held: job tables busy (<table: kinds>)` from the
+  `MIGRATE busy:` lines and exits 7 (nothing ran; re-dispatch once idle).
 - Exit 0 applied and registered, 1 run red or key missing, 2 dispatch/run not found, 3 copy PR red, 4 refused
-  (destructive, closed, out of order), 5 timeout.
+  (destructive, closed, out of order), 5 timeout, 7 apply held by busy job tables.
 
 ## ship_open_prs.py
 
@@ -121,6 +131,13 @@ checkout: `python3 tools/github/<tool>.py --help`.
 - Checks all PRs before pushing any: worktree and branch exist, branch ahead of `origin/<base>`, no rebase in
   progress, no modified tracked file, conventional title without an issue id, `Refs AA-<n>` in the body and no
   Fixes/Closes phrase. Deleted files are listed as a warning.
+- gitleaks v8.30.1 scans `origin/<base>..<branch>` with the base's rules before any push. The binary comes from
+  `gitleaks_resolve.py`, shared with the root `scripts/pre-push.sh` (S281): `AA_GITLEAKS`, then
+  `.tmp-session/gitleaks-8301/gitleaks` (only at the CI pin), then every `gitleaks` on PATH; a candidate whose
+  `gitleaks version` fails is passed over and named (a mise shim with no version set answers "No version is set for
+  shim: gitleaks"). No working gitleaks is still a refusal, in the PR opener and in the root pre-push alike; only
+  `AA_SKIP_GITLEAKS=1` skips the scan, with an explicit warning, and a resolver that crashes is a refusal too.
+  `python3 tools/github/gitleaks_resolve.py` prints the one it would use.
 - Pushes (never forced), opens the PR with the lane's title and body (or reuses the branch's open PR), appends the
   Claude Code attribution line when missing, checks the author is the App, and prints each PR's `live_steps`.
 
