@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, engineer, devops, cto, cio, pm, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-13
+last_reviewed: 2026-11-14
 review_every_days: 90
 related: [GUIDE-13-lms-inventory, CAT-00, GUIDE-10, GUIDE-12, AA-1098, AA-1099, AA-704, AA-855]
 ---
@@ -22,8 +22,9 @@ The full knowledge list is the [knowledge inventory](inventory.md). The sister r
 
 ## Summary
 
-- **Build the learning site into the stack we already run.** Call it **AA Academy**. Staff learn at `/admin/learn`
-  in CIS admin. Agencies learn in the CRM web app. No separate LMS server, no new data store, no licence.
+- **Build the learning site into the stack we already run.** Call it **AA Academy**. Everyone learns on the
+  academy host `academy.<env domain>`, served by the CRM web app; CIS holds the courses and progress, and the CIS
+  admin links to it (decision D17, S280). No separate LMS server, no new data store, no licence.
 - **One source of truth.** Courses live as Markdown and YAML in the root repo (`docs/learn/`). A lesson points at
   a catalog page, an ADR or a section of a `CONTEXT.md` by ID and never copies it. The Docs sync workflow already
   builds a redacted, tiered, EN/VI bundle for `/admin/docs`; it is extended to publish the courses too.
@@ -508,7 +509,7 @@ flowchart LR
   s3["Bundle in S3<br/>[pages, learn manifest, videos]"]
   api["CIS learning API<br/>[FastAPI]"]
   db["learn schema<br/>[shared RDS, RLS]"]
-  staff["/admin/learn<br/>[CIS admin, staff pool]"]
+  staff["Academy host<br/>[CRM web, staff sign-in]"]
   agency["Academy in CRM web<br/>[partner pool]"]
   uat["tools/uat<br/>[local TTS video build]"]
   repo --> sync --> s3 --> api
@@ -534,12 +535,21 @@ flowchart LR
 - **API.** Read the catalog and lessons from the bundle; write progress; grade quizzes on the server (answers never
   reach the browser before submission); run lab checks; issue certificates; serve a verify page by code. Videos are
   never streamed through the API: it returns a short-lived presigned S3 URL ([§6.7](#67-video-regeneration-and-delivery)).
-- **Staff UI** at `/admin/learn`: my paths, lesson reader (the docs reader renderer), quiz, review queue, lab
+- **Staff UI** on the academy host (D17; it replaced the first plan of a CIS admin page at `/admin/learn`): my paths, lesson reader (the docs reader renderer), quiz, review queue, lab
   status, certificates; a team view for the tech lead.
 - **Agency UI** in CRM web: the same components from the kit, calling the CIS API with the partner token exchange
   already used by the Content studio (ADR 0010a). The agency owner sees their own staff's progress.
 - **Spaced review** uses the FSRS algorithm through `ts-fsrs` (MIT,
   [GitHub](https://github.com/open-spaced-repetition/ts-fsrs)), run in the browser with cards stored server-side.
+
+**Note S280 (decision D17, AA-1105).** The tech lead chose one learner front door for every audience: the academy
+host `academy.<env domain>` (Dev: `academy.lumiguides.it.com`), served by the AA-Partner CRM web app. Courses,
+progress, quizzes and certificates stay in the CIS learning API (`/learn/v1`, contract `learn.http.v1`) and schema
+`learn`. Staff sign in there with a WORKFORCE app client of its own (`academy-web`), accepted only by the new route
+class `/learn/v1`; agencies follow in P7 with the partner sign-in. The CIS admin only links to the academy and keeps
+the team view (Platform › Academy: team progress, content review items, certificate revoke); there is no
+`/admin/learn` reader. Videos live under a separate private prefix `learn-media/` of the bronze bucket, not under the
+docs reader prefix. Recorded in root [ADR 0022](../../adr/0022-aa-academy-learning-platform.md).
 
 ## 6. Content pipeline
 
@@ -681,7 +691,7 @@ run in parallel, so calendar time is shorter.
 | P0 Decide | This research, the decision page, the tech lead's choices recorded in AA-1098 | done in S279 | tech lead | 0 |
 | P1 Close shared gaps | G2, G5, G6, G7, G13 pages; G1 written by AA-1099 | 1 to 2 | tech lead | 0 |
 | P2 Content format and bundle | `docs/learn/` format, `check_learn.py`, Docs sync learn manifest, source hashes, the `staff` and `partner` tiers and the allowlist (if D13 is accepted, with a risky-change review) | 1 | tech lead | 0 |
-| P3 Schema, API, staff UI | `learn` schema (migration, RLS, retention rows), learning API, `/admin/learn` reader and progress, presigned video URLs | 2 | tech lead | 0 |
+| P3 Schema, API, staff UI | `learn` schema (migration, RLS, retention rows), learning API, academy host reader and progress (D17), presigned video URLs | 2 | tech lead | 0 |
 | P4 Quizzes, review, certificates | server-graded quizzes, FSRS review, lab checker, certificates and verify page, settings | 1 to 2 | tech lead | 0 |
 | P4b Lab environments | pilot rehearsal run end to end once (G12, about 1); lab provisioner and erase jobs across CIS, CRM and Booking with lab stage and tenant budgets (about 2); learning sandbox repo for E2 (about 0.5) | 3 to 4 | tech lead; engineer on duty runs the rehearsal | 0 (the rehearsal's own LLM cap applies) |
 | P5a Fundamentals path | F1 to F6 (reading and quizzes, EN) | 1 | tech lead | about 3 USD drafting |

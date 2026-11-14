@@ -146,6 +146,38 @@ class DriftTest(LearnCase):
         self.assertTrue(any("no heading with the anchor" in m for m in self.messages(self.run_check())))
 
 
+class VideoTest(LearnCase):
+    def with_video(self, video: str) -> list[str]:
+        sources = f"      - ref: adr:0001#decision\n        sha: {self.decision_sha()}"
+        text = module_yaml(sources).replace("    sources:\n", video + "    sources:\n", 1)
+        (self.mod / "module.yaml").write_text(text, encoding="utf-8")
+        return self.messages(self.run_check())
+
+    def test_video_under_the_module_folder_passes(self):
+        self.assertEqual(self.with_video("    video:\n      key: learn-media/F1/01-reading.mp4\n"
+                                         "      captions: [en, vi]\n"), [])
+
+    def test_video_outside_learn_media_breaks_the_schema(self):
+        msgs = self.with_video("    video:\n      key: docs-reader/F1/01-reading.mp4\n      captions: [en]\n")
+        self.assertTrue(msgs, "a key outside learn-media/ is refused")
+
+    def test_video_of_another_module_is_an_error(self):
+        msgs = self.with_video("    video:\n      key: learn-media/F2/01-reading.mp4\n      captions: [en]\n")
+        self.assertTrue(any("must sit under learn-media/F1/" in m for m in msgs), msgs)
+
+    def test_video_named_after_another_lesson_is_an_error(self):
+        msgs = self.with_video("    video:\n      key: learn-media/F1/02-reading.mp4\n      captions: [en]\n")
+        self.assertTrue(any("must start with the lesson number 01-" in m for m in msgs), msgs)
+
+    def test_captions_need_english(self):
+        msgs = self.with_video("    video:\n      key: learn-media/F1/01-reading.mp4\n      captions: [vi]\n")
+        self.assertTrue(msgs, "captions without en are refused")
+
+    def test_caption_keys_sit_next_to_the_video(self):
+        self.assertEqual(cl.video_caption_keys({"key": "learn-media/F1/01-a.webm", "captions": ["en"]}),
+                         [("en", "learn-media/F1/01-a.en.vtt")])
+
+
 class PinTest(LearnCase):
     def assert_pins_to_green(self, sources: str) -> str:
         self.write_module(sources)

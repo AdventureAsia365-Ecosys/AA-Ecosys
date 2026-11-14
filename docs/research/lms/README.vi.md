@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [owner, engineer, devops, cto, cio, pm, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-13
+last_reviewed: 2026-11-14
 review_every_days: 90
 related: [GUIDE-13-lms-inventory, CAT-00, GUIDE-10, GUIDE-12, AA-1098, AA-1099, AA-704, AA-855]
 lang: vi
@@ -25,8 +25,9 @@ là một khoá học lõi ở đây.
 
 ## Tóm tắt
 
-- **Xây trang học liệu ngay trong hệ thống đang chạy.** Đặt tên là **AA Academy**. Nhân viên học ở `/admin/learn`
-  trong CIS admin. Đại lý học trong app CRM web. Không có máy chủ LMS riêng, không thêm kho dữ liệu, không mua giấy
+- **Xây trang học liệu ngay trong hệ thống đang chạy.** Đặt tên là **AA Academy**. Mọi người học trên host
+  academy `academy.<env domain>` do app CRM web phục vụ; CIS giữ khoá học và tiến độ, CIS admin chỉ đặt đường dẫn tới
+  đó (quyết định D17, S280). Không có máy chủ LMS riêng, không thêm kho dữ liệu, không mua giấy
   phép.
 - **Một nguồn sự thật.** Khoá học nằm dưới dạng Markdown và YAML trong repo gốc (`docs/learn/`). Bài học trỏ tới
   một trang catalog, một ADR hoặc một mục của `CONTEXT.md` bằng ID và không bao giờ chép lại. Workflow Docs sync đã
@@ -522,7 +523,7 @@ flowchart LR
   s3["Gói trên S3<br/>[trang, manifest học, video]"]
   api["API học tập của CIS<br/>[FastAPI]"]
   db["schema learn<br/>[RDS dùng chung, RLS]"]
-  staff["/admin/learn<br/>[CIS admin, pool nhân viên]"]
+  staff["Host academy<br/>[CRM web, đăng nhập nhân viên]"]
   agency["Academy trong CRM web<br/>[pool đối tác]"]
   uat["tools/uat<br/>[dựng video TTS local]"]
   repo --> sync --> s3 --> api
@@ -549,12 +550,21 @@ flowchart LR
 - **API.** Đọc catalog và bài học từ gói; ghi tiến độ; chấm trắc nghiệm ở server (đáp án không tới trình duyệt trước
   khi nộp); chạy phép kiểm thực hành; cấp chứng chỉ; phục vụ trang xác minh theo mã. Video không bao giờ đi qua API:
   API trả về một URL S3 ký trước có hạn ngắn ([§6.7](#67-dựng-lại-và-phát-video)).
-- **Giao diện nhân viên** ở `/admin/learn`: lộ trình của tôi, trình đọc bài (dùng bộ hiển thị của trình đọc tài
+- **Giao diện nhân viên** trên host academy (D17; thay cho kế hoạch đầu là trang `/admin/learn` trong CIS admin): lộ trình của tôi, trình đọc bài (dùng bộ hiển thị của trình đọc tài
   liệu), trắc nghiệm, hàng ôn tập, trạng thái thực hành, chứng chỉ; một màn hình theo nhóm cho tech lead.
 - **Giao diện đại lý** trong CRM web: cùng component từ kit, gọi API của CIS bằng cơ chế đổi token đối tác mà Content
   studio đang dùng (ADR 0010a). Chủ đại lý thấy tiến độ của nhân viên mình.
 - **Ôn tập giãn cách** dùng thuật toán FSRS qua `ts-fsrs` (MIT,
   [GitHub](https://github.com/open-spaced-repetition/ts-fsrs)), chạy trong trình duyệt, thẻ lưu ở server.
+
+**Ghi chú S280 (quyết định D17, AA-1105).** Tech lead chọn một cửa vào duy nhất cho mọi người học: host academy
+`academy.<env domain>` (Dev: `academy.lumiguides.it.com`), do app web CRM của AA-Partner phục vụ. Khoá học, tiến độ,
+bài kiểm tra và chứng chỉ vẫn nằm ở API học tập của CIS (`/learn/v1`, hợp đồng `learn.http.v1`) và schema `learn`.
+Nhân viên đăng nhập ở đó bằng một app client WORKFORCE riêng (`academy-web`), chỉ route class mới `/learn/v1` chấp
+nhận; đại lý theo sau ở P7 với đăng nhập partner. CIS admin chỉ đặt đường dẫn tới academy và giữ phần xem của nhóm
+(Platform › Academy: tiến độ nhóm, mục rà soát nội dung, thu hồi chứng chỉ); không có trình đọc `/admin/learn`. Video
+nằm dưới một tiền tố riêng, riêng tư `learn-media/` của bucket bronze, không nằm dưới tiền tố của trình đọc tài liệu.
+Ghi lại trong [ADR 0022](../../adr/0022-aa-academy-learning-platform.md) của repo gốc.
 
 ## 6. Quy trình nội dung
 
@@ -695,7 +705,7 @@ chạy song song, nên thời gian thực ngắn hơn.
 | P0 Quyết định | Nghiên cứu này, trang quyết định, lựa chọn của tech lead ghi vào AA-1098 | xong trong S279 | tech lead | 0 |
 | P1 Lấp khoảng trống dùng chung | Các trang G2, G5, G6, G7, G13; G1 do AA-1099 viết | 1 tới 2 | tech lead | 0 |
 | P2 Định dạng nội dung và gói | Định dạng `docs/learn/`, `check_learn.py`, manifest học trong Docs sync, mã băm nguồn, tầng `staff` và `partner` cùng allowlist (nếu D13 được chấp nhận, kèm review thay đổi rủi ro) | 1 | tech lead | 0 |
-| P3 Schema, API, giao diện nhân viên | Schema `learn` (migration, RLS, dòng thời hạn lưu trữ), API học tập, trình đọc và tiến độ ở `/admin/learn`, URL video ký trước | 2 | tech lead | 0 |
+| P3 Schema, API, giao diện nhân viên | Schema `learn` (migration, RLS, dòng thời hạn lưu trữ), API học tập, trình đọc và tiến độ trên host academy (D17), URL video ký trước | 2 | tech lead | 0 |
 | P4 Trắc nghiệm, ôn tập, chứng chỉ | Trắc nghiệm chấm ở server, ôn tập FSRS, bộ kiểm thực hành, chứng chỉ và trang xác minh, các setting | 1 tới 2 | tech lead | 0 |
 | P4b Môi trường thực hành | Chạy diễn tập pilot trọn vẹn một lần (G12, khoảng 1); job tạo và xoá môi trường thực hành trên CIS, CRM và Booking, kèm ngân sách stage thực hành và ngân sách tenant (khoảng 2); repo thử cho E2 (khoảng 0,5) | 3 tới 4 | tech lead; kỹ sư trực chạy diễn tập | 0 (trần LLM riêng của diễn tập được áp dụng) |
 | P5a Lộ trình Nền tảng | F1 tới F6 (bài đọc và trắc nghiệm, EN) | 1 | tech lead | khoảng 3 USD soạn nháp |

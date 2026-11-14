@@ -15,8 +15,12 @@ lang: en
 
 # AA Academy course files
 
-AA Academy is the AA learning site: role learning paths with short lessons, quizzes and labs. Staff will learn at
-`/admin/learn` in the CIS admin and agencies in the CRM web app. The design, the paths and the decisions are in the
+AA Academy is the AA learning site: role learning paths with short lessons, quizzes and labs. Learners use the academy
+host `academy.<env domain>` (Dev: `academy.lumiguides.it.com`), served by the CRM web app; the courses, progress,
+quizzes and certificates come from the CIS learning API (`/learn/v1`, contract
+[`learn.http.v1`](../contracts/learn.http.v1.openapi.yaml)) and its schema `learn`. Staff sign in there with the staff
+sign-in; agencies follow later. The CIS admin links to the academy and keeps the team view (decision D17,
+[ADR 0022](../adr/0022-aa-academy-learning-platform.md)). The design, the paths and the decisions are in the
 [research](../research/lms/README.md). This folder holds the courses as files, and this page is their format.
 
 **One rule above all: a course never copies its sources.** A lesson names the sections it teaches from, by
@@ -61,6 +65,11 @@ The first module written in this format is [F3 How work flows](modules/F3-how-wo
   lists `vi` under `languages` (decision D5).
 - **Lesson types** are `reading`, `walkthrough` (a short video) and `worked-example`. The quiz and the lab are module
   files, not lessons.
+- **A lesson video** (optional, decision D8) is named by the lesson's `video` field: `key` is the object key under the
+  private `learn-media/` prefix (`learn-media/<module id>/<NN>-<slug>.mp4` or `.webm`) and `captions` lists the
+  caption languages (`en` required), whose files sit next to it as `<key without extension>.<lang>.vtt`. Videos are
+  built locally with `tools/uat` and uploaded there, never kept in git; the learning API checks access and returns a
+  presigned URL that lives for the `learn.video_url_ttl_seconds` setting.
 
 ## Citing a source
 
@@ -125,7 +134,7 @@ build uploads nothing for learn (the previous bundle stays), and only the run tu
 
 | Object | What it holds |
 |---|---|
-| `learn/manifest.json` | paths, modules and lessons with their metadata, every cited section with its current hash and tier, and per lesson which sources are stale. It never holds a quiz answer |
+| `learn/manifest.json` | paths, modules and lessons with their metadata, every cited section with its current hash and tier, per lesson which sources are stale, and the lesson's video and caption keys (under `learn-media/`, not under `learn/`). It never holds a quiz answer |
 | `learn/lessons/<module folder>/<NN>-<slug>.md` | the lesson body and its translation, redacted |
 | `learn/sections/<kind>/<name>/<anchor>.md` | the redacted text of each cited section |
 | `learn/quizzes/<module id>.json` | the quiz items with their answers and a `suspended` flag. Read by the learning API on the server only; answers never reach a browser before a submission |

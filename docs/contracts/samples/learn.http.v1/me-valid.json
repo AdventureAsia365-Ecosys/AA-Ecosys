@@ -1,0 +1,13 @@
+{
+  "contract": "learn.http.v1",
+  "schema": "Me",
+  "expect": "valid",
+  "why": "The signed-in learner",
+  "payload": {
+    "learner_id": "1c2d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e51",
+    "kind": "staff",
+    "display_name": "Sample Learner",
+    "preview": false,
+    "is_test": true
+  }
+}
