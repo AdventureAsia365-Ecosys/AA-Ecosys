@@ -68,14 +68,36 @@ v1-v3. Two takes were deleted locally and never uploaded because they showed the
 REH-04b-wordpress v2 (the Facebook card of the publish page was not blurred in the WordPress scenario) and an earlier
 REH-04b-facebook v4 (the integrations page shows the Page id with no hook to blur it); both paths are fixed.
 
+## Later takes (S280, S281)
+
+Same harness and drive folder. The S280 takes REH-06 v2, REH-12-budget-on and REH-12-budget-off were uploaded in S281;
+the S280 REH-08a PASS take was lost with its worktree and was taken again in S281 (v4).
+
+| Step | Scenario (take) | App | Verdict | When | What it shows |
+|---|---|---|---|---|---|
+| 6 | REH-06 (v2) | TripPlanner | PASS 6/6 | S280 | Guest trip and one request to the agency; a double click on Send sends once (replaces the v1 harness FAIL) |
+| 8a | REH-08a (v4) | CRM | PASS 5/5 | S281 | Book now on the agency's trip page: price check, then one booking on a departure with seats for the party; the Book now switch was on for the take only |
+| X1 | REH-12-budget-on (v1) | CIS admin | PASS 3/3 | S280 | AI budget override of 0.05 USD with reason and expiry; the CRM draft is refused with `budget_exhausted` before any model call |
+| X1 | REH-12-budget-off (v1) | CIS admin | PASS 3/3 | S280 | The override removed; CRM AI back to off with its 2.00 USD budget |
+| 1b | REH-01b-pilot-on (v1) | CIS admin | PASS 3/3 | S281 | The marker tenant (kind agency) is the Dev pilot with an end date; End pilot sits next to the badge for the admin role (not pressed) |
+| 12b | REH-12b-pilot-off (v1) | CIS admin | PASS 2/2 | S281 | After End pilot the badge and the button are gone; the Dev pilot slot is free |
+
+Administrator writes of steps 1b and 12b (S281, actor `admin:agent-s281-aa1086`, API answers kept locally): the marker
+tenant `a4dd7561` was provisioned with `pilot_weeks` 1 (job steps `tenant_created`, `pilot_marked`); a second pilot
+request failed with `pilot_taken`; End pilot returned `changed` true; the soft offboard scheduled its erasure
+(CIS, Booking, TripPlanner not before 2026-12-14, CRM not before 2027-02-12, the agreed retention); the marker's
+Booking partner row read `suspended` about five minutes after the offboard (Teardown 7). The Dev pilot slot is free.
+The erasure apply after 2026-12-14 needs a person's approval of its DRY RUN fingerprint (runbook Teardown 2).
+
 ## Not recorded
 
 | Scenario | Why |
 |---|---|
-| REH-08a (Book now) | Needs the agency's Book now switch and its form key (not set) |
-| REH-01-price-import, REH-01-prices, REH-01-from-price | Price import and its approvals are tech-lead steps; only 2 tours are priced on Dev |
-| REH-01b, REH-12b (pilot marker), REH-12-budget-* (X1) | Need the tech lead: no marker tenant and no budget override today |
+| REH-01-price-import, REH-01-prices, REH-01-from-price | Covered without video by the S280 pricing run (`docs/audits/2026-11-14-S280-session/verify/aa1091/`): a synthetic supplier, 4 tours priced through the Excel DRY RUN and import, the agency tariff and the TripPlanner "From" price checked. The synthetic supply was removed after that run, so the takes cannot be filmed now. |
+| X1 items 2-3 (studio and planner refusal on budget) | No scenario yet (gap G8 of the runbook); the CRM refusal of X1 item 4 is filmed above |
 | REH-02-owner-invite | Tech-lead act (done earlier today, off camera) |
+| X2 (tour retirement) | Not run yet: retiring tour X changes shared Dev state for every tenant and is a tech-lead act in the runbook. The CRM handler it checks is live (CRM migration 063, `aa_tour_discontinued` task), so the CRM part is expected to PASS when X2 runs. |
+| X3 (AA cancels a departure) | Proven live on the CRM E2E agency in S279 (`../verify/aa1087-crm13/`); on this agency it needs gaps G1 and G11 |
 
 ## Findings
 
