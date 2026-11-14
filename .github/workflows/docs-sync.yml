@@ -198,7 +198,7 @@ jobs:
         with:
           repository: AdventureAsia365-Ecosys/AA-CIS-App
           path: _ext/AA-CIS-App
-          sparse-checkout: CONTEXT.md
+          sparse-checkout: /CONTEXT.md
           sparse-checkout-cone-mode: false
           persist-credentials: false
 
@@ -208,7 +208,7 @@ jobs:
         with:
           repository: AdventureAsia365-Ecosys/AA-Booking
           path: _ext/AA-Booking
-          sparse-checkout: CONTEXT.md
+          sparse-checkout: /CONTEXT.md
           sparse-checkout-cone-mode: false
           persist-credentials: false
 
@@ -218,7 +218,7 @@ jobs:
         with:
           repository: AdventureAsia365-Ecosys/AA-TripPlanner-Web
           path: _ext/AA-TripPlanner-Web
-          sparse-checkout: CONTEXT.md
+          sparse-checkout: /CONTEXT.md
           sparse-checkout-cone-mode: false
           persist-credentials: false
 
@@ -228,7 +228,7 @@ jobs:
         with:
           repository: AdventureAsia365-Ecosys/AA-Partner
           path: _ext/AA-Partner
-          sparse-checkout: CONTEXT.md
+          sparse-checkout: /CONTEXT.md
           sparse-checkout-cone-mode: false
           persist-credentials: false
 
@@ -238,7 +238,7 @@ jobs:
         with:
           repository: AdventureAsia365-Ecosys/AA-CIS-Infra
           path: _ext/AA-CIS-Infra
-          sparse-checkout: CONTEXT.md
+          sparse-checkout: /CONTEXT.md
           sparse-checkout-cone-mode: false
           persist-credentials: false
 

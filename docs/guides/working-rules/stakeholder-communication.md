@@ -74,7 +74,7 @@ this page disagree, the stricter rule applies until one PR fixes both.
 ## Vendors and resellers
 
 - Plain everyday chat, short sentences, numbered questions, under the tech lead's name. Refer to the business owner
-  as "our management", never by name or title.
+  as "our management" (in a Vietnamese chat, "sếp mình"), never by name or title.
 - Paste only what may leave the company: no account IDs, internal cost figures, issue keys or links to internal
   pages. Summarise such pages in words.
 
