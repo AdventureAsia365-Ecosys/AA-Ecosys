@@ -52,6 +52,8 @@ mixing route classes, and where the bytes of videos live.
 
 ### Proposed (S280 implementation choices, AA-1105; waiting for the tech lead's review)
 
+<!-- markdownlint-disable MD029 -->
+
 6. **A new WORKFORCE app client `academy-web` and a new CIS route class `/learn/v1`.** The client is confidential,
    authorization code with PKCE, callback on the academy host. `/learn/v1/*` accepts only WORKFORCE × {`academy-web`},
    verified by its own module (like `partner_identity.py`), and that client is accepted nowhere else; it is never added
@@ -78,6 +80,7 @@ mixing route classes, and where the bytes of videos live.
    module versions, with no sign-in (a shareable credential, research §7.2). The verification code sits in the URL
    path, so it reaches the API Gateway, ALB and CloudFront logs; only its SHA-256 is stored. Both points are privacy
    choices for the tech lead to confirm.
+<!-- markdownlint-enable MD029 -->
 
 ## Consequences
 
