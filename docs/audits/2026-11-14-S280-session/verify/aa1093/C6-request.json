@@ -1,0 +1,803 @@
+HTTP 200 GET /admin/job-runner/erasure/requests/98810a41-2c61-46f2-b0e9-bfce3f8980b8
+{
+ "request": {
+  "request_id": "98810a41-2c61-46f2-b0e9-bfce3f8980b8",
+  "tenant_id": "9310c702-eebd-44bd-9c52-133a7d2a4af9",
+  "mode": "drill",
+  "phase": "awaiting_approval",
+  "round": 1,
+  "opened_at": "2026-11-14T06:06:45.508517+00:00",
+  "is_pilot": false,
+  "is_synthetic": true,
+  "not_before_cis": "2026-11-14T06:06:45.508517+00:00",
+  "not_before_booking": "2026-11-14T06:06:45.508517+00:00",
+  "not_before_tripplanner": "2026-11-14T06:06:45.508517+00:00",
+  "not_before_crm": "2026-11-14T06:06:45.508517+00:00",
+  "round_apps": [
+   "cis",
+   "booking",
+   "tripplanner"
+  ],
+  "done_apps": [],
+  "combined_fingerprint": "c42fbb431c3b7fe9c77e4512710eeffdec1f440864fc677adfa783ff3fcf0084",
+  "fingerprint_at": "2026-11-14T06:26:09.816122+00:00",
+  "approved_fingerprint": null,
+  "approved_by": null,
+  "approved_at": null,
+  "approval_expires_at": null,
+  "snapshot_id": null,
+  "blockers": [],
+  "receipt": null,
+  "created_by": "admin:unknown",
+  "created_at": "2026-11-14T06:06:45.508517+00:00",
+  "updated_at": "2026-11-14T06:26:09.911421+00:00",
+  "cancelled_at": null,
+  "done_at": null,
+  "tenant_name": "E2E Erasure Drill 01",
+  "next_due_at": "2026-11-14T06:06:45.508517+00:00",
+  "steps": [
+   {
+    "request_id": "98810a41-2c61-46f2-b0e9-bfce3f8980b8",
+    "round": 1,
+    "app": "booking",
+    "mode": "dry_run",
+    "status": "ok",
+    "report_id": "acbe2ca3-6b28-4f25-8c8b-ef9de0c9ec74",
+    "error_code": null,
+    "plan_hash": "a0d7d32257dc49860f54d4b524c29660ea20bfbb97d2adbb6a9eb0d12514dc34",
+    "approved_plan_hash": null,
+    "tables": [
+     {
+      "rows": 0,
+      "table": "booking.trip_cases",
+      "action": "redact",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+     },
+     {
+      "rows": 0,
+      "table": "booking.trip_case_status_history",
+      "action": "redact",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+     },
+     {
+      "rows": 0,
+      "table": "booking.supplier_bookings",
+      "action": "redact",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+     },
+     {
+      "rows": 0,
+      "table": "booking.trip_case_checks",
+      "action": "redact",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+     },
+     {
+      "rows": 0,
+      "table": "booking.b2b_cancellations",
+      "action": "redact",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+     },
+     {
+      "rows": 0,
+      "table": "booking.agency_invoice",
+      "action": "redact",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+     },
+     {
+      "rows": 0,
+      "table": "booking.agency_payment",
+      "action": "redact",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+     },
+     {
+      "rows": 0,
+      "table": "booking.notifications",
+      "action": "redact",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+     },
+     {
+      "rows": 1,
+      "table": "booking.b2b_partners",
+      "action": "anonymise",
+      "digest": "4e4b7a10bb103f95d7efb03743183399"
+     },
+     {
+      "rows": 2,
+      "table": "booking.audit_logs",
+      "action": "redact",
+      "digest": "ac1bee650d20c89a416da6e5d8f022eb"
+     },
+     {
+      "rows": 0,
+      "table": "booking.b2b_quotes",
+      "action": "keep",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "booking.b2b_holds",
+      "action": "keep",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "booking.b2b_desk_bookings",
+      "action": "keep",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "booking.b2b_cancellations",
+      "action": "keep",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "booking.departure_fees",
+      "action": "keep",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "booking.agency_invoice",
+      "action": "keep",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "booking.agency_invoice_reminder",
+      "action": "keep",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "booking.agency_payment",
+      "action": "keep",
+      "digest": null
+     }
+    ],
+    "blockers": [],
+    "census": null,
+    "job_id": "51671a14-fd94-45ac-a0a2-f10dbeb8ec5a",
+    "reported_at": "2026-11-14T06:20:11.114848+00:00",
+    "updated_at": "2026-11-14T06:26:09.903927+00:00"
+   },
+   {
+    "request_id": "98810a41-2c61-46f2-b0e9-bfce3f8980b8",
+    "round": 1,
+    "app": "cis",
+    "mode": "dry_run",
+    "status": "ok",
+    "report_id": null,
+    "error_code": null,
+    "plan_hash": "5717bc5b67e37d1ecd7eb64eb10d4be00323061ac80684397314da01e2b3a13b",
+    "approved_plan_hash": null,
+    "tables": [
+     {
+      "rows": 0,
+      "table": "acp_contract.atom_embedding",
+      "action": "cascade",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_contract.atom_matches",
+      "action": "cascade",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_contract.atom_ranking",
+      "action": "cascade",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_contract.atom_segment_member",
+      "action": "cascade",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_contract.atomize_day_fingerprint",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_contract.route",
+      "action": "cascade",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_contract.tour_atoms",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_deliver.tenant_tour_pages",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.acp_quota_ledger",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.angle_gate_option",
+      "action": "cascade",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.angle_gate_request",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.atom_place_card",
+      "action": "cascade",
+      "digest": null
+     },
+     {
+      "rows": 5,
+      "table": "acp_shared.audit_log",
+      "action": "keep",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.content_compliance_flag",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.content_label",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.content_piece",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.content_piece_label",
+      "action": "cascade",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.debate_brand_fit_cache",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.fact_sheet",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.facts",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.publish_log",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.quarter_plan",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.quarter_plan_version",
+      "action": "cascade",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.subject",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 1,
+      "table": "acp_shared.tenant_config",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.tenant_tour_notice",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.tour_retirement_policy",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.year_plan",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "geo.geocode_call",
+      "action": "detach",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "gold_aa_internal.content_exports",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "gold_aa_internal.published_tours",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "gold_aa_internal.tenant_tour_versions",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "gold_aa_internal.webhook_deliveries",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.ai_usage_hourly",
+      "action": "merge",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.claim_shadow_verdict",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.decision_log",
+      "action": "detach",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.dfs_call_log",
+      "action": "detach",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.eval_claim_label",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.eval_claim_proposal",
+      "action": "cascade",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.eval_claim_relabel",
+      "action": "cascade",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.eval_golden_item",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.eval_golden_split",
+      "action": "cascade",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.eval_item_result",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.jev_tenant_allowlist",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.job",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.llm_call_daily",
+      "action": "merge",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.llm_call_log",
+      "action": "detach",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.llm_cassette",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.notifications",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.pipeline_jobs",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.pipeline_runs",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.place_photo",
+      "action": "cascade",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.setting_value",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.staff_tenant_assignment",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.staff_view_as_session",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 35,
+      "table": "shared.tenant_account_event",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.tenant_addon_request",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.tenant_ai_budget",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.tenant_api_usage",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.tenant_api_usage_monthly",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 2,
+      "table": "shared.tenant_brand_rules",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.tenant_entitlement",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.tenant_entitlement_override",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 1,
+      "table": "shared.tenant_erasure_request",
+      "action": "keep",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.tenant_export_config",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.tenant_integrations",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.tenant_members",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 2,
+      "table": "shared.tenant_membership_event",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.tenant_rewrite_usage",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 1,
+      "table": "shared.tenant_seo_config",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 2,
+      "table": "shared.tenant_subscription",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.tenant_tripplanner_site",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 1,
+      "table": "shared.tenants",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.unmapped_market_requests",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.writing_exemplar",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.writing_memory_disagreement",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.writing_memory_keep",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.writing_memory_release",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.writing_memory_release_exemplar",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.writing_memory_shadow",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.writing_rule",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "shared.writing_signal",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "silver_aa_internal.generated_content",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "silver_aa_internal.quality_scores",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "silver_aa_internal.raw_sources",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "silver_aa_internal.raw_tours",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "silver_aa_internal.review_queue",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "silver_aa_internal.seo_context",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "silver_aa_internal.upload_staging",
+      "action": "delete",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "acp_shared.quarter_plan",
+      "action": "null_first",
+      "digest": null
+     }
+    ],
+    "blockers": [],
+    "census": null,
+    "job_id": "535fd28f-28d8-42be-b154-1084db6e16eb",
+    "reported_at": "2026-11-14T06:26:09.816122+00:00",
+    "updated_at": "2026-11-14T06:26:09.893284+00:00"
+   },
+   {
+    "request_id": "98810a41-2c61-46f2-b0e9-bfce3f8980b8",
+    "round": 1,
+    "app": "tripplanner",
+    "mode": "dry_run",
+    "status": "ok",
+    "report_id": "b377d440-e6d9-4adb-9a0e-f45f4b8356ee",
+    "error_code": null,
+    "plan_hash": "368f210ea36ba10eb2cf38345710be854b626555d702300f09b7679daa48510d",
+    "approved_plan_hash": null,
+    "tables": [
+     {
+      "rows": 0,
+      "table": "tripplanner.ai_spend_month",
+      "action": "merge",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+     },
+     {
+      "rows": 0,
+      "table": "tripplanner.customers",
+      "action": "delete",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+     },
+     {
+      "rows": 0,
+      "table": "tripplanner.outbox",
+      "action": "delete",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+     },
+     {
+      "rows": 0,
+      "table": "tripplanner.sessions",
+      "action": "delete",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+     },
+     {
+      "rows": 0,
+      "table": "tripplanner.traveller_accounts",
+      "action": "keep",
+      "digest": null
+     },
+     {
+      "rows": 0,
+      "table": "tripplanner.trip_drafts",
+      "action": "delete",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+     },
+     {
+      "rows": 0,
+      "table": "tripplanner.trip_events",
+      "action": "delete",
+      "digest": "d41d8cd98f00b204e9800998ecf8427e"
+     }
+    ],
+    "blockers": [],
+    "census": null,
+    "job_id": "eaf13f97-48dc-45bc-a4d0-c6e70c84dbff",
+    "reported_at": "2026-11-14T06:22:54.173389+00:00",
+    "updated_at": "2026-11-14T06:26:09.908992+00:00"
+   }
+  ],
+  "job": {
+   "id": "5b66ca84-f0de-4b17-85a3-95811738f5bc",
+   "status": "succeeded",
+   "run_after": "2026-11-14T06:26:09.144019+00:00",
+   "progress": "{\"phase\": \"dry_run\", \"blockers\": [], \"cost_stamp\": {\"at\": \"2026-11-14T06:26:09.919373+00:00\", \"llm_usd\": 0}, \"reschedules\": 2, \"waiting_for\": [\"booking\", \"tripplanner\"], \"attempt_started_at\": \"2026-11-14T06:26:09.811848+00:00\", \"last_rescheduled_at\": \"2026-11-14T06:19:23.938709+00:00\"}"
+  }
+ },
+ "settings": {
+  "apply_enabled": true,
+  "apply_switch": "cis.erasure.saga_apply_enabled",
+  "approval_valid_hours": 24,
+  "window_days": {
+   "cis": 0,
+   "booking": 0,
+   "tripplanner": 0,
+   "crm": 90
+  },
+  "environment": "dev"
+ }
+}

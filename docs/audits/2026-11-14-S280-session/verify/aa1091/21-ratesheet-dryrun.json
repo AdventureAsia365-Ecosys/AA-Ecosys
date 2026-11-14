@@ -1,0 +1,16 @@
+{
+ "dry_run": true,
+ "rates": 4,
+ "contract": {
+  "valid_from": "2026-11-14",
+  "valid_to": "2027-10-31",
+  "currency": "USD"
+ },
+ "impact": {
+  "plans": [],
+  "plans_total": 0,
+  "would_move_to_priced": 0,
+  "truncated": false,
+  "horizon_to": "2027-11-14"
+ }
+}

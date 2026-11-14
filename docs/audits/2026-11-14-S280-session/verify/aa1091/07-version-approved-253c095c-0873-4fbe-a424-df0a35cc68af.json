@@ -1,0 +1,17 @@
+{
+ "status": 200,
+ "body": {
+  "id": "2951f217-df76-449e-bd61-45ab73abcc68",
+  "version_no": 1,
+  "status": "published",
+  "label": "S279 synthetic rehearsal prices - not real",
+  "second_person": true,
+  "effect": {
+   "states_moved": {
+    "superseded": [],
+    "published": []
+   },
+   "matrix": "changed"
+  }
+ }
+}

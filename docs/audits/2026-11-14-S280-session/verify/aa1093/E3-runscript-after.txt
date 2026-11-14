@@ -1,0 +1,2 @@
+SCRIPT VERDICT tripplanner after-erase PASS (non-zero checks: 0)
+SCRIPT VERDICT booking after-erase PASS (non-zero checks: 0)

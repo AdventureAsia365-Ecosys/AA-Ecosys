@@ -1,0 +1,117 @@
+{
+ "status": 200,
+ "body": {
+  "dry_run": false,
+  "tours": [
+   {
+    "tour_key": "043868cf…",
+    "title": "Okinawa Mangroves: Kayaking in Gesashi Bay",
+    "country": "Japan",
+    "sellable_before": false,
+    "sellable_after": true,
+    "components_before": 1,
+    "components_after": 1,
+    "components_changed": false,
+    "hand_rows_before": 0,
+    "hand_rows_after": 6,
+    "computed_rows_replaced": 3,
+    "net_rows_replaced": 0,
+    "departures_new": [],
+    "departures_existing": [],
+    "status_before": "priced",
+    "status_after": "priced"
+   },
+   {
+    "tour_key": "253c095c…",
+    "title": "Tomioka Silk Mill Guided Tour — 40 Min",
+    "country": "Japan",
+    "sellable_before": false,
+    "sellable_after": true,
+    "components_before": 1,
+    "components_after": 1,
+    "components_changed": false,
+    "hand_rows_before": 0,
+    "hand_rows_after": 6,
+    "computed_rows_replaced": 3,
+    "net_rows_replaced": 0,
+    "departures_new": [],
+    "departures_existing": [],
+    "status_before": "priced",
+    "status_after": "priced"
+   },
+   {
+    "tour_key": "3bb94eae…",
+    "title": "Iriomote Mangrove River Stargazing Kayak — 2 Hours",
+    "country": "Japan",
+    "sellable_before": false,
+    "sellable_after": true,
+    "components_before": 1,
+    "components_after": 1,
+    "components_changed": false,
+    "hand_rows_before": 0,
+    "hand_rows_after": 6,
+    "computed_rows_replaced": 3,
+    "net_rows_replaced": 0,
+    "departures_new": [],
+    "departures_existing": [],
+    "status_before": "priced",
+    "status_after": "priced"
+   },
+   {
+    "tour_key": "8f6d7604…",
+    "title": "Sutra-Tracing in Nikko — 1 Day",
+    "country": "Japan",
+    "sellable_before": false,
+    "sellable_after": true,
+    "components_before": 1,
+    "components_after": 1,
+    "components_changed": false,
+    "hand_rows_before": 0,
+    "hand_rows_after": 6,
+    "computed_rows_replaced": 3,
+    "net_rows_replaced": 0,
+    "departures_new": [],
+    "departures_existing": [],
+    "status_before": "priced",
+    "status_after": "priced"
+   }
+  ],
+  "totals": {
+   "tours": 4,
+   "components_changed": 0,
+   "price_tours": 4,
+   "departures_new": 0,
+   "departures_existing": 0,
+   "sellable_changes": 4,
+   "would_be_priced": 4
+  },
+  "ignored_sheets": [],
+  "price_drafts": [
+   {
+    "tour_key": "043868cf…",
+    "version_id": "b5daac6c-e7e3-4ee0-991f-bd81df32720f",
+    "rows": 6,
+    "unchanged": false
+   },
+   {
+    "tour_key": "253c095c…",
+    "version_id": "2951f217-df76-449e-bd61-45ab73abcc68",
+    "rows": 6,
+    "unchanged": false
+   },
+   {
+    "tour_key": "3bb94eae…",
+    "version_id": "52053bae-a950-4cce-8382-47adb6858a09",
+    "rows": 6,
+    "unchanged": false
+   },
+   {
+    "tour_key": "8f6d7604…",
+    "version_id": "59eb0940-110f-40fc-8225-8f2e9279dcfe",
+    "rows": 6,
+    "unchanged": false
+   }
+  ],
+  "recomputed": 4
+ }
+}

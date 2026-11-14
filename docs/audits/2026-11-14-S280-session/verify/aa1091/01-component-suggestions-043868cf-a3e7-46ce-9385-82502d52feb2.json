@@ -1,0 +1,20 @@
+{
+ "status": 200,
+ "counts": {
+  "suggested": 1,
+  "covered": 0,
+  "unmatched": 0
+ },
+ "days": [
+  {
+   "day_no": 1,
+   "needs": [
+    {
+     "kind": "activity",
+     "status": "suggested",
+     "has_suggestion": true
+    }
+   ]
+  }
+ ]
+}
