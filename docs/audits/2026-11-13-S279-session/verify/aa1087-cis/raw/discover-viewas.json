@@ -1,0 +1,545 @@
+{
+  "at": "2026-11-13T00:16:53.979Z",
+  "/api/admin/view-as/sessions?limit=100": {
+    "status": 200,
+    "body": {
+      "sessions": [
+        {
+          "session_id": "61c6596e-aef4-4039-9992-6f324ed16179",
+          "admin_user_id": "6801a67d-bf16-4f2d-81f3-2550c7e0e72b",
+          "staff_name": "E2E CIS admin",
+          "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "tenant_name": "Atlas & Hearth",
+          "tenant_slug": "atlas-hearth",
+          "reason": "S270 live check of the read-only banner",
+          "ticket_ref": null,
+          "started_at": "2026-11-05T14:54:10.938656+00:00",
+          "expires_at": "2026-11-05T15:09:10.938656+00:00",
+          "ended_at": "2026-11-05T14:54:13.937667+00:00",
+          "end_reason": "ended",
+          "open": false,
+          "read_only": true
+        },
+        {
+          "session_id": "3c87547d-595b-4d3c-adba-14f2e634a5ce",
+          "admin_user_id": "6801a67d-bf16-4f2d-81f3-2550c7e0e72b",
+          "staff_name": "E2E CIS admin",
+          "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "tenant_name": "Atlas & Hearth",
+          "tenant_slug": "atlas-hearth",
+          "reason": "Live check of the read-only view",
+          "ticket_ref": null,
+          "started_at": "2026-11-04T17:06:27.612427+00:00",
+          "expires_at": "2026-11-04T17:11:27.612427+00:00",
+          "ended_at": "2026-11-04T17:06:27.755539+00:00",
+          "end_reason": "ended",
+          "open": false,
+          "read_only": true
+        }
+      ],
+      "scope": "own"
+    }
+  },
+  "/api/admin/tenants?limit=200": {
+    "status": 200,
+    "body": {
+      "tenants": [
+        {
+          "tenant_id": "00000000-0000-0000-0000-000000000001",
+          "name": "Adventure Asia Internal",
+          "slug": "aa_internal",
+          "plan_tier": "internal",
+          "posts_per_week": 7,
+          "country": null,
+          "rate_limit_rpm": 60,
+          "daily_publish_limit": null,
+          "daily_publish_limit_effective": 20,
+          "is_active": true,
+          "status": "active",
+          "cancelled_at": null,
+          "created_at": "2026-04-20T05:18:42.813538+00:00",
+          "plan_attached": true,
+          "plan": {
+            "tours_quota_monthly": 999999,
+            "api_calls_quota_monthly": 999999,
+            "price_usd_monthly": 0
+          },
+          "this_month": {
+            "tours_rewritten": 917,
+            "api_calls_used": 0,
+            "quota_tours_pct": 0,
+            "quota_calls_pct": 0,
+            "tours_overage": 0,
+            "overage_usd": 0,
+            "llm_cost_usd": 0
+          },
+          "lifecycle": {
+            "source_active": 917,
+            "source_superseded": 26,
+            "source_trashed": 44,
+            "master_active": 844,
+            "master_inactive": 48,
+            "master_trashed": 0
+          }
+        },
+        {
+          "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "name": "Atlas & Hearth",
+          "slug": "atlas-hearth",
+          "plan_tier": "growth",
+          "posts_per_week": 3,
+          "country": null,
+          "rate_limit_rpm": 300,
+          "daily_publish_limit": null,
+          "daily_publish_limit_effective": 20,
+          "is_active": true,
+          "status": "active",
+          "cancelled_at": null,
+          "created_at": "2026-10-12T02:50:27.025435+00:00",
+          "plan_attached": true,
+          "plan": {
+            "tours_quota_monthly": 200,
+            "api_calls_quota_monthly": 20000,
+            "price_usd_monthly": 799
+          },
+          "this_month": {
+            "tours_rewritten": 0,
+            "api_calls_used": 0,
+            "quota_tours_pct": 1,
+            "quota_calls_pct": 0,
+            "tours_overage": 0,
+            "overage_usd": 0,
+            "llm_cost_usd": 0.9905
+          },
+          "lifecycle": {
+            "source_active": 0,
+            "source_superseded": 0,
+            "source_trashed": 0,
+            "master_active": 0,
+            "master_inactive": 0,
+            "master_trashed": 0
+          }
+        },
+        {
+          "tenant_id": "20d07d32-ed98-405f-81d5-0c2399c9fcdf",
+          "name": "Terra Family Expeditions",
+          "slug": "terra-family",
+          "plan_tier": "growth",
+          "posts_per_week": 3,
+          "country": null,
+          "rate_limit_rpm": 300,
+          "daily_publish_limit": null,
+          "daily_publish_limit_effective": 20,
+          "is_active": true,
+          "status": "active",
+          "cancelled_at": null,
+          "created_at": "2026-10-12T02:50:31.126479+00:00",
+          "plan_attached": true,
+          "plan": {
+            "tours_quota_monthly": 200,
+            "api_calls_quota_monthly": 20000,
+            "price_usd_monthly": 799
+          },
+          "this_month": {
+            "tours_rewritten": 0,
+            "api_calls_used": 4,
+            "quota_tours_pct": 0,
+            "quota_calls_pct": 0,
+            "tours_overage": 0,
+            "overage_usd": 0,
+            "llm_cost_usd": 0
+          },
+          "lifecycle": {
+            "source_active": 0,
+            "source_superseded": 0,
+            "source_trashed": 0,
+            "master_active": 0,
+            "master_inactive": 0,
+            "master_trashed": 0
+          }
+        },
+        {
+          "tenant_id": "692a3214-5cc2-46c6-a5ca-265389747269",
+          "name": "Trail Pulse",
+          "slug": "trail-pulse",
+          "plan_tier": "growth",
+          "posts_per_week": 3,
+          "country": null,
+          "rate_limit_rpm": 300,
+          "daily_publish_limit": null,
+          "daily_publish_limit_effective": 20,
+          "is_active": true,
+          "status": "active",
+          "cancelled_at": null,
+          "created_at": "2026-10-12T02:50:35.274253+00:00",
+          "plan_attached": true,
+          "plan": {
+            "tours_quota_monthly": 200,
+            "api_calls_quota_monthly": 20000,
+            "price_usd_monthly": 799
+          },
+          "this_month": {
+            "tours_rewritten": 0,
+            "api_calls_used": 0,
+            "quota_tours_pct": 0,
+            "quota_calls_pct": 0,
+            "tours_overage": 0,
+            "overage_usd": 0,
+            "llm_cost_usd": 0
+          },
+          "lifecycle": {
+            "source_active": 0,
+            "source_superseded": 0,
+            "source_trashed": 0,
+            "master_active": 0,
+            "master_inactive": 0,
+            "master_trashed": 0
+          }
+        },
+        {
+          "tenant_id": "885d4916-007b-415e-9261-909ad43c6d00",
+          "name": "WildKind Travel",
+          "slug": "wildkind-travel",
+          "plan_tier": "growth",
+          "posts_per_week": 3,
+          "country": null,
+          "rate_limit_rpm": 300,
+          "daily_publish_limit": null,
+          "daily_publish_limit_effective": 20,
+          "is_active": true,
+          "status": "active",
+          "cancelled_at": null,
+          "created_at": "2026-10-12T02:50:39.515311+00:00",
+          "plan_attached": true,
+          "plan": {
+            "tours_quota_monthly": 200,
+            "api_calls_quota_monthly": 20000,
+            "price_usd_monthly": 799
+          },
+          "this_month": {
+            "tours_rewritten": 0,
+            "api_calls_used": 0,
+            "quota_tours_pct": 0,
+            "quota_calls_pct": 0,
+            "tours_overage": 0,
+            "overage_usd": 0,
+            "llm_cost_usd": 0
+          },
+          "lifecycle": {
+            "source_active": 0,
+            "source_superseded": 0,
+            "source_trashed": 0,
+            "master_active": 0,
+            "master_inactive": 0,
+            "master_trashed": 0
+          }
+        },
+        {
+          "tenant_id": "120f7e90-7e1d-4d42-ad79-191b532eca8d",
+          "name": "test 2",
+          "slug": "test-2",
+          "plan_tier": "business",
+          "posts_per_week": 3,
+          "country": null,
+          "rate_limit_rpm": 1000,
+          "daily_publish_limit": null,
+          "daily_publish_limit_effective": 20,
+          "is_active": true,
+          "status": "active",
+          "cancelled_at": null,
+          "created_at": "2026-11-02T04:31:53.290495+00:00",
+          "plan_attached": true,
+          "plan": {
+            "tours_quota_monthly": 500,
+            "api_calls_quota_monthly": 100000,
+            "price_usd_monthly": 1499
+          },
+          "this_month": {
+            "tours_rewritten": 0,
+            "api_calls_used": 0,
+            "quota_tours_pct": 0,
+            "quota_calls_pct": 0,
+            "tours_overage": 0,
+            "overage_usd": 0,
+            "llm_cost_usd": 0
+          },
+          "lifecycle": {
+            "source_active": 0,
+            "source_superseded": 0,
+            "source_trashed": 0,
+            "master_active": 0,
+            "master_inactive": 0,
+            "master_trashed": 0
+          }
+        },
+        {
+          "tenant_id": "1d3e25e0-497a-490f-8511-c89d8d7873e4",
+          "name": "Invented Ledger Lane Travel (AA-1037 check)",
+          "slug": "aa1037-ledger-lane",
+          "plan_tier": "starter",
+          "posts_per_week": 1,
+          "country": null,
+          "rate_limit_rpm": 60,
+          "daily_publish_limit": null,
+          "daily_publish_limit_effective": 20,
+          "is_active": true,
+          "status": "active",
+          "cancelled_at": null,
+          "created_at": "2026-11-05T11:37:56.450653+00:00",
+          "plan_attached": true,
+          "plan": {
+            "tours_quota_monthly": 50,
+            "api_calls_quota_monthly": 5000,
+            "price_usd_monthly": 299
+          },
+          "this_month": {
+            "tours_rewritten": 0,
+            "api_calls_used": 0,
+            "quota_tours_pct": 38,
+            "quota_calls_pct": 0,
+            "tours_overage": 0,
+            "overage_usd": 0,
+            "llm_cost_usd": 2.8578
+          },
+          "lifecycle": {
+            "source_active": 0,
+            "source_superseded": 0,
+            "source_trashed": 0,
+            "master_active": 0,
+            "master_inactive": 0,
+            "master_trashed": 0
+          }
+        },
+        {
+          "tenant_id": "b8611143-9ee9-4410-9a51-534076b78b0b",
+          "name": "Atlas & Hearth (Audit)",
+          "slug": "audit-atlas-hearth",
+          "plan_tier": "growth",
+          "posts_per_week": 3,
+          "country": null,
+          "rate_limit_rpm": 300,
+          "daily_publish_limit": null,
+          "daily_publish_limit_effective": 20,
+          "is_active": true,
+          "status": "active",
+          "cancelled_at": null,
+          "created_at": "2026-11-05T12:12:14.735435+00:00",
+          "plan_attached": true,
+          "plan": {
+            "tours_quota_monthly": 200,
+            "api_calls_quota_monthly": 20000,
+            "price_usd_monthly": 799
+          },
+          "this_month": {
+            "tours_rewritten": 0,
+            "api_calls_used": 0,
+            "quota_tours_pct": 6.5,
+            "quota_calls_pct": 0,
+            "tours_overage": 0,
+            "overage_usd": 0,
+            "llm_cost_usd": 5.2624
+          },
+          "lifecycle": {
+            "source_active": 0,
+            "source_superseded": 0,
+            "source_trashed": 0,
+            "master_active": 0,
+            "master_inactive": 0,
+            "master_trashed": 0
+          }
+        },
+        {
+          "tenant_id": "7348dbd4-a6b1-489c-bb75-3a50e1cd2dbb",
+          "name": "Terra Family Expeditions (Audit)",
+          "slug": "audit-terra-family",
+          "plan_tier": "growth",
+          "posts_per_week": 3,
+          "country": null,
+          "rate_limit_rpm": 300,
+          "daily_publish_limit": null,
+          "daily_publish_limit_effective": 20,
+          "is_active": true,
+          "status": "active",
+          "cancelled_at": null,
+          "created_at": "2026-11-05T12:12:19.741242+00:00",
+          "plan_attached": true,
+          "plan": {
+            "tours_quota_monthly": 200,
+            "api_calls_quota_monthly": 20000,
+            "price_usd_monthly": 799
+          },
+          "this_month": {
+            "tours_rewritten": 0,
+            "api_calls_used": 0,
+            "quota_tours_pct": 6.5,
+            "quota_calls_pct": 0,
+            "tours_overage": 0,
+            "overage_usd": 0,
+            "llm_cost_usd": 3.3714
+          },
+          "lifecycle": {
+            "source_active": 0,
+            "source_superseded": 0,
+            "source_trashed": 0,
+            "master_active": 0,
+            "master_inactive": 0,
+            "master_trashed": 0
+          }
+        },
+        {
+          "tenant_id": "d6de5b7c-7ce9-4abf-9771-94f3c3c4b3ad",
+          "name": "Trail Pulse (Audit)",
+          "slug": "audit-trail-pulse",
+          "plan_tier": "growth",
+          "posts_per_week": 3,
+          "country": null,
+          "rate_limit_rpm": 300,
+          "daily_publish_limit": null,
+          "daily_publish_limit_effective": 20,
+          "is_active": true,
+          "status": "active",
+          "cancelled_at": null,
+          "created_at": "2026-11-05T12:12:24.778003+00:00",
+          "plan_attached": true,
+          "plan": {
+            "tours_quota_monthly": 200,
+            "api_calls_quota_monthly": 20000,
+            "price_usd_monthly": 799
+          },
+          "this_month": {
+            "tours_rewritten": 0,
+            "api_calls_used": 0,
+            "quota_tours_pct": 6,
+            "quota_calls_pct": 0,
+            "tours_overage": 0,
+            "overage_usd": 0,
+            "llm_cost_usd": 3.5949
+          },
+          "lifecycle": {
+            "source_active": 0,
+            "source_superseded": 0,
+            "source_trashed": 0,
+            "master_active": 0,
+            "master_inactive": 0,
+            "master_trashed": 0
+          }
+        },
+        {
+          "tenant_id": "c3182dd9-ca81-460c-8c86-068c21cb30d8",
+          "name": "WildKind Travel (Audit)",
+          "slug": "audit-wildkind-travel",
+          "plan_tier": "growth",
+          "posts_per_week": 3,
+          "country": null,
+          "rate_limit_rpm": 300,
+          "daily_publish_limit": null,
+          "daily_publish_limit_effective": 20,
+          "is_active": true,
+          "status": "active",
+          "cancelled_at": null,
+          "created_at": "2026-11-05T12:12:29.809808+00:00",
+          "plan_attached": true,
+          "plan": {
+            "tours_quota_monthly": 200,
+            "api_calls_quota_monthly": 20000,
+            "price_usd_monthly": 799
+          },
+          "this_month": {
+            "tours_rewritten": 0,
+            "api_calls_used": 0,
+            "quota_tours_pct": 6,
+            "quota_calls_pct": 0,
+            "tours_overage": 0,
+            "overage_usd": 0,
+            "llm_cost_usd": 3.1989
+          },
+          "lifecycle": {
+            "source_active": 0,
+            "source_superseded": 0,
+            "source_trashed": 0,
+            "master_active": 0,
+            "master_inactive": 0,
+            "master_trashed": 0
+          }
+        },
+        {
+          "tenant_id": "00000000-0000-0000-0000-000000000002",
+          "name": "Adventure Asia TripPlanner demo",
+          "slug": "aa-tripplanner",
+          "plan_tier": "internal",
+          "posts_per_week": 1,
+          "country": null,
+          "rate_limit_rpm": 60,
+          "daily_publish_limit": null,
+          "daily_publish_limit_effective": 20,
+          "is_active": true,
+          "status": "active",
+          "cancelled_at": null,
+          "created_at": "2026-11-06T01:22:56.426464+00:00",
+          "plan_attached": false,
+          "plan": {
+            "tours_quota_monthly": null,
+            "api_calls_quota_monthly": null,
+            "price_usd_monthly": null
+          },
+          "this_month": {
+            "tours_rewritten": 0,
+            "api_calls_used": 0,
+            "quota_tours_pct": 0,
+            "quota_calls_pct": 0,
+            "tours_overage": 0,
+            "overage_usd": 0,
+            "llm_cost_usd": 0.0666
+          },
+          "lifecycle": {
+            "source_active": 0,
+            "source_superseded": 0,
+            "source_trashed": 0,
+            "master_active": 0,
+            "master_inactive": 0,
+            "master_trashed": 0
+          }
+        },
+        {
+          "tenant_id": "bab16039-a064-517f-a99f-172b729ad3c4",
+          "name": "Lữ hành Sen Vàng",
+          "slug": "crm-sen-vang",
+          "plan_tier": "growth",
+          "posts_per_week": 1,
+          "country": null,
+          "rate_limit_rpm": 300,
+          "daily_publish_limit": null,
+          "daily_publish_limit_effective": 20,
+          "is_active": true,
+          "status": "active",
+          "cancelled_at": null,
+          "created_at": "2026-11-12T23:59:16.244527+00:00",
+          "plan_attached": true,
+          "plan": {
+            "tours_quota_monthly": 200,
+            "api_calls_quota_monthly": 20000,
+            "price_usd_monthly": 799
+          },
+          "this_month": {
+            "tours_rewritten": 0,
+            "api_calls_used": 0,
+            "quota_tours_pct": 0,
+            "quota_calls_pct": 0,
+            "tours_overage": 0,
+            "overage_usd": 0,
+            "llm_cost_usd": 0
+          },
+          "lifecycle": {
+            "source_active": 0,
+            "source_superseded": 0,
+            "source_trashed": 0,
+            "master_active": 0,
+            "master_inactive": 0,
+            "master_trashed": 0
+          }
+        }
+      ],
+      "total": 13
+    }
+  }
+}

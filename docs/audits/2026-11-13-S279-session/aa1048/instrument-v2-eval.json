@@ -1,0 +1,148 @@
+{
+ "ok": true,
+ "mode": "live",
+ "instrument": "gpt-6-luna-openai@openai-direct:entailment#v2",
+ "prompt_version": "aa1048-r1-v2@ddaab8c279ef",
+ "settings_refreshed": true,
+ "limits": {
+  "cap_usd": 1.5,
+  "max_claims": 50,
+  "trial_claims": 3,
+  "fp_drop_min": 0.6,
+  "tp_keep_min": 0.9
+ },
+ "subset": {
+  "claims": 50,
+  "by_group": {
+   "fp_background": 4,
+   "fp_paraphrase": 17,
+   "fp_verbatim": 4,
+   "tp": 20,
+   "tp_relabel": 5
+  },
+  "by_writer": {
+   "t2": 30,
+   "t9_blog": 20
+  }
+ },
+ "plan": {
+  "stage": "adhoc_aa1048",
+  "role": "judge",
+  "votes": 3,
+  "max_tokens": 8192,
+  "items": 50,
+  "split": "held_out",
+  "splits": {
+   "held_out": 50
+  },
+  "objects": 29,
+  "labels": {
+   "fact.embellish:ok": 5,
+   "fact.embellish:violation": 3,
+   "fact.inclusion:ok": 10,
+   "fact.inclusion:violation": 11,
+   "fact.misbinding:ok": 2,
+   "fact.misbinding:violation": 4,
+   "fact.name:ok": 1,
+   "fact.number:ok": 2,
+   "fact.number:violation": 1,
+   "other.f6:ok": 1,
+   "other.f7:violation": 2,
+   "scope.framing:ok": 1,
+   "scope.persona_promise:ok": 2,
+   "scope.persona_promise:violation": 4,
+   "struct.day_structure:ok": 1
+  },
+  "pool_positives": {
+   "t2:pool.fact_unsupported": 14,
+   "t9_blog:pool.fact_unsupported": 5
+  },
+  "instruments": [
+   {
+    "instrument": "gpt-6-luna-openai@openai-direct:entailment#v2",
+    "calls": 150,
+    "expected_usd": 0.5062,
+    "reserved_attempts": 1,
+    "expected_out_tokens": 6150,
+    "ceiling": 8192,
+    "retry_ceiling": 16384,
+    "worst_case_usd": 1.933
+   }
+  ],
+  "expected_total_usd": 0.5062,
+  "cap_usd": 1.5,
+  "fits_cap": true,
+  "worst_case_total_usd": 1.933
+ },
+ "run_id": "3018008d-9cd2-48ad-9e75-fb9dad6f651c",
+ "spent_usd": 0.031648,
+ "ledger_usd": 0.031514,
+ "calls": 150,
+ "stopped": null,
+ "caller_errors": [],
+ "identity_mismatches": {},
+ "score": {
+  "false_positives": {
+   "n": 25,
+   "firing": 13,
+   "dropped": 12,
+   "dropped_share": 0.48
+  },
+  "true_positives": {
+   "n": 20,
+   "kept": 18,
+   "lost": 2,
+   "kept_share": 0.9,
+   "sample": "out_of_sample",
+   "groups": [
+    "tp"
+   ]
+  },
+  "relabelled_in_sample": {
+   "n": 5,
+   "kept": 5,
+   "kept_share": 1.0,
+   "sample": "in_sample",
+   "groups": [
+    "tp_relabel"
+   ],
+   "note": "the v2 B5 patterns were drawn from these claims; reported, not gated"
+  },
+  "true_positives_with_relabels": {
+   "n": 25,
+   "kept": 23,
+   "lost": 2,
+   "kept_share": 0.92
+  },
+  "precision": 0.5806,
+  "recall": 0.9,
+  "by_group": {
+   "fp_background": {
+    "firing": 3,
+    "dropped": 1
+   },
+   "fp_paraphrase": {
+    "firing": 10,
+    "dropped": 7
+   },
+   "fp_verbatim": {
+    "dropped": 4
+   },
+   "tp": {
+    "kept": 18,
+    "lost": 2
+   },
+   "tp_relabel": {
+    "kept": 5
+   }
+  },
+  "bars": {
+   "fp_dropped_min": 0.6,
+   "tp_kept_min": 0.9,
+   "tp_kept_on": [
+    "tp"
+   ]
+  },
+  "verdict": "no_go"
+ }
+}

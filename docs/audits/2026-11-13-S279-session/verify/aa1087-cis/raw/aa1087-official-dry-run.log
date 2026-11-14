@@ -1,0 +1,8 @@
+
+Running 1 test using 1 worker
+
+[1A[2K[1/1] [admin-evidence] › tests/e2e/admin-evidence/compliance-release.spec.ts:56:5 › A10b admin: release a held piece of a synthetic tenant; refused on a real tenant
+[1A[2K[admin-evidence] › tests/e2e/admin-evidence/compliance-release.spec.ts:56:5 › A10b admin: release a held piece of a synthetic tenant; refused on a real tenant
+[compliance-release] dry run: the flag reads open; no write
+
+[1A[2K  1 passed (13.6s)

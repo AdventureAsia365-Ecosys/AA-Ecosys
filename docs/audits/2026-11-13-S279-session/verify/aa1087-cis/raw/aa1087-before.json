@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-13T00:18:25.221Z",
+  "mode": "before",
+  "flag": {
+    "state": "open",
+    "resolution": null,
+    "resolved_by": null,
+    "resolved_at": null,
+    "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+    "piece_id": "09d6bd4d-ebf5-43f5-8973-2a93b47650b3"
+  },
+  "total_flags": 1,
+  "open_tab_has_piece_1440": true,
+  "sideways_1440": false,
+  "open_tab_has_piece_390": true,
+  "sideways_390": false
+}

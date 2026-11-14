@@ -1,0 +1,10 @@
+
+Running 2 tests using 1 worker
+
+[aa-cancel] prepared trip b26b66d4-7ec0-4ffc-be19-949b5c249544 on departure 8fecbe57-debe-4e36-8f7a-6b3ba58968de: now run the Booking e2e-writers cancel
+  ✓  1 tests/aa-cancel.spec.ts:96:7 › crm-13: AA cancels a departure the agency has a trip on (Dev, agent-only) › prepare: a CRM trip with the seeded tour as an AA item on the seeded departure (20.8s)
+  -  2 tests/aa-cancel.spec.ts:159:7 › crm-13: AA cancels a departure the agency has a trip on (Dev, agent-only) › verify: the CRM opened the aa_cancel_case after AA cancelled the departure
+
+  1 skipped
+  1 passed (21.4s)
+exit 0

@@ -1,0 +1,11 @@
+
+Running 5 tests using 1 worker
+
+  ✓  1 [e2e-writers] › e2e/e2e-writers/writes.spec.ts:141:5 › booking staff confirms a synthetic agency's supplier booking (15.1s)
+  ✓  2 [e2e-writers] › e2e/e2e-writers/writes.spec.ts:170:5 › finance maker records a payment on a synthetic agency invoice (11.4s)
+  ✓  3 [e2e-writers] › e2e/e2e-writers/writes.spec.ts:211:5 › finance checker approves the maker's payment (11.6s)
+  ✓  4 [e2e-writers] › e2e/e2e-writers/writes.spec.ts:231:5 › booking staff cancels a synthetic departure (A10e-1) (11.5s)
+  ✓  5 [e2e-writers] › e2e/e2e-writers/writes.spec.ts:262:5 › the audit log names each identity as the actor of its write (11.7s)
+
+  5 passed (1.0m)
+exit 0

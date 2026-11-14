@@ -1,0 +1,366 @@
+{
+  "at": "2026-11-13T00:20:43.124Z",
+  "TC-000028": {
+    "case": {
+      "status": 200,
+      "trip_title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "status_value": "confirmed",
+      "start_date": "2026-12-01",
+      "end_date": "2026-12-06",
+      "party_tenant_id": "bab16039-a064-517f-a99f-172b729ad3c4"
+    },
+    "confirmation_json": {
+      "status": 200,
+      "start_date": "2026-12-01",
+      "end_date": "2026-12-06",
+      "lines": [
+        {
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "kind": "trip_plan",
+          "service_date": "2026-12-01"
+        }
+      ],
+      "vouchers": 0
+    },
+    "confirmation_html_status": [
+      200,
+      "text/html; charset=utf-8"
+    ],
+    "confirmation_text": [
+      "Invented AA billing entity (AA-1037 Dev check)",
+      "Booking confirmation TC-000028 Confirmed",
+      "Issued 13 Nov 2026 00:20 UTC",
+      "BOOKING",
+      "Booking reference",
+      "TC-000028",
+      "Agency",
+      "Lữ hành Sen Vàng",
+      "Agency reference",
+      "crm-proposal:f24632b5-e20f-4122-9797-82e642d2ba4b (version 1)",
+      "Travel dates",
+      "01 Dec 2026 to 06 Dec 2026",
+      "Travellers",
+      "2 adults",
+      "Confirmed on",
+      "31 Oct 2026",
+      "SERVICES",
+      "Line\tService\tDate\tNights\tTravellers\tRooms\tStatus\tSupplier confirmation",
+      "5a83f927-4622-4dca-8cea-d0e152a850de\tTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "Tour\t01 Dec 2026\t-\t2 adults\t1 x double\tOn request\t-",
+      "CANCELLATION POLICY",
+      "The fee is a share of the booking's AA price, by the days left before departure on the day the agency cancels.",
+      "Cancelled before departure\tCancellation fee",
+      "60+ days\t0 %",
+      "30 to 59 days\t25 %",
+      "15 to 29 days\t50 %",
+      "7 to 14 days\t75 %",
+      "0 to 6 days\t100 %",
+      "Traveller names are held by the agency and are not part of this confirmation. Prices are not shown. Lines on request are confirmed by AA separately.",
+      "To keep a PDF, print this page and choose \"Save as PDF\"."
+    ],
+    "confirmation_has_trip_plan_ref": true,
+    "vouchers_json": {
+      "status": 200,
+      "start_date": "2026-12-01",
+      "end_date": "2026-12-06",
+      "lines": [],
+      "vouchers": 0
+    },
+    "vouchers_html_status": [
+      200,
+      "text/html; charset=utf-8"
+    ],
+    "vouchers_text": [
+      "No voucher: the booking is cancelled or no service is confirmed by a supplier yet.",
+      "Traveller names are held by the agency and are not part of this voucher. Prices are not shown.",
+      "To keep a PDF, print this page and choose \"Save as PDF\"."
+    ],
+    "vouchers_has_trip_plan_ref": false,
+    "case_page": {
+      "h1": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "header": "Adventure Asia\nBOOKING\nOVERVIEW\nB2B\nSALES\nTrip Cases\nProposals\nPricing calculator\nOPERATIONS\nSUPPLY\nCATALOG (FROM CIS)\nSettings\nE\ne2e-booking-staff\nSales\nCollapse\nBooking\n/\nTrip Cases\nSearch pages, trip cases, customers…\nCtrl K\nCIS console\nSales\nE\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days\nConfirmed\nB2B\nTC-000028\nB2B agency\nAgent: Unassigned\n1 Dec 2026 – 6 Dec 2026 (6 days)\n2 adults\nAssign\nEdit details\nConfirmation\nVouchers\n\nINQUIRY\n\nNew inquiry\nDiscovery\n\nPROPOSAL\n\nBuilding\nProposal sent\n\nBOOKING\n\nConfirmed\nSupplier confirming\nInvoice sent\nPayment pending\nPaid\n\nTRAVEL\n\nPre-departure\nOn trip\nCompleted\nOverview\nProposals1\nSuppliers\nChecks\nActivity\nTrip details\nStatus\nConfirmed\nTravel dates\n1 Dec 2026 – 6 Dec 2026\n6 days\nAdults / children\n2 / 0\nCountries\n—\nTrip style\n—\nCurrency\nUSD\nApproved total\n158.54 USD\nV1\nSource\nB2B agency (AA-Partner CRM)\nCreated\n31 Oct 2026\nTrip legs · ",
+      "trip_details": "Trip details\nStatus\nConfirmed\nTravel dates\n1 Dec 2026 – 6 Dec 2026\n6 days\nAdults / children\n2 / 0\nCountries\n—\nTrip style\n—\nCurrency\nUSD\nApproved total\n158.54 USD\nV1\nSource\nB2B agency (AA-Partner CRM)\nCreated\n31 Oct 2026\nTrip legs · An agency booking: the tours sold are listed in its version.\nFROM CIS\nPeople\n\nAGENCY\n\nBA\nB2B agency booking\nB2B\nPartner tenant bab16039-a064-517f-a99f-172b729ad3c4\n\nASSIGNED SALES\n\nAssign\n\nUnassigned\n\nAgency booking\nChanges after the sale. The agency's CRM gets each one as an event; travellers are counts only.\nFewer travellers\nCancel for the agency\n\nConfirmed. No cancellation.\n\nInternal notes\nStaff only. Earlier text is kept in the Activity tab.\n\nNo notes yet. Use",
+      "oneDay": false,
+      "b2bRef": false
+    },
+    "case_page_390_sideways": false
+  },
+  "TC-000033": {
+    "case": {
+      "status": 200,
+      "trip_title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "status_value": "pre_departure",
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-25",
+      "party_tenant_id": "bab16039-a064-517f-a99f-172b729ad3c4"
+    },
+    "confirmation_json": {
+      "status": 200,
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-25",
+      "lines": [
+        {
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "kind": "trip_plan",
+          "service_date": "2026-11-20"
+        }
+      ],
+      "vouchers": 0
+    },
+    "confirmation_html_status": [
+      200,
+      "text/html; charset=utf-8"
+    ],
+    "confirmation_text": [
+      "Invented AA billing entity (AA-1037 Dev check)",
+      "Booking confirmation TC-000033 Confirmed",
+      "Issued 13 Nov 2026 00:20 UTC",
+      "BOOKING",
+      "Booking reference",
+      "TC-000033",
+      "Agency",
+      "Lữ hành Sen Vàng",
+      "Agency reference",
+      "crm-proposal:750e6a59-827d-4d9e-b9ad-745e1380a487 (version 1)",
+      "Travel dates",
+      "20 Nov 2026 to 25 Nov 2026",
+      "Travellers",
+      "2 adults, 1 child",
+      "Confirmed on",
+      "11 Nov 2026",
+      "SERVICES",
+      "Line\tService\tDate\tNights\tTravellers\tRooms\tStatus\tSupplier confirmation",
+      "e066c8a6-b725-488c-8f70-3e081ed936d6\tTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "Tour\t20 Nov 2026\t-\t2 adults, 1 child\t1 x family\tConfirmed\t-",
+      "CANCELLATION POLICY",
+      "The fee is a share of the booking's AA price, by the days left before departure on the day the agency cancels.",
+      "Cancelled before departure\tCancellation fee",
+      "60+ days\t0 %",
+      "30 to 59 days\t25 %",
+      "15 to 29 days\t50 %",
+      "7 to 14 days\t75 %",
+      "0 to 6 days\t100 %",
+      "Traveller names are held by the agency and are not part of this confirmation. Prices are not shown. Lines on request are confirmed by AA separately.",
+      "To keep a PDF, print this page and choose \"Save as PDF\"."
+    ],
+    "confirmation_has_trip_plan_ref": true,
+    "vouchers_json": {
+      "status": 200,
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-25",
+      "lines": [],
+      "vouchers": 0
+    },
+    "vouchers_html_status": [
+      200,
+      "text/html; charset=utf-8"
+    ],
+    "vouchers_text": [
+      "No voucher: the booking is cancelled or no service is confirmed by a supplier yet.",
+      "Traveller names are held by the agency and are not part of this voucher. Prices are not shown.",
+      "To keep a PDF, print this page and choose \"Save as PDF\"."
+    ],
+    "vouchers_has_trip_plan_ref": false,
+    "case_page": {
+      "h1": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "header": "Adventure Asia\nBOOKING\nOVERVIEW\nB2B\nSALES\nTrip Cases\nProposals\nPricing calculator\nOPERATIONS\nSUPPLY\nCATALOG (FROM CIS)\nSettings\nE\ne2e-booking-staff\nSales\nCollapse\nBooking\n/\nTrip Cases\nSearch pages, trip cases, customers…\nCtrl K\nCIS console\nSales\nE\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days\nPre-departure\nB2B\nTC-000033\nB2B agency\nAgent: Unassigned\n20 Nov 2026 – 25 Nov 2026 (6 days)\n2 adults, 1 child\nAssign\nEdit details\nConfirmation\nVouchers\n\nINQUIRY\n\nNew inquiry\nDiscovery\n\nPROPOSAL\n\nBuilding\nProposal sent\n\nBOOKING\n\nConfirmed\nSupplier confirming\nInvoice sent\nPayment pending\nPaid\n\nTRAVEL\n\nPre-departure\nOn trip\nCompleted\nOverview\nProposals1\nSuppliers\nChecks\nActivity\nTrip details\nStatus\nPre-departure\nTravel dates\n20 Nov 2026 – 25 Nov 2026\n6 days\nAdults / children\n2 / 1\nCountries\n—\nTrip style\n—\nCurrency\nUSD\nApproved total\n189.03 USD\nV1\nSource\nB2B agency (AA-Partner CRM)\nCreated\n11 ",
+      "trip_details": "Trip details\nStatus\nPre-departure\nTravel dates\n20 Nov 2026 – 25 Nov 2026\n6 days\nAdults / children\n2 / 1\nCountries\n—\nTrip style\n—\nCurrency\nUSD\nApproved total\n189.03 USD\nV1\nSource\nB2B agency (AA-Partner CRM)\nCreated\n11 Nov 2026\nTrip legs · An agency booking: the tours sold are listed in its version.\nFROM CIS\nPeople\n\nAGENCY\n\nBA\nB2B agency booking\nB2B\nPartner tenant bab16039-a064-517f-a99f-172b729ad3c4\n\nASSIGNED SALES\n\nAssign\n\nUnassigned\n\nAgency booking\nChanges after the sale. The agency's CRM gets each one as an event; travellers are counts only.\nFewer travellers\nCancel for the agency\n\nConfirmed. No cancellation.\n\nInternal notes\nStaff only. Earlier text is kept in the Activity tab.\n\nNo notes ye",
+      "oneDay": false,
+      "b2bRef": false
+    },
+    "case_page_390_sideways": false
+  },
+  "TC-000035": {
+    "case": {
+      "status": 200,
+      "trip_title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "status_value": "confirmed",
+      "start_date": "2026-11-27",
+      "end_date": "2026-12-02",
+      "party_tenant_id": "bab16039-a064-517f-a99f-172b729ad3c4"
+    },
+    "confirmation_json": {
+      "status": 200,
+      "start_date": "2026-11-27",
+      "end_date": "2026-12-02",
+      "lines": [
+        {
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "kind": "trip_plan",
+          "service_date": "2026-11-27"
+        }
+      ],
+      "vouchers": 0
+    },
+    "confirmation_html_status": [
+      200,
+      "text/html; charset=utf-8"
+    ],
+    "confirmation_text": [
+      "Invented AA billing entity (AA-1037 Dev check)",
+      "Booking confirmation TC-000035 Confirmed",
+      "Issued 13 Nov 2026 00:21 UTC",
+      "BOOKING",
+      "Booking reference",
+      "TC-000035",
+      "Agency",
+      "Lữ hành Sen Vàng",
+      "Agency reference",
+      "crm-proposal:2dbcc600-c459-4efd-b396-6bcea4219b3a (version 1)",
+      "Travel dates",
+      "27 Nov 2026 to 02 Dec 2026",
+      "Travellers",
+      "1 adult",
+      "Confirmed on",
+      "11 Nov 2026",
+      "SERVICES",
+      "Line\tService\tDate\tNights\tTravellers\tRooms\tStatus\tSupplier confirmation",
+      "fcd4f3dd-8e0d-4061-ba5b-bde76355976a\tTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "Tour\t27 Nov 2026\t-\t1 adult\t1 x single\tConfirmed\t-",
+      "CANCELLATION POLICY",
+      "The fee is a share of the booking's AA price, by the days left before departure on the day the agency cancels.",
+      "Cancelled before departure\tCancellation fee",
+      "60+ days\t0 %",
+      "30 to 59 days\t25 %",
+      "15 to 29 days\t50 %",
+      "7 to 14 days\t75 %",
+      "0 to 6 days\t100 %",
+      "Traveller names are held by the agency and are not part of this confirmation. Prices are not shown. Lines on request are confirmed by AA separately.",
+      "To keep a PDF, print this page and choose \"Save as PDF\"."
+    ],
+    "confirmation_has_trip_plan_ref": true,
+    "vouchers_json": {
+      "status": 200,
+      "start_date": "2026-11-27",
+      "end_date": "2026-12-02",
+      "lines": [],
+      "vouchers": 0
+    },
+    "vouchers_html_status": [
+      200,
+      "text/html; charset=utf-8"
+    ],
+    "vouchers_text": [
+      "No voucher: the booking is cancelled or no service is confirmed by a supplier yet.",
+      "Traveller names are held by the agency and are not part of this voucher. Prices are not shown.",
+      "To keep a PDF, print this page and choose \"Save as PDF\"."
+    ],
+    "vouchers_has_trip_plan_ref": false,
+    "case_page": {
+      "h1": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "header": "Adventure Asia\nBOOKING\nOVERVIEW\nB2B\nSALES\nTrip Cases\nProposals\nPricing calculator\nOPERATIONS\nSUPPLY\nCATALOG (FROM CIS)\nSettings\nE\ne2e-booking-staff\nSales\nCollapse\nBooking\n/\nTrip Cases\nSearch pages, trip cases, customers…\nCtrl K\nCIS console\nSales\nE\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days\nConfirmed\nB2B\nTC-000035\nB2B agency\nAgent: Unassigned\n27 Nov 2026 – 2 Dec 2026 (6 days)\n1 adult\nAssign\nEdit details\nConfirmation\nVouchers\n\nINQUIRY\n\nNew inquiry\nDiscovery\n\nPROPOSAL\n\nBuilding\nProposal sent\n\nBOOKING\n\nConfirmed\nSupplier confirming\nInvoice sent\nPayment pending\nPaid\n\nTRAVEL\n\nPre-departure\nOn trip\nCompleted\nOverview\nProposals1\nSuppliers\nChecks\nActivity\nTrip details\nStatus\nConfirmed\nTravel dates\n27 Nov 2026 – 2 Dec 2026\n6 days\nAdults / children\n1 / 0\nCountries\n—\nTrip style\n—\nCurrency\nVND\nApproved total\n3,202,000 VND\nV1\nSource\nB2B agency (AA-Partner CRM)\nCreated\n11 Nov 2026\nTrip leg",
+      "trip_details": "Trip details\nStatus\nConfirmed\nTravel dates\n27 Nov 2026 – 2 Dec 2026\n6 days\nAdults / children\n1 / 0\nCountries\n—\nTrip style\n—\nCurrency\nVND\nApproved total\n3,202,000 VND\nV1\nSource\nB2B agency (AA-Partner CRM)\nCreated\n11 Nov 2026\nTrip legs · An agency booking: the tours sold are listed in its version.\nFROM CIS\nPeople\n\nAGENCY\n\nBA\nB2B agency booking\nB2B\nPartner tenant bab16039-a064-517f-a99f-172b729ad3c4\n\nASSIGNED SALES\n\nAssign\n\nUnassigned\n\nAgency booking\nChanges after the sale. The agency's CRM gets each one as an event; travellers are counts only.\nFewer travellers\nCancel for the agency\n\nConfirmed. No cancellation.\n\nInternal notes\nStaff only. Earlier text is kept in the Activity tab.\n\nNo notes yet.",
+      "oneDay": false,
+      "b2bRef": false
+    },
+    "case_page_390_sideways": false
+  },
+  "TC-000036": {
+    "case": {
+      "status": 200,
+      "trip_title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "status_value": "supplier_confirming",
+      "start_date": "2027-01-12",
+      "end_date": "2027-01-17",
+      "party_tenant_id": "bab16039-a064-517f-a99f-172b729ad3c4"
+    },
+    "confirmation_json": {
+      "status": 200,
+      "start_date": "2027-01-12",
+      "end_date": "2027-01-17",
+      "lines": [
+        {
+          "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+          "kind": "trip_plan",
+          "service_date": "2027-01-12"
+        }
+      ],
+      "vouchers": 0
+    },
+    "confirmation_html_status": [
+      200,
+      "text/html; charset=utf-8"
+    ],
+    "confirmation_text": [
+      "Invented AA billing entity (AA-1037 Dev check)",
+      "Booking confirmation TC-000036 Confirmed",
+      "Issued 13 Nov 2026 00:21 UTC",
+      "BOOKING",
+      "Booking reference",
+      "TC-000036",
+      "Agency",
+      "Lữ hành Sen Vàng",
+      "Agency reference",
+      "E2E-s279 (version 1)",
+      "Travel dates",
+      "12 Jan 2027 to 17 Jan 2027",
+      "Travellers",
+      "2 adults",
+      "Confirmed on",
+      "13 Nov 2026",
+      "SERVICES",
+      "Line\tService\tDate\tNights\tTravellers\tRooms\tStatus\tSupplier confirmation",
+      "tour\tTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "Tour\t12 Jan 2027\t-\t2 adults\t-\tConfirmed\t-",
+      "CANCELLATION POLICY",
+      "The fee is a share of the booking's AA price, by the days left before departure on the day the agency cancels.",
+      "Cancelled before departure\tCancellation fee",
+      "31+ days\t0 %",
+      "22 to 30 days\t10 %",
+      "15 to 21 days\t25 %",
+      "8 to 14 days\t50 %",
+      "2 to 7 days\t75 %",
+      "0 to 1 days\t100 %",
+      "Traveller names are held by the agency and are not part of this confirmation. Prices are not shown. Lines on request are confirmed by AA separately.",
+      "To keep a PDF, print this page and choose \"Save as PDF\"."
+    ],
+    "confirmation_has_trip_plan_ref": false,
+    "vouchers_json": {
+      "status": 200,
+      "start_date": "2027-01-12",
+      "end_date": "2027-01-17",
+      "lines": [],
+      "vouchers": 1
+    },
+    "vouchers_html_status": [
+      200,
+      "text/html; charset=utf-8"
+    ],
+    "vouchers_text": [
+      "Invented AA billing entity (AA-1037 Dev check)",
+      "Service voucher SB-000010",
+      "Service",
+      "E2E fixture (synthetic): airport transfer, run s279",
+      "Date",
+      "-",
+      "Time",
+      "-",
+      "Pick-up",
+      "-",
+      "Drop-off",
+      "-",
+      "Travellers",
+      "2 adults",
+      "Supplier",
+      "ZZ S239 test Supplier AA-822",
+      "Supplier confirmation",
+      "aa1087-1794528411536",
+      "Booking reference",
+      "TC-000036",
+      "Agency reference",
+      "E2E-s279",
+      "Lead traveller: ______________________ (filled in by the agency)",
+      "Traveller names are held by the agency and are not part of this voucher. Prices are not shown.",
+      "To keep a PDF, print this page and choose \"Save as PDF\"."
+    ],
+    "vouchers_has_trip_plan_ref": false,
+    "case_page": {
+      "h1": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+      "header": "Adventure Asia\nBOOKING\nOVERVIEW\nB2B\nSALES\nTrip Cases\nProposals\nPricing calculator\nOPERATIONS\nSUPPLY\nCATALOG (FROM CIS)\nSettings\nE\ne2e-booking-staff\nSales\nCollapse\nBooking\n/\nTrip Cases\nSearch pages, trip cases, customers…\nCtrl K\nCIS console\nSales\nE\nTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days\nSupplier confirming\nConfirmed & Booked\nB2B\nTC-000036\nB2B agency\nAgent: Unassigned\n12 Jan 2027 – 17 Jan 2027 (6 days)\n2 adults\nAssign\nEdit details\nConfirmation\nVouchers\n\nINQUIRY\n\nNew inquiry\nDiscovery\n\nPROPOSAL\n\nBuilding\nProposal sent\n\nBOOKING\n\nConfirmed\nSupplier confirming\nInvoice sent\nPayment pending\nPaid\n\nTRAVEL\n\nPre-departure\nOn trip\nCompleted\nOverview\nProposals1\nSuppliers0/1\nChecks\nActivity\nTrip details\nStatus\nSupplier confirming\nTravel dates\n12 Jan 2027 – 17 Jan 2027\n6 days\nAdults / children\n2 / 0\nCountries\n—\nTrip style\n—\nCurrency\nVND\nApproved total\n4,221,000 VND\nV1\nSource\nB2B agency ",
+      "trip_details": "Trip details\nStatus\nSupplier confirming\nTravel dates\n12 Jan 2027 – 17 Jan 2027\n6 days\nAdults / children\n2 / 0\nCountries\n—\nTrip style\n—\nCurrency\nVND\nApproved total\n4,221,000 VND\nV1\nSource\nB2B agency (AA-Partner CRM)\nCreated\n13 Nov 2026\nTrip legs · An agency booking: the tours sold are listed in its version.\nFROM CIS\nPeople\n\nAGENCY\n\nBA\nB2B agency booking\nB2B\nPartner tenant bab16039-a064-517f-a99f-172b729ad3c4\n\nASSIGNED SALES\n\nAssign\n\nUnassigned\n\nAgency booking\nChanges after the sale. The agency's CRM gets each one as an event; travellers are counts only.\nFewer travellers\nCancel for the agency\n\nConfirmed. No cancellation.\n\nInternal notes\nStaff only. Earlier text is kept in the Activity tab.\n\nNo",
+      "oneDay": false,
+      "b2bRef": false
+    },
+    "case_page_390_sideways": false
+  }
+}

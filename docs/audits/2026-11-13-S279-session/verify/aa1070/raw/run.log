@@ -1,0 +1,8 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/s279-inclusions.spec.ts:8:5 › inclusions (25.1s)
+
+  1 passed (25.6s)
+
+exit 0

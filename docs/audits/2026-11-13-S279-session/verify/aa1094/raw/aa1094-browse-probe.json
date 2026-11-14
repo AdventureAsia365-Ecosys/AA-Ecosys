@@ -1,0 +1,1289 @@
+{
+  "a_tenant": {
+    "path": "/browse/tenant/audit-atlas-hearth",
+    "status": 200,
+    "body": {
+      "tenant": {
+        "tenant_id": "b8611143-9ee9-4410-9a51-534076b78b0b",
+        "slug": "audit-atlas-hearth",
+        "name": "Atlas & Hearth (Audit)",
+        "kind": "demo",
+        "launcher": true,
+        "branding_badge": false,
+        "theme": {},
+        "locale": "en"
+      }
+    }
+  },
+  "b_tours": {
+    "path": "/browse/tenant/audit-atlas-hearth/tours?limit=60",
+    "status": 200,
+    "body": {
+      "filters": {
+        "country": null,
+        "min_days": null,
+        "max_days": null,
+        "month": null,
+        "sort": "featured"
+      },
+      "total": 11,
+      "limit": 60,
+      "offset": 0,
+      "tours": [
+        {
+          "source_id": "6ff4f5ea-dad2-41d7-bfbd-4c61aed846ae",
+          "tour_id": "fe697018-6d81-456f-8082-e44a8dcfe566",
+          "slug": "culinary-bhutan-from-east-to-west-10-days-bhutan-6ff4f5ea",
+          "title": "Bhutan East to West: Farmhouse Tables, Dzongs & Paro in 10 Days",
+          "subtitle": "Samdrup Jongkhar to Paro in 10 days: ara in a Mongar farmhouse, puta in Ura, river trout in Punakha and the Tiger's Nest trek",
+          "summary": "This is a journey for travellers who would rather understand a country than tick it off, and in Bhutan the kitchen is a good place to begin. The route runs from the eastern border to the western valleys, with private vehicle transfers and English-speaking guides throughout, so the long drives through bamboo country and over mountain passes are made without hurry and with someone to place each stop in context. Between the drives come farmhouses, a local home in Tashigang and tables set beside the river. In Mongar you observe ara, the household corn liquor, being brewed. In Ura Village, Bumthang, lunch is puta, buckwheat noodles, a regional specialty. In Punakha it is river trout by the water. The meals sit alongside the buildings and crafts that explain them: the dzongs of Mongar and Punakha, the temples of Bumthang, the weaving of Tashigang, the textile and craft institutions of Thimphu, and the climb to Tiger's Nest above Paro. Stays are on a half-board basis, so each day closes on a settled evening.",
+          "country": "Bhutan",
+          "country_slug": "bhutan",
+          "duration_days": 10,
+          "duration_raw": "10 days",
+          "best_time_to_go": "all year",
+          "highlights": [
+            "Observe ara, a traditional corn liquor, being brewed at a farmhouse lunch in Mongar",
+            "Spend an evening in a local home in Tashigang, where traditional cooking is part of the visit",
+            "Visit Chorten Kora and the Khaling National Handloom on the road east toward the Indian border"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/fd85104b-e09e-4bb6-b23d-a0d874269c5f?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/fd85104b-e09e-4bb6-b23d-a0d874269c5f?size=small",
+          "cover_source": "tour",
+          "cover_place": null,
+          "photo_count": 18,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-05T13:15:13.531118+00:00",
+          "updated_at": "2026-11-05T13:15:13.531118+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-05T13:15:13.531118+00:00",
+            "human_edited": false
+          }
+        },
+        {
+          "source_id": "8a65a69e-6890-49d1-9ed1-f9bcba5d5006",
+          "tour_id": "8908e6ad-69a9-48cf-b368-fef218009f46",
+          "slug": "family-adventure-in-sri-lanka-winter-17-days-sri-lanka-8a65a69e",
+          "title": "Sri Lanka Family Journey: Temples, Rainforest & Blue Whales in 17 Days",
+          "subtitle": "Seventeen days from Colombo to Sigiriya, Kandy, Yala, Sinharaja and Mirissa, with rafting on the Kelani river and a Blue Whale boat trip",
+          "summary": "This winter journey is built for families who want Sri Lanka to unfold in layers: the cave temple at Dambulla and the citadel of Sigiriya, village lanes crossed by bicycle, cloud forest in the Knuckles mountains, and the quiet of Sinharaja at first light. Seventeen days and sixteen nights run from Colombo International Airport to a final transfer back to the airport. Along the way come a full day in Yala National Park, an afternoon among the elephants of Minneriya, an energetic morning on the Kelani river at Kitulgala, and unhurried beach days in Mirissa. The route closes with Blue Whales offshore and a working tea factory at Handunugoda, where most of the machinery is over 150 years old. Heritage, landscape and time together as a family are given equal weight.",
+          "country": "Sri Lanka",
+          "country_slug": "sri-lanka",
+          "duration_days": 17,
+          "duration_raw": "17 days",
+          "best_time_to_go": null,
+          "highlights": [
+            "Dambulla Cave Temple, a UNESCO World Heritage site with statues and paintings in its main caves",
+            "Sigiriya Rock Fortress, the citadel built by King Kasshyapa",
+            "Cycle trip and village walk in Sigiriya, through paddy fields and along the lake bunds"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/06d3c4da-147f-4586-9358-d0fdda7ade53?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/06d3c4da-147f-4586-9358-d0fdda7ade53?size=small",
+          "cover_source": "destination",
+          "cover_place": "Kandy",
+          "photo_count": 0,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-10T07:57:01.009239+00:00",
+          "updated_at": "2026-11-10T07:57:01.009239+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-10T07:57:01.009239+00:00",
+            "human_edited": false
+          }
+        },
+        {
+          "source_id": "b1c59f08-8939-4835-9c60-79a95c3f0d80",
+          "tour_id": "1823ab0e-8fa6-4699-8771-1c0e9e04905a",
+          "slug": "family-holiday-in-sri-lanka-15-days-sri-lanka-b1c59f08",
+          "title": "Sri Lanka for Families: Ancient Kingdoms, Coast & Safari in 15 Days",
+          "subtitle": "Fifteen days from Negombo to Galle: Sigiriya and Polonnaruwa, Pigeon Island snorkelling, Kandy's Temple of the Tooth, the Ella train and a tented camp in Udawalawe",
+          "summary": "This journey gives a family time to take in Sri Lanka slowly, one region at a time. It begins by the sea in Negombo and settles into three nights in an eco lodge tree house at Habarana, close to the ruined kingdoms of Sigiriya and Polonnaruwa. The coast follows at Trincomalee, where the turquoise water of Pigeon Island Marine Sanctuary invites snorkelling. Kandy brings the Temple of the Tooth Relic and a cultural dance show. In Ella, the scenic train passes centuries-old bridges, and a walk leads to Little Adam's Peak. Two nights in a mobile tented safari camp inside Udawalawe National Park bring close encounters with elephants. The trip ends in Galle, at the historical Dutch Fort and a baby sea turtle release. Stays range from small hotels to an eco lodge, a beach resort and a boutique hotel in the countryside. The source states that the excursions suit children above 6 years of age.",
+          "country": "Sri Lanka",
+          "country_slug": "sri-lanka",
+          "duration_days": 15,
+          "duration_raw": "15 DAYS",
+          "best_time_to_go": null,
+          "highlights": [
+            "Walk the ruined kingdoms and temples of Sigiriya and Polonnaruwa from an eco lodge base in Habarana",
+            "Ride an open-top jeep through rural villages near Habarana and meet local communities on a jungle and village treasure hunt",
+            "Snorkel at Pigeon Island Marine Sanctuary, with the sandy beaches of Trincomalee close by"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/06d3c4da-147f-4586-9358-d0fdda7ade53?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/06d3c4da-147f-4586-9358-d0fdda7ade53?size=small",
+          "cover_source": "destination",
+          "cover_place": "Kandy",
+          "photo_count": 0,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-10T07:57:00.763890+00:00",
+          "updated_at": "2026-11-10T07:57:00.763890+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-10T07:57:00.763890+00:00",
+            "human_edited": false
+          }
+        },
+        {
+          "source_id": "0b8fecd2-c529-480d-b83c-4160b11f0c81",
+          "tour_id": "d33d1c3f-e5b5-47d2-98f7-7bce26c45406",
+          "slug": "best-of-china-14-days-china-0b8fecd2",
+          "title": "China by Rail, River and Wall: Shanghai to Beijing in 14 Days",
+          "subtitle": "Shanghai, Hangzhou, Yangshuo, a three-night Yangtze cruise, Xi'an and Beijing, from the City God Temple to the Great Wall at Mutianyu",
+          "summary": "This journey follows China's history from its river cities to its imperial capital, moving by fast train, flight, overnight soft-sleeper train and river boat. It opens in Shanghai at the City God Temple and in the French Concession, then turns to West Lake and the Longjing tea fields at Hangzhou. Three nights in the karst landscape of Yangshuo follow, with a cycle ride to Moon Hill. From Chongqing, a three-night Yangtze cruise passes Fengdu, the Qutang and Wu Gorges and the Three Gorges Dam. In Xi'an the City Wall, the Muslim Quarter and the Terracotta Warriors sit side by side. The journey closes in Beijing, among the Forbidden City, the hutongs and the restored Great Wall at Mutianyu. Each stop is chosen for what it says about the people, architecture and beliefs behind it.",
+          "country": "China",
+          "country_slug": "china",
+          "duration_days": 14,
+          "duration_raw": "14 days",
+          "best_time_to_go": null,
+          "highlights": [
+            "The City God Temple beside Yuyuan Garden and the French Concession's Chinese and European character in Shanghai",
+            "A walk around West Lake and a tea-picking lesson with a farmer at the Longjing Tea Plantation near Hangzhou",
+            "A bicycle ride through the Yangshuo countryside to the crescent arch of Moon Hill, with lunch at the house of local friends"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/039104c8-cceb-49ad-b03b-041b38b6bb08?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/039104c8-cceb-49ad-b03b-041b38b6bb08?size=small",
+          "cover_source": "destination",
+          "cover_place": "Yangshuo",
+          "photo_count": 0,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-10T07:57:00.217631+00:00",
+          "updated_at": "2026-11-10T07:57:00.217631+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-10T07:57:00.217631+00:00",
+            "human_edited": false
+          }
+        },
+        {
+          "source_id": "40769f2c-8ba6-4025-a1b9-c63f2ea45dee",
+          "tour_id": "44281611-10a6-43f2-8e17-4090812cb7ae",
+          "slug": "seoul-jeonju-busan-and-jeju-k-pop-and-hanok-villages-10-days-south-korea-40769f2c",
+          "title": "South Korea: Hanok Nights, Busan Coast & Jeju Island in 10 Days",
+          "subtitle": "Ten days from Seoul's Gwangjang Market to a Jeonju hanok, Busan's clifftop Haedong Yonggungsa Temple and Jeju's haenyeo divers",
+          "summary": "This journey follows Korea from its capital to its southern coast, and each stage is anchored in something that has been made, kept or practiced for a long time. In Seoul, HiKR Ground and the hanok lanes of Ikseon-Dong set contemporary Korean culture beside its older domestic architecture, and Gwangjang Market shows where the city's daily life still gathers. A night in a traditional hanok house in Jeonju's preserved quarter follows, with time for hanji, pottery, calligraphy and hanbok. Busan brings Haedong Yonggungsa, a Buddhist temple built in 1376 on a cliff above the East China Sea, together with the painted hillside of Gamcheon Culture Village and the fish stalls of Jagalchi. The last three nights are spent in Jeju City, where a guided walk through Seongeup Folk Village, the climb of Seongsan Sunrise Peak and an evening with the haenyeo, the island's breath-hold divers, bring the trip to a close. Several days are left open, with optional additions such as the DMZ, a K-pop dance class or a Korean cooking class, so the pace stays yours to set.",
+          "country": "South Korea",
+          "country_slug": "south-korea",
+          "duration_days": 10,
+          "duration_raw": "10 days",
+          "best_time_to_go": null,
+          "highlights": [
+            "HiKR Ground, Seoul: a five-story space for K-pop, K-drama media and contemporary Korean art",
+            "A night in a traditional hanok house in Jeonju Hanok Village, followed by a guided walk past Gyeonggijeon Shrine and Jeondong Catholic Church",
+            "Gamcheon Culture Village, Busan: pastel-painted houses, murals and small galleries climbing a mountainside"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/241d64ac-92b4-4330-9513-54653925ec96?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/241d64ac-92b4-4330-9513-54653925ec96?size=small",
+          "cover_source": "destination",
+          "cover_place": "downtown Jeju City",
+          "photo_count": 0,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-10T06:58:57.204915+00:00",
+          "updated_at": "2026-11-10T06:58:57.204915+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-10T06:58:57.204915+00:00",
+            "human_edited": false
+          }
+        },
+        {
+          "source_id": "35784e28-4391-463d-a8d4-465a63d8a40e",
+          "tour_id": "80172001-d04a-4244-8b02-006f2d990675",
+          "slug": "china-adventure-beijing-to-hong-kong-20-days-china-35784e28",
+          "title": "China from Beijing to Hong Kong: Imperial North, Yunnan Highlands & Karst South in 20 Days",
+          "subtitle": "20 days by sleeper train, fast rail and a flight to Shangri-La: the Forbidden City, Terracotta Warriors, Tiger Leaping Gorge and the Longji terraces",
+          "summary": "This journey follows China's cultural thread from the imperial capital to the southern coast, giving each place time to be understood rather than ticked off. It opens in Beijing with Tiananmen Square, the Forbidden City and the Hutong alleys, then climbs the restored Great Wall at Mutianyu before an overnight hard-sleeper train to Xi'an and the buried army of Terracotta Warriors. Chengdu brings the Panda Breeding Center, and a flight to Zhongdian (Shangri-La, at 3,276 meters) opens the Yunnan chapter: the Tibetan lanes of Dukezong, two days on foot through Tiger Leaping Gorge, the Naxi Old Town of Lijiang, and Dali between the Cangshan Mountains and Erhai Lake. The final movement turns to Guangxi, with the 650-year-old Dragon's Backbone Rice Terraces at Longji and the karst hills of Yangshuo, before a fast train carries the group to Hong Kong. Stays are in hotels and guesthouses, and the route moves by hard-sleeper and fast trains, a flight, and public and private transfers.",
+          "country": "China",
+          "country_slug": "china",
+          "duration_days": 20,
+          "duration_raw": "20 days",
+          "best_time_to_go": null,
+          "highlights": [
+            "Walk Tiananmen Square, the Forbidden City (built 1406-1420, a World Heritage Site since 1987) and the Hutong courtyard alleys of Beijing",
+            "Climb the restored Great Wall at Mutianyu, about 2 hours from Beijing",
+            "Meet the Terracotta Warriors in Xi'an, where three pits hold just under 2,000 individually sculpted figures in battle formation"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/c6bc06d3-2a17-4ad6-98a7-3fa9ce89acf3?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/c6bc06d3-2a17-4ad6-98a7-3fa9ce89acf3?size=small",
+          "cover_source": "destination",
+          "cover_place": "Yonghe Temple",
+          "photo_count": 0,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-10T06:58:56.953590+00:00",
+          "updated_at": "2026-11-10T06:58:56.953590+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-10T06:58:56.953590+00:00",
+            "human_edited": false
+          }
+        },
+        {
+          "source_id": "45fdcf1b-bc02-41ac-9390-930fecf217a1",
+          "tour_id": "b4d315a6-21cb-4d2b-9a2f-9d654388078a",
+          "slug": "northern-india-delhi-agra-rajasthan-and-mumbai-15-days-india-45fdcf1b",
+          "title": "Northern India by Fort, Palace & River: Delhi to Mumbai in 15 Days",
+          "subtitle": "Fifteen days from Delhi to Mumbai: the Taj Mahal at Agra, a Chambal River boat safari, Ranthambore, Jaipur's Jantar Mantar, Udaipur's lakes and the Elephanta Caves",
+          "summary": "This journey reads northern India through its buildings and the people who still work within their traditions. It begins among the tombs and mosques of Delhi and reaches the Taj Mahal and Agra Fort, then turns to the quieter Chambal River, where a motorboat passes gharials and migratory birds. Ranthambore offers jeep safaris through forest scattered with ruins. In Rajasthan the pace lingers over stone and craft: Amber Fort, the 1727 instruments of Jantar Mantar, Mehrangarh above Jodhpur's blue lanes, and the 1,444 carved pillars of Ranakpur's marble temple. Block printers in Jaipur and Chandelao, and a women's craft enterprise in Jodhpur, give the route a human scale. Stays include a stone-cottage retreat at Narsingh Bagh, Narain Niwas Palace, Chandelao Garh within its fortress grounds and Fateh Niwas on Udaipur's lakefront. The journey ends in Mumbai with the rock-cut temples of Elephanta Island, reached by private boat.",
+          "country": "India",
+          "country_slug": "india",
+          "duration_days": 15,
+          "duration_raw": "15 days",
+          "best_time_to_go": null,
+          "highlights": [
+            "Guided visit to the Taj Mahal and Agra Fort, with architectural and historical context from your trip leader and a local guide",
+            "Motorboat safari on the Chambal River near Dholpur, watching for gharials and migratory birds",
+            "Jeep safari in Ranthambore National Park, led by local rangers, for Bengal tigers, leopards and deer (sightings are not guaranteed)"
+          ],
+          "cover_url": null,
+          "cover_url_small": null,
+          "cover_source": null,
+          "cover_place": null,
+          "photo_count": 0,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-10T06:58:56.704998+00:00",
+          "updated_at": "2026-11-10T06:58:56.704998+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-10T06:58:56.704998+00:00",
+            "human_edited": false
+          }
+        },
+        {
+          "source_id": "6b390225-9846-478e-821c-445764070341",
+          "tour_id": "69fe6398-3efe-4698-960e-b18bcc35f390",
+          "slug": "sri-lanka-self-guided-journey-by-public-transport-22-days-sri-lanka-6b390225",
+          "title": "Sri Lanka by Rail, Bus and Tuk Tuk: Colombo to Negombo in 22 Days",
+          "subtitle": "22 days from Colombo through Anuradhapura, Sigiriya, Kandy and Ella to a Wellawaya farm stay and the south coast at Tangalle and Unawatuna",
+          "summary": "This is Sri Lanka told at the pace of its own rails and roads. Over 22 days you travel independently by train, public bus and tuk tuk, with a driver to meet you at Colombo airport and a taxi to take you back from Negombo at the end. The route follows the island's layers in order: the ruined temples and palaces of Anuradhapura and the rock monastery at Mihintale, Sigiriya and the cave temple at Dambulla, then Kandy, where the casket holding the Buddha's Tooth is open to the public during the evening sermon. From there reserved second-class seats carry you through tea country to Nuwara Eliya and on to Ella. A rural farm stay in Wellawaya brings fields, a lake and elephants watched from the backyard. The final stretch settles into a wooden beach cabana at Tangalle and a guest house at Unawatuna, close to Galle's Dutch Fort. Village and cultural experiences, including a host day in a Kandy village and a cycle trip through the Galle countryside, are optional, so you decide how much to add to each day.",
+          "country": "Sri Lanka",
+          "country_slug": "sri-lanka",
+          "duration_days": 22,
+          "duration_raw": "22 days",
+          "best_time_to_go": null,
+          "highlights": [
+            "Walk among the ruined temples and palaces of Anuradhapura and visit Mihintale Rock Monastery, described as the birthplace of Buddhism in Sri Lanka",
+            "Climb Sigiriya Rock Fortress and visit Dambulla Cave Temple, with an optional guided cycle through the villages around Sigiriya",
+            "Attend the evening sermon at the Temple of the Tooth Relic in Kandy, when the casket holding the Buddha's Tooth is open for public viewing"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/d4d12c40-9cad-4558-bc38-cab50aedbedd?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/d4d12c40-9cad-4558-bc38-cab50aedbedd?size=small",
+          "cover_source": "destination",
+          "cover_place": "Nuwara Eliya",
+          "photo_count": 0,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-10T06:58:56.440887+00:00",
+          "updated_at": "2026-11-10T06:58:56.440887+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-10T06:58:56.440887+00:00",
+            "human_edited": false
+          }
+        },
+        {
+          "source_id": "1e0e7fa9-b355-4a0a-8a69-1b5a5e5d2eed",
+          "tour_id": "fa0112cf-cdca-4138-bf70-50b45f6052d0",
+          "slug": "india-encompassed-delhi-to-kochi-28-days-india-1e0e7fa9",
+          "title": "India, Delhi to Kochi: Palaces, Ghats & Temple Towns in 28 Days",
+          "subtitle": "28 days from Delhi to Kochi: sunrise at the Taj Mahal, the Ganges at Varanasi, Mysore Palace and a Kerala backwaters homestay",
+          "summary": "This journey reads India as a long, layered conversation between north and south, beginning among the mosques and markets of Old Delhi and ending with a Kathakali performance in Kochi. In between come the palaces of Jaipur, the Taj Mahal at sunrise, the medieval temples of Khajuraho, the ghats of Varanasi, Mysore Palace, the Shore Temple at Mamallapuram, the Brihadeeswarar Temple in Thanjavur and the Meenakshi Temple in Madurai. A local guide leads throughout, in English, and the group numbers between one and twelve. Private vehicle, train and flight link the stages, with a tented camp, a heritage stay in Alipura, a sleeper train and a village homestay on the Kerala backwaters among the places you sleep. The days leave room to understand the architecture, crafts and communities behind each place, and to meet local people.",
+          "country": "India",
+          "country_slug": "india",
+          "duration_days": 28,
+          "duration_raw": "28 days",
+          "best_time_to_go": null,
+          "highlights": [
+            "Taj Mahal at sunrise, followed by Agra Fort and Baby Taj",
+            "Amber Fort and Hawa Mahal in Jaipur",
+            "Guided tour of the medieval Khajuraho temples"
+          ],
+          "cover_url": null,
+          "cover_url_small": null,
+          "cover_source": null,
+          "cover_place": null,
+          "photo_count": 0,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-10T05:50:34.250511+00:00",
+          "updated_at": "2026-11-10T05:50:34.250511+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-10T05:50:34.250511+00:00",
+            "human_edited": false
+          }
+        },
+        {
+          "source_id": "a1363897-5bfc-42e8-a155-32ed41371254",
+          "tour_id": "2aa6e292-c82c-4380-a87e-1585933ff3df",
+          "slug": "laos-to-vietnam-cycling-tour-12-days-laos-a1363897",
+          "title": "Laos to Vietnam by Bicycle and River: Luang Prabang to Hanoi in 12 Days",
+          "subtitle": "Twelve days by bicycle and boat from Luang Prabang up the Nam Ou gorge, over Pha Din Pass and through Mai Chau to Cuc Phuong and Hanoi",
+          "summary": "This journey crosses a border slowly, by bicycle and by river, so that the change in landscape and community can be read along the way. It begins in Luang Prabang and follows the Nam Ou valley north through limestone karst. A boat journey of four to five hours through the gorge reaches Muang Khua, and from there the route enters Vietnam through primary forest. Guides accompany the route throughout. A Vietnamese guide takes over at the border, and their local knowledge gives context to Dien Bien Phu, where the battle that ended French colonial rule in Indochina was fought. The route then passes through Tai, Hmong and Black Tai country, over Pha Din Pass at about 1,450 meters, and on to Cuc Phuong National Park and Hanoi. Evenings are given to people as much as to place: homestay families in Ban Long Lao Mai and Mai Chau, and a village elder in Nong Khouay who may share local history. The cycling is demanding, with days of 40 to 80 kilometers over tarmac, dirt and mountain track, and some trekking. It asks for real cycling fitness. The route is supported at several points: the boat day on the Nam Ou, short vehicle transfers on days 6, 8, 9, 11 and 12, and guide and driver support on the final leg. Stays vary by night, with hotels in Son La, a guesthouse in Tuan Giao, family homestays and a park bungalow. Some are simple, and Nong Khouay has no grid electricity or mobile signal.",
+          "country": "Laos",
+          "country_slug": "laos",
+          "duration_days": 12,
+          "duration_raw": "12 days",
+          "best_time_to_go": null,
+          "highlights": [
+            "A four to five hour boat journey through the Nam Ou River gorge, with stops at remote villages reachable only by water",
+            "Kuang Si Waterfalls near Luang Prabang, with turquoise pools for swimming",
+            "An overnight stay with a homestay family in Ban Long Lao Mai, where Khmu families and resettled Hmong residents share a village"
+          ],
+          "cover_url": null,
+          "cover_url_small": null,
+          "cover_source": null,
+          "cover_place": null,
+          "photo_count": 0,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-05T13:15:14.039000+00:00",
+          "updated_at": "2026-11-05T13:15:14.039000+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-05T13:15:14.039000+00:00",
+            "human_edited": false
+          }
+        },
+        {
+          "source_id": "57d386c2-6c87-43b9-ab11-ac7b0e6bfc26",
+          "tour_id": "4e35f6b4-fe5f-4c2f-945c-b44b6e21b99b",
+          "slug": "khovsgol-and-gobi-tour-mongolia-15-days-mongolia-57d386c2",
+          "title": "Mongolia: Kh\u00f6vsg\u00f6l Lake, Monastery Ruins and the Gobi in 15 Days",
+          "subtitle": "Fifteen days from Kh\u00f6vsg\u00f6l Lake and the Dukha reindeer herders, through Erdene Zuu and Ongi, to the Khongor dunes and Yol Valley",
+          "summary": "This journey reads Mongolia from north to south as a series of layers: geological, religious and historical. It opens at Kh\u00f6vsg\u00f6l Lake, where steppe meets Siberian taiga and the Tsaatan, or Dukha, live by herding reindeer. It then passes through volcanic country and the silent monastic centers of Amarbayasgalant, Erdene Zuu and Ongi. Each is a different chapter in Mongolian religious and artistic life, shaped by the purges of the 1930s in different ways. Kharkhorin, the 13th-century capital, anchors the middle of the route. The final stages descend into the Gobi: the Flaming Cliffs, where the first fossilized dinosaur eggs were found, the singing dunes of Khongor, and the colored cliffs and granite formations of the Middle Gobi. Visits to nomadic families are set within this context, as a way to understand herding traditions that have persisted and adapted into the modern era. Nights are in standard ger camps positioned near each region's key sites, with upgrades available at Kh\u00f6vsg\u00f6l, Ulziit Khishig and Khongor. All meals and ground transportation between stages are included.",
+          "country": "Mongolia",
+          "country_slug": "mongolia",
+          "duration_days": 15,
+          "duration_raw": "15 DAYS \n14 NIGHTS",
+          "best_time_to_go": null,
+          "highlights": [
+            "Walk the grounds of Amarbayasgalant Monastery, built in 1727 without metal beams or nails and one of Mongolia's three major monastic centers",
+            "Descend into the caldera of Uran Togoo, a volcano dormant for 24,000 years, its crater 600 meters wide and 50 to 60 meters deep",
+            "Reach Kh\u00f6vsg\u00f6l Lake, 2,760 square kilometers and the second-largest freshwater lake in Asia, where steppe meets Siberian taiga"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/69b6aaca-f1b0-4c4f-a0d2-ba237c424f53?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/69b6aaca-f1b0-4c4f-a0d2-ba237c424f53?size=small",
+          "cover_source": "destination",
+          "cover_place": "Lake Kh\u00f6vsg\u00f6l",
+          "photo_count": 0,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-05T13:15:13.789769+00:00",
+          "updated_at": "2026-11-05T13:15:13.789769+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-05T13:15:13.789769+00:00",
+            "human_edited": false
+          }
+        }
+      ],
+      "source": "tenant"
+    }
+  },
+  "c_detail": {
+    "path": "/browse/tenant/audit-atlas-hearth/tours/culinary-bhutan-from-east-to-west-10-days-bhutan-6ff4f5ea",
+    "status": 200,
+    "body": {
+      "contract": "catalog.tenant_tour",
+      "version": 1,
+      "tenant": {
+        "slug": "audit-atlas-hearth",
+        "name": "Atlas & Hearth (Audit)"
+      },
+      "source_system": "cis",
+      "source_id": "6ff4f5ea-dad2-41d7-bfbd-4c61aed846ae",
+      "tour_id": "fe697018-6d81-456f-8082-e44a8dcfe566",
+      "slug": "culinary-bhutan-from-east-to-west-10-days-bhutan-6ff4f5ea",
+      "title": "Bhutan East to West: Farmhouse Tables, Dzongs & Paro in 10 Days",
+      "subtitle": "Samdrup Jongkhar to Paro in 10 days: ara in a Mongar farmhouse, puta in Ura, river trout in Punakha and the Tiger's Nest trek",
+      "summary": "This is a journey for travellers who would rather understand a country than tick it off, and in Bhutan the kitchen is a good place to begin. The route runs from the eastern border to the western valleys, with private vehicle transfers and English-speaking guides throughout, so the long drives through bamboo country and over mountain passes are made without hurry and with someone to place each stop in context. Between the drives come farmhouses, a local home in Tashigang and tables set beside the river. In Mongar you observe ara, the household corn liquor, being brewed. In Ura Village, Bumthang, lunch is puta, buckwheat noodles, a regional specialty. In Punakha it is river trout by the water. The meals sit alongside the buildings and crafts that explain them: the dzongs of Mongar and Punakha, the temples of Bumthang, the weaving of Tashigang, the textile and craft institutions of Thimphu, and the climb to Tiger's Nest above Paro. Stays are on a half-board basis, so each day closes on a settled evening.",
+      "highlights": [
+        "Observe ara, a traditional corn liquor, being brewed at a farmhouse lunch in Mongar",
+        "Spend an evening in a local home in Tashigang, where traditional cooking is part of the visit",
+        "Visit Chorten Kora and the Khaling National Handloom on the road east toward the Indian border",
+        "Pause at Mebar Tsho, the Black Mountain Lake, on the drive to Bumthang",
+        "Taste puta, buckwheat noodles and a regional specialty, in Ura Village, Bumthang",
+        "Visit Kurje Lhakhang and Jambay Lhakhang, two of Bhutan's most significant temples",
+        "Lunch on Bhutanese river trout beside the water, then visit Punakha Dzong in the evening",
+        "Walk the gardens of Kuenselphodrang to Asia's tallest bronze Buddha statue above Thimphu",
+        "Visit the Textile Museum, Craft Bazaar and Kaja Throm Farmers Market, then lunch at a traditional dumpling house",
+        "Trek to Tiger's Nest Monastery (Paro Taktsang) in Paro Valley",
+        "Tour a working brewery in Paro and walk through Paro town, after Kyichu Lhakhang and the Ta Dzong National Museum"
+      ],
+      "itinerary_text": "Day 1 \u00b7 Samdrup Jongkhar: Crossing into Eastern Bhutan\nArrive at Guwahati Airport and travel 98 km by road to Samdrup Jongkhar, Bhutan's eastern gateway. Immigration formalities are completed at the border, and you then check into your hotel.\n\nDay 2 \u00b7 Tashigang: Dewathang, Khaling Handloom & Chorten Kora\nThe road runs 180 kilometers east through bamboo country to Tashigang, near the Indian border. Dewathang's historical battlefield, the Khaling National Handloom and Chorten Kora set the region's history and weaving in context. The evening is spent in a local home, where traditional cooking is part of the visit.\n\nDay 3 \u00b7 Mongar Dzong and a Farmhouse Lunch with Ara\nA drive of 90 km, about three hours, brings you to Mongar. Mongar Dzong comes first, then lunch at a local farmhouse, where traditional eastern dishes are served and ara, the household corn liquor, is brewed as you observe.\n\nDay 4 \u00b7 Bumthang: Mebar Tsho, Ura Village & Two Temples\nThe 190-kilometer drive to Bumthang takes five hours over mountain passes, pausing at Mebar Tsho, the Black Mountain Lake. Lunch in Ura Village is puta, buckwheat noodles, a regional specialty. The afternoon is given to Kurje Lhakhang and Jambay Lhakhang, two of Bhutan's most significant temples.\n\nDay 5 \u00b7 Punakha: A Riverside Lunch and the Dzong\nA six-hour drive descends through green valleys to Punakha. Lunch by the river is Bhutanese-style trout with red and white rice. In the evening, visit Punakha Dzong, the fortress set where two rivers meet.\n\nDay 6 \u00b7 Thimphu via Dochu La: Kuenselphodrang and the Arts School\nDrive 74 km over Dochu La Pass to Thimphu, about two hours. The gardens of Kuenselphodrang hold Asia's tallest bronze Buddha statue. After lunch in Babesa village, the afternoon turns to the Takin Zoo, the National Library and the Traditional School of Arts and Craft.\n\nDay 7 \u00b7 Thimphu: Textile Museum, Craft Bazaar & Kaja Throm Market\nThe Textile Museum, the Craft Bazaar and Kaja Throm Farmers Market show how Thimphu weaves, makes and eats. Lunch is at a traditional dumpling house, and the afternoon is left free.\n\nDay 8 \u00b7 Paro: The Walk to Tiger's Nest Monastery\nDrive to Paro, then trek to Tiger's Nest Monastery (Paro Taktsang), the cliffside sanctuary above the valley.\n\nDay 9 \u00b7 Paro Town: Kyichu Lhakhang, Ta Dzong & a Local Brewery\nThe morning is for Kyichu Lhakhang, one of Bhutan's oldest temples, and the Ta Dzong National Museum. Lunch brings local rice pizza and buckwheat dumplings with dried spinach. The afternoon includes a brewery tour and a walk through Paro town.\n\nDay 10 \u00b7 Hotel Check-Out and Departure from Bhutan\nCheck out of your hotel and travel to the airport for your departure.",
+      "seo_title": "Bhutan Culinary Journey East to West, 10 Days | Paro",
+      "seo_meta": "Private 10-day Bhutan journey from Samdrup Jongkhar to Paro Valley: farmhouse tables, Thimphu's National Library, Paro town and the Tiger's Nest trek.",
+      "country": "Bhutan",
+      "country_slug": "bhutan",
+      "duration_raw": "10 days",
+      "duration_days": 10,
+      "best_time_to_go": "all year",
+      "cover_url": "https://api-cis.lumiguides.it.com/content/photos/fd85104b-e09e-4bb6-b23d-a0d874269c5f?size=large",
+      "cover_source": "tour",
+      "cover_place": null,
+      "photo_count": 18,
+      "content_hash": "9755e8ac441118144cdeda9a99d297a0",
+      "ai": {
+        "ai_generated": true,
+        "generator": "Adventure Asia content writer",
+        "model": null,
+        "generated_at": "2026-11-05T13:15:13.531118+00:00",
+        "human_edited": false
+      },
+      "photos": [
+        {
+          "photo_id": "7334b252-bdfd-4baf-bce6-9b0790d3bca7",
+          "path": "/content/photos/fd85104b-e09e-4bb6-b23d-a0d874269c5f",
+          "place_label": "Bhutan Mongar Town",
+          "width": 1400,
+          "height": 933,
+          "position": 1,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/fd85104b-e09e-4bb6-b23d-a0d874269c5f?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/fd85104b-e09e-4bb6-b23d-a0d874269c5f?size=small"
+        },
+        {
+          "photo_id": "b5edc27d-f5d3-4f72-9b3c-bed99525ab18",
+          "path": "/content/photos/84a4457a-2362-4a5d-9cfb-5fcf27ece3a3",
+          "place_label": "Bumthang",
+          "width": 2048,
+          "height": 1365,
+          "position": 2,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/84a4457a-2362-4a5d-9cfb-5fcf27ece3a3?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/84a4457a-2362-4a5d-9cfb-5fcf27ece3a3?size=small"
+        },
+        {
+          "photo_id": "6cf25c5a-bda6-418f-a057-24851dafae2d",
+          "path": "/content/photos/4a8153f3-ceee-43d4-9648-3ddb35063d55",
+          "place_label": "Bumthang",
+          "width": 1440,
+          "height": 960,
+          "position": 3,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/4a8153f3-ceee-43d4-9648-3ddb35063d55?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/4a8153f3-ceee-43d4-9648-3ddb35063d55?size=small"
+        },
+        {
+          "photo_id": "a1153686-10ad-4193-b0e3-abd733bf5b27",
+          "path": "/content/photos/ff6dfd50-b5b0-4d3f-8cb3-d8fcdbee7d01",
+          "place_label": "Bumthang valley",
+          "width": 1200,
+          "height": 800,
+          "position": 4,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/ff6dfd50-b5b0-4d3f-8cb3-d8fcdbee7d01?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/ff6dfd50-b5b0-4d3f-8cb3-d8fcdbee7d01?size=small"
+        },
+        {
+          "photo_id": "3686029e-95d9-405d-9af3-00b80e53def1",
+          "path": "/content/photos/3686029e-95d9-405d-9af3-00b80e53def1",
+          "place_label": "Chorten Kora, Trashiyangtse District, Bhutan",
+          "width": 2494,
+          "height": 1589,
+          "position": 5,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/3686029e-95d9-405d-9af3-00b80e53def1?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/3686029e-95d9-405d-9af3-00b80e53def1?size=small"
+        },
+        {
+          "photo_id": "f12a0200-8863-4126-b6b7-056f7d8870f1",
+          "path": "/content/photos/f12a0200-8863-4126-b6b7-056f7d8870f1",
+          "place_label": "Kaja Throm Farmers Market",
+          "width": 1200,
+          "height": 800,
+          "position": 6,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/f12a0200-8863-4126-b6b7-056f7d8870f1?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/f12a0200-8863-4126-b6b7-056f7d8870f1?size=small"
+        },
+        {
+          "photo_id": "52a747d2-bdad-42ff-8c48-b0c214e9cde0",
+          "path": "/content/photos/8f94b17d-1231-45ea-91b7-b744c950fae5",
+          "place_label": "Kyichu Lhakhang",
+          "width": 1200,
+          "height": 800,
+          "position": 7,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/8f94b17d-1231-45ea-91b7-b744c950fae5?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/8f94b17d-1231-45ea-91b7-b744c950fae5?size=small"
+        },
+        {
+          "photo_id": "e81f0e1c-4c18-418c-966b-da0ba3a870d3",
+          "path": "/content/photos/6c8196b5-2fda-4961-ae59-632ea93265e6",
+          "place_label": "Punakha",
+          "width": 4000,
+          "height": 3000,
+          "position": 8,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/6c8196b5-2fda-4961-ae59-632ea93265e6?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/6c8196b5-2fda-4961-ae59-632ea93265e6?size=small"
+        },
+        {
+          "photo_id": "f3dc6774-993b-4d8c-9c08-c03a2c9e6520",
+          "path": "/content/photos/a5931c9d-7380-43db-81c9-0b958d8d0b07",
+          "place_label": "punakha dzong",
+          "width": 1800,
+          "height": 1200,
+          "position": 9,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/a5931c9d-7380-43db-81c9-0b958d8d0b07?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/a5931c9d-7380-43db-81c9-0b958d8d0b07?size=small"
+        },
+        {
+          "photo_id": "65550cfb-bf36-44f4-b640-95a94ced00b6",
+          "path": "/content/photos/5825890e-cbd5-4db2-adb9-95a0840d4553",
+          "place_label": "PunakhaDzong",
+          "width": 1280,
+          "height": 853,
+          "position": 10,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/5825890e-cbd5-4db2-adb9-95a0840d4553?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/5825890e-cbd5-4db2-adb9-95a0840d4553?size=small"
+        },
+        {
+          "photo_id": "0f103e17-7b41-436b-a830-a06868ab0e38",
+          "path": "/content/photos/e4b04c11-5735-407c-a127-be84c29eabee",
+          "place_label": "Punakha",
+          "width": 4458,
+          "height": 3183,
+          "position": 11,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/e4b04c11-5735-407c-a127-be84c29eabee?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/e4b04c11-5735-407c-a127-be84c29eabee?size=small"
+        },
+        {
+          "photo_id": "9b74210c-9492-408a-9b6a-f9c04d942eee",
+          "path": "/content/photos/8fe23ea6-3b8e-4a6c-990b-8c6cf9841c69",
+          "place_label": "Samdrup Jongkhar",
+          "width": 1920,
+          "height": 1080,
+          "position": 12,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/8fe23ea6-3b8e-4a6c-990b-8c6cf9841c69?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/8fe23ea6-3b8e-4a6c-990b-8c6cf9841c69?size=small"
+        },
+        {
+          "photo_id": "2c956ff3-962b-4901-b0bd-325a012acd11",
+          "path": "/content/photos/0fa1d29f-5be8-4398-b8d4-0f6dd9aa970a",
+          "place_label": "Thimphu",
+          "width": 1920,
+          "height": 1080,
+          "position": 13,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/0fa1d29f-5be8-4398-b8d4-0f6dd9aa970a?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/0fa1d29f-5be8-4398-b8d4-0f6dd9aa970a?size=small"
+        },
+        {
+          "photo_id": "e6551c09-00a2-4f35-a676-af26aa485450",
+          "path": "/content/photos/dbd2fb25-eb61-49d1-875e-39b10b462479",
+          "place_label": "Thimphu",
+          "width": 3840,
+          "height": 1674,
+          "position": 14,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/dbd2fb25-eb61-49d1-875e-39b10b462479?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/dbd2fb25-eb61-49d1-875e-39b10b462479?size=small"
+        },
+        {
+          "photo_id": "da3f8b19-96c0-4a8f-b454-c342b143600b",
+          "path": "/content/photos/9675b441-3f11-4140-b97b-e09fe0967b90",
+          "place_label": "Thimphu trashi chhoe dzong",
+          "width": 2879,
+          "height": 1876,
+          "position": 15,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/9675b441-3f11-4140-b97b-e09fe0967b90?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/9675b441-3f11-4140-b97b-e09fe0967b90?size=small"
+        },
+        {
+          "photo_id": "b9c424f6-fdc9-438e-bc5a-1b8d7acd9a17",
+          "path": "/content/photos/5bdd0dda-f570-4a5e-a1e4-01b281a5af1f",
+          "place_label": "tiger's nest",
+          "width": 1336,
+          "height": 891,
+          "position": 16,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/5bdd0dda-f570-4a5e-a1e4-01b281a5af1f?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/5bdd0dda-f570-4a5e-a1e4-01b281a5af1f?size=small"
+        },
+        {
+          "photo_id": "0a784fa5-7130-4f2f-b78b-b7aa3b003be8",
+          "path": "/content/photos/45c88527-5dac-430e-b70e-4349d187e072",
+          "place_label": "Tigers Nest Taktshang Monastery",
+          "width": 1600,
+          "height": 900,
+          "position": 17,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/45c88527-5dac-430e-b70e-4349d187e072?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/45c88527-5dac-430e-b70e-4349d187e072?size=small"
+        },
+        {
+          "photo_id": "b50fece5-c932-4b86-a5ea-d06b60c767ae",
+          "path": "/content/photos/f5dfc0ed-241e-4ab4-b21b-ef6ff81aa331",
+          "place_label": "Trashigang",
+          "width": 3000,
+          "height": 1879,
+          "position": 18,
+          "url": "https://api-cis.lumiguides.it.com/content/photos/f5dfc0ed-241e-4ab4-b21b-ef6ff81aa331?size=large",
+          "url_small": "https://api-cis.lumiguides.it.com/content/photos/f5dfc0ed-241e-4ab4-b21b-ef6ff81aa331?size=small"
+        }
+      ]
+    }
+  },
+  "d_aa_tours": {
+    "path": "/browse/tenant/aa-tripplanner/tours?limit=5",
+    "status": 200,
+    "body": {
+      "filters": {
+        "country": null,
+        "min_days": null,
+        "max_days": null,
+        "month": null,
+        "sort": "featured"
+      },
+      "total": 844,
+      "limit": 5,
+      "offset": 0,
+      "tours": [
+        {
+          "source_id": "28e22489-5212-436f-94e1-702e1e8d230a",
+          "tour_id": "a26bdf3f-67b7-46ab-b80d-b5f30a425ebc",
+          "slug": "sri-lanka-cultural-tour-kandy-dambulla-and-sigiriya-3-days-sri-lanka-28e22489",
+          "title": "Sri Lanka Cultural Tour: Kandy, Dambulla and Sigiriya \u2014 3 Days",
+          "subtitle": "A 3-day private cultural route from the airport to Kandy and Sigiriya, passing the Pinnawala Elephant Orphanage and the Dambulla Cave Temple.",
+          "summary": "This 3-day cultural tour begins with a morning airport arrival and a transfer to Kandy with a chauffeur guide. It ends with a transfer to the airport for departure. Stops include the Pinnawala Elephant Orphanage, the Temple of the Tooth Relic in Kandy, the Dambulla Cave Temple and the Sigiriya rock fortress. A spice garden visit is part of the second day. A visit to a tea plantation and factory is optional on the first day.",
+          "country": "Sri Lanka",
+          "country_slug": "sri-lanka",
+          "duration_days": 3,
+          "duration_raw": "3 days",
+          "best_time_to_go": null,
+          "highlights": [
+            "Pinnawala Elephant Orphanage",
+            "Temple of the Tooth Relic in Kandy",
+            "Dambulla Cave Temple with ancient Buddhist murals and statues"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/38570b4b-8162-4560-9171-41bca02b20e6?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/38570b4b-8162-4560-9171-41bca02b20e6?size=small",
+          "cover_source": "tour",
+          "cover_place": null,
+          "photo_count": 13,
+          "lifecycle_stage": "active",
+          "published_at": "2026-10-08T01:43:44.501708+00:00",
+          "updated_at": "2026-11-12T21:11:19.918047+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia catalog writer",
+            "model": null,
+            "generated_at": "2026-10-25T04:51:34.522617+00:00",
+            "human_edited": null
+          }
+        },
+        {
+          "source_id": "80477347-7544-4214-afc5-dd46de6f5ced",
+          "tour_id": "96ac5a71-31c6-405e-a23b-a7fda683d50f",
+          "slug": "highland-colombo-sri-lanka-4-days-sri-lanka-80477347",
+          "title": "Highland & Colombo, Sri Lanka \u2014 4 Days",
+          "subtitle": "A 4-day route from Bandaranaike International Airport through Kandy and Nuwara Eliya to Colombo.",
+          "summary": "This 4-day tour starts with an airport welcome at Bandaranaike International Airport and a transfer to Kandy. It continues to the hill town of Nuwara Eliya and ends in Colombo, with an evening transfer to the airport on the last day. Named stops include the Temple of the Tooth Relic in Kandy, a tea plantation and factory near Nuwara Eliya, and the shopping malls of Colombo. The Pinnawala Elephant Orphanage is visited on day 1 only if time permits.",
+          "country": "Sri Lanka",
+          "country_slug": "sri-lanka",
+          "duration_days": 4,
+          "duration_raw": "4 days",
+          "best_time_to_go": null,
+          "highlights": [
+            "Pinnawala Elephant Orphanage (time permitting)",
+            "Spice garden stop",
+            "Pooja ceremony at the Temple of the Tooth Relic, Kandy"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/38570b4b-8162-4560-9171-41bca02b20e6?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/38570b4b-8162-4560-9171-41bca02b20e6?size=small",
+          "cover_source": "tour",
+          "cover_place": null,
+          "photo_count": 16,
+          "lifecycle_stage": "active",
+          "published_at": "2026-10-08T01:05:44.418101+00:00",
+          "updated_at": "2026-11-12T21:11:19.969803+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia catalog writer",
+            "model": null,
+            "generated_at": "2026-10-25T04:06:13.656703+00:00",
+            "human_edited": null
+          }
+        },
+        {
+          "source_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+          "tour_id": "2e1fd11d-0ba6-4388-9091-716a3e719da8",
+          "slug": "bumdra-trek-bhutan-7-days-bhutan-4a2411b2",
+          "title": "Bumdra Trek, Bhutan \u2014 7 Days",
+          "subtitle": "A 7-day Bhutan itinerary through Thimphu, Punakha and Paro, with a camping trek to Bumdra Monastery and a descent past Taktsang Monastery.",
+          "summary": "This 7-day tour begins with arrival at Paro International Airport and a drive to Thimphu. It continues to Punakha via Dochu la Pass, then returns to Paro. The trek follows, with a camp below Bumdra Monastery at about 3,800 meters and a descent through forest past Sangtopelri and Taktsang Monastery. The tour ends with departure from Paro International Airport. The source gives April \u2013 June and Sept \u2013 Nov as the best time to go.",
+          "country": "Bhutan",
+          "country_slug": "bhutan",
+          "duration_days": 7,
+          "duration_raw": "7 days",
+          "best_time_to_go": "April \u2013 June\nSept \u2013 Nov",
+          "highlights": [
+            "Sightseeing in Thimphu",
+            "Dochu la Pass and sightseeing in Punakha",
+            "Walk through blue pine and juniper forest to Chhoe Chhoe Tse Lhakhang"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef?size=small",
+          "cover_source": "tour",
+          "cover_place": null,
+          "photo_count": 13,
+          "lifecycle_stage": "active",
+          "published_at": "2026-10-05T12:33:16.088972+00:00",
+          "updated_at": "2026-11-12T21:11:12.326752+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia catalog writer",
+            "model": null,
+            "generated_at": "2026-10-24T10:57:31.355458+00:00",
+            "human_edited": null
+          }
+        },
+        {
+          "source_id": "252b1557-7652-4072-837f-ce9e88c33ddb",
+          "tour_id": "5a6201bb-b7ab-43aa-82f0-d6c2acbff9c2",
+          "slug": "buddhist-retreat-and-meditation-in-bhutan-10-days-bhutan-252b1557",
+          "title": "Buddhist Retreat and Meditation in Bhutan \u2014 10 Days",
+          "subtitle": "A 10-day Buddhist retreat in Bhutan with meditation, teachings and temple visits in Thimphu, Punakha, Bumthang and Paro.",
+          "summary": "This 10-day retreat in Bhutan combines daily meditation, breathing exercises, four teachings and offerings at temples and monasteries. It begins with arrival at Paro airport and a transfer to Thimphu, and ends with hotel checkout and departure. The route runs from Thimphu to Punakha and on to Bumthang, with meditation at Mebar Tsho lake and Jambay Lhakhang. It then returns to Paro for the Tiger's Nest hike, a herbal hot stone bath and a visit to Kyichu Lhakhang.",
+          "country": "Bhutan",
+          "country_slug": "bhutan",
+          "duration_days": 10,
+          "duration_raw": "10 days",
+          "best_time_to_go": "Apr/ May / Sept/ Nov",
+          "highlights": [
+            "Buddha Dordenma at Kuenselphodrang, Thimphu",
+            "Evening prayer and pooja at Zilukha Nunnery",
+            "Punakha Dzong"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef?size=small",
+          "cover_source": "tour",
+          "cover_place": null,
+          "photo_count": 26,
+          "lifecycle_stage": "active",
+          "published_at": "2026-10-05T12:32:29.097636+00:00",
+          "updated_at": "2026-11-12T21:11:14.781201+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia catalog writer",
+            "model": null,
+            "generated_at": "2026-10-24T07:07:33.434364+00:00",
+            "human_edited": null
+          }
+        },
+        {
+          "source_id": "8b6ce67b-4316-4618-a412-65415c532354",
+          "tour_id": "c728b197-0dd3-4a4c-a46d-4af3e004c4fa",
+          "slug": "western-bhutan-thimphu-punakha-and-paro-7-days-bhutan-8b6ce67b",
+          "title": "Western Bhutan: Thimphu, Punakha and Paro \u2014 7 Days",
+          "subtitle": "A 7-day route through Thimphu, Punakha and Paro, with a hike to Tiger's Nest and river rafting near Punakha.",
+          "summary": "This 7-day tour covers three places in western Bhutan: the capital Thimphu, the old capital Punakha, and Paro. It begins with the arrival at Paro airport and the transfer to Thimphu, and ends with hotel checkout and departure on day 7. Stops include Kuenselphodrang and Tashichhodzong in Thimphu, Punakha Dzong and Chimi Lhakhang near Punakha, and the Tiger's Nest hike from Paro. The source lists accommodation in 3-star or 3-star superior hotels, half board meals, an English-speaking guide, private vehicle transfers and entrance fees to attractions.",
+          "country": "Bhutan",
+          "country_slug": "bhutan",
+          "duration_days": 7,
+          "duration_raw": "7 days",
+          "best_time_to_go": "Feb/ Mar/ Apr/ Sept/ Oct",
+          "highlights": [
+            "Kuenselphodrang and Tashichhodzong in Thimphu",
+            "Dochula Pass and Chimi Lhakhang",
+            "Punakha Dzong and the suspension bridge"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef?size=small",
+          "cover_source": "tour",
+          "cover_place": null,
+          "photo_count": 22,
+          "lifecycle_stage": "active",
+          "published_at": "2026-10-05T12:28:33.020244+00:00",
+          "updated_at": "2026-11-12T21:11:14.084697+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia catalog writer",
+            "model": null,
+            "generated_at": "2026-10-24T11:04:21.294556+00:00",
+            "human_edited": null
+          }
+        }
+      ],
+      "source": "aa"
+    }
+  },
+  "d_catalog_tours": {
+    "path": "/browse/catalog/tours?limit=5",
+    "status": 200,
+    "body": {
+      "filters": {
+        "country": null,
+        "min_days": null,
+        "max_days": null,
+        "month": null,
+        "sort": "featured"
+      },
+      "total": 844,
+      "limit": 5,
+      "offset": 0,
+      "tours": [
+        {
+          "source_id": "28e22489-5212-436f-94e1-702e1e8d230a",
+          "tour_id": "a26bdf3f-67b7-46ab-b80d-b5f30a425ebc",
+          "slug": "sri-lanka-cultural-tour-kandy-dambulla-and-sigiriya-3-days-sri-lanka-28e22489",
+          "title": "Sri Lanka Cultural Tour: Kandy, Dambulla and Sigiriya \u2014 3 Days",
+          "subtitle": "A 3-day private cultural route from the airport to Kandy and Sigiriya, passing the Pinnawala Elephant Orphanage and the Dambulla Cave Temple.",
+          "summary": "This 3-day cultural tour begins with a morning airport arrival and a transfer to Kandy with a chauffeur guide. It ends with a transfer to the airport for departure. Stops include the Pinnawala Elephant Orphanage, the Temple of the Tooth Relic in Kandy, the Dambulla Cave Temple and the Sigiriya rock fortress. A spice garden visit is part of the second day. A visit to a tea plantation and factory is optional on the first day.",
+          "country": "Sri Lanka",
+          "country_slug": "sri-lanka",
+          "duration_days": 3,
+          "duration_raw": "3 days",
+          "best_time_to_go": null,
+          "highlights": [
+            "Pinnawala Elephant Orphanage",
+            "Temple of the Tooth Relic in Kandy",
+            "Dambulla Cave Temple with ancient Buddhist murals and statues"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/38570b4b-8162-4560-9171-41bca02b20e6?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/38570b4b-8162-4560-9171-41bca02b20e6?size=small",
+          "cover_source": "tour",
+          "cover_place": null,
+          "photo_count": 13,
+          "lifecycle_stage": "active",
+          "published_at": "2026-10-08T01:43:44.501708+00:00",
+          "updated_at": "2026-11-12T21:11:19.918047+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia catalog writer",
+            "model": null,
+            "generated_at": "2026-10-25T04:51:34.522617+00:00",
+            "human_edited": null
+          }
+        },
+        {
+          "source_id": "80477347-7544-4214-afc5-dd46de6f5ced",
+          "tour_id": "96ac5a71-31c6-405e-a23b-a7fda683d50f",
+          "slug": "highland-colombo-sri-lanka-4-days-sri-lanka-80477347",
+          "title": "Highland & Colombo, Sri Lanka \u2014 4 Days",
+          "subtitle": "A 4-day route from Bandaranaike International Airport through Kandy and Nuwara Eliya to Colombo.",
+          "summary": "This 4-day tour starts with an airport welcome at Bandaranaike International Airport and a transfer to Kandy. It continues to the hill town of Nuwara Eliya and ends in Colombo, with an evening transfer to the airport on the last day. Named stops include the Temple of the Tooth Relic in Kandy, a tea plantation and factory near Nuwara Eliya, and the shopping malls of Colombo. The Pinnawala Elephant Orphanage is visited on day 1 only if time permits.",
+          "country": "Sri Lanka",
+          "country_slug": "sri-lanka",
+          "duration_days": 4,
+          "duration_raw": "4 days",
+          "best_time_to_go": null,
+          "highlights": [
+            "Pinnawala Elephant Orphanage (time permitting)",
+            "Spice garden stop",
+            "Pooja ceremony at the Temple of the Tooth Relic, Kandy"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/38570b4b-8162-4560-9171-41bca02b20e6?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/38570b4b-8162-4560-9171-41bca02b20e6?size=small",
+          "cover_source": "tour",
+          "cover_place": null,
+          "photo_count": 16,
+          "lifecycle_stage": "active",
+          "published_at": "2026-10-08T01:05:44.418101+00:00",
+          "updated_at": "2026-11-12T21:11:19.969803+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia catalog writer",
+            "model": null,
+            "generated_at": "2026-10-25T04:06:13.656703+00:00",
+            "human_edited": null
+          }
+        },
+        {
+          "source_id": "4a2411b2-6966-4ec0-a27e-84f9fad186ea",
+          "tour_id": "2e1fd11d-0ba6-4388-9091-716a3e719da8",
+          "slug": "bumdra-trek-bhutan-7-days-bhutan-4a2411b2",
+          "title": "Bumdra Trek, Bhutan \u2014 7 Days",
+          "subtitle": "A 7-day Bhutan itinerary through Thimphu, Punakha and Paro, with a camping trek to Bumdra Monastery and a descent past Taktsang Monastery.",
+          "summary": "This 7-day tour begins with arrival at Paro International Airport and a drive to Thimphu. It continues to Punakha via Dochu la Pass, then returns to Paro. The trek follows, with a camp below Bumdra Monastery at about 3,800 meters and a descent through forest past Sangtopelri and Taktsang Monastery. The tour ends with departure from Paro International Airport. The source gives April \u2013 June and Sept \u2013 Nov as the best time to go.",
+          "country": "Bhutan",
+          "country_slug": "bhutan",
+          "duration_days": 7,
+          "duration_raw": "7 days",
+          "best_time_to_go": "April \u2013 June\nSept \u2013 Nov",
+          "highlights": [
+            "Sightseeing in Thimphu",
+            "Dochu la Pass and sightseeing in Punakha",
+            "Walk through blue pine and juniper forest to Chhoe Chhoe Tse Lhakhang"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef?size=small",
+          "cover_source": "tour",
+          "cover_place": null,
+          "photo_count": 13,
+          "lifecycle_stage": "active",
+          "published_at": "2026-10-05T12:33:16.088972+00:00",
+          "updated_at": "2026-11-12T21:11:12.326752+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia catalog writer",
+            "model": null,
+            "generated_at": "2026-10-24T10:57:31.355458+00:00",
+            "human_edited": null
+          }
+        },
+        {
+          "source_id": "252b1557-7652-4072-837f-ce9e88c33ddb",
+          "tour_id": "5a6201bb-b7ab-43aa-82f0-d6c2acbff9c2",
+          "slug": "buddhist-retreat-and-meditation-in-bhutan-10-days-bhutan-252b1557",
+          "title": "Buddhist Retreat and Meditation in Bhutan \u2014 10 Days",
+          "subtitle": "A 10-day Buddhist retreat in Bhutan with meditation, teachings and temple visits in Thimphu, Punakha, Bumthang and Paro.",
+          "summary": "This 10-day retreat in Bhutan combines daily meditation, breathing exercises, four teachings and offerings at temples and monasteries. It begins with arrival at Paro airport and a transfer to Thimphu, and ends with hotel checkout and departure. The route runs from Thimphu to Punakha and on to Bumthang, with meditation at Mebar Tsho lake and Jambay Lhakhang. It then returns to Paro for the Tiger's Nest hike, a herbal hot stone bath and a visit to Kyichu Lhakhang.",
+          "country": "Bhutan",
+          "country_slug": "bhutan",
+          "duration_days": 10,
+          "duration_raw": "10 days",
+          "best_time_to_go": "Apr/ May / Sept/ Nov",
+          "highlights": [
+            "Buddha Dordenma at Kuenselphodrang, Thimphu",
+            "Evening prayer and pooja at Zilukha Nunnery",
+            "Punakha Dzong"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef?size=small",
+          "cover_source": "tour",
+          "cover_place": null,
+          "photo_count": 26,
+          "lifecycle_stage": "active",
+          "published_at": "2026-10-05T12:32:29.097636+00:00",
+          "updated_at": "2026-11-12T21:11:14.781201+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia catalog writer",
+            "model": null,
+            "generated_at": "2026-10-24T07:07:33.434364+00:00",
+            "human_edited": null
+          }
+        },
+        {
+          "source_id": "8b6ce67b-4316-4618-a412-65415c532354",
+          "tour_id": "c728b197-0dd3-4a4c-a46d-4af3e004c4fa",
+          "slug": "western-bhutan-thimphu-punakha-and-paro-7-days-bhutan-8b6ce67b",
+          "title": "Western Bhutan: Thimphu, Punakha and Paro \u2014 7 Days",
+          "subtitle": "A 7-day route through Thimphu, Punakha and Paro, with a hike to Tiger's Nest and river rafting near Punakha.",
+          "summary": "This 7-day tour covers three places in western Bhutan: the capital Thimphu, the old capital Punakha, and Paro. It begins with the arrival at Paro airport and the transfer to Thimphu, and ends with hotel checkout and departure on day 7. Stops include Kuenselphodrang and Tashichhodzong in Thimphu, Punakha Dzong and Chimi Lhakhang near Punakha, and the Tiger's Nest hike from Paro. The source lists accommodation in 3-star or 3-star superior hotels, half board meals, an English-speaking guide, private vehicle transfers and entrance fees to attractions.",
+          "country": "Bhutan",
+          "country_slug": "bhutan",
+          "duration_days": 7,
+          "duration_raw": "7 days",
+          "best_time_to_go": "Feb/ Mar/ Apr/ Sept/ Oct",
+          "highlights": [
+            "Kuenselphodrang and Tashichhodzong in Thimphu",
+            "Dochula Pass and Chimi Lhakhang",
+            "Punakha Dzong and the suspension bridge"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/1a5619c5-6be0-4eeb-8885-8da207336aef?size=small",
+          "cover_source": "tour",
+          "cover_place": null,
+          "photo_count": 22,
+          "lifecycle_stage": "active",
+          "published_at": "2026-10-05T12:28:33.020244+00:00",
+          "updated_at": "2026-11-12T21:11:14.084697+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia catalog writer",
+            "model": null,
+            "generated_at": "2026-10-24T11:04:21.294556+00:00",
+            "human_edited": null
+          }
+        }
+      ]
+    }
+  },
+  "d_aa_detail": {
+    "path": "/browse/tenant/aa-tripplanner/tours/sri-lanka-cultural-tour-kandy-dambulla-and-sigiriya-3-days-sri-lanka-28e22489",
+    "status": 404,
+    "body": {
+      "error": "tour not found"
+    }
+  },
+  "e_audit-terra-family": {
+    "path": "/browse/tenant/audit-terra-family/tours?limit=5",
+    "status": 200,
+    "body": {
+      "filters": {
+        "country": null,
+        "min_days": null,
+        "max_days": null,
+        "month": null,
+        "sort": "featured"
+      },
+      "total": 11,
+      "limit": 5,
+      "offset": 0,
+      "tours": [
+        {
+          "source_id": "6ff4f5ea-dad2-41d7-bfbd-4c61aed846ae",
+          "tour_id": "fe697018-6d81-456f-8082-e44a8dcfe566",
+          "slug": "culinary-bhutan-from-east-to-west-10-days-bhutan-6ff4f5ea",
+          "title": "Bhutan East to West: Farmhouse Tables, Monasteries & Tiger's Nest in 10 Days",
+          "subtitle": "A 10-day family route from Samdrup Jongkhar to Paro, with ara brewing in Mongar, puta in Bumthang, Punakha Dzong and the Tiger's Nest trek",
+          "summary": "This trip follows Bhutan's food from the quieter eastern valleys to the capital and on to Paro, so children and parents learn about the country in the same way: at the table, in a family kitchen and on the road. You watch ara, a traditional corn liquor, being brewed at a Mongar farmhouse. Ara is an adults-only tasting, so parents can sample it while children follow the brewing and enjoy the eastern dishes served at the same lunch. You eat puta (buckwheat noodles) in Ura Village and have river trout by the water in Punakha. Between meals there are dzongs, temples, weaving houses, a textile museum, the Kaja Throm Farmers Market and Asia's tallest bronze Buddha statue at Kuenselphodrang. Paro brings a brewery tour, the National Museum and the trek to Tiger's Nest Monastery. The route has two long driving days, five hours to Bumthang and six to Punakha, each with a stop or a meal to break the road, and shorter drives on either side. An afternoon free in Thimphu gives everyone a rest before the Tiger's Nest climb. English-speaking guides, half-board accommodation and private vehicle transfers are included throughout, which keeps the logistics simple for parents.",
+          "country": "Bhutan",
+          "country_slug": "bhutan",
+          "duration_days": 10,
+          "duration_raw": "10 days",
+          "best_time_to_go": "all year",
+          "highlights": [
+            "Watch ara, a traditional corn-based liquor, brewed on site at a farmhouse in Mongar, an adults-only tasting while children follow the brewing and the lunch",
+            "Trek to Tiger's Nest Monastery (Paro Taktsang) in Paro, with your guide helping each family set its own pace",
+            "Visit Chorten Kora and local weaving houses in Tashigang, near the Indian border"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/fd85104b-e09e-4bb6-b23d-a0d874269c5f?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/fd85104b-e09e-4bb6-b23d-a0d874269c5f?size=small",
+          "cover_source": "tour",
+          "cover_place": null,
+          "photo_count": 18,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-05T13:24:02.965124+00:00",
+          "updated_at": "2026-11-05T13:24:02.965124+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-05T13:24:02.965124+00:00",
+            "human_edited": false
+          }
+        },
+        {
+          "source_id": "8a65a69e-6890-49d1-9ed1-f9bcba5d5006",
+          "tour_id": "8908e6ad-69a9-48cf-b368-fef218009f46",
+          "slug": "family-adventure-in-sri-lanka-winter-17-days-sri-lanka-8a65a69e",
+          "title": "Sri Lanka Family Adventure: Sigiriya, Yala & Mirissa in 17 Days",
+          "subtitle": "17 days from Colombo to Mirissa: Sigiriya Rock Fortress, Knuckles trek, Kelani river rafting, Yala safari and Blue Whale watching",
+          "summary": "This 17-day winter trip gives families a wide view of Sri Lanka, with plenty of variety for both children and parents. Culture comes first: Dambulla Cave Temple and Sigiriya Rock Fortress, then a village cycle ride where children can watch daily life go by. Nature follows. Families walk the Habarana jungle with an experienced villager, go on safari in Minneriya and Yala National Parks, trek the Knuckles mountains and walk the Sinharaja rain forest at dawn for birds. Teenagers and younger travelers can try something active together, sliding into natural pools at Kitulgala and rafting category 3 rapids on the Kelani river. The route is varied but not rushed. Kandy has a free day, Mirissa has two beach days, and the trip ends with a Blue Whale boat trip and a visit to the Handunugoda Tea Estate before the transfer to Colombo Airport.",
+          "country": "Sri Lanka",
+          "country_slug": "sri-lanka",
+          "duration_days": 17,
+          "duration_raw": "17 days",
+          "best_time_to_go": null,
+          "highlights": [
+            "Dambulla Cave Temple, a UNESCO World Heritage site with more than 80 caves in the surrounding area",
+            "Sigiriya Rock Fortress, the citadel built by King Kasshyapa",
+            "Village cycle trip and paddy field walk in Sigiriya, with a brick manufacturer visit"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/06d3c4da-147f-4586-9358-d0fdda7ade53?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/06d3c4da-147f-4586-9358-d0fdda7ade53?size=small",
+          "cover_source": "destination",
+          "cover_place": "Kandy",
+          "photo_count": 0,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-10T08:02:27.080556+00:00",
+          "updated_at": "2026-11-10T08:02:27.080556+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-10T08:02:27.080556+00:00",
+            "human_edited": false
+          }
+        },
+        {
+          "source_id": "b1c59f08-8939-4835-9c60-79a95c3f0d80",
+          "tour_id": "1823ab0e-8fa6-4699-8771-1c0e9e04905a",
+          "slug": "family-holiday-in-sri-lanka-15-days-sri-lanka-b1c59f08",
+          "title": "Sri Lanka Family Journey: Sigiriya, Ella & Safari in 15 Days",
+          "subtitle": "15 days from Negombo to Galle: Sigiriya and Polonnaruwa, Pigeon Island snorkeling, the Ella train and a tented camp in Udawalawe National Park",
+          "summary": "This 15-day family journey through Sri Lanka starts in Negombo and moves through six stays, each with its own setting: an eco lodge tree house in Habarana, a beach resort in Trincomalee, a family-owned small hotel in Kandy, a small hotel above Ella Gap, a mobile tented safari camp in Udawalawe and a countryside boutique hotel near Galle. Children get a jungle treasure hunt, snorkeling at Pigeon Island Marine Sanctuary, a scenic train ride over centuries-old bridges and close encounters with elephants. Parents get the ruined kingdoms of Sigiriya and Polonnaruwa, Buddhist pilgrim rituals at the Temple of the Tooth Relic and the historical Dutch Fort in Galle. Several places are visited over two or three nights, so the family is not changing beds every day. The source states the excursions suit children above 6 years of age.",
+          "country": "Sri Lanka",
+          "country_slug": "sri-lanka",
+          "duration_days": 15,
+          "duration_raw": "15 DAYS",
+          "best_time_to_go": null,
+          "highlights": [
+            "Wander the ruined kingdoms and temples of Sigiriya and Polonnaruwa, with a visit to monkeys in Habarana",
+            "Ride an open-top jeep through rural villages and join a jungle and village treasure hunt that meets local communities",
+            "Snorkel at Pigeon Island Marine Sanctuary, with beach time in Trincomalee"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/06d3c4da-147f-4586-9358-d0fdda7ade53?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/06d3c4da-147f-4586-9358-d0fdda7ade53?size=small",
+          "cover_source": "destination",
+          "cover_place": "Kandy",
+          "photo_count": 0,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-10T08:02:26.831427+00:00",
+          "updated_at": "2026-11-10T08:02:26.831427+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-10T08:02:26.831427+00:00",
+            "human_edited": false
+          }
+        },
+        {
+          "source_id": "0b8fecd2-c529-480d-b83c-4160b11f0c81",
+          "tour_id": "d33d1c3f-e5b5-47d2-98f7-7bce26c45406",
+          "slug": "best-of-china-14-days-china-0b8fecd2",
+          "title": "China for Families: Rails, Rivers & the Great Wall in 14 Days",
+          "subtitle": "Shanghai to Beijing in 14 days: tea picking in Hangzhou, a bicycle ride in Yangshuo, a 3-night Yangtze cruise, the Terracotta Warriors and Mutianyu",
+          "summary": "This 14-day trip runs from Shanghai to Beijing and gives families a lot to do with their hands and feet as well as their eyes. Children pick tea sprouts with a farmer near Hangzhou, cycle through the limestone countryside of Yangshuo to Moon Hill, and spend three nights on a Yangtze River boat. They then stand in front of the Terracotta Warriors, where each figure has its own face, and walk a section of the Great Wall at Mutianyu that is described as easy to climb. Travel between cities mixes a fast train, a flight, an overnight soft-sleeper train and the river boat, so there is variety for younger travelers and a clear sequence for parents to plan around. Yangshuo has a free day with optional activities, and Beijing finishes with a free final day before the airport transfer.",
+          "country": "China",
+          "country_slug": "china",
+          "duration_days": 14,
+          "duration_raw": "14 days",
+          "best_time_to_go": null,
+          "highlights": [
+            "Wander the City God Temple area beside Yuyuan Garden and the French Concession in Shanghai",
+            "Walk the shore of West Lake in Hangzhou, then pick and taste Longjing tea with a tea farmer",
+            "Cycle through the Yangshuo karst countryside to Moon Hill, with an optional climb to the summit"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/039104c8-cceb-49ad-b03b-041b38b6bb08?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/039104c8-cceb-49ad-b03b-041b38b6bb08?size=small",
+          "cover_source": "destination",
+          "cover_place": "Yangshuo",
+          "photo_count": 0,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-10T08:02:26.280006+00:00",
+          "updated_at": "2026-11-10T08:02:26.280006+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-10T08:02:26.280006+00:00",
+            "human_edited": false
+          }
+        },
+        {
+          "source_id": "40769f2c-8ba6-4025-a1b9-c63f2ea45dee",
+          "tour_id": "44281611-10a6-43f2-8e17-4090812cb7ae",
+          "slug": "seoul-jeonju-busan-and-jeju-k-pop-and-hanok-villages-10-days-south-korea-40769f2c",
+          "title": "South Korea for Families: Seoul, Hanok Stay & Jeju in 10 Days",
+          "subtitle": "Seoul, Jeonju, Busan and Jeju Island over 10 days, with a night in a hanok house, Gamcheon's mural lanes and a haenyeo diver performance",
+          "summary": "This 10-day family trip links four very different places in South Korea: Seoul, the hanok quarter of Jeonju, the coastal city of Busan and Jeju Island. It is built around things parents and children can enjoy side by side. Seoul begins with HiKR Ground, a five-story space of K-pop and contemporary art, and the street-food stalls of Gwangjang Market. A morning train takes you to Jeonju, where the family sleeps in a traditional hanok house and can try hanji paper-making, pottery, calligraphy or fan painting. In Busan you walk the painted lanes of Gamcheon Culture Village, visit the clifftop Haedong Yonggungsa Temple and ride the Songdo Maritime Cable Car. The last three nights are on Jeju, with a guided walk through Seongeup Folk Village, a 1 to 2 kilometer hike up Seongsan Sunrise Peak on a well-maintained trail, and a performance by the haenyeo, Jeju's traditional female divers, followed by time to meet them. Most days include free time, and optional activities such as the DMZ, a K-pop dance class or a Korean cooking class let each family choose its own mix.",
+          "country": "South Korea",
+          "country_slug": "south-korea",
+          "duration_days": 10,
+          "duration_raw": "10 days",
+          "best_time_to_go": null,
+          "highlights": [
+            "HiKR Ground, Seoul: five stories of K-pop performance, K-drama media and contemporary art installations",
+            "Gwangjang Market, Seoul: over 5,000 vendors selling textiles, handicrafts and Korean street food",
+            "A night in a traditional hanok house in Jeonju Hanok Village, with a guided walk past Gyeonggijeon Shrine and Jeondong Catholic Church"
+          ],
+          "cover_url": "https://api-cis.lumiguides.it.com/content/photos/241d64ac-92b4-4330-9513-54653925ec96?size=large",
+          "cover_url_small": "https://api-cis.lumiguides.it.com/content/photos/241d64ac-92b4-4330-9513-54653925ec96?size=small",
+          "cover_source": "destination",
+          "cover_place": "downtown Jeju City",
+          "photo_count": 0,
+          "lifecycle_stage": null,
+          "published_at": "2026-11-10T07:08:10.588231+00:00",
+          "updated_at": "2026-11-10T07:08:10.588231+00:00",
+          "ai": {
+            "ai_generated": true,
+            "generator": "Adventure Asia content writer",
+            "model": null,
+            "generated_at": "2026-11-10T07:08:10.588231+00:00",
+            "human_edited": false
+          }
+        }
+      ],
+      "source": "tenant"
+    }
+  },
+  "e_audit-trail-pulse": {
+    "path": "/browse/tenant/audit-trail-pulse/tours?limit=5",
+    "status": 404,
+    "body": {
+      "error": "tenant not found"
+    }
+  },
+  "e_audit-wildkind-travel": {
+    "path": "/browse/tenant/audit-wildkind-travel/tours?limit=5",
+    "status": 404,
+    "body": {
+      "error": "tenant not found"
+    }
+  },
+  "e_audit-harbour-lights": {
+    "path": "/browse/tenant/audit-harbour-lights/tours?limit=5",
+    "status": 404,
+    "body": {
+      "error": "tenant not found"
+    }
+  },
+  "e_audit-sen-vang": {
+    "path": "/browse/tenant/audit-sen-vang/tours?limit=5",
+    "status": 404,
+    "body": {
+      "error": "tenant not found"
+    }
+  },
+  "summary": {
+    "b_source": "tenant",
+    "b_total": 11,
+    "b_count": 11,
+    "b_source_ids": [
+      "6ff4f5ea-dad2-41d7-bfbd-4c61aed846ae",
+      "8a65a69e-6890-49d1-9ed1-f9bcba5d5006",
+      "b1c59f08-8939-4835-9c60-79a95c3f0d80",
+      "0b8fecd2-c529-480d-b83c-4160b11f0c81",
+      "40769f2c-8ba6-4025-a1b9-c63f2ea45dee",
+      "35784e28-4391-463d-a8d4-465a63d8a40e",
+      "45fdcf1b-bc02-41ac-9390-930fecf217a1",
+      "6b390225-9846-478e-821c-445764070341",
+      "1e0e7fa9-b355-4a0a-8a69-1b5a5e5d2eed",
+      "a1363897-5bfc-42e8-a155-32ed41371254",
+      "57d386c2-6c87-43b9-ab11-ac7b0e6bfc26"
+    ],
+    "b_slugs": [
+      "culinary-bhutan-from-east-to-west-10-days-bhutan-6ff4f5ea",
+      "family-adventure-in-sri-lanka-winter-17-days-sri-lanka-8a65a69e",
+      "family-holiday-in-sri-lanka-15-days-sri-lanka-b1c59f08",
+      "best-of-china-14-days-china-0b8fecd2",
+      "seoul-jeonju-busan-and-jeju-k-pop-and-hanok-villages-10-days-south-korea-40769f2c",
+      "china-adventure-beijing-to-hong-kong-20-days-china-35784e28",
+      "northern-india-delhi-agra-rajasthan-and-mumbai-15-days-india-45fdcf1b",
+      "sri-lanka-self-guided-journey-by-public-transport-22-days-sri-lanka-6b390225",
+      "india-encompassed-delhi-to-kochi-28-days-india-1e0e7fa9",
+      "laos-to-vietnam-cycling-tour-12-days-laos-a1363897",
+      "khovsgol-and-gobi-tour-mongolia-15-days-mongolia-57d386c2"
+    ],
+    "c_price_keys": [],
+    "c_contract": "catalog.tenant_tour",
+    "c_tenant_slug": "audit-atlas-hearth",
+    "d_aa_source": "aa",
+    "d_aa_total": 844,
+    "d_catalog_total": 844,
+    "d_aa_slug": "sri-lanka-cultural-tour-kandy-dambulla-and-sigiriya-3-days-sri-lanka-28e22489",
+    "d_aa_detail_status": 404,
+    "e_audit-terra-family": {
+      "status": 200,
+      "source": "tenant",
+      "total": 11,
+      "error": null
+    },
+    "e_audit-trail-pulse": {
+      "status": 404,
+      "source": null,
+      "total": null,
+      "error": "tenant not found"
+    },
+    "e_audit-wildkind-travel": {
+      "status": 404,
+      "source": null,
+      "total": null,
+      "error": "tenant not found"
+    },
+    "e_audit-harbour-lights": {
+      "status": 404,
+      "source": null,
+      "total": null,
+      "error": "tenant not found"
+    },
+    "e_audit-sen-vang": {
+      "status": 404,
+      "source": null,
+      "total": null,
+      "error": "tenant not found"
+    }
+  }
+}
