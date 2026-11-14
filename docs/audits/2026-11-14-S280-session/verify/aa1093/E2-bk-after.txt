@@ -1,0 +1,21 @@
+CENSUS booking.trip_cases                 agency_rows=0 free_text_left=0
+CENSUS booking.trip_case_status_history   agency_rows=0 free_text_left=0
+CENSUS booking.supplier_bookings          agency_rows=0 free_text_left=0
+CENSUS booking.trip_case_checks           agency_rows=0 free_text_left=0
+CENSUS booking.b2b_cancellations          agency_rows=0 free_text_left=0
+CENSUS booking.agency_invoice             agency_rows=0 free_text_left=0
+CENSUS booking.agency_payment             agency_rows=0 free_text_left=0
+CENSUS booking.notifications              agency_rows=0 free_text_left=0
+CENSUS booking.audit_logs                 agency_rows=2 free_text_left=0
+SCOPE tenant_erase_scope()=1 built_here=1
+PARTNER rows=1 erased_name=1 suspended=1
+NAME_HITS audit_logs before/after/label/summary: 0
+NAME_HITS notifications title/message/data: 0
+NAME_HITS b2b_partners agency_name: 0
+KEPT b2b_quotes: 0
+KEPT b2b_holds: 0
+KEPT b2b_desk_bookings: 0
+KEPT agency_invoice: 0
+KEPT agency_payment: 0
+KEPT tenant.erased audit row: 1
+PASS Booking re-read after the erasure (free text 0, partner anonymised, no name hit)

@@ -1,0 +1,21 @@
+{
+ "supplier": "SUP-000009",
+ "records": [
+  {
+   "kind": "activity",
+   "code": "SVC-000008"
+  },
+  {
+   "kind": "guide",
+   "code": "SVC-000009"
+  },
+  {
+   "kind": "activity",
+   "code": "SVC-000010"
+  },
+  {
+   "kind": "activity",
+   "code": "SVC-000011"
+  }
+ ]
+}

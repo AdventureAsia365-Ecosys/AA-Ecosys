@@ -1,0 +1,21 @@
+INFO catalog.v_tenant_account_v1 unreadable for cis_app (InsufficientPrivilegeError)
+TENANT shared.tenants rows=1 catalog.v_tenant_account_v1 rows=None
+INFO key columns ['tenant_id', 'owner_scope', 'tenant']; column `tenant` matched by id and slug
+KEEP acp_shared.audit_log.tenant_id rows=5
+LEFT acp_shared.tenant_config.tenant_id rows=1
+LEFT shared.tenant_account_event.tenant_id rows=35
+LEFT shared.tenant_brand_rules.tenant_id rows=2
+KEEP shared.tenant_erasure_request.tenant_id rows=1
+LEFT shared.tenant_membership_event.tenant_id rows=2
+LEFT shared.tenant_seo_config.tenant_id rows=1
+LEFT shared.tenant_subscription.tenant_id rows=2
+LEFT shared.tenants.tenant_id rows=1
+AUDIT agency.offboard rows=1
+AUDIT agency.onboard rows=1
+AUDIT tenant.brand_updated rows=1
+AUDIT tenant.config_updated rows=1
+AUDIT tenant.erasure_drill rows=1
+COUNTS_DIGEST d6f9c3dd7e61fbb86e86dfd13b4ee9638a7d4a66d557a21b2153c2e903b23644 (tables=72, without ['acp_shared.audit_log', 'shared.job', 'shared.tenant_erasure_request']; compare B5 vs D0)
+SUMMARY tables_checked=74 unreadable=0 left_tables=7 left_rows=44 keep_tables=2 tenant.erased=0
+INFO MODE=before: baseline only (non-zero counts are expected before the apply; LEFT = has rows now)
+ecsx: rc=0 bytes=1222 (output also in /home/nghiep/projects/AA-Ecosys/.tmp-session/ecsx/20261114T104752-871466-c30_cis_reread.out)

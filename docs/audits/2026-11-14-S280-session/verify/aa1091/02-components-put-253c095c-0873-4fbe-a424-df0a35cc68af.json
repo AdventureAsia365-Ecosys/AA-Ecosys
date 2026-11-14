@@ -1,0 +1,18 @@
+{
+ "status": 200,
+ "body": {
+  "trip_plan_id": "9545a678-1e4c-4120-8a39-5ecd47197419",
+  "source_id": "253c095c-0873-4fbe-a424-df0a35cc68af",
+  "items": [
+   {
+    "component_id": "sv:bd027469-156f-42a2-bb48-5936da25b084",
+    "kind": "guide",
+    "day_no": 1,
+    "hotel_room_type_id": null,
+    "service_id": "bd027469-156f-42a2-bb48-5936da25b084",
+    "label": "SVC-000009 SYNTHETIC S280 guide 2 (not real)",
+    "active": true
+   }
+  ]
+ }
+}

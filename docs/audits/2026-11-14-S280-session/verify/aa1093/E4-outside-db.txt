@@ -1,0 +1,8 @@
+PASS bronze raw-inbox/9310c702-eebd-44bd-9c52-133a7d2a4af9/ objects=0
+PASS bronze brand-identity/9310c702-eebd-44bd-9c52-133a7d2a4af9/ objects=0
+INFO gold exports/tenants/<t>/cis/ objects=79 (the pre-apply tenant_backup: expected > 0 right after the apply; remove by hand or let the 7-day rule expire it)
+INFO gold exports/tenants/<t>/tripplanner/ objects=0 (expected 0: the saga takes no TripPlanner backup)
+PASS secret acp/cms/<t> does not exist
+PASS secret acp/social/<t> does not exist
+INFO snapshot tenant-erase-20261114-pre status=available
+PASS nothing of the tenant left outside the database (bronze prefixes, secrets)

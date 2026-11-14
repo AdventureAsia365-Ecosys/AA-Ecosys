@@ -1,0 +1,3 @@
+PARTNER {'status': 'suspended', 'projected': True, 'erased_name': False}
+PASS Booking verify census is complete (no unlisted pii: column)
+PASS Booking kill switch TENANT_ERASE_APPLY_ENABLED is on

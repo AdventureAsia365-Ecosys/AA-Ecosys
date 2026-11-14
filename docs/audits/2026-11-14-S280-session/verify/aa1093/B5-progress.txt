@@ -1,0 +1,101 @@
+REQUEST (newest) 98810a41-2c61-46f2-b0e9-bfce3f8980b8 mode=drill phase=awaiting_approval round=1 round_apps=['cis', 'booking', 'tripplanner'] done_apps=[] synthetic=True pilot=False opened=2026-11-14T06:06:45+00:00 not_before_cis=2026-11-14T06:06:45+00:00 not_before_crm=2026-11-14T06:06:45+00:00
+  fingerprint=c42fbb431c3b7fe9c77e4512710eeffdec1f440864fc677adfa783ff3fcf0084 at=2026-11-14T06:26:09+00:00 approved=False approved_at=- approval_expires=- snapshot=- receipt=False done_at=- cancelled_at=-
+  step r1 booking     dry_run ok            code=- plan=a0d7d32257dc approved=- census=- totals={'redact': 2, 'anonymise': 1, 'keep': 0} job=51671a14 at=2026-11-14T06:20:11+00:00
+  step r1 cis         dry_run ok            code=- plan=5717bc5b67e3 approved=- census=- totals={'cascade': 0, 'delete': 44, 'keep': 6, 'detach': 0, 'merge': 0, 'null_first': 0} job=535fd28f at=2026-11-14T06:26:09+00:00
+    cis-plan r1 dry_run acp_contract.atom_embedding cascade rows=0
+    cis-plan r1 dry_run acp_contract.atom_matches cascade rows=0
+    cis-plan r1 dry_run acp_contract.atom_ranking cascade rows=0
+    cis-plan r1 dry_run acp_contract.atom_segment_member cascade rows=0
+    cis-plan r1 dry_run acp_contract.atomize_day_fingerprint delete rows=0
+    cis-plan r1 dry_run acp_contract.route cascade rows=0
+    cis-plan r1 dry_run acp_contract.tour_atoms delete rows=0
+    cis-plan r1 dry_run acp_deliver.tenant_tour_pages delete rows=0
+    cis-plan r1 dry_run acp_shared.acp_quota_ledger delete rows=0
+    cis-plan r1 dry_run acp_shared.angle_gate_option cascade rows=0
+    cis-plan r1 dry_run acp_shared.angle_gate_request delete rows=0
+    cis-plan r1 dry_run acp_shared.atom_place_card cascade rows=0
+    cis-plan r1 dry_run acp_shared.audit_log keep rows=5
+    cis-plan r1 dry_run acp_shared.content_compliance_flag delete rows=0
+    cis-plan r1 dry_run acp_shared.content_label delete rows=0
+    cis-plan r1 dry_run acp_shared.content_piece delete rows=0
+    cis-plan r1 dry_run acp_shared.content_piece_label cascade rows=0
+    cis-plan r1 dry_run acp_shared.debate_brand_fit_cache delete rows=0
+    cis-plan r1 dry_run acp_shared.fact_sheet delete rows=0
+    cis-plan r1 dry_run acp_shared.facts delete rows=0
+    cis-plan r1 dry_run acp_shared.publish_log delete rows=0
+    cis-plan r1 dry_run acp_shared.quarter_plan delete rows=0
+    cis-plan r1 dry_run acp_shared.quarter_plan null_first rows=0
+    cis-plan r1 dry_run acp_shared.quarter_plan_version cascade rows=0
+    cis-plan r1 dry_run acp_shared.subject delete rows=0
+    cis-plan r1 dry_run acp_shared.tenant_config delete rows=1
+    cis-plan r1 dry_run acp_shared.tenant_tour_notice delete rows=0
+    cis-plan r1 dry_run acp_shared.tour_retirement_policy delete rows=0
+    cis-plan r1 dry_run acp_shared.year_plan delete rows=0
+    cis-plan r1 dry_run geo.geocode_call detach rows=0
+    cis-plan r1 dry_run gold_aa_internal.content_exports delete rows=0
+    cis-plan r1 dry_run gold_aa_internal.published_tours delete rows=0
+    cis-plan r1 dry_run gold_aa_internal.tenant_tour_versions delete rows=0
+    cis-plan r1 dry_run gold_aa_internal.webhook_deliveries delete rows=0
+    cis-plan r1 dry_run shared.ai_usage_hourly merge rows=0
+    cis-plan r1 dry_run shared.claim_shadow_verdict delete rows=0
+    cis-plan r1 dry_run shared.decision_log detach rows=0
+    cis-plan r1 dry_run shared.dfs_call_log detach rows=0
+    cis-plan r1 dry_run shared.eval_claim_label delete rows=0
+    cis-plan r1 dry_run shared.eval_claim_proposal cascade rows=0
+    cis-plan r1 dry_run shared.eval_claim_relabel cascade rows=0
+    cis-plan r1 dry_run shared.eval_golden_item delete rows=0
+    cis-plan r1 dry_run shared.eval_golden_split cascade rows=0
+    cis-plan r1 dry_run shared.eval_item_result delete rows=0
+    cis-plan r1 dry_run shared.jev_tenant_allowlist delete rows=0
+    cis-plan r1 dry_run shared.job delete rows=0
+    cis-plan r1 dry_run shared.llm_call_daily merge rows=0
+    cis-plan r1 dry_run shared.llm_call_log detach rows=0
+    cis-plan r1 dry_run shared.llm_cassette delete rows=0
+    cis-plan r1 dry_run shared.notifications delete rows=0
+    cis-plan r1 dry_run shared.pipeline_jobs delete rows=0
+    cis-plan r1 dry_run shared.pipeline_runs delete rows=0
+    cis-plan r1 dry_run shared.place_photo cascade rows=0
+    cis-plan r1 dry_run shared.setting_value delete rows=0
+    cis-plan r1 dry_run shared.staff_tenant_assignment delete rows=0
+    cis-plan r1 dry_run shared.staff_view_as_session delete rows=0
+    cis-plan r1 dry_run shared.tenant_account_event delete rows=35
+    cis-plan r1 dry_run shared.tenant_addon_request delete rows=0
+    cis-plan r1 dry_run shared.tenant_ai_budget delete rows=0
+    cis-plan r1 dry_run shared.tenant_api_usage delete rows=0
+    cis-plan r1 dry_run shared.tenant_api_usage_monthly delete rows=0
+    cis-plan r1 dry_run shared.tenant_brand_rules delete rows=2
+    cis-plan r1 dry_run shared.tenant_entitlement delete rows=0
+    cis-plan r1 dry_run shared.tenant_entitlement_override delete rows=0
+    cis-plan r1 dry_run shared.tenant_erasure_request keep rows=1
+    cis-plan r1 dry_run shared.tenant_export_config delete rows=0
+    cis-plan r1 dry_run shared.tenant_integrations delete rows=0
+    cis-plan r1 dry_run shared.tenant_members delete rows=0
+    cis-plan r1 dry_run shared.tenant_membership_event delete rows=2
+    cis-plan r1 dry_run shared.tenant_rewrite_usage delete rows=0
+    cis-plan r1 dry_run shared.tenant_seo_config delete rows=1
+    cis-plan r1 dry_run shared.tenant_subscription delete rows=2
+    cis-plan r1 dry_run shared.tenant_tripplanner_site delete rows=0
+    cis-plan r1 dry_run shared.tenants delete rows=1
+    cis-plan r1 dry_run shared.unmapped_market_requests delete rows=0
+    cis-plan r1 dry_run shared.writing_exemplar delete rows=0
+    cis-plan r1 dry_run shared.writing_memory_disagreement delete rows=0
+    cis-plan r1 dry_run shared.writing_memory_keep delete rows=0
+    cis-plan r1 dry_run shared.writing_memory_release delete rows=0
+    cis-plan r1 dry_run shared.writing_memory_release_exemplar delete rows=0
+    cis-plan r1 dry_run shared.writing_memory_shadow delete rows=0
+    cis-plan r1 dry_run shared.writing_rule delete rows=0
+    cis-plan r1 dry_run shared.writing_signal delete rows=0
+    cis-plan r1 dry_run silver_aa_internal.generated_content delete rows=0
+    cis-plan r1 dry_run silver_aa_internal.quality_scores delete rows=0
+    cis-plan r1 dry_run silver_aa_internal.raw_sources delete rows=0
+    cis-plan r1 dry_run silver_aa_internal.raw_tours delete rows=0
+    cis-plan r1 dry_run silver_aa_internal.review_queue delete rows=0
+    cis-plan r1 dry_run silver_aa_internal.seo_context delete rows=0
+    cis-plan r1 dry_run silver_aa_internal.upload_staging delete rows=0
+  step r1 tripplanner dry_run ok            code=- plan=368f210ea36b approved=- census=- totals={'merge': 0, 'delete': 0, 'keep': 0} job=eaf13f97 at=2026-11-14T06:22:54+00:00
+  view booking     r1 dry_run ok       code=- plan=a0d7d32257dc census=- job=51671a14 at=2026-11-14T06:20:11+00:00
+  view tripplanner r1 dry_run ok       code=- plan=368f210ea36b census=- job=eaf13f97 at=2026-11-14T06:22:54+00:00
+  job 5b66ca84 tenant_erasure_saga  succeeded  attempt=1 part=dry_run:0 created=2026-11-14T06:18:49+00:00 finished=2026-11-14T06:26:09+00:00 err=-
+  job 535fd28f data_erasure         succeeded  attempt=1 part=cis:dry_run created=2026-11-14T06:18:53+00:00 finished=2026-11-14T06:19:01+00:00 err=-
+PASS expect awaiting_approval (request 98810a41 phase awaiting_approval)
+ecsx: rc=0 bytes=7522 (output also in /home/nghiep/projects/AA-Ecosys/.tmp-session/ecsx/20261114T062619-180943-c10_saga_progress.out)

@@ -1,0 +1,15 @@
+ecsx: script shipped through a presigned S3 URL
+ecsx: run id 20261114T061753-105105-b01_bk_readiness
+ENV ENVIRONMENT='dev' TENANT_ERASE_APPLY_ENABLED='false' parsed=False app_settings=False GIT_SHA='98e980783'
+READY bk-057=True request_view_rows=1
+ACCOUNT {'is_synthetic': True, 'in_service': False, 'trade_book': False, 'kind': 'demo', 'is_pilot': False}
+PARTNER {'status': 'suspended', 'projected': True, 'erased_name': False}
+FOOTPRINT b2b trip cases: 0
+FOOTPRINT agency invoices: 0
+FOOTPRINT supplier bookings: 0
+FOOTPRINT notifications (footprint): 0
+FOOTPRINT audit rows (footprint): 2
+CENSUS {'pii_columns_checked': 22, 'pii_rows_found': 2} unlisted_pii_columns=0
+PASS Booking verify census is complete (no unlisted pii: column)
+ecsx: rc=0 bytes=635
+ecsx: output also in /home/nghiep/projects/AA-Ecosys/.tmp-session/ecsx/20261114T061753-105105-b01_bk_readiness.out

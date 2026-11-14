@@ -1,0 +1,8 @@
+PASS CIS aa-cis-dev-api running ERASURE_APPLY_ENABLED = false
+PASS CIS aa-cis-dev-api running ERASURE_TENANT_RETENTION_DAYS = <unset>
+PASS CIS aa-cis-dev-worker running ERASURE_APPLY_ENABLED = false
+PASS CIS aa-cis-dev-worker running ERASURE_TENANT_RETENTION_DAYS = <unset>
+PASS Booking running TENANT_ERASE_APPLY_ENABLED = false
+PASS TripPlanner jobs Lambda TENANT_ERASE_APPLY_ENABLED = false
+PASS TripPlanner erasure feed schedule state = ENABLED
+PASS AWS switches are all off
