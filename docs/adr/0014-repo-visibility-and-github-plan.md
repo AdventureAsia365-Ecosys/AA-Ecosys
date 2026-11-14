@@ -5,6 +5,8 @@
   Amended 2026-10-23 (S248, AA-981): visibility-switch precondition and secret scanning, see "Amendment 2" below.
   Decision 4 amended 2026-11-08 (S273) by [ADR 0021](0021-github-org-security-and-ci-hygiene.md): org-level controls
   first at the prod trigger; making repositories private is the last option and needs its own costed decision.
+  Amended 2026-11-14 (S280, AA-1102 R1): the public new-project template repo, see "Amendment 3" below. The status
+  stays Proposed until the tech lead accepts it; the practice it records has run daily since S247.
 - **Scope:** AA-Ecosys: org AdventureAsia365-Ecosys and its repos (AA-Ecosys, AA-CIS-App, AA-Booking,
   AA-TripPlanner-Web, AA-CIS-Infra, and AA-Partner when it is created under [ADR 0010](0010-aa-partner-app.md)).
 - **Amends / Supersedes:** none.
@@ -134,6 +136,28 @@ tracked in the private record (Linear AA-981), not in this public page.
   AA-Partner had no full-history job; their full-history check with these rules was a manual step (lesson log,
   AA-981). *Update 2026-10-28:* all six repos now run `secret-scan.yml` and `secret-scan-history.yml`, and all six
   are public with GitHub secret scanning and push protection on.
+
+## Amendment 3 (S280, 2026-11-14): the new-project template repo is public
+
+Why: the tech lead approved the new-project kit design in S279 (AA-1099, decision D13): a Copier template repo named
+`project-template`, public in the organisation, that new projects generate from and later update from
+([research](../research/new-project-playbook/README.md) section 5.4). A public repo must rest on this ADR, and
+decision 1 lists only today's repos.
+
+- **Visibility:** `project-template` (to be created in AA-1103) is **public**, on GitHub Free, like the app repos:
+  free Actions minutes, branch protection, code owners and GitHub secret scanning.
+- **What it may hold:** generic templates, skeleton code, CI workflows, generic agent hooks and skills. It holds **no**
+  AA names, account IDs, ARNs, resource IDs, hostnames, secret names or values, and no copy of an AA-only rule
+  (DM-6.10, SEC-06, the public-repo rule of the first amendment).
+- **Guards from day 1:** the PR and full-history gitleaks jobs with the shared `.gitleaks.toml` (Amendment 2), the
+  resource-ID lint in `--mode error`, and the byte-copy guard against the root `docs/templates/` (one home per fact).
+  The repo is created public from an empty history, so the private-to-public precondition of Amendment 2 does not
+  apply; GitHub secret scanning and push protection are turned on at creation and read back.
+- **Identity:** the orchestrator acts on it as `aa-agent` and release-please uses `aa-ci-bot`
+  ([ADR 0011](0011-github-app-identity-and-merge-rights.md), Amendment S280); merge rights follow DM-11.5 like every
+  other repo.
+- **Prod trigger:** decision 4 as amended by ADR 0021 applies unchanged; the template repo holds no product data, so
+  it stays public after the trigger.
 
 ## Consequences
 

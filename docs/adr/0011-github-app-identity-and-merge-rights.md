@@ -2,7 +2,8 @@
 
 - **Status:** Proposed (2026-10-22, S247). The tech lead accepts after the Apps exist and the test PR passes (AA-901).
   Amended by [0011a](0011a-ci-bot-merges-copy-and-dump-prs.md) (Proposed, S255): ci-bot may merge migration-copy PRs in
-  AA-CIS-Infra and schema-dump PRs in the root repo.
+  AA-CIS-Infra and schema-dump PRs in the root repo. Amended 2026-11-14 (S280, AA-1102 R1): scope covers six repos
+  and the coming template repo, see "Amendment (S280)" below. Practised daily since S247; acceptance is the tech lead's.
 - **Scope:** AA-Ecosys: all five repos of org AdventureAsia365-Ecosys (AA-Ecosys, AA-CIS-App, AA-Booking,
   AA-TripPlanner-Web, AA-CIS-Infra); agent sessions (Claude Code, Kiro); CI workflows that write to another repo or open
   release PRs.
@@ -114,6 +115,20 @@ The PAT is also long-lived, tied to one person and listed as an open item in the
 - The organization audit log records App creation, installation, permission changes and key generation or deletion.
 - CloudTrail on acc2 records every `GetSecretValue` on the agent key.
 - The quarterly access review (DM-8.10, SEC-05) lists both Apps: installed repos, permissions, key count and age.
+
+## Amendment (S280, 2026-11-14): scope and the template repo
+
+Why: the scope line lists five repos, but AA-Partner (created 2026-10-22 under ADR 0010) has run under this ADR from
+its first day, and the new-project kit adds a public template repo (ADR 0014 Amendment 3, AA-1103).
+
+- **Scope:** all repos of the organisation: AA-Ecosys, AA-CIS-App, AA-Booking, AA-TripPlanner-Web, AA-Partner,
+  AA-CIS-Infra and, once created, `project-template`. Both Apps are installed on a new repo when it is created.
+- **Template repo:** `aa-agent` pushes, opens and merges PRs there through `tools/github/as-app.sh`, like elsewhere.
+  `aa-ci-bot` mints the token for its release-please workflow (decision 1). No cross-repo token reaches it from an app
+  repo; the byte-copy guard reads the public root templates without a token.
+- **Generic form:** the template repo ships the pattern, not these Apps: two organisation-owned Apps (an agent identity
+  and a CI identity), keys outside the repo, merge rights by phase. A new organisation creates its own pair.
+- Decisions 2 to 6 are unchanged.
 
 ## Consequences
 

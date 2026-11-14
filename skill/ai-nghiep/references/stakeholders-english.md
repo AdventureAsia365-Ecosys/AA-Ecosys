@@ -22,7 +22,8 @@
   Chọn nhà cung cấp / đại lý: đưa **đủ mọi phương án** cạnh nhau, văn trung tính (thời gian, chi phí, phí, cọc, ràng
   buộc, có cần hợp đồng mới không) để chị chọn. Hợp đồng TrueIDC đã ký: tech chỉ tư vấn phương án kỹ thuật tốt nhất,
   không đẩy ký thêm, không làm tăng chi phí. Đã đưa khuyến nghị thì giữ, không sửa tới sửa lui.
-- **Guide cho chị Thư và guide theo vai trò:** song ngữ EN–VI, hai bản đủ ý như nhau.
+- **Guide cho chị Thư và guide theo vai trò:** trang tiếng Anh là bản gốc, bản tiếng Việt là file anh em `.vi.md` dịch
+  đủ ý (S255, `docs/STYLE.md` mục Language); không viết song ngữ cạnh nhau trong một trang.
 - **Tài liệu chính thức:** trang trọng, tiêu đề rõ, không viết tắt.
 
 ## Viết cho đại lý / nhà cung cấp

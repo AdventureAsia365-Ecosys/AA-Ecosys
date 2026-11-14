@@ -67,6 +67,11 @@ Issue chỉ được giao khi đủ các mục dưới (thêm vào template trê
 Thiếu → bổ sung trước, chưa giao.
 
 - [ ] **Goal** — 1–2 câu kết quả nghiệp vụ.
+- [ ] **Path** — fix | small | feature | risky. Path quyết định các bước, lens review và artifact (playbook, Build):
+      `fix` ghi test fail sẽ chứng minh bản sửa; `feature`/`risky` có mục Plan trong implementation note; `risky` thêm
+      review agent độc lập theo Risk class.
+- [ ] **Appetite** — việc này đáng bao nhiêu: 0.25 | 0.5 | 1 | 2 phiên, kèm trần USD nếu có chạy trả phí. Vượt appetite
+      → dừng, cắt lại hoặc tách issue; không làm tiếp (circuit breaker).
 - [ ] **Scope** ghi repo/schema/file và phần out of scope.
 - [ ] **Done when** 3–6 tiêu chí kiểm được trên Dev (không phải "code merged").
 - [ ] **Verify** — lệnh curl/trang/query/workflow cụ thể chứng minh live. Bước cần ECS exec / DB live là việc của
@@ -88,9 +93,9 @@ Thiếu → bổ sung trước, chưa giao.
 ## Đóng
 
 - Commit/PR ghi `Refs AA-xxx` trong thân. Tiêu đề PR không chứa mã issue (kể cả dạng `fix: AA-123 …` — Linear đọc
-  thành câu đóng issue). Thân PR chỉ nhắc mã của issue mà PR thật sự làm. CI `pr-title` đã chặn `[AA-xxx]` trong tiêu đề
-  và từ khoá đóng issue trong thân ở AA-Booking, AA-Partner, AA-TripPlanner-Web; repo gốc, AA-CIS-App, AA-CIS-Infra
-  chưa có guard nên tự kiểm.
+  thành câu đóng issue). Thân PR chỉ nhắc mã của issue mà PR thật sự làm. CI `pr-title` chạy ở cả 6 repo (AA-1024 G11):
+  chặn mã issue trong tiêu đề, mã nằm ngoài dòng `Refs` và từ khoá đóng issue trong thân. Luật đầy đủ: `skill/aa-ship`
+  mục kiểm trước merge (nguồn duy nhất, skill này chỉ trỏ tới).
 - Linear vẫn có thể tự chuyển Done khi merge/deploy/DB Migrate dù chỉ có `Refs`: sau mỗi merge/apply/deploy của issue
   còn mở, `get_issue` kiểm status và mở lại nếu bị đóng nhầm (bài học trong `lessons.md`, mục Verify và "Done").
 - Chỉ chuyển Done khi `aa-ship` (verify live + Đánh Done) pass, kèm comment "Verified live …" có bằng chứng.

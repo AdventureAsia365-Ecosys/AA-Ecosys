@@ -7,7 +7,7 @@ status: active
 owner: nghiep
 audience: [pm, engineer, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-19
+last_reviewed: 2026-11-14
 review_every_days: 180
 related: [GUIDE-07, skill/aa-linear-issue/SKILL.md, skill/aa-ship/SKILL.md]
 ---
@@ -25,6 +25,16 @@ What is wrong or missing, where, and the evidence (session S<nnn>, PR, numbers).
 
 ## Goal
 One or two sentences: the business outcome.
+
+## Path
+fix | small | feature | risky
+(fix: failing test first, one reviewer lens; small: no new contract or table; feature: Plan section in the
+implementation note, UI check if visible; risky: as feature, plus an independent agent review by risk class.
+The path decides the stages, the review lenses and the artifacts; new-project playbook, Build phase.)
+
+## Appetite
+How much work this is worth, not an estimate: 0.25 | 0.5 | 1 | 2 sessions, and a USD cap for paid runs.
+Over the appetite: stop, re-shape or split; do not keep going (circuit breaker).
 
 ## Scope
 1. In: repo, schema, files, endpoints, pages.
@@ -56,6 +66,8 @@ AA-xxx (why)
 ## Checklist
 
 - [ ] Problem has evidence, not a guess.
+- [ ] Path chosen (fix, small, feature, risky); a `fix` names the failing test that will prove it.
+- [ ] Appetite set in sessions (and USD for paid runs).
 - [ ] Scope names the repo(s) and says what is out.
 - [ ] Done-when items are checkable on Dev, not "code merged".
 - [ ] Verify says exactly which command, page or query proves it.

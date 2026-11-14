@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [replace-me]
-last_reviewed: 2026-10-30
+last_reviewed: 2026-11-14
 related: [OPS-04, FIN-01]
 ---
 
@@ -19,6 +19,13 @@ incident records, G-14). Write within 5 working days of a SEV1 or SEV2 (docs/ops
 within 2 working days. A cost incident is SEV2 when the excess is >= 50 USD or > 20 % of a monthly budget. Write the
 lesson to skill/aa-lessons/lessons.md at root-cause time. No account IDs, ARNs, secrets or vendor contract terms: this
 repo may be public. Delete this comment. -->
+
+## When a postmortem is required
+
+Write one when any of these happened (Google SRE trigger list, adapted): user-visible downtime or degradation beyond
+the SLO, once one exists; any data loss or exposure; an on-call or tech lead intervention such as a rollback, a manual
+data fix or a deploy-gate override; a resolution time above the incident target; a monitoring failure (the problem was
+found by a person, not an alert); a cost excess at the SEV2 level. Anyone may ask for one; asking is never blame.
 
 ## 1. Summary
 

@@ -54,6 +54,7 @@ Cách đọc:
 | Việc tiếp theo, việc đã xong, việc sẽ không làm | [§9](#9-lộ-trình) |
 | Vì sao một thứ lại như vậy | [§10](#10-nhật-ký-quyết-định) |
 | Một từ bạn chưa biết | [§11](#11-thuật-ngữ) |
+| Cách bắt đầu một dự án hay một app mới | [Playbook dự án mới](playbook/README.vi.md); luật riêng của AA cho agent ở [§2.4](#24-hai-luật-làm-việc-tự-quyết-không-hỏi-không-tự-đặt-cổng-chặn) và [§2.5](#25-thêm-các-quy-tắc-làm-việc-cho-agent) |
 
 ---
 
@@ -181,6 +182,25 @@ D10 của AA Academy (S279) để dạy được và kiểm được.
      muốn.
 
 Nơi áp dụng: nghi thức phiên (`skill/aa-session/SKILL.md`, danh sách issue và "câu hỏi cho tech lead").
+
+### 2.5 Thêm các quy tắc làm việc cho agent
+
+Năm quy tắc nữa do tech lead đặt ra chỉ nằm trong memory của agent cho tới S280 (AA-1102 R1, quyết định D11 của bộ kit
+dự án mới). Chúng đánh số tiếp theo [§2.4](#24-hai-luật-làm-việc-tự-quyết-không-hỏi-không-tự-đặt-cổng-chặn): W1 là "tự
+quyết, không hỏi" và W2 là "không tự đặt cổng chặn". Cả bảy áp dụng cho mọi phiên agent, cả agent điều phối lẫn các lane
+của nó. Dạng chung, với các giới hạn mà một dự án mới tự điền, là bảng dung sai của
+[playbook dự án mới](playbook/principles.vi.md).
+
+| # | Quy tắc | Nghĩa là gì trong thực tế | Đặt ở | Thực thi bởi |
+|---|---|---|---|---|
+| W3 | **Lượt chạy tốn tiền: chỉ một tập nhỏ** | Một lô tốn tiền LLM hay API trên Dev chạy thử khoảng 3 mục, rồi tối đa khoảng 50, rồi dừng. Không bao giờ chạy cả catalog trừ khi tech lead yêu cầu. Nêu chi phí dự kiến trước và chi phí thật sau (lấy từ ledger) | S202 | DM-10.6; cờ `--limit`; ngân sách của [AI gateway](architecture/ai-gateway.md) |
+| W4 | **Báo giá trước mọi mục tốn tiền, và chờ đồng ý riêng cho mục đó** | Trước khi một thay đổi thêm một resource hay dịch vụ cloud tính phí, nêu chi phí hằng tháng và giả định. Một dịch vụ hay tính năng trả phí mới chỉ được bật sau khi có lời đồng ý rõ ràng cho đúng mục đó; một lời duyệt chung hay một báo giá trong audit không phải là đồng ý. Trên tài khoản nào khác tài khoản hạ tầng chính, nêu tên tài khoản trước | S239, S255, S259 | D-19; mục chi phí của [PR template](../.github/pull_request_template.md); [FinOps](ops/finops.md) |
+| W5 | **Kiểm live trước khi khẳng định** | Một trạng thái có thể đổi (key, credit, quyền truy cập, xoay vòng, deploy, quota) được kiểm live ngay trong lượt đó, hoặc báo là "chưa kiểm". Audit, sổ đăng ký, memory và log phiên cũ là manh mối, không phải sự thật; mỗi dòng trạng thái kèm phép kiểm đứng sau nó | S261 | Review; brief của lane; Definition of Done trong [`aa-ship`](../skill/aa-ship/SKILL.md) |
+| W6 | **Một trang báo cáo cho chủ doanh nghiệp** | Tài liệu cho chủ doanh nghiệp (nhu cầu cloud, câu hỏi cho nhà cung cấp, một sự cố, bức tranh mở rộng) là một trang báo cáo chi tiết có bảng, không phải nhiều bản nháp trong chat. Số liệu chi phí và mức dùng trên Dev được đánh dấu là chưa ổn định. Mở đầu bằng lời khuyên dài hạn (trạng thái đích, phương án, lộ trình), không phải miếng vá cho hôm nay | S258 | Review; [`aa-jira-update`](../skill/aa-jira-update/SKILL.md) để đăng |
+| W7 | **Mọi ngưỡng là một setting sửa được trên trang admin** | Mọi giá trị chính sách kinh doanh và mọi ngưỡng hay giới hạn vận hành (cổng chất lượng, mức sàn, giới hạn tần suất, trần, ngân sách, thời hạn lưu) được lưu thành dữ liệu có phiên bản, có trang admin cho vai trò administrator, và gieo sẵn giá trị mặc định đã duyệt. Code đọc qua một reader duy nhất; chỉ một biến môi trường hay một giá trị YAML là chưa đủ | S278, S279 | AA-1096; [audit ngưỡng S279](audits/2026-11-13-S279-session/thresholds-audit/); trang settings của từng app |
+
+W1 và W2 đi cùng hai thói quen tech lead yêu cầu cùng lúc: một việc còn lại làm được (một lần kiểm live, một lát việc
+còn dư) thì làm ngay trong phiên, không liệt kê lại như lời nhắc; và không đề xuất đóng phiên khi còn việc không bị chặn.
 
 ---
 
@@ -581,8 +601,9 @@ thay đổi dữ liệu.
 Điều sẽ làm cổng prod thành thật về sau: một danh tính agent riêng (GitHub App `aa-agent` và `aa-ci-bot`,
 [ADR 0011](adr/0011-github-app-identity-and-merge-rights.md), AA-901), CODEOWNERS trên các đường dẫn rủi ro (có ở cả
 năm repo từ AA-901, chưa ép trong giai đoạn dev) và bật code-owner review khi tới điều kiện prod (U-25). Không mua
-GitHub Team (D-14, [ADR 0014](adr/0014-repo-visibility-and-github-plan.md)); các repo private dựa vào trust OIDC chỉ
-cho `main` và các job guard, và ADR 0014 liệt kê lựa chọn cần quyết cho chúng khi tới điều kiện prod.
+GitHub Team (D-14, [ADR 0014](adr/0014-repo-visibility-and-github-plan.md)). Hiện mọi repo đều public, nên branch
+protection của GitHub Free dùng được trên tất cả; trust OIDC chỉ cho `main` và các job guard làm lớp đỡ thêm, và
+[ADR 0021](adr/0021-github-org-security-and-ci-hygiene.md) đặt các biện pháp cấp tổ chức lên trước khi tới điều kiện prod.
 
 ---
 
@@ -881,7 +902,7 @@ Mỗi mục là có chủ đích, kèm lý do. Mở lại một mục cần mộ
 |---|---|
 | Một môi trường staging cố định, nhiều vùng, active-active | Dev + preview + đẩy cùng một image là đủ cho tới khi có prod với khách hàng lớn |
 | Tạo tài khoản prod hoặc dựng prod trước khi có ngày go-live | [ADR 0018](adr/0018-lean-aws-account-model.md) (chấp nhận S262): `aa-prod` do root management tạo khi đặt ngày go-live; D-16, D-17 |
-| GitHub Team hoặc Enterprise, GHAS cho repo private, chuyển Infra thành public | D-14: gói Free, repo app public, repo gốc và Infra private; thay bằng gitleaks và OIDC chỉ cho `main` |
+| GitHub Team hoặc Enterprise, GHAS, chuyển repo về private trước điều kiện prod | D-14 theo bản cập nhật S280: gói Free, hiện mọi repo đều public (các amendment của ADR 0014, [ADR 0021](adr/0021-github-org-security-and-ci-hygiene.md)); thay bằng gitleaks, biện pháp cấp tổ chức và OIDC chỉ cho `main` |
 | Vercel Pro trước tenant trả tiền đầu tiên | D-18 |
 | Người duyệt mọi PR trong giai đoạn dev | DM-11.5 / D-13 |
 | Chuyển sang role agent tối thiểu quyền trước prod | D-15, N-8 (mục theo điều kiện U-53) |
@@ -940,7 +961,7 @@ phiên S243 cho N-x. Khi một quyết định đã đổi một chuẩn, chuẩ
 | D-11 | Chưa có tính năng xoá/export; runbook thủ công khi có yêu cầu; nút bấm sau khi có đăng nhập khách hàng qua Cognito | AA-839 |
 | D-12 | Tenant pool đóng khi lỗi trên toàn hệ; giữ rollback theo từng route | C2.3g, DM-8.4, SEC-10 (v1.1); [sổ đăng ký cờ](ops/feature-flags.md) |
 | D-13 | Quyền merge theo rủi ro và giai đoạn: giai đoạn dev agent tự merge kể cả bảo mật/hạ tầng; cổng người từ prod hoặc tenant trả tiền đầu tiên | DM-11.5 (v1.1); `.claude/CLAUDE.md`; `session-workflow.md`; hook subagent |
-| D-14 | Repo app public, repo gốc private, GitHub Free | [STYLE, trang được đặt ở đâu](STYLE.md#where-a-page-may-live-sec-06); [ADR 0014](adr/0014-repo-visibility-and-github-plan.md); U-25 |
+| D-14 | Repo app public, repo gốc private, GitHub Free. **Cập nhật S280 (AA-1102 R1):** repo gốc và Infra public từ 2026-10-22 (amendment S247 của ADR 0014); chuyển một repo về private là lựa chọn cuối cùng khi tới điều kiện prod và cần một quyết định riêng có báo giá ([ADR 0021](adr/0021-github-org-security-and-ci-hygiene.md), sửa quyết định 4 của 0014); repo mẫu cho dự án mới cũng public (amendment 3 của ADR 0014). Vẫn giữ GitHub Free | [STYLE, trang được đặt ở đâu](STYLE.md#where-a-page-may-live-sec-06); [ADR 0014](adr/0014-repo-visibility-and-github-plan.md); [ADR 0021](adr/0021-github-org-security-and-ci-hygiene.md); U-25 |
 | D-15 | Agent giữ profile `aa365-admin` | DM-8.7; [§7.6](#76-quyền-truy-cập) |
 | D-16 | Bố cục và cổng prod chọn cùng ngày go-live | [ADR 0012](adr/0012-environment-model.md), chấp nhận ở S257: bố cục quyết định 5, cổng quyết định 8; xây khi có ngày go-live (quyết định 11); AA-880 |
 | D-17 | Prod ở tài khoản AWS riêng `aa-prod`, us-west-1 (S262; trước đó "prod mặc định trên acc2" tới khi ADR 0018 được chấp nhận) | [ADR 0018](adr/0018-lean-aws-account-model.md) quyết định 3 và 7; C7.2a (v1.9); AA-1004; AA-880 |
@@ -997,6 +1018,8 @@ S17); chúng được ghi trong log phiên S243.
 | # | Quyết định | Thực thi ở |
 |---|---|---|
 | S279-D10 | Hai luật làm việc trước chỉ nằm trong ghi chú riêng của agent, "tự quyết, không hỏi" và "không tự đặt cổng chặn", được viết vào mô hình làm việc (quyết định D10 của AA Academy, AA-1098) | [§2.4](#24-hai-luật-làm-việc-tự-quyết-không-hỏi-không-tự-đặt-cổng-chặn); review; `skill/aa-session` |
+| S279-K1 | Thiết kế bộ kit dự án mới (AA-1099) được duyệt cùng mười bốn quyết định D1 tới D14: một bản áp dụng mỏng đặt trên các chuẩn có tên, chín pha với cổng đỏ / vàng / xanh, Kanban có trần WIP và appetite cho từng issue, dung sai kiểu PRINCE2 cho agent, trang trong `docs/playbook/`, mẫu trong `docs/templates/`, một repo mẫu Copier public, ASVS mức 1 ở mọi lần phát hành, các biện pháp prod bật ở G7 | [Playbook dự án mới](playbook/README.vi.md); [nghiên cứu](research/new-project-playbook/README.vi.md) mục 7; AA-1102, AA-1103 |
+| S279-K2 | Các quy tắc chỉ nằm trong memory của agent được đưa vào repo trước khi bộ kit chép bất cứ gì (quyết định D11 của bộ kit) | [§2.5](#25-thêm-các-quy-tắc-làm-việc-cho-agent) (làm ở S280, AA-1102 R1; hai quy tắc đầu ở §2.4) |
 
 ---
 
@@ -1036,6 +1059,7 @@ này dựa vào nhiều nhất:
 | 2026-10-19 | S243 | Sổ tay này: một trang cho quy trình, tài liệu, phiên bản, phát hành, vận hành, chi phí, lộ trình và quyết định; áp mọi điểm sửa từ bản đối chiếu; sáu tài liệu được đánh dấu bị thay thế: review và lộ trình S241 và bốn file tư vấn S243 (AA-887) |
 | 2026-10-28 | S255 | Review tài liệu: các tóm tắt tiếng Việt chuyển sang bản dịch `engineering-handbook.vi.md`; người được gọi theo vai trò; reference sinh tự động, `/admin/docs`, cổng deploy (AA-993 G5), ngân sách và việc acc1 rời hệ (AA-998) được cập nhật; quyết định ngôn ngữ S255 |
 | 2026-11-14 | S280 | §2.4 thêm hai luật làm việc theo quyết định D10 của AA Academy (AA-1104); §10.4 ghi quyết định |
+| 2026-11-14 | S280 | Dọn dẹp cho bộ kit dự án mới (AA-1102 R1): quy tắc làm việc W3 tới W7 chuyển từ memory của agent vào [§2.5](#25-thêm-các-quy-tắc-làm-việc-cho-agent); D-14 và các dòng liên quan cập nhật theo việc các repo đã public (các amendment của ADR 0014, ADR 0021); quyết định bộ kit S279 ở [§10.4](#104-s279-2026-11-13) |
 
 ### 12.2 Các tài liệu bị thay thế
 

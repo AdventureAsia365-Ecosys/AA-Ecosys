@@ -7,6 +7,7 @@ lỗi, chuyển dòng sang [`guards.md`](guards.md) trong cùng PR.
 
 ## Cách làm việc
 
+- **Lane viết tài liệu có nhắc tên tool ship/merge (`as-app.sh`, `ship_merge.py`, `mergeq.sh`…) thì ghi bằng Write/Edit hoặc một file script, không nhét chữ đó vào lệnh Bash** — S280 lane aa1102: hook subagent chặn cả lệnh python heredoc chỉ vì đoạn văn ADR có chứa tên helper merge (regex khớp theo chữ, không theo ý định); mất hai lượt (AA-1102). Guard: none: judgement hook chặn đúng thiết kế, chỉ đổi cách ghi.
 > 8 bài học của mục này đã thành guard (máy chặn) và được chuyển sang [`guards.md`](guards.md#cách-làm-việc) (S271, AA-1024).
 
 - **Không SendMessage vào agent đang chạy trong một Workflow lane: harness khởi động một BẢN SAO chạy song song, hai agent ghi chung worktree** — S278 l22: tin đổi hướng route khiến agent theo brief cũ và bản sao theo brief mới cùng ghi Infra/CIS, phải dừng lane hai lần. Đổi hướng giữa chừng: TaskStop lane, sửa brief, chạy lại `resume: true` sau khi `ps` không còn process của lane. Guard: none: judgement quy tắc điều phối, không hook nào thấy được tin nhắn vào agent của workflow
@@ -59,6 +60,7 @@ lỗi, chuyển dòng sang [`guards.md`](guards.md) trong cùng PR.
 ## Verify và "Done"
 
 > 7 bài học của mục này đã thành guard (máy chặn) và được chuyển sang [`guards.md`](guards.md#verify-và-done) (S271, AA-1024).
+- **Chạy lint docs local trên file MỚI thì `git add -N` trước: `check_frontmatter.py` và các tool docs đọc `git ls-files`, file chưa track bị bỏ qua mà vẫn báo 0 lỗi** — S280 lane aa1102: thêm 13 template, số trang được kiểm vẫn 239, tưởng xanh; sau `git add -N docs` mới thành 252 (AA-1102). CI checkout bản đã commit nên không lọt, nhưng lane báo "lint xanh" sai. Guard: none: judgement chỉ ảnh hưởng lần chạy local trước commit.
 - **E2E Dev của CRM không chạy 11 ngày (31/10 → 11/11) nên lỗi UI ẩn lâu** —. Guard: pending AA-1084.
 - **Merge PR Booking có đụng `frontend/` thì kiểm cả Deploy Admin Dev, không chỉ API** — S277: PR smoke #222 làm `playwright.config.ts` import `e2e/` (bị .dockerignore loại) → `next build` TS2307, Deploy Admin Dev đỏ 3 lần trong khi CI của PR xanh (CI kiểm cây đầy đủ) và ship_wave chỉ báo API "live"; lỗi lộ ra nhờ smoke có đăng nhập (admin vẫn chạy 2d70c96). Guard: none: external test_no_file_in_the_admin_image_imports_from_e2e ở AA-Booking (#226).
 - **Không tìm chuỗi con trong `repr()` của object có id ngẫu nhiên** — test tariff CRM kiểm "388" không có trong `repr(AuditEvent)`; `request_id` hex ngẫu nhiên chứa đúng "388" → merge queue #279 đỏ (S277, sửa ở AA-Partner #281). Guard: none: one-off đã sửa ở AA-Partner #281.

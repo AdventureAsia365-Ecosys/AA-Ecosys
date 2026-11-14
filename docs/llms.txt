@@ -12,6 +12,7 @@ Paths are relative to this `docs/` folder unless they start with a repo name. Re
 - [Style guide](STYLE.md): one-line AWS CLI with --profile and --region, no literal resource IDs, front-matter, "tested" rule, where a page may live.
 - [Glossary](glossary.md): terms with Vietnamese equivalents.
 - [Onboarding: accounts and access](onboarding.md): the only account-map table (written in AA-897).
+- [New-project playbook](playbook/README.md): nine lifecycle phases with gates, RACI, tolerances for agents, day-1 checklist, templates index ([templates](templates/README.md)); the AA overlay is [playbook/aa-profile.md](playbook/aa-profile.md).
 
 ## Architecture
 

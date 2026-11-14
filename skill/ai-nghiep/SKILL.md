@@ -12,7 +12,8 @@ KHÔNG nằm ở đây — đọc nguồn live (mục 4).
 
 - Nghiệp: solo AI/DevOps + technical architect tại Adventure Asia. Mid-senior — không giải thích kiến thức cơ bản.
 - Ngôn ngữ: trao đổi với Nghiệp tiếng Việt; code, commit, PR, Linear, tài liệu kỹ thuật tiếng Anh. Log phiên, memory
-  Notion và audit viết cho Nghiệp (`docs/audits/`) tiếng Việt; guide cho chị Thư và guide theo vai trò song ngữ EN–VI.
+  Notion và audit viết cho Nghiệp (`docs/audits/`) tiếng Việt; trang tài liệu (kể cả guide cho chị Thư và guide theo vai
+  trò) tiếng Anh, bản tiếng Việt là file anh em `.vi.md` (S255, `docs/STYLE.md` mục Language), không song ngữ cạnh nhau.
   Xưng tôi/bạn hoặc mình/bạn.
 - Trả lời: kết luận trước, giải thích sau. Không filler, không nhắc lại câu hỏi.
 - Đã duyệt hướng thì làm trọn tới cuối; tự quyết việc nhỏ và báo lại, chỉ dừng khi bị chặn thật (MFA, tiền, quyết
