@@ -1,0 +1,124 @@
+name: Catalogue
+# AA-1106: the product catalogue guard (docs/catalogue/README.md, tools/catalogue/catalogue.py).
+#   check    on EVERY pull request to master (no path filter): every contract file has an integration row, every UAT scenario
+#            names real feature ids, every setting / plan feature key / AI gateway connection / secret named in a
+#            condition exists, every page and API route group of the surface snapshot maps to a feature, no stale
+#            pattern, no account ID / ARN / e-mail address. Unit tests of the tool first (each rule fails on a missing
+#            row). Meant to be a required check of the root repo (branch protection: the tech lead's step).
+#            No `paths:` filter on purpose. GitHub leaves a required check whose workflow a path filter skipped in
+#            "Expected", which would block every other root PR (the auto-merging bot/db-schema-reference PRs, and the
+#            root merge tool, which wants every check green). The guard also reads more than its own folders: rule C6
+#            checks guide pages anywhere under docs/ (id, tier, never-published folders) against
+#            tools/docs/build_docs_reader.py, so a docs-only PR that renames, demotes or moves a guide page fails here,
+#            not later in Docs sync (whose catalogue step only warns).
+#   surface  nightly and on demand: checks the four public app repos out side by side and runs
+#            `surface.py check`, so a new page or router in any app that is missing from the committed snapshot
+#            (and so from the feature mapping) turns this run red within a day.
+# No AWS access, no secrets beyond the default read-only token. About 1 minute per run.
+on:
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: "40 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: catalogue-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Catalogue guard
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      # S273 (workflow_lint WL4): restore on every ref; only the default branch saves this cache.
+      - name: Restore pip cache
+        id: pip-cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-${{ runner.arch }}-py3.12-${{ hashFiles('tools/docs/requirements.txt') }}
+          restore-keys: pip-${{ runner.os }}-${{ runner.arch }}-py3.12-
+
+      - name: Install dependencies
+        id: deps
+        run: python -m pip install --quiet -r tools/docs/requirements.txt
+
+      - name: Save pip cache
+        if: github.ref == 'refs/heads/master' && steps.pip-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/pip
+          key: ${{ steps.pip-cache.outputs.cache-primary-key }}
+
+      - name: Unit tests of the guard
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: python -m unittest discover -s tools/catalogue -p 'test_*.py'
+
+      - name: Catalogue check
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: python tools/catalogue/catalogue.py check
+
+      - name: Bundle builds
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: python tools/catalogue/catalogue.py bundle --out _site/catalogue --sha "$GITHUB_SHA" --ref "$GITHUB_REF_NAME"
+
+  surface:
+    name: Surface snapshot is current
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: root
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: AdventureAsia365-Ecosys/AA-CIS-App
+          path: ws/apps/AA-CIS-App
+          sparse-checkout: |
+            frontend/app
+            api/routers
+            api/migrations
+            shared/settings
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: AdventureAsia365-Ecosys/AA-Booking
+          path: ws/apps/AA-Booking
+          sparse-checkout: |
+            frontend/app
+            backend/app/routers
+            backend/app/pricing
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: AdventureAsia365-Ecosys/AA-Partner
+          path: ws/apps/AA-Partner
+          sparse-checkout: |
+            web/app
+            api/app/routers
+            api/app/platform_settings
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: AdventureAsia365-Ecosys/AA-TripPlanner-Web
+          path: ws/apps/AA-TripPlanner-Web
+          sparse-checkout: |
+            frontend/app
+            backend
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Surface drift
+        run: python root/tools/catalogue/surface.py check --apps-root ws
