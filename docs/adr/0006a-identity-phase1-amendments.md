@@ -19,8 +19,9 @@
   ops; a finance maker / checker pair), each held to its own writes on synthetic agencies; A10e-1 (12/11/2026, S278)
   lets its staff address cancel a synthetic departure (crm-13); A10e-2 (14/11/2026, S279) adds a pricing maker / checker
   pair (the A10d address with the "Pricing team" preset, and a Dev-only Booking contracting address) for the AA-1091
-  live check with synthetic prices on synthetic trip plans; A10e-3 (14/11/2026, S280) lets that pair load the
-  synthetic supplier, hotels, services and rates the check prices from (the checker publishes the contract). A11 and A12 (22/10/2026,
+  live check with synthetic prices on synthetic trip plans; A10e-3 (proposed 14/11/2026, S280, pending the tech lead)
+  would let that pair load the synthetic supplier, hotels, services and rates the check prices from (the checker
+  publishes the contract). A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2). A13
   (06/11/2026, S271) retires the CIS -> Booking bridge once the staff frontends run on ECS (ADR 0019 d23).
 - **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) was unchanged and still pending on 18/10/2026.
@@ -864,11 +865,16 @@ mailbox or Google account". That is too strong.
 
 ##### A10e-3. Amendment: the pricing pair loads a synthetic supplier for the price check (14/11/2026, S280, AA-1091)
 
-- **Decision (tech lead, S280; designed by the orchestrated lane aa1091sup under the dev-phase merge rule, independent
-  review before merge because it widens auth):** the S280 facts showed the A10e-2 run cannot start: of 892 Booking trip
-  plans on Dev, 890 have no components and no supplier rate matches the CIS itineraries (component suggestions of every
-  probed tour: 0 suggested), and the one other rate-complete tour is the rehearsal's Tour X. The check needs at least 3
-  rate-complete tours and one whose suggestions are all rated. Supplier rates exist only through the supply routes and
+- **Status:** Proposed (14/11/2026, S280). Not in force until the tech lead's yes is recorded here: on that yes, this
+  line becomes "Accepted (<date>, tech lead)" and the bullet below "Decision (tech lead, <date>)". Neither the
+  AA-Booking change nor this amendment merges before then.
+
+- **Proposed decision (for the tech lead, S280; designed by the orchestrated lane aa1091sup under the dev-phase merge
+  rule, independent review before merge because it widens auth):** the S280 facts showed the A10e-2 run cannot start:
+  of 892 Booking trip plans on Dev, 890 have no components and no supplier rate matches the CIS itineraries (component
+  suggestions of every probed tour: 0 suggested). Only 2 plans are rate-complete: the rehearsal's Tour X (excluded from
+  the check) and one Okinawa tour (all its items rated, not sellable: a usable spare). The check needs at least 3
+  rate-complete tours plus one tour whose suggestions are all rated. Supplier rates exist only through the supply routes and
   the contract maker-checker, which the pair could not reach (403 `e2e_read_only`). Creating the synthetic data through
   the product is part of the check (lesson S278).
 - **Scope, enforced by AA-Booking (`backend/app/auth/e2e_staff.py`), on top of A10e-2** (Dev only, exact groups, all
