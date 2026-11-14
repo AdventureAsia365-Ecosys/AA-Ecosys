@@ -1,10 +1,11 @@
-// Pilot rehearsal step 1b, the staff evidence after the tech lead's act (root docs/ops/runbooks/pilot-rehearsal.md,
-// step 1b), read only. Entering pilot mode is the tech lead's (POST /admin/tenants/provision, kind agency, pilot_weeks
-// 1: only he may provision a pilot, root ADR 0006a A10b-4), and so is the second-pilot refusal (pilot_taken, kept as
-// API JSON): neither is filmed (catalogue row REH-01b-pilot-start). Record this right after he provisioned the marker.
+// Pilot rehearsal step 1b, the staff evidence after an administrator's act (root docs/ops/runbooks/pilot-rehearsal.md,
+// step 1b), read only. Entering pilot mode is an admin-role write (POST /admin/tenants/provision, kind agency,
+// pilot_weeks 1; the orchestrator through the admin route or the tech lead; never the E2E admin, root ADR 0006a A10b-4),
+// and so is the second-pilot refusal (pilot_taken, kept as
+// API JSON): neither is filmed (catalogue row REH-01b-pilot-start). Record this right after the marker was provisioned.
 // Given: the E2E CIS admin (read-only session); env UAT_REH_MARKER_ID = the marker tenant's id. When: they open Tenant
 // 360 > Subscription of the marker. Then: it is kind agency, in pilot mode with an end date ("Pilot until ..."), and
-// this session is offered no End pilot (tech lead only). Nothing is written. $0. Not in the dry run.
+// this session is offered no End pilot (administrators only). Nothing is written. $0. Not in the dry run.
 // Pilot guard: the marker is the Dev pilot during this step, so it is not on the synthetic allow-list. Before anything
 // is shown, the first step reads the tenant through the admin API (no paint) and stops with pilot_guard unless it
 // carries the marker's invented name and kind (lib/rehearsal-admin.cjs MARKER): a real agency is never opened.
@@ -28,8 +29,8 @@ module.exports = ro({
   baseURL: HOSTS.cisAdmin,
   prepare: async () => { id = markerId(); },
   steps: [
-    step('The tech lead put a second invented agency, the marker, into pilot mode. We open its Tenant 360.',
-      'Trưởng nhóm kỹ thuật đã đưa một đại lý giả lập thứ hai, tenant đánh dấu, vào chế độ pilot. Ta mở Tenant 360 của nó.',
+    step('An administrator put a second invented agency, the marker, into pilot mode. We open its Tenant 360.',
+      'Một quản trị viên đã đưa một đại lý giả lập thứ hai, tenant đánh dấu, vào chế độ pilot. Ta mở Tenant 360 của nó.',
       async (page, h) => {
         assertMarker(await readTenant(page), { pilot: true }); // before the first paint: pilot_guard otherwise
         await check(page, h, `/admin/tenants/${id}?tab=subscription`, { heading: MARKER.name, ready: '[data-testid="tenant360-ready"]' });
@@ -43,8 +44,8 @@ module.exports = ro({
         await h.expect(box.getByText(`Kind: ${MARKER.kind}`, { exact: true })).toBeVisible({ timeout: 30_000 });
         await h.expect(box.getByText(/^Pilot until \d{4}-\d{2}-\d{2}$/)).toBeVisible({ timeout: 30_000 });
       }),
-    step('Only the tech lead may end a pilot: the test admin sees no End pilot button. This is the end of the scenario.',
-      'Chỉ trưởng nhóm kỹ thuật được kết thúc pilot: tài khoản quản trị thử nghiệm không thấy nút Kết thúc pilot. Kết thúc kịch bản.',
+    step('Only an administrator may end a pilot: the test admin sees no End pilot button. This is the end of the scenario.',
+      'Chỉ quản trị viên được kết thúc pilot: tài khoản quản trị thử nghiệm không thấy nút Kết thúc pilot. Kết thúc kịch bản.',
       async (page, h) => {
         await h.expect(page.getByTestId('end-pilot')).toHaveCount(0);
       }),
