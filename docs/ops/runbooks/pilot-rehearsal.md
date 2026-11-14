@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [aa-cis-api, aa-crm-dev-api, aa-crm-dev-web, aa-booking-dev-api, tripplanner, ecosystem]
-last_reviewed: 2026-11-13
+last_reviewed: 2026-11-14
 review_every_days: 90
 related: [OPS-12-pilot-onboarding, OPS-03-pilot-tenant, OPS-05-ecs-exec, AA-1086, AA-1093, AA-1079, AA-1082, docs/adr/0006a-identity-phase1-amendments.md, docs/adr/0019-b2b-only-ecosystem-model.md]
 ---
@@ -36,7 +36,7 @@ The automation named below was read on `origin/main` of each repo on 2026-11-13 
 The system audit proposed one tenant created as the pilot (`kind` agency with `pilot_weeks`). That tenant could not be
 rehearsed with the Dev-only E2E write identities: CIS and Booking treat a tenant as synthetic only when `is_canary` is
 true **and** it is not the pilot (root [ADR 0006a](../../adr/0006a-identity-phase1-amendments.md) A10b-1, A10e), and a
-pilot's `is_canary` is false. Every staff write would then fall back to the tech lead's own sessions, and Dev's one
+pilot's `is_canary` is false. Every staff write would then fall back to an administrator (see [Identities](#identities)), and Dev's one
 pilot slot would hold a fake agency for the whole run. So the rehearsal uses two tenants:
 
 | Tenant | Kind | Used for |
@@ -45,7 +45,7 @@ pilot slot would hold a fake agency for the whole run. So the rehearsal uses two
 | `pilot-rehearsal-01-marker` | `agency` with `pilot_weeks` 1, no add-ons | Steps 1b and 12b only: entering and leaving pilot mode, and the second-pilot refusal |
 
 This split is the plan's recommendation; the tech lead confirms it before step 1. If the tech lead keeps the audit's
-single pilot tenant instead, every row marked "E2E identity" below becomes a tech lead step.
+single pilot tenant instead, every row marked "E2E identity" below becomes an administrator step.
 
 ## Fixtures
 
@@ -62,8 +62,9 @@ Three commands, **in this order** (each a one-time setup; the CIS tenant comes l
    seed needs no CIS tenant: the agency id is the seed catalogue's fixed id for the key `pilot-rehearsal-01`
    (`41ea21ee-77ee-5474-bd6d-aa738d2da990`).
 3. The CIS tenant, through the CIS provisioning path, the `tenant_provision` saga (AA-CIS-App
-   `services/tenant_account/provision.py`, job kind `tenant_provision`), by the tech lead, because no E2E identity may
-   create a tenant (ADR 0006a A10b-4). AA-CIS-App fixture (gap G1, closed by AA-1086): `python -m
+   `services/tenant_account/provision.py`, job kind `tenant_provision`), by an administrator (the tech lead, or the
+   orchestrator through the admin route; see [Identities](#identities)), because no E2E identity may create a tenant
+   (ADR 0006a A10b-4). AA-CIS-App fixture (gap G1, closed by AA-1086): `python -m
    services.tenant_account.e2e_fixtures rehearsal-tenant --run <run>` through ECS Exec on `aa-cis-dev-api`, DRY RUN
    first, then `--apply`. It enqueues the same saga as `POST /admin/tenants/provision` with `name` "E2E Pilot
    Rehearsal Travel", `slug` `pilot-rehearsal-01`, `plan_tier` `growth`, `posts_per_week` 2, `kind` `demo`, `add_ons`
@@ -120,12 +121,25 @@ address is an invented one.
 | A10e maker / checker | `e2e-booking-maker@`, `e2e-booking-checker@` | Record a payment / approve or reject it | 11 |
 | A10a Booking admin | `e2e-booking@` | None (reads the audit log) | 8-11 reads |
 | A10c CRM staff | `e2e-crm-staff@` | S-02 views and S-04 support sessions on synthetic agencies | 10 |
-| Tech lead | own Cognito session | Create tenants and the CRM agency, owner invitations, the AI budget override, retire and restore a tour | 1, 1b, 2, 12, X2 |
+| Administrator (admin role) | the tech lead's own Cognito session, or the orchestrator through the admin route (see below) | Create tenants (the rehearsal tenant, the marker pilot, the second-agency and second-pilot probes), the rehearsal agency's AI budget, the AI budget override and its removal, End pilot, the marker's soft offboard | 1, 1b, 12, 12b, Teardown 1-2 |
+| Tech lead | own Cognito session | The CRM agency seed, owner invitations, retire and restore a tour, the approval of an erasure apply | 1, 2, X2, Teardown 2 |
 | Agency owner / agent | members of `pilot-rehearsal-01` (partner pool, MFA) | Agency steps | 2-4b, 7, 8 |
 | Traveller | invented name, address on `example.invalid` | Public pages | 5, 6, 8, 10 |
 
 Every E2E identity signs in with an e-mail code from the E2E mailbox. Codes for A10b, A10c and A10e land under
 `inbound-admin/`, which only the MFA admin role reads, so these runs are agent-only and never CI.
+
+**Administrator.** The rows marked "Administrator" are admin-role writes on existing CIS routes (`tenant.write` and the
+admin-role check of the tenant routes). The E2E identities may not make them because ADR 0006a forbids it (A10b-4: no
+E2E identity creates a tenant; A10b does not write entitlement overrides or budgets, gap G8). That is an admin-role
+rule, not a person-only rule, so in the dev phase the orchestrator may make these writes instead of the tech lead.
+It calls the admin route with the main admin secret, `x-admin-role: admin` and its own `x-admin-user-id`
+(`admin:agent-<session>-<lane>`). This is header trust: ADR 0006a keeps it for secret-only calls until the secret check
+becomes principal-aware (plan C9), and the API takes both the role and the audit actor from those headers. The audit
+rows therefore name the agent, apart from the tech lead's own rows. Each such write is DRY RUN first, saves the API
+answer in the evidence folder, and has its restore in the same run. Once Dev header trust ends, or before a
+production pilot, these rows fall back to the tech lead's own session. The approval of an erasure apply stays a
+person's act.
 
 ## Step 0: baseline (read only)
 
@@ -155,8 +169,8 @@ orchestrator does it in the UI or through the API, no spec; **gap** = it cannot 
 
 | Step | Actor | Surface | Automation today | Expected evidence | Status |
 |---|---|---|---|---|---|
-| 1. Provision `pilot-rehearsal-01` and its CRM agency; set its AI budget; try a second real agency | Tech lead | CIS admin, `POST /admin/tenants/provision`; `/admin/tenants/agencies` | None for the create. TripPlanner add-on alone: AA-CIS-App `tests/e2e/admin-evidence/tp-addon.spec.ts`, project `admin-evidence`, `E2EADMIN=1`, `TENANT_SYNTHETIC`, `TP_PLAN`, `E2E_DRY_RUN`, `E2E_CANCEL` (A10b). The fixture `e2e_fixtures rehearsal-tenant` and the CRM seed (see [Fixtures](#fixtures)) | Job `status` `succeeded` (`failed` with `error` = abort) with `tenant_created`, `content_active`, `crm_subscribed`, `tripplanner_subscribed`; `GET /tenant/v1/tenants/<tenant-id>/account` 200; CRM agency projected within one `crm_entitlement_pull` slot; Booking partner within about 5 minutes (`bk_tenant_pull`); `kind` agency without `pilot_weeks` refused 422 `dev_real_tenant_refused`, nothing written | fixture (G1 closed); the second-agency refusal manual |
-| 1b. Enter pilot mode on the marker tenant; try a second pilot. Step 12b ends it with the end-pilot route (G2 closed) | Tech lead | `POST /admin/tenants/provision` (`kind` agency, `pilot_weeks` 1) | None | Steps `tenant_created`, `pilot_marked`; Tenant 360 › Subscription badge "Pilot until ..."; a second pilot refused `pilot_taken` | manual |
+| 1. Provision `pilot-rehearsal-01` and its CRM agency; set its AI budget; try a second real agency | Administrator (the CRM seed: tech lead) | CIS admin, `POST /admin/tenants/provision`; `/admin/tenants/agencies` | None for the create. TripPlanner add-on alone: AA-CIS-App `tests/e2e/admin-evidence/tp-addon.spec.ts`, project `admin-evidence`, `E2EADMIN=1`, `TENANT_SYNTHETIC`, `TP_PLAN`, `E2E_DRY_RUN`, `E2E_CANCEL` (A10b). The fixture `e2e_fixtures rehearsal-tenant` and the CRM seed (see [Fixtures](#fixtures)) | Job `status` `succeeded` (`failed` with `error` = abort) with `tenant_created`, `content_active`, `crm_subscribed`, `tripplanner_subscribed`; `GET /tenant/v1/tenants/<tenant-id>/account` 200; CRM agency projected within one `crm_entitlement_pull` slot; Booking partner within about 5 minutes (`bk_tenant_pull`); `kind` agency without `pilot_weeks` refused 422 `dev_real_tenant_refused`, nothing written | fixture (G1 closed); the second-agency refusal manual |
+| 1b. Enter pilot mode on the marker tenant; try a second pilot. Step 12b ends it with the end-pilot route (G2 closed) | Administrator | `POST /admin/tenants/provision` (`kind` agency, `pilot_weeks` 1) | None | Steps `tenant_created`, `pilot_marked`; Tenant 360 › Subscription badge "Pilot until ..."; a second pilot refused `pilot_taken` | manual |
 | 2. Invite the owner; owner signs in with MFA | Tech lead, then agency owner | Tenant 360 › Members › Invite (`owner`); agency drawer › Invite owner; `portal.lumiguides.it.com` | AA-Partner `e2e/phase2/phase2.spec.ts` (`e2e/playwright.phase2.config.ts`, `E2EP2=1`, `E2EP2STAFF`, `E2EP2SINCE`, `E2EP2OUT`) claims a viewer or editor invitation only; CRM `e2e/tests/invite.spec.ts` (`E2ECRMINVITE=1`, `E2ECRMINVITEE`) an assistant; the owner's studio invitation (existing E2E account) is accepted from the e2e inbox by root `tools/uat/accept-owner-invite.cjs --since <ISO time before the invite>` | Owner sees Content studio, CRM and TripPlanner in the app switcher; no "no active owner" banner; Tenant 360 › Members lists the owner `active` | manual (G1, G10) |
 | 3. Import a brand guide (.docx), adopt tour X and two more tours, Rewrite, export DOCX | Agency owner | Studio `/portal/brand`, `/portal/tours`, `/portal/tours/mine` | AA-Partner `e2e/playwright.portal.config.ts` projects `portal-setup` + `portal` (`BASE_URL`, `PORTAL_TARGET=fargate`, `E2EPORTALEMAIL`, `E2EPORTALPASSWORD`, `E2EPORTALTOTP`): `aa1040-export-marks.spec.ts` (AI mark on exports), `s268-studio-price-vi.spec.ts` (marketplace price). No spec for brand import or Rewrite | Brand rules +1; tour cards with photo and price; usage meter +1; DOCX carries `X-AI-Generated` and the AI mark in its properties | manual (G3) |
 | 4. Refresh topics (time it), pick an angle, write one blog and one LinkedIn post, edit in the viewer; release a held piece | Agency owner; A10b for the release | Studio `/portal/create`, `/portal/content`; CIS **Tenant content QA › Compliance** | Release: AA-CIS-App `tests/e2e/admin-evidence/compliance-release.spec.ts` (`E2EADMIN=1`, `FLAG_SYNTHETIC`, `FLAG_REAL`, `E2E_DRY_RUN`) and the flag seeder `python -m services.tenant_account.e2e_fixtures subject-gate-flag --tenant <tenant-id> --run <run>` (ECS exec on `aa-cis-dev-api`, DRY RUN first). No spec for topics, angle or writing | Every adopted tour has a topic or a stated reason; slate time recorded; the viewer shows no writer brief and no search context; the held piece released by A10b with a `content_compliance.released` audit row | manual (G3); release automated |
@@ -169,8 +183,8 @@ orchestrator does it in the UI or through the API, no spec; **gap** = it cannot 
 | 9. Supplier booking, confirmation, voucher, purchase order, supplier bill | A10e staff | Booking `/cases/<code>`, `/finance` | `writes.spec.ts` test 1 (request and confirm) | Voucher without client name or price and with the right end date; a cost line against the revenue in USD | supplier booking automated; voucher, PO, bill gap (G6) |
 | 10. Traveller portal: code sign-in, passport and flight, e-sign, itinerary and voucher; send to AA ops | Traveller; A10c reads the ops view | `go-dev.lumiguides.it.com/c/t`; CRM staff console `/staff` | `lifecycle-thin.spec.ts` (portal link, code sign-in, stage 3 lock, e-sign envelope) | The itinerary matches tour X; the ops view shows the departure | automated (G1 for this tenant) |
 | 11. AA agency invoice (AAT), payment by maker, approval by checker, overdue blocks a hold (409) until paid | A10e maker and checker | Booking `/agency-billing`; CIS Tenant 360 › Booking billing (read) | `writes.spec.ts` tests 2-3 (`SYNTHETIC_AGENCY_INVOICE`, `PAYMENT_AMOUNT`); invoice from the seeder `python -m app.e2e_fixtures --apply --run <run> --agency-tenant <tenant-id>` (ECS exec on `aa-booking-dev-api`, DRY RUN first) | Payment recorded and approved by two identities, each the actor of its audit row; 409 on a hold while overdue, then open again | maker-checker automated; overdue gap (G7) |
-| 12. Budget fail-closed in three apps (X1); then reset the budgets | Tech lead; agency owner; traveller | Tenant 360 › Subscription override; CRM **Settings › AI**; studio and planner | None live (`planner.spec.ts` mocks the paused chat) | See [X1](#x1-ai-budget-fails-closed-in-three-apps) | manual (G8) |
-| 12b. Leave pilot mode on the marker tenant | Tech lead | Tenant 360 › Subscription › **End pilot** or `POST /admin/tenants/<tenant-id>/pilot/end` (reason required), as in [onboarding Step 8](pilot-agency-onboarding.md#step-8-leave-pilot-mode); then [Teardown](#teardown) | None | `changed` true and one `tenant.pilot_ended` audit row; `SELECT slug FROM shared.tenants WHERE is_pilot` returns no row; Dev pilot slot free; the CRM marker false after one `crm_entitlement_pull` | manual (G2 closed) |
+| 12. Budget fail-closed in three apps (X1); then reset the budgets | Administrator; agency owner; traveller | Tenant 360 › Subscription override; CRM **Settings › AI**; studio and planner | None live (`planner.spec.ts` mocks the paused chat) | See [X1](#x1-ai-budget-fails-closed-in-three-apps) | manual (G8) |
+| 12b. Leave pilot mode on the marker tenant | Administrator | Tenant 360 › Subscription › **End pilot** or `POST /admin/tenants/<tenant-id>/pilot/end` (reason required), as in [onboarding Step 8](pilot-agency-onboarding.md#step-8-leave-pilot-mode); then [Teardown](#teardown) | None | `changed` true and one `tenant.pilot_ended` audit row; `SELECT slug FROM shared.tenants WHERE is_pilot` returns no row; Dev pilot slot free; the CRM marker false after one `crm_entitlement_pull` | manual (G2 closed) |
 
 The tour retirement (X2) and the AA-cancelled departure (X3) run after step 12, so they cannot break the main chain.
 
@@ -178,9 +192,10 @@ The tour retirement (X2) and the AA-cancelled departure (X3) run after step 12, 
 
 ### X1: AI budget fails closed in three apps
 
-1. Tech lead: on Tenant 360 › Subscription, override `ai.budget_usd_monthly` for `pilot-rehearsal-01` to 0.05 USD
-   with a reason and an expiry (`PUT /admin/tenants/<tenant-id>/entitlement-overrides/ai.budget_usd_monthly`). A10b
-   may not do this.
+1. Administrator (see [Identities](#identities)): on Tenant 360 › Subscription, override `ai.budget_usd_monthly` for
+   `pilot-rehearsal-01` to 0.05 USD with a reason and an expiry (`PUT
+   /admin/tenants/<tenant-id>/entitlement-overrides/ai.budget_usd_monthly`). A10b may not do this (gap G8). The
+   expiry is the safety net: a missed restore ends by itself.
 2. Content studio: Rewrite a tour. Expected: refused before any model call (`shared.cost_guard`), one refused row
    in `shared.llm_call_log`.
 3. TripPlanner: send one chat turn on `/pilot-rehearsal-01/plan`. Expected: the per-tenant refusal
@@ -286,7 +301,8 @@ Cap 10 USD, estimate 2-4 USD (system audit S278, section 4). The infrastructure 
 
 ## Teardown
 
-Run after X3, in this order. Each write below is the tech lead's; the evidence folder records each result.
+Run after X3, in this order. Each CIS write below is an administrator's (see [Identities](#identities)); the approval
+of an erasure apply is a person's. The evidence folder records each result.
 
 1. **Marker tenant out of pilot mode (step 12b).** Tenant 360 › Subscription › **End pilot** (or the route) as in
    [onboarding Step 8](pilot-agency-onboarding.md#step-8-leave-pilot-mode). Then step 12b's check. The marker has
@@ -308,7 +324,17 @@ Run after X3, in this order. Each write below is the tech lead's; the evidence f
    as unpublished. If the free WordPress test site has expired, write that in the README.
 5. **Booking fixtures.** The seeder rows of steps 8-11 and X3 are synthetic and stay, tagged by their run id; cancel any
    still-open synthetic hold so it does not block the next run.
-6. **Final read:** step 0 checks 3 and 5 again (job tables idle, pilot slot free) and the spend total.
+6. **CRM and TripPlanner records stay on purpose.** The takes of steps 6 and 8 (`REH-06`: one guest trip and one
+   hand-off; `REH-08a`: one price check and one booking, which add a new traveller and a trip at Proposal) and their dry
+   runs write synthetic records (travellers on `example.invalid`) to the kept fixture `pilot-rehearsal-01`. They stay
+   as evidence of the run, like the Booking seeder rows, and have no cleanup step; the README counts them. An agency
+   setting a take changed for its run (the CRM Book now switch, the CRM AI budget) is put back in the same run.
+7. **Final read (read only):** step 0 checks 3 and 5 again (job tables idle, pilot slot free) and the spend total.
+   Then the marker's Booking partner: if `bk_tenant_pull` projected the marker, its `booking.b2b_partners` row (by
+   `tenant_id`) must read `status` `suspended` within about five minutes of the offboard; no row is also a PASS (never
+   projected). Read it on the Booking admin's agency list (A10a, read only) or with a SELECT through the DB Migrate
+   `mode=run-script` (`booking.*` needs the master; ECS exec's `cis_app` cannot read it). A row still `active` is a
+   FAIL with its fixing issue in the README.
 
 ## Evidence
 
@@ -330,7 +356,7 @@ Each gap below is a step that needs a new spec, script or rule. G2, G2a, G9, G12
 | G5 | 5, 6 | AA-TripPlanner-Web, root `tools/uat` | **Partly closed (AA-1086, S279)**: `REH-05`, `REH-05.m` and `REH-06` run live on the agency's planner (theme, search, tour X, reorder at 390 px, three chat turns, send with a double click). They run headless by default; each records `meta.waf` (`headed`, the count of the web ACL challenge proofs), and a read-only preview passed the silent challenge headless. A headed take: `UAT_HEADED=1` (needs a display). Open: the CRM pipeline read after step 6 |
 | G6 | 9 | AA-Booking (+ ADR 0006a amendment) | Widen A10e staff to voucher issue, purchase order send and supplier bill on synthetic agencies, with a `writes.spec.ts` test each |
 | G7 | 11 | AA-Booking | A seeder option for an overdue synthetic invoice and a test that a hold is 409 until the payment is approved |
-| G8 | 12 | AA-CIS-App (+ ADR 0006a amendment), AA-TripPlanner-Web, AA-Partner | One opt-in script or spec for X1: either an A10b amendment for the `ai.budget_usd_monthly` override on synthetic tenants, or the tech lead's step, then the three refusals read back from both ledgers |
+| G8 | 12 | AA-CIS-App (+ ADR 0006a amendment), AA-TripPlanner-Web, AA-Partner | One opt-in script or spec for X1: either an A10b amendment for the `ai.budget_usd_monthly` override on synthetic tenants, or an administrator's step (see [Identities](#identities)), then the three refusals read back from both ledgers. Until then X1 items 2-3 (studio and planner refusals) are hand steps in the override window, and step 12 does not PASS on the CRM probe alone |
 | G10 | 2 | AA-CIS-Infra, AA-Partner | Only if G1 is not taken: an owner recipient in `studio_invitees` and a phase 2 owner mode that stores the new password and authenticator secret in Secrets Manager |
 | G11 | X3 | AA-Partner | Let `aa-cancel.spec.ts` accept a seeder run for another synthetic agency (today it requires the CRM E2E agency) |
 | G14 | 6b | AA-TripPlanner-Web | A script that sends one lead through the webhook and the e-mail channel of a tenant without the CRM add-on and checks the signature and Reply-To |
