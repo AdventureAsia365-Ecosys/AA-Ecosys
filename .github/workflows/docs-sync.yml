@@ -9,6 +9,8 @@ name: Docs sync
 #   s3://<bronze>/docs-reader/pages/...      aws s3 sync (new and changed pages first)
 #   s3://<bronze>/docs-reader/assets/...     aws s3 sync, one pass per image type (AA-697 rule 9: checked SVG diagrams;
 #                                            AA-1064 rule 10: PNG / WebP screenshots a published page links, <= 300 KB)
+#   s3://<bronze>/docs-reader/catalogue.json aws s3 cp (AA-1106: the product catalogue bundle of
+#                                            tools/catalogue/catalogue.py, read by CIS admin Platform > Product map)
 #   s3://<bronze>/docs-reader/manifest.json  aws s3 cp (after pages and assets, so it never lists one not uploaded yet)
 #   s3://<bronze>/docs-reader/{pages,assets}/... aws s3 sync --delete (objects dropped from the manifest go last)
 #
@@ -25,6 +27,8 @@ on:
   push:
     branches: [master]
     paths:
+      - "tools/catalogue/catalogue.py"
+      - "tools/uat/catalogue.json"
       - "docs/**"
       - "tools/docs/build_docs_reader.py"
       - "tools/docs/docslib.py"
@@ -35,6 +39,8 @@ on:
   pull_request:
     branches: [master]
     paths:
+      - "tools/catalogue/catalogue.py"
+      - "tools/uat/catalogue.json"
       - "tools/docs/build_docs_reader.py"
       - "tools/docs/test_docs_reader.py"
       - "tools/docs/docslib.py"
@@ -97,6 +103,13 @@ jobs:
       - name: Build the reader bundle (redaction guard included)
         run: python tools/docs/build_docs_reader.py --out "$OUT" --sha "$GITHUB_SHA" --ref "$GITHUB_REF_NAME"
 
+      # AA-1106: the product catalogue bundle. The guard runs first: a failing catalogue publishes no new
+      # catalogue.json (CIS keeps serving the last one) but never blocks the docs pages.
+      - name: Build the product catalogue bundle
+        id: catalogue
+        continue-on-error: true
+        run: python tools/catalogue/catalogue.py bundle --out "$OUT" --sha "$GITHUB_SHA" --ref "$GITHUB_REF_NAME"
+
       - name: Summary
         run: |
           python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
@@ -143,9 +156,14 @@ jobs:
           aws s3 sync "$src_assets" "$dest_assets" --only-show-errors --exclude "*" --include "*.svg" --content-type "image/svg+xml"
           aws s3 sync "$src_assets" "$dest_assets" --only-show-errors --exclude "*" --include "*.png" --content-type "image/png"
           aws s3 sync "$src_assets" "$dest_assets" --only-show-errors --exclude "*" --include "*.webp" --content-type "image/webp"
+          if [ -f "$OUT/catalogue.json" ]; then
+            aws s3 cp "$OUT/catalogue.json" "$dest/catalogue.json" --only-show-errors --content-type "application/json"
+          else
+            echo "::warning title=Docs sync::the product catalogue did not build (see the step log); catalogue.json not updated"
+          fi
           aws s3 cp "$OUT/manifest.json" "$dest/manifest.json" --only-show-errors --content-type "application/json"
           aws s3 sync "$src_pages" "$dest_pages" --only-show-errors --delete --content-type "text/markdown; charset=utf-8"
           aws s3 sync "$src_assets" "$dest_assets" --only-show-errors --delete --exclude "*" --include "*.svg" --content-type "image/svg+xml"
           aws s3 sync "$src_assets" "$dest_assets" --only-show-errors --delete --exclude "*" --include "*.png" --content-type "image/png"
           aws s3 sync "$src_assets" "$dest_assets" --only-show-errors --delete --exclude "*" --include "*.webp" --content-type "image/webp"
-          echo "uploaded $(find "$OUT/pages" -type f | wc -l) pages, $(find "$src_assets" -type f | wc -l) image assets and the manifest" >> "$GITHUB_STEP_SUMMARY"
+          echo "uploaded $(find "$OUT/pages" -type f | wc -l) pages, $(find "$src_assets" -type f | wc -l) image assets, the product catalogue and the manifest" >> "$GITHUB_STEP_SUMMARY"

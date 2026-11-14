@@ -23,7 +23,9 @@ const IDENTITIES = ['public', 'cis-admin', 'booking', 'studio', 'studio-editor',
   'booking-staff', 'booking-maker', 'booking-checker', 'crm-rehearsal', 'crm-rehearsal-agent', 'crm-staff'];
 const REQUIRED = { id: 'string', app: 'string', module: 'string', story: 'string', roles: 'array', kinds: 'array', covers: 'array',
   screens: 'array', status: 'string', round: 'round', identity: 'string', writes: 'boolean', paid: 'boolean' };
-const OPTIONAL = { file: 'string', note: 'string', issues: 'array' };
+// features: the product catalogue feature ids the scenario shows (docs/catalogue/features.yaml, AA-1106); required for every
+// row that is not retired by tools/catalogue/catalogue.py check (C3), so the catalogue guard owns that rule.
+const OPTIONAL = { file: 'string', note: 'string', issues: 'array', features: 'array' };
 // <APP>-<NN>, <APP>-PUB-<NN>, a split letter (PRT-07b), a phone variant (.m), a role variant (@account-manager); the CRM
 // review chapters CRM-REV-<NN> and its two data steps; the pilot rehearsal REH-<nn>[letter]-<slug> (one per runbook
 // step or tight step group) and drills DRILL-<nn>[-<slug>].
