@@ -1,6 +1,6 @@
 # ADR 0011 — GitHub App identity for agents and bots, and merge rights per risk tier
 
-- **Status:** Proposed (2026-10-22, S247). The tech lead accepts after the Apps exist and the test PR passes (AA-901).
+- **Status:** Accepted (2026-11-14, tech lead, S280). Proposed 2026-10-22 (S247). The tech lead accepts after the Apps exist and the test PR passes (AA-901).
   Amended by [0011a](0011a-ci-bot-merges-copy-and-dump-prs.md) (Proposed, S255): ci-bot may merge migration-copy PRs in
   AA-CIS-Infra and schema-dump PRs in the root repo. Amended 2026-11-14 (S280, AA-1102 R1): scope covers six repos
   and the coming template repo, see "Amendment (S280)" below. Practised daily since S247; acceptance is the tech lead's.

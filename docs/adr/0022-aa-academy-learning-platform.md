@@ -1,9 +1,9 @@
 # ADR 0022 — AA Academy: courses and learner records in CIS, one academy host on the CRM web, a learning route class
 
-- **Status:** **Accepted in part.** Decisions 1 to 5 restate what the tech lead accepted in S279
+- **Status:** **Accepted.** Decisions 1 to 5 restate what the tech lead accepted in S279
   (13/11/2026): decisions D1-D16 of the AA Academy research (AA-1098) and decision D17 on the S279 decision page.
-  Decisions 6 to 11 are **Proposed**: S280 implementation choices of AA-1105 that D1-D17 do not name, waiting for the
-  tech lead's review; the Dev build follows them, and a change after his review edits this ADR. This ADR records the
+  Decisions 6 to 11 (S280 implementation choices of AA-1105 that D1-D17 do not name) were
+  accepted by the tech lead on 14/11/2026 (S280). This ADR records the
   cross-repo part; the build is AA-1105 (S280).
 - **Amends (with proposed decision 6):** [ADR 0006b](0006b-partner-pool-and-mfa.md) decision 6 (a new WORKFORCE app
   client and a new route class in its table), under [ADR 0006](0006-ecosystem-identity.md) decision 8 rule 6 (one route class, one verifier).
@@ -50,7 +50,7 @@ mixing route classes, and where the bytes of videos live.
 5. **Retention (D11).** Learner data is kept while the account is active plus 365 days, then deleted by the CIS job
    `learn_retention`, whose first Dev run is a DRY RUN (DM-7.2).
 
-### Proposed (S280 implementation choices, AA-1105; waiting for the tech lead's review)
+### Accepted 14/11/2026 (S280 implementation choices, AA-1105; tech lead)
 
 <!-- markdownlint-disable MD029 -->
 

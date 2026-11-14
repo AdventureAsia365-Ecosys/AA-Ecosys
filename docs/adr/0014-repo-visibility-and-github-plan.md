@@ -1,6 +1,6 @@
 # ADR 0014 — Repo visibility and GitHub plan: app repos public, root and Infra private, GitHub Free
 
-- **Status:** Proposed (2026-10-22, S247). Records S241 D-14 / D-25 as an ADR; the tech lead accepts (AA-901).
+- **Status:** Accepted (2026-11-14, tech lead, S280). Proposed 2026-10-22 (S247). Records S241 D-14 / D-25 as an ADR; the tech lead accepts (AA-901).
   Amended 2026-10-22 (S247): root and Infra made **public** for now, see "Amendment (S247, 2026-10-22)" below.
   Amended 2026-10-23 (S248, AA-981): visibility-switch precondition and secret scanning, see "Amendment 2" below.
   Decision 4 amended 2026-11-08 (S273) by [ADR 0021](0021-github-org-security-and-ci-hygiene.md): org-level controls
