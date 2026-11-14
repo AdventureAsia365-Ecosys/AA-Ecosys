@@ -22,6 +22,20 @@ name: Docs sync
 # public for now and a variable is printed in the log): DOCS_SYNC_ROLE_ARN (Terraform output docs_sync_role_arn) and
 # DOCS_SYNC_BUCKET (the bronze bucket name). Until both exist the sync step is skipped with a notice, not failed.
 #
+# AA Academy learn bundle (AA-1104, GUIDE-13, format in docs/learn/README.md): after the pages are uploaded,
+# tools/docs/build_learn_bundle.py builds a second, separate output (_site/learn): the learn manifest, the lesson bodies,
+# the redacted text of every section a lesson cites (with its hash; a changed section marks the lesson stale and
+# suspends the quiz items that cite it) and one quiz file per module (answers, read server side only). The app and
+# Infra repos' CONTEXT.md files a lesson may cite (allowlist only) are checked out read-only under _ext/<repo>. Upload:
+#
+#   s3://<bronze>/docs-reader/learn/{lessons,sections}/...  aws s3 sync (Markdown), then quizzes/ (JSON)
+#   s3://<bronze>/docs-reader/learn/manifest.json           aws s3 cp, after the objects it lists
+#   the same prefixes again with --delete                    objects the manifest dropped go last
+#
+# The learn steps never block the pages: they run after the pages upload, a failed learn build uploads nothing for
+# learn (the previous learn bundle stays), and only the last step turns the run red so the failure is seen. The same
+# role covers it (Put / Delete on docs-reader/*).
+#
 # Cost: about 1 minute of Actions per docs merge; S3 < $0.10/month (docs_reader.tf header).
 on:
   push:
@@ -35,6 +49,8 @@ on:
       - "tools/docs/check_docs_text.py"
       - "tools/docs/check_adr_index.py"
       - "tools/docs/requirements.txt"
+      - "tools/docs/check_learn.py"
+      - "tools/docs/build_learn_bundle.py"
       - ".github/workflows/docs-sync.yml"
   pull_request:
     branches: [master]
@@ -47,6 +63,10 @@ on:
       - "tools/docs/check_docs_text.py"
       - "tools/docs/check_adr_index.py"
       - "tools/docs/requirements.txt"
+      - "tools/docs/check_learn.py"
+      - "tools/docs/build_learn_bundle.py"
+      - "tools/docs/test_learn_bundle.py"
+      - "docs/learn/**"
       - ".github/workflows/docs-sync.yml"
   workflow_dispatch:
 
@@ -67,6 +87,7 @@ jobs:
       id-token: write
     env:
       OUT: _site/docs-reader
+      LEARN: _site/learn
       PREFIX: docs-reader
       HAS_AWS: ${{ secrets.DOCS_SYNC_ROLE_ARN != '' && secrets.DOCS_SYNC_BUCKET != '' }}
       IS_MASTER: ${{ github.ref == 'refs/heads/master' && github.event_name != 'pull_request' }}
@@ -167,3 +188,95 @@ jobs:
           aws s3 sync "$src_assets" "$dest_assets" --only-show-errors --delete --exclude "*" --include "*.png" --content-type "image/png"
           aws s3 sync "$src_assets" "$dest_assets" --only-show-errors --delete --exclude "*" --include "*.webp" --content-type "image/webp"
           echo "uploaded $(find "$OUT/pages" -type f | wc -l) pages, $(find "$src_assets" -type f | wc -l) image assets, the product catalogue and the manifest" >> "$GITHUB_STEP_SUMMARY"
+
+      # AA-1104: the CONTEXT.md of each app and Infra repo (public), the only file of theirs a lesson may cite (through
+      # docs/learn/allowlist.yaml). Sparse, read-only, no credentials kept. A failed checkout only marks the lessons
+      # that cite it stale.
+      - name: CONTEXT.md of AA-CIS-App (learn sources)
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: AdventureAsia365-Ecosys/AA-CIS-App
+          path: _ext/AA-CIS-App
+          sparse-checkout: /CONTEXT.md
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - name: CONTEXT.md of AA-Booking (learn sources)
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: AdventureAsia365-Ecosys/AA-Booking
+          path: _ext/AA-Booking
+          sparse-checkout: /CONTEXT.md
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - name: CONTEXT.md of AA-TripPlanner-Web (learn sources)
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: AdventureAsia365-Ecosys/AA-TripPlanner-Web
+          path: _ext/AA-TripPlanner-Web
+          sparse-checkout: /CONTEXT.md
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - name: CONTEXT.md of AA-Partner (learn sources)
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: AdventureAsia365-Ecosys/AA-Partner
+          path: _ext/AA-Partner
+          sparse-checkout: /CONTEXT.md
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - name: CONTEXT.md of AA-CIS-Infra (learn sources)
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: AdventureAsia365-Ecosys/AA-CIS-Infra
+          path: _ext/AA-CIS-Infra
+          sparse-checkout: /CONTEXT.md
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - name: Build the learn bundle (AA Academy)
+        id: learn
+        continue-on-error: true
+        run: python tools/docs/build_learn_bundle.py --out "$LEARN" --ext-root _ext --sha "$GITHUB_SHA" --ref "$GITHUB_REF_NAME"
+
+      - name: Learn summary
+        if: steps.learn.outcome == 'success'
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, os
+          m = json.load(open(os.path.join(os.environ["LEARN"], "manifest.json"), encoding="utf-8"))
+          c = m["counts"]
+          print("### Learn bundle")
+          print(f"- {c['paths']} paths, {c['modules']} modules, {c['lessons']} lessons, {c['quiz_items']} quiz items")
+          print(f"- {c['sections']} cited sections; {c['stale_lessons']} stale lessons, {c['suspended_items']} suspended quiz items")
+          PY
+
+      - name: Upload the learn bundle to S3
+        if: env.IS_MASTER == 'true' && env.HAS_AWS == 'true' && steps.learn.outcome == 'success'
+        env:
+          BUCKET: ${{ secrets.DOCS_SYNC_BUCKET }}
+        run: |
+          set -euo pipefail
+          dest="s3://${BUCKET}/${PREFIX}/learn"
+          mkdir -p "$LEARN/quizzes"
+          aws s3 sync "$LEARN" "$dest" --only-show-errors --exclude "*" --include "*.md" --content-type "text/markdown; charset=utf-8"
+          aws s3 sync "$LEARN/quizzes" "$dest/quizzes" --only-show-errors --content-type "application/json"
+          aws s3 cp "$LEARN/manifest.json" "$dest/manifest.json" --only-show-errors --content-type "application/json"
+          aws s3 sync "$LEARN" "$dest" --only-show-errors --delete --exclude "*" --include "*.md" --content-type "text/markdown; charset=utf-8"
+          aws s3 sync "$LEARN/quizzes" "$dest/quizzes" --only-show-errors --delete --content-type "application/json"
+          echo "uploaded the learn bundle: $(find "$LEARN" -type f | wc -l) files" >> "$GITHUB_STEP_SUMMARY"
+
+      # The pages are already uploaded above; this only makes a broken course visible as a red run.
+      - name: Learn bundle failed
+        if: steps.learn.outcome == 'failure'
+        run: |
+          echo "::error title=Learn bundle::the learn bundle was not built; the docs pages were published. See the step 'Build the learn bundle'."
+          exit 1

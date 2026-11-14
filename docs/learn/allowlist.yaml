@@ -1,0 +1,27 @@
+# AA Academy publication allowlist (decision D13). Default deny: the learn bundle publishes a section of a skill, a
+# steering file or an app repo's CONTEXT.md only when it is listed here, one entry per section, and an agency
+# (partner tier) module cites only the catalog pages under partner_pages. A change to this file is an access change:
+# review it as a risky change before merge. Schema: docs/learn/schema/allowlist.schema.json; checked by
+# tools/docs/check_learn.py (the redaction guard runs on every listed section).
+version: 1
+sections:
+  # F2 "The ecosystem map" and E1: each repo's own statement of its role. English, public repos.
+  - ref: context:AA-CIS-App#what-it-is-role-in-the-aa-ecosystem
+    tier: staff
+    reason: F2 and E1 teach what the content system owns, in the repo's own words.
+  - ref: context:AA-Booking#role-in-the-ecosystem
+    tier: staff
+    reason: F2 and E1 teach what the booking back office owns, in the repo's own words.
+  - ref: context:AA-Partner#role-in-the-ecosystem
+    tier: staff
+    reason: F2 and E1 teach what the agency CRM owns, in the repo's own words.
+  - ref: context:AA-TripPlanner-Web#what-it-is-role-in-the-aa-ecosystem
+    tier: staff
+    reason: F2 and E1 teach what the traveller trip planner owns, in the repo's own words.
+  - ref: context:AA-CIS-Infra#what-it-is-role-in-the-aa-ecosystem
+    tier: staff
+    reason: F2 and E1 teach the rule "app owns code, Infra owns resources" from the Terraform repo itself.
+# Agency modules (A1 to A7, phase P7) teach from the agency runbooks only.
+partner_pages:
+  - GUIDE-12-content-studio
+  - GUIDE-12-crm
