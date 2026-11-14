@@ -116,7 +116,9 @@ const sc = rw({
         if (sent.tour !== page0.sourceId) throw new Error('the booking went out with another tour key than the page\'s own');
         const body = await res.json().catch(() => ({}));
         meta.booking = { status: res.status(), answer: body.status || body.detail || null };
-        if (res.status() !== 200 || body.status !== 'created') throw new Error(`the booking answered ${res.status()} ${body.status || body.detail || ''}`.trim());
+        // The CRM answers 201 for a created booking (200 / 202 for the other outcomes, AA-Partner routers/public.py); the
+        // body may be gone once the page moves on to the proposal, so the status code is the proof.
+        if (res.status() !== 201 && body.status !== 'created') throw new Error(`the booking answered ${res.status()} ${body.status || body.detail || ''}`.trim());
         await page.waitForURL((u) => u.pathname === '/c/p', { timeout: 60_000 });
         await h.expect(page.getByTestId('client-proposal')).toBeVisible({ timeout: 60_000 });
       }, { writes: true }),
