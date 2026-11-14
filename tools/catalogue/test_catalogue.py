@@ -208,6 +208,10 @@ class CatalogueCheckTest(unittest.TestCase):
         self.assertEqual(bundle["source"], {"repo": "AA-Ecosys", "sha": "abc", "ref": "master"})
         self.assertEqual(cat_mod.public_problems(json.dumps(bundle)), [])
 
+    def test_public_problems_ignores_digits_inside_a_commit_sha(self):
+        self.assertEqual(cat_mod.public_problems('{"sha": "40087e38b950257287406f6463f6a91f144e1ee5"}'), [])
+        self.assertTrue(cat_mod.public_problems('{"note": "account 123456789012 here"}'))
+
     def test_bundle_command_writes_file(self):
         self.fx.write()
         out = self.fx.root / "out"

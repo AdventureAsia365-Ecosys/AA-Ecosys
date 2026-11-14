@@ -63,7 +63,8 @@ INTEGRATION_ID = re.compile(r"^INT-\d{3}$")
 JOURNEY_ID = re.compile(r"^J-\d{2}$")
 SURFACE_ITEM = re.compile(r"^(page:/[A-Za-z0-9_\-\[\]./*]*|route:[A-Za-z0-9_\-/]+)$")
 ISSUE_ID = re.compile(r"\bAA-?\d{2,4}\b")
-ACCOUNT_ID = re.compile(r"(?<!\d)\d{12}(?!\d)")
+# Hex neighbours excluded: a commit SHA such as 40087e38b950257287406f… holds 12 digits in a row (S280 false positive).
+ACCOUNT_ID = re.compile(r"(?<![0-9A-Fa-f])\d{12}(?![0-9A-Fa-f])")
 ARN = re.compile(r"\barn:aws", re.I)
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\.[A-Za-z0-9.-]+")
 
