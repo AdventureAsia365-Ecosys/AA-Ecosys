@@ -134,17 +134,23 @@ The S265 audit found that the codebase already has most of the pieces: tenant RL
   TripPlanner site can also be served on the agency's own host (for example `trip.<agency domain>`). CIS 427 adds
   `shared.tenant_tripplanner_domain` (one row per host; status pending / validating / attaching / active / removing /
   failed); staff add a host on Tenant 360 and the page shows the agency's two DNS records (a CNAME of the host to the
-  TripPlanner distribution and the ACM validation CNAME). The CIS job `tripplanner_custom_domain` requests the host's ACM
-  certificate in us-east-1, then keeps one edge certificate on the TripPlanner CloudFront distribution that names the
-  base names and every attached host, and swaps the aliases and the certificate in one UpdateDistribution; with no host
-  left, the distribution is back on its Terraform state. CIS 428 appends `custom_domains` (the active hosts) to
-  `catalog.v_tenant_tripplanner_v1` (contract `tenant.entitlements.v1` 1.8). TripPlanner resolves a request's Host to
-  the tenant and maps its paths onto `/{slug}`; an unknown host is a 404 and the path `/{slug}` keeps working.
-  AA-CIS-Infra routes every alias of the distribution with a per-distribution site header and scopes the three WAF
-  rules the same way, so they cover every agency domain. Limits are settings (hosts per tenant, hosts on the edge,
-  validation timeout, poll interval). The edge certificate caps the hosts at ACM's names-per-certificate quota; past
-  it, CloudFront SaaS Manager is the scale trigger, priced first. Cost about 0 USD a month (root audit
-  `docs/audits/2026-11-15-S281-tp-custom-domain/`); applied only after the tech lead approves it.
+  TripPlanner agency distribution and the ACM validation CNAME). Agency hosts live on a CloudFront distribution of
+  their own (AA-CIS-Infra `tripplanner_agency`, a copy of the public one without its alias), so the public TripPlanner
+  host keeps its Terraform distribution and wildcard certificate and never depends on an agency's DNS. The CIS job
+  `tripplanner_custom_domain` requests the host's ACM certificate in us-east-1, then keeps one edge certificate on the
+  agency distribution that names every attached host, and swaps the aliases and the certificate in one
+  UpdateDistribution; with no host left, the distribution is back on its Terraform state. The shared edge certificate
+  still ties the agencies to each other's validation records: a host whose record is gone is failed and detached
+  (`validation_record_gone`, a staff alert) when a re-issued certificate stays pending past a setting, or by a daily
+  renewal check once the certificate expires within a grace setting (an alert first), so one agency never blocks or
+  expires the others. CIS 428 appends `custom_domains` (the active hosts) to `catalog.v_tenant_tripplanner_v1`
+  (contract `tenant.entitlements.v1` 1.8). TripPlanner resolves a request's Host to the tenant and maps its paths onto
+  `/{slug}`; an unknown host is a 404 and the path `/{slug}` keeps working. AA-CIS-Infra routes every alias with a
+  per-distribution site header and scopes the three WAF rules the same way, so they cover every agency domain. Limits
+  are settings (hosts per tenant, hosts on the edge, validation timeout, poll interval, edge pending window, renewal
+  grace days). The edge certificate caps the hosts at ACM's names-per-certificate quota; past it, or when per-agency
+  certificate isolation is needed, CloudFront SaaS Manager is the scale trigger, priced first. Cost about 0 USD a month
+  (root audit `docs/audits/2026-11-15-S281-tp-custom-domain/`); applied only after the tech lead approves it.
 
 **d11 Travellers are guests; leads go to the tenant (TL-11).**
 
