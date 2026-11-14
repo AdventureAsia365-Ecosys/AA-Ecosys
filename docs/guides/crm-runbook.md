@@ -34,6 +34,8 @@ numbers, never trips or revenue, unless the owner allows support access.
 
 ## 2. Addresses
 
+<!-- learn-tier: staff -->
+
 | What | Dev address |
 |---|---|
 | Agency app (the CRM, and the Content studio on the same host) | `https://portal.lumiguides.it.com` |
@@ -47,6 +49,8 @@ The old host `partner-dev.lumiguides.it.com` forwards to `portal.lumiguides.it.c
 ## 3. Get an account
 
 ### A new agency (Adventure Asia)
+
+<!-- learn-tier: staff -->
 
 1. An Adventure Asia admin with the CRM platform-admin staff group opens CIS admin › **Agencies (CRM)**.
 2. **Create agency**: choose the agency source (**For a CIS tenant**, or **New synthetic agency (test)**), then the
@@ -77,6 +81,8 @@ If you lose the one-time password before the first sign-in, ask the owner for a 
 
 ### Adventure Asia staff console
 
+<!-- learn-tier: staff -->
+
 The console uses the staff sign-in (company e-mail and a one-time code). The tech lead adds your staff account to the
 **ground operations** group, the **agency support** group, or both. Without a group the console signs you out with a
 message.
@@ -92,6 +98,8 @@ message.
 
 ### Adventure Asia staff
 
+<!-- learn-tier: staff -->
+
 Open `https://portal.lumiguides.it.com/staff` and choose **Sign in with your AA staff
 account**. Signing out of the console (**Sign out of the staff console**) leaves any agency session alone.
 
@@ -100,6 +108,8 @@ account**. Signing out of the console (**Sign out of the staff console**) leaves
 Travellers open the links the agency sends. The traveller portal asks for a code sent to their e-mail.
 
 ## 5. Roles
+
+<!-- learn-tier: staff -->
 
 | Role | What it can do |
 |---|---|
@@ -182,6 +192,8 @@ leaving AA Partner. A request raised by Adventure Asia shows there with **Confir
 
 ### Adventure Asia staff
 
+<!-- learn-tier: staff -->
+
 - **Agencies (CRM)** in the CIS admin: the list with usage (seats, active members, storage, AI spend, failed jobs);
   **Lock** / **Unlock**; retry a failed job; open an owner recovery when an agency lost its only owner (it completes
   after 14 days, and every member can see and cancel it).
@@ -192,6 +204,8 @@ leaving AA Partner. A request raised by Adventure Asia shows there with **Confir
   access with a reason, a ticket and 15 to 60 minutes; names are never shown there.
 
 ## 8. When something looks wrong
+
+<!-- learn-tier: staff -->
 
 | You see | Then |
 |---|---|
@@ -208,6 +222,8 @@ tech lead) follows [incident response](../ops/incident-response.md); the CRM enc
 
 ## 9. Dev-phase caveats
 
+<!-- learn-tier: staff -->
+
 - You can create as many agencies as you need on Dev (for a demo, for training): **Create agency** marks every agency created on Dev as **synthetic** (test data) by itself, and the agency then has every CRM feature. The label keeps test data apart from real data: production will refuse synthetic agencies, and Dev must never hold real customer data (real names, phone numbers, passports). For a demo, invite your own e-mail as the owner, or use the ready test agency that already has sample trips, proposals, invoices and WhatsApp messages.
 - AI drafting runs a built-in stand-in, not a real model, so its texts are placeholders.
 - SMS and WhatsApp use a sandbox provider that sends nothing. Card payments by Stripe are not built yet; payments are
@@ -216,6 +232,8 @@ tech lead) follows [incident response](../ops/incident-response.md); the CRM enc
   names come with go-live.
 
 ## Sources (for maintainers)
+
+<!-- learn-tier: staff -->
 
 Read from AA-Partner `main` on 2026-11-01: `web/lib/nav.ts` (menu and role visibility), `web/lib/i18n.ts` and
 `web/lib/i18nStaff.ts` (labels), `web/app/(crm)/settings/page.tsx`, `CONTEXT.md` (sections "Web", "Tenant portal",

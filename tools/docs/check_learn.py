@@ -23,9 +23,11 @@ What it checks (errors fail the docs lint):
     the next heading of the same or a higher level, trailing spaces and blank edge lines dropped; a reference with no
     anchor hashes the whole page body). A root source whose section changed fails until the module owner reviews the
     lesson and re-pins (`--pin`);
-  * tiers (decision D13): a `partner` module cites only the catalog pages listed in the allowlist's `partner_pages`
-    and allowlist sections of tier `partner`; a path holds modules of its own tier; skill, steering and CONTEXT.md
-    sections are cited only when the allowlist names them (default deny);
+  * tiers (decision D13): a `partner` module cites only allowlist sections of tier `partner` (a catalog page section is
+    granted to agencies one section at a time: `doc:<catalog id>#<anchor>`, exact match); a path holds modules of its
+    own tier; skill, steering and CONTEXT.md sections are cited only when the allowlist names them (default deny);
+  * staff-only sections: a section whose text holds the marker `<!-- learn-tier: staff -->` (placed below a heading of
+    the English page) is not written for agency users; a partner grant of it, or of any section around it, fails;
   * quiz: every item cites one of its module's lesson sources with an anchor; answers index existing choices;
   * prerequisites name a module or a planned module of a path, and form no cycle;
   * public safety: no account or resource ID in lesson text, quiz text or titles (the docs reader guard).
@@ -69,7 +71,9 @@ EXTERNAL_REPOS = {
     "AA-Partner": "apps/AA-Partner",
     "AA-CIS-Infra": "infra/AA-CIS-Infra",
 }
-ALLOWLIST_KINDS = ("skill", "steering", "context")
+ALLOWLIST_KINDS = ("skill", "steering", "context")   # cited only through the allowlist
+GRANT_KINDS = ("doc",)                                # listed only to grant tier partner (staff read them anyway)
+STAFF_MARK = re.compile(r"^\s*<!--\s*learn-tier:\s*staff\s*-->\s*$")
 REF_RE = re.compile(r"^(?:(doc|adr|skill|steering|context):)?([A-Za-z0-9][A-Za-z0-9._-]*)(?:#([^\s#]+))?$")
 FENCE = re.compile(r"^\s*(```|~~~)")
 HEADING = re.compile(r"^(#{1,6})\s+(.+?)\s*#*\s*$")
@@ -105,6 +109,11 @@ class Ref:
     @property
     def external(self) -> bool:
         return self.kind == "context"
+
+    @property
+    def canonical(self) -> str:
+        """The reference with its kind spelled out: a bare `GUIDE-12-crm#x` and `doc:GUIDE-12-crm#x` are one section."""
+        return f"{self.kind}:{self.name}" + (f"#{self.anchor}" if self.anchor else "")
 
     @property
     def key(self) -> str:
@@ -167,6 +176,20 @@ def section(body: str, anchor: str | None) -> str | None:
         end = next((i for i, lvl, _ in hs[n + 1:] if lvl <= level), len(lines))
         return "\n".join(lines[start:end])
     return None
+
+
+def staff_only(text: str) -> bool:
+    """True when the section holds the staff-only marker outside fenced code (it, or a subsection of it, is not for
+    agency learners)."""
+    fence: str | None = None
+    for line in text.splitlines():
+        m = FENCE.match(line)
+        if m:
+            fence = m.group(1) if fence is None else (None if m.group(1) == fence else fence)
+            continue
+        if fence is None and STAFF_MARK.match(line):
+            return True
+    return False
 
 
 def section_sha(text: str) -> str:
@@ -361,8 +384,13 @@ def load(root: Path = REPO_ROOT) -> Course:
 # ── the checks ──────────────────────────────────────────────────────────────────────────────────────
 
 def _allowed_sections(course: Course) -> dict[str, str]:
-    """ref -> tier of every allowlist section."""
-    return {str(s["ref"]): s["tier"] for s in course.allowlist.get("sections", [])}
+    """canonical ref -> tier of every allowlist section."""
+    out: dict[str, str] = {}
+    for s in course.allowlist.get("sections", []):
+        ref = parse_ref(str(s["ref"]))
+        if ref is not None:
+            out[ref.canonical] = s["tier"]
+    return out
 
 
 def check(course: Course, root: Path, sources: Sources, strict_external: bool = False) -> dict[str, Resolved]:
@@ -381,8 +409,7 @@ def check(course: Course, root: Path, sources: Sources, strict_external: bool = 
         (course.error if strict_external else course.warning)(where, msg, "Learn external source")
 
     allowed = _allowed_sections(course)
-    partner_pages = set(course.allowlist.get("partner_pages", []))
-    _check_allowlist(course, sources, res, external_problem)
+    _check_allowlist(course, res, external_problem)
 
     module_ids: dict[str, str] = {}
     lesson_ids: dict[str, str] = {}
@@ -411,24 +438,28 @@ def check(course: Course, root: Path, sources: Sources, strict_external: bool = 
             for src in lesson["sources"]:
                 raw = str(src["ref"])
                 lesson_sources.add(raw)
-                _check_source(course, where, m, lid, src, res(raw), allowed, partner_pages, external_problem)
+                _check_source(course, where, m, lid, src, res(raw), allowed, external_problem)
         _check_quiz(course, m, lesson_sources)
     _check_prerequisites(course, module_ids)
     _check_paths(course, module_ids)
     return resolved
 
 
-def _check_allowlist(course: Course, sources: Sources, res, external_problem) -> None:
+def _check_allowlist(course: Course, res, external_problem) -> None:
     seen: set[str] = set()
     for s in course.allowlist.get("sections", []):
         raw = str(s["ref"])
         ref = parse_ref(raw)
-        if ref is None or ref.kind not in ALLOWLIST_KINDS or not ref.anchor:
-            course.error(ALLOWLIST, f"{raw}: an allowlist entry is skill:/steering:/context:<name>#<anchor>")
+        if ref is None or ref.kind not in ALLOWLIST_KINDS + GRANT_KINDS or not ref.anchor:
+            course.error(ALLOWLIST, f"{raw}: an allowlist entry is skill:/steering:/context:/doc:<name>#<anchor>")
             continue
-        if raw in seen:
+        if ref.canonical in seen:
             course.error(ALLOWLIST, f"{raw} is listed twice")
-        seen.add(raw)
+        seen.add(ref.canonical)
+        partner = s["tier"] == "partner"
+        if ref.kind in GRANT_KINDS and not partner:
+            course.error(ALLOWLIST, f"{raw}: every staff role reads catalog pages already; a doc: entry only grants "
+                                    "tier partner")
         r = res(raw)
         if r.unavailable:
             course.notice(ALLOWLIST, f"{raw}: {r.problem}; checked by the Docs sync build", "Learn external source")
@@ -437,15 +468,13 @@ def _check_allowlist(course: Course, sources: Sources, res, external_problem) ->
         elif r.problem:
             course.error(ALLOWLIST, f"{raw}: {r.problem}")
         elif r.text is not None:
+            if r.access != "staff":
+                course.error(ALLOWLIST, f"{raw} is on an owner-only page in the docs reader; it cannot be granted")
+            if partner and staff_only(r.text):
+                course.error(ALLOWLIST, f"{raw} is marked staff only (<!-- learn-tier: staff --> in it or in a "
+                                        "subsection); grant only sections written for agency users")
             for label in guard_hits(r.text):
                 course.error(ALLOWLIST, f"{raw}: {label} in the section; it cannot be published")
-    index = sources.docs_index()
-    for page_id in course.allowlist.get("partner_pages", []):
-        hit = index.get(page_id)
-        if hit is None:
-            course.error(ALLOWLIST, f"partner page {page_id} is not a published catalog page")
-        elif hit[1] != "staff":
-            course.error(ALLOWLIST, f"partner page {page_id} is owner only in the docs reader")
 
 
 def _check_lesson_file(course: Course, root: Path, module_rel: str, lesson: dict) -> None:
@@ -499,22 +528,24 @@ def _check_video(course: Course, where: str, mid: str, lesson: dict, seen: dict[
         course.error(where, f"{lesson['id']}: {label} in the video key")
 
 
-def _check_source(course, where, module, lid, src, r, allowed, partner_pages, external_problem) -> None:
+def _check_source(course, where, module, lid, src, r, allowed, external_problem) -> None:
     raw = str(src["ref"])
     ref = parse_ref(raw)
     if ref is None or r is None:
         course.error(where, f"{lid}: {raw!r} is not a reference (doc:, adr:, skill:, steering:, context:)")
         return
     partner = module["tier"] == "partner"
+    granted = allowed.get(ref.canonical)
     if ref.kind in ALLOWLIST_KINDS:
-        if raw not in allowed:
+        if granted is None:
             course.error(where, f"{lid}: {raw} is not in {ALLOWLIST} (skill, steering and CONTEXT.md sections are "
                                 "published only through it)")
             return
-        if partner and allowed[raw] != "partner":
+        if partner and granted != "partner":
             course.error(where, f"{lid}: {raw} is a staff section; a partner module cites partner sections only")
-    elif partner and (ref.kind != "doc" or ref.name not in partner_pages):
-        course.error(where, f"{lid}: {raw}: a partner module cites only the allowlist's partner_pages")
+    elif partner and (ref.kind not in GRANT_KINDS or granted != "partner"):
+        course.error(where, f"{lid}: {raw}: a partner module cites only catalog sections the allowlist grants to tier "
+                            "partner (doc:<catalog id>#<anchor>, exact match)")
     if r.unavailable:
         course.notice(where, f"{lid}: {raw}: {r.problem}; checked by the Docs sync build", "Learn external source")
         return

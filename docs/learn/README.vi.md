@@ -34,7 +34,7 @@ hoặc bài học được đánh dấu cũ, nên không bài học nào lệch 
 ```text
 docs/learn/
   README.md                         trang này
-  allowlist.yaml                    các mục skill, steering và CONTEXT.md mà gói được xuất bản; các trang cho đại lý
+  allowlist.yaml                    các mục skill, steering và CONTEXT.md mà gói được xuất bản; các mục cấp cho đại lý
   schema/*.schema.json              JSON Schema của mọi file bên dưới
   paths/<path id>.yaml              một lộ trình học: các module theo thứ tự, bắt buộc hay tự chọn, các module dự kiến
   modules/<ID>-<slug>/
@@ -53,8 +53,8 @@ Module đầu tiên viết theo định dạng này là [F3 How work flows](modu
 - **ID module** là mã trong các lộ trình của bản nghiên cứu (F1 đến F6, E1 đến E15, L1 đến L9, S, C, B, O, A). Thư mục
   bắt đầu bằng mã đó: `F3-how-work-flows`. ID bài học là `<module>-NN`: `F3-01`.
 - **Tier** là ai được đọc module: `staff` (mọi vai trò nhân sự) hoặc `partner` (chủ đại lý và nhân viên đại lý). Một
-  lộ trình chỉ chứa module cùng tier với nó. Một module `partner` chỉ trích các trang catalog có trong `partner_pages`
-  của danh sách cho phép và các mục trong danh sách cho phép có tier `partner` (quyết định D13).
+  lộ trình chỉ chứa module cùng tier với nó. Một module `partner` chỉ trích các mục mà danh sách cho phép ghi với tier
+  `partner`, kể cả mục của trang catalog (quyết định D13).
 - **Trạng thái** là `draft` cho tới khi tech lead duyệt module, `active` khi học viên thấy nó, `retired` khi nó bị rút
   lại. Mỗi module được một người thứ hai duyệt (người làm, người kiểm); với câu hỏi do agent soạn, người duyệt là một
   chủ module là người.
@@ -104,16 +104,33 @@ sources:
 ## Danh sách cho phép
 
 [`allowlist.yaml`](allowlist.yaml) là đường duy nhất để một mục của skill, file steering hay `CONTEXT.md` vào được gói
-learn: mỗi mục một dòng, kèm tier và lý do; thứ gì không có trong danh sách thì không bao giờ được xuất bản (mặc định
-từ chối). Danh sách thứ hai, `partner_pages`, nêu các trang catalog mà module cho đại lý được trích. Lớp chặn che giấu
-thông tin của trình đọc tài liệu chạy trên mọi mục có trong danh sách. Sửa danh sách cho phép là mở rộng ai được đọc
-gì, nên được review như một thay đổi rủi ro (xác thực và quyền truy cập) trước khi merge.
+learn, và là đường duy nhất để một mục của trang catalog tới được đại lý: mỗi mục một dòng, kèm tier và lý do; thứ gì
+không có trong danh sách thì không bao giờ được xuất bản (mặc định từ chối). Lớp chặn che giấu thông tin của trình đọc
+tài liệu chạy trên mọi mục có trong danh sách. Sửa danh sách cho phép là mở rộng ai được đọc gì, nên được review như
+một thay đổi rủi ro (xác thực và quyền truy cập) trước khi merge.
+
+- **Cấp quyền cho đại lý.** Mọi vai trò nhân sự đọc trang catalog mà không cần dòng nào. Một module cho đại lý chỉ trích
+  một trang catalog qua một dòng `doc:<catalog id>#<anchor>` có tier `partner`: một mục, không bao giờ cả trang, và chỉ
+  đúng mục được cấp (cấp một mục không bao gồm các mục con hay mục cha của nó). Một dòng `doc:` có tier `staff` là lỗi.
+- **Mục chỉ dành cho nhân sự.** Một trang trộn nội dung cho đại lý với nội dung cho nhân sự Adventure Asia đánh dấu mỗi
+  mục không dành cho học viên đại lý bằng `<!-- learn-tier: staff -->` trên một dòng riêng, ngay dưới tiêu đề (chỉ
+  trang tiếng Anh; trình đọc tài liệu không hiện nó). Cấp quyền cho một mục đã đánh dấu, hay cho một mục bao quanh một
+  mục con đã đánh dấu, làm bước kiểm báo lỗi. Đánh dấu một mục khi nó mô tả một console nhân sự, một trang admin hay một
+  quy trình nội bộ, kể cả khi một phần của nó dành cho đại lý.
+
+```markdown
+### Adventure Asia staff console
+
+<!-- learn-tier: staff -->
+
+The console uses the staff sign-in...
+```
 
 ## Các bước kiểm
 
 | Ở đâu | Chạy gì | Báo lỗi khi |
 |---|---|---|
-| Docs lint, mọi pull request ở repo gốc có chạm `docs/**` hoặc `tools/docs/**` | `python tools/docs/check_learn.py`, và các unit test `tools/docs/test_check_learn.py` và `tools/docs/test_learn_bundle.py` | một file sai schema, ID trùng, tham chiếu không tìm thấy, ghim thiếu hoặc đã đổi, module đại lý trích trang dành cho nhân sự, mục được trích nằm ngoài danh sách cho phép, vòng lặp điều kiện trước, account ID hay resource ID trong nội dung khoá học |
+| Docs lint, mọi pull request ở repo gốc có chạm `docs/**` hoặc `tools/docs/**` | `python tools/docs/check_learn.py`, và các unit test `tools/docs/test_check_learn.py` và `tools/docs/test_learn_bundle.py` | một file sai schema, ID trùng, tham chiếu không tìm thấy, ghim thiếu hoặc đã đổi, module đại lý trích mục chưa được cấp cho đại lý, cấp quyền đại lý cho một mục đã đánh dấu chỉ dành cho nhân sự, mục được trích nằm ngoài danh sách cho phép, vòng lặp điều kiện trước, account ID hay resource ID trong nội dung khoá học |
 | Docs sync, trên master | `python tools/docs/build_learn_bundle.py`, với các file `CONTEXT.md` của các repo app được checkout | mọi lỗi khoá học trừ lệch nguồn; lệch nguồn được xuất bản ở dạng cũ (bên dưới) |
 
 Chạy chúng ở máy trước khi push:
