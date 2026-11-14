@@ -1,5 +1,5 @@
 ---
-id: ARCH-03-catalogue
+id: ARCH-07-catalogue
 title: Product catalogue
 description: What every AA app can do, how the apps link, what each link needs to work, and the guard that keeps the catalogue in step with the code.
 type: reference
@@ -42,7 +42,7 @@ the C4 context and container levels of the [ecosystem architecture](../ecosystem
 | `surface` | The pages (`page:/path`) and API route groups (`route:module`) the feature owns; `/**` covers the pages below |
 | `conditions` | What must be true for the feature to work: `entitlements` (plan or add-on feature keys), `settings` (settings registry keys), `connections` (AI gateway connection keys), `secrets` (names only), `tenant_kinds` (`demo`, `pilot`, `agency`), `note` |
 | `depends_on` | Features of other apps it cannot work without |
-| `guide` | A `docs/` page that explains it |
+| `guide` | A published `docs/` catalog page that explains it (staff tier, so every admin can open it from the map) |
 | `owner` | The accountable role: `tech_lead`, `business_owner`, `content_lead`, `customer_success`, `finance`, `ai_ops` |
 
 Evidence comes from the other direction: each UAT scenario in `tools/uat/catalogue.json` names the features it shows
@@ -69,7 +69,8 @@ the contracts, the UAT catalogue or the tool) fails when:
 - a UAT scenario that is not retired names no feature, or a feature id that does not exist;
 - a setting, plan feature key, AI gateway connection or secret named in a condition does not exist;
 - a page or API route group in the surface snapshot maps to no feature, or a feature's surface pattern matches nothing;
-- a journey, `depends_on` or integration names a missing id, or a guide page is missing;
+- a journey, `depends_on` or integration names a missing id, or a guide is not a published, staff-tier docs reader
+  page (a catalog page with a front-matter id that every admin can open);
 - either file holds an account ID, an ARN or an e-mail address.
 
 The surface snapshot is refreshed from the app repos:

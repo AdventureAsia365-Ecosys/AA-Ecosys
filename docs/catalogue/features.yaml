@@ -602,7 +602,6 @@ features:
     roles: [machine]
     status: live
     surface: ["route:catalog_http", "route:tenant_account", "route:tenant_addons", "route:tenant_membership", "route:tenant_erasure"]
-    guide: docs/contracts/README.md
     owner: tech_lead
 
   # ── AA-Booking ────────────────────────────────────────────────────────────────────────────────────────────────────

@@ -234,9 +234,10 @@ def check(cat: Catalogue) -> list[str]:
             errs.append(f"{where}: a live or beta app feature needs a surface (its pages or API route groups)")
         errs += check_conditions(where, f.get("conditions"), cat, connections, secrets_text)
         guide = f.get("guide")
-        if guide is not None and not (isinstance(guide, str) and guide.startswith("docs/") and guide.endswith(".md")
-                                      and (cat.root / guide).is_file()):
-            errs.append(f"{where}: guide {guide} is not an existing docs/ page")
+        if guide is not None:
+            problem = guide_problem(cat.root, guide)
+            if problem:
+                errs.append(f"{where}: guide {guide} {problem}")
 
     # C1 integrations
     integration_ids: dict[str, dict] = {}
@@ -383,6 +384,33 @@ def _strings(value) -> list[str]:
     if isinstance(value, dict):
         return [s for v in value.values() for s in _strings(v)]
     return []
+
+
+FRONT_MATTER_ID = re.compile(r"\A---\n(?:.*\n)*?id:\s*([A-Z]+-[0-9]{2}[a-z0-9-]*)\s*\n(?:.*\n)*?---\n")
+
+
+def guide_problem(root: Path, guide) -> str | None:
+    """Why a guide path cannot be opened from the admin page by every admin (None = fine): it must be a published
+    docs reader page (a catalog page with a front-matter id, outside the never-published folders) of the staff tier
+    (tools/docs/build_docs_reader.py publication rule v1)."""
+    if not (isinstance(guide, str) and guide.startswith("docs/") and guide.endswith(".md")):
+        return "is not a docs/*.md path"
+    path = root / guide
+    if not path.is_file():
+        return "does not exist"
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "docs"))
+    try:
+        from build_docs_reader import OWNER_ONLY_ID_PREFIXES, is_never  # noqa: E402 (sibling tool)
+    finally:
+        sys.path.pop(0)
+    if is_never(guide):
+        return "is in a folder the docs reader never publishes"
+    m = FRONT_MATTER_ID.match(path.read_text(encoding="utf-8"))
+    if not m:
+        return "has no front-matter id, so the docs reader does not publish it"
+    if m.group(1).startswith(OWNER_ONLY_ID_PREFIXES):
+        return f"is an owner-only page ({m.group(1)}): most admins cannot open it"
+    return None
 
 
 def public_problems(text: str) -> list[str]:

@@ -80,7 +80,8 @@ class Fixture:
         (self.root / "docs/contracts/README.md").write_text("# Contracts\n")
         (self.root / "docs/contracts/samples/x.json").write_text("{}\n")
         (self.root / "docs/catalogue").mkdir(parents=True)
-        (self.root / "docs/catalogue/README.md").write_text("# Catalogue\n")
+        (self.root / "docs/catalogue/README.md").write_text(
+            "---\nid: ARCH-07-catalogue\ntitle: Catalogue\n---\n\n# C\n")
         (self.root / "docs/security").mkdir(parents=True)
         (self.root / "docs/security/secrets-register.md").write_text("| `aa-cis/dev/openai-key` | keep |\n")
         (self.root / "docs/generated").mkdir(parents=True)
@@ -178,6 +179,16 @@ class CatalogueCheckTest(unittest.TestCase):
         for needle in ("id prefix does not match app cis", "status must be one of", "feature CRM-F002: a text value",
                        "integration INT-001: a text value"):
             self.assertTrue(any(needle in p for p in problems), needle)
+
+    def test_guide_must_be_a_published_staff_page(self):
+        (self.fx.root / "docs/ops").mkdir()
+        (self.fx.root / "docs/ops/plain.md").write_text("# No front-matter\n")
+        (self.fx.root / "docs/ops/owner.md").write_text("---\nid: SEC-01\ntitle: Owner page\n---\n\n# O\n")
+        guides = {"docs/ops/plain.md": "no front-matter id", "docs/ops/owner.md": "owner-only page",
+                  "docs/ops/gone.md": "does not exist", "README.md": "not a docs/*.md path"}
+        for guide, needle in guides.items():
+            self.fx.features["features"][1]["guide"] = guide
+            self.assertProblem(needle)
 
     def test_account_id_arn_email_fail(self):
         self.fx.features["features"][0]["summary"] = "Account 123456789012 at a@b.co arn:aws:iam::x"
