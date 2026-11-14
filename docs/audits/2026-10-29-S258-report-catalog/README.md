@@ -330,6 +330,8 @@ Tóm tắt (chi tiết: [automation-plan.md](automation-plan.md)):
 | R6 Đối tác và đại lý | EX-03, EX-07, CIS-03, CIS-04, FI-09, CRM-01..CRM-06 | L (25 ngày công; CRM-01/02 nằm trong AA-966 ≥ S263; cần endpoint tổng hợp `crm.ops.v1`) | ~0 USD | S263+; gấp khi mời tenant/đại lý ngoài đầu tiên | R1; đổi hợp đồng `crm.ops.v1` |
 | R7 Tăng trưởng, khách hàng, dự báo | MKT-01, MKT-02, CX-01, BK-02, BK-04, BK-05, BK-06, CIS-02, TP-02, OPS-16, EX-05 | L (22 ngày công; gồm migration tp-NNN nguồn khách và bk-NNN bảng khảo sát) | 0 USD (Search Console miễn phí sau khi xác minh — hỏi trước; Vercel Speed Insights/Web Analytics chỉ khi có báo giá và đồng ý) | trước marketing go-live; OPS-16 và EX-05 vào đầu quý tới (01/2027) | R1, R3; cần chuyến đi thật đầu tiên cho CX-01 |
 
+**Trạng thái R5 (S281, 15/11/2026, B2B theo ADR 0019):** CIS sinh ba báo cáo có nguồn live hôm nay — FI-08 (mới: quyền sử dụng theo gói và chi phí AI của từng tenant so với trần gateway đang áp), BK-03 (công nợ đại lý từ view `booking.v_tenant_billing_status`) và FI-07 (bản nhanh tuần, chỉ số đếm, từ `booking.v_ops_funnel_daily`). OPS-17, SEC-10, SEC-09, DEV-04, OPS-03 là văn bản/checklist do người viết; BK-01 cần view hợp đồng Booking chưa có; EX-02 gộp các báo cáo khác — các dòng này giữ `generator: null`. Báo cáo cho khách lẻ (B2C) đã bỏ.
+
 Tổng ~107 ngày công cho toàn bộ danh mục; nhịp đề xuất: R0–R3 trong 3–4 phiên tới, R4 theo slot master plan,
 R5–R7 theo mốc kinh doanh (ngày go-live, tenant/đại lý đầu tiên, chuyến đi thật đầu tiên).
 
