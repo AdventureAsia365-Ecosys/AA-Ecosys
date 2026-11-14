@@ -160,6 +160,28 @@ Khi repo, Notion và memory lệch nhau: repo > trang Notion chuẩn > memory > 
 
 Quyền merge theo giai đoạn: [§6.5](#65-quyền-merge-theo-giai-đoạn).
 
+### 2.4 Hai luật làm việc: tự quyết, không hỏi; không tự đặt cổng chặn
+
+Cả hai luật áp dụng cho agent và cho người. Tech lead đặt ra (S202 và S248); chúng được viết vào đây theo quyết định
+D10 của AA Academy (S279) để dạy được và kiểm được.
+
+1. **Tự quyết, không hỏi.** Khi tech lead đã duyệt một hướng đi (danh sách issue, kế hoạch, thiết kế), làm trọn từ đầu
+   tới cuối. Tự đưa ra các quyết định thường lệ đi kèm: thứ tự các bước, việc phát sinh theo dõi ở đâu (ưu tiên issue
+   có sẵn trước issue mới), chạy thử nhỏ trước khi chạy đủ, sửa lỗi gặp trên đường. Báo từng quyết định trong phần tóm
+   tắt thay vì kết thúc bằng một câu hỏi.
+   - Chỉ dừng khi bị chặn thật: một luật hoặc harness từ chối bước đó (lệnh bị từ chối mới là tín hiệu, không phải
+     phỏng đoán), lựa chọn tốn kém hoặc không đảo ngược được, hoặc khoản chi cần tech lead đồng ý rõ ràng
+     ([FinOps](ops/finops.md), DM-10). Nêu đúng một việc cần làm và tiếp tục phần còn lại.
+2. **Không tự đặt cổng chặn.** Không bao giờ tự đặt ra trần, slot hay thời gian chờ mà tech lead không đặt, ví dụ "mỗi
+   phiên tối đa một việc loại này", "đợi tới phiên N" hay "cần làm rõ trước".
+   - Một slot trong master plan là thứ tự, không phải cổng: kéo việc sau lên sớm khi điều kiện kỹ thuật đã đủ.
+   - Chỉ phụ thuộc thật mới chặn: migration phải áp trước, bảng job đang bận hoặc wave đang mở (DM-11.4), phiên MFA,
+     tiền, hoặc quyết định chỉ tech lead hay chủ doanh nghiệp đưa ra được.
+   - Câu hỏi mở không bao giờ là lý do chặn. Viết câu trả lời đề xuất, làm theo nó, rồi báo để tech lead đảo lại nếu
+     muốn.
+
+Nơi áp dụng: nghi thức phiên (`skill/aa-session/SKILL.md`, danh sách issue và "câu hỏi cho tech lead").
+
 ---
 
 ## 3. Các giai đoạn vòng đời
@@ -970,6 +992,12 @@ S17); chúng được ghi trong log phiên S243.
 |---|---|---|
 | S255-L1 | Trang danh mục chỉ viết tiếng Anh. Tiếng Việt nằm trong bản dịch đầy đủ đặt cạnh, `<name>.vi.md` (`lang: vi`, `translation_of`), không bao giờ trộn vào trang tiếng Anh; luật này thay các trang song ngữ của N-7 | [§4.8](#48-ngôn-ngữ); schema front-matter và [STYLE](STYLE.md#language) sẽ cập nhật theo |
 
+### 10.4 S279 (2026-11-13)
+
+| # | Quyết định | Thực thi ở |
+|---|---|---|
+| S279-D10 | Hai luật làm việc trước chỉ nằm trong ghi chú riêng của agent, "tự quyết, không hỏi" và "không tự đặt cổng chặn", được viết vào mô hình làm việc (quyết định D10 của AA Academy, AA-1098) | [§2.4](#24-hai-luật-làm-việc-tự-quyết-không-hỏi-không-tự-đặt-cổng-chặn); review; `skill/aa-session` |
+
 ---
 
 ## 11. Thuật ngữ
@@ -1007,6 +1035,7 @@ này dựa vào nhiều nhất:
 | 2026-10-19 | S243 | Guide SDLC/tài liệu/phiên bản, đề xuất chuẩn tài liệu, thực hành tài liệu chuyên nghiệp, và đối chiếu với S241 và data standards (xung đột K-xx, các điểm sửa, quyết định N-1…N-12) |
 | 2026-10-19 | S243 | Sổ tay này: một trang cho quy trình, tài liệu, phiên bản, phát hành, vận hành, chi phí, lộ trình và quyết định; áp mọi điểm sửa từ bản đối chiếu; sáu tài liệu được đánh dấu bị thay thế: review và lộ trình S241 và bốn file tư vấn S243 (AA-887) |
 | 2026-10-28 | S255 | Review tài liệu: các tóm tắt tiếng Việt chuyển sang bản dịch `engineering-handbook.vi.md`; người được gọi theo vai trò; reference sinh tự động, `/admin/docs`, cổng deploy (AA-993 G5), ngân sách và việc acc1 rời hệ (AA-998) được cập nhật; quyết định ngôn ngữ S255 |
+| 2026-11-14 | S280 | §2.4 thêm hai luật làm việc theo quyết định D10 của AA Academy (AA-1104); §10.4 ghi quyết định |
 
 ### 12.2 Các tài liệu bị thay thế
 

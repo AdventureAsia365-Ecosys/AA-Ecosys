@@ -47,7 +47,7 @@ public repo; read it with `aws sts get-caller-identity --profile aa-mgmt`.
 | Name | AWS account ID | Region | CLI profile | Holds | Notes |
 |---|---|---|---|---|---|
 | **acc2** - main | 005097885195 | us-west-1 | `aa365-admin` (also `default`) | Everything: VPC, RDS, ECS, Lambda, API Gateway, S3, Cognito, SES, alarms, budgets | Member account under a reseller (TrueIDC); Bedrock chat models are blocked here, Cohere embeddings are allowed |
-| **acc3** - LLM satellite (the only one) | 786888028788 | us-west-1 | `nghiep_aa365` | Role `AA3-Bedrock-Invoker`, Bedrock batch roles, Cost Explorer reader `AA3-CostExplorer-Reader`, budget `aa3-llm-monthly-total` and cost anomaly alerts | Terraform root `accounts/acc3-bedrock/`, applied by a human |
+| **acc3** - LLM satellite (behind acc1 since 2026-11-12, while AWS refuses models here) | 786888028788 | us-west-1 | `nghiep_aa365` | Role `AA3-Bedrock-Invoker`, Bedrock batch roles, Cost Explorer reader `AA3-CostExplorer-Reader`, budget `aa3-llm-monthly-total` and cost anomaly alerts | Terraform root `accounts/acc3-bedrock/`, applied by a human |
 
 History: acc1 (a personal account, ID 867490540162, profile `pqnghiep-admin`) was removed from the ecosystem on
 2026-10-28 (AA-998). Its ID stays here only as the source for the public-repo leak pattern in the

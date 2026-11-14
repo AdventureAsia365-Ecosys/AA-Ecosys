@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AdventureAsia365-Ecosys/AA-Ecosys/docs/learn/schema/allowlist.schema.json",
+  "title": "AA Academy publication allowlist",
+  "description": "docs/learn/allowlist.yaml (decision D13): the only skill, steering and CONTEXT.md sections the learn bundle publishes, one entry per section, default deny; and the catalog pages an agency (partner tier) module may cite. A change here is reviewed as an access change. Checked by tools/docs/check_learn.py (AA-1104).",
+  "type": "object",
+  "required": ["version", "sections", "partner_pages"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {"const": 1},
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["ref", "tier", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "ref": {"description": "skill:<name>#anchor, steering:<name>#anchor or context:<repo>#anchor; a whole file is never allowlisted.", "type": "string", "pattern": "^(skill|steering|context):[A-Za-z0-9][A-Za-z0-9._-]*#[^\\s#]+$"},
+          "tier": {"description": "staff: every staff role may read it; partner: agency learners may read it too.", "enum": ["staff", "partner"]},
+          "reason": {"description": "Why a learner needs this section.", "type": "string", "minLength": 10, "maxLength": 300}
+        }
+      }
+    },
+    "partner_pages": {"description": "Catalog IDs a partner-tier module may cite. Default deny: an agency learner sees nothing else.", "type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Z]+-[0-9]{2}(-[a-z0-9]+)*$"}}
+  }
+}

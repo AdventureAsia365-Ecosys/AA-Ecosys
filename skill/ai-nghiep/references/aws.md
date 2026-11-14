@@ -24,7 +24,7 @@
     cùng một image, mỗi deploy đăng ký task-def mới cho cả hai. `JOB_WORKER_IN_API` mặc định tắt; đọc giá trị thật
     trong task-def, đừng suy từ code.
   - `aa-booking-dev-api` — API Booking, worker `booking.job` chạy trong process.
-  - `aa-crm-dev-api` (worker `crm.job` trong process), `aa-crm-dev-web` và `aa-crm-dev-portal` (Content studio) — AA-Partner, Fargate ARM64.
+  - `aa-crm-dev-api` (worker `crm.job` trong process), `aa-crm-dev-web` (CRM + Content studio; `aa-crm-dev-portal` đã gỡ ở AA-1036) — AA-Partner, Fargate ARM64.
 - RDS `aa-cis-dev-db` dùng chung, mỗi app một schema và một DSN secret riêng. Secret `aa-cis/dev/rds` là master —
   task role CIS bị Deny đọc; api + worker dùng `DATABASE_URL` (`aa-cis/dev/rds-cis-app`, role `cis_app`: schema CIS,
   không `booking.*`/`tripplanner.*`, không DDL). Việc cần master → DB Migrate `mode=run-script` với script đã review

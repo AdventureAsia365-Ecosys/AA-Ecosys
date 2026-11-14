@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AdventureAsia365-Ecosys/AA-Ecosys/docs/learn/schema/module.schema.json",
+  "title": "AA Academy module",
+  "description": "docs/learn/modules/<ID>-<slug>/module.yaml. A module is one objective area of 30 to 120 minutes; its lessons point at source sections by reference and pin their hashes. Format: docs/learn/README.md. Checked by tools/docs/check_learn.py (AA-1104).",
+  "type": "object",
+  "required": ["id", "title", "tier", "status", "version", "owner", "last_reviewed", "objectives", "lessons", "quiz"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"description": "Module code from the learning paths (GUIDE-13 §3), e.g. F3, E12, A4.", "type": "string", "pattern": "^[A-Z][0-9]{1,2}$"},
+    "title": {"type": "string", "minLength": 3, "maxLength": 80},
+    "tier": {"description": "Who may read it: staff (every staff role) or partner (agency owners and agents). Decision D13.", "enum": ["staff", "partner"]},
+    "status": {"description": "draft until the tech lead approved it; active when learners see it; retired when it is withdrawn.", "enum": ["draft", "active", "retired"]},
+    "version": {"description": "Semantic version: patch for wording, minor for a new lesson, major when objectives or quiz items change (major triggers recertification for required modules).", "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "owner": {"description": "Role slug of the module owner; nghiep stands for the tech lead role (docs/STYLE.md).", "type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+    "last_reviewed": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "review_every_days": {"type": "integer", "minimum": 7, "maximum": 730},
+    "languages": {"description": "Languages the lessons exist in; en is the source, a translation is <lesson>.vi.md (decision D5).", "type": "array", "uniqueItems": true, "items": {"enum": ["en", "vi"]}, "contains": {"const": "en"}},
+    "objectives": {"description": "After the module the learner can ... (one line each).", "type": "array", "minItems": 1, "items": {"type": "string", "minLength": 10, "maxLength": 200}},
+    "prerequisites": {"description": "Module IDs to complete first; a module not written yet must be planned in a path.", "type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Z][0-9]{1,2}$"}},
+    "quiz": {"description": "The quiz file next to module.yaml.", "type": "string", "pattern": "^[a-z0-9-]+\\.yaml$"},
+    "lab": {"description": "Optional hands-on lab file (P4b); labs stay closed until the lab provisioner exists.", "type": "string", "pattern": "^[a-z0-9-]+\\.yaml$"},
+    "lessons": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "file", "title", "type", "minutes", "objective", "sources"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"description": "<module id>-NN, e.g. F3-01.", "type": "string", "pattern": "^[A-Z][0-9]{1,2}-[0-9]{2}$"},
+          "file": {"description": "lessons/<NN>-<slug>.md; the lesson body, no front-matter, first line is the H1 title.", "type": "string", "pattern": "^lessons/[0-9]{2}-[a-z0-9-]+\\.md$"},
+          "title": {"type": "string", "minLength": 3, "maxLength": 80},
+          "type": {"description": "GUIDE-13 §4.1 lesson types (quiz and lab are module files).", "enum": ["reading", "walkthrough", "worked-example"]},
+          "minutes": {"type": "integer", "minimum": 2, "maximum": 30},
+          "objective": {"type": "string", "minLength": 10, "maxLength": 200},
+          "sources": {
+            "description": "The sections the lesson teaches from. Never copied: the reader renders the live section.",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["ref"],
+              "additionalProperties": false,
+              "properties": {
+                "ref": {"description": "doc:<catalog id>[#anchor], adr:<NNNN>[#anchor], skill:<name>#anchor, steering:<name>#anchor or context:<repo>#anchor.", "type": "string", "minLength": 3},
+                "sha": {"description": "First 16 hex characters of the SHA-256 of the section, written by check_learn.py --pin.", "type": "string", "pattern": "^[0-9a-f]{16}$"}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
