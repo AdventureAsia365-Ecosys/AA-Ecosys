@@ -313,7 +313,7 @@ of an erasure apply is a person's. The evidence folder records each result.
    /admin/tenants/<tenant-id>/offboard`, reason "pilot rehearsal teardown"), then erase it with the `data_erasure` job:
    `POST /admin/job-runner/erasure/run` with `subject` tenant (DRY RUN by default), the tech lead approves the DRY RUN
    fingerprint, then the apply ([DSAR erasure runbook](../../legal/dsar-erasure-runbook.md)). The apply refuses a tenant
-   offboarded less than `ERASURE_TENANT_RETENTION_DAYS` ago; until then the offboarded marker stays, and the README
+   offboarded less than the setting `cis.erasure.tenant_retention_days` (Platform › Settings) ago; until then the offboarded marker stays, and the README
    names the date of the apply.
 3. **`pilot-rehearsal-01` is kept** as a synthetic fixture (`kind` demo, `is_canary` true) for the next rehearsal and
    for G1, with its CRM agency and E2E members. Its budget override (X1) is removed and its CRM AI budget restored. If
