@@ -44,3 +44,11 @@ line and its index row says "amended by". Never rewrite the text of an accepted 
 ## Follow-ups
 
 - <Issue, owner, trigger>. Update `docs/adr/README.md` (index row) in the same PR.
+- **Prune:** <the event that makes this ADR worth re-reading: a trigger, a date or a measured threshold>. When a later
+  ADR replaces it, set `Superseded by ADR <nnnn>` here and in the index; delete the rule from every page that restated
+  it, and do not keep the old and the new rule side by side.
+
+<!-- MADR-minimal variant (small decisions, one repo, easy to reverse): keep only Status, Context, Decisions (one
+numbered list), Consequences (one line each for good and bad) and the Prune line. Use the full shape above when two or
+more repos change, money or data is at stake, or the decision is hard to reverse. Shape source: MADR (CC0),
+https://github.com/adr/madr. Delete this comment. -->
