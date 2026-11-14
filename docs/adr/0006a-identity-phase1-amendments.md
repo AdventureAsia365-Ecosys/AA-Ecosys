@@ -19,7 +19,8 @@
   ops; a finance maker / checker pair), each held to its own writes on synthetic agencies; A10e-1 (12/11/2026, S278)
   lets its staff address cancel a synthetic departure (crm-13); A10e-2 (14/11/2026, S279) adds a pricing maker / checker
   pair (the A10d address with the "Pricing team" preset, and a Dev-only Booking contracting address) for the AA-1091
-  live check with synthetic prices on synthetic trip plans. A11 and A12 (22/10/2026,
+  live check with synthetic prices on synthetic trip plans; A10e-3 (14/11/2026, S280) lets that pair load the
+  synthetic supplier, hotels, services and rates the check prices from (the checker publishes the contract). A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2). A13
   (06/11/2026, S271) retires the CIS -> Booking bridge once the staff frontends run on ECS (ADR 0019 d23).
 - **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) was unchanged and still pending on 18/10/2026.
@@ -711,7 +712,7 @@ mailbox or Google account". That is too strong.
   rest of `api/core/e2e_staff.py`, the assignment guard, the trigger entry, the receipt-rule recipient and the AA-Partner
   `E2E_CIS_CS_EMAIL` rule (`Caller.e2e_no_write`); Terraform Apply; a closing line here. Faster stop on Dev: disable the
   user. The full end-of-project removal list is therefore A10, A10a, A10b (with A10b-1, A10b-2, A10b-3, A10b-4 and A10b-5), A10c, A10d
-  and A10e (with A10e-1 and A10e-2) (AA-1054).
+  and A10e (with A10e-1, A10e-2 and A10e-3) (AA-1054).
 
 #### A10e. Dev-only write-capable AA-Booking E2E addresses (12/11/2026, S278, AA-1087)
 
@@ -860,6 +861,41 @@ mailbox or Google account". That is too strong.
   (AA-CIS-Infra), Terraform Apply; drop the Booking-role exception and the reconcile entry (AA-CIS-App); drop the two
   writers, the plan / version SQL and the import check (AA-Booking); deactivate the staff rows; a closing line here.
   Faster stop on Dev: remove the grant, or disable the checker.
+
+##### A10e-3. Amendment: the pricing pair loads a synthetic supplier for the price check (14/11/2026, S280, AA-1091)
+
+- **Decision (tech lead, S280; designed by the orchestrated lane aa1091sup under the dev-phase merge rule, independent
+  review before merge because it widens auth):** the S280 facts showed the A10e-2 run cannot start: of 892 Booking trip
+  plans on Dev, 890 have no components and no supplier rate matches the CIS itineraries (component suggestions of every
+  probed tour: 0 suggested), and the one other rate-complete tour is the rehearsal's Tour X. The check needs at least 3
+  rate-complete tours and one whose suggestions are all rated. Supplier rates exist only through the supply routes and
+  the contract maker-checker, which the pair could not reach (403 `e2e_read_only`). Creating the synthetic data through
+  the product is part of the check (lesson S278).
+- **Scope, enforced by AA-Booking (`backend/app/auth/e2e_staff.py`), on top of A10e-2** (Dev only, exact groups, all
+  before any DB access):
+  - **Maker writes:** POST `/booking/suppliers` with a body of only `company_name` (starting `SYNTHETIC`),
+    `categories`, `country_code`, `destination_id`; POST `/booking/hotels` and `/booking/services` (marked name or
+    title, facts only: destination, country, type, unit, the CIS `source_id` of a service; never a contact, address,
+    note, link or photo) and POST `/booking/hotels/{ref}/room-types` (name, occupancy, beds); POST
+    `/booking/suppliers/{ref}/rate-sheets` (DRY RUN and import: one draft contract, the maker is its maker); POST
+    `…/deactivate` of the supplier, its hotels and services (no reason body); PATCH `/booking/contracts/{id}` with
+    exactly `{"status": "published" | "expired"}` (the service refuses to publish the maker's own draft: 403
+    `maker_checker`, backed by the bk-008 CHECK).
+  - **Checker writes:** PATCH `/booking/contracts/{id}` with exactly `{"status": "published" | "expired"}`.
+  - **Synthetic supply only** (403 `e2e_synthetic_only`, before the staff row sync or the route): a supplier is
+    synthetic only when the E2E maker created it and its name still starts with `SYNTHETIC`; its hotels, services and
+    contracts follow it; a hotel or service create is checked by the supplier its body names. The supplier create has
+    no record to check: its body check is the whole check.
+- **Exposure added.** Whoever reads a code of the pair can, on Dev, create marked suppliers, hotels and services,
+  load and publish their rates (still two people), and deactivate them. While active, a synthetic hotel is a suggestion
+  candidate for every tour that overnights at its CIS destination, and its rates price any plan that uses it; each new
+  hotel or service also queues one CIS supply-content LLM draft (capped by CIS at 20 calls and $1.00 a day, never
+  published without a human). The runbook keeps the record count small and deactivates everything at cleanup.
+- **Audit and detection:** unchanged routes and audit rows (`supplier.created`, `hotel.created`, `service.created`,
+  `supplier_contract.published` naming each identity); `booking_e2e_write_allowed … new_record=true` for the supplier
+  create.
+- **Revoke and removal:** drop the nine maker writes, the checker's contract write, the supply SQL and body checks;
+  removed with A10e-2 (AA-1054). Synthetic records are never deleted (Booking keeps supply rows); they stay inactive.
 
 ### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)
 
