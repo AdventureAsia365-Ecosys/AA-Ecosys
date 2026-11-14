@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AdventureAsia365-Ecosys/AA-Ecosys/docs/learn/schema/path.schema.json",
+  "title": "AA Academy learning path",
+  "description": "docs/learn/paths/<id>.yaml: an ordered list of modules for one role. Modules not written yet are listed under planned. Checked by tools/docs/check_learn.py (AA-1104).",
+  "type": "object",
+  "required": ["id", "title", "tier", "audience", "owner", "modules"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+    "title": {"type": "string", "minLength": 3, "maxLength": 80},
+    "tier": {"enum": ["staff", "partner"]},
+    "audience": {"description": "The role the path is for, named as a role (docs/STYLE.md).", "type": "string", "minLength": 3, "maxLength": 120},
+    "owner": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+    "modules": {
+      "description": "Modules in learning order.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "required"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-Z][0-9]{1,2}$"},
+          "required": {"description": "false for an elective (for example the E11 to E14 deep dives).", "type": "boolean"}
+        }
+      }
+    },
+    "planned": {"description": "Module IDs of this path not written yet, in order; a prerequisite may name one.", "type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Z][0-9]{1,2}$"}},
+    "final_quiz": {"description": "true when the path ends with a mixed quiz drawn from every module (GUIDE-13 §4.3).", "type": "boolean"}
+  }
+}

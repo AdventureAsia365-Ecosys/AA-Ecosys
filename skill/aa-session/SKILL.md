@@ -27,9 +27,9 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
      trước mỗi bước cần AWS/`as-app.sh` (push, merge, DB Migrate, ECS exec). Tới giờ nhắc → báo tech lead nhập MFA
      mới **trước** khi chạy train/merge dài (`as-app.sh` đọc key App bằng phiên MFA; train chết giữa chừng khi hết
      hạn). Các tool `tools/github/ship_*.py` cũng tự cảnh báo khi còn < 30′ (train: < 60′).
-   - ECS cluster `aa-cis-dev-cluster`, 9 service `aa-cis-dev-api`, `aa-cis-dev-worker`, `aa-cis-dev-admin`,
-     `aa-booking-dev-api`, `aa-booking-dev-admin`, `aa-crm-dev-api`, `aa-crm-dev-web`, `aa-crm-dev-portal` (Content
-     studio), `aa-tripplanner-dev-web` (TripPlanner web, sau CloudFront): running = desired, rollout COMPLETED; api và worker CIS cùng image SHA.
+   - ECS cluster `aa-cis-dev-cluster`, 8 service `aa-cis-dev-api`, `aa-cis-dev-worker`, `aa-cis-dev-admin`,
+     `aa-booking-dev-api`, `aa-booking-dev-admin`, `aa-crm-dev-api`, `aa-crm-dev-web` (CRM +
+     Content studio), `aa-tripplanner-dev-web` (TripPlanner web, sau CloudFront): running = desired, rollout COMPLETED; api và worker CIS cùng image SHA.
      Service nào đang tắt → **không tự bật**; báo Nghiệp (agent không bao giờ tự bật/tắt hạ tầng).
    - Bảng job `shared.job`, `booking.job`, `crm.job`: queued/running (query không lọc thời gian). Truy vấn qua ECS exec
      chỉ phiên điều phối làm được (hook chặn subagent).
@@ -129,7 +129,7 @@ Log ghi sau cùng nên có cả kết quả Jira và số liệu đã kiểm, kh
 2. **Kiểm nguồn thật (snapshot), trước khi viết bất cứ log nào.** Mọi con số trong log / memory / tracker lấy từ bước
    này (revision, SHA, migration hay lệch khi phiên dài):
    - STS acc2.
-   - ECS: mỗi service trong 9 service ở trên → task definition đang chạy (family:revision), image tag, rollout,
+   - ECS: mỗi service trong 8 service ở trên → task definition đang chạy (family:revision), image tag, rollout,
      running/desired; api và worker CIS cùng SHA. Revision mới nhất của mỗi family phải là revision đang chạy — một
      Terraform apply chạm ECS để lại revision mẫu mà deploy kế tiếp sẽ chép (xem `aa-lessons`, mục Vận hành).
    - Endpoint: CIS `/health` + `/health/ready`; Booking `/booking/health` + `/booking/health/ready`; CRM api

@@ -4,8 +4,9 @@ Nguồn sự thật: `infra/AA-CIS-Infra/.claude/CLAUDE.md` + `docs/`. Quy trìn
 
 - Roots: `accounts/aa365` (acc2: `main.tf` ECS CIS + RDS + S3; `booking.tf`; `tripplanner.tf`; `crm_*.tf` AA-Partner;
   `identity*.tf` Cognito WORKFORCE / M2M / partner; `cicd*.tf` role CI; `db_migrator.tf`; observability, cost, SES,
-  DNS…), `accounts/acc3-bedrock` (role satellite Bedrock; root `accounts/acc1-bedrock` đã destroy theo AA-998 và thư mục đã xoá khỏi Infra (#476); acc3 là satellite duy nhất). Module dùng
-  chung ở `modules/`.
+  DNS…), `accounts/acc1-bedrock` (từ S278, AA-1095: role `AA1-Bedrock-Invoker` trên acc1, đường Bedrock LLM chính; AA-998
+  từng destroy root này, S278 dựng lại), `accounts/acc3-bedrock` (role Bedrock dự phòng sau acc1), `accounts/management`
+  (acc4: Organization, Identity Center, billing). Module dùng chung ở `modules/`.
 - Workflow: `terraform-plan.yml` chạy tự động trên PR; `terraform-apply.yml` **chỉ chạy bằng workflow_dispatch trên
   `main`**, có plan guard (AA-846: từ chối khi plan đổi secret version / `random_password` / RDS instance, trừ khi
   `allow_guarded` + lý do). Không apply tay bằng CLI, trừ object bootstrap mà role CI bị cấm đổi (role CI, boundary,

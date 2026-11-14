@@ -660,9 +660,9 @@ which raised "another operation is in progress" thousands of times and lost cost
 **TST-1 (MUST)** Every owner's CI applies **all** its migrations in order to a real `postgres:15` service
 (the RDS major version) on each PR: CIS as superuser `cistest` (`apps/AA-CIS-App/tests/integration/`),
 Booking as `aa_cis_admin` (a superuser in CI) with a second apply for idempotency and no skips allowed.
-TripPlanner has no migration integration job today: a gap the review's roadmap does not cover (no
-N/X/L id), so it is an open item for the tech lead; until it exists, a TripPlanner migration PR states in its
-description how it was applied to a local `postgres:15`.
+Partner applies its migrations the same way as Booking (`crm_ci`, no skips). TripPlanner's CI job "Migrations
+(lint, PG 15 replay)" lints every `tp-NNN` file and replays each migration twice on PostgreSQL 15 with pgvector,
+with no skips allowed.
 *Why:* a migration that never ran on PG15 in CI is first tested on the shared instance. *Enforced:* CI.
 
 **TST-2 (MUST)** A PR that adds a migration adds a test asserting its objects, constraints and policies
@@ -791,7 +791,7 @@ Each row is allowed to stay until its item lands. New code MUST NOT copy any of 
 | CIS-private ops tables in `shared` (`decision_log`, `tenant_api_usage`, cost snapshots, `job`) | NAM-2 | stay; no new ones |
 | `tripplanner.sessions.guest_token = id::text` | NAM-13 | **X8** (before ADR 0006 Phase 4) |
 | PII copied across `tripplanner.customers`, outbox/inbox payloads and `booking.customers`, untagged | KEY-5, NAM-12 | **L3** (redaction after 90 days per the approved retention) |
-| No TripPlanner migration integration test | TST-1 | open item for the tech lead (not in the review roadmap; no N/X/L id) |
+| No TripPlanner migration integration test | TST-1 | closed: TripPlanner CI job "Migrations (lint, PG 15 replay)" (checked 2026-11-14) |
 
 **Retired rows** (kept here so a reader of an old link finds where they went):
 

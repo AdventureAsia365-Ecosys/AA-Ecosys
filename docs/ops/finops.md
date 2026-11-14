@@ -1,7 +1,7 @@
 ---
 id: FIN-01
 title: FinOps process
-description: How spend is tagged, budgeted, watched and reviewed across acc2, the acc3 LLM account and external APIs; the rules themselves are data standards DM-10.
+description: How spend is tagged, budgeted, watched and reviewed across acc2, the LLM accounts (acc1 since S278, acc3 behind it) and external APIs; the rules themselves are data standards DM-10.
 type: explanation
 status: draft
 owner: nghiep
@@ -40,12 +40,15 @@ kill switch, is listed in the [AI use register](../architecture/ai-use-register.
 | Where | What is billed | Ledger or source |
 |---|---|---|
 | acc2 (infra) | ECS, RDS, ALB, NAT, ElastiCache, Lambda, API Gateway, S3, CloudWatch, Bedrock embeddings | Cost Explorer, stored daily in `shared.cost_explorer_app_snapshot` (by `App` tag) and `shared.cost_explorer_snapshot` (by service) |
-| acc3 (LLM account) | Bedrock calls through the satellite role | Cost Explorer per account in `shared.cost_explorer_snapshot`; per call in `shared.llm_call_log` |
+| acc1 (LLM account since 2026-11-12) | Bedrock chat calls through its one invoker role, paid by card (the pooled AWS Lift credits do not cover Claude on Bedrock) | Per call in `shared.llm_call_log` (`account = 'acc1'`); no Cost Explorer reader on acc1, so the gateway ledger and the acc1 budget e-mails are the only views |
+| acc3 (LLM account, behind acc1) | Bedrock calls through the satellite role, while AWS lets it answer | Cost Explorer per account in `shared.cost_explorer_snapshot`; per call in `shared.llm_call_log` |
 | OpenAI, Jev, DataForSEO, geocoder | External APIs | `shared.llm_call_log`, `shared.decision_log`, `shared.dfs_call_log`, `geo.geocode_call` |
 
-acc1 (a personal account) was removed from the ecosystem on 2026-10-28 (AA-998): no LLM call goes there and there is
-no cross-account fallback. Its older rows stay in the ledgers and snapshots as history. Account IDs and profiles: the
-[account map](../onboarding.md#account-map).
+acc1 (a personal account) was removed from the ecosystem on 2026-10-28 (AA-998). Since 2026-11-12 it serves the Bedrock
+chat models again through one invoker role only, because AWS refuses several models on acc3 ([ADR 0001a](../adr/0001a-retire-acc1-llm-on-acc3-only.md)
+Note S278, AA-1095). The route order is per model family: Claude uses the Anthropic API first, then acc1, then acc3;
+GPT uses acc1 first, then acc3, then the OpenAI API. acc1 also pays acc3's organization bill (Note S277). Account IDs
+and profiles: the [account map](../onboarding.md#account-map).
 
 ## Tags
 
@@ -73,6 +76,8 @@ The keys, their allowed values, how Terraform sets them, how CI enforces them an
 | Per-App budgets `aa-cis-dev-monthly-app-*` | cis 90, tripplanner 10, booking 25, crm 35, identity 10, shared 120 USD (S255: crm up from 25, identity new, shared up from 100 so it does not forecast-alert every month); their sum must stay at or under the account budget (Terraform precondition); 80 % actual, 100 % forecast | Alert e-mail | Same file, `var.per_app_monthly_budgets` |
 | Cost Anomaly Detection, AWS services monitor | Total impact of an anomaly at least 5 USD | Alerts SNS topic (e-mail, immediate) | INF `accounts/aa365/cost_anomaly.tf` (AA-896) |
 | Same monitor, AWS default subscription | Daily summary when impact is at least 100 USD and 40 % | Account e-mail | Created by AWS, not in Terraform |
+| acc1 budget `aa1-llm-monthly-total` | 100 USD/month on acc1's own usage (credits and refunds excluded); 50 %, 80 % and 100 % actual, 100 % forecast. Alert only: nothing on acc1 stops a call (ADR 0001a Note S279, AA-1096) | E-mail (recipient in an untracked variables file) | INF `accounts/acc1-bedrock` (applied by a human) |
+| acc1 cost anomaly monitor and daily e-mail | Total impact of an anomaly at least 10 USD, on acc1's own spend | Same e-mail | Same root |
 | acc3 budget `aa3-llm-monthly-total` | 250 USD/month gross of credits (= AWS Lift tier 1); 80 % and 100 % actual, 100 % forecast | E-mail to the bootstrap alert inbox | INF `accounts/acc3-bedrock/cost_guard.tf` (AA-896, applied locally with MFA) |
 | acc3 anomaly subscription `aa3-cost-anomaly-daily` | Daily summary of anomalies with total impact at least 10 USD, on the AWS services monitor | Same e-mail | Same file |
 | acc3 anomaly subscription `aa3-cost-anomaly-immediate` | Total impact of an anomaly at least 15 USD | acc3 SNS topic `aa3-cost-alerts` (e-mail, immediate) | INF `accounts/acc3-bedrock/cost_anomaly_immediate.tf` (S255) |
@@ -82,7 +87,7 @@ The keys, their allowed values, how Terraform sets them, how CI enforces them an
 | Per-account anomaly monitors `<account name>-spend` + `<account name>-anomaly-daily` | Daily summary of anomalies with total impact at least 15 USD (`var.anomaly_threshold_usd`) | Same e-mails | Same file |
 | Per-`App` anomaly monitors `aa-app-<app>-spend` | Daily summary, impact at least 15 USD; **prepared, off** (`app_tag_anomaly_monitors_enabled = false`) | Same e-mails | INF `accounts/management/cost_anomaly_app_tag.tf` (AA-896, S262) |
 | LLM and external API caps | Per provider and scope, DB-configured (next section) | Refused calls + admin console | `shared.spend_budget` (DM-10.5) |
-| LLM connection budgets | Monthly per connection; alert 80 %, hard stop 100 % by default | Refused calls (hard stop) + admin console | `shared.llm_provider_connection.monthly_budget_usd` + `shared.llm_connection_cost_policy` (next section) |
+| LLM connection budgets | Monthly per connection; alert 80 %, hard stop 100 % by default (the `acc1` connection: 100 USD, alert at 80 %, no hard stop, ADR 0001a Note S279) | Refused calls (hard stop) + admin console | `shared.llm_provider_connection.monthly_budget_usd` + `shared.llm_connection_cost_policy` (next section) |
 
 **Per-`App` anomaly monitor: why it is off.** AWS creates tag, cost category and linked-account monitors only in the
 management (payer) account. Today acc2 is billed by the reseller's organization, not ours, so a monitor in our
@@ -165,7 +170,7 @@ counted by `created_at`, which does not move.
 
 Per-model LLM unit costs (USD per 1,000 calls, USD per 1M tokens, tokens per call) need no DB: join the Cost
 Explorer service line of each model with the CloudWatch `AWS/Bedrock` metrics `Invocations`, `InputTokenCount`,
-`OutputTokenCount` and `InvocationClientErrors` (daily sums, us-west-1, acc3; months before November 2026 also have calls on the retired account). The 2026-10-23 report keeps
+`OutputTokenCount` and `InvocationClientErrors` (daily sums, us-west-1, on each LLM account: acc3, and acc1 from 2026-11-12; acc1 also has calls before 2026-10-28). The 2026-10-23 report keeps
 the pull (`scripts/fetch_cw_bedrock.sh`, about 0.001 USD) and the join (`scripts/bedrock_units.py`). Price per token
 is stable per model, so a month-over-month LLM jump is explained by calls and tokens per call; check both.
 
