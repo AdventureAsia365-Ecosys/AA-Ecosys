@@ -67,6 +67,11 @@ Issue chỉ được giao khi đủ các mục dưới (thêm vào template trê
 Thiếu → bổ sung trước, chưa giao.
 
 - [ ] **Goal** — 1–2 câu kết quả nghiệp vụ.
+- [ ] **Path** — fix | small | feature | risky. Path quyết định các bước, lens review và artifact (playbook, Build):
+      `fix` ghi test fail sẽ chứng minh bản sửa; `feature`/`risky` có mục Plan trong implementation note; `risky` thêm
+      review agent độc lập theo Risk class.
+- [ ] **Appetite** — việc này đáng bao nhiêu: 0.25 | 0.5 | 1 | 2 phiên, kèm trần USD nếu có chạy trả phí. Vượt appetite
+      → dừng, cắt lại hoặc tách issue; không làm tiếp (circuit breaker).
 - [ ] **Scope** ghi repo/schema/file và phần out of scope.
 - [ ] **Done when** 3–6 tiêu chí kiểm được trên Dev (không phải "code merged").
 - [ ] **Verify** — lệnh curl/trang/query/workflow cụ thể chứng minh live. Bước cần ECS exec / DB live là việc của
