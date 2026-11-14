@@ -17,7 +17,11 @@ translation_of: docs/learn/README.md
 # Các file khoá học của AA Academy
 
 AA Academy là trang học tập của AA: các lộ trình học theo vai trò với bài học ngắn, bài kiểm tra và bài thực hành.
-Nhân sự sẽ học ở `/admin/learn` trong CIS admin, còn đại lý học trong ứng dụng web CRM. Thiết kế, các lộ trình và các
+Người học dùng host academy `academy.<env domain>` (Dev: `academy.lumiguides.it.com`) do ứng dụng web CRM phục vụ;
+khoá học, tiến độ, bài kiểm tra và chứng chỉ lấy từ API học tập của CIS (`/learn/v1`, hợp đồng
+[`learn.http.v1`](../contracts/learn.http.v1.openapi.yaml)) và schema `learn` của nó. Nhân sự đăng nhập ở đó bằng
+đăng nhập nhân viên; đại lý theo sau. CIS admin đặt đường dẫn tới academy và giữ phần xem của nhóm (quyết định D17,
+[ADR 0022](../adr/0022-aa-academy-learning-platform.md)). Thiết kế, các lộ trình và các
 quyết định nằm trong [bản nghiên cứu](../research/lms/README.vi.md). Thư mục này chứa các khoá học dưới dạng file, và
 trang này mô tả định dạng của chúng.
 
@@ -63,6 +67,11 @@ Module đầu tiên viết theo định dạng này là [F3 How work flows](modu
   `languages` (quyết định D5).
 - **Loại bài học** là `reading`, `walkthrough` (một video ngắn) và `worked-example`. Bài kiểm tra và bài thực hành là
   file của module, không phải bài học.
+- **Video của bài học** (không bắt buộc, quyết định D8) được khai ở trường `video` của bài: `key` là khoá đối tượng
+  dưới tiền tố riêng tư `learn-media/` (`learn-media/<module id>/<NN>-<slug>.mp4` hoặc `.webm`) và `captions` liệt kê
+  các ngôn ngữ phụ đề (bắt buộc có `en`), file phụ đề nằm cạnh video dưới tên `<key bỏ phần mở rộng>.<lang>.vtt`. Video
+  được dựng tại máy bằng `tools/uat` và tải lên đó, không bao giờ để trong git; API học tập kiểm quyền rồi trả một URL
+  ký trước sống trong khoảng của thiết lập `cis.learn.video_url_ttl_seconds`.
 
 ## Trích nguồn
 
@@ -127,7 +136,7 @@ dựng lỗi không tải gì lên cho learn (gói trước đó vẫn giữ), v
 
 | Đối tượng | Chứa gì |
 |---|---|
-| `learn/manifest.json` | lộ trình, module và bài học kèm siêu dữ liệu, mọi mục được trích kèm mã băm hiện tại và tier, và với mỗi bài học, nguồn nào đã cũ. Nó không bao giờ chứa đáp án |
+| `learn/manifest.json` | lộ trình, module và bài học kèm siêu dữ liệu, mọi mục được trích kèm mã băm hiện tại và tier, với mỗi bài học, nguồn nào đã cũ, và khoá video cùng phụ đề của bài (dưới `learn-media/`, không dưới `learn/`). Nó không bao giờ chứa đáp án |
 | `learn/lessons/<module folder>/<NN>-<slug>.md` | thân bài học và bản dịch, đã che thông tin |
 | `learn/sections/<kind>/<name>/<anchor>.md` | nội dung đã che thông tin của từng mục được trích |
 | `learn/quizzes/<module id>.json` | các câu hỏi kèm đáp án và cờ `suspended`. Chỉ API học tập đọc ở phía máy chủ; đáp án không bao giờ tới trình duyệt trước khi nộp bài |

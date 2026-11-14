@@ -39,6 +39,7 @@ An amendment is a separate file `<nnnn>a-<slug>.md` and the amended ADR carries 
 | [0019](0019-b2b-only-ecosystem-model.md) | B2B-only ecosystem model: AA sells to partner agencies (tenants) only; Content is the base product, CRM and TripPlanner are add-ons, Booking is the B2B back office; tenant master in CIS `shared`, feature keys, staff roles and tenant scope, one agency app (AA-1034; design: [S265 audit](../audits/2026-11-03-S265-ecosystem-restructure/README.md)) | Accepted 03/11/2026 (S265, tech lead; d1–d23; b1–b21 business choices the business owner may revisit) |
 | [0020](0020-content-quality-architecture.md) | Content quality architecture: one policy registry, one FactSheet, measured gates, one exit contract for every AI-written tour page, blog and social post; amends 0009 d5, d8, d10, d12 (AA-900, AA-741; design: [S271 audit](../audits/2026-11-06-S271-writing-quality-audit/README.md)) | Accepted 06/11/2026 (S271, tech lead; D1–D16) |
 | [0021](0021-github-org-security-and-ci-hygiene.md) | GitHub organisation security and CI/CD hygiene: org-level controls first, repos stay public, zero added cost; CI hygiene in four automated layers; amends 0014 d4 (AA-1024, AA-1004) | Accepted 08/11/2026 (S273, tech lead) |
+| [0022](0022-aa-academy-learning-platform.md) | AA Academy: courses and learner records in CIS (schema `learn`), one academy host on the CRM web, a learning route class `/learn/v1` with its own WORKFORCE client `academy-web`; amends 0006b decision 6 (AA-1098, AA-1105) | Accepted 13/11/2026 (S279, tech lead; decisions 1–5 = D1–D17); 6–11 Proposed (S280 implementation choices, AA-1105) |
 
 ## Numbering
 
@@ -51,7 +52,7 @@ already cite it.
 |---|---|---|
 | 0013 | Reserved | HTTP API conventions, before any `/booking/v1` prefix (AA-899; cited by the engineering handbook) |
 
-Next free root numbers: **0022**.
+Next free root numbers: **0023**.
 
 AA-901 took 0011 (agent and bot identity, merge rights) and 0014 (repo visibility and GitHub plan), the next free
 numbers when its ADRs were written (S247).

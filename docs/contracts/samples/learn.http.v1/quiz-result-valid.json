@@ -1,0 +1,36 @@
+{
+  "contract": "learn.http.v1",
+  "schema": "QuizResult",
+  "expect": "valid",
+  "why": "A graded submission returns the correct choices and explanations, and the certificate code once when the path is complete",
+  "payload": {
+    "attempt_id": "2b6f1d3c-4a5e-4f60-9a7b-8c9d0e1f2a31",
+    "scope": "final",
+    "target_id": "fundamentals",
+    "score_pct": 90,
+    "pass_mark_pct": 80,
+    "passed": true,
+    "retake_at": null,
+    "module_complete": true,
+    "items": [
+      {
+        "item_id": "F3-Q1",
+        "correct": true,
+        "chosen": [
+          1
+        ],
+        "correct_choices": [
+          1
+        ],
+        "explain": "The repo wins over every other source.",
+        "source_ref": "doc:CAT-01#22-sources-of-truth-for-process-state"
+      }
+    ],
+    "certificate": {
+      "certificate_id": "9a8b7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c61",
+      "path_id": "fundamentals",
+      "code": "Q2xhdWRlQ29kZVNhbXBsZQ",
+      "verify_path": "/verify/Q2xhdWRlQ29kZVNhbXBsZQ"
+    }
+  }
+}

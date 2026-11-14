@@ -386,6 +386,7 @@ def check(course: Course, root: Path, sources: Sources, strict_external: bool = 
 
     module_ids: dict[str, str] = {}
     lesson_ids: dict[str, str] = {}
+    video_keys: dict[str, str] = {}
     for rel, m in course.modules:
         where = f"{rel}/module.yaml"
         mid = m["id"]
@@ -406,6 +407,7 @@ def check(course: Course, root: Path, sources: Sources, strict_external: bool = 
             if not re.fullmatch(rf"{re.escape(mid)}-\d{{2}}", lid):
                 course.error(where, f"lesson id {lid} must be {mid}-NN")
             _check_lesson_file(course, root, rel, lesson)
+            _check_video(course, where, mid, lesson, video_keys)
             for src in lesson["sources"]:
                 raw = str(src["ref"])
                 lesson_sources.add(raw)
@@ -470,6 +472,31 @@ def _check_lesson_file(course: Course, root: Path, module_rel: str, lesson: dict
             course.error(vi.relative_to(root).as_posix(), "a lesson translation starts with an H1")
         for label in guard_hits(vtext):
             course.error(vi.relative_to(root).as_posix(), f"{label} in the lesson text")
+
+
+def video_caption_keys(video: dict) -> list[tuple[str, str]]:
+    """[(lang, key)] of a lesson video's caption files: <key without extension>.<lang>.vtt (decision D8)."""
+    stem = str(video["key"]).rsplit(".", 1)[0]
+    return [(lang, f"{stem}.{lang}.vtt") for lang in video.get("captions", [])]
+
+
+def _check_video(course: Course, where: str, mid: str, lesson: dict, seen: dict[str, str]) -> None:
+    """A lesson video sits in its module's learn-media folder, is named after the lesson number, and is unique."""
+    video = lesson.get("video")
+    if not video:
+        return
+    key = str(video["key"])
+    parts = key.split("/")
+    if len(parts) != 3 or parts[1] != mid:
+        course.error(where, f"{lesson['id']}: the video key {key} must sit under learn-media/{mid}/")
+    nn = lesson["id"].rsplit("-", 1)[-1]
+    if not parts[-1].startswith(f"{nn}-"):
+        course.error(where, f"{lesson['id']}: the video file name must start with the lesson number {nn}-")
+    if key in seen:
+        course.error(where, f"{lesson['id']}: the video key {key} is also used by {seen[key]}")
+    seen[key] = lesson["id"]
+    for label in guard_hits(key):
+        course.error(where, f"{lesson['id']}: {label} in the video key")
 
 
 def _check_source(course, where, module, lid, src, r, allowed, partner_pages, external_problem) -> None:
