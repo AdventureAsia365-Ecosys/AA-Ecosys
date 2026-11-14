@@ -5,7 +5,9 @@
 // API JSON): neither is filmed (catalogue row REH-01b-pilot-start). Record this right after the marker was provisioned.
 // Given: the E2E CIS admin (read-only session); env UAT_REH_MARKER_ID = the marker tenant's id. When: they open Tenant
 // 360 > Subscription of the marker. Then: it is kind agency, in pilot mode with an end date ("Pilot until ..."), and
-// this session is offered no End pilot (administrators only). Nothing is written. $0. Not in the dry run.
+// the End pilot control sits next to the badge for the admin role. The Dev-only E2E admin carries that role in the UI
+// but the API refuses its writes (403 e2e_read_only, root ADR 0006a A10b), so the take never presses it. Nothing is
+// written. $0. Not in the dry run.
 // Pilot guard: the marker is the Dev pilot during this step, so it is not on the synthetic allow-list. Before anything
 // is shown, the first step reads the tenant through the admin API (no paint) and stops with pilot_guard unless it
 // carries the marker's invented name and kind (lib/rehearsal-admin.cjs MARKER): a real agency is never opened.
@@ -44,10 +46,11 @@ module.exports = ro({
         await h.expect(box.getByText(`Kind: ${MARKER.kind}`, { exact: true })).toBeVisible({ timeout: 30_000 });
         await h.expect(box.getByText(/^Pilot until \d{4}-\d{2}-\d{2}$/)).toBeVisible({ timeout: 30_000 });
       }),
-    step('Only an administrator may end a pilot: the test admin sees no End pilot button. This is the end of the scenario.',
-      'Chỉ quản trị viên được kết thúc pilot: tài khoản quản trị thử nghiệm không thấy nút Kết thúc pilot. Kết thúc kịch bản.',
+    step('An administrator ends the pilot with the End pilot button next to the badge. The test session only looks at it. This is the end of the scenario.',
+      'Quản trị viên kết thúc pilot bằng nút Kết thúc pilot cạnh nhãn. Phiên thử nghiệm chỉ xem, không bấm. Kết thúc kịch bản.',
       async (page, h) => {
-        await h.expect(page.getByTestId('end-pilot')).toHaveCount(0);
+        // The UI shows the button to the admin role; the E2E session's write would be refused by the API (e2e_read_only).
+        await h.expect(page.getByTestId('end-pilot')).toBeVisible({ timeout: 30_000 });
       }),
   ],
 });
