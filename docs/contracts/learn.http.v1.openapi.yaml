@@ -17,7 +17,7 @@ info:
     Grading. Quiz answers never leave the server before a submission: an attempt returns the items without the
     correct choices; the server grades the submission, and only then returns the correct choices and the
     explanations. The pass marks, the retake delay, the number of items per attempt, the recertification period and
-    paths, the video URL lifetime and the review limits are CIS settings (learn.* keys of the settings registry),
+    paths, the video URL lifetime and the review limits are CIS settings (cis.learn.* keys of the settings registry),
     never literals; the routes return the values in force so the UI never computes them.
     Drafts. A module with status draft is visible only to a learner holding the learn.preview capability, marked
     draft, and never counts toward a certificate. A prerequisite that is only planned never blocks.
@@ -121,7 +121,7 @@ paths:
       summary: Short-lived presigned GET URLs of the lesson video and its captions (decision D8)
       description: >-
         The browser plays the file straight from S3 (range requests for seeking); the API never streams video. The
-        lifetime is the learn.video_url_ttl_seconds setting. 404 when the lesson has no video.
+        lifetime is the cis.learn.video_url_ttl_seconds setting. 404 when the lesson has no video.
       responses:
         "200":
           description: Video URLs
@@ -219,7 +219,7 @@ paths:
   /v1/review/due:
     get:
       operationId: listDueReviewCards
-      summary: The learner's due spaced-review cards (missed quiz items), capped by learn.review_max_cards_per_day
+      summary: The learner's due spaced-review cards (missed quiz items), capped by cis.learn.review_max_cards_per_day
       responses:
         "200":
           description: Due cards

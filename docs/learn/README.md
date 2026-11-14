@@ -69,7 +69,7 @@ The first module written in this format is [F3 How work flows](modules/F3-how-wo
   private `learn-media/` prefix (`learn-media/<module id>/<NN>-<slug>.mp4` or `.webm`) and `captions` lists the
   caption languages (`en` required), whose files sit next to it as `<key without extension>.<lang>.vtt`. Videos are
   built locally with `tools/uat` and uploaded there, never kept in git; the learning API checks access and returns a
-  presigned URL that lives for the `learn.video_url_ttl_seconds` setting.
+  presigned URL that lives for the `cis.learn.video_url_ttl_seconds` setting.
 
 ## Citing a source
 

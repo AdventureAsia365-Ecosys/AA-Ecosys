@@ -71,7 +71,7 @@ Module đầu tiên viết theo định dạng này là [F3 How work flows](modu
   dưới tiền tố riêng tư `learn-media/` (`learn-media/<module id>/<NN>-<slug>.mp4` hoặc `.webm`) và `captions` liệt kê
   các ngôn ngữ phụ đề (bắt buộc có `en`), file phụ đề nằm cạnh video dưới tên `<key bỏ phần mở rộng>.<lang>.vtt`. Video
   được dựng tại máy bằng `tools/uat` và tải lên đó, không bao giờ để trong git; API học tập kiểm quyền rồi trả một URL
-  ký trước sống trong khoảng của thiết lập `learn.video_url_ttl_seconds`.
+  ký trước sống trong khoảng của thiết lập `cis.learn.video_url_ttl_seconds`.
 
 ## Trích nguồn
 

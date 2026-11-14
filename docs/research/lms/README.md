@@ -24,7 +24,7 @@ The full knowledge list is the [knowledge inventory](inventory.md). The sister r
 
 - **Build the learning site into the stack we already run.** Call it **AA Academy**. Everyone learns on the
   academy host `academy.<env domain>`, served by the CRM web app; CIS holds the courses and progress, and the CIS
-  admin links to it (decision D17, S280). No separate LMS server, no new data store, no licence.
+  admin links to it (decision D17, S279). No separate LMS server, no new data store, no licence.
 - **One source of truth.** Courses live as Markdown and YAML in the root repo (`docs/learn/`). A lesson points at
   a catalog page, an ADR or a section of a `CONTEXT.md` by ID and never copies it. The Docs sync workflow already
   builds a redacted, tiered, EN/VI bundle for `/admin/docs`; it is extended to publish the courses too.
@@ -542,14 +542,15 @@ flowchart LR
 - **Spaced review** uses the FSRS algorithm through `ts-fsrs` (MIT,
   [GitHub](https://github.com/open-spaced-repetition/ts-fsrs)), run in the browser with cards stored server-side.
 
-**Note S280 (decision D17, AA-1105).** The tech lead chose one learner front door for every audience: the academy
-host `academy.<env domain>` (Dev: `academy.lumiguides.it.com`), served by the AA-Partner CRM web app. Courses,
-progress, quizzes and certificates stay in the CIS learning API (`/learn/v1`, contract `learn.http.v1`) and schema
-`learn`. Staff sign in there with a WORKFORCE app client of its own (`academy-web`), accepted only by the new route
-class `/learn/v1`; agencies follow in P7 with the partner sign-in. The CIS admin only links to the academy and keeps
-the team view (Platform › Academy: team progress, content review items, certificate revoke); there is no
-`/admin/learn` reader. Videos live under a separate private prefix `learn-media/` of the bronze bucket, not under the
-docs reader prefix. Recorded in root [ADR 0022](../../adr/0022-aa-academy-learning-platform.md).
+**Note S280 (decision D17, AA-1105).** The tech lead chose (S279) one learner front door for every audience: the
+academy host `academy.<env domain>` (Dev: `academy.lumiguides.it.com`), served by the AA-Partner CRM web app, so staff
+and agencies share one UI and the CIS admin stays an operator console that links to it; there is no `/admin/learn`
+reader. Courses, progress, quizzes and certificates stay in CIS and schema `learn` (D3). The S280 build proposes the
+details, which wait for the tech lead's review (root [ADR 0022](../../adr/0022-aa-academy-learning-platform.md)
+decisions 6 to 11): staff sign in with a WORKFORCE app client of its own (`academy-web`), accepted only by a new route
+class `/learn/v1` (contract `learn.http.v1`); the team view is a Platform › Academy page in the CIS admin; videos live
+under a separate private prefix `learn-media/` of the bronze bucket, not under the docs reader prefix. Agencies follow
+in P7 with the partner sign-in (D6).
 
 ## 6. Content pipeline
 

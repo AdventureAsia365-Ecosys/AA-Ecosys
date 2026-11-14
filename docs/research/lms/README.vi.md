@@ -27,7 +27,7 @@ là một khoá học lõi ở đây.
 
 - **Xây trang học liệu ngay trong hệ thống đang chạy.** Đặt tên là **AA Academy**. Mọi người học trên host
   academy `academy.<env domain>` do app CRM web phục vụ; CIS giữ khoá học và tiến độ, CIS admin chỉ đặt đường dẫn tới
-  đó (quyết định D17, S280). Không có máy chủ LMS riêng, không thêm kho dữ liệu, không mua giấy
+  đó (quyết định D17, S279). Không có máy chủ LMS riêng, không thêm kho dữ liệu, không mua giấy
   phép.
 - **Một nguồn sự thật.** Khoá học nằm dưới dạng Markdown và YAML trong repo gốc (`docs/learn/`). Bài học trỏ tới
   một trang catalog, một ADR hoặc một mục của `CONTEXT.md` bằng ID và không bao giờ chép lại. Workflow Docs sync đã
@@ -557,14 +557,15 @@ flowchart LR
 - **Ôn tập giãn cách** dùng thuật toán FSRS qua `ts-fsrs` (MIT,
   [GitHub](https://github.com/open-spaced-repetition/ts-fsrs)), chạy trong trình duyệt, thẻ lưu ở server.
 
-**Ghi chú S280 (quyết định D17, AA-1105).** Tech lead chọn một cửa vào duy nhất cho mọi người học: host academy
-`academy.<env domain>` (Dev: `academy.lumiguides.it.com`), do app web CRM của AA-Partner phục vụ. Khoá học, tiến độ,
-bài kiểm tra và chứng chỉ vẫn nằm ở API học tập của CIS (`/learn/v1`, hợp đồng `learn.http.v1`) và schema `learn`.
-Nhân viên đăng nhập ở đó bằng một app client WORKFORCE riêng (`academy-web`), chỉ route class mới `/learn/v1` chấp
-nhận; đại lý theo sau ở P7 với đăng nhập partner. CIS admin chỉ đặt đường dẫn tới academy và giữ phần xem của nhóm
-(Platform › Academy: tiến độ nhóm, mục rà soát nội dung, thu hồi chứng chỉ); không có trình đọc `/admin/learn`. Video
+**Ghi chú S280 (quyết định D17, AA-1105).** Tech lead chọn (S279) một cửa vào duy nhất cho mọi người học: host
+academy `academy.<env domain>` (Dev: `academy.lumiguides.it.com`), do app web CRM của AA-Partner phục vụ, để nhân viên
+và đại lý dùng chung một giao diện và CIS admin vẫn là bảng điều hành, chỉ đặt đường dẫn tới đó; không có trình đọc
+`/admin/learn`. Khoá học, tiến độ, bài kiểm tra và chứng chỉ vẫn nằm ở CIS và schema `learn` (D3). Bản dựng S280 đề
+xuất phần chi tiết, chờ tech lead xem lại ([ADR 0022](../../adr/0022-aa-academy-learning-platform.md) của repo gốc,
+quyết định 6 tới 11): nhân viên đăng nhập bằng một app client WORKFORCE riêng (`academy-web`), chỉ route class mới
+`/learn/v1` (hợp đồng `learn.http.v1`) chấp nhận; phần xem của nhóm là trang Platform › Academy trong CIS admin; video
 nằm dưới một tiền tố riêng, riêng tư `learn-media/` của bucket bronze, không nằm dưới tiền tố của trình đọc tài liệu.
-Ghi lại trong [ADR 0022](../../adr/0022-aa-academy-learning-platform.md) của repo gốc.
+Đại lý theo sau ở P7 với đăng nhập partner (D6).
 
 ## 6. Quy trình nội dung
 

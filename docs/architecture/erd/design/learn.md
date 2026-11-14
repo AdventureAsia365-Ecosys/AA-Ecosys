@@ -160,7 +160,7 @@ it (`admin:<uuid>`).
 
 | Point | Decision on this page | Why |
 |---|---|---|
-| Row-level security form | The CIS template (ENABLE, not FORCE; `cis_owner` exempt; `cis_app` through `<table>_cis_app_all`; `tenant_isolation` TO `aa_app_user`), not the FORCE form research §5.4 named | It is what CIS 229 / 244 do and what the RLS catalogue guard expects; nothing reads the schema as `aa_app_user` until P7 |
+| Row-level security form | ENABLE + FORCE on every table with `tenant_id`, with the X1 parity policies `<table>_cis_app_all` TO `cis_app` and `<table>_cis_owner_all` TO `cis_owner`, and `tenant_isolation` TO `aa_app_user` on `NULLIF(current_setting('app.tenant_id', true), '')::uuid` | Research §5.4 names FORCE; data standards SEC-7 delayed FORCE on CIS only until the X1 role split, done since X1 S18; every CIS tenant table since CIS 277 (360, 386, 388, 391, 394, 400, 407) has this form. An S280 implementation choice listed for the tech lead's review in ADR 0022 |
 | Tenant edge | Soft key, no FK to `shared.tenants` | Staff rows have no tenant; P7 decides whether agency learners follow the tenant erasure saga by FK or by the saga's own step |
 | `admin_user_id` FK | `ON DELETE SET NULL`; the retention job then treats the learner as inactive | A staff row is deactivated, not deleted, today; a deletion must not take the learning record with it before its window ends |
 | Expired certificates | Not a stored status: `expires_at < now()` reads as expired | No job has to flip rows at midnight |
