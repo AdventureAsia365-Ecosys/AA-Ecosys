@@ -1,0 +1,15 @@
+{
+  "ran_at": "2026-11-13T00:11:35.373Z",
+  "status": 202,
+  "title": "Trip planner · Atlas & Hearth (Audit) · Adventure Asia",
+  "agency_header": 1,
+  "agency_name": true,
+  "list": {
+    "url": "?resource=tenant-tours&tenant=audit-atlas-hearth&sort=duration_asc&limit=24",
+    "status": 200,
+    "source": "tenant",
+    "total": 11,
+    "first": "Bhutan East to West: Farmhouse Tables, Dzongs & Paro in 10 Days"
+  },
+  "errors": []
+}

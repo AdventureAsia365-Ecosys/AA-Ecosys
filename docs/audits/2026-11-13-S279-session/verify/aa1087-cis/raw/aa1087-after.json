@@ -1,0 +1,487 @@
+{
+  "at": "2026-11-13T00:19:19.014Z",
+  "mode": "after",
+  "flag": {
+    "state": "resolved",
+    "resolution": "released",
+    "resolved_by": "admin:6801a67d-bf16-4f2d-81f3-2550c7e0e72b",
+    "resolved_at": "2026-11-13T00:18:57.944409+00:00",
+    "release_reason": "Synthetic pilot rehearsal: links checked",
+    "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+    "piece_id": "09d6bd4d-ebf5-43f5-8973-2a93b47650b3"
+  },
+  "total_flags": 1,
+  "open_tab_has_piece_1440": false,
+  "sideways_1440": false,
+  "resolved_tab_has_piece_1440": true,
+  "open_tab_has_piece_390": false,
+  "sideways_390": false,
+  "resolved_tab_has_piece_390": true,
+  "audit_released": {
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "id": "1c1d2baa-23b0-41c5-bf60-2335165475a7",
+          "created_at": "2026-11-13T00:18:57.965311+00:00",
+          "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "actor": "admin:6801a67d-bf16-4f2d-81f3-2550c7e0e72b",
+          "actor_type": null,
+          "actor_name": "E2E CIS admin",
+          "actor_email": "e2e-cis-admin@e2e-mail.lumiguides.it.com",
+          "action": "content_compliance.released",
+          "resource_type": "content_piece",
+          "resource_id": "09d6bd4d-ebf5-43f5-8973-2a93b47650b3",
+          "http_method": null,
+          "route": null,
+          "status": null,
+          "details": {
+            "reason": "Synthetic pilot rehearsal: links checked",
+            "flag_id": "ad4d4fc5-7db6-4d96-88f7-31a472cfc4ff",
+            "content_sha256": "50f450b847cc6f7b0f3d0de1c3d053f8095322af309a95bb4457bd66bb6befd5"
+          },
+          "chain_seq": 6033,
+          "row_hash": "db6b4d7390b4227c979a48cc00ed799a0860bc5a20e1a4ee8eee80404a9df506"
+        }
+      ],
+      "next_cursor": null,
+      "limit": 10
+    }
+  },
+  "audit_staff_request": {
+    "status": 200,
+    "body": {
+      "rows": [],
+      "next_cursor": null,
+      "limit": 10
+    }
+  },
+  "audit_staff_request_prefix": {
+    "status": 200,
+    "body": {
+      "rows": [
+        {
+          "id": "90ebf331-7598-42fe-a7a7-e45317cf0986",
+          "created_at": "2026-11-13T00:18:57.990496+00:00",
+          "tenant_id": null,
+          "actor": "admin:6801a67d-bf16-4f2d-81f3-2550c7e0e72b",
+          "actor_type": "staff",
+          "actor_name": "E2E CIS admin",
+          "actor_email": "e2e-cis-admin@e2e-mail.lumiguides.it.com",
+          "action": "staff.request",
+          "resource_type": "http_route",
+          "resource_id": "/admin/tenant-qa/compliance/ad4d4fc5-7db6-4d96-88f7-31a472cfc4ff/release",
+          "http_method": "POST",
+          "route": "/admin/tenant-qa/compliance/{flag_id}/release",
+          "status": 200,
+          "details": {
+            "auth": "cognito",
+            "role": "admin",
+            "query_keys": []
+          },
+          "chain_seq": 6034,
+          "row_hash": "9567fa2eed79eaf5b5f8edc41055a6d84311893951aa6ed35d0aa3e2aaabb789"
+        },
+        {
+          "id": "70bf3a1f-6a9a-4752-940b-ab6f6c0f153b",
+          "created_at": "2026-11-13T00:09:00.972185+00:00",
+          "tenant_id": null,
+          "actor": "admin:6801a67d-bf16-4f2d-81f3-2550c7e0e72b",
+          "actor_type": "staff",
+          "actor_name": "E2E CIS admin",
+          "actor_email": "e2e-cis-admin@e2e-mail.lumiguides.it.com",
+          "action": "staff.request",
+          "resource_type": "http_route",
+          "resource_id": "/admin/tenants/b8611143-9ee9-4410-9a51-534076b78b0b/provision",
+          "http_method": "POST",
+          "route": "/admin/tenants/{tenant_id}/provision",
+          "status": 202,
+          "details": {
+            "auth": "cognito",
+            "role": "admin",
+            "query_keys": []
+          },
+          "chain_seq": 6031,
+          "row_hash": "902d20f5536d738fb601aa6def30a895df0b043e831a68de0709943c7f1a4601"
+        },
+        {
+          "id": "b23ea76c-bb43-48ea-b176-d83af1d465eb",
+          "created_at": "2026-11-12T11:41:51.333384+00:00",
+          "tenant_id": null,
+          "actor": "admin:claude-code-s278",
+          "actor_type": "staff",
+          "actor_name": null,
+          "actor_email": null,
+          "action": "staff.request",
+          "resource_type": "http_route",
+          "resource_id": "/admin/ai-gateway/route-control/save",
+          "http_method": "POST",
+          "route": "/admin/ai-gateway/route-control/save",
+          "status": 200,
+          "details": {
+            "auth": "legacy_unverified",
+            "role": "admin",
+            "query_keys": []
+          },
+          "chain_seq": 5982,
+          "row_hash": "bfc690761b870b64ba72a992231e2d1af0115a63f641d1d8bf5807de0653e918"
+        },
+        {
+          "id": "1d00e38f-08b8-410a-a62d-2b15e918e344",
+          "created_at": "2026-11-12T11:41:45.478502+00:00",
+          "tenant_id": null,
+          "actor": "admin:claude-code-s278",
+          "actor_type": "staff",
+          "actor_name": null,
+          "actor_email": null,
+          "action": "staff.request",
+          "resource_type": "http_route",
+          "resource_id": "/admin/ai-gateway/route-control/preview",
+          "http_method": "POST",
+          "route": "/admin/ai-gateway/route-control/preview",
+          "status": 200,
+          "details": {
+            "auth": "legacy_unverified",
+            "role": "admin",
+            "query_keys": []
+          },
+          "chain_seq": 5980,
+          "row_hash": "3b9f87526daa18b47d491fa30734f09122b44f31c11b4484684cd0be0ab7e238"
+        },
+        {
+          "id": "a33cb999-b088-4692-b610-a57afc1620f9",
+          "created_at": "2026-11-12T11:41:33.696024+00:00",
+          "tenant_id": null,
+          "actor": "admin:claude-code-s278",
+          "actor_type": "staff",
+          "actor_name": null,
+          "actor_email": null,
+          "action": "staff.request",
+          "resource_type": "http_route",
+          "resource_id": "/admin/ai-gateway/route-control/preview",
+          "http_method": "POST",
+          "route": "/admin/ai-gateway/route-control/preview",
+          "status": 200,
+          "details": {
+            "auth": "legacy_unverified",
+            "role": "admin",
+            "query_keys": []
+          },
+          "chain_seq": 5979,
+          "row_hash": "122d2dd147cf9e0587a1c64b23685648af179bc0aab3630638fef2d911586ecc"
+        },
+        {
+          "id": "79720d78-7955-46ac-a2b2-6e7245bc7ec5",
+          "created_at": "2026-11-12T07:31:00.753494+00:00",
+          "tenant_id": null,
+          "actor": "admin:6801a67d-bf16-4f2d-81f3-2550c7e0e72b",
+          "actor_type": "staff",
+          "actor_name": "E2E CIS admin",
+          "actor_email": "e2e-cis-admin@e2e-mail.lumiguides.it.com",
+          "action": "staff.request",
+          "resource_type": "http_route",
+          "resource_id": "/admin/tenant-qa/compliance/00000000-0000-4000-8000-0000000a1087/release",
+          "http_method": "POST",
+          "route": "/admin/tenant-qa/compliance/{flag_id}/release",
+          "status": 404,
+          "details": {
+            "auth": "cognito",
+            "role": "admin",
+            "query_keys": []
+          },
+          "chain_seq": 5900,
+          "row_hash": "d234007328d7b17634b75b84b38aa72cc2ca07cfca7433eb96489f6b04ac8dfa"
+        },
+        {
+          "id": "36b4da76-ff5d-48f1-93c8-801f59e5d001",
+          "created_at": "2026-11-12T04:58:07.905595+00:00",
+          "tenant_id": null,
+          "actor": "admin:claude-code-s278",
+          "actor_type": "staff",
+          "actor_name": null,
+          "actor_email": null,
+          "action": "staff.request",
+          "resource_type": "http_route",
+          "resource_id": "/admin/llm-config/t7_debate_judge/route",
+          "http_method": "PATCH",
+          "route": "/admin/llm-config/{stage}/route",
+          "status": 422,
+          "details": {
+            "auth": "legacy_unverified",
+            "role": "admin",
+            "query_keys": []
+          },
+          "chain_seq": 5846,
+          "row_hash": "82b7f02a917fd0a3e418755b243c7825eecfb1dfdc912237aa60f03b0ed0673a"
+        },
+        {
+          "id": "9da31571-ce26-4860-95fd-8f366b665d28",
+          "created_at": "2026-11-12T04:58:06.492569+00:00",
+          "tenant_id": null,
+          "actor": "admin:claude-code-s278",
+          "actor_type": "staff",
+          "actor_name": null,
+          "actor_email": null,
+          "action": "staff.request",
+          "resource_type": "http_route",
+          "resource_id": "/admin/llm-config/t2_judge/route",
+          "http_method": "PATCH",
+          "route": "/admin/llm-config/{stage}/route",
+          "status": 422,
+          "details": {
+            "auth": "legacy_unverified",
+            "role": "admin",
+            "query_keys": []
+          },
+          "chain_seq": 5845,
+          "row_hash": "f2a50377f9e8699c1cfec8e609e387f449bda804bbad168c73e070a9fe54060a"
+        },
+        {
+          "id": "93386258-9644-41af-9f5a-33b41a30e80f",
+          "created_at": "2026-11-12T04:57:46.374197+00:00",
+          "tenant_id": null,
+          "actor": "admin:claude-code-s278",
+          "actor_type": "staff",
+          "actor_name": null,
+          "actor_email": null,
+          "action": "staff.request",
+          "resource_type": "http_route",
+          "resource_id": "/admin/ai-gateway/route-control/preview",
+          "http_method": "POST",
+          "route": "/admin/ai-gateway/route-control/preview",
+          "status": 200,
+          "details": {
+            "auth": "legacy_unverified",
+            "role": "admin",
+            "query_keys": []
+          },
+          "chain_seq": 5844,
+          "row_hash": "3edb75a127bc9f7c2f6ba68b10b79a610ff101293eaf592b94c882fdf13097d2"
+        },
+        {
+          "id": "a8fc7930-11f5-4c21-b61a-9cc4ea939baf",
+          "created_at": "2026-11-12T04:57:15.501405+00:00",
+          "tenant_id": null,
+          "actor": "admin:claude-code-s278",
+          "actor_type": "staff",
+          "actor_name": null,
+          "actor_email": null,
+          "action": "staff.request",
+          "resource_type": "http_route",
+          "resource_id": "/admin/llm-config/t10_judge/route",
+          "http_method": "PATCH",
+          "route": "/admin/llm-config/{stage}/route",
+          "status": 422,
+          "details": {
+            "auth": "legacy_unverified",
+            "role": "admin",
+            "query_keys": []
+          },
+          "chain_seq": 5843,
+          "row_hash": "b495e93b39aedcc87f46d0b6886e7c39485adea9fc3acb6652aa04827d7a072c"
+        },
+        {
+          "id": "849dd0ea-8594-479a-a36c-df82a83edffd",
+          "created_at": "2026-11-12T04:57:14.106423+00:00",
+          "tenant_id": null,
+          "actor": "admin:claude-code-s278",
+          "actor_type": "staff",
+          "actor_name": null,
+          "actor_email": null,
+          "action": "staff.request",
+          "resource_type": "http_route",
+          "resource_id": "/admin/llm-config/t7_debate_judge/route",
+          "http_method": "PATCH",
+          "route": "/admin/llm-config/{stage}/route",
+          "status": 422,
+          "details": {
+            "auth": "legacy_unverified",
+            "role": "admin",
+            "query_keys": []
+          },
+          "chain_seq": 5842,
+          "row_hash": "e3510633408f4b875c24e0e90f67b3239cb4dfe401597aa41a05ff5ed9e15d1a"
+        },
+        {
+          "id": "599a7547-1447-4937-8606-c44c4116c447",
+          "created_at": "2026-11-12T04:57:12.710950+00:00",
+          "tenant_id": null,
+          "actor": "admin:claude-code-s278",
+          "actor_type": "staff",
+          "actor_name": null,
+          "actor_email": null,
+          "action": "staff.request",
+          "resource_type": "http_route",
+          "resource_id": "/admin/llm-config/t2_judge/route",
+          "http_method": "PATCH",
+          "route": "/admin/llm-config/{stage}/route",
+          "status": 422,
+          "details": {
+            "auth": "legacy_unverified",
+            "role": "admin",
+            "query_keys": []
+          },
+          "chain_seq": 5841,
+          "row_hash": "4c8b807782ac8f5dd210512cce333b7ae1f1ee7c84b198620ebd5c868a1d8de9"
+        },
+        {
+          "id": "97f19ae4-24e5-4e9e-81c9-744717aedf14",
+          "created_at": "2026-11-11T10:33:44.757662+00:00",
+          "tenant_id": null,
+          "actor": "admin:claude-code-s277",
+          "actor_type": "staff",
+          "actor_name": null,
+          "actor_email": null,
+          "action": "staff.request",
+          "resource_type": "http_route",
+          "resource_id": "/admin/waves/8a3c0f28-5acd-4db1-b165-489b9e882d81/close",
+          "http_method": "POST",
+          "route": "/admin/waves/{wave_id}/close",
+          "status": 200,
+          "details": {
+            "auth": "legacy_unverified",
+            "role": "admin",
+            "query_keys": []
+          },
+          "chain_seq": 5702,
+          "row_hash": "8de8060ce39e2c8651cc911a7263b70f7e9953a10e9534f445bcec98b817ae96"
+        },
+        {
+          "id": "21dd7058-3d2c-4775-965b-e983d08d7d72",
+          "created_at": "2026-11-11T10:28:58.987489+00:00",
+          "tenant_id": null,
+          "actor": "admin:claude-code-s277",
+          "actor_type": "staff",
+          "actor_name": null,
+          "actor_email": null,
+          "action": "staff.request",
+          "resource_type": "http_route",
+          "resource_id": "/admin/waves",
+          "http_method": "POST",
+          "route": "/admin/waves",
+          "status": 200,
+          "details": {
+            "auth": "legacy_unverified",
+            "role": "admin",
+            "query_keys": []
+          },
+          "chain_seq": 5701,
+          "row_hash": "61dd46f9a79a3cba0b622a9ff581ad9fd6d62a27b7573f4e3809c6a4ba9ed408"
+        },
+        {
+          "id": "98fac4b3-c95f-434c-969c-b63e7fb6c593",
+          "created_at": "2026-11-11T09:42:55.572971+00:00",
+          "tenant_id": null,
+          "actor": "admin:claude-code-s277",
+          "actor_type": "staff",
+          "actor_name": null,
+          "actor_email": null,
+          "action": "staff.request",
+          "resource_type": "http_route",
+          "resource_id": "/admin/waves/beb7b307-fc42-4dd8-acae-051fca91aff5/close",
+          "http_method": "POST",
+          "route": "/admin/waves/{wave_id}/close",
+          "status": 200,
+          "details": {
+            "auth": "legacy_unverified",
+            "role": "admin",
+            "query_keys": []
+          },
+          "chain_seq": 5700,
+          "row_hash": "bdd6d6be328cf8ce4e2e87cbebd35365057b95172b4fbe4deda3148399c5642f"
+        }
+      ],
+      "next_cursor": "WyIyMDI2LTExLTExVDA5OjQyOjU1LjU3Mjk3MSswMDowMCIsICI5OGZhYzRiMy1jOTVmLTQzNGMtOTY5Yy1iNjNlN2ZiNmM1OTMiXQ",
+      "limit": 15
+    }
+  },
+  "tenant_audit": {
+    "status": 200,
+    "body": {
+      "events": [
+        {
+          "action": "content_compliance.released",
+          "actor": "admin:6801a67d-bf16-4f2d-81f3-2550c7e0e72b",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "09d6bd4d-ebf5-43f5-8973-2a93b47650b3",
+          "created_at": "2026-11-13T00:18:57.965311+00:00"
+        },
+        {
+          "action": "tenant.login",
+          "actor": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "actor_type": null,
+          "resource_type": "tenant",
+          "resource_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "created_at": "2026-11-12T10:55:27.459873+00:00"
+        },
+        {
+          "action": "tenant_tour_version.exported",
+          "actor": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "actor_type": null,
+          "resource_type": "tenant_tour_version",
+          "resource_id": "db53b5b5-af2c-41d6-9ead-dee066381169",
+          "created_at": "2026-11-12T10:35:06.959544+00:00"
+        },
+        {
+          "action": "content_piece.exported",
+          "actor": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "252baf6f-77db-4db1-9d13-d7958f0759c5",
+          "created_at": "2026-11-12T10:35:06.352246+00:00"
+        },
+        {
+          "action": "content_piece.exported",
+          "actor": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "b5f11e37-b755-4afb-a9b2-b86de44fad89",
+          "created_at": "2026-11-12T10:35:06.060836+00:00"
+        },
+        {
+          "action": "content_piece.exported",
+          "actor": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "b5f11e37-b755-4afb-a9b2-b86de44fad89",
+          "created_at": "2026-11-12T10:35:05.864506+00:00"
+        },
+        {
+          "action": "tenant.login",
+          "actor": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "actor_type": null,
+          "resource_type": "tenant",
+          "resource_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "created_at": "2026-11-12T10:35:01.523404+00:00"
+        },
+        {
+          "action": "tenant.login",
+          "actor": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "actor_type": null,
+          "resource_type": "tenant",
+          "resource_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "created_at": "2026-11-12T07:57:35.557700+00:00"
+        },
+        {
+          "action": "tenant.login",
+          "actor": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "actor_type": null,
+          "resource_type": "tenant",
+          "resource_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "created_at": "2026-11-12T07:50:26.649479+00:00"
+        },
+        {
+          "action": "tenant.login",
+          "actor": "tenant:9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "actor_type": null,
+          "resource_type": "tenant",
+          "resource_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "created_at": "2026-11-12T07:20:51.038466+00:00"
+        }
+      ]
+    }
+  },
+  "audit_page_has_release_1440": true,
+  "audit_page_has_release_390": true
+}

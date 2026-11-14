@@ -1,0 +1,7 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 tests/s279-probe.spec.ts:6:5 › probe (15.0s)
+
+  1 passed (15.6s)
+exit 0

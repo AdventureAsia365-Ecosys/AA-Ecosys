@@ -1,0 +1,30 @@
+{
+ "mode": "APPLY",
+ "fixtures": {
+  "run": "s279",
+  "agency": {
+   "tenant_id": "bab16039-a064-517f-a99f-172b729ad3c4",
+   "partner_id": "7a10160c-c9e2-4080-972a-0568a289388e",
+   "name": "L\u1eef h\u00e0nh Sen V\u00e0ng",
+   "crm_e2e": true
+  },
+  "tour_source_id": "000e3340-d9f5-4b7b-8609-4cdaa9c272dc",
+  "departure_id": "8fecbe57-debe-4e36-8f7a-6b3ba58968de",
+  "departure_start": "2027-01-12",
+  "tour_component_id": "tp:77740b45-af7b-4a07-a53d-6134fe99f836",
+  "trip_case": {
+   "id": "fe17c319-96a9-4e11-9638-f111b1ea59a0",
+   "code": "TC-000036"
+  },
+  "supplier_booking": {
+   "id": "972a4f54-81ba-4528-904b-1e9bfdef1742",
+   "code": "SB-000010",
+   "status": "pending"
+  },
+  "invoice": {
+   "id": "8b65183e-c604-487a-a4b8-66443fe8e571",
+   "number": "AAT-2026-000002",
+   "status": "issued"
+  }
+ }
+}

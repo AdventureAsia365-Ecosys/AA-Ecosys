@@ -1,0 +1,78 @@
+{
+  "at": "2026-11-13T00:16:09.069Z",
+  "/api/admin/tenant-qa/compliance?state=all&kind=subject_gate&limit=200": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "flag_id": "ad4d4fc5-7db6-4d96-88f7-31a472cfc4ff",
+          "tenant_id": "9149d3c6-fcaf-4400-8e7a-4ed5e557e146",
+          "tenant_name": "Atlas & Hearth",
+          "kind": "subject_gate",
+          "stage": "write",
+          "piece_id": "09d6bd4d-ebf5-43f5-8973-2a93b47650b3",
+          "publish_id": null,
+          "tour_id": "a00d5823-9dc1-4f82-ab3f-0779cb793549",
+          "channel": "blog",
+          "external_url": null,
+          "publish_status": null,
+          "codes": [
+            "off_catalog_link"
+          ],
+          "detail": {
+            "goal": "introduction_awareness",
+            "links": [
+              "https://booking.lantern-cove.invalid/tours/dawn-s279"
+            ],
+            "tour_id": "a00d5823-9dc1-4f82-ab3f-0779cb793549",
+            "subject_ok": true,
+            "sales_links": [
+              "https://booking.lantern-cove.invalid/tours/dawn-s279"
+            ],
+            "brand_content": false,
+            "refused_hosts": [
+              "booking.lantern-cove.invalid"
+            ],
+            "refused_links": [
+              "https://booking.lantern-cove.invalid/tours/dawn-s279"
+            ],
+            "content_sha256": "50f450b847cc6f7b0f3d0de1c3d053f8095322af309a95bb4457bd66bb6befd5"
+          },
+          "tenant_message": "This piece links to a tour that isn't in the Adventure Asia catalogue (booking.lantern-cove.invalid). Point the booking link to an Adventure Asia tour page or your TripPlanner site to publish it.",
+          "action": "none",
+          "draft_due_at": null,
+          "drafted_at": null,
+          "state": "open",
+          "resolution": null,
+          "resolved_at": null,
+          "resolved_by": null,
+          "created_at": "2026-11-13T00:13:50.957133+00:00",
+          "updated_at": "2026-11-13T00:13:50.957133+00:00",
+          "piece_title": "E2E fixture (synthetic) s279",
+          "tour_name": "Cycling Tour of Bentota — 1 Day"
+        }
+      ],
+      "total": 1,
+      "limit": 200,
+      "offset": 0,
+      "open_counts": {
+        "subject_gate": 1,
+        "tour_retired": 0
+      }
+    }
+  },
+  "/api/admin/staff/me": {
+    "status": 404,
+    "body": {
+      "detail": "Not Found"
+    }
+  },
+  "/api/admin/platform/audit?scope=all&action=content_compliance&limit=20": {
+    "status": 200,
+    "body": {
+      "rows": [],
+      "next_cursor": null,
+      "limit": 20
+    }
+  }
+}

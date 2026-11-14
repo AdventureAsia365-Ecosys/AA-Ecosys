@@ -1,0 +1,414 @@
+{
+  "/api/admin/tenants/b8611143-9ee9-4410-9a51-534076b78b0b/subscription": {
+    "status": 200,
+    "body": {
+      "tenant": {
+        "tenant_id": "b8611143-9ee9-4410-9a51-534076b78b0b",
+        "name": "Atlas & Hearth (Audit)",
+        "plan_tier": "growth",
+        "account_status": "active",
+        "suspend_reason": null,
+        "kind": "demo",
+        "is_pilot": false,
+        "pilot_ends_at": null,
+        "in_service": true
+      },
+      "subscriptions": [
+        {
+          "product": "content",
+          "plan_key": "content.growth",
+          "plan_name": "Growth",
+          "status": "active",
+          "seats": null,
+          "updated_by": "job:tenant_provision:c6212f6f-7e56-4158-9d7f-145bc89bed7f",
+          "plan_retired": false,
+          "trial_ends_at": null,
+          "paid_through": null,
+          "started_at": "2026-11-05T12:12:14.735435+00:00",
+          "canceled_at": null,
+          "updated_at": "2026-11-05T12:12:14.735435+00:00"
+        },
+        {
+          "product": "crm",
+          "plan_key": "crm.core",
+          "plan_name": "CRM Core",
+          "status": "active",
+          "seats": null,
+          "updated_by": "job:tenant_provision:177ac934-f316-41ee-92c0-fcfa6a1325a8",
+          "plan_retired": false,
+          "trial_ends_at": null,
+          "paid_through": null,
+          "started_at": "2026-11-05T12:17:41.035158+00:00",
+          "canceled_at": null,
+          "updated_at": "2026-11-05T12:17:41.035158+00:00"
+        },
+        {
+          "product": "tripplanner",
+          "plan_key": "tripplanner.hosted",
+          "plan_name": "TripPlanner Hosted",
+          "status": "active",
+          "seats": null,
+          "updated_by": "job:tenant_provision:68666aa6-f30b-425b-a1d0-9aaaa8f39754",
+          "plan_retired": false,
+          "trial_ends_at": null,
+          "paid_through": null,
+          "started_at": "2026-11-13T00:09:02.866712+00:00",
+          "canceled_at": null,
+          "updated_at": "2026-11-13T00:09:02.866712+00:00"
+        }
+      ],
+      "entitlements": [
+        {
+          "feature_key": "api.access",
+          "product": "content",
+          "value_kind": "flag",
+          "unit": null,
+          "limit_value": null,
+          "source": "plan",
+          "plan_key": "content.growth",
+          "description": "Content API keys",
+          "expires_at": null
+        },
+        {
+          "feature_key": "api.calls_monthly",
+          "product": "content",
+          "value_kind": "limit",
+          "unit": "count_month",
+          "limit_value": "20000.00",
+          "source": "plan",
+          "plan_key": "content.growth",
+          "description": "Content API calls per calendar month",
+          "expires_at": null
+        },
+        {
+          "feature_key": "channel.facebook",
+          "product": "content",
+          "value_kind": "flag",
+          "unit": null,
+          "limit_value": null,
+          "source": "plan",
+          "plan_key": "content.growth",
+          "description": "Publish to Facebook",
+          "expires_at": null
+        },
+        {
+          "feature_key": "channel.wordpress",
+          "product": "content",
+          "value_kind": "flag",
+          "unit": null,
+          "limit_value": null,
+          "source": "plan",
+          "plan_key": "content.growth",
+          "description": "Publish to WordPress",
+          "expires_at": null
+        },
+        {
+          "feature_key": "content.article",
+          "product": "content",
+          "value_kind": "flag",
+          "unit": null,
+          "limit_value": null,
+          "source": "plan",
+          "plan_key": "content.growth",
+          "description": "Articles",
+          "expires_at": null
+        },
+        {
+          "feature_key": "content.rate_limit_rpm",
+          "product": "content",
+          "value_kind": "limit",
+          "unit": "rpm",
+          "limit_value": "300.00",
+          "source": "plan",
+          "plan_key": "content.growth",
+          "description": "Content API requests per minute",
+          "expires_at": null
+        },
+        {
+          "feature_key": "content.rewrite",
+          "product": "content",
+          "value_kind": "limit",
+          "unit": "count_month",
+          "limit_value": "200.00",
+          "source": "plan",
+          "plan_key": "content.growth",
+          "description": "Tour rewrites (T2) per calendar month",
+          "expires_at": null
+        },
+        {
+          "feature_key": "content.social",
+          "product": "content",
+          "value_kind": "flag",
+          "unit": null,
+          "limit_value": null,
+          "source": "plan",
+          "plan_key": "content.growth",
+          "description": "Social posts (T5-T11)",
+          "expires_at": null
+        },
+        {
+          "feature_key": "trade.book",
+          "product": "content",
+          "value_kind": "flag",
+          "unit": null,
+          "limit_value": null,
+          "source": "plan",
+          "plan_key": "content.growth",
+          "description": "Book AA tours at the B2B price (Book with AA)",
+          "expires_at": null
+        },
+        {
+          "feature_key": "crm.ai_assist",
+          "product": "crm",
+          "value_kind": "flag",
+          "unit": null,
+          "limit_value": null,
+          "source": "plan",
+          "plan_key": "crm.core",
+          "description": "CRM AI drafts",
+          "expires_at": null
+        },
+        {
+          "feature_key": "crm.core",
+          "product": "crm",
+          "value_kind": "flag",
+          "unit": null,
+          "limit_value": null,
+          "source": "plan",
+          "plan_key": "crm.core",
+          "description": "The partner CRM",
+          "expires_at": null
+        },
+        {
+          "feature_key": "crm.seats",
+          "product": "crm",
+          "value_kind": "seats",
+          "unit": "seats",
+          "limit_value": "10.00",
+          "source": "plan",
+          "plan_key": "crm.core",
+          "description": "CRM members (seats)",
+          "expires_at": null
+        },
+        {
+          "feature_key": "tp.ai_sessions",
+          "product": "tripplanner",
+          "value_kind": "limit",
+          "unit": "count_month",
+          "limit_value": null,
+          "source": "plan",
+          "plan_key": "tripplanner.hosted",
+          "description": "TripPlanner AI sessions per calendar month",
+          "expires_at": null
+        },
+        {
+          "feature_key": "tp.hosted",
+          "product": "tripplanner",
+          "value_kind": "flag",
+          "unit": null,
+          "limit_value": null,
+          "source": "plan",
+          "plan_key": "tripplanner.hosted",
+          "description": "Hosted TripPlanner site",
+          "expires_at": null
+        },
+        {
+          "feature_key": "tp.launcher",
+          "product": "tripplanner",
+          "value_kind": "flag",
+          "unit": null,
+          "limit_value": null,
+          "source": "plan",
+          "plan_key": "tripplanner.hosted",
+          "description": "TripPlanner launcher snippet",
+          "expires_at": null
+        },
+        {
+          "feature_key": "ai.budget_usd_monthly",
+          "product": "platform",
+          "value_kind": "limit",
+          "unit": "usd_month",
+          "limit_value": "40.00",
+          "source": "plan",
+          "plan_key": "content.growth",
+          "description": "AI spend included per calendar month (USD)",
+          "expires_at": null
+        },
+        {
+          "feature_key": "policy.notice_days",
+          "product": "platform",
+          "value_kind": "policy",
+          "unit": "days",
+          "limit_value": "7.00",
+          "source": "plan",
+          "plan_key": "content.growth",
+          "description": "Days of notice before a resale suspension",
+          "expires_at": null
+        }
+      ],
+      "overrides": [],
+      "add_on_plans": [
+        {
+          "plan_key": "crm.core",
+          "product": "crm",
+          "name": "CRM Core",
+          "seats_included": 10
+        },
+        {
+          "plan_key": "crm.pro",
+          "product": "crm",
+          "name": "CRM Pro",
+          "seats_included": 10
+        },
+        {
+          "plan_key": "tripplanner.hosted",
+          "product": "tripplanner",
+          "name": "TripPlanner Hosted",
+          "seats_included": null
+        },
+        {
+          "plan_key": "tripplanner.pro",
+          "product": "tripplanner",
+          "name": "TripPlanner Pro",
+          "seats_included": null
+        }
+      ],
+      "override_rules": {
+        "not_overridable": [
+          "content.rate_limit_rpm"
+        ],
+        "limit_required": [
+          "content.rewrite"
+        ],
+        "off_only_for": "flag"
+      }
+    }
+  },
+  "/api/admin/tenants/b8611143-9ee9-4410-9a51-534076b78b0b/audit?limit=15": {
+    "status": 200,
+    "body": {
+      "events": [
+        {
+          "action": "tenant.subscription_changed",
+          "actor": "job:tenant_provision:68666aa6-f30b-425b-a1d0-9aaaa8f39754",
+          "actor_type": null,
+          "resource_type": "tenant",
+          "resource_id": "b8611143-9ee9-4410-9a51-534076b78b0b",
+          "created_at": "2026-11-13T00:09:02.866712+00:00"
+        },
+        {
+          "action": "content_piece.exported",
+          "actor": "tenant:b8611143-9ee9-4410-9a51-534076b78b0b",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "af6edc90-1cd4-457f-b6d0-9eb5a6f47525",
+          "created_at": "2026-11-12T10:59:17.981982+00:00"
+        },
+        {
+          "action": "content_piece.exported",
+          "actor": "tenant:b8611143-9ee9-4410-9a51-534076b78b0b",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "af6edc90-1cd4-457f-b6d0-9eb5a6f47525",
+          "created_at": "2026-11-12T10:59:17.538987+00:00"
+        },
+        {
+          "action": "content_piece.exported",
+          "actor": "tenant:b8611143-9ee9-4410-9a51-534076b78b0b",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "af6edc90-1cd4-457f-b6d0-9eb5a6f47525",
+          "created_at": "2026-11-12T10:59:17.096093+00:00"
+        },
+        {
+          "action": "content_piece.exported",
+          "actor": "tenant:b8611143-9ee9-4410-9a51-534076b78b0b",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "9131cc81-0f26-4222-a4cb-4ebae9673b10",
+          "created_at": "2026-11-12T10:59:16.215929+00:00"
+        },
+        {
+          "action": "content_piece.exported",
+          "actor": "tenant:b8611143-9ee9-4410-9a51-534076b78b0b",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "9131cc81-0f26-4222-a4cb-4ebae9673b10",
+          "created_at": "2026-11-12T10:59:15.773573+00:00"
+        },
+        {
+          "action": "content_piece.exported",
+          "actor": "tenant:b8611143-9ee9-4410-9a51-534076b78b0b",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "9131cc81-0f26-4222-a4cb-4ebae9673b10",
+          "created_at": "2026-11-12T10:59:15.327046+00:00"
+        },
+        {
+          "action": "content_piece.finished",
+          "actor": "tenant:b8611143-9ee9-4410-9a51-534076b78b0b",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "af6edc90-1cd4-457f-b6d0-9eb5a6f47525",
+          "created_at": "2026-11-12T10:59:13.443381+00:00"
+        },
+        {
+          "action": "content_piece.finished",
+          "actor": "tenant:b8611143-9ee9-4410-9a51-534076b78b0b",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "9131cc81-0f26-4222-a4cb-4ebae9673b10",
+          "created_at": "2026-11-12T10:59:02.176105+00:00"
+        },
+        {
+          "action": "content_piece.exported",
+          "actor": "tenant:b8611143-9ee9-4410-9a51-534076b78b0b",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "37480d6c-87ce-42cf-b06b-61213d2df999",
+          "created_at": "2026-11-12T10:58:26.287168+00:00"
+        },
+        {
+          "action": "content_piece.exported",
+          "actor": "tenant:b8611143-9ee9-4410-9a51-534076b78b0b",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "37480d6c-87ce-42cf-b06b-61213d2df999",
+          "created_at": "2026-11-12T10:58:25.851241+00:00"
+        },
+        {
+          "action": "content_piece.exported",
+          "actor": "tenant:b8611143-9ee9-4410-9a51-534076b78b0b",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "37480d6c-87ce-42cf-b06b-61213d2df999",
+          "created_at": "2026-11-12T10:58:25.390208+00:00"
+        },
+        {
+          "action": "content_piece.finished",
+          "actor": "tenant:b8611143-9ee9-4410-9a51-534076b78b0b",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "37480d6c-87ce-42cf-b06b-61213d2df999",
+          "created_at": "2026-11-12T10:58:17.766577+00:00"
+        },
+        {
+          "action": "write.started",
+          "actor": "tenant:b8611143-9ee9-4410-9a51-534076b78b0b",
+          "actor_type": null,
+          "resource_type": "angle_gate_request",
+          "resource_id": "7417b3f6-4d36-4bb0-8b85-d17aee42d027",
+          "created_at": "2026-11-12T10:56:16.592702+00:00"
+        },
+        {
+          "action": "content_piece.created",
+          "actor": "tenant:b8611143-9ee9-4410-9a51-534076b78b0b",
+          "actor_type": null,
+          "resource_type": "content_piece",
+          "resource_id": "af6edc90-1cd4-457f-b6d0-9eb5a6f47525",
+          "created_at": "2026-11-12T10:56:15.989098+00:00"
+        }
+      ]
+    }
+  }
+}

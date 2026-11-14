@@ -1,0 +1,37 @@
+
+Running 2 tests using 1 worker
+
+  ✘  1 tests/aa-cancel.spec.ts:96:7 › crm-13: AA cancels a departure the agency has a trip on (Dev, agent-only) › prepare: a CRM trip with the seeded tour as an AA item on the seeded departure (46.6s)
+  -  2 tests/aa-cancel.spec.ts:159:7 › crm-13: AA cancels a departure the agency has a trip on (Dev, agent-only) › verify: the CRM opened the aa_cancel_case after AA cancelled the departure
+
+
+  1) tests/aa-cancel.spec.ts:96:7 › crm-13: AA cancels a departure the agency has a trip on (Dev, agent-only) › prepare: a CRM trip with the seeded tour as an AA item on the seeded departure 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoHaveAttribute[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Locator: getByTestId('builder')
+    Expected: [32m"true"[39m
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toHaveAttribute" with timeout 15000ms[22m
+    [2m  - waiting for getByTestId('builder')[22m
+
+
+      72 |
+      73 | async function hydrated(page: Page, testId: string) {
+    > 74 |   await expect(page.getByTestId(testId)).toHaveAttribute("data-hydrated", "true", { timeout: 15_000 });
+         |                                          ^
+      75 | }
+      76 |
+      77 | async function signedIn(page: Page) {
+        at hydrated (/home/nghiep/projects/AA-Ecosys/.tmp-session/wt/s279-verify-partner/e2e/tests/aa-cancel.spec.ts:74:42)
+        at /home/nghiep/projects/AA-Ecosys/.tmp-session/wt/s279-verify-partner/e2e/tests/aa-cancel.spec.ts:152:11
+
+    Error Context: test-results/aa-cancel-crm-13-AA-cancel-1bc30-tem-on-the-seeded-departure/error-context.md
+
+  1 failed
+    tests/aa-cancel.spec.ts:96:7 › crm-13: AA cancels a departure the agency has a trip on (Dev, agent-only) › prepare: a CRM trip with the seeded tour as an AA item on the seeded departure 
+  1 skipped
+exit 1

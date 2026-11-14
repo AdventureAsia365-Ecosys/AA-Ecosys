@@ -77,6 +77,10 @@ HARD RULES for this lane:
   and recommit (never reset --soft to a bare origin/main ref: a stale or newer ref makes the squash revert main); never "fix it in a later commit".
   Never silence a finding with an inline gitleaks allow comment (CI Secret Scan refuses a PR that adds one until a reviewer labels it): rewrite the line so
   the rule no longer matches (S278 Booking #235: WHERE key IN ('a_setting_name') instead of key = '...').
+- Thresholds are settings, not literals (tech lead S279): every new threshold, limit, cap, floor, ceiling, quota, budget, retry/attempt limit
+  or retention window you add must be read from the app's admin-editable settings (administrator role, seeded default, audited), never a
+  code literal, an env var or a registry YAML value alone. If the app has no settings mechanism for it yet, say so in notes_vi and in the
+  PR body as a follow-up instead of inventing a new env var (S279 thresholds audit: docs/audits/2026-11-13-S279-session/thresholds-audit/).
 - Test parameters are fixed values: never uuid.uuid4(), random or time at import inside @pytest.mark.parametrize or a module-level constant used
   there (pytest-xdist workers collect different ids and CI goes red). AA-CIS-App: run tests/unit/test_s276_parametrize_determinism_lint.py
   whenever you add or change a parametrize (S278: #1454 and #1456 both went red on it).
