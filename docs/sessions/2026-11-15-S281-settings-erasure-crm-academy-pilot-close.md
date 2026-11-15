@@ -176,3 +176,10 @@ Theo [`state-snapshot.md`](../audits/2026-11-15-S281-session/state-snapshot.md) 
 - **Số migration của PR mở có thể bị PR khác lấy:** #1525 lấy 427, #1521 đánh lại 428–429 lúc ship.
 - **Đổi major version module Academy reset hoàn thành module**: quiz phải đạt ở major hiện hành.
 - **Required check mới ở root** cần token gh của tech lead (App `aa-agent` thiếu quyền administration, cố ý theo ADR 0011).
+
+
+## Bổ sung lúc chốt (sau snapshot)
+
+- AA-1090: test thật trên domain thử phát hiện lỗi SAN rỗng của chứng chỉ edge → CIS #1528 (cf746a02); retry → host
+  active 08:06Z, TripPlanner mang tên đại lý trên tên miền riêng (ảnh `verify/aa1090/`); gỡ host → về đường dẫn chung.
+- AA-1048: fire 300 xong (0,396 USD, bắn 104), pool 21 TP / 66 FP, DRY RUN sạch.

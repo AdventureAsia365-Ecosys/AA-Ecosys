@@ -61,4 +61,9 @@ Migration mới nhất: CIS 429, bk-058, tp-031, crm-070.
 
 ## Bổ sung sau khi chụp
 
-(điền khi lượt fire AA-1048 và test host AA-1090 xong)
+- **AA-1048 fire 300** (xong ~07:38Z): 237 lời gọi, 0,396 USD, ledger 237/237, bắn 104 → pool mới 21 TP / 66 FP mẫu;
+  DRY RUN 2 bước sạch (pre-registration khớp, ngoài mẫu sạch). Trial và lượt có cổng: S282.
+- **CIS #1528** (sửa SAN rỗng của chứng chỉ edge) merged cf746a02 và deploy xong; CIS api/worker chạy cf746a02.
+- **AA-1090 test thật:** host `trip-test` active 08:06Z, HTTPS 200 sau chuyển hướng về `/pilot-rehearsal-01/plan`,
+  mang tên đại lý; `/destinations` 404; WAF challenge `/api/trip/send` 202. Gỡ host: distribution agency về 0 alias +
+  chứng chỉ mặc định, host không còn phục vụ, đường dẫn chung 200.
