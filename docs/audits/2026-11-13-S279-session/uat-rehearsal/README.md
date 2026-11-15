@@ -96,10 +96,10 @@ Run on 14-15/11/2026 by the orchestrator through the admin route. The tech lead 
 
 | Step | Time (UTC) | Result |
 |---|---|---|
-| Precheck | 14/11 18:10 | The trash and retire previews named 1 tenant and 0 live posts |
+| Precheck | 14/11 18:00 | The trash and retire previews named 1 tenant and 0 live posts |
 | Trash master of tour X | 14/11 18:15 | State `served` became `retired` (`master_trashed`), and 1 tenant was notified |
-| Public trip page | 14/11 18:16 | 410 |
-| Booking pull | 14/11 | Booking received the retired tour |
+| Public trip page | 14/11, after the trash | 410 |
+| Booking pull | 14/11, after the trash | Booking received the retired tour |
 | CRM flags | 14/11 20:00 | The hourly catalogue sync raised 4 flags: 3 open options and 1 confirmed line on 4 trips. The board's retired-tour filter lists the 4 trips |
 | Restore, then activate | 14/11 23:02 | `retired` became `paused` (`master_inactive`), then `served`. 1 tenant was reinstated, and the public trip page answers 200 |
 | CRM flags cleared | 15/11 01:00 | The catalogue sync saw the tour served again: the 4 flags were cleared, and one `crm_tour_retired_fanout` run succeeded |
