@@ -89,6 +89,28 @@ request failed with `pilot_taken`; End pilot returned `changed` true; the soft o
 Booking partner row read `suspended` about five minutes after the offboard (Teardown 7). The Dev pilot slot is free.
 The erasure apply after 2026-12-14 needs a person's approval of its DRY RUN fingerprint (runbook Teardown 2).
 
+## X2 tour retirement (S281, no video)
+
+Run on 14-15/11/2026 by the orchestrator through the admin route. The tech lead approved it in S281. The evidence is in
+`../../2026-11-15-S281-session/verify/aa1086/`.
+
+| Step | Time (UTC) | Result |
+|---|---|---|
+| Precheck | 14/11 18:00 | The trash and retire previews named 1 tenant and 0 live posts |
+| Trash master of tour X | 14/11 18:15 | State `served` became `retired` (`master_trashed`), and 1 tenant was notified |
+| Public trip page | 14/11, after the trash | 410 |
+| Booking pull | 14/11, after the trash | Booking received the retired tour |
+| CRM flags | 14/11 20:00 | The hourly catalogue sync raised 4 flags: 3 open options and 1 confirmed line on 4 trips. The board's retired-tour filter lists the 4 trips |
+| Restore, then activate | 14/11 23:02 | `retired` became `paused` (`master_inactive`), then `served`. 1 tenant was reinstated, and the public trip page answers 200 |
+| CRM flags cleared | 15/11 01:00 | The catalogue sync saw the tour served again: the 4 flags were cleared, and one `crm_tour_retired_fanout` run succeeded |
+
+**Result: PASS**, including the CRM part.
+
+Timing: the flags were raised at 20:00, not at the 19:00 sync, because the catalogue listing waits for the platform
+`recompute` that a trash starts (39 minutes here). They were cleared at the second sync after the activate (the
+activate's recompute ran 52 minutes, and one sync pass covers 500 of about 890 tours). So expect up to about two
+hours from the CIS act to the CRM flags.
+
 ## Not recorded
 
 | Scenario | Why |
@@ -96,7 +118,6 @@ The erasure apply after 2026-12-14 needs a person's approval of its DRY RUN fing
 | REH-01-price-import, REH-01-prices, REH-01-from-price | Covered without video by the S280 pricing run (`docs/audits/2026-11-14-S280-session/verify/aa1091/`): a synthetic supplier, 4 tours priced through the Excel DRY RUN and import, the agency tariff and the TripPlanner "From" price checked. The synthetic supply was removed after that run, so the takes cannot be filmed now. |
 | X1 items 2-3 (studio and planner refusal on budget) | No scenario yet (gap G8 of the runbook); the CRM refusal of X1 item 4 is filmed above |
 | REH-02-owner-invite | Tech-lead act (done earlier today, off camera) |
-| X2 (tour retirement) | Not run yet: retiring tour X changes shared Dev state for every tenant and is a tech-lead act in the runbook. The CRM handler it checks is live (CRM migration 063, `aa_tour_discontinued` task), so the CRM part is expected to PASS when X2 runs. |
 | X3 (AA cancels a departure) | Proven live on the CRM E2E agency in S279 (`../verify/aa1087-crm13/`); on this agency it needs gaps G1 and G11 |
 
 ## Findings
