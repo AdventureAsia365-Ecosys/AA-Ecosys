@@ -1,0 +1,96 @@
+{
+  "n": "3",
+  "at": "2026-11-15T01:25:51.519Z",
+  "spent_before": "0.0008",
+  "steps": {
+    "r41_draft": {
+      "status": 200,
+      "ms": 1050,
+      "data": {
+        "ai_draft_id": "af6c2f81-bc43-4576-84bf-e6b7fc2c04a5",
+        "outcome": "ok",
+        "text": "Dear <PERSON_1>,\n\nThank you for your inquiry. I'll confirm the details about breakfast inclusion and the airport pickup time for your Hanoi hotel. I'll get back to you shortly.\n\nBest regards,\n<AGENCY_NAME>",
+        "fallback": null,
+        "refusal_code": null,
+        "error_class": null,
+        "llm_call_id": "0e418a16-0d4f-4df6-963c-fbe4728dd5fb",
+        "budget_used_pct": 0,
+        "budget_alert": null,
+        "truncated": false,
+        "approval_required": true,
+        "voice_profile_id": "f1ea02a0-b387-4f03-b3d3-2b45f2cbf910",
+        "drafted_at": "2026-11-15T01:25:52.617541+00:00",
+        "ai": {
+          "ai_generated": true,
+          "generator": "Adventure Asia CRM AI assistant",
+          "generated_at": "2026-11-15T01:25:52.617541+00:00"
+        }
+      }
+    },
+    "r10_supplier": {
+      "status": 200,
+      "ms": 967,
+      "data": {
+        "outcome": "ok",
+        "fallback": null,
+        "refusal_code": null,
+        "error_class": null,
+        "llm_call_id": "a462adbb-3762-4fbc-9de4-c77a265e3406",
+        "budget_used_pct": 0.1,
+        "budget_alert": null,
+        "truncated": false,
+        "approval_required": true,
+        "ai_draft_id": "ae5d92c5-c3d3-4ec2-822e-99ecc97a9742",
+        "agency_supplier_id": "2be5cbbe-9366-4284-877d-28360283108e",
+        "lines": [
+          {
+            "code": "L1",
+            "booking_line_id": "53c30e02-4655-43b3-9b93-b3e3451a0425",
+            "status": "declined",
+            "confirmation_no": null,
+            "service_from": "2026-12-12",
+            "service_to": "2026-12-12",
+            "times": null,
+            "title": "Flight Hanoi to Ho Chi Minh City, 2 adults (synthetic trial)"
+          }
+        ],
+        "rejected": 0,
+        "reasons": {},
+        "source": "text"
+      }
+    },
+    "r40_options": {
+      "status": 200,
+      "ms": 1031,
+      "data": {
+        "outcome": "ok",
+        "fallback": null,
+        "refusal_code": null,
+        "error_class": null,
+        "llm_call_id": "4cee7da5-2d99-452c-b9f2-f36a55a0587b",
+        "budget_used_pct": 0.1,
+        "budget_alert": null,
+        "truncated": false,
+        "approval_required": true,
+        "ai_draft_id": "ae2cdf57-e234-4d44-bd40-699762c0c9b7",
+        "proposal_day_id": "65f6c3db-52ac-41e0-9fdd-dbaadc6d8b89",
+        "proposal_id": "feb86104-412e-456e-898a-36cfd9a3f6da",
+        "options": [
+          {
+            "code": "A2",
+            "tour_source_id": "000e3340-d9f5-4b7b-8609-4cdaa9c272dc",
+            "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+            "component_id": "sv:7f474dc8-a9b3-45ea-b67a-3dd87f1a99e6",
+            "component_kind": "activity",
+            "tour_day": 1,
+            "why": "The family with two teens is active and wants a short trek or rafting, which aligns with the activities offered on tour day 1."
+          }
+        ],
+        "closed_list_size": 3,
+        "rejected": 0,
+        "reasons": {}
+      }
+    }
+  },
+  "spent_after": "0.0013"
+}
