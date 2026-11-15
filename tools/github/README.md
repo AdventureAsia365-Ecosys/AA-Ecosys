@@ -19,6 +19,7 @@ tools serve, and when to use each: skill `aa-ship` (§1 "Cách merge", `referenc
 | `ship_copy_apply.py <owner> <NNN>` | Infra copy PR + DB Migrate on that file + readiness (below) |
 | `dbmig.sh <owner>/<file or NNN> <check or apply>` | DB Migrate on a file already on Infra main (`ship_copy_apply.py --no-copy`) |
 | `ship_open_prs.py <journal or wf_ id>` | push lane branches and open their PRs from a workflow journal (below) |
+| `ship_deploy.py` | library, read-only: deployed services per repo (deploy workflow push paths + health URL) and the ECS exec guard used by `ship_merge.py` / `ship_wave.py` (below) |
 | `train-lib.sh` | shell functions for a background train; `waitdeploy` waits for a `git_sha` on a health endpoint |
 | `guard_runs.py [--json]` | session start, read-only: the latest scheduled run of every workflow in the 6 repos, red first |
 | `ci_hygiene.py [--json] [--clean]` | session start: Actions cache usage vs the 10 GB cap per repo, stale pull request / merge-queue caches (`--clean` deletes only those), uncached external downloads in workflows (WL5), artifact retention (WL7, warn), public org repositories not in the known list; read-only without `--clean`. `--retention-scan <checkout>` prints WL7 warnings for one checkout (root Workflow Lint) |
@@ -45,6 +46,17 @@ checkout: `python3 tools/github/<tool>.py --help`.
 - `--check-only` gates and reports; `--serial` keeps the given order and stops at the first failure.
 - Exit 0 merged, 3 a red check (or none reported), 4 refused or merge failed, 5 still pending at `--timeout`.
 - The gate does not read job tables or waves: `aa-ship` §2 still comes first for backend merges.
+- ECS exec guard (AA-1048): after the gate and before the merge call, an AA-CIS-App PR whose diff touches the
+  api/worker deploy paths (`api/**`, `shared/**`, `services/**`, `worker/**`, `Dockerfile`, `requirements.txt`, minus
+  `api/version.py` and `api/migrations/**`) is refused (exit 4) while a `tools/ecs/ecsx.sh` S3-mode script runs in
+  `aa-cis-dev-api` / `-worker`: a heartbeat `scripts/out/<run id>.txt.running` on the scripts bucket younger than 120 s
+  with no `.done` (the same rule as the CIS deploy gate, `shared/jobs/exec_heartbeat.py`). The refusal names the run id.
+  The read is one `aws s3api list-objects-v2` (profile `ECSX_PROFILE`, default `aa365-admin`; bucket `ECSX_BUCKET`, else
+  the default in `tools/ecs/ecsx.sh`); an unreadable listing (expired MFA) refuses too. `--allow-running-exec` merges
+  anyway: the tech lead's call, printed as a WARN line and appended to `.tmp-session/ship-overrides.jsonl`; the CIS
+  deploy guard still blocks the roll until the script ends or is overridden in Deploy Dev. Gap: Booking and CRM runs use
+  the ecsx local mode (output in the container's `/tmp`, nothing outside), so no tool can see them and they are not
+  guarded; finish such a run before shipping that repo's backend.
 - AA-1024: `as-app.sh` refuses `gh pr merge` unless this gate passed (it sets `AA_SHIP_GATED`; `--disable-auto` stays
   open), and the same merge through the API: `gh api` with a writing method on `pulls/<n>/merge`, or `gh api graphql`
   with `mergePullRequest` / `enqueuePullRequest` (also from a `-F query=@file` / `--input` body; a GET of the merge
@@ -71,8 +83,26 @@ checkout: `python3 tools/github/<tool>.py --help`.
   integration run or a refused push stops that PR (exit 4) and keeps the merge for a hand fix. `--check-only` never
   touches a branch.
 - A failure stops only what depends on it (a red migration PR skips its held PRs; independent PRs go on).
-- `--wait-deploy` waits once per deployed app (CIS, Booking, Partner) at the end, until the health `git_sha` contains
-  every merge of the wave (GitHub compare). `--dry-run` prints the plan; `--check-only` gates and merges nothing.
+- `--wait-deploy` waits once per deployed service at the end, until its health commit contains every merge of the wave
+  that touched it (GitHub compare). Which services a merge deploys comes from the PR's files and the deploy workflows'
+  `on.push.paths`, mirrored in `ship_deploy.SERVICES` (AA-1048; S281 Partner #323, web only, timed out on the CRM API
+  health while the web already served the merge):
+
+  | Repo | Service | Deploy workflow | Health read |
+  |---|---|---|---|
+  | AA-CIS-App | api + worker | `deploy-dev.yml` | `https://api-cis.lumiguides.it.com/health/ready` `git_sha` |
+  | AA-CIS-App | admin | `deploy-admin-dev.yml` | `https://aa-cis.lumiguides.it.com/api/healthz` `sha` |
+  | AA-Booking | api | `deploy-dev.yml` | `https://api-booking.lumiguides.it.com/booking/health` `git_sha` |
+  | AA-Booking | admin | `deploy-admin-dev.yml` | `https://booking.lumiguides.it.com/api/healthz` `sha` |
+  | AA-Partner | api | `deploy-dev.yml` | `https://partner-dev.lumiguides.it.com/crm/health` `git_sha` |
+  | AA-Partner | web | `deploy-web-dev.yml` | `https://portal.lumiguides.it.com/healthz` `git_sha` |
+
+  A PR that touches no deploy path (docs, tests, a migration file alone) prints "no deploy expected"; an unreadable
+  file list waits on every service of its repo. `test_ship_deploy.py` compares the paths with `origin/main` of the
+  local app clones, so a changed workflow filter turns that test red. A timeout names the service, its URL and its
+  workflow. `--dry-run` prints the plan; `--check-only` gates and merges nothing.
+- `--allow-running-exec`: the ECS exec guard of `ship_merge.py` (above) runs for every CIS api/worker PR of the wave;
+  a refused PR stops alone (exit 4), the rest of the wave goes on.
 - Busy job tables (S281): a contract apply refused because a job table is busy or a rerun wave is open (DM-11.4; a tour
   trash / restore / Master activation queues a platform `recompute` of 16-52 min) is a hold, not a failure. The tool
   cannot read the job tables (no AWS), so it reads the refusal: `<owner>/<NNN>: apply held: job tables busy (<table:

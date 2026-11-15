@@ -12,10 +12,12 @@ import os
 import tempfile
 import threading
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
 from unittest import mock
 
 import ship_common
+import ship_deploy
 import ship_merge
 import ship_wave
 from ship_common import Result, Runner, ShipError
@@ -41,16 +43,30 @@ class Recorder:
 
 
 def scripted(numbers, rec: Recorder, *, wait_for: dict | None = None, repo_of: dict | None = None,
-             dirty: tuple = ()) -> FakeRunner:
+             dirty: tuple = (), files: dict | None = None, heartbeats: list | None = None) -> FakeRunner:
     """A FakeRunner where each PR is OPEN and green until its merge call ran, then MERGED.
 
     wait_for {a: b}: the merge call of PR a blocks until the merge call of PR b has STARTED (proves parallelism:
-    a serial run would wait for ever, so the call gives up after 5 s and fails)."""
+    a serial run would wait for ever, so the call gives up after 5 s and fails).
+    files {n: [paths]}: the PR's changed files (default none: docs-only, no deploy, no ECS exec check).
+    heartbeats: the scripts/out/ listing the ECS exec guard reads (default empty)."""
     started = {n: threading.Event() for n in numbers}
     merged: set[int] = set()
     r = FakeRunner()
     r.on(("export-credentials",), Result(1, "", "no session"))
-    r.on(("--paginate",), Result(0, "[]\n"))
+
+    def paginate(argv):
+        if any("removed" in a for a in argv):  # removed_files: the gate's deletion check
+            return Result(0, "[]\n")
+        n = int(next(a for a in argv if "/pulls/" in a).split("/pulls/")[1].split("/")[0])
+        return js((files or {}).get(n, ["docs/notes.md"]))
+
+    def listing(argv):  # heartbeats: (key, age in seconds at the time of the read, on the fake clock)
+        return js([{"Key": k, "LastModified": datetime.fromtimestamp(r.t - age, tz=timezone.utc).isoformat()}
+                   for k, age in (heartbeats or [])])
+
+    r.on(("--paginate",), paginate)
+    r.on(("s3api", "list-objects-v2"), listing)
 
     def view(n):
         def answer(argv):
@@ -336,7 +352,7 @@ class WaveTest(unittest.TestCase):
 
     def test_wait_deploy_once_per_app_until_the_wave_is_live(self):
         rec = Recorder()
-        r = scripted([1350, 1351], rec)
+        r = scripted([1350, 1351], rec, files={1350: ["api/routers/x.py"], 1351: ["shared/y.py"]})
         r.on(("gh", "api", f"repos/{ship_common.ORG}/AA-CIS-App/compare/{'c' * 40}...{'9' * 40}"),
              js({"status": "ahead"}))
         r.on(("gh", "api", f"repos/{ship_common.ORG}/AA-CIS-App/compare/{'d' * 40}...{'9' * 40}"),
@@ -352,16 +368,102 @@ class WaveTest(unittest.TestCase):
         code = ship_wave.main(["cis#1350", "cis#1351", "--wait-deploy"], runner=r, apply_fn=lambda o, n: 0,
                               fetch=fetch)
         self.assertEqual(code, 0, self.out.getvalue())
-        self.assertEqual(set(urls), {ship_wave.DEPLOY_URL["AA-CIS-App"]})
+        self.assertEqual(set(urls), {ship_deploy.service("AA-CIS-App", "api").url})
         self.assertEqual(len(urls), 3)  # one wait for the app, not one per PR
         self.assertIn("contains 2 merge(s)", self.out.getvalue())
 
     def test_wait_deploy_timeout_is_exit_5(self):
-        r = scripted([1350], Recorder())
+        r = scripted([1350], Recorder(), files={1350: ["api/x.py"]})
         r.on(("gh", "api"), js({"status": "behind"}))
         code = ship_wave.main(["cis#1350", "--wait-deploy", "--deploy-timeout", "60"], runner=r,
                               apply_fn=lambda o, n: 0, fetch=lambda url: {"git_sha": "1" * 40})
         self.assertEqual(code, 5)
+
+    def _partner_wave(self, files: list[str], live: dict) -> tuple[int, list[str], str]:
+        """One Partner PR (#323) with `files`; `live` maps a health URL to the commit it serves."""
+        merged = "a" * 40  # what scripted() reports for a merged PR without a MERGE_SHA entry
+        r = scripted([323], Recorder(), files={323: files})
+        r.rules.insert(0, (("gh", "api", f"repos/{ship_common.ORG}/AA-Partner/compare/{merged}...{'1' * 40}"),
+                           [js({"status": "behind"})]))
+        urls: list[str] = []
+
+        def fetch(url):
+            urls.append(url)
+            return {"git_sha": live.get(url, "1" * 40)}
+
+        code = ship_wave.main(["crm#323", "--wait-deploy", "--deploy-timeout", "60"], runner=r,
+                              apply_fn=lambda o, n: 0, fetch=fetch)
+        return code, urls, self.out.getvalue()
+
+    def test_web_only_partner_pr_waits_on_the_crm_web_not_the_api(self):
+        # S281 #323: only web/ changed; the web /healthz already serves the merge, the API keeps its old commit.
+        web, api = ship_deploy.service("AA-Partner", "web"), ship_deploy.service("AA-Partner", "api")
+        code, urls, out = self._partner_wave(["web/app/page.tsx", "web/tests/x.test.ts"], {web.url: "a" * 40})
+        self.assertEqual(code, 0, out)
+        self.assertEqual(set(urls), {web.url})
+        self.assertNotIn(api.url, urls)
+        self.assertIn("deploy AA-Partner web: live aaaaaaaa contains 1 merge(s)", out)
+
+    def test_api_only_partner_pr_waits_on_the_crm_api(self):
+        api = ship_deploy.service("AA-Partner", "api")
+        code, urls, out = self._partner_wave(["api/app/routers/x.py"], {api.url: "a" * 40})
+        self.assertEqual(code, 0, out)
+        self.assertEqual(set(urls), {api.url})
+
+    def test_partner_pr_touching_both_waits_on_both(self):
+        web, api = ship_deploy.service("AA-Partner", "web"), ship_deploy.service("AA-Partner", "api")
+        code, urls, out = self._partner_wave(["api/app/x.py", "web/lib/y.ts"], {api.url: "a" * 40})
+        self.assertEqual(code, 5, out)  # the web never served the merge: that service times out, named
+        self.assertEqual(set(urls), {api.url, web.url})
+        self.assertIn(f"ERROR deploy AA-Partner web: {web.url} still 11111111", out)
+
+    def test_docs_only_partner_pr_expects_no_deploy(self):
+        code, urls, out = self._partner_wave(["docs/guide.md", "api/tests/unit/test_x.py", "api/migrations/050_x.sql"],
+                                             {})
+        self.assertEqual(code, 0, out)
+        self.assertEqual(urls, [])
+        self.assertIn("deploy AA-Partner#323: no deploy expected", out)
+
+    def test_unreadable_file_list_waits_on_every_service_of_the_repo(self):
+        r = scripted([323], Recorder())
+        r.rules.insert(0, (("--paginate", "repos/AdventureAsia365-Ecosys/AA-Partner/pulls/323/files?per_page=100",
+                            "[.[] | .filename, (.previous_filename // empty)]"), [Result(1, "", "HTTP 502")]))
+        plan_wave = ship_wave.Wave(r, ship_wave.parse_items(["crm#323"]), merge_kw={}, apply_fn=None, fetch=None,
+                                   check_only=False)
+        plan_wave.merged_sha["AA-Partner#323"] = "f" * 40
+        plan_wave.results["AA-Partner#323"] = (0, "MERGED")
+        plan = ship_wave.deploy_plan(r, plan_wave)
+        self.assertEqual({s.name for s in plan}, {"api", "web"})
+        self.assertIn("HTTP 502", self.out.getvalue())
+
+    def test_running_ecs_exec_refuses_the_cis_backend_pr_only(self):
+        # AA-1048: a fresh heartbeat holds the CIS api PR; the CIS frontend PR and the root PR merge.
+        rec = Recorder()
+        r = scripted([1350, 1351, 601], rec, repo_of={601: "AA-Ecosys"},
+                     files={1350: ["api/x.py"], 1351: ["frontend/app/page.tsx"], 601: ["tools/x.py"]},
+                     heartbeats=[("scripts/out/20261026T070000-42-recount.txt.running", 30)])
+        code = ship_wave.main(["cis#1350", "cis#1351", "root#601"], runner=r, apply_fn=lambda o, n: 0,
+                              fetch=lambda url: {})
+        out = self.out.getvalue()
+        self.assertEqual(code, 4, out)
+        self.assertNotIn("merge-start 1350", rec.events)
+        self.assertIn("merged 1351", rec.events)
+        self.assertIn("merged 601", rec.events)
+        self.assertIn("20261026T070000-42-recount (heartbeat 30s ago)", out)
+        self.assertEqual(len(r.called("s3api")), 1)  # only the backend PR reads the heartbeats
+
+    def test_allow_running_exec_lets_the_wave_merge_and_logs_it(self):
+        rec = Recorder()
+        r = scripted([1350], rec, files={1350: ["api/x.py"]},
+                     heartbeats=[("scripts/out/run-1.txt.running", 10)])
+        with mock.patch.object(ship_deploy, "OVERRIDE_LOG", Path(self._tmp.name) / "overrides.jsonl"):
+            code = ship_wave.main(["cis#1350", "--allow-running-exec"], runner=r, apply_fn=lambda o, n: 0,
+                                  fetch=lambda url: {})
+            logged = (Path(self._tmp.name) / "overrides.jsonl").read_text()
+        self.assertEqual(code, 0, self.out.getvalue())
+        self.assertIn("merged 1350", rec.events)
+        self.assertIn("WARN AA-CIS-App#1350: --allow-running-exec", self.out.getvalue())
+        self.assertIn('"pr": "AA-CIS-App#1350"', logged)
 
     def test_dry_run_touches_nothing(self):
         r = FakeRunner()

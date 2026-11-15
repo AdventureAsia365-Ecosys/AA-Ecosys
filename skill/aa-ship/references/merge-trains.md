@@ -10,7 +10,10 @@ live: §3. Công cụ và mã thoát: `tools/github/README.md` (AA-1032).
 - **Cả wave = MỘT lệnh `tools/github/ship_wave.py`** (AA-1024) chạy bằng Bash `run_in_background`, output
   `> .tmp-session/S<nnn>/<tên>-wave.txt 2>&1`: PR độc lập song song, chuỗi khai báo bằng `'<Repo>#<n>>apply:<owner>/<NNN>'`
   (PR chỉ migration) và `'<Repo>#<n>@after=<owner>/<NNN>'` (PR code chờ migration), `--wait-deploy` chờ deploy một lần
-  mỗi app. Không nối `ship_merge.py … && ship_copy_apply.py … && ship_merge.py …`, không vòng `for`, không script ship
+  mỗi service mà diff của PR đụng tới (AA-1048: CIS api+worker / admin, Booking api / admin, CRM api / web theo `paths`
+  của workflow deploy, `tools/github/ship_deploy.py`; PR chỉ docs/test → "no deploy expected"). PR CIS đụng api/worker
+  bị từ chối khi đang có script `tools/ecs/ecsx.sh` chạy trong container (heartbeat còn tươi, in run id);
+  `--allow-running-exec` là quyết định của tech lead (có ghi log). Không nối `ship_merge.py … && ship_copy_apply.py … && ship_merge.py …`, không vòng `for`, không script ship
   trong `.tmp-session/`: hook `aa_shell_guard` SHIP-1 chặn (S257, S263, S271: script tự viết merge tuần tự, merge PR có
   check đỏ không bắt buộc, đọc nhầm run DB Migrate của file khác).
 - Công cụ (Python stdlib, `python3 tools/github/<tool>.py --help`):

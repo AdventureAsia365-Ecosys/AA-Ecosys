@@ -337,6 +337,22 @@ class S3ModeTest(unittest.TestCase):
             self.assertEqual(r.returncode, 2)
             self.assertIn("10800 s cap", r.stderr)
 
+    def test_script_timeout_in_the_environment_is_refused_and_says_where_it_goes(self):
+        # S278 lesson / AA-1048: the env form is ignored by the runner; the refusal must say "after the script path".
+        old = os.environ.get("ECSX_SCRIPT_TIMEOUT")
+        os.environ["ECSX_SCRIPT_TIMEOUT"] = "600"
+        try:
+            with tempfile.TemporaryDirectory() as d:
+                r = self.run_ecsx(Path(d), "print(1)\n")
+        finally:
+            if old is None:
+                os.environ.pop("ECSX_SCRIPT_TIMEOUT", None)
+            else:
+                os.environ["ECSX_SCRIPT_TIMEOUT"] = old
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("AFTER the script path", r.stderr)
+        self.assertIn("ECSX_SCRIPT_TIMEOUT=600", r.stderr)
+
 
 class RunnerCapsTest(unittest.TestCase):
     """S272 review: the heartbeat interval and the script timeout cannot be raised past what the deploy gate reads."""
