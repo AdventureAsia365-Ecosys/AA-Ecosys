@@ -657,13 +657,13 @@ features:
     module: academy
     name: AA Academy learning (courses, progress, quizzes, certificates)
     name_vi: Học viện AA (khoá học, tiến độ, bài kiểm tra, chứng chỉ)
-    summary_vi: "Khoá học dựng từ tài liệu nội bộ; nhân viên học trên trang academy, máy chủ chấm bài và cấp chứng chỉ. Đang xây (lược đồ và thông số đã áp dụng, API và trang chưa có)."
-    summary: Courses built from the repo docs; staff learn on the academy host, the server grades quizzes and issues certificates. Being built (schema and settings applied; API and pages not yet).
+    summary_vi: "Khoá học dựng từ tài liệu nội bộ; nhân viên học trên trang academy, máy chủ chấm bài, cấp chứng chỉ và cho người ngoài kiểm tra chứng chỉ."
+    summary: Courses built from the repo docs; staff learn on the academy host, the server grades quizzes, issues certificates and lets anyone verify a certificate code.
     roles: [admin, content, viewer]
-    status: planned
-    surface: []
+    status: live
+    surface: ["route:learn"]
     conditions:
-      settings: [cis.learn.quiz_items_per_attempt, cis.learn.quiz_pass_mark_pct, cis.learn.quiz_retake_delay_hours, cis.learn.final_quiz_items_per_module, cis.learn.final_quiz_pass_mark_pct, cis.learn.recert_months, cis.learn.recert_paths, cis.learn.review_max_cards_per_day, cis.learn.review_target_retention, cis.learn.learner_retention_days, cis.learn.verify_requests_per_minute, cis.learn.video_url_ttl_seconds]
+      settings: [cis.learn.quiz_items_per_attempt, cis.learn.quiz_pass_mark_pct, cis.learn.quiz_retake_delay_hours, cis.learn.final_quiz_items_per_module, cis.learn.final_quiz_pass_mark_pct, cis.learn.recert_months, cis.learn.recert_paths, cis.learn.review_max_cards_per_day, cis.learn.review_target_retention, cis.learn.learner_retention_days, cis.learn.verify_requests_per_minute, cis.learn.verify_visitor_requests_per_minute, cis.learn.video_url_ttl_seconds]
     depends_on: [CIS-F032]
     owner: tech_lead
   - id: BK-F001
@@ -1345,6 +1345,18 @@ features:
     surface: ["page:/portal/account/**"]
     depends_on: [CIS-F040, CIS-F045]
     owner: customer_success
+  - id: CRM-F047
+    app: crm
+    module: academy
+    name: AA Academy web (lessons, quizzes, review, certificates, public verify)
+    name_vi: Trang AA Academy (bài học, bài kiểm tra, ôn tập, chứng chỉ, kiểm tra chứng chỉ công khai)
+    summary_vi: "Giao diện học trên host academy: danh sách module, bài học, bài kiểm tra, ôn tập theo lịch, chứng chỉ của người học và trang công khai kiểm tra mã chứng chỉ."
+    summary: The learning UI on the academy host - module list, lessons, quizzes, spaced review, the learner's certificates and a public page that verifies a certificate code.
+    roles: [admin, content, viewer]
+    status: live
+    surface: ["page:/academy/**", "page:/academy", "page:/verify/[code]"]
+    depends_on: [CIS-F048]
+    owner: tech_lead
 
   # ── AA-TripPlanner ────────────────────────────────────────────────────────────────────────────────────────────────
   - id: TP-F001
