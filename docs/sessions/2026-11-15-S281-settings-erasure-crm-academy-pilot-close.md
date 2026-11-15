@@ -126,9 +126,9 @@
 | AA-1048 trial 9 lời gọi | 0,027 |
 | AA-1048 lượt bị timeout cắt (108/177 lời gọi, mất report) | ~0,172 |
 | AA-1048 bắn mẫu 150 (177 lời gọi) | 0,289 |
-| AA-1048 bắn mẫu 300 | đang chạy, số cuối điền ở snapshot |
+| AA-1048 bắn mẫu 300 (237 lời gọi, bắn 104; pool mới 21 TP / 66 FP mẫu, DRY RUN sạch) | 0,396 |
 | AA-965 trial + mở rộng (49 lượt) | 0,0072 |
-| **Tổng LLM đã biết (chưa gồm mẫu 300)** | **~0,77** |
+| **Tổng LLM trả phí của phiên** | **~1,17** |
 
 Dưới trần phiên 5 USD. Ngoài LLM: tên miền thử cho AA-1090 ~3 USD/năm (tech lead chọn phương án 1).
 
@@ -140,7 +140,12 @@ Không nháp PR-23 / PR-24 / PR-25 (không có tính năng mới ở đó). Báo
 
 ## Trạng thái kiểm cuối phiên
 
-ĐIỀN TỪ state-snapshot.md
+Theo [`state-snapshot.md`](../audits/2026-11-15-S281-session/state-snapshot.md) (~07:40 UTC):
+
+- ECS: cis-api :1170 / worker :739 cùng dev-6393fd75; booking-api :141 (8019cb88); crm-api :182, crm-web :156 (7e24a4c5); booking-admin :29. Rollout COMPLETED, running = desired.
+- Health 200 cả CIS, Booking, CRM, CRM web, academy, TripPlanner; migration CIS 429, bk-058, crm-070, tp-031.
+- Bảng job: shared.job và booking.job rảnh; crm.job 2 job định kỳ. Không wave.
+- Công tắc xoá dữ liệu tắt hết; domain test AA-1090 còn giữ; RDS snapshot erase02 xoá sau root PR.
 
 ## Còn lại (việc cho S282, theo thứ tự)
 
