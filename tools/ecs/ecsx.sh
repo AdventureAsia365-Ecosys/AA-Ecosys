@@ -23,6 +23,12 @@ Runs <script.py> with python3 in a running task of the service, cwd /app, /app o
 its output; exits with the script's exit code. VAR=value pairs become the script's environment. The script reads
 the container's own DATABASE_URL (CIS: cis_app, Booking: booking, CRM: crm_app). The pair
 ECSX_SCRIPT_TIMEOUT=<seconds> sets how long the script may run in the container (default 3300, at most 10800).
+ECSX_SCRIPT_TIMEOUT goes AFTER the script path, as a VAR=value pair; set in the environment it has no effect and is
+refused. ECSX_TIMEOUT (the wait on this side) is the environment one:
+  ECSX_TIMEOUT=7200 tools/ecs/ecsx.sh .tmp-session/long.py ECSX_SCRIPT_TIMEOUT=7200
+While an s3-mode run is alive (CIS), its heartbeat blocks the CIS deploy gate and ship_merge / ship_wave refuse to
+merge a CIS api/worker PR (override --allow-running-exec, the tech lead's call). Local-mode runs (Booking, CRM) leave
+no heartbeat outside the container: finish them before shipping that repo's backend.
 
 Environment:
   ECSX_SERVICE        aa-cis-dev-api (default) | aa-cis-dev-worker | aa-booking-dev-api | aa-crm-dev-api
@@ -91,7 +97,7 @@ done
 # S278 lesson: ECSX_SCRIPT_TIMEOUT set in the environment is ignored (it is a VAR=value argument); two paid R1 runs
 # were cut at the 3300 s default that way. Refuse instead of silently using the default.
 if [[ -n ${ECSX_SCRIPT_TIMEOUT:-} ]] && ! printf '%s\n' "$@" | grep -q '^ECSX_SCRIPT_TIMEOUT='; then
-  echo "ecsx: ECSX_SCRIPT_TIMEOUT is set in the environment, where it has no effect: pass it after the script path as ECSX_SCRIPT_TIMEOUT=$ECSX_SCRIPT_TIMEOUT" >&2; exit 2
+  echo "ecsx: ECSX_SCRIPT_TIMEOUT is set in the environment, where it has no effect: pass it AFTER the script path as a VAR=value pair (tools/ecs/ecsx.sh $script ECSX_SCRIPT_TIMEOUT=$ECSX_SCRIPT_TIMEOUT) and unset it in the environment" >&2; exit 2
 fi
 base=$(basename "$script" .py); base=${base//[^A-Za-z0-9_-]/_}
 id=$(date -u +%Y%m%dT%H%M%S)-$$-$base

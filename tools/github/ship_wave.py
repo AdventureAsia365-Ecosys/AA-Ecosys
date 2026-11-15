@@ -26,8 +26,15 @@ time (ship_merge.merge_one: EVERY check green, settle re-read, DIRTY / draft / b
 CIS, Booking, Partner; squash with --match-head-commit for the others, one PR at a time per non-queue repo). The
 migrations of one owner are applied in number order, one after the other, as one batch (Migration Sync / Apply keep
 owner order); a held PR starts the moment its migrations are registered. A failure stops only what depends on it.
---wait-deploy waits ONCE per deployed app (CIS, Booking, Partner) at the end, until its health endpoint reports a
-git_sha that contains every merge of the wave in that repo; never once per PR.
+--wait-deploy waits ONCE per deployed service at the end, until its health endpoint reports a commit that contains
+every merge of the wave that touched it; never once per PR. Which services a merge deploys comes from its diff and the
+deploy workflows' push paths (ship_deploy.SERVICES, AA-1048): CIS api+worker / admin, Booking api / admin, CRM api /
+web. A PR that touches none (docs, tests) expects no deploy and says so (S281: Partner web-only #323 timed out on the
+CRM API health while the web /healthz already served it).
+
+ECS exec guard (AA-1048, in ship_merge.merge_one): a CIS PR that deploys api/worker is refused while a
+tools/ecs/ecsx.sh script runs there (fresh heartbeat on the scripts bucket), naming the run id; --allow-running-exec
+is the tech lead's override (logged). The other PRs of the wave go on.
 
 Busy job tables (S281): Migration Apply / DB Migrate refuse a contract apply while any owner job table has a queued or
 running job or a rerun wave is open (DM-11.4); a tour trash / restore / Master activation queues a platform recompute
@@ -57,6 +64,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import ship_copy_apply
+import ship_deploy
 import ship_merge
 from ship_common import (
     AS_APP,
@@ -76,12 +84,7 @@ from ship_common import (
 )
 from ship_open_prs import SAFE_HOOKS, push_failure_reason, push_timeout
 
-# Deployed apps: health endpoint that reports the running git_sha (as tools/github/train-lib.sh waitdeploy).
-DEPLOY_URL = {
-    "AA-CIS-App": "https://api-cis.lumiguides.it.com/health/ready",
-    "AA-Booking": "https://api-booking.lumiguides.it.com/booking/health",
-    "AA-Partner": "https://partner-dev.lumiguides.it.com/crm/health",
-}
+# Deployed services, their deploy paths and health endpoints: ship_deploy.SERVICES (AA-1048).
 
 Key = tuple[str, str]  # (owner, NNN)
 
@@ -497,29 +500,53 @@ def contains(runner: Runner, repo: str, base: str, head: str) -> bool:
     return isinstance(data, dict) and data.get("status") in ("identical", "ahead")
 
 
-def wait_deploys(runner: Runner, wave: Wave, fetch, *, timeout: float, interval: float = 30) -> int:
-    """Once per deployed app: wait until its running git_sha contains every merge of the wave in that repo."""
-    worst = 0
-    by_repo: dict[str, list[str]] = {}
+def deploy_plan(runner: Runner, wave: Wave, files_of=None) -> dict[ship_deploy.Service, list[str]]:
+    """The merges of the wave each deployed service must serve: a merged PR counts for the services whose deploy
+    paths its diff touches (AA-1048: Partner web-only #323 waited on the CRM API and timed out). A PR that touches
+    none (docs, tests, a migration file alone) expects no deploy; an unreadable file list waits on every service of
+    its repo."""
+    files_of = files_of or (lambda repo, n: ship_deploy.changed_files(runner, repo, n))
+    plan: dict[ship_deploy.Service, list[str]] = {}
     for it in wave.items:
         sha = wave.merged_sha.get(it.tag)
-        if sha and it.repo in DEPLOY_URL and wave.results.get(it.tag, (1,))[0] == 0:
-            by_repo.setdefault(it.repo, []).append(sha)
-    for repo, shas in sorted(by_repo.items()):
-        url = DEPLOY_URL[repo]
+        if not sha or it.repo not in ship_deploy.DEPLOYED_REPOS or wave.results.get(it.tag, (1,))[0] != 0:
+            continue
+        try:
+            services = ship_deploy.touched_services(it.repo, files_of(it.repo, it.n))
+        except ShipError as e:
+            services = ship_deploy.services_of(it.repo)
+            log(f"WARN deploy {it.tag}: {e}; waiting on every service of {it.repo} "
+                f"({', '.join(s.name for s in services)})")
+        if not services:
+            log(f"deploy {it.tag}: no deploy expected (no file under the deploy paths of "
+                f"{', '.join(s.label for s in ship_deploy.services_of(it.repo))})")
+            continue
+        log(f"deploy {it.tag}: waits on {', '.join(f'{s.name} ({s.label})' for s in services)}")
+        for s in services:
+            plan.setdefault(s, []).append(sha)
+    return plan
+
+
+def wait_deploys(runner: Runner, wave: Wave, fetch, *, timeout: float, interval: float = 30, files_of=None) -> int:
+    """Once per deployed service the wave touched: wait until its running commit contains every merge of the wave
+    that touched it."""
+    worst = 0
+    plan = deploy_plan(runner, wave, files_of)
+    for svc, shas in sorted(plan.items(), key=lambda kv: (kv[0].repo, kv[0].name)):
+        repo, url, what = svc.repo, svc.url, f"{svc.repo} {svc.name}"
         t0 = runner.now()
         while True:
             try:
-                running = str((fetch(url) or {}).get("git_sha") or "")
+                running = ship_deploy.running_sha(fetch(url))
             except Exception as e:  # noqa: BLE001 - report and retry until the timeout
                 running = ""
-                log(f"deploy {repo}: {url} unreachable ({type(e).__name__})")
+                log(f"deploy {what}: {url} unreachable ({type(e).__name__})")
             if running and all(contains(runner, repo, s, running) for s in shas):
-                log(f"deploy {repo}: live {running[:8]} contains {len(shas)} merge(s) of the wave")
+                log(f"deploy {what}: live {running[:8]} contains {len(shas)} merge(s) of the wave")
                 break
             if runner.now() - t0 >= timeout:
-                log(f"ERROR deploy {repo}: still {running[:8] or 'unknown'} after {int(timeout)}s, not "
-                    f"{', '.join(s[:8] for s in shas)} (a docs-only merge does not deploy: check the Deploy Dev run)")
+                log(f"ERROR deploy {what}: {url} still {running[:8] or 'unknown'} after {int(timeout)}s, not "
+                    f"{', '.join(s[:8] for s in shas)} (check the {svc.workflow} run of {repo})")
                 worst = max(worst, 5)
                 break
             runner.sleep(interval)
@@ -542,6 +569,8 @@ def main(argv: list[str] | None = None, runner: Runner | None = None, apply_fn=N
                     help="an apply held by busy job tables (exit 7) is re-dispatched up to N times, "
                          "--wait-idle-interval apart (default 0: report the hold and stop that chain)")
     ap.add_argument("--wait-idle-interval", type=float, default=IDLE_INTERVAL, help=argparse.SUPPRESS)
+    ap.add_argument(ship_deploy.ALLOW_FLAG, dest="allow_running_exec", action="store_true",
+                    help="merge CIS api/worker PRs although an ECS exec script runs there (tech lead's call, logged)")
     a = ap.parse_args(argv)
     if a.wait_idle < 0:
         print("ERROR --wait-idle must be 0 or more", file=sys.stderr)
@@ -571,7 +600,7 @@ def main(argv: list[str] | None = None, runner: Runner | None = None, apply_fn=N
             return rc, str(report.get("held") or "")
     wave = Wave(runner, items, apply_fn=apply_fn, fetch=fetch, check_only=a.check_only, restack=restack,
                 merge_kw={"timeout": a.timeout, "interval": max(30.0, a.interval), "allow_deletes": a.allow_deletes,
-                          "queue_timeout": a.queue_timeout},
+                          "queue_timeout": a.queue_timeout, "allow_running_exec": a.allow_running_exec},
                 wait_idle=a.wait_idle, idle_interval=a.wait_idle_interval)
     wave.run()
     codes: list[int] = []
