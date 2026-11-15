@@ -17,6 +17,12 @@ refuses a draft PR, a PR that does not target the default branch (a stacked PR s
 and a PR that deletes files unless --allow-deletes (a squash from a stale base shows up as deletions, lessons
 S250/S253). The gate does not see job tables or waves: aa-ship §2 still applies before backend merges.
 
+ECS exec guard (AA-1048): an AA-CIS-App PR that touches the api/worker deploy paths is not merged while a
+tools/ecs/ecsx.sh script runs in aa-cis-dev-api / -worker (a fresh heartbeat scripts/out/<run id>.txt.running on the
+scripts bucket; read-only `aws s3api list-objects-v2`): the deploy would kill it. The refusal names the run id
+(exit 4); --allow-running-exec merges anyway (the tech lead's call; a WARN line and a JSON line in
+.tmp-session/ship-overrides.jsonl). An unreadable listing (expired MFA) refuses too. Logic: ship_deploy.py.
+
 Merge: AA-CIS-App, AA-Booking, AA-Partner through the merge queue (mergeq.sh). When mergeq.sh exits 4 "not in the
 queue" and the PR is not merged, the merge-queue entries and the PR's merge_group runs are read before failing: while
 either still holds the PR, the tool waits (S273: exit 4 while the PR's own group CI ran). TripPlanner, Infra and the
@@ -37,6 +43,7 @@ import os
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
+import ship_deploy
 from ship_common import (
     AS_APP,
     GATE_ENV,
@@ -201,7 +208,7 @@ def _wait_out_queue(runner: Runner, repo: str, n: int, *, timeout: float, interv
 
 def merge_one(runner: Runner, repo: str, n: int, *, check_only: bool = False, timeout: float = 2400,
               interval: float = 60, allow_deletes: bool = False, expect_head: str | None = None,
-              queue_timeout: float = 5400) -> str:
+              queue_timeout: float = 5400, allow_running_exec: bool = False) -> str:
     """Gate and merge one PR. Return the merge SHA ('' with --check-only); raise ShipError on refusal/failure."""
     tag = f"{repo}#{n}"
     pr = gate(runner, repo, n, timeout=timeout, interval=interval, allow_deletes=allow_deletes,
@@ -213,6 +220,8 @@ def merge_one(runner: Runner, repo: str, n: int, *, check_only: bool = False, ti
     if check_only:
         log(f"{tag}: green, not merged (--check-only)")
         return ""
+    # AA-1048: a CIS PR that deploys api/worker is not merged while an ECS exec script runs there (the deploy kills it)
+    ship_deploy.exec_guard(runner, repo, n, allow=allow_running_exec)
     os.environ[GATE_ENV] = "ship_merge"  # as-app.sh lets a gated `gh pr merge` through (AA-1024); inherited below
     if repo in QUEUE_REPOS:
         r = runner.stream([MERGEQ, repo, str(n)], prefix=f"{tag}: ", timeout=queue_timeout)
@@ -283,6 +292,8 @@ def main(argv: list[str] | None = None, runner: Runner | None = None) -> int:
     ap.add_argument("--timeout", type=float, default=2400, help="max seconds to wait for checks (default 2400)")
     ap.add_argument("--interval", type=float, default=60, help="seconds between check reads (min 30)")
     ap.add_argument("--queue-timeout", type=float, default=5400, help="max seconds for mergeq.sh (default 5400)")
+    ap.add_argument(ship_deploy.ALLOW_FLAG, dest="allow_running_exec", action="store_true",
+                    help="merge a CIS api/worker PR although an ECS exec script runs there (tech lead's call, logged)")
     a = ap.parse_args(argv)
     runner = runner or Runner()
     try:
@@ -293,7 +304,8 @@ def main(argv: list[str] | None = None, runner: Runner | None = None) -> int:
     if not a.check_only:
         warn_mfa(runner)
     return run_targets(runner, targets, serial=a.serial, check_only=a.check_only, timeout=a.timeout,
-                       interval=max(30.0, a.interval), allow_deletes=a.allow_deletes, queue_timeout=a.queue_timeout)
+                       interval=max(30.0, a.interval), allow_deletes=a.allow_deletes, queue_timeout=a.queue_timeout,
+                       allow_running_exec=a.allow_running_exec)
 
 
 if __name__ == "__main__":
