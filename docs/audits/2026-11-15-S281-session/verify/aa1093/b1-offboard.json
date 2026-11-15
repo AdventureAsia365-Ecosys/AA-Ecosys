@@ -1,0 +1,18 @@
+HTTP 200 POST /admin/tenants/ce1fb25b-8625-43c0-a4a6-404e6b576288/offboard
+{
+ "tenant_id": "ce1fb25b-8625-43c0-a4a6-404e6b576288",
+ "status": "offboarded",
+ "cancelled_jobs": 0,
+ "ended_view_as_sessions": 0,
+ "erasure_request": {
+  "status": "scheduled",
+  "request_id": "0e914c59-8bdf-4f4c-8a54-b29e772693d3",
+  "not_before": {
+   "cis": "2026-12-15T03:04:07.292927+00:00",
+   "booking": "2026-12-15T03:04:07.292927+00:00",
+   "tripplanner": "2026-12-15T03:04:07.292927+00:00",
+   "crm": "2027-02-13T03:04:07.292927+00:00"
+  }
+ },
+ "note": "Tenant data and settings are kept; POST /admin/tenants/{id}/restore brings the tenant back."
+}

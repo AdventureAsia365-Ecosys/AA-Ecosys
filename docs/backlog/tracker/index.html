@@ -293,8 +293,8 @@ details.sdetail summary { cursor: pointer; font-weight: 600; color: var(--muted)
 (function () {
   var LINEAR = "https://linear.app/aa-ecosys/issue/";
   var JIRA = "https://adventure-asia.atlassian.net/browse/";
-  var SES_ORDER = ["S265","S266","S267","S268","S269","S270","≤11/11","S271","S272","S273","S274","≥10/11","S275","S276","S277","S278","S279","S280","S281","after S281","≥19/11","≥01/12","LLM path","TL-11 lift","at go-live","unscheduled","later","05/2027","parked"];
-  var LANES = ["S265","S266","S267","S268","S269","S270","S271","S272","S273","S274","S275","S276","S277","S278","S279","S280"];
+  var SES_ORDER = ["S265","S266","S267","S268","S269","S270","≤11/11","S271","S272","S273","S274","≥10/11","S275","S276","S277","S278","S279","S280","S281","S282","after S281","≥19/11","≥01/12","LLM path","TL-11 lift","at go-live","unscheduled","later","05/2027","parked"];
+  var LANES = ["S265","S266","S267","S268","S269","S270","S271","S272","S273","S274","S275","S276","S277","S278","S279","S280","S281"];
   var PRI = { Urgent: 0, High: 1, Medium: 2, Low: 3, None: 4, "No priority": 4 };
   var MS_ORDER = ["M-R0","M1b","M-R1","M-R3","M-R2","M-P1","M-R4","M-P2","M-R6","M-R7","M-OD","M2a","M5","CRM-after-R3","later","parked"];
   var STATUS_VI = { active: "đang làm", next: "kế tiếp", blocked: "chờ quyết định", later: "sau", done: "xong" };
@@ -377,7 +377,7 @@ details.sdetail summary { cursor: pointer; font-weight: 600; color: var(--muted)
     LANES.forEach(function (L, i) {
       rows.push(cell(esc(L) + "<small>" + esc(dateOf[L] || (i === nowIdx ? "hiện tại" : "")) + "</small>", i + 2, 0, "g-head" + (i === nowIdx ? " now" : "")));
     });
-    rows.push(cell("Sau S280<small>theo ngày / trigger</small>", LAST, 0, "g-head")); r++;
+    rows.push(cell("Sau S281<small>theo ngày / trigger</small>", LAST, 0, "g-head")); r++;
 
     // milestones
     rows.push(cell("Mốc (Done-when)", 1, 0, "g-sec", ";grid-column:1 / -1")); r++;
@@ -417,7 +417,7 @@ details.sdetail summary { cursor: pointer; font-weight: 600; color: var(--muted)
         });
       }
       if (later.length) {
-        var tipL = "<b>" + later.length + " issue sau S280 / theo ngày</b><br>" + later.map(function (x) { return esc(x.id) + " · " + esc(x.session) }).join("<br>");
+        var tipL = "<b>" + later.length + " issue sau S281 / theo ngày</b><br>" + later.map(function (x) { return esc(x.id) + " · " + esc(x.session) }).join("<br>");
         rows.push('<div class="g-cell" style="grid-row:' + r + ";grid-column:" + LAST + '"><span class="g-chip more" tabindex="0" data-tip="' + esc(tipL) + '">+' + later.length + "</span></div>");
       }
       r += depth;

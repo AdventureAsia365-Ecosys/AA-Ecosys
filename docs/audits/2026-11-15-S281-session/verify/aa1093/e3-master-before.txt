@@ -1,0 +1,34 @@
+SCRIPT tenant ce1fb25b
+SCRIPT TP tripplanner.sessions tenant_rows=0 visible_total=139
+SCRIPT TP tripplanner.trip_drafts tenant_rows=0 visible_total=134
+SCRIPT TP tripplanner.trip_events tenant_rows=0 visible_total=656
+SCRIPT TP tripplanner.outbox tenant_rows=0 visible_total=11
+SCRIPT TP tripplanner.ai_spend_month scope_tenant_rows=0
+SCRIPT TP tripplanner.customers linked_by_tenant_sessions=0
+SCRIPT TP tripplanner.customers unlinked_total=0 (after the apply: not higher than the baseline)
+SCRIPT TP tripplanner.tenant_erasure_log (kept, the record): none
+SCRIPT BK booking.trip_cases agency_rows=0 free_text_left=0
+SCRIPT BK booking.trip_case_status_history agency_rows=0 free_text_left=0
+SCRIPT BK booking.supplier_bookings agency_rows=0 free_text_left=0
+SCRIPT BK booking.trip_case_checks agency_rows=0 free_text_left=0
+SCRIPT BK booking.b2b_cancellations agency_rows=0 free_text_left=0
+SCRIPT BK booking.agency_invoice agency_rows=0 free_text_left=0
+SCRIPT BK booking.agency_payment agency_rows=0 free_text_left=0
+SCRIPT BK booking.notifications agency_rows=0 free_text_left=0
+SCRIPT BK booking.audit_logs agency_rows=1 free_text_left=1
+SCRIPT BK booking.b2b_partners rows=1 erased_name=0 suspended=0
+SCRIPT BK name_hits booking.audit_logs=1
+SCRIPT BK name_hits booking.notifications=0
+SCRIPT BK name_hits booking.b2b_partners=1
+SCRIPT BK booking.tenant_erasure_log (kept, the record): none
+SCRIPT VERDICT tripplanner after-erase PASS (no tenant rows at baseline: not evidence) (non-zero checks: 0)
+SCRIPT VERDICT booking after-erase FAIL (non-zero checks: 4)
+SCRIPT CRM crm.tenant visible=1 offboarded=0 erased_name=0
+SCRIPT CRM tables_checked=122 left=15 agency_supplier=1 consent=6 form_definition=1 form_submission=3 intake_form=1 tag=13 task=3 tenant_entitlement=1 tenant_settings=1 traveler=3 traveler_profile=3 trip=3 trip_party=3 trip_stage_history=3 trip_traveler=3
+SCRIPT CRM kept (erase_subject keep list): audit_event=9 audit_export_tenant=1 tenant=1 tenant_key=1
+SCRIPT CRM pii_columns_checked=80 pii_rows_found=9 form_submission=3 traveler=3 trip=3
+SCRIPT CRM crm.tenant_key live=1
+SCRIPT CRM crm.studio_invitation rows=0
+SCRIPT CRM name_hits crm.tenant=1
+SCRIPT CRM crm.tenant_erasure_report (kept, the record): none
+SCRIPT VERDICT crm after-erase FAIL (non-zero checks: 19)
