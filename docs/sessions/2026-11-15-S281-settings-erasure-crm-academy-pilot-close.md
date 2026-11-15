@@ -184,4 +184,4 @@ Theo [`state-snapshot.md`](../audits/2026-11-15-S281-session/state-snapshot.md) 
   active 08:06Z, TripPlanner mang tên đại lý trên tên miền riêng (ảnh `verify/aa1090/`); gỡ host → về đường dẫn chung.
 - AA-1048: fire 300 xong (0,396 USD, bắn 104), pool 21 TP / 66 FP, DRY RUN sạch.
 
-- Jira đã đăng sau khi tech lead duyệt: PR-22 10657, PR-26 10658, PR-27 10659, PR-20 10660 (`../audits/2026-11-15-S281-session/jira-drafts.md`).
+- Jira đã đăng sau khi tech lead duyệt: PR-22 10657, PR-26 10658, PR-27 10659, PR-20 10660 (`../audits/2026-11-15-S281-session/jira-drafts.md`). Báo cáo tuần kỳ 5 trên PR-20: comment 10661 (`../audits/2026-11-15-S281-session/pr20-period5/README.md`).
