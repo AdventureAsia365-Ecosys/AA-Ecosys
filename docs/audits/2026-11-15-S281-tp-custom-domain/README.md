@@ -18,12 +18,12 @@ lập (mục 7).*
    có tag), chờ bản ghi, rồi giữ **một chứng chỉ "edge"** trên distribution đại lý gồm mọi host đại lý đang gắn, đổi
    alias và chứng chỉ trong **một** `UpdateDistribution`. Gỡ host: job tháo alias, xoá chứng chỉ; hết host thì
    distribution đại lý trở lại đúng trạng thái Terraform (không alias, chứng chỉ mặc định).
-5. TripPlanner nhận request theo Host: host lạ → tra `catalog.v_tenant_tripplanner_v1.custom_domains` (CIS 428) → đúng
+5. TripPlanner nhận request theo Host: host lạ → tra `catalog.v_tenant_tripplanner_v1.custom_domains` (CIS 429) → đúng
    tenant (branding, tour, lead route như `/{slug}`); host không biết → trang 404 trơn, không bao giờ hiện site AA.
 6. WAF giữ nguyên tác dụng: 3 rule TripPlanner trong web ACL của ALB chuyển từ khớp **Host** sang khớp **header riêng**
    (`x-aa-tp-site`, secret ngẫu nhiên, cả hai distribution cùng gắn), nên áp cho mọi alias. Rule ALB mới chuyển mọi
    alias về service TripPlanner.
-7. Giới hạn là **setting** (Platform › Settings, CIS 427): số host mỗi đại lý (mặc định 1, chỉnh riêng từng đại lý),
+7. Giới hạn là **setting** (Platform › Settings, CIS 428): số host mỗi đại lý (mặc định 1, chỉnh riêng từng đại lý),
    tổng số host trên edge (10), thời gian chờ bản ghi DNS (72 giờ), chu kỳ kiểm (120 giây), thời gian chờ chứng chỉ
    edge mới (6 giờ), số ngày ân hạn trước khi hết hạn (30 ngày).
 8. **Chi phí ước tính: khoảng 0 USD/tháng** trên Dev (mục 3).
@@ -64,7 +64,7 @@ phí cố định mới.
 
 | Repo | PR | Nội dung |
 |---|---|---|
-| AA-CIS-App | migration-only (CIS 427–428) | bảng `shared.tenant_tripplanner_domain`, 6 setting, cột view `custom_domains`, contract 1.8, dòng erasure, allowlist RLS |
+| AA-CIS-App | migration-only (CIS 428–429) | bảng `shared.tenant_tripplanner_domain`, 6 setting, cột view `custom_domains`, contract 1.8, dòng erasure, allowlist RLS |
 | AA-CIS-App | code (sau 427–428) | editor Tenant 360 (kể cả "Retry removal"), job `tripplanner_custom_domain` + kiểm tra edge hằng ngày, `tp_edge.py`, cảnh báo `tripplanner_custom_domain_dns`, readiness 427 |
 | AA-TripPlanner-Web | code | `GET /browse/tenant-host/{host}`, `proxy.ts` + `lib/tenantHost.ts` (Host → tenant, map đường dẫn) |
 | AA-CIS-Infra | code (không apply) | distribution `tripplanner_agency`, header site, rule ALB alias, phạm vi WAF, IAM policy (Deny chứng chỉ Terraform) + env cho CIS |
