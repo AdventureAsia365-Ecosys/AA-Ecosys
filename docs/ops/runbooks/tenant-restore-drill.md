@@ -1,7 +1,7 @@
 ---
 id: OPS-03-tenant-restore
 title: Restore one tenant's CIS and TripPlanner data from its own backup
-description: The one-tenant backup and restore drill of CIS (job tenant_backup, restore_drill into a throwaway schema, counts and checksums compared) and the planned TripPlanner drill; the CRM has its own runbook.
+description: The one-tenant backup and restore drill of CIS (job tenant_backup, restore_drill into a throwaway schema, counts and checksums compared) and the TripPlanner drill (jobs Lambda tp_tenant_backup and restore_drill); the CRM has its own runbook.
 type: how-to
 status: draft
 owner: nghiep
@@ -9,9 +9,9 @@ audience: [engineer, devops, agent]
 applies_to: [aa-cis-api, aa-cis-worker, aa-cis-dev-db, tripplanner-lambda]
 last_reviewed: 2026-11-13
 review_every_days: 90
-last_tested: 2026-11-13
+last_tested: 2026-11-15
 tested_where: drill
-tested_evidence: docs/audits/2026-11-13-S279-cis-restore-drill/restore-drill.json
+tested_evidence: docs/audits/2026-11-15-S281-session/verify/aa1093/tp-restore-drill/restore-drill.json
 related: [OPS-03-pilot-tenant, OPS-03-pitr, OPS-03-schema, OPS-05-ecs-exec, SEC-04-dsar, AA-1093]
 ---
 
@@ -134,9 +134,29 @@ the erasure falls inside the backup's 7 days ([DSAR runbook](../../legal/dsar-er
 
 ## TripPlanner
 
-**Planned (AA-1093 L4).** The same shape for TripPlanner's tenant tables (`tripplanner.sessions`,
-`tripplanner.trip_drafts`, `tripplanner.trip_events`, `tripplanner.outbox` of one tenant): a job kind
-`tp_tenant_backup` in `tripplanner.job`, run by the TripPlanner jobs Lambda, writing JSONL, a manifest and checksums
-under the tenant's own prefix, and a `restore_drill` op of the jobs Lambda that loads them into a throwaway schema and
-compares counts, with Lambda IAM for that prefix only. This section gets its steps, pass keys and failure codes when
-the TripPlanner change ships; until then a TripPlanner tenant is recovered only through PITR.
+The **TripPlanner drill passed on Dev on 2026-11-15** for the synthetic tenant `pilot-rehearsal-01`: `passed` true,
+every checksum matched, 4 tables, 42 rows restored out of 42 in the manifest, every row identical to the live one
+([evidence](../../audits/2026-11-15-S281-session/verify/aa1093/tp-restore-drill/restore-drill.json)). The CIS drill
+above passed on 2026-11-13.
+
+### What is in place
+
+| Piece | Where |
+|---|---|
+| The backup job | `tp_tenant_backup` in `tripplanner.job`, run by the TripPlanner jobs Lambda (AA-TripPlanner-Web `backend/jobs/tenant_backup.py`): daily for the tenant CIS marks pilot, on demand for any tenant |
+| What it copies | `tripplanner.sessions`, `trip_drafts`, `trip_events`, `outbox` of one tenant, one fixed statement per table |
+| The files | Gold bucket, prefix `exports/tenants/<tenant>/tripplanner/<backup id>/` (backup id = the job id): JSONL per table, a manifest and `SHA256SUMS`; the job result keeps the digest of `SHA256SUMS`. Kept 7 days |
+| The drill | `tp_tenant_restore_drill` (op `restore_drill` of the jobs Lambda): loads the backup into `pg_temp`, compares counts and digests with the manifest and the live rows, rolls back |
+
+### Steps (orchestrator, AWS CLI single line, MFA session of the Dev profile)
+
+1. Back up one tenant (slug or id); the answer carries the job result:
+   `aws lambda invoke --function-name aa-tripplanner-dev-jobs --cli-binary-format raw-in-base64-out --payload '{"op":"enqueue","kind":"tp_tenant_backup","payload":{"tenant_slug":"<slug>"}}' --cli-read-timeout 300 --profile <dev profile> --region us-west-1 out.json`
+   Expected: `status` `succeeded`, `rows` per table, `sha256sums_sha256` 64 hex characters; note `backup_id`.
+2. Run the drill on that backup:
+   `aws lambda invoke --function-name aa-tripplanner-dev-jobs --cli-binary-format raw-in-base64-out --payload '{"op":"restore_drill","payload":{"tenant_slug":"<slug>","backup_id":"<backup id>"}}' --cli-read-timeout 300 --profile <dev profile> --region us-west-1 out.json`
+3. Pass when `passed` is true, every `checks` entry is true, and every table has `manifest_rows` = `restored_rows` with
+   `digest_ok` true. `live_rows` / `identical` are reported only (the tenant may have changed after the backup).
+   `attention` true or a failed job: read the jobs Lambda log, fix, run again.
+4. Record it like the CIS drill (evidence JSON under `docs/audits/<date>-S<nnn>-…/`, then `last_tested` and
+   `tested_evidence` here).
