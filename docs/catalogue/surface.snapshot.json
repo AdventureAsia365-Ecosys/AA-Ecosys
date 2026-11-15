@@ -187,6 +187,7 @@
    "route:admin_writing_memory",
    "route:auth",
    "route:catalog_http",
+   "route:learn",
    "route:tenant_account",
    "route:tenant_addons",
    "route:tenant_erasure",
@@ -214,6 +215,13 @@
    "page:/[section]",
    "page:/aa-bookings",
    "page:/aa-tariff",
+   "page:/academy",
+   "page:/academy/certificates",
+   "page:/academy/lessons/[lessonId]",
+   "page:/academy/modules/[moduleId]",
+   "page:/academy/quiz/[scope]/[targetId]",
+   "page:/academy/review",
+   "page:/academy/signed-out",
    "page:/automations",
    "page:/bookings",
    "page:/c/[...slug]",
@@ -305,6 +313,7 @@
    "page:/tasks",
    "page:/travelling",
    "page:/trip/[tourId]",
+   "page:/verify/[code]",
    "route:aa",
    "route:addons",
    "route:agency",
@@ -711,6 +720,10 @@
    "app": "cis",
    "area": "learn"
   },
+  "cis.learn.verify_visitor_requests_per_minute": {
+   "app": "cis",
+   "area": "learn"
+  },
   "cis.learn.video_url_ttl_seconds": {
    "app": "cis",
    "area": "learn"
@@ -736,6 +749,26 @@
    "area": "quality"
   },
   "cis.quality.brand_fit_repeat_band_low": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.claim_fire_sample_max": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.claim_fresh_pool_sample_max": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.claim_two_step_judge_fp_drop_min_pct": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.claim_two_step_judge_tp_keep_min_pct": {
+   "app": "cis",
+   "area": "quality"
+  },
+  "cis.quality.claim_two_step_route_tp_min_pct": {
    "app": "cis",
    "area": "quality"
   },
@@ -1447,6 +1480,14 @@
    "app": "cis",
    "area": "content"
   },
+  "cis.t9.blog_extend_material": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.t9.blog_extend_shrink_sections": {
+   "app": "cis",
+   "area": "content"
+  },
   "cis.t9.blog_length_extend": {
    "app": "cis",
    "area": "content"
@@ -1458,6 +1499,30 @@
   "cis.t9.repeat_drop_near_exact": {
    "app": "cis",
    "area": "content"
+  },
+  "cis.tripplanner.custom_domain_edge_max": {
+   "app": "cis",
+   "area": "tripplanner"
+  },
+  "cis.tripplanner.custom_domain_edge_pending_hours": {
+   "app": "cis",
+   "area": "tripplanner"
+  },
+  "cis.tripplanner.custom_domain_max_per_tenant": {
+   "app": "cis",
+   "area": "tripplanner"
+  },
+  "cis.tripplanner.custom_domain_poll_seconds": {
+   "app": "cis",
+   "area": "tripplanner"
+  },
+  "cis.tripplanner.custom_domain_renewal_grace_days": {
+   "app": "cis",
+   "area": "tripplanner"
+  },
+  "cis.tripplanner.custom_domain_validation_timeout_hours": {
+   "app": "cis",
+   "area": "tripplanner"
   },
   "cis.writing_memory.month_cap_usd": {
    "app": "cis",
@@ -1516,6 +1581,38 @@
    "area": "ai"
   },
   "crm.ai.draft_reply_max_tokens": {
+   "app": "crm",
+   "area": "ai"
+  },
+  "crm.ai.notes_options_max_candidates": {
+   "app": "crm",
+   "area": "ai"
+  },
+  "crm.ai.notes_options_max_chars": {
+   "app": "crm",
+   "area": "ai"
+  },
+  "crm.ai.notes_options_max_suggestions": {
+   "app": "crm",
+   "area": "ai"
+  },
+  "crm.ai.notes_options_max_tokens": {
+   "app": "crm",
+   "area": "ai"
+  },
+  "crm.ai.supplier_confirm_max_chars": {
+   "app": "crm",
+   "area": "ai"
+  },
+  "crm.ai.supplier_confirm_max_lines": {
+   "app": "crm",
+   "area": "ai"
+  },
+  "crm.ai.supplier_confirm_max_tokens": {
+   "app": "crm",
+   "area": "ai"
+  },
+  "crm.ai.voice_profiles_per_member_max": {
    "app": "crm",
    "area": "ai"
   },
