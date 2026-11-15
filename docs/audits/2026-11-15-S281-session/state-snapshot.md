@@ -1,15 +1,3 @@
----
-id: AUD-S281-snapshot
-title: S281 state snapshot at session close
-description: Live state read at the S281 close (15/11/2026, ~07:40 UTC) - ECS revisions and images, health, migrations, job tables, repo heads and open PRs, what is left on.
-type: reference
-status: active
-owner: nghiep
-audience: [engineer, agent]
-last_reviewed: 2026-11-15
-review_every_days: 365
----
-
 # Snapshot trạng thái cuối phiên S281 (15/11/2026, ~07:40 UTC)
 
 Đọc live, chỉ tên và số (không account ID, ARN hay giá trị secret).
