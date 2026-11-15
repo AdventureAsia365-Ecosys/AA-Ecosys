@@ -183,3 +183,5 @@ Theo [`state-snapshot.md`](../audits/2026-11-15-S281-session/state-snapshot.md) 
 - AA-1090: test thật trên domain thử phát hiện lỗi SAN rỗng của chứng chỉ edge → CIS #1528 (cf746a02); retry → host
   active 08:06Z, TripPlanner mang tên đại lý trên tên miền riêng (ảnh `verify/aa1090/`); gỡ host → về đường dẫn chung.
 - AA-1048: fire 300 xong (0,396 USD, bắn 104), pool 21 TP / 66 FP, DRY RUN sạch.
+
+- Jira đã đăng sau khi tech lead duyệt: PR-22 10657, PR-26 10658, PR-27 10659, PR-20 10660 (`../audits/2026-11-15-S281-session/jira-drafts.md`).
