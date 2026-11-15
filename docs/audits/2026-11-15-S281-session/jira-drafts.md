@@ -206,3 +206,5 @@ các video mới.
 
 Chưa đăng — chờ tech lead duyệt. Sau khi đăng: ghi comment id từng issue vào đây và vào log phiên; bản lưu chuyển sang
 `docs/audits/2026-11-15-S281-session/jira-drafts.md` (không chứa account ID, secret hay link Drive riêng).
+
+PR-20 kỳ 5 (10–16/11): soạn sau khi chốt phiên theo yêu cầu tech lead, thêm mục kế hoạch tuần tới theo góp ý, đăng comment 10661 sau "Đăng". Nháp + bằng chứng: `pr20-period5/README.md`.
