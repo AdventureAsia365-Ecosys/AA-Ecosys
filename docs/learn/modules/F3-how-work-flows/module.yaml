@@ -4,10 +4,10 @@
 id: F3
 title: How work flows
 tier: staff
-status: draft
-version: 0.1.0
+status: active
+version: 1.0.0
 owner: nghiep
-last_reviewed: 2026-11-14
+last_reviewed: 2026-11-15
 review_every_days: 180
 languages: [en]
 objectives:
