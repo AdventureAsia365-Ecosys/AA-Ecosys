@@ -1,0 +1,7 @@
+HTTP 200 POST /admin/job-runner/erasure/requests/0e914c59-8bdf-4f4c-8a54-b29e772693d3/advance
+{
+ "request_id": "0e914c59-8bdf-4f4c-8a54-b29e772693d3",
+ "phase": "dry_run",
+ "job_id": "2f94f045-2636-44a9-bb34-388b85152598",
+ "created": false
+}

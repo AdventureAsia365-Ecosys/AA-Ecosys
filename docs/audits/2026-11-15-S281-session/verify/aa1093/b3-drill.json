@@ -1,0 +1,33 @@
+HTTP 200 POST /admin/job-runner/erasure/requests/drill
+{
+ "request": {
+  "request_id": "0e914c59-8bdf-4f4c-8a54-b29e772693d3",
+  "tenant_id": "ce1fb25b-8625-43c0-a4a6-404e6b576288",
+  "mode": "drill",
+  "phase": "dry_run",
+  "round": 1,
+  "opened_at": "2026-11-15T03:04:07.292927+00:00",
+  "is_pilot": false,
+  "is_synthetic": true,
+  "not_before_cis": "2026-11-15T03:04:07.292927+00:00",
+  "not_before_booking": "2026-11-15T03:04:07.292927+00:00",
+  "not_before_tripplanner": "2026-11-15T03:04:07.292927+00:00",
+  "not_before_crm": "2026-11-15T03:04:07.292927+00:00",
+  "round_apps": [],
+  "done_apps": [],
+  "combined_fingerprint": null,
+  "fingerprint_at": null,
+  "approved_fingerprint": null,
+  "approved_by": null,
+  "approved_at": null,
+  "approval_expires_at": null,
+  "snapshot_id": null,
+  "blockers": [],
+  "receipt": null,
+  "created_by": "admin:unknown",
+  "created_at": "2026-11-15T03:04:07.292927+00:00",
+  "updated_at": "2026-11-15T03:19:07.650954+00:00",
+  "cancelled_at": null,
+  "done_at": null
+ }
+}
