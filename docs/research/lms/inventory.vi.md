@@ -26,7 +26,7 @@ Mỗi dòng là một điều một người cần biết, nơi điều đó đ�
 lại dòng khác đã được gộp. Khoảng trống (tri thức chưa có trang nào) nằm ở
 [README §2.3](README.vi.md#23-khoảng-trống-chặn-khoá-học), không nằm ở đây.
 
-**241 mục trong 24 lĩnh vực.** [§25](#25-nguồn-bổ-sung-không-tính-vào-241-mục) liệt kê thêm các ADR và nguồn lịch sử làm rõ các mục này nhưng không được tính là mục.
+**246 mục trong 24 lĩnh vực.** [§25](#25-nguồn-bổ-sung-không-tính-vào-246-mục) liệt kê thêm các ADR và nguồn lịch sử làm rõ các mục này nhưng không được tính là mục.
 
 Tên mục trong bảng giữ nguyên tiếng Anh vì đó là tên kỹ thuật dùng thống nhất trong mọi tài liệu (xem bảng thuật
 ngữ `docs/glossary.vi.md`).
@@ -109,7 +109,7 @@ ngữ `docs/glossary.vi.md`).
 | Deploy gate and its override | kỹ thuật | `docs/ops/runbooks/deploy-gate-override.md` | E D | E4 |
 | No backend merge during an open wave | quy tắc | `skill/aa-wave-rerun/SKILL.md` §3; `skill/aa-ship/SKILL.md` §2 | E X | E4 |
 
-## 5. Nền tảng AI (17)
+## 5. Nền tảng AI (18)
 
 | Mục | Loại | Nguồn | Đối tượng | Module |
 |---|---|---|---|---|
@@ -130,6 +130,7 @@ ngữ `docs/glossary.vi.md`).
 | AI mark on delivered content | tiêu chuẩn | `docs/adr/0020-content-quality-architecture.md` | E A O | A6 |
 | LLM access-denied and cost-spike playbooks | runbook | `docs/ops/playbooks/llm-access-denied.md`; `docs/ops/playbooks/llm-cost-spike.md` | D S | E9 |
 | Postmortem: LLM account access refusal | báo cáo | `docs/ops/postmortems/2026-10-29-acc3-bedrock-access-refusal.md` | D T | E15 |
+| Pre-registered calibration of an LLM judge: fresh pool, held-out claims, one gated run | kỹ thuật | `docs/calibration/aa1048-two-step-panel-brief.md`; `services/ground_truth/two_step.py` (AA-CIS-App) | E T C | E6 |
 
 ## 6. TripPlanner (7)
 
@@ -188,7 +189,7 @@ ngữ `docs/glossary.vi.md`).
 | Staff directory in CIS (database first, then Cognito) | kỹ thuật | `docs/ecosystem-architecture.md` §4.6 | E S | S2 |
 | Cognito login playbook | runbook | `docs/ops/playbooks/cognito-login.md` | D S | S4 |
 
-## 10. Nền tảng dữ liệu (19)
+## 10. Nền tảng dữ liệu (20)
 
 | Mục | Loại | Nguồn | Đối tượng | Module |
 |---|---|---|---|---|
@@ -211,6 +212,7 @@ ngữ `docs/glossary.vi.md`).
 | PII classes and privacy rules | tiêu chuẩn | `docs/architecture/data-standards/02-data-management.md` §6 | tất cả | F4 |
 | Destructive operations: DRY RUN first | runbook | `skill/aa-cis-schema/references/destructive-ops.md` | E D T | E9 |
 | ECS exec through S3 | runbook | `docs/ops/runbooks/ecs-exec-s3-mediated.md`; `tools/ecs/ecsx.sh` | E D | E9 |
+| Weekly query review (C4.3): pg_stat_statements deltas and EXPLAIN (ANALYZE, BUFFERS) | quy trình | `docs/architecture/data-standards/03-scaling.md` (C4.3); `docs/templates/capacity-review.md` | E T | L5 |
 
 ## 11. Mở rộng và độ tin cậy (6)
 
@@ -239,7 +241,7 @@ ngữ `docs/glossary.vi.md`).
 | Onboarding: accounts and access | hướng dẫn | `docs/onboarding.md` | E D S | E1 |
 | SES mail and bounces | runbook | `docs/ops/runbooks/ses-bounce.md` | D S | S4 |
 
-## 13. Thực hành kỹ thuật (19)
+## 13. Thực hành kỹ thuật (20)
 
 | Mục | Loại | Nguồn | Đối tượng | Module |
 |---|---|---|---|---|
@@ -262,6 +264,7 @@ ngữ `docs/glossary.vi.md`).
 | Implementation notes per issue | mẫu | `docs/implementation-notes/` | E X | E2 |
 | Secret scanning | công cụ | `.github/workflows/secret-scan.yml` (repo gốc, Infra và bốn repo app) | E X | E2 |
 | Cost line in every PR | quy tắc | `skill/aa-ship/SKILL.md` §1 | E X | E2 |
+| Delivery metrics: the five DORA keys and CI health per app | tiêu chuẩn | `docs/templates/delivery-metrics-report.md`; `services/reports/delivery.py` (AA-CIS-App, DEV-01 và DEV-03) | E T | L5 |
 
 ## 14. Frontend (4)
 
@@ -297,7 +300,7 @@ ngữ `docs/glossary.vi.md`).
 | Pilot agency onboarding and rehearsal | runbook | `docs/ops/runbooks/pilot-agency-onboarding.md`; `docs/ops/runbooks/pilot-rehearsal.md` | T S | S3 |
 | App access and operations index | hướng dẫn | `docs/guides/app-access-and-operations.md` | S C B O | S2 |
 
-## 17. Bảo mật (8)
+## 17. Bảo mật (9)
 
 | Mục | Loại | Nguồn | Đối tượng | Module |
 |---|---|---|---|---|
@@ -309,6 +312,7 @@ ngữ `docs/glossary.vi.md`).
 | Public-repo safe writing | tiêu chuẩn | `docs/STYLE.md` (Where a page may live); `docs/adr/0014-repo-visibility-and-github-plan.md` | tất cả | F4 |
 | Compliance and privacy register (DPA, sub-processors, DSAR) | sổ đăng ký | `docs/legal/register.md`; `docs/legal/readiness-packet.md` | T O | O5 |
 | Tenant AI schedule and DPA pack | mẫu | `docs/legal/tenant-ai-schedule.md`; `docs/legal/dpa.md` | A O | A5 |
+| Search over encrypted personal data: blind indexes, exact match only, proof of no plaintext index | kỹ thuật | `docs/implementation-notes/AA-963.md` (AA-Partner); `apps/AA-Partner/CONTEXT.md` | E | E13 |
 
 ## 18. Chi phí và FinOps (8)
 
@@ -323,7 +327,7 @@ ngữ `docs/glossary.vi.md`).
 | Monthly cost report | công cụ | `docs/ops/cost/README.md`; `tools/finops/monthly_cost_report.py`; `docs/templates/cost-report.md` | T O | L5 |
 | AI providers and reports runbook | hướng dẫn | `docs/guides/ai-providers-and-reports-runbook.md` | T O | L5 |
 
-## 19. Tài liệu (8)
+## 19. Tài liệu (9)
 
 | Mục | Loại | Nguồn | Đối tượng | Module |
 |---|---|---|---|---|
@@ -335,6 +339,7 @@ ngữ `docs/glossary.vi.md`).
 | Role guides | hướng dẫn | `docs/guides/cto.md`, `cio.md`, `pm.md`, `devops.md` | T O | F1 |
 | PRD as code | tiêu chuẩn | `docs/product/README.md`; `tools/docs/check_prd_refs.py` | E T | L4 |
 | Audits folder and artifact registry | tiêu chuẩn | `docs/audits/`; `docs/artifacts/README.md` | T X | L3 |
+| Masking account IDs and ARNs in generated public pages | công cụ | `tools/docs/aws_mask.py` (AA-CIS-Infra) | E X | F4 |
 
 ## 20. Vận hành agent (11)
 
@@ -405,7 +410,7 @@ ngữ `docs/glossary.vi.md`).
 | New engineer learning path | hướng dẫn | `docs/guides/new-engineer.md` | E | E1 |
 | CIS admin runbook | hướng dẫn | `docs/guides/cis-admin-runbook.md` | C S | C1 |
 
-## 25. Nguồn bổ sung (không tính vào 241 mục)
+## 25. Nguồn bổ sung (không tính vào 246 mục)
 
 Các nguồn này được nêu tên để người phụ trách module tìm ra. Chúng không phải là mục kiến thức mới: mỗi nguồn làm rõ
 một mục ở trên, hoặc là nguồn cho ví dụ thực tế.

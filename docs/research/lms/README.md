@@ -28,7 +28,7 @@ The full knowledge list is the [knowledge inventory](inventory.md). The sister r
 - **One source of truth.** Courses live as Markdown and YAML in the root repo (`docs/learn/`). A lesson points at
   a catalog page, an ADR or a section of a `CONTEXT.md` by ID and never copies it. The Docs sync workflow already
   builds a redacted, tiered, EN/VI bundle for `/admin/docs`; it is extended to publish the courses too.
-- **241 knowledge items in 24 domains** are mapped to **62 modules** in **8 learning paths**: Fundamentals for every
+- **246 knowledge items in 24 domains** are mapped to **62 modules** in **8 learning paths**: Fundamentals for every
   staff role, then one path each for the engineer on duty, the tech lead, ops and support, the content operator,
   finance and booking staff, agency owners and agents, and the business owner.
 - **Every module ends in a retrieval quiz.** Missed items come back on a spaced schedule. Hands-on labs run on Dev
@@ -98,27 +98,27 @@ The full list, with source paths, audience and module per item, is the [knowledg
 | CIS content pipeline | 22 | `apps/AA-CIS-App/CONTEXT.md`, ADR 0020, `skill/aa-wave-rerun/` | C2 to C8, A2, E11 |
 | CIS platform | 6 | `apps/AA-CIS-App/CONTEXT.md` | C7, S2, S3, E3, E5, F6 |
 | Job runner | 5 | ADR 0003/0003a, `docs/ops/job-kinds.md` | E4 |
-| AI platform | 17 | ADR 0009, `docs/architecture/ai-gateway.md`, CIS `docs/llm/` | E6, E9, E15, L1, A6 |
+| AI platform | 18 | ADR 0009, `docs/architecture/ai-gateway.md`, CIS `docs/llm/` | E6, E9, E15, L1, A6 |
 | TripPlanner | 7 | `apps/AA-TripPlanner-Web/CONTEXT.md` | E14, S2 |
 | Booking | 12 | ADR 0004/0005 family, `apps/AA-Booking/CONTEXT.md`, booking guides | B1 to B6, E12 |
 | Partner CRM | 13 | ADR 0010/0010a, `apps/AA-Partner/CONTEXT.md`, CRM guides | A2 to A7, E5, E13, S5 |
 | Identity | 5 | ADR 0006 family | E5, S2, S4 |
-| Data platform | 19 | `docs/architecture/data-standards/`, schema reference | E3, E9, F4, L1 |
+| Data platform | 20 | `docs/architecture/data-standards/`, schema reference | E3, E9, F4, L1 |
 | Scaling and reliability | 6 | `03-scaling.md`, ADR 0012/0018 | E9, E10, L5, L7 |
 | Infrastructure | 11 | `infra/AA-CIS-Infra/CONTEXT.md`, `docs/generated/` | E1, E10, F5, S4 |
-| Engineering practice | 19 | `docs/engineering-handbook.md`, `skill/aa-ship/`, CI workflows | F3, E2 |
+| Engineering practice | 20 | `docs/engineering-handbook.md`, `skill/aa-ship/`, CI workflows | F3, E2 |
 | Frontend | 4 | ADR 0016, `skill/aa-ui-verify/` | E7 |
 | Testing | 3 | CI workflows, `tools/uat/` | E8 |
 | Observability and operations | 12 | `docs/ops/` | E9, S1, S2, S3 |
-| Security | 8 | `docs/security/`, `docs/legal/`, STYLE SEC-06 | E5, F4, L9, O5, A5 |
+| Security | 9 | `docs/security/`, `docs/legal/`, STYLE SEC-06 | E5, F4, L9, O5, A5 |
 | Cost and FinOps | 8 | `docs/ops/finops.md`, DM-10, `tools/llm/` | F5, C5, L5, O3 |
-| Documentation | 8 | `docs/README.md`, `docs/STYLE.md` | F1, F6, L3, L4 |
+| Documentation | 9 | `docs/README.md`, `docs/STYLE.md` | F1, F6, L3, L4 |
 | Agent operations | 11 | `docs/agents.md`, `skill/aa-session/`, `.claude/hooks/` | L3, L9 |
 | Planning and issues | 9 | `docs/backlog/`, `skill/aa-linear-issue/` | L4, O6 |
 | Governance and change control | 13 | handbook §1 and §10, DM-11 | F3, L1, L2, L6, B2, C3 |
 | Stakeholders and vendors | 7 | `skill/aa-jira-update/`, `docs/reports/` | L6, O1, O2 |
 | Lessons and learning | 4 | `skill/aa-lessons/`, `docs/guides/` | E1, E15, C1 |
-| **Total** | **241** | | |
+| **Total** | **246** | | |
 
 ### 2.2 What the inventory tells us
 
