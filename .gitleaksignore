@@ -99,3 +99,14 @@ e089300c97f2d2a6c3b4e69d3e6a2398a3da47b0:canary/aa981-canary.tfvars:terraform-pl
 97a3c2b872fc91140b6c3156e0c1854df30ce0b6:tools/docs/test_docs_reader.py:aws-access-token:146
 b1fe235863298252281a28f5685ce75af001d139:tools/docs/test_docs_reader.py:aws-access-token:138
 b1fe235863298252281a28f5685ce75af001d139:tools/docs/test_docs_reader.py:aws-access-token:146
+
+# S283 (17/11/2026): Secret Scan (full history) run 43775101893 — five false positives, reviewed one by one:
+# - tools/uat/lib/pilot-guard.cjs:69-71 (three historical commits): `crmKey` held CRM agency slugs (demo and rehearsal
+#   agencies, e.g. pilot-rehearsal-01), not credentials; the file now names the field crmSlug.
+# - tools/uat/tests/rehearsal-traveller.test.cjs:114: an invented 22-character key built in the test to prove redaction.
+# - docs/linear-export/tripplanner-aa-booking/AA-1038.md:190: names a Secrets Manager secret and a repo secret, no value.
+7211dd4ce194ecc77f818e966315c88afdfe3889:tools/uat/lib/pilot-guard.cjs:generic-api-key:69
+4f3d6ce8c34bb7db418064ce1e79e94a0a4facc2:tools/uat/lib/pilot-guard.cjs:generic-api-key:70
+a8b0a9b856bb36cdffe31396c770bf7d306b9601:tools/uat/lib/pilot-guard.cjs:generic-api-key:71
+ffb03e8cfee4b150f24aa8793f7d1700f6bf6204:tools/uat/tests/rehearsal-traveller.test.cjs:generic-api-key:114
+994deca9e8de9f9c84b6e6b8dc0e86d926d6ab4b:docs/linear-export/tripplanner-aa-booking/AA-1038.md:generic-api-key:190
