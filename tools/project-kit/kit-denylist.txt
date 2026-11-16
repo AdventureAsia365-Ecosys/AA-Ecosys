@@ -7,7 +7,7 @@
 (?i)\bAA[-_ ]?(CIS|Booking|Partner|TripPlanner|Ecosys|Academy)\b
 (?i)adventure\s?asia
 (?i)adventure\.asia
-(?i)\bnghiep\b
+(?i)nghiep
 Nghiệp
 (?i)lumiguides
 \bCIS\b
