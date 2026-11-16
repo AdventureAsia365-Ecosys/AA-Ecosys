@@ -28,4 +28,6 @@ t 0 python3 -m unittest test_ship_copy_apply
 t 0 python3 tools/github/ship_common.py mfa; t 0 bash tools/llm/test_anthropic_key_plug_in.sh
 t 0 git status; t 0 git -C /x log --oneline; t 0 git commit -m msg; t 0 gh pr view 1; t 0 gh api repos/x; t 0 gh pr checks 1
 t 0 aws --profile p ecs describe-services --cluster c; t 0 aws s3 cp a s3://b; t 0 terraform plan; t 0 aws --profile p secretsmanager get-secret-value --secret-id x
+# AA-1103 split: the patterns live in subagent-guardrails.d/; without any pattern file a subagent is refused (fail closed)
+T=$(mktemp -d); cp "$H" "$T/"; H="$T/subagent-guardrails.sh"; t 2 git status; rm -rf "$T"
 echo "pass=$pass fail=$fail"; [ "$fail" = 0 ]
