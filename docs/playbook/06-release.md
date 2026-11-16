@@ -4,7 +4,7 @@ title: "Phase 6: Release"
 description: Get changes to Dev (later prod) and prove them live - deploy order, the Definition of Done, release notes and common mistakes.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, engineer, devops, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -28,8 +28,9 @@ Merged and green is not done. A change is done when it runs on the live environm
 | Migrations applied in order through CI | [Migration file](../templates/migration-file.md) |
 | Flags set to their release state on purpose | Project's flag register |
 | Post-deploy verify output and a "verified live" comment on the issue | Release checklist, "Verified live" |
-| Release note with verified work only | [Release note](../templates/release-note.md) |
+| Release note with verified work only | [Release note](../templates/release-note.md) <!-- kit:drop --> |
 | Business update in the business owner's language | Release note, business part |
+<!-- kit:only | Release note with verified work only | The release note of the release PR (`CHANGELOG.md`) | -->
 
 ## Deploy order
 

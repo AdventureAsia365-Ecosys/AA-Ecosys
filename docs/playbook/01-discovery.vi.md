@@ -4,7 +4,7 @@ title: "Pha 1: Khám phá"
 description: Hiểu vấn đề và quyết định có nên xây hay không - sản phẩm bàn giao, checklist cổng G1, mẫu và lỗi hay gặp.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, cto, pm, engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -56,7 +56,9 @@ Chấm mỗi dòng đỏ, vàng hoặc xanh. Chủ doanh nghiệp ký.
 - Bỏ qua sàng lọc quyền riêng tư vì sản phẩm "chỉ lưu vài trường".
 - Để pha khám phá kéo dài không giới hạn: cho nó một appetite riêng.
 
+<!-- kit:skip -->
 ## AA làm thế nào
 
 Cổng quyết định của ADR 0008 (app mới, module hay API client) và các ghi chú nghiên cứu trong `docs/research/` đóng vai
 trò khám phá; xem [bản áp dụng AA](aa-profile.vi.md).
+<!-- /kit:skip -->

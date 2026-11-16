@@ -5,6 +5,8 @@ description: Nền tảng làm việc với Nghiệp trên chương trình AA_Ec
 
 # ai-nghiep — làm việc với Nghiệp (AA_Ecosys)
 
+> Lớp AA (overlay) của skill generic [`project-rules`](../kit/project-rules/SKILL.md) (kit dự án mới, tiếng Anh, AA-1103): quy trình chung nằm ở đó; skill này chỉ thêm phần riêng của AA. Đổi quy tắc chung thì sửa skill generic trước.
+
 Bản quy tắc chuẩn tiếng Anh cho giọng văn với người liên quan: `docs/guides/working-rules/stakeholder-communication.md`.
 Skill này giữ quy trình; sửa quy tắc thì sửa cả hai trong cùng PR, lệch nhau thì áp bên chặt hơn.
 

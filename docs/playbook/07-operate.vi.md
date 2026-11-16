@@ -4,7 +4,7 @@ title: "Pha 7: Vận hành"
 description: Giữ sản phẩm chạy, học từ mọi lỗi và theo dõi chi phí - các đợt rà soát định kỳ, sự cố, runbook và lỗi hay gặp.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -31,9 +31,11 @@ Pha này không có cổng cố định: các đợt rà soát định kỳ là 
 | Postmortem | [Postmortem](../templates/postmortem.md) | khi một điều kiện kích hoạt xảy ra |
 | Diễn tập các runbook quan trọng (khôi phục, rollback, break-glass, xoay secret) | Runbook có `last_tested` | khi quy trình đổi, và trước prod |
 | Báo cáo chỉ số giao hàng | [Báo cáo chỉ số giao hàng](../templates/delivery-metrics-report.vi.md) | hằng tuần |
-| Rà soát chi phí và dung lượng | [Rà soát chi phí và dung lượng](../templates/cost-report.md), [bảng chi phí](../templates/cost-sheet.vi.md) | hằng tháng |
-| Rà soát quyền truy cập | [Rà soát quyền truy cập](../templates/access-review.md) | hằng quý |
+| Rà soát chi phí và dung lượng | [Rà soát chi phí và dung lượng](../templates/cost-report.md), [bảng chi phí](../templates/cost-sheet.vi.md) | hằng tháng <!-- kit:drop --> |
+| Rà soát quyền truy cập | [Rà soát quyền truy cập](../templates/access-review.md) | hằng quý <!-- kit:drop --> |
 | Bài học được biến thành guard | Sổ bài học của dự án | lúc tìm ra nguyên nhân gốc |
+<!-- kit:only | Rà soát quyền truy cập | Ai truy cập được gì: role, khoá, quyền repo và cloud | hằng quý | -->
+<!-- kit:only | Rà soát chi phí và dung lượng | [Bảng chi phí](../templates/cost-sheet.vi.md), đối chiếu với hoá đơn | hằng tháng | -->
 
 ## Luật
 

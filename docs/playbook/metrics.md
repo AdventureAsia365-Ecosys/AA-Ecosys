@@ -4,7 +4,7 @@ title: Playbook metrics
 description: How a project measures delivery (DORA), flow (Kanban) and AI readiness (DORA AI capabilities), and how often.
 type: reference
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [cto, pm, engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14

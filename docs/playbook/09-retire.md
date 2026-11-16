@@ -4,7 +4,7 @@ title: "Phase 9: Retire"
 description: Shut a product, app or feature down cleanly and stop paying for it - the retirement steps, gate G8 and common mistakes.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, cto, engineer, devops, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14

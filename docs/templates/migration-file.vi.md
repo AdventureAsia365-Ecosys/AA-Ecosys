@@ -4,7 +4,7 @@ title: Mẫu file migration
 description: Header, transaction, tự đăng ký và hình dạng expand / contract mà mọi file migration cơ sở dữ liệu bắt đầu từ đó.
 type: template
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -16,8 +16,11 @@ translation_of: docs/templates/migration-file.md
 
 # Mẫu file migration
 
-Chép khối dưới vào `db/migrations/<prefix>-<NNN>_<slug>.sql`. Nó theo các luật migration MIG-1 tới MIG-14 của AA
-([data standards Part A](../architecture/data-standards/01-engineering.md)) ở dạng chung: mỗi schema một chủ sở hữu và
+Chép khối dưới vào `db/migrations/<prefix>-<NNN>_<slug>.sql`. Nó theo các luật migration MIG-1 tới MIG-14
+<!-- kit:skip -->
+([data standards Part A của AA](../architecture/data-standards/01-engineering.md))
+<!-- /kit:skip -->
+ở dạng chung: mỗi schema một chủ sở hữu và
 một dải số, chỉ đi tới, idempotent, expand / contract cho mọi thay đổi hình dạng, chỉ áp từ CI.
 
 ```sql

@@ -18,7 +18,7 @@ translation_of: docs/templates/discovery-brief.md
 <!-- Playbook dự án mới, pha 1 Khám phá (docs/playbook/01-discovery.md). Dựa trên pha discovery của UK GDS (diễn đạt
 lại giải pháp thành vấn đề, ước lượng chi phí của vấn đề, dừng lại không phải là thất bại) và hướng dẫn mua hay tự xây
 của 18F. Điền cùng chủ doanh nghiệp; tech lead và agent bổ sung phần nghiên cứu. Giữ trong hai trang. Lưu trong tài liệu
-của dự án (với AA: docs/product/<slug>/). Xoá ghi chú này. -->
+của dự án (ví dụ docs/product/<slug>/). Xoá ghi chú này. -->
 
 ## 1. Vấn đề
 

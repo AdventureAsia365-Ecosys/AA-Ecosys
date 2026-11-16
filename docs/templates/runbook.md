@@ -4,7 +4,7 @@ title: <Verb> <object>
 description: <One sentence - when an operator opens this runbook.>
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, devops, agent]
 applies_to: [replace-me]
 last_reviewed: 2026-10-19
@@ -20,7 +20,8 @@ related: []
 > [!WARNING]
 > UNTESTED - do not follow in an incident without checking each step.
 > Remove this banner, set `status: active` and fill `last_tested`, `tested_where` and `tested_evidence` after the
-> first real run (Dev acc2, drill, incident or DRY RUN). See [STYLE](../STYLE.md#runbooks-and-tested).
+> first real run (Dev acc2, drill, incident or DRY RUN). See [STYLE](../STYLE.md#runbooks-and-tested). <!-- kit:drop -->
+<!-- kit:only > first real run (Dev, drill, incident or DRY RUN). -->
 
 ## When to use
 
@@ -33,11 +34,20 @@ related: []
 - State: `shared.job` has no queued or running job of a kind this touches (deploy gate), unless SEV1 and the tech lead decides.
 - Cost: <0 USD / estimate per run>.
 
+<!-- kit:skip -->
 ```bash
 aws sts get-caller-identity --profile aa365-admin
 ```
 
 Expected: the acc2 account from the [account map](../onboarding.md#account-map).
+<!-- /kit:skip -->
+<!-- kit:only
+```bash
+aws sts get-caller-identity --profile <profile>
+```
+
+Expected: the account of this environment from the project's account map.
+kit:only -->
 
 ## Steps
 
@@ -71,10 +81,13 @@ Expected: the acc2 account from the [account map](../onboarding.md#account-map).
 
 ## Escalation
 
-- Severity per [incident response](../ops/incident-response.md). Tell the business owner when <rule>.
+- Severity per [incident response](../ops/incident-response.md). Tell the business owner when <rule>. <!-- kit:drop -->
+
+<!-- kit:only - Severity per the project's incident response page. Tell the business owner when <rule>. -->
 
 ## Tested log
 
 | Date | Where | By | Evidence | Result |
 |---|---|---|---|---|
-| <YYYY-MM-DD> | <dev-acc2 / drill / incident / dry-run> | <name> | `docs/audits/<date>-S<nnn>-<slug>/` or Linear comment | <pass / fail + note> |
+| <YYYY-MM-DD> | <dev-acc2 / drill / incident / dry-run> | <name> | `docs/audits/<date>-S<nnn>-<slug>/` or Linear comment | <pass / fail + note> <!-- kit:drop --> |
+<!-- kit:only | <YYYY-MM-DD> | <dev / drill / incident / dry-run> | <name> | `docs/audits/<date>-S<nnn>-<slug>/` or tracker comment | <pass / fail + note> | -->

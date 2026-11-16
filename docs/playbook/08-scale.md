@@ -4,7 +4,7 @@ title: "Phase 8: Scale"
 description: Grow only when a measured trigger says so, cheapest lever first, and switch on the prod controls at gate G7.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, cto, engineer, devops]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -44,7 +44,9 @@ Written during the dev phase, switched on together when the first prod release o
 
 ## Deliverables
 
-- Trigger table and capacity review ([cost and capacity review](../templates/cost-report.md)).
+- Trigger table and capacity review ([cost and capacity review](../templates/cost-report.md)). <!-- kit:drop -->
+
+<!-- kit:only - Trigger table and capacity review (cost sheet compared with the bill and the load). -->
 - Prod blueprint (environments, accounts, data residency, backups and restore targets).
 - The governance switch above, recorded as a decision with its date.
 

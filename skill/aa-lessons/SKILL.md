@@ -5,6 +5,8 @@ description: Sổ bài học (lesson log) của AA_Ecosys — ghi ngay một ngu
 
 # aa-lessons
 
+> Lớp AA (overlay) của skill generic [`project-lessons`](../kit/project-lessons/SKILL.md) (kit dự án mới, tiếng Anh, AA-1103): quy trình chung nằm ở đó; skill này chỉ thêm phần riêng của AA. Đổi quy tắc chung thì sửa skill generic trước.
+
 Log: [`lessons.md`](lessons.md), chia theo vùng. Mỗi dòng là **một nguyên tắc**, không phải nhật ký sự cố.
 
 | Mục trong `lessons.md` | Đọc trước khi |

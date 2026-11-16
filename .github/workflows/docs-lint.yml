@@ -23,6 +23,8 @@ name: Docs lint
 #   - the AA Academy course files under docs/learn/ (AA-1104): shape, references, pinned source hashes (a cited
 #     section that changed turns the check red until the module owner re-pins), tiers and the allowlist
 #   - the ECS exec wrapper tools/ecs (AA-1024 G3) and the GIT_DIR isolation of the pre-push hook (S272)
+#   - the new-project kit sources (AA-1103): every file the public project template copies (tools/project-kit/
+#     kit-sources.txt) has balanced kit markers and, after the kit transform, no project name, key or account number
 # Secrets: gitleaks runs on every PR (any path) in secret-scan.yml and nightly over the full history in
 # secret-scan-history.yml (AA-981),
 # so it is not repeated here (secret names are fine in docs, values never are).
@@ -57,6 +59,7 @@ on:
       - "scripts/pre-push.sh"
       - "tools/ecs/**"
       - "tools/kit/**"
+      - "tools/project-kit/**"
       - "tools/llm-core/**"
       - "tools/adr/**"
       - ".markdownlint-cli2.jsonc"
@@ -133,8 +136,19 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           bash .claude/hooks/test_subagent_guardrails.sh
+          bash .claude/hooks/test_subagent_guardrails_generic.sh
+          bash .claude/hooks/test_subagent_mcp_guardrails.sh
           bash .claude/hooks/test_kit_core_edit_guard.sh
           python -m unittest discover -s .claude/hooks -p 'test_*.py'
+
+      # AA-1103: the files the public project template copies stay generic. The template repo's own CI compares each
+      # copy with tools/project-kit/kit_transform.py of its source; this check fails first, before a release copies a
+      # project name, issue key or account number into a public template. Offline, stdlib only.
+      - name: Project kit sources stay generic
+        if: ${{ !cancelled() }}
+        run: |
+          python -m unittest discover -s tools/project-kit -p 'test_*.py'
+          python tools/project-kit/check_kit_sources.py
 
       # AA-1024 G22: every lesson line a PR adds or changes ends with a Guard field (skill/aa-lessons/SKILL.md section
       # 3): a guard that exists, a planned GRD/AA id, or "none: <judgement|external|one-off> <why>". Old lines pass.

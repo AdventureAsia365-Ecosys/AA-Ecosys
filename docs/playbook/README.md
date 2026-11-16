@@ -1,26 +1,30 @@
 ---
 id: GUIDE-14
 title: New-project playbook
-description: How a new project runs the whole product lifecycle from day 1 - nine phases with gates, roles, templates, agent rules and the AA profile on top of named standards.
+description: How a new project runs the whole product lifecycle from day 1 - nine phases with gates, roles, templates, agent rules and the AA profile on top of named standards. # kit:drop
+# kit:only description: How a new project runs the whole product lifecycle from day 1 - nine phases with gates, roles, templates and agent rules on top of named standards.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, engineer, devops, cto, cio, pm, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
 review_every_days: 90
-related: [CAT-01, TPL-01, GUIDE-08, GUIDE-13, docs/research/new-project-playbook/README.md, AA-1099, AA-1102]
+related: [CAT-01, TPL-01, GUIDE-08, GUIDE-13, docs/research/new-project-playbook/README.md, AA-1099, AA-1102] # kit:drop
 ---
 
 # New-project playbook
 
 This playbook is the kit a new project applies on day 1. It covers the full lifecycle, from deciding whether to build
 at all to shutting the product down. It is a thin profile over well-known standards, not a new method: each page
-names the standard it follows and what it keeps or drops. AA-Ecosys is its reference application; the
-[AA profile](aa-profile.md) maps the generic pages onto AA's own rules and tools.
+names the standard it follows and what it keeps or drops.
+<!-- kit:skip -->
+AA-Ecosys is its reference application; the [AA profile](aa-profile.md) maps the generic pages onto AA's own rules
+and tools.
 
 The design and its fourteen decisions were approved by the tech lead in S279
 ([research](../research/new-project-playbook/README.md), handbook decision S279-K1).
+<!-- /kit:skip -->
 
 ## Start here
 
@@ -30,12 +34,12 @@ The design and its fourteen decisions were approved by the tech lead in S279
 | Business owner | This page, [Discovery](01-discovery.md), [Scale](08-scale.md), [Retire](09-retire.md) |
 | Tech lead | [Principles](principles.md), every phase page, [Agents](agents.md) |
 | Engineer or agent joining a running project | [Principles](principles.md), [Build](04-build.md), [Test](05-test.md), [Release](06-release.md), [Agents](agents.md) |
-| Working on AA itself | [AA profile](aa-profile.md) |
+| Working on AA itself | [AA profile](aa-profile.md) <!-- kit:drop --> |
 
 ## Lifecycle map
 
 Nine phases, named after the UK GDS phases (discovery, alpha, beta, live, retirement). Each phase ends at a gate: a
-short checklist rated red, amber or green (an AA choice, not a GDS rule). Green passes. Amber passes with a recorded
+short checklist rated red, amber or green (the kit's own choice, not a GDS rule). Green passes. Amber passes with a recorded
 follow-up. Red stops.
 
 ```mermaid
@@ -68,7 +72,7 @@ to 6 repeat for every issue, so a live project is in several phases at once.
 
 ## Roles (RACI per phase)
 
-One human is Accountable for each phase. Agents may be Responsible, never Accountable (AA's own rule).
+One human is Accountable for each phase. Agents may be Responsible, never Accountable (the kit's own rule).
 
 | Phase | Business owner | Tech lead | Orchestrator agent | Subagents / second agent | CI | Vendors |
 |---|---|---|---|---|---|---|
@@ -102,9 +106,10 @@ the tech lead also approves risky merges before they land ([Scale](08-scale.md))
 | Running a team of one human and several agents | [agents.md](agents.md) |
 | Day-1 checklist and the 30 / 60 / 90-day plan | [adoption.md](adoption.md) |
 | DORA, flow and AI-readiness metrics | [metrics.md](metrics.md) |
-| How AA maps onto the kit | [aa-profile.md](aa-profile.md) |
+| How AA maps onto the kit | [aa-profile.md](aa-profile.md) <!-- kit:drop --> |
 | Templates | [`docs/templates/`](../templates/README.md) |
-| Template repo (Copier) and generic agent skills | planned, AA-1103 |
+| Template repo (Copier) and generic agent skills | `project-template` repo; [`skill/kit/`](../../skill/kit/README.md) <!-- kit:drop --> |
+<!-- kit:only | Generic agent skills | [`.claude/skills/`](../../.claude/skills/README.md) | -->
 
 ## Standards it builds on
 
@@ -112,5 +117,5 @@ UK GDS service manual (phases), ISO/IEC/IEEE 12207 (coverage check), ISO/IEC 250
 (four performance domains), PRINCE2 7 (tolerances), Scrum Guide 2020 (product goal, Definition of Done), Kanban Guide
 (WIP, flow metrics), Shape Up (appetite, circuit breaker), DORA (metrics, AI capabilities), Google SRE (SLOs,
 postmortems), C4 and arc42 (architecture), MADR (ADRs), AGENTS.md (agent instructions), Twelve-Factor App, trunk-based
-development, OWASP ASVS 5.0 and SAMM v2 (security), FinOps Framework (cost), RACI. Sources and the verdict on each are
-in the [research](../research/new-project-playbook/README.md) sections 4 and 8.
+development, OWASP ASVS 5.0 and SAMM v2 (security), FinOps Framework (cost), RACI.
+Sources and the verdict on each are in the [research](../research/new-project-playbook/README.md) sections 4 and 8. <!-- kit:drop -->

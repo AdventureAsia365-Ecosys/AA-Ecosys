@@ -4,7 +4,7 @@ title: "Pha 8: Mở rộng"
 description: Chỉ mở rộng khi một điều kiện đo được yêu cầu, đòn bẩy rẻ nhất trước, và bật các biện pháp prod ở cổng G7.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, cto, engineer, devops]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -47,7 +47,9 @@ D10 của bộ kit):
 
 ## Sản phẩm bàn giao
 
-- Bảng điều kiện kích hoạt và rà soát dung lượng ([rà soát chi phí và dung lượng](../templates/cost-report.md)).
+- Bảng điều kiện kích hoạt và rà soát dung lượng ([rà soát chi phí và dung lượng](../templates/cost-report.md)). <!-- kit:drop -->
+
+<!-- kit:only - Bảng điều kiện kích hoạt và rà soát dung lượng (bảng chi phí đối chiếu với hoá đơn và tải). -->
 - Bản thiết kế prod (môi trường, tài khoản, nơi lưu dữ liệu, backup và mục tiêu khôi phục).
 - Công tắc quản trị ở trên, được ghi thành một quyết định có ngày.
 

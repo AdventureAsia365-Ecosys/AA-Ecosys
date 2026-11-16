@@ -4,12 +4,13 @@ title: Playbook principles and tolerances
 description: The seven principles of the new-project kit and the tolerance table that tells agents what they may do without asking.
 type: explanation
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, engineer, cto, pm, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
 review_every_days: 90
-related: [GUIDE-14, CAT-01, docs/research/new-project-playbook/README.md]
+related: [GUIDE-14, CAT-01, docs/research/new-project-playbook/README.md] # kit:drop
+# kit:only related: [GUIDE-14, CAT-01]
 ---
 
 # Playbook principles and tolerances
@@ -23,7 +24,7 @@ related: [GUIDE-14, CAT-01, docs/research/new-project-playbook/README.md]
 3. **Handbook-first.** A rule changes in the kit page first, then in skills and copies. The learning site renders from
    the same pages.
 4. **Generic core plus overlay.** The kit carries no project names. A project keeps an overlay (accounts, services,
-   people, trackers) that points at the generic pages; AA's is the [AA profile](aa-profile.md).
+   people, trackers) that points at the generic pages (see the overlay page of the project).
 5. **Tolerances, not approvals.** Agents act inside agreed limits and escalate only when a forecast says a limit will
    be broken (PRINCE2 "manage by exception").
 6. **Switches by phase.** Prod-only controls (error budget, on-call, enforced code owners, a least-privilege agent role)

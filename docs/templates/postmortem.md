@@ -4,7 +4,7 @@ title: "Postmortem: <short title> (<YYYY-MM-DD>)"
 description: <One sentence - what broke or overspent, for how long and what it cost.>
 type: report
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, devops, cto, agent]
 applies_to: [replace-me]
 last_reviewed: 2026-11-14
@@ -13,12 +13,20 @@ related: [OPS-04, FIN-01]
 
 # Postmortem: <short title> (<YYYY-MM-DD>)
 
+<!-- kit:skip -->
 <!-- Report OPS-04 (incident and postmortem, cost incidents included; root docs/reports/catalog.yaml). Blameless.
 Store at docs/ops/postmortems/<YYYY-MM-DD>-<slug>.md and add a row to docs/ops/postmortems/README.md (single place for
 incident records, G-14). Write within 5 working days of a SEV1 or SEV2 (docs/ops/incident-response.md); the Linear note
 within 2 working days. A cost incident is SEV2 when the excess is >= 50 USD or > 20 % of a monthly budget. Write the
 lesson to skill/aa-lessons/lessons.md at root-cause time. No account IDs, ARNs, secrets or vendor contract terms: this
 repo may be public. Delete this comment. -->
+<!-- /kit:skip -->
+<!-- kit:only
+<!-- Blameless. Store at docs/ops/postmortems/<YYYY-MM-DD>-<slug>.md and add a row to docs/ops/postmortems/README.md.
+Write within 5 working days of a SEV1 or SEV2; the tracker note within 2 working days. A cost incident is SEV2 when
+the excess passes the limit the cost sheet sets. Write the lesson to docs/lessons.md at root-cause time. No account
+IDs, ARNs, secrets or vendor contract terms: the repo may be public. Delete this comment. -->
+kit:only -->
 
 ## When a postmortem is required
 
@@ -102,4 +110,5 @@ jargon. A Vietnamese version goes in a sibling `.vi.md` file when needed (docs/S
 
 ## 12. Lessons
 
-Link to the lessons entry (`skill/aa-lessons/lessons.md`) and to any runbook or playbook changed.
+Link to the lessons entry (`skill/aa-lessons/lessons.md`) and to any runbook or playbook changed. <!-- kit:drop -->
+<!-- kit:only Link to the lessons entry (`docs/lessons.md`) and to any runbook or playbook changed. -->

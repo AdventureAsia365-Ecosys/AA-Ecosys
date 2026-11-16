@@ -4,7 +4,7 @@ title: "Pha 9: Ngừng"
 description: Đóng một sản phẩm, app hay tính năng cho gọn và thôi trả tiền cho nó - các bước ngừng, cổng G8 và lỗi hay gặp.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, cto, engineer, devops, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14

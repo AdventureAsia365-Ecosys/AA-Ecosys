@@ -4,7 +4,7 @@ title: "Phase 4: Build"
 description: Turn small, ready issues into reviewed changes - the Definition of Ready, delivery paths, appetite, lanes and common mistakes.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, pm, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14

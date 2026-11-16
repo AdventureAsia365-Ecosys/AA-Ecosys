@@ -4,7 +4,7 @@ title: Vận hành một dự án với agent
 description: Cách một người và nhiều agent AI vận hành một dự án - vai trò, dung sai, guardrail, nghi thức phiên, lane, trang quyết định và phân lớp chỉ dẫn.
 type: explanation
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [cto, engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -16,7 +16,7 @@ translation_of: docs/playbook/agents.md
 
 # Vận hành một dự án với agent
 
-Những gì AA học được khi vận hành một đội gồm một tech lead và nhiều agent AI, viết ra để dự án khác áp dụng được.
+Những gì dự án tham chiếu học được khi vận hành một đội gồm một tech lead và nhiều agent AI, viết ra để dự án khác áp dụng được.
 **Theo:** AGENTS.md (định dạng chỉ dẫn mở), các kỹ thuật về agent trong Thoughtworks Technology Radar (lộ dần ngữ cảnh,
 sandbox, vòng phản hồi; cảnh báo về chỉ dẫn phình to và tài liệu tràn lan), dung sai của PRINCE2.
 

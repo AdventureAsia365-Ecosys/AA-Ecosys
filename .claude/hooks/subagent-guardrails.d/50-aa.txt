@@ -1,0 +1,15 @@
+# AA block of the subagent guardrail (AA-1103 split; the generic block is 00-generic.txt). Same format.
+#
+# AA-1026: scripts whose AWS / admin-API writes the command line does not show
+(^|[ /])anthropic_key_plug_in\.sh
+# AA-1032: the orchestrator ship tools push, merge and dispatch DB Migrate inside their own subprocesses (through
+# as-app.sh), where this hook never sees the command. Any mention is refused, so `cat`/`git add` of these files is
+# too: subagents editing them use the Read/Edit tools and `git add <dir>`. Their tests (test_ship_*.py) stay open.
+# AA-1024: ship_wave.py merges and applies migrations the same way.
+(^|[ /"'=(`;&|])(ship_(merge|train|copy_apply|open_prs|wave)\.py|mergeq\.sh|dbmig\.sh|train-lib\.sh|as-app\.sh)
+(^|[ ;&|(])-m +ship_(merge|train|copy_apply|open_prs|wave)( |$|[;&|)])
+# AA-1023: the ECS rollback helper runs update-service and the ECS exec wrapper runs execute-command (game-day seed
+# writes shared.job through it) inside the script, out of this hook's sight. Any mention is refused, as for the ship
+# tools above (dry runs too: they need the MFA session; lanes edit these files with Read/Edit and `git add <dir>`).
+# Their tests (test_ecs_rollback.py, test_ecsx.py, test_gameday_seed_job.py) stay open.
+(^|[ /"'=(`;&|])(ecs_rollback|ecsx)\.sh
