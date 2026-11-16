@@ -1,0 +1,146 @@
+{"max_size": 2, "event": "aa817_tenant_pool_ready", "level": "info", "logger": "api.core.aa544_tenant_pool", "timestamp": "2026-11-15T23:54:39.154242Z", "service": "cis-api", "environment": "dev", "git_sha": "cf746a020b5
+ids 50
+Subquery Scan on v_tour_place  (cost=2282081.49..2282088.81 rows=1 width=183) (actual time=605.267..606.680 rows=1321 loops=1)
+  Filter: (v_tour_place.source_system = 'cis'::text)
+  Buffers: shared hit=34371
+  ->  WindowAgg  (cost=2282081.49..2282086.52 rows=183 width=531) (actual time=605.266..606.429 rows=1321 loops=1)
+        Buffers: shared hit=34371
+        ->  Sort  (cost=2282081.49..2282081.95 rows=183 width=249) (actual time=605.255..605.482 rows=1321 loops=1)
+              Sort Key: g.tour_id, g.day_number, g.text_pos, g.first_seen_at, ((g.place_key)::text) COLLATE "C"
+              Sort Method: quicksort  Memory: 316kB
+              Buffers: shared hit=34371
+              ->  Nested Loop Left Join  (cost=2267790.73..2282074.61 rows=183 width=249) (actual time=249.031..603.841 rows=1321 loops=1)
+                    Buffers: shared hit=34371
+                    ->  Nested Loop Left Join  (cost=2267786.32..2279057.36 rows=183 width=249) (actual time=248.986..594.582 rows=1321 loops=1)
+                          Buffers: shared hit=29031
+                          ->  Nested Loop Left Join  (cost=2267761.35..2274484.58 rows=183 width=241) (actual time=248.966..585.952 rows=1321 loops=1)
+                                Buffers: shared hit=24495
+                                ->  Nested Loop Left Join  (cost=2267736.41..2269915.18 rows=183 width=225) (actual time=248.746..565.248 rows=1321 loops=1)
+                                      Buffers: shared hit=16891
+                                      ->  Hash Right Join  (cost=2267727.59..2268297.00 rows=183 width=209) (actual time=247.893..253.468 rows=1321 loops=1)
+                                            Hash Cond: (pc.card_id = g.place_card_id)
+                                            Buffers: shared hit=12517
+                                            ->  Seq Scan on place_card pc  (cost=0.00..549.42 rows=4842 width=55) (actual time=0.015..1.061 rows=4860 loops=1)
+                                                  Buffers: shared hit=501
+                                            ->  Hash  (cost=2267725.30..2267725.30 rows=183 width=186) (actual time=247.869..248.013 rows=1321 loops=1)
+                                                  Buckets: 2048 (originally 1024)  Batches: 1 (originally 1)  Memory Usage: 228kB
+                                                  Buffers: shared hit=12016
+                                                  ->  Subquery Scan on g  (cost=2267714.32..2267725.30 rows=183 width=186) (actual time=226.414..247.344 rows=1321 loops=1)
+                                                        Buffers: shared hit=12016
+                                                        ->  GroupAggregate  (cost=2267714.32..2267723.47 rows=183 width=226) (actual time=226.412..247.106 rows=1321 loops=1)
+                                                              Group Key: spelled.source_system, spelled.source_id, spelled.tour_id, spelled.tour_country, spelled.itinerary_day, spelled.place_key
+                                                              Buffers: shared hit=12016
+                                                              ->  Sort  (cost=2267714.32..2267714.78 rows=183 width=223) (actual time=226.363..226.663 rows=1525 loops=1)
+                                                                    Sort Key: spelled.source_system, spelled.source_id, spelled.tour_id, spelled.tour_country, spelled.itinerary_day, spelled.place_key
+                                                                    Sort Method: quicksort  Memory: 996kB
+                                                                    Buffers: shared hit=12016
+                                                                    ->  Subquery Scan on spelled  (cost=328398.25..2267707.45 rows=183 width=223) (actual time=69.718..220.573 rows=1525 loops=1)
+                                                                          Buffers: shared hit=12016
+                                                                          ->  WindowAgg  (cost=328398.25..2267705.62 rows=183 width=287) (actual time=69.716..219.979 rows=1525 loops=1)
+                                                                                Buffers: shared hit=12016
+                                                                                ->  Nested Loop Left Join  (cost=328398.25..2267696.47 rows=183 width=167) (actual time=67.265..212.965 rows=1525 loops=1)
+                                                                                      Buffers: shared hit=12016
+                                                                                      ->  Nested Loop Left Join  (cost=328397.97..2267626.79 rows=183 width=135) (actual time=67.252..206.896 rows=1525 loops=1)
+                                                                                            Buffers: shared hit=9121
+                                                                                            ->  Merge Join  (cost=328397.68..2267558.20 rows=183 width=136) (actual time=67.234..196.730 rows=1525 loops=1)
+                                                                                                  Merge Cond: (a.tour_id = rt.tour_id)
+                                                                                                  Buffers: shared hit=4546
+                                                                                                  ->  Gather Merge  (cost=5775.15..8785.92 rows=25851 width=60) (actual time=66.590..77.063 rows=25895 loops=1)
+                                                                                                        Workers Planned: 2
+                                                                                                        Workers Launched: 2
+                                                                                                        Buffers: shared hit=3809
+                                                                                                        ->  Sort  (cost=4775.12..4802.05 rows=10771 width=60) (actual time=44.970..46.063 rows=8652 loops=3)
+                                                                                                              Sort Key: a.tour_id, a.itinerary_day, (btrim(a.place))
+                                                                                                              Sort Method: quicksort  Memory: 2375kB
+                                                                                                              Buffers: shared hit=3809
+                                                                                                              Worker 0:  Sort Method: quicksort  Memory: 751kB
+                                                                                                              Worker 1:  Sort Method: quicksort  Memory: 833kB
+                                                                                                              ->  Parallel Seq Scan on tour_atoms a  (cost=0.00..4053.74 rows=10771 width=60) (actual time=0.024..27.897 row
+                                                                                                                    Filter: ((NOT deleted) AND (NOT is_empty_marker) AND (place IS NOT NULL) AND (btrim(place) <> ''::text))
+                                                                                                                    Rows Removed by Filter: 10079
+                                                                                                                    Buffers: shared hit=3705
+                                                                                                  ->  Materialize  (cost=322622.30..2258704.92 rows=7 width=108) (actual time=0.637..115.923 rows=1505 loops=1)
+                                                                                                        Buffers: shared hit=737
+                                                                                                        ->  Nested Loop  (cost=322622.30..2258704.91 rows=7 width=108) (actual time=0.632..115.717 rows=50 loops=1)
+                                                                                                              Buffers: shared hit=737
+                                                                                                              ->  Nested Loop  (cost=0.55..352.45 rows=7 width=76) (actual time=0.067..0.985 rows=50 loops=1)
+                                                                                                                    Buffers: shared hit=300
+                                                                                                                    ->  Index Scan using raw_tours_pkey on raw_tours rt  (cost=0.28..243.42 rows=16 width=60) (actual time=0
+                                                                                                                          Index Cond: (tour_id = ANY ('{0c8bdf9e-511f-44fa-a665-af8bedeb6d83,2a2a5928-b723-4fa4-a94b-b15a7f8
+                                                                                                                          Filter: ((deleted_at IS NULL) AND ((tenant_id = (NULLIF(current_setting('app.tenant_id'::text, tru
+                                                                                                                          Buffers: shared hit=150
+                                                                                                                    ->  Index Scan using published_tours_tour_id_key on published_tours pt  (cost=0.28..6.81 rows=1 width=16
+                                                                                                                          Index Cond: (tour_id = rt.tour_id)
+                                                                                                                          Filter: ((deleted_at IS NULL) AND (tenant_id = '00000000-0000-0000-0000-000000000001'::uuid) AND (
+                                                                                                                          Buffers: shared hit=150
+                                                                                                              ->  Aggregate  (cost=322621.75..322621.76 rows=1 width=32) (actual time=2.292..2.293 rows=1 loops=50)
+                                                                                                                    Buffers: shared hit=437
+                                                                                                                    ->  Unique  (cost=317642.25..322617.25 rows=200 width=188) (actual time=2.270..2.273 rows=9 loops=50)
+                                                                                                                          Buffers: shared hit=437
+                                                                                                                          ->  Sort  (cost=317642.25..320129.75 rows=995000 width=188) (actual time=2.268..2.269 rows=9 loops
+                                                                                                                                Sort Key: d.day_number, c.ord DESC
+                                                                                                                                Sort Method: quicksort  Memory: 27kB
+                                                                                                                                Buffers: shared hit=437
+                                                                                                                                ->  Nested Loop  (cost=0.64..34866.67 rows=995000 width=188) (actual time=0.386..2.258 rows=
+                                                                                                                                      Buffers: shared hit=437
+                                                                                                                                      ->  Nested Loop  (cost=0.55..41.59 rows=995 width=56) (actual time=0.180..0.481 rows=9
+                                                                                                                                            Buffers: shared hit=437
+                                                                                                                                            ->  Nested Loop  (cost=0.55..16.63 rows=1 width=128) (actual time=0.006..0.009 r
+                                                                                                                                                  Buffers: shared hit=300
+                                                                                                                                                  ->  Index Scan using published_tours_tour_id_key on published_tours pt_1  
+                                                                                                                                                        Index Cond: (tour_id = rt.tour_id)
+                                                                                                                                                        Filter: ((deleted_at IS NULL) AND (aa_itineraries IS NOT NULL) AND (
+                                                                                                                                                        Buffers: shared hit=150
+                                                                                                                                                  ->  Index Scan using raw_tours_pkey on raw_tours rt_1  (cost=0.28..8.31 ro
+                                                                                                                                                        Index Cond: (tour_id = rt.tour_id)
+                                                                                                                                                        Filter: ((deleted_at IS NULL) AND ((tenant_id = (NULLIF(current_sett
+                                                                                                                                                        Buffers: shared hit=150
+                                                                                                                                            ->  Function Scan on regexp_split_to_table c  (cost=0.00..15.00 rows=995 width=4
+                                                                                                                                                  Filter: (regexp_match(btrim(txt, ' 	
+'::text), '^Days?\s+(\d+)(?:[ \t]*(?:[-–]|to)[ \t]*(\d{1,3}))?\s+—[ \t]*([^\n]*)(.*)$'::text) IS NOT NULL)
+                                                                                                                                                  Buffers: shared hit=137
+                                                                                                                                      ->  Function Scan on generate_series d  (cost=0.09..10.09 rows=1000 width=4) (actual t
+                                                                                            ->  Index Scan using atom_place_card_pkey on atom_place_card apc  (cost=0.29..0.37 rows=1 width=33) (actual time=0.006..0.006 ro
+                                                                                                  Index Cond: (atom_id = a.atom_id)
+                                                                                                  Buffers: shared hit=4575
+                                                                                      ->  Index Scan using place_card_pkey on place_card pc_1  (cost=0.28..0.38 rows=1 width=16) (actual time=0.003..0.003 rows=1 loops=1525
+                                                                                            Index Cond: (card_id = apc.card_id)
+                                                                                            Filter: (status <> 'rejected'::text)
+                                                                                            Rows Removed by Filter: 0
+                                                                                            Buffers: shared hit=2895
+                                      ->  Limit  (cost=8.82..8.82 rows=1 width=32) (actual time=0.235..0.235 rows=0 loops=1321)
+                                            Buffers: shared hit=4374
+                                            ->  Sort  (cost=8.82..8.82 rows=1 width=32) (actual time=0.235..0.235 rows=0 loops=1321)
+                                                  Sort Key: gp.component_id
+                                                  Sort Method: quicksort  Memory: 25kB
+                                                  Buffers: shared hit=4374
+                                                  ->  Index Scan using tour_place_source_idx on tour_place gp  (cost=0.29..8.81 rows=1 width=32) (actual time=0.187..0.234 rows=0 loops=1321)
+                                                        Index Cond: ((source_id = g.source_id) AND (day_index = g.day_number))
+                                                        Filter: ((destination_id IS NOT NULL) AND (geo.name_norm(name) = geo.name_norm(g.place_name)))
+                                                        Rows Removed by Filter: 2
+                                                        Buffers: shared hit=4374
+                                ->  Limit  (cost=24.94..24.95 rows=1 width=33) (actual time=0.015..0.015 rows=1 loops=1321)
+                                      Buffers: shared hit=7604
+                                      ->  Sort  (cost=24.94..24.95 rows=1 width=33) (actual time=0.015..0.015 rows=1 loops=1321)
+                                            Sort Key: ((lower(dd.name) = lower(pc.display_name))) DESC NULLS LAST, dd.id
+                                            Sort Method: quicksort  Memory: 25kB
+                                            Buffers: shared hit=7604
+                                            ->  Nested Loop  (cost=0.57..24.93 rows=1 width=33) (actual time=0.012..0.013 rows=1 loops=1321)
+                                                  Buffers: shared hit=7604
+                                                  ->  Index Scan using destinations_lower_name_uidx on destinations dd  (cost=0.29..16.62 rows=1 width=51) (actual time=0.007..0.008 rows=1 loops=1321)
+                                                        Index Cond: (lower(name) = ANY (ARRAY[lower(pc.display_name), lower(g.place_name)]))
+                                                        Filter: (lower(country) = lower(COALESCE(pc.country, g.tour_country)))
+                                                        Rows Removed by Filter: 0
+                                                        Buffers: shared hit=4523
+                                                  ->  Index Scan using destinations_pkey on destinations k  (cost=0.29..8.30 rows=1 width=16) (actual time=0.003..0.003 rows=1 loops=1027)
+                                                        Index Cond: (id = COALESCE(dd.duplicate_of, dd.id))
+                                                        Filter: ((duplicate_of IS NULL) AND (geo_status <> 'suspect'::text))
+                                                        Rows Removed by Filter: 0
+                                                        Buffers: shared hit=3081
+                          ->  Limit  (cost=24.97..24.97 rows=1 width=92) (actual time=0.006..0.006 rows=1 loops=1321)
+                                Buffers: shared hit=4536
+                                ->  Sort  (cost=24.97..24.97 rows=2 width=92) (actual time=0.006..0.006 rows=1 loops=1321)
+                                      Sort Key: "*VALUES*".column1
+                                      Sort Method: quicksort  Memory: 25kB
+                                      Buffers: shared hit=4536
+                          

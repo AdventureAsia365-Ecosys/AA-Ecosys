@@ -12,6 +12,8 @@ _Last updated: S281, 15/11/2026 (Claude Code, Ultracode; ~00:30 → before 17:00
 
 | Due | Issue | Check |
 |---|---|---|
+| ≥ 02/12 | AA-1122 | First nightly automatic research after 01/12 (tech lead sets `cis.seo.research_auto_enabled` = true, effective 01/12, 5 USD month cap): it buys only new / stale places, stops at the cap, and `search_volume_monthly` gets 12-month rows. Then AA-1122 can close. |
+| S283 | AA-1108 | `delivery-metrics.yml` has `event=schedule` runs after the S282 close root PR re-saved the cron (minute 17). None → dispatch it from CI hygiene. |
 | after the S281 close root PR merges | AA-1093 (Done S281) | Delete the pre-erase RDS snapshot `tenant-erase-20261115-erase02` (kept until the S281 evidence PR is on master). |
 | Monday 16/11 01:30 UTC, then weekly | AA-1003 (R5) | First scheduled runs of BK-03 and FI-07 with `generator: cis` (root #795, CIS #1516). Read the two `report_run` rows: both must succeed; the S281 runs were by hand (3/3). |
 | ≥14/12/2026 (CRM ≥12/02/2027) | AA-1086 marker tenant | The pilot-rehearsal marker tenant was soft-offboarded in S281; its erasure request (live mode) becomes due then. It runs only through the AA-1093 flow: DRY RUN, fingerprint, the tech lead's approval, a snapshot first. |
@@ -59,6 +61,7 @@ _Last updated: S281, 15/11/2026 (Claude Code, Ultracode; ~00:30 → before 17:00
 
 ## 2. Waiting on Nghiệp (decisions / manual steps)
 
+- **Waiting after S282:** (a) set `cis.seo.research_auto_enabled` = true with *Effective from* 01/12/2026 on Platform › Settings (click path sent in the session; Cognito-only write); (b) acc2 OrganizationAccountAccessRole held until the TrueIDC appendix is signed; (c) acc1 root e-mail → info@adventure.asia 25–30/11, card / tax code / root MFA ≥ 02/12 (memory billing-transfer-timeline).
 - **Waiting after S281:** (a) the tech lead approves the four S281 Jira drafts (PR-22, PR-26, PR-27, PR-20; `.tmp-session/S281/jira-drafts.md`, not posted), then they are posted and the record moves to `docs/audits/2026-11-15-S281-session/jira-drafts.md`; (b) AA-1051: the tech lead's yes for the paid null run (cap 5 USD) once AA-1048 pins the instrument.
 - **Waiting after S275:** (a) the business owner's answers to the 10 M-OD default questions (Jira PR-26 comment 10636); the system uses the proposed defaults until then. (b) acc3 tag `terraform apply` (auto mode off). (c) The TrueIDC Zalo message before 20/11 (`.tmp-session/S275/trueidc-zalo.txt`).
 - **Settled in S265 (ADR 0019, B2B-only):** the decision page (44/44 items) and the plan/issue review (all 52 verdicts approved). Frontends: the two staff apps (CIS admin, Booking admin) leave Vercel on **Dev first**, in one Fargate Spot task (0.5 vCPU / 1 GB), and TripPlanner runs as one Spot task with CloudFront + WAF, about 20–22 USD a month on Dev; production sizing later (ADR 0019 d23, settled item 2). **q-pilot:** if the Dev pilot starts with no go-live date, the `aa-prod` build (P2) starts at the latest in pilot week 3. **q-ses:** yes to SES mail for the tour-retirement fan-out (a few cents a month, AA-1039). **q-aa741:** yes to the AA-741 paid T-series run, at most 20 USD and 50 tours, through the interim OpenAI / acc2 path while acc3 is closed (inside the OpenAI 10 USD/month hard cap, CIS 327). Every session's list explains each issue in plain words before the tech lead approves it.
@@ -258,6 +261,18 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-697 | Architecture diagrams with official AWS icons — ecosystem + each repo | S256 | **Done S257** (§5c): pilot approved under the S257 session plan (root #320); drift findings closed (Booking ops-docs bucket built S256, EFS removed S257 Infra #492) | — |
 | AA-710 | B2B benchmark: Asian Trails (eConnect, API, Lemax) | M-R4 | **S265:** slot S271 (R4 start): update the note against the R4 design (AA-1037, AA-1029, AA-1030, 'Book with AA' d17), map the gaps to issues, KAN-20 draft at that session's end, then close | — |
 | AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 | **S262:** AA-952, AA-954, AA-956, AA-957, AA-964, AA-971 closed (§5); AA-958 → S263. AA-952 was In Progress since S259 (slice 1 = C-M3 confirm, §3 row 0ah); **re-planned at the S260 close**: slots S261–S266, go-real ≥S267, see §3b "Kế hoạch CRM W5–W8 sau S260" | AA-958 needs a free Twilio trial for the live proof; AA-965 needs an LLM path |
+
+## 5. Closed in S282
+
+- **AA-963** CRM search + library (Partner #324, #328; crm-071): "Hội An" = "Hoi An", other agency 403.
+- **AA-968** CRM campaigns (root #822, Partner #326, #327; crm-073/074): preview 15 / 175 / 12, scheduled then cancelled.
+- **AA-970** release train, help, public data page (Partner #325; crm-072).
+- **AA-1048** Done-with-scope: instrument v7 pinned (FP 68 %, TP 88 %); shadow → AA-1050, null run → AA-1051.
+- **AA-1107** catalog places read 606 → 143.9 ms (CIS #1533, 431/432).
+- **AA-1109** whole-ecosystem audit (artifact + `docs/audits/2026-11-16-S282-session/ecosystem-audit/`), 10 new issues AA-1110…AA-1119.
+- **AA-1120** Done-with-scope: research cache on the queue path (CIS #1540), replay −19.4 %.
+- Still open with S282 work: AA-1122 In Review (CIS 440–442, #1547–#1549; PAA 99.4 %; auto run proof ≥ 02/12), AA-1116 In Progress (option B in every app: CIS #1543/#1544, Booking #260, TripPlanner #270/#271, Partner #331), AA-1111 In Progress (Sentry on 5 services), AA-1108 In Review (schedule), AA-1121 new (project kit v1.1, template v1.0.0 released).
+- Evidence: root `docs/audits/2026-11-16-S282-session/` and the S282 session log.
 
 ## 5. Closed in S281
 

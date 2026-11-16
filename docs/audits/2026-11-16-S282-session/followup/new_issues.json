@@ -1,0 +1,163 @@
+[
+ {
+  "title": "[Ops] Continuity pack: second key-holder, runbook-only deploy/rollback drill, security tabletop and a second alert channel",
+  "project": "Data Platform — Schema, Ops & Scale",
+  "priority": "Urgent",
+  "refs": [
+   "R01",
+   "R13",
+   "R14",
+   "R15",
+   "R41",
+   "R45"
+  ],
+  "done_when": "Named second key-holder holds tested access (GitHub org, AWS management, registrar, break-glass); 'run without the agent' page; one runbook-only deploy+rollback and one security tabletop (break-glass test + CRM key rotation) in the drill index; alarms reach a second channel.",
+  "effort": "M",
+  "cost": "0",
+  "needs": "tech lead + business owner"
+ },
+ {
+  "title": "[Security] Pre-pilot identity hardening: workforce admin MFA, access review, account guards, ZAP baseline",
+  "project": "Data Platform — Schema, Ops & Scale",
+  "priority": "Urgent",
+  "refs": [
+   "R08",
+   "R25",
+   "R34",
+   "R43",
+   "R44"
+  ],
+  "done_when": "Workforce admins cannot sign in without TOTP (or Google IdP + 2SV), ADR 0006 amended; Q4 access review recorded; allowed_account_ids on aa365 and acc3; read-only default agent role decided; one ZAP baseline triaged; fork-PR approval = all external contributors.",
+  "effort": "M",
+  "cost": "0",
+  "needs": "tech lead"
+ },
+ {
+  "title": "[Data] Retention go-live and tenant-isolation debt: approve proposed DM-7.1 rows, first live runs, RLS allowlist cleanup",
+  "project": "Data Platform — Schema, Ops & Scale",
+  "priority": "High",
+  "refs": [
+   "R02",
+   "R19",
+   "R42"
+  ],
+  "done_when": "69 proposed DM-7.1 rows approved by group; CIS, Booking, CRM retention each finish one live run with archive (doc says JSONL.gz, not Parquet); new-table rule in CI; RLS allowlist has no stale entries and every tenant_id table has RLS or a written exception.",
+  "effort": "M",
+  "cost": "0",
+  "needs": "tech lead"
+ },
+ {
+  "title": "[AI Gateway] PII scrub before every free-text AI call and one hard cap for every caller (CIS, TripPlanner, CRM)",
+  "project": "CIS Core — Pipeline, LLM & Platform",
+  "priority": "High",
+  "refs": [
+   "R11",
+   "R28",
+   "G12"
+  ],
+  "done_when": "F3 scrub in the shared gateway for free_text stages, fail closed; ADR 0009 d10 accepted; CRM AI calls via gateway ledger and connection caps; over-cap flag in catalog.v_llm_gateway_config_v1; acc3 budget catches Marketplace spend or matches gateway cap.",
+  "effort": "L",
+  "cost": "0",
+  "needs": "tech lead"
+ },
+ {
+  "title": "[TripPlanner] Custom-domain follow-up: entitlement check, subject_gate tenant allow-list, ReDoS fix, CodeQL on AA-Partner",
+  "project": "CIS Core — Pipeline, LLM & Platform",
+  "priority": "High",
+  "refs": [
+   "G18",
+   "R29",
+   "G4"
+  ],
+  "done_when": "add_domain refuses tenants without tp.custom_domain; links to a verified tenant domain pass subject_gate; CodeQL #60/#62 closed; Partner CodeQL default setup on; tests cover all three.",
+  "effort": "S",
+  "cost": "0",
+  "needs": "none"
+ },
+ {
+  "title": "[TripPlanner] Ship the launcher snippet and agency-only branding (no Adventure Asia strings, locale, B2C leftovers removed)",
+  "project": "TripPlanner & AA-Booking",
+  "priority": "High",
+  "refs": [
+   "G19",
+   "G4",
+   "G9",
+   "G23",
+   "G24"
+  ],
+  "done_when": "Basic-plan tenant copies a launcher snippet opening /{slug}/plan (no iframe, CSP unchanged); agency name in title/description/og:site_name with test guard; html lang follows tenant locale; /sign-in and /trips 404; tp.ai_sessions enforced; compose-body guard test.",
+  "effort": "M",
+  "cost": "0",
+  "needs": "none"
+ },
+ {
+  "title": "[Add-ons] End-to-end add-on lifecycle: New tenant runs the provisioning saga, CRM agency auto-created, TripPlanner module in the agency app",
+  "project": "Partner CRM — AA-Partner",
+  "priority": "High",
+  "refs": [
+   "G2",
+   "G5",
+   "G6",
+   "G7",
+   "G10",
+   "G11",
+   "G13",
+   "G25"
+  ],
+  "done_when": "New tenant calls the saga (theme, lead channel, TP domain, CRM agency + owner invite) with no hand steps; agency app TripPlanner module (site link, lead channel, theme, locale, leads, usage); remaining CRM gates enforced; seat-overage invoice line; TP webhook/e-mail leads proven live on a synthetic tenant; trial on attach per decision.",
+  "effort": "L",
+  "cost": "0",
+  "needs": "tech lead (trial on attach) + business owner (prices G1)"
+ },
+ {
+  "title": "[Go-live] One dated go-live gate: checklist with CI guard and the proofs it needs (price coverage, Booking restore drill, load test, edge rate limits)",
+  "project": "Data Platform — Schema, Ops & Scale",
+  "priority": "High",
+  "refs": [
+   "R09",
+   "R10",
+   "R30",
+   "R39",
+   "R45"
+  ],
+  "done_when": "~15-line checklist in repo with CI guard linking proofs: price/photo coverage per pilot market, Booking per-partner restore drill, bounded CIS/TP load test (no LLM), edge rate-limit decision, prod capacity base, enforce_admins plan, 'no real PII before DPA signed'; go-live date set.",
+  "effort": "L",
+  "cost": "0 (WAF ~5-6 USD/month if approved)",
+  "needs": "tech lead + business owner"
+ },
+ {
+  "title": "[Docs] Bring runbooks, architecture pages and the feature catalogue back to reality, with drift lints",
+  "project": "Data Platform — Schema, Ops & Scale",
+  "priority": "Medium",
+  "refs": [
+   "R12",
+   "R19",
+   "R20",
+   "R21",
+   "R24",
+   "R26",
+   "R35",
+   "R37",
+   "G16",
+   "G36"
+  ],
+  "done_when": "Every runbook has last_tested or marked untested; stale-phrase lint; alarms.md masks ALB/TG IDs; free-tier limits table in finops.md; features.yaml planned rows + proven field; plan_sync.py fails CI on drift; CIS CONTEXT.md split; postmortem template has detected_at/resolved_at.",
+  "effort": "M",
+  "cost": "0",
+  "needs": "none"
+ },
+ {
+  "title": "[DevOps] Release safety: TripPlanner merge queue and strict checks, smoke-red rollback, release-please, CRM Sentry, DB Migrate input check",
+  "project": "CIS Core — Pipeline, LLM & Platform",
+  "priority": "Medium",
+  "refs": [
+   "R31",
+   "R32",
+   "R40"
+  ],
+  "done_when": "TP main strict checks + merge queue + coverage floor; red post-deploy smoke rolls back or opens an issue for every web app; release-please merged weekly or removed; CRM api sends a test event to its Sentry project; DB Migrate validates input before dispatch.",
+  "effort": "M",
+  "cost": "0",
+  "needs": "tech lead (release-please keep or drop)"
+ }
+]

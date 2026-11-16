@@ -1,0 +1,75 @@
+ecsx: started (session output not seen, normal when SSM drops it); checking the heartbeat
+RP load table=atoms rows=24253
+RP load table=log_norm rows=6150
+RP load table=log_raw rows=6360
+RP load table=log_max rows=1
+RP load table=pk_norm rows=5941
+RP load table=seg rows=17346
+RP load table=seg_labels rows=7028
+RP load table=dest rows=8356
+RP load table=place_name rows=9735
+RP load table=tour_place rows=4923
+RP load table=card_alias rows=17687
+RP load table=card_name rows=4845
+RP load table=card_miss rows=1307
+RP baseline distinct_names=11084 researched_names_in_log=6150 missing=5589 missing_with_any_place_keyword=0 missing_le3_chars=9 active_tours_with_places=844 tenant_only_names=0 last_volume_research=2026-11-09_23:06:12.950852+00:00
+RP primary_bucket bucket=near_dup_of_researched group=false_gap names=2069 tour_mentions=3002
+RP primary_bucket bucket=covered_via_segment_label group=false_gap names=1214 tour_mentions=1856
+RP primary_bucket bucket=no_segment_other group=by_design names=951 tour_mentions=1241
+RP primary_bucket bucket=no_segment_transit_typed group=by_design names=269 tour_mentions=304
+RP primary_bucket bucket=non_destination_route_or_multi group=non_destination names=253 tour_mentions=276
+RP primary_bucket bucket=non_destination_generic_only group=non_destination names=219 tour_mentions=804
+RP primary_bucket bucket=non_destination_lodging group=non_destination names=176 tour_mentions=197
+RP primary_bucket bucket=segment_unresearched_real group=real_gap_candidate names=160 tour_mentions=233
+RP primary_bucket bucket=non_destination_transport group=non_destination names=76 tour_mentions=90
+RP primary_bucket bucket=non_destination_food_venue group=non_destination names=57 tour_mentions=68
+RP primary_bucket bucket=segment_unresearched_transit_like group=real_gap_candidate names=55 tour_mentions=67
+RP primary_bucket bucket=non_destination_long_phrase group=non_destination names=52 tour_mentions=52
+RP primary_bucket bucket=token_dup_of_researched group=false_gap names=35 tour_mentions=41
+RP primary_bucket bucket=non_destination_very_short group=non_destination names=3 tour_mentions=4
+RP primary_group false_gap=3318 by_design=1220 non_destination=836 real_gap_candidate=215 total=5589
+RP flags_all_missing platform=5589 in_segment=2080 segment_label_researched=1214 is_a_segment_label_norm=898 token_dup=81 non_dest_pattern=2940 destination_any=1171 destination_same_country=1102 place_name_any=1435 place_name_resolved=765 place_name_unknown=294 tour_place_any=553 place_card_alias_or_name=2354 place_card_miss=633 multi_country=236 newer_than_last_research=506
+RP non_dest_pattern_all_missing lodging=680 route_or_multi=1355 none=2649 generic_only=230 transport=478 food_venue=80 long_phrase=108 very_short=9
+RP gazetteer_real_gap names=160 no_match=7 segment_label_only=56 place_name_unknown=16 destination_same_country=63 destination_other_country=1 place_card=13 place_name_resolved_same_country=4
+RP gazetteer_all_missing names=5589 place_card=1389 no_match=2154 place_card_miss=437 segment_label_only=258 destination_other_country=29 destination_same_country=1102 place_name_unknown=179 place_name_resolved_same_country=40 tour_place_unlinked=1
+RP real_gap_extra names=160 newer_than_last_research=35 is_a_segment_label_norm=147 label_norm_equals_name=146 multi_country=6
+RP mentions_all_missing t1=4597 t2_5=867 t6p=125
+RP mentions_by_bucket bucket=covered_via_segment_label t1=969 t2_5=218 t6p=27
+RP mentions_by_bucket bucket=near_dup_of_researched t1=1709 t2_5=311 t6p=49
+RP mentions_by_bucket bucket=no_segment_other t1=793 t2_5=147 t6p=11
+RP mentions_by_bucket bucket=no_segment_transit_typed t1=243 t2_5=26
+RP mentions_by_bucket bucket=non_destination_food_venue t1=50 t2_5=7
+RP mentions_by_bucket bucket=non_destination_generic_only t1=109 t6p=33 t2_5=77
+RP mentions_by_bucket bucket=non_destination_lodging t1=160 t2_5=16
+RP mentions_by_bucket bucket=non_destination_long_phrase t1=52
+RP mentions_by_bucket bucket=non_destination_route_or_multi t1=236 t2_5=17
+RP mentions_by_bucket bucket=non_destination_transport t1=65 t2_5=11
+RP mentions_by_bucket bucket=non_destination_very_short t1=2 t2_5=1
+RP mentions_by_bucket bucket=segment_unresearched_real t1=133 t2_5=22 t6p=5
+RP mentions_by_bucket bucket=segment_unresearched_transit_like t1=46 t2_5=9
+RP mentions_by_bucket bucket=token_dup_of_researched t2_5=5 t1=30
+RP by_country country=India tours=181 names=2572 missing=1322 real_gap=40 false_gap=800 by_design=246 non_dest=214
+RP by_country country=China tours=121 names=1456 missing=792 real_gap=17 false_gap=537 by_design=129 non_dest=101
+RP by_country country=Nepal tours=81 names=1554 missing=718 real_gap=10 false_gap=509 by_design=124 non_dest=70
+RP by_country country=Sri_Lanka tours=122 names=1094 missing=703 real_gap=12 false_gap=416 by_design=161 non_dest=114
+RP by_country country=Thailand tours=37 names=835 missing=497 real_gap=23 false_gap=211 by_design=114 non_dest=146
+RP by_country country=Laos tours=45 names=864 missing=456 real_gap=12 false_gap=217 by_design=118 non_dest=101
+RP by_country country=Japan tours=79 names=735 missing=345 real_gap=11 false_gap=121 by_design=125 non_dest=86
+RP by_country country=Philippines tours=44 names=608 missing=291 real_gap=9 false_gap=167 by_design=68 non_dest=46
+RP by_country country=South_Korea tours=30 names=659 missing=275 real_gap=16 false_gap=175 by_design=45 non_dest=39
+RP by_country country=Taiwan tours=36 names=395 missing=222 real_gap=13 false_gap=97 by_design=61 non_dest=49
+RP by_country country=Pakistan tours=18 names=402 missing=153 real_gap=1 false_gap=110 by_design=26 non_dest=14
+RP by_country country=Bhutan tours=32 names=338 missing=136 real_gap=0 false_gap=78 by_design=30 non_dest=28
+RP by_country country=Mongolia tours=17 names=158 missing=83 real_gap=3 false_gap=41 by_design=24 non_dest=14
+RP by_country country=Vietnam tours=1 names=58 missing=30 real_gap=0 false_gap=13 by_design=8 non_dest=7
+RP coverage_raw_topN n=0 tours_full=18 tours_some=815 tours_none=11 llm_calls=0 kw_worst=0 tasks_per_market=0 est_usd_6mkts=0.0
+RP coverage_raw_topN n=200 tours_full=41 tours_some=799 tours_none=4 llm_calls=14 kw_worst=800 tasks_per_market=1 est_usd_6mkts=0.58
+RP coverage_raw_topN n=500 tours_full=54 tours_some=788 tours_none=2 llm_calls=34 kw_worst=2000 tasks_per_market=2 est_usd_6mkts=1.26
+RP coverage_raw_topN n=1000 tours_full=81 tours_some=761 tours_none=2 llm_calls=67 kw_worst=4000 tasks_per_market=4 est_usd_6mkts=2.51
+RP coverage_raw_topN n=all_5589 tours_full=844 tours_some=0 tours_none=0 llm_calls=373 kw_worst=22356 tasks_per_market=23 est_usd_6mkts=14.24
+RP coverage_adjusted_topN n=0 tours_full=625 tours_some=219 tours_none=0 llm_calls=0 kw_worst=0 tasks_per_market=0 est_usd_6mkts=0.0
+RP coverage_adjusted_topN n=200 tours_full=830 tours_some=14 tours_none=0 llm_calls=14 kw_worst=800 tasks_per_market=1 est_usd_6mkts=0.58
+RP coverage_adjusted_topN n=all_215 tours_full=844 tours_some=0 tours_none=0 llm_calls=15 kw_worst=860 tasks_per_market=1 est_usd_6mkts=0.59
+RP coverage_platform_only basis=raw tours_full=18 tours_some=815 tours_none=11
+RP coverage_platform_only basis=adjusted tours_full=625 tours_some=219 tours_none=0
+ecsx: rc=0 bytes=7105 (output also in /home/nghiep/projects/AA-Ecosys/.tmp-session/ecsx/20261116T075237-1936339-place_gap_classify.out)

@@ -1,0 +1,312 @@
+<title>Bảng giá gói đại lý</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column of price sheets; the three options sit side by side and stack on phones. */
+:root{
+  --bg:#f6f7f5; --surface:#ffffff; --fg:#1d2420; --muted:#5d6a62; --line:#dde3de;
+  --accent:#1f6b52; --accent-soft:#e3f0ea; --warn:#9a5b00; --warn-soft:#fbf0dc; --bad:#a3322a; --bad-soft:#f8e3e0;
+  --display:"Be Vietnam Pro",system-ui,sans-serif; --body:"Be Vietnam Pro",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121614; --surface:#1a201d; --fg:#e4ebe6; --muted:#9aa8a0; --line:#2c3531;
+  --accent:#5fc49f; --accent-soft:#1d3329; --warn:#e2a64a; --warn-soft:#352a18; --bad:#ec8a80; --bad-soft:#3a2321; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121614; --surface:#1a201d; --fg:#e4ebe6; --muted:#9aa8a0; --line:#2c3531;
+  --accent:#5fc49f; --accent-soft:#1d3329; --warn:#e2a64a; --warn-soft:#352a18; --bad:#ec8a80; --bad-soft:#3a2321; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+main{max-width:1080px;margin:0 auto;display:grid;gap:36px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.25}
+h1{font-size:1.9rem;font-weight:700}
+h2{font-size:1.3rem;font-weight:700}
+h3{font-size:1.05rem;font-weight:600}
+p{margin:0;max-width:72ch}
+.muted{color:var(--muted)}
+.eyebrow{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+section{display:grid;gap:14px}
+header{display:grid;gap:10px}
+.legend{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-size:.75rem;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:var(--surface)}
+.summary{display:grid;gap:8px;padding:18px 20px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.summary ul{margin:0;padding-left:20px;display:grid;gap:6px}
+.options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+@media (max-width:900px){.options{grid-template-columns:1fr}}
+.opt{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;gap:12px;min-width:0}
+.opt.rec{border:2px solid var(--accent)}
+.opt .head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.badge{font-size:.72rem;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.opt dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:4px 12px}
+.opt dt{color:var(--muted)}
+.opt dd{margin:0;text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.opt .group{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);grid-column:1/-1;margin-top:6px;font-weight:600}
+.pros,.cons{margin:0;padding-left:18px;display:grid;gap:4px;font-size:.92rem}
+.cons li::marker{color:var(--bad)}
+.pros li::marker{color:var(--accent)}
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.neg{color:var(--bad);font-weight:600}
+.calc{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;gap:14px}
+.calc .controls{display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{font:inherit;border:0;background:transparent;color:var(--fg);padding:6px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--surface);font-weight:600}
+.seg button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=range]{accent-color:var(--accent);width:220px;max-width:100%}
+.bars{display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:90px minmax(0,1fr) 120px;gap:10px;align-items:center;font-size:.9rem}
+.track{height:12px;background:var(--line);border-radius:6px;position:relative;overflow:hidden}
+.fill{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:6px}
+.fill.neg{background:var(--bad)}
+.bar .val{text-align:right}
+.note{padding:12px 16px;border-radius:8px;background:var(--warn-soft);color:var(--fg);border-left:3px solid var(--warn);font-size:.92rem;display:grid;gap:6px}
+.ask{padding:18px 20px;border-radius:10px;background:var(--accent-soft);display:grid;gap:8px}
+footer{font-size:.82rem;color:var(--muted);display:grid;gap:4px}
+@media (prefers-reduced-motion:no-preference){.fill{transition:width .25s ease}}
+</style>
+
+<main>
+<header>
+  <span class="eyebrow">Đề xuất giá · 16/11/2026 · phiên S282</span>
+  <h1>Bảng giá gói cho đại lý: Content, CRM, TripPlanner</h1>
+  <p class="muted">Ba phương án giá để anh chọn. Dùng thử 14 ngày đã chốt. Giá chưa gồm thuế; quy đổi 1 USD ≈ 26.000 đ, giá VND làm tròn xuống thành giá đẹp. Chi phí lấy từ số đo trên Dev (chưa có khách thật), chỉ để thấy xu hướng.</p>
+  <div class="legend">
+    <span class="tag">[Dev] số đo trên Dev</span>
+    <span class="tag">[giả định] số tự đặt để tính</span>
+    <span class="tag">[chưa kiểm được] không mở được nguồn gốc</span>
+  </div>
+</header>
+
+<section class="summary" aria-labelledby="s-sum">
+  <h2 id="s-sum">Tóm tắt</h2>
+  <ul>
+    <li>Giá Content hiện có trong hệ thống (299 / 799 / 1.499 USD) hợp với đại lý Úc, Âu, Mỹ nhưng cao với đại lý Việt Nam: gói 799 USD ≈ 20,8 triệu đ/tháng. CRM và TripPlanner <b>chưa có giá</b>.</li>
+    <li>Chi phí nền mỗi đại lý khi có 10 đại lý: <span class="num">~97 / 134 / 198</span> USD (Starter / Growth / Business). Khi có 30 đại lý: <span class="num">~50 / 87 / 151</span>. Phần lớn là hạ tầng chung chia đều; AI tốn tối đa bằng trần AI của gói vì gateway tự dừng ở trần.</li>
+    <li>AI thật tháng 10 [Dev]: trung bình ~9 USD mỗi đại lý, cao nhất 14,82 USD, đều dưới trần gói Growth (40 USD).</li>
+    <li><b>Đề xuất: phương án B</b> làm bảng giá chung; giá C dùng làm mốc cho Enterprise và đại lý nước ngoài lớn.</li>
+  </ul>
+</section>
+
+<section aria-labelledby="s-opt">
+  <h2 id="s-opt">Ba phương án</h2>
+  <div class="options">
+    <article class="opt">
+      <div class="head"><h3>A · Rẻ để vào nhanh</h3></div>
+      <p class="muted">Cho đại lý nhỏ Việt Nam và Đông Nam Á, cần nhiều đại lý dùng sớm.</p>
+      <dl>
+        <span class="group">Content (USD/tháng)</span>
+        <dt>Starter</dt><dd>79</dd>
+        <dt>Growth</dt><dd>199</dd>
+        <dt>Business</dt><dd>399</dd>
+        <span class="group">Add-on</span>
+        <dt>CRM / người (tối thiểu 3)</dt><dd>12</dd>
+        <dt>TripPlanner Hosted</dt><dd>29</dd>
+        <dt>TripPlanner Pro</dt><dd>59</dd>
+        <dt>Tên miền riêng</dt><dd>9</dd>
+      </dl>
+      <ul class="pros"><li>Dễ chốt; CRM chỉ đắt hơn CRM Việt Nam khoảng 2 lần.</li></ul>
+      <ul class="cons">
+        <li>Starter lỗ cho tới khi có khoảng 13 đại lý.</li>
+        <li>Trần AI thấp (10 / 25 / 50 USD) nên viết được ít bài.</li>
+        <li>Sau này tăng giá rất khó.</li>
+      </ul>
+    </article>
+
+    <article class="opt rec">
+      <div class="head"><h3>B · Cân bằng</h3><span class="badge">Đề xuất</span></div>
+      <p class="muted">Margin dương ngay khi có 10 đại lý, giá còn chỗ để khuyến mãi.</p>
+      <dl>
+        <span class="group">Content (USD/tháng)</span>
+        <dt>Starter</dt><dd>149</dd>
+        <dt>Growth</dt><dd>349</dd>
+        <dt>Business</dt><dd>699</dd>
+        <dt>Enterprise</dt><dd>từ 699</dd>
+        <span class="group">Add-on</span>
+        <dt>CRM Core / người (tối thiểu 3)</dt><dd>19</dd>
+        <dt>CRM Pro / người (tối thiểu 3)</dt><dd>29</dd>
+        <dt>TripPlanner Hosted</dt><dd>49</dd>
+        <dt>TripPlanner Pro</dt><dd>99</dd>
+        <dt>Tên miền riêng</dt><dd>15</dd>
+        <dt>Gói AI thêm (+10 USD AI)</dt><dd>19</dd>
+      </dl>
+      <ul class="pros">
+        <li>Margin gộp 35–72 % khi có 10 đại lý, 66–78 % khi có 30.</li>
+        <li>Giữ nguyên trần AI đã chốt (15 / 40 / 80 USD).</li>
+        <li>Combo Growth + CRM 3 người + TripPlanner Hosted: 455 USD, giảm 10 % còn <b>409 USD (10.490.000 đ)</b>.</li>
+      </ul>
+      <ul class="cons"><li>CRM 490.000 đ/người vẫn đắt gấp 3–9 lần CRM Việt Nam; phải bán bằng tính năng riêng của ngành du lịch.</li></ul>
+    </article>
+
+    <article class="opt">
+      <div class="head"><h3>C · Cao cấp</h3></div>
+      <p class="muted">Giữ giá Content đang có trong hệ thống, chốt giá add-on cao.</p>
+      <dl>
+        <span class="group">Content (USD/tháng)</span>
+        <dt>Starter</dt><dd>299</dd>
+        <dt>Growth</dt><dd>799</dd>
+        <dt>Business</dt><dd>1.499</dd>
+        <span class="group">Add-on</span>
+        <dt>CRM Core / người (tối thiểu 3)</dt><dd>29</dd>
+        <dt>CRM Pro / người (tối thiểu 3)</dt><dd>39</dd>
+        <dt>TripPlanner Hosted</dt><dd>99</dd>
+        <dt>TripPlanner Pro</dt><dd>199</dd>
+        <dt>Tên miền riêng</dt><dd>25</dd>
+      </dl>
+      <ul class="pros"><li>Margin trên 68 %; ngang Safari Portal và Tourwriter; hợp đại lý Úc, Âu, Mỹ.</li></ul>
+      <ul class="cons">
+        <li>Growth 20,5 triệu đ/tháng, ngoài tầm hầu hết đại lý Việt Nam.</li>
+        <li>Vòng bán dài, cần case study trước.</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<section aria-labelledby="s-calc">
+  <h2 id="s-calc">Margin gộp theo số đại lý</h2>
+  <p class="muted">Chi phí nền = trần AI của gói + giờ hỗ trợ × 8 USD + phần chia đều chi phí cố định (~700 USD/tháng, gồm cả prod) cho số đại lý. Chưa trừ lương đội sản phẩm.</p>
+  <div class="calc">
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Phương án">
+        <button type="button" id="opt-A" data-opt="A" aria-pressed="false">A</button>
+        <button type="button" id="opt-B" data-opt="B" aria-pressed="true">B</button>
+        <button type="button" id="opt-C" data-opt="C" aria-pressed="false">C</button>
+      </div>
+      <label for="agencies">Số đại lý: <b class="num" id="nOut">10</b></label>
+      <input type="range" id="agencies" min="3" max="50" step="1" value="10">
+    </div>
+    <div class="bars" id="bars"></div>
+  </div>
+</section>
+
+<section aria-labelledby="s-cost">
+  <h2 id="s-cost">Chi phí nền</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Khoản</th><th class="r">USD/tháng</th><th>Ghi chú</th></tr></thead>
+      <tbody>
+        <tr><td>AWS Dev (hạ tầng chung)</td><td class="r">~260</td><td>Tháng 10 là 213,87; cộng TripPlanner trên ECS, lấy số bảo thủ [Dev]</td></tr>
+        <tr><td>Prod khi go-live</td><td class="r">~350</td><td>Ước 280–410, chưa tạo</td></tr>
+        <tr><td>AI chạy nền không gắn đại lý</td><td class="r">~80</td><td>[giả định]; tháng 10 có 2 đợt viết lại cả catalogue nên không dùng được</td></tr>
+        <tr><td><b>Tổng cố định</b></td><td class="r"><b>~700</b></td><td>Khoảng 550–900; trước go-live chỉ ~340</td></tr>
+        <tr><td>AI mỗi đại lý</td><td class="r">15 / 40 / 80</td><td>Bằng trần AI của gói (trường hợp xấu nhất)</td></tr>
+        <tr><td>Hỗ trợ mỗi đại lý</td><td class="r">12 / 24 / 48</td><td>1,5 / 3 / 6 giờ × 8 USD [giả định]</td></tr>
+        <tr><td>CRM Core, 3 người</td><td class="r">~16</td><td>Pro ~19 (thêm tên miền portal)</td></tr>
+        <tr><td>TripPlanner Hosted / Pro</td><td class="r">~18 / ~40</td><td>Đã gồm AI cộng thêm +10 / +25 USD</td></tr>
+        <tr><td>Một đợt dùng thử 14 ngày (Growth)</td><td class="r">~32–36</td><td>Khi đặt trần AI 50 %; quên đặt thì ~52–56</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section aria-labelledby="s-mkt">
+  <h2 id="s-mkt">So sánh thị trường</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Sản phẩm</th><th>Loại</th><th>Giá công bố (USD/tháng)</th><th>Dùng thử</th></tr></thead>
+      <tbody>
+        <tr><td>Travefy</td><td>CRM + lịch trình</td><td>Core 39 người đầu +20/người; Premium 59 +39/người</td><td>10 ngày</td></tr>
+        <tr><td>TravelJoy</td><td>CRM travel advisor</td><td>Starter 19 (một tài khoản, không AI); Pro 39</td><td>7 ngày</td></tr>
+        <tr><td>Tern</td><td>CRM + lịch trình</td><td>49/người trả tháng, 35 trả quý/năm</td><td>Có</td></tr>
+        <tr><td>Tourwriter</td><td>Lịch trình + báo giá</td><td>99–149/người, phí setup từ 1.199</td><td>Demo</td></tr>
+        <tr><td>Safari Portal</td><td>Portal lịch trình</td><td>299 (1 người) / 399 (3 người); 199 giá hỗ trợ</td><td>—</td></tr>
+        <tr><td>Wetu</td><td>Lịch trình + nội dung</td><td>75 / 150 mỗi người; Enterprise ~395 [aggregator]</td><td>14 ngày</td></tr>
+        <tr><td>WeTravel</td><td>Thanh toán + đặt chỗ</td><td>Pro 79 mỗi tổ chức</td><td>—</td></tr>
+        <tr><td>mTrip, TripCreator</td><td>Trip planner white-label</td><td>Không công bố / không đọc được [chưa kiểm được]</td><td>—</td></tr>
+        <tr><td>HubSpot Starter</td><td>CRM chung</td><td>20/người</td><td>—</td></tr>
+        <tr><td>Odoo</td><td>ERP/CRM chung</td><td>9–20/người</td><td>—</td></tr>
+        <tr><td>MISA AMIS, Getfly</td><td>CRM Việt Nam</td><td>55.000–175.000 đ/người (2–7 USD)</td><td>—</td></tr>
+        <tr><td>Jasper, Copy.ai</td><td>Viết nội dung AI chung</td><td>Jasper 59–69/người; Copy.ai 24–29 cho tối đa 5 người</td><td>7 ngày</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="muted">CRM ngành du lịch tính 19–59 USD; CRM chung và CRM Việt Nam rẻ hơn 3–10 lần, nên CRM của mình phải bán bằng proposal, departure, portal cho khách, tour AA có sẵn và lead từ TripPlanner. Chưa thấy sản phẩm nào giống Content (viết lại tour có sẵn theo thương hiệu đại lý rồi đăng thẳng lên WordPress, Facebook). TripPlanner chưa có mốc giá nào kiểm được; giá 49 / 99 của B đặt theo chi phí.</p>
+</section>
+
+<section aria-labelledby="s-pol">
+  <h2 id="s-pol">Chính sách đi kèm (áp cho phương án được chọn)</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Chính sách</th><th>Đề xuất</th></tr></thead>
+      <tbody>
+        <tr><td>Dùng thử</td><td><b>14 ngày</b> (đã chốt). Trong thời gian thử đặt trần AI bằng 50 % trần gói ở Tenant 360.</td></tr>
+        <tr><td>Trả theo năm</td><td>Trả 10 tháng, dùng 12 tháng (giảm ~17 %).</td></tr>
+        <tr><td>Pilot trên Dev</td><td>Miễn phí tới ngày go-live (chưa có SLA thì không thu tiền).</td></tr>
+        <tr><td>Đại lý sáng lập</td><td>Giảm 30 % trong 12 tháng cho 10 đại lý đầu tiên (Growth, Business, add-on). Starter không giảm; đại lý Việt Nam nhỏ có thể dùng Starter trả năm (~124 USD/tháng) thay vào đó.</td></tr>
+        <tr><td>Combo cả ba sản phẩm</td><td>Giảm 10 %.</td></tr>
+        <tr><td>Vượt trần AI</td><td>Dừng mềm như hiện nay; bán gói AI thêm hoặc gợi ý lên gói. Không tự trừ tiền khi chưa có Stripe.</td></tr>
+        <tr><td>Tiền tệ</td><td>USD cho đại lý nước ngoài; bảng giá VND cố định cho đại lý Việt Nam, xem lại mỗi quý.</td></tr>
+        <tr><td>Ghế CRM</td><td>Theo người dùng đang hoạt động, tối thiểu 3 (hệ thống đang để mặc định 10, sẽ đổi).</td></tr>
+        <tr><td>Xem lại giá</td><td>Sau 3 đại lý trả tiền đầu tiên, dùng số AI và margin thật.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section aria-labelledby="s-risk">
+  <h2 id="s-risk">Rủi ro chính</h2>
+  <div class="note">
+    <div>Chi phí lấy từ Dev nên có thể sai ±30 %; tính lại theo hoá đơn tháng 11 và tháng đầu chạy prod.</div>
+    <div>Margin gộp chưa trừ lương: theo B cần khoảng 7–8 đại lý dùng combo mới bù được chi phí cố định cộng một suất lương 1.500 USD [giả định].</div>
+    <div>Tổng trần AI của các đại lý có thể vượt ngân sách nhà cung cấp AI (Anthropic API 150 USD/tháng): mỗi khi thêm đại lý phải nâng ngân sách theo.</div>
+    <div>Thuế (VAT phần mềm, thuế nhà thầu, Thông tư 32) chưa tính; kế toán xác nhận trước đại lý trả tiền đầu tiên.</div>
+    <div>Đại lý đã vào ở giá B thì khó nâng lên C: ghi rõ "giá ra mắt, xem lại sau 12 tháng".</div>
+  </div>
+</section>
+
+<section class="ask" aria-labelledby="s-ask">
+  <h2 id="s-ask">Anh chọn phương án nào?</h2>
+  <p>Trả lời A, B hoặc C trong phiên Claude Code (kèm chỉnh nếu có, ví dụ "B, CRM 15 USD"). Sau khi anh chọn, em nhập giá, số ghế CRM, phiên AI của TripPlanner và trần AI dùng thử vào hệ thống qua Plans API (chỉ đổi dữ liệu, không sửa code).</p>
+</section>
+
+<footer>
+  <span>Nguồn: ADR 0019, migration CIS 355 / 361 / 390, báo cáo AI tháng 10, rà soát dung lượng S265, AA-741 phase 3, trang giá công khai của từng hãng (mở lại 16/11/2026).</span>
+  <span>Bản đầy đủ: docs/audits/2026-11-16-S282-…/pricing-proposal/README.md</span>
+</footer>
+</main>
+
+<script>
+(function(){
+  var F = 700;
+  // Per agency: price, and variable cost (AI cap + support hours × 8) for each Content plan.
+  var plans = {
+    A: [["Starter",79,22],["Growth",199,49],["Business",399,98]],
+    B: [["Starter",149,27],["Growth",349,64],["Business",699,128]],
+    C: [["Starter",299,27],["Growth",799,64],["Business",1499,128]]
+  };
+  var state = {opt:"B", n:10};
+  var bars = document.getElementById("bars");
+  var nOut = document.getElementById("nOut");
+  function render(){
+    nOut.textContent = state.n;
+    bars.innerHTML = "";
+    plans[state.opt].forEach(function(p){
+      var cost = p[2] + F / state.n;
+      var m = (p[1] - cost) / p[1];
+      var pct = Math.round(m * 100);
+      var row = document.createElement("div");
+      row.className = "bar";
+      var w = Math.max(0, Math.min(100, Math.abs(pct)));
+      row.innerHTML = '<span>' + p[0] + ' <span class="muted num">' + p[1] + '</span></span>' +
+        '<div class="track" role="img" aria-label="Margin ' + pct + '%"><div class="fill' + (pct < 0 ? ' neg' : '') + '" style="width:' + w + '%"></div></div>' +
+        '<span class="val num' + (pct < 0 ? ' neg' : '') + '">' + pct + ' % <span class="muted">(' + Math.round(cost) + ')</span></span>';
+      bars.appendChild(row);
+    });
+  }
+  document.querySelectorAll(".seg button").forEach(function(b){
+    b.addEventListener("click", function(){
+      state.opt = b.dataset.opt;
+      document.querySelectorAll(".seg button").forEach(function(x){ x.setAttribute("aria-pressed", String(x === b)); });
+      render();
+    });
+  });
+  document.getElementById("agencies").addEventListener("input", function(e){ state.n = +e.target.value; render(); });
+  render();
+})();
+</script>
