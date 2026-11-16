@@ -59,7 +59,8 @@ The old host `partner-dev.lumiguides.it.com` forwards to `portal.lumiguides.it.c
 3. Open the agency's panel and choose **Invite first owner** with the owner's e-mail address. The address is never
    stored in clear or shown again.
 
-A new agency starts on the free plan with 10 seats.
+A new agency gets the seats of its CRM subscription in CIS. The CRM plans bill at least 3 seats (the plan's minimum,
+edited on CIS Tenants › Plans & add-ons); a request for fewer seats is raised to 3.
 
 ### Joining an agency (every member)
 
