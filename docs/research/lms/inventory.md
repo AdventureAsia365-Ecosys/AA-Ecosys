@@ -24,7 +24,7 @@ workflows and each repo's `CONTEXT.md`. Each row names one thing a person must k
 needs it and which module teaches it. Rows that only repeat another row were merged. Gaps (knowledge that has no
 page yet) are listed in [README §2.3](README.md#23-gaps-that-block-courses), not here.
 
-**241 items in 24 domains.** [§25](#25-further-sources-not-counted-in-the-241-items) adds the ADRs and history sources that refine these items but are not counted as items.
+**246 items in 24 domains.** [§25](#25-further-sources-not-counted-in-the-246-items) adds the ADRs and history sources that refine these items but are not counted as items.
 
 **Columns.**
 
@@ -105,7 +105,7 @@ page yet) are listed in [README §2.3](README.md#23-gaps-that-block-courses), no
 | Deploy gate and its override | technique | `docs/ops/runbooks/deploy-gate-override.md` | E D | E4 |
 | No backend merge during an open wave | rule | `skill/aa-wave-rerun/SKILL.md` §3; `skill/aa-ship/SKILL.md` §2 | E X | E4 |
 
-## 5. AI platform (17)
+## 5. AI platform (18)
 
 | Item | Kind | Source | Audience | Module |
 |---|---|---|---|---|
@@ -126,6 +126,7 @@ page yet) are listed in [README §2.3](README.md#23-gaps-that-block-courses), no
 | AI mark on delivered content | standard | `docs/adr/0020-content-quality-architecture.md` | E A O | A6 |
 | LLM access-denied and cost-spike playbooks | runbook | `docs/ops/playbooks/llm-access-denied.md`; `docs/ops/playbooks/llm-cost-spike.md` | D S | E9 |
 | Postmortem: LLM account access refusal | report | `docs/ops/postmortems/2026-10-29-acc3-bedrock-access-refusal.md` | D T | E15 |
+| Pre-registered calibration of an LLM judge: fresh pool, held-out claims, one gated run | technique | `docs/calibration/aa1048-two-step-panel-brief.md`; `services/ground_truth/two_step.py` (AA-CIS-App) | E T C | E6 |
 
 ## 6. TripPlanner (7)
 
@@ -184,7 +185,7 @@ page yet) are listed in [README §2.3](README.md#23-gaps-that-block-courses), no
 | Staff directory in CIS (database first, then Cognito) | technique | `docs/ecosystem-architecture.md` §4.6 | E S | S2 |
 | Cognito login playbook | runbook | `docs/ops/playbooks/cognito-login.md` | D S | S4 |
 
-## 10. Data platform (19)
+## 10. Data platform (20)
 
 | Item | Kind | Source | Audience | Module |
 |---|---|---|---|---|
@@ -207,6 +208,7 @@ page yet) are listed in [README §2.3](README.md#23-gaps-that-block-courses), no
 | PII classes and privacy rules | standard | `docs/architecture/data-standards/02-data-management.md` §6 | all | F4 |
 | Destructive operations: DRY RUN first | runbook | `skill/aa-cis-schema/references/destructive-ops.md` | E D T | E9 |
 | ECS exec through S3 | runbook | `docs/ops/runbooks/ecs-exec-s3-mediated.md`; `tools/ecs/ecsx.sh` | E D | E9 |
+| Weekly query review (C4.3): pg_stat_statements deltas and EXPLAIN (ANALYZE, BUFFERS) | process | `docs/architecture/data-standards/03-scaling.md` (C4.3); `docs/templates/capacity-review.md` | E T | L5 |
 
 ## 11. Scaling and reliability (6)
 
@@ -235,7 +237,7 @@ page yet) are listed in [README §2.3](README.md#23-gaps-that-block-courses), no
 | Onboarding: accounts and access | guide | `docs/onboarding.md` | E D S | E1 |
 | SES mail and bounces | runbook | `docs/ops/runbooks/ses-bounce.md` | D S | S4 |
 
-## 13. Engineering practice (19)
+## 13. Engineering practice (20)
 
 | Item | Kind | Source | Audience | Module |
 |---|---|---|---|---|
@@ -258,6 +260,7 @@ page yet) are listed in [README §2.3](README.md#23-gaps-that-block-courses), no
 | Implementation notes per issue | template | `docs/implementation-notes/` | E X | E2 |
 | Secret scanning | tool | `.github/workflows/secret-scan.yml` (root, Infra and the four app repos) | E X | E2 |
 | Cost line in every PR | rule | `skill/aa-ship/SKILL.md` §1 | E X | E2 |
+| Delivery metrics: the five DORA keys and CI health per app | standard | `docs/templates/delivery-metrics-report.md`; `services/reports/delivery.py` (AA-CIS-App, DEV-01 and DEV-03) | E T | L5 |
 
 ## 14. Frontend (4)
 
@@ -293,7 +296,7 @@ page yet) are listed in [README §2.3](README.md#23-gaps-that-block-courses), no
 | Pilot agency onboarding and rehearsal | runbook | `docs/ops/runbooks/pilot-agency-onboarding.md`; `docs/ops/runbooks/pilot-rehearsal.md` | T S | S3 |
 | App access and operations index | guide | `docs/guides/app-access-and-operations.md` | S C B O | S2 |
 
-## 17. Security (8)
+## 17. Security (9)
 
 | Item | Kind | Source | Audience | Module |
 |---|---|---|---|---|
@@ -305,6 +308,7 @@ page yet) are listed in [README §2.3](README.md#23-gaps-that-block-courses), no
 | Public-repo safe writing | standard | `docs/STYLE.md` (Where a page may live); `docs/adr/0014-repo-visibility-and-github-plan.md` | all | F4 |
 | Compliance and privacy register (DPA, sub-processors, DSAR) | register | `docs/legal/register.md`; `docs/legal/readiness-packet.md` | T O | O5 |
 | Tenant AI schedule and DPA pack | template | `docs/legal/tenant-ai-schedule.md`; `docs/legal/dpa.md` | A O | A5 |
+| Search over encrypted personal data: blind indexes, exact match only, proof of no plaintext index | technique | `docs/implementation-notes/AA-963.md` (AA-Partner); `apps/AA-Partner/CONTEXT.md` | E | E13 |
 
 ## 18. Cost and FinOps (8)
 
@@ -319,7 +323,7 @@ page yet) are listed in [README §2.3](README.md#23-gaps-that-block-courses), no
 | Monthly cost report | tool | `docs/ops/cost/README.md`; `tools/finops/monthly_cost_report.py`; `docs/templates/cost-report.md` | T O | L5 |
 | AI providers and reports runbook | guide | `docs/guides/ai-providers-and-reports-runbook.md` | T O | L5 |
 
-## 19. Documentation (8)
+## 19. Documentation (9)
 
 | Item | Kind | Source | Audience | Module |
 |---|---|---|---|---|
@@ -331,6 +335,7 @@ page yet) are listed in [README §2.3](README.md#23-gaps-that-block-courses), no
 | Role guides | guide | `docs/guides/cto.md`, `cio.md`, `pm.md`, `devops.md` | T O | F1 |
 | PRD as code | standard | `docs/product/README.md`; `tools/docs/check_prd_refs.py` | E T | L4 |
 | Audits folder and artifact registry | standard | `docs/audits/`; `docs/artifacts/README.md` | T X | L3 |
+| Masking account IDs and ARNs in generated public pages | tool | `tools/docs/aws_mask.py` (AA-CIS-Infra) | E X | F4 |
 
 ## 20. Agent operations (11)
 
@@ -401,7 +406,7 @@ page yet) are listed in [README §2.3](README.md#23-gaps-that-block-courses), no
 | New engineer learning path | guide | `docs/guides/new-engineer.md` | E | E1 |
 | CIS admin runbook | guide | `docs/guides/cis-admin-runbook.md` | C S | C1 |
 
-## 25. Further sources (not counted in the 241 items)
+## 25. Further sources (not counted in the 246 items)
 
 These sources are named so a module owner can find them. They are not extra knowledge items: each one refines an
 item above, or serves as a worked-example source.

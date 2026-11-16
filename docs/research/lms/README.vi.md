@@ -33,7 +33,7 @@ là một khoá học lõi ở đây.
   một trang catalog, một ADR hoặc một mục của `CONTEXT.md` bằng ID và không bao giờ chép lại. Workflow Docs sync đã
   dựng sẵn một gói tài liệu đã che thông tin nhạy cảm, có phân tầng truy cập và cặp EN/VI cho `/admin/docs`; ta mở
   rộng nó để xuất bản cả khoá học.
-- **241 mục tri thức trong 24 lĩnh vực** được ánh xạ vào **62 module** thuộc **8 lộ trình học**: lộ trình Nền tảng
+- **246 mục tri thức trong 24 lĩnh vực** được ánh xạ vào **62 module** thuộc **8 lộ trình học**: lộ trình Nền tảng
   cho mọi nhân viên, rồi mỗi vai trò một lộ trình: kỹ sư trực, tech lead, vận hành và hỗ trợ, người vận hành nội
   dung, nhân viên tài chính và booking, chủ đại lý và nhân viên đại lý, chủ doanh nghiệp.
 - **Mỗi module kết thúc bằng một bài trắc nghiệm gợi nhớ.** Câu trả lời sai được hỏi lại theo lịch giãn cách. Bài
@@ -112,27 +112,27 @@ ngữ `docs/glossary.vi.md`).
 | Pipeline nội dung CIS | 22 | `apps/AA-CIS-App/CONTEXT.md`, ADR 0020, `skill/aa-wave-rerun/` | C2 tới C8, A2, E11 |
 | Nền tảng CIS | 6 | `apps/AA-CIS-App/CONTEXT.md` | C7, S2, S3, E3, E5, F6 |
 | Job runner | 5 | ADR 0003/0003a, `docs/ops/job-kinds.md` | E4 |
-| Nền tảng AI | 17 | ADR 0009, `docs/architecture/ai-gateway.md`, `docs/llm/` của CIS | E6, E9, E15, L1, A6 |
+| Nền tảng AI | 18 | ADR 0009, `docs/architecture/ai-gateway.md`, `docs/llm/` của CIS | E6, E9, E15, L1, A6 |
 | TripPlanner | 7 | `apps/AA-TripPlanner-Web/CONTEXT.md` | E14, S2 |
 | Booking | 12 | nhóm ADR 0004/0005, `apps/AA-Booking/CONTEXT.md`, các guide booking | B1 tới B6, E12 |
 | CRM đối tác | 13 | ADR 0010/0010a, `apps/AA-Partner/CONTEXT.md`, các guide CRM | A2 tới A7, E5, E13, S5 |
 | Định danh | 5 | nhóm ADR 0006 | E5, S2, S4 |
-| Nền tảng dữ liệu | 19 | `docs/architecture/data-standards/`, schema reference | E3, E9, F4, L1 |
+| Nền tảng dữ liệu | 20 | `docs/architecture/data-standards/`, schema reference | E3, E9, F4, L1 |
 | Mở rộng và độ tin cậy | 6 | `03-scaling.md`, ADR 0012/0018 | E9, E10, L5, L7 |
 | Hạ tầng | 11 | `infra/AA-CIS-Infra/CONTEXT.md`, `docs/generated/` | E1, E10, F5, S4 |
-| Thực hành kỹ thuật | 19 | `docs/engineering-handbook.md`, `skill/aa-ship/`, workflow CI | F3, E2 |
+| Thực hành kỹ thuật | 20 | `docs/engineering-handbook.md`, `skill/aa-ship/`, workflow CI | F3, E2 |
 | Frontend | 4 | ADR 0016, `skill/aa-ui-verify/` | E7 |
 | Kiểm thử | 3 | workflow CI, `tools/uat/` | E8 |
 | Quan sát và vận hành | 12 | `docs/ops/` | E9, S1, S2, S3 |
-| Bảo mật | 8 | `docs/security/`, `docs/legal/`, STYLE SEC-06 | E5, F4, L9, O5, A5 |
+| Bảo mật | 9 | `docs/security/`, `docs/legal/`, STYLE SEC-06 | E5, F4, L9, O5, A5 |
 | Chi phí và FinOps | 8 | `docs/ops/finops.md`, DM-10, `tools/llm/` | F5, C5, L5, O3 |
-| Tài liệu | 8 | `docs/README.md`, `docs/STYLE.md` | F1, F6, L3, L4 |
+| Tài liệu | 9 | `docs/README.md`, `docs/STYLE.md` | F1, F6, L3, L4 |
 | Vận hành agent | 11 | `docs/agents.md`, `skill/aa-session/`, `.claude/hooks/` | L3, L9 |
 | Kế hoạch và issue | 9 | `docs/backlog/`, `skill/aa-linear-issue/` | L4, O6 |
 | Quản trị và kiểm soát thay đổi | 13 | handbook §1 và §10, DM-11 | F3, L1, L2, L6, B2, C3 |
 | Bên liên quan và nhà cung cấp | 7 | `skill/aa-jira-update/`, `docs/reports/` | L6, O1, O2 |
 | Bài học | 4 | `skill/aa-lessons/`, `docs/guides/` | E1, E15, C1 |
-| **Tổng** | **241** | | |
+| **Tổng** | **246** | | |
 
 ### 2.2 Danh mục cho ta biết gì
 
