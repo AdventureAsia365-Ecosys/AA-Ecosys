@@ -1,0 +1,146 @@
+---
+id: GUIDE-12-delivery
+title: Hướng dẫn chỉ số phát hành
+description: Cách đọc trang CIS admin Platform › Delivery và các báo cáo DEV-01 / DEV-03 - năm chỉ số DORA, các khúc lead time và sức khoẻ CI theo app, mỗi con số được định nghĩa thế nào trong hệ sinh thái này, và làm gì khi một con số thay đổi.
+type: how-to
+status: draft
+owner: nghiep
+audience: [engineer, devops, agent, cto]
+applies_to: [aa-cis-frontend, aa-cis-api]
+last_reviewed: 2026-11-16
+review_every_days: 90
+related: [GUIDE-12, GUIDE-12-cis-admin, GUIDE-14-metrics, AA-1108]
+lang: vi
+translation_of: docs/guides/delivery-metrics.md
+---
+
+# Hướng dẫn chỉ số phát hành
+
+Thuộc bộ [truy cập và vận hành app](app-access-and-operations.md). Bản tiếng Anh của trang này là
+[delivery-metrics.md](delivery-metrics.md). Mẫu báo cáo trong kit dự án dùng cùng định nghĩa là
+[báo cáo chỉ số giao hàng](../templates/delivery-metrics-report.md).
+
+## 1. Trang trả lời câu hỏi gì
+
+Mỗi con số trên Platform › Delivery gắn với một quyết định. Con số nào không đổi được quyết định nào thì không có trên
+trang.
+
+| Câu hỏi | Quyết định đi kèm |
+|---|---|
+| Mỗi app ra bản nhanh tới đâu, có đều không? | App nào cần chú ý; có cần chia pull request nhỏ hơn không |
+| Một thay đổi mất bao lâu từ pull request tới Dev, và chờ ở đâu? | Tăng tốc CI, hàng merge hay khâu review |
+| Bao nhiêu lần deploy hỏng, và sửa mất bao lâu? | Thêm test hay guard ở đâu; rollback có cần nhanh hơn không |
+| CI có ổn định không, có tốn thời gian vô ích không? | Sửa test chập chờn, chia job chậm, thêm cache |
+| Các tool ship của agent có làm chậm hay làm hỏng việc phát hành không? | Sửa các tool `ship_*`, train hay một guard |
+
+## 2. Số liệu lấy từ đâu
+
+- Workflow **Delivery metrics** ở repo gốc (`.github/workflows/delivery-metrics.yml`) chạy mỗi giờ. Nó đọc sáu repo
+  public bằng `GITHUB_TOKEN` của chính nó (không thêm secret nào): các lượt chạy workflow, job của chúng (mọi lần chạy
+  lại), các pull request đã merge và các GitHub Deployment của môi trường `dev`.
+- Nó **lưu sự kiện thô trước** (mỗi ngày một file NDJSON, giữ 400 ngày) rồi mới tính chỉ số từ đó, nên khi đổi định
+  nghĩa thì tính lại được trên lịch sử đã lưu. Tên trường theo OpenTelemetry semantic conventions cho CI/CD và VCS
+  (`cicd.pipeline.*`, `vcs.change.*`, `deployment.*`).
+- Nó đăng một bản tóm tắt cạnh bộ tài liệu của docs reader. API CIS đọc bản này (cache 5 phút), tô màu từng con số
+  bằng các thiết lập của nhóm **delivery** trên Platform › Settings, rồi phục vụ trang. Các báo cáo **DEV-01** (hằng
+  tháng) và **DEV-03** (hằng tuần) đọc cùng bản tóm tắt, nên trang và báo cáo luôn cùng số.
+- Nút **Làm mới** trên trang đọc lại bản tóm tắt mới nhất đã đăng. Một lượt thu thập mới chạy vào mỗi giờ.
+- Mọi con số là **số trên Dev**. Dev có ít sự kiện, nên mỗi chỉ số hiện cỡ mẫu **n** của nó; chỉ số có n dưới thiết
+  lập "số sự kiện tối thiểu trước khi tô màu" thì giữ màu xám. Các dải DORA của ngành đo trên production: không so các
+  số này với chúng như thể đây là số production.
+- Lịch sử của một repo mới được lấp đầy qua vài lượt chạy hằng giờ (hạn mức gọi API dùng chung). Dòng "lịch sử đủ từ"
+  trên mỗi app cho biết từ ngày nào số liệu bao phủ đủ.
+
+## 3. Định nghĩa trong hệ sinh thái này
+
+Đây là các định nghĩa đã được duyệt (tech lead, S282). Đây là phần quan trọng nhất: một con số tô màu đẹp mà định
+nghĩa sai thì vô nghĩa.
+
+- **Deploy.** Một lượt chạy của một trong các workflow deploy của app trên nhánh mặc định (push hoặc chạy tay) mà job
+  deploy đã chạy. Danh sách workflow theo app nằm ở `tools/delivery/apps.json`. Các lượt chạy cùng một commit chồng
+  nhau về thời gian là **một lần deploy của app** (CIS api + worker và admin, CRM api và web). Một lần deploy là
+  **xanh** khi các job deploy và post-deploy verify đều đạt. Một lượt chạy sau của chính commit đang chạy là **deploy
+  lại**: nó có thể là lần khôi phục của một lần deploy hỏng, nhưng không tính là một lần deploy mới.
+- **Thay đổi.** Một pull request được squash-merge vào nhánh mặc định.
+- **Deploy hỏng.** Một trong các trường hợp:
+  - post-deploy verify đỏ;
+  - một job deploy lỗi;
+  - nó bị **rollback** (một lần deploy sau đưa lên commit cũ hơn);
+  - pull request của nó bị **revert**, trong vòng 48 giờ;
+  - một pull request có tiêu đề bắt đầu bằng `fix` nhắc tới pull request của nó và được merge trong vòng 48 giờ (một
+    **hotfix**).
+- **Khôi phục.** Từ lần deploy hỏng tới lần deploy xanh sửa nó: lần deploy xanh kế tiếp với verify đỏ hay job deploy
+  lỗi, lần deploy rollback, hoặc lần deploy mang bản revert hay hotfix.
+- **Làm lại (rework).** Một lần deploy mà chính nó là sửa chữa ngoài kế hoạch: một rollback, hoặc một lần deploy mang
+  pull request revert hay hotfix.
+- **Môi trường.** Là một chiều riêng ngay từ đầu: `dev` bây giờ, `prod` sau go-live. Prod sẽ thêm sự cố vào phần
+  khôi phục.
+- **Không tính vào lead time, đếm riêng.** Pull request của bot (release-please, các bot schema và docs, không phải
+  App của agent) và pull request chỉ đổi tài liệu (`docs/**` hoặc Markdown) và không gây deploy.
+
+## 4. Năm chỉ số DORA
+
+DORA đã mở rộng từ bốn lên năm chỉ số: ba về tốc độ, hai về độ ổn định. Ngưỡng khởi đầu là dải "high" của DORA (tech
+lead S282); mỗi ngưỡng là một thiết lập trên Platform › Settings › CIS › Chỉ số phát hành, do quản trị viên đổi kèm lý
+do.
+
+| Chỉ số | Định nghĩa | Xanh lúc đầu | Vàng lúc đầu | Nếu tệ đi |
+|---|---|---|---|---|
+| Tần suất deploy | Số lần deploy xanh mỗi tuần trong 4 tuần gần nhất | ít nhất 1 lần mỗi tuần | ít nhất 0,25 lần mỗi tuần | Thay đổi dồn lại: ra pull request nhỏ hơn, xem cái gì chặn deploy |
+| Lead time cho thay đổi | Trung vị, từ lúc mở pull request tới post-deploy verify của lần deploy xanh đầu tiên chứa nó | 24 giờ trở xuống | 168 giờ trở xuống | Đọc biểu đồ các khúc (mục 5) và sửa khúc dài nhất |
+| Tỉ lệ deploy hỏng | Số lần deploy hỏng / số lần deploy đã lên Dev | 15 % trở xuống | 30 % trở xuống | Xem lý do trong "Deploy hỏng": thêm test hay guard lẽ ra đã bắt được chúng |
+| Thời gian khôi phục deploy hỏng | Trung vị, từ lần deploy hỏng tới lần deploy xanh sửa nó | 24 giờ trở xuống | 168 giờ trở xuống | Làm rollback nhanh hơn, hoặc sửa tiếp sớm hơn |
+| Tỉ lệ làm lại | Số lần deploy rollback, revert và hotfix / số lần deploy đã lên Dev | 10 % trở xuống | 20 % trở xuống | Thời gian dành cho sửa nhiều hơn cho việc mới: chậm lại và ổn định hoá |
+
+Thêm hai màu trên mỗi app:
+
+- **CI p95 chậm nhất**: thời lượng p95 của workflow CI hay deploy chậm nhất của app; xanh khi 15 phút trở xuống, vàng
+  khi 30 phút trở xuống.
+- **Nhánh main**: xanh khi lượt CI và deploy mới nhất trên nhánh mặc định đều đạt; vàng khi có một lượt đỏ dưới 2
+  giờ; đỏ sau đó. Main đỏ chặn mọi merge: sửa nó trước.
+
+## 5. Các khúc lead time
+
+Lead time được tách ở những điểm mà một thay đổi phải chờ, để biểu đồ cho thấy cần làm gì ở đâu.
+
+| Khúc | Từ → tới | Khúc dài thường có nghĩa là |
+|---|---|---|
+| Mở tới CI xanh đầu tiên | mở pull request → lượt CI xanh đầu tiên trên nó | CI chậm hoặc chập chờn, hoặc pull request được mở khi chưa sẵn sàng |
+| CI xanh tới vào hàng merge | CI xanh đầu tiên → pull request vào hàng merge | đang chờ review hoặc chờ phiên làm việc ship nó |
+| Hàng merge tới đã merge | vào hàng → đã merge | hàng chạy lại CI trên main mới nhất; mỗi lần bị đẩy khỏi hàng (một lượt đỏ trong hàng) thêm một vòng CI đầy đủ |
+| Đã merge tới đã deploy | đã merge → job deploy của lần deploy xanh đầu tiên chứa nó xong | deploy bị chặn (bảng job còn việc, một migration chờ Migration Apply) hoặc build chậm |
+| Đã deploy tới đã verify | job deploy xong → post-deploy verify đạt | verify chậm, hoặc verify đỏ phải deploy lần hai |
+
+Repo không có hàng merge (repo gốc) thì không có điểm hàng merge: khúc "Hàng merge tới đã merge" của nó tính từ CI
+xanh tới lúc merge.
+
+## 6. Sức khoẻ CI
+
+| Con số | Cho thấy gì | Làm gì |
+|---|---|---|
+| p50 / p95 theo workflow | Thời lượng thông thường và chậm của 4 tuần gần nhất (bỏ lượt bị huỷ và bị bỏ qua) | Chia nhỏ hoặc thêm cache cho job chậm nhất; xem danh sách job trong lượt chạy GitHub |
+| Tỉ lệ lỗi theo workflow | Số lượt đỏ / số lượt chạy | Tỉ lệ cao trên pull request là bình thường lúc đang code; trên main hay trong hàng merge thì không |
+| Tỉ lệ lỗi trên main | Số lượt CI và deploy đỏ trên nhánh mặc định / số lượt chạy | Trên vài phần trăm: có thứ thường làm hỏng main; tìm nguyên nhân chung |
+| Chạy lại | Số lượt chạy có nhiều hơn một lần thử | Chạy lại nhiều thường do test chập chờn |
+| Job chập chờn | Job đỏ rồi xanh trên cùng một commit | Sửa job đứng đầu trước; không bao giờ chạy lại cho qua |
+| Thời gian chờ hàng merge và số lần bị đẩy ra | Thời gian trong hàng, và số lần một pull request bị đẩy ra | Mỗi lần bị đẩy ra tốn một vòng CI đầy đủ |
+| Phút Actions | Số phút job theo workflow (repo public chạy miễn phí, nhưng lãng phí vẫn hiện ra) | Bỏ các job chạy khi không có gì chúng kiểm thay đổi |
+
+## 7. Dùng thế nào
+
+- **Mỗi tuần**: DEV-03 hiện tuần đó theo từng app. Chọn một điểm nghẽn để sửa và ghi vào log phiên.
+- **Mỗi tháng**: DEV-01 so với tháng trước. Đặt một hoặc hai mục tiêu cải thiện.
+- **Không bao giờ** dùng các số này để chấm điểm một người. Đo người thì số sẽ bị "làm đẹp" (định luật Goodhart).
+  Chúng mô tả hệ thống và quy trình.
+- **n nhỏ**: khi số sự kiện ít hơn thiết lập, đừng kết luận; chờ thêm dữ liệu.
+
+## 8. Giới hạn hiện tại
+
+- Chỉ có Dev; chưa có chiều prod, và chưa có sự cố trong phần khôi phục.
+- Phát hiện hotfix dựa vào một pull request `fix` nhắc tới pull request nó sửa (`#123`); bản sửa không nhắc tới thì
+  không được tính.
+- Job chập chờn lấy từ các lần chạy lại và các lượt chạy lặp trên một commit; độ chập chờn theo từng test từ báo cáo
+  JUnit là bước sau.
+- Nút Làm mới đọc lại bản tóm tắt đã đăng; nó không khởi động một lượt thu thập GitHub mới (API CIS không có token
+  GitHub).
+- Cảnh báo (main đỏ quá lâu, deploy hỏng, verify đỏ) và lead time tách theo agent / người / bot là bước sau.
