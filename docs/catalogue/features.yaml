@@ -924,7 +924,7 @@ features:
     summary: Agency people sign in with the partner pool, pick their agency and move between the CRM and the Content studio.
     roles: [owner, agent, assistant]
     status: live
-    surface: ["page:/", "page:/[section]", "page:/select-agency", "page:/signed-out", "page:/health", "page:/kit-gallery", "page:/help", "route:agency", "route:health", "route:ci"]
+    surface: ["page:/", "page:/[section]", "page:/select-agency", "page:/signed-out", "page:/health", "page:/kit-gallery", "page:/help", "route:agency", "route:health", "route:ci", "route:search"]
     conditions:
       entitlements: [crm.core]
       tenant_kinds: [pilot, agency]
@@ -1011,7 +1011,7 @@ features:
     summary: The text version of a proposal, the Before you go day and the message template library.
     roles: [owner, agent]
     status: live
-    surface: ["page:/pipeline/[tripId]/proposal/[proposalId]/text", "page:/settings/templates", "route:proposal_text"]
+    surface: ["page:/pipeline/[tripId]/proposal/[proposalId]/text", "page:/settings/templates", "page:/library", "route:proposal_text"]
     owner: tech_lead
   - id: CRM-F009
     app: crm
@@ -1164,11 +1164,11 @@ features:
     module: marketing
     name: Marketing and tags
     name_vi: Marketing và nhãn
-    summary_vi: "Nhãn cho khách và chuyến đi, và danh sách khách cũ Sẵn sàng đi tiếp."
-    summary: Tags on clients and trips, and the Ready to travel again list of past clients.
+    summary_vi: "Nhãn cho khách và chuyến đi, danh sách khách cũ Sẵn sàng đi tiếp, và chiến dịch e-mail có đồng ý nhận và trang huỷ đăng ký."
+    summary: Tags on clients and trips, the Ready to travel again list of past clients, and e-mail campaigns with consent and an unsubscribe page.
     roles: [owner, agent]
     status: live
-    surface: ["page:/marketing", "page:/settings/tags", "route:tags"]
+    surface: ["page:/marketing", "page:/settings/tags", "page:/c/u/[token]", "route:tags", "route:campaigns"]
     owner: tech_lead
   - id: CRM-F022
     app: crm

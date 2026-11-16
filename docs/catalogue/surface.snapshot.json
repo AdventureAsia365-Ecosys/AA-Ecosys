@@ -233,6 +233,7 @@
    "page:/c/r/[token]",
    "page:/c/s/[token]",
    "page:/c/t",
+   "page:/c/u/[token]",
    "page:/calendar",
    "page:/clients",
    "page:/clients/[travelerId]",
@@ -247,9 +248,12 @@
    "page:/join/accept",
    "page:/join/invite",
    "page:/kit-gallery",
+   "page:/legal/data",
    "page:/legal/partner-terms",
    "page:/legal/privacy",
+   "page:/legal/subprocessors",
    "page:/legal/terms",
+   "page:/library",
    "page:/marketing",
    "page:/onboarding",
    "page:/partners",
@@ -323,6 +327,7 @@
    "route:audit",
    "route:builder",
    "route:calendar",
+   "route:campaigns",
    "route:catalogue",
    "route:ci",
    "route:client_pages",
@@ -351,6 +356,7 @@
    "route:proposals",
    "route:public",
    "route:reports",
+   "route:search",
    "route:staff",
    "route:staff_ops",
    "route:support_access",
@@ -654,7 +660,79 @@
    "app": "cis",
    "area": "content"
   },
+  "cis.billing.ai_alert_pct_default": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.ai_approval_pct_default": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.ai_hard_stop_default": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.annual_paid_months": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.combo_discount_pct": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.combo_products": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.founding_discount_pct": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.founding_eligible_plans": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.founding_max_agencies": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.founding_months": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.fx_vnd_per_usd": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.pilot_free": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.price_lock_months": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.price_review_months": {
+   "app": "cis",
+   "area": "billing"
+  },
   "cis.billing.rewrite_over_quota_mode": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.trial_ai_budget_pct": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.trial_days_default": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.trial_days_max": {
+   "app": "cis",
+   "area": "billing"
+  },
+  "cis.billing.vnd_price_review_months": {
    "app": "cis",
    "area": "billing"
   },
@@ -1350,6 +1428,26 @@
    "app": "cis",
    "area": "quality_modes"
   },
+  "cis.reports.partner_activation_days": {
+   "app": "cis",
+   "area": "reports"
+  },
+  "cis.reports.partner_low_use_months": {
+   "app": "cis",
+   "area": "reports"
+  },
+  "cis.reports.partner_low_use_quota_pct": {
+   "app": "cis",
+   "area": "reports"
+  },
+  "cis.reports.partner_stuck_days": {
+   "app": "cis",
+   "area": "reports"
+  },
+  "cis.reports.partner_upsell_quota_pct": {
+   "app": "cis",
+   "area": "reports"
+  },
   "cis.retention.job_failed_days": {
    "app": "cis",
    "area": "retention"
@@ -1390,11 +1488,83 @@
    "app": "cis",
    "area": "seo"
   },
+  "cis.seo.dfs_queue_recover_days": {
+   "app": "cis",
+   "area": "seo"
+  },
   "cis.seo.meta_max": {
    "app": "cis",
    "area": "seo"
   },
   "cis.seo.meta_min": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_auto_activation_stale_pct": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_auto_dfs_queue": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_auto_enabled": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_auto_max_consecutive_failures": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_auto_new_max_wait_days": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_auto_new_min_places": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_auto_refresh_every_days": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_auto_window_end_utc": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_auto_window_start_utc": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_market_tenant_statuses": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_month_warn_pct": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_new_wait_alert_days": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_refresh_ahead_days": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_refresh_max_share_pct": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_requalify_max_places": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_serp_fresh_days": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.research_volume_fresh_days": {
    "app": "cis",
    "area": "seo"
   },
@@ -1407,6 +1577,14 @@
    "area": "seo"
   },
   "cis.seo.title_min": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.tour_paa_max": {
+   "app": "cis",
+   "area": "seo"
+  },
+  "cis.seo.tour_paa_per_keyword": {
    "app": "cis",
    "area": "seo"
   },
@@ -1442,7 +1620,27 @@
    "app": "cis",
    "area": "spend"
   },
+  "cis.spend.research_auto_max_usd_per_run": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.research_auto_min_run_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.research_jev_ask_estimate_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.research_max_usd_per_month": {
+   "app": "cis",
+   "area": "spend"
+  },
   "cis.spend.segment_research_max_usd_per_run": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.tour_paa_backfill_max_usd_per_run": {
    "app": "cis",
    "area": "spend"
   },
@@ -1557,6 +1755,10 @@
   "cis.t9.repeat_drop_near_exact": {
    "app": "cis",
    "area": "content"
+  },
+  "cis.tenant.pilot_max_weeks": {
+   "app": "cis",
+   "area": "tenant"
   },
   "cis.tripplanner.custom_domain_edge_max": {
    "app": "cis",
@@ -1674,6 +1876,22 @@
    "app": "crm",
    "area": "ai"
   },
+  "crm.campaign.mailbox_daily_limit": {
+   "app": "crm",
+   "area": "campaigns"
+  },
+  "crm.campaign.max_recipients": {
+   "app": "crm",
+   "area": "campaigns"
+  },
+  "crm.members.default_limit": {
+   "app": "crm",
+   "area": "members"
+  },
+  "crm.members.max_limit": {
+   "app": "crm",
+   "area": "members"
+  },
   "crm.payments.invoice_reminder_every_days": {
    "app": "crm",
    "area": "payments"
@@ -1706,6 +1924,10 @@
    "app": "crm",
    "area": "rate_limit"
   },
+  "crm.release.preview": {
+   "app": "crm",
+   "area": "release"
+  },
   "crm.retention.audit_dry_run": {
    "app": "crm",
    "area": "retention"
@@ -1721,6 +1943,22 @@
   "crm.retention.partner_account_cleanup_dry_run": {
    "app": "crm",
    "area": "retention"
+  },
+  "crm.search.enabled": {
+   "app": "crm",
+   "area": "search"
+  },
+  "crm.search.min_text_chars": {
+   "app": "crm",
+   "area": "search"
+  },
+  "crm.search.query_max_chars": {
+   "app": "crm",
+   "area": "search"
+  },
+  "crm.search.results_per_kind": {
+   "app": "crm",
+   "area": "search"
   },
   "crm.settings.two_person_approval": {
    "app": "crm",
