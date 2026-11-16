@@ -4,7 +4,7 @@ title: "Pha 3: Dựng khung"
 description: Dựng một khung chạy được, build được, deploy lên Dev và được quan sát, với mọi guard bật - sản phẩm bàn giao, checklist cổng G3 và lỗi hay gặp.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -21,14 +21,16 @@ mọi guard bật ngay từ commit đầu tiên. **Người chịu trách nhiệ
 deploy nằm trong môi trường), trunk-based development, AGENTS.md (chỉ dẫn cho agent), FinOps (tag và ngân sách từ ngày
 đầu).
 
+<!-- kit:skip -->
 Trang này cũng lấp chỗ "Thêm một app mới" (GUIDE-08) trong danh mục. Với một app mới bên trong AA-Ecosys,
 [bản áp dụng AA](aa-profile.vi.md) bổ sung playbook mười hai bước của ADR 0008.
+<!-- /kit:skip -->
 
 ## Sản phẩm bàn giao
 
 | Vùng | Sản phẩm |
 |---|---|
-| Repo | Sinh từ repo mẫu (đã lên kế hoạch, AA-1103); bật branch protection và merge queue |
+| Repo | Sinh từ repo mẫu (Copier); bật branch protection và merge queue |
 | CI | Xanh trên một PR rỗng: test, lint, check tiêu đề PR, quét secret (PR và toàn lịch sử), docs lint, workflow lint |
 | Guard local | Hook pre-push với các check nhanh; ratchet sức khoẻ code và độ phủ với baseline rỗng |
 | Agent | `AGENTS.md` là nguồn chỉ dẫn, `CLAUDE.md` import nó, các hook guardrail kèm test |

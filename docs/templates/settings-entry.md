@@ -4,7 +4,7 @@ title: Settings registry entry template
 description: How to add a threshold, limit or policy value as an admin-editable setting, with its registry row and operator guide.
 type: template
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14

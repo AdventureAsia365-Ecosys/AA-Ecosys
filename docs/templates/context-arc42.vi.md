@@ -18,7 +18,7 @@ translation_of: docs/templates/context-arc42.md
 
 <!-- Mẫu CONTEXT.md trên canvas arc42 (playbook dự án mới, pha 2 Kiến trúc). Nó nằm ở gốc repo và là file đầu tiên một
 kỹ sư hay một agent đọc trước khi sửa repo. Trần dung lượng: khoảng 60 KB; quá mức đó, chuyển chi tiết của một module
-sang docs/modules/<module>.md và trỏ tới từ đây (CIS đã phình tới khoảng 530 KB, không ai học theo thứ tự được). Sơ đồ
+sang docs/modules/<module>.md và trỏ tới từ đây (một file vài trăm KB thì không ai học theo thứ tự được). Sơ đồ
 dạng code (Mermaid, nhãn C4, tối đa 15 nút). Điền mục 1 tới 6 ngay ngày đầu; phần còn lại theo code lớn dần. Xoá ghi chú
 này. -->
 

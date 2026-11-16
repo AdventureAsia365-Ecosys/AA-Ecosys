@@ -17,7 +17,7 @@ translation_of: docs/templates/stakeholder-raci.md
 # Bản đồ các bên liên quan và RACI - <dự án>
 
 <!-- Playbook dự án mới, pha 1 Khám phá. Mỗi pha một người chịu trách nhiệm cuối (luật RACI phổ biến). Agent có thể là
-người làm, không bao giờ là người chịu trách nhiệm cuối (luật riêng của AA). Tài liệu công ty gọi theo vai trò, không gọi
+người làm, không bao giờ là người chịu trách nhiệm cuối (luật riêng của bộ kit, không thuộc RACI). Tài liệu công ty gọi theo vai trò, không gọi
 tên người. Xoá ghi chú này. -->
 
 ## 1. Các bên liên quan

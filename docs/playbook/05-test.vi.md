@@ -4,7 +4,7 @@ title: "Pha 5: Kiểm thử"
 description: Chứng minh một thay đổi chạy đúng trước khi người dùng thấy nó - các lớp kiểm thử, checklist cổng G5, kiểm bảo mật, UAT và lỗi hay gặp.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, pm, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14

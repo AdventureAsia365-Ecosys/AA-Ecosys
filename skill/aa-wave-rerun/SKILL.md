@@ -5,6 +5,8 @@ description: Runbook chạy lại pipeline A1→A3 (S1 rewrite → review/Master
 
 # aa-wave-rerun
 
+> Lớp AA (overlay) của skill generic [`project-batch-run`](../kit/project-batch-run/SKILL.md) (kit dự án mới, tiếng Anh, AA-1103): quy trình chung nằm ở đó; skill này chỉ thêm phần riêng của AA. Đổi quy tắc chung thì sửa skill generic trước.
+
 Wave = một lần chạy trả phí trên một tập tour cố định, có đầu, có cuối, có báo cáo. Mọi bước live (enqueue, ECS exec,
 snapshot, merge, DB Migrate) do **phiên điều phối** chạy; subagent chỉ soạn script/runbook (hook chặn ECS exec, merge).
 

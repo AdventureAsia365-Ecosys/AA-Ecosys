@@ -4,7 +4,7 @@ title: "Pha 4: Xây dựng"
 description: Biến các issue nhỏ, đã sẵn sàng thành thay đổi đã được review - Definition of Ready, các đường đi, appetite, lane và lỗi hay gặp.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, pm, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14

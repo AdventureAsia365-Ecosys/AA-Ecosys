@@ -4,18 +4,23 @@ title: Release checklist
 description: What a change must pass from merge to verified live - the Definition of Done as one checklist, by quality area.
 type: template
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, devops, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
 review_every_days: 180
-related: [TPL-01, TPL-01-dor, skill/aa-ship/SKILL.md]
+related: [TPL-01, TPL-01-dor, skill/aa-ship/SKILL.md] # kit:drop
+# kit:only related: [TPL-01, TPL-01-dor]
 ---
 
 # Release checklist
 
-The generic form of the Definition of Done (new-project playbook, phase 6 Release, gate G6). AA's own procedure, with
-its tools and commands, is the skill `skill/aa-ship/SKILL.md`. Copy the list into the PR or the release issue and tick
+The generic form of the Definition of Done (new-project playbook, phase 6 Release, gate G6). The procedure, with
+the project's tools and commands, is the skill `project-ship`.
+<!-- kit:skip -->
+AA's own procedure is the skill `skill/aa-ship/SKILL.md`.
+<!-- /kit:skip -->
+Copy the list into the PR or the release issue and tick
 it with evidence; an unticked line is either done or written as "n.a.: <why>".
 
 ## Before merge

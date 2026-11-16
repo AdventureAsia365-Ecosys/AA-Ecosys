@@ -4,7 +4,7 @@ title: Running a project with agents
 description: How one human and several AI agents run a project - roles, tolerances, guardrails, the session ritual, lanes, decision pages and instruction layering.
 type: explanation
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [cto, engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -14,7 +14,7 @@ related: [GUIDE-14, GUIDE-14-principles, TPL-01-session, GUIDE-02]
 
 # Running a project with agents
 
-What AA learned about running a team of one tech lead and several AI agents, written so another project can apply it.
+What the reference project learned about running a team of one tech lead and several AI agents, written so another project can apply it.
 **Follows:** AGENTS.md (open instruction format), the Thoughtworks Technology Radar techniques on agents (progressive
 context disclosure, sandboxing, feedback flywheel; cautions on instruction bloat and documentation sprawl), PRINCE2
 tolerances.

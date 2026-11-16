@@ -5,6 +5,8 @@ description: Nghi thức bắt đầu và kết thúc một phiên làm việc A
 
 # aa-session
 
+> Lớp AA (overlay) của skill generic [`project-session`](../kit/project-session/SKILL.md) (kit dự án mới, tiếng Anh, AA-1103): quy trình chung nằm ở đó; skill này chỉ thêm phần riêng của AA. Đổi quy tắc chung thì sửa skill generic trước.
+
 Bản quy tắc chuẩn tiếng Anh (người và bài học AA Academy đọc): `docs/guides/working-rules/sessions.md`. Skill này
 giữ quy trình; sửa quy tắc thì sửa cả hai trong cùng PR, lệch nhau thì áp bên chặt hơn.
 

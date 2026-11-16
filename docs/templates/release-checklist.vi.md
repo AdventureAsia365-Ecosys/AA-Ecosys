@@ -4,20 +4,25 @@ title: Checklist phát hành
 description: Những gì một thay đổi phải qua từ lúc merge tới lúc đã kiểm live - Definition of Done thành một checklist, theo từng vùng chất lượng.
 type: template
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, devops, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
 review_every_days: 180
-related: [TPL-01, TPL-01-dor, skill/aa-ship/SKILL.md]
+related: [TPL-01, TPL-01-dor, skill/aa-ship/SKILL.md] # kit:drop
+# kit:only related: [TPL-01, TPL-01-dor]
 lang: vi
 translation_of: docs/templates/release-checklist.md
 ---
 
 # Checklist phát hành
 
-Dạng chung của Definition of Done (playbook dự án mới, pha 6 Phát hành, cổng G6). Quy trình riêng của AA, kèm công cụ và
-lệnh, là skill `skill/aa-ship/SKILL.md`. Chép danh sách vào PR hoặc issue phát hành và đánh dấu kèm bằng chứng; một dòng
+Dạng chung của Definition of Done (playbook dự án mới, pha 6 Phát hành, cổng G6). Quy trình, kèm công cụ và lệnh của dự án,
+là skill `project-ship`.
+<!-- kit:skip -->
+Quy trình riêng của AA là skill `skill/aa-ship/SKILL.md`.
+<!-- /kit:skip -->
+Chép danh sách vào PR hoặc issue phát hành và đánh dấu kèm bằng chứng; một dòng
 chưa đánh dấu thì hoặc làm xong, hoặc ghi "không áp dụng: <vì sao>".
 
 ## Trước khi merge

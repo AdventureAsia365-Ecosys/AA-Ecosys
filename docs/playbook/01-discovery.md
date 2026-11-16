@@ -4,7 +4,7 @@ title: "Phase 1: Discovery"
 description: Understand the problem and decide whether to build at all - deliverables, gate G1 checklist, templates and common mistakes.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, cto, pm, engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -53,7 +53,9 @@ Rate each line red, amber or green. The business owner signs.
 - Skipping the privacy screening because the product "only stores a few fields".
 - Letting discovery run open-ended: give it an appetite of its own.
 
+<!-- kit:skip -->
 ## How AA does it
 
 The ADR 0008 decision gate (new app, module or API client) and research notes in `docs/research/` play the discovery
 role; see the [AA profile](aa-profile.md).
+<!-- /kit:skip -->

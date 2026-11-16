@@ -4,7 +4,7 @@ title: <Verb> <object>
 description: <One sentence - the goal of this how-to.>
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, agent]
 applies_to: [replace-me]
 last_reviewed: 2026-10-19

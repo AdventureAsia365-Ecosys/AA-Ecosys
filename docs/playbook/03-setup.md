@@ -4,7 +4,7 @@ title: "Phase 3: Setup"
 description: Stand up a walking skeleton that builds, deploys to Dev and is observed, with every guard on - deliverables, gate G3 checklist and common mistakes.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -18,14 +18,16 @@ related: [GUIDE-14, GUIDE-14-architecture, GUIDE-14-adoption, GUIDE-08]
 the first commit. **Accountable:** the tech lead. **Follows:** Twelve-Factor App (deploy configuration in the
 environment), trunk-based development, AGENTS.md (agent instructions), FinOps (tags and budgets from day 1).
 
+<!-- kit:skip -->
 This page also fills the catalog slot "Add a new app" (GUIDE-08). For a new app inside AA-Ecosys, the
 [AA profile](aa-profile.md) adds the ADR 0008 twelve-step playbook.
+<!-- /kit:skip -->
 
 ## Deliverables
 
 | Area | Deliverable |
 |---|---|
-| Repos | Generated from the template repo (planned, AA-1103); branch protection and the merge queue on |
+| Repos | Generated from the template repo (Copier); branch protection and the merge queue on |
 | CI | Green on an empty PR: tests, lint, PR-title check, secret scan (PR and full history), docs lint, workflow lint |
 | Local guards | Pre-push hook with the fast checks; code-health and coverage ratchets with an empty baseline |
 | Agents | `AGENTS.md` as the instruction source, `CLAUDE.md` importing it, guardrail hooks with their tests |

@@ -1,0 +1,25 @@
+# AA terms that must never reach the public project template (AA-1103, kit decision D13). One Python regex per line;
+# a line of a kit source (after kit_transform.py) or of the template repo that matches one fails the check.
+# The template repo reads the same list from its Actions variable LEAK_DENYLIST (set by the orchestrator from this
+# file), so the list itself never lands in the public template.
+\bAA-[0-9]+
+\bAA\b
+(?i)\bAA[-_ ]?(CIS|Booking|Partner|TripPlanner|Ecosys|Academy)\b
+(?i)adventure\s?asia
+(?i)adventure\.asia
+(?i)\bnghiep\b
+Nghiệp
+(?i)lumiguides
+\bCIS\b
+(?i)tripplanner
+(?i)\baa365
+(?i)\bthule\b
+(chị|Ms\.?) Thư
+(?i)\bacc[1-4]\b
+(?<![0-9A-Za-z])[0-9]{12}(?![0-9A-Za-z])
+skill/aa-
+ai-nghiep
+\.kiro/
+\bDM-[0-9]+
+\bADR 00[0-9][0-9]
+(?i)aa_ecosys

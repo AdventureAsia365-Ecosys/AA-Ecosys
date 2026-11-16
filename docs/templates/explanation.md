@@ -4,7 +4,7 @@ title: <Noun>
 description: <One sentence - what this explains and why a reader needs it.>
 type: explanation
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, agent]
 applies_to: [replace-me]
 last_reviewed: 2026-10-19

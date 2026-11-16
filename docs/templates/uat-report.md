@@ -4,18 +4,25 @@ title: UAT report — <App> <build> (<YYYY-MM-DD>)
 description: <One sentence - which build was tested and the verdict.>
 type: report
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, pm, engineer]
 applies_to: [replace-me]
 last_reviewed: 2026-10-19
-related: [AA-855]
+related: [AA-855] # kit:drop
+# kit:only related: []
 ---
 
 # UAT report — <App> <build> (<YYYY-MM-DD>)
 
+<!-- kit:skip -->
 <!-- UAT is recorded as videos, once, after the technical work for all apps (AA-855). Videos live on the
 Google Drive AdventureAsia folder; this page links them. Dev holds test data only (D-01): use test accounts,
 never real customer data. Delete this comment. -->
+<!-- /kit:skip -->
+<!-- kit:only
+<!-- UAT recordings (skill project-uat) live in the project's shared folder; this page links them. Dev holds test
+data only: use test accounts, never real customer data. Delete this comment. -->
+kit:only -->
 
 ## Build
 

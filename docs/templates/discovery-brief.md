@@ -16,7 +16,7 @@ related: []
 <!-- New-project playbook, phase 1 Discovery (docs/playbook/01-discovery.md). Built on the UK GDS discovery phase
 (restate the solution as a problem, size the cost of the problem, stopping is not failure) and the 18F buy-versus-build
 guide. Fill it with the business owner; the tech lead and agents add the research. Keep it to two pages. Store it in the
-project's docs (for AA: docs/product/<slug>/). Delete this comment. -->
+project's docs (for example docs/product/<slug>/). Delete this comment. -->
 
 ## 1. Problem
 

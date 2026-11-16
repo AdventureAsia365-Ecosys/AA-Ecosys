@@ -15,7 +15,7 @@ related: []
 # Stakeholder map and RACI - <project>
 
 <!-- New-project playbook, phase 1 Discovery. One Accountable per phase (common RACI rule). Agents may be Responsible,
-never Accountable (AA's own rule). Name roles, not people, in company docs. Delete this comment. -->
+never Accountable (the kit's own rule, not part of RACI). Name roles, not people, in company docs. Delete this comment. -->
 
 ## 1. Stakeholders
 

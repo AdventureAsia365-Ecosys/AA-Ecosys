@@ -1,10 +1,11 @@
 ---
 id: TPL-01
 title: Templates
-description: Every doc template of AA-Ecosys and the new-project kit, by lifecycle phase, with what each one is for.
+description: Every doc template of AA-Ecosys and the new-project kit, by lifecycle phase, with what each one is for. # kit:drop
+# kit:only description: Every doc template of the new-project kit, by lifecycle phase, with what each one is for.
 type: reference
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, pm, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -15,8 +16,11 @@ related: [CAT-00, TPL-02, TPL-03, GUIDE-14]
 # Templates
 
 One home per template (playbook principle 2). Copy a template, fill it, and delete its guidance comment. Templates
-carry placeholder IDs and are never published to the docs reader. The front-matter schema is
-[`frontmatter.schema.json`](frontmatter.schema.json); the style rules are in the [style guide](../STYLE.md).
+carry placeholder IDs and are never published to the docs reader.
+<!-- kit:skip -->
+The front-matter schema is [`frontmatter.schema.json`](frontmatter.schema.json); the style rules are in the
+[style guide](../STYLE.md).
+<!-- /kit:skip -->
 
 ## By lifecycle phase
 
@@ -41,12 +45,12 @@ carry placeholder IDs and are never published to the docs reader. The front-matt
 | 5, 6 | [Security checklist](security-checklist.md) | ASVS 5.0 level 1 (level 2 for auth, payment, personal data) |
 | 5 Test | [UAT report](uat-report.md) | Business sign-off of a visible feature |
 | 6 Release | [Release checklist](release-checklist.md) | Merge to verified live, by quality area |
-| 6 Release | [Release note](release-note.md) | The business view of a release |
+| 6 Release | [Release note](release-note.md) | The business view of a release <!-- kit:drop --> |
 | 7 Operate | [Runbook](runbook.md) | Exact steps for one task, with the tested rule |
 | 7 Operate | [Incident record](incident-record.md) | A light record opened when an incident starts |
 | 7 Operate | [Postmortem](postmortem.md) | Blameless review, with the list of when one is required |
-| 7 Operate | [Capacity and cost review](cost-report.md), [capacity review](capacity-review.md) | Monthly cost and capacity |
-| 7 Operate | [Access review](access-review.md) | Quarterly: who can reach what |
+| 7 Operate | [Capacity and cost review](cost-report.md), [capacity review](capacity-review.md) | Monthly cost and capacity <!-- kit:drop --> |
+| 7 Operate | [Access review](access-review.md) | Quarterly: who can reach what <!-- kit:drop --> |
 | 7 Operate | [Delivery metrics report](delivery-metrics-report.md) | Weekly DORA and flow metrics |
 | 8 Scale | [SLO and error budget policy](slo-error-budget.md) | Written early, switched on at first prod |
 | 9 Retire | [Retirement checklist](retirement-checklist.md) | Nothing left running, stored or billed |
@@ -59,4 +63,4 @@ carry placeholder IDs and are never published to the docs reader. The front-matt
 | [How-to](how-to.md) | Steps to reach one goal |
 | [Reference](reference.md) | Facts to look up |
 | [Explanation](explanation.md) | Why something is the way it is |
-| [Role guide](role-guide.md) | One reader role's entry page |
+| [Role guide](role-guide.md) | One reader role's entry page <!-- kit:drop --> |

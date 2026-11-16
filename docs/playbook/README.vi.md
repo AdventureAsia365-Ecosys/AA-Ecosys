@@ -1,15 +1,16 @@
 ---
 id: GUIDE-14
 title: Playbook cho dự án mới
-description: Cách một dự án mới chạy trọn vòng đời sản phẩm ngay từ ngày đầu - chín pha có cổng, vai trò, mẫu, luật cho agent và bản áp dụng AA đặt trên các chuẩn có tên.
+description: Cách một dự án mới chạy trọn vòng đời sản phẩm ngay từ ngày đầu - chín pha có cổng, vai trò, mẫu, luật cho agent và bản áp dụng AA đặt trên các chuẩn có tên. # kit:drop
+# kit:only description: Cách một dự án mới chạy trọn vòng đời sản phẩm ngay từ ngày đầu - chín pha có cổng, vai trò, mẫu và luật cho agent đặt trên các chuẩn có tên.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, engineer, devops, cto, cio, pm, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
 review_every_days: 90
-related: [CAT-01, TPL-01, GUIDE-08, GUIDE-13, docs/research/new-project-playbook/README.md, AA-1099, AA-1102]
+related: [CAT-01, TPL-01, GUIDE-08, GUIDE-13, docs/research/new-project-playbook/README.md, AA-1099, AA-1102] # kit:drop
 lang: vi
 translation_of: docs/playbook/README.md
 ---
@@ -18,8 +19,11 @@ translation_of: docs/playbook/README.md
 
 Playbook này là bộ kit mà một dự án mới áp dụng ngay từ ngày đầu. Nó phủ trọn vòng đời, từ việc quyết định có nên xây
 hay không tới lúc đóng sản phẩm lại. Đây là một bản áp dụng mỏng đặt trên các chuẩn quen thuộc, không phải một phương
-pháp mới: mỗi trang nêu chuẩn nó theo và phần nó giữ hay bỏ. AA-Ecosys là ứng dụng tham chiếu; trang
-[bản áp dụng AA](aa-profile.vi.md) ánh xạ các trang chung sang luật và công cụ riêng của AA.
+pháp mới: mỗi trang nêu chuẩn nó theo và phần nó giữ hay bỏ. 
+<!-- kit:skip -->
+AA-Ecosys là ứng dụng tham chiếu; trang [bản áp dụng AA](aa-profile.vi.md) ánh xạ các trang chung sang luật và công cụ
+riêng của AA.
+<!-- /kit:skip -->
 
 Thiết kế và mười bốn quyết định của nó đã được tech lead duyệt ở S279
 ([nghiên cứu](../research/new-project-playbook/README.vi.md), quyết định S279-K1 trong sổ tay).
@@ -32,12 +36,12 @@ Thiết kế và mười bốn quyết định của nó đã được tech lead
 | Chủ doanh nghiệp | Trang này, [Khám phá](01-discovery.vi.md), [Mở rộng](08-scale.vi.md), [Ngừng](09-retire.vi.md) |
 | Tech lead | [Nguyên tắc](principles.vi.md), mọi trang pha, [Agent](agents.vi.md) |
 | Kỹ sư hoặc agent vào một dự án đang chạy | [Nguyên tắc](principles.vi.md), [Xây dựng](04-build.vi.md), [Kiểm thử](05-test.vi.md), [Phát hành](06-release.vi.md), [Agent](agents.vi.md) |
-| Người làm trên chính AA | [Bản áp dụng AA](aa-profile.vi.md) |
+| Người làm trên chính AA | [Bản áp dụng AA](aa-profile.vi.md) <!-- kit:drop --> |
 
 ## Bản đồ vòng đời
 
 Chín pha, đặt tên theo các pha của UK GDS (discovery, alpha, beta, live, retirement). Mỗi pha kết thúc ở một cổng: một
-checklist ngắn chấm đỏ, vàng hoặc xanh (lựa chọn của AA, không phải luật của GDS). Xanh thì qua. Vàng thì qua kèm một
+checklist ngắn chấm đỏ, vàng hoặc xanh (lựa chọn riêng của bộ kit, không phải luật của GDS). Xanh thì qua. Vàng thì qua kèm một
 việc tiếp theo được ghi lại. Đỏ thì dừng.
 
 ```mermaid
@@ -71,7 +75,7 @@ lặp lại cho mỗi issue, nên một dự án đang live ở trong nhiều ph
 ## Vai trò (RACI theo pha)
 
 Mỗi pha có đúng một người chịu trách nhiệm cuối (Accountable). Agent có thể là người làm (Responsible), không bao giờ
-là người chịu trách nhiệm cuối (luật riêng của AA).
+là người chịu trách nhiệm cuối (luật riêng của bộ kit).
 
 | Pha | Chủ doanh nghiệp | Tech lead | Agent điều phối | Subagent / agent thứ hai | CI | Nhà cung cấp |
 |---|---|---|---|---|---|---|
@@ -105,9 +109,10 @@ trả tiền đầu tiên, tech lead còn duyệt các merge rủi ro trước k
 | Vận hành một đội gồm một người và nhiều agent | [agents.vi.md](agents.vi.md) |
 | Checklist ngày đầu và kế hoạch 30 / 60 / 90 ngày | [adoption.vi.md](adoption.vi.md) |
 | Chỉ số DORA, luồng và mức sẵn sàng AI | [metrics.vi.md](metrics.vi.md) |
-| AA ánh xạ vào bộ kit thế nào | [aa-profile.vi.md](aa-profile.vi.md) |
+| AA ánh xạ vào bộ kit thế nào | [aa-profile.vi.md](aa-profile.vi.md) <!-- kit:drop --> |
 | Mẫu | [`docs/templates/`](../templates/README.vi.md) |
-| Repo mẫu (Copier) và skill chung cho agent | đã lên kế hoạch, AA-1103 |
+| Repo mẫu (Copier) và skill chung cho agent | repo `project-template`; [`skill/kit/`](../../skill/kit/README.md) <!-- kit:drop --> |
+<!-- kit:only | Skill chung cho agent | [`.claude/skills/`](../../.claude/skills/README.md) | -->
 
 ## Các chuẩn làm nền
 

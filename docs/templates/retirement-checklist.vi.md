@@ -4,7 +4,7 @@ title: Checklist ngừng
 description: Cách đóng một sản phẩm, app, tính năng hay môi trường cho gọn, không còn gì chạy, lưu trữ hay bị tính tiền.
 type: template
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, engineer, devops, cto, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -17,8 +17,11 @@ translation_of: docs/templates/retirement-checklist.md
 # Checklist ngừng
 
 Playbook dự án mới, pha 9 Ngừng, cổng G8. Chép danh sách vào issue ngừng. Chủ doanh nghiệp chịu trách nhiệm cuối; tech
-lead thực hiện. Cổng G8 chỉ qua khi hoá đơn cloud và inventory cho thấy không còn gì. Các trường hợp AA làm nền cho nó:
-việc gỡ một tài khoản khỏi hệ sinh thái (ADR 0001a), lan truyền khi ngừng tour (ADR 0015) và sổ bảng chết.
+lead thực hiện. Cổng G8 chỉ qua khi hoá đơn cloud và inventory cho thấy không còn gì.
+<!-- kit:skip -->
+Các trường hợp AA làm nền cho nó: việc gỡ một tài khoản khỏi hệ sinh thái (ADR 0001a), lan truyền khi ngừng tour
+(ADR 0015) và sổ bảng chết.
+<!-- /kit:skip -->
 
 ## 1. Quyết định
 

@@ -4,7 +4,7 @@ title: <Thing> reference
 description: <One sentence - what this table answers.>
 type: reference
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, agent]
 applies_to: [replace-me]
 last_reviewed: 2026-10-19
