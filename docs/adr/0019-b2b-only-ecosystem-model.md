@@ -331,30 +331,38 @@ above; the rows stay as the S265 record.
 
 - **Prices (Tenants › Plans & add-ons, versioned and audited):** Content Starter 149, Growth 349, Business 699 USD a
   month; Enterprise by contract with a floor of 699 USD (`price_floor_usd_monthly`); CRM Core 19 and Pro 29 USD per seat
-  a month with a minimum of 3 seats billed (`seats_min`; a smaller request is raised to 3); TripPlanner Hosted 49 and Pro
-  99 USD a month per site; add-ons: custom domain 15 USD (one add-on gives the TripPlanner and the CRM custom domain;
-  still included in TripPlanner Pro and CRM Pro) and AI pack 19 USD (+10 USD of AI a month per unit). Each plan also
-  carries a VND list price (reviewed quarterly against the reference rate) and, for Content, the overage rates.
+  a month with a minimum of 3 seats billed (`seats_min`; a smaller request is raised to 3); TripPlanner is sold only as
+  two plans, Hosted 49 and Pro 99 USD a month per site. Each plan also carries a VND list price (reviewed quarterly
+  against the reference rate) and, for Content, the overage rates.
+- **No retail add-ons:** nothing is sold à la carte. There is no custom-domain add-on: the custom domain is a Pro
+  feature only (TripPlanner Pro; CRM Pro as before). There is no AI pack: an agency that needs more AI gets a
+  per-tenant override of its AI budget on Tenant 360. CRM and TripPlanner stay products an agency adds to its Content
+  subscription.
+- **Not sold, off the roadmap:** the TripPlanner embed, an open TripPlanner API and an AA sub-domain per agency.
+  TripPlanner Pro no longer carries `tp.embed` or `tp.api` (plan version 2 on the Plans page); an agency's site lives at
+  its `/{slug}` path or on its own custom domain (Pro).
 - **AI included (b19):** Starter 15, Growth 40, Business 80 USD a month; TripPlanner Hosted adds 10 and Pro 25
-  (`ai.budget_addon_usd_monthly`); AI packs add 10 each. Alerts at 80 % and a hard stop at 100 % by default.
-- **Trials:** 14 days for a new account and for every add-on attached later or approved from a request, once per tenant
-  and product; a trialing subscription gets 50 % of its own AI part. Pilots are free until go-live (no end date needed).
+  (`ai.budget_addon_usd_monthly`, part of the plans). Alerts at 80 % and a hard stop at 100 % by default.
+- **Trials:** 14 days for a new account and for every CRM or TripPlanner product attached later or approved from a
+  request, once per tenant and product; a trialing subscription gets 50 % of its own AI part. Pilots are free until
+  go-live (no end date needed).
 - **Commercial terms:** annual = 10 of 12 months; founding agencies 30 % for 12 months, at most 10 agencies, on Growth,
-  Business and every add-on (Starter excluded); combo 10 % when an agency holds Content, CRM and TripPlanner; founding
-  and combo never stack (the larger applies); reference rate 26,000 VND per USD; launch prices reviewed after 12 months
-  and locked for 12 months for an agency that signs up.
+  Business and every CRM and TripPlanner plan (Starter excluded); combo 10 % when an agency holds Content, CRM and
+  TripPlanner; founding and combo never stack (the larger applies); reference rate 26,000 VND per USD; launch prices
+  reviewed after 12 months and locked for 12 months for an agency that signs up. An agreed or locked price is per billed
+  unit, like the list price it replaces (per seat on a per-seat plan, so a seat added during the lock is billed at the
+  locked seat price).
 - **Where each value lives:** the prices on Plans & add-ons (CIS `shared.plan`, `shared.plan_feature`); the trial,
   pilot, AI threshold and commercial values on Platform › Settings (`cis.billing.*`, `cis.tenant.pilot_max_weeks`,
   maker-checker); per agency on Tenant 360 (billing currency, bill-to, founding offer dates, billed monthly or yearly,
-  an agreed or locked price, add-ons). CIS migrations 435-439; contract `tenant.entitlements.v1` 1.9. Booking invoices
-  from the same data (its AA-1116 lane); `shared.membership_plans` is no longer read for prices.
-- **Decisions of the S282 open questions:** one custom-domain add-on for both apps; seats raised to the minimum; one
-  trial per tenant and product; the trial share applies to a subscription's own AI part, never to an override; an
-  AI budget row with no amount follows the plan; discounts do not stack; Booking flags annual and discounted
-  subscriptions for a manual invoice for now; a pilot may have no end date; the TripPlanner chat cap follows the
-  add-on increment; an "AI session" is a TripPlanner session with at least one AI call in a UTC month; Enterprise and
-  internal quotas with no number mean no quota; price edits stay single-admin until the first paying agency; existing
-  Dev subscriptions get no price lock backfill.
+  an agreed or locked price, an AI budget override). CIS migrations 435-439; contract `tenant.entitlements.v1` 1.9.
+  Booking invoices from the same data (its AA-1116 lane); `shared.membership_plans` is no longer read for prices.
+- **Decisions of the S282 open questions:** seats raised to the minimum; one trial per tenant and product; the trial
+  share applies to a subscription's own AI part, never to an override; an AI budget row with no amount follows the
+  plan; discounts do not stack; Booking flags annual and discounted subscriptions for a manual invoice for now; a pilot
+  may have no end date; the TripPlanner chat cap follows the plan's AI increment; an "AI session" is a TripPlanner
+  session with at least one AI call in a UTC month; Enterprise and internal quotas with no number mean no quota; price
+  edits stay single-admin until the first paying agency; existing Dev subscriptions get no price lock backfill.
 
 ## ADRs amended
 
