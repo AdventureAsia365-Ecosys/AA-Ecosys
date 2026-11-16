@@ -117,5 +117,5 @@ UK GDS service manual (phases), ISO/IEC/IEEE 12207 (coverage check), ISO/IEC 250
 (four performance domains), PRINCE2 7 (tolerances), Scrum Guide 2020 (product goal, Definition of Done), Kanban Guide
 (WIP, flow metrics), Shape Up (appetite, circuit breaker), DORA (metrics, AI capabilities), Google SRE (SLOs,
 postmortems), C4 and arc42 (architecture), MADR (ADRs), AGENTS.md (agent instructions), Twelve-Factor App, trunk-based
-development, OWASP ASVS 5.0 and SAMM v2 (security), FinOps Framework (cost), RACI. Sources and the verdict on each are
-in the [research](../research/new-project-playbook/README.md) sections 4 and 8.
+development, OWASP ASVS 5.0 and SAMM v2 (security), FinOps Framework (cost), RACI.
+Sources and the verdict on each are in the [research](../research/new-project-playbook/README.md) sections 4 and 8. <!-- kit:drop -->

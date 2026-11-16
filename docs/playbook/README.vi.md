@@ -19,14 +19,14 @@ translation_of: docs/playbook/README.md
 
 Playbook này là bộ kit mà một dự án mới áp dụng ngay từ ngày đầu. Nó phủ trọn vòng đời, từ việc quyết định có nên xây
 hay không tới lúc đóng sản phẩm lại. Đây là một bản áp dụng mỏng đặt trên các chuẩn quen thuộc, không phải một phương
-pháp mới: mỗi trang nêu chuẩn nó theo và phần nó giữ hay bỏ. 
+pháp mới: mỗi trang nêu chuẩn nó theo và phần nó giữ hay bỏ.
 <!-- kit:skip -->
 AA-Ecosys là ứng dụng tham chiếu; trang [bản áp dụng AA](aa-profile.vi.md) ánh xạ các trang chung sang luật và công cụ
 riêng của AA.
-<!-- /kit:skip -->
 
 Thiết kế và mười bốn quyết định của nó đã được tech lead duyệt ở S279
 ([nghiên cứu](../research/new-project-playbook/README.vi.md), quyết định S279-K1 trong sổ tay).
+<!-- /kit:skip -->
 
 ## Bắt đầu từ đây
 
@@ -120,5 +120,5 @@ UK GDS service manual (các pha), ISO/IEC/IEEE 12207 (kiểm độ phủ), ISO/I
 PMBOK 7 (bốn performance domain), PRINCE2 7 (dung sai), Scrum Guide 2020 (product goal, Definition of Done), Kanban
 Guide (WIP, chỉ số luồng), Shape Up (appetite, circuit breaker), DORA (chỉ số, năng lực AI), Google SRE (SLO,
 postmortem), C4 và arc42 (kiến trúc), MADR (ADR), AGENTS.md (chỉ dẫn cho agent), Twelve-Factor App, trunk-based
-development, OWASP ASVS 5.0 và SAMM v2 (bảo mật), FinOps Framework (chi phí), RACI. Nguồn và kết luận cho từng chuẩn
-nằm ở [nghiên cứu](../research/new-project-playbook/README.vi.md) mục 4 và 8.
+development, OWASP ASVS 5.0 và SAMM v2 (bảo mật), FinOps Framework (chi phí), RACI.
+Nguồn và kết luận cho từng chuẩn nằm ở [nghiên cứu](../research/new-project-playbook/README.vi.md) mục 4 và 8. <!-- kit:drop -->

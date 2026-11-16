@@ -1,10 +1,11 @@
 ---
 id: TPL-01
 title: Mẫu tài liệu
-description: Mọi mẫu tài liệu của AA-Ecosys và bộ kit dự án mới, theo pha vòng đời, kèm công dụng của từng mẫu.
+description: Mọi mẫu tài liệu của AA-Ecosys và bộ kit dự án mới, theo pha vòng đời, kèm công dụng của từng mẫu. # kit:drop
+# kit:only description: Mọi mẫu tài liệu của bộ kit dự án mới, theo pha vòng đời, kèm công dụng của từng mẫu.
 type: reference
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, pm, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -17,9 +18,12 @@ translation_of: docs/templates/README.md
 # Mẫu tài liệu
 
 Mỗi mẫu một nhà (nguyên tắc 2 của playbook). Chép một mẫu, điền vào, và xoá ghi chú hướng dẫn của nó. Mẫu mang ID giữ
-chỗ và không bao giờ được xuất bản lên trình đọc tài liệu. Schema front-matter là
-[`frontmatter.schema.json`](frontmatter.schema.json); luật văn phong nằm trong [hướng dẫn văn phong](../STYLE.md). Mẫu có
-bản tiếng Việt khi nó có front-matter; ADR và ghi chú triển khai không có bản dịch.
+chỗ và không bao giờ được xuất bản lên trình đọc tài liệu. Mẫu có bản tiếng Việt khi nó có front-matter; ADR và ghi chú
+triển khai không có bản dịch.
+<!-- kit:skip -->
+Schema front-matter là [`frontmatter.schema.json`](frontmatter.schema.json); luật văn phong nằm trong
+[hướng dẫn văn phong](../STYLE.md).
+<!-- /kit:skip -->
 
 ## Theo pha vòng đời
 
@@ -44,12 +48,12 @@ bản tiếng Việt khi nó có front-matter; ADR và ghi chú triển khai kh�
 | 5, 6 | [Checklist bảo mật](security-checklist.vi.md) | ASVS 5.0 mức 1 (mức 2 cho xác thực, thanh toán, dữ liệu cá nhân) |
 | 5 Kiểm thử | [Báo cáo UAT](uat-report.md) | Phía kinh doanh ký xác nhận một tính năng thấy được |
 | 6 Phát hành | [Checklist phát hành](release-checklist.vi.md) | Từ merge tới đã kiểm live, theo vùng chất lượng |
-| 6 Phát hành | [Ghi chú phát hành](release-note.md) | Góc nhìn kinh doanh của một bản phát hành |
+| 6 Phát hành | [Ghi chú phát hành](release-note.md) | Góc nhìn kinh doanh của một bản phát hành <!-- kit:drop --> |
 | 7 Vận hành | [Runbook](runbook.md) | Các bước chính xác cho một việc, kèm luật đã kiểm |
 | 7 Vận hành | [Bản ghi sự cố](incident-record.vi.md) | Một bản ghi gọn mở ngay khi sự cố bắt đầu |
 | 7 Vận hành | [Postmortem](postmortem.md) | Rà soát không đổ lỗi, kèm danh sách khi nào bắt buộc phải có |
-| 7 Vận hành | [Rà soát chi phí và dung lượng](cost-report.md), [rà soát dung lượng](capacity-review.md) | Chi phí và dung lượng hằng tháng |
-| 7 Vận hành | [Rà soát quyền truy cập](access-review.md) | Hằng quý: ai truy cập được gì |
+| 7 Vận hành | [Rà soát chi phí và dung lượng](cost-report.md), [rà soát dung lượng](capacity-review.md) | Chi phí và dung lượng hằng tháng <!-- kit:drop --> |
+| 7 Vận hành | [Rà soát quyền truy cập](access-review.md) | Hằng quý: ai truy cập được gì <!-- kit:drop --> |
 | 7 Vận hành | [Báo cáo chỉ số giao hàng](delivery-metrics-report.vi.md) | Chỉ số DORA và luồng hằng tuần |
 | 8 Mở rộng | [Chính sách SLO và error budget](slo-error-budget.vi.md) | Viết từ sớm, bật khi có prod đầu tiên |
 | 9 Ngừng | [Checklist ngừng](retirement-checklist.vi.md) | Không còn gì chạy, lưu trữ hay bị tính tiền |
@@ -62,4 +66,4 @@ bản tiếng Việt khi nó có front-matter; ADR và ghi chú triển khai kh�
 | [How-to](how-to.md) | Các bước để đạt một mục tiêu |
 | [Reference](reference.md) | Dữ kiện để tra cứu |
 | [Explanation](explanation.md) | Vì sao một thứ lại như vậy |
-| [Guide theo vai trò](role-guide.md) | Trang vào của một vai trò người đọc |
+| [Guide theo vai trò](role-guide.md) | Trang vào của một vai trò người đọc <!-- kit:drop --> |

@@ -7,6 +7,7 @@ tools/project-kit/kit-sources.txt kit-sources.txt
 tools/project-kit/kit_transform.py tools/kit_transform.py
 # templates
 docs/templates/README.md template/docs/templates/README.md
+docs/templates/README.vi.md template/docs/templates/README.vi.md
 docs/templates/adr.md template/docs/templates/adr.md
 docs/templates/adr-http-api-conventions.md template/docs/templates/adr-http-api-conventions.md
 docs/templates/contract.md template/docs/templates/contract.md

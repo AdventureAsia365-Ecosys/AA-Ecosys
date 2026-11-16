@@ -9,7 +9,8 @@ audience: [owner, engineer, cto, pm, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
 review_every_days: 90
-related: [GUIDE-14, CAT-01, docs/research/new-project-playbook/README.md]
+related: [GUIDE-14, CAT-01, docs/research/new-project-playbook/README.md] # kit:drop
+# kit:only related: [GUIDE-14, CAT-01]
 lang: vi
 translation_of: docs/playbook/principles.md
 ---

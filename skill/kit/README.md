@@ -1,7 +1,8 @@
 # Generic agent skills (new-project kit)
 
-The generic skills of the new-project kit (design: `docs/research/new-project-playbook/` section 5.5). They hold the
-procedures a project run by one tech lead and several AI agents needs, with no project names. The kit's template repo
+The generic skills of the new-project kit (design: `docs/research/new-project-playbook/` section 5.5). <!-- kit:drop -->
+<!-- kit:only The generic skills of the new-project kit (the playbook page `docs/playbook/agents.md`). -->
+They hold the procedures a project run by one tech lead and several AI agents needs, with no project names. The kit's template repo
 copies this folder byte for byte into a generated project's `.claude/skills/`.
 
 | Skill | Use it for |
