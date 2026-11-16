@@ -123,6 +123,17 @@ class Collect(unittest.TestCase):
         self.assertIn("demotool/releases/download", row["wl5"][0])
         self.assertEqual(len(row["wl4"]), 1)
 
+    def test_codeql_caches_do_not_count_toward_red(self):
+        state = {"AA-TripPlanner-Web": {"caches": [
+            c(1, "refs/heads/main", GB, "setup-uv-2-x86_64-unknown-linux-gnu-ubuntu-26.04-3.12.16-0123456789abcdef")] + [
+            c(10 + i, "refs/heads/main", GB, f"codeql-overlay-base-database-1-0123456789ab-python-1-{i}-1")
+            for i in range(9)], "open": [], "files": {".github/workflows/a.yml": CLEAN_WF}}}
+        row = h.collect("AA-TripPlanner-Web", warn_gb=8, run=FakeGh(state=state), now=NOW, log=lambda m: None,
+                        allowlist=[])
+        self.assertEqual(row["bytes"], 10 * GB)
+        self.assertEqual(row["codeql_bytes"], 9 * GB)
+        self.assertEqual(row["red"], [])
+
     def test_clean_deletes_only_stale_and_lowers_the_usage(self):
         fake = FakeGh()
         row = h.collect("AA-CIS-App", warn_gb=8, clean=True, run=fake, now=NOW, log=lambda m: None)

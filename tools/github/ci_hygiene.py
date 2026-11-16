@@ -5,7 +5,8 @@ For each of the 6 repos:
   * Actions cache usage against GitHub's 10 GB per-repo cap (above it GitHub evicts least-recently-used entries, which
     can be the default-branch caches every run restores), split by ref kind (default branch / pull request / merge
     queue / other) with the top key families by size. CodeQL default setup's own caches (codeql-*) are listed but
-    cannot be limited from a workflow (repository setting, no input).
+    cannot be limited from a workflow (repository setting, no input); they are left out of the RED threshold
+    (S282: least-recently-used eviction removes those stale entries first).
   * Stale caches: those of pull requests that are not open and of merge-queue refs idle for more than 2 h (nobody can
     read them again). --clean deletes exactly those (the logic of .github/scripts/cache_cleanup.py, which each repo's
     Cache cleanup workflow runs on pull request close and daily).
@@ -104,7 +105,9 @@ def summarize(caches: list[dict], default_branch: str, top: int = 5) -> dict:
         f[1] += size
     top_fams = sorted(({"family": k, "entries": v[0], "bytes": v[1]} for k, v in fams.items()),
                       key=lambda r: -r["bytes"])[:top]
-    return {"bytes": cc.total_bytes(caches), "entries": len(caches), "by_ref": by_kind, "top": top_fams}
+    codeql = sum(int(c.get("size_in_bytes") or 0) for c in caches if (c.get("key") or "").startswith("codeql"))
+    return {"bytes": cc.total_bytes(caches), "entries": len(caches), "by_ref": by_kind, "top": top_fams,
+            "codeql_bytes": codeql}
 
 
 def default_branch(repo: str, run=subprocess.run) -> str:
@@ -364,8 +367,14 @@ def collect(repo: str, *, warn_gb: float, clean: bool = False, local_root: Path 
         row["wl8"], row["wl8_unread"] = allowlist_findings(files, patterns, fetch or (lambda r: remote_action(r, run)))
     row["files"] = len(files)
     after = row["bytes"] - row["deleted_bytes"]
-    row["red"] = [r for r, bad in ((f"cache {after / 1e9:.1f} GB > {warn_gb:g} GB (cap {CAP_GB:g})",
-                                    after > warn_gb * 1e9),
+    # S282: CodeQL default setup saves one overlay database per analysed commit (~250 MB each) that no later run
+    # reads, and no workflow input can limit it. Above the cap GitHub evicts least-recently-used entries first, i.e.
+    # those stale CodeQL entries, not the caches every run restores; so only the workflow's own caches count toward
+    # RED. The total stays in the table.
+    own = after - row["codeql_bytes"]
+    row["red"] = [r for r, bad in ((f"workflow caches {own / 1e9:.1f} GB > {warn_gb:g} GB (cap {CAP_GB:g}; "
+                                    f"CodeQL {row['codeql_bytes'] / 1e9:.1f} GB not counted)",
+                                    own > warn_gb * 1e9),
                                    (f"{len(row['wl5'])} uncached external download(s)", bool(row["wl5"])),
                                    (f"{len(row['wl8'])} action(s) outside the org Actions allow-list (WL8)",
                                     bool(row["wl8"])))
