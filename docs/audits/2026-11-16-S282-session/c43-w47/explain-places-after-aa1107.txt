@@ -1,0 +1,179 @@
+ids 50
+Subquery Scan on v_tour_place  (cost=2165264.81..2165272.93 rows=1 width=183) (actual time=142.238..143.530 rows=1321 loops=1)
+  Filter: (v_tour_place.source_system = 'cis'::text)
+  Buffers: shared hit=31307
+  ->  WindowAgg  (cost=2165264.81..2165270.39 rows=203 width=531) (actual time=142.237..143.275 rows=1321 loops=1)
+        Buffers: shared hit=31307
+        ->  Sort  (cost=2165264.81..2165265.32 rows=203 width=249) (actual time=142.226..142.325 rows=1321 loops=1)
+              Sort Key: spelled.tour_id, spelled.itinerary_day, (NULLIF(strpos(lower(COALESCE(max(spelled.day_text), ''::text)), spelled.place_key), 0)), (min(spelled.created_at)), ((spelled.place_key)::text) COLLATE "C"
+              Sort Method: quicksort  Memory: 316kB
+              Buffers: shared hit=31307
+              ->  Nested Loop Left Join  (cost=2150049.34..2165257.03 rows=203 width=249) (actual time=60.220..140.723 rows=1321 loops=1)
+                    Buffers: shared hit=31307
+                    ->  Nested Loop Left Join  (cost=2150044.93..2161910.02 rows=203 width=249) (actual time=60.178..132.112 rows=1321 loops=1)
+                          Buffers: shared hit=25967
+                          ->  Nested Loop Left Join  (cost=2150019.96..2156837.49 rows=203 width=241) (actual time=60.155..123.599 rows=1321 loops=1)
+                                Buffers: shared hit=21431
+                                ->  Nested Loop Left Join  (cost=2149995.02..2151768.69 rows=203 width=225) (actual time=60.130..105.632 rows=1321 loops=1)
+                                      Buffers: shared hit=13827
+                                      ->  Hash Left Join  (cost=2149986.33..2149999.04 rows=203 width=209) (actual time=59.830..76.768 rows=1321 loops=1)
+                                            Hash Cond: (((array_agg(spelled.card_id ORDER BY spelled.created_at, spelled.card_id) FILTER (WHERE (spelled.card_id IS NOT NULL)))[1]) = pc.card_id)
+                                            Buffers: shared hit=9191
+                                            ->  GroupAggregate  (cost=2149376.38..2149386.53 rows=203 width=226) (actual time=56.542..72.669 rows=1321 loops=1)
+                                                  Group Key: spelled.source_system, spelled.source_id, spelled.tour_id, spelled.tour_country, spelled.itinerary_day, spelled.place_key
+                                                  Buffers: shared hit=8690
+                                                  ->  Sort  (cost=2149376.38..2149376.89 rows=203 width=223) (actual time=56.507..56.728 rows=1525 loops=1)
+                                                        Sort Key: spelled.source_system, spelled.source_id, spelled.tour_id, spelled.tour_country, spelled.itinerary_day, spelled.place_key
+                                                        Sort Method: quicksort  Memory: 996kB
+                                                        Buffers: shared hit=8690
+                                                        ->  Subquery Scan on spelled  (cost=422002.52..2149368.60 rows=203 width=223) (actual time=1.656..50.635 rows=1525 loops=1)
+                                                              Buffers: shared hit=8690
+                                                              ->  WindowAgg  (cost=422002.52..2149366.57 rows=203 width=287) (actual time=1.655..50.385 rows=1525 loops=1)
+                                                                    Buffers: shared hit=8690
+                                                                    ->  Incremental Sort  (cost=422002.52..2149357.94 rows=203 width=150) (actual time=1.635..45.669 rows=1525 loops=1)
+                                                                          Sort Key: rt.tour_id, ta.itinerary_day, (btrim(ta.place))
+                                                                          Presorted Key: rt.tour_id
+                                                                          Full-sort Groups: 29  Sort Method: quicksort  Average Memory: 418kB  Peak Memory: 529kB
+                                                                          Pre-sorted Groups: 9  Sort Method: quicksort  Average Memory: 636kB  Peak Memory: 660kB
+                                                                          Buffers: shared hit=8690
+                                                                          ->  Nested Loop Left Join  (cost=306845.70..2149348.36 rows=203 width=150) (actual time=0.264..42.449 rows=1525 loops=1)
+                                                                                Buffers: shared hit=8690
+                                                                                ->  Nested Loop Left Join  (cost=306845.42..2149271.57 rows=203 width=150) (actual time=0.262..39.100 rows=1525 loops=1)
+                                                                                      Buffers: shared hit=5795
+                                                                                      ->  Nested Loop  (cost=306845.12..2149030.89 rows=203 width=151) (actual time=0.246..29.326 rows=1525 loops=1)
+                                                                                            Buffers: shared hit=1220
+                                                                                            ->  Nested Loop  (cost=306840.61..2148233.07 rows=7 width=92) (actual time=0.227..26.105 rows=50 loops=1)
+                                                                                                  Buffers: shared hit=737
+                                                                                                  ->  Nested Loop  (cost=0.55..352.45 rows=7 width=60) (actual time=0.034..0.616 rows=50 loops=1)
+                                                                                                        Buffers: shared hit=300
+                                                                                                        ->  Index Scan using raw_tours_pkey on raw_tours rt  (cost=0.28..243.42 rows=16 width=60) (actual time=0.025..0.315 rows=50 loops=1)
+                                                                                                              Index Cond: (tour_id = ANY ('{0c8bdf9e-511f-44fa-a665-af8bedeb6d83,2a2a5928-b723-4fa4-a94b-b15a7f85d782,69f731ca-a77d-4fb1-87b2-9d98c6ad010f,a6254fcf-e1bb-4caa-bad7-867fc80e5792,ff02e1c2-3a61-4e4d-b59c-baa0946e1e6b,92cff0d9-fd48-4747-9cd7-83c0d5453d11,ea46ea64-8b8f-46e9-8137-69a95c8c674c,9f55e8ee-7475-4aa0-bc2b-cc99b7b1c29b,bae085b4-93ef-46bc-be4d-211b5c45542a,1430bf90-1a57-4259-9f69-b719284f89f2,fb4dd7e9-6ed0-460d-b836-11e124bcdb75,9b74a857-c73a-4423-9e3b-a528a20e2b84,aef604a6-6f85-49ee-818c-986b9389d4fc,6da29e14-1717-46e1-968e-2bb99753158a,00164580-b7b2-429f-a185-2f9415d1de11,04ec22e8-6d7d-4689-b0ea-d19139ad6b5e,1895278d-55d9-4f1a-803a-74f4b0eef9f6,30d181f5-baa3-4f8d-bf97-8565837c3378,bd6d5576-9d32-4ca2-b541-eeccf6966961,b1214f62-8c80-454b-8e93-439a718f93ef,25ca84b9-0013-4267-a61a-7b64cd2f64fe,1055c3a3-a4d8-4c60-b381-8f19a3fcd645,52313e94-24c4-4d10-a6ce-04e881eaa8e6,963b3cc7-0c9d-42ac-a374-49a364d6afe7,1904ed9d-d66e-4a29-a331-b7bac71e00bf,c410a272-cac2-486d-9911-a5a73f5365d2,af0ded16-120f-458f-97b9-8e22c239fa3a,cd8649e6-13e3-4804-9f38-d2c0062d41a9,287d3b96-9a7a-49c3-88fe-14af56347fd6,95421187-4ae5-45f6-9619-1473e023c69b,9bef0a77-d635-4e43-b378-d14f21cc552a,c47ea6d3-7e25-45a1-a510-3b38e783ae02,54e5a12a-a809-4c75-8c72-a56988fc1c54,d33d1c3f-e5b5-47d2-98f7-7bce26c45406,682b324f-ff2d-4e2b-b92a-56fa6fd8bc45,46010051-70e6-4ae4-bf0a-6f2a0b5ecc9d,a2abcacb-aa69-41f6-ac4e-41e05cd2afbd,453a8d51-ab48-44e0-9dc3-1426ee91a27c,dab05a3b-4b44-4a44-8e11-0c90cd75e0d9,5289931a-9d1b-4d87-b45a-67609e06d7dc,955b704b-f70b-47f5-9bd9-c5826f50b640,f0f39028-f69d-4203-9abf-701788aef655,468a38a7-b7ce-4fde-9683-3a619a65c33c,efcd330f-3099-44ae-8915-3b9939fbe0a0,48dd72a1-6326-4bf4-8a25-0de8b8cc02a4,ade2a433-b137-4cfb-bbd8-7c1626328f38,0b87114e-3431-4503-ba58-88345a6e4f2c,21cf2928-1880-4a49-bc0c-f22a8f7b0f93,279b77f8-9b4e-4f5e-a5d6-70e6be4a9bd7,5f99c8b7-16e0-4b21-89f1-e00779ebed2e}'::uuid[]))
+                                                                                                              Filter: ((deleted_at IS NULL) AND ((tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid) OR (tenant_id = '00000000-0000-0000-0000-000000000001'::uuid)) AND (source_status = 'active'::silver_aa_internal.source_status_enum))
+                                                                                                              Buffers: shared hit=150
+                                                                                                        ->  Index Scan using published_tours_tour_id_key on published_tours pt  (cost=0.28..6.81 rows=1 width=16) (actual time=0.005..0.005 rows=1 loops=50)
+                                                                                                              Index Cond: (tour_id = rt.tour_id)
+                                                                                                              Filter: ((deleted_at IS NULL) AND (tenant_id = '00000000-0000-0000-0000-000000000001'::uuid) AND ((tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid) OR (tenant_id = '00000000-0000-0000-0000-000000000001'::uuid)) AND (master_status = 'active'::gold_aa_internal.master_status_enum))
+                                                                                                              Buffers: shared hit=150
+                                                                                                  ->  Aggregate  (cost=306840.06..306840.07 rows=1 width=32) (actual time=0.508..0.509 rows=1 loops=50)
+                                                                                                        Buffers: shared hit=437
+                                                                                                        ->  Unique  (cost=301835.56..306835.56 rows=200 width=188) (actual time=0.492..0.495 rows=9 loops=50)
+                                                                                                              Buffers: shared hit=437
+                                                                                                              ->  Sort  (cost=301835.56..304335.56 rows=1000000 width=188) (actual time=0.491..0.492 rows=9 loops=50)
+                                                                                                                    Sort Key: d.day_number, c.ord DESC
+                                                                                                                    Sort Method: quicksort  Memory: 27kB
+                                                                                                                    Buffers: shared hit=437
+                                                                                                                    ->  Nested Loop  (cost=0.61..17601.71 rows=1000000 width=188) (actual time=0.142..0.485 rows=9 loops=50)
+                                                                                                                          Buffers: shared hit=437
+                                                                                                                          ->  Nested Loop  (cost=0.55..71.64 rows=1000 width=56) (actual time=0.130..0.411 rows=9 loops=50)
+                                                                                                                                Buffers: shared hit=437
+                                                                                                                                ->  Nested Loop  (cost=0.55..36.64 rows=1000 width=56) (actual time=0.086..0.090 rows=9 loops=50)
+                                                                                                                                      Buffers: shared hit=437
+                                                                                                                                      ->  Nested Loop  (cost=0.55..16.63 rows=1 width=128) (actual time=0.005..0.006 rows=1 loops=50)
+                                                                                                                                            Buffers: shared hit=300
+                                                                                                                                            ->  Index Scan using published_tours_tour_id_key on published_tours pt_1  (cost=0.28..8.31 rows=1 width=128) (actual time=0.002..0.002 rows=1 loops=50)
+                                                                                                                                                  Index Cond: (tour_id = rt.tour_id)
+                                                                                                                                                  Filter: ((deleted_at IS NULL) AND (aa_itineraries IS NOT NULL) AND (tenant_id = '00000000-0000-0000-0000-000000000001'::uuid) AND ((tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid) OR (tenant_id = '00000000-0000-0000-0000-000000000001'::uuid)) AND (master_status = 'active'::gold_aa_internal.master_status_enum))
+                                                                                                                                                  Buffers: shared hit=150
+                                                                                                                                            ->  Index Scan using raw_tours_pkey on raw_tours rt_1  (cost=0.28..8.31 rows=1 width=16) (actual time=0.002..0.002 rows=1 loops=50)
+                                                                                                                                                  Index Cond: (tour_id = rt.tour_id)
+                                                                                                                                                  Filter: ((deleted_at IS NULL) AND ((tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid) OR (tenant_id = '00000000-0000-0000-0000-000000000001'::uuid)) AND (source_status = 'active'::silver_aa_internal.source_status_enum))
+                                                                                                                                                  Buffers: shared hit=150
+                                                                                                                                      ->  Function Scan on regexp_split_to_table c  (cost=0.00..10.00 rows=1000 width=40) (actual time=0.080..0.081 rows=9 loops=50)
+                                                                                                                                            Buffers: shared hit=137
+                                                                                                                                ->  Subquery Scan on h  (cost=0.00..0.03 rows=1 width=32) (actual time=0.037..0.037 rows=1 loops=428)
+                                                                                                                                      Filter: (h.m IS NOT NULL)
+                                                                                                                                      ->  Result  (cost=0.00..0.01 rows=1 width=32) (actual time=0.037..0.037 rows=1 loops=428)
+                                                                                                                          ->  Memoize  (cost=0.06..10.05 rows=1000 width=4) (actual time=0.006..0.006 rows=1 loops=428)
+                                                                                                                                Cache Key: h.m, h.m, h.m, h.m, h.m, h.m, h.m, h.m
+                                                                                                                                Cache Mode: binary
+                                                                                                                                Hits: 0  Misses: 428  Evictions: 0  Overflows: 0  Memory Usage: 1445kB
+                                                                                                                                ->  Function Scan on generate_series d  (cost=0.05..10.04 rows=1000 width=4) (actual time=0.001..0.001 rows=1 loops=428)
+                                                                                            ->  Bitmap Heap Scan on tour_atoms ta  (cost=4.51..113.40 rows=29 width=91) (actual time=0.011..0.055 rows=30 loops=50)
+                                                                                                  Recheck Cond: ((tour_id = rt.tour_id) AND (NOT deleted))
+                                                                                                  Filter: ((NOT is_empty_marker) AND (place IS NOT NULL) AND (btrim(place) <> ''::text))
+                                                                                                  Rows Removed by Filter: 0
+                                                                                                  Heap Blocks: exact=383
+                                                                                                  Buffers: shared hit=483
+                                                                                                  ->  Bitmap Index Scan on idx_tour_atoms_tour_id  (cost=0.00..4.50 rows=29 width=0) (actual time=0.006..0.006 rows=31 loops=50)
+                                                                                                        Index Cond: (tour_id = rt.tour_id)
+                                                                                                        Buffers: shared hit=100
+                                                                                      ->  Memoize  (cost=0.30..7.90 rows=1 width=33) (actual time=0.006..0.006 rows=1 loops=1525)
+                                                                                            Cache Key: ta.atom_id
+                                                                                            Cache Mode: logical
+                                                                                            Hits: 0  Misses: 1525  Evictions: 0  Overflows: 0  Memory Usage: 209kB
+                                                                                            Buffers: shared hit=4575
+                                                                                            ->  Index Scan using atom_place_card_pkey on atom_place_card apc  (cost=0.29..7.89 rows=1 width=33) (actual time=0.005..0.005 rows=1 loops=1525)
+                                                                                                  Index Cond: (atom_id = ta.atom_id)
+                                                                                                  Buffers: shared hit=4575
+                                                                                ->  Index Scan using place_card_pkey on place_card pc_1  (cost=0.28..0.38 rows=1 width=16) (actual time=0.002..0.002 rows=1 loops=1525)
+                                                                                      Index Cond: (card_id = apc.card_id)
+                                                                                      Filter: (status <> 'rejected'::text)
+                                                                                      Rows Removed by Filter: 0
+                                                                                      Buffers: shared hit=2895
+                                            ->  Hash  (cost=549.42..549.42 rows=4842 width=55) (actual time=3.279..3.280 rows=4860 loops=1)
+                                                  Buckets: 8192  Batches: 1  Memory Usage: 431kB
+                                                  Buffers: shared hit=501
+                                                  ->  Seq Scan on place_card pc  (cost=0.00..549.42 rows=4842 width=55) (actual time=0.030..2.159 rows=4860 loops=1)
+                                                        Buffers: shared hit=501
+                                      ->  Limit  (cost=8.69..8.70 rows=1 width=32) (actual time=0.021..0.021 rows=0 loops=1321)
+                                            Buffers: shared hit=4636
+                                            ->  Sort  (cost=8.69..8.70 rows=1 width=32) (actual time=0.021..0.021 rows=0 loops=1321)
+                                                  Sort Key: gp.component_id
+                                                  Sort Method: quicksort  Memory: 25kB
+                                                  Buffers: shared hit=4636
+                                                  ->  Index Scan using tour_place_source_day_name_norm_idx on tour_place gp  (cost=0.66..8.68 rows=1 width=32) (actual time=0.005..0.005 rows=0 loops=1321)
+                                                        Index Cond: ((source_id = spelled.source_id) AND (day_index = spelled.itinerary_day) AND (geo.name_norm(name) = geo.name_norm(((array_agg(spelled.place ORDER BY spelled.spelled_in_text DESC, spelled.spelling_n DESC, (spelled.place)::text))[1]))))
+                                                        Filter: (destination_id IS NOT NULL)
+                                                        Rows Removed by Filter: 0
+                                                        Buffers: shared hit=4636
+                                ->  Limit  (cost=24.94..24.95 rows=1 width=33) (actual time=0.013..0.013 rows=1 loops=1321)
+                                      Buffers: shared hit=7604
+                                      ->  Sort  (cost=24.94..24.95 rows=1 width=33) (actual time=0.013..0.013 rows=1 loops=1321)
+                                            Sort Key: ((lower(dd.name) = lower(pc.display_name))) DESC NULLS LAST, dd.id
+                                            Sort Method: quicksort  Memory: 25kB
+                                            Buffers: shared hit=7604
+                                            ->  Nested Loop  (cost=0.57..24.93 rows=1 width=33) (actual time=0.010..0.011 rows=1 loops=1321)
+                                                  Buffers: shared hit=7604
+                                                  ->  Index Scan using destinations_lower_name_uidx on destinations dd  (cost=0.29..16.62 rows=1 width=51) (actual time=0.005..0.007 rows=1 loops=1321)
+                                                        Index Cond: (lower(name) = ANY (ARRAY[lower(pc.display_name), lower(((array_agg(spelled.place ORDER BY spelled.spelled_in_text DESC, spelled.spelling_n DESC, (spelled.place)::text))[1]))]))
+                                                        Filter: (lower(country) = lower(COALESCE(pc.country, spelled.tour_country)))
+                                                        Rows Removed by Filter: 0
+                                                        Buffers: shared hit=4523
+                                                  ->  Index Scan using destinations_pkey on destinations k  (cost=0.29..8.30 rows=1 width=16) (actual time=0.003..0.003 rows=1 loops=1027)
+                                                        Index Cond: (id = COALESCE(dd.duplicate_of, dd.id))
+                                                        Filter: ((duplicate_of IS NULL) AND (geo_status <> 'suspect'::text))
+                                                        Rows Removed by Filter: 0
+                                                        Buffers: shared hit=3081
+                          ->  Limit  (cost=24.97..24.97 rows=1 width=92) (actual time=0.006..0.006 rows=1 loops=1321)
+                                Buffers: shared hit=4536
+                                ->  Sort  (cost=24.97..24.97 rows=2 width=92) (actual time=0.006..0.006 rows=1 loops=1321)
+                                      Sort Key: "*VALUES*".column1
+                                      Sort Method: quicksort  Memory: 25kB
+                                      Buffers: shared hit=4536
+                                      ->  Nested Loop  (cost=0.29..24.96 rows=2 width=92) (actual time=0.003..0.004 rows=1 loops=1321)
+                                            Buffers: shared hit=4536
+                                            ->  Values Scan on "*VALUES*"  (cost=0.00..0.04 rows=3 width=20) (actual time=0.001..0.001 rows=3 loops=1321)
+                                            ->  Index Scan using destinations_pkey on destinations dd_1  (cost=0.29..8.30 rows=1 width=56) (actual time=0.001..0.001 rows=0 loops=3963)
+                                                  Index Cond: (id = "*VALUES*".column2)
+                                                  Filter: ((duplicate_of IS NULL) AND (geo_status <> 'suspect'::text))
+                                                  Rows Removed by Filter: 0
+                                                  Buffers: shared hit=4536
+                    ->  Limit  (cost=4.41..16.47 rows=1 width=110) (actual time=0.006..0.006 rows=0 loops=1321)
+                          Buffers: shared hit=5340
+                          ->  Nested Loop  (cost=4.41..16.47 rows=1 width=110) (actual time=0.005..0.005 rows=0 loops=1321)
+                                Buffers: shared hit=5340
+                                ->  Bitmap Heap Scan on graph_build b  (cost=4.13..8.14 rows=1 width=16) (actual time=0.002..0.002 rows=1 loops=1321)
+                                      Recheck Cond: is_current
+                                      Heap Blocks: exact=2642
+                                      Buffers: shared hit=3963
+                                      ->  Bitmap Index Scan on graph_build_one_current_uq  (cost=0.00..4.13 rows=1 width=0) (actual time=0.001..0.001 rows=2 loops=1321)
+                                            Buffers: shared hit=1321
+                                ->  Index Only Scan using tour_segment_pkey on tour_segment ts  (cost=0.28..4.30 rows=1 width=16) (actual time=0.002..0.002 rows=0 loops=1321)
+                                      Index Cond: ((build_id = b.build_id) AND (source_id = spelled.source_id) AND (day_index = spelled.itinerary_day) AND (destination_id = dd_1.id))
+                                      Heap Fetches: 0
+                                      Buffers: shared hit=1377
+Planning:
+  Buffers: shared hit=57
+Planning Time: 3.021 ms
+Execution Time: 143.923 ms
+AA1107 exec_ms=143.9 target<=200 atoms_seq_scan=False name_norm_filter=False name_key_index=True jit=off

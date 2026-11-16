@@ -1,0 +1,542 @@
+{
+ "critic": {
+  "verdicts": [
+   {
+    "id": "V1",
+    "status": "partial",
+    "where": "shared.plan.price_usd_monthly (CIS api/migrations/353:150; seed 355:123-128 = 299/799/1499, Enterprise NULL). Legacy second source shared.membership_plans.price_usd_monthly (CIS 223:72-76, 299/799/1499), with no admin writer.",
+    "admin_surface": "CIS admin > Tenants > Plans & add-ons, PlanDrawer 'Price (USD a month)' (frontend/app/admin/tenants/plans/PlanDrawer.tsx:144-145) -> PATCH /admin/plans/{plan_key} (api/routers/admin_plans.py). Versioned and audited, admin role only, no maker-checker.",
+    "hardcoded_at": [
+     "AA-CIS-App api/migrations/355_tenant_plans_seed_and_entitlement_view.sql:123-128",
+     "AA-CIS-App api/migrations/223_tenant_usage_real_llm_cost.sql:72-76",
+     "AA-CIS-App api/routers/v1_tours.py:538-550 (tenant /v1/billing plan table reads shared.membership_plans; verified)",
+     "AA-CIS-App api/routers/admin.py:214-217,411,608 (membership_plans)",
+     "AA-CIS-App api/routers/admin_tenant360.py:143,296",
+     "AA-CIS-App api/routers/admin_settings.py:76",
+     "AA-Partner web/app/(studio)/portal/_components/PlaceholderTabs.tsx:122,219; DashboardTab.tsx:82,133 (show /v1/billing price with a literal '$')"
+    ],
+    "gap": "Auditors split (3 partial, 1 editable); settled as partial. Booking invoices from shared.plan (catalog.v_tenant_billing_v1), so 149/349/699 can be typed on the Plans page. But the agency studio Billing/Dashboard, the admin tenants list, Tenant 360 margin and v_tenant_monthly_usage still read shared.membership_plans (verified v1_tours.py:546-550), which no admin page edits. After the edit, agencies would still see 299/799/1499. Needed: repoint those readers to shared.plan, or retire the membership_plans prices. Enterprise 'contact sales, floor 699' has no field: price NULL means contract, and the floor exists only as notes text (355:128). A price_floor_usd column (or a documented convention) is needed. Optional: maker-checker on price edits."
+   },
+   {
+    "id": "V2",
+    "status": "not_modelled",
+    "where": "Nothing for SaaS prices: shared.plan has only USD columns (CIS 353:150-153). booking.fx_rates is Booking's table for B2B tour quotes and does not apply here. The settings registry has no billing key except cis.billing.rewrite_over_quota_mode (verified).",
+    "admin_surface": "none",
+    "hardcoded_at": [
+     "AA-CIS-App frontend/app/admin/tenants/plans/plans.messages.ts:30,51,55 ('USD' in the labels; vi :126,146,150)",
+     "AA-Booking backend/app/agency_billing/drafts.py:303-306 (any saas_currency other than USD is skipped as currency_unsupported; verified)",
+     "AA-Partner web/app/(studio)/portal/_components/account.messages.ts:157,217 and PlaceholderTabs.tsx:179,219, DashboardTab.tsx:182 (literal '$')"
+    ],
+    "gap": "Needed: a VND price list per plan and per add-on (columns, or a shared.plan_price(plan_key, currency, amount, valid_from, reviewed_at) table) editable in PlanDrawer, a quarterly review date, and an FX reference key (26,000 VND/USD) in the Settings registry with maker-checker. The Booking SaaS draft must price VND agencies from that list instead of skipping them, and the studio must show the agency's own currency."
+   },
+   {
+    "id": "V3",
+    "status": "partial",
+    "where": "shared.plan crm.core/crm.pro: price_unit 'seat', price NULL, seats_included 10 (CIS 355:130-133); plan_feature crm.seats = 10 (355:185,188); price_extra_seat_usd (353:153). The CRM member cap comes from crm.seats (or subscription.seats), never from seats_included.",
+    "admin_surface": "PlanDrawer has fields for Price, Priced per, Seats included and Extra seat (PlanDrawer.tsx:144-158), plus the crm.seats limit in the feature list. Tenant 360 add-on form takes seats 1..500 (Tenant360Subscription.tsx:81).",
+    "hardcoded_at": [
+     "AA-CIS-App api/migrations/355_tenant_plans_seed_and_entitlement_view.sql:130-133,185,188",
+     "AA-Booking backend/app/agency_billing/drafts.py:136 (quantity = max(seats or seats_included or 1, 1): no minimum; verified)",
+     "AA-Booking backend/app/agency_billing/drafts.py:140-144 (extra-seat line only for plans not priced per seat; verified)",
+     "AA-Partner api/app/cis/entitlement_feed.py:107 (MEMBER_LIMIT_MAX 500), :127 (DEFAULT_MEMBER_LIMIT 10)",
+     "AA-Partner api/app/members/team.py:43 (DEFAULT_PLAN member_limit 10)",
+     "AA-Partner api/migrations/008_crm_roles_members.sql:452,461 (DEFAULT 10)",
+     "AA-CIS-App services/tenant_account/provision.py:59-62 (SEATS_MAX 500)"
+    ],
+    "gap": "19/29 USD and 3 seats can be typed in today. Both seats_included and crm.seats must change, because the two fields can drift apart. 'Minimum 3 seats' is not modelled: Booking bills 1 seat when a subscription has 1 seat, and nothing enforces a minimum at provision. Add seats_min (or define seats_included as the billed minimum: quantity = max(seats, seats_min)) and enforce it at provision. price_extra_seat_usd is ignored for per-seat plans, so 'extra seat price' for CRM is simply the per-seat price unless this is changed. The CRM fallback of 10 seats is a code and DB literal."
+   },
+   {
+    "id": "V4",
+    "status": "editable_in_admin",
+    "where": "shared.plan.price_usd_monthly for tripplanner.hosted / tripplanner.pro, unit 'site', seeded NULL (CIS 355:134-137). TripPlanner code holds no price.",
+    "admin_surface": "Plans & add-ons > PlanDrawer Price field + Public switch (PlanDrawer.tsx:144-145,162-163)",
+    "hardcoded_at": [
+     "AA-CIS-App api/migrations/355_tenant_plans_seed_and_entitlement_view.sql:134-137 (NULL, is_public false)"
+    ],
+    "gap": "Data only: enter 49 / 99 and make the plans public. While the price is NULL, Booking drafts a 0 line flagged price_missing (drafts.py:130-135). No agency-facing page shows add-on prices (studio Account > Add-ons and CRM Settings > Add-ons show state only). The tenant.addons.v1 contract would need a price field if agencies should see it."
+   },
+   {
+    "id": "V5",
+    "status": "partial",
+    "where": "shared.plan_feature tp.ai_sessions (count_month), NULL for both TripPlanner plans (CIS 355:112,196,199)",
+    "admin_surface": "PlanDrawer feature limit for tp.ai_sessions; a per-tenant override in Tenant 360",
+    "hardcoded_at": [
+     "AA-CIS-App api/migrations/355_tenant_plans_seed_and_entitlement_view.sql:196,199"
+    ],
+    "gap": "Auditors split (cis-commercial said editable without checking TripPlanner). Settled as partial: git grep 'ai_sessions' on AA-TripPlanner-Web origin/main returns 0 hits, and CIS has hits only in migration 355. The value can be stored, but nothing enforces it, and it is not in catalog.v_tenant_tripplanner_v1 or v_tenant_ai_budget_v1. Needed: expose the key in a catalog contract view and have TripPlanner count and stop sessions per tenant per month."
+   },
+   {
+    "id": "V6",
+    "status": "not_modelled",
+    "where": "none. ai.budget_usd_monthly is resolved from the content plan only (CIS 361); the Plans API refuses ai.* keys on add-on plans (services/tenant_account/plans.py:241-245 platform_key_content_only); catalog.v_tenant_ai_budget_v1 serves the single resolved value (CIS 390).",
+    "admin_surface": "none. The only workaround is an absolute override (Tenant 360 > Subscription, or the AA-1016 row in Tenant 360 > Cost / AI providers > Budgets). Both replace the value instead of adding to it, and do not drop when TripPlanner is cancelled.",
+    "hardcoded_at": [
+     "AA-CIS-App services/tenant_account/plans.py:241-245",
+     "AA-CIS-App api/migrations/361_tenant_entitlement_trial_grace.sql:15-26,115,126"
+    ],
+    "gap": "Needed: an additive key (for example ai.budget_addon_usd_monthly) allowed on add-on plans and editable per plan (+10 Hosted, +25 Pro). The resolver, cost_guard (_TENANT_BUDGET_SQL, shared/cost_guard.py:666-689) and v_tenant_ai_budget_v1 would then sum the content cap and the live add-on increments, with a contract version bump. Separately, TripPlanner's planning chat has its own per-tenant cap, the registry key tripplanner.spend.plan_chat_tenant_monthly_cap_usd = 2.0 (CIS 414:75). Unless that key is raised or tied to the add-on, the +10/+25 would not reach TripPlanner chat."
+   },
+   {
+    "id": "V7",
+    "status": "editable_in_admin",
+    "where": "shared.plan_feature ai.budget_usd_monthly = 15 / 40 / 80, Enterprise 80, internal NULL (CIS 355:166,170,174,178,182)",
+    "admin_surface": "PlanDrawer feature limit, required on tiered content plans (plans.py ENFORCED_CONTENT_KEYS)",
+    "hardcoded_at": [],
+    "gap": "None for the value: the seed already matches option B. Caveat: a tenant with an override (rank 1) or an AA-1016 row (rank 2) does not follow later plan edits. An AA-1016 row saved with monthly_usd empty makes the tenant unlimited."
+   },
+   {
+    "id": "V8",
+    "status": "not_modelled",
+    "where": "Only the flags tp.custom_domain / crm.custom_domain inside TripPlanner Pro / CRM Pro (CIS 355:192,201). shared.plan.product CHECK allows content|crm|tripplanner only (353:164), and the unique index allows one subscription per (tenant, product).",
+    "admin_surface": "none for a price. A Tenant 360 override can switch the flag on, but carries no price.",
+    "hardcoded_at": [],
+    "gap": "Needed: a separately priced add-on item (an 'addon' product or a shared.addon catalogue plus a tenant_addon table) with custom_domain = 15 USD, editable on the Plans page, that grants the flag and appears on the Booking SaaS draft."
+   },
+   {
+    "id": "V9",
+    "status": "not_modelled",
+    "where": "none. No AI-pack product, price or quantity exists. Add-on requests accept crm|tripplanner only (services/tenant_account/addon_requests.py:135, provision.py:58).",
+    "admin_surface": "none for the price. The workaround is an absolute override on ai.budget_usd_monthly plus a manual 'adjustment' line on the Booking draft.",
+    "hardcoded_at": [],
+    "gap": "Auditors split (cis-commercial said partial because of the manual workaround). Settled as not_modelled: neither the 19 USD price nor the +10 USD grant is stored anywhere, and the override replaces the budget instead of adding to it. Needed: a catalogue item (USD and VND price, budget increment) editable in admin, and a per-tenant pack (count, month or expiry) added on top of the resolved cap through the V6 mechanism."
+   },
+   {
+    "id": "V10",
+    "status": "partial",
+    "where": "trial_days is only a per-request input on POST /admin/tenants/provision (api/routers/admin_tenant_provision.py:66, 1..TRIAL_DAYS_MAX). TRIAL_DAYS_MAX = 60 is a code constant (services/tenant_account/provision.py:66). The result lands in tenant_subscription.trial_ends_at. No default length is stored.",
+    "admin_surface": "none: no frontend sends trial_days, and Tenant 360 only displays trial_ends_at",
+    "hardcoded_at": [
+     "AA-CIS-App services/tenant_account/provision.py:66 (TRIAL_DAYS_MAX = 60)",
+     "AA-CIS-App services/tenant_account/provision.py:286-294 (NEW_ADDON_SQL: an approved add-on request starts 'active', never trialing)",
+     "AA-CIS-App services/tenant_account/provision.py:379-389 (attaching an add-on to an existing tenant starts 'active')",
+     "root docs/adr/0019-b2b-only-ecosystem-model.md:306 (b2 '14-day trial' stated only in the ADR)"
+    ],
+    "gap": "Needed: a default trial length of 14 days as a registry key (for example cis.billing.trial_days_default, maker-checker) or a per-plan column. Use it in the provision saga, for add-ons attached later and for approved add-on requests (start them 'trialing'). Expose the trial length in the admin create and attach drawers. TRIAL_DAYS_MAX should become data."
+   },
+   {
+    "id": "V11",
+    "status": "not_modelled",
+    "where": "none. While trialing, the resolver serves the plan's own limit with source 'trial' (CIS 361:99-107). The only workaround is shared.tenant_entitlement_override.limit_value + expires_at (353:32-33).",
+    "admin_surface": "Workaround only: Tenant 360 > Subscription override drawer, where staff type a USD amount and an optional expiry date (Tenant360Subscription.tsx:173-242)",
+    "hardcoded_at": [],
+    "gap": "Auditors split (partial vs not_modelled); settled as not_modelled because the 50 % ratio is stored nowhere. Answer to the question: no, the workaround does not expire with the trial. It expires only on a date staff type by hand, does not follow an extended, shortened or converted trial (lifecycle.py END_TRIALS), and never expires if the date is left empty. Needed: cis.billing.trial_ai_budget_pct = 50 (maker-checker, or a plan column), applied by the resolver and cost_guard while the content subscription is trialing, so it ends automatically with the trial."
+   },
+   {
+    "id": "V12",
+    "status": "not_modelled",
+    "where": "none: no billing interval on shared.plan or shared.tenant_subscription; Booking SaaS drafts cover one calendar month (AA-Booking drafts.py:5-7, parse_period)",
+    "admin_surface": "none",
+    "hardcoded_at": [
+     "AA-Booking backend/app/agency_billing/drafts.py:5-7,93 (calendar-month period)"
+    ],
+    "gap": "Needed: subscription billing_interval (month|year), an editable annual rule (12 months for the price of 10, as a registry key or an annual price per plan), an annual draft in Booking, and paid_through set one year ahead."
+   },
+   {
+    "id": "V13",
+    "status": "not_modelled",
+    "where": "none in shared.* or in Booking SaaS invoices. booking.partner_tier_discounts belongs to B2B tour pricing and does not apply.",
+    "admin_surface": "none. Only a manual 'adjustment' line per draft, and the draft rewrites its subscription lines on every run (drafts.py:315-321), so staff would have to re-add the discount every month.",
+    "hardcoded_at": [],
+    "gap": "Needed: an offer catalogue (30 %, 12 months, at most 10 agencies, eligible Growth/Business/add-ons, Starter excluded) editable in admin, a per-tenant assignment with start and end dates in Tenant 360, and a discount line on the SaaS draft."
+   },
+   {
+    "id": "V14",
+    "status": "not_modelled",
+    "where": "none; the Booking draft writes one line per subscription with no rule across products (drafts.py:120-145)",
+    "admin_surface": "none",
+    "hardcoded_at": [],
+    "gap": "Needed: a combo rule (product set content+crm+tripplanner, 10 %) in the same discount catalogue as V13, applied on the SaaS draft."
+   },
+   {
+    "id": "V15",
+    "status": "partial",
+    "where": "shared.tenants.is_pilot / pilot_ends_at (CIS 354), set through provision with pilot_weeks",
+    "admin_surface": "Tenant 360 pilot badge + End pilot; pilot_weeks can be set only through the provision API",
+    "hardcoded_at": [
+     "AA-CIS-App services/tenant_account/dev_guard.py:23 (PILOT_MAX_WEEKS = 8)",
+     "AA-CIS-App api/routers/admin_tenant_provision.py:69 (pilot_weeks le=8)",
+     "AA-Booking backend/app/agency_billing/drafts.py:289-291 (only kind 'internal' is skipped; verified)"
+    ],
+    "gap": "Verified: catalog.v_tenant_billing_v1 (CIS 377:83-86) has no is_pilot column, so Booking drafts a pilot at the full plan price. 'Free' depends on a person not issuing the invoice. The 8-week cap also contradicts 'free until go-live'. Needed: pilot end as data ('until go-live' allowed), and a free flag (is_pilot or a 100 % offer) exposed in the billing view so the draft skips or zeroes the pilot."
+   },
+   {
+    "id": "V16",
+    "status": "partial",
+    "where": "Tenants on a plan budget without an AA-1016 row use code constants PLAN_ALERT_PCT = 80 and PLAN_APPROVAL_PCT = 100 (shared/cost_guard.py:617-618; verified). Per-tenant values live in shared.tenant_ai_budget.alert_pct / approval_pct / hard_stop.",
+    "admin_surface": "Per tenant only: Tenant 360 > Cost (Tenant360AiBudget.tsx) and AI providers > Budgets (PUT /admin/ai-gateway/tenant-budgets/{id}). No platform default in the Settings registry.",
+    "hardcoded_at": [
+     "AA-CIS-App shared/cost_guard.py:617-618",
+     "AA-CIS-App shared/cost_guard.py:707-709 (dataclass defaults 100/150/hard_stop False)",
+     "AA-CIS-App api/services/tenant_ai_budget.py:45 (defaults 100/150/True)",
+     "AA-CIS-App api/routers/admin_ai_gateway.py:289-291",
+     "AA-CIS-App frontend/app/admin/tenants/_components/Tenant360AiBudget.tsx:67-68",
+     "AA-CIS-App frontend/lib/aiGateway.ts:948-949",
+     "AA-CIS-App shared/llm_client/tenant_budget.py:31,57 (env-only switch LLM_TENANT_BUDGETS)",
+     "AA-TripPlanner-Web backend/shared/tenant_budget.py:66 (hard stop at 100 %, ignores the tenant thresholds)"
+    ],
+    "gap": "The stop at 100 % already matches option B, but only as code constants. Creating a per-tenant row silently moves approval to 150 %. Move the default alert, approval and hard-stop values into the Settings registry (maker-checker) and align the row defaults with them. An empty monthly_usd should mean 'follow the plan', not 'unlimited'. Decide whether LLM_TENANT_BUDGETS should become a registry flag."
+   },
+   {
+    "id": "V17",
+    "status": "partial",
+    "where": "booking.billing_terms.saas_currency char(3) DEFAULT 'USD' (AA-Booking migrations/041:121,133). CIS shared.tenants has billing_country but no currency.",
+    "admin_surface": "Booking staff > Agency billing > Terms shows 'Software fee currency', but the input is disabled (verified: frontend/app/(staff)/agency-billing/_parts/TermsSection.tsx:58-59). The API accepts the field (backend/app/routers/agency_billing.py:169).",
+    "hardcoded_at": [
+     "AA-Booking frontend/app/(staff)/agency-billing/_parts/TermsSection.tsx:58-59 (disabled input)",
+     "AA-Booking backend/app/agency_billing/drafts.py:303-306 (only USD drafted)",
+     "AA-Booking backend/app/routers/agency_billing.py:169 (default 'USD')",
+     "AA-Booking frontend/app/(staff)/agency-billing/_parts/AgencyBillingView.tsx:68-80 (USD-only KPI tiles)"
+    ],
+    "gap": "A per-agency currency column exists, but no one can set it in the UI, and a VND agency would get no invoice. Enable the field (in Booking Terms or in CIS Tenant 360 next to billing_country) and build V2 so VND agencies are invoiced from the VND price list."
+   },
+   {
+    "id": "V18",
+    "status": "not_modelled",
+    "where": "shared.plan.version + retired_at (CIS 353:155,161). tenant_subscription stores plan_key only, with no price or version snapshot. Booking reads the current price on every run through v_tenant_billing_v1.",
+    "admin_surface": "Workaround only: retire the old plan (its subscribers stay on it) and create a new one, on the Plans page (admin_plans.py:109-140). The unique index allows one live content plan per tier (353:179-180).",
+    "hardcoded_at": [],
+    "gap": "Auditors split (partial vs not_modelled); settled as not_modelled because a price lock, an effective_from date and a review date do not exist. A price PATCH reprices every subscriber at once. Needed: a price snapshot on the subscription (price_locked_usd/vnd + price_locked_until = now() + 12 months, editable in Tenant 360) served by the billing view, and a review_due_at field per plan."
+   }
+  ],
+  "missed": [
+   "Doc drift, root docs/adr/0019-b2b-only-ecosystem-model.md:306 (b2): still states 'Content tiers 299 / 799 / 1,499 USD a month ... Reviewed after 3 agencies. 14-day trial'. :307 (b3) says CRM '25-35 USD per user a month'. Option B (149/349/699, 19/29 per seat, 12-month review) needs an ADR 0019 amendment note, or the ADR contradicts the data.",
+   "Doc drift, root docs/guides/crm-runbook.md:62: 'A new agency starts on the free plan with 10 seats', which conflicts with the minimum of 3 paid seats; the same 10 appears in AA-Partner team.py:43 and migration 008:452,461.",
+   "shared.membership_plans carries more than prices: it is the fallback source of the rewrite tours quota (services/tenant_account/plans.py:56-58: the Enterprise/internal content.rewrite NULL falls back to membership_plans; api/routers/v1_tours.py:389-429; admin.py:608) and of the overage rates 4/3/2 USD per tour and 0.80/0.60/0.40 USD per 1k calls (CIS 223:72-76). These are not editable and are used by cis.billing.rewrite_over_quota_mode. Retiring membership_plans for V1 has to move the quota fallback and the overage rates too.",
+   "The Settings registry has exactly one billing key (cis.billing.rewrite_over_quota_mode); there is no key for trial length, trial AI share, FX rate, annual rule or default AI thresholds. Plans PATCH is a single admin with no maker-checker, unlike registry keys, so price edits are less controlled than other policy values.",
+   "TripPlanner planning-chat sub-cap tripplanner.spend.plan_chat_tenant_monthly_cap_usd = 2.0 (and plan_chat_monthly_cap_usd 2.0) in CIS 414:74-75 is editable in the registry, but it caps TripPlanner chat far below the +10/+25 V6 increments and below the 300/1,500 sessions of V5. It must be reconciled, or the option B TripPlanner AI promises cannot be met.",
+   "AA-CIS-App api/routers/admin_tenant_provision.py:69 pilot_weeks le=8 and services/tenant_account/dev_guard.py:23 PILOT_MAX_WEEKS = 8 conflict with V15 'free until go-live' (ADR 0019 b18 ties go-live to a pilot agency, with no date).",
+   "Verified clean: the old fabricated '$299 / 50 tours' defaults in v1_tours/admin_pipeline (AA-798) are gone from CIS code. No plan-price literal remains in CIS, Partner, TripPlanner or Booking Python/TS outside migrations, tests and the '$'/'USD' currency labels listed under V2.",
+   "Booking billing_terms seed (AA-Booking CONTEXT.md:2028: due 14/14 days, warn 1, suspend 30, USD) and the reminder steps 1/7/14 days are Booking policy data editable in Booking Terms and pricing policy. The warn/suspend days are editable, but saas_currency is not (disabled input)."
+  ]
+ },
+ "design": {
+  "summary_vi": "Kiểm trên origin/main (CIS mới nhất là migration 433, nên số kế tiếp là 434; CRM đang ở crm-074, TripPlanner ở tp-031, Booking ở bk-058).\n\nĐÃ SỬA ĐƯỢC TRONG ADMIN HÔM NAY (chỉ cần nhập số qua trang Plans & add-ons hoặc PATCH /admin/plans, không cần migration):\n- Giá USD của Content 149/349/699, CRM 19/29 mỗi người, TripPlanner 49/99.\n- seats_included và giới hạn crm.seats (đổi 10 thành 3).\n- tp.ai_sessions 300/1.500.\n- Trần AI 15/40/80: seed đã đúng phương án B.\n\nNhưng nhập giá Content lúc này thì đại lý vẫn thấy 299/799/1.499. Lý do: trang Billing của studio, danh sách tenant, biên lợi nhuận ở Tenant 360 và view v_tenant_monthly_usage vẫn đọc bảng cũ shared.membership_plans, mà bảng này không có trang admin nào sửa.\n\nCHƯA CÓ HOẶC MỚI CÓ MỘT PHẦN:\n- Bảng giá VND và tỷ giá 26.000.\n- Tối thiểu 3 ghế: Booking vẫn tính 1 ghế, không có gì chặn.\n- Tên miền riêng bán lẻ 15 USD và gói AI thêm 19 USD: không có sản phẩm nào để gắn giá.\n- Trần AI cộng thêm +10/+25 khi gắn TripPlanner: Plans API chặn khóa ai.* trên gói add-on.\n- Dùng thử 14 ngày: chỉ có trong ADR. TRIAL_DAYS_MAX=60 là hằng số trong code, add-on gắn vào là 'active' ngay.\n- Trần AI 50 % khi dùng thử: chỉ làm được bằng override nhập tay, và override không tự hết khi hết hạn thử.\n- Trả năm, ưu đãi đại lý sáng lập 30 %, combo 10 %, khóa giá 12 tháng: không có chỗ lưu.\n- Pilot miễn phí: billing view không có cột pilot, nên Booking vẫn lập nháp hoá đơn đủ giá cho pilot. Giới hạn 8 tuần là hằng số trong code.\n- Ngưỡng AI 80/100: hằng số trong cost_guard. TripPlanner dừng cứng ở 100 %.\n- Tiền tệ theo đại lý: ô nhập ở Booking bị khoá, đại lý VND bị bỏ qua không lập hoá đơn.\n- Sàn Enterprise 699 chỉ nằm trong phần ghi chú.\n\nKiểm thêm thấy một chỗ hở nữa: các trường xuất hoá đơn của tenant (billing_country, billing_email, tax_id…) không có trang nào sửa được, cả trong CIS lẫn Partner.\n\nSẼ LÀM (10 PR theo thứ tự): \n1. CIS migration 434 (chỉ đổi schema). Thêm vào shared.plan các cột giá VND, seats_min, sàn giá, giá vượt quota, ngày xem lại giá; thêm sản phẩm 'addon' và bảng shared.tenant_addon; thêm khoá ai.budget_addon_usd_monthly. Ở mỗi subscription thêm giá thoả thuận / khoá giá và kỳ tháng hoặc năm. Ở tenant thêm billing_currency và ngày bắt đầu, ngày hết ưu đãi sáng lập. Thêm hàm đọc registry trong SQL.\n2. Đưa khoá chính sách vào Platform › Settings, có maker-checker: số ngày dùng thử mặc định/tối đa, % trần AI khi thử, số tuần pilot, pilot miễn phí, ngưỡng AI cảnh báo/chờ duyệt/dừng cứng, cờ LLM_TENANT_BUDGETS. Code đọc các khoá này thay cho hằng số. Add-on gắn vào hoặc được duyệt sẽ bắt đầu ở trạng thái thử 14 ngày.\n3. Plans API và PlanDrawer có các trường mới, có loại add-on, và cho phép khoá AI cộng thêm trên add-on. Provision kiểm tối thiểu số ghế và sàn giá.\n4. Sửa resolver: trần AI = trần gói (×50 % khi đang thử) + phần cộng của add-on + gói AI. Cấp gói AI và tên miền riêng trong Tenant 360. Nối thêm cột vào các catalog view cho Booking và TripPlanner.\n5. Bỏ hẳn giá trong membership_plans: view usage và /v1/billing đọc shared.plan, có kèm tiền tệ.\n6. Khoá thương mại (trả năm, sáng lập, combo, tỷ giá, kỳ xem lại giá, khoá giá) cùng một service báo giá. Thêm panel \"Commercial terms\" ở trang Plans. Thêm thẻ báo giá và thẻ Billing details (tiền tệ, bill-to, kỳ thanh toán, giá thoả thuận, ưu đãi) ở Tenant 360.\n7. Booking: nháp hoá đơn đọc tiền tệ và giá VND, tối thiểu ghế, giá khoá, pilot miễn phí; gói năm thì gắn cờ để xử lý tay.\n8. TripPlanner: đếm và chặn tp.ai_sessions, dừng ở ngưỡng chờ duyệt lấy từ CIS thay vì số 100 viết cứng.\n9. Partner: hiện đúng tiền tệ; số ghế mặc định và tối đa chuyển vào registry của CRM.\n10. Tài liệu gốc: thêm amendment cho ADR 0019 (phương án B), runbook CRM ghi 3 ghế, nâng contract tenant.entitlements.v1.\n\nKhi code xong thì nhập số phương án B. Phần lớn nhập qua trang Plans; giá trị trong Settings đã được seed sẵn theo phương án B. Chỉ có hai việc cần quyết thêm: hạn mức chat TripPlanner 2 USD/tenant, và cách tính \"phiên AI\".",
+  "slices": [
+   {
+    "slice": "S1-cis-mig-434-pricing-schema",
+    "repo": "AA-CIS-App (+ byte copy to AA-CIS-Infra db/migrations/cis/)",
+    "goal": "Expand-only schema so every option-B value has a column/table to live in (no behaviour change on apply). shared.plan: + price_vnd_monthly numeric(14,0), price_extra_seat_vnd numeric(14,0), seats_min integer (>=1, NULL = none), price_floor_usd_monthly numeric(10,2), overage_usd_per_tour numeric(10,2), overage_usd_per_1k_calls numeric(10,4), price_set_at date; product CHECK + 'addon', price_unit CHECK + 'unit', plan_key_check unchanged (addon.<name>). shared.entitlement_feature: + row ai.budget_addon_usd_monthly (platform, limit, usd_month). New shared.tenant_addon (addon_id, tenant_id FK ON DELETE CASCADE, plan_key + product='addon' FK to shared.plan, quantity int>=1, status active|canceled, starts_at, ends_at NULL, reason, created_by, created_at; grants like tenant_subscription; RLS/erasure same as tenant_subscription). shared.tenant_subscription: + billing_interval text NOT NULL DEFAULT 'month' CHECK month|year, agreed_price_monthly numeric(14,2), agreed_currency char(3) CHECK USD|VND, agreed_until date (NULL with a price = contract without end). shared.tenants: + billing_currency char(3) NOT NULL DEFAULT 'USD' CHECK (USD, VND), founding_offer_from date, founding_offer_until date. SQL helper shared.setting_effective(key text) STABLE returning jsonb (latest approved platform value in force, else definition default; the 407 trigger already does this inline for two_person_approval). Backfill overage_* on the content plans from shared.membership_plans by tier (copy of today's values, so they become editable).",
+    "covers": [
+     "V1",
+     "V2",
+     "V3",
+     "V8",
+     "V9",
+     "V12",
+     "V13",
+     "V17",
+     "V18"
+    ],
+    "migration": true,
+    "files": [
+     "api/migrations/434_pricing_option_b_schema.sql",
+     "tests/integration/test_migration_434.py",
+     "docs/implementation-notes/<ISSUE>.md",
+     "AA-CIS-Infra db/migrations/cis/434_pricing_option_b_schema.sql",
+     "root docs/architecture/db-schema-reference.md (bot PR after apply)"
+    ],
+    "depends_on": [],
+    "tests": "Integration test replays 434 twice (idempotent), checks new CHECKs (addon product, unit price_unit, currency values, seats_min>=1), FK tenant_addon -> plan product addon, helper returns default then approved value, overage backfill equals membership_plans values; schema-drift/ERD check green.",
+    "risk": "Medium: CHECK widening on shared.plan / tenant_subscription and a new table with RLS + erasure path (tenant offboarding must cascade). Migration-only PR (MIG-4), applied via Infra Migration Apply when job tables idle; review by independent subagent (schema change)."
+   },
+   {
+    "slice": "S2-cis-policy-settings-trial-pilot-ai-thresholds",
+    "repo": "AA-CIS-App",
+    "goal": "Platform policy values that already have a code consumer move to the Settings registry (area billing / tenant / spend, maker_checker, enforced, guides EN+VI) and the literals go: cis.billing.trial_days_default=14 (int 1-60), cis.billing.trial_days_max=60 (replaces provision.py TRIAL_DAYS_MAX), cis.billing.trial_ai_budget_pct=50 (pct 1-100; consumer lands in S4, seed enforced=false until then or ship S2+S4 together), cis.tenant.pilot_max_weeks=8 (bound 1-104; replaces dev_guard PILOT_MAX_WEEKS and the le=8 in admin_tenant_provision), cis.billing.pilot_free=true (bool; consumer S4 view column), cis.billing.ai_alert_pct_default=80, cis.billing.ai_approval_pct_default=100, cis.billing.ai_hard_stop_default=true (replace cost_guard PLAN_ALERT_PCT/PLAN_APPROVAL_PCT, the TenantAIBudget dataclass defaults, api/services/tenant_ai_budget.py defaults 100/150/True, admin_ai_gateway.py:289-291 and the FE prefills Tenant360AiBudget.tsx:67-68 / lib/aiGateway.ts:948-949 which then read the defaults from the API), cis.spend.tenant_budgets_enabled (bool, env_override LLM_TENANT_BUDGETS for one release). Behaviour: provision saga uses trial_days_default when trial_days is omitted; an add-on attached later and an approved add-on request start 'trialing' with trial_ends_at = now()+trial_days_default (provision.py NEW_ADDON_SQL and attach path); an AA-1016 row saved with monthly_usd empty means 'follow the plan' (not unlimited). Admin create/attach drawers show and accept trial days.",
+    "covers": [
+     "V10",
+     "V15",
+     "V16",
+     "V11"
+    ],
+    "migration": true,
+    "files": [
+     "api/migrations/435_billing_policy_settings.sql (settings-seed block)",
+     "shared/settings/compiled_defaults.json (regenerated)",
+     "services/tenant_account/provision.py",
+     "services/tenant_account/dev_guard.py",
+     "api/routers/admin_tenant_provision.py",
+     "services/tenant_account/addon_requests.py",
+     "shared/cost_guard.py",
+     "api/services/tenant_ai_budget.py",
+     "api/routers/admin_ai_gateway.py",
+     "shared/llm_client/tenant_budget.py",
+     "frontend/app/admin/tenants/_components/Tenant360Subscription.tsx (attach drawer trial days)",
+     "frontend/app/admin/tenants/_components/Tenant360AiBudget.tsx",
+     "frontend/lib/aiGateway.ts",
+     "tests/unit/test_s279_settings_lint.py (passes)",
+     "tests for provision trial default, addon trialing, cost_guard thresholds from settings",
+     "AA-CIS-Infra copy of 435"
+    ],
+    "depends_on": [
+     "S1-cis-mig-434-pricing-schema"
+    ],
+    "tests": "settings-lint + seed-parity + guide-lint; unit: provision without trial_days -> 14 days; trial_days > setting max -> 422; approved add-on request -> status trialing; pilot_weeks above setting refused; cost_guard plan budget uses 80/100/hard stop from settings and follows an approved change; empty AA-1016 monthly_usd falls back to the plan value (not unlimited); LLM_TENANT_BUDGETS env still honoured with warning.",
+    "risk": "Medium-high: changes add-on start state (active -> trialing) and the AI budget fail-closed path; cost_guard is on the hot path of every tenant LLM call. Ship settings seed in the code PR (CIS 424/427 precedent, MIG-4 deviation recorded). Independent review required (billing/auth-adjacent)."
+   },
+   {
+    "slice": "S3-cis-plans-api-drawer-fields",
+    "repo": "AA-CIS-App",
+    "goal": "Plans catalogue edits every per-plan option-B value: PlanCreateIn/PlanPatchIn + services/tenant_account/plans.py draft/validation for price_vnd_monthly, price_extra_seat_vnd, seats_min, price_floor_usd_monthly, overage_usd_per_tour, overage_usd_per_1k_calls, price_set_at (auto = today on a price change); product 'addon' (plan_key addon.*), price_unit 'unit'; allow ai.budget_addon_usd_monthly on crm/tripplanner/addon plans and refuse it on content plans (inverse of platform_key_content_only); addon plans may list any product's flags (tp.custom_domain, crm.custom_domain). PlanDrawer: VND price, min seats, Enterprise floor, overage rates, 'Add-on' product tab; plans.messages.ts labels currency-neutral ('USD'/'VND' from field). Provision/attach: seats < seats_min refused (or raised to min, see open question); Enterprise agreed price < floor refused.",
+    "covers": [
+     "V1",
+     "V2",
+     "V3",
+     "V6",
+     "V8",
+     "V9"
+    ],
+    "migration": false,
+    "files": [
+     "api/routers/admin_plans.py",
+     "services/tenant_account/plans.py",
+     "services/tenant_account/provision.py (seats_min, floor)",
+     "frontend/app/admin/tenants/plans/PlanDrawer.tsx",
+     "frontend/app/admin/tenants/plans/PlansCatalogue.tsx",
+     "frontend/app/admin/tenants/plans/plans.messages.ts",
+     "frontend/app/admin/tenants/plans/page.tsx",
+     "tests/unit/test_plans_*.py",
+     "frontend plans tests (*.test.mjs)"
+    ],
+    "depends_on": [
+     "S1-cis-mig-434-pricing-schema"
+    ],
+    "tests": "API: PATCH crm.core seats_min=3, price_vnd 490000 round-trips with version bump + audit; ai.budget_addon_usd_monthly accepted on tripplanner.hosted, refused on content.growth; create addon.custom_domain with unit 'unit'; provision crm seats=1 with seats_min 3 refused/raised; UI smoke on Vercel preview (aa-ui-verify: drawer desktop/mobile, light/dark).",
+    "risk": "Low-medium: admin-only API; versioning unchanged. No maker-checker on price PATCH (open question)."
+   },
+   {
+    "slice": "S4-cis-resolver-addons-ai-budget-views",
+    "repo": "AA-CIS-App (+ Infra copy)",
+    "goal": "Make the stored values take effect. Migration 436: CREATE OR REPLACE shared.v_tenant_entitlement_resolved so the rank-3 (plan/trial) ai.budget_usd_monthly = content plan value x (setting cis.billing.trial_ai_budget_pct/100 while the content subscription is trialing) + sum over live crm/tripplanner subscriptions of their plan's ai.budget_addon_usd_monthly (same trial factor while that subscription is trialing) + sum over live shared.tenant_addon rows of plan ai.budget_addon_usd_monthly x quantity; addon plan flags (custom domain) resolve at rank 3 from live tenant_addon rows; override (rank 1) and AA-1016 row (rank 2) stay absolute (documented). Re-sync trigger on shared.tenant_addon; tenant_account_tick re-syncs trialing tenants hourly so a changed trial pct reaches the materialised shared.tenant_entitlement. Append-only contract columns (tenant.entitlements.v1 1.6): catalog.v_tenant_billing_v1 + billing_currency, price_vnd_monthly, price_extra_seat_vnd, seats_min, agreed_price_monthly, agreed_currency, agreed_until, billing_interval, trial_ends_at, is_pilot, bill_free (is_pilot AND setting cis.billing.pilot_free), plus addon rows (product 'addon', quantity); catalog.v_tenant_ai_budget_v1 + alert_pct, approval_pct (row or registry default); catalog.v_tenant_tripplanner_v1 + ai_sessions_monthly (resolved tp.ai_sessions). Tenant 360: 'Add-ons' card to grant/cancel an AI pack (quantity, month or end date) and the custom-domain add-on (POST/DELETE /admin/tenants/{id}/addons, tenant.write, reason, audit). cost_guard needs no formula change (reads the resolver) but its _PLAN_FALLBACK must apply the same sum.",
+    "covers": [
+     "V6",
+     "V8",
+     "V9",
+     "V11",
+     "V15",
+     "V16",
+     "V5"
+    ],
+    "migration": true,
+    "files": [
+     "api/migrations/436_resolver_addon_ai_budget_and_contract_columns.sql",
+     "services/tenant_account/addons.py (new)",
+     "api/routers/admin_tenant360.py or admin_tenant_addons.py (new)",
+     "services/tenant_account/lifecycle.py (re-sync)",
+     "shared/cost_guard.py (_PLAN_FALLBACK)",
+     "frontend/app/admin/tenants/_components/Tenant360AddOns.tsx (new) + messages",
+     "frontend/app/admin/tenants/_components/Tenant360Subscription.tsx (source label 'plan + add-ons', trial share)",
+     "docs/contracts/tenant.entitlements.v1.openapi.yaml (1.6)",
+     "tests/integration/test_migration_436.py",
+     "AA-CIS-Infra copy of 436"
+    ],
+    "depends_on": [
+     "S1-cis-mig-434-pricing-schema",
+     "S2-cis-policy-settings-trial-pilot-ai-thresholds",
+     "S3-cis-plans-api-drawer-fields"
+    ],
+    "tests": "Integration: Growth (40) + TP Hosted (+10) = 50; trialing Growth = 20 (50 %), drops to 40 when the tick converts the trial; AI pack x2 adds 20 and disappears at ends_at; override still absolute; materialisation equals resolver guard; v_tenant_ai_budget_v1 and v_tenant_billing_v1 queried as tripplanner/booking roles with the exact column lists consumers use; pilot row bill_free true when setting on.",
+    "risk": "High: resolver is the single source of every entitlement and of the AI budget on the LLM hot path; catalog contract bump read by Booking and TripPlanner (append-only keeps old readers working). Migration-only first? No: view + code must agree; follow the 361 pattern (migration PR, apply, then code PR) and independent review."
+   },
+   {
+    "slice": "S5-cis-retire-membership-plan-prices",
+    "repo": "AA-CIS-App (+ Infra copy)",
+    "goal": "One price source. Migration 437 recreates shared.v_tenant_monthly_usage reading price_usd_monthly and overage rates from the tenant's live content plan in shared.plan and quotas from the resolved content.rewrite / api.calls_monthly entitlements (Enterprise/internal NULL = no quota instead of the membership_plans fallback); /v1/billing plan table (v1_tours.py:538-550) reads public live content plans from shared.plan and returns currency + amount in the tenant's billing_currency (VND price when set); admin.py:214-217,411,608, admin_tenant360.py:143,296, admin_settings.py:76 and plans.py:56-58 fallback stop reading membership_plans. Table shared.membership_plans stays (no writer, no reader of price) and is marked deprecated in its COMMENT; tenants.plan_id soft link untouched.",
+    "covers": [
+     "V1",
+     "V2",
+     "V17"
+    ],
+    "migration": true,
+    "files": [
+     "api/migrations/437_usage_view_reads_shared_plan.sql",
+     "api/routers/v1_tours.py",
+     "api/routers/_billing.py",
+     "api/routers/admin.py",
+     "api/routers/admin_tenant360.py",
+     "api/routers/admin_settings.py",
+     "api/routers/admin_pipeline/billing.py",
+     "services/tenant_account/plans.py",
+     "tests (usage view, /v1/billing, admin billing)",
+     "AA-CIS-Infra copy of 437"
+    ],
+    "depends_on": [
+     "S1-cis-mig-434-pricing-schema",
+     "S3-cis-plans-api-drawer-fields"
+    ],
+    "tests": "After PATCH content.starter price 149 the /v1/billing table, /admin/billing, tenants list and Tenant 360 margin all show 149; a VND tenant sees 3,790,000 VND; overage computed from plan columns; git grep 'membership_plans' in api/ services/ shared/ (outside migrations/tests) = 0 price reads.",
+    "risk": "Medium: v_tenant_monthly_usage feeds the tenant dashboard and rewrite quota (cis.billing.rewrite_over_quota_mode); quota semantics for Enterprise change from membership fallback to unlimited-by-contract (confirm)."
+   },
+   {
+    "slice": "S6-cis-commercial-terms-quote-billing-details",
+    "repo": "AA-CIS-App",
+    "goal": "Store, edit and show the commercial policies with no invoicing consumer yet, and the per-agency terms. Migration 438 seeds registry keys (area billing, maker_checker, enforced: read by the quote service): cis.billing.annual_paid_months=10 (of 12), cis.billing.founding_discount_pct=30, cis.billing.founding_months=12, cis.billing.founding_max_agencies=10, cis.billing.founding_eligible_plans (list: content.growth, content.business, crm.*, tripplanner.*, addon.*), cis.billing.combo_discount_pct=10, cis.billing.combo_products (list: content, crm, tripplanner), cis.billing.fx_vnd_per_usd=26000, cis.billing.vnd_price_review_months=3, cis.billing.price_lock_months=12, cis.billing.price_review_months=12. services/tenant_account/quote.py (pure): list price per subscription/add-on in the tenant currency, agreed/locked price, founding and combo discounts (no stacking rule per open question), annual total, VND<->USD reference via FX. Plans page 'Commercial terms' panel (read-only values + link to Platform › Settings, review-due badge per plan from price_set_at + review months; VND drift warning vs FX). Tenant 360: 'Billing details' card (legal_entity_name, tax_id, billing_email, billing_address, billing_country, billing_currency: today no editor exists anywhere), subscription row fields billing_interval, agreed price/currency/until (default lock = start + price_lock_months on attach), founding offer from/until (API refuses when founding_max_agencies already used or plan not eligible), and a 'Quote' card. Agency-facing: GET /v1/billing returns the quote totals so the studio can show them (S9).",
+    "covers": [
+     "V2",
+     "V12",
+     "V13",
+     "V14",
+     "V17",
+     "V18",
+     "V1"
+    ],
+    "migration": true,
+    "files": [
+     "api/migrations/438_billing_commercial_settings.sql",
+     "shared/settings/compiled_defaults.json",
+     "services/tenant_account/quote.py (new)",
+     "api/routers/admin_tenant360.py (billing details, quote)",
+     "api/routers/admin_tenants.py or subscription router (interval, agreed price, founding)",
+     "api/routers/v1_tours.py (/v1/billing quote)",
+     "frontend/app/admin/tenants/plans/CommercialTerms.tsx (new)",
+     "frontend/app/admin/tenants/_components/Tenant360BillingDetails.tsx (new)",
+     "frontend/app/admin/tenants/_components/Tenant360Quote.tsx (new)",
+     "frontend/app/admin/tenants/_components/Tenant360Subscription.tsx",
+     "frontend/lib/quote.ts + tests",
+     "tests/unit/test_quote.py"
+    ],
+    "depends_on": [
+     "S1-cis-mig-434-pricing-schema",
+     "S5-cis-retire-membership-plan-prices"
+    ],
+    "tests": "quote unit table: Growth+CRM 3 seats+TP Hosted = 455 USD, combo 10 % = 409.50; founding Growth 349 -> 244.30 for 12 months, Starter excluded; annual = 10 x monthly; VND tenant uses VND list; 11th founding assignment refused; settings-lint/seed-parity; UI smoke of the three cards.",
+    "risk": "Medium: bill-to edits are personal/company data (audit, finance role read-only); quote numbers shown to staff must match Booking drafts (S7) - one pure function, same tests."
+   },
+   {
+    "slice": "S7-booking-saas-draft-reads-cis-terms",
+    "repo": "AA-Booking",
+    "goal": "The existing monthly SaaS draft uses the new view columns instead of literals/assumptions (no new invoicing, no Stripe): currency = v_tenant_billing_v1.billing_currency (fallback billing_terms.saas_currency), VND agencies drafted from price_vnd_monthly / price_extra_seat_vnd instead of 'currency_unsupported'; quantity = max(seats, seats_min, 1); unit price = agreed_price_monthly when agreed_until is NULL or after the period; rows with bill_free skipped (counted 'pilot_free'); billing_interval 'year' rows drafted as a 0 line flagged 'annual: invoice by hand' (no annual drafting); addon rows (custom domain, AI pack x quantity) drafted as lines. Terms page: the currency input shows the CIS value read-only with 'set in CIS Tenant 360'. USD-only KPI tiles group by currency.",
+    "covers": [
+     "V2",
+     "V3",
+     "V15",
+     "V17",
+     "V18",
+     "V8",
+     "V9",
+     "V12"
+    ],
+    "migration": false,
+    "files": [
+     "backend/app/agency_billing/drafts.py",
+     "backend/app/agency_billing/cis.py (column list)",
+     "backend/app/routers/agency_billing.py",
+     "frontend/app/(staff)/agency-billing/_parts/TermsSection.tsx",
+     "frontend/app/(staff)/agency-billing/_parts/AgencyBillingView.tsx",
+     "backend/tests/test_agency_billing_drafts*.py"
+    ],
+    "depends_on": [
+     "S4-cis-resolver-addons-ai-budget-views",
+     "S6-cis-commercial-terms-quote-billing-details"
+    ],
+    "tests": "Pure saas_lines tests: CRM 1 seat with seats_min 3 -> 3 x 19; VND tenant -> 3,790,000 VND line; pilot skipped; agreed price wins inside lock; annual flagged; AI pack x2 -> 2 x 19; integration test with the CIS view stub carrying the 1.6 column list.",
+    "risk": "Medium: invoice amounts change; booking.job must be idle before deploy (DM-11.4). Discount lines (V13/V14) not applied on drafts in this slice (open question)."
+   },
+   {
+    "slice": "S8-tripplanner-ai-sessions-and-thresholds",
+    "repo": "AA-TripPlanner-Web",
+    "goal": "Enforce tp.ai_sessions and the AI stop threshold from CIS data. Migration tp-032: tripplanner.tenant_ai_session_month (tenant_id, month date, session_id, first_ai_at; PK (tenant_id, month, session_id)) inserted on a session's first AI call of the month. Before an AI stage starts a NEW session-month, compare count vs v_tenant_tripplanner_v1.ai_sessions_monthly (NULL = unlimited; read failure = fail closed like tenant_budget); a session already counted continues. tenant_budget.py stops at v_tenant_ai_budget_v1.approval_pct (default 100 from CIS) instead of the literal 100 %. Narration/search degrade as today with reason tenant_sessions_cap.",
+    "covers": [
+     "V5",
+     "V16"
+    ],
+    "migration": true,
+    "files": [
+     "migrations/032_tenant_ai_session_month.sql",
+     "backend/shared/tenant_sessions.py (new)",
+     "backend/shared/tenant_budget.py",
+     "backend/shared/llm_gateway.py (hook)",
+     "backend/tests/test_tenant_sessions*.py",
+     "backend/tests/test_aa1038_leads_pg.py (CIS 436 column stub)",
+     "AA-CIS-Infra db/migrations/tripplanner/032_*"
+    ],
+    "depends_on": [
+     "S4-cis-resolver-addons-ai-budget-views"
+    ],
+    "tests": "pg test: 300th session allowed, 301st refused for Hosted, Pro 1,500; month rollover resets; view unreadable -> paused; approval_pct 100 read from view; existing session continues past the cap.",
+    "risk": "Medium: traveller-facing degradation; definition of an 'AI session' must be agreed (open question)."
+   },
+   {
+    "slice": "S9-partner-currency-and-crm-seat-defaults",
+    "repo": "AA-Partner",
+    "goal": "Agency studio Billing/Dashboard show the amount and currency /v1/billing returns (no literal '$'; VND formatting); CRM fallback member limit and max move to the CRM settings registry (crm-075: crm.members.default_limit default 3, crm.members.max_limit 500, maker-checker, edited on CIS Platform › Settings CRM tab) replacing DEFAULT_MEMBER_LIMIT 10 (entitlement_feed.py:127, members/team.py:43) and MEMBER_LIMIT_MAX; migration 008 DB DEFAULT 10 dropped (value always written by the feed).",
+    "covers": [
+     "V2",
+     "V3",
+     "V17"
+    ],
+    "migration": true,
+    "files": [
+     "web/app/(studio)/portal/_components/PlaceholderTabs.tsx",
+     "web/app/(studio)/portal/_components/DashboardTab.tsx",
+     "web/app/(studio)/portal/_components/account.messages.ts",
+     "api/migrations/075_crm_member_limit_settings.sql",
+     "api/app/platform_settings/compiled_defaults.json",
+     "api/app/cis/entitlement_feed.py",
+     "api/app/members/team.py",
+     "api/tests/*",
+     "AA-CIS-Infra db/migrations/crm/075_*"
+    ],
+    "depends_on": [
+     "S5-cis-retire-membership-plan-prices",
+     "S6-cis-commercial-terms-quote-billing-details"
+    ],
+    "tests": "Web unit: VND tenant renders '3.790.000 ₫', USD '$149'; CRM settings-lint/seed-parity; feed with no seats -> setting default; UI smoke on studio Billing tab.",
+    "risk": "Low."
+   },
+   {
+    "slice": "S10-root-docs-adr-0019-amendment",
+    "repo": "AA-Ecosys (root)",
+    "goal": "Docs match the data: ADR 0019 amendment note (b2 Content 149/349/699 + Enterprise floor 699, b3 CRM 19/29 per seat min 3, b4 TripPlanner 49/99, add-ons custom domain 15 and AI pack 19, 14-day trial incl. add-ons with 50 % AI, annual 10/12, founding 30 %/12 months/10 agencies, combo 10 %, VND list reviewed quarterly, launch price reviewed after 12 months with 12-month lock; all values are data on Plans / Settings / Tenant 360), docs/guides/crm-runbook.md:62 (3 seats), tenant.entitlements.v1 1.6 contract note, schema-ownership (shared.tenant_addon), backlog entry.",
+    "covers": [
+     "V1",
+     "V3",
+     "V4",
+     "V10",
+     "V12",
+     "V13",
+     "V14",
+     "V18"
+    ],
+    "migration": false,
+    "files": [
+     "docs/adr/0019-b2b-only-ecosystem-model.md (amendment note)",
+     "docs/guides/crm-runbook.md",
+     "docs/database/schema-ownership.md",
+     "docs/architecture/ai-gateway.md (budget = content x trial share + add-ons)",
+     "docs/backlog/README.md"
+    ],
+    "depends_on": [],
+    "tests": "tools/docs/check_frontmatter.py; links check.",
+    "risk": "Low. Can ship first (records the decision) or last (records what shipped)."
+   }
+  ],
+  "data_entry": [
+   "Before typing anything: read the live rows (GET /admin/plans?include_retired=true), because Dev data may already differ from seed 355. Prices typed before S5 ships make the studio and admin lists still show 299/799/1,499 from shared.membership_plans. Enter content prices after S5, or at the same time (Dev only, no paying agency).",
+   "Possible TODAY via Plans page / PATCH /admin/plans/{plan_key} (no migration, versioned + audited): content.starter price_usd_monthly 149; content.growth 349; content.business 699; crm.core price 19 (unit seat) + seats_included 3 + feature crm.seats 3; crm.pro price 29 + seats_included 3 + crm.seats 3; tripplanner.hosted price 49 + is_public true + tp.ai_sessions 300; tripplanner.pro price 99 + is_public true + tp.ai_sessions 1500. Leave price_extra_seat_usd NULL on per-seat CRM plans: Booking bills every seat at the per-seat price.",
+   "Already matching option B (verify only): ai.budget_usd_monthly 15/40/80 on starter/growth/business (Enterprise 80, internal NULL); content.rewrite 50/200/500; api.calls_monthly 5000/20000/100000.",
+   "After S3 (Plans page, no migration): price_vnd_monthly content.starter 3,790,000 / growth 8,990,000 / business 17,990,000; crm.core 490,000 per seat, crm.pro 750,000 per seat; tripplanner.hosted 1,250,000, tripplanner.pro 2,490,000. seats_min 3 on crm.core and crm.pro. content.enterprise: price NULL (contract), price_floor_usd_monthly 699. tripplanner.hosted feature ai.budget_addon_usd_monthly 10; tripplanner.pro 25. Check overage_usd_per_tour 4/3/2 and overage_usd_per_1k_calls 0.80/0.60/0.40 (backfilled by 434), and change them if option B wants other values.",
+   "After S3 (Plans page, create via POST /admin/plans, no migration): addon.custom_domain 'Custom domain' price 15 USD / 390,000 VND, unit 'unit', features tp.custom_domain + crm.custom_domain, public. addon.ai_pack 'AI pack' price 19 USD / 490,000 VND, unit 'unit', feature ai.budget_addon_usd_monthly 10, public.",
+   "Settings registry (Platform › Settings, area billing / tenant / spend): seeded by migrations 435/438 at the option-B values (trial 14 days, max 60, trial AI 50 %, pilot free true, pilot max weeks 8 or more, AI alert 80 / approval 100 / hard stop on, annual 10 of 12 months, founding 30 % / 12 months / 10 agencies / eligible list, combo 10 % on content+crm+tripplanner, FX 26,000 VND/USD, VND review every 3 months, price lock 12 months, price review 12 months). Nothing to type unless the tech lead changes a value (maker-checker proposal + approval).",
+   "Existing registry key to reconcile (Platform › Settings, TripPlanner tab, maker-checker): tripplanner.spend.plan_chat_tenant_monthly_cap_usd = 2.0 (CIS 414). Raise it, for example to 25, or the +10/+25 TripPlanner AI and 300/1,500 sessions cannot be reached. The CRM keys crm.members.default_limit 3 and max_limit 500 are seeded by crm-075.",
+   "Per agency in Tenant 360 after S4/S6 (no migration): billing_currency VND for Vietnamese agencies, bill-to details, billing_interval year for annual payers, an agreed price for Enterprise (>= 699 floor), founding offer dates for the first 10 eligible agencies, and AI packs / custom-domain add-ons per order. Pilot agencies need no entry: bill_free follows is_pilot and cis.billing.pilot_free.",
+   "Not to touch: shared.membership_plans. After S5 nothing reads its prices, so do not edit it. The table stays as history."
+  ],
+  "open_questions": [
+   "Custom domain add-on (V8): one addon.custom_domain grants both tp.custom_domain and crm.custom_domain, and the flag only takes effect where the product is live. Or do we need two separately priced items? It stays included in TripPlanner Pro and CRM Pro.",
+   "Seats minimum (V3): when an agency asks for fewer than 3 seats, should provision refuse, or create the subscription with 3 seats (proposed: raise to seats_min and bill 3)?",
+   "Add-on trials (V10): proposed: every attach or approved request starts trialing 14 days, once per tenant and product, with no second trial after a cancel. Confirm.",
+   "Trial AI share (V11): proposed: the 50 % applies to each trialing subscription's own share (the content cap and the TripPlanner +10/+25), never to an override or an AA-1016 row. Confirm.",
+   "AA-1016 row with monthly_usd empty (V7/V16): proposed meaning is 'follow the plan' (today it means unlimited). Confirm, or keep 'unlimited' only for kind internal.",
+   "Discount stacking (V13/V14): founding 30 % and combo 10 % do not stack (the better one applies). Founding also covers add-ons attached later inside the 12-month window. Confirm.",
+   "Discounts and annual on Booking drafts: S7 only flags annual subscriptions ('invoice by hand') and does not add discount lines, as the task asked for no invoicing build. Should a later slice add discount lines from the CIS quote to the monthly SaaS draft?",
+   "Pilot 'free until go-live' (V15): is raising the bound of cis.tenant.pilot_max_weeks (up to 104) enough, or should pilot_ends_at be allowed NULL ('until go-live', ended by End pilot)?",
+   "TripPlanner planning-chat sub-cap 2.0 USD per tenant (CIS 414): raise the platform value, make it per tenant, or derive it from the add-on increment?",
+   "Definition of a 'TripPlanner AI session' for tp.ai_sessions. Proposed: a tripplanner.sessions row that makes at least one AI call in a UTC month, counted once a month.",
+   "Enterprise quota after S5: with no membership_plans fallback, Enterprise/internal content.rewrite and api.calls_monthly NULL mean 'no quota'. Confirm, or set contract numbers per tenant as overrides.",
+   "Plans price edits are admin-only and versioned but have no maker-checker, while registry keys have one. Should price PATCH get a second-person approval before the first paying tenant (DM-11.5 later phase)?",
+   "Price lock for subscriptions that already exist at launch (Dev pilots only today): set agreed price and agreed_until = launch + 12 months automatically in S6 backfill, or leave empty?",
+   "Migration numbers are taken from origin/main on 16/11/2026: CIS 434-438, CRM crm-075, TripPlanner tp-032, Booking needs none. Renumber at merge if another lane lands first."
+  ]
+ }
+}

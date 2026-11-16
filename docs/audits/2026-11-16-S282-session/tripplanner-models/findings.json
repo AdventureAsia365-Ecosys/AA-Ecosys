@@ -1,0 +1,300 @@
+{
+ "inv": {
+  "models": [
+   {
+    "name": "1. AA's own showcase site on the public host (bare paths: /, /destinations, /tours/{slug}, /plan, /plan/shared, plus the B2C leftovers /sign-in and /trips). It runs as the demo tenant aa-tripplanner.",
+    "what_agency_gets": "Nothing directly. It is AA's demo and storefront under the AA brand, with the full AA catalogue. Since AA-1034 R0, 'Send to an advisor' only shows a demo notice: the Lambda answers 410 b2b_only before any SQL. The old inquiry.submitted hand-off to AA-Booking is frozen, and Cognito traveller sign-in and My trips still exist.",
+    "branding": "Adventure Asia only: AA logo, AA title and description (root layout), Golden Hour kit tokens. Nothing on these pages is per tenant.",
+    "gate": "No plan or entitlement. The bare path binds DEFAULT_TENANT_ID / DEMO_TENANT_ID (config.is_aa_hosted). The demo tenant is also exempt from the tenant AI budget and from lead routing. /aa-tripplanner/plan serves the same demo tenant.",
+    "live_status": "Live on Dev. curl today: /api/health = 200, version 0.14.0, git_sha 766d728. TP-F001..F004 are 'live' in features.yaml. Covered by the deploy verify job, the security-header smoke and the report-only Playwright visual run.",
+    "upkeep_and_risk": "This is the largest code surface. The marketing site (pages and components/site) is about 2.9k lines. The B2C leftovers are about 1.8k lines: handoff.py, registration.py, account.py, Cognito sign-in with an HMAC sign-up proof, My trips, accountProxy, advisorDemo. The Cognito traveller pool, the sign-up proof key and the session cookies all need upkeep, and the WAF Challenge and rate rules cover it. The B2C parts contradict ADR 0019 d11 (travellers are guests); AA-1061 drops the B2C tables from 28/11.",
+    "agency_builds_own_ui": false,
+    "files": [
+     "apps/AA-TripPlanner-Web/frontend/app/layout.tsx:32-38 (title template '%s · Adventure Asia', AA description, og siteName)",
+     "apps/AA-TripPlanner-Web/frontend/app/page.tsx",
+     "apps/AA-TripPlanner-Web/frontend/app/plan/page.tsx",
+     "apps/AA-TripPlanner-Web/frontend/app/sign-in/page.tsx",
+     "apps/AA-TripPlanner-Web/frontend/app/trips/page.tsx",
+     "apps/AA-TripPlanner-Web/backend/assembly/handler.py:215-219 (410 b2b_only)",
+     "apps/AA-TripPlanner-Web/backend/config.py:226 (ADVISOR_HANDOFF_DEMO)",
+     "apps/AA-TripPlanner-Web/backend/assembly/handoff.py",
+     "apps/AA-TripPlanner-Web/backend/assembly/registration.py",
+     "apps/AA-TripPlanner-Web/frontend/lib/advisorDemo.ts"
+    ]
+   },
+   {
+    "name": "2. Hosted agency planner on AA's host: /{slug}/plan, /{slug}/tours/{tour}, /{slug}/plan/shared (R5 slices 2-3, AA-1038 / AA-1094). This is the model the owner describes.",
+    "what_agency_gets": "One AA-built map planner (map, search, route finder, AI narration and plan chat), its own tour list and tour pages (tours it adopted or edited, or AI text that passed QA, from catalog.v_tenant_tour_v1), no AA price (b5), and travellers as guests. 'Send to advisor' delivers a lead.submitted.v1 to the agency (see model 8). Data isolation is per-tenant FORCE RLS (tp-028). AI usage is capped by the tenant's ai.budget_usd_monthly.",
+    "branding": "Agency bar showing the trading name as text only (shared.tenants.name). There is no logo, no AA logo, no account link and an AI pill without the AA name (Header.tsx AgencyHeader). Colours: the theme JSON sets 6 accent tokens (accent, accent-deep, accent-soft, accent-tint, accent-border, on-accent) through the kit brandTheme layer. They are contrast-checked, and dark mode takes only the accent. Neutrals, text, fonts (Poppins/Satisfy) and layout stay AA's. The 'Powered by Adventure Asia' line shows only when tp.branding is on; it is in no plan, off by default, and set by override (BO-8). A locale (en/vi) is stored and passed through but never applied: the UI is English only. Not supported: logo, favicon, fonts, hero or copy text, email branding. The page title becomes 'Trip planner · <Agency> · Adventure Asia' because of the root layout template, and the AA description and og:site_name remain.",
+    "gate": "The tenant needs a TripPlanner subscription (shared.tenant_subscription product='tripplanner'), must be in service (trial/active/past_due), and needs tp.hosted live. That is served=true in catalog.v_tenant_tripplanner_v1 (CIS 379/390/429). tp.hosted comes with both plans, tripplanner.hosted and tripplanner.pro (CIS 355:194-202). Any other slug gets a 404.",
+    "live_status": "Live on Dev (TP-F005 'live'). Tested with two synthetic agencies in the isolation pg tests (test_aa1038_tenant_site_pg.py) and by the nightly DB Isolation Probe. The deploy verify checks the WAF challenge on /aa-tripplanner/plan. The S281 custom-domain test showed the agency-branded planner live (screenshots in verify/aa1090/).",
+    "upkeep_and_risk": "About 1.6k lines in TripPlanner: tenant pages, tenantSite/tenantProxy/tenantAssertion/plannerTenant/tenantTours, backend tenant_site.py, tenant_tours.py, tenant_assertion.py. It also uses the 148-line kit brandTheme. The security surface is a signed BFF tenant assertion (HMAC, 120 s) whose secret tripplanner/dev/tenant-assertion-key must be rotated (AA-1092), FORCE RLS, a per-tenant AI cap and the same WAF rules as the AA site. It reuses AA's pages, so the extra support load is small. Open follow-up: CIS slug creation should refuse the reserved slugs (lib/tenantSlug.ts RESERVED_TENANT_SLUGS).",
+    "agency_builds_own_ui": false,
+    "files": [
+     "apps/AA-TripPlanner-Web/frontend/app/[tenant]/plan/page.tsx:22-47",
+     "apps/AA-TripPlanner-Web/frontend/app/[tenant]/tours/[tour]/page.tsx",
+     "apps/AA-TripPlanner-Web/frontend/components/Header.tsx:19-25 (agency bar)",
+     "apps/AA-TripPlanner-Web/frontend/components/TripPanel.tsx:760 (Powered by AA only with tp.branding)",
+     "apps/AA-TripPlanner-Web/frontend/ui/core/brandTheme.ts (BRAND_TOKENS)",
+     "apps/AA-TripPlanner-Web/backend/browse/tenant_site.py:34-38,66-80",
+     "apps/AA-TripPlanner-Web/frontend/lib/tenantSite.ts:30-50",
+     "apps/AA-TripPlanner-Web/frontend/lib/tenantProxy.ts",
+     "apps/AA-TripPlanner-Web/backend/assembly/handler.py:1008 (tenant_assertion_answer)",
+     "apps/AA-CIS-App/api/migrations/379_tenant_tripplanner_catalog_view.sql:107-121 (shared.tenant_tripplanner_site theme/locale)",
+     "apps/AA-CIS-App/api/migrations/429_aa1090_tenant_tripplanner_custom_domains_view.sql:77-110 (current view body)"
+    ]
+   },
+   {
+    "name": "3. The same hosted planner on the agency's own domain, e.g. trip.<agency>.com (R8 custom domain, AA-1090).",
+    "what_agency_gets": "Exactly the model 2 UI on the agency's host. TripPlanner rewrites / to /{slug}, /plan to /{slug}/plan and /tours/{tour} to /{slug}/tours/{tour}. AA's own catalogue pages and other tenants' slugs give a 404 there. The agency creates 2 DNS CNAMEs that Tenant 360 shows. Guest cookie and WAF token are per host.",
+    "branding": "As model 2, plus the agency's domain in the address bar. The TLS certificate is AA-managed ACM (one shared edge certificate on the agency CloudFront distribution).",
+    "gate": "Intended to be tp.custom_domain, which only the tripplanner.pro plan carries (CIS 355:201). In code it is NOT checked: add_domain only requires any TripPlanner subscription that is not canceled (HAS_TRIPPLANNER_SQL), an edge that is configured (TP_AGENCY_DISTRIBUTION_ID), and the settings cis.tripplanner.custom_domain_max_per_tenant and custom_domain_edge_max. As a result a Hosted tenant can get a custom domain today. Only staff can add a domain (Tenant 360); the agency has no self-serve.",
+    "live_status": "Infra is applied and the feature works on Dev. S281 tested it live on a bought test domain: it first failed on an empty SAN, CIS #1528 fixed that, and after a retry the host went active and the planner showed the agency brand. Removing the host fell back to the path. Per the S282 progress report, AA-1090 is still In Review with 2 holes: the tp.custom_domain check is missing, and subject_gate does not accept the tenant's own domain for sales links. I did not re-check it live today.",
+    "upkeep_and_risk": "About 1.9k lines in CIS (tripplanner_domain.py, tp_edge.py, the job, the Tenant360CustomDomain UI, migrations 428/429) and about 290 in TripPlanner (tenantHost.ts, proxy.ts). Ongoing: ACM certificates, a daily renewal check, and coupling between agencies on the one shared edge certificate (validation_record_gone detaches a host whose record is gone, with a staff alert). The quota of names per certificate means CloudFront SaaS Manager is the scale trigger. Cost is about 0 USD/month (S281 audit). Support load: guiding agencies through DNS.",
+    "agency_builds_own_ui": false,
+    "files": [
+     "apps/AA-CIS-App/services/tenant_account/tripplanner_domain.py:173-176,244-270 (gate = any TP subscription, no tp.custom_domain)",
+     "apps/AA-CIS-App/services/tenant_account/tp_edge.py",
+     "apps/AA-CIS-App/services/jobs/tripplanner_custom_domain_job.py",
+     "apps/AA-CIS-App/api/routers/admin_tenant_subscription.py:215-261",
+     "apps/AA-CIS-App/frontend/app/admin/tenants/_components/Tenant360CustomDomain.tsx",
+     "apps/AA-CIS-App/api/migrations/428_aa1090_tenant_tripplanner_domain.sql",
+     "apps/AA-TripPlanner-Web/frontend/lib/tenantHost.ts:56,77,98",
+     "apps/AA-TripPlanner-Web/frontend/proxy.ts",
+     "infra/AA-CIS-Infra/accounts/aa365/tripplanner_web_edge.tf (agency distribution)",
+     "docs/audits/2026-11-15-S281-tp-custom-domain/README.md"
+    ]
+   },
+   {
+    "name": "4. Launcher button or snippet (tp.launcher). It was meant to be a button on the agency's own website that opens its hosted planner.",
+    "what_agency_gets": "Today nothing. The flag goes from the view through /browse/tenant/{slug} ('launcher': bool) into lib/tenantSite.ts, and no code uses it: there is no snippet, no generator and no UI that shows it. ADR 0019 d10 says it is a button that keeps CSP frame-ancestors 'none' (a new tab, no iframe).",
+    "branding": "Not built. The intended form is a link or button styled by the agency on its own site, pointing to /{slug}/plan or its custom domain.",
+    "gate": "tp.launcher. Both plans carry it (CIS 355:195,198), so it belongs to the base tier that pricing proposal B sells at 49 USD.",
+    "live_status": "Not built. Only the key and the data plumbing exist. The S282 progress report confirms: 'Launcher thuộc gói cơ bản nhưng chưa có code'.",
+    "upkeep_and_risk": "About 0 lines today. If it is built as a plain link or button (an <a target=_blank> HTML snippet shown on the agency's add-on page), there is no CORS, no iframe and no new security surface, and upkeep is tiny.",
+    "agency_builds_own_ui": false,
+    "files": [
+     "apps/AA-CIS-App/api/migrations/355_tenant_plans_seed_and_entitlement_view.sql:107,195,198",
+     "apps/AA-CIS-App/api/migrations/429_aa1090_tenant_tripplanner_custom_domains_view.sql:88-89",
+     "apps/AA-TripPlanner-Web/backend/browse/tenant_site.py:76",
+     "apps/AA-TripPlanner-Web/frontend/lib/tenantSite.ts:30,47"
+    ]
+   },
+   {
+    "name": "5. Iframe or script embed of the planner inside the agency's own website (tp.embed).",
+    "what_agency_gets": "Nothing: it is blocked. Every response sends X-Frame-Options: DENY and CSP frame-ancestors 'none' (checked live today with curl on the public host). The deploy check fails the deploy if these headers are missing.",
+    "branding": "N/A (not built).",
+    "gate": "tp.embed, carried only by the tripplanner.pro plan (CIS 355:200). No code reads it.",
+    "live_status": "Not built. The key exists only in plan data. Pricing proposal B still lists 'embed' in Pro (99 USD).",
+    "upkeep_and_risk": "Building it would mean a per-tenant frame-ancestors allow-list, which loosens the clickjacking protection. Third-party cookie problems would follow: the __Host-tp_guest cookie is SameSite=Lax, so it is lost inside a cross-site iframe. The WAF Challenge reload behaves badly in a frame, the agency would show its own cookie notice (b9), and the support load is high. ADR 0019 d10 already defers it to 'its own trigger'.",
+    "agency_builds_own_ui": false,
+    "files": [
+     "apps/AA-TripPlanner-Web/frontend/next.config.mjs:3-12",
+     "apps/AA-TripPlanner-Web/.github/scripts/check_security_headers.sh",
+     "apps/AA-CIS-App/api/migrations/355_tenant_plans_seed_and_entitlement_view.sql:108,200"
+    ]
+   },
+   {
+    "name": "6. Public or headless API, so the agency builds its OWN front-end on AA data (tp.api).",
+    "what_agency_gets": "Nothing. The API Gateway routes /browse/* and /trip/* accept only the shared edge key X-TripPlanner-Key, which only AA's BFF holds. Tenant identity is an assertion that only the BFF signs. CORS exists only in the local dev servers. The single machine endpoint, /trip/m2m/v1/tenants/{id}/leads, is for the AA CRM client (a platform M2M credential), not for agencies.",
+    "branding": "N/A. With this model the agency would own all the UI and branding, which is the opposite of the owner's wish.",
+    "gate": "tp.api, carried only by the tripplanner.pro plan (CIS 355:202). No code reads it. ADR 0019 d6: 'Deferred to R8: a machine API for agencies ... built only when a paying tenant asks'.",
+    "live_status": "Not built. Only the key and plan data exist. Pricing proposal B lists 'API' in Pro.",
+    "upkeep_and_risk": "Building it would need scoped, rotatable per-agency credentials, CORS, per-key rate limits, a versioned public contract, docs, abuse handling of AI spend, and support for the agency's own developers. It is the biggest security and support load of all the models. It would also let an agency re-skin AA's data and planner logic outside AA's UI.",
+    "agency_builds_own_ui": true,
+    "files": [
+     "apps/AA-TripPlanner-Web/backend/shared/auth.py:5-11,116 (edge shared secret)",
+     "apps/AA-TripPlanner-Web/backend/assembly/handler.py:768 (serve_m2m, CRM-only)",
+     "apps/AA-TripPlanner-Web/backend/assembly/local_server.py:71 and backend/browse/local_server.py:49 (CORS * in local dev only)",
+     "apps/AA-CIS-App/api/migrations/355_tenant_plans_seed_and_entitlement_view.sql:110,202",
+     "docs/adr/0019-b2b-only-ecosystem-model.md:88,127"
+    ]
+   },
+   {
+    "name": "7. AA sub-domain per agency (e.g. <agency>.trip.<aa domain>).",
+    "what_agency_gets": "Nothing. It is named only in ADR 0019 d10 ('Subdomains ... come later'). There is no key and no code.",
+    "branding": "N/A.",
+    "gate": "None.",
+    "live_status": "Not built.",
+    "upkeep_and_risk": "None today. It is not needed: /{slug} and the custom domain already cover the case.",
+    "agency_builds_own_ui": false,
+    "files": [
+     "docs/adr/0019-b2b-only-ecosystem-model.md:125-127"
+    ]
+   },
+   {
+    "name": "8. Lead delivery of the hosted planner (not a front-end, but part of what is sold): CRM pull, signed webhook, e-mail, or none = refuse.",
+    "what_agency_gets": "When a traveller presses 'Send to advisor' on the agency planner (model 2 or 3), the agency gets one lead.submitted.v1 lead. The route is chosen per tenant in the view: crm when crm.core is live; otherwise webhook (an https URL with an X-AA-Signature HMAC header per tenant) or email (SES, Reply-To the traveller) from Tenant 360 › Lead route; with no route the send is refused (409 lead_route_missing) and nothing is stored. A CRM tenant gets the lead in its inquiry pipeline through the system form 'Trip planner' (lead source tripplanner). Undelivered leads are redacted after 7 days. Limits: 5 sends/h per session, 20/h per IP, 200 per tenant per day.",
+    "branding": "The lead form names the agency. The e-mail channel is sent from AA's SES From address (TP_LEAD_EMAIL_FROM), not the agency's.",
+    "gate": "Only for an agency tenant through a verified tenant assertion. The bare path and the demo tenant always answer 410 b2b_only. The CRM channel needs crm.core plus tp.hosted (the CRM projection crm.tenant_entitlement.tp_crm_leads, crm-047).",
+    "live_status": "Code and infra are live on Dev: TP_LEAD_CRM_PULL_ENABLED='true' in Infra modules/environment/tripplanner.tf:513, and the CRM job crm_tp_lead_pull has run since S272 (Infra #721). TP-F006 is 'live'. I found NO evidence in the session logs of an end-to-end lead from an agency planner into a real CRM inbox: S272 lists 'lead E2E vào CRM tenant' as still open, and nothing later records it. Not verified.",
+    "upkeep_and_risk": "About 1.5k lines in TripPlanner (leads.py, lead_deliver.py, m2m_auth.py, LeadForm), about 640 in the CRM (leads.py, crm-047) and about 410 in CIS (lead-route editor). Ongoing: the webhook key secret, the SES sender, SSRF checks on webhook URLs (public-address check at write, store and POST), and the hold and expiry job. This works the same way whichever front-end model is used, and it is what makes TripPlanner feed the CRM.",
+    "agency_builds_own_ui": false,
+    "files": [
+     "apps/AA-TripPlanner-Web/backend/assembly/handler.py:694 (_send_lead), 768 (serve_m2m)",
+     "apps/AA-TripPlanner-Web/backend/assembly/leads.py",
+     "apps/AA-TripPlanner-Web/backend/jobs/lead_deliver.py",
+     "apps/AA-TripPlanner-Web/backend/config.py:197 (LEAD_CRM_PULL_ENABLED)",
+     "apps/AA-Partner/api/app/tripplanner/leads.py (crm_tp_lead_pull)",
+     "apps/AA-Partner/api/migrations/047_crm_tp_crm_leads.sql",
+     "apps/AA-CIS-App/services/tenant_account/tripplanner_site.py",
+     "apps/AA-CIS-App/frontend/app/admin/tenants/_components/Tenant360LeadRoute.tsx",
+     "infra/AA-CIS-Infra/modules/environment/tripplanner.tf:504-513"
+    ]
+   }
+  ],
+  "branding_controls": "Here is what can be changed today, and where.\n\n**CIS admin › Tenant 360 (AA staff only):**\n- **Subscription tab:**\n  - Attach the plan tripplanner.hosted or tripplanner.pro.\n  - Set per-tenant entitlement overrides on any tp.* key (PUT/DELETE /admin/tenants/{id}/entitlement-overrides/{feature_key}). This is how the 'Powered by Adventure Asia' line (tp.branding) is turned on; it is off by default and in no plan.\n- **Lead route:** none / webhook URL / e-mail. CRM is automatic when crm.core is live.\n- **Custom domains:** add, remove or retry, with the 2 DNS CNAMEs shown.\n- **Trading name:** shared.tenants.name, the text shown in the agency bar, comes from the tenant record.\n\n**No editor anywhere:**\n- **Colours:** the 6 accent tokens (accent, accent-deep, accent-soft, accent-tint, accent-border, on-accent as #rrggbb) live in shared.tenant_tripplanner_site.theme. Neither CIS admin nor the agency app has an editor for them; the only writer today is SQL as cis_app (DB Migrate run-script).\n- **Locale (en/vi):** stored in the same table and passed to the front-end, but not applied (the planner UI is English only).\n\n**Agency side (Content studio Account › Add-ons, CRM Settings › Add-ons):**\n- The agency can only request the 'Trip planner' add-on. AA switches it on and 'sets it up on your site with you'.\n- In the CRM, the agency can set the default owner of planner leads on the system form 'Trip planner' (Settings › Forms).\n- The agency app has no TripPlanner module (site link, theme, lead channel, usage).\n\n**Not supported at all:**\n- Logo or favicon: the agency bar is text only.\n- Fonts, which stay Poppins/Satisfy.\n- Hero or marketing copy.\n- Page title, description and og:site_name: they still say Adventure Asia.\n- The e-mail sender of lead mails, which is AA's SES address.\n- Non-accent colours: neutrals, text and semantic colours are locked so contrast holds.",
+  "gaps_for_owner_model": [
+   "Bottom line: the system already sells only AA-built front-ends. Model 2 (hosted /{slug}/plan) and model 3 (the same UI on the agency's domain) match the owner's wish exactly. No agency can build its own front-end today: the API needs AA's edge key and BFF-signed tenant assertions, there is no CORS, and framing is blocked. KEEP everything that is built: the hosted planner, custom domain, lead delivery and the BO-8 badge. Remove only the promises that were never built.",
+   "Remove tp.api and tp.embed from the tripplanner.pro plan. This is a data change on the Plans page or shared.plan_feature, with zero code. Also correct pricing proposal B, which sells Pro at 99 USD as 'Hosted + custom domain + embed + API': two of those four have no code, and tp.api is exactly the 'agency builds its own UI' model the owner does not want. Record it as an ADR 0019 amendment (b4 and d6 'machine API deferred to R8' become 'not offered'; d10 iframe/subdomain become 'not offered unless a paying tenant forces it'). Keep the two keys in shared.entitlement_feature, unassigned, so nothing breaks.",
+   "Redefine the Pro tier around what exists: custom domain, a higher AI budget, and possibly priority support. Alternatively sell the custom domain as a 15 USD add-on, as the pricing proposal already suggests.",
+   "Custom domain is not gated by tp.custom_domain. add_domain checks only for any TripPlanner subscription (apps/AA-CIS-App/services/tenant_account/tripplanner_domain.py:173-176,254), so a Hosted tenant gets a Pro feature. Add the entitlement check (already planned as the AA-1090 close-out in the S282 progress report), or drop the gate if the custom domain becomes a separate add-on.",
+   "Launcher (tp.launcher) is in the base tier and sold at 49 USD, but has no code. Build the cheap version: a copy-paste link or button snippet that opens /{slug}/plan or the custom domain in a new tab. That needs no iframe, no CSP change and no CORS. It fits the owner's model.",
+   "AA name leaks on agency pages. The root layout title template '%s · Adventure Asia', the AA description and og:site_name 'Adventure Asia Trip Planner' (apps/AA-TripPlanner-Web/frontend/app/layout.tsx:32-38) apply to /{slug}/plan and the tour pages, giving the title 'Trip planner · <Agency> · Adventure Asia'. The preview footer note also names AA. Needs per-tenant metadata and a test guard.",
+   "No logo. The agency bar shows the trading name as text only. 'Agency adds its branding' needs at least a logo (and a favicon) upload stored per tenant site and served safely, for example through the CIS asset store with type and size checks.",
+   "No branding editor. Theme colours and locale can only be written by SQL. Needs an editor: on Tenant 360 for staff, and ideally a TripPlanner module in the agency app (theme with contrast preview, logo, locale, site link, lead channel, usage), which the S282 report already lists as a gap.",
+   "Locale vi is stored but never applied: the planner UI is English only. Either build vi strings for the planner or hide the field.",
+   "Branding depth is limited to 6 accent tokens. Neutrals, fonts, layout and copy are fixed. That is fine for 'one AA UI + agency brand', but the business owner should know the limit before it is sold as white-label.",
+   "Lead into CRM is not verified end to end. Code and infra are on (TP_LEAD_CRM_PULL_ENABLED=true, crm_tp_lead_pull running), but no session log shows a lead from an agency planner arriving in a CRM inbox (S272 left 'lead E2E vào CRM tenant' open). Run one live E2E on a synthetic agency before selling 'leads flow into your CRM'.",
+   "Lead e-mails are sent from AA's SES From address. For a full white-label, the sender name or Reply-To should carry the agency (Reply-To is already the traveller).",
+   "Remove the B2C leftovers on the AA host: Cognito traveller sign-in, My trips, the inquiry.submitted hand-off to AA-Booking (frozen at 410), and the registration and customers code. They contradict ADR 0019 d11, cost upkeep (Cognito pool, sign-up proof key, cookies) and add security surface. AA-1061 (B2C table drop from 28/11) is the vehicle. Keep the AA-branded demo itself as the sales showcase.",
+   "Fix the add-on copy. The studio text says 'A map-first trip planner on your own site' (apps/AA-Partner/web/app/(studio)/portal/_components/account.messages.ts:310). It should say it is hosted by AA under the agency's brand, on AA's path or the agency's own domain, so the copy does not promise an embed.",
+   "Small follow-ups. CIS slug creation should refuse TripPlanner's reserved slugs (lib/tenantSlug.ts RESERVED_TENANT_SLUGS). features.yaml should list launcher, embed, API and custom domain with their real status (S282 report item 'Làm cho Product map nói thật')."
+  ]
+ },
+ "advice": {
+  "per_model": [
+   {
+    "name": "1. Trang trình diễn của AA trên host chung (/, /destinations, /tours, /plan) cùng phần B2C còn sót (đăng nhập khách du lịch, My trips, chuyển yêu cầu sang Booking)",
+    "decision": "Giữ trang trình diễn nhưng không bán. Xoá phần B2C còn sót.",
+    "why": "Trang trình diễn là bản demo và cửa hàng của AA, dùng để bán cho đại lý, nên cần giữ. Nó không thuộc gói nào, cũng không cần cờ quyền. Phần B2C còn sót thì khác. Gồm đăng nhập khách du lịch qua Cognito, My trips, mã đăng ký khách, và luồng chuyển yêu cầu sang Booking (đã đóng băng, luôn trả 410). Phần này khoảng 1,8 nghìn dòng. Nó trái với mô hình chỉ B2B: khách du lịch chỉ là khách vãng lai. Nó cũng tốn công giữ: pool Cognito, khoá ký, cookie, quy tắc WAF. Nó còn mở thêm bề mặt tấn công mà không mang lại doanh thu. Nên xoá cùng đợt dọn các bảng B2C đã lên lịch cuối tháng 11. Nếu sau này cần lại thì làm lại từ đầu theo mô hình mới, không dùng lại phần cũ. Việc này không ảnh hưởng bảng giá và không ảnh hưởng luồng lead vào CRM, vì trang demo vốn không gửi lead."
+   },
+   {
+    "name": "2. Planner của đại lý trên host của AA: /{slug}/plan, trang tour, chia sẻ lịch trình",
+    "decision": "Giữ và bán. Đây là lõi của gói Hosted.",
+    "why": "Đây đúng là mô hình chị Thư mô tả: AA làm một giao diện, đại lý chỉ gắn thương hiệu. Phần này đã chạy trên Dev, có test tách dữ liệu giữa hai đại lý và probe cách ly chạy hằng đêm. Dữ liệu được khoá theo từng đại lý ở tầng DB. Chi phí AI bị chặn bằng trần của từng đại lý. Công giữ thêm nhỏ vì nó dùng lại trang của AA. Phần còn thiếu nằm ở thương hiệu (xem mục branding). Còn hai việc nhỏ: (1) xoay khoá ký định danh đại lý, (2) khi tạo slug ở CIS phải chặn các slug dành riêng."
+   },
+   {
+    "name": "3. Cùng planner đó trên tên miền riêng của đại lý (vd. trip.<đại-lý>.com)",
+    "decision": "Giữ và bán, trong gói Pro (hoặc bán lẻ 15 USD). Phải sửa chốt kiểm quyền trước khi bán.",
+    "why": "Đây vẫn là giao diện do AA làm, chỉ khác địa chỉ trên thanh trình duyệt. Vì vậy nó khớp mô hình của chị Thư và tăng cảm giác đây là 'trang của đại lý'. Hạ tầng gần như 0 USD/tháng. Đã thử live trên một tên miền thật: lên được, gỡ ra thì quay về đường dẫn cũ bình thường. Công giữ gồm theo dõi gia hạn chứng chỉ, hướng dẫn đại lý trỏ DNS, và rủi ro dùng chung một chứng chỉ khi số đại lý lớn. Lỗi cần sửa: code đang cho mọi đại lý có TripPlanner gắn tên miền. Nó chưa kiểm quyền tên miền riêng, nên khách gói Hosted đang được dùng miễn phí tính năng của gói Pro. Còn thiếu thêm một điểm: link bán hàng chưa nhận tên miền của đại lý. Đây là điểm khác biệt chính của gói Pro, nên cần đóng hai chỗ này trước khi chào giá."
+   },
+   {
+    "name": "4. Nút mở planner (launcher): đại lý dán một nút hoặc link lên website của mình",
+    "decision": "Giữ và bán trong gói Hosted, nhưng phải làm bản đơn giản trước. Chưa có code thì chưa được quảng cáo.",
+    "why": "Cả hai gói đều có cờ quyền này và bảng giá B có ghi nó, nhưng hiện không có dòng code nào làm ra nút. Bản đơn giản chỉ cần một đoạn HTML: thẻ <a target=_blank> trỏ tới /{slug}/plan hoặc tên miền riêng. Đại lý copy đoạn này ở trang Add-ons. Bản này không cần iframe, không cần đổi CSP, không cần CORS, nên không mở thêm rủi ro bảo mật. Công làm khoảng một ngày, công giữ gần 0. Nó vẫn đúng mô hình 'AA làm giao diện', vì nút chỉ mở trang AA làm sẵn."
+   },
+   {
+    "name": "5. Nhúng planner vào website đại lý bằng iframe hoặc script",
+    "decision": "Giữ cờ quyền nhưng không bán. Gỡ khỏi gói Pro, không có code để xoá.",
+    "why": "Chưa có code. Hệ thống đang chặn nhúng có chủ đích (X-Frame-Options DENY, frame-ancestors 'none'), và bước kiểm khi deploy cũng ép giữ việc chặn này. Muốn làm thì phải nới lớp chống clickjacking theo từng đại lý. Cookie khách sẽ mất khi nằm trong iframe khác site, màn thử thách của WAF chạy lỗi trong khung, và tải hỗ trợ sẽ cao. Lợi ích so với nút mở trang mới (mục 4) lại nhỏ. Nên bỏ chữ 'embed' khỏi gói Pro trong bảng giá B và khỏi dữ liệu gói (chỉ đổi dữ liệu, không đổi code). Giữ cờ quyền nhưng không gán gói nào, để sau này có khách trả tiền yêu cầu thì bật lại. Việc này không ảnh hưởng luồng lead."
+   },
+   {
+    "name": "6. API mở hoặc headless để đại lý tự dựng giao diện trên dữ liệu AA",
+    "decision": "Gỡ khỏi gói và khỏi lộ trình. Không có code để xoá, chỉ bỏ lời hứa.",
+    "why": "Đây là mô hình ngược hẳn với ý chị Thư: đại lý tự làm giao diện và có thể khoác áo khác cho dữ liệu cùng logic planner của AA. Đây cũng là mô hình nặng nhất về bảo mật và hỗ trợ. Nó cần khoá riêng cho từng đại lý và phải xoay được, cần CORS, giới hạn tần suất theo khoá, hợp đồng API có phiên bản, tài liệu, chống lạm dụng chi phí AI, và hỗ trợ lập trình viên của đại lý. Hôm nay API chỉ nhận khoá nội bộ của AA và định danh do máy chủ AA ký, nên đại lý không có đường nào tự làm giao diện. Cần gỡ 'API' khỏi gói Pro (bảng giá B và dữ liệu gói), và ghi vào quyết định kiến trúc rằng đổi từ 'hoãn' sang 'không bán'. Nên giữ cờ quyền trong danh mục nhưng không gán gói nào, để không làm vỡ dữ liệu. Không ảnh hưởng luồng lead: đường máy-tới-máy dành cho CRM là kênh nội bộ, phải giữ nguyên."
+   },
+   {
+    "name": "7. Tên miền phụ của AA cho từng đại lý (<đại-lý>.trip.<tên-miền-AA>)",
+    "decision": "Bỏ khỏi lộ trình. Không có gì để xoá.",
+    "why": "Chỉ có một dòng nhắc trong tài liệu, không có code và không có cờ quyền. Hai cách đang có đã đủ: đường dẫn /{slug} cho gói Hosted và tên miền riêng cho gói Pro. Làm thêm cách thứ ba chỉ tốn công giữ chứng chỉ wildcard và DNS mà không bán thêm được gì."
+   },
+   {
+    "name": "8. Đưa lead từ planner về đại lý (CRM, webhook có ký, e-mail; không có kênh thì từ chối)",
+    "decision": "Giữ và bán, có trong cả hai gói. Phải chạy thử trọn luồng trước khi hứa với khách.",
+    "why": "Đây không phải một kiểu giao diện. Đây là giá trị chính khiến đại lý mua TripPlanner: khách bấm 'Gửi cho tư vấn viên' thì lead chảy về CRM của đại lý. Code và hạ tầng đã bật trên Dev. Đã có sẵn giới hạn chống spam, kiểm SSRF cho webhook, và tự xoá thông tin lead không gửi được sau 7 ngày. Nhưng chưa có lần chạy nào chứng minh một lead đi từ planner của đại lý vào hộp thư CRM. Cần chạy một lần trọn luồng trên một đại lý thử rồi mới ghi 'lead đổ vào CRM' trong bảng giá. E-mail lead đang gửi từ địa chỉ của AA. Nếu muốn white-label trọn vẹn, ít nhất tên người gửi phải là tên đại lý."
+   }
+  ],
+  "plan_mapping": "Kết luận chính: hệ thống hiện chỉ có các mô hình 'AA làm giao diện'. Không có đường nào cho đại lý tự làm giao diện. API chỉ nhận khoá nội bộ của AA, không có CORS, và nhúng iframe bị chặn. Vì vậy mô hình chị Thư muốn đã nằm sẵn trong code, ở mục 2 và mục 3. Việc cần làm là dọn lời hứa trong gói và làm nốt phần thương hiệu. Không cần làm lại kiến trúc.\n\nĐề xuất xếp gói theo bảng giá B (vẫn 49 / 99 USD):\n\n- **TripPlanner Hosted, 49 USD/tháng.**\n  - Planner, trang tour và trang chia sẻ lịch trình chạy trên đường dẫn của AA (/{slug}/plan).\n  - Thương hiệu đại lý: tên, logo, favicon, màu nhấn, tiêu đề trang và mô tả chia sẻ mang tên đại lý.\n  - Nút hoặc link launcher để dán lên website đại lý.\n  - Lead đổ về CRM, hoặc webhook, hoặc e-mail.\n  - Thêm 10 USD vào trần AI.\n\n- **TripPlanner Pro, 99 USD/tháng.**\n  - Mọi thứ của Hosted, cộng tên miền riêng của đại lý.\n  - Thêm 25 USD vào trần AI (thay vì 10).\n  - E-mail lead mang tên đại lý.\n  - Được chọn ẩn dòng 'Powered by Adventure Asia'.\n  - Hỗ trợ ưu tiên.\n  - Bỏ hai mục 'embed' và 'API' khỏi mô tả gói Pro, khỏi bảng giá B và khỏi dữ liệu gói. Đây chỉ là đổi dữ liệu, giữ cờ quyền nhưng không gán gói nào.\n\n- **Phương án thay thế:** chỉ giữ một gói Hosted 49 USD, rồi bán tên miền riêng như add-on 15 USD (đã có trong bảng giá B). Cách này đơn giản hơn cho chị Thư. Nhưng gói Pro sẽ mất lý do tồn tại, vì hai trong bốn thứ ghi trong Pro chưa có code.\n\nLời khuyên chung khi giữ hay gỡ:\n\n- **Phần đã xây và có test thì giữ:** planner của đại lý, tên miền riêng, luồng lead, dòng 'Powered by'.\n- **Phần chưa xây thì gỡ khỏi gói, không cần xoá code:** embed, API, tên miền phụ.\n- **Chỉ xoá code thật ở một chỗ:** phần B2C còn sót trên trang demo của AA. Lý do là phần này tốn công giữ, mở thêm rủi ro bảo mật, và trái với mô hình chỉ B2B.\n- **Luồng lead vào CRM không bị ảnh hưởng** bởi bất kỳ việc gỡ nào ở trên.",
+  "branding_must_have": [
+   "Logo (bắt buộc) và favicon theo từng đại lý. CHƯA CÓ: thanh đại lý hiện chỉ hiện tên bằng chữ. Cần chỗ tải lên có kiểm loại và dung lượng file, lưu theo trang của đại lý.",
+   "Tiêu đề trang, mô tả và tên hiện khi chia sẻ link (og:site_name) mang tên đại lý, không còn chữ 'Adventure Asia'. CHƯA ĐÚNG: hiện ra 'Trip planner · <Đại lý> · Adventure Asia'. Cần thêm một test để chặn lỗi tái phát.",
+   "Màu thương hiệu: 6 màu nhấn, có kiểm độ tương phản. ĐÃ CÓ phần hiển thị, CHƯA CÓ trình sửa: hiện chỉ sửa được bằng SQL. Cần trình sửa có xem trước độ tương phản.",
+   "Tên giao dịch của đại lý trên thanh đầu trang. ĐÃ CÓ, lấy từ hồ sơ tenant.",
+   "Bật hoặc tắt dòng 'Powered by Adventure Asia'. ĐÃ CÓ cờ quyền, mặc định tắt. Cần chốt mặc định cho từng gói và để staff chỉnh ở Tenant 360.",
+   "Tên miền riêng. ĐÃ CÓ, staff thêm ở Tenant 360. Cần thêm chốt kiểm quyền gói Pro, và cho link bán hàng nhận tên miền của đại lý.",
+   "Tên người gửi e-mail lead là tên đại lý (Reply-To đã là khách du lịch). CHƯA CÓ: đang gửi từ địa chỉ của AA.",
+   "Ngôn ngữ: hệ thống lưu được en/vi nhưng giao diện chỉ có tiếng Anh. Cần dịch planner sang tiếng Việt, hoặc ẩn trường này để không hứa sai.",
+   "Một chỗ chỉnh tập trung. Staff dùng Tenant 360 với tab TripPlanner gồm logo, màu, ngôn ngữ, link trang, kênh lead và mức dùng. Về sau đại lý tự chỉnh trong app của họ. CHƯA CÓ.",
+   "Nói rõ giới hạn khi bán: font, bố cục, màu nền và chữ, nội dung marketing vẫn là của AA. Đây là 'một giao diện AA, gắn thương hiệu đại lý', không phải white-label toàn phần."
+  ],
+  "work": [
+   "1. Dọn gói, chỉ đổi dữ liệu (nửa ngày). Gỡ embed và API khỏi gói Pro trong dữ liệu gói. Sửa bảng giá B. Ghi quyết định kiến trúc mới: không bán API mở, iframe và tên miền phụ. Sửa câu giới thiệu add-on trong app đại lý: bỏ ý 'trên site của bạn' nghe như nhúng, đổi thành 'AA vận hành, mang thương hiệu của bạn, trên đường dẫn AA hoặc tên miền riêng'.",
+   "2. Sửa chốt kiểm quyền tên miền riêng: chỉ gói Pro hoặc người mua add-on mới được gắn. Cho link bán hàng nhận tên miền của đại lý (1 đến 2 ngày).",
+   "3. Gỡ chữ 'Adventure Asia' khỏi tiêu đề, mô tả và tên chia sẻ trên trang đại lý. Làm metadata theo từng đại lý và thêm test (1 ngày).",
+   "4. Thêm logo và favicon theo đại lý: tải lên có kiểm file, hiện trên thanh đại lý và tab trình duyệt (2 đến 3 ngày).",
+   "5. Thêm tab TripPlanner ở Tenant 360 cho staff: màu kèm xem trước độ tương phản, logo, ngôn ngữ, link trang, kênh lead, mức dùng AI. Sau đó làm bản tự chỉnh cho đại lý trong app của họ (3 đến 5 ngày).",
+   "6. Làm launcher bản đơn giản: đoạn link hoặc nút để copy ở trang Add-ons, mở planner ở tab mới (1 ngày).",
+   "7. Chạy thử trọn luồng lead trên một đại lý thử: từ planner, qua CRM, vào hộp thư, có ảnh chụp làm bằng chứng. Đổi tên người gửi e-mail lead thành tên đại lý (1 ngày).",
+   "8. Xử lý tiếng Việt: dịch planner, hoặc ẩn trường ngôn ngữ cho tới khi dịch xong.",
+   "9. Xoá phần B2C còn sót trên trang demo của AA (đăng nhập khách du lịch, My trips, chuyển yêu cầu sang Booking) cùng đợt dọn bảng B2C cuối tháng 11. Giữ trang demo làm nơi trình diễn.",
+   "10. Việc nhỏ đi kèm: chặn slug dành riêng khi tạo đại lý, cập nhật bản đồ tính năng cho đúng trạng thái thật (launcher, embed, API, tên miền riêng), xoay khoá ký định danh đại lý."
+  ],
+  "summary_vi": "Hệ thống có 8 'mô hình' TripPlanner trên giấy, nhưng chỉ 4 cái thật sự chạy:\n- trang demo của AA;\n- planner của đại lý trên /{slug};\n- planner đó trên tên miền riêng của đại lý;\n- luồng đưa lead về đại lý.\n\nCả 4 đều là 'AA làm giao diện', nên mô hình chị Thư muốn đã có sẵn.\n\nBa mô hình còn lại (nút launcher, nhúng iframe, API để đại lý tự làm giao diện) chỉ có cờ quyền trong dữ liệu gói, không có code. Embed và API lại đang được ghi trong gói Pro 99 USD. Mô hình thứ 8 (tên miền phụ cho từng đại lý) chỉ nằm trong tài liệu, không có code lẫn cờ quyền.\n\nKhuyến nghị:\n- **Giữ và bán:** planner của đại lý, tên miền riêng (Pro), luồng lead.\n- **Làm nhanh bản đơn giản:** launcher (Hosted).\n- **Gỡ khỏi gói, không có code để xoá:** embed, API, tên miền phụ. API đặc biệt nên bỏ hẳn vì nó ngược ý chị Thư.\n- **Xoá code thật:** chỉ phần B2C còn sót trên trang demo.\n\nĐể bán được, phải làm thêm phần thương hiệu: logo và favicon, bỏ chữ Adventure Asia trên tiêu đề trang, trình sửa màu, tên đại lý trên e-mail lead. Phải sửa lỗi tên miền riêng đang mở cho cả gói Hosted. Và phải chạy thử trọn luồng lead vào CRM một lần.\n\nTôi chỉ đọc code và tài liệu. Tôi không kiểm lại live trên Dev hôm nay, trừ một lệnh curl đã có trong bản kiểm kê.",
+  "message_for_owner_vi": "Dạ chị, em đã rà lại TripPlanner. Hệ thống hiện chỉ bán đúng kiểu chị muốn: AA làm sẵn giao diện, đại lý gắn thương hiệu và chạy trên link của AA hoặc tên miền riêng của đại lý. Không có đường nào để đại lý tự làm giao diện riêng.\nHai mục 'nhúng vào website' và 'API' đang ghi trong gói Pro thì chưa có và không hợp hướng này. Em đề xuất gỡ hai mục đó, chỉ là đổi dữ liệu gói, không tốn chi phí.\nGói đề xuất: Hosted 49 USD gồm planner mang thương hiệu đại lý, nút mở planner để dán lên website, và lead đổ về CRM. Pro 99 USD gồm thêm tên miền riêng, hạn mức AI cao hơn và hỗ trợ ưu tiên.\nĐể bán được, bên em cần làm nốt phần thương hiệu (logo, màu, tên đại lý trên tiêu đề trang và e-mail) và chạy thử trọn luồng lead vào CRM, ước khoảng 2 tuần làm việc.\nNhờ chị quyết giúp em: giữ hai gói Hosted/Pro như trên, hay chỉ một gói 49 USD và bán tên miền riêng lẻ 15 USD."
+ },
+ "critic": {
+  "corrections": [
+   "CONFIRMED against origin/main: tp.api, tp.embed and tp.custom_domain have no reader anywhere in CIS, TripPlanner or CRM. They exist only in CIS 355, where tripplanner.pro carries embed/custom_domain/api (lines 200-202) and both plans carry tp.hosted, tp.launcher and tp.ai_sessions. The X-Frame-Options DENY and frame-ancestors 'none' headers (next.config.mjs) and their enforcement in .github/scripts/check_security_headers.sh:30-32 are confirmed. CORS * exists only in the two local_server.py files. The 410 b2b_only response is at handler.py:219. The custom-domain gate is HAS_TRIPPLANNER_SQL (any TripPlanner subscription that is not canceled) at tripplanner_domain.py:173-176 and 254. The title template '%s · Adventure Asia' (layout.tsx) combined with [tenant]/plan generateMetadata 'Trip planner · <name>' does give 'Trip planner · <Agency> · Adventure Asia'. TP_LEAD_CRM_PULL_ENABLED='true' is at Infra tripplanner.tf:513. The tenant-assertion key is its own secret (AA-1092). The studio copy is at account.messages.ts:310. The only lead E2E evidence is S272 line 93, which marks it as still open.",
+   "MISSED (custom domain hole is wider than the add path): catalog.v_tenant_tripplanner_v1 (CIS 429) returns every ACTIVE custom domain with no tp.custom_domain check, and lookup_host only requires served (tp.hosted). A tenant downgraded from Pro to Hosted therefore keeps its live custom domain. The fix needs an entitlement check in add_domain AND on the serve path (the view or the custom-domain job detaching on downgrade), not only in add_domain.",
+   "MISSED (B2C leftovers reach agency domains): lib/tenantHost.ts PASS_PATHS lets /sign-in, /trips, /privacy and /terms through unchanged on an agency's custom domain. lib/plannerTenant.ts accountLinks/myTripsTargets and MyTrips.tsx carry ?tenant=<slug>. So the AA-branded Cognito sign-in page, which collects traveller e-mail through /api/auth/start (still live: it sends Cognito codes whenever the session secret is set), is reachable at trip.<agency>.com/sign-in. This is an AA-brand leak plus a PII-collection surface on the agency's own domain. The B2C removal is not limited to the AA host: it must also remove these entries from PASS_PATHS, plannerTenant and MyTrips. 'Frozen' is only true of the UI links (AA-1094 removed the 'Sign in' link); the endpoints still work.",
+   "MISSED (privacy/controller, ADR 0019 b9: agency = controller): on the agency planner the LeadForm collects traveller name, e-mail, phone and the consent and marketing ticks, but it links no agency privacy notice. On a custom domain, /privacy and /terms serve AA's platform legal pages. Add a per-tenant privacy-notice URL (stored in tenant_tripplanner_site, editable in Tenant 360) and link it from the LeadForm. This is a must-have before selling, alongside the logo.",
+   "WRONG in plan_mapping ('+10 USD / +25 USD AI' as plan data): the entitlement resolver (CIS 361) counts a platform key such as ai.budget_usd_monthly ONLY from the content plan ('a plan's platform key counts only from the content plan'), and it picks a single winner per key; it does not sum. Adding ai.budget_usd_monthly to tripplanner.hosted or tripplanner.pro would be ignored. A per-tenant override replaces the content budget; it does not add to it. Delivering 'TripPlanner adds 10/25 USD to the AI cap' needs a resolver or migration change (for example a separate tp AI budget key, or summing across products). It is not data-only and not zero-code. Related point: TripPlanner fails closed with budget_source 'none' (backend/shared/tenant_budget.py:16,60), so a tenant without a live Content plan gets no AI in the planner.",
+   "WRONG in plan_mapping ('Pro: được chọn ẩn dòng Powered by Adventure Asia'): tp.branding is in no plan and is off by default, so every tenant, Hosted included, already has the badge hidden. As written, this is not a Pro perk. To make it one, put tp.branding in the tripplanner.hosted plan (badge shown) and leave it out of Pro. That is a data change, but it changes the look of current Hosted tenants.",
+   "IMPRECISE ('lead đổ về CRM' listed as a Hosted feature, also in message_for_owner_vi): the CRM channel only applies when the tenant also has crm.core live (view 429: route = 'crm' only when crm.live). A Hosted tenant without the CRM add-on gets its leads by webhook or e-mail, and with neither set, the send is refused (409 lead_route_missing). Say 'lead về CRM (nếu có CRM), hoặc webhook/e-mail'.",
+   "IMPRECISE (launcher 'no code, do not advertise'): the launcher's function already works, because any agency can link to /{slug}/plan or its custom domain today. Only the snippet UI and the flag reader are missing. It is fine to sell once the snippet text is shown on the Add-ons page or in Tenant 360, which is under a day of work. Keep tp.launcher. It has no security cost.",
+   "UNUSED KEY not mentioned: tp.ai_sessions is in both plans with a NULL limit, and no code reads it. Either enforce it or remove it from the plan descriptions when tp.api and tp.embed are removed, so the Product map is honest.",
+   "Logo upload (branding must-have 1 / work item 4): require raster formats only (PNG/WebP/JPEG; refuse SVG or sanitise it, because SVG carries script and XSS risk), cap the size, re-encode on the server, and serve from the image CDN path, not as inline markup. Add this to the acceptance criteria.",
+   "features.yaml (root docs/catalogue/features.yaml:1432) names TP-F005 'Agency planner (white label)'. That oversells: the branding is 6 accent tokens plus a text name. Rename it to something like 'Agency-branded planner' in the same honesty pass as the launcher/embed/API/custom-domain status update.",
+   "summary_vi numbering slip: it calls the sub-domain model 'mô hình thứ 8', but it is model 7. Model 8 is lead delivery.",
+   "message_for_owner_vi style: the saved note for messages to Ms. Thư says 'Dạ chị,' plus a backstory paragraph, plain lines, then 'Nhờ chị quyết giúp em mấy việc sau:' and no recommendation or thanks. The draft has recommendations ('Em đề xuất gỡ...'). Move the recommendation into the decision page or report, or turn it into neutral options. The '2 tuần' estimate covers only the branding and E2E items. The full work list (items 1-10 plus Vietnamese translation) is closer to 3 weeks."
+  ],
+  "final": [
+   {
+    "name": "1. AA showcase site on the public host + B2C leftovers",
+    "decision": "Keep the demo showcase (not sold). Remove the B2C leftovers.",
+    "note": "Agree, and the removal is more urgent than stated. /sign-in and /trips also pass through on agency custom domains (tenantHost.ts PASS_PATHS). /api/auth/start still sends Cognito codes, so the 'frozen' sign-in is still a live PII and abuse surface. Removal must also edit tenantHost PASS_PATHS, plannerTenant accountLinks/myTripsTargets and MyTrips. Erase existing traveller records through AA-1061 using the DRY RUN destructive-ops procedure."
+   },
+   {
+    "name": "2. Hosted agency planner /{slug}/plan",
+    "decision": "Keep and sell (the core of Hosted).",
+    "note": "This serves the owner's model: the agency cannot alter the UI. Theme values are hex-checked in the CIS CHECK and in brandTheme.ts HEX, and are written only by AA. Before selling: (a) per-tenant metadata (no 'Adventure Asia' in the title, description or og:site_name); (b) a logo with safe raster upload; (c) a per-tenant privacy-notice link on the LeadForm (b9 controller); (d) a theme editor in Tenant 360. Reserved slugs in CIS are a small follow-up (only a 404, no security issue)."
+   },
+   {
+    "name": "3. Same planner on the agency's own domain",
+    "decision": "Keep and sell (Pro, or a 15 USD add-on). Fix the gate before quoting a price.",
+    "note": "The gate gap is wider than reported. add_domain checks only for any TripPlanner subscription, AND view 429 / lookup_host serve active domains without checking tp.custom_domain, so a downgrade from Pro to Hosted keeps the domain live. Gate both the add path and the serve path (or detach on downgrade). Also stop /sign-in and /trips (AA-branded) from passing through on agency hosts."
+   },
+   {
+    "name": "4. Launcher button/snippet (tp.launcher)",
+    "decision": "Keep the flag. Build the copy-paste link snippet (under 1 day), then sell it in Hosted.",
+    "note": "A plain link already works today (/{slug}/plan). Only the snippet UI and the flag reader are missing. It needs no iframe, CSP change or CORS, so it adds no risk."
+   },
+   {
+    "name": "5. Iframe/script embed (tp.embed)",
+    "decision": "Do not sell. Remove it from the tripplanner.pro plan through the Plans API (services/tenant_account/plans.py, data-only). Keep the key unassigned.",
+    "note": "Agree. Framing is blocked and the deploy check enforces it. Building an embed would weaken clickjacking protection, and the __Host-tp_guest cookie (SameSite=Lax) and the WAF challenge break inside a cross-site frame. No code to delete. Correct pricing proposal B's Pro row."
+   },
+   {
+    "name": "6. Public/headless API (tp.api)",
+    "decision": "Remove it from the plan and the roadmap (record an ADR 0019 b4/d6 amendment). Keep the key unassigned or retired. Keep the CRM M2M leads endpoint.",
+    "note": "Agree. This is the only model where the agency builds its own UI, so it is the opposite of the owner's wish and the highest risk. Today nothing exposes it: only AA's BFF has the edge key and can sign the tenant assertion. Removing the plan row does not affect /trip/m2m/v1 (CRM pull)."
+   },
+   {
+    "name": "7. AA sub-domain per agency",
+    "decision": "Drop it from the roadmap. Nothing to delete.",
+    "note": "Agree. There is only an ADR mention (d10 line 127). Neither a key nor code exists."
+   },
+   {
+    "name": "8. Lead delivery (CRM / signed webhook / e-mail / refuse)",
+    "decision": "Keep and sell in both tiers. Run one live E2E on a synthetic agency before promising 'leads into your CRM'.",
+    "note": "Agree. Sell it as 'CRM if you have the CRM add-on, otherwise webhook or e-mail', because the CRM route needs crm.core. Add the agency's privacy-notice link to the LeadForm. The e-mail sender display name can carry the agency's name, but the From address must stay AA's verified SES domain (DMARC)."
+   },
+   {
+    "name": "Plan mapping (Hosted 49 / Pro 99)",
+    "decision": "Keep the structure. Correct the two perks that are not real today.",
+    "note": "(1) '+10/+25 USD AI' cannot be set as TripPlanner plan data: CIS 361 counts platform keys only from the content plan and does not sum. It needs a resolver change or a new tp budget key. (2) 'Pro can hide Powered by' is a no-op, because the badge is off for everyone. Put tp.branding in Hosted if hiding it should be a Pro perk. (3) Remove embed, API and tp.ai_sessions (no reader) from the plan descriptions. The alternative (one Hosted plan + a 15 USD custom-domain add-on) is the more honest fit for what exists today."
+   }
+  ]
+ }
+}
