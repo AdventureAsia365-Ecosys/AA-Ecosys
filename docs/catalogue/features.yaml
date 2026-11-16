@@ -547,6 +547,21 @@ features:
     depends_on: [INF-F006]
     guide: docs/catalogue/README.md
     owner: tech_lead
+  - id: CIS-F049
+    app: cis
+    module: developer
+    name: Delivery (CI/CD and DORA per app)
+    name_vi: Phát hành (CI/CD và DORA theo app)
+    summary_vi: "Mỗi app ra bản nhanh và an toàn tới đâu: năm chỉ số DORA, lead time tốn ở khúc nào, sức khoẻ CI và các lần deploy hỏng, dựng mỗi giờ từ dữ liệu GitHub."
+    summary: How fast and how safely each app ships - the five DORA keys, where lead time goes, CI health and failed deploys, built hourly from GitHub data.
+    roles: [admin]
+    status: beta
+    surface: ["page:/admin/platform/delivery", "route:admin_platform_delivery"]
+    conditions:
+      settings: [cis.delivery.cfr_green_pct, cis.delivery.lead_time_green_hours, cis.delivery.min_sample]
+    depends_on: [INF-F006]
+    guide: docs/guides/delivery-metrics.md
+    owner: tech_lead
   # ── AA-CIS: Content studio API (the UI lives in AA-Partner) ───────────────────────────────────────────────────────
   - id: CIS-F040
     app: cis

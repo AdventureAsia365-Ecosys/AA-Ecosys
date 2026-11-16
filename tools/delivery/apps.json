@@ -1,0 +1,70 @@
+{
+  "format": 1,
+  "_comment": "AA-1108: the apps the Delivery metrics collector reads (tools/delivery/delivery_metrics.py). Root has no settings registry: the collection parameters live here (follow-up in docs/implementation-notes/AA-1108.md); the colour thresholds are CIS settings (cis.delivery.*).",
+  "org": "AdventureAsia365-Ecosys",
+  "environment": "dev",
+  "headline_days": 28,
+  "trend_weeks": 12,
+  "trend_months": 3,
+  "store_days": 98,
+  "jobs_days": 14,
+  "runs_overlap_days": 2,
+  "rework_hours": 48,
+  "raw_retention_days": 400,
+  "request_budget": 650,
+  "rate_limit_floor": 60,
+  "list_cap": 30,
+  "agent_logins": ["aa-agent[bot]"],
+  "deploy_triggers": ["push", "workflow_dispatch", "workflow_run", "repository_dispatch"],
+  "main_triggers": ["push", "schedule", "workflow_dispatch"],
+  "apps": [
+    {
+      "id": "cis", "name": "CIS", "repo": "AA-CIS-App", "default_branch": "main",
+      "deploy_workflows": ["deploy-dev.yml", "deploy-admin-dev.yml"],
+      "deploy_job": "^Deploy (to ECS Dev|CIS admin to ECS Dev)$",
+      "verify_job": "^Post-deploy verify",
+      "ci_workflows": ["ci.yml"],
+      "no_deploy_paths": ["docs/**", "*.md", "**/*.md"]
+    },
+    {
+      "id": "booking", "name": "Booking", "repo": "AA-Booking", "default_branch": "main",
+      "deploy_workflows": ["deploy-dev.yml", "deploy-admin-dev.yml"],
+      "deploy_job": "^Deploy (to ECS Dev|Booking admin to ECS Dev)$",
+      "verify_job": "^Post-deploy verify",
+      "ci_workflows": ["ci.yml"],
+      "no_deploy_paths": ["docs/**", "*.md", "**/*.md"]
+    },
+    {
+      "id": "partner", "name": "Partner CRM", "repo": "AA-Partner", "default_branch": "main",
+      "deploy_workflows": ["deploy-dev.yml", "deploy-web-dev.yml"],
+      "deploy_job": "^Deploy (to ECS Dev|web to ECS Dev)$",
+      "verify_job": "^Post-deploy verify",
+      "ci_workflows": ["ci.yml"],
+      "no_deploy_paths": ["docs/**", "*.md", "**/*.md"]
+    },
+    {
+      "id": "tripplanner", "name": "TripPlanner", "repo": "AA-TripPlanner-Web", "default_branch": "main",
+      "deploy_workflows": ["deploy-web-dev.yml", "deploy-lambdas.yml"],
+      "deploy_job": "^(Deploy TripPlanner web to ECS Dev|Build \\+ deploy Lambda code)$",
+      "verify_job": "^Post-deploy verify",
+      "ci_workflows": ["ci.yml"],
+      "no_deploy_paths": ["docs/**", "*.md", "**/*.md"]
+    },
+    {
+      "id": "infra", "name": "Infra", "repo": "AA-CIS-Infra", "default_branch": "main",
+      "deploy_workflows": ["terraform-apply.yml"],
+      "deploy_job": "^Terraform Apply \\((dev|management)\\)$",
+      "verify_job": null,
+      "ci_workflows": ["terraform-plan.yml"],
+      "no_deploy_paths": ["docs/**", "*.md", "**/*.md"]
+    },
+    {
+      "id": "root", "name": "Root (docs and plans)", "repo": "AA-Ecosys", "default_branch": "master",
+      "deploy_workflows": ["docs-sync.yml"],
+      "deploy_job": "^Docs sync$",
+      "verify_job": null,
+      "ci_workflows": ["docs-lint.yml"],
+      "no_deploy_paths": []
+    }
+  ]
+}
