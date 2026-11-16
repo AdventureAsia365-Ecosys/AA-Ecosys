@@ -57,7 +57,8 @@ Host cũ `partner-dev.lumiguides.it.com` chuyển tiếp sang `portal.lumiguides
 3. Mở ngăn chi tiết của đại lý và chọn **Invite first owner** với địa chỉ e-mail của owner. Địa chỉ không bao giờ được
    lưu dạng đọc được hay hiện lại.
 
-Một đại lý mới bắt đầu với gói miễn phí 10 chỗ.
+Một đại lý mới nhận số chỗ theo gói CRM của nó trong CIS. Các gói CRM tính ít nhất 3 chỗ (mức tối thiểu của gói,
+sửa ở CIS Tenants › Plans & add-ons); yêu cầu ít hơn sẽ được nâng lên 3.
 
 ### Tham gia một đại lý (mọi thành viên)
 
