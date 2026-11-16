@@ -63,6 +63,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
 
+import gitleaks_resolve
 import ship_copy_apply
 import ship_deploy
 import ship_merge
@@ -575,6 +576,12 @@ def main(argv: list[str] | None = None, runner: Runner | None = None, apply_fn=N
     if a.wait_idle < 0:
         print("ERROR --wait-idle must be 0 or more", file=sys.stderr)
         return 2
+    if runner is None and not os.environ.get("AA_GITLEAKS"):
+        # S282: a merge push runs the repo's pre-push gitleaks; pick the binary the root resolver finds (the mise
+        # install of the CI pin when the shim has no version) so the hook does not fail on the shim.
+        found = gitleaks_resolve.resolve()
+        if found.path:
+            os.environ["AA_GITLEAKS"] = found.path
     runner = runner or Runner()
     try:
         items = parse_items(a.targets)
