@@ -278,11 +278,15 @@ def runs_on_commit(runner: Runner, repo: str, sha: str) -> list[dict]:
 
 def classify_runs(runs: list[dict]) -> CheckSummary:
     """The latest run per (workflow, event) counts: it must be finished and green. An older run of the same workflow
-    (cancelled by concurrency, then started again) does not."""
+    (cancelled by concurrency, then started again) does not. Two runs created in the same second are ordered by run
+    id (a later run always has a larger id), so a cancelled twin never hides the green rerun."""
+    def order(r: dict) -> tuple:
+        return (r.get("createdAt") or "", int(r.get("databaseId") or 0))
+
     latest: dict[tuple, dict] = {}
     for r in runs or []:
         key = (r.get("workflowName") or r.get("name") or "", r.get("event") or "")
-        if key not in latest or (r.get("createdAt") or "") >= (latest[key].get("createdAt") or ""):
+        if key not in latest or order(r) >= order(latest[key]):
             latest[key] = r
     s = CheckSummary()
     for (wf, event), r in sorted(latest.items()):
