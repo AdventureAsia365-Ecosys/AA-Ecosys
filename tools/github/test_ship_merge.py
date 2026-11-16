@@ -403,6 +403,15 @@ class SettleTest(unittest.TestCase):
                                                                         created="2026-11-01T09:10:00Z")])
         self.assertEqual(s.red, ["CI (pull_request) cancelled"])
 
+    def test_same_second_twin_is_ordered_by_run_id(self):
+        # gh run list is newest first; a cancelled twin created in the same second must not hide the green run.
+        green = dict(run_row("API contract", created="2026-11-16T05:00:00Z"), databaseId=43604071960)
+        cancelled = dict(run_row("API contract", conclusion="cancelled", created="2026-11-16T05:00:00Z"),
+                         databaseId=43604071839)
+        for runs in ([green, cancelled], [cancelled, green]):
+            s = ship_common.classify_runs(runs)
+            self.assertEqual((s.red, s.pending, s.green), ([], [], ["API contract (pull_request)"]))
+
 
 class RunTargetsTest(unittest.TestCase):
     def test_one_red_one_green_in_parallel(self):
