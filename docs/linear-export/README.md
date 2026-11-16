@@ -19,6 +19,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1044](cis-core-pipeline-llm-platform/AA-1044.md) | [Photos] Trial copying tour photos from Google Drive into S3 so the pipeline can drop the Google API key | Done | 2026-11-04 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1045](cis-core-pipeline-llm-platform/AA-1045.md) | [AI gateway] Usage analytics explorer | Done | 2026-11-05 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1047](cis-core-pipeline-llm-platform/AA-1047.md) | [Quality W1] One policy registry, one FactSheet, one exit contract (report mode) for S1, T2, T9 and the eval | Done | 2026-11-08 | CIS Core — Pipeline, LLM & Platform |
+| [AA-1048](cis-core-pipeline-llm-platform/AA-1048.md) | [Quality W2] Claim-level ground truth and calibration of the pinned claim instrument | Done | 2026-11-16 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1049](cis-core-pipeline-llm-platform/AA-1049.md) | [Quality W3] Rewire the T9, S1 and T2 control planes in place (code-composed fields, local source-aware repair, one exit) | Done | 2026-11-11 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1052](cis-core-pipeline-llm-platform/AA-1052.md) | [Quality W6] Lineage, dormant-code cleanup and permanent change control for every writing workflow | Done | 2026-11-09 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1053](cis-core-pipeline-llm-platform/AA-1053.md) | [AI gateway] One owner for the token-budget retry and one effort rule per provider (W1 contradictions #13, #14) | Done | 2026-11-08 | CIS Core — Pipeline, LLM & Platform |
@@ -47,6 +48,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1102](cis-core-pipeline-llm-platform/AA-1102.md) | [Playbook] Build the new-project kit, part 1 — clean-up, templates and playbook pages (R1–R2b) | Done | 2026-11-14 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1104](cis-core-pipeline-llm-platform/AA-1104.md) | [Academy] Build part 1 — close shared doc gaps and the lesson format + bundle (P1–P2) | Done | 2026-11-14 | CIS Core — Pipeline, LLM & Platform |
 | [AA-1105](cis-core-pipeline-llm-platform/AA-1105.md) | [Academy] Build part 2 — learn schema, API, academy UI, quizzes and certificates (P3–P4) | Done | 2026-11-15 | CIS Core — Pipeline, LLM & Platform |
+| [AA-1120](cis-core-pipeline-llm-platform/AA-1120.md) | [DFS] Queue path bypasses the research cache: cache lookup, in-run dedupe and a guard so every DFS path goes through the cache | Done | 2026-11-16 | CIS Core — Pipeline, LLM & Platform |
 | [AA-594](cis-core-pipeline-llm-platform/AA-594.md) | [EPIC] CIS Data Reset & Pipeline Rerun — giữ raw_tours, reset dẫn xuất, chạy lại S1/atom/social, verify UI | Done | 2026-10-12 | CIS Core — Pipeline, LLM & Platform |
 | [AA-628](cis-core-pipeline-llm-platform/AA-628.md) | [Future] Engagement feedback loop for T-series (rebuild on content_piece/publish_log) | Canceled | 2026-11-03 | CIS Core — Pipeline, LLM & Platform |
 | [AA-634](cis-core-pipeline-llm-platform/AA-634.md) | [RESEARCH] TypeSafe AI "Jev" (System One Model) — khảo sát toàn diện A/T-series + TripPlanner + AAA cho quyết định có cấu trúc | Done | 2026-10-15 | CIS Core — Pipeline, LLM & Platform |
@@ -231,6 +233,8 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1096](data-platform-schema-ops-scale/AA-1096.md) | [Platform] Every threshold, limit and cap editable on an admin page (administrator) | Done | 2026-11-14 | Data Platform — Schema, Ops & Scale |
 | [AA-1097](data-platform-schema-ops-scale/AA-1097.md) | [Code health] Complexity and file-size ratchet guards in every app repo, then split the largest CIS files | Done | 2026-11-13 | Data Platform — Schema, Ops & Scale |
 | [AA-1106](data-platform-schema-ops-scale/AA-1106.md) | [Platform] Feature and integration catalogue for every app — capabilities, links, enabling conditions | Done | 2026-11-14 | Data Platform — Schema, Ops & Scale |
+| [AA-1107](data-platform-schema-ops-scale/AA-1107.md) | [Data/Perf] Catalog places read: index the normalised place name and push the tour filter into the atoms scan | Done | 2026-11-16 | Data Platform — Schema, Ops & Scale |
+| [AA-1109](data-platform-schema-ops-scale/AA-1109.md) | [Audit] Whole-ecosystem deep audit: state of every area, gaps and a ranked plan (report as an artifact) | Done | 2026-11-16 | Data Platform — Schema, Ops & Scale |
 | [AA-751](data-platform-schema-ops-scale/AA-751.md) | [Jobs] X6 per-owner job tables (ADR 0003a): DDL template + comparison test, booking.job parity, Booking deploy guard, DB Migrate idle check, backlog-age alarms, acp_runs readers | Done | 2026-10-17 | Data Platform — Schema, Ops & Scale |
 | [AA-824](data-platform-schema-ops-scale/AA-824.md) | [Data/Ops] RDS guardrails + connection budget — storage autoscaling, parameter group, pg_stat_statements, log export, alarms, CONNECTION LIMIT per role, Lambda reserved concurrency | Done | 2026-10-15 | Data Platform — Schema, Ops & Scale |
 | [AA-825](data-platform-schema-ops-scale/AA-825.md) | [Data] Retention + rollups for log tables — llm_call_log 180 d + daily rollup, tenant_api_usage 90 d + monthly, job TTL, sargable usage view, S3 Parquet archive | Done | 2026-10-25 | Data Platform — Schema, Ops & Scale |
@@ -668,11 +672,14 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-960](partner-crm-aa-partner/AA-960.md) | [CRM W6] CRM-29b Tags, system tags, coverage, ready-to-travel | Done | 2026-11-12 | Partner CRM — AA-Partner |
 | [AA-961](partner-crm-aa-partner/AA-961.md) | [CRM W6] CRM-30 Duty of care + calendar | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-962](partner-crm-aa-partner/AA-962.md) | [CRM W6] CRM-31 Onboarding + import | Done | 2026-10-31 | Partner CRM — AA-Partner |
+| [AA-963](partner-crm-aa-partner/AA-963.md) | [CRM W6] CRM-32 Search + library | Done | 2026-11-16 | Partner CRM — AA-Partner |
 | [AA-964](partner-crm-aa-partner/AA-964.md) | [CRM W7] CRM-33a AI gateway + drafts + guardrails | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-965](partner-crm-aa-partner/AA-965.md) | [CRM W7] CRM-33b AI: supplier confirmations, notes → options, voices | Done | 2026-11-15 | Partner CRM — AA-Partner |
 | [AA-966](partner-crm-aa-partner/AA-966.md) | [CRM W7] CRM-34 Reports + insights | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-967](partner-crm-aa-partner/AA-967.md) | [CRM W7] CRM-35 Module 18 portability + deletion | Done | 2026-10-31 | Partner CRM — AA-Partner |
+| [AA-968](partner-crm-aa-partner/AA-968.md) | [CRM W7] CRM-36 Campaigns (R14) | Done | 2026-11-16 | Partner CRM — AA-Partner |
 | [AA-969](partner-crm-aa-partner/AA-969.md) | [CRM W7] CRM-37a Security review, SLOs, bounded load test | Done | 2026-11-05 | Partner CRM — AA-Partner |
+| [AA-970](partner-crm-aa-partner/AA-970.md) | [CRM W7] CRM-37b Release train, help, data page | Done | 2026-11-16 | Partner CRM — AA-Partner |
 | [AA-971](partner-crm-aa-partner/AA-971.md) | [CRM W7] CRM-13b AA support L2 + break-glass L3 | Done | 2026-10-31 | Partner CRM — AA-Partner |
 | [AA-972](partner-crm-aa-partner/AA-972.md) | [CRM LB] CRM-B1 M2M + B2B quote | Done | 2026-10-23 | Partner CRM — AA-Partner |
 | [AA-973](partner-crm-aa-partner/AA-973.md) | [CRM LB] CRM-B2 Departures, capacity, holds | Done | 2026-10-23 | Partner CRM — AA-Partner |
@@ -694,6 +701,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1073](tripplanner-aa-booking/AA-1073.md) | [Booking departures] Minimum to operate, cutoff, recurring generator, agency allotments, departure board, ops sheet, departure fees, price adjustments | Done | 2026-11-11 | TripPlanner & AA-Booking |
 | [AA-1074](tripplanner-aa-booking/AA-1074.md) | [Booking finance] FX-normalised costs, departure shared costs, supplier purchase orders, planned vs actual cost, profit per case / departure / agency | Done | 2026-11-11 | TripPlanner & AA-Booking |
 | [AA-1075](tripplanner-aa-booking/AA-1075.md) | [Booking ops] Staff-entered agency bookings, vouchers, manifest and rooming list, cancellation override, child / infant / single net prices, deposit terms | Done | 2026-11-11 | TripPlanner & AA-Booking |
+| [AA-1090](tripplanner-aa-booking/AA-1090.md) | [TripPlanner R8] Tenant custom domain for the agency's TripPlanner (CloudFront + ACM) | Done | 2026-11-15 | TripPlanner & AA-Booking |
 | [AA-1091](tripplanner-aa-booking/AA-1091.md) | [Booking pricing] Price setup workbench for the customer-service team: components suggested from the CIS itinerary, bulk Excel import, readiness per tour | Done | 2026-11-14 | TripPlanner & AA-Booking |
 | [AA-1094](tripplanner-aa-booking/AA-1094.md) | [TripPlanner tenant] v_tenant_tour_v1 view, agency branding kept off AA tour pages, CIS tour page carries source_id for Book now | Done | 2026-11-13 | TripPlanner & AA-Booking |
 | [AA-589](tripplanner-aa-booking/AA-589.md) | [EPIC] TripPlanner — Ms.Thư tasks (data cleanup, upload raw, auto-edit, arrival/departure map, suggest next) | Done | 2026-09-16 | TripPlanner & AA-Booking |
