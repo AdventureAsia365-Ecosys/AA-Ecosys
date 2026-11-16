@@ -24,7 +24,7 @@ name: Delivery metrics
 # month); GitHub reads count against this repo's GITHUB_TOKEN rate limit (1,000 an hour), not against a person.
 on:
   schedule:
-    - cron: "23 * * * *"   # hourly (tech lead S282); the CIS page re-reads the published file on its Refresh button
+    - cron: "17 * * * *"   # hourly (tech lead S282); re-saved S282 close: the first cron never fired (AA-1108). The CIS page re-reads the published file on its Refresh button
   workflow_dispatch:
   pull_request:
     branches: [master]

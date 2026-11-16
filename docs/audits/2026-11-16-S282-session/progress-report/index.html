@@ -1,0 +1,448 @@
+<title>Tiến độ hệ sinh thái AA</title>
+<style>
+:root{
+  --bg:#f6f5f1;--surface:#ffffff;--surface-2:#f0eee8;--ink:#1d1c1a;--ink-2:#55524b;--ink-3:#85817a;
+  --line:#e2dfd7;--accent:#2f5d8a;--accent-soft:#e3ecf5;
+  --live:#1f7a4d;--live-bg:#e2f3e9;--beta:#7a5a00;--beta-bg:#fbf0cc;--partial:#8a4b12;--partial-bg:#fbe6d3;
+  --planned:#4b4f8f;--planned-bg:#e6e7f6;--missing:#9b2c2c;--missing-bg:#f8e0e0;
+  --bar-plan:#b9b4a8;--bar-ev:#2f5d8a;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161614;--surface:#1f1e1b;--surface-2:#282723;--ink:#ecebe6;--ink-2:#b5b2aa;--ink-3:#8a877f;
+    --line:#35332e;--accent:#8db6df;--accent-soft:#22303d;
+    --live:#7fd3a6;--live-bg:#173326;--beta:#e8c968;--beta-bg:#3a3115;--partial:#f0b27a;--partial-bg:#3d2a19;
+    --planned:#b3b6f0;--planned-bg:#272a47;--missing:#f19b9b;--missing-bg:#432222;
+    --bar-plan:#5a574f;--bar-ev:#8db6df;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#161614;--surface:#1f1e1b;--surface-2:#282723;--ink:#ecebe6;--ink-2:#b5b2aa;--ink-3:#8a877f;
+  --line:#35332e;--accent:#8db6df;--accent-soft:#22303d;
+  --live:#7fd3a6;--live-bg:#173326;--beta:#e8c968;--beta-bg:#3a3115;--partial:#f0b27a;--partial-bg:#3d2a19;
+  --planned:#b3b6f0;--planned-bg:#272a47;--missing:#f19b9b;--missing-bg:#432222;
+  --bar-plan:#5a574f;--bar-ev:#8db6df;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-bottom:48px}
+.wrap{max-width:1080px;margin:0 auto}
+header.top{padding:32px 0 8px}
+h1{font-size:28px;line-height:1.2;margin:0 0 6px;letter-spacing:-.01em}
+h2{font-size:20px;margin:40px 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+h3{font-size:16px;margin:20px 0 8px}
+p{margin:8px 0}
+.sub{color:var(--ink-2);font-size:14px}
+.mono,code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+nav.toc{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0 0}
+nav.toc a{font-size:13px;color:var(--accent);text-decoration:none;background:var(--accent-soft);padding:4px 10px;border-radius:999px}
+ul.tight{margin:8px 0;padding-left:20px}
+ul.tight li{margin:6px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.card h3{margin:0 0 4px;font-size:16px}
+.card .meta{font-size:13px;color:var(--ink-2)}
+.counts{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.kv{font-size:13px;margin:8px 0 0}
+.kv b{display:block;font-size:12px;color:var(--ink-3);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.ev{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:11.5px;line-height:1.45;color:var(--ink-3);margin-top:6px;overflow-wrap:anywhere}
+.chip{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.chip.live{color:var(--live);background:var(--live-bg)}
+.chip.beta{color:var(--beta);background:var(--beta-bg)}
+.chip.partial{color:var(--partial);background:var(--partial-bg)}
+.chip.planned{color:var(--planned);background:var(--planned-bg)}
+.chip.missing{color:var(--missing);background:var(--missing-bg)}
+.chip.neutral{color:var(--ink-2);background:var(--surface-2)}
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+th{font-size:12px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;background:var(--surface-2);position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+td.item{font-weight:600;width:26%}
+td.st{width:96px}
+td.sym{width:40px;font-size:18px;text-align:center}
+tr.group td{background:var(--surface-2);font-weight:700;font-size:13px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.filters button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:4px 12px;border-radius:999px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.ms{display:grid;grid-template-columns:minmax(150px,240px) 1fr;gap:6px 14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.ms .name{font-weight:600;font-size:14px}
+.ms .name small{display:block;font-weight:400;color:var(--ink-3);font-size:12px}
+.bars{display:flex;flex-direction:column;gap:4px;min-width:0}
+.bar{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-2)}
+.bar .lbl{width:74px;flex:none}
+.bar .track{flex:1;height:10px;background:var(--surface-2);border-radius:999px;overflow:hidden;min-width:60px}
+.bar .fill{height:100%;border-radius:999px}
+.bar .fill.plan{background:var(--bar-plan)}
+.bar .fill.ev{background:var(--bar-ev)}
+.bar .val{width:72px;flex:none;text-align:right;font-family:"JetBrains Mono",ui-monospace,monospace}
+.ms .note{grid-column:1/-1;font-size:13px;color:var(--ink-2)}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--ink-2);margin:6px 0 10px;flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:12px;height:8px;border-radius:4px;margin-right:6px;vertical-align:middle}
+.legend .lp::before{background:var(--bar-plan)}
+.legend .le::before{background:var(--bar-ev)}
+.answer{background:var(--accent-soft);border-left:4px solid var(--accent);padding:12px 16px;border-radius:6px;margin:12px 0}
+ol.ranked{padding-left:22px}
+ol.ranked li{margin:10px 0}
+ol.ranked .who{font-size:12px;color:var(--ink-3)}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0}
+summary{cursor:pointer;font-weight:600}
+.legend-sym{font-size:13px;color:var(--ink-2);margin:6px 0}
+footer{margin-top:40px;font-size:12px;color:var(--ink-3)}
+@media (max-width:520px){
+  h1{font-size:23px}
+  .ms{grid-template-columns:1fr}
+  .bar .lbl{width:60px}
+}
+</style>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<div class="wrap">
+<header class="top">
+  <h1>Tiến độ hệ sinh thái AA</h1>
+  <p class="sub">Rà soát chỉ đọc, phiên S282, 16/11/2026, viết cho tech lead. Nguồn: catalogue tính năng, plan.json, backlog, ADR, CONTEXT.md từng repo, log phiên S278 đến S281, Linear export, git log và curl endpoint công khai. Mỗi dòng có bằng chứng ở chữ nhỏ bên dưới.</p>
+  <nav class="toc">
+    <a href="#tomtat">1. Tóm tắt</a><a href="#app">2. Theo app</a><a href="#odoo">3. CRM so với Odoo</a>
+    <a href="#addon">4. Add-on hoàn chỉnh chưa</a><a href="#tp">5. Dạng cung cấp TripPlanner</a><a href="#next">6. Việc tiếp</a><a href="#src">7. Nguồn và giới hạn</a>
+  </nav>
+</header>
+
+<section id="tomtat">
+<h2>1. Tóm tắt</h2>
+<ul class="tight">
+  <li><b>Phần build đã gần đủ trên Dev.</b> Catalogue có 118 tính năng: 115 live, 3 beta. Hai tuần qua có hơn 790 commit ở 5 repo (CIS 276, Infra 251, Partner 126, Booking 90, TripPlanner 56). Toàn bộ loạt M-OD rút từ Odoo đã Done từ 10/11 đến 14/11.</li>
+  <li><b>Chưa có prod.</b> M5 chưa tick tiêu chí nào. Khung Deploy Prod có guard và module môi trường đã tách 3 slice (Booking, CRM, TripPlanner), nhưng chưa có tài khoản aa-prod, chưa có stack lõi CIS trong module, chưa có PITR/drill trên prod.</li>
+  <li><b>plan.json cũ hơn thực tế.</b> M-OD ghi 0/4 nhưng thực tế 4/4; M-P2 ghi 0/6 nhưng khoảng 5/6; M1b, M2a, CRM-after-R3 đều có tiêu chí đã đạt mà chưa tick. Tiêu chí "acc1 = 0 USD" của M1b đã sai từ S278 vì acc1 phục vụ Bedrock.</li>
+  <li><b>CRM mạnh hơn Odoo ở nghiệp vụ du lịch</b> (trip, departure, voucher, visa, Book with AA, mã hoá theo đại lý). Odoo vượt xa ở kế toán, hoá đơn điện tử VN, email marketing, API ngoài, app mobile. Khoảng trống cho pilot: thanh toán online thật, campaigns, tìm kiếm chung, Microsoft 365.</li>
+  <li><b>TripPlanner và CRM chưa phải add-on bán được.</b> Lõi kỹ thuật chạy thật (gói, feature key, duyệt add-on, saga cấp phát, hoá đơn, xoá dữ liệu), nhưng giá gói còn NULL, add-on thêm sau không có trial, CRM phải tạo agency tay, TripPlanner chưa có module trong app đại lý, chưa có hợp đồng đối tác.</li>
+  <li><b>TripPlanner chỉ có một dạng giao chạy thật</b>: trang AA host tại /{slug}/plan. Tên miền riêng đã test live PASS (S281) nhưng còn 2 lỗ và issue vẫn In Review. Launcher thuộc gói cơ bản nhưng chưa có code; embed, sub-domain AA, API chưa làm. Trang đại lý vẫn lộ chữ Adventure Asia ở title/description.</li>
+  <li><b>Bedrock</b>: acc1 gọi được 13/13 model chat từ S278; acc3 vẫn bị AWS chặn 7 model (theo log, chưa kiểm live hôm nay).</li>
+</ul>
+</section>
+
+<section id="app">
+<h2>2. Tiến độ theo app</h2>
+<p class="sub">Đếm từ docs/catalogue/features.yaml (cập nhật 16/11). Catalogue không có dòng planned, nên phần "còn lại" đọc từ plan.json và code. Số commit tính từ 02/11.</p>
+<div class="grid" id="appcards"></div>
+
+<h3>Milestone: plan.json ghi so với bằng chứng</h3>
+<div class="legend"><span class="lp">plan.json ghi</span><span class="le">theo bằng chứng</span></div>
+<div style="display:flex;flex-direction:column;gap:10px" id="milestones"></div>
+
+<details>
+  <summary>Chi tiết từng dòng tiến độ (app, nền tảng, milestone)</summary>
+  <div class="tablebox" style="margin-top:10px"><table><thead><tr><th>Mục</th><th>Trạng thái</th><th>Chi tiết</th></tr></thead><tbody id="approws"></tbody></table></div>
+</details>
+</section>
+
+<section id="odoo">
+<h2>3. CRM so với Odoo</h2>
+<div class="answer"><b>Kết luận ngắn.</b> CRM đại lý (AA-Partner) đã build gần hết lõi bán tour và mạnh hơn Odoo rõ ở nghiệp vụ du lịch: Odoo gốc không có trip, departure, voucher hay visa, phải mua module bên thứ ba. Odoo vượt xa ở kế toán đầy đủ (kể cả hoá đơn điện tử VN qua SInvoice), kho, Studio, API ngoài, app mobile, VoIP, live chat, helpdesk, email marketing, eLearning cho khách. Hướng nên đi: không đuổi theo độ rộng của Odoo; đóng các khoảng trống cho pilot và tích hợp kế toán thay vì tự build. Bảng so sánh 53 mục ngày 10/11 chưa được chấm lại sau M-OD.</div>
+<div class="filters" id="odoofilters" role="group" aria-label="Lọc theo trạng thái"></div>
+<div class="tablebox"><table><thead><tr><th>Năng lực</th><th>AA</th><th>So với Odoo</th></tr></thead><tbody id="odoorows"></tbody></table></div>
+
+<h3>Khoảng trống xếp theo mức ưu tiên</h3>
+<ol class="ranked" id="odoogaps"></ol>
+</section>
+
+<section id="addon">
+<h2>4. TripPlanner và CRM đã là add-on hoàn chỉnh chưa</h2>
+<div class="answer"><b>Trả lời: CHƯA.</b> Phần lõi kỹ thuật đã chạy thật trên Dev: danh mục gói, feature key, đại lý xin add-on rồi staff duyệt, saga cấp phát (create/attach/detach), hoá đơn SaaS từ Booking, treo cả tài khoản khi nợ, xoá dữ liệu khi đại lý rời đi ở cả 4 app. Thiếu chung: giá gói CRM và TripPlanner còn NULL (hoá đơn ra dòng 0 USD), add-on thêm sau không có trial, chưa có hợp đồng đối tác (DPA còn nháp), tài liệu cũ. Riêng CRM: bật add-on xong vẫn phải tạo agency và mời owner bằng tay, 4 trong 6 cổng tính năng chưa được gọi. Riêng TripPlanner: app đại lý chưa có module TripPlanner, chưa có trình sửa theme, chỉ site host theo /{slug} là live, và trang /sign-in, /trips của khách vẫn chạy trái ADR 0019 d11. Content studio là add-on đầy đủ nhất: có giá, có hạn mức, có hoá đơn.</div>
+<p class="legend-sym">✓ đã có &nbsp;·&nbsp; ◐ một phần hoặc beta &nbsp;·&nbsp; ○ chưa có</p>
+<div class="tablebox"><table><thead><tr><th></th><th>Tiêu chí</th><th>Trạng thái</th><th>Chi tiết</th></tr></thead><tbody id="addonrows"></tbody></table></div>
+</section>
+
+<section id="tp">
+<h2>5. Các dạng cung cấp TripPlanner tới đại lý</h2>
+<p>Hiện chỉ một dạng giao chạy thật cho đại lý: trang AA host tại <code>/{slug}/plan</code>. Kiểm live 16/11: host TripPlanner trả 200 (bản 0.14.0, sha 766d728), slug lạ trả 404.</p>
+<div class="grid" id="tpcards"></div>
+</section>
+
+<section id="next">
+<h2>6. Việc nên làm tiếp</h2>
+<p class="sub">Gộp từ bốn hướng rà soát, xếp theo tác động tới pilot đại lý đầu tiên và độ rẻ.</p>
+<ol class="ranked">
+  <li><b>Đồng bộ plan.json và backlog README với thực tế.</b> Chuyển M-OD sang done; tick D8 (M1b), AA-741 (M2a), AA-965 (CRM-after-R3), các tiêu chí đã đạt của M-P2/M-R7, phần P0 và AA-911 của M5. Thay tiêu chí "acc1 = 0 USD" bằng đối soát chi phí Bedrock acc1 và acc3 trên hoá đơn payer. Thêm AA-1090 vào issues[]; sửa tiêu chí 3 của M-R7; sửa dòng AA-1082 (đã gộp vào AA-980) và trạng thái AA-963/968/970 cho khớp. Commit bản plan.json đang sửa dở.<div class="who">Agent, root PR cuối phiên</div></li>
+  <li><b>Đóng AA-1090 kèm hai sửa nhỏ.</b> add_domain kiểm cờ tp.custom_domain (gói pro, b4); subject_gate nhận tên miền riêng của tenant để link bán hàng không bị chặn.<div class="who">Agent, CIS PR rồi aa-ship</div></li>
+  <li><b>Chốt giá gói.</b> Business owner chốt giá CRM theo seat (b3) và TripPlanner theo site (b4); tech lead nhập ở Plans admin; đọc lại hoá đơn nháp để chắc không còn price_missing.<div class="who">Business owner quyết, tech lead nhập</div></li>
+  <li><b>Gỡ chữ Adventure Asia trên trang đại lý và phần B2C còn sót.</b> title, description, og:site_name theo tên đại lý, có test guard; gỡ hoặc tắt /sign-in và /trips theo ADR 0019 d11, cập nhật TP-F004.<div class="who">Agent, TripPlanner PR</div></li>
+  <li><b>Launcher snippet (tp.launcher).</b> Đoạn script hoặc nút mở /{slug}/plan ở tab mới, không cần iframe nên CSP giữ nguyên. Đây là phần gói cơ bản đang bán mà chưa giao.<div class="who">Agent</div></li>
+  <li><b>Cấp phát CRM trọn vòng.</b> Thêm bước tạo agency CRM và mời owner vào saga tenant_provision; cho nút "New tenant" gọi saga (G2a); quyết trial cho add-on thêm bằng attach.<div class="who">Tech lead quyết trial, agent build</div></li>
+  <li><b>Module Trip planner trong app đại lý.</b> Link site, kênh lead, theme/brand (G13), locale vi áp thật, lead, mức dùng.<div class="who">Agent</div></li>
+  <li><b>Cổng tính năng CRM còn thiếu.</b> Gắn require_feature cho campaigns, stripe_connect, custom_domain, insights_export khi build; áp hoặc bỏ key không dùng (tp.ai_sessions, api.access).<div class="who">Agent</div></li>
+  <li><b>Khoảng trống CRM cho pilot.</b> Drill VNPay với merchant sandbox và thêm dòng VNPay vào integrations.yaml; AA-963 Search; AA-968 Campaigns (consent, unsubscribe, gửi từ mailbox đại lý); AA-1011 Microsoft 365 và đồng bộ lịch; trình quyết định b14 về Stripe.<div class="who">Agent; app M365 do tech lead đăng ký</div></li>
+  <li><b>Pháp lý và vận hành trước đại lý trả tiền đầu tiên.</b> Mẫu hợp đồng đối tác (gói, phí, SLA), hoàn tất DPA, gửi luật sư (b20); AA-980 Go-real gồm HA cho web đại lý, báo chi phí tháng trước khi làm.<div class="who">Business owner và tech lead</div></li>
+  <li><b>Làm cho Product map nói thật.</b> Thêm dòng planned vào features.yaml (TripPlanner embed/launcher/API/tên miền riêng, CRM campaigns và các cổng còn thiếu, prod); sửa điều kiện TP-F004/TP-F005; xem lại CRM-F022 beta sang live.<div class="who">Agent</div></li>
+  <li><b>Tài liệu.</b> Viết lại tripplanner-runbook theo B2B; làm mới crm- và content-studio-runbook; sửa bước 7 và 9 của runbook onboarding (AA-1093 đã xong, TripPlanner khôi phục được 42/42).<div class="who">Agent</div></li>
+  <li><b>Lịch theo ngày.</b> AA-1061 (xoá bảng B2C, từ 28/11) để đóng M-R4; các tiêu chí từ 01/12 của M1b và M5 (AA-1026 D6, AA-873, AA-1004).<div class="who">Agent, theo slot</div></li>
+  <li><b>Sau pilot, theo phản hồi thật.</b> Chấm lại bảng Odoo (35 mục CRM + 18 mục Booking); xuất kế toán theo mẫu MISA/Xero và nghiên cứu hoá đơn điện tử BYO (cần hỏi trước khi mở issue); Zalo OA theo mô hình BYO; chấm điểm lead, luật phân lead, SLA inbox, API/webhook công khai, academy cho đại lý (P7). Không build Studio, kho hay sổ cái.<div class="who">Tech lead xếp ưu tiên</div></li>
+</ol>
+</section>
+
+<section id="src">
+<h2>7. Nguồn và giới hạn</h2>
+<h3>Đã kiểm live (curl công khai, 16/11)</h3>
+<ul class="tight">
+  <li>CIS <code>/health</code> 200; Booking <code>/booking/health</code> 200; CRM <code>/crm/health</code> 200 (aa-crm-api 0.11.0); host portal và academy 307; host TripPlanner 200 (0.14.0, sha 766d728).</li>
+  <li>TripPlanner: <code>/audit-atlas-hearth/plan</code> 200, slug lạ 404, <code>/sign-in</code> và <code>/trips</code> 200, header CSP <code>frame-ancestors 'none'</code> và <code>X-Frame-Options: DENY</code>, meta title/description/og:site_name còn chữ Adventure Asia, <code>&lt;html lang="en"&gt;</code>.</li>
+</ul>
+<h3>Chưa kiểm</h3>
+<ul class="tight">
+  <li>ECS, RDS, rollout, bảng job, trạng thái Bedrock acc1/acc3 hôm nay (vai trò chỉ đọc, không gọi AWS). Trạng thái Bedrock lấy từ log S278.</li>
+  <li>Giá gói live trong DB; mặc định trial 14 ngày trong code; alarm Terraform; nội dung tài liệu pháp lý từng dòng.</li>
+  <li>Kênh lead webhook và e-mail chạy live; theme màu có hiện trên trang đại lý; trang <code>/{slug}/tours/{tour}</code> live; task Fargate Spot đang chạy thật; rule rate/Challenge 429 của WAF.</li>
+  <li>M-R7 tiêu chí 1 (§8.4 mục 1 đến 7) chưa đối chiếu từng mục.</li>
+  <li>Phần lớn chi tiết về Odoo 19 do agent trước ghi; reviewer chỉ kiểm lại trang pricing và trang Vietnam fiscal localization. Nghĩa vụ hoá đơn điện tử của đại lý VN về pháp lý chưa kiểm.</li>
+</ul>
+<h3>Lưu ý về nguồn</h3>
+<ul class="tight">
+  <li>plan.json đang có thay đổi local chưa commit (43+/31-). Số liệu milestone đọc từ working tree S282; ở chỗ README backlog và bản đã commit khác bản working tree (AA-963, AA-968, AA-970), báo cáo theo bản đã commit.</li>
+  <li>AA-1090: một hướng rà soát ghi "chờ Infra #863"; các nguồn mới hơn (log S281 mục "Bổ sung lúc chốt", Infra #863 đến #865, CIS #1528) cho thấy test live đã PASS. Báo cáo theo nguồn mới hơn.</li>
+  <li>Không ghi account ID, e-mail hay secret trong trang này.</li>
+</ul>
+<details><summary>Ghi chú của reviewer (các chỗ đã sửa so với bản nháp)</summary><div id="reviewnotes"></div></details>
+</section>
+
+<footer>Rà soát chỉ đọc S282, 16/11/2026. Không ghi vào repo, không gọi AWS, không gọi LLM trả phí.</footer>
+</div>
+
+<script>
+(function(){
+var L={live:"live",beta:"beta",partial:"một phần",planned:"planned",missing:"thiếu"};
+function el(t,c,txt){var e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e;}
+function chip(s){return el("span","chip "+s,L[s]||s);}
+function ev(t){return el("div","ev",t);}
+
+/* ---------- Section 2: app cards ---------- */
+var apps=[
+ {n:"AA-CIS",s:"Dev live",live:46,beta:1,planned:0,c:276,
+  shipped:"Settings registry (214 setting, 0 env override), saga xoá tenant, backup/restore theo tenant, kết nối Bedrock acc1, gateway batch lane, Reference prices, Academy API, Product map, tên miền riêng TripPlanner ở Tenant 360, báo cáo R5/R6.",
+  left:"AA-1048 In Progress; AA-1050/1051 (later); M2a: AA-1000, AA-788 (từ 19/11), AA-790, AA-920..922; báo cáo R7.",
+  e:"features.yaml; git log --since=2026-11-02; S281 log dòng 39, 117; curl api-cis /health 200"},
+ {n:"AA-Booking",s:"Dev live, chỉ B2B",live:19,beta:0,planned:0,c:90,
+  shipped:"Gỡ phần B2C, chuỗi giá tour, agency billing, admin trên ECS, finance, departure minimum/cutoff/allotments, vouchers, partial cancel, RLS b2b_partners, price list version + season calendar, policy params, xoá tenant.",
+  left:"AA-1061 xoá bảng B2C (từ 28/11) để đóng M-R4.",
+  e:"features.yaml BK-F001..F019; git log (90); curl /booking/health 200"},
+ {n:"AA-Partner (CRM + Content studio + Academy web)",s:"Dev live",live:35,beta:2,planned:0,c:126,
+  shipped:"Content studio gộp vào web, lead TripPlanner vào CRM, settings registry, xoá tenant, PDF PAdES, Academy web, voice profiles + AI CRM-33b.",
+  left:"AA-963, AA-968, AA-970 (README ghi Backlog/tạm dừng), AA-948, AA-1011; 4/6 cổng tính năng chưa gọi; AA-980 Go-real (M5).",
+  e:"features.yaml CRM-F001..F047; entitlements.py dòng 20; git log (126); curl /crm/health 200"},
+ {n:"AA-TripPlanner",s:"Dev live, white-label một phần",live:9,beta:0,planned:0,c:56,
+  shipped:"tenant_id + RLS FORCE, lead.submitted.v1 vào CRM, frontend trên ECS sau CloudFront/WAF, UX R7 + chat lập kế hoạch, khoá ký assertion riêng, xoá tenant, tên miền riêng (test PASS).",
+  left:"Đóng AA-1090; launcher, embed, API headless; module trong app đại lý; theme/locale; gỡ /sign-in, /trips.",
+  e:"CONTEXT.md dòng 30-37; next.config.mjs dòng 12; migration 355; git log (56); curl 200"},
+ {n:"AA-CIS-Infra",s:"Dev live, prod chưa có",live:6,beta:0,planned:0,c:251,
+  shipped:"Module môi trường tách 3 slice (Booking #633, CRM #643, TripPlanner #649), khung Deploy Prod có guard, Terraform tên miền riêng (#854, #863..#865).",
+  left:"Stack lõi CIS vào module, tài khoản aa-prod, envs prod, PITR/drill prod (M5).",
+  e:"features.yaml INF-F001..F006; deploy-prod.yml; ls modules/environment, accounts, envs"},
+ {n:"AA Academy",s:"Dev live cho staff",live:2,beta:0,planned:0,c:null,
+  shipped:"CIS-F048 learn API + verify chứng chỉ công khai; CRM-F047 web (đăng nhập, bài học, quiz, ôn tập, chứng chỉ). AA-1105 Done 15/11.",
+  left:"Nội dung mỏng: 1 path, 1 module active (F3); F1, F2, F4, F5, F6 planned. Academy cho đại lý ở P7 (ADR 0022 D6).",
+  e:"ADR 0022; docs/learn/paths/fundamentals.yaml; curl academy 307. Hai tính năng này đã tính trong CIS và Partner ở trên."}
+];
+var ac=document.getElementById("appcards");
+apps.forEach(function(a){
+  var c=el("div","card");c.appendChild(el("h3",null,a.n));c.appendChild(el("div","meta",a.s));
+  var k=el("div","counts");
+  var l=chip("live");l.textContent=a.live+" live";k.appendChild(l);
+  var b=chip("beta");b.textContent=a.beta+" beta";k.appendChild(b);
+  var p=chip("planned");p.textContent=a.planned+" planned";k.appendChild(p);
+  if(a.c!=null){var cc=el("span","chip neutral",a.c+" commit / 2 tuần");k.appendChild(cc);}
+  c.appendChild(k);
+  var s=el("div","kv");s.appendChild(el("b",null,"Đã ship từ 02/11"));s.appendChild(document.createTextNode(a.shipped));c.appendChild(s);
+  var r=el("div","kv");r.appendChild(el("b",null,"Còn lại"));r.appendChild(document.createTextNode(a.left));c.appendChild(r);
+  c.appendChild(ev(a.e));ac.appendChild(c);
+});
+
+/* milestones: [name, sub, planDone, evDone (null=không quy được), total, note, evidence] */
+var ms=[
+ ["M1b Cổng AI + FinOps","active",4,5,7,"D8 (mig 336 + DB_AUTO_APPLY_CONTRACT) đã Done S276 nhưng chưa tick. Còn 2 tiêu chí từ 01/12. Tiêu chí 'Cost Explorer acc1 = 0 USD' sai từ S277/S278.","plan.json milestones[M1b]; linear-export dòng 10 (AA-1024)"],
+ ["M-R4 Booking chỉ B2B","active",5,5,6,"Còn xoá bảng B2C (AA-1061, DRY RUN + review, từ 28/11).","plan.json milestones[M-R4]"],
+ ["M5 Prod + go-real","active",0,null,7,"Đã làm một phần: khung Deploy Prod + DB Migrate prod có guard (#633), 3 slice module môi trường, AA-911 Done 08/11. Chưa có aa-prod, PITR/drill, AA-873, AA-980; AA-1004 chờ ngày go-live.","plan.json milestones[M5]; Infra #633/#643/#649; linear-export dòng 737"],
+ ["M-OD Học từ Odoo","ghi next",0,4,4,"Cả 4 tiêu chí đã đạt: AA-1066..1075 và AA-1089 Done 10/11 đến 14/11. Cần chuyển sang done.","linear-export dòng 628-636, 694-696"],
+ ["M-P2 TripPlanner đa tenant","ghi later",0,5,6,"RLS FORCE tp-028 (probe 99/99), tenant theo path, lead vào CRM, ECS sau CloudFront + WAF, trần AI theo tenant. Thiếu AA-855 vòng 2 (park). WAF 429 live chưa kiểm. Số 5/6 là ước lượng.","linear-export dòng 690; tripplanner_web.tf dòng 288-298"],
+ ["M-R7 UX TripPlanner","ghi later",0,null,3,"AA-1041 Done 11/11. Tiêu chí 1 chưa đối chiếu đủ; tiêu chí 2 đạt một phần (visual chỉ report-only); tiêu chí 3 ('không làm chat') mâu thuẫn vì chat đã ship tp-029.","linear-export dòng 691; deploy-web-dev.yml"],
+ ["CRM-after-R3","ghi later, đang chạy",0,1,4,"AA-965 Done 15/11 (49 lượt AI, 0,0072 USD) chưa tick. AA-968 campaign chưa có code.","plan.json; linear-export dòng 672; S281 log dòng 73-74"],
+ ["M2a Chất lượng CIS","later, chờ đường LLM",0,1,4,"AA-741 Done 10/11 chưa tick. AA-788 mở từ 19/11. Rủi ro 'acc3 đứng' cần ghi lại: acc1 đã thay acc3.","plan.json milestones[M2a]; linear-export dòng 86"]
+];
+var mw=document.getElementById("milestones");
+function bar(lbl,cls,done,total){
+  var b=el("div","bar");b.appendChild(el("span","lbl",lbl));
+  var t=el("div","track");var f=el("div","fill "+cls);
+  f.style.width=(done==null?0:Math.round(done/total*100))+"%";t.appendChild(f);b.appendChild(t);
+  b.appendChild(el("span","val",done==null?"chưa quy":done+"/"+total));return b;
+}
+ms.forEach(function(m){
+  var d=el("div","ms");var n=el("div","name",m[0]);n.appendChild(el("small",null,m[1]));d.appendChild(n);
+  var bs=el("div","bars");bs.appendChild(bar("plan.json","plan",m[2],m[4]));bs.appendChild(bar("bằng chứng","ev",m[3],m[4]));d.appendChild(bs);
+  var no=el("div","note",m[5]);no.appendChild(ev(m[6]));d.appendChild(no);mw.appendChild(d);
+});
+
+var appRows=[
+ ["Đường gọi Bedrock (acc1 / acc3)","partial","Từ S278 (12/11) acc1 gọi được 13/13 model chat qua role AA1-Bedrock-Invoker; route v10/v11: Claude đi Anthropic API → acc1 → acc3; GPT đi acc1 → acc3 → OpenAI API. acc3 vẫn bị AWS chặn ở cấp tài khoản: 7 model 'not available for this account', quota 0. Log S280, S281 không ghi acc3 được mở. Trạng thái live hôm nay chưa kiểm.","S278 log dòng 24, 48, 63, 67; CIS #1465/#1466; CLAUDE.md account map (Note S278)"],
+ ["Nền tảng dùng chung","partial","Infra 6/6 live. AI gateway có batch lane, ngân sách, trần theo tenant. Settings registry 311 key trong snapshot; live CIS 214 + TP 17, 0 env override (AA-1096 Done 14/11). Control plane tenant đủ plans, entitlements, provision, saga offboarding/erasure qua 4 app. Báo cáo AA-1003 (In Review): 65 dòng; 32 có generator CIS (31 partial, 1 missing), 33 chưa có generator (16 partial, 11 missing, 3 planned, 2 exists, 1 retired). Prod chưa có.","features.yaml INF-F001..F006; surface.snapshot.json; docs/reports/catalog.yaml; deploy-prod.yml"],
+ ["AA-1090 tên miền riêng TripPlanner","beta","Code, migration, Terraform đã merge (TP #269, CIS #1521/#1527/#1528, Infra #854/#863/#864/#865). Test live PASS lúc chốt S281 trên domain thử (host active 08:06Z, mang tên đại lý, gỡ thì về đường dẫn chung). Issue vẫn In Review, chưa có trong plan.json issues[].","S281 log mục 'Bổ sung lúc chốt'; backlog README dòng 174"],
+ ["Catalogue không có dòng planned","partial","features.yaml không có dòng planned nào, nên Product map không cho thấy TripPlanner embed/launcher/API, 4 cổng CRM chưa gọi, prod.","docs/catalogue/features.yaml"]
+];
+var ar=document.getElementById("approws");
+appRows.forEach(function(r){var tr=el("tr");tr.appendChild(el("td","item",r[0]));var s=el("td","st");s.appendChild(chip(r[1]));tr.appendChild(s);var d=el("td",null,r[2]);d.appendChild(ev(r[3]));tr.appendChild(d);ar.appendChild(tr);});
+
+/* ---------- Section 3: Odoo matrix ---------- */
+var od=[
+ ["Pipeline / kanban stages","live","Bảng trip từ Inquiry tới Travelled, lịch sử stage, Undo, lý do lost/cancel; có giá trị pipeline theo tỷ giá hôm nay. Thiếu dự báo doanh thu nhân xác suất theo stage như Odoo.","features.yaml CRM-F005; CONTEXT.md ~986; odoo.com/app/crm (không kiểm lại)"],
+ ["Lead capture (form, e-mail, lead planner)","live","Form inquiry/planning công khai, mail forward-in vào trip, lead từ TripPlanner, dedupe theo e-mail/điện thoại. Thiếu live chat, quét danh thiếp, lead từ Events.","features.yaml CRM-F004; integrations.yaml INT-011"],
+ ["Chấm điểm lead / xác suất thắng","missing","AA chưa có. Odoo có lead scoring theo dữ liệu thắng/thua. Không bắt buộc cho pilot.","Odoo docs lead_scoring (không kiểm lại)"],
+ ["Phân lead / sales team","partial","Mỗi trip có một chủ, workflow set_field đổi chủ. Chưa có sales team, round-robin hay luật phân lead.","CONTEXT.md CRM-29a (crm-038)"],
+ ["Khách và người đi","live","Mã hoá từng trường bằng DEK riêng mỗi đại lý (KMS), mặc định che, mỗi lần xem có log. Có người đi cùng, hộ chiếu, ăn uống, y tế. Odoo Contacts là trường thường, phân quyền theo group.","features.yaml CRM-F006; CONTEXT.md Field encryption (AA-934)"],
+ ["Activities, task, follow-up","live","Task theo trip, task tự động từ workflow, mốc ngày (khởi hành, sinh nhật, hộ chiếu hết hạn). Tương đương activities của Odoo.","features.yaml CRM-F005; CONTEXT.md CRM-29a"],
+ ["Đề xuất / proposal builder","live","Đề xuất theo ngày, nhiều option, có version, tour AA giá live từ Booking cộng dịch vụ riêng. Với tour, sâu hơn quote template của Odoo Sales.","features.yaml CRM-F007, F008"],
+ ["Luật giá, loại khách, giảm giá","live","Giá người lớn/trẻ em/em bé/phòng đơn, luật mùa/nhóm/đặt sớm; giảm giá quá ngưỡng cần chủ đại lý duyệt. Thiếu coupon, loyalty, gift card.","AA-1066.md (Done)"],
+ ["Accept online + e-sign","live","Accept kèm price hash; e-sign tự build có waiver, giám hộ ký cho trẻ; PDF niêm phong PAdES-B-B (AA-1012). Giá trị pháp lý chưa được luật sư xem.","features.yaml CRM-F009, F010; AA-1012.md"],
+ ["Hoá đơn (cọc/phần còn lại, thuế, số)","live","Số hoá đơn liên tục, thuế suất, khoá sau phát hành. Không phát hành được hoá đơn điện tử VN cho khách của đại lý; Odoo 19 có l10n_vn_edi_viettel (SInvoice).","features.yaml CRM-F011; odoo.com/documentation/19.0 Vietnam"],
+ ["Lịch thanh toán, trả góp, nhắc nợ","live","Cọc, trả góp, quá hạn; nhắc từ mailbox đại lý, chu kỳ sửa được trong admin.","AA-1067.md (Done)"],
+ ["Thanh toán online (cổng)","partial","VNPay BYO (AA-1072) mới chạy stub với mã merchant giả; Stripe Connect planned (INT-071, b14). Catalogue chưa có dòng VNPay.","AA-1072.md dòng 97; integrations.yaml INT-071"],
+ ["Hoàn tiền, chính sách huỷ","live","Hoàn tiền cần duyệt (ngưỡng, không tự duyệt); bảng phí huỷ theo ngày khoá vào đề xuất, có hoá đơn phí huỷ. Odoo dùng credit note chung.","AA-1067.md; AA-1089.md"],
+ ["Kế toán đầy đủ (GL, đối soát ngân hàng, thuế)","missing","Cố ý không làm: đại lý là merchant và tự lo kế toán. Chưa có đường xuất sang MISA/Xero, chỉ CSV báo cáo và ZIP portability.","CONTEXT.md CRM-23, CRM-34"],
+ ["Đa tiền tệ, tỷ giá","live","Tỷ giá chốt lúc xác nhận, override theo ngày, crm.fx_resolve, chênh lệch tỷ giá trên hoa hồng; khoá tỷ giá theo dòng booking.","CONTEXT.md crm-014; research Odoo 10/11"],
+ ["Nhà cung cấp, catalogue dịch vụ, hoá đơn NCC","live","NCC riêng đại lý, yêu cầu đặt gom theo NCC, hoá đơn NCC so với kế hoạch. Odoo Purchase sâu hơn (RFQ, đối chiếu ba chiều).","features.yaml CRM-F012, F015; AA-1068/1069.md"],
+ ["Lãi lỗ chuyến / P&L","live","P&L từng chuyến, chi phí chung của nhóm khởi hành, profit cube theo kênh/sản phẩm/tháng/người bán. Odoo phải dùng analytic accounting.","CONTEXT.md dòng 1068; AA-1068.md"],
+ ["Kho / sản xuất","missing","Cố ý không làm. Ghế khởi hành và allotment nằm ở Booking (AA-1073).","AA-1073.md"],
+ ["Điều hành tour (departure, voucher, rooming, hộ chiếu/visa)","live","Khác biệt chính: roster theo khởi hành, voucher, PDF server, rooming list, theo dõi visa, ops release, duty of care. Odoo gốc không có.","features.yaml CRM-F018, F019; AA-1070.md"],
+ ["Book with AA (nguồn cung B2B trong CRM)","live","Tariff AA, giữ chỗ có hạn, xác nhận sau cọc, hoá đơn AA, contract booking.b2b.v1. Odoo không có.","features.yaml CRM-F013; integrations.yaml INT-024"],
+ ["Cổng khách du lịch","live","Link ký + OTP e-mail: chi tiết chuyến, giấy tờ, ký, hoá đơn, PWA offline. Đặc thù chuyến đi hơn portal Odoo.","features.yaml CRM-F009; CONTEXT.md CRM-24b"],
+ ["Website / đặt online","partial","'Book now' trên trang tour công khai (bật theo đại lý), add-on TripPlanner, form inquiry. Không có website builder hay eCommerce.","AA-1072.md; integrations.yaml INT-050/051"],
+ ["Tích hợp mailbox","live","Send-as Gmail và SMTP; forward/BCC gom thread theo trip, Unmatched, saved replies. Chưa đồng bộ hai chiều; chưa có Microsoft 365 (AA-1011).","features.yaml CRM-F016; integrations.yaml INT-070"],
+ ["Email marketing / campaign","planned","Chưa có code; /marketing mới có tag và danh sách Ready to travel again. AA-968: README ghi Backlog/tạm dừng, chỉ plan.json chưa commit ghi In Progress.","backlog README dòng 185, 232; CONTEXT.md dòng 1521"],
+ ["Tự động hoá / workflow","live","Trigger theo stage, sự kiện, mốc ngày; bước gửi mail/SMS, tạo task, set field, chờ; chống vòng lặp, tôn trọng consent. Chưa có trigger theo mở/click.","CONTEXT.md crm-038"],
+ ["SMS và WhatsApp","beta","Twilio BYO, template WhatsApp, inbox gom tin; Dev chỉ chạy SandboxProvider. Zalo, Messenger/IG chưa có issue.","features.yaml CRM-F017; integrations.yaml INT-072"],
+ ["VoIP / ghi cuộc gọi","missing","AA không có. Odoo có VoIP.","Odoo (không kiểm lại)"],
+ ["Live chat / chatbot","missing","Không có. Help bot trong backlog design v3, sau khoảng 50 câu hỏi thật.","design-v3.md dòng 58"],
+ ["Helpdesk / ticket","partial","Thread theo trip, Unmatched, task. Không có ticket, SLA, knowledge base.","features.yaml CRM-F016"],
+ ["Project / task (Gantt, timesheet)","partial","Lấy chuyến làm trung tâm: task, calendar, duty of care. Không Gantt, phụ thuộc task hay timesheet.","features.yaml CRM-F005, F018"],
+ ["Tài liệu / DMS","partial","Giấy tờ theo trip mã hoá, đính kèm mail, PDF niêm phong. Không DMS chung hay spreadsheet.","features.yaml CRM-F006, F019"],
+ ["Chat nội bộ / chatter","partial","Internal note trên trip và audit log. Không kênh chat hay @mention.","CONTEXT.md ~1260"],
+ ["Lịch","partial","Lịch đại lý, Travelling now. Đồng bộ Google/Microsoft Calendar thuộc AA-1011 (Backlog).","features.yaml CRM-F018; backlog README dòng 187"],
+ ["Báo cáo / dashboard","live","Funnel, tiền, công nợ, team, xuất CSV (entitlement crm.insights_export). Engine AA-1003 là báo cáo nội bộ AA, không phải dashboard đại lý. Odoo linh hoạt hơn nhiều.","features.yaml CRM-F020; commit 01c6b849 (#817)"],
+ ["Tính năng AI","beta","AI soạn nháp, ngân sách tháng, lọc PII 3 lớp trước mọi prompt. AA-965 Done S281 nhưng catalogue vẫn ghi beta. Odoo rộng hơn; Agentic AI thuộc gói Custom.","features.yaml CRM-F022; AA-965.md"],
+ ["Tìm kiếm chung","planned","Chưa có; AA-963 README ghi Backlog/tạm dừng. Mỗi trang chỉ có bộ lọc riêng.","backlog README dòng 184, 231"],
+ ["Vai trò, quyền, đa tenant","live","3 vai trò cố định; margin bảo vệ bằng RLS RESTRICTIVE; FORCE RLS theo đại lý; quyền hỗ trợ AA do chủ đại lý cấp có hạn. Odoo cấu hình linh hoạt hơn nhưng không phải SaaS đa tenant.","features.yaml CRM-F023, F026, F027"],
+ ["Quyền riêng tư / vòng đời dữ liệu","live","ZIP portability, log yêu cầu dữ liệu, access log, thùng rác, legal hold, xoá theo saga (AA-1093). Đại lý là controller, AA là processor. Phía Odoo chưa kiểm.","features.yaml CRM-F025"],
+ ["Tuỳ biến (Studio, custom field)","missing","Cố ý không làm: chỉ sửa ngưỡng/policy và template. Odoo Studio thuộc gói Custom.","CONTEXT.md dòng 3061; odoo.com/pricing"],
+ ["Tích hợp, API ngoài, kho app","missing","Chỉ connector BYO cố định (Gmail/SMTP, Twilio, VNPay, WordPress, Facebook). API key tenant đã gỡ ở R3. Không API công khai, webhook ra.","integrations.yaml; backlog README dòng 135, 228"],
+ ["Mobile","partial","Web responsive, PWA offline cho khách. Nhân viên không có app native.","CONTEXT.md CRM-24b, CRM-27"],
+ ["Content studio (AI viết theo brand đại lý)","live","Odoo không có. Brand voice, marketplace nhận tour AA, AI viết lại, slate bài và social, đăng WordPress/Facebook.","features.yaml CRM-F040..F046"],
+ ["Hoa hồng và sub-agent","live","Hoa hồng từ NCC (expected → received), sales partner có link giới thiệu, portal sub-agent. So sánh Odoo chưa kiểm lại.","features.yaml CRM-F014; AA-1071.md"],
+ ["Onboarding và import","live","Getting started 3 bước, import khách từ spreadsheet có dedupe. Phía Odoo chưa kiểm.","features.yaml CRM-F003"],
+ ["eLearning (AA Academy)","partial","Academy web live nhưng chỉ cho nhân viên AA; academy cho đại lý ở P7. Odoo có eLearning bán khoá học cho khách.","features.yaml CRM-F047; ADR 0022"],
+ ["Sẵn sàng vận hành","partial","CRM /crm/health 200 (0.11.0). Web đại lý chạy 1 task Fargate Spot. HA đã gộp vào AA-980 Go-real (Backlog).","curl 16/11; linear-review S279 dòng 15, 19"]
+];
+var ob=document.getElementById("odoorows");
+od.forEach(function(r){var tr=el("tr");tr.setAttribute("data-s",r[1]);tr.appendChild(el("td","item",r[0]));var s=el("td","st");s.appendChild(chip(r[1]));tr.appendChild(s);var d=el("td",null,r[2]);d.appendChild(ev(r[3]));tr.appendChild(d);ob.appendChild(tr);});
+var fs=document.getElementById("odoofilters");
+var keys=["all","live","beta","partial","planned","missing"];
+var counts={all:od.length};od.forEach(function(r){counts[r[1]]=(counts[r[1]]||0)+1;});
+keys.forEach(function(k){
+  var b=el("button",null,(k==="all"?"Tất cả":L[k])+" ("+(counts[k]||0)+")");b.type="button";b.setAttribute("aria-pressed",k==="all"?"true":"false");
+  b.addEventListener("click",function(){
+    fs.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed","false");});b.setAttribute("aria-pressed","true");
+    ob.querySelectorAll("tr").forEach(function(tr){tr.style.display=(k==="all"||tr.getAttribute("data-s")===k)?"":"none";});
+  });fs.appendChild(b);
+});
+var og=[
+ "Thanh toán online thật: VNPay BYO mới chạy stub, chưa thử merchant sandbox/thật; Stripe (INT-071) chờ quyết định b14. Đại lý pilot phải nhận chuyển khoản tay rồi bấm 'I have paid'.",
+ "Hoá đơn điện tử VN và kế toán: chưa phát hành được hoá đơn điện tử cho khách của đại lý, chưa có đường xuất sang MISA/Xero. Nghĩa vụ pháp lý chưa kiểm.",
+ "Email campaign (AA-968): chưa có code; trạng thái lệch giữa README và plan.json chưa commit.",
+ "Microsoft 365 và lịch (AA-1011): đại lý dùng Outlook chưa gửi send-as được, chưa đồng bộ lịch; mail hai chiều còn trong backlog.",
+ "Tìm kiếm chung (AA-963): chưa có code.",
+ "Kênh chat phổ biến ở VN: Zalo, Messenger/IG chưa có issue; WhatsApp/SMS vẫn beta, cần Twilio riêng; chưa có live chat.",
+ "HA cho web đại lý: đã gộp vào AA-980 Go-real; web vẫn 1 task Spot, rủi ro uptime khi đại lý dùng hằng ngày.",
+ "Sau pilot: chấm điểm lead, luật phân lead, SLA inbox, app mobile cho nhân viên, API/webhook công khai, academy cho đại lý (P7).",
+ "Không coi là gap: kế toán đầy đủ, kho, Studio, kho app. Đây là lựa chọn có chủ đích; giải bằng tích hợp."
+];
+var ogl=document.getElementById("odoogaps");og.forEach(function(g){ogl.appendChild(el("li",null,g));});
+
+/* ---------- Section 4: add-on checklist ---------- */
+var sym={live:"✓",beta:"◐",partial:"◐",planned:"○",missing:"○"};
+var ad=[
+ ["TripPlanner"],
+ ["Gói bán được (SKU) và giá","partial","Có gói Hosted và Pro tính theo site (b4), giá seed NULL ('price to set'). Giá live trong DB chưa kiểm.","migration 355 dòng 134-137; ADR 0019 b4"],
+ ["Feature key chặn quyền","partial","tp.hosted quyết định site có phục vụ (live 16/11: slug không phục vụ 404, /aa-tripplanner/plan 200). tp.launcher chỉ là cờ; tp.ai_sessions không code nào đọc; không thấy kiểm tp.custom_domain; tp.embed, tp.api chưa có tính năng.","migration 355 dòng 194-202; lib/tenantSite.ts; tripplanner_domain.py dòng 24-25, 60-61"],
+ ["Kích hoạt (đại lý xin, staff duyệt)","live","Owner bấm 'Request add-on', staff duyệt ở Tenant 360, saga attach only_new. Đại lý không tự mua được.","addon_requests.py; provision.py dòng 22-29; features.yaml CIS-F019"],
+ ["Saga cấp phát qua các app","partial","Saga ghi subscription và entitlement. Theme (G13), kênh lead, tên miền do staff đặt tay. Lead sang CRM chỉ khi có cả tp.hosted và crm.core. Màn 'New tenant' chưa thêm được add-on (G2a).","pilot-agency-onboarding.md dòng 134, 183, 273, 276; entitlement_feed.py dòng 35"],
+ ["Đo mức dùng và mức trần","partial","Có trần ngân sách AI theo tenant và bộ giới hạn route AA-1015; tp.ai_sessions không áp. Đại lý không có trang xem mức dùng.","migration 355 dòng 28-29"],
+ ["Hoá đơn add-on","partial","Giá NULL nên dòng ra 0 USD, đếm price_missing, finance phải thêm điều chỉnh tay.","agency_billing/drafts.py dòng 14, 120-134"],
+ ["Dùng thử, hạ gói, treo","partial","Trial chỉ khi tạo tenant (tối đa 60 ngày); add-on thêm bằng attach không có trial. Detach huỷ qua saga. Không treo riêng add-on.","provision.py dòng 66, 107, 120-124"],
+ ["Rời đi và xoá dữ liệu","live","Saga xoá ở 4 app; đọc lại TripPlanner 0/8 dòng; diễn tập khôi phục 42/42. Chưa có quy tắc khi chỉ huỷ add-on.","S281 log dòng 115; AA-1093.md"],
+ ["Admin UI (Tenant 360)","live","Thêm, đổi, huỷ add-on, override, kênh lead, tên miền riêng. Chưa có trình sửa theme (G13).","admin_tenant_subscription.py"],
+ ["Giao diện cho đại lý + hướng dẫn","missing","App đại lý không có module TripPlanner. plannerHref chỉ dẫn owner tới CRM Settings › Add-ons; /trip/[tourId] là trang tour AA công khai, không phải công cụ TripPlanner.","web/lib/apps.ts dòng 94-109; AccountAddOns.tsx dòng 110"],
+ ["Hợp đồng / điều khoản / DPA","partial","Có /privacy, /terms; DPA v0.5 có nhắc Trip Planner; joint-controller chờ luật sư; chưa có hợp đồng đối tác (gói, phí, SLA).","docs/legal/pilot-contract-set.md; readiness-packet.md"],
+ ["Giám sát + runbook","partial","Alarm tp_jobs, tp_web; runbook rollback, cutover, khôi phục tenant. TP-01 partial; chưa có báo cáo phễu/lead theo đại lý.","reports/catalog.yaml dòng 743"],
+ ["Tài liệu","partial","tripplanner-runbook draft (01/11) vẫn tả B2C cũ. /sign-in và /trips vẫn trả 200 live, trái ADR 0019 d11 + amendment S278: phần B2C còn sót.","tripplanner-runbook.md; features.yaml TP-F004; curl 16/11"],
+ ["Các dạng cung cấp","partial","Site /{slug} và trang tour riêng live. Tên miền riêng (AA-1090) đã merge đủ code/migration/Terraform và test live PASS lúc chốt S281, issue vẫn In Review. Launcher mới là cờ; iframe bị CSP chặn; API headless chưa làm. Xem mục 5.","features.yaml TP-F005; S281 log; next.config.mjs dòng 12"],
+ ["CRM"],
+ ["Gói bán được (SKU) và giá","partial","CRM Core và Pro tính theo seat, kèm 10 seat; giá seed NULL ('price to set below the main competitor', b3).","migration 355 dòng 130-133, 183-193"],
+ ["Feature key chặn quyền","partial","crm_entitlement_pull chiếu allowed_features và member_limit; thiếu crm.core trả 403. Trong code: entitlements.py khai 6 feature, chỉ ai_assist và whatsapp_sms có chỗ gọi require_feature/feature_allowed; campaigns, stripe_connect, custom_domain, insights_export chưa có cổng.","entitlement_feed.py dòng 27-43, 103; entitlements.py dòng 20"],
+ ["Kích hoạt","live","Owner xin ở Studio hoặc CRM Settings › Add-ons, staff duyệt ở Tenant 360, saga attach.","addon_requests.py; features.yaml CRM-F024"],
+ ["Saga cấp phát qua các app","partial","Saga chỉ ghi subscription và entitlement; feed bỏ qua agency chưa có. Staff phải tạo agency và mời owner bằng tay.","pilot-agency-onboarding.md dòng 139"],
+ ["Đo mức dùng và mức trần","partial","Seat áp qua crm.seats. AI CRM dùng ngân sách và ledger riêng, override ở CIS không tới (G12, chưa có issue).","pilot-agency-onboarding.md dòng 221, 275"],
+ ["Hoá đơn add-on","partial","Giá × số seat; không có dòng seat vượt mức cho gói theo seat. Giá NULL nên dòng 0 USD, điều chỉnh tay; thu tiền đánh dấu tay (b14).","drafts.py dòng 128-144"],
+ ["Dùng thử, hạ gói, treo","partial","Trial khi tạo tenant; attach không có trial. Hết add-on thì projection về plan 'free' và rút feature; CIS thôi phục vụ thì CRM khoá agency. Không treo riêng add-on.","entitlement_feed.py dòng 30, 43, 125, 245"],
+ ["Rời đi và xoá dữ liệu","live","Export, xoá, chờ 72 giờ. Lần chạy thật AA-1093: xoá 36 dòng, ẩn danh 1, shred 1 khoá vault, đọc lại 0/83.","S281 log dòng 63, 115; crm-runbook.md"],
+ ["Admin UI","live","Tenant 360 › Subscription, Agencies (CRM): tạo, mời owner, khoá, mở khoá; staff console.","features.yaml CIS-F019, CRM-F027, F028"],
+ ["Giao diện cho đại lý + hướng dẫn","partial","App đầy đủ, M-OD Done. SMS/WhatsApp và AI drafts còn beta. AA-970 (help, release train) README ghi Backlog. Báo cáo CRM-01 planned, CRM-02 và CRM-05 missing.","features.yaml CRM-F017, F022; reports/catalog.yaml dòng 1075, 1102, 1180"],
+ ["Hợp đồng / điều khoản / DPA","partial","/legal/terms có tóm tắt AI Schedule; DPA và annex còn nháp, luật sư chưa xem (b20); chưa có hợp đồng ghi giá seat và SLA.","docs/legal/dpa.md; pilot-contract-set.md"],
+ ["Giám sát + runbook","partial","Alarm, runbook crm-keys, diễn tập khôi phục. Web 1 task Spot, chưa HA; AA-1082 đã gộp vào AA-980 nhưng README dòng 169 còn ghi Backlog.","backlog README dòng 169 vs 289"],
+ ["Tài liệu","partial","crm-runbook draft (01/11), trước M-OD. Runbook onboarding (13/11) lỗi thời ở bước 7 và 9 (AA-1093 đã xong, TripPlanner khôi phục 42/42).","crm-runbook.md; pilot-agency-onboarding.md dòng 10, 231, 256"],
+ ["Content studio (để so sánh)"],
+ ["Gói bán được và giá","live","Starter, Growth, Business 299/799/1.499 USD/tháng; ngân sách AI 15/40/80 USD; hạn mức rewrite 50/200/500; Enterprise theo hợp đồng.","migration 355 dòng 123-128, 163-174"],
+ ["Feature key + mức trần","live","Hạn mức content.rewrite soft/hard, key channel.* và content.*. api.access vẫn seed sau khi bỏ API key ở R3 (chưa kiểm còn code đọc không).","migration 355 dòng 14; v1_tours.py"],
+ ["Cấp phát, hoá đơn, trial, rời đi","live","Saga tạo tenant, hoá đơn có giá thật, trial khi tạo tenant (tối đa 60 ngày), saga xoá. Nút 'New tenant' chưa gọi saga (G2a).","provision.py; drafts.py"],
+ ["UI đại lý, tài liệu, hợp đồng","partial","Studio đủ trang; content-studio-runbook còn ghi xin key qua e-mail (lỗi thời); chưa có hợp đồng chung.","content-studio-runbook.md dòng 117"]
+];
+var ab=document.getElementById("addonrows");
+ad.forEach(function(r){
+  if(r.length===1){var g=el("tr","group");var td=el("td",null,r[0]);td.colSpan=4;g.appendChild(td);ab.appendChild(g);return;}
+  var tr=el("tr");var sy=el("td","sym",sym[r[1]]);sy.setAttribute("aria-label",L[r[1]]);tr.appendChild(sy);
+  tr.appendChild(el("td","item",r[0]));var s=el("td","st");s.appendChild(chip(r[1]));tr.appendChild(s);
+  var d=el("td",null,r[2]);d.appendChild(ev(r[3]));tr.appendChild(d);ab.appendChild(tr);
+});
+
+/* ---------- Section 5: TripPlanner delivery ---------- */
+var tp=[
+ ["Trang AA host theo đường dẫn /{slug}/plan và /{slug}/tours/{tour}","live","Đại lý xin add-on Trip planner (Account › Add-ons), staff bật gói tripplanner.hosted ở Tenant 360.","Dạng giao chính. Phục vụ khi đại lý ở trial/active/past_due và có tp.hosted. Có thanh tên đại lý, không logo AA, không giá AA, chỉ liệt kê tour AA mà đại lý được phép đăng. Slug lạ, chưa có add-on hoặc bị treo đều trả 404. Trang tour /{slug}/tours/{tour} chưa kiểm live.","CONTEXT.md dòng 37, 850-873; CIS migration 429; features.yaml TP-F005; curl 16/11: /audit-atlas-hearth/plan 200, slug lạ 404"],
+ ["Planner demo của AA (/plan, tenant aa-tripplanner)","live","Không giao cho đại lý; dùng để demo.","Catalogue và thương hiệu AA; nút 'Send to advisor' chỉ hiện thông báo demo.","CONTEXT.md §Leads; features.yaml TP-F006; curl /plan 200"],
+ ["Tên miền riêng (trip.<domain đại lý>, AA-1090)","beta","Staff thêm host ở Tenant 360, đại lý tạo CNAME; job CIS cấp chứng chỉ ACM và gắn vào CloudFront riêng.","Chi phí khoảng 0 USD/tháng (đã duyệt). Test live 15/11 lộ lỗi SAN rỗng, sửa ở CIS #1528, sau đó host active và mang tên đại lý, rồi được gỡ. Issue In Review. Còn 2 lỗ: add_domain không kiểm tp.custom_domain (gói pro, trái b4); subject_gate chưa nhận tên miền riêng nên link bán hàng bị chặn. Mặc định 1 host mỗi đại lý, 10 host toàn edge.","tripplanner_domain.py dòng 173, 243-265; migration 428; TP #269, CIS #1521/#1527/#1528; S281 log dòng 16, 87, 183"],
+ ["Sub-domain AA cho từng đại lý (<slug>.tripplanner…)","planned","Chưa có cách nhận.","ADR ghi 'come later, each on its own trigger'. Màn tên miền riêng còn chặn hậu tố lumiguides.it.com.","ADR 0019 dòng 127; tripplanner_domain.py dòng 67"],
+ ["Launcher snippet trên website đại lý","planned","Chưa có cách nhận, dù cờ tp.launcher nằm trong gói cơ bản.","b4 hứa gói cơ bản gồm 'hosted page plus launcher'. Chưa có snippet, script hay hướng dẫn; đại lý đang mua quyền lợi chưa được giao.","ADR 0019 dòng 125, 308; migration 355 dòng 28-29, 107; CONTEXT.md dòng 873"],
+ ["Nhúng iframe / widget","planned","Chưa có cách nhận; bị chặn có chủ đích.","Mọi phản hồi gửi CSP frame-ancestors 'none' và X-Frame-Options DENY. Cần thiết kế allow-list. Cờ tp.embed thuộc gói pro nhưng chưa có code.","curl -I /plan 16/11; ADR 0019 dòng 125, 127; migration 355 dòng 29, 108"],
+ ["API headless (tp.api)","planned","Chưa có cách nhận.","Cờ tp.api thuộc gói pro, chưa có code đọc. catalog.http.v1 chỉ phục vụ CRM qua M2M; /browse/* là nội bộ cho BFF.","integrations.yaml INT-002; migration 355 dòng 110"],
+ ["Nhãn trắng (thanh đại lý, brand token, metadata)","partial","Đi kèm site host; chưa có màn sửa theme.","Có thanh tên đại lý, brand token ở 3 trang [tenant]; badge 'Powered by Adventure Asia' chỉ khi có tp.branding (không gói nào có). Live 16/11: title 'Trip planner · <tên đại lý> · Adventure Asia', description nhắc 'Adventure Asia advisor', og:site_name 'Adventure Asia Trip Planner'. Theme màu live chưa kiểm.","CONTEXT.md dòng 861-873; tripplanner_site.py dòng 214; curl meta 16/11"],
+ ["Ngôn ngữ của site đại lý","partial","Locale đặt trong DB, chưa có màn sửa.","View trả en/vi, tenantSite.ts đọc nhưng không dùng; layout cố định lang='en'. Đặt vi chưa đổi giao diện.","tenantSite.ts dòng 33, 50; app/layout.tsx dòng 55"],
+ ["Lead của khách vào CRM, webhook hoặc e-mail","live","Staff chọn kênh ở Tenant 360 (Lead route).","Khách là guest, gửi chuyến kèm đồng ý. E2E S273 PASS: lead chỉ vào CRM của tenant A. Webhook và e-mail chưa có bằng chứng live.","ADR 0019 d11; AA-1038.md dòng 237, 303; tripplanner.tf dòng 513"],
+ ["Link chia sẻ / in / PDF / .ics","live","Khách tự dùng trên site đại lý.","/{slug}/plan/shared chỉ đọc, mang brand token; in/lưu PDF bằng trình duyệt, tải .ics.","CONTEXT.md §Pages (AA-1041); app/[tenant]/plan/shared/page.tsx"],
+ ["Deep link từ đề xuất CRM sang TripPlanner","missing","Chưa có.","CRM web chỉ nhắc TripPlanner ở trang Add-ons. Bản đồ trong builder (AA-948) chờ quyết định engine chung và chi phí Mapbox.","grep tripplanner trong AA-Partner/web; backlog README dòng 69 (g)"],
+ ["Bài đăng WordPress/Facebook trỏ về TripPlanner","partial","Gián tiếp qua Content studio.","Link bán hàng chỉ được trỏ tới trang tour AA, trang tour đại lý hoặc site TripPlanner; allow-list host chưa có tên miền riêng của tenant.","integrations.yaml INT-050; subject_gate.py dòng 9-14, 96-100, 320-330"]
+];
+var tc=document.getElementById("tpcards");
+tp.forEach(function(r){
+  var c=el("div","card");var h=el("h3",null,r[0]);c.appendChild(h);
+  var k=el("div","counts");k.appendChild(chip(r[1]));c.appendChild(k);
+  var a=el("div","kv");a.appendChild(el("b",null,"Đại lý nhận thế nào"));a.appendChild(document.createTextNode(r[2]));c.appendChild(a);
+  var d=el("div","kv");d.appendChild(el("b",null,"Hiện trạng"));d.appendChild(document.createTextNode(r[3]));c.appendChild(d);
+  c.appendChild(ev(r[4]));tc.appendChild(c);
+});
+
+/* ---------- Section 7: reviewer notes ---------- */
+var rn=[
+ "Tiến độ app: AA-1090 sửa thành 'test live PASS lúc chốt S281, issue vẫn In Review'; Academy đã có kế hoạch cho học viên đại lý ở P7; module môi trường có 3 slice (#633/#643/#649) và AA-911 Done 08/11; Fargate Spot đã kiểm trong Terraform, WAF 429 chưa kiểm; entitlement CRM: 6 feature khai báo, chỉ 2 có cổng; báo cáo đủ 65 dòng; Odoo thêm 18 mục Booking (12 một phần, 6 thiếu); thêm dòng Bedrock acc1/acc3.",
+ "Odoo: AA-968 và AA-963 giữ planned theo README đã commit; AA-1082 đã gộp vào AA-980 ở S279; Pipeline có giá trị pipeline, thiếu dự báo xác suất; AA-1003 là engine nội bộ; AA-965 Done nhưng catalogue ghi beta; e-invoice của AA-1037 là hoá đơn AA xuất cho đại lý; thêm dòng Academy; chỉ trang pricing và Vietnam localization của Odoo được kiểm lại.",
+ "Add-on: hoá đơn CRM theo seat không có dòng seat vượt mức; attach không mang trial_days; /sign-in, /trips 200 là phần B2C còn sót; AA-970 Backlog theo bản đã commit; /trip/[tourId] là trang tour AA công khai; runbook onboarding lỗi thời ở bước 7 và 9; CSP live và số liệu AA-1093 đã thêm.",
+ "Dạng cung cấp: add_domain kiểm 'có gói tripplanner chưa huỷ', không kiểm tp.hosted hay tp.custom_domain; giới hạn host là setting; title đã có tên đại lý nhưng còn đuôi AA; trang tour đại lý chưa kiểm live; bỏ câu 'xoá sau 7 ngày' vì không có nguồn.",
+ "Người tổng hợp trang này: dòng 'Feature key' của CRM ở mục 4 đổi từ live sang một phần, dựa trên kiểm code entitlements.py của hướng rà soát app; dòng 'Các dạng cung cấp' ở mục 4 cập nhật AA-1090 theo log S281."
+];
+var rd=document.getElementById("reviewnotes");var ul=el("ul","tight");rn.forEach(function(t){ul.appendChild(el("li",null,t));});rd.appendChild(ul);
+})();
+</script>
