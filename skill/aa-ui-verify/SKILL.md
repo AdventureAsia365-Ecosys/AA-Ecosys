@@ -5,6 +5,8 @@ description: Kiểm tra giao diện trước khi báo xong — admin AA-CIS (fro
 
 # aa-ui-verify
 
+> Lớp AA (overlay) của skill generic [`project-ui-verify`](../kit/project-ui-verify/SKILL.md) (kit dự án mới, tiếng Anh, AA-1103): quy trình chung nằm ở đó; skill này chỉ thêm phần riêng của AA. Đổi quy tắc chung thì sửa skill generic trước.
+
 Build pass không chứng minh trang chạy. Agent phải **nhìn thấy** trang rồi mới báo xong.
 Bài học của vùng này: `aa-lessons/lessons.md` mục "Frontend" (phân trang server, Playwright chờ có trần, tràn ngang
 mobile, hydrate trước khi `fill`) — đọc trước khi sửa trang.

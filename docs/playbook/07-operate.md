@@ -4,7 +4,7 @@ title: "Phase 7: Operate"
 description: Keep the product running, learn from every failure and watch the cost - periodic reviews, incidents, runbooks and common mistakes.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -29,9 +29,11 @@ There is no permanent gate in this phase: the periodic reviews are the control.
 | Postmortems | [Postmortem](../templates/postmortem.md) | when a trigger applies |
 | Drills of the runbooks that matter (restore, rollback, break-glass, secret rotation) | Runbook with `last_tested` | on a procedure change, and before prod |
 | Delivery metrics report | [Delivery metrics report](../templates/delivery-metrics-report.md) | weekly |
-| Cost and capacity review | [Cost and capacity review](../templates/cost-report.md), [cost sheet](../templates/cost-sheet.md) | monthly |
-| Access review | [Access review](../templates/access-review.md) | quarterly |
+| Cost and capacity review | [Cost and capacity review](../templates/cost-report.md), [cost sheet](../templates/cost-sheet.md) | monthly <!-- kit:drop --> |
+| Access review | [Access review](../templates/access-review.md) | quarterly <!-- kit:drop --> |
 | Lessons turned into guards | Project's lesson log | at root-cause time |
+<!-- kit:only | Access review | Who can reach what: roles, keys, repo and cloud access | quarterly | -->
+<!-- kit:only | Cost and capacity review | [Cost sheet](../templates/cost-sheet.md), compared with the bill | monthly | -->
 
 ## Rules
 

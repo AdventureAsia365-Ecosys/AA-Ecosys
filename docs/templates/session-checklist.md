@@ -4,18 +4,22 @@ title: Session checklist and session log template
 description: The start, during and close steps of one agent working session, and the shape of the session log it leaves behind.
 type: template
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
 review_every_days: 180
-related: [TPL-01, skill/aa-session/SKILL.md]
+related: [TPL-01, skill/aa-session/SKILL.md] # kit:drop
+# kit:only related: [TPL-01]
 ---
 
 # Session checklist and session log template
 
-The generic session ritual (new-project playbook, agents page). AA's own version, with its memory store, live checks and
-business updates, is the skill `skill/aa-session/SKILL.md`. Keep the live checklist as a scratch file during the
+The generic session ritual (new-project playbook, agents page; skill `project-session`).
+<!-- kit:skip -->
+AA's own version, with its memory store, live checks and business updates, is the skill `skill/aa-session/SKILL.md`.
+<!-- /kit:skip -->
+Keep the live checklist as a scratch file during the
 session; the log is written once, at the close, from the checked state.
 
 ## Start

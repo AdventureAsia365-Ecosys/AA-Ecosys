@@ -1,0 +1,34 @@
+# Generic block of the subagent guardrail (new-project kit; the template repo copies this file byte for byte).
+# One extended regex (grep -E) per line (write a needed trailing space as [[:space:]]), matched against the Bash command of a SUBAGENT (hook input with agent_id).
+# A match refuses the command: only the orchestrator pushes, merges, applies, deploys or deletes.
+#
+# git: allow any global options before the subcommand (e.g. git -C <dir> push)
+git( +-[cC] +[^ ]+| +--[a-z-]+(=[^ ]+)?)* +push
+git( +-[cC] +[^ ]+| +--[a-z-]+(=[^ ]+)?)* +reset +--hard
+git( +-[cC] +[^ ]+| +--[a-z-]+(=[^ ]+)?)* +clean +-[a-z]*f
+git( +-[cC] +[^ ]+| +--[a-z-]+(=[^ ]+)?)* +branch +-D
+git( +-[cC] +[^ ]+)* +checkout +\.( |$)
+git( +-[cC] +[^ ]+)* +restore +\.( |$)
+git( +-[cC] +[^ ]+)* +rebase .*(main|master)$
+git( +-[cC] +[^ ]+)* +commit .*--no-verify
+# GitHub CLI: anything that changes remote state
+gh +pr +(merge|close|create|ready)
+gh +workflow +run
+gh +run +rerun
+gh +secret
+gh +repo +(create|delete|edit)
+gh +api .*(-X *|--method[ =]+)(PUT|POST|PATCH|DELETE)
+gh +api .* -(f|F)[[:space:]]
+gh +api .*--(field|raw-field|input)
+# terraform / aws: allow global options (--profile X --region Y ...) before the service
+terraform( +-[a-z-]+(=[^ ]+)?)* +(apply|destroy|import|state)
+aws( +--[a-z-]+( +[^- ][^ ]*)?)* +ecs +(update-service|run-task|stop-task|register-task-definition|execute-command)
+aws( +--[a-z-]+( +[^- ][^ ]*)?)* +rds +(stop|start|delete|modify)
+aws( +--[a-z-]+( +[^- ][^ ]*)?)* +secretsmanager +(put|create|delete|update)
+aws( +--[a-z-]+( +[^- ][^ ]*)?)* +s3 +rm
+aws( +--[a-z-]+( +[^- ][^ ]*)?)* +iam[[:space:]]
+aws( +--[a-z-]+( +[^- ][^ ]*)?)* +lambda +(invoke|update|create|delete)
+aws( +--[a-z-]+( +[^- ][^ ]*)?)* +ssm +(put|delete|send-command)
+aws( +--[a-z-]+( +[^- ][^ ]*)?)* +ecr +(put|delete|batch-delete)
+# Vercel CLI moves of the production domain
+(^|[ ;&|(])(npx +)?vercel( +-[^ ]+( +[^- ][^ ]*)?)* +(rollback|promote|redeploy|deploy +.*--prod)( |$)

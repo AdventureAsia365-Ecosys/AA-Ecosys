@@ -4,20 +4,24 @@ title: Mẫu checklist phiên và log phiên
 description: Các bước bắt đầu, trong phiên và đóng phiên của một phiên làm việc của agent, và hình dạng log phiên nó để lại.
 type: template
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
 review_every_days: 180
-related: [TPL-01, skill/aa-session/SKILL.md]
+related: [TPL-01, skill/aa-session/SKILL.md] # kit:drop
+# kit:only related: [TPL-01]
 lang: vi
 translation_of: docs/templates/session-checklist.md
 ---
 
 # Mẫu checklist phiên và log phiên
 
-Nghi thức phiên chung (playbook dự án mới, trang agent). Bản riêng của AA, kèm kho memory, các phép kiểm live và cập nhật
-kinh doanh, là skill `skill/aa-session/SKILL.md`. Giữ checklist sống thành một file nháp trong phiên; log chỉ viết một
+Nghi thức phiên chung (playbook dự án mới, trang agent; skill `project-session`).
+<!-- kit:skip -->
+Bản riêng của AA, kèm kho memory, các phép kiểm live và cập nhật kinh doanh, là skill `skill/aa-session/SKILL.md`.
+<!-- /kit:skip -->
+Giữ checklist sống thành một file nháp trong phiên; log chỉ viết một
 lần, lúc đóng phiên, từ trạng thái đã kiểm.
 
 ## Bắt đầu

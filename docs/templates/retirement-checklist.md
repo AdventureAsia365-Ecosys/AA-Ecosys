@@ -4,7 +4,7 @@ title: Retirement checklist
 description: How to shut down a product, app, feature or environment cleanly, with nothing left running, stored or billed.
 type: template
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, engineer, devops, cto, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -15,9 +15,11 @@ related: [TPL-01]
 # Retirement checklist
 
 New-project playbook, phase 9 Retire, gate G8. Copy the list into the retirement issue. The business owner is
-accountable; the tech lead runs it. Gate G8 passes only when the cloud bill and the inventory show nothing left. AA cases
-it is built from: the removal of an account from the ecosystem (ADR 0001a), tour retirement propagation (ADR 0015) and
-the dead table registry.
+accountable; the tech lead runs it. Gate G8 passes only when the cloud bill and the inventory show nothing left.
+<!-- kit:skip -->
+AA cases it is built from: the removal of an account from the ecosystem (ADR 0001a), tour retirement propagation
+(ADR 0015) and the dead table registry.
+<!-- /kit:skip -->
 
 ## 1. Decide
 

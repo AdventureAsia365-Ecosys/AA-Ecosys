@@ -4,12 +4,13 @@ title: Nguyên tắc và dung sai của playbook
 description: Bảy nguyên tắc của bộ kit dự án mới và bảng dung sai cho agent biết việc gì được làm mà không cần hỏi.
 type: explanation
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, engineer, cto, pm, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
 review_every_days: 90
-related: [GUIDE-14, CAT-01, docs/research/new-project-playbook/README.md]
+related: [GUIDE-14, CAT-01, docs/research/new-project-playbook/README.md] # kit:drop
+# kit:only related: [GUIDE-14, CAT-01]
 lang: vi
 translation_of: docs/playbook/principles.md
 ---
@@ -25,7 +26,7 @@ translation_of: docs/playbook/principles.md
 3. **Sổ tay trước.** Một luật đổi ở trang bộ kit trước, rồi mới tới skill và các bản chép. Trang học liệu dựng từ chính
    các trang này.
 4. **Lõi chung cộng lớp phủ.** Bộ kit không mang tên dự án nào. Mỗi dự án giữ một lớp phủ (tài khoản, service, người,
-   công cụ theo dõi việc) trỏ về các trang chung; lớp phủ của AA là [bản áp dụng AA](aa-profile.vi.md).
+   công cụ theo dõi việc) trỏ về các trang chung (xem trang lớp phủ của dự án).
 5. **Dung sai, không phải xin duyệt.** Agent làm trong giới hạn đã thoả thuận và chỉ báo lên khi dự báo cho thấy một
    giới hạn sẽ bị vượt (PRINCE2 "manage by exception").
 6. **Công tắc theo giai đoạn.** Các biện pháp chỉ dành cho prod (error budget, trực sự cố, code owner được ép, role agent

@@ -4,7 +4,7 @@ title: Adopting the playbook
 description: The day-1 checklist, the 30 / 60 / 90-day plan, the running cost of a new project and how the kit itself is accepted.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, cto, pm, engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14

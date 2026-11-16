@@ -4,7 +4,7 @@ title: Migration file template
 description: The header, transaction, self-registration and expand / contract shape every database migration file starts from.
 type: template
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -14,8 +14,11 @@ related: [TPL-01, docs/architecture/data-standards/01-engineering.md]
 
 # Migration file template
 
-Copy the block into `db/migrations/<prefix>-<NNN>_<slug>.sql`. It follows the AA migration rules MIG-1 to MIG-14
-([data standards Part A](../architecture/data-standards/01-engineering.md)) in a generic form: one owner and one key
+Copy the block into `db/migrations/<prefix>-<NNN>_<slug>.sql`. It follows the migration rules MIG-1 to MIG-14
+<!-- kit:skip -->
+([AA data standards Part A](../architecture/data-standards/01-engineering.md))
+<!-- /kit:skip -->
+in a generic form: one owner and one key
 space per schema, forward only, idempotent, expand / contract for every shape change, applied from CI only.
 
 ```sql

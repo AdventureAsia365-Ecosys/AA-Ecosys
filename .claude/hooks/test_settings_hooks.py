@@ -51,8 +51,6 @@ class SettingsHooksTest(unittest.TestCase):
         tests = {p.name for p in HOOKS.glob("test_*")}
         for _, cmd in registered():
             stem = Path(cmd.split("/")[-1]).stem.replace("-", "_")
-            if stem == "subagent_mcp_guardrails":  # a 20-line pattern list, red-teamed by hand (AA-1032)
-                continue
             self.assertTrue(any(t.startswith(f"test_{stem}") for t in tests), f"no test_{stem}* for {cmd}")
 
     def test_the_guards_of_aa_1024_are_registered(self):

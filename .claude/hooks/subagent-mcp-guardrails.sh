@@ -1,6 +1,8 @@
 #!/bin/bash
-# S235 (architect R6): the Bash guardrail does not cover MCP tools. Block MCP write tools for SUBAGENTS only
+# S235 (architect R6): the Bash guardrail does not cover MCP tools. Block MCP write tools for SUBAGENTS only # kit:drop
+# kit:only # The Bash guardrail does not cover MCP tools. Block MCP write tools for SUBAGENTS only
 # (hook input has agent_id); the orchestrator (no agent_id) keeps full access. Subagents may still read.
+# Test: bash .claude/hooks/test_subagent_mcp_guardrails.sh
 input=$(cat)
 read -r agent tool < <(python3 -c '
 import json, sys

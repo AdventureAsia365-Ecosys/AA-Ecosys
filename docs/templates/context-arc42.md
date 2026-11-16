@@ -16,8 +16,8 @@ related: []
 
 <!-- CONTEXT.md template on the arc42 canvas (new-project playbook, phase 2 Architecture). It sits at the repo root and
 is the first file an engineer or an agent reads before changing the repo. Size cap: about 60 KB; past that, move a
-module's detail into docs/modules/<module>.md and link it here (CIS grew to about 530 KB, which no one can learn in
-order). Diagrams as code (Mermaid, C4 labels, at most 15 nodes). Fill sections 1 to 6 on day 1; the rest as the code
+module's detail into docs/modules/<module>.md and link it here (a file of several hundred KB is one no one can
+learn in order). Diagrams as code (Mermaid, C4 labels, at most 15 nodes). Fill sections 1 to 6 on day 1; the rest as the code
 grows. Delete this comment. -->
 
 ## 1. Goal and stakeholders

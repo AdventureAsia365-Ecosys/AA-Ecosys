@@ -5,6 +5,8 @@ description: Quay video UAT và video giới thiệu sản phẩm AA_Ecosys (Pla
 
 # aa-uat-video
 
+> Lớp AA (overlay) của skill generic [`project-uat`](../kit/project-uat/SKILL.md) (kit dự án mới, tiếng Anh, AA-1103): quy trình chung nằm ở đó; skill này chỉ thêm phần riêng của AA. Đổi quy tắc chung thì sửa skill generic trước.
+
 Mục tiêu: **một kịch bản = một user story = một video = một regression test.** Video là bằng chứng cho người đọc
 nghiệp vụ; kịch bản đồng thời là bài test chạy lại được.
 

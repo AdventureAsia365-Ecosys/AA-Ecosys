@@ -4,7 +4,7 @@ title: Mẫu mục registry settings
 description: Cách thêm một ngưỡng, giới hạn hay giá trị chính sách thành một setting sửa được trên trang admin, kèm dòng registry và hướng dẫn vận hành.
 type: template
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14

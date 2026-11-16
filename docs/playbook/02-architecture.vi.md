@@ -4,7 +4,7 @@ title: "Pha 2: Kiến trúc"
 description: Chọn và ghi lại các ranh giới khó đảo ngược trước khi viết code - sản phẩm bàn giao, checklist cổng G2, mẫu và lỗi hay gặp.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [cto, engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -56,8 +56,10 @@ mật theo từng vùng).
 - Viết mọi mục arc42 ngay ngày đầu; điền canvas, phần còn lại lớn dần theo code.
 - Quyết định đưa ra trong chat và không bao giờ được viết thành ADR.
 
+<!-- kit:skip -->
 ## AA làm thế nào
 
 [Kiến trúc hệ sinh thái](../ecosystem-architecture.md), [mục lục ADR](../adr/README.md), [hợp
 đồng](../contracts/README.md), [data standards](../architecture/data-standards/README.md) và [sở hữu
 schema](../database/schema-ownership.md); xem [bản áp dụng AA](aa-profile.vi.md).
+<!-- /kit:skip -->

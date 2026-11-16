@@ -4,7 +4,7 @@ title: Áp dụng playbook
 description: Checklist ngày đầu, kế hoạch 30 / 60 / 90 ngày, chi phí chạy của một dự án mới và cách chính bộ kit được nghiệm thu.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, cto, pm, engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14

@@ -4,7 +4,7 @@ title: "Pha 6: Phát hành"
 description: Đưa thay đổi lên Dev (sau này prod) và chứng minh chúng live - thứ tự deploy, Definition of Done, ghi chú phát hành và lỗi hay gặp.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [owner, engineer, devops, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -31,8 +31,9 @@ quả.
 | Migration được áp theo thứ tự qua CI | [File migration](../templates/migration-file.vi.md) |
 | Cờ được đặt sang trạng thái phát hành một cách có chủ đích | Sổ đăng ký cờ của dự án |
 | Kết quả kiểm sau deploy và một comment "đã kiểm live" trên issue | Checklist phát hành, mục "Đã kiểm live" |
-| Ghi chú phát hành chỉ gồm việc đã kiểm | [Ghi chú phát hành](../templates/release-note.md) |
+| Ghi chú phát hành chỉ gồm việc đã kiểm | [Ghi chú phát hành](../templates/release-note.md) <!-- kit:drop --> |
 | Cập nhật cho kinh doanh bằng ngôn ngữ của chủ doanh nghiệp | Ghi chú phát hành, phần kinh doanh |
+<!-- kit:only | Ghi chú phát hành chỉ gồm việc đã kiểm | Ghi chú phát hành của PR phát hành (`CHANGELOG.md`) | -->
 
 ## Thứ tự deploy
 

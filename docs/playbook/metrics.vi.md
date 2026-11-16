@@ -4,7 +4,7 @@ title: Chỉ số của playbook
 description: Cách một dự án đo giao hàng (DORA), luồng (Kanban) và mức sẵn sàng AI (năng lực AI của DORA), và đo bao lâu một lần.
 type: reference
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [cto, pm, engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14

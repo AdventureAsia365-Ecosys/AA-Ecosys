@@ -4,7 +4,7 @@ title: "Phase 2: Architecture"
 description: Choose and record the boundaries that are hard to reverse before code - deliverables, gate G2 checklist, templates and common mistakes.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [cto, engineer, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
@@ -53,8 +53,10 @@ views as code), MADR (minimal ADRs), ISO/IEC 25010:2023 (quality names), OWASP A
 - Writing every arc42 section on day 1; fill the canvas, grow the rest with the code.
 - Decisions made in chat and never written as an ADR.
 
+<!-- kit:skip -->
 ## How AA does it
 
 The [ecosystem architecture](../ecosystem-architecture.md), the [ADR index](../adr/README.md), the
 [contracts](../contracts/README.md), the [data standards](../architecture/data-standards/README.md) and
 [schema ownership](../database/schema-ownership.md); see the [AA profile](aa-profile.md).
+<!-- /kit:skip -->

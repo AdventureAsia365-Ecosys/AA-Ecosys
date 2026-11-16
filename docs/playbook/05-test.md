@@ -4,7 +4,7 @@ title: "Phase 5: Test"
 description: Prove a change works before users see it - test layers, gate G5 checklist, security checks, UAT and common mistakes.
 type: how-to
 status: draft
-owner: nghiep
+owner: tech-lead
 audience: [engineer, pm, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-14
