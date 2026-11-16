@@ -1,18 +1,18 @@
 ---
 id: SEC-04-dpa-annex3
-title: "DPA Annex 3: sub-processors (draft v0.5)"
-description: "Annex 3 of the partner-agency DPA (SCC Annex III): every third party that may receive agency personal data, with data, apps and location, from the live AI gateway and AWS; plus non-sub-processors and the Vercel exit (completed 2026-11-08)."
+title: "DPA Annex 3: sub-processors (draft v0.6)"
+description: "Annex 3 of the partner-agency DPA (SCC Annex III): every third party that may receive agency personal data, with data, apps and location, from the live AI gateway and AWS; plus non-sub-processors, the Vercel exit (completed 2026-11-08) and the public summary the agency app renders."
 type: reference
 status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-crm-api, aa-crm-web, aa-partner-portal, aa-cis-api, aa-cis-worker, aa-booking-api]
-last_reviewed: 2026-11-13
+last_reviewed: 2026-11-16
 review_every_days: 30
-related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex4, SEC-04, APP-06-ai-register, ARCH-01-ai-gateway, AA-820, AA-1042, AA-1038, AA-900, AA-1095, AA-1093]
+related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex4, SEC-04, APP-06-ai-register, ARCH-01-ai-gateway, AA-820, AA-1042, AA-1038, AA-900, AA-1095, AA-1093, AA-970]
 ---
 
-# DPA Annex 3: sub-processors (draft v0.5)
+# DPA Annex 3: sub-processors (draft v0.6)
 
 > [!WARNING]
 > Draft for counsel, not legal advice. Part of the [Data Processing Agreement](dpa.md); also Annex III of the SCCs
@@ -30,6 +30,15 @@ live CRM task environment. Hosting: AA-CIS-Infra `main`. Other
 vendors: the [compliance register](register.md) section (b) and the vendor rows of the
 [secrets register](../security/secrets-register.md) (re-read 2026-11-09). Sentry region: read from the Sentry
 organisation (`us.sentry.io`) on 2026-11-05.
+
+**What changed in v0.6 (2026-11-16).** New [§5](#5-public-summary-rendered-in-the-agency-app): a short public
+summary of where agency data is kept and of the sub-processor list, in plain words and without account details. The
+agency app renders it on its public pages "How we handle your data" (`/legal/data`) and "Sub-processors"
+(`/legal/subprocessors`) from a copy of the block between its two markers (AA-Partner
+`api/scripts/gen_legal_annex.py`; the CI job "Vendored CIS copies" fails when the copy differs from this file on
+`master`). The AI facts are re-read against the Amazon Bedrock serving of 2026-11-12 (ADR 0001a Note S278) and are
+unchanged since v0.5: no sub-processor was added or removed. A change to §1 that changes what an agency should know
+updates §5 in the same pull request.
 
 **What changed in v0.5 (2026-11-13).** The AI rows follow what serves the models today ([ADR 0001a](../adr/0001a-retire-acc1-llm-on-acc3-only.md),
 Note S278 of 2026-11-12 and Note S279 of 2026-11-13, AA-1095): AWS still refuses the main models on AA's AI account,
@@ -147,3 +156,55 @@ is open (register "Tenant CRM (open)"); the BYO decision (S247) treats them as t
 
 AA tells the Agency of a new or replaced sub-processor as in DPA clause 6.2. A removal needs no notice; AA updates
 this page.
+
+## 5. Public summary (rendered in the agency app)
+
+The block between the two markers is the public text of the agency app's pages "How we handle your data" and
+"Sub-processors". It is written for the people of an agency, not for counsel: plain words, no account numbers or
+internal names, and nothing that §1 to §4 do not say. Its format is a small subset of Markdown that the app renders:
+`###` headings (the first is the data page, the second the sub-processor page), paragraphs, `-` lists, one table,
+`**bold**` and links. Rules for editing it: change §1 to §4 first, then this summary in the same pull request; never
+name an AWS account, a person or an internal ticket here; keep "To be confirmed" where §1 has an open point.
+
+<!-- public-summary:begin -->
+### How we handle your data
+
+Adventure Asia runs the agency app (the CRM and the Content studio) for your agency. Your agency decides what data it
+keeps about its clients; Adventure Asia processes it only to run the app for you, under the data processing agreement
+between your agency and Adventure Asia.
+
+- **Where it is kept.** On Amazon Web Services in the United States (region us-west-1, Northern California), with the
+  backups in the same region. Pages are delivered through Amazon CloudFront, whose edge locations around the world
+  pass and briefly cache them on the way to your browser.
+- **United States by default.** An EU hosting cell is built only when a signed contract requires EU hosting, when
+  enough EU agencies justify its cost, or when the legal basis for transfers to the United States no longer holds. We
+  do not claim that AI processing happens in the EU.
+- **Encryption.** Every personal field of your clients in the CRM is encrypted with a key that belongs to your agency
+  alone (AWS Key Management Service); documents and exports are encrypted with your agency's key before they are
+  stored; every connection uses TLS.
+- **AI in the CRM.** Off until your agency switches it on. Before any CRM text reaches an AI model, names, contacts and
+  other personal details are replaced with placeholders; if that step fails, the model is not called. CRM AI calls
+  stay in AWS regions in the United States, and a person in your agency reviews every draft before it is sent.
+- **AI in the Content studio.** Tour content, your brand settings and your instructions go to the AI providers listed
+  on the sub-processor page. Personal data of your clients is not sent there by rule, and AI call records keep no
+  prompt text.
+- **Your own providers.** Services your agency connects with its own account (your mailbox, SMS and WhatsApp, card
+  payments, your website and social pages) are your agency's own providers, chosen and contracted by your agency.
+- **Changes.** We tell your agency in advance before we add or replace a sub-processor, as the data processing
+  agreement sets out, and update the list.
+
+### Sub-processors
+
+These companies may receive your agency's data when the app runs. The list follows the AI providers and the hosting
+that serve the app today.
+
+| Sub-processor | What it does | Your agency's data it receives | Where |
+|---|---|---|---|
+| Amazon Web Services | Hosting, database, file storage, encryption keys, sign-in, e-mail sending, monitoring | All of it, with your clients' personal fields encrypted with your agency's own key | United States (us-west-1); CloudFront edge locations worldwide, in transit |
+| Amazon Web Services: Amazon Bedrock | AI models (Anthropic Claude, OpenAI GPT, Amazon Nova, Meta Llama, Cohere Embed) and the detection of personal details before a CRM model call | Content studio text; CRM text only after personal details are replaced with placeholders | CRM: AWS regions in the United States only. Content studio: some stages may use AWS cross-region inference, which can process a request in another AWS region |
+| Anthropic | Claude models through the Anthropic API, the first path for Claude in the Content studio | Content studio text: tour content, brand settings, instructions | To be confirmed |
+| OpenAI | GPT models through the OpenAI API, the last fallback for scoring and checking Content studio drafts | Content studio drafts | To be confirmed |
+| Jev (TypeSafe) | Yes-or-no checks of Content studio drafts, only for agencies on an allow list once a data agreement with Jev exists | Content studio text | To be confirmed |
+| Sentry | Error tracking | Error reports after scrubbing: no request bodies, no cookies, no default personal data | United States |
+| Adventure Asia's company mail provider | Adventure Asia's company mailbox | Only what your agency or a person writes to us | To be confirmed |
+<!-- public-summary:end -->

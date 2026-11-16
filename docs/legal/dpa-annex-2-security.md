@@ -1,18 +1,18 @@
 ---
 id: SEC-04-dpa-annex2
-title: "DPA Annex 2: technical and organisational measures (draft v0.5)"
+title: "DPA Annex 2: technical and organisational measures (draft v0.6)"
 description: "Annex 2 of the partner-agency DPA (and SCC Annex II): each security measure marked Live with its code, Terraform or audit evidence and the data-standard rule or ADR it implements, or Planned with the gate it must pass; no measure is claimed that does not run."
 type: reference
 status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-crm-api, aa-crm-web, aa-partner-portal, aa-cis-api, aa-cis-worker, aa-booking-api, aa-cis-dev-db]
-last_reviewed: 2026-11-09
+last_reviewed: 2026-11-16
 review_every_days: 30
 related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex3, ARCH-08-data-management, SEC-08-s268-crm-security-review, OPS-03-pilot-tenant, AA-820, AA-900, AA-969, AA-970, AA-1004, AA-1035, AA-1038, AA-1048]
 ---
 
-# DPA Annex 2: technical and organisational measures (draft v0.5)
+# DPA Annex 2: technical and organisational measures (draft v0.6)
 
 > [!WARNING]
 > Draft for counsel, not legal advice. Part of the [Data Processing Agreement](dpa.md); also Annex II of the SCCs
@@ -24,6 +24,11 @@ request, the live schema dump, an audit folder or a session log in [`docs/sessio
 standards ([Part B, data management](../architecture/data-standards/02-data-management.md)) cited as DM-n.n, and the
 ADRs in [`docs/adr/`](../adr/). Repos: CIS = AA-CIS-App, BK = AA-Booking, CRM = AA-Partner, INF = AA-CIS-Infra.
 AA promises the Live measures; the Planned ones are listed so the Agency knows what is not there yet.
+
+**What changed in v0.6 (2026-11-16).** New M-18b states the pseudonymous preference profile of the CRM honestly
+(design v3 §4.3, Fix A1): which database roles it keeps away from client identity, and that it does not protect
+against the CRM's own runtime role or the database master user. New §2 item 10 says the same as a known gap. No other
+measure changed.
 
 **What changed in v0.5 (2026-11-09).** M-20 and §0 no longer say that AA keeps no AI output text at all: the AI call
 records keep none, but since 2026-11-06 the CIS AI gateway also keeps the raw reply of each model attempt in a separate
@@ -96,6 +101,7 @@ only as strong as its weakest Live row; the gaps are in §2.
 | # | Measure | State | Evidence | Rule |
 |---|---|---|---|---|
 | M-18 | **Personal data is scrubbed before any CRM model call**: three passes (the trip's known names and contacts, patterns such as e-mail, phone, passport, card, ID numbers, and Amazon Bedrock Guardrails); any error or timeout refuses the call. A corpus of 254 synthetic English and Vietnamese samples must show 0 leaks in CI | Live (CRM AI is off by default per Agency; on Dev the drafts run on Amazon Nova Lite through a `us.` inference profile, always after the scrub) | CRM `app/privacy/`, CONTEXT "F3 PII scrubber", workflow "Scrub corpus"; INF `modules/environment/crm_llm.tf` | DM-6.4; ADR 0008a §5 |
+| M-18b | **The CRM keeps a client's preferences apart from the client's identity (pseudonymous profile)**: budget, pace, interests, dietary and mobility codes and the age band are held under a random token, and the only pointer from the identity record to it is encrypted. The database roles for AI context, AA insights and L2 support may read the profile and the AI views, but none of the identity tables (clients, health, flights, trip travellers, notes, messages, documents, ops releases); a test asserts each of them is refused. **What it does not protect against:** the CRM's own runtime role and the database master user, which can link a profile to a person through the trip (a trip with one traveller, or the lead traveller of any trip). This is accepted at this scale, and stated here so the Agency is not told more than is true | Live | CRM CONTEXT "F1 / F2 complete"; `crm.traveler_profile`, `crm.trip_party` (dump); CRM `tests/integration/test_crm006_schema.py` (the three reader roles on `crm.trip_traveler` -> refused); design v3 §4.3 (Fix A1) | DM-6.4; ADR 0008a |
 | M-19 | No identifying personal data in AI prompts of the Content studio and AA content stages; every such stage is classed `content`; a stage classed `pii` may only use AWS and a US deployment, enforced by a database check and the gateway | Live (rule by review; class enforced by CIS 373) | CIS migration 373 (`llm_role_config_pii_scope_check`), `shared/llm_client/vendor_route.py` | DM-6.4; ADR 0019 d12; ADR 0009 decision 10 |
 | M-20 | AI call records keep the stage, model, provider, tokens, cost and time, never the prompt or output text; CRM drafts keep placeholders, and the placeholder map is sealed and expires after 24 hours. **Separately**, the CIS AI gateway keeps the raw reply of each model attempt in its reply store (`shared.llm_cassette`, CIS 385): never the prompt text (a hash only), no reply text for a stage classed `pii` (none in CIS today), at most 256 KiB per reply, written by the gateway only, never read by an Agency route or exported, deleted with the Agency by the tenant erasure job. Its 30-day window is proposed and has no deletion job yet (DM-7.1), so rows stay until that job exists. The Trip Planner and CRM gateways have no reply store | Live (the reply store's window: Planned, before production) | `shared.llm_call_log`, `crm.llm_call`, `shared.llm_cassette` (dump); CRM `app/privacy/placeholder_store.py`; CIS `shared/llm_client/cassette.py` (switch `LLM_CASSETTE`, default `record`), `services/erasure/inventory.py` | DM-6.4; ADR 0009 decision 8; ADR 0020 "Gateway amendments" d8 |
 | M-21 | Personal data stays out of job payloads, logs and error reports: job payloads hold ids only (checked at enqueue); log lines and error reports pass a scrubber; request paths with link tokens are logged redacted; error reporting sends no default personal data, no request bodies, no cookies and no local variables | Live | CRM `app/jobs/payload_guard.py`, `app/observability/scrub.py`, `request_id.py` (S268 F4); CIS `shared/sentry_init.py` (AA-870, AA-941); BK and TP same settings (AA-871) | DM-6.3, DM-6.4 |
@@ -178,6 +184,9 @@ that agency's export failed. It was fixed with a test and a code guard, and a fa
    marketing text, with no client personal data by rule (DPA clause 13.3), but it is the Agency's. Before the pilot
    agency's real content exists, either the tools skip the pilot agency, or the Agency is told and agrees **[tech lead
    decides; engineering change in AA-CIS-App]**.
+10. The pseudonymous preference profile (M-18b) protects client identity from the AI, insight and support roles only:
+    the CRM's own runtime role and the database master user can still link a profile to a person through a trip.
+    A redesign (one token per trip) is not planned at this scale **[tech lead decided, design v3 §4.3]**.
 
 ## 3. Points for counsel and the business owner
 
