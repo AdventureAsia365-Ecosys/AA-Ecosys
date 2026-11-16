@@ -1,0 +1,195 @@
+{
+ "run_id": "9b0d46f8-2654-4c31-9421-2b7796c06299",
+ "run_kind": "full",
+ "calls": 255,
+ "spent_usd": 0.076105,
+ "ledger_usd": 0.075995,
+ "pool_sha256": "716df551d458fee1",
+ "prompt_versions": {
+  "classify": "aa1048-r1-v5c@50704a977e52",
+  "judge": "aa1048-r1-v5j@0c3529d50a55"
+ },
+ "subset": {
+  "claims": 46,
+  "by_group": {
+   "fp_background": 11,
+   "fp_paraphrase": 12,
+   "fp_verbatim": 2,
+   "tp": 21
+  },
+  "by_writer": {
+   "t2": 23,
+   "t9_blog": 19,
+   "t9_social": 4
+  }
+ },
+ "score": {
+  "false_positives": {
+   "n": 25,
+   "firing": 17,
+   "dropped": 8,
+   "dropped_share": 0.32
+  },
+  "true_positives": {
+   "n": 21,
+   "kept": 20,
+   "lost": 1,
+   "kept_share": 0.9524,
+   "sample": "out_of_sample",
+   "groups": [
+    "tp"
+   ]
+  },
+  "relabelled_in_sample": {
+   "n": 0,
+   "kept_share": null,
+   "sample": "in_sample",
+   "groups": [
+    "tp_relabel"
+   ],
+   "note": "the v2 B5 patterns were drawn from these claims; reported, not gated"
+  },
+  "true_positives_with_relabels": {
+   "n": 21,
+   "kept": 20,
+   "lost": 1,
+   "kept_share": 0.9524
+  },
+  "precision": 0.5405,
+  "recall": 0.9524,
+  "by_group": {
+   "fp_background": {
+    "firing": 7,
+    "dropped": 4
+   },
+   "fp_paraphrase": {
+    "firing": 9,
+    "dropped": 3
+   },
+   "fp_verbatim": {
+    "firing": 1,
+    "dropped": 1
+   },
+   "tp": {
+    "kept": 20,
+    "lost": 1
+   }
+  },
+  "bars": {
+   "fp_dropped_min": 0.6,
+   "tp_kept_min": 0.9,
+   "tp_kept_on": [
+    "tp"
+   ]
+  },
+  "verdict": "no_go",
+  "overall_verdict": "no_go",
+  "steps": {
+   "step1": {
+    "fp_background": {
+     "sent_on": 8,
+     "sent_on_unverified": 0,
+     "restated": 3
+    },
+    "fp_paraphrase": {
+     "sent_on": 10,
+     "sent_on_unverified": 0,
+     "restated": 2
+    },
+    "fp_verbatim": {
+     "sent_on": 1,
+     "sent_on_unverified": 0,
+     "restated": 1
+    },
+    "tp": {
+     "sent_on": 20,
+     "sent_on_unverified": 0,
+     "restated": 1
+    }
+   },
+   "step2": {
+    "fp_background": {
+     "flagged": 7,
+     "cleared": 1
+    },
+    "fp_paraphrase": {
+     "flagged": 9,
+     "cleared": 1
+    },
+    "fp_verbatim": {
+     "flagged": 1
+    },
+    "tp": {
+     "flagged": 20
+    }
+   },
+   "route_tp_share": 0.9524,
+   "judge_tp_kept_share": 1.0,
+   "judge_fp_dropped_share": 0.1053,
+   "bars": {
+    "route_tp_min": 0.95,
+    "judge_tp_kept_min": 0.95,
+    "judge_fp_dropped_min": 0.4,
+    "on": [
+     "tp"
+    ]
+   },
+   "passes": {
+    "route_tp": true,
+    "judge_tp_kept": true,
+    "judge_fp_dropped": false
+   },
+   "step1_vs_panel": {
+    "new_claim->new_claim": 22,
+    "new_claim->restatement": 1,
+    "restatement->new_claim": 17,
+    "restatement->restatement": 6
+   }
+  }
+ },
+ "by_step": {
+  "classify": {
+   "instrument": "gpt-6-luna-openai@openai-direct:entailment#v5c",
+   "prompt_version": "aa1048-r1-v5c@50704a977e52",
+   "calls": 138,
+   "charged_usd": 0.038538,
+   "prompt_chars": 2007594,
+   "mean_prompt_chars": 14547.8
+  },
+  "judge": {
+   "instrument": "gpt-6-luna-openai@openai-direct:entailment#v5j",
+   "prompt_version": "aa1048-r1-v5j@0c3529d50a55",
+   "calls": 117,
+   "charged_usd": 0.037567,
+   "prompt_chars": 1649355,
+   "mean_prompt_chars": 14097.1
+  }
+ },
+ "stop_rule": {
+  "kind": "full",
+  "prereg": "aa1048-two-step-v5",
+  "pool": "716df551d458fee1",
+  "ledger_read": true,
+  "prior_gated_runs": [],
+  "prior_trials": 1,
+  "refused": null
+ },
+ "limits": {
+  "cap_usd": 1.5,
+  "max_claims": 50,
+  "trial_claims": 3,
+  "fp_drop_min": 0.6,
+  "tp_keep_min": 0.9
+ },
+ "step_limits": {
+  "route_tp_min": 0.95,
+  "judge_tp_keep_min": 0.95,
+  "judge_fp_drop_min": 0.4
+ },
+ "trial": {
+  "run_id": "7fd5e57e-d507-4b43-9a5b-372f651a4240",
+  "calls": 18,
+  "spent_usd": 0.004102,
+  "ledger_usd": 0.003963
+ }
+}
