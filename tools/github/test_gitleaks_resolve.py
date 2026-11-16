@@ -48,6 +48,19 @@ class ResolveTest(unittest.TestCase):
         # the download comes before PATH, so the shim is not even probed
         self.assertEqual(f.skipped, [])
 
+    def test_mise_install_of_the_pin_is_taken_before_the_broken_shim(self):
+        shim = fake(self.d / "shims" / "gitleaks", body=SHIM)
+        mise = fake(self.d / "mise" / "installs" / "gitleaks" / gr.PIN / "gitleaks", gr.PIN)
+        f = gr.resolve([self.root], env={"PATH": str(shim.rsplit(os.sep, 1)[0]), "MISE_DATA_DIR": str(self.d / "mise")})
+        self.assertEqual((f.path, f.version), (mise, gr.PIN))
+        self.assertEqual(f.skipped, [])
+
+    def test_mise_install_path_from_home(self):
+        self.assertEqual(gr.mise_install({"HOME": "/h"}), f"/h/.local/share/mise/installs/gitleaks/{gr.PIN}/gitleaks")
+        self.assertEqual(gr.mise_install({"XDG_DATA_HOME": "/x", "HOME": "/h"}),
+                         f"/x/mise/installs/gitleaks/{gr.PIN}/gitleaks")
+        self.assertIsNone(gr.mise_install({}))
+
     def test_broken_shim_on_path_is_skipped_for_a_later_path_entry(self):
         fake(self.d / "shims" / "gitleaks", body=SHIM)
         good = fake(self.d / "bin" / "gitleaks", "8.30.1")
@@ -133,7 +146,8 @@ class CliTest(unittest.TestCase):
         self.tmp.cleanup()
 
     def run_cli(self, *args: str, path: str) -> subprocess.CompletedProcess:
-        env = {k: v for k, v in os.environ.items() if k != "AA_GITLEAKS"}
+        env = {k: v for k, v in os.environ.items() if k not in ("AA_GITLEAKS", "MISE_DATA_DIR", "XDG_DATA_HOME")}
+        env["HOME"] = str(self.d / "home")  # the machine's own mise install must not leak into the test
         env["PATH"] = f"{path}{os.pathsep}/usr/bin{os.pathsep}/bin"
         return subprocess.run([sys.executable, "-B", str(Path(gr.__file__)), *args], capture_output=True, text=True,
                               env=env, timeout=60)

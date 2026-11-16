@@ -11,7 +11,10 @@ binary. Candidates, in order:
   2. <root>/.tmp-session/gitleaks-8301/gitleaks (the download lanes and the orchestrator check against the release
      checksums), for each root: --root DIRs, else $AA_ECOSYS_ROOT, else the workspace path. Taken only when
      `gitleaks version` reports the CI pin.
-  3. every `gitleaks` on PATH, in PATH order.
+  3. the mise install of the CI pin, <mise data dir>/installs/gitleaks/<PIN>/gitleaks ($MISE_DATA_DIR, else
+     $XDG_DATA_HOME/mise, else ~/.local/share/mise). The mise shim answers "No version is set" when no global version
+     is set, while the install it would run is right there (S282: a ship wave push failed on the shim twice).
+  4. every `gitleaks` on PATH, in PATH order.
 
 A candidate whose `gitleaks version` fails or prints no version is skipped, with the reason kept: the mise shim
 answers "No version is set for shim: gitleaks" (exit 1) when no global gitleaks version is set, and `shutil.which`
@@ -92,6 +95,16 @@ def default_roots() -> list[str]:
     return list(dict.fromkeys(x for x in (os.environ.get("AA_ECOSYS_ROOT", ""), WORKSPACE) if x))
 
 
+def mise_install(env) -> str | None:
+    """Where mise installs the CI pin (None when no home or data dir is known)."""
+    data = (env.get("MISE_DATA_DIR") or "").strip()
+    if not data:
+        xdg = (env.get("XDG_DATA_HOME") or "").strip()
+        home = (env.get("HOME") or "").strip()
+        data = str(Path(xdg) / "mise") if xdg else (str(Path(home) / ".local" / "share" / "mise") if home else "")
+    return str(Path(data) / "installs" / "gitleaks" / PIN / "gitleaks") if data else None
+
+
 def resolve(roots: Iterable[str | os.PathLike] | None = None, *, run_version: Probe = probe,
             env: dict | None = None, on_path: list[str] | None = None) -> Found:
     """The gitleaks to run (see the module doc). `on_path` replaces the PATH search (tests)."""
@@ -123,6 +136,14 @@ def resolve(roots: Iterable[str | os.PathLike] | None = None, *, run_version: Pr
             found.path, found.version = local, v
             return found
         found.skipped.append(f"{local}: {why or f'version {v}, not the CI pin {PIN}'}")
+    mise = mise_install(env)
+    if mise and key(mise) not in seen and os.path.isfile(mise) and os.access(mise, os.X_OK):
+        seen.add(key(mise))
+        v, why = run_version(mise)
+        if v == PIN:
+            found.path, found.version = mise, v
+            return found
+        found.skipped.append(f"{mise}: {why or f'version {v}, not the CI pin {PIN}'}")
     first: tuple[str, str] | None = None
     for cand in (on_path if on_path is not None else which_all("gitleaks", env.get("PATH", ""))):
         if key(cand) in seen:
