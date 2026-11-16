@@ -93,6 +93,7 @@
    "page:/admin/platform/apps",
    "page:/admin/platform/audit",
    "page:/admin/platform/catalogue",
+   "page:/admin/platform/delivery",
    "page:/admin/platform/infra",
    "page:/admin/platform/settings",
    "page:/admin/platform/staff",
@@ -161,6 +162,7 @@
    "route:admin_places",
    "route:admin_plans",
    "route:admin_platform",
+   "route:admin_platform_delivery",
    "route:admin_platform_ops",
    "route:admin_product_catalogue",
    "route:admin_quality_funnel",
@@ -659,6 +661,62 @@
   "cis.content.trash_retention_days": {
    "app": "cis",
    "area": "retention"
+  },
+  "cis.delivery.cfr_amber_pct": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.cfr_green_pct": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.ci_time_amber_minutes": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.ci_time_green_minutes": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.deploys_per_week_amber": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.deploys_per_week_green": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.lead_time_amber_hours": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.lead_time_green_hours": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.main_red_hours": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.min_sample": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.recovery_amber_hours": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.recovery_green_hours": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.rework_amber_pct": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.rework_green_pct": {
+   "app": "cis",
+   "area": "delivery"
   },
   "cis.erasure.crm_window_days": {
    "app": "cis",
