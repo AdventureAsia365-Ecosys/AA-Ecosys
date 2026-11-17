@@ -22,3 +22,5 @@ aws-actions/amazon-ecr-login@*
 aws-actions/configure-aws-credentials@*
 googleapis/release-please-action@*
 hashicorp/setup-terraform@*
+# AA-1111: passive ZAP baseline (.github/workflows/zap-baseline.yml, on demand; a JavaScript action, nothing nested)
+zaproxy/action-baseline@*

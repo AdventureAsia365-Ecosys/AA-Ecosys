@@ -1,0 +1,77 @@
+{
+ "@programName": "ZAP",
+ "@version": "2.17.0",
+ "@generated": "Tue, 17 Nov 2026 03:12:00",
+ "created": "2026-11-17T03:12:00.000Z",
+ "insights": [],
+ "site": [
+  {
+   "@name": "https://api.example.test",
+   "@host": "api.example.test",
+   "@port": "443",
+   "@ssl": "true",
+   "alerts": [
+    {
+     "pluginid": "10038",
+     "alertRef": "10038-1",
+     "alert": "Content Security Policy (CSP) Header Not Set",
+     "name": "Content Security Policy (CSP) Header Not Set",
+     "riskcode": "2",
+     "confidence": "3",
+     "riskdesc": "Medium (High)",
+     "desc": "<p>Recorded description.</p>",
+     "instances": [
+      {
+       "id": "0",
+       "uri": "https://api.example.test/health",
+       "nodeName": "https://api.example.test/health",
+       "method": "GET",
+       "param": "",
+       "attack": "",
+       "evidence": "",
+       "otherinfo": ""
+      }
+     ],
+     "count": "1",
+     "systemic": false,
+     "solution": "<p>Recorded solution.</p>",
+     "otherinfo": "",
+     "reference": "",
+     "cweid": "693",
+     "wascid": "15",
+     "sourceid": "3"
+    },
+    {
+     "pluginid": "10021",
+     "alertRef": "10021",
+     "alert": "X-Content-Type-Options Header Missing",
+     "name": "X-Content-Type-Options Header Missing",
+     "riskcode": "1",
+     "confidence": "2",
+     "riskdesc": "Low (Medium)",
+     "desc": "<p>Recorded description.</p>",
+     "instances": [
+      {
+       "id": "0",
+       "uri": "https://api.example.test/health",
+       "nodeName": "https://api.example.test/health",
+       "method": "GET",
+       "param": "",
+       "attack": "",
+       "evidence": "",
+       "otherinfo": ""
+      }
+     ],
+     "count": "1",
+     "systemic": false,
+     "solution": "<p>Recorded solution.</p>",
+     "otherinfo": "",
+     "reference": "",
+     "cweid": "693",
+     "wascid": "15",
+     "sourceid": "3"
+    }
+   ]
+  }
+ ]
+}
