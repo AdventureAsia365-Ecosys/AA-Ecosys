@@ -1,0 +1,226 @@
+[
+ {
+  "id": "s283-docs-reader-access",
+  "question_vi": "Ai đọc được /admin/docs? Hiện chỉ vai trò admin, nên guide viết cho staff (content lead, customer success) không tới được người đọc.",
+  "options": [
+   {
+    "v": "all-staff-after-fix",
+    "t": "Mở cho mọi staff sau khi 3 runbook staff sai được sửa hoặc gắn banner",
+    "rec": true
+   },
+   {
+    "v": "all-staff",
+    "t": "Mở cho mọi vai trò staff; tầng owner/staff vẫn kiểm ở server"
+   },
+   {
+    "v": "admin-only",
+    "t": "Giữ chỉ admin như hiện tại"
+   }
+  ]
+ },
+ {
+  "id": "s283-docs-map-home",
+  "question_vi": "Bản đồ docs <-> code (trang nào mô tả file code nào) đặt ở đâu?",
+  "options": [
+   {
+    "v": "central-map-merged",
+    "t": "Một file doc-map.yaml trung tâm, gộp luôn doc-owners",
+    "rec": true
+   },
+   {
+    "v": "central-map",
+    "t": "Một file trung tâm docs/catalogue/doc-map.yaml (phủ cả file agent và CONTEXT.md, seed từ rows.json)"
+   },
+   {
+    "v": "frontmatter-watches",
+    "t": "Trường watches: trong front-matter từng trang"
+   },
+   {
+    "v": "both",
+    "t": "Cả hai: front-matter cho trang catalog, file trung tâm cho file không có front-matter"
+   }
+  ]
+ },
+ {
+  "id": "s283-docs-gate",
+  "question_vi": "Cổng docs-impact trên PR của 6 repo chặn tới đâu?",
+  "options": [
+   {
+    "v": "warn-then-required",
+    "t": "Cảnh báo 2 tuần, sau đó thành check bắt buộc"
+   },
+   {
+    "v": "warn-only",
+    "t": "Chỉ cảnh báo, không bao giờ chặn",
+    "rec": true
+   },
+   {
+    "v": "required-now",
+    "t": "Bắt buộc ngay từ đầu"
+   }
+  ]
+ },
+ {
+  "id": "s283-docs-sidebar",
+  "question_vi": "Sidebar theo chủ đề của /admin/docs lấy từ đâu?",
+  "options": [
+   {
+    "v": "frontmatter-nav",
+    "t": "Trường front-matter nav (+ nav_order) + lint mỗi trang publish có nav",
+    "rec": true
+   },
+   {
+    "v": "sidebar-yaml",
+    "t": "File docs/sidebar.yaml + lint mỗi trang publish xuất hiện đúng một lần"
+   },
+   {
+    "v": "from-cat00",
+    "t": "Suy từ heading của catalog CAT-00 (không thêm file, khó kiểm soát hơn)"
+   },
+   {
+    "v": "keep-folders",
+    "t": "Giữ nhóm theo thư mục như hiện tại"
+   }
+  ]
+ },
+ {
+  "id": "s283-docs-search",
+  "question_vi": "Tìm kiếm toàn văn trong /admin/docs chạy ở đâu?",
+  "options": [
+   {
+    "v": "server-fts5",
+    "t": "Server: SQLite FTS5 trong CIS API, lọc tầng ở server, không thêm thư viện",
+    "rec": true
+   },
+   {
+    "v": "client-minisearch",
+    "t": "Trình duyệt: index tách theo tầng + MiniSearch"
+   },
+   {
+    "v": "keep-title",
+    "t": "Giữ tìm theo tiêu đề như hiện tại"
+   }
+  ]
+ },
+ {
+  "id": "s283-docs-feedback",
+  "question_vi": "Có làm widget 'Trang này có ích? Có/Không + Báo lỗi' cuối mỗi trang docs không?",
+  "options": [
+   {
+    "v": "cis-table",
+    "t": "Có, lưu một bảng nhỏ của CIS + trang admin xem phản hồi (một migration CIS)"
+   },
+   {
+    "v": "github-issue",
+    "t": "Có, mở GitHub issue điền sẵn (repo public, dễ lộ chi tiết nội bộ)"
+   },
+   {
+    "v": "no",
+    "t": "Không làm",
+    "rec": true
+   }
+  ]
+ },
+ {
+  "id": "s283-docs-github-links",
+  "question_vi": "Có hiện link 'Sửa / Lịch sử trên GitHub' trên trang docs không?",
+  "options": [
+   {
+    "v": "source-history-all-edit-admin",
+    "t": "\"Nguồn · Lịch sử\" cho mọi người đọc; \"Sửa\" chỉ cho admin",
+    "rec": true
+   },
+   {
+    "v": "while-public",
+    "t": "Hiện khi repo gốc còn public; build tự ẩn khi repo chuyển private"
+   },
+   {
+    "v": "never",
+    "t": "Không hiện"
+   }
+  ]
+ },
+ {
+  "id": "s283-docs-draft",
+  "question_vi": "Trạng thái draft hiện gắn 134/205 trang nên mất nghĩa. Xử lý thế nào?",
+  "options": [
+   {
+    "v": "active-after-fix",
+    "t": "Trang nào AA-1118 sửa xong thì chuyển active; reader hiện draft là ghi chú nhỏ 'Chưa duyệt'",
+    "rec": true
+   },
+   {
+    "v": "keep",
+    "t": "Giữ như hiện tại"
+   }
+  ]
+ },
+ {
+  "id": "s283-docs-owner-slug",
+  "question_vi": "Slug chủ trang thống nhất là gì?",
+  "options": [
+   {
+    "v": "tech-lead",
+    "t": "tech-lead (đổi các slug nghiep trong một đợt)",
+    "rec": true
+   },
+   {
+    "v": "nghiep",
+    "t": "nghiep"
+   }
+  ]
+ },
+ {
+  "id": "s283-docs-ui-option",
+  "question_vi": "Phương án giao diện cho /admin/docs?",
+  "options": [
+   {
+    "v": "evolve-reader",
+    "t": "A: nâng cấp reader hiện có (0 USD/tháng, giữ phân quyền và kit UI)",
+    "rec": true
+   },
+   {
+    "v": "fumadocs",
+    "t": "B: nhúng Fumadocs vào admin (0 USD, hai hệ giao diện, rủi ro phân quyền theo tầng)"
+   },
+   {
+    "v": "separate-site",
+    "t": "C: site docs riêng tự host (~5-10 USD/tháng, đăng nhập thứ hai)"
+   }
+  ]
+ },
+ {
+  "id": "s283-docs-dvc",
+  "question_vi": "Công cụ DVC (Data Version Control) có dùng không?",
+  "options": [
+   {
+    "v": "not-now",
+    "t": "Chưa dùng; bật khi bộ eval/calibration > ~50 MB, nhị phân, hoặc chứa văn bản tenant",
+    "rec": true
+   },
+   {
+    "v": "pilot-eval",
+    "t": "Thử ngay cho bộ eval/golden"
+   }
+  ]
+ },
+ {
+  "id": "s283-docs-linear",
+  "question_vi": "Phạm vi Linear cho việc docs-as-code và reader?",
+  "options": [
+   {
+    "v": "aa1118-plus-two",
+    "t": "AA-1118 giữ lint + vá nhanh + sửa nội dung; mở 2 issue mới: 'Docs sync engine' và 'Docs reader v2'",
+    "rec": true
+   },
+   {
+    "v": "all-in-aa1118",
+    "t": "Gộp hết vào AA-1118"
+   },
+   {
+    "v": "one-new",
+    "t": "Một issue mới duy nhất cho cả hai"
+   }
+  ]
+ }
+]
