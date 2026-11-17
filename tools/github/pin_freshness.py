@@ -11,7 +11,8 @@ and compares each with the newest GitHub release of its upstream:
   * .github/actions/lychee/pins.txt        "<version> <target> <sha256>"  (lycheeverse/lychee, tags lychee-vX.Y.Z)
   * requirements*.txt                      "<name> @ https://github.com/<o>/<r>/releases/download/<tag>/...#sha256="
                                             (the spaCy model wheel)
-  * workflow / composite action files      "ghcr.io/<o>/<n>:<tag>@sha256:<digest>"  (the gitleaks image)
+  * workflow / composite action files      "ghcr.io/<o>/<n>:<tag>@sha256:<digest>"  (the gitleaks image; the ZAP
+                                            image, whose tag 2.17.0 is release v2.17.0: a bare tag also matches "v")
 
 A pin is outdated when any repo carries a version lower than the newest non-draft, non-prerelease release whose tag
 has the same prefix ("v", "lychee-v", "en_core_web_sm-"). The root CI hygiene workflow (weekly) turns the --json
@@ -143,14 +144,24 @@ def latest_release(upstream: str, prefix: str, run=subprocess.run, fetch=_anonym
         rows = fetch(f"https://api.github.com/repos/{upstream}/releases?per_page=100")
         out = "\n".join(f"{r.get('tag_name', '')}\t{r.get('html_url', '')}" for r in rows
                         if isinstance(r, dict) and not r.get("draft") and not r.get("prerelease"))
+    best = _newest(out, prefix)
+    if best is None and prefix == "":
+        # AA-1111 (S283): an image tag without the "v" of its upstream's release tags (ghcr.io/zaproxy/zaproxy:2.17.0,
+        # release v2.17.0); the weekly "w<date>" builds keep their own prefix and never match.
+        best = _newest(out, "v")
+    if best is None:
+        raise ValueError(f"no release of {upstream} with a tag {prefix}<version>")
+    return best
+
+
+def _newest(releases: str, prefix: str) -> tuple[str, str] | None:
+    """(version, url) of the highest `<prefix><version>` tag in the tab-separated `tag\turl` lines, or None."""
     best = None
-    for line in out.splitlines():
+    for line in releases.splitlines():
         tag, _, url = line.partition("\t")
         pre, version = split_tag(tag)
         if pre == prefix and version and (best is None or vkey(version) > vkey(best[0])):
             best = (version, url)
-    if best is None:
-        raise ValueError(f"no release of {upstream} with a tag {prefix}<version>")
     return best
 
 

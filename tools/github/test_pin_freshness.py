@@ -147,6 +147,21 @@ class Check(unittest.TestCase):
         self.assertEqual(got, ("0.70.0", "u70"))
         self.assertEqual(seen, ["https://api.github.com/repos/aquasecurity/trivy/releases?per_page=100"])
 
+    def test_bare_image_tag_matches_v_release_tags(self):
+        # AA-1111: ghcr image tag 2.17.0, upstream release tags v2.17.0 plus weekly w<date> builds
+        def run(cmd, **kw):
+            rows = "".join(f"{t}\tu-{t}\n" for t in ("w2026-11-11", "v2.18.0", "v2.17.0"))
+            return subprocess.CompletedProcess(cmd, 0, rows, "")
+        self.assertEqual(p.latest_release("demo-org/proxy", "", run=run), ("2.18.0", "u-v2.18.0"))
+        img = p.parse_pins("r", ".github/workflows/zap.yml",
+                           f"docker_name: ghcr.io/demo-org/proxy:2.17.0@sha256:{'cd' * 32}\n")
+        self.assertEqual([(x["key"], x["prefix"], x["version"]) for x in img], [("proxy", "", "2.17.0")])
+
+    def test_exact_prefix_wins_over_v_fallback(self):
+        def run(cmd, **kw):
+            return subprocess.CompletedProcess(cmd, 0, "3.0.0\tu3\nv9.0.0\tu9\n", "")
+        self.assertEqual(p.latest_release("demo-org/plain", "", run=run), ("3.0.0", "u3"))
+
     def test_other_gh_errors_are_not_retried_without_token(self):
         def run(cmd, **kw):
             return subprocess.CompletedProcess(cmd, 1, "", "gh: HTTP 404 Not Found")
