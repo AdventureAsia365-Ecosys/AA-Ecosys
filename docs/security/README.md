@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-20
+last_reviewed: 2026-11-17
 review_every_days: 90
 related: [SEC-01, SEC-02, SEC-03, SEC-05, SEC-06, SEC-07]
 ---
@@ -27,6 +27,7 @@ decides who may read them there (N-3).
 | SEC-04 | [Compliance and privacy register](../legal/register.md) (draft, AA-886), with the [retention log](../legal/retention-log.md), [DPA template](../legal/dpa-template.md), [DSAR and erasure runbook](../legal/dsar-erasure-runbook.md), [readiness packet](../legal/readiness-packet.md) and [consent check](../legal/consent-capture-query.md) | Processing activities, sub-processors, retention runs, data-subject requests |
 | SEC-06 | [Where a page may live](../STYLE.md#where-a-page-may-live-sec-06) | What may go into the public app repos |
 | SEC-07 | [GitHub Apps for agents and bots](github-apps.md) (draft, AA-901) | How the `aa-agent` and `aa-ci-bot` Apps are created, installed, keyed, rotated and stopped |
+| SEC-05 | [Access register (key-holders)](access-register.md) (template, AA-1110) | Who holds the GitHub organization, each AWS account, the domains and break-glass, with the second key-holder, registrar ownership and auto-renew |
 
 ## Access reviews (SEC-05)
 
