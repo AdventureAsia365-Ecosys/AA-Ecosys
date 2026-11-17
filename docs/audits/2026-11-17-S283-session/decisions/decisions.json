@@ -1,0 +1,21 @@
+{
+ "s283-mfa-admin": "totp-admin (note: needs a plain explanation of what and why)",
+ "s283-fork-pr": "yes (already on: all_external_contributors on org + 7 repos)",
+ "s283-ro-role": "yes",
+ "s283-dreamhost": "skip",
+ "s283-keyholder": "owner-dec",
+ "s283-alert2": "none",
+ "s283-billing-contact": "hand (note: needs a clearer explanation)",
+ "s283-retention-job": "yes-2392 (note: asks why no archive)",
+ "s283-dm71": "approve-groups",
+ "s283-d10": "accept",
+ "s283-acc3-budget": "100",
+ "s283-nullrun": "yes5",
+ "s283-aa788": "yes5",
+ "s283-tl11": "lift-0usd",
+ "s283-waf": "prod",
+ "s283-golive": "hold",
+ "s283-map-engine": "shared-quote",
+ "s283-template-app": "yes",
+ "s283-tp-ruleset": "yes"
+}

@@ -1,0 +1,589 @@
+<title>Quyết định S283</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column of decision cards grouped by issue, each with context, options, a recommended pick and a save button. */
+:root {
+  --bg: #f6f7f4; --surface: #ffffff; --line: #d9ddd3; --fg: #1c211b; --muted: #5d665a;
+  --accent: #2f6b4f; --accent-soft: #dcebe2; --warn: #8a5a00; --warn-soft: #f6ead0; --ok: #24683f; --ok-soft: #dcefe2;
+  --body: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif; --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121512; --surface: #1a1f1a; --line: #2e362d; --fg: #e4e9e2; --muted: #9aa597;
+  --accent: #7cc4a0; --accent-soft: #1f3a2d; --warn: #e2b05a; --warn-soft: #3a2f17; --ok: #7fd09c; --ok-soft: #1c3424; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121512; --surface: #1a1f1a; --line: #2e362d; --fg: #e4e9e2; --muted: #9aa597;
+  --accent: #7cc4a0; --accent-soft: #1f3a2d; --warn: #e2b05a; --warn-soft: #3a2f17; --ok: #7fd09c; --ok-soft: #1c3424; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body) }
+.wrap { max-width: 860px; margin: 0 auto; padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 22px }
+h1 { font-size: clamp(24px, 3.4vw, 32px); margin: 0; line-height: 1.2; text-wrap: balance }
+h2 { font-size: 18px; margin: 0; line-height: 1.3; text-wrap: balance }
+h3.grp { font-size: 13px; margin: 10px 0 0; font-family: var(--mono); color: var(--muted); letter-spacing: .05em; text-transform: uppercase }
+.lede { color: var(--muted); margin: 0; max-width: 68ch }
+.status { font: 500 13px var(--mono); color: var(--muted) }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: grid; gap: 12px; min-width: 0 }
+.card.done { border-color: var(--ok) }
+.card header { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; justify-content: space-between }
+.tag { font: 500 12px var(--mono); color: var(--accent) }
+.ctx { margin: 0; color: var(--fg) }
+.facts { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; display: grid; gap: 2px }
+.opts { display: grid; gap: 8px }
+.opt { display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer }
+.opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft) }
+.opt input { margin-top: 4px }
+.opt b { font-weight: 600 }
+.rec { font: 500 11px var(--mono); color: var(--ok); background: var(--ok-soft); padding: 2px 6px; border-radius: 4px; margin-left: 6px; white-space: nowrap }
+.opt small { display: block; color: var(--muted); font-size: 13px }
+textarea { width: 100%; min-height: 56px; font: 14px var(--body); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; resize: vertical }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center }
+button { font: 600 14px var(--body); color: #fff; background: var(--accent); border: 0; border-radius: 8px; padding: 9px 16px; cursor: pointer }
+:root:not([data-theme="light"]) button { color: var(--bg) }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) button { color: #fff } }
+:root[data-theme="light"] button { color: #fff }
+button.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent) }
+button:disabled { opacity: .5; cursor: not-allowed }
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.saved { font-size: 13px; color: var(--ok) }
+.saved.warn { color: var(--warn) }
+.bar { position: sticky; top: 0; z-index: 2; background: var(--bg); padding: 10px 0; border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center }
+footer { color: var(--muted); font-size: 13px }
+code { font: 13px var(--mono) }
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:8px">
+    <div class="status">S283 · 17/11/2026 · 18 quyết định</div>
+    <h1>Quyết định S283</h1>
+    <p class="lede">Các câu cần anh hoặc chủ doanh nghiệp quyết, gom từ lượt đánh giá 35 issue Linear sáng nay và các lane đang chạy. Mỗi câu có bối cảnh bằng lời thường và một đề xuất chọn sẵn. Bấm <b>Chốt</b> từng câu hoặc <b>Chốt tất cả theo đề xuất</b>; agent đọc lựa chọn đã lưu rồi làm tiếp. Câu nào không chốt thì agent làm theo đề xuất và báo lại.</p>
+    <div class="status" id="conn">Đang kết nối nơi lưu…</div>
+  </header>
+
+  <div class="bar"><button type="button" id="save-all" disabled>Chốt tất cả theo đề xuất</button><span class="saved" id="msg-all"></span><span class="status" id="count"></span></div>
+
+  <div id="cards"></div>
+
+  <footer>Nguồn: <code>docs/audits/2026-11-17-S283-session/</code> (root PR cuối phiên). Chi trả phí nếu chốt hết theo đề xuất: tối đa ~10 USD (null run ≤ 5, pilot AA-788 ≤ 5); các mục khác 0 USD.</footer>
+</div>
+
+<script>
+(function () {
+  var Q = [
+   {
+    "grp": "Bảo mật trước pilot (AA-1111)",
+    "id": "s283-mfa-admin",
+    "tag": "AA-1111 · MFA admin",
+    "title": "Bắt admin đăng nhập bằng yếu tố thứ hai thế nào?",
+    "ctx": "Pool đăng nhập nhân viên (WORKFORCE) đang để MFA OPTIONAL, cho đăng nhập bằng mật khẩu hoặc mã gửi e-mail. Không dùng được Google 2SV vì hộp thư công ty nằm ở DreamHost. MFA của Cognito áp cho cả pool và không áp cho đăng nhập bằng mã e-mail, nên muốn chỉ bắt admin thì phải thiết kế riêng.",
+    "facts": [
+     "Đã kiểm live 16/11: get-user-pool-mfa-config = OPTIONAL",
+     "Chưa kiểm token của pool có claim amr hay không: agent kiểm trước khi code; không có thì dùng Lambda pre-token đóng dấu claim"
+    ],
+    "opts": [
+     {
+      "v": "totp-admin",
+      "t": "Nhóm admin đăng nhập mật khẩu + TOTP; API CIS/Booking/Partner từ chối phiên admin không có dấu MFA; người khác vẫn dùng mã e-mail",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "separate-pool",
+      "t": "Tách pool riêng cho admin, bắt MFA cả pool",
+      "d": ""
+     },
+     {
+      "v": "prod",
+      "t": "Để tới lúc dựng prod",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Bảo mật trước pilot (AA-1111)",
+    "id": "s283-ro-role",
+    "tag": "AA-1111 · R34",
+    "title": "Phiên agent mặc định dùng role AWS chỉ đọc, chỉ nâng quyền ghi khi apply/deploy?",
+    "ctx": "Audit S282 (R34): agent đang dùng role admin 12 h cho mọi việc. Role chỉ đọc làm mặc định giảm thiệt hại khi lệnh sai; bước ghi ghi rõ trong checklist phiên.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "yes",
+      "t": "Đồng ý: chỉ đọc mặc định, role ghi chỉ cho bước apply/deploy, ghi log",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "no",
+      "t": "Giữ role admin như hiện nay",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Bảo mật trước pilot (AA-1111)",
+    "id": "s283-dreamhost",
+    "tag": "Chủ doanh nghiệp · e-mail",
+    "title": "Đề xuất với chủ doanh nghiệp bật MFA trên DreamHost và đặt mật khẩu mạnh, riêng cho mỗi hộp thư?",
+    "ctx": "Hộp thư công ty là kênh khôi phục của nhiều tài khoản (AWS, GitHub, Linear). Không tốn tiền.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "jira",
+      "t": "Đưa vào nháp Jira cuối phiên như một đề xuất nhẹ, anh duyệt",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "skip",
+      "t": "Chưa gửi",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Vận hành liên tục (AA-1110)",
+    "id": "s283-keyholder",
+    "tag": "AA-1110 · người giữ khoá",
+    "title": "Ai là người giữ khoá thứ hai, và khi nào diễn tập?",
+    "ctx": "Hôm nay chỉ anh có quyền chủ org GitHub, Identity Center acc4, tên miền và break-glass. Agent đã viết trang “chạy không cần agent” và kịch bản tabletop (lane L3 hôm nay).",
+    "facts": [
+     "Các runbook rollback ECS/Booking/TP Lambda chưa diễn tập lần nào"
+    ],
+    "opts": [
+     {
+      "v": "owner-dec",
+      "t": "Chủ doanh nghiệp; một buổi 60 phút tuần đầu tháng 12 (sau khi acc2 vào org 01/12): thử quyền + diễn tập + tabletop",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "other",
+      "t": "Người khác (anh ghi chú)",
+      "d": ""
+     },
+     {
+      "v": "later",
+      "t": "Để sau go-live",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Vận hành liên tục (AA-1110)",
+    "id": "s283-alert2",
+    "tag": "AA-1110 · cảnh báo",
+    "title": "Kênh cảnh báo thứ hai (miễn phí) là gì?",
+    "ctx": "Báo động hiện chỉ gửi một e-mail SNS. Lane hôm nay thêm subscription thứ hai trong Terraform, mặc định tắt.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "email-owner",
+      "t": "E-mail SNS thứ hai tới hộp thư công ty của chủ doanh nghiệp; bật khi xác nhận",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "webhook",
+      "t": "Webhook push miễn phí (agent đề xuất dịch vụ)",
+      "d": ""
+     },
+     {
+      "v": "none",
+      "t": "Chưa cần",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Vận hành liên tục (AA-1110)",
+    "id": "s283-billing-contact",
+    "tag": "AA-1004 · acc2",
+    "title": "Thêm liên hệ BILLING thay thế cho acc2 trước khi chuyển org?",
+    "ctx": "Kiểm 1.7 sáng nay: acc2 có liên hệ chính nhưng chưa có liên hệ BILLING thay thế. AWS cần đủ thông tin liên hệ để tài khoản đứng riêng. Các kiểm khác: tự rời org được (1.3), tạo được role org (1.4), role chưa tồn tại (1.5). Apply role vẫn giữ tới khi ký phụ lục TrueIDC.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "hand",
+      "t": "Anh thêm trên console (hộp thư vai trò), khoảng 2 phút",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "agent",
+      "t": "Agent chạy put-alternate-contact (lệnh ghi, cần anh cho phép)",
+      "d": ""
+     },
+     {
+      "v": "later",
+      "t": "Để tới 01/12",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Dữ liệu và AI (AA-1112, AA-1113)",
+    "id": "s283-retention-job",
+    "tag": "AA-1112 · retention",
+    "title": "Cho chạy live lần đầu retention_job: xoá 2.392 job đã xong hơn 30 ngày?",
+    "ctx": "DRY RUN đêm 16/11: shared.job có 2.392 job trạng thái succeeded cũ hơn 30 ngày (28/09–16/10), không archive theo chính sách đã duyệt. Các loại retention khác có 0 dòng vì dữ liệu chưa đủ tuổi. Sau một lượt live, lượt theo lịch tự chạy live trong giới hạn tăng 2x.",
+    "facts": [
+     "Job failed/cancelled (90 ngày, có archive): 0 dòng",
+     "llm_call_log 180 ngày, tenant_api_usage 90 ngày, decision_log 180 ngày: 0 dòng"
+    ],
+    "opts": [
+     {
+      "v": "yes-2392",
+      "t": "Đồng ý, max_rows = 2.392 (job succeeded), chạy một lượt và báo số",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "no",
+      "t": "Chưa xoá",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Dữ liệu và AI (AA-1112, AA-1113)",
+    "id": "s283-dm71",
+    "tag": "AA-1112 · DM-7.1",
+    "title": "Duyệt khoảng 57 dòng retention đang ở trạng thái “proposed” trong DM-7.1?",
+    "ctx": "Các nhóm: log CIS, cấu hình nền tảng CRM, bản ghi xoá dữ liệu CRM, TripPlanner, vận hành Booking, thời hạn decision_log. Danh sách đầy đủ ở bảng DM-7.1 trong data standards. Mỗi app chạy live lần đầu vẫn theo DRY RUN rồi anh duyệt số dòng.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "approve-groups",
+      "t": "Duyệt theo nhóm như đề xuất; lượt live đầu mỗi app vẫn DRY RUN + anh duyệt số",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "page",
+      "t": "Agent làm trang duyệt từng dòng",
+      "d": ""
+     },
+     {
+      "v": "later",
+      "t": "Để sau",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Dữ liệu và AI (AA-1112, AA-1113)",
+    "id": "s283-d10",
+    "tag": "AA-1113 · ADR 0009 d10",
+    "title": "Chấp nhận ADR 0009 quyết định 10 (phạm vi dữ liệu theo nơi xử lý) để bật che PII trước lượt gọi AI?",
+    "ctx": "Đo $0 hôm nay (30 ngày): chỉ ba stage viết cho đại lý mang chữ của tenant: t9_write, t2_generate, t8_angle_gen (7 tenant mỗi stage). Các stage catalogue (s1_*, a3_*, tp_compose) không có dữ liệu tenant.",
+    "facts": [
+     "File: docs/audits/2026-11-17-S283-session/aa1113-provider-stage-30d.psv"
+    ],
+    "opts": [
+     {
+      "v": "accept",
+      "t": "Chấp nhận; che PII fail-closed cho các stage free-text (t9/t2/t8), tp_compose không cần",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "wait",
+      "t": "Chờ thêm số liệu",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Dữ liệu và AI (AA-1112, AA-1113)",
+    "id": "s283-acc3-budget",
+    "tag": "AA-1113 · budget",
+    "title": "Hạ budget acc3 từ 250 xuống 100 USD/tháng cho khớp trần gateway?",
+    "ctx": "Budget acc1 = 100 USD (khớp trần gateway 100). Budget acc3 = 250 USD trong khi trần gateway của acc3 là 100. Cả hai không lọc theo dịch vụ nên nhiều khả năng đã tính tiền Marketplace (Claude); kiểm lại khi có hoá đơn tháng 11. Đổi budget miễn phí.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "100",
+      "t": "Hạ xuống 100 USD, agent apply local khi có MFA",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "keep",
+      "t": "Giữ 250",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Chất lượng nội dung, prod, khác",
+    "id": "s283-nullrun",
+    "tag": "AA-1051 · null run",
+    "title": "Cho chạy null run W5 bằng thước đo v7 (tư vấn), trần 5 USD?",
+    "ctx": "AA-1048 v7 đã ghim (FP 68 %, TP 88 %), chưa đủ 80 % để chặn nên chỉ dùng làm tư vấn. Null run cần để biết mức nhiễu của thước đo trước các lượt chứng minh trả phí.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "yes5",
+      "t": "Đồng ý, trần 5 USD, sau khi PR nối v7 (0 USD) đã merge",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "wait",
+      "t": "Chưa",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Chất lượng nội dung, prod, khác",
+    "id": "s283-aa788",
+    "tag": "AA-788 · pilot",
+    "title": "Pilot 20 bài AA-788 (F12_scope, F14, F9) từ 19/11, ước 2–5 USD?",
+    "ctx": "Replay $0 đã xong. Pilot là bước cuối trước khi đưa ba cổng thành chặn (sửa một lần, không giữ bài). Đăng ký trước mẫu + chỉ số rồi mới chạy.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "yes5",
+      "t": "Đồng ý, trần 5 USD, thử 3 bài trước, đăng ký trước merge trước",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "wait",
+      "t": "Chưa",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Chất lượng nội dung, prod, khác",
+    "id": "s283-tl11",
+    "tag": "D4 · TL-11",
+    "title": "Gỡ băng TL-11 thế nào khi AA-1050 chưa thể enforce class nào trước pilot?",
+    "ctx": "S278 D4: gỡ TL-11 khi AA-1077 đóng và AA-1050 enforce ít nhất một class. Điều kiện thứ hai chưa thể đạt trước pilot, nên AA-790/920/921/1000 đứng yên.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "lift-0usd",
+      "t": "Gỡ cho code $0 và replay; lượt shadow trả phí, pilot và đổi prompt writer chờ pilot",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "keep",
+      "t": "Giữ băng như cũ",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Chất lượng nội dung, prod, khác",
+    "id": "s283-waf",
+    "tag": "AA-1117 · WAF",
+    "title": "Giới hạn tốc độ ở biên (CloudFront WAF, ~5–6 USD/tháng): bật bây giờ hay lúc prod?",
+    "ctx": "Dev không có người dùng thật. Ghi rủi ro chấp nhận có điều kiện vào checklist go-live.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "prod",
+      "t": "Lúc dựng prod",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "now",
+      "t": "Bật bây giờ trên Dev",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Chất lượng nội dung, prod, khác",
+    "id": "s283-golive",
+    "tag": "Chủ doanh nghiệp · go-live",
+    "title": "Đề xuất chủ doanh nghiệp đặt tháng go-live mục tiêu?",
+    "ctx": "Chưa có ngày go-live thì prod P2–P6, AA-980, AA-1054 và checklist AA-1117 không bắt đầu được. Luật dự phòng S265: P2 trễ nhất tuần 3 của pilot.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "jira",
+      "t": "Nháp Jira đề xuất một tháng mục tiêu sau khi chuyển org (01/12), anh duyệt",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "hold",
+      "t": "Chưa hỏi",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Chất lượng nội dung, prod, khác",
+    "id": "s283-map-engine",
+    "tag": "AA-948 · bản đồ",
+    "title": "Builder CRM dùng chung engine bản đồ/tuyến của TripPlanner (không fork)?",
+    "ctx": "AA-948 đang parked. Dùng chung engine tránh lệch hai bản. Mapbox có thể tốn tiền: agent báo giá trước khi làm.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "shared-quote",
+      "t": "Đồng ý engine dùng chung; agent báo giá Mapbox trước, vẫn parked tới khi duyệt giá",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "no",
+      "t": "Giữ nguyên parked, không bàn",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Chất lượng nội dung, prod, khác",
+    "id": "s283-template-app",
+    "tag": "AA-1103 · template",
+    "title": "Cài App aa-agent lên repo project-template và duyệt kích hoạt module Academy L8 sau PR?",
+    "ctx": "Cài App là một cú bấm của owner org. L8 (playbook dự án mới) đang làm bản nháp ở lane L4 hôm nay.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "yes",
+      "t": "Đồng ý cả hai",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "module-only",
+      "t": "Chỉ duyệt L8, chưa cài App",
+      "d": ""
+     }
+    ]
+   },
+   {
+    "grp": "Chất lượng nội dung, prod, khác",
+    "id": "s283-tp-ruleset",
+    "tag": "AA-1119 · TripPlanner",
+    "title": "Bật merge queue + check bắt buộc cho repo TripPlanner (anh áp ruleset JSON, ~1 phút)?",
+    "ctx": "Ba repo app khác đã có merge queue. App aa-agent không có quyền admin repo nên không tự áp được.",
+    "facts": [],
+    "opts": [
+     {
+      "v": "yes",
+      "t": "Đồng ý; agent chuẩn bị JSON",
+      "d": "",
+      "rec": true
+     },
+     {
+      "v": "later",
+      "t": "Để sau",
+      "d": ""
+     }
+    ]
+   }
+  ];
+
+  var cards = document.getElementById("cards");
+  var conn = document.getElementById("conn");
+  var allBtn = document.getElementById("save-all"), allMsg = document.getElementById("msg-all"), count = document.getElementById("count");
+  var db = null, saved = {};
+
+  function el(tag, attrs, html) { var e = document.createElement(tag); for (var k in attrs || {}) e.setAttribute(k, attrs[k]); if (html != null) e.innerHTML = html; return e; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function recOf(q) { return (q.opts.filter(function (o) { return o.rec; })[0] || q.opts[0]).v; }
+  function optText(q, v) { return (q.opts.filter(function (o) { return o.v === v; })[0] || {}).t || v; }
+
+  function render() {
+    // keep unsaved picks and notes across re-renders
+    var pending = {};
+    Q.forEach(function (q) {
+      var p = cards.querySelector('input[name="' + q.id + '"]:checked'), t = document.getElementById("note-" + q.id);
+      if (p || t) pending[q.id] = { choice: p ? p.value : null, note: t ? t.value : "" };
+    });
+    cards.innerHTML = "";
+    var box = el("div", { style: "display:grid;gap:18px" }), lastGrp = null;
+    Q.forEach(function (q) {
+      if (q.grp !== lastGrp) { box.appendChild(el("h3", { class: "grp" }, esc(q.grp))); lastGrp = q.grp; }
+      var s = saved[q.id], pd = pending[q.id];
+      var card = el("section", { class: "card" + (s ? " done" : ""), "aria-labelledby": "h-" + q.id });
+      card.appendChild(el("header", {}, '<h2 id="h-' + q.id + '">' + esc(q.title) + '</h2><span class="tag">' + esc(q.tag) + '</span>'));
+      card.appendChild(el("p", { class: "ctx" }, esc(q.ctx)));
+      if (q.facts.length) card.appendChild(el("ul", { class: "facts" }, q.facts.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("")));
+      var opts = el("div", { class: "opts", role: "radiogroup", "aria-label": q.title });
+      var current = (pd && pd.choice) || (s ? s.choice : recOf(q));
+      q.opts.forEach(function (o) {
+        var id = q.id + "-" + o.v;
+        var lab = el("label", { class: "opt", for: id });
+        lab.innerHTML = '<input type="radio" name="' + q.id + '" id="' + id + '" value="' + o.v + '"' + (o.v === current ? " checked" : "") + '>' +
+          '<span><b>' + esc(o.t) + '</b>' + (o.rec ? '<span class="rec">đề xuất</span>' : "") + (o.d ? '<small>' + esc(o.d) + '</small>' : "") + '</span>';
+        opts.appendChild(lab);
+      });
+      card.appendChild(opts);
+      var ta = el("textarea", { id: "note-" + q.id, placeholder: "Ghi chú (không bắt buộc)", "aria-label": "Ghi chú cho " + q.title });
+      ta.value = pd ? pd.note : (s && s.note ? s.note : "");
+      card.appendChild(ta);
+      var row = el("div", { class: "row" });
+      var btn = el("button", { type: "button", id: "save-" + q.id }, "Chốt");
+      var msg = el("span", { class: "saved", id: "msg-" + q.id }, s ? "Đã chốt: " + esc(optText(q, s.choice)) : "");
+      if (!db) btn.disabled = true;
+      btn.addEventListener("click", function () { save(q, card, btn, msg); });
+      row.appendChild(btn); row.appendChild(msg);
+      card.appendChild(row);
+      box.appendChild(card);
+    });
+    cards.appendChild(box);
+    var n = Q.filter(function (q) { return saved[q.id]; }).length;
+    count.textContent = n + "/" + Q.length + " câu đã chốt";
+    allBtn.disabled = !db;
+  }
+
+  function put(q, choice, note) {
+    return db.doc("decisions/" + q.id).set({ question: q.title, choice: choice, note: (note || "").slice(0, 2000), at: new Date().toISOString() });
+  }
+
+  function save(q, card, btn, msg) {
+    var pick = card.querySelector('input[name="' + q.id + '"]:checked');
+    if (!pick || !db) return;
+    btn.disabled = true; msg.className = "saved"; msg.textContent = "Đang lưu…";
+    put(q, pick.value, card.querySelector("textarea").value)
+      .then(function () { msg.textContent = "Đã chốt"; btn.disabled = false; })
+      .catch(function (e) { msg.className = "saved warn"; msg.textContent = "Chưa lưu được (" + ((e && e.code) || "lỗi") + "). Bạn có quyền ghi trang này không?"; btn.disabled = false; });
+  }
+
+  allBtn.addEventListener("click", function () {
+    if (!db) return;
+    var todo = Q.filter(function (q) { return !saved[q.id]; });
+    if (!todo.length) { allMsg.textContent = "Mọi câu đã được chốt."; return; }
+    allBtn.disabled = true; allMsg.className = "saved"; allMsg.textContent = "Đang lưu " + todo.length + " câu…";
+    var i = 0;
+    (function next() {
+      if (i >= todo.length) { allMsg.textContent = "Đã chốt " + todo.length + " câu theo đề xuất."; allBtn.disabled = false; return; }
+      var q = todo[i++], t = document.getElementById("note-" + q.id);
+      put(q, recOf(q), t ? t.value : "").then(next).catch(function (e) {
+        allMsg.className = "saved warn"; allMsg.textContent = "Dừng ở câu “" + q.title + "” (" + ((e && e.code) || "lỗi") + ")."; allBtn.disabled = false;
+      });
+    })();
+  });
+
+  render();
+  var timer = setTimeout(function () { if (!db) conn.textContent = "Chưa kết nối được nơi lưu: có thể xem, nhưng chưa chốt được. Mở lại trang khi đã đăng nhập claude.ai."; }, 10000);
+  if (window.claude && window.claude.use) {
+    window.claude.use("db").then(function (d) {
+      if (!d) { clearTimeout(timer); conn.textContent = "Trang này không lưu được ở chế độ xem hiện tại."; return; }
+      db = d; clearTimeout(timer); conn.textContent = "Đã kết nối. Lựa chọn được lưu khi bấm Chốt.";
+      db.collection("decisions").onSnapshot(function (snap) {
+        saved = {};
+        (snap.docs || []).forEach(function (doc) { var v = doc.data ? doc.data() : doc; saved[doc.id] = v; });
+        render();
+      }, function () { render(); });
+      render();
+    }).catch(function () { clearTimeout(timer); conn.textContent = "Chưa kết nối được nơi lưu."; });
+  } else {
+    clearTimeout(timer); conn.textContent = "Mở trang trên claude.ai để chốt.";
+  }
+})();
+</script>
