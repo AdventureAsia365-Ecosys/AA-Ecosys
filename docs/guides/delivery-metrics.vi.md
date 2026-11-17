@@ -1,15 +1,15 @@
 ---
 id: GUIDE-12-delivery
 title: Hướng dẫn chỉ số phát hành
-description: Cách đọc trang CIS admin Platform › Delivery và các báo cáo DEV-01 / DEV-03 - năm chỉ số DORA, các khúc lead time và sức khoẻ CI theo app, mỗi con số được định nghĩa thế nào trong hệ sinh thái này, và làm gì khi một con số thay đổi.
+description: Cách đọc trang CIS admin Platform › Delivery và các báo cáo DEV-01 / DEV-03 - năm chỉ số DORA, các khúc lead time và sức khoẻ CI theo app, hàng merge và bản đồ git, mỗi con số được định nghĩa thế nào trong hệ sinh thái này, và làm gì khi một con số thay đổi.
 type: how-to
 status: draft
 owner: nghiep
 audience: [engineer, devops, agent, cto]
 applies_to: [aa-cis-frontend, aa-cis-api]
-last_reviewed: 2026-11-16
+last_reviewed: 2026-11-17
 review_every_days: 90
-related: [GUIDE-12, GUIDE-12-cis-admin, GUIDE-14-metrics, AA-1108]
+related: [GUIDE-12, GUIDE-12-cis-admin, GUIDE-14-metrics, AA-1108, AA-1125]
 lang: vi
 translation_of: docs/guides/delivery-metrics.md
 ---
@@ -37,7 +37,8 @@ trang.
 
 - Workflow **Delivery metrics** ở repo gốc (`.github/workflows/delivery-metrics.yml`) chạy mỗi giờ. Nó đọc sáu repo
   public bằng `GITHUB_TOKEN` của chính nó (không thêm secret nào): các lượt chạy workflow, job của chúng (mọi lần chạy
-  lại), các pull request đã merge và các GitHub Deployment của môi trường `dev`.
+  lại), các pull request đã merge và các GitHub Deployment của môi trường `dev`; cho tab hàng merge và bản đồ git còn
+  đọc timeline của từng pull request đã vào hàng merge và các commit của nhánh mặc định kèm file của chúng.
 - Nó **lưu sự kiện thô trước** (mỗi ngày một file NDJSON, giữ 400 ngày) rồi mới tính chỉ số từ đó, nên khi đổi định
   nghĩa thì tính lại được trên lịch sử đã lưu. Tên trường theo OpenTelemetry semantic conventions cho CI/CD và VCS
   (`cicd.pipeline.*`, `vcs.change.*`, `deployment.*`).
@@ -126,7 +127,40 @@ xanh tới lúc merge.
 | Thời gian chờ hàng merge và số lần bị đẩy ra | Thời gian trong hàng, và số lần một pull request bị đẩy ra | Mỗi lần bị đẩy ra tốn một vòng CI đầy đủ |
 | Phút Actions | Số phút job theo workflow (repo public chạy miễn phí, nhưng lãng phí vẫn hiện ra) | Bỏ các job chạy khi không có gì chúng kiểm thay đổi |
 
-## 7. Dùng thế nào
+## 7. Tab hàng merge
+
+AA-CIS-App, AA-Booking và AA-Partner merge qua hàng merge của GitHub. Tab hiện từng **lượt**: một lần pull request nằm
+trong hàng, đọc từ timeline của nó (vào / ra khỏi hàng merge, đã merge) và ghép với các lượt chạy merge_group trên nhánh
+tạm của hàng.
+
+| Con số | Định nghĩa | Làm gì |
+|---|---|---|
+| Chờ hàng merge p50 / p95 | Thời gian từ lúc vào hàng tới lúc merge, các lượt được merge trong 4 tuần gần nhất. p95 được tô màu (thiết lập `cis.delivery.queue_wait_*`) | Check merge_group chậm hoặc phải dựng lại nhiều sau các lượt bị loại; tăng tốc hoặc thêm cache cho các check chạy trong hàng |
+| Tới merge p50 / p95 | Từ lần đầu pull request vào hàng tới lúc merge, tính mọi lượt của nó | Cao hơn nhiều so với thời gian chờ: các lượt liên tục bị loại |
+| Kết quả | **đã merge** (hàng gỡ nó ra và merge), **bị loại** (hàng gỡ ra mà không merge), **bị rút** (người hoặc agent rút ra, hoặc pull request bị đóng), **trong hàng** | - |
+| Tỉ lệ bị loại | Số lượt bị loại / số lượt được merge hoặc bị loại (thiết lập `cis.delivery.queue_ejection_*`) | Xem bảng lý do: có thứ chạy được trên pull request nhưng hỏng trên bản đã gộp |
+| Lý do bị loại | check lỗi, check quá giờ, check bị huỷ, không có check nào chạy (từ các lượt merge_group của lượt đó), kèm các workflow đỏ | Sửa workflow loại nhiều nhất |
+| Tỉ lệ chập chờn | Số lượt có dấu hiệu chập chờn / số lượt được merge hoặc bị loại (thiết lập `cis.delivery.queue_flaky_*`). Dấu hiệu: một lượt merge_group mà lần thử mới nhất đạt sau khi lần thử trước đó lỗi, hoặc bị loại vì check đỏ rồi được merge mà không có commit mới | Cách ly hoặc sửa check; không bao giờ đưa lại vào hàng cho qua |
+| CI merge_group | Số phút (theo job, mọi lần thử), số lượt chạy, tỉ lệ lỗi, p95 và số lần chạy lại của các lượt chạy trong hàng | Mỗi lần bị loại tốn trọn một vòng số phút này |
+| Lưu lượng | Số lượt rời hàng mỗi ngày, theo kết quả | - |
+
+## 8. Tab bản đồ git
+
+Commit trên nhánh mặc định của từng repo trong 90 ngày, kèm file của chúng (số dòng thêm + xoá từ các squash commit).
+
+| Con số | Định nghĩa |
+|---|---|
+| Lịch commit | Số commit mỗi ngày; các cột cộng theo tuần |
+| Loại tác giả | App agent (`aa-agent`), bot CI (`aa-ecosys-ci-bot`, các bản copy migration của Infra), release-please (commit `chore(...): release`), Dependabot, bot khác, một người. Không bao giờ lưu tên đăng nhập của một người |
+| Mức thay đổi | Số dòng thêm + xoá theo thư mục cấp đầu, rồi theo thư mục con hoặc file (đi sâu), và 30 file đứng đầu, trong 30 hoặc 90 ngày. Bỏ qua file lock (`churn_exclude` trong `tools/delivery/apps.json`) |
+| Merge theo tiền tố nhánh | Số pull request đã merge theo tiền tố của nhánh (feat, fix, docs, chore, bot, release-please, ...) |
+| Commit gần đây | 50 commit mới nhất trên nhánh mặc định kèm pull request của nó (`(#n)` cuối cùng trong tiêu đề) |
+| Đã đọc file | Tỉ lệ commit đã đọc danh sách file; lịch sử mới được lấp đầy sau vài lượt chạy hằng giờ, mới nhất trước |
+
+Dùng nó để thấy mã đang thay đổi ở đâu (một điểm nóng đổi mỗi tuần là ứng viên cho một test hoặc tách nhỏ) và ai đang
+đổi. Như phần còn lại của trang, nó mô tả hệ thống, không mô tả một người.
+
+## 9. Dùng thế nào
 
 - **Mỗi tuần**: DEV-03 hiện tuần đó theo từng app. Chọn một điểm nghẽn để sửa và ghi vào log phiên.
 - **Mỗi tháng**: DEV-01 so với tháng trước. Đặt một hoặc hai mục tiêu cải thiện.
@@ -134,7 +168,7 @@ xanh tới lúc merge.
   Chúng mô tả hệ thống và quy trình.
 - **n nhỏ**: khi số sự kiện ít hơn thiết lập, đừng kết luận; chờ thêm dữ liệu.
 
-## 8. Giới hạn hiện tại
+## 10. Giới hạn hiện tại
 
 - Chỉ có Dev; chưa có chiều prod, và chưa có sự cố trong phần khôi phục.
 - Phát hiện hotfix dựa vào một pull request `fix` nhắc tới pull request nó sửa (`#123`); bản sửa không nhắc tới thì

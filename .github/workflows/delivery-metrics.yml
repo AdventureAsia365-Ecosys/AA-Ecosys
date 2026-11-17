@@ -5,9 +5,12 @@ name: Delivery metrics
 #
 # Every hour tools/delivery/delivery_metrics.py reads the six public repos with this run's GITHUB_TOKEN (no new
 # secret; reads of public repos, at most `request_budget` requests a run, tools/delivery/apps.json): workflow runs,
-# their jobs (every attempt), merged pull requests and the GitHub Deployments of the environment dev. It keeps the
-# normalised events (OpenTelemetry CI/CD and VCS field names) in an Actions cache saved on master only (one entry: the
-# previous one is deleted after the new one is saved), computes one summary per app and uploads, on master only:
+# their jobs (every attempt), merged pull requests and the GitHub Deployments of the environment dev; AA-1125 (S283)
+# adds the merge-queue timeline of each pull request seen in a merge_group run (the three repos with a merge queue) and
+# the default branch's commits with their files (90 days, read once each), for the Merge queue and Git map tabs. It
+# keeps the normalised events (OpenTelemetry CI/CD and VCS field names) in an Actions cache saved on master only (one
+# entry: the previous one is deleted after the new one is saved), computes one summary per app and uploads, on master
+# only:
 #
 #   s3://<bronze>/docs-reader/delivery/events/<yyyy>/<mm>/<dd>.ndjson   the raw events of each day it changed
 #   s3://<bronze>/docs-reader/delivery/summary.json                     after the events (CIS reads it, cached 5 min)

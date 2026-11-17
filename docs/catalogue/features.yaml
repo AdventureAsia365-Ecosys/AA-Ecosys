@@ -552,13 +552,13 @@ features:
     module: developer
     name: Delivery (CI/CD and DORA per app)
     name_vi: Phát hành (CI/CD và DORA theo app)
-    summary_vi: "Mỗi app ra bản nhanh và an toàn tới đâu: năm chỉ số DORA, lead time tốn ở khúc nào, sức khoẻ CI và các lần deploy hỏng, dựng mỗi giờ từ dữ liệu GitHub."
-    summary: How fast and how safely each app ships - the five DORA keys, where lead time goes, CI health and failed deploys, built hourly from GitHub data.
+    summary_vi: "Mỗi app ra bản nhanh và an toàn tới đâu: năm chỉ số DORA, lead time tốn ở khúc nào, sức khoẻ CI và các lần deploy hỏng, hàng merge chạy ra sao và mã thay đổi ở đâu (tab hàng merge và bản đồ git), dựng mỗi giờ từ dữ liệu GitHub."
+    summary: How fast and how safely each app ships - the five DORA keys, where lead time goes, CI health and failed deploys, how the merge queues work and where the code changes (merge queue and git map tabs), built hourly from GitHub data.
     roles: [admin]
     status: beta
     surface: ["page:/admin/platform/delivery", "route:admin_platform_delivery"]
     conditions:
-      settings: [cis.delivery.cfr_green_pct, cis.delivery.lead_time_green_hours, cis.delivery.min_sample]
+      settings: [cis.delivery.cfr_green_pct, cis.delivery.lead_time_green_hours, cis.delivery.min_sample, cis.delivery.queue_wait_green_hours, cis.delivery.queue_ejection_green_pct, cis.delivery.queue_flaky_green_pct]
     depends_on: [INF-F006]
     guide: docs/guides/delivery-metrics.md
     owner: tech_lead

@@ -1,4 +1,460 @@
 {
+ "_comment_aa1125": "AA-1125: main commits (one older than 90 days, one dependabot, one person, one ci-bot docs copy, one release-please release), their files, and the merge-queue timelines of pull requests 10 (straight merge) and 11 (ejected on red checks, back in with no new commit, merged).",
+ "commit_details": {
+  "d040000000000000000000000000000000000000": {
+   "files": [
+    {
+     "additions": 1,
+     "deletions": 1,
+     "filename": "requirements.txt"
+    }
+   ],
+   "sha": "d040000000000000000000000000000000000000",
+   "stats": {
+    "additions": 1,
+    "deletions": 1
+   }
+  },
+  "o010000000000000000000000000000000000000": {
+   "files": [
+    {
+     "additions": 10,
+     "deletions": 0,
+     "filename": "app/lanterns/first.py"
+    }
+   ],
+   "sha": "o010000000000000000000000000000000000000",
+   "stats": {
+    "additions": 10,
+    "deletions": 0
+   }
+  },
+  "r180000000000000000000000000000000000000": {
+   "files": [
+    {
+     "additions": 20,
+     "deletions": 0,
+     "filename": "CHANGELOG.md"
+    },
+    {
+     "additions": 1,
+     "deletions": 1,
+     "filename": "version.txt"
+    }
+   ],
+   "sha": "r180000000000000000000000000000000000000",
+   "stats": {
+    "additions": 21,
+    "deletions": 1
+   }
+  },
+  "s100000000000000000000000000000000000000": {
+   "files": [
+    {
+     "additions": 40,
+     "deletions": 2,
+     "filename": "app/lanterns/list.py"
+    },
+    {
+     "additions": 30,
+     "deletions": 0,
+     "filename": "tests/test_lanterns.py"
+    }
+   ],
+   "sha": "s100000000000000000000000000000000000000",
+   "stats": {
+    "additions": 70,
+    "deletions": 2
+   }
+  },
+  "s110000000000000000000000000000000000000": {
+   "files": [
+    {
+     "additions": 120,
+     "deletions": 10,
+     "filename": "app/harbour/map.py"
+    },
+    {
+     "additions": 80,
+     "deletions": 5,
+     "filename": "frontend/harbour/Map.tsx"
+    },
+    {
+     "additions": 500,
+     "deletions": 400,
+     "filename": "package-lock.json"
+    }
+   ],
+   "sha": "s110000000000000000000000000000000000000",
+   "stats": {
+    "additions": 700,
+    "deletions": 415
+   }
+  },
+  "s120000000000000000000000000000000000000": {
+   "files": [
+    {
+     "additions": 5,
+     "deletions": 3,
+     "filename": "app/harbour/map.py"
+    }
+   ],
+   "sha": "s120000000000000000000000000000000000000",
+   "stats": {
+    "additions": 5,
+    "deletions": 3
+   }
+  },
+  "s130000000000000000000000000000000000000": {
+   "files": [
+    {
+     "additions": 200,
+     "deletions": 150,
+     "filename": "docs/schema.md"
+    }
+   ],
+   "sha": "s130000000000000000000000000000000000000",
+   "stats": {
+    "additions": 200,
+    "deletions": 150
+   }
+  },
+  "s140000000000000000000000000000000000000": {
+   "files": [
+    {
+     "additions": 25,
+     "deletions": 0,
+     "filename": "docs/guides/lanterns.md"
+    }
+   ],
+   "sha": "s140000000000000000000000000000000000000",
+   "stats": {
+    "additions": 25,
+    "deletions": 0
+   }
+  },
+  "s150000000000000000000000000000000000000": {
+   "files": [
+    {
+     "additions": 60,
+     "deletions": 0,
+     "filename": "app/harbour/night.py"
+    },
+    {
+     "additions": 10,
+     "deletions": 2,
+     "filename": "app/harbour/map.py"
+    }
+   ],
+   "sha": "s150000000000000000000000000000000000000",
+   "stats": {
+    "additions": 70,
+    "deletions": 2
+   }
+  },
+  "s160000000000000000000000000000000000000": {
+   "files": [
+    {
+     "additions": 0,
+     "deletions": 60,
+     "filename": "app/harbour/night.py"
+    },
+    {
+     "additions": 2,
+     "deletions": 10,
+     "filename": "app/harbour/map.py"
+    }
+   ],
+   "sha": "s160000000000000000000000000000000000000",
+   "stats": {
+    "additions": 2,
+    "deletions": 70
+   }
+  },
+  "s170000000000000000000000000000000000000": {
+   "files": [
+    {
+     "additions": 90,
+     "deletions": 0,
+     "filename": "app/tides/table.py"
+    },
+    {
+     "additions": 3,
+     "deletions": 1,
+     "filename": "README.md"
+    }
+   ],
+   "sha": "s170000000000000000000000000000000000000",
+   "stats": {
+    "additions": 93,
+    "deletions": 1
+   }
+  },
+  "x000000000000000000000000000000000000000": {
+   "files": [
+    {
+     "additions": 5,
+     "deletions": 0,
+     "filename": "app/lanterns/first.py"
+    }
+   ],
+   "sha": "x000000000000000000000000000000000000000",
+   "stats": {
+    "additions": 5,
+    "deletions": 0
+   }
+  }
+ },
+ "commits": [
+  {
+   "author": {
+    "login": "aa-ecosys-ci-bot[bot]",
+    "type": "Bot"
+   },
+   "commit": {
+    "author": {
+     "date": "2026-03-20T08:00:00Z"
+    },
+    "committer": {
+     "date": "2026-03-20T08:00:00Z"
+    },
+    "message": "chore(main): release 1.4.0 (#18)\n\nbody line"
+   },
+   "parents": [
+    {
+     "sha": "s170000000000000000000000000000000000000"
+    }
+   ],
+   "sha": "r180000000000000000000000000000000000000"
+  },
+  {
+   "author": {
+    "login": "aa-agent[bot]",
+    "type": "Bot"
+   },
+   "commit": {
+    "author": {
+     "date": "2026-03-19T09:00:00Z"
+    },
+    "committer": {
+     "date": "2026-03-19T09:00:00Z"
+    },
+    "message": "feat: tide table (#17)\n\nbody line"
+   },
+   "parents": [
+    {
+     "sha": "s160000000000000000000000000000000000000"
+    }
+   ],
+   "sha": "s170000000000000000000000000000000000000"
+  },
+  {
+   "author": {
+    "login": "aa-agent[bot]",
+    "type": "Bot"
+   },
+   "commit": {
+    "author": {
+     "date": "2026-03-18T12:00:00Z"
+    },
+    "committer": {
+     "date": "2026-03-18T12:00:00Z"
+    },
+    "message": "Revert \"feat: night mode for the harbour map (#15)\" (#16)\n\nbody line"
+   },
+   "parents": [
+    {
+     "sha": "s150000000000000000000000000000000000000"
+    }
+   ],
+   "sha": "s160000000000000000000000000000000000000"
+  },
+  {
+   "author": {
+    "login": "aa-agent[bot]",
+    "type": "Bot"
+   },
+   "commit": {
+    "author": {
+     "date": "2026-03-18T09:00:00Z"
+    },
+    "committer": {
+     "date": "2026-03-18T09:00:00Z"
+    },
+    "message": "feat: night mode for the harbour map (#15)\n\nbody line"
+   },
+   "parents": [
+    {
+     "sha": "s140000000000000000000000000000000000000"
+    }
+   ],
+   "sha": "s150000000000000000000000000000000000000"
+  },
+  {
+   "author": {
+    "login": "aa-agent[bot]",
+    "type": "Bot"
+   },
+   "commit": {
+    "author": {
+     "date": "2026-03-17T10:00:00Z"
+    },
+    "committer": {
+     "date": "2026-03-17T10:00:00Z"
+    },
+    "message": "docs: lantern list guide (#14)\n\nbody line"
+   },
+   "parents": [
+    {
+     "sha": "s130000000000000000000000000000000000000"
+    }
+   ],
+   "sha": "s140000000000000000000000000000000000000"
+  },
+  {
+   "author": {
+    "login": "aa-ecosys-ci-bot[bot]",
+    "type": "Bot"
+   },
+   "commit": {
+    "author": {
+     "date": "2026-03-17T07:30:00Z"
+    },
+    "committer": {
+     "date": "2026-03-17T07:30:00Z"
+    },
+    "message": "docs: regenerate the schema reference (#13)\n\nbody line"
+   },
+   "parents": [
+    {
+     "sha": "s120000000000000000000000000000000000000"
+    }
+   ],
+   "sha": "s130000000000000000000000000000000000000"
+  },
+  {
+   "author": {
+    "login": "aa-agent[bot]",
+    "type": "Bot"
+   },
+   "commit": {
+    "author": {
+     "date": "2026-03-16T13:00:00Z"
+    },
+    "committer": {
+     "date": "2026-03-16T13:00:00Z"
+    },
+    "message": "fix: harbour map tiles load again (#11) (#12)\n\nbody line"
+   },
+   "parents": [
+    {
+     "sha": "s110000000000000000000000000000000000000"
+    }
+   ],
+   "sha": "s120000000000000000000000000000000000000"
+  },
+  {
+   "author": {
+    "login": "river-otter",
+    "type": "User"
+   },
+   "commit": {
+    "author": {
+     "date": "2026-03-16T11:00:00Z"
+    },
+    "committer": {
+     "date": "2026-03-16T11:00:00Z"
+    },
+    "message": "feat: paint the harbour map (#11)\n\nbody line"
+   },
+   "parents": [
+    {
+     "sha": "s100000000000000000000000000000000000000"
+    }
+   ],
+   "sha": "s110000000000000000000000000000000000000"
+  },
+  {
+   "author": {
+    "login": "aa-agent[bot]",
+    "type": "Bot"
+   },
+   "commit": {
+    "author": {
+     "date": "2026-03-16T09:20:00Z"
+    },
+    "committer": {
+     "date": "2026-03-16T09:20:00Z"
+    },
+    "message": "feat: add the lantern list (#10)\n\nbody line"
+   },
+   "parents": [
+    {
+     "sha": "d040000000000000000000000000000000000000"
+    }
+   ],
+   "sha": "s100000000000000000000000000000000000000"
+  },
+  {
+   "author": {
+    "login": "dependabot[bot]",
+    "type": "Bot"
+   },
+   "commit": {
+    "author": {
+     "date": "2026-02-20T10:00:00Z"
+    },
+    "committer": {
+     "date": "2026-02-20T10:00:00Z"
+    },
+    "message": "chore(deps): bump lantern-lib from 1.0 to 1.1 (#9)\n\nbody line"
+   },
+   "parents": [
+    {
+     "sha": "o010000000000000000000000000000000000000"
+    }
+   ],
+   "sha": "d040000000000000000000000000000000000000"
+  },
+  {
+   "author": {
+    "login": "aa-agent[bot]",
+    "type": "Bot"
+   },
+   "commit": {
+    "author": {
+     "date": "2026-01-10T10:00:00Z"
+    },
+    "committer": {
+     "date": "2026-01-10T10:00:00Z"
+    },
+    "message": "feat: first lantern (#5)\n\nbody line"
+   },
+   "parents": [
+    {
+     "sha": "x000000000000000000000000000000000000000"
+    }
+   ],
+   "sha": "o010000000000000000000000000000000000000"
+  },
+  {
+   "author": {
+    "login": "aa-agent[bot]",
+    "type": "Bot"
+   },
+   "commit": {
+    "author": {
+     "date": "2025-11-01T10:00:00Z"
+    },
+    "committer": {
+     "date": "2025-11-01T10:00:00Z"
+    },
+    "message": "feat: the very first lantern (#2)\n\nbody line"
+   },
+   "parents": [],
+   "sha": "x000000000000000000000000000000000000000"
+  }
+ ],
  "deployments": [
   {
    "created_at": "2026-03-16T09:30:00Z",
@@ -842,5 +1298,121 @@
    "status": "in_progress",
    "updated_at": "2026-03-20T11:56:00Z"
   }
- ]
+ ],
+ "timelines": {
+  "10": [
+   {
+    "committer": {
+     "date": "2026-03-16T07:55:00Z"
+    },
+    "event": "committed",
+    "sha": "c07"
+   },
+   {
+    "actor": {
+     "login": "aa-agent[bot]",
+     "type": "Bot"
+    },
+    "created_at": "2026-03-16T08:01:00Z",
+    "event": "labeled"
+   },
+   {
+    "actor": {
+     "login": "aa-agent[bot]",
+     "type": "Bot"
+    },
+    "created_at": "2026-03-16T08:58:00Z",
+    "event": "added_to_merge_queue"
+   },
+   {
+    "actor": {
+     "login": "aa-agent[bot]",
+     "type": "Bot"
+    },
+    "created_at": "2026-03-16T09:20:00Z",
+    "event": "merged"
+   },
+   {
+    "actor": {
+     "login": "aa-agent[bot]",
+     "type": "Bot"
+    },
+    "created_at": "2026-03-16T09:20:00Z",
+    "event": "closed"
+   },
+   {
+    "actor": {
+     "login": "github-merge-queue[bot]",
+     "type": "Bot"
+    },
+    "created_at": "2026-03-16T09:20:00Z",
+    "event": "removed_from_merge_queue"
+   },
+   {
+    "actor": {
+     "login": "aa-agent[bot]",
+     "type": "Bot"
+    },
+    "created_at": "2026-03-16T09:20:05Z",
+    "event": "head_ref_deleted"
+   }
+  ],
+  "11": [
+   {
+    "committer": {
+     "date": "2026-03-16T09:50:00Z"
+    },
+    "event": "committed",
+    "sha": "c09"
+   },
+   {
+    "actor": {
+     "login": "river-otter",
+     "type": "User"
+    },
+    "created_at": "2026-03-16T10:33:00Z",
+    "event": "added_to_merge_queue"
+   },
+   {
+    "actor": {
+     "login": "github-merge-queue[bot]",
+     "type": "Bot"
+    },
+    "created_at": "2026-03-16T10:45:00Z",
+    "event": "removed_from_merge_queue"
+   },
+   {
+    "actor": {
+     "login": "aa-agent[bot]",
+     "type": "Bot"
+    },
+    "created_at": "2026-03-16T10:46:00Z",
+    "event": "added_to_merge_queue"
+   },
+   {
+    "actor": {
+     "login": "github-merge-queue[bot]",
+     "type": "Bot"
+    },
+    "created_at": "2026-03-16T11:00:00Z",
+    "event": "removed_from_merge_queue"
+   },
+   {
+    "actor": {
+     "login": "aa-agent[bot]",
+     "type": "Bot"
+    },
+    "created_at": "2026-03-16T11:00:00Z",
+    "event": "merged"
+   },
+   {
+    "actor": {
+     "login": "aa-agent[bot]",
+     "type": "Bot"
+    },
+    "created_at": "2026-03-16T11:00:00Z",
+    "event": "closed"
+   }
+  ]
+ }
 }

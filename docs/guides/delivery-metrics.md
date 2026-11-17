@@ -1,15 +1,15 @@
 ---
 id: GUIDE-12-delivery
 title: Delivery metrics guide
-description: How to read the CIS admin page Platform › Delivery and the reports DEV-01 / DEV-03 - the five DORA keys, the lead-time segments and CI health per app, how each number is defined on this ecosystem, and what to do when one moves.
+description: How to read the CIS admin page Platform › Delivery and the reports DEV-01 / DEV-03 - the five DORA keys, the lead-time segments and CI health per app, the merge queues and the git map, how each number is defined on this ecosystem, and what to do when one moves.
 type: how-to
 status: draft
 owner: nghiep
 audience: [engineer, devops, agent, cto]
 applies_to: [aa-cis-frontend, aa-cis-api]
-last_reviewed: 2026-11-16
+last_reviewed: 2026-11-17
 review_every_days: 90
-related: [GUIDE-12, GUIDE-12-cis-admin, GUIDE-14-metrics, AA-1108]
+related: [GUIDE-12, GUIDE-12-cis-admin, GUIDE-14-metrics, AA-1108, AA-1125]
 ---
 
 # Delivery metrics guide
@@ -35,7 +35,8 @@ page.
 
 - The root workflow **Delivery metrics** (`.github/workflows/delivery-metrics.yml`) runs every hour. It reads the six
   public repos with its own `GITHUB_TOKEN` (no extra secret): workflow runs, their jobs (every attempt), merged pull
-  requests and the GitHub Deployments of the environment `dev`.
+  requests and the GitHub Deployments of the environment `dev`; for the Merge queue and Git map tabs also the timeline
+  of each pull request seen in the merge queue and the default branch's commits with their files.
 - It stores **raw events first** (one NDJSON file per day, kept 400 days) and computes the metrics from them, so a
   changed definition can be recomputed on the stored history. Field names follow the OpenTelemetry semantic
   conventions for CI/CD and VCS (`cicd.pipeline.*`, `vcs.change.*`, `deployment.*`).
@@ -122,7 +123,40 @@ A repo without a merge queue (root) has no queue point: its "Queue to merged" co
 | Merge-queue wait and ejections | Time in the queue, and how often a pull request was pushed out | Ejections cost a full CI round each |
 | Actions minutes | Job minutes per workflow (public repos run free, but waste still shows) | Remove jobs that run when nothing they test changed |
 
-## 7. How to use it
+## 7. Merge queue tab
+
+AA-CIS-App, AA-Booking and AA-Partner merge through a GitHub merge queue. The tab shows each **entry**: one stay of a
+pull request in the queue, read from its timeline (added to / removed from the merge queue, merged) and matched with the
+merge_group runs on the queue's temporary branches.
+
+| Number | Definition | What to do |
+|---|---|---|
+| Queue wait p50 / p95 | Time from entering the queue to the merge, entries that merged in the last 4 weeks. The p95 is coloured (settings `cis.delivery.queue_wait_*`) | Slow merge_group checks or many rebuilds behind ejected entries; speed up or cache the checks that run in the queue |
+| To merge p50 / p95 | From the first time a pull request entered the queue to its merge, across all its entries | Far above the wait: entries keep getting ejected |
+| Outcome | **merged** (the queue removed it and merged it), **ejected** (the queue removed it without a merge), **removed** (a person or the agent took it out, or the pull request was closed), **in queue** | - |
+| Ejection rate | Ejected entries / entries that merged or were ejected (settings `cis.delivery.queue_ejection_*`) | Read the reasons table: something passes on the pull request but fails on the merged result |
+| Ejection reason | checks failed, checks timed out, checks cancelled, no check ran (from the merge_group runs of that entry), with the red workflows | Fix the workflow that ejects most |
+| Flaky rate | Entries with a flaky signal / entries that merged or were ejected (settings `cis.delivery.queue_flaky_*`). Signals: a merge_group run whose newest attempt passed after an earlier attempt failed, or an ejection on red checks followed by a merge with no new commit | Quarantine or fix the check; never re-queue silently |
+| merge_group CI | Minutes (per job, every attempt), runs, failure rate, p95 and re-runs of the queue's runs | Every ejection costs a full round of these minutes |
+| Throughput | Entries that left the queue per day, by outcome | - |
+
+## 8. Git map tab
+
+Commits on each repo's default branch over 90 days, with their files (additions + deletions from the squash commits).
+
+| Number | Definition |
+|---|---|
+| Commit calendar | Commits a day; the bars add them up per week |
+| Author kind | agent App (`aa-agent`), CI bot (`aa-ecosys-ci-bot`, the Infra migration copies), release-please (a `chore(...): release` commit), Dependabot, another bot, a person. A person's login is never stored |
+| Churn | Lines added + deleted per top-level directory, then per sub-directory or file (drill-down), and the top 30 files, over 30 or 90 days. Lock files are left out (`churn_exclude` in `tools/delivery/apps.json`) |
+| Merges by branch prefix | Merged pull requests per head-branch prefix (feat, fix, docs, chore, bot, release-please, ...) |
+| Recent commits | The newest 50 commits on the default branch with their pull request (the last `(#n)` of the title) |
+| Files read | Share of the commits whose file list is read; a cold history fills over a few hourly runs, newest first |
+
+Use it to see where the code moves (a hotspot that changes every week is a candidate for a test or a split) and who
+moves it. Like the rest of the page it describes the system, not a person.
+
+## 9. How to use it
 
 - **Every week**: DEV-03 shows the week per app. Pick one bottleneck to fix and note it in the session log.
 - **Every month**: DEV-01 compares with the month before. Set one or two improvement targets.
@@ -130,7 +164,7 @@ A repo without a merge queue (root) has no queue point: its "Queue to merged" co
   They describe the system and the process.
 - **Small n**: with fewer events than the setting, do not draw a conclusion; wait for more data.
 
-## 8. Limits today
+## 10. Limits today
 
 - Dev only; no prod dimension yet, and no incidents in recovery.
 - Hotfix detection relies on a `fix` pull request naming the pull request it repairs (`#123`); an unnamed fix is not
