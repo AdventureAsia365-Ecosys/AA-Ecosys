@@ -635,7 +635,7 @@ template in `shared/jobs` is *to build* (**X6**). Until the template exists, a n
 
 **QRY-9 (MUST)** Bulk writes use `executemany`, `unnest` or `COPY`; large lists use keyset pagination on
 `(created_at, id)`, not `OFFSET`; retention and cleanup DELETEs run in batches (Part C C5.4c) inside owner
-job kinds, only after the S3 Parquet archive where Part B §7 requires one, and never use `VACUUM FULL`.
+job kinds, only after the S3 archive (gzipped JSON Lines, Part B DM-7.3) where Part B §7 requires one, and never use `VACUUM FULL`.
 *Why:* row-by-row writes and deep OFFSETs grow with the table; `VACUUM FULL` takes an exclusive lock.
 *Enforced:* review.
 
