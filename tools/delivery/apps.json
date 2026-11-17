@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "_comment": "AA-1108: the apps the Delivery metrics collector reads (tools/delivery/delivery_metrics.py). Root has no settings registry: the collection parameters live here (follow-up in docs/implementation-notes/AA-1108.md); the colour thresholds are CIS settings (cis.delivery.*).",
+  "_comment": "AA-1108 + AA-1125 (merge queue and git activity): the apps the Delivery metrics collector reads (tools/delivery/delivery_metrics.py). Root has no settings registry: the collection parameters live here (follow-up in docs/implementation-notes/AA-1108.md); the colour thresholds are CIS settings (cis.delivery.*).",
   "org": "AdventureAsia365-Ecosys",
   "environment": "dev",
   "headline_days": 28,
@@ -14,12 +14,22 @@
   "request_budget": 650,
   "rate_limit_floor": 60,
   "list_cap": 30,
+  "git_days": 90,
+  "git_windows": [30, 90],
+  "graph_commits": 50,
+  "top_files": 30,
+  "top_children": 10,
+  "commit_files_cap": 300,
+  "queue_actor_prefix": "github-merge-queue",
+  "author_kinds": {"agent": ["aa-agent[bot]"], "ci_bot": ["aa-ecosys-ci-bot[bot]"], "dependabot": ["dependabot[bot]"]},
+  "release_title": "^chore(\\([^)]*\\))?: release ",
+  "churn_exclude": ["*package-lock.json", "*pnpm-lock.yaml", "*yarn.lock", "*poetry.lock", "*uv.lock"],
   "agent_logins": ["aa-agent[bot]"],
   "deploy_triggers": ["push", "workflow_dispatch", "workflow_run", "repository_dispatch"],
   "main_triggers": ["push", "schedule", "workflow_dispatch"],
   "apps": [
     {
-      "id": "cis", "name": "CIS", "repo": "AA-CIS-App", "default_branch": "main",
+      "id": "cis", "name": "CIS", "repo": "AA-CIS-App", "default_branch": "main", "merge_queue": true,
       "deploy_workflows": ["deploy-dev.yml", "deploy-admin-dev.yml"],
       "deploy_job": "^Deploy (to ECS Dev|CIS admin to ECS Dev)$",
       "verify_job": "^Post-deploy verify",
@@ -27,7 +37,7 @@
       "no_deploy_paths": ["docs/**", "*.md", "**/*.md"]
     },
     {
-      "id": "booking", "name": "Booking", "repo": "AA-Booking", "default_branch": "main",
+      "id": "booking", "name": "Booking", "repo": "AA-Booking", "default_branch": "main", "merge_queue": true,
       "deploy_workflows": ["deploy-dev.yml", "deploy-admin-dev.yml"],
       "deploy_job": "^Deploy (to ECS Dev|Booking admin to ECS Dev)$",
       "verify_job": "^Post-deploy verify",
@@ -35,7 +45,7 @@
       "no_deploy_paths": ["docs/**", "*.md", "**/*.md"]
     },
     {
-      "id": "partner", "name": "Partner CRM", "repo": "AA-Partner", "default_branch": "main",
+      "id": "partner", "name": "Partner CRM", "repo": "AA-Partner", "default_branch": "main", "merge_queue": true,
       "deploy_workflows": ["deploy-dev.yml", "deploy-web-dev.yml"],
       "deploy_job": "^Deploy (to ECS Dev|web to ECS Dev)$",
       "verify_job": "^Post-deploy verify",

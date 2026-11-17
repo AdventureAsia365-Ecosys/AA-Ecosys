@@ -4,7 +4,10 @@ fixtures/demo_github.json holds the runs, jobs, merged pull requests, deployment
 invented repo (example-org/demo-app) over five days, written to cover every definition of the delivery metrics:
 a green deploy, a red post-deploy verify repaired by a hotfix pull request, a rollback, a revert, a failed deploy job
 repaired by a redeploy, a bot pull request, a docs-only pull request, a merge-queue ejection, a flaky job and a red
-main. No network: a fake transport answers from the fixture.
+main. AA-1125 adds the main branch's commits with their files (one older than the 90-day window, a dependabot bump,
+a person's change, a ci-bot docs copy, a release-please release) and the merge-queue timelines of pull requests 10
+(straight merge) and 11 (ejected on red checks, back in the queue with no new commit, merged). No network: a fake
+transport answers from the fixture.
 
     python3 -m unittest discover -s tools/delivery -p 'test_*.py'
 """
@@ -35,7 +38,7 @@ def demo_config(**over) -> dict:
     cfg["apps"] = [{"id": "demo", "name": "Demo", "repo": FIX["repo"], "default_branch": "main",
                     "deploy_workflows": ["deploy.yml"], "deploy_job": "^Deploy to Dev$",
                     "verify_job": "^Post-deploy verify", "ci_workflows": ["ci.yml"],
-                    "no_deploy_paths": ["docs/**", "*.md", "**/*.md"]}]
+                    "no_deploy_paths": ["docs/**", "*.md", "**/*.md"], "merge_queue": True}]
     cfg.update(over)
     return cfg
 
@@ -73,6 +76,15 @@ class FakeGitHub:
             body = paged(sorted(FIX["pulls"], key=lambda p: p["updated_at"], reverse=True))
         elif len(rest) == 3 and rest[0] == "pulls" and rest[2] == "files":
             body = paged(FIX["files"].get(rest[1], []))
+        elif rest == ["commits"]:
+            items = [c for c in FIX["commits"] if c["commit"]["committer"]["date"] >= q.get("since", "")]
+            body = paged(items)
+        elif len(rest) == 2 and rest[0] == "commits":
+            if rest[1] not in FIX["commit_details"]:
+                return 404, headers, b"{}"
+            body = FIX["commit_details"][rest[1]]
+        elif len(rest) == 3 and rest[0] == "issues" and rest[2] == "timeline":
+            body = paged(FIX["timelines"].get(rest[1], []))
         elif rest == ["deployments"]:
             body = paged(sorted((d for d in FIX["deployments"] if d["environment"] == q.get("environment")),
                                 key=lambda d: d["id"], reverse=True))
@@ -106,7 +118,7 @@ class TestCollect(SummaryFixture):
     def test_reads_every_kind_of_event_and_keeps_state(self):
         kinds = {e["event"] for e in self.store.events.values()}
         self.assertEqual(kinds, {"cicd.pipeline.run", "cicd.pipeline.task.run", "vcs.change", "deployment",
-                                 "aa.jobs.read"})
+                                 "aa.jobs.read", "aa.vcs.commit", "aa.merge_queue.timeline"})
         st = self.store.repo_state(FIX["repo"])
         self.assertEqual(st["runs_forward_day"], "2026-03-20")
         first = NOW.date() - dm.timedelta(days=self.cfg["store_days"])
@@ -120,8 +132,10 @@ class TestCollect(SummaryFixture):
         cfg = self.cfg
         store = dm.Store(copy.deepcopy(self.store.events), copy.deepcopy(self.store.state))
         dm.collect(cfg, store, dm.GitHub(fake, cfg["request_budget"], cfg["rate_limit_floor"]), NOW)
-        # 3 run days, 1 pull request page, 1 deployment page; no job, file or backfill read again
-        self.assertEqual(len(fake.calls), 5, fake.calls)
+        # 3 run days, 1 pull request page, 1 deployment page, 1 commit page; no job, file, settled queue timeline or
+        # backfill read again
+        self.assertEqual(len(fake.calls), 6, fake.calls)
+        self.assertTrue(fake.calls[-1].startswith(f"{dm.API}/repos/{FIX['org']}/{FIX['repo']}/commits?"))
 
     def test_budget_stop_keeps_what_was_read(self):
         cfg = demo_config(request_budget=4)
@@ -326,7 +340,7 @@ class TestTrendAndShape(SummaryFixture):
         self.assertEqual(s["definitions"]["rework_hours"], 48)
         json.dumps(s)   # serialisable
         for key in ("dora", "lead_time_segments", "ci", "merge_queue", "flaky", "verify", "deploys",
-                    "failed_deploys", "changes", "trend", "window", "complete_since"):
+                    "failed_deploys", "changes", "trend", "window", "complete_since", "queue", "git"):
             self.assertIn(key, self.app)
 
     def test_incomplete_history_clips_the_window(self):
@@ -337,6 +351,200 @@ class TestTrendAndShape(SummaryFixture):
         self.assertEqual(app["window"]["covered_days"], 2.5)
         # pull requests merged before the complete history are not matched to a deploy
         self.assertTrue(all(c["number"] >= 15 for c in app["changes"]["slowest"]))
+
+
+class TestMergeQueue(SummaryFixture):
+    """AA-1125: the merge-queue section (pull request 10 straight in, 11 ejected on red checks then back and merged)."""
+
+    def test_entries_wait_and_outcomes(self):
+        q = self.app["queue"]
+        self.assertEqual((q["entries"], q["prs"], q["merged"], q["ejected"], q["removed"], q["in_queue"]),
+                         (3, 2, 2, 1, 0, 0))
+        self.assertEqual(q["wait"], {"p50_h": 0.233, "p95_h": 0.367, "n": 2})
+        # from the first entry to the merge: pull request 11 waited through its ejection
+        self.assertEqual(q["to_merge"], {"p50_h": 0.367, "p95_h": 0.45, "n": 2})
+        self.assertEqual(q["ejection_rate"], {"value": 0.3333, "n": 3, "ejected": 1})
+
+    def test_ejection_reason_and_flaky_signal(self):
+        q = self.app["queue"]
+        self.assertEqual(len(q["reasons"]), 1)
+        r = q["reasons"][0]
+        self.assertEqual((r["reason"], r["n"], r["workflows"], r["last_pr"]), ("checks_failed", 1, {"CI": 1}, 11))
+        self.assertTrue(r["last_url"].endswith("/actions/runs/1005"))
+        self.assertEqual(q["flaky"], {"value": 0.3333, "n": 3, "flaky": 1, "rerun_green": 0, "reentry_green": 1})
+        self.assertEqual([(e["pr"], e["attempt"], e["flaky"]) for e in q["flaky_entries"]], [(11, 1, "reentry_green")])
+
+    def test_each_run_counts_for_one_entry(self):
+        rows = {(e["pr"], e["attempt"]): e for e in self.app["queue"]["recent"]}
+        self.assertEqual(set(rows), {(10, 1), (11, 1), (11, 2)})
+        self.assertTrue(rows[(11, 1)]["run_url"].endswith("/runs/1005"))
+        self.assertTrue(rows[(11, 2)]["run_url"].endswith("/runs/1006"))   # 10:46, the second entry's own run
+        self.assertEqual((rows[(11, 1)]["runs"], rows[(11, 2)]["runs"]), (1, 1))
+        self.assertFalse(rows[(11, 2)]["new_commit"])
+        self.assertEqual(rows[(10, 1)]["url"], f"https://github.com/{FIX['org']}/{FIX['repo']}/pull/10")
+
+    def test_merge_group_ci(self):
+        ci = self.app["queue"]["ci"]
+        self.assertEqual((ci["runs"], ci["failures"], ci["failure_rate"], ci["reruns"]), (3, 1, 0.3333, 0))
+        self.assertGreater(ci["minutes"], 0)
+        self.assertEqual([w["name"] for w in ci["workflows"]], ["CI"])
+
+    def test_throughput_per_day(self):
+        days = {d["date"]: d for d in self.app["queue"]["throughput"]}
+        self.assertEqual(len(days), self.cfg["headline_days"] + 1)   # the window starts and ends at noon
+        self.assertEqual(days["2026-03-16"], {"date": "2026-03-16", "merged": 2, "ejected": 1, "removed": 0})
+
+    def test_app_without_merge_queue_has_no_section(self):
+        cfg = copy.deepcopy(self.cfg)
+        cfg["apps"][0]["merge_queue"] = False
+        self.assertIsNone(dm.summarize(cfg, self.store, NOW)["apps"][0]["queue"])
+
+
+class TestQueueEntries(unittest.TestCase):
+    Q = {"login": "github-merge-queue[bot]", "type": "Bot"}
+    AGENT = {"login": "aa-agent[bot]", "type": "Bot"}
+    PERSON = {"login": "river-otter", "type": "User"}
+
+    def timeline(self, *items):
+        cfg = demo_config()
+        rows = [{"event": e, "created_at": w, "actor": a} if e != "committed" else {"event": e, "committer": {"date": w}}
+                for e, w, a in items]
+        return dm.queue_event("demo", 7, rows, cfg)
+
+    def test_removed_by_a_person_then_still_queued(self):
+        tl = self.timeline(("added_to_merge_queue", "2026-03-10T10:00:00Z", self.AGENT),
+                           ("removed_from_merge_queue", "2026-03-10T10:05:00Z", self.PERSON),
+                           ("committed", "2026-03-10T10:20:00Z", None),
+                           ("added_to_merge_queue", "2026-03-10T10:30:00Z", self.AGENT))
+        self.assertFalse(dm._attr(tl, "aa.queue.settled"))
+        self.assertTrue(dm.open_entry(dm._attr(tl, "aa.queue.events")))
+        entries = dm.queue_entries(tl)
+        self.assertEqual([(e["outcome"], e["new_commit"]) for e in entries], [("removed", False), ("queued", True)])
+        self.assertEqual(entries[0]["removed_by"], "human")   # the kind only: no login is kept
+        self.assertNotIn("river-otter", json.dumps(tl))
+
+    def test_queue_removal_with_a_close_is_not_an_ejection(self):
+        tl = self.timeline(("added_to_merge_queue", "2026-03-10T10:00:00Z", self.AGENT),
+                           ("removed_from_merge_queue", "2026-03-10T10:05:00Z", self.Q),
+                           ("closed", "2026-03-10T10:05:20Z", self.PERSON))
+        self.assertEqual([e["outcome"] for e in dm.queue_entries(tl)], ["removed"])
+        self.assertTrue(dm._attr(tl, "aa.queue.settled"))
+
+    def test_merge_in_the_same_second_in_any_order(self):
+        for order in ((("merged", self.AGENT), ("removed_from_merge_queue", self.Q)),
+                      (("removed_from_merge_queue", self.Q), ("merged", self.AGENT))):
+            tl = self.timeline(("added_to_merge_queue", "2026-03-10T10:00:00Z", self.AGENT),
+                               *[(e, "2026-03-10T10:09:00Z", a) for e, a in order])
+            self.assertEqual([e["outcome"] for e in dm.queue_entries(tl)], ["merged"])
+
+    def test_no_queue_event_is_none(self):
+        self.assertIsNone(self.timeline(("merged", "2026-03-10T10:00:00Z", self.AGENT)))
+
+    def test_rerun_that_turned_green_is_flaky(self):
+        cfg, app = demo_config(), demo_config()["apps"][0]
+        tl = self.timeline(("added_to_merge_queue", "2026-03-10T10:00:00Z", self.AGENT),
+                           ("removed_from_merge_queue", "2026-03-10T10:30:00Z", self.Q),
+                           ("merged", "2026-03-10T10:30:00Z", self.AGENT))
+        run = dm.run_event("demo", {"id": 5, "name": "CI", "path": ".github/workflows/ci.yml", "event": "merge_group",
+                                    "head_branch": "gh-readonly-queue/main/pr-7-abc", "status": "completed",
+                                    "conclusion": "success", "run_attempt": 2, "created_at": "2026-03-10T10:01:00Z",
+                                    "run_started_at": "2026-03-10T10:15:00Z", "updated_at": "2026-03-10T10:28:00Z"})
+        job = {"attributes": {"aa.run_attempt": 1, "cicd.pipeline.task.run.result": "failure", "aa.duration_s": 300}}
+        entries = dm.classify_entries(cfg, app, [tl], [run], {5: [job]}, [])
+        self.assertEqual([(e["outcome"], e["flaky"], e["reruns"]) for e in entries], [("merged", "rerun_green", 1)])
+
+    def test_ejection_without_runs(self):
+        cfg, app = demo_config(), demo_config()["apps"][0]
+        tl = self.timeline(("added_to_merge_queue", "2026-03-10T10:00:00Z", self.AGENT),
+                           ("removed_from_merge_queue", "2026-03-10T11:00:00Z", self.Q))
+        entries = dm.classify_entries(cfg, app, [tl], [], {}, [])
+        self.assertEqual([(e["outcome"], e["reason"]) for e in entries], [("ejected", "no_checks")])
+
+
+class TestGitActivity(SummaryFixture):
+    """AA-1125: commits of the main branch with their files."""
+
+    def test_window_and_daily_counts(self):
+        g = self.app["git"]
+        self.assertEqual(g["commits"], 11)        # the commit older than 90 days is never read
+        self.assertEqual(g["files_coverage"], 1.0)
+        self.assertEqual(len(g["daily"]), self.cfg["git_days"] + 1)
+        days = {d["date"]: d["n"] for d in g["daily"]}
+        self.assertEqual((days["2026-03-16"], days["2026-03-20"], days["2026-01-10"]), (3, 1, 1))
+        self.assertEqual(sum(days.values()), 11)
+        self.assertEqual(g["complete_since"], "2025-12-20")
+
+    def test_author_kinds(self):
+        d30, d90 = self.app["git"]["windows"]["d30"], self.app["git"]["windows"]["d90"]
+        self.assertEqual(d30["by_kind"], {"agent": 6, "ci_bot": 1, "release_please": 1, "dependabot": 1, "bot": 0,
+                                          "human": 1})
+        self.assertEqual(d90["by_kind"]["agent"], 7)
+        self.assertEqual((d30["commits"], d90["commits"]), (10, 11))
+
+    def test_churn_by_directory_with_drill_down(self):
+        d30 = self.app["git"]["windows"]["d30"]
+        self.assertEqual([d["path"] for d in d30["dirs"]], ["app", "docs", "frontend", "tests", "(root)"])
+        app = d30["dirs"][0]
+        self.assertEqual((app["churn"], app["commits"], app["files"]), (414, 6, 4))
+        self.assertEqual(app["by_kind"], {"agent": 5, "human": 1})
+        self.assertEqual([c["path"] for c in app["children"]], ["app/harbour", "app/tides", "app/lanterns"])
+        self.assertEqual((app["children"][0]["churn"], app["children"][0]["last_at"]), (282, "2026-03-18T12:00:00Z"))
+        # lock files are left out of the churn (apps.json churn_exclude)
+        self.assertNotIn("package-lock.json", json.dumps(d30["dirs"]))
+
+    def test_top_files(self):
+        files = self.app["git"]["windows"]["d30"]["files"]
+        self.assertEqual([f["path"] for f in files[:3]], ["docs/schema.md", "app/harbour/map.py",
+                                                          "app/harbour/night.py"])
+        self.assertEqual((files[1]["churn"], files[1]["commits"]), (162, 4))
+        self.assertLessEqual(len(files), self.cfg["top_files"])
+
+    def test_merges_by_branch_prefix(self):
+        d30 = self.app["git"]["windows"]["d30"]
+        self.assertEqual((d30["merges"], d30["merges_by_prefix"]), (8, {"feat": 8}))
+
+    def test_commit_graph(self):
+        graph = self.app["git"]["graph"]
+        self.assertEqual(len(graph), 11)
+        head = graph[0]
+        self.assertEqual((head["title"], head["pr"], head["kind"]), ("chore(main): release 1.4.0 (#18)", 18,
+                                                                    "release_please"))
+        self.assertTrue(head["pr_url"].endswith("/pull/18"))
+        self.assertEqual(head["parents"], [graph[1]["sha"]])
+        fix = next(c for c in graph if c["title"].startswith("fix: harbour"))
+        self.assertEqual(fix["pr"], 12)                     # the last "(#n)" of a squash title is its pull request
+        self.assertEqual((fix["additions"], fix["deletions"], fix["files"]), (5, 3, 1))
+        self.assertEqual(len(dm.summarize(self.cfg, self.store, NOW, None, None)["apps"][0]["git"]["graph"]), 11)
+
+    def test_a_person_login_is_never_stored(self):
+        commits = {dm._attr(c, "aa.commit.title"): c for c in self.store.of("aa.vcs.commit")}
+        person = commits["feat: paint the harbour map (#11)"]["attributes"]
+        self.assertEqual((person["aa.author.kind"], person["aa.author.login"]), ("human", None))
+        self.assertNotIn("river-otter", json.dumps(self.summary))
+
+    def test_files_survive_a_reread_and_the_cap_flags_truncation(self):
+        fake = FakeGitHub()
+        store = dm.Store(copy.deepcopy(self.store.events), copy.deepcopy(self.store.state))
+        dm.collect(self.cfg, store, dm.GitHub(fake, 400, 10), NOW)
+        self.assertTrue(all(dm._attr(c, "aa.files") is not None for c in store.of("aa.vcs.commit")))
+        _cfg, store2, _r, _f = collected(demo_config(commit_files_cap=1))
+        c = next(c for c in store2.of("aa.vcs.commit") if dm._attr(c, "vcs.change.id") == 11)
+        self.assertEqual((len(dm._attr(c, "aa.files")), dm._attr(c, "aa.files_truncated")), (1, True))
+        self.assertEqual(dm._attr(c, "aa.additions"), 700)   # the commit's own totals, not the capped list
+
+    def test_helpers(self):
+        cfg = demo_config()
+        kind = dm.commit_author_kind
+        self.assertEqual(kind({"login": "aa-agent[bot]", "type": "Bot"}, "feat: x (#1)", cfg), "agent")
+        self.assertEqual(kind({"login": "aa-ecosys-ci-bot[bot]", "type": "Bot"}, "chore(main): release 2.0.0", cfg),
+                         "release_please")
+        self.assertEqual(kind({"login": "aa-ecosys-ci-bot[bot]", "type": "Bot"}, "docs: copy", cfg), "ci_bot")
+        self.assertEqual(kind({"login": "some-tool[bot]", "type": "Bot"}, "chore: x", cfg), "bot")
+        self.assertEqual(kind(None, "a commit with no GitHub user", cfg), "human")
+        self.assertEqual(dm.branch_prefix("feat/aa1125-tabs"), "feat")
+        self.assertEqual(dm.branch_prefix("release-please--branches--main"), "release-please")
+        self.assertEqual(dm.branch_prefix("dependabot/pip/x"), "dependabot")
+        self.assertEqual(dm.branch_prefix("main"), "other")
 
 
 class TestRunOutcome(unittest.TestCase):
