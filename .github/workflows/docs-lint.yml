@@ -16,6 +16,7 @@ name: Docs lint
 #   - the tracker docs/backlog/tracker/plan.json (S263): plan_sync.py tests, shape, no account ID or ARN
 #   - unit tests of the orchestrator ship tools tools/github/ship_*.py (AA-1032; offline, scripted gh/aws, temp git)
 #   - unit tests of the architecture video gate tools/uat/arch (AA-1021; stdlib, invented names, temp git, no media)
+#   - unit tests of the security helpers tools/security (AA-1111: the ZAP baseline report summary, recorded fixtures)
 #   - unit tests of the UAT take upload check tools/uat/check_takes_uploaded.py (S281; stdlib, scripted rclone)
 #   - unit tests of the ops helpers tools/ops (AA-1023: ecs_rollback.sh against a scripted aws/curl, the game-day seed)
 #   - the Claude Code hooks .claude/hooks (AA-1024 G5): every hook's tests, and every hook settings.json registers exists
@@ -54,6 +55,7 @@ on:
       - "tools/uat/tests/test_check_takes_uploaded.py"
       - "tools/ops/**"
       - "tools/llm/**"
+      - "tools/security/**"
       # AA-1024 S272: the files tools/github/test_git_env_isolation.py and the ecsx tests guard (GIT_DIR, ECS exec)
       - ".githooks/**"
       - "scripts/pre-push.sh"
@@ -180,6 +182,12 @@ jobs:
       - name: Ops tools tests
         if: ${{ !cancelled() }}
         run: python -m unittest discover -s tools/ops -p 'test_*.py'
+
+      # AA-1111: the ZAP baseline summary (tools/security/zap_summary.py) on recorded-shape reports with invented hosts.
+      # Stdlib only, offline.
+      - name: Security tools tests
+        if: ${{ !cancelled() }}
+        run: python -m unittest discover -s tools/security -p 'test_*.py'
 
       # AA-1024 G18: the one cost source (spend_by_stage.py, cost_estimate.py) on invented rows: a typesafe / Jev or
       # DataForSEO row is never counted as LLM, a total is a lower bound until the log-write failures are 0, and an

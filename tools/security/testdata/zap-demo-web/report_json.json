@@ -1,0 +1,205 @@
+{
+ "@programName": "ZAP",
+ "@version": "2.17.0",
+ "@generated": "Tue, 17 Nov 2026 03:10:00",
+ "created": "2026-11-17T03:10:00.000Z",
+ "insights": [],
+ "site": [
+  {
+   "@name": "https://admin.example.test",
+   "@host": "admin.example.test",
+   "@port": "443",
+   "@ssl": "true",
+   "alerts": [
+    {
+     "pluginid": "10038",
+     "alertRef": "10038-1",
+     "alert": "Content Security Policy (CSP) Header Not Set",
+     "name": "Content Security Policy (CSP) Header Not Set",
+     "riskcode": "2",
+     "confidence": "3",
+     "riskdesc": "Medium (High)",
+     "desc": "<p>Recorded description.</p>",
+     "instances": [
+      {
+       "id": "0",
+       "uri": "https://admin.example.test/",
+       "nodeName": "https://admin.example.test/",
+       "method": "GET",
+       "param": "",
+       "attack": "",
+       "evidence": "",
+       "otherinfo": ""
+      },
+      {
+       "id": "1",
+       "uri": "https://admin.example.test/login",
+       "nodeName": "https://admin.example.test/login",
+       "method": "GET",
+       "param": "",
+       "attack": "",
+       "evidence": "",
+       "otherinfo": ""
+      },
+      {
+       "id": "2",
+       "uri": "https://admin.example.test/robots.txt",
+       "nodeName": "https://admin.example.test/robots.txt",
+       "method": "GET",
+       "param": "",
+       "attack": "",
+       "evidence": "",
+       "otherinfo": ""
+      },
+      {
+       "id": "3",
+       "uri": "https://admin.example.test/sitemap.xml",
+       "nodeName": "https://admin.example.test/sitemap.xml",
+       "method": "GET",
+       "param": "",
+       "attack": "",
+       "evidence": "",
+       "otherinfo": ""
+      }
+     ],
+     "count": "4",
+     "systemic": true,
+     "solution": "<p>Recorded solution.</p>",
+     "otherinfo": "",
+     "reference": "",
+     "cweid": "693",
+     "wascid": "15",
+     "sourceid": "3"
+    },
+    {
+     "pluginid": "10020",
+     "alertRef": "10020-1",
+     "alert": "Missing Anti-clickjacking Header",
+     "name": "Missing Anti-clickjacking Header",
+     "riskcode": "2",
+     "confidence": "2",
+     "riskdesc": "Medium (Medium)",
+     "desc": "<p>Recorded description.</p>",
+     "instances": [
+      {
+       "id": "0",
+       "uri": "https://admin.example.test/login",
+       "nodeName": "https://admin.example.test/login",
+       "method": "GET",
+       "param": "",
+       "attack": "",
+       "evidence": "",
+       "otherinfo": ""
+      }
+     ],
+     "count": "1",
+     "systemic": false,
+     "solution": "<p>Recorded solution.</p>",
+     "otherinfo": "",
+     "reference": "",
+     "cweid": "1021",
+     "wascid": "15",
+     "sourceid": "3"
+    },
+    {
+     "pluginid": "10035",
+     "alertRef": "10035",
+     "alert": "Strict-Transport-Security Header Not Set",
+     "name": "Strict-Transport-Security Header Not Set",
+     "riskcode": "1",
+     "confidence": "3",
+     "riskdesc": "Low (High)",
+     "desc": "<p>Recorded description.</p>",
+     "instances": [
+      {
+       "id": "0",
+       "uri": "https://admin.example.test/",
+       "nodeName": "https://admin.example.test/",
+       "method": "GET",
+       "param": "",
+       "attack": "",
+       "evidence": "",
+       "otherinfo": ""
+      }
+     ],
+     "count": "1",
+     "systemic": false,
+     "solution": "<p>Recorded solution.</p>",
+     "otherinfo": "",
+     "reference": "",
+     "cweid": "319",
+     "wascid": "15",
+     "sourceid": "3"
+    },
+    {
+     "pluginid": "10049",
+     "alertRef": "10049",
+     "alert": "Storable and Cacheable Content",
+     "name": "Storable and Cacheable Content",
+     "riskcode": "0",
+     "confidence": "2",
+     "riskdesc": "Informational (Medium)",
+     "desc": "<p>Recorded description.</p>",
+     "instances": [
+      {
+       "id": "0",
+       "uri": "https://admin.example.test/robots.txt",
+       "nodeName": "https://admin.example.test/robots.txt",
+       "method": "GET",
+       "param": "",
+       "attack": "",
+       "evidence": "",
+       "otherinfo": ""
+      }
+     ],
+     "count": "1",
+     "systemic": false,
+     "solution": "<p>Recorded solution.</p>",
+     "otherinfo": "",
+     "reference": "",
+     "cweid": "524",
+     "wascid": "15",
+     "sourceid": "3"
+    }
+   ]
+  },
+  {
+   "@name": "https://cdn.example.test",
+   "@host": "cdn.example.test",
+   "@port": "443",
+   "@ssl": "true",
+   "alerts": [
+    {
+     "pluginid": "10017",
+     "alertRef": "10017",
+     "alert": "Cross-Domain JavaScript Source File Inclusion",
+     "name": "Cross-Domain JavaScript Source File Inclusion",
+     "riskcode": "1",
+     "confidence": "2",
+     "riskdesc": "Low (Medium)",
+     "desc": "<p>Recorded description.</p>",
+     "instances": [
+      {
+       "id": "0",
+       "uri": "https://cdn.example.test/lib|v2.js",
+       "nodeName": "https://cdn.example.test/lib|v2.js",
+       "method": "GET",
+       "param": "",
+       "attack": "",
+       "evidence": "",
+       "otherinfo": ""
+      }
+     ],
+     "count": "1",
+     "systemic": false,
+     "solution": "<p>Recorded solution.</p>",
+     "otherinfo": "",
+     "reference": "",
+     "cweid": "829",
+     "wascid": "15",
+     "sourceid": "3"
+    }
+   ]
+  }
+ ]
+}
