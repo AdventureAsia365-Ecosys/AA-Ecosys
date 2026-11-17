@@ -73,7 +73,7 @@ phiên 24 câu https://claude.ai/artifact/FFHgg1Bm4A5n6odz8rvkRb.
    GATE, margin 4,0, reverify t9_blog ≤ 5 USD rồi null run).
 2. AA-1126 L16: thiết kế lại đường báo đại lý của TripPlanner (không cấp quyền vào `shared.notifications`), rồi ship 447,
    CIS #1568, TP #276, PR code Partner.
-3. Booking B0 (rule giá test hiệu lực 01/01/2027) + B1 (lịch mùa báo thành công giả) nếu tech lead duyệt.
+3. ~~B0~~ **xong trong S283**: dòng giá B2B test hiệu lực 01/01/2027 đã xoá (Infra #899/#900; DB Migrate DRY RUN 44052308368, xoá 44053578633 `DELETE 1`, kiểm độc lập 44053927046: 0 dòng, rule B2B đang hiệu lực giữ nguyên bản 12/11, review độc lập SAFE). B1 (lịch mùa báo thành công giả) sang S284.
 4. Xoá key IAM cũ đã Inactive + file sao lưu credentials (≥ 18/11). Kiểm Merge queue Booking/Partner trên Delivery.
 5. AA-788 pilot từ 19/11 (đã duyệt ≤ 5 USD). AA-1061 từ 28/11. AA-1122 ≥ 02/12.
 
