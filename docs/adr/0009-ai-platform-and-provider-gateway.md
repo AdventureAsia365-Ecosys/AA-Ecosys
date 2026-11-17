@@ -307,7 +307,7 @@ registry key (Platform › Settings, shown again on the AI gateway page), never 
 
 Why: customers pay per plan, and a platform hard cap would break a feature they paid for. Cost control in prod comes
 from plan quotas, alerts and the anomaly breaker; batch runs keep their hard caps. First slice live in S283: CIS 446
-+ #1566 (cap mode, anomaly breaker, per-run caps, the settings keys), Partner crm-076. The tenant quota notice and
+and #1566 (cap mode, anomaly breaker, per-run caps, the settings keys), Partner crm-076. The tenant quota notice and
 Upgrade action follow (AA-1126).
 
 ### 7. Health probes, access state and balances
