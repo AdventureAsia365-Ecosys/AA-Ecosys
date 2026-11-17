@@ -100,6 +100,9 @@ lỗi, chuyển dòng sang [`guards.md`](guards.md) trong cùng PR.
 - **Mỗi file integration test tự đặt repo root vào `sys.path` (như các file khác), không dựa vào file chạy trước** — `No module named 'api'` chỉ ở shard 3, lặp khi rerun: thêm test migration 366 làm đổi cách chia shard nên `test_aa859_main_pool_wait` được collect trước mọi file thêm root (S267, CIS #1294). Bắt bằng: ứng viên guard quét `tests/integration/*.py` import `api`/`services` mà thiếu `sys.path.insert` (hoặc thêm root trong conftest).
 
 - **Pass sửa sau review của lane cũng phải kiểm chứng đối kháng trước khi push khi đụng gate/luật/tiền** — pass sửa l3/l1/l8/l9 đều đưa lỗi mới (gate fail open, guard chặn nhầm câu xin duyệt, trần chi phí R1 không cứng); lane.js chỉ review bản đầu (S272, AA-1047, AA-1024, AA-1048). Guard: pending AA-1024 (lane.js thêm vòng verify sau Fix khi PR risky).
+- Bước tay đưa tech lead phải kiểm trạng thái thật trước (gh api installations/repositories, console, CLI) — đưa bước 'cài App lên project-template' khi App đã có repo đó làm tech lead mất công (S283). Guard: none: judgement — mỗi bước tay kèm lệnh kiểm đã chạy
+- Guard nội dung hiển thị (vd. không có chữ 'Adventure Asia' trên trang đại lý) phải kiểm HTML render thật, không chỉ đồ thị import — Next 16 nhét root not-found vào payload mọi trang (S283, AA-1115, TP #273 → #274). Guard: ci apps/AA-TripPlanner-Web/frontend/scripts/check-agency-render.mjs
+
 ## Vận hành
 
 > 39 bài học của mục này đã thành guard (máy chặn) và được chuyển sang [`guards.md`](guards.md#vận-hành) (S271, AA-1024).
@@ -315,6 +318,10 @@ rồi kiểm lại bằng một exec ngắn riêng; exec chỉ đọc thì chạ
 - **ecsx: `ECSX_TIMEOUT` là biến môi trường của shell, `ECSX_SCRIPT_TIMEOUT=` truyền SAU đường dẫn script; đường dẫn script phải tuyệt đối khi lệnh có `cd`; script gói ngoài phải xoá report cũ trước mỗi lượt và đọc dòng đầu log ecsx trước khi đọc report** — 2 lượt AA-1048 không chạy (S279); S281 `ECSX_SCRIPT_TIMEOUT` đặt trong env lại bị từ chối (rc=2), script gói ngoài đọc report của lượt trước → tưởng lượt mới bị từ chối (AA-1048). Guard: tool tools/ecs/ecsx.sh.
 - **Link do connector Google Drive trả về đi vòng qua OAuth của bên thứ ba** (`viewUrl` = freeconvert) — S279 trang video. Cách làm: dựng link trực tiếp `https://drive.google.com/file/d/<id>/view` / `.../drive/folders/<id>`. Guard: none: external connector returns third-party redirect.
 - **Deploy chạy TRƯỚC Terraform apply chép bản mẫu cũ** — CIS deploy của #1489 lúc 16:09, apply #832 lúc 16:20 → task vẫn còn env cũ, phải deploy lại (S279, AA-1096). Bắt bằng: sau mọi apply chạm ECS, so revision đang chạy với revision mới nhất (`td_compare.sh`) và deploy lại khi lệch. Guard: none: judgement compare running and newest revision.
+- Điều phối bật Postgres tạm trong cluster riêng (`orch-pg`, cổng riêng), không mở thư mục `pg` của lane khác — sai DB và có thể phá lane đang chạy (S283). Guard: none: judgement — tên thư mục scratch riêng cho điều phối
+- Một lần sửa implementation notes chèn gạch đầu dòng sau mọi ký tự làm file phình 11 MB trên main mà không check nào bắt (S283, CIS #1525 → AA-1051). Guard: none: one-off — file đã khôi phục trong CIS #1560; ratchet kích thước .md là đề xuất
+- Cache theo process (gateway LLM) sống qua module test; `invalidate()` chỉ reset mốc giờ → test phụ thuộc thứ tự, đỏ ở nightly random (S283, CIS #1551). Guard: test apps/AA-CIS-App/tests/integration/test_s283_llm_cache_reset.py
+- Test dùng `now()` cấp module trong khi dòng ghi bằng `now()` của DB → lượt nightly vắt qua 00:00 UTC lệch cửa sổ (S283, CIS #1551). Guard: none: judgement — one clock for reads and rows in each test
 
 ## Pipeline và chất lượng
 
@@ -457,6 +464,9 @@ rồi kiểm lại bằng một exec ngắn riêng; exec chỉ đọc thì chạ
 
 - **Step CI cần giữ mã thoát để in log phải viết `cmd > log 2>&1 || STATUS=$?`, không `cmd; STATUS=$?`: shell mặc định của Actions là `bash -e`, lệnh lỗi giết step trước khi kịp in log** — bước "Classify" của Migration preflight AA-Partner: `expand_check.py` trả 14 → chỉ thấy "exit code 14", không thấy classify.log (S281, AA-1093 crm-066); ci.yml của Booking và CIS dùng cùng mẫu. Finding thật: bảng mới trong schema `crm` (thuộc expand_rls_schemas) không ENABLE + FORCE RLS → file phải là contract. Guard: pending AA-1024 (sửa step Classify ở ci.yml của Partner, Booking, CIS).
 - **Migration contract phải chạy lại được: `CREATE OR REPLACE TRIGGER` / `IF NOT EXISTS`, không `CREATE TRIGGER` trần** — đổi crm-066 từ expand sang contract làm `test_reapply_is_a_no_op` (AA-Partner apply lại mọi file không phải expand) vỡ DuplicateObject (S281, AA-1093). Guard: test apps/AA-Partner/api/tests/integration/test_crm_migrations.py::test_reapply_is_a_no_op.
+- Fixture E2E ghi vào bảng thật phải giữ đúng dạng cột như writer thật: `gate_ledger = '{}'` (object) làm job KPI tuần (jsonb_array_elements) lỗi 2 lần (S283, AA-922). Guard: test apps/AA-CIS-App/tests/unit/test_aa922_array_column_guard.py
+- Test hình dạng của migration N chỉ kiểm cột của chính nó (`>=`), không ghim cả bảng (`==`) — migration sau thêm cột là CI đỏ (S283, CIS 446 vs test_aa1025_migration_345_346). Guard: none: judgement — review test hình dạng
+- Một migration cấp quyền chéo app (TripPlanner INSERT vào shared.notifications) đụng guard ranh giới cố ý của migration 274/351 → đỏ khi replay (S283, CIS 447). Nguyên tắc: báo chéo app đi qua bảng/contract của app chủ, không cấp quyền vào bảng của app khác. Guard: test apps/AA-CIS-App/api/migrations/351_tripplanner_gateway_table_reads_revoked.sql
 
 ## Frontend
 

@@ -1,0 +1,11 @@
+# Tóm tắt audit frontend S283 (AA-1123), 17/11/2026
+
+- **Phạm vi:** 4 frontend trên Dev (CIS admin, Booking admin, app đại lý gồm CRM + Content studio + client host + Academy, TripPlanner), chỉ đọc: mọi request không phải GET bị chặn. 225 dòng (brief tính 188 trang): 161 trang mở được, 64 chưa mở (phiên CIS/Booking hết hạn giữa chừng, trang login/legal bị loại, trang cần token hoặc chưa có user E2E staff CRM).
+- **Kết quả:** không trang nào vỡ (HTTP 200, gần như 0 lỗi console). 244 phát hiện: **1 cao, 59 trung bình, 184 thấp**; mọi phát hiện cao/trung bình đã qua một lượt kiểm chứng lại.
+- **Đề xuất 1 (cao, hạn trước 01/01/2027):** Booking có một rule giá test đã duyệt, hiệu lực 01/01/2027, sẽ thay rule B2B đang dùng (margin 20% → 15%, sàn 12% → 10%, mất +25% RRP). UI không rút được; cần đóng rule bằng thay đổi dữ liệu (tech lead duyệt) và thêm tie-break `approved_at`.
+- **Đề xuất 2:** Booking chưa từng gán lịch mùa cho tour nào: bước sync timeout ở cả 405/405 lần chạy trong 5 ngày mà job vẫn báo "succeeded", nên mọi tour đang tính giá mùa thấp.
+- **Đề xuất 3:** Content studio có hai bộ đếm rewrite lệch nhau (billing 2, quota 0; overage tính theo bộ đếm billing), trang Publish cho đăng bài WordPress thứ hai với nội dung đã đăng, và số "Amount due $409.50" không giải thích add-on + giảm giá combo.
+- **Đề xuất 4:** sửa một lần trong kit CIS rồi kit-sync: select số dòng/trang không có tên (khoảng 30 trang ở cả 4 app), Drawer không có tên và không giữ focus, dòng bảng chỉ mở được bằng chuột.
+- **Đề xuất 5:** CIS hiện số lệch nhau: funnel 75 vs Review Queue 73, Tenant 360 "Tours (25)" trên tổng 892, ô "Need a look" nhảy 8 → 4 theo giờ probe, chi phí Anthropic API bị gộp vào "Other", snapshot Cost Explorer cũ 8 ngày.
+- **Ngưỡng (theo lưu ý của anh):** mọi đề xuất có ngưỡng (STALE_OK_HOURS = 6 đang hard-code, cửa sổ và hạn "cũ" của Cost Explorer, ngưỡng giá tối thiểu và batch lịch mùa của Booking, cửa sổ 30 ngày của Jobs...) phải sửa đồng bộ trên trang cài đặt admin trong cùng PR; bảng đầy đủ ở mục "Thresholds" của README.
+- **Việc tiếp theo:** đa số batch cần issue mới (hỏi trước khi tạo); chạy lại 64 trang chưa mở với phiên mới, các chunk CIS chạy tuần tự. Chi tiết: [README.md](README.md), dữ liệu: [rows.json](rows.json).

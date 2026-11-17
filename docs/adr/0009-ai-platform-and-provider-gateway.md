@@ -1,7 +1,10 @@
 # ADR 0009 — AI platform and provider gateway: one gateway for every paid AI and data provider, every app and stage
 
 - **Status:** **Accepted** for decisions 1–9, 13 and 14 and the UI section (tech lead, 31/10/2026, S261; see
-  "Decision record"). **Proposed** for decisions 10, 11 and 12 (proposed answers to gap §5 items 9, 4 and 1 + 7,
+  "Decision record"). **Decision 10 accepted** by the tech lead on 17/11/2026 (S283 decision page; first slice live: the
+  gateway scrubs free-text stages `t9_write`, `t2_generate`, `t8_angle_gen` before any model call and fails closed,
+  CIS #1559). **Decision 6 amended** on 17/11/2026 (S283: per-environment budget settings, one mechanism).
+  **Proposed** for decisions 11 and 12 (proposed answers to gap §5 items 9, 4 and 1 + 7,
   accepted one by one when their step comes). Uses the number reserved for AA-804 ("AI platform and governance").
   "Not decided here" lists what this ADR leaves open.
 - **Amended by:** [ADR 0020](0020-content-quality-architecture.md#gateway-amendments-adr-0009) (S271): d5 same-model truncation retry owned by the gateway and single-family writer routes; d8 degraded marks for every role and a raw-reply cassette; d10 data-scope exception for the pinned claim instrument; d12 instrument identity and gated route changes.
@@ -289,6 +292,23 @@ What exists (CIS code at `1b6e9448`, S261 audits, [inventory](../audits/2026-10-
   DataForSEO 401/402) is `quota_exhausted`: the connection stops, it is never retried as throttling.
 - For `decide`, a budget refusal or `quota_exhausted` is a Jev failure: the stage keeps its existing grey/error rule
   (CIS ADR 0007) and no work is blocked.
+
+**Amendment S283 (17/11/2026, accepted by the tech lead): one mechanism, two settings profiles.** Every budget
+mechanism is built and live on Dev now; only the settings values differ by environment. Every value is a Settings
+registry key (Platform › Settings, shown again on the AI gateway page), never a constant or an env-only variable.
+
+| Layer | Dev | Prod |
+|---|---|---|
+| Connection (monthly) | hard cap: the connection stops at 100 % | alert + failover: at the cap the gateway alerts and moves the call to the next route (`failover_continue`); it never refuses a tenant call for this reason |
+| Tenant | hard cap per tenant | plan quotas per tenant: the plan price sets the quota, the tenant sees a quota notice and an Upgrade action; no hidden hard stop below the plan |
+| Batch and ad-hoc runs (S1, eval, `adhoc_<issue>`) | hard cap per run | hard cap per run (unchanged: a runaway batch is never a customer feature) |
+| Anomaly breaker | on | on: the only automatic stop in prod, for spend far above the recent baseline |
+| AWS Budgets | e-mail alerts | e-mail alerts only, never an action that stops a service |
+
+Why: customers pay per plan, and a platform hard cap would break a feature they paid for. Cost control in prod comes
+from plan quotas, alerts and the anomaly breaker; batch runs keep their hard caps. First slice live in S283: CIS 446
+and #1566 (cap mode, anomaly breaker, per-run caps, the settings keys), Partner crm-076. The tenant quota notice and
+Upgrade action follow (AA-1126).
 
 ### 7. Health probes, access state and balances
 

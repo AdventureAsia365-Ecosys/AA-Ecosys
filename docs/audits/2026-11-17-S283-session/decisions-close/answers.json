@@ -1,0 +1,30 @@
+{
+ "answered_at": "2026-11-17T08:48–08:55Z",
+ "by": "tech lead",
+ "answers": {
+  "c-access-findings": "s284",
+  "c-adr0009-caps": "yes (done: ADR 0009 decision 6 amendment)",
+  "c-b0-test-rule": "now (done in S283: Infra run-scripts)",
+  "c-b1-season": "s284",
+  "c-docs-batches": "1to5-s284",
+  "c-docs-code": "one-issue",
+  "c-fe-batches": "top6-s284",
+  "c-fe-issues": "per-app",
+  "c-s283-docs-draft": "active-after-fix",
+  "c-s283-docs-dvc": "not-now",
+  "c-s283-docs-feedback": "cis-table",
+  "c-s283-docs-gate": "warn-only",
+  "c-s283-docs-github-links": "source-history-all-edit-admin",
+  "c-s283-docs-linear": "aa1118-plus-two",
+  "c-s283-docs-map-home": "central-map-merged",
+  "c-s283-docs-owner-slug": "tech-lead",
+  "c-s283-docs-reader-access": "all-staff-after-fix",
+  "c-s283-docs-search": "server-fts5",
+  "c-s283-docs-sidebar": "frontmatter-nav",
+  "c-s283-docs-ui-option": "evolve-reader",
+  "c-sec-headers": "s284",
+  "c-w5-gate": "label6",
+  "c-w5-margin": "accept",
+  "c-w5-reverify": "yes-cap5"
+ }
+}

@@ -6,14 +6,16 @@
 
 **Rules:** at session start read §1–§3 and pick the session's parallel items from §3 and §3b by slot (skip items blocked in §2 or by the "blocked by" notes). At session end update the Status column, move closed items to §5, add new items. Re-audit only when this file is older than ~2 weeks or many issues were created outside sessions.
 
-_Last updated: S281, 15/11/2026 (Claude Code, Ultracode; ~00:30 → before 17:00 +07). **Closed in S281:** AA-1096, AA-1106, AA-1086, AA-1105, AA-1093, AA-1089, AA-1012, AA-965, AA-1077. AA-1048 two-step instrument live (the 300-claim fire sheet was running at the close); AA-1051 $0 part live; AA-1003 R5 live; AA-1090 live test on the test domain in progress. Next: §3 row S282._
+_Last updated: S283, 17/11/2026 (Claude Code, Ultracode; ~06:15 → ~16:30 +07). **Closed in S283:** AA-1108, AA-1114, AA-1003 (Done-with-scope), AA-922 (Done-with-scope), AA-1123, AA-1124. New: AA-1125 (Delivery tabs, In Review), AA-1126 (AI spend controls per environment, L15 live, L16 next). Next: §3 row S284 and the S283 close decision page (24 questions)._
 
 ## 1. Time-gated checks (do these first when due)
 
 | Due | Issue | Check |
 |---|---|---|
 | ≥ 02/12 | AA-1122 | First nightly automatic research after 01/12 (tech lead sets `cis.seo.research_auto_enabled` = true, effective 01/12, 5 USD month cap): it buys only new / stale places, stops at the cap, and `search_volume_monthly` gets 12-month rows. Then AA-1122 can close. |
-| S283 | AA-1108 | `delivery-metrics.yml` has `event=schedule` runs after the S282 close root PR re-saved the cron (minute 17). None → dispatch it from CI hygiene. |
+| ≥ 18/11 | AA-1111 | Delete the old IAM base-user access key (Inactive since the S283 rotation) and the local credentials backup `.bak-s283` once the new key has worked for a day. Then recheck the Platform › Delivery merge-queue tab: Booking and Partner showed 0 queue entries on the first collector run (S283).
+| S284 | AA-1126 L16 | Redesign the TripPlanner agency notice path without a cross-app grant on `shared.notifications` (CIS #1567 / migration 447 conflicts with the guards of migrations 274 and 351), then ship the quota notice + Upgrade slice (CIS #1568, TripPlanner #276, the Partner code PR).
+| before 01/01/2027 | Booking B0 (S283 FE audit) | A Booking test pricing rule becomes effective on 01/01/2027: close or delete it before then (decision page question, S283).
 | after the S281 close root PR merges | AA-1093 (Done S281) | Delete the pre-erase RDS snapshot `tenant-erase-20261115-erase02` (kept until the S281 evidence PR is on master). |
 | Monday 16/11 01:30 UTC, then weekly | AA-1003 (R5) | First scheduled runs of BK-03 and FI-07 with `generator: cis` (root #795, CIS #1516). Read the two `report_run` rows: both must succeed; the S281 runs were by hand (3/3). |
 | ≥14/12/2026 (CRM ≥12/02/2027) | AA-1086 marker tenant | The pilot-rehearsal marker tenant was soft-offboarded in S281; its erasure request (live mode) becomes due then. It runs only through the AA-1093 flow: DRY RUN, fingerprint, the tech lead's approval, a snapshot first. |
@@ -173,7 +175,6 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | AA-1069 | [CRM ops] Agency service catalogue, supplier booking requests | M-OD | S277 | new S275 | Backlog |
 | AA-1070 | [CRM ops] Departure roster, vouchers, rooming list, passport / visa tracker | M-OD | S278 | new S275 | Backlog |
 | AA-1061 | [Booking] R4c bk-045 B2C table drop | M-R4 | ≥28/11 (slot ≥01/12) | new S275 | Backlog |
-| AA-1003 | [Reporting] Build the ecosystem report engine and the 63-report catalog (appr… | M-R0 | S282 (S281: R5 live, root #795 + CIS #1516, FI-08 / BK-03 / FI-07 ran 3/3; next: R6 `crm.ops.v1`, then R7) | re-scope | In Progress |
 | AA-1090 | [TripPlanner R8] Tenant custom domain for the agency's TripPlanner (CloudFront + ACM) | later | S282 (S281: cost ~0 USD/month approved, root #802, CIS #1521 (428–429) + #1527, TripPlanner #269, Infra #854 merged; test domain bought, ~3 USD/year; next: Infra #863 two-step Terraform + the live test-sub-domain check (HTTPS branded, removal falls back to the path) → close) | new S278 | In Review |
 | AA-1004 | [Infra] Implement the lean AWS model: company organization, Identity Center,… | M5 | before 20/11 | re-scope | Backlog |
 | AA-1021 | AA-1021 (content series, details private) | parked | S267 | re-scope | In Progress |
@@ -197,7 +198,6 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | AA-920 | [Writing memory] Inject approved rules into the four writers with a post-acti… | M2a | LLM path | keep | Backlog |
 | AA-921 | [Writing memory] Pinned example sets and tenant preference summaries | M2a | LLM path | keep | Backlog |
 | AA-1000 | [T10] Tier-2 LLM adjudicator for the recall classes the seed-alignment tier c… | M2a | LLM path | keep | Backlog |
-| AA-922 | [Writing memory] Weekly KPIs, soft-stop rollback and the disagreement queue | M2a | TL-11 lift | re-scope | Backlog |
 | AA-980 | [CRM W8] CRM-38 Go-real | M5 | at go-live | pause | Backlog |
 | AA-881 | [Data/Ops] PostgreSQL 15 major-upgrade rehearsal on a restored snapshot (trig… | parked | 05/2027 | keep | Backlog |
 | AA-948 | [CRM W4] CRM-20 Builder map fork (enhancement) | CRM-after-R3 | parked | re-scope | Backlog |
@@ -261,6 +261,17 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-697 | Architecture diagrams with official AWS icons — ecosystem + each repo | S256 | **Done S257** (§5c): pilot approved under the S257 session plan (root #320); drift findings closed (Booking ops-docs bucket built S256, EFS removed S257 Infra #492) | — |
 | AA-710 | B2B benchmark: Asian Trails (eConnect, API, Lemax) | M-R4 | **S265:** slot S271 (R4 start): update the note against the R4 design (AA-1037, AA-1029, AA-1030, 'Book with AA' d17), map the gaps to issues, KAN-20 draft at that session's end, then close | — |
 | AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 | **S262:** AA-952, AA-954, AA-956, AA-957, AA-964, AA-971 closed (§5); AA-958 → S263. AA-952 was In Progress since S259 (slice 1 = C-M3 confirm, §3 row 0ah); **re-planned at the S260 close**: slots S261–S266, go-real ≥S267, see §3b "Kế hoạch CRM W5–W8 sau S260" | AA-958 needs a free Twilio trial for the live proof; AA-965 needs an LLM path |
+
+## 5. Closed in S283
+
+- **AA-1108** Delivery metrics schedule runs (CI hygiene + the scheduled collector).
+- **AA-1114** subject gate, ReDoS fix and CodeQL on AA-Partner (CIS #1555, Partner #333).
+- **AA-1003** Done-with-scope: R6 + R7 live (root #844, CIS #1553); EX-03 / EX-07 / CRM-04 ran from Generate now; EX-06 shows 65 reports.
+- **AA-922** Done-with-scope: array-column reads guarded (CIS #1552), week of 09/11 re-run.
+- **AA-1123** FE audit, 225 pages (`docs/audits/2026-11-17-S283-fe-audit/`).
+- **AA-1124** docs audit, 361 pages, and the docs-as-code advisory (`docs/audits/2026-11-17-S283-docs-audit/`, `-docs-advisory/`).
+- Still open with S283 work: AA-1116 (contract 1.10 discounts, CIS 443/444, Booking #262, CRM saga CIS #1556, plan gates Partner #334), AA-1115 In Review (agency-only branding, TripPlanner #273/#274), AA-1111 (Q4 access review, allowed_account_ids, key rotation, ZAP 0 High), AA-1126 (L15 live, CIS 446 + #1566, Partner crm-076), AA-1125 In Review (CIS 445, #1564, root #852), AA-1112 (DM-7.1, retention 2,392 rows), AA-1113 (PII scrub, acc3 budget 100), AA-1110, AA-1103, AA-1051 (W5 v7 wiring, null run blocked by the DRY plan), AA-1004 (org move checks, billing contact).
+- Evidence: root `docs/audits/2026-11-17-S283-session/` and the S283 session log.
 
 ## 5. Closed in S282
 

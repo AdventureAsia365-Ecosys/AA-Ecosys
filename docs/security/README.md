@@ -37,3 +37,4 @@ Quarterly, in the first session of each quarter (DM-8.10). Each review is a date
 | Quarter | Record | Notes |
 |---|---|---|
 | 2026-Q4 | [2026-10-20-S245-access-review](../audits/2026-10-20-S245-access-review/README.md) | First review (AA-878), 20/10/2026: 15 findings (F-1…F-15), 2 questions for the tech lead. Next: first session of 2027-Q1 (cadence AA-838) |
+| 2026-Q4 (re-run) | [2026-11-17-S283-access-review](../audits/2026-11-17-S283-access-review/README.md) | Pre-pilot re-run (AA-1111, S282 audit R25), 17/11/2026: 24 findings (F-01…F-24), first live IAM and DB-reach measurement; S245 F-1, F-2, F-5, F-6, F-7, F-9, F-11, F-13 closed (F-8, F-10 in part); 3 questions for the tech lead. Next: first session of 2027-Q1 |
