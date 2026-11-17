@@ -87,8 +87,10 @@ HEADER_CATALOG = """\
 # product page), generator (cis = the CIS engine renders it with job kind report_generate; null = not automated yet,
 # or retired), automated_from (optional, generator cis only: the first snapshot day YYYY-MM-DD whose daily chain can
 # create the report's scheduled period, the deploy day of its generator, so the register does not call earlier
-# periods overdue), retired_on (status retired only, required: the day it stopped, YYYY-MM-DD), kpis (IDs in
-# kpis.yaml), sections (what it contains).
+# periods overdue), retired_on (status retired only, required: the day it stopped, YYYY-MM-DD), trigger (required for
+# status planned, optional for any other report the CIS engine does not render, never on a retired one: the business
+# milestone or event that starts building it, in words; EX-06 lists it), kpis (IDs in kpis.yaml), sections (what it
+# contains).
 """
 
 HEADER_KPIS = """\
@@ -485,6 +487,18 @@ def check(root: Path, copy_dir: Path | None = None) -> tuple[list[Finding], list
                 err(CATALOG, f"report {rid}: a retired report has no generator (got {r.get('generator')!r})")
         elif "retired_on" in r:
             err(CATALOG, f"report {rid}: retired_on needs status retired")
+        # trigger (AA-1003 R7): what starts building a report the CIS engine does not render; EX-06 lists it.
+        trig = r.get("trigger")
+        if "trigger" in r:
+            if not isinstance(trig, str) or not trig.strip():
+                err(CATALOG, f"report {rid}: trigger must be a non-empty string")
+            if r.get("status") == "retired":
+                err(CATALOG, f"report {rid}: a retired report has no trigger (it will not be built)")
+            if r.get("generator") is not None:
+                err(CATALOG, f"report {rid}: trigger is for a report no engine renders yet (generator "
+                             f"{r.get('generator')!r})")
+        elif r.get("status") == "planned":
+            err(CATALOG, f"report {rid}: a planned report needs a trigger (the milestone that starts its build)")
         tpl = r.get("template")
         if tpl is not None and (not isinstance(tpl, str) or not (root / tpl).is_file()):
             err(CATALOG, f"report {rid}: template {tpl!r} does not exist")
