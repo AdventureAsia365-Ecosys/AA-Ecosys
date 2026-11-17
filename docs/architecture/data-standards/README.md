@@ -7,19 +7,19 @@ status: active
 owner: nghiep
 audience: [engineer, devops, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-dev-db]
-last_reviewed: 2026-11-02
+last_reviewed: 2026-11-17
 review_every_days: 90
 related: [ARCH-08-engineering, ARCH-08-data-management, ARCH-08-scaling, ARCH-08-schema-ownership, ARCH-01, docs/adr/0008-new-app-integration-and-data-platform-rules.md]
 ---
 
 # AA_Ecosys data standards
 
-**Version 1.14** · S280 · 14/11/2026 · **v1.0 and v1.1 approved by the tech lead** (v1.0: S237 data-architecture review,
+**Version 1.15** · S283 · 17/11/2026 · **v1.0 and v1.1 approved by the tech lead** (v1.0: S237 data-architecture review,
 every recommendation approved, decisions E1–E11; v1.1: S243 N-1; v1.2: X1 close-out, the tech lead approves its root PR; v1.3:
 partner CRM, classes and windows approved in S246 decision D6, the tech lead approves its root PR; v1.4: tour liveness rule
 of ADR 0015, whose answers Q1–Q10 the tech lead decided in S248, root PR merged under DM-11.5 (dev phase); v1.5: enforcement
 facts only (AA-853), no rule change, root PR under DM-11.5; v1.6: facts only from the first capacity review (AA-838), root PR
-under DM-11.5; v1.7: the capacity review decisions D1–D13, approved by the tech lead in S256; v1.8: the C7.2c / C7.2d amendments of ADR 0012, accepted by the tech lead in S257; v1.9: the C7.2a / C7.2c / DM-9.6 amendments of ADR 0018, accepted by the tech lead in S262; v1.10: the DM-10.4 amendment of ADR 0009 decision 8, accepted by the tech lead on 31/10/2026; v1.11: the S263 alert diet (C4.1, C6, Part B §7), approved by the tech lead in S263; v1.12: the MIG-4 / DM-11.2 Dev exception of ADR 0017a, asked for by the tech lead in S263; v1.13: the DM-10.4 federated ledger read of ADR 0009 decision 8, decided by the tech lead in S263 (T-14); v1.14: facts only (AA-1104), root PR under DM-11.5; see the changelog below) · Host ADR:
+under DM-11.5; v1.7: the capacity review decisions D1–D13, approved by the tech lead in S256; v1.8: the C7.2c / C7.2d amendments of ADR 0012, accepted by the tech lead in S257; v1.9: the C7.2a / C7.2c / DM-9.6 amendments of ADR 0018, accepted by the tech lead in S262; v1.10: the DM-10.4 amendment of ADR 0009 decision 8, accepted by the tech lead on 31/10/2026; v1.11: the S263 alert diet (C4.1, C6, Part B §7), approved by the tech lead in S263; v1.12: the MIG-4 / DM-11.2 Dev exception of ADR 0017a, asked for by the tech lead in S263; v1.13: the DM-10.4 federated ledger read of ADR 0009 decision 8, decided by the tech lead in S263 (T-14); v1.14: facts only (AA-1104), root PR under DM-11.5; v1.15: the retention windows still marked "proposed" in Part B §7, approved by the tech lead on the S283 decision page, and the DM-7.3 archive format as built; see the changelog below) · Host ADR:
 [ADR 0008 — New-app integration and data platform rules](../../adr/0008-new-app-integration-and-data-platform-rules.md)
 (accepted 15/10/2026), with [ADR 0003a — one job table per owner](../../adr/0003a-per-owner-job-tables.md).
 
@@ -105,9 +105,10 @@ roadmap items is [Part B §12](02-data-management.md#12-enforcement-still-to-bui
     before contract, `lock_timeout` / `statement_timeout` set, no down files, all job tables idle
     before `apply`; destructive work under DRY RUN with a snapshot. (MIG-2–14, C6.3b)
 12. **Every log, event, outbox or job table ships with a retention row and a TTL index.** Owner-run,
-    batched TTL jobs; archive to S3 Parquet before delete; never `VACUUM FULL`. Approved windows:
+    batched TTL jobs; archive to S3 (gzipped JSON Lines) before delete; never `VACUUM FULL`. Approved windows:
     `llm_call_log` 180 d + daily rollup, `tenant_api_usage` 90 d + monthly rollup, jobs succeeded 30 d /
-    failed 90 d, outbox/inbox payload PII redacted after 90 d; the partner CRM rows of S246 D6 (v1.3). (NAM-15,
+    failed 90 d, outbox/inbox payload PII redacted after 90 d; the partner CRM rows of S246 D6 (v1.3); every other
+    window of Part B §7, approved by the tech lead in S283 (v1.15). (NAM-15,
     DM-7, C5.4)
 13. **`booking.customers` is the single customer master.** No parallel customer profile (a tenant CRM's
     travellers are the agency's own records, DM-6.8); PII columns tagged `pii:<class>`; payloads and logs
@@ -156,6 +157,7 @@ ADR 0008.
 | 1.12 | 01/11/2026 | S263 | Dev exception of [ADR 0017a](../../adr/0017a-dev-auto-applies-contract-migrations.md) (AA-1032, asked for by the tech lead in S263): **MIG-4** steps (3) and (4) and **DM-11.2** need no person on Dev; ci-bot merges the green contract copy PR and Migration Apply applies it after the all-job-tables-idle wait of **C6.3b** / **DM-11.4** (busy = deferred). Destructive files and prod keep the manual DB Migrate apply. |
 | 1.13 | 02/11/2026 | S264 | The DM-10.4 amendment of [ADR 0009](../../adr/0009-ai-platform-and-provider-gateway.md) decision 8 (tech lead T-14, option b, S263; AA-1025 D3): the ledger contract is read federated. Jev calls are `llm_call_log` rows with role `decide`; DataForSEO and Geoapify keep their domain ledgers with the contract's status, latency, app and stage (`geo.geocode_call` gains them in CIS 346); the admin reads every ledger together. Part B §7 gains the retention row of `shared.llm_app_profile` (CIS 345, configuration). No other rule changes. |
 | 1.14 | 14/11/2026 | S280 | Facts only, no rule change (AA-1104, gap G13 of the AA Academy research): **DM-11.1** names ADR 0009 as written and accepted (it said "not written yet"); **TST-1** records that Partner and TripPlanner CI now replay their migrations on PostgreSQL 15 (the TripPlanner gap row in Part A §9 is closed). Root PR under DM-11.5 (dev phase). |
+| 1.15 | 17/11/2026 | S283 | Retention windows approved (AA-1112; the tech lead's decision `s283-dm71` on the S283 decision page, 17/11/2026: approve the groups as proposed; record `docs/audits/2026-11-17-S283-session/decisions/decisions.json`). **Part B §7 (DM-7.5 amendment):** every window still marked "proposed" in the retention table is approved as proposed, by group: CIS logs, ledgers and platform records, CRM platform configuration, CRM erasure record, TripPlanner, Booking operations and accounting rows; each such row ends with **Approved:**. `shared.decision_log` gets its window: 180 days for rows without a human outcome (the Jev verdict cache age, as the CIS kind `retention_decision_log` already runs it); the S3 archive lifecycle (Standard-IA after 90 days, no expiry yet) is recorded as built. Unchanged: the first live run of each TTL kind per app is a DRY RUN whose row count the tech lead approves (DM-7.2); the (est.) windows still wait for the accountant (the 10-year Booking money rows) or counsel / the business owner (the CRM ones); `tripplanner.sessions` and `tripplanner.trip_events` had no window to approve. **DM-7.3 / C5.4a (facts):** the archive is gzipped JSON Lines (`.jsonl.gz`, one `to_jsonb(row)` per line), not Parquet, as the CIS and Booking archivers write it; Part A QRY-9, Part C C3 and C5 and golden rule 12 follow, and C5.4a moves from "To build" to built. ADR 0008 decision 7 is amended to match. |
 
 ## Open items for the tech lead
 
@@ -174,9 +176,11 @@ Decisions the parts follow for now, which the tech lead may change by PR:
 6. **No automated PII check** on prompts or logs is on the roadmap (DM-6.4 stays review-only).
 7. **Proposed extensions** beyond the review's scope (marked `+` in Part B §12): orphan-rate query and
    dump-based quality measures (N1+), PII tag lint and kernel-list guard (X2+), read-only ops role (X1+).
-8. **Proposed retention rows** in Part B §7 (DFS/geocoder ledgers, superseded rankings/routes,
-   notifications, Booking OTP/session rows, TripPlanner sessions/events, `decision_log`) and the
-   "stop at 2x the previous run" rule need owner confirmation in N4 / L3.
+8. **Proposed retention rows (resolved, v1.15):** the tech lead approved every window still marked "proposed" in
+   Part B §7 on the S283 decision page (17/11/2026), `decision_log` included (180 days); the "stop at 2x the previous
+   run" rule is built into the CIS retention kinds (DM-7.2). Still open: `tripplanner.sessions` and
+   `tripplanner.trip_events` have no window yet (TripPlanner proposes one before prod), and the (est.) windows wait for
+   the accountant or counsel.
 9. **Facts checked during delivery (resolved):** Performance Insights runs on `db.t4g.small` (X9;
    `modules/rds/main.tf`); the parameter group sets `idle_in_transaction_session_timeout` (C2.3f, C4.2a); the real
    `max_connections` after the resize is 181 (measured 16/10/2026, C2.2 recomputed); the schema reference is

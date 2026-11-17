@@ -164,9 +164,14 @@ approves each change.
 - `shared.llm_call_log`: raw 180 days + daily rollup `shared.llm_call_daily`;
   `shared.tenant_api_usage`: raw 90 days + monthly rollup; job tables: succeeded 30 days, failed /
   cancelled 90 days; outbox/inbox payload PII redacted after 90 days (row and idempotency key kept).
-- Rows with business or audit value are **archived to S3 as Parquet before delete**. Deletes are
-  owner-run, batched TTL job kinds; never `VACUUM FULL`. The full table and the approval mechanics are
-  Part B §7; the batch mechanics are Part C C5.4.
+- Rows with business or audit value are **archived to S3 before delete** (gzipped JSON Lines since the S283
+  amendment below; E3 said Parquet). Deletes are owner-run, batched TTL job kinds; never `VACUUM FULL`. The full
+  table and the approval mechanics are Part B §7; the batch mechanics are Part C C5.4.
+- **Amendment S283 (17/11/2026, AA-1112, data standards v1.15):** the archive format is gzipped JSON Lines
+  (`.jsonl.gz`, one `to_jsonb(row)` per line), as the CIS and Booking retention kinds write it: their images carry
+  no Parquet library, and an Athena CTAS can convert the prefix when L6 queries it. The windows that were still
+  marked "proposed" in Part B §7 were approved by the tech lead, group by group as proposed, on the S283 decision
+  page. The first live run of each TTL kind is still a DRY RUN whose row count the tech lead approves.
 
 ### 8. Customer data and the tenant CRM (E8, E9)
 
