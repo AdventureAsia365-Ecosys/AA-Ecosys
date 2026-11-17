@@ -95,6 +95,23 @@ class RegistryCheck(unittest.TestCase):
         errors, _ = self.messages(_catalog(retired_on="2026-11-03"), _kpis())
         self.assertTrue(any("needs status retired" in e for e in errors), errors)
 
+    def test_planned_report_needs_a_trigger(self):
+        errors, _ = self.messages(_catalog(status="planned", generator=None), _kpis())
+        self.assertTrue(any("needs a trigger" in e for e in errors), errors)
+        errors, _ = self.messages(_catalog(status="planned", generator=None, trigger="First paying agency"), _kpis())
+        self.assertEqual(errors, [])
+        errors, _ = self.messages(_catalog(status="missing", generator=None, trigger="Go-live date set"), _kpis())
+        self.assertEqual(errors, [])
+
+    def test_trigger_shape_and_where_it_may_appear(self):
+        errors, _ = self.messages(_catalog(status="planned", generator=None, trigger="  "), _kpis())
+        self.assertTrue(any("non-empty string" in e for e in errors), errors)
+        errors, _ = self.messages(_catalog(status="partial", generator="cis", trigger="later"), _kpis())
+        self.assertTrue(any("no engine renders yet" in e for e in errors), errors)
+        errors, _ = self.messages(_catalog(status="retired", retired_on="2026-11-03", generator=None, trigger="x"),
+                                  _kpis())
+        self.assertTrue(any("retired report has no trigger" in e for e in errors), errors)
+
     def test_duplicate_report_id_fails(self):
         cat = _catalog()
         cat["reports"].append(dict(cat["reports"][0]))
