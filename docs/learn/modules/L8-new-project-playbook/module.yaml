@@ -1,0 +1,100 @@
+# AA Academy module L8 (Tech lead path, GUIDE-13 research §3.4 and §3.10). Format: docs/learn/README.md. Checked by
+# tools/docs/check_learn.py. Teaches the new-project playbook (GUIDE-14, docs/playbook/) by reference: every lesson
+# points at the phase pages' sections and never copies them. Draft until the tech lead approves it (maker-checker);
+# learners with the preview capability see it marked draft. The sha pins are written by
+# `python tools/docs/check_learn.py --pin` after the owner has read the cited sections.
+id: L8
+title: New-project playbook
+tier: staff
+status: draft
+version: 0.1.0
+owner: nghiep
+last_reviewed: 2026-11-17
+review_every_days: 90
+languages: [en]
+objectives:
+  - Walk a new project through the nine playbook phases and name the gate that closes each one.
+  - Tell who is accountable in each phase, and why an agent can be responsible but never accountable.
+  - Rate a gate checklist red, amber or green, and say what each rating lets the project do next.
+  - Pick the path of an issue (fix, small, feature, risky) and the review it needs before merge.
+  - Say which measured trigger starts the scale phase and what proves a retirement is complete.
+prerequisites: [L1, L2, L3, L4, L5, L6, L7]
+quiz: quiz.yaml
+lessons:
+  - id: L8-01
+    file: lessons/01-the-lifecycle-at-a-glance.md
+    title: The lifecycle at a glance
+    type: reading
+    minutes: 10
+    objective: Name the nine phases, their gates and the accountable role of each, and find where a new project starts.
+    sources:
+      - ref: doc:GUIDE-14#lifecycle-map
+        sha: 45066a082fc4e42a
+      - ref: doc:GUIDE-14#roles-raci-per-phase
+        sha: e34cbe94669ceccc
+      - ref: doc:GUIDE-14-adoption#day-1-first-two-sessions
+        sha: c724e5c7fc232f5c
+  - id: L8-02
+    file: lessons/02-decide-then-design.md
+    title: Decide to build, then design the boundaries
+    type: reading
+    minutes: 12
+    objective: Run gate G1 (go or no-go) and gate G2 (design accepted), and avoid the mistakes both pages list.
+    sources:
+      - ref: doc:GUIDE-14-discovery#gate-g1-go--no-go
+        sha: 39afa8e823aaa9c0
+      - ref: doc:GUIDE-14-discovery#common-mistakes
+        sha: 34e989a591ad9899
+      - ref: doc:GUIDE-14-architecture#gate-g2-design-accepted
+        sha: 5090426263ffe08d
+      - ref: doc:GUIDE-14-architecture#common-mistakes
+        sha: a53bd981a991d515
+  - id: L8-03
+    file: lessons/03-skeleton-and-build-loop.md
+    title: The walking skeleton and the build loop
+    type: reading
+    minutes: 12
+    objective: Prove a walking skeleton at gate G3, then move each issue through the Definition of Ready and its path.
+    sources:
+      - ref: doc:GUIDE-14-setup#gate-g3-walking-skeleton
+        sha: 75d3fae523ccf1de
+      - ref: doc:GUIDE-14-build#gate-g4-per-issue-definition-of-ready
+        sha: 10e5c1099b1c74cb
+      - ref: doc:GUIDE-14-build#paths
+        sha: c006fbf81605119c
+      - ref: doc:GUIDE-14-build#flow-rules
+        sha: 8760cb985aaf058c
+  - id: L8-04
+    file: lessons/04-test-release-verify.md
+    title: Test, release and prove it live
+    type: reading
+    minutes: 12
+    objective: Pass gate G5 before merge, deploy in the safe order, and close an issue only at gate G6, verified live.
+    sources:
+      - ref: doc:GUIDE-14-test#gate-g5-release-ready
+        sha: 6e839f03465499ba
+      - ref: doc:GUIDE-14-release#deploy-order
+        sha: 177ada464937c242
+      - ref: doc:GUIDE-14-release#gate-g6-definition-of-done-verified-live
+        sha: eb7dc067e4bd1b06
+      - ref: doc:GUIDE-14-release#merge-rights-by-phase
+        sha: 7ff0612a4898d696
+  - id: L8-05
+    file: lessons/05-operate-scale-retire.md
+    title: Operate, scale on a trigger, retire cleanly
+    type: reading
+    minutes: 12
+    objective: Run the review calendar, scale only when a measured trigger fires, and prove a retirement reached zero.
+    sources:
+      - ref: doc:GUIDE-14-operate#rules
+        sha: 6dedec2bcd6a91b2
+      - ref: doc:GUIDE-14-operate#review-calendar
+        sha: f7982cc93fe4b70f
+      - ref: doc:GUIDE-14-scale#triggers
+        sha: 759974964ebd139c
+      - ref: doc:GUIDE-14-scale#gate-g7-switch-on-the-prod-controls
+        sha: da8fe26889435117
+      - ref: doc:GUIDE-14-retire#steps
+        sha: 2f9fb11ea5eb088d
+      - ref: doc:GUIDE-14-retire#gate-g8-retirement-complete
+        sha: 77e084e5c434946d

@@ -1,0 +1,114 @@
+# Quiz of module L8. Every item cites the lesson source section it tests; when that section changes, the item is
+# suspended until the owner reviews it. The pass mark and the retake delay are settings, never in this file.
+module: L8
+items:
+  - id: L8-Q1
+    kind: single
+    prompt: Which playbook gate is checked once for every issue rather than once at the end of a phase?
+    choices:
+      - G1 go / no-go
+      - G3 walking skeleton
+      - G4 Definition of Ready
+      - G8 retirement complete
+    answer: [2]
+    source: doc:GUIDE-14#lifecycle-map
+    explain: G4 runs per issue; build has no exit gate of its own, each issue then leaves through G5 and G6.
+  - id: L8-Q2
+    kind: single
+    prompt: Who can be accountable for a playbook phase?
+    choices:
+      - The orchestrator agent, once it has merge rights
+      - Only a human, the business owner or the tech lead
+      - The CI system, for the phases it runs
+      - Any vendor the phase consults
+    answer: [1]
+    source: doc:GUIDE-14#roles-raci-per-phase
+    explain: One human is accountable for each phase; agents may be responsible, never accountable.
+  - id: L8-Q3
+    kind: multi
+    prompt: Which of these does gate G1 (go / no-go) ask for? Choose every one that applies.
+    choices:
+      - One success metric with a baseline and a target
+      - The monthly running cost of the Dev skeleton
+      - A green CI run on an empty pull request
+      - The no-go case written down
+    answer: [0, 1, 3]
+    source: doc:GUIDE-14-discovery#gate-g1-go--no-go
+    explain: A green CI run belongs to the walking skeleton (G3); G1 asks for the metric, the running cost and a real stop option.
+  - id: L8-Q4
+    kind: single
+    prompt: A design has the booking app read the content app's tables directly. Which gate G2 question does it fail?
+    choices:
+      - Does every entity have exactly one writer?
+      - Does every cross-app read go through a named, versioned contract?
+      - Is the environment model chosen?
+      - Does CONTEXT.md stay under its size cap?
+    answer: [1]
+    source: doc:GUIDE-14-architecture#gate-g2-design-accepted
+    explain: Cross-app reads go through a contract view or API with a version, never straight to another app's tables.
+  - id: L8-Q5
+    kind: single
+    prompt: An issue adds a database migration that users never see. Which path does it take?
+    choices:
+      - fix
+      - small
+      - feature
+      - risky
+    answer: [3]
+    source: doc:GUIDE-14-build#paths
+    explain: Migration and schema changes are a risky class, so the issue also gets the independent review before merge.
+  - id: L8-Q6
+    kind: single
+    prompt: An issue is In Progress and you find scope its Done-when lines do not cover. What happens?
+    choices:
+      - Add the new scope to the Done-when lines
+      - Keep the Done-when lines and open a new linked issue for the new scope
+      - Drop the Done-when lines that no longer fit
+      - Pause every other issue until the scope is settled
+    answer: [1]
+    source: doc:GUIDE-14-build#flow-rules
+    explain: Done-when is frozen once the issue is In Progress; new scope becomes a new linked issue.
+  - id: L8-Q7
+    kind: multi
+    prompt: Which of these must be true before an issue is closed at gate G6? Choose every one that applies.
+    choices:
+      - Every service of the app runs the same commit after the rollout
+      - The changed endpoint or page returns the expected shape on the live environment
+      - The release note was drafted
+      - The evidence is posted on the issue
+    answer: [0, 1, 3]
+    source: doc:GUIDE-14-release#gate-g6-definition-of-done-verified-live
+    explain: Done means rolled out, checked live with the output kept, and the evidence posted; a release note lists only verified work.
+  - id: L8-Q8
+    kind: single
+    prompt: In what order does a change that alters a table shape reach the live environment?
+    choices:
+      - Code, then the expand migration, then the flags
+      - Expand migration, then code that works with both shapes, then flags, then the contract migration
+      - Contract migration, then code, then the expand migration
+      - All at once in one deploy, so nothing is half done
+    answer: [1]
+    source: doc:GUIDE-14-release#deploy-order
+    explain: Expand first, code that handles both shapes, flags once the code is live, and contract only after every reader moved.
+  - id: L8-Q9
+    kind: single
+    prompt: Database CPU went above the line once during one busy hour. What does the playbook say to do?
+    choices:
+      - Buy a larger instance now
+      - Nothing yet; act when the measured trigger fires, and then try the cheapest lever first
+      - Move to a second account
+      - Switch on every prod control
+    answer: [1]
+    source: doc:GUIDE-14-scale#triggers
+    explain: Scaling waits for a sustained, measured trigger; the first lever is the cheapest one, such as fixing the top queries.
+  - id: L8-Q10
+    kind: single
+    prompt: The infrastructure of a retired app was destroyed today. What still has to be shown before gate G8 passes?
+    choices:
+      - Nothing; destroyed means retired
+      - A bill one full billing day later with 0 USD for the retired part, among the other G8 checks
+      - A new ADR for the replacement app
+      - A green CI run on the retired repo
+    answer: [1]
+    source: doc:GUIDE-14-retire#gate-g8-retirement-complete
+    explain: Retirement ends at zero on the bill, with data, secrets and docs handled too, not at the destroy.
