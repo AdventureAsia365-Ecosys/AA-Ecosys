@@ -1,0 +1,13 @@
+# AA Academy learning path: Tech lead (GUIDE-13 research §3.4). Format: docs/learn/README.md.
+# Modules are listed once written; the rest stay under planned in learning order. L8 (the new-project playbook) is
+# written first: it is the course of the playbook kit (AA-1103 R6), in draft until the tech lead approves it.
+id: tech-lead
+title: Tech lead
+tier: staff
+audience: The tech lead, after the engineer-on-duty modules E1 to E3
+owner: nghiep
+modules:
+  - id: L8
+    required: true
+planned: [L1, L2, L3, L4, L5, L6, L7, L9]
+final_quiz: true
