@@ -62,7 +62,7 @@ phiên 24 câu https://claude.ai/artifact/FFHgg1Bm4A5n6odz8rvkRb.
 
 ## Jira
 
-_(điền sau khi tech lead duyệt)_
+Đã đăng (tech lead duyệt): PR-25 10665, PR-26 10666, PR-24 10667, PR-22 10668.
 
 ## Còn lại / phiên sau (S284)
 

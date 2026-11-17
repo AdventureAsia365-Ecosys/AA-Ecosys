@@ -73,4 +73,4 @@ Vì sao: hai tính năng ship hôm nay có ý nghĩa với chủ doanh nghiệp 
 
 ## Kết quả đăng
 
-_(điền sau khi tech lead duyệt)_
+Tech lead duyệt 17/11 (~16:30 +07), đăng nguyên văn: PR-25 comment 10665, PR-26 comment 10666, PR-24 comment 10667, PR-22 comment 10668.
