@@ -6,7 +6,7 @@
 
 **Rules:** at session start read §1–§3 and pick the session's parallel items from §3 and §3b by slot (skip items blocked in §2 or by the "blocked by" notes). At session end update the Status column, move closed items to §5, add new items. Re-audit only when this file is older than ~2 weeks or many issues were created outside sessions.
 
-_Last updated: S283, 17/11/2026 (Claude Code, Ultracode; ~06:15 → ~16:30 +07). **Closed in S283:** AA-1108, AA-1114, AA-1003 (Done-with-scope), AA-922 (Done-with-scope), AA-1123, AA-1124. New: AA-1125 (Delivery tabs, In Review), AA-1126 (AI spend controls per environment, L15 live, L16 next). Next: §3 row S284 and the S283 close decision page (24 questions)._
+_Last updated: S283, 17/11/2026 (Claude Code, Ultracode; ~06:15 → ~16:30 +07). **Closed in S283:** AA-1108, AA-1114, AA-1003 (Done-with-scope), AA-922 (Done-with-scope), AA-1123, AA-1124. New: AA-1125 (Delivery tabs, In Review), AA-1126 (AI spend controls per environment, L15 live, L16 next), and from the close decision page AA-1127…AA-1131 (UI fixes per app + kit), AA-1132 (docs sync engine), AA-1133 (docs reader v2), AA-1134 (docs-audit code follow-ups). Next: §3 row S284 and the S283 close decision page (24 questions)._
 
 ## 1. Time-gated checks (do these first when due)
 

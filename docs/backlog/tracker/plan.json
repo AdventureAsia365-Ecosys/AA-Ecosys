@@ -1,6 +1,6 @@
 {
  "updated": "2026-11-17",
- "synced_at": "2026-11-17T08:55Z",
+ "synced_at": "2026-11-17T09:37Z",
  "session": "S283",
  "next_session": "S284",
  "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
@@ -949,7 +949,15 @@
     "AA-1123",
     "AA-1124",
     "AA-1125",
-    "AA-1126"
+    "AA-1126",
+    "AA-1127",
+    "AA-1128",
+    "AA-1129",
+    "AA-1130",
+    "AA-1131",
+    "AA-1132",
+    "AA-1133",
+    "AA-1134"
    ],
    "reopened": [],
    "notes": [
@@ -958,7 +966,8 @@
     "Add-on AA-1116: contract 1.10, CIS 443/444, Booking #262 (409,50 USD), saga CRM + mời chủ đại lý (CIS #1556), cổng gói Partner #334",
     "TripPlanner chỉ brand đại lý (#273/#274); tab Merge queue + Git map (CIS 445, #1564, root #852)",
     "Rà quyền Q4 (DB 7/7), allowed_account_ids, xoay key IAM, ZAP 0 High; retention xoá 2.392 job; budget acc3 100; LLM 0 USD",
-    "Trang duyệt cuối phiên: 24/24 đã trả lời (answers.json). S284: dọn F-20…F-24, B1 lịch mùa, docs batch 1–5, FE batch top 6 (issue theo app), 1 issue cho 19 việc code từ audit docs, security headers, W5 gán nhãn 6 mục GATE + margin 4,0 + reverify t9_blog ≤ 5 USD; DVC chưa dùng"
+    "Trang duyệt cuối phiên: 24/24 đã trả lời (answers.json). S284: dọn F-20…F-24, B1 lịch mùa, docs batch 1–5, FE batch top 6 (issue theo app), 1 issue cho 19 việc code từ audit docs, security headers, W5 gán nhãn 6 mục GATE + margin 4,0 + reverify t9_blog ≤ 5 USD; DVC chưa dùng",
+    "Issue mới từ trang duyệt: AA-1127…1131 (UI theo app + kit), AA-1132 (docs sync engine), AA-1133 (docs reader v2), AA-1134 (19 việc code từ audit docs); comment quyết định vào AA-1118, AA-1111, AA-1051"
    ]
   },
   {
@@ -2534,6 +2543,102 @@
    "size": "L",
    "next": "S283: kiểm soát chi AI theo môi trường (G1–G4 gateway, L1–L4 UX quota) — code sẵn ở dev, prod chỉ đổi setting",
    "needs": ""
+  },
+  {
+   "id": "AA-1127",
+   "title": "[UI fixes — CIS] Studio money and counters, numbers that disagree, spend truth, copy and QA layout",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "portal",
+   "milestone": "later",
+   "session": "S284",
+   "size": "",
+   "next": "S1, C1, C2 (top 6)",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1128",
+   "title": "[UI fixes — Booking] Season calendars really assigned, catalog and prices, names not ids, copy and Vietnamese",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "tpbk",
+   "milestone": "later",
+   "session": "S284",
+   "size": "",
+   "next": "B1 season job first (top 6)",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1129",
+   "title": "[UI fixes — Agency app] Studio money view, CRM home and routing, people and labels, translation, settings, client host, Academy",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "S285",
+   "size": "",
+   "next": "S1 agency web part, then P1–P5, A1",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1130",
+   "title": "[UI fixes — TripPlanner] Agency planner page fixes from the S283 UI audit",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "tpbk",
+   "milestone": "later",
+   "session": "S285",
+   "size": "",
+   "next": "T1 agency planner",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1131",
+   "title": "[Kit] Accessibility fixes in the shared kit, synced to every app, plus the UI audit harness",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "portal",
+   "milestone": "later",
+   "session": "S284",
+   "size": "",
+   "next": "K1 kit accessibility (top 6)",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1132",
+   "title": "[Docs] Docs sync engine — generated facts, docs-impact check, event-based freshness, page history",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "data",
+   "milestone": "later",
+   "session": "S284",
+   "size": "",
+   "next": "A1 page history + A2 facts, then A4 docs-impact warn-only",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1133",
+   "title": "[Docs] Docs reader v2 — /admin/docs like market docs sites, open to all staff",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "portal",
+   "milestone": "later",
+   "session": "S284",
+   "size": "",
+   "next": "B1 page header + code blocks, then B2",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1134",
+   "title": "[Ops] Docs-audit code follow-ups — 19 small code, config and settings fixes",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "data",
+   "milestone": "later",
+   "session": "S285",
+   "size": "",
+   "next": "small slices in batches",
+   "needs": "cần xếp slot"
   }
  ]
 }
