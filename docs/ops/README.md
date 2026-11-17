@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-10-28
+last_reviewed: 2026-11-17
 review_every_days: 90
 related: [CAT-00, OPS-04, APP-01, APP-02, OPS-05, OPS-06, APP-09, skill/aa-ship/SKILL.md, AA-892]
 ---
@@ -35,6 +35,13 @@ Everything runs on **acc2** (us-west-1) except the LLM calls, which run on acc3;
 | Staff cannot sign in | [Staff cannot sign in (Cognito)](playbooks/cognito-login.md) |
 | LLM calls refused, `llm_access_denied`, Bedrock "Error 002" | [LLM calls refused](playbooks/llm-access-denied.md) |
 | SES bounce or complaint alarm | [SES bounce or complaint](runbooks/ses-bounce.md) |
+
+## Without the agent
+
+- [Run the platform without the agent](run-without-agent.md): deploy, roll back and apply a migration with the GitHub
+  web UI and one-line AWS CLI commands, with the tested state of each path (draft, never run runbook-only yet).
+- [Security tabletop script](drills/security-tabletop.md): 60 minutes, two scenarios, one real low-risk rotation.
+- [Access register](../security/access-register.md): who holds each account, with the second key-holder.
 
 ## Runbooks
 
