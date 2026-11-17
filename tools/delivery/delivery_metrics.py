@@ -26,6 +26,16 @@ Design (tech lead approved S282, root .tmp-session audit "aa1108-delivery-design
     merge commit. Bot pull requests (not the agent App) and pull requests that change only docs are left out of the
     lead time and counted apart.
   * Every number carries its sample size `n`; the numbers are Dev numbers (environment `dev`).
+  * AA-1125 (S283) adds two sections per app, same store, same bundle (format 1 stays: new keys only):
+      - `queue` (apps with `merge_queue: true`): one entry per stay of a pull request in the GitHub merge queue, from
+        the pull request timeline (added_to_merge_queue / removed_from_merge_queue / merged, REST, one read per
+        queued pull request) and the merge_group workflow runs already stored: wait, outcome merged / ejected /
+        removed, the ejection reason from the red merge_group runs, merge_group CI minutes and re-runs, and flaky
+        signals (a re-run that turned green, an ejection followed by a green re-entry with no new commit).
+      - `git` (every app): the default branch's commits of the last `git_days` (90) days with their files (one read
+        per commit, newest first, kept: commits never change): commits per day, author kind (agent App, ci-bot,
+        release-please, dependabot, other bot, person; a person's login is never stored), churn by directory and the
+        top files over 30 / 90 days, merges by branch prefix, and the last `graph_commits` commits for a graph.
 
 Budget: GITHUB_TOKEN allows 1,000 requests an hour; one run spends at most `request_budget` (apps.json) and stops
 early when the rate limit runs low. A cold store fills over several runs (newest data first: recent runs, merged pull
@@ -35,6 +45,9 @@ day the history is complete.
     python3 tools/delivery/delivery_metrics.py collect --store DIR --out DIR       # GITHUB_TOKEN in the environment
     python3 tools/delivery/delivery_metrics.py summarize --store DIR --out DIR     # recompute from the store, offline
     python3 tools/delivery/delivery_metrics.py expired --keys FILE [--today D]     # S3 event keys past retention
+
+The AA-1125 knobs (git_days, git_windows, graph_commits, top_files, top_children, commit_files_cap, author_kinds,
+release_title, churn_exclude) live in apps.json like the AA-1108 ones; older configs get the defaults below.
 
 Stdlib only. Exit 0 = done (a budget stop is not an error), 1 = no repo could be read, 2 = bad usage or config.
 """
@@ -85,6 +98,29 @@ STATES = {
     "completed": "finalizing",
 }
 RED = ("failure", "timeout", "error")
+# AA-1125: defaults of the merge-queue and git-activity keys (apps.json overrides them).
+CONFIG_DEFAULTS: dict[str, Any] = {
+    "git_days": 90,
+    "git_windows": [30, 90],
+    "graph_commits": 50,
+    "top_files": 30,
+    "top_children": 10,
+    "commit_files_cap": 300,
+    "queue_actor_prefix": "github-merge-queue",
+    "author_kinds": {"agent": ["aa-agent[bot]"], "ci_bot": [], "dependabot": ["dependabot[bot]"]},
+    "release_title": r"^chore(\([^)]*\))?: release ",
+    "churn_exclude": [],
+}
+COMMIT_KINDS = ("agent", "ci_bot", "release_please", "dependabot", "bot", "human")
+QUEUE_EVENTS = {
+    "added_to_merge_queue": "added",
+    "removed_from_merge_queue": "removed",
+    "merged": "merged",
+    "closed": "closed",
+    "reopened": "reopened",
+    "committed": "commit",
+    "head_ref_force_pushed": "force_push",
+}
 QUEUE_BRANCH = re.compile(r"^gh-readonly-queue/[^/]+/pr-(\d+)-")
 REVERTS = re.compile(r"\bReverts?\s+(?:[\w.-]+/[\w.-]+)?#(\d+)", re.I)
 TITLE_REF = re.compile(r"\(#(\d+)\)")
@@ -160,6 +196,9 @@ def load_config(path: Path = CONFIG) -> dict:
     ):
         if k not in cfg:
             raise ConfigError(f"{path}: {k} missing")
+    for k, v in CONFIG_DEFAULTS.items():
+        cfg.setdefault(k, v)
+    re.compile(cfg["release_title"])
     seen = set()
     for a in cfg["apps"]:
         for k in ("id", "name", "repo", "default_branch", "deploy_workflows", "deploy_job", "ci_workflows"):
@@ -371,6 +410,95 @@ def deployment_event(repo: str, d: dict) -> dict:
     }
 
 
+def commit_author_kind(user: Optional[dict], title: str, cfg: dict) -> str:
+    """agent | ci_bot | release_please | dependabot | bot | human for a commit on the default branch (AA-1125).
+
+    A release-please release is told by its title (release-please opens it under the ci-bot App)."""
+    if re.match(cfg["release_title"], title or "", re.I):
+        return "release_please"
+    login = (user or {}).get("login") or ""
+    kinds = cfg.get("author_kinds") or {}
+    for kind in ("agent", "ci_bot", "dependabot"):
+        if login and login in set(kinds.get(kind) or ()):
+            return kind
+    if (user or {}).get("type") == "Bot" or login.endswith("[bot]"):
+        return "bot"
+    return "human"
+
+
+def commit_event(repo: str, branch: str, c: dict, cfg: dict) -> dict:
+    """One commit of the default branch (AA-1125). `aa.files` stays None until the commit's files are read."""
+    commit = c.get("commit") or {}
+    title = (commit.get("message") or "").split("\n", 1)[0].strip()[:200]
+    when = (commit.get("committer") or {}).get("date") or (commit.get("author") or {}).get("date")
+    kind = commit_author_kind(c.get("author"), title, cfg)
+    refs = TITLE_REF.findall(title)
+    return {
+        "event": "aa.vcs.commit",
+        "id": f"{repo}/commit/{c['sha']}",
+        "time": when,
+        "attributes": {
+            "vcs.repository.name": repo,
+            "vcs.ref.head.name": branch,
+            "vcs.ref.head.revision": c["sha"],
+            "aa.parents": [p.get("sha") for p in c.get("parents") or [] if isinstance(p, dict) and p.get("sha")],
+            "aa.commit.title": title,
+            "aa.author.kind": kind,
+            "aa.author.login": ((c.get("author") or {}).get("login") or None) if kind != "human" else None,
+            "vcs.change.id": int(refs[-1]) if refs else None,
+            "aa.committed_at": when,
+            "aa.files": None,
+            "aa.files_truncated": None,
+            "aa.additions": None,
+            "aa.deletions": None,
+        },
+    }
+
+
+def _queue_actor(user: Optional[dict], cfg: dict) -> str:
+    login = (user or {}).get("login") or ""
+    if login.startswith(cfg["queue_actor_prefix"]):
+        return "queue"
+    return author_kind(user, (cfg.get("author_kinds") or {}).get("agent") or cfg.get("agent_logins", ()))
+
+
+def queue_event(repo: str, number: int, items: Iterable[dict], cfg: dict) -> Optional[dict]:
+    """The merge-queue history of one pull request from its timeline (AA-1125): [kind, time, actor kind] in order.
+
+    Kinds: added, removed, merged, closed, reopened, commit, force_push; actor kinds: queue (the merge queue itself),
+    agent, bot, human (no login is kept). None when the timeline has no queue event."""
+    rows = []
+    for i, it in enumerate(items):
+        kind = QUEUE_EVENTS.get(it.get("event") or "")
+        if kind is None:
+            continue
+        when = it.get("created_at") if kind != "commit" else (it.get("committer") or {}).get("date")
+        if not when:
+            continue
+        rows.append((when, i, kind, _queue_actor(it.get("actor"), cfg) if kind != "commit" else None))
+    if not any(k in ("added", "removed") for _w, _i, k, _a in rows):
+        return None
+    rows.sort()
+    events = [[k, w, a] for w, _i, k, a in rows]
+    state = None
+    for k, _w, _a in events:
+        if k in ("merged", "closed"):
+            state = "merged" if k == "merged" or state == "merged" else "closed"
+        elif k == "reopened":
+            state = None
+    return {
+        "event": "aa.merge_queue.timeline",
+        "id": f"{repo}/queue/{number}",
+        "time": events[-1][1],
+        "attributes": {
+            "vcs.repository.name": repo,
+            "vcs.change.id": number,
+            "aa.queue.events": events,
+            "aa.queue.settled": state is not None,
+        },
+    }
+
+
 # ── the event store ─────────────────────────────────────────────────────────────────────────────────────────────
 
 
@@ -401,10 +529,18 @@ class Store:
                 fh.write(json.dumps(e, sort_keys=True, separators=(",", ":")) + "\n")
         (folder / STORE_STATE).write_text(json.dumps(self.state, indent=1, sort_keys=True), encoding="utf-8")
 
+    # attributes read by a later, separate request: a re-read of the list keeps them
+    KEEP = {
+        "vcs.change": ("aa.docs_only",),
+        "aa.vcs.commit": ("aa.files", "aa.files_truncated", "aa.additions", "aa.deletions"),
+    }
+
     def put(self, e: dict) -> bool:
         old = self.events.get(e["id"])
-        if old is not None and e["event"] == "vcs.change" and old["attributes"].get("aa.docs_only") is not None:
-            e["attributes"]["aa.docs_only"] = old["attributes"]["aa.docs_only"]
+        if old is not None:
+            for k in self.KEEP.get(e["event"], ()):
+                if old["attributes"].get(k) is not None and e["attributes"].get(k) is None:
+                    e["attributes"][k] = old["attributes"][k]
         if old == e:
             return False
         self.events[e["id"]] = e
@@ -650,14 +786,112 @@ def collect(cfg: dict, store: Store, gh: GitHub, now: datetime) -> dict:
             if not moved:
                 return
 
-    # Newest first; the soft shares keep a cold store from spending a whole run on one phase.
+    # 7. AA-1125: the merge-queue timeline of each pull request seen in a merge_group run (one read each). A timeline
+    #    is read again while it is not settled (the pull request still open) and something moved: a new merge_group
+    #    run of it, its merge, or an entry still open in the queue.
+    def queue_timelines(share: float = 1.0):
+        for app in cfg["apps"]:
+            if not app.get("merge_queue"):
+                continue
+            repo = app["repo"]
+            st = store.repo_state(repo)
+            read = st.setdefault("queue_read", {})
+            seen: dict[int, str] = {}
+            for r in store.of("cicd.pipeline.run", repo):
+                a = r["attributes"]
+                m = QUEUE_BRANCH.match(a["vcs.ref.head.name"] or "")
+                if m and a["aa.trigger"] == "merge_group":
+                    n = int(m.group(1))
+                    seen[n] = max(seen.get(n, ""), a["aa.created_at"] or "")
+            merged = {_attr(p, "vcs.change.id"): _attr(p, "aa.merged_at") or "" for p in store.of("vcs.change", repo)}
+            have = {_attr(q, "vcs.change.id"): q for q in store.of("aa.merge_queue.timeline", repo)}
+            todo = []
+            for n, newest in seen.items():
+                q, last = have.get(n), read.get(str(n)) or ""
+                if q is None and not last:
+                    todo.append((newest, n))
+                elif q is not None and not _attr(q, "aa.queue.settled") and (
+                    newest > last or merged.get(n, "") > last or open_entry(_attr(q, "aa.queue.events"))
+                ):
+                    todo.append((newest, n))
+            for k in [k for k in read if int(k) not in seen]:
+                del read[k]
+            for _newest, n in sorted(todo, reverse=True):
+                if spent(share):
+                    return
+                try:
+                    items = list(gh.pages(f"repos/{cfg['org']}/{repo}/issues/{n}/timeline", {}, max_pages=5))
+                except ReadError as err:
+                    report["errors"].append(f"{repo} queue timeline of #{n}: {err}")
+                    continue
+                ev = queue_event(repo, n, items, cfg)
+                if ev is not None:
+                    store.put(ev)
+                read[str(n)] = iso(now)
+
+    # 8. AA-1125: commits of each default branch since the cursor (90 days on a cold store), then their files.
+    git_from = now - timedelta(days=cfg["git_days"])
+
+    def recent_commits():
+        for app in cfg["apps"]:
+            repo = app["repo"]
+            st = store.repo_state(repo)
+            cursor = ts(st.get("commits_cursor"))
+            since = max(git_from, cursor - timedelta(days=cfg["runs_overlap_days"])) if cursor else git_from
+            newest = cursor
+            try:
+                for c in gh.pages(
+                    f"repos/{cfg['org']}/{repo}/commits",
+                    {"sha": app["default_branch"], "since": iso(since)},
+                    max_pages=40,
+                ):
+                    if not c.get("sha"):
+                        continue
+                    e = commit_event(repo, app["default_branch"], c, cfg)
+                    store.put(e)
+                    t = ts(e["time"])
+                    newest = max(newest, t) if newest and t else (newest or t)
+            except ReadError as err:
+                report["errors"].append(f"{repo} commits: {err}")
+                continue
+            st["commits_cursor"] = iso(newest or now)
+            if not cursor:
+                st["commits_complete_since"] = since.date().isoformat()
+
+    def commit_files(share: float = 1.0):
+        cut = iso(git_from)
+        todo = [e for e in store.of("aa.vcs.commit") if _attr(e, "aa.files") is None and (e["time"] or "") >= cut]
+        for e in sorted(todo, key=lambda e: e["time"] or "", reverse=True):
+            if spent(share):
+                return
+            a = e["attributes"]
+            try:
+                d = gh.get(f"repos/{cfg['org']}/{a['vcs.repository.name']}/commits/{a['vcs.ref.head.revision']}")
+            except ReadError as err:
+                report["errors"].append(f"files of commit {a['vcs.ref.head.revision'][:12]}: {err}")
+                continue
+            files = [f for f in (d or {}).get("files") or [] if isinstance(f, dict) and f.get("filename")]
+            cap = cfg["commit_files_cap"]
+            a["aa.files"] = [[f["filename"], f.get("additions") or 0, f.get("deletions") or 0] for f in files[:cap]]
+            a["aa.files_truncated"] = len(files) > cap or len(files) >= 300  # the API lists 300 files a page
+            stats = (d or {}).get("stats") or {}
+            a["aa.additions"] = stats.get("additions", sum(f[1] for f in a["aa.files"]))
+            a["aa.deletions"] = stats.get("deletions", sum(f[2] for f in a["aa.files"]))
+            store.touched_days.add((e["time"] or "")[:10])
+
+    # Newest first; the soft shares keep a cold store from spending a whole run on one phase. The queue timelines come
+    # after the backfill (it finds the older merge_group runs); the commit files of a cold store (a few thousand
+    # commits over 90 days) fill over several runs, newest first, before the CI jobs.
     for name, fn in (
         ("runs", recent_runs),
         ("pull requests", recent_prs),
         ("deployments", recent_deployments),
+        ("commits", recent_commits),
         ("jobs of deploy runs", lambda: jobs(max_tier=0)),
         ("backfill", lambda: backfill(share=0.6)),
+        ("merge queue timelines", lambda: queue_timelines(share=0.7)),
         ("pull request files", lambda: pr_files(share=0.8)),
+        ("commit files", lambda: commit_files(share=0.85)),
         ("jobs", jobs),
     ):
         phase(name, fn)
@@ -1193,6 +1427,421 @@ def queue_block(changes: list[dict], a: datetime, b: datetime) -> dict:
     }
 
 
+# ── AA-1125: merge queue entries ─────────────────────────────────────────────────────────────────────────────────
+
+
+def open_entry(events: Optional[list]) -> bool:
+    """True when the last queue event of a timeline is an `added` with no exit after it (still in the queue)."""
+    state = False
+    for k, _w, _a in events or ():
+        if k == "added":
+            state = True
+        elif k in ("removed", "merged", "closed"):
+            state = False
+    return state
+
+
+def queue_entries(timeline: dict) -> list[dict]:
+    """Each stay of one pull request in the merge queue, oldest first.
+
+    outcome: merged (the queue removed it and merged it at once), ejected (the queue removed it without a merge),
+    removed (a person or the agent took it out, or the pull request was closed), queued (still in the queue).
+    `new_commit`: a commit or a force push between the previous exit and this entry."""
+    events = _attr(timeline, "aa.queue.events") or []
+    out: list[dict] = []
+    cur: Optional[dict] = None
+    pushed = False
+    for i, (k, w, actor) in enumerate(events):
+        if k in ("commit", "force_push"):
+            pushed = True
+        elif k == "added":
+            if cur is None:
+                cur = {"enqueued": ts(w), "new_commit": pushed and bool(out), "enqueued_by": actor}
+                pushed = False
+        elif k == "removed" and cur is not None:
+            # the queue's own removal comes with the merge (same second); a close at the same time is a person's act
+            nxt = next((e for e in events[i + 1 :] if e[0] not in ("commit", "force_push")), None)
+            outcome = "removed"
+            if actor == "queue":
+                outcome = "ejected"
+                if nxt and nxt[0] == "merged":
+                    outcome = "merged"
+                elif nxt and nxt[0] == "closed" and (ts(nxt[1]) or ts(w)) - ts(w) <= timedelta(minutes=1):
+                    outcome = "removed"
+            out.append({**cur, "left": ts(w), "outcome": outcome, "removed_by": actor})
+            cur = None
+        elif k in ("merged", "closed") and cur is not None:
+            out.append({**cur, "left": ts(w), "outcome": "merged" if k == "merged" else "removed", "removed_by": actor})
+            cur = None
+    if cur is not None:
+        out.append({**cur, "left": None, "outcome": "queued", "removed_by": None})
+    return out
+
+
+def _assign_runs(entries: list[dict], runs: list[dict]) -> list[list[dict]]:
+    """The merge_group runs of each queue entry of one pull request: a run belongs to the newest entry that started
+    before it (one minute of clock slack), so a run is never counted twice."""
+    out: list[list[dict]] = [[] for _ in entries]
+    for r in runs:
+        t = ts(_attr(r, "aa.created_at"))
+        if t is None:
+            continue
+        idx = None
+        for i, e in enumerate(entries):
+            if e["enqueued"] and e["enqueued"] - timedelta(minutes=1) <= t:
+                idx = i
+        if idx is not None and (entries[idx]["left"] is None or t <= entries[idx]["left"] + timedelta(minutes=1)):
+            out[idx].append(r)
+    return out
+
+
+def _rerun_green(run: dict, jobs: Optional[list[dict]]) -> bool:
+    """A merge_group run whose newest attempt passed after a job of an earlier attempt failed."""
+    if _attr(run, "cicd.pipeline.result") != "success" or (_attr(run, "aa.run_attempt") or 1) < 2:
+        return False
+    newest = _attr(run, "aa.run_attempt") or 1
+    return any(
+        (_attr(j, "aa.run_attempt") or 1) < newest and _attr(j, "cicd.pipeline.task.run.result") in RED
+        for j in jobs or ()
+    )
+
+
+def classify_entries(
+    cfg: dict, app: dict, timelines: list[dict], runs: list[dict], jobs_by_run: dict, prs: list[dict]
+) -> list[dict]:
+    """Every queue entry of the app with its merge_group runs, ejection reason and flaky signals."""
+    org = cfg["org"]
+    by_pr: dict[int, list[dict]] = defaultdict(list)
+    for r in runs:
+        a = r["attributes"]
+        m = QUEUE_BRANCH.match(a["vcs.ref.head.name"] or "")
+        if m and a["aa.trigger"] == "merge_group":
+            by_pr[int(m.group(1))].append(r)
+    titles = {_attr(p, "vcs.change.id"): _attr(p, "vcs.change.title") for p in prs}
+    out: list[dict] = []
+    for tl in timelines:
+        n = _attr(tl, "vcs.change.id")
+        entries = queue_entries(tl)
+        assigned = _assign_runs(entries, by_pr.get(n, []))
+        for i, e in enumerate(entries):
+            rs = assigned[i]
+            red = [r for r in rs if _attr(r, "cicd.pipeline.result") in ("failure", "error")]
+            timeouts = [r for r in rs if _attr(r, "cicd.pipeline.result") == "timeout"]
+            cancelled = [r for r in rs if _attr(r, "cicd.pipeline.result") == "cancellation"]
+            reason = None
+            if e["outcome"] == "ejected":
+                reason = (
+                    "checks_failed"
+                    if red
+                    else "checks_timeout"
+                    if timeouts
+                    else "checks_cancelled"
+                    if cancelled
+                    else "no_checks"
+                    if not rs
+                    else "other"
+                )
+            elif e["outcome"] == "removed":
+                reason = "removed"
+            mins = sum(run_minutes(r, jobs_by_run.get(_attr(r, "cicd.pipeline.run.id")))[0] for r in rs)
+            reruns = [r for r in rs if (_attr(r, "aa.run_attempt") or 1) > 1]
+            first_bad = min(red + timeouts, key=lambda r: _attr(r, "aa.created_at") or "", default=None)
+            e.update(
+                {
+                    "pr": n,
+                    "title": titles.get(n),
+                    "url": f"https://github.com/{org}/{app['repo']}/pull/{n}",
+                    "attempt": i + 1,
+                    "attempts": len(entries),
+                    "reason": reason,
+                    "failed_workflows": sorted({_attr(r, "cicd.pipeline.name") for r in red + timeouts}),
+                    "runs": len(rs),
+                    "rebuilds": max(len({_attr(r, "vcs.ref.head.name") for r in rs}) - 1, 0),
+                    "reruns": len(reruns),
+                    "minutes": mins,
+                    "run_url": _attr(first_bad, "cicd.pipeline.run.url.full")
+                    if first_bad
+                    else (_attr(rs[0], "cicd.pipeline.run.url.full") if rs else None),
+                    "flaky": None,
+                }
+            )
+            if any(_rerun_green(r, jobs_by_run.get(_attr(r, "cicd.pipeline.run.id"))) for r in rs):
+                e["flaky"] = "rerun_green"
+        # an ejection on red checks, then the same pull request back in the queue with no new commit and merged
+        for prev, nxt in zip(entries, entries[1:], strict=False):
+            if (
+                prev["outcome"] == "ejected"
+                and prev["reason"] in ("checks_failed", "checks_timeout")
+                and not nxt["new_commit"]
+                and nxt["outcome"] == "merged"
+            ):
+                prev["flaky"] = "reentry_green"
+        out.extend(entries)
+    return out
+
+
+def entry_row(e: dict) -> dict:
+    return {
+        "pr": e["pr"],
+        "title": e["title"],
+        "url": e["url"],
+        "enqueued_at": iso(e["enqueued"]),
+        "left_at": iso(e["left"]),
+        "outcome": e["outcome"],
+        "reason": e["reason"],
+        "failed_workflows": e["failed_workflows"],
+        "wait_h": hours(e["enqueued"], e["left"]) if e["left"] else None,
+        "attempt": e["attempt"],
+        "attempts": e["attempts"],
+        "runs": e["runs"],
+        "rebuilds": e["rebuilds"],
+        "reruns": e["reruns"],
+        "minutes": e["minutes"],
+        "flaky": e["flaky"],
+        "new_commit": e["new_commit"],
+        "run_url": e["run_url"],
+    }
+
+
+def queue_summary(
+    cfg: dict, app: dict, store: Store, runs: list[dict], jobs_by_run: dict, prs: list[dict], a: datetime, b: datetime
+) -> dict:
+    """The merge-queue section of one app over the headline window [a, b) (entries that left the queue in it)."""
+    repo = app["repo"]
+    entries = classify_entries(cfg, app, store.of("aa.merge_queue.timeline", repo), runs, jobs_by_run, prs)
+    done = [e for e in entries if e["left"] and in_range(e["left"], a, b)]
+    merged = [e for e in done if e["outcome"] == "merged"]
+    ejected = [e for e in done if e["outcome"] == "ejected"]
+    judged = merged + ejected
+    flaky = [e for e in judged if e["flaky"]]
+    first_in: dict[int, datetime] = {}
+    for e in entries:
+        if e["enqueued"] and (e["pr"] not in first_in or e["enqueued"] < first_in[e["pr"]]):
+            first_in[e["pr"]] = e["enqueued"]
+    to_merge = [hours(first_in.get(e["pr"]), e["left"]) for e in merged]
+    reasons: dict[str, dict] = {}
+    for e in sorted(ejected + [e for e in done if e["outcome"] == "removed"], key=lambda e: e["left"]):
+        r = reasons.setdefault(e["reason"], {"reason": e["reason"], "n": 0, "workflows": {}, "last_pr": None,
+                                             "last_url": None, "last_at": None})
+        r["n"] += 1
+        for w in e["failed_workflows"]:
+            r["workflows"][w] = r["workflows"].get(w, 0) + 1
+        r["last_pr"], r["last_url"], r["last_at"] = e["pr"], e["run_url"] or e["url"], iso(e["left"])
+    # merge_group CI: the runs of the queue branches that finished in the window
+    qruns = [
+        r
+        for r in runs
+        if _attr(r, "aa.trigger") == "merge_group"
+        and _attr(r, "cicd.pipeline.result")
+        and in_range(ts(_attr(r, "end_time")), a, b)
+    ]
+    qjudged = [r for r in qruns if _attr(r, "cicd.pipeline.result") not in ("cancellation", "skip")]
+    qred = [r for r in qjudged if _attr(r, "cicd.pipeline.result") in RED]
+    durs = [_attr(r, "aa.duration_s") for r in qjudged if _attr(r, "aa.duration_s") is not None]
+    by_wf: dict[str, dict] = {}
+    for r in qruns:
+        w = by_wf.setdefault(_attr(r, "cicd.pipeline.name"), {"name": _attr(r, "cicd.pipeline.name"), "runs": 0,
+                                                               "failures": 0, "minutes": 0, "reruns": 0})
+        w["runs"] += 1
+        w["failures"] += _attr(r, "cicd.pipeline.result") in RED
+        w["minutes"] += run_minutes(r, jobs_by_run.get(_attr(r, "cicd.pipeline.run.id")))[0]
+        w["reruns"] += (_attr(r, "aa.run_attempt") or 1) > 1
+    days = _days(a.date(), (b - timedelta(seconds=1)).date()) if b > a else []
+    per_day = {d.isoformat(): {"date": d.isoformat(), "merged": 0, "ejected": 0, "removed": 0} for d in days}
+    for e in done:
+        row = per_day.get(e["left"].date().isoformat())
+        if row is not None:
+            row[e["outcome"]] += 1
+    st = store.repo_state(repo)
+    return {
+        "window": {"start": iso(a), "end": iso(b)},
+        "complete_since": st.get("runs_complete_since"),
+        "entries": len(done),
+        "prs": len({e["pr"] for e in done}),
+        "merged": len(merged),
+        "ejected": len(ejected),
+        "removed": sum(1 for e in done if e["outcome"] == "removed"),
+        "in_queue": sum(1 for e in entries if e["outcome"] == "queued"),
+        "wait": {
+            "p50_h": percentile([hours(e["enqueued"], e["left"]) for e in merged], 50),
+            "p95_h": percentile([hours(e["enqueued"], e["left"]) for e in merged], 95),
+            "n": len(merged),
+        },
+        "to_merge": {"p50_h": percentile(to_merge, 50), "p95_h": percentile(to_merge, 95), "n": len(to_merge)},
+        "ejection_rate": {"value": round(len(ejected) / len(judged), 4) if judged else None, "n": len(judged),
+                          "ejected": len(ejected)},
+        "flaky": {
+            "value": round(len(flaky) / len(judged), 4) if judged else None,
+            "n": len(judged),
+            "flaky": len(flaky),
+            "rerun_green": sum(1 for e in flaky if e["flaky"] == "rerun_green"),
+            "reentry_green": sum(1 for e in flaky if e["flaky"] == "reentry_green"),
+        },
+        "reasons": sorted(reasons.values(), key=lambda r: (-r["n"], r["reason"] or "")),
+        "ci": {
+            "runs": len(qjudged),
+            "failures": len(qred),
+            "failure_rate": round(len(qred) / len(qjudged), 4) if qjudged else None,
+            "p50_s": percentile(durs, 50),
+            "p95_s": percentile(durs, 95),
+            "reruns": sum(1 for r in qruns if (_attr(r, "aa.run_attempt") or 1) > 1),
+            "minutes": sum(w["minutes"] for w in by_wf.values()),
+            "workflows": sorted(by_wf.values(), key=lambda w: (-w["minutes"], w["name"]))[: cfg["list_cap"]],
+        },
+        "throughput": list(per_day.values()),
+        "recent": [
+            entry_row(e)
+            for e in sorted(entries, key=lambda e: e["left"] or b + timedelta(days=1), reverse=True)
+            if e["outcome"] == "queued" or (e["left"] and e["left"] >= a)
+        ][: cfg["list_cap"]],
+        "flaky_entries": [entry_row(e) for e in sorted(flaky, key=lambda e: e["left"], reverse=True)][: cfg["list_cap"]],
+    }
+
+
+# ── AA-1125: git activity ────────────────────────────────────────────────────────────────────────────────────────
+
+
+def _top_dir(path: str) -> str:
+    return path.split("/", 1)[0] if "/" in path else "(root)"
+
+
+def _child(path: str) -> str:
+    """The drill-down level under a top-level directory: its sub-directory, or the file itself."""
+    parts = path.split("/")
+    return "/".join(parts[:2]) if len(parts) > 2 else path
+
+
+def branch_prefix(ref: Optional[str]) -> str:
+    """feat / fix / docs / chore / bot / release-please / dependabot / ... from a pull request's head branch."""
+    ref = ref or ""
+    if ref.startswith("release-please"):
+        return "release-please"
+    return ref.split("/", 1)[0].lower() if "/" in ref else "other"
+
+
+def churn_block(cfg: dict, commits: list[dict], prs: list[dict], app: dict, a: datetime, b: datetime) -> dict:
+    inside = [c for c in commits if in_range(ts(c["time"]), a, b)]
+    read = [c for c in inside if _attr(c, "aa.files") is not None]
+    excl = cfg.get("churn_exclude") or []
+    dirs: dict[str, dict] = {}
+    children: dict[str, dict[str, dict]] = defaultdict(dict)
+    files: dict[str, dict] = {}
+
+    def add(row: dict, adds: int, dels: int, sha: str) -> None:
+        row["additions"] += adds
+        row["deletions"] += dels
+        row["churn"] += adds + dels
+        row["_shas"].add(sha)
+
+    for c in read:
+        sha = _attr(c, "vcs.ref.head.revision")
+        kind = _attr(c, "aa.author.kind") if _attr(c, "aa.author.kind") in COMMIT_KINDS else "human"
+        for path, adds, dels in _attr(c, "aa.files") or []:
+            if any(fnmatch.fnmatch(path, pat) for pat in excl):
+                continue
+            new = {"additions": 0, "deletions": 0, "churn": 0, "_shas": set()}
+            d = dirs.setdefault(_top_dir(path), {"path": _top_dir(path), **new, "_files": set(), "_kinds": {}})
+            add(d, adds, dels, sha)
+            d["_files"].add(path)
+            d["_kinds"].setdefault(kind, set()).add(sha)
+            ch = children[d["path"]].setdefault(_child(path), {"path": _child(path), **new, "_shas": set(),
+                                                                "last_at": None})
+            add(ch, adds, dels, sha)
+            ch["last_at"] = max(ch["last_at"] or "", c["time"] or "") or None
+            f = files.setdefault(path, {"path": path, **new, "_shas": set(), "last_at": None})
+            add(f, adds, dels, sha)
+            f["last_at"] = max(f["last_at"] or "", c["time"] or "") or None
+
+    def out(row: dict) -> dict:
+        r = {k: v for k, v in row.items() if not k.startswith("_")}
+        r["commits"] = len(row["_shas"])
+        if "_files" in row:
+            r["files"] = len(row["_files"])
+        if "_kinds" in row:   # commits per author kind: who changes this directory
+            r["by_kind"] = {k: len(v) for k, v in sorted(row["_kinds"].items())}
+        return r
+
+    def top(rows: Iterable[dict], k: int) -> list[dict]:
+        return [out(r) for r in sorted(rows, key=lambda r: (-r["churn"], -len(r["_shas"]), r["path"]))[:k]]
+
+    merged = [
+        p
+        for p in prs
+        if _attr(p, "vcs.ref.base.name") == app["default_branch"] and in_range(ts(_attr(p, "aa.merged_at")), a, b)
+    ]
+    prefixes: dict[str, int] = defaultdict(int)
+    for p in merged:
+        prefixes[branch_prefix(_attr(p, "vcs.ref.head.name"))] += 1
+    kinds = {k: 0 for k in COMMIT_KINDS}
+    for c in inside:
+        kinds[_attr(c, "aa.author.kind") if _attr(c, "aa.author.kind") in kinds else "human"] += 1
+    dir_rows = top(dirs.values(), len(dirs))
+    for d in dir_rows:
+        d["children"] = top(children[d["path"]].values(), cfg["top_children"])
+    return {
+        "start": iso(a),
+        "end": iso(b),
+        "commits": len(inside),
+        "files_read": len(read),
+        "additions": sum(_attr(c, "aa.additions") or 0 for c in read),
+        "deletions": sum(_attr(c, "aa.deletions") or 0 for c in read),
+        "by_kind": kinds,
+        "merges": len(merged),
+        "merges_by_prefix": dict(sorted(prefixes.items(), key=lambda kv: (-kv[1], kv[0]))),
+        "dirs": dir_rows,
+        "files": top(files.values(), cfg["top_files"]),
+    }
+
+
+def git_summary(cfg: dict, app: dict, store: Store, prs: list[dict], now: datetime) -> dict:
+    repo, org = app["repo"], cfg["org"]
+    st = store.repo_state(repo)
+    start = now - timedelta(days=cfg["git_days"])
+    commits = sorted(
+        (c for c in store.of("aa.vcs.commit", repo) if _attr(c, "vcs.ref.head.name") == app["default_branch"]),
+        key=lambda c: (c["time"] or "", c["id"]),
+    )
+    recent = [c for c in commits if in_range(ts(c["time"]), start, now + timedelta(seconds=1))]
+    per_day = {d.isoformat(): 0 for d in _days(start.date(), now.date())}
+    for c in recent:
+        k = (c["time"] or "")[:10]
+        if k in per_day:
+            per_day[k] += 1
+    graph = []
+    for c in reversed(commits[-cfg["graph_commits"] :]):
+        a = c["attributes"]
+        graph.append(
+            {
+                "sha": a["vcs.ref.head.revision"],
+                "parents": a.get("aa.parents") or [],
+                "title": a.get("aa.commit.title"),
+                "pr": a.get("vcs.change.id"),
+                "url": f"https://github.com/{org}/{repo}/commit/{a['vcs.ref.head.revision']}",
+                "pr_url": f"https://github.com/{org}/{repo}/pull/{a['vcs.change.id']}" if a.get("vcs.change.id")
+                else None,
+                "kind": a.get("aa.author.kind"),
+                "at": c["time"],
+                "additions": a.get("aa.additions"),
+                "deletions": a.get("aa.deletions"),
+                "files": len(a["aa.files"]) if a.get("aa.files") is not None else None,
+            }
+        )
+    read = sum(1 for c in recent if _attr(c, "aa.files") is not None)
+    return {
+        "branch": app["default_branch"],
+        "days": cfg["git_days"],
+        "complete_since": st.get("commits_complete_since"),
+        "commits": len(recent),
+        "files_coverage": round(read / len(recent), 4) if recent else None,
+        "daily": [{"date": d, "n": n} for d, n in per_day.items()],
+        "windows": {
+            f"d{w}": churn_block(cfg, recent, prs, app, now - timedelta(days=w), now + timedelta(seconds=1))
+            for w in cfg["git_windows"]
+        },
+        "graph": graph,
+    }
+
+
 def group_row(g: dict) -> dict:
     return {
         "sha": g["sha"],
@@ -1339,6 +1988,8 @@ def app_summary(cfg: dict, app: dict, store: Store, now: datetime) -> dict:
             ][:10],
         },
         "trend": {"weeks": weeks, "months": months},
+        "queue": queue_summary(cfg, app, store, runs, jobs_by_run, prs, a, b) if app.get("merge_queue") else None,
+        "git": git_summary(cfg, app, store, prs, now),
     }
 
 
@@ -1386,6 +2037,10 @@ def summarize(
             "rework_hours": cfg["rework_hours"],
             "segments": [s[0] for s in SEGMENTS],
             "guide": "docs/guides/delivery-metrics.md",
+            "git_days": cfg["git_days"],
+            "git_windows": cfg["git_windows"],
+            "commit_kinds": list(COMMIT_KINDS),
+            "queue_outcomes": ["merged", "ejected", "removed", "queued"],
         },
         "collection": collection or {},
         "apps": [app_summary(cfg, app, store, now) for app in cfg["apps"]],
@@ -1471,6 +2126,9 @@ def main(argv: Optional[list[str]] = None) -> int:
                         "deploys": s["dora"]["deployment_frequency"]["n"],
                         "lead_time_n": s["dora"]["lead_time"]["n"],
                         "complete_since": s["complete_since"],
+                        "queue_entries": (s.get("queue") or {}).get("entries"),
+                        "commits": s["git"]["commits"],
+                        "commit_files": s["git"]["files_coverage"],
                     }
                     for s in summary["apps"]
                 ],

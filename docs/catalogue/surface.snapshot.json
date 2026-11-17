@@ -780,6 +780,30 @@
    "app": "cis",
    "area": "delivery"
   },
+  "cis.delivery.queue_ejection_amber_pct": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.queue_ejection_green_pct": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.queue_flaky_amber_pct": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.queue_flaky_green_pct": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.queue_wait_amber_hours": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.queue_wait_green_hours": {
+   "app": "cis",
+   "area": "delivery"
+  },
   "cis.delivery.recovery_amber_hours": {
    "app": "cis",
    "area": "delivery"
