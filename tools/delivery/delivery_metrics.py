@@ -789,7 +789,10 @@ def collect(cfg: dict, store: Store, gh: GitHub, now: datetime) -> dict:
     # 7. AA-1125: the merge-queue timeline of each pull request seen in a merge_group run (one read each). A timeline
     #    is read again while it is not settled (the pull request still open) and something moved: a new merge_group
     #    run of it, its merge, or an entry still open in the queue.
+    #    S284: the reads take turns across the apps (newest first within each app). Reading one app to the end first
+    #    let CIS's long backlog use the whole share of every run, so Booking and Partner never got a single timeline.
     def queue_timelines(share: float = 1.0):
+        lanes: list[tuple[str, dict, list[int]]] = []
         for app in cfg["apps"]:
             if not app.get("merge_queue"):
                 continue
@@ -816,7 +819,12 @@ def collect(cfg: dict, store: Store, gh: GitHub, now: datetime) -> dict:
                     todo.append((newest, n))
             for k in [k for k in read if int(k) not in seen]:
                 del read[k]
-            for _newest, n in sorted(todo, reverse=True):
+            lanes.append((repo, read, [n for _newest, n in sorted(todo, reverse=True)]))
+        for turn in range(max((len(t) for _r, _s, t in lanes), default=0)):
+            for repo, read, todo in lanes:
+                if turn >= len(todo):
+                    continue
+                n = todo[turn]
                 if spent(share):
                     return
                 try:

@@ -46,9 +46,10 @@ def demo_config(**over) -> dict:
 class FakeGitHub:
     """Answers GET https://api.github.com/... from the fixture, 100 items a page."""
 
-    def __init__(self, remaining: int = 900):
+    def __init__(self, remaining: int = 900, aliases: tuple = ()):
         self.calls: list[str] = []
         self.remaining = remaining
+        self.repos = (FIX["repo"], *aliases)   # S284: extra repo names answered from the same fixture
 
     def __call__(self, url: str):
         self.calls.append(url)
@@ -58,7 +59,7 @@ class FakeGitHub:
         page, per = int(q.get("page", 1)), int(q.get("per_page", 100))
         self.remaining -= 1
         headers = {"x-ratelimit-remaining": str(self.remaining)}
-        if parts[:3] != ["repos", FIX["org"], FIX["repo"]]:
+        if parts[:2] != ["repos", FIX["org"]] or len(parts) < 3 or parts[2] not in self.repos:
             return 404, headers, b'{"message": "Not Found"}'
         rest = parts[3:]
 
@@ -393,6 +394,20 @@ class TestMergeQueue(SummaryFixture):
         days = {d["date"]: d for d in self.app["queue"]["throughput"]}
         self.assertEqual(len(days), self.cfg["headline_days"] + 1)   # the window starts and ends at noon
         self.assertEqual(days["2026-03-16"], {"date": "2026-03-16", "merged": 2, "ejected": 1, "removed": 0})
+
+    def test_timelines_take_turns_across_apps(self):
+        """S284: one app's backlog must not starve the next app (Booking and Partner read 0 timelines behind CIS)."""
+        cfg = demo_config()
+        twin = copy.deepcopy(cfg["apps"][0])
+        twin.update({"id": "twin", "name": "Twin", "repo": "demo-twin"})
+        cfg["apps"].append(twin)
+        fake = FakeGitHub(aliases=("demo-twin",))
+        store = dm.Store()
+        dm.collect(cfg, store, dm.GitHub(fake, cfg["request_budget"], cfg["rate_limit_floor"]), NOW)
+        order = [u.split("/repos/")[1].split("/")[1] for u in fake.calls if "/timeline" in u]
+        self.assertEqual(order, [FIX["repo"], "demo-twin", FIX["repo"], "demo-twin"])
+        for repo in (FIX["repo"], "demo-twin"):
+            self.assertEqual(len(store.of("aa.merge_queue.timeline", repo)), 2, repo)
 
     def test_app_without_merge_queue_has_no_section(self):
         cfg = copy.deepcopy(self.cfg)
