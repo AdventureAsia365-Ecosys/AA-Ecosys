@@ -1,0 +1,162 @@
+[
+  {
+    "stage": "a0_column_map",
+    "free_text": false
+  },
+  {
+    "stage": "a3_atomize",
+    "free_text": false
+  },
+  {
+    "stage": "a3_place_card",
+    "free_text": false
+  },
+  {
+    "stage": "a3_place_card_check",
+    "free_text": false
+  },
+  {
+    "stage": "a3_place_days",
+    "free_text": false
+  },
+  {
+    "stage": "a3_place_dedupe",
+    "free_text": false
+  },
+  {
+    "stage": "a3_place_dedupe_check",
+    "free_text": false
+  },
+  {
+    "stage": "a3_place_embed",
+    "free_text": false
+  },
+  {
+    "stage": "a3_place_locate",
+    "free_text": false
+  },
+  {
+    "stage": "f10_embed",
+    "free_text": false
+  },
+  {
+    "stage": "s1_atom_writer",
+    "free_text": false
+  },
+  {
+    "stage": "s1_brand_audit",
+    "free_text": false
+  },
+  {
+    "stage": "s1_flag_fix",
+    "free_text": false
+  },
+  {
+    "stage": "s1_generate",
+    "free_text": false
+  },
+  {
+    "stage": "s1_itinerary_nudge",
+    "free_text": false
+  },
+  {
+    "stage": "s1_judge",
+    "free_text": false
+  },
+  {
+    "stage": "s1_source_facts",
+    "free_text": false
+  },
+  {
+    "stage": "segment_research",
+    "free_text": false
+  },
+  {
+    "stage": "segment_research_batch",
+    "free_text": false
+  },
+  {
+    "stage": "supply_content_writer",
+    "free_text": false
+  },
+  {
+    "stage": "t10_adjudicate",
+    "free_text": true
+  },
+  {
+    "stage": "t10_claims",
+    "free_text": true
+  },
+  {
+    "stage": "t10_judge",
+    "free_text": true
+  },
+  {
+    "stage": "t2_brand_audit",
+    "free_text": true
+  },
+  {
+    "stage": "t2_flag_fix",
+    "free_text": true
+  },
+  {
+    "stage": "t2_generate",
+    "free_text": true
+  },
+  {
+    "stage": "t2_itinerary_nudge",
+    "free_text": true
+  },
+  {
+    "stage": "t2_judge",
+    "free_text": true
+  },
+  {
+    "stage": "t7_debate_judge",
+    "free_text": true
+  },
+  {
+    "stage": "t8_angle_gen",
+    "free_text": true
+  },
+  {
+    "stage": "t9_faq_answer_fit",
+    "free_text": true
+  },
+  {
+    "stage": "t9_faq_filter",
+    "free_text": true
+  },
+  {
+    "stage": "t9_repair",
+    "free_text": true
+  },
+  {
+    "stage": "t9_write",
+    "free_text": true
+  },
+  {
+    "stage": "tp_component_embed",
+    "free_text": false
+  },
+  {
+    "stage": "tp_compose",
+    "free_text": false
+  },
+  {
+    "stage": "tp_extract",
+    "free_text": false
+  },
+  {
+    "stage": "tp_search_embed",
+    "free_text": false
+  },
+  {
+    "stage": "writing_memory_eval",
+    "free_text": false
+  },
+  {
+    "stage": "writing_memory_mine",
+    "free_text": false
+  }
+]

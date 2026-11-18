@@ -1,0 +1,72 @@
+{
+  "currency": "USD",
+  "lines": [
+    {
+      "kind": "subscription",
+      "product": "content",
+      "plan_key": "content.starter",
+      "name": "Starter",
+      "quantity": 1,
+      "extra_seats": 0,
+      "extra_seat_price": null,
+      "unit_price": "149.00",
+      "amount": "149.00",
+      "discount": "0.00",
+      "agreed": false,
+      "price_missing": false,
+      "billing_interval": "month",
+      "trialing": false
+    },
+    {
+      "kind": "subscription",
+      "product": "crm",
+      "plan_key": "crm.core",
+      "name": "CRM Core",
+      "quantity": 5,
+      "extra_seats": 2,
+      "extra_seat_price": "19.00",
+      "unit_price": "19.00",
+      "amount": "95.00",
+      "discount": "0.00",
+      "agreed": false,
+      "price_missing": false,
+      "billing_interval": "month",
+      "trialing": false
+    }
+  ],
+  "subtotal": "244.00",
+  "discount_kind": null,
+  "discount_pct": "0",
+  "discount": "0.00",
+  "pilot_free": false,
+  "monthly_total": "244.00",
+  "annual_paid_months": 10,
+  "annual_total": "2440.00",
+  "reference": {
+    "currency": "VND",
+    "monthly_total": "6344000",
+    "fx_vnd_per_usd": "26000.0"
+  },
+  "subscriptions": [
+    {
+      "product": "content",
+      "plan_key": "content.starter",
+      "status": "active",
+      "billing_interval": "month",
+      "agreed_price_monthly": null,
+      "agreed_currency": null,
+      "agreed_until": null,
+      "price_floor_usd_monthly": null
+    },
+    {
+      "product": "crm",
+      "plan_key": "crm.core",
+      "status": "active",
+      "billing_interval": "month",
+      "agreed_price_monthly": null,
+      "agreed_currency": null,
+      "agreed_until": null,
+      "price_floor_usd_monthly": null
+    }
+  ]
+}
