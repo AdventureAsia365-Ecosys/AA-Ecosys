@@ -7,9 +7,9 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent, cto]
 applies_to: [aa-cis-frontend, aa-cis-api]
-last_reviewed: 2026-11-17
+last_reviewed: 2026-11-18
 review_every_days: 90
-related: [GUIDE-12, GUIDE-12-cis-admin, GUIDE-14-metrics, AA-1108, AA-1125]
+related: [GUIDE-12, GUIDE-12-cis-admin, GUIDE-14-metrics, AA-1108, AA-1125, AA-1135]
 ---
 
 # Delivery metrics guide
@@ -172,5 +172,39 @@ moves it. Like the rest of the page it describes the system, not a person.
 - Flaky jobs come from re-runs and repeated runs on one commit; per-test flakiness from JUnit reports is a later step.
 - The Refresh button re-reads the published summary; it does not start a new GitHub collection (the CIS API has no
   GitHub token).
+- A custom range reaches back only as far as the event store (`store_days`, 98 days); a longer or older range is
+  refused, never estimated.
 - Alerts (main red too long, failed deploy, red verify) and the split agent / person / bot lead time are a later
   step.
+
+## 11. Time range and charts
+
+**Range picker.** One picker above the tabs sets the window of every tab (Overview, each app, Merge queue, Git map);
+it lives in the URL (`?range=7d|28d|90d`, or `?range=custom&from=YYYY-MM-DD&to=YYYY-MM-DD`), so a link opens the same
+view.
+
+- **Presets 7 / 28 / 90 days** are computed by the collector every hour (`ranges.d7`, `d28`, `d90` per app in the same
+  summary; `range_presets` in `tools/delivery/apps.json`). The 28-day preset is the headline the page always showed.
+- **Custom range** (from, to, whole UTC days): the CIS API recomputes it from the collector's daily event files with
+  a byte copy of the collector's computation (`tools/delivery/delivery_engine.py`), so a custom range and a preset of
+  the same window cannot differ. The summary carries the engine's sha256; while the CIS copy differs (a collector
+  change not yet synced with `tools/delivery/sync_engine.py`), custom ranges are paused with a message and the presets
+  still work. The longest range is the setting `cis.delivery.custom_range_max_days`; a range before the event store
+  (`definitions.store_from`) or after the newest collection is refused. Results are cached per range until the next
+  collection (`cis.delivery.custom_range_cache_entries` ranges at most).
+- A window that starts before an app's complete history is measured from it, as before ("covered days").
+
+**Charts.**
+
+| Chart | What it shows |
+|---|---|
+| DORA trend | Deploys, lead time p50, change failure rate and recovery p50 per ISO week over 12 weeks, one app or all apps compared |
+| Delivery flow | Pull request opened → CI green → entered the queue → merged → deployed → verified: the median and p95 of each step for the range, n per step; the step with the longest median is highlighted. A text table under the diagram carries the same numbers |
+| Queue wait histogram | Merged queue entries per wait bin (`queue_wait_bins_h` in `apps.json`) |
+| Ejection reasons | Ejected and removed entries per reason, as bars |
+| Weekly ejection rate | Ejected over merged + ejected entries per ISO week of the range |
+| Churn treemap | Lines changed per top-level directory sized by churn; select a directory to drill into its sub-directories and files |
+| Recent commits | The newest commits on the default branch with their pull request links |
+
+**Sorting.** The repo cards on Overview and Merge queue sort by worst colour first (default), by name, or by the
+metric shown (highest or slowest first); the choice lives in the URL (`?sort=`).

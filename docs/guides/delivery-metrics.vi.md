@@ -7,9 +7,9 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, agent, cto]
 applies_to: [aa-cis-frontend, aa-cis-api]
-last_reviewed: 2026-11-17
+last_reviewed: 2026-11-18
 review_every_days: 90
-related: [GUIDE-12, GUIDE-12-cis-admin, GUIDE-14-metrics, AA-1108, AA-1125]
+related: [GUIDE-12, GUIDE-12-cis-admin, GUIDE-14-metrics, AA-1108, AA-1125, AA-1135]
 lang: vi
 translation_of: docs/guides/delivery-metrics.md
 ---
@@ -177,4 +177,38 @@ Dùng nó để thấy mã đang thay đổi ở đâu (một điểm nóng đ�
   JUnit là bước sau.
 - Nút Làm mới đọc lại bản tóm tắt đã đăng; nó không khởi động một lượt thu thập GitHub mới (API CIS không có token
   GitHub).
+- Khoảng tự chọn chỉ lùi được tới đầu kho sự kiện (`store_days`, 98 ngày); khoảng dài hơn hoặc cũ hơn bị từ chối,
+  không bao giờ ước đoán.
 - Cảnh báo (main đỏ quá lâu, deploy hỏng, verify đỏ) và lead time tách theo agent / người / bot là bước sau.
+
+## 11. Khoảng thời gian và biểu đồ
+
+**Bộ chọn khoảng.** Một bộ chọn phía trên các tab đặt khoảng thời gian cho mọi tab (Tổng quan, từng app, Hàng merge,
+Bản đồ git); nó nằm trong URL (`?range=7d|28d|90d`, hoặc `?range=custom&from=YYYY-MM-DD&to=YYYY-MM-DD`), nên một
+đường link mở đúng góc nhìn đó.
+
+- **Mốc sẵn 7 / 28 / 90 ngày** do bộ thu thập tính mỗi giờ (`ranges.d7`, `d28`, `d90` theo từng app trong cùng bản tóm
+  tắt; `range_presets` trong `tools/delivery/apps.json`). Mốc 28 ngày là con số chính trang vẫn luôn hiện.
+- **Khoảng tự chọn** (từ, đến, trọn ngày UTC): API CIS tính lại từ các file sự kiện theo ngày của bộ thu thập bằng
+  một bản sao y từng byte phần tính toán của bộ thu thập (`tools/delivery/delivery_engine.py`), nên khoảng tự chọn và
+  mốc sẵn của cùng một khoảng không thể lệch nhau. Bản tóm tắt mang sha256 của engine; khi bản sao ở CIS khác (một thay
+  đổi bộ thu thập chưa đồng bộ bằng `tools/delivery/sync_engine.py`), khoảng tự chọn tạm dừng kèm thông báo, còn mốc
+  sẵn vẫn chạy. Khoảng dài nhất là thiết lập `cis.delivery.custom_range_max_days`; khoảng trước đầu kho sự kiện
+  (`definitions.store_from`) hoặc sau lượt thu thập mới nhất bị từ chối. Kết quả được lưu đệm theo từng khoảng tới lượt
+  thu thập sau (tối đa `cis.delivery.custom_range_cache_entries` khoảng).
+- Khoảng bắt đầu trước lịch sử đầy đủ của một app được đo từ ngày lịch sử đầy đủ, như trước ("số ngày được phủ").
+
+**Biểu đồ.**
+
+| Biểu đồ | Cho thấy gì |
+|---|---|
+| Xu hướng DORA | Số deploy, lead time p50, tỉ lệ deploy hỏng và thời gian khôi phục p50 theo tuần ISO trong 12 tuần, một app hoặc so sánh mọi app |
+| Luồng phát hành | Mở pull request → CI xanh → vào hàng merge → merge → deploy → verify: trung vị và p95 của từng bước trong khoảng đã chọn, n mỗi bước; bước có trung vị dài nhất được làm nổi bật. Bảng chữ dưới sơ đồ mang cùng các số |
+| Phân bố thời gian chờ trong hàng | Số lượt đã merge theo từng nhóm thời gian chờ (`queue_wait_bins_h` trong `apps.json`) |
+| Lý do bị loại | Số lượt bị loại và bị rút ra theo lý do, dạng thanh |
+| Tỉ lệ bị loại theo tuần | Bị loại trên (đã merge + bị loại) theo từng tuần ISO của khoảng |
+| Treemap churn | Số dòng thay đổi theo thư mục cấp đầu, kích thước theo churn; chọn một thư mục để đi sâu vào thư mục con và file |
+| Commit gần đây | Các commit mới nhất trên nhánh mặc định kèm link pull request |
+
+**Sắp xếp.** Các thẻ repo ở Tổng quan và Hàng merge sắp theo màu xấu nhất trước (mặc định), theo tên, hoặc theo chỉ số
+đang hiện (cao nhất hoặc chậm nhất trước); lựa chọn nằm trong URL (`?sort=`).
