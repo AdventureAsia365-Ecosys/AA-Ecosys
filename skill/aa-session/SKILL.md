@@ -154,9 +154,13 @@ Log ghi sau cùng nên có cả kết quả Jira và số liệu đã kiểm, kh
      (làm mới phiên bản app, job kind, required checks, số ngày backup trong các khối `gen:`; migration mới nhất đi theo
      PR bot schema dump) và `python3 tools/docs/docs_freshness.py report --deps-root /home/nghiep/projects/AA-Ecosys
      --deps-ref origin/main --out docs/audits/<date>-S<nnn>-<slug>/docs-freshness.md` (trang + file agent/`CONTEXT.md`
-     cần đọc lại vì code đổi sau lần sửa cuối). Với mỗi repo có PR merge trong phiên: `doc_impact.py check --repo <Repo>
-     --base <head đầu phiên>`; trang OPEN → một subagent đọc trang so với code vừa merge, sửa trong root PR hoặc ghi lệch
-     vào snapshot. Chỉ cảnh báo, không chặn chốt phiên.
+     cần đọc lại vì code đổi sau lần sửa cuối). Với mỗi repo có PR merge trong phiên (`D` = thư mục repo, vd.
+     `apps/AA-CIS-App`, `infra/AA-CIS-Infra`; repo gốc dùng `origin/master`):
+     `B=$(git -C /home/nghiep/projects/AA-Ecosys/$D rev-list -1 --before="<giờ bắt đầu phiên, UTC>" origin/main)` rồi
+     `python3 tools/docs/doc_impact.py check --repo <Repo> --repo-dir /home/nghiep/projects/AA-Ecosys/$D --base "$B"
+     --head origin/main` (diff đúng checkout của repo đó, tới main đã fetch, không cần reset checkout). Trang OPEN →
+     một subagent đọc trang so với code vừa merge, sửa trong root PR hoặc ghi lệch vào snapshot. Chỉ cảnh báo, không
+     chặn chốt phiên.
    - Lệch giữa snapshot và điều phiên tưởng → xử lý hoặc ghi rõ là lệch; không viết log theo điều tưởng.
    Ghi vào `docs/audits/<date>-S<nnn>-<slug>/state-snapshot.md` (tiếng Việt, chỉ tên/số, không account ID, ARN hay
    giá trị secret).

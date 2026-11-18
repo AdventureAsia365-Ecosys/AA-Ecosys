@@ -75,8 +75,9 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 - [ ] **Docs:** "Docs impact" của issue làm trong cùng PR (CONTEXT.md / ADR / runbook / contract / trang catalog
   `docs/README.md`), hoặc ghi "N/A". Trang catalog theo `docs/STYLE.md`; chỉ bump `last_reviewed` khi đã kiểm với hệ thật,
   kèm dòng `Verified: <đã kiểm gì với code/live nào>` trong thân PR (docs lint cảnh báo khi thiếu, AA-1132 A5).
-  Trước khi mở PR (mọi repo): `python3 /home/nghiep/projects/AA-Ecosys/tools/docs/doc_impact.py check --repo <Repo>
-  --base origin/main` (repo gốc: `origin/master`; bản đồ `docs/catalogue/doc-map.yaml`). Trang OPEN cùng repo → sửa
+  Trước khi mở PR (mọi repo), trong worktree của PR: `python3 /home/nghiep/projects/AA-Ecosys/tools/docs/doc_impact.py
+  check --repo <Repo> --base origin/main` (chạy chỗ khác thì thêm `--repo-dir <worktree>`; repo gốc: `origin/master`;
+  bản đồ `docs/catalogue/doc-map.yaml`). Trang OPEN cùng repo → sửa
   trong PR này; trang repo gốc → root PR riêng (link vào thân PR) hoặc ghi lý do. Thân PR có một dòng
   `Docs-impact: <link root PR> | updated-here | none: <lý do>` (check Docs impact chỉ cảnh báo, không chặn merge).
   Sự thật sinh tự động (khối `<!-- gen:... -->`: account, route LLM, service ECS, migration mới nhất, phiên bản app, job

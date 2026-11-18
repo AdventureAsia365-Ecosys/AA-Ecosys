@@ -11,6 +11,7 @@ import io
 import json
 import os
 import stat
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -202,6 +203,44 @@ class MainTest(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(json.loads(out)[0]["id"], "river-boats")
         self.assertIn("Acknowledged in the PR body: `Docs-impact: none: test`", comment.read_text(encoding="utf-8"))
+
+
+    def _git(self, repo: Path, *args: str) -> str:
+        env = {**os.environ, "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@example.invalid",
+               "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@example.invalid"}
+        return subprocess.run(["git", "-C", str(repo), *args], check=True, capture_output=True, text=True,
+                              env=env).stdout.strip()
+
+    def test_base_reads_another_checkout_up_to_head_ref(self):
+        """Session close: the root worktree diffs an app checkout from its first main commit to origin/main."""
+        repo = self.dir / "river"
+        repo.mkdir()
+        self._git(repo, "init", "-q", "-b", "main")
+        (repo / "readme.txt").write_text("a\n", encoding="utf-8")
+        self._git(repo, "add", ".")
+        self._git(repo, "commit", "-q", "-m", "start")
+        base = self._git(repo, "rev-parse", "HEAD")
+        self._git(repo, "checkout", "-q", "-b", "merged")
+        (repo / "oars.py").write_text("x = 1\n", encoding="utf-8")
+        self._git(repo, "add", ".")
+        self._git(repo, "commit", "-q", "-m", "oars")
+        self._git(repo, "checkout", "-q", "main")  # the checkout itself still sits on the old head
+        code, out = self.run_main("check", "--map", str(self.map), "--repo", "Repo-River", "--base", base,
+                                  "--repo-dir", str(repo), "--head", "merged")
+        self.assertEqual(code, 0)
+        self.assertIn("OPEN    river-oars", out)
+        code, out = self.run_main("check", "--map", str(self.map), "--repo", "Repo-River", "--base", base,
+                                  "--repo-dir", str(repo))
+        self.assertIn("no mapped code changed", out)
+
+    def test_unknown_base_warns_instead_of_crashing(self):
+        repo = self.dir / "empty"
+        repo.mkdir()
+        self._git(repo, "init", "-q", "-b", "main")
+        code, out = self.run_main("check", "--map", str(self.map), "--repo", "Repo-River", "--base", "0" * 40,
+                                  "--repo-dir", str(repo))
+        self.assertEqual(code, 0)
+        self.assertIn("::warning title=Docs impact::git diff", out)
 
 
 FAKE_GH = """#!/usr/bin/env python3

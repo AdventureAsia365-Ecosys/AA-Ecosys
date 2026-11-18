@@ -138,7 +138,8 @@ a merge (tech lead S283: warn only). Answer it with one line in the PR body: `Do
 `Docs-impact: updated-here` or `Docs-impact: none: <reason>`. Run it locally before a push:
 
 ```bash
-python tools/docs/doc_impact.py check --repo AA-CIS-Infra --base origin/main   # inside the Infra checkout, map from here
+python tools/docs/doc_impact.py check --repo AA-CIS-Infra --repo-dir infra/AA-CIS-Infra --base origin/main
+# a range of merged work (session close): --base <first commit> --head origin/main
 ```
 
 Add an entry when a page starts describing code; keep ids stable (hooks and lane notes cite them).
