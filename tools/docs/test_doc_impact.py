@@ -22,6 +22,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import doc_impact as d  # noqa: E402
 
+# One test runs git in a temporary repo: drop git's repo-local variables for this whole test process, like
+# tools/github/ship_fakes.py (`git rev-parse --local-env-vars`; tools/github/test_git_env_isolation.py).
+for _git_var in ("GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_CONFIG", "GIT_CONFIG_PARAMETERS", "GIT_CONFIG_COUNT",
+                 "GIT_OBJECT_DIRECTORY", "GIT_DIR", "GIT_WORK_TREE", "GIT_IMPLICIT_WORK_TREE", "GIT_GRAFT_FILE",
+                 "GIT_INDEX_FILE", "GIT_NO_REPLACE_OBJECTS", "GIT_REPLACE_REF_BASE", "GIT_PREFIX", "GIT_SHALLOW_FILE",
+                 "GIT_COMMON_DIR"):
+    os.environ.pop(_git_var, None)
+
+
 MAP = """version: 1
 repos: [AA-Ecosys, Repo-River, Repo-Stone]
 entries:

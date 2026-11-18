@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import contextlib
 import io
+import os
 import sys
 import tempfile
 import unittest
@@ -18,6 +19,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_docs_reader as b  # noqa: E402
 import check_images as ci  # noqa: E402
 from test_docs_reader import FAKE_ACCOUNT, png_bytes, webp_bytes  # noqa: E402
+
+
+# One test runs git in a temporary repo: drop git's repo-local variables for this whole test process, like
+# tools/github/ship_fakes.py (`git rev-parse --local-env-vars`; tools/github/test_git_env_isolation.py).
+for _git_var in ("GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_CONFIG", "GIT_CONFIG_PARAMETERS", "GIT_CONFIG_COUNT",
+                 "GIT_OBJECT_DIRECTORY", "GIT_DIR", "GIT_WORK_TREE", "GIT_IMPLICIT_WORK_TREE", "GIT_GRAFT_FILE",
+                 "GIT_INDEX_FILE", "GIT_NO_REPLACE_OBJECTS", "GIT_REPLACE_REF_BASE", "GIT_PREFIX", "GIT_SHALLOW_FILE",
+                 "GIT_COMMON_DIR"):
+    os.environ.pop(_git_var, None)
 
 
 class ImageLint(unittest.TestCase):
