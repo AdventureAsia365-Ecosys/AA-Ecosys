@@ -10,6 +10,7 @@ applies_to: [tripplanner-web, tripplanner-lambda]
 last_reviewed: 2026-11-01
 review_every_days: 90
 related: [GUIDE-12, GUIDE-12-booking, GUIDE-04, OPS-04, AA-1020]
+known_issue: "Some steps describe hosting and hand-off flows that changed in November 2026; a fix is in progress. Check a step with the tech lead before you follow it."
 ---
 
 # TripPlanner runbook

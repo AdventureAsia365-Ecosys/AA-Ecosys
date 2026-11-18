@@ -617,7 +617,7 @@ integrations:
     failure: CIS admin keeps serving the last bundle
     kill_switch: Remove the docs sync repo secrets
     personal_data: false
-    features: [INF-F006, CIS-F032, CIS-F038]
+    features: [INF-F006, CIS-F050, CIS-F038]
     owner: tech_lead
     status: live
   - id: INT-081

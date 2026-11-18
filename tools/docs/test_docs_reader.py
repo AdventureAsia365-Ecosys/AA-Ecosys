@@ -71,7 +71,7 @@ class PublicationRule(TreeCase):
         body = (self.out / entry["key"]).read_text(encoding="utf-8")
         self.assertTrue(body.startswith("# Run it"))
         self.assertNotIn("last_reviewed", body)
-        self.assertEqual(m["source"], {"repo": "AA-Ecosys", "sha": "abc123", "ref": "master"})
+        self.assertEqual(m["source"], {"repo": "AA-Ecosys", "sha": "abc123", "ref": "master", "github": None})
         self.assertEqual(m["format"], 1)
 
     def test_never_prefixes_are_not_published_even_with_front_matter(self):

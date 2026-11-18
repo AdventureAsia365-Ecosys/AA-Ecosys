@@ -10,6 +10,7 @@ applies_to: [aa-booking-admin, aa-booking-api]
 last_reviewed: 2026-11-01
 review_every_days: 90
 related: [GUIDE-12, GUIDE-12-cis-admin, GUIDE-12-tripplanner, GUIDE-04, OPS-04, AA-1020]
+known_issue: "Some steps describe the retired traveller inquiry flow and an older menu and role list; a fix is in progress. Check a step with the tech lead before you follow it."
 ---
 
 # Booking admin runbook

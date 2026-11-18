@@ -10,6 +10,7 @@ applies_to: [aa-cis-frontend, aa-cis-api]
 last_reviewed: 2026-11-10
 review_every_days: 90
 related: [GUIDE-12, GUIDE-12-ai-reports, GUIDE-04, GUIDE-01, OPS-04, AA-1020]
+known_issue: "Some menus and steps changed in November 2026 and this page is being fixed. Check a step with the tech lead before you follow it."
 ---
 
 # CIS admin runbook

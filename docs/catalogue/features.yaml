@@ -465,13 +465,13 @@ features:
   - id: CIS-F032
     app: cis
     module: developer
-    name: Developer docs, API docs and data model
-    name_vi: Tài liệu kỹ thuật, tài liệu API và mô hình dữ liệu
-    summary_vi: "Danh mục tài liệu đã xuất bản (tiếng Anh và tiếng Việt), trình đọc OpenAPI và sơ đồ dữ liệu sống từ bản dump schema hằng đêm."
-    summary: The published docs catalogue (English and Vietnamese), the OpenAPI reader and the live ERD from the nightly schema dump.
+    name: API docs and data model
+    name_vi: Tài liệu API và mô hình dữ liệu
+    summary_vi: "Trình đọc OpenAPI và sơ đồ dữ liệu sống từ bản dump schema hằng đêm."
+    summary: The OpenAPI reader and the live ERD from the nightly schema dump.
     roles: [admin]
     status: live
-    surface: ["page:/admin/docs", "page:/admin/api-docs", "page:/admin/data-model", "route:admin_docs", "route:admin_api_docs", "route:admin_data_model"]
+    surface: ["page:/admin/api-docs", "page:/admin/data-model", "route:admin_api_docs", "route:admin_data_model"]
     depends_on: [INF-F006]
     owner: tech_lead
   - id: CIS-F033
@@ -679,7 +679,19 @@ features:
     surface: ["route:learn"]
     conditions:
       settings: [cis.learn.quiz_items_per_attempt, cis.learn.quiz_pass_mark_pct, cis.learn.quiz_retake_delay_hours, cis.learn.final_quiz_items_per_module, cis.learn.final_quiz_pass_mark_pct, cis.learn.recert_months, cis.learn.recert_paths, cis.learn.review_max_cards_per_day, cis.learn.review_target_retention, cis.learn.learner_retention_days, cis.learn.verify_requests_per_minute, cis.learn.verify_visitor_requests_per_minute, cis.learn.video_url_ttl_seconds]
-    depends_on: [CIS-F032]
+    depends_on: [CIS-F050]
+    owner: tech_lead
+  - id: CIS-F050
+    app: cis
+    module: developer
+    name: Docs reader
+    name_vi: Trình đọc tài liệu
+    summary_vi: "Danh mục tài liệu đã xuất bản (tiếng Anh và tiếng Việt) cho mọi nhân viên: thanh bên theo chủ đề, tìm toàn văn, mục lục, nguồn và lịch sử trên GitHub, phản hồi từng trang; trang chỉ dành cho chủ sở hữu vẫn ẩn với người khác."
+    summary: The published docs catalogue (English and Vietnamese) for every staff role - topic sidebar, full-text search, table of contents, GitHub source and history, per-page feedback; owner-only pages stay hidden from everyone else.
+    roles: [admin, content_lead, content, tenant_qa, customer_success, support, finance, ai_ops, viewer]
+    status: live
+    surface: ["page:/admin/docs", "route:admin_docs"]
+    depends_on: [INF-F006]
     owner: tech_lead
   - id: BK-F001
     app: booking
