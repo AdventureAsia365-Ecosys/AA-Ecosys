@@ -8,7 +8,7 @@ so a custom range and a preset of the same window can never give different numbe
   * the summary carries `definitions.engine_sha256` (this file's sha256) and the collector's `config`;
   * CIS refuses a custom range while its copy's sha256 differs from the published one (sync with
     tools/delivery/sync_engine.py, which also writes the copy's lock file);
-  * tests/test_delivery_metrics.py pins custom == preset on the fixture (the parity test).
+  * tools/delivery/test_delivery_metrics.py pins custom == preset on the fixture (the parity test).
 
 Pure computation: standard library only, no network, no file other than the store files of `Store`. Every number
 follows the definitions of docs/guides/delivery-metrics.md (DEFINITIONS_VERSION).
