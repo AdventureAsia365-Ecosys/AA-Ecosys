@@ -26,7 +26,8 @@ This session delivers the DRY RUN and the prepared migration only; nothing destr
   `customer_id` exists, so a re-run does not move it.
 - **Customer money rows archived in the database** (`booking.retired_b2c_record`: source table, id, `to_jsonb` row, last
   write, `retain_until` = 31 Dec of the last-write year in Vietnam time + 10), checked equal to the source before the
-  four tables drop. DM-7.3 wants S3 Parquet, which does not exist yet (N4); an in-DB, owner-only table with its own
+  four tables drop. DM-7.3 wanted S3 Parquet at the time, which did not exist yet (N4; since v1.15 DM-7.3 names the
+  gzipped JSON Lines archive that CIS and Booking write); an in-DB, owner-only table with its own
   DM-7.1 row (added in this root PR) is the stand-in. The schema's default privileges grant `booking` arwd on a new
   table, so the migration revokes it.
 - **Pins = row count + md5 of the sorted row text**, nine keys (the dropped tables only). A same-count UPDATE that left
