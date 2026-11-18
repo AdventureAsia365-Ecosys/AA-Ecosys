@@ -3,7 +3,8 @@
 #
 # Runs the same commands as this repo's CI before a push, so a red CI run is caught locally:
 #   - .github/workflows/docs-lint.yml : lint-tool unit tests, front-matter, PRD refs, ADR index, single-line AWS CLI,
-#     alarm runbook links, literal resource IDs (warn-only), markdownlint-cli2 0.23.2, lychee offline links;
+#     alarm runbook links, literal resource IDs (warn-only), generated docs blocks and the doc map (AA-1132),
+#     markdownlint-cli2 0.23.2, lychee offline links;
 #   - .github/workflows/contracts.yml : contract/ADR unit tests, check_contracts.py, check_adr_numbers.py;
 #   - .github/workflows/secret-scan.yml: gitleaks on the pushed commits, only when a working gitleaks is found
 #     (local convenience; CI keeps its own pull_request_target job, so --ci never runs it). The binary comes from
@@ -94,6 +95,7 @@ plan_checks() {
   if [ "$docs" = 1 ]; then
     echo docs-unit
     echo frontmatter; echo prd-refs; echo adr-index; echo aws-multiline; echo alarm-runbooks; echo resource-ids
+    echo gen-sections; echo doc-map
     if [ "$md" = 1 ]; then echo markdownlint; fi
     echo lychee
   fi
@@ -282,6 +284,8 @@ run_planned() {
       adr-index) run_check "$id" "docs-lint.yml: ADR status and index" - "$PY" tools/docs/check_adr_index.py docs/adr ;;
       aws-multiline) run_check "$id" "docs-lint.yml: Single-line AWS CLI" - "$PY" tools/docs/check_docs_text.py aws-multiline ;;
       alarm-runbooks) run_check "$id" "docs-lint.yml: Alarm runbook links" - "$PY" tools/docs/check_alarm_runbooks.py ;;
+      gen-sections) run_check "$id" "docs-lint.yml: Generated docs blocks" py-deps "$PY" tools/docs/gen_sections.py --check ;;
+      doc-map) run_check "$id" "docs-lint.yml: Doc map" py-deps "$PY" tools/docs/doc_impact.py validate ;;
       resource-ids)
         # warn-only in CI too: print a one-line count, never fail
         out=$("$PY" tools/docs/check_docs_text.py resource-ids --mode warn 2>&1 | tail -1) || true
@@ -327,7 +331,7 @@ self_test() {
     got=$(printf '%s\n' "$@" | plan_checks "$mode" "$ci" | tr '\n' ' ' | sed 's/ $//')
     if [ "$got" = "$want" ]; then ok "$name"; else bad "$name"; echo "     want: $want"; echo "     got:  $got"; fi
   }
-  local DOCS="docs-unit frontmatter prd-refs adr-index aws-multiline alarm-runbooks resource-ids"
+  local DOCS="docs-unit frontmatter prd-refs adr-index aws-multiline alarm-runbooks resource-ids gen-sections doc-map"
   local CONTRACTS="contracts-unit adr-unit contracts adr-numbers"
   local ALL="$DOCS markdownlint lychee $CONTRACTS"
   # check selection

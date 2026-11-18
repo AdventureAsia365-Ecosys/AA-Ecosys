@@ -37,14 +37,46 @@ named `prod` until AA-1023, ADR 0012 decision 6, C7.2d); the Dev apply role trus
 `prod` is free for a future prod apply role. Prod Terraform will be its own root, `accounts/prod`, in the `aa-prod` account (ADR 0018 decision
 5, replacing the `accounts/aa365-prod` of ADR 0012; C7.2c).
 
-Live components on Dev (checked 2026-11-01): ECS cluster `aa-cis-dev-cluster` with services `aa-cis-dev-api`,
-`aa-cis-dev-worker`, `aa-booking-dev-api`, `aa-crm-dev-api` and `aa-crm-dev-web` (the Content studio is part of the web since AA-1036); RDS
-`aa-cis-dev-db` (PostgreSQL, `db.t4g.small`, single-AZ, 7-day PITR); Lambdas `aa-tripplanner-dev-browse`,
+Live components on Dev. The ECS services, generated from the Terraform state (`tools/docs/gen_sections.py`; never
+edit the block by hand):
+
+<!-- gen:ecs-services -->
+
+Cluster `aa-cis-dev-cluster`, 8 services:
+
+| Service | App |
+|---|---|
+| `aa-booking-dev-admin` | AA-Booking |
+| `aa-booking-dev-api` | AA-Booking |
+| `aa-cis-dev-admin` | AA-CIS-App |
+| `aa-cis-dev-api` | AA-CIS-App |
+| `aa-cis-dev-worker` | AA-CIS-App |
+| `aa-crm-dev-api` | AA-Partner |
+| `aa-crm-dev-web` | AA-Partner |
+| `aa-tripplanner-dev-web` | AA-TripPlanner-Web |
+
+From the Terraform state at AA-CIS-Infra `c1545f7b` (resource inventory, AA-CIS-Infra Docs Gen).
+
+<!-- /gen -->
+
+The rest (checked 2026-11-01): RDS `aa-cis-dev-db` (PostgreSQL, `db.t4g.small`, single-AZ, 7-day PITR); Lambdas `aa-tripplanner-dev-browse`,
 `aa-tripplanner-dev-assembly` and `aa-tripplanner-dev-jobs` (the `tripplanner.job` worker, woken by a daily
 EventBridge Scheduler entry); four Cognito trigger Lambdas (`aa-identity-dev-*`); the daily probe Lambda
-`aa-cis-dev-dfs-balance-check`; the snapshot expiry Lambda `aa-cis-dev-rds-snapshot-expiry`. Chat models run on Amazon
-Bedrock in acc3, behind the [AI gateway](../architecture/ai-gateway.md); acc1 (a personal account) was removed from the
-ecosystem on 2026-10-28 (AA-998).
+`aa-cis-dev-dfs-balance-check`; the snapshot expiry Lambda `aa-cis-dev-rds-snapshot-expiry`. Chat models run behind
+the [AI gateway](../architecture/ai-gateway.md), in this provider order (generated from `docs/catalogue/platform.yaml`;
+the account roles are in the [ecosystem architecture](../ecosystem-architecture.md)):
+
+<!-- gen:llm-route-order -->
+
+| Model family | Route order (first to last) | Note |
+|---|---|---|
+| Claude | Anthropic API → acc1 (Bedrock) → acc3 (Bedrock) | acc3 is skipped while Bedrock refuses it |
+| GPT | acc1 (Bedrock) → acc3 (Bedrock) → OpenAI API | the OpenAI API serves the twin model last |
+| Embeddings | acc2 (Bedrock, Cohere Embed v4) | - |
+
+Decision: ADR 0009 (one gateway for every provider) with ADR 0001a Note S278 (acc1 before acc3). The live routes per stage are in the [LLM routes table](../generated/llm-routes.md) and CIS admin AI providers.
+
+<!-- /gen -->
 
 The management account (ADR 0018) holds the AA organization: OUs, three SCPs on the OUs, the organization trail,
 budgets and IAM Identity Center. It runs no workload, and no workload account has joined yet. Its Terraform root is
