@@ -172,7 +172,7 @@ DM-6.10) and `docs/calib/` are never published anywhere.
 
 ## Admin docs page allowlist (AA-898)
 
-The CIS admin docs reader (`/admin/docs`, Platform › Developer › Docs, admin only) shows a bundle that
+The CIS admin docs reader (`/admin/docs`, Platform › Developer › Docs; every staff role from reader v2, AA-1133) shows a bundle that
 [`docs-sync.yml`](../.github/workflows/docs-sync.yml) builds **from a CI checkout** of `master` (tracked files only,
 never a laptop) with [`tools/docs/build_docs_reader.py`](../tools/docs/build_docs_reader.py) and uploads to the bronze
 bucket prefix `docs-reader/`. Publication rule v1 (the script header is the source):
@@ -187,6 +187,8 @@ bucket prefix `docs-reader/`. Publication rule v1 (the script header is the sour
 | SVG images (AA-697) | A tracked `docs/**/*.svg` outside the never-published folders is published byte for byte under `assets/` when it is safe (no script, `foreignObject`, event handler or outside reference; only fragment links and inline PNG icons) and its text has no account or resource ID; an unsafe SVG fails the build. Assets are staff tier, so an SVG never carries owner-only content |
 | Screenshots (AA-1064) | A tracked PNG or WebP under `docs/` is published byte for byte under `assets/` only when a published page links it (`![alt](images/x.png)`), at most 300 KB, with a valid signature and no account or resource ID in its metadata; a linked image that fails fails the build. Its tier is the most open tier of the pages that link it. Pixels cannot be checked, so crop before committing. `tools/docs/check_images.py` checks every image link in the docs lint |
 | Translations (S255) | A `<name>.vi.md` page is published only when its English page is, with the same ID and access tier. Each manifest entry carries `lang` (`en` or `vi`); an English entry lists its `translations` (`lang`, `path`, `key`, `title`) and a translation names its English page in `translation_of`, so the reader lists English pages and offers an EN/VI toggle |
+| Reader v2 (AA-1133) | Each entry carries its sidebar group `nav` (front-matter `nav`, else derived from the folder; groups: start, guides, operations, architecture, reference, legal-security) and `nav_order`, the date and commit of the last change to the file (`last_changed`, from the full git history Docs sync fetches), and `known_issue` (a front-matter note shown as a banner until the fixing PR removes it). The owner slug `nghiep` is published as `tech-lead`. `source.github` names the repo while it is public, so the reader links Source and History (every reader) and Edit (admins) |
+| Search (AA-1133) | `search/index.sqlite` is a SQLite FTS5 index of every published section, built from the same redacted bodies; the CIS API serves `GET /admin/docs/search` from it and filters owner-tier sections out for every caller without the owner flag |
 
 v1 is stricter than the S243 wording for security and audit pages: they are not synced at all (security reports and
 audit evidence stay in git). Only this repo is published for now; Infra pages can be added as a second `repo` in the

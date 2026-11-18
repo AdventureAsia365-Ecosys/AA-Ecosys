@@ -9,6 +9,8 @@ name: Docs sync
 #   s3://<bronze>/docs-reader/pages/...      aws s3 sync (new and changed pages first)
 #   s3://<bronze>/docs-reader/assets/...     aws s3 sync, one pass per image type (AA-697 rule 9: checked SVG diagrams;
 #                                            AA-1064 rule 10: PNG / WebP screenshots a published page links, <= 300 KB)
+#   s3://<bronze>/docs-reader/search/index.sqlite aws s3 cp (AA-1133 rule 12: the FTS5 search index of the published
+#                                            sections; the manifest names its sha256, the CIS API checks it)
 #   s3://<bronze>/docs-reader/catalogue.json aws s3 cp (AA-1106: the product catalogue bundle of
 #                                            tools/catalogue/catalogue.py, read by CIS admin Platform > Product map)
 #   s3://<bronze>/docs-reader/manifest.json  aws s3 cp (after pages and assets, so it never lists one not uploaded yet)
@@ -45,6 +47,7 @@ on:
       - "tools/uat/catalogue.json"
       - "docs/**"
       - "tools/docs/build_docs_reader.py"
+      - "tools/docs/docs_search_index.py"
       - "tools/docs/docslib.py"
       - "tools/docs/check_docs_text.py"
       - "tools/docs/check_adr_index.py"
@@ -58,7 +61,9 @@ on:
       - "tools/catalogue/catalogue.py"
       - "tools/uat/catalogue.json"
       - "tools/docs/build_docs_reader.py"
+      - "tools/docs/docs_search_index.py"
       - "tools/docs/test_docs_reader.py"
+      - "tools/docs/test_docs_reader_v2.py"
       - "tools/docs/docslib.py"
       - "tools/docs/check_docs_text.py"
       - "tools/docs/check_adr_index.py"
@@ -92,7 +97,12 @@ jobs:
       HAS_AWS: ${{ secrets.DOCS_SYNC_ROLE_ARN != '' && secrets.DOCS_SYNC_BUCKET != '' }}
       IS_MASTER: ${{ github.ref == 'refs/heads/master' && github.event_name != 'pull_request' }}
     steps:
+      # AA-1133 rule 11: the whole history (without file contents: blob:none keeps it fast), so each page's
+      # last_changed is its own last commit, not the one shallow commit every file would share.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          filter: blob:none
 
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
@@ -119,10 +129,14 @@ jobs:
           key: ${{ steps.pip-cache.outputs.cache-primary-key }}
 
       - name: Unit tests of the bundle builder
-        run: python -m unittest tools/docs/test_docs_reader.py
+        run: python -m unittest tools/docs/test_docs_reader.py tools/docs/test_docs_reader_v2.py
 
       - name: Build the reader bundle (redaction guard included)
-        run: python tools/docs/build_docs_reader.py --out "$OUT" --sha "$GITHUB_SHA" --ref "$GITHUB_REF_NAME"
+        env:
+          VISIBILITY: ${{ github.event.repository.visibility }}
+        run: >-
+          python tools/docs/build_docs_reader.py --out "$OUT" --sha "$GITHUB_SHA" --ref "$GITHUB_REF_NAME"
+          --github-repo "$GITHUB_REPOSITORY" --visibility "$VISIBILITY"
 
       # AA-1106: the product catalogue bundle. The guard runs first: a failing catalogue publishes no new
       # catalogue.json (CIS keeps serving the last one) but never blocks the docs pages.
@@ -140,6 +154,7 @@ jobs:
           print("### Docs reader bundle")
           print(f"- {c['published']} pages published ({c['owner_only']} owner only), {c['skipped']} not published")
           print(f"- {sum(p['redactions'] for p in m['pages'])} values redacted")
+          print(f"- {c.get('search_sections', 0)} search sections; {c.get('nav_derived', 0)} pages without `nav` (group derived from the folder)")
           print(f"- {c.get('assets', 0)} image assets ({c.get('screenshots', 0)} screenshots, rule 10; the rest SVG, rule 9)")
           print(f"- source `{m['source']['sha'][:12]}`")
           PY
@@ -182,6 +197,8 @@ jobs:
           else
             echo "::warning title=Docs sync::the product catalogue did not build (see the step log); catalogue.json not updated"
           fi
+          # AA-1133 rule 12: before the manifest that names its sha256 (the API refuses an index whose hash differs).
+          aws s3 cp "$OUT/search/index.sqlite" "$dest/search/index.sqlite" --only-show-errors --content-type "application/vnd.sqlite3"
           aws s3 cp "$OUT/manifest.json" "$dest/manifest.json" --only-show-errors --content-type "application/json"
           aws s3 sync "$src_pages" "$dest_pages" --only-show-errors --delete --content-type "text/markdown; charset=utf-8"
           aws s3 sync "$src_assets" "$dest_assets" --only-show-errors --delete --exclude "*" --include "*.svg" --content-type "image/svg+xml"

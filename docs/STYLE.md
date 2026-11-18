@@ -40,7 +40,10 @@ front-matter schema is [`templates/frontmatter.schema.json`](templates/frontmatt
 - Every catalog page starts with the front-matter defined by the schema. Required: `id`, `title`, `type`, `status`,
   `owner`, `last_reviewed`. Optional: `description` (recommended), `audience`, `applies_to`, `review_every_days`
   (default 90), `last_tested`, `tested_where`, `tested_evidence`, `generated`, `generator`, `superseded_by`, `related`,
-  and `lang` / `translation_of` for translations ([Language](#language)).
+  `lang` / `translation_of` for translations ([Language](#language)), and for the `/admin/docs` reader (AA-1133):
+  `nav` (sidebar group: `start`, `guides`, `operations`, `architecture`, `reference`, `legal-security`; derived from
+  the folder when absent), `nav_order` (0-999, lower first) and `known_issue` (a short banner text while the page has
+  known errors; the PR that fixes the page removes it).
   PRDs (`docs/product/`) add `linear`, `adrs`, `contracts`, `erd` and `migrations` ([PRD rules](product/README.md)).
 - Not used on journals (`docs/sessions/`, `docs/audits/`, `docs/implementation-notes/`, `docs/backlog/`,
   `docs/research/`, `skill/aa-lessons/lessons.md`) or on ADRs (ADRs keep their `Status` bullet).
