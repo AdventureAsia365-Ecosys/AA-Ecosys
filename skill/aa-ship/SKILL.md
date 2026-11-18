@@ -73,7 +73,15 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 - [ ] PR frontend → `npm run build` đầy đủ local (Node 22 qua nvm), rồi `aa-ui-verify`.
 - [ ] PR xoá bảng/dữ liệu → quy trình DRY RUN (`aa-cis-schema/references/destructive-ops.md`).
 - [ ] **Docs:** "Docs impact" của issue làm trong cùng PR (CONTEXT.md / ADR / runbook / contract / trang catalog
-  `docs/README.md`), hoặc ghi "N/A". Trang catalog theo `docs/STYLE.md`; chỉ bump `last_reviewed` khi đã kiểm với hệ thật.
+  `docs/README.md`), hoặc ghi "N/A". Trang catalog theo `docs/STYLE.md`; chỉ bump `last_reviewed` khi đã kiểm với hệ thật,
+  kèm dòng `Verified: <đã kiểm gì với code/live nào>` trong thân PR (docs lint cảnh báo khi thiếu, AA-1132 A5).
+  Trước khi mở PR (mọi repo), trong worktree của PR: `python3 /home/nghiep/projects/AA-Ecosys/tools/docs/doc_impact.py
+  check --repo <Repo> --base origin/main` (chạy chỗ khác thì thêm `--repo-dir <worktree>`; repo gốc: `origin/master`;
+  bản đồ `docs/catalogue/doc-map.yaml`). Trang OPEN cùng repo → sửa
+  trong PR này; trang repo gốc → root PR riêng (link vào thân PR) hoặc ghi lý do. Thân PR có một dòng
+  `Docs-impact: <link root PR> | updated-here | none: <lý do>` (check Docs impact chỉ cảnh báo, không chặn merge).
+  Sự thật sinh tự động (khối `<!-- gen:... -->`: account, route LLM, service ECS, migration mới nhất, phiên bản app, job
+  kind, required checks, số ngày backup) không sửa tay: `python3 tools/docs/gen_sections.py --write` ở repo gốc.
 - [ ] **Changelog:** PR `feat`/`fix` người dùng thấy → tiêu đề PR đọc được như một dòng CHANGELOG (release-please lấy từ đây).
 - [ ] **LLM:** đổi prompt/model/route → điền mục "LLM change" của mẫu PR CIS (id prompt trong sổ đăng ký
   `docs/llm/prompt-register.md`, loại eval); eval chạy tay theo runbook CIS `docs/llm/eval-runbook.md` (R2 trên golden

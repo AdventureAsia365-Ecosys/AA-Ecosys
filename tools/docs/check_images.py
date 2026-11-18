@@ -15,14 +15,22 @@ For every Markdown image ``![alt](src)`` on a tracked docs/**/*.md page outside 
 The checks are the builder's functions, so the lint and the published bundle cannot drift apart. Needs PyYAML (the
 builder imports it): tools/docs/requirements.txt. Add `docs-lint: ignore` to a line to skip it.
 
+New audit images (AA-1132 A9, --new-audit-images --base REF): audit folders are never published, so no page check
+reaches their screenshots, and 3,000+ PNG evidence files had grown to ~39 MB of git history. An image file ADDED under
+docs/audits/ since REF (`git diff --diff-filter=A REF HEAD`) must be a WebP or a PNG (a JPEG / GIF / BMP / TIFF:
+convert it to WebP) and at most MAX_RASTER_BYTES (300 KB, the reader's screenshot cap). Files already in git are never
+re-checked. SVG diagrams are text and are not checked here.
+
 Usage:
   python tools/docs/check_images.py                 # every page in scope
   python tools/docs/check_images.py docs/guides/x.md ...
+  python tools/docs/check_images.py --new-audit-images --base origin/master
 """
 
 from __future__ import annotations
 
 import argparse
+import subprocess
 import sys
 from pathlib import Path
 
@@ -30,6 +38,9 @@ import build_docs_reader as b
 from docslib import IGNORE_MARKER, REPO_ROOT, Finding, emit, list_markdown
 
 TITLE = "Docs image"
+AUDIT_PREFIX = "docs/audits/"
+AUDIT_ALLOWED = (".webp", ".png")
+AUDIT_REFUSED = (".jpg", ".jpeg", ".gif", ".bmp", ".tif", ".tiff", ".heic", ".avif")
 
 
 def check_page(root: Path, relpath: str) -> list[Finding]:
@@ -87,12 +98,59 @@ def check_page(root: Path, relpath: str) -> list[Finding]:
     return findings
 
 
+def added_files(root: Path, base: str) -> list[str]:
+    out = subprocess.run(["git", "-C", str(root), "diff", "--name-only", "--no-renames", "--diff-filter=A", base, "HEAD",
+                          "--", AUDIT_PREFIX], check=True, capture_output=True, text=True).stdout
+    return [line for line in out.splitlines() if line.strip()]
+
+
+def check_audit_images(root: Path, files: list[str]) -> list[Finding]:
+    """A9: the new image files under docs/audits/: WebP or PNG, at most MAX_RASTER_BYTES."""
+    findings: list[Finding] = []
+    cap = b.MAX_RASTER_BYTES
+    for relpath in files:
+        if not relpath.startswith(AUDIT_PREFIX):
+            continue
+        suffix = Path(relpath).suffix.lower()
+        if suffix in AUDIT_REFUSED:
+            findings.append(Finding(relpath, 1, TITLE, f"new audit image is {suffix}: convert it to WebP "
+                                                       f"(cwebp -q 80, or Pillow) and keep it under {cap // 1024} KB"))
+            continue
+        if suffix not in AUDIT_ALLOWED:
+            continue
+        path = root / relpath
+        if not path.is_file():
+            continue
+        size = path.stat().st_size
+        if size > cap:
+            hint = "convert it to WebP" if suffix == ".png" else "lower the quality or crop it"
+            findings.append(Finding(relpath, 1, TITLE, f"new audit image is {size // 1024} KB, over the {cap // 1024} KB "
+                                                       f"cap: {hint} (git history keeps every byte forever)"))
+    return findings
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("files", nargs="*", help="repo-relative pages (default: every docs page in scope)")
     parser.add_argument("--root", type=Path, default=REPO_ROOT)
+    parser.add_argument("--new-audit-images", action="store_true",
+                        help="check the image files added under docs/audits/ since --base instead of the pages")
+    parser.add_argument("--base", help="git ref the change is compared with (--new-audit-images)")
     args = parser.parse_args(argv)
     root = args.root.resolve()
+    if args.new_audit_images:
+        if not args.base:
+            parser.error("--new-audit-images needs --base")
+        try:
+            added = args.files or added_files(root, args.base)
+        except (OSError, subprocess.CalledProcessError) as exc:
+            print(f"::error title={TITLE}::git diff against {args.base} failed: {exc}")
+            return 1
+        findings = check_audit_images(root, added)
+        emit(findings, "error")
+        print(f"audit images: {sum(1 for f in added if f.startswith(AUDIT_PREFIX))} new files under {AUDIT_PREFIX}, "
+              f"{len(findings)} errors")
+        return 1 if findings else 0
     files = args.files or list_markdown(b.SCOPE, root)
     files = [f for f in files if f.endswith(".md") and not b.is_never(f)]
     findings = [f for relpath in files for f in check_page(root, relpath)]

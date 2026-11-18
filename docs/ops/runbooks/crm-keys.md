@@ -70,8 +70,8 @@ anomaly alarm uses the standard CloudWatch alarm e-mail).
    aws kms get-key-policy --key-id alias/crm-dev/data --policy-name default --profile aa365-admin --region us-west-1 --query Policy --output text
    ```
 
-   Then run a read-only `terraform plan` of `accounts/aa365` with `-target=aws_kms_key.crm_data` (same for `crm_ingest`,
-   `crm_seal`): "No changes" means the live policy is the reviewed one.
+   Then run a read-only `terraform plan` of `accounts/aa365` with `-target=module.environment.aws_kms_key.crm_data` (same for `crm_ingest`,
+   `crm_seal`; the keys moved into `modules/environment` with AA-1004): "No changes" means the live policy is the reviewed one.
    Rollback: none - read-only.
 
 4. If a key is scheduled for deletion and that was not planned: cancel at once (the window is 30 days, but every
