@@ -66,7 +66,8 @@ Publication rule (v1; docs/README.md "Docs reader" and docs/engineering-handbook
      CHANGES_PATH (id CHANGES_ID, staff tier, nav "reference", generated): the newest CHANGES_MAX commits that touched a
      published hand-written page (front-matter ``generated`` pages such as the ERDs are left out), grouped by week,
      each with its date, cleaned subject, PR number and links to the staff-tier English pages it changed (an
-     owner-tier page is counted, never named). It is written only when the history is known (a full git checkout), is
+     owner-tier page is counted, never named). A commit that changed only owner-tier pages shows its date and that
+     count alone: no subject, PR number or SHA. It is written only when the history is known (a full git checkout), is
      left out of the search index, and its entry has ``history`` [].
 
 Output layout (OUT_DIR, default _site/docs-reader):
@@ -789,10 +790,7 @@ def changes_page(commits: list[dict], pages: list[Page]) -> Page | None:
         if _week_of(c["date"]) != week:
             week = _week_of(c["date"])
             lines += ["", f"## Week of {week}", ""]
-        pr = f" · PR #{c['pr']}" if c["pr"] else ""
-        subject = c["subject"] or "(no subject)"
-        lines.append(f"- **{c['date'][:10]}** · {subject}{pr} · `{c['sha'][:8]}`")
-        shown, restricted = set(), 0
+        shown, links, restricted = set(), [], 0
         for path in c["paths"]:
             page = by_path.get(path)
             if page is None:
@@ -807,9 +805,19 @@ def changes_page(commits: list[dict], pages: list[Page]) -> Page | None:
             shown.add(page.path)
             link = posixpath.relpath(page.path, posixpath.dirname(CHANGES_PATH))
             title, _ = redact(str(page.meta.get("title", page.path)))
-            lines.append(f"  - [{title.replace(']', ')')}]({link})")
+            links.append(f"  - [{title.replace(']', ')')}]({link})")
+        pages_word = f"page{'s' if restricted != 1 else ''}"
+        if not links and restricted:
+            # Only owner-tier pages changed: the subject, PR number and SHA would describe an owner page to every
+            # staff reader (advisory 6.1 item 12), so the line says only that such a change happened.
+            lines.append(f"- **{c['date'][:10]}** · A change to {restricted} {pages_word} with restricted access")
+            continue
+        pr = f" · PR #{c['pr']}" if c["pr"] else ""
+        subject = c["subject"] or "(no subject)"
+        lines.append(f"- **{c['date'][:10]}** · {subject}{pr} · `{c['sha'][:8]}`")
+        lines += links
         if restricted:
-            lines.append(f"  - {restricted} page{'s' if restricted != 1 else ''} with restricted access")
+            lines.append(f"  - {restricted} {pages_word} with restricted access")
     body = "\n".join(lines) + "\n"
     meta = {"id": CHANGES_ID, "title": CHANGES_TITLE, "type": "reference", "status": "active", "owner": "tech-lead",
             "audience": ["staff", "engineer", "agent"], "last_reviewed": commits[0]["date"][:10], "generated": True,

@@ -136,6 +136,20 @@ class HistoryBuild(unittest.TestCase):
         self.assertIn("PR #2", body)
         self.assertEqual(m["counts"]["changes_commits"], 2)
 
+    def test_changes_page_hides_the_subject_of_an_owner_only_commit(self):
+        self.seed()
+        self.write("docs/legal/quiet-cove.md", _page("SEC-91", "Quiet cove policy", body="Third.\n"))
+        sha = self.commit("docs: lantern vault rotation report (#4)")
+        m = self.build()
+        body = (self.out / self.entry(m, b.CHANGES_PATH)["key"]).read_text(encoding="utf-8")
+        self.assertNotIn("lantern vault", body.lower())
+        self.assertNotIn("PR #4", body)
+        self.assertNotIn(sha[:8], body)
+        self.assertIn("A change to 1 page with restricted access", body)
+        self.assertNotIn("Quiet cove", body)
+        self.assertIn("harbour and cove notes", body)     # a mixed commit keeps its subject and staff link
+        self.assertEqual(m["counts"]["changes_commits"], 3)
+
     def test_changes_page_is_not_searchable(self):
         self.seed()
         m = self.build()
