@@ -996,7 +996,9 @@ def queue_summary(
             for e in sorted(entries, key=lambda e: e["left"] or b + timedelta(days=1), reverse=True)
             if e["outcome"] == "queued" or (e["left"] and e["left"] >= a)
         ][: cfg["list_cap"]],
-        "flaky_entries": [entry_row(e) for e in sorted(flaky, key=lambda e: e["left"], reverse=True)][: cfg["list_cap"]],
+        "flaky_entries": [entry_row(e) for e in sorted(flaky, key=lambda e: e["left"], reverse=True)][
+            : cfg["list_cap"]
+        ],
     }
 
 
