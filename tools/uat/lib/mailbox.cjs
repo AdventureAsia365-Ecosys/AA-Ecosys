@@ -237,4 +237,5 @@ function waitForInviteLink({ recipient, prefix = 'inbound/', before = new Set(),
   return waitForMail({ recipient, prefix, before, since, timeoutMs, extract: extractInviteLink, what: 'invitation link' });
 }
 
-module.exports = { baseline, waitForCode, waitForInviteLink, extractCode, extractInviteLink, isAddressedTo, textBodies, parseHeaders, awsErrorCode };
+module.exports = { baseline, waitForCode, waitForInviteLink, waitForMail, extractCode, extractInviteLink, isAddressedTo, textBodies,
+  parseHeaders, splitHeadBody, awsErrorCode };

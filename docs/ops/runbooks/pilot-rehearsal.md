@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [aa-cis-api, aa-crm-dev-api, aa-crm-dev-web, aa-booking-dev-api, tripplanner, ecosystem]
-last_reviewed: 2026-11-14
+last_reviewed: 2026-11-18
 review_every_days: 90
 related: [OPS-12-pilot-onboarding, OPS-03-pilot-tenant, OPS-05-ecs-exec, AA-1086, AA-1093, AA-1079, AA-1082, docs/adr/0006a-identity-phase1-amendments.md, docs/adr/0019-b2b-only-ecosystem-model.md]
 ---
@@ -177,7 +177,7 @@ orchestrator does it in the UI or through the API, no spec; **gap** = it cannot 
 | 4b. Publish the blog to WordPress (with a link to `/pilot-rehearsal-01/plan?tour=<X>`), take it down, publish again; post and remove on the Facebook test Page | Agency owner | Studio `/portal/account/integrations`, `/portal/content/publish` (`POST /v1/publish-log/<piece-id>/publish`, put-back, move-to-draft) | None committed (the S276 drill used API calls) | Live post with the AI mark; publishing again makes no duplicate; Facebook post and removal both logged in the publish log | manual (G4) |
 | 5. Open the agency's planner, search "Laos", add tour X, reorder at 390 px, chat three turns | Traveller | `tripplanner.lumiguides.it.com/pilot-rehearsal-01/plan` | Live UAT scenarios (root `tools/uat`, identity `traveller`, no sign-in): `REH-05` (theme, search, tour X, three chat turns; paid, `dryrun.cjs --record REH-05 --allow-paid`) and `REH-05.m` (390 px reorder, `--include-writable`); env `UAT_REH_TOUR_X`. Mocked specs: AA-TripPlanner-Web `e2e/visual/planner.spec.ts`, `visual.spec.ts` | Tenant colours; the list holds only the tenant's adopted tours (needs this wave's TripPlanner change: the AA catalogue keyed on the AA-hosted tenant, not on `kind` demo); search by embedding; `shared.llm_call_log` rows carry the tenant id | UAT scenarios (G5 partly closed); ledger read manual (G13) |
 | 6. Send to the agency (consent ticked), click twice | Traveller, then agency owner | TripPlanner `POST /trip/<trip-id>/send-to-advisor`; CRM `/pipeline` | Traveller half: UAT scenario `REH-06` (one hand-off; the repeat is answered `already_sent`). The CRM read is the CRM group's scenario | 200 once; one lead in the CRM pipeline within about a minute (`crm_tp_lead_pull`); not visible to the audit tenants; the TripPlanner outbox row redacted (`tripplanner.outbox.redacted_at`); one hand-off for the double click | traveller half UAT; CRM read manual (G5) |
-| 6b. The other lead channels: webhook and e-mail | Orchestrator | Tenant 360 lead route (`PUT /admin/tenants/<tenant-id>/tripplanner-site/lead-route`), only for a tenant without the CRM add-on | None | Signature valid; Reply-To is the traveller | gap (G14) |
+| 6b. The other lead channels: webhook and e-mail | Orchestrator | Tenant 360 lead route (`PUT /admin/tenants/<tenant-id>/tripplanner-site/lead-route`), only for a tenant without the CRM add-on | root `tools/uat/tp-lead-proof.cjs lead --channel webhook` (or `email`) (see [X4](#x4-lead-channels-and-the-ai-sessions-quota-aa-1116)) | Signature valid; Reply-To is the traveller; the agency's name is the sender's display name; `lead_delivered` logged | script (G14 closed, AA-1116) |
 | 7. Quote: an AA line for tour X, own services, inclusions and exclusions; a discount above the limit | Agency owner / agent | CRM `/pipeline/<trip-id>`, proposal builder | AA-Partner `e2e/tests/aa-lines.spec.ts`, `proposal-builder.spec.ts` (`e2e/playwright.config.ts`, `E2ECRM=1`, `E2ECRMCLIENT`, `E2ECRMPARTNER`, `E2ECRMFORMKEY`, `E2ECRMEMAIL`, `E2ECRMPASSWORD`, `E2ECRMTOTP`, `E2ECRMAATOUR`), on the CRM E2E agencies today | The AA price equals the Booking quote for the agency's tier; the discount opens an approval task for the owner | automated on the CRM E2E agencies (G1); discount manual (G15) |
 | 8. The client accepts, pays the deposit ("I've paid"), AA confirms | Traveller; agency owner; A10e staff | `go-dev.lumiguides.it.com/c/p`; CRM `/aa-bookings`; Booking B2B desk | AA-Partner `client-proposal.spec.ts`, `lifecycle-thin.spec.ts` (same env); AA-Booking `frontend/e2e/e2e-writers/writes.spec.ts` test 1, project `e2e-writers` (`BOOKING_E2E_WRITERS=1`, `BOOKING_E2E_FIXTURES`, `SYNTHETIC_SUPPLIER_BOOKING`); reads: project `signed-in` (`departure-board.spec.ts`, `agency-ops.spec.ts`) | Trip booked; a B2B case; seats +N on the departure; manifest matches; CRM `/aa-bookings` shows confirmed. VNPay runs as the stub only | automated (G1 for this tenant) |
 | 9. Supplier booking, confirmation, voucher, purchase order, supplier bill | A10e staff | Booking `/cases/<code>`, `/finance` | `writes.spec.ts` test 1 (request and confirm) | Voucher without client name or price and with the right end date; a cost line against the revenue in USD | supplier booking automated; voucher, PO, bill gap (G6) |
@@ -264,6 +264,51 @@ Proven live on 2026-11-13 on the CRM's E2E agency (evidence in the S279 session 
 
 Status: automated on the CRM E2E agency. On `pilot-rehearsal-01` it needs G1 and G11 (the spec accepts the CRM E2E
 agency only).
+
+### X4: lead channels and the AI sessions quota (AA-1116)
+
+One script, `tools/uat/tp-lead-proof.cjs` (unit tests `tools/uat/tests/tp-lead-proof.test.cjs`), proves on the real
+planner of a synthetic agency that a lead reaches the agency on each channel and that the plan's AI sessions quota
+stops a new session. It costs 0 USD: the guest trip is one free day (`add_day`), search and narration are blocked, the
+lead mode never calls the chat, and the quota check runs with the quota at 0 (no model call). Headless by default
+(`UAT_HEADED=1` for a headed take); every run writes a JSON result under `tools/uat/work/` and prints PASS or FAIL.
+The agency name passed with `--agency` must be the planner's exact name and carry E2E, Test, Synthetic or Rehearsal
+(`pilot_guard` otherwise).
+
+1. **CRM channel** (a tenant with `crm.core` and `tp.hosted`, for example `pilot-rehearsal-01` or the S283 test
+   agency): `node tools/uat/tp-lead-proof.cjs lead --channel crm --slug <slug> --tenant <tenant-id> --agency "<name>"`.
+   PASS = the send answered 200 with channel `crm` and TripPlanner logged `lead_delivered` (channel crm) for the
+   tenant: the CRM pulled and stored it (`crm_tp_lead_pull` acknowledged it). The CRM pipeline read stays the CRM
+   group's scenario (`REH-06-lead`).
+2. **Webhook channel** (a TripPlanner-only synthetic tenant, provisioned with `tripplanner.hosted` and no CRM add-on):
+   1. Expose a local port on a public https URL at no cost, for example a Cloudflare quick tunnel (no account):
+      `cloudflared tunnel --url http://127.0.0.1:8787` (prints a `https://<random>.trycloudflare.com` URL; nothing
+      listens yet, which is fine: nothing posts before the send).
+   2. Administrator: set the lead route to that URL (`PUT /admin/tenants/<tenant-id>/tripplanner-site/lead-route`,
+      `{"lead_channel": "webhook", "lead_webhook_url": "<url>"}`; CIS checks it is a public https host).
+   3. `node tools/uat/tp-lead-proof.cjs lead --channel webhook --slug <slug> --tenant <tenant-id> --agency "<name>"
+      --webhook-port 8787`: it reads the master secret `tripplanner/dev/lead-webhook-key` in memory only, listens on
+      127.0.0.1:8787, then opens the planner and sends.
+
+   PASS = the POST carried a valid `X-AA-Signature` (tenant key, timestamp
+   within 5 minutes), `X-AA-Contract: lead.submitted.v1`, the `Idempotency-Key` of the body, this run's lead id and
+   traveller; the listener answered 200 and TripPlanner logged `lead_delivered` (channel webhook). Stop the tunnel and
+   set the route back (`none`) afterwards.
+3. **E-mail channel** (same TripPlanner-only tenant): Administrator sets the route to the shared E2E mailbox address
+   (`{"lead_channel": "email", "lead_email": "e2e@e2e-mail.lumiguides.it.com"}`; SES receives only the recipients
+   listed in AA-CIS-Infra `accounts/aa365/e2e_mailbox.tf`, and this one lands under `inbound/`), then `node
+   tools/uat/tp-lead-proof.cjs lead --channel email --slug <slug> --tenant <tenant-id> --agency "<name>" --lead-email
+   e2e@e2e-mail.lumiguides.it.com`. PASS = the mail in the E2E mailbox (`inbound/`) is to that address,
+   Reply-To the invented traveller, its sender's display name is the agency's name (AA-TripPlanner-Web
+   `leads.sender_address`), its text carries the lead id; and `lead_delivered` (channel email) is logged.
+4. **AI sessions quota** (any synthetic agency with a TripPlanner plan): Administrator sets the override
+   `tp.ai_sessions` = 0 with a reason and an expiry (`PUT /admin/tenants/<tenant-id>/entitlement-overrides/tp.ai_sessions`,
+   `{"limit_value": 0, ...}`) and reads it back (`GET /admin/tenants/<tenant-id>/subscription`: the override is listed
+   with limit 0); wait 30 s (the planner caches the quota per container). Then `node tools/uat/tp-lead-proof.cjs
+   sessions-cap --slug <slug> --tenant <tenant-id> --agency "<name>" --quota-zero`. PASS = the chat turn of a new
+   session answered `paused` / `budget` and TripPlanner logged `tenant_ai_sessions_stop` with reason
+   `tenant_sessions_cap` for the tenant (and, the first time in the month, the agency notice `ai.allowance_used`, shown
+   in the studio bell). Remove the override afterwards.
 
 ## LLM spend cap
 
@@ -359,6 +404,6 @@ Each gap below is a step that needs a new spec, script or rule. G2, G2a, G9, G12
 | G8 | 12 | AA-CIS-App (+ ADR 0006a amendment), AA-TripPlanner-Web, AA-Partner | One opt-in script or spec for X1: either an A10b amendment for the `ai.budget_usd_monthly` override on synthetic tenants, or an administrator's step (see [Identities](#identities)), then the three refusals read back from both ledgers. Until then X1 items 2-3 (studio and planner refusals) are hand steps in the override window, and step 12 does not PASS on the CRM probe alone |
 | G10 | 2 | AA-CIS-Infra, AA-Partner | Only if G1 is not taken: an owner recipient in `studio_invitees` and a phase 2 owner mode that stores the new password and authenticator secret in Secrets Manager |
 | G11 | X3 | AA-Partner | Let `aa-cancel.spec.ts` accept a seeder run for another synthetic agency (today it requires the CRM E2E agency) |
-| G14 | 6b | AA-TripPlanner-Web | A script that sends one lead through the webhook and the e-mail channel of a tenant without the CRM add-on and checks the signature and Reply-To |
+| G14 | 6b | root `tools/uat` | **Closed (AA-1116, S284)**: `tools/uat/tp-lead-proof.cjs` (see [X4](#x4-lead-channels-and-the-ai-sessions-quota-aa-1116)) sends one lead through the webhook, e-mail or CRM channel and checks the signature, Reply-To and sender name, and stops a new AI session at a quota of 0 |
 | G15 | 7 | AA-Partner | A test that a discount above the agent's limit opens the owner's approval task |
 | - | X2 | AA-Partner, all | The CRM handler for `tour.discontinued`: AA-1093 |
