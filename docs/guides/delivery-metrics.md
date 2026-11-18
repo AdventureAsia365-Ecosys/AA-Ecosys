@@ -139,6 +139,7 @@ merge_group runs on the queue's temporary branches.
 | Flaky rate | Entries with a flaky signal / entries that merged or were ejected (settings `cis.delivery.queue_flaky_*`). Signals: a merge_group run whose newest attempt passed after an earlier attempt failed, or an ejection on red checks followed by a merge with no new commit | Quarantine or fix the check; never re-queue silently |
 | merge_group CI | Minutes (per job, every attempt), runs, failure rate, p95 and re-runs of the queue's runs | Every ejection costs a full round of these minutes |
 | Throughput | Entries that left the queue per day, by outcome | - |
+| Recent entries | The newest entries of the chosen range, at most 30 (`list_cap`): the entries that left the queue inside it, and the ones still queued that entered before its end. Entries after the end of a past range are never listed | - |
 
 ## 8. Git map tab
 
