@@ -143,6 +143,7 @@ tạm của hàng.
 | Tỉ lệ chập chờn | Số lượt có dấu hiệu chập chờn / số lượt được merge hoặc bị loại (thiết lập `cis.delivery.queue_flaky_*`). Dấu hiệu: một lượt merge_group mà lần thử mới nhất đạt sau khi lần thử trước đó lỗi, hoặc bị loại vì check đỏ rồi được merge mà không có commit mới | Cách ly hoặc sửa check; không bao giờ đưa lại vào hàng cho qua |
 | CI merge_group | Số phút (theo job, mọi lần thử), số lượt chạy, tỉ lệ lỗi, p95 và số lần chạy lại của các lượt chạy trong hàng | Mỗi lần bị loại tốn trọn một vòng số phút này |
 | Lưu lượng | Số lượt rời hàng mỗi ngày, theo kết quả | - |
+| Lượt gần đây | Các lượt mới nhất của khoảng thời gian đã chọn, tối đa 30 (`list_cap`): các lượt rời hàng trong khoảng đó, và các lượt còn trong hàng đã vào trước lúc khoảng đó kết thúc. Lượt sau khi một khoảng đã qua kết thúc không bao giờ được liệt kê | - |
 
 ## 8. Tab bản đồ git
 
