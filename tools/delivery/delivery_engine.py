@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import fnmatch
 import gzip
+import hashlib
 import json
 import math
 import re
@@ -128,11 +129,16 @@ class Store:
         return self.state.setdefault("repos", {}).setdefault(repo, {})
 
     def of(self, kind: str, repo: Optional[str] = None) -> list[dict]:
-        return [
-            e
-            for e in self.events.values()
-            if e["event"] == kind and (repo is None or e["attributes"]["vcs.repository.name"] == repo)
-        ]
+        """The events of one kind (and repo), oldest first: (time, id) order, so every computation sees the same
+        order whether the store was loaded from the cache or rebuilt from the day files (AA-1135 parity)."""
+        return sorted(
+            (
+                e
+                for e in self.events.values()
+                if e["event"] == kind and (repo is None or e["attributes"]["vcs.repository.name"] == repo)
+            ),
+            key=lambda e: (e.get("time") or "", e["id"]),
+        )
 
     def prune(self, keep_from: datetime) -> int:
         cut = iso(keep_from)
@@ -539,7 +545,8 @@ def lead_segments(changes: list[dict], a: datetime, b: datetime) -> list[dict]:
     out = []
     for name, _x, _y in SEGMENTS:
         vals = [s[name] for s in (segments_of(c) for c in lt) if name in s]
-        out.append({"segment": name, "p50_h": percentile(vals, 50), "p90_h": percentile(vals, 90), "n": len(vals)})
+        out.append({"segment": name, "p50_h": percentile(vals, 50), "p90_h": percentile(vals, 90),
+                    "p95_h": percentile(vals, 95), "n": len(vals)})
     return out
 
 
@@ -856,6 +863,45 @@ def entry_row(e: dict) -> dict:
     }
 
 
+def wait_bins(cfg: dict) -> list[float]:
+    """The upper edges (hours) of the merge-queue wait histogram (apps.json queue_wait_bins_h)."""
+    return sorted(float(x) for x in cfg.get("queue_wait_bins_h") or (0.25, 0.5, 1, 2, 4, 8, 24))
+
+
+def wait_histogram(waits: Iterable[Optional[float]], edges: list[float]) -> list[dict]:
+    """Counts of `waits` per bin [lo, hi) of hours; the last bin has no upper edge (hi null)."""
+    lows = [0.0, *edges]
+    rows = [{"lo_h": lo, "hi_h": hi, "n": 0} for lo, hi in zip(lows, [*edges, None], strict=True)]
+    for w in waits:
+        if w is None:
+            continue
+        idx = next((i for i, hi in enumerate(edges) if w < hi), len(edges))
+        rows[idx]["n"] += 1
+    return rows
+
+
+def queue_weekly(done: list[dict], a: datetime, b: datetime) -> list[dict]:
+    """Per ISO week touching [a, b): the entries that left the queue in the window that week, by outcome, and the
+    ejection rate (ejected over merged + ejected; null without either)."""
+    if b <= a:
+        return []
+    out: dict[str, dict] = {}
+    d = week_start(a.date())
+    while d <= (b - timedelta(seconds=1)).date():
+        ws = datetime.combine(d, datetime.min.time(), timezone.utc)
+        out[iso_week(ws)] = {"week": iso_week(ws), "start": d.isoformat(), "merged": 0, "ejected": 0, "removed": 0,
+                             "ejection_rate": None}
+        d += timedelta(weeks=1)
+    for e in done:
+        row = out.get(iso_week(e["left"]))
+        if row is not None and e["outcome"] in ("merged", "ejected", "removed"):
+            row[e["outcome"]] += 1
+    for row in out.values():
+        judged = row["merged"] + row["ejected"]
+        row["ejection_rate"] = round(row["ejected"] / judged, 4) if judged else None
+    return list(out.values())
+
+
 def queue_summary(
     cfg: dict, app: dict, store: Store, runs: list[dict], jobs_by_run: dict, prs: list[dict], a: datetime, b: datetime
 ) -> dict:
@@ -908,6 +954,9 @@ def queue_summary(
     st = store.repo_state(repo)
     return {
         "window": {"start": iso(a), "end": iso(b)},
+        # AA-1135: the wait of each merged entry in bins of hours, and the outcomes and ejection rate per ISO week
+        "wait_histogram": wait_histogram([hours(e["enqueued"], e["left"]) for e in merged], wait_bins(cfg)),
+        "weekly": queue_weekly(done, a, b),
         "complete_since": st.get("runs_complete_since"),
         "entries": len(done),
         "prs": len({e["pr"] for e in done}),
@@ -1129,7 +1178,9 @@ def change_row(c: dict) -> dict:
     }
 
 
-def app_summary(cfg: dict, app: dict, store: Store, now: datetime) -> dict:
+def app_context(cfg: dict, app: dict, store: Store, now: datetime) -> dict:
+    """Everything of one app that does not depend on the window: its runs and jobs, merged pull requests, deploys
+    (grouped, failed and recovered) and changes (lead-time points). Every window of the app is cut from this."""
     repo = app["repo"]
     runs = store.of("cicd.pipeline.run", repo)
     jobs_by_run: dict[Any, list[dict]] = {}
@@ -1145,6 +1196,104 @@ def app_summary(cfg: dict, app: dict, store: Store, now: datetime) -> dict:
     cs = ts(f"{st['runs_complete_since']}T00:00:00Z") if st.get("runs_complete_since") else now
     changes = attach_changes(cfg, app, groups, prs, runs, since=cs)
     recovery(groups)
+    commits = sorted(
+        (c for c in store.of("aa.vcs.commit", repo) if _attr(c, "vcs.ref.head.name") == app["default_branch"]),
+        key=lambda c: (c["time"] or "", c["id"]),
+    )
+    return {"store": store, "runs": runs, "jobs_by_run": jobs_by_run, "prs": prs, "groups": groups,
+            "changes": changes, "cs": cs, "state": st, "commits": commits, "now": now}
+
+
+def _window(ctx: dict, req_a: datetime, b: datetime) -> tuple[datetime, dict]:
+    """The measured start of a window that asks to start at `req_a` (never before the complete history) and its
+    `window` block."""
+    now, cs = ctx["now"], ctx["cs"]
+    a = min(max(req_a, cs), now)
+    return a, {
+        "start": iso(a),
+        "end": iso(b),
+        "days": round((b - req_a).total_seconds() / 86400, 1),
+        "requested_start": iso(req_a),
+        "covered_days": round(max((b - a).total_seconds(), 0.0) / 86400, 1),
+    }
+
+
+def changes_block(cfg: dict, changes: list[dict], a: datetime, b: datetime) -> dict:
+    recent_changes = [c for c in changes if in_range(c["merged"], a, b)]
+    return {
+        "merged": len(recent_changes),
+        "by_kind": {k: sum(1 for c in recent_changes if c["kind"] == k) for k in ("agent", "human", "bot")},
+        "docs_only": sum(1 for c in recent_changes if c["excluded"] == "docs_only"),
+        "awaiting_deploy": sum(1 for c in recent_changes if not c["excluded"] and not c["verified"]),
+        "bot": [
+            change_row(c)
+            for c in sorted(recent_changes, key=lambda c: c["merged"], reverse=True)
+            if c["excluded"] == "bot"
+        ][: cfg["list_cap"]],
+        "slowest": [
+            change_row(c)
+            for c in sorted(
+                (c for c in recent_changes if not c["excluded"] and c["verified"]),
+                key=lambda c: -(hours(c["opened"], c["verified"]) or 0),
+            )
+        ][:10],
+    }
+
+
+def git_range(cfg: dict, app: dict, ctx: dict, a: datetime, b: datetime) -> dict:
+    """AA-1135: the git activity of one window (churn by directory and file, author kinds, merges by prefix) and its
+    commits a day; the Git map tab of a chosen range."""
+    st = ctx["state"]
+    inside = [c for c in ctx["commits"] if in_range(ts(c["time"]), a, b)]
+    per_day = {d.isoformat(): 0 for d in _days(a.date(), (b - timedelta(seconds=1)).date())} if b > a else {}
+    for c in inside:
+        k = (c["time"] or "")[:10]
+        if k in per_day:
+            per_day[k] += 1
+    read = sum(1 for c in inside if _attr(c, "aa.files") is not None)
+    return {
+        **churn_block(cfg, inside, ctx["prs"], app, a, b),
+        "complete_since": st.get("commits_complete_since"),
+        "files_coverage": round(read / len(inside), 4) if inside else None,
+        "daily": [{"date": d, "n": n} for d, n in per_day.items()],
+    }
+
+
+def range_block(cfg: dict, app: dict, ctx: dict, req_a: datetime, b: datetime) -> dict:
+    """AA-1135: every windowed number of one app over [req_a, b) (clipped to the complete history): the same blocks
+    as the 28-day headline, plus the deploys of the window, the merge queue and the git activity. The presets of the
+    summary (`ranges`) and the CIS custom range both come from here."""
+    a, window = _window(ctx, req_a, b)
+    runs, jobs_by_run, groups, changes = ctx["runs"], ctx["jobs_by_run"], ctx["groups"], ctx["changes"]
+    in_win = [g for g in groups if in_range(g["start"], a, b)]
+    return {
+        "window": window,
+        "dora": dora_block(groups, changes, a, b),
+        "lead_time_segments": lead_segments(changes, a, b),
+        "ci": ci_block(cfg, app, runs, jobs_by_run, a, b, ctx["now"]),
+        "merge_queue": queue_block(changes, a, b),
+        "flaky": flaky_block(cfg, runs, jobs_by_run, a, b),
+        "verify": verify_block(groups, a, b),
+        "deploys": [group_row(g) for g in reversed(in_win)][: cfg["list_cap"]],
+        "failed_deploys": [group_row(g) for g in reversed(in_win) if g["failed"]][: cfg["list_cap"]],
+        "changes": changes_block(cfg, changes, a, b),
+        "queue": queue_summary(cfg, app, ctx["store"], runs, jobs_by_run, ctx["prs"], a, b)
+        if app.get("merge_queue")
+        else None,
+        "git": git_range(cfg, app, ctx, req_a, b),
+    }
+
+
+def range_presets(cfg: dict) -> list[int]:
+    return [int(d) for d in cfg.get("range_presets") or (7, 28, 90)]
+
+
+def app_summary(cfg: dict, app: dict, store: Store, now: datetime) -> dict:
+    repo = app["repo"]
+    ctx = app_context(cfg, app, store, now)
+    runs, jobs_by_run, prs, groups, changes, cs = (ctx[k] for k in ("runs", "jobs_by_run", "prs", "groups", "changes",
+                                                                    "cs"))
+    st = ctx["state"]
 
     def clip(x: datetime) -> datetime:
         return min(max(x, cs), now)
@@ -1200,7 +1349,6 @@ def app_summary(cfg: dict, app: dict, store: Store, now: datetime) -> dict:
             }
         )
     in_trend = [g for g in groups if in_range(g["start"], trend_from, now)]
-    recent_changes = [c for c in changes if in_range(c["merged"], a, b)]
     return {
         "id": app["id"],
         "name": app["name"],
@@ -1222,27 +1370,12 @@ def app_summary(cfg: dict, app: dict, store: Store, now: datetime) -> dict:
         "verify": verify_block(groups, a, b),
         "deploys": [group_row(g) for g in reversed(in_trend)][: cfg["list_cap"]],
         "failed_deploys": [group_row(g) for g in reversed(in_trend) if g["failed"]][: cfg["list_cap"]],
-        "changes": {
-            "merged": len(recent_changes),
-            "by_kind": {k: sum(1 for c in recent_changes if c["kind"] == k) for k in ("agent", "human", "bot")},
-            "docs_only": sum(1 for c in recent_changes if c["excluded"] == "docs_only"),
-            "awaiting_deploy": sum(1 for c in recent_changes if not c["excluded"] and not c["verified"]),
-            "bot": [
-                change_row(c)
-                for c in sorted(recent_changes, key=lambda c: c["merged"], reverse=True)
-                if c["excluded"] == "bot"
-            ][: cfg["list_cap"]],
-            "slowest": [
-                change_row(c)
-                for c in sorted(
-                    (c for c in recent_changes if not c["excluded"] and c["verified"]),
-                    key=lambda c: -(hours(c["opened"], c["verified"]) or 0),
-                )
-            ][:10],
-        },
+        "changes": changes_block(cfg, changes, a, b),
         "trend": {"weeks": weeks, "months": months},
         "queue": queue_summary(cfg, app, store, runs, jobs_by_run, prs, a, b) if app.get("merge_queue") else None,
         "git": git_summary(cfg, app, store, prs, now),
+        # AA-1135: the presets of the range picker, each the same blocks over the last N days
+        "ranges": {f"d{n}": range_block(cfg, app, ctx, now - timedelta(days=n), now) for n in range_presets(cfg)},
     }
 
 
@@ -1294,7 +1427,78 @@ def summarize(
             "git_windows": cfg["git_windows"],
             "commit_kinds": list(COMMIT_KINDS),
             "queue_outcomes": ["merged", "ejected", "removed", "queued"],
+            # AA-1135: the range picker's presets, the stored history a custom range may ask for, and this engine
+            "range_presets": range_presets(cfg),
+            "store_days": cfg["store_days"],
+            "store_from": store_start(cfg, now).isoformat(),
+            "engine_sha256": engine_sha256(),
         },
         "collection": collection or {},
         "apps": [app_summary(cfg, app, store, now) for app in cfg["apps"]],
+        # AA-1135: the collection parameters this summary was computed with (apps.json, public); the CIS custom range
+        # recomputes with exactly these
+        "config": cfg,
     }
+
+
+# ── AA-1135: a custom range from the published day files ───────────────────────────────────────────────────────
+
+
+def engine_sha256() -> str:
+    """sha256 of this file: the collector publishes it, the CIS copy compares its own before computing a range."""
+    return hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+
+
+def store_start(cfg: dict, now: datetime) -> date:
+    """The first day the event store keeps (the collector prunes older events at the end of each run)."""
+    return now.date() - timedelta(days=cfg["store_days"])
+
+
+def day_keys(cfg: dict, now: datetime) -> list[str]:
+    """The day files (relative to the delivery prefix) that hold the store of a summary computed at `now`."""
+    return [f"events/{d:%Y/%m/%d}.ndjson" for d in _days(store_start(cfg, now), now.date())]
+
+
+def load_events(files: Iterable[Optional[str]]) -> dict[str, dict]:
+    """The events of the day files (NDJSON text each, None for a missing day), one per id. An event that moved to a
+    later day (a run that finished, a pull request updated) keeps an older copy in its first day's file: the copy
+    with the newest time wins, as in the store."""
+    events: dict[str, dict] = {}
+    for text in files:
+        for line in (text or "").splitlines():
+            if not line.strip():
+                continue
+            e = json.loads(line)
+            if not isinstance(e, dict) or not isinstance(e.get("id"), str) or "attributes" not in e:
+                continue
+            old = events.get(e["id"])
+            if old is None or (e.get("time") or "") >= (old.get("time") or ""):
+                events[e["id"]] = e
+    return events
+
+
+def state_from_summary(summary: dict) -> dict:
+    """The store state a range needs (per repo: from which day the run and commit history is complete), as the
+    summary publishes it."""
+    repos: dict[str, dict] = {}
+    for a in summary.get("apps") or []:
+        git = a.get("git") if isinstance(a.get("git"), dict) else {}
+        repos[a["repo"]] = {"runs_complete_since": a.get("complete_since"),
+                            "commits_complete_since": git.get("complete_since")}
+    return {"repos": repos}
+
+
+def custom_range(summary: dict, events: dict[str, dict], a: datetime, b: datetime) -> dict:
+    """Every app's `range_block` over [a, b) from the published day files, with the config and the time of the
+    summary they belong to: the same numbers a preset of that window gives (tests: the parity test)."""
+    cfg, now = summary["config"], ts(summary["generated_at"])
+    if now is None:
+        raise ValueError("summary without generated_at")
+    store = Store(events, state_from_summary(summary))
+    store.prune(datetime.combine(store_start(cfg, now), datetime.min.time(), timezone.utc))
+    apps = []
+    for app in cfg["apps"]:
+        ctx = app_context(cfg, app, store, now)
+        apps.append({"id": app["id"], "range": range_block(cfg, app, ctx, a, b)})
+    return {"generated_at": summary["generated_at"], "engine_sha256": engine_sha256(), "start": iso(a),
+            "end": iso(b), "apps": apps}

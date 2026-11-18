@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "_comment": "AA-1108 + AA-1125 (merge queue and git activity): the apps the Delivery metrics collector reads (tools/delivery/delivery_metrics.py). Root has no settings registry: the collection parameters live here (follow-up in docs/implementation-notes/AA-1108.md); the colour thresholds are CIS settings (cis.delivery.*).",
+  "_comment": "AA-1108 + AA-1125 (merge queue and git activity) + AA-1135 (range presets, wait histogram bins): the apps the Delivery metrics collector reads (tools/delivery/delivery_metrics.py). Root has no settings registry: the collection parameters live here (follow-up in docs/implementation-notes/AA-1108.md); the colour thresholds are CIS settings (cis.delivery.*).",
   "org": "AdventureAsia365-Ecosys",
   "environment": "dev",
   "headline_days": 28,
@@ -23,6 +23,8 @@
   "queue_actor_prefix": "github-merge-queue",
   "author_kinds": {"agent": ["aa-agent[bot]"], "ci_bot": ["aa-ecosys-ci-bot[bot]"], "dependabot": ["dependabot[bot]"]},
   "release_title": "^chore(\\([^)]*\\))?: release ",
+  "range_presets": [7, 28, 90],
+  "queue_wait_bins_h": [0.25, 0.5, 1, 2, 4, 8, 24],
   "churn_exclude": ["*package-lock.json", "*pnpm-lock.yaml", "*yarn.lock", "*poetry.lock", "*uv.lock"],
   "agent_logins": ["aa-agent[bot]"],
   "deploy_triggers": ["push", "workflow_dispatch", "workflow_run", "repository_dispatch"],

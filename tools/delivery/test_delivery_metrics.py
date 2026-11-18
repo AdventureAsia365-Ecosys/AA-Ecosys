@@ -26,7 +26,9 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
+import delivery_engine as de  # noqa: E402
 import delivery_metrics as dm  # noqa: E402
+import sync_engine  # noqa: E402
 
 FIX = json.loads((HERE / "fixtures" / "demo_github.json").read_text(encoding="utf-8"))
 NOW = dm.ts(FIX["now"])
@@ -413,6 +415,144 @@ class TestMergeQueue(SummaryFixture):
         cfg = copy.deepcopy(self.cfg)
         cfg["apps"][0]["merge_queue"] = False
         self.assertIsNone(dm.summarize(cfg, self.store, NOW)["apps"][0]["queue"])
+
+
+class TestRanges(SummaryFixture):
+    """AA-1135: the presets of the range picker and the custom range from the published day files (the parity)."""
+
+    def test_presets_per_app(self):
+        ranges = self.app["ranges"]
+        self.assertEqual(sorted(ranges), ["d28", "d7", "d90"])
+        self.assertEqual(self.summary["definitions"]["range_presets"], [7, 28, 90])
+        for n in (7, 28, 90):
+            r = ranges[f"d{n}"]
+            self.assertEqual(r["window"]["days"], n)
+            self.assertEqual(r["window"]["end"], FIX["now"])
+            for key in ("dora", "lead_time_segments", "ci", "merge_queue", "flaky", "verify", "deploys",
+                        "failed_deploys", "changes", "queue", "git"):
+                self.assertIn(key, r)
+
+    def test_the_28_day_preset_is_the_headline(self):
+        r = self.app["ranges"]["d28"]
+        for key in ("dora", "lead_time_segments", "ci", "merge_queue", "flaky", "verify", "changes", "queue"):
+            self.assertEqual(r[key], self.app[key], key)
+        self.assertEqual(r["window"]["start"], self.app["window"]["start"])
+
+    def test_a_short_preset_counts_less(self):
+        cfg = demo_config(range_presets=[1, 7])
+        app = dm.summarize(cfg, self.store, NOW)["apps"][0]
+        one, week = app["ranges"]["d1"], app["ranges"]["d7"]
+        self.assertEqual(one["window"]["requested_start"], "2026-03-19T12:00:00Z")
+        self.assertLess(one["dora"]["deployment_frequency"]["attempts"],
+                        week["dora"]["deployment_frequency"]["attempts"])
+        self.assertLessEqual(len(one["deploys"]), len(week["deploys"]))
+        self.assertEqual(len(one["git"]["daily"]), 2)   # noon to noon touches two days
+
+    def test_segments_carry_p95(self):
+        seg = {s["segment"]: s for s in self.app["lead_time_segments"]}
+        self.assertIn("p95_h", seg["to_merge"])
+        self.assertGreaterEqual(seg["to_merge"]["p95_h"], seg["to_merge"]["p50_h"])
+
+    def test_definitions_name_the_engine_and_the_store(self):
+        d = self.summary["definitions"]
+        self.assertEqual(d["engine_sha256"], de.engine_sha256())
+        self.assertEqual(len(d["engine_sha256"]), 64)
+        self.assertEqual(d["store_from"], "2025-12-12")   # 98 days before 2026-03-20
+        self.assertEqual(self.summary["config"]["apps"][0]["repo"], FIX["repo"])
+
+    def published(self) -> tuple[dict, dict]:
+        """The summary and the day files as the workflow uploads them, read back the way CIS reads them."""
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp)
+            days = {(e.get("time") or "")[:10] for e in self.store.events.values()}
+            dm.write_outputs(out, self.summary, self.store.day_files(days))
+            summary = json.loads((out / "summary.json").read_text(encoding="utf-8"))
+            texts = [(out / k).read_text(encoding="utf-8") if (out / k).exists() else None
+                     for k in de.day_keys(summary["config"], NOW)]
+        return summary, de.load_events(texts)
+
+    def test_custom_range_equals_each_preset(self):
+        """The parity test: a custom range over a preset's window gives the preset's numbers exactly."""
+        summary, events = self.published()
+        self.assertEqual(len(events), len(self.store.events))
+        for n in (7, 28, 90):
+            got = de.custom_range(summary, events, NOW - dm.timedelta(days=n), NOW)
+            self.assertEqual(got["engine_sha256"], summary["definitions"]["engine_sha256"])
+            self.assertEqual(got["apps"][0]["id"], "demo")
+            self.assertEqual(json.dumps(got["apps"][0]["range"], sort_keys=True),
+                             json.dumps(summary["apps"][0]["ranges"][f"d{n}"], sort_keys=True), f"d{n}")
+
+    def test_custom_range_of_any_window_equals_the_store(self):
+        summary, events = self.published()
+        a, b = dm.ts("2026-03-16T00:00:00Z"), dm.ts("2026-03-18T00:00:00Z")
+        got = de.custom_range(summary, events, a, b)["apps"][0]["range"]
+        ctx = de.app_context(self.cfg, self.cfg["apps"][0], self.store, NOW)
+        want = de.range_block(self.cfg, self.cfg["apps"][0], ctx, a, b)
+        self.assertEqual(json.dumps(got, sort_keys=True), json.dumps(want, sort_keys=True))
+        self.assertEqual(got["window"]["days"], 2.0)
+
+    def test_an_older_copy_in_an_earlier_day_file_loses(self):
+        e = next(e for e in self.store.events.values() if e["event"] == "cicd.pipeline.run")
+        stale = copy.deepcopy(e)
+        stale["time"] = "2026-03-01T00:00:00Z"
+        stale["attributes"]["cicd.pipeline.result"] = None
+        line = json.dumps(e) + "\n"
+        events = de.load_events([json.dumps(stale) + "\n", None, line, "\n"])
+        self.assertEqual(events[e["id"]], e)
+        events = de.load_events([line, json.dumps(stale) + "\n"])   # order of the files does not matter
+        self.assertEqual(events[e["id"]], e)
+
+    def test_events_before_the_store_are_left_out(self):
+        summary, events = self.published()
+        old = copy.deepcopy(next(e for e in events.values() if e["event"] == "deployment"))
+        old["id"], old["time"] = "demo/deployment/old", "2025-12-01T00:00:00Z"
+        got = de.custom_range(summary, {**events, old["id"]: old}, NOW - dm.timedelta(days=7), NOW)
+        self.assertEqual(json.dumps(got["apps"][0]["range"], sort_keys=True),
+                         json.dumps(summary["apps"][0]["ranges"]["d7"], sort_keys=True))
+
+    def test_store_order_is_deterministic(self):
+        shuffled = dm.Store(dict(reversed(list(self.store.events.items()))), self.store.state)
+        self.assertEqual([e["id"] for e in shuffled.of("cicd.pipeline.run")],
+                         [e["id"] for e in self.store.of("cicd.pipeline.run")])
+
+    def test_day_keys_cover_the_store(self):
+        keys = de.day_keys(self.cfg, NOW)
+        self.assertEqual(keys[0], "events/2025/12/12.ndjson")
+        self.assertEqual(keys[-1], "events/2026/03/20.ndjson")
+        self.assertEqual(len(keys), self.cfg["store_days"] + 1)
+
+    def test_queue_histogram_and_weekly(self):
+        q = self.app["queue"]
+        hist = q["wait_histogram"]
+        self.assertEqual([(h["lo_h"], h["hi_h"]) for h in hist[:2]], [(0.0, 0.25), (0.25, 0.5)])
+        self.assertIsNone(hist[-1]["hi_h"])
+        self.assertEqual(sum(h["n"] for h in hist), q["wait"]["n"])
+        weeks = {w["week"]: w for w in q["weekly"]}
+        self.assertEqual(weeks["2026-W12"], {"week": "2026-W12", "start": "2026-03-16", "merged": 2, "ejected": 1,
+                                             "removed": 0, "ejection_rate": 0.3333})
+
+    def test_sync_engine_writes_and_checks_the_cis_copy(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            cis = Path(tmp)
+            (cis / "api" / "services").mkdir(parents=True)
+            self.assertEqual(sync_engine.main(["--cis", str(cis), "--check"]), 1)
+            self.assertEqual(sync_engine.main(["--cis", str(cis)]), 0)
+            self.assertEqual((cis / sync_engine.COPY).read_bytes(), (HERE / "delivery_engine.py").read_bytes())
+            lock = json.loads((cis / sync_engine.LOCK).read_text(encoding="utf-8"))
+            self.assertEqual(lock["sha256"], de.engine_sha256())
+            self.assertEqual(lock["definitions_version"], de.DEFINITIONS_VERSION)
+            self.assertEqual(sync_engine.main(["--cis", str(cis), "--check"]), 0)
+            (cis / sync_engine.COPY).write_text("# edited\n", encoding="utf-8")
+            self.assertEqual(sync_engine.main(["--cis", str(cis), "--check"]), 1)
+            self.assertEqual(sync_engine.main(["--cis", str(cis / "nope")]), 2)
+
+    def test_histogram_and_weekly_helpers(self):
+        rows = de.wait_histogram([0.1, 0.25, 3.0, 30.0, None], [0.25, 1.0, 24.0])
+        self.assertEqual([r["n"] for r in rows], [1, 1, 1, 1])
+        self.assertEqual(de.queue_weekly([], NOW, NOW), [])
+        weeks = de.queue_weekly([], dm.ts("2026-03-01T00:00:00Z"), dm.ts("2026-03-16T00:00:00Z"))
+        self.assertEqual([w["week"] for w in weeks], ["2026-W09", "2026-W10", "2026-W11"])
+        self.assertTrue(all(w["ejection_rate"] is None for w in weeks))
 
 
 class TestQueueEntries(unittest.TestCase):

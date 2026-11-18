@@ -56,7 +56,6 @@ from __future__ import annotations
 
 import argparse
 import fnmatch
-import hashlib
 import json
 import os
 import re
@@ -128,6 +127,9 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "author_kinds": {"agent": ["aa-agent[bot]"], "ci_bot": [], "dependabot": ["dependabot[bot]"]},
     "release_title": r"^chore(\([^)]*\))?: release ",
     "churn_exclude": [],
+    # AA-1135: the range picker's presets (days) and the upper edges (hours) of the merge-queue wait histogram
+    "range_presets": [7, 28, 90],
+    "queue_wait_bins_h": [0.25, 0.5, 1, 2, 4, 8, 24],
 }
 QUEUE_EVENTS = {
     "added_to_merge_queue": "added",

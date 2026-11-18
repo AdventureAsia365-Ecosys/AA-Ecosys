@@ -15,6 +15,10 @@ name: Delivery metrics
 #   s3://<bronze>/docs-reader/delivery/events/<yyyy>/<mm>/<dd>.ndjson   the raw events of each day it changed
 #   s3://<bronze>/docs-reader/delivery/summary.json                     after the events (CIS reads it, cached 5 min)
 #
+# AA-1135 (S284): the summary also carries per app the range-picker presets (`ranges.d7|d28|d90`), the collector's
+# config and the sha256 of tools/delivery/delivery_engine.py; the CIS API recomputes a custom range from the day files
+# with a byte copy of that engine (tools/delivery/sync_engine.py keeps the copy in step).
+#
 # Raw event files are kept 400 days (apps.json raw_retention_days): this run deletes older day files itself; the
 # bucket expires noncurrent docs-reader/ versions after 7 days (AA-CIS-Infra accounts/aa365/docs_reader.tf).
 #
