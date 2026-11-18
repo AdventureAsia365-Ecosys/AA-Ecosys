@@ -97,7 +97,7 @@ plan_checks() {
   if [ "$docs" = 1 ]; then
     echo docs-unit
     echo frontmatter; echo prd-refs; echo adr-index; echo aws-multiline; echo alarm-runbooks; echo resource-ids
-    echo gen-sections; echo doc-map; echo code-refs; echo audit-images; echo docs-impact
+    echo gen-sections; echo doc-map; echo doc-owners; echo code-refs; echo audit-images; echo docs-impact
     if [ "$md" = 1 ]; then echo markdownlint; fi
     echo lychee
   fi
@@ -288,6 +288,7 @@ run_planned() {
       alarm-runbooks) run_check "$id" "docs-lint.yml: Alarm runbook links" - "$PY" tools/docs/check_alarm_runbooks.py ;;
       gen-sections) run_check "$id" "docs-lint.yml: Generated docs blocks" py-deps "$PY" tools/docs/gen_sections.py --check ;;
       doc-map) run_check "$id" "docs-lint.yml: Doc map" py-deps "$PY" tools/docs/doc_impact.py validate ;;
+      doc-owners) run_check "$id" "docs-lint.yml: Doc owners" py-deps "$PY" tools/docs/docs_freshness.py validate ;;
       code-refs) run_check "$id" "docs-lint.yml: Backtick names" py-deps "$PY" tools/docs/check_code_refs.py --summary --strict-rules tf-address ;;
       audit-images)
         local ibase="$BASE"
@@ -349,7 +350,7 @@ self_test() {
     got=$(printf '%s\n' "$@" | plan_checks "$mode" "$ci" | tr '\n' ' ' | sed 's/ $//')
     if [ "$got" = "$want" ]; then ok "$name"; else bad "$name"; echo "     want: $want"; echo "     got:  $got"; fi
   }
-  local DOCS="docs-unit frontmatter prd-refs adr-index aws-multiline alarm-runbooks resource-ids gen-sections doc-map code-refs audit-images docs-impact"
+  local DOCS="docs-unit frontmatter prd-refs adr-index aws-multiline alarm-runbooks resource-ids gen-sections doc-map doc-owners code-refs audit-images docs-impact"
   local CONTRACTS="contracts-unit adr-unit contracts adr-numbers"
   local ALL="$DOCS markdownlint lychee $CONTRACTS"
   # check selection

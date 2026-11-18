@@ -20,7 +20,8 @@ name: Docs sync
 # ECS deploy. On a pull request the job only builds and checks (no AWS, no secret).
 #
 # AWS: role aa-cis-dev-docs-sync (AA-CIS-Infra accounts/aa365/docs_reader.tf; trusted only by this repo on
-# refs/heads/master; ListBucket + Put/Delete on docs-reader/ only). Repo secrets (secrets, not variables: this repo is
+# refs/heads/master; ListBucket + Put/Delete on docs-reader/, Get on docs-reader/manifest.json only: AA-1132 keeps the
+# replaced manifest as manifest.previous.json). Repo secrets (secrets, not variables: this repo is
 # public for now and a variable is printed in the log): DOCS_SYNC_ROLE_ARN (Terraform output docs_sync_role_arn) and
 # DOCS_SYNC_BUCKET (the bronze bucket name). Until both exist the sync step is skipped with a notice, not failed.
 #
@@ -54,6 +55,9 @@ on:
       - "tools/docs/requirements.txt"
       - "tools/docs/check_learn.py"
       - "tools/docs/build_learn_bundle.py"
+      - "tools/docs/docs_freshness.py"
+      - "tools/docs/doc_impact.py"
+      - "tools/docs/repo_facts.py"
       - ".github/workflows/docs-sync.yml"
   pull_request:
     branches: [master]
@@ -72,6 +76,12 @@ on:
       - "tools/docs/check_learn.py"
       - "tools/docs/build_learn_bundle.py"
       - "tools/docs/test_learn_bundle.py"
+      - "tools/docs/docs_freshness.py"
+      - "tools/docs/test_docs_freshness.py"
+      - "tools/docs/doc_impact.py"
+      - "tools/docs/repo_facts.py"
+      - "docs/catalogue/doc-map.yaml"
+      - "docs/catalogue/doc-owners.yaml"
       - "docs/learn/**"
       - ".github/workflows/docs-sync.yml"
   workflow_dispatch:
@@ -131,14 +141,25 @@ jobs:
           key: ${{ steps.pip-cache.outputs.cache-primary-key }}
 
       - name: Unit tests of the bundle builder
-        run: python -m unittest tools/docs/test_docs_reader.py tools/docs/test_docs_reader_v2.py tools/docs/test_docs_history.py
+        run: python -m unittest tools/docs/test_docs_reader.py tools/docs/test_docs_reader_v2.py tools/docs/test_docs_history.py tools/docs/test_docs_freshness.py
+
+      # AA-1132 A5 (rule 15): the history of the five other repos, so each page's needs_review sees the code its
+      # doc-map entries watch. Bare, blobless clones of public repos (commits and trees only, a few MB, seconds); no
+      # credentials. A failed clone only leaves that repo out (the manifest lists it under repos_not_checked).
+      - name: History of the app and Infra repos (needs_review)
+        run: |
+          mkdir -p _deps
+          for repo in AA-CIS-App AA-Booking AA-Partner AA-TripPlanner-Web AA-CIS-Infra; do
+            git clone --bare --filter=blob:none --quiet "https://github.com/AdventureAsia365-Ecosys/${repo}.git" "_deps/${repo}" \
+              || echo "::warning title=Docs freshness::could not clone ${repo}; its pages are not checked"
+          done
 
       - name: Build the reader bundle (redaction guard included)
         env:
           VISIBILITY: ${{ github.event.repository.visibility }}
         run: >-
           python tools/docs/build_docs_reader.py --out "$OUT" --sha "$GITHUB_SHA" --ref "$GITHUB_REF_NAME"
-          --github-repo "$GITHUB_REPOSITORY" --visibility "$VISIBILITY"
+          --github-repo "$GITHUB_REPOSITORY" --visibility "$VISIBILITY" --deps-root _deps
 
       # AA-1106: the product catalogue bundle. The guard runs first: a failing catalogue publishes no new
       # catalogue.json (CIS keeps serving the last one) but never blocks the docs pages.
@@ -159,6 +180,13 @@ jobs:
           print(f"- {c.get('search_sections', 0)} search sections; {c.get('nav_derived', 0)} pages without `nav` (group derived from the folder)")
           print(f"- {c.get('with_history', 0)} pages with history; {c.get('changes_commits', 0)} commits on the \"What changed in docs\" page")
           print(f"- {c.get('assets', 0)} image assets ({c.get('screenshots', 0)} screenshots, rule 10; the rest SVG, rule 9)")
+          f = m.get("freshness")
+          if f:
+              print(f"- freshness (rule 15): {c.get('needs_review', 0)} published pages need review; "
+                    f"{f['agent_files_needing_review']} of {f['agent_files']} agent files / CONTEXT.md need review, "
+                    f"{f['agent_files_overdue']} overdue; repos not checked: {', '.join(f['repos_not_checked']) or 'none'}")
+          else:
+              print("- freshness (rule 15): not computed (see the build step)")
           print(f"- source `{m['source']['sha'][:12]}`")
           PY
 
@@ -202,6 +230,15 @@ jobs:
           fi
           # AA-1133 rule 12: before the manifest that names its sha256 (the API refuses an index whose hash differs).
           aws s3 cp "$OUT/search/index.sqlite" "$dest/search/index.sqlite" --only-show-errors --content-type "application/vnd.sqlite3"
+          # AA-1132 (advisory A1 item 5): keep the manifest being replaced as manifest.previous.json, the one-step undo of
+          # a bad publish (copy it back). Needs s3:GetObject on docs-reader/manifest.json (AA-CIS-Infra docs_reader.tf);
+          # before that grant, or on the first publish, the copy is skipped with a notice, never a failure.
+          if aws s3 cp "$dest/manifest.json" _prev_manifest.json --only-show-errors 2>/dev/null; then
+            aws s3 cp _prev_manifest.json "$dest/manifest.previous.json" --only-show-errors --content-type "application/json"
+            echo "kept the previous manifest as manifest.previous.json" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "::notice title=Docs sync::no previous manifest read (first publish, or the role has no GetObject yet); manifest.previous.json not updated"
+          fi
           aws s3 cp "$OUT/manifest.json" "$dest/manifest.json" --only-show-errors --content-type "application/json"
           aws s3 sync "$src_pages" "$dest_pages" --only-show-errors --delete --content-type "text/markdown; charset=utf-8"
           aws s3 sync "$src_assets" "$dest_assets" --only-show-errors --delete --exclude "*" --include "*.svg" --content-type "image/svg+xml"
