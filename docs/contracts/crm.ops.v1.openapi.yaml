@@ -1410,7 +1410,14 @@ components:
         degrade_mode: {type: string, enum: [manual_reply_needed], default: manual_reply_needed}
         disabled_reason: {type: [string, "null"], maxLength: 500}
     SettingValue:
-      description: A setting value, typed by its definition's value_type (number, boolean, string, list or object).
+      description: >-
+        A setting value, typed by its definition's value_type (number, boolean, string, list or object). An object
+        (a json setting, for example crm.ai.connection_monthly_cap_usd keyed by model connection) is served whole: its
+        own keys are the setting's data, not response fields, so AA-Partner's response allow-list does not require
+        them on its explicit key list. It still refuses any of them, at any depth, that names a trip, pipeline,
+        revenue, margin, commission or other money field or personal data (the same forbidden patterns as every
+        other key). This applies to the fields value, previous_value, default_value and allowed_values of the
+        /settings answers only.
       type: [number, integer, boolean, string, array, object]
     SettingRow:
       type: object
