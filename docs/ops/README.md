@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem]
-last_reviewed: 2026-11-17
+last_reviewed: 2026-11-18
 review_every_days: 90
 related: [CAT-00, OPS-04, APP-01, APP-02, OPS-05, OPS-06, APP-09, skill/aa-ship/SKILL.md, AA-892]
 ---
@@ -153,7 +153,7 @@ check. A docs-only PR skips the test jobs. Dispatching `ci.yml` on a PR branch r
 | AA-CIS-Infra | `db-migrate.yml` | dispatch from `main` | Migrate | modes check / apply / set-password / run-script |
 | AA-CIS-Infra | `db-schema-dump.yml` | nightly 03:43 UTC; after each apply; dispatch | Dump schema, regenerate reference | opens the root PR `bot/db-schema-reference` |
 | AA-CIS-Infra | `db-isolation-probe.yml` | nightly 04:13 UTC; after each apply; dispatch | Isolation probe | read-only |
-| AA-CIS-Infra | `migration-copy-guard.yml` | every PR (a scope step skips the checks outside the migration paths); nightly 02:17 UTC; dispatch | Copies match owner main (with the scope step since S271), Migration lint and unique numbers, Retention rows for new-app tables, Expand classify | required (ruleset): all but Retention rows (advisory, reads root `master`) |
+| AA-CIS-Infra | `migration-copy-guard.yml` | every PR (a scope step skips the checks outside the migration paths); nightly 02:17 UTC; dispatch | Copies match owner main (with the scope step since S271), Migration lint and unique numbers, Retention rows and RLS allowlist, Expand classify | required (ruleset): all but Retention rows and RLS allowlist (advisory, reads root `master` and the latest Dev dump) |
 | AA-CIS-Infra | `secret-scan.yml` | PR to `main` | gitleaks (PR lines) | uses the base commit rules (AA-981) |
 | AA-CIS-Infra | `secret-scan-history.yml` | push `main` (that push's commits only, S271); nightly 19:23 UTC and dispatch (full history) | gitleaks full history; gitleaks working tree (dispatch only) | every branch, tag and PR head, baseline in `.gitleaksignore` (AA-981) |
 | AA-CIS-Infra | `identity-triggers-test.yml`, `ops-probe-test.yml`, `rds-snapshot-expiry-test.yml`, `secrets-register-check-test.yml` | PR / push `main` (their paths) | unit tests of the Lambdas and tools | |
