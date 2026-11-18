@@ -10,6 +10,7 @@ applies_to: [aa-booking-admin, aa-booking-api]
 last_reviewed: 2026-11-01
 review_every_days: 90
 related: [GUIDE-12, GUIDE-12-cis-admin, GUIDE-12-tripplanner, GUIDE-04, OPS-04, AA-1020]
+known_issue: "Một số bước còn mô tả luồng yêu cầu của khách lẻ đã bỏ, menu và danh sách vai trò cũ; đang sửa. Hỏi tech lead trước khi làm theo một bước."
 lang: vi
 translation_of: docs/guides/booking-admin-runbook.md
 ---

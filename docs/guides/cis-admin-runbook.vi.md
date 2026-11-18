@@ -10,6 +10,7 @@ applies_to: [aa-cis-frontend, aa-cis-api]
 last_reviewed: 2026-11-10
 review_every_days: 90
 related: [GUIDE-12, GUIDE-12-ai-reports, GUIDE-04, GUIDE-01, OPS-04, AA-1020]
+known_issue: "Một số menu và bước đã đổi trong tháng 11/2026, trang này đang được sửa. Hỏi tech lead trước khi làm theo một bước."
 lang: vi
 translation_of: docs/guides/cis-admin-runbook.md
 ---

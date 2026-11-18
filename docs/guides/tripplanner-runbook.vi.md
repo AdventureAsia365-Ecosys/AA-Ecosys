@@ -10,6 +10,7 @@ applies_to: [tripplanner-web, tripplanner-lambda]
 last_reviewed: 2026-11-01
 review_every_days: 90
 related: [GUIDE-12, GUIDE-12-booking, GUIDE-04, OPS-04, AA-1020]
+known_issue: "Một số bước còn mô tả cách triển khai và luồng chuyển yêu cầu đã đổi trong tháng 11/2026; đang sửa. Hỏi tech lead trước khi làm theo một bước."
 lang: vi
 translation_of: docs/guides/tripplanner-runbook.md
 ---

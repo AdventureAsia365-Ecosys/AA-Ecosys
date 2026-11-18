@@ -47,19 +47,34 @@ Publication rule (v1; docs/README.md "Docs reader" and docs/engineering-handbook
      outside docs/ or with a path the reader cannot serve (letters, digits, '.', '_', '-' only) is not published.
      tools/docs/check_images.py checks the same rule on every catalog page in the docs lint.
 
+ 11. Reader v2 (AA-1133, S283 decisions): each entry carries the sidebar group ``nav`` (front-matter ``nav``, else the
+     group derived from the folder, NAV_DEFAULTS; ``nav_derived`` says which) and ``nav_order``; ``known_issue`` (a
+     short front-matter note: the page has known errors and is being fixed; the reader shows it as a banner until the
+     fix removes the field); ``last_changed`` {sha, date} of the last commit that touched the file (null outside a full
+     git checkout: Docs sync fetches the whole history for it); the owner slug ``nghiep`` is published as
+     ``tech-lead`` (company docs name roles). ``source.github`` is "<org>/<repo>" when the build was told the repo is
+     public (--github-repo, --visibility public), else null: the reader shows Source / History links only then.
+ 12. Search (AA-1133): search/index.sqlite, a SQLite FTS5 index of the published sections (docs_search_index.py),
+     built from the same redacted bodies and titles; the manifest names it under ``search``. Owner-tier sections carry
+     access "owner" and the API filters them out for every other caller.
+
 Output layout (OUT_DIR, default _site/docs-reader):
 
   manifest.json                    format 1, below
   pages/<repo>/<repo-relative path> the redacted Markdown body of each published page
   assets/<repo>/<repo-relative path> each published SVG (rule 9) or screenshot (rule 10), unchanged
+  search/index.sqlite              the full-text index (rule 12)
 
 manifest.json:
   {"format": 1, "rule": "v1", "generated_at": ISO, "source": {"repo", "sha", "ref"},
    "counts": {"published", "owner_only", "translations", "skipped", "assets", "screenshots"},
    "pages": [{"repo", "path", "key", "id", "title", "description", "type", "status", "audience", "owner",
               "last_reviewed", "generated", "access", "bytes", "sha256", "redactions",
-              "lang", "translation_of", "translations"}],
-   "assets": [{"repo", "path", "key", "type", "bytes", "sha256", "access"}]}
+              "lang", "translation_of", "translations", "nav", "nav_order", "nav_derived", "known_issue",
+              "last_changed"}],
+   "assets": [{"repo", "path", "key", "type", "bytes", "sha256", "access"}],
+   "search": {"key", "format", "bytes", "sha256", "sections"}}
+  (source also carries "github": "<org>/<repo>" or null, rule 11)
 
   lang            "en" for an English page (the source), "vi" for a translation.
   translation_of  translations only: the `path` of the English entry (same repo); null on an English page.
@@ -97,6 +112,8 @@ from pathlib import Path
 
 import yaml
 
+import docs_search_index
+
 from check_adr_index import ADR_FILE, find_status
 from check_docs_text import RESOURCE_PATTERNS
 from docslib import REPO_ROOT, SOURCE_LANG, list_markdown, source_of_translation, split_front_matter, translation_lang
@@ -126,6 +143,27 @@ NEVER_PREFIXES = (
 OWNER_ONLY_ID_PREFIXES = ("SEC-", "ARCH-02", "ARCH-03", "ARCH-04")
 # A page bigger than this is skipped (the reader is not a file store; the API refuses larger objects too).
 MAX_PAGE_BYTES = 1_000_000
+# Rule 11: the sidebar groups of the reader, in display order (frontmatter.schema.json `nav` enum), and the group a page
+# without `nav` gets from its folder (first matching prefix wins; a page directly under docs/ is "start").
+NAV_GROUPS = ("start", "guides", "operations", "architecture", "reference", "legal-security")
+NAV_DEFAULTS: tuple[tuple[str, str], ...] = (
+    ("docs/legal/", "legal-security"),
+    ("docs/ops/", "operations"),
+    ("docs/guides/", "guides"),
+    ("docs/playbook/", "guides"),
+    ("docs/learn/", "guides"),
+    ("docs/generated/", "reference"),
+    ("docs/architecture/erd/", "reference"),
+    ("docs/catalogue/", "reference"),
+    ("docs/database/", "reference"),
+    ("docs/adr/", "architecture"),
+    ("docs/architecture/", "architecture"),
+    ("docs/product/", "architecture"),
+)
+NAV_ORDER_MAX = 999
+OWNER_ALIASES = {"nghiep": "tech-lead"}   # tech lead S283 (c-s283-docs-owner-slug): pages name the role
+KNOWN_ISSUE_MAX = 300
+GITHUB_REPO = re.compile(r"^[A-Za-z0-9-]+/[A-Za-z0-9._-]+$")
 # Rule 9: an SVG bigger than this is skipped (the diagrams with inline icons are 0.2-0.4 MB).
 MAX_ASSET_BYTES = 1_000_000
 SVG_SUFFIXES = {".svg": "image/svg+xml"}
@@ -203,6 +241,7 @@ class Page:
     lang: str = SOURCE_LANG
     translation_of: str | None = None
     translations: list[dict] = field(default_factory=list)
+    last_changed: dict | None = None
 
 
 @dataclass
@@ -428,9 +467,10 @@ def _adr_meta(relpath: str, text: str) -> dict | None:
         "id": f"ADR-{number.upper()}",
         "title": title.strip(),
         "type": "adr",
-        "status": (status or "").strip("* ").split(" ", 1)[0].strip(".,;").lower() or "unknown",
+        # "**Accepted** (amended …)" -> "accepted" (AA-1133: the trailing "**" used to stay on the badge).
+        "status": (status or "").strip("* ").split(" ", 1)[0].strip(".,;*").lower() or "unknown",
         "audience": ["engineer", "cto", "agent"],
-        "owner": "nghiep",
+        "owner": "tech-lead",
     }
 
 
@@ -482,6 +522,9 @@ def collect(root: Path = REPO_ROOT) -> Result:
         if isinstance(meta.get("description"), str):
             meta["description"], nd = redact(meta["description"])
             n += nd
+        if isinstance(meta.get("known_issue"), str):
+            meta["known_issue"], nk = redact(meta["known_issue"])
+            n += nk
         lang = translation_lang(relpath)
         page = Page(relpath, meta, body, access_for(str(meta["id"])), n + nt)
         if lang is not None:
@@ -605,6 +648,60 @@ def collect_assets(root: Path = REPO_ROOT) -> tuple[list[Asset], list[str]]:
     return assets, problems
 
 
+def nav_of(relpath: str, meta: dict) -> tuple[str, bool]:
+    """Rule 11: (sidebar group, derived?) of a page: its front-matter `nav` when valid, else the folder default."""
+    nav = meta.get("nav")
+    if isinstance(nav, str) and nav in NAV_GROUPS:
+        return nav, False
+    for prefix, group in NAV_DEFAULTS:
+        if relpath.startswith(prefix):
+            return group, True
+    return ("start" if relpath.count("/") == 1 else "reference"), True
+
+
+def nav_order_of(meta: dict) -> int | None:
+    v = meta.get("nav_order")
+    return v if isinstance(v, int) and not isinstance(v, bool) and 0 <= v <= NAV_ORDER_MAX else None
+
+
+def owner_of(meta: dict) -> str | None:
+    owner = meta.get("owner")
+    return OWNER_ALIASES.get(owner, owner) if isinstance(owner, str) else None
+
+
+def known_issue_of(meta: dict) -> str | None:
+    note = meta.get("known_issue")
+    if not isinstance(note, str) or not note.strip():
+        return None
+    return " ".join(note.split())[:KNOWN_ISSUE_MAX]
+
+
+def git_last_changed(root: Path, paths: list[str]) -> dict[str, dict]:
+    """Rule 11: {path: {"sha", "date"}} of the newest commit that touched each path, from one `git log` walk. Empty when
+    root is not a git checkout or the checkout is shallow (every file would look changed by its one commit)."""
+    try:
+        shallow = subprocess.run(["git", "-C", str(root), "rev-parse", "--is-shallow-repository"], check=True,
+                                 capture_output=True, text=True).stdout.strip()
+        if shallow != "false":
+            return {}
+        out = subprocess.run(["git", "-C", str(root), "log", "--format=%x00%H%x09%cI", "--name-only", "--", *SCOPE],
+                             check=True, capture_output=True).stdout.decode("utf-8", "replace")
+    except (OSError, subprocess.CalledProcessError):
+        return {}
+    wanted = set(paths)
+    found: dict[str, dict] = {}
+    for block in out.split("\0")[1:]:
+        head, _, names = block.partition("\n")
+        sha, _, date = head.partition("\t")
+        for name in names.splitlines():
+            name = name.strip()
+            if name in wanted and name not in found:
+                found[name] = {"sha": sha, "date": date}
+        if len(found) == len(wanted):
+            break
+    return found
+
+
 def _entry(page: Page) -> dict:
     data = page.body.encode("utf-8")
     m = page.meta
@@ -619,7 +716,7 @@ def _entry(page: Page) -> dict:
         "type": m["type"],
         "status": m.get("status"),
         "audience": [a for a in audience if isinstance(a, str)],
-        "owner": m.get("owner"),
+        "owner": owner_of(m),
         "last_reviewed": m.get("last_reviewed"),
         "generated": bool(m.get("generated", False)),
         "access": page.access,
@@ -629,19 +726,29 @@ def _entry(page: Page) -> dict:
         "lang": page.lang,
         "translation_of": page.translation_of,
         "translations": [dict(t) for t in page.translations],
+        "nav": nav_of(page.path, m)[0],
+        "nav_order": nav_order_of(m),
+        "nav_derived": nav_of(page.path, m)[1],
+        "known_issue": known_issue_of(m),
+        "last_changed": page.last_changed,
     }
 
 
-def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "") -> dict:
+def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "", github_repo: str = "",
+          visibility: str = "") -> dict:
     """Write the bundle to `out` (emptied first) and return the manifest. Raises SystemExit on a guard hit."""
     result = collect(root)
+    changed = git_last_changed(root, [p.path for p in result.pages])
+    for page in result.pages:
+        page.last_changed = changed.get(page.path)
     assets, problems = collect_assets(root)
     rasters, raster_problems_found = collect_raster_assets(result.pages, root)
     assets += rasters
     problems += raster_problems_found
     for page in result.pages:
-        # Everything a reader sees: the body and the manifest's text fields (not the sha256, which is hex).
-        visible = {k: v for k, v in _entry(page).items() if k not in ("sha256", "bytes", "redactions")}
+        # Everything a reader sees: the body and the manifest's text fields (not the sha256 and the last commit, which
+        # are hex: a 40-character git sha may hold a 12-digit run).
+        visible = {k: v for k, v in _entry(page).items() if k not in ("sha256", "bytes", "redactions", "last_changed")}
         for label in guard_hits(page.body + "\n" + json.dumps(visible, ensure_ascii=False)):
             problems.append(f"{page.path}: {label} still present after redaction")
     if problems:
@@ -662,11 +769,20 @@ def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "") -> di
         target = out / asset.key
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(asset.data)
+    source_sha = sha or _git_sha(root)
+    search_file = out / docs_search_index.KEY
+    sections = docs_search_index.write_index(
+        search_file,
+        [{"repo": REPO_NAME, "path": p.path, "lang": p.lang, "access": p.access, "title": p.meta["title"],
+          "body": p.body} for p in result.pages],
+        source_sha)
+    search_bytes = search_file.read_bytes()
+    public_repo = github_repo if visibility == "public" and GITHUB_REPO.match(github_repo or "") else None
     manifest = {
         "format": FORMAT,
         "rule": RULE,
         "generated_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
-        "source": {"repo": REPO_NAME, "sha": sha or _git_sha(root), "ref": ref or None},
+        "source": {"repo": REPO_NAME, "sha": source_sha, "ref": ref or None, "github": public_repo},
         "counts": {
             "published": len(entries),
             "owner_only": sum(1 for e in entries if e["access"] == "owner"),
@@ -674,9 +790,13 @@ def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "") -> di
             "skipped": result.skipped,
             "assets": len(assets),
             "screenshots": len(rasters),
+            "nav_derived": sum(1 for e in entries if e["nav_derived"] and e["lang"] == SOURCE_LANG),
+            "search_sections": sections,
         },
         "pages": entries,
         "assets": [a.entry() for a in assets],
+        "search": {"key": docs_search_index.KEY, "format": docs_search_index.FORMAT, "bytes": len(search_bytes),
+                   "sha256": hashlib.sha256(search_bytes).hexdigest(), "sections": sections},
     }
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     return manifest
@@ -695,18 +815,22 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out", default="_site/docs-reader", help="output folder (emptied first)")
     ap.add_argument("--sha", default="", help="commit the bundle is built from (default: git HEAD)")
     ap.add_argument("--ref", default="", help="branch name recorded in the manifest")
+    ap.add_argument("--github-repo", default="", help="<org>/<repo> on GitHub, for the reader's Source / History links")
+    ap.add_argument("--visibility", default="", help="the repo's GitHub visibility; links are published only if public")
     ap.add_argument("--check", action="store_true", help="build into a temp folder and print the counts only")
     args = ap.parse_args(argv)
+    kw = {"sha": args.sha, "ref": args.ref, "github_repo": args.github_repo, "visibility": args.visibility}
     if args.check:
         with tempfile.TemporaryDirectory() as tmp:
-            manifest = build(Path(tmp) / "out", sha=args.sha, ref=args.ref)
+            manifest = build(Path(tmp) / "out", **kw)
     else:
-        manifest = build(Path(args.out), sha=args.sha, ref=args.ref)
+        manifest = build(Path(args.out), **kw)
     c = manifest["counts"]
     redacted = sum(p["redactions"] for p in manifest["pages"])
     print(f"docs reader: {c['published']} pages published ({c['owner_only']} owner only, {c['translations']} translations), "
           f"{c['skipped']} skipped, {c['assets']} assets ({c['screenshots']} screenshots), "
-          f"{redacted} values redacted, source {manifest['source']['sha'][:12] or 'unknown'}")
+          f"{redacted} values redacted, {c['search_sections']} search sections, {c['nav_derived']} pages without "
+          f"`nav` (sidebar group derived from the folder), source {manifest['source']['sha'][:12] or 'unknown'}")
     return 0
 
 
