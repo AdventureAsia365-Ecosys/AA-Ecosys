@@ -64,6 +64,7 @@ on:
       - "tools/docs/docs_search_index.py"
       - "tools/docs/test_docs_reader.py"
       - "tools/docs/test_docs_reader_v2.py"
+      - "tools/docs/test_docs_history.py"
       - "tools/docs/docslib.py"
       - "tools/docs/check_docs_text.py"
       - "tools/docs/check_adr_index.py"
@@ -98,7 +99,8 @@ jobs:
       IS_MASTER: ${{ github.ref == 'refs/heads/master' && github.event_name != 'pull_request' }}
     steps:
       # AA-1133 rule 11: the whole history (without file contents: blob:none keeps it fast), so each page's
-      # last_changed is its own last commit, not the one shallow commit every file would share.
+      # last_changed is its own last commit, not the one shallow commit every file would share. AA-1132 rules 13-14
+      # read the same walk: each page's history and the generated "What changed in docs" page.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
@@ -129,7 +131,7 @@ jobs:
           key: ${{ steps.pip-cache.outputs.cache-primary-key }}
 
       - name: Unit tests of the bundle builder
-        run: python -m unittest tools/docs/test_docs_reader.py tools/docs/test_docs_reader_v2.py
+        run: python -m unittest tools/docs/test_docs_reader.py tools/docs/test_docs_reader_v2.py tools/docs/test_docs_history.py
 
       - name: Build the reader bundle (redaction guard included)
         env:
@@ -155,6 +157,7 @@ jobs:
           print(f"- {c['published']} pages published ({c['owner_only']} owner only), {c['skipped']} not published")
           print(f"- {sum(p['redactions'] for p in m['pages'])} values redacted")
           print(f"- {c.get('search_sections', 0)} search sections; {c.get('nav_derived', 0)} pages without `nav` (group derived from the folder)")
+          print(f"- {c.get('with_history', 0)} pages with history; {c.get('changes_commits', 0)} commits on the \"What changed in docs\" page")
           print(f"- {c.get('assets', 0)} image assets ({c.get('screenshots', 0)} screenshots, rule 10; the rest SVG, rule 9)")
           print(f"- source `{m['source']['sha'][:12]}`")
           PY

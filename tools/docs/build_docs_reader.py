@@ -57,6 +57,17 @@ Publication rule (v1; docs/README.md "Docs reader" and docs/engineering-handbook
  12. Search (AA-1133): search/index.sqlite, a SQLite FTS5 index of the published sections (docs_search_index.py),
      built from the same redacted bodies and titles; the manifest names it under ``search``. Owner-tier sections carry
      access "owner" and the API filters them out for every other caller.
+ 13. Page history (AA-1132 A1): each entry carries ``history``, the newest HISTORY_MAX commits that touched the file
+     ([{sha, date, subject, pr}], newest first; [] outside a full git checkout, like ``last_changed``, which stays
+     the first item's {sha, date}). ``subject`` is the commit subject without its "(#123)" suffix (that number is
+     ``pr``) and without issue keys (readers see no internal issue id), redacted like a body and checked by the same
+     guard. A file renamed keeps the history of its new path only (no --follow).
+ 14. "What changed in docs" (AA-1132 A1): the build adds one generated page that is not a file in git,
+     CHANGES_PATH (id CHANGES_ID, staff tier, nav "reference", generated): the newest CHANGES_MAX commits that touched a
+     published hand-written page (front-matter ``generated`` pages such as the ERDs are left out), grouped by week,
+     each with its date, cleaned subject, PR number and links to the staff-tier English pages it changed (an
+     owner-tier page is counted, never named). It is written only when the history is known (a full git checkout), is
+     left out of the search index, and its entry has ``history`` [].
 
 Output layout (OUT_DIR, default _site/docs-reader):
 
@@ -67,11 +78,12 @@ Output layout (OUT_DIR, default _site/docs-reader):
 
 manifest.json:
   {"format": 1, "rule": "v1", "generated_at": ISO, "source": {"repo", "sha", "ref"},
-   "counts": {"published", "owner_only", "translations", "skipped", "assets", "screenshots"},
+   "counts": {"published", "owner_only", "translations", "skipped", "assets", "screenshots", "nav_derived",
+              "search_sections", "with_history", "changes_commits"},
    "pages": [{"repo", "path", "key", "id", "title", "description", "type", "status", "audience", "owner",
               "last_reviewed", "generated", "access", "bytes", "sha256", "redactions",
               "lang", "translation_of", "translations", "nav", "nav_order", "nav_derived", "known_issue",
-              "last_changed"}],
+              "last_changed", "history"}],
    "assets": [{"repo", "path", "key", "type", "bytes", "sha256", "access"}],
    "search": {"key", "format", "bytes", "sha256", "sections"}}
   (source also carries "github": "<org>/<repo>" or null, rule 11)
@@ -163,6 +175,17 @@ NAV_DEFAULTS: tuple[tuple[str, str], ...] = (
 NAV_ORDER_MAX = 999
 OWNER_ALIASES = {"nghiep": "tech-lead"}   # tech lead S283 (c-s283-docs-owner-slug): pages name the role
 KNOWN_ISSUE_MAX = 300
+# Rules 13-14 (AA-1132 A1): bundle size of the history fields. Build-output sizes of this CI tool, not runtime policy:
+# the root repo has no admin settings store (a follow-up if they ever need to change without a PR).
+HISTORY_MAX = 10
+CHANGES_MAX = 50
+SUBJECT_MAX = 160
+CHANGES_PATH = "docs/generated/docs-changes.md"
+CHANGES_ID = "CAT-00-docs-changes"
+CHANGES_TITLE = "What changed in docs"
+PR_SUFFIX = re.compile(r"\s*\(#(\d{1,6})\)\s*$")
+# Issue keys of the trackers commits name (Linear AA, Jira KAN / CON / PR): readers never see an internal issue id.
+ISSUE_KEY = re.compile(r"\[?\b(?:AA|KAN|CON|PR)-\d+\b\]?")
 GITHUB_REPO = re.compile(r"^[A-Za-z0-9-]+/[A-Za-z0-9._-]+$")
 # Rule 9: an SVG bigger than this is skipped (the diagrams with inline icons are 0.2-0.4 MB).
 MAX_ASSET_BYTES = 1_000_000
@@ -242,6 +265,8 @@ class Page:
     translation_of: str | None = None
     translations: list[dict] = field(default_factory=list)
     last_changed: dict | None = None
+    history: list[dict] = field(default_factory=list)
+    searchable: bool = True
 
 
 @dataclass
@@ -679,27 +704,119 @@ def known_issue_of(meta: dict) -> str | None:
 def git_last_changed(root: Path, paths: list[str]) -> dict[str, dict]:
     """Rule 11: {path: {"sha", "date"}} of the newest commit that touched each path, from one `git log` walk. Empty when
     root is not a git checkout or the checkout is shallow (every file would look changed by its one commit)."""
+    history, _ = git_history(root, paths, limit=1)
+    return {path: {"sha": items[0]["sha"], "date": items[0]["date"]} for path, items in history.items()}
+
+
+def clean_subject(subject: str) -> tuple[str, int | None]:
+    """Rule 13: (subject a reader may see, PR number). Drops the "(#123)" suffix into the number, removes issue keys,
+    redacts IDs, trims to SUBJECT_MAX."""
+    m = PR_SUFFIX.search(subject)
+    pr = int(m.group(1)) if m else None
+    text = PR_SUFFIX.sub("", subject)
+    text = ISSUE_KEY.sub("", text)
+    text = re.sub(r"\(\s*[,;/]?\s*\)", "", text)          # "(AA-1, AA-2)" left as "( , )" -> gone
+    text = re.sub(r"\s+([,;:.)])", r"\1", " ".join(text.split())).strip(" ,;:-")
+    text, _ = redact(text)
+    if len(text) > SUBJECT_MAX:
+        text = text[:SUBJECT_MAX - 1].rstrip() + "…"
+    return text, pr
+
+
+def git_history(root: Path, paths: list[str], limit: int = HISTORY_MAX, changes_max: int = 0,
+                change_paths: set[str] | None = None) -> tuple[dict[str, list[dict]], list[dict]]:
+    """Rules 13-14, one `git log` walk over docs/: ({path: [{sha, date, subject, pr}] newest first, at most `limit`},
+    the newest `changes_max` commits that touched any of `change_paths` (default: `paths`) as
+    [{sha, date, subject, pr, paths}], `paths` limited to `change_paths`). Both empty when root is not a git checkout or
+    the checkout is shallow (every file would look changed by its one commit)."""
     try:
         shallow = subprocess.run(["git", "-C", str(root), "rev-parse", "--is-shallow-repository"], check=True,
                                  capture_output=True, text=True).stdout.strip()
         if shallow != "false":
-            return {}
-        out = subprocess.run(["git", "-C", str(root), "log", "--format=%x00%H%x09%cI", "--name-only", "--", *SCOPE],
-                             check=True, capture_output=True).stdout.decode("utf-8", "replace")
+            return {}, []
+        out = subprocess.run(["git", "-C", str(root), "log", "--format=%x00%H%x09%cI%x09%s", "--name-only", "--",
+                              *SCOPE], check=True, capture_output=True).stdout.decode("utf-8", "replace")
     except (OSError, subprocess.CalledProcessError):
-        return {}
+        return {}, []
     wanted = set(paths)
-    found: dict[str, dict] = {}
+    listed = wanted if change_paths is None else set(change_paths)
+    found: dict[str, list[dict]] = {}
+    commits: list[dict] = []
     for block in out.split("\0")[1:]:
         head, _, names = block.partition("\n")
-        sha, _, date = head.partition("\t")
-        for name in names.splitlines():
-            name = name.strip()
-            if name in wanted and name not in found:
-                found[name] = {"sha": sha, "date": date}
-        if len(found) == len(wanted):
+        sha, _, rest = head.partition("\t")
+        date, _, raw_subject = rest.partition("\t")
+        touched = sorted({n.strip() for n in names.splitlines() if n.strip() in wanted})
+        if not touched:
+            continue
+        subject, pr = clean_subject(raw_subject)
+        item = {"sha": sha, "date": date, "subject": subject, "pr": pr}
+        for name in touched:
+            items = found.setdefault(name, [])
+            if len(items) < limit:
+                items.append(dict(item))
+        in_changes = [n for n in touched if n in listed]
+        if in_changes and len(commits) < changes_max:
+            commits.append({**item, "paths": in_changes})
+        if len(commits) >= changes_max and len(found) == len(wanted) and all(len(v) >= limit for v in found.values()):
             break
-    return found
+    return found, commits
+
+
+def _week_of(date: str) -> str:
+    """The Monday (YYYY-MM-DD) of the ISO week of an ISO date-time; the date itself when it does not parse."""
+    try:
+        day = dt.date.fromisoformat(date[:10])
+    except ValueError:
+        return date[:10]
+    return (day - dt.timedelta(days=day.weekday())).isoformat()
+
+
+def changes_page(commits: list[dict], pages: list[Page]) -> Page | None:
+    """Rule 14: the generated "What changed in docs" page from `git_history` commits, or None without history."""
+    if not commits:
+        return None
+    by_path = {p.path: p for p in pages}
+    lines = [
+        f"# {CHANGES_TITLE}",
+        "",
+        f"The newest {len(commits)} changes to the published docs pages, newest first, grouped by week. This page is "
+        "generated by the docs bundle build from the git history of the pages; it is not a file in git. Open a page "
+        "for its own history.",
+    ]
+    week = None
+    for c in commits:
+        if _week_of(c["date"]) != week:
+            week = _week_of(c["date"])
+            lines += ["", f"## Week of {week}", ""]
+        pr = f" · PR #{c['pr']}" if c["pr"] else ""
+        subject = c["subject"] or "(no subject)"
+        lines.append(f"- **{c['date'][:10]}** · {subject}{pr} · `{c['sha'][:8]}`")
+        shown, restricted = set(), 0
+        for path in c["paths"]:
+            page = by_path.get(path)
+            if page is None:
+                continue
+            if page.translation_of:
+                page = by_path.get(page.translation_of, page)
+            if page.access != "staff":
+                restricted += 1
+                continue
+            if page.path in shown:
+                continue
+            shown.add(page.path)
+            link = posixpath.relpath(page.path, posixpath.dirname(CHANGES_PATH))
+            title, _ = redact(str(page.meta.get("title", page.path)))
+            lines.append(f"  - [{title.replace(']', ')')}]({link})")
+        if restricted:
+            lines.append(f"  - {restricted} page{'s' if restricted != 1 else ''} with restricted access")
+    body = "\n".join(lines) + "\n"
+    meta = {"id": CHANGES_ID, "title": CHANGES_TITLE, "type": "reference", "status": "active", "owner": "tech-lead",
+            "audience": ["staff", "engineer", "agent"], "last_reviewed": commits[0]["date"][:10], "generated": True,
+            "nav": "reference",
+            "description": "Generated list of the newest changes to the published docs pages, grouped by week."}
+    return Page(path=CHANGES_PATH, meta=meta, body=body, access="staff",
+                last_changed={"sha": commits[0]["sha"], "date": commits[0]["date"]}, searchable=False)
 
 
 def _entry(page: Page) -> dict:
@@ -731,6 +848,7 @@ def _entry(page: Page) -> dict:
         "nav_derived": nav_of(page.path, m)[1],
         "known_issue": known_issue_of(m),
         "last_changed": page.last_changed,
+        "history": [dict(h) for h in page.history],
     }
 
 
@@ -738,18 +856,29 @@ def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "", githu
           visibility: str = "") -> dict:
     """Write the bundle to `out` (emptied first) and return the manifest. Raises SystemExit on a guard hit."""
     result = collect(root)
-    changed = git_last_changed(root, [p.path for p in result.pages])
+    # Rule 14 lists hand-written pages only: the nightly regenerations (ERD, schema reference) would fill the page.
+    written = {p.path for p in result.pages if not p.meta.get("generated")}
+    history, commits = git_history(root, [p.path for p in result.pages], limit=HISTORY_MAX, changes_max=CHANGES_MAX,
+                                   change_paths=written)
     for page in result.pages:
-        page.last_changed = changed.get(page.path)
+        page.history = history.get(page.path, [])
+        page.last_changed = {"sha": page.history[0]["sha"], "date": page.history[0]["date"]} if page.history else None
     assets, problems = collect_assets(root)
     rasters, raster_problems_found = collect_raster_assets(result.pages, root)
     assets += rasters
     problems += raster_problems_found
+    generated = changes_page(commits, result.pages)
+    if generated is not None and any(p.path == CHANGES_PATH for p in result.pages):
+        problems.append(f"{CHANGES_PATH}: a tracked page has the path of the generated changes page (rule 14)")
+    elif generated is not None:
+        result.pages.append(generated)
     for page in result.pages:
-        # Everything a reader sees: the body and the manifest's text fields (not the sha256 and the last commit, which
-        # are hex: a 40-character git sha may hold a 12-digit run).
-        visible = {k: v for k, v in _entry(page).items() if k not in ("sha256", "bytes", "redactions", "last_changed")}
-        for label in guard_hits(page.body + "\n" + json.dumps(visible, ensure_ascii=False)):
+        # Everything a reader sees: the body and the manifest's text fields (not the sha256 and the commit ids, which
+        # are hex: a 40-character git sha may hold a 12-digit run; the history subjects are checked on their own).
+        visible = {k: v for k, v in _entry(page).items()
+                   if k not in ("sha256", "bytes", "redactions", "last_changed", "history")}
+        subjects = "\n".join(h["subject"] for h in page.history)
+        for label in guard_hits(page.body + "\n" + json.dumps(visible, ensure_ascii=False) + "\n" + subjects):
             problems.append(f"{page.path}: {label} still present after redaction")
     if problems:
         for p in problems:
@@ -774,7 +903,7 @@ def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "", githu
     sections = docs_search_index.write_index(
         search_file,
         [{"repo": REPO_NAME, "path": p.path, "lang": p.lang, "access": p.access, "title": p.meta["title"],
-          "body": p.body} for p in result.pages],
+          "body": p.body} for p in result.pages if p.searchable],
         source_sha)
     search_bytes = search_file.read_bytes()
     public_repo = github_repo if visibility == "public" and GITHUB_REPO.match(github_repo or "") else None
@@ -792,6 +921,8 @@ def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "", githu
             "screenshots": len(rasters),
             "nav_derived": sum(1 for e in entries if e["nav_derived"] and e["lang"] == SOURCE_LANG),
             "search_sections": sections,
+            "with_history": sum(1 for e in entries if e["history"]),
+            "changes_commits": len(commits) if generated is not None else 0,
         },
         "pages": entries,
         "assets": [a.entry() for a in assets],
@@ -830,7 +961,8 @@ def main(argv: list[str] | None = None) -> int:
     print(f"docs reader: {c['published']} pages published ({c['owner_only']} owner only, {c['translations']} translations), "
           f"{c['skipped']} skipped, {c['assets']} assets ({c['screenshots']} screenshots), "
           f"{redacted} values redacted, {c['search_sections']} search sections, {c['nav_derived']} pages without "
-          f"`nav` (sidebar group derived from the folder), source {manifest['source']['sha'][:12] or 'unknown'}")
+          f"`nav` (sidebar group derived from the folder), {c['with_history']} pages with history, "
+          f"{c['changes_commits']} commits on the changes page, source {manifest['source']['sha'][:12] or 'unknown'}")
     return 0
 
 
