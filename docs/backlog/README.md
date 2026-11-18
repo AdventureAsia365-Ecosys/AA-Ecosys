@@ -15,7 +15,6 @@ _Last updated: S283, 17/11/2026 (Claude Code, Ultracode; ~06:15 → ~16:30 +07).
 | ≥ 02/12 | AA-1122 | First nightly automatic research after 01/12 (tech lead sets `cis.seo.research_auto_enabled` = true, effective 01/12, 5 USD month cap): it buys only new / stale places, stops at the cap, and `search_volume_monthly` gets 12-month rows. Then AA-1122 can close. |
 | ≥ 18/11 | AA-1111 | Delete the old IAM base-user access key (Inactive since the S283 rotation) and the local credentials backup `.bak-s283` once the new key has worked for a day. Then recheck the Platform › Delivery merge-queue tab: Booking and Partner showed 0 queue entries on the first collector run (S283).
 | S284 | AA-1126 L16 | Redesign the TripPlanner agency notice path without a cross-app grant on `shared.notifications` (CIS #1567 / migration 447 conflicts with the guards of migrations 274 and 351), then ship the quota notice + Upgrade slice (CIS #1568, TripPlanner #276, the Partner code PR).
-| after the S281 close root PR merges | AA-1093 (Done S281) | Delete the pre-erase RDS snapshot `tenant-erase-20261115-erase02` (kept until the S281 evidence PR is on master). |
 | Monday 16/11 01:30 UTC, then weekly | AA-1003 (R5) | First scheduled runs of BK-03 and FI-07 with `generator: cis` (root #795, CIS #1516). Read the two `report_run` rows: both must succeed; the S281 runs were by hand (3/3). |
 | ≥14/12/2026 (CRM ≥12/02/2027) | AA-1086 marker tenant | The pilot-rehearsal marker tenant was soft-offboarded in S281; its erasure request (live mode) becomes due then. It runs only through the AA-1093 flow: DRY RUN, fingerprint, the tech lead's approval, a snapshot first. |
 | before 02/12 (slotted S269–S271) | AA-1040 | **S266:** the notice and the machine marks are live on every surface (CIS export / WordPress body, tenant JSON, TripPlanner tour pages, browse catalog JSON `catalog.http.v1` 1.3, Booking supply view CIS 358–359). Left: one live WordPress publish once the tech lead creates a new WordPress test site (not urgent, §2). Hard deadline d19 (EU AI Act Art. 50): the AI notice and the machine-readable `ai_generated` marking on every surface. Slotted before pilot milestone 1 (~S272) because the pilot tenant publishes AI content; check the Art. 50(2) date against the official text. |
@@ -62,6 +61,7 @@ _Last updated: S283, 17/11/2026 (Claude Code, Ultracode; ~06:15 → ~16:30 +07).
 
 ## 2. Waiting on Nghiệp (decisions / manual steps)
 
+- **Waiting after S284:** none blocking. The provider budget split is set (tech lead, 14:33–14:34): provider {acc1 100, acc3 100, anthropic-direct 150, openai-direct 10, acc2 30, acc2-usw2 5}, CRM share {acc2 5}, CIS acc2 25 USD hard stop, acc1 alert only. AA-1138: the tech lead approved switching the CRM AI on for the synthetic agency to run the Nova Lite half, then grading the blind comparison page.
 - **Waiting after S282:** (a) set `cis.seo.research_auto_enabled` = true with *Effective from* 01/12/2026 on Platform › Settings (click path sent in the session; Cognito-only write); (b) acc2 OrganizationAccountAccessRole held until the TrueIDC appendix is signed; (c) acc1 root e-mail → info@adventure.asia 25–30/11, card / tax code / root MFA ≥ 02/12 (memory billing-transfer-timeline).
 - **Waiting after S281:** (a) the tech lead approves the four S281 Jira drafts (PR-22, PR-26, PR-27, PR-20; `.tmp-session/S281/jira-drafts.md`, not posted), then they are posted and the record moves to `docs/audits/2026-11-15-S281-session/jira-drafts.md`; (b) AA-1051: the tech lead's yes for the paid null run (cap 5 USD) once AA-1048 pins the instrument.
 - **Waiting after S275:** (a) the business owner's answers to the 10 M-OD default questions (Jira PR-26 comment 10636); the system uses the proposed defaults until then. (b) acc3 tag `terraform apply` (auto mode off). (c) The TrueIDC Zalo message before 20/11 (`.tmp-session/S275/trueidc-zalo.txt`).
@@ -260,6 +260,20 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-697 | Architecture diagrams with official AWS icons — ecosystem + each repo | S256 | **Done S257** (§5c): pilot approved under the S257 session plan (root #320); drift findings closed (Booking ops-docs bucket built S256, EFS removed S257 Infra #492) | — |
 | AA-710 | B2B benchmark: Asian Trails (eConnect, API, Lemax) | M-R4 | **S265:** slot S271 (R4 start): update the note against the R4 design (AA-1037, AA-1029, AA-1030, 'Book with AA' d17), map the gaps to issues, KAN-20 draft at that session's end, then close | — |
 | AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 | **S262:** AA-952, AA-954, AA-956, AA-957, AA-964, AA-971 closed (§5); AA-958 → S263. AA-952 was In Progress since S259 (slice 1 = C-M3 confirm, §3 row 0ah); **re-planned at the S260 close**: slots S261–S266, go-real ≥S267, see §3b "Kế hoạch CRM W5–W8 sau S260" | AA-958 needs a free Twilio trial for the live proof; AA-965 needs an LLM path |
+
+## 5. Closed in S284
+
+- **AA-1115** agency-only TripPlanner launcher and branding live (0 "Adventure Asia" strings, synthetic agency page).
+- **AA-1125** Delivery tabs: collector reads apps in turns (root #859), Booking 21 / Partner 23 queue entries.
+- **AA-1131** Done-with-scope: kit core a11y (CIS #1571) synced to Booking / Partner, checked live.
+- **AA-1112** retention live: Booking (2 candidates, 1 deleted, 1 archived), CRM (dry run off), new-table retention CI rule in 4 owners.
+- **AA-1113** gateway free-text scrub fail closed (live probe ok), each app its own cap per connection, provider budget split on AI gateway › Budgets, CRM setting values served whole (Partner #348).
+- **AA-1132** docs sync engine A1–A9 (root #875, #877), docs-impact warning in the 5 app repos, needs-review in the reader (CIS #1587, #1589), Infra #919 applied.
+- **AA-1133** Done-with-scope: docs reader v2 for every staff role (search, sidebar, TOC, history, feedback; CIS #1581, #1582, #1588).
+- **AA-1116** Done-with-scope: lead on CRM / e-mail / webhook, AI sessions quota, extra-seat line (244 USD = draft) live; agency-app module moved to AA-1139.
+- New: AA-1135 (Delivery v2, In Progress: cold custom range > 29 s), AA-1136 / AA-1137 (hooks + spec, S285), AA-1138 (CRM draft reply Nova vs Haiku, In Progress), AA-1139 (TripPlanner module in the agency app).
+- Still open with S284 work: AA-1111 (old IAM key removed, npm audit gate, security headers in 5 apps), AA-1126 L16 (TripPlanner outbox tp-034 + CIS 447), AA-1127 (CIS 448–449 + #1574/#1575), AA-1128 (season sync B1 live), AA-1051 (W5 null run non_inferior, 2.62 USD).
+- Evidence: root `docs/audits/2026-11-18-S284-session/` and the S284 session log.
 
 ## 5. Closed in S283
 

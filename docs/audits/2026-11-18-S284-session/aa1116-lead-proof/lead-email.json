@@ -1,0 +1,22 @@
+{
+  "mode": "lead",
+  "channel": "email",
+  "slug": "e2e-lead-proof",
+  "tenant_id": "de3272b3-85b6-41ae-babe-f78b2254717e",
+  "run": "4ec3fb2c",
+  "started_at": "2026-11-18T06:38:12.823Z",
+  "checks": {
+    "send": {
+      "step": "send",
+      "status": 200,
+      "channel": "email"
+    },
+    "email": {
+      "problems": []
+    },
+    "lead_delivered_log": true
+  },
+  "ok": true,
+  "lead_id": "40ef4753-d485-47a8-9b63-1656d498facf",
+  "handoff_id": 665
+}

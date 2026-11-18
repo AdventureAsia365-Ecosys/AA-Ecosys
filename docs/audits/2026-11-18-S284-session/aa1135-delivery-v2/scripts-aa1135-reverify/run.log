@@ -1,0 +1,1652 @@
+{
+ "shots": [
+  {
+   "name": "overview-trend-1440-light.png",
+   "kb": 55
+  },
+  {
+   "name": "overview-trend-1440-dark.png",
+   "kb": 55
+  },
+  {
+   "name": "custom-picker-1440-light.png",
+   "kb": 142
+  },
+  {
+   "name": "custom-picker-1440-dark.png",
+   "kb": 143
+  },
+  {
+   "name": "mq-cis-90d-charts-1440-light.png",
+   "kb": 106
+  },
+  {
+   "name": "mq-cis-90d-throughput-1440-dark.png",
+   "kb": 92
+  },
+  {
+   "name": "mq-cis-90d-recent-1440-light.png",
+   "kb": 49
+  },
+  {
+   "name": "mq-booking-7d-recent-1440-dark.png",
+   "kb": 49
+  },
+  {
+   "name": "git-map-cis-weekly-1440-light.png",
+   "kb": 84
+  },
+  {
+   "name": "git-map-cis-weekly-1440-dark.png",
+   "kb": 84
+  },
+  {
+   "name": "cis-trend-1440-light.png",
+   "kb": 125
+  },
+  {
+   "name": "cis-segments-1440-dark.png",
+   "kb": 96
+  },
+  {
+   "name": "booking-90d-ci-1440-light.png",
+   "kb": 123
+  },
+  {
+   "name": "partner-7d-trend-1440-dark.png",
+   "kb": 124
+  },
+  {
+   "name": "tripplanner-segments-1440-light.png",
+   "kb": 94
+  },
+  {
+   "name": "custom-picker-390-light.png",
+   "kb": 54
+  }
+ ],
+ "pages": [
+  {
+   "name": "overview-trend-1440-light",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery",
+   "scheme": "light",
+   "login": false,
+   "file": "overview-trend-1440-light.png",
+   "axisCuts": [],
+   "chartCount": 43,
+   "yTicks": [
+    "delivery-infra-deployment_frequency[]",
+    "delivery-infra-lead_time[]",
+    "delivery-infra-change_failure_rate[]",
+    "delivery-infra-recovery_time[]",
+    "delivery-infra-rework_rate[]",
+    "delivery-infra-ci_p95[]",
+    "delivery-booking-deployment_frequency[]",
+    "delivery-booking-lead_time[]",
+    "delivery-booking-change_failure_rate[]",
+    "delivery-booking-recovery_time[]",
+    "delivery-booking-rework_rate[]",
+    "delivery-booking-ci_p95[]",
+    "delivery-cis-deployment_frequency[]",
+    "delivery-cis-lead_time[]",
+    "delivery-cis-change_failure_rate[]",
+    "delivery-cis-recovery_time[]",
+    "delivery-cis-rework_rate[]",
+    "delivery-cis-ci_p95[]",
+    "delivery-partner-deployment_frequency[]",
+    "delivery-partner-lead_time[]",
+    "delivery-partner-change_failure_rate[]",
+    "delivery-partner-recovery_time[]",
+    "delivery-partner-rework_rate[]",
+    "delivery-partner-ci_p95[]",
+    "delivery-root-deployment_frequency[]",
+    "delivery-root-lead_time[]",
+    "delivery-root-change_failure_rate[]",
+    "delivery-root-recovery_time[]",
+    "delivery-root-rework_rate[]",
+    "delivery-root-ci_p95[]",
+    "delivery-tripplanner-deployment_frequency[]",
+    "delivery-tripplanner-lead_time[]",
+    "delivery-tripplanner-change_failure_rate[]",
+    "delivery-tripplanner-recovery_time[]",
+    "delivery-tripplanner-rework_rate[]",
+    "delivery-tripplanner-ci_p95[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[0,50,100,150,200]"
+   ],
+   "colours": [
+    {
+     "ctx": "delivery-trend",
+     "kind": "lines",
+     "series": [
+      "#db9628",
+      "#1e40af",
+      "#5b21b6",
+      "#276b4e",
+      "#c20101",
+      "#35495e"
+     ],
+     "legend": [
+      "Booking=#1e40af",
+      "CIS=#db9628",
+      "Infra=#c20101",
+      "Partner CRM=#5b21b6",
+      "Root (docs and plans)=#35495e",
+      "TripPlanner=#276b4e"
+     ],
+     "distinct": true,
+     "minDeltaE": 26.7,
+     "closestPair": "#1e40af vs #5b21b6",
+     "minContrastVsBg": 2.5,
+     "bg": "rgb(255, 255, 255)"
+    }
+   ],
+   "oldWording": [
+    "/last 12 weeks/i"
+   ],
+   "wording": {
+    "intro": null,
+    "ci": null,
+    "failed": null,
+    "recent": null
+   },
+   "expectWhen": null,
+   "whenOk": null,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "overview-trend-1440-dark",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery",
+   "scheme": "dark",
+   "login": false,
+   "file": "overview-trend-1440-dark.png",
+   "axisCuts": [],
+   "chartCount": 43,
+   "yTicks": [
+    "delivery-infra-deployment_frequency[]",
+    "delivery-infra-lead_time[]",
+    "delivery-infra-change_failure_rate[]",
+    "delivery-infra-recovery_time[]",
+    "delivery-infra-rework_rate[]",
+    "delivery-infra-ci_p95[]",
+    "delivery-booking-deployment_frequency[]",
+    "delivery-booking-lead_time[]",
+    "delivery-booking-change_failure_rate[]",
+    "delivery-booking-recovery_time[]",
+    "delivery-booking-rework_rate[]",
+    "delivery-booking-ci_p95[]",
+    "delivery-cis-deployment_frequency[]",
+    "delivery-cis-lead_time[]",
+    "delivery-cis-change_failure_rate[]",
+    "delivery-cis-recovery_time[]",
+    "delivery-cis-rework_rate[]",
+    "delivery-cis-ci_p95[]",
+    "delivery-partner-deployment_frequency[]",
+    "delivery-partner-lead_time[]",
+    "delivery-partner-change_failure_rate[]",
+    "delivery-partner-recovery_time[]",
+    "delivery-partner-rework_rate[]",
+    "delivery-partner-ci_p95[]",
+    "delivery-root-deployment_frequency[]",
+    "delivery-root-lead_time[]",
+    "delivery-root-change_failure_rate[]",
+    "delivery-root-recovery_time[]",
+    "delivery-root-rework_rate[]",
+    "delivery-root-ci_p95[]",
+    "delivery-tripplanner-deployment_frequency[]",
+    "delivery-tripplanner-lead_time[]",
+    "delivery-tripplanner-change_failure_rate[]",
+    "delivery-tripplanner-recovery_time[]",
+    "delivery-tripplanner-rework_rate[]",
+    "delivery-tripplanner-ci_p95[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[0,50,100,150,200]"
+   ],
+   "colours": [
+    {
+     "ctx": "delivery-trend",
+     "kind": "lines",
+     "series": [
+      "#e8a838",
+      "#a5bef7",
+      "#b99bf0",
+      "#4fb488",
+      "#f2746f",
+      "#8ca3bc"
+     ],
+     "legend": [
+      "Booking=#a5bef7",
+      "CIS=#e8a838",
+      "Infra=#f2746f",
+      "Partner CRM=#b99bf0",
+      "Root (docs and plans)=#8ca3bc",
+      "TripPlanner=#4fb488"
+     ],
+     "distinct": true,
+     "minDeltaE": 20.2,
+     "closestPair": "#a5bef7 vs #8ca3bc",
+     "minContrastVsBg": 5.79,
+     "bg": "rgb(25, 33, 44)"
+    }
+   ],
+   "oldWording": [
+    "/last 12 weeks/i"
+   ],
+   "wording": {
+    "intro": null,
+    "ci": null,
+    "failed": null,
+    "recent": null
+   },
+   "expectWhen": null,
+   "whenOk": null,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "custom-picker-1440-light",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery",
+   "scheme": "light",
+   "login": false,
+   "file": "custom-picker-1440-light.png",
+   "axisCuts": [],
+   "chartCount": 43,
+   "yTicks": [
+    "delivery-infra-deployment_frequency[]",
+    "delivery-infra-lead_time[]",
+    "delivery-infra-change_failure_rate[]",
+    "delivery-infra-recovery_time[]",
+    "delivery-infra-rework_rate[]",
+    "delivery-infra-ci_p95[]",
+    "delivery-booking-deployment_frequency[]",
+    "delivery-booking-lead_time[]",
+    "delivery-booking-change_failure_rate[]",
+    "delivery-booking-recovery_time[]",
+    "delivery-booking-rework_rate[]",
+    "delivery-booking-ci_p95[]",
+    "delivery-cis-deployment_frequency[]",
+    "delivery-cis-lead_time[]",
+    "delivery-cis-change_failure_rate[]",
+    "delivery-cis-recovery_time[]",
+    "delivery-cis-rework_rate[]",
+    "delivery-cis-ci_p95[]",
+    "delivery-partner-deployment_frequency[]",
+    "delivery-partner-lead_time[]",
+    "delivery-partner-change_failure_rate[]",
+    "delivery-partner-recovery_time[]",
+    "delivery-partner-rework_rate[]",
+    "delivery-partner-ci_p95[]",
+    "delivery-root-deployment_frequency[]",
+    "delivery-root-lead_time[]",
+    "delivery-root-change_failure_rate[]",
+    "delivery-root-recovery_time[]",
+    "delivery-root-rework_rate[]",
+    "delivery-root-ci_p95[]",
+    "delivery-tripplanner-deployment_frequency[]",
+    "delivery-tripplanner-lead_time[]",
+    "delivery-tripplanner-change_failure_rate[]",
+    "delivery-tripplanner-recovery_time[]",
+    "delivery-tripplanner-rework_rate[]",
+    "delivery-tripplanner-ci_p95[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[0,50,100,150,200]"
+   ],
+   "colours": [
+    {
+     "ctx": "delivery-trend",
+     "kind": "lines",
+     "series": [
+      "#db9628",
+      "#1e40af",
+      "#5b21b6",
+      "#276b4e",
+      "#c20101",
+      "#35495e"
+     ],
+     "legend": [
+      "Booking=#1e40af",
+      "CIS=#db9628",
+      "Infra=#c20101",
+      "Partner CRM=#5b21b6",
+      "Root (docs and plans)=#35495e",
+      "TripPlanner=#276b4e"
+     ],
+     "distinct": true,
+     "minDeltaE": 26.7,
+     "closestPair": "#1e40af vs #5b21b6",
+     "minContrastVsBg": 2.5,
+     "bg": "rgb(255, 255, 255)"
+    }
+   ],
+   "oldWording": [
+    "/last 12 weeks/i"
+   ],
+   "wording": {
+    "intro": null,
+    "ci": null,
+    "failed": null,
+    "recent": null
+   },
+   "expectWhen": null,
+   "whenOk": null,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": {
+    "geo": [
+     {
+      "label": "From",
+      "value": "5 Nov 2026",
+      "wrap": [
+       592,
+       742
+      ],
+      "box": [
+       592,
+       742
+      ]
+     },
+     {
+      "label": "To",
+      "value": "18 Nov 2026",
+      "wrap": [
+       770,
+       920
+      ],
+      "box": [
+       770,
+       920
+      ]
+     }
+    ],
+    "applyBox": [
+     930,
+     990
+    ],
+    "hit": {
+     "inside": true,
+     "tag": "BUTTON",
+     "label": null
+    },
+    "enabled": false,
+    "notes": "7 days\n28 days\n90 days\nCustom\n–\nApply\nCustom ranges are paused until CIS runs the same engine as the collector; the presets work.",
+    "urlBefore": "https://aa-cis.lumiguides.it.com/admin/platform/delivery",
+    "urlAfter": null,
+    "headAfter": null
+   }
+  },
+  {
+   "name": "custom-picker-1440-dark",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery",
+   "scheme": "dark",
+   "login": false,
+   "file": "custom-picker-1440-dark.png",
+   "axisCuts": [],
+   "chartCount": 43,
+   "yTicks": [
+    "delivery-infra-deployment_frequency[]",
+    "delivery-infra-lead_time[]",
+    "delivery-infra-change_failure_rate[]",
+    "delivery-infra-recovery_time[]",
+    "delivery-infra-rework_rate[]",
+    "delivery-infra-ci_p95[]",
+    "delivery-booking-deployment_frequency[]",
+    "delivery-booking-lead_time[]",
+    "delivery-booking-change_failure_rate[]",
+    "delivery-booking-recovery_time[]",
+    "delivery-booking-rework_rate[]",
+    "delivery-booking-ci_p95[]",
+    "delivery-cis-deployment_frequency[]",
+    "delivery-cis-lead_time[]",
+    "delivery-cis-change_failure_rate[]",
+    "delivery-cis-recovery_time[]",
+    "delivery-cis-rework_rate[]",
+    "delivery-cis-ci_p95[]",
+    "delivery-partner-deployment_frequency[]",
+    "delivery-partner-lead_time[]",
+    "delivery-partner-change_failure_rate[]",
+    "delivery-partner-recovery_time[]",
+    "delivery-partner-rework_rate[]",
+    "delivery-partner-ci_p95[]",
+    "delivery-root-deployment_frequency[]",
+    "delivery-root-lead_time[]",
+    "delivery-root-change_failure_rate[]",
+    "delivery-root-recovery_time[]",
+    "delivery-root-rework_rate[]",
+    "delivery-root-ci_p95[]",
+    "delivery-tripplanner-deployment_frequency[]",
+    "delivery-tripplanner-lead_time[]",
+    "delivery-tripplanner-change_failure_rate[]",
+    "delivery-tripplanner-recovery_time[]",
+    "delivery-tripplanner-rework_rate[]",
+    "delivery-tripplanner-ci_p95[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[0,50,100,150,200]"
+   ],
+   "colours": [
+    {
+     "ctx": "delivery-trend",
+     "kind": "lines",
+     "series": [
+      "#e8a838",
+      "#a5bef7",
+      "#b99bf0",
+      "#4fb488",
+      "#f2746f",
+      "#8ca3bc"
+     ],
+     "legend": [
+      "Booking=#a5bef7",
+      "CIS=#e8a838",
+      "Infra=#f2746f",
+      "Partner CRM=#b99bf0",
+      "Root (docs and plans)=#8ca3bc",
+      "TripPlanner=#4fb488"
+     ],
+     "distinct": true,
+     "minDeltaE": 20.2,
+     "closestPair": "#a5bef7 vs #8ca3bc",
+     "minContrastVsBg": 5.79,
+     "bg": "rgb(25, 33, 44)"
+    }
+   ],
+   "oldWording": [
+    "/last 12 weeks/i"
+   ],
+   "wording": {
+    "intro": null,
+    "ci": null,
+    "failed": null,
+    "recent": null
+   },
+   "expectWhen": null,
+   "whenOk": null,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": {
+    "geo": [
+     {
+      "label": "From",
+      "value": "5 Nov 2026",
+      "wrap": [
+       592,
+       742
+      ],
+      "box": [
+       592,
+       742
+      ]
+     },
+     {
+      "label": "To",
+      "value": "18 Nov 2026",
+      "wrap": [
+       770,
+       920
+      ],
+      "box": [
+       770,
+       920
+      ]
+     }
+    ],
+    "applyBox": [
+     930,
+     990
+    ],
+    "hit": {
+     "inside": true,
+     "tag": "BUTTON",
+     "label": null
+    },
+    "enabled": false,
+    "notes": "7 days\n28 days\n90 days\nCustom\n–\nApply\nCustom ranges are paused until CIS runs the same engine as the collector; the presets work.",
+    "urlBefore": "https://aa-cis.lumiguides.it.com/admin/platform/delivery",
+    "urlAfter": null,
+    "headAfter": null
+   }
+  },
+  {
+   "name": "custom-url-mq-cis",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=merge-queue&repo=cis&range=custom&from=2026-11-09&to=2026-11-15",
+   "scheme": "light",
+   "login": false,
+   "file": null,
+   "axisCuts": [],
+   "chartCount": 0,
+   "yTicks": [],
+   "colours": [],
+   "oldWording": [],
+   "wording": {
+    "intro": null,
+    "ci": null,
+    "failed": null,
+    "recent": null
+   },
+   "expectWhen": null,
+   "whenOk": null,
+   "emailInText": false,
+   "console": [
+    "Failed to load resource: the server responded with a status of 409 ()"
+   ],
+   "network": [
+    "409 GET https://aa-cis.lumiguides.it.com/api/admin/platform/delivery?range=custom&from=2026-11-09&to=2026-11-15"
+   ],
+   "extra": null
+  },
+  {
+   "name": "custom-url-cis",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=cis&range=custom&from=2026-11-09&to=2026-11-15",
+   "scheme": "light",
+   "login": false,
+   "file": null,
+   "axisCuts": [],
+   "chartCount": 0,
+   "yTicks": [],
+   "colours": [],
+   "oldWording": [],
+   "wording": {
+    "intro": null,
+    "ci": null,
+    "failed": null,
+    "recent": null
+   },
+   "expectWhen": null,
+   "whenOk": null,
+   "emailInText": false,
+   "console": [
+    "Failed to load resource: the server responded with a status of 409 ()"
+   ],
+   "network": [
+    "409 GET https://aa-cis.lumiguides.it.com/api/admin/platform/delivery?range=custom&from=2026-11-09&to=2026-11-15"
+   ],
+   "extra": null
+  },
+  {
+   "name": "mq-cis-90d-charts-1440-light",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=merge-queue&repo=cis&range=90d",
+   "scheme": "light",
+   "login": false,
+   "file": "mq-cis-90d-charts-1440-light.png",
+   "axisCuts": [],
+   "chartCount": 7,
+   "yTicks": [
+    "queue-histogram[0,75,150,225,300]",
+    "queue-reason-bars[Checks failed,No check ran]",
+    "queue-weekly[0,3,6,9,12]",
+    "queue-throughput[]",
+    "queue-throughput[]",
+    "queue-throughput[]",
+    "queue-throughput[0,9,18,27,36]"
+   ],
+   "colours": [
+    {
+     "ctx": "queue-throughput",
+     "kind": "bars",
+     "series": [
+      "#276b4e",
+      "#c20101"
+     ],
+     "legend": [
+      "Ejected=#c20101",
+      "Merged=#276b4e",
+      "Removed=#5a6270"
+     ],
+     "distinct": true,
+     "minDeltaE": 104,
+     "closestPair": "#276b4e vs #c20101",
+     "minContrastVsBg": 6.36,
+     "bg": "rgb(255, 255, 255)"
+    }
+   ],
+   "oldWording": [],
+   "wording": {
+    "intro": "Each stay of a pull request in the GitHub merge queue over the last 90 days: how long it waited, whether it merged or was thrown out and why, and what the merge_group checks cost.",
+    "ci": null,
+    "failed": null,
+    "recent": "Recent entries | Entries still in the queue at the end of the range and the ones that left it over the last 90 days, newest first. | Columns"
+   },
+   "expectWhen": "over the last 90 days",
+   "whenOk": true,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "mq-cis-90d-throughput-1440-dark",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=merge-queue&repo=cis&range=90d",
+   "scheme": "dark",
+   "login": false,
+   "file": "mq-cis-90d-throughput-1440-dark.png",
+   "axisCuts": [],
+   "chartCount": 7,
+   "yTicks": [
+    "queue-histogram[0,75,150,225,300]",
+    "queue-reason-bars[Checks failed,No check ran]",
+    "queue-weekly[0,3,6,9,12]",
+    "queue-throughput[]",
+    "queue-throughput[]",
+    "queue-throughput[]",
+    "queue-throughput[0,9,18,27,36]"
+   ],
+   "colours": [
+    {
+     "ctx": "queue-throughput",
+     "kind": "bars",
+     "series": [
+      "#4fb488",
+      "#f2746f"
+     ],
+     "legend": [
+      "Ejected=#f2746f",
+      "Merged=#4fb488",
+      "Removed=#a0a8b4"
+     ],
+     "distinct": true,
+     "minDeltaE": 88.8,
+     "closestPair": "#4fb488 vs #f2746f",
+     "minContrastVsBg": 5.79,
+     "bg": "rgb(25, 33, 44)"
+    }
+   ],
+   "oldWording": [],
+   "wording": {
+    "intro": "Each stay of a pull request in the GitHub merge queue over the last 90 days: how long it waited, whether it merged or was thrown out and why, and what the merge_group checks cost.",
+    "ci": null,
+    "failed": null,
+    "recent": "Recent entries | Entries still in the queue at the end of the range and the ones that left it over the last 90 days, newest first. | Columns"
+   },
+   "expectWhen": "over the last 90 days",
+   "whenOk": true,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "mq-cis-90d-recent-1440-light",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=merge-queue&repo=cis&range=90d",
+   "scheme": "light",
+   "login": true,
+   "file": "mq-cis-90d-recent-1440-light.png",
+   "axisCuts": [],
+   "chartCount": 0,
+   "yTicks": [],
+   "colours": [],
+   "oldWording": [],
+   "wording": {},
+   "expectWhen": "over the last 90 days",
+   "whenOk": true,
+   "emailInText": false,
+   "console": [
+    "Failed to load resource: the server responded with a status of 404 ()",
+    "Refused to execute script from 'https://aa-cis.lumiguides.it.com/_next/static/chunks/1j1tv1qegb-0w.js' because its MIME type ('text/plain') is not executable, and strict MIME type checking is enabled."
+   ],
+   "network": [
+    "404 GET https://aa-cis.lumiguides.it.com/_next/static/chunks/1j1tv1qegb-0w.js",
+    "FAILED net::ERR_ABORTED https://aa-cis.lumiguides.it.com/_next/static/chunks/1j1tv1qegb-0w.js"
+   ],
+   "extra": null
+  },
+  {
+   "name": "mq-booking-7d-recent-1440-dark",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=merge-queue&repo=booking&range=7d",
+   "scheme": "dark",
+   "login": true,
+   "file": "mq-booking-7d-recent-1440-dark.png",
+   "axisCuts": [],
+   "chartCount": 0,
+   "yTicks": [],
+   "colours": [],
+   "oldWording": [],
+   "wording": {},
+   "expectWhen": "over the last 7 days",
+   "whenOk": true,
+   "emailInText": false,
+   "console": [
+    "Failed to load resource: the server responded with a status of 404 ()",
+    "Refused to execute script from 'https://aa-cis.lumiguides.it.com/_next/static/chunks/2sxi74h7fofs7.js' because its MIME type ('text/plain') is not executable, and strict MIME type checking is enabled."
+   ],
+   "network": [
+    "404 GET https://aa-cis.lumiguides.it.com/_next/static/chunks/2sxi74h7fofs7.js",
+    "FAILED net::ERR_ABORTED https://aa-cis.lumiguides.it.com/_next/static/chunks/2sxi74h7fofs7.js"
+   ],
+   "extra": null
+  },
+  {
+   "name": "mq-partner-28d",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=merge-queue&repo=partner&range=28d",
+   "scheme": "light",
+   "login": false,
+   "file": null,
+   "axisCuts": [],
+   "chartCount": 7,
+   "yTicks": [
+    "queue-histogram[0,45,90,135,180]",
+    "queue-reason-bars[Checks failed,No check ran]",
+    "queue-weekly[0,4,8,12,16]",
+    "queue-throughput[]",
+    "queue-throughput[]",
+    "queue-throughput[]",
+    "queue-throughput[0,5,10,15,20]"
+   ],
+   "colours": [
+    {
+     "ctx": "queue-throughput",
+     "kind": "bars",
+     "series": [
+      "#276b4e",
+      "#c20101"
+     ],
+     "legend": [
+      "Ejected=#c20101",
+      "Merged=#276b4e",
+      "Removed=#5a6270"
+     ],
+     "distinct": true,
+     "minDeltaE": 104,
+     "closestPair": "#276b4e vs #c20101",
+     "minContrastVsBg": 6.36,
+     "bg": "rgb(255, 255, 255)"
+    }
+   ],
+   "oldWording": [],
+   "wording": {
+    "intro": "Each stay of a pull request in the GitHub merge queue over the last 28 days: how long it waited, whether it merged or was thrown out and why, and what the merge_group checks cost.",
+    "ci": null,
+    "failed": null,
+    "recent": "Recent entries | Entries still in the queue at the end of the range and the ones that left it over the last 28 days, newest first. | Columns"
+   },
+   "expectWhen": "over the last 28 days",
+   "whenOk": true,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "mq-booking-90d",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=merge-queue&repo=booking&range=90d",
+   "scheme": "light",
+   "login": false,
+   "file": null,
+   "axisCuts": [],
+   "chartCount": 7,
+   "yTicks": [
+    "queue-histogram[0,45,90,135,180]",
+    "queue-reason-bars[No check ran,Checks failed]",
+    "queue-weekly[0,2,4,6,8]",
+    "queue-throughput[]",
+    "queue-throughput[]",
+    "queue-throughput[]",
+    "queue-throughput[0,5,10,15,20]"
+   ],
+   "colours": [
+    {
+     "ctx": "queue-throughput",
+     "kind": "bars",
+     "series": [
+      "#276b4e",
+      "#c20101"
+     ],
+     "legend": [
+      "Ejected=#c20101",
+      "Merged=#276b4e",
+      "Removed=#5a6270"
+     ],
+     "distinct": true,
+     "minDeltaE": 104,
+     "closestPair": "#276b4e vs #c20101",
+     "minContrastVsBg": 6.36,
+     "bg": "rgb(255, 255, 255)"
+    }
+   ],
+   "oldWording": [],
+   "wording": {
+    "intro": "Each stay of a pull request in the GitHub merge queue over the last 90 days: how long it waited, whether it merged or was thrown out and why, and what the merge_group checks cost.",
+    "ci": null,
+    "failed": null,
+    "recent": "Recent entries | Entries still in the queue at the end of the range and the ones that left it over the last 90 days, newest first. | Columns"
+   },
+   "expectWhen": "over the last 90 days",
+   "whenOk": true,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "mq-cis-7d",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=merge-queue&repo=cis&range=7d",
+   "scheme": "light",
+   "login": false,
+   "file": null,
+   "axisCuts": [],
+   "chartCount": 7,
+   "yTicks": [
+    "queue-histogram[0,35,70,105,140]",
+    "queue-reason-bars[Checks failed,No check ran]",
+    "queue-weekly[0,2,4,6,8]",
+    "queue-throughput[]",
+    "queue-throughput[]",
+    "queue-throughput[]",
+    "queue-throughput[0,9,18,27,36]"
+   ],
+   "colours": [
+    {
+     "ctx": "queue-throughput",
+     "kind": "bars",
+     "series": [
+      "#276b4e",
+      "#c20101"
+     ],
+     "legend": [
+      "Ejected=#c20101",
+      "Merged=#276b4e",
+      "Removed=#5a6270"
+     ],
+     "distinct": true,
+     "minDeltaE": 104,
+     "closestPair": "#276b4e vs #c20101",
+     "minContrastVsBg": 6.36,
+     "bg": "rgb(255, 255, 255)"
+    }
+   ],
+   "oldWording": [],
+   "wording": {
+    "intro": "Each stay of a pull request in the GitHub merge queue over the last 7 days: how long it waited, whether it merged or was thrown out and why, and what the merge_group checks cost.",
+    "ci": null,
+    "failed": null,
+    "recent": "Recent entries | Entries still in the queue at the end of the range and the ones that left it over the last 7 days, newest first. | Columns"
+   },
+   "expectWhen": "over the last 7 days",
+   "whenOk": true,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "git-map-cis-weekly-1440-light",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=git-map&repo=cis",
+   "scheme": "light",
+   "login": false,
+   "file": "git-map-cis-weekly-1440-light.png",
+   "axisCuts": [],
+   "chartCount": 1,
+   "yTicks": [
+    "git-weekly[0,55,110,165,220]"
+   ],
+   "colours": [],
+   "oldWording": [],
+   "wording": {
+    "intro": null,
+    "ci": null,
+    "failed": null,
+    "recent": null
+   },
+   "expectWhen": null,
+   "whenOk": null,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "git-map-cis-weekly-1440-dark",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=git-map&repo=cis",
+   "scheme": "dark",
+   "login": false,
+   "file": "git-map-cis-weekly-1440-dark.png",
+   "axisCuts": [],
+   "chartCount": 1,
+   "yTicks": [
+    "git-weekly[0,55,110,165,220]"
+   ],
+   "colours": [],
+   "oldWording": [],
+   "wording": {
+    "intro": null,
+    "ci": null,
+    "failed": null,
+    "recent": null
+   },
+   "expectWhen": null,
+   "whenOk": null,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "cis-trend-1440-light",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=cis",
+   "scheme": "light",
+   "login": false,
+   "file": "cis-trend-1440-light.png",
+   "axisCuts": [],
+   "chartCount": 5,
+   "yTicks": [
+    "delivery-app-trend[0,40,80,120,160]",
+    "delivery-app-trend[0,0.25,0.5,0.75,1]",
+    "delivery-app-trend[0,9,18,27,36]",
+    "delivery-app-trend[0,0.35,0.7,1.05,1.4]",
+    "delivery-segments[Median,#1568,#1567,#1401,#1339,#1400,#1360,#1160,#1161,#1044,#1045]"
+   ],
+   "colours": [
+    {
+     "ctx": "delivery-segments",
+     "kind": "bars",
+     "series": [
+      "#1e40af",
+      "#5b21b6",
+      "#35495e",
+      "#db9628",
+      "#276b4e"
+     ],
+     "legend": [],
+     "distinct": true,
+     "minDeltaE": 26.7,
+     "closestPair": "#1e40af vs #5b21b6",
+     "minContrastVsBg": 2.5,
+     "bg": "rgb(255, 255, 255)"
+    }
+   ],
+   "oldWording": [
+    "/last 12 weeks/i"
+   ],
+   "wording": {
+    "intro": null,
+    "ci": "CI health per workflow | Runs over the last 28 days per workflow (cancelled and skipped runs left out). | Columns",
+    "failed": "Failed deploys and recovery | Deploys that failed over the last 28 days, why, and how long until a green deploy repaired them. | Columns",
+    "recent": null
+   },
+   "expectWhen": "over the last 28 days",
+   "whenOk": true,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "cis-segments-1440-dark",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=cis",
+   "scheme": "dark",
+   "login": false,
+   "file": "cis-segments-1440-dark.png",
+   "axisCuts": [],
+   "chartCount": 5,
+   "yTicks": [
+    "delivery-app-trend[0,40,80,120,160]",
+    "delivery-app-trend[0,0.25,0.5,0.75,1]",
+    "delivery-app-trend[0,9,18,27,36]",
+    "delivery-app-trend[0,0.35,0.7,1.05,1.4]",
+    "delivery-segments[Median,#1568,#1567,#1401,#1339,#1400,#1360,#1160,#1161,#1044,#1045]"
+   ],
+   "colours": [
+    {
+     "ctx": "delivery-segments",
+     "kind": "bars",
+     "series": [
+      "#a5bef7",
+      "#b99bf0",
+      "#8ca3bc",
+      "#e8a838",
+      "#4fb488"
+     ],
+     "legend": [],
+     "distinct": true,
+     "minDeltaE": 20.2,
+     "closestPair": "#a5bef7 vs #8ca3bc",
+     "minContrastVsBg": 6.24,
+     "bg": "rgb(25, 33, 44)"
+    }
+   ],
+   "oldWording": [
+    "/last 12 weeks/i"
+   ],
+   "wording": {
+    "intro": null,
+    "ci": "CI health per workflow | Runs over the last 28 days per workflow (cancelled and skipped runs left out). | Columns",
+    "failed": "Failed deploys and recovery | Deploys that failed over the last 28 days, why, and how long until a green deploy repaired them. | Columns",
+    "recent": null
+   },
+   "expectWhen": "over the last 28 days",
+   "whenOk": true,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "booking-90d-ci-1440-light",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=booking&range=90d",
+   "scheme": "light",
+   "login": false,
+   "file": "booking-90d-ci-1440-light.png",
+   "axisCuts": [],
+   "chartCount": 5,
+   "yTicks": [
+    "delivery-app-trend[0,8,16,24,32]",
+    "delivery-app-trend[0,0.25,0.5,0.75,1]",
+    "delivery-app-trend[0,5,10,15,20]",
+    "delivery-app-trend[0,2,4,6,8]",
+    "delivery-segments[Median,#30,#48,#31,#32,#49,#169,#33,#93,#208,#50]"
+   ],
+   "colours": [
+    {
+     "ctx": "delivery-segments",
+     "kind": "bars",
+     "series": [
+      "#1e40af",
+      "#5b21b6",
+      "#35495e",
+      "#db9628",
+      "#276b4e"
+     ],
+     "legend": [],
+     "distinct": true,
+     "minDeltaE": 26.7,
+     "closestPair": "#1e40af vs #5b21b6",
+     "minContrastVsBg": 2.5,
+     "bg": "rgb(255, 255, 255)"
+    }
+   ],
+   "oldWording": [
+    "/last 12 weeks/i"
+   ],
+   "wording": {
+    "intro": null,
+    "ci": "CI health per workflow | Runs over the last 90 days per workflow (cancelled and skipped runs left out). | Columns",
+    "failed": "Failed deploys and recovery | Deploys that failed over the last 90 days, why, and how long until a green deploy repaired them. | Columns",
+    "recent": null
+   },
+   "expectWhen": "over the last 90 days",
+   "whenOk": true,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "partner-7d-trend-1440-dark",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=partner&range=7d",
+   "scheme": "dark",
+   "login": false,
+   "file": "partner-7d-trend-1440-dark.png",
+   "axisCuts": [],
+   "chartCount": 5,
+   "yTicks": [
+    "delivery-app-trend[0,25,50,75,100]",
+    "delivery-app-trend[0,0.2,0.4,0.6,0.8]",
+    "delivery-app-trend[0,4,8,12,16]",
+    "delivery-app-trend[0,0.95,1.9,2.85,3.8]",
+    "delivery-segments[Median,#308,#297,#274,#316,#279,#284,#273,#283,#305,#276]"
+   ],
+   "colours": [
+    {
+     "ctx": "delivery-segments",
+     "kind": "bars",
+     "series": [
+      "#a5bef7",
+      "#b99bf0",
+      "#8ca3bc",
+      "#e8a838",
+      "#4fb488"
+     ],
+     "legend": [],
+     "distinct": true,
+     "minDeltaE": 20.2,
+     "closestPair": "#a5bef7 vs #8ca3bc",
+     "minContrastVsBg": 6.24,
+     "bg": "rgb(25, 33, 44)"
+    }
+   ],
+   "oldWording": [
+    "/last 12 weeks/i"
+   ],
+   "wording": {
+    "intro": null,
+    "ci": "CI health per workflow | Runs over the last 7 days per workflow (cancelled and skipped runs left out). | Columns",
+    "failed": "Failed deploys and recovery | Deploys that failed over the last 7 days, why, and how long until a green deploy repaired them. | Columns",
+    "recent": null
+   },
+   "expectWhen": "over the last 7 days",
+   "whenOk": true,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "tripplanner-segments-1440-light",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=tripplanner",
+   "scheme": "light",
+   "login": false,
+   "file": "tripplanner-segments-1440-light.png",
+   "axisCuts": [],
+   "chartCount": 5,
+   "yTicks": [
+    "delivery-app-trend[0,6,12,18,24]",
+    "delivery-app-trend[0,20,40,60,80]",
+    "delivery-app-trend[0,9,18,27,36]",
+    "delivery-app-trend[0,2,4,6,8]",
+    "delivery-segments[Median,#143,#197,#191,#276,#175,#193,#167,#168,#169,#170]"
+   ],
+   "colours": [
+    {
+     "ctx": "delivery-segments",
+     "kind": "bars",
+     "series": [
+      "#1e40af",
+      "#35495e",
+      "#db9628",
+      "#276b4e"
+     ],
+     "legend": [],
+     "distinct": true,
+     "minDeltaE": 38.3,
+     "closestPair": "#35495e vs #276b4e",
+     "minContrastVsBg": 2.5,
+     "bg": "rgb(255, 255, 255)"
+    }
+   ],
+   "oldWording": [
+    "/last 12 weeks/i"
+   ],
+   "wording": {
+    "intro": null,
+    "ci": "CI health per workflow | Runs over the last 28 days per workflow (cancelled and skipped runs left out). | Columns",
+    "failed": "Failed deploys and recovery | Deploys that failed over the last 28 days, why, and how long until a green deploy repaired them. | Columns",
+    "recent": null
+   },
+   "expectWhen": "over the last 28 days",
+   "whenOk": true,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "infra",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=infra",
+   "scheme": "light",
+   "login": false,
+   "file": null,
+   "axisCuts": [],
+   "chartCount": 5,
+   "yTicks": [
+    "delivery-app-trend[0,6,12,18,24]",
+    "delivery-app-trend[0,400,800,1200,1600]",
+    "delivery-app-trend[0,3,6,9,12]",
+    "delivery-app-trend[0,0.04,0.08,0.12,0.16]",
+    "delivery-segments[Median,#250,#251,#252,#253,#254,#255,#256,#257,#258,#259]"
+   ],
+   "colours": [
+    {
+     "ctx": "delivery-segments",
+     "kind": "bars",
+     "series": [
+      "#1e40af",
+      "#35495e",
+      "#db9628"
+     ],
+     "legend": [],
+     "distinct": true,
+     "minDeltaE": 57.3,
+     "closestPair": "#1e40af vs #35495e",
+     "minContrastVsBg": 2.5,
+     "bg": "rgb(255, 255, 255)"
+    }
+   ],
+   "oldWording": [
+    "/last 12 weeks/i"
+   ],
+   "wording": {
+    "intro": null,
+    "ci": "CI health per workflow | Runs over the last 28 days per workflow (cancelled and skipped runs left out). | Columns",
+    "failed": "Failed deploys and recovery | Deploys that failed over the last 28 days, why, and how long until a green deploy repaired them. | Columns",
+    "recent": null
+   },
+   "expectWhen": "over the last 28 days",
+   "whenOk": true,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "root-tab",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery?app=root",
+   "scheme": "light",
+   "login": false,
+   "file": null,
+   "axisCuts": [],
+   "chartCount": 5,
+   "yTicks": [
+    "delivery-app-trend[0,50,100,150,200]",
+    "delivery-app-trend[0,200,400,600,800]",
+    "delivery-app-trend[0,2,4,6,8]",
+    "delivery-app-trend[0,0.15,0.3,0.45,0.6]",
+    "delivery-segments[Median,#146,#147,#148,#149,#150,#151,#152,#153,#154,#155]"
+   ],
+   "colours": [
+    {
+     "ctx": "delivery-segments",
+     "kind": "bars",
+     "series": [
+      "#1e40af",
+      "#35495e",
+      "#db9628"
+     ],
+     "legend": [],
+     "distinct": true,
+     "minDeltaE": 57.3,
+     "closestPair": "#1e40af vs #35495e",
+     "minContrastVsBg": 2.5,
+     "bg": "rgb(255, 255, 255)"
+    }
+   ],
+   "oldWording": [
+    "/last 12 weeks/i"
+   ],
+   "wording": {
+    "intro": null,
+    "ci": "CI health per workflow | Runs over the last 28 days per workflow (cancelled and skipped runs left out). | Columns",
+    "failed": "Failed deploys and recovery | Deploys that failed over the last 28 days, why, and how long until a green deploy repaired them. | Columns",
+    "recent": null
+   },
+   "expectWhen": "over the last 28 days",
+   "whenOk": true,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": null
+  },
+  {
+   "name": "custom-picker-390-light",
+   "url": "https://aa-cis.lumiguides.it.com/admin/platform/delivery",
+   "scheme": "light",
+   "login": false,
+   "file": "custom-picker-390-light.png",
+   "axisCuts": [],
+   "chartCount": 43,
+   "yTicks": [
+    "delivery-infra-deployment_frequency[]",
+    "delivery-infra-lead_time[]",
+    "delivery-infra-change_failure_rate[]",
+    "delivery-infra-recovery_time[]",
+    "delivery-infra-rework_rate[]",
+    "delivery-infra-ci_p95[]",
+    "delivery-booking-deployment_frequency[]",
+    "delivery-booking-lead_time[]",
+    "delivery-booking-change_failure_rate[]",
+    "delivery-booking-recovery_time[]",
+    "delivery-booking-rework_rate[]",
+    "delivery-booking-ci_p95[]",
+    "delivery-cis-deployment_frequency[]",
+    "delivery-cis-lead_time[]",
+    "delivery-cis-change_failure_rate[]",
+    "delivery-cis-recovery_time[]",
+    "delivery-cis-rework_rate[]",
+    "delivery-cis-ci_p95[]",
+    "delivery-partner-deployment_frequency[]",
+    "delivery-partner-lead_time[]",
+    "delivery-partner-change_failure_rate[]",
+    "delivery-partner-recovery_time[]",
+    "delivery-partner-rework_rate[]",
+    "delivery-partner-ci_p95[]",
+    "delivery-root-deployment_frequency[]",
+    "delivery-root-lead_time[]",
+    "delivery-root-change_failure_rate[]",
+    "delivery-root-recovery_time[]",
+    "delivery-root-rework_rate[]",
+    "delivery-root-ci_p95[]",
+    "delivery-tripplanner-deployment_frequency[]",
+    "delivery-tripplanner-lead_time[]",
+    "delivery-tripplanner-change_failure_rate[]",
+    "delivery-tripplanner-recovery_time[]",
+    "delivery-tripplanner-rework_rate[]",
+    "delivery-tripplanner-ci_p95[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[]",
+    "delivery-trend[0,50,100,150,200]"
+   ],
+   "colours": [
+    {
+     "ctx": "delivery-trend",
+     "kind": "lines",
+     "series": [
+      "#db9628",
+      "#1e40af",
+      "#5b21b6",
+      "#276b4e",
+      "#c20101",
+      "#35495e"
+     ],
+     "legend": [
+      "Booking=#1e40af",
+      "CIS=#db9628",
+      "Infra=#c20101",
+      "Partner CRM=#5b21b6",
+      "Root (docs and plans)=#35495e",
+      "TripPlanner=#276b4e"
+     ],
+     "distinct": true,
+     "minDeltaE": 26.7,
+     "closestPair": "#1e40af vs #5b21b6",
+     "minContrastVsBg": 2.5,
+     "bg": "rgb(255, 255, 255)"
+    }
+   ],
+   "oldWording": [
+    "/last 12 weeks/i"
+   ],
+   "wording": {
+    "intro": null,
+    "ci": null,
+    "failed": null,
+    "recent": null
+   },
+   "expectWhen": null,
+   "whenOk": null,
+   "emailInText": false,
+   "console": [],
+   "network": [],
+   "extra": {
+    "geo": [
+     {
+      "label": "From",
+      "value": "5 Nov 2026",
+      "wrap": [
+       16,
+       166
+      ],
+      "box": [
+       16,
+       166
+      ]
+     },
+     {
+      "label": "To",
+      "value": "18 Nov 2026",
+      "wrap": [
+       194,
+       344
+      ],
+      "box": [
+       194,
+       344
+      ]
+     }
+    ],
+    "applyBox": [
+     16,
+     76
+    ],
+    "hit": {
+     "inside": true,
+     "tag": "BUTTON",
+     "label": null
+    },
+    "enabled": false,
+    "notes": "7 days\n28 days\n90 days\nCustom\n–\nApply\nCustom ranges are paused until CIS runs the same engine as the collector; the presets work.",
+    "urlBefore": "https://aa-cis.lumiguides.it.com/admin/platform/delivery",
+    "urlAfter": null,
+    "headAfter": null
+   }
+  }
+ ],
+ "custom": {
+  "light": {
+   "geo": [
+    {
+     "label": "From",
+     "value": "5 Nov 2026",
+     "wrap": [
+      592,
+      742
+     ],
+     "box": [
+      592,
+      742
+     ]
+    },
+    {
+     "label": "To",
+     "value": "18 Nov 2026",
+     "wrap": [
+      770,
+      920
+     ],
+     "box": [
+      770,
+      920
+     ]
+    }
+   ],
+   "applyBox": [
+    930,
+    990
+   ],
+   "hit": {
+    "inside": true,
+    "tag": "BUTTON",
+    "label": null
+   },
+   "enabled": false,
+   "notes": "7 days\n28 days\n90 days\nCustom\n–\nApply\nCustom ranges are paused until CIS runs the same engine as the collector; the presets work.",
+   "urlBefore": "https://aa-cis.lumiguides.it.com/admin/platform/delivery",
+   "urlAfter": null,
+   "headAfter": null
+  },
+  "meta": [
+   {
+    "url": "/api/admin/platform/delivery",
+    "status": 200,
+    "range": {
+     "key": "28d",
+     "store_from": "2026-08-12",
+     "last_day": "2026-11-18",
+     "presets": [
+      "7d",
+      "28d",
+      "90d"
+     ],
+     "custom": false,
+     "max_days": 90
+    }
+   }
+  ],
+  "dark": {
+   "geo": [
+    {
+     "label": "From",
+     "value": "5 Nov 2026",
+     "wrap": [
+      592,
+      742
+     ],
+     "box": [
+      592,
+      742
+     ]
+    },
+    {
+     "label": "To",
+     "value": "18 Nov 2026",
+     "wrap": [
+      770,
+      920
+     ],
+     "box": [
+      770,
+      920
+     ]
+    }
+   ],
+   "applyBox": [
+    930,
+    990
+   ],
+   "hit": {
+    "inside": true,
+    "tag": "BUTTON",
+    "label": null
+   },
+   "enabled": false,
+   "notes": "7 days\n28 days\n90 days\nCustom\n–\nApply\nCustom ranges are paused until CIS runs the same engine as the collector; the presets work.",
+   "urlBefore": "https://aa-cis.lumiguides.it.com/admin/platform/delivery",
+   "urlAfter": null,
+   "headAfter": null
+  },
+  "urlRange": {
+   "from": "2026-11-09",
+   "to": "2026-11-15",
+   "wording": {
+    "intro": null,
+    "ci": null,
+    "failed": null,
+    "recent": null
+   },
+   "rangeText": null,
+   "api": [
+    {
+     "url": "/api/admin/platform/delivery?range=custom&from=2026-11-09&to=2026-11-15",
+     "status": 409,
+     "note": "{\"detail\":\"Custom ranges are paused until the CIS copy of the delivery engine matches the collector's; the presets work\"}"
+    }
+   ]
+  },
+  "urlRangeApp": {
+   "wording": {
+    "intro": null,
+    "ci": null,
+    "failed": null,
+    "recent": null
+   },
+   "api": [
+    {
+     "url": "/api/admin/platform/delivery?range=custom&from=2026-11-09&to=2026-11-15",
+     "status": 409,
+     "note": "{\"detail\":\"Custom ranges are paused until the CIS copy of the delivery engine matches the collector's; the presets work\"}"
+    }
+   ]
+  },
+  "mobile": {
+   "geo": [
+    {
+     "label": "From",
+     "value": "5 Nov 2026",
+     "wrap": [
+      16,
+      166
+     ],
+     "box": [
+      16,
+      166
+     ]
+    },
+    {
+     "label": "To",
+     "value": "18 Nov 2026",
+     "wrap": [
+      194,
+      344
+     ],
+     "box": [
+      194,
+      344
+     ]
+    }
+   ],
+   "applyBox": [
+    16,
+    76
+   ],
+   "hit": {
+    "inside": true,
+    "tag": "BUTTON",
+    "label": null
+   },
+   "enabled": false,
+   "notes": "7 days\n28 days\n90 days\nCustom\n–\nApply\nCustom ranges are paused until CIS runs the same engine as the collector; the presets work.",
+   "urlBefore": "https://aa-cis.lumiguides.it.com/admin/platform/delivery",
+   "urlAfter": null,
+   "headAfter": null
+  }
+ },
+ "recent": [
+  {
+   "repo": "cis",
+   "range": "90d",
+   "n": 30,
+   "inQueue": 0,
+   "window": "2026-08-20T04:49:49Z..2026-11-18T04:49:49Z",
+   "oldestLeft": "2026-11-16T13:07:00Z",
+   "newestLeft": "2026-11-18T04:47:52Z",
+   "outside": 0
+  },
+  {
+   "repo": "partner",
+   "range": "28d",
+   "n": 30,
+   "inQueue": 0,
+   "window": "2026-10-21T04:49:49Z..2026-11-18T04:49:49Z",
+   "oldestLeft": "2026-11-14T21:25:09Z",
+   "newestLeft": "2026-11-18T04:46:47Z",
+   "outside": 0
+  },
+  {
+   "repo": "booking",
+   "range": "90d",
+   "n": 30,
+   "inQueue": 0,
+   "window": "2026-08-20T04:49:49Z..2026-11-18T04:49:49Z",
+   "oldestLeft": "2026-11-13T00:21:07Z",
+   "newestLeft": "2026-11-18T04:44:39Z",
+   "outside": 0
+  },
+  {
+   "repo": "cis",
+   "range": "7d",
+   "n": 30,
+   "inQueue": 0,
+   "window": "2026-11-11T04:49:49Z..2026-11-18T04:49:49Z",
+   "oldestLeft": "2026-11-16T13:07:00Z",
+   "newestLeft": "2026-11-18T04:47:52Z",
+   "outside": 0
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+{
+  "mode": "sessions-cap",
+  "channel": null,
+  "slug": "e2e-lead-proof",
+  "tenant_id": "de3272b3-85b6-41ae-babe-f78b2254717e",
+  "run": "68e1e9df",
+  "started_at": "2026-11-18T06:39:45.369Z",
+  "checks": {
+    "chat": {
+      "step": "chat",
+      "status": 200,
+      "answer": "paused",
+      "reason": "budget"
+    },
+    "sessions_stop_log": true
+  },
+  "ok": true
+}

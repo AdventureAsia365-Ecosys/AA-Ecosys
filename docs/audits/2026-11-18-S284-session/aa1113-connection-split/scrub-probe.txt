@@ -1,0 +1,33 @@
+--- AA1113 SCRUB PROBE ---
+{
+  "stage": "t9_write",
+  "model": "zz-aa1113-probe-no-model",
+  "error": "RuntimeError",
+  "expected_hash": "51e79ee69c5d959bdfe11f738ce391845d7f21aeb3930e1f01f62b08012fe1cb",
+  "row": {
+    "stage": "t9_write",
+    "model": "zz-aa1113-probe-no-model",
+    "status": "error",
+    "error_class": "other",
+    "cost_usd": "0.000000"
+  },
+  "pii_scrub": {
+    "status": "scrubbed",
+    "version": "aa1113-2",
+    "redacted": {
+      "[email]": 1,
+      "[phone]": 1
+    },
+    "scrubbed_hash": "51e79ee69c5d959bdfe11f738ce391845d7f21aeb3930e1f01f62b08012fe1cb"
+  },
+  "checks": {
+    "refused_before_any_attempt": true,
+    "ledger_row_found": true,
+    "scrubbed": true,
+    "scrubbed_hash_matches": true,
+    "planted_values_absent": true,
+    "zero_cost": true
+  },
+  "ok": true
+}
+--- END ---

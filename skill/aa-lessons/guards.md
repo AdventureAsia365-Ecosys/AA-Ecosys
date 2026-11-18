@@ -100,6 +100,7 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 - **Wrapper merge queue không kết luận PR "rời queue" khi `isInMergeQueue` đọc false — còn entry trong `mergeQueue.entries` hoặc run `merge_group` của nhánh nhóm `pr-<n>-` chưa xong thì chờ tiếp** (S273) → `tools/github/mergeq.sh` held(), `tools/github/ship_merge.py` queue_hold, `tools/github/test_ship_merge.py` QueueExitTest + MergeqScriptTest (guard mới S274, AA-1024)
 - **Allow-list Actions cấp org phải tính action lồng trong composite action bên thứ ba (trivy-action → setup-trivy)** (S273, ADR 0021) → `tools/github/ci_hygiene.py` WL8 + `tools/github/actions-allowlist.txt` (guard mới S274, AA-1024)
 - **File sinh tự động từ nguồn ngoài (Linear export) cũng phải qua gitleaks trước khi commit** (S276) → `tools/linear/linear_export.py` (gitleaks trên mọi file xuất của lượt chạy, kể cả file không đổi; chỉ bỏ dấu hai chấm sau nhãn secret khi token là tên dạng đường dẫn, giá trị lạ giữ nguyên cho gitleaks bắt), `tools/linear/test_linear_export.py` (guard mới S277, AA-1024)
+- **Cache theo process của gateway LLM sống qua module test; `invalidate()` chỉ reset mốc giờ → test phụ thuộc thứ tự, đỏ ở nightly random order** (S283, CIS #1551) → `apps/AA-CIS-App/tests/integration/_llm_cache_reset.py` (fixture `cold_llm_gateway` trong conftest đưa mọi cache của `shared.llm_client` về trạng thái lạnh mỗi module, tự phủ cache mới), `apps/AA-CIS-App/tests/integration/test_s283_llm_cache_reset.py` (guard mới S283)
 
 ## Pipeline và chất lượng
 
@@ -158,6 +159,7 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 - **Job chiếu (projection pull) từ một master mới phải có adoption guard: dòng chưa từng chiếu (projected_at NULL) mà master chưa có thì để nguyên — không suspend, không xoá quyền, không đóng dấu projected_at** (S266) → `apps/AA-Booking/backend/tests/integration/test_aa1028_tenant_pull.py`, `apps/AA-Partner/api/tests/integration/test_crm043_entitlement_feed.py`
 - **Bảng mới có cột `tenant_id` mà RLS tắt có chủ đích không thể là expand: classify đòi ENABLE + FORCE RLS cho bảng tenant_id mới** (S268) → `infra/AA-CIS-Infra/db/rls_catalogue_rules.py`
 - **DRY RUN qua ECS exec không băm cả dòng (`md5(t::text)`)** (S271) → `.claude/hooks/pilot_pii_guard.py` (`--check`), `skill/aa-cis-schema/references/destructive-ops.md` (mẫu pin) (guard mới S272, AA-1024)
+- **Fixture E2E ghi vào bảng thật phải giữ đúng dạng cột như writer thật: `gate_ledger = '{}'` (object) làm job KPI tuần (`jsonb_array_elements`) lỗi 2 lần** (S283, AA-922) → `apps/AA-CIS-App/tests/unit/test_aa922_array_column_guard.py` (mọi SQL trong api/services/shared đọc cột mảng của `content_piece` phải qua `json_array()`; SQL chạy thật ở `tests/integration/test_aa922_array_column_readers.py`) (guard mới S283, CIS #1552)
 
 ## Frontend
 
