@@ -3,7 +3,9 @@
 #
 # Runs the same commands as this repo's CI before a push, so a red CI run is caught locally:
 #   - .github/workflows/docs-lint.yml : lint-tool unit tests, front-matter, PRD refs, ADR index, single-line AWS CLI,
-#     alarm runbook links, literal resource IDs (warn-only), generated docs blocks and the doc map (AA-1132),
+#     alarm runbook links, literal resource IDs (warn-only), generated docs blocks and the doc map (AA-1132), the
+#     backtick names (Terraform addresses fail, the rest warn) and the new audit images gate (AA-1132 A7, A9), plus the
+#     docs impact of the change (warn only, AA-1132 A6),
 #     markdownlint-cli2 0.23.2, lychee offline links;
 #   - .github/workflows/contracts.yml : contract/ADR unit tests, check_contracts.py, check_adr_numbers.py;
 #   - .github/workflows/secret-scan.yml: gitleaks on the pushed commits, only when a working gitleaks is found
@@ -95,7 +97,7 @@ plan_checks() {
   if [ "$docs" = 1 ]; then
     echo docs-unit
     echo frontmatter; echo prd-refs; echo adr-index; echo aws-multiline; echo alarm-runbooks; echo resource-ids
-    echo gen-sections; echo doc-map
+    echo gen-sections; echo doc-map; echo doc-owners; echo code-refs; echo audit-images; echo docs-impact
     if [ "$md" = 1 ]; then echo markdownlint; fi
     echo lychee
   fi
@@ -286,6 +288,23 @@ run_planned() {
       alarm-runbooks) run_check "$id" "docs-lint.yml: Alarm runbook links" - "$PY" tools/docs/check_alarm_runbooks.py ;;
       gen-sections) run_check "$id" "docs-lint.yml: Generated docs blocks" py-deps "$PY" tools/docs/gen_sections.py --check ;;
       doc-map) run_check "$id" "docs-lint.yml: Doc map" py-deps "$PY" tools/docs/doc_impact.py validate ;;
+      doc-owners) run_check "$id" "docs-lint.yml: Doc owners" py-deps "$PY" tools/docs/docs_freshness.py validate ;;
+      code-refs) run_check "$id" "docs-lint.yml: Backtick names" py-deps "$PY" tools/docs/check_code_refs.py --summary --strict-rules tf-address ;;
+      audit-images)
+        local ibase="$BASE"
+        if [ "$CI_MODE" = 1 ] && [ -n "${BASE_SHA:-}" ]; then ibase="$BASE_SHA"; fi
+        if git rev-parse -q --verify "$ibase^{commit}" >/dev/null; then
+          run_check "$id" "docs-lint.yml: New audit images" py-deps "$PY" tools/docs/check_images.py --new-audit-images --base "$ibase"
+        else echo "skip audit-images: base $ibase not found"; SKIPPED+=("$id"); fi ;;
+      docs-impact)
+        # AA-1132 A6: warn only (never fails a push, as in every repo's Docs impact check): root code that pages
+        # describe (docs/catalogue/doc-map.yaml). App repos run the same tool: python <root>/tools/docs/doc_impact.py
+        # check --repo <Repo> --base origin/main.
+        if git rev-parse -q --verify "$BASE^{commit}" >/dev/null; then
+          out=$("$PY" tools/docs/doc_impact.py check --repo AA-Ecosys --base "$BASE" 2>&1) || true
+          case "$out" in *OPEN*) echo "warn docs-impact (warn-only): pages to check for this change:"; printf '%s\n' "$out" | grep OPEN | sed 's/^/     /'; WARNED+=("$id") ;;
+            *) echo "ok   docs-impact: $out" ;; esac
+        else echo "skip docs-impact: base $BASE not found"; SKIPPED+=("$id"); fi ;;
       resource-ids)
         # warn-only in CI too: print a one-line count, never fail
         out=$("$PY" tools/docs/check_docs_text.py resource-ids --mode warn 2>&1 | tail -1) || true
@@ -331,7 +350,7 @@ self_test() {
     got=$(printf '%s\n' "$@" | plan_checks "$mode" "$ci" | tr '\n' ' ' | sed 's/ $//')
     if [ "$got" = "$want" ]; then ok "$name"; else bad "$name"; echo "     want: $want"; echo "     got:  $got"; fi
   }
-  local DOCS="docs-unit frontmatter prd-refs adr-index aws-multiline alarm-runbooks resource-ids gen-sections doc-map"
+  local DOCS="docs-unit frontmatter prd-refs adr-index aws-multiline alarm-runbooks resource-ids gen-sections doc-map doc-owners code-refs audit-images docs-impact"
   local CONTRACTS="contracts-unit adr-unit contracts adr-numbers"
   local ALL="$DOCS markdownlint lychee $CONTRACTS"
   # check selection

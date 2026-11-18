@@ -24,6 +24,7 @@ assistant read the same files.
 | [`surface.snapshot.json`](surface.snapshot.json) | Generated: every page and API route group of each app, the settings registry keys and the plan feature keys |
 | [`platform.yaml`](platform.yaml) | Platform decisions docs pages show as generated blocks: account roles (labels only), LLM provider order, app tags (AA-1132) |
 | [`doc-map.yaml`](doc-map.yaml) | Docs ↔ code map: code globs per repo and the pages that describe them; the Docs impact check reads it (AA-1132) |
+| [`doc-owners.yaml`](doc-owners.yaml) | Owners of the docs files without front-matter (agent rules, skills, steering, every repo's `CONTEXT.md`), so the freshness report covers them (AA-1132) |
 
 The model follows the Backstage catalog format without a Backstage server: an app is a *System*, a feature is a
 *Component* with the pages and API route groups it owns, an integration is an *API* with one producer
@@ -111,12 +112,23 @@ the page between two comment markers:
 ```
 
 Blocks today: `accounts` and `llm-route-order` (from [`platform.yaml`](platform.yaml)), `ecs-services` (from the
-Terraform-state inventory `docs/generated/inventory.md`). Every block renders from one snapshot,
+Terraform-state inventory `docs/generated/inventory.md`), `latest-migrations` (from the live schema dump
+`docs/architecture/db-schema-reference.md`), and, read from the other five repos by
+[`tools/docs/repo_facts.py`](../../tools/docs/repo_facts.py): `app-versions` (release-please), `job-kinds-cis`,
+`job-kinds-booking`, `job-kinds-crm`, `job-kinds-tripplanner` (the kind registries in code), `backup-days` (Infra
+Terraform); `required-checks` comes from GitHub (`gh api`, read only). Every block renders from one snapshot,
 `docs/generated/facts.snapshot.json`, so the check is deterministic and never calls AWS. Change a decision in
 `platform.yaml` (with its ADR), run `python tools/docs/gen_sections.py --write`, commit the snapshot and the pages.
 The docs lint fails a PR whose blocks differ from the snapshot or whose snapshot is behind `platform.yaml`; a snapshot
-behind the inventory is a warning (the nightly Infra Docs Gen PR must stay green), fixed by `--write` in the next docs
-PR. Never edit a block by hand; write the prose around it.
+behind a collected source (the inventory, the schema dump; the other repos and GitHub when given) is a warning, fixed
+by `--write` in the next docs PR. The repo facts and required checks refresh at session close, from the workspace:
+
+```bash
+python tools/docs/gen_sections.py --write --repos-root /home/nghiep/projects/AA-Ecosys --repos-ref origin/main --github
+```
+
+The nightly Catalogue run compares the repo facts with the repos' main and warns on drift. Never edit a block by hand;
+write the prose around it.
 
 **Docs impact.** [`doc-map.yaml`](doc-map.yaml) maps code globs of each repo to the pages that describe them. The
 reusable workflow `.github/workflows/docs-impact.yml`, called from every app repo, runs
@@ -126,7 +138,20 @@ a merge (tech lead S283: warn only). Answer it with one line in the PR body: `Do
 `Docs-impact: updated-here` or `Docs-impact: none: <reason>`. Run it locally before a push:
 
 ```bash
-python tools/docs/doc_impact.py check --repo AA-CIS-Infra --base origin/main   # inside the Infra checkout, map from here
+python tools/docs/doc_impact.py check --repo AA-CIS-Infra --repo-dir infra/AA-CIS-Infra --base origin/main
+# a range of merged work (session close): --base <first commit> --head origin/main
 ```
 
 Add an entry when a page starts describing code; keep ids stable (hooks and lane notes cite them).
+
+**Event-based freshness.** A page "needs review" when code its doc-map entries watch changed after the page's own last
+commit. [`tools/docs/docs_freshness.py`](../../tools/docs/docs_freshness.py) computes it from git history only: the
+docs bundle writes `needs_review` on each published page and a `freshness` summary into the reader manifest (Docs
+sync clones the other repos blobless for their history), and the weekly Docs lint run adds the report to its summary.
+Files without front-matter are registered in [`doc-owners.yaml`](doc-owners.yaml) so they get the same flag and a
+calendar review date. A PR that raises `last_reviewed` should say what it checked on a `Verified:` line of its body
+(docs lint warns otherwise). Warn only: nothing here blocks a merge.
+
+**Names in backticks.** [`tools/docs/check_code_refs.py`](../../tools/docs/check_code_refs.py) checks repo paths, service
+names, job kinds, settings keys, migration numbers and workflow names inside backticks against the facts (warnings),
+and fails on a Terraform address after `-target=` / `-replace=` that the resource inventory does not have.

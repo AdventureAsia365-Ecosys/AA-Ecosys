@@ -129,7 +129,1353 @@
   }
  ],
  "llm_routes_decision": "ADR 0009 (one gateway for every provider) with ADR 0001a Note S278 (acc1 before acc3)",
- "schema": "aa1132-facts/1",
+ "migrations": {
+  "as_of": "2026-11-18",
+  "owners": [
+   {
+    "latest": "454",
+    "owner": "CIS"
+   },
+   {
+    "latest": "tp-034",
+    "owner": "TripPlanner"
+   },
+   {
+    "latest": "bk-059",
+    "owner": "Booking"
+   },
+   {
+    "latest": "crm-077",
+    "owner": "CRM"
+   }
+  ]
+ },
+ "repos": {
+  "backup": {
+   "copy_max_age_days": 30,
+   "copy_max_age_source": "accounts/aa365/rds_snapshot_expiry.tf",
+   "rds_pitr_days": 14,
+   "rds_pitr_source": "modules/rds/main.tf"
+  },
+  "collected_from": {
+   "AA-Booking": "4b777358",
+   "AA-CIS-App": "2ff8c53d",
+   "AA-CIS-Infra": "751d767e",
+   "AA-Partner": "6592cf50",
+   "AA-TripPlanner-Web": "44aa203b"
+  },
+  "job_kinds": {
+   "AA-Booking": [
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "bk_agency_invoice_reminders",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "bk_allotment_release",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "bk_b2b_hold_expire",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "bk_case_lifecycle",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "bk_departure_cost_recompute",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "bk_departure_watch",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": true,
+     "expected_seconds": 3660,
+     "kind": "bk_noop_sleep",
+     "test_only": true
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "bk_ops_reminders",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 600,
+     "kind": "bk_price_recompute",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": true,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 900,
+     "kind": "bk_retention_inbox_redact",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": true,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 900,
+     "kind": "bk_retention_job",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "bk_saas_invoice_draft",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "bk_settlement_draft",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "bk_supplier_order_send",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "bk_tenant_erase",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "bk_tenant_pull",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "bk_tour_lifecycle_pull",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "bk_trip_plan_sync",
+     "test_only": false
+    }
+   ],
+   "AA-CIS-App": [
+    {
+     "background": false,
+     "code": "services/jobs/a3_atomize_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "a3_atomize",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/ai_usage_rollup_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": true,
+     "expected_seconds": 1200,
+     "kind": "ai_usage_rollup",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/erasure_job.py",
+     "concurrency": 1,
+     "deploy_blocking": true,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 900,
+     "kind": "data_erasure",
+     "max_attempts": 1
+    },
+    {
+     "background": true,
+     "code": "services/jobs/embedding_reembed_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "embedding_reembed",
+     "max_attempts": 3
+    },
+    {
+     "background": true,
+     "code": "services/jobs/report_ops_jobs.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 5,
+     "kind": "inquiry_handoff_check",
+     "max_attempts": 1
+    },
+    {
+     "background": true,
+     "code": "services/jobs/report_jobs.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "kpi_snapshot_daily",
+     "max_attempts": 3
+    },
+    {
+     "background": false,
+     "code": "services/jobs/llm_batch_job.py",
+     "concurrency": 2,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 900,
+     "kind": "llm_batch",
+     "max_attempts": 3
+    },
+    {
+     "background": true,
+     "code": "services/jobs/llm_probe_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": true,
+     "expected_seconds": 600,
+     "kind": "llm_connection_probe",
+     "max_attempts": 1
+    },
+    {
+     "background": true,
+     "code": "services/jobs/llm_contract_smoke_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "llm_contract_smoke",
+     "max_attempts": 1
+    },
+    {
+     "background": true,
+     "code": "services/jobs/llm_cost_reconcile_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "llm_cost_reconcile",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/llm_model_lifecycle_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": true,
+     "expected_seconds": 120,
+     "kind": "llm_model_lifecycle_sync",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/llm_route_watch_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": true,
+     "expected_seconds": 60,
+     "kind": "llm_route_watch",
+     "max_attempts": 2
+    },
+    {
+     "background": false,
+     "code": "services/jobs/ops_alert_email_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 60,
+     "kind": "ops_alert_email",
+     "max_attempts": 5
+    },
+    {
+     "background": true,
+     "code": "services/jobs/photo_destination_match_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "photo_destination_match",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/photo_medium_backfill_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "photo_medium_backfill",
+     "max_attempts": 2
+    },
+    {
+     "background": false,
+     "code": "services/jobs/photo_sync_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "photo_sync",
+     "max_attempts": 2
+    },
+    {
+     "background": false,
+     "code": "services/jobs/place_cards_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 600,
+     "kind": "place_cards_build",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/place_dedupe_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 900,
+     "kind": "place_dedupe",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/place_extract_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "place_extract",
+     "max_attempts": 3
+    },
+    {
+     "background": true,
+     "code": "services/jobs/place_geocode_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "place_geocode",
+     "max_attempts": 3
+    },
+    {
+     "background": true,
+     "code": "services/jobs/place_relocate_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "place_relocate",
+     "max_attempts": 3
+    },
+    {
+     "background": true,
+     "code": "services/jobs/place_shape_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "place_shape",
+     "max_attempts": 3
+    },
+    {
+     "background": true,
+     "code": "services/jobs/quality_funnel_watch_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": true,
+     "expected_seconds": 60,
+     "kind": "quality_funnel_watch",
+     "max_attempts": 3
+    },
+    {
+     "background": false,
+     "code": "services/jobs/recompute_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "recompute",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/report_ops_jobs.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 60,
+     "kind": "report_email",
+     "max_attempts": 5
+    },
+    {
+     "background": true,
+     "code": "services/jobs/report_jobs.py",
+     "concurrency": 2,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "report_generate",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/retention_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "retention_cost_explorer_snapshot",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/retention_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "retention_decision_log",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/retention_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "retention_job",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/retention_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "retention_llm_call_log",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/retention_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "retention_tenant_api_usage",
+     "max_attempts": 2
+    },
+    {
+     "background": false,
+     "code": "services/jobs/tour_retirement_jobs.py",
+     "concurrency": 2,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "retired_page_draft",
+     "max_attempts": 4
+    },
+    {
+     "background": false,
+     "code": "services/jobs/revalidate_job.py",
+     "concurrency": 2,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 600,
+     "kind": "revalidate",
+     "max_attempts": 2
+    },
+    {
+     "background": false,
+     "code": "services/jobs/s1_batch_ingest_job.py",
+     "concurrency": 1,
+     "deploy_blocking": true,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 7200,
+     "kind": "s1_batch_ingest",
+     "max_attempts": 1
+    },
+    {
+     "background": false,
+     "code": "services/jobs/s1_rewrite_job.py",
+     "concurrency": 6,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 600,
+     "kind": "s1_rewrite",
+     "max_attempts": 1
+    },
+    {
+     "background": false,
+     "code": "services/jobs/s1_seo_prefetch_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 900,
+     "kind": "s1_seo_prefetch",
+     "max_attempts": 2
+    },
+    {
+     "background": false,
+     "code": "services/jobs/segment_research_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 3600,
+     "kind": "segment_research",
+     "max_attempts": 2
+    },
+    {
+     "background": false,
+     "code": "services/jobs/source_fanout_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 60,
+     "kind": "source_fanout",
+     "max_attempts": 3
+    },
+    {
+     "background": true,
+     "code": "services/jobs/staff_reconcile_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "staff_directory_reconcile",
+     "max_attempts": 2
+    },
+    {
+     "background": false,
+     "code": "services/jobs/staff_invite_email_job.py",
+     "concurrency": 2,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 60,
+     "kind": "staff_invite_email",
+     "max_attempts": 5
+    },
+    {
+     "background": true,
+     "code": "services/jobs/supply_content_draft_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "supply_content_draft",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/supply_media_purge_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 60,
+     "kind": "supply_media_purge",
+     "max_attempts": 3
+    },
+    {
+     "background": false,
+     "code": "services/jobs/t2_rewrite_job.py",
+     "concurrency": 4,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "t2_rewrite",
+     "max_attempts": 2
+    },
+    {
+     "background": false,
+     "code": "services/jobs/t7_slate_job.py",
+     "concurrency": 2,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 600,
+     "kind": "t7_slate",
+     "max_attempts": 2
+    },
+    {
+     "background": false,
+     "code": "services/jobs/t8_angles_job.py",
+     "concurrency": 4,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "t8_angles",
+     "max_attempts": 2
+    },
+    {
+     "background": false,
+     "code": "services/jobs/t9_write_job.py",
+     "concurrency": 4,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 600,
+     "kind": "t9_write",
+     "max_attempts": 2
+    },
+    {
+     "background": false,
+     "code": "services/jobs/tenant_account_tick_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 60,
+     "kind": "tenant_account_tick",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/tenant_backup_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 900,
+     "kind": "tenant_backup",
+     "max_attempts": 2
+    },
+    {
+     "background": false,
+     "code": "services/jobs/tenant_billing_tick_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 60,
+     "kind": "tenant_billing_tick",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/tenant_erasure_saga_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "tenant_erasure_saga",
+     "max_attempts": 3
+    },
+    {
+     "background": false,
+     "code": "services/jobs/tenant_provision_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 60,
+     "kind": "tenant_provision",
+     "max_attempts": 3
+    },
+    {
+     "background": true,
+     "code": "services/jobs/tour_graph_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 600,
+     "kind": "tour_graph_build",
+     "max_attempts": 3
+    },
+    {
+     "background": false,
+     "code": "services/jobs/tour_retirement_jobs.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "tour_notice_email",
+     "max_attempts": 4
+    },
+    {
+     "background": false,
+     "code": "services/jobs/tour_paa_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "tour_paa_backfill",
+     "max_attempts": 2
+    },
+    {
+     "background": false,
+     "code": "services/jobs/tour_retirement_jobs.py",
+     "concurrency": 2,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "tour_retirement_fanout",
+     "max_attempts": 5
+    },
+    {
+     "background": true,
+     "code": "services/jobs/tripplanner_custom_domain_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "tripplanner_custom_domain",
+     "max_attempts": 3
+    },
+    {
+     "background": false,
+     "code": "services/jobs/tripplanner_purge_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 60,
+     "kind": "tripplanner_purge",
+     "max_attempts": 4
+    },
+    {
+     "background": true,
+     "code": "services/jobs/writing_memory_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 900,
+     "kind": "writing_memory_kpi_weekly",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/writing_memory_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "writing_memory_mine",
+     "max_attempts": 1
+    },
+    {
+     "background": true,
+     "code": "services/jobs/writing_memory_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "writing_memory_post_activation",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/writing_memory_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 1800,
+     "kind": "writing_memory_r0",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/writing_memory_job.py",
+     "concurrency": 1,
+     "deploy_blocking": true,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 5400,
+     "kind": "writing_memory_r2",
+     "max_attempts": 1
+    },
+    {
+     "background": true,
+     "code": "services/jobs/writing_memory_job.py",
+     "concurrency": 1,
+     "deploy_blocking": true,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 5400,
+     "kind": "writing_memory_shadow",
+     "max_attempts": 1
+    },
+    {
+     "background": true,
+     "code": "services/jobs/writing_memory_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 900,
+     "kind": "writing_signal_backfill",
+     "max_attempts": 2
+    },
+    {
+     "background": true,
+     "code": "services/jobs/writing_memory_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 600,
+     "kind": "writing_signal_fact_filter",
+     "max_attempts": 3
+    }
+   ],
+   "AA-Partner": [
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "crm_audit_export",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 900,
+     "kind": "crm_audit_retention",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": true,
+     "expected_seconds": 60,
+     "kind": "crm_booking_sync",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "crm_campaign_tick",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "crm_catalog_sync",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "crm_client_import",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 600,
+     "kind": "crm_data_export",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 30,
+     "kind": "crm_dispatch",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 60,
+     "kind": "crm_entitlement_pull",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "crm_fx_fetch",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": true,
+     "expected_seconds": 30,
+     "kind": "crm_heartbeat",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 30,
+     "kind": "crm_intake_process",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 900,
+     "kind": "crm_job_retention",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 900,
+     "kind": "crm_lifecycle",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "crm_mail_health",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "crm_mail_history_import",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "crm_mail_ingest",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": true,
+     "expected_seconds": 30,
+     "kind": "crm_membership_pull",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "crm_messaging_health",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 60,
+     "kind": "crm_messaging_templates",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 600,
+     "kind": "crm_offboard",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "crm_ops_release_sync",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "crm_partner_accounts",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 60,
+     "kind": "crm_pdf_render",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 60,
+     "kind": "crm_pilot_backup",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 60,
+     "kind": "crm_placeholder_purge",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "crm_stage_date_rule",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 30,
+     "kind": "crm_studio_activation",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "crm_task_digest",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 600,
+     "kind": "crm_tenant_erase",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "crm_tour_retired_fanout",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "crm_tp_lead_pull",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 60,
+     "kind": "crm_workflow_run",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "crm_workflow_tick",
+     "test_only": false
+    }
+   ],
+   "AA-TripPlanner-Web": [
+    {
+     "code": "backend/jobs/handler.py",
+     "daily": true,
+     "kind": "tp_lead_deliver",
+     "max_attempts": 3
+    },
+    {
+     "code": "backend/jobs/handler.py",
+     "daily": true,
+     "kind": "tp_retention_ai_rate_counter",
+     "max_attempts": 1
+    },
+    {
+     "code": "backend/jobs/handler.py",
+     "daily": true,
+     "kind": "tp_retention_outbox_redact",
+     "max_attempts": 1
+    },
+    {
+     "code": "backend/jobs/handler.py",
+     "daily": true,
+     "kind": "tp_tenant_backup",
+     "max_attempts": 2
+    },
+    {
+     "code": "backend/jobs/handler.py",
+     "daily": true,
+     "kind": "tp_tenant_erase",
+     "max_attempts": 1
+    },
+    {
+     "code": "backend/jobs/handler.py",
+     "daily": false,
+     "kind": "tp_tenant_restore_drill",
+     "max_attempts": 1
+    }
+   ]
+  },
+  "unresolved": [],
+  "versions": {
+   "AA-Booking": "0.16.0",
+   "AA-CIS-App": "0.20.0",
+   "AA-Partner": "0.13.0",
+   "AA-TripPlanner-Web": "0.16.0"
+  },
+  "workflows": {
+   "AA-Booking": [
+    "api-contract.yml",
+    "cache-cleanup.yml",
+    "cache-warm.yml",
+    "ci.yml",
+    "deploy-admin-dev.yml",
+    "deploy-dev.yml",
+    "docs-impact.yml",
+    "docs-lint.yml",
+    "migration-sync-wake.yml",
+    "post-deploy-verify.yml",
+    "pr-title.yml",
+    "release-please.yml",
+    "secret-scan-history.yml",
+    "secret-scan.yml",
+    "visual.yml",
+    "workflow-lint.yml"
+   ],
+   "AA-CIS-App": [
+    "api-contract.yml",
+    "cache-cleanup.yml",
+    "cache-warm.yml",
+    "ci.yml",
+    "deploy-admin-dev.yml",
+    "deploy-dev.yml",
+    "docs-impact.yml",
+    "e2e-cognito.yml",
+    "eval-regression.yml",
+    "kit-consumers.yml",
+    "kit-sync.yml",
+    "llm-core-consumers.yml",
+    "llm-core-sync.yml",
+    "migration-sync-wake.yml",
+    "nightly-integration.yml",
+    "post-deploy-verify.yml",
+    "pr-title.yml",
+    "release-please.yml",
+    "secret-scan-history.yml",
+    "secret-scan.yml",
+    "test-durations.yml",
+    "ui-smoke.yml",
+    "visual.yml",
+    "workflow-lint.yml"
+   ],
+   "AA-CIS-Infra": [
+    "alb-rule-order.yml",
+    "cache-cleanup.yml",
+    "connection-budget.yml",
+    "contract-copy-guard.yml",
+    "crm-key-policy-diff.yml",
+    "db-auto-apply-role-check.yml",
+    "db-freshness-probe.yml",
+    "db-isolation-probe.yml",
+    "db-migrate.yml",
+    "db-schema-dump.yml",
+    "db-tour-liveness-gate.yml",
+    "deploy-prod.yml",
+    "docs-gen-test.yml",
+    "docs-gen.yml",
+    "docs-impact.yml",
+    "docs-lint.yml",
+    "identity-triggers-test.yml",
+    "managed-login-branding.yml",
+    "migration-apply.yml",
+    "migration-copy-guard.yml",
+    "migration-sync.yml",
+    "ops-probe-test.yml",
+    "pr-title.yml",
+    "rds-snapshot-expiry-test.yml",
+    "sec-admin-session-digest-test.yml",
+    "secret-scan-history.yml",
+    "secret-scan.yml",
+    "secrets-register-check-test.yml",
+    "terraform-apply.yml",
+    "terraform-drift.yml",
+    "terraform-plan.yml",
+    "tf-plan-guard-test.yml",
+    "workflow-lint.yml"
+   ],
+   "AA-Partner": [
+    "cache-cleanup.yml",
+    "cache-warm.yml",
+    "ci.yml",
+    "deploy-dev.yml",
+    "deploy-web-dev.yml",
+    "docs-impact.yml",
+    "docs-lint.yml",
+    "e2e-dev.yml",
+    "migration-sync-wake.yml",
+    "post-deploy-verify.yml",
+    "pr-title.yml",
+    "release-please.yml",
+    "scrub-corpus.yml",
+    "secret-scan-history.yml",
+    "secret-scan.yml",
+    "ui-smoke-portal.yml",
+    "visual.yml",
+    "workflow-lint.yml"
+   ],
+   "AA-TripPlanner-Web": [
+    "cache-cleanup.yml",
+    "ci.yml",
+    "deploy-lambdas.yml",
+    "deploy-web-dev.yml",
+    "docs-impact.yml",
+    "docs-lint.yml",
+    "migration-sync-wake.yml",
+    "post-deploy-verify.yml",
+    "pr-title.yml",
+    "release-please.yml",
+    "secret-scan-history.yml",
+    "secret-scan.yml",
+    "visual.yml",
+    "workflow-lint.yml"
+   ]
+  }
+ },
+ "required_checks": {
+  "AA-Booking": {
+   "branch": "main",
+   "checks": [
+    "Docker Build Check",
+    "Frontend Build",
+    "Integration Tests",
+    "Lint",
+    "Security Audit",
+    "Settings Lint",
+    "Unit Tests",
+    "Visual (next start, mocked API + kit gallery)",
+    "gitleaks"
+   ]
+  },
+  "AA-CIS-App": {
+   "branch": "main",
+   "checks": [
+    "Docker Build Check",
+    "Frontend Build",
+    "Frontend Lint",
+    "Integration Tests",
+    "Kit consumers",
+    "Lint",
+    "Security Audit",
+    "Unit Tests",
+    "Visual (next start, public pages + kit gallery)",
+    "gitleaks"
+   ]
+  },
+  "AA-CIS-Infra": {
+   "branch": "main",
+   "checks": [
+    "Copies match owner main",
+    "Expand classify",
+    "Migration lint and unique numbers",
+    "Terraform Plan (dev)",
+    "gitleaks"
+   ]
+  },
+  "AA-Ecosys": {
+   "branch": "master",
+   "checks": [
+    "Catalogue guard"
+   ]
+  },
+  "AA-Partner": {
+   "branch": "main",
+   "checks": [
+    "Docker Build Check",
+    "Docs lint",
+    "Integration Tests",
+    "Lint",
+    "PR title",
+    "Security Audit",
+    "Settings Lint",
+    "Unit Tests",
+    "Visual (built in the runner, public pages + kit gallery)",
+    "Web Build",
+    "gitleaks"
+   ]
+  },
+  "AA-TripPlanner-Web": {
+   "branch": "main",
+   "checks": [
+    "Backend (pytest)",
+    "Frontend (lint + build)",
+    "Migrations (lint, PG 15 replay)",
+    "Security Audit",
+    "Settings Lint",
+    "gitleaks"
+   ]
+  }
+ },
+ "schema": "aa1132-facts/2",
  "sources": {
   "docs/catalogue/platform.yaml": "ce35306b490e3f51c7760ebcb9bac3b7cd042cc479bd36fd5f44e4534fe64c48",
   "docs/generated/inventory.md": "ff3295d5219e7e30518a6340c0f2a5915ca48308c90a15ebc8753f33c3a896f3"

@@ -124,8 +124,24 @@ auth, data deletion) starts with prod or the first paying tenant.
 
 ## CI/CD matrix (APP-02)
 
-Read from each repo's `.github/workflows/` on `main` on 2026-10-19; the CI rows and required checks re-read on 2026-10-28;
-the CI, Visual, copy guard and history scan rows updated on 2026-11-06 (S271, CI minutes).
+Read from each repo's `.github/workflows/` on `main` on 2026-10-19; the CI rows re-read on 2026-10-28;
+the CI, Visual, copy guard and history scan rows updated on 2026-11-06 (S271, CI minutes). The required checks are
+generated (below); where a "required" note in the matrix differs, the generated table is right.
+
+<!-- gen:required-checks -->
+
+| Repo | Branch | Required checks |
+|---|---|---|
+| AA-Booking | `main` | `Docker Build Check`, `Frontend Build`, `Integration Tests`, `Lint`, `Security Audit`, `Settings Lint`, `Unit Tests`, `Visual (next start, mocked API + kit gallery)`, `gitleaks` |
+| AA-CIS-App | `main` | `Docker Build Check`, `Frontend Build`, `Frontend Lint`, `Integration Tests`, `Kit consumers`, `Lint`, `Security Audit`, `Unit Tests`, `Visual (next start, public pages + kit gallery)`, `gitleaks` |
+| AA-CIS-Infra | `main` | `Copies match owner main`, `Expand classify`, `Migration lint and unique numbers`, `Terraform Plan (dev)`, `gitleaks` |
+| AA-Ecosys | `master` | `Catalogue guard` |
+| AA-Partner | `main` | `Docker Build Check`, `Docs lint`, `Integration Tests`, `Lint`, `PR title`, `Security Audit`, `Settings Lint`, `Unit Tests`, `Visual (built in the runner, public pages + kit gallery)`, `Web Build`, `gitleaks` |
+| AA-TripPlanner-Web | `main` | `Backend (pytest)`, `Frontend (lint + build)`, `Migrations (lint, PG 15 replay)`, `Security Audit`, `Settings Lint`, `gitleaks` |
+
+Read from GitHub (branch protection and rulesets of the default branch) with `gen_sections.py --write --github`. A check skipped by a path filter counts as passed only where the workflow says so; the merge-queue repos run every required check in the queue.
+
+<!-- /gen -->
 
 Since S271 the three merge-queue repos (CIS, Booking, Partner) run `ci.yml` on pull_request, merge_group and dispatch,
 not on push to `main`: every commit on `main` is a queue group commit that already passed the full run. On a pull

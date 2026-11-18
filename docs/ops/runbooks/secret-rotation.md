@@ -110,7 +110,7 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 ### 5. TripPlanner edge key (`tripplanner/dev/api-key`)
 
 - Terraform `random_password` is the source. Replacing it is a local MFA apply from merged Infra `main`
-  (`-replace=random_password.tripplanner_api_key`; the CI apply takes no arguments). The Lambdas read the secret by
+  (`-replace=module.environment.random_password.tripplanner_api_key`; the CI apply takes no arguments). The Lambdas read the secret by
   name and may cache it per instance: dispatch `deploy-lambdas.yml` from `main` to get fresh instances. The tech lead updates
   the Vercel `aa-tripplanner` copy (register row) on Production, Preview and Development in the same window and
   redeploys the frontend. Requests fail with 401 in between. Verify: `curl -s -o /dev/null -w "%{http_code}\n" "https://tripplanner.lumiguides.it.com/api/browse?resource=countries"` 200.

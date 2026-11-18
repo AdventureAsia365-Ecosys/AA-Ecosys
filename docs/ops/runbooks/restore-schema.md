@@ -43,9 +43,20 @@ Both read only from the copy; the live write is a separate, reviewed step.
 
 ## Preconditions
 
-- The restore point is known (just before the damage) and inside the 7-day PITR window.
+- The restore point is known (just before the damage) and inside the point-in-time recovery window below.
 - The owning app is told and, if its jobs touch the tables, its job table is idle (DB Migrate idle check enforces it).
 - Cost: under 1 USD (temporary micro instance for about an hour).
+
+<!-- gen:backup-days -->
+
+| Backup window (Dev RDS) | Days | Set in AA-CIS-Infra |
+|---|---|---|
+| Automated backups, point-in-time recovery | 14 | `modules/rds/main.tf` (`backup_retention_period`) |
+| Longest any backup copy may live (alarm above it) | 30 | `accounts/aa365/rds_snapshot_expiry.tf` (`rds_backup_copy_max_age_days`) |
+
+Read statically from AA-CIS-Infra main at `751d767e` (tools/docs/repo_facts.py).
+
+<!-- /gen -->
 
 ```bash
 aws sts get-caller-identity --profile aa365-admin

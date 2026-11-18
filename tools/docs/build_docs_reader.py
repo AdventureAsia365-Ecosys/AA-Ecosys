@@ -70,6 +70,15 @@ Publication rule (v1; docs/README.md "Docs reader" and docs/engineering-handbook
      count alone: no subject, PR number or SHA. It is written only when the history is known (a full git checkout), is
      left out of the search index, and its entry has ``history`` [].
 
+ 15. Event-based freshness (AA-1132 A5, tools/docs/docs_freshness.py): each entry carries ``needs_review``, null or
+     {"since": <the page's last commit date>, "count": n, "changes": [{"entry", "repo", "sha", "date", "files"}]}: the
+     code that the page's doc-map entries (docs/catalogue/doc-map.yaml) watch changed after the page's own last commit
+     (newest 5 shown). A translation the map does not name carries its English page's flag. Repos other than this one
+     count only when their history is given (--deps-root; Docs sync clones them blobless). The manifest's
+     ``freshness`` is the summary (repos checked / not checked, counts, the agent files and CONTEXT.md of
+     docs/catalogue/doc-owners.yaml that need review or are past their review date); null when not computed. Never a
+     build failure.
+
 Output layout (OUT_DIR, default _site/docs-reader):
 
   manifest.json                    format 1, below
@@ -80,13 +89,15 @@ Output layout (OUT_DIR, default _site/docs-reader):
 manifest.json:
   {"format": 1, "rule": "v1", "generated_at": ISO, "source": {"repo", "sha", "ref"},
    "counts": {"published", "owner_only", "translations", "skipped", "assets", "screenshots", "nav_derived",
-              "search_sections", "with_history", "changes_commits"},
+              "search_sections", "with_history", "changes_commits", "needs_review"},
    "pages": [{"repo", "path", "key", "id", "title", "description", "type", "status", "audience", "owner",
               "last_reviewed", "generated", "access", "bytes", "sha256", "redactions",
               "lang", "translation_of", "translations", "nav", "nav_order", "nav_derived", "known_issue",
-              "last_changed", "history"}],
+              "last_changed", "history", "needs_review"}],
    "assets": [{"repo", "path", "key", "type", "bytes", "sha256", "access"}],
-   "search": {"key", "format", "bytes", "sha256", "sections"}}
+   "search": {"key", "format", "bytes", "sha256", "sections"},
+   "freshness": {"repos_checked", "repos_not_checked", "pages_needing_review", "agent_files",
+                 "agent_files_needing_review", "agent_files_overdue", "agent_files_list"} | null}
   (source also carries "github": "<org>/<repo>" or null, rule 11)
 
   lang            "en" for an English page (the source), "vi" for a translation.
@@ -268,6 +279,7 @@ class Page:
     last_changed: dict | None = None
     history: list[dict] = field(default_factory=list)
     searchable: bool = True
+    needs_review: dict | None = None
 
 
 @dataclass
@@ -857,11 +869,30 @@ def _entry(page: Page) -> dict:
         "known_issue": known_issue_of(m),
         "last_changed": page.last_changed,
         "history": [dict(h) for h in page.history],
+        "needs_review": page.needs_review,
     }
 
 
+def freshness(root: Path, pages: list[Page], deps_root: Path | None, deps_ref: str) -> dict | None:
+    """Rule 15: each page's `needs_review` (set on the pages) and the manifest's `freshness` summary, or None when the
+    doc map or the history is not available. Never fails the build: freshness is a reader signal, not a gate."""
+    try:
+        import docs_freshness
+        fr = docs_freshness.compute(root, deps_root, deps_ref,
+                                    page_dates={p.path: p.history[0]["date"] for p in pages if p.history})
+    except Exception as exc:  # noqa: BLE001 - any failure leaves the flags out, with a warning
+        print(f"::warning title=Docs freshness::needs_review not computed: {exc}")
+        return None
+    if docs_freshness.ROOT_REPO not in fr.repos_checked:
+        return None
+    for page in pages:
+        page.needs_review = fr.pages.get(page.path) or (fr.pages.get(page.translation_of) if page.translation_of
+                                                        else None)
+    return fr.summary()
+
+
 def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "", github_repo: str = "",
-          visibility: str = "") -> dict:
+          visibility: str = "", deps_root: Path | None = None, deps_ref: str = "HEAD") -> dict:
     """Write the bundle to `out` (emptied first) and return the manifest. Raises SystemExit on a guard hit."""
     result = collect(root)
     # Rule 14 lists hand-written pages only: the nightly regenerations (ERD, schema reference) would fill the page.
@@ -871,6 +902,7 @@ def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "", githu
     for page in result.pages:
         page.history = history.get(page.path, [])
         page.last_changed = {"sha": page.history[0]["sha"], "date": page.history[0]["date"]} if page.history else None
+    fresh = freshness(root, result.pages, deps_root, deps_ref)
     assets, problems = collect_assets(root)
     rasters, raster_problems_found = collect_raster_assets(result.pages, root)
     assets += rasters
@@ -884,7 +916,7 @@ def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "", githu
         # Everything a reader sees: the body and the manifest's text fields (not the sha256 and the commit ids, which
         # are hex: a 40-character git sha may hold a 12-digit run; the history subjects are checked on their own).
         visible = {k: v for k, v in _entry(page).items()
-                   if k not in ("sha256", "bytes", "redactions", "last_changed", "history")}
+                   if k not in ("sha256", "bytes", "redactions", "last_changed", "history", "needs_review")}
         subjects = "\n".join(h["subject"] for h in page.history)
         for label in guard_hits(page.body + "\n" + json.dumps(visible, ensure_ascii=False) + "\n" + subjects):
             problems.append(f"{page.path}: {label} still present after redaction")
@@ -930,10 +962,12 @@ def build(out: Path, root: Path = REPO_ROOT, sha: str = "", ref: str = "", githu
             "nav_derived": sum(1 for e in entries if e["nav_derived"] and e["lang"] == SOURCE_LANG),
             "search_sections": sections,
             "with_history": sum(1 for e in entries if e["history"]),
+            "needs_review": sum(1 for e in entries if e["needs_review"]),
             "changes_commits": len(commits) if generated is not None else 0,
         },
         "pages": entries,
         "assets": [a.entry() for a in assets],
+        "freshness": fresh,
         "search": {"key": docs_search_index.KEY, "format": docs_search_index.FORMAT, "bytes": len(search_bytes),
                    "sha256": hashlib.sha256(search_bytes).hexdigest(), "sections": sections},
     }
@@ -957,8 +991,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--github-repo", default="", help="<org>/<repo> on GitHub, for the reader's Source / History links")
     ap.add_argument("--visibility", default="", help="the repo's GitHub visibility; links are published only if public")
     ap.add_argument("--check", action="store_true", help="build into a temp folder and print the counts only")
+    ap.add_argument("--deps-root", type=Path, help="git repos of the app / Infra repos (rule 15: needs_review)")
+    ap.add_argument("--deps-ref", default="HEAD", help="ref read in each --deps-root repo")
     args = ap.parse_args(argv)
-    kw = {"sha": args.sha, "ref": args.ref, "github_repo": args.github_repo, "visibility": args.visibility}
+    kw = {"sha": args.sha, "ref": args.ref, "github_repo": args.github_repo, "visibility": args.visibility,
+          "deps_root": args.deps_root, "deps_ref": args.deps_ref}
     if args.check:
         with tempfile.TemporaryDirectory() as tmp:
             manifest = build(Path(tmp) / "out", **kw)
@@ -970,7 +1007,8 @@ def main(argv: list[str] | None = None) -> int:
           f"{c['skipped']} skipped, {c['assets']} assets ({c['screenshots']} screenshots), "
           f"{redacted} values redacted, {c['search_sections']} search sections, {c['nav_derived']} pages without "
           f"`nav` (sidebar group derived from the folder), {c['with_history']} pages with history, "
-          f"{c['changes_commits']} commits on the changes page, source {manifest['source']['sha'][:12] or 'unknown'}")
+          f"{c['changes_commits']} commits on the changes page, {c['needs_review']} pages need review, "
+          f"source {manifest['source']['sha'][:12] or 'unknown'}")
     return 0
 
 

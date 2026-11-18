@@ -113,6 +113,12 @@ HARD RULES for this lane:
 - One model label containing "api" per line in code and tests (gitleaks generic-api-key scans every commit; a later fix commit does not clear it).
 - Integration tests that sign in as cis_app: grant schema USAGE/SELECT temporarily in the test, name result columns ("AS ok") and read rows by column name.
 - Keep docs/implementation-notes/<ISSUE>.md in the repo updated (Decisions / Changed / Tradeoffs / Should know); parallel lanes on one issue use <ISSUE>-<lane>.md.
+- Docs impact (AA-1132, warn only, never a gate): before returning, in each worktree run
+  python3 /home/nghiep/projects/AA-Ecosys/tools/docs/doc_impact.py check --repo <AA-CIS-App|AA-Booking|AA-Partner|AA-TripPlanner-Web|AA-CIS-Infra|AA-Ecosys> --base origin/main
+  (root: origin/master). Update every OPEN page of the same repo in the same PR; a root page you did not change goes to followups as
+  "docs: <page>: <what changed>"; put one "Docs-impact: updated-here | none: <reason>" line in pr_body. Generated blocks
+  (<!-- gen:... -->) are never edited by hand: python3 tools/docs/gen_sections.py --write in a root worktree. Raise last_reviewed only
+  with a "Verified: <what was checked against what>" line in pr_body.
 - UI: kit components only (ADR 0016); never edit **/_kit/core/** outside apps/AA-CIS-App/frontend/app/_kit/core/; English UI copy; never show AA-xxx ids in UI text.
 - Commit locally early and often, format: "feat|fix|chore|refactor|docs: description" then blank line, "Refs AA-xxx", blank line,
   "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>". Never "Fixes"/"Closes".

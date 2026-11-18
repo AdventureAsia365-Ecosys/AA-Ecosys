@@ -59,7 +59,7 @@ From the Terraform state at AA-CIS-Infra `c1545f7b` (resource inventory, AA-CIS-
 
 <!-- /gen -->
 
-The rest (checked 2026-11-01): RDS `aa-cis-dev-db` (PostgreSQL, `db.t4g.small`, single-AZ, 7-day PITR); Lambdas `aa-tripplanner-dev-browse`,
+The rest (checked 2026-11-01): RDS `aa-cis-dev-db` (PostgreSQL, `db.t4g.small`, single-AZ; backup days under [Backups and restore](#backups-and-restore)); Lambdas `aa-tripplanner-dev-browse`,
 `aa-tripplanner-dev-assembly` and `aa-tripplanner-dev-jobs` (the `tripplanner.job` worker, woken by a daily
 EventBridge Scheduler entry); four Cognito trigger Lambdas (`aa-identity-dev-*`); the daily probe Lambda
 `aa-cis-dev-dfs-balance-check`; the snapshot expiry Lambda `aa-cis-dev-rds-snapshot-expiry`. Chat models run behind
@@ -92,7 +92,7 @@ environment `org` with the tech lead as reviewer.
 | Booking | Merge to `main` → `Deploy Dev`: image tagged with the git SHA, role `aa-booking-dev-app-deploy`, smoke `/booking/health` (same `git_sha`) and `/booking/health/ready` | `deploy-admin-dev.yml` (admin on ECS `aa-booking-dev-admin`), followed by the public smoke and the visual run | Asks `/booking/ops/deploy-gate`; refuses only while a retention job (`bk_retention_job`, `bk_retention_inbox_redact`) runs or is due within 15 min (C6.3a, AA-993 G5) |
 | TripPlanner | Merge to `main` touching `backend/**` → `deploy-lambdas.yml`: zips to the artifacts bucket, `UpdateFunctionCode` on the three Lambdas (browse, assembly, jobs) | `deploy-web-dev.yml` (web on ECS `aa-tripplanner-dev-web` behind CloudFront: verify through the distribution, then the release verify and the visual run) | None: `tripplanner.job` (tp-021) has no deploy-blocking kind, and a Lambda deploy does not interrupt a running invocation |
 | Partner | Merge to `main` touching `api/**` → `Deploy Dev`: image tagged with the git SHA (native arm64), service `aa-crm-dev-api`; `web/**` → `Deploy Web Dev`, service `aa-crm-dev-web` | The tenant Content studio is part of the web since AA-1036 (`web/app/(studio)`): `Deploy Web Dev` verifies its paths on `portal.lumiguides.it.com` and runs its UI smoke; `portal/`, `Deploy Portal Dev` and the service `aa-crm-dev-portal` are retired. The Vercel project `aa-cis-portal` went at the AA-979 clean-up (S256) | The API deploy has the same guard, but no Partner kind blocks a deploy today (`crm_dispatch` stopped blocking in AA-993 G4b); the web deploy has no job gate |
-| Infra | PR → **Terraform Plan** (read it; Infra has no required checks) → merge → **Terraform Apply Dev** run by hand (`workflow_dispatch` on `main`) | - | Plan read in the PR; OIDC trust only for `refs/heads/main` |
+| Infra | PR → **Terraform Plan** (read it; the ruleset's required checks are listed below) → merge → **Terraform Apply Dev** run by hand (`workflow_dispatch` on `main`) | - | Plan read in the PR; OIDC trust only for `refs/heads/main` |
 
 Boundary: *apps own code, Infra owns resources*. Infra creates the ECS services, Lambdas and roles; the apps ship
 code into them. Bootstrap IAM roles and policies and the `accounts/acc3-bedrock` root are applied by a human with the
@@ -101,6 +101,38 @@ MFA profile, never by CI; the `accounts/management` root applies only through it
 No frontend deploys to Vercel any more. The CIS and Booking admins left Vercel in S272 (AA-911) and deploy to ECS
 with `deploy-admin-dev.yml`; the TripPlanner frontend left in S272 too (AA-1038) and deploys to ECS behind CloudFront
 with `deploy-web-dev.yml`.
+
+Release versions on `main` (release-please):
+
+<!-- gen:app-versions -->
+
+| Repo | Release version |
+|---|---|
+| AA-Booking | `0.16.0` |
+| AA-CIS-App | `0.20.0` |
+| AA-Partner | `0.13.0` |
+| AA-TripPlanner-Web | `0.16.0` |
+
+From each repo's `.release-please-manifest.json` on main (AA-Booking `4b777358`, AA-CIS-App `2ff8c53d`, AA-Partner `6592cf50`, AA-TripPlanner-Web `44aa203b`); release-please raises it when its release PR merges.
+
+<!-- /gen -->
+
+Required checks before a merge, per repo:
+
+<!-- gen:required-checks -->
+
+| Repo | Branch | Required checks |
+|---|---|---|
+| AA-Booking | `main` | `Docker Build Check`, `Frontend Build`, `Integration Tests`, `Lint`, `Security Audit`, `Settings Lint`, `Unit Tests`, `Visual (next start, mocked API + kit gallery)`, `gitleaks` |
+| AA-CIS-App | `main` | `Docker Build Check`, `Frontend Build`, `Frontend Lint`, `Integration Tests`, `Kit consumers`, `Lint`, `Security Audit`, `Unit Tests`, `Visual (next start, public pages + kit gallery)`, `gitleaks` |
+| AA-CIS-Infra | `main` | `Copies match owner main`, `Expand classify`, `Migration lint and unique numbers`, `Terraform Plan (dev)`, `gitleaks` |
+| AA-Ecosys | `master` | `Catalogue guard` |
+| AA-Partner | `main` | `Docker Build Check`, `Docs lint`, `Integration Tests`, `Lint`, `PR title`, `Security Audit`, `Settings Lint`, `Unit Tests`, `Visual (built in the runner, public pages + kit gallery)`, `Web Build`, `gitleaks` |
+| AA-TripPlanner-Web | `main` | `Backend (pytest)`, `Frontend (lint + build)`, `Migrations (lint, PG 15 replay)`, `Security Audit`, `Settings Lint`, `gitleaks` |
+
+Read from GitHub (branch protection and rulesets of the default branch) with `gen_sections.py --write --github`. A check skipped by a path filter counts as passed only where the workflow says so; the merge-queue repos run every required check in the queue.
+
+<!-- /gen -->
 
 The full pre-merge checklist and the live verify are in `skill/aa-ship/SKILL.md`. Rollback steps per app are runbooks
 in [`ops/runbooks/`](../ops/runbooks/), listed on the [operations index](../ops/README.md) (AA-892).
@@ -121,6 +153,19 @@ rules: Infra `README.md` "DB Migrate" and [schema ownership](../database/schema-
 The input `override_busy_jobs=<reason>` is the tech lead's call only. After `apply`, **DB Schema Dump** regenerates
 [`db-schema-reference.md`](../architecture/db-schema-reference.md) through a root PR; **DB Isolation Probe** runs nightly
 and on demand.
+
+<!-- gen:latest-migrations -->
+
+| Owner | Migration key | Latest applied on Dev |
+|---|---|---|
+| CIS | `NNN` | `454` |
+| TripPlanner | `tp-NNN` | `tp-034` |
+| Booking | `bk-NNN` | `bk-059` |
+| CRM | `crm-NNN` | `crm-077` |
+
+From the live schema dump of 2026-11-18 ([DB schema reference](../architecture/db-schema-reference.md), refreshed by the DB Schema Dump bot PR). A new migration takes the next number on its owner's main; the owner list is in [schema ownership](../database/schema-ownership.md).
+
+<!-- /gen -->
 
 ## Alarms, runbooks and incidents
 
@@ -157,7 +202,18 @@ session is logged for 365 days. Deleting data follows the DRY RUN procedure
 
 ## Backups and restore
 
-- RDS automated backups: 7-day point-in-time recovery on Dev (prod will keep 14, data standards DM-9.6).
+<!-- gen:backup-days -->
+
+| Backup window (Dev RDS) | Days | Set in AA-CIS-Infra |
+|---|---|---|
+| Automated backups, point-in-time recovery | 14 | `modules/rds/main.tf` (`backup_retention_period`) |
+| Longest any backup copy may live (alarm above it) | 30 | `accounts/aa365/rds_snapshot_expiry.tf` (`rds_backup_copy_max_age_days`) |
+
+Read statically from AA-CIS-Infra main at `751d767e` (tools/docs/repo_facts.py).
+
+<!-- /gen -->
+
+- Prod targets (Multi-AZ, cross-region copy, RPO / RTO): data standards DM-9.6.
 - Manual snapshots expire after 30 days (daily Lambda at 22:00 UTC), unless named `keep-` or tagged to retain.
 - Full PITR restore drills passed on 2026-10-17 (about 22 minutes, `docs/audits/2026-10-17-S241-restore-drill/`)
   and on 2026-10-23 (about 21 minutes, with a single-schema restore and a repoint of `db.dev.internal`,

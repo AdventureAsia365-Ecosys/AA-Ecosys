@@ -9,7 +9,9 @@ entry whose code changed while none of its pages did.
 Commands:
 
   check     --repo <name> and the changed files (--files a b c, --files-from FILE, or --base REF for `git diff
-            --name-only REF...HEAD` in the current directory) [--pr-body-file FILE]. Prints the entries hit; with
+            --name-only REF...HEAD` in the current directory; --repo-dir DIR diffs that checkout instead and --head REF
+            replaces HEAD, e.g. `--base <first main commit of the session> --head origin/main` at session close)
+            [--pr-body-file FILE]. Prints the entries hit; with
             --github also `::warning` annotations, the step summary and, with --comment-out, the sticky PR comment
             body. Exit 0 always (warn only, S283), even when the map is broken (that prints a warning); --strict
             exits 1 when an entry is open (reserved for advisory slice A8, never used in CI today).
@@ -260,8 +262,8 @@ def text_report(hits: list[Hit], repo: str) -> str:
     return "\n".join(lines)
 
 
-def git_changed(base: str, cwd: str | None = None) -> list[str]:
-    out = subprocess.run(["git", "diff", "--name-only", "--no-renames", f"{base}...HEAD"], cwd=cwd, check=True,
+def git_changed(base: str, cwd: str | None = None, head: str = "HEAD") -> list[str]:
+    out = subprocess.run(["git", "diff", "--name-only", "--no-renames", f"{base}...{head}"], cwd=cwd, check=True,
                          capture_output=True, text=True).stdout
     return [line for line in out.splitlines() if line.strip()]
 
@@ -330,6 +332,8 @@ def main(argv: list[str] | None = None) -> int:
     src.add_argument("--files", nargs="+")
     src.add_argument("--files-from")
     src.add_argument("--base")
+    c.add_argument("--repo-dir", help="with --base: the checkout of --repo to diff (default: the current directory)")
+    c.add_argument("--head", default="HEAD", help="with --base: diff --base...HEAD-REF (default HEAD)")
     c.add_argument("--pr-body-file")
     c.add_argument("--map", default=str(REPO_ROOT / MAP))
     c.add_argument("--github", action="store_true", help="print ::warning annotations")
@@ -368,7 +372,13 @@ def main(argv: list[str] | None = None) -> int:
     elif args.files_from:
         files = Path(args.files_from).read_text(encoding="utf-8").splitlines()
     else:
-        files = git_changed(args.base)
+        try:
+            files = git_changed(args.base, cwd=args.repo_dir, head=args.head)
+        except (OSError, subprocess.CalledProcessError) as exc:
+            detail = (getattr(exc, "stderr", None) or str(exc)).strip().splitlines()
+            print(f"::warning title=Docs impact::git diff {args.base}...{args.head} failed in "
+                  f"{args.repo_dir or 'the current directory'}, nothing checked: {detail[0] if detail else exc}")
+            return 1 if args.strict else 0
     body = Path(args.pr_body_file).read_text(encoding="utf-8") if args.pr_body_file else ""
     ack = acknowledgement(body)
     hits = impact(entries, args.repo, files)

@@ -1,0 +1,55 @@
+# Owners of the docs files that have no front-matter (AA-1132 A5; tools/docs/docs_freshness.py reads it).
+#
+# Agent rules, skills, steering files and every repo's CONTEXT.md are loaded into every agent session, yet they carry no
+# `last_reviewed` / `review_every_days` front-matter, so the calendar freshness report never saw them (S283 audit: 16 of
+# the 35 high findings were in such files). Each row registers one file or a glob of root files:
+#
+#   path               a root path or glob (`skill/*/SKILL.md`), or `<repo>:<path>` for a file in an app / Infra repo
+#   owner              a role slug, never a person's name (docs/STYLE.md)
+#   review_every_days  optional, default 90 (the front-matter default); the calendar safety net only
+#   last_reviewed      optional, default the file's last commit; raise it only with a `Verified:` line in the PR body
+#   depends_on         optional doc-map entry ids (docs/catalogue/doc-map.yaml) beyond the entries that list the file
+#
+# The docs bundle (Docs sync) and the weekly freshness report flag a file "needs review" when code of a mapped entry
+# changed after the file's last commit, and "overdue" when its review date passed. Warn only: nothing fails on it.
+# Public repo: no account ID, ARN or e-mail address (docs_freshness.py validate refuses them).
+version: 1
+files:
+  # Root repo: always-loaded agent rules
+  - path: .claude/CLAUDE.md
+    owner: tech-lead
+  - path: .kiro/steering/*.md
+    owner: tech-lead
+  - path: .claude/agents/*.md
+    owner: tech-lead
+  - path: .claude/skills/*/*.md
+    owner: tech-lead
+  # Root repo: skills (loaded on demand) and their references
+  - path: skill/*/SKILL.md
+    owner: tech-lead
+  - path: skill/*/references/*.md
+    owner: tech-lead
+  # App and Infra repos: CONTEXT.md (source of truth for design, CLAUDE.md steering rule) and agent rules
+  - path: AA-CIS-App:CONTEXT.md
+    owner: tech-lead
+  - path: AA-CIS-App:.claude/CLAUDE.md
+    owner: tech-lead
+  - path: AA-Booking:CONTEXT.md
+    owner: tech-lead
+    depends_on: [booking-job-kinds]
+  - path: AA-Booking:.claude/CLAUDE.md
+    owner: tech-lead
+  - path: AA-Partner:CONTEXT.md
+    owner: tech-lead
+    depends_on: [partner-job-kinds]
+  - path: AA-Partner:.claude/CLAUDE.md
+    owner: tech-lead
+  - path: AA-TripPlanner-Web:CONTEXT.md
+    owner: tech-lead
+  - path: AA-TripPlanner-Web:.claude/CLAUDE.md
+    owner: tech-lead
+  - path: AA-CIS-Infra:CONTEXT.md
+    owner: tech-lead
+    depends_on: [infra-ecs-services, infra-account-roots, infra-migration-flow]
+  - path: AA-CIS-Infra:.claude/CLAUDE.md
+    owner: tech-lead
