@@ -8,6 +8,8 @@ Fixtures are an invented workspace (folder mode) and one git repo (ref mode); no
 from __future__ import annotations
 
 import json
+import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -271,10 +273,103 @@ class GenSectionsA3Test(Workspace):
         self.assertEqual(errors, [])
         self.assertIn("latest migrations", warnings[0])
 
+    def test_a_heads_only_move_rewrites_nothing(self):
+        """A new head with the same facts keeps the stored head: no snapshot or page diff (no no-op docs commit)."""
+        repos = r.collect(self.readers())
+        repos["collected_from"] = {repo: "aaaaaaaa" for repo in r.REPO_DIRS}
+        g.write(self.root, repos, {})
+        snapshot = (self.root / g.SNAPSHOT).read_text(encoding="utf-8")
+        page = (self.root / "docs/ops/kinds.md").read_text(encoding="utf-8")
+        self.assertIn("main at `aaaaaaaa`", page)
+        moved = json.loads(json.dumps(repos))
+        moved["collected_from"] = {repo: "bbbbbbbb" for repo in r.REPO_DIRS}
+        self.assertEqual(g.write(self.root, moved, {}), [g.SNAPSHOT])                # nothing but the snapshot path
+        self.assertEqual((self.root / g.SNAPSHOT).read_text(encoding="utf-8"), snapshot)
+        self.assertEqual((self.root / "docs/ops/kinds.md").read_text(encoding="utf-8"), page)
+        # A fact change of one repo moves that repo's head only.
+        moved["versions"]["AA-Booking"] = "2.1.0"
+        g.write(self.root, moved, {})
+        heads = json.loads((self.root / g.SNAPSHOT).read_text(encoding="utf-8"))["repos"]["collected_from"]
+        self.assertEqual(heads["AA-Booking"], "bbbbbbbb")
+        self.assertEqual(heads["AA-CIS-App"], "aaaaaaaa")
+        self.assertEqual((self.root / "docs/ops/kinds.md").read_text(encoding="utf-8"), page)
+
+    def test_keep_heads_takes_a_new_repo_head_and_unresolved_notes(self):
+        new = {"collected_from": {"AA-CIS-App": "cccccccc", "AA-Booking": "dddddddd"}, "versions": {},
+               "job_kinds": {}, "workflows": {}, "backup": None, "unresolved": ["AA-CIS-App x.py:3"]}
+        old = {"collected_from": {"AA-CIS-App": "aaaaaaaa"}, "versions": {}, "job_kinds": {}, "workflows": {},
+               "backup": None, "unresolved": []}
+        self.assertEqual(r.keep_heads(new, old)["collected_from"], {"AA-CIS-App": "cccccccc", "AA-Booking": "dddddddd"})
+        new["unresolved"] = []
+        self.assertEqual(r.keep_heads(new, old)["collected_from"]["AA-CIS-App"], "aaaaaaaa")
+        self.assertEqual(r.keep_heads(new, None)["collected_from"]["AA-CIS-App"], "cccccccc")
+
     def test_main_reads_a_workspace(self):
         self.assertEqual(g.main(["--write", "--root", str(self.root), "--repos-root", str(self.ws)]), 0)
         self.assertIn("`heron_count`", (self.root / "docs/ops/kinds.md").read_text(encoding="utf-8"))
         self.assertEqual(g.main(["--check", "--root", str(self.root), "--repos-root", str(self.ws / "none")]), 1)
+
+
+
+WORKFLOW = Path(__file__).resolve().parents[2] / ".github/workflows/catalogue.yml"
+WORKSPACE = Path(os.environ.get("AA_WORKSPACE", "/home/nghiep/projects/AA-Ecosys"))
+
+
+def sparse_cones(text: str) -> dict[str, list[str]]:
+    """{"apps/AA-CIS-App": ["frontend/app", ...]} from the `path: ws/...` + `sparse-checkout: |` checkouts."""
+    out = {}
+    for m in re.finditer(r"path: ws/(\S+)\n\s+sparse-checkout: \|\n((?:\s{12}\S.*\n)+)", text):
+        out[m.group(1)] = [line.strip().rstrip("/") for line in m.group(2).splitlines() if line.strip()]
+    return out
+
+
+class ConeReader(r.RepoReader):
+    """A reader that sees what a cone-mode sparse checkout leaves: top-level files and the listed folders."""
+
+    def __init__(self, path, ref, cone):
+        super().__init__(path, ref)
+        self.cone = cone
+
+    def _seen(self, rel: str) -> bool:
+        return "/" not in rel or any(rel.startswith(c + "/") for c in self.cone)
+
+    def files(self, prefix: str = "") -> list[str]:
+        return [f for f in super().files(prefix) if self._seen(f)]
+
+    def read(self, rel: str):
+        return super().read(rel) if self._seen(rel) else None
+
+
+class SparseConeTest(unittest.TestCase):
+    """The nightly catalogue job reads the repos through a sparse checkout; it must see what a full read sees."""
+
+    def test_workflow_cone_covers_every_read_path(self):
+        cones = sparse_cones(WORKFLOW.read_text(encoding="utf-8"))
+        self.assertEqual(sorted(cones), sorted(r.REPO_DIRS.values()))
+        for repo, paths in r.READ_PATHS.items():
+            cone = cones[r.REPO_DIRS[repo]]
+            for path in paths:
+                self.assertTrue(any((path.rstrip("/") + "/").startswith(c + "/") for c in cone),
+                                f"{repo}: {path} is outside the catalogue.yml sparse checkout {cone}")
+
+    def test_cone_reader_hides_folders_outside_the_cone(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write_tree(Path(tmp), CIS_FILES)
+            reader = ConeReader(Path(tmp), None, ["services/jobs", "shared"])
+            self.assertIsNone(reader.read("services/heron/names.py"))
+            kinds, unresolved = r.cis_job_kinds(reader)
+            self.assertNotIn("heron_count", [k["kind"] for k in kinds])
+            self.assertIn("services/jobs/heron_job.py:6", unresolved)
+
+    @unittest.skipUnless(all((WORKSPACE / d / ".git").exists() for d in r.REPO_DIRS.values()),
+                         "needs the local workspace with every app and Infra checkout (not in CI)")
+    def test_sparse_read_of_the_workspace_equals_a_full_read(self):
+        cones = sparse_cones(WORKFLOW.read_text(encoding="utf-8"))
+        ref = "origin/main"
+        full = r.collect(r.readers_for(WORKSPACE, ref))
+        sparse = r.collect({repo: ConeReader(WORKSPACE / d, ref, cones[d]) for repo, d in r.REPO_DIRS.items()})
+        for key in ("versions", "job_kinds", "backup", "workflows", "unresolved"):
+            self.assertEqual(sparse[key], full[key], f"{key}: the sparse checkout of catalogue.yml reads less")
 
 
 if __name__ == "__main__":

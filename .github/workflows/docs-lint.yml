@@ -48,6 +48,8 @@ on:
       - ".claude/settings.json"
       - "tools/workflows/**"
       - "tools/docs/**"
+      # AA-1132: the sparse cone of the nightly repo facts read (test_repo_facts.py checks it)
+      - ".github/workflows/catalogue.yml"
       - "tools/linear/**"
       - "tools/github/**"
       - "tools/uat/arch/**"

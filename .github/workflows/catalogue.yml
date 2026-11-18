@@ -96,6 +96,7 @@ jobs:
             frontend/app
             api/routers
             api/migrations
+            api/services
             shared
             services
             .github/workflows

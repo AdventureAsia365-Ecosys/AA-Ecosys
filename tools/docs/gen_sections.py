@@ -241,7 +241,8 @@ def collect_required_checks(runner=None) -> dict:
 def collect(root: Path = REPO_ROOT, previous: dict | None = None, repos: dict | None = None,
             required_checks: dict | None = None) -> dict:
     """The snapshot. `repos` (repo_facts.collect output) and `required_checks` replace the stored values when given;
-    otherwise the values of `previous` (the committed snapshot) are kept."""
+    otherwise the values of `previous` (the committed snapshot) are kept. A repo whose facts did not change keeps its
+    stored head (repo_facts.keep_heads), so a heads-only move rewrites neither the snapshot nor a page."""
     previous = previous or {}
     platform_text = (root / PLATFORM).read_text(encoding="utf-8")
     inventory_text = (root / INVENTORY).read_text(encoding="utf-8")
@@ -257,7 +258,7 @@ def collect(root: Path = REPO_ROOT, previous: dict | None = None, repos: dict | 
         "llm_routes_decision": platform["llm_routes_decision"],
         "ecs": parse_inventory(inventory_text, platform["app_tags"]),
         "migrations": migrations if migrations is not None else previous.get("migrations"),
-        "repos": repos if repos is not None else previous.get("repos"),
+        "repos": repo_facts.keep_heads(repos, previous.get("repos")) if repos is not None else previous.get("repos"),
         "required_checks": required_checks if required_checks is not None else previous.get("required_checks"),
     }
 

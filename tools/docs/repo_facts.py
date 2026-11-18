@@ -47,6 +47,17 @@ KINDS_FILES = {"AA-Booking": "backend/app/jobs/kinds.py", "AA-Partner": "api/app
 TP_HANDLER = "backend/jobs/handler.py"
 RDS_MAIN = "modules/rds/main.tf"
 RDS_EXPIRY = "accounts/aa365/rds_snapshot_expiry.tf"
+# Folders the readers below open in each repo, imports included (CIS job modules take KIND from shared/, services/
+# and api/services/). The nightly catalogue job checks the repos out sparsely (.github/workflows/catalogue.yml): its
+# cone must cover these or a kind resolved through an import drops to `unresolved` (S284 review). test_repo_facts
+# checks the workflow cone against this list, and against a full read of the local workspace when it is there.
+READ_PATHS = {
+    "AA-CIS-App": (CIS_JOBS, "shared/", "services/", "api/services/", ".github/workflows/"),
+    "AA-Booking": ("backend/app/jobs/", ".github/workflows/"),
+    "AA-Partner": ("api/app/jobs/", ".github/workflows/"),
+    "AA-TripPlanner-Web": ("backend/", ".github/workflows/"),
+    "AA-CIS-Infra": ("modules/rds/", "accounts/aa365/", ".github/workflows/"),
+}
 JOB_FLAGS = ("concurrency", "max_attempts", "expected_seconds", "background", "deploy_blocking", "deploy_gate_exempt")
 UNRESOLVED = object()
 
@@ -408,6 +419,32 @@ def collect(readers: dict[str, RepoReader]) -> dict:
         if repo == "AA-CIS-Infra":
             out["backup"] = backup(reader)
     return out
+
+
+def facts_of(facts: dict | None, repo: str) -> dict:
+    """The facts of one repo inside a collect() result, without its head (what a page block can show for it)."""
+    facts = facts or {}
+    return {
+        "versions": (facts.get("versions") or {}).get(repo),
+        "job_kinds": (facts.get("job_kinds") or {}).get(repo),
+        "workflows": (facts.get("workflows") or {}).get(repo),
+        "backup": facts.get("backup") if repo == "AA-CIS-Infra" else None,
+        "unresolved": sorted(u for u in facts.get("unresolved") or [] if u.startswith(repo + " ")),
+    }
+
+
+def keep_heads(new: dict, previous: dict | None) -> dict:
+    """`new` with the previous `collected_from` head of every repo whose facts did not change.
+
+    A head moves on every merge while the facts mostly stay put; printing the new head would rewrite the page blocks
+    (and move each page's last-commit date, which clears its needs-review flag) for nothing. The head kept is the one
+    the unchanged facts were first read at, so "read from main at <sha>" stays true."""
+    old_heads = (previous or {}).get("collected_from") or {}
+    heads = dict(new.get("collected_from") or {})
+    for repo in heads:
+        if old_heads.get(repo) and facts_of(new, repo) == facts_of(previous, repo):
+            heads[repo] = old_heads[repo]
+    return {**new, "collected_from": heads}
 
 
 def readers_for(root: Path, ref: str | None = None) -> dict[str, RepoReader]:
