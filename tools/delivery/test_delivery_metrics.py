@@ -20,7 +20,7 @@ import sys
 import tempfile
 import unittest
 import urllib.parse
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -675,6 +675,50 @@ class TestQueueEntries(unittest.TestCase):
         job = {"attributes": {"aa.run_attempt": 1, "cicd.pipeline.task.run.result": "failure", "aa.duration_s": 300}}
         entries = dm.classify_entries(cfg, app, [tl], [run], {5: [job]}, [])
         self.assertEqual([(e["outcome"], e["flaky"], e["reruns"]) for e in entries], [("merged", "rerun_green", 1)])
+
+    def test_recent_is_bounded_by_the_window_before_the_list_cap(self):
+        """S284: a past range with more later entries than list_cap listed none of its own (the cap came first)."""
+        cfg = demo_config(list_cap=3)
+        app = cfg["apps"][0]
+        store = de.Store()
+
+        def merged(n, at, minutes=10):
+            enq = dm.ts(at)
+            rows = [{"event": "added_to_merge_queue", "created_at": de.iso(enq), "actor": self.AGENT},
+                    {"event": "removed_from_merge_queue", "created_at": de.iso(enq + timedelta(minutes=minutes)),
+                     "actor": self.Q},
+                    {"event": "merged", "created_at": de.iso(enq + timedelta(minutes=minutes)), "actor": self.AGENT}]
+            store.put(dm.queue_event(FIX["repo"], n, rows, cfg))
+
+        merged(1, "2026-03-10T09:00:00Z")   # inside the window
+        merged(2, "2026-03-11T09:00:00Z")   # inside the window
+        merged(3, "2026-03-11T23:55:00Z")   # entered inside, left after the end
+        for n in range(4, 9):               # five entries after the end: more than list_cap
+            merged(n, f"2026-03-1{n - 2}T09:00:00Z")
+
+        def queued(n, at):
+            store.put(dm.queue_event(FIX["repo"], n, [{"event": "added_to_merge_queue", "created_at": at,
+                                                       "actor": self.AGENT}], cfg))
+
+        queued(9, "2026-03-11T20:00:00Z")    # still queued, entered inside the window
+        queued(10, "2026-03-13T20:00:00Z")   # still queued, entered after the end
+        a, b = dm.ts("2026-03-10T00:00:00Z"), dm.ts("2026-03-12T00:00:00Z")
+        q = de.queue_summary(cfg, app, store, [], {}, [], a, b)
+        self.assertEqual([(e["pr"], e["outcome"]) for e in q["recent"]], [(9, "queued"), (2, "merged"), (1, "merged")])
+        self.assertTrue(all(e["left_at"] is None or a <= dm.ts(e["left_at"]) < b for e in q["recent"]))
+        self.assertEqual(q["entries"], 2)
+        # the window that holds the later entries lists them, capped
+        late = de.queue_summary(cfg, app, store, [], {}, [], b, dm.ts("2026-03-20T00:00:00Z"))
+        self.assertEqual([e["pr"] for e in late["recent"]], [9, 10, 8])   # the queued first, then the newest left
+
+    def test_recent_in_window_helper(self):
+        a, b = dm.ts("2026-03-10T00:00:00Z"), dm.ts("2026-03-12T00:00:00Z")
+        e = {"left": None, "outcome": "queued", "enqueued": None}
+        self.assertTrue(de.recent_in_window(e, a, b))
+        self.assertFalse(de.recent_in_window({**e, "enqueued": b}, a, b))
+        self.assertTrue(de.recent_in_window({**e, "outcome": "merged", "left": a}, a, b))
+        self.assertFalse(de.recent_in_window({**e, "outcome": "merged", "left": b}, a, b))
+        self.assertFalse(de.recent_in_window({**e, "outcome": "removed"}, a, b))
 
     def test_ejection_without_runs(self):
         cfg, app = demo_config(), demo_config()["apps"][0]
