@@ -1,8 +1,8 @@
 {
- "updated": "2026-11-17",
- "synced_at": "2026-11-17T09:37Z",
- "session": "S283",
- "next_session": "S284",
+ "updated": "2026-11-18",
+ "synced_at": "2026-11-18T09:01Z",
+ "session": "S284",
+ "next_session": "S285",
  "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
  "projects": {
   "data": "Data Platform",
@@ -933,6 +933,37 @@
   }
  ],
  "log": [
+  {
+   "session": "S284",
+   "date": "18/11/2026",
+   "closed": [
+    "AA-1115",
+    "AA-1125",
+    "AA-1131",
+    "AA-1112",
+    "AA-1113",
+    "AA-1132",
+    "AA-1133",
+    "AA-1116"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-1135",
+    "AA-1136",
+    "AA-1137",
+    "AA-1138",
+    "AA-1139"
+   ],
+   "reopened": [],
+   "notes": [
+    "Ultracode: ~20 lane; AA-1113 (scrub fail closed + trần mỗi app mỗi connection + split ngân sách provider), AA-1132 (docs sync A1–A9, 5 caller docs-impact), AA-1133 (docs reader v2), AA-1116 (3 kênh lead + quota AI + dòng chỗ vượt live), AA-1112 (retention live)",
+    "Tech lead: ngân sách provider acc1 100 / acc3 100 / anthropic 150 / openai 10 / acc2 30 / acc2-usw2 5; CRM acc2 5; CIS acc2 25 chặn; acc1 chỉ cảnh báo",
+    "AWS T8i/ARM64/Spot/Valkey: không đổi — ổn định > tiết kiệm ~10 USD",
+    "Lỗi bắt được live: serializer CRM bỏ key trong giá trị setting (Partner #348); needs_review lệch dạng giữa 2 lane (CIS #1589); Delivery custom range lần đầu > 29 s (L18)",
+    "Jira đăng: PR-24 (lead 3 kênh), PR-25 (chỗ vượt gói 244 USD), PR-22 (Docs cho mọi nhân viên)",
+    "Chi LLM phiên: W5 null run 2,62 USD + AA-1138 Haiku 0,002 USD"
+   ]
+  },
   {
    "session": "S283",
    "date": "17/11/2026",
@@ -2346,9 +2377,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "S283",
+   "session": "S285",
    "size": "",
-   "next": "M2a — S283: nối v7 vào W5 ($0, tech lead duyệt null run v7 tư vấn ≤ 5 USD), null run sau merge",
+   "next": "còn: prereg T9/S1/T2 sau W5 null run non_inferior",
    "needs": ""
   },
   {
@@ -2379,7 +2410,7 @@
   {
    "id": "AA-1103",
    "title": "[Playbook] Build the new-project kit, part 2 — Copier template repo, generic skills, pilot (R3–R6)",
-   "status": "In Progress",
+   "status": "Backlog",
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
@@ -2403,62 +2434,14 @@
   {
    "id": "AA-1111",
    "title": "[Security] Pre-pilot identity hardening: workforce admin MFA, access review, account guards, ZAP baseline",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "Urgent",
    "project": "data",
    "milestone": "later",
-   "session": "S283",
+   "session": "S285",
    "size": "M",
-   "next": "S283: allowed_account_ids aa365 + acc3, rà quyền Q4, ZAP baseline; MFA admin + fork-PR + role chỉ đọc lên trang quyết định",
+   "next": "còn: MFA TOTP nhóm admin, role agent chỉ đọc, ZAP lại, eval asn1/crypto-browserify portal",
    "needs": "Tech lead: cài đặt org GitHub, chọn IdP"
-  },
-  {
-   "id": "AA-1112",
-   "title": "[Data] Retention go-live and tenant-isolation debt: approve proposed DM-7.1 rows, first live runs, RLS allowlist cleanup",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "data",
-   "milestone": "later",
-   "session": "S283",
-   "size": "M",
-   "next": "S283: trang quyết định DM-7.1; chạy retention live 1 lượt mỗi app theo DRY RUN cho dòng đã duyệt",
-   "needs": "Tech lead: duyệt các dòng retention"
-  },
-  {
-   "id": "AA-1113",
-   "title": "[AI Gateway] PII scrub before every free-text AI call and one hard cap for every caller (CIS, TripPlanner, CRM)",
-   "status": "In Progress",
-   "priority": "High",
-   "project": "core",
-   "milestone": "later",
-   "session": "S283",
-   "size": "L",
-   "next": "S283: đo provider × stage $0 + trang quyết định ADR 0009 d10; bản port scrub nếu kịp",
-   "needs": "Tech lead: ADR 0009 d10"
-  },
-  {
-   "id": "AA-1115",
-   "title": "[TripPlanner] Ship the launcher snippet and agency-only branding (no Adventure Asia strings, locale, B2C leftovers removed)",
-   "status": "In Review",
-   "priority": "High",
-   "project": "tpbk",
-   "milestone": "later",
-   "session": "S283",
-   "size": "M",
-   "next": "S283: thương hiệu riêng đại lý (title/og/lang + guard), gỡ luồng đăng nhập/trips B2C cũ",
-   "needs": ""
-  },
-  {
-   "id": "AA-1116",
-   "title": "[Add-ons] End-to-end add-on lifecycle: new tenant runs the provisioning saga, CRM agency auto-created, TripPlanner module in the agency app",
-   "status": "In Review",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "later",
-   "session": "S283",
-   "size": "L",
-   "next": "S283: saga tự tạo đại lý CRM + mời owner, migration 443 contract 1.10, PR Booking drafts; module TP trong app đại lý nếu kịp",
-   "needs": "Chủ doanh nghiệp: giá gói; tech lead: trial khi gắn add-on"
   },
   {
    "id": "AA-1117",
@@ -2521,51 +2504,39 @@
    "needs": "cần xếp slot"
   },
   {
-   "id": "AA-1125",
-   "title": "[DevOps] Platform › Delivery: Merge queue tab and Git map tab (GitLens-style activity, churn, ownership)",
-   "status": "In Review",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "later",
-   "session": "S283",
-   "size": "M",
-   "next": "S283: tab Merge queue + Git map trên Platform › Delivery (collector $0 + UI kit)",
-   "needs": ""
-  },
-  {
    "id": "AA-1126",
    "title": "[AI Gateway] Spend controls per environment: plan quotas with clear UX, connection caps alert + failover, anomaly breaker, batch caps",
    "status": "In Review",
    "priority": "High",
    "project": "core",
    "milestone": "later",
-   "session": "S283",
+   "session": "S285",
    "size": "L",
-   "next": "S283: kiểm soát chi AI theo môi trường (G1–G4 gateway, L1–L4 UX quota) — code sẵn ở dev, prod chỉ đổi setting",
+   "next": "còn: thử flip env + ảnh quota notices",
    "needs": ""
   },
   {
    "id": "AA-1127",
    "title": "[UI fixes — CIS] Studio money and counters, numbers that disagree, spend truth, copy and QA layout",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "High",
    "project": "portal",
    "milestone": "later",
-   "session": "S284",
+   "session": "S285",
    "size": "",
-   "next": "S1, C1, C2 (top 6)",
+   "next": "còn: C3/C4/D1, tên select bộ lọc review, kiểm Cost Explorer hằng ngày (cần yes)",
    "needs": "cần xếp slot"
   },
   {
    "id": "AA-1128",
    "title": "[UI fixes — Booking] Season calendars really assigned, catalog and prices, names not ids, copy and Vietnamese",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "High",
    "project": "tpbk",
    "milestone": "later",
-   "session": "S284",
+   "session": "S285",
    "size": "",
-   "next": "B1 season job first (top 6)",
+   "next": "còn: backfill notifications cũ (cần duyệt) hoặc để hết hạn, B5, D1",
    "needs": "cần xếp slot"
   },
   {
@@ -2593,42 +2564,6 @@
    "needs": "cần xếp slot"
   },
   {
-   "id": "AA-1131",
-   "title": "[Kit] Accessibility fixes in the shared kit, synced to every app, plus the UI audit harness",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "portal",
-   "milestone": "later",
-   "session": "S284",
-   "size": "",
-   "next": "K1 kit accessibility (top 6)",
-   "needs": "cần xếp slot"
-  },
-  {
-   "id": "AA-1132",
-   "title": "[Docs] Docs sync engine — generated facts, docs-impact check, event-based freshness, page history",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "later",
-   "session": "S284",
-   "size": "",
-   "next": "A1 page history + A2 facts, then A4 docs-impact warn-only",
-   "needs": "cần xếp slot"
-  },
-  {
-   "id": "AA-1133",
-   "title": "[Docs] Docs reader v2 — /admin/docs like market docs sites, open to all staff",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "portal",
-   "milestone": "later",
-   "session": "S284",
-   "size": "",
-   "next": "B1 page header + code blocks, then B2",
-   "needs": "cần xếp slot"
-  },
-  {
    "id": "AA-1134",
    "title": "[Ops] Docs-audit code follow-ups — 19 small code, config and settings fixes",
    "status": "Backlog",
@@ -2638,6 +2573,66 @@
    "session": "S285",
    "size": "",
    "next": "small slices in batches",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1135",
+   "title": "[DevOps] Platform › Delivery v2: time range on every tab, DORA trends, delivery flow diagram, queue and churn charts, card sorting",
+   "status": "In Progress",
+   "priority": "Medium",
+   "project": "data",
+   "milestone": "later",
+   "session": "S285",
+   "size": "",
+   "next": "L18: lần gọi đầu khoảng tuỳ chọn > 29 s (504) — sửa đường lạnh, verify live, đóng",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1136",
+   "title": "[DevOps] Agent change hooks: code ↔ tests ↔ implementation notes, script-only, log mode first",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "data",
+   "milestone": "later",
+   "session": "S285",
+   "size": "",
+   "next": "hooks docs-impact / notes-present (warn trước, đo rồi quyết)",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1137",
+   "title": "[DevOps] Specs and trace: plan → spec (requirements, design, tasks) → lanes → PR, Kiro-compatible",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "data",
+   "milestone": "later",
+   "session": "S285",
+   "size": "",
+   "next": "plan → spec → task theo rủi ro",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1138",
+   "title": "[CRM] Draft reply quality: Nova Lite vs Claude Haiku, then route crm_draft_reply to Claude only if it wins",
+   "status": "In Progress",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "S285",
+   "size": "",
+   "next": "nửa Nova Lite qua gateway CRM (bật tạm ai_enabled agency giả), trang so sánh ẩn tên model → tech lead chấm",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1139",
+   "title": "[Add-ons] TripPlanner module in the agency app: site link, lead channel, theme, locale, leads, usage",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "crm",
+   "milestone": "later",
+   "session": "S285",
+   "size": "",
+   "next": "module TripPlanner trong app đại lý (tách từ add-on lifecycle)",
    "needs": "cần xếp slot"
   }
  ]

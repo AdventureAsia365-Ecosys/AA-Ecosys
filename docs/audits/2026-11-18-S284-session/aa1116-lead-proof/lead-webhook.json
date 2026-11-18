@@ -1,0 +1,23 @@
+{
+  "mode": "lead",
+  "channel": "webhook",
+  "slug": "e2e-lead-proof",
+  "tenant_id": "de3272b3-85b6-41ae-babe-f78b2254717e",
+  "run": "acb51ef9",
+  "started_at": "2026-11-18T06:54:47.902Z",
+  "checks": {
+    "send": {
+      "step": "send",
+      "status": 200,
+      "channel": "webhook"
+    },
+    "webhook": {
+      "at": "2026-11-18T06:55:06.279Z",
+      "problems": []
+    },
+    "lead_delivered_log": true
+  },
+  "ok": true,
+  "lead_id": "851c0394-a4ed-459c-a046-42c9d1bf5fad",
+  "handoff_id": 668
+}

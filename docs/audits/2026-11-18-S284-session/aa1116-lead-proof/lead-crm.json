@@ -1,0 +1,19 @@
+{
+  "mode": "lead",
+  "channel": "crm",
+  "slug": "pilot-rehearsal-01",
+  "tenant_id": "41ea21ee-77ee-5474-bd6d-aa738d2da990",
+  "run": "0b061366",
+  "started_at": "2026-11-18T06:34:11.145Z",
+  "checks": {
+    "send": {
+      "step": "send",
+      "status": 200,
+      "channel": "crm"
+    },
+    "lead_delivered_log": true
+  },
+  "ok": true,
+  "lead_id": "6eadedfe-c15e-4d8d-8863-c5e0b71d798d",
+  "handoff_id": 663
+}

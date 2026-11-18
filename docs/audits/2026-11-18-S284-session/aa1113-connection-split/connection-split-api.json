@@ -1,0 +1,63 @@
+{
+  "rows": [
+    {
+      "connection_key": "acc1",
+      "provider_budget_usd": null,
+      "cis_share_usd": 100.0,
+      "crm_share_usd": null,
+      "crm_known": false,
+      "state": "no_provider_budget"
+    },
+    {
+      "connection_key": "acc2",
+      "provider_budget_usd": null,
+      "cis_share_usd": null,
+      "crm_share_usd": null,
+      "crm_known": false,
+      "state": "no_provider_budget"
+    },
+    {
+      "connection_key": "acc2-usw2",
+      "provider_budget_usd": null,
+      "cis_share_usd": 5.0,
+      "crm_share_usd": null,
+      "crm_known": false,
+      "state": "no_provider_budget"
+    },
+    {
+      "connection_key": "acc3",
+      "provider_budget_usd": null,
+      "cis_share_usd": 100.0,
+      "crm_share_usd": null,
+      "crm_known": false,
+      "state": "no_provider_budget"
+    },
+    {
+      "connection_key": "anthropic-direct",
+      "provider_budget_usd": null,
+      "cis_share_usd": 150.0,
+      "crm_share_usd": null,
+      "crm_known": false,
+      "state": "no_provider_budget"
+    },
+    {
+      "connection_key": "bedrock-llm-org",
+      "provider_budget_usd": null,
+      "cis_share_usd": null,
+      "crm_share_usd": null,
+      "crm_known": false,
+      "state": "no_provider_budget"
+    },
+    {
+      "connection_key": "openai-direct",
+      "provider_budget_usd": null,
+      "cis_share_usd": 10.0,
+      "crm_share_usd": null,
+      "crm_known": false,
+      "state": "no_provider_budget"
+    }
+  ],
+  "unknown_keys": [],
+  "crm_error": "cognito_session_required",
+  "errors": []
+}
