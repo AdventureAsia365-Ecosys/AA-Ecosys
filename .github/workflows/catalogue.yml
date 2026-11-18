@@ -14,6 +14,11 @@ name: Catalogue
 #   surface  nightly and on demand: checks the four public app repos out side by side and runs
 #            `surface.py check`, so a new page or router in any app that is missing from the committed snapshot
 #            (and so from the feature mapping) turns this run red within a day.
+#            AA-1132 A3: the same checkout (plus AA-CIS-Infra; root files such as .release-please-manifest.json
+#            are always in a cone-mode sparse checkout) feeds `gen_sections.py --check --repos-root ws`, which
+#            compares the repo facts of docs/generated/facts.snapshot.json (app versions, job kinds, backup days,
+#            workflow names) with the repos' main and WARNS on drift (never red: kinds and versions move daily). The
+#            session close step (skill/aa-session) runs --write with the workspace in its root PR.
 # No AWS access, no secrets beyond the default read-only token. About 1 minute per run.
 on:
   pull_request:
@@ -91,7 +96,9 @@ jobs:
             frontend/app
             api/routers
             api/migrations
-            shared/settings
+            shared
+            services
+            .github/workflows
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: AdventureAsia365-Ecosys/AA-Booking
@@ -100,6 +107,8 @@ jobs:
             frontend/app
             backend/app/routers
             backend/app/pricing
+            backend/app/jobs
+            .github/workflows
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: AdventureAsia365-Ecosys/AA-Partner
@@ -108,6 +117,8 @@ jobs:
             web/app
             api/app/routers
             api/app/platform_settings
+            api/app/jobs
+            .github/workflows
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: AdventureAsia365-Ecosys/AA-TripPlanner-Web
@@ -115,6 +126,15 @@ jobs:
           sparse-checkout: |
             frontend/app
             backend
+            .github/workflows
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: AdventureAsia365-Ecosys/AA-CIS-Infra
+          path: ws/infra/AA-CIS-Infra
+          sparse-checkout: |
+            modules/rds
+            accounts/aa365
+            .github/workflows
 
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
@@ -122,3 +142,11 @@ jobs:
 
       - name: Surface drift
         run: python root/tools/catalogue/surface.py check --apps-root ws
+
+      # AA-1132 A3: warns (exit 0) when the stored repo facts differ from the repos' main; red only when the tool
+      # itself breaks. PyYAML: the generator reads platform.yaml.
+      - name: Repo facts of the generated docs blocks (warn only)
+        if: ${{ !cancelled() }}
+        run: |
+          python -m pip install --quiet -r root/tools/docs/requirements.txt
+          python root/tools/docs/gen_sections.py --check --repos-root ws
