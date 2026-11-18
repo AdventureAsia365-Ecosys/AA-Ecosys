@@ -1,0 +1,137 @@
+{
+ "accounts": [
+  {
+   "chat_models": "No",
+   "decision": "ADR 0018",
+   "holds": "AWS Organizations (OUs NonProd, Prod, Suspended) with three SCPs, the organization trail, IAM Identity Center, the organization budget and Cost Anomaly Detection. No workload",
+   "label": "acc4",
+   "name": "aa-management",
+   "state": "Live; no workload account has joined yet",
+   "terraform_root": "accounts/management"
+  },
+  {
+   "chat_models": "Fallbacks of judge and validate routes only (Nova Lite, Llama 4 Scout, Llama 4 Maverick), never a writer",
+   "decision": "ADR 0018, ADR 0009 decision 14",
+   "holds": "Every Dev workload: VPC, RDS, ECS, Lambda, API Gateway, CloudFront, Cognito, S3, SES, Valkey; Bedrock embeddings and the CRM scrub guardrail",
+   "label": "acc2",
+   "name": "aa-nonprod",
+   "state": "Live; joins the AA organization when the payer moves (planned 2026-12-01)",
+   "terraform_root": "accounts/aa365"
+  },
+  {
+   "chat_models": "Yes, first Bedrock account while AWS blocks acc3 (since 2026-11-12)",
+   "decision": "ADR 0001a Note S278",
+   "holds": "One Bedrock invoker role trusted by the CIS task role and a free spend alert; payer of the organization that holds acc3. Nothing else",
+   "label": "acc1",
+   "name": "personal account, outside the AA organization",
+   "state": "Live; the tech lead reviews it in early December",
+   "terraform_root": "accounts/acc1-bedrock"
+  },
+  {
+   "chat_models": "Fallback behind acc1; AWS refuses its chat models at account level since 2026-10-29",
+   "decision": "ADR 0001a",
+   "holds": "Bedrock invoker role, Bedrock Batch service role, Cost Explorer reader",
+   "label": "acc3",
+   "name": "aa-ai",
+   "state": "Live, refused by Bedrock",
+   "terraform_root": "accounts/acc3-bedrock"
+  },
+  {
+   "chat_models": "-",
+   "decision": "ADR 0018 decision 3",
+   "holds": "Does not exist",
+   "label": "aa-prod",
+   "name": "aa-prod",
+   "state": "Created by the management root when a go-live date is set",
+   "terraform_root": null
+  }
+ ],
+ "ecs": {
+  "cluster": "aa-cis-dev-cluster",
+  "infra_commit": "c1545f7b",
+  "services": [
+   {
+    "address": "module.environment.aws_ecs_service.staff_web[\"booking\"]",
+    "app": "AA-Booking",
+    "app_tag": "booking",
+    "name": "aa-booking-dev-admin"
+   },
+   {
+    "address": "module.environment.aws_ecs_service.booking",
+    "app": "AA-Booking",
+    "app_tag": "booking",
+    "name": "aa-booking-dev-api"
+   },
+   {
+    "address": "module.environment.aws_ecs_service.staff_web[\"cis\"]",
+    "app": "AA-CIS-App",
+    "app_tag": "cis",
+    "name": "aa-cis-dev-admin"
+   },
+   {
+    "address": "module.ecs.aws_ecs_service.api",
+    "app": "AA-CIS-App",
+    "app_tag": "cis",
+    "name": "aa-cis-dev-api"
+   },
+   {
+    "address": "module.ecs.aws_ecs_service.worker",
+    "app": "AA-CIS-App",
+    "app_tag": "cis",
+    "name": "aa-cis-dev-worker"
+   },
+   {
+    "address": "module.environment.aws_ecs_service.crm_api",
+    "app": "AA-Partner",
+    "app_tag": "crm",
+    "name": "aa-crm-dev-api"
+   },
+   {
+    "address": "module.environment.aws_ecs_service.crm_web",
+    "app": "AA-Partner",
+    "app_tag": "crm",
+    "name": "aa-crm-dev-web"
+   },
+   {
+    "address": "module.environment.aws_ecs_service.tripplanner_web",
+    "app": "AA-TripPlanner-Web",
+    "app_tag": "tripplanner",
+    "name": "aa-tripplanner-dev-web"
+   }
+  ]
+ },
+ "generator": "tools/docs/gen_sections.py",
+ "llm_routes": [
+  {
+   "family": "Claude",
+   "note": "acc3 is skipped while Bedrock refuses it",
+   "order": [
+    "Anthropic API",
+    "acc1 (Bedrock)",
+    "acc3 (Bedrock)"
+   ]
+  },
+  {
+   "family": "GPT",
+   "note": "the OpenAI API serves the twin model last",
+   "order": [
+    "acc1 (Bedrock)",
+    "acc3 (Bedrock)",
+    "OpenAI API"
+   ]
+  },
+  {
+   "family": "Embeddings",
+   "note": "",
+   "order": [
+    "acc2 (Bedrock, Cohere Embed v4)"
+   ]
+  }
+ ],
+ "llm_routes_decision": "ADR 0009 (one gateway for every provider) with ADR 0001a Note S278 (acc1 before acc3)",
+ "schema": "aa1132-facts/1",
+ "sources": {
+  "docs/catalogue/platform.yaml": "ce35306b490e3f51c7760ebcb9bac3b7cd042cc479bd36fd5f44e4534fe64c48",
+  "docs/generated/inventory.md": "ff3295d5219e7e30518a6340c0f2a5915ca48308c90a15ebc8753f33c3a896f3"
+ }
+}

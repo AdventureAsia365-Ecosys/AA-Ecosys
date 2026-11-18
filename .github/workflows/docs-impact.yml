@@ -1,0 +1,66 @@
+name: Docs impact
+# AA-1132 A4 (advisory docs/audits/2026-11-17-S283-docs-advisory/README.md section 2.2 L3; tech lead S283: one central
+# doc map in the root, warn only). A pull request that changes code listed in docs/catalogue/doc-map.yaml without
+# touching the pages that describe it gets a warning: `::warning` annotations, the run summary and ONE sticky PR comment
+# (created on the first finding, updated in place afterwards, cleared to "no docs impact left" once resolved). It never
+# fails: tools/docs/doc_impact.py github-pr exits 0 and the step is continue-on-error, so a broken map, a GitHub API
+# error or a read-only fork token can only print a warning.
+#
+# Reusable: every app repo (AA-CIS-App, AA-Booking, AA-Partner, AA-TripPlanner-Web, AA-CIS-Infra) calls this file from
+# its own .github/workflows/docs-impact.yml, pinned to a commit of this repo (WL6), on pull_request and merge_group.
+# On merge_group (no PR) the job is skipped; it is never a required check (warn only), so the merge queue never waits
+# on it. The map and the tool are read from this repo's master (one current map for every repo); on a pull request of
+# this repo itself (the pull_request trigger below) they come from the PR head, so a map change is checked on its own PR.
+#
+# Skipped for bot PRs whose files are generated: Dependabot, release-please, the schema-reference bot.
+# Read only apart from the comment: contents read; pull-requests write (the caller grants it). No secret, no AWS.
+on:
+  workflow_call:
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  docs-impact:
+    name: Docs impact (warning only)
+    if: >-
+      github.event_name == 'pull_request'
+      && github.event.pull_request.user.login != 'dependabot[bot]'
+      && !startsWith(github.head_ref, 'release-please--')
+      && github.head_ref != 'bot/db-schema-reference'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Check out the doc map and the tool (AA-Ecosys)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: AdventureAsia365-Ecosys/AA-Ecosys
+          ref: ${{ github.repository == 'AdventureAsia365-Ecosys/AA-Ecosys' && github.event.pull_request.head.sha || 'master' }}
+          path: _aa_ecosys
+          persist-credentials: false
+          sparse-checkout: |
+            tools/docs/doc_impact.py
+            docs/catalogue/doc-map.yaml
+          sparse-checkout-cone-mode: false
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      # PyYAML only (the version tools/docs/requirements.txt pins); a few seconds, no cache needed.
+      - name: Install PyYAML
+        run: python -m pip install --quiet "PyYAML==6.0.2"
+
+      - name: Docs impact
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: python _aa_ecosys/tools/docs/doc_impact.py github-pr --map _aa_ecosys/docs/catalogue/doc-map.yaml

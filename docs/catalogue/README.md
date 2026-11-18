@@ -22,6 +22,8 @@ assistant read the same files.
 | [`features.yaml`](features.yaml) | The apps, every feature (`<APP>-F<nnn>`) and the business journeys |
 | [`integrations.yaml`](integrations.yaml) | Every link between two apps or to an outside provider (`INT-<nnn>`) |
 | [`surface.snapshot.json`](surface.snapshot.json) | Generated: every page and API route group of each app, the settings registry keys and the plan feature keys |
+| [`platform.yaml`](platform.yaml) | Platform decisions docs pages show as generated blocks: account roles (labels only), LLM provider order, app tags (AA-1132) |
+| [`doc-map.yaml`](doc-map.yaml) | Docs ↔ code map: code globs per repo and the pages that describe them; the Docs impact check reads it (AA-1132) |
 
 The model follows the Backstage catalog format without a Backstage server: an app is a *System*, a feature is a
 *Component* with the pages and API route groups it owns, an integration is an *API* with one producer
@@ -96,3 +98,35 @@ page (read only, cached five minutes), so a merged catalogue change shows up wit
    unmapped).
 2. Give every new UAT scenario its `features`.
 3. Run the check locally; open a root pull request.
+
+## Generated blocks and docs impact (AA-1132)
+
+**Generated blocks.** A fact that many pages repeat (which account serves the chat models, which ECS services run) is
+written once and shown as a block that [`tools/docs/gen_sections.py`](../../tools/docs/gen_sections.py) renders into
+the page between two comment markers:
+
+```markdown
+<!-- gen:ecs-services -->
+<!-- /gen -->
+```
+
+Blocks today: `accounts` and `llm-route-order` (from [`platform.yaml`](platform.yaml)), `ecs-services` (from the
+Terraform-state inventory `docs/generated/inventory.md`). Every block renders from one snapshot,
+`docs/generated/facts.snapshot.json`, so the check is deterministic and never calls AWS. Change a decision in
+`platform.yaml` (with its ADR), run `python tools/docs/gen_sections.py --write`, commit the snapshot and the pages.
+The docs lint fails a PR whose blocks differ from the snapshot or whose snapshot is behind `platform.yaml`; a snapshot
+behind the inventory is a warning (the nightly Infra Docs Gen PR must stay green), fixed by `--write` in the next docs
+PR. Never edit a block by hand; write the prose around it.
+
+**Docs impact.** [`doc-map.yaml`](doc-map.yaml) maps code globs of each repo to the pages that describe them. The
+reusable workflow `.github/workflows/docs-impact.yml`, called from every app repo, runs
+[`tools/docs/doc_impact.py`](../../tools/docs/doc_impact.py) on each pull request: when mapped code changed and none
+of its pages did, the PR gets one sticky comment and warning annotations listing the pages to check. It never blocks
+a merge (tech lead S283: warn only). Answer it with one line in the PR body: `Docs-impact: <root PR link>`,
+`Docs-impact: updated-here` or `Docs-impact: none: <reason>`. Run it locally before a push:
+
+```bash
+python tools/docs/doc_impact.py check --repo AA-CIS-Infra --base origin/main   # inside the Infra checkout, map from here
+```
+
+Add an entry when a page starts describing code; keep ids stable (hooks and lane notes cite them).
