@@ -44,6 +44,7 @@ day the history is complete.
 
     python3 tools/delivery/delivery_metrics.py collect --store DIR --out DIR       # GITHUB_TOKEN in the environment
     python3 tools/delivery/delivery_metrics.py summarize --store DIR --out DIR     # recompute from the store, offline
+    ... collect --all-days    # AA-1135: write every day file of the store (empty ones too), not only the changed days
     python3 tools/delivery/delivery_metrics.py expired --keys FILE [--today D]     # S3 event keys past retention
 
 The AA-1125 knobs (git_days, git_windows, graph_commits, top_files, top_children, commit_files_cap, author_kinds,
@@ -90,6 +91,7 @@ from delivery_engine import (  # noqa: F401
     percentile,
     queue_entries,
     run_outcome,
+    store_days,
     summarize,
     ts,
 )
@@ -826,6 +828,18 @@ def expired_keys(keys: Iterable[str], today: date, days: int) -> list[str]:
     return out
 
 
+def output_days(cfg: dict, store: Store, now: datetime, all_days: bool) -> dict[str, list[dict]]:
+    """The day files a run uploads: the days it changed, or (`all_days`: a store restored from no cache, or a repair)
+    every day of the store, an empty file for a day without events, so the published day files rebuild exactly the
+    store the summary was computed from (AA-1135, definitions.store_fingerprint): the upload overwrites whatever an
+    older store left on S3."""
+    if not all_days:
+        return store.day_files(store.touched_days)
+    files = {d: [] for d in store_days(cfg, now)}
+    files.update(store.day_files(files))
+    return files
+
+
 def write_outputs(out: Path, summary: dict, day_files: dict[str, list[dict]]) -> None:
     out.mkdir(parents=True, exist_ok=True)
     (out / "summary.json").write_text(json.dumps(summary, sort_keys=True, separators=(",", ":")), encoding="utf-8")
@@ -848,6 +862,8 @@ def main(argv: Optional[list[str]] = None) -> int:
         p.add_argument("--now", help="ISO time (tests); default the current UTC time")
         p.add_argument("--sha", default=os.environ.get("GITHUB_SHA", ""))
         p.add_argument("--run-id", default=os.environ.get("GITHUB_RUN_ID", ""))
+        p.add_argument("--all-days", action="store_true",
+                       help="write every day file of the store, empty ones too (a new store, or a repair)")
     e = sub.add_parser("expired")
     e.add_argument("--keys", type=Path, required=True)
     e.add_argument("--today")
@@ -874,8 +890,9 @@ def main(argv: Optional[list[str]] = None) -> int:
         store.save(args.store)
     source = {"repo": "AA-Ecosys", "sha": args.sha or None, "run_id": args.run_id or None}
     summary = summarize(cfg, store, now, source, report)
-    days = store.touched_days if args.cmd == "collect" else {(e.get("time") or "")[:10] for e in store.events.values()}
-    write_outputs(args.out, summary, store.day_files(days))
+    files = output_days(cfg, store, now, all_days=args.all_days or args.cmd == "summarize")
+    days = set(files)
+    write_outputs(args.out, summary, files)
     print(
         json.dumps(
             {

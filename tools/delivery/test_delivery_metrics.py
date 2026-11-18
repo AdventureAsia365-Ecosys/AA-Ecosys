@@ -510,6 +510,74 @@ class TestRanges(SummaryFixture):
         self.assertEqual(json.dumps(got["apps"][0]["range"], sort_keys=True),
                          json.dumps(summary["apps"][0]["ranges"]["d7"], sort_keys=True))
 
+    def test_definitions_carry_the_store_fingerprint(self):
+        fp = self.summary["definitions"]["store_fingerprint"]
+        self.assertEqual(sorted(fp), [FIX["repo"]])
+        self.assertEqual(fp[FIX["repo"]]["events"], len(self.store.events))
+        self.assertEqual(len(fp[FIX["repo"]]["sha256"]), 64)
+        # the order the events were stored in does not change it
+        shuffled = dict(reversed(list(self.store.events.items())))
+        self.assertEqual(de.store_fingerprint(shuffled.values(), de.store_cut(self.cfg, NOW)), fp)
+
+    def test_a_day_file_missing_an_event_is_refused(self):
+        """A failed upload or a lost cache: the day files no longer rebuild the store, so no custom range."""
+        summary, events = self.published()
+        dropped = next(k for k, e in events.items() if e["event"] == "deployment")
+        with self.assertRaises(de.StoreMismatch) as err:
+            de.custom_range(summary, {k: v for k, v in events.items() if k != dropped}, NOW - dm.timedelta(days=7),
+                            NOW)
+        self.assertIn(FIX["repo"], str(err.exception))
+
+    def test_a_day_file_with_a_changed_or_extra_event_is_refused(self):
+        summary, events = self.published()
+        run = copy.deepcopy(next(e for e in events.values() if e["event"] == "cicd.pipeline.run"))
+        run["attributes"]["cicd.pipeline.result"] = "failure" if run["attributes"].get(
+            "cicd.pipeline.result") != "failure" else "success"
+        with self.assertRaises(de.StoreMismatch):
+            de.custom_range(summary, {**events, run["id"]: run}, NOW - dm.timedelta(days=7), NOW)
+        extra = {**copy.deepcopy(run), "id": "demo/run/extra"}
+        with self.assertRaises(de.StoreMismatch):
+            de.custom_range(summary, {**events, extra["id"]: extra}, NOW - dm.timedelta(days=7), NOW)
+
+    def test_a_summary_without_a_fingerprint_is_refused(self):
+        summary, events = self.published()
+        summary["definitions"].pop("store_fingerprint")
+        with self.assertRaises(de.StoreMismatch):
+            de.custom_range(summary, events, NOW - dm.timedelta(days=7), NOW)
+
+    def test_an_event_that_moves_day_rewrites_its_old_day(self):
+        store = dm.Store(copy.deepcopy(self.store.events))
+        e = copy.deepcopy(next(e for e in store.events.values() if e["event"] == "cicd.pipeline.run"))
+        old_day = e["time"][:10]
+        e["time"] = "2026-03-20T09:00:00Z" if old_day != "2026-03-20" else "2026-03-19T09:00:00Z"
+        store.touched_days.clear()
+        self.assertTrue(store.put(e))
+        self.assertEqual(store.touched_days, {old_day, e["time"][:10]})
+        files = store.day_files(store.touched_days)
+        self.assertNotIn(e["id"], [x["id"] for x in files.get(old_day, [])])
+
+    def test_all_days_writes_every_day_of_the_store(self):
+        """A run without a cached store (or a repair) overwrites every day file, so stale S3 days cannot linger."""
+        files = dm.output_days(self.cfg, self.store, NOW, all_days=True)
+        self.assertEqual(sorted(files), de.store_days(self.cfg, NOW))
+        self.assertEqual(files["2025-12-12"], [])
+        self.assertEqual(sum(len(v) for v in files.values()), len(self.store.events))
+        self.store.touched_days.clear()
+        self.assertEqual(dm.output_days(self.cfg, self.store, NOW, all_days=False), {})
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp)
+            stale = out / "events" / "2025" / "12" / "12.ndjson"
+            stale.parent.mkdir(parents=True)
+            stale.write_text(json.dumps({**next(iter(self.store.events.values())), "id": "demo/old/stale"}) + "\n",
+                             encoding="utf-8")
+            dm.write_outputs(out, self.summary, files)
+            self.assertEqual(stale.read_text(encoding="utf-8"), "")
+            summary = json.loads((out / "summary.json").read_text(encoding="utf-8"))
+            texts = [(out / k).read_text(encoding="utf-8") for k in de.day_keys(summary["config"], NOW)]
+        got = de.custom_range(summary, de.load_events(texts), NOW - dm.timedelta(days=7), NOW)
+        self.assertEqual(json.dumps(got["apps"][0]["range"], sort_keys=True),
+                         json.dumps(summary["apps"][0]["ranges"]["d7"], sort_keys=True))
+
     def test_store_order_is_deterministic(self):
         shuffled = dm.Store(dict(reversed(list(self.store.events.items()))), self.store.state)
         self.assertEqual([e["id"] for e in shuffled.of("cicd.pipeline.run")],

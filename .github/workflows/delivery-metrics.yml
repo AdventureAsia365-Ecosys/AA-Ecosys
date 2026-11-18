@@ -17,7 +17,11 @@ name: Delivery metrics
 #
 # AA-1135 (S284): the summary also carries per app the range-picker presets (`ranges.d7|d28|d90`), the collector's
 # config and the sha256 of tools/delivery/delivery_engine.py; the CIS API recomputes a custom range from the day files
-# with a byte copy of that engine (tools/delivery/sync_engine.py keeps the copy in step).
+# with a byte copy of that engine (tools/delivery/sync_engine.py keeps the copy in step). The day files must rebuild
+# exactly the store the presets come from (the summary publishes a fingerprint of it, CIS refuses a custom range on a
+# difference), so the store is saved to the cache only after the upload succeeded (a failed upload leaves the older
+# store, whose next run re-reads and re-uploads the same days), and a run that starts without a cached store, or a
+# manual run with full_day_files, uploads every day file of the store (empty ones too).
 #
 # Raw event files are kept 400 days (apps.json raw_retention_days): this run deletes older day files itself; the
 # bucket expires noncurrent docs-reader/ versions after 7 days (AA-CIS-Infra accounts/aa365/docs_reader.tf).
@@ -33,6 +37,11 @@ on:
   schedule:
     - cron: "17 * * * *"   # hourly (tech lead S282); re-saved S282 close: the first cron never fired (AA-1108). The CIS page re-reads the published file on its Refresh button
   workflow_dispatch:
+    inputs:
+      full_day_files:
+        description: "Upload every day file of the store (repairs day files that fell out of step with the summary)"
+        type: boolean
+        default: false
   pull_request:
     branches: [master]
     paths:
@@ -91,9 +100,16 @@ jobs:
         id: collect
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          # a store that starts empty (no cache entry) or a repair run: every day file, so S3 mirrors the store
+          ALL_DAYS: ${{ steps.restore.outputs.cache-matched-key == '' || inputs.full_day_files == true }}
         run: |
           set -euo pipefail
-          python3 tools/delivery/delivery_metrics.py collect --store "$STORE" --out "$OUT" > _collect.json
+          extra=()
+          if [ "$ALL_DAYS" = "true" ]; then
+            extra=(--all-days)
+            echo "::notice title=Delivery metrics::writing every day file of the store (no cached store, or a repair run)"
+          fi
+          python3 tools/delivery/delivery_metrics.py collect --store "$STORE" --out "$OUT" "${extra[@]}" > _collect.json
           python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
           import json
           r = json.load(open("_collect.json", encoding="utf-8"))
@@ -114,9 +130,38 @@ jobs:
                     f"{d['recovery_time']['p50_h']} | {a['ci']['main']['state']} | {a['complete_since']} |")
           PY
 
+      - name: Upload skipped
+        if: env.HAS_AWS != 'true'
+        run: echo "::notice title=Delivery metrics::DOCS_SYNC_ROLE_ARN / DOCS_SYNC_BUCKET are not set; summary built, nothing uploaded."
+
+      - name: AWS credentials (OIDC)
+        if: env.HAS_AWS == 'true'
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ secrets.DOCS_SYNC_ROLE_ARN }}
+          aws-region: us-west-1
+          role-session-name: delivery-metrics-${{ github.run_id }}
+
+      - name: Upload the events, then the summary
+        id: upload
+        if: env.HAS_AWS == 'true'
+        env:
+          BUCKET: ${{ secrets.DOCS_SYNC_BUCKET }}
+        run: |
+          set -euo pipefail
+          dest="s3://${BUCKET}/${PREFIX}"
+          mkdir -p "$OUT/events"
+          aws s3 sync "$OUT/events" "$dest/events" --only-show-errors --content-type "application/x-ndjson; charset=utf-8"
+          aws s3 cp "$OUT/summary.json" "$dest/summary.json" --only-show-errors --content-type "application/json"
+          echo "uploaded $(find "$OUT/events" -type f | wc -l) day files and the summary" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Save the event store
         id: save
-        if: github.ref == 'refs/heads/master' && steps.collect.outcome == 'success'
+        # after the upload: a store whose day files never reached S3 is not kept (AA-1135, the day files must rebuild
+        # the store; the next run starts from the older store and uploads those days again)
+        if: >-
+          github.ref == 'refs/heads/master' && steps.collect.outcome == 'success'
+          && (env.HAS_AWS != 'true' || steps.upload.outcome == 'success')
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: _store
@@ -131,30 +176,6 @@ jobs:
         run: |
           gh cache delete "$OLD_KEY" --repo "$GITHUB_REPOSITORY" \
             || echo "::notice title=Delivery metrics::previous store entry $OLD_KEY not deleted (already gone?)"
-
-      - name: Upload skipped
-        if: env.HAS_AWS != 'true'
-        run: echo "::notice title=Delivery metrics::DOCS_SYNC_ROLE_ARN / DOCS_SYNC_BUCKET are not set; summary built, nothing uploaded."
-
-      - name: AWS credentials (OIDC)
-        if: env.HAS_AWS == 'true'
-        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
-        with:
-          role-to-assume: ${{ secrets.DOCS_SYNC_ROLE_ARN }}
-          aws-region: us-west-1
-          role-session-name: delivery-metrics-${{ github.run_id }}
-
-      - name: Upload the events, then the summary
-        if: env.HAS_AWS == 'true'
-        env:
-          BUCKET: ${{ secrets.DOCS_SYNC_BUCKET }}
-        run: |
-          set -euo pipefail
-          dest="s3://${BUCKET}/${PREFIX}"
-          mkdir -p "$OUT/events"
-          aws s3 sync "$OUT/events" "$dest/events" --only-show-errors --content-type "application/x-ndjson; charset=utf-8"
-          aws s3 cp "$OUT/summary.json" "$dest/summary.json" --only-show-errors --content-type "application/json"
-          echo "uploaded $(find "$OUT/events" -type f | wc -l) day files and the summary" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Delete event files past the retention
         if: env.HAS_AWS == 'true'
