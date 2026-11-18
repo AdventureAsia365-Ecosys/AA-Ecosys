@@ -25,6 +25,11 @@ Linear is read-only for you — never try to write it.
   code style. Frontend: inline style + tokens (`A`/`K`, `alpha()`), dark theme safe (no hex/white
   literals in pages), no setState in useEffect. FastAPI: no helper between a decorator and its function.
 - Commits on this branch only: `<type>: <description>` + blank line + `Refs <AA-xxx>`.
+- **Docs impact (warn only):** before the first push run
+  `python3 /home/nghiep/projects/AA-Ecosys/tools/docs/doc_impact.py check --repo <Repo> --base origin/main`; update every
+  OPEN page of this repo in the same branch and list the root pages it names under `## Open questions / risks` (Claude
+  Code opens the root PR). Never edit a `<!-- gen:... -->` block by hand; raise `last_reviewed` only for a page you
+  checked against the code, and say what you checked in the report.
 - **Loop until green, then report — do not stop at local tests:**
   1. Run the test commands above until green.
   2. `git push -u origin <branch>` (feature branch only — never main/master, never force).

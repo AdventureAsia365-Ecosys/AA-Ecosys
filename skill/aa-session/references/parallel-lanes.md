@@ -31,6 +31,9 @@ Khối `COMMON` của `lane.js` là dạng workflow của mẫu brief giao việ
 CI, nhãn model chứa "api" mỗi dòng một nhãn, test integration `cis_app` cấp quyền tạm + đọc theo tên cột, RAM, cấm
 push/merge/ECS exec. Thêm luật mới → sửa `COMMON` trong `lane.js` (một nguồn), không chép vào brief từng lane.
 Khi một dòng `COMMON` đã là guard, dòng bài học tương ứng trong `lessons.md` có thể rút gọn (`aa-lessons` §4).
+Docs impact (AA-1132 A6): `COMMON` bắt mỗi lane chạy `tools/docs/doc_impact.py check` trong từng worktree trước khi trả
+kết quả, sửa trang OPEN cùng repo trong cùng PR, đưa trang repo gốc chưa sửa vào `followups` và ghi dòng `Docs-impact:`
+trong `pr_body`; điều phối gom các trang repo gốc đó vào root PR cuối phiên (`SKILL.md`, Kết thúc phiên bước 2).
 
 ## Sau rate limit / usage limit
 
