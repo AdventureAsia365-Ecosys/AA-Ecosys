@@ -268,6 +268,21 @@ jobs:
       - name: Doc map
         if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
         run: python tools/docs/doc_impact.py validate
+      # AA-1132 A7: names inside backticks. A Terraform address after -target= / -replace= that the resource inventory
+      # does not have fails (a runbook command that changes nothing); paths, services, job kinds, settings keys,
+      # migration numbers and workflow names only warn (their false positives are not near zero yet).
+      - name: Backtick names
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: python tools/docs/check_code_refs.py --strict-rules tf-address
+
+      # AA-1132 A9: an image added under docs/audits/ is WebP or PNG and at most 300 KB (git history keeps every byte).
+      - name: New audit images
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        env:
+          BASE_REF: ${{ github.base_ref || 'master' }}
+        run: |
+          git fetch --no-tags --depth=1 origin "$BASE_REF"
+          python tools/docs/check_images.py --new-audit-images --base FETCH_HEAD
       - name: Literal resource IDs (warn-only)
         if: ${{ !cancelled() }}
         run: python tools/docs/check_docs_text.py resource-ids --mode warn

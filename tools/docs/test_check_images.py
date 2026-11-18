@@ -111,5 +111,63 @@ class ImageLint(unittest.TestCase):
             self.assertEqual(ci.main(["--root", str(self.root)]), 0)
 
 
+class NewAuditImages(unittest.TestCase):
+    """AA-1132 A9: image files added under docs/audits/ since a base ref (a throwaway git repo)."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+        self.git("init", "-q")
+        self.put("docs/audits/2026-01-01-S1-old/big.png", png_bytes(pad=400 * 1024))   # already in git: never re-checked
+        self.put("docs/audits/2026-01-01-S1-old/README.md", b"# old\n")
+        self.git("add", "-A")
+        self.git("commit", "-q", "-m", "base")
+        self.base = self.git("rev-parse", "HEAD").strip()
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def git(self, *args: str) -> str:
+        import subprocess
+        return subprocess.run(["git", "-C", str(self.root), "-c", "user.name=t", "-c", "user.email=t@t.invalid", *args],
+                              check=True, capture_output=True, text=True).stdout
+
+    def put(self, rel: str, data: bytes) -> None:
+        p = self.root / rel
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_bytes(data)
+
+    def run_gate(self) -> tuple[int, str]:
+        self.git("add", "-A")
+        self.git("commit", "-q", "-m", "change")
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = ci.main(["--root", str(self.root), "--new-audit-images", "--base", self.base])
+        return code, out.getvalue()
+
+    def test_small_png_and_webp_pass(self):
+        self.put("docs/audits/2026-01-02-S2-new/shot.png", png_bytes())
+        self.put("docs/audits/2026-01-02-S2-new/shot.webp", webp_bytes())
+        self.put("docs/audits/2026-01-02-S2-new/diagram.svg", b"<svg/>" + b" " * (400 * 1024))
+        code, out = self.run_gate()
+        self.assertEqual(code, 0, out)
+        self.assertIn("3 new files", out)
+
+    def test_large_png_and_jpeg_fail(self):
+        self.put("docs/audits/2026-01-02-S2-new/huge.png", png_bytes(pad=b.MAX_RASTER_BYTES + 1))
+        self.put("docs/audits/2026-01-02-S2-new/photo.jpg", b"\xff\xd8\xff" + b"\0" * 10)
+        self.put("docs/guides/images/elsewhere.jpg", b"\xff\xd8\xff")              # outside docs/audits/: not this gate
+        code, out = self.run_gate()
+        self.assertEqual(code, 1)
+        self.assertIn("huge.png", out)
+        self.assertIn("convert it to WebP", out)
+        self.assertIn("photo.jpg", out)
+        self.assertNotIn("elsewhere.jpg", out)
+
+    def test_base_is_required(self):
+        with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+            ci.main(["--root", str(self.root), "--new-audit-images"])
+
+
 if __name__ == "__main__":
     unittest.main()
