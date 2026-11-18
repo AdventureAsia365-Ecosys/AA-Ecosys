@@ -24,6 +24,7 @@ name: Docs lint
 #   - the AA Academy course files under docs/learn/ (AA-1104): shape, references, pinned source hashes (a cited
 #     section that changed turns the check red until the module owner re-pins), tiers and the allowlist
 #   - the ECS exec wrapper tools/ecs (AA-1024 G3) and the GIT_DIR isolation of the pre-push hook (S272)
+#   - the generated docs blocks match the facts snapshot, and the docs <-> code map is valid (AA-1132)
 #   - the new-project kit sources (AA-1103): every file the public project template copies (tools/project-kit/
 #     kit-sources.txt) has balanced kit markers and, after the kit transform, no project name, key or account number
 # Secrets: gitleaks runs on every PR (any path) in secret-scan.yml and nightly over the full history in
@@ -255,6 +256,18 @@ jobs:
         if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
         run: python tools/docs/report_registry.py check
 
+      # AA-1132 A2: every generated block (<!-- gen:<name> --> ... <!-- /gen -->) in a docs page equals its render of
+      # docs/generated/facts.snapshot.json, the snapshot matches docs/catalogue/platform.yaml, and neither holds an
+      # account ID, ARN or e-mail address. A snapshot behind docs/generated/inventory.md is a warning only (the Infra
+      # Docs Gen PR must stay green to merge itself); run `python tools/docs/gen_sections.py --write` in a docs PR.
+      - name: Generated docs blocks
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: python tools/docs/gen_sections.py --check
+      # AA-1132 A4: the docs <-> code map (docs/catalogue/doc-map.yaml) that the Docs impact workflow reads in every
+      # repo: shape, unique ids, known repos, and every root page it names exists.
+      - name: Doc map
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: python tools/docs/doc_impact.py validate
       - name: Literal resource IDs (warn-only)
         if: ${{ !cancelled() }}
         run: python tools/docs/check_docs_text.py resource-ids --mode warn

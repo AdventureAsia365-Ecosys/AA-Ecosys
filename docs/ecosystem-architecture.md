@@ -69,14 +69,22 @@ The `AA-TripPlanner-Web` repo builds the real code and ships it with `lambda:Upd
 Terraform `ignore_changes` covers the code attributes, so it never overwrites them. Source:
 `infra/AA-CIS-Infra/docs/implementation-notes/AA-TripPlanner-backend.md`.
 
-**AWS accounts [FACT] (ADR 0018).** Today:
+**AWS accounts [FACT] (ADR 0018).** The table is generated from `docs/catalogue/platform.yaml` (change a role there,
+with its ADR, and run `tools/docs/gen_sections.py --write`):
 
-| Account (target name) | Holds today | State on 2026-11-01 |
-|---|---|---|
-| Management account (`aa-management`) | AWS Organizations (all features), OUs `NonProd`, `Prod`, `Suspended`, three SCPs attached to the OUs (deny leave or close, protect audit and billing, Region allow-list), the organization CloudTrail `aa-org-trail` with its bucket, IAM Identity Center (groups `aa-admins`, `aa-developers`, `aa-billing`; permission sets `AA-Admin`, `AA-Developer`, `AA-ReadOnly`, `AA-Billing`), the organization budget and its own budget, Cost Anomaly Detection. **No workload** | **Live** since S259; Terraform root `accounts/management`. It is the only member of its organization: no workload account has joined yet |
-| acc2 (`aa-nonprod`) | Every workload: VPC, RDS, ECS, Lambda, API Gateway, CloudFront, Cognito, S3, SES, Valkey, Bedrock embeddings, the Bedrock Guardrail of the CRM scrub, and five Bedrock chat models catalogued by CIS 324; three of them (Nova Lite, Llama 4 Scout, Llama 4 Maverick) are fallbacks of judge and validate routes since CIS 331–333 and 339 (ADR 0009 decision 14), never of a writer | Live. Still a member of the reseller's organization; joining the AA organization and moving the payer are planned for 2026-12-01 |
-| acc3 (`aa-ai`) | The main Bedrock chat account: invoker role, Bedrock Batch service role, Cost Explorer reader | Live, but Bedrock refuses every model since 2026-10-29 (Error 002); see the [AI gateway](architecture/ai-gateway.md) |
-| `aa-prod` | Does not exist | Created by the management root when the go-live date is set (ADR 0018 decision 3) |
+<!-- gen:accounts -->
+
+| Account | Name | Holds | Chat models | Terraform root (AA-CIS-Infra) | State | Decision |
+|---|---|---|---|---|---|---|
+| acc4 | aa-management | AWS Organizations (OUs NonProd, Prod, Suspended) with three SCPs, the organization trail, IAM Identity Center, the organization budget and Cost Anomaly Detection. No workload | No | `accounts/management` | Live; no workload account has joined yet | ADR 0018 |
+| acc2 | aa-nonprod | Every Dev workload: VPC, RDS, ECS, Lambda, API Gateway, CloudFront, Cognito, S3, SES, Valkey; Bedrock embeddings and the CRM scrub guardrail | Fallbacks of judge and validate routes only (Nova Lite, Llama 4 Scout, Llama 4 Maverick), never a writer | `accounts/aa365` | Live; joins the AA organization when the payer moves (planned 2026-12-01) | ADR 0018, ADR 0009 decision 14 |
+| acc1 | personal account, outside the AA organization | One Bedrock invoker role trusted by the CIS task role and a free spend alert; payer of the organization that holds acc3. Nothing else | Yes, first Bedrock account while AWS blocks acc3 (since 2026-11-12) | `accounts/acc1-bedrock` | Live; the tech lead reviews it in early December | ADR 0001a Note S278 |
+| acc3 | aa-ai | Bedrock invoker role, Bedrock Batch service role, Cost Explorer reader | Fallback behind acc1; AWS refuses its chat models at account level since 2026-10-29 | `accounts/acc3-bedrock` | Live, refused by Bedrock | ADR 0001a |
+| aa-prod | aa-prod | Does not exist | - | none | Created by the management root when a go-live date is set | ADR 0018 decision 3 |
+
+Labels only: account IDs and CLI profiles are in the account map of the onboarding page (owner tier), never in a repo page.
+
+<!-- /gen -->
 
 acc1 (a personal account) was removed from the ecosystem on 2026-10-28 (AA-998,
 [ADR 0001a](adr/0001a-retire-acc1-llm-on-acc3-only.md)). Since 2026-11-11 it is the payer of acc3's organization
@@ -84,9 +92,20 @@ acc1 (a personal account) was removed from the ecosystem on 2026-10-28 (AA-998,
 blocks acc3: one invoker role (Terraform root `accounts/acc1-bedrock`), trusted by the CIS task role, plus since
 2026-11-13 a free spend alert in the same root (budget and anomaly e-mails, never a stop; AA-1096, ADR 0001a Note S279);
 nothing else.
-Route order: Claude on the Anthropic API first, then acc1, then acc3; GPT on acc1 first, then acc3 (skipped while it
-refuses), then the OpenAI API twin model. Account IDs and profiles: the account map in
-[onboarding](onboarding.md); never in a repo page.
+Account IDs and profiles: the account map in [onboarding](onboarding.md); never in a repo page. Provider order
+of the chat models (generated, same source):
+
+<!-- gen:llm-route-order -->
+
+| Model family | Route order (first to last) | Note |
+|---|---|---|
+| Claude | Anthropic API → acc1 (Bedrock) → acc3 (Bedrock) | acc3 is skipped while Bedrock refuses it |
+| GPT | acc1 (Bedrock) → acc3 (Bedrock) → OpenAI API | the OpenAI API serves the twin model last |
+| Embeddings | acc2 (Bedrock, Cohere Embed v4) | - |
+
+Decision: ADR 0009 (one gateway for every provider) with ADR 0001a Note S278 (acc1 before acc3). The live routes per stage are in the [LLM routes table](generated/llm-routes.md) and CIS admin AI providers.
+
+<!-- /gen -->
 
 ## 2. System diagram
 

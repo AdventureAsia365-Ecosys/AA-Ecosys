@@ -1,0 +1,412 @@
+# Docs <-> code map (AA-1132 A4; tech lead S283: one central map in the root). tools/docs/doc_impact.py reads it.
+#
+# Each entry: when a pull request in `repo` changes a file matching one of `code` (globs; `**` crosses folders) and
+# touches none of `pages`, the Docs impact check posts a warning on the PR listing the pages to check. It never fails
+# a PR (warn only, S283). A page is a path in this root repo, or `<repo>:<path>` for a page in that app repo (a PR there
+# can update it in the same PR; a root page needs a root PR, named in the PR body as `Docs-impact: <root PR link>`, or
+# `Docs-impact: none: <reason>` when nothing in the pages changes).
+#
+# `source: audit-s283` entries were seeded once (S284) from the code paths the S283 docs audit cited as evidence for a
+# stale sentence (docs/audits/2026-11-17-S283-docs-audit/rows.json): a historical migration file became its topic glob
+# (`*_<word>_*.sql`), ADR and template pages were left out (dated records), and three globs that matched nearly every
+# PR of a repo were dropped. `source: hand` entries carry the cross-repo facts of the audit's eight drift groups.
+# Edit this file by hand from now on; the docs lint validates its shape and that every root page exists.
+#
+# Ids are stable (the S284 hooks spec advisory, slice 2, and lane notes cite them); never reuse a removed id.
+version: 1
+repos: [AA-Ecosys, AA-CIS-App, AA-Booking, AA-Partner, AA-TripPlanner-Web, AA-CIS-Infra]
+entries:
+  - id: infra-ecs-services
+    repo: AA-CIS-Infra
+    code: ["modules/ecs/**", "modules/environment/**"]
+    pages: ["docs/catalogue/platform.yaml", "docs/guides/devops.md", "docs/ecosystem-architecture.md", "docs/ops/README.md", "docs/ops/runbooks/rollback-ecs.md", "skill/aa-ecosys-repos/references/tripplanner.md", "AA-TripPlanner-Web:docs/architecture-overview.md"]
+    source: hand
+    why: "ECS services, task definitions and hosts; the ecs-services block regenerates from the inventory, the prose around it does not"
+  - id: infra-account-roots
+    repo: AA-CIS-Infra
+    code: ["accounts/*/main.tf", "accounts/*/versions.tf", "accounts/*/README.md"]
+    pages: ["docs/catalogue/platform.yaml", "docs/ecosystem-architecture.md", "docs/onboarding.md", ".claude/CLAUDE.md", "skill/ai-nghiep/references/aws.md"]
+    source: hand
+    why: "an account root added, removed or repurposed changes the account roles (platform.yaml) and the agent account maps"
+  - id: infra-migration-flow
+    repo: AA-CIS-Infra
+    code: ["db/owners.yaml", "db/run_migration.py", ".github/workflows/db-migrate.yml", ".github/workflows/migration-apply.yml", ".github/workflows/migration-sync.yml"]
+    pages: ["docs/database/schema-ownership.md", "docs/ops/runbooks/db-migrate.md", "docs/guides/devops.md", "skill/aa-cis-schema/SKILL.md", "skill/aa-ship/SKILL.md"]
+    source: hand
+    why: "who owns which schema and how a migration reaches Dev"
+  - id: cis-llm-gateway
+    repo: AA-CIS-App
+    code: ["shared/llm_client/**", "api/migrations/*_llm_*.sql"]
+    pages: ["docs/architecture/ai-gateway.md", "docs/catalogue/platform.yaml", "docs/architecture/ai-use-register.md"]
+    source: hand
+    why: "gateway routes, connections and provider order"
+  - id: cis-job-kinds
+    repo: AA-CIS-App
+    code: ["shared/jobs/registry.py"]
+    pages: ["docs/ops/job-kinds.md"]
+    source: hand
+    why: "the CIS shared.job kinds"
+  - id: booking-job-kinds
+    repo: AA-Booking
+    code: ["backend/app/jobs/kinds.py"]
+    pages: ["docs/ops/job-kinds.md"]
+    source: hand
+    why: "the booking.job kinds"
+  - id: partner-job-kinds
+    repo: AA-Partner
+    code: ["api/app/jobs/kinds.py"]
+    pages: ["docs/ops/job-kinds.md", "skill/aa-ship/SKILL.md"]
+    source: hand
+    why: "the crm.job kinds"
+  - id: tp-job-kinds
+    repo: AA-TripPlanner-Web
+    code: ["backend/jobs/**"]
+    pages: ["docs/ops/job-kinds.md"]
+    source: hand
+    why: "the tripplanner.job kinds"
+  - id: cis-deploy
+    repo: AA-CIS-App
+    code: [".github/workflows/deploy-dev.yml", ".github/workflows/deploy-admin-dev.yml"]
+    pages: ["docs/guides/devops.md", "skill/aa-ship/SKILL.md"]
+    source: hand
+    why: "how CIS deploys"
+  - id: booking-deploy
+    repo: AA-Booking
+    code: [".github/workflows/deploy-dev.yml", ".github/workflows/deploy-admin-dev.yml"]
+    pages: ["docs/guides/devops.md", "skill/aa-ship/SKILL.md"]
+    source: hand
+    why: "how Booking deploys"
+  - id: partner-deploy
+    repo: AA-Partner
+    code: [".github/workflows/deploy-dev.yml", ".github/workflows/deploy-web-dev.yml"]
+    pages: ["docs/guides/devops.md", "skill/aa-ship/SKILL.md"]
+    source: hand
+    why: "how the agency app deploys"
+  - id: tp-deploy
+    repo: AA-TripPlanner-Web
+    code: [".github/workflows/deploy-web-dev.yml", ".github/workflows/deploy-lambdas.yml"]
+    pages: ["docs/guides/devops.md", "skill/aa-ship/SKILL.md"]
+    source: hand
+    why: "how TripPlanner deploys"
+  - id: cis-docs-impact-caller
+    repo: AA-CIS-App
+    code: [".github/workflows/docs-impact.yml"]
+    pages: ["docs/catalogue/README.md"]
+    source: hand
+    why: "the caller of the root Docs impact workflow; this entry also makes the caller PR show the warning once"
+  - id: booking-docs-impact-caller
+    repo: AA-Booking
+    code: [".github/workflows/docs-impact.yml"]
+    pages: ["docs/catalogue/README.md"]
+    source: hand
+    why: "the caller of the root Docs impact workflow; this entry also makes the caller PR show the warning once"
+  - id: partner-docs-impact-caller
+    repo: AA-Partner
+    code: [".github/workflows/docs-impact.yml"]
+    pages: ["docs/catalogue/README.md"]
+    source: hand
+    why: "the caller of the root Docs impact workflow; this entry also makes the caller PR show the warning once"
+  - id: tp-docs-impact-caller
+    repo: AA-TripPlanner-Web
+    code: [".github/workflows/docs-impact.yml"]
+    pages: ["docs/catalogue/README.md"]
+    source: hand
+    why: "the caller of the root Docs impact workflow; this entry also makes the caller PR show the warning once"
+  - id: infra-docs-impact-caller
+    repo: AA-CIS-Infra
+    code: [".github/workflows/docs-impact.yml"]
+    pages: ["docs/catalogue/README.md"]
+    source: hand
+    why: "the caller of the root Docs impact workflow; this entry also makes the caller PR show the warning once"
+  - id: root-docs-reader
+    repo: AA-Ecosys
+    code: ["tools/docs/build_docs_reader.py", "tools/docs/docs_search_index.py"]
+    pages: ["docs/README.md", "tools/docs/README.md"]
+    source: hand
+    why: "the docs reader publication rules"
+  - id: root-gen-sections
+    repo: AA-Ecosys
+    code: ["tools/docs/gen_sections.py", "tools/docs/doc_impact.py"]
+    pages: ["docs/catalogue/README.md", "tools/docs/README.md"]
+    source: hand
+    why: "the generated blocks and the docs-impact check"
+  - id: booking-b2c
+    repo: AA-Booking
+    code: ["backend/app/b2c.py"]
+    pages: ["skill/aa-ecosys-repos/references/tripplanner.md"]
+    source: audit-s283
+  - id: booking-docs-lint
+    repo: AA-Booking
+    code: [".github/workflows/docs-lint.yml"]
+    pages: ["docs/STYLE.md"]
+    source: audit-s283
+  - id: booking-migrations
+    repo: AA-Booking
+    code: ["migrations/**"]
+    pages: ["docs/contracts/README.md"]
+    source: audit-s283
+  - id: booking-migrations-finance
+    repo: AA-Booking
+    code: ["migrations/*_finance_*.sql"]
+    pages: ["docs/contracts/ops.overview.v1.md", "docs/legal/consent-capture-query.md", "docs/legal/dsar-erasure-runbook.md"]
+    source: audit-s283
+  - id: booking-observability-sentry
+    repo: AA-Booking
+    code: ["backend/app/observability/sentry.py"]
+    pages: ["docs/engineering-handbook.md", "docs/engineering-handbook.vi.md", "docs/onboarding.md"]
+    source: audit-s283
+  - id: booking-tools-docs
+    repo: AA-Booking
+    code: ["tools/docs/**"]
+    pages: ["AA-Partner:tools/docs/README.md"]
+    source: audit-s283
+  - id: booking-tools-docs-test-docs-tools
+    repo: AA-Booking
+    code: ["tools/docs/test_docs_tools.py"]
+    pages: ["AA-Booking:tools/docs/README.md", "tools/docs/README.md"]
+    source: audit-s283
+  - id: cis-api-core-view-as
+    repo: AA-CIS-App
+    code: ["api/core/view_as.py"]
+    pages: ["docs/architecture/t-series-audit-and-plan.md"]
+    source: audit-s283
+  - id: cis-api-migrations
+    repo: AA-CIS-App
+    code: ["api/migrations/**"]
+    pages: ["docs/database/schema-ownership.md"]
+    source: audit-s283
+  - id: cis-drop
+    repo: AA-CIS-App
+    code: ["api/migrations/*_drop_*.sql"]
+    pages: ["docs/architecture/dead-table-registry.md"]
+    source: audit-s283
+  - id: cis-frontend-app-admin-spend
+    repo: AA-CIS-App
+    code: ["frontend/app/admin/spend/**"]
+    pages: ["docs/architecture/ai-gateway.md"]
+    source: audit-s283
+  - id: cis-frontend-app-admin-tenants
+    repo: AA-CIS-App
+    code: ["frontend/app/admin/tenants/**"]
+    pages: ["skill/aa-ui-verify/SKILL.md"]
+    source: audit-s283
+  - id: cis-frontend-next-config
+    repo: AA-CIS-App
+    code: ["frontend/next.config.ts"]
+    pages: ["docs/ecosystem-architecture.md"]
+    source: audit-s283
+  - id: cis-learn
+    repo: AA-CIS-App
+    code: ["api/migrations/*_learn_*.sql"]
+    pages: ["docs/architecture/erd/design/README.md"]
+    source: audit-s283
+  - id: cis-llm
+    repo: AA-CIS-App
+    code: ["api/migrations/*_llm_*.sql"]
+    pages: ["docs/architecture/ai-gateway.md", "docs/architecture/ai-gateway.vi.md", "docs/architecture/ai-use-register.md"]
+    source: audit-s283
+  - id: cis-requirements
+    repo: AA-CIS-App
+    code: ["requirements.txt"]
+    pages: ["docs/security/vulnerability-management.md"]
+    source: audit-s283
+  - id: cis-resolver
+    repo: AA-CIS-App
+    code: ["api/migrations/*_resolver_*.sql"]
+    pages: ["docs/architecture/ai-use-register.md"]
+    source: audit-s283
+  - id: cis-services-jobs-writing-memory-job
+    repo: AA-CIS-App
+    code: ["services/jobs/writing_memory_job.py"]
+    pages: ["skill/aa-ship/SKILL.md"]
+    source: audit-s283
+  - id: cis-tests-e2e-admin-evidence-admin-pages-spec
+    repo: AA-CIS-App
+    code: ["tests/e2e/admin-evidence/admin-pages.spec.ts"]
+    pages: ["skill/aa-ui-verify/SKILL.md"]
+    source: audit-s283
+  - id: cis-ui-smoke
+    repo: AA-CIS-App
+    code: [".github/workflows/ui-smoke.yml"]
+    pages: [".claude/skills/kiro-delegate/SKILL.md", ".claude/skills/kiro-delegate/brief-template.md"]
+    source: audit-s283
+  - id: cis-visual
+    repo: AA-CIS-App
+    code: [".github/workflows/visual.yml"]
+    pages: [".claude/skills/kiro-delegate/SKILL.md"]
+    source: audit-s283
+  - id: infra-accounts-aa365
+    repo: AA-CIS-Infra
+    code: ["accounts/aa365/**"]
+    pages: ["AA-TripPlanner-Web:.claude/CLAUDE.md", "docs/ecosystem-architecture.md", "skill/aa-ecosys-repos/references/booking.md", "skill/aa-ecosys-repos/references/infra.md"]
+    source: audit-s283
+  - id: infra-accounts-aa365-environment
+    repo: AA-CIS-Infra
+    code: ["accounts/aa365/environment.tf"]
+    pages: ["docs/ops/runbooks/secret-rotation.md"]
+    source: audit-s283
+  - id: infra-accounts-aa365-main
+    repo: AA-CIS-Infra
+    code: ["accounts/aa365/main.tf"]
+    pages: ["AA-CIS-App:README.md", "docs/legal/dsar-erasure-runbook.md"]
+    source: audit-s283
+  - id: infra-accounts-aa365-observability-ecosys
+    repo: AA-CIS-Infra
+    code: ["accounts/aa365/observability_ecosys.tf"]
+    pages: ["docs/architecture/data-standards/01-engineering.md"]
+    source: audit-s283
+  - id: infra-accounts-aa365-terraform-tfvars
+    repo: AA-CIS-Infra
+    code: ["accounts/aa365/terraform.tfvars"]
+    pages: ["docs/architecture/ai-gateway.md", "docs/architecture/ai-gateway.vi.md"]
+    source: audit-s283
+  - id: infra-accounts-aa365-test-wp-edge
+    repo: AA-CIS-Infra
+    code: ["accounts/aa365/test_wp_edge.tf"]
+    pages: ["docs/ops/runbooks/pilot-rehearsal.md"]
+    source: audit-s283
+  - id: infra-accounts-aa365-variables
+    repo: AA-CIS-Infra
+    code: ["accounts/aa365/variables.tf"]
+    pages: ["docs/architecture/data-standards/README.md"]
+    source: audit-s283
+  - id: infra-accounts-acc1-bedrock
+    repo: AA-CIS-Infra
+    code: ["accounts/acc1-bedrock/**"]
+    pages: ["skill/ai-nghiep/references/aws.md"]
+    source: audit-s283
+  - id: infra-accounts-acc1-bedrock-main
+    repo: AA-CIS-Infra
+    code: ["accounts/acc1-bedrock/main.tf"]
+    pages: ["AA-TripPlanner-Web:CONTEXT.md"]
+    source: audit-s283
+  - id: infra-accounts-acc1-bedrock-versions
+    repo: AA-CIS-Infra
+    code: ["accounts/acc1-bedrock/versions.tf"]
+    pages: ["docs/architecture/tagging-standard.md"]
+    source: audit-s283
+  - id: infra-accounts-management-organization
+    repo: AA-CIS-Infra
+    code: ["accounts/management/organization.tf"]
+    pages: ["docs/ecosystem-architecture.md"]
+    source: audit-s283
+  - id: infra-db-migrate
+    repo: AA-CIS-Infra
+    code: [".github/workflows/db-migrate.yml"]
+    pages: ["docs/ops/runbooks/db-migrate.md"]
+    source: audit-s283
+  - id: infra-db-migrations-cis-tenant
+    repo: AA-CIS-Infra
+    code: ["db/migrations/cis/*_tenant_*.sql"]
+    pages: ["AA-TripPlanner-Web:CONTEXT.md"]
+    source: audit-s283
+  - id: infra-db-migrations-roles
+    repo: AA-CIS-Infra
+    code: ["db/migrations/roles/**"]
+    pages: ["docs/architecture/data-standards/01-engineering.md"]
+    source: audit-s283
+  - id: infra-db-owners
+    repo: AA-CIS-Infra
+    code: ["db/owners.yaml"]
+    pages: ["docs/database/schema-ownership.md", "docs/ops/runbooks/db-migrate.md"]
+    source: audit-s283
+  - id: infra-db-run-migration
+    repo: AA-CIS-Infra
+    code: ["db/run_migration.py"]
+    pages: ["docs/architecture/data-standards/01-engineering.md", "docs/architecture/data-standards/02-data-management.md"]
+    source: audit-s283
+  - id: infra-migration-sync
+    repo: AA-CIS-Infra
+    code: [".github/workflows/migration-sync.yml"]
+    pages: ["docs/security/github-apps.md"]
+    source: audit-s283
+  - id: infra-modules-ecs-main
+    repo: AA-CIS-Infra
+    code: ["modules/ecs/main.tf"]
+    pages: ["AA-CIS-App:.claude/agents/db-auditor.md", "AA-CIS-App:.claude/skills/ecs-exec-pattern.md"]
+    source: audit-s283
+  - id: infra-modules-environment-booking
+    repo: AA-CIS-Infra
+    code: ["modules/environment/booking.tf"]
+    pages: ["AA-Booking:.claude/CLAUDE.md", "docs/ops/runbooks/ecs-exec-s3-mediated.md"]
+    source: audit-s283
+  - id: infra-modules-environment-crm-llm
+    repo: AA-CIS-Infra
+    code: ["modules/environment/crm_llm.tf"]
+    pages: ["AA-Partner:CONTEXT.md"]
+    source: audit-s283
+  - id: infra-modules-rds-main
+    repo: AA-CIS-Infra
+    code: ["modules/rds/main.tf"]
+    pages: ["docs/architecture/data-standards/02-data-management.md"]
+    source: audit-s283
+  - id: infra-terraform-apply
+    repo: AA-CIS-Infra
+    code: [".github/workflows/terraform-apply.yml"]
+    pages: ["docs/engineering-handbook.md", "docs/security/baseline.md", "skill/aa-cis-schema/SKILL.md", "skill/aa-ecosys-repos/references/infra.md"]
+    source: audit-s283
+  - id: infra-tools-secrets-register-check
+    repo: AA-CIS-Infra
+    code: ["tools/secrets/register_check.py"]
+    pages: ["docs/security/secrets-register.md"]
+    source: audit-s283
+  - id: infra-tools-terraform-crm-key-policy-diff
+    repo: AA-CIS-Infra
+    code: ["tools/terraform/crm_key_policy_diff.py"]
+    pages: ["docs/ops/runbooks/crm-keys.md"]
+    source: audit-s283
+  - id: partner-deploy-web-dev
+    repo: AA-Partner
+    code: [".github/workflows/deploy-web-dev.yml"]
+    pages: ["skill/aa-ui-verify/SKILL.md"]
+    source: audit-s283
+  - id: partner-e2e-smoke-portal-auth-setup
+    repo: AA-Partner
+    code: ["e2e/smoke-portal/auth.setup.ts"]
+    pages: ["skill/aa-ui-verify/SKILL.md"]
+    source: audit-s283
+  - id: partner-jobs-kinds
+    repo: AA-Partner
+    code: ["api/app/jobs/kinds.py"]
+    pages: ["skill/aa-ship/SKILL.md"]
+    source: audit-s283
+  - id: partner-release-please-config
+    repo: AA-Partner
+    code: ["release-please-config.json"]
+    pages: ["skill/aa-ship/SKILL.md"]
+    source: audit-s283
+  - id: partner-tools-docs
+    repo: AA-Partner
+    code: ["tools/docs/**"]
+    pages: ["AA-Partner:tools/docs/README.md", "AA-TripPlanner-Web:tools/docs/README.md", "tools/docs/README.md"]
+    source: audit-s283
+  - id: partner-tools-docs-docslib
+    repo: AA-Partner
+    code: ["tools/docs/docslib.py"]
+    pages: ["AA-Partner:tools/docs/README.md"]
+    source: audit-s283
+  - id: partner-ui-smoke-portal
+    repo: AA-Partner
+    code: [".github/workflows/ui-smoke-portal.yml"]
+    pages: [".claude/skills/kiro-delegate/SKILL.md", ".claude/skills/kiro-delegate/brief-template.md"]
+    source: audit-s283
+  - id: partner-web-app-kit
+    repo: AA-Partner
+    code: ["web/app/_kit/**"]
+    pages: ["skill/aa-ui-verify/SKILL.md"]
+    source: audit-s283
+  - id: tp-backend-assembly-handler
+    repo: AA-TripPlanner-Web
+    code: ["backend/assembly/handler.py"]
+    pages: ["skill/aa-ecosys-repos/references/tripplanner.md"]
+    source: audit-s283
+  - id: tp-backend-jobs
+    repo: AA-TripPlanner-Web
+    code: ["backend/jobs/**"]
+    pages: ["skill/aa-ecosys-repos/SKILL.md"]
+    source: audit-s283
+  - id: tp-tools-docs-test-docs-tools
+    repo: AA-TripPlanner-Web
+    code: ["tools/docs/test_docs_tools.py"]
+    pages: ["AA-TripPlanner-Web:tools/docs/README.md"]
+    source: audit-s283
