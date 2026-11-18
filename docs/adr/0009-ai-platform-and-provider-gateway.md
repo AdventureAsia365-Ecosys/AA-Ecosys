@@ -3,7 +3,11 @@
 - **Status:** **Accepted** for decisions 1–9, 13 and 14 and the UI section (tech lead, 31/10/2026, S261; see
   "Decision record"). **Decision 10 accepted** by the tech lead on 17/11/2026 (S283 decision page; first slice live: the
   gateway scrubs free-text stages `t9_write`, `t2_generate`, `t8_angle_gen` before any model call and fails closed,
-  CIS #1559). **Decision 6 amended** on 17/11/2026 (S283: per-environment budget settings, one mechanism).
+  CIS #1559; S284, AA-1113: the stage list is the migration-only registry column `shared.llm_role_config.free_text`,
+  CIS 451, over a fail-safe floor of every tenant stage, a marked stage never batches, and the ledger receipt carries
+  the scrubbed prompt's hash; not covered yet: TripPlanner's planning chat `tp_plan_chat`, which has no registry row
+  and runs in TripPlanner's own gateway, a follow-up). **Decision 6 amended** on 17/11/2026 (S283: per-environment
+  budget settings, one mechanism).
   **Proposed** for decisions 11 and 12 (proposed answers to gap §5 items 9, 4 and 1 + 7,
   accepted one by one when their step comes). Uses the number reserved for AA-804 ("AI platform and governance").
   "Not decided here" lists what this ADR leaves open.
