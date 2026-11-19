@@ -88,8 +88,17 @@ bước 1, AA-1121 gộp vào AA-1103; AA-1160 tạo từ quyết định E5 bu�
 - DRY plan: S1 5,63 USD / trần 8, power 0,964; T2 5,98 USD / trần 6,5, power 0,95.
 - Proof trả phí (tech lead duyệt chạy, 19/11 ~23:00): giám khảo GPT-6 Luna qua OpenAI API (ghim theo thước đo AA-1048 v7, không tự fallback — trả lời từ đường khác bị từ chối thành dòng lỗi), bên viết Claude Sonnet 5.5 qua Anthropic API.
   - CIS #1611 đăng ký w5-s1 / w5-t2 (status registered + lock); plan ready_for_live true, blocking [].
-  - **S1 đang chạy** lúc ghi log: job `writing_memory_r2` 4c706730 bắt đầu 16:41Z, sau 55 phút 2.304 lượt gọi, ~1,01 USD; trần cứng 7,6 USD.
-  - **T2 chưa chạy** (chạy sau khi S1 xong, trần 6,35 USD) → đầu S286: `runner report --prereg w5-s1`, rồi chạy T2.
+  - **S1 xong** (job 4c706730, 16:41Z → 18:33Z, run e76e1145): verdict **non_inferior** trên 25 cặp — lỗi/tour 11,16 →
+    0,76 (cận trên −6,79 < biên 4); writer 0,062 USD/tour ≤ 0,065 đạt, hard_stops 0 đạt; serious_error_rate + day_loss
+    còn pending. Sổ chi phí 3,11 USD (judge 1,40, s1_generate 1,65, grounding 0,07); item_fail_rate 0,44, first_pass_yield 0,56.
+    Báo cáo: [w5-s1-report.json](../audits/2026-11-19-S285-session/aa1051/w5-s1-report.json).
+  - **T2 xong** (job cb7afcc0, 18:35Z → 20:11Z, run dfdcb43d): verdict **non_inferior** trên 20 cặp nhưng sát biên — lỗi/tour
+    8,3 → 7,7, cận trên 3,81 so với biên 4; writer 1 lượt/tour, 0,058 USD/tour, hard_stops 0 (ba mục đạt);
+    enforce_findings_after_repair pending. item_fail_rate 1,0, first_pass_yield 0 (tour nào cũng còn ít nhất một claim
+    lỗi). Sổ chi phí 2,50 USD (judge 1,40, t2_generate 1,08). Báo cáo:
+    [w5-t2-report.json](../audits/2026-11-19-S285-session/aa1051/w5-t2-report.json).
+  - Tổng hai proof 5,60 USD (trần 7,6 + 6,35). **Lệch phát hiện:** `shared.job.cost_usd` ghi đúng gấp đôi sổ chi phí
+    (S1 6,22 so với 3,11; T2 4,99 so với 2,50) → bộ cộng chi phí job đếm hai lần, sửa ở S286.
 - Sau đó trong phiên: CIS #1612 (CIS 461) + #1613 (Cost Explorer hằng ngày + nhãn số cũ) live `2e6070a6`; Partner #367 sửa smoke, Deploy Web Dev 88db5880 xanh lại; Infra #943 quy tắc bucket `audit-assets/` tự xoá sau 60 ngày (apply 16:38Z, kiểm live); tạo AA-1161 (giữ repo gọn, guard ảnh / file build / file chạy, viết lại lịch sử khi tech lead duyệt).
 
 ## Kế hoạch lại (M-ROLES) và tư vấn
