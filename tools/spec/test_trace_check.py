@@ -22,6 +22,14 @@ REPO = HERE.parents[1]
 sys.path.insert(0, str(HERE))
 import trace_check as tc  # noqa: E402
 
+# A git hook (pre-push) exports GIT_DIR and friends; the git commands below run in temporary repos and must not act
+# on the real one. Drop git's repo-local variables for this test process (tools/github/test_git_env_isolation.py).
+for _git_var in ("GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_CONFIG", "GIT_CONFIG_PARAMETERS", "GIT_CONFIG_COUNT",
+                 "GIT_OBJECT_DIRECTORY", "GIT_DIR", "GIT_WORK_TREE", "GIT_IMPLICIT_WORK_TREE", "GIT_GRAFT_FILE",
+                 "GIT_INDEX_FILE", "GIT_NO_REPLACE_OBJECTS", "GIT_REPLACE_REF_BASE", "GIT_PREFIX", "GIT_SHALLOW_FILE",
+                 "GIT_COMMON_DIR"):
+    os.environ.pop(_git_var, None)
+
 SAMPLE = REPO / ".kiro" / "specs" / "AA-1137-spec-trace"
 TEMPLATES = REPO / "skill" / "aa-linear-issue" / "templates" / "spec"
 ACCOUNT = "1234" + "5678" + "9012"
@@ -75,8 +83,6 @@ Hard to reverse: {hard}
 def git(cwd: Path, *args: str) -> str:
     env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@example.invalid", GIT_COMMITTER_NAME="t",
                GIT_COMMITTER_EMAIL="t@example.invalid")
-    for k in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE"):
-        env.pop(k, None)
     return subprocess.run(["git", "-C", str(cwd), *args], check=True, capture_output=True, text=True,
                           env=env).stdout
 
