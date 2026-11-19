@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: lead.submitted.v1 (AA-TripPlanner-Web → the tenant's CRM (AA-Partner), webhook or e-mail; a traveller's trip request)
-  version: "1.0"
+  version: "1.1"
   description: >-
     A traveller planning on an agency tenant's TripPlanner site (/{slug}/plan, root ADR 0019 d10) asks the agency for
     this trip ("Send to advisor"). The request becomes one lead.submitted.v1 for THAT tenant (root ADR 0019 d11): the
@@ -24,9 +24,10 @@ info:
     ADR 0008a), hence HTTP. (2) webhook — TripPlanner POSTs the LeadSubmitted JSON to the agency's https URL with the
     headers X-AA-Contract (lead.submitted.v1), Idempotency-Key (= idempotency_key) and X-AA-Signature
     't=<unix seconds>,v1=<hex HMAC-SHA256 of "<t>." + raw body>' (the catalog.tour.lifecycle.v1 format), keyed per tenant
-    by TripPlanner (the key is handed to the agency by AA, never stored in CIS); a 2xx answer is delivery, anything
+    by TripPlanner (never stored in CIS; 1.1: the agency owner creates or rotates it in the agency app and sees it
+    once, rotatePlannerWebhookKey); a 2xx answer is delivery, anything
     else is retried by the daily delivery run until the hold window ends. The key is the 64-character lowercase hex
-    text AA hands over, used AS ASCII BYTES (do not hex-decode it to 32 bytes). Verify:
+    text the agency was shown, used AS ASCII BYTES (do not hex-decode it to 32 bytes). Verify:
     expected = hex(HMAC-SHA256(key_text.encode("ascii"), (t + ".").encode("ascii") + raw_body)), compare in constant
     time with v1, and refuse a t more than 5 minutes away from your clock (replay). Delivery is at least once and
     unordered (an inline attempt and the daily retry can both arrive; a retried lead can come after a newer one):
@@ -62,10 +63,22 @@ info:
     tenant): TripPlanner serves only a tenant whose lead route is crm at the time of the call (else 404
     tenant_not_on_crm), so a leaked token reaches no tenant that left the CRM add-on or never had it; tenant isolation
     inside the CRM is the CRM's agency loop plus its own check of each lead's tenant.
+
+    1.1 (AA-1139, tag planner): the agency app's TripPlanner module. The CRM API (the agency app's back end) reads, for
+    an agency whose person it has checked (reading: owner and agent; rotating: owner), the newest leads of that agency
+    with their delivery status (ids, times, channel, status, tries and the last error code: never a traveller field),
+    this UTC month's counts, the usage (AI sessions this month against the plan's quota, CIS tp.ai_sessions; the
+    leads of the last 24 hours against the tenant's lead cap) and the webhook signing key's version, and rotates the
+    key. A key has a version: version 0 (never rotated) is the key of 1.0, HMAC-SHA256(master, "aa-tripplanner lead
+    webhook v1:" + tenant_id); version n >= 1 adds ":" + n to the message. A rotation answers the new key once; no
+    operation reads a key back. The rotation takes effect for the next delivery (no overlap). These operations need
+    their own scope, tripplanner.leads/manage (the pull's deliver scope reaches none of them, and the manage scope
+    reaches neither listLeads nor ackLead); a tenant CIS does not list with a Trip planner subscription is 404
+    unknown_tenant (any lead route, not only crm).
   x-aa-contract: lead.submitted.v1
   x-aa-producer: AA-TripPlanner-Web
   x-aa-consumers: [AA-Partner]
-  x-aa-issues: [AA-1038]
+  x-aa-issues: [AA-1038, AA-1139]
 servers:
   - url: /trip/m2m/v1
 security:
@@ -131,7 +144,103 @@ paths:
         "403": {$ref: "#/components/responses/Problem"}
         "404": {$ref: "#/components/responses/Problem"}
         "503": {$ref: "#/components/responses/Problem"}
+  /tenants/{tenant_id}/planner/leads:
+    parameters:
+      - {$ref: "#/components/parameters/TenantId"}
+    get:
+      operationId: listPlannerLeads
+      tags: [planner]
+      security:
+        - m2m: [tripplanner.leads/manage]
+      summary: The agency's newest leads with their delivery status, and this month's counts (1.1)
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema: {type: integer, minimum: 1, maximum: 50, default: 50}
+      responses:
+        "200":
+          description: Newest first; ids, times and states only
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/PlannerLeadList"}
+        "400": {$ref: "#/components/responses/Problem"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
+        "404": {$ref: "#/components/responses/Problem"}
+        "503": {$ref: "#/components/responses/Problem"}
+  /tenants/{tenant_id}/planner/usage:
+    parameters:
+      - {$ref: "#/components/parameters/TenantId"}
+    get:
+      operationId: getPlannerUsage
+      tags: [planner]
+      security:
+        - m2m: [tripplanner.leads/manage]
+      summary: This UTC month's AI sessions against the plan quota, and the leads of the last 24 hours (1.1)
+      responses:
+        "200":
+          description: The usage
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/PlannerUsage"}
+        "400": {$ref: "#/components/responses/Problem"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
+        "404": {$ref: "#/components/responses/Problem"}
+        "503": {$ref: "#/components/responses/Problem"}
+  /tenants/{tenant_id}/planner/webhook-key:
+    parameters:
+      - {$ref: "#/components/parameters/TenantId"}
+    get:
+      operationId: getPlannerWebhookKey
+      tags: [planner]
+      security:
+        - m2m: [tripplanner.leads/manage]
+      summary: The webhook signing key's version and when it was rotated, never the key (1.1)
+      responses:
+        "200":
+          description: The key info
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/PlannerWebhookKey"}
+        "400": {$ref: "#/components/responses/Problem"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
+        "404": {$ref: "#/components/responses/Problem"}
+        "503": {$ref: "#/components/responses/Problem"}
+  /tenants/{tenant_id}/planner/webhook-key/rotate:
+    parameters:
+      - {$ref: "#/components/parameters/TenantId"}
+    post:
+      operationId: rotatePlannerWebhookKey
+      tags: [planner]
+      security:
+        - m2m: [tripplanner.leads/manage]
+      summary: A new webhook signing key, shown once; the old one stops at once (1.1)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/PlannerKeyRotateIn"}
+      responses:
+        "200":
+          description: The new version and its key (the only time the key is answered)
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/PlannerWebhookKeyRotated"}
+        "400": {$ref: "#/components/responses/Problem"}
+        "401": {$ref: "#/components/responses/Problem"}
+        "403": {$ref: "#/components/responses/Problem"}
+        "404": {$ref: "#/components/responses/Problem"}
+        "503": {$ref: "#/components/responses/Problem"}
 components:
+  parameters:
+    TenantId:
+      name: tenant_id
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
   securitySchemes:
     m2m:
       type: oauth2
@@ -141,6 +250,7 @@ components:
           tokenUrl: https://m2m-auth.example.invalid/oauth2/token
           scopes:
             tripplanner.leads/deliver: List the tenant's pending leads and acknowledge their delivery
+            tripplanner.leads/manage: Read an agency's lead delivery status and usage, and rotate its webhook signing key (1.1)
   responses:
     Problem:
       description: Error
@@ -159,7 +269,9 @@ components:
           description: >-
             A stable code: invalid_tenant_id, invalid_lead_id, invalid_limit, invalid_ack (400), unauthorized (401),
             forbidden (403: wrong client or scope), lead_not_found or tenant_not_on_crm (404: the tenant's lead route
-            is not crm now), m2m_not_configured or unavailable (503).
+            is not crm now), m2m_not_configured or unavailable (503). 1.1: invalid_actor (400), not_found (404: an
+            unknown planner path or method), unknown_tenant (404: CIS lists no Trip planner for the tenant),
+            webhook_key_unavailable (503: no master secret in this deployment; nothing written).
     TenantRef:
       type: object
       additionalProperties: false
@@ -348,3 +460,100 @@ components:
         already:
           type: boolean
           description: The lead was already in a final state (delivered, rejected or expired); nothing changed.
+    PlannerLeadStatus:
+      type: string
+      enum: [pending, retrying, delivered, rejected, expired]
+      description: >-
+        delivered = handed over (the CRM stored it, the webhook answered 2xx, the e-mail was sent); pending = waiting
+        for the CRM pull or the first attempt; retrying = an attempt failed, the daily run tries again inside the hold;
+        rejected = the CRM refused it; expired = not delivered within the hold.
+    PlannerLead:
+      type: object
+      additionalProperties: false
+      required: [lead_id, created_at, channel, status, attempts, delivered_at, error]
+      properties:
+        lead_id: {type: string, format: uuid}
+        created_at: {type: string, format: date-time}
+        channel:
+          type: string
+          enum: [crm, webhook, email]
+        status: {$ref: "#/components/schemas/PlannerLeadStatus"}
+        attempts: {type: integer, minimum: 0}
+        delivered_at: {type: [string, "null"], format: date-time}
+        error:
+          type: [string, "null"]
+          pattern: "^[a-z][a-z0-9_:]{0,63}$"
+          description: The last delivery error code (never free text); null when delivered or none.
+    PlannerLeadMonth:
+      type: object
+      additionalProperties: false
+      required: [total, pending, retrying, delivered, rejected, expired]
+      properties:
+        total: {type: integer, minimum: 0}
+        pending: {type: integer, minimum: 0}
+        retrying: {type: integer, minimum: 0}
+        delivered: {type: integer, minimum: 0}
+        rejected: {type: integer, minimum: 0}
+        expired: {type: integer, minimum: 0}
+    PlannerLeadList:
+      type: object
+      additionalProperties: false
+      required: [leads, month]
+      properties:
+        leads:
+          type: array
+          maxItems: 50
+          items: {$ref: "#/components/schemas/PlannerLead"}
+        month: {$ref: "#/components/schemas/PlannerLeadMonth"}
+    PlannerUsage:
+      type: object
+      additionalProperties: false
+      required: [month, ai_allowance, leads_24h]
+      properties:
+        month: {type: string, pattern: "^[0-9]{4}-[0-9]{2}$", description: The UTC month counted.}
+        ai_allowance:
+          description: The planner's AI allowance this month, counted in AI sessions (tp.ai_sessions) - used and quota.
+          type: object
+          additionalProperties: false
+          required: [used, quota]
+          properties:
+            used: {type: integer, minimum: 0}
+            quota: {type: [integer, "null"], minimum: 0, description: The plan's tp.ai_sessions; null = no limit.}
+        leads_24h:
+          type: object
+          additionalProperties: false
+          required: [count, cap]
+          properties:
+            count: {type: integer, minimum: 0}
+            cap: {type: integer, minimum: 1, description: The tenant's lead cap (tripplanner.leads.tenant_daily_cap).}
+    PlannerWebhookKey:
+      type: object
+      additionalProperties: false
+      required: [version, rotated_at, available]
+      properties:
+        version: {type: integer, minimum: 0, description: 0 = never rotated (the 1.0 key).}
+        rotated_at: {type: [string, "null"], format: date-time}
+        available: {type: boolean, description: This deployment can sign webhooks (it holds the master secret).}
+    PlannerKeyRotateIn:
+      type: object
+      additionalProperties: false
+      required: [actor]
+      properties:
+        actor:
+          type: string
+          pattern: "^(crm|studio)-member:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          description: >-
+            Who rotated it, recorded with the version (never a name or an e-mail): the CRM owner (crm-member:<CRM
+            member id>) or, for an agency without the CRM add-on, the Content studio owner whose membership the CRM
+            checked with CIS tenant.membership.v1 (studio-member:<membership id>).
+    PlannerWebhookKeyRotated:
+      type: object
+      additionalProperties: false
+      required: [version, rotated_at, key]
+      properties:
+        version: {type: integer, minimum: 1}
+        rotated_at: {type: string, format: date-time}
+        key:
+          type: string
+          pattern: "^[0-9a-f]{64}$"
+          description: The new key (shown once; used as ASCII bytes, see the webhook delivery above).

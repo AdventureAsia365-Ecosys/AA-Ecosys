@@ -237,6 +237,12 @@ class JsonSchemaContractTest(unittest.TestCase):
                     "contract", "supply_version", "working_title", "inclusions"):
             self.assertIsNone(cc.key_violation(self.SUPPLY, key), key)
 
+    def test_addons_exempt_only_the_planner_lead_mailbox(self):
+        addons = cc.POLICY["tenant.addons.v1"]
+        self.assertIsNone(cc.key_violation(addons, "lead_email"))
+        for key in ("email", "owner_email", "requester_email", "contact_email", "display_name", "decided_by"):
+            self.assertIsNotNone(cc.key_violation(addons, key), key)
+
     def test_inquiry_carries_contact_but_never_a_token(self):
         self.assertEqual(cc.key_violation(self.INQUIRY, "access_token"), "access_token")
         self.assertIsNotNone(cc.key_violation(self.INQUIRY, "session_token"))
