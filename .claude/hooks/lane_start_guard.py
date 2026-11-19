@@ -24,6 +24,12 @@ For a launch of tools/workflows/lane.js (by scriptPath, any checkout, or by the 
      plan gates passed when the lane first started (a same-day handover may have moved plan.json on since).
      Only worktrees named <session>-<key>-<repo>[-<detail>] (repo: cis, booking, partner, tp, infra, root) count, so
      lane l2 does not see the worktrees of lane l2-w1-factsheet.
+  6. (AA-1137) only when args name a `spec` (a .kiro/specs/AA-<n>-<slug> folder, relative to the workspace root or
+     absolute) and `tasks` (["T1", ...]): the spec passes tools/spec/trace_check.py, its status is approved or
+     in-progress, every task exists and is open (`- [ ]`), and no other lane of this session holds one of them. A lane
+     that passes records its tasks in .tmp-session/spec-claims.json (keyed by spec id; a claim of an earlier session is
+     stale; the same lane key relaunching passes). `tasks` without `spec` is refused. `spec_gate: "skip: <reason>"`
+     passes this gate only, logged. A lane without `spec` is gated exactly as before.
 `plan_gate: "skip: <reason>"` in args passes (a hotfix lane), logged to .tmp-session/guard-hits.log. Every other
 Workflow launch (research, review, audits) is not gated. plan.json is read from the main checkout
 ($CLAUDE_PROJECT_DIR), where the orchestrator edits it. Unreadable hook input passes; an unreadable plan.json refuses
@@ -43,9 +49,14 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import aa_shell_guard  # noqa: E402  (the /proc readers of RAM-1)
 
+# The spec checker lives next to this hook in the same checkout (tools/spec/trace_check.py, stdlib only).
+SPEC_TOOLS = Path(__file__).resolve().parents[2] / "tools" / "spec"
+
 ROOT = Path(os.environ.get("CLAUDE_PROJECT_DIR") or Path(__file__).resolve().parents[2])
 PLAN = Path("docs/backlog/tracker/plan.json")
 HITS_LOG = Path(".tmp-session/guard-hits.log")
+CLAIMS = Path(".tmp-session/spec-claims.json")
+SPEC_STATUSES = ("approved", "in-progress")
 REQUIRED = ("key", "goal", "session", "date")
 LANE_MEM_FLOOR_MIB = 4096
 FIX = ("Update docs/backlog/tracker/plan.json first (session, next_session, and the session slot of every agreed "
@@ -109,10 +120,112 @@ def _plan_and_worktree_gates(args: dict, session: str, root: Path) -> str | None
     return None
 
 
+def _load_trace_check():
+    if str(SPEC_TOOLS) not in sys.path:
+        sys.path.insert(0, str(SPEC_TOOLS))
+    import trace_check  # noqa: PLC0415
+    return trace_check
+
+
+def _read_claims(root: Path) -> dict:
+    try:
+        data = json.loads((root / CLAIMS).read_text(encoding="utf-8"))
+        return data if isinstance(data, dict) else {}
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def _spec_gate(args: dict, root: Path) -> tuple[str | None, tuple[str, list[str]] | None]:
+    """(refusal, claim). claim = (spec id, tasks) to record once every other gate passed; None without a spec."""
+    spec_arg, tasks = args.get("spec"), args.get("tasks")
+    if spec_arg is None and tasks is None:
+        return None, None
+    if re.match(r"skip:\s*\S", str(args.get("spec_gate") or "")):
+        _log(root, f"spec skip {args.get('key')}: {args.get('spec_gate')}")
+        return None, None
+    if not spec_arg or not isinstance(spec_arg, str):
+        return "lane.js args name tasks but no spec: add spec (the .kiro/specs/AA-<n>-<slug> folder).", None
+    if not isinstance(tasks, list) or not tasks or not all(isinstance(t, str) and t.strip() for t in tasks):
+        return (f"lane.js args.spec is {spec_arg!r} but tasks is not a non-empty list of task ids "
+                f"(for example [\"T1\", \"T2\"]).", None)
+    for k in ("key", "session"):
+        if not str(args.get(k) or "").strip():
+            return f"lane.js args lack {k} (a spec lane needs key and session to claim its tasks).", None
+    spec_dir = Path(spec_arg)
+    if not spec_dir.is_absolute():
+        spec_dir = root / spec_dir
+    if not spec_dir.is_dir():
+        return f"spec folder {spec_arg!r} does not exist in {root}.", None
+    try:
+        tc = _load_trace_check()
+        spec = tc.load_spec(spec_dir)
+    except Exception as e:  # noqa: BLE001  (a broken checker must refuse a spec lane, not pass it)
+        return f"cannot read spec {spec_arg!r} ({type(e).__name__}: {str(e)[:120]}).", None
+    errors = [f.render() for f in spec.findings if f.level == "error"]
+    if errors:
+        return (f"spec {spec_arg!r} fails tools/spec/trace_check.py ({len(errors)} errors; first: "
+                f"{'; '.join(errors[:3])}). Fix the spec first.", None)
+    if spec.status not in SPEC_STATUSES:
+        return (f"spec {spec.spec_id} has status {spec.status!r}; a lane starts only on an approved or in-progress "
+                f"spec (the session list approves it: set status approved and approved_at).", None)
+    wanted = [t.strip() for t in tasks]
+    unknown = [t for t in wanted if t not in spec.tasks]
+    if unknown:
+        return f"spec {spec.spec_id} has no task {', '.join(unknown)} (tasks.md lists {', '.join(spec.tasks)}).", None
+    closed = [f"{t} [{spec.tasks[t].state}]" for t in wanted if spec.tasks[t].state != " "]
+    if closed:
+        return f"task(s) {', '.join(closed)} of {spec.spec_id} are not open; a lane takes open tasks only.", None
+    session, key = str(args["session"]).strip(), str(args["key"]).strip()
+    held = _read_claims(root).get(spec.spec_id) or {}
+    taken = [f"{t} (lane {c.get('key')})" for t in wanted
+             if isinstance(c := held.get(t), dict) and c.get("session") == session and c.get("key") != key]
+    if taken:
+        return (f"another lane of {session} already holds {', '.join(taken)} of {spec.spec_id} "
+                f"({CLAIMS}). Give this lane other tasks, or add spec_gate: \"skip: <reason>\" to args.", None)
+    return None, (spec.spec_id, wanted)
+
+
+def _claim(root: Path, args: dict, claim: tuple[str, list[str]]) -> None:
+    spec_id, tasks = claim
+    data = _read_claims(root)
+    entry = data.setdefault(spec_id, {})
+    for t in tasks:
+        entry[t] = {"session": str(args["session"]).strip(), "key": str(args["key"]).strip()}
+    try:
+        p = root / CLAIMS
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(json.dumps(data, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    except OSError:
+        pass
+
+
 def check(tool_input: dict, root: Path = ROOT, proc: Path = Path("/proc")) -> str | None:
     """None when the launch may go ahead, else the refusal message."""
     if not is_lane(tool_input):
         return None
+    args = tool_input.get("args")
+    if isinstance(args, str):
+        try:
+            parsed = json.loads(args)
+        except json.JSONDecodeError:
+            parsed = None
+        if isinstance(parsed, dict):
+            args = parsed
+    claim = None
+    replay = bool(str(tool_input.get("resumeFromRunId") or "").strip())
+    if isinstance(args, dict) and not replay:
+        # a replay reuses the lane's original args; its tasks were claimed when it first passed
+        refusal, claim = _spec_gate(args, root)
+        if refusal:
+            return refusal
+    refusal = _check_lane(tool_input, root, proc)
+    if refusal is None and claim is not None:
+        _claim(root, args, claim)
+    return refusal
+
+
+def _check_lane(tool_input: dict, root: Path, proc: Path) -> str | None:
+    """Gates 1 to 5 (the plan, the args, the worktrees, the RAM)."""
     args = tool_input.get("args")
     if isinstance(args, str):
         # The harness parses a JSON-encoded object (replay S271: 191 lane launches passed args that way and ran); a

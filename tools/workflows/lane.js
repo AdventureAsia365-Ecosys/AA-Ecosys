@@ -8,6 +8,10 @@
 //     "migStart": { "cis": 318, "crm": 28 }, "lenses": ["...", "..."] }
 // key, goal, session, date are required; migStart (a hint, per owner) and lenses are optional.
 // After a rate limit: resume the run with resumeFromRunId instead of starting over (the guard lets a replay through).
+// Spec lanes (AA-1137): optional "spec" (the .kiro/specs/AA-<n>-<slug> folder, relative to the workspace root) and
+// "tasks" (["T1", "T2"]): the lane implements only those tasks, returns trace[] (one entry per task) and gets the
+// reviewer lens "spec". .claude/hooks/lane_start_guard.py checks the spec (approved / in-progress, open tasks, no other
+// lane holding them) only when spec is given; a lane without spec runs as before.
 // A FRESH launch of a lane whose worktree already exists needs "resume": true (AA-1024 G20;
 // .claude/hooks/lane_start_guard.py refuses it otherwise): the agent then reports resumed_state (dirty files, commits
 // ahead, a decision per file) before it changes anything.
@@ -31,7 +35,16 @@ if (typeof args !== 'object' || args === null || Array.isArray(args)) {
 for (const k of ['key', 'goal', 'session', 'date']) {
   if (!args[k] || typeof args[k] !== 'string') throw new Error(`lane.js: args.${k} is required (a string)`)
 }
+// AA-1137: tasks only with a spec, as a list of task ids.
+if (args.tasks !== undefined && !args.spec) throw new Error('lane.js: args.tasks needs args.spec (the spec folder)')
+if (args.spec !== undefined) {
+  if (typeof args.spec !== 'string' || !args.spec.trim()) throw new Error('lane.js: args.spec must be a folder path (a string)')
+  if (!Array.isArray(args.tasks) || args.tasks.length === 0 || !args.tasks.every(t => typeof t === 'string' && t.trim())) {
+    throw new Error('lane.js: args.spec needs args.tasks, a non-empty list of task ids such as ["T1", "T2"]')
+  }
+}
 const L = args
+const SPEC = L.spec ? { dir: L.spec.trim(), tasks: L.tasks.map(t => t.trim()) } : null
 const S = L.session
 const slug = S.toLowerCase()
 const mig = L.migStart
@@ -133,6 +146,34 @@ HARD RULES for this lane:
 - Return one entry in prs[] per PR the orchestrator should open (in merge order), each with exact live_steps the orchestrator must run after merge
   (deploy checks, DB Migrate, curl checks with expected shape, screenshots). notes_vi: 3-6 lines in Vietnamese for the tech lead.`
 
+// AA-1137: what the lane did per spec task (requirement ids, the tests and live steps that prove them).
+const TRACE = {
+  type: 'array',
+  items: {
+    type: 'object',
+    properties: {
+      task: { type: 'string' },
+      requirements: { type: 'array', items: { type: 'string' } },
+      tests: { type: 'array', items: { type: 'string' } },
+      live_steps: { type: 'array', items: { type: 'string' } },
+      status: { type: 'string', enum: ['done', 'partial', 'carried', 'dropped'] },
+    },
+    required: ['task', 'requirements', 'tests', 'live_steps', 'status'],
+  },
+}
+const SPEC_BRIEF = SPEC ? `
+
+SPEC (AA-1137): this lane implements ONLY tasks ${SPEC.tasks.join(', ')} of the spec ${SPEC.dir} (relative to the workspace root;
+in your worktree when the spec lives in the repo you change). First print them with their requirements, verbatim:
+  python3 /home/nghiep/projects/AA-Ecosys/tools/spec/trace_check.py show /home/nghiep/projects/AA-Ecosys/${SPEC.dir} --tasks ${SPEC.tasks.join(',')}
+and read requirements.md (or bugfix.md), design.md and tasks.md of that folder. Build what those requirements say and nothing
+outside them: a needed change outside the spec goes to followups as "spec: <what> (amend R<n>.<m> or a new task)", never into
+the diff silently. Every requirement your tasks name gets the test or live step its Verify line names (a live step goes into
+live_steps of the PR). When the spec lives in the repo you change, tick your finished tasks ([x]) in its tasks.md in the same
+PR (an unfinished one: "[~] ... carried -> AA-<n> (reason)" or leave it open and say why); a spec of another repo (the root) is
+ticked by the orchestrator: say so in followups. Then run trace_check.py check <spec folder> on the copy you changed (it
+must report errors=0). Return trace[]: one entry per task {task, requirements[], tests[], live_steps[], status}.` : ''
+
 const IMPL = {
   type: 'object',
   properties: {
@@ -174,7 +215,12 @@ const IMPL = {
   required: ['ready', 'prs', 'summary', 'notes_vi'],
 }
 // AA-1024 G20: a resumed lane must report what it found before it acts (lesson: relaunched lanes redid work).
-const IMPL_RUN = L.resume ? { ...IMPL, required: [...IMPL.required, 'resumed_state'] } : IMPL
+// AA-1137: a spec lane must return its trace.
+const withTrace = schema => SPEC
+  ? { ...schema, properties: { ...schema.properties, trace: TRACE }, required: [...schema.required, 'trace'] }
+  : schema
+const IMPL_RUN = withTrace(L.resume ? { ...IMPL, required: [...IMPL.required, 'resumed_state'] } : IMPL)
+const FIX_RUN = withTrace(IMPL)
 
 const REVIEW = {
   type: 'object',
@@ -199,16 +245,21 @@ const REVIEW = {
 }
 
 phase('Implement')
-const impl = await agent(`${COMMON}\n\nLANE ${L.key}: ${L.goal}`, { label: `impl:${L.key}`, phase: 'Implement', schema: IMPL_RUN })
+const impl = await agent(`${COMMON}\n\nLANE ${L.key}: ${L.goal}${SPEC_BRIEF}`, { label: `impl:${L.key}`, phase: 'Implement', schema: IMPL_RUN })
 if (!impl || !impl.ready || !impl.prs || impl.prs.length === 0) {
   return { lane: L.key, impl, reviews: [], fix: null }
 }
 
 const prList = impl.prs.map(p => `- ${p.repo} worktree ${p.worktree} branch ${p.branch} (base ${p.base || 'origin/main'})`).join('\n')
-const lenses = L.lenses || [
+const SPEC_LENS = SPEC
+  ? `spec (tasks ${SPEC.tasks.join(', ')} of ${SPEC.dir}: every requirement those tasks name has the test or live step its Verify line asks for, in the diff or in live_steps; no behaviour outside the spec; tasks.md ticks match the work; trace_check.py check passes on the spec; the lane trace below is true)`
+  : null
+const lenses = [...(L.lenses || [
   'correctness + spec fit (does it do what the Linear issue / plan asked, edge cases, tests meaningful)',
   'security + data safety (auth/permissions, RLS/tenant isolation, migrations safe to auto-apply, secrets, no account IDs in public repos)',
-]
+])]
+if (SPEC_LENS && !lenses.some(l => /^spec\b/.test(l))) lenses.push(SPEC_LENS)
+const traceNote = SPEC ? `\nLane trace (spec ${SPEC.dir}): ${JSON.stringify(impl.trace || [])}` : ''
 
 phase('Review')
 const reviews = (await parallel(lenses.map((lens, i) => () => agent(
@@ -216,7 +267,7 @@ const reviews = (await parallel(lenses.map((lens, i) => () => agent(
 First confirm each worktree exists and has commits beyond its base; if not, return verdict "changes" with one blocking finding saying so.
 Review ONLY the diff of these local branches against their base (git -C <worktree> diff <base>...HEAD); read surrounding code as needed.
 ${prList}
-Context of the lane goal: ${L.goal}
+Context of the lane goal: ${L.goal}${traceNote}
 Do not edit files. Report concrete findings only (file + line + why + fix). Severity blocking = would break prod/dev, leak data, or fail CI;
 major = wrong behaviour or missing required part of the slice; minor = style. Default verdict approve if no blocking/major.`,
   { label: `review:${L.key}:${i}`, phase: 'Review', schema: REVIEW })))).filter(Boolean)
@@ -228,6 +279,6 @@ if (must.length) {
   fix = await agent(`${COMMON}\n\nLANE ${L.key} FIX PASS. The lane already built these branches:\n${prList}\n
 Independent reviewers raised these blocking/major findings. Verify each against the code; fix the real ones in the same worktrees
 (new commits, same commit format), re-run the affected tests, and explain any you reject.\n${JSON.stringify(must, null, 1)}\n
-Return the full updated prs[] (same schema) with ready=true unless something is truly blocked.`, { label: `fix:${L.key}`, phase: 'Fix', schema: IMPL })
+Return the full updated prs[] (same schema)${SPEC ? ' and the full updated trace[]' : ''} with ready=true unless something is truly blocked.${SPEC_BRIEF}`, { label: `fix:${L.key}`, phase: 'Fix', schema: FIX_RUN })
 }
 return { lane: L.key, impl, reviews, fix }
