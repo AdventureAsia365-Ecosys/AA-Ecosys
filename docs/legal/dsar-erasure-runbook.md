@@ -221,6 +221,10 @@ run-script, never shown in a task log.
   never traveller data by rule: when a match is found, set the column to `[redacted]` and change nothing else (the
   bk-054 guard trigger allows only that move, the label or one reason alone, on a version that left draft; run as
   `bk_owner`)
+- `booking.supply_restrictions.note` / `reject_reason` / `withdraw_reason` / `end_reason` (bk-060, staff text on
+  supplier allotment, free-sale, on-request and stop-sale rows, never traveller data by rule): when a match is found,
+  set the column to `[redacted]` and change nothing else (the bk-060 guard trigger allows only that move, on any row:
+  a closed stop-sale or a term of a published contract; run as `bk_owner`)
 - `booking.retired_b2c_record.record` (the bk-045 archive of the customer invoices and payments, accounting
   exception DM-7.1): redact the personal keys in place, never delete (section 3 step 4)
 - gone since bk-045 (dropped, not archived, so nothing to erase): `booking.customers`, `customer_identities`,
