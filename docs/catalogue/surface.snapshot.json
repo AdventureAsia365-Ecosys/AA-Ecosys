@@ -226,7 +226,6 @@
    "page:/academy/signed-out",
    "page:/automations",
    "page:/bookings",
-   "page:/c/[...slug]",
    "page:/c/a",
    "page:/c/f/[publicKey]",
    "page:/c/p",
