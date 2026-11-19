@@ -180,12 +180,17 @@ POLICY: dict[str, Policy] = {
     # AA-1036 R3 (root ADR 0019 d7): an agency's add-ons and its requests, relayed by the CRM for its CRM owner. The
     # agency's own note and the reason staff wrote for it cross; the staff actor, the requester's name or e-mail, a
     # CRM role, the plan key, the attach job, a price and a billing field never do.
+    # AA-1139 (1.1, the agency app's TripPlanner module): the planner's lead route carries `lead_email`, the mailbox the
+    # agency itself chose to receive planner leads (business data, like a hotel's address; CIS refuses a non-public
+    # domain). It is the only e-mail-named field exempt from the name heuristic; `email` and every other `*_email` stay
+    # refused.
     "tenant.addons.v1": Policy(
         forbidden_keys=frozenset({"actor", "email", "display_name", "role", "crm_role", "requested_by", "decided_by",
                                   "plan_key", "provision_job_id", "job_id", "job_error"}),
         forbidden_patterns=(r"_by$", r"^actor$", r"^billing", r"(^|_)prices?(_|$)", r"(^|_)roles?$", r"(^|_)jobs?(_|$)"),
+        pii_name_exempt=frozenset({"lead_email"}),
         why="add-on states and the agency's own requests only: no staff actor, requester name or e-mail, CRM role, "
-            "plan key, attach job, price or billing field",
+            "plan key, attach job, price or billing field (the planner's lead mailbox is the agency's business inbox)",
     ),
     # AA-1093 (tenant offboarding erasure saga): requests and reports carry ids, counts, codes and hashes only. The
     # approver and every other actor stay in CIS; a row value, a before / after audit value, the tenant's name, slug or
