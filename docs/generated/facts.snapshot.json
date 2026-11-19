@@ -20,8 +20,8 @@
   },
   {
    "chat_models": "Yes, first Bedrock account while AWS blocks acc3 (since 2026-11-12)",
-   "decision": "ADR 0001a Note S278",
-   "holds": "One Bedrock invoker role trusted by the CIS task role and a free spend alert; payer of the organization that holds acc3. Nothing else",
+   "decision": "ADR 0001a Notes S278, S285",
+   "holds": "One Bedrock invoker role trusted by the CIS task role and, for the CRM reply drafts, the CRM task role (each with its own ExternalId) and a free spend alert; payer of the organization that holds acc3. Nothing else",
    "label": "acc1",
    "name": "personal account, outside the AA organization",
    "state": "Live; the tech lead reviews it in early December",
@@ -1477,7 +1477,7 @@
  },
  "schema": "aa1132-facts/2",
  "sources": {
-  "docs/catalogue/platform.yaml": "ce35306b490e3f51c7760ebcb9bac3b7cd042cc479bd36fd5f44e4534fe64c48",
+  "docs/catalogue/platform.yaml": "6c029d3a33b591705db61c12c2b1c2e87761ddb88cf8b5b2ca44922be931d846",
   "docs/generated/inventory.md": "ff3295d5219e7e30518a6340c0f2a5915ca48308c90a15ebc8753f33c3a896f3"
  }
 }

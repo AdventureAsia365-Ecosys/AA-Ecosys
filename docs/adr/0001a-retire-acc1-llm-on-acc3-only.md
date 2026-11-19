@@ -3,7 +3,9 @@
 - **Status:** Accepted (28/10/2026, S255, AA-998: the tech lead asked for acc1 to leave the ecosystem and accepts
   losing the cross-account LLM fallback). Separate file, following the `0003a` pattern; ADR 0001 itself only gets a pointer.
   Partly reversed for Bedrock chat serving only by the Note S278 at the end (12/11/2026, AA-1095); the Note S279
-  (13/11/2026, AA-1096) adds a billing-only spend alert on acc1 (e-mail only, never a stop).
+  (13/11/2026, AA-1096) adds a billing-only spend alert on acc1 (e-mail only, never a stop); the Note S285
+  (19/11/2026, AA-1138) lets the AA-Partner CRM task role assume the same invoker role, with its own ExternalId, for
+  the first entry of its reply drafts.
 - **Amends:** ADR 0001 decision 2 ("Single Model Gateway"), the sentence "The fallback stays inside acc3 (previous
   model) until acc1 accepts the same agreements". The fallback now stays inside acc3 for good.
 - **Amended by:** [ADR 0009](0009-ai-platform-and-provider-gateway.md) decision 14 (Accepted 2026-10-31, S261):
@@ -146,3 +148,38 @@ stands.
 - **Reversal.** Removed with the rest of the `accounts/acc1-bedrock` root when acc3 serves again (Note S278,
   Reversal). Values (budget, percentages, anomaly floor) are Terraform variables of that root; the gateway values are
   settings of the `acc1` connection.
+
+## Note — 19/11/2026 (S285): the CRM may assume the acc1 invoker role for its reply drafts
+
+**Decision (tech lead, AA-1138):** after a blind comparison of ten client replies (Claude Haiku 5.5 preferred in 7 of
+10 over Amazon Nova Lite), the AA-Partner CRM's reply-draft stage `crm_draft_reply` runs Claude Haiku 5.5 on Amazon
+Bedrock first and keeps Amazon Nova Lite on acc2 as its last fallback. acc2 cannot run Claude and acc3 refuses models
+at account level, so the CRM's Claude call goes through acc1. This widens the scope of Note S278 by one trust
+statement; everything else in Notes S278 and S279 stands.
+
+- **Scope on acc1.** No new resource: the existing invoker role `AA1-Bedrock-Invoker` gets a second trust statement
+  (`AllowAcc2CrmEcsTaskRoleAssume`) naming the CRM ECS task role on acc2, with its own ExternalId, so the CIS and CRM
+  assume calls stay apart in CloudTrail and either trust can be removed alone. The role's invoke policy adds exactly
+  one resource, the `us.` inference profile of Claude Haiku 5.5 (it routes to us-east-1, us-east-2, us-west-1 and
+  us-west-2 only). The CIS keeps its `global.` profiles. Still no data, secret or compute on acc1.
+- **Why the `us.` profile.** The agency terms say CRM text is processed in US regions only (DPA Annexes 1-4) and
+  [ADR 0009](0009-ai-platform-and-provider-gateway.md) decision 10 keeps tenant stages off `global.` profiles until the
+  terms cover them.
+- **Data.** Scrubbed agency text (F3 scrub: known values, patterns, Bedrock Guardrails on acc2, fails closed;
+  placeholders instead of personal data) now passes through acc1 in transit to Bedrock, as Content studio text already
+  does. acc1 keeps none of it: Bedrock model invocation logging must stay off on acc1 (checked live, read only, before
+  the first CRM draft; if it is ever on, the CRM trust comes off first). The DPA Annex 3 §1.2 and the AI Use Register
+  name the change; it adds no sub-processor (Amazon Web Services already lists Amazon Bedrock).
+- **Spend, per app.** The CRM gets its own cap on acc1: the AA-Partner setting `crm.ai.connection_monthly_cap_usd`
+  entry `"acc1"` (5 USD a month, taken from the CIS share of the acc1 connection, 100 -> 95 USD), written and approved
+  before the Infra apply. The CRM gateway also fails closed: under the Dev spend rules it never calls a named
+  connection that has no CRM cap. The CRM keeps its own ledger (`crm.llm_call`, [ADR 0008a](0008a-crm-separate-app-exceptions.md) §5);
+  the acc1 AWS budget of Note S279 covers both apps' spend on the account.
+- **Not the Anthropic API.** The platform order for Claude puts the Anthropic API first (Note S278). The CRM stays
+  Bedrock only (ADR 0008a §5): it holds no vendor key and no vendor client. Giving the CRM an Anthropic API path is its
+  own change (ADR 0008a amendment, provider, secret); the S285 tech lead direction is that Bedrock, managed and
+  tracked per app, is the long-term path.
+- **Reversal.** Switch the CRM route entry off (a forward AA-Partner migration: Nova Lite answers alone), set
+  `crm_llm_acc1_enabled = false` in AA-CIS-Infra (removes the CRM task role's grant and task environment) and remove
+  the trust statement and the `us.` profile from `accounts/acc1-bedrock`. The Note S278 reversal (acc3 serves again)
+  removes it with the rest of the root.
