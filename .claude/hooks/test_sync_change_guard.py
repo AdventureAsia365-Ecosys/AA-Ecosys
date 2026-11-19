@@ -21,12 +21,18 @@ SYNC = HERE.parents[1] / "tools" / "sync"
 sys.path.insert(0, str(SYNC))
 import change_guard as cg  # noqa: E402
 
-_DROP = ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_OBJECT_DIRECTORY", "GIT_COMMON_DIR")
+# S272: a git hook (pre-push) exports GIT_DIR and friends; a git command run in a temporary repo below would then act
+# on the real repo. Drop git's repo-local variables for this whole test process (`git rev-parse --local-env-vars`;
+# tools/github/test_git_env_isolation.py).
+for _git_var in ("GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_CONFIG", "GIT_CONFIG_PARAMETERS", "GIT_CONFIG_COUNT",
+                 "GIT_OBJECT_DIRECTORY", "GIT_DIR", "GIT_WORK_TREE", "GIT_IMPLICIT_WORK_TREE", "GIT_GRAFT_FILE",
+                 "GIT_INDEX_FILE", "GIT_NO_REPLACE_OBJECTS", "GIT_REPLACE_REF_BASE", "GIT_PREFIX", "GIT_SHALLOW_FILE",
+                 "GIT_COMMON_DIR"):
+    os.environ.pop(_git_var, None)
 
 
 def git(top: Path, *args: str) -> str:
-    env = {k: v for k, v in os.environ.items() if k not in _DROP}
-    env.update({"GIT_CONFIG_GLOBAL": os.devnull, "GIT_CONFIG_NOSYSTEM": "1"})
+    env = {**os.environ, "GIT_CONFIG_GLOBAL": os.devnull, "GIT_CONFIG_NOSYSTEM": "1"}
     return subprocess.run(["git", "-C", str(top), "-c", "user.name=Test", "-c", "user.email=test@example.invalid",
                            "-c", "commit.gpgsign=false", *args], capture_output=True, text=True, check=True,
                           env=env).stdout
