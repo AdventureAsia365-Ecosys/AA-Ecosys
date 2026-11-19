@@ -1,6 +1,6 @@
 {
- "updated": "2026-11-19",
- "synced_at": "2026-11-19T16:22Z",
+ "updated": "2026-11-20",
+ "synced_at": "2026-11-19T17:41Z",
  "session": "S285",
  "next_session": "S286",
  "source": "Linear (19/11/2026, plan_sync.py --write, S285) + docs/audits/2026-11-19-S285-session/plan-audit-plan-changes.json (tech lead duyệt Q1–Q12, 19/11) + docs/backlog/README.md",
@@ -2822,7 +2822,7 @@
   {
    "id": "AA-1161",
    "title": "[DevOps] Keep every repo lean: screenshots, build artifacts and binaries stored in their right place, with guards",
-   "status": "Todo",
+   "status": "In Review",
    "priority": "High",
    "project": "data",
    "milestone": "later",
