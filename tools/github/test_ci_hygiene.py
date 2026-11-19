@@ -167,6 +167,17 @@ class Collect(unittest.TestCase):
         self.assertEqual(row["files"], 1)
         self.assertEqual(len(row["wl5"]), 1)
 
+    def test_project_template_is_known_and_read_remotely_under_local_root(self):
+        # AA-1134: the public project kit template is meant to stay; it has no checkout in the workspace.
+        self.assertIn("project-template", h.REPOS)
+        self.assertNotIn("project-template", h.LOCAL_DIRS)
+        self.assertEqual(h.unknown_public([{"name": "project-template", "visibility": "public"}]), [])
+        with tempfile.TemporaryDirectory() as tmp:
+            row = h.collect("project-template", warn_gb=8, local_root=Path(tmp), run=FakeGh(), now=NOW,
+                            log=lambda m: None)
+        self.assertEqual(row["files"], 1)       # the remote default branch (FakeGh's clean workflow)
+        self.assertEqual(row["wl5"], [])
+
 
 UPLOADS = textwrap.dedent("""
     on: push

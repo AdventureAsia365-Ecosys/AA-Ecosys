@@ -51,7 +51,10 @@ from typing import Callable
 import yaml
 
 ORG = "AdventureAsia365-Ecosys"
-REPOS = ("AA-Ecosys", "AA-CIS-App", "AA-Booking", "AA-Partner", "AA-TripPlanner-Web", "AA-CIS-Infra")
+# project-template (AA-1134, open hygiene issue "unknown public repo"): the public project kit template, meant to stay.
+# It has no checkout in this workspace, so --local-root reads its default branch remotely.
+REPOS = ("AA-Ecosys", "AA-CIS-App", "AA-Booking", "AA-Partner", "AA-TripPlanner-Web", "AA-CIS-Infra",
+         "project-template")
 LOCAL_DIRS = {"AA-Ecosys": ".", "AA-CIS-App": "apps/AA-CIS-App", "AA-Booking": "apps/AA-Booking",
               "AA-Partner": "apps/AA-Partner", "AA-TripPlanner-Web": "apps/AA-TripPlanner-Web",
               "AA-CIS-Infra": "infra/AA-CIS-Infra"}
@@ -358,7 +361,7 @@ def collect(repo: str, *, warn_gb: float, clean: bool = False, local_root: Path 
         failed = cc.delete(f"{ORG}/{repo}", stale, run, log)
         row["deleted"] = len(stale) - failed
         row["deleted_bytes"] = row["stale_bytes"] if not failed else 0
-    files = local_files(local_root / LOCAL_DIRS[repo]) if local_root else remote_files(repo, run)
+    files = local_files(local_root / LOCAL_DIRS[repo]) if local_root and repo in LOCAL_DIRS else remote_files(repo, run)
     findings = scan(files)
     row["wl5"] = [f for f in findings if ":WL5 " in f or ":WL0 " in f]
     row["wl4"] = [f for f in findings if ":WL4 " in f]

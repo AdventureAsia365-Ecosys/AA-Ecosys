@@ -19,6 +19,7 @@ name: Docs lint
 #   - unit tests of the security helpers tools/security (AA-1111: the ZAP baseline report summary, recorded fixtures)
 #   - unit tests of the UAT take upload check tools/uat/check_takes_uploaded.py (S281; stdlib, scripted rclone)
 #   - unit tests of the ops helpers tools/ops (AA-1023: ecs_rollback.sh against a scripted aws/curl, the game-day seed)
+#   - unit tests of the FinOps report tools tools/finops (AA-896, AA-1134: report draft and collector, synthetic data)
 #   - the Claude Code hooks .claude/hooks (AA-1024 G5): every hook's tests, and every hook settings.json registers exists
 #   - the lessons log (AA-1024 G22): a new or changed lesson line carries a valid Guard field
 #   - the AA Academy course files under docs/learn/ (AA-1104): shape, references, pinned source hashes (a cited
@@ -65,6 +66,7 @@ on:
       - "tools/uat/check_takes_uploaded.py"
       - "tools/uat/tests/test_check_takes_uploaded.py"
       - "tools/ops/**"
+      - "tools/finops/**"
       - "tools/llm/**"
       - "tools/security/**"
       # AA-1024 S272: the files tools/github/test_git_env_isolation.py and the ecsx tests guard (GIT_DIR, ECS exec)
@@ -222,6 +224,11 @@ jobs:
         if: ${{ !cancelled() }}
         run: python -m unittest discover -s tools/llm -p 'test_*.py'
 
+      # AA-1134: the monthly cost report draft and its collector (synthetic data, stdlib only, offline).
+      - name: FinOps tools tests
+        if: ${{ !cancelled() }}
+        run: python -m unittest discover -s tools/finops -p 'test_*.py'
+
       # AA-1024 G3: the ecsx runner (tools/ecs): pid claim, nostart / dead states, heartbeat, one auto-restart, the
       # script-timeout refusal, the local output copy. Offline: aws is scripted, files live in a temporary directory.
       - name: ECS exec wrapper tests
@@ -328,6 +335,13 @@ jobs:
       - name: Literal resource IDs (warn-only)
         if: ${{ !cancelled() }}
         run: python tools/docs/check_docs_text.py resource-ids --mode warn
+
+      # AA-1134: phrases that describe a retired thing as live (acc3-only serving, Vercel previews, the portal copy,
+      # the retired Booking inquiry kind, 7-day Dev backups; S283 docs audit). Warn-only while the docs rewrite of the
+      # audit findings lands; then --mode error.
+      - name: Retired phrases (warn-only)
+        if: ${{ !cancelled() }}
+        run: python tools/docs/check_docs_text.py retired-phrases --mode warn
 
       # Failing since the existing pages were cleaned up (AA-888, S245). The scope (what is ignored and why) and the
       # rule settings are in .markdownlint-cli2.jsonc; the action pins markdownlint-cli2 0.23.2.

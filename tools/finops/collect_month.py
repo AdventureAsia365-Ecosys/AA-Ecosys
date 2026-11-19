@@ -8,7 +8,11 @@ because each container's DATABASE_URL reads only its own schemas:
                 For every month: the cost-per-app answer of api.services.platform_cost.cost_by_app (the one cost module
                 of the admin console, AA-884: acc2 Cost Explorer by App tag and service as stored by the CIS client,
                 LLM spend by app, acc3 Bedrock), LLM spend by app / stage / role / account from shared.llm_call_daily +
-                shared.llm_call_log, and the published-tour counts for the unit costs.
+                shared.llm_call_log, and the published-tour counts for the unit costs. Every month carries an acc1
+                line (llm_satellites.acc1, AA-1134): acc1 serves Bedrock first since S278 (AA-1095), but its Cost
+                Explorer is outside the CIS client (the CIS task role may only invoke Bedrock there), so the line
+                holds the gateway estimate and ce_bedrock_usd null; monthly_cost_report.py --acc1-usd fills it from
+                the one-line read on acc1 (docs/ops/cost/README.md).
   PART=booking  (ECSX_SERVICE=aa-booking-dev-api, login booking) trip cases created per month and how many of them
                 are confirmed or later (booking.trip_cases).
   PART=crm      (ECSX_SERVICE=aa-crm-dev-api, login crm_app) CRM LLM spend per month, stage and model from its own
@@ -242,6 +246,26 @@ async def refresh_service_snapshot(pool: Any, start: date, end_exclusive: date, 
     return {"ok": True, "row_count": written, "accounts_failed": sorted(result.get("errors") or {})}
 
 
+ACC1_KEY = "acc1"
+ACC1_CE_NOTE = "acc1 Cost Explorer is outside the CIS client: monthly_cost_report.py --acc1-usd (docs/ops/cost/README.md)"
+
+
+def with_acc1_line(cost: dict[str, Any], llm_rows: list[dict[str, Any]]) -> dict[str, Any]:
+    """``cost`` with an acc1 line in llm_satellites. cost_by_app lists acc1 only when the connection registry names it
+    and the month has acc1 spend; otherwise the line is built from the ledger rows of the month (account 'acc1', only
+    Bedrock connections carry that key), so the report always shows the first LLM route."""
+    sats = cost.get("llm_satellites")
+    if not isinstance(sats, dict):
+        sats = {}
+    line = dict(sats.get(ACC1_KEY) or {})
+    if "llm_log_estimate_usd" not in line or line["llm_log_estimate_usd"] is None:
+        est = sum(float(r.get("cost_usd") or 0.0) for r in llm_rows if r.get("account") == ACC1_KEY)
+        line["llm_log_estimate_usd"] = round(est, 4)
+    line.setdefault("ce_bedrock_usd", None)
+    line.setdefault("ce_source", ACC1_CE_NOTE)
+    return {**cost, "llm_satellites": {**sats, ACC1_KEY: line}}
+
+
 async def collect_cis(pool: Any, months: list[str], today: date, *, cost_fn: CostFn,
                       refresh_fn: Optional[RefreshFn] = None,
                       service_refresh_fn: Optional[RefreshFn] = None) -> dict[str, Any]:
@@ -264,10 +288,11 @@ async def collect_cis(pool: Any, months: list[str], today: date, *, cost_fn: Cos
             refreshed = done
             cost = await cost_fn(pool, m, refresh_if_stale=False)
         units = dict((await pool.fetch(PUBLISHED_TOURS_SQL, start, end))[0])
+        llm_rows = rows(await pool.fetch(LLM_BY_STAGE_SQL, start, end))
         out[m] = {
             "period_start": start.isoformat(), "period_end_exclusive": end.isoformat(),
-            "platform_cost": cost,
-            "llm_by_stage": rows(await pool.fetch(LLM_BY_STAGE_SQL, start, end)),
+            "platform_cost": with_acc1_line(cost, llm_rows),
+            "llm_by_stage": llm_rows,
             "units": {k: int(v or 0) for k, v in units.items()},
             "refreshed": refreshed,
         }

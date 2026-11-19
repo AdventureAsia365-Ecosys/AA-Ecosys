@@ -238,7 +238,7 @@ Notes (hand-written; a kind missing here has no note):
 | `bk_retention_inbox_redact` | retention |
 | `bk_tenant_erase` | AA-1093, bk-057: the Booking step of the offboarding erasure saga; reads `catalog.v_tenant_erasure_v1`, DRY RUN plan hash, apply anonymises the agency (money rows and the bill-to snapshot kept) only with the approved hash, writes `booking.tenant_erasure_log` (report view `booking.v_tenant_erasure_report_v1`); blocks a deploy while an apply runs |
 
-The retired B2C kinds (`bk_inquiry_pull`, `bk_inquiry_process`, `bk_notify_email`) have no handler any more; `bk_inquiry_pull` stays in `DEPLOY_GATE_EXEMPT` so the deploy-gate answer keeps its shape, and a leftover row is cancelled by the worker.
+The retired B2C kinds (`bk_inquiry_pull`, `bk_inquiry_process`, `bk_notify_email`) have no handler any more and a leftover row is cancelled by the worker. Since AA-1134 `bk_inquiry_pull` is no longer in `DEPLOY_GATE_EXEMPT`: a leftover row would show in the deploy-gate counts as information only (it is not a deploy-blocking kind).
 
 Source: `backend/app/jobs/kinds.py` (`EXPECTED_SECONDS`, `DEPLOY_BLOCKING_KINDS`, `DEPLOY_GATE_EXEMPT`).
 

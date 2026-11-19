@@ -75,6 +75,19 @@ Rules and budgets: [FinOps process](../finops.md).
    Pass the two amounts as `--mgmt-usd` and `--mgmt-prev-usd` in step 5. Without them the report says in its totals
    and in summary line 1 that the management account is not included.
 
+   acc1 serves Bedrock first since S278 (AA-1095), acc3 is the fallback behind it. The CIS client cannot read acc1's
+   Cost Explorer (the CIS task role may only invoke Bedrock there), so the bundle's acc1 line holds the gateway
+   estimate only. acc1 holds nothing but the Bedrock invoker role, so its own spend is its Bedrock spend (Claude through
+   the Marketplace included). Sign in (`aws sso login --profile pqnghiep-admin`), then one line per month (the filter
+   keeps acc1 itself, not acc3 that it pays for):
+
+   ```bash
+   aws ce get-cost-and-usage --time-period Start=2026-10-01,End=2026-11-01 --granularity MONTHLY --metrics UnblendedCost --filter "{\"Dimensions\":{\"Key\":\"LINKED_ACCOUNT\",\"Values\":[\"$(aws sts get-caller-identity --profile pqnghiep-admin --query Account --output text)\"]}}" --profile pqnghiep-admin --region us-east-1 --query 'ResultsByTime[0].Total.UnblendedCost.Amount' --output text
+   ```
+
+   Pass the two amounts as `--acc1-usd` and `--acc1-prev-usd` in step 5. They fill the acc1 row next to its gateway
+   estimate; the totals do not change (the acc1 calls are already in the LLM spend by app, billed outside acc2).
+
 4. Optional: write the trip plan count (TripPlanner runs in Lambda, there is no container) to `units-YYYY-MM.json`,
    for example `{"trip_plans": 0}`. Take it with a read-only query; read the table and column names in
    `docs/architecture/db-schema-reference.md`, never from memory.
@@ -82,7 +95,7 @@ Rules and budgets: [FinOps process](../finops.md).
 5. Draft the cost sections:
 
    ```bash
-   python3 tools/finops/monthly_cost_report.py --bundle .tmp-session/cost-2026-10/cis.txt --booking-bundle .tmp-session/cost-2026-10/booking.txt --crm-bundle .tmp-session/cost-2026-10/crm.txt --mgmt-usd <amount> --mgmt-prev-usd <amount> --budget-usd 300 --out .tmp-session/cost-2026-10/cost-sections.md
+   python3 tools/finops/monthly_cost_report.py --bundle .tmp-session/cost-2026-10/cis.txt --booking-bundle .tmp-session/cost-2026-10/booking.txt --crm-bundle .tmp-session/cost-2026-10/crm.txt --mgmt-usd <amount> --mgmt-prev-usd <amount> --acc1-usd <amount> --acc1-prev-usd <amount> --budget-usd 300 --out .tmp-session/cost-2026-10/cost-sections.md
    ```
 
    From the second report on, add `--prev-units docs/audits/<last month's review>/cis.txt` (the CIS bundle saved with
