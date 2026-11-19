@@ -46,6 +46,9 @@ Các quy tắc W1 đến W7 của [sổ tay kỹ thuật](../../engineering-hand
    hằng quý được đưa vào danh sách của phiên (data standards C4.3, C8, DM-8.10).
 5. **Cập nhật master plan trước khi mở lane.** Khi tech lead chốt danh sách, tracker hiện các issue của phiên này, rồi
    mới mở lane.
+6. **Danh sách duyệt luôn spec.** Chốt danh sách là duyệt requirement trong spec của từng issue trong đó (xem
+   [Spec](planning-and-issues.vi.md#spec)); quyết định thiết kế đánh dấu khó đảo ngược đưa lên trang quyết định của phiên
+   cho tech lead.
 
 ## Trong phiên
 

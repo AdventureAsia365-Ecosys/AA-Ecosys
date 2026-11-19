@@ -66,6 +66,29 @@ Title: `[Area] <việc cần làm> — <chi tiết chính>`, ví dụ `[Admin] A
 **Liên kết Jira:** issue làm cho một yêu cầu Jira (PR, KAN, CON) ghi `Jira: <key>` ở mục Related. Chiều ngược lại
 không có: comment Jira không bao giờ chứa mã Linear (`aa-jira-update`).
 
+## Spec (AA-1137, tech lead S284)
+
+Spec theo định dạng Kiro, ở repo chủ của việc: `.kiro/specs/AA-<n>-<slug>/` (việc nhiều repo: repo gốc, mỗi task ghi
+`repo:`). Mẫu: `templates/spec/` (`feature`, `bugfix`, `quick`); luật định dạng + kiểm: `tools/spec/trace_check.py`.
+
+- **Spec theo rủi ro:** feature spec (`requirements.md` + `design.md` + `tasks.md`) cho issue có migration/schema,
+  auth/quyền hoặc nhiều repo; quick spec (`requirements.md` + `tasks.md`) cho issue thường; bugfix spec (`bugfix.md` +
+  `tasks.md`) cho lỗi; chore nhỏ không cần spec.
+- **Requirement:** EARS, mỗi dòng một mã `R1.1 WHEN … THE SYSTEM SHALL …`, dòng sau `Verify:` là test (đường dẫn)
+  hoặc `live: …`. **Task:** `- [ ] T1 … - repo: … - lane: …`, dòng sau `_Requirements: R1.1_`; `[x]` xong,
+  `[~] … carried -> AA-<n> (lý do)`, `[-] … dropped: <lý do>`.
+- **Duyệt:** tech lead chốt danh sách issue đầu phiên = duyệt requirement (điều phối đặt `status: approved` +
+  `approved_at`). Tech lead chỉ duyệt riêng quyết định thiết kế agent đánh `Hard to reverse: yes` (ranh giới, grant,
+  xoá dữ liệu, mức ADR) trên trang quyết định của phiên, ghi `Approved: <ngày>, <nơi>` dưới quyết định đó. Task không
+  cần duyệt.
+- **Linear:** issue giữ Problem + Scope; Done when = danh sách mã R + đường dẫn spec, không chép lại chữ của R. Đổi
+  tiêu chí sau khi bắt đầu: `R1.1 (amended S<nnn>: …)`, một dòng Changed trong implementation note, một comment Linear.
+- **Vòng đời:** `draft` → `approved` → `in-progress` (lane đầu) → `implemented` (PR cuối merge, mọi task `[x]`/`[~]`/`[-]`)
+  → `archived` (cuối phiên, chuyển vào `.kiro/specs/_archive/`). Sau `implemented` spec đóng băng (CI Spec trace báo
+  `frozen`); đổi hành vi về sau → spec mới với `supersedes: spec-AA-<n>`.
+- Kiểm: `python3 tools/spec/trace_check.py check .kiro/specs/AA-<n>-<slug>`; CI `.github/workflows/spec-trace.yml`
+  chỉ chặn PR có issue mang spec.
+
 ## Definition of Ready (trước khi giao Kiro/subagent/lane)
 
 Issue chỉ được giao khi đủ các mục dưới (thêm vào template trên; mẫu đầy đủ + checklist: `docs/templates/definition-of-ready.md`).
@@ -78,7 +101,7 @@ Thiếu → bổ sung trước, chưa giao.
 - [ ] **Appetite** — việc này đáng bao nhiêu: 0.25 | 0.5 | 1 | 2 phiên, kèm trần USD nếu có chạy trả phí. Vượt appetite
       → dừng, cắt lại hoặc tách issue; không làm tiếp (circuit breaker).
 - [ ] **Scope** ghi repo/schema/file và phần out of scope.
-- [ ] **Done when** 3–6 tiêu chí kiểm được trên Dev (không phải "code merged").
+- [ ] **Done when** 3–6 tiêu chí kiểm được trên Dev (không phải "code merged"); issue có spec: mã R + đường dẫn spec.
 - [ ] **Verify** — lệnh curl/trang/query/workflow cụ thể chứng minh live. Bước cần ECS exec / DB live là việc của
       agent điều phối (hook chặn subagent); subagent chỉ chuẩn bị runbook/script.
 - [ ] **Risk class** — none | auth | migration | IAM/secret | delete | cost | LLM; lớp rủi ro → `kiro-reviewer` trên PR.

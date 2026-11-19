@@ -66,6 +66,9 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
      trả về Backlog kèm lý do, hoặc làm xong, tới khi ≤ 8, rồi mới chuyển issue mới sang In Progress. Đây là trần do tech
      lead đặt, không phải trần agent tự đặt; trần theo lane / theo cỡ (≤ 3 mỗi lane, ≤ 2 L/XL) chưa duyệt, không áp.
    - Mỗi issue `get_issue` để chắc title đúng.
+   - **Spec (AA-1137):** issue có migration/auth/nhiều repo mang feature spec, issue thường quick spec, chore không
+     (`aa-linear-issue` mục Spec). Chốt danh sách = duyệt requirement của các spec đó; quyết định `Hard to reverse: yes`
+     trong `design.md` đưa lên trang quyết định của phiên để tech lead duyệt riêng.
 4. **Báo lệch:** state thật khác memory (revision, job treo, issue đã đóng, PR mở) → nói ngay trước khi làm.
 5. **Đọc bài học:** mục liên quan trong `aa-lessons/lessons.md`, và `.tmp-session/S<nnn-1>-lessons-pending.md` nếu
    phiên trước chưa chuyển hết.
@@ -85,7 +88,8 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
 7. **Ngay sau khi Nghiệp chốt danh sách — cập nhật master plan (BẮT BUỘC, tech lead nhắc S264 và S271):**
    (a) `python3 tools/linear/plan_sync.py --write` sau mọi đổi trạng thái Linear của lượt hội tụ; (b) sửa tay
    `plan.json`: `session` = phiên này, `next_session`, và `session` / `next` của mọi issue đã chốt (kể cả issue kéo lên
-   sớm); `--validate`; (c) tạo checklist sống + `sessions/S<nnn>.json` (kpis + groups, `s` ∈ done/run/wait/warn/block)
+   sớm); `--validate`; spec của issue đã chốt: `status: approved` + `approved_at` (spec repo gốc trong root PR của phiên,
+   spec repo con trong PR đầu của lane); (c) tạo checklist sống + `sessions/S<nnn>.json` (kpis + groups, `s` ∈ done/run/wait/warn/block)
    + thêm dòng vào `sessions/index.json` (lấy bản live bằng Artifact read, giữ các phiên cũ); (d) **publish tracker**
    theo `docs/backlog/tracker/README.md` bước 4. Làm xong bước này rồi mới mở lane / bắt đầu việc đầu tiên.
 
