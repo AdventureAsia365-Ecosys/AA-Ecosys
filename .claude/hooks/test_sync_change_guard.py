@@ -169,7 +169,8 @@ class CheckOnGitTest(unittest.TestCase):
         r = cg.check(self.top)
         self.assertEqual((r.base, r.issues, r.code), ("origin/main", ["AA-42"], ["api/svc.py"]))
         self.assertEqual(r.findings, ["no-test", "no-note"])
-        write(self.top, "docs/implementation-notes/AA-42.md", "# AA-42\n\nNo test needed: wiring only, covered upstream\n")
+        write(self.top, "docs/implementation-notes/AA-42.md",
+              "# AA-42\n\nNo test needed: wiring only, covered upstream\n")
         r = cg.check(self.top)  # the untracked note counts, and its waiver is read
         self.assertEqual(r.findings, [])
         self.assertEqual(r.waivers, {"test": "wiring only, covered upstream"})

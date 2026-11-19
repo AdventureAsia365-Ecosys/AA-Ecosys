@@ -46,7 +46,8 @@ def sync_check(data: dict, m: str) -> tuple[dict, str]:
     """(log record, reminder or '') for the checkouts this agent wrote."""
     event = str(data.get("hook_event_name") or "Stop")
     rec: dict = {"event": event, "hook": "stop_dispatch", "mode": m, "agent": hookio.agent_key(data),
-                 "agent_type": str(data.get("agent_type") or ""), "stop_hook_active": bool(data.get("stop_hook_active"))}
+                 "agent_type": str(data.get("agent_type") or ""),
+                 "stop_hook_active": bool(data.get("stop_hook_active"))}
     state = hookio.load_state(data)
     repos = [r for r in state["repos"] if Path(r).is_dir()]
     if not repos:

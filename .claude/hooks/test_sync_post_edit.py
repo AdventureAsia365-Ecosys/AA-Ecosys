@@ -87,7 +87,8 @@ class RunTest(Base):
         self.assertIn("Docs impact", other_agent)
 
     def test_editing_the_page_itself_is_no_docs_hit(self):
-        entries = [{"id": "e", "repo": "Demo", "pages": ["Demo:api/orders/README.md"], "patterns": [r"^api/orders/.*$"]}]
+        entries = [{"id": "e", "repo": "Demo", "pages": ["Demo:api/orders/README.md"],
+                    "patterns": [r"^api/orders/.*$"]}]
         self.assertEqual(pe.docs_hits(entries, "Demo", "api/orders/README.md"), [])
         self.assertEqual([h["id"] for h in pe.docs_hits(entries, "Demo", "api/orders/x.py")], ["e"])
         self.assertEqual(pe.docs_hits(entries, "Other", "api/orders/x.py"), [])
