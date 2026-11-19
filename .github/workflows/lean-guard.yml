@@ -1,0 +1,47 @@
+name: Lean guard
+# AA-1161 (S286, tech lead decision S285): keep the repo lean. tools/repo/lean_guard.py refuses, among the files a pull
+# request adds or changes: a raster image over 500 KiB, more than 10 MiB of images in one PR, a *.zip under dist/, an
+# ELF / Mach-O / PE executable, and any file over 5 MiB that .lean-allow does not list with a reason. Compress
+# screenshots first with tools/docs/compress_images.py; full sets and videos go to the Google Drive AdventureAsia folder
+# or the private S3 audit-assets prefix, linked from the audit page.
+#
+# Its own workflow because no root lint workflow runs on every PR without a paths filter (docs-lint.yml filters on
+# docs/**, and a binary can land anywhere). The same guard runs at push time (scripts/pre-push.sh, check lean-guard)
+# and, as a byte-identical copy, in the five child repos (their change-guard.yml, job `lean`).
+# Blobless sparse clone: only tools/repo is checked out (the tree holds ~1 GB of legacy images), the guard fetches the
+# changed blobs in one round trip (--prefetch). Free: the runner's stdlib Python, no secret, no AWS, read-only token.
+on:
+  pull_request:
+    branches: [master]
+  merge_group:
+    types: [checks_requested]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lean-guard-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  lean:
+    name: lean repo guard
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout (full history, no blobs, tools/repo only)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          sparse-checkout: |
+            tools/repo
+          persist-credentials: false
+
+      - name: Guard unit tests
+        run: python3 -B -m unittest discover -s tools/repo -p 'test_*.py'
+
+      - name: Lean repo guard (images, build artifacts, binaries)
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+        run: python3 -I -B tools/repo/lean_guard.py --base "$BASE_SHA" --head HEAD --prefetch --github
