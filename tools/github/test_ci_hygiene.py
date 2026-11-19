@@ -428,3 +428,16 @@ class OrgAndPermissions(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+
+class OwnOrgWorkflowTest(unittest.TestCase):
+    def test_own_org_reusable_workflow_is_allowed(self):
+        """S285: the org's own reusable workflow (root docs-impact.yml) is allowed by the org policy itself."""
+        ref = "AdventureAsia365-Ecosys/AA-Ecosys/.github/workflows/docs-impact.yml@" + "f" * 40
+        self.assertFalse(h.is_third_party(ref))
+        findings, unread = h.allowlist_findings([("w.yml", f"jobs:\n  a:\n    uses: {ref}\n")], [], lambda r: None)
+        self.assertEqual((findings, unread), ([], []))
+
+    def test_other_org_still_governed(self):
+        self.assertTrue(h.is_third_party("someone/else@" + "a" * 40))
