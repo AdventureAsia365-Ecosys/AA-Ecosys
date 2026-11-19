@@ -8,6 +8,9 @@
   `email_verified` gap and the residual `AdminCreateUser` risk. Where the two differ, 0006a wins.
 - **Amended by:** [ADR 0006b](0006b-partner-pool-and-mfa.md) (Accepted 22/10/2026, S247): a partner pool
   with required MFA for agency people, an M2M pool for service calls, Phase 3 moved to the partner pool.
+- **Amended by:** [ADR 0006c](0006c-staff-admin-mfa.md) (Accepted 19/11/2026, S285, AA-1111): administrators enrol TOTP
+  and each staff API refuses an administrator session without it (`amr` claim, one admin-editable switch per app);
+  decision 4's "TOTP used only by break-glass" no longer holds.
 - **Amended by:** [ADR 0019](0019-b2b-only-ecosystem-model.md) (Accepted 2026-11-03, S265, AA-1034): the EXTERNAL traveller clients `tripplanner` and
   `booking-customer` are frozen (ADR 0019 d11). Travellers are guests who return through the tenant's CRM client-portal
   link, so Phase 4 traveller accounts are re-scoped to "access through a CRM link" (AA-1005). Staff gain the d3 roles
