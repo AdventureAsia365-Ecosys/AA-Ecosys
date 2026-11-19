@@ -1033,7 +1033,8 @@ the only home of a person's Booking role and Booking reads it from the token).
   `pricing.approve`, `supplier.activate`, `contract.publish` and `stop_sale.approve` are reserved ahead of use: on
   main today `pricing.write`, `supply.write`, `stop_sale.write` and `b2b_desk.write` still gate the pricing, agency
   pricing, price-adjustment and allotment approvals, supplier activate, contract publish and stop-sale review. Booking
-  splits them out first (the AA-1150 Booking step, then spec task T4.1); no one gets `booking-custom` before that.
+  splits them out first (the AA-1150 Booking step, then spec task T4.1); the Booking resolver of `booking-custom`
+  ships only after that, so until then the group resolves to no role.
 - **Transport (Q2 option A):** CIS publishes the key-only contract view `shared.v_staff_booking_grant(cognito_sub,
   booking_role_code, is_owner, is_business_owner)` over the active directory rows with a Cognito identity; SELECT (and
   USAGE on schema `shared`) to the `booking` role only, mirrored in AA-CIS-Infra `db/owners.yaml` `consumer_grants`

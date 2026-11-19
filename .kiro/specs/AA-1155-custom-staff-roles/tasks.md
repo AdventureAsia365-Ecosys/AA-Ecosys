@@ -24,5 +24,5 @@
   _Requirements: R5.2, R5.4_
 - [ ] T11 AI budget and gateway routes: verified Cognito session, before / after audit of budget changes - repo: AA-CIS-App
   _Requirements: R5.5_
-- [ ] T12 Rollout: Terraform Apply Dev, Migration Apply of CIS 462 and bk-062, schema-reference PR, isolation probe, maker token, deploys, hand step (no one, the E2E maker included, gets booking-custom before the AA-1150 Booking split, T4.1 and T5 are live), pricing E2E - repo: AA-Ecosys, AA-CIS-Infra
+- [ ] T12 Rollout: Terraform Apply Dev, Migration Apply of CIS 462 and bk-062, schema-reference PR, isolation probe, maker token, deploys, hand step (the content + operations staff member gets booking-custom only once the AA-1150 Booking split, T4.1 and T5 are live; the E2E maker's booking-custom group grants nothing before T5), pricing E2E - repo: AA-Ecosys, AA-CIS-Infra
   _Requirements: R1.1, R6.1_

@@ -46,7 +46,8 @@ Booking `PERMISSIONS` on main today. Until the AA-1150 Booking split and task T4
 (supplier, hotel and service activate, contract publish), `stop_sale.write` (stop-sale review and end), `pricing.write`
 (approve of pricing rules, FX rates, cancellation policies, agency pricing and price adjustments) and `b2b_desk.write`
 (allotment approve) still carry those approvals. The seed keeps these write capabilities; the CHECK and the code then
-refuse the new approve capabilities to custom roles. So T5 starts after both, and no one gets `booking-custom` before.
+refuse the new approve capabilities to custom roles. So T5 starts after both; before T5 a `booking-custom` group
+resolves to no role (the E2E maker's included), and the real person gets it only once T5 is live.
 
 ### D5 A custom CIS holder keeps a built-in base role that is never admin
 
