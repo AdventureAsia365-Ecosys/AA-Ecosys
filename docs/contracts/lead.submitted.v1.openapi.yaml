@@ -508,10 +508,11 @@ components:
     PlannerUsage:
       type: object
       additionalProperties: false
-      required: [month, ai_sessions, leads_24h]
+      required: [month, ai_allowance, leads_24h]
       properties:
         month: {type: string, pattern: "^[0-9]{4}-[0-9]{2}$", description: The UTC month counted.}
-        ai_sessions:
+        ai_allowance:
+          description: The planner's AI allowance this month, counted in AI sessions (tp.ai_sessions) - used and quota.
           type: object
           additionalProperties: false
           required: [used, quota]
