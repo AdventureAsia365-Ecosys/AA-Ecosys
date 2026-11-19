@@ -65,6 +65,7 @@
    "route:supplier_bookings",
    "route:suppliers",
    "route:supply",
+   "route:supply_model",
    "route:trip_cases",
    "route:trip_checks"
   ],
@@ -129,6 +130,8 @@
    "route:admin_a4",
    "route:admin_aa_content",
    "route:admin_ai_gateway",
+   "route:admin_ai_gateway_budgets",
+   "route:admin_ai_gateway_spend",
    "route:admin_alert_recipients",
    "route:admin_api_docs",
    "route:admin_atoms",
@@ -152,6 +155,8 @@
    "route:admin_pipeline/billing",
    "route:admin_pipeline/brand_identity",
    "route:admin_pipeline/brands",
+   "route:admin_pipeline/drafts",
+   "route:admin_pipeline/fact_drafts",
    "route:admin_pipeline/metrics",
    "route:admin_pipeline/review",
    "route:admin_pipeline/runs",
@@ -173,6 +178,7 @@
    "route:admin_search",
    "route:admin_segment_research",
    "route:admin_seo",
+   "route:admin_session",
    "route:admin_settings",
    "route:admin_settings_registry",
    "route:admin_supply_content",
@@ -199,6 +205,7 @@
    "route:v1_account_addons",
    "route:v1_account_members",
    "route:v1_account_tour_retirement",
+   "route:v1_account_tripplanner",
    "route:v1_angle_gate",
    "route:v1_content_writing",
    "route:v1_facts",
@@ -271,6 +278,7 @@
    "page:/portal/account/integrations",
    "page:/portal/account/members",
    "page:/portal/account/settings",
+   "page:/portal/account/trip-planner",
    "page:/portal/brand",
    "page:/portal/content",
    "page:/portal/content/publish",
@@ -289,6 +297,7 @@
    "page:/settings",
    "page:/settings/access-log",
    "page:/settings/add-ons",
+   "page:/settings/add-ons/trip-planner",
    "page:/settings/agreements",
    "page:/settings/ai",
    "page:/settings/cancellation",
@@ -345,6 +354,7 @@
    "route:messaging",
    "route:onboarding",
    "route:ops",
+   "route:ops_connection_shares",
    "route:ops_release",
    "route:ops_settings",
    "route:partner_pages",
@@ -358,32 +368,33 @@
    "route:search",
    "route:staff",
    "route:staff_ops",
+   "route:studio_tripplanner",
    "route:support_access",
    "route:tags",
    "route:team",
    "route:travel_ops",
    "route:travellers",
+   "route:tripplanner_module",
    "route:workflows"
   ],
   "tripplanner": [
    "page:/",
    "page:/[tenant]",
+   "page:/[tenant]/[...rest]",
    "page:/[tenant]/plan",
    "page:/[tenant]/plan/shared",
+   "page:/[tenant]/privacy",
+   "page:/[tenant]/terms",
    "page:/[tenant]/tours/[tour]",
    "page:/destinations",
    "page:/destinations/[country]",
    "page:/plan",
    "page:/plan/shared",
    "page:/privacy",
-   "page:/sign-in",
    "page:/terms",
    "page:/tours/[slug]",
-   "page:/trips",
-   "route:bff/auth",
    "route:bff/browse",
    "route:bff/health",
-   "route:bff/me",
    "route:bff/revalidate",
    "route:bff/trip",
    "route:lambda/assembly",
@@ -539,6 +550,10 @@
    "app": "booking",
    "area": "pricing_policy"
   },
+  "booking.policy.child_price_pct_by_service_type": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
   "booking.policy.departure_decision_days_default": {
    "app": "booking",
    "area": "pricing_policy"
@@ -616,6 +631,14 @@
    "area": "pricing_policy"
   },
   "booking.policy.rounding_increment_by_currency": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.season_sync_batch_size": {
+   "app": "booking",
+   "area": "pricing_policy"
+  },
+  "booking.policy.season_sync_read_timeout_seconds": {
    "app": "booking",
    "area": "pricing_policy"
   },
@@ -735,6 +758,18 @@
    "app": "cis",
    "area": "billing"
   },
+  "cis.content.publish_two_person": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.content.t2_rerun_alert_pct": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.content.t2_rerun_monthly_cap_usd": {
+   "app": "cis",
+   "area": "content"
+  },
   "cis.content.trash_retention_days": {
    "app": "cis",
    "area": "retention"
@@ -752,6 +787,14 @@
    "area": "delivery"
   },
   "cis.delivery.ci_time_green_minutes": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.custom_range_cache_entries": {
+   "app": "cis",
+   "area": "delivery"
+  },
+  "cis.delivery.custom_range_max_days": {
    "app": "cis",
    "area": "delivery"
   },
@@ -890,6 +933,34 @@
   "cis.lifecycle.tour_retirement_notice_days": {
    "app": "cis",
    "area": "lifecycle"
+  },
+  "cis.llm.anomaly_baseline_days": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.llm.anomaly_breaker_mode": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.llm.anomaly_floor_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.llm.anomaly_multiple": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.llm.connection_cap_mode": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.llm.idle_after_hours": {
+   "app": "cis",
+   "area": "ai"
+  },
+  "cis.platform.admin_mfa_required": {
+   "app": "cis",
+   "area": "platform"
   },
   "cis.publish.daily_limit_default": {
    "app": "cis",
@@ -1615,7 +1686,27 @@
    "app": "cis",
    "area": "platform"
   },
+  "cis.spend.ce_daily_refresh_enabled": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.ce_daily_refresh_hour_utc": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.ce_stale_after_hours": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.connection_provider_budget_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
   "cis.spend.dfs_call_estimate_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.environment": {
    "app": "cis",
    "area": "spend"
   },
@@ -1656,6 +1747,18 @@
    "area": "spend"
   },
   "cis.spend.research_max_usd_per_month": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.run_cap_adhoc_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.run_cap_eval_usd": {
+   "app": "cis",
+   "area": "spend"
+  },
+  "cis.spend.run_cap_s1_rewrite_usd": {
    "app": "cis",
    "area": "spend"
   },
@@ -1863,6 +1966,10 @@
    "app": "crm",
    "area": "ai"
   },
+  "crm.ai.connection_monthly_cap_usd": {
+   "app": "crm",
+   "area": "ai"
+  },
   "crm.ai.draft_reply_max_tokens": {
    "app": "crm",
    "area": "ai"
@@ -1927,6 +2034,10 @@
    "app": "crm",
    "area": "payments"
   },
+  "crm.platform.admin_mfa_required": {
+   "app": "crm",
+   "area": "platform"
+  },
   "crm.rate.ai_per_minute": {
    "app": "crm",
    "area": "rate_limit"
@@ -1986,6 +2097,10 @@
   "crm.settings.two_person_approval": {
    "app": "crm",
    "area": "platform"
+  },
+  "crm.spend.environment": {
+   "app": "crm",
+   "area": "spend"
   },
   "tripplanner.ai.narration_cache_ttl_hours": {
    "app": "tripplanner",
@@ -2047,11 +2162,31 @@
    "app": "tripplanner",
    "area": "rate"
   },
+  "tripplanner.spend.connection_share_enforce": {
+   "app": "tripplanner",
+   "area": "spend"
+  },
+  "tripplanner.spend.environment": {
+   "app": "tripplanner",
+   "area": "spend"
+  },
+  "tripplanner.spend.near_cap_pct": {
+   "app": "tripplanner",
+   "area": "spend"
+  },
   "tripplanner.spend.plan_chat_monthly_cap_usd": {
    "app": "tripplanner",
    "area": "spend"
   },
   "tripplanner.spend.plan_chat_tenant_monthly_cap_usd": {
+   "app": "tripplanner",
+   "area": "spend"
+  },
+  "tripplanner.spend.stage_cap_compose_usd": {
+   "app": "tripplanner",
+   "area": "spend"
+  },
+  "tripplanner.spend.stage_cap_search_usd": {
    "app": "tripplanner",
    "area": "spend"
   }
