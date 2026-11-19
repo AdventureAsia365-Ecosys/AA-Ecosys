@@ -182,6 +182,8 @@ Limits and recovery:
 - Eight reads in a row with no usable line (task replaced, runner not shipped) stop the tool with exit code 4; the
   files stay in the container until the task is replaced.
 - Long work (more than about 5 minutes) still belongs in a job (`booking.job`, `crm.job`), not in exec.
+- Sentry is off for the script (every service): the runner drops `SENTRY_DSN` and sets `SENTRY_REQUIRED=false`, so an
+  exception in an ad hoc script never shows up as an app issue. Pass `ECSX_KEEP_SENTRY=1` to keep it on.
 
 ## Port-forward for a GUI client (optional)
 

@@ -242,6 +242,36 @@ class LostStartTest(unittest.TestCase):
                 self.assertEqual(L.poll(aws, "t6", 0), (False, 4))
 
 
+class ShrinkingReadTest(unittest.TestCase):
+    """S285: a read whose transcript is unreadable at one range size is retried with half the range."""
+
+    def test_unreadable_large_reads_fall_back_to_smaller_ranges(self):
+        import zlib
+        data = bytes(range(256)) * 12  # 3072 bytes
+
+        class Stub:
+            reads = []
+
+            def exec(self, command, timeout=None):
+                _, _, _, run_id, offset, length, _ = command.split()
+                offset, length = int(offset), int(length)
+                self.reads.append(length)
+                if length > 512 and offset >= 1024:
+                    return "ECSX_CHUNK " + str(offset) + " garbled"
+                part = data[offset:offset + length]
+                state = "rc=0" if offset + len(part) >= len(data) else "run"
+                return (f"ECSX_CHUNK {offset} {len(part)} {len(data)} {state} {zlib.crc32(part):08x} "
+                        f"{base64.b64encode(part).decode() or '-'}\n")
+
+        stub = Stub()
+        stdout = io.TextIOWrapper(io.BytesIO())
+        with mock.patch.dict(os.environ, {"ECSX_READ_CHUNK": "1024", "ECSX_POLL": "0"}), \
+                mock.patch.object(sys, "stdout", stdout), mock.patch.object(time, "sleep", lambda s: None):
+            self.assertEqual(L.poll(stub, "t7", 0), (True, 0))
+        self.assertEqual(stdout.buffer.getvalue(), data)
+        self.assertIn(512, stub.reads)
+
+
 FAKE_AWS = r'''#!/usr/bin/env python3
 """A scripted aws CLI for test_ecsx.py: S3 is a directory, ECS exec runs the command here with /tmp mapped."""
 import os, re, subprocess, sys
@@ -391,6 +421,21 @@ class RunnerCapsTest(unittest.TestCase):
             else:
                 os.environ["ECSX_SCRIPT_TIMEOUT"] = old
 
+
+
+class ScriptEnvSentryTest(unittest.TestCase):
+    """S285: an ad hoc script never reports to the app's Sentry project unless ECSX_KEEP_SENTRY=1."""
+
+    def test_sentry_off_by_default(self):
+        with mock.patch.dict(os.environ, {"SENTRY_DSN": "https://k@o0.ingest.example/1", "SENTRY_REQUIRED": "true"}):
+            env = R.script_env()
+        self.assertNotIn("SENTRY_DSN", env)
+        self.assertEqual(env["SENTRY_REQUIRED"], "false")
+
+    def test_keep_sentry_on_request(self):
+        with mock.patch.dict(os.environ, {"SENTRY_DSN": "https://k@o0.ingest.example/1", "ECSX_KEEP_SENTRY": "1"}):
+            env = R.script_env()
+        self.assertEqual(env["SENTRY_DSN"], "https://k@o0.ingest.example/1")
 
 if __name__ == "__main__":
     unittest.main()
