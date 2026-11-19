@@ -1,0 +1,140 @@
+{
+ "prereg": "w5-s1",
+ "sha256": "d9793c384589509a252f8435b0e4c807b9ff8dbf5fbedc600b80e0be2c19e331",
+ "ok": true,
+ "runs": {
+  "B": "e76e1145-4288-44a8-9f3e-6179a96bb076"
+ },
+ "reruns": [],
+ "rerun_note": null,
+ "decision": {
+  "verdict": "non_inferior",
+  "rule": "non_inferior",
+  "metric": "fail_claims_per_item",
+  "direction": "lower",
+  "paired": 25,
+  "planned": 25,
+  "mean_a": 11.16,
+  "mean_b": 0.76,
+  "mean_diff": -10.4,
+  "se_diff": 2.194691,
+  "upper_bound": -6.790055,
+  "margin_abs": 4.0,
+  "noise_items": 0,
+  "se_noise": 0.0,
+  "allowance": 4.0,
+  "problems": []
+ },
+ "computed": {
+  "item_fail_rate": 0.44,
+  "fail_claims_per_item": 0.76,
+  "fail_classes_per_item": 0.0,
+  "first_pass_yield": 0.56,
+  "hard_stops": 0.0,
+  "cost_per_object_usd": 0.067597,
+  "requests_per_object": 71.0,
+  "writer_requests_per_object": 2.0,
+  "writer_cost_per_object_usd": 0.062119
+ },
+ "targets": [
+  {
+   "metric": "writer_cost_per_object_usd",
+   "target": {
+    "op": "<=",
+    "value": 0.065
+   },
+   "value": 0.062119,
+   "status": "met"
+  },
+  {
+   "metric": "hard_stops",
+   "target": {
+    "op": "<=",
+    "value": 0
+   },
+   "value": 0.0,
+   "status": "met"
+  },
+  {
+   "metric": "serious_error_rate_diff_upper_bound",
+   "target": {
+    "op": "<=",
+    "value": 0.003
+   },
+   "value": null,
+   "status": "pending"
+  },
+  {
+   "metric": "day_loss",
+   "target": {
+    "op": "<=",
+    "value": 0
+   },
+   "value": null,
+   "status": "pending"
+  }
+ ],
+ "cost": {
+  "stage": "adhoc_aa1051",
+  "runs": [
+   {
+    "run_id": "e76e1145-4288-44a8-9f3e-6179a96bb076",
+    "writer": "a1",
+    "verdict": "informative",
+    "stop_reason": "completed",
+    "prereg": {
+     "id": "w5-s1",
+     "arm": "B",
+     "sha256": "d9793c384589509a252f8435b0e4c807b9ff8dbf5fbedc600b80e0be2c19e331",
+     "workflow": "s1"
+    },
+    "ledger_usd": 3.108178,
+    "ledger_rows": 4546,
+    "by_real_stage_usd": {
+     "adhoc_aa1048": 1.395629,
+     "s1_generate": 1.645916,
+     "s1_grounding": 0.066633
+    },
+    "objects": 25,
+    "all_in_cost_per_object_usd": 0.124327,
+    "attributed_cost_per_object_usd": {
+     "n": 25,
+     "median": 0.067597,
+     "mean": 0.078371,
+     "max": 0.15638
+    },
+    "requests_per_object": {
+     "n": 25,
+     "median": 71.0,
+     "mean": 73.12,
+     "max": 130.0
+    },
+    "writer_requests_per_object": {
+     "n": 25,
+     "median": 2.0,
+     "mean": 2.44,
+     "max": 3.0
+    },
+    "writer_cost_per_object_usd": {
+     "n": 25,
+     "median": 0.062119,
+     "mean": 0.068502,
+     "max": 0.147967
+    },
+    "unattributed": null
+   }
+  ],
+  "total_usd": 3.108178
+ },
+ "judge": {
+  "model_key": "gpt-6-luna-openai",
+  "connection": "openai-direct",
+  "instrument": "aa1048-two-step-v7",
+  "advisory": true
+ },
+ "advisory": "AA-1048 v7 gated run 46d645c4 was no_go by one stored violation (false positives dropped 68 %, stored violations kept 88 % against the 90 % bar; precision 0.73, recall 0.88); the tech lead allowed it as an advisory W5 judge (S283)",
+ "d12": {
+  "workflow_cap_usd": 8.0,
+  "total_cap_usd": 33.0
+ }
+}
