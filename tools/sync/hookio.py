@@ -61,6 +61,17 @@ class Timer:
         return round((time.perf_counter() - self.start) * 1000, 1)
 
 
+def wall_ms(env: dict | None = None, now: float | None = None) -> float | None:
+    """Milliseconds since the shell wrapper started (AA_SYNC_T0 = bash $EPOCHREALTIME), interpreter start included.
+    None when the wrapper did not set it (a direct `python3 <hook>.py` run)."""
+    raw = ((env if env is not None else os.environ).get("AA_SYNC_T0") or "").replace(",", ".")
+    try:
+        start = float(raw)
+    except ValueError:
+        return None
+    return round(((now if now is not None else time.time()) - start) * 1000, 1)
+
+
 def read_event(stream=None) -> dict:
     """The hook JSON from stdin; {} when it is missing or not an object."""
     try:

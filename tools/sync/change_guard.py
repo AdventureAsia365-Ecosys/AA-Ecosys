@@ -47,8 +47,8 @@ ISSUE = re.compile(r"(?i)\b(aa)-(\d+)\b")
 REFS_LINE = re.compile(r"(?im)^\s*refs\s+(.+)$")
 NOTE_FILE = re.compile(r"^(?:.*/)?docs/implementation-notes/(?P<id>[A-Za-z]+-\d+)(?:-[^/]*)?\.md$")
 WAIVER = {
-    "test": re.compile(r"(?im)^[\s>*_`-]*no test needed[*_`]*\s*:\s*(?P<reason>\S.{2,})$"),
-    "note": re.compile(r"(?im)^[\s>*_`-]*no note needed[*_`]*\s*:\s*(?P<reason>\S.{2,})$"),
+    "test": re.compile(r"(?im)^[\s>*_`-]*no test needed[*_`]*\s*:[*_`]*\s*(?P<reason>(?!<)\S.{2,})$"),
+    "note": re.compile(r"(?im)^[\s>*_`-]*no note needed[*_`]*\s*:[*_`]*\s*(?P<reason>(?!<)\S.{2,})$"),
 }
 IGNORED = re.compile(r"(?:^|/)(?:\.tmp-session|node_modules|\.venv|venv|__pycache__|\.next|dist|build)/")
 TEST = re.compile(
@@ -274,6 +274,7 @@ def read_log(path: Path, since: str = "") -> list[dict]:
 
 def summarize_log(rows: list[dict]) -> dict:
     events: dict[str, list[float]] = {}
+    walls: dict[str, list[float]] = {}
     errors = 0
     lane_agents: dict[str, set] = {}
     would: dict[str, int] = {}
@@ -284,10 +285,14 @@ def summarize_log(rows: list[dict]) -> dict:
             events.setdefault(ev, []).append(float(r["latency_ms"]))
         else:
             events.setdefault(ev, [])
+        if isinstance(r.get("wall_ms"), (int, float)):
+            walls.setdefault(ev, []).append(float(r["wall_ms"]))
         if r.get("error"):
             errors += 1
         if r.get("agent") and r.get("agent") != "main" and r.get("repo_kind") == "worktree":
             lane_agents.setdefault(ev, set()).add(r["agent"])
+        if ev == "PostToolUse" and r.get("would") == "remind":
+            would["post-edit"] = would.get("post-edit", 0) + 1
         for c in r.get("checks") or []:
             for f in c.get("findings") or []:
                 would[f] = would.get(f, 0) + 1
@@ -299,6 +304,9 @@ def summarize_log(rows: list[dict]) -> dict:
         "error_rate": round(errors / len(rows), 4) if rows else 0.0,
         "latency_ms": {ev: {"n": len(v), "p50": percentile(v, 50), "p95": percentile(v, 95)}
                        for ev, v in sorted(events.items())},
+        # wall_ms (from the shell wrapper's start, interpreter included) is what M2 / M3 compare with
+        "wall_ms": {ev: {"n": len(v), "p50": percentile(v, 50), "p95": percentile(v, 95)}
+                    for ev, v in sorted(walls.items())},
         "lane_agents": {ev: len(a) for ev, a in sorted(lane_agents.items())},
         "would_remind": would,
         "waivers": waivers,
@@ -372,8 +380,9 @@ def main(argv: list[str] | None = None) -> int:
         else:
             print(f"events {out['events']}, errors {out['errors']} ({out['error_rate']:.2%})")
             for ev, v in out["latency_ms"].items():
-                print(f"  {ev}: n={v['n']} p50={v['p50']} ms p95={v['p95']} ms, lane agents "
-                      f"{out['lane_agents'].get(ev, 0)}")
+                w = out["wall_ms"].get(ev, {})
+                print(f"  {ev}: n={v['n']} p50={v['p50']} ms p95={v['p95']} ms (in script); wall p50={w.get('p50')} "
+                      f"p95={w.get('p95')} ms; lane agents {out['lane_agents'].get(ev, 0)}")
             print(f"would remind: {out['would_remind'] or 'none'}; waivers: {out['waivers'] or 'none'}")
         return 0
     out = uncovered_commits(Path(args.repo_dir).resolve(), args.since, args.ref)

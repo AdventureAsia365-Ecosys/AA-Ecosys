@@ -217,6 +217,7 @@ def main() -> int:
         rec = {"event": EVENT, "hook": "sync_post_edit", "mode": m, "agent": hookio.agent_key(data),
                "error": f"{type(e).__name__}: {e}"[:300]}
     rec["latency_ms"] = round((time.perf_counter() - _T0) * 1000, 1)
+    rec["wall_ms"] = hookio.wall_ms()
     hookio.log_event(rec)
     if text and hookio.speaks(m):
         print(hookio.context_output(EVENT, text))

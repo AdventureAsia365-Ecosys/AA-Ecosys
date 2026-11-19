@@ -46,6 +46,8 @@ on:
       - ".claude/**/*.md"
       - ".claude/hooks/**"
       - ".claude/settings.json"
+      # AA-1136: the sync hooks library (its tests sit in .claude/hooks, step "Claude hook tests")
+      - "tools/sync/**"
       - "tools/workflows/**"
       - "tools/docs/**"
       # AA-1132: the sparse cone of the nightly repo facts read (test_repo_facts.py checks it)

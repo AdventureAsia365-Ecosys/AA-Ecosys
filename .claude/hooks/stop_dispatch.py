@@ -85,6 +85,7 @@ def main() -> int:
         rec = {"event": str(data.get("hook_event_name") or "Stop"), "hook": "stop_dispatch", "mode": m,
                "agent": hookio.agent_key(data), "error": f"{type(e).__name__}: {e}"[:300]}
     rec["latency_ms"] = round((time.perf_counter() - _T0) * 1000, 1)
+    rec["wall_ms"] = hookio.wall_ms()
     hookio.log_event(rec)
     if text:
         print(hookio.clip(text), file=sys.stderr)
