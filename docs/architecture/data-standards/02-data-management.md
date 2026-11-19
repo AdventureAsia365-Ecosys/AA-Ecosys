@@ -152,7 +152,7 @@ These meanings are binding. A new column MUST NOT reuse a name below with a diff
 | `(iss, sub)` | Cognito identity of a person (ADR 0006). | Never an email as identity. |
 | `idempotency_key` | Unique per producer + contract. Stored in the consumer inbox `UNIQUE (source, contract, idempotency_key)`. | Never a BIGSERIAL cursor alone (contracts rule 4). |
 | version key | `NNN` (CIS), `tp-NNN`, `bk-NNN`, `crm-NNN` in `shared.schema_versions`. | CIS has duplicate 007/008/019 numbers: resolved in the registry, not renumbered (N5). |
-| job kind prefix | `<prefix>_<verb>`, e.g. `bk_inquiry_pull`. Recorded in `owners.yaml` (X6). | — |
+| job kind prefix | `<prefix>_<verb>`, e.g. `bk_tour_lifecycle_pull`. Recorded in `owners.yaml` (X6). | — |
 | `app` (LLM ledger) | The calling app on `shared.llm_call_log`. Today it is in `quality_signal.app` (jsonb); it becomes a v2 column (AA-804). | Filter on the column once it exists. |
 | `master_status` | Gate on `published_tours` that controls atom visibility (`acp_contract.v_active_tour_atoms`). | Read atoms through the view, not `tour_atoms`. |
 

@@ -76,6 +76,38 @@ class CollectTest(unittest.TestCase):
         self.assertEqual(out["2099-10"]["period_end_exclusive"], "2099-11-01")
         self.assertEqual(db.calls[0][1], (date(2099, 9, 1), date(2099, 10, 1)))
 
+    def test_every_month_carries_an_acc1_line(self):
+        # AA-1134: acc1 serves Bedrock first (AA-1095); its Cost Explorer is outside the CIS client, so the line is
+        # the gateway estimate (from cost_by_app, or from the month's ledger rows when cost_by_app has no acc1 key).
+        db = FakeDB({
+            c.PUBLISHED_TOURS_SQL: [{"published_tours": 1, "published_tours_live": 1}],
+            c.LLM_BY_STAGE_SQL: [
+                {"app": "cis", "stage": "s1_rewrite", "role": "writer", "account": "acc1", "calls": 2,
+                 "cost_usd": Decimal("0.5000")},
+                {"app": "cis", "stage": "judge", "role": "judge", "account": "acc1", "calls": 1,
+                 "cost_usd": Decimal("0.2500")},
+                {"app": "cis", "stage": "s1_rewrite", "role": "writer", "account": "acc3", "calls": 1,
+                 "cost_usd": Decimal("9.0000")}],
+        })
+        answers = {"2099-09": {"llm_satellites": {"acc3": {"ce_bedrock_usd": 1.0}}},
+                   "2099-10": {"llm_satellites": {"acc1": {"account_id": "x", "ce_bedrock_usd": None,
+                                                           "llm_log_estimate_usd": 3.5}}}}
+
+        async def cost_fn(pool, month, *, refresh_if_stale):
+            return {"month": month, "apps": [], "totals": {}, "refresh": {"stale": False}, **answers[month]}
+
+        out = asyncio.run(c.collect_cis(db, ["2099-09", "2099-10"], date(2099, 11, 2), cost_fn=cost_fn))
+        sep = out["2099-09"]["platform_cost"]["llm_satellites"]
+        self.assertEqual(sep["acc1"]["llm_log_estimate_usd"], 0.75)       # from the ledger rows
+        self.assertIsNone(sep["acc1"]["ce_bedrock_usd"])
+        self.assertIn("--acc1-usd", sep["acc1"]["ce_source"])
+        self.assertEqual(sep["acc3"], {"ce_bedrock_usd": 1.0})
+        octo = out["2099-10"]["platform_cost"]["llm_satellites"]["acc1"]
+        self.assertEqual(octo["llm_log_estimate_usd"], 3.5)               # cost_by_app's own estimate wins
+        report = m.section_totals(out["2099-10"]["platform_cost"], out["2099-09"]["platform_cost"])
+        self.assertTrue(any(ln.startswith("| acc1 (Bedrock LLM, first route) | n/a |") and "3.50" in ln
+                            for ln in report))
+
     def test_refresh_only_for_a_stale_month_and_only_when_asked(self):
         db = FakeDB({c.PUBLISHED_TOURS_SQL: [{"published_tours": 0, "published_tours_live": 0}],
                      c.LLM_BY_STAGE_SQL: []})

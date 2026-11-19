@@ -561,7 +561,7 @@ use the producer's BIGSERIAL id as the only cursor (anti-join against the inbox,
 selects only the rows of its own contract (ADR 0004a decision 4, `booking.v_supply_outbox`, planned). Payloads carry
 ids, not PII, wherever the consumer can resolve the id; every event has an `idempotency_key`; the consumer
 inbox has `UNIQUE (source, contract, idempotency_key)` and processes each key once; the pull job kind is
-`<prefix>_<event>_pull` (e.g. `bk_inquiry_pull`). Status flows back as the consumer's own event, never a
+`<prefix>_<event>_pull` (e.g. `bk_tour_lifecycle_pull`). Status flows back as the consumer's own event, never a
 write into the producer's schema.
 *Why:* outbox → pull → inbox is the approved transport (ADR 0001 decision 6). *Enforced:* review; Booking
 inquiry intake tests.

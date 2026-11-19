@@ -32,6 +32,11 @@ Both ways:
                     the CIS client reads acc2 and acc3 only). Shown as its own row and added to the grand total.
                     Without it the totals say plainly that the management account is not included.
   --mgmt-prev-usd N the same for the month before (optional; enables the change column and a like-for-like line 2).
+  --acc1-usd N      acc1's Bedrock spend of the report month from acc1's own Cost Explorer (the one-line read in
+                    docs/ops/cost/README.md, profile pqnghiep-admin). acc1 serves Bedrock first since S278 (AA-1095)
+                    but the CIS client reads acc2 and acc3 only, so the acc1 row shows the gateway estimate alone
+                    without it. A comparison line like acc3: the acc1 calls are already in the LLM total by app.
+  --acc1-prev-usd N the same for the month before (optional; enables the change column of the acc1 row).
   --budget-usd N    the acc2 monthly account budget (docs/ops/finops.md, Budgets) for the budget line.
   --out FILE        write the Markdown there (default: stdout).
 
@@ -172,15 +177,31 @@ def apply_crm(cost: dict[str, Any], crm_month: Optional[dict[str, Any]]) -> dict
     return out
 
 
-# acc3 is the only LLM satellite (AA-998). The retired fallback account gets a row only while a month's JSON still
-# carries it (key "retired" in cost_by_app since AA-998, "acc1" in older exports), so the first report after the
-# retirement still compares with the month before.
-SATELLITES = (("acc3", "acc3 (LLM satellite)"), ("retired", "Retired account (former LLM fallback)"),
-              ("acc1", "acc1 (retired, AA-998)"))
+# The LLM accounts in route order (AA-1095, S278): acc1 serves Bedrock first, acc3 is the fallback behind it. Both
+# always get a row. cost_by_app carries acc1 as a registry satellite (gateway estimate only: its Cost Explorer is
+# outside the CIS client, --acc1-usd gives it). The AA-998 retired fallback account ("retired") keeps a row only while
+# a month's JSON still carries it. AA-1134: acc1 was labelled "retired" here after AA-998; it is live again.
+SATELLITES = (("acc1", "acc1 (Bedrock LLM, first route)"), ("acc3", "acc3 (Bedrock LLM fallback)"),
+              ("retired", "Retired account (former LLM fallback)"))
+ALWAYS_SHOWN = ("acc1", "acc3")
+ACC1_SOURCE = "acc1 Cost Explorer (--acc1-usd, profile pqnghiep-admin)"
 
 
 def satellite_rows(cur: dict[str, Any], prev: dict[str, Any]) -> list[tuple[str, str]]:
-    return [(n, label) for n, label in SATELLITES if n == "acc3" or n in cur or n in prev]
+    return [(n, label) for n, label in SATELLITES if n in ALWAYS_SHOWN or n in cur or n in prev]
+
+
+def apply_acc1(cost: Optional[dict[str, Any]], usd: Optional[float]) -> Optional[dict[str, Any]]:
+    """A copy of ``cost`` whose acc1 satellite carries the Cost Explorer amount read on acc1 (--acc1-usd). The totals
+    do not change: the acc1 calls are already in ai_usd by app (billed outside acc2), as for acc3."""
+    if cost is None or usd is None:
+        return cost
+    out = copy.deepcopy(cost)
+    sats = out.setdefault("llm_satellites", {})
+    row = sats.setdefault("acc1", {"ce_bedrock_usd": None, "llm_log_estimate_usd": None})
+    row["ce_bedrock_usd"] = round(float(usd), 4)
+    row["ce_source"] = ACC1_SOURCE
+    return out
 
 
 def grand_total(cost: Optional[dict[str, Any]], mgmt_usd: Optional[float]) -> Optional[float]:
@@ -207,7 +228,11 @@ def section_totals(cur: dict[str, Any], prev: Optional[dict[str, Any]], mgmt_usd
         p = (sat_p.get(name) or {}).get("ce_bedrock_usd") if prev else None
         est = (sat_c.get(name) or {}).get("llm_log_estimate_usd")
         ch, _ = change(c, p)
-        lines.append(f"| {label} | {money(c)} | {money(p)} | {ch} | Bedrock from Cost Explorer; gateway estimate {money(est)} |")
+        if name == "acc1" and c is None:
+            src = "not read (no --acc1-usd: acc1 is outside the CIS Cost Explorer client)"
+        else:
+            src = "Bedrock from Cost Explorer"
+        lines.append(f"| {label} | {money(c)} | {money(p)} | {ch} | {src}; gateway estimate {money(est)} |")
     if mgmt_usd is not None:
         ch, _ = change(mgmt_usd, mgmt_prev_usd)
         lines.append(f"| {MGMT_LABEL} | {money(mgmt_usd)} | {money(mgmt_prev_usd)} | {ch} | "
@@ -281,6 +306,9 @@ def section_mom(months: list[str], costs: dict[str, dict[str, Any]]) -> list[str
                      [(costs[m].get("totals") or {}).get("total_usd") for m in months]))
     lines.append(row("AWS acc2", [(costs[m].get("aws") or {}).get("total_usd") for m in months]))
     lines.append(row("LLM, all apps (gateway estimate)", [(costs[m].get("totals") or {}).get("ai_usd") for m in months]))
+    lines.append(row("acc1 Bedrock (gateway estimate)",
+                     [((costs[m].get("llm_satellites") or {}).get("acc1") or {}).get("llm_log_estimate_usd")
+                      for m in months]))
     lines.append(row("acc3 Bedrock (Cost Explorer, net of credits)",
                      [((costs[m].get("llm_satellites") or {}).get("acc3") or {}).get("ce_bedrock_usd") for m in months]))
     svc = {m: services_total(costs[m]) for m in months}
@@ -569,6 +597,8 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap.add_argument("--prev-units")
     ap.add_argument("--mgmt-usd", type=float)
     ap.add_argument("--mgmt-prev-usd", type=float)
+    ap.add_argument("--acc1-usd", type=float)
+    ap.add_argument("--acc1-prev-usd", type=float)
     ap.add_argument("--budget-usd", type=float)
     ap.add_argument("--out")
     ap.add_argument("--print-sql", action="store_true", help="print the read-only LLM-by-stage SQL and exit")
@@ -578,10 +608,14 @@ def main(argv: Optional[list[str]] = None) -> int:
         return 0
     if a.mgmt_prev_usd is not None and a.mgmt_usd is None:
         ap.error("--mgmt-prev-usd needs --mgmt-usd")
+    if a.acc1_prev_usd is not None and a.acc1_usd is None:
+        ap.error("--acc1-prev-usd needs --acc1-usd")
     if a.bundle:
         if a.current or a.previous or a.llm_csv:
             ap.error("--bundle replaces --current, --previous and --llm-csv")
         kw = from_bundles(a)
+        kw["cur"] = apply_acc1(kw["cur"], a.acc1_usd)
+        kw["prev"] = apply_acc1(kw["prev"], a.acc1_prev_usd)   # the month-over-month rows use the estimates only
         text = build(kw.pop("cur"), kw.pop("prev"), kw.pop("llm_rows"), kw.pop("units"), budget_usd=a.budget_usd,
                      mgmt_usd=a.mgmt_usd, mgmt_prev_usd=a.mgmt_prev_usd, **kw)
     else:
@@ -589,7 +623,7 @@ def main(argv: Optional[list[str]] = None) -> int:
             ap.error("--current or --bundle is required (or use --print-sql)")
         if a.booking_bundle or a.crm_bundle or a.month:
             ap.error("--booking-bundle, --crm-bundle and --month need --bundle")
-        cur, prev = load_json(a.current), load_json(a.previous)
+        cur, prev = apply_acc1(load_json(a.current), a.acc1_usd), apply_acc1(load_json(a.previous), a.acc1_prev_usd)
         units = json.loads(Path(a.units).read_text(encoding="utf-8")) if a.units else None
         llm_rows = read_llm_csv(a.llm_csv) if a.llm_csv else None
         prev_units = load_prev_units(a.prev_units, prev["month"]) if a.prev_units and prev else None
