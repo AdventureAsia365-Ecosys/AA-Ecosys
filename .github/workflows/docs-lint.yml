@@ -25,6 +25,9 @@ name: Docs lint
 #     section that changed turns the check red until the module owner re-pins), tiers and the allowlist
 #   - the ECS exec wrapper tools/ecs (AA-1024 G3) and the GIT_DIR isolation of the pre-push hook (S272)
 #   - the generated docs blocks match the facts snapshot, and the docs <-> code map is valid (AA-1132)
+#   - the spec tools (AA-1137): tools/spec/trace_check.py tests, the lane workflow tests (tools/workflows), the
+#     Spec trace workflow's own guard, and every file under .kiro/specs checked for literal resource IDs as an error
+#     (specs ship in the public app repos); the trace check of a PR's spec itself runs in spec-trace.yml
 #   - the new-project kit sources (AA-1103): every file the public project template copies (tools/project-kit/
 #     kit-sources.txt) has balanced kit markers and, after the kit transform, no project name, key or account number
 # Secrets: gitleaks runs on every PR (any path) in secret-scan.yml and nightly over the full history in
@@ -43,6 +46,9 @@ on:
       - "docs/**"
       - "skill/**"
       - ".kiro/steering/**"
+      - ".kiro/specs/**"
+      - "tools/spec/**"
+      - ".github/workflows/spec-trace.yml"
       - ".claude/**/*.md"
       - ".claude/hooks/**"
       - ".claude/settings.json"
@@ -145,6 +151,21 @@ jobs:
           bash .claude/hooks/test_subagent_mcp_guardrails.sh
           bash .claude/hooks/test_kit_core_edit_guard.sh
           python -m unittest discover -s .claude/hooks -p 'test_*.py'
+
+      # AA-1137: the spec trace checker (fixture specs in temporary folders, the committed AA-1137 spec and the three
+      # templates under skill/aa-linear-issue/templates/spec/ as passing fixtures) and lane.js against a scripted agent().
+      # Offline, stdlib + the node of the runner image.
+      - name: Spec tools tests
+        if: ${{ !cancelled() }}
+        run: |
+          python -m unittest discover -s tools/spec -p 'test_*.py'
+          node --test tools/workflows/test_lane.cjs
+
+      # AA-1137: specs ship in the public app repos (DM-6.10), so a literal account or resource ID under .kiro/specs
+      # fails here, while docs pages of this repo only warn (the step below).
+      - name: Spec files carry no resource ID
+        if: ${{ !cancelled() }}
+        run: python tools/docs/check_docs_text.py resource-ids --mode error --scope .kiro/specs
 
       # AA-1103: the files the public project template copies stay generic. The template repo's own CI compares each
       # copy with tools/project-kit/kit_transform.py of its source; this check fails first, before a release copies a

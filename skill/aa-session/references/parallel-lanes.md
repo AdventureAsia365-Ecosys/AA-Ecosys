@@ -15,6 +15,10 @@ chạy lane; luật hook subagent ở `SKILL.md` mục "Điều phối và subag
 1. **Gọi Workflow** với script `tools/workflows/lane.js`, `args` là JSON viết inline (không chuỗi giữ chỗ):
    `{"key": "<lane>", "goal": "AA-xxx: <lát việc + đường dẫn plan>", "session": "S<nnn>", "date": "<dd/mm/yyyy>",
    "migStart": {"cis": <N>}, "lenses": [...]}`. `migStart` (gợi ý số migration theo owner) và `lenses` không bắt buộc.
+   Issue có spec (AA-1137): thêm `"spec": ".kiro/specs/AA-<n>-<slug>"` (đường dẫn từ gốc workspace) và
+   `"tasks": ["T1", "T2"]` (một nhóm task, thường của một repo). `lane_start_guard.py` khi đó kiểm spec `approved` /
+   `in-progress`, task có và chưa tick, không lane khác trong phiên giữ task đó (`.tmp-session/spec-claims.json`);
+   lane trả thêm `trace[]` và có thêm lens review `spec`. Spec ở repo gốc thì điều phối tick task trong root PR.
 2. **Implement:** agent lane làm trong worktree đường dẫn tuyệt đối của riêng nó, chỉ commit local.
 3. **Review:** 2 reviewer độc lập theo lens — mặc định (a) đúng + khớp spec, (b) bảo mật + an toàn dữ liệu. Đổi
    `lenses` khi lane có rủi ro khác (ví dụ UI kit, hiệu năng).

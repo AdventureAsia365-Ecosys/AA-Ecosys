@@ -127,6 +127,81 @@ class LaneStartGuardTest(unittest.TestCase):
         (self.root / g.PLAN).write_text("{not json")
         self.assertIn("cannot read", self.check({"scriptPath": LANE, "args": args()}))
 
+    # --- AA-1137 spec gate ---------------------------------------------------------------------------------------
+
+    def spec(self, status: str = "approved", tasks: str | None = None, name: str = "AA-900-demo") -> str:
+        d = self.root / ".kiro/specs" / name
+        d.mkdir(parents=True, exist_ok=True)
+        approved = "approved_at: 2026-11-07" if status != "draft" else ""
+        (d / "requirements.md").write_text(
+            f"---\nid: spec-AA-900\nissue: AA-900\nstatus: {status}\nowner_repo: AA-Example\nkind: quick\n"
+            f"{approved}\n---\n\n# Demo\n\n- R1.1 WHEN a bell rings THE SYSTEM SHALL count it.\n"
+            "  Verify: tests/unit/test_bell.py\n", encoding="utf-8")
+        (d / "tasks.md").write_text(tasks if tasks is not None else (
+            "- [ ] T1 Count rings\n  _Requirements: R1.1_\n- [ ] T2 Show the count\n  _Requirements: R1.1_\n"
+            "- [x] T3 Done already\n  _Requirements: R1.1_\n"), encoding="utf-8")
+        return f".kiro/specs/{name}"
+
+    def test_lane_without_spec_is_gated_as_before(self):
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": args()}))
+        self.assertFalse((self.root / g.CLAIMS).exists())
+
+    def test_spec_lane_passes_and_claims_its_tasks(self):
+        sp = self.spec()
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": args(spec=sp, tasks=["T1"])}))
+        claims = json.loads((self.root / g.CLAIMS).read_text())
+        self.assertEqual(claims["spec-AA-900"]["T1"], {"session": "S271", "key": "l1-demo"})
+        # the same lane relaunching (resume) still passes; an absolute spec path works too
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": args(spec=str(self.root / sp), tasks=["T1"],
+                                                                          resume=True)}))
+
+    def test_another_lane_cannot_take_a_claimed_task(self):
+        sp = self.spec()
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": args(spec=sp, tasks=["T1"])}))
+        msg = self.check({"scriptPath": LANE, "args": args(key="l2-other", spec=sp, tasks=["T2", "T1"])})
+        self.assertIn("already holds T1 (lane l1-demo)", msg)
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": args(key="l2-other", spec=sp, tasks=["T2"])}))
+        # a claim of an earlier session is stale
+        self.plan({"session": "S272", "issues": [{"id": "AA-900", "session": "S272"}]})
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": args(key="l3", session="S272", spec=sp,
+                                                                          tasks=["T1"])}))
+        # an explicit skip passes the spec gate only
+        self.plan({"session": "S271", "issues": [{"id": "AA-900", "session": "S271"}]})
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": args(key="l4", spec=sp, tasks=["T1"],
+                                                                          spec_gate="skip: split the task")}))
+        self.assertIn("spec skip l4", (self.root / g.HITS_LOG).read_text())
+
+    def test_spec_status_and_task_state(self):
+        sp = self.spec(status="draft")
+        self.assertIn("status 'draft'", self.check({"scriptPath": LANE, "args": args(spec=sp, tasks=["T1"])}))
+        sp = self.spec(status="in-progress")
+        self.assertIsNone(self.check({"scriptPath": LANE, "args": args(spec=sp, tasks=["T1"])}))
+        self.assertIn("no task T9", self.check({"scriptPath": LANE, "args": args(spec=sp, tasks=["T9"])}))
+        self.assertIn("T3 [x]", self.check({"scriptPath": LANE, "args": args(spec=sp, tasks=["T3"])}))
+
+    def test_bad_spec_args(self):
+        sp = self.spec()
+        self.assertIn("no spec", self.check({"scriptPath": LANE, "args": args(tasks=["T1"])}))
+        self.assertIn("non-empty list", self.check({"scriptPath": LANE, "args": args(spec=sp)}))
+        self.assertIn("non-empty list", self.check({"scriptPath": LANE, "args": args(spec=sp, tasks="T1")}))
+        self.assertIn("does not exist", self.check({"scriptPath": LANE,
+                                                    "args": args(spec=".kiro/specs/AA-1-x", tasks=["T1"])}))
+
+    def test_broken_spec_is_refused(self):
+        sp = self.spec(tasks="- [ ] T1 Count rings\n  _Requirements: R7.7_\n")
+        msg = self.check({"scriptPath": LANE, "args": args(spec=sp, tasks=["T1"])})
+        self.assertIn("fails tools/spec/trace_check.py", msg)
+        self.assertIn("R7.7", msg)
+
+    def test_claim_is_written_only_when_every_gate_passes(self):
+        sp = self.spec()
+        self.assertIn("MemAvailable", self.check({"scriptPath": LANE, "args": args(spec=sp, tasks=["T1"])},
+                                                 avail_mib=1000))
+        self.assertFalse((self.root / g.CLAIMS).exists())
+        # a replay does not re-run the spec gate (its tasks were claimed at the first launch)
+        self.assertIsNone(self.check({"scriptPath": LANE, "resumeFromRunId": "wf_x",
+                                      "args": args(spec=sp, tasks=["T3"])}))
+
     def test_hook_exit_codes(self):
         env = dict(os.environ, CLAUDE_PROJECT_DIR=str(self.root))
         sh = HERE / "lane-start-guard.sh"

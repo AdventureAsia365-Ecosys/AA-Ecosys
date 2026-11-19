@@ -53,6 +53,30 @@ tính bằng phiên (kèm trần USD nếu có chạy trả phí), phạm vi, 3 
 ảnh hưởng tới tài liệu và chi phí. Checklist đầy đủ là [mẫu Definition of Ready](../../templates/definition-of-ready.md).
 Nếu việc vượt appetite, dừng lại và cắt bớt hoặc tách ra; không làm tiếp.
 
+## Spec
+
+Spec là danh sách yêu cầu đã thống nhất của một issue, theo định dạng của Kiro, nằm ở repo sở hữu công việc:
+`.kiro/specs/AA-<n>-<slug>/` (việc nhiều repo: repo gốc, mỗi task ghi repo của nó). Mẫu nằm ở
+`skill/aa-linear-issue/templates/spec/`; `tools/spec/trace_check.py` giữ luật định dạng và kiểm chúng.
+
+- **Spec theo rủi ro.** Feature spec (requirements, design, tasks) cho issue có migration hay đổi schema, auth hay
+  quyền, hoặc việc nhiều repo; quick spec (requirements, tasks) cho issue thường; bugfix spec (hành vi hiện tại, hành
+  vi đúng, hành vi giữ nguyên, tasks) cho lỗi; chore nhỏ không cần spec.
+- **Requirement** là tiêu chí EARS có mã (`R1.1 WHEN ... THE SYSTEM SHALL ...`), mỗi tiêu chí có một dòng Verify nêu
+  test hoặc bước kiểm live. **Task** (`T1 ...`) ghi các requirement nó giao; một task là xong, chuyển sang issue khác
+  kèm lý do, hoặc bỏ kèm lý do.
+- **Duyệt.** Chốt danh sách issue của phiên là duyệt requirement trong spec của chúng. Tech lead chỉ duyệt riêng các
+  quyết định thiết kế mà agent đánh dấu khó đảo ngược (ranh giới, grant, xoá dữ liệu, mức ADR), trên trang quyết định
+  của phiên. Task không cần duyệt.
+- **Linear giữ vấn đề và phạm vi.** Issue có spec ghi mã requirement và đường dẫn spec làm các dòng Done-when, không
+  chép lại tiêu chí lần thứ hai. Tiêu chí đổi sau khi đã bắt đầu giữ nguyên mã kèm ghi chú "amended", một dòng Changed
+  trong implementation note và một comment Linear.
+- **Spec đóng băng khi đã implemented.** Sau khi PR cuối merge, spec là bản ghi điều đã thống nhất, được lưu trữ lúc
+  chốt phiên; thay đổi hành vi về sau mở spec mới ghi spec nó thay thế. Sự thật hiện tại vẫn nằm ở CONTEXT.md và các
+  khối tài liệu sinh tự động.
+- **Check Spec trace** chạy trên mọi PR của repo gốc (các repo ứng dụng ở đợt sau) và chỉ đỏ khi issue của PR có spec
+  vi phạm luật.
+
 ## Giữ gói miễn phí
 
 Linear chạy gói miễn phí, có trần số issue đang mở của cả workspace, và không nâng gói.

@@ -45,6 +45,9 @@ hold in every session; this page does not repeat them.
    access review join the session list (data standards C4.3, C8, DM-8.10).
 5. **Update the master plan before any lane starts.** Once the tech lead confirms the list, the tracker shows this
    session's issues, then lanes open.
+6. **The list approves the specs.** Confirming the list approves the requirements of each listed issue's spec (see
+   [Specs](planning-and-issues.md#specs)); design decisions flagged hard to reverse go on the session decision page
+   for the tech lead.
 
 ## During the session
 

@@ -1,0 +1,86 @@
+name: Spec trace
+# AA-1137: the trace check of Kiro-compatible specs (.kiro/specs/AA-<n>-<slug>/: requirements.md, design.md,
+# tasks.md; format and rules: tools/spec/trace_check.py, templates: skill/aa-linear-issue/templates/spec/).
+# It reads the issue keys of the PR title and body (in a merge queue: the commit messages of the group) and the specs
+# the change touches, then checks each spec found: every task names an existing requirement, every requirement has a
+# test or a live step, no account or resource ID, and a spec implemented at the base stays frozen.
+# It blocks ONLY when one of those issues has a spec or a spec changed; any other PR passes ("No spec").
+#
+# Reusable: the app repos call it with `uses: AdventureAsia365-Ecosys/AA-Ecosys/.github/workflows/spec-trace.yml@<sha>`
+# from their own pull_request / merge_group workflow (next wave). A caller's specs are read from its checkout, and the
+# root repo's specs (cross-repo work) from a sparse checkout of AA-Ecosys at `tools-ref`, which also gives the
+# checker. Safety: pull_request and merge_group only (never pull_request_target), contents: read, no secret, the PR
+# text reaches the script through environment variables and a file, every action pinned by full commit SHA.
+# Not a required check in the root repo. Cost: one short job per PR (about 20 s), no AWS.
+
+on:
+  pull_request:
+    branches: [master]
+  merge_group:
+  workflow_call:
+    inputs:
+      tools-ref:
+        description: AA-Ecosys ref whose tools/spec/trace_check.py and .kiro/specs are read (callers pin a SHA)
+        type: string
+        required: false
+        default: master
+
+permissions:
+  contents: read
+
+concurrency:
+  group: spec-trace-${{ github.repository }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  spec-trace:
+    name: Spec trace
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # A caller (an app repo): the checker and the root repo's specs come from AA-Ecosys (public, read-only token).
+      - name: Checkout the AA-Ecosys spec tools (callers only)
+        if: github.repository != 'AdventureAsia365-Ecosys/AA-Ecosys'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: AdventureAsia365-Ecosys/AA-Ecosys
+          ref: ${{ inputs.tools-ref || 'master' }}
+          path: _aa_ecosys
+          persist-credentials: false
+          sparse-checkout: |
+            tools/spec
+            tools/docs
+            .kiro/specs
+
+      - name: Check the specs of the PR's issues
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha }}
+        run: |
+          set -euo pipefail
+          text="$RUNNER_TEMP/spec_trace_text.md"
+          printf '%s\n\n%s\n' "$PR_TITLE" "$PR_BODY" > "$text"
+          if [ "$EVENT_NAME" = "merge_group" ] && [ -n "$BASE_SHA" ] && [ -n "$HEAD_SHA" ]; then
+            git log --format=%B "$BASE_SHA..$HEAD_SHA" >> "$text"
+          fi
+          tools="."
+          extra=()
+          if [ -d _aa_ecosys ]; then
+            tools="_aa_ecosys"
+            extra=(--extra-root _aa_ecosys)
+          fi
+          base=()
+          if [ -n "$BASE_SHA" ]; then
+            base=(--base "$BASE_SHA")
+          fi
+          python3 "$tools/tools/spec/trace_check.py" pr --root . "${extra[@]}" "${base[@]}" \
+            --text-file "$text" --summary "$GITHUB_STEP_SUMMARY"
