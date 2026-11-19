@@ -1,6 +1,7 @@
 # ADR 0008 — Amendment: the partner CRM is a separate app; traveller OTP and an own LLM gateway as playbook exceptions
 
-- **Status:** Accepted (2026-10-22, S247, tech lead). Proposed the same day.
+- **Status:** Accepted (2026-10-22, S247, tech lead). Proposed the same day. §5 amended 2026-11-19 (S285, AA-1138:
+  the CRM's Claude path on acc1).
 - **Scope:** AA-Ecosys: the partner CRM (AA-821) in the new app AA-Partner ([ADR 0010](0010-aa-partner-app.md)),
   and every app that would read or write its data (AA-CIS-App, AA-Booking, AA-TripPlanner-Web, AA-CIS-Infra).
 - **Amends:** [ADR 0008](0008-new-app-integration-and-data-platform-rules.md) decision 8 ("If built, it is a CIS
@@ -121,6 +122,13 @@ whose members are seeded in `crm.member`.
 - Providers: Bedrock only; OpenAI and Jev are never routed for CRM stages. If acc2 cannot run the models or Guardrails
   (it cannot run Bedrock LLMs today, through TrueIDC), the planned path is acc3 through a CRM-only role
   (`us.` inference profiles + `ApplyGuardrail` only), checked in AA-930.
+  *Amendment 2026-11-19 (S285, AA-1138, tech lead):* acc3 still refuses models at account level, so the CRM's Claude
+  path is acc1's existing Bedrock invoker role instead of a CRM-only role on acc3: the role trusts the CRM task role
+  with its own ExternalId and grants the `us.` inference profile of Claude Haiku 5.5, the first entry of
+  `crm_draft_reply` (AA-Partner crm-078); Amazon Nova Lite on acc2 stays its last fallback and Guardrails stay on acc2
+  ([ADR 0001a](0001a-retire-acc1-llm-on-acc3-only.md) Note S285). Still Bedrock only, still `us.` profiles, the scrub
+  before every call; the CRM's own monthly cap per connection (`crm.ai.connection_monthly_cap_usd`) bounds its acc1
+  spend. When acc3 serves again, the acc3 CRM path above is the one to build.
 - The rest of step 9 is unchanged: job table from the shared template with the `crm_` prefix, a retention row for every
   log, event or job table (`crm.llm_call`: 180 days + rollup).
 
