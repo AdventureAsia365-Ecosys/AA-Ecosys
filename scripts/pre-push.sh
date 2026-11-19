@@ -9,6 +9,9 @@
 #     .kiro/specs as an error (AA-1137),
 #     markdownlint-cli2 0.23.2, lychee offline links;
 #   - .github/workflows/contracts.yml : contract/ADR unit tests, check_contracts.py, check_adr_numbers.py;
+#   - .github/workflows/lean-guard.yml : AA-1161 tools/repo/lean_guard.py on the pushed commits (always, local runs;
+#     refuses an image > 500 KiB, > 10 MiB of images, dist/*.zip, executables, files > 5 MiB not in .lean-allow), and
+#     its unit tests when tools/repo/ changes;
 #   - .github/workflows/secret-scan.yml: gitleaks on the pushed commits, only when a working gitleaks is found
 #     (local convenience; CI keeps its own pull_request_target job, so --ci never runs it). The binary comes from
 #     tools/github/gitleaks_resolve.py (S281): AA_GITLEAKS, then .tmp-session/gitleaks-8301/gitleaks of this checkout
@@ -74,6 +77,12 @@ is_docs_lint_path() {
   esac
   return 1
 }
+is_lean_path() {
+  case "$1" in
+    tools/repo/*|.github/workflows/lean-guard.yml) return 0 ;;
+  esac
+  return 1
+}
 is_contracts_path() {
   case "$1" in
     docs/contracts/*|docs/adr/*|tools/contracts/*|tools/adr/*|.github/workflows/contracts.yml) return 0 ;;
@@ -84,14 +93,15 @@ is_contracts_path() {
 # plan_checks <fast|full> <ci 0|1>: reads changed paths (one per line) on stdin, prints the check ids in run order.
 # CI runs every step of a workflow once its path filter matches, so a selected workflow runs all its checks here too.
 plan_checks() {
-  local mode="$1" ci="$2" f docs=0 contracts=0 md=0
+  local mode="$1" ci="$2" f docs=0 contracts=0 md=0 lean=0
   if [ "$mode" = full ]; then
-    docs=1; contracts=1; md=1
+    docs=1; contracts=1; md=1; lean=1
   else
     while IFS= read -r f; do
       [ -n "$f" ] || continue
       if is_docs_lint_path "$f"; then docs=1; fi
       if is_contracts_path "$f"; then contracts=1; fi
+      if is_lean_path "$f"; then lean=1; fi
       case "$f" in docs/*.md|.markdownlint-cli2.jsonc|.github/workflows/docs-lint.yml) md=1 ;; esac
     done
   fi
@@ -106,7 +116,8 @@ plan_checks() {
   if [ "$contracts" = 1 ]; then
     echo contracts-unit; echo adr-unit; echo contracts; echo adr-numbers
   fi
-  if [ "$ci" != 1 ]; then echo gitleaks; fi
+  if [ "$lean" = 1 ]; then echo lean-unit; fi
+  if [ "$ci" != 1 ]; then echo lean-guard; echo gitleaks; fi
 }
 
 # markdownlint targets in fast mode: changed docs/**/*.md that still exist (the config's ignores still apply);
@@ -322,6 +333,10 @@ run_planned() {
         run_check "$id" "docs-lint.yml: Markdown style" bin:npx npx --yes "markdownlint-cli2@$MDL_VERSION" "${targets[@]}" ;;
       lychee)
         run_check "$id" "docs-lint.yml: Internal links (offline)" bin:lychee lychee --config tools/docs/lychee.toml --exclude-path docs/linear-export 'docs/**/*.md' ;;
+      lean-unit) run_check "$id" "lean-guard.yml: Unit tests of the guard" - "$PY" -B -m unittest discover -s tools/repo -p 'test_*.py' ;;
+      lean-guard)
+        # AA-1161: what the push adds (base...HEAD); a missing base skips here with a note (CI checks every PR).
+        run_check "$id" "lean-guard.yml: Lean repo guard" - "$PY" -B tools/repo/lean_guard.py --base "$BASE" --allow-missing-base ;;
       contracts-unit) run_check "$id" "contracts.yml: Unit tests of the checks" py-deps "$PY" -m unittest discover -s tools/contracts -p 'test_*.py' ;;
       adr-unit) run_check "$id" "contracts.yml: Unit tests of the checks" - "$PY" -m unittest discover -s tools/adr -p 'test_*.py' ;;
       contracts) run_check "$id" "contracts.yml: Contracts, samples and field policy" py-deps "$PY" tools/contracts/check_contracts.py ;;
@@ -358,33 +373,35 @@ self_test() {
   }
   local DOCS="docs-unit frontmatter prd-refs adr-index aws-multiline alarm-runbooks resource-ids gen-sections doc-map doc-owners code-refs audit-images docs-impact spec-unit lane-unit spec-ids"
   local CONTRACTS="contracts-unit adr-unit contracts adr-numbers"
-  local ALL="$DOCS markdownlint lychee $CONTRACTS"
+  local ALL="$DOCS markdownlint lychee $CONTRACTS lean-unit"
   # check selection
-  expect "empty diff"                     fast 0 "gitleaks" ""
-  expect "README only"                    fast 0 "gitleaks" README.md
-  expect "settings.json is not docs"      fast 0 "gitleaks" .claude/settings.json
-  expect "catalog page"                   fast 0 "$DOCS markdownlint lychee gitleaks" docs/README.md
-  expect "journal page (lint ignores it)" fast 0 "$DOCS markdownlint lychee gitleaks" docs/sessions/2026-10-27-x.md
-  expect "skill file: no markdownlint"    fast 0 "$DOCS lychee gitleaks" skill/aa-ship/SKILL.md
-  expect "nested .claude md"              fast 0 "$DOCS lychee gitleaks" .claude/agents/reviewer.md
-  expect "steering"                       fast 0 "$DOCS lychee gitleaks" .kiro/steering/db-schema.md
-  expect "ADR: docs + contracts, unit tests" fast 0 "$DOCS markdownlint lychee $CONTRACTS gitleaks" docs/adr/0016-deploy-any-time.md
-  expect "contract json: unit tests"      fast 0 "$DOCS lychee $CONTRACTS gitleaks" docs/contracts/crm.ops.v1.json
-  expect "contract yaml: unit tests"      fast 0 "$DOCS lychee $CONTRACTS gitleaks" docs/contracts/booking.openapi.yaml
-  expect "templates json: docs unit tests" fast 0 "$DOCS lychee gitleaks" docs/templates/frontmatter.schema.json
-  expect "non-ASCII ADR name"             fast 0 "$DOCS markdownlint lychee $CONTRACTS gitleaks" "docs/adr/0099-quyết-định.md"
-  expect "name with spaces"               fast 0 "$DOCS markdownlint lychee gitleaks" "docs/audits/a b/report c.md"
-  expect "docs tool"                      fast 0 "$DOCS lychee gitleaks" tools/docs/docslib.py
-  expect "spec folder"                    fast 0 "$DOCS lychee gitleaks" .kiro/specs/AA-1137-spec-trace/tasks.md
-  expect "spec tool"                      fast 0 "$DOCS lychee gitleaks" tools/spec/trace_check.py
-  expect "adr tool"                       fast 0 "$CONTRACTS gitleaks" tools/adr/check_adr_numbers.py
-  expect "contracts tool"                 fast 0 "$CONTRACTS gitleaks" tools/contracts/check_contracts.py
-  expect "contracts workflow"             fast 0 "$CONTRACTS gitleaks" .github/workflows/contracts.yml
-  expect "docs-lint workflow"             fast 0 "$DOCS markdownlint lychee gitleaks" .github/workflows/docs-lint.yml
-  expect "markdownlint config"            fast 0 "$DOCS markdownlint lychee gitleaks" .markdownlint-cli2.jsonc
-  expect "untracked-by-CI tools"          fast 0 "gitleaks" tools/finops/monthly_cost_report.py scripts/pre-push.sh
-  expect "full ignores the diff"          full 0 "$ALL gitleaks" README.md
-  expect "ci: all checks, no gitleaks"    full 1 "$ALL" ""
+  expect "empty diff"                     fast 0 "lean-guard gitleaks" ""
+  expect "README only"                    fast 0 "lean-guard gitleaks" README.md
+  expect "settings.json is not docs"      fast 0 "lean-guard gitleaks" .claude/settings.json
+  expect "catalog page"                   fast 0 "$DOCS markdownlint lychee lean-guard gitleaks" docs/README.md
+  expect "journal page (lint ignores it)" fast 0 "$DOCS markdownlint lychee lean-guard gitleaks" docs/sessions/2026-10-27-x.md
+  expect "skill file: no markdownlint"    fast 0 "$DOCS lychee lean-guard gitleaks" skill/aa-ship/SKILL.md
+  expect "nested .claude md"              fast 0 "$DOCS lychee lean-guard gitleaks" .claude/agents/reviewer.md
+  expect "steering"                       fast 0 "$DOCS lychee lean-guard gitleaks" .kiro/steering/db-schema.md
+  expect "ADR: docs + contracts, unit tests" fast 0 "$DOCS markdownlint lychee $CONTRACTS lean-guard gitleaks" docs/adr/0016-deploy-any-time.md
+  expect "contract json: unit tests"      fast 0 "$DOCS lychee $CONTRACTS lean-guard gitleaks" docs/contracts/crm.ops.v1.json
+  expect "contract yaml: unit tests"      fast 0 "$DOCS lychee $CONTRACTS lean-guard gitleaks" docs/contracts/booking.openapi.yaml
+  expect "templates json: docs unit tests" fast 0 "$DOCS lychee lean-guard gitleaks" docs/templates/frontmatter.schema.json
+  expect "non-ASCII ADR name"             fast 0 "$DOCS markdownlint lychee $CONTRACTS lean-guard gitleaks" "docs/adr/0099-quyết-định.md"
+  expect "name with spaces"               fast 0 "$DOCS markdownlint lychee lean-guard gitleaks" "docs/audits/a b/report c.md"
+  expect "docs tool"                      fast 0 "$DOCS lychee lean-guard gitleaks" tools/docs/docslib.py
+  expect "spec folder"                    fast 0 "$DOCS lychee lean-guard gitleaks" .kiro/specs/AA-1137-spec-trace/tasks.md
+  expect "spec tool"                      fast 0 "$DOCS lychee lean-guard gitleaks" tools/spec/trace_check.py
+  expect "adr tool"                       fast 0 "$CONTRACTS lean-guard gitleaks" tools/adr/check_adr_numbers.py
+  expect "contracts tool"                 fast 0 "$CONTRACTS lean-guard gitleaks" tools/contracts/check_contracts.py
+  expect "contracts workflow"             fast 0 "$CONTRACTS lean-guard gitleaks" .github/workflows/contracts.yml
+  expect "docs-lint workflow"             fast 0 "$DOCS markdownlint lychee lean-guard gitleaks" .github/workflows/docs-lint.yml
+  expect "markdownlint config"            fast 0 "$DOCS markdownlint lychee lean-guard gitleaks" .markdownlint-cli2.jsonc
+  expect "untracked-by-CI tools"          fast 0 "lean-guard gitleaks" tools/finops/monthly_cost_report.py scripts/pre-push.sh
+  expect "lean guard tool: its unit tests" fast 0 "lean-unit lean-guard gitleaks" tools/repo/lean_guard.py
+  expect "lean guard workflow"            fast 0 "lean-unit lean-guard gitleaks" .github/workflows/lean-guard.yml
+  expect "full ignores the diff"          full 0 "$ALL lean-guard gitleaks" README.md
+  expect "ci: all checks, no lean-guard gitleaks"    full 1 "$ALL" ""
   # markdownlint target selection
   got=$(printf '%s\n' docs/README.md skill/x.md docs/no-such-file.md | md_targets | tr '\n' ' ')
   if [ "$got" = "docs/README.md " ]; then ok "md targets: existing changed docs pages"; else bad "md targets: got '$got'"; fi

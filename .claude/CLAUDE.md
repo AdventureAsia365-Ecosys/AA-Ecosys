@@ -78,6 +78,9 @@ Trạng thái phiên: memory Notion (Program Brain/memory.md) + docs/sessions/. 
 - Agent điều phối push / mở PR / merge bằng GitHub App `aa-agent` qua `tools/github/as-app.sh` (ADR 0011, S247; cách
   gọi: `skill/aa-ship` §1). Subagent vẫn không push, không merge (hook chặn lệnh, không phụ thuộc danh tính).
 - Không merge/deploy backend khi bảng job còn job hoặc đang có wave (DM-11.4); "Done" theo `skill/aa-ship/SKILL.md`.
+- Repo gọn (AA-1161): git chỉ giữ code, test, config, docs chữ và vài ảnh chính đã nén (≤ 500 KiB/ảnh, ≤ 10 MiB/PR;
+  `tools/docs/compress_images.py`). Bộ ảnh đầy đủ/video → Drive hoặc S3 `audit-assets/`; build artifact (zip Lambda, `dist/`)
+  và binary → CI/Terraform/S3, không commit. `tools/repo/lean_guard.py` chặn ở pre-push + CI cả 6 repo.
 ## KIRO STEERING RULES — BẮT BUỘC (import, added 24/09/2026)
 Nguồn sự thật duy nhất là `.kiro/steering/` (dùng chung Kiro + Claude Code) — import trực tiếp để
 không lệch nhau; sửa quy tắc thì sửa file steering, KHÔNG chép lại vào đây.
