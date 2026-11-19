@@ -222,10 +222,13 @@ def load_allowlist(path: Path = ALLOWLIST) -> list[str] | None:
 
 
 def is_third_party(ref: str) -> bool:
-    """A `uses:` the allow-list governs: a remote action outside GitHub's own orgs (not ./local, not docker://)."""
+    """A `uses:` the allow-list governs: a remote action outside GitHub's own orgs and outside this org (not ./local,
+    not docker://). The policy "Allow <org>, and select non-<org>, actions and reusable workflows" always allows the
+    org's own actions and reusable workflows (S285: the root `docs-impact.yml` called from the five app repos)."""
     if ref.startswith(("./", "../", "docker://")) or "@" not in ref:
         return False
-    return ref.split("/", 1)[0].lower() not in GITHUB_OWNED
+    owner = ref.split("/", 1)[0].lower()
+    return owner not in GITHUB_OWNED and owner != ORG.lower()
 
 
 def allowed(ref: str, patterns: list[str]) -> bool:
