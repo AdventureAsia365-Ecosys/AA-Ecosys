@@ -152,7 +152,7 @@ def validate(runner: Runner, p: dict, stacked_on: frozenset[str] = frozenset()) 
     except ShipError as e:
         return [str(e)], []
     wt, br = str(p.get("worktree", "")), str(p.get("branch", ""))
-    base = str(p.get("base") or default_branch(repo))
+    base = str(p.get("base") or default_branch(repo)).removeprefix("origin/")
     title, body = str(p.get("pr_title", "")), str(p.get("pr_body", ""))
     if not TITLE_RE.match(title):
         problems.append(f"title is not 'feat|fix|chore|refactor|docs|...: description': {title!r}")
@@ -316,7 +316,7 @@ def push_failure_reason(r) -> str:
 def open_one(runner: Runner, p: dict, extra_refs: list[str], draft: bool) -> str:
     repo = normalize_repo(str(p["repo"]))
     wt, br = str(p["worktree"]), str(p["branch"])
-    base = str(p.get("base") or default_branch(repo))
+    base = str(p.get("base") or default_branch(repo)).removeprefix("origin/")
     tag = f"{repo} {br}"
     r = runner.run([AS_APP, "--repos", repo, "--", "git", "-c", f"core.hooksPath={SAFE_HOOKS}", "-C", wt, "push", "-q",
                     "-u", "origin", br],

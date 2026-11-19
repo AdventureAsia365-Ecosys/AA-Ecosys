@@ -135,6 +135,8 @@ class OpenTest(unittest.TestCase):
         r, _ = self.runner()
         ok, _w = sop.validate(r, lane_pr(self.sb.wt))
         self.assertEqual(ok, [])
+        # S285: a lane may report its base as "origin/<branch>"; it means the same branch, not origin/origin/<branch>
+        self.assertEqual(sop.validate(r, lane_pr(self.sb.wt, base="origin/main"))[0], [])
         bad = lane_pr(self.sb.wt, pr_title="fix: AA-9001 lantern glow", pr_body="Fixes AA-9001\n")
         problems, _ = sop.validate(r, bad)
         text = " ".join(problems)
