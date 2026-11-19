@@ -229,22 +229,49 @@ class MeasureTest(unittest.TestCase):
                 {"ts": "2026-01-01T00:00:00", "event": "PostToolUse", "latency_ms": 10, "agent": "a1",
                  "repo_kind": "worktree"},
                 {"ts": "2026-01-02T00:00:00", "event": "PostToolUse", "latency_ms": 30, "agent": "a2",
-                 "repo_kind": "worktree", "would": "remind"},
+                 "session": "s1", "repo": "Demo", "repo_kind": "worktree", "would": "remind",
+                 "docs_entries": ["orders"]},
+                # the same edit reminder again in the same session: counted once
+                {"ts": "2026-01-02T00:00:00", "event": "PostToolUse", "latency_ms": 30, "agent": "a2",
+                 "session": "s1", "repo": "Demo", "repo_kind": "worktree", "would": "remind",
+                 "docs_entries": ["orders"]},
                 {"ts": "2026-01-02T00:00:01", "event": "SubagentStop", "latency_ms": 50, "wall_ms": 64, "agent": "a1",
-                 "repo_kind": "worktree", "checks": [{"findings": ["no-test"], "waivers": ["note"]}]},
+                 "session": "s1", "repo_kind": "worktree",
+                 "checks": [{"repo": "Demo", "branch": "feat/a", "code": 2, "findings": ["no-test"],
+                             "waivers": ["note"]}]},
                 {"ts": "2026-01-02T00:00:02", "event": "Stop", "latency_ms": 70, "agent": "main", "error": "boom"},
+                # one open finding on every turn's Stop: counted once per (session, agent, repo, branch, finding)
+                {"ts": "2026-01-02T00:00:03", "event": "Stop", "latency_ms": 70, "agent": "main", "session": "s1",
+                 "repo_kind": "main", "checks": [
+                     {"repo": "Demo", "branch": "feat/b", "code": 1, "findings": ["no-note"], "waivers": []},
+                     {"repo": "Other", "branch": "fix/c", "code": 1, "findings": [], "waivers": ["test"]}]},
+                {"ts": "2026-01-02T00:00:04", "event": "Stop", "latency_ms": 70, "agent": "main", "session": "s1",
+                 "repo_kind": "main", "checks": [
+                     {"repo": "Demo", "branch": "feat/b", "code": 1, "findings": ["no-note"], "waivers": []},
+                     {"repo": "Other", "branch": "fix/c", "code": 1, "findings": [], "waivers": ["test"]}]},
+                # the same finding in a later session would be said again in warn mode: counted again
+                {"ts": "2026-01-03T00:00:00", "event": "Stop", "latency_ms": 70, "agent": "main", "session": "s2",
+                 "repo_kind": "main", "checks": [
+                     {"repo": "Demo", "branch": "feat/b", "code": 1, "findings": ["no-note"], "waivers": []}]},
             ]
             log.write_text("\n".join(json.dumps(r) for r in rows) + "\nnot json\n", encoding="utf-8")
             out = cg.summarize_log(cg.read_log(log, since="2026-01-02"))
-            self.assertEqual(out["events"], 3)
+            self.assertEqual(out["events"], 7)
             self.assertEqual(out["errors"], 1)
             self.assertEqual(out["latency_ms"]["SubagentStop"], {"n": 1, "p50": 50.0, "p95": 50.0})
             self.assertEqual(out["wall_ms"], {"SubagentStop": {"n": 1, "p50": 64.0, "p95": 64.0}})
             self.assertEqual(out["lane_agents"], {"PostToolUse": 1, "SubagentStop": 1})
-            self.assertEqual((out["would_remind"], out["waivers"]), ({"no-test": 1, "post-edit": 1}, {"note": 1}))
+            self.assertEqual(out["would_remind"], {"Demo": {"no-note": 2, "no-test": 1, "post-edit": 1}})
+            self.assertEqual(out["findings"], [["Demo", "feat/a", "no-test"], ["Demo", "feat/b", "no-note"],
+                                               ["Demo", "feat/b", "no-note"]])
+            self.assertEqual(out["waivers"], {"Demo": {"note": 1}, "Other": {"test": 1}})
+            self.assertEqual(out["code_changes"], {"Demo": 2, "Other": 1})
+            self.assertEqual(out["waived_share"], {"Demo": 0.5, "Other": 1.0})
             with contextlib.redirect_stdout(io.StringIO()) as out_text:
                 self.assertEqual(cg.main(["report", "--log", str(log)]), 0)
             self.assertIn("p95=", out_text.getvalue())
+            self.assertIn("Other: would remind none; waivers {'test': 1}; code changes 1, waived 100%",
+                          out_text.getvalue())
 
     def test_uncovered_commits(self):
         with tempfile.TemporaryDirectory() as d:

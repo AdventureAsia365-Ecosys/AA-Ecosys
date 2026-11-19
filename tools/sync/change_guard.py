@@ -277,13 +277,29 @@ def read_log(path: Path, since: str = "") -> list[dict]:
     return rows
 
 
+def _bump(table: dict[str, dict[str, int]], repo: str, kind: str) -> None:
+    per = table.setdefault(repo, {})
+    per[kind] = per.get(kind, 0) + 1
+
+
 def summarize_log(rows: list[dict]) -> dict:
+    """The log-week numbers (M1-M5, M8 of docs/implementation-notes/AA-1136.md) from the hook log rows.
+
+    Stop fires at the end of every turn, so one open finding sits in many rows. Counts are therefore distinct:
+    a finding once per (session, agent, repo, branch, finding), the key under which `warn` mode says it once;
+    a post-edit reminder once per (session, agent, repo, docs entries, lint); a waiver once per (repo, branch, kind),
+    and a code change once per (repo, branch), the denominator of the M8 waived share.
+    """
     events: dict[str, list[float]] = {}
     walls: dict[str, list[float]] = {}
     errors = 0
     lane_agents: dict[str, set] = {}
-    would: dict[str, int] = {}
-    waivers: dict[str, int] = {}
+    seen_findings: set[tuple] = set()
+    seen_edits: set[tuple] = set()
+    seen_waivers: set[tuple] = set()
+    changes: dict[str, set] = {}
+    would: dict[str, dict[str, int]] = {}
+    waivers: dict[str, dict[str, int]] = {}
     for r in rows:
         ev = str(r.get("event") or "?")
         if isinstance(r.get("latency_ms"), (int, float)):
@@ -296,13 +312,29 @@ def summarize_log(rows: list[dict]) -> dict:
             errors += 1
         if r.get("agent") and r.get("agent") != "main" and r.get("repo_kind") == "worktree":
             lane_agents.setdefault(ev, set()).add(r["agent"])
+        who = (str(r.get("session") or ""), str(r.get("agent") or ""))
         if ev == "PostToolUse" and r.get("would") == "remind":
-            would["post-edit"] = would.get("post-edit", 0) + 1
+            repo = str(r.get("repo") or "?")
+            key = (*who, repo, tuple(sorted(r.get("docs_entries") or [])), r.get("lint") == "findings")
+            if key not in seen_edits:
+                seen_edits.add(key)
+                _bump(would, repo, "post-edit")
         for c in r.get("checks") or []:
+            repo, branch = str(c.get("repo") or "?"), str(c.get("branch") or "")
+            if c.get("code"):
+                changes.setdefault(repo, set()).add(branch)
             for f in c.get("findings") or []:
-                would[f] = would.get(f, 0) + 1
+                key = (*who, repo, branch, f)
+                if key not in seen_findings:
+                    seen_findings.add(key)
+                    _bump(would, repo, f)
             for w in c.get("waivers") or []:
-                waivers[w] = waivers.get(w, 0) + 1
+                if (repo, branch, w) not in seen_waivers:
+                    seen_waivers.add((repo, branch, w))
+                    _bump(waivers, repo, w)
+    waived_branches: dict[str, set] = {}
+    for repo, branch, _ in seen_waivers:
+        waived_branches.setdefault(repo, set()).add(branch)
     return {
         "events": len(rows),
         "errors": errors,
@@ -313,8 +345,14 @@ def summarize_log(rows: list[dict]) -> dict:
         "wall_ms": {ev: {"n": len(v), "p50": percentile(v, 50), "p95": percentile(v, 95)}
                     for ev, v in sorted(walls.items())},
         "lane_agents": {ev: len(a) for ev, a in sorted(lane_agents.items())},
-        "would_remind": would,
-        "waivers": waivers,
+        "would_remind": {repo: dict(sorted(k.items())) for repo, k in sorted(would.items())},
+        # M5 samples from this list: one entry per distinct reminder warn mode would say
+        "findings": sorted([repo, branch, f] for _, _, repo, branch, f in seen_findings),
+        "waivers": {repo: dict(sorted(k.items())) for repo, k in sorted(waivers.items())},
+        # M8: share of a repo's code changes (branches with code) that carry at least one waiver
+        "code_changes": {repo: len(b) for repo, b in sorted(changes.items())},
+        "waived_share": {repo: round(len(waived_branches.get(repo, set()) & b) / len(b), 3)
+                         for repo, b in sorted(changes.items()) if b},
     }
 
 
@@ -388,7 +426,11 @@ def main(argv: list[str] | None = None) -> int:
                 w = out["wall_ms"].get(ev, {})
                 print(f"  {ev}: n={v['n']} p50={v['p50']} ms p95={v['p95']} ms (in script); wall p50={w.get('p50')} "
                       f"p95={w.get('p95')} ms; lane agents {out['lane_agents'].get(ev, 0)}")
-            print(f"would remind: {out['would_remind'] or 'none'}; waivers: {out['waivers'] or 'none'}")
+            for repo in sorted(set(out["would_remind"]) | set(out["waivers"]) | set(out["code_changes"])):
+                share = out["waived_share"].get(repo)
+                print(f"  {repo}: would remind {out['would_remind'].get(repo) or 'none'}; waivers "
+                      f"{out['waivers'].get(repo) or 'none'}; code changes {out['code_changes'].get(repo, 0)}"
+                      + ("" if share is None else f", waived {share:.0%}"))
         return 0
     out = uncovered_commits(Path(args.repo_dir).resolve(), args.since, args.ref)
     if args.json:

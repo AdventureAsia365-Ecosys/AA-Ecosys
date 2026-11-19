@@ -154,7 +154,8 @@ def docs_hits(entries: list[dict], repo: str, rel: str) -> list[dict]:
 
 def run(data: dict, m: str) -> tuple[dict, str]:
     """(log record, reminder text for the agent or '')."""
-    rec: dict = {"event": EVENT, "hook": "sync_post_edit", "mode": m, "agent": hookio.agent_key(data),
+    rec: dict = {"event": EVENT, "hook": "sync_post_edit", "mode": m, "session": hookio.session_key(data),
+                 "agent": hookio.agent_key(data),
                  "agent_type": str(data.get("agent_type") or ""), "tool": str(data.get("tool_name") or "")}
     path = hookio.edited_path(data)
     repo = hookio.find_repo(path)
