@@ -364,6 +364,33 @@ above; the rows stay as the S265 record.
   session with at least one AI call in a UTC month; Enterprise and internal quotas with no number mean no quota; price
   edits stay single-admin until the first paying agency; existing Dev subscriptions get no price lock backfill.
 
+**Amendment (S285, 19/11/2026, business rule and tech lead decisions B5, B6, B9, B10, B11, T19; AA-1144): b6 is
+narrowed. All product data is Adventure Asia's and its suppliers'; agencies only use the apps.** It replaces b6 above;
+the row stays as the S265 record.
+
+- **Catalogue types are AA-only.** A hotel (extra nights included), a transfer or vehicle (in the tour and airport
+  transfers alike, B9), a guide, a ticket or entrance, a meal or restaurant, an activity and a DMC are Adventure Asia
+  products. The CRM refuses an agency's own supplier, catalogue service, booking line or proposal item of those types
+  (4xx with a plain reason), and "other" is no way round it: it stays a supplier category (the agency's fee, a
+  consolidator), never an item type. A lodging, activity, transport, meal or guide block of the proposal builder takes
+  AA items only; the agency's own items sit on an "Other" block.
+- **The agency's own items are a closed list** (B10): flight, visa, travel insurance and the agency's own service fee.
+  They are typed by hand, with no external integration (no GDS, airline, visa or insurer API), and are never sent to
+  AA. The agency is responsible for them towards its client (b5, b12); the partner terms say the agency is allowed to
+  sell insurance in its own country (the CRM does not check that licence).
+- **Extra hotel nights** (B11): the agency asks AA from the CRM ("Ask AA for extra nights": place, before or after the
+  tour, check-in day, nights, rooms and party); AA quotes the nights from an AA supplier hotel and the agency adds the AA
+  item. AA ground operations see the open requests on the CRM staff console.
+- **Facts Entries** (B6): an agency's own facts are its prices (its markup) and its sale terms only; every product fact
+  (season, itinerary, visa and entry, transfer time) comes from AA. The agency changes presentation (voice, logo, its
+  contact details), never tour facts.
+- **Older data** (T19): no hard delete. CRM migration crm-080 counts first, re-types the agency's own suppliers of a
+  blocked type to "other", moves the ones nothing references (and the agency's transfer catalogue services) to the
+  CRM trash, keeps the referenced ones readable, then narrows the CHECK constraints.
+- **Next slice** (T18, not part of this amendment's first delivery): an accepted proposal writes its agency items as
+  agency lines; attachments and due dates on a line; the client invoice groups "Tour (Adventure Asia)" and "Services
+  provided by <agency>" with a disclaimer, visa fees and insurance always on their own lines.
+
 ## ADRs amended
 
 Each one carries an "Amended by ADR 0019 (S265)" pointer in its header.
@@ -373,7 +400,7 @@ Each one carries an "Amended by ADR 0019 (S265)" pointer in its header.
 - **0005:** the B2C channels and margins (d4) are retired. "From" (d6) = RRP per b15, kept as policy data in `booking.pricing_rules`.
 - **0005a:** "no subscription line, CRM free at launch" is superseded. Tenants pay subscriptions; CRM and TripPlanner are paid add-ons (b2–b4); settlement is invoiced from Booking (d9).
 - **0006:** the EXTERNAL traveller clients `tripplanner` and `booking-customer` are frozen (d11). Phase 4 traveller accounts are re-scoped to "access through a CRM link" (AA-1005).
-- **0010:** d5 is narrowed (agency suppliers for ancillaries only, b6). d6 ends with one app (d6 here).
+- **0010:** d5 is narrowed (agency suppliers for ancillaries only, b6; S285: flight, visa, travel insurance and the agency fee only). d6 ends with one app (d6 here).
 - **0010a:** d1 and d6 are superseded (one app, one session, no studio service); d5's clean-up is brought forward (d6). d2 and d3 stay. d4 is delivered through the role-map invitation (d7).
 - **0016:** adds a runtime per-tenant brand-token layer, the AI-notice component and the message catalogue, built once in the CIS canonical core and synced. Four kit consumers after the merge, not five.
 - **0018:** d7 ("residency settled: US") becomes "US by default, EU cell on triggers" (d12); this is decided before `aa-prod` is created. d2's "test data only on Dev" gets the pilot exception (d16). The TripPlanner ECS service lives in `aa-nonprod` (no new account).
