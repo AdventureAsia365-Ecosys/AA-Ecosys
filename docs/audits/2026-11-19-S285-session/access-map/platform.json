@@ -1,0 +1,880 @@
+{
+ "app": "platform",
+ "name": "Quyền nền tảng ngoài các app: GitHub, AWS (acc1–acc4), Cognito WORKFORCE",
+ "host": "github.com/AdventureAsia365-Ecosys; AWS us-west-1 (Identity Center của acc4); staff sign-in https://staff-auth.lumiguides.it.com",
+ "signin": "GitHub: tài khoản cá nhân, bắt buộc 2FA. AWS acc2: user IAM của tech lead assume role admin có MFA (12 h). acc4: Identity Center, MFA mỗi lần đăng nhập, permission set AA-Admin 1 h. acc1/acc3: SSO từ Identity Center của acc1 (AA-Admin) hoặc role break-glass. CI: GitHub OIDC, chỉ nhánh main/môi trường được ghim. Nhân viên app: Cognito WORKFORCE bằng mã e-mail hoặc mật khẩu, nhóm <app>-<vai trò>.",
+ "roles": [
+  {
+   "code": "tech_lead",
+   "label": "Tech lead",
+   "who": "Tech lead (1 người)",
+   "summary": "Chủ tổ chức GitHub, admin mọi tài khoản AWS, giữ break-glass; người duy nhất có mọi quyền hôm nay."
+  },
+  {
+   "code": "gh_breakglass",
+   "label": "Tài khoản GitHub dự phòng",
+   "who": "Tài khoản GitHub break-glass (org owner thứ 2)",
+   "summary": "Chỉ để cứu tổ chức GitHub khi mất tài khoản chính; cùng quyền owner."
+  },
+  {
+   "code": "business_owner",
+   "label": "Business owner",
+   "who": "Business owner (nhóm aa-billing ở acc4)",
+   "summary": "Xem chi phí, ngân sách, hoá đơn AWS, chỉ đọc; key-holder thứ 2 trong access register (còn là mẫu)."
+  },
+  {
+   "code": "engineer",
+   "label": "Kỹ sư (nhóm aa-developers)",
+   "who": "Chưa thấy trong repo (danh sách người nằm trong tfvars không commit); blueprint 2–3 kỹ sư",
+   "summary": "Toàn quyền ở nonprod và ai trong 8 h, chỉ xem ở prod, không vào management."
+  },
+  {
+   "code": "aa_agent",
+   "label": "GitHub App aa-agent",
+   "who": "Phiên agent điều phối (qua tools/github/as-app.sh)",
+   "summary": "Đẩy nhánh, mở PR, merge qua merge queue khi CI xanh; không có quyền tổ chức."
+  },
+  {
+   "code": "ci_bot",
+   "label": "GitHub App aa-ecosys-ci-bot",
+   "who": "Workflow release-please, schema dump, kit-sync, ci-hygiene",
+   "summary": "Mở PR tự động; chỉ tự merge 2 loại PR (schema dump, migration copy)."
+  },
+  {
+   "code": "agent_shell",
+   "label": "Role agent hẹp (aa-cis-dev-agent-session)",
+   "who": "Shell của agent khi dùng profile aa365-agent (chưa là mặc định)",
+   "summary": "ECS exec, S3 scripts/, log, describe; cấm IAM, xoá RDS, đọc secret, state Terraform."
+  },
+  {
+   "code": "ci_oidc",
+   "label": "Role CI qua GitHub OIDC",
+   "who": "Workflow trên main: tf-plan, tf-apply, db-auto-apply, deploy CIS/Booking/TripPlanner/CRM, docs-sync, CI management",
+   "summary": "Plan/apply Terraform, chạy DB Migrate, deploy app; mỗi role ghim đúng repo và nhánh/môi trường."
+  },
+  {
+   "code": "app_runtime",
+   "label": "Role chạy app",
+   "who": "Task role CIS (và CRM cho bản nháp trả lời) trên acc2",
+   "summary": "Gọi Bedrock ở acc1 (rồi acc3) bằng ExternalId; đọc chi phí acc3."
+  },
+  {
+   "code": "staff_cognito",
+   "label": "Nhân viên trong nhóm Cognito WORKFORCE",
+   "who": "Nhân viên AA được gán vai trò trên trang Staff của CIS",
+   "summary": "Nhận vai trò theo app (cis-*, booking-*, crm-*); quyền cụ thể nằm ở bản đồ từng app."
+  }
+ ],
+ "areas": [
+  {
+   "area": "GitHub org AdventureAsia365-Ecosys",
+   "pages": [
+    {
+     "path": "org Settings (Member privileges, 2FA, Actions policy, PAT)",
+     "label": "Cài đặt tổ chức",
+     "access": {
+      "tech_lead": "write",
+      "gh_breakglass": "write",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "org Settings › GitHub Apps",
+     "label": "Cài/gỡ/treo App, sinh khoá App",
+     "access": {
+      "tech_lead": "write",
+      "gh_breakglass": "write",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "repo: AA-Ecosys, AA-CIS-App, AA-Booking, AA-TripPlanner-Web, AA-Partner, AA-CIS-Infra, project-template",
+     "label": "Code các repo (đẩy nhánh, PR)",
+     "access": {
+      "tech_lead": "write",
+      "gh_breakglass": "write",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "write",
+      "ci_bot": "write",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "repo › Settings, Environments, Secrets",
+     "label": "Môi trường, secret, branch protection",
+     "access": {
+      "tech_lead": "write",
+      "gh_breakglass": "write",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "repo › Actions",
+     "label": "Chạy/chạy lại workflow",
+     "access": {
+      "tech_lead": "write",
+      "gh_breakglass": "write",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "write",
+      "ci_bot": "read",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    }
+   ]
+  },
+  {
+   "area": "AWS acc2 (hạ tầng Dev)",
+   "pages": [
+    {
+     "path": "role admin MFA (AdministratorAccess + Billing, 12 h)",
+     "label": "Toàn quyền acc2",
+     "access": {
+      "tech_lead": "write",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "aa-cis-dev-agent-session",
+     "label": "ECS exec, S3 scripts/, log, describe",
+     "access": {
+      "tech_lead": "write",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "write",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "aa-cis-infra-tf-plan / tf-apply / db-auto-apply",
+     "label": "Terraform plan/apply, DB Migrate",
+     "access": {
+      "tech_lead": "none",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "write",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "*-app-deploy (CIS, Booking, TripPlanner, CRM)",
+     "label": "Deploy app",
+     "access": {
+      "tech_lead": "none",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "write",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "Secrets Manager (secret có resource policy: break-glass Cognito, khoá aa-agent, khoá Linear)",
+     "label": "Đọc/ghi giá trị secret",
+     "access": {
+      "tech_lead": "write",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "read",
+      "staff_cognito": "none"
+     }
+    }
+   ]
+  },
+  {
+   "area": "AWS acc1 (chỉ Bedrock)",
+   "pages": [
+    {
+     "path": "AA1-Bedrock-Invoker",
+     "label": "Gọi model chat Bedrock",
+     "access": {
+      "tech_lead": "none",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "write",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "AA-BreakGlass-Admin / SSO",
+     "label": "Quản trị acc1",
+     "access": {
+      "tech_lead": "write",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    }
+   ]
+  },
+  {
+   "area": "AWS acc3 (Bedrock dự phòng)",
+   "pages": [
+    {
+     "path": "AA3-Bedrock-Invoker + aa3-bedrock-batch-inference-role",
+     "label": "Gọi Bedrock, chạy Batch",
+     "access": {
+      "tech_lead": "none",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "write",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "AA3-CostExplorer-Reader",
+     "label": "Đọc chi phí acc3",
+     "access": {
+      "tech_lead": "none",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "read",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "SSO AA-Admin (từ Identity Center acc1)",
+     "label": "Quản trị acc3",
+     "access": {
+      "tech_lead": "write",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    }
+   ]
+  },
+  {
+   "area": "AWS acc4 (management, Identity Center)",
+   "pages": [
+    {
+     "path": "AA-Admin (1 h, mọi tài khoản)",
+     "label": "Quản trị tổ chức AWS",
+     "access": {
+      "tech_lead": "write",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "AA-Developer (8 h, nonprod + ai)",
+     "label": "Làm việc hằng ngày",
+     "access": {
+      "tech_lead": "write",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "write",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "AA-ReadOnly (8 h, prod)",
+     "label": "Xem cấu hình prod, không đọc dữ liệu",
+     "access": {
+      "tech_lead": "read",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "read",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "AA-Billing (4 h, management)",
+     "label": "Chi phí, ngân sách, hoá đơn",
+     "access": {
+      "tech_lead": "none",
+      "gh_breakglass": "none",
+      "business_owner": "read",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "aa-org-member-access → OrganizationAccountAccessRole",
+     "label": "Vào tài khoản thành viên (1 h)",
+     "access": {
+      "tech_lead": "write",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    },
+    {
+     "path": "CI management ci_plan / ci_apply (môi trường org)",
+     "label": "Terraform của management",
+     "access": {
+      "tech_lead": "none",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "write",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    }
+   ]
+  },
+  {
+   "area": "Cognito WORKFORCE (nhân viên)",
+   "pages": [
+    {
+     "path": "cis-admin",
+     "label": "CIS admin",
+     "access": {
+      "tech_lead": "none",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "read"
+     }
+    },
+    {
+     "path": "cis-content_lead, cis-ai_ops, cis-customer_success, cis-finance, cis-tenant_qa, cis-support, cis-content",
+     "label": "Các vai trò CIS khác",
+     "access": {
+      "tech_lead": "none",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "read"
+     }
+    },
+    {
+     "path": "booking-admin, booking-sales, booking-contracting, booking-finance, booking-content_creator",
+     "label": "Vai trò Booking",
+     "access": {
+      "tech_lead": "none",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "read"
+     }
+    },
+    {
+     "path": "crm-platform-admin, crm-ops, crm-support",
+     "label": "Vai trò staff AA-Partner",
+     "access": {
+      "tech_lead": "none",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "read"
+     }
+    },
+    {
+     "path": "client breakglass (refresh 1 h)",
+     "label": "Đăng nhập break-glass",
+     "access": {
+      "tech_lead": "write",
+      "gh_breakglass": "none",
+      "business_owner": "none",
+      "engineer": "none",
+      "aa_agent": "none",
+      "ci_bot": "none",
+      "agent_shell": "none",
+      "ci_oidc": "none",
+      "app_runtime": "none",
+      "staff_cognito": "none"
+     }
+    }
+   ]
+  }
+ ],
+ "actions": [
+  {
+   "area": "GitHub",
+   "action": "Tạo repo mới trong tổ chức",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "yes",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "no",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": ".tmp-session/S285/decisions3/data.json:41 (B5: bỏ quyền tạo repo của member); docs/audits/2026-11-17-S283-access-review/README.md:48,50,307 (2 thành viên đều là owner; F-16); docs/adr/0021-github-org-security-and-ci-hygiene.md:72"
+  },
+  {
+   "area": "GitHub",
+   "action": "Đổi public/private, xoá hoặc chuyển repo",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "yes",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "no",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "docs/adr/0021-github-org-security-and-ci-hygiene.md:72"
+  },
+  {
+   "area": "GitHub",
+   "action": "Cài, treo GitHub App; sinh/xoá khoá App",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "yes",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "no",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "docs/security/github-apps.md:39; docs/security/access-register.md:41"
+  },
+  {
+   "area": "GitHub",
+   "action": "Đẩy nhánh và mở PR",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "yes",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "yes",
+    "ci_bot": "yes",
+    "agent_shell": "no",
+    "ci_oidc": "no",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "docs/security/github-apps.md:76 (aa-agent: Contents, Pull requests, Workflows, Actions ghi; không quyền tổ chức); docs/security/github-apps.md:169 (ci-bot: Contents, Issues, Pull requests ghi)"
+  },
+  {
+   "area": "GitHub",
+   "action": "Merge PR vào main (CI bắt buộc xanh)",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "no",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "yes",
+    "ci_bot": "approve",
+    "agent_shell": "no",
+    "ci_oidc": "no",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": {
+    "creator": "aa_agent",
+    "approver": "tech_lead",
+    "rule": "Giai đoạn dev: agent điều phối tự merge khi CI xanh, subagent không merge. Từ prod/tenant trả tiền đầu tiên: tech lead duyệt trước PR Terraform/IAM, migration, auth/bảo mật, xoá dữ liệu.",
+    "evidence": ".kiro/steering/session-workflow.md:57,60"
+   },
+   "evidence": "docs/security/github-apps.md:263 (ci-bot chỉ merge PR schema dump và migration copy); .claude/hooks/subagent-guardrails.sh:2"
+  },
+  {
+   "area": "GitHub",
+   "action": "Đặt secret, môi trường, branch protection",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "yes",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "no",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "docs/security/github-apps.md:89 (App không có quyền tổ chức); docs/audits/2026-11-17-S283-access-review/README.md:56"
+  },
+  {
+   "area": "AWS acc2",
+   "action": "Làm mọi việc trên acc2 (gồm IAM, billing)",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "no",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "no",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "infra/AA-CIS-Infra/accounts/aa365/admin_role.tf:50"
+  },
+  {
+   "area": "AWS acc2",
+   "action": "ECS exec chạy script, ghi/đọc S3 scripts/, đọc log",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "no",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "yes",
+    "ci_oidc": "no",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "infra/AA-CIS-Infra/accounts/aa365/agent_session.tf:46,141"
+  },
+  {
+   "area": "AWS acc2",
+   "action": "Terraform apply tài khoản Dev và DB Migrate",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "no",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "yes",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "infra/AA-CIS-Infra/accounts/aa365/cicd_split.tf:705,727; infra/AA-CIS-Infra/accounts/aa365/cicd_db_auto_apply.tf:49"
+  },
+  {
+   "area": "AWS acc2",
+   "action": "Tạo/sửa role IAM ngoài stack (role admin, org access)",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "no",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "no",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "infra/AA-CIS-Infra/accounts/aa365/admin_role.tf:14; infra/AA-CIS-Infra/accounts/aa365/org_access.tf:24"
+  },
+  {
+   "area": "AWS acc2",
+   "action": "Deploy app (ECS, Lambda) từ main",
+   "access": {
+    "tech_lead": "no",
+    "gh_breakglass": "no",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "yes",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "infra/AA-CIS-Infra/accounts/aa365/cicd_split.tf:413; infra/AA-CIS-Infra/modules/environment/tripplanner.tf:694; infra/AA-CIS-Infra/modules/environment/booking.tf:671; infra/AA-CIS-Infra/modules/environment/crm_app.tf:615"
+  },
+  {
+   "area": "AWS acc2",
+   "action": "Đọc giá trị secret",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "no",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "no",
+    "app_runtime": "yes",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "docs/audits/2026-11-17-S283-access-review/README.md:107 (3 secret chỉ role admin MFA đọc); infra/AA-CIS-Infra/accounts/aa365/agent_session.tf:141 (agent bị cấm)"
+  },
+  {
+   "area": "AWS acc1/acc3",
+   "action": "Gọi model Bedrock (cần ExternalId)",
+   "access": {
+    "tech_lead": "no",
+    "gh_breakglass": "no",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "no",
+    "app_runtime": "yes",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "infra/AA-CIS-Infra/accounts/acc1-bedrock/main.tf:74; infra/AA-CIS-Infra/accounts/acc3-bedrock/main.tf:17; docs/adr/0001a-retire-acc1-llm-on-acc3-only.md:146"
+  },
+  {
+   "area": "AWS acc1/acc3",
+   "action": "Quản trị acc1 hoặc acc3",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "no",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "no",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "docs/audits/2026-11-17-S283-access-review/README.md:86,87; docs/adr/0001a-retire-acc1-llm-on-acc3-only.md:146"
+  },
+  {
+   "area": "AWS acc4",
+   "action": "Quản trị tổ chức AWS, vào tài khoản thành viên",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "no",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "no",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "infra/AA-CIS-Infra/accounts/management/identity_center.tf:16,68; infra/AA-CIS-Infra/accounts/management/org_member_access.tf:54"
+  },
+  {
+   "area": "AWS acc4",
+   "action": "Xem chi phí và hoá đơn",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "no",
+    "business_owner": "yes",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "no",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "infra/AA-CIS-Infra/accounts/management/identity_center.tf:19,68"
+  },
+  {
+   "area": "AWS acc4",
+   "action": "Terraform apply management",
+   "access": {
+    "tech_lead": "no",
+    "gh_breakglass": "no",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "approve",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": {
+    "creator": "ci_oidc",
+    "approver": "tech_lead",
+    "rule": "Môi trường org có người duyệt bắt buộc + chỉ main",
+    "evidence": "docs/audits/2026-11-17-S283-access-review/README.md:56; infra/AA-CIS-Infra/accounts/management/cicd.tf:268,286"
+   },
+   "evidence": "infra/AA-CIS-Infra/accounts/management/cicd.tf:268"
+  },
+  {
+   "area": "Cognito",
+   "action": "Gán nhóm Cognito (vai trò) cho nhân viên",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "no",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "no",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "infra/AA-CIS-Infra/accounts/aa365/identity.tf:573 (chỉ trang Staff của CIS ghi nhóm, không dùng console); infra/AA-CIS-Infra/accounts/aa365/identity.tf:141"
+  },
+  {
+   "area": "Cognito",
+   "action": "Đăng nhập break-glass nhân viên",
+   "access": {
+    "tech_lead": "yes",
+    "gh_breakglass": "no",
+    "business_owner": "no",
+    "engineer": "no",
+    "aa_agent": "no",
+    "ci_bot": "no",
+    "agent_shell": "no",
+    "ci_oidc": "no",
+    "app_runtime": "no",
+    "staff_cognito": "no"
+   },
+   "two_person": null,
+   "evidence": "infra/AA-CIS-Infra/accounts/aa365/identity.tf:191; docs/security/access-register.md:66"
+  }
+ ],
+ "gaps": [
+  "Tạo repo: thực tế chỉ 2 org owner (tech lead + tài khoản GitHub dự phòng) tạo được; tổ chức không có member thường nên bước B5 chưa đổi ai. Chưa kiểm live sau B5.",
+  "ADR 0021 (docs/adr/0021-github-org-security-and-ci-hygiene.md:72) ghi gói Free khoá ô chặn tạo repo public (kiểm 08/11); nếu đúng, member mới vẫn tạo được repo public. Bù lại: ci-hygiene hằng ngày báo repo mới.",
+  "Phiên agent điều phối dùng token gh của tech lead (owner) nên tạo được repo; hook chỉ chặn lệnh tạo/xoá/sửa repo của gh ở subagent (.claude/hooks/subagent-guardrails.d/00-generic.txt:19), phiên chính không có luật chặn.",
+  "Shell agent vẫn chạy trên role admin MFA của tech lead; role hẹp aa-cis-dev-agent-session chưa là mặc định (F-02).",
+  "Môi trường dev của AA-CIS-Infra (giữ role apply) chưa giới hạn nhánh (F-03); B5 bước 2 xử lý, chưa kiểm live.",
+  "Mọi dòng của access register còn 'template': chưa có key-holder thứ 2 được thử (AA-1110).",
+  "Cognito WORKFORCE: MFA tuỳ chọn, chỉ tài khoản break-glass có TOTP; bắt buộc MFA admin chờ AA-1111.",
+  "Không ghi số người cụ thể của từng nhóm Cognito: số liệu chỉ có trong bản rà live, không có trong code."
+ ]
+}

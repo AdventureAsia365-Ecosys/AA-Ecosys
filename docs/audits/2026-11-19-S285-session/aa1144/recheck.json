@@ -1,0 +1,517 @@
+{
+ "run": "2026-11-19T11:10:38.682Z",
+ "deployed": {
+  "cis": "1b3e07c0 (#1605)",
+  "partner": "fbe5ff71 (#365)"
+ },
+ "tenant": {
+  "name": "Atlas & Hearth",
+  "role": "owner"
+ },
+ "tour": "05a91427-81ca-4c44-8902-e878585082ef",
+ "base_version": "b92e916a-338e-4b6b-a6e2-a8a6bea8a4f9",
+ "log": [
+  {
+   "step": "before",
+   "method": "GET",
+   "path": "/api/tenant/v1/tours/my-versions?page=1&page_size=100 (this tour)",
+   "status": 200,
+   "response": [
+    {
+     "n": 6,
+     "status": "pending",
+     "id": "b92e916a-338e-4b6b-a6e2-a8a6bea8a4f9"
+    },
+    {
+     "n": 5,
+     "status": "rejected",
+     "id": "3b363e23-91b7-4e72-ae1e-b1de1bd52817"
+    },
+    {
+     "n": 4,
+     "status": "pending",
+     "id": "3d5e5ace-6200-403e-9cc8-4b3cb2e672a8"
+    },
+    {
+     "n": 3,
+     "status": "rejected",
+     "id": "8045e8ff-e98b-41a9-b20a-668833374992"
+    },
+    {
+     "n": 2,
+     "status": "pending",
+     "id": "751421b8-2e8c-4a17-bbaf-001253488ee3"
+    },
+    {
+     "n": 1,
+     "status": "ai_generated",
+     "id": "92de5ed6-6ad9-47d9-a712-cfd293766c99"
+    }
+   ]
+  },
+  {
+   "step": "before:get-v6",
+   "method": "GET",
+   "path": "/api/tenant/v1/tours/versions/b92e916a-338e-4b6b-a6e2-a8a6bea8a4f9",
+   "request": null,
+   "status": 200,
+   "response": "(version detail, see steps)"
+  },
+  {
+   "step": "1:get-tours-mine",
+   "method": "GET",
+   "path": "/api/tenant/v1/tours/mine",
+   "request": null,
+   "status": 404,
+   "response": {
+    "detail": "Tour not found"
+   }
+  },
+  {
+   "step": "2:patch-ten-day",
+   "method": "PATCH",
+   "path": "/api/tenant/v1/tours/versions/b92e916a-338e-4b6b-a6e2-a8a6bea8a4f9",
+   "request": {
+    "action": "edit",
+    "edited_content": {
+     "summary": "This ten-day trek into Nepal's Solu-Khumbu region offers something the Everest Base Camp corridor rarely permits: a quieter, less-trafficked approach to the high Himalaya, through living communities whose traditions have shaped this landscape for generations. The route leaves the road at Dhap and moves on foot through pine and rhododendron forest, past terraced fields worked by Sherpa and Tamang families, and along trails where the rhythms of village life remain largely undisturbed. The ascent to Pikey Peak Base Camp at 3,640 metres is gradual and considered, allowing the altitude to be met with care. The summit ridge opens to one of the region's most sweeping Himalayan panoramas, extending toward Everest, Makalu, and Kanchenjunga. The descent passes through Jase Bhanjyang and Junbesi, a monastery town of genuine cultural depth, its religious architecture and community life offering a point of real engagement before the trail finishes at Phaplu and Salleri. Nights are spent in tea houses and lodges along the route, the appropriate and authentic form of accommodation in this part of Solu-Khumbu, where the warmth of a shared dining room and a well-earned rest carry their own particular character. A final drive returns to Kathmandu on the seventh day."
+    }
+   },
+   "status": 422,
+   "response": {
+    "detail": {
+     "code": "fact_locked",
+     "message": "This edit changes a tour fact (days, places, figures or what is or is not included). Only the wording can change; the facts come from Adventure Asia.",
+     "locked": [
+      {
+       "field": "summary",
+       "fact": "figure",
+       "value": "ten-day"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "step": "3:patch-flights-included",
+   "method": "PATCH",
+   "path": "/api/tenant/v1/tours/versions/b92e916a-338e-4b6b-a6e2-a8a6bea8a4f9",
+   "request": {
+    "action": "edit",
+    "edited_content": {
+     "summary": "This seven-day trek into Nepal's Solu-Khumbu region offers something the Everest Base Camp corridor rarely permits: a quieter, less-trafficked approach to the high Himalaya, through living communities whose traditions have shaped this landscape for generations. The route leaves the road at Dhap and moves on foot through pine and rhododendron forest, past terraced fields worked by Sherpa and Tamang families, and along trails where the rhythms of village life remain largely undisturbed. The ascent to Pikey Peak Base Camp at 3,640 metres is gradual and considered, allowing the altitude to be met with care. The summit ridge opens to one of the region's most sweeping Himalayan panoramas, extending toward Everest, Makalu, and Kanchenjunga. The descent passes through Jase Bhanjyang and Junbesi, a monastery town of genuine cultural depth, its religious architecture and community life offering a point of real engagement before the trail finishes at Phaplu and Salleri. Nights are spent in tea houses and lodges along the route, the appropriate and authentic form of accommodation in this part of Solu-Khumbu, where the warmth of a shared dining room and a well-earned rest carry their own particular character. A final drive returns to Kathmandu on the seventh day. International flights included."
+    }
+   },
+   "status": 422,
+   "response": {
+    "detail": {
+     "code": "fact_locked",
+     "message": "This edit changes a tour fact (days, places, figures or what is or is not included). Only the wording can change; the facts come from Adventure Asia.",
+     "locked": [
+      {
+       "field": "content",
+       "fact": "included",
+       "value": "flights"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "step": "2-3:versions-after-refusals",
+   "method": "GET",
+   "path": "/api/tenant/v1/tours/my-versions?page=1&page_size=100 (this tour)",
+   "status": 200,
+   "response": [
+    {
+     "n": 6,
+     "status": "pending",
+     "id": "b92e916a-338e-4b6b-a6e2-a8a6bea8a4f9"
+    },
+    {
+     "n": 5,
+     "status": "rejected",
+     "id": "3b363e23-91b7-4e72-ae1e-b1de1bd52817"
+    },
+    {
+     "n": 4,
+     "status": "pending",
+     "id": "3d5e5ace-6200-403e-9cc8-4b3cb2e672a8"
+    },
+    {
+     "n": 3,
+     "status": "rejected",
+     "id": "8045e8ff-e98b-41a9-b20a-668833374992"
+    },
+    {
+     "n": 2,
+     "status": "pending",
+     "id": "751421b8-2e8c-4a17-bbaf-001253488ee3"
+    },
+    {
+     "n": 1,
+     "status": "ai_generated",
+     "id": "92de5ed6-6ad9-47d9-a712-cfd293766c99"
+    }
+   ]
+  },
+  {
+   "step": "4:patch-wording",
+   "method": "PATCH",
+   "path": "/api/tenant/v1/tours/versions/b92e916a-338e-4b6b-a6e2-a8a6bea8a4f9",
+   "request": {
+    "action": "edit",
+    "edited_content": {
+     "summary": "This seven-day trek into Nepal's Solu-Khumbu region offers something the Everest Base Camp corridor rarely permits: a calmer, less-trafficked approach to the high Himalaya, through living communities whose traditions have shaped this landscape for generations. The route leaves the road at Dhap and moves on foot through pine and rhododendron forest, past terraced fields worked by Sherpa and Tamang families, and along trails where the rhythms of village life remain largely undisturbed. The ascent to Pikey Peak Base Camp at 3,640 metres is gradual and considered, allowing the altitude to be met with care. The summit ridge opens to one of the region's most sweeping Himalayan panoramas, extending toward Everest, Makalu, and Kanchenjunga. The descent passes through Jase Bhanjyang and Junbesi, a monastery town of genuine cultural depth, its religious architecture and community life offering a point of real engagement before the trail finishes at Phaplu and Salleri. Nights are spent in tea houses and lodges along the route, the appropriate and authentic form of accommodation in this part of Solu-Khumbu, where the warmth of a shared dining room and a well-earned rest carry their own particular character. A final drive returns to Kathmandu on the seventh day."
+    }
+   },
+   "status": 200,
+   "response": {
+    "status": "edited",
+    "new_version_id": "6199ed43-fa58-4f64-a56f-20d0265eeb40",
+    "version_number": 7
+   }
+  },
+  {
+   "step": "4:get-v7",
+   "method": "GET",
+   "path": "/api/tenant/v1/tours/versions/6199ed43-fa58-4f64-a56f-20d0265eeb40",
+   "request": null,
+   "status": 200,
+   "response": "(version detail, see steps)"
+  },
+  {
+   "step": "5:ui-drawer-save",
+   "method": "PATCH",
+   "path": "/api/tenant/v1/tours/versions/6199ed43-fa58-4f64-a56f-20d0265eeb40",
+   "request": {
+    "action": "edit",
+    "edited_content": {
+     "summary": "This seven-day trek into Nepal's Solu-Khumbu region offers something the Everest Base Camp corridor rarely permits: a calmer, less-trafficked approach to the high Himalaya, through living communities whose traditions have shaped this landscape for generations. The route leaves the road at Dhap and moves on foot through pine and rhododendron forest, past terraced fields worked by Sherpa and Tamang families, and along trails where the rhythms of village life remain largely undisturbed. The ascent to Pikey Peak Base Camp at 3,640 metres is gradual and measured, allowing the altitude to be met with care. The summit ridge opens to one of the region's most sweeping Himalayan panoramas, extending toward Everest, Makalu, and Kanchenjunga. The descent passes through Jase Bhanjyang and Junbesi, a monastery town of genuine cultural depth, its religious architecture and community life offering a point of real engagement before the trail finishes at Phaplu and Salleri. Nights are spent in tea houses and lodges along the route, the appropriate and authentic form of accommodation in this part of Solu-Khumbu, where the warmth of a shared dining room and a well-earned rest carry their own particular character. A final drive returns to Kathmandu on the seventh day."
+    }
+   },
+   "status": 200,
+   "response": {
+    "status": "edited",
+    "new_version_id": "b6d30d7f-214e-40bd-a2af-5d3dab773cbc",
+    "version_number": 8
+   }
+  },
+  {
+   "step": "5:get-v8",
+   "method": "GET",
+   "path": "/api/tenant/v1/tours/versions/b6d30d7f-214e-40bd-a2af-5d3dab773cbc",
+   "request": null,
+   "status": 200,
+   "response": "(version detail, see steps)"
+  },
+  {
+   "step": "6:supersede-with-v6-content",
+   "method": "PATCH",
+   "path": "/api/tenant/v1/tours/versions/b6d30d7f-214e-40bd-a2af-5d3dab773cbc",
+   "request": {
+    "action": "edit",
+    "edited_content": {
+     "summary": "This seven-day trek into Nepal's Solu-Khumbu region offers something the Everest Base Camp corridor rarely permits: a quieter, less-trafficked approach to the high Himalaya, through living communities whose traditions have shaped this landscape for generations. The route leaves the road at Dhap and moves on foot through pine and rhododendron forest, past terraced fields worked by Sherpa and Tamang families, and along trails where the rhythms of village life remain largely undisturbed. The ascent to Pikey Peak Base Camp at 3,640 metres is gradual and considered, allowing the altitude to be met with care. The summit ridge opens to one of the region's most sweeping Himalayan panoramas, extending toward Everest, Makalu, and Kanchenjunga. The descent passes through Jase Bhanjyang and Junbesi, a monastery town of genuine cultural depth, its religious architecture and community life offering a point of real engagement before the trail finishes at Phaplu and Salleri. Nights are spent in tea houses and lodges along the route, the appropriate and authentic form of accommodation in this part of Solu-Khumbu, where the warmth of a shared dining room and a well-earned rest carry their own particular character. A final drive returns to Kathmandu on the seventh day.",
+     "highlights": [
+      "Ascent to Pikey Peak Base Camp at 3,640 metres, gaining altitude gradually through pine and rhododendron forest",
+      "Summit views from Pikey Peak across the Himalayan arc toward Everest, Makalu, and Kanchenjunga",
+      "Walking through Sherpa and Tamang villages whose traditions and way of life remain central to the Solu-Khumbu landscape",
+      "Junbesi: a monastery town with active religious life and some of the most culturally significant architecture on the route",
+      "Terraced hillside fields and forested trails from Dhap through to Jase Bhanjyang, with the high peaks shaping the horizon",
+      "Tea house and lodge accommodation in keeping with the region, offering an authentic and grounded experience of Solu-Khumbu"
+     ]
+    }
+   },
+   "status": 200,
+   "response": {
+    "status": "edited",
+    "new_version_id": "b7d2a591-69e4-4379-b432-67dc8c15cf22",
+    "version_number": 9
+   }
+  },
+  {
+   "step": "6:reject-test-version",
+   "method": "PATCH",
+   "path": "/api/tenant/v1/tours/versions/6199ed43-fa58-4f64-a56f-20d0265eeb40",
+   "request": {
+    "action": "reject"
+   },
+   "status": 200,
+   "response": {
+    "status": "rejected",
+    "version_id": "6199ed43-fa58-4f64-a56f-20d0265eeb40"
+   }
+  },
+  {
+   "step": "6:reject-test-version",
+   "method": "PATCH",
+   "path": "/api/tenant/v1/tours/versions/b6d30d7f-214e-40bd-a2af-5d3dab773cbc",
+   "request": {
+    "action": "reject"
+   },
+   "status": 200,
+   "response": {
+    "status": "rejected",
+    "version_id": "b6d30d7f-214e-40bd-a2af-5d3dab773cbc"
+   }
+  },
+  {
+   "step": "6:versions-after-restore",
+   "method": "GET",
+   "path": "/api/tenant/v1/tours/my-versions?page=1&page_size=100 (this tour)",
+   "status": 200,
+   "response": [
+    {
+     "n": 9,
+     "status": "pending",
+     "id": "b7d2a591-69e4-4379-b432-67dc8c15cf22"
+    },
+    {
+     "n": 8,
+     "status": "rejected",
+     "id": "b6d30d7f-214e-40bd-a2af-5d3dab773cbc"
+    },
+    {
+     "n": 7,
+     "status": "rejected",
+     "id": "6199ed43-fa58-4f64-a56f-20d0265eeb40"
+    },
+    {
+     "n": 6,
+     "status": "pending",
+     "id": "b92e916a-338e-4b6b-a6e2-a8a6bea8a4f9"
+    },
+    {
+     "n": 5,
+     "status": "rejected",
+     "id": "3b363e23-91b7-4e72-ae1e-b1de1bd52817"
+    },
+    {
+     "n": 4,
+     "status": "pending",
+     "id": "3d5e5ace-6200-403e-9cc8-4b3cb2e672a8"
+    },
+    {
+     "n": 3,
+     "status": "rejected",
+     "id": "8045e8ff-e98b-41a9-b20a-668833374992"
+    },
+    {
+     "n": 2,
+     "status": "pending",
+     "id": "751421b8-2e8c-4a17-bbaf-001253488ee3"
+    },
+    {
+     "n": 1,
+     "status": "ai_generated",
+     "id": "92de5ed6-6ad9-47d9-a712-cfd293766c99"
+    }
+   ]
+  },
+  {
+   "step": "6:get-latest",
+   "method": "GET",
+   "path": "/api/tenant/v1/tours/versions/b7d2a591-69e4-4379-b432-67dc8c15cf22",
+   "request": null,
+   "status": 200,
+   "response": "(version detail, see steps)"
+  }
+ ],
+ "steps": {
+  "1": {
+   "expected": "404 (was 500)",
+   "actual": 404,
+   "pass": true
+  },
+  "2": {
+   "expected": "422 fact_locked",
+   "actual": "422 fact_locked",
+   "locked": [
+    {
+     "field": "summary",
+     "fact": "figure",
+     "value": "ten-day"
+    }
+   ],
+   "pass": true
+  },
+  "3": {
+   "expected": "422 fact_locked",
+   "actual": "422 fact_locked",
+   "locked": [
+    {
+     "field": "content",
+     "fact": "included",
+     "value": "flights"
+    }
+   ],
+   "pass": true
+  },
+  "4": {
+   "expected": "200 + new version id",
+   "actual": "200 6199ed43-fa58-4f64-a56f-20d0265eeb40 v7",
+   "pass": true,
+   "newVersionSummaryHasRewording": true,
+   "drawerShowsRewording": true
+  },
+  "5": {
+   "expected": "PATCH on v7, edited_content keys = [summary]; 200; v8 name/subtitle/seo_title/seo_meta = v7 own values",
+   "patchedVersion": "6199ed43-fa58-4f64-a56f-20d0265eeb40",
+   "patchedIsV7": true,
+   "action": "edit",
+   "sentKeys": [
+    "summary"
+   ],
+   "status": 200,
+   "previousOwn": {
+    "name": "Pikey Peak Trek: Solu-Khumbu in 7 Days",
+    "subtitle": "Seven days on foot through Sherpa and Tamang country to Pikey Peak (3,640 m), with Himalayan views toward Everest, Makalu, and Kanchenjunga",
+    "seo_title": "Pikey Peak Trek Kathmandu: 7-Day Solu-Khumbu",
+    "seo_meta": "From Kathmandu, trek seven days through Solu-Khumbu's Sherpa villages and forest to Pikey Peak, with Everest and Kanchenjunga views, in Nepal."
+   },
+   "newVersion": {
+    "name": "Pikey Peak Trek: Solu-Khumbu in 7 Days",
+    "subtitle": "Seven days on foot through Sherpa and Tamang country to Pikey Peak (3,640 m), with Himalayan views toward Everest, Makalu, and Kanchenjunga",
+    "seo_title": "Pikey Peak Trek Kathmandu: 7-Day Solu-Khumbu",
+    "seo_meta": "From Kathmandu, trek seven days through Solu-Khumbu's Sherpa villages and forest to Pikey Peak, with Everest and Kanchenjunga views, in Nepal."
+   },
+   "fieldsEqualPrevious": {
+    "name": true,
+    "subtitle": true,
+    "seo_title": true,
+    "seo_meta": true
+   },
+   "fieldsDifferFromMaster": {
+    "name": true,
+    "subtitle": true,
+    "seo_title": true,
+    "seo_meta": true
+   },
+   "highlightsUnchanged": true,
+   "summaryHasEdit": true,
+   "newVersion_number": 8,
+   "pass": true
+  },
+  "6": {
+   "expected": "latest version content == v6 content; this run's test versions rejected",
+   "supersedeStatus": 200,
+   "latest": {
+    "n": 9,
+    "status": "pending",
+    "id": "b7d2a591-69e4-4379-b432-67dc8c15cf22"
+   },
+   "latestIsSupersede": true,
+   "contentEqualsV6": true,
+   "differingKeys": [],
+   "testVersionsRejected": true,
+   "versionsAfter": [
+    "9:pending",
+    "8:rejected",
+    "7:rejected",
+    "6:pending",
+    "5:rejected",
+    "4:pending",
+    "3:rejected",
+    "2:pending",
+    "1:ai_generated"
+   ],
+   "pass": true,
+   "drawerShowsOriginal": true
+  },
+  "2-3 no version written": true
+ },
+ "created": [
+  "6199ed43-fa58-4f64-a56f-20d0265eeb40",
+  "b6d30d7f-214e-40bd-a2af-5d3dab773cbc"
+ ],
+ "shots": [
+  {
+   "file": "recheck-step4-1440.png",
+   "bytes": 156524
+  },
+  {
+   "file": "recheck-step5-edited-1440.png",
+   "bytes": 158256
+  },
+  {
+   "file": "recheck-step5-saved-1440.png",
+   "bytes": 160631
+  }
+ ],
+ "versionsBefore": [
+  {
+   "n": 6,
+   "status": "pending",
+   "id": "b92e916a-338e-4b6b-a6e2-a8a6bea8a4f9"
+  },
+  {
+   "n": 5,
+   "status": "rejected",
+   "id": "3b363e23-91b7-4e72-ae1e-b1de1bd52817"
+  },
+  {
+   "n": 4,
+   "status": "pending",
+   "id": "3d5e5ace-6200-403e-9cc8-4b3cb2e672a8"
+  },
+  {
+   "n": 3,
+   "status": "rejected",
+   "id": "8045e8ff-e98b-41a9-b20a-668833374992"
+  },
+  {
+   "n": 2,
+   "status": "pending",
+   "id": "751421b8-2e8c-4a17-bbaf-001253488ee3"
+  },
+  {
+   "n": 1,
+   "status": "ai_generated",
+   "id": "92de5ed6-6ad9-47d9-a712-cfd293766c99"
+  }
+ ],
+ "activityTop": [
+  {
+   "action": "tenant_tour_version.edited",
+   "label": "Edited a tour",
+   "at": "2026-11-19T11:10:53.507049+00:00"
+  },
+  {
+   "action": "tenant_tour_version.edited",
+   "label": "Edited a tour",
+   "at": "2026-11-19T11:10:51.604838+00:00"
+  },
+  {
+   "action": "tenant_tour_version.edited",
+   "label": "Edited a tour",
+   "at": "2026-11-19T11:10:46.761447+00:00"
+  },
+  {
+   "action": "tenant_tour_version.edit_refused",
+   "label": "Tour edit refused: it changed a tour fact",
+   "at": "2026-11-19T11:10:45.754864+00:00"
+  },
+  {
+   "action": "tenant_tour_version.edit_refused",
+   "label": "Tour edit refused: it changed a tour fact",
+   "at": "2026-11-19T11:10:45.368575+00:00"
+  },
+  {
+   "action": "tenant.login",
+   "label": "Signed in",
+   "at": "2026-11-19T11:09:32.421685+00:00"
+  },
+  {
+   "action": "tenant_tour_version.exported",
+   "label": "Downloaded a tour",
+   "at": "2026-11-19T11:03:29.891434+00:00"
+  },
+  {
+   "action": "content_piece.exported",
+   "label": "Downloaded a post",
+   "at": "2026-11-19T11:03:29.498882+00:00"
+  }
+ ],
+ "pageErrors": []
+}

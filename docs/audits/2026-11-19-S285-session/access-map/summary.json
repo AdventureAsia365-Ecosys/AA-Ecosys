@@ -1,0 +1,917 @@
+{
+ "generated": "2026-11-19 (S285)",
+ "overview": [
+  {
+   "app": "CIS (admin của AA)",
+   "who_enters": "Chỉ nhân viên AA. Đại lý không còn vào CIS (trang /portal đã chuyển sang AA-Partner).",
+   "how_sign_in": "Trang đăng nhập nhân viên staff-auth (Cognito WORKFORCE), mã gửi về e-mail công ty. Vai trò lấy từ nhóm cis-<vai trò>, mỗi người đúng 1 vai trò CIS. Người có cờ owner gán vai trò cho cả CIS, Booking và CRM trên trang Nhân viên & quyền.",
+   "roles_count": "8 vai trò gán được (admin, content_lead, content, tenant_qa, customer_success, support, finance, ai_ops) + viewer chỉ cho tài khoản thử + cờ owner (không phải vai trò)",
+   "evidence": "apps/AA-CIS-App/api/core/staff_identity.py:18-21,103-112; apps/AA-CIS-App/api/core/staff_authz.py:164-227; apps/AA-CIS-App/api/services/staff_directory.py:1-41,110-146"
+  },
+  {
+   "app": "Booking (back office đặt tour)",
+   "who_enters": "Nhân viên AA làm bán hàng, sản phẩm & điều hành, kế toán và quản trị.",
+   "how_sign_in": "Cùng trang staff-auth (client booking-staff). Vai trò lấy từ nhóm booking-*; không có nhóm booking-* thì bị từ chối. Booking không đổi vai trò tại chỗ: admin cấp trên trang Staff của CIS.",
+   "roles_count": "5 hôm nay (admin, sales, contracting, finance, content_creator cũ); còn 4 sau khi ẩn content_creator (R8)",
+   "evidence": "apps/AA-Booking/backend/app/auth/staff.py:72-85,102-189; apps/AA-Booking/backend/app/auth/identity_config.py:54-58"
+  },
+  {
+   "app": "CRM đại lý (AA-Partner, host portal.)",
+   "who_enters": "Chủ và nhân viên của từng đại lý. Mỗi đại lý chỉ thấy dữ liệu của mình.",
+   "how_sign_in": "Cognito PARTNER, chỉ vào được qua lời mời, mật khẩu + app Authenticator. Chủ đầu tiên do AA mời qua console L1; chủ mời người còn lại. Khách du lịch không có tài khoản (link ký + mã e-mail).",
+   "roles_count": "3 (owner, agent, assistant)",
+   "evidence": "apps/AA-Partner/api/app/permissions.py:155-225; apps/AA-Partner/api/app/routers/team.py:77-116"
+  },
+  {
+   "app": "Content studio của đại lý (cùng host portal.)",
+   "who_enters": "Thành viên đại lý làm nội dung marketing và bản tour riêng (T2).",
+   "how_sign_in": "Cùng đăng nhập CRM; web đổi lấy token studio của CIS sống tối đa 15 phút, trong token có vai trò studio. Ghế chủ studio chỉ AA (cis-admin hoặc crm-platform-admin) mời.",
+   "roles_count": "3 (chủ studio, biên tập, người xem)",
+   "evidence": "apps/AA-CIS-App/api/middleware/tenant_role.py:48,58-64"
+  },
+  {
+   "app": "Console nhân viên AA cho CRM (/staff trên portal. và console L1 trong admin CIS)",
+   "who_enters": "Nhân viên AA hỗ trợ, vận hành và quản trị đại lý (không phải nhân viên của đại lý).",
+   "how_sign_in": "/staff: Cognito WORKFORCE client crm-staff, nhóm crm-ops hoặc crm-support. Console L1: đăng nhập admin CIS, nhóm cis-admin, crm-platform-admin, cis-customer_success, cis-support.",
+   "roles_count": "6 (crm-platform-admin, cis-admin đọc, cis-customer_success, cis-support, crm-ops, crm-support)",
+   "evidence": "apps/AA-Partner/api/app/routers/staff.py:1-30,229,245; apps/AA-Partner/api/app/routers/ops.py:653-918; infra/AA-CIS-Infra/modules/environment/crm_web.tf:30-33"
+  },
+  {
+   "app": "TripPlanner (trang lập chuyến cho khách)",
+   "who_enters": "Khách du lịch, không cần đăng nhập. Nhân viên AA và đại lý không có trang quản trị ở đây.",
+   "how_sign_in": "Không đăng nhập: khách được nhận ra bằng cookie riêng của trình duyệt. Đăng nhập khách cũ đã gỡ. Cài đặt và AI của TripPlanner do nhân viên AA chỉnh trong admin CIS; CRM kéo lead bằng token máy.",
+   "roles_count": "0 vai trò nhân viên; 2 loại khách (trang AA, trang đại lý) + 2 máy gọi máy",
+   "evidence": "apps/AA-TripPlanner-Web/backend/assembly/handler.py:501,527,691; apps/AA-TripPlanner-Web/backend/shared/m2m_auth.py:33,75; apps/AA-TripPlanner-Web/CONTEXT.md:544,1292"
+  },
+  {
+   "app": "Nền tảng (GitHub, AWS, Cognito)",
+   "who_enters": "Tech lead (mọi quyền), một tài khoản GitHub dự phòng, business owner (chỉ xem chi phí AWS), các bot và role máy.",
+   "how_sign_in": "GitHub: tài khoản cá nhân bắt buộc 2FA. AWS hạ tầng: role admin có MFA 12 giờ. Tài khoản quản lý AWS: Identity Center, MFA mỗi lần. CI: GitHub OIDC, chỉ nhánh main hoặc môi trường được ghim.",
+   "roles_count": "10 loại chủ thể (người, bot, role máy)",
+   "evidence": "infra/AA-CIS-Infra/accounts/aa365/admin_role.tf:14,50; infra/AA-CIS-Infra/accounts/management/identity_center.tf:16-19,68; docs/security/github-apps.md:76,169"
+  }
+ ],
+ "approvals": [
+  {
+   "app": "Booking",
+   "action": "Công bố hợp đồng nhà cung cấp",
+   "creator": "Quản trị hoặc Sản phẩm & điều hành (nhập điều khoản, giá)",
+   "approver": "Quản trị hoặc Sản phẩm & điều hành, khác người sửa cuối bản nháp",
+   "rule": "DB chặn người sửa cuối tự công bố. Sau R4: chặn mọi người đã viết điều khoản hoặc giá, không chỉ người sửa cuối.",
+   "only_1_2_people": "Đội 2 người (owner + Sản phẩm & điều hành): một người làm, người kia duyệt. Chỉ 1 người: tech lead dùng tài khoản admin của chính mình làm người thứ hai (người thật khác). Không có nút 'duyệt một mình' ở Dev (R7).",
+   "today_or_planned": "today; planned (AA-1150 L7b) cho R4",
+   "evidence": "apps/AA-Booking/backend/app/suppliers/service.py:496-498,597-612"
+  },
+  {
+   "app": "Booking",
+   "action": "Quy tắc giá, tỷ giá, chính sách huỷ",
+   "creator": "Quản trị hoặc Sản phẩm & điều hành",
+   "approver": "Quản trị hoặc Sản phẩm & điều hành, khác người tạo",
+   "rule": "API trả 403 khi tự duyệt, trigger DB chặn lần nữa.",
+   "only_1_2_people": "Đội 2 người (owner + Sản phẩm & điều hành): một người làm, người kia duyệt. Chỉ 1 người: tech lead dùng tài khoản admin của chính mình làm người thứ hai (người thật khác). Không có nút 'duyệt một mình' ở Dev (R7).",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Booking/backend/app/pricing/policy.py:440-461"
+  },
+  {
+   "app": "Booking",
+   "action": "Chiết khấu theo hạng và bảng giá riêng của một đại lý",
+   "creator": "Quản trị hoặc Sản phẩm & điều hành",
+   "approver": "Quản trị hoặc Sản phẩm & điều hành, khác người tạo",
+   "rule": "403 + CHECK trong DB.",
+   "only_1_2_people": "Đội 2 người (owner + Sản phẩm & điều hành): một người làm, người kia duyệt. Chỉ 1 người: tech lead dùng tài khoản admin của chính mình làm người thứ hai (người thật khác). Không có nút 'duyệt một mình' ở Dev (R7).",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Booking/backend/app/b2b/agency_pricing.py:513-519"
+  },
+  {
+   "app": "Booking",
+   "action": "Bảng giá tay (phiên bản giá) của tour",
+   "creator": "Quản trị hoặc Sản phẩm & điều hành",
+   "approver": "Quản trị hoặc Sản phẩm & điều hành, khác người soạn",
+   "rule": "403 + CHECK trong DB.",
+   "only_1_2_people": "Đội 2 người (owner + Sản phẩm & điều hành): một người làm, người kia duyệt. Chỉ 1 người: tech lead dùng tài khoản admin của chính mình làm người thứ hai (người thật khác). Không có nút 'duyệt một mình' ở Dev (R7).",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Booking/backend/app/catalog/price_versions.py:673"
+  },
+  {
+   "app": "Booking",
+   "action": "Lịch mùa, sự kiện lễ",
+   "creator": "Quản trị hoặc Sản phẩm & điều hành",
+   "approver": "Quản trị hoặc Sản phẩm & điều hành, khác người đề xuất",
+   "rule": "403 + CHECK trong DB.",
+   "only_1_2_people": "Đội 2 người (owner + Sản phẩm & điều hành): một người làm, người kia duyệt. Chỉ 1 người: tech lead dùng tài khoản admin của chính mình làm người thứ hai (người thật khác). Không có nút 'duyệt một mình' ở Dev (R7).",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Booking/backend/app/pricing/seasons_admin.py:155-159"
+  },
+  {
+   "app": "Booking",
+   "action": "Dừng bán (stop-sale)",
+   "creator": "Quản trị hoặc Sản phẩm & điều hành",
+   "approver": "Hôm nay: người thứ hai duyệt thì mới có hiệu lực. Sau R6: bật có hiệu lực ngay, không chờ ai; chỉ GỠ một dừng bán đã duyệt mới cần người thứ hai",
+   "rule": "Lỡ chặn nhầm thì tour chỉ chuyển sang 'hỏi lại', an toàn hơn bán 'xác nhận ngay' khi khách sạn đã hết phòng.",
+   "only_1_2_people": "Bật dừng bán: 1 người là đủ. Gỡ: như các bước 2 người khác.",
+   "today_or_planned": "today; planned (AA-1145, code ở lát L7a của AA-1150) cho R6",
+   "evidence": "apps/AA-Booking/backend/app/pricing/seasons.py:157; apps/AA-Booking/backend/app/pricing/seasons_admin.py:9-11,155-159"
+  },
+  {
+   "app": "Booking",
+   "action": "Tham số trang Policy (giá, tỷ giá, thuế, phụ thu, thanh toán, hạn giữ dữ liệu)",
+   "creator": "Quản trị, Sản phẩm & điều hành hoặc Kế toán",
+   "approver": "Theo nhóm: giá = Quản trị/Sản phẩm & điều hành; tỷ giá, thuế, thanh toán = Quản trị/Kế toán; hạn giữ dữ liệu = chỉ Quản trị; luôn khác người đề xuất",
+   "rule": "403 + CHECK bảng.",
+   "only_1_2_people": "Nhóm 'chỉ Quản trị' cần 2 người có vai trò Quản trị: tech lead + business owner (sau D6).",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Booking/backend/app/pricing/policy_admin.py:317,370; apps/AA-Booking/backend/app/auth/staff.py:178-183"
+  },
+  {
+   "app": "Booking",
+   "action": "Điều chỉnh giá theo một đoàn khởi hành",
+   "creator": "Quản trị hoặc Sản phẩm & điều hành",
+   "approver": "Quản trị hoặc Sản phẩm & điều hành, khác người đề xuất",
+   "rule": "403.",
+   "only_1_2_people": "Đội 2 người (owner + Sản phẩm & điều hành): một người làm, người kia duyệt. Chỉ 1 người: tech lead dùng tài khoản admin của chính mình làm người thứ hai (người thật khác). Không có nút 'duyệt một mình' ở Dev (R7).",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Booking/backend/app/b2b/price_adjustments.py:253"
+  },
+  {
+   "app": "Booking",
+   "action": "Đặt chỗ thay đại lý có giá dưới biên sàn, giảm phí huỷ",
+   "creator": "Quản trị hoặc Bán hàng",
+   "approver": "Quản trị hoặc Sản phẩm & điều hành, khác người nhập",
+   "rule": "403 + CHECK.",
+   "only_1_2_people": "Đội 2 người (owner + Sản phẩm & điều hành): một người làm, người kia duyệt. Chỉ 1 người: tech lead dùng tài khoản admin của chính mình làm người thứ hai (người thật khác). Không có nút 'duyệt một mình' ở Dev (R7).",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Booking/backend/app/b2b/desk_bookings.py:18-21,321; apps/AA-Booking/backend/app/b2b/amendments.py:318"
+  },
+  {
+   "app": "Booking",
+   "action": "Phí đoàn khởi hành",
+   "creator": "Quản trị, Bán hàng hoặc Sản phẩm & điều hành",
+   "approver": "Quản trị hoặc Sản phẩm & điều hành, khác người đề xuất",
+   "rule": "403 + CHECK.",
+   "only_1_2_people": "Đội 2 người (owner + Sản phẩm & điều hành): một người làm, người kia duyệt. Chỉ 1 người: tech lead dùng tài khoản admin của chính mình làm người thứ hai (người thật khác). Không có nút 'duyệt một mình' ở Dev (R7).",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Booking/backend/app/b2b/departure_fees.py:10,237"
+  },
+  {
+   "app": "Booking",
+   "action": "Giữ chỗ (allotment) cho đại lý trên một khởi hành",
+   "creator": "Quản trị, Bán hàng hoặc Sản phẩm & điều hành",
+   "approver": "Quản trị, Bán hàng hoặc Sản phẩm & điều hành, khác người đề xuất",
+   "rule": "403 + CHECK.",
+   "only_1_2_people": "Đội 2 người (owner + Sản phẩm & điều hành): một người làm, người kia duyệt. Chỉ 1 người: tech lead dùng tài khoản admin của chính mình làm người thứ hai (người thật khác). Không có nút 'duyệt một mình' ở Dev (R7).",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Booking/backend/app/b2b/allotments.py:6,261"
+  },
+  {
+   "app": "Booking",
+   "action": "Duyệt hoá đơn nhà cung cấp",
+   "creator": "Quản trị hoặc Sản phẩm & điều hành (nhập hoá đơn)",
+   "approver": "Quản trị hoặc Sản phẩm & điều hành, khác người nhập và khác người sửa số tiền cuối",
+   "rule": "403 + CHECK.",
+   "only_1_2_people": "Đội 2 người (owner + Sản phẩm & điều hành): một người làm, người kia duyệt. Chỉ 1 người: tech lead dùng tài khoản admin của chính mình làm người thứ hai (người thật khác). Không có nút 'duyệt một mình' ở Dev (R7).",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Booking/backend/app/ops/supplier_bills.py:840-843"
+  },
+  {
+   "app": "Booking",
+   "action": "Ghi khoản trả nhà cung cấp (chỉ là bản ghi; tiền thật đi ở ngân hàng)",
+   "creator": "Hoá đơn đã được duyệt",
+   "approver": "Hôm nay: chỉ Quản trị ghi, khác người nhập và người sửa số tiền, nhưng chưa chặn người đã duyệt hoá đơn. Sau R2/R3: Kế toán hoặc Quản trị ghi, khác cả người duyệt hoá đơn",
+   "rule": "Sau R3: nếu không còn ai khác có quyền trả đang hoạt động, vẫn cho ghi nhưng bắt ghi lý do và gắn cờ đỏ, cờ hiện trong tóm tắt tuần gửi business owner. Ở ngân hàng: Kế toán lập lệnh, business owner duyệt lệnh.",
+   "only_1_2_people": "2 người: owner vừa duyệt hoá đơn vừa ghi khoản trả thì chỉ gắn cờ, chấp nhận được vì lệnh ngân hàng vẫn do owner duyệt.",
+   "today_or_planned": "today; planned (AA-1150 L7a) cho R2, R3",
+   "evidence": "apps/AA-Booking/backend/app/ops/supplier_bills.py:958-962; apps/AA-Booking/backend/app/auth/staff.py:157"
+  },
+  {
+   "app": "Booking",
+   "action": "Khoản đại lý trả cho AA",
+   "creator": "Quản trị hoặc Kế toán (ghi khoản)",
+   "approver": "Quản trị hoặc Kế toán, khác người ghi",
+   "rule": "403 + CHECK.",
+   "only_1_2_people": "Kế toán ghi, Quản trị duyệt (hoặc ngược lại).",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Booking/backend/app/agency_billing/payments.py:143"
+  },
+  {
+   "app": "Booking",
+   "action": "Điều khoản đối tác (ví dụ lỗi giá)",
+   "creator": "Quản trị hoặc Kế toán (sửa)",
+   "approver": "Quản trị, khác người sửa cuối",
+   "rule": "403 + CHECK.",
+   "only_1_2_people": "Kế toán sửa, Quản trị duyệt. Nếu Quản trị sửa thì cần Quản trị thứ hai (tech lead hoặc business owner).",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Booking/backend/app/agency_billing/clauses.py:95-108"
+  },
+  {
+   "app": "Booking",
+   "action": "Kích hoạt nhà cung cấp mới",
+   "creator": "Quản trị hoặc Sản phẩm & điều hành (tạo nhà cung cấp, trạng thái 'Chờ duyệt')",
+   "approver": "Quản trị hoặc Sản phẩm & điều hành, khác người tạo",
+   "rule": "Hôm nay nhà cung cấp mới vào thẳng 'đang dùng'. Sau R5: chưa kích hoạt thì không đặt dịch vụ, không nhận hoá đơn. Nhà cung cấp đang có giữ nguyên 'đang dùng'.",
+   "only_1_2_people": "Đội 2 người (owner + Sản phẩm & điều hành): một người làm, người kia duyệt. Chỉ 1 người: tech lead dùng tài khoản admin của chính mình làm người thứ hai (người thật khác). Không có nút 'duyệt một mình' ở Dev (R7).",
+   "today_or_planned": "planned (AA-1150 L7b)",
+   "evidence": "apps/AA-Booking/migrations/008_suppliers_contracts.sql:61,74; apps/AA-Booking/backend/app/suppliers/service.py:410"
+  },
+  {
+   "app": "Booking",
+   "action": "Số tài khoản ngân hàng nhà cung cấp (nhập hoặc đổi)",
+   "creator": "Quản trị hoặc Kế toán",
+   "approver": "Quản trị hoặc Kế toán, khác người nhập; gọi lại số điện thoại cũ để xác nhận; khoá trả tiền 24 giờ",
+   "rule": "Số tài khoản mã hoá bằng khoá KMS riêng (A1 đã duyệt), chỉ Kế toán và Quản trị giải mã.",
+   "only_1_2_people": "Nếu owner tự nhập số tài khoản và không có Kế toán: tech lead (tài khoản admin riêng) duyệt.",
+   "today_or_planned": "planned (AA-1150 L7c)",
+   "evidence": "docs/audits/2026-11-19-S285-session/advisory-r3-t13-roles.md:310-319 (chưa có code, supplier_bank.* chưa tồn tại)"
+  },
+  {
+   "app": "CIS",
+   "action": "Cài đặt hệ thống (ngưỡng, trần, chính sách trên Platform › Settings)",
+   "creator": "Admin (đề xuất, ghi lý do)",
+   "approver": "Admin. Công tắc cis.settings.two_person_approval TẮT (Dev hôm nay): tự duyệt, ghi cờ self_approved, khoá tác động cao gửi e-mail cho tech lead. BẬT (từ prod đầu tiên hoặc tenant trả tiền đầu tiên): phải là admin khác",
+   "rule": "Đang bật thì muốn tắt công tắc cũng cần người thứ hai.",
+   "only_1_2_people": "Hai admin thật của CIS: tech lead và business owner.",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-CIS-App/api/services/settings_registry.py:456-462; apps/AA-CIS-App/api/migrations/407_platform_settings_registry.sql:404"
+  },
+  {
+   "app": "CIS",
+   "action": "Xuất bản nội dung AA (Review Queue duyệt, đưa phiên bản lên bản chính, xuất bản trang chuyến, nội dung khách sạn/hoạt động, nội dung cho CRM)",
+   "creator": "content, content_lead hoặc admin (sửa, soạn nháp)",
+   "approver": "Hôm nay: không cần người thứ hai, content tự duyệt được. Sau D1: quyền riêng content.publish; công tắc cis.content.publish_two_person TẮT trên Dev (tự xuất bản), BẬT ở prod: content_lead hoặc admin xuất bản, khác người soạn",
+   "rule": "Từ chối 403 same_person khi người bấm xuất bản chính là người soạn (lúc công tắc bật).",
+   "only_1_2_people": "Nếu chỉ có 1 nhân viên content: content_lead hoặc admin (tech lead, business owner) là người thứ hai.",
+   "today_or_planned": "planned (AA-1146)",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:451,511,521,655,730,821-823"
+  },
+  {
+   "app": "CIS",
+   "action": "Đổi công tắc 'cần người thứ hai khi xuất bản'",
+   "creator": "Admin",
+   "approver": "Admin khác (vì công tắc là cài đặt hai người)",
+   "rule": "Bật công tắc là siết lại; tắt khi đang bật thì phải có admin thứ hai, để một người không tự gỡ khoá của chính mình.",
+   "only_1_2_people": "Tech lead đề xuất, business owner duyệt (hoặc ngược lại).",
+   "today_or_planned": "planned (AA-1146)",
+   "evidence": "apps/AA-CIS-App/api/services/settings_registry.py:456-462"
+  },
+  {
+   "app": "CIS",
+   "action": "Release Writing memory (luật viết của AI)",
+   "creator": "admin hoặc ai_ops",
+   "approver": "admin hoặc ai_ops, chỉ cần một người thật bấm; không bắt khác người tạo",
+   "rule": "Chưa có luật khác người.",
+   "only_1_2_people": "1 người là đủ hôm nay.",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-CIS-App/services/writing_memory/releases.py:717-728"
+  },
+  {
+   "app": "CIS",
+   "action": "Xoá dữ liệu của một đại lý",
+   "creator": "Admin",
+   "approver": "Admin đăng nhập Cognito; không bắt khác người tạo yêu cầu",
+   "rule": "Bắt đăng nhập thật, dấu vân tay dữ liệu còn mới và công tắc apply (Terraform) đang bật.",
+   "only_1_2_people": "1 người là đủ hôm nay.",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-CIS-App/services/tenant_erasure/saga.py:355-367"
+  },
+  {
+   "app": "CIS",
+   "action": "Tạo nhân viên, gán vai trò CIS/Booking/CRM",
+   "creator": "Admin có cờ owner",
+   "approver": "Không có người duyệt",
+   "rule": "Chỉ cờ owner + đăng nhập Cognito. Sắp thêm (AA-1150): cấp vai trò có quyền tiền (booking-admin, contracting, finance) thì báo ngay cho mọi admin khác.",
+   "only_1_2_people": "Một owner tự làm; người kia nhận thông báo.",
+   "today_or_planned": "today; planned (AA-1150) cho thông báo",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:220-227; apps/AA-CIS-App/api/services/staff_directory.py:599-608"
+  },
+  {
+   "app": "CIS + Booking + CRM",
+   "action": "Tạo hoặc sửa vai trò tuỳ chỉnh (bước 2 của R1)",
+   "creator": "Admin có cờ owner",
+   "approver": "Admin khác (tech lead hoặc business owner)",
+   "rule": "Mỗi lần đổi bộ quyền cần người thứ hai và ghi audit; cặp quyền xung đột (ví dụ duyệt hoá đơn + ghi khoản trả) bị chặn cứng.",
+   "only_1_2_people": "Tech lead làm, business owner duyệt.",
+   "today_or_planned": "planned (AA-1150 + issue mới, hỏi trước khi tạo)",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:164-210; apps/AA-Booking/backend/app/auth/staff.py:102-189; apps/AA-Partner/api/app/permissions.py:155-225"
+  },
+  {
+   "app": "CRM đại lý",
+   "action": "Giảm giá vượt hạn mức hoặc bán dưới giá vốn",
+   "creator": "Nhân viên bán (agent) xin duyệt",
+   "approver": "Chủ đại lý (owner)",
+   "rule": "DB chỉ cho owner. Owner tự xuất bản giảm giá vượt hạn mức thì tự ghi duyệt của chính mình.",
+   "only_1_2_people": "Đại lý 1 người: owner tự làm, có audit. Chưa có quyết định áp luật R3 cho đại lý.",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Partner/api/app/proposals/discount.py:11-16,184-194"
+  },
+  {
+   "app": "CRM đại lý",
+   "action": "Hoàn tiền cho khách",
+   "creator": "Owner hoặc agent (xin hoàn)",
+   "approver": "Owner mọi mức; agent tới ngưỡng của đại lý; agent không tự duyệt yêu cầu của mình",
+   "rule": "403 refund_self_approval cho agent. Owner không bị chặn tự duyệt.",
+   "only_1_2_people": "Đại lý 1 người: owner tự xin, tự duyệt.",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Partner/api/app/payments/service.py:405-409"
+  },
+  {
+   "app": "CRM đại lý",
+   "action": "Hoa hồng đối tác bán",
+   "creator": "Hệ thống tự tính từ chuyến đã đặt",
+   "approver": "Owner duyệt và ghi đã trả, không cần người thứ hai",
+   "rule": "Không có luật khác người.",
+   "only_1_2_people": "Owner làm hết.",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Partner/api/app/routers/partners.py:218-245"
+  },
+  {
+   "app": "CRM đại lý",
+   "action": "Nháp AI (tin nhắn, xác nhận nhà cung cấp, phương án ngày)",
+   "creator": "AI soạn",
+   "approver": "Một thành viên đại lý chấp nhận trước khi gửi hoặc áp vào chuyến",
+   "rule": "AI không tự gửi gì.",
+   "only_1_2_people": "Không ảnh hưởng.",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Partner/api/app/permissions.py:79-81,186; apps/AA-Partner/api/app/llm/ai_drafts.py:103"
+  },
+  {
+   "app": "CRM (AA quản trị)",
+   "action": "Khôi phục chủ đại lý (khi chủ mất quyền truy cập)",
+   "creator": "crm-platform-admin của AA mở yêu cầu",
+   "approver": "Không có người duyệt; thay bằng 14 ngày chờ, chủ cũ được báo, thành viên nào của đại lý cũng huỷ được",
+   "rule": "409 recovery_not_due nếu chưa đủ 14 ngày.",
+   "only_1_2_people": "Không cần người thứ hai.",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Partner/api/app/members/recovery.py:14-18"
+  },
+  {
+   "app": "CRM (AA quản trị)",
+   "action": "Cài đặt CRM (ngưỡng, trần, mặc định)",
+   "creator": "crm-platform-admin",
+   "approver": "crm-platform-admin khác khi công tắc crm.settings.two_person_approval bật; Dev đang tắt nên tự duyệt, ghi self_approved",
+   "rule": "Giống cài đặt CIS.",
+   "only_1_2_people": "Hôm nay chỉ tech lead giữ crm-platform-admin: muốn bật công tắc thì phải cấp thêm cho business owner.",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Partner/api/app/platform_settings/service.py:20-22,663-682"
+  },
+  {
+   "app": "CRM (AA hỗ trợ)",
+   "action": "Vào xem dữ liệu một đại lý để hỗ trợ",
+   "creator": "Chủ đại lý cho phép 1–7 ngày",
+   "approver": "Không cần thêm; nhân viên crm-support chỉ đọc, có ticket",
+   "rule": "Ngoài khung chủ cho phép thì không vào được.",
+   "only_1_2_people": "Không ảnh hưởng.",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Partner/api/app/routers/staff.py:1-30,229"
+  },
+  {
+   "app": "CRM (AA vận hành)",
+   "action": "Truy cập khẩn (break-glass) vào một đại lý",
+   "creator": "crm-ops tự mở",
+   "approver": "Không có người duyệt trước; bắt lý do, ticket, 15–60 phút, e-mail báo chủ đại lý và ops",
+   "rule": "Chỉ đọc, không ghi được dữ liệu đại lý.",
+   "only_1_2_people": "1 người.",
+   "today_or_planned": "today",
+   "evidence": "apps/AA-Partner/api/app/routers/staff.py:24-28,245"
+  },
+  {
+   "app": "GitHub",
+   "action": "Merge PR vào main",
+   "creator": "Agent điều phối (GitHub App aa-agent)",
+   "approver": "Giai đoạn dev: agent tự merge khi CI xanh, subagent không merge được. Từ prod hoặc tenant trả tiền đầu tiên: tech lead duyệt trước PR Terraform/IAM, migration, bảo mật, xoá dữ liệu",
+   "rule": "CI bắt buộc xanh; hook chặn subagent merge.",
+   "only_1_2_people": "Chỉ 1 kỹ sư (tech lead).",
+   "today_or_planned": "today",
+   "evidence": ".kiro/steering/session-workflow.md:57,60; .claude/hooks/subagent-guardrails.sh:2"
+  },
+  {
+   "app": "AWS tài khoản quản lý",
+   "action": "Terraform apply phần quản lý tổ chức AWS",
+   "creator": "CI qua GitHub OIDC",
+   "approver": "Tech lead (người duyệt bắt buộc của môi trường org, chỉ nhánh main)",
+   "rule": "Môi trường GitHub có reviewer bắt buộc.",
+   "only_1_2_people": "Tech lead duyệt.",
+   "today_or_planned": "today",
+   "evidence": "infra/AA-CIS-Infra/accounts/management/cicd.tf:268,286"
+  }
+ ],
+ "changes": [
+  {
+   "id": "R1",
+   "app": "Booking, CIS, CRM",
+   "what_changes": "Bước 1: bộ quyền của mỗi vai trò chuyển thành dữ liệu và có trang 'Vai trò & quyền' hiện ma trận tick theo app. Bước 2 (anh muốn làm luôn): tạo vai trò tuỳ chỉnh bằng cách nhân bản vai trò mẫu rồi tick; đổi cần người thứ hai + audit; luật không tự duyệt vẫn chặn cứng trong DB.",
+   "issue": "AA-1150 (+ issue mới cho phần CIS/CRM của bước 2, hỏi trước khi tạo)",
+   "status": "planned",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:164-210; apps/AA-CIS-App/frontend/lib/rbac.ts:340-377; apps/AA-Booking/backend/app/auth/staff.py:102-189; apps/AA-Partner/api/app/permissions.py:155-225"
+  },
+  {
+   "id": "R2",
+   "app": "Booking",
+   "what_changes": "Kế toán thêm quyền đọc giá net, nhà cung cấp, đặt dịch vụ, hồ sơ chuyến (không thấy thông tin cá nhân khách), danh mục tour; không sửa. Xem lãi chỉ Quản trị và Kế toán.",
+   "issue": "AA-1150 (L7a)",
+   "status": "planned",
+   "evidence": "apps/AA-Booking/backend/app/auth/staff.py:103-157"
+  },
+  {
+   "id": "R3",
+   "app": "Booking",
+   "what_changes": "Kế toán (hoặc Quản trị) ghi khoản trả nhà cung cấp; người ghi phải khác người duyệt hoá đơn; thiếu người thì cho ghi kèm lý do + cờ đỏ trong tóm tắt tuần.",
+   "issue": "AA-1150 (L7a)",
+   "status": "planned",
+   "evidence": "apps/AA-Booking/backend/app/ops/supplier_bills.py:958-962"
+  },
+  {
+   "id": "R4",
+   "app": "Booking",
+   "what_changes": "Ghi lại mọi người đã viết điều khoản hoặc giá của hợp đồng; không ai trong số đó được công bố.",
+   "issue": "AA-1150 (L7b, migration bk-)",
+   "status": "planned",
+   "evidence": "apps/AA-Booking/backend/app/suppliers/service.py:496-498"
+  },
+  {
+   "id": "R5",
+   "app": "Booking",
+   "what_changes": "Nhà cung cấp mới ở 'Chờ duyệt' cho tới khi người thứ hai kích hoạt; chưa kích hoạt thì không đặt dịch vụ, không nhận hoá đơn.",
+   "issue": "AA-1150 (L7b, migration bk-)",
+   "status": "planned",
+   "evidence": "apps/AA-Booking/migrations/008_suppliers_contracts.sql:61"
+  },
+  {
+   "id": "R6",
+   "app": "Booking",
+   "what_changes": "Dừng bán có hiệu lực ngay khi nhập; gỡ dừng bán đã duyệt mới cần người thứ hai.",
+   "issue": "AA-1145",
+   "status": "planned",
+   "evidence": "apps/AA-Booking/backend/app/pricing/seasons.py:157"
+  },
+  {
+   "id": "R7",
+   "app": "Booking (áp chung mọi app)",
+   "what_changes": "Khi thiếu người duyệt: tech lead dùng tài khoản admin của chính mình làm người thứ hai. Không làm nút 'duyệt một mình' ở Dev; chỉ làm trước prod nếu có giai đoạn chỉ 1 người duyệt được. Người nghỉ phép: admin đổi vai trò tạm, có audit.",
+   "issue": "AA-1150 (quy tắc), không đổi code ở Dev",
+   "status": "planned",
+   "evidence": "docs/audits/2026-11-19-S285-session/advisory-r3-t13-roles.md:200-219"
+  },
+  {
+   "id": "R8",
+   "app": "Booking + CIS",
+   "what_changes": "Bước 1: trang Staff của CIS thôi cấp vai trò Booking content_creator, nút Sync gỡ nhóm cũ. Bước 2: đếm được 0 người ở CIS, Booking và Cognito thì xoá hẳn vai trò và thu hẹp ràng buộc DB.",
+   "issue": "AA-1150 (L7a) + issue riêng cho bước 2",
+   "status": "planned",
+   "evidence": "apps/AA-CIS-App/api/services/staff_directory.py:118; apps/AA-Booking/backend/app/auth/staff.py:72-83"
+  },
+  {
+   "id": "D1",
+   "app": "CIS",
+   "what_changes": "Quyền riêng content.publish + công tắc cis.content.publish_two_person (chỉ admin đổi, đổi cũng cần người thứ hai). Dev tắt, prod bật.",
+   "issue": "AA-1146",
+   "status": "planned",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:451,511,521,655,730,821"
+  },
+  {
+   "id": "D2",
+   "app": "CIS",
+   "what_changes": "Nhân viên content tạo tour tay ở dạng nháp; xuất bản qua cổng D1.",
+   "issue": "AA-1148",
+   "status": "planned",
+   "evidence": "docs/audits/2026-11-19-S285-session/advisory-r3-permissions-cross-app.md:352"
+  },
+  {
+   "id": "D3",
+   "app": "CIS",
+   "what_changes": "content chạy lại AI cho 1 tour (hiện trước số tiền, trong trần); chạy lô (S1 batch, wave, SEO prefetch) chỉ content_lead và admin.",
+   "issue": "AA-1148",
+   "status": "planned",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:506-509"
+  },
+  {
+   "id": "D4",
+   "app": "CIS",
+   "what_changes": "Quyền mới photos.upload cho content (upload, cắt, chọn ảnh bìa); đồng bộ Drive và chạy hàng loạt giữ ở photos.write (content_lead, admin).",
+   "issue": "AA-1148",
+   "status": "planned",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:607-611; apps/AA-CIS-App/frontend/lib/rbac.ts:107"
+  },
+  {
+   "id": "D5",
+   "app": "CIS + Booking",
+   "what_changes": "Bỏ quyền sửa giá tham chiếu của content và content_lead ngay; customer_success nhập tiếp tới khi tour có giá trong Booking rồi trang thành chỉ đọc; ô giá và tên nhà cung cấp trong tour gốc khoá, mọi lần sửa còn lại ghi giá trị cũ.",
+   "issue": "issue CIS mới (dọn quyền, hỏi trước khi tạo) + AA-1146 (khoá price_raw/provider) + AA-1145, AA-1149 (giá ở Booking)",
+   "status": "planned",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:174-191,595-599; apps/AA-CIS-App/api/routers/admin_pipeline/tour_detail.py:401-405"
+  },
+  {
+   "id": "D6",
+   "app": "CIS + Booking",
+   "what_changes": "Business owner: CIS admin + cờ owner (agent kiểm DB trước), bắt buộc TOTP cùng đợt MFA admin; Booking: Quản trị; CRM staff: không cần.",
+   "issue": "AA-1111",
+   "status": "planned",
+   "evidence": "docs/audits/2026-11-17-S283-access-review/README.md:158,297; apps/AA-CIS-App/api/core/staff_authz.py:220-227"
+  },
+  {
+   "id": "D7",
+   "app": "Content studio (code ở CIS)",
+   "what_changes": "Facts Entries của đại lý chỉ còn loại booking_terms; dòng cũ loại khác giữ để đọc, không tạo mới, thôi đè dữ kiện AA.",
+   "issue": "AA-1144 (thêm repo CIS)",
+   "status": "planned",
+   "evidence": "apps/AA-CIS-App/api/routers/v1_facts.py:1-22"
+  },
+  {
+   "id": "D8",
+   "app": "Content studio (code ở CIS)",
+   "what_changes": "Bản T2 của đại lý: đổi trường sự thật bị từ chối (fact_locked); câu chữ sửa tự do; audit mỗi lần sửa.",
+   "issue": "AA-1144 (thêm repo CIS)",
+   "status": "planned",
+   "evidence": "apps/AA-CIS-App/api/routers/v1_tours.py:1275-1292"
+  },
+  {
+   "id": "D9",
+   "app": "CRM đại lý",
+   "what_changes": "Tên mục AA trong báo giá chỉ đọc; đại lý thêm được 1 dòng ghi chú cho khách.",
+   "issue": "AA-1144",
+   "status": "planned",
+   "evidence": "apps/AA-Partner/api/app/proposals/builder.py:1465-1474"
+  },
+  {
+   "id": "D10",
+   "app": "CIS",
+   "what_changes": "Giá 'từ' trên trang Facts lấy từ Booking, không gõ tay; loại mùa chỉ admin và content_lead ghi; tenant_qa ghi các loại còn lại; sửa chú thích 'admin only' sai.",
+   "issue": "AA-1144 hoặc issue CIS mới (gộp với D5)",
+   "status": "planned",
+   "evidence": "apps/AA-CIS-App/api/routers/admin_facts.py:17-18; apps/AA-CIS-App/api/core/staff_authz.py:587-589"
+  },
+  {
+   "id": "D11",
+   "app": "CIS",
+   "what_changes": "Thêm tài khoản thử A10f vai trò content_lead, chỉ Dev, chỉ duyệt được tour thử có đánh dấu riêng.",
+   "issue": "AA-1146",
+   "status": "planned",
+   "evidence": "apps/AA-CIS-App/api/core/e2e_staff.py:85-88"
+  },
+  {
+   "id": "A1",
+   "app": "Booking + Infra",
+   "what_changes": "Khoá KMS riêng cho số tài khoản ngân hàng nhà cung cấp (~1 USD/tháng), chỉ Kế toán và Quản trị giải mã.",
+   "issue": "AA-1150 (L7c)",
+   "status": "planned",
+   "evidence": "docs/audits/2026-11-19-S285-session/advisory-r3-pending-approvals.md:43-46"
+  },
+  {
+   "id": "A2",
+   "app": "CIS",
+   "what_changes": "Trần 10 USD/tháng trên Dev cho việc tự chạy lại T2 khi dữ kiện tour đổi, báo ở 80 %, sửa được trong admin; hết trần chỉ đánh dấu 'lỗi thời' và báo đại lý.",
+   "issue": "AA-1146",
+   "status": "planned",
+   "evidence": "apps/AA-CIS-App/shared/llm_client/tenant_budget.py:3-38,168-170"
+  },
+  {
+   "id": "A3",
+   "app": "CRM + Infra",
+   "what_changes": "Tách khoá đăng nhập của console nhân viên AA (/staff) khỏi secret web dùng chung (0,40 USD/tháng).",
+   "issue": "AA-1019",
+   "status": "planned",
+   "evidence": "infra/AA-CIS-Infra/modules/environment/crm_web.tf:175-180,299-307"
+  },
+  {
+   "id": "A4",
+   "app": "CIS",
+   "what_changes": "Đọc Cost Explorer 1 lần/ngày cho trang chi phí (0,30–0,60 USD/tháng).",
+   "issue": "AA-1127, AA-1141",
+   "status": "planned",
+   "evidence": "docs/audits/2026-11-19-S285-session/advisory-r3-pending-approvals.md:58-62"
+  },
+  {
+   "id": "A5",
+   "app": "Nền tảng",
+   "what_changes": "Không dùng Route 53 health check; cron GitHub Actions kiểm DNS, TLS, /health (0 USD).",
+   "issue": "AA-1142",
+   "status": "planned",
+   "evidence": "docs/audits/2026-11-19-S285-session/advisory-r3-pending-approvals.md:64-66"
+  },
+  {
+   "id": "A6",
+   "app": "Nền tảng",
+   "what_changes": "Dọn quyền và secret cũ theo access review S283 (F-04, F-08, F-09, F-12, F-13, F-20, F-24): DRY RUN → liệt kê → xoá trong một cửa sổ tắt auto mode.",
+   "issue": "AA-878, AA-816, AA-911, AA-866 (theo từng mục F)",
+   "status": "planned",
+   "evidence": "docs/audits/2026-11-17-S283-access-review/README.md:295-315"
+  },
+  {
+   "id": "A7",
+   "app": "Mọi app (Dev)",
+   "what_changes": "Theo ghi chú: dữ liệu thử đang có giữ nguyên; chỉ áp cho dữ liệu mới (tên trung tính, lint chặn tên AA-n trong seed).",
+   "issue": "AA-1127, AA-1128",
+   "status": "planned",
+   "evidence": "docs/audits/2026-11-19-S285-session/advisory-r3-pending-approvals.md:78-82"
+  },
+  {
+   "id": "A8",
+   "app": "Nền tảng",
+   "what_changes": "Đề xuất sửa Done-when của AA-1110 (e-mail cảnh báo thứ hai) bị từ chối: giữ nguyên AA-1110, không thêm kênh.",
+   "issue": "AA-1110",
+   "status": "not_approved",
+   "evidence": "docs/audits/2026-11-19-S285-session/advisory-r3-pending-approvals.md:84-87"
+  },
+  {
+   "id": "A9",
+   "app": "Backlog",
+   "what_changes": "Gạch 18 mục cũ khỏi 'Waiting on Nghiệp' sau khi kiểm lại bằng chứng từng mục.",
+   "issue": "không có (docs/backlog/README.md)",
+   "status": "planned",
+   "evidence": "docs/audits/2026-11-19-S285-session/advisory-r3-pending-approvals.md:142-162"
+  }
+ ],
+ "faq": [
+  {
+   "id": "A2",
+   "q": "Trần chạy lại T2 trả bằng ngân sách AI của AA hay của đại lý? Nên làm sao?",
+   "a": "Tiền thật luôn là của AA: AA trả hoá đơn cho AWS/Anthropic/OpenAI, đại lý không trả theo lượt. Nhưng trong code, mỗi lượt T2 được ghi vào sổ chi phí AI dưới tên đại lý (tenant_id) và tính vào 'hạn mức AI tháng' của đại lý, tức phần AI đi kèm gói của đại lý. Hết hạn mức thì việc T2 của đại lý đó dừng chờ. Việc tự chạy lại T2 khi AA đổi dữ kiện tour là do AA gây ra, không phải đại lý yêu cầu. Nếu để nguyên, đại lý bị trừ hạn mức vì thay đổi của AA, và khi họ hết hạn mức thì bản tour của họ không được cập nhật. Đề xuất: (1) các lượt chạy lại do AA đổi dữ kiện vẫn ghi tên đại lý (để biết tour nào, đại lý nào) nhưng gắn nhãn nguồn 'AA đổi dữ kiện' và KHÔNG trừ vào hạn mức của đại lý; (2) chúng trừ vào trần riêng 10 USD/tháng của AA (A2), nằm trong ngân sách connection AA đã đặt; (3) chỉ khi đại lý tự bấm viết lại thì mới trừ hạn mức của họ. Lane làm AA-1146 phải sửa chỗ kiểm hạn mức để phân biệt hai loại này, vì hôm nay mọi stage T đều trừ hạn mức đại lý.",
+   "evidence": "apps/AA-CIS-App/shared/llm_client/tenant_budget.py:3-38,168-170; apps/AA-CIS-App/shared/cost_guard.py:657-688; apps/AA-CIS-App/api/services/tenant_ai_budget.py:1-15; apps/AA-CIS-App/api/services/llm_connections.py:78,314"
+  },
+  {
+   "id": "A3",
+   "q": "Console nhân viên CRM là nhân viên AA hay nhân viên đại lý? Chung secret là chung cái gì, sao quan trọng?",
+   "a": "Là nhân viên AA (nhóm crm-ops, crm-support), không phải nhân viên đại lý. Console này nằm ở đường /staff trên cùng web portal. mà đại lý dùng cho CRM và Content studio. Cả hai chạy trong cùng một dịch vụ web, đọc chung một secret tên crm/<env>/web. Secret đó chứa cùng lúc: khoá đăng nhập của đại lý, khoá ký cookie của đại lý, khoá đăng nhập của console nhân viên AA, khoá ký cookie nhân viên AA (và khoá của Academy). Vì sao quan trọng: khoá ký cookie nhân viên AA là thứ chứng minh 'người này là nhân viên AA'. Nếu một lỗi ở phần đại lý dùng làm lộ biến môi trường, kẻ tấn công lấy được cả khoá nhân viên, giả làm nhân viên AA và mở truy cập khẩn vào mọi đại lý. Tách secret (A3, 0,40 USD/tháng) giúp xoay khoá riêng, phân quyền đọc riêng và soát ai đọc. Nói thẳng: chừng nào console còn chạy chung một tiến trình với phần đại lý thì tách secret chỉ là bước đầu; cách ly thật là cho console chạy dịch vụ riêng. Đề xuất: làm A3 ngay, ghi việc tách dịch vụ console vào danh sách trước prod.",
+   "evidence": "infra/AA-CIS-Infra/modules/environment/crm_web.tf:30-33,175-180,223,299-307; apps/AA-Partner/api/app/routers/staff.py:1-30,245"
+  },
+  {
+   "id": "A6",
+   "q": "Dọn quyền và secret cũ: sẽ kiểm gì trước khi xoá?",
+   "a": "Mỗi mục kiểm 2 lớp rồi mới xoá: (1) không còn chỗ nào dùng: tìm tên trong code và workflow của cả 6 repo, và xem lần đọc gần nhất trên AWS; (2) DRY RUN: đếm, liệt kê đúng thứ sẽ xoá, đưa anh xem. Cụ thể: 2 secret E2E cũ (F-09) kiểm không workflow nào trên main đọc; secret không ai đọc (F-12) kiểm lần đọc cuối và người dùng; môi trường GitHub thời Vercel (F-13) kiểm không còn secret, biến hay workflow nào trỏ tới; hash mật khẩu chết trong shared.admin_users (F-20) đếm số dòng, xác nhận API chỉ nhận đăng nhập Cognito; 9 dòng staff Booking cũ (F-24) đếm, kiểm chưa từng đăng nhập, chưa liên kết, ưu tiên đặt ngưng thay vì xoá; khoá CI bot và bộ E2E portal (F-08) chỉ chuyển chỗ, kiểm workflow vẫn chạy trên main; danh sách cho phép đọc secret của CIS (F-04) kiểm mọi secret CIS đang đọc đều nằm trong danh sách, Terraform plan chỉ đổi đúng chỗ đó. Secret AWS xoá theo kiểu có thời gian khôi phục (không xoá ngay), để lỡ sai thì lấy lại được. Lệnh xoá gom vào một cửa sổ tắt auto mode, sổ đăng ký secret cập nhật cùng lúc.",
+   "evidence": "docs/audits/2026-11-17-S283-access-review/README.md:295-315; infra/AA-CIS-Infra/modules/environment/crm_web.tf:178"
+  },
+  {
+   "id": "A9",
+   "q": "Gạch 18 mục khỏi danh sách chờ: kiểm kỹ thế nào?",
+   "a": "Chỉ gạch khỏi mục 'Waiting on Nghiệp' trong backlog, không xoá gì khác; lịch sử còn trong git. Trước khi gạch, agent kiểm lại từng bằng chứng ở nguồn thật, không dựa vào ghi chú cũ: trạng thái issue Linear (ví dụ AA-1008 Done, AA-1021 Canceled), comment Jira đã đăng, PR đã merge và health trả đúng migration, trang quyết định đọc live. Mục nào bằng chứng không còn khớp thì giữ lại và báo anh.",
+   "evidence": "docs/audits/2026-11-19-S285-session/advisory-r3-pending-approvals.md:142-162"
+  },
+  {
+   "id": "A7",
+   "q": "Dọn dữ liệu thử: cái nào có rồi thì để; business owner đã là admin chưa?",
+   "a": "Đúng ý anh: dữ liệu thử đang có giữ nguyên, không đổi tên, không xoá. Chỉ áp cho dữ liệu mới: tên trung tính, thêm lint chặn tên kiểu AA-n trong seed; ảnh và comment Jira dùng dữ liệu thử thì ghi rõ 'dữ liệu giả lập'. Về business owner (câu D6): bản rà quyền S283 ghi business owner đã ở nhóm cis-admin, chưa có vai trò Booking. D6 chỉ thêm phần còn thiếu: cờ owner ở CIS (agent kiểm DB trước khi đổi), vai trò Quản trị ở Booking, và bắt TOTP khi AA-1111 xong. Không đụng gì khác của chị.",
+   "evidence": "docs/audits/2026-11-17-S283-access-review/README.md:158,297; apps/AA-CIS-App/api/core/staff_authz.py:220-227"
+  },
+  {
+   "id": "D1",
+   "q": "Đã là admin đổi công tắc rồi thì người thứ hai là ai?",
+   "a": "Là một admin khác, người thật khác: hôm nay CIS có hai admin thật là tech lead và business owner. Lý do: công tắc này là khoá kiểm soát. Nếu một admin tự tắt được thì người đó tự gỡ khoá rồi tự xuất bản, khoá không còn tác dụng. Cách chạy: BẬT công tắc (siết lại) thì admin đề xuất; TẮT khi đang bật thì phải có admin thứ hai duyệt, giống công tắc hai người của cài đặt hệ thống đang chạy. Trên Dev công tắc tắt nên không ai phải chờ. Khi bật ở prod: tech lead đề xuất, business owner duyệt (hoặc ngược lại).",
+   "evidence": "apps/AA-CIS-App/api/services/settings_registry.py:456-462; apps/AA-CIS-App/api/migrations/407_platform_settings_registry.sql:404"
+  },
+  {
+   "id": "D3",
+   "q": "Làm bản phân quyền rõ ràng hơn: vai trò nào được làm gì?",
+   "a": "Bản tổng hợp này là câu trả lời: mỗi app có bảng 'ai vào, đăng nhập thế nào, mấy vai trò' (overview), danh sách mọi việc cần hai người (approvals), và tên dễ hiểu kèm việc làm của từng vai trò (recommend_role_names). Ngắn gọn: CIS = nhân viên AA làm nội dung, kiểm nội dung đại lý, chăm sóc đại lý, AI và tiền đại lý; Booking = bán hàng, sản phẩm & điều hành (nhà cung cấp, giá, điều hành), kế toán, quản trị; CRM = chủ, nhân viên bán, trợ lý của đại lý, cộng nhân viên AA hỗ trợ; TripPlanner = khách, không có nhân viên. Về D3: content chạy lại AI cho 1 tour, chạy lô chỉ content_lead và admin.",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:164-210; apps/AA-Booking/backend/app/auth/staff.py:102-189; apps/AA-Partner/api/app/permissions.py:155-225"
+  },
+  {
+   "id": "D4",
+   "q": "Nhân viên content cần quyền gì? Admin/ops toàn quyền nhưng không sửa nội dung: chia thế nào?",
+   "a": "Đề xuất chia gọn. Nhân viên content (CIS): đọc và sửa nội dung tour, khách sạn, hoạt động ở dạng nháp; tải tour lên; trả lại/bỏ qua bài trong Review Queue; upload, cắt, chọn ảnh bìa (photos.upload mới); chọn nhà cung cấp AA (chỉ đọc); xem giá (chỉ đọc); chạy lại AI cho 1 tour. Không: xuất bản khi công tắc bật, vòng đời tour, atom, đồng bộ Drive, chạy lô, sửa giá, đại lý, AI, cài đặt. Content_lead: mọi việc của content + xuất bản, vòng đời tour, atom, ảnh hàng loạt, wave, chạy lô, dữ kiện loại mùa; không sửa giá. Admin: người dùng, cài đặt, tiền, trần AI, đại lý. Admin có nên giữ quyền sửa nội dung? Đề xuất giữ nhưng chỉ làm đường dự phòng: menu admin không đưa trình sửa nội dung lên đầu, mỗi lần admin sửa nội dung phải ghi lý do và có audit, và khi công tắc hai người bật thì bản admin sửa vẫn cần content_lead xuất bản. Admin giữ quyền xuất bản để làm người duyệt thứ hai khi content_lead vắng. Bỏ hẳn quyền sửa của admin thì đội 2–3 người không ai sửa gấp được một tour sai. Booking cũng vậy: nhà cung cấp, dịch vụ, giá thuộc Sản phẩm & điều hành; Quản trị giữ quyền như người duyệt dự phòng của mọi bước hai người, không làm việc hằng ngày.",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:156,174-183,506-521,607-611; apps/AA-Booking/backend/app/auth/staff.py:114-157"
+  },
+  {
+   "id": "D5",
+   "q": "Giá nhập và sửa ở CIS hay ở Booking?",
+   "a": "Hôm nay có hai nơi. CIS: (1) chữ giá trong tour gốc (price_raw, lấy từ Excel) do content, content_lead, admin sửa được trong ô tour; (2) giá tham chiếu (nhập Excel hoặc sửa tay) do admin, content_lead và customer_success (nhóm 'Pricing team'); Booking đọc giá tham chiếu này qua view để gợi ý. Booking: giá net theo hợp đồng nhà cung cấp, bảng giá tay của tour, bàn làm giá (workbook, giá theo độ tuổi), quy tắc giá, tỷ giá, hạng đại lý, đều do Sản phẩm & điều hành nhập và người thứ hai duyệt; Booking công bố giá 'từ' cho CIS và TripPlanner đọc. Sau khi làm: mọi giá nhập và sửa ở Booking, người nhập là Sản phẩm & điều hành, người thứ hai duyệt. CIS chỉ hiện giá, không sửa: ô giá và tên nhà cung cấp trong tour gốc khoá lại (AA-1146), content và content_lead mất quyền sửa giá tham chiếu ngay, customer_success nhập tiếp chỉ tới khi tour có giá ở Booking (AA-1145, AA-1149) rồi trang thành chỉ đọc; giá 'từ' trên trang Facts lấy từ Booking (D10).",
+   "evidence": "apps/AA-CIS-App/api/routers/admin_pipeline/tour_detail.py:401-405; apps/AA-CIS-App/api/core/staff_authz.py:174-191,593-599; apps/AA-Booking/backend/app/catalog/trip_plan_sync.py:23,82-85; apps/AA-CIS-App/api/routers/v1_tours.py:199-208; apps/AA-Booking/backend/app/routers/price_versions.py:125-212; apps/AA-Booking/backend/app/routers/catalog.py:394-719"
+  },
+  {
+   "id": "R1",
+   "q": "Làm sẵn bước 2 (vai trò tuỳ chỉnh) ngay: cần gì, rủi ro gì, đề xuất?",
+   "a": "Cần gì: hôm nay bộ quyền nằm trong code ở 3 app (CIS: staff_authz.py và bản sao ở frontend rbac.ts; Booking: staff.py; CRM: permissions.py), nhóm Cognito cố định trong Terraform. Bước 2 cần: mỗi app một bảng vai trò + quyền (migration của chính app đó, vì CIS không được ghi vào schema của Booking hay CRM); API đọc quyền từ bảng có cache; frontend lấy quyền từ /me thay vì bảng cứng; trang 'Vai trò & quyền' để nhân bản vai trò mẫu rồi tick; trang Staff gán vai trò tuỳ chỉnh, nhóm Cognito vẫn là nhóm của vai trò mẫu gốc nên không phải sửa Terraform mỗi lần. Ước lượng 2–3 phiên, mỗi app 2–3 PR, có migration nên cần review trước merge. Rủi ro: (1) tick ra một vai trò vừa duyệt vừa trả tiền; (2) quyền ở giao diện và API lệch nhau; (3) người sửa vai trò tự nâng quyền cho mình; (4) cache làm quyền cũ còn hiệu lực vài phút; (5) bài test chính sách route phải viết lại. Đề xuất: làm bước 1 + 2 cho CIS và Booking trước, CRM đại lý giữ 3 vai trò cố định tới khi có đại lý thật hỏi. Chặn cứng: chỉ nhân bản từ vai trò mẫu; danh sách cặp quyền cấm (duyệt hoá đơn + ghi khoản trả, nhập + duyệt số tài khoản, soạn + xuất bản khi công tắc bật); đổi vai trò cần admin thứ hai + audit; không ai sửa vai trò của chính mình; luật 'không tự duyệt' trong DB giữ nguyên dù tick thế nào.",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:164-210; apps/AA-CIS-App/frontend/lib/rbac.ts:340-377; apps/AA-Booking/backend/app/auth/staff.py:102-189; apps/AA-Partner/api/app/permissions.py:155-225; infra/AA-CIS-Infra/accounts/aa365/identity.tf:140-162; apps/AA-CIS-App/api/services/staff_directory.py:110-146"
+  },
+  {
+   "id": "R5",
+   "q": "Nhiều bước cần người duyệt: ai tạo, ai duyệt?",
+   "a": "Xem danh sách approvals: mỗi dòng ghi rõ người tạo, người duyệt, luật chặn và chuyện gì xảy ra khi chỉ có 1–2 người. Nguyên tắc chung: người duyệt luôn khác người tạo, kể cả admin, DB giữ luật này. Với nhà cung cấp mới (R5): Sản phẩm & điều hành hoặc Quản trị tạo, người còn lại trong hai vai trò đó kích hoạt. Đội 2 người: một người làm, người kia duyệt. Chỉ 1 người: tech lead dùng tài khoản admin của chính mình làm người thứ hai.",
+   "evidence": "apps/AA-Booking/migrations/008_suppliers_contracts.sql:61; apps/AA-Booking/backend/app/suppliers/service.py:410"
+  },
+  {
+   "id": "R8",
+   "q": "Sao lại ẩn hay gỡ vai trò content_creator ở Booking? Nhân viên content bị ảnh hưởng gì?",
+   "a": "Hôm nay content_creator ở Booking chỉ được đọc danh mục tour, không làm được gì khác. Anh đã chốt nhân viên content chỉ làm ở CIS; những gì họ cần từ Booking (danh sách nhà cung cấp, dữ kiện khách sạn, giá 'từ') sẽ hiện chỉ đọc ngay trong CIS. Giữ vai trò này nghĩa là thêm một nhóm đăng nhập vào app có tiền mà không có việc gì để làm, và gây hiểu nhầm 'content được vào Booking'. Thay đổi với nhân viên content: không mất việc nào; họ không cần đăng nhập Booking nữa. Làm 2 bước để không ai bị lỗi đăng nhập: trước thôi cấp và gỡ nhóm cũ, khi đếm được 0 người ở cả 3 nơi mới xoá hẳn.",
+   "evidence": "apps/AA-Booking/backend/app/auth/staff.py:72-83,119; apps/AA-CIS-App/api/services/staff_directory.py:118"
+  },
+  {
+   "id": "repo",
+   "q": "Ai được quyền tạo repo?",
+   "a": "Hôm nay chỉ 2 tài khoản tạo được repo trong tổ chức GitHub: tài khoản của tech lead và tài khoản GitHub dự phòng (cả hai là owner tổ chức). Tổ chức không có thành viên thường nào khác. Bot không tạo được: GitHub App aa-agent và ci-bot không có quyền quản trị tổ chức. Chỗ hở: phiên agent điều phối dùng token gh của tech lead (owner) nên về kỹ thuật vẫn tạo được repo; hook chỉ chặn lệnh tạo, xoá, sửa repo ở subagent, phiên chính chưa chặn. Bước B5 (bỏ quyền tạo repo của thành viên) không đổi gì cho 2 owner, chỉ chặn thành viên mới sau này; gói Free có thể khoá ô chặn tạo repo public (ADR 0021 ghi đã kiểm 08/11), bù lại bằng kiểm hằng ngày báo repo mới. Đề xuất: thêm luật hook chặn lệnh tạo, xoá, sửa repo cho cả phiên chính; tạo repo mới chỉ khi tech lead bảo.",
+   "evidence": "docs/audits/2026-11-17-S283-access-review/README.md:48,50,307; docs/adr/0021-github-org-security-and-ci-hygiene.md:70-75; .claude/hooks/subagent-guardrails.d/00-generic.txt:19; docs/security/github-apps.md:76,89,169"
+  }
+ ],
+ "recommend_role_names": [
+  {
+   "app": "CIS",
+   "code": "owner (cờ)",
+   "plain_label_vi": "Chủ nền tảng",
+   "plain_label_en": "Platform owner",
+   "does": "Admin có thêm cờ owner: tạo nhân viên, gán vai trò cho cả 3 app. Luôn giữ ít nhất 1 owner.",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:220-227"
+  },
+  {
+   "app": "CIS",
+   "code": "admin",
+   "plain_label_vi": "Quản trị",
+   "plain_label_en": "Administrator",
+   "does": "Người dùng, cài đặt hệ thống, tiền, trần AI, đại lý; người duyệt dự phòng. Sửa nội dung chỉ khi cần gấp (đề xuất D4).",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:164-172"
+  },
+  {
+   "app": "CIS",
+   "code": "content_lead",
+   "plain_label_vi": "Trưởng nhóm nội dung",
+   "plain_label_en": "Content lead",
+   "does": "Quản lý danh mục AA: xuất bản, vòng đời tour, atom, ảnh hàng loạt, wave, chạy AI theo lô.",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:174-178"
+  },
+  {
+   "app": "CIS",
+   "code": "content",
+   "plain_label_vi": "Nhân viên nội dung",
+   "plain_label_en": "Content editor",
+   "does": "Tải tour, sửa nội dung ở dạng nháp, ảnh cho tour đang sửa, chạy lại AI cho 1 tour; xuất bản cần người thứ hai khi công tắc bật.",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:180"
+  },
+  {
+   "app": "CIS",
+   "code": "tenant_qa",
+   "plain_label_vi": "Kiểm nội dung đại lý",
+   "plain_label_en": "Agency content reviewer",
+   "does": "Sửa câu, gắn nhãn, thả hoặc gỡ bài của đại lý; dữ kiện và thẻ địa điểm.",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:182-183"
+  },
+  {
+   "app": "CIS",
+   "code": "customer_success",
+   "plain_label_vi": "Chăm sóc đại lý",
+   "plain_label_en": "Agency success",
+   "does": "Chăm sóc các đại lý trong sổ mình: cấu hình, thành viên, add-on, xem như đại lý; nhập giá tham chiếu tới khi Booking có giá.",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:188-191"
+  },
+  {
+   "app": "CIS",
+   "code": "support",
+   "plain_label_vi": "Hỗ trợ đại lý",
+   "plain_label_en": "Agency support",
+   "does": "Xem đại lý trong sổ mình, gửi lại lời mời, xem như đại lý; không sửa, không tiền.",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:196"
+  },
+  {
+   "app": "CIS",
+   "code": "finance",
+   "plain_label_vi": "Kế toán (CIS)",
+   "plain_label_en": "Finance (CIS)",
+   "does": "Xem gói và tiền của mọi đại lý, đổi gói, tạm ngưng vì nợ, xem chi phí AI.",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:198"
+  },
+  {
+   "app": "CIS",
+   "code": "ai_ops",
+   "plain_label_vi": "Vận hành AI",
+   "plain_label_en": "AI operations",
+   "does": "Cấu hình AI gateway, chỉ được hạ trần chi tiêu, Writing memory.",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:201-204"
+  },
+  {
+   "app": "CIS",
+   "code": "viewer",
+   "plain_label_vi": "Chỉ xem (tài khoản thử)",
+   "plain_label_en": "Read-only (test)",
+   "does": "Chỉ đọc; không gán được cho người thật.",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:205-208,218"
+  },
+  {
+   "app": "Booking",
+   "code": "admin",
+   "plain_label_vi": "Quản trị",
+   "plain_label_en": "Administrator",
+   "does": "Quản trị nhân viên, audit, xoá dữ liệu theo hạn; người duyệt dự phòng cho mọi bước hai người.",
+   "evidence": "apps/AA-Booking/backend/app/auth/staff.py:102-189"
+  },
+  {
+   "app": "Booking",
+   "code": "sales",
+   "plain_label_vi": "Bán hàng",
+   "plain_label_en": "Sales",
+   "does": "Hồ sơ chuyến, báo giá, đặt chỗ thay đại lý, đặt dịch vụ nhà cung cấp; đọc giá.",
+   "evidence": "apps/AA-Booking/backend/app/auth/staff.py:103-143"
+  },
+  {
+   "app": "Booking",
+   "code": "contracting",
+   "plain_label_vi": "Sản phẩm & điều hành",
+   "plain_label_en": "Product & operations",
+   "does": "Nhà cung cấp, hợp đồng, giá, mùa, dừng bán, nhập và duyệt hoá đơn nhà cung cấp, điều hành đoàn.",
+   "evidence": "apps/AA-Booking/backend/app/auth/staff.py:114-157; apps/AA-Booking/frontend/lib/rbac.ts:17"
+  },
+  {
+   "app": "Booking",
+   "code": "finance",
+   "plain_label_vi": "Kế toán",
+   "plain_label_en": "Finance",
+   "does": "Hoá đơn gửi đại lý, tiền đại lý trả, ghi khoản trả nhà cung cấp (sau R3), xem lãi; đọc giá net và nhà cung cấp (sau R2).",
+   "evidence": "apps/AA-Booking/backend/app/auth/staff.py:154-172"
+  },
+  {
+   "app": "Booking",
+   "code": "content_creator",
+   "plain_label_vi": "Nội dung (cũ, sắp bỏ)",
+   "plain_label_en": "Content (retired)",
+   "does": "Chỉ đọc danh mục tour; sẽ ẩn rồi xoá (R8).",
+   "evidence": "apps/AA-Booking/backend/app/auth/staff.py:72-83,119"
+  },
+  {
+   "app": "CRM đại lý",
+   "code": "owner",
+   "plain_label_vi": "Chủ đại lý",
+   "plain_label_en": "Agency owner",
+   "does": "Toàn quyền trong đại lý: đội ngũ, cài đặt, tiền, xuất dữ liệu, duyệt giảm giá, hoàn tiền, hoa hồng đối tác.",
+   "evidence": "apps/AA-Partner/api/app/permissions.py:155-225"
+  },
+  {
+   "app": "CRM đại lý",
+   "code": "agent",
+   "plain_label_vi": "Nhân viên bán",
+   "plain_label_en": "Sales agent",
+   "does": "Làm chuyến, báo giá, xuất bản báo giá, thu tiền, thấy giá net và lãi.",
+   "evidence": "apps/AA-Partner/api/app/permissions.py:155-225"
+  },
+  {
+   "app": "CRM đại lý",
+   "code": "assistant",
+   "plain_label_vi": "Trợ lý",
+   "plain_label_en": "Assistant",
+   "does": "Làm chuyến, hồ sơ khách, soạn nháp báo giá; không thấy lãi, không xuất bản.",
+   "evidence": "apps/AA-Partner/api/app/permissions.py:155-225"
+  },
+  {
+   "app": "Content studio",
+   "code": "csr:owner",
+   "plain_label_vi": "Chủ studio",
+   "plain_label_en": "Studio owner",
+   "does": "Toàn quyền studio kể cả thành viên, kênh kết nối, cài đặt.",
+   "evidence": "apps/AA-CIS-App/api/middleware/tenant_role.py:48,58-64"
+  },
+  {
+   "app": "Content studio",
+   "code": "csr:editor",
+   "plain_label_vi": "Biên tập studio",
+   "plain_label_en": "Studio editor",
+   "does": "Tạo, sửa nội dung, bản T2 (chỉ câu chữ sau D8), điều khoản bán (sau D7).",
+   "evidence": "apps/AA-CIS-App/api/middleware/tenant_role.py:48,58-64"
+  },
+  {
+   "app": "Content studio",
+   "code": "csr:viewer",
+   "plain_label_vi": "Người xem studio",
+   "plain_label_en": "Studio viewer",
+   "does": "Chỉ đọc.",
+   "evidence": "apps/AA-CIS-App/api/middleware/tenant_role.py:48,58-64"
+  },
+  {
+   "app": "CRM (nhân viên AA)",
+   "code": "crm-platform-admin",
+   "plain_label_vi": "Quản trị CRM (AA)",
+   "plain_label_en": "CRM platform admin",
+   "does": "Tạo, khoá đại lý, mời chủ, khôi phục chủ, quyền gói, cài đặt và AI của CRM.",
+   "evidence": "apps/AA-Partner/api/app/routers/ops.py:549,653-918"
+  },
+  {
+   "app": "CRM (nhân viên AA)",
+   "code": "crm-ops",
+   "plain_label_vi": "Vận hành CRM (AA)",
+   "plain_label_en": "CRM operations",
+   "does": "Bảng ops, manifest; mở truy cập khẩn có lý do, ticket, có hạn giờ.",
+   "evidence": "apps/AA-Partner/api/app/routers/staff.py:245"
+  },
+  {
+   "app": "CRM (nhân viên AA)",
+   "code": "crm-support",
+   "plain_label_vi": "Hỗ trợ CRM (AA)",
+   "plain_label_en": "CRM support",
+   "does": "Chỉ đọc đại lý nào chủ đang cho phép hỗ trợ.",
+   "evidence": "apps/AA-Partner/api/app/routers/staff.py:229"
+  },
+  {
+   "app": "TripPlanner",
+   "code": "visitor",
+   "plain_label_vi": "Khách trên trang AA",
+   "plain_label_en": "Visitor",
+   "does": "Xem tour, lập chuyến, dùng AI trong giới hạn.",
+   "evidence": "apps/AA-TripPlanner-Web/backend/assembly/handler.py:501,870"
+  },
+  {
+   "app": "TripPlanner",
+   "code": "agency_visitor",
+   "plain_label_vi": "Khách trên trang đại lý",
+   "plain_label_en": "Agency visitor",
+   "does": "Như khách AA, thấy thương hiệu đại lý, gửi được yêu cầu cho đại lý.",
+   "evidence": "apps/AA-TripPlanner-Web/backend/assembly/handler.py:691"
+  }
+ ],
+ "notes": [
+  "Tên trường 'what_changes' thay cho 'what changes' trong đề bài.",
+  "A7 trên trang quyết định là 'dọn dữ liệu thử Dev'; câu về business owner thuộc D6, trả lời gộp trong FAQ A7.",
+  "Không đọc DB live: số người mỗi vai trò không có ở đây; trạng thái business owner lấy từ bản rà S283."
+ ]
+}

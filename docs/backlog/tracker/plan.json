@@ -1,9 +1,9 @@
 {
- "updated": "2026-11-18",
- "synced_at": "2026-11-18T09:01Z",
- "session": "S284",
- "next_session": "S285",
- "source": "Linear (04/11/2026 01:20Z, plan_sync.py --write --session S266) + docs/backlog/README.md + .tmp-session/S266-checklist.md + docs/audits/2026-11-03-S266-close/state-snapshot.md",
+ "updated": "2026-11-19",
+ "synced_at": "2026-11-19T16:22Z",
+ "session": "S285",
+ "next_session": "S286",
+ "source": "Linear (19/11/2026, plan_sync.py --write, S285) + docs/audits/2026-11-19-S285-session/plan-audit-plan-changes.json (tech lead duyệt Q1–Q12, 19/11) + docs/backlog/README.md",
  "projects": {
   "data": "Data Platform",
   "core": "CIS Core",
@@ -498,6 +498,58 @@
     },
     {
      "text": "Booking: khởi hành, chi phí/lãi, vận hành (AA-1073, AA-1074, AA-1075)",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "M-ROLES",
+   "name": "Lean roles + My work",
+   "status": "now",
+   "window": "S286–S289 (trước phần còn lại của M-SUP)",
+   "criteria": [
+    {
+     "text": "Bước 1 (AA-1150): 3 preset vai trò người trên trang Staff, bỏ content_creator, finance đọc được, tách supplier.activate / contract.publish / stop_sale.approve, một lần đăng nhập cho CIS + Booking (E2E + tài khoản thật), E2E pricing xanh",
+     "done": false
+    },
+    {
+     "text": "Vai trò tuỳ chỉnh (AA-1155): Booking + CIS, contract view shared.v_staff_booking_grant (Q2 = A, bổ sung ADR 0006), seed 'Product, ops & accounting' gồm cả báo giá/đặt chỗ đại lý (Q3), không quyền duyệt; trang Roles & permissions đủ 4 app",
+     "done": false
+    },
+    {
+     "text": "View-as xuống dưới (AA-1157): CIS + Booking, chỉ đọc, có log, không đổi phiên đăng nhập",
+     "done": false
+    },
+    {
+     "text": "Luật duyệt cho đội 3 người (AA-1158): owner tự duyệt có cờ, payer ≠ người duyệt (business owner ghi chi trả, có cờ), hồ sơ NCC + tài khoản ngân hàng mã hoá KMS, khoá chi trả 24 giờ",
+     "done": false
+    },
+    {
+     "text": "My work hai nửa nối nhau (Q8 = a): trang CIS /admin/my-work (AA-1156) + dải My work trên dashboard Booking (AA-1159), không view chéo app",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "M-SUP",
+   "name": "Nguồn cung AA + công cụ content (quyết định S285)",
+   "status": "now",
+   "window": "S285–S290 (phân quyền gọn M-ROLES đi trước; hết dự phòng sau S290)",
+   "criteria": [
+    {
+     "text": "CRM: đại lý chỉ còn vé máy bay, visa, bảo hiểm, phí; dữ liệu sản phẩm chỉ của AA (AA-1144, AA-1147)",
+     "done": false
+    },
+    {
+     "text": "Booking: mô hình nguồn cung chung + 3 vai trò người + vai trò tuỳ chỉnh (M-ROLES), tour bán ra tách từng đặt dịch vụ, hồ sơ nhà cung cấp (AA-1145, AA-1149, AA-1150)",
+     "done": false
+    },
+    {
+     "text": "CIS: sửa tour có phiên bản, khoá, cổng duyệt; bộ công cụ content tạo tour tay (AA-1146, AA-1148)",
+     "done": false
+    },
+    {
+     "text": "PR-29 hoạt động tuỳ chọn + PR-30 khách sạn qua DMC (AA-1151, AA-1152, AA-1153)",
      "done": false
     }
    ]
@@ -2178,16 +2230,76 @@
  ],
  "issues": [
   {
+   "id": "AA-1158",
+   "title": "[Booking + Infra] Approval rules for a three-person team, business-owner self-approval, supplier profile and bank-detail controls",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "tpbk",
+   "milestone": "M-ROLES",
+   "session": "S288",
+   "size": "L",
+   "next": "Roles — S288 phần 1 (luật duyệt, owner tự duyệt có cờ, payer ≠ người duyệt, thông tin chuyển khoản, sellable cần giá duyệt); S289 phần 2 (khoá KMS, hồ sơ NCC, tài khoản ngân hàng, khoá 24 giờ)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1157",
+   "title": "[CIS + Booking] View as a lower role: read-only, logged, never changes the sign-in",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "tpbk",
+   "milestone": "M-ROLES",
+   "session": "S288",
+   "size": "L",
+   "next": "Roles — S288: view-as xuống dưới CIS + Booking (cookie ký ngắn hạn ở Booking), cần marker owner từ AA-1155",
+   "needs": ""
+  },
+  {
+   "id": "AA-1159",
+   "title": "[Booking] My work on the staff dashboard: permission-filtered queues, filtered lists, approvals waiting",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "tpbk",
+   "milestone": "M-ROLES",
+   "session": "S287",
+   "size": "M",
+   "next": "My work — S287 ô việc theo me.permissions; S288 danh sách lọc + thông báo theo quyền; S289 dải 'Đang chờ người khác' / 'Chờ tôi duyệt'",
+   "needs": ""
+  },
+  {
+   "id": "AA-1156",
+   "title": "[CIS] My work: one queue page for content roles",
+   "status": "Todo",
+   "priority": "High",
+   "project": "core",
+   "milestone": "M-ROLES",
+   "session": "S286",
+   "size": "M",
+   "next": "My work — S286: trang /admin/my-work dải Content (thay M0 của AA-1148), không migration",
+   "needs": ""
+  },
+  {
+   "id": "AA-1155",
+   "title": "[Booking + CIS] Custom staff roles: roles as data, one combined role per person",
+   "status": "Todo",
+   "priority": "High",
+   "project": "tpbk",
+   "milestone": "M-ROLES",
+   "session": "S286",
+   "size": "L",
+   "next": "Roles — S286: PR Infra (booking-custom, cis-custom, E2E maker) + PR migration CIS + bk-; S287: apply khi 3 bảng job rảnh, deploy code, bước tay giao vai trò tuỳ chỉnh",
+   "needs": ""
+  },
+  {
    "id": "AA-1004",
    "title": "[Infra] Implement the lean AWS model: company organization, Identity Center, nonprod/ai accounts in the org, prod at go-live, Bedrock path",
    "status": "Backlog",
    "priority": "High",
    "project": "data",
    "milestone": "M5",
-   "session": "S283",
+   "session": "≥01/12",
    "size": "L",
-   "next": "Prod — S283: kiểm sẵn sàng chuyển org 1.2–1.5/1.7 (chỉ đọc), xuất Cost Explorer 13 tháng tới tháng 10; giữ apply role tới khi ký phụ lục",
-   "needs": "Business owner: ngày go-live (b18); tech lead: mời acc2/acc3 vào org (≥01/12)",
+   "next": "Prod — ≥01/12: chờ phụ lục TrueIDC, hoá đơn 25–28/11, lời mời org 01/12; giữ apply role tới khi ký phụ lục",
+   "needs": "Business owner: ký phụ lục TrueIDC; tech lead: hoá đơn 25–28/11, mời acc2/acc3 vào org 01/12",
    "due": "2026-11-20"
   },
   {
@@ -2197,7 +2309,7 @@
    "priority": "Low",
    "project": "core",
    "milestone": "M2a",
-   "session": "LLM path",
+   "session": "TL-11 lift",
    "size": "M",
    "next": "M2a · chờ đường LLM + gỡ băng TL-11; chạy sau AA-790/788",
    "needs": ""
@@ -2269,7 +2381,7 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "LLM path",
+   "session": "TL-11 lift",
    "size": "L",
    "next": "M2a · chờ đường LLM + gỡ băng TL-11 theo stage; kết quả hiện ở Writing Lab (R6)",
    "needs": ""
@@ -2281,9 +2393,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "≥19/11",
+   "session": "S287",
    "size": "S",
-   "next": "M2a · tech lead duyệt S283: pilot 20 bài trần 5 USD từ 19/11, thử 3 bài trước, đăng ký trước merge trước",
+   "next": "M2a — S287: pilot 20 bài trần 5 USD, chạy sau khi áp migration của phiên",
    "needs": ""
   },
   {
@@ -2305,7 +2417,7 @@
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "LLM path",
+   "session": "TL-11 lift",
    "size": "M",
    "next": "M2a · release 1 khi có đường LLM + gỡ băng TL-11; rule quản lý theo stage ở Writing Lab › Releases",
    "needs": ""
@@ -2317,7 +2429,7 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "M2a",
-   "session": "LLM path",
+   "session": "TL-11 lift",
    "size": "M",
    "next": "M2a · phần $0 đã kiểm live; phần LLM còn lại, UI tóm tắt sở thích đặt ở Tenant 360 › Brand & voice",
    "needs": ""
@@ -2353,7 +2465,7 @@
    "priority": "No priority",
    "project": "crm",
    "milestone": "CRM-after-R3",
-   "session": "after S281",
+   "session": "unscheduled",
    "size": "M",
    "next": "CRM · M365 + lịch BYO ở Account › Integrations của app agency; ship trong pilot thì qua review AA-969 trước",
    "needs": "Tech lead: đăng ký app Entra (M365)"
@@ -2365,9 +2477,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "S282",
+   "session": "S292",
    "size": "",
-   "next": "M2a — S282: shadow instrument nếu AA-1048 đạt ≥1 class",
+   "next": "M2a — S292: shadow instrument, chỉ khi có ~30 nhãn bất đồng",
    "needs": "Tech lead hoặc panel: nhãn ~30 ca bất đồng (đúng ≥ 80% mới có class enforce)"
   },
   {
@@ -2379,7 +2491,7 @@
    "milestone": "later",
    "session": "S285",
    "size": "",
-   "next": "còn: prereg T9/S1/T2 sau W5 null run non_inferior",
+   "next": "M2a — S286: đóng sau khi đợt chạy T2 xong (trần đã duyệt)",
    "needs": ""
   },
   {
@@ -2404,7 +2516,7 @@
    "session": "≥01/12",
    "size": "",
    "next": "",
-   "needs": "cần xếp slot",
+   "needs": "",
    "due": "2026-11-29"
   },
   {
@@ -2414,10 +2526,10 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "S283",
+   "session": "S291",
    "size": "L",
-   "next": "S283: module Academy L8 (playbook) bản nháp; cài App lên project-template là bước tay",
-   "needs": []
+   "next": "S291: module Academy L8 (playbook) + nhận phạm vi AA-1121 (kit v1.1); cài App lên project-template là bước tay",
+   "needs": ""
   },
   {
    "id": "AA-1110",
@@ -2426,9 +2538,9 @@
    "priority": "Urgent",
    "project": "data",
    "milestone": "later",
-   "session": "S283",
+   "session": "≥01/12",
    "size": "M",
-   "next": "S283: trang chạy không cần agent, kịch bản tabletop, SNS kênh 2 (tắt sẵn); người giữ khoá → trang quyết định",
+   "next": "Ops — S285: chốt kênh cảnh báo thứ 2; phần người thứ hai ≥01/12",
    "needs": "Tech lead + chủ doanh nghiệp: người giữ khoá thứ hai"
   },
   {
@@ -2438,10 +2550,10 @@
    "priority": "Urgent",
    "project": "data",
    "milestone": "later",
-   "session": "S285",
+   "session": "unscheduled",
    "size": "M",
-   "next": "còn: MFA TOTP nhóm admin, role agent chỉ đọc, ZAP lại, eval asn1/crypto-browserify portal",
-   "needs": "Tech lead: cài đặt org GitHub, chọn IdP"
+   "next": "Security — S285: MFA admin (amr check CIS/Booking/Partner + TF pool, rollout sau khi tech lead đăng ký TOTP), npm audit portal, ZAP lại",
+   "needs": "Tech lead: TOTP; WAF #935"
   },
   {
    "id": "AA-1117",
@@ -2450,7 +2562,7 @@
    "priority": "High",
    "project": "data",
    "milestone": "later",
-   "session": "after S281",
+   "session": "at go-live",
    "size": "L",
    "next": "Next: cổng go-live có ngày + checklist CI",
    "needs": "Tech lead + chủ doanh nghiệp: ngày go-live, chi WAF"
@@ -2462,9 +2574,9 @@
    "priority": "Medium",
    "project": "data",
    "milestone": "later",
-   "session": "later",
+   "session": "S292",
    "size": "M",
-   "next": "Later: tài liệu khớp thực tế + lint chống lệch",
+   "next": "S292: tài liệu khớp thực tế + lint chống lệch",
    "needs": ""
   },
   {
@@ -2474,22 +2586,10 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "later",
+   "session": "S291",
    "size": "M",
-   "next": "Later: an toàn phát hành (merge queue TP, rollback khi smoke đỏ, release-please)",
-   "needs": "Tech lead: giữ hay bỏ release-please"
-  },
-  {
-   "id": "AA-1121",
-   "title": "[Playbook] Project kit v1.1: the parts v1.0.0 does not ship",
-   "status": "Backlog",
-   "priority": "Low",
-   "project": "core",
-   "milestone": "later",
-   "session": "unscheduled",
-   "size": "",
-   "next": "",
-   "needs": "cần xếp slot"
+   "next": "S291: an toàn phát hành (merge queue TP, rollback khi smoke đỏ); release-please giữ (S282)",
+   "needs": ""
   },
   {
    "id": "AA-1122",
@@ -2498,21 +2598,9 @@
    "priority": "High",
    "project": "core",
    "milestone": "later",
-   "session": "S283",
+   "session": "≥01/12",
    "size": "",
-   "next": "S283: sau 01/12 kiểm lượt nghiên cứu tự động đêm đầu (chỉ địa điểm mới, dừng ở trần 5 USD) + bảng lịch sử có dòng 12 tháng; tech lead đặt research_auto_enabled=true hiệu lực 01/12",
-   "needs": "cần xếp slot"
-  },
-  {
-   "id": "AA-1126",
-   "title": "[AI Gateway] Spend controls per environment: plan quotas with clear UX, connection caps alert + failover, anomaly breaker, batch caps",
-   "status": "In Review",
-   "priority": "High",
-   "project": "core",
-   "milestone": "later",
-   "session": "S285",
-   "size": "L",
-   "next": "còn: thử flip env + ảnh quota notices",
+   "next": "≥02/12: kiểm lượt nghiên cứu tự động đêm đầu (chỉ địa điểm mới, dừng ở trần 5 USD)",
    "needs": ""
   },
   {
@@ -2524,115 +2612,223 @@
    "milestone": "later",
    "session": "S285",
    "size": "",
-   "next": "còn: C3/C4/D1, tên select bộ lọc review, kiểm Cost Explorer hằng ngày (cần yes)",
-   "needs": "cần xếp slot"
-  },
-  {
-   "id": "AA-1128",
-   "title": "[UI fixes — Booking] Season calendars really assigned, catalog and prices, names not ids, copy and Vietnamese",
-   "status": "In Review",
-   "priority": "High",
-   "project": "tpbk",
-   "milestone": "later",
-   "session": "S285",
-   "size": "",
-   "next": "còn: backfill notifications cũ (cần duyệt) hoặc để hết hạn, B5, D1",
-   "needs": "cần xếp slot"
-  },
-  {
-   "id": "AA-1129",
-   "title": "[UI fixes — Agency app] Studio money view, CRM home and routing, people and labels, translation, settings, client host, Academy",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "crm",
-   "milestone": "later",
-   "session": "S285",
-   "size": "",
-   "next": "S1 agency web part, then P1–P5, A1",
-   "needs": "cần xếp slot"
-  },
-  {
-   "id": "AA-1130",
-   "title": "[UI fixes — TripPlanner] Agency planner page fixes from the S283 UI audit",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "tpbk",
-   "milestone": "later",
-   "session": "S285",
-   "size": "",
-   "next": "T1 agency planner",
-   "needs": "cần xếp slot"
+   "next": "UI — S286: đóng (C3 read-only + C4 layout QA tenant)",
+   "needs": ""
   },
   {
    "id": "AA-1134",
    "title": "[Ops] Docs-audit code follow-ups — 19 small code, config and settings fixes",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "Medium",
    "project": "data",
    "milestone": "later",
-   "session": "S285",
+   "session": "S286",
    "size": "",
-   "next": "small slices in batches",
-   "needs": "cần xếp slot"
-  },
-  {
-   "id": "AA-1135",
-   "title": "[DevOps] Platform › Delivery v2: time range on every tab, DORA trends, delivery flow diagram, queue and churn charts, card sorting",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "later",
-   "session": "S285",
-   "size": "",
-   "next": "L18: lần gọi đầu khoảng tuỳ chọn > 29 s (504) — sửa đường lạnh, verify live, đóng",
-   "needs": "cần xếp slot"
+   "next": "Ops — S286: đóng (lát A–E đã merge, verify live)",
+   "needs": ""
   },
   {
    "id": "AA-1136",
    "title": "[DevOps] Agent change hooks: code ↔ tests ↔ implementation notes, script-only, log mode first",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "Medium",
    "project": "data",
    "milestone": "later",
-   "session": "S285",
+   "session": "S289",
    "size": "",
-   "next": "hooks docs-impact / notes-present (warn trước, đo rồi quyết)",
-   "needs": "cần xếp slot"
+   "next": "DevOps — S289: đóng sau 1 tuần log",
+   "needs": ""
   },
   {
    "id": "AA-1137",
    "title": "[DevOps] Specs and trace: plan → spec (requirements, design, tasks) → lanes → PR, Kiro-compatible",
+   "status": "In Review",
+   "priority": "Medium",
+   "project": "data",
+   "milestone": "later",
+   "session": "S287",
+   "size": "",
+   "next": "DevOps — S287: đóng sau khi có T7/T8",
+   "needs": ""
+  },
+  {
+   "id": "AA-1140",
+   "title": "[Ops] Ecosystem status: replace /admin/overview with one live + period status page for the four apps",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "data",
+   "milestone": "later",
+   "session": "S290",
+   "size": "",
+   "next": "Ops — S290: trang status + shared.ops_event + bản ghi sự cố tối giản (AI8)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1141",
+   "title": "[Ops] Ecosystem status P1: change annotations, alert ack/snooze, freshness, capacity forecast, cost anomaly, digest, saved views, accessibility",
    "status": "Backlog",
    "priority": "Medium",
    "project": "data",
    "milestone": "later",
-   "session": "S285",
+   "session": "S291",
    "size": "",
-   "next": "plan → spec → task theo rủi ro",
-   "needs": "cần xếp slot"
+   "next": "Ops P1 — S291, sau AA-1140",
+   "needs": ""
   },
   {
-   "id": "AA-1138",
-   "title": "[CRM] Draft reply quality: Nova Lite vs Claude Haiku, then route crm_draft_reply to Claude only if it wins",
-   "status": "In Progress",
+   "id": "AA-1142",
+   "title": "[Ops] Ecosystem status P2: SLO and error budget burn, incident record, external synthetic checks, per-agency drill-down",
+   "status": "Backlog",
    "priority": "Medium",
-   "project": "crm",
+   "project": "data",
    "milestone": "later",
-   "session": "S285",
+   "session": "S292",
    "size": "",
-   "next": "nửa Nova Lite qua gateway CRM (bật tạm ai_enabled agency giả), trang so sánh ẩn tên model → tech lead chấm",
-   "needs": "cần xếp slot"
+   "next": "Ops P2 — S292, sau AA-1141",
+   "needs": ""
   },
   {
-   "id": "AA-1139",
-   "title": "[Add-ons] TripPlanner module in the agency app: site link, lead channel, theme, locale, leads, usage",
+   "id": "AA-1145",
+   "title": "[Booking] One supply model: pax types, structured contract terms, restrictions and allotment",
+   "status": "In Review",
+   "priority": "High",
+   "project": "tpbk",
+   "milestone": "M-SUP",
+   "session": "S286",
+   "size": "",
+   "next": "L5 — S286: verify live R6 rồi Done",
+   "needs": ""
+  },
+  {
+   "id": "AA-1146",
+   "title": "[CIS] Tour edits are versioned, locked and published through one review gate",
+   "status": "In Review",
+   "priority": "High",
+   "project": "portal",
+   "milestone": "M-SUP",
+   "session": "S286",
+   "size": "",
+   "next": "L3 — S286: đóng phần 1 (D1, D5, CIS 457/458) có bằng chứng; phần 2 Tour editor chuyển sang AA-1148",
+   "needs": ""
+  },
+  {
+   "id": "AA-1147",
+   "title": "[CRM] Agency extras follow the trip from proposal to invoice",
    "status": "Backlog",
    "priority": "Medium",
    "project": "crm",
-   "milestone": "later",
-   "session": "S285",
+   "milestone": "M-SUP",
+   "session": "S287",
    "size": "",
-   "next": "module TripPlanner trong app đại lý (tách từ add-on lifecycle)",
+   "next": "L2 — S287: dòng dịch vụ đại lý theo proposal → hoá đơn",
+   "needs": ""
+  },
+  {
+   "id": "AA-1148",
+   "title": "[CIS] Content workspace: create and edit tours by hand, tied to an AA supplier, with preview and change review",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "portal",
+   "milestone": "M-SUP",
+   "session": "S288",
+   "size": "",
+   "next": "L4 — S288–S290: editor tour + AA-1146 phần 2 + view nhà cung cấp; photos.upload sau AA-1157 (bỏ M0, thay bằng AA-1156)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1149",
+   "title": "[Booking] A sold tour becomes one supplier booking per component, with service attributes and a can-operate check",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "tpbk",
+   "milestone": "M-SUP",
+   "session": "S288",
+   "size": "",
+   "next": "L6 — S288: snapshot + tách đặt dịch vụ + thuộc tính dịch vụ + kiểm 'vận hành được'; migration bk- áp sau AA-1158 phần 1",
+   "needs": ""
+  },
+  {
+   "id": "AA-1150",
+   "title": "[CIS + Booking] Lean staff roles step 1: three people-role presets, finance reads, make/approve capability split, one sign-in",
+   "status": "Todo",
+   "priority": "High",
+   "project": "tpbk",
+   "milestone": "M-ROLES",
+   "session": "S286",
+   "size": "M",
+   "next": "Roles — S286: bước 1 (preset, bỏ content_creator, finance đọc, tách quyền làm/duyệt, một lần đăng nhập), không migration",
+   "needs": ""
+  },
+  {
+   "id": "AA-1151",
+   "title": "[Booking + CIS] Optional activities as AA offers with places, sale rules and expiry alerts",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "tpbk",
+   "milestone": "M-SUP",
+   "session": "S289",
+   "size": "",
+   "next": "L8 — S289: hoạt động tuỳ chọn ở Booking + CIS (PR-29)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1152",
+   "title": "[TripPlanner + CRM] Optional activities per day for customers and agencies, with rounded agency prices",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "tpbk",
+   "milestone": "M-SUP",
+   "session": "S290",
+   "size": "",
+   "next": "L9 — S290: TripPlanner + CRM hiện hoạt động theo ngày, giá đại lý làm tròn (phần giá mở, B2 = C)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1153",
+   "title": "[Booking] Hotel contracts through DMCs: property master, meal plans, supplements, allotment and safer manual import",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "tpbk",
+   "milestone": "M-SUP",
+   "session": "S289",
+   "size": "",
+   "next": "L10 — S289 phần 1 (dời S290 nếu bảng job bận), S290 phần 2 (allotment, Excel 2 chiều) (PR-30)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1154",
+   "title": "[Ops] CIS admin assistant A0–A2: monitor, look up and propose ops actions with risk and predicted outcome",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "data",
+   "milestone": "later",
+   "session": "S291",
+   "size": "",
+   "next": "Trợ lý admin CIS — S291 A0, S292 A1, tiếp sau S292 (A0 không LLM, A1 LLM + UI, A2 đo dự đoán)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1160",
+   "title": "[TripPlanner] Planner follows the agency's locale and theme; leads fall back when the CRM agency does not exist yet",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "tpbk",
+   "milestone": "later",
+   "session": "S288",
+   "size": "",
+   "next": "",
+   "needs": "cần xếp slot"
+  },
+  {
+   "id": "AA-1161",
+   "title": "[DevOps] Keep every repo lean: screenshots, build artifacts and binaries stored in their right place, with guards",
+   "status": "Todo",
+   "priority": "High",
+   "project": "data",
+   "milestone": "later",
+   "session": "S286",
+   "size": "",
+   "next": "",
    "needs": "cần xếp slot"
   }
  ]

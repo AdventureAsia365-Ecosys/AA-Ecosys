@@ -1,0 +1,184 @@
+{
+ "run": "2026-11-19T09:40:50.361Z",
+ "tenant": {
+  "name": "Atlas & Hearth",
+  "role": "owner"
+ },
+ "facts": {
+  "api": {
+   "status": 200,
+   "kinds": [
+    "booking_terms"
+   ],
+   "own": [],
+   "platformCount": 1
+  },
+  "formKindOptions": [
+   {
+    "value": "booking_terms",
+    "label": "Booking terms"
+   }
+  ],
+  "postPrice": {
+   "status": 422,
+   "body": {
+    "detail": "An agency's own facts are its booking terms only. Prices, seasons, visas and entry, transfer times and other tour facts come from Adventure Asia."
+   }
+  },
+  "mobileOverflow": 0,
+  "errors390": []
+ },
+ "t2": {
+  "v1": {
+   "version_number": 1,
+   "status": "ai_generated",
+   "edit_source": "ai_generated",
+   "published_tour_id": "05a91427-81ca-4c44-8902-e878585082ef"
+  },
+  "wordingEdit": {
+   "status": 200,
+   "body": {
+    "status": "edited",
+    "new_version_id": "751421b8-2e8c-4a17-bbaf-001253488ee3",
+    "version_number": 2
+   }
+  },
+  "drawerShowsV2Wording": true,
+  "factEdit": {
+   "status": 200,
+   "versionPatched": "751421b8-2e8c-4a17-bbaf-001253488ee3",
+   "body": {
+    "status": "edited",
+    "new_version_id": "8045e8ff-e98b-41a9-b20a-668833374992",
+    "version_number": 3
+   },
+   "toasts": [
+    "Saved"
+   ]
+  },
+  "revert": {
+   "status": 200,
+   "body": {
+    "status": "edited",
+    "new_version_id": "3d5e5ace-6200-403e-9cc8-4b3cb2e672a8",
+    "version_number": 4
+   }
+  },
+  "v3": {
+   "version_number": 4,
+   "status": "pending",
+   "edit_source": "tenant_edit",
+   "contentEqualsV1": true,
+   "differingKeys": []
+  },
+  "versionsOfTour": [
+   {
+    "n": 4,
+    "status": "pending",
+    "edit_source": "tenant_edit"
+   },
+   {
+    "n": 3,
+    "status": "pending",
+    "edit_source": "tenant_edit"
+   },
+   {
+    "n": 2,
+    "status": "pending",
+    "edit_source": "tenant_edit"
+   },
+   {
+    "n": 1,
+    "status": "ai_generated",
+    "edit_source": "ai_generated"
+   }
+  ]
+ },
+ "activity": {
+  "api": {
+   "status": 200,
+   "keys": [
+    "data",
+    "pagination",
+    "categories",
+    "actions"
+   ],
+   "top": [
+    {
+     "action": "tenant_tour_version.edited",
+     "label": "Edited a tour",
+     "at": "2026-11-19T09:41:13.423242+00:00"
+    },
+    {
+     "action": "tenant_tour_version.edited",
+     "label": "Edited a tour",
+     "at": "2026-11-19T09:41:12.027625+00:00"
+    },
+    {
+     "action": "tenant_tour_version.edited",
+     "label": "Edited a tour",
+     "at": "2026-11-19T09:41:06.706935+00:00"
+    },
+    {
+     "action": "tenant.login",
+     "label": "Signed in",
+     "at": "2026-11-19T09:40:59.229102+00:00"
+    },
+    {
+     "action": "tenant.login",
+     "label": "Signed in",
+     "at": "2026-11-19T09:40:52.156537+00:00"
+    },
+    {
+     "action": "tenant_tour_version.exported",
+     "label": "Downloaded a tour",
+     "at": "2026-11-19T09:33:40.778285+00:00"
+    }
+   ]
+  },
+  "pageText": [
+   "Tours",
+   "Edited a tour",
+   "TOURS\tYou",
+   "Edited a tour",
+   "TOURS\tYou",
+   "Edited a tour",
+   "TOURS\tYou",
+   "Downloaded a tour",
+   "TOURS\tYou",
+   "Downloaded a tour",
+   "TOURS\tYou",
+   "Downloaded a tour"
+  ]
+ },
+ "shots": [
+  {
+   "file": "studio-facts-1440.jpg",
+   "masked": 0,
+   "bytes": 69505
+  },
+  {
+   "file": "studio-facts-add-1440.jpg",
+   "masked": 0,
+   "bytes": 67358
+  },
+  {
+   "file": "studio-facts-390.jpg",
+   "masked": 0,
+   "bytes": 38599
+  },
+  {
+   "file": "studio-tour-fact-locked-1440.jpg",
+   "masked": 0,
+   "bytes": 162341
+  },
+  {
+   "file": "studio-activity-1440.jpg",
+   "masked": 0,
+   "bytes": 71798
+  }
+ ],
+ "errors1440": [
+  "Failed to load resource: the server responded with a status of 422 ()"
+ ]
+}

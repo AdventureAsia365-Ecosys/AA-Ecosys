@@ -1,0 +1,1207 @@
+{
+ "app": "booking",
+ "name": "AA-Booking (back office đặt tour)",
+ "host": "https://booking.lumiguides.it.com (staff admin), API https://api-booking.lumiguides.it.com",
+ "signin": "Nhân viên đăng nhập bằng email công ty, nhận mã một lần trên trang Cognito WORKFORCE staff-auth.lumiguides.it.com (client booking-staff). Vai trò lấy từ group booking-* (admin > sales > contracting > content_creator > finance, group đầu tiên thắng); không có group booking-* thì bị từ chối. Admin cấp group trên trang Staff của CIS. Booking không giữ mật khẩu; cầu nối token từ CIS đã tắt. Tài khoản E2E admin chỉ đọc; các tài khoản E2E ghi chỉ chạy trên Dev, đúng route cho phép, trên dữ liệu giả.",
+ "signin_evidence": "apps/AA-Booking/CONTEXT.md:2235-2244; backend/app/auth/staff.py:77-85,510-574; backend/app/auth/identity_config.py:54-58",
+ "roles": [
+  {
+   "code": "admin",
+   "label": "Admin (Quản trị)",
+   "who": "business owner, tech lead; tài khoản E2E admin (chỉ đọc)",
+   "summary": "Làm được mọi việc, là người duyệt dự phòng cho mọi maker-checker, quản trị nhân viên, audit, xoá dữ liệu theo hạn; chỉ admin ghi khoản trả NCC."
+  },
+  {
+   "code": "sales",
+   "label": "Sales (Bán hàng)",
+   "who": "nhân viên bán hàng; tài khoản E2E staff (Dev)",
+   "summary": "Hồ sơ chuyến, báo giá, đặt chỗ thay đại lý, đặt dịch vụ NCC; đọc giá, NCC, hoá đơn NCC."
+  },
+  {
+   "code": "contracting",
+   "label": "Contracting (Sản phẩm & điều hành)",
+   "who": "người phụ trách sản phẩm, giá và điều hành; tài khoản E2E pricing maker/checker (Dev)",
+   "summary": "Sở hữu NCC, hợp đồng, giá, mùa, stop-sale; nhập và duyệt hoá đơn NCC; duyệt giá dưới sàn; đặt dịch vụ."
+  },
+  {
+   "code": "content_creator",
+   "label": "Content creator",
+   "who": "vai trò cũ, sắp ẩn (S285 đã chốt bỏ)",
+   "summary": "Chỉ đọc catalog tour từ CIS; không làm gì khác."
+  },
+  {
+   "code": "finance",
+   "label": "Finance (Kế toán)",
+   "who": "kế toán; tài khoản E2E finance maker/checker (Dev)",
+   "summary": "Hoá đơn gửi đại lý, ghi và duyệt tiền đại lý trả, cài đặt thu tiền, đề xuất/duyệt tham số tài chính, xem lợi nhuận. Hôm nay chưa xem được NCC, hoá đơn NCC, hồ sơ chuyến."
+  }
+ ],
+ "areas": [
+  {
+   "area": "Chung (mọi vai trò)",
+   "pages": [
+    {
+     "path": "/",
+     "label": "Trang chủ (bảng việc theo vai trò)",
+     "access": {
+      "admin": "read",
+      "sales": "read",
+      "contracting": "read",
+      "content_creator": "read",
+      "finance": "read"
+     }
+    },
+    {
+     "path": "/notifications",
+     "label": "Thông báo",
+     "access": {
+      "admin": "read",
+      "sales": "read",
+      "contracting": "read",
+      "content_creator": "read",
+      "finance": "read"
+     }
+    },
+    {
+     "path": "/settings",
+     "label": "Cài đặt cá nhân (chỉ tuỳ chọn thông báo của mình)",
+     "access": {
+      "admin": "write",
+      "sales": "write",
+      "contracting": "write",
+      "content_creator": "write",
+      "finance": "write"
+     }
+    },
+    {
+     "path": "/staff/[cisUserId]",
+     "label": "Hồ sơ nhân viên (admin xem mọi người, người khác chỉ xem hồ sơ của mình)",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "read",
+      "content_creator": "read",
+      "finance": "read"
+     }
+    }
+   ]
+  },
+  {
+   "area": "Bán hàng: hồ sơ chuyến và báo giá",
+   "pages": [
+    {
+     "path": "/cases",
+     "label": "Danh sách hồ sơ chuyến",
+     "access": {
+      "admin": "write",
+      "sales": "write",
+      "contracting": "read",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/cases/[code]",
+     "label": "Chi tiết hồ sơ chuyến",
+     "access": {
+      "admin": "write",
+      "sales": "write",
+      "contracting": "read",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/cases/[code]/proposals/[n]",
+     "label": "Phiên bản báo giá",
+     "access": {
+      "admin": "write",
+      "sales": "write",
+      "contracting": "read",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/cases/[code]/proposals/[n]/preview",
+     "label": "Xem trước báo giá gửi khách",
+     "access": {
+      "admin": "read",
+      "sales": "read",
+      "contracting": "read",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/proposals",
+     "label": "Danh sách báo giá",
+     "access": {
+      "admin": "write",
+      "sales": "write",
+      "contracting": "read",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/pricing/calculator",
+     "label": "Máy tính giá",
+     "access": {
+      "admin": "read",
+      "sales": "read",
+      "contracting": "read",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    }
+   ]
+  },
+  {
+   "area": "Nhà cung cấp và dịch vụ",
+   "pages": [
+    {
+     "path": "/suppliers",
+     "label": "Danh sách NCC",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/suppliers/new",
+     "label": "Tạo NCC",
+     "access": {
+      "admin": "write",
+      "sales": "none",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/suppliers/[id]",
+     "label": "Chi tiết NCC và hợp đồng",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/suppliers/[id]/edit",
+     "label": "Sửa NCC",
+     "access": {
+      "admin": "write",
+      "sales": "none",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/suppliers/rate-sheets/[id]",
+     "label": "Bảng giá Excel đã nhập",
+     "access": {
+      "admin": "write",
+      "sales": "none",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/hotels",
+     "label": "Khách sạn",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/services",
+     "label": "Dịch vụ",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/services/[id]",
+     "label": "Chi tiết dịch vụ",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    }
+   ]
+  },
+  {
+   "area": "Giá",
+   "pages": [
+    {
+     "path": "/pricing/rules",
+     "label": "Quy tắc giá, tỷ giá, chính sách huỷ",
+     "access": {
+      "admin": "write",
+      "sales": "none",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/pricing/agency-tiers",
+     "label": "Hạng đại lý và bảng giá riêng",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/pricing/agency-tiers/tariff",
+     "label": "Bảng giá của một đại lý",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/pricing/readiness",
+     "label": "Độ sẵn sàng giá của catalog",
+     "access": {
+      "admin": "read",
+      "sales": "read",
+      "contracting": "read",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/pricing/workbench",
+     "label": "Bàn làm giá (bật bán, nhập workbook)",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/pricing/policy",
+     "label": "Tham số chính sách giá (Policy)",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "write"
+     }
+    },
+    {
+     "path": "/pricing/seasons",
+     "label": "Lịch mùa và stop-sale",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/pricing/holiday-events",
+     "label": "Sự kiện lễ",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    }
+   ]
+  },
+  {
+   "area": "Catalog tour (nội dung từ CIS)",
+   "pages": [
+    {
+     "path": "/catalog/trip-plans",
+     "label": "Danh sách tour",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "write",
+      "content_creator": "read",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/catalog/trip-plans/[sourceId]",
+     "label": "Chi tiết tour (khởi hành, chỗ giữ cho đại lý, mở hồ sơ)",
+     "access": {
+      "admin": "write",
+      "sales": "write",
+      "contracting": "write",
+      "content_creator": "read",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/catalog/trip-plans/[sourceId]/commercial",
+     "label": "Thông tin bán của tour",
+     "access": {
+      "admin": "write",
+      "sales": "none",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/catalog/countries",
+     "label": "Quốc gia (trạng thái bán)",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "read",
+      "content_creator": "read",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/catalog/countries/[iso]",
+     "label": "Chi tiết quốc gia",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "read",
+      "content_creator": "read",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/catalog/destinations",
+     "label": "Điểm đến",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "read",
+      "content_creator": "read",
+      "finance": "none"
+     }
+    }
+   ]
+  },
+  {
+   "area": "Vận hành và B2B",
+   "pages": [
+    {
+     "path": "/b2b-desk",
+     "label": "Desk B2B (dòng on-request, sự cố, đặt thay đại lý)",
+     "access": {
+      "admin": "write",
+      "sales": "write",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/b2b-desk/manifest/[id]",
+     "label": "Danh sách khách của đoàn",
+     "access": {
+      "admin": "read",
+      "sales": "read",
+      "contracting": "read",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/departures",
+     "label": "Bảng khởi hành",
+     "access": {
+      "admin": "write",
+      "sales": "write",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/trip-checks",
+     "label": "Kiểm chuyến",
+     "access": {
+      "admin": "write",
+      "sales": "write",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    }
+   ]
+  },
+  {
+   "area": "Tiền",
+   "pages": [
+    {
+     "path": "/billing",
+     "label": "Hoá đơn NCC và khoản trả",
+     "access": {
+      "admin": "write",
+      "sales": "read",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/finance",
+     "label": "Chi phí đoàn, PO và lợi nhuận",
+     "access": {
+      "admin": "write",
+      "sales": "write",
+      "contracting": "write",
+      "content_creator": "none",
+      "finance": "read"
+     }
+    },
+    {
+     "path": "/agency-billing",
+     "label": "Hoá đơn gửi đại lý, khoản đại lý trả, cài đặt thu tiền",
+     "access": {
+      "admin": "write",
+      "sales": "none",
+      "contracting": "none",
+      "content_creator": "none",
+      "finance": "write"
+     }
+    },
+    {
+     "path": "/agency-billing/invoices/[ref]",
+     "label": "Chi tiết hoá đơn đại lý",
+     "access": {
+      "admin": "write",
+      "sales": "none",
+      "contracting": "none",
+      "content_creator": "none",
+      "finance": "write"
+     }
+    }
+   ]
+  },
+  {
+   "area": "Quản trị",
+   "pages": [
+    {
+     "path": "/staff",
+     "label": "Danh sách nhân viên Booking",
+     "access": {
+      "admin": "write",
+      "sales": "none",
+      "contracting": "none",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    },
+    {
+     "path": "/audit-log",
+     "label": "Nhật ký audit",
+     "access": {
+      "admin": "read",
+      "sales": "none",
+      "contracting": "none",
+      "content_creator": "none",
+      "finance": "none"
+     }
+    }
+   ]
+  }
+ ],
+ "actions": [
+  {
+   "area": "Nhà cung cấp",
+   "action": "Tạo, sửa NCC, khách sạn, dịch vụ, ảnh",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "yes",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/auth/staff.py:117; backend/app/routers/suppliers.py:134; backend/app/routers/supply.py:217"
+  },
+  {
+   "area": "Nhà cung cấp",
+   "action": "Kích hoạt hoặc tạm ngưng NCC (một người làm, không ai duyệt)",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "yes",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/suppliers.py:155-163; migrations/008_suppliers_contracts.sql:61"
+  },
+  {
+   "area": "Nhà cung cấp",
+   "action": "Nhập hợp đồng nháp, giá NCC, nhập bảng giá Excel",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "yes",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/suppliers.py:177,220; backend/app/routers/supply.py:405-417"
+  },
+  {
+   "area": "Nhà cung cấp",
+   "action": "Công bố hợp đồng NCC",
+   "access": {
+    "admin": "approve",
+    "sales": "no",
+    "contracting": "approve",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": {
+    "creator": "admin, contracting",
+    "approver": "admin, contracting",
+    "rule": "người công bố khác người sửa cuối của bản nháp (hoặc người tạo nếu chưa ai sửa); CHECK trong DB",
+    "evidence": "backend/app/suppliers/service.py:496-498,597-612"
+   },
+   "evidence": "backend/app/suppliers/service.py:597-601"
+  },
+  {
+   "area": "Giá",
+   "action": "Đề xuất quy tắc giá, tỷ giá FX, chính sách huỷ",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "yes",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/pricing.py:226,271,328; backend/app/auth/staff.py:114"
+  },
+  {
+   "area": "Giá",
+   "action": "Duyệt, từ chối quy tắc giá, tỷ giá FX, chính sách huỷ",
+   "access": {
+    "admin": "approve",
+    "sales": "no",
+    "contracting": "approve",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": {
+    "creator": "admin, contracting",
+    "approver": "admin, contracting",
+    "rule": "người duyệt khác người tạo dòng (403 own_row + trigger bk-007)",
+    "evidence": "backend/app/pricing/policy.py:440-461"
+   },
+   "evidence": "backend/app/routers/pricing.py:232-354"
+  },
+  {
+   "area": "Giá",
+   "action": "Tạo, sửa hạng đại lý và gán hạng cho đại lý",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "yes",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/agency_pricing.py:100,106,183"
+  },
+  {
+   "area": "Giá",
+   "action": "Chiết khấu theo hạng và bảng giá riêng đại lý (đề xuất và duyệt)",
+   "access": {
+    "admin": "approve",
+    "sales": "no",
+    "contracting": "approve",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": {
+    "creator": "admin, contracting",
+    "approver": "admin, contracting",
+    "rule": "người duyệt khác người tạo dòng (403 own_row + CHECK bk-043)",
+    "evidence": "backend/app/b2b/agency_pricing.py:513-519"
+   },
+   "evidence": "backend/app/routers/agency_pricing.py:130-168"
+  },
+  {
+   "area": "Giá",
+   "action": "Soạn và nộp bảng giá tay (price version) của tour",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "yes",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/price_versions.py:125,175,182; backend/app/auth/staff.py:187"
+  },
+  {
+   "area": "Giá",
+   "action": "Duyệt, từ chối, rút bảng giá tay đã công bố",
+   "access": {
+    "admin": "approve",
+    "sales": "no",
+    "contracting": "approve",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": {
+    "creator": "admin, contracting",
+    "approver": "admin, contracting",
+    "rule": "người duyệt khác người soạn phiên bản (403 maker_checker + CHECK)",
+    "evidence": "backend/app/catalog/price_versions.py:673"
+   },
+   "evidence": "backend/app/routers/price_versions.py:190-212"
+  },
+  {
+   "area": "Giá",
+   "action": "Đề xuất lịch mùa, khoảng mùa, stop-sale, sự kiện lễ, đổi lịch mùa của tour",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "yes",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/price_versions.py:137,268-289,344; backend/app/auth/staff.py:189"
+  },
+  {
+   "area": "Giá",
+   "action": "Duyệt lịch mùa, stop-sale, sự kiện lễ (stop-sale chỉ có hiệu lực sau khi duyệt)",
+   "access": {
+    "admin": "approve",
+    "sales": "no",
+    "contracting": "approve",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": {
+    "creator": "admin, contracting",
+    "approver": "admin, contracting",
+    "rule": "người duyệt khác người đề xuất (403 maker_checker + CHECK)",
+    "evidence": "backend/app/pricing/seasons_admin.py:155-159"
+   },
+   "evidence": "backend/app/routers/price_versions.py:147,295,310,350; backend/app/pricing/seasons.py:157"
+  },
+  {
+   "area": "Giá",
+   "action": "Đề xuất thay đổi tham số trên trang Policy",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "yes",
+    "content_creator": "no",
+    "finance": "yes"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/pricing.py:397-418; backend/app/auth/staff.py:178"
+  },
+  {
+   "area": "Giá",
+   "action": "Duyệt tham số Policy theo nhóm: nhóm giá (admin, contracting), nhóm tỷ giá/thuế/phụ thu/thanh toán (admin, finance), hạn giữ dữ liệu (chỉ admin)",
+   "access": {
+    "admin": "approve",
+    "sales": "no",
+    "contracting": "approve",
+    "content_creator": "no",
+    "finance": "approve"
+   },
+   "two_person": {
+    "creator": "admin, contracting, finance",
+    "approver": "theo nhóm tham số: admin/contracting, admin/finance, hoặc chỉ admin",
+    "rule": "người duyệt khác người đề xuất (403 own_row + CHECK bảng)",
+    "evidence": "backend/app/pricing/policy_admin.py:317,370"
+   },
+   "evidence": "backend/app/auth/staff.py:179-183; backend/app/pricing/policy_params.py:61-63"
+  },
+  {
+   "area": "Giá",
+   "action": "Bàn làm giá: bật/tắt bán tour, nhập workbook giá, giá và độ tuổi, thành phần tour, tạo khởi hành, thông tin bán",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "yes",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/catalog.py:394-719; backend/app/auth/staff.py:121"
+  },
+  {
+   "area": "Giá",
+   "action": "Điều chỉnh giá theo đoàn khởi hành (đề xuất, duyệt, kết thúc)",
+   "access": {
+    "admin": "approve",
+    "sales": "no",
+    "contracting": "approve",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": {
+    "creator": "admin, contracting",
+    "approver": "admin, contracting",
+    "rule": "người duyệt khác người đề xuất (403 maker_checker)",
+    "evidence": "backend/app/b2b/price_adjustments.py:253"
+   },
+   "evidence": "backend/app/routers/b2b_desk.py:591-608"
+  },
+  {
+   "area": "Bán hàng",
+   "action": "Tạo, sửa hồ sơ chuyến, đổi trạng thái, mở hồ sơ từ tour",
+   "access": {
+    "admin": "yes",
+    "sales": "yes",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/trip_cases.py:177-221; backend/app/routers/catalog.py:558"
+  },
+  {
+   "area": "Bán hàng",
+   "action": "Giao người phụ trách hồ sơ",
+   "access": {
+    "admin": "yes",
+    "sales": "yes",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/trip_cases.py:233; backend/app/auth/staff.py:105"
+  },
+  {
+   "area": "Bán hàng",
+   "action": "Soạn phiên bản báo giá, tính giá, gửi khách",
+   "access": {
+    "admin": "yes",
+    "sales": "yes",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/trip_cases.py:245-332; backend/app/auth/staff.py:106"
+  },
+  {
+   "area": "Bán hàng",
+   "action": "Ghi nhận khách đồng ý báo giá (chốt hồ sơ)",
+   "access": {
+    "admin": "yes",
+    "sales": "yes",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/trip_cases.py:356; backend/app/trip_cases/versions.py:769-772"
+  },
+  {
+   "area": "B2B",
+   "action": "Trả lời dòng on-request, báo và gỡ sự cố đoàn, chạy kiểm tra khởi hành",
+   "access": {
+    "admin": "yes",
+    "sales": "yes",
+    "contracting": "yes",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/b2b_desk.py:117-177; backend/app/auth/staff.py:133"
+  },
+  {
+   "area": "B2B",
+   "action": "Đặt chỗ thay đại lý, huỷ hoặc bớt khách cho đại lý, xin giảm phí huỷ",
+   "access": {
+    "admin": "yes",
+    "sales": "yes",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/b2b_desk.py:270,336,358,377; backend/app/auth/staff.py:138"
+  },
+  {
+   "area": "B2B",
+   "action": "Duyệt đặt chỗ có giá dưới biên sàn và giảm phí huỷ",
+   "access": {
+    "admin": "approve",
+    "sales": "no",
+    "contracting": "approve",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": {
+    "creator": "admin, sales",
+    "approver": "admin, contracting",
+    "rule": "người duyệt khác người nhập/yêu cầu (403 maker_checker + CHECK)",
+    "evidence": "backend/app/b2b/desk_bookings.py:18-21,321; backend/app/b2b/amendments.py:318"
+   },
+   "evidence": "backend/app/routers/b2b_desk.py:291-296,365-372; backend/app/auth/staff.py:139"
+  },
+  {
+   "area": "B2B",
+   "action": "Phí đoàn khởi hành (đề xuất và duyệt)",
+   "access": {
+    "admin": "approve",
+    "sales": "yes",
+    "contracting": "approve",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": {
+    "creator": "admin, sales, contracting",
+    "approver": "admin, contracting",
+    "rule": "người duyệt khác người đề xuất (403 maker_checker + CHECK)",
+    "evidence": "backend/app/b2b/departure_fees.py:10,237"
+   },
+   "evidence": "backend/app/routers/b2b_desk.py:557-574"
+  },
+  {
+   "area": "B2B",
+   "action": "Giữ chỗ (allotment) cho đại lý trên một khởi hành (đề xuất, duyệt, kết thúc)",
+   "access": {
+    "admin": "approve",
+    "sales": "approve",
+    "contracting": "approve",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": {
+    "creator": "admin, sales, contracting",
+    "approver": "admin, sales, contracting",
+    "rule": "người duyệt khác người đề xuất (403 maker_checker + CHECK)",
+    "evidence": "backend/app/b2b/allotments.py:6,261"
+   },
+   "evidence": "backend/app/routers/catalog.py:738-755"
+  },
+  {
+   "area": "B2B",
+   "action": "Sửa đối tác B2B được gọi API (chỉ có API, chưa có trang)",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/b2b_partners.py:23,64; backend/app/auth/staff.py:129"
+  },
+  {
+   "area": "Vận hành",
+   "action": "Đặt dịch vụ NCC: tạo, gửi, xác nhận, huỷ, ghi phí huỷ, tải tài liệu",
+   "access": {
+    "admin": "yes",
+    "sales": "yes",
+    "contracting": "yes",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/supplier_bookings.py:131-268; backend/app/auth/staff.py:143"
+  },
+  {
+   "area": "Vận hành",
+   "action": "Kiểm chuyến",
+   "access": {
+    "admin": "yes",
+    "sales": "yes",
+    "contracting": "yes",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/trip_checks.py:97-104"
+  },
+  {
+   "area": "Vận hành",
+   "action": "Gán nhân sự, ghi chú vận hành cho đoàn khởi hành",
+   "access": {
+    "admin": "yes",
+    "sales": "yes",
+    "contracting": "yes",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/b2b_desk.py:489-516"
+  },
+  {
+   "area": "Vận hành",
+   "action": "Chi phí theo đoàn và PO gửi NCC (thêm, sửa, gửi, huỷ)",
+   "access": {
+    "admin": "yes",
+    "sales": "yes",
+    "contracting": "yes",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/finance.py:113-213"
+  },
+  {
+   "area": "Tiền",
+   "action": "Nhập, sửa, huỷ hoá đơn NCC và khớp với đặt dịch vụ",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "yes",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/supplier_bills.py:171-200; backend/app/auth/staff.py:155"
+  },
+  {
+   "area": "Tiền",
+   "action": "Duyệt hoá đơn NCC",
+   "access": {
+    "admin": "approve",
+    "sales": "no",
+    "contracting": "approve",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": {
+    "creator": "admin, contracting",
+    "approver": "admin, contracting",
+    "rule": "người duyệt khác người nhập và khác người sửa số tiền cuối (403 maker_checker + CHECK)",
+    "evidence": "backend/app/ops/supplier_bills.py:840-843"
+   },
+   "evidence": "backend/app/routers/supplier_bills.py:194"
+  },
+  {
+   "area": "Tiền",
+   "action": "Ghi hoặc huỷ khoản trả NCC (chỉ là bản ghi, tiền đi ở ngân hàng)",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": {
+    "creator": "admin, contracting (nhập hoá đơn)",
+    "approver": "admin (ghi khoản trả)",
+    "rule": "người ghi khoản trả khác người nhập hoá đơn và người sửa số tiền; CHƯA chặn người đã duyệt hoá đơn",
+    "evidence": "backend/app/ops/supplier_bills.py:958-962"
+   },
+   "evidence": "backend/app/routers/supplier_bills.py:206,217; backend/app/auth/staff.py:157"
+  },
+  {
+   "area": "Tiền",
+   "action": "Hoá đơn gửi đại lý: tạo nháp, thêm dòng, phát hành, huỷ, ghi tiền đại lý trả",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "yes"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/agency_billing.py:225-326; backend/app/auth/staff.py:163"
+  },
+  {
+   "area": "Tiền",
+   "action": "Duyệt, từ chối khoản đại lý trả",
+   "access": {
+    "admin": "approve",
+    "sales": "no",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "approve"
+   },
+   "two_person": {
+    "creator": "admin, finance",
+    "approver": "admin, finance",
+    "rule": "người duyệt khác người ghi khoản (403 maker_checker + CHECK)",
+    "evidence": "backend/app/agency_billing/payments.py:143"
+   },
+   "evidence": "backend/app/routers/agency_billing.py:293-299"
+  },
+  {
+   "area": "Tiền",
+   "action": "Cài đặt thu tiền: pháp nhân xuất hoá đơn, quy tắc thuế, điều khoản thanh toán (mặc định, theo đại lý, theo tour)",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "yes"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/agency_billing.py:348-436; backend/app/auth/staff.py:165"
+  },
+  {
+   "area": "Tiền",
+   "action": "Sửa và duyệt điều khoản đối tác (ví dụ lỗi giá)",
+   "access": {
+    "admin": "approve",
+    "sales": "no",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "yes"
+   },
+   "two_person": {
+    "creator": "admin, finance",
+    "approver": "admin",
+    "rule": "người duyệt khác người sửa cuối của điều khoản (403 maker_checker + CHECK)",
+    "evidence": "backend/app/agency_billing/clauses.py:95-108"
+   },
+   "evidence": "backend/app/routers/agency_billing.py:478-484"
+  },
+  {
+   "area": "Tiền",
+   "action": "Xem lợi nhuận thực tế theo hồ sơ, đoàn, đại lý",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "yes"
+   },
+   "two_person": null,
+   "evidence": "backend/app/auth/staff.py:172; backend/app/routers/finance.py:47"
+  },
+  {
+   "area": "Quản trị",
+   "action": "Cấp, đổi vai trò Booking (làm trên trang Staff của CIS qua group booking-*; Booking từ chối đổi vai trò tại chỗ)",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/auth/admin.py:3,51-55; backend/app/auth/staff.py:77-85; frontend/app/(staff)/settings/page.tsx:10-14"
+  },
+  {
+   "area": "Quản trị",
+   "action": "Khoá hoặc mở tài khoản Booking (khoá phải ghi lý do)",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/staff.py:84; backend/app/auth/staff.py:124"
+  },
+  {
+   "area": "Quản trị",
+   "action": "Xem nhật ký audit",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/reference.py:19,34; backend/app/auth/staff.py:125"
+  },
+  {
+   "area": "Quản trị",
+   "action": "Đổi trạng thái bán của quốc gia, điểm đến",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/catalog.py:259,285; backend/app/auth/staff.py:123"
+  },
+  {
+   "area": "Quản trị",
+   "action": "Chạy xoá/ẩn dữ liệu theo hạn (DRY RUN hoặc thật; chỉ có API, chưa có trang)",
+   "access": {
+    "admin": "yes",
+    "sales": "no",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/routers/retention.py:33,74; backend/app/auth/staff.py:127"
+  },
+  {
+   "area": "AI",
+   "action": "Chạy AI: Booking không gọi AI nào",
+   "access": {
+    "admin": "no",
+    "sales": "no",
+    "contracting": "no",
+    "content_creator": "no",
+    "finance": "no"
+   },
+   "two_person": null,
+   "evidence": "backend/app/catalog/component_suggest.py:5"
+  }
+ ],
+ "notes": [
+  "Trang được mở theo frontend/lib/rbac.ts (PAGE_RULES, khớp mẫu đầu tiên); API kiểm lại quyền ở mỗi lệnh gọi (backend/app/auth/staff.py PERMISSIONS). 'write' = trang có thao tác ghi với vai trò đó; 'read' = chỉ xem.",
+  "Finance được frontend cho vào /catalog/* (rbac.ts:80) nhưng API catalog.read không có finance (staff.py:119), nên thực tế bị 403: ghi 'none'.",
+  "Không có nút bỏ qua maker-checker; admin cũng không tự duyệt việc của mình."
+ ],
+ "gaps": [
+  "Kế toán chưa có bill.read, payout.write, pricing.read, supply.read, ops.read, trip_case.read, catalog.read (lát L7a chưa làm): chưa mở được hoá đơn NCC, NCC, hồ sơ chuyến; catalog bị 403 dù menu cho vào (staff.py:103-157, rbac.ts:80-84).",
+  "Ghi khoản trả NCC hôm nay chỉ admin; quyết định S285 là Kế toán trả (staff.py:157).",
+  "Người đã duyệt hoá đơn NCC vẫn tự ghi được khoản trả cho hoá đơn đó (luật L-2c chưa có; supplier_bills.py:958-962).",
+  "Công bố hợp đồng chỉ chặn người sửa cuối, chưa chặn mọi người đã viết điều khoản hoặc giá (suppliers/service.py:496-498).",
+  "NCC mới vào thẳng trạng thái active, chưa có bước người thứ hai kích hoạt (migrations/008_suppliers_contracts.sql:61).",
+  "Stop-sale chỉ có hiệu lực khi đã duyệt; quyết định S285: bật có hiệu lực ngay, gỡ mới cần người thứ hai (pricing/seasons.py:157).",
+  "content_creator vẫn còn trong STAFF_ROLES, group booking-content_creator và cầu nối ROLE_FROM_CIS; quyết định S285: ẩn ngay, xoá sau (staff.py:72-83).",
+  "Nhãn contracting vẫn là 'Contracting', chưa đổi thành 'Product & operations' (rbac.ts:17).",
+  "Chưa có quản lý STK ngân hàng NCC có maker-checker và khoá 24 giờ (T17, supplier_bank.* chưa có).",
+  "Chưa có: báo mọi admin khác khi cấp vai trò có quyền tiền, tóm tắt tuần cho owner + Kế toán, cờ đỏ trên màn duyệt hoá đơn, trang chủ riêng cho Kế toán.",
+  "Trang máy tính giá và trang báo giá kiểm vai trò cứng (me.role === admin || contracting) thay vì quyền pricing.write (pricing/calculator/page.tsx:22).",
+  "customer.write và customer.admin có trong ma trận nhưng không route nào dùng (không có trang khách hàng riêng).",
+  "b2b.admin (đối tác B2B) và retention.admin (xoá dữ liệu theo hạn) chỉ có API, chưa có trang staff."
+ ]
+}

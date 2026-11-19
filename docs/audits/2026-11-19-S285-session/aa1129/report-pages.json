@@ -1,0 +1,1318 @@
+[
+ {
+  "id": "payments",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/payments",
+  "finalPath": "/payments",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "payments-en-1440.jpg"
+ },
+ {
+  "id": "payments",
+  "lang": "en",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/payments",
+  "finalPath": "/payments",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "payments-en-390.jpg"
+ },
+ {
+  "id": "payments",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/payments",
+  "finalPath": "/payments",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "payments-vi-1440.jpg"
+ },
+ {
+  "id": "payments",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/payments",
+  "finalPath": "/payments",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "payments-vi-390.jpg"
+ },
+ {
+  "id": "partners",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/partners",
+  "finalPath": "/partners",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "partners-en-1440.jpg"
+ },
+ {
+  "id": "partners",
+  "lang": "en",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/partners",
+  "finalPath": "/partners",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "partners-en-390.jpg"
+ },
+ {
+  "id": "partners",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/partners",
+  "finalPath": "/partners",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "partners-vi-1440.jpg"
+ },
+ {
+  "id": "partners",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/partners",
+  "finalPath": "/partners",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "partners-vi-390.jpg"
+ },
+ {
+  "id": "suppliers",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/suppliers",
+  "finalPath": "/suppliers",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "suppliers-en-1440.jpg"
+ },
+ {
+  "id": "suppliers",
+  "lang": "en",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/suppliers",
+  "finalPath": "/suppliers",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "suppliers-en-390.jpg"
+ },
+ {
+  "id": "suppliers",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/suppliers",
+  "finalPath": "/suppliers",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "suppliers-vi-1440.jpg"
+ },
+ {
+  "id": "suppliers",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/suppliers",
+  "finalPath": "/suppliers",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "suppliers-vi-390.jpg"
+ },
+ {
+  "id": "marketing",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/marketing",
+  "finalPath": "/marketing",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "marketing-en-1440.jpg"
+ },
+ {
+  "id": "marketing",
+  "lang": "en",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/marketing",
+  "finalPath": "/marketing",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "marketing-en-390.jpg"
+ },
+ {
+  "id": "marketing",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/marketing",
+  "finalPath": "/marketing",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "marketing-vi-1440.jpg"
+ },
+ {
+  "id": "marketing",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/marketing",
+  "finalPath": "/marketing",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "marketing-vi-390.jpg"
+ },
+ {
+  "id": "departures",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/departures",
+  "finalPath": "/departures",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [
+   "1 (1 adult)"
+  ],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "departures-en-1440.jpg"
+ },
+ {
+  "id": "departures",
+  "lang": "en",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/departures",
+  "finalPath": "/departures",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [
+   "1 (1 adult)"
+  ],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "departures-en-390.jpg"
+ },
+ {
+  "id": "departures",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/departures",
+  "finalPath": "/departures",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "departures-vi-1440.jpg"
+ },
+ {
+  "id": "departures",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/departures",
+  "finalPath": "/departures",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "departures-vi-390.jpg"
+ },
+ {
+  "id": "bookings",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/bookings",
+  "finalPath": "/bookings",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "bookings-en-1440.jpg"
+ },
+ {
+  "id": "bookings",
+  "lang": "en",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/bookings",
+  "finalPath": "/bookings",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "bookings-en-390.jpg"
+ },
+ {
+  "id": "bookings",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/bookings",
+  "finalPath": "/bookings",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "bookings-vi-1440.jpg"
+ },
+ {
+  "id": "bookings",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/bookings",
+  "finalPath": "/bookings",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "bookings-vi-390.jpg"
+ },
+ {
+  "id": "home",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/home",
+  "finalPath": "/home",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [
+   "Needs you"
+  ],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "home-en-1440.jpg"
+ },
+ {
+  "id": "home",
+  "lang": "en",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/home",
+  "finalPath": "/home",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [
+   "Needs you"
+  ],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "home-en-390.jpg"
+ },
+ {
+  "id": "home",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/home",
+  "finalPath": "/home",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "home-vi-1440.jpg"
+ },
+ {
+  "id": "home",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/home",
+  "finalPath": "/home",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "home-vi-390.jpg"
+ },
+ {
+  "id": "reports",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/reports",
+  "finalPath": "/reports",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "reports-en-1440.jpg"
+ },
+ {
+  "id": "reports",
+  "lang": "en",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/reports",
+  "finalPath": "/reports",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "reports-en-390.jpg"
+ },
+ {
+  "id": "reports",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/reports",
+  "finalPath": "/reports",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "reports-vi-1440.jpg"
+ },
+ {
+  "id": "reports",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/reports",
+  "finalPath": "/reports",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "reports-vi-390.jpg"
+ },
+ {
+  "id": "settings-forms",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/settings/forms",
+  "finalPath": "/settings/forms",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "settings-forms-en-1440.jpg"
+ },
+ {
+  "id": "settings-forms",
+  "lang": "en",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/settings/forms",
+  "finalPath": "/settings/forms",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "settings-forms-en-390.jpg"
+ },
+ {
+  "id": "settings-forms",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/settings/forms",
+  "finalPath": "/settings/forms",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "settings-forms-vi-1440.jpg"
+ },
+ {
+  "id": "settings-forms",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/settings/forms",
+  "finalPath": "/settings/forms",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "settings-forms-vi-390.jpg"
+ },
+ {
+  "id": "pipeline-trip",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/pipeline/f0a838d8-5d42-40fa-8656-061dedebdb05",
+  "finalPath": "/pipeline/f0a838d8-5d42-40fa-8656-061dedebdb05",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "pipeline-trip-en-1440.jpg"
+ },
+ {
+  "id": "pipeline-trip",
+  "lang": "en",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/pipeline/f0a838d8-5d42-40fa-8656-061dedebdb05",
+  "finalPath": "/pipeline/f0a838d8-5d42-40fa-8656-061dedebdb05",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "pipeline-trip-en-390.jpg"
+ },
+ {
+  "id": "pipeline-trip",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/pipeline/f0a838d8-5d42-40fa-8656-061dedebdb05",
+  "finalPath": "/pipeline/f0a838d8-5d42-40fa-8656-061dedebdb05",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "pipeline-trip-vi-1440.jpg"
+ },
+ {
+  "id": "pipeline-trip",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/pipeline/f0a838d8-5d42-40fa-8656-061dedebdb05",
+  "finalPath": "/pipeline/f0a838d8-5d42-40fa-8656-061dedebdb05",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "pipeline-trip-vi-390.jpg"
+ },
+ {
+  "id": "calendar",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/calendar",
+  "finalPath": "/calendar",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "calendar-en-1440.jpg"
+ },
+ {
+  "id": "calendar",
+  "lang": "en",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/calendar",
+  "finalPath": "/calendar",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "calendar-en-390.jpg"
+ },
+ {
+  "id": "calendar",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/calendar",
+  "finalPath": "/calendar",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "calendar-vi-1440.jpg"
+ },
+ {
+  "id": "calendar",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/calendar",
+  "finalPath": "/calendar",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "calendar-vi-390.jpg"
+ },
+ {
+  "id": "inbox",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/inbox",
+  "finalPath": "/inbox",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "inbox-en-1440.jpg"
+ },
+ {
+  "id": "inbox",
+  "lang": "en",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/inbox",
+  "finalPath": "/inbox",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "inbox-en-390.jpg"
+ },
+ {
+  "id": "inbox",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/inbox",
+  "finalPath": "/inbox",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "inbox-vi-1440.jpg"
+ },
+ {
+  "id": "inbox",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/inbox",
+  "finalPath": "/inbox",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "inbox-vi-390.jpg"
+ },
+ {
+  "id": "access-log",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/settings/access-log",
+  "finalPath": "/settings/access-log",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [
+   "pageerror: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified dev environment for full errors a"
+  ],
+  "file": "access-log-en-1440.jpg"
+ },
+ {
+  "id": "access-log",
+  "lang": "en",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/settings/access-log",
+  "finalPath": "/settings/access-log",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [
+   "pageerror: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified dev environment for full errors a"
+  ],
+  "file": "access-log-en-390.jpg"
+ },
+ {
+  "id": "access-log",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/settings/access-log",
+  "finalPath": "/settings/access-log",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [
+   "pageerror: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified dev environment for full errors a"
+  ],
+  "file": "access-log-vi-1440.jpg"
+ },
+ {
+  "id": "access-log",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/settings/access-log",
+  "finalPath": "/settings/access-log",
+  "status": 200,
+  "title": "Adventure Asia Partner",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [
+   "pageerror: Minified React error #418; visit https://react.dev/errors/418?args[]=text&args[]= for the full message or use the non-minified dev environment for full errors a"
+  ],
+  "file": "access-log-vi-390.jpg"
+ },
+ {
+  "id": "studio-activity",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/portal/account/activity",
+  "finalPath": "/portal-access/none?next=%2Fportal%2Faccount%2Factivity",
+  "status": 200,
+  "title": "Adventure Asia — Partner Portal",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "studio-activity-en-1440.jpg"
+ },
+ {
+  "id": "studio-activity",
+  "lang": "en",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/portal/account/activity",
+  "finalPath": "/portal-access/none?next=%2Fportal%2Faccount%2Factivity",
+  "status": 200,
+  "title": "Adventure Asia — Partner Portal",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "studio-activity-en-390.jpg"
+ },
+ {
+  "id": "studio-activity",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://portal.lumiguides.it.com/portal/account/activity",
+  "finalPath": "/portal-access/none?next=%2Fportal%2Faccount%2Factivity",
+  "status": 200,
+  "title": "Adventure Asia — Cổng đối tác",
+  "overflowPx": 0,
+  "missing": [
+   "Đã tải xuống một tour"
+  ],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "studio-activity-vi-1440.jpg"
+ },
+ {
+  "id": "studio-activity",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://portal.lumiguides.it.com/portal/account/activity",
+  "finalPath": "/portal-access/none?next=%2Fportal%2Faccount%2Factivity",
+  "status": 200,
+  "title": "Adventure Asia — Cổng đối tác",
+  "overflowPx": 0,
+  "missing": [
+   "Đã tải xuống một tour"
+  ],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "studio-activity-vi-390.jpg"
+ },
+ {
+  "id": "academy",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://academy.lumiguides.it.com/academy",
+  "finalPath": "/login?… (Cognito managed login: no academy session)",
+  "status": 200,
+  "title": "Sign-in",
+  "overflowPx": 0,
+  "missing": [
+   "1 of 1 required module complete"
+  ],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "academy-en-1440.jpg"
+ },
+ {
+  "id": "academy",
+  "lang": "en",
+  "width": 390,
+  "url": "https://academy.lumiguides.it.com/academy",
+  "finalPath": "/login?… (Cognito managed login: no academy session)",
+  "status": 200,
+  "title": "Sign-in",
+  "overflowPx": 0,
+  "missing": [
+   "1 of 1 required module complete"
+  ],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "academy-en-390.jpg"
+ },
+ {
+  "id": "academy",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://academy.lumiguides.it.com/academy",
+  "finalPath": "/login?… (Cognito managed login: no academy session)",
+  "status": 200,
+  "title": "Sign-in",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "academy-vi-1440.jpg"
+ },
+ {
+  "id": "academy",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://academy.lumiguides.it.com/academy",
+  "finalPath": "/login?… (Cognito managed login: no academy session)",
+  "status": 200,
+  "title": "Sign-in",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "academy-vi-390.jpg"
+ },
+ {
+  "id": "client-form",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://go-dev.lumiguides.it.com/c/f/cSyR3Pp6y9euRM-mX2yifw",
+  "finalPath": "/c/f/cSyR3Pp6y9euRM-mX2yifw",
+  "status": 200,
+  "title": "Plan your trip with Lữ hành Sen Vàng",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "client-form-en-1440.jpg",
+  "brand": "Lữ hành Sen Vàng",
+  "privacyLine": "Lữ hành Sen Vàng uses these details only to answer this inquiry and plan your trip. To see, correct or delete them, reply to any message Lữ hành Sen Vàng sends you."
+ },
+ {
+  "id": "client-form",
+  "lang": "en",
+  "width": 390,
+  "url": "https://go-dev.lumiguides.it.com/c/f/cSyR3Pp6y9euRM-mX2yifw",
+  "finalPath": "/c/f/cSyR3Pp6y9euRM-mX2yifw",
+  "status": 200,
+  "title": "Plan your trip with Lữ hành Sen Vàng",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "client-form-en-390.jpg",
+  "brand": "Lữ hành Sen Vàng",
+  "privacyLine": "Lữ hành Sen Vàng uses these details only to answer this inquiry and plan your trip. To see, correct or delete them, reply to any message Lữ hành Sen Vàng sends you."
+ },
+ {
+  "id": "client-form",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://go-dev.lumiguides.it.com/c/f/cSyR3Pp6y9euRM-mX2yifw",
+  "finalPath": "/c/f/cSyR3Pp6y9euRM-mX2yifw?lang=vi",
+  "status": 200,
+  "title": "Lên kế hoạch chuyến đi cùng Lữ hành Sen Vàng",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "client-form-vi-1440.jpg",
+  "brand": "Lữ hành Sen Vàng",
+  "privacyLine": "Lữ hành Sen Vàng chỉ dùng các thông tin này để trả lời yêu cầu và lên kế hoạch chuyến đi của bạn. Để xem, sửa hoặc xoá chúng, hãy trả lời bất kỳ tin nhắn nào Lữ hành Sen Vàng gửi cho bạn."
+ },
+ {
+  "id": "client-form",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://go-dev.lumiguides.it.com/c/f/cSyR3Pp6y9euRM-mX2yifw",
+  "finalPath": "/c/f/cSyR3Pp6y9euRM-mX2yifw?lang=vi",
+  "status": 200,
+  "title": "Lên kế hoạch chuyến đi cùng Lữ hành Sen Vàng",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "client-form-vi-390.jpg",
+  "brand": "Lữ hành Sen Vàng",
+  "privacyLine": "Lữ hành Sen Vàng chỉ dùng các thông tin này để trả lời yêu cầu và lên kế hoạch chuyến đi của bạn. Để xem, sửa hoặc xoá chúng, hãy trả lời bất kỳ tin nhắn nào Lữ hành Sen Vàng gửi cho bạn."
+ },
+ {
+  "id": "client-trip",
+  "lang": "en",
+  "width": 1440,
+  "url": "https://go-dev.lumiguides.it.com/trip/80172001-d04a-4244-8b02-006f2d990675",
+  "finalPath": "/trip/80172001-d04a-4244-8b02-006f2d990675",
+  "status": 200,
+  "title": "China Adventure: Beijing to Hong Kong in 20 Days",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "client-trip-en-1440.jpg",
+  "days": [
+   {
+    "t": "Day 1 — Beijing arrival and orientation walk",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 2 — Tiananmen Square, Forbidden City and Huton",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 3 — Beijing free day with optional activities",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 4 — Great Wall at Mutianyu and sleeper train t",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 5 — Xi'an and the Terracotta Warriors",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 6 — Xi'an free morning and fast train to Cheng",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 7 — Chengdu Panda Breeding Center",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 8 — Chengdu free day and flight to Shangri-La",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 9 — Dukezong Ancient Town and Shangri-La after",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 10 — Tiger Leaping Gorge hike to a Naxi family",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 11 — Tiger Leaping Gorge hike and arrival in L",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 12 — Lijiang Old Town, Black Dragon Pool and L",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 13 — Public bus to Dali and Dali Ancient Town",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 14 — Cycle tour to Xizhou Village and Erhai La",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 15 — Dali to Kunming, Green Lake Park and slee",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 16 — Longji Rice Terraces and Long-hair Villag",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 17 — Longji rice terraces hike and transfer to",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 18 — Yangshuo free day and optional Moon Hill ",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 19 — Yangshuo optional activities",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 20 — Yangshuo to Hong Kong by fast train",
+    "nextTag": "P"
+   }
+  ],
+  "dayInParagraph": 0
+ },
+ {
+  "id": "client-trip",
+  "lang": "en",
+  "width": 390,
+  "url": "https://go-dev.lumiguides.it.com/trip/80172001-d04a-4244-8b02-006f2d990675",
+  "finalPath": "/trip/80172001-d04a-4244-8b02-006f2d990675",
+  "status": 200,
+  "title": "China Adventure: Beijing to Hong Kong in 20 Days",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "client-trip-en-390.jpg",
+  "days": [
+   {
+    "t": "Day 1 — Beijing arrival and orientation walk",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 2 — Tiananmen Square, Forbidden City and Huton",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 3 — Beijing free day with optional activities",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 4 — Great Wall at Mutianyu and sleeper train t",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 5 — Xi'an and the Terracotta Warriors",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 6 — Xi'an free morning and fast train to Cheng",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 7 — Chengdu Panda Breeding Center",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 8 — Chengdu free day and flight to Shangri-La",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 9 — Dukezong Ancient Town and Shangri-La after",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 10 — Tiger Leaping Gorge hike to a Naxi family",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 11 — Tiger Leaping Gorge hike and arrival in L",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 12 — Lijiang Old Town, Black Dragon Pool and L",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 13 — Public bus to Dali and Dali Ancient Town",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 14 — Cycle tour to Xizhou Village and Erhai La",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 15 — Dali to Kunming, Green Lake Park and slee",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 16 — Longji Rice Terraces and Long-hair Villag",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 17 — Longji rice terraces hike and transfer to",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 18 — Yangshuo free day and optional Moon Hill ",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 19 — Yangshuo optional activities",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 20 — Yangshuo to Hong Kong by fast train",
+    "nextTag": "P"
+   }
+  ],
+  "dayInParagraph": 0
+ },
+ {
+  "id": "client-trip",
+  "lang": "vi",
+  "width": 1440,
+  "url": "https://go-dev.lumiguides.it.com/trip/80172001-d04a-4244-8b02-006f2d990675",
+  "finalPath": "/trip/80172001-d04a-4244-8b02-006f2d990675",
+  "status": 200,
+  "title": "China Adventure: Beijing to Hong Kong in 20 Days",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "client-trip-vi-1440.jpg",
+  "days": [
+   {
+    "t": "Day 1 — Beijing arrival and orientation walk",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 2 — Tiananmen Square, Forbidden City and Huton",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 3 — Beijing free day with optional activities",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 4 — Great Wall at Mutianyu and sleeper train t",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 5 — Xi'an and the Terracotta Warriors",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 6 — Xi'an free morning and fast train to Cheng",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 7 — Chengdu Panda Breeding Center",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 8 — Chengdu free day and flight to Shangri-La",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 9 — Dukezong Ancient Town and Shangri-La after",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 10 — Tiger Leaping Gorge hike to a Naxi family",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 11 — Tiger Leaping Gorge hike and arrival in L",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 12 — Lijiang Old Town, Black Dragon Pool and L",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 13 — Public bus to Dali and Dali Ancient Town",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 14 — Cycle tour to Xizhou Village and Erhai La",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 15 — Dali to Kunming, Green Lake Park and slee",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 16 — Longji Rice Terraces and Long-hair Villag",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 17 — Longji rice terraces hike and transfer to",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 18 — Yangshuo free day and optional Moon Hill ",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 19 — Yangshuo optional activities",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 20 — Yangshuo to Hong Kong by fast train",
+    "nextTag": "P"
+   }
+  ],
+  "dayInParagraph": 0
+ },
+ {
+  "id": "client-trip",
+  "lang": "vi",
+  "width": 390,
+  "url": "https://go-dev.lumiguides.it.com/trip/80172001-d04a-4244-8b02-006f2d990675",
+  "finalPath": "/trip/80172001-d04a-4244-8b02-006f2d990675",
+  "status": 200,
+  "title": "China Adventure: Beijing to Hong Kong in 20 Days",
+  "overflowPx": 0,
+  "missing": [],
+  "forbidden": [],
+  "consoleErrors": [],
+  "file": "client-trip-vi-390.jpg",
+  "days": [
+   {
+    "t": "Day 1 — Beijing arrival and orientation walk",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 2 — Tiananmen Square, Forbidden City and Huton",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 3 — Beijing free day with optional activities",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 4 — Great Wall at Mutianyu and sleeper train t",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 5 — Xi'an and the Terracotta Warriors",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 6 — Xi'an free morning and fast train to Cheng",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 7 — Chengdu Panda Breeding Center",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 8 — Chengdu free day and flight to Shangri-La",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 9 — Dukezong Ancient Town and Shangri-La after",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 10 — Tiger Leaping Gorge hike to a Naxi family",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 11 — Tiger Leaping Gorge hike and arrival in L",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 12 — Lijiang Old Town, Black Dragon Pool and L",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 13 — Public bus to Dali and Dali Ancient Town",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 14 — Cycle tour to Xizhou Village and Erhai La",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 15 — Dali to Kunming, Green Lake Park and slee",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 16 — Longji Rice Terraces and Long-hair Villag",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 17 — Longji rice terraces hike and transfer to",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 18 — Yangshuo free day and optional Moon Hill ",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 19 — Yangshuo optional activities",
+    "nextTag": "P"
+   },
+   {
+    "t": "Day 20 — Yangshuo to Hong Kong by fast train",
+    "nextTag": "P"
+   }
+  ],
+  "dayInParagraph": 0
+ }
+]

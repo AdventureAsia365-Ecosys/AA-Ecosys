@@ -1,0 +1,1054 @@
+{
+ "run": "2026-11-19T09:07:07.732Z",
+ "deploySha": "363a8011",
+ "pages": [
+  {
+   "id": "access-log",
+   "lang": "en",
+   "width": 1440,
+   "url": "https://portal.lumiguides.it.com/settings/access-log",
+   "finalPath": "/settings/access-log",
+   "status": 200,
+   "htmlLang": "en",
+   "overflowPx": 0,
+   "consoleErrors": [],
+   "reload": {
+    "status": 200,
+    "newErrors": []
+   },
+   "file": "access-log-en-1440.jpg",
+   "maskedEmailElements": 0,
+   "bytes": 259195,
+   "emailInText": false,
+   "rowCount": 50,
+   "scan": {
+    "textLen": 6208,
+    "hexHits": [],
+    "snakeHits": [],
+    "attrHex": [],
+    "attrSnake": []
+   },
+   "expected": {
+    "viewed the agency · reason: settings": 7,
+    "a trip": 0,
+    "1 item shown": 0,
+    "viewed the sales partners": 0,
+    "viewed the message list · sender, subject, message text": 0
+   },
+   "bad": {
+    "itemsShownAfter1": 0,
+    "aiCode": [],
+    "shortIdWords": [],
+    "rawListLabels": []
+   },
+   "rowsWithEmail": 0
+  },
+  {
+   "id": "access-log",
+   "lang": "en",
+   "width": 390,
+   "url": "https://portal.lumiguides.it.com/settings/access-log",
+   "finalPath": "/settings/access-log",
+   "status": 200,
+   "htmlLang": "en",
+   "overflowPx": 0,
+   "consoleErrors": [],
+   "reload": {
+    "status": 200,
+    "newErrors": []
+   },
+   "file": "access-log-en-390.jpg",
+   "maskedEmailElements": 0,
+   "bytes": 163958,
+   "emailInText": false,
+   "rowCount": 50,
+   "scan": {
+    "textLen": 6208,
+    "hexHits": [],
+    "snakeHits": [],
+    "attrHex": [],
+    "attrSnake": []
+   },
+   "expected": {
+    "viewed the agency · reason: settings": 7,
+    "a trip": 0,
+    "1 item shown": 0,
+    "viewed the sales partners": 0,
+    "viewed the message list · sender, subject, message text": 0
+   },
+   "bad": {
+    "itemsShownAfter1": 0,
+    "aiCode": [],
+    "shortIdWords": [],
+    "rawListLabels": []
+   },
+   "rowsWithEmail": 0
+  },
+  {
+   "id": "access-log",
+   "lang": "vi",
+   "width": 1440,
+   "url": "https://portal.lumiguides.it.com/settings/access-log",
+   "finalPath": "/settings/access-log",
+   "status": 200,
+   "htmlLang": "vi",
+   "overflowPx": 0,
+   "consoleErrors": [],
+   "reload": {
+    "status": 200,
+    "newErrors": []
+   },
+   "file": "access-log-vi-1440.jpg",
+   "maskedEmailElements": 0,
+   "bytes": 257103,
+   "emailInText": false,
+   "rowCount": 50,
+   "scan": {
+    "textLen": 6568,
+    "hexHits": [],
+    "snakeHits": [],
+    "attrHex": [],
+    "attrSnake": []
+   },
+   "expected": {
+    "hiển thị 1 mục": 0
+   },
+   "bad": {
+    "itemsShownAfter1": 0,
+    "aiCode": [],
+    "shortIdWords": [],
+    "rawListLabels": []
+   },
+   "rowsWithEmail": 0
+  },
+  {
+   "id": "access-log",
+   "lang": "vi",
+   "width": 390,
+   "url": "https://portal.lumiguides.it.com/settings/access-log",
+   "finalPath": "/settings/access-log",
+   "status": 200,
+   "htmlLang": "vi",
+   "overflowPx": 0,
+   "consoleErrors": [],
+   "reload": {
+    "status": 200,
+    "newErrors": []
+   },
+   "file": "access-log-vi-390.jpg",
+   "maskedEmailElements": 0,
+   "bytes": 169083,
+   "emailInText": false,
+   "rowCount": 50,
+   "scan": {
+    "textLen": 6506,
+    "hexHits": [],
+    "snakeHits": [],
+    "attrHex": [],
+    "attrSnake": []
+   },
+   "expected": {
+    "hiển thị 1 mục": 0
+   },
+   "bad": {
+    "itemsShownAfter1": 0,
+    "aiCode": [],
+    "shortIdWords": [],
+    "rawListLabels": []
+   },
+   "rowsWithEmail": 0
+  },
+  {
+   "id": "studio-billing",
+   "lang": "en",
+   "width": 1440,
+   "url": "https://portal.lumiguides.it.com/portal/account/billing",
+   "finalPath": "/portal/account/billing",
+   "status": 200,
+   "htmlLang": "en",
+   "overflowPx": 0,
+   "consoleErrors": [],
+   "reload": {
+    "status": 200,
+    "newErrors": []
+   },
+   "file": "studio-billing-en-1440.jpg",
+   "maskedEmailElements": 1,
+   "bytes": 52300,
+   "emailInText": true,
+   "cardCount": 1,
+   "cardText": "YOUR MONTHLY BILL\n\nWhat you pay each month for every product on your account, before any overage.\n\nGrowth\n$349\nCRM Core\n× 3\n$57\nTripPlanner Hosted\n$49\nSubtotal\n$455\nCombo discount (10%)\n− $45.50\nMonthly total\n$409.50\n\nPaid yearly: $4,095 (10 months)",
+   "rows": [
+    {
+     "testid": "quote-line",
+     "label": "Growth",
+     "amount": "$349"
+    },
+    {
+     "testid": "quote-line",
+     "label": "CRM Core × 3",
+     "amount": "$57"
+    },
+    {
+     "testid": "quote-line",
+     "label": "TripPlanner Hosted",
+     "amount": "$49"
+    },
+    {
+     "testid": null,
+     "label": "Subtotal",
+     "amount": "$455"
+    },
+    {
+     "testid": "quote-discount",
+     "label": "Combo discount (10%)",
+     "amount": "− $45.50"
+    },
+    {
+     "testid": "quote-total",
+     "label": "Monthly total",
+     "amount": "$409.50"
+    }
+   ],
+   "math": {
+    "lines": 3,
+    "sumLines": 455,
+    "subtotal": 455,
+    "discount": 45.5,
+    "total": 409.5,
+    "subtotalOk": true,
+    "totalOk": true
+   },
+   "annual": [
+    "Paid yearly: $4,095 (10 months)"
+   ],
+   "pilot": 0,
+   "amountDueBlock": null,
+   "api": {
+    "url": "/api/tenant/v1/billing",
+    "status": 200,
+    "billing_currency": "USD",
+    "quote": {
+     "currency": "USD",
+     "lines": [
+      {
+       "name": "Growth",
+       "product": "content",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "349.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "CRM Core",
+       "product": "crm",
+       "quantity": 3,
+       "extra_seats": 0,
+       "amount": "57.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "TripPlanner Hosted",
+       "product": "tripplanner",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "49.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      }
+     ],
+     "subtotal": "455.00",
+     "discount_kind": "combo",
+     "discount_pct": "10.0",
+     "discount": "45.50",
+     "pilot_free": false,
+     "monthly_total": "409.50",
+     "annual_paid_months": 10,
+     "annual_total": "4095.00"
+    }
+   }
+  },
+  {
+   "id": "studio-billing",
+   "lang": "en",
+   "width": 390,
+   "url": "https://portal.lumiguides.it.com/portal/account/billing",
+   "finalPath": "/portal/account/billing",
+   "status": 200,
+   "htmlLang": "en",
+   "overflowPx": 0,
+   "consoleErrors": [],
+   "reload": {
+    "status": 200,
+    "newErrors": []
+   },
+   "file": "studio-billing-en-390.jpg",
+   "maskedEmailElements": 1,
+   "bytes": 25608,
+   "emailInText": true,
+   "cardCount": 1,
+   "cardText": "YOUR MONTHLY BILL\n\nWhat you pay each month for every product on your account, before any overage.\n\nGrowth\n$349\nCRM Core\n× 3\n$57\nTripPlanner Hosted\n$49\nSubtotal\n$455\nCombo discount (10%)\n− $45.50\nMonthly total\n$409.50\n\nPaid yearly: $4,095 (10 months)",
+   "rows": [
+    {
+     "testid": "quote-line",
+     "label": "Growth",
+     "amount": "$349"
+    },
+    {
+     "testid": "quote-line",
+     "label": "CRM Core × 3",
+     "amount": "$57"
+    },
+    {
+     "testid": "quote-line",
+     "label": "TripPlanner Hosted",
+     "amount": "$49"
+    },
+    {
+     "testid": null,
+     "label": "Subtotal",
+     "amount": "$455"
+    },
+    {
+     "testid": "quote-discount",
+     "label": "Combo discount (10%)",
+     "amount": "− $45.50"
+    },
+    {
+     "testid": "quote-total",
+     "label": "Monthly total",
+     "amount": "$409.50"
+    }
+   ],
+   "math": {
+    "lines": 3,
+    "sumLines": 455,
+    "subtotal": 455,
+    "discount": 45.5,
+    "total": 409.5,
+    "subtotalOk": true,
+    "totalOk": true
+   },
+   "annual": [
+    "Paid yearly: $4,095 (10 months)"
+   ],
+   "pilot": 0,
+   "amountDueBlock": null,
+   "api": {
+    "url": "/api/tenant/v1/billing",
+    "status": 200,
+    "billing_currency": "USD",
+    "quote": {
+     "currency": "USD",
+     "lines": [
+      {
+       "name": "Growth",
+       "product": "content",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "349.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "CRM Core",
+       "product": "crm",
+       "quantity": 3,
+       "extra_seats": 0,
+       "amount": "57.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "TripPlanner Hosted",
+       "product": "tripplanner",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "49.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      }
+     ],
+     "subtotal": "455.00",
+     "discount_kind": "combo",
+     "discount_pct": "10.0",
+     "discount": "45.50",
+     "pilot_free": false,
+     "monthly_total": "409.50",
+     "annual_paid_months": 10,
+     "annual_total": "4095.00"
+    }
+   }
+  },
+  {
+   "id": "studio-billing",
+   "lang": "vi",
+   "width": 1440,
+   "url": "https://portal.lumiguides.it.com/portal/account/billing",
+   "finalPath": "/portal/account/billing",
+   "status": 200,
+   "htmlLang": "vi",
+   "overflowPx": 0,
+   "consoleErrors": [],
+   "reload": {
+    "status": 200,
+    "newErrors": []
+   },
+   "file": "studio-billing-vi-1440.jpg",
+   "maskedEmailElements": 1,
+   "bytes": 57312,
+   "emailInText": true,
+   "cardCount": 1,
+   "cardText": "HOÁ ĐƠN HẰNG THÁNG\n\nSố tiền bạn trả mỗi tháng cho từng sản phẩm trong tài khoản, chưa gồm phí vượt hạn mức.\n\nGrowth\n$349\nCRM Core\n× 3\n$57\nTripPlanner Hosted\n$49\nTạm tính\n$455\nGiảm giá trọn gói (10%)\n− $45.50\nTổng mỗi tháng\n$409.50\n\nThanh toán theo năm: $4,095 (10 tháng)",
+   "rows": [
+    {
+     "testid": "quote-line",
+     "label": "Growth",
+     "amount": "$349"
+    },
+    {
+     "testid": "quote-line",
+     "label": "CRM Core × 3",
+     "amount": "$57"
+    },
+    {
+     "testid": "quote-line",
+     "label": "TripPlanner Hosted",
+     "amount": "$49"
+    },
+    {
+     "testid": null,
+     "label": "Tạm tính",
+     "amount": "$455"
+    },
+    {
+     "testid": "quote-discount",
+     "label": "Giảm giá trọn gói (10%)",
+     "amount": "− $45.50"
+    },
+    {
+     "testid": "quote-total",
+     "label": "Tổng mỗi tháng",
+     "amount": "$409.50"
+    }
+   ],
+   "math": {
+    "lines": 3,
+    "sumLines": 455,
+    "subtotal": 455,
+    "discount": 45.5,
+    "total": 409.5,
+    "subtotalOk": true,
+    "totalOk": true
+   },
+   "annual": [
+    "Thanh toán theo năm: $4,095 (10 tháng)"
+   ],
+   "pilot": 0,
+   "amountDueBlock": "Số tiền bạn trả mỗi tháng cho từng sản phẩm trong tài khoản, chưa gồm phí vượt hạn mức.\n\nGrowth\n$349\nCRM Core\n× 3\n$57\nTripPlanner Hosted\n$49\nTạm tính\n$455\nGiảm giá trọn gói (10%)\n− $45.50\nTổng mỗi tháng\n$409",
+   "api": {
+    "url": "/api/tenant/v1/billing",
+    "status": 200,
+    "billing_currency": "USD",
+    "quote": {
+     "currency": "USD",
+     "lines": [
+      {
+       "name": "Growth",
+       "product": "content",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "349.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "CRM Core",
+       "product": "crm",
+       "quantity": 3,
+       "extra_seats": 0,
+       "amount": "57.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "TripPlanner Hosted",
+       "product": "tripplanner",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "49.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      }
+     ],
+     "subtotal": "455.00",
+     "discount_kind": "combo",
+     "discount_pct": "10.0",
+     "discount": "45.50",
+     "pilot_free": false,
+     "monthly_total": "409.50",
+     "annual_paid_months": 10,
+     "annual_total": "4095.00"
+    }
+   }
+  },
+  {
+   "id": "studio-billing",
+   "lang": "vi",
+   "width": 390,
+   "url": "https://portal.lumiguides.it.com/portal/account/billing",
+   "finalPath": "/portal/account/billing",
+   "status": 200,
+   "htmlLang": "vi",
+   "overflowPx": 0,
+   "consoleErrors": [],
+   "reload": {
+    "status": 200,
+    "newErrors": []
+   },
+   "file": "studio-billing-vi-390.jpg",
+   "maskedEmailElements": 1,
+   "bytes": 28056,
+   "emailInText": true,
+   "cardCount": 1,
+   "cardText": "HOÁ ĐƠN HẰNG THÁNG\n\nSố tiền bạn trả mỗi tháng cho từng sản phẩm trong tài khoản, chưa gồm phí vượt hạn mức.\n\nGrowth\n$349\nCRM Core\n× 3\n$57\nTripPlanner Hosted\n$49\nTạm tính\n$455\nGiảm giá trọn gói (10%)\n− $45.50\nTổng mỗi tháng\n$409.50\n\nThanh toán theo năm: $4,095 (10 tháng)",
+   "rows": [
+    {
+     "testid": "quote-line",
+     "label": "Growth",
+     "amount": "$349"
+    },
+    {
+     "testid": "quote-line",
+     "label": "CRM Core × 3",
+     "amount": "$57"
+    },
+    {
+     "testid": "quote-line",
+     "label": "TripPlanner Hosted",
+     "amount": "$49"
+    },
+    {
+     "testid": null,
+     "label": "Tạm tính",
+     "amount": "$455"
+    },
+    {
+     "testid": "quote-discount",
+     "label": "Giảm giá trọn gói (10%)",
+     "amount": "− $45.50"
+    },
+    {
+     "testid": "quote-total",
+     "label": "Tổng mỗi tháng",
+     "amount": "$409.50"
+    }
+   ],
+   "math": {
+    "lines": 3,
+    "sumLines": 455,
+    "subtotal": 455,
+    "discount": 45.5,
+    "total": 409.5,
+    "subtotalOk": true,
+    "totalOk": true
+   },
+   "annual": [
+    "Thanh toán theo năm: $4,095 (10 tháng)"
+   ],
+   "pilot": 0,
+   "amountDueBlock": "Số tiền bạn trả mỗi tháng cho từng sản phẩm trong tài khoản, chưa gồm phí vượt hạn mức.\n\nGrowth\n$349\nCRM Core\n× 3\n$57\nTripPlanner Hosted\n$49\nTạm tính\n$455\nGiảm giá trọn gói (10%)\n− $45.50\nTổng mỗi tháng\n$409",
+   "api": {
+    "url": "/api/tenant/v1/billing",
+    "status": 200,
+    "billing_currency": "USD",
+    "quote": {
+     "currency": "USD",
+     "lines": [
+      {
+       "name": "Growth",
+       "product": "content",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "349.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "CRM Core",
+       "product": "crm",
+       "quantity": 3,
+       "extra_seats": 0,
+       "amount": "57.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "TripPlanner Hosted",
+       "product": "tripplanner",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "49.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      }
+     ],
+     "subtotal": "455.00",
+     "discount_kind": "combo",
+     "discount_pct": "10.0",
+     "discount": "45.50",
+     "pilot_free": false,
+     "monthly_total": "409.50",
+     "annual_paid_months": 10,
+     "annual_total": "4095.00"
+    }
+   }
+  },
+  {
+   "id": "studio-dashboard",
+   "lang": "en",
+   "width": 1440,
+   "url": "https://portal.lumiguides.it.com/portal/dashboard",
+   "finalPath": "/portal/dashboard",
+   "status": 200,
+   "htmlLang": "en",
+   "overflowPx": 0,
+   "consoleErrors": [],
+   "reload": {
+    "status": 200,
+    "newErrors": []
+   },
+   "file": "studio-dashboard-en-1440.jpg",
+   "maskedEmailElements": 0,
+   "bytes": 70134,
+   "emailInText": false,
+   "cardCount": 1,
+   "cardText": "Growth\n$349\nCRM Core\n× 3\n$57\nTripPlanner Hosted\n$49\nCombo discount (10%)\n− $45.50\nMonthly total\n$409.50",
+   "rows": [
+    {
+     "testid": "quote-line",
+     "label": "Growth",
+     "amount": "$349"
+    },
+    {
+     "testid": "quote-line",
+     "label": "CRM Core × 3",
+     "amount": "$57"
+    },
+    {
+     "testid": "quote-line",
+     "label": "TripPlanner Hosted",
+     "amount": "$49"
+    },
+    {
+     "testid": "quote-discount",
+     "label": "Combo discount (10%)",
+     "amount": "− $45.50"
+    },
+    {
+     "testid": "quote-total",
+     "label": "Monthly total",
+     "amount": "$409.50"
+    }
+   ],
+   "math": {
+    "lines": 3,
+    "sumLines": 455,
+    "subtotal": null,
+    "discount": 45.5,
+    "total": 409.5,
+    "subtotalOk": null,
+    "totalOk": true
+   },
+   "annual": [],
+   "pilot": 0,
+   "thisMonthBlock": null,
+   "api": {
+    "url": "/api/tenant/v1/billing",
+    "status": 200,
+    "billing_currency": "USD",
+    "quote": {
+     "currency": "USD",
+     "lines": [
+      {
+       "name": "Growth",
+       "product": "content",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "349.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "CRM Core",
+       "product": "crm",
+       "quantity": 3,
+       "extra_seats": 0,
+       "amount": "57.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "TripPlanner Hosted",
+       "product": "tripplanner",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "49.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      }
+     ],
+     "subtotal": "455.00",
+     "discount_kind": "combo",
+     "discount_pct": "10.0",
+     "discount": "45.50",
+     "pilot_free": false,
+     "monthly_total": "409.50",
+     "annual_paid_months": 10,
+     "annual_total": "4095.00"
+    }
+   }
+  },
+  {
+   "id": "studio-dashboard",
+   "lang": "en",
+   "width": 390,
+   "url": "https://portal.lumiguides.it.com/portal/dashboard",
+   "finalPath": "/portal/dashboard",
+   "status": 200,
+   "htmlLang": "en",
+   "overflowPx": 0,
+   "consoleErrors": [],
+   "reload": {
+    "status": 200,
+    "newErrors": []
+   },
+   "file": "studio-dashboard-en-390.jpg",
+   "maskedEmailElements": 0,
+   "bytes": 25908,
+   "emailInText": false,
+   "cardCount": 1,
+   "cardText": "Growth\n$349\nCRM Core\n× 3\n$57\nTripPlanner Hosted\n$49\nCombo discount (10%)\n− $45.50\nMonthly total\n$409.50",
+   "rows": [
+    {
+     "testid": "quote-line",
+     "label": "Growth",
+     "amount": "$349"
+    },
+    {
+     "testid": "quote-line",
+     "label": "CRM Core × 3",
+     "amount": "$57"
+    },
+    {
+     "testid": "quote-line",
+     "label": "TripPlanner Hosted",
+     "amount": "$49"
+    },
+    {
+     "testid": "quote-discount",
+     "label": "Combo discount (10%)",
+     "amount": "− $45.50"
+    },
+    {
+     "testid": "quote-total",
+     "label": "Monthly total",
+     "amount": "$409.50"
+    }
+   ],
+   "math": {
+    "lines": 3,
+    "sumLines": 455,
+    "subtotal": null,
+    "discount": 45.5,
+    "total": 409.5,
+    "subtotalOk": null,
+    "totalOk": true
+   },
+   "annual": [],
+   "pilot": 0,
+   "thisMonthBlock": null,
+   "api": {
+    "url": "/api/tenant/v1/billing",
+    "status": 200,
+    "billing_currency": "USD",
+    "quote": {
+     "currency": "USD",
+     "lines": [
+      {
+       "name": "Growth",
+       "product": "content",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "349.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "CRM Core",
+       "product": "crm",
+       "quantity": 3,
+       "extra_seats": 0,
+       "amount": "57.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "TripPlanner Hosted",
+       "product": "tripplanner",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "49.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      }
+     ],
+     "subtotal": "455.00",
+     "discount_kind": "combo",
+     "discount_pct": "10.0",
+     "discount": "45.50",
+     "pilot_free": false,
+     "monthly_total": "409.50",
+     "annual_paid_months": 10,
+     "annual_total": "4095.00"
+    }
+   }
+  },
+  {
+   "id": "studio-dashboard",
+   "lang": "vi",
+   "width": 1440,
+   "url": "https://portal.lumiguides.it.com/portal/dashboard",
+   "finalPath": "/portal/dashboard",
+   "status": 200,
+   "htmlLang": "vi",
+   "overflowPx": 0,
+   "consoleErrors": [],
+   "reload": {
+    "status": 200,
+    "newErrors": []
+   },
+   "file": "studio-dashboard-vi-1440.jpg",
+   "maskedEmailElements": 0,
+   "bytes": 75636,
+   "emailInText": false,
+   "cardCount": 1,
+   "cardText": "Growth\n$349\nCRM Core\n× 3\n$57\nTripPlanner Hosted\n$49\nGiảm giá trọn gói (10%)\n− $45.50\nTổng mỗi tháng\n$409.50",
+   "rows": [
+    {
+     "testid": "quote-line",
+     "label": "Growth",
+     "amount": "$349"
+    },
+    {
+     "testid": "quote-line",
+     "label": "CRM Core × 3",
+     "amount": "$57"
+    },
+    {
+     "testid": "quote-line",
+     "label": "TripPlanner Hosted",
+     "amount": "$49"
+    },
+    {
+     "testid": "quote-discount",
+     "label": "Giảm giá trọn gói (10%)",
+     "amount": "− $45.50"
+    },
+    {
+     "testid": "quote-total",
+     "label": "Tổng mỗi tháng",
+     "amount": "$409.50"
+    }
+   ],
+   "math": {
+    "lines": 3,
+    "sumLines": 455,
+    "subtotal": null,
+    "discount": 45.5,
+    "total": 409.5,
+    "subtotalOk": null,
+    "totalOk": true
+   },
+   "annual": [],
+   "pilot": 0,
+   "thisMonthBlock": null,
+   "api": {
+    "url": "/api/tenant/v1/billing",
+    "status": 200,
+    "billing_currency": "USD",
+    "quote": {
+     "currency": "USD",
+     "lines": [
+      {
+       "name": "Growth",
+       "product": "content",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "349.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "CRM Core",
+       "product": "crm",
+       "quantity": 3,
+       "extra_seats": 0,
+       "amount": "57.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "TripPlanner Hosted",
+       "product": "tripplanner",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "49.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      }
+     ],
+     "subtotal": "455.00",
+     "discount_kind": "combo",
+     "discount_pct": "10.0",
+     "discount": "45.50",
+     "pilot_free": false,
+     "monthly_total": "409.50",
+     "annual_paid_months": 10,
+     "annual_total": "4095.00"
+    }
+   }
+  },
+  {
+   "id": "studio-dashboard",
+   "lang": "vi",
+   "width": 390,
+   "url": "https://portal.lumiguides.it.com/portal/dashboard",
+   "finalPath": "/portal/dashboard",
+   "status": 200,
+   "htmlLang": "vi",
+   "overflowPx": 0,
+   "consoleErrors": [],
+   "reload": {
+    "status": 200,
+    "newErrors": []
+   },
+   "file": "studio-dashboard-vi-390.jpg",
+   "maskedEmailElements": 0,
+   "bytes": 27974,
+   "emailInText": false,
+   "cardCount": 1,
+   "cardText": "Growth\n$349\nCRM Core\n× 3\n$57\nTripPlanner Hosted\n$49\nGiảm giá trọn gói (10%)\n− $45.50\nTổng mỗi tháng\n$409.50",
+   "rows": [
+    {
+     "testid": "quote-line",
+     "label": "Growth",
+     "amount": "$349"
+    },
+    {
+     "testid": "quote-line",
+     "label": "CRM Core × 3",
+     "amount": "$57"
+    },
+    {
+     "testid": "quote-line",
+     "label": "TripPlanner Hosted",
+     "amount": "$49"
+    },
+    {
+     "testid": "quote-discount",
+     "label": "Giảm giá trọn gói (10%)",
+     "amount": "− $45.50"
+    },
+    {
+     "testid": "quote-total",
+     "label": "Tổng mỗi tháng",
+     "amount": "$409.50"
+    }
+   ],
+   "math": {
+    "lines": 3,
+    "sumLines": 455,
+    "subtotal": null,
+    "discount": 45.5,
+    "total": 409.5,
+    "subtotalOk": null,
+    "totalOk": true
+   },
+   "annual": [],
+   "pilot": 0,
+   "thisMonthBlock": null,
+   "api": {
+    "url": "/api/tenant/v1/billing",
+    "status": 200,
+    "billing_currency": "USD",
+    "quote": {
+     "currency": "USD",
+     "lines": [
+      {
+       "name": "Growth",
+       "product": "content",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "349.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "CRM Core",
+       "product": "crm",
+       "quantity": 3,
+       "extra_seats": 0,
+       "amount": "57.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      },
+      {
+       "name": "TripPlanner Hosted",
+       "product": "tripplanner",
+       "quantity": 1,
+       "extra_seats": 0,
+       "amount": "49.00",
+       "trialing": false,
+       "agreed": false,
+       "billing_interval": "month"
+      }
+     ],
+     "subtotal": "455.00",
+     "discount_kind": "combo",
+     "discount_pct": "10.0",
+     "discount": "45.50",
+     "pilot_free": false,
+     "monthly_total": "409.50",
+     "annual_paid_months": 10,
+     "annual_total": "4095.00"
+    }
+   }
+  }
+ ]
+}
