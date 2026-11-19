@@ -1,0 +1,115 @@
+{
+  "written": "2026-11-19",
+  "session": "S285",
+  "note": "plan.json uses the field `session` (not `slot`). Apply on the local working-tree plan.json, keeping its uncommitted diff. Migration apply requires shared.job + booking.job + crm.job idle; apply migrations before paid runs.",
+  "slots": {
+    "S285": ["slice-0-live-check", "hand-step-content-role-cis-only"],
+    "S286": ["AA-1145", "AA-1146", "AA-1134", "AA-1127", "AA-1051", "AA-1150", "NEW-W1", "NEW-R1"],
+    "S287": ["NEW-R1", "NEW-W2", "AA-1147", "AA-1137", "AA-788", "AA-1139"],
+    "S288": ["NEW-R3", "NEW-R2", "NEW-W2", "AA-1149", "AA-1148"],
+    "S289": ["NEW-R3", "NEW-W2", "AA-1148", "AA-1151", "AA-1153", "AA-1136"],
+    "S290": ["AA-1152", "AA-1153", "AA-1148", "AA-1140"],
+    "S291": ["AA-1154", "AA-1141", "AA-1119", "AA-1103"],
+    "S292": ["AA-1154", "AA-1142", "AA-1118", "AA-1050"]
+  },
+  "gated": {
+    "AA-1004": "due 20/11 -> re-date; TrueIDC appendix, bills 25-28/11, org invite 01/12",
+    "AA-1110": ">=01/12 second key-holder",
+    "AA-1111": "tech lead TOTP; WAF #935",
+    "AA-1122": ">=02/12 nightly run",
+    "AA-873": ">=01/12",
+    "AA-1061": "apply from 28/11 23:50Z",
+    "AA-980": "go-live date",
+    "AA-1054": "go-live date",
+    "AA-1117": "go-live date",
+    "AA-1011": "Entra app",
+    "AA-948": "Mapbox cost yes",
+    "AA-881": "05/2027",
+    "AA-790": "TL-11 freeze lift only",
+    "AA-920": "TL-11 freeze lift only",
+    "AA-921": "TL-11 freeze lift only",
+    "AA-1000": "TL-11 freeze lift only",
+    "AA-704": "parked",
+    "AA-782": "parked",
+    "AA-842": "parked",
+    "AA-855": "parked"
+  },
+  "new": [
+    {
+      "key": "NEW-R1",
+      "title": "[Booking + CIS] Custom staff roles: roles as data, one combined role per person",
+      "session": "S286",
+      "sessions": ["S286", "S287"],
+      "milestone": "M-ROLES",
+      "size": "L",
+      "migration": "CIS + bk-",
+      "depends": ["AA-1150", "Q2-transport", "Q3-allow-list"]
+    },
+    {
+      "key": "NEW-R2",
+      "title": "[CIS + Booking] View as a lower role: read-only, logged, never changes the sign-in",
+      "session": "S288",
+      "sessions": ["S288"],
+      "milestone": "M-ROLES",
+      "size": "L",
+      "migration": "CIS (or folded into NEW-R1); Booking none",
+      "depends": ["NEW-R1", "Q6"]
+    },
+    {
+      "key": "NEW-R3",
+      "title": "[Booking + Infra] Approval rules for a three-person team, business-owner self-approval, supplier profile and bank-detail controls",
+      "session": "S288",
+      "sessions": ["S288", "S289"],
+      "milestone": "M-ROLES",
+      "size": "L",
+      "migration": "bk- x2 + Infra KMS",
+      "depends": ["NEW-R1", "Q4", "Q5", "Q9", "Q10"]
+    },
+    {
+      "key": "NEW-W1",
+      "title": "[CIS] My work: one queue page for content roles",
+      "session": "S286",
+      "sessions": ["S286"],
+      "milestone": "M-ROLES",
+      "size": "M",
+      "migration": "none",
+      "depends": []
+    },
+    {
+      "key": "NEW-W2",
+      "title": "[Booking] My work on the staff dashboard: permission-filtered queues, filtered lists, approvals waiting",
+      "session": "S287",
+      "sessions": ["S287", "S288", "S289"],
+      "milestone": "M-ROLES",
+      "size": "M",
+      "migration": "none",
+      "depends": ["NEW-R1", "NEW-R3", "NEW-R2"]
+    }
+  ],
+  "rescope": [
+    {"id": "AA-1150", "note": "Title -> '[CIS + Booking] Lean staff roles step 1: three people-role presets, finance reads, make/approve capability split, one sign-in'. Session S287 -> S286, status Todo, milestone M-ROLES. Keep presets, content_creator retirement, L7a finance reads, supplier.activate/contract.publish/stop_sale.approve split (built-in contracting keeps them for pricing E2E). Drop masked-account check, KMS need, payout.write for finance. Add one-sign-in Done-when (E2E + real account) and pricing E2E green. Custom roles -> NEW-R1, view-as -> NEW-R2, approval rules/self-approve/supplier profile/bank -> NEW-R3."},
+    {"id": "AA-1145", "note": "Drop ', lean staff roles' from title; live-verify R6; Done in S286."},
+    {"id": "AA-1146", "note": "Status In Review; close on part 1 (D1, D5, CIS 457/458); part 2 Tour editor moves to AA-1148; clear stale T2 cap need (A2 yes)."},
+    {"id": "AA-1148", "note": "Remove M0 content desk (replaced by NEW-W1) and 'content staff work only in CIS'; add AA-1146 part 2 and photos.upload (authz after NEW-R2); sessions S288-S290."},
+    {"id": "AA-1147", "note": "Session S286 -> S287."},
+    {"id": "AA-1149", "note": "Session S286 -> S288; bk- migration after NEW-R3 part 1."},
+    {"id": "AA-1151", "note": "Session S287 -> S289."},
+    {"id": "AA-1153", "note": "Part 1 S287 -> S289 (spill S290); part 2 S288 -> S290."},
+    {"id": "AA-1152", "note": "Session S288 -> S290; price part unblocked (B2 = option C)."},
+    {"id": "AA-1140", "note": "Session S289 -> S290."},
+    {"id": "AA-1154", "note": "Session S290 -> S291, continues after S292."},
+    {"id": "AA-1141", "note": "Unscheduled -> S291."},
+    {"id": "AA-1142", "note": "Unscheduled -> S292."},
+    {"id": "AA-1121", "note": "Close as duplicate of AA-1103 with a pointer comment; AA-1103 takes its scope (S291)."},
+    {"id": "AA-1119", "note": "Clear release-please need (kept, S282); session S291."},
+    {"id": "AA-1004", "note": "Re-date past session S283 to its real gates (25-28/11, 01/12)."},
+    {"id": "AA-1050", "note": "Past S282 -> S292 only if ~30 disagreement labels exist."},
+    {"id": "AA-790/AA-920/AA-921/AA-1000", "note": "Gate becomes 'TL-11 freeze lift' only."},
+    {"id": "plan.json-sync", "note": "Done: AA-1143, 1126, 1144, 1130, 1138, 1128, 1129, 1135. In Review: AA-1145, 1146, 1136, 1137. Clear 'cần xếp slot' on AA-1127, 1134, 1136, 1137, 1139, 1122, 1061. Close milestones M-OD, M-P2, M-R7; fix M1b refs (AA-1026, AA-998); add M-ROLES (S286-S289). M-SUP criterion: 'Booking: 3 people-roles + custom roles'. Remove A9 C1-C18 from waiting. Update source + synced_at. Republish tracker Q4Lv..."}
+  ],
+  "decisions_needed": {
+    "before_S286": ["Q1 no interim Booking contracting", "Q2 transport (option A)", "Q3 Booking allow-list incl. quote/book", "Q8 My work two halves", "Q12 create 5 issues + merge AA-1121 + M-ROLES"],
+    "before_S288": ["Q4 business owner records payouts", "Q5 self-approval scope", "Q6 view-as downward definition", "Q9 sellable needs approved price"],
+    "later": ["Q7 CIS Content role (S287)", "Q10 bank entry by content+ops after S289", "Q11 no CRM role editor"]
+  }
+}

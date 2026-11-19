@@ -1,0 +1,19 @@
+{
+ "restore": {
+  "status": 200,
+  "body": {
+   "status": "edited",
+   "new_version_id": "b92e916a-338e-4b6b-a6e2-a8a6bea8a4f9",
+   "version_number": 6
+  }
+ },
+ "latestEqualsV1": true,
+ "versionsOfTour": [
+  "6:pending",
+  "5:rejected",
+  "4:pending",
+  "3:rejected",
+  "2:pending",
+  "1:ai_generated"
+ ]
+}

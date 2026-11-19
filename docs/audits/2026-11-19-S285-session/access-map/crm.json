@@ -1,0 +1,1396 @@
+{
+ "app": "crm",
+ "name": "AA-Partner (CRM đại lý + Content studio + console staff AA)",
+ "host": "portal.lumiguides.it.com (CRM, Content studio, /staff; partner-dev. chuyển về portal.); console L1 trong admin CIS aa-cis.lumiguides.it.com",
+ "signin": "Đại lý: Cognito PARTNER pool (chỉ tạo qua lời mời, mật khẩu + authenticator MFA), client partner-web, session server; vai trò CRM lấy từ crm.member. Content studio: cùng đăng nhập, web đổi lấy token studio của CIS (≤15 phút, claim csr = owner/editor/viewer). Staff AA: Cognito WORKFORCE (staff-auth.), client crm-staff, nhóm crm-ops / crm-support; console L1 qua client cis-admin, nhóm cis-admin / crm-platform-admin / cis-customer_success / cis-support. Khách du lịch: link ký + mã e-mail, không có tài khoản.",
+ "roles": [
+  {
+   "code": "owner",
+   "label": "Chủ đại lý (CRM)",
+   "who": "Người chủ của đại lý; chủ đầu tiên do tech lead mời qua console L1, chủ sau mời thêm",
+   "summary": "Toàn quyền trong đại lý của mình: đội ngũ, cài đặt, tiền, xuất dữ liệu, duyệt giảm giá/hoàn tiền/hoa hồng đối tác"
+  },
+  {
+   "code": "agent",
+   "label": "Nhân viên bán (CRM)",
+   "who": "Nhân viên bán hàng của đại lý, do owner mời",
+   "summary": "Làm chuyến, báo giá, xuất bản báo giá, thu tiền, thấy giá net và lãi; không đổi cài đặt, đội ngũ, xuất dữ liệu"
+  },
+  {
+   "code": "assistant",
+   "label": "Trợ lý (CRM)",
+   "who": "Trợ lý / nhân viên hỗ trợ của đại lý, do owner mời",
+   "summary": "Làm chuyến và hồ sơ khách, soạn nháp báo giá; không thấy giá net/lãi, không xuất bản báo giá, chỉ gửi tin trên chuyến được giao"
+  },
+  {
+   "code": "csr:owner",
+   "label": "Chủ Content studio",
+   "who": "Chủ đại lý bên Content studio; ghế owner chỉ do cis-admin / crm-platform-admin gửi lời mời",
+   "summary": "Toàn quyền studio, kể cả tài khoản: thành viên, kênh kết nối, cài đặt, xin add-on"
+  },
+  {
+   "code": "csr:editor",
+   "label": "Biên tập Content studio",
+   "who": "Nhân viên content của đại lý, do owner mời",
+   "summary": "Tạo/sửa nội dung, bản T2, Facts, thương hiệu; không đổi phần tài khoản (/v1/account, /v1/integrations, /v1/webhooks)"
+  },
+  {
+   "code": "csr:viewer",
+   "label": "Người xem Content studio",
+   "who": "Thành viên chỉ xem của đại lý",
+   "summary": "Chỉ đọc; mọi lệnh ghi bị 403 studio_role_forbidden"
+  },
+  {
+   "code": "crm-platform-admin",
+   "label": "Quản trị nền tảng CRM (AA)",
+   "who": "Tech lead (runbook onboarding đại lý); preset 'Platform owner' trên trang Staff của CIS",
+   "summary": "Console L1 trong admin CIS: tạo/khoá đại lý, mời chủ, khôi phục chủ, quyền gói, cài đặt CRM, hồ sơ AI của CRM"
+  },
+  {
+   "code": "cis-admin",
+   "label": "Admin CIS (đọc CRM)",
+   "who": "Admin CIS; tài khoản E2E CIS admin trên Dev chỉ đọc",
+   "summary": "Đọc mọi đại lý trong console L1, gửi lời mời Content studio; không ghi gì khác của CRM"
+  },
+  {
+   "code": "cis-customer_success",
+   "label": "CS của AA (đọc theo phạm vi)",
+   "who": "Nhân viên customer success AA; E2E customer_success trên Dev không ghi",
+   "summary": "Đọc các đại lý CIS giao cho mình, gửi lại lời mời viewer/editor; không ghi"
+  },
+  {
+   "code": "cis-support",
+   "label": "Support CIS (đọc theo phạm vi)",
+   "who": "Nhân viên support AA",
+   "summary": "Như CS nhưng không xem tài khoản đại lý (usage, entitlements); chỉ gửi lại lời mời tới địa chỉ cũ"
+  },
+  {
+   "code": "crm-ops",
+   "label": "Vận hành CRM (AA)",
+   "who": "Nhân viên vận hành AA (vai trò 'ops' trên trang Staff CIS); E2E crm-staff trên Dev chỉ đại lý thử",
+   "summary": "Bảng ops release, manifest; mở truy cập khẩn (break-glass) không cần owner cho phép, có lý do, ticket, 15–60 phút"
+  },
+  {
+   "code": "crm-support",
+   "label": "Hỗ trợ CRM (AA)",
+   "who": "Nhân viên hỗ trợ AA (vai trò 'support' trên trang Staff CIS)",
+   "summary": "Chỉ vào đại lý nào owner đang cho phép hỗ trợ (1–7 ngày), chỉ đọc, có ticket"
+  }
+ ],
+ "areas": [
+  {
+   "area": "CRM đại lý — Trang chủ và CRM (host portal.)",
+   "pages": [
+    {
+     "path": "/home",
+     "label": "Trang chủ CRM",
+     "access": {
+      "owner": "read",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/pipeline",
+     "label": "Pipeline chuyến",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "write"
+     }
+    },
+    {
+     "path": "/pipeline/[tripId]",
+     "label": "Chi tiết chuyến (assistant không thấy tiền lãi/net)",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "write"
+     }
+    },
+    {
+     "path": "/pipeline/[tripId]/proposal/[proposalId]",
+     "label": "Trình dựng báo giá (assistant chỉ soạn nháp)",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "write"
+     }
+    },
+    {
+     "path": "/pipeline/[tripId]/proposal/[proposalId]/text",
+     "label": "Báo giá dạng chữ",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "write"
+     }
+    },
+    {
+     "path": "/clients",
+     "label": "Khách hàng",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "write"
+     }
+    },
+    {
+     "path": "/clients/[travelerId]",
+     "label": "Hồ sơ khách",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "write"
+     }
+    },
+    {
+     "path": "/clients/duplicates",
+     "label": "Khách trùng (gộp: owner)",
+     "access": {
+      "owner": "write",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/inbox",
+     "label": "Hộp thư (assistant gửi chỉ trên chuyến được giao)",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "write"
+     }
+    },
+    {
+     "path": "/tasks",
+     "label": "Việc cần làm",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "write"
+     }
+    },
+    {
+     "path": "/travelling",
+     "label": "Khách đang đi",
+     "access": {
+      "owner": "read",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/calendar",
+     "label": "Lịch + link lịch riêng",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "write"
+     }
+    },
+    {
+     "path": "/departures",
+     "label": "Đoàn khởi hành",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "write"
+     }
+    },
+    {
+     "path": "/departures/[ref]",
+     "label": "Chi tiết đoàn (chi phí nhóm: owner, agent)",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/onboarding",
+     "label": "Danh sách bắt đầu",
+     "access": {
+      "owner": "write",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/help",
+     "label": "Trợ giúp",
+     "access": {
+      "owner": "read",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/legal/terms",
+     "label": "Điều khoản dùng CRM",
+     "access": {
+      "owner": "read",
+      "agent": "read",
+      "assistant": "read"
+     }
+    }
+   ]
+  },
+  {
+   "area": "CRM đại lý — Tiền (Money)",
+   "pages": [
+    {
+     "path": "/payments",
+     "label": "Thanh toán, hoàn tiền",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/bookings",
+     "label": "Đặt dịch vụ (assistant không sửa tiền)",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "write"
+     }
+    },
+    {
+     "path": "/aa-bookings",
+     "label": "Đặt dịch vụ AA",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "none"
+     }
+    },
+    {
+     "path": "/aa-tariff",
+     "label": "Bảng giá AA cho đại lý",
+     "access": {
+      "owner": "read",
+      "agent": "read",
+      "assistant": "none"
+     }
+    },
+    {
+     "path": "/commissions",
+     "label": "Hoa hồng nhà cung cấp",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "none"
+     }
+    },
+    {
+     "path": "/partners",
+     "label": "Đối tác bán (agent thấy số tiền, chỉ owner quản lý)",
+     "access": {
+      "owner": "write",
+      "agent": "read",
+      "assistant": "read"
+     }
+    }
+   ]
+  },
+  {
+   "area": "CRM đại lý — Phát triển (Grow)",
+   "pages": [
+    {
+     "path": "/reports",
+     "label": "Báo cáo (assistant không có lãi)",
+     "access": {
+      "owner": "read",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/marketing",
+     "label": "Marketing, chiến dịch",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "none"
+     }
+    },
+    {
+     "path": "/suppliers",
+     "label": "Nhà cung cấp riêng của đại lý",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "write"
+     }
+    },
+    {
+     "path": "/services",
+     "label": "Danh mục dịch vụ riêng",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/library",
+     "label": "Thư viện mẫu",
+     "access": {
+      "owner": "read",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/automations",
+     "label": "Tự động hoá (sửa luật: owner; áp dụng: owner, agent)",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "read"
+     }
+    }
+   ]
+  },
+  {
+   "area": "CRM đại lý — Cài đặt",
+   "pages": [
+    {
+     "path": "/settings",
+     "label": "Trang cài đặt tổng",
+     "access": {
+      "owner": "write",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/settings/team",
+     "label": "Đội ngũ và vai trò",
+     "access": {
+      "owner": "write",
+      "agent": "none",
+      "assistant": "none"
+     }
+    },
+    {
+     "path": "/settings/access-log",
+     "label": "Nhật ký truy cập",
+     "access": {
+      "owner": "read",
+      "agent": "none",
+      "assistant": "none"
+     }
+    },
+    {
+     "path": "/settings/add-ons",
+     "label": "Add-on (xin Trip planner)",
+     "access": {
+      "owner": "write",
+      "agent": "none",
+      "assistant": "none"
+     }
+    },
+    {
+     "path": "/settings/agreements",
+     "label": "Điều khoản bán, miễn trừ",
+     "access": {
+      "owner": "write",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/settings/ai",
+     "label": "Trợ lý AI, ngân sách AI",
+     "access": {
+      "owner": "write",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/settings/cancellation",
+     "label": "Chính sách huỷ",
+     "access": {
+      "owner": "write",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/settings/channels",
+     "label": "SMS / WhatsApp",
+     "access": {
+      "owner": "write",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/settings/connections",
+     "label": "Kết nối",
+     "access": {
+      "owner": "write",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/settings/data",
+     "label": "Dữ liệu, quyền riêng tư, cho phép AA hỗ trợ",
+     "access": {
+      "owner": "write",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/settings/forms",
+     "label": "Form nhận yêu cầu",
+     "access": {
+      "owner": "write",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/settings/import",
+     "label": "Nhập khách hàng",
+     "access": {
+      "owner": "write",
+      "agent": "none",
+      "assistant": "none"
+     }
+    },
+    {
+     "path": "/settings/inclusions",
+     "label": "Dòng Bao gồm / Không bao gồm",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/settings/mailbox",
+     "label": "Hộp thư riêng của mình",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "write"
+     }
+    },
+    {
+     "path": "/settings/payments",
+     "label": "Phương thức thanh toán, hoá đơn",
+     "access": {
+      "owner": "write",
+      "agent": "none",
+      "assistant": "none"
+     }
+    },
+    {
+     "path": "/settings/pricing",
+     "label": "Luật giá, markup",
+     "access": {
+      "owner": "write",
+      "agent": "none",
+      "assistant": "none"
+     }
+    },
+    {
+     "path": "/settings/saved-replies",
+     "label": "Câu trả lời mẫu",
+     "access": {
+      "owner": "write",
+      "agent": "write",
+      "assistant": "write"
+     }
+    },
+    {
+     "path": "/settings/tags",
+     "label": "Thẻ",
+     "access": {
+      "owner": "write",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/settings/templates",
+     "label": "Mẫu tin nhắn",
+     "access": {
+      "owner": "write",
+      "agent": "read",
+      "assistant": "read"
+     }
+    },
+    {
+     "path": "/settings/travel",
+     "label": "Hộ chiếu, visa",
+     "access": {
+      "owner": "write",
+      "agent": "read",
+      "assistant": "read"
+     }
+    }
+   ]
+  },
+  {
+   "area": "Content studio (cùng host portal., vai trò lấy từ CIS)",
+   "pages": [
+    {
+     "path": "/portal/dashboard",
+     "label": "Bảng điều khiển",
+     "access": {
+      "csr:owner": "read",
+      "csr:editor": "read",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/tours",
+     "label": "Tour AA",
+     "access": {
+      "csr:owner": "write",
+      "csr:editor": "write",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/tours/mine",
+     "label": "Tour của tôi (bản T2)",
+     "access": {
+      "csr:owner": "write",
+      "csr:editor": "write",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/create",
+     "label": "Tạo nội dung",
+     "access": {
+      "csr:owner": "write",
+      "csr:editor": "write",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/create/article",
+     "label": "Viết bài",
+     "access": {
+      "csr:owner": "write",
+      "csr:editor": "write",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/create/social",
+     "label": "Bài mạng xã hội",
+     "access": {
+      "csr:owner": "write",
+      "csr:editor": "write",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/create/write",
+     "label": "Viết tự do",
+     "access": {
+      "csr:owner": "write",
+      "csr:editor": "write",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/content",
+     "label": "Nội dung đã tạo",
+     "access": {
+      "csr:owner": "write",
+      "csr:editor": "write",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/content/publish",
+     "label": "Xuất bản lên kênh",
+     "access": {
+      "csr:owner": "write",
+      "csr:editor": "write",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/facts",
+     "label": "Facts Entries của đại lý",
+     "access": {
+      "csr:owner": "write",
+      "csr:editor": "write",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/brand",
+     "label": "Thương hiệu",
+     "access": {
+      "csr:owner": "write",
+      "csr:editor": "write",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/account",
+     "label": "Tài khoản",
+     "access": {
+      "csr:owner": "read",
+      "csr:editor": "read",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/account/members",
+     "label": "Thành viên studio",
+     "access": {
+      "csr:owner": "write",
+      "csr:editor": "read",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/account/integrations",
+     "label": "Kết nối kênh",
+     "access": {
+      "csr:owner": "write",
+      "csr:editor": "read",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/account/settings",
+     "label": "Cài đặt tài khoản",
+     "access": {
+      "csr:owner": "write",
+      "csr:editor": "read",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/account/add-ons",
+     "label": "Add-on",
+     "access": {
+      "csr:owner": "write",
+      "csr:editor": "read",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/account/billing",
+     "label": "Gói và hoá đơn",
+     "access": {
+      "csr:owner": "read",
+      "csr:editor": "read",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/account/activity",
+     "label": "Hoạt động",
+     "access": {
+      "csr:owner": "read",
+      "csr:editor": "read",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal/help/facebook",
+     "label": "Hướng dẫn Facebook",
+     "access": {
+      "csr:owner": "read",
+      "csr:editor": "read",
+      "csr:viewer": "read"
+     }
+    },
+    {
+     "path": "/portal-access/select",
+     "label": "Chọn studio (nhiều đại lý)",
+     "access": {
+      "csr:owner": "read",
+      "csr:editor": "read",
+      "csr:viewer": "read"
+     }
+    }
+   ]
+  },
+  {
+   "area": "Console staff AA trong CRM (/staff, đăng nhập WORKFORCE riêng)",
+   "pages": [
+    {
+     "path": "/staff",
+     "label": "Vào console (chuyển tới ops hoặc support)",
+     "access": {
+      "crm-ops": "read",
+      "crm-support": "read"
+     }
+    },
+    {
+     "path": "/staff/ops",
+     "label": "Bảng ops release",
+     "access": {
+      "crm-ops": "read",
+      "crm-support": "none"
+     }
+    },
+    {
+     "path": "/staff/ops/[tenantId]/[tripId]",
+     "label": "Một ops release, manifest",
+     "access": {
+      "crm-ops": "read",
+      "crm-support": "none"
+     }
+    },
+    {
+     "path": "/staff/support",
+     "label": "Bắt đầu hỗ trợ / mở break-glass",
+     "access": {
+      "crm-ops": "write",
+      "crm-support": "write"
+     }
+    },
+    {
+     "path": "/staff/support/[tenantId]",
+     "label": "Tổng quan đại lý (khi có phiên)",
+     "access": {
+      "crm-ops": "read",
+      "crm-support": "read"
+     }
+    },
+    {
+     "path": "/staff/support/[tenantId]/trips/[tripId]",
+     "label": "Một chuyến (chỉ đọc)",
+     "access": {
+      "crm-ops": "read",
+      "crm-support": "read"
+     }
+    }
+   ]
+  },
+  {
+   "area": "Admin CIS cho CRM (host aa-cis., console L1)",
+   "pages": [
+    {
+     "path": "/admin/tenants/agencies",
+     "label": "Đại lý (CRM): tạo, khoá, mời chủ, khôi phục chủ",
+     "access": {
+      "crm-platform-admin": "write",
+      "cis-admin": "read",
+      "cis-customer_success": "read",
+      "cis-support": "read"
+     }
+    },
+    {
+     "path": "/admin/platform/settings",
+     "label": "Cài đặt CRM (tab CRM)",
+     "access": {
+      "crm-platform-admin": "write",
+      "cis-admin": "read",
+      "cis-customer_success": "none",
+      "cis-support": "none"
+     }
+    }
+   ]
+  }
+ ],
+ "actions": [
+  {
+   "area": "Chuyến",
+   "action": "Tạo/sửa chuyến, đổi stage, ghi chú, việc",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/pipeline.py:218; apps/AA-Partner/api/app/permissions.py:159"
+  },
+  {
+   "area": "Chuyến",
+   "action": "Huỷ chuyến",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/pipeline.py:190-192; apps/AA-Partner/api/app/permissions.py:189"
+  },
+  {
+   "area": "Chuyến",
+   "action": "Xoá chuyến vào thùng rác (agent chỉ chuyến của mình)",
+   "access": {
+    "owner": "yes",
+    "agent": "yes (chỉ chuyến của mình)",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/lifecycle.py:67-75; apps/AA-Partner/api/app/permissions.py:190"
+  },
+  {
+   "area": "Chuyến",
+   "action": "Chuyển giao khách/chuyến cho người khác",
+   "access": {
+    "owner": "yes",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/team.py:132; apps/AA-Partner/api/app/permissions.py:198"
+  },
+  {
+   "area": "Khách hàng",
+   "action": "Tạo/sửa khách, xem liên hệ và giấy tờ nhạy cảm (có log)",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/travellers.py:209; apps/AA-Partner/api/app/permissions.py:165-167"
+  },
+  {
+   "area": "Khách hàng",
+   "action": "Xoá vĩnh viễn (erasure), xuất dữ liệu khách, gộp khách trùng, nhập khách từ CSV",
+   "access": {
+    "owner": "yes",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/lifecycle.py:281; apps/AA-Partner/api/app/routers/onboarding.py:130-184; apps/AA-Partner/api/app/permissions.py:195-196,210-211"
+  },
+  {
+   "area": "Nhà cung cấp",
+   "action": "Tạo/sửa/xoá nhà cung cấp riêng (phần hoa hồng: owner, agent)",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/ledger.py:282-320"
+  },
+  {
+   "area": "Nhà cung cấp",
+   "action": "Tạo/sửa dịch vụ riêng trong danh mục, hoá đơn nhà cung cấp, chi phí đoàn",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/catalogue.py:107-132; apps/AA-Partner/api/app/routers/finance.py:143-223"
+  },
+  {
+   "area": "Báo giá",
+   "action": "Soạn nháp báo giá (ngày, block, phương án)",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/builder.py:257-494; apps/AA-Partner/api/app/permissions.py:170"
+  },
+  {
+   "area": "Báo giá",
+   "action": "Sửa giá bán/net của phương án, đặt giảm giá",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/builder.py:422-439; apps/AA-Partner/api/app/permissions.py:181"
+  },
+  {
+   "area": "Báo giá",
+   "action": "Duyệt giảm giá vượt hạn mức hoặc bán dưới giá vốn",
+   "access": {
+    "owner": "approve",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": {
+    "creator": "agent (xin duyệt)",
+    "approver": "owner",
+    "rule": "Agent xin, chỉ owner quyết; DB guard CRM48 chỉ cho owner. Owner tự xuất bản giảm giá vượt hạn mức thì tự ghi duyệt của chính mình",
+    "evidence": "apps/AA-Partner/api/app/proposals/discount.py:11-16,184-194"
+   },
+   "evidence": "apps/AA-Partner/api/app/routers/builder.py:450"
+  },
+  {
+   "area": "Báo giá",
+   "action": "Xuất bản / gửi / thu hồi báo giá cho khách",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/proposals.py:143-191; apps/AA-Partner/api/app/routers/builder.py:510; apps/AA-Partner/api/app/permissions.py:184"
+  },
+  {
+   "area": "Báo giá",
+   "action": "Xác nhận dòng AA (tạo booking thật bên AA)",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/booking/aa_lines.py:234; apps/AA-Partner/api/app/permissions.py:182"
+  },
+  {
+   "area": "Báo giá",
+   "action": "Đổi tên một mục AA trong báo giá",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/proposals/builder.py:1465-1474"
+  },
+  {
+   "area": "Hoá đơn và tiền",
+   "action": "Lập/sửa/phát hành/huỷ hoá đơn, ghi nhận tiền khách trả, đánh dấu lịch trả đã trả",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/invoices.py:107-180; apps/AA-Partner/api/app/routers/payments.py:91; apps/AA-Partner/api/app/permissions.py:187"
+  },
+  {
+   "area": "Hoá đơn và tiền",
+   "action": "Xin hoàn tiền và thực hiện hoàn tiền",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/payments.py:102,141"
+  },
+  {
+   "area": "Hoá đơn và tiền",
+   "action": "Duyệt hoàn tiền (agent tới ngưỡng của đại lý)",
+   "access": {
+    "owner": "approve",
+    "agent": "approve (tới ngưỡng)",
+    "assistant": "no"
+   },
+   "two_person": {
+    "creator": "owner, agent",
+    "approver": "owner (mọi mức); agent (tới ngưỡng)",
+    "rule": "Agent không được duyệt yêu cầu do chính mình tạo (403 refund_self_approval); owner thì không bị chặn tự duyệt",
+    "evidence": "apps/AA-Partner/api/app/payments/service.py:405-409"
+   },
+   "evidence": "apps/AA-Partner/api/app/routers/payments.py:123-132; apps/AA-Partner/api/app/permissions.py:188"
+  },
+  {
+   "area": "Hoá đơn và tiền",
+   "action": "Hoa hồng nhà cung cấp: claim, nhận, xoá nợ",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/commissions.py:90-126"
+  },
+  {
+   "area": "Đối tác bán",
+   "action": "Quản lý đối tác bán, điều khoản, link",
+   "access": {
+    "owner": "yes",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/partners.py:111-159; apps/AA-Partner/api/app/permissions.py:216"
+  },
+  {
+   "area": "Đối tác bán",
+   "action": "Duyệt / trả / huỷ hoa hồng đối tác",
+   "access": {
+    "owner": "approve",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": {
+    "creator": "hệ thống tính từ chuyến đã đặt",
+    "approver": "owner",
+    "rule": "Owner vừa duyệt vừa ghi đã trả, không cần người thứ hai",
+    "evidence": "apps/AA-Partner/api/app/routers/partners.py:218-245"
+   },
+   "evidence": "apps/AA-Partner/api/app/routers/partners.py:218-245; apps/AA-Partner/api/app/permissions.py:217"
+  },
+  {
+   "area": "Tin nhắn",
+   "action": "Gửi tin cho khách / nhà cung cấp (assistant chỉ trên chuyến được giao)",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "yes (chuyến được giao)"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/mail.py:294; apps/AA-Partner/api/app/permissions.py:185"
+  },
+  {
+   "area": "AI",
+   "action": "Yêu cầu AI soạn nháp (tin nhắn, xác nhận nhà cung cấp, phương án ngày)",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/ai.py:153-265; apps/AA-Partner/api/app/permissions.py:179"
+  },
+  {
+   "area": "AI",
+   "action": "Chấp nhận nháp AI để gửi / áp vào chuyến",
+   "access": {
+    "owner": "approve",
+    "agent": "approve",
+    "assistant": "approve (chuyến được giao)"
+   },
+   "two_person": {
+    "creator": "AI (gateway)",
+    "approver": "thành viên đại lý",
+    "rule": "AI chỉ gợi ý; một người trong đại lý phải chấp nhận trước khi gửi",
+    "evidence": "apps/AA-Partner/api/app/permissions.py:79-81,186"
+   },
+   "evidence": "apps/AA-Partner/api/app/llm/ai_drafts.py:103; apps/AA-Partner/api/app/llm/supplier_confirm.py:270"
+  },
+  {
+   "area": "AI",
+   "action": "Bật/tắt AI và đặt ngân sách AI tháng của đại lý",
+   "access": {
+    "owner": "yes",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/ai.py:142; apps/AA-Partner/api/app/permissions.py:213"
+  },
+  {
+   "area": "Marketing",
+   "action": "Tạo, lên lịch, gửi chiến dịch",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/campaigns.py:115-176; apps/AA-Partner/api/app/permissions.py:192"
+  },
+  {
+   "area": "Tự động hoá",
+   "action": "Sửa luật tự động, mẫu tin nhắn",
+   "access": {
+    "owner": "yes",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/workflows.py:215-276; apps/AA-Partner/api/app/routers/proposal_text.py:158-186; apps/AA-Partner/api/app/permissions.py:199"
+  },
+  {
+   "area": "Tự động hoá",
+   "action": "Áp luật cho chuyến, dừng lượt chạy",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/workflows.py:253,292; apps/AA-Partner/api/app/permissions.py:193"
+  },
+  {
+   "area": "Cài đặt",
+   "action": "Mời, đổi vai trò, gỡ thành viên",
+   "access": {
+    "owner": "yes",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/team.py:77-116; apps/AA-Partner/api/app/permissions.py:203"
+  },
+  {
+   "area": "Cài đặt",
+   "action": "Thanh toán, hoá đơn, luật giá, markup, chính sách huỷ, tỷ giá tay",
+   "access": {
+    "owner": "yes",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/ledger.py:478-654; apps/AA-Partner/api/app/routers/payments.py:158-234; apps/AA-Partner/api/app/permissions.py:205"
+  },
+  {
+   "area": "Cài đặt",
+   "action": "Kết nối SMS/WhatsApp",
+   "access": {
+    "owner": "yes",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/messaging.py:108-164; apps/AA-Partner/api/app/permissions.py:204"
+  },
+  {
+   "area": "Cài đặt",
+   "action": "Kết nối hộp thư riêng của mình",
+   "access": {
+    "owner": "yes",
+    "agent": "yes",
+    "assistant": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/mail.py:155; apps/AA-Partner/api/app/permissions.py:172"
+  },
+  {
+   "area": "Cài đặt",
+   "action": "Điều khoản bán, miễn trừ (xuất bản)",
+   "access": {
+    "owner": "yes",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/proposals.py:251-269; apps/AA-Partner/api/app/permissions.py:200"
+  },
+  {
+   "area": "Cài đặt",
+   "action": "Form nhận yêu cầu, cài đặt pipeline, visa",
+   "access": {
+    "owner": "yes",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/pipeline.py:357,412; apps/AA-Partner/api/app/routers/travel_ops.py:381-419; apps/AA-Partner/api/app/permissions.py:207"
+  },
+  {
+   "area": "Cài đặt",
+   "action": "Dữ liệu: thùng rác, lưu trữ, legal hold, yêu cầu dữ liệu",
+   "access": {
+    "owner": "yes",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/lifecycle.py:194-210; apps/AA-Partner/api/app/routers/data.py:131-154; apps/AA-Partner/api/app/permissions.py:209"
+  },
+  {
+   "area": "Cài đặt",
+   "action": "Xuất toàn bộ dữ liệu đại lý, rời nền tảng (offboarding)",
+   "access": {
+    "owner": "yes",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/data.py:82-90; apps/AA-Partner/api/app/routers/lifecycle.py:313-363; apps/AA-Partner/api/app/permissions.py:197"
+  },
+  {
+   "area": "Cài đặt",
+   "action": "Cho phép AA hỗ trợ (1–7 ngày) và thu hồi",
+   "access": {
+    "owner": "yes",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/support_access.py:52-61; apps/AA-Partner/api/app/permissions.py:201"
+  },
+  {
+   "area": "Cài đặt",
+   "action": "Xin add-on (Trip planner, CRM) từ AA",
+   "access": {
+    "owner": "yes",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/addons.py:103; apps/AA-Partner/api/app/permissions.py:214"
+  },
+  {
+   "area": "Cài đặt",
+   "action": "Đổi tên/xoá thẻ dùng chung",
+   "access": {
+    "owner": "yes",
+    "agent": "no",
+    "assistant": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/tags.py:103-112; apps/AA-Partner/api/app/permissions.py:220"
+  },
+  {
+   "area": "Content studio",
+   "action": "Tạo/sửa nội dung, bản T2, Facts, thương hiệu",
+   "access": {
+    "csr:owner": "yes",
+    "csr:editor": "yes",
+    "csr:viewer": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/middleware/tenant_role.py:58-64"
+  },
+  {
+   "area": "Content studio",
+   "action": "Sửa phần tài khoản: thành viên, kênh, webhook, cài đặt",
+   "access": {
+    "csr:owner": "yes",
+    "csr:editor": "no",
+    "csr:viewer": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/middleware/tenant_role.py:48,58-64"
+  },
+  {
+   "area": "AA nền tảng (console L1)",
+   "action": "Tạo đại lý, khoá/mở khoá, mời chủ đầu tiên, xoá đại lý thử",
+   "access": {
+    "crm-platform-admin": "yes",
+    "cis-admin": "no",
+    "cis-customer_success": "no",
+    "cis-support": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/ops.py:653-797"
+  },
+  {
+   "area": "AA nền tảng (console L1)",
+   "action": "Đổi quyền gói, retry job, yêu cầu dữ liệu, vô hiệu thành viên",
+   "access": {
+    "crm-platform-admin": "yes",
+    "cis-admin": "no",
+    "cis-customer_success": "no",
+    "cis-support": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/ops.py:820-882"
+  },
+  {
+   "area": "AA nền tảng (console L1)",
+   "action": "Khôi phục chủ đại lý (đợi 14 ngày, chủ cũ được báo, thành viên nào cũng huỷ được)",
+   "access": {
+    "crm-platform-admin": "yes",
+    "cis-admin": "no"
+   },
+   "two_person": {
+    "creator": "crm-platform-admin mở yêu cầu",
+    "approver": "không có người duyệt; chặn bằng thời gian chờ 14 ngày, mọi thành viên đại lý huỷ được",
+    "rule": "Hoàn tất không sớm hơn eligible_at (409 recovery_not_due)",
+    "evidence": "apps/AA-Partner/api/app/members/recovery.py:14-18"
+   },
+   "evidence": "apps/AA-Partner/api/app/routers/ops.py:901-918"
+  },
+  {
+   "area": "AA nền tảng (console L1)",
+   "action": "Gửi lời mời Content studio",
+   "access": {
+    "crm-platform-admin": "yes",
+    "cis-admin": "yes",
+    "cis-customer_success": "yes (viewer/editor, trong phạm vi)",
+    "cis-support": "yes (gửi lại địa chỉ cũ)"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/ops.py:716"
+  },
+  {
+   "area": "AA nền tảng (console L1)",
+   "action": "Đổi cài đặt CRM (ngưỡng, trần, mặc định)",
+   "access": {
+    "crm-platform-admin": "approve",
+    "cis-admin": "no"
+   },
+   "two_person": {
+    "creator": "crm-platform-admin",
+    "approver": "crm-platform-admin khác",
+    "rule": "Khoá maker_checker: người duyệt khác người đề xuất, trừ khi crm.settings.two_person_approval tắt (Dev) thì tự duyệt, ghi self_approved, khoá tác động cao gửi e-mail ops",
+    "evidence": "apps/AA-Partner/api/app/platform_settings/service.py:20-22,663-682"
+   },
+   "evidence": "apps/AA-Partner/api/app/routers/ops_settings.py:202-231"
+  },
+  {
+   "area": "AA nền tảng (console L1)",
+   "action": "Bật/tắt AI toàn CRM, hồ sơ AI của app",
+   "access": {
+    "crm-platform-admin": "yes",
+    "cis-admin": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/ops.py:549"
+  },
+  {
+   "area": "Console staff AA",
+   "action": "Bắt đầu phiên hỗ trợ (cần owner cho phép, ticket)",
+   "access": {
+    "crm-support": "yes",
+    "crm-ops": "no"
+   },
+   "two_person": {
+    "creator": "owner đại lý cho phép",
+    "approver": "—",
+    "rule": "Staff chỉ vào được trong khung owner cho phép; chỉ đọc",
+    "evidence": "apps/AA-Partner/api/app/routers/staff.py:1-30"
+   },
+   "evidence": "apps/AA-Partner/api/app/routers/staff.py:229"
+  },
+  {
+   "area": "Console staff AA",
+   "action": "Mở break-glass (không cần owner, lý do, ticket, 15–60 phút, báo e-mail owner + ops)",
+   "access": {
+    "crm-ops": "yes",
+    "crm-support": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/staff.py:245"
+  },
+  {
+   "area": "Console staff AA",
+   "action": "Ghi bất kỳ dữ liệu nào của đại lý",
+   "access": {
+    "crm-ops": "no",
+    "crm-support": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-Partner/api/app/routers/staff.py:24-28"
+  }
+ ],
+ "gaps": [
+  "P6/L1: cả assistant tạo/sửa/xoá được nhà cung cấp riêng (chỉ cần TRIP_EDIT), loại nhà cung cấp vẫn có khách sạn, xe, hoạt động (api/app/routers/ledger.py:282-320; api/app/ledger/suppliers.py:30-41). AA-1144 chưa làm.",
+  "D9: đại lý vẫn đổi được tên mục AA trong báo giá; chưa có dòng ghi chú riêng (api/app/proposals/builder.py:1465-1474).",
+  "D7: Facts Entries của đại lý vẫn nhận mọi loại (giá, mùa…) và đè dữ kiện AA, chưa giới hạn booking_terms (code ở CIS: api/routers/v1_facts.py:1-12).",
+  "D8: bản T2 của đại lý chưa khoá trường sự thật (chưa có lỗi fact_locked) và chưa audit (CIS api/routers/v1_tours.py).",
+  "P8: đại lý gõ điểm đón/giờ đón cho dòng AA trên voucher (api/app/routers/travel_ops.py:259).",
+  "Tinh thần R3 (người ghi khác người duyệt) chưa áp ở CRM: owner tự duyệt hoàn tiền của mình, owner vừa duyệt vừa trả hoa hồng đối tác, owner tự ghi duyệt giảm giá (payments/service.py:406; routers/partners.py:218-245; proposals/discount.py:184-194). Với đại lý nhỏ đây có thể là chủ ý; cần quyết.",
+  "R1: ma trận quyền CRM nằm trong code (api/app/permissions.py:_TABLE), 3 vai trò cố định; chưa có trang 'Vai trò & quyền' hay vai trò tuỳ chỉnh.",
+  "Cài đặt CRM: two_person_approval đang tắt trên Dev nên crm-platform-admin tự duyệt thay đổi của mình (platform_settings/service.py:663-670); R7: người thứ hai là tài khoản admin riêng của người khác.",
+  "A3: khoá staff console CRM (STAFF_COGNITO_CLIENT_SECRET) vẫn trong secret web dùng chung với Content studio; đã duyệt tách, chưa làm (CONTEXT.md:3112).",
+  "Break-glass mức AWS (IAM role có MFA, gắn tenant) chưa làm; break-glass trong app không có bước MFA nâng cấp (CONTEXT.md:3083)."
+ ],
+ "notes": [
+  "Vai trò không liệt kê trong access của một trang = không vào được.",
+  "Web chỉ ẩn trang; API là nơi chặn thật (tenant_tx action= + permissions.require, apps/AA-Partner/api/app/permissions.py:15-28). Phần lãi/giá net bị xoá khỏi mọi response cho assistant (app/margin.py).",
+  "Nguồn: AA-Partner HEAD 27b8c56f."
+ ]
+}

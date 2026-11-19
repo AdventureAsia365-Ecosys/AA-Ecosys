@@ -1,0 +1,76 @@
+[
+ {
+  "name": "plan",
+  "w": 1440,
+  "scheme": "light",
+  "status": 200,
+  "brand": 0,
+  "overflow": false,
+  "errors": [
+   "[mapbox error] Failed to fetch https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/sprite.png?access_token=REDACTED"
+  ]
+ },
+ {
+  "name": "plan",
+  "w": 1440,
+  "scheme": "dark",
+  "status": 200,
+  "brand": 0,
+  "overflow": false,
+  "errors": []
+ },
+ {
+  "name": "plan",
+  "w": 390,
+  "scheme": "light",
+  "status": 200,
+  "brand": 0,
+  "overflow": false,
+  "errors": []
+ },
+ {
+  "name": "plan",
+  "w": 390,
+  "scheme": "dark",
+  "status": 200,
+  "brand": 0,
+  "overflow": false,
+  "errors": []
+ },
+ {
+  "name": "tour",
+  "w": 1440,
+  "scheme": "light",
+  "status": 200,
+  "brand": 0,
+  "overflow": false,
+  "errors": []
+ },
+ {
+  "name": "tour",
+  "w": 1440,
+  "scheme": "dark",
+  "status": 200,
+  "brand": 0,
+  "overflow": false,
+  "errors": []
+ },
+ {
+  "name": "tour",
+  "w": 390,
+  "scheme": "light",
+  "status": 200,
+  "brand": 0,
+  "overflow": false,
+  "errors": []
+ },
+ {
+  "name": "tour",
+  "w": 390,
+  "scheme": "dark",
+  "status": 200,
+  "brand": 0,
+  "overflow": false,
+  "errors": []
+ }
+]

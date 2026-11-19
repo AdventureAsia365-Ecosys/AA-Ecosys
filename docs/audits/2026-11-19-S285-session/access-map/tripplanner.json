@@ -1,0 +1,568 @@
+{
+ "app": "tripplanner",
+ "name": "AA-TripPlanner-Web (trình lập chuyến đi trên bản đồ, bán B2B dạng white-label cho đại lý)",
+ "host": "https://tripplanner.lumiguides.it.com (Dev; trang đại lý ở /{slug}/plan hoặc tên miền riêng của đại lý)",
+ "signin": "Không có đăng nhập. Khách là khách vãng lai (guest): quyền duy nhất là cookie HttpOnly __Host-tp_guest (token ngẫu nhiên 32 byte, 400 ngày, gia hạn trượt) do BFF cấp; Lambda chỉ lưu sha256 của token. Đăng nhập khách bằng Cognito EXTERNAL (/sign-in, /trips) đã gỡ ở AA-1115. Không có trang nhân viên trong app này: cài đặt TripPlanner do nhân viên AA sửa trên CIS admin. Máy gọi máy: CRM kéo lead bằng token M2M (scope tripplanner.leads/deliver); CIS xoá cache bằng chữ ký HMAC.",
+ "roles": [
+  {
+   "code": "visitor",
+   "label": "Khách trên site AA",
+   "who": "Bất kỳ ai mở trang công khai của AA (không đăng nhập)",
+   "summary": "Xem tour, nước, lập chuyến trên bản đồ, chạy AI kể chuyện/chat trong giới hạn; nút 'Gửi tư vấn viên' chỉ là thông báo demo."
+  },
+  {
+   "code": "agency_visitor",
+   "label": "Khách trên trang đại lý",
+   "who": "Khách của một đại lý đang được phục vụ (gói tp.hosted bật), vào /{slug}/plan hoặc tên miền riêng",
+   "summary": "Như khách AA nhưng thấy tour và thương hiệu của đại lý; được gửi lead cho đại lý (CRM, webhook hoặc e-mail)."
+  },
+  {
+   "code": "traveller_signed_in",
+   "label": "Khách đã đăng nhập (đã gỡ)",
+   "who": "Không còn ai: trang /sign-in và /trips đã gỡ (AA-1115)",
+   "summary": "Vai trò cũ giữ để đối chiếu; mọi trang và thao tác trả 404 hoặc giống khách vãng lai."
+  },
+  {
+   "code": "crm_m2m",
+   "label": "CRM (máy gọi máy)",
+   "who": "Client M2M của AA-Partner CRM",
+   "summary": "Kéo lead của từng đại lý dùng kênh CRM và xác nhận đã nhận (ack)."
+  },
+  {
+   "code": "cis_purge",
+   "label": "CIS (job xoá cache)",
+   "who": "Job tripplanner_purge của AA-CIS-App, ký HMAC",
+   "summary": "Báo tour đổi trạng thái để TripPlanner xoá cache trang."
+  },
+  {
+   "code": "aa_staff_cis",
+   "label": "Nhân viên AA (qua CIS admin)",
+   "who": "Nhân viên có quyền trên CIS admin (theo bản đồ quyền CIS)",
+   "summary": "Không vào TripPlanner; sửa 17 khoá cài đặt tripplanner.*, đổi model AI, tắt AI của app ở CIS admin."
+  },
+  {
+   "code": "agency_owner",
+   "label": "Chủ đại lý (qua AA-Partner)",
+   "who": "Thành viên đại lý trên AA-Partner (trang Add-ons)",
+   "summary": "Không có trang trong TripPlanner; lấy đoạn link launcher mở planner của mình."
+  }
+ ],
+ "areas": [
+  {
+   "area": "Trang công khai của AA",
+   "pages": [
+    {
+     "path": "/",
+     "label": "Trang chủ tìm kiếm",
+     "access": {
+      "visitor": "read",
+      "agency_visitor": "read",
+      "traveller_signed_in": "read",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "/plan",
+     "label": "Planner bản đồ (lập chuyến)",
+     "access": {
+      "visitor": "write",
+      "agency_visitor": "write",
+      "traveller_signed_in": "write",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "/plan/shared",
+     "label": "Xem/in chuyến được chia sẻ (chỉ đọc)",
+     "access": {
+      "visitor": "read",
+      "agency_visitor": "read",
+      "traveller_signed_in": "read",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "/destinations",
+     "label": "Danh sách nước",
+     "access": {
+      "visitor": "read",
+      "agency_visitor": "read",
+      "traveller_signed_in": "read",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "/destinations/[country]",
+     "label": "Trang một nước",
+     "access": {
+      "visitor": "read",
+      "agency_visitor": "read",
+      "traveller_signed_in": "read",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "/tours/[slug]",
+     "label": "Trang tour AA (410 khi tour đã nghỉ)",
+     "access": {
+      "visitor": "read",
+      "agency_visitor": "read",
+      "traveller_signed_in": "read",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "/privacy, /terms",
+     "label": "Trang pháp lý (bản nháp)",
+     "access": {
+      "visitor": "read",
+      "agency_visitor": "read",
+      "traveller_signed_in": "read",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    }
+   ]
+  },
+  {
+   "area": "Trang của đại lý (/{slug} hoặc tên miền riêng)",
+   "pages": [
+    {
+     "path": "/[tenant]",
+     "label": "Chuyển hướng sang planner đại lý",
+     "access": {
+      "visitor": "none",
+      "agency_visitor": "read",
+      "traveller_signed_in": "none",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "/[tenant]/plan",
+     "label": "Planner mang thương hiệu đại lý, form gửi lead",
+     "access": {
+      "visitor": "none",
+      "agency_visitor": "write",
+      "traveller_signed_in": "none",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "/[tenant]/plan/shared",
+     "label": "Xem/in chuyến chia sẻ của đại lý",
+     "access": {
+      "visitor": "none",
+      "agency_visitor": "read",
+      "traveller_signed_in": "none",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "/[tenant]/tours/[tour]",
+     "label": "Trang tour của đại lý (không hiện giá)",
+     "access": {
+      "visitor": "none",
+      "agency_visitor": "read",
+      "traveller_signed_in": "none",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "/[tenant]/privacy, /[tenant]/terms",
+     "label": "Trang pháp lý của đại lý (bản nháp)",
+     "access": {
+      "visitor": "none",
+      "agency_visitor": "read",
+      "traveller_signed_in": "none",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    }
+   ]
+  },
+  {
+   "area": "Trang đã gỡ",
+   "pages": [
+    {
+     "path": "/sign-in",
+     "label": "Đăng nhập khách (404, giữ chỗ)",
+     "access": {
+      "visitor": "none",
+      "agency_visitor": "none",
+      "traveller_signed_in": "none",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "/trips",
+     "label": "Chuyến của tôi (404, giữ chỗ)",
+     "access": {
+      "visitor": "none",
+      "agency_visitor": "none",
+      "traveller_signed_in": "none",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    }
+   ]
+  },
+  {
+   "area": "API của BFF và Lambda (máy gọi)",
+   "pages": [
+    {
+     "path": "/api/trip, /api/trip/narrate, /api/trip/chat, /api/trip/send",
+     "label": "Sửa/đọc chuyến, AI, gửi (cần cookie khách, chặn POST khác site)",
+     "access": {
+      "visitor": "write",
+      "agency_visitor": "write",
+      "traveller_signed_in": "none",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "/api/browse, /api/browse/search",
+     "label": "Đọc danh mục, tìm kiếm",
+     "access": {
+      "visitor": "read",
+      "agency_visitor": "read",
+      "traveller_signed_in": "none",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "/api/revalidate/catalog",
+     "label": "Xoá cache khi tour đổi (chữ ký HMAC)",
+     "access": {
+      "visitor": "none",
+      "agency_visitor": "none",
+      "traveller_signed_in": "none",
+      "crm_m2m": "none",
+      "cis_purge": "write",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "/trip/m2m/v1/tenants/{id}/leads (+ /ack)",
+     "label": "CRM kéo lead và ack (token M2M)",
+     "access": {
+      "visitor": "none",
+      "agency_visitor": "none",
+      "traveller_signed_in": "none",
+      "crm_m2m": "write",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "/me/claim, /me/trips (Lambda)",
+     "label": "Route tài khoản khách cũ, BFF không còn gọi",
+     "access": {
+      "visitor": "none",
+      "agency_visitor": "none",
+      "traveller_signed_in": "none",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "none"
+     }
+    }
+   ]
+  },
+  {
+   "area": "Quản lý TripPlanner nằm ở app khác",
+   "pages": [
+    {
+     "path": "CIS admin › Platform › Settings › TripPlanner",
+     "label": "17 khoá cài đặt tripplanner.*",
+     "access": {
+      "visitor": "none",
+      "agency_visitor": "none",
+      "traveller_signed_in": "none",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "write",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "CIS admin › AI providers › Routing / App profiles",
+     "label": "Model AI theo stage, bật/tắt AI của app",
+     "access": {
+      "visitor": "none",
+      "agency_visitor": "none",
+      "traveller_signed_in": "none",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "write",
+      "agency_owner": "none"
+     }
+    },
+    {
+     "path": "AA-Partner › Add-ons",
+     "label": "Đoạn launcher mở planner của đại lý",
+     "access": {
+      "visitor": "none",
+      "agency_visitor": "none",
+      "traveller_signed_in": "none",
+      "crm_m2m": "none",
+      "cis_purge": "none",
+      "aa_staff_cis": "none",
+      "agency_owner": "read"
+     }
+    }
+   ]
+  }
+ ],
+ "actions": [
+  {
+   "area": "Lập chuyến",
+   "action": "Tạo và sửa chuyến (thêm/bớt điểm, đổi thứ tự, thêm/bớt ngày, áp tuyến tour)",
+   "access": {
+    "visitor": "yes",
+    "agency_visitor": "yes",
+    "traveller_signed_in": "no",
+    "crm_m2m": "no",
+    "cis_purge": "no",
+    "aa_staff_cis": "no",
+    "agency_owner": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-TripPlanner-Web/backend/assembly/handler.py:501 (_guard: token khách phải khớp phiên, phiên phải sở hữu chuyến); apps/AA-TripPlanner-Web/CONTEXT.md:474"
+  },
+  {
+   "area": "Lập chuyến",
+   "action": "Xem chuyến của chính mình (người khác: 404)",
+   "access": {
+    "visitor": "yes",
+    "agency_visitor": "yes",
+    "traveller_signed_in": "no",
+    "crm_m2m": "no",
+    "cis_purge": "no",
+    "aa_staff_cis": "no",
+    "agency_owner": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-TripPlanner-Web/backend/assembly/handler.py:527 (_read_guard); apps/AA-TripPlanner-Web/CONTEXT.md:498"
+  },
+  {
+   "area": "AI",
+   "action": "Chạy AI kể chuyện cho chuyến (có giới hạn tốc độ, trần chi tiền app và trần đại lý)",
+   "access": {
+    "visitor": "yes",
+    "agency_visitor": "yes",
+    "traveller_signed_in": "no",
+    "crm_m2m": "no",
+    "cis_purge": "no",
+    "aa_staff_cis": "no",
+    "agency_owner": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-TripPlanner-Web/backend/assembly/handler.py:870; apps/AA-TripPlanner-Web/CONTEXT.md:932"
+  },
+  {
+   "area": "AI",
+   "action": "Chat lập kế hoạch bằng AI (trần tháng, quota phiên AI của đại lý)",
+   "access": {
+    "visitor": "yes",
+    "agency_visitor": "yes",
+    "traveller_signed_in": "no",
+    "crm_m2m": "no",
+    "cis_purge": "no",
+    "aa_staff_cis": "no",
+    "agency_owner": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-TripPlanner-Web/backend/assembly/handler.py:597; apps/AA-TripPlanner-Web/CONTEXT.md:944"
+  },
+  {
+   "area": "Gửi",
+   "action": "Gửi chuyến cho tư vấn viên trên site AA (trả 410 b2b_only, chỉ thông báo demo)",
+   "access": {
+    "visitor": "no",
+    "agency_visitor": "no",
+    "traveller_signed_in": "no",
+    "crm_m2m": "no",
+    "cis_purge": "no",
+    "aa_staff_cis": "no",
+    "agency_owner": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-TripPlanner-Web/backend/assembly/handler.py:219; apps/AA-TripPlanner-Web/backend/config.py:234"
+  },
+  {
+   "area": "Gửi",
+   "action": "Gửi lead cho đại lý (cần đồng ý liên hệ; 5 lần/giờ mỗi phiên, 20/giờ mỗi IP, 200 lead/ngày mỗi đại lý)",
+   "access": {
+    "visitor": "no",
+    "agency_visitor": "yes",
+    "traveller_signed_in": "no",
+    "crm_m2m": "no",
+    "cis_purge": "no",
+    "aa_staff_cis": "no",
+    "agency_owner": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-TripPlanner-Web/backend/assembly/handler.py:691; apps/AA-TripPlanner-Web/CONTEXT.md:880"
+  },
+  {
+   "area": "Gửi",
+   "action": "Chia sẻ/in chuyến, tải lịch .ics (chỉ id điểm, không token)",
+   "access": {
+    "visitor": "yes",
+    "agency_visitor": "yes",
+    "traveller_signed_in": "no",
+    "crm_m2m": "no",
+    "cis_purge": "no",
+    "aa_staff_cis": "no",
+    "agency_owner": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-TripPlanner-Web/CONTEXT.md:278"
+  },
+  {
+   "area": "Lead",
+   "action": "Kéo lead của một đại lý và xác nhận đã nhận",
+   "access": {
+    "visitor": "no",
+    "agency_visitor": "no",
+    "traveller_signed_in": "no",
+    "crm_m2m": "yes",
+    "cis_purge": "no",
+    "aa_staff_cis": "no",
+    "agency_owner": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-TripPlanner-Web/backend/shared/m2m_auth.py:33,75; apps/AA-TripPlanner-Web/backend/assembly/handler.py:765; apps/AA-TripPlanner-Web/CONTEXT.md:902"
+  },
+  {
+   "area": "Vận hành",
+   "action": "Xoá cache trang khi tour đổi trạng thái",
+   "access": {
+    "visitor": "no",
+    "agency_visitor": "no",
+    "traveller_signed_in": "no",
+    "crm_m2m": "no",
+    "cis_purge": "yes",
+    "aa_staff_cis": "no",
+    "agency_owner": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-TripPlanner-Web/frontend/app/api/revalidate/catalog/route.ts:14; apps/AA-TripPlanner-Web/frontend/lib/catalogPurge.ts:8; apps/AA-TripPlanner-Web/CONTEXT.md:312"
+  },
+  {
+   "area": "Cài đặt",
+   "action": "Sửa cài đặt TripPlanner (giới hạn tốc độ, trần chat, trần lead, thời gian giữ lead, công tắc gửi)",
+   "access": {
+    "visitor": "no",
+    "agency_visitor": "no",
+    "traveller_signed_in": "no",
+    "crm_m2m": "no",
+    "cis_purge": "no",
+    "aa_staff_cis": "yes",
+    "agency_owner": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-TripPlanner-Web/CONTEXT.md:1292"
+  },
+  {
+   "area": "Cài đặt",
+   "action": "Đổi model AI của stage hoặc tắt AI của app tripplanner",
+   "access": {
+    "visitor": "no",
+    "agency_visitor": "no",
+    "traveller_signed_in": "no",
+    "crm_m2m": "no",
+    "cis_purge": "no",
+    "aa_staff_cis": "yes",
+    "agency_owner": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-TripPlanner-Web/CONTEXT.md:1016; apps/AA-TripPlanner-Web/CONTEXT.md:1031"
+  },
+  {
+   "area": "Đại lý",
+   "action": "Lấy launcher (link mở planner của đại lý)",
+   "access": {
+    "visitor": "no",
+    "agency_visitor": "no",
+    "traveller_signed_in": "no",
+    "crm_m2m": "no",
+    "cis_purge": "no",
+    "aa_staff_cis": "no",
+    "agency_owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-TripPlanner-Web/CONTEXT.md:870"
+  },
+  {
+   "area": "Tài khoản khách",
+   "action": "Đăng nhập khách, nhận chuyến về tài khoản, xem 'Chuyến của tôi'",
+   "access": {
+    "visitor": "no",
+    "agency_visitor": "no",
+    "traveller_signed_in": "no",
+    "crm_m2m": "no",
+    "cis_purge": "no",
+    "aa_staff_cis": "no",
+    "agency_owner": "no"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-TripPlanner-Web/CONTEXT.md:544; apps/AA-TripPlanner-Web/CONTEXT.md:336; apps/AA-TripPlanner-Web/frontend/lib/tenantSlug.ts:14"
+  }
+ ],
+ "gaps": [
+  "TripPlanner không có vai trò nhân viên nên không có lỗ hổng phân quyền riêng (khớp nhận định nhóm D, S285); quyền sửa cài đặt và AI của app phụ thuộc bản đồ quyền CIS.",
+  "Phần sót của đăng nhập khách chưa dọn: route /me/claim, /me/trips trong Lambda assembly, bảng tripplanner.traveller_accounts, client Cognito EXTERNAL 'tripplanner' và các khoá TP_COGNITO_* (CONTEXT.md:544).",
+  "Cookie khách là bằng chứng duy nhất: ai dùng chung trình duyệt thì thấy và sửa được chuyến của người trước (thiết kế).",
+  "Tạo slug đại lý ở CIS chưa chặn các tên dành riêng (plan, tours, sign-in…) (CONTEXT.md:782, follow-up).",
+  "Trang 'Vai trò & quyền' (R1, bước 1) không có cột TripPlanner vì app không có vai trò; nếu thêm trang nhân viên cho TripPlanner thì phải vào ma trận đó.",
+  "Trang pháp lý vẫn là bản nháp, chờ luật sư; khoá Mapbox chưa giới hạn theo URL (Known gaps)."
+ ]
+}

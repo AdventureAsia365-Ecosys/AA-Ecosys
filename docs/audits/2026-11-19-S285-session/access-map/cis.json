@@ -1,0 +1,1915 @@
+{
+ "app": "cis",
+ "name": "AA-CIS (staff admin)",
+ "host": "https://aa-cis.lumiguides.it.com",
+ "signin": "Nhân viên AA đăng nhập Cognito WORKFORCE (trang staff-auth, mã gửi e-mail, chỉ địa chỉ @adventure.asia). Vai trò = nhóm cis-<vai trò> cao nhất trong token; mỗi người 1 vai trò CIS. Form mật khẩu cũ chỉ hiện khi bật cờ LEGACY_ADMIN_LOGIN_ENABLED và không được sửa nhân viên. CIS không còn phục vụ đại lý: /portal chuyển sang AA-Partner (portal.).",
+ "signin_evidence": "apps/AA-CIS-App/api/core/staff_identity.py:18-21,103-112; apps/AA-CIS-App/api/services/staff_directory.py:18-25; apps/AA-CIS-App/frontend/app/login/LoginForm.tsx:4; apps/AA-CIS-App/frontend/lib/rbac.ts:72-73",
+ "roles": [
+  {
+   "code": "owner",
+   "label": "Chủ nền tảng (cờ owner, không phải vai trò)",
+   "who": "tech lead (admin có cờ is_owner)",
+   "summary": "Admin có cờ owner: là người duy nhất tạo nhân viên và gán vai trò cho cả 3 app; luôn giữ ít nhất 1 owner",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:220-227; apps/AA-CIS-App/api/services/staff_directory.py:57-63"
+  },
+  {
+   "code": "admin",
+   "label": "Administrator",
+   "who": "tech lead; tài khoản E2E admin chỉ Dev (chỉ đọc trừ danh sách ngoại lệ)",
+   "summary": "Toàn quyền CIS: danh mục, đại lý, AI & chi phí, jobs, cài đặt hệ thống",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:164-172; apps/AA-CIS-App/api/core/staff_identity.py:37-46"
+  },
+  {
+   "code": "content_lead",
+   "label": "Content Lead",
+   "who": "trưởng nhóm nội dung (chưa có tài khoản E2E riêng)",
+   "summary": "Làm và quản lý danh mục AA: vòng đời tour, atom, ảnh, wave, kiểm nội dung đại lý, giá tham chiếu",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:174-178"
+  },
+  {
+   "code": "content",
+   "label": "Content Team",
+   "who": "nhân viên nội dung; tài khoản E2E content (thử đăng nhập bằng mã e-mail)",
+   "summary": "Tải tour, chạy S1, sửa bản viết, duyệt Review Queue; không vòng đời tour, atom, ảnh, đại lý",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:180; apps/AA-CIS-App/api/services/staff_directory.py:18-19"
+  },
+  {
+   "code": "tenant_qa",
+   "label": "Tenant Content QA",
+   "who": "người kiểm nội dung đại lý",
+   "summary": "Sửa câu, gắn nhãn, thả/gỡ bài của đại lý, dữ kiện và thẻ địa điểm; đọc danh mục AA",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:182-183"
+  },
+  {
+   "code": "customer_success",
+   "label": "Customer Success",
+   "who": "đội chăm sóc khách / đội nhập giá (preset 'Pricing team'); tài khoản E2E CS chỉ Dev, chỉ đọc",
+   "summary": "Chăm sóc các đại lý trong sổ mình: cấu hình, thành viên, add-on, xem như đại lý; nhập giá tham chiếu",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:188-191; apps/AA-CIS-App/api/services/staff_directory.py:128-146"
+  },
+  {
+   "code": "support",
+   "label": "Support",
+   "who": "nhân viên hỗ trợ",
+   "summary": "Xem đại lý trong sổ mình + pool, gửi lại lời mời, xem như đại lý; không tiền, không sửa",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:196"
+  },
+  {
+   "code": "finance",
+   "label": "Finance",
+   "who": "kế toán",
+   "summary": "Xem gói và tiền của mọi đại lý, đổi gói / tạm ngưng vì nợ, xem chi phí AI",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:198"
+  },
+  {
+   "code": "ai_ops",
+   "label": "AI Operations",
+   "who": "người vận hành AI",
+   "summary": "Cấu hình AI gateway, trần chi tiêu, Writing memory; đọc chữ đại lý trong Lab có ghi log từng lần",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:201-204"
+  },
+  {
+   "code": "viewer",
+   "label": "Viewer (chỉ đọc)",
+   "who": "tài khoản E2E UI-smoke; không gán được từ trang Staff",
+   "summary": "Chỉ đọc các trang nội dung; mọi thao tác ghi bị từ chối",
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:205-208,218; apps/AA-CIS-App/api/services/staff_directory.py:107-112"
+  }
+ ],
+ "staff_page": {
+  "summary": "Trang Nhân viên & quyền (owner, đăng nhập Cognito) gán cho mỗi người: 1 vai trò CIS (8 vai trò, không viewer), 0–1 vai trò Booking (admin, sales, contracting, content_creator, finance), 0..n vai trò CRM (platform_admin, ops, support). Lưu DB trước, rồi đồng bộ nhóm Cognito cis-*/booking-*/crm-*; nút Sync sửa lệch. Preset 'Platform owner' (admin cả 3 app) và 'Pricing team' (CIS customer_success + Booking contracting, chỉ thêm).",
+  "evidence": "apps/AA-CIS-App/api/services/staff_directory.py:1-41,110-146,762-780"
+ },
+ "areas": [
+  {
+   "area": "Trang chủ (Home)",
+   "pages": [
+    {
+     "path": "/admin/overview",
+     "label": "Tổng quan",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:83"
+    },
+    {
+     "path": "/admin/platform/apps",
+     "label": "Sức khoẻ app",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:132"
+    },
+    {
+     "path": "/admin/reports",
+     "label": "Báo cáo (chạy ngay)",
+     "access": {
+      "admin": "write",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:85; apps/AA-CIS-App/api/core/staff_authz.py:645"
+    },
+    {
+     "path": "/admin/data-coverage",
+     "label": "Độ phủ dữ liệu",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:84"
+    }
+   ]
+  },
+  {
+   "area": "Đại lý (Tenants)",
+   "pages": [
+    {
+     "path": "/admin/tenants",
+     "label": "Danh bạ đại lý (lọc theo sổ của mình)",
+     "access": {
+      "admin": "write",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "read",
+      "support": "read",
+      "finance": "read",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:99; apps/AA-CIS-App/api/core/staff_authz.py:403"
+    },
+    {
+     "path": "/admin/tenants/[id]",
+     "label": "Tenant 360 (một đại lý)",
+     "access": {
+      "admin": "write",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "write",
+      "support": "read",
+      "finance": "write",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:99; apps/AA-CIS-App/api/core/staff_authz.py:432-445"
+    },
+    {
+     "path": "/admin/tenants/assignments",
+     "label": "Phân công phụ trách đại lý",
+     "access": {
+      "admin": "write",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "read",
+      "support": "read",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:97; apps/AA-CIS-App/api/core/staff_authz.py:486"
+    },
+    {
+     "path": "/admin/tenants/agencies",
+     "label": "Đại lý CRM",
+     "access": {
+      "admin": "write",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "read",
+      "support": "read",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:92; apps/AA-CIS-App/api/core/staff_authz.py:695-713"
+    },
+    {
+     "path": "/admin/tenants/view-as",
+     "label": "Xem như đại lý (chỉ đọc, ≤ 60 phút)",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "read",
+      "support": "read",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:98; apps/AA-CIS-App/api/core/staff_authz.py:494"
+    },
+    {
+     "path": "/admin/tenants/data-erasure",
+     "label": "Xoá dữ liệu đại lý",
+     "access": {
+      "admin": "write",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:93; apps/AA-CIS-App/api/core/staff_authz.py:387"
+    },
+    {
+     "path": "/admin/tenants/plans",
+     "label": "Gói & add-on",
+     "access": {
+      "admin": "write",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "read",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:94; apps/AA-CIS-App/api/core/staff_authz.py:423"
+    }
+   ]
+  },
+  {
+   "area": "Danh mục AA (AA Catalogue)",
+   "pages": [
+    {
+     "path": "/admin/upload",
+     "label": "Tải tour lên (S0)",
+     "access": {
+      "admin": "write",
+      "content_lead": "write",
+      "content": "write",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:134; apps/AA-CIS-App/api/core/staff_authz.py:500"
+    },
+    {
+     "path": "/admin/s1-rewrite",
+     "label": "Viết lại (S1)",
+     "access": {
+      "admin": "write",
+      "content_lead": "write",
+      "content": "write",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:135; apps/AA-CIS-App/api/core/staff_authz.py:506-509"
+    },
+    {
+     "path": "/admin/review",
+     "label": "Hàng duyệt (Review Queue)",
+     "access": {
+      "admin": "write",
+      "content_lead": "write",
+      "content": "write",
+      "tenant_qa": "read",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "read",
+      "viewer": "read"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:138; apps/AA-CIS-App/api/core/staff_authz.py:511"
+    },
+    {
+     "path": "/admin/master-content",
+     "label": "Nội dung gốc (Master Content)",
+     "access": {
+      "admin": "write",
+      "content_lead": "write",
+      "content": "write",
+      "tenant_qa": "read",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "read",
+      "viewer": "read"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:137; apps/AA-CIS-App/api/core/staff_authz.py:451-461,519-521"
+    },
+    {
+     "path": "/admin/atom-curation",
+     "label": "Atom & tuyến",
+     "access": {
+      "admin": "write",
+      "content_lead": "write",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:114; apps/AA-CIS-App/api/core/staff_authz.py:538"
+    },
+    {
+     "path": "/admin/places",
+     "label": "Địa điểm (sửa bản đồ)",
+     "access": {
+      "admin": "write",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:112; apps/AA-CIS-App/api/core/staff_authz.py:613-625"
+    },
+    {
+     "path": "/admin/places/cards",
+     "label": "Thẻ địa điểm",
+     "access": {
+      "admin": "write",
+      "content_lead": "write",
+      "content": "none",
+      "tenant_qa": "write",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:111; apps/AA-CIS-App/api/core/staff_authz.py:581"
+    },
+    {
+     "path": "/admin/photos",
+     "label": "Ảnh",
+     "access": {
+      "admin": "write",
+      "content_lead": "write",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:107; apps/AA-CIS-App/api/core/staff_authz.py:607-611"
+    },
+    {
+     "path": "/admin/facts",
+     "label": "Dữ kiện (Facts)",
+     "access": {
+      "admin": "write",
+      "content_lead": "write",
+      "content": "read",
+      "tenant_qa": "write",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "read",
+      "viewer": "read"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:149; apps/AA-CIS-App/api/core/staff_authz.py:587"
+    },
+    {
+     "path": "/admin/reference-prices",
+     "label": "Giá tham chiếu",
+     "access": {
+      "admin": "write",
+      "content_lead": "write",
+      "content": "read",
+      "tenant_qa": "none",
+      "customer_success": "write",
+      "support": "none",
+      "finance": "read",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:43-46,152; apps/AA-CIS-App/api/core/staff_authz.py:595-599"
+    },
+    {
+     "path": "/admin/supply-content",
+     "label": "Nội dung dịch vụ Booking (Supply copy)",
+     "access": {
+      "admin": "write",
+      "content_lead": "write",
+      "content": "write",
+      "tenant_qa": "read",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "read",
+      "viewer": "read"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:146; apps/AA-CIS-App/api/core/staff_authz.py:820-821"
+    },
+    {
+     "path": "/admin/aa-content",
+     "label": "Nội dung AA cho CRM",
+     "access": {
+      "admin": "write",
+      "content_lead": "write",
+      "content": "write",
+      "tenant_qa": "read",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "read",
+      "viewer": "read"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:142; apps/AA-CIS-App/api/core/staff_authz.py:727-730"
+    },
+    {
+     "path": "/admin/seo-intelligence",
+     "label": "SEO Intelligence",
+     "access": {
+      "admin": "write",
+      "content_lead": "read",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:113; apps/AA-CIS-App/api/core/staff_authz.py:627"
+    },
+    {
+     "path": "/admin/settings",
+     "label": "Cài đặt danh mục (thương hiệu, SEO)",
+     "access": {
+      "admin": "write",
+      "content_lead": "write",
+      "content": "read",
+      "tenant_qa": "read",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "read",
+      "viewer": "read"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:139; apps/AA-CIS-App/api/core/staff_authz.py:396,525"
+    }
+   ]
+  },
+  {
+   "area": "Kiểm nội dung đại lý (Tenant content QA)",
+   "pages": [
+    {
+     "path": "/admin/tenant-qa/quality",
+     "label": "Chất lượng nội dung",
+     "access": {
+      "admin": "write",
+      "content_lead": "write",
+      "content": "none",
+      "tenant_qa": "write",
+      "customer_success": "read",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:120; apps/AA-CIS-App/api/core/staff_authz.py:574"
+    },
+    {
+     "path": "/admin/tenant-qa/trace",
+     "label": "Content Trace",
+     "access": {
+      "admin": "read",
+      "content_lead": "read",
+      "content": "none",
+      "tenant_qa": "read",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:121"
+    },
+    {
+     "path": "/admin/tenant-qa/review-log",
+     "label": "Nhật ký duyệt / xuất bản",
+     "access": {
+      "admin": "write",
+      "content_lead": "write",
+      "content": "none",
+      "tenant_qa": "write",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:121; apps/AA-CIS-App/api/core/staff_authz.py:545"
+    },
+    {
+     "path": "/admin/tenant-qa/slate",
+     "label": "Slate",
+     "access": {
+      "admin": "read",
+      "content_lead": "read",
+      "content": "none",
+      "tenant_qa": "read",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:121"
+    },
+    {
+     "path": "/admin/tenant-qa/compliance",
+     "label": "Tuân thủ (bài bị giữ)",
+     "access": {
+      "admin": "write",
+      "content_lead": "write",
+      "content": "none",
+      "tenant_qa": "write",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:121; apps/AA-CIS-App/api/core/staff_authz.py:569"
+    }
+   ]
+  },
+  {
+   "area": "AI & chi phí",
+   "pages": [
+    {
+     "path": "/admin/ai-gateway",
+     "label": "AI gateway",
+     "access": {
+      "admin": "write",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "read",
+      "ai_ops": "write",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:100; apps/AA-CIS-App/api/core/staff_authz.py:278-372"
+    },
+    {
+     "path": "/admin/spend",
+     "label": "Chi tiêu (trần, ngân sách)",
+     "access": {
+      "admin": "write",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "read",
+      "ai_ops": "write",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:103; apps/AA-CIS-App/api/core/staff_authz.py:314"
+    },
+    {
+     "path": "/admin/usage",
+     "label": "Khám phá mức dùng",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "read",
+      "ai_ops": "read",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:104; apps/AA-CIS-App/api/core/staff_authz.py:341-347"
+    }
+   ]
+  },
+  {
+   "area": "Writing Lab",
+   "pages": [
+    {
+     "path": "/admin/lab",
+     "label": "Các stage (chỉ đọc)",
+     "access": {
+      "admin": "read",
+      "content_lead": "read",
+      "content": "none",
+      "tenant_qa": "read",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "read",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:34,124"
+    },
+    {
+     "path": "/admin/lab/writing-memory",
+     "label": "Writing memory (luật, release)",
+     "access": {
+      "admin": "write",
+      "content_lead": "read",
+      "content": "none",
+      "tenant_qa": "read",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "write",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:124,220; apps/AA-CIS-App/api/core/staff_authz.py:746-806"
+    },
+    {
+     "path": "/admin/decisions",
+     "label": "Jev Decisions",
+     "access": {
+      "admin": "write",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:106; apps/AA-CIS-App/api/core/staff_authz.py:390-394"
+    }
+   ]
+  },
+  {
+   "area": "Giao dịch (Trade, mở sang Booking)",
+   "pages": [
+    {
+     "path": "booking:/",
+     "label": "Booking admin, Agency billing, Agency tiers, B2B desk (link sang Booking; Booking tự kiểm quyền)",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "read",
+      "support": "none",
+      "finance": "read",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/adminIa.ts:53-55,128-134; apps/AA-CIS-App/frontend/lib/rbac.ts:167-172"
+    }
+   ]
+  },
+  {
+   "area": "Nền tảng (Platform)",
+   "pages": [
+    {
+     "path": "/admin/platform",
+     "label": "Trang Platform",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:132"
+    },
+    {
+     "path": "/admin/platform/staff",
+     "label": "Nhân viên & quyền (gán vai trò CIS/Booking/CRM)",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none",
+      "owner": "write"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:132,402-404; apps/AA-CIS-App/api/core/staff_authz.py:661-668"
+    },
+    {
+     "path": "/admin/platform/staff/[id]",
+     "label": "Hồ sơ một nhân viên",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none",
+      "owner": "write"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:132; apps/AA-CIS-App/api/core/staff_authz.py:659-668"
+    },
+    {
+     "path": "/admin/platform/audit",
+     "label": "Nhật ký audit",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:132"
+    },
+    {
+     "path": "/admin/jobs",
+     "label": "Jobs (huỷ, chạy lại)",
+     "access": {
+      "admin": "write",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:105; apps/AA-CIS-App/api/core/staff_authz.py:374-384"
+    },
+    {
+     "path": "/admin/platform/alerts",
+     "label": "Người nhận cảnh báo",
+     "access": {
+      "admin": "write",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:132; apps/AA-CIS-App/api/core/staff_authz.py:718-723"
+    },
+    {
+     "path": "/admin/platform/settings",
+     "label": "Cài đặt hệ thống (đề xuất / duyệt)",
+     "access": {
+      "admin": "write",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:132,233,243; apps/AA-CIS-App/api/core/staff_authz.py:602-604"
+    },
+    {
+     "path": "/admin/platform/infra",
+     "label": "Giới hạn hạ tầng",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:132"
+    },
+    {
+     "path": "/admin/platform/delivery",
+     "label": "Delivery",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:132"
+    },
+    {
+     "path": "/admin/platform/catalogue",
+     "label": "Bản đồ sản phẩm",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:132"
+    },
+    {
+     "path": "/admin/platform/ui-kit",
+     "label": "UI kit",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:132"
+    },
+    {
+     "path": "/admin/api-docs",
+     "label": "API Docs",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:125"
+    },
+    {
+     "path": "/admin/data-model",
+     "label": "Mô hình dữ liệu (ERD)",
+     "access": {
+      "admin": "read",
+      "content_lead": "none",
+      "content": "none",
+      "tenant_qa": "none",
+      "customer_success": "none",
+      "support": "none",
+      "finance": "none",
+      "ai_ops": "none",
+      "viewer": "none"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:126"
+    },
+    {
+     "path": "/admin/docs",
+     "label": "Tài liệu (trang owner chỉ owner xem)",
+     "access": {
+      "admin": "read",
+      "content_lead": "read",
+      "content": "read",
+      "tenant_qa": "read",
+      "customer_success": "read",
+      "support": "read",
+      "finance": "read",
+      "ai_ops": "read",
+      "viewer": "read"
+     },
+     "evidence": "apps/AA-CIS-App/frontend/lib/rbac.ts:129; apps/AA-CIS-App/api/core/staff_authz.py:210"
+    }
+   ]
+  }
+ ],
+ "actions": [
+  {
+   "area": "Danh mục AA",
+   "action": "Tải file tour lên (S0)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "yes",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:500-504"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Chạy viết lại S1 cho 1 tour (tốn tiền AI)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "yes",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:506-507"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Chạy S1 hàng loạt và SEO prefetch (tốn tiền AI)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "yes",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:508-509"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Duyệt / từ chối / bỏ qua bài trong Review Queue",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "yes",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:511-516"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Sửa bản viết, sửa dữ liệu thô, đổi nước của tour",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "yes",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:517-520"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Đưa một phiên bản tour lên làm bản chính (promote)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "yes",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:521"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Bỏ tour vào thùng rác / khôi phục",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "yes",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:461-462"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Bật / tắt / đổi trạng thái tour gốc (vòng đời Master)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:451-455"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Xuất bản trang chuyến (trip page)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:655"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Tách atom, sửa atom",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:538-539"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Đồng bộ ảnh từ Drive, gán ảnh cho tour/địa điểm",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:607-611"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Sửa bản đồ địa điểm (gộp trùng, vùng, chuyển chỗ)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:613-625"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Dựng / gộp / sửa thẻ địa điểm",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "no",
+    "tenant_qa": "yes",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:581-585"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Thêm / sửa / xoá dữ kiện (Facts)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "no",
+    "tenant_qa": "yes",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:587-589"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Sửa / nhập Excel giá tham chiếu",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "yes",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:595-599"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Nội dung AA cho CRM: viết nháp",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "yes",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:727-729"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Nội dung AA cho CRM: xuất bản / gỡ / khôi phục",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:730-732"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Nội dung dịch vụ Booking: viết nháp",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "yes",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:819-820"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Nội dung dịch vụ Booking: xuất bản / từ chối / gỡ",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "yes",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:821-823"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Đổi thương hiệu, cài đặt SEO, cổng chất lượng danh mục",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:396,525-532"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Chạy nghiên cứu SEO DataForSEO (tốn tiền)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:627-629"
+  },
+  {
+   "area": "Danh mục AA",
+   "action": "Tạo / dừng / chạy tiếp / đóng wave chạy lại",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:631-634"
+  },
+  {
+   "area": "Kiểm nội dung đại lý",
+   "action": "Cắt / viết lại câu, gắn nhãn nội dung của đại lý",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "no",
+    "tenant_qa": "yes",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:570-578"
+  },
+  {
+   "area": "Kiểm nội dung đại lý",
+   "action": "Thả bài bị giữ vì tuân thủ",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "no",
+    "tenant_qa": "yes",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:569"
+  },
+  {
+   "area": "Kiểm nội dung đại lý",
+   "action": "Gỡ bài đã xuất bản của đại lý (A4)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "yes",
+    "content": "no",
+    "tenant_qa": "yes",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:545"
+  },
+  {
+   "area": "Đại lý",
+   "action": "Tạo / khởi tạo đại lý mới",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:403-410"
+  },
+  {
+   "area": "Đại lý",
+   "action": "Đổi gói, tạm ngưng / mở lại đại lý (theo trường)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "yes",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:432"
+  },
+  {
+   "area": "Đại lý",
+   "action": "Sửa cấu hình và nhận diện thương hiệu của đại lý trong sổ mình",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "yes",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:441-442"
+  },
+  {
+   "area": "Đại lý",
+   "action": "Duyệt / từ chối yêu cầu mua add-on của đại lý",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "yes",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:420-421"
+  },
+  {
+   "area": "Đại lý",
+   "action": "Cho đại lý nghỉ / khôi phục / kết thúc pilot",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:443-445"
+  },
+  {
+   "area": "Đại lý",
+   "action": "Mời / đổi vai trò / gỡ thành viên Content studio (vai trò owner chỉ admin)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "yes",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:478-481"
+  },
+  {
+   "area": "Đại lý",
+   "action": "Gửi lại lời mời thành viên",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "yes",
+    "support": "yes",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:483"
+  },
+  {
+   "area": "Đại lý",
+   "action": "Phân công nhân viên phụ trách đại lý",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:486-487"
+  },
+  {
+   "area": "Đại lý",
+   "action": "Mở phiên 'xem như đại lý' (chỉ đọc, có lý do, ghi log)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "yes",
+    "support": "yes",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:494-497"
+  },
+  {
+   "area": "Đại lý",
+   "action": "Sửa danh mục gói (tạo, sửa, ngưng)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:423-425"
+  },
+  {
+   "area": "Đại lý",
+   "action": "Đại lý CRM: tạo, khoá / mở, mời owner, quyền tính năng",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:695-713"
+  },
+  {
+   "area": "Đại lý",
+   "action": "Chạy và duyệt xoá dữ liệu đại lý (cần đăng nhập Cognito)",
+   "access": {
+    "admin": "approve",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "approve"
+   },
+   "two_person": {
+    "creator": "admin",
+    "approver": "admin (đăng nhập Cognito)",
+    "rule": "Không bắt người duyệt khác người tạo yêu cầu; chỉ bắt đăng nhập Cognito, fingerprint còn mới, công tắc apply bật",
+    "evidence": "apps/AA-CIS-App/services/tenant_erasure/saga.py:355-367"
+   },
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:386-388; apps/AA-CIS-App/services/tenant_erasure/saga.py:361"
+  },
+  {
+   "area": "AI & chi phí",
+   "action": "Đổi model, tuyến dự phòng, tắt/bật stage AI",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "yes",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:278-281"
+  },
+  {
+   "area": "AI & chi phí",
+   "action": "Lưu / quay lại phiên bản route-control",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "yes",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:357-362"
+  },
+  {
+   "area": "AI & chi phí",
+   "action": "Gửi lô LLM có phí, huỷ lô",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "yes",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:337-338"
+  },
+  {
+   "area": "AI & chi phí",
+   "action": "Đặt / xoá trần chi tiêu, ngân sách AI của đại lý",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "yes",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:314-325"
+  },
+  {
+   "area": "AI & chi phí",
+   "action": "Ghi nạp tiền credit nhà cung cấp AI / Jev",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "yes",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:327-329,391-394"
+  },
+  {
+   "area": "AI & chi phí",
+   "action": "Bật / tắt AI theo từng app, reset cầu dao bất thường",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "yes",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:331-333"
+  },
+  {
+   "area": "Writing Lab",
+   "action": "Chạy đào luật Writing memory (tốn tiền)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "yes",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:746"
+  },
+  {
+   "area": "Writing Lab",
+   "action": "Duyệt / kích hoạt / rollback một release viết",
+   "access": {
+    "admin": "approve",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "approve",
+    "viewer": "no",
+    "owner": "approve"
+   },
+   "two_person": {
+    "creator": "admin, ai_ops",
+    "approver": "admin, ai_ops (một người, phải là người thật)",
+    "rule": "Một cú bấm của người thật là đủ; không bắt khác người tạo release",
+    "evidence": "apps/AA-CIS-App/services/writing_memory/releases.py:717-728"
+   },
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:758-765"
+  },
+  {
+   "area": "Writing Lab",
+   "action": "Sửa câu hỏi Jev",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "yes",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:390; apps/AA-CIS-App/frontend/lib/rbac.ts:106 (trang chỉ admin mở)"
+  },
+  {
+   "area": "Nền tảng",
+   "action": "Huỷ / chạy lại job, đặt lịch dọn",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:374-384"
+  },
+  {
+   "area": "Nền tảng",
+   "action": "Chạy báo cáo ngay",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:645-646"
+  },
+  {
+   "area": "Nền tảng",
+   "action": "Đổi người nhận cảnh báo (cần đăng nhập Cognito)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:718-723"
+  },
+  {
+   "area": "Nền tảng",
+   "action": "Đề xuất giá trị cài đặt hệ thống (ngưỡng, trần, chính sách)",
+   "access": {
+    "admin": "yes",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": {
+    "creator": "admin",
+    "approver": "admin",
+    "rule": "Công tắc cis.settings.two_person_approval mặc định TẮT: admin tự duyệt đề xuất của mình (ghi self_approved; khoá impact cao thì e-mail cho tech lead). BẬT: người duyệt phải khác người đề xuất; tắt công tắc khi đang bật cũng cần người thứ hai",
+    "evidence": "apps/AA-CIS-App/api/services/settings_registry.py:456-462; apps/AA-CIS-App/api/migrations/407_platform_settings_registry.sql:404"
+   },
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:603"
+  },
+  {
+   "area": "Nền tảng",
+   "action": "Duyệt / từ chối đề xuất cài đặt",
+   "access": {
+    "admin": "approve",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "approve"
+   },
+   "two_person": {
+    "creator": "admin",
+    "approver": "admin",
+    "rule": "Như trên: khác người đề xuất chỉ khi công tắc hai người đang bật",
+    "evidence": "apps/AA-CIS-App/api/services/settings_registry.py:456-462"
+   },
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:604"
+  },
+  {
+   "area": "Nền tảng",
+   "action": "Tạo nhân viên, gán vai trò CIS / Booking / CRM, khoá / mở, đăng xuất, đồng bộ Cognito",
+   "access": {
+    "admin": "no",
+    "content_lead": "no",
+    "content": "no",
+    "tenant_qa": "no",
+    "customer_success": "no",
+    "support": "no",
+    "finance": "no",
+    "ai_ops": "no",
+    "viewer": "no",
+    "owner": "yes"
+   },
+   "two_person": null,
+   "evidence": "apps/AA-CIS-App/api/core/staff_authz.py:227,661-668; apps/AA-CIS-App/api/services/staff_directory.py:599-608"
+  }
+ ],
+ "gaps": [
+  "D1: chưa có quyền content.publish và công tắc cis.content.publish_two_person; mọi xuất bản nội dung (Master, trip page, AA content, Supply copy, Review Queue) chỉ cần 1 người (staff_authz.py:451,511,655,730,821).",
+  "D2/D3: content vẫn tự đưa phiên bản lên bản chính (promote, :521) và chạy được S1 hàng loạt + SEO prefetch (:508-509); chưa giới hạn chạy lô cho content_lead/admin.",
+  "D4: chưa có quyền photos.upload; content không mở được trang Ảnh (rbac.ts:107).",
+  "D5: content_lead vẫn có quyền sửa giá tham chiếu (staff_authz.py:177, rbac.ts:46); quyết định là bỏ.",
+  "D6: chưa thấy bắt buộc TOTP cho admin có cờ owner trong code CIS (AA-1111 chưa làm).",
+  "D10: chú thích admin_facts.py:18 ghi 'admin only' nhưng thực tế admin, content_lead, tenant_qa đều ghi Facts; chưa tách loại 'mùa' chỉ admin/content_lead; giá 'từ' chưa lấy từ Booking.",
+  "D11: chưa có tài khoản E2E content_lead (A10f) để thử luồng người thứ hai.",
+  "R1: bộ quyền mỗi vai trò vẫn viết cứng trong code (staff_authz.py ROLE_PERMS :164-210, rbac.ts :340-377); chưa có trang 'Vai trò & quyền' hay vai trò tuỳ chỉnh.",
+  "R8: trang Staff vẫn cấp vai trò Booking content_creator (staff_directory.py:118).",
+  "Người duyệt: chỉ Cài đặt hệ thống có luật 'khác người đề xuất', và đang TẮT trên Dev (migration 407:404). Release Writing memory và xoá dữ liệu đại lý chỉ cần 1 người duyệt.",
+  "SEO Intelligence: content_lead mở được trang nhưng xem trước/chạy nghiên cứu cần ops.read/ops.write, chỉ admin có (staff_authz.py:627).",
+  "Jev Decisions: ai_ops có quyền ai.admin ở backend nhưng trang /admin/decisions chỉ cho admin (rbac.ts:106)."
+ ]
+}
