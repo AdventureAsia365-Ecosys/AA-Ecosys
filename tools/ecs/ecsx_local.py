@@ -42,6 +42,7 @@ HERE = Path(__file__).resolve().parent
 RUNNER = HERE / "ecsx_runner.py"
 VAR_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*=[A-Za-z0-9_.:,/@+-]*$")
 ID_RE = re.compile(r"^[A-Za-z0-9_-]+$")
+MIN_READ_CHUNK = 128  # the smallest range poll() falls back to when a read comes back unreadable
 CHUNK_RE = re.compile(
     r"ECSX_CHUNK (\d+) (\d+) (-?\d+) (run|missing|nostart|dead|rc=-?\d+) ([0-9a-f]{8}) ([A-Za-z0-9+/=]+|-)")
 # Python code run with `python3 -c "..."` inside `sh -c '...'`: no quotes, $, backslash or backtick allowed in it.
@@ -245,6 +246,12 @@ def poll(aws: Aws, run_id: str, offset: int, restart=None, sink=None) -> tuple[b
                 restart()
                 restart, nostart = None, 0
             time.sleep(2)
+            continue
+        if res is None and length > MIN_READ_CHUNK:
+            # S285: some SSM transcripts break a long ECSX_CHUNK line at the same offset on every read (AA-1138: always
+            # at byte 2048 with 1024-byte reads, fine with 512). Halve the range and read the same offset again.
+            length = max(MIN_READ_CHUNK, length // 2)
+            log(f"unreadable read at offset {offset}: reading {length}-byte ranges from here")
             continue
         if res is None or res.state == "missing":
             misses += 1
