@@ -31,12 +31,12 @@ accounts:
   - label: acc1
     name: personal account, outside the AA organization
     holds: >-
-      One Bedrock invoker role trusted by the CIS task role and a free spend alert; payer of the organization that
-      holds acc3. Nothing else
+      One Bedrock invoker role trusted by the CIS task role and, for the CRM reply drafts, the CRM task role (each
+      with its own ExternalId) and a free spend alert; payer of the organization that holds acc3. Nothing else
     chat_models: Yes, first Bedrock account while AWS blocks acc3 (since 2026-11-12)
     terraform_root: accounts/acc1-bedrock
     state: Live; the tech lead reviews it in early December
-    decision: ADR 0001a Note S278
+    decision: ADR 0001a Notes S278, S285
   - label: acc3
     name: aa-ai
     holds: Bedrock invoker role, Bedrock Batch service role, Cost Explorer reader

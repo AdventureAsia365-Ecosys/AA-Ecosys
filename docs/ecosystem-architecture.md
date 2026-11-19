@@ -78,7 +78,7 @@ with its ADR, and run `tools/docs/gen_sections.py --write`):
 |---|---|---|---|---|---|---|
 | acc4 | aa-management | AWS Organizations (OUs NonProd, Prod, Suspended) with three SCPs, the organization trail, IAM Identity Center, the organization budget and Cost Anomaly Detection. No workload | No | `accounts/management` | Live; no workload account has joined yet | ADR 0018 |
 | acc2 | aa-nonprod | Every Dev workload: VPC, RDS, ECS, Lambda, API Gateway, CloudFront, Cognito, S3, SES, Valkey; Bedrock embeddings and the CRM scrub guardrail | Fallbacks of judge and validate routes only (Nova Lite, Llama 4 Scout, Llama 4 Maverick), never a writer | `accounts/aa365` | Live; joins the AA organization when the payer moves (planned 2026-12-01) | ADR 0018, ADR 0009 decision 14 |
-| acc1 | personal account, outside the AA organization | One Bedrock invoker role trusted by the CIS task role and a free spend alert; payer of the organization that holds acc3. Nothing else | Yes, first Bedrock account while AWS blocks acc3 (since 2026-11-12) | `accounts/acc1-bedrock` | Live; the tech lead reviews it in early December | ADR 0001a Note S278 |
+| acc1 | personal account, outside the AA organization | One Bedrock invoker role trusted by the CIS task role and, for the CRM reply drafts, the CRM task role (each with its own ExternalId) and a free spend alert; payer of the organization that holds acc3. Nothing else | Yes, first Bedrock account while AWS blocks acc3 (since 2026-11-12) | `accounts/acc1-bedrock` | Live; the tech lead reviews it in early December | ADR 0001a Notes S278, S285 |
 | acc3 | aa-ai | Bedrock invoker role, Bedrock Batch service role, Cost Explorer reader | Fallback behind acc1; AWS refuses its chat models at account level since 2026-10-29 | `accounts/acc3-bedrock` | Live, refused by Bedrock | ADR 0001a |
 | aa-prod | aa-prod | Does not exist | - | none | Created by the management root when a go-live date is set | ADR 0018 decision 3 |
 
@@ -89,9 +89,10 @@ Labels only: account IDs and CLI profiles are in the account map of the onboardi
 acc1 (a personal account) was removed from the ecosystem on 2026-10-28 (AA-998,
 [ADR 0001a](adr/0001a-retire-acc1-llm-on-acc3-only.md)). Since 2026-11-11 it is the payer of acc3's organization
 (billing only), and since 2026-11-12 (S278, AA-1095, ADR 0001a Note S278) it serves the Bedrock chat models while AWS
-blocks acc3: one invoker role (Terraform root `accounts/acc1-bedrock`), trusted by the CIS task role, plus since
-2026-11-13 a free spend alert in the same root (budget and anomaly e-mails, never a stop; AA-1096, ADR 0001a Note S279);
-nothing else.
+blocks acc3: one invoker role (Terraform root `accounts/acc1-bedrock`), trusted by the CIS task role and, since
+2026-11-19, by the CRM task role for the first entry of its reply drafts (each with its own ExternalId; AA-1138, ADR
+0001a Note S285), plus since 2026-11-13 a free spend alert in the same root (budget and anomaly e-mails, never a stop;
+AA-1096, ADR 0001a Note S279); nothing else.
 Account IDs and profiles: the account map in [onboarding](onboarding.md); never in a repo page. Provider order
 of the chat models (generated, same source):
 
