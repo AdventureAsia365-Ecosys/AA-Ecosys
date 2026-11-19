@@ -83,7 +83,7 @@ the two disagree, `owners.yaml` wins and this page is fixed in the same PR train
 
 | Schema | Owner | DB owner role / runtime role(s) | What it is | Read by others |
 |---|---|---|---|---|
-| `silver_aa_internal` | AA-CIS-App | `cis_owner` / `cis_app`, `aa_app_user` | A0 raw tours, A1 rewrites (`generated_content`), `review_queue`, `seo_context`, upload staging | — |
+| `silver_aa_internal` | AA-CIS-App | `cis_owner` / `cis_app`, `aa_app_user` | A0 raw tours and their edit history (`raw_tour_revision`, AA-1146 CIS 457: append-only, `cis_app` SELECT, INSERT), A1 rewrites (`generated_content`, human draft versions since CIS 457), `review_queue`, `seo_context`, upload staging | — |
 | `gold_aa_internal` | AA-CIS-App | `cis_owner` / `cis_app`, `aa_app_user` | Master Content (`published_tours`), tenant tour versions, exports; AA-authored content for the CRM (CIS 275, AA-977: `aa_content_item`, `aa_content_version` with draft / published rows, published rows immutable and undeletable by trigger, view `v_aa_content_published`; `cis_app` only, no RLS, no tenant column) | None since CIS 270 (AA-712 X4; TripPlanner reads `catalog.v_tour`). The AA content is served to AA-Partner over HTTP (`catalog.http.v1` `/aa-content`, AA-977), read by CIS as `cis_app`; no grant to another app |
 | `acp_contract` | AA-CIS-App | `cis_owner` / `cis_app` | A3 platform atoms, Segments, Routes, Hubs, search demand; view `v_active_tour_atoms` | None since CIS 270 (216 revoked; 180 revoked by CIS 254) |
 | `acp_shared` | AA-CIS-App | `cis_owner` / `cis_app`, `aa_app_user` | Tenant T-series: plans, angle gate, `content_piece`, `publish_log`, quota, audit | — |
