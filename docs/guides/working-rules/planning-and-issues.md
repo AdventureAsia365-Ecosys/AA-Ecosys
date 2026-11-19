@@ -53,6 +53,30 @@ class, dependencies, docs impact and cost. The full checklist is the
 [Definition of Ready template](../../templates/definition-of-ready.md). If the work outgrows its appetite, stop and
 cut or split it; do not carry on.
 
+## Specs
+
+A spec is the agreed requirement list of one issue, in Kiro's format, in the repo that owns the work:
+`.kiro/specs/AA-<n>-<slug>/` (work across repos: the root repo, each task naming its repo). Templates are in
+`skill/aa-linear-issue/templates/spec/`; `tools/spec/trace_check.py` holds the format rules and checks them.
+
+- **A spec by risk.** A feature spec (requirements, design, tasks) for an issue with a migration or schema change,
+  auth or permissions, or work across repos; a quick spec (requirements, tasks) for an ordinary issue; a bugfix spec
+  (current, expected and unchanged behaviour, tasks) for a bug; no spec for a small chore.
+- **Requirements** are EARS criteria with ids (`R1.1 WHEN ... THE SYSTEM SHALL ...`), each with a Verify line that
+  names a test or a live step. **Tasks** (`T1 ...`) name the requirements they deliver; a task is done, carried to
+  another issue with a reason, or dropped with a reason.
+- **Approval.** Confirming the session issue list approves the requirements of their specs. The tech lead approves
+  separately only the design decisions the agent flags as hard to reverse (boundaries, grants, data deletion,
+  ADR-level), on the session decision page. Tasks are not approved.
+- **Linear keeps the problem and scope.** An issue with a spec lists the requirement ids and the spec path as its
+  Done-when lines, never a second copy of the criteria. A criterion changed after the work started keeps its id with
+  an "amended" note, a Changed line in the implementation note and a Linear comment.
+- **A spec freezes when implemented.** After its last PR merges it is a record of what was agreed, archived at the
+  session close; later behaviour changes get a new spec that names the one it supersedes. The current truth stays in
+  CONTEXT.md and the generated docs blocks.
+- **The Spec trace check** runs on every root PR (application repos next) and fails only when the PR's issue has a
+  spec that breaks the rules.
+
 ## Keeping the free plan
 
 Linear runs on the free plan, which caps the open issues of the workspace, and it is not upgraded.

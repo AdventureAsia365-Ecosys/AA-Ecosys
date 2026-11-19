@@ -5,7 +5,8 @@
 #   - .github/workflows/docs-lint.yml : lint-tool unit tests, front-matter, PRD refs, ADR index, single-line AWS CLI,
 #     alarm runbook links, literal resource IDs (warn-only), generated docs blocks and the doc map (AA-1132), the
 #     backtick names (Terraform addresses fail, the rest warn) and the new audit images gate (AA-1132 A7, A9), plus the
-#     docs impact of the change (warn only, AA-1132 A6),
+#     docs impact of the change (warn only, AA-1132 A6), the spec tools tests and the resource-ID check of
+#     .kiro/specs as an error (AA-1137),
 #     markdownlint-cli2 0.23.2, lychee offline links;
 #   - .github/workflows/contracts.yml : contract/ADR unit tests, check_contracts.py, check_adr_numbers.py;
 #   - .github/workflows/secret-scan.yml: gitleaks on the pushed commits, only when a working gitleaks is found
@@ -69,7 +70,7 @@ GITLEAKS_VERSION=8.30.1 # secret-scan.yml: GITLEAKS_IMAGE
 # so `docs/*` is `docs/**` and `.claude/*.md` is `.claude/**/*.md`.
 is_docs_lint_path() {
   case "$1" in
-    docs/*|skill/*|.kiro/steering/*|.claude/*.md|tools/docs/*|.markdownlint-cli2.jsonc|.github/workflows/docs-lint.yml) return 0 ;;
+    docs/*|skill/*|.kiro/steering/*|.kiro/specs/*|.claude/*.md|tools/docs/*|tools/spec/*|.markdownlint-cli2.jsonc|.github/workflows/docs-lint.yml) return 0 ;;
   esac
   return 1
 }
@@ -98,6 +99,7 @@ plan_checks() {
     echo docs-unit
     echo frontmatter; echo prd-refs; echo adr-index; echo aws-multiline; echo alarm-runbooks; echo resource-ids
     echo gen-sections; echo doc-map; echo doc-owners; echo code-refs; echo audit-images; echo docs-impact
+    echo spec-unit; echo lane-unit; echo spec-ids
     if [ "$md" = 1 ]; then echo markdownlint; fi
     echo lychee
   fi
@@ -305,6 +307,10 @@ run_planned() {
           case "$out" in *OPEN*) echo "warn docs-impact (warn-only): pages to check for this change:"; printf '%s\n' "$out" | grep OPEN | sed 's/^/     /'; WARNED+=("$id") ;;
             *) echo "ok   docs-impact: $out" ;; esac
         else echo "skip docs-impact: base $BASE not found"; SKIPPED+=("$id"); fi ;;
+      # AA-1137: the spec checker + lane.js tests, and no resource ID in a spec (error, specs ship in public repos)
+      spec-unit) run_check "$id" "docs-lint.yml: Spec tools tests" - "$PY" -m unittest discover -s tools/spec -p 'test_*.py' ;;
+      lane-unit) run_check "$id" "docs-lint.yml: Spec tools tests" bin:node node --test tools/workflows/test_lane.cjs ;;
+      spec-ids) run_check "$id" "docs-lint.yml: Spec files carry no resource ID" - "$PY" tools/docs/check_docs_text.py resource-ids --mode error --scope .kiro/specs ;;
       resource-ids)
         # warn-only in CI too: print a one-line count, never fail
         out=$("$PY" tools/docs/check_docs_text.py resource-ids --mode warn 2>&1 | tail -1) || true
@@ -350,7 +356,7 @@ self_test() {
     got=$(printf '%s\n' "$@" | plan_checks "$mode" "$ci" | tr '\n' ' ' | sed 's/ $//')
     if [ "$got" = "$want" ]; then ok "$name"; else bad "$name"; echo "     want: $want"; echo "     got:  $got"; fi
   }
-  local DOCS="docs-unit frontmatter prd-refs adr-index aws-multiline alarm-runbooks resource-ids gen-sections doc-map doc-owners code-refs audit-images docs-impact"
+  local DOCS="docs-unit frontmatter prd-refs adr-index aws-multiline alarm-runbooks resource-ids gen-sections doc-map doc-owners code-refs audit-images docs-impact spec-unit lane-unit spec-ids"
   local CONTRACTS="contracts-unit adr-unit contracts adr-numbers"
   local ALL="$DOCS markdownlint lychee $CONTRACTS"
   # check selection
@@ -369,6 +375,8 @@ self_test() {
   expect "non-ASCII ADR name"             fast 0 "$DOCS markdownlint lychee $CONTRACTS gitleaks" "docs/adr/0099-quyết-định.md"
   expect "name with spaces"               fast 0 "$DOCS markdownlint lychee gitleaks" "docs/audits/a b/report c.md"
   expect "docs tool"                      fast 0 "$DOCS lychee gitleaks" tools/docs/docslib.py
+  expect "spec folder"                    fast 0 "$DOCS lychee gitleaks" .kiro/specs/AA-1137-spec-trace/tasks.md
+  expect "spec tool"                      fast 0 "$DOCS lychee gitleaks" tools/spec/trace_check.py
   expect "adr tool"                       fast 0 "$CONTRACTS gitleaks" tools/adr/check_adr_numbers.py
   expect "contracts tool"                 fast 0 "$CONTRACTS gitleaks" tools/contracts/check_contracts.py
   expect "contracts workflow"             fast 0 "$CONTRACTS gitleaks" .github/workflows/contracts.yml
