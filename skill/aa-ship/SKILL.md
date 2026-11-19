@@ -46,6 +46,9 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 - [ ] **Gate mọi check:** chỉ merge khi không còn check nào đỏ hoặc pending trong `gh pr checks <n>` (đọc đủ, không chỉ
   `--required`; Infra và repo gốc không có required check) — `ship_merge.py` làm đúng việc này. Có gì push vào PR (bot, restack, release-please) → gate lại,
   lần xanh trước không còn tính. `Deploy Admin Dev` (ECS) + UI smoke sau deploy → PR frontend kiểm thêm `aa-ui-verify`.
+- [ ] **Repo gọn (AA-1161):** `tools/repo/lean_guard.py` (pre-push + CI, 6 repo) chặn ảnh > 500 KiB, ảnh > 10 MiB mỗi
+  PR, `dist/**/*.zip`, file thực thi ELF/Mach-O/PE, file > 5 MiB ngoài `.lean-allow` (có lý do). Nén trước:
+  `apps/AA-CIS-App/.venv/bin/python tools/docs/compress_images.py <file|thư mục>`; bộ ảnh đầy đủ/video → Drive hoặc S3 `audit-assets/`, build artifact → CI/Terraform.
 - [ ] Test xanh local, đỏ CI → so package đã cài (`pip list` local vs CI/image) trước khi sửa code.
 - [ ] Khẳng định "check xanh khi khớp / đỏ khi lệch" → chứng minh bằng nhánh thử hoặc draft PR có cài sẵn chỗ lệch rồi
   đóng không merge; không merge thứ sai để thử.

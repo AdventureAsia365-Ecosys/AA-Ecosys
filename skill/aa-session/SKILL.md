@@ -185,6 +185,9 @@ Log ghi sau cùng nên có cả kết quả Jira và số liệu đã kiểm, kh
    Ngoại lệ: tách phiên trong **cùng ngày** → draft gom sang phiên sau, ghi rõ trong log.
 5. **Rồi mới ghi**, tất cả từ snapshot (bước 2) + kết quả Jira (bước 4):
    - **Series nội dung riêng tư:** log, snapshot, backlog, tracker và memory ghi vào repo public chỉ nêu mã issue của series (vd. "AA-1021 (content series, details private)"), không tả tên, tập, kịch bản, giọng, nền tảng đăng; chi tiết để thư mục riêng / Drive.
+   - **Ảnh trong root PR (AA-1161):** tối đa ~5–10 ảnh chính, đã nén (`tools/docs/compress_images.py`, ≤ 500 KiB/ảnh,
+     ≤ ~10 MiB cả PR — lean guard chặn ở pre-push + CI); bộ đầy đủ/video lên S3 `audit-assets/<thư mục phiên>/` hoặc Drive,
+     link trong `ASSETS.md`. Không commit build artifact hay binary.
    - **Log local** `docs/sessions/<yyyy-mm-dd>-S<nnn>-<slug>.md` (ghi rõ tác nhân) + index `docs/sessions/README.md`
      (có mục Jira: đã đăng / chờ).
    - **Session block** prepend vào đầu Notion `memory.md` HOT, đúng format:
