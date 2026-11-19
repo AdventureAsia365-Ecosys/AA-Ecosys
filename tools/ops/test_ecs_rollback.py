@@ -272,6 +272,28 @@ class EcsRollbackTest(unittest.TestCase):
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         self.assertIn("https://tripplanner.lumiguides.it.com/api/health git_sha=" + SHA_A, r.stdout)
 
+    def test_staff_admin_frontends_check_their_healthz_sha(self):
+        # AA-1134: the CIS and Booking staff admins run on ECS (AA-911); /api/healthz answers {status, app, sha}.
+        cases = (
+            ("aa-cis-dev-admin", f"dev-{SHA_B}", f"dev-{SHA_A}", "https://aa-cis.lumiguides.it.com/api/healthz"),
+            ("aa-booking-dev-admin", SHA_B, SHA_A, "https://booking.lumiguides.it.com/api/healthz"),
+        )
+        for fam, running_tag, target_tag, health in cases:
+            with self.subTest(fam):
+                state = {"fam": fam, "running": 21, "health_field": "sha", "revs": {
+                    "21": {"image": f"{REGISTRY}/{fam}:{running_tag}"},
+                    "20": {"image": f"{REGISTRY}/{fam}:{target_tag}"}}}
+                r, calls, _ = self.run_tool(state, fam, "--previous")
+                self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+                self.assertIn(f"target:   {fam}:20  image tag {target_tag}", r.stdout)
+                self.assertIn(f"curl -s {health}   (expect sha starting with {SHA_A})", r.stdout)
+                self.assertNotIn("CIS api and worker must run the same image", r.stdout)
+                self.assertNotIn("update-service", calls)
+                r, _, after = self.run_tool(state, fam, "--previous", "--apply")
+                self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+                self.assertEqual(after["running"], 20)
+                self.assertIn(f"health:   {health} sha={SHA_A}", r.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

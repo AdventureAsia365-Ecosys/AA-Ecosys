@@ -16,7 +16,8 @@ For each of the 6 repos:
     on pull request / merge-queue refs).
   * WL7 (warn, root ADR 0021 decision 4): an actions/upload-artifact step without `retention-days`, or with more than
     14 days and no `# retention: <why>` comment in the step (or the comment lines right above it).
-  * The organisation's public repositories against the known list (REPOS): a new or unknown public repository is a
+  * The organisation's public repositories against the known list (KNOWN_PUBLIC: REPOS plus the public
+    repositories meant to stay that are not scanned per repo): a new or unknown public repository is a
     finding (ADR 0021 decision 2.1: on the Free plan members can still create public repositories).
   * WL8 (RED, ADR 0021 decision 2.3): every third-party `uses:` of the workflows and composite actions, and every
     `uses:` inside a third-party composite action they call (read at the pinned SHA, followed 3 levels deep), against
@@ -52,6 +53,10 @@ import yaml
 
 ORG = "AdventureAsia365-Ecosys"
 REPOS = ("AA-Ecosys", "AA-CIS-App", "AA-Booking", "AA-Partner", "AA-TripPlanner-Web", "AA-CIS-Infra")
+# Public repositories meant to stay that are NOT scanned per repo (caches, PRs, workflows): the org check alone reads
+# this. project-template (AA-1134): the public project kit template. Kept out of REPOS because the ci-bot token of
+# ci-hygiene.yml is scoped to REPOS; scanning a repo outside that scope reads as a standing permission finding.
+KNOWN_PUBLIC = (*REPOS, "project-template")
 LOCAL_DIRS = {"AA-Ecosys": ".", "AA-CIS-App": "apps/AA-CIS-App", "AA-Booking": "apps/AA-Booking",
               "AA-Partner": "apps/AA-Partner", "AA-TripPlanner-Web": "apps/AA-TripPlanner-Web",
               "AA-CIS-Infra": "infra/AA-CIS-Infra"}
@@ -326,7 +331,7 @@ def org_repos(run=subprocess.run) -> list[dict]:
     return [json.loads(line) for line in out.splitlines() if line.strip()]
 
 
-def unknown_public(repos: list[dict], known=REPOS) -> list[str]:
+def unknown_public(repos: list[dict], known=KNOWN_PUBLIC) -> list[str]:
     return sorted(r["name"] for r in repos if r.get("visibility") == "public" and r.get("name") not in known)
 
 

@@ -41,8 +41,8 @@ AA-993 G5 a busy queue no longer blocks a deploy: only an open rerun wave or a d
 - CIS: one table `shared.job`, worker service `aa-cis-dev-worker` (the api runs no worker loop). Kinds, concurrency and
   expected times: [job-kind register](../job-kinds.md). Statuses: `queued`, `running`, `succeeded`, `failed`,
   `stopped_budget`, `cancelled`.
-- Booking: `booking.job`, worker inside the api process (on by default on Dev); `bk_inquiry_pull` is always queued by
-  design.
+- Booking: `booking.job`, worker inside the api process (on by default on Dev); no kind is always queued (the B2C
+  intake pull was retired, AA-1046, and left the exempt lists in AA-1134).
 - Partner CRM: `crm.job`, worker inside the `aa-crm-dev-api` process. `crm_heartbeat`, `crm_membership_pull` and
   `crm_booking_sync` are recurring, so one row of each is always queued. The CIS admin reads per-kind counts through
   the CRM ops contract (`GET /crm/ops/v1/jobs/summary`); one agency's failed jobs are listed and retried through

@@ -13,6 +13,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from unittest import mock
 
+import yaml
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import ci_hygiene as h  # noqa: E402
 
@@ -166,6 +168,20 @@ class Collect(unittest.TestCase):
             row = h.collect("AA-Booking", warn_gb=8, local_root=Path(tmp), run=FakeGh(), now=NOW, log=lambda m: None)
         self.assertEqual(row["files"], 1)
         self.assertEqual(len(row["wl5"]), 1)
+
+    def test_project_template_is_known_public_but_not_scanned(self):
+        # AA-1134: the public project kit template is meant to stay. It is known to the org check only: the ci-bot
+        # token of ci-hygiene.yml is scoped to REPOS, so scanning it would read as a permission finding every day.
+        self.assertNotIn("project-template", h.REPOS)
+        self.assertIn("project-template", h.KNOWN_PUBLIC)
+        self.assertTrue(set(h.REPOS) <= set(h.KNOWN_PUBLIC))
+        self.assertEqual(h.unknown_public([{"name": "project-template", "visibility": "public"}]), [])
+        self.assertEqual(h.unknown_public([{"name": "scratch-demo", "visibility": "public"}]), ["scratch-demo"])
+
+    def test_workflow_token_scope_matches_repos(self):
+        # The ci-bot token of ci-hygiene.yml covers exactly the scanned repos (a repo outside it reads as 403).
+        wf = yaml.safe_load((Path(__file__).resolve().parents[2] / ".github/workflows/ci-hygiene.yml").read_text())
+        self.assertEqual(tuple(wf["env"]["REPOS"].split(",")), h.REPOS)
 
 
 UPLOADS = textwrap.dedent("""

@@ -36,19 +36,39 @@ class ReportTest(unittest.TestCase):
         self.assertIn("Untagged acc2 spend 3.00 USD (DM-10.1): AWS Data Transfer.", out)
         self.assertIn("| n/a |", out)  # no previous month
 
-    def test_satellites_acc3_only_after_aa998(self):
+    def test_satellites_acc1_first_then_acc3(self):
+        # AA-1134: acc1 serves Bedrock first since AA-1095 (S278), acc3 is the fallback; both rows always shown.
         out = self.run_main("--current", str(S / "platform-cost-2099-02.json"),
                             "--previous", str(S / "platform-cost-2099-01.json"))
-        self.assertIn("| acc3 (LLM satellite) | 30.00 | 18.00 | +66.7 % |", out)
-        self.assertNotIn("acc1", out)
+        self.assertIn("| acc3 (Bedrock LLM fallback) | 30.00 | 18.00 | +66.7 % |", out)
+        self.assertIn("| acc1 (Bedrock LLM, first route) | n/a | n/a | n/a | not read (no --acc1-usd", out)
+        self.assertNotIn("retired", out.lower())
+        self.assertLess(out.index("| acc1 (Bedrock LLM"), out.index("| acc3 (Bedrock LLM"))
 
-    def test_retired_acc1_row_only_when_a_month_carries_it(self):
-        self.assertEqual(m.satellite_rows({}, {}), [("acc3", "acc3 (LLM satellite)")])
-        # cost_by_app names the retired account "retired" since AA-998
+    def test_acc1_usd_fills_the_acc1_row_and_leaves_the_totals(self):
+        base = self.run_main("--current", str(S / "platform-cost-2099-02.json"),
+                             "--previous", str(S / "platform-cost-2099-01.json"))
+        out = self.run_main("--current", str(S / "platform-cost-2099-02.json"),
+                            "--previous", str(S / "platform-cost-2099-01.json"),
+                            "--acc1-usd", "12.5", "--acc1-prev-usd", "10")
+        self.assertIn("| acc1 (Bedrock LLM, first route) | 12.50 | 10.00 | +25.0 % | Bedrock from Cost Explorer;", out)
+        total = [ln for ln in base.splitlines() if ln.startswith("LLM spend by app")]
+        self.assertEqual(total, [ln for ln in out.splitlines() if ln.startswith("LLM spend by app")])
+        with self.assertRaises(SystemExit):
+            m.main(["--current", str(S / "platform-cost-2099-02.json"), "--acc1-prev-usd", "1"])
+
+    def test_satellite_rows(self):
+        both = [("acc1", "acc1 (Bedrock LLM, first route)"), ("acc3", "acc3 (Bedrock LLM fallback)")]
+        self.assertEqual(m.satellite_rows({}, {}), both)
+        # cost_by_app names the AA-998 retired account "retired"; it keeps a row while a month carries it.
         self.assertEqual(m.satellite_rows({"retired": {}}, {}),
-                         [("acc3", "acc3 (LLM satellite)"), ("retired", "Retired account (former LLM fallback)")])
-        self.assertEqual(m.satellite_rows({"acc3": {}}, {"acc1": {"ce_bedrock_usd": 0.76}}),
-                         [("acc3", "acc3 (LLM satellite)"), ("acc1", "acc1 (retired, AA-998)")])
+                         both + [("retired", "Retired account (former LLM fallback)")])
+        self.assertEqual(m.apply_acc1(None, 1.0), None)
+        cost = {"llm_satellites": {"acc1": {"ce_bedrock_usd": None, "llm_log_estimate_usd": 2.0}}}
+        got = m.apply_acc1(cost, 3.0)
+        self.assertEqual(got["llm_satellites"]["acc1"]["ce_bedrock_usd"], 3.0)
+        self.assertEqual(got["llm_satellites"]["acc1"]["llm_log_estimate_usd"], 2.0)
+        self.assertIsNone(cost["llm_satellites"]["acc1"]["ce_bedrock_usd"])  # the input is not changed
 
     def test_change(self):
         self.assertEqual(m.change(None, 1.0), ("n/a", False))

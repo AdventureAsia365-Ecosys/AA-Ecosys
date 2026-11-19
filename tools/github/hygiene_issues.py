@@ -152,8 +152,8 @@ def hygiene_findings(report: dict, *, stale_min_gb: float = 1.0, token_source: s
             "Public repository not in the known list",
             [f"**{n}** (https://github.com/{ORG}/{n})" for n in names],
             "On GitHub Free members can still create public repositories (ADR 0021 decision 2.1). The org owner checks "
-            "each one: delete it or make it private if it is a mistake; if it is meant to stay, add it to `REPOS` in "
-            "`tools/github/ci_hygiene.py` and turn on secret scanning and push protection for it.")
+            "each one: delete it or make it private if it is a mistake; if it is meant to stay, add it to `KNOWN_PUBLIC` "
+            "(or to `REPOS` and the ci-hygiene.yml token scope, to scan it too) in `tools/github/ci_hygiene.py` and turn on secret scanning and push protection for it.")
 
     blocked = [r["repo"] for r in rows if r.get("cache_error")]
     if blocked:

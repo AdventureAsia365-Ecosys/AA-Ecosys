@@ -1,7 +1,7 @@
 ---
 id: OPS-02-ecs
 title: Roll back any ECS service
-description: One parameterised procedure to point an ECS service (CIS api/worker, Booking api, CRM api, web, portal, TripPlanner web) at an earlier task-definition revision or image SHA and back, with the helper tools/ops/ecs_rollback.sh.
+description: One parameterised procedure to point an ECS service (CIS api/worker/admin, Booking api/admin, CRM api, web, portal, TripPlanner web) at an earlier task-definition revision or image SHA and back, with the helper tools/ops/ecs_rollback.sh.
 type: how-to
 status: draft
 owner: nghiep
@@ -41,7 +41,7 @@ This page is the shared procedure. The per-app pages keep their app facts:
 
 | Parameter | Values |
 |---|---|
-| `<service>` | `aa-cis-dev-api`, `aa-cis-dev-worker`, `aa-booking-dev-api`, `aa-crm-dev-api`, `aa-crm-dev-web` (CRM + Content studio; `aa-crm-dev-portal` was retired in AA-1036), `aa-tripplanner-dev-web` (the TripPlanner frontend since its Vercel retirement, AA-1038). The task-definition family has the same name. Cluster `aa-cis-dev-cluster` for all. |
+| `<service>` | `aa-cis-dev-api`, `aa-cis-dev-worker`, `aa-cis-dev-admin`, `aa-booking-dev-api`, `aa-booking-dev-admin` (the two staff admin frontends on ECS since AA-911), `aa-crm-dev-api`, `aa-crm-dev-web` (CRM + Content studio; `aa-crm-dev-portal` was retired in AA-1036), `aa-tripplanner-dev-web` (the TripPlanner frontend since its Vercel retirement, AA-1038). The task-definition family has the same name. Cluster `aa-cis-dev-cluster` for all. |
 | `<target>` | one of: `--previous` (newest older revision with a different real build), `--to <revision>`, `--to-sha <git-sha>` (full or a 7+ character prefix) |
 | `<current-revision>` | the revision the service runs now (step 1); it is the way back |
 
@@ -49,7 +49,9 @@ This page is the shared procedure. The per-app pages keep their app facts:
 |---|---|---|---|---|
 | `aa-cis-dev-api` | `dev-<sha>` | 30 | `https://api-cis.lumiguides.it.com/health` (`git_sha`) | `shared.job` (with the worker) |
 | `aa-cis-dev-worker` | `dev-<sha>` (same image as the api) | 30 | none over HTTP: log line `job_worker_started` | `shared.job` |
+| `aa-cis-dev-admin` | `dev-<sha>` | 10 | `https://aa-cis.lumiguides.it.com/api/healthz` (`sha`) | none |
 | `aa-booking-dev-api` | `<sha>` | 10 | `https://api-booking.lumiguides.it.com/booking/health` (`git_sha`) | `booking.job` (in process) |
+| `aa-booking-dev-admin` | `<sha>` | 10 | `https://booking.lumiguides.it.com/api/healthz` (`sha`) | none |
 | `aa-crm-dev-api` | `<sha>` | 10 | `https://partner-dev.lumiguides.it.com/crm/health` (`git_sha`) | `crm.job` (in process) |
 | `aa-crm-dev-web` | `<sha>` | 10 | `https://portal.lumiguides.it.com/healthz` (`git_sha`) | none |
 | `aa-tripplanner-dev-web` | `<sha>` | 10 | `https://tripplanner.lumiguides.it.com/api/health` (`git_sha`) | none |
