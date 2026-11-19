@@ -18,9 +18,10 @@ An amendment is a separate file `<nnnn>a-<slug>.md` and the amended ADR carries 
 | [0005](0005-pricing-and-supplier-rates.md) | Pricing and supplier rates | Accepted (amended by 0005a, 0005b, 0019) |
 | [0005a](0005a-b2b-resale-warn-and-vnd.md) | Amendment: B2B resale by partner agencies (warn below the "from" price, no subscription line, VND quotes) | Accepted (amended by 0005b, 0019) |
 | [0005b](0005b-price-versions.md) | Amendment: price versions: no overwrite, a second person publishes, quotes and agency tariffs pin a version id, confirmed bookings never repriced (one contract surcharge line), the travel date decides season and version; season calendars and yearly holiday events, versioned Excel, provisional prices on request only, 12 pricing policy parameters with defaults; `booking.b2b.v1` 1.9 (AA-1091; design: [S278 advisory](../audits/2026-11-12-S278-pricing-advice/README.md)) | Proposed (2026-11-12, S278; d1–d15) |
-| [0006](0006-ecosystem-identity.md) | Ecosystem identity on Amazon Cognito (staff, tenant users, travellers) | Accepted (amended by 0006a, 0006b, 0019) |
+| [0006](0006-ecosystem-identity.md) | Ecosystem identity on Amazon Cognito (staff, tenant users, travellers) | Accepted (amended by 0006a, 0006b, 0006c, 0019) |
 | [0006a](0006a-identity-phase1-amendments.md) | Amendment: identity Phase 1 as shipped (CIS staff on Cognito WORKFORCE) | Accepted |
 | [0006b](0006b-partner-pool-and-mfa.md) | Amendment: a partner pool with required MFA for agency people, and an M2M pool for service calls | Accepted (A1 S263: `AdminDeleteUser` for never-signed-in accounts) |
+| [0006c](0006c-staff-admin-mfa.md) | Amendment: administrators sign in with password + TOTP, checked by each staff API (`amr` claim, switch per app, then the staff hosts leave the WAF geo rule; AA-1111) | Accepted 19/11/2026 (S285) |
 | [0007](0007-place-pipeline-in-cis.md) | Place pipeline in CIS: `geo` schema, `catalog.*` views, background jobs | Accepted |
 | [0008](0008-new-app-integration-and-data-platform-rules.md) | New-app integration and data platform rules | Accepted (amended by 0008a) |
 | [0008a](0008a-crm-separate-app-exceptions.md) | Amendment: the partner CRM is a separate app; traveller OTP and an own LLM gateway as playbook exceptions | Accepted |
