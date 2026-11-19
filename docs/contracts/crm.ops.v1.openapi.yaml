@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: crm.ops.v1 (AA-Partner CRM → CIS admin, L1 platform console)
-  version: "1.13"
+  version: "1.16"
   description: >-
     Platform console API of the partner CRM (AA-Partner, root ADR 0010), served under /crm/ops/v1 and called by the
     CIS admin screen S-01 "Agencies (CRM)" (AA-941) and the CIS platform-ops pages (AA-936: job summary, LLM usage).
@@ -101,13 +101,21 @@ info:
     (a platform+tenant key: its AI budget ceiling, its inquiry-form quota) is written in that agency's context and writes
     one `setting_change` event in its audit, and its history read one `ops_read`. 503 `settings_unavailable` before
     crm-064.
+    Version 1.16 (AA-1143, tech lead decision G3; additive): GET and PUT /llm/connection-shares, the CRM's copy of its
+    monthly share of each LLM connection's budget. CIS holds one set of budget rows per connection (its total, one
+    share per app, CIS taking the remainder; CIS AI gateway > Budgets) and the CRM reads no CIS table (root ADR 0008a
+    §6), so CIS sends the CRM its part whole (PUT, crm-platform-admin, the staff member's own token): every CIS
+    connection that has a total, with the CRM's share or 0 (no spend there). The CRM gateway enforces it on its own
+    ledger and, for one release, falls back to the setting crm.ai.connection_monthly_cap_usd for a connection the copy
+    does not name. A platform setting: no agency audit event (CIS audits the save), no staff id returned. 503
+    `connection_shares_unavailable` before crm-079.
     Errors are
     `{detail, message?, fields?, state?, member_limit?}` (Problem); a 422 names the failing fields only, never the
     submitted values.
   x-aa-contract: crm.ops.v1
   x-aa-producer: AA-Partner
   x-aa-consumers: [AA-CIS-App]
-  x-aa-issues: [AA-928, AA-941, AA-939, AA-936, AA-933, AA-978, AA-979, AA-992, AA-966, AA-964, AA-1025, AA-1035, AA-1096]
+  x-aa-issues: [AA-928, AA-941, AA-939, AA-936, AA-933, AA-978, AA-979, AA-992, AA-966, AA-964, AA-1025, AA-1035, AA-1096, AA-1143]
 servers:
   - url: /crm/ops/v1
 security:
@@ -814,6 +822,47 @@ paths:
         "503":
           $ref: "#/components/responses/Unavailable"
           description: "`app_profile_unavailable` (crm-041 not applied)"
+  /llm/connection-shares:
+    get:
+      operationId: getLlmConnectionShares
+      summary: The CRM's copy of its LLM connection budget shares (1.16; empty = none sent yet)
+      responses:
+        "200":
+          description: The copy as CIS sent it
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/ConnectionShares"}
+        "401": {$ref: "#/components/responses/Unauthorized"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "503":
+          $ref: "#/components/responses/Unavailable"
+          description: "`connection_shares_unavailable` (crm-079 not applied)"
+    put:
+      operationId: putLlmConnectionShares
+      summary: Replace the CRM's copy of its connection shares (1.16; write, crm-platform-admin; sent by the CIS admin)
+      description: >-
+        Replaces the whole copy: a connection the body does not name is dropped (the setting then applies to it for
+        one release). Takes effect on the next AI call of any agency. No agency audit event (a platform setting); the
+        rows keep the staff actor and the reason of the CIS save, never returned.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/ConnectionSharesIn"}
+      responses:
+        "200":
+          description: Stored
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/ConnectionShares"}
+        "401": {$ref: "#/components/responses/Unauthorized"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "422":
+          $ref: "#/components/responses/Invalid"
+          description: "`invalid_request`, `invalid_connection_shares` (a bad or repeated key, an amount out of range)"
+        "503":
+          $ref: "#/components/responses/Unavailable"
+          description: "`connection_shares_unavailable` (crm-079 not applied)"
   /llm/calls:
     get:
       operationId: getLlmCalls
@@ -1409,6 +1458,30 @@ components:
           description: 0 to 100000 USD, at most 4 decimals; null = no daily budget
         degrade_mode: {type: string, enum: [manual_reply_needed], default: manual_reply_needed}
         disabled_reason: {type: [string, "null"], maxLength: 500}
+    ConnectionShare:
+      type: object
+      additionalProperties: false
+      required: [connection_key, share_usd]
+      properties:
+        connection_key: {type: string, pattern: "^[a-z0-9][a-z0-9-]{1,62}$", description: A CIS registry connection key}
+        share_usd:
+          type: string
+          pattern: "^[0-9]{1,7}(\\.[0-9]{1,2})?$"
+          description: USD per UTC calendar month the CRM may spend on the connection (every agency together)
+    ConnectionShares:
+      type: object
+      additionalProperties: false
+      required: [shares, updated_at]
+      properties:
+        shares: {type: array, items: {$ref: "#/components/schemas/ConnectionShare"}}
+        updated_at: {type: [string, "null"], format: date-time}
+    ConnectionSharesIn:
+      type: object
+      additionalProperties: false
+      required: [shares, reason]
+      properties:
+        shares: {type: array, maxItems: 200, items: {$ref: "#/components/schemas/ConnectionShare"}}
+        reason: {type: string, minLength: 20, maxLength: 500, description: The reason of the CIS budget save}
     SettingValue:
       description: >-
         A setting value, typed by its definition's value_type (number, boolean, string, list or object). An object
