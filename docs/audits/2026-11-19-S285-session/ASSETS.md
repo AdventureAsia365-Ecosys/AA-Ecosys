@@ -4,7 +4,8 @@ Only 9 key screenshots stay in this folder. The full set of 300 screenshots (22.
 the private S3 prefix `audit-assets/2026-11-19-S285-session/` of the CIS bronze bucket on acc2. The relative paths
 are the same as the links in the `.md` files of this folder. The rule comes from the tech lead's decision of S285
 (AA-1161): GitHub holds code and the text that runs or documents the system; images, videos and build files live in
-their own storage.
+their own storage. A bucket lifecycle rule (`audit-assets-expire-60d`, Infra #943) deletes these copies 60 days after
+upload (about 18/01/2027 for this session): download anything worth keeping before then.
 
 Read one (single line, AWS admin profile):
 

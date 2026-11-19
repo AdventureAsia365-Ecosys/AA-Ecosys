@@ -86,9 +86,11 @@ bước 1, AA-1121 gộp vào AA-1103; AA-1160 tạo từ quyết định E5 bu�
   nhận (E4).
 - Ứng viên T2 sinh 18/18 (0,882 USD). Tỷ lệ fire a1 đo 0,24 (0,28 USD). Judge trên nhãn 0,77 USD.
 - DRY plan: S1 5,63 USD / trần 8, power 0,964; T2 5,98 USD / trần 6,5, power 0,95.
-- Proof trả phí S1 + T2: đang chạy / chưa chạy lúc ghi log.
-
-<!-- S285-PROOFS -->
+- Proof trả phí (tech lead duyệt chạy, 19/11 ~23:00): giám khảo GPT-6 Luna qua OpenAI API (ghim theo thước đo AA-1048 v7, không tự fallback — trả lời từ đường khác bị từ chối thành dòng lỗi), bên viết Claude Sonnet 5.5 qua Anthropic API.
+  - CIS #1611 đăng ký w5-s1 / w5-t2 (status registered + lock); plan ready_for_live true, blocking [].
+  - **S1 đang chạy** lúc ghi log: job `writing_memory_r2` 4c706730 bắt đầu 16:41Z, sau 55 phút 2.304 lượt gọi, ~1,01 USD; trần cứng 7,6 USD.
+  - **T2 chưa chạy** (chạy sau khi S1 xong, trần 6,35 USD) → đầu S286: `runner report --prereg w5-s1`, rồi chạy T2.
+- Sau đó trong phiên: CIS #1612 (CIS 461) + #1613 (Cost Explorer hằng ngày + nhãn số cũ) live `2e6070a6`; Partner #367 sửa smoke, Deploy Web Dev 88db5880 xanh lại; Infra #943 quy tắc bucket `audit-assets/` tự xoá sau 60 ngày (apply 16:38Z, kiểm live); tạo AA-1161 (giữ repo gọn, guard ảnh / file build / file chạy, viết lại lịch sử khi tech lead duyệt).
 
 ## Kế hoạch lại (M-ROLES) và tư vấn
 
