@@ -541,8 +541,11 @@ components:
       properties:
         actor:
           type: string
-          pattern: "^crm-member:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-          description: The CRM owner who rotated it (recorded with the version; never a name or an e-mail).
+          pattern: "^(crm|studio)-member:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          description: >-
+            Who rotated it, recorded with the version (never a name or an e-mail): the CRM owner (crm-member:<CRM
+            member id>) or, for an agency without the CRM add-on, the Content studio owner whose membership the CRM
+            checked with CIS tenant.membership.v1 (studio-member:<membership id>).
     PlannerWebhookKeyRotated:
       type: object
       additionalProperties: false

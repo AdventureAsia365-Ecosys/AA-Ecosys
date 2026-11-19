@@ -25,4 +25,7 @@ Nguồn sự thật: `apps/AA-TripPlanner-Web/CONTEXT.md`; yêu cầu sản ph�
   `/trip/m2m/v1` cho CRM của AA-Partner: kéo lead (scope `tripplanner.leads/deliver`) và, từ 1.1 (AA-1139), module
   TripPlanner của app đại lý `.../tenants/{id}/planner/*` (`assembly/planner_admin.py`: danh sách lead + trạng thái
   giao, usage AI session trong tháng, xoay khoá ký webhook có version ở tp-035; scope `tripplanner.leads/manage`).
+  Hai trang dùng: CRM (Settings › Add-ons › Trip planner) và Content studio (Account › Trip planner) cho đại lý
+  KHÔNG có CRM add-on (không có CRM agency; CRM API hỏi CIS `tenant.membership.v1` membership studio, actor
+  `studio-member:<id>`); cài đặt site (lead route, theme, locale) của studio đi thẳng CIS `/v1/account/tripplanner`.
 - Tài nguyên AWS (Lambda, API Gateway, OIDC deploy role, trust Bedrock) ở AA-CIS-Infra `accounts/aa365/tripplanner.tf`.
