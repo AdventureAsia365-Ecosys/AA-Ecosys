@@ -1,0 +1,143 @@
+{
+ "run1": {
+  "before": {
+   "status": "draft",
+   "version": 1,
+   "edit_seq": 4,
+   "source": "aa",
+   "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+   "display_note": null,
+   "sell_amount": "1500.00"
+  },
+  "rename": {
+   "step": "1a rename AA item",
+   "http": 403,
+   "body": {
+    "detail": "aa_title_read_only",
+    "message": "an Adventure Asia item keeps its name; add a note line under it instead"
+   },
+   "after": {
+    "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+    "edit_seq": 4
+   }
+  },
+  "ui_add_note_first_try": {
+   "step": "1b add note (UI)",
+   "http": 422,
+   "after": {
+    "display_note": null,
+    "edit_seq": 4
+   },
+   "builderNoteText": null
+  },
+  "note": "first UI add answered 422 with the generic builder error and changed nothing (edit_seq stayed 4); not reproduced in 3 later UI tries (all 200)"
+ },
+ "run2": {
+  "steps": [
+   {
+    "step": "clear note (UI Edit note -> empty)",
+    "http": 200
+   },
+   {
+    "step": "repro rename (API)",
+    "http": 403,
+    "body": {
+     "detail": "aa_title_read_only",
+     "message": "an Adventure Asia item keeps its name; add a note line under it instead"
+    }
+   },
+   {
+    "step": "repro UI add note after a stale page",
+    "http": 200,
+    "uiError": null
+   },
+   {
+    "step": "repro cleanup clear (UI)",
+    "http": 200
+   }
+  ],
+  "shots": [
+   {
+    "file": "crm-builder-note-1440.jpg",
+    "masked": 0,
+    "bytes": 191382
+   },
+   {
+    "file": "crm-builder-note-item-1440.jpg",
+    "masked": 0,
+    "bytes": 87337
+   },
+   {
+    "file": "crm-builder-note-390.jpg",
+    "masked": 0,
+    "bytes": 29864
+   },
+   {
+    "file": "crm-builder-after-1440.jpg",
+    "masked": 0,
+    "bytes": 190716
+   }
+  ],
+  "patches": [
+   {
+    "w": 1440,
+    "req": "{\"seq\":5,\"display_note\":\"\"}"
+   },
+   {
+    "w": 1440,
+    "status": 200,
+    "body": "(view)"
+   },
+   {
+    "w": 1440,
+    "req": "{\"seq\":6,\"title\":\"Renamed by S285 check\"}"
+   },
+   {
+    "w": 1440,
+    "status": 403,
+    "body": "{\"detail\":\"aa_title_read_only\",\"message\":\"an Adventure Asia item keeps its name; add a note line under it instead\"}"
+   },
+   {
+    "w": 1440,
+    "req": "{\"seq\":6,\"display_note\":\"S285 check note\"}"
+   },
+   {
+    "w": 1440,
+    "status": 200,
+    "body": "(view)"
+   },
+   {
+    "w": 1440,
+    "req": "{\"seq\":7,\"display_note\":\"\"}"
+   },
+   {
+    "w": 1440,
+    "status": 200,
+    "body": "(view)"
+   }
+  ],
+  "noteSet": {
+   "edit_seq": 5,
+   "display_note": "S285 check note"
+  },
+  "builderNoteText": "Note: S285 check note",
+  "mobile": {
+   "noteVisible": true,
+   "overflow": 0
+  },
+  "afterClear": {
+   "edit_seq": 6,
+   "display_note": null,
+   "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days"
+  },
+  "final": {
+   "status": "draft",
+   "version": 1,
+   "edit_seq": 8,
+   "title": "Tropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days",
+   "display_note": null,
+   "sell_amount": "1500.00"
+  }
+ },
+ "client_page": "not checked live: the note only reaches the client page on a published version, and publishing a new version of a synthetic quote cannot be undone"
+}

@@ -28,10 +28,11 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
      hạn phiên MFA** (~12 h, role `nghiep-admin-12h`): `python3 tools/github/ship_common.py mfa` — in giờ hết hạn, số phút còn lại và giờ nhắc
      (hết hạn − 30′); chỉ đọc trường `Expiration`, không in key/token. Ghi dòng đó vào khối trạng thái đầu phiên và
      đầu checklist `.tmp-session/S<nnn>-checklist.md`.
-   - **Nhắc trước khi hết hạn:** đặt một lời nhắc một lần (CronCreate) đúng giờ nhắc; không có thì kiểm lại giờ đó
-     trước mỗi bước cần AWS/`as-app.sh` (push, merge, DB Migrate, ECS exec). Tới giờ nhắc → báo tech lead nhập MFA
-     mới **trước** khi chạy train/merge dài (`as-app.sh` đọc key App bằng phiên MFA; train chết giữa chừng khi hết
-     hạn). Các tool `tools/github/ship_*.py` cũng tự cảnh báo khi còn < 30′ (train: < 60′).
+   - **Không nhắc trước khi hết hạn (tech lead S285):** không đặt lời nhắc (CronCreate), không nhắc lại giờ hết hạn
+     trong báo cáo tiến độ — tech lead không nhập được mã mới trước khi phiên cũ hết. Chỉ báo **một lần, khi đã hết
+     hạn thật** (một lệnh AWS / `ecsx` / `as-app.sh` lỗi vì credentials), kèm đúng một lệnh để chạy. Trước một
+     train/merge dài khi còn rất ít phút (`tools/github/ship_*.py` tự cảnh báo < 30′, train < 60′): làm việc ngắn khác
+     trước, chạy train sau khi có phiên mới.
    - ECS cluster `aa-cis-dev-cluster`, 8 service `aa-cis-dev-api`, `aa-cis-dev-worker`, `aa-cis-dev-admin`,
      `aa-booking-dev-api`, `aa-booking-dev-admin`, `aa-crm-dev-api`, `aa-crm-dev-web` (CRM +
      Content studio), `aa-tripplanner-dev-web` (TripPlanner web, sau CloudFront): running = desired, rollout COMPLETED; api và worker CIS cùng image SHA.

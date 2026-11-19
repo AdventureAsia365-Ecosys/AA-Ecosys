@@ -1,0 +1,16 @@
+{
+  "bare": {
+    "status": 200,
+    "landed": "/portal-access/none",
+    "hasOpenCrm": true,
+    "afterClick": "/home"
+  },
+  "accessLog": {
+    "rowsWithMembers": 2,
+    "sample": [
+      "19 Nov 2026 08:36 Owner b85c6b16 viewed the list the agency · E-mail · reason: members · 2 items shown",
+      "19 Nov 2026 08:36 Owner b85c6b16 viewed the list the agency · E-mail · reason: members · 2 items shown"
+    ],
+    "hasListView": false
+  }
+}

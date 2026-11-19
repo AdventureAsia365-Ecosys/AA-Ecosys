@@ -1,0 +1,180 @@
+{
+ "probes": [
+  {
+   "variant": "digitDays",
+   "status": 422,
+   "body": {
+    "detail": {
+     "code": "fact_locked",
+     "message": "This edit changes a tour fact (days, places, figures or what is or is not included). Only the wording can change; the facts come from Adventure Asia.",
+     "locked": [
+      {
+       "field": "summary",
+       "fact": "figure",
+       "value": "23-day"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "variant": "wordDaysEleven",
+   "status": 422,
+   "body": {
+    "detail": {
+     "code": "fact_locked",
+     "message": "This edit changes a tour fact (days, places, figures or what is or is not included). Only the wording can change; the facts come from Adventure Asia.",
+     "locked": [
+      {
+       "field": "summary",
+       "fact": "figure",
+       "value": "eleven-day"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "variant": "price",
+   "status": 422,
+   "body": {
+    "detail": {
+     "code": "fact_locked",
+     "message": "This edit changes a tour fact (days, places, figures or what is or is not included). Only the wording can change; the facts come from Adventure Asia.",
+     "locked": [
+      {
+       "field": "summary",
+       "fact": "figure",
+       "value": "$4,999"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "variant": "flightsIncluded",
+   "status": 200,
+   "body": {
+    "status": "edited",
+    "new_version_id": "3b363e23-91b7-4e72-ae1e-b1de1bd52817",
+    "version_number": 5
+   }
+  },
+  {
+   "variant": "flightsIncluded cleanup reject",
+   "status": 200
+  }
+ ],
+ "shots": [
+  {
+   "file": "studio-tour-fact-locked-1440.jpg",
+   "masked": 0,
+   "bytes": 164696
+  },
+  {
+   "file": "studio-activity-1440.jpg",
+   "masked": 0,
+   "bytes": 76986
+  }
+ ],
+ "ui": {
+  "status": 422,
+  "patched": "3b363e23-91b7-4e72-ae1e-b1de1bd52817",
+  "body": {
+   "detail": {
+    "code": "fact_locked",
+    "message": "This edit changes a tour fact (days, places, figures or what is or is not included). Only the wording can change; the facts come from Adventure Asia.",
+    "locked": [
+     {
+      "field": "summary",
+      "fact": "figure",
+      "value": "23-day"
+     }
+    ]
+   }
+  },
+  "toasts": [
+   "This edit changes a tour fact (days, places, figures or what is or is not included). Only the wording can change: the facts come from Adventure Asia."
+  ]
+ },
+ "rejectV3": 200,
+ "versionsOfTour": [
+  {
+   "n": 5,
+   "status": "rejected",
+   "edit_source": "tenant_edit"
+  },
+  {
+   "n": 4,
+   "status": "pending",
+   "edit_source": "tenant_edit"
+  },
+  {
+   "n": 3,
+   "status": "rejected",
+   "edit_source": "tenant_edit"
+  },
+  {
+   "n": 2,
+   "status": "pending",
+   "edit_source": "tenant_edit"
+  },
+  {
+   "n": 1,
+   "status": "ai_generated",
+   "edit_source": "ai_generated"
+  }
+ ],
+ "activityTop": [
+  {
+   "action": "tenant_tour_version.edit_refused",
+   "label": "Tour edit refused: it changed a tour fact",
+   "at": "2026-11-19T09:46:10.816780+00:00"
+  },
+  {
+   "action": "tenant_tour_version.edited",
+   "label": "Edited a tour",
+   "at": "2026-11-19T09:46:05.744433+00:00"
+  },
+  {
+   "action": "tenant_tour_version.edit_refused",
+   "label": "Tour edit refused: it changed a tour fact",
+   "at": "2026-11-19T09:46:05.425810+00:00"
+  },
+  {
+   "action": "tenant_tour_version.edit_refused",
+   "label": "Tour edit refused: it changed a tour fact",
+   "at": "2026-11-19T09:46:05.118971+00:00"
+  },
+  {
+   "action": "tenant_tour_version.edit_refused",
+   "label": "Tour edit refused: it changed a tour fact",
+   "at": "2026-11-19T09:46:04.772023+00:00"
+  },
+  {
+   "action": "tenant.login",
+   "label": "Signed in",
+   "at": "2026-11-19T09:46:00.642825+00:00"
+  },
+  {
+   "action": "tenant.login",
+   "label": "Signed in",
+   "at": "2026-11-19T09:41:39.043359+00:00"
+  },
+  {
+   "action": "tenant_tour_version.edited",
+   "label": "Edited a tour",
+   "at": "2026-11-19T09:41:13.423242+00:00"
+  },
+  {
+   "action": "tenant_tour_version.edited",
+   "label": "Edited a tour",
+   "at": "2026-11-19T09:41:12.027625+00:00"
+  },
+  {
+   "action": "tenant_tour_version.edited",
+   "label": "Edited a tour",
+   "at": "2026-11-19T09:41:06.706935+00:00"
+  }
+ ]
+}

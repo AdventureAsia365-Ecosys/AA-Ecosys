@@ -1,0 +1,57 @@
+{
+ "verified_at": "2026-11-19",
+ "deploy": "aa-crm-dev-web / aa-crm-dev-api b6e3cd6f",
+ "session": "tools/uat/work/crm/.state-A.json (Sen Vang owner)",
+ "curl": {
+  "/c/f/AAAA…(24)": {
+   "status": 404,
+   "has_not_available": true,
+   "has_AA_Partner": false,
+   "title": "Your trip"
+  },
+  "/nope": {
+   "status": 404,
+   "body": "Not Found (text/plain from proxy.ts; no <title>)",
+   "has_AA_Partner": false,
+   "home_link": false
+  },
+  "/trip/<unknown uuid>": {
+   "status": 404,
+   "title": "Your trip",
+   "has_AA_Partner": false
+  },
+  "/c/nope": {
+   "status": 200,
+   "title": "Your trip",
+   "has_AA_Partner": true,
+   "note": "c/[...slug] placeholder still shows the partner brand"
+  }
+ },
+ "bff": {
+  "members": "200, 8 items, display_name null or no '@', seq>=1",
+  "reports/agenda": "200, needs_you ints {107,0,41}, next_departures titled, 2d3f3d0c start 2026-11-27",
+  "conversations?unmatched=true": "200, 6 items with sender/subject/preview"
+ },
+ "extra": {
+  "bare": {
+   "status": 200,
+   "landed": "/portal-access/none",
+   "hasOpenCrm": true,
+   "afterClick": "/home"
+  },
+  "accessLog": {
+   "rowsWithMembers": 2,
+   "sample": [
+    "19 Nov 2026 08:36 Owner b85c6b16 viewed the list the agency · E-mail · reason: members · 2 items shown",
+    "19 Nov 2026 08:36 Owner b85c6b16 viewed the list the agency · E-mail · reason: members · 2 items shown"
+   ],
+   "hasListView": false
+  }
+ },
+ "travelling_row6": "20 Nov 2026 – 25 Nov 2026 · Day 1 · 1 traveller (on 19 Nov, trip not started)",
+ "not_done": [
+  "studio /portal/account/activity (A state -> /portal-access/none; no studio.json)",
+  "academy pages + curl /academy/modules/F2 (no academy.json; redirect to managed login)",
+  "departures singular '1 (1 adult)': no 1-traveller departure in data"
+ ]
+}

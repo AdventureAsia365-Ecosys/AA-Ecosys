@@ -1,0 +1,803 @@
+{
+  "run": "2026-11-19T03:04:42.201Z",
+  "pages": [
+    {
+      "id": "client-404",
+      "lang": "en",
+      "width": 1440,
+      "url": "https://go-dev.lumiguides.it.com/c/nope",
+      "finalPath": "/c/nope",
+      "status": 404,
+      "title": "Your trip",
+      "overflowPx": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "react418": 0,
+      "reload": null,
+      "file": "client-404-en-1440.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 12413,
+      "emailInText": false,
+      "bodyStart": "404\n\nThis page does not exist. Check the link you were sent."
+    },
+    {
+      "id": "client-404",
+      "lang": "en",
+      "width": 390,
+      "url": "https://go-dev.lumiguides.it.com/c/nope",
+      "finalPath": "/c/nope",
+      "status": 404,
+      "title": "Your trip",
+      "overflowPx": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "react418": 0,
+      "reload": null,
+      "file": "client-404-en-390.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 6385,
+      "emailInText": false,
+      "bodyStart": "404\n\nThis page does not exist. Check the link you were sent."
+    },
+    {
+      "id": "client-404",
+      "lang": "vi",
+      "width": 1440,
+      "url": "https://go-dev.lumiguides.it.com/c/nope",
+      "finalPath": "/c/nope",
+      "status": 404,
+      "title": "Chuyến đi của bạn",
+      "overflowPx": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "react418": 0,
+      "reload": null,
+      "file": "client-404-vi-1440.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 13228,
+      "emailInText": false,
+      "bodyStart": "404\n\nTrang này không tồn tại. Hãy kiểm tra lại đường link bạn nhận được."
+    },
+    {
+      "id": "client-404",
+      "lang": "vi",
+      "width": 390,
+      "url": "https://go-dev.lumiguides.it.com/c/nope",
+      "finalPath": "/c/nope",
+      "status": 404,
+      "title": "Chuyến đi của bạn",
+      "overflowPx": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "react418": 0,
+      "reload": null,
+      "file": "client-404-vi-390.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 6975,
+      "emailInText": false,
+      "bodyStart": "404\n\nTrang này không tồn tại. Hãy kiểm tra lại đường link bạn nhận được."
+    },
+    {
+      "id": "client-404-settings",
+      "lang": "en",
+      "width": 1440,
+      "url": "https://go-dev.lumiguides.it.com/settings",
+      "finalPath": "/settings",
+      "status": 404,
+      "title": "Your trip",
+      "overflowPx": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "react418": 0,
+      "reload": null,
+      "file": "client-404-settings-en-1440.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 12413,
+      "emailInText": false,
+      "bodyStart": "404\n\nThis page does not exist. Check the link you were sent."
+    },
+    {
+      "id": "client-404-settings",
+      "lang": "en",
+      "width": 390,
+      "url": "https://go-dev.lumiguides.it.com/settings",
+      "finalPath": "/settings",
+      "status": 404,
+      "title": "Your trip",
+      "overflowPx": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "react418": 0,
+      "reload": null,
+      "file": "client-404-settings-en-390.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 6385,
+      "emailInText": false,
+      "bodyStart": "404\n\nThis page does not exist. Check the link you were sent."
+    },
+    {
+      "id": "client-404-settings",
+      "lang": "vi",
+      "width": 1440,
+      "url": "https://go-dev.lumiguides.it.com/settings",
+      "finalPath": "/settings",
+      "status": 404,
+      "title": "Chuyến đi của bạn",
+      "overflowPx": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "react418": 0,
+      "reload": null,
+      "file": "client-404-settings-vi-1440.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 13228,
+      "emailInText": false,
+      "bodyStart": "404\n\nTrang này không tồn tại. Hãy kiểm tra lại đường link bạn nhận được."
+    },
+    {
+      "id": "client-404-settings",
+      "lang": "vi",
+      "width": 390,
+      "url": "https://go-dev.lumiguides.it.com/settings",
+      "finalPath": "/settings",
+      "status": 404,
+      "title": "Chuyến đi của bạn",
+      "overflowPx": 0,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "react418": 0,
+      "reload": null,
+      "file": "client-404-settings-vi-390.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 6975,
+      "emailInText": false,
+      "bodyStart": "404\n\nTrang này không tồn tại. Hãy kiểm tra lại đường link bạn nhận được."
+    },
+    {
+      "id": "forms",
+      "lang": "en",
+      "width": 1440,
+      "url": "https://portal.lumiguides.it.com/settings/forms",
+      "finalPath": "/settings/forms",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "forms-en-1440.jpg",
+      "maskedEmailElements": 1,
+      "bytes": 96400,
+      "emailInText": false,
+      "ownerOptions": [
+        "No one (the inquiry waits unassigned)",
+        "Owner 1",
+        "Owner 2",
+        "pqnghiep1354 · Owner",
+        "Agent 1",
+        "Agent 2",
+        "Assistant 1",
+        "Assistant 2"
+      ],
+      "optionWithAt": false,
+      "optionWithId": false
+    },
+    {
+      "id": "forms",
+      "lang": "en",
+      "width": 390,
+      "url": "https://portal.lumiguides.it.com/settings/forms",
+      "finalPath": "/settings/forms",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "forms-en-390.jpg",
+      "maskedEmailElements": 1,
+      "bytes": 66692,
+      "emailInText": false,
+      "ownerOptions": [
+        "No one (the inquiry waits unassigned)",
+        "Owner 1",
+        "Owner 2",
+        "pqnghiep1354 · Owner",
+        "Agent 1",
+        "Agent 2",
+        "Assistant 1",
+        "Assistant 2"
+      ],
+      "optionWithAt": false,
+      "optionWithId": false
+    },
+    {
+      "id": "forms",
+      "lang": "vi",
+      "width": 1440,
+      "url": "https://portal.lumiguides.it.com/settings/forms",
+      "finalPath": "/settings/forms",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "forms-vi-1440.jpg",
+      "maskedEmailElements": 1,
+      "bytes": 103359,
+      "emailInText": false,
+      "ownerOptions": [
+        "Không ai (yêu cầu chờ chưa giao)",
+        "Chủ đại lý 1",
+        "Chủ đại lý 2",
+        "pqnghiep1354 · Chủ đại lý",
+        "Nhân viên tư vấn 1",
+        "Nhân viên tư vấn 2",
+        "Trợ lý 1",
+        "Trợ lý 2"
+      ],
+      "optionWithAt": false,
+      "optionWithId": false
+    },
+    {
+      "id": "forms",
+      "lang": "vi",
+      "width": 390,
+      "url": "https://portal.lumiguides.it.com/settings/forms",
+      "finalPath": "/settings/forms",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "forms-vi-390.jpg",
+      "maskedEmailElements": 1,
+      "bytes": 73440,
+      "emailInText": false,
+      "ownerOptions": [
+        "Không ai (yêu cầu chờ chưa giao)",
+        "Chủ đại lý 1",
+        "Chủ đại lý 2",
+        "pqnghiep1354 · Chủ đại lý",
+        "Nhân viên tư vấn 1",
+        "Nhân viên tư vấn 2",
+        "Trợ lý 1",
+        "Trợ lý 2"
+      ],
+      "optionWithAt": false,
+      "optionWithId": false
+    },
+    {
+      "id": "travelling",
+      "lang": "en",
+      "width": 1440,
+      "url": "https://portal.lumiguides.it.com/travelling",
+      "finalPath": "/travelling",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "travelling-en-1440.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 48472,
+      "emailInText": false,
+      "starts": [
+        "Starts tomorrow"
+      ],
+      "day": [],
+      "leaves": [],
+      "tripLines": [
+        "20 Nov 2026 – 25 Nov 2026 · Starts tomorrow · 1 traveller"
+      ]
+    },
+    {
+      "id": "travelling",
+      "lang": "en",
+      "width": 390,
+      "url": "https://portal.lumiguides.it.com/travelling",
+      "finalPath": "/travelling",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "travelling-en-390.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 27718,
+      "emailInText": false,
+      "starts": [
+        "Starts tomorrow"
+      ],
+      "day": [],
+      "leaves": [],
+      "tripLines": [
+        "20 Nov 2026 – 25 Nov 2026 · Starts tomorrow · 1 traveller"
+      ]
+    },
+    {
+      "id": "travelling",
+      "lang": "vi",
+      "width": 1440,
+      "url": "https://portal.lumiguides.it.com/travelling",
+      "finalPath": "/travelling",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "travelling-vi-1440.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 49876,
+      "emailInText": false,
+      "starts": [
+        "Khởi hành ngày mai"
+      ],
+      "day": [],
+      "leaves": [],
+      "tripLines": [
+        "20 thg 11, 2026 – 25 thg 11, 2026 · Khởi hành ngày mai · 1 khách"
+      ]
+    },
+    {
+      "id": "travelling",
+      "lang": "vi",
+      "width": 390,
+      "url": "https://portal.lumiguides.it.com/travelling",
+      "finalPath": "/travelling",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "travelling-vi-390.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 27286,
+      "emailInText": false,
+      "starts": [
+        "Khởi hành ngày mai"
+      ],
+      "day": [],
+      "leaves": [],
+      "tripLines": [
+        "20 thg 11, 2026 – 25 thg 11, 2026 · Khởi hành ngày mai · 1 khách"
+      ]
+    },
+    {
+      "id": "access-log",
+      "lang": "en",
+      "width": 1440,
+      "url": "https://portal.lumiguides.it.com/settings/access-log",
+      "finalPath": "/settings/access-log",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": {
+        "status": 200,
+        "newErrors": []
+      },
+      "file": "access-log-en-1440.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 225452,
+      "emailInText": false,
+      "rowCount": 50,
+      "ownerHex": 0,
+      "listTheAgency": 0,
+      "teamMembers": 13,
+      "rowsWithEmail": 0,
+      "sample": [
+        "19 Nov 2026 10:05 Owner 2 viewed the team members · E-mail · reason: members · 2 items shown",
+        "19 Nov 2026 10:05 Owner 2 opened the agency · bell",
+        "19 Nov 2026 10:05 Owner 2 opened the agency · bell",
+        "19 Nov 2026 10:05 Owner 2 opened the agency · bell",
+        "19 Nov 2026 10:05 Owner 2 opened the agency · bell",
+        "19 Nov 2026 10:05 Owner 2 opened the agency · bell"
+      ]
+    },
+    {
+      "id": "access-log",
+      "lang": "en",
+      "width": 390,
+      "url": "https://portal.lumiguides.it.com/settings/access-log",
+      "finalPath": "/settings/access-log",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": {
+        "status": 200,
+        "newErrors": []
+      },
+      "file": "access-log-en-390.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 153023,
+      "emailInText": false,
+      "rowCount": 50,
+      "ownerHex": 0,
+      "listTheAgency": 0,
+      "teamMembers": 14,
+      "rowsWithEmail": 0,
+      "sample": [
+        "19 Nov 2026 10:05 Owner 2 opened the agency · bell",
+        "19 Nov 2026 10:05 Owner 2 opened the access log",
+        "19 Nov 2026 10:05 Owner 2 viewed the team members · E-mail · reason: members · 2 items shown",
+        "19 Nov 2026 10:05 Owner 2 opened the agency · bell",
+        "19 Nov 2026 10:05 Owner 2 opened the access log",
+        "19 Nov 2026 10:05 Owner 2 viewed the team members · E-mail · reason: members · 2 items shown"
+      ]
+    },
+    {
+      "id": "access-log",
+      "lang": "vi",
+      "width": 1440,
+      "url": "https://portal.lumiguides.it.com/settings/access-log",
+      "finalPath": "/settings/access-log",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": {
+        "status": 200,
+        "newErrors": []
+      },
+      "file": "access-log-vi-1440.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 223311,
+      "emailInText": false,
+      "rowCount": 50,
+      "ownerHex": 0,
+      "listTheAgency": 0,
+      "teamMembers": 16,
+      "rowsWithEmail": 0,
+      "sample": [
+        "19 thg 11, 2026 10:06 Chủ đại lý 2 đã xem danh sách thành viên · E-mail · lý do: members · 2 mục hiển thị",
+        "19 thg 11, 2026 10:06 Chủ đại lý 2 đã mở đại lý · bell",
+        "19 thg 11, 2026 10:06 Chủ đại lý 2 đã xem danh sách thành viên · E-mail · lý do: members · 2 mục hiển thị",
+        "19 thg 11, 2026 10:06 Chủ đại lý 2 đã mở nhật ký truy cập",
+        "19 thg 11, 2026 10:06 Chủ đại lý 2 đã mở đại lý · bell",
+        "19 thg 11, 2026 10:05 Chủ đại lý 2 đã xem danh sách thành viên · E-mail · lý do: members · 2 mục hiển thị"
+      ]
+    },
+    {
+      "id": "access-log",
+      "lang": "vi",
+      "width": 390,
+      "url": "https://portal.lumiguides.it.com/settings/access-log",
+      "finalPath": "/settings/access-log",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": {
+        "status": 200,
+        "newErrors": []
+      },
+      "file": "access-log-vi-390.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 161427,
+      "emailInText": false,
+      "rowCount": 50,
+      "ownerHex": 0,
+      "listTheAgency": 0,
+      "teamMembers": 15,
+      "rowsWithEmail": 0,
+      "sample": [
+        "19 thg 11, 2026 10:06 Chủ đại lý 2 đã xem danh sách thành viên · E-mail · lý do: members · 2 mục hiển thị",
+        "19 thg 11, 2026 10:06 Chủ đại lý 2 đã mở đại lý · bell",
+        "19 thg 11, 2026 10:06 Chủ đại lý 2 đã mở nhật ký truy cập",
+        "19 thg 11, 2026 10:06 Chủ đại lý 2 đã xem danh sách thành viên · E-mail · lý do: members · 2 mục hiển thị",
+        "19 thg 11, 2026 10:06 Chủ đại lý 2 đã mở đại lý · bell",
+        "19 thg 11, 2026 10:06 Chủ đại lý 2 đã mở nhật ký truy cập"
+      ]
+    },
+    {
+      "id": "data",
+      "lang": "en",
+      "width": 1440,
+      "url": "https://portal.lumiguides.it.com/settings/data",
+      "finalPath": "/settings/data",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "data-en-1440.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 189038,
+      "emailInText": false,
+      "dryRunBanner": 1,
+      "trashDryRunNote": 1,
+      "trashNoteText": "Deletion is switched off here: nothing in the trash is removed for good, the dates show when it would be.",
+      "noteAboveTrashTable": true,
+      "trashRowsShown": 10,
+      "would": 10,
+      "removedForGood": 1,
+      "pagerText": [
+        "1–10 of 151",
+        "Page 1 / 16"
+      ],
+      "exportsShown": 5,
+      "exportsFold": [
+        "Show all 16"
+      ],
+      "requestsShown": 5,
+      "requestsFold": [
+        "Show all 26"
+      ],
+      "untitledOrId": 10
+    },
+    {
+      "id": "data",
+      "lang": "en",
+      "width": 390,
+      "url": "https://portal.lumiguides.it.com/settings/data",
+      "finalPath": "/settings/data",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "data-en-390.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 131552,
+      "emailInText": false,
+      "dryRunBanner": 1,
+      "trashDryRunNote": 1,
+      "trashNoteText": "Deletion is switched off here: nothing in the trash is removed for good, the dates show when it would be.",
+      "noteAboveTrashTable": true,
+      "trashRowsShown": 10,
+      "would": 10,
+      "removedForGood": 1,
+      "pagerText": [
+        "1–10 of 151",
+        "Page 1 / 16"
+      ],
+      "exportsShown": 5,
+      "exportsFold": [
+        "Show all 16"
+      ],
+      "requestsShown": 5,
+      "requestsFold": [
+        "Show all 26"
+      ],
+      "untitledOrId": 10
+    },
+    {
+      "id": "data",
+      "lang": "vi",
+      "width": 1440,
+      "url": "https://portal.lumiguides.it.com/settings/data",
+      "finalPath": "/settings/data",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "data-vi-1440.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 192174,
+      "emailInText": false,
+      "dryRunBanner": 1,
+      "trashDryRunNote": 1,
+      "trashNoteText": "Ở đây việc xoá đang tắt: không mục nào trong thùng rác bị xoá hẳn, ngày ghi bên cạnh là lúc mục đó sẽ bị xoá.",
+      "noteAboveTrashTable": true,
+      "trashRowsShown": 10,
+      "would": 10,
+      "removedForGood": 0,
+      "pagerText": [
+        "Trang 1 / 16"
+      ],
+      "exportsShown": 5,
+      "exportsFold": [
+        "Xem cả 16"
+      ],
+      "requestsShown": 5,
+      "requestsFold": [
+        "Xem cả 26"
+      ],
+      "untitledOrId": 10
+    },
+    {
+      "id": "data",
+      "lang": "vi",
+      "width": 390,
+      "url": "https://portal.lumiguides.it.com/settings/data",
+      "finalPath": "/settings/data",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "data-vi-390.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 131618,
+      "emailInText": false,
+      "dryRunBanner": 1,
+      "trashDryRunNote": 1,
+      "trashNoteText": "Ở đây việc xoá đang tắt: không mục nào trong thùng rác bị xoá hẳn, ngày ghi bên cạnh là lúc mục đó sẽ bị xoá.",
+      "noteAboveTrashTable": true,
+      "trashRowsShown": 10,
+      "would": 10,
+      "removedForGood": 0,
+      "pagerText": [
+        "Trang 1 / 16"
+      ],
+      "exportsShown": 5,
+      "exportsFold": [
+        "Xem cả 16"
+      ],
+      "requestsShown": 5,
+      "requestsFold": [
+        "Xem cả 26"
+      ],
+      "untitledOrId": 10
+    },
+    {
+      "id": "agreements",
+      "lang": "en",
+      "width": 1440,
+      "url": "https://portal.lumiguides.it.com/settings/agreements",
+      "finalPath": "/settings/agreements",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "agreements-en-1440.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 78230,
+      "emailInText": false,
+      "formCount": 1,
+      "rowCount": 58,
+      "formAboveList": true,
+      "olderSummary": [
+        "Older versions (55)"
+      ],
+      "olderRows": 55,
+      "olderStatuses": [
+        "retired"
+      ],
+      "topStatuses": [
+        "published",
+        "published",
+        "published"
+      ]
+    },
+    {
+      "id": "agreements",
+      "lang": "en",
+      "width": 390,
+      "url": "https://portal.lumiguides.it.com/settings/agreements",
+      "finalPath": "/settings/agreements",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "agreements-en-390.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 56211,
+      "emailInText": false,
+      "formCount": 1,
+      "rowCount": 58,
+      "formAboveList": true,
+      "olderSummary": [
+        "Older versions (55)"
+      ],
+      "olderRows": 55,
+      "olderStatuses": [
+        "retired"
+      ],
+      "topStatuses": [
+        "published",
+        "published",
+        "published"
+      ]
+    },
+    {
+      "id": "agreements",
+      "lang": "vi",
+      "width": 1440,
+      "url": "https://portal.lumiguides.it.com/settings/agreements",
+      "finalPath": "/settings/agreements",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "agreements-vi-1440.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 82310,
+      "emailInText": false,
+      "formCount": 1,
+      "rowCount": 58,
+      "formAboveList": true,
+      "olderSummary": [
+        "Phiên bản cũ (55)"
+      ],
+      "olderRows": 55,
+      "olderStatuses": [
+        "retired"
+      ],
+      "topStatuses": [
+        "published",
+        "published",
+        "published"
+      ]
+    },
+    {
+      "id": "agreements",
+      "lang": "vi",
+      "width": 390,
+      "url": "https://portal.lumiguides.it.com/settings/agreements",
+      "finalPath": "/settings/agreements",
+      "status": 200,
+      "title": "Adventure Asia Partner",
+      "overflowPx": 0,
+      "consoleErrors": [],
+      "react418": 0,
+      "reload": null,
+      "file": "agreements-vi-390.jpg",
+      "maskedEmailElements": 0,
+      "bytes": 58941,
+      "emailInText": false,
+      "formCount": 1,
+      "rowCount": 58,
+      "formAboveList": true,
+      "olderSummary": [
+        "Phiên bản cũ (55)"
+      ],
+      "olderRows": 55,
+      "olderStatuses": [
+        "retired"
+      ],
+      "topStatuses": [
+        "published",
+        "published",
+        "published"
+      ]
+    }
+  ],
+  "checks": {
+    "bffAuditEvents": {
+      "status": 200,
+      "keys": [
+        "events",
+        "next_cursor",
+        "retention_months",
+        "oldest",
+        "actor_groups",
+        "timezone"
+      ],
+      "timezone": "Asia/Ho_Chi_Minh",
+      "items": 5
+    }
+  },
+  "skippedForPrivacy": []
+}

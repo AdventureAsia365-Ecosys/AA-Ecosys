@@ -1,0 +1,40 @@
+{
+"people":[["anh","Anh (tech lead)","Quản trị, cờ owner"],["thu","Chị Thư (business owner)","Quản trị + cờ owner, người duyệt"],["trang","Trang","Nội dung (CIS) + Sản phẩm, điều hành & kế toán (Booking)"]],
+"legend":{"lam":"Làm","duyet":"Duyệt","xem":"Xem","no":"—","tu":"Làm + tự duyệt (có cờ)"},
+"rows":[
+["CIS: nội dung","Sửa tour, khách sạn, hoạt động (bản nháp), ảnh","lam","lam","lam",""],
+["CIS: nội dung","Tạo tour tay, gộp Excel từng trường","lam","lam","lam",""],
+["CIS: nội dung","Xuất bản nội dung","lam","lam","lam","Dev: công tắc hai người tắt, ai cũng xuất bản được. Khi bật (prod): Trang làm, chị Thư duyệt."],
+["CIS: nội dung","Chạy lại AI cho 1 tour (hiện trước số tiền)","lam","lam","lam",""],
+["CIS: nội dung","Chạy AI hàng loạt (wave, S1 batch)","lam","lam","lam","Trong trần chi phí tháng."],
+["CIS: đại lý","Quản lý đại lý, quota, add-on","lam","lam","xem",""],
+["CIS: nền tảng","AI gateway: kết nối, route, ngân sách","lam","lam","no",""],
+["CIS: nền tảng","Cài đặt hệ thống (Settings)","lam","lam","no","Công tắc hai người cho cài đặt: tắt trên Dev."],
+["CIS: nền tảng","Nhân viên & quyền, vai trò tuỳ chỉnh","lam","lam","no","Chỉ người có cờ owner."],
+["CIS: nền tảng","Xem như (chỉ xuống dưới, chỉ đọc)","lam","lam","no","Không ai xem như vai trò cao hơn mình."],
+["Booking","Thêm nhà cung cấp","lam","tu","lam","Nhà cung cấp mới chờ chị Thư kích hoạt (R5)."],
+["Booking","Kích hoạt nhà cung cấp","duyet","duyet","no","Anh không tự kích hoạt cái anh tạo."],
+["Booking","Hợp đồng, giá, mùa, giá trẻ em","lam","tu","lam","Người viết không tự công bố (R4); chị Thư công bố."],
+["Booking","Công bố hợp đồng giá","duyet","duyet","no",""],
+["Booking","Bật dừng bán (stop-sale)","lam","lam","lam","Có hiệu lực ngay."],
+["Booking","Gỡ dừng bán","duyet","duyet","no","Cần người thứ hai."],
+["Booking","Báo giá, đặt tour cho đại lý","lam","lam","lam",""],
+["Booking","Đặt dịch vụ với nhà cung cấp, voucher, PO","lam","lam","lam",""],
+["Booking","Nhập hoá đơn nhà cung cấp","lam","tu","lam",""],
+["Booking","Duyệt hoá đơn nhà cung cấp","duyet","duyet","no",""],
+["Booking","Ghi khoản trả nhà cung cấp","lam","lam","lam","Người ghi khác người duyệt hoá đơn (R3). Tiền thật: chị Thư duyệt ở internet banking."],
+["Booking","Tài khoản ngân hàng nhà cung cấp","lam","tu","lam","Đổi phải chị Thư duyệt + gọi lại xác nhận + khoá trả 24 giờ."],
+["Booking","Công nợ đại lý, giảm giá, hoàn tiền","lam","tu","lam",""],
+["Booking","Xem lãi, giá net","xem","xem","xem",""],
+["CRM","Console hỗ trợ đại lý (khẩn)","lam","xem","no",""],
+["Hạ tầng","GitHub, AWS, deploy, DB","lam","no","no","Claude Code làm theo lệnh của anh, không có vai trò trong app."]
+],
+"plan":[
+["1","Gán vai trò thật, ẩn vai trò thừa","Trang Staff chỉ hiện 3 vai trò; các vai trò khác giữ trong code. Vì Booking mỗi người một vai trò, Trang dùng một vai trò tuỳ chỉnh 'Sản phẩm, điều hành & kế toán' (gộp quyền contracting + finance). Kế toán được đọc đủ trang của mình (R2). Không migration ở bước nhãn và quyền.","AA-1150 L7a"],
+["2","Luật duyệt cho đội nhỏ","Danh sách người viết hợp đồng (R4); nhà cung cấp mới chờ kích hoạt (R5); người trả khác người duyệt (R3); chủ doanh nghiệp được tự duyệt nhưng gắn cờ owner_self_approved; anh không tự duyệt; cờ đỏ + tóm tắt tuần gửi chị Thư. Có migration Booking.","AA-1150 L7b"],
+["3","Vai trò thành dữ liệu + vai trò tuỳ chỉnh + Xem như","Mỗi app (CIS, Booking, CRM) một bảng vai trò → quyền; trang 'Vai trò & quyền' (ma trận tick, nhân bản vai trò mẫu rồi tick); đổi vai trò cần chủ doanh nghiệp; 'Xem như' chỉ xuống dưới, chỉ đọc, có nhật ký. Luật tách nhiệm vụ vẫn cứng trong code.","AA-1150 (R1 bước 1+2, L3, L5)"],
+["4","Hồ sơ nhà cung cấp + tài khoản ngân hàng","Pháp nhân, mã số thuế, người liên hệ theo vai trò, điều khoản thanh toán có cấu trúc; số tài khoản mã hoá bằng khoá KMS riêng (đã duyệt A1).","AA-1150 L7c"],
+["5","Bật cho người thật","Khi bước 1–3 lên Dev: anh hoặc chị Thư gán vai trò trên trang Staff (anh: quản trị; chị Thư: quản trị + owner; Trang: nội dung + vai trò tuỳ chỉnh Booking). Em gửi đường dẫn và từng bước bấm.","Bước tay"]
+],
+"timing":"Bước 1–2 vừa sức một phiên, bước 3–4 thêm một phiên; theo kế hoạch là S287, có thể kéo lên S286 vì không phụ thuộc việc khác ngoài AA-1145 (đã xong)."
+}
