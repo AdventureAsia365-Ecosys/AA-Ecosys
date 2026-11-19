@@ -84,11 +84,11 @@ features:
     module: admin-shell
     name: Admin shell, sign-in and search
     name_vi: Khung trang quản trị, đăng nhập và tìm kiếm
-    summary_vi: "Nhân viên đăng nhập bằng tài khoản công ty, di chuyển bằng thanh bên và bảng lệnh, tìm nhanh tour, đại lý và trang."
-    summary: Staff sign in with the company account, move around with the sidebar and the command palette, and search across tours, tenants and pages.
+    summary_vi: "Nhân viên đăng nhập bằng tài khoản công ty, di chuyển bằng thanh bên và bảng lệnh, tìm nhanh tour, đại lý và trang; phiên chỉ đọc thì các trang ẩn nút ghi."
+    summary: Staff sign in with the company account, move around with the sidebar and the command palette, and search across tours, tenants and pages; a read-only session sees no write buttons.
     roles: [admin, content, content_lead, tenant_qa, customer_success, support, finance, ai_ops, viewer]
     status: live
-    surface: ["page:/", "page:/login", "page:/admin/platform", "route:admin_search"]
+    surface: ["page:/", "page:/login", "page:/admin/platform", "route:admin_search", "route:admin_session"]
     owner: tech_lead
   - id: CIS-F002
     app: cis
@@ -147,11 +147,11 @@ features:
     module: catalogue-pipeline
     name: Master content
     name_vi: Nội dung chuẩn (Master)
-    summary_vi: "Các tour catalogue đã xuất bản, kèm mọi phiên bản, nguồn, ngữ cảnh SEO, bản xuất và công cụ sửa quốc gia."
-    summary: The published catalogue tours with every version, the source, the SEO context, exports and the country fix.
+    summary_vi: "Các tour catalogue đã xuất bản, kèm mọi phiên bản, nguồn, ngữ cảnh SEO, bản xuất và công cụ sửa quốc gia; bản nháp lời văn và bản nháp dữ kiện từ lần nhập lại Excel, được xuất bản qua cổng kiểm tra."
+    summary: The published catalogue tours with every version, the source, the SEO context, exports and the country fix; a person's draft of a tour's wording and the facts draft of an Excel re-import, both published through the check gate.
     roles: [admin, content, content_lead, tenant_qa, ai_ops, viewer]
     status: live
-    surface: ["page:/admin/master-content", "route:admin_pipeline/tours", "route:admin_pipeline/tour_detail", "route:admin_pipeline/versions"]
+    surface: ["page:/admin/master-content", "route:admin_pipeline/tours", "route:admin_pipeline/tour_detail", "route:admin_pipeline/versions", "route:admin_pipeline/drafts", "route:admin_pipeline/fact_drafts"]
     owner: content_lead
   - id: CIS-F007
     app: cis
@@ -393,11 +393,11 @@ features:
     module: spend
     name: Spend and budgets
     name_vi: Chi phí và ngân sách
-    summary_vi: "Chi phí AI và dữ liệu theo nhà cung cấp, ứng dụng và bước, cùng ngân sách mà bộ chặn chi phí áp dụng."
-    summary: AI and data spend per provider, app and stage, with the budgets the cost guard enforces.
+    summary_vi: "Chi phí AI và dữ liệu theo nhà cung cấp, ứng dụng và bước, cùng ngân sách mà bộ chặn chi phí áp dụng: ngân sách mỗi kết nối AI chia cho các ứng dụng, các mức trần đang áp dụng và bộ ngắt bất thường của từng ứng dụng."
+    summary: AI and data spend per provider, app and stage, with the budgets the cost guard enforces - one budget per AI connection split across the apps, the spend caps in force and each app's anomaly breaker.
     roles: [admin, ai_ops, finance]
     status: live
-    surface: ["page:/admin/spend", "route:admin_budgets"]
+    surface: ["page:/admin/spend", "route:admin_budgets", "route:admin_ai_gateway_budgets", "route:admin_ai_gateway_spend"]
     conditions:
       settings: [cis.retention.llm_call_log_days]
     owner: finance
@@ -568,11 +568,11 @@ features:
     module: studio-api
     name: Studio sign-in, account and notifications API
     name_vi: API đăng nhập, tài khoản và thông báo của Studio
-    summary_vi: "Đăng nhập Content studio bằng nhóm tài khoản đối tác, các trang tài khoản (hoạt động, thành viên, add-on, cài đặt ngừng tour) và chuông thông báo."
-    summary: Studio sign-in with the partner pool, the account pages (activity, members, add-ons, tour retirement setting) and the notification bell.
+    summary_vi: "Đăng nhập Content studio bằng nhóm tài khoản đối tác, các trang tài khoản (hoạt động, thành viên, add-on, cài đặt ngừng tour, mô-đun Trip planner cho đại lý không dùng CRM) và chuông thông báo."
+    summary: Studio sign-in with the partner pool, the account pages (activity, members, add-ons, tour retirement setting, the Trip planner module for an agency without the CRM) and the notification bell.
     roles: [studio-owner, studio-editor, studio-viewer]
     status: live
-    surface: ["route:tenant_session", "route:auth", "route:v1_account", "route:v1_account_members", "route:v1_account_addons", "route:v1_account_tour_retirement", "route:v1_notifications"]
+    surface: ["route:tenant_session", "route:auth", "route:v1_account", "route:v1_account_members", "route:v1_account_addons", "route:v1_account_tour_retirement", "route:v1_account_tripplanner", "route:v1_notifications"]
     conditions:
       settings: [cis.lifecycle.tour_retirement_notice_days]
     owner: tech_lead
@@ -795,11 +795,11 @@ features:
     module: supply
     name: Suppliers, contracts and rate sheets
     name_vi: Nhà cung cấp, hợp đồng và bảng giá
-    summary_vi: "Danh sách nhà cung cấp kèm hợp đồng và bảng giá."
-    summary: The supplier register with contracts and rate sheets.
-    roles: [booking-admin, contracting]
+    summary_vi: "Danh sách nhà cung cấp kèm hợp đồng và bảng giá; điều khoản hợp đồng (allotment, free sale, on request), hạn chế cung ứng và stop-sale, có người thứ hai duyệt."
+    summary: The supplier register with contracts and rate sheets; the contract terms (allotment, free sale, on request), supply restrictions and stop-sale, each checked by a second person.
+    roles: [booking-admin, contracting, sales]
     status: live
-    surface: ["page:/suppliers/**", "route:suppliers"]
+    surface: ["page:/suppliers/**", "route:suppliers", "route:supply_model"]
     owner: tech_lead
   - id: BK-F010
     app: booking
@@ -1214,11 +1214,11 @@ features:
     module: team
     name: Add-ons
     name_vi: Add-on
-    summary_vi: "Các add-on của đại lý (CRM, TripPlanner) và yêu cầu add-on của chủ đại lý, được trả lời trong CIS."
-    summary: The agency's add-ons (CRM, TripPlanner) and the owner's request for one, answered in CIS.
-    roles: [owner]
+    summary_vi: "Các add-on của đại lý (CRM, TripPlanner) và yêu cầu add-on của chủ đại lý, được trả lời trong CIS; mô-đun Trip planner: liên kết trang lên lịch trình, nơi nhận lead, giao diện, lead gần nhất kèm trạng thái gửi, mức dùng và khoá ký webhook."
+    summary: The agency's add-ons (CRM, TripPlanner) and the owner's request for one, answered in CIS; the Trip planner module - planner link, lead route, look, the newest leads with their delivery status, usage and the webhook signing key.
+    roles: [owner, agent]
     status: live
-    surface: ["page:/settings/add-ons", "route:addons"]
+    surface: ["page:/settings/add-ons", "page:/settings/add-ons/trip-planner", "route:addons", "route:tripplanner_module"]
     depends_on: [CIS-F019]
     owner: customer_success
   - id: CRM-F025
@@ -1262,11 +1262,11 @@ features:
     module: ops-contract
     name: Platform ops API and CRM settings
     name_vi: API vận hành nền tảng và cấu hình CRM
-    summary_vi: "Hợp đồng vận hành mà CIS admin gọi (đại lý, thành viên, job) và các cài đặt CRM hiển thị qua trang Cài đặt nền tảng."
-    summary: The ops contract CIS admin calls (agencies, members, jobs) and the CRM settings relayed by Platform › Settings.
+    summary_vi: "Hợp đồng vận hành mà CIS admin gọi (đại lý, thành viên, job), các cài đặt CRM hiển thị qua trang Cài đặt nền tảng và bản sao phần ngân sách mỗi kết nối AI của CRM."
+    summary: The ops contract CIS admin calls (agencies, members, jobs), the CRM settings relayed by Platform › Settings and the CRM's copy of its share of each AI connection budget.
     roles: [machine]
     status: live
-    surface: ["route:ops", "route:ops_settings"]
+    surface: ["route:ops", "route:ops_settings", "route:ops_connection_shares"]
     conditions:
       settings: [crm.settings.two_person_approval, crm.retention.job_dry_run]
     owner: tech_lead
@@ -1365,11 +1365,11 @@ features:
     module: studio
     name: Studio account
     name_vi: Tài khoản Studio
-    summary_vi: "Hoạt động, thành viên, add-on, mức dùng tính phí, tích hợp và cài đặt studio."
-    summary: Activity, members, add-ons, billing usage, integrations and the studio settings.
+    summary_vi: "Hoạt động, thành viên, add-on, mức dùng tính phí, tích hợp, cài đặt studio và trang Trip planner (lead, mức dùng, khoá ký webhook) cho đại lý không dùng CRM."
+    summary: Activity, members, add-ons, billing usage, integrations, the studio settings and the Trip planner page (leads, usage, the webhook signing key) for an agency without the CRM.
     roles: [studio-owner]
     status: live
-    surface: ["page:/portal/account/**"]
+    surface: ["page:/portal/account/**", "route:studio_tripplanner"]
     depends_on: [CIS-F040, CIS-F045]
     owner: customer_success
   - id: CRM-F047
@@ -1427,13 +1427,14 @@ features:
   - id: TP-F004
     app: tripplanner
     module: account
-    name: Sign in and My trips
-    name_vi: Đăng nhập và Chuyến đi của tôi
-    summary_vi: "Khách du lịch đăng nhập bằng nhóm tài khoản khách, lưu và mở lại chuyến đi của mình."
-    summary: Travellers sign in with the traveller pool, keep their trips and reopen them.
+    name: Sign in and My trips (retired)
+    name_vi: Đăng nhập và Chuyến đi của tôi (đã ngừng)
+    summary_vi: "Đã ngừng: trang đăng nhập của khách và trang Chuyến đi của tôi đã được gỡ khi trình lên lịch trình chỉ phục vụ đại lý; khách là khách vãng lai và gửi chuyến đi cho đại lý."
+    summary: "Retired: the traveller sign-in and My trips pages were removed when the planner became agencies only; travellers plan as guests and send their trip to the agency."
     roles: [traveller]
-    status: live
-    surface: ["page:/sign-in", "page:/trips", "route:bff/auth", "route:bff/me"]
+    # Retired (S286, AA-1134): the surface was page:/sign-in, page:/trips, route:bff/auth and route:bff/me, removed by
+    # AA-TripPlanner-Web #273 (root ADR 0019 d11: travellers are guests; the traveller pool is frozen). Kept as history.
+    status: retired
     conditions:
       settings: [tripplanner.rate.signed_in_factor]
     depends_on: [INF-F002]
@@ -1443,11 +1444,11 @@ features:
     module: agency-planner
     name: Agency planner (white label)
     name_vi: Công cụ lên lịch trình của đại lý (mang thương hiệu đại lý)
-    summary_vi: "Trang lên kế hoạch và trang tour riêng của một đại lý đang được phục vụ, mang thương hiệu, tour và nội dung của đại lý."
-    summary: A served agency's own planner and tour pages under its brand, with its own tours and text.
+    summary_vi: "Trang lên kế hoạch và trang tour riêng của một đại lý đang được phục vụ, mang thương hiệu, tour và nội dung của đại lý, kèm thông báo quyền riêng tư và điều khoản (bản nháp) đứng tên đại lý và trang không tìm thấy của đại lý."
+    summary: A served agency's own planner and tour pages under its brand, with its own tours and text, its own draft privacy notice and terms, and its own not-found page.
     roles: [public, traveller]
     status: live
-    surface: ["page:/[tenant]", "page:/[tenant]/plan/**", "page:/[tenant]/tours/[tour]"]
+    surface: ["page:/[tenant]", "page:/[tenant]/plan/**", "page:/[tenant]/tours/[tour]", "page:/[tenant]/privacy", "page:/[tenant]/terms", "page:/[tenant]/[...rest]"]
     conditions:
       entitlements: [tp.hosted, tp.branding]
       tenant_kinds: [pilot, agency]
