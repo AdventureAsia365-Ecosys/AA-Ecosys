@@ -52,6 +52,12 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
      sha256 pin. Dòng RED (repo > 8 GB hoặc tải ngoài chưa cache) → ghi vào khối trạng thái và checklist. Còn cache cũ →
      `--clean` (chỉ xoá cache PR không còn mở và queue cũ; cache main không bao giờ bị đụng). Cache CodeQL (default
      setup) chỉ báo dung lượng, không chỉnh được từ workflow.
+   - **Sentry (tech lead S285):** mọi project (CIS, Booking, Partner/CRM, TripPlanner), môi trường `dev`: issue chưa
+     resolve mới hoặc tăng từ phiên trước, xếp theo số event 24 h. Đọc qua connector claude.ai Sentry; connector bị từ
+     chối → ghi "Sentry: chưa kiểm (cần đăng nhập lại connector)" vào khối trạng thái, không bỏ qua im lặng. Issue có
+     stack trong file `ecsx-*` là lỗi của script tạm của agent, không phải lỗi app (từ S285 `ecsx_runner` tắt Sentry
+     cho script, `ECSX_KEEP_SENTRY=1` mới bật lại): resolve kèm ghi chú. Lỗi app thật → một dòng trong checklist (sửa
+     trong phiên hoặc follow-up có lý do).
    - **Chỉ khi Nghiệp nói "dùng kiro-cli"**: chạy `.claude/skills/kiro-delegate/kiro-preflight.sh`, ghi credit Kiro vào
      khối trạng thái. Lỗi / credit thấp → báo và làm phiên này bằng Claude (skill `kiro-delegate`).
 3. **Đề xuất danh sách issue** theo master plan: trước hết issue có `session` = phiên này, rồi slot kế, rồi theo thứ tự

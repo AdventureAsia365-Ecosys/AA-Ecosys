@@ -102,8 +102,15 @@ def run_state(run_id: str) -> str:
 
 
 def script_env() -> dict:
+    """The script's environment: the container's, with /app on the path and Sentry off (S285). An ad hoc script that
+    imports the app would otherwise report its own exceptions to the app's Sentry project as app errors (S284: a
+    StopIteration of a check script became issue AA-PARTNER-API-1). ECSX_KEEP_SENTRY=1 keeps it on."""
     pp = os.environ.get("PYTHONPATH")
-    return dict(os.environ, PYTHONPATH=APP_DIR + (":" + pp if pp else ""), PYTHONUNBUFFERED="1")
+    env = dict(os.environ, PYTHONPATH=APP_DIR + (":" + pp if pp else ""), PYTHONUNBUFFERED="1")
+    if env.get("ECSX_KEEP_SENTRY") != "1":
+        env.pop("SENTRY_DSN", None)
+        env["SENTRY_REQUIRED"] = "false"
+    return env
 
 
 def script_timeout() -> int:
