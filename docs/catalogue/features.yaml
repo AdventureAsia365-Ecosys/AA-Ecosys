@@ -1034,7 +1034,7 @@ features:
     summary: Signed pages on the client host - the proposal a client accepts on a phone and the traveller portal with details, documents, signing and invoices.
     roles: [traveller]
     status: live
-    surface: ["page:/c/[...slug]", "page:/c/p", "page:/c/t", "route:client_pages"]
+    surface: ["page:/c/p", "page:/c/t", "route:client_pages"]
     owner: tech_lead
   - id: CRM-F010
     app: crm
