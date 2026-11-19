@@ -21,4 +21,8 @@ Nguồn sự thật: `apps/AA-TripPlanner-Web/CONTEXT.md`; yêu cầu sản ph�
 - Bàn giao sang AA-Booking: outbox `tripplanner.outbox` → view `tripplanner.v_inquiry_outbox` → Booking
   `bk_inquiry_pull`; hợp đồng `docs/contracts/inquiry.submitted.v1*.json`. TripPlanner không gửi email; email staff
   do Booking gửi.
+- Lead của đại lý (`lead.submitted.v1`): CRM / webhook / email theo lead route CIS. Assembly Lambda còn phục vụ M2M
+  `/trip/m2m/v1` cho CRM của AA-Partner: kéo lead (scope `tripplanner.leads/deliver`) và, từ 1.1 (AA-1139), module
+  TripPlanner của app đại lý `.../tenants/{id}/planner/*` (`assembly/planner_admin.py`: danh sách lead + trạng thái
+  giao, usage AI session trong tháng, xoay khoá ký webhook có version ở tp-035; scope `tripplanner.leads/manage`).
 - Tài nguyên AWS (Lambda, API Gateway, OIDC deploy role, trust Bedrock) ở AA-CIS-Infra `accounts/aa365/tripplanner.tf`.
