@@ -53,8 +53,8 @@ cannot say which custom role a person holds, and Booking cannot read the CIS dir
   Verify: test the Booking auth unit and integration tests of task T5; live: the E2E maker gets 200 on /suppliers, /billing and /agency-billing
 - R4.2 WHEN the view or the role table cannot be read, or the role is unknown or archived, THE SYSTEM SHALL refuse a custom holder and SHALL keep built-in holders, the administrator included, signed in.
   Verify: test the Booking integration test of task T5 with the grant revoked; live: admin opens /staff in Booking after the apply
-- R4.3 WHEN a custom holder calls an approve-class write THE SYSTEM SHALL answer 403.
-  Verify: test the Booking API integration tests of task T5; live: the E2E maker gets 403 on supplier activate, contract publish, stop-sale review, payout and billing-config writes
+- R4.3 WHEN a custom holder calls an approve-class write THE SYSTEM SHALL answer 403, including the approvals that a write capability gates today (pricing rules, FX rates, cancellation policies, agency pricing, price adjustments, allotments, supplier activate, contract publish, stop-sale review).
+  Verify: test the Booking API integration tests of tasks T4.1 and T5; live: the E2E maker gets 403 on supplier activate, contract publish, stop-sale review and end, pricing-rule, FX-rate and cancellation-policy approve, agency tier-discount and rate-card approve, price-adjustment approve, allotment approve, payout and billing-config writes
 - R4.4 WHEN a staff member who is not is_owner writes on the role editor THE SYSTEM SHALL answer 403, and SHALL audit every owner change with before and after.
   Verify: test the role editor unit and integration tests of task T6
 - R4.5 THE SYSTEM SHALL gate the Booking admin pages by the capabilities in me.permissions instead of role names.

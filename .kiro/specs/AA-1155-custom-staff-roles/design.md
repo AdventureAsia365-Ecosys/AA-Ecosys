@@ -41,6 +41,13 @@ Booking: `*.approve`, `*.approve_<x>`, `supplier.activate`, `contract.publish`, 
 `staff.admin`. The editor answers 400; a table CHECK refuses the same names if the code is bypassed. `supplier_bank.*`
 is not refused by the CHECK (Q10 may add `supplier_bank.write`, entry only).
 
+Reserved ahead of use: `pricing.approve`, `supplier.activate`, `contract.publish` and `stop_sale.approve` are not in
+Booking `PERMISSIONS` on main today. Until the AA-1150 Booking split and task T4.1 re-gate the routes, `supply.write`
+(supplier, hotel and service activate, contract publish), `stop_sale.write` (stop-sale review and end), `pricing.write`
+(approve of pricing rules, FX rates, cancellation policies, agency pricing and price adjustments) and `b2b_desk.write`
+(allotment approve) still carry those approvals. The seed keeps these write capabilities; the CHECK and the code then
+refuse the new approve capabilities to custom roles. So T5 starts after both, and no one gets `booking-custom` before.
+
 ### D5 A custom CIS holder keeps a built-in base role that is never admin
 
 Hard to reverse: no
