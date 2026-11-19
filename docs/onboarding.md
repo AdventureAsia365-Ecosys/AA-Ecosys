@@ -32,7 +32,8 @@ architecture §4.3, §4.4). Workloads use these two accounts only; a third, the 
 organization and runs no workload (below). LLM chat calls run on acc3
 ([ADR 0001a](adr/0001a-retire-acc1-llm-on-acc3-only.md)), and since 2026-11-12, while AWS blocks acc3, also on acc1
 through one Bedrock invoker role (AA-1095, ADR 0001a Note S278; Terraform root `accounts/acc1-bedrock/`, applied by a
-human; spend there is alert only, ADR 0001a Note S279); since [ADR 0009](adr/0009-ai-platform-and-provider-gateway.md)
+human; spend there is alert only, ADR 0001a Note S279), which the CIS and, since 2026-11-19, the CRM reply drafts
+assume, each with its own ExternalId (AA-1138, ADR 0001a Note S285); since [ADR 0009](adr/0009-ai-platform-and-provider-gateway.md)
 decision 14 (accepted 2026-10-31) acc2 may also serve chat models for eval, judge and validate stages once a model
 passes the qualification ladder, and the direct Anthropic and OpenAI APIs are capped warm paths outside AWS.
 
