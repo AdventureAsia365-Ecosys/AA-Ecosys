@@ -384,7 +384,7 @@ the row stays as the S265 record.
 - **Facts Entries** (B6): an agency's own facts are its prices (its markup) and its sale terms only; every product fact
   (season, itinerary, visa and entry, transfer time) comes from AA. The agency changes presentation (voice, logo, its
   contact details), never tour facts.
-- **Older data** (T19): no hard delete. CRM migration crm-079 counts first, re-types the agency's own suppliers of a
+- **Older data** (T19): no hard delete. CRM migration crm-080 counts first, re-types the agency's own suppliers of a
   blocked type to "other", moves the ones nothing references (and the agency's transfer catalogue services) to the
   CRM trash, keeps the referenced ones readable, then narrows the CHECK constraints.
 - **Next slice** (T18, not part of this amendment's first delivery): an accepted proposal writes its agency items as
