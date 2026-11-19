@@ -392,5 +392,20 @@ class RunnerCapsTest(unittest.TestCase):
                 os.environ["ECSX_SCRIPT_TIMEOUT"] = old
 
 
+
+class ScriptEnvSentryTest(unittest.TestCase):
+    """S285: an ad hoc script never reports to the app's Sentry project unless ECSX_KEEP_SENTRY=1."""
+
+    def test_sentry_off_by_default(self):
+        with mock.patch.dict(os.environ, {"SENTRY_DSN": "https://k@o0.ingest.example/1", "SENTRY_REQUIRED": "true"}):
+            env = R.script_env()
+        self.assertNotIn("SENTRY_DSN", env)
+        self.assertEqual(env["SENTRY_REQUIRED"], "false")
+
+    def test_keep_sentry_on_request(self):
+        with mock.patch.dict(os.environ, {"SENTRY_DSN": "https://k@o0.ingest.example/1", "ECSX_KEEP_SENTRY": "1"}):
+            env = R.script_env()
+        self.assertEqual(env["SENTRY_DSN"], "https://k@o0.ingest.example/1")
+
 if __name__ == "__main__":
     unittest.main()
