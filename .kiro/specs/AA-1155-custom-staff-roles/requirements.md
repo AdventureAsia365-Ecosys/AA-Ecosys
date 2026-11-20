@@ -72,6 +72,10 @@ cannot say which custom role a person holds, and Booking cannot read the CIS dir
   Verify: test the page unit test of task T10; live: screenshot of the page on Dev
 - R5.5 WHEN a budget or AI gateway route is called without a verified Cognito session THE SYSTEM SHALL answer 401 or 403 whatever x-admin-role says, and SHALL audit every budget change with before and after.
   Verify: test the CIS unit tests of task T11; live: curl with a forged x-admin-role and no session gets 401 or 403
+- R5.6 THE SYSTEM SHALL let an is_owner user create, label, archive and edit the capabilities of CIS custom roles on the CIS Staff page (the same rules as the Booking editor: clone a built-in role, approve-class and unknown capabilities refused, audit before and after), so no CIS business role needs a code change or a migration.
+  Verify: test the CIS role editor unit tests of task T13; live: create, edit and archive a test custom role on Dev
+- R5.7 THE SYSTEM SHALL hold the people-role presets of the Staff page (label, the role each preset grants per app, the CRM mode, additive-only) as data editable by an is_owner user and audited, and SHALL keep in code only the guards: a preset never sets is_owner, the self-demote and last-owner checks, and a preset never silently replaces a held role.
+  Verify: test the preset unit tests of task T14 (the frontend reads presets from the API, no preset literal left in staffPresets.ts); live: edit a preset label on Dev and apply it to an E2E account
 
 ### R6 Rollout
 

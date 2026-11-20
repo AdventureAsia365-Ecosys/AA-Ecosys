@@ -1,0 +1,193 @@
+{
+ "pairs": [
+  {
+   "key": "place_cards_to_review",
+   "tile": 4859,
+   "landed": "/admin/places/cards?status=auto_checked",
+   "calls": [
+    {
+     "t": 1795141539042,
+     "status": 200,
+     "path": "/api/admin/content-quality/place-cards",
+     "q": "?limit=50&offset=0&status=auto_checked",
+     "total": 4859
+    }
+   ],
+   "ofN": [
+    "of 4,859"
+   ],
+   "selects": [
+    "Card status=auto_checked",
+    "Rows per page=50"
+   ],
+   "tabs": []
+  },
+  {
+   "key": "review_waiting",
+   "tile": 73,
+   "landed": "/admin/review",
+   "calls": [],
+   "ofN": [
+    "of 73"
+   ],
+   "selects": [
+    "Review status=pending",
+    "Country=all",
+    "Quality score=all",
+    "Elephant riding policy=all",
+    "Rows per page=25"
+   ],
+   "tabs": []
+  },
+  {
+   "key": "supply_drafts",
+   "tile": 8,
+   "landed": "/admin/supply-content?has_draft=1",
+   "calls": [
+    {
+     "t": 1795141575203,
+     "status": 200,
+     "path": "/api/admin/supply-content",
+     "q": "?has_draft=1&limit=25&offset=0",
+     "total": 8
+    }
+   ],
+   "ofN": [
+    "of 8"
+   ],
+   "selects": [
+    "Content status=",
+    "Type=",
+    "Open draft=1",
+    "Rows per page=25"
+   ],
+   "tabs": []
+  },
+  {
+   "key": "aa_content_drafts",
+   "tile": 1,
+   "landed": "/admin/aa-content?status=draft",
+   "calls": [
+    {
+     "t": 1795141583873,
+     "status": 200,
+     "path": "/api/admin/aa-content",
+     "q": "?status=draft&limit=25&offset=0",
+     "total": 1
+    }
+   ],
+   "ofN": [
+    "of 1"
+   ],
+   "selects": [
+    "Kind=",
+    "Language=",
+    "Status=draft",
+    "Country=",
+    "Rows per page=25"
+   ],
+   "tabs": []
+  }
+ ],
+ "summaryStatus": 200,
+ "tiles": [
+  {
+   "key": "review_waiting",
+   "count": 73,
+   "available": true,
+   "filter": {}
+  },
+  {
+   "key": "supply_drafts",
+   "count": 8,
+   "available": true,
+   "filter": {
+    "has_draft": "1"
+   }
+  },
+  {
+   "key": "supply_no_description",
+   "count": 0,
+   "available": true,
+   "filter": {
+    "status": "draft"
+   }
+  },
+  {
+   "key": "aa_content_drafts",
+   "count": 1,
+   "available": true,
+   "filter": {
+    "status": "draft"
+   }
+  },
+  {
+   "key": "place_cards_to_review",
+   "count": 4859,
+   "available": true,
+   "filter": {
+    "status": "auto_checked"
+   }
+  },
+  {
+   "key": "compliance_holds",
+   "count": 0,
+   "available": true,
+   "filter": {}
+  }
+ ],
+ "tilesDom": [
+  {
+   "key": "review_waiting",
+   "href": "/admin/review",
+   "text": "Review Queue: waiting 73 Oldest: 8 Oct 2026"
+  },
+  {
+   "key": "supply_drafts",
+   "href": "/admin/supply-content?has_draft=1",
+   "text": "Supply copy: drafts to review 8 Oldest: 25 Oct 2026"
+  },
+  {
+   "key": "supply_no_description",
+   "href": "/admin/supply-content?status=draft",
+   "text": "Hotels and services with no description 0 Nothing waiting"
+  },
+  {
+   "key": "aa_content_drafts",
+   "href": "/admin/aa-content?status=draft",
+   "text": "AA content: drafts 1 Oldest: 25 Oct 2026"
+  },
+  {
+   "key": "place_cards_to_review",
+   "href": "/admin/places/cards?status=auto_checked",
+   "text": "Place cards to review 4859 Oldest: 13 Oct 2026"
+  },
+  {
+   "key": "compliance_holds",
+   "href": "/admin/tenant-qa/compliance",
+   "text": "Compliance holds 0 Nothing waiting"
+  }
+ ],
+ "direct": {
+  "calls": [
+   {
+    "t": 1795141546490,
+    "status": 200,
+    "path": "/api/admin/content-quality/place-cards",
+    "q": "?limit=50&offset=0&status=auto_checked",
+    "total": 4859
+   }
+  ],
+  "ofN": [
+   "of 4,859"
+  ],
+  "selects": [
+   "Card status=auto_checked",
+   "Rows per page=50"
+  ]
+ },
+ "console": [],
+ "failing": [],
+ "console_others": [],
+ "failing_others": []
+}

@@ -1,0 +1,18 @@
+{"step": "fixture", "supplier_id": "f15ae24f-7e57-4cfe-8ad4-e24b2c5776a2", "contract_id": "04c5f194-757a-4329-885e-6913ff532849", "service_id": "fdc7ef6b-6ccf-4825-8e61-2fdaa20eba37", "rolled_back_at_end": true}
+{"step": "terms_saved", "ok": true, "child_pct": "50.00", "tiers": [{"min_days": 30, "fee_pct": "0.00"}, {"min_days": 15, "fee_pct": "50.00"}, {"min_days": 0, "fee_pct": "100.00"}], "deposit_pct": "30.00", "balance_due_days_before": 21}
+{"step": "cancellation_tiers_fee_pct", "ok": true, "fee_pct_by_days_before": {"45": "0.00", "30": "0.00", "20": "50.00", "15": "50.00", "7": "100.00", "0": "100.00"}}
+{"step": "adult_rate", "rate_id": "5dab7775-83b3-4bfd-a085-d52365883a73", "net_amount": "40.00", "pax_type": "adult", "unit": "person"}
+{"step": "free_sale_term", "restriction_id": "b5b10acb-1fa5-4f3d-9db3-1839981a3ef5", "status": "contract", "max_pax": 8}
+{"step": "stop_sale_on_draft_refused", "ok": true, "code": "contract_not_published"}
+{"step": "maker_cannot_publish", "ok": true, "code": "maker_checker"}
+{"step": "contract_published_by_checker", "ok": true, "status": "published"}
+{"step": "terms_fixed_after_publish", "ok": true, "code": "contract_locked"}
+{"step": "permission_map_stop_sale_write", "ok": true, "holders": ["admin", "contracting"], "contracting_can": true, "sales_can": false, "sales_http": "403 (require dependency; HTTP covered by tests/integration/test_aa1145_supply_model.py)"}
+{"step": "stop_sale_set_by_contracting", "ok": true, "restriction_id": "740970ea-ea91-4dd6-929e-29a8f489b717", "status": "pending", "in_effect": true, "date_from": "2026-12-24", "date_to": "2026-12-24"}
+{"step": "availability_check", "ok": true, "days": [["2026-12-23", "available", "free_sale"], ["2026-12-24", "on_request", "stop_sale"], ["2026-12-25", "available", "free_sale"]]}
+{"step": "pricing_policy", "loaded": true, "child_pct_activity": "100", "child_age_max": 11}
+{"step": "child_line_is_50_pct", "ok": true, "adult_line_net": "40.00", "child_line_net": "20.00", "child_to_adult": "0.5", "child_basis": {"basis": "contract_pct", "pct": "50"}}
+{"step": "family_line_2a_1c", "ok": true, "family_23_net": "100.00", "family_24_net": "100.00", "child_basis": {"basis": "contract_pct", "pct": "50"}, "currency": ["USD"]}
+{"step": "quote_line_24_12_on_request", "ok": true, "lines": {"adult_only_24": {"engine": ["stop_sale"], "line_availability": "on_request", "supply_note": {"stop_sale": ["2026-12-24"]}}, "child_only_24": {"engine": ["stop_sale"], "line_availability": "on_request", "supply_note": {"stop_sale": ["2026-12-24"]}}, "family_23": {"engine": ["free_sale"], "line_availability": "available", "supply_note": null}, "family_24": {"engine": ["stop_sale"], "line_availability": "on_request", "supply_note": {"stop_sale": ["2026-12-24"]}}}, "note_on_contrast": "quote_in keeps an sv: line without a departure on_request anyway; the engine verdict and supply_availability are what change on 24/12"}
+{"step": "rolled_back_nothing_persists", "ok": true, "suppliers_left": 0, "restrictions_left": 0}
+{"summary": "AA-1145 live proof", "ok": true, "failed": []}
