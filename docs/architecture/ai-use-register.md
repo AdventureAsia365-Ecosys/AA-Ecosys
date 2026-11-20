@@ -1,18 +1,18 @@
 ---
 id: APP-06-ai-register
 title: "AI Use Register"
-description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps, and the machine-readable marking of AI output (EU AI Act Art. 50). v1.14."
+description: "Every AI and paid-data stage of the ecosystem with its owner role, provider, data scope, budget, kill switch, eval and human gate, and the OWASP LLM Top 10 (2025) map of existing controls and gaps, and the machine-readable marking of AI output (EU AI Act Art. 50). v1.15."
 type: reference
 status: draft
 owner: nghiep
 audience: [engineer, cto, cio, agent]
 applies_to: [ecosystem, aa-cis-api, aa-cis-worker, tripplanner-lambda, aa-crm-api, aa-booking-api, aa-booking-admin]
-last_reviewed: 2026-11-10
+last_reviewed: 2026-11-20
 review_every_days: 30
-related: [ARCH-01-ai-gateway, APP-06-routes, APP-06-eval, APP-06-prompts, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-804, AA-820, AA-1040, AA-1138]
+related: [ARCH-01-ai-gateway, APP-06-routes, APP-06-eval, APP-06-prompts, ARCH-08, docs/adr/0009-ai-platform-and-provider-gateway.md, AA-804, AA-820, AA-1040, AA-1138, AA-1168]
 ---
 
-# AI Use Register (v1.14)
+# AI Use Register (v1.15)
 
 One row per place where the ecosystem calls an AI model or a paid data provider. It answers, for each stage: what it
 is for, who owns the decision to change it, which provider and model family serve it today, which data may leave AWS,
@@ -102,6 +102,10 @@ which human checks the output before anyone relies on it.
   `shared.llm_cassette` (prompt hash only, no text for a `pii` stage, DM-7.1 30 days proposed), so "no prompt or output
   text" holds for the ledger, not for every store; [DPA Annex 1](../legal/dpa-annex-1-processing.md) §3 and
   [Annex 2](../legal/dpa-annex-2-security.md) M-20 say so.
+- **v1.15 (2026-11-20, S286, AA-1168):** the TripPlanner planning chat (`tp_plan_chat`) gets its row and its
+  marking row; the WordPress, Facebook and plain-text channels carry a visible disclosure line next to their machine
+  mark (CIS); a [register guard](#register-guard) fails the docs check when a route of the route snapshot, or a
+  gateway stage that runs without a route row, has no row here. No route change.
 - **Who updates it:** the PR that adds, removes or re-routes a stage, adds a provider, or changes a stage's data
   scope, budget or human gate updates its row. A new provider also updates the tenant terms list (AA-820).
 
@@ -225,6 +229,7 @@ is not from the writers' family (Anthropic), per decision 12. acc2 is `aws_only`
 | Stage | App | Purpose | Owner role | Provider / family today | Data scope | Tenant data | Budget source | Kill switch | Golden set / eval | Human gate |
 |---|---|---|---|---|---|---|---|---|---|---|
 | `tp_compose` | TripPlanner | Narrate and re-narrate a traveller's trip | Tech lead | Sonnet 5.5 → Sonnet 4.6 → Haiku 4.5, Bedrock (acc3) / Anthropic (CIS 366; CIS 376 dropped the OpenAI API rung its gateway never calls). **TripPlanner's gateway calls Bedrock only today**: it skips Sonnet 5.5 on the Anthropic API until it gains vendor adapters. It may also skip the new acc3 rungs: it reads the acc3 connection circuit from `catalog.v_llm_gateway_config_v1`, which still counts single-model refusals that the CIS breaker no longer counts, so after a CIS request that last probed two refused acc3 models acc3 stays tripped for TripPlanner until the next CIS answer on acc3 (follow-up: a CIS view migration with the new rule) | vendor_direct since CIS 366 (TripPlanner reads its route through `catalog.v_llm_gateway_config_v1`, CIS 323) | No; **traveller free text** can be in the prompt (no automated scrub yet, ADR 0009 "Not decided here") | `TP_DAILY_SPEND_CAP_USD` (5 USD/day over the online stages, set by Infra), read through `catalog.v_llm_app_spend_today_v1` (no fallback since AA-1027 E5); fails closed when the spend cannot be read (AA-642 S0); per-visitor limits in `tripplanner.ai_rate_counter` (tp-023, AA-1015). Its acc3 calls count toward the acc3 100 USD connection cap but are not stopped by it (follow-up) | Over the cap the site serves basic narration (degrade mode) | None | AI label on the site and on AI narration; an Adventure Asia advisor reviews every itinerary before booking |
+| `tp_plan_chat` | TripPlanner | Planning chat (`POST /trip/{id}/chat`): the traveller asks in their own words, the model calls read-only catalog tools and answers with a reply and an optional change to the trip (at most 3 model calls per message) | Tech lead | No route row of its own yet: it borrows the `tp_compose` route's models (`load_route(..., borrow_from="tp_compose")`), logged under its own stage, Bedrock only through TripPlanner's gateway (as `tp_compose`) | As `tp_compose` (its borrowed route) | No; **traveller free text** is in the prompt (no automated scrub yet, CIS 451 notes the gap) | Month caps per app and per tenant (`tripplanner.ai_spend_month`, tp-029; admin settings, 2 USD each by default), then the daily app cap and the tenant AI budget (`budget_status`); fails closed; per-session message limits (settings) | At a cap or with AI off the chat answers `paused` and the composer closes; the rest of the planner is untouched | None (prompt manifest `backend/shared/prompt_versions.json`, version gate in CI) | The server keeps answers inside the catalog (grounding check: names, links and references the turn's tools did not return become a server sentence); the chat writes no trip state: the traveller applies a proposal with "Apply to my trip"; an advisor reviews every itinerary before booking |
 | `tp_search_embed` | TripPlanner | Embed the traveller's search text | Engineer on duty | Cohere Embed v4, Bedrock acc2 → acc3 / Cohere | aws_only | No; traveller search text | Same daily cap | Same degrade mode | None | Not applicable |
 | `tp_extract`, `tp_component_embed` | TripPlanner | Routes kept for the old place extraction and embedding; **no caller found on `main`** (the place pipeline moved to CIS `a3_*`, AA-712) | Engineer on duty | Sonnet 5.5 / Cohere Embed v4 | aws_only | No | Logged only (offline stages are outside the daily cap) | Connection `enabled` | None | None (not called) |
 
@@ -303,13 +308,14 @@ any label a Channel or law requires to what it publishes ([●].4(b)).
 
 | Surface | What AI wrote | Stored mark | Delivered mark | Visible notice |
 |---|---|---|---|---|
-| Content studio piece (T9) | Blog and social pieces (`t9_write`) | `acp_shared.content_piece.writer_input -> 'ai_provenance'`: `ai_generated`, `generator`, writer `model` (from the `t9_write` ledger row), `generated_at`; `human_edited_at` after a tenant edit. A piece older than AA-1040 still reads as AI-generated (`generated_at` = `created_at`, model unknown) | `piece.ai` in `/v1/content-writing/pieces/*`; HTML export: `<meta name="ai-*">` in the `<head>` (document) or after the `<article>` (fragment), `data-ai-*` on the `<article>`; every download: `X-AI-Generated` / `X-AI-Generator` / `X-AI-Model` headers | `publisher` line at review, publish and export; "AI-assisted" badge on each My Content, Published and publish row and in the piece drawer |
+| Content studio piece (T9) | Blog and social pieces (`t9_write`) | `acp_shared.content_piece.writer_input -> 'ai_provenance'`: `ai_generated`, `generator`, writer `model` (from the `t9_write` ledger row), `generated_at`; `human_edited_at` after a tenant edit. A piece older than AA-1040 still reads as AI-generated (`generated_at` = `created_at`, model unknown) | `piece.ai` in `/v1/content-writing/pieces/*`; HTML export: `<meta name="ai-*">` in the `<head>` (document) or after the `<article>` (fragment), `data-ai-*` on the `<article>`; every download: `X-AI-Generated` / `X-AI-Generator` / `X-AI-Model` headers; plain-text export (AA-1168): the body ends with `---`, the disclosure line and one `AI-Content: ai-generated=true; ai-generator=…; ai-model=…; ai-generated-at=…; ai-human-edited=…; digital-source-type=<IPTC URI>` line (a saved `.txt` keeps no headers) | `publisher` line at review, publish and export; "AI-assisted" badge on each My Content, Published and publish row and in the piece drawer; the exported HTML and text carry the disclosure line (below) |
 | Catalog Master text (A-series) | Tour name, subtitle, summary, description, highlights and day-by-day text of every Master tour (`s1_generate` and its repair stages) | None per row: every `gold_aa_internal.published_tours` `aa_*` text is S1 writer output by construction; the writer models and a staff edit before approval are on `silver_aa_internal.generated_content` (admin only) | `ai: {ai_generated, generator: "Adventure Asia catalog writer", generated_at, model: null, human_edited: null}` in the tenant tour reads (`/v1/tours/pool`, `/v1/tours/{id}`, `/v1/tours/{id}/full`), `generated_at` = the last Master publish (`updated_at`, else `published_at`); TripPlanner tour pages: `data-ai-generated="true" data-ai-source="catalog" data-ai-generated-at` on the summary, highlights and each itinerary day block (never page-wide: prices, photos and facts on the same page are not AI output). The same `ai` object in the catalog tour JSON other apps read: `Tour.ai` of catalog.http.v1 1.3 (the partner CRM, CIS `services/catalog_http`, inside the hashed body so the ETag moves with a Master publish) and every tour card and tour detail of the TripPlanner browse Lambda (`backend/browse/catalog.py` `catalog_ai_mark`; the tour page's `data-ai-generated-at` takes its `generated_at`). There `generated_at` is `catalog.v_tour.text_updated_at` (CIS 359), the Master row's `updated_at`, so it equals the tenant reads' value; a photo change does not move it. Until 359 is applied both readers fall back to `v_tour.updated_at` (the later of the text publish and the photo updates, an upper bound). **Not marked yet:** Marketplace rows (tour name only) | AI label (AA-819) on the tour text and the `traveller` line under the itinerary (AA-1033); `publisher` line in the Content studio catalog tab |
 | Booking supply text | Hotel and service descriptions and highlights (`supply_content_writer`), reviewed and published by AA staff in CIS `/admin/supply-content`; shown read-only in the Booking admin and on proposal items | `shared.supply_content_version.origin` (`llm` = the writer's draft, `human` = a staff edit) and its `based_on_version_id` chain (a staff edit of a draft stays AI-assisted; a text written from scratch is not AI), `created_at` of the draft; served to Booking as `ai_generated`, `ai_generated_at`, `ai_human_edited` on `catalog.v_supply_content` (CIS 358, NULL while not published) | `content.ai` on the Booking hotel and service detail and `supply.ai` on proposal items: `{ai_generated, generator: "Adventure Asia supply content writer", model: null, generated_at, human_edited}`; `data-ai-generated` / `data-ai-source="cis-supply-content"` / `data-ai-generated-at` / `data-ai-human-edited` on each text block in the Booking admin (never page-wide) | "AI-assisted" badge (kit `AiNotice form="badge"`, staff sentence as its tooltip) next to the text in the hotel / service CIS panel, the service form, the proposal builder and the proposal preview; CIS admin labels each version "Written by model" |
 | Content studio tour version (T2) | Tour rewrites (`t2_generate`) | `gold_aa_internal.tenant_tour_versions.edit_source` (`ai_generated`, `re_rewrite`; `tenant_edit` = a person's edit) and `generation_meta` (admin only) | `ai` in every tenant version read (`/v1/tours/my-versions`, `/v1/tours/versions/{id}`); DOCX download: core properties keywords `ai-generated` and comments (generator, generated-at, human-edited) | `publisher` line in the catalog tab, drawer and rewrite panel |
-| WordPress post (T11 blog) | The published T9 piece | As the piece | Post body: `<article data-ai-generated="true" data-ai-generator data-ai-model data-ai-generated-at data-ai-human-edited>` (kept by WordPress for every role) and, after it, `<meta name="ai-generated">`, `ai-generator`, `ai-model`, `ai-generated-at`, `ai-human-edited`, `digital-source-type` (IPTC `trainedAlgorithmicMedia`), kept only when the connected WordPress user may post unfiltered HTML (administrators, editors) | The tenant's own site; Schedule [●].4(b) |
-| Facebook Page post (T11) | The published T9 piece | As the piece | **None on the platform**: the Graph API Page feed has no AI label for a text post; the text is not changed | Schedule [●].4(b): the tenant labels it if Facebook's rules or the law require |
+| WordPress post (T11 blog) | The published T9 piece | As the piece | Post body: `<article data-ai-generated="true" data-ai-generator data-ai-model data-ai-generated-at data-ai-human-edited>` (kept by WordPress for every role) and, after it, `<meta name="ai-generated">`, `ai-generator`, `ai-model`, `ai-generated-at`, `ai-human-edited`, `digital-source-type` (IPTC `trainedAlgorithmicMedia`), kept only when the connected WordPress user may post unfiltered HTML (administrators, editors). REST post meta (AA-1168): `ai_generated`, `ai_generator`, `ai_model`, `ai_generated_at`, `ai_human_edited`, `ai_digital_source_type`, stored only when the site registered them (snippet below) | The disclosure line as the last paragraph of the `<article>` (AA-1168): `<p class="ai-disclosure" data-ai-disclosure="true"><em>This content was created with the help of AI.</em></p>`, kept for every WordPress role; Schedule [●].4(b) |
+| Facebook Page post (T11) | The published T9 piece | As the piece | **No platform field**: the Graph API Page feed has no AI label for a text post. Since AA-1168 the post text ends with the disclosure line and the `#AIgenerated` hashtag, the one token software can find in the text; the full mark stays in the piece and its `publish_log` row | The disclosure line at the end of the post ("This content was created with the help of AI. #AIgenerated"); Schedule [●].4(b) for anything else Facebook's rules or the law require |
 | CRM AI draft | Reply and follow-up drafts (`crm_draft_reply`) | `crm.ai_draft` (every row is model output; the model is on the ledger row `llm_call_id`) | `ai: {ai_generated, generator, generated_at}` in the draft answer; `data-ai-generated` / `data-ai-generated-at` on the draft text in the CRM web | `staff` line under the draft. A message a member writes from it is their own (a person reviews and sends) |
+| Trip Planner planning chat | Chat replies and trip-change proposals (`tp_plan_chat`), shown only in the traveller's own planner, never published | None stored: the chat keeps no conversation server-side; the answer carries `ai_generated` (false for a server sentence written by the grounding rule or a refusal) | `ai_generated` in the chat answer; `data-ai-generated="true"` on each reply the model wrote | `narration` line under each model-written reply (none under a server sentence) |
 | Trip Planner narration | Day text on request (`tp_compose`, source `llm` / `mixed`) or AA itinerary text written earlier (`master`) | The narrate answer's `source` | `data-ai-generated="true"` and `data-ai-source` on the narration block | `narration` line for `llm` / `mixed`, `traveller` line otherwise; the per-source AI label (AA-819) |
 
 **Coverage limits** (03/11/2026, v1.6): the table lists every surface that shows AI text to a tenant, a staff member or the public today, each with a stored and a delivered mark. The two v1.5 gaps are closed (AA-1040): the catalog tour JSON (catalog.http.v1 1.3 and the TripPlanner browse Lambda) and the Booking supply text (CIS 358). Still without a per-row mark: Marketplace rows, which show the tour name only. Where the model is not known at the read (catalog tours, Booking supply text), `model` is null and the writer model stays on the CIS ledger (admin only). A surface added later gets its row here first (ADR 0019 d19, deadline 02/12/2026).
@@ -319,13 +325,34 @@ any label a Channel or law requires to what it publishes ([●].4(b)).
 
 | Channel | Platform label through the API | What AA sends |
 |---|---|---|
-| WordPress (blog) | No AI field in the REST API; unregistered post meta is ignored | The HTML mark above |
-| Facebook Page feed (text) | None documented for a text post. Meta's "AI info" label comes from image and video metadata (C2PA / IPTC) or the uploader's own disclosure in the app; a `video_labels` parameter for video is reported by third parties only | Nothing extra; the mark stays in the piece |
+| WordPress (blog) | No AI field in the REST API; unregistered post meta is ignored | The HTML mark above, the disclosure paragraph, and the `ai_*` post meta keys (stored by a site that registered them) |
+| Facebook Page feed (text) | None documented for a text post. Meta's "AI info" label comes from image and video metadata (C2PA / IPTC) or the uploader's own disclosure in the app; a `video_labels` parameter for video is reported by third parties only | The disclosure line and `#AIgenerated` at the end of the text (AA-1168); the full mark stays in the piece |
 | Instagram, LinkedIn, e-mail, ads | Not built | — |
 | TikTok | Not built; third-party guides name a boolean `is_aigc` on the Content Posting API (video `post_info`), not confirmed against TikTok's reference | — |
 
 The meta names are plain and self-describing; no single web standard marks AI text yet, so this table is their
 definition. C2PA Content Credentials would apply to images and video, which no stage generates today.
+
+**WordPress post meta, for a tenant site that wants it stored** (AA-1168): WordPress keeps a REST `meta` key only when
+the site registered it. A site owner who wants the mark in the post's own data (readable at
+`/wp-json/wp/v2/posts/<id>`, `meta`) adds to the theme's `functions.php` or a small plugin:
+
+```php
+foreach (['ai_generated', 'ai_generator', 'ai_model', 'ai_generated_at', 'ai_human_edited', 'ai_digital_source_type'] as $key) {
+    register_post_meta('post', $key, ['show_in_rest' => true, 'single' => true, 'type' => 'string']);
+}
+```
+
+Without it the post still carries the HTML mark and the disclosure paragraph.
+
+## Register guard
+
+`tools/docs/test_ai_use_register.py` (run by the docs check, "Unit tests of the lint tools") fails when a stage of the
+route snapshot [`docs/generated/llm-routes.snapshot.json`](../generated/llm-routes.snapshot.json) (every row of
+`shared.llm_role_config`, active or not) or a gateway stage that runs without a route row of its own (listed in the
+test: today `tp_plan_chat`, which borrows the `tp_compose` route) has no row in the "Register" section above. A row
+names its stages in backticks in its first cell; `crm_*` covers every CRM stage. A recaptured snapshot with a new
+stage turns the docs check red until its row is written.
 
 ## OWASP Top 10 for LLM Applications (2025): controls and gaps
 
@@ -349,6 +376,7 @@ decision or issue that closes them, or say "none planned".
 
 | Version | Date | Change |
 |---|---|---|
+| v1.15 | 20/11/2026 (S286, AA-1168) | `tp_plan_chat` (TripPlanner planning chat) register and marking rows; WordPress, Facebook and plain-text export rows: the visible disclosure line, the WordPress `ai_*` post meta (with the registration snippet), `#AIgenerated` on Facebook, the `AI-Content:` line of the text export; the register guard. No route change. |
 | v1.14 | 19/11/2026 (S285, AA-1138) | CRM row: `crm_draft_reply` runs Claude Haiku 5.5 on Bedrock acc1 (`us.` inference profile, the acc1 invoker role assumed by the CRM task role with its own ExternalId) first and Amazon Nova Lite on acc2 last (AA-Partner crm-078; root ADR 0001a Note S285, ADR 0008a §5 amendment); the CRM's per-connection cap (acc1 5 USD from the CIS share, acc2 5 USD). The other CRM stages keep Nova Lite only. |
 | v1.13 | 09/11/2026 (S274, AA-820) | Records CIS 383 (route control version 7, applied 06/11): no OpenAI writer rung, no Nova Lite judge or instrument rung (the other validate rows keep theirs); 383 wins over the row chains it names; provider list for the tenant terms corrected; CIS 385 reply store noted. No new route change. |
 | v1.12 | 06/11/2026 (S271, AA-820) | The AA-Partner Content studio terms and privacy pages moved to Draft v0.5 (EN and VI): Claude models write and may also check, the direct Anthropic API and OpenAI API are providers that may process the content (not a fallback), Amazon Nova / Meta Llama may also review and check, an OpenAI model may write as a last resort; AA may change the order without notice, adding or replacing a provider follows the DPA notice (6.2). Closes the v1.11 open item. Terms-wording notes of the provider list and the T-stage narrative follow. No route change. |
