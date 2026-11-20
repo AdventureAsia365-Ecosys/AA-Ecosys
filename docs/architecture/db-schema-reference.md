@@ -1,15 +1,15 @@
 # AA-Ecosys DB Schema Reference (live dump)
 
-<!-- schema-fingerprint: 1d5ec382d56966901988ba9dab64d1ad4b8880ba8f853a971d8076774f25f15c -->
+<!-- schema-fingerprint: 1718c35c8c52fb73d357f9bf3d32a22610f4b80949adb2307bc214b491f0114f -->
 
-**Verified:** 2026-11-19 16:22 UTC — live catalog dump of the shared RDS (`aa-cis-dev-db`, `aa-cis/dev/rds`, acc2, us-west-1, PostgreSQL 15.17). Latest migration per owner: CIS **461**, TripPlanner **tp-035**, Booking **bk-061**, CRM **crm-082** (616 versions registered).
+**Verified:** 2026-11-20 00:37 UTC — live catalog dump of the shared RDS (`aa-cis-dev-db`, `aa-cis/dev/rds`, acc2, us-west-1, PostgreSQL 15.17). Latest migration per owner: CIS **462**, TripPlanner **tp-035**, Booking **bk-061**, CRM **crm-082** (617 versions registered).
 
 > **Generated file — do not edit by hand** (data standards DM-3.1). It is the single source of truth for table/column names, owners, grants and RLS across CIS, TripPlanner and Booking (one RDS, one schema per owner; ownership rules: `docs/database/schema-ownership.md`). Read it before introspecting columns. AA-CIS-Infra `.github/workflows/db-schema-dump.yml` regenerates it after every DB Migrate apply and every night (`db/schema_dump.py` in a one-off ECS task, then `db/gen_schema_reference.py`) and opens a PR here when the structure changed.
-> Source: AA-CIS-Infra DB Schema Dump (after DB Migrate apply of cis/461_aa1127_cost_explorer_daily_settings.sql (run 44564756011)), https://github.com/AdventureAsia365-Ecosys/AA-CIS-Infra/actions/runs/44565071606
+> Source: AA-CIS-Infra DB Schema Dump (after DB Migrate apply of cis/462_aa1155_custom_staff_roles.sql (run 44646895580)), https://github.com/AdventureAsia365-Ecosys/AA-CIS-Infra/actions/runs/44647104783
 
 **ERD:** [one Mermaid diagram per schema](erd/README.md) (keys and foreign keys), generated from the same dump by AA-CIS-Infra `db/gen_erd.py` (AA-894).
 
-**Totals:** 14 schemas (0 empty: none), 546 tables/views, 1530 indexes, 711 FKs, 326 RLS policy(ies), 231 functions, 13 enums. Database size 2.2 GB, max_connections 181. RLS catalogue guard: 0 unallowlisted violation(s) (see *RLS catalogue guard (X2)*). DM-6.1 tags: 421 tagged column(s), 70 untagged candidate(s).
+**Totals:** 14 schemas (0 empty: none), 549 tables/views, 1533 indexes, 713 FKs, 326 RLS policy(ies), 231 functions, 13 enums. Database size 2.3 GB, max_connections 181. RLS catalogue guard: 0 unallowlisted violation(s) (see *RLS catalogue guard (X2)*). DM-6.1 tags: 422 tagged column(s), 70 untagged candidate(s).
 
 ## Conventions
 - Column format: `name type` — `NN` suffix = NOT NULL. Types are `format_type()` output (`character varying(64)`, `text[]`, `vector(1024)`, enums schema-qualified). A ` · pii:<class>` / ` · conf:<class>` suffix is the column's data standards DM-6.1 tag (its comment starts with it), `(also …)` = further tags named in the same comment; see *Personal and confidential data tags (DM-6.1)*.
@@ -24,17 +24,17 @@
 | `acp_contract` | cis_owner | 17 | 674 MB | aa_app_user: USAGE; catalog_owner: USAGE; cis_app: USAGE |
 | `acp_deliver` | cis_owner | 1 | 40 kB | aa_app_user: USAGE; cis_app: USAGE |
 | `acp_shared` | cis_owner | 24 | 43.5 MB | aa_app_user: USAGE; catalog_owner: USAGE; cis_app: USAGE |
-| `booking` | bk_owner | 119 | 16.7 MB | booking: USAGE; cis_app: USAGE; tripplanner: USAGE |
+| `booking` | bk_owner | 119 | 16.9 MB | booking: USAGE; cis_app: USAGE; tripplanner: USAGE |
 | `catalog` | cis_owner | 40 |  | aa_app_user: USAGE; booking: USAGE; catalog_owner: USAGE; tripplanner: USAGE |
-| `crm` | crm_owner | 159 | 71.6 MB | crm_ai_reader: USAGE; crm_app: USAGE; crm_eraser: USAGE; crm_insights: USAGE; crm_support_reader: USAGE |
+| `crm` | crm_owner | 159 | 72.1 MB | crm_ai_reader: USAGE; crm_app: USAGE; crm_eraser: USAGE; crm_insights: USAGE; crm_support_reader: USAGE |
 | `geo` | cis_owner | 18 | 356.9 MB | catalog_owner: USAGE; cis_app: USAGE |
 | `gold_aa_internal` | cis_owner | 9 | 8.6 MB | aa_app_user: USAGE; catalog_owner: USAGE; cis_app: USAGE |
 | `learn` | cis_owner | 9 | 400 kB | cis_app: USAGE |
 | `public` | pg_database_owner | 1 | 24 kB | PUBLIC: USAGE |
 | `retired` | cis_owner | 2 | 72 kB |  |
-| `shared` | cis_owner | 115 | 1 GB | aa_app_user: USAGE; bk_owner: USAGE; catalog_owner: USAGE; cis_app: USAGE; crm_owner: USAGE; tp_owner: USAGE; tripplanner: USAGE |
+| `shared` | cis_owner | 118 | 1.1 GB | aa_app_user: USAGE; bk_owner: USAGE; booking: USAGE; catalog_owner: USAGE; cis_app: USAGE; crm_owner: USAGE; tp_owner: USAGE; tripplanner: USAGE |
 | `silver_aa_internal` | cis_owner | 10 | 30.3 MB | aa_app_user: USAGE; catalog_owner: USAGE; cis_app: USAGE |
-| `tripplanner` | tp_owner | 22 | 5 MB | cis_app: USAGE; tripplanner: USAGE |
+| `tripplanner` | tp_owner | 22 | 5.1 MB | cis_app: USAGE; tripplanner: USAGE |
 
 ## `acp_contract` (17 objects)
 
@@ -472,7 +472,7 @@ miss_reason text
 - grant `catalog_owner`: SELECT
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `acp_shared.audit_log` (table, ~8173 rows, 5.9 MB)
+### `acp_shared.audit_log` (table, ~8173 rows, 6 MB)
 ```
 id uuid NN
 tenant_id character varying(50)
@@ -2260,7 +2260,7 @@ updated_at timestamp with time zone NN
 - trigger `invoices_guard`: BEFORE INSERT OR UPDATE ON booking.invoices FOR EACH ROW EXECUTE FUNCTION booking.invoices_guard()
 - trigger `invoices_set_updated_at`: BEFORE UPDATE ON booking.invoices FOR EACH ROW EXECUTE FUNCTION booking.set_updated_at()
 
-### `booking.job` (table, ~13155 rows, 8.2 MB)
+### `booking.job` (table, ~12920 rows, 8.3 MB)
 ```
 id uuid NN
 kind text NN
@@ -3205,7 +3205,7 @@ supplier_cancel_fee_currency character(3) · conf:commercial
 - trigger `supplier_bookings_guard`: BEFORE INSERT OR UPDATE ON booking.supplier_bookings FOR EACH ROW EXECUTE FUNCTION booking.supplier_bookings_guard()
 - trigger `supplier_bookings_set_updated_at`: BEFORE UPDATE ON booking.supplier_bookings FOR EACH ROW EXECUTE FUNCTION booking.set_updated_at()
 
-### `booking.supplier_contract_terms` (table, 16 kB)
+### `booking.supplier_contract_terms` (table, 32 kB)
 ```
 supplier_contract_id uuid NN
 cancellation_tiers jsonb · conf:commercial
@@ -3445,7 +3445,7 @@ updated_at timestamp with time zone NN
 - grant `booking`: INSERT, SELECT, UPDATE
 - trigger `suppliers_set_updated_at`: BEFORE UPDATE ON booking.suppliers FOR EACH ROW EXECUTE FUNCTION booking.set_updated_at()
 
-### `booking.supply_restrictions` (table, 40 kB)
+### `booking.supply_restrictions` (table, 72 kB)
 ```
 id uuid NN
 supplier_contract_id uuid NN
@@ -5698,7 +5698,7 @@ object_ids text[] NN
 - trigger `audit_event_check_at`: BEFORE INSERT ON crm.audit_event_legacy FOR EACH ROW EXECUTE FUNCTION crm.audit_event_check_at()
 - trigger `audit_event_no_truncate`: BEFORE TRUNCATE ON crm.audit_event_legacy FOR EACH STATEMENT EXECUTE FUNCTION crm.reject_append_only_change()
 
-### `crm.audit_event_p202611` (table, ~13060 rows, 8.7 MB)
+### `crm.audit_event_p202611` (table, ~13060 rows, 8.8 MB)
 ```
 event_id uuid NN
 tenant_id uuid NN
@@ -5846,7 +5846,7 @@ object_ids text[] NN
 - trigger `audit_event_check_at`: BEFORE INSERT ON crm.audit_event_p202702 FOR EACH ROW EXECUTE FUNCTION crm.audit_event_check_at()
 - trigger `audit_event_no_truncate`: BEFORE TRUNCATE ON crm.audit_event_p202702 FOR EACH STATEMENT EXECUTE FUNCTION crm.reject_append_only_change()
 
-### `crm.audit_export_manifest` (table, ~22273 rows, 14.6 MB)
+### `crm.audit_export_manifest` (table, ~23482 rows, 15 MB)
 ```
 manifest_id uuid NN
 tenant_id uuid NN
@@ -7325,7 +7325,7 @@ purge_after timestamp with time zone
 - trigger `invoice_sequence_set_updated_at`: BEFORE UPDATE ON crm.invoice_sequence FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
 - trigger `invoice_sequence_step`: BEFORE UPDATE ON crm.invoice_sequence FOR EACH ROW EXECUTE FUNCTION crm.guard_invoice_sequence()
 
-### `crm.job` (table, ~20105 rows, 17.2 MB)
+### `crm.job` (table, ~19996 rows, 17.2 MB)
 ```
 id uuid NN
 kind text NN
@@ -7398,7 +7398,7 @@ purge_after timestamp with time zone
 - trigger `legal_hold_set_updated_at`: BEFORE UPDATE ON crm.legal_hold FOR EACH ROW EXECUTE FUNCTION crm.set_updated_at()
 - trigger `legal_hold_status_transition`: BEFORE UPDATE OF status ON crm.legal_hold FOR EACH ROW EXECUTE FUNCTION crm.enforce_status_transition()
 
-### `crm.lifecycle_run` (table, ~935 rows, 496 kB)
+### `crm.lifecycle_run` (table, ~935 rows, 520 kB)
 ```
 run_id uuid NN
 tenant_id uuid NN
@@ -11789,9 +11789,9 @@ created_at timestamp with time zone
 - index `idx_pipeline_lessons_stage`: btree (stage) WHERE (is_active = true)
 - index `pipeline_lessons_pkey` PRIMARY KEY: UNIQUE btree (id)
 
-## `shared` (115 objects)
+## `shared` (118 objects)
 
-### `shared.admin_users` (table, ~12 rows, 80 kB)
+### `shared.admin_users` (table, ~12 rows, 88 kB)
 ```
 id uuid NN
 username character varying(100) NN · pii:online_id
@@ -11806,18 +11806,22 @@ cognito_iss text · pii:online_id
 cognito_sub text · pii:online_id
 last_login_at timestamp with time zone
 is_owner boolean NN
+custom_role text
+is_business_owner boolean NN
 ```
 - owner `cis_owner`
 - index `admin_users_cognito_identity_key`: UNIQUE btree (cognito_iss, cognito_sub)
 - index `admin_users_email_lower_key`: UNIQUE btree (lower(email))
+- index `admin_users_one_business_owner_key`: UNIQUE btree (is_business_owner) WHERE is_business_owner
 - index `admin_users_pkey` PRIMARY KEY: UNIQUE btree (id)
 - index `admin_users_username_key`: UNIQUE btree (username)
 - check `admin_users_cognito_pair_chk`: `CHECK ((((cognito_iss IS NULL) AND (cognito_sub IS NULL)) OR ((cognito_iss IS NOT NULL) AND (cognito_sub IS NOT NULL) AND (cognito_iss ~~ 'https://%'::text) AND ((length(cognito_sub) >= 1) AND (length(cognito_sub) <= 128)))))`
-- check `admin_users_email_chk`: `CHECK (((email IS NULL) OR ((email = lower(email)) AND (email ~ '^[^@[:space:]]+@adventure[.]asia$'::text)) OR ((email = 'e2e@e2e-mail.lumiguides.it.com'::text) AND (role = 'content'::shared.admin_role) AND (NOT is_owner) AND (password_hash IS NULL)) OR ((email = 'e2e-cis-admin@e2e-mail.lumiguides.it.com'::text) AND (role = 'admin'::shared.admin_role) AND (NOT is_owner) AND (password_hash IS NULL)) OR ((email = 'e2e-cis-cs@e2e-mail.lumiguides.it.com'::text) AND (role = 'customer_success'::shared.admin_role) AND (NOT is_owner) AND (password_hash IS NULL))))`
+- check `admin_users_custom_role_chk`: `CHECK (((custom_role IS NULL) OR (role <> ALL (ARRAY['admin'::shared.admin_role, 'viewer'::shared.admin_role, 'reviewer'::shared.admin_role]))))`
+- check `admin_users_email_chk`: `CHECK (((email IS NULL) OR ((email = lower(email)) AND (email ~ '^[^@[:space:]]+@adventure[.]asia$'::text)) OR ((email = 'e2e@e2e-mail.lumiguides.it.com'::text) AND (role = 'content'::shared.admin_role) AND (NOT is_owner) AND (NOT is_business_owner) AND (password_hash IS NULL)) OR ((email = 'e2e-cis-admin@e2e-mail.lumiguides.it.com'::text) AND (role = 'admin'::shared.admin_role) AND (NOT is_owner) AND (NOT is_business_owner) AND (password_hash IS NULL)) OR ((email = 'e2e-cis-cs@e2e-mail.lumiguides.it.com'::text) AND (role = 'customer_success'::shared.admin_role) AND (NOT is_owner) AND (NOT is_business_owner) AND (password_hash IS NULL)) OR ((email = 'e2e-cis-content-lead@e2e-mail.lumiguides.it.com'::text) AND (role = 'content_lead'::shared.admin_role) AND (custom_role IS NULL) AND (NOT is_owner) AND (NOT is_business_owner) AND (password_hash IS NULL)) OR ((email = 'e2e-custom-maker@e2e-mail.lumiguides.it.com'::text) AND (role = 'content_lead'::shared.admin_role) AND (NOT is_owner) AND (NOT is_business_owner) AND (password_hash IS NULL))))`
 - check `admin_users_role_not_alias_chk`: `CHECK ((role <> 'reviewer'::shared.admin_role))`
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.ai_usage_hourly` (table, ~4303 rows, 2.2 MB)
+### `shared.ai_usage_hourly` (table, ~4324 rows, 2.2 MB)
 ```
 hour timestamp with time zone NN
 source text NN
@@ -11955,7 +11959,7 @@ details jsonb NN
 - policy `claim_shadow_verdict_cis_owner_all` (PERMISSIVE ALL TO cis_owner): USING `true` WITH CHECK `true`
 - policy `tenant_isolation` (PERMISSIVE ALL TO aa_app_user): USING `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)` WITH CHECK `(tenant_id = (NULLIF(current_setting('app.tenant_id'::text, true), ''::text))::uuid)`
 
-### `shared.cost_explorer_app_snapshot` (table, ~26158 rows, 6.5 MB)
+### `shared.cost_explorer_app_snapshot` (table, ~27602 rows, 6.8 MB)
 ```
 id uuid NN
 account_id text NN
@@ -11973,7 +11977,7 @@ fetched_at timestamp with time zone NN
 - index `cost_explorer_app_snapshot_pkey` PRIMARY KEY: UNIQUE btree (id)
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.cost_explorer_snapshot` (table, ~2194 rows, 2 MB)
+### `shared.cost_explorer_snapshot` (table, ~2604 rows, 2 MB)
 ```
 id uuid NN
 account_id text NN
@@ -12013,7 +12017,7 @@ aliases text[] NN
 - grant `catalog_owner`: SELECT
 - grant `cis_app`: SELECT
 
-### `shared.decision_cache_hits_daily` (table, ~362 rows, 128 kB)
+### `shared.decision_cache_hits_daily` (table, ~365 rows, 136 kB)
 ```
 day date NN
 stage text NN
@@ -12027,7 +12031,7 @@ updated_at timestamp with time zone NN
 - index `decision_cache_hits_daily_pkey` PRIMARY KEY: UNIQUE btree (day, stage, question_key, mode, zone)
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.decision_log` (table, ~665918 rows, 590 MB)
+### `shared.decision_log` (table, ~665918 rows, 591 MB)
 ```
 id bigint NN
 created_at timestamp with time zone NN
@@ -12482,7 +12486,7 @@ assigned_at timestamp with time zone NN
 - policy `eval_golden_split_cis_owner_all` (PERMISSIVE ALL TO cis_owner): USING `true` WITH CHECK `true`
 - trigger `eval_golden_split_frozen`: BEFORE UPDATE ON shared.eval_golden_split FOR EACH ROW EXECUTE FUNCTION shared.eval_golden_split_frozen()
 
-### `shared.eval_item_result` (table, ~1111 rows, 1.3 MB)
+### `shared.eval_item_result` (table, ~1111 rows, 1.7 MB)
 ```
 result_id uuid NN
 run_id uuid NN
@@ -12554,7 +12558,7 @@ added_by text NN
 - index `jev_tenant_allowlist_pkey` PRIMARY KEY: UNIQUE btree (tenant_id)
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.job` (table, ~10722 rows, 31.9 MB)
+### `shared.job` (table, ~10985 rows, 31.9 MB)
 ```
 id uuid NN
 kind text NN
@@ -12593,7 +12597,7 @@ finished_at timestamp with time zone
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 - trigger `job_set_updated_at`: BEFORE UPDATE ON shared.job FOR EACH ROW EXECUTE FUNCTION shared.job_set_updated_at()
 
-### `shared.job_worker` (table, ~117 rows, 280 kB)
+### `shared.job_worker` (table, ~121 rows, 280 kB)
 ```
 worker_id text NN
 host text NN
@@ -12615,7 +12619,7 @@ git_sha text
 - index `job_worker_pkey` PRIMARY KEY: UNIQUE btree (worker_id)
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.kpi_daily` (table, ~319 rows, 128 kB)
+### `shared.kpi_daily` (table, ~319 rows, 136 kB)
 ```
 kpi_id text NN
 day date NN
@@ -12693,7 +12697,7 @@ latency_ms_count bigint NN
 - index `llm_call_daily_tenant_day_idx`: btree (tenant_id, day)
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.llm_call_log` (table, ~520416 rows, 294.7 MB)
+### `shared.llm_call_log` (table, ~502192 rows, 304 MB)
 ```
 id uuid NN
 tenant_id uuid
@@ -12780,7 +12784,7 @@ updated_by text NN
 - check `llm_capacity_limit_updated_by_check`: `CHECK ((length(updated_by) <= 128))`
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.llm_cassette` (table, ~12343 rows, 17.3 MB)
+### `shared.llm_cassette` (table, ~19832 rows, 26.4 MB)
 ```
 id uuid NN
 created_at timestamp with time zone NN
@@ -13444,7 +13448,7 @@ updated_by text NN
 - trigger `plan_feature_guard`: BEFORE INSERT OR UPDATE ON shared.plan_feature FOR EACH ROW EXECUTE FUNCTION shared.plan_feature_guard()
 - trigger `plan_feature_resync`: AFTER INSERT OR DELETE OR UPDATE ON shared.plan_feature FOR EACH ROW EXECUTE FUNCTION shared.tenant_entitlement_resync_plan()
 
-### `shared.prompt_eval_runs` (table, ~42 rows, 200 kB)
+### `shared.prompt_eval_runs` (table, ~42 rows, 216 kB)
 ```
 id uuid NN
 pipeline text NN
@@ -13550,7 +13554,7 @@ updated_at timestamp with time zone NN
 - check `provider_health_streak_check`: `CHECK (((open_streak >= 0) AND (open_streak <= 1000)))`
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `shared.report_run` (table, ~151 rows, 1.6 MB)
+### `shared.report_run` (table, ~163 rows, 1.7 MB)
 ```
 id uuid NN
 report_id text NN
@@ -13789,7 +13793,7 @@ updated_at timestamp with time zone NN
 - owner `cis_owner`
 - index `staff_app_grant_pkey` PRIMARY KEY: UNIQUE btree (admin_user_id, app)
 - check `staff_app_grant_app_chk`: `CHECK ((app = 'booking'::text))`
-- check `staff_app_grant_role_chk`: `CHECK ((role = ANY (ARRAY['admin'::text, 'sales'::text, 'contracting'::text, 'content_creator'::text, 'finance'::text])))`
+- check `staff_app_grant_role_chk`: `CHECK (((role = ANY (ARRAY['admin'::text, 'sales'::text, 'contracting'::text, 'content_creator'::text, 'finance'::text])) OR (role ~ '^custom_[a-z][a-z0-9_]{1,46}$'::text)))`
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
 ### `shared.staff_crm_grant` (table, 32 kB)
@@ -13801,6 +13805,40 @@ created_at timestamp with time zone NN
 - owner `cis_owner`
 - index `staff_crm_grant_pkey` PRIMARY KEY: UNIQUE btree (admin_user_id, role)
 - check `staff_crm_grant_role_chk`: `CHECK ((role = ANY (ARRAY['platform_admin'::text, 'ops'::text, 'support'::text])))`
+- grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
+
+### `shared.staff_role` (table, 32 kB)
+```
+code text NN
+label text NN
+based_on shared.admin_role NN
+archived boolean NN
+created_at timestamp with time zone NN
+created_by text NN
+updated_at timestamp with time zone NN
+updated_by text NN
+```
+- owner `cis_owner`
+- index `staff_role_pkey` PRIMARY KEY: UNIQUE btree (code)
+- check `staff_role_actor_chk`: `CHECK ((((char_length(created_by) >= 1) AND (char_length(created_by) <= 128)) AND ((char_length(updated_by) >= 1) AND (char_length(updated_by) <= 128))))`
+- check `staff_role_based_on_chk`: `CHECK ((based_on <> ALL (ARRAY['admin'::shared.admin_role, 'viewer'::shared.admin_role, 'reviewer'::shared.admin_role])))`
+- check `staff_role_code_chk`: `CHECK ((code ~ '^custom_[a-z][a-z0-9_]{1,46}$'::text))`
+- check `staff_role_label_chk`: `CHECK ((((char_length(btrim(label)) >= 1) AND (char_length(btrim(label)) <= 80)) AND (label !~ '[[:cntrl:]]'::text)))`
+- check `staff_role_time_chk`: `CHECK ((updated_at >= created_at))`
+- grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
+
+### `shared.staff_role_capability` (table, 32 kB)
+```
+role_code text NN
+capability text NN
+created_at timestamp with time zone NN
+created_by text NN
+```
+- owner `cis_owner`
+- index `staff_role_capability_pkey` PRIMARY KEY: UNIQUE btree (role_code, capability)
+- check `staff_role_capability_actor_chk`: `CHECK (((char_length(created_by) >= 1) AND (char_length(created_by) <= 128)))`
+- check `staff_role_capability_name_chk`: `CHECK ((capability ~ '^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*){1,3}$'::text))`
+- check `staff_role_capability_not_approve_chk`: `CHECK (((capability !~ '\.approve(_[a-z0-9_]+)?$'::text) AND (capability <> ALL (ARRAY['staff.write'::text, 'staff.admin'::text]))))`
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
 ### `shared.staff_tenant_assignment` (table, 56 kB)
@@ -14079,7 +14117,7 @@ updated_by text NN
 - column grant `catalog_owner`: SELECT (alert_pct, approval_pct, hard_stop, tenant_id)
 - trigger `tenant_ai_budget_resync`: AFTER INSERT OR DELETE OR UPDATE ON shared.tenant_ai_budget FOR EACH ROW EXECUTE FUNCTION shared.tenant_entitlement_resync_row()
 
-### `shared.tenant_api_usage` (table, ~208550 rows, 51.8 MB)
+### `shared.tenant_api_usage` (table, ~208550 rows, 52.1 MB)
 ```
 id uuid NN
 tenant_id uuid
@@ -14606,6 +14644,17 @@ value jsonb
 ```
 - owner `cis_owner`
 - grant `catalog_owner`: SELECT
+- grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
+
+### `shared.v_staff_booking_grant` (VIEW)
+```
+cognito_sub text · pii:online_id
+booking_role_code text
+is_owner boolean
+is_business_owner boolean
+```
+- owner `cis_owner`
+- grant `booking`: SELECT
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
 ### `shared.v_tenant_entitlement_resolved` (VIEW)
@@ -15202,7 +15251,7 @@ created_at timestamp with time zone NN
 - check `raw_tour_fact_draft_status_check`: `CHECK ((status = ANY (ARRAY['draft'::text, 'published'::text, 'discarded'::text])))`
 - grant `cis_app`: DELETE, INSERT, SELECT, UPDATE
 
-### `silver_aa_internal.raw_tour_revision` (table, 32 kB)
+### `silver_aa_internal.raw_tour_revision` (table, 64 kB)
 ```
 id bigint NN
 tour_id uuid NN
@@ -15399,7 +15448,7 @@ created_at timestamp with time zone NN
 
 ## `tripplanner` (22 objects)
 
-### `tripplanner.ai_rate_counter` (table, ~10287 rows, 3.3 MB)
+### `tripplanner.ai_rate_counter` (table, ~10631 rows, 3.4 MB)
 ```
 key_hash text NN
 window_start timestamp with time zone NN
@@ -15469,7 +15518,7 @@ contact_consent_at timestamp with time zone
 - index `customers_pkey` PRIMARY KEY: UNIQUE btree (id)
 - grant `tripplanner`: DELETE, INSERT, SELECT, UPDATE
 
-### `tripplanner.job` (table, ~76 rows, 240 kB)
+### `tripplanner.job` (table, ~86 rows, 248 kB)
 ```
 id uuid NN
 kind text NN
@@ -16713,6 +16762,7 @@ learn.lesson_progress.learner_id -> learn.learner.learner_id
 learn.quiz_attempt.learner_id -> learn.learner.learner_id
 learn.review_card.learner_id -> learn.learner.learner_id
 learn.statement.learner_id -> learn.learner.learner_id
+shared.admin_users.custom_role -> shared.staff_role.code
 shared.destinations.country_iso2 -> shared.countries.iso2
 shared.destinations.duplicate_of -> shared.destinations.id
 shared.embedding_column.previous_space_key -> shared.embedding_space.space_key
@@ -16752,6 +16802,7 @@ shared.setting_value.key -> shared.setting_definition.key
 shared.setting_value.tenant_id -> shared.tenants.tenant_id
 shared.staff_app_grant.admin_user_id -> shared.admin_users.id
 shared.staff_crm_grant.admin_user_id -> shared.admin_users.id
+shared.staff_role_capability.role_code -> shared.staff_role.code
 shared.staff_tenant_assignment.admin_user_id -> shared.admin_users.id
 shared.staff_tenant_assignment.tenant_id -> shared.tenants.tenant_id
 shared.staff_view_as_session.admin_user_id -> shared.admin_users.id
@@ -16826,68 +16877,68 @@ tripplanner.trip_events.session_id -> tripplanner.sessions.id
 |---|---|---|---|---|---|---|---|
 | `acp_contract.atom_embedding` | 28654 | 455.7 MB | 535 | 291260 | 26156 / 0 / 0 | 0 | 2026-11-09 17:57 |
 | `acp_contract.atom_matches` | 39077 | 11.1 MB | 45 | 134558 | 33330 / 79649 / 0 | 902 | 2026-11-10 13:12 |
-| `acp_contract.atom_ranking` | 88728 | 67.1 MB | 39009 | 231033 | 16023140 / 15942962 / 15966920 | 0 | 2026-11-16 17:58 |
-| `acp_contract.atom_segment` | 11482 | 3.9 MB | 15594 | 25474948 | 21821 / 201663 / 13352 | 24 | 2026-11-16 17:24 |
-| `acp_contract.atom_segment_alias` | 1012 | 352 kB | 22986 | 227828 | 2286 / 231879 / 1489 | 136 | 2026-10-25 07:52 |
-| `acp_contract.atom_segment_member` | 17401 | 7.8 MB | 13572 | 2515078 | 56801 / 471 / 44271 | 526 | 2026-11-11 00:36 |
+| `acp_contract.atom_ranking` | 88728 | 67.1 MB | 39009 | 231038 | 16023140 / 15942962 / 15966920 | 0 | 2026-11-16 17:58 |
+| `acp_contract.atom_segment` | 11482 | 3.9 MB | 15598 | 25729676 | 21821 / 201663 / 13352 | 24 | 2026-11-16 17:24 |
+| `acp_contract.atom_segment_alias` | 1012 | 352 kB | 22990 | 227828 | 2286 / 231879 / 1489 | 136 | 2026-10-25 07:52 |
+| `acp_contract.atom_segment_member` | 17401 | 7.8 MB | 13601 | 2515312 | 56801 / 471 / 44271 | 526 | 2026-11-11 00:36 |
 | `acp_contract.atomize_day_fingerprint` | 16159 | 3 MB | 55 | 18699 | 13626 / 53 / 0 | 3 | 2026-10-25 06:38 |
-| `acp_contract.hub` | 93 | 152 kB | 2540 | 13765 | 81 / 2909 / 774 | 48 | 2026-11-11 10:07 |
+| `acp_contract.hub` | 93 | 152 kB | 2545 | 13775 | 81 / 2909 / 774 | 48 | 2026-11-11 10:07 |
 | `acp_contract.place_keyword` | 18915 | 5.6 MB | 147 | 49428 | 19810 / 0 / 233 | 0 | 2026-11-16 08:05 |
 | `acp_contract.question_embedding` | 6948 | 57 MB | 130 | 6172 | 6049 / 0 / 0 | 0 | 2026-11-16 08:30 |
-| `acp_contract.route` | 11896 | 6.8 MB | 1566 | 9197932 | 11363 / 10501 / 0 | 550 | 2026-10-27 07:15 |
-| `acp_contract.search_demand` | 110783 | 17.4 MB | 6138 | 159678 | 108959 / 5868 / 0 | 55 | 2026-11-09 23:05 |
+| `acp_contract.route` | 11896 | 6.8 MB | 1566 | 9197962 | 11363 / 10501 / 0 | 550 | 2026-10-27 07:15 |
+| `acp_contract.search_demand` | 110783 | 17.4 MB | 6143 | 159678 | 108959 / 5868 / 0 | 55 | 2026-11-09 23:05 |
 | `acp_contract.search_volume_monthly` |  | 24 kB | 10 | 0 | 0 / 0 / 0 | 0 |  |
-| `acp_contract.segment_research_log` | 43869 | 5.6 MB | 7699 | 93233 | 43382 / 705 / 0 | 4 | 2026-11-16 08:17 |
-| `acp_contract.tour_atoms` | 55799 | 32.3 MB | 66250 | 23830562 | 44589 / 37721 / 0 | 731 | 2026-11-11 00:36 |
-| `acp_deliver.tenant_tour_pages` | 0 | 40 kB | 189857 | 0 | 0 / 0 / 0 | 0 |  |
+| `acp_contract.segment_research_log` | 43869 | 5.6 MB | 7740 | 93233 | 43382 / 705 / 0 | 4 | 2026-11-16 08:17 |
+| `acp_contract.tour_atoms` | 55799 | 32.3 MB | 66305 | 23842456 | 44589 / 37721 / 0 | 731 | 2026-11-11 00:36 |
+| `acp_deliver.tenant_tour_pages` | 0 | 40 kB | 190062 | 0 | 0 / 0 / 0 | 0 |  |
 | `acp_shared.acp_quota_ledger` |  | 56 kB | 21 | 54 | 9 / 0 / 2 | 2 |  |
-| `acp_shared.angle_gate_option` | 360 | 776 kB | 6516 | 4925061 | 393 / 396 / 0 | 47 | 2026-11-12 07:51 |
-| `acp_shared.angle_gate_request` | 125 | 240 kB | 67142 | 4440115 | 136 / 461 / 0 | 51 | 2026-11-12 01:28 |
-| `acp_shared.atom_place_card` | 27230 | 4 MB | 19484 | 12112224 | 27988 / 325 / 0 | 245 | 2026-10-26 13:34 |
-| `acp_shared.audit_log` | 8173 | 5.9 MB | 642 | 18230 | 8399 / 0 / 0 | 15 | 2026-11-12 01:27 |
-| `acp_shared.content_compliance_flag` |  | 128 kB | 43 | 7006 | 4 / 6 / 0 | 6 |  |
+| `acp_shared.angle_gate_option` | 360 | 776 kB | 6541 | 4929483 | 393 / 396 / 0 | 47 | 2026-11-12 07:51 |
+| `acp_shared.angle_gate_request` | 125 | 240 kB | 67171 | 4445348 | 136 / 461 / 0 | 51 | 2026-11-12 01:28 |
+| `acp_shared.atom_place_card` | 27230 | 4 MB | 19484 | 12214407 | 27988 / 325 / 0 | 245 | 2026-10-26 13:34 |
+| `acp_shared.audit_log` | 8173 | 6 MB | 642 | 18317 | 8412 / 0 / 0 | 18 | 2026-11-12 01:27 |
+| `acp_shared.content_compliance_flag` |  | 128 kB | 43 | 7131 | 4 / 6 / 0 | 6 |  |
 | `acp_shared.content_label` |  | 64 kB | 19 | 58 | 3 / 0 / 1 | 1 |  |
-| `acp_shared.content_piece` | 458 | 16.3 MB | 23022 | 701550 | 469 / 958 / 0 | 25 | 2026-11-13 00:55 |
+| `acp_shared.content_piece` | 458 | 16.3 MB | 23039 | 707261 | 469 / 958 / 0 | 25 | 2026-11-13 00:55 |
 | `acp_shared.content_piece_label` |  | 48 kB | 69 | 29620 | 1 / 0 / 0 | 0 |  |
 | `acp_shared.debate_brand_fit_cache` | 2256 | 1.2 MB | 1081 | 18078 | 3913 / 0 / 1651 | 0 | 2026-11-13 13:45 |
 | `acp_shared.docs_feedback` |  | 64 kB | 5 | 2 | 1 / 1 / 0 | 1 |  |
 | `acp_shared.fact_sheet` | 161 | 2.6 MB | 25 | 752 | 197 / 0 / 0 | 0 |  |
-| `acp_shared.facts` |  | 64 kB | 115 | 18629 | 2 / 4 / 2 | 6 |  |
-| `acp_shared.place_card` | 4842 | 4.5 MB | 32001 | 14202915 | 4878 / 4288 / 18 | 57 | 2026-11-09 15:08 |
+| `acp_shared.facts` |  | 64 kB | 115 | 18694 | 2 / 4 / 2 | 6 |  |
+| `acp_shared.place_card` | 4842 | 4.5 MB | 32049 | 14341135 | 4878 / 4288 / 18 | 57 | 2026-11-09 15:08 |
 | `acp_shared.place_card_alias` | 18503 | 3.2 MB | 1518 | 104058 | 19234 / 20 / 0 | 2 | 2026-10-26 15:22 |
 | `acp_shared.place_card_miss` | 1321 | 528 kB | 1114 | 21999 | 1391 / 139 / 73 | 116 | 2026-10-26 15:04 |
-| `acp_shared.publish_log` | 18 | 128 kB | 75695 | 159889 | 20 / 39 / 0 | 4 | 2026-11-13 14:06 |
-| `acp_shared.quarter_plan` | 6 | 88 kB | 7383 | 180 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.quarter_plan_version` | 0 | 112 kB | 7273 | 180 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.subject` | 4346 | 3.4 MB | 15144 | 41163 | 8729 / 9825 / 4383 | 0 | 2026-11-19 03:04 |
-| `acp_shared.tenant_config` |  | 32 kB | 42 | 2145 | 3 / 0 / 3 | 3 |  |
+| `acp_shared.publish_log` | 18 | 128 kB | 75891 | 164845 | 20 / 39 / 0 | 4 | 2026-11-13 14:06 |
+| `acp_shared.quarter_plan` | 6 | 88 kB | 7408 | 180 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.quarter_plan_version` | 0 | 112 kB | 7298 | 180 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.subject` | 4346 | 3.4 MB | 15144 | 41192 | 8729 / 9825 / 4383 | 0 | 2026-11-19 03:04 |
+| `acp_shared.tenant_config` |  | 32 kB | 42 | 2149 | 3 / 0 / 3 | 3 |  |
 | `acp_shared.tenant_tour_notice` |  | 112 kB | 125 | 92 | 22 / 12 / 0 | 22 |  |
-| `acp_shared.tour_retirement_policy` |  | 16 kB | 325 | 0 | 0 / 0 / 0 | 0 |  |
-| `acp_shared.year_plan` |  | 40 kB | 31 | 7263 | 0 / 0 / 0 | 0 |  |
-| `booking.agency_invoice` |  | 176 kB | 14 | 1720 | 14 / 32 / 0 | 11 |  |
+| `acp_shared.tour_retirement_policy` |  | 16 kB | 327 | 0 | 0 / 0 / 0 | 0 |  |
+| `acp_shared.year_plan` |  | 40 kB | 31 | 7288 | 0 / 0 / 0 | 0 |  |
+| `booking.agency_invoice` |  | 176 kB | 14 | 1737 | 14 / 32 / 0 | 11 |  |
 | `booking.agency_invoice_line` | 17 | 56 kB | 50 | 38 | 30 / 0 / 3 | 3 |  |
 | `booking.agency_invoice_reminder` |  | 48 kB | 2 | 34 | 1 / 0 / 0 | 0 |  |
 | `booking.agency_payment` |  | 80 kB | 12 | 284 | 4 / 4 / 0 | 4 |  |
-| `booking.audit_logs` | 492 | 600 kB | 254 | 491 | 554 / 4 / 0 | 36 |  |
+| `booking.audit_logs` | 492 | 600 kB | 254 | 493 | 563 / 4 / 0 | 41 |  |
 | `booking.b2b_cancellations` |  | 80 kB | 19 | 1562 | 5 / 0 / 0 | 0 |  |
 | `booking.b2b_desk_bookings` |  | 120 kB | 68 | 150 | 2 / 0 / 0 | 0 |  |
-| `booking.b2b_hold_lines` | 42 | 80 kB | 5674 | 10572 | 62 / 21 / 0 | 16 |  |
-| `booking.b2b_holds` | 53 | 176 kB | 83949 | 12890 | 63 / 68 / 0 | 11 | 2026-11-11 07:12 |
+| `booking.b2b_hold_lines` | 42 | 80 kB | 5674 | 10766 | 62 / 21 / 0 | 16 |  |
+| `booking.b2b_holds` | 53 | 176 kB | 84945 | 13084 | 63 / 68 / 0 | 11 | 2026-11-11 07:12 |
 | `booking.b2b_line_reductions` |  | 56 kB | 138 | 108 | 0 / 0 / 0 | 0 |  |
-| `booking.b2b_partners` |  | 64 kB | 5302 | 48458 | 27 / 18 / 0 | 2 |  |
+| `booking.b2b_partners` |  | 64 kB | 5409 | 49445 | 27 / 20 / 0 | 4 |  |
 | `booking.b2b_quote_lines` | 161 | 144 kB | 3529 | 3549 | 175 / 0 / 0 | 0 |  |
 | `booking.b2b_quotes` | 162 | 160 kB | 474 | 3270 | 176 / 0 / 0 | 0 |  |
 | `booking.billing_entity` |  | 64 kB | 67 | 5 | 1 / 0 / 0 | 0 |  |
-| `booking.billing_terms` |  | 64 kB | 202 | 4695 | 2 / 0 / 0 | 0 |  |
+| `booking.billing_terms` |  | 64 kB | 202 | 4911 | 2 / 0 / 0 | 0 |  |
 | `booking.cancellation_policies` |  | 48 kB | 9 | 213 | 2 / 0 / 0 | 0 |  |
-| `booking.countries` |  | 32 kB | 703 | 481 | 21 / 0 / 0 | 0 |  |
+| `booking.countries` |  | 32 kB | 703 | 486 | 21 / 0 / 0 | 0 |  |
 | `booking.country_profiles` |  | 24 kB | 33 | 16 | 0 / 0 / 0 | 0 |  |
 | `booking.customer_identities` |  | 24 kB | 12 | 4 | 0 / 0 / 0 | 0 |  |
 | `booking.customer_otps` |  | 24 kB | 13 | 0 | 0 / 0 / 0 | 0 |  |
 | `booking.customer_sessions` |  | 32 kB | 15 | 0 | 0 / 0 / 0 | 0 |  |
 | `booking.customers` | 1 | 104 kB | 6542 | 4 | 17 / 0 / 0 | 4 |  |
 | `booking.departure_allotments` |  | 64 kB | 209 | 1692 | 0 / 0 / 0 | 0 |  |
-| `booking.departure_costs` |  | 56 kB | 24707 | 494 | 0 / 0 / 0 | 0 |  |
+| `booking.departure_costs` |  | 56 kB | 25703 | 494 | 0 / 0 / 0 | 0 |  |
 | `booking.departure_fees` |  | 32 kB | 5 | 158 | 0 / 0 / 0 | 0 |  |
 | `booking.departure_incidents` |  | 64 kB | 9 | 717 | 2 / 1 / 0 | 2 |  |
 | `booking.departure_price_adjustments` |  | 48 kB | 5 | 290 | 0 / 0 / 0 | 0 |  |
@@ -16895,22 +16946,22 @@ tripplanner.trip_events.session_id -> tripplanner.sessions.id
 | `booking.departures` |  | 64 kB | 394 | 5041 | 7 / 1 / 0 | 1 |  |
 | `booking.destination_profiles` |  | 16 kB | 61 | 42110 | 0 / 0 / 0 | 0 |  |
 | `booking.entity_media` |  | 64 kB | 44 | 597 | 2 / 2 / 0 | 2 |  |
-| `booking.fx_rates` |  | 48 kB | 596 | 17 | 3 / 0 / 0 | 0 |  |
-| `booking.holiday_events` |  | 24 kB | 19287 | 0 | 0 / 0 / 0 | 0 |  |
-| `booking.hotel_room_types` |  | 48 kB | 541 | 3645 | 6 / 0 / 0 | 1 |  |
-| `booking.hotels` |  | 136 kB | 288 | 2019 | 6 / 12 / 0 | 13 |  |
-| `booking.inbox_cursor` | 2 | 64 kB | 118482 | 19870 | 2 / 19770 / 0 | 33 | 2026-11-03 07:02 |
-| `booking.inbox_events` | 71 | 240 kB | 67602 | 12819 | 74 / 79 / 0 | 3 | 2026-11-11 06:16 |
+| `booking.fx_rates` |  | 48 kB | 598 | 17 | 3 / 0 / 0 | 0 |  |
+| `booking.holiday_events` |  | 24 kB | 20283 | 0 | 0 / 0 / 0 | 0 |  |
+| `booking.hotel_room_types` |  | 48 kB | 543 | 3648 | 6 / 0 / 0 | 1 |  |
+| `booking.hotels` |  | 136 kB | 288 | 2025 | 6 / 12 / 0 | 13 |  |
+| `booking.inbox_cursor` | 2 | 64 kB | 119478 | 19870 | 2 / 19770 / 0 | 33 | 2026-11-03 07:02 |
+| `booking.inbox_events` | 71 | 240 kB | 68072 | 13352 | 74 / 79 / 0 | 3 | 2026-11-11 06:16 |
 | `booking.invoice_items` |  | 88 kB | 49 | 68 | 4 / 0 / 0 | 2 |  |
 | `booking.invoice_sequence` |  | 32 kB | 1 | 4 | 2 / 2 / 0 | 2 |  |
 | `booking.invoices` |  | 184 kB | 70 | 930 | 4 / 14 / 0 | 16 |  |
-| `booking.job` | 13155 | 8.2 MB | 19180 | 3589706 | 26147 / 52351 / 12911 | 270 | 2026-11-19 07:55 |
+| `booking.job` | 12920 | 8.3 MB | 19184 | 3623195 | 26283 / 52623 / 12913 | 228 | 2026-11-19 17:45 |
 | `booking.media_files` |  | 24 kB | 12 | 0 | 0 / 0 / 0 | 0 |  |
 | `booking.notification_reads` |  | 24 kB | 10 | 46262 | 0 / 0 / 0 | 0 |  |
 | `booking.notifications` | 53 | 136 kB | 3988 | 344 | 82 / 0 / 0 | 3 |  |
 | `booking.ops_files` |  | 128 kB | 53 | 80 | 1 / 1 / 0 | 1 |  |
 | `booking.ops_transitions` |  | 32 kB | 4 | 58 | 20 / 0 / 0 | 0 |  |
-| `booking.outbox` | 55 | 152 kB | 204230 | 36725 | 58 / 55 / 0 | 4 | 2026-11-14 11:53 |
+| `booking.outbox` | 55 | 152 kB | 207560 | 37576 | 59 / 55 / 0 | 5 | 2026-11-14 11:53 |
 | `booking.partner_price_approvals` |  | 64 kB | 56 | 700 | 5 / 0 / 0 | 0 |  |
 | `booking.partner_rate_cards` |  | 64 kB | 25 | 1164 | 2 / 0 / 0 | 0 |  |
 | `booking.partner_terms_clause` |  | 48 kB | 4 | 2 | 2 / 0 / 0 | 0 |  |
@@ -16918,197 +16969,197 @@ tripplanner.trip_events.session_id -> tripplanner.sessions.id
 | `booking.partner_tiers` |  | 32 kB | 39 | 359 | 3 / 0 / 0 | 0 |  |
 | `booking.payment_schedule` |  | 88 kB | 60 | 177 | 6 / 0 / 0 | 3 |  |
 | `booking.payments` |  | 200 kB | 62 | 684 | 8 / 8 / 0 | 13 |  |
-| `booking.policy_approvals` | 6 | 80 kB | 45832 | 56 | 12 / 0 / 1 | 1 |  |
+| `booking.policy_approvals` | 6 | 80 kB | 46834 | 56 | 12 / 0 / 1 | 1 |  |
 | `booking.policy_row_closures` |  | 40 kB | 44 | 9 | 0 / 0 / 0 | 0 |  |
-| `booking.price_list_version_rows` | 180 | 96 kB | 274 | 0 | 204 / 0 / 24 | 24 |  |
-| `booking.price_list_versions` |  | 112 kB | 19446 | 762 | 11 / 16 / 0 | 12 |  |
-| `booking.pricing_policy` |  | 112 kB | 542 | 228 | 43 / 0 / 0 | 0 |  |
-| `booking.pricing_policy_events` | 78 | 96 kB | 687 | 244 | 86 / 0 / 0 | 0 |  |
-| `booking.pricing_rules` |  | 48 kB | 163 | 780 | 7 / 0 / 1 | 1 |  |
-| `booking.season_calendars` | 317 | 168 kB | 20475 | 1178 | 328 / 0 / 0 | 0 |  |
-| `booking.season_ranges` |  | 32 kB | 19283 | 761 | 0 / 0 / 0 | 0 |  |
-| `booking.services` |  | 160 kB | 692 | 1049 | 11 / 5 / 0 | 6 |  |
+| `booking.price_list_version_rows` | 180 | 96 kB | 276 | 0 | 204 / 0 / 24 | 24 |  |
+| `booking.price_list_versions` |  | 112 kB | 20445 | 764 | 11 / 16 / 0 | 12 |  |
+| `booking.pricing_policy` |  | 112 kB | 580 | 228 | 43 / 0 / 0 | 0 |  |
+| `booking.pricing_policy_events` | 78 | 96 kB | 725 | 244 | 86 / 0 / 0 | 0 |  |
+| `booking.pricing_rules` |  | 48 kB | 163 | 782 | 7 / 0 / 1 | 1 |  |
+| `booking.season_calendars` | 317 | 168 kB | 21471 | 1180 | 328 / 0 / 0 | 0 |  |
+| `booking.season_ranges` |  | 32 kB | 20279 | 763 | 0 / 0 / 0 | 0 |  |
+| `booking.services` |  | 160 kB | 694 | 1062 | 12 / 5 / 0 | 7 |  |
 | `booking.settings` |  | 64 kB | 48 | 1120 | 23 / 21 / 0 | 6 |  |
 | `booking.staff_assignments` |  | 64 kB | 301 | 16205 | 1 / 0 / 0 | 0 |  |
-| `booking.staff_users` | 13 | 64 kB | 12503 | 39174 | 22 / 131 / 0 | 14 |  |
+| `booking.staff_users` | 13 | 64 kB | 12562 | 39177 | 25 / 131 / 0 | 17 |  |
 | `booking.supplier_bill_items` |  | 64 kB | 10 | 391 | 2 / 0 / 0 | 2 |  |
 | `booking.supplier_bills` |  | 216 kB | 109 | 84 | 1 / 3 / 0 | 4 |  |
 | `booking.supplier_bookings` | 2 | 256 kB | 2477 | 1457 | 11 / 16 / 0 | 23 |  |
-| `booking.supplier_contract_terms` |  | 16 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
-| `booking.supplier_contracts` |  | 64 kB | 44447 | 8461 | 8 / 20 / 0 | 9 |  |
+| `booking.supplier_contract_terms` |  | 32 kB | 2 | 5 | 1 / 0 / 0 | 1 |  |
+| `booking.supplier_contracts` |  | 64 kB | 45443 | 8575 | 9 / 24 / 0 | 14 |  |
 | `booking.supplier_orders` |  | 40 kB | 81 | 79 | 0 / 0 / 0 | 0 |  |
 | `booking.supplier_payouts` |  | 168 kB | 19 | 18 | 3 / 1 / 0 | 4 |  |
-| `booking.supplier_rates` |  | 80 kB | 69139 | 26606 | 21 / 0 / 0 | 6 |  |
-| `booking.suppliers` |  | 144 kB | 617 | 15759 | 9 / 2 / 0 | 5 |  |
-| `booking.supply_restrictions` |  | 40 kB | 5 | 2 | 0 / 0 / 0 | 0 |  |
+| `booking.supplier_rates` |  | 80 kB | 71131 | 26878 | 22 / 0 / 0 | 7 |  |
+| `booking.suppliers` |  | 144 kB | 619 | 15768 | 11 / 2 / 0 | 7 |  |
+| `booking.supply_restrictions` |  | 72 kB | 5 | 7 | 2 / 0 / 0 | 2 |  |
 | `booking.tax_rule` |  | 48 kB | 20 | 35 | 1 / 0 / 0 | 0 |  |
-| `booking.tenant_erasure_log` |  | 96 kB | 15 | 1902 | 10 / 0 / 0 | 0 |  |
+| `booking.tenant_erasure_log` |  | 96 kB | 15 | 2001 | 10 / 0 / 0 | 0 |  |
 | `booking.trip_case_checks` | 52 | 160 kB | 607 | 818 | 82 / 2 / 0 | 20 |  |
 | `booking.trip_case_countries` |  | 40 kB | 10 | 3350 | 3 / 0 / 0 | 0 |  |
-| `booking.trip_case_legs` | 8 | 64 kB | 4756 | 117 | 14 / 8 / 0 | 8 |  |
-| `booking.trip_case_status_history` | 51 | 96 kB | 916 | 130 | 78 / 0 / 0 | 17 |  |
+| `booking.trip_case_legs` | 8 | 64 kB | 4757 | 117 | 14 / 8 / 0 | 8 |  |
+| `booking.trip_case_status_history` | 51 | 96 kB | 918 | 130 | 78 / 0 / 0 | 17 |  |
 | `booking.trip_case_status_transitions` |  | 32 kB | 7 | 333 | 34 / 0 / 0 | 0 |  |
 | `booking.trip_case_version_itinerary` | 36 | 96 kB | 2366 | 515 | 40 / 17 / 0 | 8 |  |
 | `booking.trip_case_versions` | 22 | 80 kB | 2819 | 5347 | 27 / 34 / 0 | 37 |  |
-| `booking.trip_cases` | 30 | 184 kB | 13062 | 784 | 38 / 53 / 0 | 6 | 2026-11-13 00:07 |
+| `booking.trip_cases` | 30 | 184 kB | 13066 | 784 | 38 / 53 / 0 | 6 | 2026-11-13 00:07 |
 | `booking.trip_plan_billing_terms` |  | 32 kB | 3 | 35 | 0 / 0 / 0 | 0 |  |
-| `booking.trip_plan_components` |  | 48 kB | 44775 | 1774 | 10 / 0 / 4 | 4 |  |
+| `booking.trip_plan_components` |  | 48 kB | 45772 | 1776 | 10 / 0 / 4 | 4 |  |
 | `booking.trip_plan_price_history` | 360 | 192 kB | 135 | 19 | 360 / 312 / 0 | 48 | 2026-11-14 12:16 |
-| `booking.trip_plan_prices` | 96 | 144 kB | 22381 | 204 | 360 / 0 / 312 | 48 | 2026-11-14 12:16 |
-| `booking.trip_plans` | 892 | 536 kB | 50399 | 1352396 | 892 / 1310 / 0 | 50 | 2026-11-18 09:15 |
+| `booking.trip_plan_prices` | 96 | 144 kB | 22466 | 204 | 360 / 0 / 312 | 48 | 2026-11-14 12:16 |
+| `booking.trip_plans` | 892 | 536 kB | 51495 | 1380344 | 892 / 1310 / 0 | 50 | 2026-11-18 09:15 |
 | `booking.version_item_costs` | 4 | 64 kB | 410 | 19 | 27 / 0 / 1 | 3 |  |
 | `crm.aa_cancel_case` |  | 88 kB | 5 | 1331 | 2 / 0 / 0 | 0 |  |
-| `crm.aa_catalog_state` | 1 | 64 kB | 6549 | 1 | 1 / 5636 / 0 | 45 | 2026-11-19 11:00 |
-| `crm.aa_catalog_tour` | 892 | 6.7 MB | 6148 | 239636 | 892 / 254116 / 0 | 0 | 2026-11-19 16:00 |
-| `crm.aa_content` | 25 | 232 kB | 2815 | 2333 | 25 / 13091 / 0 | 0 | 2026-11-19 16:00 |
+| `crm.aa_catalog_state` | 1 | 64 kB | 6637 | 1 | 1 / 5712 / 0 | 7 | 2026-11-19 23:00 |
+| `crm.aa_catalog_tour` | 892 | 6.7 MB | 6234 | 243056 | 892 / 257684 / 0 | 52 | 2026-11-20 00:00 |
+| `crm.aa_content` | 25 | 232 kB | 2855 | 2341 | 25 / 13291 / 0 | 47 | 2026-11-19 21:00 |
 | `crm.aa_departure_state` |  | 64 kB | 3 | 107 | 1 / 0 / 0 | 0 |  |
 | `crm.aa_extra_night_request` |  | 40 kB | 4 | 0 | 0 / 0 / 0 | 0 |  |
 | `crm.aa_invoice_cache` |  | 48 kB | 2 | 434 | 1 / 8 / 0 | 8 |  |
-| `crm.aa_request` | 75 | 160 kB | 1570806 | 100178 | 86 / 158 / 0 | 47 | 2026-10-31 06:44 |
+| `crm.aa_request` | 75 | 160 kB | 1601876 | 101500 | 86 / 158 / 0 | 47 | 2026-10-31 06:44 |
 | `crm.agency_service` |  | 80 kB | 5 | 241 | 2 / 0 / 2 | 2 |  |
 | `crm.agency_service_tier` |  | 32 kB | 3 | 42 | 0 / 0 / 0 | 0 |  |
-| `crm.agency_supplier` | 88 | 120 kB | 3190 | 4485 | 89 / 44 / 1 | 41 |  |
-| `crm.agreement_doc` | 58 | 128 kB | 10258 | 1231 | 60 / 115 / 0 | 2 | 2026-11-11 09:52 |
+| `crm.agency_supplier` | 88 | 120 kB | 3296 | 4485 | 89 / 44 / 1 | 41 |  |
+| `crm.agreement_doc` | 58 | 128 kB | 10307 | 1231 | 60 / 115 / 0 | 2 | 2026-11-11 09:52 |
 | `crm.ai_draft` | 51 | 144 kB | 6 | 37 | 51 / 2 / 0 | 2 |  |
 | `crm.audit_event` |  | 0 B | 0 | 0 | 0 / 0 / 0 | 0 |  |
 | `crm.audit_event_legacy` | 11563 | 8 MB | 125 | 3777 | 12034 / 0 / 0 | 0 | 2026-10-31 18:46 |
-| `crm.audit_event_p202611` | 13060 | 8.7 MB | 60 | 46836 | 13497 / 0 / 0 | 0 | 2026-11-15 01:32 |
+| `crm.audit_event_p202611` | 13060 | 8.8 MB | 60 | 48916 | 13639 / 0 / 0 | 0 | 2026-11-15 01:32 |
 | `crm.audit_event_p202612` |  | 32 kB | 15 | 1406 | 0 / 0 / 0 | 0 |  |
 | `crm.audit_event_p202701` |  | 32 kB | 15 | 1406 | 0 / 0 / 0 | 0 |  |
 | `crm.audit_event_p202702` |  | 32 kB | 3 | 1126 | 0 / 0 / 0 | 0 |  |
-| `crm.audit_export_manifest` | 22273 | 14.6 MB | 27 | 47642 | 23352 / 0 / 0 | 0 | 2026-11-16 11:16 |
-| `crm.audit_export_tenant` | 65 | 64 kB | 142808 | 600 | 65 / 24291 / 0 | 32 | 2026-11-19 00:16 |
-| `crm.booking_feed_state` | 2 | 48 kB | 1353517 | 851 | 2 / 44951 / 0 | 0 |  |
-| `crm.booking_line` | 61 | 224 kB | 1172219 | 1793114 | 61 / 98 / 0 | 22 | 2026-11-01 02:33 |
-| `crm.booking_line_money` | 106 | 128 kB | 181519 | 32502 | 147 / 0 / 0 | 0 |  |
+| `crm.audit_export_manifest` | 23482 | 15 MB | 27 | 48747 | 23872 / 0 / 0 | 0 | 2026-11-16 11:16 |
+| `crm.audit_export_tenant` | 65 | 64 kB | 145735 | 600 | 65 / 24876 / 0 | 29 | 2026-11-19 00:16 |
+| `crm.booking_feed_state` | 2 | 48 kB | 1384554 | 851 | 2 / 45936 / 0 | 35 |  |
+| `crm.booking_line` | 61 | 224 kB | 1196204 | 1800160 | 61 / 98 / 0 | 22 | 2026-11-01 02:33 |
+| `crm.booking_line_money` | 106 | 128 kB | 181551 | 32950 | 147 / 0 / 0 | 0 |  |
 | `crm.booking_line_voucher` |  | 80 kB | 4 | 61 | 1 / 0 / 0 | 0 |  |
 | `crm.calendar_feed` |  | 80 kB | 4 | 668 | 8 / 9 / 0 | 9 |  |
-| `crm.campaign` |  | 104 kB | 5 | 5260 | 2 / 2 / 1 | 3 |  |
+| `crm.campaign` |  | 104 kB | 5 | 5748 | 2 / 2 / 1 | 3 |  |
 | `crm.campaign_recipient` |  | 128 kB | 8 | 169 | 15 / 15 / 0 | 15 |  |
 | `crm.campaign_suppression` |  | 32 kB | 3 | 2 | 0 / 0 / 0 | 0 |  |
 | `crm.cancellation_charge` |  | 64 kB | 3 | 2598 | 2 / 0 / 0 | 0 |  |
 | `crm.cancellation_policy` |  | 40 kB | 4 | 56 | 0 / 0 / 0 | 0 |  |
 | `crm.cancellation_policy_tier` |  | 32 kB | 3 | 18 | 0 / 0 / 0 | 0 |  |
-| `crm.channel_account` |  | 80 kB | 10 | 5737 | 1 / 14 / 0 | 14 |  |
-| `crm.channel_template` | 3 | 80 kB | 28 | 371 | 3 / 57 / 0 | 3 |  |
-| `crm.client_link` | 212 | 320 kB | 2270 | 12243 | 219 / 576 / 0 | 13 | 2026-11-12 00:13 |
-| `crm.commission` |  | 112 kB | 6 | 30127 | 7 / 13 / 0 | 13 |  |
-| `crm.consent` | 424 | 224 kB | 205 | 3348 | 458 / 0 / 6 | 10 |  |
-| `crm.conversation` | 27 | 120 kB | 18230 | 17774 | 28 / 71 / 0 | 45 |  |
+| `crm.channel_account` |  | 80 kB | 10 | 5799 | 1 / 14 / 0 | 14 |  |
+| `crm.channel_template` | 3 | 80 kB | 29 | 374 | 3 / 60 / 0 | 6 |  |
+| `crm.client_link` | 212 | 320 kB | 2270 | 12651 | 219 / 576 / 0 | 13 | 2026-11-12 00:13 |
+| `crm.commission` |  | 112 kB | 6 | 30775 | 7 / 13 / 0 | 13 |  |
+| `crm.consent` | 424 | 224 kB | 205 | 3482 | 458 / 0 / 6 | 10 |  |
+| `crm.conversation` | 27 | 120 kB | 18482 | 18026 | 28 / 71 / 0 | 45 |  |
 | `crm.data_request` |  | 80 kB | 4 | 276 | 26 / 20 / 0 | 20 |  |
 | `crm.departure_cost` |  | 32 kB | 3 | 2613 | 0 / 0 / 0 | 0 |  |
 | `crm.discount_approval` |  | 80 kB | 4 | 82 | 2 / 2 / 0 | 2 |  |
-| `crm.dispatch_attempt` | 139 | 128 kB | 821 | 127 | 167 / 167 / 0 | 47 | 2026-11-01 00:24 |
-| `crm.dispatch_queue` | 250 | 216 kB | 1382 | 6668 | 259 / 279 / 0 | 26 | 2026-11-11 07:16 |
-| `crm.document` |  | 112 kB | 1389 | 4611 | 23 / 3 / 0 | 3 |  |
-| `crm.entitlement_feed_state` | 1 | 64 kB | 37489 | 1 | 1 / 11914 / 0 | 22 | 2026-11-19 15:40 |
+| `crm.dispatch_attempt` | 139 | 128 kB | 825 | 131 | 167 / 167 / 0 | 47 | 2026-11-01 00:24 |
+| `crm.dispatch_queue` | 250 | 216 kB | 1446 | 7108 | 259 / 279 / 0 | 26 | 2026-11-11 07:16 |
+| `crm.document` |  | 112 kB | 1453 | 4872 | 23 / 3 / 0 | 3 |  |
+| `crm.entitlement_feed_state` | 1 | 64 kB | 38283 | 1 | 1 / 12169 / 0 | 22 | 2026-11-19 23:54 |
 | `crm.erasure_request` |  | 56 kB | 16 | 181 | 1 / 0 / 0 | 0 |  |
 | `crm.export_job` | 17 | 128 kB | 3811 | 161 | 17 / 615 / 0 | 43 |  |
 | `crm.form_definition` | 53 | 176 kB | 8 | 475 | 56 / 0 / 1 | 1 |  |
-| `crm.form_submission` | 233 | 392 kB | 3993 | 108198 | 234 / 164 / 3 | 43 | 2026-10-31 19:18 |
+| `crm.form_submission` | 233 | 392 kB | 4181 | 108294 | 234 / 164 / 3 | 43 | 2026-10-31 19:18 |
 | `crm.fx_rate_override` |  | 24 kB | 8 | 526 | 0 / 0 / 0 | 0 |  |
-| `crm.fx_rate_platform` | 567 | 152 kB | 114 | 893 | 567 / 0 / 0 | 0 |  |
+| `crm.fx_rate_platform` | 567 | 152 kB | 114 | 914 | 588 / 0 / 0 | 0 |  |
 | `crm.inbox_events` |  | 48 kB | 8 | 83 | 27 / 0 / 0 | 0 |  |
 | `crm.incident_flag` |  | 80 kB | 4 | 1068 | 1 / 1 / 0 | 1 |  |
 | `crm.inclusion_item` |  | 80 kB | 4 | 205 | 4 / 1 / 4 | 5 |  |
 | `crm.ingest_address` |  | 64 kB | 38 | 65 | 1 / 0 / 0 | 0 |  |
 | `crm.intake_form` | 53 | 80 kB | 1113 | 1110 | 57 / 0 / 1 | 1 |  |
-| `crm.integration_credential` | 2 | 80 kB | 1355 | 2822 | 4 / 78 / 1 | 6 |  |
-| `crm.invoice` | 18 | 184 kB | 2566372 | 22338 | 24 / 121 / 0 | 14 | 2026-11-01 02:34 |
-| `crm.invoice_line` |  | 80 kB | 4 | 583 | 30 / 0 / 0 | 0 |  |
+| `crm.integration_credential` | 2 | 80 kB | 1359 | 2822 | 4 / 80 / 1 | 8 |  |
+| `crm.invoice` | 18 | 184 kB | 2626510 | 22842 | 24 / 121 / 0 | 14 | 2026-11-01 02:34 |
+| `crm.invoice_line` |  | 80 kB | 4 | 615 | 30 / 0 / 0 | 0 |  |
 | `crm.invoice_sequence` |  | 32 kB | 1 | 53 | 2 / 22 / 0 | 22 |  |
-| `crm.job` | 20105 | 17.2 MB | 17030 | 7899657 | 195774 / 391541 / 175668 | 422 | 2026-11-19 16:00 |
-| `crm.legal_hold` |  | 24 kB | 132 | 10329 | 0 / 0 / 0 | 0 |  |
-| `crm.lifecycle_run` | 935 | 496 kB | 16 | 118 | 935 / 0 / 0 | 0 |  |
-| `crm.llm_app_profile` |  | 32 kB | 2 | 7505 | 1 / 1 / 0 | 1 |  |
-| `crm.llm_call` | 109 | 160 kB | 269 | 2824 | 161 / 0 / 0 | 0 |  |
+| `crm.job` | 19996 | 17.2 MB | 17034 | 8039544 | 198868 / 397733 / 178744 | 100 | 2026-11-20 00:31 |
+| `crm.legal_hold` |  | 24 kB | 132 | 10608 | 0 / 0 / 0 | 0 |  |
+| `crm.lifecycle_run` | 935 | 520 kB | 16 | 118 | 999 / 0 / 0 | 0 |  |
+| `crm.llm_app_profile` |  | 32 kB | 2 | 7604 | 1 / 1 / 0 | 1 |  |
+| `crm.llm_call` | 109 | 160 kB | 269 | 2952 | 161 / 0 / 0 | 0 |  |
 | `crm.llm_connection_share` |  | 32 kB | 47 | 6 | 6 / 0 / 0 | 0 |  |
 | `crm.llm_stage_profile` |  | 32 kB | 2 | 135 | 3 / 0 / 0 | 0 |  |
 | `crm.llm_stage_route` |  | 32 kB | 10 | 136 | 9 / 3 / 0 | 3 |  |
-| `crm.llm_usage_daily` | 15 | 32 kB | 94 | 372 | 15 / 146 / 0 | 39 |  |
+| `crm.llm_usage_daily` | 15 | 32 kB | 96 | 372 | 15 / 146 / 0 | 39 |  |
 | `crm.mail_import` |  | 32 kB | 39 | 37 | 4 / 18 / 0 | 18 |  |
-| `crm.meeting_slot` |  | 96 kB | 1160 | 605 | 18 / 15 / 0 | 15 |  |
-| `crm.member` | 68 | 136 kB | 7877471 | 4410 | 70 / 4 / 0 | 0 |  |
-| `crm.member_invitation` |  | 80 kB | 248 | 4610 | 12 / 19 / 0 | 20 |  |
-| `crm.membership_feed_state` | 1 | 64 kB | 172988 | 1 | 1 / 83421 / 0 | 34 | 2026-11-19 16:06 |
-| `crm.membership_inbox` |  | 48 kB | 8 | 1061 | 39 / 0 / 1 | 1 |  |
-| `crm.message` | 50 | 248 kB | 8239 | 9670 | 65 / 52 / 11 | 6 | 2026-11-01 01:15 |
+| `crm.meeting_slot` |  | 96 kB | 1254 | 637 | 18 / 15 / 0 | 15 |  |
+| `crm.member` | 68 | 136 kB | 8064313 | 4410 | 70 / 4 / 0 | 0 |  |
+| `crm.member_invitation` |  | 80 kB | 248 | 4740 | 12 / 19 / 0 | 20 |  |
+| `crm.membership_feed_state` | 1 | 64 kB | 175155 | 1 | 1 / 84482 / 0 | 24 | 2026-11-20 00:25 |
+| `crm.membership_inbox` |  | 48 kB | 8 | 1125 | 39 / 0 / 1 | 1 |  |
+| `crm.message` | 50 | 248 kB | 8239 | 9671 | 65 / 52 / 11 | 6 | 2026-11-01 01:15 |
 | `crm.message_delivery` |  | 48 kB | 2 | 51 | 1 / 2 / 0 | 2 |  |
 | `crm.message_template` |  | 112 kB | 10 | 379 | 10 / 0 / 0 | 0 |  |
-| `crm.messaging_connection` |  | 96 kB | 5 | 1219 | 1 / 4 / 0 | 4 |  |
-| `crm.metric_event` | 164 | 248 kB | 2561 | 1020 | 200 / 0 / 0 | 0 |  |
-| `crm.note` | 72 | 96 kB | 4169 | 396 | 73 / 0 / 0 | 0 |  |
-| `crm.ops_release` |  | 152 kB | 6 | 45160 | 6 / 17 / 0 | 6 |  |
-| `crm.option` | 206 | 328 kB | 12233 | 21116663 | 216 / 16 / 2 | 7 |  |
-| `crm.option_block` | 414 | 368 kB | 877 | 4116 | 425 / 159 / 0 | 21 |  |
+| `crm.messaging_connection` |  | 96 kB | 5 | 1280 | 1 / 4 / 0 | 4 |  |
+| `crm.metric_event` | 164 | 248 kB | 2561 | 1052 | 200 / 0 / 0 | 0 |  |
+| `crm.note` | 72 | 96 kB | 4359 | 396 | 73 / 0 / 0 | 0 |  |
+| `crm.ops_release` |  | 152 kB | 6 | 46176 | 6 / 17 / 0 | 6 |  |
+| `crm.option` | 206 | 328 kB | 12252 | 21691867 | 216 / 16 / 2 | 7 |  |
+| `crm.option_block` | 414 | 368 kB | 877 | 4148 | 425 / 159 / 0 | 21 |  |
 | `crm.option_price` |  | 80 kB | 4 | 649 | 17 / 0 / 0 | 2 |  |
-| `crm.option_rule` |  | 96 kB | 11 | 2797 | 13 / 0 / 0 | 13 |  |
-| `crm.otp_challenge` | 3 | 152 kB | 44803 | 1132 | 57 / 158 / 57 | 44 | 2026-11-01 10:00 |
+| `crm.option_rule` |  | 96 kB | 11 | 2829 | 13 / 0 / 0 | 13 |  |
+| `crm.otp_challenge` | 3 | 152 kB | 45905 | 1132 | 57 / 158 / 57 | 44 | 2026-11-01 10:00 |
 | `crm.owner_recovery_request` |  | 24 kB | 34 | 4376 | 0 / 0 / 0 | 0 |  |
-| `crm.partner_commission` |  | 96 kB | 5 | 2661 | 1 / 0 / 0 | 0 |  |
-| `crm.payment` | 36 | 176 kB | 9735 | 318 | 41 / 0 / 0 | 0 |  |
+| `crm.partner_commission` |  | 96 kB | 5 | 2663 | 1 / 0 / 0 | 0 |  |
+| `crm.payment` | 36 | 176 kB | 9807 | 318 | 41 / 0 / 0 | 0 |  |
 | `crm.payment_provider_account` |  | 48 kB | 368 | 132 | 5 / 12 / 0 | 12 |  |
-| `crm.payment_schedule` | 110 | 168 kB | 15140 | 19455 | 128 / 55 / 0 | 55 |  |
+| `crm.payment_schedule` | 110 | 168 kB | 15173 | 20039 | 128 / 55 / 0 | 55 |  |
 | `crm.payment_session` |  | 80 kB | 4 | 41 | 3 / 2 / 0 | 2 |  |
-| `crm.placeholder_map` |  | 64 kB | 670 | 7 | 18 / 0 / 7 | 7 |  |
-| `crm.prep_pack_selection` |  | 48 kB | 11 | 1411 | 0 / 0 / 0 | 0 |  |
-| `crm.profile_history` |  | 24 kB | 34 | 1124 | 0 / 0 / 0 | 0 |  |
-| `crm.proposal` | 105 | 304 kB | 85715 | 1787636 | 111 / 974 / 0 | 59 | 2026-11-11 10:18 |
-| `crm.proposal_day` | 520 | 376 kB | 806 | 2721 | 526 / 10 / 0 | 14 |  |
+| `crm.placeholder_map` |  | 64 kB | 678 | 7 | 18 / 0 / 7 | 7 |  |
+| `crm.prep_pack_selection` |  | 48 kB | 11 | 1443 | 0 / 0 / 0 | 0 |  |
+| `crm.profile_history` |  | 24 kB | 34 | 1218 | 0 / 0 / 0 | 0 |  |
+| `crm.proposal` | 105 | 304 kB | 85734 | 1828058 | 111 / 974 / 0 | 59 | 2026-11-11 10:18 |
+| `crm.proposal_day` | 520 | 376 kB | 806 | 2753 | 526 / 10 / 0 | 14 |  |
 | `crm.proposal_inclusion` |  | 128 kB | 5 | 203 | 31 / 0 / 0 | 0 |  |
-| `crm.public_booking_attempt` |  | 96 kB | 5 | 12513 | 11 / 21 / 0 | 0 |  |
-| `crm.refund_request` |  | 96 kB | 5 | 1791 | 4 / 2 / 0 | 2 |  |
+| `crm.public_booking_attempt` |  | 96 kB | 5 | 13001 | 11 / 21 / 0 | 0 |  |
+| `crm.refund_request` |  | 96 kB | 5 | 1823 | 4 / 2 / 0 | 2 |  |
 | `crm.retail_price_rule` |  | 64 kB | 3 | 247 | 1 / 0 / 0 | 0 |  |
-| `crm.room_assignment` |  | 80 kB | 4 | 1160 | 4 / 0 / 4 | 4 |  |
-| `crm.sales_partner` |  | 64 kB | 3 | 204 | 1 / 0 / 0 | 0 |  |
+| `crm.room_assignment` |  | 80 kB | 4 | 1200 | 4 / 0 / 4 | 4 |  |
+| `crm.sales_partner` |  | 64 kB | 3 | 205 | 1 / 0 / 0 | 0 |  |
 | `crm.sales_partner_link` |  | 80 kB | 5 | 152 | 1 / 0 / 0 | 0 |  |
-| `crm.sales_partner_otp` |  | 48 kB | 5 | 24042 | 0 / 0 / 0 | 0 |  |
+| `crm.sales_partner_otp` |  | 48 kB | 5 | 25018 | 0 / 0 / 0 | 0 |  |
 | `crm.saved_reply` |  | 48 kB | 40 | 1242 | 10 / 0 / 9 | 9 |  |
-| `crm.selection` |  | 96 kB | 11 | 1723 | 16 / 0 / 0 | 0 |  |
+| `crm.selection` |  | 96 kB | 11 | 1755 | 16 / 0 / 0 | 0 |  |
 | `crm.setting_definition` | 44 | 72 kB | 37 | 54 | 47 / 9 / 0 | 9 |  |
-| `crm.setting_value` |  | 96 kB | 143 | 33738 | 9 / 11 / 0 | 11 |  |
-| `crm.signature_event` |  | 264 kB | 5 | 3311 | 39 / 0 / 0 | 0 |  |
-| `crm.signature_request` | 52 | 192 kB | 4202 | 4101 | 52 / 54 / 0 | 38 |  |
-| `crm.status_transition` | 183 | 88 kB | 2331 | 261 | 236 / 0 / 0 | 0 |  |
-| `crm.studio_invitation` |  | 96 kB | 34 | 96 | 10 / 28 / 0 | 28 |  |
+| `crm.setting_value` |  | 96 kB | 143 | 34727 | 9 / 11 / 0 | 11 |  |
+| `crm.signature_event` |  | 264 kB | 5 | 3501 | 39 / 0 / 0 | 0 |  |
+| `crm.signature_request` | 52 | 192 kB | 4328 | 4190 | 52 / 54 / 0 | 38 |  |
+| `crm.status_transition` | 183 | 88 kB | 2332 | 261 | 236 / 0 / 0 | 0 |  |
+| `crm.studio_invitation` |  | 96 kB | 35 | 96 | 10 / 28 / 0 | 28 |  |
 | `crm.supplier_bill` |  | 40 kB | 4 | 265 | 0 / 0 / 0 | 0 |  |
 | `crm.supplier_bill_line` |  | 40 kB | 4 | 113 | 0 / 0 / 0 | 0 |  |
 | `crm.supplier_manifest_export` |  | 48 kB | 2 | 24 | 5 / 0 / 4 | 4 |  |
 | `crm.support_grant` |  | 64 kB | 4 | 6486 | 4 / 4 / 0 | 4 |  |
 | `crm.support_session` |  | 96 kB | 5 | 2381 | 3 / 4 / 0 | 4 |  |
-| `crm.tag` | 767 | 352 kB | 3 | 197509 | 808 / 0 / 15 | 15 |  |
-| `crm.tag_link` | 241 | 256 kB | 1014 | 12241 | 484 / 0 / 243 | 0 | 2026-11-14 20:00 |
-| `crm.task` | 397 | 320 kB | 10243 | 216566 | 455 / 275 / 3 | 72 | 2026-10-31 19:19 |
-| `crm.tenant` | 58 | 72 kB | 15441 | 7933505 | 65 / 20 / 0 | 13 |  |
-| `crm.tenant_entitlement` |  | 32 kB | 8 | 966204 | 10 / 22 / 1 | 23 |  |
-| `crm.tenant_erasure_feed_state` | 1 | 64 kB | 6890 | 3438 | 1 / 3438 / 0 | 11 | 2026-11-16 12:48 |
-| `crm.tenant_erasure_report` |  | 80 kB | 4 | 3468 | 3 / 3 / 0 | 3 |  |
-| `crm.tenant_erasure_saga` |  | 64 kB | 3441 | 34 | 8 / 8 / 0 | 8 |  |
-| `crm.tenant_key` |  | 96 kB | 9 | 2128 | 24 / 4 / 0 | 4 |  |
-| `crm.tenant_settings` | 61 | 64 kB | 87229 | 12515 | 64 / 110 / 1 | 6 |  |
-| `crm.terms_acceptance` | 51 | 256 kB | 1096 | 2860 | 82 / 0 / 0 | 0 |  |
+| `crm.tag` | 767 | 352 kB | 3 | 206269 | 808 / 0 / 15 | 15 |  |
+| `crm.tag_link` | 241 | 256 kB | 1014 | 12729 | 484 / 0 / 243 | 0 | 2026-11-14 20:00 |
+| `crm.task` | 397 | 320 kB | 10307 | 219509 | 456 / 275 / 3 | 72 | 2026-10-31 19:19 |
+| `crm.tenant` | 58 | 72 kB | 15649 | 8123376 | 65 / 20 / 0 | 13 |  |
+| `crm.tenant_entitlement` |  | 32 kB | 8 | 996288 | 10 / 22 / 1 | 23 |  |
+| `crm.tenant_erasure_feed_state` | 1 | 64 kB | 7384 | 3685 | 1 / 3685 / 0 | 13 | 2026-11-16 12:48 |
+| `crm.tenant_erasure_report` |  | 80 kB | 4 | 3715 | 3 / 3 / 0 | 3 |  |
+| `crm.tenant_erasure_saga` |  | 64 kB | 3688 | 34 | 8 / 8 / 0 | 8 |  |
+| `crm.tenant_key` |  | 96 kB | 9 | 2161 | 24 / 4 / 0 | 4 |  |
+| `crm.tenant_settings` | 61 | 64 kB | 88859 | 13003 | 64 / 110 / 1 | 6 |  |
+| `crm.terms_acceptance` | 51 | 256 kB | 1190 | 2956 | 82 / 0 / 0 | 0 |  |
 | `crm.tour_retired_flag` |  | 144 kB | 6 | 915 | 21 / 21 / 0 | 21 |  |
-| `crm.traveler` | 305 | 528 kB | 20063 | 186805 | 309 / 123 / 4 | 50 | 2026-10-31 10:17 |
-| `crm.traveler_access` | 38 | 152 kB | 6368 | 6529 | 52 / 91 / 0 | 17 | 2026-10-31 18:46 |
-| `crm.traveler_flight` |  | 96 kB | 5 | 1387 | 12 / 0 / 0 | 0 |  |
-| `crm.traveler_health` |  | 24 kB | 1169 | 1350 | 0 / 0 / 0 | 0 |  |
-| `crm.traveler_profile` | 285 | 200 kB | 2455 | 3506 | 309 / 560 / 4 | 27 |  |
-| `crm.traveler_relation` |  | 40 kB | 2095 | 172 | 0 / 0 / 0 | 0 |  |
-| `crm.trip` | 163 | 264 kB | 38706 | 907292 | 174 / 1994 / 3 | 64 | 2026-11-12 03:17 |
-| `crm.trip_cancellation` |  | 80 kB | 4 | 3893 | 9 / 3 / 0 | 3 |  |
-| `crm.trip_commitment` | 121 | 152 kB | 210 | 890 | 131 / 105 / 0 | 16 |  |
-| `crm.trip_party` | 145 | 144 kB | 1097 | 1984 | 189 / 13 / 4 | 8 |  |
-| `crm.trip_stage_history` | 565 | 384 kB | 7054 | 68103 | 606 / 0 / 3 | 5 |  |
-| `crm.trip_traveler` | 166 | 152 kB | 113111 | 648168 | 189 / 53 / 4 | 15 |  |
-| `crm.visa_application` |  | 96 kB | 5 | 12409 | 1 / 1 / 1 | 2 |  |
+| `crm.traveler` | 305 | 528 kB | 20063 | 187586 | 309 / 123 / 4 | 50 | 2026-10-31 10:17 |
+| `crm.traveler_access` | 38 | 152 kB | 6543 | 6625 | 52 / 91 / 0 | 17 | 2026-10-31 18:46 |
+| `crm.traveler_flight` |  | 96 kB | 5 | 1427 | 12 / 0 / 0 | 0 |  |
+| `crm.traveler_health` |  | 24 kB | 1263 | 1390 | 0 / 0 / 0 | 0 |  |
+| `crm.traveler_profile` | 285 | 200 kB | 2455 | 3600 | 309 / 560 / 4 | 27 |  |
+| `crm.traveler_relation` |  | 40 kB | 2253 | 172 | 0 / 0 / 0 | 0 |  |
+| `crm.trip` | 163 | 264 kB | 38725 | 947192 | 174 / 1995 / 3 | 65 | 2026-11-12 03:17 |
+| `crm.trip_cancellation` |  | 80 kB | 4 | 3910 | 9 / 3 / 0 | 3 |  |
+| `crm.trip_commitment` | 121 | 152 kB | 210 | 954 | 131 / 105 / 0 | 16 |  |
+| `crm.trip_party` | 145 | 144 kB | 1097 | 2216 | 189 / 13 / 4 | 8 |  |
+| `crm.trip_stage_history` | 565 | 384 kB | 7054 | 68135 | 607 / 0 / 3 | 5 |  |
+| `crm.trip_traveler` | 166 | 152 kB | 113111 | 648973 | 189 / 53 / 4 | 15 |  |
+| `crm.visa_application` |  | 96 kB | 5 | 12897 | 1 / 1 / 1 | 2 |  |
 | `crm.visa_checklist_item` |  | 64 kB | 3 | 35 | 3 / 1 / 3 | 4 |  |
 | `crm.visa_template` |  | 64 kB | 3 | 32 | 1 / 0 / 1 | 1 |  |
 | `crm.voice_profile` |  | 64 kB | 3 | 69 | 1 / 0 / 1 | 1 |  |
-| `crm.workflow_rule` |  | 80 kB | 4 | 24230 | 1 / 0 / 0 | 0 |  |
-| `crm.workflow_run` |  | 120 kB | 7 | 23184 | 5 / 5 / 0 | 5 |  |
+| `crm.workflow_rule` |  | 80 kB | 4 | 24719 | 1 / 0 / 0 | 0 |  |
+| `crm.workflow_run` |  | 120 kB | 7 | 23798 | 5 / 5 / 0 | 5 |  |
 | `geo.component_redirect` | 104 | 104 kB | 419 | 20663 | 130 / 0 / 1 | 1 |  |
-| `geo.geocode_call` | 158 | 88 kB | 2973 | 5683 | 165 / 3 / 0 | 0 |  |
-| `geo.graph_build` | 3 | 144 kB | 8967024 | 6616038 | 100 / 199 / 97 | 39 | 2026-11-09 22:55 |
+| `geo.geocode_call` | 158 | 88 kB | 3011 | 5763 | 165 / 3 / 0 | 0 |  |
+| `geo.graph_build` | 3 | 144 kB | 8967024 | 6705286 | 100 / 199 / 97 | 39 | 2026-11-09 22:55 |
 | `geo.graph_edge` | 7186 | 3.2 MB | 119 | 7 | 178415 / 0 / 171229 | 0 | 2026-11-14 23:07 |
 | `geo.graph_node` | 4479 | 2.9 MB | 149 | 112 | 111980 / 0 / 107501 | 0 | 2026-11-14 23:07 |
 | `geo.place_dedupe_country` |  | 16 kB | 91 | 0 | 0 / 0 / 0 | 0 |  |
@@ -17121,16 +17172,16 @@ tripplanner.trip_events.session_id -> tripplanner.sessions.id
 | `geo.tour_day` | 6993 | 2.9 MB | 9412 | 90866 | 16949 / 2335 / 9956 | 451 | 2026-11-09 16:50 |
 | `geo.tour_junction` | 162726 | 53.3 MB | 1319 | 1 | 3654566 / 0 / 3491840 | 0 | 2026-11-14 23:07 |
 | `geo.tour_leg` | 75774 | 58.5 MB | 3004 | 20 | 1997292 / 0 / 1921518 | 0 | 2026-11-14 23:07 |
-| `geo.tour_place` | 13387 | 220.5 MB | 11795 | 11759084 | 32932 / 8295 / 19545 | 935 | 2026-11-09 23:00 |
-| `geo.tour_segment` | 1028 | 1.7 MB | 205233 | 8834104 | 22719 / 0 / 21691 | 0 | 2026-11-14 23:07 |
-| `geo.tour_stop` | 16652 | 7.6 MB | 6071 | 6893 | 414506 / 0 / 397854 | 0 | 2026-11-14 23:07 |
-| `gold_aa_internal.aa_content_item` | 28 | 48 kB | 1693 | 3874 | 31 / 31 / 0 | 3 |  |
-| `gold_aa_internal.aa_content_version` | 28 | 144 kB | 1617 | 16564 | 34 / 31 / 0 | 34 |  |
-| `gold_aa_internal.content_exports` |  | 24 kB | 10194 | 0 | 0 / 0 / 0 | 0 |  |
-| `gold_aa_internal.published_tours` | 892 | 6.8 MB | 240565 | 31396223 | 497 / 2388 / 0 | 108 | 2026-11-10 00:26 |
-| `gold_aa_internal.tenant_tour_versions` | 159 | 1.4 MB | 113898 | 150939 | 165 / 697 / 1 | 51 | 2026-11-19 11:19 |
-| `gold_aa_internal.tour_lifecycle_event` | 64 | 144 kB | 107942794 | 25956494 | 80 / 0 / 0 | 13 |  |
-| `gold_aa_internal.webhook_deliveries` |  | 24 kB | 10215 | 0 | 0 / 0 / 0 | 0 |  |
+| `geo.tour_place` | 13387 | 220.5 MB | 11798 | 11853994 | 32932 / 8295 / 19545 | 935 | 2026-11-09 23:00 |
+| `geo.tour_segment` | 1028 | 1.7 MB | 205233 | 8922838 | 22719 / 0 / 21691 | 0 | 2026-11-14 23:07 |
+| `geo.tour_stop` | 16652 | 7.6 MB | 6074 | 6927 | 414506 / 0 / 397854 | 0 | 2026-11-14 23:07 |
+| `gold_aa_internal.aa_content_item` | 28 | 48 kB | 1807 | 4061 | 31 / 31 / 0 | 3 |  |
+| `gold_aa_internal.aa_content_version` | 28 | 144 kB | 1697 | 19705 | 34 / 31 / 0 | 34 |  |
+| `gold_aa_internal.content_exports` |  | 24 kB | 10223 | 0 | 0 / 0 / 0 | 0 |  |
+| `gold_aa_internal.published_tours` | 892 | 6.8 MB | 241238 | 31492649 | 497 / 2390 / 0 | 110 | 2026-11-10 00:26 |
+| `gold_aa_internal.tenant_tour_versions` | 159 | 1.4 MB | 114114 | 151685 | 165 / 697 / 1 | 51 | 2026-11-19 11:19 |
+| `gold_aa_internal.tour_lifecycle_event` | 64 | 144 kB | 108118864 | 25956494 | 80 / 0 / 0 | 13 |  |
+| `gold_aa_internal.webhook_deliveries` |  | 24 kB | 10244 | 0 | 0 / 0 / 0 | 0 |  |
 | `learn.certificate` |  | 64 kB | 22 | 53 | 1 / 0 / 0 | 0 |  |
 | `learn.content_review_item` |  | 24 kB | 2 | 0 | 0 / 0 / 0 | 0 |  |
 | `learn.enrollment` |  | 48 kB | 18 | 36 | 1 / 1 / 0 | 1 |  |
@@ -17143,137 +17194,139 @@ tripplanner.trip_events.session_id -> tripplanner.sessions.id
 | `public.checkpoint_migrations` |  | 24 kB | 8 | 0 | 0 / 0 / 0 | 0 |  |
 | `retired.acp_output_rules` |  | 48 kB | 46 | 0 | 0 / 0 / 0 | 0 |  |
 | `retired.pipeline_lessons` |  | 24 kB | 9 | 1960 | 0 / 0 / 0 | 0 |  |
-| `shared.admin_users` | 12 | 80 kB | 77262 | 75345 | 10 / 2370 / 4 | 19 |  |
-| `shared.ai_usage_hourly` | 4303 | 2.2 MB | 33 | 4640 | 37889 / 0 / 33586 | 71 | 2026-11-19 13:49 |
+| `shared.admin_users` | 12 | 88 kB | 78495 | 75345 | 10 / 2377 / 4 | 26 |  |
+| `shared.ai_usage_hourly` | 4324 | 2.2 MB | 33 | 4739 | 38441 / 0 / 34117 | 110 | 2026-11-19 22:45 |
 | `shared.ai_usage_saved_view` |  | 48 kB | 2 | 16 | 1 / 0 / 1 | 1 |  |
-| `shared.alert_recipient` | 2 | 64 kB | 23570 | 154 | 2 / 4937 / 0 | 18 |  |
+| `shared.alert_recipient` | 2 | 64 kB | 23776 | 154 | 2 / 4937 / 0 | 18 |  |
 | `shared.claim_shadow_verdict` |  | 232 kB | 15 | 123 | 24 / 0 / 0 | 0 |  |
-| `shared.cost_explorer_app_snapshot` | 26158 | 6.5 MB | 294 | 519 | 26306 / 0 / 0 | 0 | 2026-11-19 01:23 |
-| `shared.cost_explorer_snapshot` | 2194 | 2 MB | 940 | 178 | 10503 / 0 / 10490 | 0 | 2026-11-03 21:00 |
-| `shared.countries` | 249 | 128 kB | 14146 | 15830 | 249 / 7 / 0 | 6 |  |
-| `shared.decision_cache_hits_daily` | 362 | 128 kB | 672 | 31056 | 362 / 30658 / 0 | 15 | 2026-11-08 14:14 |
-| `shared.decision_log` | 665918 | 590 MB | 752 | 4013816 | 659857 / 6 / 695728 | 3 | 2026-11-10 06:11 |
-| `shared.decision_question` | 5 | 72 kB | 19049 | 708 | 1 / 20 / 0 | 3 |  |
-| `shared.destinations` | 8200 | 9.7 MB | 214460 | 98025432 | 7226 / 18922 / 0 | 6 | 2026-11-01 01:22 |
-| `shared.dfs_balance_snapshot` |  | 488 kB | 6 | 2563 | 50 / 0 / 0 | 0 |  |
-| `shared.dfs_call_log` | 2934 | 1.4 MB | 2124 | 16997 | 1103 / 0 / 0 | 0 |  |
+| `shared.cost_explorer_app_snapshot` | 27602 | 6.8 MB | 298 | 529 | 27602 / 0 / 0 | 0 | 2026-11-19 01:23 |
+| `shared.cost_explorer_snapshot` | 2604 | 2 MB | 949 | 180 | 11107 / 0 / 10684 | 194 | 2026-11-03 21:00 |
+| `shared.countries` | 249 | 128 kB | 14148 | 15830 | 249 / 7 / 0 | 6 |  |
+| `shared.decision_cache_hits_daily` | 365 | 136 kB | 672 | 31109 | 365 / 30708 / 0 | 15 | 2026-11-08 14:14 |
+| `shared.decision_log` | 665918 | 591 MB | 752 | 4044297 | 661733 / 6 / 695728 | 3 | 2026-11-10 06:11 |
+| `shared.decision_question` | 5 | 72 kB | 19091 | 708 | 1 / 20 / 0 | 3 |  |
+| `shared.destinations` | 8200 | 9.7 MB | 214846 | 98546614 | 7226 / 18922 / 0 | 6 | 2026-11-01 01:22 |
+| `shared.dfs_balance_snapshot` |  | 488 kB | 6 | 2570 | 50 / 0 / 0 | 0 |  |
+| `shared.dfs_call_log` | 2934 | 1.4 MB | 2124 | 17127 | 1103 / 0 / 0 | 0 |  |
 | `shared.embedding_column` |  | 64 kB | 177 | 14 | 5 / 0 / 0 | 0 |  |
 | `shared.embedding_space` |  | 32 kB | 169 | 19 | 2 / 0 / 0 | 0 |  |
-| `shared.entitlement_feature` |  | 32 kB | 6467 | 619894 | 28 / 0 / 0 | 0 |  |
+| `shared.entitlement_feature` |  | 32 kB | 6615 | 641230 | 28 / 0 / 0 | 0 |  |
 | `shared.eval_claim_label` | 6031 | 6.3 MB | 108 | 9302 | 6293 / 0 / 0 | 0 | 2026-11-09 21:21 |
 | `shared.eval_claim_proposal` | 417 | 488 kB | 3 | 16749 | 417 / 0 / 0 | 0 |  |
 | `shared.eval_claim_relabel` |  | 80 kB | 15 | 463 | 5 / 0 / 0 | 0 |  |
-| `shared.eval_golden_item` | 834 | 10.7 MB | 1087 | 4609 | 837 / 0 / 0 | 3 |  |
-| `shared.eval_golden_set` |  | 176 kB | 23 | 4514 | 9 / 5 / 0 | 8 |  |
-| `shared.eval_golden_split` | 500 | 168 kB | 453 | 870 | 500 / 0 / 0 | 0 |  |
-| `shared.eval_item_result` | 1111 | 1.3 MB | 300 | 1212 | 1112 / 0 / 0 | 1 |  |
-| `shared.jev_credit_topup` |  | 48 kB | 2024 | 3 | 2 / 0 / 0 | 0 |  |
-| `shared.jev_tenant_allowlist` |  | 32 kB | 16088 | 4923 | 6 / 0 / 9 | 9 |  |
-| `shared.job` | 10722 | 31.9 MB | 25181 | 12573613 | 12527 / 95063 / 2407 | 240 | 2026-11-19 07:47 |
-| `shared.job_worker` | 117 | 280 kB | 120955 | 1021656 | 807 / 252772 / 751 | 10 | 2026-11-19 16:20 |
-| `shared.kpi_daily` | 319 | 128 kB | 54 | 375 | 319 / 0 / 0 | 0 |  |
-| `shared.llm_app_profile` |  | 32 kB | 78161 | 5285 | 4 / 7 / 0 | 7 |  |
-| `shared.llm_call_daily` |  | 48 kB | 4294 | 2376 | 5 / 0 / 0 | 0 |  |
-| `shared.llm_call_log` | 520416 | 294.7 MB | 17700 | 31960628 | 413048 / 0 / 200 | 200 | 2026-11-09 23:57 |
-| `shared.llm_capacity_limit` |  | 32 kB | 77261 | 2 | 1 / 0 / 1 | 1 |  |
-| `shared.llm_cassette` | 12343 | 17.3 MB | 14 | 28 | 12665 / 0 / 0 | 0 | 2026-11-18 02:17 |
-| `shared.llm_connection_budget` |  | 48 kB | 200 | 27 | 9 / 0 / 0 | 0 |  |
-| `shared.llm_connection_cost_policy` |  | 32 kB | 1805 | 12 | 4 / 1 / 0 | 1 |  |
-| `shared.llm_cost_reconcile` | 132 | 104 kB | 89 | 385 | 139 / 236 / 0 | 10 |  |
-| `shared.llm_model_alias` |  | 48 kB | 6119 | 3 | 3 / 0 / 0 | 0 |  |
-| `shared.llm_model_catalog` | 33 | 144 kB | 11022 | 1198 | 22 / 577 / 0 | 35 | 2026-11-14 04:02 |
-| `shared.llm_model_deployment` | 57 | 112 kB | 12763 | 418 | 57 / 730 / 0 | 29 | 2026-11-14 05:04 |
+| `shared.eval_golden_item` | 834 | 10.7 MB | 1095 | 5021 | 837 / 0 / 0 | 3 |  |
+| `shared.eval_golden_set` |  | 176 kB | 23 | 4590 | 9 / 5 / 0 | 8 |  |
+| `shared.eval_golden_split` | 500 | 168 kB | 475 | 870 | 500 / 0 / 0 | 0 |  |
+| `shared.eval_item_result` | 1111 | 1.7 MB | 300 | 1347 | 1202 / 0 / 0 | 1 |  |
+| `shared.jev_credit_topup` |  | 48 kB | 2046 | 3 | 2 / 0 / 0 | 0 |  |
+| `shared.jev_tenant_allowlist` |  | 32 kB | 16131 | 4923 | 6 / 0 / 9 | 9 |  |
+| `shared.job` | 10985 | 31.9 MB | 25215 | 12611588 | 12632 / 96290 / 2415 | 85 | 2026-11-19 21:31 |
+| `shared.job_worker` | 121 | 280 kB | 121063 | 1030593 | 811 / 254748 / 751 | 61 | 2026-11-20 00:22 |
+| `shared.kpi_daily` | 319 | 136 kB | 55 | 391 | 334 / 0 / 0 | 0 |  |
+| `shared.llm_app_profile` |  | 32 kB | 79805 | 5393 | 4 / 7 / 0 | 7 |  |
+| `shared.llm_call_daily` |  | 48 kB | 4395 | 2488 | 5 / 0 / 0 | 0 |  |
+| `shared.llm_call_log` | 502192 | 304 MB | 17872 | 32054219 | 421153 / 0 / 200 | 0 | 2026-11-19 19:26 |
+| `shared.llm_capacity_limit` |  | 32 kB | 78867 | 2 | 1 / 0 / 1 | 1 |  |
+| `shared.llm_cassette` | 19832 | 26.4 MB | 14 | 28 | 19846 / 0 / 0 | 0 | 2026-11-19 19:20 |
+| `shared.llm_connection_budget` |  | 48 kB | 386 | 27 | 9 / 0 / 0 | 0 |  |
+| `shared.llm_connection_cost_policy` |  | 32 kB | 1991 | 12 | 4 / 1 / 0 | 1 |  |
+| `shared.llm_cost_reconcile` | 132 | 104 kB | 90 | 385 | 139 / 236 / 0 | 10 |  |
+| `shared.llm_model_alias` |  | 48 kB | 6273 | 3 | 3 / 0 / 0 | 0 |  |
+| `shared.llm_model_catalog` | 33 | 144 kB | 11253 | 1202 | 22 / 577 / 0 | 35 | 2026-11-14 04:02 |
+| `shared.llm_model_deployment` | 57 | 112 kB | 13013 | 422 | 57 / 730 / 0 | 29 | 2026-11-14 05:04 |
 | `shared.llm_model_family` |  | 32 kB | 2 | 44 | 7 / 0 / 0 | 0 |  |
-| `shared.llm_provider_connection` | 11 | 72 kB | 15705 | 645 | 11 / 258 / 0 | 15 |  |
-| `shared.llm_provider_health` | 46 | 32 kB | 15981 | 2902 | 46 / 2830 / 0 | 0 |  |
-| `shared.llm_role_config` | 40 | 80 kB | 30582 | 11751 | 23 / 293 / 6 | 41 | 2026-11-04 12:25 |
+| `shared.llm_provider_connection` | 11 | 72 kB | 15985 | 649 | 11 / 258 / 0 | 15 |  |
+| `shared.llm_provider_health` | 46 | 32 kB | 17413 | 3179 | 46 / 3107 / 0 | 0 |  |
+| `shared.llm_role_config` | 40 | 80 kB | 32945 | 11751 | 23 / 293 / 6 | 41 | 2026-11-04 12:25 |
 | `shared.llm_route_config_version` |  | 120 kB | 2 | 75 | 11 / 0 / 0 | 0 |  |
-| `shared.llm_route_policy` |  | 16 kB | 3661 | 0 | 0 / 0 / 0 | 0 |  |
-| `shared.llm_route_settings` |  | 32 kB | 2177 | 145906 | 1 / 10 / 0 | 10 |  |
+| `shared.llm_route_policy` |  | 16 kB | 3747 | 0 | 0 / 0 / 0 | 0 |  |
+| `shared.llm_route_settings` |  | 32 kB | 2229 | 154491 | 1 / 10 / 0 | 10 |  |
 | `shared.llm_shadow_log` | 5882 | 12 MB | 21 | 255 | 3333 / 0 / 0 | 0 | 2026-10-08 07:37 |
 | `shared.membership_plans` |  | 48 kB | 20917 | 33996 | 0 / 0 / 0 | 0 |  |
-| `shared.notifications` | 264 | 464 kB | 64793 | 28185 | 295 / 224 / 0 | 13 | 2026-11-14 13:34 |
+| `shared.notifications` | 264 | 464 kB | 64918 | 28981 | 298 / 224 / 0 | 13 | 2026-11-14 13:34 |
 | `shared.pipeline_jobs` | 523 | 480 kB | 62 | 22 | 0 / 0 / 0 | 0 |  |
-| `shared.pipeline_runs` | 46 | 208 kB | 12454 | 17897 | 0 / 1777 / 0 | 33 |  |
-| `shared.place_photo` | 3232 | 4.2 MB | 494218 | 102517286 | 0 / 98879 / 0 | 0 | 2026-11-18 21:11 |
-| `shared.plan` |  | 64 kB | 5048 | 25407 | 10 / 20 / 0 | 20 |  |
-| `shared.plan_feature` | 75 | 48 kB | 944363 | 96 | 83 / 4 / 2 | 2 |  |
-| `shared.prompt_eval_runs` | 42 | 200 kB | 3091 | 2200 | 64 / 18 / 1 | 22 |  |
-| `shared.prompt_version` | 52 | 80 kB | 236 | 107 | 71 / 0 / 0 | 0 |  |
-| `shared.provider_credit_topup` |  | 48 kB | 2 | 2434 | 1 / 0 / 1 | 1 |  |
-| `shared.provider_health` | 3 | 72 kB | 4887 | 1841 | 3 / 1539 / 0 | 23 | 2026-11-16 08:54 |
-| `shared.report_run` | 151 | 1.6 MB | 699 | 753 | 159 / 477 / 0 | 15 | 2026-11-17 04:38 |
-| `shared.rerun_wave` | 25 | 216 kB | 1413 | 293570 | 33 / 138 / 0 | 18 | 2026-10-25 08:19 |
-| `shared.schema_versions` | 584 | 192 kB | 19543 | 6250 | 443 / 0 / 0 | 13 |  |
-| `shared.setting_definition` | 319 | 984 kB | 4635 | 195697 | 331 / 274 / 0 | 69 | 2026-11-13 10:06 |
-| `shared.setting_value` |  | 96 kB | 132 | 227926 | 19 / 27 / 0 | 27 |  |
+| `shared.pipeline_runs` | 46 | 208 kB | 12489 | 18001 | 0 / 1778 / 0 | 34 |  |
+| `shared.place_photo` | 3232 | 4.2 MB | 496303 | 104925384 | 0 / 102111 / 0 | 6 | 2026-11-19 21:11 |
+| `shared.plan` |  | 64 kB | 5241 | 25628 | 10 / 20 / 0 | 20 |  |
+| `shared.plan_feature` | 75 | 48 kB | 975138 | 96 | 83 / 4 / 2 | 2 |  |
+| `shared.prompt_eval_runs` | 42 | 216 kB | 3284 | 2313 | 66 / 20 / 1 | 24 |  |
+| `shared.prompt_version` | 52 | 80 kB | 245 | 107 | 71 / 0 / 0 | 0 |  |
+| `shared.provider_credit_topup` |  | 48 kB | 2 | 2476 | 1 / 0 / 1 | 1 |  |
+| `shared.provider_health` | 3 | 72 kB | 5073 | 1928 | 3 / 1619 / 0 | 0 | 2026-11-19 18:31 |
+| `shared.report_run` | 163 | 1.7 MB | 706 | 776 | 163 / 489 / 0 | 19 | 2026-11-17 04:38 |
+| `shared.rerun_wave` | 25 | 216 kB | 1413 | 299594 | 33 / 138 / 0 | 18 | 2026-10-25 08:19 |
+| `shared.schema_versions` | 584 | 192 kB | 19682 | 6277 | 444 / 0 / 0 | 13 |  |
+| `shared.setting_definition` | 319 | 984 kB | 4843 | 211510 | 331 / 274 / 0 | 69 | 2026-11-13 10:06 |
+| `shared.setting_value` |  | 96 kB | 133 | 244680 | 19 / 27 / 0 | 27 |  |
 | `shared.source_change_mark` | 322 | 304 kB | 4 | 337 | 333 / 2 / 0 | 2 |  |
-| `shared.spend_budget` |  | 32 kB | 2307 | 4373 | 12 / 0 / 1 | 1 |  |
-| `shared.staff_app_grant` |  | 32 kB | 303 | 133 | 3 / 0 / 2 | 2 |  |
-| `shared.staff_crm_grant` |  | 32 kB | 66 | 646 | 1 / 0 / 0 | 0 |  |
+| `shared.spend_budget` |  | 32 kB | 2314 | 4581 | 12 / 0 / 1 | 1 |  |
+| `shared.staff_app_grant` |  | 32 kB | 306 | 134 | 3 / 0 / 2 | 2 |  |
+| `shared.staff_crm_grant` |  | 32 kB | 67 | 659 | 1 / 0 / 0 | 0 |  |
+| `shared.staff_role` |  | 32 kB | 1 | 19 | 1 / 0 / 0 | 0 |  |
+| `shared.staff_role_capability` |  | 32 kB | 1 | 20 | 18 / 0 / 0 | 0 |  |
 | `shared.staff_tenant_assignment` |  | 56 kB | 30 | 123 | 2 / 0 / 1 | 1 |  |
 | `shared.staff_view_as_session` |  | 64 kB | 13 | 60 | 2 / 2 / 0 | 2 |  |
-| `shared.stage_model_params` |  | 32 kB | 2589 | 124 | 8 / 0 / 0 | 0 |  |
-| `shared.supply_content_version` |  | 112 kB | 70 | 5558 | 15 / 9 / 0 | 9 |  |
-| `shared.supply_entity` |  | 96 kB | 1658 | 539 | 11 / 29 / 0 | 29 |  |
+| `shared.stage_model_params` |  | 32 kB | 2682 | 124 | 8 / 0 / 0 | 0 |  |
+| `shared.supply_content_version` |  | 112 kB | 155 | 6414 | 15 / 9 / 0 | 9 |  |
+| `shared.supply_entity` |  | 96 kB | 1779 | 626 | 11 / 29 / 0 | 29 |  |
 | `shared.supply_event_inbox` |  | 80 kB | 66 | 88 | 27 / 0 / 0 | 0 |  |
-| `shared.supply_feed_cursor` | 1 | 64 kB | 16804 | 8186 | 1 / 8087 / 0 | 28 | 2026-11-19 14:19 |
+| `shared.supply_feed_cursor` | 1 | 64 kB | 17034 | 8293 | 1 / 8194 / 0 | 33 | 2026-11-19 22:15 |
 | `shared.supply_media` |  | 48 kB | 65 | 232 | 2 / 8 / 0 | 8 |  |
-| `shared.tenant_account_event` | 484 | 368 kB | 368 | 31644 | 622 / 0 / 78 | 78 | 2026-11-03 11:27 |
-| `shared.tenant_addon_request` |  | 80 kB | 13 | 18370 | 1 / 1 / 0 | 1 |  |
-| `shared.tenant_ai_budget` |  | 32 kB | 1397 | 12299 | 2 / 0 / 2 | 2 |  |
-| `shared.tenant_api_usage` | 208550 | 51.8 MB | 9 | 128744 | 169554 / 0 / 200 | 269 | 2026-11-18 01:46 |
+| `shared.tenant_account_event` | 484 | 368 kB | 368 | 32385 | 622 / 0 / 78 | 78 | 2026-11-03 11:27 |
+| `shared.tenant_addon_request` |  | 80 kB | 16 | 18442 | 1 / 2 / 0 | 2 |  |
+| `shared.tenant_ai_budget` |  | 32 kB | 1397 | 12379 | 2 / 0 / 2 | 2 |  |
+| `shared.tenant_api_usage` | 208550 | 52.1 MB | 9 | 129121 | 170788 / 0 / 200 | 269 | 2026-11-18 01:46 |
 | `shared.tenant_api_usage_monthly` |  | 48 kB | 29 | 291 | 3 / 0 / 0 | 0 |  |
-| `shared.tenant_brand_rules` | 45 | 248 kB | 80062 | 20146 | 51 / 71 / 6 | 16 | 2026-10-22 09:12 |
-| `shared.tenant_entitlement` | 184 | 112 kB | 45774 | 434 | 346 / 45 / 112 | 54 | 2026-11-13 10:46 |
-| `shared.tenant_entitlement_override` |  | 48 kB | 17 | 298247 | 7 / 0 / 6 | 6 |  |
-| `shared.tenant_erasure_request` |  | 96 kB | 9559 | 616 | 8 / 36 / 0 | 36 |  |
-| `shared.tenant_erasure_step` | 24 | 160 kB | 7454 | 437 | 37 / 54 / 0 | 18 |  |
+| `shared.tenant_brand_rules` | 45 | 248 kB | 80336 | 20319 | 51 / 71 / 6 | 16 | 2026-10-22 09:12 |
+| `shared.tenant_entitlement` | 184 | 112 kB | 46694 | 434 | 346 / 45 / 112 | 54 | 2026-11-13 10:46 |
+| `shared.tenant_entitlement_override` |  | 48 kB | 17 | 308390 | 7 / 0 / 6 | 6 |  |
+| `shared.tenant_erasure_request` |  | 96 kB | 10114 | 616 | 8 / 36 / 0 | 36 |  |
+| `shared.tenant_erasure_step` | 24 | 160 kB | 7854 | 437 | 37 / 54 / 0 | 18 |  |
 | `shared.tenant_export_config` |  | 48 kB | 30 | 45 | 0 / 0 / 0 | 0 |  |
-| `shared.tenant_integrations` | 3 | 64 kB | 12174 | 20366 | 19 / 20 / 16 | 32 |  |
-| `shared.tenant_members` |  | 64 kB | 130 | 1594 | 16 / 18 / 0 | 21 |  |
-| `shared.tenant_membership_event` | 48 | 104 kB | 9926 | 94884 | 80 / 0 / 6 | 25 |  |
-| `shared.tenant_rewrite_usage` | 10 | 64 kB | 18891 | 231 | 9 / 125 / 0 | 25 | 2026-11-10 08:08 |
-| `shared.tenant_seo_config` |  | 48 kB | 192 | 10387 | 11 / 11 / 2 | 13 |  |
-| `shared.tenant_subscription` | 31 | 64 kB | 334903 | 45880 | 42 / 37 / 5 | 11 |  |
-| `shared.tenant_tripplanner_domain` |  | 64 kB | 13 | 3765 | 1 / 10 / 1 | 11 |  |
-| `shared.tenant_tripplanner_site` |  | 32 kB | 16 | 54774 | 5 / 6 / 0 | 6 |  |
-| `shared.tenants` | 11 | 104 kB | 519919 | 6504 | 25 / 85 / 4 | 32 |  |
+| `shared.tenant_integrations` | 3 | 64 kB | 12233 | 20366 | 19 / 20 / 16 | 32 |  |
+| `shared.tenant_members` |  | 64 kB | 130 | 1597 | 16 / 18 / 0 | 21 |  |
+| `shared.tenant_membership_event` | 48 | 104 kB | 10421 | 96533 | 80 / 0 / 6 | 25 |  |
+| `shared.tenant_rewrite_usage` | 10 | 64 kB | 19262 | 233 | 9 / 125 / 0 | 25 | 2026-11-10 08:08 |
+| `shared.tenant_seo_config` |  | 48 kB | 196 | 10467 | 11 / 11 / 2 | 13 |  |
+| `shared.tenant_subscription` | 31 | 64 kB | 347799 | 45924 | 42 / 37 / 5 | 11 |  |
+| `shared.tenant_tripplanner_domain` |  | 64 kB | 13 | 3851 | 1 / 10 / 1 | 11 |  |
+| `shared.tenant_tripplanner_site` |  | 32 kB | 16 | 56742 | 5 / 6 / 0 | 6 |  |
+| `shared.tenants` | 11 | 104 kB | 524474 | 6575 | 25 / 87 / 4 | 34 |  |
 | `shared.unmapped_market_requests` | 15 | 96 kB | 54 | 578 | 15 / 55 / 0 | 0 | 2026-11-19 03:04 |
 | `shared.writing_exemplar` |  | 96 kB | 115 | 125 | 2 / 2 / 1 | 3 |  |
 | `shared.writing_memory_disagreement` | 911 | 440 kB | 226 | 4808 | 912 / 891 / 1 | 1 | 2026-11-10 15:39 |
 | `shared.writing_memory_keep` |  | 64 kB | 56 | 4 | 1 / 0 / 1 | 1 |  |
 | `shared.writing_memory_kpi_report` |  | 80 kB | 24 | 3 | 4 / 0 / 0 | 0 |  |
-| `shared.writing_memory_release` | 9 | 160 kB | 8894 | 162 | 23 / 91 / 2 | 40 | 2026-10-27 00:28 |
+| `shared.writing_memory_release` | 9 | 160 kB | 9033 | 162 | 23 / 91 / 2 | 40 | 2026-10-27 00:28 |
 | `shared.writing_memory_release_exemplar` |  | 80 kB | 56 | 8 | 1 / 0 / 1 | 1 |  |
 | `shared.writing_memory_shadow` |  | 80 kB | 100 | 9 | 4 / 0 / 1 | 1 |  |
 | `shared.writing_memory_writer` |  | 32 kB | 32 | 365 | 4 / 8 / 0 | 8 |  |
-| `shared.writing_rule` |  | 128 kB | 174 | 1655 | 27 / 16 / 1 | 41 |  |
-| `shared.writing_signal` | 580 | 2.1 MB | 8505 | 7450 | 602 / 589 / 1 | 26 | 2026-10-25 12:12 |
-| `silver_aa_internal.generated_content` | 2357 | 19.4 MB | 12296 | 1746441 | 1863 / 978 / 0 | 180 | 2026-10-25 04:35 |
-| `silver_aa_internal.quality_scores` | 2354 | 2.4 MB | 1549296 | 2786 | 1868 / 1818 / 7 | 203 | 2026-10-24 12:26 |
-| `silver_aa_internal.raw_sources` | 34 | 96 kB | 2690 | 4308 | 0 / 0 / 0 | 0 |  |
+| `shared.writing_rule` |  | 128 kB | 174 | 1685 | 27 / 16 / 1 | 41 |  |
+| `shared.writing_signal` | 580 | 2.1 MB | 8612 | 7475 | 603 / 589 / 1 | 27 | 2026-10-25 12:12 |
+| `silver_aa_internal.generated_content` | 2357 | 19.4 MB | 12339 | 1772085 | 1864 / 984 / 0 | 186 | 2026-10-25 04:35 |
+| `silver_aa_internal.quality_scores` | 2354 | 2.4 MB | 1572981 | 2786 | 1868 / 1818 / 7 | 203 | 2026-10-24 12:26 |
+| `silver_aa_internal.raw_sources` | 34 | 96 kB | 2721 | 4346 | 0 / 0 / 0 | 0 |  |
 | `silver_aa_internal.raw_tour_fact_draft` |  | 32 kB | 3 | 0 | 0 / 0 / 0 | 0 |  |
-| `silver_aa_internal.raw_tour_revision` |  | 32 kB | 3 | 0 | 0 / 0 / 0 | 0 |  |
-| `silver_aa_internal.raw_tours` | 987 | 6.5 MB | 309751 | 46516919 | 0 / 2714 / 0 | 116 | 2026-10-25 07:44 |
-| `silver_aa_internal.review_queue` | 329 | 208 kB | 117732 | 62156 | 233 / 130 / 0 | 9 | 2026-11-11 00:08 |
-| `silver_aa_internal.seo_context` | 918 | 1.5 MB | 10536 | 796883 | 506 / 314 / 0 | 0 | 2026-11-16 13:10 |
-| `silver_aa_internal.tour_reference_price` |  | 24 kB | 919 | 0 | 0 / 0 / 0 | 0 |  |
+| `silver_aa_internal.raw_tour_revision` |  | 64 kB | 3 | 5 | 1 / 0 / 0 | 1 |  |
+| `silver_aa_internal.raw_tours` | 987 | 6.5 MB | 310806 | 46634819 | 0 / 2716 / 0 | 117 | 2026-10-25 07:44 |
+| `silver_aa_internal.review_queue` | 329 | 208 kB | 119147 | 62157 | 233 / 130 / 0 | 9 | 2026-11-11 00:08 |
+| `silver_aa_internal.seo_context` | 918 | 1.5 MB | 10561 | 796887 | 506 / 314 / 0 | 0 | 2026-11-16 13:10 |
+| `silver_aa_internal.tour_reference_price` |  | 24 kB | 960 | 0 | 0 / 0 / 0 | 0 |  |
 | `silver_aa_internal.upload_staging` |  | 104 kB | 96 | 0 | 0 / 0 / 0 | 0 |  |
-| `tripplanner.ai_rate_counter` | 10287 | 3.3 MB | 12 | 51467 | 10315 / 41119 / 0 | 11 | 2026-11-19 14:10 |
+| `tripplanner.ai_rate_counter` | 10631 | 3.4 MB | 12 | 53436 | 10711 / 42691 / 0 | 20 | 2026-11-19 14:10 |
 | `tripplanner.ai_session_month` |  | 16 kB | 1 | 21 | 0 / 0 / 0 | 0 |  |
 | `tripplanner.ai_spend_month` |  | 32 kB | 17 | 54 | 3 / 23 / 0 | 23 |  |
 | `tripplanner.component_id_map` | 750 | 136 kB | 513 | 2101 | 756 / 0 / 0 | 0 |  |
 | `tripplanner.customers` |  | 64 kB | 47 | 25 | 7 / 7 / 1 | 8 |  |
-| `tripplanner.job` | 76 | 240 kB | 1681 | 4979 | 81 / 162 / 0 | 50 | 2026-11-14 19:33 |
+| `tripplanner.job` | 86 | 248 kB | 1685 | 5299 | 86 / 172 / 0 | 0 | 2026-11-19 19:33 |
 | `tripplanner.lead_webhook_key` |  | 32 kB | 1 | 13 | 1 / 0 / 0 | 0 |  |
 | `tripplanner.narration_cache` |  | 48 kB | 30 | 25 | 1 / 1 / 0 | 1 |  |
-| `tripplanner.outbox` | 7 | 176 kB | 65974 | 29685 | 17 / 14 / 3 | 15 |  |
-| `tripplanner.sessions` | 125 | 136 kB | 6066 | 1808 | 122 / 169 / 3 | 0 | 2026-11-05 18:28 |
-| `tripplanner.tenant_erasure_log` |  | 96 kB | 2472 | 66 | 8 / 0 / 0 | 0 |  |
+| `tripplanner.outbox` | 7 | 176 kB | 68075 | 29685 | 17 / 14 / 3 | 15 |  |
+| `tripplanner.sessions` | 125 | 136 kB | 6095 | 1808 | 122 / 169 / 3 | 0 | 2026-11-05 18:28 |
+| `tripplanner.tenant_erasure_log` |  | 96 kB | 2497 | 66 | 8 / 0 / 0 | 0 |  |
 | `tripplanner.traveller_accounts` |  | 48 kB | 27 | 31 | 4 / 1 / 0 | 1 |  |
-| `tripplanner.trip_drafts` | 134 | 328 kB | 3155 | 4623 | 114 / 575 / 1 | 9 | 2026-11-05 18:28 |
-| `tripplanner.trip_events` | 599 | 424 kB | 1175 | 5560 | 567 / 599 / 6 | 0 | 2026-11-05 18:28 |
+| `tripplanner.trip_drafts` | 134 | 328 kB | 3184 | 4623 | 114 / 575 / 1 | 9 | 2026-11-05 18:28 |
+| `tripplanner.trip_events` | 599 | 424 kB | 1176 | 5588 | 567 / 599 / 6 | 0 | 2026-11-05 18:28 |
 
 ## Unused indexes
 
@@ -17367,7 +17420,6 @@ Non-PK, non-unique indexes with 0 scans since the stats reset. A drop candidate 
 - `booking.suppliers_categories_idx` on `suppliers` (24 kB)
 - `booking.suppliers_country_idx` on `suppliers` (16 kB)
 - `booking.suppliers_updated_idx` on `suppliers` (16 kB)
-- `booking.supply_restrictions_contract_idx` on `supply_restrictions` (8 kB)
 - `booking.trip_case_checks_assignee_idx` on `trip_case_checks` (8 kB)
 - `booking.trip_case_checks_created_by_idx` on `trip_case_checks` (8 kB)
 - `booking.trip_case_checks_done_by_idx` on `trip_case_checks` (8 kB)
@@ -17454,12 +17506,12 @@ Non-PK, non-unique indexes with 0 scans since the stats reset. A drop candidate 
 - `shared.eval_golden_item_tenant_idx` on `eval_golden_item` (16 kB)
 - `shared.eval_item_result_scored_idx` on `eval_item_result` (16 kB)
 - `shared.eval_item_result_tenant_idx` on `eval_item_result` (16 kB)
-- `shared.llm_cassette_created_idx` on `llm_cassette` (520 kB)
-- `shared.llm_cassette_eval_idx` on `llm_cassette` (48 kB)
+- `shared.llm_cassette_created_idx` on `llm_cassette` (800 kB)
+- `shared.llm_cassette_eval_idx` on `llm_cassette` (120 kB)
 - `shared.llm_cassette_piece_idx` on `llm_cassette` (16 kB)
-- `shared.llm_cassette_request_idx` on `llm_cassette` (1.7 MB)
+- `shared.llm_cassette_request_idx` on `llm_cassette` (2.6 MB)
 - `shared.llm_cassette_tour_idx` on `llm_cassette` (40 kB)
-- `shared.llm_cassette_trace_idx` on `llm_cassette` (640 kB)
+- `shared.llm_cassette_trace_idx` on `llm_cassette` (1.1 MB)
 - `shared.ix_pipeline_jobs_created` on `pipeline_jobs` (40 kB)
 - `shared.idx_pipeline_runs_status` on `pipeline_runs` (16 kB)
 - `shared.plan_feature_feature_key_idx` on `plan_feature` (16 kB)
@@ -17475,7 +17527,6 @@ Non-PK, non-unique indexes with 0 scans since the stats reset. A drop candidate 
 - `shared.writing_memory_shadow_tenant_idx` on `writing_memory_shadow` (16 kB)
 - `shared.writing_rule_tenant_status_idx` on `writing_rule` (16 kB)
 - `silver_aa_internal.raw_tour_fact_draft_tour_idx` on `raw_tour_fact_draft` (8 kB)
-- `silver_aa_internal.raw_tour_revision_tour_idx` on `raw_tour_revision` (8 kB)
 - `silver_aa_internal.tour_reference_price_review_idx` on `tour_reference_price` (8 kB)
 - `tripplanner.job_finished_idx` on `job` (16 kB)
 - `tripplanner.job_parent_idx` on `job` (8 kB)
@@ -17498,7 +17549,7 @@ Cross-app keys that have no FK (data standards DM-2.3) and how many rows point a
 
 Column comments that start with `pii:<class>` (personal data) or `conf:<class>` (`commercial`, `credential`), data standards DM-6.1; `also` = further tags named later in the same comment. Owners tag a column in the migration that creates it. Input of the RoPA (AA-Ecosys `docs/legal/register.md` section (a), `tools/data/gen_pii_inventory.py`) and the erasure runbook (DM-6.7).
 
-**421 tagged column(s)**, 70 untagged candidate(s) in booking, crm, tripplanner, 0 finding(s).
+**422 tagged column(s)**, 70 untagged candidate(s) in booking, crm, tripplanner, 0 finding(s).
 
 | schema | tag | columns | named as also |
 |---|---|---|---|
@@ -17536,7 +17587,7 @@ Column comments that start with `pii:<class>` (personal data) or `conf:<class>` 
 | `shared` | `pii:free_text` | 31 | 0 |
 | `shared` | `pii:government_id` | 1 | 0 |
 | `shared` | `pii:name` | 2 | 0 |
-| `shared` | `pii:online_id` | 7 | 0 |
+| `shared` | `pii:online_id` | 8 | 0 |
 | `silver_aa_internal` | `pii:free_text` | 3 | 0 |
 | `tripplanner` | `conf:credential` | 2 | 0 |
 | `tripplanner` | `pii:contact` | 4 | 0 |
@@ -17941,6 +17992,7 @@ Column comments that start with `pii:<class>` (personal data) or `conf:<class>` 
 | `shared` | `tenants` | `tax_id` | `pii:government_id` |  |
 | `shared` | `tenants` | `billing_email` | `pii:contact` |  |
 | `shared` | `tenants` | `billing_address` | `pii:address` |  |
+| `shared` | `v_staff_booking_grant` | `cognito_sub` | `pii:online_id` |  |
 | `shared` | `writing_exemplar` | `masked_text` | `pii:free_text` |  |
 | `shared` | `writing_memory_disagreement` | `note` | `pii:free_text` |  |
 | `shared` | `writing_memory_keep` | `reason` | `pii:free_text` |  |
@@ -18072,7 +18124,7 @@ Columns of `booking`, `crm`, `tripplanner` without a tag whose name contains one
 
 Rules in AA-CIS-Infra `db/rls_catalogue_rules.py` (byte copy of AA-CIS-App `tests/integration/rls_catalogue_rules.py`, which CIS CI runs on the replayed migrations). A violation is a finding that is not on the allowlist; each allowlist entry carries a one-line reason. Fix the object or allowlist it in the CIS file, then copy it here.
 
-**0 unallowlisted violation(s)**, 134 allowlisted finding(s), 0 stale allowlist entry(ies).
+**0 unallowlisted violation(s)**, 136 allowlisted finding(s), 1 stale allowlist entry(ies).
 
 | rule | meaning | violations | allowlisted |
 |---|---|---|---|
@@ -18082,7 +18134,7 @@ Rules in AA-CIS-Infra `db/rls_catalogue_rules.py` (byte copy of AA-CIS-App `test
 | d | current_setting('app.tenant_id') outside NULLIF | 0 | 0 |
 | e | foreign key across owners | 0 | 0 |
 | p | grant to PUBLIC | 0 | 1 |
-| g | grant to another owner's role | 0 | 88 |
+| g | grant to another owner's role | 0 | 90 |
 | t | unconditional (true) policy | 0 | 1 |
 
 ### Violations
@@ -18160,7 +18212,9 @@ Rules in AA-CIS-Infra `db/rls_catalogue_rules.py` (byte copy of AA-CIS-App `test
 | g | `shared.schema_versions:bk_owner` | 1 | contract: bk- keys only, key guard (CIS 243) |
 | g | `shared.schema_versions:crm_owner` | 1 | contract: crm- keys only, key guard (CIS 269) |
 | g | `shared.schema_versions:tp_owner` | 1 | contract: tp- keys only, key guard (CIS 243) |
+| g | `shared.v_staff_booking_grant:booking` | 1 | contract: staff.roles.v1, a custom holder's Booking role code and owner markers by sub (CIS 462) |
 | g | `shared:bk_owner` | 1 | contract: Booking owner role registers bk- keys (CIS 243) |
+| g | `shared:booking` | 1 | contract: schema USAGE for the key-only staff grant view below (CIS 462, AA-1155) |
 | g | `shared:crm_owner` | 1 | contract: partner CRM owner role registers crm- keys (CIS 269) |
 | g | `shared:tp_owner` | 1 | contract: TripPlanner owner role registers tp- keys (CIS 243) |
 | g | `shared:tripplanner` | 1 | schema USAGE for the llm_call_log INSERT above (CIS 173); grandfathered TripPlanner read (owners.yaml consumer_grants), removed by X4 |
@@ -18175,13 +18229,15 @@ Rules in AA-CIS-Infra `db/rls_catalogue_rules.py` (byte copy of AA-CIS-App `test
 | p | `public` | 1 | PostgreSQL default USAGE on the public schema (extensions); no app object lives there |
 | t | `acp_contract.tour_atoms:catalog_owner_read` | 1 | catalog_owner views read every atom as before (CIS 266); D9 = 0 guarded |
 
+Stale entries (matched nothing on this database; remove them from the CIS file): [g] `booking.v_staff_role_capability:cis_app`.
+
 ## Schema drift against a replay of all migrations (AA-853)
 
 <!-- drift-fingerprint: 61c436bfdd0520ca6c250ce24f76a298429b602347d9062e538f39504df631be -->
 
 **Drift verdict: open** (16 open finding(s), 3 failed replay file(s); 5 finding(s) carry an owner decision and do not count as open)
 
-AA-CIS-Infra `db/replay_migrations.py` replayed every applied migration (live `shared.schema_versions` order) into a scratch PostgreSQL 15.16 (Debian 15.16-1.pgdg12+1) and `db/schema_drift.py` compared its catalog with the live dump above. Replay: 640 files, 632 ok, 5 partly (legacy files, psql semantics), 3 failed; 19 legacy files without a registry row replayed in number order, 1 registered versions without a file.
+AA-CIS-Infra `db/replay_migrations.py` replayed every applied migration (live `shared.schema_versions` order) into a scratch PostgreSQL 15.16 (Debian 15.16-1.pgdg12+1) and `db/schema_drift.py` compared its catalog with the live dump above. Replay: 641 files, 633 ok, 5 partly (legacy files, psql semantics), 3 failed; 19 legacy files without a registry row replayed in number order, 1 registered versions without a file.
 
 **Unmanaged** (on Dev, no migration creates it): **16** finding(s), 91 object(s) with their children; **15 without an owner decision**. **Missing** (a migration creates it, not on Dev): 4. **Changed**: 1. Findings explained by a failed replay file (it changes the object with DDL): 15; **not explained by the replay** (drift on Dev to decide): 6, of them unmanaged 2. Privilege differences (informational): 23. Owner decisions live in AA-CIS-Infra `db/schema_drift_decisions.json`; `drift.json` in the workflow artifact has every finding. Report only: a finding fails nothing, and findings a replay gap explains do not move the drift fingerprint.
 
@@ -18243,14 +18299,17 @@ Client sessions per `application_name` (`(empty)` = a pool without `application_
 | aa-tripplanner-dev-assembly | tripplanner | idle | 1 |
 | aa-tripplanner-dev-jobs | tripplanner | idle | 1 |
 | booking-api | booking | idle | 1 |
-| cis-api | cis_app | idle | 3 |
-| cis-worker | cis_app | idle | 2 |
-| crm-api | crm_app | idle | 1 |
+| cis-api | cis_app | idle | 6 |
+| cis-worker | cis_app | idle | 1 |
+| crm-api | crm_app | idle | 2 |
+| db-isolation-probe | aa_app_user | active | 1 |
+| db-isolation-probe | db_migrator | idle | 1 |
 
 ## Latest migrations
 
 | version | applied_at | description |
 |---|---|---|
+| 462 | 2026-11-20 00:34:05.150674+00:00 | AA-1155: CIS custom staff roles (staff_role, staff_role_capability), admin_users.custom_role and is_business_owner, Booking custom grant codes, A10f/A10g E2E addresses, contract view shared.v_staff_booking_grant (booking) |
 | 461 | 2026-11-19 16:20:29.571962+00:00 | AA-1127: the daily Cost Explorer check settings (cis.spend.ce_*) in the settings registry |
 | 460 | 2026-11-19 14:03:22.106967+00:00 | AA-1051 S285 C2: the T2 writer proof cap default 5 -> 6.5 USD |
 | tp-035 | 2026-11-19 12:56:47.890174+00:00 | AA-1139: tripplanner.lead_webhook_key (the rotatable lead webhook signing key version) |
@@ -18270,4 +18329,3 @@ Client sessions per `application_name` (`(empty)` = a pool without `application_
 | 453 | 2026-11-18 05:47:53.805732+00:00 | AA-1113: the provider budget of each LLM connection as a platform setting (the per-app split) |
 | 452 | 2026-11-18 05:46:04.399392+00:00 | AA-1113: catalog.v_llm_connection_cap_v1 (month spend, over_cap, stops per capped LLM connection; tripplanner) and catalog.v_llm_gateway_config_v1 + free_text, over_cap_connections |
 | 451 | 2026-11-18 05:43:55.382591+00:00 | AA-1113: shared.llm_role_config.free_text (the gateway scrubs these stages before any model call, fail closed; every tenant stage marked; never on a pii stage) |
-| crm-077 | 2026-11-18 04:51:51.011297+00:00 | AA-1113 connection cap: the setting crm.ai.connection_monthly_cap_usd (the CRM's own monthly cap per model connection, its share of the provider budget) |
