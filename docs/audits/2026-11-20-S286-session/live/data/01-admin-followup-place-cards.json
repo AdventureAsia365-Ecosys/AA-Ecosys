@@ -1,0 +1,48 @@
+{
+ "afterSignIn": "/admin/overview",
+ "navAfterSignIn": 1,
+ "navVisible": true,
+ "navText": "My work",
+ "bareAdmin": "/login",
+ "hops": [
+  "aa-cis.lumiguides.it.com/login",
+  "aa-cis.lumiguides.it.com/login",
+  "aa-cis.lumiguides.it.com/admin/overview",
+  "aa-cis.lumiguides.it.com/admin/overview",
+  "aa-cis.lumiguides.it.com/login",
+  "aa-cis.lumiguides.it.com/login",
+  "aa-cis.lumiguides.it.com/admin/places/cards",
+  "aa-cis.lumiguides.it.com/admin/places/cards",
+  "aa-cis.lumiguides.it.com/admin/my-work",
+  "aa-cis.lumiguides.it.com/admin/my-work",
+  "aa-cis.lumiguides.it.com/admin/places/cards"
+ ],
+ "calls": [
+  "?limit=50&offset=0",
+  "?limit=50&offset=0&status=auto_checked",
+  "?limit=50&offset=0"
+ ],
+ "totals": [
+  {
+   "q": "?limit=50&offset=0",
+   "total": 4860
+  },
+  {
+   "q": "?limit=50&offset=0&status=auto_checked",
+   "total": 4859
+  },
+  {
+   "q": "?limit=50&offset=0",
+   "total": 4860
+  }
+ ],
+ "directText": [
+  "of 4,859"
+ ],
+ "directSelect": "auto_checked",
+ "tileUrl": "/admin/places/cards?status=auto_checked",
+ "tileText": [
+  "of 4,860"
+ ],
+ "tileSelect": ""
+}

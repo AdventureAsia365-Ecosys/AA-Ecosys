@@ -258,6 +258,10 @@ const lenses = [...(L.lenses || [
   'correctness + spec fit (does it do what the Linear issue / plan asked, edge cases, tests meaningful)',
   'security + data safety (auth/permissions, RLS/tenant isolation, migrations safe to auto-apply, secrets, no account IDs in public repos)',
 ])]
+// S286 (tech lead, standing rule since S278/S279): every value a lane adds must stay editable from an admin page.
+// Always reviewed, even when args.lenses replaces the defaults.
+const SETTINGS_LENS = 'settings, not hard-coded (every threshold, limit, cap, window, percentage, price, retry count, size limit, customer-visible wording a business owner may change and every business option list added or changed by the diff is read from the app admin-editable settings registry / policy table / DB enum with an admin picker, seeded default, audited; a literal in code or env-only is a blocking finding unless it is a pure technical constant, a security invariant an admin must not weaken, or infra-owned Terraform config, and the finding says which)'
+if (!lenses.some(l => /^settings, not hard-coded/.test(l))) lenses.push(SETTINGS_LENS)
 if (SPEC_LENS && !lenses.some(l => /^spec\b/.test(l))) lenses.push(SPEC_LENS)
 const traceNote = SPEC ? `\nLane trace (spec ${SPEC.dir}): ${JSON.stringify(impl.trace || [])}` : ''
 

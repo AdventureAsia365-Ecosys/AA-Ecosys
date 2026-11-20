@@ -1,0 +1,16 @@
+{"step": "cis_457_applied", "ok": true, "columns": 1}
+{"step": "candidates", "count": 5}
+{"step": "tour", "tour_id": "00164580-b7b2-429f-a185-2f9415d1de11", "versions_before": 2, "raw_revisions_before": 0, "two_person_publish_switch": false}
+{"step": "raw_edit_revision_row", "ok": true, "revision_num": 1, "raw_revisions_delta": 1, "source": "staff_edit", "fields": ["inclusions"], "actor_is_editor": true, "reason_matches": true, "keeps_before_and_after": true}
+{"step": "draft_version_created", "ok": true, "draft_id": "eca1704e-f1c9-45d0-9855-6106834a2c6d", "version_num": 3, "base_version_num": 2, "versions_delta": 1, "status": "draft", "origin": "human", "reason_matches": true, "author_is_editor": true, "editors": 1, "live_version_untouched": true, "word_diff": {"fields": ["aa_summary"], "ops": 2, "words_inserted": 3, "words_deleted": 0}}
+{"step": "gate_refuses_unchecked_draft", "ok": true, "status": 409, "code": "revalidate_required"}
+{"step": "published_and_master_locked", "ok": true, "version_num": 3, "master_points_to_draft": true, "version_status": "approved", "human_lock_at_set": true, "human_lock_by_is_publisher": true, "human_lock_reason_is_draft_reason": true, "process_export_used_this_connection": true}
+{"step": "no_open_draft_after_publish", "ok": true, "open_draft": false, "lock_reported": true}
+{"step": "s1_job_skips_locked_tour", "ok": true, "result_skipped": true, "reason": "human_locked", "progress_phase": ["skipped"], "progress_skip_reason": ["human_locked"]}
+{"step": "run_tour_refuses_locked_tour", "ok": true, "status": 409, "code": "human_locked", "paid_path_calls": 0}
+{"step": "s1_batch_leaves_out_locked_tour", "ok": false, "status": 503, "code": null, "skipped_locked_is_tour": false, "paid_path_calls": 0}
+{"step": "export_refuses_automatic_exit", "ok": true, "refused": "HumanLockedError"}
+{"step": "would_have_enqueued_or_called", "calls": {"a3_atomize_enqueue": 1, "master_source_fanout_enqueue": 1, "process_export_connect_borrowed": 1, "raw_source_fanout_enqueue": 1}}
+{"step": "no_paid_path_reached", "ok": true}
+{"step": "rolled_back_nothing_persists", "ok": true, "drafts_left": 0, "revisions_left": 0, "locks_left": 0}
+{"summary": "AA-1146 part 1 live proof", "tour_id": "00164580-b7b2-429f-a185-2f9415d1de11", "ok": false, "failed": ["s1_batch_leaves_out_locked_tour"]}

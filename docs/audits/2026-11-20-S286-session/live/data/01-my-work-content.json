@@ -1,0 +1,249 @@
+{
+ "landing": "/admin/my-work",
+ "hops": [
+  "aa-cis.lumiguides.it.com/login",
+  "aa-cis.lumiguides.it.com/login",
+  "aa-cis.lumiguides.it.com/admin/my-work",
+  "aa-cis.lumiguides.it.com/admin/my-work",
+  "aa-cis.lumiguides.it.com/admin/my-work",
+  "aa-cis.lumiguides.it.com/admin/my-work",
+  "aa-cis.lumiguides.it.com/admin/my-work",
+  "aa-cis.lumiguides.it.com/admin/my-work",
+  "aa-cis.lumiguides.it.com/admin/review",
+  "aa-cis.lumiguides.it.com/admin/my-work",
+  "aa-cis.lumiguides.it.com/admin/my-work",
+  "aa-cis.lumiguides.it.com/admin/supply-content",
+  "aa-cis.lumiguides.it.com/admin/my-work",
+  "aa-cis.lumiguides.it.com/admin/my-work",
+  "aa-cis.lumiguides.it.com/admin/supply-content",
+  "aa-cis.lumiguides.it.com/admin/my-work",
+  "aa-cis.lumiguides.it.com/admin/my-work",
+  "aa-cis.lumiguides.it.com/admin/aa-content"
+ ],
+ "navMyWork": null,
+ "navMyWorkVisible": null,
+ "layout": {
+  "390-light": {
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390
+  },
+  "390-dark": {
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390
+  }
+ },
+ "myWorkConsole": [],
+ "myWorkApiFail": [],
+ "tileTexts": {
+  "review_waiting": "Review Queue: waiting 73 Oldest: 8 Oct 2026",
+  "supply_drafts": "Supply copy: drafts to review 8 Oldest: 25 Oct 2026",
+  "supply_no_description": "Hotels and services with no description 0 Nothing waiting",
+  "aa_content_drafts": "AA content: drafts 1 Oldest: 25 Oct 2026"
+ },
+ "pairs": [
+  {
+   "key": "review_waiting",
+   "tile": {
+    "count": 73,
+    "available": true,
+    "filter": {},
+    "text": "Review Queue: waiting 73 Oldest: 8 Oct 2026"
+   },
+   "href": "/admin/review",
+   "landed": "/admin/review",
+   "api_calls": [
+    {
+     "url": "/api/admin/review-queue?status=pending&page=1&page_size=25",
+     "status": 200,
+     "body": {
+      "data": "<array 25>",
+      "pagination": {
+       "page": 1,
+       "page_size": 25,
+       "total": 73
+      },
+      "facets": {
+       "countries": "<array 6>",
+       "policy_reviews": 48
+      }
+     }
+    }
+   ],
+   "page_total_texts": [
+    "of 73"
+   ],
+   "tabs": []
+  },
+  {
+   "key": "supply_drafts",
+   "tile": {
+    "count": 8,
+    "available": true,
+    "filter": {
+     "has_draft": "1"
+    },
+    "text": "Supply copy: drafts to review 8 Oldest: 25 Oct 2026"
+   },
+   "href": "/admin/supply-content?has_draft=1",
+   "landed": "/admin/supply-content?has_draft=1",
+   "api_calls": [
+    {
+     "url": "/api/admin/supply-content?limit=25&offset=0",
+     "status": 200,
+     "body": {
+      "items": "<array 11>",
+      "total": 11,
+      "by_status": {
+       "published": 2,
+       "in_review": 3,
+       "unpublished": 6
+      }
+     }
+    },
+    {
+     "url": "/api/admin/supply-content?has_draft=1&limit=25&offset=0",
+     "status": 200,
+     "body": {
+      "items": "<array 8>",
+      "total": 8,
+      "by_status": {
+       "published": 2,
+       "in_review": 3,
+       "unpublished": 6
+      }
+     }
+    }
+   ],
+   "page_total_texts": [
+    "0 pending",
+    "of 8"
+   ],
+   "tabs": []
+  },
+  {
+   "key": "supply_no_description",
+   "tile": {
+    "count": 0,
+    "available": true,
+    "filter": {
+     "status": "draft"
+    },
+    "text": "Hotels and services with no description 0 Nothing waiting"
+   },
+   "href": "/admin/supply-content?status=draft",
+   "landed": "/admin/supply-content?status=draft",
+   "api_calls": [
+    {
+     "url": "/api/admin/supply-content?limit=25&offset=0",
+     "status": 200,
+     "body": {
+      "items": "<array 11>",
+      "total": 11,
+      "by_status": {
+       "published": 2,
+       "in_review": 3,
+       "unpublished": 6
+      }
+     }
+    },
+    {
+     "url": "/api/admin/supply-content?status=draft&limit=25&offset=0",
+     "status": 200,
+     "body": {
+      "items": "<array 0>",
+      "total": 0,
+      "by_status": {
+       "published": 2,
+       "in_review": 3,
+       "unpublished": 6
+      }
+     }
+    }
+   ],
+   "page_total_texts": [
+    "0 pending"
+   ],
+   "tabs": []
+  },
+  {
+   "key": "aa_content_drafts",
+   "tile": {
+    "count": 1,
+    "available": true,
+    "filter": {
+     "status": "draft"
+    },
+    "text": "AA content: drafts 1 Oldest: 25 Oct 2026"
+   },
+   "href": "/admin/aa-content?status=draft",
+   "landed": "/admin/aa-content?status=draft",
+   "api_calls": [
+    {
+     "url": "/api/admin/aa-content?limit=25&offset=0",
+     "status": 200,
+     "body": {
+      "items": "<array 25>",
+      "total": 30,
+      "limit": 25,
+      "offset": 0
+     }
+    },
+    {
+     "url": "/api/admin/aa-content?status=draft&limit=25&offset=0",
+     "status": 200,
+     "body": {
+      "items": "<array 1>",
+      "total": 1,
+      "limit": 25,
+      "offset": 0
+     }
+    }
+   ],
+   "page_total_texts": [
+    "of 1"
+   ],
+   "tabs": []
+  }
+ ],
+ "summary_tiles": [
+  {
+   "key": "review_waiting",
+   "capability": "review.act",
+   "filter": {},
+   "available": true,
+   "count": 73
+  },
+  {
+   "key": "supply_drafts",
+   "capability": "content.write",
+   "filter": {
+    "has_draft": "1"
+   },
+   "available": true,
+   "count": 8
+  },
+  {
+   "key": "supply_no_description",
+   "capability": "content.write",
+   "filter": {
+    "status": "draft"
+   },
+   "available": true,
+   "count": 0
+  },
+  {
+   "key": "aa_content_drafts",
+   "capability": "content.write",
+   "filter": {
+    "status": "draft"
+   },
+   "available": true,
+   "count": 1
+  }
+ ],
+ "summary_role": "content"
+}

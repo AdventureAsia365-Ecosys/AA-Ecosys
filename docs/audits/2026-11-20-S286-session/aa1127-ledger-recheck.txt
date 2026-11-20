@@ -1,0 +1,57 @@
+AA-1127 ledger re-check, read only, at 2026-11-19T23:03:55.446941+00:00 (env dev)
+
+== 0. Daily Cost Explorer job (CIS #1612 settings CIS 461, #1613 job kind cost_explorer_refresh)
+  INFO job code in this image: importable (services.jobs.cost_explorer_refresh_job)
+    status=succeeded  n=1   last_created=2026-11-19 16:40:10.247778+00:00 last_finished=2026-11-19 16:40:15.231651+00:00 cost_usd_sum=0.03
+    newest runs:
+    ad927c72-921f-463d-b7cd-4f0f8d39107d succeeded key=cost_explorer_refresh:2026-11-19 by=scheduler:aa-1127 trig=schedule created=2026-11-19 16:40:10.247778+00:00 finished=2026-11-19 16:40:15.231651+00:00 secs=3.76411 attempt=1 cost_usd=0.03 ce_requests=3 est=0.03 rows=604/1296 window=2026-11-01..2026-11-20 error=False error_classes=None
+    setting cis.spend.ce_daily_refresh_enabled: default=true enforced=True latest_value=None status=None v=None (rows 0, live-like 0)
+    setting cis.spend.ce_daily_refresh_hour_utc: default=1 enforced=True latest_value=None status=None v=None (rows 0, live-like 0)
+    setting cis.spend.ce_stale_after_hours: default=36 enforced=True latest_value=None status=None v=None (rows 0, live-like 0)
+    resolved by shared.settings: {'cis.spend.ce_daily_refresh_enabled': True, 'cis.spend.ce_daily_refresh_hour_utc': 1, 'cis.spend.ce_stale_after_hours': 36}
+  INFO job has run: succeeded=1, failed=0, queued=0, running=0
+  PASS a successful run in the last 26 h: newest succeeded 6.4 h ago
+  PASS today's scheduled run exists: key cost_explorer_refresh:2026-11-19 -> {'status': 'succeeded', 'cost_usd': 0.03} (run hour 1 UTC, now 23 UTC)
+  PASS Cost Explorer snapshots fresh (no stale badge): service_at=2026-11-19 16:40:13.390567+00:00 app_at=2026-11-19 16:40:15.053152+00:00 older-of-newest age=6.4 h, stale after 36 h
+    the page's freshness block: stale=False age_hours=6.4 daily_refresh={'enabled': True, 'hour_utc': 1}
+
+== 1. AI month: Overview vs Spend vs AI gateway vs the ledger (UTC month to date)
+    Overview 'AI this month' = 46.7532 USD; by family {'anthropic': 35.0792, 'openai': 7.6786, 'jev': 2.2718, 'bedrock': 1.7237, 'other': 0.0}
+    ledger: llm_call_log raw 46.7532 USD in 150852 rows (shadow 0.1251, counted on every page), llm_call_daily 0.0 USD over 0 rolled day(s), raw rows on rolled days 0 (0.0 USD)
+  PASS Overview AI month = ledger (llm_call_daily + raw days not rolled): overview=46.7532 ledger=46.7532 diff=0.0
+  PASS Spend > By app AI total (CIS ledger part, no CRM) = Overview AI month: by_app=46.7532 overview=46.7532 diff=0.0
+    By app AI per row: {'cis': 46.659, 'tripplanner': 0.0942}; crm_llm={'status': 'not_requested'} (not asked here)
+  PASS Spend > By app AI as the page shows it (CIS + CRM) - Overview = CRM AI part: page_minus_overview=0.0095 crm_ai=0.009486 diff=1.4e-05  (page 46.7627, overview 46.7532: the Overview note must allow for this gap (C3 copy))
+    Spend > Overview forecast month to date per family: {'bedrock': 1.7237, 'openai': 7.6786, 'anthropic': 35.0792, 'jev': 2.2718, 'dfs': 11.1868, 'other': 0.0}
+  PASS forecast MTD 'bedrock' = Overview family 'bedrock': forecast=1.7237 overview=1.7237 diff=0.0
+  PASS forecast MTD 'openai' = Overview family 'openai': forecast=7.6786 overview=7.6786 diff=0.0
+  PASS forecast MTD 'anthropic' = Overview family 'anthropic': forecast=35.0792 overview=35.0792 diff=0.0
+  PASS forecast MTD 'jev' = Overview family 'jev': forecast=2.2718 overview=2.2718 diff=0.0
+  PASS forecast MTD 'other' = Overview family 'other': forecast=0.0 overview=0.0 diff=0.0
+  PASS forecast LLM families total = Overview AI month: forecast=46.7533 overview=46.7532 diff=0.0001
+  PASS Anthropic API rows land in the 'anthropic' family (not 'other'): family=35.0792 ledger_provider_anthropic=35.0792 diff=0.0  (1878 calls this month)
+  INFO providers counted as 'other': None
+  PASS Overview DataForSEO month = dfs_call_log month: overview=11.1868 ledger=11.1868 diff=0.0
+  PASS forecast DataForSEO MTD = dfs_call_log month: forecast=11.1868 ledger=11.1868 diff=0.0
+    AI gateway: Month tile 57.94 USD, hint (LLM month) 46.7532, per group {'llm': 44.4814, 'decide': 2.2718, 'data': 11.1868}, unattributed LLM 0.0; errors []
+  PASS AI gateway Month tile hint = Overview AI month: tile_hint=46.7532 overview=46.7532 diff=0.0
+  PASS AI gateway LLM + Jev rows (incl. unattributed) = Overview AI month: tile_llm_part=46.7532 overview=46.7532 diff=0.0  (the tile reads raw llm_call_log only: a gap = rolled-up days or a double-counted row)
+  PASS AI gateway Month tile (CRM not asked) = raw LLM ledger + DataForSEO + Geoapify: tile=57.94 ledgers=57.94 diff=0.0
+
+== 2. Studio rewrites: quota counter (GET /v1/quota) vs billing view (GET /v1/billing, admin usage)
+  PASS tenants whose view count differs from the quota counter: tenants=0 expected=0 diff=0.0  (22 tenants compared)
+  PASS view sum = counter sum (this UTC month): view=72 counter=72 diff=0.0
+  PASS tenants whose overage is not max(0, rewritten - quota): tenants=0 expected=0 diff=0.0
+  PASS counter rows of tenants the view does not list: rows=0 expected=0 diff=0.0
+  INFO tenant tour versions created this month by edit_source: {'ai_generated': 93, 'tenant_edit': 8} (an inline edit is not a rewrite; versions can lag the counter while jobs run)
+  PASS Tenant usage LLM cost (view, all tenants) = ledger tenant rows, no shadow: view=22.1011 ledger=22.101 diff=0.0001
+
+== 3. Tenant 360: Tours total (header / pager) vs the rows the pager lists
+  PASS B2B tenants whose Tours total differs from the pageable rows: tenants=0 expected=0 diff=0.0  (10 tenants with versions; page SQL from tenant360_lists.TENANT_VERSIONS_PAGE_SQL)
+    totals: [('1d3e25e0-497a-490f-8511-c89d8d7873e4', 19), ('20d07d32-ed98-405f-81d5-0c2399c9fcdf', 18), ('41ea21ee-77ee-5474-bd6d-aa738d2da990', 4), ('692a3214-5cc2-46c6-a5ca-265389747269', 14), ('7348dbd4-a6b1-489c-bb75-3a50e1cd2dbb', 19), ('885d4916-007b-415e-9261-909ad43c6d00', 12), ('9149d3c6-fcaf-4400-8e7a-4ed5e557e146', 29), ('b8611143-9ee9-4410-9a51-534076b78b0b', 13), ('c3182dd9-ca81-460c-8c86-068c21cb30d8', 18), ('d6de5b7c-7ce9-4abf-9771-94f3c3c4b3ad', 18)]
+  PASS Internal catalog: header Total Rewrites = catalog total (default filter): header=892 catalog=892 diff=0.0
+
+== 4. Overview funnel 'In review' vs Review Queue total (Master Content queue)
+  PASS Overview funnel In review = Review Queue total (pending, live source): funnel=73 queue=73 diff=0.0  (queue distinct tours 73; the funnel counts distinct tours per known country)
+
+RESULT: 26 PASS, 0 FAIL, 0 ERROR, 4 INFO

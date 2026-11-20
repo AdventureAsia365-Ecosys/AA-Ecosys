@@ -1,0 +1,686 @@
+{
+ "who": "booking",
+ "runs": {
+  "1440-light": {
+   "summaryStatus": 200,
+   "role": "admin",
+   "theme": "light",
+   "groups": [
+    {
+     "id": "my-work-group-work",
+     "heading": "To do"
+    },
+    {
+     "id": "my-work-group-approve",
+     "heading": "To approve or pay"
+    }
+   ],
+   "tilesDom": [
+    {
+     "key": "my_open_cases",
+     "href": "/cases?tab=mine&status=new_inquiry%2Cdiscovery%2Cbuilding%2Cproposal_sent%2Cconfirmed%2Csupplier_confirming%2Cinvoice_sent%2Cpayment_pending%2Cpaid%2Cpre_departure%2Con_trip",
+     "text": "My open cases 0 Nothing assigned to you"
+    },
+    {
+     "key": "trip_checks_overdue",
+     "href": "/trip-checks?due=overdue",
+     "text": "Trip checks overdue 18 Earliest due 6 Nov 2026"
+    },
+    {
+     "key": "b2b_on_request",
+     "href": "/b2b-desk",
+     "text": "On-request lines 3 Oldest 30 Oct 2026"
+    },
+    {
+     "key": "supplier_bills_overdue",
+     "href": "/billing?bill_status=open&bill_due=overdue",
+     "text": "Supplier bills overdue 0 Nothing overdue"
+    },
+    {
+     "key": "supplier_bills_due_soon",
+     "href": "/billing?bill_status=open&bill_due=soon",
+     "text": "Supplier bills due soon 0 Nothing due soon"
+    },
+    {
+     "key": "agency_invoices_overdue",
+     "href": "/agency-billing?status=overdue",
+     "text": "Agency invoices overdue 0 Nothing overdue"
+    },
+    {
+     "key": "supplier_bills_to_approve",
+     "href": "/billing?bill_status=received&approvable=me",
+     "text": "Supplier bills to approve 0 Nothing to approve"
+    },
+    {
+     "key": "supplier_bills_to_pay",
+     "href": "/billing?bill_status=approved&approvable=me",
+     "text": "Supplier bills to pay 0 Nothing to pay"
+    },
+    {
+     "key": "agency_payments_to_approve",
+     "href": "/agency-billing?tab=payments&approvable=me",
+     "text": "Agency payments to approve 0 Nothing to approve"
+    },
+    {
+     "key": "stop_sales_to_review",
+     "href": "/stop-sales?review=me",
+     "text": "Stop-sales to review 0 Nothing to review"
+    }
+   ],
+   "overflow": {
+    "doc": [
+     1440,
+     1440
+    ],
+    "main": [
+     1192,
+     1192
+    ]
+   },
+   "shot": "06-booking-my-work-admin-1440-light.png",
+   "pairs": [
+    {
+     "key": "my_open_cases",
+     "tile": 0,
+     "landed": "/cases?tab=mine&status=new_inquiry%2Cdiscovery%2Cbuilding%2Cproposal_sent%2Cconfirmed%2Csupplier_confirming%2Cinvoice_sent%2Cpayment_pending%2Cpaid%2Cpre_departure%2Con_trip",
+     "calls": [
+      {
+       "t": 1795141324889,
+       "status": 200,
+       "path": "staff/directory",
+       "q": "",
+       "total": null,
+       "len": 8
+      },
+      {
+       "t": 1795141324891,
+       "status": 200,
+       "path": "trip-cases",
+       "q": "?status=new_inquiry%2Cdiscovery%2Cbuilding%2Cproposal_sent%2Cconfirmed%2Csupplier_confirming%2Cinvoice_sent%2Cpayment_pending%2Cpaid%2Cpre_departure%2Con_trip&assignee=me&sort=-updated_at&limit=25&offset=0",
+       "total": 0,
+       "len": 0
+      }
+     ],
+     "ofN": [],
+     "resN": [],
+     "empty": null,
+     "selects": [
+      "=",
+      "="
+     ],
+     "tabs": [
+      "Mine"
+     ]
+    },
+    {
+     "key": "trip_checks_overdue",
+     "tile": 18,
+     "landed": "/trip-checks?due=overdue",
+     "calls": [
+      {
+       "t": 1795141330354,
+       "status": 200,
+       "path": "case-lifecycle/runs",
+       "q": "?limit=6",
+       "total": null,
+       "len": 6
+      },
+      {
+       "t": 1795141330354,
+       "status": 200,
+       "path": "trip-checks",
+       "q": "?status=open&due_before=2026-11-19&limit=25&offset=0",
+       "total": 18,
+       "len": 18
+      }
+     ],
+     "ofN": [
+      "3",
+      "3",
+      "4",
+      "4",
+      "3",
+      "3",
+      "3",
+      "3",
+      "4",
+      "3",
+      "3",
+      "3",
+      "3",
+      "3",
+      "3",
+      "3",
+      "3",
+      "3",
+      "18"
+     ],
+     "resN": [
+      "3 checks",
+      "3 checks",
+      "4 checks",
+      "4 checks",
+      "3 checks",
+      "3 checks"
+     ],
+     "empty": null,
+     "selects": [
+      "=",
+      "=overdue",
+      "=",
+      "=",
+      "Rows per page=25"
+     ],
+     "tabs": [
+      "Overdue18"
+     ]
+    },
+    {
+     "key": "b2b_on_request",
+     "tile": 3,
+     "landed": "/b2b-desk",
+     "calls": [
+      {
+       "t": 1795141339872,
+       "status": 200,
+       "path": "b2b-desk/summary",
+       "q": "",
+       "total": null,
+       "len": null
+      },
+      {
+       "t": 1795141339872,
+       "status": 200,
+       "path": "b2b-desk/on-request",
+       "q": "?state=open&limit=25&offset=0",
+       "total": 3,
+       "len": 3
+      }
+     ],
+     "ofN": [
+      "3"
+     ],
+     "resN": [],
+     "empty": null,
+     "selects": [
+      "Rows per page=25"
+     ],
+     "tabs": [
+      "On request3"
+     ]
+    },
+    {
+     "key": "supplier_bills_overdue",
+     "tile": 0,
+     "landed": "/billing?bill_status=open&bill_due=overdue",
+     "calls": [
+      {
+       "t": 1795141345824,
+       "status": 200,
+       "path": "supplier-bills",
+       "q": "?status=open&overdue=true&limit=25&offset=0",
+       "total": 0,
+       "len": 0
+      },
+      {
+       "t": 1795141346174,
+       "status": 200,
+       "path": "supplier-bills/summary",
+       "q": "",
+       "total": null,
+       "len": null
+      }
+     ],
+     "ofN": [],
+     "resN": [
+      "0 bill",
+      "0 bill"
+     ],
+     "empty": null,
+     "selects": [
+      "=open",
+      "=overdue",
+      "="
+     ],
+     "tabs": []
+    },
+    {
+     "key": "supplier_bills_due_soon",
+     "tile": 0,
+     "landed": "/billing?bill_status=open&bill_due=soon",
+     "calls": [
+      {
+       "t": 1795141351532,
+       "status": 200,
+       "path": "supplier-bills/summary",
+       "q": "",
+       "total": null,
+       "len": null
+      },
+      {
+       "t": 1795141351532,
+       "status": 200,
+       "path": "supplier-bills",
+       "q": "?status=open&due_soon=true&limit=25&offset=0",
+       "total": 0,
+       "len": 0
+      }
+     ],
+     "ofN": [],
+     "resN": [
+      "0 bill",
+      "0 bill"
+     ],
+     "empty": null,
+     "selects": [
+      "=open",
+      "=soon",
+      "="
+     ],
+     "tabs": []
+    },
+    {
+     "key": "agency_invoices_overdue",
+     "tile": 0,
+     "landed": "/agency-billing?status=overdue",
+     "calls": [
+      {
+       "t": 1795141357093,
+       "status": 200,
+       "path": "agency-invoices",
+       "q": "?status=overdue&limit=25&offset=0",
+       "total": 0,
+       "len": 0
+      },
+      {
+       "t": 1795141357100,
+       "status": 200,
+       "path": "agency-invoices/summary",
+       "q": "",
+       "total": null,
+       "len": null
+      }
+     ],
+     "ofN": [],
+     "resN": [],
+     "empty": null,
+     "selects": [
+      "=",
+      "=overdue"
+     ],
+     "tabs": [
+      "Invoices"
+     ]
+    },
+    {
+     "key": "supplier_bills_to_approve",
+     "tile": 0,
+     "landed": "/billing?bill_status=received&approvable=me",
+     "calls": [
+      {
+       "t": 1795141362121,
+       "status": 200,
+       "path": "supplier-bills",
+       "q": "?status=received&approvable=me&limit=25&offset=0",
+       "total": 0,
+       "len": 0
+      },
+      {
+       "t": 1795141362123,
+       "status": 200,
+       "path": "supplier-bills/summary",
+       "q": "",
+       "total": null,
+       "len": null
+      }
+     ],
+     "ofN": [],
+     "resN": [
+      "0 bill",
+      "0 bill"
+     ],
+     "empty": null,
+     "selects": [
+      "=received",
+      "=",
+      "=me"
+     ],
+     "tabs": []
+    },
+    {
+     "key": "supplier_bills_to_pay",
+     "tile": 0,
+     "landed": "/billing?bill_status=approved&approvable=me",
+     "calls": [
+      {
+       "t": 1795141367471,
+       "status": 200,
+       "path": "supplier-bills",
+       "q": "?status=approved&approvable=me&limit=25&offset=0",
+       "total": 0,
+       "len": 0
+      },
+      {
+       "t": 1795141367471,
+       "status": 200,
+       "path": "supplier-bills/summary",
+       "q": "",
+       "total": null,
+       "len": null
+      }
+     ],
+     "ofN": [],
+     "resN": [
+      "0 bill",
+      "0 bill"
+     ],
+     "empty": null,
+     "selects": [
+      "=approved",
+      "=",
+      "=me"
+     ],
+     "tabs": []
+    },
+    {
+     "key": "agency_payments_to_approve",
+     "tile": 0,
+     "landed": "/agency-billing?tab=payments&approvable=me",
+     "calls": [
+      {
+       "t": 1795141376060,
+       "status": 200,
+       "path": "agency-invoices/summary",
+       "q": "",
+       "total": null,
+       "len": null
+      },
+      {
+       "t": 1795141376060,
+       "status": 200,
+       "path": "agency-payments",
+       "q": "?state=recorded&approvable=me&limit=25&offset=0",
+       "total": 0,
+       "len": 0
+      }
+     ],
+     "ofN": [],
+     "resN": [],
+     "empty": "No payments here",
+     "selects": [
+      "=recorded",
+      "=me"
+     ],
+     "tabs": [
+      "Payments to approve"
+     ]
+    },
+    {
+     "key": "stop_sales_to_review",
+     "tile": 0,
+     "landed": "/stop-sales?review=me",
+     "calls": [
+      {
+       "t": 1795141381810,
+       "status": 200,
+       "path": "supply/restrictions",
+       "q": "?kind=stop_sale&review=me&limit=200",
+       "total": 0,
+       "len": 0
+      }
+     ],
+     "ofN": [],
+     "resN": [],
+     "empty": "Nothing waits for review",
+     "selects": [
+      "=me"
+     ],
+     "tabs": []
+    }
+   ],
+   "console": [],
+   "failing": []
+  },
+  "1440-dark": {
+   "summaryStatus": 200,
+   "role": "admin",
+   "theme": "dark",
+   "groups": [
+    {
+     "id": "my-work-group-work",
+     "heading": "To do"
+    },
+    {
+     "id": "my-work-group-approve",
+     "heading": "To approve or pay"
+    }
+   ],
+   "tilesDom": [
+    {
+     "key": "my_open_cases",
+     "href": "/cases?tab=mine&status=new_inquiry%2Cdiscovery%2Cbuilding%2Cproposal_sent%2Cconfirmed%2Csupplier_confirming%2Cinvoice_sent%2Cpayment_pending%2Cpaid%2Cpre_departure%2Con_trip",
+     "text": "My open cases 0 Nothing assigned to you"
+    },
+    {
+     "key": "trip_checks_overdue",
+     "href": "/trip-checks?due=overdue",
+     "text": "Trip checks overdue 18 Earliest due 6 Nov 2026"
+    },
+    {
+     "key": "b2b_on_request",
+     "href": "/b2b-desk",
+     "text": "On-request lines 3 Oldest 30 Oct 2026"
+    },
+    {
+     "key": "supplier_bills_overdue",
+     "href": "/billing?bill_status=open&bill_due=overdue",
+     "text": "Supplier bills overdue 0 Nothing overdue"
+    },
+    {
+     "key": "supplier_bills_due_soon",
+     "href": "/billing?bill_status=open&bill_due=soon",
+     "text": "Supplier bills due soon 0 Nothing due soon"
+    },
+    {
+     "key": "agency_invoices_overdue",
+     "href": "/agency-billing?status=overdue",
+     "text": "Agency invoices overdue 0 Nothing overdue"
+    },
+    {
+     "key": "supplier_bills_to_approve",
+     "href": "/billing?bill_status=received&approvable=me",
+     "text": "Supplier bills to approve 0 Nothing to approve"
+    },
+    {
+     "key": "supplier_bills_to_pay",
+     "href": "/billing?bill_status=approved&approvable=me",
+     "text": "Supplier bills to pay 0 Nothing to pay"
+    },
+    {
+     "key": "agency_payments_to_approve",
+     "href": "/agency-billing?tab=payments&approvable=me",
+     "text": "Agency payments to approve 0 Nothing to approve"
+    },
+    {
+     "key": "stop_sales_to_review",
+     "href": "/stop-sales?review=me",
+     "text": "Stop-sales to review 0 Nothing to review"
+    }
+   ],
+   "overflow": {
+    "doc": [
+     1440,
+     1440
+    ],
+    "main": [
+     1192,
+     1192
+    ]
+   },
+   "shot": "06-booking-my-work-admin-1440-dark.png",
+   "console": [],
+   "failing": []
+  },
+  "390-light": {
+   "summaryStatus": 200,
+   "role": "admin",
+   "theme": "light",
+   "groups": [
+    {
+     "id": "my-work-group-work",
+     "heading": "To do"
+    },
+    {
+     "id": "my-work-group-approve",
+     "heading": "To approve or pay"
+    }
+   ],
+   "tilesDom": [
+    {
+     "key": "my_open_cases",
+     "href": "/cases?tab=mine&status=new_inquiry%2Cdiscovery%2Cbuilding%2Cproposal_sent%2Cconfirmed%2Csupplier_confirming%2Cinvoice_sent%2Cpayment_pending%2Cpaid%2Cpre_departure%2Con_trip",
+     "text": "My open cases 0 Nothing assigned to you"
+    },
+    {
+     "key": "trip_checks_overdue",
+     "href": "/trip-checks?due=overdue",
+     "text": "Trip checks overdue 18 Earliest due 6 Nov 2026"
+    },
+    {
+     "key": "b2b_on_request",
+     "href": "/b2b-desk",
+     "text": "On-request lines 3 Oldest 30 Oct 2026"
+    },
+    {
+     "key": "supplier_bills_overdue",
+     "href": "/billing?bill_status=open&bill_due=overdue",
+     "text": "Supplier bills overdue 0 Nothing overdue"
+    },
+    {
+     "key": "supplier_bills_due_soon",
+     "href": "/billing?bill_status=open&bill_due=soon",
+     "text": "Supplier bills due soon 0 Nothing due soon"
+    },
+    {
+     "key": "agency_invoices_overdue",
+     "href": "/agency-billing?status=overdue",
+     "text": "Agency invoices overdue 0 Nothing overdue"
+    },
+    {
+     "key": "supplier_bills_to_approve",
+     "href": "/billing?bill_status=received&approvable=me",
+     "text": "Supplier bills to approve 0 Nothing to approve"
+    },
+    {
+     "key": "supplier_bills_to_pay",
+     "href": "/billing?bill_status=approved&approvable=me",
+     "text": "Supplier bills to pay 0 Nothing to pay"
+    },
+    {
+     "key": "agency_payments_to_approve",
+     "href": "/agency-billing?tab=payments&approvable=me",
+     "text": "Agency payments to approve 0 Nothing to approve"
+    },
+    {
+     "key": "stop_sales_to_review",
+     "href": "/stop-sales?review=me",
+     "text": "Stop-sales to review 0 Nothing to review"
+    }
+   ],
+   "overflow": {
+    "doc": [
+     390,
+     390
+    ],
+    "main": [
+     390,
+     390
+    ]
+   },
+   "shot": "06-booking-my-work-admin-390-light.png",
+   "console": [],
+   "failing": []
+  },
+  "390-dark": {
+   "summaryStatus": 200,
+   "role": "admin",
+   "theme": "dark",
+   "groups": [
+    {
+     "id": "my-work-group-work",
+     "heading": "To do"
+    },
+    {
+     "id": "my-work-group-approve",
+     "heading": "To approve or pay"
+    }
+   ],
+   "tilesDom": [
+    {
+     "key": "my_open_cases",
+     "href": "/cases?tab=mine&status=new_inquiry%2Cdiscovery%2Cbuilding%2Cproposal_sent%2Cconfirmed%2Csupplier_confirming%2Cinvoice_sent%2Cpayment_pending%2Cpaid%2Cpre_departure%2Con_trip",
+     "text": "My open cases 0 Nothing assigned to you"
+    },
+    {
+     "key": "trip_checks_overdue",
+     "href": "/trip-checks?due=overdue",
+     "text": "Trip checks overdue 18 Earliest due 6 Nov 2026"
+    },
+    {
+     "key": "b2b_on_request",
+     "href": "/b2b-desk",
+     "text": "On-request lines 3 Oldest 30 Oct 2026"
+    },
+    {
+     "key": "supplier_bills_overdue",
+     "href": "/billing?bill_status=open&bill_due=overdue",
+     "text": "Supplier bills overdue 0 Nothing overdue"
+    },
+    {
+     "key": "supplier_bills_due_soon",
+     "href": "/billing?bill_status=open&bill_due=soon",
+     "text": "Supplier bills due soon 0 Nothing due soon"
+    },
+    {
+     "key": "agency_invoices_overdue",
+     "href": "/agency-billing?status=overdue",
+     "text": "Agency invoices overdue 0 Nothing overdue"
+    },
+    {
+     "key": "supplier_bills_to_approve",
+     "href": "/billing?bill_status=received&approvable=me",
+     "text": "Supplier bills to approve 0 Nothing to approve"
+    },
+    {
+     "key": "supplier_bills_to_pay",
+     "href": "/billing?bill_status=approved&approvable=me",
+     "text": "Supplier bills to pay 0 Nothing to pay"
+    },
+    {
+     "key": "agency_payments_to_approve",
+     "href": "/agency-billing?tab=payments&approvable=me",
+     "text": "Agency payments to approve 0 Nothing to approve"
+    },
+    {
+     "key": "stop_sales_to_review",
+     "href": "/stop-sales?review=me",
+     "text": "Stop-sales to review 0 Nothing to review"
+    }
+   ],
+   "overflow": {
+    "doc": [
+     390,
+     390
+    ],
+    "main": [
+     390,
+     390
+    ]
+   },
+   "shot": "06-booking-my-work-admin-390-dark.png",
+   "console": [],
+   "failing": []
+  }
+ },
+ "note": "390 runs re-taken with a 390x2300 viewport so the band screenshot is whole"
+}

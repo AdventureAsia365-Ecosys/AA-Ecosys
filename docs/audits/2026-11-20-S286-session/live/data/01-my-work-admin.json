@@ -1,0 +1,354 @@
+{
+ "landing": "/login",
+ "hops": null,
+ "navMyWork": 0,
+ "navMyWorkVisible": false,
+ "layout": {
+  "390-light": {
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390
+  },
+  "390-dark": {
+   "docScrollWidth": 390,
+   "docClientWidth": 390,
+   "mainScrollWidth": 390,
+   "mainClientWidth": 390
+  }
+ },
+ "myWorkConsole": [],
+ "myWorkApiFail": [],
+ "tileTexts": {
+  "review_waiting": "Review Queue: waiting 73 Oldest: 8 Oct 2026",
+  "supply_drafts": "Supply copy: drafts to review 8 Oldest: 25 Oct 2026",
+  "supply_no_description": "Hotels and services with no description 0 Nothing waiting",
+  "aa_content_drafts": "AA content: drafts 1 Oldest: 25 Oct 2026",
+  "place_cards_to_review": "Place cards to review 4859 Oldest: 13 Oct 2026",
+  "compliance_holds": "Compliance holds 0 Nothing waiting"
+ },
+ "pairs": [
+  {
+   "key": "review_waiting",
+   "tile": {
+    "count": 73,
+    "available": true,
+    "filter": {},
+    "text": "Review Queue: waiting 73 Oldest: 8 Oct 2026"
+   },
+   "href": "/admin/review",
+   "landed": "/admin/review",
+   "api_calls": [
+    {
+     "url": "/api/admin/review-queue?status=pending&page=1&page_size=25",
+     "status": 200,
+     "body": {
+      "data": "<array 25>",
+      "pagination": {
+       "page": 1,
+       "page_size": 25,
+       "total": 73
+      },
+      "facets": {
+       "countries": "<array 6>",
+       "policy_reviews": 48
+      }
+     }
+    }
+   ],
+   "page_total_texts": [
+    "of 73"
+   ],
+   "tabs": []
+  },
+  {
+   "key": "supply_drafts",
+   "tile": {
+    "count": 8,
+    "available": true,
+    "filter": {
+     "has_draft": "1"
+    },
+    "text": "Supply copy: drafts to review 8 Oldest: 25 Oct 2026"
+   },
+   "href": "/admin/supply-content?has_draft=1",
+   "landed": "/admin/supply-content?has_draft=1",
+   "api_calls": [
+    {
+     "url": "/api/admin/supply-content?limit=25&offset=0",
+     "status": 200,
+     "body": {
+      "items": "<array 11>",
+      "total": 11,
+      "by_status": {
+       "published": 2,
+       "in_review": 3,
+       "unpublished": 6
+      }
+     }
+    },
+    {
+     "url": "/api/admin/supply-content?has_draft=1&limit=25&offset=0",
+     "status": 200,
+     "body": {
+      "items": "<array 8>",
+      "total": 8,
+      "by_status": {
+       "published": 2,
+       "in_review": 3,
+       "unpublished": 6
+      }
+     }
+    }
+   ],
+   "page_total_texts": [
+    "0 pending",
+    "of 8"
+   ],
+   "tabs": []
+  },
+  {
+   "key": "supply_no_description",
+   "tile": {
+    "count": 0,
+    "available": true,
+    "filter": {
+     "status": "draft"
+    },
+    "text": "Hotels and services with no description 0 Nothing waiting"
+   },
+   "href": "/admin/supply-content?status=draft",
+   "landed": "/admin/supply-content?status=draft",
+   "api_calls": [
+    {
+     "url": "/api/admin/supply-content?limit=25&offset=0",
+     "status": 200,
+     "body": {
+      "items": "<array 11>",
+      "total": 11,
+      "by_status": {
+       "published": 2,
+       "in_review": 3,
+       "unpublished": 6
+      }
+     }
+    },
+    {
+     "url": "/api/admin/supply-content?status=draft&limit=25&offset=0",
+     "status": 200,
+     "body": {
+      "items": "<array 0>",
+      "total": 0,
+      "by_status": {
+       "published": 2,
+       "in_review": 3,
+       "unpublished": 6
+      }
+     }
+    }
+   ],
+   "page_total_texts": [
+    "0 pending"
+   ],
+   "tabs": []
+  },
+  {
+   "key": "aa_content_drafts",
+   "tile": {
+    "count": 1,
+    "available": true,
+    "filter": {
+     "status": "draft"
+    },
+    "text": "AA content: drafts 1 Oldest: 25 Oct 2026"
+   },
+   "href": "/admin/aa-content?status=draft",
+   "landed": "/admin/aa-content?status=draft",
+   "api_calls": [
+    {
+     "url": "/api/admin/aa-content?limit=25&offset=0",
+     "status": 200,
+     "body": {
+      "items": "<array 25>",
+      "total": 30,
+      "limit": 25,
+      "offset": 0
+     }
+    },
+    {
+     "url": "/api/admin/aa-content?status=draft&limit=25&offset=0",
+     "status": 200,
+     "body": {
+      "items": "<array 1>",
+      "total": 1,
+      "limit": 25,
+      "offset": 0
+     }
+    }
+   ],
+   "page_total_texts": [
+    "of 1"
+   ],
+   "tabs": []
+  },
+  {
+   "key": "place_cards_to_review",
+   "tile": {
+    "count": 4859,
+    "available": true,
+    "filter": {
+     "status": "auto_checked"
+    },
+    "text": "Place cards to review 4859 Oldest: 13 Oct 2026"
+   },
+   "href": "/admin/places/cards?status=auto_checked",
+   "landed": "/admin/places/cards?status=auto_checked",
+   "api_calls": [
+    {
+     "url": "/api/admin/content-quality/place-cards?limit=50&offset=0",
+     "status": 200,
+     "body": {
+      "data": "<array 50>",
+      "total": 4860,
+      "limit": 50,
+      "offset": 0
+     }
+    }
+   ],
+   "page_total_texts": [
+    "of 4,860"
+   ],
+   "tabs": []
+  },
+  {
+   "key": "compliance_holds",
+   "tile": {
+    "count": 0,
+    "available": true,
+    "filter": {},
+    "text": "Compliance holds 0 Nothing waiting"
+   },
+   "href": "/admin/tenant-qa/compliance",
+   "landed": "/admin/tenant-qa/compliance",
+   "api_calls": [
+    {
+     "url": "/api/admin/tenant-qa/compliance?state=open&limit=200",
+     "status": 200,
+     "body": {
+      "data": "<array 0>",
+      "total": 0,
+      "limit": 200,
+      "offset": 0,
+      "open_counts": {
+       "subject_gate": 0,
+       "tour_retired": 0
+      }
+     }
+    }
+   ],
+   "page_total_texts": [],
+   "tabs": [
+    "Open0",
+    "Resolved",
+    "All"
+   ]
+  }
+ ],
+ "summary_tiles": [
+  {
+   "key": "review_waiting",
+   "capability": "review.act",
+   "filter": {},
+   "available": true,
+   "count": 73
+  },
+  {
+   "key": "supply_drafts",
+   "capability": "content.write",
+   "filter": {
+    "has_draft": "1"
+   },
+   "available": true,
+   "count": 8
+  },
+  {
+   "key": "supply_no_description",
+   "capability": "content.write",
+   "filter": {
+    "status": "draft"
+   },
+   "available": true,
+   "count": 0
+  },
+  {
+   "key": "aa_content_drafts",
+   "capability": "content.write",
+   "filter": {
+    "status": "draft"
+   },
+   "available": true,
+   "count": 1
+  },
+  {
+   "key": "place_cards_to_review",
+   "capability": "quality.write",
+   "filter": {
+    "status": "auto_checked"
+   },
+   "available": true,
+   "count": 4859
+  },
+  {
+   "key": "compliance_holds",
+   "capability": "quality.write",
+   "filter": {},
+   "available": true,
+   "count": 0
+  }
+ ],
+ "summary_role": "admin",
+ "staff": {
+  "viewer": {
+   "auth": "cognito",
+   "is_owner": false,
+   "can_write": false
+  },
+  "crm_roles_available": true,
+  "total": 12,
+  "bookingRoles": [
+   null,
+   "admin"
+  ],
+  "e2eRows": [
+   {
+    "email": "e2e-cis-admin@e2e-mail.lumiguides.it.com",
+    "role": "admin",
+    "booking_role": null,
+    "crm_roles": [],
+    "is_active": true
+   },
+   {
+    "email": "e2e@e2e-mail.lumiguides.it.com",
+    "role": "content",
+    "booking_role": null,
+    "crm_roles": [],
+    "is_active": true
+   },
+   {
+    "email": "e2e-cis-cs@e2e-mail.lumiguides.it.com",
+    "role": "customer_success",
+    "booking_role": null,
+    "crm_roles": [],
+    "is_active": true
+   }
+  ],
+  "addStaffVisible": false,
+  "countsByRole": "Active by role\n4\nadministrator\n0\ncontent lead\n1\ncontent team\n0\ntenant content qa\n1\ncustomer success\n0\nsupport\n0\nfinance\n0\nai operations\n1\nviewer (read-only)",
+  "productOpsText": 0,
+  "csRowText": "E2E Customer Success (Dev) e2e-cis-cs@e2e-mail.lumiguides.it.com CUSTOMER SUCCESS None None ACTIVE 6 Nov 2026, 03:16 Never 5 Nov 2026 Open in Booking",
+  "presetsVisible": 0,
+  "showAllVisible": 0,
+  "console": [],
+  "apiFail": []
+ }
+}

@@ -1030,11 +1030,11 @@ the only home of a person's Booking role and Booking reads it from the token).
   capability set. The approve class is reserved for built-in roles and refused by the code (400) and by a table CHECK:
   `*.approve`, `supplier.activate`, `contract.publish`, `stop_sale.approve`, `payout.write`, `payment.verify`,
   `billing_config.write`, `staff.admin` (CIS: `*.approve`, `staff.write`).
-  `pricing.approve`, `supplier.activate`, `contract.publish` and `stop_sale.approve` are reserved ahead of use: on
-  main today `pricing.write`, `supply.write`, `stop_sale.write` and `b2b_desk.write` still gate the pricing, agency
-  pricing, price-adjustment and allotment approvals, supplier activate, contract publish and stop-sale review. Booking
-  splits them out first (the AA-1150 Booking step, then spec task T4.1); the Booking resolver of `booking-custom`
-  ships only after that, so until then the group resolves to no role.
+  Since S286 (20/11/2026) these four are live in Booking: the AA-1150 Booking step (Booking #288: `supplier.activate`,
+  `contract.publish`, `stop_sale.approve`) and spec task T4.1 (Booking #290: `pricing.approve`, `b2b_desk.approve`,
+  hotel and service activate under `supplier.activate`; a maker creates inactive records and still withdraws its own
+  pending rows) took every approval out of the write capabilities. The Booking resolver of `booking-custom` (T5) may now
+  start; until it ships the group resolves to no role.
 - **Transport (Q2 option A):** CIS publishes the key-only contract view `shared.v_staff_booking_grant(cognito_sub,
   booking_role_code, is_owner, is_business_owner)` over the active directory rows with a Cognito identity; SELECT (and
   USAGE on schema `shared`) to the `booking` role only, mirrored in AA-CIS-Infra `db/owners.yaml` `consumer_grants`
@@ -1054,7 +1054,9 @@ the only home of a person's Booking role and Booking reads it from the token).
   table or the role is unreadable, unknown or archived. Built-in holders never read the tables, so an outage of either
   never locks out an administrator.
 - **Who edits:** Booking has a role editor (clone a built-in role, tick capabilities), `is_owner` staff only, every
-  change audited before and after. CIS has no editor until a second CIS custom role is needed (seeded by CIS 462).
+  change audited before and after. CIS gets the same editor (spec task T13); S286 settings-rule audit: a business
+  role must never need a code change or migration, so the earlier "no CIS editor until a second role" is withdrawn.
+  The Staff page presets become editable data too (T14); only the preset guards stay in code.
   CRM staff groups have no editor (Q11) and show read-only on the matrix page.
 - **E2E:** A10f (CIS `content_lead`) and A10g (the custom-role maker).
 - **Order:** Infra (groups, trigger, E2E entries; Terraform Apply with MFA) -> CIS 462 + bk-062 (contract files,
