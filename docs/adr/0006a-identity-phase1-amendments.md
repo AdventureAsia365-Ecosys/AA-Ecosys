@@ -23,7 +23,10 @@
   would let that pair load the synthetic supplier, hotels, services and rates the check prices from (the checker
   publishes the contract). A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2). A13
-  (06/11/2026, S271) retires the CIS -> Booking bridge once the staff frontends run on ECS (ADR 0019 d23).
+  (06/11/2026, S271) retires the CIS -> Booking bridge once the staff frontends run on ECS (ADR 0019 d23). A14
+  (20/11/2026, S286) adds custom staff roles as data and the CIS contract view Booking reads a person's Booking role
+  from (amends decision 3 and A1); A10f and A10g (same day) add two Dev-only E2E addresses for it (a CIS
+  `content_lead` and the custom-role maker).
 - **Implements:** ADR 0006 Phase 1 for CIS. Booking (Phase 2) was unchanged and still pending on 18/10/2026.
 - **Update 2026-10-28:** Booking Phase 2 has shipped in part: Booking verifies WORKFORCE tokens of the
   `booking-staff` and `breakglass` clients and takes roles from the `booking-*` groups; the CIS bridge stays until
@@ -902,6 +905,38 @@ mailbox or Google account". That is too strong.
 - **Revoke and removal:** drop the nine maker writes, the checker's contract write, the supply SQL and body checks;
   removed with A10e-2 (AA-1054). Synthetic records are never deleted (Booking keeps supply rows); they stay inactive.
 
+#### A10f. Dev-only CIS content_lead E2E address: the second person of content publishing (20/11/2026, S286, AA-1155)
+
+- **Decision (tech lead, S285: D11 of the R3 permissions advisory and the AA-1155 scope "add the A10f E2E content_lead
+  identity"):** a new Dev-only address `e2e-cis-content-lead@e2e-mail.lumiguides.it.com`, exactly `cis-content_lead`,
+  no Booking or CRM group. It is the second person the agent needs to prove two-person content publishing (CIS 458
+  switch `cis.content.publish_two_person`) without opening more writes to the A10b admin.
+- **Groups (trigger):** one more entry of `workforce.E2E_DEV_ONLY_TEST_STAFF`, behind `E2E_DEV_ONLY_STAFF_ENABLED`
+  (dev only); any other set denies the token. Codes in `inbound-admin/` (rule `e2e-cognito-admin`, MFA admin only).
+- **Directory (CIS 462):** `admin_users_email_chk` allows the address as `content_lead`, no custom role, not an owner
+  or the business owner, no password. The CIS code (AA-1155 spec task T8) adds it to the E2E roles of the directory,
+  refuses it outside `ENVIRONMENT` dev and holds its writes to synthetic test tours (publish, review, the writes the
+  two-person proof needs; reads stay `content_lead`).
+- **Removal:** with the A10 family (trigger entry, recipient, CHECK branch, directory row, Cognito user).
+
+#### A10g. Dev-only custom-role maker E2E address (20/11/2026, S286, AA-1155)
+
+- **Decision (tech lead, S285, AA-1155 scope "one E2E maker identity that holds booking-custom, write-capable, not
+  read-only"):** a new Dev-only address `e2e-custom-maker@e2e-mail.lumiguides.it.com`, exactly `cis-custom` +
+  `booking-custom` (A14). It mirrors the real target person: a CIS custom "Content" role plus the Booking "Product, ops
+  & accounting" role, so the Done-when of AA-1155 (200 on `/suppliers`, `/billing`, `/agency-billing`; 403 on every
+  approve-class write) runs with a real session, not only CI integration tests.
+- **Groups (trigger):** one entry of the Dev-only map, one exact set, no extra set. Created with AdminCreateUser +
+  SUPPRESS, no password (AA-CIS-Infra `tools/identity/crm_dev_identity.py e2e-custom-maker`), so the token proof runs
+  right after Terraform Apply; the CIS Staff page then links its directory row.
+- **Directory (CIS 462):** `admin_users_email_chk` allows the address as `content_lead` (the `based_on` of the CIS
+  custom role), with a custom role, never an owner or the business owner, no password. Its Booking grant is the
+  custom code, a `shared.staff_app_grant` row.
+- **Scope, enforced by the app code (AA-1155 spec tasks T6 / T8):** Booking refuses it outside `ENVIRONMENT` dev and
+  on any write outside synthetic records (the A10e rule); CIS holds it to synthetic test tours. The approve-class
+  refusals are what the identity proves, so no route-scoped grant is added.
+- **Removal:** with the A10 family (trigger entry, recipient, tool command, CHECK branch, directory row, Cognito user).
+
 ### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)
 
 > **Superseded by A13 (07/11/2026, S272).** The fixed Preview hosts, the Preview-only clients and the Vercel projects
@@ -976,6 +1011,55 @@ A11 Preview design as the way staff sign in outside Production.
   `booking-staff-preview` and the `aa-booking-admin.vercel.app` callback are removed. Both APIs accept no preview
   client by default (the viewer / read-only cap code stays for a client set through the env). Per-PR UI evidence is
   `Visual (next start)` in CI; the signed-in smoke runs on the production staff hosts after each `Deploy Admin Dev`.
+
+### A14. Custom staff roles: roles as data, one combined role per person; Booking reads the grant through a CIS contract view (20/11/2026, S286, AA-1155)
+
+Amends ADR 0006 decision 3 (one `<app>-<role>` group per role, the group is the role) and A1 (the CIS directory is
+the only home of a person's Booking role and Booking reads it from the token).
+
+- **Why:** Booking takes one built-in role from the first `booking-*` group and CIS roles are a code dict, so a person
+  who does content and product, operations and accounting work cannot hold the one combined role the business needs,
+  with make and read rights and no approve right. Tech lead S285: Q1 (no interim Booking `contracting` grant), Q2 =
+  option A (below), Q3 (agency quote and booking rights), Q7 (CIS "Content"), Q11 (no CRM role editor).
+- **Groups:** two WORKFORCE groups, `cis-custom` and `booking-custom`. A group only says "this person holds a custom
+  role"; it grants nothing alone. Built-in roles keep their `<app>-<role>` groups and stay in code
+  (CIS `staff_authz.ROLE_PERMS`, Booking `staff.PERMISSIONS`).
+- **Roles as data:** CIS `shared.staff_role` / `shared.staff_role_capability` (CIS 462) and Booking
+  `booking.staff_role` / `booking.staff_role_capability` (bk-062) hold **custom roles only**. A code matches
+  `^custom_[a-z][a-z0-9_]{1,46}$`, so it never equals a built-in role. Each capability is checked against the code's
+  capability set. The approve class is reserved for built-in roles and refused by the code (400) and by a table CHECK:
+  `*.approve`, `supplier.activate`, `contract.publish`, `stop_sale.approve`, `payout.write`, `payment.verify`,
+  `billing_config.write`, `staff.admin` (CIS: `*.approve`, `staff.write`).
+  `pricing.approve`, `supplier.activate`, `contract.publish` and `stop_sale.approve` are reserved ahead of use: on
+  main today `pricing.write`, `supply.write`, `stop_sale.write` and `b2b_desk.write` still gate the pricing, agency
+  pricing, price-adjustment and allotment approvals, supplier activate, contract publish and stop-sale review. Booking
+  splits them out first (the AA-1150 Booking step, then spec task T4.1); the Booking resolver of `booking-custom`
+  ships only after that, so until then the group resolves to no role.
+- **Transport (Q2 option A):** CIS publishes the key-only contract view `shared.v_staff_booking_grant(cognito_sub,
+  booking_role_code, is_owner, is_business_owner)` over the active directory rows with a Cognito identity; SELECT (and
+  USAGE on schema `shared`) to the `booking` role only, mirrored in AA-CIS-Infra `db/owners.yaml` `consumer_grants`
+  and the isolation probe, which keeps `shared.admin_users`, `shared.staff_app_grant` and `shared.staff_role` closed to
+  `booking`. Booking reads it only for a `booking-custom` holder and for the owner markers, with a 60-second cache.
+  The CIS directory stays the source of truth (A1): the CIS Staff page writes the grant
+  (`shared.staff_app_grant.role` = a built-in role or a Booking custom code) and Sync puts the person in
+  `booking-custom`. Rejected: option B (Booking keeps `booking.staff_users.custom_role` on its own `/staff` page): two
+  places to assign one person's roles. Not `catalog.*`: that schema is the content read model with its own owner role
+  and recipe; this is a staff-directory contract for one consumer.
+- **Reverse read:** CIS reads the Booking custom roles for its "Roles & permissions" page and the Staff page pickers
+  through the key-only view `booking.v_staff_role_capability` (bk-062, `cis_app` only).
+- **Business owner:** `shared.admin_users.is_business_owner`, held by at most one person (partial unique index), set
+  only on the CIS Staff page by an `is_owner` user, audited. Approvals that need the business owner (AA-1158) read it
+  server-side from the view, never from a request field. No `booking-business_owner` group.
+- **Fail closed, for custom holders only:** a `booking-custom` / `cis-custom` holder is refused when the view, the role
+  table or the role is unreadable, unknown or archived. Built-in holders never read the tables, so an outage of either
+  never locks out an administrator.
+- **Who edits:** Booking has a role editor (clone a built-in role, tick capabilities), `is_owner` staff only, every
+  change audited before and after. CIS has no editor until a second CIS custom role is needed (seeded by CIS 462).
+  CRM staff groups have no editor (Q11) and show read-only on the matrix page.
+- **E2E:** A10f (CIS `content_lead`) and A10g (the custom-role maker).
+- **Order:** Infra (groups, trigger, E2E entries; Terraform Apply with MFA) -> CIS 462 + bk-062 (contract files,
+  applied when every job table is idle) -> schema-reference PR -> CIS and Booking code -> hand step (the content +
+  operations staff member moves to the custom roles). Spec: `.kiro/specs/AA-1155-custom-staff-roles/`.
 
 ## Phase 1 status (18/10/2026)
 
