@@ -649,3 +649,20 @@ integrations:
     features: [CIS-F048]
     owner: tech_lead
     status: planned
+  - id: INT-083
+    name: Custom staff roles between CIS and Booking (key-only views)
+    producer: cis
+    consumers: [booking]
+    kind: db_view
+    contracts:
+      - {file: staff.roles.v1.md, version: "1"}
+    auth: SELECT on shared.v_staff_booking_grant for the booking role (CIS migration 462); SELECT on booking.v_staff_role_capability for cis_app (bk-062)
+    conditions:
+      note: Only holders of the booking-custom or cis-custom WORKFORCE group are resolved through the views; built-in roles stay in code.
+    cadence: Read per request, cached 60 seconds
+    failure: Custom-role holders are denied (fail closed); built-in roles and the administrator keep working
+    kill_switch: Revoke the view grant in a CIS or Booking migration
+    personal_data: true
+    features: [CIS-F033, BK-F018]
+    owner: tech_lead
+    status: planned

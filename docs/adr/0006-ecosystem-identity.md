@@ -121,7 +121,9 @@ EXTERNAL); every app verifies JWTs via JWKS; the PR #721 bridge must be swappabl
   lower-cased, `@adventure.asia`), `display_name`, `cognito_sub` and per-app role columns;
   `password_hash` becomes nullable and is dropped after cutover (CIS migration, CIS-owned).
   *(Amended by 0006a A1–A3: Booking roles live in `shared.staff_app_grant` (CIS 247), and only owners
-  (`is_owner`, Cognito session) write the directory.)*
+  (`is_owner`, Cognito session) write the directory. Amended by 0006a A14 (S286, AA-1155): custom roles are data,
+  groups `cis-custom` / `booking-custom` grant nothing alone, and Booking reads a custom holder's role and the
+  business-owner marker from the CIS contract view `shared.v_staff_booking_grant`.)*
 - The directory's admin UI (in the CIS admin) is the **only writer** of Cognito users and group
   memberships: each change writes the directory row, then calls `AdminCreateUser` /
   `AdminAddUserToGroup` / `AdminRemoveUserFromGroup` / `AdminDisableUser`. A reconcile job
