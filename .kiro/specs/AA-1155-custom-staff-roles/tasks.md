@@ -8,7 +8,7 @@
   _Requirements: R2.1, R2.2, R2.3, R3.2_
 - [ ] T4 ADR 0006a A14 / A10f / A10g, DM-7.1 retention rows, schema ownership, this spec - repo: AA-Ecosys - lane: l4-custom-roles-foundation
   _Requirements: R3.1, R3.2, R6.1_
-- [ ] T4.1 Booking approve split, no migration: a `pricing.approve` capability (built-in admin and contracting only) gates the checker routes (approve, reject) of pricing rules, FX rates, cancellation policies, partner tier discounts, partner rate cards and price adjustments, which `pricing.write` gates today; allotment approve and end move from `b2b_desk.write` to `b2b_desk.approve`; hotel and service activate move from `supply.write` to `supplier.activate` unless the AA-1150 Booking change already re-gated them; tests: a holder of the write capability without the approve one gets 403 on each of these routes, built-in contracting and admin keep 200 - repo: AA-Booking
+- [x] T4.1 Booking approve split, no migration: a `pricing.approve` capability (built-in admin and contracting only) gates the checker routes (approve, reject) of pricing rules, FX rates, cancellation policies, partner tier discounts, partner rate cards and price adjustments, which `pricing.write` gates today; allotment approve and end move from `b2b_desk.write` to `b2b_desk.approve`; hotel and service activate move from `supply.write` to `supplier.activate` unless the AA-1150 Booking change already re-gated them; tests: a holder of the write capability without the approve one gets 403 on each of these routes, built-in contracting and admin keep 200 - repo: AA-Booking
   _Requirements: R4.3_
 - [ ] T5 Booking resolver: booking-custom holders through the view and booking.staff_role (60 s cache, fail closed), staff_users role sync, readiness bk-062, A10g allow-list on synthetic records, approve-class 403 tests; starts only after the AA-1150 Booking split (`supplier.activate`, `contract.publish`, `stop_sale.approve` out of `supply.write` and `stop_sale.write`) and T4.1 have merged: until then the seeded role's `supply.write`, `stop_sale.write`, `pricing.write` and `b2b_desk.write` still carry approvals - repo: AA-Booking
   _Requirements: R4.1, R4.2, R4.3_
@@ -24,5 +24,9 @@
   _Requirements: R5.2, R5.4_
 - [ ] T11 AI budget and gateway routes: verified Cognito session, before / after audit of budget changes - repo: AA-CIS-App
   _Requirements: R5.5_
+- [ ] T13 CIS role editor: API and Staff page section to clone a built-in CIS role, tick capabilities, label and archive custom roles, is_owner only, audit before and after, 400 on approve-class or unknown capability (reuses the Booking T6 rules) - repo: AA-CIS-App
+  _Requirements: R5.6_
+- [ ] T14 Staff presets as data: a preset table (code, label, role per app or custom role, CRM mode keep / replace / add, additive_only, archived) seeded with today's four presets, an is_owner editor on the Staff page with audit, the frontend reads presets from the API; the code keeps only the guards - repo: AA-CIS-App
+  _Requirements: R5.7_
 - [ ] T12 Rollout: Terraform Apply Dev, Migration Apply of CIS 462 and bk-062, schema-reference PR, isolation probe, maker token, deploys, hand step (the content + operations staff member gets booking-custom only once the AA-1150 Booking split, T4.1 and T5 are live; the E2E maker's booking-custom group grants nothing before T5), pricing E2E - repo: AA-Ecosys, AA-CIS-Infra
   _Requirements: R1.1, R6.1_

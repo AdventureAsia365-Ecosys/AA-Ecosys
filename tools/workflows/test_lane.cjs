@@ -35,7 +35,9 @@ test('a lane without spec keeps its schema, lenses and prompt', async () => {
   assert.ok(!('trace' in impl.schema.properties))
   assert.ok(!impl.schema.required.includes('trace'))
   assert.ok(!impl.prompt.includes('SPEC (AA-1137)'))
-  assert.equal(calls.filter(c => c.phase === 'Review').length, 2)
+  const reviews = calls.filter(c => c.phase === 'Review')
+  assert.equal(reviews.length, 3)
+  assert.ok(reviews.some(r => /lens: settings, not hard-coded/.test(r.prompt)))
 })
 
 test('a spec lane requires trace, briefs the tasks and adds the spec lens', async () => {
@@ -48,7 +50,7 @@ test('a spec lane requires trace, briefs the tasks and adds the spec lens', asyn
   assert.match(impl.prompt, /implements ONLY tasks T1, T2 of the spec \.kiro\/specs\/AA-900-demo/)
   assert.match(impl.prompt, /trace_check\.py show \/home\/nghiep\/projects\/AA-Ecosys\/\.kiro\/specs\/AA-900-demo --tasks T1,T2/)
   const reviews = calls.filter(c => c.phase === 'Review')
-  assert.equal(reviews.length, 3)
+  assert.equal(reviews.length, 4)
   assert.ok(reviews.some(r => /lens: spec \(tasks T1, T2/.test(r.prompt)))
   assert.ok(reviews.every(r => r.prompt.includes('"task":"T1"')))
 })
@@ -56,10 +58,12 @@ test('a spec lane requires trace, briefs the tasks and adds the spec lens', asyn
 test('custom lenses get the spec lens once', async () => {
   const lenses = ['ui kit', 'spec: my own wording']
   const { calls } = await runLane({ ...BASE, spec: 's', tasks: ['T1'], lenses }, { implResult: { ...IMPL, trace: [] } })
-  assert.equal(calls.filter(c => c.phase === 'Review').length, 2)
+  // custom lenses + the always-on settings lens; the spec lens is not added twice
+  assert.equal(calls.filter(c => c.phase === 'Review').length, 3)
   const { calls: c2 } = await runLane({ ...BASE, spec: 's', tasks: ['T1'], lenses: ['ui kit'] },
     { implResult: { ...IMPL, trace: [] } })
-  assert.equal(c2.filter(c => c.phase === 'Review').length, 2)
+  assert.equal(c2.filter(c => c.phase === 'Review').length, 3)
+  assert.ok(c2.some(c => c.phase === 'Review' && /lens: settings, not hard-coded/.test(c.prompt)))
 })
 
 test('the fix pass of a spec lane also returns trace', async () => {

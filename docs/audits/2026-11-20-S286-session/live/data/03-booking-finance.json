@@ -1,0 +1,140 @@
+{
+ "session_reused": false,
+ "me_status": 200,
+ "role": "finance",
+ "email_is_maker": true,
+ "permissions": [
+  "agency_billing.read",
+  "agency_billing.write",
+  "agency_payment.approve",
+  "bill.read",
+  "billing.read",
+  "billing.write",
+  "billing_config.write",
+  "catalog.read",
+  "ops.read",
+  "pricing.read",
+  "pricing_policy.approve_finance",
+  "pricing_policy.read",
+  "pricing_policy.write",
+  "profit.read",
+  "supply.read",
+  "trip_case.read"
+ ],
+ "has": {
+  "bill.read": true,
+  "pricing.read": true,
+  "supply.read": true,
+  "ops.read": true,
+  "trip_case.read": true,
+  "catalog.read": true
+ },
+ "has_not": {
+  "payout.write": true,
+  "supplier.activate": true,
+  "contract.publish": true,
+  "stop_sale.approve": true
+ },
+ "gets": [
+  {
+   "path": "/api/booking/supplier-bills",
+   "status": 200,
+   "shape": {
+    "items": "<array 0>",
+    "total": 0,
+    "limit": 50,
+    "offset": 0
+   }
+  },
+  {
+   "path": "/api/booking/pricing/rules",
+   "status": 200,
+   "shape": {
+    "items": "<array 6>",
+    "today": "2026-11-20"
+   }
+  },
+  {
+   "path": "/api/booking/suppliers",
+   "status": 200,
+   "shape": {
+    "items": "<array 6>",
+    "total": 6,
+    "limit": 25,
+    "offset": 0
+   }
+  },
+  {
+   "path": "/api/booking/trip-cases",
+   "status": 200,
+   "shape": {
+    "items": "<array 25>",
+    "total": 32,
+    "limit": 25,
+    "offset": 0
+   }
+  }
+ ],
+ "suppliers_url": "/suppliers",
+ "list_buttons": [
+  "Adventure Asia\nBOOKING",
+  "OVERVIEW",
+  "B2B",
+  "SALES",
+  "OPERATIONS",
+  "SUPPLY",
+  "Suppliers",
+  "Hotels",
+  "Services",
+  "Agency tiers",
+  "Price readiness",
+  "Price setup",
+  "Pricing policy",
+  "Seasons",
+  "Holiday events",
+  "CATALOG (FROM CIS)",
+  "Settings",
+  "Collapse",
+  "Search pages, trip cases, customers\u2026\nCtrl K",
+  "EN",
+  "VI",
+  "Finance\nE",
+  "Reset filters",
+  "CSV",
+  "Columns"
+ ],
+ "list_has_activate": false,
+ "list_has_publish": false,
+ "detail_pick": {
+  "status": "inactive",
+  "inactive_found": true
+ },
+ "detail_buttons": [
+  "Adventure Asia\nBOOKING",
+  "OVERVIEW",
+  "B2B",
+  "SALES",
+  "OPERATIONS",
+  "SUPPLY",
+  "Suppliers",
+  "Hotels",
+  "Services",
+  "Agency tiers",
+  "Price readiness",
+  "Price setup",
+  "Pricing policy",
+  "Seasons",
+  "Holiday events",
+  "CATALOG (FROM CIS)",
+  "Settings",
+  "Collapse",
+  "Search pages, trip cases, customers\u2026\nCtrl K",
+  "EN",
+  "VI",
+  "Finance\nE"
+ ],
+ "detail_has_activate": false,
+ "detail_has_publish": false,
+ "console_errors": [],
+ "failing_requests": []
+}

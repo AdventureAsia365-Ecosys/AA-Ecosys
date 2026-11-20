@@ -1,0 +1,72 @@
+[
+  {
+    "at": "2026-11-20T01:58:51.020Z",
+    "host": "aa-cis.lumiguides.it.com",
+    "path": "/login"
+  },
+  {
+    "at": "2026-11-20T01:58:51.860Z",
+    "host": "aa-cis.lumiguides.it.com",
+    "path": "/login"
+  },
+  {
+    "at": "2026-11-20T01:58:53.221Z",
+    "host": "staff-auth.lumiguides.it.com",
+    "path": "/login"
+  },
+  {
+    "at": "2026-11-20T01:58:53.369Z",
+    "host": "staff-auth.lumiguides.it.com",
+    "path": "/login"
+  },
+  {
+    "at": "2026-11-20T01:58:53.436Z",
+    "host": "staff-auth.lumiguides.it.com",
+    "path": "/login"
+  },
+  {
+    "at": "2026-11-20T01:58:57.353Z",
+    "host": "staff-auth.lumiguides.it.com",
+    "path": "/verifyCode"
+  },
+  {
+    "at": "2026-11-20T01:59:01.458Z",
+    "host": "aa-cis.lumiguides.it.com",
+    "path": "/admin/tenants"
+  },
+  {
+    "at": "2026-11-20T01:59:01.673Z",
+    "host": "aa-cis.lumiguides.it.com",
+    "path": "/admin/tenants"
+  },
+  {
+    "at": "2026-11-20T01:59:02.265Z",
+    "host": "aa-cis.lumiguides.it.com",
+    "path": "/admin/tenants"
+  },
+  {
+    "at": "2026-11-20T01:59:02.389Z",
+    "host": "aa-cis.lumiguides.it.com",
+    "path": "/admin/tenants"
+  },
+  {
+    "at": "2026-11-20T01:59:03.266Z",
+    "host": "booking.lumiguides.it.com",
+    "path": "/login"
+  },
+  {
+    "at": "2026-11-20T01:59:07.474Z",
+    "host": "booking.lumiguides.it.com",
+    "path": "/login"
+  },
+  {
+    "at": "2026-11-20T01:59:10.260Z",
+    "host": "booking.lumiguides.it.com",
+    "path": "/"
+  },
+  {
+    "at": "2026-11-20T01:59:10.701Z",
+    "host": "booking.lumiguides.it.com",
+    "path": "/"
+  }
+]
