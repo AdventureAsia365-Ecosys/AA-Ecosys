@@ -52,7 +52,8 @@ Never share a one-time code, a password or an authenticator code with anyone, th
 
 1. Check the app's own health signs first (each runbook names them: the bell, the **Apps** page, the **Jobs** page,
    the CRM health page).
-2. Alarm e-mails go to the people on CIS admin **Platform › Alert recipients**, on ALARM and again on OK.
+2. Alarm e-mails go to the people on CIS admin **Platform › Alerts › Recipients**, on ALARM and again on OK. The full
+   list of what is watched, with severity and where each threshold is changed, is **Platform › Alerts › Catalogue**.
 3. Normal problems: a Jira issue in the projects you already use. Urgent problems (an app is down, wrong data is
    visible, a partner complains): message the engineer on duty at once. During the dev phase the tech lead is the
    engineer on duty for every app.

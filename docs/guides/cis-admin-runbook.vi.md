@@ -86,7 +86,7 @@ phút.
 Menu bên trái có hai phần.
 
 - **Platform**: Overview (**Overview**, **Data coverage**, **Reports**); People & access (**Staff**, **Audit log**,
-  **Alert recipients**); **Apps**; Tenants (**Tenants**, **Agencies (CRM)**); Jobs (**Jobs**, **Data erasure**);
+  **Alerts**); **Apps**; Tenants (**Tenants**, **Agencies (CRM)**); Jobs (**Jobs**, **Data erasure**);
   AI & spend (**AI providers**, **Cost Operations**, **Cost per app**, **Jev Decisions**); Developer (**API Docs**,
   **Data model**, **Docs**).
 - **CIS Content**: Pipeline (**Upload (S0)**, **Rewrite (S1)**, **Review Queue**, **Master Content**); Assets
@@ -154,7 +154,9 @@ phải, và chuyển giữa tiếng Anh và tiếng Việt khi trang có bản d
      **Check now**; một CRM role lệch được liệt kê là một phát hiện. Các tài khoản kiểm thử tự động được phép trên Dev
      được liệt kê riêng.
 2. **Audit log**: ai đã đổi gì và khi nào.
-3. **Alert recipients**: ai nhận e-mail cảnh báo và ngân sách.
+3. **Alerts**: tab **Catalogue** liệt kê mọi điều kiện cảnh báo của nền tảng (alarm, rule bảo mật và database, ngân
+   sách, kiểm tra trong app của CIS, Booking và CRM) kèm mức độ, ngưỡng, nơi đổi ngưỡng và trạng thái live; tab
+   **Recipients** đặt ai nhận e-mail cảnh báo và ngân sách ("All alerts" hoặc "Page alerts only").
 
 ### Tenant và đại lý đối tác
 

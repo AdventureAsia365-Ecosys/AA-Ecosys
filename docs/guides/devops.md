@@ -169,10 +169,15 @@ From the live schema dump of 2026-11-18 ([DB schema reference](../architecture/d
 
 ## Alarms, runbooks and incidents
 
-- CloudWatch alarms (27 on acc2 after the S263 alert diet) e-mail through SNS to the recipients on CIS admin →
-  Platform → Alert recipients: state alarms (service down, RDS, NAT recover and instance check, SES, backup copy age) on ALARM and OK,
-  event alarms (Lambda errors, break-glass token, KMS decrypt anomaly) on ALARM only. The generated list is
-  [alarms](../generated/alarms.md).
+- CloudWatch alarms e-mail through SNS to the recipients on CIS admin → Platform → Alerts → Recipients: state alarms
+  (service down, RDS, NAT recover and instance check, SES, backup copy age, worker liveness, API 5xx rate) on ALARM and
+  OK, event alarms (Lambda errors, break-glass token, KMS decrypt anomaly, failed alert delivery) on ALARM only. Each
+  carries a `Severity` tag (`page` / `ticket`, [incident response](../ops/incident-response.md#alert-severity-page--ticket));
+  page alarms also notify the page topic. The generated list is [alarms](../generated/alarms.md); the full live list
+  (alarms, rules, budgets and the in-app checks of CIS, Booking and the CRM, with where each threshold is changed) is
+  Platform → Alerts → Catalogue (AA-1171).
+- In-app check thresholds are settings (AA-1171): CIS `cis.ops.*` and CRM `crm.ops.*` on Platform → Settings, Booking
+  `ops_jobs_*` on its Pricing › Policy page; CloudWatch alarm thresholds stay in Terraform (S287 decision D2).
 - S263 alert diet: CloudWatch keeps service down, RDS CPU / storage / connections, Lambda errors, SES and the security
   signals only AWS sees; job queues, per-role connections and log events are in-app checks that e-mail the same topic
   (table: `docs/audits/2026-11-01-S263-alerting-cost/diet.md`). No target-tracking autoscaling on Dev.
