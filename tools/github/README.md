@@ -19,6 +19,8 @@ tools serve, and when to use each: skill `aa-ship` (§1 "Cách merge", `referenc
 | `ship_copy_apply.py <owner> <NNN>` | Infra copy PR + DB Migrate on that file + readiness (below) |
 | `dbmig.sh <owner>/<file or NNN> <check or apply>` | DB Migrate on a file already on Infra main (`ship_copy_apply.py --no-copy`) |
 | `ship_open_prs.py <journal or wf_ id>` | push lane branches and open their PRs from a workflow journal (below) |
+| `post_agent_review.py <Repo>#<pr> --review <wf_ id, journal or JSON>` | run under `as-app.sh`: posts the lane's independent agent review onto the PR as a comment review (below) |
+| `change_control.py` + `change_control.json` | library: the human-approval rule for risky PRs in the merge gate, OFF today (below) |
 | `ship_deploy.py` | library, read-only: deployed services per repo (deploy workflow push paths + health URL) and the ECS exec guard used by `ship_merge.py` / `ship_wave.py` (below) |
 | `train-lib.sh` | shell functions for a background train; `waitdeploy` waits for a `git_sha` on a health endpoint |
 | `guard_runs.py [--json]` | session start, read-only: the latest scheduled run of every workflow in the 6 repos, red first |
@@ -64,6 +66,31 @@ checkout: `python3 tools/github/<tool>.py --help`.
   same API forms, a raw `gh pr merge`, `mergeq.sh` run by
   hand, `ship_merge.py` in a shell loop or twice in one command, and running a hand-written `.tmp-session` script that
   merges. `mergeq.sh` exits 4 at once when the PR turns DIRTY while it waits.
+
+## Change control and agent reviews (AA-1162)
+
+Tech lead decision D4 (S286): risky PRs need the tech lead's approval from the first pilot with real data; until then
+the independent agent review of a risky PR is recorded on the PR itself. Trigger and process: skill `aa-ship` §1.
+
+- `post_agent_review.py`: `tools/github/as-app.sh --repos AA-Booking -- python3 tools/github/post_agent_review.py
+  booking#240 --review wf_324cb059-50b --lenses "correctness + spec fit,security + data safety,settings"`. Input: a
+  lane workflow run id or its `journal.jsonl` (the results of the `review:<lane>:<i>` agents in lens order, and whether a
+  fix pass ran), or a JSON file with the lane result, its `reviews[]` or one review. Posts a review with event
+  `COMMENT` on the PR head (the App authored the PR, so GitHub refuses `APPROVE` / `REQUEST_CHANGES` from it); the
+  first line is `Agent review: approve | request changes | blocking` (blocking = a blocking finding; request changes =
+  a major finding or a reviewer verdict `changes`), then lenses, finding counts and table, reviewer run id and the
+  reviewed head. A hidden marker `<!-- aa-agent-review head=<sha> -->` makes it idempotent: the same head updates
+  the review (`PUT .../reviews/<id>`), a new head adds one. Refuses without `GH_TOKEN` (a run outside `as-app.sh` would
+  post as the logged-in person), on a PR that is not open, and when `--head` differs from the PR head. `--dry-run`
+  prints the body. Exit 0 posted / updated, 2 input or gh error, 4 refused.
+- `change_control.json` (switch `require_human_approval_for_risky`, **false today**) is read by
+  `ship_merge.merge_one`, so by `ship_merge.py`, `ship_wave.py`, `ship_train.py` and `ship_copy_apply.py`. OFF: no
+  extra read, no refusal. ON: after the check gate and before the merge call, a risky PR (label in `risky_labels`, or
+  a changed file outside `ignore_paths` matching `risky_paths`; authors in `exempt_authors` are never risky) is
+  refused (exit 4, `--check-only` included) unless a human reviewer (GitHub user type `User`, not the PR author, in
+  `approvers` when that list is set) has `APPROVED` the gated head as their latest decisive review, and no human's
+  latest decisive review is `CHANGES_REQUESTED`. The agent's comment review never counts. No command-line override:
+  the switch changes only through a root PR, and while ON that PR is itself risky. An unreadable config refuses.
 
 ## ship_wave.py
 

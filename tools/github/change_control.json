@@ -1,0 +1,43 @@
+{
+  "_doc": [
+    "Change control for the merge gate (AA-1162, tech lead decision D4 of S286; skill aa-ship section 1).",
+    "require_human_approval_for_risky OFF (false) = the merge tool behaves as before.",
+    "ON (true) = it refuses a risky PR until a human (non-bot) reviewer APPROVED its current head commit.",
+    "Trigger to switch it ON: the first pilot with real data, at the latest the first prod or paying tenant.",
+    "Switch it by a root PR that edits this file; while ON, a PR that changes this file is itself risky.",
+    "risky = a PR label in risky_labels, or a changed file matching risky_paths (fnmatch, '*' crosses '/')",
+    "and not matching ignore_paths (text-only files never make a PR risky).",
+    "approvers: GitHub logins whose approval counts; empty = any human reviewer other than the PR author.",
+    "exempt_authors: PR authors never classified risky (bot copies of files already approved in their app PR)."
+  ],
+  "require_human_approval_for_risky": false,
+  "risky_labels": ["risky", "change-control: risky"],
+  "risky_paths": [
+    "*migrations/*.sql",
+    "*.tf",
+    "*.tfvars",
+    "*iam*",
+    "*policy*.json",
+    ".github/workflows/*",
+    ".github/actions/*",
+    ".github/CODEOWNERS",
+    ".github/scripts/*",
+    ".gitleaks.toml",
+    ".githooks/*",
+    ".claude/hooks/*",
+    ".claude/settings.json",
+    "*secret*",
+    "*auth*",
+    "*permission*",
+    "*rbac*",
+    "*middleware*",
+    "*cognito*",
+    "*erasure*",
+    "*retention*",
+    "*grants*",
+    "tools/github/change_control.json"
+  ],
+  "ignore_paths": ["*.md"],
+  "approvers": [],
+  "exempt_authors": ["app/aa-ecosys-ci-bot"]
+}

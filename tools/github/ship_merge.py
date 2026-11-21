@@ -23,6 +23,11 @@ scripts bucket; read-only `aws s3api list-objects-v2`): the deploy would kill it
 (exit 4); --allow-running-exec merges anyway (the tech lead's call; a WARN line and a JSON line in
 .tmp-session/ship-overrides.jsonl). An unreadable listing (expired MFA) refuses too. Logic: ship_deploy.py.
 
+Change control (AA-1162, S286 decision D4): tools/github/change_control.json holds a switch that is OFF today (no
+extra read, no refusal). ON (trigger in skill aa-ship §1: the first pilot with real data) it refuses, after the gate
+and before the merge call (exit 4), a risky PR (risky label, or a changed file matching the config's risky paths)
+without an APPROVED review of the gated head by a human (non-bot) reviewer; logic and rules: change_control.py.
+
 Merge: AA-CIS-App, AA-Booking, AA-Partner through the merge queue (mergeq.sh). When mergeq.sh exits 4 "not in the
 queue" and the PR is not merged, the merge-queue entries and the PR's merge_group runs are read before failing: while
 either still holds the PR, the tool waits (S273: exit 4 while the PR's own group CI ran). TripPlanner, Infra and the
@@ -31,7 +36,7 @@ parallel (one worker per PR, lesson S257); PRs of one non-queue repo run one aft
 order for all.
 
 Exit: 0 all merged (or green with --check-only) | 2 usage / gh error | 3 a check or workflow run red, or none
-reported | 4 refused (draft, base, DIRTY, deletions, closed) or merge failed | 5 checks still pending at --timeout.
+reported | 4 refused (draft, base, DIRTY, deletions, closed, change control) or merge failed | 5 checks still pending at --timeout.
 Orchestrator only: .claude/hooks/subagent-guardrails.sh refuses any subagent command that names this tool (the merge
 runs inside it, out of the hook's sight). Holds no secrets.
 """
@@ -43,6 +48,7 @@ import os
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
+import change_control
 import ship_deploy
 from ship_common import (
     AS_APP,
@@ -208,7 +214,8 @@ def _wait_out_queue(runner: Runner, repo: str, n: int, *, timeout: float, interv
 
 def merge_one(runner: Runner, repo: str, n: int, *, check_only: bool = False, timeout: float = 2400,
               interval: float = 60, allow_deletes: bool = False, expect_head: str | None = None,
-              queue_timeout: float = 5400, allow_running_exec: bool = False) -> str:
+              queue_timeout: float = 5400, allow_running_exec: bool = False,
+              change_control_cfg: dict | None = None) -> str:
     """Gate and merge one PR. Return the merge SHA ('' with --check-only); raise ShipError on refusal/failure."""
     tag = f"{repo}#{n}"
     pr = gate(runner, repo, n, timeout=timeout, interval=interval, allow_deletes=allow_deletes,
@@ -217,6 +224,9 @@ def merge_one(runner: Runner, repo: str, n: int, *, check_only: bool = False, ti
         sha = ((pr.get("mergeCommit") or {}).get("oid")) or ""
         log(f"{tag}: already merged {sha[:8]}")
         return sha
+    # AA-1162: change control (tools/github/change_control.json). OFF today: reads nothing, refuses nothing. ON: a risky
+    # PR needs a human APPROVED review of the gated head (exit 4); part of the gate, so --check-only reports it too.
+    change_control.check(runner, repo, n, str(pr.get("headRefOid") or ""), cfg=change_control_cfg)
     if check_only:
         log(f"{tag}: green, not merged (--check-only)")
         return ""
