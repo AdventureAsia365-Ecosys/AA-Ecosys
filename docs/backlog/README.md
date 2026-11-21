@@ -12,7 +12,7 @@ _Last updated: S287, 21/11/2026 (Claude Code, Ultracode; ~03:00 → evening +07,
 
 | Due | Issue | Check |
 |---|---|---|
-| 22/11 (Sunday) | (Jira) PR-20 | Weekly report kỳ 6 (17–23/11): drafted in S287 with numbers read live 21/11 18:14 (`docs/audits/2026-11-21-S287-session/jira-drafts.md` J4); post once the tech lead approves. |
+| 23/11 (Monday morning) | (Jira) PR-20 | Weekly report kỳ 6 (17–23/11): drafted in S287 (`docs/audits/2026-11-21-S287-session/jira-drafts.md` J4), approved; re-read the numbers, then post (tech lead: hold until the Monday-morning session). |
 | next session | AA-1161 | History rewritten and force-pushed 21/11 (root clone 113 MB, Infra 7.6 MB; backups in private S3 `archive/`). Read the repo size GitHub reports (`gh api repos/<org>/<repo> --jq .size`) once its GC has run; close AA-1161 when it is near the clone size. |
 | 01/12 | AA-1051 (AI gateway cap) | Set the `openai-direct` monthly cap back from **25 USD** (raised for November in S285 for the AA-1051 judge runs) to **10 USD**, then read the value back on AI gateway › Budgets. |
 | ~26/11 | AA-1136 | One-week readout of the agent change hooks in log mode (root #885, p95 79 ms at start): hit counts, false alarms, latency; then decide warn / block mode and close. |
