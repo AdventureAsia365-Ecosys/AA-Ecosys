@@ -18,7 +18,7 @@ import collect as c  # noqa: E402
 ROOT = Path(__file__).resolve().parents[2]
 NOW = datetime(2026, 11, 21, 3, 0, tzinfo=timezone.utc)
 CFG = {"org": "ExampleOrg", "root_repo": "Root", "repos": ["Root", "AppA"], "image_repos": ["AppA"],
-       "ci_workflow": "ci.yml", "secret_scan_workflow": "secret-scan-history.yml", "guard_window_days": 8,
+       "ci_workflow": "ci.yml", "ci_runs_inspected": 10, "secret_scan_workflow": "secret-scan-history.yml", "guard_window_days": 8,
        "docs_skip_status": ["archived"]}
 
 
@@ -67,16 +67,68 @@ class GithubChecksTest(unittest.TestCase):
         r = c.check_scheduled_guards(fake({}), CFG, NOW)
         self.assertEqual(r["status"], "error")   # no scheduled run at all is not a pass
 
+    SCAN = "Scan image for vulnerabilities (Trivy, failing on fixable CRITICAL/HIGH)"
+    SBOM = "Generate SBOM (syft, CycloneDX)"
+
+    def _scan_jobs(self, scan="success", sbom="success"):
+        return {"jobs": [{"steps": [{"name": self.SCAN, "conclusion": scan}, {"name": self.SBOM, "conclusion": sbom}]}]}
+
     def test_image_scan_and_sbom_steps_must_both_pass(self):
-        runs = {"workflow_runs": [{"id": 7}]}
-        jobs = {"jobs": [{"steps": [
-            {"name": "Scan image for vulnerabilities (Trivy, failing on fixable CRITICAL/HIGH)", "conclusion": "success"},
-            {"name": "Generate SBOM (syft, CycloneDX)", "conclusion": "success"}]}]}
-        f = fake({"/repos/ExampleOrg/AppA/actions/workflows/ci.yml/runs": runs,
+        runs = {"workflow_runs": [{"id": 7, "head_branch": "gh-readonly-queue/main/pr-12-abc", "conclusion": "success",
+                                   "created_at": "2026-11-21T01:00:00Z"}]}
+        jobs = self._scan_jobs()
+        f = fake({"/repos/ExampleOrg/AppA/actions/workflows/ci.yml/runs?event=merge_group": runs,
                   "/repos/ExampleOrg/AppA/actions/runs/7/jobs": jobs})
-        self.assertEqual(c.check_image_scan_sbom(f, CFG)["status"], "pass")
-        jobs["jobs"][0]["steps"][1]["conclusion"] = "skipped"
+        r = c.check_image_scan_sbom(f, CFG)
+        self.assertEqual((r["status"], r["detail"]["last_date"]), ("pass", "2026-11-21"))
+        jobs["jobs"][0]["steps"][1]["conclusion"] = "failure"
         self.assertEqual(c.check_image_scan_sbom(f, CFG)["status"], "fail")
+        jobs["jobs"][0]["steps"][1]["conclusion"] = "skipped"   # the only run did not scan: no evidence, not a pass
+        r = c.check_image_scan_sbom(f, CFG)
+        self.assertEqual((r["status"], r["detail"]["missing_or_red"]), ("fail", ["AppA"]))
+        self.assertNotIn("last_date", r["detail"])
+
+    def test_image_scan_reads_the_merge_queue_not_an_old_push_on_main(self):
+        # CI runs on merge_group since the push trigger on main was dropped: the old push run must not decide
+        queue = {"workflow_runs": [
+            {"id": 30, "head_branch": "gh-readonly-queue/main/pr-40-def", "conclusion": "cancelled",
+             "created_at": "2026-11-21T02:00:00Z"},
+            {"id": 31, "head_branch": "gh-readonly-queue/main/pr-41-abc", "conclusion": "failure",
+             "created_at": "2026-11-20T09:00:00Z"},
+            {"id": 32, "head_branch": "gh-readonly-queue/other/pr-9-x", "conclusion": "success",
+             "created_at": "2026-11-21T05:00:00Z"}]}
+        push = {"workflow_runs": [{"id": 5, "head_branch": "main", "conclusion": "success",
+                                   "created_at": "2026-11-06T17:00:00Z"}]}
+        f = fake({"/repos/ExampleOrg/AppA/actions/workflows/ci.yml/runs?event=merge_group": queue,
+                  "/repos/ExampleOrg/AppA/actions/workflows/ci.yml/runs?event=push": push,
+                  "/repos/ExampleOrg/AppA/actions/runs/31/jobs": self._scan_jobs(scan="failure"),
+                  "/repos/ExampleOrg/AppA/actions/runs/5/jobs": self._scan_jobs(),
+                  "/repos/ExampleOrg/AppA": {"default_branch": "main"}})
+        r = c.check_image_scan_sbom(f, CFG)
+        self.assertEqual((r["status"], r["detail"]["run_dates"]), ("fail", {"AppA": "2026-11-20"}))
+        self.assertNotIn("/repos/ExampleOrg/AppA/actions/runs/30/jobs", f.calls)   # cancelled run skipped
+        self.assertNotIn("/repos/ExampleOrg/AppA/actions/runs/32/jobs", f.calls)   # another branch's queue
+        self.assertNotIn("/repos/ExampleOrg/AppA/actions/runs/5/jobs", f.calls)    # the newer queue run decided
+        # only the old push run scanned: it passes, but its date is published so CIS can fail it on age
+        f = fake({"/repos/ExampleOrg/AppA/actions/workflows/ci.yml/runs?event=push": push,
+                  "/repos/ExampleOrg/AppA/actions/runs/5/jobs": self._scan_jobs()})
+        r = c.check_image_scan_sbom(f, CFG)
+        self.assertEqual((r["status"], r["detail"]["last_date"]), ("pass", "2026-11-06"))
+        self.assertIn("2026-11-06", r["summary"])
+
+    def test_image_scan_fact_is_the_oldest_newest_scan_across_repos(self):
+        cfg = dict(CFG, image_repos=["AppA", "AppB"])
+        f = fake({"/repos/ExampleOrg/AppA/actions/workflows/ci.yml/runs?event=merge_group": {"workflow_runs": [
+                      {"id": 1, "head_branch": "gh-readonly-queue/main/pr-1-a", "conclusion": "success",
+                       "created_at": "2026-11-21T01:00:00Z"}]},
+                  "/repos/ExampleOrg/AppB/actions/workflows/ci.yml/runs?event=merge_group": {"workflow_runs": [
+                      {"id": 2, "head_branch": "gh-readonly-queue/main/pr-2-b", "conclusion": "success",
+                       "created_at": "2026-11-09T01:00:00Z"}]},
+                  "/repos/ExampleOrg/AppA/actions/runs/1/jobs": self._scan_jobs(),
+                  "/repos/ExampleOrg/AppB/actions/runs/2/jobs": self._scan_jobs()})
+        r = c.check_image_scan_sbom(f, cfg)
+        self.assertEqual((r["status"], r["detail"]["last_date"]), ("pass", "2026-11-09"))
+        self.assertEqual(r["detail"]["run_dates"], {"AppA": "2026-11-21", "AppB": "2026-11-09"})
 
     def test_secret_scan_reads_the_newest_completed_run(self):
         f = fake({"/repos/ExampleOrg/Root/actions/workflows/secret-scan-history.yml/runs": {"workflow_runs": [

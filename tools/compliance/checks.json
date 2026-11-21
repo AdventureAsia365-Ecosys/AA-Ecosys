@@ -3,7 +3,9 @@
     "AA-1170: the repos and workflow names the root compliance collector reads (tools/compliance/collect.py).",
     "No threshold lives here: the limits that grade a check (drill age, access review age, overdue docs, validity,",
     "heartbeat) are CIS admin settings (cis.compliance.*). guard_window_days is the read window of the scheduled",
-    "guard check (which runs count as the latest), the same window as tools/github/guard_runs.py."
+    "guard check (which runs count as the latest), the same window as tools/github/guard_runs.py. ci_runs_inspected is",
+    "how many recent CI runs per image repo the scan check reads to find the newest one that scanned (an API read bound;",
+    "the age a scan may have is the CIS setting cis.compliance.ci_scan_max_age_days)."
   ],
   "org": "AdventureAsia365-Ecosys",
   "root_repo": "AA-Ecosys",
@@ -12,5 +14,6 @@
   "ci_workflow": "ci.yml",
   "secret_scan_workflow": "secret-scan-history.yml",
   "guard_window_days": 8,
+  "ci_runs_inspected": 10,
   "docs_skip_status": ["archived", "deprecated", "superseded"]
 }

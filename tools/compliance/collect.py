@@ -13,7 +13,8 @@ Format 1: {"format": 1, "source": "root_daily", "collector", "collector_version"
 "run_ref" (workflow and run number), "generated_at", "checks": [{"check_id", "status", "summary", "detail",
 "link"}]}. status is pass | fail | error | manual. The checks of the "fact" kind (last_restore_drill,
 last_access_review, docs_review_overdue) publish a fact (a date or a count) with status pass when it was read, error
-when not: CIS grades the fact against the admin settings (cis.compliance.*), so the thresholds are never literals here.
+when not; ci_image_scan_sbom publishes its pass / fail and the date of its oldest scan (`last_date`). CIS grades every
+fact against the admin settings (cis.compliance.*), so the thresholds are never literals here.
 
 Public repo rules (root advisory section 4 C.5): the run prints counts only, never raw API output; detail holds counts,
 dates, repo names and workflow names, never an account ID, an ARN, a bucket name or a person; :func:`assert_publishable`
@@ -144,28 +145,60 @@ def check_scheduled_guards(fetch: Fetch, cfg: dict, now: datetime) -> dict:
                   f"{total - len(red)}/{total} scheduled guards green", {"workflows": total, "red": red})
 
 
+_SKIP_RUN = frozenset({"cancelled", "skipped", "neutral", "stale"})
+
+
+def _run_scan_result(fetch: Fetch, org: str, repo: str, run: dict) -> Optional[bool]:
+    """Whether the image scan and the SBOM steps of one CI run both passed; None when the run did not scan (no such
+    steps, or they were skipped: a path-filtered or cancelled run says nothing about the image)."""
+    jobs = (fetch(f"/repos/{org}/{repo}/actions/runs/{run['id']}/jobs?per_page=100") or {}).get("jobs", [])
+    steps = [s for j in jobs for s in j.get("steps", []) or []]
+    scan = [s for s in steps if "trivy" in s.get("name", "").lower() and "scan" in s.get("name", "").lower()]
+    sbom = [s for s in steps if "sbom" in s.get("name", "").lower() and "generate" in s.get("name", "").lower()]
+    ran = [s for s in scan + sbom if s.get("conclusion") not in (None, "skipped", "cancelled")]
+    if not scan or not sbom or len(ran) != len(scan + sbom):
+        return None
+    return all(s.get("conclusion") == "success" for s in ran)
+
+
 def check_image_scan_sbom(fetch: Fetch, cfg: dict) -> dict:
-    """The newest CI run on main of every image repo scanned the image (Trivy gate) and wrote an SBOM, both passed."""
-    org, bad, ok = cfg["org"], [], 0
+    """The newest CI run that reached main in every image repo scanned the image (Trivy gate) and wrote an SBOM, both
+    passed. "Reached main" = a merge-queue run (event merge_group, branch gh-readonly-queue/<main>/...: since the app
+    CI dropped push on main this is the run that gates what lands) or a push run on main, whichever is newer. The
+    result carries the fact `last_date`, the date of the OLDEST of those newest scans across the repos: CIS grades its
+    age against cis.compliance.ci_scan_max_age_days, so a scan that stopped running fails instead of passing on an old
+    run (Q3: only fresh evidence counts). The per-repo run dates are in `run_dates`."""
+    org, flow, bad, ok = cfg["org"], cfg["ci_workflow"], [], 0
+    inspect = int(cfg["ci_runs_inspected"])
+    dates: dict[str, str] = {}
     for repo in cfg["image_repos"]:
-        runs = (fetch(f"/repos/{org}/{repo}/actions/workflows/{cfg['ci_workflow']}/runs?branch=main&status=completed"
-                      "&per_page=10") or {}).get("workflow_runs", [])
+        branch = (fetch(f"/repos/{org}/{repo}") or {}).get("default_branch") or "main"
+        base = f"/repos/{org}/{repo}/actions/workflows/{flow}/runs"
+        queue = (fetch(f"{base}?event=merge_group&status=completed&per_page={inspect}") or {}).get("workflow_runs", [])
+        push = (fetch(f"{base}?event=push&branch={branch}&status=completed&per_page={inspect}")
+                or {}).get("workflow_runs", [])
+        runs = [r for r in queue if str(r.get("head_branch", "")).startswith(f"gh-readonly-queue/{branch}/")]
+        runs += [r for r in push if r.get("head_branch") == branch]
+        runs.sort(key=lambda r: str(r.get("created_at", "")), reverse=True)
         found = None
-        for run in runs:
-            jobs = (fetch(f"/repos/{org}/{repo}/actions/runs/{run['id']}/jobs?per_page=100") or {}).get("jobs", [])
-            steps = [s for j in jobs for s in j.get("steps", []) or []]
-            scan = [s for s in steps if "trivy" in s.get("name", "").lower() and "scan" in s.get("name", "").lower()]
-            sbom = [s for s in steps if "sbom" in s.get("name", "").lower() and "generate" in s.get("name", "").lower()]
-            if scan and sbom:
-                found = all(s.get("conclusion") == "success" for s in scan + sbom)
+        for run in runs[:inspect]:
+            if run.get("conclusion") in _SKIP_RUN:
+                continue
+            found = _run_scan_result(fetch, org, repo, run)
+            if found is not None:
+                dates[repo] = str(run.get("created_at", ""))[:10]
                 break
         if found:
             ok += 1
         else:
             bad.append(repo)
     n = len(cfg["image_repos"])
-    return result("ci_image_scan_sbom", "pass" if not bad else "fail", f"{ok}/{n} image repos scan and write an SBOM",
-                  {"repos": n, "ok": ok, "missing_or_red": bad})
+    detail: dict[str, Any] = {"repos": n, "ok": ok, "missing_or_red": bad, "run_dates": dates}
+    summary = f"{ok}/{n} image repos scan and write an SBOM"
+    if dates:
+        detail["last_date"] = min(dates.values())
+        summary += f"; oldest newest scan {detail['last_date']}"
+    return result("ci_image_scan_sbom", "pass" if not bad else "fail", summary, detail)
 
 
 def check_secret_scan(fetch: Fetch, cfg: dict) -> dict:
