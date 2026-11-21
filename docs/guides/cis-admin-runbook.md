@@ -85,7 +85,7 @@ to 15 minutes.
 The left menu has two sections.
 
 - **Platform**: Overview (**Overview**, **Data coverage**, **Reports**); People & access (**Staff**, **Audit log**,
-  **Alert recipients**); **Apps**; Tenants (**Tenants**, **Agencies (CRM)**); Jobs (**Jobs**, **Data erasure**);
+  **Alerts**); **Apps**; Tenants (**Tenants**, **Agencies (CRM)**); Jobs (**Jobs**, **Data erasure**);
   AI & spend (**AI providers**, **Cost Operations**, **Cost per app**, **Jev Decisions**); Developer (**API Docs**,
   **Data model**, **Docs**).
 - **CIS Content**: Pipeline (**Upload (S0)**, **Rewrite (S1)**, **Review Queue**, **Master Content**); Assets
@@ -153,7 +153,9 @@ Screenshot: the **Docs** page on Dev, captured 28 Oct 2026.
    - **Directory health** (top of the page) compares the sign-in groups with the list once a day or on **Check now**;
      a CRM role that differs is listed as a finding. The automated test accounts allowed on Dev are listed apart.
 2. **Audit log**: who changed what and when.
-3. **Alert recipients**: who receives alarm and budget e-mails.
+3. **Alerts**: the **Catalogue** tab lists every alert condition of the platform (alarms, security and database rules,
+   budgets, the in-app checks of CIS, Booking and the CRM) with its severity, threshold, where it is changed and its
+   live state; the **Recipients** tab sets who receives alarm and budget e-mails ("All alerts" or "Page alerts only").
 
 ### Tenants and partner agencies
 

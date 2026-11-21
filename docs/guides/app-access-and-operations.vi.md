@@ -53,7 +53,8 @@ Không bao giờ chia sẻ mã dùng một lần, mật khẩu hay mã của ứ
 
 1. Xem dấu hiệu sức khoẻ của chính ứng dụng trước (mỗi runbook có nêu: chuông thông báo, trang **Apps**, trang
    **Jobs**, trang health của CRM).
-2. E-mail cảnh báo được gửi tới những người ở CIS admin **Platform › Alert recipients**, khi ALARM và lần nữa khi OK.
+2. E-mail cảnh báo được gửi tới những người ở CIS admin **Platform › Alerts › Recipients**, khi ALARM và lần nữa khi OK.
+   Danh sách đầy đủ những gì đang được theo dõi, kèm mức độ và nơi đổi từng ngưỡng, là **Platform › Alerts › Catalogue**.
 3. Lỗi thông thường: tạo một issue Jira trong các project bạn vẫn dùng. Lỗi khẩn (một ứng dụng sập, dữ liệu sai đang
    hiển thị, một đối tác phàn nàn): nhắn ngay cho kỹ sư trực. Trong giai đoạn dev, tech lead là kỹ sư trực cho mọi
    ứng dụng.

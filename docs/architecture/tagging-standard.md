@@ -81,6 +81,11 @@ with a `pii:` tag is `restricted`.
 
 - `Name`: the console name, free text.
 - `Issue`: the Linear issue that created or last reshaped the resource, `AA-<number>`.
+- `Severity` (CloudWatch alarms and EventBridge rules that notify an SNS topic, required there by the Infra source guard
+  `tools/docs/gen_docs.py check-source`): `page` (a person acts now: security, identity, the NAT instance, the database
+  down, failed alert delivery; notifies the page topic too) or `ticket` (working hours). AA-1171.
+- `Mutable` (alarms): `true` / `false`, whether a future time-boxed mute from the admin may silence the alarm; `false`
+  for security, identity, recover and watchdog alarms and for every EventBridge rule. The app roles can never write it.
 - Operational keys of one feature, prefixed `aa:` for new ones: `aa:retain`, `aa:retain-until`, `aa:purpose` on RDS
   snapshots (DM-7, snapshot expiry). Older descriptive keys (`Pool`, `Layer`, `Tier`, `Role`, `Function`) may stay.
 

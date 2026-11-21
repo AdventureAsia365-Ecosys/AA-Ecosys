@@ -28,6 +28,21 @@ on ALARM and on OK (D-20).
 
 When unsure, pick the higher severity and lower it later.
 
+### Alert severity (page / ticket)
+
+Every CloudWatch alarm and every EventBridge rule that e-mails carries the tag `Severity` (AA-1171, S287 decision D5):
+
+- **page**: a person acts now, any hour: security and identity signals, the NAT instance (all private egress), the
+  database down or stopped, and failed delivery of the alerts topic itself. A page alarm notifies the alerts topic
+  and the page topic (`aa-ecosys-<env>-page-alerts`), so a pager or phone channel added to the page topic later gets
+  only these.
+- **ticket**: handled in working hours. On Dev that includes a service with no healthy task (no real users yet);
+  re-rate the service-down alarms to `page` when the first prod service goes live (a one-line Infra change).
+
+An alert's severity is not its SEV: a page alert usually opens a SEV1 or SEV2, a ticket alert a SEV2 or SEV3. The full
+list of alert conditions, with severity, threshold, where it is changed and the live state, is the CIS admin page
+**Platform › Alerts › Catalogue**; the generated list of Terraform alarms is [alarms](../generated/alarms.md).
+
 ## First 15 minutes
 
 1. **Confirm.** Reproduce it on the live URL (curl or browser). Read the alarm e-mail and the app log

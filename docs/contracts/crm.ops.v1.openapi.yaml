@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: crm.ops.v1 (AA-Partner CRM → CIS admin, L1 platform console)
-  version: "1.16"
+  version: "1.17"
   description: >-
     Platform console API of the partner CRM (AA-Partner, root ADR 0010), served under /crm/ops/v1 and called by the
     CIS admin screen S-01 "Agencies (CRM)" (AA-941) and the CIS platform-ops pages (AA-936: job summary, LLM usage).
@@ -109,6 +109,11 @@ info:
     ledger and, for one release, falls back to the setting crm.ai.connection_monthly_cap_usd for a connection the copy
     does not name. A platform setting: no agency audit event (CIS audits the save), no staff id returned. 503
     `connection_shares_unavailable` before crm-079.
+    Version 1.17 (AA-1171, S287 alerts catalogue P0; additive): GET /ops-checks, the CRM's in-app check registry, read by
+    the CIS admin page Platform > Alerts > Catalogue (any full reader). One entry per ops check (the e-mail's title and
+    action, state or event, the component it watches, its thresholds with their crm.ops.* setting keys and the values in
+    force, or the fixed rule still in code, and the time of its last alert in the last 7 days); the same "ops check
+    registry v1" shape AA-Booking serves at GET /booking/ops/checks. No agency data, so no agency audit event.
     Errors are
     `{detail, message?, fields?, state?, member_limit?}` (Problem); a 422 names the failing fields only, never the
     submitted values.
@@ -863,6 +868,18 @@ paths:
         "503":
           $ref: "#/components/responses/Unavailable"
           description: "`connection_shares_unavailable` (crm-079 not applied)"
+  /ops-checks:
+    get:
+      operationId: getOpsChecks
+      summary: The CRM's in-app check registry with the thresholds in force (1.17; read by the CIS alerts catalogue)
+      responses:
+        "200":
+          description: Every ops check of the CRM
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/CheckRegistry"}
+        "401": {$ref: "#/components/responses/Unauthorized"}
+        "403": {$ref: "#/components/responses/Forbidden"}
   /llm/calls:
     get:
       operationId: getLlmCalls
@@ -1475,6 +1492,41 @@ components:
       properties:
         shares: {type: array, items: {$ref: "#/components/schemas/ConnectionShare"}}
         updated_at: {type: [string, "null"], format: date-time}
+    CheckRegistry:
+      description: The "ops check registry v1" shape (1.17), the same as AA-Booking GET /booking/ops/checks.
+      type: object
+      additionalProperties: false
+      required: [app, version, as_of, checks]
+      properties:
+        app: {type: string, enum: [crm]}
+        version: {type: integer, const: 1}
+        as_of: {type: string, format: date-time}
+        checks: {type: array, items: {$ref: "#/components/schemas/RegistryCheck"}}
+    RegistryCheck:
+      type: object
+      additionalProperties: false
+      required: [key, title, component, severity, kind, action, thresholds, channel, last_alert_at]
+      properties:
+        key: {type: string, description: The ops check name (app/observability/ops_alerts.py CHECKS)}
+        title: {type: string}
+        component: {type: string}
+        severity: {type: string, enum: [page, ticket]}
+        kind: {type: string, enum: [state, event]}
+        action: {type: string, description: What to do (the alert e-mail's text)}
+        thresholds: {type: array, items: {$ref: "#/components/schemas/RegistryThreshold"}}
+        channel: {type: array, items: {type: string}}
+        last_alert_at: {type: [string, "null"], format: date-time}
+    RegistryThreshold:
+      type: object
+      additionalProperties: false
+      required: [setting, value, unit, editable_via, where, label]
+      properties:
+        setting: {type: [string, "null"], description: The crm.ops.* setting key; null for a fixed rule still in code}
+        value: {description: The value in force (null for a fixed rule)}
+        unit: {type: [string, "null"]}
+        editable_via: {type: string, enum: [settings, none]}
+        where: {type: [string, "null"]}
+        label: {type: string}
     ConnectionSharesIn:
       type: object
       additionalProperties: false
