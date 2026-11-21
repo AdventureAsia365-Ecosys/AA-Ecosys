@@ -1,0 +1,26 @@
+# Vulnerability exception register (SEC-03, docs/security/vulnerability-management.md#exceptions; AA-1163).
+#
+# The ONE list of accepted vulnerability findings across the six repos. A finding is accepted only with a row here AND
+# the entry its own gate reads, with the same expiry:
+#   pip-audit      -> <repo>/.github/pip-audit-ignore.txt   `<id> <expires> <reason>`
+#   trivy          -> <repo>/.trivyignore                   `# <reason>` then `<id> exp:<expires>`
+#   dependabot     -> GitHub dismissal "Tolerable risk", comment `exception until <expires>: <reason> (SEC-03)`
+#   code-scanning  -> GitHub dismissal "Won't fix", same comment
+# tools/security/vuln_triage.py lists, in the monthly triage record, every entry without a row, every expiry that
+# differs, every expired row, every row that no finding or entry matches any more, and every exception source
+# the GitHub API refused to read (only HTTP 404 means the file is absent).
+#
+# Row format (TOML dates are bare, no quotes). The expiry is at most [exceptions] max_days (vuln_triage.toml) after
+# approved_on. approved_by names a role, not a person.
+#
+# [[exception]]
+# repo = "AA-CIS-App"
+# id = "GHSA-xxxx-xxxx-xxxx"        # the id the gate or dismissal uses: GHSA, CVE or PYSEC; for code-scanning
+#                                   # the alert number "#<n>" (one alert, never a rule: a rule id accepts nothing)
+# source = "dependabot"             # pip-audit | trivy | dependabot | code-scanning
+# package = "example-package"
+# expires = 2026-12-31
+# reason = "Why it is safe for now (exposure, reachability)."
+# way_out = "What removes it: bump, replace or drop."
+# approved_by = "tech lead"
+# approved_on = 2026-11-21
