@@ -385,9 +385,33 @@ class Cli(unittest.TestCase):
         self.assertIn("# Vulnerability triage record 2026-11", text)
         self.assertIn("| CISA KEV | not checked (--offline) |", text)
         self.assertIn("| P1 | 30 days | 1 | 1 | 0 | 0 |", text)
-        self.assertIn("api/…", text)
-        self.assertNotIn("handler.py", text)
+        self.assertNotIn("api/secret", text)
+        self.assertNotIn("py/example-rule", text)
+        self.assertIn("## Code scanning (public summary)", text)
+        self.assertIn("| Repo-A | P2 | internet | 1 | #2 | 2027-02-08 | 0 |", text)
+        self.assertIn("Code scanning only: 1", text.split("## P2")[1].split("##")[0])
         self.assertIn("| Repo-A | dependabot | #1 | examplepkg | web/package-lock.json |", text)
+
+    def test_record_has_front_matter_and_signoff(self):
+        dep = self.write("dep.json", [dependabot_alert(1, v4=7.1, created="2026-10-01T00:00:00Z"),
+                                      dependabot_alert(2, v4=5.0, ghsa="GHSA-zzzz-zzzz-zzzz", cve=None)])
+        rc, text = self.run_cli("--offline", "--record", "--month", "2026-11", "--input", f"Repo-A={dep}")
+        self.assertEqual(rc, 0)
+        self.assertTrue(text.startswith("---\nid: SEC-03-triage-2026-11\n"))
+        self.assertIn("type: report", text)
+        self.assertIn("## Decisions and sign-off", text)
+        self.assertIn("| Repo-A dependabot #1 examplepkg | P1 | 2026-10-31 | tech lead | bump to 2.0.1 | pending |", text)
+        self.assertNotIn("dependabot #2 examplepkg | P2", text)
+        self.assertIn("Sign-off: tech lead, date: pending.", text)
+
+    def test_private_record_keeps_rule_and_path(self):
+        cs = self.write("cs.json", [code_alert(2, path="api/secret/handler.py", level="high")])
+        rc, text = self.run_cli("--offline", "--record", "--input", f"Repo-A={cs}")
+        self.assertIn("| Repo-A | code-scanning | #2 | py/example-rule | api/secret/handler.py |", text)
+        self.assertIn("| Repo-A code-scanning #2 py/example-rule | P1 |", text)
+        rc, text = self.run_cli("--offline", "--record", "--public", "--input", f"Repo-A={cs}")
+        self.assertIn("| Repo-A code scanning #2 | P1 |", text)
+        self.assertNotIn("py/example-rule", text)
 
     def test_strict_fails_on_past_due_p1(self):
         dep = self.write("dep.json", [dependabot_alert(1, v4=7.1, created="2026-10-01T00:00:00Z")])
