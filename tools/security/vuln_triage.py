@@ -622,8 +622,9 @@ def render_markdown(findings: list[Finding], problems: list[tuple[str, str, str]
         w("---")
         w(f"id: SEC-03-triage-{meta['month']}")
         w(f"title: Vulnerability triage {meta['month']}")
-        w(f"description: Monthly vulnerability triage record for {meta['month']}: open findings by class, due dates, "
-          "exceptions and the tech lead's decisions.")
+        # Plain YAML scalar: no ": " inside (check_frontmatter.py parses it).
+        w(f"description: Monthly vulnerability triage record for {meta['month']} with the open findings by class, due "
+          "dates, exceptions and the tech lead's decisions.")
         w("type: report")
         w("status: draft")
         w("owner: nghiep")

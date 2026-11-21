@@ -399,6 +399,9 @@ class Cli(unittest.TestCase):
         self.assertEqual(rc, 0)
         self.assertTrue(text.startswith("---\nid: SEC-03-triage-2026-11\n"))
         self.assertIn("type: report", text)
+        front = text.split("---\n")[1]
+        for line in front.splitlines():   # plain YAML scalars: one ": " per line, after the key
+            self.assertEqual(line.count(": "), 1, line)
         self.assertIn("## Decisions and sign-off", text)
         self.assertIn("| Repo-A dependabot #1 examplepkg | P1 | 2026-10-31 | tech lead | bump to 2.0.1 | pending |", text)
         self.assertNotIn("dependabot #2 examplepkg | P2", text)
