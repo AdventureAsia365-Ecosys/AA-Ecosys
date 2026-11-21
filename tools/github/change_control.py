@@ -5,10 +5,14 @@ so every switch is reviewed and in git history. OFF (today) = the merge tools be
 GitHub read, no refusal. ON = before a merge, ship_merge.merge_one reads the PR's labels, author, changed files and
 reviews, and refuses (exit 4) a risky PR that has no APPROVED review on its current head from a human reviewer:
 
-- risky: a label in risky_labels, or a changed file (not matching ignore_paths) matching risky_paths; a PR by an
-  exempt author (the CI bot's migration copies, already approved in their app PR) is not risky;
+- risky: a label in risky_labels, or a changed file (not matching ignore_paths) matching risky_paths; a renamed file
+  counts with its old path too (renaming a workflow to a .md file is risky); the merge tools themselves (tools/github,
+  tools/workflows) are risky paths, so the rule cannot be edited away by a PR it does not gate; a PR by an exempt
+  author (the CI bot's migration copies, already approved in their app PR) is not risky;
 - human: a reviewer whose GitHub user type is "User" (an App such as aa-agent is "Bot", so its comment review from
-  post_agent_review.py never counts), not the PR author, and in approvers when that list is not empty;
+  post_agent_review.py never counts), not the PR author, in approvers (required while ON: the tools refuse an empty
+  list), and with repo access (author_association OWNER, MEMBER or COLLABORATOR): the repos are public, and any
+  signed-in GitHub user can submit an Approve or Request changes review on a public repo;
 - approved: that reviewer's latest APPROVED / CHANGES_REQUESTED / DISMISSED review is APPROVED and on the head commit
   (a push after the approval asks for a new one); any human's latest CHANGES_REQUESTED refuses too.
 
@@ -26,6 +30,11 @@ from ship_common import HERE, Runner, ShipError, _parse_paged_arrays, log, slug
 
 CONFIG_PATH = HERE / "change_control.json"
 DECISIVE = frozenset({"APPROVED", "CHANGES_REQUESTED", "DISMISSED"})
+TRUSTED_ASSOCIATIONS = frozenset({"OWNER", "MEMBER", "COLLABORATOR"})
+# Each changed file plus the path it was renamed from, so a rename is classified by both paths.
+FILES_JQ = "[.[] | .filename, (.previous_filename // empty)]"
+REVIEWS_JQ = ("[.[] | {user: {login: .user.login, type: .user.type}, author_association, state, commit_id, "
+              "submitted_at}]")
 
 
 def load_config(path: Path | None = None) -> dict:
@@ -42,7 +51,15 @@ def load_config(path: Path | None = None) -> dict:
         raise ShipError(f"change control config {p}: not a JSON object", 2)
     if not isinstance(data.get("require_human_approval_for_risky", False), bool):
         raise ShipError(f"change control config {p}: require_human_approval_for_risky must be true or false", 2)
+    validate(data, f"change control config {p}")
     return data
+
+
+def validate(cfg: dict, where: str = "change control config") -> None:
+    """ON needs a non-empty approvers list: empty, any human with repo access could approve a risky PR."""
+    if enabled(cfg) and not [a for a in (cfg.get("approvers") or []) if str(a).strip()]:
+        raise ShipError(f"{where}: require_human_approval_for_risky is on but approvers is empty; list the tech "
+                        "lead's GitHub login", 2)
 
 
 def enabled(cfg: dict) -> bool:
@@ -77,9 +94,11 @@ def approval_state(reviews: list[dict], head: str, author: str, approvers: list[
         state = str(r.get("state") or "").upper()
         if not login or user.get("type") != "User" or state not in DECISIVE:
             continue
+        if str(r.get("author_association") or "").upper() not in TRUSTED_ASSOCIATIONS:
+            continue  # public repo: a stranger's review neither approves nor blocks
         if login.lower() == author.lower().removeprefix("app/"):
             continue
-        if approvers and login.lower() not in {a.lower() for a in approvers}:
+        if approvers and login.lower() not in {str(a).lower() for a in approvers}:
             continue
         if login not in latest or str(r.get("submitted_at") or "") >= str(latest[login].get("submitted_at") or ""):
             latest[login] = r
@@ -117,15 +136,15 @@ def check(runner: Runner, repo: str, n: int, head: str, cfg: dict | None = None)
     cfg = load_config() if cfg is None else cfg
     if not enabled(cfg):
         return
+    validate(cfg)
     tag = f"{repo}#{n}"
     labels, author = _pr_meta(runner, repo, n)
-    files = [str(x) for x in _paged(runner, repo, n, "files", "[.[].filename]")]
+    files = [str(x) for x in _paged(runner, repo, n, "files", FILES_JQ)]
     why = risky_reasons(cfg, labels, files, author)
     if not why:
         log(f"{tag}: change control ON, not a risky PR")
         return
-    reviews = _paged(runner, repo, n, "reviews",
-                     "[.[] | {user: {login: .user.login, type: .user.type}, state, commit_id, submitted_at}]")
+    reviews = _paged(runner, repo, n, "reviews", REVIEWS_JQ)
     approved, blocked = approval_state(reviews, head, author, list(cfg.get("approvers") or []))
     if blocked:
         raise ShipError(f"{tag} REFUSED (change control): changes requested by {', '.join(blocked)}; "

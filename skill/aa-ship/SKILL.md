@@ -57,10 +57,13 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
   hoặc tenant trả tiền đầu tiên) điều phối mở root PR đặt `"require_human_approval_for_risky": true` trong
   `tools/github/change_control.json` (bước này phải có trong go-live checklist pilot, AA-1166). Bật rồi thì `ship_merge.py` và
   `ship_wave.py` (cùng gate) từ chối, exit 4, PR rủi ro: nhãn `risky` / `change-control: risky`, hoặc file đổi khớp
-  `risky_paths` (migration, Terraform/IAM, workflow/CI/secret/hook, auth/quyền, erasure/retention, chính file config;
-  file `.md` không tính; PR copy của ci-bot được miễn vì file đã duyệt ở PR app), khi chưa có review **APPROVED** của
-  một người (user GitHub loại User, không phải bot, không phải tác giả; `approvers` không rỗng thì chỉ người trong
-  danh sách) trên **đúng head đã gate**; một người còn "changes requested" cũng chặn. Không có cờ override: tắt lại là
+  `risky_paths` (migration, Terraform/IAM, workflow/CI/secret/hook, auth/quyền, erasure/retention, chính các tool
+  merge `tools/github/*` + `tools/workflows/*`; file đổi tên tính cả đường cũ; file `.md` không tính; PR copy của
+  ci-bot được miễn vì file đã duyệt ở PR app), khi chưa có review **APPROVED** của một người (user GitHub loại User,
+  không phải bot, không phải tác giả, có tên trong `approvers` — PR bật switch phải điền login GitHub của tech lead,
+  để rỗng thì tool từ chối exit 2 — và có quyền repo: OWNER/MEMBER/COLLABORATOR, vì repo public ai cũng review được)
+  trên **đúng head đã gate**; người trong danh sách còn "changes requested" cũng chặn. Review agent đăng lên PR được
+  che account ID, ARN, ID mạng, e-mail, key/token trước khi đăng (repo public). Không có cờ override: tắt lại là
   một root PR, tự nó là PR rủi ro khi đang bật. Hôm nay TẮT: gate chạy y như trước, không đọc thêm gì. Logic +
   test: `tools/github/change_control.py`, `test_change_control.py`.
 - [ ] **Gate mọi check:** chỉ merge khi không còn check nào đỏ hoặc pending trong `gh pr checks <n>` (đọc đủ, không chỉ

@@ -101,6 +101,29 @@ class BodyTest(unittest.TestCase):
         self.assertEqual(par.MARKER_RE.findall(body), [HEAD])
         self.assertIn("6 more finding(s)", body)
 
+    def test_sensitive_values_never_reach_the_public_body(self):
+        # Built at run time so the source holds no literal that a secret or resource-ID scanner would flag.
+        acct = "".join(str(d) for d in (1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2))
+        arn = "arn" + ":aws:iam::" + acct + ":role/invented-role"
+        key = "AK" + "IA" + "Q" * 16
+        token = "gh" + "s_" + "x" * 36
+        sg = "sg" + "-0" + "a" * 16
+        mail = "someone" + "@" + "example.org"
+        f = finding("major", issue=f"role {arn} in account {acct}; dashed {acct[:4]}-{acct[4:8]}-{acct[8:]}",
+                    file=f"infra/{acct}/main.tf")
+        f["fix"] = f"drop {key}, {token}, {sg} and mail {mail}"
+        body = par.build_body([rv("changes", f, lens=f"lens for {mail}")], head=HEAD, lenses=[],
+                              run_id=f"wf_{acct}", lane=arn)
+        for value in (acct, arn, key, token, sg, mail, acct[:4] + "-" + acct[4:8]):
+            self.assertNotIn(value, body)
+        for placeholder in ("[redacted ARN]", "[redacted account id]", "[redacted key]", "[redacted token]",
+                            "[redacted resource id]", "[redacted e-mail]"):
+            self.assertIn(placeholder, body)
+        # Ordinary text, line numbers, dates and short numbers stay.
+        self.assertEqual(par.redact("api/x.py line 42 on 2026-11-21, 3 findings"),
+                         "api/x.py line 42 on 2026-11-21, 3 findings")
+        self.assertEqual(par.MARKER_RE.findall(body), [HEAD])
+
     def test_fix_pass_line(self):
         body = par.build_body([rv("changes", finding("major"))], head=HEAD, lenses=[], run_id="r", fix_ran=True)
         self.assertIn("Fix pass: ran after this review", body)

@@ -82,14 +82,17 @@ the independent agent review of a risky PR is recorded on the PR itself. Trigger
   reviewed head. A hidden marker `<!-- aa-agent-review head=<sha> -->` makes it idempotent: the same head updates
   the review (`PUT .../reviews/<id>`), a new head adds one. Refuses without `GH_TOKEN` (a run outside `as-app.sh` would
   post as the logged-in person), on a PR that is not open, and when `--head` differs from the PR head. `--dry-run`
-  prints the body. Exit 0 posted / updated, 2 input or gh error, 4 refused.
+  prints the body. Every reviewer-written cell is redacted first (account IDs, ARNs, network IDs, e-mails, access
+  keys and tokens), since the PRs are public. Exit 0 posted / updated, 2 input or gh error, 4 refused.
 - `change_control.json` (switch `require_human_approval_for_risky`, **false today**) is read by
   `ship_merge.merge_one`, so by `ship_merge.py`, `ship_wave.py`, `ship_train.py` and `ship_copy_apply.py`. OFF: no
   extra read, no refusal. ON: after the check gate and before the merge call, a risky PR (label in `risky_labels`, or
-  a changed file outside `ignore_paths` matching `risky_paths`; authors in `exempt_authors` are never risky) is
+  a changed file outside `ignore_paths` matching `risky_paths`, a renamed file counted by its old path too; the merge
+  tools in `tools/github` and `tools/workflows` are risky paths; authors in `exempt_authors` are never risky) is
   refused (exit 4, `--check-only` included) unless a human reviewer (GitHub user type `User`, not the PR author, in
-  `approvers` when that list is set) has `APPROVED` the gated head as their latest decisive review, and no human's
-  latest decisive review is `CHANGES_REQUESTED`. The agent's comment review never counts. No command-line override:
+  `approvers`, with repo access: `author_association` OWNER, MEMBER or COLLABORATOR) has `APPROVED` the gated head as
+  their latest decisive review, and no such reviewer's latest decisive review is `CHANGES_REQUESTED` (a stranger's
+  review on the public repo neither approves nor blocks). ON with an empty `approvers` list refuses (exit 2). The agent's comment review never counts. No command-line override:
   the switch changes only through a root PR, and while ON that PR is itself risky. An unreadable config refuses.
 
 ## ship_wave.py

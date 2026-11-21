@@ -26,10 +26,9 @@ OLD = "9" * 40
 ON = {
     "require_human_approval_for_risky": True,
     "risky_labels": ["risky", "change-control: risky"],
-    "risky_paths": ["*migrations/*.sql", "*.tf", ".github/workflows/*", "*auth*",
-                    "tools/github/change_control.json"],
+    "risky_paths": ["*migrations/*.sql", "*.tf", ".github/workflows/*", "*auth*", "tools/github/*"],
     "ignore_paths": ["*.md"],
-    "approvers": [],
+    "approvers": ["lead", "second"],
     "exempt_authors": ["app/aa-ecosys-ci-bot"],
 }
 OFF = {**ON, "require_human_approval_for_risky": False}
@@ -45,8 +44,10 @@ def meta(labels=(), author="app/aa-agent") -> Result:
     return js({"labels": [{"name": x} for x in labels], "author": {"login": author, "is_bot": author.startswith("app/")}})
 
 
-def review(login: str, state: str, commit: str = HEAD, kind: str = "User", at: str = "2026-11-21T10:00:00Z") -> dict:
-    return {"user": {"login": login, "type": kind}, "state": state, "commit_id": commit, "submitted_at": at}
+def review(login: str, state: str, commit: str = HEAD, kind: str = "User", at: str = "2026-11-21T10:00:00Z",
+           assoc: str = "MEMBER") -> dict:
+    return {"user": {"login": login, "type": kind}, "author_association": assoc, "state": state, "commit_id": commit,
+            "submitted_at": at}
 
 
 def runner(*, repo: str = "AA-Ecosys", n: int = 5, labels=(), files=("tools/x.py",), reviews=(),
@@ -58,7 +59,7 @@ def runner(*, repo: str = "AA-Ecosys", n: int = 5, labels=(), files=("tools/x.py
     return (FakeRunner()
             .on(("--json", "labels,author"), meta(labels, author))
             .on((DELETES_JQ,), NO_DELETES)
-            .on(("[.[].filename]",), js(list(files)))
+            .on((change_control.FILES_JQ,), js(list(files)))
             .on((f"repos/{ship_common.slug(repo)}/pulls/{n}/reviews?per_page=100",), js(list(reviews)))
             .on(("gh", "pr", "view"), *views)
             .on((ship_common.AS_APP,), Result(0, "")))
@@ -94,6 +95,33 @@ class ConfigTest(unittest.TestCase):
             with self.assertRaises(ShipError):
                 change_control.load_config(bad)
 
+    def test_on_with_empty_approvers_refuses(self):
+        # Empty approvers while ON would let any human with repo access approve a risky PR.
+        with tempfile.TemporaryDirectory() as d:
+            cfg = Path(d) / "cc.json"
+            cfg.write_text(json.dumps({**ON, "approvers": []}), encoding="utf-8")
+            with self.assertRaises(ShipError) as cm:
+                change_control.load_config(cfg)
+            self.assertEqual(cm.exception.code, 2)
+            self.assertIn("approvers is empty", str(cm.exception))
+            cfg.write_text(json.dumps({**OFF, "approvers": []}), encoding="utf-8")
+            self.assertFalse(change_control.enabled(change_control.load_config(cfg)))
+        # A cfg handed to check() directly is validated too, before any GitHub read.
+        r = runner(labels=["risky"])
+        with self.assertRaises(ShipError) as cm:
+            change_control.check(r, "AA-Ecosys", 5, HEAD, cfg={**ON, "approvers": [" "]})
+        self.assertEqual(cm.exception.code, 2)
+        self.assertEqual(r.calls, [])
+
+    def test_shipped_config_gates_its_own_enforcement_code(self):
+        # A PR that edits the merge tools (e.g. drops the check call) must itself need the human approval.
+        cfg = change_control.load_config()
+        for path in ("tools/github/change_control.py", "tools/github/ship_merge.py", "tools/github/ship_common.py",
+                     "tools/github/ship_wave.py", "tools/github/ship_train.py", "tools/github/ship_copy_apply.py",
+                     "tools/github/mergeq.sh", "tools/github/as-app.sh", "tools/workflows/lane.js",
+                     ".claude/hooks/subagent-guardrails.sh"):
+            self.assertTrue(change_control.risky_reasons(cfg, [], [path], "app/aa-agent"), path)
+
     def test_enabled_only_on_true(self):
         self.assertTrue(change_control.enabled(ON))
         self.assertFalse(change_control.enabled(OFF))
@@ -108,6 +136,9 @@ class ClassifyTest(unittest.TestCase):
         self.assertTrue(change_control.risky_reasons(ON, [], [".github/workflows/ci.yml"], ""))
         self.assertTrue(change_control.risky_reasons(ON, [], ["accounts/aa365/main.tf"], ""))
         self.assertTrue(change_control.risky_reasons(ON, [], ["backend/app/auth/session.py"], ""))
+
+    def test_enforcement_code_is_risky(self):
+        self.assertTrue(change_control.risky_reasons(ON, [], ["tools/github/change_control.py"], "app/aa-agent"))
 
     def test_not_risky(self):
         self.assertEqual(change_control.risky_reasons(ON, ["docs"], ["frontend/app/page.tsx"], "app/aa-agent"), [])
@@ -133,6 +164,15 @@ class ClassifyTest(unittest.TestCase):
         rs = [review("lead", "APPROVED", at="2026-11-21T10:00:00Z"),
               review("lead", "COMMENTED", at="2026-11-21T11:00:00Z")]
         self.assertEqual(change_control.approval_state(rs, HEAD, "", []), (["lead"], []))
+        # Public repos: a review by someone without repo access neither approves nor blocks.
+        for assoc in ("NONE", "CONTRIBUTOR", "FIRST_TIME_CONTRIBUTOR", ""):
+            self.assertEqual(change_control.approval_state([review("lead", "APPROVED", assoc=assoc)], HEAD, "", []),
+                             ([], []), assoc)
+            self.assertEqual(change_control.approval_state([review("x", "CHANGES_REQUESTED", assoc=assoc)], HEAD,
+                                                           "", []), ([], []), assoc)
+        for assoc in ("OWNER", "MEMBER", "COLLABORATOR"):
+            self.assertEqual(change_control.approval_state([review("lead", "APPROVED", assoc=assoc)], HEAD, "", []),
+                             (["lead"], []), assoc)
         # The PR author cannot approve their own PR; approvers narrows who counts.
         self.assertEqual(change_control.approval_state([review("dev", "APPROVED")], HEAD, "dev", []), ([], []))
         self.assertEqual(change_control.approval_state([review("dev", "APPROVED")], HEAD, "", ["lead"]), ([], []))
@@ -144,7 +184,7 @@ class MergeGateOffTest(Quiet):
         sha = ship_merge.merge_one(r, "AA-Ecosys", 5, change_control_cfg=OFF)
         self.assertEqual(sha, "d" * 40)
         self.assertFalse(r.called("labels,author"))
-        self.assertFalse(r.called("[.[].filename]"))
+        self.assertFalse(r.called(change_control.FILES_JQ))
         self.assertFalse([c for c in r.calls if any("/reviews" in t for t in c)])
         self.assertEqual(len(r.called(ship_common.AS_APP)), 1)
 
@@ -178,6 +218,24 @@ class MergeGateOnTest(Quiet):
     def test_changes_requested_is_refused(self):
         rs = [review("lead", "APPROVED"), review("second", "CHANGES_REQUESTED")]
         self.refused(runner(labels=["risky"], reviews=rs), "changes requested by second")
+
+    def test_rename_of_a_workflow_to_a_text_file_is_risky(self):
+        # FILES_JQ lists the old path of a rename next to the new one; the old path is a workflow.
+        r = runner(files=["docs/secret-scan.md", ".github/workflows/secret-scan.yml"])
+        self.refused(r, ".github/workflows/secret-scan.yml")
+        files_call = [c for c in r.calls if change_control.FILES_JQ in c]
+        self.assertEqual(len(files_call), 1)
+        self.assertIn("previous_filename", change_control.FILES_JQ)
+
+    def test_outsider_reviews_neither_approve_nor_block(self):
+        rs = [review("lead", "APPROVED", assoc="NONE"), review("stranger", "CHANGES_REQUESTED", assoc="NONE")]
+        self.refused(runner(labels=["risky"], reviews=rs), "needs an APPROVED review")
+        rs = [review("lead", "APPROVED"), review("second", "CHANGES_REQUESTED", assoc="NONE")]
+        r = runner(labels=["risky"], reviews=rs)
+        self.assertEqual(ship_merge.merge_one(r, "AA-Ecosys", 5, change_control_cfg=ON), "d" * 40)
+
+    def test_member_outside_approvers_does_not_count(self):
+        self.refused(runner(labels=["risky"], reviews=[review("someone", "APPROVED")]), "needs an APPROVED review")
 
     def test_check_only_reports_the_refusal(self):
         r = runner(labels=["risky"], merged=False)

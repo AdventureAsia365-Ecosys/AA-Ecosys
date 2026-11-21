@@ -29,6 +29,9 @@ head updates that review (PUT .../reviews/<id>) instead of adding a second one; 
 history of reviewed heads stays on the PR. --head <sha> refuses when the PR head moved on (the review was of another
 commit).
 
+The PRs are public: every reviewer-written text (lens, file, finding, fix, run id, lane) is redacted before it goes
+into the body (AWS account IDs, ARNs, network resource IDs, e-mail addresses, access keys and tokens; DM-6.10, D-25).
+
 Posting needs GH_TOKEN (as-app.sh sets it): without it gh would post as the person logged in, and an agent review must
 never look like a human one. --dry-run prints the body and posts nothing. Exit: 0 posted / updated / dry run |
 2 usage, input or gh error | 4 refused (PR not open, head moved, no GH_TOKEN). Orchestrator only. No secrets.
@@ -156,8 +159,28 @@ def verdict_of(reviews: list[dict]) -> str:
     return "approve"
 
 
+# Reviewer agents read CLAUDE.md and memory, and may quote account IDs, ARNs, e-mails or tokens in a finding. The PR is
+# public (DM-6.10, D-25: no account IDs, ARNs or network IDs in public repos), so every reviewer-written cell goes
+# through redact(). Order matters: an ARN holds an account ID, so ARNs go first.
+REDACTIONS: tuple[tuple[re.Pattern[str], str], ...] = (
+    (re.compile(r"\barn:aws[a-z-]*:[^\s|`'\")\]]*", re.I), "[redacted ARN]"),
+    (re.compile(r"\b(?:A3T[A-Z0-9]|AKIA|ASIA|ABIA|ACCA)[A-Z0-9]{16}\b"), "[redacted key]"),
+    (re.compile(r"\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})"), "[redacted token]"),
+    (re.compile(r"\b(?:sk-[A-Za-z0-9_-]{20,}|xox[abprs]-[A-Za-z0-9-]{10,})"), "[redacted token]"),
+    (re.compile(r"\b(?:sg|vpc|subnet|vpce|igw|nat|rtb|eni|acl|tgw)-[0-9a-f]{8,17}\b"), "[redacted resource id]"),
+    (re.compile(r"(?<!\d)\d{4}-?\d{4}-?\d{4}(?!\d)"), "[redacted account id]"),
+    (re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}\b"), "[redacted e-mail]"),
+)
+
+
+def redact(text: str) -> str:
+    for pat, repl in REDACTIONS:
+        text = pat.sub(repl, text)
+    return text
+
+
 def _cell(text: object) -> str:
-    s = " ".join(str(text if text is not None else "").split())
+    s = redact(" ".join(str(text if text is not None else "").split()))
     s = s.replace("|", "\\|").replace("<!--", "&lt;!--")
     return s if len(s) <= MAX_CELL else s[: MAX_CELL - 1] + "…"
 
