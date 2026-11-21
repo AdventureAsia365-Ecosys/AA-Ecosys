@@ -7,14 +7,16 @@
 #   dependabot     -> GitHub dismissal "Tolerable risk", comment `exception until <expires>: <reason> (SEC-03)`
 #   code-scanning  -> GitHub dismissal "Won't fix", same comment
 # tools/security/vuln_triage.py lists, in the monthly triage record, every entry without a row, every expiry that
-# differs, every expired row and every row that no finding or entry matches any more.
+# differs, every expired row, every row that no finding or entry matches any more, and every exception source
+# the GitHub API refused to read (only HTTP 404 means the file is absent).
 #
 # Row format (TOML dates are bare, no quotes). The expiry is at most [exceptions] max_days (vuln_triage.toml) after
 # approved_on. approved_by names a role, not a person.
 #
 # [[exception]]
 # repo = "AA-CIS-App"
-# id = "GHSA-xxxx-xxxx-xxxx"        # the id the gate or dismissal uses (GHSA, CVE, PYSEC or code scanning rule)
+# id = "GHSA-xxxx-xxxx-xxxx"        # the id the gate or dismissal uses: GHSA, CVE or PYSEC; for code-scanning
+#                                   # the alert number "#<n>" (one alert, never a rule: a rule id accepts nothing)
 # source = "dependabot"             # pip-audit | trivy | dependabot | code-scanning
 # package = "example-package"
 # expires = 2026-12-31

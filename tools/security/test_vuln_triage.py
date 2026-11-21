@@ -85,6 +85,7 @@ class Parse(unittest.TestCase):
 
     def test_code_scanning(self):
         [f] = vt.parse_code_scanning("Repo-A", [code_alert(rule="js/example", level="critical", path="x/y.js")])
+        self.assertEqual(f.ids, ["#1"])   # keyed by alert number, never by rule
         self.assertEqual((f.source, f.package, f.severity, f.location), ("code-scanning", "js/example", "critical",
                                                                          "x/y.js"))
         self.assertIsNone(f.cve)
@@ -199,6 +200,23 @@ class Triage(unittest.TestCase):
         f = self.run_triage(finding(cvss=7.5, opened=dt.date(2026, 9, 1)), [expired])
         self.assertEqual(f.status, "past due")
 
+    def test_code_scanning_exception_accepts_one_alert_not_the_rule(self):
+        one, two = vt.parse_code_scanning("Repo-A", [code_alert(1, path="app/a.py"), code_alert(2, path="app/b.py")])
+        row = exc(id="#1", source="code-scanning", package="py/example-rule")
+        vt.triage([one, two], CFG, [row], AS_OF, "dev")
+        self.assertEqual(one.status, "accepted until 2026-12-31")
+        self.assertFalse(two.status.startswith("accepted"))
+        three, = vt.parse_code_scanning("Repo-A", [code_alert(3)])
+        vt.triage([three], CFG, [exc(id="py/example-rule", source="code-scanning")], AS_OF, "dev")
+        self.assertFalse(three.status.startswith("accepted"))   # a rule-wide row accepts nothing
+
+    def test_alert_numbers_do_not_cross_sources(self):
+        cs, = vt.parse_code_scanning("Repo-A", [code_alert(5)])
+        dep = finding(ref="#5", ids=["#5"], cvss=5.0)
+        vt.triage([cs, dep], CFG, [exc(id="#5", source="dependabot")], AS_OF, "dev")
+        self.assertFalse(cs.status.startswith("accepted"))
+        self.assertTrue(dep.status.startswith("accepted"))
+
     def test_actions(self):
         f = self.run_triage(finding(cvss=5.0, fixed_in="2.0.1"))
         self.assertEqual(f.action, "bump to 2.0.1")
@@ -235,6 +253,10 @@ class Exceptions(unittest.TestCase):
                   dependabot_alert(2, ghsa="GHSA-dddd-eeee-ffff", state="dismissed", dismissed_reason="inaccurate")]
         got = vt.dismissals("Repo-A", "dependabot", alerts, CFG["exceptions"]["dependabot_reasons"])
         self.assertEqual([(e.id, e.expires) for e in got], [("GHSA-aaaa-bbbb-cccc", dt.date(2026, 12, 31))])
+        cs = [code_alert(7, state="dismissed", dismissed_reason="won't fix",
+                         dismissed_comment="exception until 2026-12-31: internal only (SEC-03)")]
+        got = vt.dismissals("Repo-A", "code-scanning", cs, CFG["exceptions"]["code_scanning_reasons"])
+        self.assertEqual([(e.id, e.expires) for e in got], [("#7", dt.date(2026, 12, 31))])
 
     def test_cross_check(self):
         entries = [
@@ -246,14 +268,26 @@ class Exceptions(unittest.TestCase):
                     exc(id="GHSA-old0-old0-old0", expires=dt.date(2026, 11, 1), approved_on=dt.date(2026, 10, 1)),
                     exc(id="GHSA-long-long-long", expires=dt.date(2027, 6, 1))]
         problems = vt.check_exceptions(register, entries, [], AS_OF, 90)
-        texts = {(r, i): t for r, i, t in problems}
+        texts = {(p.repo, p.id): p.text for p in problems}
         self.assertIn("register says 2026-12-31", texts[("Repo-A", "GHSA-aaaa-bbbb-cccc")])
         self.assertIn("not in the exception register", texts[("Repo-A", "CVE-2099-0009")])
         self.assertIn("carries no expiry", texts[("Repo-B", "PYSEC-2099-2")])
-        msgs = [t for r, i, t in problems if i == "GHSA-old0-old0-old0"]
+        msgs = [p.text for p in problems if p.id == "GHSA-old0-old0-old0"]
         self.assertTrue(any("expired on 2026-11-01" in m for m in msgs))
         self.assertTrue(any("remove the row" in m for m in msgs))
-        self.assertTrue(any("more than 90 days" in t for r, i, t in problems if i == "GHSA-long-long-long"))
+        self.assertTrue(any("more than 90 days" in p.text for p in problems if p.id == "GHSA-long-long-long"))
+
+    def test_code_scanning_rows_name_one_alert(self):
+        entries = [vt.SourceEntry("Repo-A", "code-scanning", "#3", dt.date(2026, 12, 31), "GitHub dismissal #3")]
+        ok = [exc(id="#3", source="code-scanning")]
+        self.assertEqual(vt.check_exceptions(ok, entries, [], AS_OF, 90), [])
+        rule_row = exc(id="py/example-rule", source="code-scanning")
+        problems = vt.check_exceptions([rule_row], [], [], AS_OF, 90)
+        self.assertTrue(all(p.code for p in problems))
+        self.assertTrue(any("not a rule" in p.text for p in problems))
+        # a Dependabot row "#3" does not register the code scanning dismissal #3
+        problems = vt.check_exceptions([exc(id="#3", source="dependabot")], entries, [], AS_OF, 90)
+        self.assertTrue(any(p.id == "#3" and p.code and "not in the exception register" in p.text for p in problems))
 
     def test_clean_register(self):
         entries = [vt.SourceEntry("Repo-A", "dependabot", "GHSA-aaaa-bbbb-cccc", dt.date(2026, 12, 31), "d")]
@@ -322,8 +356,10 @@ class Feeds(unittest.TestCase):
 
 
 class FakeGh:
-    def __init__(self, refuse=()):
+    def __init__(self, refuse=(), refuse_files=(), refuse_dismissed=()):
         self.refuse = set(refuse)
+        self.refuse_files = set(refuse_files)          # repos whose exception files answer 403
+        self.refuse_dismissed = set(refuse_dismissed)  # repos whose dismissed code scanning list answers 500
         self.paths: list[str] = []
 
     def __call__(self, path: str, raw: bool = False):
@@ -331,6 +367,10 @@ class FakeGh:
         repo = path.split("/")[2]
         if repo in self.refuse and "dependabot" in path:
             raise vt.GhError("HTTP 403: Resource not accessible by integration")
+        if repo in self.refuse_dismissed and "code-scanning/alerts?state=dismissed" in path:
+            raise vt.GhError("gh: Server Error (HTTP 500)")
+        if raw and repo in self.refuse_files:
+            raise vt.GhError("gh: Resource not accessible by integration (HTTP 403)")
         if raw:
             if repo == "AA-CIS-App" and path.endswith(".trivyignore"):
                 return "# why\nCVE-2099-0007 exp:2026-12-31\n"
@@ -354,6 +394,27 @@ class GitHub(unittest.TestCase):
         self.assertEqual(sorted(f.repo for f in findings), ["AA-CIS-App", "AA-Partner"])
         self.assertEqual([(e.repo, e.id) for e in entries], [("AA-CIS-App", "CVE-2099-0007")])
         self.assertTrue(all("/contents/" in p or "alerts?state=" in p for p in gh.paths))
+        self.assertEqual(by["AA-CIS-App"].exception_files,
+                         [".github/pip-audit-ignore.txt: absent", ".trivyignore: 1 entries"])
+        self.assertEqual(by["AA-CIS-App"].unreadable, [])
+        self.assertEqual([n for n, _ in by["AA-Booking"].unreadable], ["dependabot alerts and dismissals"])
+
+    def test_only_404_means_absent(self):
+        self.assertEqual(vt.GhError("gh: Not Found (HTTP 404)").status, 404)
+        self.assertEqual(vt.GhError("refused", 403).status, 403)
+        self.assertIsNone(vt.GhError("connection reset").status)
+        gh = FakeGh(refuse_files={"AA-Partner"}, refuse_dismissed={"AA-Booking"})
+        _, _, reads = vt.read_github(CFG, gh, AS_OF)
+        by = {r.repo: r for r in reads}
+        self.assertEqual(by["AA-Partner"].exception_files[0],
+                         ".github/pip-audit-ignore.txt: not readable: gh: Resource not accessible by integration "
+                         "(HTTP 403)")
+        self.assertEqual([n for n, _ in by["AA-Partner"].unreadable], [".github/pip-audit-ignore.txt", ".trivyignore"])
+        self.assertEqual(by["AA-Booking"].code_scanning, "0 open; dismissals not readable: gh: Server Error (HTTP 500)")
+        self.assertEqual([n for n, _ in by["AA-Booking"].unreadable], ["code-scanning dismissals"])
+        problems = vt.unreadable_problems(reads)
+        self.assertEqual(len(problems), 3)
+        self.assertTrue(all("cross-check did not run" in p.text for p in problems))
 
 
 class Cli(unittest.TestCase):
@@ -456,6 +517,35 @@ class Cli(unittest.TestCase):
         cis = [f for f in doc["findings"] if f["repo"] == "AA-CIS-App"]
         self.assertEqual((cis[0]["cls"], cis[0]["kev"]), ("P0", None))
         self.assertEqual([p["id"] for p in doc["problems"]], ["CVE-2099-0007"])   # trivy ignore without a row
+
+    def test_refused_exception_file_fails_strict(self):
+        rc, text = self.run_cli("--github", "--offline", "--public", "--strict", gh=FakeGh(refuse_files={"AA-Partner"}))
+        self.assertEqual(rc, 1)
+        self.assertIn("| AA-Partner exception files | .github/pip-audit-ignore.txt: not readable", text)
+        self.assertIn("- AA-Partner `.trivyignore`: not readable (gh: Resource not accessible by integration "
+                      "(HTTP 403)): the register cross-check did not run for it", text)
+        self.assertNotIn("has a matching row", text)
+
+    def test_public_register_and_problems_hide_code_scanning_rules(self):
+        cs = self.write("cs.json", [code_alert(1, path="api/secret/handler.py"), code_alert(2, path="api/other.py")])
+        self.register.write_text(
+            '[[exception]]\nrepo = "Repo-A"\nid = "#1"\nsource = "code-scanning"\npackage = "py/example-rule"\n'
+            'expires = 2026-12-31\nreason = "Only py/example-rule in api/secret, internal."\n'
+            'way_out = "Fix the handler."\n'
+            'approved_by = "tech lead"\napproved_on = 2026-11-20\n'
+            '[[exception]]\nrepo = "Repo-A"\nid = "py/example-rule"\nsource = "code-scanning"\n'
+            'expires = 2026-12-31\nreason = "r"\nway_out = "w"\napproved_by = "tech lead"\napproved_on = 2026-11-20\n')
+        rc, text = self.run_cli("--offline", "--public", "--record", "--input", f"Repo-A={cs}")
+        self.assertNotIn("py/example-rule", text)
+        self.assertNotIn("api/secret", text)
+        self.assertIn("| Repo-A | #1 | code-scanning | 2026-12-31 | withheld (code scanning, repo members only) |",
+                      text)
+        self.assertIn("| Repo-A | (rule withheld) | code-scanning |", text)
+        self.assertIn("- Repo-A code scanning (rule withheld): a code scanning row names one alert number", text)
+        self.assertIn("- Exception Repo-A code scanning (rule withheld):", text)
+        self.assertIn("| Repo-A | P1 | internet | 2 | #1, #2 |", text)   # both still counted open
+        rc, text = self.run_cli("--offline", "--record", "--input", f"Repo-A={cs}")
+        self.assertIn("- Repo-A `py/example-rule`: a code scanning row names one alert number", text)
 
     def test_bad_input_exit_2(self):
         bad = self.write("bad.json", {"nope": 1})

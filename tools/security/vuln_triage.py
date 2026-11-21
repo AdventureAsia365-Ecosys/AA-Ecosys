@@ -20,11 +20,17 @@ ignore, Trivy ignore and GitHub "tolerable risk" dismissal must have a row there
 are cached (default tools/security/.cache/, gitignored). --offline skips the feeds: KEV shows "not checked" and the
 EPSS value GitHub attaches to an alert is used.
 
+A code scanning exception is keyed by its alert number (`#<n>`), never by its rule: one accepted alert must not accept
+every other alert of the same rule. An exception file the API refuses to read (anything but HTTP 404, which means the
+file is absent) is a cross-check problem, so the check never passes when it did not run.
+
 --public keeps the record safe for a public repo: code scanning alerts (visible to repo members only) appear as counts and
-alert numbers per repo, class and exposure, without rule or file; no advisory text is ever copied. --record adds the
+alert numbers per repo, class and exposure, without rule or file, in the findings, the register and the cross-check; no
+advisory text is ever copied. --record adds the
 front matter of the monthly record (SEC-03-triage-<month>) and the decisions and sign-off section.
 
-Exit: 0 record written | 1 --strict and a P0/P1 is past due, an exception is expired or unregistered | 2 bad input.
+Exit: 0 record written | 1 --strict and a P0/P1 is past due, an exception is expired or unregistered, or an exception
+source was not readable | 2 bad input.
 """
 from __future__ import annotations
 
@@ -49,13 +55,24 @@ DEFAULT_REGISTER = ROOT / "docs" / "security" / "vuln-exceptions.toml"
 DEFAULT_CACHE = HERE / ".cache"
 CLASSES = ("P0", "P1", "P2", "P3")
 CVE_RE = re.compile(r"^CVE-\d{4}-\d{4,}$")
+ALERT_NO_RE = re.compile(r"^#\d+$")
+HTTP_STATUS_RE = re.compile(r"\bHTTP (\d{3})\b")
 USER_AGENT = "vuln-triage/1.0 (stdlib urllib)"
 
 Fetch = Callable[[str], bytes]
 
 
 class GhError(Exception):
-    """A GitHub API call was refused or failed (the message is the first line gh printed)."""
+    """A GitHub API call was refused or failed (the message is the first line gh printed).
+
+    `status` is the HTTP status when the client knows it (or gh printed "HTTP <code>"), else None."""
+
+    def __init__(self, message: str, status: int | None = None):
+        super().__init__(message)
+        if status is None:
+            m = HTTP_STATUS_RE.search(message)
+            status = int(m.group(1)) if m else None
+        self.status = status
 
 
 GhClient = Callable[[str, bool], object]   # (api path, raw) -> parsed JSON list/dict, or text when raw
@@ -81,7 +98,7 @@ class Finding:
     ref: str                        # alert number or scan target
     package: str                    # package name, or the rule id of a code scanning alert
     location: str                   # manifest path, file path or scan target
-    ids: list[str]                  # GHSA / CVE / rule ids, most specific first
+    ids: list[str]                  # GHSA / CVE ids, most specific first; "#<n>" for a code scanning alert
     severity: str                   # vendor severity, lower case
     opened: dt.date
     cvss: float | None = None
@@ -128,6 +145,25 @@ class SourceEntry:
     id: str
     expires: dt.date | None
     where: str
+
+
+@dataclass
+class Problem:
+    """One register cross-check problem. `code` marks a code scanning item (its id is withheld in --public)."""
+    repo: str
+    id: str
+    text: str
+    code: bool = False
+
+
+def _kind(source: str) -> str:
+    """Code scanning alerts and dependency findings are matched separately: their alert numbers are separate sequences
+    and a code scanning exception names one alert, not a rule or an advisory."""
+    return "code" if source == "code-scanning" else "dependency"
+
+
+def accepts(e: "Exception_", f: "Finding") -> bool:
+    return e.repo == f.repo and _kind(e.source) == _kind(f.source) and e.id in f.ids
 
 
 def _date(value: object) -> dt.date | None:
@@ -210,7 +246,7 @@ def parse_code_scanning(repo: str, alerts: list) -> list[Finding]:
         sev = str(rule.get("security_severity_level") or rule.get("severity") or "unknown").lower()
         out.append(Finding(
             repo=repo, source="code-scanning", ref=f"#{a.get('number')}",
-            package=rule.get("id") or "?", location=loc.get("path") or "", ids=[rule.get("id") or "?"],
+            package=rule.get("id") or "?", location=loc.get("path") or "", ids=[f"#{a.get('number')}"],
             severity=sev, opened=_date(a.get("created_at")) or dt.date.today(),
             owner=", ".join(x.get("login", "") for x in a.get("assignees") or [] if isinstance(x, dict)),
             url=a.get("html_url") or "",
@@ -335,8 +371,8 @@ def dismissals(repo: str, source: str, alerts: list, reasons: Iterable[str]) -> 
             continue
         if source == "dependabot":
             ident = (a.get("security_advisory") or {}).get("ghsa_id") or f"#{a.get('number')}"
-        else:
-            ident = (a.get("rule") or {}).get("id") or f"#{a.get('number')}"
+        else:   # code scanning: the alert number, never the rule (see accepts())
+            ident = f"#{a.get('number')}"
         m = _EXPIRY_IN_COMMENT.search(a.get("dismissed_comment") or "")
         out.append(SourceEntry(repo, source, ident, _date(m.group(1)) if m else None,
                                f"GitHub dismissal #{a.get('number')}"))
@@ -344,27 +380,33 @@ def dismissals(repo: str, source: str, alerts: list, reasons: Iterable[str]) -> 
 
 
 def check_exceptions(register: list[Exception_], entries: list[SourceEntry], findings: list[Finding],
-                     as_of: dt.date, max_days: int) -> list[tuple[str, str, str]]:
-    """Problems as (repo, id, text). Every entry needs a register row with the same expiry; rows expire."""
-    problems = []
-    index = {(e.repo, e.id): e for e in register}
+                     as_of: dt.date, max_days: int) -> list[Problem]:
+    """Every entry needs a register row with the same expiry; rows expire; a code scanning row names one alert."""
+    problems: list[Problem] = []
+    index = {(e.repo, _kind(e.source), e.id): e for e in register}
     for row in register:
+        code = _kind(row.source) == "code"
+        texts = []
+        if code and not ALERT_NO_RE.match(row.id):
+            texts.append("a code scanning row names one alert number (#<n>), not a rule: it accepts nothing")
         if row.expires < as_of:
-            problems.append((row.repo, row.id, f"expired on {row.expires}"))
+            texts.append(f"expired on {row.expires}")
         if (row.expires - row.approved_on).days > max_days:
-            problems.append((row.repo, row.id, f"expiry is more than {max_days} days after approval"))
-        in_source = any(s.repo == row.repo and s.id == row.id for s in entries)
-        in_findings = any(f.repo == row.repo and row.id in f.ids for f in findings)
-        if not in_source and not in_findings:
-            problems.append((row.repo, row.id, "no open finding or ignore entry matches: remove the row"))
+            texts.append(f"expiry is more than {max_days} days after approval")
+        in_source = any(s.repo == row.repo and _kind(s.source) == _kind(row.source) and s.id == row.id
+                        for s in entries)
+        if not in_source and not any(accepts(row, f) for f in findings):
+            texts.append("no open finding or ignore entry matches: remove the row")
+        problems += [Problem(row.repo, row.id, t, code) for t in texts]
     for s in entries:
-        row = index.get((s.repo, s.id))
+        code = _kind(s.source) == "code"
+        row = index.get((s.repo, _kind(s.source), s.id))
         if row is None:
-            problems.append((s.repo, s.id, f"in {s.where} but not in the exception register"))
+            problems.append(Problem(s.repo, s.id, f"in {s.where} but not in the exception register", code))
         elif s.expires and s.expires != row.expires:
-            problems.append((s.repo, s.id, f"{s.where} expires {s.expires}, register says {row.expires}"))
+            problems.append(Problem(s.repo, s.id, f"{s.where} expires {s.expires}, register says {row.expires}", code))
         elif s.expires is None and s.source in ("trivy", "pip-audit", "dependabot"):
-            problems.append((s.repo, s.id, f"{s.where} carries no expiry"))
+            problems.append(Problem(s.repo, s.id, f"{s.where} carries no expiry", code))
     return problems
 
 
@@ -504,7 +546,7 @@ def triage(findings: list[Finding], cfg: dict, register: list[Exception_], as_of
         f.cls, f.reasons = classify(f, cfg)
         f.owner = f.owner or default_owner
         f.due = f.opened + dt.timedelta(days=int(sla[f.cls])) if f.cls in sla else None
-        accepted = next((e for e in register if e.repo == f.repo and e.id in f.ids and e.expires >= as_of), None)
+        accepted = next((e for e in register if accepts(e, f) and e.expires >= as_of), None)
         if accepted:
             f.status = f"accepted until {accepted.expires}"
         elif f.due is None:
@@ -539,8 +581,10 @@ def gh_cli(path: str, raw: bool = False) -> object:
         cmd = ["gh", "api", "--paginate", "--jq", ".[]", path]
     proc = subprocess.run(cmd, capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
     if proc.returncode != 0:
-        msg = (proc.stderr or proc.stdout or "").strip().splitlines()
-        raise GhError(msg[0] if msg else f"gh exit {proc.returncode}")
+        err = (proc.stderr or proc.stdout or "").strip()
+        msg = err.splitlines()
+        m = HTTP_STATUS_RE.search(err)
+        raise GhError(msg[0] if msg else f"gh exit {proc.returncode}", int(m.group(1)) if m else None)
     if raw:
         return proc.stdout
     return [json.loads(line) for line in proc.stdout.splitlines() if line.strip()]
@@ -551,6 +595,8 @@ class RepoRead:
     repo: str
     dependabot: str = "not read"        # "<n> open" or "not readable: <reason>"
     code_scanning: str = "not read"
+    exception_files: list[str] = field(default_factory=list)   # "<file>: <n> entries | absent | not readable: <why>"
+    unreadable: list[tuple[str, str]] = field(default_factory=list)   # (exception source, reason): cross-check gaps
 
 
 def read_github(cfg: dict, gh: GhClient, as_of: dt.date) -> tuple[list[Finding], list[SourceEntry], list[RepoRead]]:
@@ -562,30 +608,37 @@ def read_github(cfg: dict, gh: GhClient, as_of: dt.date) -> tuple[list[Finding],
     for repo in cfg["github"]["repos"]:
         rr = RepoRead(repo)
         base = f"repos/{org}/{repo}"
-        try:
-            open_alerts = gh(f"{base}/dependabot/alerts?state=open&per_page=100", False)
-            got = parse_dependabot(repo, open_alerts)  # type: ignore[arg-type]
+        for kind, parse, reasons in (("dependabot", parse_dependabot, ex["dependabot_reasons"]),
+                                     ("code-scanning", parse_code_scanning, ex["code_scanning_reasons"])):
+            attr = kind.replace("-", "_")
+            try:
+                got = parse(repo, gh(f"{base}/{kind}/alerts?state=open&per_page=100", False))  # type: ignore[arg-type]
+            except GhError as exc:   # no alert read: its risk-acceptance dismissals were not checked either
+                setattr(rr, attr, f"not readable: {exc}")
+                rr.unreadable.append((f"{kind} alerts and dismissals", str(exc)))
+                continue
             findings += got
-            rr.dependabot = f"{len(got)} open"
-            dismissed = gh(f"{base}/dependabot/alerts?state=dismissed&per_page=100", False)
-            entries += dismissals(repo, "dependabot", dismissed, ex["dependabot_reasons"])  # type: ignore[arg-type]
-        except GhError as exc:
-            rr.dependabot = f"not readable: {exc}"
-        try:
-            open_alerts = gh(f"{base}/code-scanning/alerts?state=open&per_page=100", False)
-            got = parse_code_scanning(repo, open_alerts)  # type: ignore[arg-type]
-            findings += got
-            rr.code_scanning = f"{len(got)} open"
-            dismissed = gh(f"{base}/code-scanning/alerts?state=dismissed&per_page=100", False)
-            entries += dismissals(repo, "code-scanning", dismissed, ex["code_scanning_reasons"])  # type: ignore
-        except GhError as exc:
-            rr.code_scanning = f"not readable: {exc}"
+            state = f"{len(got)} open"
+            try:
+                dismissed = gh(f"{base}/{kind}/alerts?state=dismissed&per_page=100", False)
+                entries += dismissals(repo, kind, dismissed, reasons)  # type: ignore[arg-type]
+            except GhError as exc:
+                state += f"; dismissals not readable: {exc}"
+                rr.unreadable.append((f"{kind} dismissals", str(exc)))
+            setattr(rr, attr, state)
         for name in cfg["github"].get("ignore_files") or []:
             try:
                 text = gh(f"{base}/contents/{name}", True)
-            except GhError:
-                continue   # absent file: nothing accepted there
-            entries += parse_ignore_file(repo, name, str(text))
+            except GhError as exc:
+                if exc.status == 404:
+                    rr.exception_files.append(f"{name}: absent")   # nothing accepted there
+                else:
+                    rr.exception_files.append(f"{name}: not readable: {exc}")
+                    rr.unreadable.append((name, str(exc)))
+                continue
+            got_entries = parse_ignore_file(repo, name, str(text))
+            entries += got_entries
+            rr.exception_files.append(f"{name}: {len(got_entries)} entries")
         reads.append(rr)
     return findings, entries, reads
 
@@ -614,7 +667,26 @@ def label(f: Finding, public: bool) -> str:
     return f"{f.repo} {f.source} {f.ref} {f.package}"
 
 
-def render_markdown(findings: list[Finding], problems: list[tuple[str, str, str]], register: list[Exception_],
+def shown_id(ident: str, code: bool, public: bool) -> str:
+    """--public: a code scanning item shows only its alert number; a rule id written by mistake is withheld."""
+    if public and code and not ALERT_NO_RE.match(ident):
+        return "(rule withheld)"
+    return ident
+
+
+def problem_label(p: Problem, public: bool) -> str:
+    if public and p.code:
+        return f"{cell(p.repo)} code scanning {cell(shown_id(p.id, True, True))}"
+    return f"{cell(p.repo)} `{cell(p.id)}`"
+
+
+def unreadable_problems(reads: list[RepoRead]) -> list[Problem]:
+    """An exception source the API refused: the cross-check did not run for it, so it is a problem, not a pass."""
+    return [Problem(rr.repo, name, f"not readable ({reason}): the register cross-check did not run for it")
+            for rr in reads for name, reason in rr.unreadable]
+
+
+def render_markdown(findings: list[Finding], problems: list[Problem], register: list[Exception_],
                     reads: list[RepoRead], meta: dict, public: bool, record: bool = False) -> str:
     out: list[str] = []
     w = out.append
@@ -646,6 +718,8 @@ def render_markdown(findings: list[Finding], problems: list[tuple[str, str, str]
     for rr in reads:
         w(f"| {rr.repo} Dependabot | {cell(rr.dependabot)} |")
         w(f"| {rr.repo} code scanning | {cell(rr.code_scanning)} |")
+        if rr.exception_files:
+            w(f"| {rr.repo} exception files | {cell('; '.join(rr.exception_files))} |")
     for name, state in meta.get("inputs", []):
         w(f"| {cell(name)} | {cell(state)} |")
     w(f"| CISA KEV | {cell(meta['kev'])} |")
@@ -699,19 +773,23 @@ def render_markdown(findings: list[Finding], problems: list[tuple[str, str, str]
         w("| Repo | Finding | Source | Expires | Reason | Way out | Approved |")
         w("|---|---|---|---|---|---|---|")
         for e in register:
+            code = _kind(e.source) == "code"
+            withhold = public and code   # the reason of a code scanning exception may name the rule or file
             w("| " + " | ".join(cell(x) for x in (
-                e.repo, e.id, e.source, e.expires, e.reason, e.way_out, f"{e.approved_by}, {e.approved_on}")) + " |")
+                e.repo, shown_id(e.id, code, public), e.source, e.expires,
+                "withheld (code scanning, repo members only)" if withhold else e.reason,
+                "withheld" if withhold else e.way_out, f"{e.approved_by}, {e.approved_on}")) + " |")
     else:
         w("The exception register (`docs/security/vuln-exceptions.toml`) has no row.")
     w("")
     if problems:
         w("Register cross-check:")
         w("")
-        for repo, ident, text in problems:
-            w(f"- {cell(repo)} `{cell(ident)}`: {cell(text)}")
+        for pr in problems:
+            w(f"- {problem_label(pr, public)}: {cell(pr.text)}")
     else:
-        w("Register cross-check: every pip-audit ignore, Trivy ignore and risk-acceptance dismissal that was readable "
-          "has a matching row, and no row is expired.")
+        w("Register cross-check: every pip-audit ignore, Trivy ignore and risk-acceptance dismissal read for this "
+          "record has a matching row, no exception source was refused, and no row is expired.")
     w("")
     if record:
         render_signoff(w, findings, problems, meta, public)
@@ -743,7 +821,7 @@ def render_code_summary(w, code: list[Finding]) -> None:
     w("")
 
 
-def render_signoff(w, findings: list[Finding], problems: list[tuple[str, str, str]], meta: dict,
+def render_signoff(w, findings: list[Finding], problems: list[Problem], meta: dict,
                    public: bool = False) -> None:
     """The part the tech lead completes: one decision per P0/P1 or past-due row, then the sign-off line."""
     w("## Decisions and sign-off")
@@ -761,15 +839,15 @@ def render_signoff(w, findings: list[Finding], problems: list[tuple[str, str, st
     else:
         w("No P0 or P1 finding and nothing past due.")
     w("")
-    for repo, ident, text in problems:
-        w(f"- Exception {cell(repo)} `{cell(ident)}`: {cell(text)}. Decision: pending.")
+    for pr in problems:
+        w(f"- Exception {problem_label(pr, public)}: {cell(pr.text)}. Decision: pending.")
     if problems:
         w("")
     w("Sign-off: tech lead, date: pending.")
     w("")
 
 
-def render_json(findings: list[Finding], problems: list, register: list[Exception_], reads: list[RepoRead],
+def render_json(findings: list[Finding], problems: list[Problem], register: list[Exception_], reads: list[RepoRead],
                 meta: dict) -> str:
     def enc(o):
         if isinstance(o, dt.date):
@@ -779,7 +857,7 @@ def render_json(findings: list[Finding], problems: list, register: list[Exceptio
         "meta": meta, "reads": [asdict(r) for r in reads],
         "findings": [{**asdict(f), "cve": f.cve} for f in findings],
         "exceptions": [asdict(e) for e in register],
-        "problems": [{"repo": r, "id": i, "text": t} for r, i, t in problems],
+        "problems": [asdict(pr) for pr in problems],
     }, default=enc, indent=1)
 
 
@@ -815,7 +893,8 @@ def run(argv: list[str] | None = None, *, fetch: Fetch | None = None, gh: GhClie
                    help="write the monthly record: front matter (SEC-03-triage-<month>) and a decisions section")
     p.add_argument("--format", choices=("md", "json"), default="md")
     p.add_argument("--out", type=Path, default=None)
-    p.add_argument("--strict", action="store_true", help="exit 1 on a past-due P0/P1 or an exception problem")
+    p.add_argument("--strict", action="store_true",
+                   help="exit 1 on a past-due P0/P1, an exception problem or an unreadable exception source")
     args = p.parse_args(argv)
     stdout = stdout or sys.stdout
     now = time.time() if now is None else now
@@ -859,7 +938,8 @@ def run(argv: list[str] | None = None, *, fetch: Fetch | None = None, gh: GhClie
             epss_state = f"not readable ({exc.__class__.__name__}): GitHub alert values used"
     enrich(findings, kev, epss)
     triage(findings, cfg, register, as_of, args.env)
-    problems = check_exceptions(register, entries, findings, as_of, int(cfg["exceptions"]["max_days"]))
+    problems = unreadable_problems(reads) + check_exceptions(register, entries, findings, as_of,
+                                                             int(cfg["exceptions"]["max_days"]))
 
     meta = {"month": month, "as_of": as_of.isoformat(), "env": args.env, "kev": kev_state, "epss": epss_state,
             "sla": cfg["sla"][args.env], "inputs": inputs}
