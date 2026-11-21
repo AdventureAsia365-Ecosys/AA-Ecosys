@@ -48,7 +48,7 @@
  ],
  "ecs": {
   "cluster": "aa-cis-dev-cluster",
-  "infra_commit": "c1545f7b",
+  "infra_commit": "65e0a732",
   "services": [
    {
     "address": "module.environment.aws_ecs_service.staff_web[\"booking\"]",
@@ -130,22 +130,22 @@
  ],
  "llm_routes_decision": "ADR 0009 (one gateway for every provider) with ADR 0001a Note S278 (acc1 before acc3)",
  "migrations": {
-  "as_of": "2026-11-18",
+  "as_of": "2026-11-21",
   "owners": [
    {
-    "latest": "454",
+    "latest": "469",
     "owner": "CIS"
    },
    {
-    "latest": "tp-034",
+    "latest": "tp-035",
     "owner": "TripPlanner"
    },
    {
-    "latest": "bk-059",
+    "latest": "bk-063",
     "owner": "Booking"
    },
    {
-    "latest": "crm-077",
+    "latest": "crm-085",
     "owner": "CRM"
    }
   ]
@@ -1478,6 +1478,6 @@
  "schema": "aa1132-facts/2",
  "sources": {
   "docs/catalogue/platform.yaml": "6c029d3a33b591705db61c12c2b1c2e87761ddb88cf8b5b2ca44922be931d846",
-  "docs/generated/inventory.md": "ff3295d5219e7e30518a6340c0f2a5915ca48308c90a15ebc8753f33c3a896f3"
+  "docs/generated/inventory.md": "cdc63406b21ef7f1001e527561cd6631b4b0defc626ecc1f85db2db4b5b728f4"
  }
 }

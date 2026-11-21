@@ -55,7 +55,7 @@ Cluster `aa-cis-dev-cluster`, 8 services:
 | `aa-crm-dev-web` | AA-Partner |
 | `aa-tripplanner-dev-web` | AA-TripPlanner-Web |
 
-From the Terraform state at AA-CIS-Infra `c1545f7b` (resource inventory, AA-CIS-Infra Docs Gen).
+From the Terraform state at AA-CIS-Infra `65e0a732` (resource inventory, AA-CIS-Infra Docs Gen).
 
 <!-- /gen -->
 
@@ -158,12 +158,12 @@ and on demand.
 
 | Owner | Migration key | Latest applied on Dev |
 |---|---|---|
-| CIS | `NNN` | `454` |
-| TripPlanner | `tp-NNN` | `tp-034` |
-| Booking | `bk-NNN` | `bk-059` |
-| CRM | `crm-NNN` | `crm-077` |
+| CIS | `NNN` | `469` |
+| TripPlanner | `tp-NNN` | `tp-035` |
+| Booking | `bk-NNN` | `bk-063` |
+| CRM | `crm-NNN` | `crm-085` |
 
-From the live schema dump of 2026-11-18 ([DB schema reference](../architecture/db-schema-reference.md), refreshed by the DB Schema Dump bot PR). A new migration takes the next number on its owner's main; the owner list is in [schema ownership](../database/schema-ownership.md).
+From the live schema dump of 2026-11-21 ([DB schema reference](../architecture/db-schema-reference.md), refreshed by the DB Schema Dump bot PR). A new migration takes the next number on its owner's main; the owner list is in [schema ownership](../database/schema-ownership.md).
 
 <!-- /gen -->
 

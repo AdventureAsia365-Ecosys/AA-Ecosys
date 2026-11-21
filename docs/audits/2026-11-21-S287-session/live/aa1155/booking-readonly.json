@@ -1,0 +1,76 @@
+{
+  "host": "https://booking.lumiguides.it.com",
+  "staff_me": {
+    "status": 200,
+    "role": "admin",
+    "role_label": null,
+    "permissions_count": 52
+  },
+  "staff_roles": {
+    "status": 200,
+    "can_edit": false,
+    "builtin": [
+      "admin",
+      "sales",
+      "contracting",
+      "content_creator",
+      "finance"
+    ],
+    "custom": [
+      {
+        "code": "custom_product_ops_accounting",
+        "label": "Product, ops & accounting",
+        "based_on": "contracting",
+        "archived": false,
+        "caps": 24,
+        "holders": 1
+      }
+    ],
+    "target": {
+      "code": "custom_product_ops_accounting",
+      "caps": 24,
+      "approve_class_by_rule": [],
+      "not_assignable_per_api": [],
+      "unknown_per_api": [],
+      "capabilities": [
+        "agency_billing.read",
+        "agency_billing.write",
+        "b2b_desk.book",
+        "b2b_desk.read",
+        "b2b_desk.write",
+        "bill.read",
+        "bill.write",
+        "billing.read",
+        "billing.write",
+        "catalog.read",
+        "customer.read",
+        "customer.write",
+        "ops.read",
+        "ops.write",
+        "pricing.read",
+        "pricing.write",
+        "profit.read",
+        "staff.directory",
+        "stop_sale.write",
+        "supply.read",
+        "supply.write",
+        "trip_case.read",
+        "trip_case.write",
+        "trip_plan.write"
+      ]
+    }
+  },
+  "page": {
+    "owner_only_line": true,
+    "edit_archive_new_buttons": 0,
+    "forbidden": {
+      "issue_ids": [],
+      "emails": [],
+      "account_ids": [],
+      "e2e_markers": [],
+      "agent_words": []
+    }
+  },
+  "console_errors": [],
+  "failing_requests": []
+}

@@ -1,0 +1,156 @@
+{
+  "run_at": "2026-11-21T08:28:04.718Z",
+  "piece_id": "7e07c0c0-9e9e-4a64-a76f-7bfc228afa24",
+  "steps": {
+    "original": {
+      "status": 200,
+      "length": 5035,
+      "sha_prefix": "8661f6bcf547",
+      "raw_markup_in_text": {
+        "script": false,
+        "iframe": false,
+        "on_attr": false
+      }
+    },
+    "export_original_fragment": {
+      "status": 200,
+      "starts_with_article": true,
+      "length": 6012,
+      "script_tag": false,
+      "script_body_text": false,
+      "iframe_tag": false,
+      "iframe_src": false,
+      "on_attr": false,
+      "on_attr_values": false,
+      "javascript_url": false,
+      "tags": [
+        "a",
+        "article",
+        "br",
+        "em",
+        "h2",
+        "meta",
+        "p",
+        "strong"
+      ]
+    },
+    "edit": {
+      "status": 200,
+      "ready_state": "ready",
+      "length": 5926
+    },
+    "export_test_fragment": {
+      "status": 200,
+      "length": 6755,
+      "script_tag": false,
+      "script_body_text": false,
+      "iframe_tag": false,
+      "iframe_src": false,
+      "on_attr": false,
+      "on_attr_values": false,
+      "javascript_url": false,
+      "survives": {
+        "h2": true,
+        "h3": true,
+        "strong": true,
+        "normal_link": true,
+        "list_link": true,
+        "ul_items": true,
+        "ol_items": false,
+        "onclick_paragraph_text": true,
+        "js_link_texts": true
+      },
+      "excerpt": "<h2>Sanitizer check heading (aa1167-h2)</h2>\n<p>A normal paragraph with <strong>bold text</strong> and a <a href=\"https://en.wikipedia.org/wiki/Forbidden_City\">normal link</a> (aa1167-normal-link).</p>\n\n\n\n\n<p>Paragraph that carried a click handler (aa1167-onclick-text).</p>\n\n<p><a>Markdown link with a script URL (aa1167-js-md-text)</a></p>\n<p><a>Raw link with a script URL (aa1167-js-raw-text)</a></p>\n<ul>\n<li>First list item (aa1167-li-1)</li>\n<li>\n<p>Second list item with a <a href=\"https://en.wikipedia.org/wiki/Beijing\">link</a> (aa1167-li-2)</p>\n</li>\n<li>\n<p>Ordered item one (aa1167-ol-1)</p>\n</li>\n<li>Ordered item two (aa1167-ol-2)</li>\n</ul>\n<h3>Sub heading (aa1167-h3)</h3>\n<p>End of the sanitizer check block (aa1167-end).</p>"
+    },
+    "export_test_document": {
+      "status": 200,
+      "length": 7159,
+      "script_tag": false,
+      "script_body_text": false,
+      "iframe_tag": false,
+      "iframe_src": false,
+      "on_attr": false,
+      "on_attr_values": false,
+      "javascript_url": false
+    },
+    "export_test_text": {
+      "status": 200,
+      "any_tag": false,
+      "script_body_text": false,
+      "javascript_url": false,
+      "keeps_heading_text": true,
+      "keeps_onclick_paragraph_text": true
+    },
+    "publish": {
+      "status": 200,
+      "keys": [
+        "publish_id",
+        "success",
+        "status",
+        "external_id",
+        "external_url",
+        "published_at",
+        "last_error",
+        "replayed"
+      ],
+      "success": true,
+      "status_field": "published",
+      "replayed": false,
+      "publish_id": "6e9b686e-08e9-47ff-99da-d2d86946531f",
+      "wp_post_id": "4",
+      "last_error": null
+    },
+    "wp_rest_get": {
+      "status": 200,
+      "post_status": "publish",
+      "has_ai_article": true,
+      "length": 6842,
+      "script_tag": false,
+      "script_body_text": false,
+      "iframe_tag": false,
+      "iframe_src": false,
+      "on_attr": false,
+      "on_attr_values": false,
+      "javascript_url": false,
+      "survives": {
+        "h2": true,
+        "h3": true,
+        "strong": true,
+        "normal_link": true,
+        "list_link": true,
+        "ul_items": true,
+        "ol_items": false,
+        "onclick_paragraph_text": true,
+        "js_link_texts": true
+      },
+      "excerpt": "<h2>Sanitizer check heading (aa1167-h2)</h2>\n<p>A normal paragraph with <strong>bold text</strong> and a <a href=\"https://en.wikipedia.org/wiki/Forbidden_City\">normal link</a> (aa1167-normal-link).</p>\n<p>Paragraph that carried a click handler (aa1167-onclick-text).</p>\n<p><a>Markdown link with a script URL (aa1167-js-md-text)</a></p>\n<p><a>Raw link with a script URL (aa1167-js-raw-text)</a></p>\n<ul>\n<li>First list item (aa1167-li-1)</li>\n<li>\n<p>Second list item with a <a href=\"https://en.wikipedia.org/wiki/Beijing\">link</a> (aa1167-li-2)</p>\n</li>\n<li>\n<p>Ordered item one (aa1167-ol-1)</p>\n</li>\n<li>Ordered item two (aa1167-ol-2)</li>\n</ul>\n<h3>Sub heading (aa1167-h3)</h3>\n<p>End of the sanitizer check block (aa1167-end).</p>"
+    },
+    "wp_page": {
+      "status": "loaded",
+      "length": 6363,
+      "script_tag": false,
+      "script_body_text": false,
+      "iframe_tag": false,
+      "iframe_src": false,
+      "on_attr": false,
+      "on_attr_values": false,
+      "javascript_url": false,
+      "window_aa1167_defined": false
+    },
+    "unpublish": {
+      "status": 200,
+      "log_row_status": "unpublished",
+      "unpublished_at_set": true,
+      "post_id": "4",
+      "public_get_after": 401
+    },
+    "restore": {
+      "status": 200,
+      "text_equals_original": true,
+      "ready_state": "ready",
+      "in_ready_to_publish": true,
+      "publish_log_rows": 12,
+      "publish_log_published": 0
+    }
+  }
+}

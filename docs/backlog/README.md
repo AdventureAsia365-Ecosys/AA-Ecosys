@@ -6,15 +6,14 @@
 
 **Rules:** at session start read §1–§3 and pick the session's parallel items from §3 and §3b by slot (skip items blocked in §2 or by the "blocked by" notes). At session end update the Status column, move closed items to §5, add new items. Re-audit only when this file is older than ~2 weeks or many issues were created outside sessions.
 
-_Last updated: S286, 20/11/2026 (Claude Code, Ultracode; ~05:20 → ~11:30 +07). **Closed in S286:** AA-1134, AA-1145, AA-1146 (part 1; part 2 → AA-1148), AA-1127, AA-1051 (with scope; T9 → AA-1169), AA-1150, AA-1168, AA-1156, AA-1159. New: AA-1162…AA-1168 (security and compliance decisions D1–D12), AA-1169 (T9 first-pass yield). AA-1155 foundation (T1–T4.1) live, code tasks T5–T11 next plus T13 / T14 (CIS role editor, presets as data: S286 settings-rule audit). AA-1168 follow-up (lane l11) live: disclosure wording is the admin setting `cis.content.ai_disclosure` (CIS 463/464, Partner #372). AA-1161 phase 1 live, phase 2 (history rewrite) this weekend. Next: §3 row S287 (AA-1155 T5–T11, then the security packages)._
+_Last updated: S287, 21/11/2026 (Claude Code, Ultracode; ~03:00 → evening +07, one long session). **Closed in S287:** AA-1164, AA-1167, AA-1147, AA-1165, AA-1163, AA-1170, AA-788, AA-1137, AA-1162, AA-1171. New: AA-1170 (compliance readiness), AA-1171 (alerts catalogue P0), AA-1172 (T9 fact trap). Still open: AA-1155 (code + live done; T12 hand step), AA-1161 (history rewritten; read the GitHub size after its GC)._
 
 ## 1. Time-gated checks (do these first when due)
 
 | Due | Issue | Check |
 |---|---|---|
-| 22/11 (Sunday) | (Jira) PR-20 | Weekly report kỳ 6 (17–23/11): fold in the S286 PR-22 / PR-25 / PR-23 updates; re-read the numbers on the day. |
-| this weekend | AA-1161 phase 2 | History rewrite of the root repo and AA-CIS-Infra in a dedicated window (decision draft `docs/audits/2026-11-20-S286-session/aa1161-phase2-decision.md`): merge or close open PRs, mirror backup, rewrite, force push, re-clone, update pinned root SHAs. |
-| next session | AA-Partner Scrub corpus | The nightly went red 20/11 (AWS guardrail stopped detecting some names; no git change). Confirm the S286 fix (local name check) keeps it green, else re-run and read the leak list. |
+| 22/11 (Sunday) | (Jira) PR-20 | Weekly report kỳ 6 (17–23/11): drafted in S287 with numbers read live 21/11 18:14 (`docs/audits/2026-11-21-S287-session/jira-drafts.md` J4); post once the tech lead approves. |
+| next session | AA-1161 | History rewritten and force-pushed 21/11 (root clone 113 MB, Infra 7.6 MB; backups in private S3 `archive/`). Read the repo size GitHub reports (`gh api repos/<org>/<repo> --jq .size`) once its GC has run; close AA-1161 when it is near the clone size. |
 | 01/12 | AA-1051 (AI gateway cap) | Set the `openai-direct` monthly cap back from **25 USD** (raised for November in S285 for the AA-1051 judge runs) to **10 USD**, then read the value back on AI gateway › Budgets. |
 | ~26/11 | AA-1136 | One-week readout of the agent change hooks in log mode (root #885, p95 79 ms at start): hit counts, false alarms, latency; then decide warn / block mode and close. |
 | ≥ 02/12 | AA-1122 | First nightly automatic research after 01/12 (tech lead sets `cis.seo.research_auto_enabled` = true, effective 01/12, 5 USD month cap): it buys only new / stale places, stops at the cap, and `search_volume_monthly` gets 12-month rows. Then AA-1122 can close. |
@@ -160,7 +159,7 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | S282 | Jira S281, AA-1048, AA-1051, AA-1090, AA-1003, C4.3 W47 | (S281: Jira drafts and PR-20 period 5 posted, 10657–10661.) AA-1048: read the 300-claim fire sheet, panel, import; gated run when ≥20 TP and ≥25 FP, else a larger sheet. AA-1051 null run after AA-1048 + the tech lead's yes. AA-1090: Infra #863 (two-step Terraform) + the test sub-domain check → close. AA-1003 R6 (`crm.ops.v1`), then R7. Small follow-ups: AA-1086 G8 scenarios, AA-1089 reviewer minors, the T9 trial driver into `tools/`. |
 | S285 (done) | AA-1130, AA-1138, AA-1128, AA-1129, AA-1143, AA-1126, AA-1144, AA-1139 closed; AA-1127, AA-1111, AA-1136, AA-1137, AA-1145, AA-1146, AA-1134, AA-1051 advanced | **Done:** UI fixes in 4 apps, T2 fact lock, Send to CRM, CRM drafts on Haiku, TripPlanner module in the agency app. Supply decisions (M-SUP) and the lean-roles re-plan (M-ROLES, Q1–Q12). AA-1051 golden 1.7.0, T9 non_inferior. See the S285 session log. |
 | S286 | AA-1150, AA-1156, AA-1155 (+ AA-1137 spec pilot), AA-1051, AA-1127, AA-1145, AA-1146, AA-1134 | Close first: AA-1145 (R6 live), AA-1146 part 1, AA-1134, AA-1127 (E2/E3), AA-1051 proof results. Then AA-1150 step 1 and AA-1156 (no migration, separate files); AA-1155 starts with the Infra PR + CIS / bk- migration PRs (apply only when all three job tables are idle). |
-| S287 | AA-1155, AA-1159, AA-1147, AA-1137, AA-788, AA-1139 follow-ups | AA-1155 apply → schema-reference PR → code → hand step (custom role for the content+ops staff member). AA-1159 starts. AA-1147 (ready since AA-1144). AA-788 pilot (≤ 5 USD) after the migrations. |
+| S287 (done) | AA-1164, AA-1167, AA-1147, AA-1165, AA-1163, AA-1170, AA-788, AA-1137, AA-1162, AA-1171 closed; AA-1155, AA-1161 advanced | **Done:** image scanning, AI output hardening, agency extras in CRM, edge rate limit, vulnerability triage v2, compliance readiness page, T10 F12/F14, spec-trace pilot, change control, alerts catalogue P0; repo history rewrite. AA-1155 waits on T12 (a staff account for the content + ops person). |
 | S288 | AA-1158 part 1, AA-1157, AA-1159, AA-1149, AA-1148 | Approval rules for a three-person team (bk-), view-as downward, Booking My work filters, AA-1149 (second bk- in the session), AA-1148 editor part. |
 | S289 | AA-1158 part 2, AA-1159, AA-1148, AA-1151, AA-1153 part 1, AA-1136 | Supplier profile + KMS bank details (24 h payout lock), approvals strip, then the bk- chain AA-1151 → AA-1153 p1; AA-1136 closes after the one-week readout. Final hand step: real roles for the three people. |
 | S290–S292 | AA-1152, AA-1153, AA-1148, AA-1140, AA-1154, AA-1141, AA-1119, AA-1103, AA-1142, AA-1118, AA-1050 | Close M-SUP in S290 (no spare session left after it); then the ops status pages, the admin assistant A0–A1, release safety, the project kit (with AA-1121), docs reality; AA-1050 only with ~30 disputed labels. |
@@ -200,7 +199,6 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | AA-968 | [CRM W7] CRM-36 Campaigns (R14) | CRM-after-R3 | after S280 | pause | Backlog |
 | AA-970 | [CRM W7] CRM-37b Release train, help, data page | CRM-after-R3 | after S280 | pause | Backlog |
 | AA-1011 | [CRM] Microsoft 365 + BYO calendar connect: mail send-as for M365 and SMTP, c… | CRM-after-R3 | after S280 | keep | Backlog |
-| AA-788 | [T10 gates] Promote F12_scope, F14 under-length and F9_brand_style (repair on… | M2a | ≥19/11 | keep | Backlog |
 | AA-998 | [Infra] Remove acc1 (personal AWS account) from the whole ecosystem: audit, c… | M1b | ≥01/12 | keep | Backlog |
 | AA-1026 | [AI gateway] Warm paths + route governance: Anthropic key on/off runbook, Ope… | M1b | ≥01/12 | keep | In Review |
 | AA-873 | [Security] Account detection baseline: GuardDuty, Access Analyzer, S3 BPA, Cl… | M5 | ≥01/12 | keep | In Progress |
@@ -218,14 +216,14 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | AA-842 | [Observability] Investigate OpenTelemetry gen_ai tracing for every LLM call (… | parked | parked | keep | Backlog |
 | AA-1150 | [CIS + Booking] Lean staff roles step 1: three people-role presets, finance reads, make/approve capability split, one sign-in | M-ROLES | S286 (re-scoped S285; no migration) | new S285 | Todo |
 | AA-1156 | [CIS] My work: one queue page for content roles | M-ROLES | S286 | new S285 | Todo |
-| AA-1155 | [Booking + CIS] Custom staff roles: roles as data, one combined role per person | M-ROLES | S286 → S287 (foundation T1–T4.1 live S286; T5–T11 + T13 CIS role editor + T14 presets as data, added by the S286 settings-rule audit) | new S285 | In Progress |
+| AA-1155 | [Booking + CIS] Custom staff roles: roles as data, one combined role per person | M-ROLES | S288 (T1–T14 live S286–S287; left: T12 hand step — the content + ops person gets the custom roles once they have a staff account) | new S285 | In Review |
 | AA-1159 | [Booking] My work on the staff dashboard: permission-filtered queues, filtered lists, approvals waiting | M-ROLES | S287–S289 | new S285 | Backlog |
 | AA-1157 | [CIS + Booking] View as a lower role: read-only, logged, never changes the sign-in | M-ROLES | S288 (after AA-1155) | new S285 | Backlog |
+| AA-1172 | [Quality] T9 fact trap: the one prompt-injection case the data fence did not stop | M2a | S288 | new S287 | Backlog |
 | AA-1158 | [Booking + Infra] Approval rules for a three-person team, business-owner self-approval, supplier profile and bank-detail controls | M-ROLES | S288 part 1, S289 part 2 | new S285 | Backlog |
 | AA-1160 | TripPlanner locale / theme + lead fallback (from the S285 evening decision E5) | later | not slotted yet | new S285 | Backlog |
 | AA-1145 | [Booking] One supply model: pax types, structured contract terms, restrictions and allotment | M-SUP | S286 (merged: Booking #281 bk-060 + #282; verify R6 live, then Done) | new S285 | In Review |
 | AA-1146 | [CIS] Tour edits are versioned, locked and published through one review gate | M-SUP | S286 (part 1 D1 / D5, CIS 457–458: live evidence, then Done; part 2 → AA-1148) | new S285 | In Review |
-| AA-1147 | [CRM] Agency extras follow the trip from proposal to invoice | M-SUP | S287 | new S285 | Backlog |
 | AA-1148 | [CIS] Content workspace: create and edit tours by hand, tied to an AA supplier, with preview and change review | M-SUP | S288–S290 | new S285 | Backlog |
 | AA-1149 | [Booking] A sold tour becomes one supplier booking per component, with service attributes and a can-operate check | M-SUP | S288 | new S285 | Backlog |
 | AA-1151 | [Booking + CIS] Optional activities as AA offers with places, sale rules and expiry alerts | M-SUP | S289 | new S285 | Backlog |
@@ -238,7 +236,6 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | AA-1127 | [UI fixes — CIS] Studio money and counters, numbers that disagree, spend truth, copy and QA layout | later | S286 (390 px fixes live 12/12; left: E2 daily Cost Explorer check, E3 Dev data cleanup — lane l28, approved) | new S283 | In Review |
 | AA-1111 | [Security] Pre-pilot identity hardening: workforce admin MFA, access review, account guards, ZAP baseline | later | when the business owner has TOTP (CRM switch On; CIS / Booking Off; Infra #935 open) | new S282 | In Review |
 | AA-1136 | [DevOps] Agent change hooks: code ↔ tests ↔ implementation notes, script-only, log mode first | later | ~26/11 readout (S289) | new S284 | In Review |
-| AA-1137 | [DevOps] Specs and trace: plan → spec → lanes → PR, Kiro-compatible | later | S286–S287 (pilot spec on AA-1155) | new S284 | In Review |
 | AA-1134 | [Ops] Docs-audit code follow-ups — 19 small code, config and settings fixes | later | S286 (Infra #920 shipped; live check, then Done) | new S283 | In Review |
 | AA-1110 | [Ops] Continuity pack: second key-holder, runbook-only drill, security tabletop, second alert channel | later | ≥01/12 (Done-when kept, A8 = no) | new S282 | In Review |
 | AA-1103 | [Playbook] New-project kit part 2 (absorbs AA-1121 since S285) | later | S291 | — | Backlog |
@@ -283,7 +280,6 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-804 | AI platform ADR + ledger v2 — one gateway library, attempt-level llm_call_log, AI Use Register | M5 | **Done-with-scope S262** (§5; §3 row 0ai). later. AI platform ADR + ledger v2 + AI Use Register before prod; ADR 0008a accepted S247 (root #168); AA-804 builds on it | Accept the ADR |
 | AA-642 | Model Gateway — one routing layer for Claude/Bedrock, OpenAI, Jev, driven by admin UI settings | later | **Done-with-scope S262** (§5; §3 row 0al). later. Model Gateway epic; last in the L1 order | — |
 | AA-703 | Identity epic (ADR 0006): Cognito workforce + external pools, staff/tenant/traveller sign-in | M1 | later. **In Progress**; Epic: post a Phase 2/3 status comment with evidence links (M1 criterion); AA-813 and AA-908 Done S250, so it closes when AA-816 and AA-911 land (both at the end of project code) | — |
-| AA-788 | T10: promote F12_scope, F14 under-length and F9_brand_style to blocking | M2a | **S260:** CIS #1184 `484e0924` (per-check modes to promote F12_scope and F9_brand_style; unused seed facts for the F14 floor rewrite; golden guard fixed twice), deploy green; replay hold-rate running at the close. Next (S261): read the replay hold-rate, then switch the checks to blocking · Backlog in Linear | — |
 | AA-789 | T10 gates recall tunes (F17, F18, F15, F13, F16) | M2a | **Done S259** (§5a): S258 tier 0 CIS #1151 (golden text 169 → 0) + seed alignment CIS #1152 (default off); the LLM part moved to AA-1000 (§3 row 0ag). S257: precision-only rev 4 CIS #1140 `0c4dd6a6` (three verifier rounds found 13 → 8 → 10 false positives, a fourth found 0; 194 unit tests with every verifier sentence as a negative). After the close the tech lead chose to solve it in full: design approved (root #333, `docs/audits/2026-10-29-S257-aa789-design/PLAN.md`), S258 $0 slices S1–S8 | — |
 | AA-814 | Facts Entry API + UI — platform and tenant-scope facts used by T2/T9 | M5 | **Done S257** (§5c); follow-ups in §3 row 0ab | — |
 | AA-861 | TripPlanner outbox payload PII redaction after 90 days | M5 | **Done S257** (§5c, §3 row 0o) | — |
@@ -298,6 +294,22 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-697 | Architecture diagrams with official AWS icons — ecosystem + each repo | S256 | **Done S257** (§5c): pilot approved under the S257 session plan (root #320); drift findings closed (Booking ops-docs bucket built S256, EFS removed S257 Infra #492) | — |
 | AA-710 | B2B benchmark: Asian Trails (eConnect, API, Lemax) | M-R4 | **S265:** slot S271 (R4 start): update the note against the R4 design (AA-1037, AA-1029, AA-1030, 'Book with AA' d17), map the gaps to issues, KAN-20 draft at that session's end, then close | — |
 | AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 | **S262:** AA-952, AA-954, AA-956, AA-957, AA-964, AA-971 closed (§5); AA-958 → S263. AA-952 was In Progress since S259 (slice 1 = C-M3 confirm, §3 row 0ah); **re-planned at the S260 close**: slots S261–S266, go-real ≥S267, see §3b "Kế hoạch CRM W5–W8 sau S260" | AA-958 needs a free Twilio trial for the live proof; AA-965 needs an LLM path |
+
+## 5. Closed in S287
+
+- **AA-1164** image scanning: nightly scan of the images that run (Infra #960), Node base images pinned by digest in 4 repos, WordPress test site 7.1.5; second scan gate green 8/8.
+- **AA-1167** AI output hardening: HTML of AI posts sanitised before publishing (CIS #1634), WordPress test post clean; prompt data fence (CIS 467) kept off at the 8/9 trap baseline (0.81 USD); the open trap → AA-1172.
+- **AA-1147** agency extras follow the trip (Partner #374, #375; crm-083, crm-084): live 5/5.
+- **AA-1165** per-viewer WAF rate rule on the CRM CloudFront path (Infra #954, #956), alarm 0.10 USD/month (#961): COUNT 10,647 then BLOCK 429.
+- **AA-1163** vulnerability triage v2 (root #924): KEV, EPSS, CVSS v4, SLA; November record 0 P0 / 6 P1 / 44 P2, signed by the tech lead's review of root #940.
+- **AA-1170** compliance readiness phase 1 (root #929, CIS #1629, #1631 = CIS 466, #1633, Infra #963): 6 frameworks, 48 controls, daily collector; stale-evidence drop proven by the tech lead (validity 1 h → met 8 → 0, reset to 72 h).
+- **AA-788** F12 scope as a setting with a measured-record flip rule, F14 under-length = `length_short` (CIS #1632, CIS 468); pilot 1.73 USD; F12 stays warn (tech lead).
+- **AA-1137** spec-trace pilot on AA-1155: spec, tasks, lane trace and `Spec trace` green on CIS #1624, #1627, #1628 and Booking #294.
+- **AA-1162** change control: ruleset on every default branch; a test force-push and delete of root `master` refused 21/11; agent reviews posted on risky PRs; the pilot trigger in `aa-ship`.
+- **AA-1171** alerts catalogue P0 (Infra #968, CIS #1635 = CIS 469, #1636, #1637, Booking #297 = bk-063, #298, Partner #378 = crm-085, root #935, #936): 123 rows match AWS (37 alarms, 15 rules), Apps health by App tag, threshold change proven on `cis.ops.xid_age_limit`, page topic, 4 coverage alarms + delivery-failed alarm OK.
+- New: AA-1170, AA-1171, AA-1172.
+- Still open with S287 work: AA-1155 (T12 hand step), AA-1161 (history rewritten; GitHub size after GC).
+- Evidence: root `docs/audits/2026-11-21-S287-session/` (live/, state snapshot, Jira drafts), `docs/audits/2026-11-21-S287-compliance-tracking/`, `docs/audits/2026-11-21-S287-alerting-inventory/`.
 
 ## 5. Closed in S286
 
