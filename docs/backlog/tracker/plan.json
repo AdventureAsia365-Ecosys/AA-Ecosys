@@ -1,6 +1,6 @@
 {
  "updated": "2026-11-21",
- "synced_at": "2026-11-21T12:13Z",
+ "synced_at": "2026-11-21T13:05Z",
  "session": "S287",
  "next_session": "S288",
  "source": "Linear (19/11/2026, plan_sync.py --write, S285) + docs/audits/2026-11-19-S285-session/plan-audit-plan-changes.json (tech lead duyệt Q1–Q12, 19/11) + docs/backlog/README.md",
@@ -1004,14 +1004,17 @@
    "created": [
     "AA-1170",
     "AA-1171",
-    "AA-1172"
+    "AA-1172",
+    "AA-1173",
+    "AA-1174"
    ],
    "reopened": [],
    "notes": [
     "Phiên dài cả ngày, Ultracode, tối đa 4 lane: vai trò tuỳ chỉnh CIS + Booking live (AA-1155 còn T12), bảo mật D1–D12 xong 6/7 (AA-1162…1165, 1167; AA-1166 chờ pilot)",
     "AA-1161 giai đoạn 2: viết lại lịch sử root (915→112 MB) + Infra (89→6 MB), backup + ảnh gốc lên S3 private acc2",
     "Tư vấn + quyết định: trang Compliance readiness (17 câu → AA-1170 Done) và Alerts catalogue (10 câu → AA-1171 Done, kiểm live bằng workflow 3 lane + phản biện)",
-    "Migration CIS 465–469, bk-063, crm-083/084/085; Catalogue schedule đỏ 4 ngày → sửa snapshot surface + CIS-F051/F052"
+    "Migration CIS 465–469, bk-063, crm-083/084/085; Catalogue schedule đỏ 4 ngày → sửa snapshot surface + CIS-F051/F052",
+    "Cuối phiên: Q14 đổi — luật dữ liệu cá nhân VN + GDPR + luật quốc tế áp dụng vào trang Compliance ở S288 (AA-1174); pha 2–3 Compliance tạo AA-1173 (S289)"
    ]
   },
   {
@@ -2795,6 +2798,30 @@
    "session": "S288",
    "size": "S",
    "next": "Sửa T9 tin lệnh cài trong fact (validator hoặc check sau khi viết) + 2–3 bẫy mới, chạy lại trap ≤ 1 USD",
+   "needs": ""
+  },
+  {
+   "id": "AA-1173",
+   "title": "[Security] Compliance readiness phase 2–3: immutable evidence, read-only collectors (GitHub, AWS, DB), exceptions and monthly review",
+   "status": "Backlog",
+   "priority": "Medium",
+   "project": "data",
+   "milestone": "later",
+   "session": "S289",
+   "size": "L",
+   "next": "Pha 2–3 Compliance: Object Lock + role compliance-evidence (Infra, review trước merge), GitHub App chỉ đọc (tech lead tạo), Prowler, DB checks, bảng exception/risk/SoA, rà soát tháng",
+   "needs": "Tech lead tạo GitHub App chỉ đọc"
+  },
+  {
+   "id": "AA-1174",
+   "title": "[Security] Privacy obligations on Compliance readiness: applicability by market, Vietnam personal data law, GDPR and the other laws that apply",
+   "status": "Backlog",
+   "priority": "High",
+   "project": "data",
+   "milestone": "later",
+   "session": "S288",
+   "size": "M",
+   "next": "Bản đồ áp dụng luật theo thị trường (nguồn chính thức) → checklist nghĩa vụ VN (Luật 91/2025 + NĐ 356/2025), GDPR và luật nào \"áp dụng\" → tab Obligations",
    "needs": ""
   }
  ]

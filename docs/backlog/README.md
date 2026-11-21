@@ -220,6 +220,8 @@ The pre-S265 queue (the S238–S264 rows 0a…36 and their history) is in git hi
 | AA-1159 | [Booking] My work on the staff dashboard: permission-filtered queues, filtered lists, approvals waiting | M-ROLES | S287–S289 | new S285 | Backlog |
 | AA-1157 | [CIS + Booking] View as a lower role: read-only, logged, never changes the sign-in | M-ROLES | S288 (after AA-1155) | new S285 | Backlog |
 | AA-1172 | [Quality] T9 fact trap: the one prompt-injection case the data fence did not stop | M2a | S288 | new S287 | Backlog |
+| AA-1174 | [Security] Privacy obligations on Compliance readiness: applicability by market, Vietnam law, GDPR and other laws that apply | later | S288 | new S287 | Backlog |
+| AA-1173 | [Security] Compliance readiness phase 2–3: immutable evidence, read-only collectors, exceptions and monthly review | later | S289 (after AA-1166) | new S287 | Backlog |
 | AA-1158 | [Booking + Infra] Approval rules for a three-person team, business-owner self-approval, supplier profile and bank-detail controls | M-ROLES | S288 part 1, S289 part 2 | new S285 | Backlog |
 | AA-1160 | TripPlanner locale / theme + lead fallback (from the S285 evening decision E5) | later | not slotted yet | new S285 | Backlog |
 | AA-1145 | [Booking] One supply model: pax types, structured contract terms, restrictions and allotment | M-SUP | S286 (merged: Booking #281 bk-060 + #282; verify R6 live, then Done) | new S285 | In Review |
@@ -307,7 +309,7 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 - **AA-1137** spec-trace pilot on AA-1155: spec, tasks, lane trace and `Spec trace` green on CIS #1624, #1627, #1628 and Booking #294.
 - **AA-1162** change control: ruleset on every default branch; a test force-push and delete of root `master` refused 21/11; agent reviews posted on risky PRs; the pilot trigger in `aa-ship`.
 - **AA-1171** alerts catalogue P0 (Infra #968, CIS #1635 = CIS 469, #1636, #1637, Booking #297 = bk-063, #298, Partner #378 = crm-085, root #935, #936): 123 rows match AWS (37 alarms, 15 rules), Apps health by App tag, threshold change proven on `cis.ops.xid_age_limit`, page topic, 4 coverage alarms + delivery-failed alarm OK.
-- New: AA-1170, AA-1171, AA-1172.
+- New: AA-1170, AA-1171, AA-1172, AA-1173 (compliance phase 2–3, S289), AA-1174 (privacy obligations incl. international laws, S288).
 - Still open with S287 work: AA-1155 (T12 hand step), AA-1161 (history rewritten; GitHub size after GC).
 - Evidence: root `docs/audits/2026-11-21-S287-session/` (live/, state snapshot, Jira drafts), `docs/audits/2026-11-21-S287-compliance-tracking/`, `docs/audits/2026-11-21-S287-alerting-inventory/`.
 
