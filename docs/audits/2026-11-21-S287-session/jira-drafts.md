@@ -315,4 +315,11 @@ departures_open 3). Items written "chưa kiểm" / "chưa làm" were not checked
 
 ## Posted
 
-(none yet)
+Tech lead approved all four drafts on 21/11 (evening); PR-20 held for the Monday-morning session.
+
+| Draft | Issue | Comment | Images |
+|---|---|---|---|
+| J1 | PR-26 | 10684 (21/11) | 4 inline |
+| J2 | PR-23 | 10685 (21/11) | none |
+| J3 | PR-27 | 10686 (21/11) | 3 inline |
+| J4 | PR-20 | not posted yet: held for the Monday 23/11 morning session (tech lead) | none |

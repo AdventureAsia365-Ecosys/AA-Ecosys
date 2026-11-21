@@ -88,8 +88,8 @@ Thư mục `docs/audits/2026-11-21-S287-session/live/` (aa1147, aa1155, aa1167, 
 
 ## Jira
 
-Nháp J1–J4 ở `docs/audits/2026-11-21-S287-session/jira-drafts.md` (PR-26, PR-23, PR-27, PR-20 kỳ 6). Kết quả đăng: xem mục
-"Posted" của file đó.
+Tech lead duyệt cả 4 nháp. Đã đăng: PR-26 comment 10684 (4 ảnh), PR-23 10685, PR-27 10686 (3 ảnh). PR-20 kỳ 6 (J4) giữ lại
+tới phiên sáng thứ Hai 23/11 mới đăng (nháp có số đo 21/11 18:14 trong `jira-drafts.md`).
 
 ## Việc đầu phiên sau (S288)
 
@@ -101,7 +101,7 @@ Nháp J1–J4 ở `docs/audits/2026-11-21-S287-session/jira-drafts.md` (PR-26, P
 ## Còn lại
 
 - AA-1155 T12 (bước tay: người content + ops cần tài khoản staff), AA-1161 (đóng khi GitHub báo dung lượng sau GC).
-- Jira J1–J4 chờ tech lead duyệt rồi mới đăng (PR-20 kỳ 6 hạn CN 22/11).
+- Đăng PR-20 kỳ 6 (J4) ở phiên sáng thứ Hai 23/11 (đọc lại số trước khi đăng).
 - CIS #1586 (dependabot frontend-security) vẫn đỏ từ S285.
 - Follow-up nhỏ của AA-1171 / AA-1170: người nhận cho topic page trước prod, alarm delivery-failed cho topic page, bỏ mã
   issue khỏi mô tả Terraform, chữ điều kiện alarm anomaly-band ("above band None"), nút Refresh evidence chưa báo kết quả,
