@@ -1,4 +1,0 @@
-# AA-1161 phase 2 (S287, 21/11/2026): one-off exemption for the PR that compresses every linked screenshot in place
-# before the root history rewrite; the full-size originals are in the private S3 archive (docs/ops/repo-media-archive.md).
-# Remove this line in the post-rewrite cleanup PR of the same session.
-docs/audits/** AA-1161 phase 2 one-off in-place compression of linked screenshots, originals archived in S3; remove after the rewrite
