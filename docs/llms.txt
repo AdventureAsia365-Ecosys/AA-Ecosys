@@ -38,7 +38,7 @@ Paths are relative to this `docs/` folder unless they start with a repo name. Re
 
 - [Security docs index](security/README.md): security pages and access-review records.
 - [Security baseline](security/baseline.md): every control with live status, evidence and open issue.
-- [Vulnerability management](security/vulnerability-management.md): fix times, exceptions, monthly triage, open alerts.
+- [Vulnerability management](security/vulnerability-management.md): triage rule (CISA KEV, EPSS, CVSS v4.0) with fix times, the exception register, the monthly triage and its records.
 
 ## Decisions
 
