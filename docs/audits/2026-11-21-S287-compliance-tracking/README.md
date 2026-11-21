@@ -389,3 +389,13 @@ control chung. Con số ~40 là số control (việc mình làm và chứng minh
 thoả nhiều yêu cầu ở nhiều khung cùng lúc, nên % đáp ứng vẫn tính trên toàn bộ yêu cầu của khung.
 
 Issue triển khai: AA-1170 (pha 1–2), cùng project với AA-1166. Trang quyết định: https://claude.ai/artifact/MxZVVsNbcmjo31DBz8n2fQ.
+
+**Cập nhật cuối phiên S287 (21/11, tech lead):**
+
+- **Q14 đổi:** luật dữ liệu cá nhân VN (Luật 91/2025/QH15 + Nghị định 356/2025/NĐ-CP) và GDPR vào trang **ngay ở S288**, dạng checklist
+  nghĩa vụ có cờ "cần luật sư xem". Các luật quốc tế khác (UK GDPR, Privacy Act của Úc, luật bang Mỹ theo ngưỡng, luật chống
+  spam cho chiến dịch e-mail, Luật Dữ liệu 60/2024 và quy định lưu trữ trong nước, PCI DSS khi có thanh toán thẻ) chỉ vào sau
+  bước bản đồ áp dụng theo thị trường, mỗi kết luận có nguồn chính thức → AA-1174.
+- Pha 2–3 (kho bằng chứng khoá ghi, GitHub App chỉ đọc, Prowler, DB checks, exception / risk / SoA, rà soát tháng) chưa có issue
+  sau khi AA-1170 đóng → tạo AA-1173, xếp S289 sau bộ chính sách AA-1166 (S288).
+
