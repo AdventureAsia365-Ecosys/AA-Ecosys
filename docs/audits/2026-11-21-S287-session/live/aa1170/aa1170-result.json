@@ -1,0 +1,473 @@
+{
+  "run_at": "2026-11-21T08:29:42.959Z",
+  "overview": {
+    "status": 200,
+    "top_keys": [
+      "environment",
+      "generated_at",
+      "frameworks",
+      "controls",
+      "checks",
+      "attention",
+      "heartbeat",
+      "trend",
+      "settings",
+      "settings_changed_on",
+      "register",
+      "ingest"
+    ],
+    "frameworks_count": 6,
+    "frameworks": [
+      {
+        "framework": "iso27001:2022",
+        "reference_pct": 45.8,
+        "n_requirements": 123,
+        "n_met": 3,
+        "n_partial": 17,
+        "n_gap": 101,
+        "n_stale": 0,
+        "n_unmapped": 2,
+        "strict_pct": 2.44,
+        "weighted_pct": 9.35
+      },
+      {
+        "framework": "soc2:2017",
+        "reference_pct": 44,
+        "n_requirements": 33,
+        "n_met": 0,
+        "n_partial": 11,
+        "n_gap": 22,
+        "n_stale": 0,
+        "n_unmapped": 0,
+        "strict_pct": 0,
+        "weighted_pct": 16.67
+      },
+      {
+        "framework": "iso42001:2023",
+        "reference_pct": 46.9,
+        "n_requirements": 70,
+        "n_met": 1,
+        "n_partial": 5,
+        "n_gap": 64,
+        "n_stale": 0,
+        "n_unmapped": 0,
+        "strict_pct": 1.43,
+        "weighted_pct": 5
+      },
+      {
+        "framework": "owasp-top10:2021",
+        "reference_pct": 64.8,
+        "n_requirements": 10,
+        "n_met": 0,
+        "n_partial": 4,
+        "n_gap": 6,
+        "n_stale": 0,
+        "n_unmapped": 0,
+        "strict_pct": 0,
+        "weighted_pct": 20
+      },
+      {
+        "framework": "owasp-llm:2025",
+        "reference_pct": 66.7,
+        "n_requirements": 10,
+        "n_met": 0,
+        "n_partial": 0,
+        "n_gap": 10,
+        "n_stale": 0,
+        "n_unmapped": 0,
+        "strict_pct": 0,
+        "weighted_pct": 0
+      },
+      {
+        "framework": "eu-ai-act:2024",
+        "reference_pct": null,
+        "n_requirements": 7,
+        "n_met": 0,
+        "n_partial": 0,
+        "n_gap": 7,
+        "n_stale": 0,
+        "n_unmapped": 0,
+        "strict_pct": 0,
+        "weighted_pct": 0
+      }
+    ],
+    "heartbeat": [
+      {
+        "source": "root_daily",
+        "last_seen": "2026-11-21T08:06:24+00:00",
+        "age_hours": 0.4,
+        "heartbeat_hours": 36,
+        "ok": true,
+        "evidence_rows": 10
+      }
+    ],
+    "ingest": {
+      "read_at": "2026-11-21T08:29:47.144673+00:00",
+      "object": "compliance/evidence.json",
+      "state": "ok",
+      "rows": 10,
+      "new": 10,
+      "dropped": []
+    },
+    "totals": {
+      "requirements": 253,
+      "controls": 48,
+      "mappings": 399
+    },
+    "settings": {
+      "validity_hours": {
+        "root_daily": 72
+      },
+      "heartbeat_hours": 36,
+      "partial_weight": 0.5,
+      "fact_limits": {
+        "ci_image_scan_sbom": {
+          "fact": "last_date",
+          "limit": 8,
+          "kind": "age_days"
+        },
+        "docs_review_overdue": {
+          "fact": "overdue",
+          "limit": 0,
+          "kind": "max"
+        },
+        "last_access_review": {
+          "fact": "last_date",
+          "limit": 100,
+          "kind": "age_days"
+        },
+        "last_restore_drill": {
+          "fact": "last_date",
+          "limit": 90,
+          "kind": "age_days"
+        }
+      }
+    },
+    "attention_count": 1
+  },
+  "controls": {
+    "status": 200,
+    "top_keys": [
+      "generated_at",
+      "controls",
+      "frameworks"
+    ],
+    "count": 48,
+    "by_state": {
+      "no_evidence": 39,
+      "met": 8,
+      "gap": 1
+    },
+    "row_keys": [
+      "control_id",
+      "title",
+      "domain",
+      "owner_role",
+      "frequency",
+      "test_type",
+      "scope",
+      "active",
+      "state",
+      "frameworks",
+      "checks",
+      "last_evidence_at"
+    ]
+  },
+  "control_detail": {
+    "status": 200,
+    "control_id": "AAC-AI-01",
+    "keys": [
+      "control_id",
+      "title",
+      "intent",
+      "domain",
+      "owner_role",
+      "frequency",
+      "test_type",
+      "checks",
+      "scope",
+      "active",
+      "updated_at",
+      "state",
+      "requirements"
+    ],
+    "title": "AI system inventory",
+    "state": "no_evidence",
+    "domain": "ai_governance",
+    "owner_role": "tech lead",
+    "frequency": "monthly",
+    "test_type": "manual",
+    "requirements_count": 8,
+    "requirements_sample": [
+      {
+        "framework": "iso27001:2022",
+        "ref": "A.5.9",
+        "coverage": "partial",
+        "state": "gap"
+      },
+      {
+        "framework": "iso42001:2023",
+        "ref": "7.5.1",
+        "coverage": "partial",
+        "state": "partial"
+      },
+      {
+        "framework": "iso42001:2023",
+        "ref": "A.4.2",
+        "coverage": "full",
+        "state": "gap"
+      },
+      {
+        "framework": "iso42001:2023",
+        "ref": "A.4.3",
+        "coverage": "partial",
+        "state": "gap"
+      },
+      {
+        "framework": "iso42001:2023",
+        "ref": "A.4.4",
+        "coverage": "full",
+        "state": "gap"
+      }
+    ],
+    "checks": []
+  },
+  "control_unknown": {
+    "status": 404
+  },
+  "refresh": {
+    "status": 403,
+    "body": {
+      "detail": "e2e_read_only"
+    }
+  },
+  "overview_after": {
+    "status": 200,
+    "top_keys": [
+      "environment",
+      "generated_at",
+      "frameworks",
+      "controls",
+      "checks",
+      "attention",
+      "heartbeat",
+      "trend",
+      "settings",
+      "settings_changed_on",
+      "register",
+      "ingest"
+    ],
+    "frameworks_count": 6,
+    "frameworks": [
+      {
+        "framework": "iso27001:2022",
+        "reference_pct": 45.8,
+        "n_requirements": 123,
+        "n_met": 3,
+        "n_partial": 17,
+        "n_gap": 101,
+        "n_stale": 0,
+        "n_unmapped": 2,
+        "strict_pct": 2.44,
+        "weighted_pct": 9.35
+      },
+      {
+        "framework": "soc2:2017",
+        "reference_pct": 44,
+        "n_requirements": 33,
+        "n_met": 0,
+        "n_partial": 11,
+        "n_gap": 22,
+        "n_stale": 0,
+        "n_unmapped": 0,
+        "strict_pct": 0,
+        "weighted_pct": 16.67
+      },
+      {
+        "framework": "iso42001:2023",
+        "reference_pct": 46.9,
+        "n_requirements": 70,
+        "n_met": 1,
+        "n_partial": 5,
+        "n_gap": 64,
+        "n_stale": 0,
+        "n_unmapped": 0,
+        "strict_pct": 1.43,
+        "weighted_pct": 5
+      },
+      {
+        "framework": "owasp-top10:2021",
+        "reference_pct": 64.8,
+        "n_requirements": 10,
+        "n_met": 0,
+        "n_partial": 4,
+        "n_gap": 6,
+        "n_stale": 0,
+        "n_unmapped": 0,
+        "strict_pct": 0,
+        "weighted_pct": 20
+      },
+      {
+        "framework": "owasp-llm:2025",
+        "reference_pct": 66.7,
+        "n_requirements": 10,
+        "n_met": 0,
+        "n_partial": 0,
+        "n_gap": 10,
+        "n_stale": 0,
+        "n_unmapped": 0,
+        "strict_pct": 0,
+        "weighted_pct": 0
+      },
+      {
+        "framework": "eu-ai-act:2024",
+        "reference_pct": null,
+        "n_requirements": 7,
+        "n_met": 0,
+        "n_partial": 0,
+        "n_gap": 7,
+        "n_stale": 0,
+        "n_unmapped": 0,
+        "strict_pct": 0,
+        "weighted_pct": 0
+      }
+    ],
+    "heartbeat": [
+      {
+        "source": "root_daily",
+        "last_seen": "2026-11-21T08:06:24+00:00",
+        "age_hours": 0.4,
+        "heartbeat_hours": 36,
+        "ok": true,
+        "evidence_rows": 10
+      }
+    ],
+    "ingest": {
+      "read_at": "2026-11-21T08:29:47.144673+00:00",
+      "object": "compliance/evidence.json",
+      "state": "ok",
+      "rows": 10,
+      "new": 10,
+      "dropped": []
+    },
+    "totals": {
+      "requirements": 253,
+      "controls": 48,
+      "mappings": 399
+    },
+    "settings": {
+      "validity_hours": {
+        "root_daily": 72
+      },
+      "heartbeat_hours": 36,
+      "partial_weight": 0.5,
+      "fact_limits": {
+        "ci_image_scan_sbom": {
+          "fact": "last_date",
+          "limit": 8,
+          "kind": "age_days"
+        },
+        "docs_review_overdue": {
+          "fact": "overdue",
+          "limit": 0,
+          "kind": "max"
+        },
+        "last_access_review": {
+          "fact": "last_date",
+          "limit": 100,
+          "kind": "age_days"
+        },
+        "last_restore_drill": {
+          "fact": "last_date",
+          "limit": 90,
+          "kind": "age_days"
+        }
+      }
+    },
+    "attention_count": 1
+  },
+  "ui_overview": {
+    "url_path": "/admin/platform/compliance",
+    "banner": "READINESS SCORE (DEV ENVIRONMENT), NOT A CERTIFICATION. Evidence is collected automatically from the repos and registers and kept for readiness tracking; it is not yet stored in a tamper-proof evidence store.",
+    "banner_ok": true,
+    "refresh_button_visible": true,
+    "forbidden": {
+      "issue_ids": [],
+      "emails": 0,
+      "account_ids": 0
+    },
+    "body_forbidden": {
+      "issue_ids": [],
+      "emails": 0,
+      "account_ids": 0
+    },
+    "page_hscroll_390": false
+  },
+  "ui_controls": {
+    "rows_in_table": 48,
+    "drawer_open": true,
+    "drawer_text_head": "AAC-VUL-01 MET Image scanning, SBOM and valid exceptions Intent: Every image built for main is scanned with an SBOM and the scan passes, recently enough; every vulnerability exception is still within its expiry. Evidence: the CI scan read and the exception register. vulnerability · tech lead · daily · hybrid Requirements covered ISO/IEC 27001:2022 A.5.21 — Security risks of the ICT supply chain ha",
+    "forbidden": {
+      "issue_ids": [],
+      "emails": 0,
+      "account_ids": 0
+    },
+    "rows_in_table_no_drawer": 48,
+    "page_hscroll_390": false,
+    "drawer_control": "AAC-VUL-01",
+    "forbidden_drawer": {
+      "issue_ids": [],
+      "emails": 0,
+      "account_ids": 0
+    }
+  },
+  "console_errors": [
+    "Failed to load resource: the server responded with a status of 404 ()",
+    "Failed to load resource: the server responded with a status of 403 ()"
+  ],
+  "failing_requests": [
+    "GET /api/admin/platform/compliance/controls/ZZ-NOPE-99 404",
+    "POST /api/admin/platform/compliance/refresh 403"
+  ],
+  "control_detail_met": {
+    "status": 200,
+    "control_id": "AAC-VUL-01",
+    "title": "Image scanning, SBOM and valid exceptions",
+    "state": "met",
+    "test_type": "hybrid",
+    "requirements_count": 6,
+    "requirements_by_framework": {
+      "iso27001:2022": 3,
+      "owasp-top10:2021": 1,
+      "soc2:2017": 2
+    },
+    "checks": [
+      {
+        "check_id": "ci_image_scan_sbom",
+        "state": "pass",
+        "required": true,
+        "expires_at": "2026-11-24T08:06:24+00:00",
+        "history": 1,
+        "last": {
+          "status": "pass",
+          "collected_at": "2026-11-21T08:06:24+00:00",
+          "source": "root_daily",
+          "summary": "3/3 image repos scan and write an SBOM; oldest newest scan 2026-11-21"
+        }
+      },
+      {
+        "check_id": "vuln_exceptions_valid",
+        "state": "pass",
+        "required": true,
+        "expires_at": "2026-11-24T08:06:24+00:00",
+        "history": 1,
+        "last": {
+          "status": "pass",
+          "collected_at": "2026-11-21T08:06:24+00:00",
+          "source": "root_daily",
+          "summary": "0/0 exceptions valid"
+        }
+      }
+    ]
+  }
+}

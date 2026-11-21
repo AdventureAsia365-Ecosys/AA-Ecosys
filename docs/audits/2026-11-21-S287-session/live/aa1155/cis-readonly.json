@@ -1,0 +1,140 @@
+{
+  "host": "https://aa-cis.lumiguides.it.com",
+  "landing_after_sign_in": "/admin/overview",
+  "verify_admin": {
+    "status": 200,
+    "keys": [
+      "admin_id",
+      "auth",
+      "capabilities",
+      "custom_role_label",
+      "display_name",
+      "email",
+      "role",
+      "username",
+      "valid"
+    ],
+    "role": "admin",
+    "custom_role_label": null,
+    "capabilities": [
+      "a4.unpublish",
+      "ai.admin",
+      "alerts.write",
+      "atoms.write",
+      "audit.read",
+      "billing.read",
+      "billing.write",
+      "catalog.read",
+      "content.publish",
+      "content.read",
+      "content.settings.write",
+      "content.write",
+      "docs.read",
+      "lab.read",
+      "learn.preview",
+      "master.admin",
+      "notifications.read",
+      "ops.read",
+      "ops.write",
+      "photos.write",
+      "quality.write",
+      "reference_price.read",
+      "reference_price.write",
+      "review.act",
+      "settings.approve",
+      "settings.write",
+      "spend.read",
+      "spend.write",
+      "staff.read",
+      "tenant.assign",
+      "tenant.book.account.read",
+      "tenant.book.read",
+      "tenant.book.write",
+      "tenant.member.resend",
+      "tenant.member.write",
+      "tenant.read",
+      "tenant.view_as",
+      "tenant.write",
+      "tenant_content.read",
+      "wave.run"
+    ],
+    "capabilities_count": 40,
+    "capabilities_sorted": true,
+    "cis_caps_cookie_equal": true,
+    "cis_role_name_cookie": "",
+    "detail": null
+  },
+  "roles_api": {
+    "status": 200,
+    "cis_builtin": [
+      "admin",
+      "content_lead",
+      "content",
+      "tenant_qa",
+      "customer_success",
+      "support",
+      "finance",
+      "ai_ops",
+      "viewer"
+    ],
+    "cis_custom": [
+      {
+        "code": "custom_content",
+        "label": "Content",
+        "based_on": "content_lead",
+        "archived": false,
+        "caps": 18
+      }
+    ],
+    "cis_custom_available": true,
+    "content_role": {
+      "has_tenant_read": true,
+      "has_content_settings_write": false,
+      "caps": 18
+    },
+    "booking_builtin": [
+      "admin",
+      "sales",
+      "contracting",
+      "finance"
+    ],
+    "booking_custom": [
+      {
+        "code": "custom_product_ops_accounting",
+        "label": "Product, ops & accounting",
+        "caps": 24,
+        "approve_class": []
+      }
+    ],
+    "booking_custom_available": true,
+    "crm_groups": [
+      "Agency admin",
+      "Operations",
+      "Support"
+    ],
+    "tripplanner": {
+      "staff_roles": false
+    }
+  },
+  "page": {
+    "sections": {
+      "roles-app-cis": true,
+      "roles-cis-matrix": true,
+      "roles-app-booking": true,
+      "roles-app-crm": true,
+      "roles-app-tripplanner": true
+    },
+    "tripplanner_text": "TripPlanner No staff roles: TripPlanner has no staff sign-in. Its settings are changed from CIS.",
+    "forbidden": {
+      "issue_ids": [],
+      "emails": [],
+      "account_ids": [],
+      "e2e_markers": [],
+      "agent_words": []
+    },
+    "shows_content_label": true,
+    "shows_booking_custom_label": true
+  },
+  "console_errors": [],
+  "failing_requests": []
+}

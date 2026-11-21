@@ -24,9 +24,9 @@
   _Requirements: R5.2, R5.4_
 - [x] T11 AI budget and gateway routes: verified Cognito session, before / after audit of budget changes - repo: AA-CIS-App
   _Requirements: R5.5_
-- [ ] T13 CIS role editor: API and Staff page section to clone a built-in CIS role, tick capabilities, label and archive custom roles, is_owner only, audit before and after, 400 on approve-class or unknown capability (reuses the Booking T6 rules) - repo: AA-CIS-App
+- [x] T13 CIS role editor: API and Staff page section to clone a built-in CIS role, tick capabilities, label and archive custom roles, is_owner only, audit before and after, 400 on approve-class or unknown capability (reuses the Booking T6 rules) - repo: AA-CIS-App
   _Requirements: R5.6_
-- [ ] T14 Staff presets as data: a preset table (code, label, role per app or custom role, CRM mode keep / replace / add, additive_only, archived) seeded with today's four presets, an is_owner editor on the Staff page with audit, the frontend reads presets from the API; the code keeps only the guards - repo: AA-CIS-App
+- [x] T14 Staff presets as data: a preset table (code, label, role per app or custom role, CRM mode keep / replace / add, additive_only, archived) seeded with today's four presets, an is_owner editor on the Staff page with audit, the frontend reads presets from the API; the code keeps only the guards - repo: AA-CIS-App
   _Requirements: R5.7_
 - [ ] T12 Rollout: Terraform Apply Dev, Migration Apply of CIS 462 and bk-062, schema-reference PR, isolation probe, maker token, deploys, hand step (the content + operations staff member gets booking-custom only once the AA-1150 Booking split, T4.1 and T5 are live; the E2E maker's booking-custom group grants nothing before T5), pricing E2E - repo: AA-Ecosys, AA-CIS-Infra
   _Requirements: R1.1, R6.1_

@@ -125,7 +125,7 @@ features:
     status: live
     surface: ["page:/admin/s1-rewrite", "route:admin_pipeline/runs", "route:admin_waves"]
     conditions:
-      settings: [cis.a1.attempts_before_review, cis.spend.rerun_wave_max_tours, cis.quality.pass_line]
+      settings: [cis.a1.attempts_before_review, cis.spend.rerun_wave_max_tours, cis.quality.pass_line, cis.llm.prompt_data_fence]
       connections: [anthropic-direct, openai-direct, acc3, acc2]
       note: Paid AI calls through the AI gateway; a wave is limited by the rerun wave cap.
     owner: content_lead
@@ -479,23 +479,25 @@ features:
     module: people-access
     name: Staff directory and roles
     name_vi: Danh bạ nhân viên và vai trò
-    summary_vi: "Mọi tài khoản nhân viên và vai trò; quản trị viên mời, đổi vai trò, khoá, đăng xuất và đồng bộ với đăng nhập công ty."
-    summary: Every staff account with its roles; admins invite, change roles, disable, sign out and sync with the company sign-in.
+    summary_vi: "Mọi tài khoản nhân viên và vai trò; quản trị viên mời, đổi vai trò, khoá, đăng xuất và đồng bộ với đăng nhập công ty; chủ sở hữu tạo vai trò riêng từ một vai trò có sẵn và giữ các mẫu vai trò cho người mới."
+    summary: Every staff account with its roles; admins invite, change roles, disable, sign out and sync with the company sign-in; owners clone a built-in role into a custom role and keep the people-role presets.
     roles: [admin]
     status: live
-    surface: ["page:/admin/platform/staff/**", "route:admin_platform"]
+    surface: ["page:/admin/platform/staff/**", "page:/admin/platform/roles", "route:admin_platform", "route:admin_platform_roles"]
     depends_on: [INF-F001]
     owner: tech_lead
   - id: CIS-F034
     app: cis
     module: people-access
-    name: Alert recipients
-    name_vi: Người nhận cảnh báo
-    summary_vi: "Ai nhận e-mail cảnh báo của nền tảng, luôn khớp với danh sách đăng ký kênh cảnh báo."
-    summary: Who receives the platform alert e-mails, kept in step with the alert topic subscriptions.
+    name: Alerts catalogue and recipients
+    name_vi: Danh mục cảnh báo và người nhận
+    summary_vi: "Mọi điều kiện cảnh báo của hệ thống trên một trang (alarm, rule, ngân sách, các kiểm tra trong ứng dụng của CIS, Booking và CRM) kèm ngưỡng đang áp dụng, lần báo gần nhất và chỗ còn thiếu; cùng danh sách ai nhận e-mail cảnh báo, luôn khớp với danh sách đăng ký kênh cảnh báo."
+    summary: Every alert condition of the platform on one page (alarms, rules, budgets, the in-app checks of CIS, Booking and the CRM) with the thresholds in force, the last alert and the coverage gaps; and who receives the platform alert e-mails, kept in step with the alert topic subscriptions.
     roles: [admin]
     status: live
-    surface: ["page:/admin/platform/alerts", "route:admin_alert_recipients"]
+    surface: ["page:/admin/platform/alerts", "route:admin_alert_recipients", "route:admin_alerts_catalogue"]
+    conditions:
+      settings: [cis.ops.app_spend_near_pct, cis.ops.bell_every_daily_hours, cis.ops.bell_every_hours, cis.ops.bell_every_nightly_hours, cis.ops.bell_every_route_hours, cis.ops.jobs_overdue_factor, cis.ops.jobs_starved_after_s, cis.ops.qf_drift_alert_pct, cis.ops.qf_drift_new_model_pct, cis.ops.qf_min_requests, cis.ops.recompute_lag_limit_s, cis.ops.reply_cut_alert_pct, cis.ops.research_stale_share_pct, cis.ops.role_connections_pct, cis.ops.xid_age_limit]
     depends_on: [INF-F005]
     owner: tech_lead
   - id: CIS-F035
@@ -562,6 +564,31 @@ features:
     depends_on: [INF-F006]
     guide: docs/guides/delivery-metrics.md
     owner: tech_lead
+  - id: CIS-F051
+    app: cis
+    module: overview
+    name: My work
+    name_vi: Việc của tôi
+    summary_vi: "Trang mở đầu của các vai trò nội dung: mỗi hàng việc mà vai trò được làm là một ô, có số việc đang chờ, việc cũ nhất đã chờ bao lâu, bấm vào mở đúng trang với cùng bộ lọc; hiển thị theo quyền, không theo người."
+    summary: The landing page of the content roles - one tile per work queue the role may work, with the number waiting and how long the oldest has waited, each opening its page with the same filter; shown by permission, never by person.
+    roles: [admin, content_lead, content, tenant_qa]
+    status: live
+    surface: ["page:/admin/my-work", "route:admin_my_work"]
+    owner: content_lead
+  - id: CIS-F052
+    app: cis
+    module: platform-ops
+    name: Compliance readiness
+    name_vi: Mức sẵn sàng tuân thủ
+    summary_vi: "Platform › Compliance readiness: mức có bằng chứng của sáu bộ khung (ISO 27001, SOC 2, ISO 42001, OWASP Top 10, OWASP LLM, EU AI Act), từng control với các kiểm tra và lịch sử bằng chứng, bộ thu bằng chứng chạy mỗi ngày; là số liệu sẵn sàng trên Dev, không phải chứng nhận."
+    summary: Platform › Compliance readiness - the evidenced share of six frameworks (ISO 27001, SOC 2, ISO 42001, OWASP Top 10, OWASP LLM, EU AI Act), every control with its checks and evidence history, fed by a daily evidence collector; a Dev readiness number, not a certification.
+    roles: [admin]
+    status: beta
+    surface: ["page:/admin/platform/compliance", "route:admin_platform_compliance"]
+    conditions:
+      settings: [cis.compliance.access_review_max_age_days, cis.compliance.ci_scan_max_age_days, cis.compliance.collector_heartbeat_hours, cis.compliance.docs_overdue_max, cis.compliance.drill_max_age_days, cis.compliance.partial_weight, cis.compliance.reference_scores, cis.compliance.validity_hours.root_daily]
+    depends_on: [INF-F006]
+    owner: tech_lead
   # ── AA-CIS: Content studio API (the UI lives in AA-Partner) ───────────────────────────────────────────────────────
   - id: CIS-F040
     app: cis
@@ -616,7 +643,7 @@ features:
     surface: ["route:v1_content_writing"]
     conditions:
       entitlements: [content.social, content.article, ai.budget_usd_monthly]
-      settings: [cis.t9.max_attempts, cis.t9.blog_chars_max, cis.quality.t10_reuse_similarity]
+      settings: [cis.t9.max_attempts, cis.t9.blog_chars_max, cis.quality.t10_reuse_similarity, cis.llm.prompt_data_fence]
     owner: content_lead
   - id: CIS-F044
     app: cis
@@ -641,7 +668,7 @@ features:
     surface: ["route:v1_integrations", "route:v1_publish"]
     conditions:
       entitlements: [channel.wordpress, channel.facebook]
-      settings: [cis.publish.daily_limit_default]
+      settings: [cis.publish.daily_limit_default, cis.content.ai_disclosure]
     owner: content_lead
   - id: CIS-F046
     app: cis
@@ -698,11 +725,11 @@ features:
     module: shell
     name: Staff shell, dashboard and notifications
     name_vi: Khung trang, bảng điều khiển và thông báo cho nhân viên
-    summary_vi: "Nhân viên Booking đăng nhập bằng tài khoản công ty, xem bảng điều khiển và luồng thông báo của mình."
-    summary: Booking staff sign in with the company account and see the dashboard and their notification feed.
+    summary_vi: "Nhân viên Booking đăng nhập bằng tài khoản công ty, xem bảng điều khiển với dải Việc của tôi (mỗi hàng việc vai trò được làm là một ô có số việc chờ) và luồng thông báo của mình."
+    summary: Booking staff sign in with the company account and see the dashboard with its My work band (one tile per work queue their role may work, with the number waiting) and their notification feed.
     roles: [booking-admin, sales, contracting, finance]
     status: live
-    surface: ["page:/", "page:/login", "page:/kit-gallery", "page:/notifications", "route:notifications"]
+    surface: ["page:/", "page:/login", "page:/kit-gallery", "page:/notifications", "route:notifications", "route:my_work"]
     depends_on: [INF-F001]
     owner: tech_lead
   - id: BK-F002
@@ -710,11 +737,11 @@ features:
     module: platform
     name: Health, API docs and deploy gate
     name_vi: Health, tài liệu API và cổng deploy
-    summary_vi: "Kiểm tra sống và sẵn sàng, tài liệu API có bảo vệ, và điểm gọi máy mà quy trình deploy hỏi trước khi triển khai."
-    summary: Liveness and readiness checks, the gated API docs and the machine endpoint the deploy workflow asks before it rolls out.
+    summary_vi: "Kiểm tra sống và sẵn sàng, tài liệu API có bảo vệ, điểm gọi máy mà quy trình deploy hỏi trước khi triển khai, và danh sách kiểm tra trong ứng dụng (ngưỡng đang áp dụng, lần báo gần nhất) mà danh mục cảnh báo của CIS đọc."
+    summary: Liveness and readiness checks, the gated API docs, the machine endpoint the deploy workflow asks before it rolls out, and the in-app check registry (thresholds in force, last alert) the CIS alerts catalogue reads.
     roles: [machine]
     status: live
-    surface: ["route:health", "route:docs", "route:ops"]
+    surface: ["route:health", "route:docs", "route:ops", "route:ops_checks"]
     owner: tech_lead
   - id: BK-F003
     app: booking
@@ -795,11 +822,11 @@ features:
     module: supply
     name: Suppliers, contracts and rate sheets
     name_vi: Nhà cung cấp, hợp đồng và bảng giá
-    summary_vi: "Danh sách nhà cung cấp kèm hợp đồng và bảng giá; điều khoản hợp đồng (allotment, free sale, on request), hạn chế cung ứng và stop-sale, có người thứ hai duyệt."
-    summary: The supplier register with contracts and rate sheets; the contract terms (allotment, free sale, on request), supply restrictions and stop-sale, each checked by a second person.
+    summary_vi: "Danh sách nhà cung cấp kèm hợp đồng và bảng giá; điều khoản hợp đồng (allotment, free sale, on request), hạn chế cung ứng và stop-sale, có người thứ hai duyệt; một trang gom mọi stop-sale đang chờ duyệt của tất cả nhà cung cấp."
+    summary: The supplier register with contracts and rate sheets; the contract terms (allotment, free sale, on request), supply restrictions and stop-sale, each checked by a second person; one page lists the stop-sales waiting for that check across every supplier.
     roles: [booking-admin, contracting, sales]
     status: live
-    surface: ["page:/suppliers/**", "route:suppliers", "route:supply_model"]
+    surface: ["page:/suppliers/**", "page:/stop-sales", "route:suppliers", "route:supply_model"]
     owner: tech_lead
   - id: BK-F010
     app: booking
@@ -906,11 +933,11 @@ features:
     module: admin
     name: Staff, audit log and reference data
     name_vi: Nhân viên, nhật ký kiểm toán và dữ liệu tham chiếu
-    summary_vi: "Hồ sơ và vai trò nhân viên Booking, nhật ký quản trị và dữ liệu tham chiếu (cài đặt, quốc gia)."
-    summary: Booking staff profiles and roles, the admin audit log and the reference rows (settings, countries).
+    summary_vi: "Hồ sơ và vai trò nhân viên Booking, vai trò riêng do chủ sở hữu tạo từ một vai trò có sẵn, nhật ký quản trị và dữ liệu tham chiếu (cài đặt, quốc gia)."
+    summary: Booking staff profiles and roles, the custom roles an owner clones from a built-in role, the admin audit log and the reference rows (settings, countries).
     roles: [booking-admin]
     status: live
-    surface: ["page:/staff/**", "page:/audit-log", "route:staff", "route:reference"]
+    surface: ["page:/staff/**", "page:/roles", "page:/audit-log", "route:staff", "route:staff_roles", "route:reference"]
     owner: tech_lead
   - id: BK-F019
     app: booking
@@ -1071,6 +1098,8 @@ features:
     roles: [owner, agent]
     status: live
     surface: ["page:/suppliers", "page:/bookings", "page:/services", "route:ledger", "route:catalogue"]
+    conditions:
+      settings: [crm.agency_lines.disclaimer, crm.agency_lines.due_lead_days]
     owner: tech_lead
   - id: CRM-F013
     app: crm
@@ -1262,13 +1291,13 @@ features:
     module: ops-contract
     name: Platform ops API and CRM settings
     name_vi: API vận hành nền tảng và cấu hình CRM
-    summary_vi: "Hợp đồng vận hành mà CIS admin gọi (đại lý, thành viên, job), các cài đặt CRM hiển thị qua trang Cài đặt nền tảng và bản sao phần ngân sách mỗi kết nối AI của CRM."
-    summary: The ops contract CIS admin calls (agencies, members, jobs), the CRM settings relayed by Platform › Settings and the CRM's copy of its share of each AI connection budget.
+    summary_vi: "Hợp đồng vận hành mà CIS admin gọi (đại lý, thành viên, job), các cài đặt CRM hiển thị qua trang Cài đặt nền tảng, bản sao phần ngân sách mỗi kết nối AI của CRM, và danh sách kiểm tra trong ứng dụng (ngưỡng đang áp dụng, lần báo gần nhất) mà danh mục cảnh báo của CIS đọc."
+    summary: The ops contract CIS admin calls (agencies, members, jobs), the CRM settings relayed by Platform › Settings, the CRM's copy of its share of each AI connection budget, and the in-app check registry (thresholds in force, last alert) the CIS alerts catalogue reads.
     roles: [machine]
     status: live
-    surface: ["route:ops", "route:ops_settings", "route:ops_connection_shares"]
+    surface: ["route:ops", "route:ops_settings", "route:ops_connection_shares", "route:ops_checks"]
     conditions:
-      settings: [crm.settings.two_person_approval, crm.retention.job_dry_run]
+      settings: [crm.settings.two_person_approval, crm.retention.job_dry_run, crm.ops.app_spend_near_pct, crm.ops.audit_export_lag_min, crm.ops.audit_partition_months_ahead, crm.ops.audit_verify_lag_h, crm.ops.jobs_overdue_factor, crm.ops.jobs_stuck_after_s, crm.ops.membership_feed_stuck_failures]
     owner: tech_lead
   - id: CRM-F029
     app: crm

@@ -917,6 +917,9 @@ mailbox or Google account". That is too strong.
   or the business owner, no password. The CIS code (AA-1155 spec task T8) adds it to the E2E roles of the directory,
   refuses it outside `ENVIRONMENT` dev and holds its writes to synthetic test tours (publish, review, the writes the
   two-person proof needs; reads stay `content_lead`).
+- **As built (S287, CIS #1624):** the CIS side is read-only for now. CIS has no synthetic-tour marker, so the writes on
+  synthetic test tours are not built and the address holds `content_lead` reads only. A later task adds the marker
+  before the two-person publish proof runs.
 - **Removal:** with the A10 family (trigger entry, recipient, CHECK branch, directory row, Cognito user).
 
 #### A10g. Dev-only custom-role maker E2E address (20/11/2026, S286, AA-1155)
@@ -935,6 +938,11 @@ mailbox or Google account". That is too strong.
 - **Scope, enforced by the app code (AA-1155 spec tasks T6 / T8):** Booking refuses it outside `ENVIRONMENT` dev and
   on any write outside synthetic records (the A10e rule); CIS holds it to synthetic test tours. The approve-class
   refusals are what the identity proves, so no route-scoped grant is added.
+- **As built (S287, Booking #294, CIS #1624):** Booking allows the maker only two writes: creating and deactivating its
+  own synthetic supplier. Every approve-class write answers 403 `forbidden` from the role's capabilities before any
+  record is read. That covers route gates of the approve class and the activate actions for suppliers, hotels and
+  services. It also covers contract publish and stop-sale review. Live 21/11: 24 capabilities, reads 200, 13/13
+  approve-class writes 403. CIS holds it to reads (no synthetic-tour marker yet, see A10f).
 - **Removal:** with the A10 family (trigger entry, recipient, tool command, CHECK branch, directory row, Cognito user).
 
 ### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)

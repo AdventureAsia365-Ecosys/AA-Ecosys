@@ -34,11 +34,13 @@
    "page:/pricing/seasons",
    "page:/pricing/workbench",
    "page:/proposals",
+   "page:/roles",
    "page:/services",
    "page:/services/[id]",
    "page:/settings",
    "page:/staff",
    "page:/staff/[cisUserId]",
+   "page:/stop-sales",
    "page:/suppliers",
    "page:/suppliers/[id]",
    "page:/suppliers/[id]/edit",
@@ -54,13 +56,16 @@
    "route:docs",
    "route:finance",
    "route:health",
+   "route:my_work",
    "route:notifications",
    "route:ops",
+   "route:ops_checks",
    "route:price_versions",
    "route:pricing",
    "route:reference",
    "route:retention",
    "route:staff",
+   "route:staff_roles",
    "route:supplier_bills",
    "route:supplier_bookings",
    "route:suppliers",
@@ -85,6 +90,7 @@
    "page:/admin/lab/[stage]",
    "page:/admin/lab/writing-memory",
    "page:/admin/master-content",
+   "page:/admin/my-work",
    "page:/admin/overview",
    "page:/admin/photos",
    "page:/admin/places",
@@ -94,8 +100,10 @@
    "page:/admin/platform/apps",
    "page:/admin/platform/audit",
    "page:/admin/platform/catalogue",
+   "page:/admin/platform/compliance",
    "page:/admin/platform/delivery",
    "page:/admin/platform/infra",
+   "page:/admin/platform/roles",
    "page:/admin/platform/settings",
    "page:/admin/platform/staff",
    "page:/admin/platform/staff/[id]",
@@ -133,6 +141,7 @@
    "route:admin_ai_gateway_budgets",
    "route:admin_ai_gateway_spend",
    "route:admin_alert_recipients",
+   "route:admin_alerts_catalogue",
    "route:admin_api_docs",
    "route:admin_atoms",
    "route:admin_budgets",
@@ -150,6 +159,7 @@
    "route:admin_llm_ops",
    "route:admin_llm_route",
    "route:admin_llm_route_control",
+   "route:admin_my_work",
    "route:admin_overview",
    "route:admin_photos",
    "route:admin_pipeline/billing",
@@ -167,8 +177,10 @@
    "route:admin_places",
    "route:admin_plans",
    "route:admin_platform",
+   "route:admin_platform_compliance",
    "route:admin_platform_delivery",
    "route:admin_platform_ops",
+   "route:admin_platform_roles",
    "route:admin_product_catalogue",
    "route:admin_quality_funnel",
    "route:admin_quality_lineage",
@@ -354,6 +366,7 @@
    "route:messaging",
    "route:onboarding",
    "route:ops",
+   "route:ops_checks",
    "route:ops_connection_shares",
    "route:ops_release",
    "route:ops_settings",
@@ -758,6 +771,42 @@
    "app": "cis",
    "area": "billing"
   },
+  "cis.compliance.access_review_max_age_days": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.ci_scan_max_age_days": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.collector_heartbeat_hours": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.docs_overdue_max": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.drill_max_age_days": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.partial_weight": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.reference_scores": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.validity_hours.root_daily": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.content.ai_disclosure": {
+   "app": "cis",
+   "area": "content"
+  },
   "cis.content.publish_two_person": {
    "app": "cis",
    "area": "content"
@@ -957,6 +1006,70 @@
   "cis.llm.idle_after_hours": {
    "app": "cis",
    "area": "ai"
+  },
+  "cis.llm.prompt_data_fence": {
+   "app": "cis",
+   "area": "ai"
+  },
+  "cis.ops.app_spend_near_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.bell_every_daily_hours": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.bell_every_hours": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.bell_every_nightly_hours": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.bell_every_route_hours": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.jobs_overdue_factor": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.jobs_starved_after_s": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.qf_drift_alert_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.qf_drift_new_model_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.qf_min_requests": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.recompute_lag_limit_s": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.reply_cut_alert_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.research_stale_share_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.role_connections_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.xid_age_limit": {
+   "app": "cis",
+   "area": "ops"
   },
   "cis.platform.admin_mfa_required": {
    "app": "cis",
@@ -1958,6 +2071,14 @@
    "app": "crm",
    "area": "agency_defaults"
   },
+  "crm.agency_lines.disclaimer": {
+   "app": "crm",
+   "area": "agency_lines"
+  },
+  "crm.agency_lines.due_lead_days": {
+   "app": "crm",
+   "area": "agency_lines"
+  },
   "crm.ai.budget_default_usd": {
    "app": "crm",
    "area": "ai"
@@ -2021,6 +2142,34 @@
   "crm.members.max_limit": {
    "app": "crm",
    "area": "members"
+  },
+  "crm.ops.app_spend_near_pct": {
+   "app": "crm",
+   "area": "ops"
+  },
+  "crm.ops.audit_export_lag_min": {
+   "app": "crm",
+   "area": "ops"
+  },
+  "crm.ops.audit_partition_months_ahead": {
+   "app": "crm",
+   "area": "ops"
+  },
+  "crm.ops.audit_verify_lag_h": {
+   "app": "crm",
+   "area": "ops"
+  },
+  "crm.ops.jobs_overdue_factor": {
+   "app": "crm",
+   "area": "ops"
+  },
+  "crm.ops.jobs_stuck_after_s": {
+   "app": "crm",
+   "area": "ops"
+  },
+  "crm.ops.membership_feed_stuck_failures": {
+   "app": "crm",
+   "area": "ops"
   },
   "crm.payments.invoice_reminder_every_days": {
    "app": "crm",

@@ -1,0 +1,63 @@
+{
+  "landing_after_sign_in": "/admin/my-work",
+  "verify_admin": {
+    "status": 200,
+    "keys": [
+      "admin_id",
+      "auth",
+      "capabilities",
+      "custom_role_label",
+      "display_name",
+      "email",
+      "role",
+      "username",
+      "valid"
+    ],
+    "role": "custom_content",
+    "custom_role_label": "Content",
+    "capabilities": [
+      "a4.unpublish",
+      "atoms.write",
+      "catalog.read",
+      "content.publish",
+      "content.read",
+      "content.write",
+      "docs.read",
+      "lab.read",
+      "learn.preview",
+      "master.admin",
+      "notifications.read",
+      "photos.write",
+      "quality.write",
+      "reference_price.read",
+      "review.act",
+      "tenant.read",
+      "tenant_content.read",
+      "wave.run"
+    ],
+    "capabilities_count": 18,
+    "capabilities_sorted": true,
+    "cis_caps_cookie_equal": true,
+    "cis_role_name_cookie": "Content",
+    "detail": null
+  },
+  "has_content_settings_write": false,
+  "has_tenant_read": true,
+  "pages_landed": {
+    "/admin/my-work": "/admin/my-work",
+    "/admin/tenants": "/admin/tenants",
+    "/admin/platform/staff": "/admin/my-work",
+    "/admin/seo-intelligence": "/admin/my-work"
+  },
+  "write_probe": {
+    "route": "PUT /api/admin/aa-content/<random uuid>/draft",
+    "status": 403,
+    "body": "{\"detail\":\"e2e_read_only\"}"
+  },
+  "console_errors": [
+    "Failed to load resource: the server responded with a status of 403 ()"
+  ],
+  "failing_requests": [
+    "PUT /api/admin/aa-content/18d749cf-d860-431f-aa57-a6a081c1519d/draft 403"
+  ]
+}
