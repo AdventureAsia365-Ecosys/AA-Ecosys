@@ -55,3 +55,6 @@ _site/
 
 # Third-party commercial plugin under study (OPL-1): never commit (AA-1065)
 docs/plugin/
+
+# Vulnerability triage feed cache (CISA KEV, FIRST EPSS; tools/security/vuln_triage.py, AA-1163)
+tools/security/.cache/

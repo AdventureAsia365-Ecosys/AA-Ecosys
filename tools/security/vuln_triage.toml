@@ -1,0 +1,101 @@
+# Vulnerability triage rule and SLA (SEC-03, docs/security/vulnerability-management.md; tech lead decision D12, S286).
+#
+# Read by tools/security/vuln_triage.py. Every threshold, SLA and window of the triage lives here, never as a constant in
+# the tool. When the compliance settings page exists (AA-1170), these values move to the admin-editable settings and this
+# file becomes the seed. Change a value only together with the SEC-03 table, in the same PR.
+
+[rule]
+# P0: listed in CISA KEV, or EPSS probability >= p0_epss, or CVSS base score >= p0_cvss on internet-facing code.
+p0_epss = 0.10
+p0_cvss = 9.0
+# P1: CVSS 7.0-8.9 (or >= p0_cvss on code that is not internet-facing), or EPSS percentile >= p1_epss_percentile.
+p1_cvss = 7.0
+p1_epss_percentile = 0.90
+# P2: CVSS 4.0-6.9. Below p2_cvss is P3.
+p2_cvss = 4.0
+# Exposure rule (SEC-03): a finding in code that never runs where untrusted input reaches it (build, test, docs
+# tooling, development-only dependencies) moves one class down. A KEV listing is never moved down.
+build_moves_down = true
+kev_moves_down = false
+
+[sla]
+# Fix within N days of the day the alert opened. P3 has no clock: it is looked at again at the next monthly triage.
+# prod applies from the first production go-live (S286 section 5.3: prod halves the clock; P0 is 72 hours).
+dev = { P0 = 7, P1 = 30, P2 = 90 }
+prod = { P0 = 3, P1 = 15, P2 = 45 }
+# A row is flagged "due soon" when its due date is at most this many days after the record date.
+due_soon_days = 7
+
+[severity_scores]
+# When an alert carries no CVSS base score, its vendor severity stands in for the lowest score of that band.
+critical = 9.0
+high = 7.0
+medium = 4.0
+low = 0.1
+
+[exceptions]
+# Longest accepted exception, counted from its approval date (the same cap as the Trivy ignore check).
+max_days = 90
+# Dismissal reasons that are a risk acceptance and so need a row in the exception register.
+dependabot_reasons = ["tolerable_risk", "no_bandwidth"]
+code_scanning_reasons = ["won't fix"]
+
+[feeds]
+# Both feeds are free and public. Cache files go to the cache dir (gitignored) and are reused for cache_hours.
+kev_url = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
+epss_url = "https://api.first.org/data/v1/epss"
+epss_batch = 100
+cache_hours = 24
+timeout_seconds = 30
+
+[github]
+org = "AdventureAsia365-Ecosys"
+repos = ["AA-CIS-App", "AA-Booking", "AA-TripPlanner-Web", "AA-Partner", "AA-CIS-Infra", "AA-Ecosys"]
+# Exception files read from each repo's default branch (absent files are skipped).
+ignore_files = [".github/pip-audit-ignore.txt", ".trivyignore"]
+# Who owns an open finding when the alert has no GitHub assignee (company docs name roles, not people).
+default_owner = "tech lead"
+
+[exposure]
+# Where a finding sits decides its exposure: internet (runs and is reachable from the internet), internal (runs, but
+# only for staff or CI with no public input path) or build (never runs where untrusted input reaches it).
+default = "internet"
+# Dependabot marks a dependency as runtime or development; a development-only dependency is build.
+development_scope = "build"
+
+# First match wins. repo and path are shell-style globs; path is the manifest path (Dependabot), the file of a code
+# scanning alert, or the scan target (Trivy).
+[[exposure.rules]]
+repo = "*"
+path = "*tests/*"
+exposure = "build"
+
+[[exposure.rules]]
+repo = "*"
+path = "*.test.*"
+exposure = "build"
+
+[[exposure.rules]]
+repo = "*"
+path = ".github/workflows/*"
+exposure = "internal"
+
+[[exposure.rules]]
+repo = "AA-Ecosys"
+path = "docs/*"
+exposure = "build"
+
+[[exposure.rules]]
+repo = "AA-Ecosys"
+path = "tools/*"
+exposure = "build"
+
+[[exposure.rules]]
+repo = "AA-CIS-Infra"
+path = "tools/*"
+exposure = "build"
+
+[[exposure.rules]]
+repo = "AA-CIS-Infra"
+path = "db/*"
+exposure = "internal"
