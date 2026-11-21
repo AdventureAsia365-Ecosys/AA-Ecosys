@@ -55,7 +55,7 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
   `as-app.sh`) → từ chối, để review không bao giờ mang tên người. Agent review **không** phải approval của người.
 - [ ] **Trigger change control (tech lead, S286 D4):** từ **pilot đầu tiên có dữ liệu thật** (muộn nhất: prod đầu tiên
   hoặc tenant trả tiền đầu tiên) điều phối mở root PR đặt `"require_human_approval_for_risky": true` trong
-  `tools/github/change_control.json` (mục này nằm trong go-live checklist pilot). Bật rồi thì `ship_merge.py` và
+  `tools/github/change_control.json` (bước này phải có trong go-live checklist pilot, AA-1166). Bật rồi thì `ship_merge.py` và
   `ship_wave.py` (cùng gate) từ chối, exit 4, PR rủi ro: nhãn `risky` / `change-control: risky`, hoặc file đổi khớp
   `risky_paths` (migration, Terraform/IAM, workflow/CI/secret/hook, auth/quyền, erasure/retention, chính file config;
   file `.md` không tính; PR copy của ci-bot được miễn vì file đã duyệt ở PR app), khi chưa có review **APPROVED** của
