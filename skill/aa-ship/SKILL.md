@@ -43,6 +43,29 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 - [ ] **PR rủi ro → vòng review trước merge** (auth/quyền, migration/RLS, CI/workflow/secret, xoá dữ liệu, middleware
   trên đường request): commit local → subagent review độc lập (chỉ đọc, nhiệm vụ "phá nó") → sửa mọi blocker/should-fix
   → điều phối push, chờ CI, merge.
+- [ ] **Bằng chứng review trên PR rủi ro (AA-1162):** mở PR xong, điều phối đăng verdict của review độc lập lên PR
+  bằng App (review nằm trên PR, không chỉ trong journal):
+  `tools/github/as-app.sh --repos <Repo> -- python3 tools/github/post_agent_review.py <Repo>#<n> --review <wf_id |
+  journal.jsonl | lane-result.json> --lenses "<lens 1>,<lens 2>,..."` (lens đúng thứ tự lane chạy; mặc định của
+  `tools/workflows/lane.js`: correctness + spec fit, security + data safety, settings, thêm spec khi lane có spec).
+  App là tác giả PR nên GitHub từ chối APPROVE/REQUEST_CHANGES: review luôn là COMMENT, dòng đầu
+  `Agent review: approve | request changes | blocking`, kèm lens, đếm + bảng finding, run id reviewer, head đã review.
+  Chạy lại trên cùng head → sửa review cũ (marker ẩn theo head), không nhân bản; head mới → review mới. Review lại
+  sau pass sửa → đăng lại bằng run review mới. `--dry-run` in body, không đăng; thiếu `GH_TOKEN` (chạy ngoài
+  `as-app.sh`) → từ chối, để review không bao giờ mang tên người. Agent review **không** phải approval của người.
+- [ ] **Trigger change control (tech lead, S286 D4):** từ **pilot đầu tiên có dữ liệu thật** (muộn nhất: prod đầu tiên
+  hoặc tenant trả tiền đầu tiên) điều phối mở root PR đặt `"require_human_approval_for_risky": true` trong
+  `tools/github/change_control.json` (bước này phải có trong go-live checklist pilot, AA-1166). Bật rồi thì `ship_merge.py` và
+  `ship_wave.py` (cùng gate) từ chối, exit 4, PR rủi ro: nhãn `risky` / `change-control: risky`, hoặc file đổi khớp
+  `risky_paths` (migration, Terraform/IAM, workflow/CI/secret/hook, auth/quyền, erasure/retention, chính các tool
+  merge `tools/github/*` + `tools/workflows/*`; file đổi tên tính cả đường cũ; file `.md` không tính; PR copy của
+  ci-bot được miễn vì file đã duyệt ở PR app), khi chưa có review **APPROVED** của một người (user GitHub loại User,
+  không phải bot, không phải tác giả, có tên trong `approvers` — PR bật switch phải điền login GitHub của tech lead,
+  để rỗng thì tool từ chối exit 2 — và có quyền repo: OWNER/MEMBER/COLLABORATOR, vì repo public ai cũng review được)
+  trên **đúng head đã gate**; người trong danh sách còn "changes requested" cũng chặn. Review agent đăng lên PR được
+  che account ID, ARN, ID mạng, e-mail, key/token trước khi đăng (repo public). Không có cờ override: tắt lại là
+  một root PR, tự nó là PR rủi ro khi đang bật. Hôm nay TẮT: gate chạy y như trước, không đọc thêm gì. Logic +
+  test: `tools/github/change_control.py`, `test_change_control.py`.
 - [ ] **Gate mọi check:** chỉ merge khi không còn check nào đỏ hoặc pending trong `gh pr checks <n>` (đọc đủ, không chỉ
   `--required`; Infra và repo gốc không có required check) — `ship_merge.py` làm đúng việc này. Có gì push vào PR (bot, restack, release-please) → gate lại,
   lần xanh trước không còn tính. `Deploy Admin Dev` (ECS) + UI smoke sau deploy → PR frontend kiểm thêm `aa-ui-verify`.
@@ -102,7 +125,8 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
     (không chỉ required; S263 CIS #1225 vào queue với "Migration preflight" đỏ), draft, base không phải nhánh mặc
     định, DIRTY, PR xoá file (`--allow-deletes` khi chủ ý); repo queue đi qua `mergeq.sh`, repo khác squash
     `--match-head-commit`. `--check-only` để chỉ gate;
-  - nhánh xếp chồng: `ship_train.py`; migration copy + DB Migrate: `ship_copy_apply.py` (`references/merge-trains.md`).
+  - nhánh xếp chồng: `ship_train.py`; migration copy + DB Migrate: `ship_copy_apply.py` (`references/merge-trains.md`);
+  - review agent lên PR rủi ro: `post_agent_review.py` qua `as-app.sh` (§1 trên); change control: `change_control.json`.
 - Squash chỉ sau `git fetch`; gộp commit bằng `git reset --soft $(git merge-base HEAD origin/main)`, không bằng
   `origin/main` trần. Trước mọi merge: `gh pr diff <n> --name-only` — có file bị xoá/đổi ngoài phạm vi PR thì dừng
   (`ship_merge.py` tự từ chối PR xoá file; file đổi ngoài phạm vi vẫn phải đọc).
