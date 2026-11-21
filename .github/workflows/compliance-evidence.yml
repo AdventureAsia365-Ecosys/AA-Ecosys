@@ -1,0 +1,118 @@
+name: Compliance evidence
+
+# AA-1170 (S287, phase 1): the daily evidence behind the CIS admin page Platform › Compliance (Evidenced % per
+# framework). Root advisory docs/audits/2026-11-21-S287-compliance-tracking/README.md sections 4 C.4 / C.5 and 5
+# (phase 1); tech lead decisions S287 Q5, Q7 (this file), Q8 (the Object Lock store is phase 2).
+#
+# Once a day tools/compliance/collect.py runs about ten checks that need no new permission: reads of the six public
+# repos with this run's GITHUB_TOKEN (default-branch protection, CodeQL, scheduled guards green, the image scan + SBOM
+# of the image repos, the full-history secret scan) and the registers of this repo (docs past their review date, the
+# last passed drill, the last access review, vulnerability exceptions still valid), plus its own heartbeat. It writes
+# ONE file that the CIS API ingests into compliance.evidence (api/services/compliance.py):
+#
+#   s3://<bronze>/docs-reader/compliance/evidence.json                   the latest file (CIS reads it)
+#   s3://<bronze>/docs-reader/compliance/history/<yyyy>/<mm>/<dd>.json   the same file per day
+#
+# Readiness tracking, not immutable evidence: the Docs sync role can overwrite these objects (phase 2 moves the
+# collector to an Object Lock bucket and its own role). The bucket expires noncurrent docs-reader/ versions after 7 days.
+#
+# Public repo (section 4 C.5): this log prints counts only, never raw API output; the collector refuses to write a file
+# that carries an account ID, an ARN, an S3 URI or an e-mail address; no shell tracing, no artifact, no
+# pull_request_target (tools/compliance/test_collect.py checks this file).
+#
+# AWS: the Docs sync role (secret DOCS_SYNC_ROLE_ARN, trusted only by this repo on refs/heads/master; Put on
+# docs-reader/*), bucket secret DOCS_SYNC_BUCKET: the Delivery metrics path (AA-1108), nothing new in Terraform. Without
+# the two secrets the upload is skipped with a notice. On a pull request only the unit tests run (no AWS, no reads).
+#
+# Cost: under a minute of Actions a day on a public repo ($0); two S3 PUT a day and a few kB.
+on:
+  schedule:
+    - cron: "41 2 * * *"   # daily 02:41 UTC; the CIS heartbeat window (cis.compliance.collector_heartbeat_hours) is longer
+  workflow_dispatch:
+  pull_request:
+    branches: [master]
+    paths:
+      - "tools/compliance/**"
+      - ".github/workflows/compliance-evidence.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: compliance-evidence-${{ github.ref }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test:
+    name: Compliance collector unit tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Unit tests (invented GitHub answers and pages; no network)
+        run: python3 -m unittest discover -s tools/compliance -p 'test_*.py'
+
+  collect:
+    name: Collect and publish
+    needs: test
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read      # workflow runs and jobs of the six public repos
+      id-token: write    # OIDC for the Docs sync role
+    env:
+      OUT: _out/evidence.json
+      PREFIX: docs-reader/compliance
+      HAS_AWS: ${{ secrets.DOCS_SYNC_ROLE_ARN != '' && secrets.DOCS_SYNC_BUCKET != '' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Collect (counts only in this log)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 tools/compliance/collect.py --out "$OUT" > _counts.json
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          counts = json.load(open("_counts.json", encoding="utf-8"))
+          bundle = json.load(open("_out/evidence.json", encoding="utf-8"))
+          print("### Compliance evidence")
+          print(f"- {counts['checks']} checks: " + ", ".join(f"{k} {v}" for k, v in sorted(counts["by_status"].items())))
+          print("")
+          print("| Check | Status |")
+          print("|---|---|")
+          for c in bundle["checks"]:
+              print(f"| {c['check_id']} | {c['status']} |")
+          PY
+
+      - name: Upload skipped
+        if: env.HAS_AWS != 'true'
+        run: echo "::notice title=Compliance evidence::DOCS_SYNC_ROLE_ARN / DOCS_SYNC_BUCKET are not set; file built, nothing uploaded."
+
+      - name: AWS credentials (OIDC)
+        if: env.HAS_AWS == 'true'
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ secrets.DOCS_SYNC_ROLE_ARN }}
+          aws-region: us-west-1
+          role-session-name: compliance-evidence-${{ github.run_id }}
+
+      - name: Upload the day file, then the latest file
+        if: env.HAS_AWS == 'true'
+        env:
+          BUCKET: ${{ secrets.DOCS_SYNC_BUCKET }}
+        run: |
+          set -euo pipefail
+          day="$(date -u +%Y/%m/%d)"
+          dest="s3://${BUCKET}/${PREFIX}"
+          aws s3 cp "$OUT" "$dest/history/${day}.json" --only-show-errors --content-type "application/json"
+          aws s3 cp "$OUT" "$dest/evidence.json" --only-show-errors --content-type "application/json"
+          echo "uploaded the evidence file and the day file ${day}" >> "$GITHUB_STEP_SUMMARY"
