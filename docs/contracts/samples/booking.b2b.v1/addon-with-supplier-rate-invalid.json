@@ -2,8 +2,7 @@
   "contract": "booking.b2b.v1",
   "schema": "Addon",
   "expect": "invalid",
-  "rule": "supplier_net",
-  "why": "1.11 (AA-1152): an add-on never carries the supplier net behind its price",
+  "why": "1.11 (AA-1152): an add-on never carries the supplier rate behind its price",
   "payload": {
     "component_id": "sv:7d9f8b00-0000-4000-8000-0000000000c2",
     "offer_id": "a1520000-0000-4000-8000-0000000000a1",
@@ -15,7 +14,9 @@
     "country_code": null,
     "min_pax": 1,
     "cutoff_hours": 0,
-    "operating_weekdays": [1],
+    "operating_weekdays": [
+      1
+    ],
     "start_times": [],
     "inventory_kind": "on_request",
     "featured": false,
@@ -23,6 +24,9 @@
     "places": [],
     "b2b_price_per_person": null,
     "rrp_per_person": null,
-    "supplier_net": {"amount": "30.00", "currency": "USD"}
+    "supplier_rate": {
+      "amount": "30.00",
+      "currency": "USD"
+    }
   }
 }
