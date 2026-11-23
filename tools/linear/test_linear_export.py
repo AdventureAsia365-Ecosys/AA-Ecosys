@@ -96,6 +96,26 @@ class SecretLabelTest(unittest.TestCase):
         self.assertNotIn(SECRETS_COLON + " `", out)
 
 
+class PersonalAddressTest(unittest.TestCase):
+    """S288: a person's company address never lands in the public export; role and test mailboxes stay."""
+
+    def test_personal_address_is_masked(self):
+        self.assertEqual(le.mask_personal_addresses("Invite robin@adventure.asia today"), "Invite r***@adventure.asia today")
+        self.assertEqual(le.mask_personal_addresses("Robin.Lee@Adventure.Asia"), "R***@adventure.asia")
+
+    def test_role_and_test_mailboxes_stay(self):
+        for text in ("info@adventure.asia", "admin@adventure.asia", "e2e-s235+booking@adventure.asia",
+                     "robin@example.com", "adventure.asia", "@adventure.asia"):
+            self.assertEqual(le.mask_personal_addresses(text), text, text)
+
+    def test_render_masks_title_description_comments(self):
+        it = issue(comment="Sent to robin@adventure.asia", desc="Owner robin@adventure.asia")
+        it["title"] = "Account for robin@adventure.asia"
+        out = le.render(it)
+        self.assertNotIn("robin@", out)
+        self.assertEqual(out.count("r***@adventure.asia"), 4)
+
+
 class GateTest(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp(prefix="le-test-"))

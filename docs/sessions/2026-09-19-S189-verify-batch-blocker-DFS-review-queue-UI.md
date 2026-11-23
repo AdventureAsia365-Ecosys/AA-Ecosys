@@ -34,7 +34,7 @@ Tác nhân: **Kiro**. Tiếp nối S188. Phiên dài, nhiều điều tra + 3 PR
 ## Thay đổi Hạ tầng
 - **KHÔNG terraform.** 1 migration DB `158_review_status_dismissed.sql` applied Dev (ALTER TYPE ADD VALUE, idempotent, không đụng data) qua ECS task container `api` + admin secret `aa-cis/dev/rds`.
 - **AWS support case `178979743800653`** mở cho acc3 (786888028788) enable Bedrock Batch Inference — Service limit increase → General (Basic Support không mở được Technical case). Chờ AWS.
-- **DFS refill:** chị Thư nạp $50 (tài khoản `thu@adventure.asia`), balance -$0.04 → $49.96 (tổng nạp $201). Verify search_volume/live HTTP 200 (hết 402).
+- **DFS refill:** chị Thư nạp $50 (tài khoản `t***@adventure.asia`), balance -$0.04 → $49.96 (tổng nạp $201). Verify search_volume/live HTTP 200 (hết 402).
 
 ## Bằng chứng verify
 - **AA-621 bước 0 (điều tra + submit thật):** Terraform acc3 (accounts/acc3-bedrock/main.tf+batch.tf, modules/s3) khai báo ĐẦY ĐỦ Batch perm; submit S1 batch 100 tour chưa viết trong container → IAM assume acc3 OK, S3 manifest upload OK (1.93MB), **CreateModelInvocationJob FAIL: ValidationException "account is not authorized... create a support case"** (service-level entitlement, KHÔNG phải IAM). ListModelInvocationJobs cũng AccessDenied (policy read live thiếu). → AA-606 cũng chưa từng chạy batch job thật.

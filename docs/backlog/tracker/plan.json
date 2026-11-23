@@ -1,8 +1,8 @@
 {
- "updated": "2026-11-21",
- "synced_at": "2026-11-21T13:05Z",
- "session": "S287",
- "next_session": "S288",
+ "updated": "2026-11-23",
+ "synced_at": "2026-11-23T15:16Z",
+ "session": "S288",
+ "next_session": "S289",
  "source": "Linear (19/11/2026, plan_sync.py --write, S285) + docs/audits/2026-11-19-S285-session/plan-audit-plan-changes.json (tech lead duyệt Q1–Q12, 19/11) + docs/backlog/README.md",
  "projects": {
   "data": "Data Platform",
@@ -805,6 +805,16 @@
  "waiting": [
   {
    "who": "Nghiệp",
+   "issue": "AA-1158",
+   "text": "S289 sáng 24/11: chị Thư — Resend invite → đăng nhập → Make business owner (tech lead) → Booking → TOTP; Create agency cho Test Agency (crm-platform-admin) rồi Invite first owner"
+  },
+  {
+   "who": "Nghiệp",
+   "issue": "AA-1172",
+   "text": "S288: quyết bật guard dữ kiện T9 (cis.llm.fact_instruction_guard), 13/14 bẫy qua khi bật"
+  },
+  {
+   "who": "Nghiệp",
    "issue": "AA-1122",
    "text": "S282: đặt cis.seo.research_auto_enabled = true, Effective from 01/12/2026 (Platform › Settings, đã gửi bước bấm)"
   },
@@ -985,6 +995,25 @@
   }
  ],
  "log": [
+  {
+   "session": "S288",
+   "date": "23/11/2026",
+   "closed": [
+    "AA-1161"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-1175",
+    "AA-1176"
+   ],
+   "reopened": [],
+   "notes": [
+    "Phiên dài cả ngày, Ultracode: 5 issue merged + deploy + kiểm live phần agent → In Review (AA-1157, 1158 phần 1, 1149, 1172, 1174)",
+    "Mới: AA-1175 bậc số khách chỉnh được (bk-066), AA-1176 owner E2E Dev (CIS 473) — owner E2E đã chuẩn bị tài khoản chị Thư (preset, không mời), test agency, info@ Content, Refresh, view-as",
+    "Migration CIS 470–473, bk-064…066; CI CIS đỏ do sentry-sdk 3.0.0 / redis 8.2.0 → ghim (#1650)",
+    "Runbook chủ DN + hệ thống giá (GUIDE-12) + bản ngắn artifact; PR-20 kỳ 6 đã đăng; PR-25/27/31 chờ duyệt"
+   ]
+  },
   {
    "session": "S287",
    "date": "21/11/2026",
@@ -2297,25 +2326,25 @@
   {
    "id": "AA-1158",
    "title": "[Booking + Infra] Approval rules for a three-person team, business-owner self-approval, supplier profile and bank-detail controls",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M-ROLES",
    "session": "S288",
    "size": "L",
-   "next": "Roles — S288 phần 1 (luật duyệt, owner tự duyệt có cờ, payer ≠ người duyệt, thông tin chuyển khoản, sellable cần giá duyệt); S289 phần 2 (khoá KMS, hồ sơ NCC, tài khoản ngân hàng, khoá 24 giờ)",
+   "next": "S288: phần 1 merged + deploy (bk-064); chờ kiểm chủ DN tự duyệt bằng phiên chủ DN; phần 2 → S289",
    "needs": ""
   },
   {
    "id": "AA-1157",
    "title": "[CIS + Booking] View as a lower role: read-only, logged, never changes the sign-in",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M-ROLES",
-   "session": "S287",
+   "session": "S288",
    "size": "L",
-   "next": "Roles — S288: view-as xuống dưới CIS + Booking (cookie ký ngắn hạn ở Booking), cần marker owner từ AA-1155",
+   "next": "S288: merged + deploy (CIS 470, Booking view-as); kiểm live bằng owner E2E: Booking đủ, CIS banner lỗi cookie → CIS #1651",
    "needs": ""
   },
   {
@@ -2327,7 +2356,7 @@
    "milestone": "M-ROLES",
    "session": "S288",
    "size": "L",
-   "next": "T12: người content + ops có tài khoản staff → gán vai trò tuỳ chỉnh (bước tay), rồi đóng",
+   "next": "T12: info@ đã tạo vai trò Content + mời (S288); người ops chưa có tài khoản",
    "needs": ""
   },
   {
@@ -2675,7 +2704,7 @@
    "priority": "High",
    "project": "portal",
    "milestone": "M-SUP",
-   "session": "S288",
+   "session": "S289",
    "size": "",
    "next": "L4 — S288–S290: editor tour + AA-1146 phần 2 + view nhà cung cấp; photos.upload sau AA-1157 (bỏ M0, thay bằng AA-1156)",
    "needs": ""
@@ -2683,13 +2712,13 @@
   {
    "id": "AA-1149",
    "title": "[Booking] A sold tour becomes one supplier booking per component, with service attributes and a can-operate check",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "High",
    "project": "tpbk",
    "milestone": "M-SUP",
    "session": "S288",
    "size": "",
-   "next": "L6 — S288: snapshot + tách đặt dịch vụ + thuộc tính dịch vụ + kiểm 'vận hành được'; migration bk- áp sau AA-1158 phần 1",
+   "next": "S288: merged + deploy (bk-065); chờ kịch bản bán tour giả lập bằng phiên chủ DN",
    "needs": ""
   },
   {
@@ -2753,18 +2782,6 @@
    "needs": "cần xếp slot"
   },
   {
-   "id": "AA-1161",
-   "title": "[DevOps] Keep every repo lean: screenshots, build artifacts and binaries stored in their right place, with guards",
-   "status": "In Review",
-   "priority": "High",
-   "project": "data",
-   "milestone": "later",
-   "session": "S288",
-   "size": "",
-   "next": "Đọc dung lượng repo GitHub sau GC (root, Infra) → đóng",
-   "needs": "cần xếp slot"
-  },
-  {
    "id": "AA-1166",
    "title": "[Security] ISMS-lite and AIMS-lite: policy, scope, risk register, SoA, AI impact assessments and a pilot go-live checklist",
    "status": "Backlog",
@@ -2791,19 +2808,19 @@
   {
    "id": "AA-1172",
    "title": "[Quality] T9 blog writer follows an instruction planted in the fact input (trap t9_facts_override)",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "Medium",
    "project": "data",
    "milestone": "M2a",
    "session": "S288",
    "size": "S",
-   "next": "Sửa T9 tin lệnh cài trong fact (validator hoặc check sau khi viết) + 2–3 bẫy mới, chạy lại trap ≤ 1 USD",
+   "next": "S288: merged + deploy (CIS 472), guard TẮT; 2 lượt bẫy 1,40 USD (bật 13/14); tech lead quyết bật",
    "needs": ""
   },
   {
    "id": "AA-1173",
    "title": "[Security] Compliance readiness phase 2–3: immutable evidence, read-only collectors (GitHub, AWS, DB), exceptions and monthly review",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "data",
    "milestone": "later",
@@ -2815,13 +2832,37 @@
   {
    "id": "AA-1174",
    "title": "[Security] Privacy obligations on Compliance readiness: applicability by market, Vietnam personal data law, GDPR and the other laws that apply",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "High",
    "project": "data",
    "milestone": "later",
    "session": "S288",
    "size": "M",
-   "next": "Bản đồ áp dụng luật theo thị trường (nguồn chính thức) → checklist nghĩa vụ VN (Luật 91/2025 + NĐ 356/2025), GDPR và luật nào \"áp dụng\" → tab Obligations",
+   "next": "S288: merged + deploy (CIS 471); register v2 nạp; Refresh OK (cis_db + crm_ops); trang pháp lý giữ draft (D1)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1175",
+   "title": "[Booking] Group-size price bands editable in Pricing › Policy (business owner's bands 1, 2, 4, 5–7, 8–10)",
+   "status": "In Review",
+   "priority": "High",
+   "project": "tpbk",
+   "milestone": "M-SUP",
+   "session": "S288",
+   "size": "S",
+   "next": "S288: merged + deploy (bk-066); price_pax_bands v2 (1, 2, 3, 4, 5–7, 8–10, 11+) từ 23/11",
+   "needs": ""
+  },
+  {
+   "id": "AA-1176",
+   "title": "[Security] Dev-only E2E owner admin for agent live checks (view-as, admin writes on synthetic data, Refresh)",
+   "status": "In Review",
+   "priority": "High",
+   "project": "data",
+   "milestone": "M-ROLES",
+   "session": "S288",
+   "size": "S",
+   "next": "S288: merged + deploy (CIS 473, Infra run-script); đã dùng cho view-as, Refresh, mời info@",
    "needs": ""
   }
  ]

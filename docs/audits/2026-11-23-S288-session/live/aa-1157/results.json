@@ -1,0 +1,87 @@
+{
+  "cis_e2e_admin": {
+    "bff_start": {
+      "status": 403,
+      "body": {
+        "detail": "e2e_read_only"
+      }
+    },
+    "proxy_start": {
+      "status": 403,
+      "body": {
+        "detail": "view_as_bff_only",
+        "message": "Start a view from Roles & permissions."
+      }
+    },
+    "roles": {
+      "status": 200,
+      "can_view_as": false,
+      "cis_custom_roles": [
+        {
+          "code": "custom_content",
+          "archived": false,
+          "capabilities": 18
+        },
+        {
+          "code": "custom_test_s287",
+          "archived": true,
+          "capabilities": 17
+        }
+      ],
+      "booking_custom_roles": [
+        {
+          "code": "custom_product_ops_accounting",
+          "archived": false,
+          "capabilities": 24
+        }
+      ]
+    },
+    "current": {
+      "status": 200,
+      "body": {
+        "active": false
+      }
+    },
+    "session_hint": {
+      "status": 200,
+      "read_only": true,
+      "reason": "e2e"
+    },
+    "view_as_buttons": 0,
+    "banner": 0
+  },
+  "booking_e2e_staff": {
+    "me": {
+      "status": 200,
+      "role": "admin",
+      "view_as": null,
+      "read_only": false
+    },
+    "roles": {
+      "status": 200,
+      "can_edit": false,
+      "can_view_as": false
+    },
+    "current_before": {
+      "status": 200,
+      "body": {
+        "active": false
+      }
+    },
+    "start": {
+      "status": 403,
+      "body": {
+        "detail": "e2e_read_only"
+      }
+    },
+    "current_after": {
+      "status": 200,
+      "body": {
+        "active": false
+      }
+    },
+    "cookies": [],
+    "view_as_start_panels": 0,
+    "banner": 0
+  }
+}

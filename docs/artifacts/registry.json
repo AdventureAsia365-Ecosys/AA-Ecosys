@@ -84,6 +84,13 @@
    "title": "Video diễn tập pilot",
    "purpose": "37 video diễn tập pilot S279 theo hành trình đại lý (mỗi video quay gì, kết quả, lời đọc, link Drive); cập nhật khi quay lại REH-06 / REH-08a / bước nhập giá",
    "source": ".tmp-session/S279/videos-page (build.py; bản repo không link Drive: docs/audits/2026-11-13-S279-session/uat-rehearsal/videos.html)"
+  },
+  {
+   "id": "DaUxxoojMm4RzpswhdQB2J",
+   "url": "https://claude.ai/artifact/DaUxxoojMm4RzpswhdQB2J",
+   "title": "Bắt đầu với hệ thống giá",
+   "purpose": "Bản ngắn cho chủ doanh nghiệp (S288): chuẩn bị buổi đầu, đăng nhập nhân sự và đại lý thử, hệ thống giá với ví dụ giá trip PR-31, nên thử gì; bản đầy đủ là GUIDE-12-owner-pricing",
+   "source": "docs/audits/2026-11-23-S288-session/owner-pricing-quickstart.html"
   }
  ],
  "superseded": [
