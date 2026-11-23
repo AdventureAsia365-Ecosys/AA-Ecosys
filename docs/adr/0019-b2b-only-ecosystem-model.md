@@ -394,8 +394,9 @@ the row stays as the S265 record.
 **Amendment (S288, 23/11/2026, tech lead decision Q6 of S285; AA-1157): d5 also covers "view as a lower staff role".**
 d5 stays for the tenant view; this adds a second, staff-internal kind with the same guarantees.
 
-- **Who.** Only an owner may start one: the CIS `is_owner` marker. In CIS the owner must also hold the admin role on a
-  company (Cognito) sign-in (the `OWNER_PERMS` rule of `staff.write`); in Booking the marker is read through
+- **Who.** Only an owner may start one: the CIS `is_owner` marker. In CIS the owner must also hold the built-in admin role
+  on a company (Cognito) sign-in (the `OWNER_PERMS` rule of `staff.write`); a custom role never qualifies, even one
+  that holds `staff.read`, and the API and the admin web check the same rule; in Booking the marker is read through
   `shared.v_staff_booking_grant`. The business-owner marker alone does not qualify.
 - **Downward only (Q6).** The target role's read rights must be a subset of the viewer's: in CIS its read surface (the
   GET routes of the route policy it passes, the unlisted content reads, the read capabilities a handler checks); in
