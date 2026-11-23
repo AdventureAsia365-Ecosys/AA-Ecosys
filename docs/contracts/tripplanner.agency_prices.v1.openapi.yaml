@@ -22,10 +22,10 @@ info:
     One PUT replaces the agency's whole list (the newest computed_at wins; an older one is answered 409 stale and
     changes nothing). show_prices false (the agency's "Show prices on my planner" switch, CRM Settings, default on) hides
     every price on its pages at once; the lists may then be empty. The CRM publishes after each change of the agency's
-    markups, rounding steps or switch, and at least once a day (AA prices move with tariffs and FX). TripPlanner shows a
-    price only while show_prices is true AND the row is newer than its staleness window (a TripPlanner setting), and
-    always with the line "Indicative price; your final price is in <agency>'s quote". Never on AA's own pages, never
-    for the AA demo tenant.
+    markups, rounding steps or switch, and once per hour (AA prices move with tariffs and FX). TripPlanner shows a price
+    only while show_prices is true, the newest list it was given, always with the line "Indicative price; your final
+    price is in <agency>'s quote" (it keeps received_at; hiding a list the CRM stopped refreshing, after a window that
+    is a TripPlanner setting seeded by CIS, is a later minor). Never on AA's own pages, never for the AA demo tenant.
 
     Auth: M2M token of the aa-m2m pool, client = AA-Partner (CRM), scope tripplanner.leads/manage (the agency app's
     TripPlanner module scope of lead.submitted.v1 1.1; the CRM checks the agency first). A tenant CIS does not list with
