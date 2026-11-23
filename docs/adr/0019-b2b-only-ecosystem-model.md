@@ -402,11 +402,17 @@ d5 stays for the tenant view; this adds a second, staff-internal kind with the s
   GET routes of the route policy it passes, the unlisted content reads, the read capabilities a handler checks); in
   Booking the permissions its GET routes check plus every `*.read`. Writes do not count: a view never writes.
 - **Read-only, before any route.** Every request other than GET / HEAD / OPTIONS in a view is refused 403
-  `view_as_read_only` before route code runs (CIS: a middleware inside the staff audit, so the refusal is logged;
-  Booking: in `current_staff`, before any database access), and again by the staff BFFs. During a view the effective
-  rights are target ∩ viewer and the owner markers read false.
+  `view_as_read_only`. In the browser flow the staff BFF of each app refuses it first and never forwards it; its
+  trace is one structured log line in that web app's container log (`staff_view_as_write_refused` in CIS,
+  `booking_view_as_write_refused` in Booking: session, viewer, method, path), not an audit-table row. A write that
+  reaches an API with the view credential anyway is refused there before route code runs (CIS: a middleware inside the
+  staff audit, so it leaves a `staff.request` 403 row with `details.view_as`; Booking: in `current_staff`, before any
+  database access, with the same log line). During a view the effective rights are target ∩ viewer and the owner
+  markers read false. A short database error while re-checking the target role answers 503 and does not end the view.
 - **Logged.** The start row holds the viewer, the target role, the target role's full capability list and the time;
-  the end row is logged too. CIS: `shared.staff_view_as_session` (CIS 470: `tenant_id` NULL, `view_role`) and
+  the end row is logged too: on Back, a new start, sign-out, staff disable, lost rights, and for a view left to time
+  out on the owner's next view-as read (the banner checks at 0 minutes) or sign-out, as `expired`. Reads are not
+  logged one by one. CIS: `shared.staff_view_as_session` (CIS 470: `tenant_id` NULL, `view_role`) and
   `acp_shared.audit_log` (`staff.view_as_started` / `staff.view_as_ended`). Booking: `booking.audit_logs` rows of
   entity `staff_view_as`, no new table.
 - **At most 60 minutes, a banner and a Back button; the sign-in is untouched.** Back ends the view; the Cognito session
