@@ -917,11 +917,18 @@ mailbox or Google account". That is too strong.
   it is never the business owner, so its own publish is 403 `maker_checker`.
 - **Scope, enforced by AA-Booking (`backend/app/auth/e2e_staff.py`), on top of A10e-3:** one more maker write, the
   activity import, on the maker's synthetic supplier only (checked from the path like the rate sheet, 403
-  `e2e_synthetic_only`). The route then checks the parsed file before any preview or write: every activity title
-  starts with `SYNTHETIC` and no row has inclusions text, else 403 `e2e_read_only`. No offer write is added: the
-  checker publishes the draft contract (A10e-3) and the E2E owner (A10h), who wrote none of it, publishes the offers.
+  `e2e_synthetic_only`). The route then checks the parsed file before any preview or write: at most 5 rows (the
+  Done-when count), every activity title starts with `SYNTHETIC` and no row has inclusions text, else 403
+  `e2e_read_only`. The other columns (the text after the mark, season, the contract block) stay free text, as in the
+  A10e-3 rate sheet. No offer write is added: the checker publishes the draft contract (A10e-3) and the E2E owner
+  (A10h), who wrote none of it, publishes the offers.
 - **Exposure added.** Whoever reads the maker's code can, on Dev, create marked activity services and draft add-ons
-  under the synthetic supplier; nothing sells until two other people publish the contract and each offer.
+  under the synthetic supplier; nothing sells until two other people publish the contract and each offer. Two side
+  effects: (1) each new service queues one paid CIS `supply_content_draft` job (the free text after the mark reaches
+  its prompt) and counts against the CIS daily draft cap; the 5-row cap bounds one import to about 5 drafts, and
+  repeated imports are bounded by that daily cap (real drafts that day can end `stopped_budget`), so the agent runs
+  the import once per check. (2) A published synthetic offer appears in `booking.v_place_addons` at a real CIS place,
+  which the `tripplanner` role reads; the offer's title carries the mark, and the agent retires it after the check.
 - **Revoke and removal:** drop the write, its SQL entry and the route check; removed with A10e-2 (AA-1054).
 
 #### A10f. Dev-only CIS content_lead E2E address: the second person of content publishing (20/11/2026, S286, AA-1155)
