@@ -80,9 +80,10 @@ info:
     ignores unknown fields and event types keeps working; until Booking serves 1.9 the new fields are absent (read a
     missing provisional as false, a missing ETag as always changed).
     Minor 1.10 (AA-1153, additive request fields): a QuoteLineRequest may name meal_plan (RO, BB, HB, FB or AI: the
-    board of every hotel night of the line; without it a tour night's own board, else bed and breakfast) and
-    child_ages (one age per child, 0-17, on the service date: a hotel prices a child the rooms asked do not hold by its
-    age band). Both are covered by price_hash only when sent, so a 1.9 request hashes and prices as before; a line
+    board of every hotel night of the line; without it a tour night's own board, else AA's default board, a pricing
+    policy setting seeded bed and breakfast) and child_ages (one age per child, 0-17, on the service date: a hotel
+    prices a child the rooms asked do not hold by its age band). Both are covered by price_hash only when sent, so a
+    1.9 request hashes and prices as before (while the default board stays BB); a line
     with HB, FB or AI on a night that also holds a meal service is priced by the rates and only flagged to AA staff.
   x-aa-contract: booking.b2b.v1
   x-aa-producer: AA-Booking
@@ -938,7 +939,8 @@ components:
           enum: [RO, BB, HB, FB, AI, null]
           description: >-
             1.10 (AA-1153): the board of every hotel night of the line (RO room only, BB bed and breakfast, HB half
-            board, FB full board, AI all inclusive). Empty: a tour night's own board, else BB.
+            board, FB full board, AI all inclusive). Empty: a tour night's own board, else AA's default board (a
+            pricing policy setting, seeded BB).
         child_ages:
           type: [array, "null"]
           maxItems: 60
