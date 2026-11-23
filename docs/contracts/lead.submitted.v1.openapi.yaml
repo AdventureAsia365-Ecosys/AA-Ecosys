@@ -20,7 +20,13 @@ info:
     (ackLead), after which TripPlanner redacts the payload. Each listLeads call is that tenant's beacon: TripPlanner
     takes a crm lead for a tenant only while the CRM listed that tenant within the last 10 minutes (the CRM lists every
     agency it can serve every minute and skips a locked, offboarding or unknown agency BEFORE the list call), so a
-    tenant the CRM cannot take leads for is refused at once (503 lead_channel_unavailable, nothing stored). The CRM holds no database grant on another schema (root
+    tenant the CRM cannot take leads for is refused at once (503 lead_channel_unavailable, nothing stored). Since AA-1160
+    (CIS 474, tenant.entitlements.v1 1.11) that beacon is the liveness of the tenant's CRM agency: a tenant with the
+    add-on that the CRM has not listed lately (no agency yet, or locked, offboarding or deleted in the CRM, or the
+    pull down) takes the agency's own route instead when it has one (fallback_channel webhook or email; with none the
+    503 above stands), and TripPlanner's daily run moves such a tenant's pending crm leads once to that route (they
+    then show that channel in listPlannerLeads); the CRM's own listLeads / ackLead still see the crm route while the
+    add-on is live. The CRM holds no database grant on another schema (root
     ADR 0008a), hence HTTP. (2) webhook — TripPlanner POSTs the LeadSubmitted JSON to the agency's https URL with the
     headers X-AA-Contract (lead.submitted.v1), Idempotency-Key (= idempotency_key) and X-AA-Signature
     't=<unix seconds>,v1=<hex HMAC-SHA256 of "<t>." + raw body>' (the catalog.tour.lifecycle.v1 format), keyed per tenant
@@ -78,7 +84,7 @@ info:
   x-aa-contract: lead.submitted.v1
   x-aa-producer: AA-TripPlanner-Web
   x-aa-consumers: [AA-Partner]
-  x-aa-issues: [AA-1038, AA-1139]
+  x-aa-issues: [AA-1038, AA-1139, AA-1160]
 servers:
   - url: /trip/m2m/v1
 security:
