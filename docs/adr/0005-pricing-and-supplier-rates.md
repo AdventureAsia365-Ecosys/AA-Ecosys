@@ -17,7 +17,8 @@
   pricing policy parameter `price_pax_bands` (Pricing > Policy, ADR 0005b d15: versioned, two-person approval), read
   by the cost sheet for the recompute day. Seeded with 1, 2, 3, 4, 5–7, 8–10, 11+ (the business owner's bands, 3 on
   its own and an open top band); each band is still priced for its smallest party. Computed rows move to new bands at
-  the next recompute.
+  the next recompute. The agency tariff lists the band rows; the B2B quote still prices the real party from the
+  plan's components and does not read the bands.
 - **Update 2026-11-04** (AA-1029, Booking bk-039): built: the bridge from every published CIS tour to a Booking trip
   plan (`bk_trip_plan_sync`), the cost sheet from the plan's components and the supplier rates in force
   (`bk_price_recompute`, decision 3), the RRP on `b2b` rows (`pricing_rules.rrp_markup_pct`, ADR 0019 b15), the view

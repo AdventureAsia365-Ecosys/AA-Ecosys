@@ -682,6 +682,8 @@ in a 3-4 band. Rules: start at 1, no gap or overlap, only the last band may end 
 - Existing computed prices change only at the next recompute (C7); until then the table keeps the old bands.
 - Hand prices (C8) may use any group sizes and win over the computed rows they cover.
 - More bands mean fewer future date ranges fit in a tour's price table (200 rows; the latest are left out first).
+- The agency tariff lists one price per band. An agency quote does not use the bands: it prices the real group from
+  the tour's costs, so a group of 6 can be quoted below the 5-7 tariff row (priced for 5).
 - A group at or above **Group quoted on request from** (starting value 9) is still quoted on request, whatever band
   holds it.
 
