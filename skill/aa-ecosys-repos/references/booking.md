@@ -24,3 +24,8 @@ ap-southeast-1 không thuộc hệ sinh thái. Nguồn sự thật: `apps/AA-Boo
   Itinerary của version là bảng quan hệ (`trip_case_version_itinerary`), không JSONB. Ảnh lưu `s3_bucket` + `s3_key`, CDN URL sinh lúc trả response.
 - Nền bất biến: state machine trip case trong DB; idempotency key cho mọi side effect; **payment không do agent thực
   hiện**.
+- Tài khoản ngân hàng nhà cung cấp (AA-1158 phần 2, bk-067): `booking.supplier_bank_account` lưu chi tiết dạng
+  ciphertext (KMS envelope, key `alias/aa-booking-<env>-supplier-bank`, chỉ task role Booking dùng được; env
+  `SUPPLIER_BANK_KMS_KEY_ID`); duyệt bởi người thứ hai sau cuộc gọi xác nhận; không chi trả khi còn thay đổi chờ duyệt
+  hoặc trong `supplier_bank_payout_lock_hours` (Pricing > Policy) sau khi duyệt. Agent không bao giờ đọc chi tiết tài
+  khoản (chỉ đếm / tổng hợp khi kiểm live).

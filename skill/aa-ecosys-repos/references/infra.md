@@ -7,6 +7,11 @@ Nguồn sự thật: `infra/AA-CIS-Infra/.claude/CLAUDE.md` + `docs/`. Quy trìn
   DNS…), `accounts/acc1-bedrock` (từ S278, AA-1095: role `AA1-Bedrock-Invoker` trên acc1, đường Bedrock LLM chính; AA-998
   từng destroy root này, S278 dựng lại), `accounts/acc3-bedrock` (role Bedrock dự phòng sau acc1), `accounts/management`
   (acc4: Organization, Identity Center, billing). Module dùng chung ở `modules/`.
+- KMS key do khách hàng quản lý: 3 key CRM (`crm_data.tf`), key CloudTrail (`security_cloudtrail.tf`) và từ S289 key
+  tài khoản ngân hàng nhà cung cấp của Booking (`modules/environment/booking_supplier_bank.tf`, AA-1158). CI tạo / mô tả
+  key theo tag `App`, không bao giờ dùng key, sửa policy hay xoá (boundary `DenyCrmKeyUseAndPolicyEdits` cho App = crm /
+  booking); đổi policy là apply local có MFA. Cấp quyền tạo key cho một App mới = sửa `cicd_sec.tf` (bootstrap, apply
+  local trước).
 - Workflow: `terraform-plan.yml` chạy tự động trên PR; `terraform-apply.yml` **chỉ chạy bằng workflow_dispatch trên
   `main`**, có plan guard (AA-846: từ chối khi plan đổi secret version / `random_password` / RDS instance, trừ khi
   `allow_guarded` + lý do). Không apply tay bằng CLI, trừ object bootstrap mà role CI bị cấm đổi (role CI, boundary,
