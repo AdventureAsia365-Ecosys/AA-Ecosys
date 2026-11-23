@@ -610,6 +610,10 @@ Expire, then recompute).
 
 **Gotcha:** sellable does not mean an agency can buy. The agency quote still checks **Can operate** (C13).
 
+**Gotcha:** computed prices use the **Group size bands** of the pricing policy (C10). After a band change, the computed
+rows move only at the next recompute: **Recompute prices** here, **Recompute from rates** on a trip plan, or the
+automatic recompute after the approval (or on the change's effective day). Until then the rows of the old bands stay.
+
 ### C8. Price versions (prices by hand)
 
 **Where:** **Price setup** → a tour → **Price versions** → tab **Versions**.
@@ -669,6 +673,17 @@ lists. An approval after the day has passed is refused.
 Key parameters: quote validity, hold hours, child and infant ages, rounding by currency, sale-exception days (14 by
 default, 30 at most). Section **Staff sign-in** holds the authenticator switch and the two business-owner switches. A
 badge "Not enforced yet" marks values that are stored but not used.
+
+**Group size bands** (section **Prices**): the group sizes a tour's computed price table is priced for, typed as
+`1, 2, 3, 4, 5-7, 8-10, 11+` (the starting value: the business owner's 2, 4, 5-7 and 8-10, with 3 on its own and an
+open band from 11). Each band is priced for its smallest group, so 4 travellers on their own pay less per person than
+in a 3-4 band. Rules: start at 1, no gap or overlap, only the last band may end with `+`, at most 8 bands.
+
+- Existing computed prices change only at the next recompute (C7); until then the table keeps the old bands.
+- Hand prices (C8) may use any group sizes and win over the computed rows they cover.
+- More bands mean fewer future date ranges fit in a tour's price table (200 rows; the latest are left out first).
+- A group at or above **Group quoted on request from** (starting value 9) is still quoted on request, whatever band
+  holds it.
 
 ### C11. Agency tiers, discounts and rate cards
 

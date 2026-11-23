@@ -630,6 +630,11 @@ lại).
 
 **Lưu ý:** mở bán chưa có nghĩa là đại lý mua được. Báo giá cho đại lý vẫn kiểm **Can operate** (C13).
 
+**Lưu ý:** giá tính tự động dùng **Group size bands** (Bậc cỡ đoàn) của chính sách giá (C10). Sau khi đổi bậc, các
+dòng tính tự động chỉ đổi ở lần tính lại kế tiếp: **Recompute prices** ở đây, **Recompute from rates** (Tính lại từ
+giá) trên một kế hoạch chuyến đi, hoặc lần tính lại tự động sau khi duyệt (hoặc vào ngày hiệu lực của thay đổi). Tới
+lúc đó các dòng của bậc cũ vẫn giữ nguyên.
+
 ### C8. Phiên bản giá (giá nhập tay)
 
 **Ở đâu:** **Price setup** → một tour → **Price versions** (Phiên bản giá) → tab **Versions** (Phiên bản).
@@ -694,6 +699,18 @@ giá đại lý mới. Duyệt sau khi ngày đó đã qua sẽ bị từ chối
 Các tham số chính: hiệu lực báo giá, số giờ giữ chỗ, tuổi trẻ em và em bé, làm tròn theo tiền tệ, số ngày ngoại lệ bán
 (mặc định 14, tối đa 30). Mục **Staff sign-in** chứa công tắc ứng dụng xác thực và hai công tắc chủ doanh nghiệp. Huy
 hiệu "Not enforced yet" đánh dấu các giá trị đã lưu nhưng chưa được dùng.
+
+**Group size bands** (Bậc cỡ đoàn, mục **Prices** (Giá)): các cỡ đoàn mà bảng giá tính tự động của một tour được tính
+cho, nhập dạng `1, 2, 3, 4, 5-7, 8-10, 11+` (giá trị ban đầu: các bậc 2, 4, 5-7 và 8-10 của chủ doanh nghiệp, thêm bậc
+3 riêng và một bậc mở từ 11). Mỗi bậc được tính giá cho đoàn nhỏ nhất của bậc, nên 4 khách đứng riêng trả mỗi người ít
+hơn so với trong bậc 3-4. Quy tắc: bắt đầu từ 1, không hở, không chồng, chỉ bậc cuối được kết thúc bằng `+`, tối đa 8
+bậc.
+
+- Giá tính tự động đang có chỉ đổi ở lần tính lại kế tiếp (C7); tới lúc đó bảng giá giữ các bậc cũ.
+- Giá nhập tay (C8) được dùng cỡ đoàn bất kỳ và thắng các dòng tính tự động mà nó phủ.
+- Càng nhiều bậc thì càng ít khoảng ngày tương lai vừa bảng giá của một tour (200 dòng; khoảng xa nhất bị bỏ trước).
+- Đoàn từ cỡ **Group quoted on request from** (Đoàn báo giá theo yêu cầu từ, giá trị ban đầu 9) trở lên vẫn được báo
+  giá theo yêu cầu, dù thuộc bậc nào.
 
 ### C11. Hạng đại lý, mức giảm và thẻ giá
 

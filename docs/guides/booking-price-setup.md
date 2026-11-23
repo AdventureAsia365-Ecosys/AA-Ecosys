@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [staff, owner]
 applies_to: [aa-booking-admin, aa-booking-api, aa-cis-frontend, aa-cis-api]
-last_reviewed: 2026-11-13
+last_reviewed: 2026-11-23
 review_every_days: 90
 related: [GUIDE-12, GUIDE-12-booking, GUIDE-12-cis-admin, AA-1091]
 ---
@@ -96,7 +96,9 @@ and their supplier rates.
   worked out with the fixed-departure pricing rule. **Currency**: empty = USD; the **Check** names any currency that
   is not a selling currency.
 - **Pax min** / **Pax max** (pax = travellers): the group size of the band, for example 2–2, 3–4, 11 and empty
-  (empty = no upper limit). Rows of one channel and currency must not overlap in dates and group size.
+  (empty = no upper limit). Rows of one channel and currency must not overlap in dates and group size. A hand row may
+  use any group sizes; prices worked out from a cost use the **Group size bands** of **Supply › Pricing policy** (the
+  workbook's first sheet names them).
 - **Valid from** / **Valid to**: travel dates; the last day is included.
 - **Season** is a label for people. **Peak** is still read but decides nothing: the tour's season calendar decides
   the season and the peak uplift (section 6).
@@ -149,7 +151,8 @@ What changes after approval:
 - **Withdraw** stops a version for anything new; the dialog shows which older version prices those dates again and
   which dates can no longer be quoted. A published version is withdrawn by a second person.
 
-Quote validity, the group size quoted on request and other business rules are on **Supply › Pricing policy**. Their
+Quote validity, the group size quoted on request, the group size bands of computed prices and other business rules
+are on **Supply › Pricing policy**. Their
 changes also need a second person; see the [Booking admin runbook](booking-admin-runbook.md).
 
 ## 6. Season calendars and holiday events

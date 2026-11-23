@@ -13,6 +13,11 @@
   (AA no longer sells to travellers). The "from" price of decision 6 becomes the suggested retail price (RRP = net +
   25 %, ADR 0019 b15), kept as policy data in `booking.pricing_rules`; agency prices follow b15 (one net price per tour
   per season, three agency tiers with per-contract discounts).
+- **Update 2026-11-23** (AA-1175, Booking bk-066): the pax band list of decision 3 is no longer fixed. It is the
+  pricing policy parameter `price_pax_bands` (Pricing > Policy, ADR 0005b d15: versioned, two-person approval), read
+  by the cost sheet for the recompute day. Seeded with 1, 2, 3, 4, 5–7, 8–10, 11+ (the business owner's bands, 3 on
+  its own and an open top band); each band is still priced for its smallest party. Computed rows move to new bands at
+  the next recompute.
 - **Update 2026-11-04** (AA-1029, Booking bk-039): built: the bridge from every published CIS tour to a Booking trip
   plan (`bk_trip_plan_sync`), the cost sheet from the plan's components and the supplier rates in force
   (`bk_price_recompute`, decision 3), the RRP on `b2b` rows (`pricing_rules.rrp_markup_pct`, ADR 0019 b15), the view
@@ -48,7 +53,8 @@ version V3, the V3 price cannot change.
    capacity), guide (language, per day), entrance fee (adult/child, per pax), activity (per pax or per group), meal.
    New rates are new rows with new validity — never overwrite.
 3. **Cost sheet.** Each priced tour (Booking `trip_plans`, synced from a CIS published tour) maps its days to
-   services. Net cost per person is computed per **pax band** (1, 2, 3–4, 5–6, 7–10, 11+) and **season**, because
+   services. Net cost per person is computed per **pax band** (1, 2, 3–4, 5–6, 7–10, 11+; since 2026-11-23 the policy
+   parameter `price_pax_bands`, see the update above) and **season**, because
    fixed costs (vehicle, guide) are shared by the group.
 4. **Selling price = net cost ÷ (1 − margin)**, margin = gross margin on the selling price (not markup).
 
