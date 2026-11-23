@@ -1,0 +1,14 @@
+{
+  "contract": "tripplanner.agency_prices.v1",
+  "schema": "AgencyPricesStored",
+  "expect": "valid",
+  "why": "TripPlanner stored the list",
+  "payload": {
+    "tenant_id": "5b7d6f00-0000-4000-8000-0000000000aa",
+    "show_prices": true,
+    "currency": "VND",
+    "computed_at": "2027-02-01T08:00:00Z",
+    "tour_count": 12,
+    "addon_count": 3
+  }
+}

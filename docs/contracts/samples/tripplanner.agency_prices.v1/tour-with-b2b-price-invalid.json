@@ -1,0 +1,25 @@
+{
+  "contract": "tripplanner.agency_prices.v1",
+  "schema": "AgencyPrices",
+  "expect": "invalid",
+  "rule": "b2b_price_per_person",
+  "why": "AA's B2B price never reaches the planner: the agency's own price only",
+  "payload": {
+    "show_prices": true,
+    "currency": "USD",
+    "computed_at": "2027-02-01T08:00:00Z",
+    "tours": [
+      {
+        "source_id": "SYN-TOUR-0042",
+        "from_per_person": "1232",
+        "b2b_price_per_person": "1043.48"
+      }
+    ],
+    "addons": [
+      {
+        "component_id": "sv:7d9f8b00-0000-4000-8000-0000000000c2",
+        "from_per_person": "42"
+      }
+    ]
+  }
+}

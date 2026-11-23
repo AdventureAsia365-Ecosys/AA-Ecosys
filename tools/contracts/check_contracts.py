@@ -266,6 +266,16 @@ POLICY: dict[str, Policy] = {
         why="the traveller's own contact and trip wishes for one agency; never a session, token, IP address, user "
             "agent or price",
     ),
+    # AA-1152 (S285 B2 option C): an agency's own "from" prices for its planner pages. The number the agency shows is
+    # its own; AA's B2B price, the agency's markup, AA's RRP, a net, a margin and a supplier never cross.
+    "tripplanner.agency_prices.v1": Policy(
+        forbidden_keys=frozenset({"b2b_price", "b2b_price_per_person", "supplier_net", "net_amount", "markup_pct",
+                                  "retail_markup_pct", "rrp_per_person", "margin", "supplier_id"}),
+        forbidden_patterns=(r"(^|_)b2b(_|$)", r"supplier", r"(^|_)net(_|$)", r"markup", r"(^|_)rrp(_|$)",
+                            r"margin"),
+        why="the agency's own final price per traveller and its show-prices switch only; never AA's B2B price, the "
+            "agency's markup, AA's RRP, a net, a margin or a supplier",
+    ),
 }
 
 # The negative samples the design requires (AA-928 Done-when R case). rule = a forbidden key, or "pii:".
@@ -292,6 +302,8 @@ REQUIRED_NEGATIVES: dict[str, tuple[str, ...]] = {
     "catalog.tenant_tour.v1": ("price", "quality_score"),
     # AA-1038: a lead never carries the guest session, an AA B2B price or a token.
     "lead.submitted.v1": ("session_id", "b2b_price", "access_token"),
+    # AA-1152: the agency's price list never carries AA's B2B price or the agency's markup.
+    "tripplanner.agency_prices.v1": ("b2b_price_per_person", "markup_pct"),
 }
 
 # JSON Schema contract files that predate the JSON field policy (AA-835): no POLICY entry or sample is required

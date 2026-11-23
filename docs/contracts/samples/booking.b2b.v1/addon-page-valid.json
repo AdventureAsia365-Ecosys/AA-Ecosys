@@ -1,0 +1,36 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "AddonPage",
+  "expect": "valid",
+  "why": "1.11 (AA-1152): one add-on of an invented place with the agency's price and AA's RRP per traveller",
+  "payload": {
+    "currency": "USD",
+    "priced_for_pax": 2,
+    "date": null,
+    "truncated": false,
+    "items": [
+      {
+        "component_id": "sv:7d9f8b00-0000-4000-8000-0000000000c2",
+        "offer_id": "a1520000-0000-4000-8000-0000000000a1",
+        "kind": "activity",
+        "title": "Evening lantern walk",
+        "unit": "person",
+        "duration_minutes": 180,
+        "max_group_size": 12,
+        "country_code": "VN",
+        "min_pax": 2,
+        "cutoff_hours": 24,
+        "operating_weekdays": [2, 4, 6],
+        "start_times": ["17:30"],
+        "inventory_kind": "on_request",
+        "featured": true,
+        "first_date": "2027-03-02",
+        "places": [
+          {"destination_id": "d1520000-0000-4000-8000-0000000000d1", "role": "operates", "name": "Lantern Bay", "country_code": "VN"}
+        ],
+        "b2b_price_per_person": {"amount": "35.30", "currency": "USD"},
+        "rrp_per_person": {"amount": "45.00", "currency": "USD"}
+      }
+    ]
+  }
+}

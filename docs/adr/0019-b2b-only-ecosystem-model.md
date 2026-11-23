@@ -249,6 +249,15 @@ Tenants are told on two channels:
 - **In the portal:** already built (`tour.discontinued` in `shared.notifications`, the bell).
 - **E-mail through SES (R6):** sent at once when a `retired` tour still has live pages or posts for the tenant; otherwise folded into a daily digest. Recipients are the owner and the content members. The mail names the tour, the stop date, what the system already did, when the WordPress page goes to draft, which Facebook posts to edit, and a replacement tour if any. A `restored` tour gets a "back on sale" mail; a `paused` tour gets no mail. Wording is content-style, never "flag" or "QA".
 
+- **Amendment (S289, AA-1152; S285 decision B2 option C, tech lead): b5 means "only the agency's own price, never
+  AA's".** An agency's TripPlanner pages (`/{slug}/plan`, `/{slug}/tours/{tour}`, the day cards) may show "from X per
+  person" for the AA tours and AA add-ons it sells: X = AA's B2B price for that agency x (1 + the agency's own markup for
+  that product type), or AA's RRP when it set none, rounded up to the agency's rounding step of its currency (CRM
+  Settings; platform default USD 1, VND 10,000). The CRM computes X (one function with every price it suggests in a
+  proposal) and publishes the list to TripPlanner (`tripplanner.agency_prices.v1`); TripPlanner never sees AA's B2B
+  price, the markup or a supplier. A switch in the agency's CRM Settings ("Show prices on my planner", default on) hides
+  every price at once. The page says the price is indicative and the agency's quote is final. AA's own pages and the AA
+  demo tenant show no agency price.
 - **Amendment (S276, 10/11/2026, tech lead decision; AA-1039 follow-up): notice only by default.** Adventure Asia does not change an agency's WordPress site when it retires a tour, unless the agency asked for it.
   - **Default:** every live post about the retired tour, WordPress and Facebook alike, gets a `notice_only` flag (no draft date). The agency gets the bell and the e-mail, which list each page and say what it can do: rewrite it around another AA tour, move it to draft with one click, or keep it. Neither ever says AA will change the site.
   - **One click:** the Content studio (AA-Partner CRM web, Publish, beside "Put back online") and the bell offer **Move to draft** on each listed WordPress page. CIS `POST /v1/publish-log/{publish_id}/move-to-draft` moves exactly that page to draft through the same path as the old automatic draft. It accepts only the tenant's own published page with an open `tour_retired` flag (404 otherwise), is idempotent (a repeat click answers "already a draft") and writes the audit row `content_piece.moved_to_draft`. A page drafted this way is put back with "Put back online" after a restore, like an automatic draft (S275 option A).

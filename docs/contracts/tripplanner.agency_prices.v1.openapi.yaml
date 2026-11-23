@@ -1,0 +1,147 @@
+openapi: 3.1.0
+info:
+  title: tripplanner.agency_prices.v1 (AA-Partner CRM → AA-TripPlanner-Web; an agency's own "from" prices on its planner)
+  version: "1.0"
+  description: >-
+    Option C of the S285 B2 decision (root docs/audits/2026-11-19-S285-session/advisory-r2-b2b-crm.md, Jira PR-29):
+    an agency's TripPlanner pages (/{slug}/plan, /{slug}/tours/{tour}, the day cards) show "from X per person" for the
+    AA tours and AA add-ons it sells, in the agency's own price, never AA's (root ADR 0019 b5 as amended by AA-1152:
+    the agency is the merchant of record, so a price under its brand is its own). The CRM owns the agency's pricing
+    rules, so the CRM computes every number and hands TripPlanner the result; TripPlanner never computes, never sees a
+    B2B price, a markup or a supplier, and only shows what it was given. The CRM holds no grant on another schema and no
+    AA app reads crm (root ADR 0008a decision 1), hence HTTP.
+
+    How the CRM computes one price (one function for this list and every price the CRM suggests in a proposal): the
+    agency's AA B2B "from" price per traveller (booking.b2b.v1 GET /tariff for a tour: the lowest per-person price of a
+    band that holds 2 travellers; GET /add-ons for an add-on, priced for 2 travellers) times (1 + the agency's own
+    markup for that product type), or AA's suggested retail price when the agency set no markup for it, then rounded UP
+    to the agency's rounding step of its currency (its CRM Settings; a platform default per currency: USD 1, VND
+    10,000). Date rules (season, early booking) are not applied: the page shows the lowest, "from". A tour or add-on
+    the CRM cannot price is left out (no price shown, never a guess).
+
+    One PUT replaces the agency's whole list (the newest computed_at wins; an older one is answered 409 stale and
+    changes nothing). show_prices false (the agency's "Show prices on my planner" switch, CRM Settings, default on) hides
+    every price on its pages at once; the lists may then be empty. The CRM publishes after each change of the agency's
+    markups, rounding steps or switch, and at least once a day (AA prices move with tariffs and FX). TripPlanner shows a
+    price only while show_prices is true AND the row is newer than its staleness window (a TripPlanner setting), and
+    always with the line "Indicative price; your final price is in <agency>'s quote". Never on AA's own pages, never
+    for the AA demo tenant.
+
+    Auth: M2M token of the aa-m2m pool, client = AA-Partner (CRM), scope tripplanner.leads/manage (the agency app's
+    TripPlanner module scope of lead.submitted.v1 1.1; the CRM checks the agency first). A tenant CIS does not list with
+    a Trip planner subscription is 404 unknown_tenant. No personal data crosses this API.
+  x-aa-contract: tripplanner.agency_prices.v1
+  x-aa-producer: AA-TripPlanner-Web
+  x-aa-consumers: [AA-Partner]
+  x-aa-issues: [AA-1152]
+servers:
+  - url: /trip/m2m/v1
+security:
+  - m2m: [tripplanner.leads/manage]
+paths:
+  /tenants/{tenant_id}/planner/prices:
+    parameters:
+      - $ref: "#/components/parameters/TenantId"
+    put:
+      operationId: putAgencyPrices
+      summary: Replace the agency's own "from" prices on its planner, and its show-prices switch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: "#/components/schemas/AgencyPrices"}
+      responses:
+        "200":
+          description: "Stored (or the same computed_at again: nothing changed)"
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/AgencyPricesStored"}
+        "404": {$ref: "#/components/responses/Problem"}
+        "409": {$ref: "#/components/responses/Problem"}
+        "422": {$ref: "#/components/responses/Problem"}
+components:
+  parameters:
+    TenantId:
+      name: tenant_id
+      in: path
+      required: true
+      schema: {type: string, format: uuid}
+  securitySchemes:
+    m2m:
+      type: oauth2
+      description: Cognito M2M pool aa-m2m-<env>, client credentials.
+      flows:
+        clientCredentials:
+          tokenUrl: https://m2m-auth.example.invalid/oauth2/token
+          scopes:
+            tripplanner.leads/manage: The agency app's TripPlanner module (lead.submitted.v1 1.1), here its planner prices
+  responses:
+    Problem:
+      description: Error
+      content:
+        application/json:
+          schema: {$ref: "#/components/schemas/Problem"}
+  schemas:
+    Problem:
+      type: object
+      additionalProperties: false
+      required: [error]
+      properties:
+        error:
+          type: string
+          enum: [unknown_tenant, stale, invalid]
+        message: {type: string, maxLength: 300}
+    Amount:
+      type: string
+      pattern: "^\\d{1,10}(\\.\\d{1,2})?$"
+      description: Decimal string, the agency's own price per traveller in the list's currency (VND without decimals).
+    TourPrice:
+      type: object
+      additionalProperties: false
+      required: [source_id, from_per_person]
+      properties:
+        source_id:
+          type: string
+          minLength: 1
+          maxLength: 128
+          description: The AA catalog key of the tour (catalog.tenant_tour.v1 source_id).
+        from_per_person: {$ref: "#/components/schemas/Amount"}
+    AddonPrice:
+      type: object
+      additionalProperties: false
+      required: [component_id, from_per_person]
+      properties:
+        component_id:
+          type: string
+          pattern: "^sv:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          description: The add-on (supply.place_addons.v1 component_id).
+        from_per_person: {$ref: "#/components/schemas/Amount"}
+    AgencyPrices:
+      type: object
+      additionalProperties: false
+      required: [show_prices, currency, computed_at, tours, addons]
+      properties:
+        show_prices:
+          type: boolean
+          description: The agency's "Show prices on my planner" switch; false hides every price on its pages.
+        currency: {type: string, pattern: "^[A-Z]{3}$", description: The agency's base currency.}
+        computed_at: {type: string, format: date-time}
+        tours:
+          type: array
+          maxItems: 2000
+          items: {$ref: "#/components/schemas/TourPrice"}
+        addons:
+          type: array
+          maxItems: 1000
+          items: {$ref: "#/components/schemas/AddonPrice"}
+    AgencyPricesStored:
+      type: object
+      additionalProperties: false
+      required: [tenant_id, show_prices, currency, computed_at, tour_count, addon_count]
+      properties:
+        tenant_id: {type: string, format: uuid}
+        show_prices: {type: boolean}
+        currency: {type: string, pattern: "^[A-Z]{3}$"}
+        computed_at: {type: string, format: date-time}
+        tour_count: {type: integer, minimum: 0}
+        addon_count: {type: integer, minimum: 0}
