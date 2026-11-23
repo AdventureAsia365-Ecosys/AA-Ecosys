@@ -24,8 +24,12 @@ info:
     every price on its pages at once; the lists may then be empty. The CRM publishes after each change of the agency's
     markups, rounding steps or switch, and once per hour (AA prices move with tariffs and FX). TripPlanner shows a price
     only while show_prices is true, the newest list it was given, always with the line "Indicative price; your final
-    price is in <agency>'s quote" (it keeps received_at; hiding a list the CRM stopped refreshing, after a window that
-    is a TripPlanner setting seeded by CIS, is a later minor). Never on AA's own pages, never for the AA demo tenant.
+    price is in <agency>'s quote", and never from a cached page: the switch and a new list show on the next view.
+    Never out of date: TripPlanner hides a list that arrived longer ago than its setting
+    tripplanner.prices.agency_stale_hours (CIS 476, Platform > Settings, default 6 hours), and the CRM sends an empty
+    list with show_prices false when it stops serving the agency's planner (leads no longer routed to it, its CRM
+    locked or deleted) or Booking refuses the agency (unknown_partner, forbidden). Never on AA's own pages, never for
+    the AA demo tenant.
 
     Auth: M2M token of the aa-m2m pool, client = AA-Partner (CRM), scope tripplanner.leads/manage (the agency app's
     TripPlanner module scope of lead.submitted.v1 1.1; the CRM checks the agency first). A tenant CIS does not list with

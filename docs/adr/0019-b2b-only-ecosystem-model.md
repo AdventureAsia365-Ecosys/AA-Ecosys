@@ -256,8 +256,10 @@ Tenants are told on two channels:
   Settings; platform default USD 1, VND 10,000). The CRM computes X (one function with every price it suggests in a
   proposal) and publishes the list to TripPlanner (`tripplanner.agency_prices.v1`); TripPlanner never sees AA's B2B
   price, the markup or a supplier. A switch in the agency's CRM Settings ("Show prices on my planner", default on) hides
-  every price at once. The page says the price is indicative and the agency's quote is final. AA's own pages and the AA
-  demo tenant show no agency price.
+  every price at once (no cached page carries the price). A price is never out of date: TripPlanner hides a list older
+  than its setting `tripplanner.prices.agency_stale_hours` (CIS 476, default 6 hours), and the CRM hides the list of an
+  agency it no longer serves or that AA stopped selling to. The page says the price is indicative and the agency's
+  quote is final. AA's own pages and the AA demo tenant show no agency price.
 - **Amendment (S276, 10/11/2026, tech lead decision; AA-1039 follow-up): notice only by default.** Adventure Asia does not change an agency's WordPress site when it retires a tour, unless the agency asked for it.
   - **Default:** every live post about the retired tour, WordPress and Facebook alike, gets a `notice_only` flag (no draft date). The agency gets the bell and the e-mail, which list each page and say what it can do: rewrite it around another AA tour, move it to draft with one click, or keep it. Neither ever says AA will change the site.
   - **One click:** the Content studio (AA-Partner CRM web, Publish, beside "Put back online") and the bell offer **Move to draft** on each listed WordPress page. CIS `POST /v1/publish-log/{publish_id}/move-to-draft` moves exactly that page to draft through the same path as the old automatic draft. It accepts only the tenant's own published page with an open `tour_retired` flag (404 otherwise), is idempotent (a repeat click answers "already a draft") and writes the audit row `content_piece.moved_to_draft`. A page drafted this way is put back with "Put back online" after a restore, like an automatic draft (S275 option A).
