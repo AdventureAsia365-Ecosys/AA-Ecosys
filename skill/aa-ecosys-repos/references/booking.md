@@ -29,3 +29,6 @@ ap-southeast-1 không thuộc hệ sinh thái. Nguồn sự thật: `apps/AA-Boo
   `SUPPLIER_BANK_KMS_KEY_ID`); duyệt bởi người thứ hai sau cuộc gọi xác nhận; không chi trả khi còn thay đổi chờ duyệt
   hoặc trong `supplier_bank_payout_lock_hours` (Pricing > Policy) sau khi duyệt. Agent không bao giờ đọc chi tiết tài
   khoản (chỉ đếm / tổng hợp khi kiểm live).
+  Duyệt bị từ chối (409 `contacts_recently_changed`) khi người nhập hoặc người duyệt vừa sửa liên hệ của nhà cung cấp
+  trong `supplier_bank_contact_change_days`. Vai trò liên hệ, hình thức và phương thức thanh toán là dữ liệu
+  (`booking.supplier_profile_option`, admin sửa ở Suppliers > Profile choices), không phải danh sách trong code.
