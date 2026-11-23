@@ -38,6 +38,8 @@ Trong CIS admin, có hai khu vực có runbook riêng vì chủ doanh nghiệp x
 đăng ký báo cáo).
 Trong Booking admin, nhóm chăm sóc khách hàng nhập giá tour có hướng dẫn riêng:
 [thiết lập giá trong Booking](booking-price-setup.vi.md).
+Lần vào hệ thống đầu tiên của chủ doanh nghiệp (tài khoản nhân sự, đại lý thử nghiệm, đăng nhập hai bước) và mọi việc
+với hệ thống giá trên Dev nằm ở [đưa chủ doanh nghiệp vào hệ thống và làm việc với hệ thống giá](business-owner-onboarding-and-pricing.vi.md).
 
 ## Ba kiểu đăng nhập
 

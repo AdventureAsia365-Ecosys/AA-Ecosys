@@ -37,6 +37,8 @@ Inside the CIS admin, two areas have their own runbook because the business owne
 register).
 Inside the Booking admin, the customer-service team who enter tour prices have their own guide:
 [Booking price setup](booking-price-setup.md).
+The business owner's first access (staff account, test agency, two-step sign-in) and every price-system task on Dev
+are in [Business owner onboarding and the price system](business-owner-onboarding-and-pricing.md).
 
 ## Three kinds of sign-in
 
