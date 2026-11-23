@@ -21,7 +21,8 @@
   pair (the A10d address with the "Pricing team" preset, and a Dev-only Booking contracting address) for the AA-1091
   live check with synthetic prices on synthetic trip plans; A10e-3 (proposed 14/11/2026, S280, pending the tech lead)
   would let that pair load the synthetic supplier, hotels, services and rates the check prices from (the checker
-  publishes the contract). A11 and A12 (22/10/2026,
+  publishes the contract); A10e-4 (24/11/2026, S289) lets the maker import the activity catalogue of that synthetic
+  supplier for the add-on live check (marked titles only; the A10h owner publishes the offers). A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2). A13
   (06/11/2026, S271) retires the CIS -> Booking bridge once the staff frontends run on ECS (ADR 0019 d23). A14
   (20/11/2026, S286) adds custom staff roles as data and the CIS contract view Booking reads a person's Booking role
@@ -904,6 +905,31 @@ mailbox or Google account". That is too strong.
   create.
 - **Revoke and removal:** drop the nine maker writes, the checker's contract write, the supply SQL and body checks;
   removed with A10e-2 (AA-1054). Synthetic records are never deleted (Booking keeps supply rows); they stay inactive.
+
+##### A10e-4. Amendment: the pricing maker imports synthetic activities for the add-on check (24/11/2026, S289, AA-1151)
+
+- **Status:** Accepted under the dev-phase merge rule (24/11/2026, S289, orchestrated lane b-1151; it widens auth, so
+  an independent review runs before merge). Recorded for the tech lead.
+- **Decision:** the add-on Done-when ("import 5 activities, a second person publishes") must run with agent
+  identities on Dev. The activity catalogue import (POST `/booking/suppliers/{ref}/activity-sheets`, DRY RUN and
+  import: one activity service, one draft add-on offer and its rates per row, in one draft contract) was on no
+  allow-list, so the pricing pair got 403 `e2e_read_only`. The E2E owner (A10h) cannot be both maker and publisher:
+  it is never the business owner, so its own publish is 403 `maker_checker`.
+- **Scope, enforced by AA-Booking (`backend/app/auth/e2e_staff.py`), on top of A10e-3:** one more maker write, the
+  activity import, on the maker's synthetic supplier only (checked from the path like the rate sheet, 403
+  `e2e_synthetic_only`). The route then checks the parsed file before any preview or write: at most 5 rows (the
+  Done-when count), every activity title starts with `SYNTHETIC` and no row has inclusions text, else 403
+  `e2e_read_only`. The other columns (the text after the mark, season, the contract block) stay free text, as in the
+  A10e-3 rate sheet. No offer write is added: the checker publishes the draft contract (A10e-3) and the E2E owner
+  (A10h), who wrote none of it, publishes the offers.
+- **Exposure added.** Whoever reads the maker's code can, on Dev, create marked activity services and draft add-ons
+  under the synthetic supplier; nothing sells until two other people publish the contract and each offer. Two side
+  effects: (1) each new service queues one paid CIS `supply_content_draft` job (the free text after the mark reaches
+  its prompt) and counts against the CIS daily draft cap; the 5-row cap bounds one import to about 5 drafts, and
+  repeated imports are bounded by that daily cap (real drafts that day can end `stopped_budget`), so the agent runs
+  the import once per check. (2) A published synthetic offer appears in `booking.v_place_addons` at a real CIS place,
+  which the `tripplanner` role reads; the offer's title carries the mark, and the agent retires it after the check.
+- **Revoke and removal:** drop the write, its SQL entry and the route check; removed with A10e-2 (AA-1054).
 
 #### A10f. Dev-only CIS content_lead E2E address: the second person of content publishing (20/11/2026, S286, AA-1155)
 
