@@ -945,6 +945,53 @@ mailbox or Google account". That is too strong.
   approve-class writes 403. CIS holds it to reads (no synthetic-tour marker yet, see A10f).
 - **Removal:** with the A10 family (trigger entry, recipient, tool command, CHECK branch, directory row, Cognito user).
 
+#### A10h. Dev-only E2E owner administrator for agent live checks (23/11/2026, S288, AA-1176)
+
+- **Decision (tech lead, S288: "create an admin role like me for the three points and do it now"):** a new Dev-only
+  address `e2e-owner@e2e-mail.lumiguides.it.com`, an administrator with the owner marker, so the orchestrating agent can
+  run the live checks only an owner can run: the staff view-as in CIS and Booking, Platform › Compliance › Refresh,
+  Staff › Add (one invite the tech lead asked for), a Booking sale exception on a synthetic plan. Every earlier E2E
+  identity is read-only or not an owner. It is **never the business owner**.
+- **Groups (trigger):** exactly `cis-admin` + `booking-admin`, one entry of `workforce.E2E_DEV_ONLY_TEST_STAFF` behind
+  `E2E_DEV_ONLY_STAFF_ENABLED` (dev only, Terraform precondition), no extra set; any other set denies the token. This
+  is the tech lead's own set (S283 access review, row W2) without `crm-platform-admin`: in the CRM it is a `cis-admin`
+  operations reader only. Created with AdminCreateUser + SUPPRESS, no password
+  (AA-CIS-Infra `tools/identity/crm_dev_identity.py e2e-owner`). Codes in `inbound-admin/` (rule `e2e-cognito-admin`),
+  readable by the MFA admin role only; never a recipient of `e2e-cognito`.
+- **Directory (CIS 473):** `admin_users_email_chk` allows the address as `admin`, no custom role, no password, never the
+  business owner; `is_owner` is left free. The owner marker and the Booking `admin` grant are written by the reviewed
+  master run-script AA-CIS-Infra `db/scripts/aa1176_e2e_owner_row.py` (DB Migrate `mode=run-script`, DRY RUN first,
+  audited as `script:db-migrate-aa1176`), not by a migration seed (a seed would create an owner on every future
+  environment) and not by a product route (none sets `is_owner`).
+- **Not read-only, Dev only in every app.** Unlike A10b..A10g the session is a normal administrator (and owner) session
+  in CIS and Booking. CIS (`api/core/staff_identity.py` rule 5f) and Booking (`app/auth/e2e_owner.py`) refuse it
+  wherever `ENVIRONMENT` is not exactly `dev` (403 `e2e_not_allowed_here`, reads included), and refuse any other row or
+  token shape (CIS 403 `e2e_owner_scope`, Booking 403 `e2e_scope`); the CRM (`app/auth/route_guard.py`) refuses it
+  outside dev / test / local and with any other group set (403 `e2e_read_only`).
+- **Administrator MFA:** CIS (`cis.platform.admin_mfa_required`), Booking (`staff_admin_mfa_required`) and the CRM
+  (`crm.platform.admin_mfa_required`) exempt it, like the other Dev-only E2E identities. Reason: its e-mail code is
+  readable only by the MFA admin IAM role, which is the second factor. This is the one real widening of this
+  amendment; it holds only together with the Dev-only gates above.
+- **Limits in code (D5):** on the CIS Staff page it never changes an owner, the business owner or its own row (403
+  `e2e_owner_scope`), never sets or clears the business-owner marker, and never counts as "another active owner" (so
+  the last real owner stays protected); it never approves a tenant erasure (A10b-5 rule "only a person approves an
+  erasure"); in Booking it never self-approves. A real owner may disable it at any time.
+- **Operating rules (D6, not enforced in code yet):** it acts on synthetic records only (synthetic tenants, synthetic
+  trip plans and suppliers, the E2E mailbox), except the one invite the tech lead asked for. It may be the **maker** of
+  a maker-checker flow, **never the checker** of a real person's work (CIS settings proposals, Booking price or Pricing
+  › Policy versions, payments): an approval by it is not a second person. A code guard is a follow-up if wanted.
+- **Recognisable:** its directory row and Booking staff row are named "E2E owner (agent, Dev only)", the run-script's
+  audit rows carry `e2e_owner: true`, the CIS bearer log carries `e2e_owner`, and the CIS staff reconcile lists it as a
+  known E2E identity (A10h) in the access review scope.
+- **Removal:** at once, **only** Platform › Staff › Disable by a CIS owner (row inactive, AdminDisableUser, global
+  sign-out; both Cognito steps must report no error). A database-only change is not a removal: Booking takes `admin`
+  from the token's groups (and its own staff row), the CRM is token-only, so with the Cognito user still enabled the
+  account stays an MFA-exempt Booking administrator and a CRM reader; only CIS would refuse it. The run-script's REMOVE
+  mode (owner marker off, Booking grant deleted) is cleanup after Disable, never instead of it: it makes no Cognito
+  call, refuses while the row is still active and prints that the Cognito user was not touched. With the A10 family
+  (AA-1054): trigger entry, recipient, tool command, run-script, the CIS / Booking / CRM constants, guards and MFA
+  exemptions, the spec, the row (DRY RUN) and the Cognito user, a CIS migration restoring the 462 CHECK.
+
 ### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)
 
 > **Superseded by A13 (07/11/2026, S272).** The fixed Preview hosts, the Preview-only clients and the Vercel projects
@@ -1120,3 +1167,7 @@ the only home of a person's Booking role and Booking reads it from the token).
   `lambda_src/identity_triggers/workforce.py` (A10, A10a), `docs/implementation-notes/AA-910-booking-e2e-staff.md`
   (A10a); `e2e_mailbox.tf` rule `e2e-cognito-admin`, `docs/implementation-notes/AA-816-e2e-cis-admin.md` (A10b).
 - AA-Booking: `backend/app/auth/staff.py` (A10a write cap, A11 preview cap), `frontend/e2e/SIGNED-IN-SMOKE.md` (A10a).
+- A10h (AA-1176): AA-CIS-App `api/migrations/473_aa1176_admin_users_e2e_owner_email.sql`, `api/core/e2e_staff.py`,
+  `api/services/staff_e2e_owner.py`, `docs/implementation-notes/AA-1176-e2e-owner.md`; AA-Booking
+  `backend/app/auth/e2e_owner.py`; AA-Partner `api/app/auth/route_guard.py`; AA-CIS-Infra
+  `db/scripts/aa1176_e2e_owner_row.py`, `docs/implementation-notes/AA-1176-e2e-owner.md`.
