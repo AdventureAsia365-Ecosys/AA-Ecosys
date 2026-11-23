@@ -11,7 +11,7 @@ tạm dừng (Nghiệp cho máy ngủ, ghi chú `.tmp-session/s242/RESUME.md`) r
 ## Quyết định của Nghiệp trong phiên
 - Duyệt danh sách đầu phiên (AA-854 → X1 → AA-885 → AA-816 …), "làm luôn", tắt auto mode khi cần.
 - Break-glass giữ `admin@adventure.asia` (S241); tài khoản staff hằng ngày của Nghiệp = `nghieppham@adventure.asia`.
-- Thêm chị Thư `thu@adventure.asia` làm admin CIS (Nghiệp tự tạo trên trang Staff; sau đó tự chuyển Booking role về None).
+- Thêm chị Thư `t***@adventure.asia` làm admin CIS (Nghiệp tự tạo trên trang Staff; sau đó tự chuyển Booking role về None).
 - Trang đăng nhập phải đồng bộ UI AA; chuyển sang domain riêng sau khi Chrome báo "Dangerous site".
 - Có thư mời khi tạo nhân viên; thêm bộ lọc "Show disabled". Không có nút xoá staff (giữ lịch sử, Disable = nghỉ việc).
 - Dọn sạch PR Dependabot ở mọi repo.

@@ -1,0 +1,219 @@
+<title>Bắt đầu với hệ thống giá</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (~70ch), a sticky section index on wide screens, tables scroll inside their own box. */
+:root {
+  --bg: #f7f8f6; --surface: #ffffff; --fg: #1d2420; --muted: #5b6660; --line: #dde3df;
+  --accent: #0f6e5a; --accent-soft: #e2f1ec; --warn: #9a5b00; --warn-soft: #fbf0dc; --ok: #1f7a3a; --ok-soft: #e3f3e7;
+  --plan: #3b5bab; --plan-soft: #e7ecf8;
+  --font-body: "Be Vietnam Pro", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121614; --surface: #1a201d; --fg: #e6ece8; --muted: #9aa69f; --line: #2c3530;
+  --accent: #5cc9ac; --accent-soft: #163a31; --warn: #f0b862; --warn-soft: #3a2c14; --ok: #7fd394; --ok-soft: #173322;
+  --plan: #9db4f0; --plan-soft: #1e2840; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121614; --surface: #1a201d; --fg: #e6ece8; --muted: #9aa69f; --line: #2c3530;
+  --accent: #5cc9ac; --accent-soft: #163a31; --warn: #f0b862; --warn-soft: #3a2c14; --ok: #7fd394; --ok-soft: #173322;
+  --plan: #9db4f0; --plan-soft: #1e2840; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15.5px; line-height: 1.65;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 64px }
+.wrap { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 40px }
+@media (max-width: 860px) { .wrap { grid-template-columns: minmax(0, 1fr); gap: 20px } nav.toc { display: none } }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); align-self: start; font-size: 13.5px }
+nav.toc p { text-transform: uppercase; letter-spacing: .08em; font-size: 11.5px; color: var(--muted); margin: 0 0 8px }
+nav.toc a { display: block; color: var(--muted); text-decoration: none; padding: 5px 0 5px 10px; border-left: 2px solid var(--line) }
+nav.toc a:hover, nav.toc a:focus-visible { color: var(--accent); border-left-color: var(--accent); outline: none }
+main { min-width: 0; max-width: 72ch }
+header .eyebrow { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); font-weight: 600 }
+h1 { font-size: clamp(26px, 4vw, 34px); line-height: 1.2; margin: 6px 0 10px; text-wrap: balance; font-weight: 700 }
+.lede { color: var(--muted); font-size: 16.5px; margin: 0 0 14px }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; font-size: 12.5px; color: var(--muted) }
+.chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; background: var(--surface) }
+h2 { font-size: 21px; margin: 44px 0 12px; text-wrap: balance; scroll-margin-top: 20px; font-weight: 700 }
+h3 { font-size: 16px; margin: 22px 0 8px; font-weight: 600 }
+p { margin: 0 0 12px }
+ol, ul { margin: 0 0 12px; padding-left: 22px; display: grid; gap: 6px }
+code, .mono { font-family: var(--font-mono); font-size: 13px; background: var(--accent-soft); color: var(--fg); padding: 1px 6px; border-radius: 4px; overflow-wrap: anywhere }
+a { color: var(--accent) }
+b, strong { font-weight: 600 }
+.ui { font-weight: 600; border-bottom: 1px dashed var(--muted) }
+.callout { border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 14px 0 }
+.callout.warn { border-left-color: var(--warn); background: var(--warn-soft) }
+.callout p:last-child { margin-bottom: 0 }
+.tablebox { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); margin: 12px 0 16px }
+table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 560px }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--line) }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; background: var(--bg) }
+tr:last-child td { border-bottom: 0 }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; font-family: var(--font-mono); font-size: 13px }
+.pill { display: inline-block; font-size: 12px; font-weight: 600; border-radius: 999px; padding: 1px 9px; white-space: nowrap }
+.pill.ok { background: var(--ok-soft); color: var(--ok) }
+.pill.wip { background: var(--plan-soft); color: var(--plan) }
+.pill.part { background: var(--warn-soft); color: var(--warn) }
+.steps { counter-reset: s; list-style: none; padding: 0 }
+.steps > li { counter-increment: s; position: relative; padding-left: 38px }
+.steps > li::before { content: counter(s); position: absolute; left: 0; top: 1px; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--accent-soft); color: var(--accent); font-weight: 600; font-size: 13px; display: grid; place-items: center }
+.check { list-style: none; padding: 0 }
+.check li { padding-left: 26px; position: relative }
+.check li::before { content: ""; position: absolute; left: 2px; top: 6px; width: 13px; height: 13px; border: 1.5px solid var(--accent); border-radius: 3px }
+pre.mermaid { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; overflow-x: auto }
+footer { margin-top: 48px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 14px }
+@media (prefers-reduced-motion: no-preference) { nav.toc a { transition: color .15s, border-color .15s } }
+</style>
+
+<div class="wrap">
+  <nav class="toc" aria-label="Mục lục">
+    <p>Trên trang này</p>
+    <a href="#chuan-bi">1. Chuẩn bị cho ngày đầu</a>
+    <a href="#dang-nhap-nhan-su">2. Đăng nhập nhân sự lần đầu</a>
+    <a href="#dai-ly-thu">3. Ứng dụng đại lý thử</a>
+    <a href="#vi-du-gia">4. Ví dụ giá trip đã có gì</a>
+    <a href="#luong-gia">5. Giá chảy thế nào, ai duyệt</a>
+    <a href="#thu-gi">6. Nên thử gì</a>
+    <a href="#an-toan">7. Quy tắc an toàn trên Dev</a>
+    <a href="#chua-co">8. Đang làm và chưa có</a>
+  </nav>
+
+  <main>
+    <header>
+      <div class="eyebrow">Adventure Asia · môi trường Dev</div>
+      <h1>Bắt đầu với hệ thống giá</h1>
+      <p class="lede">Bản ngắn cho chủ doanh nghiệp: chuẩn bị gì cho buổi đầu, đăng nhập thế nào, hệ thống giá làm được gì với ví dụ giá trip thật, và nên thử những gì.</p>
+      <div class="meta">
+        <span class="chip">Cập nhật 23/11/2026</span>
+        <span class="chip">Đọc khoảng 8 phút</span>
+        <span class="chip">Hướng dẫn chi tiết: GUIDE-12 trong mục Tài liệu</span>
+      </div>
+    </header>
+
+    <h2 id="chuan-bi">1. Chuẩn bị cho ngày đầu</h2>
+    <ul class="check">
+      <li><b>Điện thoại có ứng dụng xác thực</b> có sao lưu: Google Authenticator, Microsoft Authenticator hoặc 1Password. Sẽ thêm hai mục: một cho đăng nhập nhân sự, một cho ứng dụng đại lý.</li>
+      <li><b>Hộp thư công ty riêng</b> (<span class="mono">…@adventure.asia</span>) mở sẵn trên cùng máy tính. Mã đăng nhập và thư mời gửi về đây.</li>
+      <li><b>Trình quản lý mật khẩu</b> (hoặc nơi lưu an toàn) cho hai mật khẩu: nhân sự và đại lý.</li>
+      <li><b>Hai cửa sổ trình duyệt</b>: cửa sổ thường cho trang nhân sự, cửa sổ ẩn danh cho ứng dụng đại lý. Hai kiểu đăng nhập tách biệt.</li>
+      <li><b>Tắt VPN</b>, hoặc dùng VPN có điểm ra ở Việt Nam. Trang nhân sự chỉ nhận truy cập từ một số quốc gia.</li>
+    </ul>
+    <div class="callout"><p>Tech lead tạo tài khoản và ngồi cùng trong buổi đầu. Buổi đầu mất khoảng 1 giờ cho cả tài khoản nhân sự lẫn đại lý thử.</p></div>
+
+    <h2 id="dang-nhap-nhan-su">2. Đăng nhập nhân sự lần đầu</h2>
+    <p>Dùng cho CIS admin (nội dung, tour, nền tảng) và Booking admin (nhà cung cấp, giá, booking).</p>
+    <ol class="steps">
+      <li>Nhận thư mời từ hệ thống. Mở <span class="mono">aa-cis.lumiguides.it.com/login</span>, trang "Staff sign-in".</li>
+      <li>Bấm <span class="ui">Sign in with company email</span>. Trang đăng nhập Adventure Asia mở ra. Gõ địa chỉ công ty.</li>
+      <li>Mở hộp thư, lấy <b>mã dùng một lần</b> và gõ vào. CIS admin mở ra.</li>
+      <li>Tech lead đặt dấu "chủ doanh nghiệp" cho tài khoản. Dấu này cho phép tự duyệt một số việc của chính mình, luôn có đánh dấu và ghi nhật ký (mục 5).</li>
+      <li>Mở <span class="mono">booking.lumiguides.it.com</span> và đăng nhập cùng cách. Góc trên có nút <span class="ui">EN | VI</span> để chuyển tiếng Việt.</li>
+      <li>Cài ứng dụng xác thực cho đăng nhập nhân sự, tech lead làm cùng. Từ đó đăng nhập bằng mật khẩu cộng mã 6 số trên điện thoại.</li>
+    </ol>
+    <div class="callout warn"><p>Không chia sẻ mã dùng một lần, mật khẩu hay mã 6 số với bất kỳ ai, kể cả tech lead.</p></div>
+
+    <h2 id="dai-ly-thu">3. Ứng dụng đại lý thử</h2>
+    <p>Một đại lý thử nghiệm để xem hệ thống từ phía đại lý (Content studio và CRM tại <span class="mono">portal.lumiguides.it.com</span>). Tech lead tạo đại lý và gửi hai lời mời.</p>
+    <ol class="steps">
+      <li>Trong <b>cửa sổ ẩn danh</b>, mở đường link trong thư mời thứ nhất. Bấm <span class="ui">Open invitation</span>. Trang hiện <b>mật khẩu dùng một lần</b>, chỉ hiện một lần, nên giữ trang mở.</li>
+      <li>Bấm <span class="ui">Continue to sign in</span>, gõ địa chỉ và mật khẩu dùng một lần, rồi đặt mật khẩu đại lý của riêng mình.</li>
+      <li>Quét mã QR bằng ứng dụng xác thực, gõ mã 6 số, rồi bấm <span class="ui">Accept invitation</span>.</li>
+      <li>Mở thư mời thứ hai, đăng nhập bằng mật khẩu đại lý và mã 6 số, nhận lời mời. Bấm <span class="ui">Open the Content studio</span>.</li>
+    </ol>
+    <p>Đổi tiếng Việt: menu tài khoản › <span class="ui">Language and dates</span>.</p>
+
+    <h2 id="vi-du-gia">4. Ví dụ giá trip đã có gì</h2>
+    <p>Đối chiếu với ví dụ giá đưa ra ngày 23/11 (giá mỗi khách, ở phòng đôi, hiệu lực 20/01–31/03/2027):</p>
+    <div class="tablebox"><table>
+      <thead><tr><th>Số khách</th><th>Giá mỗi khách (phòng đôi)</th></tr></thead>
+      <tbody>
+        <tr><td>2 khách</td><td class="num">USD 2,190</td></tr>
+        <tr><td>4 khách</td><td class="num">USD 1,770</td></tr>
+        <tr><td>5–7 khách</td><td class="num">USD 1,745</td></tr>
+        <tr><td>8 khách</td><td class="num">USD 1,550</td></tr>
+      </tbody>
+    </table></div>
+    <div class="tablebox"><table>
+      <thead><tr><th>Yêu cầu</th><th>Hệ thống hôm nay</th><th>Trạng thái</th></tr></thead>
+      <tbody>
+        <tr><td>Giá mỗi khách theo phòng đôi</td><td>Có. Giá tính theo người ở phòng đôi, kèm phụ thu phòng đơn, giá trẻ em và em bé.</td><td><span class="pill ok">Đã có</span></td></tr>
+        <tr><td>Thời hạn giá (20/01–31/03/2027)</td><td>Có. Mỗi phiên bản giá có ngày hiệu lực.</td><td><span class="pill ok">Đã có</span></td></tr>
+        <tr><td>Mùa cao điểm và thấp điểm</td><td>Có. Lịch mùa và ngày lễ trong Booking; cần người thứ hai duyệt, hoặc chủ doanh nghiệp tự duyệt có đánh dấu.</td><td><span class="pill ok">Đã có</span></td></tr>
+        <tr><td>Một trip lấy giá từ nhiều nhà cung cấp</td><td>Có. Giá tour cộng từ khách sạn, xe, hướng dẫn viên… của nhiều nhà cung cấp. Khi bán, mỗi thành phần thành một booking nhà cung cấp riêng.</td><td><span class="pill ok">Đã có</span></td></tr>
+        <tr><td>Bậc số khách 1, 2, 4, 5–7, 8–10</td><td>Có, từ 23/11. Bậc số khách là tham số chỉnh được trong <span class="ui">Pricing policy</span> (người thứ hai duyệt), mặc định 1, 2, 3, 4, 5–7, 8–10, 11+. Bậc 3 đứng riêng vì bậc phải liền nhau từ 1 (gộp 3–4 sẽ tính nhóm 4 theo giá của 3); 11+ tính theo giá 11 khách. Giá nhập tay vẫn đặt được bậc tuỳ ý (Pax min, Pax max). Giá tính tự động đổi theo bậc mới ở lần tính lại kế tiếp.</td><td><span class="pill ok">Đã có</span></td></tr>
+      </tbody>
+    </table></div>
+    <p>Cách nhập loại giá trong ví dụ hôm nay: <b>Phiên bản giá</b> (giá nhập tay) cho tour, mỗi dòng một bậc số khách, có ngày hiệu lực. Sau khi duyệt, giá dùng ngay cho báo giá và hiển thị.</p>
+
+    <h2 id="luong-gia">5. Giá chảy thế nào, ai duyệt</h2>
+    <p>Booking giữ mọi giá. Một bảng giá duy nhất cấp cho mọi nơi khác.</p>
+<pre class="mermaid">
+flowchart LR
+  sup["Nhà cung cấp (đã kích hoạt)"] --> con["Hợp đồng + giá NCC (đã công bố)"]
+  comp["Khách sạn & dịch vụ của tour"] --> cost["Bảng chi phí"]
+  con --> cost
+  rule["Quy tắc giá + tỷ giá (đã duyệt)"] --> cost
+  ver["Phiên bản giá nhập tay (đã duyệt)"] --> table["Bảng giá tour"]
+  cost --> table
+  table --> tp["TripPlanner: Từ $X"]
+  table --> studio["Content studio: Từ $X"]
+  table --> crm["CRM đại lý: giá AA, báo giá"]
+</pre>
+    <ul>
+      <li><b>Giá bán lẻ đề xuất</b> = giá theo quy tắc giá + 25%, như nhau cho mọi đại lý.</li>
+      <li><b>Giá "Từ $X" công khai</b> = giá bán lẻ rẻ nhất mỗi khách cho 2 khách, còn hiệu lực hôm nay.</li>
+      <li><b>Giá đại lý</b> = giá theo quy tắc trừ mức giảm theo hạng hoặc thẻ giá của đại lý.</li>
+    </ul>
+    <h3>Ai duyệt</h3>
+    <p>Người làm không tự duyệt việc của mình. Ngoại lệ duy nhất: chủ doanh nghiệp được tự duyệt một số việc, mỗi lần đều được đánh dấu và liệt kê ở tab <span class="ui">Business-owner self-approvals</span> trong nhật ký.</p>
+    <div class="tablebox"><table>
+      <thead><tr><th>Việc</th><th>Người thứ hai duyệt</th><th>Chủ doanh nghiệp tự duyệt</th></tr></thead>
+      <tbody>
+        <tr><td>Kích hoạt nhà cung cấp mới</td><td>Có</td><td><span class="pill ok">Được, có đánh dấu</span></td></tr>
+        <tr><td>Công bố hợp đồng và giá nhà cung cấp</td><td>Có</td><td><span class="pill ok">Được, có đánh dấu</span></td></tr>
+        <tr><td>Duyệt phiên bản giá, mùa, ngày lễ</td><td>Có</td><td><span class="pill ok">Được, có đánh dấu</span></td></tr>
+        <tr><td>Thông tin chuyển khoản in trên hoá đơn đại lý</td><td>Có</td><td><span class="pill ok">Được, có đánh dấu</span></td></tr>
+        <tr><td>Duyệt hoá đơn nhà cung cấp, ghi nhận chi trả</td><td>Có</td><td><span class="pill ok">Được, có đánh dấu</span></td></tr>
+        <tr><td>Quy tắc giá, tỷ giá, mức giảm theo hạng đại lý</td><td>Có</td><td><span class="pill part">Không</span></td></tr>
+        <tr><td>Ngừng bán, gỡ ngừng bán, thay đổi chính sách giá</td><td>Có</td><td><span class="pill part">Không</span></td></tr>
+        <tr><td>Mở bán một tour</td><td>Không, nhưng cần có giá đã duyệt</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2 id="thu-gi">6. Nên thử gì</h2>
+    <ul class="check">
+      <li>Booking › <span class="ui">Price setup</span>: xem mức sẵn sàng của từng tour (đã có giá chưa, vận hành được chưa).</li>
+      <li>Tạo một nhà cung cấp tên <span class="mono">SYNTHETIC …</span>: nó ở trạng thái chờ; tự kích hoạt (có đánh dấu) rồi xem dòng đó ở nhật ký tự duyệt.</li>
+      <li>Nhập một phiên bản giá cho một tour thử, mỗi dòng một bậc số khách như ví dụ ở mục 4; duyệt; mở bán.</li>
+      <li>Xem giá "Từ $X" hiện trên TripPlanner và trong Content studio › Marketplace của đại lý thử.</li>
+      <li>Trong CRM của đại lý thử: Settings › <span class="ui">AA prices for your agency</span>, bảng giá theo tour, mùa và cỡ nhóm.</li>
+      <li>Hoàn tác theo hướng dẫn chi tiết (GUIDE-12, Phần D) khi thử xong.</li>
+    </ul>
+
+    <h2 id="an-toan">7. Quy tắc an toàn trên Dev</h2>
+    <ul>
+      <li>Chỉ dùng dữ liệu bịa. Đặt tên mọi bản ghi tự tạo là <span class="mono">SYNTHETIC …</span>, tên đại lý có chữ "Test".</li>
+      <li>Không gõ khách hàng hay khách du lịch thật; email thử kết thúc bằng <span class="mono">example.invalid</span>.</li>
+      <li>Không động vào các đại lý thử có sẵn và các tài khoản <span class="mono">e2e-</span>.</li>
+      <li>Một số bước gọi AI có tính phí (mỗi khách sạn hoặc dịch vụ mới tạo một bản nháp AI). Giữ số lượng nhỏ.</li>
+    </ul>
+
+    <h2 id="chua-co">8. Đang làm và chưa có</h2>
+    <div class="tablebox"><table>
+      <thead><tr><th>Còn thiếu</th><th>Khi nào</th></tr></thead>
+      <tbody>
+        <tr><td>Giá nhà cung cấp thật và ngày khởi hành thật cho các tour ưu tiên</td><td>Trước pilot thật đầu tiên</td></tr>
+        <tr><td>Tài khoản ngân hàng nhà cung cấp, có thời gian chờ trước khi chi trả sau một lần đổi</td><td>Phần tiếp theo của quy tắc duyệt</td></tr>
+        <tr><td>Chủ doanh nghiệp tự duyệt mức giảm theo hạng đại lý, thẻ giá, miễn phí huỷ</td><td>Phần tiếp theo của quy tắc duyệt</td></tr>
+        <tr><td>Hoạt động tuỳ chọn do AA cung cấp; hợp đồng khách sạn qua đại lý địa phương (gói bữa ăn, phụ thu, allotment)</td><td>Các phiên tới</td></tr>
+        <tr><td>Giá theo xe và giá bậc thang trong file Excel dịch vụ</td><td>Sau này</td></tr>
+      </tbody>
+    </table></div>
+
+    <footer>
+      Hướng dẫn chi tiết từng bước (cho tech lead và chủ doanh nghiệp): CIS admin › Tài liệu › Hướng dẫn › "Business owner onboarding and pricing" (GUIDE-12-owner-pricing), có bản tiếng Việt. Trang này là bản tóm tắt; số liệu và nhãn nút theo bản Dev ngày 23/11/2026.
+    </footer>
+  </main>
+</div>

@@ -532,7 +532,7 @@
     "id": "S4n",
     "repo": "CIS admin (Dev)",
     "who": "nghiep",
-    "what": "In CIS admin \u2192 Platform \u2192 Staff, set your own Booking role (admin). That writes shared.staff_app_grant and fixes the S242 drift where nghieppham and admin have booking-admin in Cognito but no grant. Then sign in at https://booking.lumiguides.it.com/login with 'Sign in with company email' for the live E2E proof. Optional negative check: thu@adventure.asia (Booking role None) should see the 'no Booking role' screen."
+    "what": "In CIS admin \u2192 Platform \u2192 Staff, set your own Booking role (admin). That writes shared.staff_app_grant and fixes the S242 drift where nghieppham and admin have booking-admin in Cognito but no grant. Then sign in at https://booking.lumiguides.it.com/login with 'Sign in with company email' for the live E2E proof. Optional negative check: t***@adventure.asia (Booking role None) should see the 'no Booking role' screen."
    },
    {
     "id": "S5",

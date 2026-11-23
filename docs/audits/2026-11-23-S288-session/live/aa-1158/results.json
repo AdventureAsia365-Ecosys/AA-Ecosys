@@ -1,0 +1,385 @@
+{
+  "run": "aa1158-mwsw2mi1",
+  "at": "2026-11-23T06:32:47.977Z",
+  "readonly_me": {
+    "role": "admin",
+    "custom_role_label": null,
+    "is_business_owner": null,
+    "supplier_perms": [
+      "audit.read",
+      "billing_config.approve",
+      "billing_config.write",
+      "contract.publish",
+      "payout.write",
+      "supplier.activate"
+    ],
+    "has_supplier_write": false,
+    "has_supplier_activate": true,
+    "has_contract_publish": true,
+    "has_audit_read": true,
+    "has_billing_config_write": true,
+    "has_billing_config_approve": true
+  },
+  "self_approval": {
+    "status": 200,
+    "body": {
+      "is_business_owner": false,
+      "approve": false,
+      "payout": false
+    }
+  },
+  "policy": {
+    "status": 200,
+    "item_count": 47,
+    "owner_self_approval_allowed": {
+      "key": "owner_self_approval_allowed",
+      "group": "security",
+      "value": true,
+      "version": 1,
+      "current_status": "in_force"
+    },
+    "owner_payout_after_approval_allowed": {
+      "key": "owner_payout_after_approval_allowed",
+      "group": "security",
+      "value": true,
+      "version": 1,
+      "current_status": "in_force"
+    },
+    "top_keys": [
+      "items",
+      "today",
+      "pending"
+    ]
+  },
+  "audit_owner_self": {
+    "status": 200,
+    "items": 0,
+    "all_flagged": true,
+    "actions": []
+  },
+  "audit_unfiltered": {
+    "status": 200,
+    "items": 5
+  },
+  "suppliers_pending_before": {
+    "status": 200,
+    "count": 0,
+    "total": 0
+  },
+  "suppliers_summary": {
+    "status": 200,
+    "body": {
+      "total": 8,
+      "active": 5,
+      "inactive": 3,
+      "pending": 0,
+      "countries": 3,
+      "contracts_ending_30d": 0
+    }
+  },
+  "billing_entities": {
+    "status": 200,
+    "count": 1,
+    "have_pending_change_key": true,
+    "pending_changes": 0
+  },
+  "billing_change_probe_readonly": {
+    "status": 403,
+    "detail": "e2e_read_only",
+    "message": null
+  },
+  "my_work": {
+    "status": 200,
+    "tile_keys": [
+      "my_open_cases",
+      "trip_checks_overdue",
+      "b2b_on_request",
+      "supplier_bills_overdue",
+      "supplier_bills_due_soon",
+      "agency_invoices_overdue",
+      "supplier_bills_to_approve",
+      "supplier_bills_to_pay",
+      "agency_payments_to_approve",
+      "stop_sales_to_review",
+      "suppliers_to_activate",
+      "billing_changes_to_approve",
+      "owner_self_approvals"
+    ],
+    "owner_self_approvals": {
+      "key": "owner_self_approvals",
+      "capability": "audit.read",
+      "group": "work",
+      "filter": {
+        "owner_self_approved": "true",
+        "from": "2026-11-01"
+      },
+      "available": true,
+      "count": 0,
+      "oldest_at": null,
+      "earliest_due": null,
+      "days": null
+    },
+    "suppliers_to_activate": {
+      "key": "suppliers_to_activate",
+      "capability": "supplier.activate",
+      "group": "approve",
+      "filter": {
+        "status": "pending",
+        "approvable": "me"
+      },
+      "available": true,
+      "count": 0,
+      "oldest_at": null,
+      "earliest_due": null,
+      "days": null
+    },
+    "billing_changes_to_approve": {
+      "key": "billing_changes_to_approve",
+      "capability": "billing_config.approve",
+      "group": "approve",
+      "filter": {
+        "tab": "settings",
+        "approvable": "me"
+      },
+      "available": true,
+      "count": 0,
+      "oldest_at": null,
+      "earliest_due": null,
+      "days": null
+    }
+  },
+  "custom_me": {
+    "role": "custom_product_ops_accounting",
+    "custom_role_label": null,
+    "is_business_owner": null,
+    "supplier_perms": [],
+    "has_supplier_write": false,
+    "has_supplier_activate": false,
+    "has_contract_publish": false,
+    "has_audit_read": false,
+    "has_billing_config_write": false,
+    "has_billing_config_approve": false
+  },
+  "custom_create": {
+    "status": 201,
+    "detail": null,
+    "supplier": {
+      "status": "pending",
+      "code_present": true,
+      "name_marked": true,
+      "activated_by_is": null,
+      "activated_at_set": false,
+      "owner_self_approved": false,
+      "writers_count": 1,
+      "writers_are": [
+        "custom"
+      ],
+      "actions": {
+        "activate": {
+          "allowed": false,
+          "self_approval": false,
+          "blockers": [
+            "needs_supplier_activate"
+          ]
+        }
+      }
+    }
+  },
+  "custom_detail": {
+    "status": 200,
+    "supplier": {
+      "status": "pending",
+      "code_present": true,
+      "name_marked": true,
+      "activated_by_is": null,
+      "activated_at_set": false,
+      "owner_self_approved": false,
+      "writers_count": 1,
+      "writers_are": [
+        "custom"
+      ],
+      "actions": {
+        "activate": {
+          "allowed": false,
+          "self_approval": false,
+          "blockers": [
+            "needs_supplier_activate"
+          ]
+        }
+      }
+    }
+  },
+  "custom_activate_own": {
+    "status": 403,
+    "detail": "forbidden",
+    "message": null
+  },
+  "ui_suppliers_pending": {
+    "url": "/suppliers?status=pending",
+    "landed": "/suppliers?status=pending",
+    "overflow": {
+      "1440-light": {
+        "doc": false,
+        "main": false
+      },
+      "1440-dark": {
+        "doc": false,
+        "main": false
+      },
+      "390-light": {
+        "doc": false,
+        "main": false
+      },
+      "390-dark": {
+        "doc": false,
+        "main": false
+      }
+    },
+    "console_errors": [],
+    "failing_requests": [],
+    "text_sample": "Adventure Asia\nBOOKING\nOVERVIEW\nB2B\nSALES\nOPERATIONS\nSUPPLY\nSuppliers\nHotels\nServices\nPricing rules & FX\nAgency tiers\nPrice readiness\nPrice setup\nPricing policy\nSeasons\nHoliday events\nStop-sales\nCATALOG (FROM CIS)\nADMIN\nSettings\nE\ne2e-booking\nAdmin\nCollapse\nBooking\n/\nSuppliers\nSearch pages, trip cases, customers…\nCtrl K\nCIS console\nEN\nVI\nAdmin\nE\nSuppliers\nHotels, transport, guides and other partners Booking buys from, with their contracts.\nADD SUPPLIER\nTotal suppliers\n9\nAcross 3 countries\nActive\n5\nCan take new contracts\nInactive\n3\nKept on record, no new contracts\nContracts ending in 30 days\n0\nNothing ending soon\nSearch name, SUP- code, contact or e-mail\nStatus\nAll statuses\nPending approval\nActive\nInactive\nCategory\nAll categories\nHotel\nTransport\nGuide\nEntrance\nActivity\nMeal\nCountry\nAll countries\nBhutan\nCambodia\nChina\nIndia\nIndonesia\nJapan\nKyrgyzstan\nLaos\nMalaysia\nMongolia\nMyanmar\nNepal\nPakistan\nPhilippines\nSingapore\nSouth Korea\nSri Lanka\nTaiwan\nThailand\nUzbekistan\nVietnam\nSort\nName A–Z\nRecently updated\nNewest first\nName Z–A\nReset filters\nCSV\nColumns\nSUPPLIER\tCATEGORIES\tCONTACT\tCONTRACTS\tSTATUS\tUPDATED\tACTIONS\n\nSYNTHETIC aa1158-mwsw2mi1 custom\nSUP-000014\n\t\nHotel\n\t—\t0\t\nPending approval\tjust now\t\n1–1 of 1\n25 / page\n50 / page\n100 / page\nPage 1 / 1"
+  },
+  "ui_supplier_detail_admin": {
+    "url": "/suppliers/7c138395-19f0-4cba-9ec9-5b0bbe26b199",
+    "landed": "/suppliers/7c138395-19f0-4cba-9ec9-5b0bbe26b199",
+    "overflow": {
+      "1440-light": {
+        "doc": false,
+        "main": false
+      },
+      "390-dark": {
+        "doc": false,
+        "main": false
+      }
+    },
+    "console_errors": [],
+    "failing_requests": [],
+    "text_sample": "Adventure Asia\nBOOKING\nOVERVIEW\nB2B\nSALES\nOPERATIONS\nSUPPLY\nSuppliers\nHotels\nServices\nPricing rules & FX\nAgency tiers\nPrice readiness\nPrice setup\nPricing policy\nSeasons\nHoliday events\nStop-sales\nCATALOG (FROM CIS)\nADMIN\nSettings\nE\ne2e-booking\nAdmin\nCollapse\nBooking\n/\nSuppliers\nSearch pages, trip cases, customers…\nCtrl K\nCIS console\nEN\nVI\nAdmin\nE\n\nSuppliers/SYNTHETIC aa1158-mwsw2mi1 custom\n\nSA\nSYNTHETIC aa1158-mwsw2mi1 custom\nPending approval\nSUP-000014\nHotel\nAdded on 23 Nov 2026\nEdit profile\nACTIVATE\nProfile\nContracts(0)\nRates\nBookings\nBills\nThis supplier waits for approval: a second person activates it before contracts can be added.\nBasic information\nCATEGORIES\nHotel\nWEBSITE\n—\nINTERNAL NOTES\nNone\nLocation\nSTREET ADDRESS\n—\nCITY / PLACE\n—\nCOUNTRY\n—\nSTATE / PROVINCE\n—\nPOSTAL CODE\n—\nContact details\nPRIMARY CONTACT\n—\nJOB TITLE\n—\nE-MAIL\n—\nPHONE\n—\nRecent activity\nCreated supplier SYNTHETIC aa1158-mwsw2mi1 custom (pending approval)\ne2e-custom-maker · 23 Nov 2026, 13:33"
+  },
+  "ui_supplier_detail_creator": {
+    "url": "/suppliers/7c138395-19f0-4cba-9ec9-5b0bbe26b199",
+    "landed": "/suppliers/7c138395-19f0-4cba-9ec9-5b0bbe26b199",
+    "overflow": {
+      "1440-light": {
+        "doc": false,
+        "main": false
+      }
+    },
+    "console_errors": [],
+    "failing_requests": [],
+    "text_sample": "Adventure Asia\nBOOKING\nOVERVIEW\nB2B\nSALES\nOPERATIONS\nSUPPLY\nSuppliers\nHotels\nServices\nPricing rules & FX\nAgency tiers\nPrice readiness\nPrice setup\nSeasons\nHoliday events\nStop-sales\nCATALOG (FROM CIS)\nSettings\nE\ne2e-custom-maker\nProduct, ops & accounting\nCollapse\nBooking\n/\nSuppliers\nSearch pages, trip cases, customers…\nCtrl K\nCIS console\nEN\nVI\nProduct, ops & accounting\nE\n\nSuppliers/SYNTHETIC aa1158-mwsw2mi1 custom\n\nSA\nSYNTHETIC aa1158-mwsw2mi1 custom\nPending approval\nSUP-000014\nHotel\nAdded on 23 Nov 2026\nEdit profile\nProfile\nContracts(0)\nRates\nBookings\nBills\nThis supplier waits for approval: a second person activates it before contracts can be added.\nBasic information\nCATEGORIES\nHotel\nWEBSITE\n—\nINTERNAL NOTES\nNone\nLocation\nSTREET ADDRESS\n—\nCITY / PLACE\n—\nCOUNTRY\n—\nSTATE / PROVINCE\n—\nPOSTAL CODE\n—\nContact details\nPRIMARY CONTACT\n—\nJOB TITLE\n—\nE-MAIL\n—\nPHONE\n—\nRecent activity\nCreated supplier SYNTHETIC aa1158-mwsw2mi1 custom (pending approval)\ne2e-custom-maker · 23 Nov 2026, 13:33"
+  },
+  "pmaker_sign_in": {
+    "ok": false,
+    "error": "TimeoutError: page.waitForURL: Timeout 45000ms exceeded."
+  },
+  "pchecker_me": {
+    "role": "contracting",
+    "custom_role_label": null,
+    "is_business_owner": null,
+    "supplier_perms": [
+      "contract.publish",
+      "supplier.activate"
+    ],
+    "has_supplier_write": false,
+    "has_supplier_activate": true,
+    "has_contract_publish": true,
+    "has_audit_read": false,
+    "has_billing_config_write": false,
+    "has_billing_config_approve": false
+  },
+  "pchecker_activate_custom_supplier": {
+    "status": 403,
+    "detail": "e2e_synthetic_only",
+    "message": null
+  },
+  "custom_supplier_after_checker_probe": {
+    "status": 200,
+    "supplier_status": "pending"
+  },
+  "custom_cleanup_deactivate": {
+    "status": 200,
+    "detail": null,
+    "status_after": "inactive"
+  },
+  "ui_audit_self": {
+    "url": "/audit-log?owner_self_approved=true",
+    "landed": "/audit-log?owner_self_approved=true",
+    "overflow": {
+      "1440-light": {
+        "doc": false,
+        "main": false
+      },
+      "1440-dark": {
+        "doc": false,
+        "main": false
+      },
+      "390-light": {
+        "doc": false,
+        "main": false
+      },
+      "390-dark": {
+        "doc": false,
+        "main": false
+      }
+    },
+    "console_errors": [],
+    "failing_requests": [],
+    "text_sample": "Adventure Asia\nBOOKING\nOVERVIEW\nB2B\nSALES\nOPERATIONS\nSUPPLY\nCATALOG (FROM CIS)\nADMIN\nStaff\nRoles\nAudit Log\nSettings\nE\ne2e-booking\nAdmin\nCollapse\nBooking\n/\nAudit Log\nSearch pages, trip cases, customers…\nCtrl K\nCIS console\nEN\nVI\nAdmin\nE\nAudit log\nEvery staff write in Booking, newest first: who did what, when, and the values before and after.\nEXPORT CSV\nAll changes\nBusiness-owner self-approvals\nSearch description, action, record or staff\nRecord type\nAll record types\nTrip case\nProposal version\nCustomer\nStaff\nSupplier\nSupplier contract\nSupplier rate\nHotel\nRoom type\nService\nPricing rule\nFX rate\nTrip plan\nDeparture\nB2B hold\nB2B partner\nRetention\nPrice list version\nAgency\nAgency invoice\nAgency payment\nAgency billing export\nCancellation policy\nCountry profile\nDestination profile\nDeparture cost\nPhoto\nBackground job\nAgency rate card\nAgency tier\nAgency tier discount\nPricing policy\nSupplier bill\nSupplier booking\nSupplier order\nTerms clause\nTrip check\nView as\nStaff member\nAll staff\nAA-835 evidence (S251)\nadmin\ne2e-booking\ne2e-booking-checker\ne2e-booking-maker\ne2e-booking-pricing-checker\ne2e-booking-staff\ne2e-cis-cs\ne2e-claude-code\ne2e-claude-code-2\ne2e-custom-maker\nnghieppham\nSYNTHETIC S248 seed (contract checker)\nSYNTHETIC S248 seed (contract maker)\nSYNTHETIC S253 AA-682 S3 checker\nSYNTHETIC S253 AA-682 S3 maker\nSYNTHETIC S267 seed (rate sheet checker)\nSYNTHETIC S267 seed (rate sheet maker)\nDate\n–\nReset filters\nNo entries match these filters\nChange or reset the filters to see more."
+  },
+  "ui_billing_settings": {
+    "url": "/agency-billing?tab=settings",
+    "landed": "/agency-billing?tab=settings",
+    "overflow": {
+      "1440-light": {
+        "doc": false,
+        "main": false
+      },
+      "390-dark": {
+        "doc": false,
+        "main": false
+      }
+    },
+    "console_errors": [],
+    "failing_requests": [],
+    "text_sample": "Adventure Asia\nBOOKING\nOVERVIEW\nB2B\nPartners\nSettlement\nB2B desk\nSALES\nOPERATIONS\nSUPPLY\nCATALOG (FROM CIS)\nADMIN\nSettings\nE\ne2e-booking\nAdmin\nCollapse\nBooking\n/\nSettlement\nSearch pages, trip cases, customers…\nCtrl K\nCIS console\nEN\nVI\nAdmin\nE\nAgency billing\nEvery invoice from AA to an agency: the software fee and the tour settlement. Drafts come from the monthly jobs; finance issues them, records payments and a second person approves each payment.\nDrafts to issue\n10\nOpen\n0.00 USD\n0 VND\nOverdue\n0.00 USD\n0 VND\nWaiting for approval\n0.00 USD\n0 VND\nInvoices\nPayments to approve\nAgencies\nSettings\nIssuing entity\nThe AA legal entity printed on every invoice. The invoice keeps a copy taken when it is issued.\nADD ENTITY\nColumns\nCODE\tLEGAL ENTITY\tTAX CODE\tCOUNTRY\t\t\nDEVCHECK1037\tInvented AA billing entity (AA-1037 Dev check)\t0000000000\tVN\t\nDefault\tChange payment details\n1–1 of 1\n10 / page\n25 / page\n50 / page\n100 / page\nPage 1 / 1\nTax rules\nThe issue picks the active rule in force for the invoice kind and the agency's country, the most specific first. The footer wording is printed on the invoice.\nADD TAX RULE\nColumns\nCODE\tINVOICE KIND\tRECIPIENT COUNTRY\tRATE\tLINE\tFROM\tUNTIL\t\nEXCL_TAX\tAny\tAny\t0.00 %\tTax\t1 Jan 2026\t—\tDeactivate\n1–1 of 1\n10 / page\n25 / page\n50 / page\n100 / page\nPage 1 / 1\nPayment terms\nThe default terms of every agency; an agency's own contract terms replace them as a whole.\nDeposit (%)\nBilled when an agency booking is confirmed. Allowed: 0–100.\nBalance due before departure (d"
+  },
+  "ui_home_my_work": {
+    "url": "/",
+    "landed": "/",
+    "overflow": {
+      "1440-light": {
+        "doc": false,
+        "main": false
+      },
+      "390-dark": {
+        "doc": false,
+        "main": false
+      }
+    },
+    "console_errors": [],
+    "failing_requests": [],
+    "text_sample": "Adventure Asia\nBOOKING\nOVERVIEW\nDashboard\nB2B\nSALES\nOPERATIONS\nSUPPLY\nCATALOG (FROM CIS)\nADMIN\nSettings\nE\ne2e-booking\nAdmin\nCollapse\nBooking\n/\nDashboard\nSearch pages, trip cases, customers…\nCtrl K\nCIS console\nEN\nVI\nAdmin\nE\nDashboard\nWelcome back, e2e-booking. Here is what needs your attention today.\nMy work\nThe queues your permissions let you work. Each tile opens the list it counts.\nRefresh\nTO DO\nMy open cases\n0\nNothing assigned to you\nTrip checks overdue\n25\nEarliest due 6 Nov 2026\nOn-request lines\n3\nOldest 30 Oct 2026\nSupplier bills overdue\n0\nNothing overdue\nSupplier bills due soon\n0\nNothing due soon\nAgency invoices overdue\n0\nNothing overdue\nBusiness-owner self-approvals\n0\nNone this month\nTO APPROVE OR PAY\nSupplier bills to approve\n0\nNothing to approve\nSupplier bills to pay\n0\nNothing to pay\nAgency payments to approve\n0\nNothing to approve\nStop-sales to review\n0\nNothing to review\nSuppliers to activate\n0\nNothing to activate\nBilling changes to approve\n0\nNothing to approve\nIn progress\n1\nIn discovery or building\nProposals sent\n0\nWaiting for the customer\nInactive staff\n9\nNot active: never signed in or deactivated\nSupplier answers pending\n0\nNothing late\nRecent trip cases\nThe five cases updated most recently.\nView all cases\nColumns\nCASE\tFOR\tTRIP\tSTATUS\tSALES\tUPDATED\nTC-000034\t\nLH\nLữ hành Sen Vàng\nB2B agency booking\n\tTropical Jewels: Bohol, Dumaguete and Siquijor — 6 Days\t\nPre-departure\tUnassigned\t3 d ago\nTC-000037\t\nEP\nE2E Pilot Rehearsal Travel\nB2B agency booking\n\tTropical Jewels: B"
+  },
+  "ui_suppliers_list_after": {
+    "url": "/suppliers",
+    "landed": "/suppliers",
+    "overflow": {
+      "1440-light": {
+        "doc": false,
+        "main": false
+      }
+    },
+    "console_errors": [],
+    "failing_requests": [],
+    "text_sample": "Adventure Asia\nBOOKING\nOVERVIEW\nB2B\nSALES\nOPERATIONS\nSUPPLY\nSuppliers\nHotels\nServices\nPricing rules & FX\nAgency tiers\nPrice readiness\nPrice setup\nPricing policy\nSeasons\nHoliday events\nStop-sales\nCATALOG (FROM CIS)\nADMIN\nSettings\nE\ne2e-booking\nAdmin\nCollapse\nBooking\n/\nSuppliers\nSearch pages, trip cases, customers…\nCtrl K\nCIS console\nEN\nVI\nAdmin\nE\nSuppliers\nHotels, transport, guides and other partners Booking buys from, with their contracts.\nADD SUPPLIER\nTotal suppliers\n9\nAcross 3 countries\nActive\n5\nCan take new contracts\nInactive\n4\nKept on record, no new contracts\nContracts ending in 30 days\n0\nNothing ending soon\nSearch name, SUP- code, contact or e-mail\nStatus\nAll statuses\nPending approval\nActive\nInactive\nCategory\nAll categories\nHotel\nTransport\nGuide\nEntrance\nActivity\nMeal\nCountry\nAll countries\nBhutan\nCambodia\nChina\nIndia\nIndonesia\nJapan\nKyrgyzstan\nLaos\nMalaysia\nMongolia\nMyanmar\nNepal\nPakistan\nPhilippines\nSingapore\nSouth Korea\nSri Lanka\nTaiwan\nThailand\nUzbekistan\nVietnam\nSort\nName A–Z\nRecently updated\nNewest first\nName Z–A\nReset filters\nCSV\nColumns\nSUPPLIER\tCATEGORIES\tCONTACT\tCONTRACTS\tSTATUS\tUPDATED\tACTIONS\n\nSYNTHETIC aa1158-mwsvx10w custom\nSUP-000012\n\t\nHotel\n\t—\t0\t\nInactive\t5 min ago\t\n\n\nSYNTHETIC aa1158-mwsvza59 custom\nSUP-000013\n\t\nHotel\n\t—\t0\t\nInactive\t3 min ago\t\n\n\nSYNTHETIC aa1158-mwsw2mi1 custom\nSUP-000014\n\t\nHotel\n\t—\t0\t\nInactive\tjust now\t\n\n\nSYNTHETIC S248 Supplier\nSUP-000002\n\t\nHotel\nActivity\n\t—\t1\t\nActive\t23 Oct 2026\t\n\n\nSYNTHETIC S251 AA-835 Evidence Supplier\nSUP-000004\n· V"
+  },
+  "audit_run_rows": {
+    "status": 200,
+    "rows": 2,
+    "actions": [
+      "supplier.withdrawn",
+      "supplier.created"
+    ]
+  }
+}

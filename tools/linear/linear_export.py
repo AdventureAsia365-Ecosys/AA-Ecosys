@@ -29,6 +29,9 @@ Rules:
   `<app>/<env>/<name>`"), loses the colon ("Secrets — `<app>/<env>/<name>`"). The colon is the assignment the
   generic-api-key rule looks for; the backticks stay (they stop the rule on a name list). Any other backticked token
   after a secret label (a value such as "Secret: `Xk29...`") is left as written, so the gate still sees it.
+- A second rewrite (S288): a personal company address `<name>@adventure.asia` becomes `<first letter>***@adventure.asia`.
+  The repo is public and a person's work address is personal data; the role mailboxes (`info@`, `admin@`) and the
+  `e2e…` test addresses stay as written.
 """
 from __future__ import annotations
 
@@ -122,10 +125,28 @@ def neutralise_secret_labels(text: str) -> str:
     return _SECRET_LABEL.sub(lambda m: f"{m.group(1).rstrip()}{m.group(2) or ''}{m.group(3) or ''} — ", text)
 
 
+_COMPANY_ADDRESS = re.compile(r"\b([A-Za-z0-9][A-Za-z0-9._%+-]*)@adventure\.asia\b", re.IGNORECASE)
+_ROLE_MAILBOXES = {"info", "admin"}
+
+
+def mask_personal_addresses(text: str) -> str:
+    """`thu@adventure.asia` -> `t***@adventure.asia`; role mailboxes and `e2e…` test addresses unchanged (S288)."""
+    def one(m: re.Match) -> str:
+        local = m.group(1)
+        if local.lower() in _ROLE_MAILBOXES or local.lower().startswith("e2e"):
+            return m.group(0)
+        return f"{local[0]}***@adventure.asia"
+    return _COMPANY_ADDRESS.sub(one, text)
+
+
+def _clean(text: str) -> str:
+    return mask_personal_addresses(neutralise_secret_labels(text))
+
+
 def render(issue: dict) -> str:
     meta = {
         "identifier": issue["identifier"],
-        "title": issue["title"],
+        "title": mask_personal_addresses(issue["title"]),
         "state": issue["state"]["name"],
         "state_type": issue["state"]["type"],
         "project": (issue.get("project") or {}).get("name"),
@@ -144,18 +165,18 @@ def render(issue: dict) -> str:
     }
     # Metadata as a fenced yaml block, not front-matter: docs lint validates every docs/**/*.md front-matter
     # against the catalog schema, and these generated pages are not catalog pages.
-    lines = [f"# {issue['identifier']} — {issue['title']}", "", "```yaml"]
+    lines = [f"# {issue['identifier']} — {mask_personal_addresses(issue['title'])}", "", "```yaml"]
     lines += [f"{k}: {json.dumps(v, ensure_ascii=False)}" for k, v in meta.items()] + ["```", ""]
-    lines += [neutralise_secret_labels(issue.get("description") or "_(no description)_"), ""]
+    lines += [_clean(issue.get("description") or "_(no description)_"), ""]
     atts = issue["attachments"]["nodes"]
     if atts:
-        lines += ["## Links", ""] + [f"- [{a['title']}]({a['url']})" for a in atts] + [""]
+        lines += ["## Links", ""] + [f"- [{mask_personal_addresses(a['title'])}]({a['url']})" for a in atts] + [""]
     comments = sorted(issue["comments"]["nodes"], key=lambda c: c["createdAt"])
     if comments:
         lines += ["## Comments", ""]
         for c in comments:
             who = (c.get("user") or {}).get("name") or "unknown"
-            lines += [f"### {c['createdAt'][:16].replace('T', ' ')} — {who}", "", neutralise_secret_labels(c["body"]),
+            lines += [f"### {c['createdAt'][:16].replace('T', ' ')} — {who}", "", _clean(c["body"]),
                       ""]
     return "\n".join(lines).rstrip() + "\n"
 

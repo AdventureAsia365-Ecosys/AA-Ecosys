@@ -1,0 +1,73 @@
+{
+  "at": "2026-11-23T07:27:35.189Z",
+  "registry_cis_status": 200,
+  "registry_cis_count": 345,
+  "registry_cis_reader_error": null,
+  "registry_tripplanner_status": 200,
+  "registry_tripplanner_count": 22,
+  "registry_tripplanner_reader_error": null,
+  "registry_crm_status": 200,
+  "registry_crm_count": 56,
+  "registry_crm_reader_error": null,
+  "guard": {
+    "key": "cis.llm.fact_instruction_guard",
+    "app": "cis",
+    "area": "ai",
+    "label": "Facts: drop sentences written to the AI writer",
+    "value_type": "bool",
+    "default_value": false,
+    "value": false,
+    "source": "default",
+    "version": null,
+    "approved_version": 0,
+    "enforced": true,
+    "approval": "maker_checker",
+    "impact": "high",
+    "scope_kind": "platform",
+    "env_override": null,
+    "scheduled": 0,
+    "open_proposals": 0,
+    "last_change_status": null,
+    "guide_langs": [
+      "en",
+      "vi"
+    ],
+    "guide_en_parts": [
+      "what",
+      "raise",
+      "lower",
+      "when",
+      "example"
+    ],
+    "guide_vi_parts": [
+      "what",
+      "raise",
+      "lower",
+      "when",
+      "example"
+    ]
+  },
+  "scheduled_rows": [],
+  "overflow_390_light": {
+    "doc": 0,
+    "main": 0
+  },
+  "overflow_390_dark": {
+    "doc": 0,
+    "main": 0
+  },
+  "real_in_force": {
+    "key": "cis.seo.research_auto_enabled",
+    "source": "platform",
+    "value": true,
+    "effective_from": "2026-11-16T13:42:00.118842+00:00",
+    "scheduled": 0
+  },
+  "real_badge": false,
+  "real_line": false,
+  "inject_past_badge": false,
+  "inject_past_line": false,
+  "inject_ahead_badge": false,
+  "inject_ahead_line": true,
+  "console_errors": []
+}
