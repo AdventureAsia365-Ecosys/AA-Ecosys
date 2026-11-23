@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: crm.ops.v1 (AA-Partner CRM → CIS admin, L1 platform console)
-  version: "1.17"
+  version: "1.18"
   description: >-
     Platform console API of the partner CRM (AA-Partner, root ADR 0010), served under /crm/ops/v1 and called by the
     CIS admin screen S-01 "Agencies (CRM)" (AA-941) and the CIS platform-ops pages (AA-936: job summary, LLM usage).
@@ -114,13 +114,19 @@ info:
     action, state or event, the component it watches, its thresholds with their crm.ops.* setting keys and the values in
     force, or the fixed rule still in code, and the time of its last alert in the last 7 days); the same "ops check
     registry v1" shape AA-Booking serves at GET /booking/ops/checks. No agency data, so no agency audit event.
+    Version 1.18 (AA-1174, S288 privacy obligations; additive): GET /privacy-evidence, read by the CIS admin page
+    Platform > Compliance (Obligations) on Refresh evidence (any full reader). Counts across every active agency for the
+    last `days` days (1-365, default 30): marketing messages sent, the sends to a contact whose latest marketing consent
+    at send time was not a yes or who was suppressed (`violations`, expected 0), the sends left out because the
+    contact was erased since, consent decisions recorded and the time of the newest one. Counts and one timestamp only:
+    no agency name or id, no contact, no address. No agency audit event (no agency data is returned).
     Errors are
     `{detail, message?, fields?, state?, member_limit?}` (Problem); a 422 names the failing fields only, never the
     submitted values.
   x-aa-contract: crm.ops.v1
   x-aa-producer: AA-Partner
   x-aa-consumers: [AA-CIS-App]
-  x-aa-issues: [AA-928, AA-941, AA-939, AA-936, AA-933, AA-978, AA-979, AA-992, AA-966, AA-964, AA-1025, AA-1035, AA-1096, AA-1143]
+  x-aa-issues: [AA-928, AA-941, AA-939, AA-936, AA-933, AA-978, AA-979, AA-992, AA-966, AA-964, AA-1025, AA-1035, AA-1096, AA-1143, AA-1174]
 servers:
   - url: /crm/ops/v1
 security:
@@ -880,6 +886,26 @@ paths:
               schema: {$ref: "#/components/schemas/CheckRegistry"}
         "401": {$ref: "#/components/responses/Unauthorized"}
         "403": {$ref: "#/components/responses/Forbidden"}
+  /privacy-evidence:
+    get:
+      operationId: getPrivacyEvidence
+      summary: Consent capture and campaign sends to opted-in contacts, counts only (1.18; read by CIS Compliance)
+      parameters:
+        - name: days
+          in: query
+          required: false
+          schema: {type: integer, minimum: 1, maximum: 365, default: 30}
+      responses:
+        "200":
+          description: Counts across every active agency for the window
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/PrivacyEvidence"}
+        "401": {$ref: "#/components/responses/Unauthorized"}
+        "403": {$ref: "#/components/responses/Forbidden"}
+        "422":
+          $ref: "#/components/responses/Invalid"
+          description: "`invalid_request` (days out of range)"
   /llm/calls:
     get:
       operationId: getLlmCalls
@@ -1492,6 +1518,25 @@ components:
       properties:
         shares: {type: array, items: {$ref: "#/components/schemas/ConnectionShare"}}
         updated_at: {type: [string, "null"], format: date-time}
+    PrivacyEvidence:
+      type: object
+      additionalProperties: false
+      required: [as_of, window_days, tenants, marketing_sent, violations, excluded_erased, consents_recorded,
+                 last_consent_at]
+      properties:
+        as_of: {type: string, format: date-time}
+        window_days: {type: integer, minimum: 1, maximum: 365}
+        tenants: {type: integer, minimum: 0, description: "Active agencies counted"}
+        marketing_sent: {type: integer, minimum: 0, description: "Marketing messages sent in the window"}
+        violations:
+          type: integer
+          minimum: 0
+          description: >-
+            Sends whose contact's latest marketing consent at or before the send was not a yes, or whose address was
+            suppressed at send time (expected 0)
+        excluded_erased: {type: integer, minimum: 0, description: "Sends left out: the contact was erased since"}
+        consents_recorded: {type: integer, minimum: 0, description: "Consent decisions recorded in the window"}
+        last_consent_at: {type: [string, "null"], format: date-time, description: "The newest consent decision"}
     CheckRegistry:
       description: The "ops check registry v1" shape (1.17), the same as AA-Booking GET /booking/ops/checks.
       type: object

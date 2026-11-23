@@ -19,7 +19,9 @@ ROOT = Path(__file__).resolve().parents[2]
 NOW = datetime(2026, 11, 21, 3, 0, tzinfo=timezone.utc)
 CFG = {"org": "ExampleOrg", "root_repo": "Root", "repos": ["Root", "AppA"], "image_repos": ["AppA"],
        "ci_workflow": "ci.yml", "ci_runs_inspected": 10, "secret_scan_workflow": "secret-scan-history.yml", "guard_window_days": 8,
-       "docs_skip_status": ["archived"]}
+       "docs_skip_status": ["archived", "superseded"], "retention_log": "docs/legal/retention-log.md",
+       "legal_docs": {"legal_ropa_reviewed": ["docs/legal/register.md"],
+                      "legal_dpa_reviewed": ["docs/legal/dpa.md", "docs/legal/annex.md"]}}
 
 
 def fake(answers: dict):
@@ -156,6 +158,16 @@ def _tree(tmp: Path) -> Path:
     (tmp / "docs" / "guides" / "fresh.md").write_text(page.format(s="draft", d="2026-11-10"), encoding="utf-8")
     (tmp / "docs" / "guides" / "old.md").write_text(page.format(s="draft", d="2026-09-01"), encoding="utf-8")
     (tmp / "docs" / "guides" / "gone.md").write_text(page.format(s="archived", d="2025-01-01"), encoding="utf-8")
+    (tmp / "docs" / "legal").mkdir(parents=True)
+    (tmp / "docs" / "legal" / "register.md").write_text(page.format(s="draft", d="2026-11-09"), encoding="utf-8")
+    (tmp / "docs" / "legal" / "dpa.md").write_text(page.format(s="draft", d="2026-11-13"), encoding="utf-8")
+    (tmp / "docs" / "legal" / "annex.md").write_text(page.format(s="draft", d="2026-10-01"), encoding="utf-8")
+    (tmp / "docs" / "legal" / "retention-log.md").write_text(
+        "| Date (UTC) | Table | Window | Mode | Rows |\n|---|---|---|---|---|\n"
+        "| 2026-10-16 | `shared.job` | 30 days | DRY RUN | 0 candidates |\n"
+        "| 2026-10-23 | Tenant erasure drill: synthetic tenant | retention 0 | DRY RUN | 15 candidates |\n"
+        "| 2026-10-31 | CRM client erasure drill: synthetic client | erasure request | live | 2 deleted |\n",
+        encoding="utf-8")
     return tmp
 
 
@@ -168,7 +180,7 @@ class RepoChecksTest(unittest.TestCase):
             review = c.check_last_access_review(root)
             self.assertEqual(review["detail"], {"last_date": "2026-11-01", "reviews": 2})
             docs = c.check_docs_overdue(root, date(2026, 11, 21), ("archived",))
-            self.assertEqual(docs["detail"], {"overdue": 1, "pages": 2})
+            self.assertEqual(docs["detail"], {"overdue": 2, "pages": 5})   # incl. the AA-1174 legal fixture pages
             vuln = c.check_vuln_exceptions(root, date(2026, 11, 21))
             self.assertEqual((vuln["status"], vuln["detail"]["expired"]), ("fail", ["AppA: GHSA-dddd-eeee-ffff"]))
 
@@ -177,6 +189,51 @@ class RepoChecksTest(unittest.TestCase):
             self.assertEqual(c.check_last_drill(Path(d))["status"], "error")
             self.assertEqual(c.check_last_access_review(Path(d))["status"], "error")
             self.assertEqual(c.check_vuln_exceptions(Path(d), date(2026, 11, 21))["status"], "error")
+
+
+class LegalChecksTest(unittest.TestCase):
+    """AA-1174: the legal document checks and the erasure drill date."""
+
+    def test_legal_doc_publishes_overdue_against_each_pages_own_cycle(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = _tree(Path(d))
+            ropa = c.check_legal_doc(root, "legal_ropa_reviewed", ["docs/legal/register.md"], date(2026, 11, 23),
+                                     ("superseded",), CFG)
+            self.assertEqual(ropa["status"], "pass")
+            self.assertEqual(ropa["detail"], {"pages": 1, "overdue": 0, "doc_status": "draft",
+                                              "oldest_reviewed": "2026-11-09"})
+            self.assertEqual(ropa["link"], "https://github.com/ExampleOrg/Root/blob/master/docs/legal/register.md")
+            dpa = c.check_legal_doc(root, "legal_dpa_reviewed", ["docs/legal/dpa.md", "docs/legal/annex.md"],
+                                    date(2026, 11, 23), ("superseded",), CFG)
+            self.assertEqual((dpa["detail"]["overdue"], dpa["detail"]["oldest_reviewed"]), (1, "2026-10-01"))
+
+    def test_missing_superseded_or_undated_pages_are_errors(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = _tree(Path(d))
+            (root / "docs" / "legal" / "old.md").write_text("---\nstatus: superseded\nlast_reviewed: 2026-11-01\n---\n",
+                                                          encoding="utf-8")
+            (root / "docs" / "legal" / "undated.md").write_text("---\nstatus: draft\n---\n", encoding="utf-8")
+            for pages in (["docs/legal/none.md"], ["docs/legal/old.md"], ["docs/legal/undated.md"]):
+                r = c.check_legal_doc(root, "legal_ropa_reviewed", pages, date(2026, 11, 23), ("superseded",), CFG)
+                self.assertEqual(r["status"], "error", pages)
+                self.assertNotIn("overdue", r["detail"])
+
+    def test_erasure_drill_takes_the_newest_live_drill_only(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = _tree(Path(d))
+            r = c.check_last_erasure_drill(root, "docs/legal/retention-log.md", CFG)
+            self.assertEqual((r["status"], r["detail"]), ("pass", {"last_date": "2026-10-31", "drills": 1}))
+            self.assertEqual(c.check_last_erasure_drill(Path(d), "docs/legal/nope.md", CFG)["status"], "error")
+
+    def test_the_real_legal_pages_are_listed_and_exist(self):
+        cfg = c.load_config()
+        self.assertEqual(set(cfg["legal_docs"]), {"legal_ropa_reviewed", "legal_dpa_reviewed",
+                                                  "legal_subprocessors_reviewed", "legal_transfer_dossier_vn",
+                                                  "legal_dsar_runbook_reviewed", "legal_consent_capture_reviewed"})
+        for pages in cfg["legal_docs"].values():
+            for rel in pages:
+                self.assertTrue((ROOT / rel).exists(), rel)
+        self.assertTrue((ROOT / cfg["retention_log"]).exists())
 
 
 class BundleTest(unittest.TestCase):
@@ -200,7 +257,8 @@ class BundleTest(unittest.TestCase):
         states = {x["check_id"]: x["status"] for x in b["checks"]}
         self.assertEqual(states["repo_branch_protection"], "error")
         self.assertEqual(states["last_restore_drill"], "pass")
-        self.assertEqual(len(states), 10)
+        self.assertEqual(states["legal_ropa_reviewed"], "pass")
+        self.assertEqual(len(states), 13)   # 5 remote + 4 registers + erasure drill + 2 legal (AA-1174) + heartbeat
 
     def test_forbidden_text_refuses_the_file(self):
         bad = {"checks": [{"summary": "role arn:aws:iam::" + "1" * 12 + ":role/x"}]}

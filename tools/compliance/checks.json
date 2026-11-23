@@ -5,15 +5,58 @@
     "heartbeat) are CIS admin settings (cis.compliance.*). guard_window_days is the read window of the scheduled",
     "guard check (which runs count as the latest), the same window as tools/github/guard_runs.py. ci_runs_inspected is",
     "how many recent CI runs per image repo the scan check reads to find the newest one that scanned (an API read bound;",
-    "the age a scan may have is the CIS setting cis.compliance.ci_scan_max_age_days)."
+    "the age a scan may have is the CIS setting cis.compliance.ci_scan_max_age_days).",
+    "AA-1174: legal_docs lists the docs/legal pages each legal document check reads (front matter last_reviewed,",
+    "review_every_days, status; CIS grades the published `overdue` count); retention_log is the run log whose",
+    "live erasure drill rows date the last_erasure_drill check."
   ],
   "org": "AdventureAsia365-Ecosys",
   "root_repo": "AA-Ecosys",
-  "repos": ["AA-Ecosys", "AA-CIS-App", "AA-Booking", "AA-Partner", "AA-TripPlanner-Web", "AA-CIS-Infra"],
-  "image_repos": ["AA-CIS-App", "AA-Booking", "AA-Partner"],
+  "repos": [
+    "AA-Ecosys",
+    "AA-CIS-App",
+    "AA-Booking",
+    "AA-Partner",
+    "AA-TripPlanner-Web",
+    "AA-CIS-Infra"
+  ],
+  "image_repos": [
+    "AA-CIS-App",
+    "AA-Booking",
+    "AA-Partner"
+  ],
   "ci_workflow": "ci.yml",
   "secret_scan_workflow": "secret-scan-history.yml",
   "guard_window_days": 8,
   "ci_runs_inspected": 10,
-  "docs_skip_status": ["archived", "deprecated", "superseded"]
+  "docs_skip_status": [
+    "archived",
+    "deprecated",
+    "superseded"
+  ],
+  "legal_docs": {
+    "legal_ropa_reviewed": [
+      "docs/legal/register.md"
+    ],
+    "legal_dpa_reviewed": [
+      "docs/legal/dpa.md",
+      "docs/legal/dpa-annex-1-processing.md",
+      "docs/legal/dpa-annex-2-security.md",
+      "docs/legal/dpa-annex-3-subprocessors.md",
+      "docs/legal/dpa-annex-4-transfers.md"
+    ],
+    "legal_subprocessors_reviewed": [
+      "docs/legal/dpa-annex-3-subprocessors.md"
+    ],
+    "legal_transfer_dossier_vn": [
+      "docs/legal/vn-cross-border-transfer-dossier.md"
+    ],
+    "legal_dsar_runbook_reviewed": [
+      "docs/legal/dsar-erasure-runbook.md"
+    ],
+    "legal_consent_capture_reviewed": [
+      "docs/legal/consent-capture-query.md"
+    ]
+  },
+  "retention_log": "docs/legal/retention-log.md"
 }

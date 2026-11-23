@@ -16,6 +16,15 @@ last_access_review, docs_review_overdue) publish a fact (a date or a count) with
 when not; ci_image_scan_sbom publishes its pass / fail and the date of its oldest scan (`last_date`). CIS grades every
 fact against the admin settings (cis.compliance.*), so the thresholds are never literals here.
 
+AA-1174 (S288, privacy obligations): six legal document checks (``legal_*``, the pages listed in checks.json
+"legal_docs": records of processing, the processing agreement and its annexes, the sub-processor list, the Vietnam
+transfer dossier, the data subject request runbook, the consent capture page) publish ``overdue`` = their pages past
+their OWN review cycle (last_reviewed + review_every_days, the docs freshness rule), ``oldest_reviewed`` and
+``doc_status`` (the pages' front-matter status, so a draft agreement is never mistaken for a signed one); a missing,
+superseded or undated page is an error. ``last_erasure_drill`` publishes the date of the newest live erasure drill of
+the retention and erasure run log. CIS grades them (cis.compliance.legal_docs_overdue_max,
+cis.compliance.erasure_drill_max_age_days).
+
 Public repo rules (root advisory section 4 C.5): the run prints counts only, never raw API output; detail holds counts,
 dates, repo names and workflow names, never an account ID, an ARN, a bucket name or a person; :func:`assert_publishable`
 refuses to write a file that carries one (the workflow then fails instead of publishing).
@@ -277,6 +286,60 @@ def check_last_access_review(root: Path) -> dict:
                   {"last_date": dates[-1], "reviews": len(dates)})
 
 
+GITHUB_BLOB = "https://github.com/{org}/{repo}/blob/master/{path}"
+
+
+def check_legal_doc(root: Path, check_id: str, pages: list[str], today: date, skip_status: tuple[str, ...],
+                    cfg: dict) -> dict:
+    """AA-1174: the review state of the legal pages behind one check (fact `overdue`; CIS grades it)."""
+    problems: list[str] = []
+    overdue, reviewed, statuses = 0, [], set()
+    for rel in pages:
+        path = root / rel
+        if not path.exists():
+            problems.append(f"{rel}: missing")
+            continue
+        fm = _front(path.read_text(encoding="utf-8", errors="replace"))
+        status = fm.get("status") or "unknown"
+        statuses.add(status)
+        if status in skip_status:
+            problems.append(f"{rel}: {status}")
+            continue
+        try:
+            day = date.fromisoformat(fm.get("last_reviewed", "")[:10])
+            every = int(fm.get("review_every_days") or 90)
+        except ValueError:
+            problems.append(f"{rel}: no valid last_reviewed")
+            continue
+        reviewed.append(day.isoformat())
+        overdue += (today - day).days > every
+    link = GITHUB_BLOB.format(org=cfg["org"], repo=cfg["root_repo"], path=pages[0]) if pages else None
+    detail: dict[str, Any] = {"pages": len(pages), "overdue": overdue, "doc_status": ", ".join(sorted(statuses))}
+    if reviewed:
+        detail["oldest_reviewed"] = min(reviewed)
+    if problems:
+        return result(check_id, "error", "; ".join(problems), {"pages": len(pages), "problems": len(problems)}, link)
+    return result(check_id, "pass", f"{overdue} of {len(pages)} pages past their review cycle; "
+                  f"oldest review {detail['oldest_reviewed']}; status {detail['doc_status']}", detail, link)
+
+
+def check_last_erasure_drill(root: Path, rel: str, cfg: dict) -> dict:
+    """AA-1174: the newest LIVE erasure drill row of the retention and erasure run log (fact `last_date`)."""
+    path = root / rel
+    dates = []
+    for line in (path.read_text(encoding="utf-8").splitlines() if path.exists() else []):
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) < 4 or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", cells[0]):
+            continue
+        if "erasure drill" in cells[1].lower() and cells[3].lower() == "live":
+            dates.append(cells[0])
+    link = GITHUB_BLOB.format(org=cfg["org"], repo=cfg["root_repo"], path=rel)
+    if not dates:
+        return result("last_erasure_drill", "error", "no live erasure drill in the run log", {}, link)
+    return result("last_erasure_drill", "pass", f"last live erasure drill {max(dates)}",
+                  {"last_date": max(dates), "drills": len(dates)}, link)
+
+
 def check_vuln_exceptions(root: Path, today: date) -> dict:
     """Every row of the vulnerability exception register is still valid (expires today or later)."""
     path = root / "docs" / "security" / "vuln-exceptions.toml"
@@ -312,7 +375,11 @@ def collect(fetch: Optional[Fetch], cfg: dict, root: Path, now: datetime, versio
     local = (("docs_review_overdue", lambda: check_docs_overdue(root, today, tuple(cfg["docs_skip_status"]))),
              ("last_restore_drill", lambda: check_last_drill(root)),
              ("last_access_review", lambda: check_last_access_review(root)),
-             ("vuln_exceptions_valid", lambda: check_vuln_exceptions(root, today)))
+             ("vuln_exceptions_valid", lambda: check_vuln_exceptions(root, today)),
+             ("last_erasure_drill", lambda: check_last_erasure_drill(root, cfg["retention_log"], cfg)))
+    skip = tuple(cfg["docs_skip_status"])
+    local += tuple((cid, (lambda c=cid, pages=pages: check_legal_doc(root, c, pages, today, skip, cfg)))
+                   for cid, pages in cfg.get("legal_docs", {}).items())
     for check_id, run in (remote if fetch else ()) + local:
         try:
             checks.append(run())
