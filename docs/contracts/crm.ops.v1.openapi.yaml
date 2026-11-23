@@ -115,10 +115,11 @@ info:
     force, or the fixed rule still in code, and the time of its last alert in the last 7 days); the same "ops check
     registry v1" shape AA-Booking serves at GET /booking/ops/checks. No agency data, so no agency audit event.
     Version 1.18 (AA-1174, S288 privacy obligations; additive): GET /privacy-evidence, read by the CIS admin page
-    Platform > Compliance (Obligations) on Refresh evidence (any full reader). Counts across every active agency for the
-    last `days` days (1-365, default 30): marketing messages sent, the sends to a contact whose latest marketing consent
-    at send time was not a yes or who was suppressed (`violations`, expected 0), the sends left out because the
-    contact was erased since, consent decisions recorded and the time of the newest one. Counts and one timestamp only:
+    Platform > Compliance (Obligations) on Refresh evidence (any full reader). Counts across every agency that is not
+    trashed (any status) for the last `days` days (1-365, default 30): marketing messages sent (including the sends held
+    send_uncertain, which the provider may have delivered; also counted apart as `marketing_uncertain`), the sends to a
+    contact whose latest marketing consent at send time was not a yes or who was suppressed (`violations`, expected 0),
+    the sends left out because the contact was erased since, consent decisions recorded and the time of the newest one. Counts and one timestamp only:
     no agency name or id, no contact, no address. No agency audit event (no agency data is returned).
     Errors are
     `{detail, message?, fields?, state?, member_limit?}` (Problem); a 422 names the failing fields only, never the
@@ -897,7 +898,7 @@ paths:
           schema: {type: integer, minimum: 1, maximum: 365, default: 30}
       responses:
         "200":
-          description: Counts across every active agency for the window
+          description: Counts across every agency that is not trashed (any status) for the window
           content:
             application/json:
               schema: {$ref: "#/components/schemas/PrivacyEvidence"}
@@ -1521,13 +1522,22 @@ components:
     PrivacyEvidence:
       type: object
       additionalProperties: false
-      required: [as_of, window_days, tenants, marketing_sent, violations, excluded_erased, consents_recorded,
-                 last_consent_at]
+      required: [as_of, window_days, tenants, marketing_sent, marketing_uncertain, violations, excluded_erased,
+                 consents_recorded, last_consent_at]
       properties:
         as_of: {type: string, format: date-time}
         window_days: {type: integer, minimum: 1, maximum: 365}
-        tenants: {type: integer, minimum: 0, description: "Active agencies counted"}
-        marketing_sent: {type: integer, minimum: 0, description: "Marketing messages sent in the window"}
+        tenants: {type: integer, minimum: 0, description: "Agencies counted: every agency that is not trashed (any status)"}
+        marketing_sent:
+          type: integer
+          minimum: 0
+          description: >-
+            Marketing messages sent in the window, including the sends held send_uncertain (the provider may have
+            delivered them)
+        marketing_uncertain:
+          type: integer
+          minimum: 0
+          description: "Of marketing_sent: the sends held send_uncertain (a run stopped after calling the provider)"
         violations:
           type: integer
           minimum: 0

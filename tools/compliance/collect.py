@@ -20,7 +20,8 @@ AA-1174 (S288, privacy obligations): six legal document checks (``legal_*``, the
 "legal_docs": records of processing, the processing agreement and its annexes, the sub-processor list, the Vietnam
 transfer dossier, the data subject request runbook, the consent capture page) publish ``overdue`` = their pages past
 their OWN review cycle (last_reviewed + review_every_days, the docs freshness rule), ``oldest_reviewed`` and
-``doc_status`` (the pages' front-matter status, so a draft agreement is never mistaken for a signed one); a missing,
+``doc_status`` (the pages' front-matter status) and ``drafts``: a page still in a draft status (checks.json
+"legal_draft_status") makes the check ``fail``, so a draft agreement is never graded as an adopted one; a missing,
 superseded or undated page is an error. ``last_erasure_drill`` publishes the date of the newest live erasure drill of
 the retention and erasure run log. CIS grades them (cis.compliance.legal_docs_overdue_max,
 cis.compliance.erasure_drill_max_age_days).
@@ -291,9 +292,14 @@ GITHUB_BLOB = "https://github.com/{org}/{repo}/blob/master/{path}"
 
 def check_legal_doc(root: Path, check_id: str, pages: list[str], today: date, skip_status: tuple[str, ...],
                     cfg: dict) -> dict:
-    """AA-1174: the review state of the legal pages behind one check (fact `overdue`; CIS grades it)."""
+    """AA-1174: the review state of the legal pages behind one check (fact `overdue`; CIS grades it).
+
+    A page whose front-matter status is a draft status (checks.json "legal_draft_status") is not an adopted document:
+    the check is ``fail`` whatever the review dates say (fact ``drafts``), so the obligation it backs never reads met
+    on a draft agreement."""
     problems: list[str] = []
-    overdue, reviewed, statuses = 0, [], set()
+    draft_status = tuple(cfg.get("legal_draft_status", ("draft",)))
+    overdue, drafts, reviewed, statuses = 0, 0, [], set()
     for rel in pages:
         path = root / rel
         if not path.exists():
@@ -313,14 +319,20 @@ def check_legal_doc(root: Path, check_id: str, pages: list[str], today: date, sk
             continue
         reviewed.append(day.isoformat())
         overdue += (today - day).days > every
+        drafts += status in draft_status
     link = GITHUB_BLOB.format(org=cfg["org"], repo=cfg["root_repo"], path=pages[0]) if pages else None
-    detail: dict[str, Any] = {"pages": len(pages), "overdue": overdue, "doc_status": ", ".join(sorted(statuses))}
+    detail: dict[str, Any] = {"pages": len(pages), "overdue": overdue, "drafts": drafts,
+                              "doc_status": ", ".join(sorted(statuses))}
     if reviewed:
         detail["oldest_reviewed"] = min(reviewed)
     if problems:
         return result(check_id, "error", "; ".join(problems), {"pages": len(pages), "problems": len(problems)}, link)
-    return result(check_id, "pass", f"{overdue} of {len(pages)} pages past their review cycle; "
-                  f"oldest review {detail['oldest_reviewed']}; status {detail['doc_status']}", detail, link)
+    review = (f"{overdue} of {len(pages)} pages past their review cycle; oldest review {detail['oldest_reviewed']}; "
+              f"status {detail['doc_status']}")
+    if drafts:
+        return result(check_id, "fail", f"{drafts} of {len(pages)} pages still a draft, not an adopted document; "
+                      f"{review}", detail, link)
+    return result(check_id, "pass", review, detail, link)
 
 
 def check_last_erasure_drill(root: Path, rel: str, cfg: dict) -> dict:

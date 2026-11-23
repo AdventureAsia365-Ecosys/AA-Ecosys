@@ -20,6 +20,11 @@ ngay, cùng các luật khác sau khi kiểm tra áp dụng theo thị trường
   (`cis_db`) và số đếm từ CRM (`crm_ops`, crm.ops.v1 1.18: tin marketing gửi cho người chưa đồng ý, quyết định đồng ý
   mới nhất) khi admin bấm Làm mới bằng chứng.
 - **Trang:** tab Nghĩa vụ trên Platform › Compliance readiness, có ma trận áp dụng và danh sách kiểm theo từng luật.
+- **Đọc trung thực (review vòng 3):** trang pháp lý còn ở trạng thái `draft` thì kiểm tra tài liệu của nó **không đạt**
+  (hôm nay mọi trang `docs/legal` đều là bản nháp, nên các nghĩa vụ dựa trên DPA, hồ sơ chuyển dữ liệu và RoPA ghi chưa
+  đạt cho tới khi tài liệu được thông qua); 0 tin marketing trong cửa sổ là chưa có bằng chứng (không ghi đạt); tin bị giữ
+  `send_uncertain` (có thể đã gửi) được tính là đã gửi; mỗi luật hiện ngày có hiệu lực và, nếu muộn hơn, ngày bắt đầu
+  áp dụng (GDPR: hiệu lực 24/05/2016, áp dụng 25/05/2018).
 
 ## Nguồn đã đọc (23/11/2026)
 
@@ -30,7 +35,7 @@ ninh mạng 116/2025/QH15 (hiệu lực 01/07/2026, thay Luật 24/2018), Luật
 trên tài liệu giới thiệu của Ngân hàng Nhà nước / Sở Tư pháp Đắk Lắk và một bản dịch không chính thức; các link đó đã
 được thay, và bộ nạp register giờ chỉ nhận cơ sở dữ liệu văn bản pháp luật và Công báo cho nguồn Việt Nam.
 Ngoài Việt Nam: GDPR và Chỉ thị ePrivacy (EUR-Lex), UK GDPR, DPA 2018, PECR (legislation.gov.uk), Privacy Act 1988 và
-Spam Act 2003 của Úc (legislation.gov.au, OAIC), CCPA (cppa.ca.gov, ngưỡng điều chỉnh 2025), VCDPA (law.lis.virginia.gov),
+Spam Act 2003 của Úc (legislation.gov.au, OAIC), CCPA (văn bản luật trên leginfo.legislature.ca.gov, Civ. Code 1798.100 trở đi; ngưỡng điều chỉnh 2025 trên cppa.ca.gov), VCDPA (law.lis.virginia.gov),
 CAN-SPAM (uscode.house.gov), PCI DSS v4.0.1.
 
 ## Việc cho luật sư (đã gắn cờ trong dữ liệu)

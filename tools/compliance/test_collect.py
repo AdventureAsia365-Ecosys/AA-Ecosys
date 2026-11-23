@@ -159,7 +159,7 @@ def _tree(tmp: Path) -> Path:
     (tmp / "docs" / "guides" / "old.md").write_text(page.format(s="draft", d="2026-09-01"), encoding="utf-8")
     (tmp / "docs" / "guides" / "gone.md").write_text(page.format(s="archived", d="2025-01-01"), encoding="utf-8")
     (tmp / "docs" / "legal").mkdir(parents=True)
-    (tmp / "docs" / "legal" / "register.md").write_text(page.format(s="draft", d="2026-11-09"), encoding="utf-8")
+    (tmp / "docs" / "legal" / "register.md").write_text(page.format(s="active", d="2026-11-09"), encoding="utf-8")
     (tmp / "docs" / "legal" / "dpa.md").write_text(page.format(s="draft", d="2026-11-13"), encoding="utf-8")
     (tmp / "docs" / "legal" / "annex.md").write_text(page.format(s="draft", d="2026-10-01"), encoding="utf-8")
     (tmp / "docs" / "legal" / "retention-log.md").write_text(
@@ -200,12 +200,24 @@ class LegalChecksTest(unittest.TestCase):
             ropa = c.check_legal_doc(root, "legal_ropa_reviewed", ["docs/legal/register.md"], date(2026, 11, 23),
                                      ("superseded",), CFG)
             self.assertEqual(ropa["status"], "pass")
-            self.assertEqual(ropa["detail"], {"pages": 1, "overdue": 0, "doc_status": "draft",
+            self.assertEqual(ropa["detail"], {"pages": 1, "overdue": 0, "drafts": 0, "doc_status": "active",
                                               "oldest_reviewed": "2026-11-09"})
             self.assertEqual(ropa["link"], "https://github.com/ExampleOrg/Root/blob/master/docs/legal/register.md")
             dpa = c.check_legal_doc(root, "legal_dpa_reviewed", ["docs/legal/dpa.md", "docs/legal/annex.md"],
                                     date(2026, 11, 23), ("superseded",), CFG)
             self.assertEqual((dpa["detail"]["overdue"], dpa["detail"]["oldest_reviewed"]), (1, "2026-10-01"))
+
+    def test_a_draft_page_never_passes_even_when_reviewed_on_time(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = _tree(Path(d))
+            r = c.check_legal_doc(root, "legal_dpa_reviewed", ["docs/legal/register.md", "docs/legal/dpa.md"],
+                                  date(2026, 11, 23), ("superseded",), CFG)
+            self.assertEqual(r["status"], "fail")
+            self.assertEqual((r["detail"]["drafts"], r["detail"]["overdue"]), (1, 0))
+            self.assertIn("draft", r["summary"])
+            only = c.check_legal_doc(root, "legal_dpa_reviewed", ["docs/legal/dpa.md"], date(2026, 11, 23),
+                                     ("superseded",), {**CFG, "legal_draft_status": []})
+            self.assertEqual(only["status"], "pass")   # the draft statuses come from checks.json
 
     def test_missing_superseded_or_undated_pages_are_errors(self):
         with tempfile.TemporaryDirectory() as d:

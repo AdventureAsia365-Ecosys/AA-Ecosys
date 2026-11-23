@@ -8,7 +8,8 @@
     "the age a scan may have is the CIS setting cis.compliance.ci_scan_max_age_days).",
     "AA-1174: legal_docs lists the docs/legal pages each legal document check reads (front matter last_reviewed,",
     "review_every_days, status; CIS grades the published `overdue` count); retention_log is the run log whose",
-    "live erasure drill rows date the last_erasure_drill check."
+    "live erasure drill rows date the last_erasure_drill check. legal_draft_status: a legal page in one of these",
+    "front-matter statuses is not an adopted document, so its check fails (a definition, not a threshold)."
   ],
   "org": "AdventureAsia365-Ecosys",
   "root_repo": "AA-Ecosys",
@@ -33,6 +34,9 @@
     "archived",
     "deprecated",
     "superseded"
+  ],
+  "legal_draft_status": [
+    "draft"
   ],
   "legal_docs": {
     "legal_ropa_reviewed": [
