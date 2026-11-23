@@ -983,10 +983,14 @@ mailbox or Google account". That is too strong.
 - **Recognisable:** its directory row and Booking staff row are named "E2E owner (agent, Dev only)", the run-script's
   audit rows carry `e2e_owner: true`, the CIS bearer log carries `e2e_owner`, and the CIS staff reconcile lists it as a
   known E2E identity (A10h) in the access review scope.
-- **Removal:** at once, a CIS owner disables it on Platform › Staff (Cognito disable + global sign-out), or the
-  run-script's REMOVE mode. With the A10 family (AA-1054): trigger entry, recipient, tool command, run-script, the
-  CIS / Booking / CRM constants, guards and MFA exemptions, the spec, the row (DRY RUN) and the Cognito user, a CIS
-  migration restoring the 462 CHECK.
+- **Removal:** at once, **only** Platform › Staff › Disable by a CIS owner (row inactive, AdminDisableUser, global
+  sign-out; both Cognito steps must report no error). A database-only change is not a removal: Booking takes `admin`
+  from the token's groups (and its own staff row), the CRM is token-only, so with the Cognito user still enabled the
+  account stays an MFA-exempt Booking administrator and a CRM reader; only CIS would refuse it. The run-script's REMOVE
+  mode (owner marker off, Booking grant deleted) is cleanup after Disable, never instead of it: it makes no Cognito
+  call, refuses while the row is still active and prints that the Cognito user was not touched. With the A10 family
+  (AA-1054): trigger entry, recipient, tool command, run-script, the CIS / Booking / CRM constants, guards and MFA
+  exemptions, the spec, the row (DRY RUN) and the Cognito user, a CIS migration restoring the 462 CHECK.
 
 ### A11. Preview staff sign-in on one fixed host, capped at viewer (22/10/2026, S247; AA-911 D-1, AA-816 P6a)
 
