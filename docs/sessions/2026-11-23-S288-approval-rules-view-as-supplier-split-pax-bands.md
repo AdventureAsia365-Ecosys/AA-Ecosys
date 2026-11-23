@@ -14,7 +14,9 @@ MFA hết hạn 1 lần (Nghiệp nhập lại).
   tài khoản owner E2E chỉ trên Dev cho agent (CIS 473). Cả hai merged + deploy + kiểm live.
 - AA-1155 T12: info@adventure.asia đã được tạo với vai trò Content và gửi lời mời (bằng owner E2E). Người ops chưa có tài khoản.
 - Lỗi mới tìm ra khi kiểm live bằng owner E2E: **F1** banner view-as của CIS không hiện (cookie hiển thị mã hoá hai lần) →
-  sửa ở CIS #1651 trong phiên.
+  sửa ở CIS #1651 (`f4aab0c4`, admin :90), kiểm lại 22:37: dải báo, menu theo vai trò và nút Back đều đúng.
+- Kiểm cuối (owner E2E, `live/e2e-owner/evidence-final.md`): trang Group size bands hiện v2 (chỉ xem); ngoại lệ bán chưa thử vì
+  Dev chưa có tour giả lập (không thử trên tour thật).
 - Snapshot: [state-snapshot](../audits/2026-11-23-S288-session/state-snapshot.md).
 
 ## Quyết định của Nghiệp (23/11)
@@ -68,8 +70,8 @@ MFA hết hạn 1 lần (Nghiệp nhập lại).
 ## Jira
 
 - PR-20 kỳ 6: đã đăng (10687).
-- PR-25 (Booking), PR-27 (nền tảng), PR-31 (trả lời "Price system"): nháp ở `docs/audits/2026-11-23-S288-session/jira-drafts.md`,
-  chờ Nghiệp duyệt.
+- PR-25 (Booking) 10688, PR-27 (nền tảng) 10689, PR-31 (trả lời "Price system") 10690: đã đăng 23/11 ~22:55 sau khi Nghiệp
+  duyệt ("kiểm xong hết đi, rồi có sửa gì thì đăng"), đã gộp kết quả kiểm cuối (`jira-drafts.md`, mục Posting log).
 
 ## Việc đầu phiên sau (S289, sáng 24/11 cùng tech lead + chị Thư)
 
@@ -83,6 +85,7 @@ MFA hết hạn 1 lần (Nghiệp nhập lại).
 ## Còn lại
 
 - AA-1157/1158/1149/1172/1174/1175/1176: In Review, chờ bước của người.
+- Tạo tour giả lập trên Dev (plan bước 2 của AA-1149) rồi thử ngoại lệ bán + Generate booking nhà cung cấp (Done-when AA-1176/AA-1149).
 - Ghim nốt 14 dòng `>=` trong `requirements.txt` CIS (ứng viên lint).
 - Booking #200 (bk-045 cũ, chờ ≥ 28/11), Infra #935 (WAF geo, sau MFA admin).
 

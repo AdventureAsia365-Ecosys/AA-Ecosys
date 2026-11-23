@@ -1,6 +1,6 @@
 # S288 (23/11/2026) — Jira drafts, session close
 
-Status: **DRAFT, not posted.** The tech lead approves each one before it is posted (skill `aa-jira-update`). Nothing was
+Status: **POSTED 23/11 ~22:55 +07** after the tech lead's in-session approval ("kiểm xong hết đi, rồi có sửa gì thì đăng"), with the final live results of the E2E owner run folded in (`live/e2e-owner/evidence-final.md`). Nothing was
 written to Jira, Linear or GitHub while preparing these drafts (read-only).
 
 Sources read: `.tmp-session/S288-checklist.md`; Linear comments on AA-1149, AA-1157, AA-1158, AA-1172, AA-1174,
@@ -70,11 +70,11 @@ the matrix) merged 07:52 UTC, Deploy Admin Dev green on b8d040cb. CIS #1648/#164
 <ul>
 <li><p>Tab Suppliers của hồ sơ chuyến có thẻ "Tour components". Khi tour bán cho đại lý đã xác nhận, bấm Generate thì mỗi đêm khách sạn, mỗi chặng xe và hướng dẫn viên thành một booking nhà cung cấp riêng, lấy theo tour tại lúc bán; sửa tour sau đó không làm đổi các booking đã tạo. Đã có trong hệ thống, chưa thử thật vì từ lúc lên Dev chưa có tour nào được bán. 3 hồ sơ bán trước 23/11 hiện dòng "Sold before tours were split: add by hand" (đã thấy trên Dev).</p></li>
 <li><p>Trang Price readiness có cột "Can operate" và bộ lọc theo Ready, Warnings, Blocked, Exception. Thiếu khách sạn một đêm thì tour bị chặn bán cho đại lý; thiếu xe giữa hai nơi chỉ cảnh báo. Đã thấy 23/11: một tour bị chặn với lý do "night 2 has no hotel". Hôm nay cả 892 tour trên Dev đều ở Blocked: 890 tour chưa có thành phần, 2 tour đã có giá còn thiếu đêm khách sạn. Đây là đúng với dữ liệu Dev, chưa có nguồn cung thật. Chưa thử: báo giá đại lý bị từ chối cho tour bị chặn, và trường hợp chỉ cảnh báo (Dev chưa có tour nào thiếu xe giữa hai nơi).</p></li>
-<li><p>Quản trị viên mở bán ngoại lệ bằng nút "Allow sale…": chọn quy tắc, ghi lý do ít nhất 20 ký tự, thời hạn mặc định 14 ngày, tối đa 30 ngày (hai mức này chỉnh được trong chính sách giá); chuyến bán theo ngoại lệ được gắn việc kiểm tra chuyến. Đã mở thử khung này 23/11, không bấm lưu; mở khoá bán thật chưa thử vì cần tài khoản quản trị được phép thay đổi dữ liệu.</p></li>
+<li><p>Quản trị viên mở bán ngoại lệ bằng nút "Allow sale…": chọn quy tắc, ghi lý do ít nhất 20 ký tự, thời hạn mặc định 14 ngày, tối đa 30 ngày (hai mức này chỉnh được trong chính sách giá); chuyến bán theo ngoại lệ được gắn việc kiểm tra chuyến. Đã mở thử khung này 23/11, không bấm lưu; mở khoá bán thật chưa thử vì Dev chưa có tour giả lập để thử (2 tour đã có giá là tour thật của catalogue nên không dùng để thử).</p></li>
 </ul></li>
-<li><p><strong>Bậc số khách cho giá tour</strong> nay chỉnh được ở trang Pricing policy, mục "Group size bands"; đang dùng từ 23/11: 1, 2, 3, 4, 5–7, 8–10, 11+. Đổi bậc cần người thứ hai duyệt (kể cả chủ doanh nghiệp). Đã lên Dev 23/11, chưa mở thử trang trên màn hình. Chi tiết và đối chiếu với ví dụ giá ở PR-31.</p></li>
+<li><p><strong>Bậc số khách cho giá tour</strong> nay chỉnh được ở trang Pricing policy, mục "Group size bands"; đang dùng từ 23/11: 1, 2, 3, 4, 5–7, 8–10, 11+. Đổi bậc cần người thứ hai duyệt (kể cả chủ doanh nghiệp). Đã mở thử 23/11 (chỉ xem, không sửa): trang hiện đúng các bậc đang dùng, phiên bản v2 từ 23/11 và lịch sử phiên bản. Chi tiết và đối chiếu với ví dụ giá ở PR-31.</p></li>
 </ol>
-<p>Ảnh theo thứ tự: (1) danh sách nhà cung cấp lọc "Pending approval", (2) nhà cung cấp chờ duyệt nhìn từ người tạo, (3) trang chủ Booking với các ô duyệt mới, (4) trang Price readiness lọc "Can operate = Blocked", (5) khung "Allow sale…".</p>
+<p>Ảnh theo thứ tự: (1) danh sách nhà cung cấp lọc "Pending approval", (2) nhà cung cấp chờ duyệt nhìn từ người tạo, (3) trang chủ Booking với các ô duyệt mới, (4) trang Price readiness lọc "Can operate = Blocked", (5) khung "Allow sale…", (6) mục "Group size bands" trên trang Pricing policy.</p>
 ```
 
 ### Images (in order)
@@ -130,7 +130,7 @@ chip per its evidence file; images 1 and 2 still show the synthetic supplier nam
 <ul>
 <li><p>Chủ nền tảng chọn một vai trò (ví dụ "Content" ở CIS, "Product, ops &amp; accounting" ở Booking) để thấy đúng các trang và menu của vai trò đó. Trong lúc xem chỉ được đọc, mọi thay đổi bị từ chối; đầu trang có dải báo đang xem với vai trò nào, số phút còn lại và nút Back. Nhật ký ghi lúc bắt đầu, lúc kết thúc và danh sách quyền của vai trò được xem. Chỉ chủ nền tảng mới bắt đầu được, và không xem được vai trò có quyền đọc rộng hơn mình.</p></li>
 <li><p>Chỗ dùng: CIS › Platform › Roles &amp; permissions (nút "View as" trên từng vai trò) và Booking › Roles (khung "View as a role").</p></li>
-<li><p>Đã thử thật 23/11 bằng tài khoản chủ nền tảng thử (chỉ có trên Dev). Booking, xem với vai trò "Product, ops &amp; accounting": dải báo hiện đúng, một thao tác thay đổi bị từ chối, nút Back đưa về quyền của mình. CIS, xem với vai trò "Content": phía hệ thống chạy đúng (thay đổi bị từ chối, các trang quản trị bị chặn), nhưng dải báo và menu theo vai trò chưa hiện. [CIS_FIX_STATUS] Tài khoản quản trị chỉ đọc không thấy nút "View as" ở cả hai app.</p></li>
+<li><p>Đã thử thật 23/11 bằng tài khoản chủ nền tảng thử (chỉ có trên Dev). Booking, xem với vai trò "Product, ops &amp; accounting": dải báo hiện đúng, một thao tác thay đổi bị từ chối, nút Back đưa về quyền của mình. CIS, xem với vai trò "Content": phía hệ thống chạy đúng (thay đổi bị từ chối, các trang quản trị bị chặn), nhưng dải báo và menu theo vai trò chưa hiện. Lỗi này đã sửa trong ngày; kiểm lại 23/11 lúc 22:37: dải báo hiện vai trò đang xem, chế độ chỉ đọc, số phút còn lại và nút Back, menu chỉ còn các mục của vai trò Content, bấm Back trả lại đầy đủ quyền. Tài khoản quản trị chỉ đọc không thấy nút "View as" ở cả hai app.</p></li>
 </ul></li>
 <li><p><strong>Compliance readiness có thêm tab Obligations (nghĩa vụ theo luật):</strong></p>
 <ul>
@@ -143,7 +143,7 @@ chip per its evidence file; images 1 and 2 still show the synthetic supplier nam
 <li><p>Đã kiểm 23/11 trên máy tính: cả ba tab Overview, Controls, Obligations hiện đủ, không lỗi (nền sáng; tab Obligations cả nền tối).</p></li>
 </ul></li>
 </ol>
-<p>Ảnh: (1) tab Obligations với bảng áp dụng theo thị trường, (2) Booking đang xem với vai trò "Product, ops &amp; accounting" (dải báo ở đầu trang).</p>
+<p>Ảnh: (1) tab Obligations với bảng áp dụng theo thị trường, (2) Booking đang xem với vai trò "Product, ops &amp; accounting" (dải báo ở đầu trang), (3) CIS đang xem với vai trò Content sau khi sửa (dải báo và menu theo vai trò).</p>
 ```
 
 ### Images (in order)
@@ -210,10 +210,11 @@ fix was not re-checked live, so the draft makes no phone claim.
 <li><p><strong>Bậc số khách cho giá tính tự động:</strong> trước đây cố định trong hệ thống (1, 2, 3–4, 5–6, 7–10, 11+); nay là một tham số ở trang Pricing policy, mục "Group size bands", đang dùng từ 23/11: <strong>1, 2, 3, 4, 5–7, 8–10, 11+</strong>. Có bậc 3 riêng vì các bậc phải liền nhau từ 1 khách: nếu gộp 3–4 thì nhóm 4 người sẽ phải trả theo giá của nhóm 3 người, cao hơn. Bậc 11+ tính theo giá của 11 khách (số khách nhỏ nhất của bậc), giống mọi bậc khác, để không đoàn nào bị tính thấp hơn chi phí thật. Đổi bậc cần người thứ hai duyệt (kể cả chủ doanh nghiệp), có lịch sử thay đổi và hướng dẫn tiếng Anh, tiếng Việt ngay trên trang.</p></li>
 <li><p><strong>Bảng giá cho đại lý</strong> ghi một giá cho mỗi bậc, tính theo số khách nhỏ nhất của bậc đó. Báo giá tức thì cho đại lý tính theo đúng số khách thật từ các thành phần tour, nên có thể thấp hơn giá của bậc; nhóm từ 9 khách trở lên báo giá theo yêu cầu (mức 9 chỉnh được). Dòng 8–10 và 11+ vẫn có trong bảng giá để tham khảo; đoàn từ 9 khách nhân viên báo giá theo yêu cầu.</p></li>
 <li><p><strong>Ở lần tính giá lại đầu tiên:</strong> nhóm 1, 2, 3, 5, 6 và 11+ không đổi; nhóm 4 có dòng giá riêng, rẻ hơn trước; nhóm 7 nay theo giá của 5 khách (tăng); nhóm 8–10 theo giá của 8 khách (giảm).</p></li>
-<li><p>Đã lên Dev 23/11, có test tự động; chưa mở thử trang Pricing policy trên màn hình.</p></li>
+<li><p>Đã lên Dev 23/11, có test tự động; đã mở thử trang Pricing policy 23/11 (chỉ xem, không sửa): mục "Group size bands" hiện đúng các bậc trên, phiên bản v2 từ 23/11, có lịch sử phiên bản (ảnh kèm).</p></li>
 </ul>
 <p>Trang tóm tắt "Bắt đầu với hệ thống giá" (chuẩn bị cho buổi đầu, đăng nhập, giá chảy thế nào, ai duyệt, nên thử gì): <a href="https://claude.ai/artifact/DaUxxoojMm4RzpswhdQB2J">https://claude.ai/artifact/DaUxxoojMm4RzpswhdQB2J</a></p>
 <p>Hướng dẫn chi tiết (bản nháp, sẽ dùng trong buổi đầu cùng em) nằm trong CIS admin › Docs, trang "Business owner onboarding and the price system", có bản tiếng Việt; chị mở được sau khi có tài khoản.</p>
+<p>Ảnh: mục "Group size bands" trên trang Pricing policy của Booking.</p>
 ```
 
 No images (optional: the Pricing policy screenshot from "Before posting" 2, then drop the "chưa mở thử" line).
@@ -252,8 +253,10 @@ No images (optional: the Pricing policy screenshot from "Before posting" 2, then
 
 ## Posting log
 
-| Jira | Comment id | Posted at | Note |
+| Issue | Comment | Images | Posted |
 |---|---|---|---|
-| PR-25 | — | — | chưa đăng: chờ duyệt |
-| PR-27 | — | — | chưa đăng: chờ duyệt |
-| PR-31 | — | — | chưa đăng: chờ duyệt |
+| PR-25 | [10688](https://adventure-asia.atlassian.net/browse/PR-25?focusedCommentId=10688) | 6 (images 1–2 with the synthetic supplier code masked; 6 = Group size bands, final run) | 23/11 ~22:52 +07 |
+| PR-27 | [10689](https://adventure-asia.atlassian.net/browse/PR-27?focusedCommentId=10689) | 3 (3 = CIS view-as banner after CIS #1651) | 23/11 ~22:54 +07 (first try hit a connector error; checked, not posted, retried once) |
+| PR-31 | [10690](https://adventure-asia.atlassian.net/browse/PR-31?focusedCommentId=10690) | 1 (Group size bands) | 23/11 ~22:55 +07 |
+
+Changes from the drafts above after the final run: PR-27 CIS banner sentence (fixed and re-checked 22:37); PR-25 item 3 and PR-31 last bullet "đã mở thử trang Pricing policy (chỉ xem)"; PR-25 sale exception reason "Dev chưa có tour giả lập"; extra images.
