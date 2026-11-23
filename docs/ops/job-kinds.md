@@ -328,6 +328,6 @@ Notes (hand-written):
 |---|---|
 | `tp_retention_outbox_redact` | redacts `tripplanner.outbox` payloads past their window (AA-861; DRY RUN when run by hand) |
 | `tp_retention_ai_rate_counter` | deletes AI limiter windows older than 2 days (AA-1015) |
-| `tp_lead_deliver` | daily + on demand: delivers and redacts `lead.submitted` rows, retries (AA-1038) |
+| `tp_lead_deliver` | daily + on demand: delivers and redacts `lead.submitted` rows, retries (AA-1038); moves the pending CRM leads of a tenant without a CRM agency once to its webhook / e-mail route (AA-1160, result `reroute`) |
 | `tp_tenant_erase` | AA-1093, tp-030: the TripPlanner step of the offboarding erasure saga; reads `catalog.v_tenant_erasure_v1`, DRY RUN plan hash, apply deletes the tenant's rows and merges its spend rows only with the approved hash, writes `tripplanner.tenant_erasure_log` (report view `tripplanner.v_tenant_erasure_report_v1`) |
 | `tp_tenant_backup` | AA-1093 L4: one tenant's TripPlanner rows to its own backup prefix; drilled by the jobs Lambda `restore_drill` op ([restore drill](runbooks/tenant-restore-drill.md), TripPlanner section) |
