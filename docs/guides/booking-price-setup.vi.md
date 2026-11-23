@@ -7,7 +7,7 @@ status: draft
 owner: nghiep
 audience: [staff, owner]
 applies_to: [aa-booking-admin, aa-booking-api, aa-cis-frontend, aa-cis-api]
-last_reviewed: 2026-11-13
+last_reviewed: 2026-11-23
 review_every_days: 90
 related: [GUIDE-12, GUIDE-12-booking, GUIDE-12-cis-admin, AA-1091]
 lang: vi
@@ -100,7 +100,9 @@ Sheet **Prices**, mỗi dòng một nhóm số khách và một khoảng ngày:
   tính theo quy tắc giá của kênh khởi hành cố định. **Currency**: để trống = USD; bước **Check** báo mọi đơn vị tiền
   không phải tiền bán.
 - **Pax min** / **Pax max** (pax = số khách): số khách của nhóm, ví dụ 2–2, 3–4, 11 và để trống (để trống = không
-  giới hạn trên). Các dòng cùng kênh và cùng đơn vị tiền không được chồng nhau về ngày và số khách.
+  giới hạn trên). Các dòng cùng kênh và cùng đơn vị tiền không được chồng nhau về ngày và số khách. Dòng nhập tay được
+  dùng cỡ đoàn bất kỳ; giá tính từ chi phí dùng **Group size bands** (Bậc cỡ đoàn) ở **Supply › Pricing policy** (trang
+  đầu của file Excel ghi các bậc này).
 - **Valid from** / **Valid to**: ngày khởi hành; ngày cuối được tính.
 - **Season** là nhãn cho người đọc. **Peak** vẫn được đọc nhưng không quyết định gì: lịch mùa của tour quyết định mùa
   và phụ thu cao điểm (mục 6).
@@ -152,8 +154,8 @@ Sau khi duyệt:
 - **Withdraw** (Rút lại) dừng phiên bản cho mọi việc mới; hộp thoại cho biết phiên bản cũ nào áp giá lại cho các ngày
   đó và ngày nào không báo giá được nữa. Phiên bản đã áp dụng do người thứ hai rút lại.
 
-Thời hạn báo giá, số khách được báo giá theo yêu cầu và các quy tắc kinh doanh khác nằm ở **Supply › Pricing
-policy**. Đổi chúng cũng cần người thứ hai; xem [runbook Booking admin](booking-admin-runbook.vi.md).
+Thời hạn báo giá, số khách được báo giá theo yêu cầu, các bậc cỡ đoàn của giá tính tự động và các quy tắc kinh doanh
+khác nằm ở **Supply › Pricing policy**. Đổi chúng cũng cần người thứ hai; xem [runbook Booking admin](booking-admin-runbook.vi.md).
 
 ## 6. Lịch mùa và ngày lễ
 
