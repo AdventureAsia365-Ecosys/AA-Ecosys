@@ -666,3 +666,20 @@ integrations:
     features: [CIS-F033, BK-F018]
     owner: tech_lead
     status: planned
+  - id: INT-084
+    name: Booking place add-ons for TripPlanner (optional activities per place and day)
+    producer: booking
+    consumers: [tripplanner]
+    kind: db_view
+    contracts:
+      - {file: supply.place_addons.v1.md, version: "1"}
+    auth: USAGE and SELECT on booking.v_place_addons for the tripplanner role (Booking bk-068)
+    conditions:
+      note: Only published offers on days they run with an in-force price and no stop-sale; no net price, supplier or contract fields.
+    cadence: Read per request
+    failure: A day without a row shows no add-on for that day; nothing is invented
+    kill_switch: Revoke the view grant in a Booking migration
+    personal_data: false
+    features: [BK-F009, BK-F010]
+    owner: tech_lead
+    status: planned
