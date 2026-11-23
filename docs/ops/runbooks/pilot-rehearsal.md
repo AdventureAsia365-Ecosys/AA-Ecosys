@@ -121,12 +121,13 @@ address is an invented one.
 | A10e maker / checker | `e2e-booking-maker@`, `e2e-booking-checker@` | Record a payment / approve or reject it | 11 |
 | A10a Booking admin | `e2e-booking@` | None (reads the audit log) | 8-11 reads |
 | A10c CRM staff | `e2e-crm-staff@` | S-02 views and S-04 support sessions on synthetic agencies | 10 |
-| Administrator (admin role) | the tech lead's own Cognito session, or the orchestrator through the admin route (see below) | Create tenants (the rehearsal tenant, the marker pilot, the second-agency and second-pilot probes), the rehearsal agency's AI budget, the AI budget override and its removal, End pilot, the marker's soft offboard | 1, 1b, 12, 12b, Teardown 1-2 |
+| A10h E2E owner (AA-1176) | `e2e-owner@` | An administrator with the owner marker, Dev only, never the business owner: the Administrator rows below, view-as, Compliance Refresh, sale exceptions on synthetic plans; never the checker of a person's work, never an erasure approval | Administrator rows, evidence views |
+| Administrator (admin role) | the tech lead's own Cognito session, the orchestrator through the admin route, or the A10h E2E owner (see below) | Create tenants (the rehearsal tenant, the marker pilot, the second-agency and second-pilot probes), the rehearsal agency's AI budget, the AI budget override and its removal, End pilot, the marker's soft offboard | 1, 1b, 12, 12b, Teardown 1-2 |
 | Tech lead | own Cognito session | The CRM agency seed, owner invitations, retire and restore a tour, the approval of an erasure apply | 1, 2, X2, Teardown 2 |
 | Agency owner / agent | members of `pilot-rehearsal-01` (partner pool, MFA) | Agency steps | 2-4b, 7, 8 |
 | Traveller | invented name, address on `example.invalid` | Public pages | 5, 6, 8, 10 |
 
-Every E2E identity signs in with an e-mail code from the E2E mailbox. Codes for A10b, A10c and A10e land under
+Every E2E identity signs in with an e-mail code from the E2E mailbox. Codes for A10b, A10c, A10e and A10h land under
 `inbound-admin/`, which only the MFA admin role reads, so these runs are agent-only and never CI.
 
 **Administrator.** The rows marked "Administrator" are admin-role writes on existing CIS routes (`tenant.write` and the
