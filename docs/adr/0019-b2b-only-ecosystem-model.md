@@ -391,6 +391,32 @@ the row stays as the S265 record.
   agency lines; attachments and due dates on a line; the client invoice groups "Tour (Adventure Asia)" and "Services
   provided by <agency>" with a disclaimer, visa fees and insurance always on their own lines.
 
+**Amendment (S288, 23/11/2026, tech lead decision Q6 of S285; AA-1157): d5 also covers "view as a lower staff role".**
+d5 stays for the tenant view; this adds a second, staff-internal kind with the same guarantees.
+
+- **Who.** Only an owner may start one: the CIS `is_owner` marker. In CIS the owner must also hold the admin role on a
+  company (Cognito) sign-in (the `OWNER_PERMS` rule of `staff.write`); in Booking the marker is read through
+  `shared.v_staff_booking_grant`. The business-owner marker alone does not qualify.
+- **Downward only (Q6).** The target role's read rights must be a subset of the viewer's: in CIS its read surface (the
+  GET routes of the route policy it passes, the unlisted content reads, the read capabilities a handler checks); in
+  Booking the permissions its GET routes check plus every `*.read`. Writes do not count: a view never writes.
+- **Read-only, before any route.** Every request other than GET / HEAD / OPTIONS in a view is refused 403
+  `view_as_read_only` before route code runs (CIS: a middleware inside the staff audit, so the refusal is logged;
+  Booking: in `current_staff`, before any database access), and again by the staff BFFs. During a view the effective
+  rights are target ∩ viewer and the owner markers read false.
+- **Logged.** The start row holds the viewer, the target role, the target role's full capability list and the time;
+  the end row is logged too. CIS: `shared.staff_view_as_session` (CIS 470: `tenant_id` NULL, `view_role`) and
+  `acp_shared.audit_log` (`staff.view_as_started` / `staff.view_as_ended`). Booking: `booking.audit_logs` rows of
+  entity `staff_view_as`, no new table.
+- **At most 60 minutes, a banner and a Back button; the sign-in is untouched.** Back ends the view; the Cognito session
+  and its cookies never change.
+- **Booking credential (deviation from "a signed cookie").** Booking has no signing secret, so its cookie holds an
+  opaque session id (uuid4) checked on every request against its start / end rows and bound to the viewer: revocable
+  at once, no secret, no Infra change; it can only narrow rights. CIS signs its token (HS256, its own audience). A
+  signed Booking token would need a new secret (Infra PR) and is not needed for integrity.
+- **Data scope.** Data limited to assignments (a customer_success or support book) follows the owner's own
+  assignments during the view, so it may be empty.
+
 ## ADRs amended
 
 Each one carries an "Amended by ADR 0019 (S265)" pointer in its header.
