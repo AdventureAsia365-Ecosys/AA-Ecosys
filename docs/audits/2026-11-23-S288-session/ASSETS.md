@@ -24,7 +24,7 @@ Kept in git (shown in the S288 Jira drafts or the main checks):
 - `live/aa-1158/suppliers-pending-1440-light.png`: suppliers filtered on "Pending approval"
 - `live/aa-1158/home-my-work-1440-light.png`: Booking home with the new approval tiles
 - `live/aa-1158/audit-log-self-approvals-1440-light.png`: the "Business-owner self-approvals" audit tab
-- `live/aa-1174/r2-compliance-obligations-desktop-light.png`: Compliance readiness › Obligations
+- `live/aa-1174/r2-compliance-obligations-desktop-light.png`: Compliance readiness › Obligations (top 4,000 px in git; the full-page capture is on S3)
 - `live/e2e-owner/03b-new-tenant-outcome.png`: test tenant created, CRM agency "Needs a look (crm_unavailable)"
 - `live/e2e-owner/06b-compliance-after-refresh.png`: evidence refreshed, `cis_db` and `crm_ops` last seen 22:01
 - `live/e2e-owner/07a-cis-view-as-content-no-banner.png`: CIS view-as before the display-cookie fix (no banner)
