@@ -124,7 +124,8 @@ renew it, for every kind of contract (hotel, transport, guide, activity, ...):
   **Supply › Pricing policy** (60 days to start with). Changing that value changes the lists at once.
 - **The e-mail**: once a day (01:00 UTC) the reminder posts one notification and sends one e-mail per contract and end
   date to every active Booking staff member of the roles in **Contract expiring e-mail: staff roles** (Booking admin
-  and Contracting to start with) who has an e-mail address. The e-mail is in English and Vietnamese and links to the
+  and Contracting to start with) who has an e-mail address. A custom role counts as the built-in role it was cloned
+  from while it is not archived and can still read suppliers. The e-mail is in English and Vietnamese and links to the
   supplier's Contracts tab. A contract is never mailed twice for the same end date; if its end date changes, it is
   announced again. An empty role list sends no e-mail (the notification and the lists stay).
 - **What to do**: agree the new rates with the supplier and enter the next contract (or import its rate sheet) before
@@ -284,7 +285,7 @@ A **Per group** price gives Booking no per-person amount, so it cannot become a 
 | A page refuses a change | Your role does not include it; ask the platform owner |
 | A room the DMC holds in allotment shows on request | The night is inside the release days, the allotment is used up, or another DMC priced the room (only its own inventory counts) |
 | **Excel** says the contract has too many rows | Split the contract, or raise **Rate sheet: most rows in one workbook** on **Supply › Pricing policy** |
-| A contract ending soon was not e-mailed to you | Your role is not in **Contract expiring e-mail: staff roles**, your staff account has no e-mail address, or you got the role after it was mailed; the list on **Suppliers** still shows it |
+| A contract ending soon was not e-mailed to you | Your role (or, for a custom role, the role it was cloned from) is not in **Contract expiring e-mail: staff roles**, your custom role cannot read suppliers, your staff account has no e-mail address, or you got the role after it was mailed; the list on **Suppliers** still shows it |
 
 During the dev phase the tech lead is the engineer on duty: a Jira issue for normal problems, a direct message when
 urgent. Give the page address, the tour key, the time and a screenshot.

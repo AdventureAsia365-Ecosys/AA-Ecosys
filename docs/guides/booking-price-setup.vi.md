@@ -127,7 +127,8 @@ người gia hạn nó, cho mọi loại hợp đồng (khách sạn, vận chuy
   trên **Supply › Pricing policy** (ban đầu 60 ngày). Đổi giá trị này thì các danh sách đổi ngay.
 - **E-mail**: mỗi ngày một lần (01:00 UTC), nhắc việc đăng một thông báo và gửi một e-mail cho mỗi hợp đồng và ngày
   kết thúc tới mọi nhân viên Booking đang hoạt động thuộc các vai trò trong **Contract expiring e-mail: staff roles**
-  (ban đầu Booking admin và Contracting) có địa chỉ e-mail. E-mail viết bằng tiếng Anh và tiếng Việt, có đường dẫn
+  (ban đầu Booking admin và Contracting) có địa chỉ e-mail. Một vai trò tuỳ chỉnh được tính như vai trò dựng sẵn mà
+  nó được sao chép từ đó, khi chưa lưu trữ và còn quyền xem nhà cung cấp. E-mail viết bằng tiếng Anh và tiếng Việt, có đường dẫn
   tới thẻ Contracts của nhà cung cấp. Một hợp đồng không bao giờ được gửi hai lần cho cùng một ngày kết thúc; nếu ngày
   kết thúc đổi, nó được báo lại. Danh sách vai trò để trống thì không gửi e-mail (thông báo và các danh sách vẫn còn).
 - **Cần làm gì**: thoả thuận giá mới với nhà cung cấp và nhập hợp đồng tiếp theo (hoặc nhập bảng giá của nó) trước
@@ -288,7 +289,7 @@ Giá **Per group** không cho Booking số tiền mỗi khách, nên không dùn
 | Trang từ chối một thay đổi | Vai trò của bạn không có quyền đó; hỏi chủ nền tảng |
 | Phòng DMC giữ bằng allotment vẫn hiện theo yêu cầu | Đêm đó đã trong số ngày nhả phòng, allotment đã hết, hoặc một DMC khác định giá phòng (chỉ phòng được giữ của chính DMC đó được tính) |
 | **Excel** báo hợp đồng có quá nhiều dòng | Tách hợp đồng, hoặc tăng **Rate sheet: most rows in one workbook** trên **Supply › Pricing policy** |
-| Bạn không nhận được e-mail về một hợp đồng sắp hết hạn | Vai trò của bạn không nằm trong **Contract expiring e-mail: staff roles**, tài khoản nhân viên của bạn không có địa chỉ e-mail, hoặc bạn nhận vai trò sau khi e-mail đã gửi; danh sách trên **Suppliers** vẫn hiện hợp đồng đó |
+| Bạn không nhận được e-mail về một hợp đồng sắp hết hạn | Vai trò của bạn (hoặc, với vai trò tuỳ chỉnh, vai trò nó được sao chép từ đó) không nằm trong **Contract expiring e-mail: staff roles**, vai trò tuỳ chỉnh của bạn không có quyền xem nhà cung cấp, tài khoản nhân viên của bạn không có địa chỉ e-mail, hoặc bạn nhận vai trò sau khi e-mail đã gửi; danh sách trên **Suppliers** vẫn hiện hợp đồng đó |
 
 Trong giai đoạn dev, tech lead là kỹ sư trực: tạo issue Jira cho vấn đề thường, nhắn trực tiếp khi gấp. Gửi kèm địa
 chỉ trang, mã tour, thời điểm và ảnh chụp màn hình.
