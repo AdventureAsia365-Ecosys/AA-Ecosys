@@ -1,7 +1,7 @@
 ---
 id: GUIDE-12-booking-pricing
 title: Booking price setup
-description: How the customer-service team enter tour prices - access, Price setup, hotels and services from the CIS itinerary, the price workbook with its DRY RUN, price versions, seasons, provisional and CIS reference prices, and checking a tour is on sale.
+description: How the customer-service team enter tour prices - access, Price setup, hotels and services from the CIS itinerary, hotel contracts in Excel and room inventory, the price workbook with its DRY RUN, price versions, seasons, provisional and CIS reference prices, and checking a tour is on sale.
 type: how-to
 status: draft
 owner: nghiep
@@ -9,7 +9,7 @@ audience: [staff, owner]
 applies_to: [aa-booking-admin, aa-booking-api, aa-cis-frontend, aa-cis-api]
 last_reviewed: 2026-11-23
 review_every_days: 90
-related: [GUIDE-12, GUIDE-12-booking, GUIDE-12-cis-admin, AA-1091]
+related: [GUIDE-12, GUIDE-12-booking, GUIDE-12-cis-admin, AA-1091, AA-1153]
 ---
 
 # Booking price setup
@@ -73,6 +73,43 @@ and their supplier rates.
    then open the tour again.
 6. For a component without a rate: **Supply › Suppliers**, open the supplier, **Import rate sheet**, **Download the
    template**, fill it, **Check**, then **Import as draft**. A second person publishes the draft contract.
+
+### Change a hotel contract in Excel
+
+A supplier's contract goes out and comes back as the same rate sheet.
+
+1. **Supply › Suppliers**, open the supplier (the DMC), tab **Rates**, pick the contract, click **Excel**. The file
+   holds the contract, every rate (net, and **Published** + **Commission %** when the DMC gave a published price),
+   the **Seasons**, the **Hotel children** prices and the **Inventory** sheet (below). A hotel is written with the
+   DMC's own code for it.
+2. Edit the file: a new price, a new season, an allotment. Keep the column headers.
+3. **Import rate sheet**, pick the file, **Check**. Nothing is written yet. The check lists problems by sheet, row
+   and column, the business warnings (half board cheaper than bed and breakfast, a season gap, a big price rise) and
+   the changes against the contract you exported (added, changed, removed rates).
+4. **Import as draft**. It is a new draft contract; the published one stays as it is until a second person
+   publishes the new one (and acknowledges any warning).
+
+A rate sheet holds at most the number of rows set on **Supply › Pricing policy** (section hotels, **Rate sheet: most
+rows in one workbook**). A contract with more rows cannot be downloaded: split it into two contracts.
+
+### Room inventory: allotment, free sale, on request
+
+On the **Rates** tab, **Room and service inventory** lists what the DMC holds for AA on the contract. While the
+contract is a draft, **Add term** adds one (or fill the **Inventory** sheet of the rate sheet: Hotel code, Room type
+or Service code, Kind, From, To, Units, Release days, Max pax, Notes).
+
+| Kind | What it means for an agency booking of the room |
+|---|---|
+| **Allotment** | The DMC keeps this many rooms a night for AA. While rooms are left and the night is more than the release days away, the agency booking is confirmed at once. Past that: on request |
+| **Free sale** | AA confirms at once without asking, up to **Max pax** travellers a booking (empty = any party) |
+| **On request** | Every booking is asked of the DMC on the B2B desk. Also what happens with no term at all |
+
+- **Release days** empty = the value of **Allotment: release days when the contract gives none** on **Supply ›
+  Pricing policy** (7 days to start with). It is written on the term, so a later policy change does not move it.
+- Each DMC's inventory counts only for the bookings its rate prices: when two DMCs sell the same hotel, the
+  cheaper (or preferred) DMC prices the room and only its allotment is used.
+- Example: an allotment of 2 rooms with 7 release days. An agency asking for 2 rooms is confirmed at once; a 3rd
+  room, or any room fewer than 7 days before the night, goes to the B2B desk as on request.
 
 ## 4. Many tours at once: the workbook
 
@@ -226,6 +263,8 @@ A **Per group** price gives Booking no per-person amount, so it cannot become a 
 | The approve button is missing | You made this version: a second person approves it |
 | **No approved agency pricing rule is in force** banner | No tour prices from supplier rates; propose a rule on **Pricing rules & FX**; a second person with Contracting or Booking admin approves it |
 | A page refuses a change | Your role does not include it; ask the platform owner |
+| A room the DMC holds in allotment shows on request | The night is inside the release days, the allotment is used up, or another DMC priced the room (only its own inventory counts) |
+| **Excel** says the contract has too many rows | Split the contract, or raise **Rate sheet: most rows in one workbook** on **Supply › Pricing policy** |
 
 During the dev phase the tech lead is the engineer on duty: a Jira issue for normal problems, a direct message when
 urgent. Give the page address, the tour key, the time and a screenshot.
@@ -237,5 +276,7 @@ Read from AA-Booking `main` on 2026-11-13: `frontend/ui/local/nav.tsx`, the `(st
 `backend/app/catalog/price_import.py` (workbook columns, checks and the Read me lines), `CONTEXT.md` ("Tour price
 chain", "Agency price tiers"), `docs/implementation-notes/AA-1091*.md`; AA-CIS-App `frontend/lib/adminIa.ts`,
 `frontend/app/admin/reference-prices/messages.ts`, `frontend/app/admin/platform/staff/messages.ts`,
-`docs/implementation-notes/AA-1091-cis.md`. Decisions: root ADR 0005, 0005b and 0019. Keep
+`docs/implementation-notes/AA-1091-cis.md`. AA-1153 part 2 (S290): `suppliers/_parts/InventoryTerms.tsx`,
+`backend/app/supply/rate_sheet_export.py`, `rate_sheet_inventory.py`, `availability.py`, `CONTEXT.md` ("Hotel contracts
+through DMCs"). Decisions: root ADR 0005, 0005b and 0019. Keep
 [booking-price-setup.vi.md](booking-price-setup.vi.md) in step with this page.
