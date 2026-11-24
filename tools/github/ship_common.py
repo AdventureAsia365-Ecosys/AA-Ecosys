@@ -36,8 +36,10 @@ ORG = "AdventureAsia365-Ecosys"
 GATE_ENV = "AA_SHIP_GATED"
 
 REPOS = ("AA-Ecosys", "AA-CIS-App", "AA-Booking", "AA-Partner", "AA-TripPlanner-Web", "AA-CIS-Infra")
-# Repos whose main is protected by the GitHub merge queue (AA-889): merge through mergeq.sh.
-QUEUE_REPOS = frozenset({"AA-CIS-App", "AA-Booking", "AA-Partner"})
+# Repos whose main is protected by the GitHub merge queue (AA-889; AA-TripPlanner-Web since AA-1119): merge through
+# mergeq.sh. Also safe while a repo's queue ruleset is not on yet: without a queue, the squash merge mergeq.sh asks for
+# lands at once and its wait loop reads MERGED.
+QUEUE_REPOS = frozenset({"AA-CIS-App", "AA-Booking", "AA-Partner", "AA-TripPlanner-Web"})
 ALIASES = {
     "root": "AA-Ecosys",
     "aa-ecosys": "AA-Ecosys",

@@ -136,6 +136,10 @@ Read from GitHub (branch protection and rulesets of the default branch) with `ge
 
 The full pre-merge checklist and the live verify are in `skill/aa-ship/SKILL.md`. Rollback steps per app are runbooks
 in [`ops/runbooks/`](../ops/runbooks/), listed on the [operations index](../ops/README.md) (AA-892).
+The four web frontends (CIS admin, Booking admin, CRM web, TripPlanner web) roll back by themselves when their
+post-deploy verify or smoke is red, and open a `deploy-smoke-red` issue (AA-1119,
+[rollback-ecs](../ops/runbooks/rollback-ecs.md#automatic-rollback-after-a-red-post-deploy-check)). TripPlanner merges
+through the GitHub merge queue like CIS, Booking and Partner once its ruleset is on (AA-1119).
 
 ## DB Migrate
 

@@ -28,10 +28,10 @@ extra read, no refusal). ON (trigger in skill aa-ship §1: the first pilot with 
 and before the merge call (exit 4), a risky PR (risky label, or a changed file matching the config's risky paths)
 without an APPROVED review of the gated head by a human (non-bot) reviewer; logic and rules: change_control.py.
 
-Merge: AA-CIS-App, AA-Booking, AA-Partner through the merge queue (mergeq.sh). When mergeq.sh exits 4 "not in the
-queue" and the PR is not merged, the merge-queue entries and the PR's merge_group runs are read before failing: while
-either still holds the PR, the tool waits (S273: exit 4 while the PR's own group CI ran). TripPlanner, Infra and the
-root repo squash through the aa-agent App with --match-head-commit (the head that was gated). Queue repos run in
+Merge: AA-CIS-App, AA-Booking, AA-Partner, AA-TripPlanner-Web (AA-1119) through the merge queue (mergeq.sh). When
+mergeq.sh exits 4 "not in the queue" and the PR is not merged, the merge-queue entries and the PR's merge_group runs
+are read before failing: while either still holds the PR, the tool waits (S273: exit 4 while the PR's own group CI
+ran). Infra and the root repo squash through the aa-agent App with --match-head-commit (the head that was gated). Queue repos run in
 parallel (one worker per PR, lesson S257); PRs of one non-queue repo run one after the other. --serial keeps the given
 order for all.
 

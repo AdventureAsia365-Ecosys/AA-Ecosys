@@ -47,6 +47,14 @@ class NamesTest(unittest.TestCase):
             parse_targets(["AA-CIS-App"])
 
 
+class QueueReposTest(unittest.TestCase):
+    def test_app_repos_merge_through_the_queue(self):
+        # AA-1119: AA-TripPlanner-Web joined the merge queue; Infra and the root repo squash through the App.
+        self.assertEqual(ship_common.QUEUE_REPOS,
+                         {"AA-CIS-App", "AA-Booking", "AA-Partner", "AA-TripPlanner-Web"})
+        self.assertTrue(ship_common.QUEUE_REPOS <= set(ship_common.REPOS))
+
+
 class ClassifyTest(unittest.TestCase):
     def test_red_non_required_check_is_red(self):
         # S263 #1225: every required check green, the non-required "Migration preflight" red.

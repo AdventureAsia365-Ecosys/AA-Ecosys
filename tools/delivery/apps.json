@@ -55,7 +55,7 @@
       "no_deploy_paths": ["docs/**", "*.md", "**/*.md"]
     },
     {
-      "id": "tripplanner", "name": "TripPlanner", "repo": "AA-TripPlanner-Web", "default_branch": "main",
+      "id": "tripplanner", "name": "TripPlanner", "repo": "AA-TripPlanner-Web", "default_branch": "main", "merge_queue": true,
       "deploy_workflows": ["deploy-web-dev.yml", "deploy-lambdas.yml"],
       "deploy_job": "^(Deploy TripPlanner web to ECS Dev|Build \\+ deploy Lambda code)$",
       "verify_job": "^Post-deploy verify",

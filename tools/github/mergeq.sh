@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Merge a PR through the GitHub merge queue (AA-889) for AA-CIS-App, AA-Partner, AA-Booking; or take it out again.
+# Merge a PR through the GitHub merge queue (AA-889) for AA-CIS-App, AA-Partner, AA-Booking, AA-TripPlanner-Web
+# (AA-1119); or take it out again.
 #
 #   tools/github/mergeq.sh <Repo> <pr>            wait for PR checks, enqueue, wait until merged, print the SHA
 #   tools/github/mergeq.sh <Repo> <pr> --dequeue  take the PR out of the queue (or cancel a pending auto-merge)

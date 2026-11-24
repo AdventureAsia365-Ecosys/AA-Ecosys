@@ -62,6 +62,9 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
    - Local: `BASE_URL=<URL> npx playwright test --project=smoke-public`. Smoke có đăng nhập **không chạy được từ máy
      local** (role đọc hộp thư chỉ tin `refs/heads/main` + environment `e2e`).
    - Thêm trang = thêm 1 dòng vào danh sách trong `tests/e2e/smoke/ui-smoke.spec.ts`.
+   - Verify hoặc smoke sau deploy đỏ (CIS admin, Booking admin, CRM web, TripPlanner web) → workflow tự rollback về
+     revision trước và mở issue `deploy-smoke-red` (AA-1119; `docs/ops/runbooks/rollback-ecs.md`). Smoke đỏ vì spec
+     lỗi cũng làm bản tốt bị rollback: sửa spec cùng PR đổi chữ/trang, đọc issue trước khi kết luận "UI hỏng".
    - Portal: smoke ở AA-Partner (`e2e/smoke-portal/`, `e2e/playwright.portal.config.ts`), workflow `UI Smoke (portal)`
      tự chạy sau `Deploy Portal Dev` trên `portal.` (đăng nhập partner pool + mã TOTP của user studio e2e, secret
      `E2EPORTALEMAIL` / `E2EPORTALPASSWORD` / `E2EPORTALTOTP`; đăng nhập bằng API key đã tắt từ AA-979 dọn dẹp).
