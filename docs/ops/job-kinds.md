@@ -75,12 +75,13 @@ free slots; **blocks** = `deploy_blocking` in the registry.
 
 <!-- gen:job-kinds-cis -->
 
-65 kinds registered with `@job_kind` (`shared/jobs/registry.py`); a kind registered only when `JOB_TEST_KINDS` is on is not listed.
+67 kinds registered with `@job_kind` (`shared/jobs/registry.py`); a kind registered only when `JOB_TEST_KINDS` is on is not listed.
 
 | Kind | Code | Concurrency | Max attempts | Expected (s) | Background | Blocks deploys | Gate exempt |
 |---|---|---|---|---|---|---|---|
 | `a3_atomize` | `services/jobs/a3_atomize_job.py` | 1 | 2 | 1800 | no | no | no |
 | `ai_usage_rollup` | `services/jobs/ai_usage_rollup_job.py` | 1 | 2 | 1200 | **yes** | no | **yes** |
+| `cost_explorer_refresh` | `services/jobs/cost_explorer_refresh_job.py` | 1 | 1 | 120 | **yes** | no | no |
 | `data_erasure` | `services/jobs/erasure_job.py` | 1 | 1 | 900 | **yes** | **yes** | no |
 | `embedding_reembed` | `services/jobs/embedding_reembed_job.py` | 1 | 3 | 1800 | **yes** | no | no |
 | `inquiry_handoff_check` | `services/jobs/report_ops_jobs.py` | 1 | 1 | 5 | **yes** | no | no |
@@ -92,6 +93,7 @@ free slots; **blocks** = `deploy_blocking` in the registry.
 | `llm_model_lifecycle_sync` | `services/jobs/llm_model_lifecycle_job.py` | 1 | 2 | 120 | **yes** | no | **yes** |
 | `llm_route_watch` | `services/jobs/llm_route_watch_job.py` | 1 | 2 | 60 | **yes** | no | **yes** |
 | `ops_alert_email` | `services/jobs/ops_alert_email_job.py` | 1 | 5 | 60 | no | no | no |
+| `ops_status_sample` | `services/jobs/ops_status_sample_job.py` | 1 | 1 | 60 | **yes** | no | **yes** |
 | `photo_destination_match` | `services/jobs/photo_destination_match_job.py` | 1 | 2 | 300 | **yes** | no | no |
 | `photo_medium_backfill` | `services/jobs/photo_medium_backfill_job.py` | 1 | 2 | 1800 | **yes** | no | no |
 | `photo_sync` | `services/jobs/photo_sync_job.py` | 1 | 2 | 1800 | no | no | no |
@@ -145,7 +147,7 @@ free slots; **blocks** = `deploy_blocking` in the registry.
 | `writing_signal_backfill` | `services/jobs/writing_memory_job.py` | 1 | 2 | 900 | **yes** | no | no |
 | `writing_signal_fact_filter` | `services/jobs/writing_memory_job.py` | 1 | 3 | 600 | **yes** | no | no |
 
-Read statically from AA-CIS-App main at `2ff8c53d` (tools/docs/repo_facts.py).
+Read statically from AA-CIS-App main at `7b1c8afd` (tools/docs/repo_facts.py).
 
 <!-- /gen -->
 
@@ -199,7 +201,7 @@ not counted (`shared/jobs/queue.py` `release`).
 
 <!-- gen:job-kinds-booking -->
 
-18 kinds in `backend/app/jobs/kinds.py` (`EXPECTED_SECONDS`, `DEPLOY_BLOCKING_KINDS`, `DEPLOY_GATE_EXEMPT`, `TEST_KINDS`).
+19 kinds in `backend/app/jobs/kinds.py` (`EXPECTED_SECONDS`, `DEPLOY_BLOCKING_KINDS`, `DEPLOY_GATE_EXEMPT`, `TEST_KINDS`).
 
 | Kind | Expected (s) | Blocks deploys | Gate exempt | Test only |
 |---|---|---|---|---|
@@ -207,6 +209,7 @@ not counted (`shared/jobs/queue.py` `release`).
 | `bk_allotment_release` | 120 | no | no | no |
 | `bk_b2b_hold_expire` | 120 | no | no | no |
 | `bk_case_lifecycle` | 300 | no | no | no |
+| `bk_contract_expiry_watch` | 120 | no | no | no |
 | `bk_departure_cost_recompute` | 300 | no | no | no |
 | `bk_departure_watch` | 300 | no | no | no |
 | `bk_noop_sleep` | 3660 | no | **yes** | **yes** |
@@ -222,7 +225,7 @@ not counted (`shared/jobs/queue.py` `release`).
 | `bk_tour_lifecycle_pull` | 120 | no | no | no |
 | `bk_trip_plan_sync` | 120 | no | no | no |
 
-Read statically from AA-Booking main at `4b777358` (tools/docs/repo_facts.py).
+Read statically from AA-Booking main at `094d678d` (tools/docs/repo_facts.py).
 
 <!-- /gen -->
 
@@ -246,7 +249,7 @@ Source: `backend/app/jobs/kinds.py` (`EXPECTED_SECONDS`, `DEPLOY_BLOCKING_KINDS`
 
 <!-- gen:job-kinds-crm -->
 
-34 kinds in `api/app/jobs/kinds.py` (`EXPECTED_SECONDS`, `DEPLOY_BLOCKING_KINDS`, `DEPLOY_GATE_EXEMPT`, `TEST_KINDS`).
+35 kinds in `api/app/jobs/kinds.py` (`EXPECTED_SECONDS`, `DEPLOY_BLOCKING_KINDS`, `DEPLOY_GATE_EXEMPT`, `TEST_KINDS`).
 
 | Kind | Expected (s) | Blocks deploys | Gate exempt | Test only |
 |---|---|---|---|---|
@@ -282,10 +285,11 @@ Source: `backend/app/jobs/kinds.py` (`EXPECTED_SECONDS`, `DEPLOY_BLOCKING_KINDS`
 | `crm_tenant_erase` | 600 | no | no | no |
 | `crm_tour_retired_fanout` | 120 | no | no | no |
 | `crm_tp_lead_pull` | 120 | no | no | no |
+| `crm_tp_price_publish` | 300 | no | no | no |
 | `crm_workflow_run` | 60 | no | no | no |
 | `crm_workflow_tick` | 300 | no | no | no |
 
-Read statically from AA-Partner main at `6592cf50` (tools/docs/repo_facts.py).
+Read statically from AA-Partner main at `28b1c4f6` (tools/docs/repo_facts.py).
 
 <!-- /gen -->
 
@@ -318,7 +322,7 @@ Worker: the jobs Lambda (AA-TripPlanner-Web `backend/jobs/handler.py`), woken da
 | `tp_tenant_erase` | **yes** | 1 |
 | `tp_tenant_restore_drill` | no | 1 |
 
-Read statically from AA-TripPlanner-Web main at `44aa203b` (tools/docs/repo_facts.py).
+Read statically from AA-TripPlanner-Web main at `12b6a4d2` (tools/docs/repo_facts.py).
 
 <!-- /gen -->
 

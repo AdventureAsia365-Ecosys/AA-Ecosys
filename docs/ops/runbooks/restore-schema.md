@@ -54,7 +54,7 @@ Both read only from the copy; the live write is a separate, reviewed step.
 | Automated backups, point-in-time recovery | 14 | `modules/rds/main.tf` (`backup_retention_period`) |
 | Longest any backup copy may live (alarm above it) | 30 | `accounts/aa365/rds_snapshot_expiry.tf` (`rds_backup_copy_max_age_days`) |
 
-Read statically from AA-CIS-Infra main at `751d767e` (tools/docs/repo_facts.py).
+Read statically from AA-CIS-Infra main at `8422045d` (tools/docs/repo_facts.py).
 
 <!-- /gen -->
 
