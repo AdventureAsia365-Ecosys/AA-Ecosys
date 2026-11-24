@@ -50,6 +50,36 @@ Note S278, AA-1095). The route order is per model family: Claude uses the Anthro
 GPT uses acc1 first, then acc3, then the OpenAI API. acc1 also pays acc3's organization bill (Note S277). Account IDs
 and profiles: the [account map](../onboarding.md#account-map).
 
+## Free tier limits
+
+Always-free monthly amounts of the services the platform uses, as AWS publishes them (as of 2026-11-24, read from the
+linked AWS pages; AA-1118). Plan on them as a ceiling, never as a saving:
+
+- **One free tier per organization.** With consolidated billing AWS applies the free tier to the total usage of all
+  accounts in the organization, not to each account
+  ([consolidated billing](https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/useconsolidatedbilling-effective.html)).
+  acc2 sits in its reseller's organization until the billing transfer, and acc3 in acc1's, so their share of these
+  amounts can be zero; read the bill, not this table.
+- **12-month and credit offers do not count.** The 12-month offers (RDS, S3, ECR, API Gateway, the load balancer
+  hours) end with an account's first year, and accounts created from 2025-07-15 get Free Tier credits instead
+  ([Secrets Manager pricing](https://aws.amazon.com/secrets-manager/pricing/), Free Tier note).
+
+| Service | Always free per month | Our use against it | Source |
+|---|---|---|---|
+| Lambda | 1,000,000 requests and 400,000 GB-seconds | TripPlanner Lambdas, Cognito triggers, ops Lambdas: inside it at Dev traffic | [Lambda pricing](https://aws.amazon.com/lambda/pricing/) |
+| CloudWatch | 10 custom or detailed metrics; 10 alarm metrics (standard resolution); 1,000,000 API requests (GetMetricData, GetInsightRuleReport and GetMetricWidgetImage always billed); 5 GB of logs (ingestion, archive and Logs Insights scans); 3 custom dashboards of up to 50 metrics | Above it: every alarm in the [alarm catalog](../generated/alarms.md) past the tenth is billed | [CloudWatch pricing](https://aws.amazon.com/cloudwatch/pricing/) |
+| SNS | 1,000,000 publishes; 100,000 HTTPS deliveries; 1,000 e-mail deliveries | Alert e-mails: inside it | [SNS on the Free Tier](https://aws.amazon.com/pm/sns/) |
+| SQS | 1,000,000 requests | Inside it | [SQS pricing](https://aws.amazon.com/sqs/pricing/) |
+| KMS | 20,000 requests (requests with asymmetric keys and GenerateDataKeyPair excluded); each customer managed key is billed per month on top | Requests inside it; the keys are billed | [KMS pricing](https://aws.amazon.com/kms/pricing/) |
+| EventBridge Scheduler | 14,000,000 invocations | Inside it | [EventBridge pricing](https://aws.amazon.com/eventbridge/pricing/) |
+| Cognito | 10,000 monthly active users on the Lite or Essentials tier; 50 for SAML or OIDC federation; none on Plus or for machine-to-machine tokens | Staff and partner pools: inside it | [Cognito pricing](https://aws.amazon.com/cognito/pricing/) |
+| CloudFront | 1 TB data out, 10,000,000 HTTP(S) requests, 2,000,000 CloudFront Functions invocations (pay-as-you-go distributions) | Inside it at Dev traffic | [AWS News Blog, effective 2021-12-01](https://aws.amazon.com/blogs/aws/aws-free-tier-data-transfer-expansion-100-gb-from-regions-and-1-tb-from-amazon-cloudfront-per-month/) |
+| Data transfer out to the internet | 100 GB from all Regions together | Inside it | same post |
+| Secrets Manager | none: every secret and every 10,000 API calls is billed | All billed (see the [secrets register](../security/secrets-register.md)) | [Secrets Manager pricing](https://aws.amazon.com/secrets-manager/pricing/) |
+| ECS on Fargate, RDS, NAT gateway, load balancer, WAF, Bedrock | none (always free does not cover them) | The bulk of the acc2 bill | each service's pricing page |
+
+Refresh the table when a page above changes or once a quarter with the monthly review; change the as-of date with it.
+
 ## Tags
 
 The keys, their allowed values, how Terraform sets them, how CI enforces them and how prod differs are in the
