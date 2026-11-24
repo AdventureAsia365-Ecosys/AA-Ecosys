@@ -24,7 +24,9 @@
   publishes the contract); A10e-4 (24/11/2026, S289) lets the maker import the activity catalogue of that synthetic
   supplier for the add-on live check (marked titles only; the A10h owner publishes the offers); A10e-5 (24/11/2026, S289)
   lets the maker link its synthetic hotel to a second synthetic supplier and enter a desk booking of that hotel's rooms
-  on a synthetic agency, for the hotel-contract live check. A11 and A12 (22/10/2026,
+  on a synthetic agency, for the hotel-contract live check; A10e-6 (24/11/2026, S290) lets the pricing checker decide
+  the E2E owner's group-size band changes and lets the pair enter and approve supplier bills of the synthetic supplier
+  on a synthetic agency's trip case, for the band-change and payout live checks. A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2). A13
   (06/11/2026, S271) retires the CIS -> Booking bridge once the staff frontends run on ECS (ADR 0019 d23). A14
   (20/11/2026, S286) adds custom staff roles as data and the CIS contract view Booking reads a person's Booking role
@@ -719,7 +721,7 @@ mailbox or Google account". That is too strong.
   rest of `api/core/e2e_staff.py`, the assignment guard, the trigger entry, the receipt-rule recipient and the AA-Partner
   `E2E_CIS_CS_EMAIL` rule (`Caller.e2e_no_write`); Terraform Apply; a closing line here. Faster stop on Dev: disable the
   user. The full end-of-project removal list is therefore A10, A10a, A10b (with A10b-1, A10b-2, A10b-3, A10b-4 and A10b-5), A10c, A10d
-  and A10e (with A10e-1, A10e-2 and A10e-3) (AA-1054).
+  and A10e (with A10e-1 to A10e-6) (AA-1054).
 
 #### A10e. Dev-only write-capable AA-Booking E2E addresses (12/11/2026, S278, AA-1087)
 
@@ -969,6 +971,53 @@ mailbox or Google account". That is too strong.
   allow-list test (`tests/unit/test_aa1087_e2e_writers.py`), deploy; faster on Dev: disable the maker or clear
   `is_canary` on the synthetic tenants. Removed with A10e-2 (AA-1054). The synthetic booking stays as Dev data (the
   agent cancels it at cleanup through the desk as an administrator).
+
+##### A10e-6. Amendment: the pricing checker decides the E2E owner's band changes; the pair enters and approves synthetic supplier bills (24/11/2026, S290, AA-1175 / AA-1158)
+
+- **Status:** Accepted (24/11/2026, tech lead, S290: close-out decisions D2(b) and D3(a), "the smallest fix");
+  designed by the orchestrated lane e-e2e-a10e6 under the dev-phase merge rule. It widens auth, so an independent review
+  runs before merge.
+- **Why.** Two live checks could not run with agent identities on Dev:
+  - **AA-1175 (group-size bands).** A Pricing › Policy change needs a second person (bk-050: the approver is never the
+    maker, 403 `own_row`). The E2E owner (A10h) may only be the maker (D6), and no Pricing › Policy route was on any E2E
+    writer allow-list, so the pricing checker got 403 `e2e_read_only`. Each band change waited for the tech lead.
+  - **AA-1158 (supplier payouts).** The payout rules need three people: the bill's maker, its approver, and a payer who
+    is neither (`payout.write` is admin only, and the bank-lock refusal is checked last, so only a third person reaches
+    it). The agent had one admin (the E2E owner); entering and approving a bill was on no allow-list.
+- **Scope, enforced by AA-Booking on top of A10e-3** (Dev only, exact groups, all before the staff row sync or the
+  route; allow-list in `backend/app/auth/e2e_staff.py`, body checks in `e2e_staff_bodies.py`, record checks in
+  `e2e_staff_finance.py`):
+  - **Policy decision (checker only):** POST `/booking/pricing/policy/{version_id}/approve` (no body) and `/reject`
+    (body exactly a `reason` that starts `SYNTHETIC`), only when the version is of the parameter `price_pax_bands` and
+    its maker is the E2E owner's staff row (A10h). Another parameter, a band change of a real person or of any other
+    identity, an unknown id or a database error: 403 `e2e_synthetic_only`. Propose, submit, withdraw and discard stay
+    403 `e2e_read_only` for both identities, and the maker decides nothing.
+  - **Bill entry (maker only):** POST `/booking/supplier-bills`, body: a bill number that starts `SYNTHETIC`, a trip
+    case, no departure, no notes text, lines of exactly a supplier booking and an amount (else 403 `e2e_read_only`). The
+    supplier must be the maker's synthetic supplier (created by the maker, name still starting `SYNTHETIC`, the A10e-3
+    rule) and the trip case a case of an agency CIS marks synthetic (`catalog.v_tenant_account_v1.is_synthetic`, the
+    A10b-1 rule; by UUID or `TC-` code), else 403 `e2e_synthetic_only`. The lines need no guard of their own: the bk-045
+    trigger refuses a line whose supplier booking is of another supplier or another trip case than the bill.
+  - **Bill approval (checker only):** POST `/booking/supplier-bills/{bill}/approve` (no body), only for a bill the maker
+    entered and last edited (`created_by` and `facts_edited_by`), of the maker's synthetic supplier, on a synthetic
+    agency's trip case (by UUID or `BIL-` code), else 403 `e2e_synthetic_only`.
+  - Bill edit, cancel, payouts and payout void stay 403 `e2e_read_only` for both identities. No route-scoped grant:
+    `contracting` already holds `bill.write`, `bill.approve` and `pricing_policy.approve` (the approver permission of
+    the `pricing` group that `price_pax_bands` belongs to). The services keep their own maker-checker refusals.
+- **Exposure added.** Whoever reads the checker's code can, on Dev, approve or reject a pending group-size band change
+  that the E2E owner proposed. An approved change reprices every Dev plan with components at the next recompute, so
+  the close-out run restores the earlier bands right after (a second owner proposal, approved the same way). Whoever
+  reads the maker's code can enter received bills for the synthetic supplier on a synthetic agency's case, and the
+  checker can approve them. No identity of the pair can pay a bill, and no real supplier, agency, bill or policy
+  parameter is reachable.
+- **Audit and detection:** unchanged routes and audit rows (`pricing_policy.approved` / `.rejected`,
+  `supplier_bill.created`, the bill approval row, each naming the identity's staff key); `booking_e2e_write_allowed
+  identity=pricing_checker|pricing_maker route=…`, refusals `booking_e2e_writer_refused … reason=body | not_synthetic
+  | not_allowlisted`.
+- **When it is removed.** Removed at go-live with the A10 family (AA-1054): drop the four writes, their body checks,
+  `e2e_staff_finance.py` and the tests (`tests/unit/test_aa1087_e2e_writers.py` lists them), deploy. Faster stop on
+  Dev: remove the "Pricing team" preset from the maker, disable the checker, or clear `is_canary` on the synthetic
+  tenants. The synthetic bills stay as Dev data (approved, unpaid).
 
 #### A10f. Dev-only CIS content_lead E2E address: the second person of content publishing (20/11/2026, S286, AA-1155)
 
@@ -1236,3 +1285,5 @@ the only home of a person's Booking role and Booking reads it from the token).
   `api/services/staff_e2e_owner.py`, `docs/implementation-notes/AA-1176-e2e-owner.md`; AA-Booking
   `backend/app/auth/e2e_owner.py`; AA-Partner `api/app/auth/route_guard.py`; AA-CIS-Infra
   `db/scripts/aa1176_e2e_owner_row.py`, `docs/implementation-notes/AA-1176-e2e-owner.md`.
+- A10e-6 (AA-1175 / AA-1158): AA-Booking `backend/app/auth/e2e_staff.py`, `e2e_staff_bodies.py`,
+  `e2e_staff_finance.py`, `docs/implementation-notes/AA-1175-e2e-a10e6.md`.
