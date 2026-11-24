@@ -22,7 +22,9 @@
   live check with synthetic prices on synthetic trip plans; A10e-3 (proposed 14/11/2026, S280, pending the tech lead)
   would let that pair load the synthetic supplier, hotels, services and rates the check prices from (the checker
   publishes the contract); A10e-4 (24/11/2026, S289) lets the maker import the activity catalogue of that synthetic
-  supplier for the add-on live check (marked titles only; the A10h owner publishes the offers). A11 and A12 (22/10/2026,
+  supplier for the add-on live check (marked titles only; the A10h owner publishes the offers); A10e-5 (24/11/2026, S289)
+  lets the maker link its synthetic hotel to a second synthetic supplier and enter a desk booking of that hotel's rooms
+  on a synthetic agency, for the hotel-contract live check. A11 and A12 (22/10/2026,
   S247, recorded S248) add the Preview staff sign-in and switch the legacy flag off by default (cutover S2). A13
   (06/11/2026, S271) retires the CIS -> Booking bridge once the staff frontends run on ECS (ADR 0019 d23). A14
   (20/11/2026, S286) adds custom staff roles as data and the CIS contract view Booking reads a person's Booking role
@@ -930,6 +932,43 @@ mailbox or Google account". That is too strong.
   the import once per check. (2) A published synthetic offer appears in `booking.v_place_addons` at a real CIS place,
   which the `tripplanner` role reads; the offer's title carries the mark, and the agent retires it after the check.
 - **Revoke and removal:** drop the write, its SQL entry and the route check; removed with A10e-2 (AA-1054).
+
+##### A10e-5. Amendment: the pricing maker links a second synthetic supplier and quotes a synthetic hotel (24/11/2026, S289, AA-1153)
+
+- **Status:** Accepted (24/11/2026, tech lead, S289: "support the hotel-contract live check"); designed by the
+  orchestrated lane h-1158-owner-approve under the dev-phase merge rule. It widens auth, so an independent review runs
+  before merge.
+- **Decision:** the hotel-contract Done-when ("one hotel with contracts from 2 suppliers; a 3-night half-board quote
+  for 2 adults and a 7-year-old matches the cost") must run with agent identities on Dev. Two steps were on no
+  allow-list: linking a hotel to a second supplier (POST `/booking/hotels/{ref}/suppliers`) and the quote. The agency
+  quote API takes an agency machine token, which no staff identity holds; the staff path to the same quote is the B2B
+  desk entry (POST `/booking/b2b-desk/entries`: quote, hold and confirm for a chosen agency), which needs
+  `b2b_desk.book` (admin, sales), not held by the maker's `contracting` role.
+- **Scope, enforced by AA-Booking on top of A10e-3** (Dev only, exact groups, all before the staff row sync or the
+  route; allow-list in `backend/app/auth/e2e_staff.py`, body checks in `e2e_staff_bodies.py`, record checks in
+  `e2e_staff_supply.py`):
+  - **Hotel link (maker only):** body exactly `supplier_id`, optionally `supplier_hotel_code` and `is_preferred` (else
+    403 `e2e_read_only`). The hotel from the path and the supplier from the body must both be the maker's synthetic
+    supply (created by the maker, name still starting `SYNTHETIC`), else 403 `e2e_synthetic_only`.
+  - **Desk entry (maker only):** body exactly `partner_id`, `agency_ref`, `currency`, `lines`; the agency reference
+    starts `SYNTHETIC`; no price override; every line a room line (`rt:<room type>`) with no departure and no room's own
+    room type (else 403 `e2e_read_only`). The agency must be synthetic in CIS
+    (`catalog.v_tenant_account_v1.is_synthetic`, the A10b-1 rule) and every room type must sit on a hotel of the maker's synthetic supplier all of whose supplier
+    links, active or not, are to synthetic suppliers, so no real supplier's rate prices the quote and no real supplier
+    is booked (one query; an unknown id, a malformed id or a database error count as real: 403 `e2e_synthetic_only`).
+  - **Route-scoped grant:** only after every check passed does that one request hold `b2b_desk.book` (the A10e-1
+    mechanism, `E2EWriter.grants`); no other request or identity holds it. The checker gets neither write.
+- **Exposure added.** Whoever reads the maker's code can, on Dev, link the maker's synthetic hotels to its synthetic
+  suppliers (and mark one preferred), and book those hotels' rooms for a synthetic agency: a quote, a hold and a
+  confirmed B2B booking (a trip case with the agency reference) that the agency's CRM imports (`booking.created_by_aa`).
+  No real agency, supplier, hotel, rate or customer is reachable; no price override.
+- **Audit and detection:** unchanged routes and audit rows (`hotel.supplier_linked`, `b2b_desk_booking.entered`,
+  each naming the identity's staff key); `booking_e2e_write_allowed identity=pricing_maker route=…`, refusals
+  `booking_e2e_writer_refused … reason=body | not_synthetic`.
+- **Revoke and removal:** drop the two writes, their body checks, the record checks and the grant, update the
+  allow-list test (`tests/unit/test_aa1087_e2e_writers.py`), deploy; faster on Dev: disable the maker or clear
+  `is_canary` on the synthetic tenants. Removed with A10e-2 (AA-1054). The synthetic booking stays as Dev data (the
+  agent cancels it at cleanup through the desk as an administrator).
 
 #### A10f. Dev-only CIS content_lead E2E address: the second person of content publishing (20/11/2026, S286, AA-1155)
 
