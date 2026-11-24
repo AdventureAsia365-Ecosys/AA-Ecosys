@@ -99,7 +99,9 @@ features:
     summary: One live and period status page for the four apps, with a verdict, what needs attention, golden signals, services, jobs, AI spend and events.
     roles: [admin]
     status: live
-    surface: ["page:/admin/overview", "route:admin_overview", "route:admin_dashboard", "route:admin_pipeline/metrics"]
+    surface: ["page:/admin/overview", "route:admin_overview", "route:admin_dashboard", "route:admin_pipeline/metrics", "route:admin_ops_assist"]
+    conditions:
+      settings: [cis.ops.assist_card_ttl_min, cis.ops.assist_changes_window_min, cis.ops.assist_evidence_window_min, cis.ops.assist_history_min_n, cis.ops.assist_reason_min_chars, cis.ops.assist_refused_trigger_calls, cis.ops.assist_small_money_usd, cis.ops.assist_spend_baseline_days, cis.ops.assist_spend_spike_factor, cis.ops.assist_spend_spike_floor_usd_h, cis.ops.assist_throttled_trigger_calls, cis.ops.assist_wide_scope_stages, cis.ops.status_ack_hours, cis.ops.status_ack_reason_min_chars, cis.ops.status_cost_anomaly_baseline_days, cis.ops.status_cost_anomaly_factor, cis.ops.status_cost_anomaly_floor_usd_h, cis.ops.status_forecast_crit_days, cis.ops.status_forecast_warn_days, cis.ops.status_forecast_window_days, cis.ops.status_mute_max_days, cis.ops.status_snooze_choices_hours, cis.ops.status_snooze_tomorrow_hour]
     owner: tech_lead
   - id: CIS-F003
     app: cis
@@ -1139,6 +1141,7 @@ features:
     conditions:
       entitlements: [trade.book]
       tenant_kinds: [pilot, agency]
+      settings: [crm.jobs.booking_proposal_check_every_s]
     depends_on: [BK-F017]
     owner: tech_lead
   - id: CRM-F014
@@ -1326,7 +1329,7 @@ features:
     status: live
     surface: ["route:ops", "route:ops_settings", "route:ops_connection_shares", "route:ops_checks", "route:ops_privacy_evidence"]
     conditions:
-      settings: [crm.settings.two_person_approval, crm.retention.job_dry_run, crm.ops.app_spend_near_pct, crm.ops.audit_export_lag_min, crm.ops.audit_partition_months_ahead, crm.ops.audit_verify_lag_h, crm.ops.jobs_overdue_factor, crm.ops.jobs_stuck_after_s, crm.ops.membership_feed_stuck_failures]
+      settings: [crm.settings.two_person_approval, crm.retention.job_dry_run, crm.ops.app_spend_near_pct, crm.ops.audit_export_lag_min, crm.ops.audit_partition_months_ahead, crm.ops.audit_verify_lag_h, crm.ops.jobs_overdue_factor, crm.ops.jobs_stuck_after_s, crm.ops.membership_feed_stuck_failures, crm.jobs.history_prune_every_s]
     owner: tech_lead
   - id: CRM-F029
     app: crm
