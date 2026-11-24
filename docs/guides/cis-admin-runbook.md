@@ -88,7 +88,7 @@ The left menu has two sections.
   **Alerts**); **Apps**; Tenants (**Tenants**, **Agencies (CRM)**); Jobs (**Jobs**, **Data erasure**);
   AI & spend (**AI providers**, **Cost Operations**, **Cost per app**, **Jev Decisions**); Developer (**API Docs**,
   **Data model**, **Docs**).
-- **CIS Content**: Pipeline (**Upload (S0)**, **Rewrite (S1)**, **Review Queue**, **Master Content**); Assets
+- **CIS Content**: Pipeline (**Upload (S0)**, **Content workspace**, **Rewrite (S1)**, **Review Queue**, **Master Content**); Assets
   (**Photos**, **Places**, **AA content (CRM)**, **Facts**, **Supply (Booking)**); Intelligence (**Social Content**,
   **SEO Intelligence**); Tenant output (**Content Trace**, **A4 Quality**, **Content Quality**, **Writing memory**).
 
@@ -110,6 +110,40 @@ Screenshot: the **Docs** page on Dev, captured 28 Oct 2026.
    **Commit**, then **Dup Review** for tours that look like ones already in the catalog.
 3. The new tours appear under **Tours Ready for Rewrite**. **Trash** removes a wrong source tour; **Show Trashed**
    lets you restore it.
+
+### Make one tour by hand
+
+Use this when a supplier sends a single tour by e-mail or PDF instead of an Excel sheet.
+
+1. Open **Content workspace** and press **New tour**.
+2. Fill **Basics**: the tour name, the country and the **AA supplier** (pick it from Booking's list; search by name or
+   code). A supplier that is missing from the list is added in Booking by the contracting team. Do not type personal
+   data (names, phone numbers or e-mail addresses of people).
+3. Press **Create tour**. From now on the form saves by itself as you type ("Saved 10:42" under the title).
+4. Add one **day card** per day: a title, at least one place, the meals included, where the travellers sleep and what
+   happens. Then the items under **What is included** and **What is not included** (the quick-add chips help). The tour
+   types and the quick-add chips are lists an administrator edits on **Platform › Settings** (content area).
+5. Watch **Before you publish** on the right: every item must be green. The minimums (days, included and not included
+   items) are settings an administrator changes on **Platform › Settings**.
+6. Open **Customer wording**: the text starts from your facts. Rewrite it, give a reason, **Save draft**, then
+   **Run checks** and, when they pass, **Publish**. With two-person publishing on, a content lead who did not write the
+   wording **or the facts** publishes it. The required list is checked on every publish, also when a Rewrite (S1) run
+   or a Review Queue approve would publish the tour: an incomplete hand-made tour stays unpublished.
+7. **Preview** shows the tour as a traveller reads it, on a desktop or a phone width. **History** lists every change of
+   the facts.
+
+Once a tour is published, changes to its facts go live when you save them: write the reason and press **Save changes**.
+While two-person publishing is on, the facts of a published hand-made tour are read-only here, because such a save would
+go live without a second person; change the wording through a draft.
+
+### Link old tours to their AA supplier
+
+1. Open **Content workspace › Supplier links**. It lists the live tours whose supplier is only the text of their Excel
+   sheet, with the AA supplier that text names when it names exactly one.
+2. Press **Link to …** on a row to accept a suggestion, or select rows and press **Link selected** to choose the
+   supplier yourself.
+3. Content leads and administrators can press **Link suggestions…**: run the **Dry run** first, then **Link them**. Each
+   run links at most the number set on **Platform › Settings** (100 by default); run it again for the rest.
 
 ### Rewrite tours
 

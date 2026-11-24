@@ -89,7 +89,7 @@ Menu bên trái có hai phần.
   **Alerts**); **Apps**; Tenants (**Tenants**, **Agencies (CRM)**); Jobs (**Jobs**, **Data erasure**);
   AI & spend (**AI providers**, **Cost Operations**, **Cost per app**, **Jev Decisions**); Developer (**API Docs**,
   **Data model**, **Docs**).
-- **CIS Content**: Pipeline (**Upload (S0)**, **Rewrite (S1)**, **Review Queue**, **Master Content**); Assets
+- **CIS Content**: Pipeline (**Upload (S0)**, **Content workspace**, **Rewrite (S1)**, **Review Queue**, **Master Content**); Assets
   (**Photos**, **Places**, **AA content (CRM)**, **Facts**, **Supply (Booking)**); Intelligence (**Social Content**,
   **SEO Intelligence**); Tenant output (**Content Trace**, **A4 Quality**, **Content Quality**, **Writing memory**).
 
@@ -110,6 +110,40 @@ phải, và chuyển giữa tiếng Anh và tiếng Việt khi trang có bản d
 2. Làm theo các bước trên trang: **Select Files** (file Excel tour), **Upload to S3**, **Parse & Review**, **Commit**,
    rồi **Dup Review** cho các tour trông giống tour đã có trong danh mục.
 3. Tour mới hiện ở **Tours Ready for Rewrite**. **Trash** bỏ một tour nguồn sai; **Show Trashed** cho phép khôi phục.
+
+### Tạo một tour bằng tay
+
+Dùng khi nhà cung cấp gửi một tour qua e-mail hoặc PDF thay vì file Excel.
+
+1. Mở **Content workspace** (Khu làm nội dung) và bấm **New tour** (Tạo tour).
+2. Điền **Thông tin cơ bản**: tên tour, nước và **nhà cung cấp AA** (chọn từ danh sách của Booking; tìm theo tên hoặc
+   mã). Nhà cung cấp chưa có trong danh sách do bộ phận hợp đồng thêm trong Booking. Không nhập dữ liệu cá nhân (tên, số
+   điện thoại hay e-mail của người).
+3. Bấm **Tạo tour**. Từ đây form tự lưu khi bạn gõ ("Đã lưu 10:42" dưới tiêu đề).
+4. Thêm một **thẻ ngày** cho mỗi ngày: tiêu đề, ít nhất một địa điểm, bữa ăn đã gồm, nơi ngủ và việc trong ngày. Rồi các
+   mục **Bao gồm** và **Không bao gồm** (các nút thêm nhanh giúp nhập nhanh). Các loại tour và các nút thêm nhanh là danh
+   sách quản trị viên sửa ở **Platform › Settings** (khu content).
+5. Xem khung **Trước khi xuất bản** bên phải: mọi mục phải xanh. Các mức tối thiểu (số ngày, số mục bao gồm và không
+   bao gồm) là cài đặt quản trị viên đổi ở **Platform › Settings**.
+6. Mở **Câu chữ cho khách**: câu chữ bắt đầu từ dữ kiện của bạn. Viết lại, ghi lý do, **Save draft**, rồi **Run
+   checks** và khi đạt thì **Publish**. Khi bật duyệt hai người, một trưởng nhóm nội dung không viết câu chữ **hay dữ
+   kiện** của tour xuất bản. Danh sách bắt buộc được kiểm ở mọi lần xuất bản, kể cả khi một lượt Rewrite (S1) hay một
+   lần duyệt ở Review Queue sắp xuất bản tour: tour tạo tay chưa đủ thì vẫn chưa xuất bản.
+7. **Xem trước** hiện tour như khách đọc, ở bề rộng máy tính hoặc điện thoại. **Lịch sử** liệt kê mọi thay đổi dữ
+   kiện.
+
+Khi tour đã xuất bản, thay đổi dữ kiện có hiệu lực ngay khi lưu: ghi lý do rồi bấm **Lưu thay đổi**. Khi bật duyệt hai
+người, dữ kiện của tour tạo tay đã xuất bản chỉ xem ở đây, vì lưu như vậy sẽ có hiệu lực mà không có người thứ hai; câu
+chữ thì sửa qua bản nháp.
+
+### Gắn tour cũ với nhà cung cấp AA
+
+1. Mở **Content workspace › Supplier links** (Gắn nhà cung cấp). Trang liệt kê các tour đang bán có nhà cung cấp chỉ là
+   chữ trong file Excel, kèm nhà cung cấp AA khi chữ đó khớp đúng một nhà cung cấp.
+2. Bấm **Gắn với …** ở một dòng để nhận gợi ý, hoặc chọn nhiều dòng rồi bấm **Gắn … tour đã chọn** để tự chọn nhà cung
+   cấp.
+3. Trưởng nhóm nội dung và quản trị viên bấm được **Gắn theo gợi ý…**: chạy **Chạy thử** trước, rồi **Gắn**. Mỗi lần
+   gắn tối đa số tour đặt ở **Platform › Settings** (mặc định 100); chạy lại cho phần còn lại.
 
 ### Viết lại tour
 
