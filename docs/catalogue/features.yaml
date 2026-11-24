@@ -93,10 +93,10 @@ features:
   - id: CIS-F002
     app: cis
     module: overview
-    name: Overview dashboard
-    name_vi: Bảng tổng quan
-    summary_vi: "Một trang xem toàn hệ thống: từ phễu pipeline tới chi phí, job và cảnh báo."
-    summary: One page with the whole system at a glance, from the pipeline funnel to spend, jobs and alerts.
+    name: Ecosystem status
+    name_vi: Trạng thái hệ sinh thái
+    summary_vi: "Một trang trạng thái trực tiếp và theo kỳ cho bốn ứng dụng: kết luận, việc cần xem, tín hiệu vàng, dịch vụ, job, chi phí AI và sự kiện."
+    summary: One live and period status page for the four apps, with a verdict, what needs attention, golden signals, services, jobs, AI spend and events.
     roles: [admin]
     status: live
     surface: ["page:/admin/overview", "route:admin_overview", "route:admin_dashboard", "route:admin_pipeline/metrics"]
