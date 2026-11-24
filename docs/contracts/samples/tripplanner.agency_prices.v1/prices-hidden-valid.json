@@ -1,0 +1,13 @@
+{
+  "contract": "tripplanner.agency_prices.v1",
+  "schema": "AgencyPrices",
+  "expect": "valid",
+  "why": "The agency switched prices off: empty lists, every price hidden",
+  "payload": {
+    "show_prices": false,
+    "currency": "USD",
+    "computed_at": "2027-02-01T08:00:00Z",
+    "tours": [],
+    "addons": []
+  }
+}

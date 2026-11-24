@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: booking.b2b.v1 (AA-Booking → AA-Partner CRM, B2B products, quotes, holds, bookings, events)
-  version: "1.10"
+  version: "1.11"
   description: >-
     The AA inventory API of the partner CRM spec (§9), owned by AA-Booking (root ADR 0005, 0005a) and called by the
     AA-Partner CRM API server to server (root ADR 0010). Auth: an M2M access token of the aa-m2m pool (root ADR 0006b
@@ -85,10 +85,18 @@ info:
     prices a child the rooms asked do not hold by its age band). Both are covered by price_hash only when sent, so a
     1.9 request hashes and prices as before (while the default board stays BB); a line
     with HB, FB or AI on a night that also holds a meal service is priced by the rates and only flagged to AA staff.
+    Minor 1.11 (AA-1152, additive; S285 advisories PR-29 T6 and B2 option C): GET /add-ons, the AA add-ons the calling
+    agency can quote (the published add-on offers of supply.place_addons.v1: an optional activity of an AA supplier
+    sold at some CIS places on the days it runs), of one place and / or one day or all, each once with the asked day
+    (else its first sellable day), its places (CIS id, role, name, ISO-2 country) and, for pax adults on that day, the
+    agency's own b2b_price_per_person (its tier or contract discount off; a group or vehicle unit shared over the party)
+    and AA's rrp_per_person (the suggested retail price, root ADR 0019 b15). The CRM's "AA add-on" drawer lists them
+    and the agency's own "from" prices start from them; the chosen one is quoted with POST /quotes like any sv: line
+    (prices fixed at quote time; the sale rules checked there). Never a net, a margin or a supplier identity.
   x-aa-contract: booking.b2b.v1
   x-aa-producer: AA-Booking
   x-aa-consumers: [AA-Partner]
-  x-aa-issues: [AA-928, AA-952, AA-972, AA-973, AA-974, AA-975, AA-986, AA-1030, AA-1037, AA-1073, AA-1075, AA-1091, AA-1153]
+  x-aa-issues: [AA-928, AA-952, AA-972, AA-973, AA-974, AA-975, AA-986, AA-1030, AA-1037, AA-1073, AA-1075, AA-1091, AA-1153, AA-1152]
 servers:
   - url: /booking/b2b/v1
 security:
@@ -573,6 +581,49 @@ paths:
           content:
             application/json:
               schema: {$ref: "#/components/schemas/PriceParity"}
+  /add-ons:
+    get:
+      operationId: listAddons
+      summary: 1.11 (AA-1152). The AA add-ons the calling agency can quote, with its own price per traveller
+      description: >-
+        The rows of supply.place_addons.v1 per offer: a published offer whose service and supplier are active, with an
+        adult rate in force under a published contract on a day it runs and no stop-sale. With date, the offers that
+        can be sold that day; without, each offer once with its first sellable day (from today, within AA's add-on
+        horizon). With destination_id, the offers sold at that CIS place (operates or pickup). Featured first, then
+        AA's display order and the title; at most 200 offers (truncated true when more). Each row is priced by the
+        quote engine for pax adults on first_date with the agency's discount in force today; a row AA cannot price
+        today is listed with both prices null (the quote decides). The cut-off, the minimum travellers and the running
+        days are not applied here beyond the day itself: POST /quotes refuses a line that breaks them (422 invalid).
+      security:
+        - m2m: [booking.b2b/read]
+      parameters:
+        - $ref: "#/components/parameters/TenantHeader"
+        - name: destination_id
+          in: query
+          required: false
+          schema: {type: string, format: uuid}
+        - name: date
+          in: query
+          required: false
+          schema: {type: string, format: date}
+          description: A service day, today or later (422 invalid for a past day).
+        - name: pax
+          in: query
+          required: false
+          schema: {type: integer, minimum: 1, maximum: 60, default: 2}
+        - name: currency
+          in: query
+          required: false
+          schema: {type: string, pattern: "^[A-Z]{3}$", default: USD}
+          description: A quote currency (422 invalid otherwise).
+      responses:
+        "200":
+          description: The add-ons
+          content:
+            application/json:
+              schema: {$ref: "#/components/schemas/AddonPage"}
+        "403": {$ref: "#/components/responses/Problem"}
+        "422": {$ref: "#/components/responses/Problem"}
   /tariff:
     get:
       operationId: getTariff
@@ -1539,6 +1590,86 @@ components:
             - {type: "null"}
             - {$ref: "#/components/schemas/Money"}
         basis: {type: string, enum: [per_person_2pax_low_season]}
+    AddonPlace:
+      type: object
+      additionalProperties: false
+      required: [destination_id, role, name, country_code]
+      properties:
+        destination_id: {type: string, format: uuid}
+        role:
+          type: string
+          enum: [operates, pickup]
+          description: operates = the activity happens there; pickup = travellers staying there are collected.
+        name: {type: [string, "null"], maxLength: 300, description: The CIS place name (null when the catalog is unreadable).}
+        country_code: {type: [string, "null"], pattern: "^[A-Z]{2}$"}
+    Addon:
+      type: object
+      additionalProperties: false
+      required: [component_id, offer_id, kind, title, unit, duration_minutes, max_group_size, country_code, min_pax,
+                 cutoff_hours, operating_weekdays, start_times, inventory_kind, featured, first_date, places,
+                 b2b_price_per_person, rrp_per_person]
+      properties:
+        component_id:
+          type: string
+          pattern: "^sv:[0-9a-f-]{36}$"
+          description: The sv component to quote with POST /quotes.
+        offer_id: {type: string, format: uuid}
+        kind:
+          type: string
+          enum: [transfer, guide, activity, entrance, meal]
+        title: {type: string, minLength: 1, maxLength: 300, description: "AA's name of the add-on (no supplier)."}
+        unit:
+          type: string
+          enum: [person, group, vehicle, day]
+        duration_minutes: {type: [integer, "null"], minimum: 0}
+        max_group_size: {type: [integer, "null"], minimum: 1}
+        country_code: {type: [string, "null"], pattern: "^[A-Z]{2}$"}
+        min_pax: {type: integer, minimum: 1, description: It runs for this many travellers or more.}
+        cutoff_hours: {type: integer, minimum: 0, description: Book at least this many hours before the earliest start.}
+        operating_weekdays:
+          type: array
+          items: {type: integer, minimum: 1, maximum: 7}
+          description: ISO weekdays it runs (1 = Monday).
+        start_times:
+          type: array
+          items: {type: string, pattern: "^([01][0-9]|2[0-3]):[0-5][0-9]$"}
+          description: Local start times, sorted; empty = flexible.
+        inventory_kind:
+          type: string
+          enum: [free_sale, allotment, on_request]
+        featured: {type: boolean}
+        first_date: {type: string, format: date, description: The asked day, else the first day it can be sold.}
+        places:
+          type: array
+          items: {$ref: "#/components/schemas/AddonPlace"}
+        b2b_price_per_person:
+          oneOf:
+            - $ref: "#/components/schemas/Money"
+            - type: "null"
+          description: >-
+            The calling agency's B2B price for pax adults on first_date, per traveller (a group or vehicle unit shared
+            over the party), rounded up like a quote line; null when AA cannot price it today. Indicative: the quote
+            fixes the price.
+        rrp_per_person:
+          oneOf:
+            - $ref: "#/components/schemas/Money"
+            - type: "null"
+          description: >-
+            AA's suggested retail price per traveller (root ADR 0019 b15): the sell price before the agency's discount
+            plus AA's RRP markup, rounded up to AA's rounding step of the currency; null without one.
+    AddonPage:
+      type: object
+      additionalProperties: false
+      required: [currency, priced_for_pax, date, truncated, items]
+      properties:
+        currency: {type: string, pattern: "^[A-Z]{3}$"}
+        priced_for_pax: {type: integer, minimum: 1, maximum: 60}
+        date: {type: [string, "null"], format: date}
+        truncated: {type: boolean}
+        items:
+          type: array
+          maxItems: 200
+          items: {$ref: "#/components/schemas/Addon"}
     Tariff:
       type: object
       additionalProperties: false

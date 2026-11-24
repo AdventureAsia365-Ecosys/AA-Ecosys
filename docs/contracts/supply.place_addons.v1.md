@@ -9,7 +9,7 @@ price: they quote the component through `booking.b2b.v1` (prices are fixed at qu
 | | |
 |---|---|
 | View | `booking.v_place_addons` (Booking migration `bk-068`, AA-1151), owner `bk_owner`, security barrier |
-| Readers | role `tripplanner` (the day cards of the trip planner, next slice): `SELECT` on the view + `USAGE` on schema `booking` (held since bk-039), nothing else of `booking` (Infra `db/owners.yaml` consumer grant, isolation probe cell `consumer.contract_grants.bk-068`); role `booking` itself (the staff preview `GET /booking/add-ons/place-days`) |
+| Readers | role `tripplanner` (the day cards of the trip planner, AA-1152): `SELECT` on the view + `USAGE` on schema `booking` (held since bk-039), nothing else of `booking` (Infra `db/owners.yaml` consumer grant, isolation probe cell `consumer.contract_grants.bk-068`); role `booking` itself (the staff preview `GET /booking/add-ons/place-days`) |
 | Key | `(offer_id, destination_id, service_date)`; `component_id` = `sv:<service id>`, the id a B2B quote line takes |
 | Rows | one per **published** offer, place and day from today (UTC) for `addon_days_ahead` days (Booking Pricing > Policy, seeded 365) on which the offer runs (its weekday) **and** an adult rate of the service is in force under a published contract of its supplier **and** no stop-sale is in effect; the service and the supplier are active. No row = not offered that day (B3) |
 
@@ -37,6 +37,14 @@ price: they quote the component through `booking.b2b.v1` (prices are fixed at qu
 | `free_sale_max_pax` | smallint, null | `free_sale` only: the most travellers per booking AA confirms at once (null = no limit) |
 | `supply_version` | bigint | the service's facts version (`supply.service.v1`) |
 | `published_at` | timestamptz | when a second person published the offer |
+| `title` | text | 1.1 (AA-1152, Booking `bk-070`): AA's name of the add-on (the Booking service title, English, no supplier); the customer text and photos stay CIS's (`catalog.v_supply_content`) |
+
+## Versions
+
+- **1.0** (AA-1151, `bk-068`): the columns above but `title`.
+- **1.1** (AA-1152, `bk-070`, additive): `title` appended, so the trip planner day cards can name an add-on (the
+  `tripplanner` role reads no CIS supply content). A reader that runs before `bk-070` is applied treats the
+  `UndefinedColumn` like no row (fail soft).
 
 ## Rules
 
@@ -46,5 +54,5 @@ price: they quote the component through `booking.b2b.v1` (prices are fixed at qu
 - Columns are **append-only**; a change of meaning is `supply.place_addons.v2` (a new view).
 - A reader treats `UndefinedTable` / `InsufficientPrivilege` / no row as "no add-on" (fail soft), so it may ship
   before `bk-068` is applied.
-- Agencies never write to the catalogue: the CRM reads add-ons through `booking.b2b.v1` (next slice), never this view
+- Agencies never write to the catalogue: the CRM reads add-ons through `booking.b2b.v1` (1.11 `GET /add-ons`, AA-1152), never this view
   (root ADR 0008a decision 1: no AA app role reads `crm`, and `crm_app` reads nothing outside `crm`).

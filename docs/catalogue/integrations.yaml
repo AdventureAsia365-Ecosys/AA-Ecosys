@@ -683,3 +683,20 @@ integrations:
     features: [BK-F009, BK-F010]
     owner: tech_lead
     status: planned
+  - id: INT-085
+    name: Agency own planner prices from the CRM to TripPlanner
+    producer: crm
+    consumers: [tripplanner]
+    kind: http_api
+    contracts:
+      - {file: tripplanner.agency_prices.v1.openapi.yaml, version: "1"}
+    auth: M2M token with scope tripplanner.leads/manage; the CRM PUTs, TripPlanner stores per tenant
+    conditions:
+      note: Only the agency's own rounded from prices and its show-prices switch; never AA's B2B price, markup, RRP, net or supplier.
+    cadence: CRM job hourly and on an owner change
+    failure: TripPlanner hides prices older than tripplanner.prices.agency_stale_hours; nothing is invented
+    kill_switch: The agency's show-prices switch, or pause the CRM price publish job
+    personal_data: false
+    features: [CRM-F023, TP-F005]
+    owner: tech_lead
+    status: planned

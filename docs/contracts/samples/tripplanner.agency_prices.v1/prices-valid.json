@@ -1,0 +1,23 @@
+{
+  "contract": "tripplanner.agency_prices.v1",
+  "schema": "AgencyPrices",
+  "expect": "valid",
+  "why": "An agency's own rounded from prices for one invented tour and one add-on, prices shown",
+  "payload": {
+    "show_prices": true,
+    "currency": "USD",
+    "computed_at": "2027-02-01T08:00:00Z",
+    "tours": [
+      {
+        "source_id": "SYN-TOUR-0042",
+        "from_per_person": "1232"
+      }
+    ],
+    "addons": [
+      {
+        "component_id": "sv:7d9f8b00-0000-4000-8000-0000000000c2",
+        "from_per_person": "42"
+      }
+    ]
+  }
+}

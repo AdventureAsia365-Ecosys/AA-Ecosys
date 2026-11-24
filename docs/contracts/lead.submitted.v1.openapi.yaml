@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: lead.submitted.v1 (AA-TripPlanner-Web → the tenant's CRM (AA-Partner), webhook or e-mail; a traveller's trip request)
-  version: "1.1"
+  version: "1.2"
   description: >-
     A traveller planning on an agency tenant's TripPlanner site (/{slug}/plan, root ADR 0019 d10) asks the agency for
     this trip ("Send to advisor"). The request becomes one lead.submitted.v1 for THAT tenant (root ADR 0019 d11): the
@@ -81,10 +81,16 @@ info:
     their own scope, tripplanner.leads/manage (the pull's deliver scope reaches none of them, and the manage scope
     reaches neither listLeads nor ackLead); a tenant CIS does not list with a Trip planner subscription is 404
     unknown_tenant (any lead route, not only crm).
+
+    1.2 (AA-1152, additive; S285 advisory PR-29 T6): a day of trip.day_plan may carry addons, the AA add-ons the
+    traveller ticked on that day card (supply.place_addons.v1: an optional activity AA sells at the day's places),
+    each its sv: component id and AA's name of it. Never a price: the agency quotes them in its CRM (booking.b2b.v1
+    GET /add-ons, POST /quotes). A lead whose day plan carries an add-on says version "1.2"; every other lead keeps
+    "1.0", so a consumer that validates against a 1.0 or 1.1 copy (DayPlan without addons) still takes it.
   x-aa-contract: lead.submitted.v1
   x-aa-producer: AA-TripPlanner-Web
   x-aa-consumers: [AA-Partner]
-  x-aa-issues: [AA-1038, AA-1139, AA-1160]
+  x-aa-issues: [AA-1038, AA-1139, AA-1160, AA-1152]
 servers:
   - url: /trip/m2m/v1
 security:
@@ -351,6 +357,21 @@ components:
           type: array
           maxItems: 12
           items: {type: string, minLength: 1, maxLength: 120}
+        addons:
+          type: array
+          maxItems: 12
+          description: 1.2 (AA-1152). The AA add-ons the traveller ticked on this day; absent or empty = none.
+          items: {$ref: "#/components/schemas/DayAddon"}
+    DayAddon:
+      type: object
+      additionalProperties: false
+      required: [component_id, title]
+      properties:
+        component_id:
+          type: string
+          pattern: "^sv:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          description: The Booking sv component (supply.place_addons.v1 component_id) the agency quotes.
+        title: {type: string, minLength: 1, maxLength: 300, description: "AA's name of the add-on, as the traveller saw it."}
     Trip:
       type: object
       additionalProperties: false
@@ -415,7 +436,8 @@ components:
           const: lead.submitted.v1
         version:
           type: string
-          enum: ["1.0"]
+          enum: ["1.0", "1.2"]
+          description: '"1.2" when a day of the plan carries addons (1.2), else "1.0".'
         lead_id: {type: string, format: uuid}
         idempotency_key:
           type: string
