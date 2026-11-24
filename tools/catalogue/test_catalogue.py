@@ -208,6 +208,59 @@ class CatalogueCheckTest(unittest.TestCase):
         self.assertEqual(bundle["source"], {"repo": "AA-Ecosys", "sha": "abc", "ref": "master"})
         self.assertEqual(cat_mod.public_problems(json.dumps(bundle)), [])
 
+    def _planned(self, **kw):
+        row = {"id": "CRM-F002", "app": "crm", "module": "later", "name": "Later", "name_vi": "Sau",
+               "summary": "A later thing.", "summary_vi": "Viec sau.", "roles": ["owner"], "status": "planned",
+               "owner": "tech_lead", "milestone": "M9"}
+        row.update(kw)
+        self.fx.features["features"].append(row)
+        (self.fx.root / "docs/backlog/tracker").mkdir(parents=True, exist_ok=True)
+        (self.fx.root / "docs/backlog/tracker/plan.json").write_text(json.dumps({"milestones": [{"id": "M9"}]}))
+
+    def test_proven_pointer_passes_and_lands_in_the_bundle(self):
+        # AA-1118 C8: a repo file, a UAT scenario or a run link of the ecosystem's repos
+        (self.fx.root / "docs/audits/x").mkdir(parents=True)
+        (self.fx.root / "docs/audits/x/drill.json").write_text("{}\n")
+        self.fx.features["features"][0]["proven"] = {"date": "2026-01-05", "evidence": "docs/audits/x/drill.json"}
+        self.fx.features["features"][1]["proven"] = {"date": "2026-01-06", "evidence": "uat:CIS-01"}
+        self._planned()
+        self.assertEqual(self.fx.problems(), [])
+        bundle = cat_mod.build_bundle(self.fx.write())
+        feat = {f["id"]: f for f in bundle["features"]}
+        self.assertEqual(feat["CIS-F001"]["proven"], {"date": "2026-01-05", "evidence": "docs/audits/x/drill.json"})
+        self.assertEqual(feat["CRM-F002"]["milestone"], "M9")
+        self.assertEqual((bundle["counts"]["proven"], bundle["counts"]["planned"]), (2, 1))
+        self.assertEqual(cat_mod.proven_counts(self.fx.write()), (2, 2))
+
+    def test_proven_pointer_problems(self):
+        f = self.fx.features["features"]
+        cases = [
+            ({"date": "soon", "evidence": "uat:CIS-01"}, "is not YYYY-MM-DD"),
+            ({"date": "2026-01-05"}, "exactly date and evidence"),
+            ({"date": "2026-01-05", "evidence": "docs/audits/none.json"}, "does not exist in this repo"),
+            ({"date": "2026-01-05", "evidence": "uat:CIS-99"}, "no such UAT scenario"),
+            ({"date": "2026-01-05", "evidence": "https://example.com/x"}, "run or pull request"),
+            ({"date": "2026-01-05", "evidence": "../outside.md"}, "repo-relative"),
+        ]
+        for proven, needle in cases:
+            with self.subTest(needle=needle):
+                f[0]["proven"] = proven
+                self.assertProblem(needle)
+        f[0]["proven"] = {"date": "2026-01-05", "evidence": "https://github.com/AdventureAsia365-Ecosys/AA-Ecosys/actions/runs/1"}
+        self.assertEqual(self.fx.problems(), [])
+
+    def test_planned_rows_need_a_milestone_and_no_surface(self):
+        self._planned(milestone="M0")
+        self.assertProblem("a planned feature names its milestone")
+        self.fx.features["features"][-1].update(milestone="later", surface=["page:/home"])
+        self.assertProblem("a planned feature owns no surface yet")
+        self.fx.features["features"][-1].pop("surface")
+        self.fx.features["features"][0]["milestone"] = "M9"
+        self.assertProblem("milestone is only for planned features")
+        self.fx.features["features"][0].pop("milestone")
+        self.fx.features["features"][-1]["proven"] = {"date": "2026-01-05", "evidence": "uat:CIS-01"}
+        self.assertProblem("proven only on a live or beta feature")
+
     def test_public_problems_ignores_digits_inside_a_commit_sha(self):
         self.assertEqual(cat_mod.public_problems('{"sha": "40087e38b950257287406f6463f6a91f144e1ee5"}'), [])
         self.assertTrue(cat_mod.public_problems('{"note": "account 123456789012 here"}'))

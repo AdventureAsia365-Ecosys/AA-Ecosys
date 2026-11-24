@@ -42,6 +42,8 @@ the C4 context and container levels of the [ecosystem architecture](../ecosystem
 | `name`, `name_vi`, `summary`, `summary_vi` | Plain words for the business owner, in English and Vietnamese (the Product map shows the Vietnamese pair when the viewer picks VI); no internal issue id |
 | `roles` | Who uses it (staff roles, agency roles, `traveller`, `public`, `machine`) |
 | `status` | `live`, `beta`, `planned` or `retired`, as the code on Dev does it today |
+| `proven` | Optional, live or beta rows only: `date` (YYYY-MM-DD) and `evidence`, a pointer to the live proof that the feature works end to end: a repo file (an audit or drill record), `uat:<scenario id>` or a link to a run or pull request of the ecosystem's GitHub repos. Rows without it are live by the code, not yet by evidence; the check prints how many carry it |
+| `milestone` | Planned rows only, and required there: the `docs/backlog/tracker/plan.json` milestone that holds the work, or `later`. A planned row owns no surface until it ships |
 | `surface` | The pages (`page:/path`) and API route groups (`route:module`) the feature owns; `/**` covers the pages below |
 | `conditions` | What must be true for the feature to work: `entitlements` (plan or add-on feature keys), `settings` (settings registry keys), `connections` (AI gateway connection keys), `secrets` (names only), `tenant_kinds` (`demo`, `pilot`, `agency`), `note` |
 | `depends_on` | Features of other apps it cannot work without |
@@ -74,7 +76,9 @@ the contracts, the UAT catalogue or the tool) fails when:
 - a page or API route group in the surface snapshot maps to no feature, or a feature's surface pattern matches nothing;
 - a journey, `depends_on` or integration names a missing id, or a guide is not a published, staff-tier docs reader
   page (a catalog page with a front-matter id that every admin can open);
-- either file holds an account ID, an ARN or an e-mail address.
+- either file holds an account ID, an ARN or an e-mail address;
+- a `proven` pointer is malformed, points at nothing or sits on a row that is not live or beta; a planned row has no
+  milestone of the plan, or owns a surface (AA-1118).
 
 The surface snapshot is refreshed from the app repos:
 

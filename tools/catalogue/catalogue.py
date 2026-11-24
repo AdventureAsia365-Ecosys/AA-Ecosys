@@ -25,6 +25,9 @@ catalogue, the contracts, the UAT catalogue or this tool):
   C6  every feature, integration and UAT id a journey, a depends_on or an integration names exists; every guide page
       exists under docs/
   C7  public repo: no 12-digit run (an AWS account ID), no ARN, no e-mail address in either YAML file or the bundle
+  C8  (AA-1118) a `proven` pointer (date + evidence: a repo file that exists, `uat:<scenario id>` or a link to a run
+      of the ecosystem's GitHub repos) sits only on a live or beta feature; a planned feature names its `milestone`
+      (an id of docs/backlog/tracker/plan.json, or `later`) and owns no surface yet; `milestone` only on planned rows
 
 Standard library + PyYAML (tools/docs/requirements.txt pins it).
 """
@@ -48,6 +51,7 @@ CONTRACTS = Path("docs/contracts")
 UAT = Path("tools/uat/catalogue.json")
 LLM_ROUTES = Path("docs/generated/llm-routes.snapshot.json")
 SECRETS_REGISTER = Path("docs/security/secrets-register.md")
+PLAN = Path("docs/backlog/tracker/plan.json")
 BUNDLE_FORMAT = 1
 
 APP_PREFIX = {"cis": "CIS", "booking": "BK", "crm": "CRM", "tripplanner": "TP", "infra": "INF"}
@@ -57,6 +61,10 @@ KINDS = ("db_view", "http_api", "event_outbox", "webhook", "m2m", "provider")
 TENANT_KINDS = ("demo", "pilot", "agency")
 CONDITION_KEYS = ("entitlements", "settings", "connections", "secrets", "tenant_kinds", "note")
 EXTERNAL = "external"
+# AA-1118: the slot word for planned work that has no milestone yet (plan.json issues use it too).
+UNSLOTTED = "later"
+ISO_DAY = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+EVIDENCE_URL = re.compile(r"^https://github\.com/AdventureAsia365-Ecosys/[A-Za-z0-9._-]+/(?:actions/runs|pull)/\d+(?:[/#?].*)?$")
 
 FEATURE_ID = re.compile(r"^(CIS|BK|CRM|TP|INF)-F\d{3}$")
 INTEGRATION_ID = re.compile(r"^INT-\d{3}$")
@@ -77,6 +85,7 @@ class Catalogue:
         self.surface = self._json(SURFACE, {"apps": {}, "settings": {}, "entitlements": {}})
         self.uat = self._json(UAT, {"scenarios": []})
         self.llm = self._json(LLM_ROUTES, {"connections": []})
+        self.plan = self._json(PLAN, {})
 
     def _yaml(self, rel: Path) -> dict:
         data = yaml.safe_load((self.root / rel).read_text(encoding="utf-8"))
@@ -116,6 +125,9 @@ class Catalogue:
             if f.suffix in (".json", ".yaml", ".yml", ".md"):
                 out.append(rel)
         return out
+
+    def milestone_ids(self) -> set[str]:
+        return {m.get("id") for m in self.plan.get("milestones") or [] if isinstance(m, dict)} | {UNSLOTTED}
 
     def connection_keys(self) -> set[str]:
         return {c.get("connection_key") for c in self.llm.get("connections") or [] if isinstance(c, dict)}
@@ -234,6 +246,7 @@ def check(cat: Catalogue) -> list[str]:
         if app not in (None, "infra") and f.get("status") in ("live", "beta") and not surface:
             errs.append(f"{where}: a live or beta app feature needs a surface (its pages or API route groups)")
         errs += check_conditions(where, f.get("conditions"), cat, connections, secrets_text)
+        errs += check_lifecycle(where, f, cat, scenario_ids_of(cat))
         guide = f.get("guide")
         if guide is not None:
             problem = guide_problem(cat.root, guide)
@@ -377,6 +390,55 @@ def check(cat: Catalogue) -> list[str]:
     return errs
 
 
+def scenario_ids_of(cat: Catalogue) -> set[str]:
+    return {s.get("id") for s in cat.scenarios}
+
+
+def proven_problem(root: Path, proven, scenarios: set[str]) -> str | None:
+    """Why a `proven` value is not a usable live-evidence pointer (None = fine)."""
+    if not isinstance(proven, dict) or set(proven) != {"date", "evidence"}:
+        return "must be a mapping with exactly date and evidence"
+    if not ISO_DAY.match(str(proven["date"])):
+        return f"date {proven['date']!r} is not YYYY-MM-DD"
+    ev = proven["evidence"]
+    if not (isinstance(ev, str) and ev.strip()):
+        return "evidence is empty"
+    if ev.startswith("uat:"):
+        return None if ev[4:] in scenarios else f"evidence {ev}: no such UAT scenario"
+    if ev.startswith("https://"):
+        return None if EVIDENCE_URL.match(ev) else f"evidence {ev}: a link must point to a run or pull request of the ecosystem's repos"
+    if ev.startswith("/") or ".." in Path(ev).parts:
+        return f"evidence {ev}: use a repo-relative path"
+    return None if (root / ev).exists() else f"evidence {ev} does not exist in this repo"
+
+
+def check_lifecycle(where: str, f: dict, cat: Catalogue, scenarios: set[str]) -> list[str]:
+    """C8 (AA-1118): proven only on live / beta rows; planned rows carry a milestone and no surface."""
+    errs = []
+    status = f.get("status")
+    if "proven" in f:
+        if status not in ("live", "beta"):
+            errs.append(f"{where}: proven only on a live or beta feature (status {status})")
+        problem = proven_problem(cat.root, f["proven"], scenarios)
+        if problem:
+            errs.append(f"{where}: proven {problem}")
+    if status == "planned":
+        if f.get("milestone") not in cat.milestone_ids():
+            errs.append(f"{where}: a planned feature names its milestone (a plan.json milestone id or {UNSLOTTED}), "
+                        f"not {f.get('milestone')!r}")
+        if f.get("surface"):
+            errs.append(f"{where}: a planned feature owns no surface yet")
+    elif "milestone" in f:
+        errs.append(f"{where}: milestone is only for planned features")
+    return errs
+
+
+def proven_counts(cat: Catalogue) -> tuple[int, int]:
+    """(live features with a proven pointer, live features)."""
+    live = [f for f in cat.features if f.get("status") == "live"]
+    return sum(1 for f in live if "proven" in f), len(live)
+
+
 def _strings(value) -> list[str]:
     if isinstance(value, str):
         return [value]
@@ -459,6 +521,9 @@ def build_bundle(cat: Catalogue, sha: str = "", ref: str = "") -> dict:
             "summary": f["summary"], "summary_vi": f["summary_vi"], "roles": f["roles"], "status": f["status"], "owner": f["owner"],
             "surface": f.get("surface") or [], "conditions": cond(f.get("conditions")),
             "depends_on": f.get("depends_on") or [], "guide": f.get("guide"),
+            "proven": ({"date": str(f["proven"]["date"]), "evidence": f["proven"]["evidence"]}
+                       if isinstance(f.get("proven"), dict) else None),
+            "milestone": f.get("milestone"),
             "uat": uat.get(f["id"], []), "integrations": links_by_feature.get(f["id"], []),
         })
     integrations = []
@@ -493,7 +558,9 @@ def build_bundle(cat: Catalogue, sha: str = "", ref: str = "") -> dict:
         "scenarios": scenarios,
         "settings": dict(sorted(used_settings.items())),
         "counts": {"features": len(features), "integrations": len(integrations), "journeys": len(journeys),
-                   "contracts": len(cat.contract_files()), "uat_linked": len(scenarios)},
+                   "contracts": len(cat.contract_files()), "uat_linked": len(scenarios),
+                   "planned": sum(1 for f in features if f["status"] == "planned"),
+                   "proven": sum(1 for f in features if f["proven"])},
     }
 
 
@@ -513,8 +580,10 @@ def main(argv: list[str] | None = None) -> int:
         print(f"{len(problems)} problem(s); format and rules: docs/catalogue/README.md")
         return 1
     if args.command == "check":
+        proven, live = proven_counts(cat)
         print(f"catalogue OK: {len(cat.features)} features, {len(cat.integrations)} integrations, "
-              f"{len(cat.journeys)} journeys, {len(cat.contract_files())} contracts covered")
+              f"{len(cat.journeys)} journeys, {len(cat.contract_files())} contracts covered; "
+              f"{proven} of {live} live features carry a proven pointer")
         return 0
     if not args.out:
         ap.error("bundle needs --out")

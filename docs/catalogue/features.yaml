@@ -1287,6 +1287,10 @@ features:
     surface: ["page:/settings/data", "page:/settings/access-log", "route:data", "route:audit", "route:lifecycle"]
     conditions:
       settings: [crm.agency_defaults.trash_days, crm.agency_defaults.auto_archive_months, crm.retention.lifecycle_dry_run]
+    # AA-1118: live evidence — the CRM one-agency restore drill from its sealed nightly export (S269).
+    proven:
+      date: 2026-11-05
+      evidence: docs/audits/2026-11-05-S269-aa969-loadtest/restore-drill.json
     owner: tech_lead
   - id: CRM-F026
     app: crm
@@ -1559,6 +1563,9 @@ features:
     status: live
     surface: ["route:lambda/jobs"]
     depends_on: [CIS-F024]
+    proven:
+      date: 2026-11-15
+      evidence: docs/audits/2026-11-15-S281-session/verify/aa1093/tp-restore-drill/restore-drill.json
     owner: tech_lead
 
   # ── AA-CIS-Infra: shared platform edge (no app surface; checked by the Infra repo itself) ─────────────────────────
@@ -1571,6 +1578,9 @@ features:
     summary: One company sign-in for every staff app, with groups that map to each app's roles.
     roles: [admin, booking-admin, aa-staff]
     status: live
+    proven:
+      date: 2026-10-19
+      evidence: docs/audits/2026-10-19-S244-aa816-cutover/cutover-report.md
     owner: tech_lead
   - id: INF-F002
     app: infra
@@ -1622,6 +1632,65 @@ features:
     roles: [machine]
     status: live
     guide: docs/catalogue/README.md
+    owner: tech_lead
+
+  # ── Planned (AA-1118): work the plan holds but no app does yet; status planned, a plan.json milestone, no surface ──
+  # The milestone is the slot of the open issue in docs/backlog/tracker/plan.json (CIS-F054 AA-704, CIS-F055 AA-1154,
+  # CIS-F056 AA-1142, CRM-F048 AA-1011, INF-F007 AA-1004 / AA-980). Move a row to live with its surface when it ships.
+  - id: CIS-F054
+    app: cis
+    module: assistant
+    name: In-app assistant for staff and agencies
+    name_vi: Trợ lý trong ứng dụng cho nhân viên và đại lý
+    summary_vi: "Trợ lý trả lời câu hỏi về hệ thống và về dữ liệu của chính người hỏi, ngay trong trang quản trị và Content studio."
+    summary: An assistant inside the admin and the Content studio that answers questions about the system and about the asker's own data.
+    roles: [admin, content, owner, agent]
+    status: planned
+    milestone: parked
+    owner: tech_lead
+  - id: CIS-F055
+    app: cis
+    module: ops-assistant
+    name: Operations assistant in the admin
+    name_vi: Trợ lý vận hành trong trang quản trị
+    summary_vi: "Theo dõi, tra cứu và đề xuất việc vận hành kèm mức rủi ro và kết quả dự đoán; con người quyết định."
+    summary: Watches, looks things up and proposes operations actions with their risk and predicted outcome; a person decides.
+    roles: [admin, ai_ops]
+    status: planned
+    milestone: later
+    owner: tech_lead
+  - id: CIS-F056
+    app: cis
+    module: overview
+    name: Service levels, error budgets and incident records
+    name_vi: Mức dịch vụ, ngân sách lỗi và hồ sơ sự cố
+    summary_vi: "Trang trạng thái hệ sinh thái thêm mục tiêu mức dịch vụ và mức tiêu ngân sách lỗi, hồ sơ sự cố, kiểm tra tổng hợp từ bên ngoài và xem theo từng đại lý."
+    summary: The ecosystem status page gains service-level objectives with error-budget burn, an incident record, external synthetic checks and a per-agency view.
+    roles: [admin]
+    status: planned
+    milestone: later
+    owner: tech_lead
+  - id: CRM-F048
+    app: crm
+    module: integrations
+    name: Microsoft 365 mail and calendar sync
+    name_vi: Đồng bộ thư và lịch Microsoft 365
+    summary_vi: "Đại lý gửi thư bằng tài khoản Microsoft 365 hoặc SMTP của mình và đồng bộ lịch qua OAuth (Google, Microsoft)."
+    summary: The agency sends mail as its own Microsoft 365 or SMTP account and syncs its calendar over OAuth (Google, Microsoft).
+    roles: [owner, agent]
+    status: planned
+    milestone: CRM-after-R3
+    owner: tech_lead
+  - id: INF-F007
+    app: infra
+    module: environments
+    name: Production environment
+    name_vi: Môi trường production
+    summary_vi: "Một tài khoản AWS production riêng với cơ sở dữ liệu có khôi phục theo thời điểm, bản sao lưu ở vùng khác và một lần diễn tập khôi phục, trước khi có khách thật."
+    summary: A separate production AWS account with point-in-time recovery, a backup copy in another region and one restore drill, before real customers arrive.
+    roles: [machine]
+    status: planned
+    milestone: M5
     owner: tech_lead
 
 journeys:
