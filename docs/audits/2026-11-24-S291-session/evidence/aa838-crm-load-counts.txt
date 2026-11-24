@@ -1,0 +1,6 @@
+COUNTS [rate] due_proposals calls_per_min=0.0 window_calls=0 buffers_per_call=n/a
+COUNTS [rate] tenant_status calls_per_min=130.0 window_calls=260 buffers_per_call=4
+COUNTS [rate] job_prune_delete calls_per_min=3.5 window_calls=7 buffers_per_call=1008
+COUNTS [evictions] dealloc_per_min=0.00
+COUNTS [entries] crm_app=5385 asyncpg_savepoint_texts=5266 crm_sp_texts=4 all_roles=9829
+COUNTS [window] seconds=120

@@ -1,0 +1,6 @@
+{
+ "bill": "BIL-000002",
+ "status": 409,
+ "detail": "bank_account_pending",
+ "message": "this supplier's bank account change waits for approval: no payout until it is decided"
+}

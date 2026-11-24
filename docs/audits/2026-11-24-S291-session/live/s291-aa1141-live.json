@@ -1,0 +1,38 @@
+{
+ "status": {
+  "http": 200,
+  "keys": [
+   "acks",
+   "buckets",
+   "environment",
+   "generated_at",
+   "pipelines",
+   "previous",
+   "range",
+   "sections",
+   "sources",
+   "thresholds",
+   "verdict",
+   "viewer"
+  ],
+  "acks": [
+   "rules",
+   "recent"
+  ],
+  "viewer": [
+   "can_ack"
+  ]
+ },
+ "views": {
+  "create": 200,
+  "list": 200,
+  "found": true,
+  "delete": 200
+ },
+ "page": {
+  "what_changed": true,
+  "as_of": true,
+  "forecast": true,
+  "saved_views": true
+ }
+}

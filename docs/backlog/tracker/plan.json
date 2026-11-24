@@ -1,8 +1,8 @@
 {
- "updated": "2026-11-24",
- "synced_at": "2026-11-24T12:19Z",
- "session": "S290",
- "next_session": "S291",
+ "updated": "2026-11-25",
+ "synced_at": "2026-11-24T20:10Z",
+ "session": "S291",
+ "next_session": "S292",
  "source": "Linear (19/11/2026, plan_sync.py --write, S285) + docs/audits/2026-11-19-S285-session/plan-audit-plan-changes.json (tech lead duyệt Q1–Q12, 19/11) + docs/backlog/README.md",
  "projects": {
   "data": "Data Platform",
@@ -995,6 +995,24 @@
   }
  ],
  "log": [
+  {
+   "session": "S291",
+   "date": "24–25/11/2026",
+   "closed": [
+    "AA-1118",
+    "AA-1119",
+    "AA-1141"
+   ],
+   "canceled": [],
+   "created": [],
+   "reopened": [],
+   "notes": [
+    "Qua đêm (~20:15 → ~04:00, Ultracode, lane a–i, ≤3 lane theo RAM); không đụng việc thứ Năm 26/11; 0 USD LLM; chạm limit 5h ~00:50 → AA-1142 dời S292",
+    "Done: AA-1118 (docs + lint chống lệch), AA-1119 (TP merge queue + strict + coverage, rollback khi kiểm sau deploy đỏ, Sentry CRM, DB Migrate kiểm input), AA-1141 (status P1, CIS 482/483 + hotfix ToastProvider)",
+    "AA-1154 A0 live (CIS 481; replay 29/10 → 6 thẻ R0–R4); follow-up S290 CIS/Booking/CRM (CIS 480, bk-075, crm-088); perf C4.3: request_tours 25,5→4,0 ms, CRM due_proposals ~60→0/phút",
+    "Giữ draft tới sau thứ Năm: savepoint Booking #331 / CIS #1676; Jira 5 nháp chờ duyệt"
+   ]
+  },
   {
    "session": "S290",
    "date": "24/11/2026",
@@ -2615,9 +2633,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "S291",
+   "session": "S292",
    "size": "L",
-   "next": "S291: module Academy L8 (playbook) + nhận phạm vi AA-1121 (kit v1.1); cài App lên project-template là bước tay",
+   "next": "S292: kit v1.1 (AA-1121) + module Academy L8; cài App lên project-template là bước tay",
    "needs": ""
   },
   {
@@ -2657,30 +2675,6 @@
    "needs": "Tech lead + chủ doanh nghiệp: ngày go-live, chi WAF"
   },
   {
-   "id": "AA-1118",
-   "title": "[Docs] Bring runbooks, architecture pages and the feature catalogue back to reality, with drift lints",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "later",
-   "session": "S292",
-   "size": "M",
-   "next": "S292: tài liệu khớp thực tế + lint chống lệch",
-   "needs": ""
-  },
-  {
-   "id": "AA-1119",
-   "title": "[DevOps] Release safety: TripPlanner merge queue and strict checks, smoke-red rollback, release-please, CRM Sentry, DB Migrate input check",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "core",
-   "milestone": "later",
-   "session": "S291",
-   "size": "M",
-   "next": "S291: an toàn phát hành (merge queue TP, rollback khi smoke đỏ); release-please giữ (S282)",
-   "needs": ""
-  },
-  {
    "id": "AA-1122",
    "title": "[DFS] Search demand always ready: seasonality history, automatic research under a monthly cap, variant groups, tour PAA backfill",
    "status": "In Review",
@@ -2699,21 +2693,9 @@
    "priority": "Medium",
    "project": "data",
    "milestone": "later",
-   "session": "S291",
+   "session": "S292",
    "size": "",
-   "next": "S291: báo cáo đo M1–M8 sau tuần log (≥26/11), tech lead chọn block/warn (S290 chưa làm báo cáo tạm)",
-   "needs": ""
-  },
-  {
-   "id": "AA-1141",
-   "title": "[Ops] Ecosystem status P1: change annotations, alert ack/snooze, freshness, capacity forecast, cost anomaly, digest, saved views, accessibility",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "later",
-   "session": "S291",
-   "size": "",
-   "next": "Ops P1 — S291, sau AA-1140",
+   "next": "S292: báo cáo đo M1–M8 sau tuần log (≥26/11), tech lead chọn block/warn",
    "needs": ""
   },
   {
@@ -2725,7 +2707,7 @@
    "milestone": "later",
    "session": "S292",
    "size": "",
-   "next": "Ops P2 — S292, sau AA-1141",
+   "next": "Ops P2 — S292 (dời từ S291: chạm limit 5h), sau AA-1141 đã Done",
    "needs": ""
   },
   {
@@ -2743,13 +2725,13 @@
   {
    "id": "AA-1154",
    "title": "[Ops] CIS admin assistant A0–A2: monitor, look up and propose ops actions with risk and predicted outcome",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "data",
    "milestone": "later",
-   "session": "S291",
+   "session": "S292",
    "size": "",
-   "next": "Trợ lý admin CIS — S291 A0, S292 A1, tiếp sau S292 (A0 không LLM, A1 LLM + UI, A2 đo dự đoán)",
+   "next": "Trợ lý admin CIS — A0 live S291 (replay 29/10, 6 thẻ, 0 LLM); A1 S292 (LLM, cap 10 USD stage ops_assist)",
    "needs": ""
   },
   {

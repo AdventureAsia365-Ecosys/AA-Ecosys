@@ -1,0 +1,63 @@
+{
+ "catalog": {
+  "status": 200,
+  "actions": 14
+ },
+ "replays": {
+  "status": 200,
+  "cases": {
+   "replays": [
+    {
+     "case": "llm-access-denied-2026-10-29",
+     "title": "AI account refused every Bedrock model (29/10/2026), replayed on today's routes",
+     "what_happened": "On 29/10/2026 Bedrock refused model access for the LLM account at account level (Error 002): first the OpenAI models, then every model. No alert fired; the cause was found hours later after model-by-model checks. This replay puts the same refusal on today's primary Bedrock account (acc1) with today's routes: Claude = Anthropic API, then acc1, then acc3; GPT = acc1, then acc3, then the OpenAI API. acc3 keeps its known refusals of the GPT models.",
+     "source": "/admin/docs?path=docs/ops/postmortems/2026-10-29-acc3-bedrock-access-refusal.md"
+    }
+   ]
+  }
+ },
+ "replay": {
+  "status": 200,
+  "cards": 6,
+  "ranked": [
+   "1:llm_probe:[object Object]",
+   "2:observe:[object Object]",
+   "3:wave_pause:[object Object]",
+   "4:route_save:[object Object]",
+   "5:retry_llm_denied:[object Object]",
+   "6:aws_support_case:[object Object]"
+  ],
+  "every_card_has": {
+   "reason": 6,
+   "evidence": 6,
+   "risk": 6,
+   "prediction": 6,
+   "way_back": 6,
+   "approver": 0
+  },
+  "llm_calls": 0,
+  "keys": [
+   "item_id",
+   "as_of",
+   "range",
+   "item",
+   "playbook",
+   "context",
+   "signal",
+   "evidence",
+   "cards",
+   "not_proposed",
+   "summary",
+   "limits",
+   "limit_keys",
+   "unavailable",
+   "llm",
+   "audience",
+   "replay"
+  ]
+ },
+ "signals": {
+  "status": 200
+ },
+ "drawer": "opened"
+}

@@ -1,0 +1,23 @@
+{
+ "booking_notifications": {
+  "status": 200,
+  "count": 85,
+  "with_data_mail": 0,
+  "kinds": []
+ },
+ "cis_tours_ready": {
+  "status": 200,
+  "rows": 25,
+  "manual_rows": 0,
+  "keys": [
+   "tour_id",
+   "src_name",
+   "country",
+   "ingest_at",
+   "source_id",
+   "batch_id",
+   "filename",
+   "source_status"
+  ]
+ }
+}
