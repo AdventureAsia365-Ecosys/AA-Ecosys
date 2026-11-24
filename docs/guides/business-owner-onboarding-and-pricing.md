@@ -97,8 +97,14 @@ The Dev addresses used on this page:
 
 ### Ground rules on Dev
 
-- Use invented data only. Name every record you create `SYNTHETIC …`, and put "Test" in the agency name.
-- Never type a real customer, lead or traveller. Use addresses ending in `example.invalid`.
+- Real AA business data is allowed (tech lead decision, 2026-11-24): real suppliers, hotels, room types, services,
+  optional activities, contracts and prices may be entered on Dev and kept. Dev is the only environment for now, so
+  this is where the catalogue is built.
+- Personal data stays invented: never type a real customer, lead, traveller or agency contact. Use addresses ending in
+  `example.invalid`.
+- Supplier bank accounts: only invented numbers until production exists. Real bank details wait for production.
+- Test records stay marked: name every record you create only to try a feature `SYNTHETIC …`, and put "Test" in a
+  test agency name, so that tests and real data never mix.
 - Leave the existing test agencies alone ("Lữ hành Sen Vàng", "E2E Pilot Rehearsal Travel", the load-test agencies,
   any "E2E …" agency) and every `e2e-` account.
 - Never share a one-time code, a password or an authenticator code with anyone, the tech lead included.
@@ -373,7 +379,7 @@ If it fails:
 | A test client | CRM | Only invented names and `example.invalid` addresses |
 
 > [!NOTE]
-> Staff test accounts can also see a synthetic agency. That is another reason to type invented data only.
+> Staff test accounts can also see a synthetic agency. That is another reason to type invented clients only.
 
 There is no self-service reset of the agency authenticator. If it is lost, the tech lead resets it by hand after the
 business owner confirms, which raises a security alarm. Use an authenticator app with backup.

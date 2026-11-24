@@ -100,8 +100,15 @@ Các địa chỉ Dev dùng trong trang này:
 
 ### Quy tắc trên Dev
 
-- Chỉ dùng dữ liệu bịa ra. Đặt tên mọi bản ghi bạn tạo là `SYNTHETIC …`, và có chữ "Test" trong tên đại lý.
-- Không bao giờ gõ khách hàng, khách tiềm năng hay khách du lịch thật. Dùng địa chỉ kết thúc bằng `example.invalid`.
+- Được nhập dữ liệu kinh doanh thật của AA (tech lead quyết định ngày 24/11/2026): nhà cung cấp, khách sạn, loại
+  phòng, dịch vụ, hoạt động tuỳ chọn, hợp đồng và giá thật được nhập trên Dev và giữ lại. Hiện Dev là môi trường duy
+  nhất, nên danh mục được xây ở đây.
+- Dữ liệu cá nhân vẫn phải bịa: không bao giờ gõ khách hàng, khách tiềm năng, khách du lịch hay người liên hệ của đại lý
+  thật. Dùng địa chỉ kết thúc bằng `example.invalid`.
+- Tài khoản ngân hàng của nhà cung cấp: chỉ dùng số bịa cho tới khi có môi trường production. Thông tin ngân hàng thật
+  chờ production.
+- Bản ghi thử vẫn phải đánh dấu: bản ghi nào tạo ra chỉ để thử tính năng thì đặt tên `SYNTHETIC …`, và có chữ "Test"
+  trong tên đại lý thử, để dữ liệu thử và dữ liệu thật không lẫn nhau.
 - Không động vào các đại lý thử nghiệm có sẵn ("Lữ hành Sen Vàng", "E2E Pilot Rehearsal Travel", các đại lý thử tải,
   mọi đại lý "E2E …") và mọi tài khoản `e2e-`.
 - Không bao giờ chia sẻ mã dùng một lần, mật khẩu hay mã xác thực với bất kỳ ai, kể cả tech lead.
@@ -378,7 +385,7 @@ Nếu lỗi:
 | Một khách hàng thử | CRM | Chỉ tên bịa và địa chỉ `example.invalid` |
 
 > [!NOTE]
-> Tài khoản thử nghiệm của nhân sự cũng nhìn thấy được một đại lý giả lập. Đó thêm một lý do để chỉ gõ dữ liệu bịa.
+> Tài khoản thử nghiệm của nhân sự cũng nhìn thấy được một đại lý giả lập. Đó thêm một lý do để chỉ gõ khách hàng bịa.
 
 Ứng dụng xác thực của đại lý không có cách tự đặt lại. Nếu mất, tech lead đặt lại bằng tay sau khi chủ doanh nghiệp
 xác nhận, việc này sẽ bật một cảnh báo bảo mật. Dùng ứng dụng xác thực có sao lưu.
