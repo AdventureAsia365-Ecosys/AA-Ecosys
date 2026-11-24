@@ -45,3 +45,6 @@ Tác nhân: Claude Code. Chỉ tên và số; không account ID, ARN hay giá tr
 - Catalogue lịch đỏ (5 setting compliance S290 thiếu trong surface snapshot) → root #990.
 - TripPlanner deploy job Visual đỏ từ #298 (planner sập khi add-on trả sai dạng) → TP #303, Visual xanh.
 - Trang Ecosystem status sập sau deploy AA-1141 (`useToast` ngoài `ToastProvider`) → CIS #1679, trang render lại.
+
+## Jira
+- 5 nháp chưa đăng, chuyển sang phiên sau cùng ngày 25/11 (tech lead quyết ~04:20).

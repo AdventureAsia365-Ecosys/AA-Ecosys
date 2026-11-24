@@ -1,4 +1,4 @@
-# S291 — nháp Jira (chờ tech lead duyệt, CHƯA đăng)
+# S291 — nháp Jira (CHƯA đăng — chuyển sang phiên sau cùng ngày 25/11, tech lead quyết 25/11 ~04:20)
 
 Mỗi nháp đăng dưới tên tech lead, mention @thule bằng mention node khi đăng. Ảnh nhúng từ `live/`.
 
