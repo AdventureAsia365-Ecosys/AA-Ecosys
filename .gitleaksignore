@@ -20,6 +20,11 @@
 # Add a short comment above each entry: what the value is and why it is not a secret. Never write the value here.
 # A real secret is never ignored here: remove it, rotate it, then pin the old commit.
 # A change to this file needs the PR label `secret-scan-baseline-reviewed` (see the workflow header).
+# History rewrites (git filter-repo + force push) give the branch commits new SHAs, but GitHub keeps every pull
+# request head (refs/pull/*/head), and through them the OLD commits, for ever; the full-history job reads them. So a
+# remap ADDS the pins of the new SHAs and keeps the old ones. tools/repo/gitleaksignore_guard.py (lean-guard.yml and
+# scripts/pre-push.sh) refuses a change that drops a pinned line, unless the file retires it with a reason:
+# `# retired <fingerprint> <reason>`, only once no ref on GitHub reaches that commit any more.
 
 # --- Frozen audit evidence under docs/audits/ (never edited after the session that wrote it). Each line exists on
 # two commits, the lane commit and the squash merge (or the PR head and the squash merge), so each finding is pinned
@@ -110,3 +115,42 @@ b229055c7dfd81ee1ac84e466c043f6d1a0eb35f:tools/uat/lib/pilot-guard.cjs:generic-a
 9dbf3a90f22a5ca069f61c47190b4deb6ca405b5:tools/uat/lib/pilot-guard.cjs:generic-api-key:71
 8082ed94e0782092e90ca5a76513fbf57d95f29f:tools/uat/tests/rehearsal-traveller.test.cjs:generic-api-key:114
 3aed90633bd62305454ae4cf5324489932cbbc00:docs/linear-export/tripplanner-aa-booking/AA-1038.md:generic-api-key:190
+
+# S290 (24/11/2026): pins of the PRE-REWRITE commits. The S287 history rewrite (21/11) remapped the pins above to the
+# rewritten SHAs and dropped these; the old commits are on no branch any more but stay reachable through old pull
+# request heads (refs/pull/*/head), so Secret Scan (full history) run 45326217737 reported all 33 again. Each one is
+# the same line (same content, checked line by line) as a pin above that was reviewed already: audit evidence, the fake
+# test keys and the CRM agency slugs described in the blocks above. None is a credential.
+ab977ce529b43e3352fa7224e623032b6a058325:docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:95
+ab977ce529b43e3352fa7224e623032b6a058325:docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:134
+ab977ce529b43e3352fa7224e623032b6a058325:docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:212
+ab977ce529b43e3352fa7224e623032b6a058325:docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:251
+ab977ce529b43e3352fa7224e623032b6a058325:docs/audits/2026-10-14-S235-ecosystem-team-pilot/ai-governance-audit/ai_audit.json:generic-api-key:264
+5300ea127513fea5c0e0b6ca111d275170ab45af:docs/audits/2026-10-14-S237-lane-backlog/aa712-trial/parity.json:generic-api-key:45
+5300ea127513fea5c0e0b6ca111d275170ab45af:docs/audits/2026-10-14-S237-lane-backlog/aa712-trial/parity.json:generic-api-key:421
+5300ea127513fea5c0e0b6ca111d275170ab45af:docs/audits/2026-10-14-S237-lane-backlog/aa712-trial/parity.json:generic-api-key:876
+51501ad336ee0e18520aed20bec1b3fd83d88e3e:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1442
+51501ad336ee0e18520aed20bec1b3fd83d88e3e:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1474
+51501ad336ee0e18520aed20bec1b3fd83d88e3e:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1702
+51501ad336ee0e18520aed20bec1b3fd83d88e3e:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1858
+51501ad336ee0e18520aed20bec1b3fd83d88e3e:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:1876
+51501ad336ee0e18520aed20bec1b3fd83d88e3e:docs/audits/2026-10-15-S238-backlog-audit/backlog_audit.json:generic-api-key:2009
+752ba567383a15f4c78152427b890a597f0dfbcc:docs/audits/2026-10-16-S240-aa859/aa859_flag.py:generic-api-key:43
+5b48cbf295ee4a3946c92198fce54c751848db43:docs/audits/2026-10-18-S242-cognito-phase1/aa854-evidence.md:generic-api-key:39
+dd253383848704640f8930d8df5ac69ca73729f6:docs/audits/2026-10-20-S245-tenant-crm/v2/crm-design-B-serverless.md:generic-api-key:715
+abb57ca122f6138cf28730d0bf592f8c587f2970:docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:30
+abb57ca122f6138cf28730d0bf592f8c587f2970:docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:507
+abb57ca122f6138cf28730d0bf592f8c587f2970:docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:546
+abb57ca122f6138cf28730d0bf592f8c587f2970:docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:646
+abb57ca122f6138cf28730d0bf592f8c587f2970:docs/audits/2026-10-21-S246-jev-question-eval/decisions.json:generic-api-key:721
+6aca458d896a57e7f2d615c654ba02f38db962fa:docs/audits/2026-10-22-S247-aa779-llm/jev-reuse/jev_existing_stats.json:generic-api-key:1
+6aca458d896a57e7f2d615c654ba02f38db962fa:docs/audits/2026-10-22-S247-aa779-llm/jev-reuse/jev_reuse_t_map.md:generic-api-key:193
+6aca458d896a57e7f2d615c654ba02f38db962fa:docs/audits/2026-10-22-S247-aa859-wave3/aa859_wave3_flag.py:generic-api-key:54
+6aca458d896a57e7f2d615c654ba02f38db962fa:docs/audits/2026-10-22-S247-aa859-wave3/aa859_wave4_flag.py:generic-api-key:62
+994deca9e8de9f9c84b6e6b8dc0e86d926d6ab4b:docs/linear-export/tripplanner-aa-booking/AA-1038.md:generic-api-key:190
+97a3c2b872fc91140b6c3156e0c1854df30ce0b6:tools/docs/test_docs_reader.py:aws-access-token:138
+97a3c2b872fc91140b6c3156e0c1854df30ce0b6:tools/docs/test_docs_reader.py:aws-access-token:146
+7211dd4ce194ecc77f818e966315c88afdfe3889:tools/uat/lib/pilot-guard.cjs:generic-api-key:69
+4f3d6ce8c34bb7db418064ce1e79e94a0a4facc2:tools/uat/lib/pilot-guard.cjs:generic-api-key:70
+a8b0a9b856bb36cdffe31396c770bf7d306b9601:tools/uat/lib/pilot-guard.cjs:generic-api-key:71
+ffb03e8cfee4b150f24aa8793f7d1700f6bf6204:tools/uat/tests/rehearsal-traveller.test.cjs:generic-api-key:114

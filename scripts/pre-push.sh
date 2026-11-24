@@ -11,7 +11,8 @@
 #   - .github/workflows/contracts.yml : contract/ADR unit tests, check_contracts.py, check_adr_numbers.py;
 #   - .github/workflows/lean-guard.yml : AA-1161 tools/repo/lean_guard.py on the pushed commits (always, local runs;
 #     refuses an image > 500 KiB, > 10 MiB of images, dist/*.zip, executables, files > 5 MiB not in .lean-allow), and
-#     its unit tests when tools/repo/ changes;
+#     its unit tests when tools/repo/ changes; tools/repo/gitleaksignore_guard.py (S290: no pinned fingerprint of
+#     .gitleaksignore dropped, a history rewrite adds pins) when .gitleaksignore or tools/repo/ changes;
 #   - .github/workflows/secret-scan.yml: gitleaks on the pushed commits, only when a working gitleaks is found
 #     (local convenience; CI keeps its own pull_request_target job, so --ci never runs it). The binary comes from
 #     tools/github/gitleaks_resolve.py (S281): AA_GITLEAKS, then .tmp-session/gitleaks-8301/gitleaks of this checkout
@@ -93,15 +94,16 @@ is_contracts_path() {
 # plan_checks <fast|full> <ci 0|1>: reads changed paths (one per line) on stdin, prints the check ids in run order.
 # CI runs every step of a workflow once its path filter matches, so a selected workflow runs all its checks here too.
 plan_checks() {
-  local mode="$1" ci="$2" f docs=0 contracts=0 md=0 lean=0
+  local mode="$1" ci="$2" f docs=0 contracts=0 md=0 lean=0 baseline=0
   if [ "$mode" = full ]; then
-    docs=1; contracts=1; md=1; lean=1
+    docs=1; contracts=1; md=1; lean=1; baseline=1
   else
     while IFS= read -r f; do
       [ -n "$f" ] || continue
       if is_docs_lint_path "$f"; then docs=1; fi
       if is_contracts_path "$f"; then contracts=1; fi
-      if is_lean_path "$f"; then lean=1; fi
+      if is_lean_path "$f"; then lean=1; baseline=1; fi
+      if [ "$f" = .gitleaksignore ]; then baseline=1; fi
       case "$f" in docs/*.md|.markdownlint-cli2.jsonc|.github/workflows/docs-lint.yml) md=1 ;; esac
     done
   fi
@@ -117,6 +119,7 @@ plan_checks() {
     echo contracts-unit; echo adr-unit; echo contracts; echo adr-numbers
   fi
   if [ "$lean" = 1 ]; then echo lean-unit; fi
+  if [ "$baseline" = 1 ]; then echo baseline-guard; fi
   if [ "$ci" != 1 ]; then echo lean-guard; echo gitleaks; fi
 }
 
@@ -334,6 +337,13 @@ run_planned() {
       lychee)
         run_check "$id" "docs-lint.yml: Internal links (offline)" bin:lychee lychee --config tools/docs/lychee.toml --exclude-path docs/linear-export 'docs/**/*.md' ;;
       lean-unit) run_check "$id" "lean-guard.yml: Unit tests of the guard" - "$PY" -B -m unittest discover -s tools/repo -p 'test_*.py' ;;
+      baseline-guard)
+        # S290: a pinned .gitleaksignore fingerprint is never dropped (old commits stay on refs/pull/*/head).
+        if [ "$CI_MODE" = 1 ] && [ -n "${BASE_SHA:-}" ]; then
+          run_check "$id" "lean-guard.yml: gitleaks baseline guard" - "$PY" -B tools/repo/gitleaksignore_guard.py --base "$BASE_SHA"
+        else
+          run_check "$id" "lean-guard.yml: gitleaks baseline guard" - "$PY" -B tools/repo/gitleaksignore_guard.py --base "$BASE" --allow-missing-base
+        fi ;;
       lean-guard)
         # AA-1161: what the push adds (base...HEAD); a missing base skips here with a note (CI checks every PR).
         run_check "$id" "lean-guard.yml: Lean repo guard" - "$PY" -B tools/repo/lean_guard.py --base "$BASE" --allow-missing-base ;;
@@ -373,7 +383,7 @@ self_test() {
   }
   local DOCS="docs-unit frontmatter prd-refs adr-index aws-multiline alarm-runbooks resource-ids gen-sections doc-map doc-owners code-refs audit-images docs-impact spec-unit lane-unit spec-ids"
   local CONTRACTS="contracts-unit adr-unit contracts adr-numbers"
-  local ALL="$DOCS markdownlint lychee $CONTRACTS lean-unit"
+  local ALL="$DOCS markdownlint lychee $CONTRACTS lean-unit baseline-guard"
   # check selection
   expect "empty diff"                     fast 0 "lean-guard gitleaks" ""
   expect "README only"                    fast 0 "lean-guard gitleaks" README.md
@@ -398,8 +408,9 @@ self_test() {
   expect "docs-lint workflow"             fast 0 "$DOCS markdownlint lychee lean-guard gitleaks" .github/workflows/docs-lint.yml
   expect "markdownlint config"            fast 0 "$DOCS markdownlint lychee lean-guard gitleaks" .markdownlint-cli2.jsonc
   expect "untracked-by-CI tools"          fast 0 "lean-guard gitleaks" tools/finops/monthly_cost_report.py scripts/pre-push.sh
-  expect "lean guard tool: its unit tests" fast 0 "lean-unit lean-guard gitleaks" tools/repo/lean_guard.py
-  expect "lean guard workflow"            fast 0 "lean-unit lean-guard gitleaks" .github/workflows/lean-guard.yml
+  expect "lean guard tool: its unit tests" fast 0 "lean-unit baseline-guard lean-guard gitleaks" tools/repo/lean_guard.py
+  expect "lean guard workflow"            fast 0 "lean-unit baseline-guard lean-guard gitleaks" .github/workflows/lean-guard.yml
+  expect "gitleaks baseline: its guard"   fast 0 "baseline-guard lean-guard gitleaks" .gitleaksignore
   expect "full ignores the diff"          full 0 "$ALL lean-guard gitleaks" README.md
   expect "ci: all checks, no lean-guard gitleaks"    full 1 "$ALL" ""
   # markdownlint target selection
