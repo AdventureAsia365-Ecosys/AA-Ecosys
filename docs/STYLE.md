@@ -59,6 +59,10 @@ front-matter schema is [`templates/frontmatter.schema.json`](templates/frontmatt
 - A runbook is `status: active` only after it ran at least once on Dev acc2, in a drill, in a real incident or, for a
   destructive step, as a DRY RUN (`skill/aa-cis-schema/references/destructive-ops.md`). Record `last_tested`,
   `tested_where`, `tested_evidence`.
+- Every page under `docs/ops/runbooks/` sets `last_tested`: the date its write steps last ran, with `tested_where` and
+  `tested_evidence` (the evidence link and what was tested), or the word `untested`. A read-only check of the first
+  steps is not a test of the runbook: keep `untested` and note it in the page's tested log. `null` or a missing key
+  fails the docs lint (`tools/docs/check_frontmatter.py`, AA-1118).
 - Not run yet: `status: draft` and this banner right under the H1:
 
   ```markdown

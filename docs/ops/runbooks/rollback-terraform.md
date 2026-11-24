@@ -9,7 +9,7 @@ audience: [engineer, devops, agent]
 applies_to: [aa-cis-infra]
 last_reviewed: 2026-10-28
 review_every_days: 90
-last_tested: null
+last_tested: untested
 tested_where: null
 tested_evidence: null
 related: [OPS-01, OPS-04, OPS-02-cis, AA-866, AA-869, AA-892]

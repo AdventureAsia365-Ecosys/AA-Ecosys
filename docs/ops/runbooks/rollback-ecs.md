@@ -9,18 +9,19 @@ audience: [engineer, devops, agent]
 applies_to: [aa-cis-api, aa-cis-worker, aa-booking-api, aa-crm-api, aa-crm-web, aa-tripplanner]
 last_reviewed: 2026-11-08
 review_every_days: 90
-last_tested: null
-tested_where: null
-tested_evidence: null
+last_tested: 2026-11-02
+tested_where: drill
+tested_evidence: "docs/audits/2026-11-02-S264-rollback-game-day/README.md (D1 Booking API and D2 CRM API back one build and forward with tools/ops/ecs_rollback.sh, AA-1023)"
 related: [OPS-02-cis, OPS-02-booking, OPS-02-vercel, OPS-02-tp-lambda, OPS-03-gameday, OPS-10-deploy-gate, tools/ops/ecs_rollback.sh, AA-1023]
 ---
 
 # Roll back any ECS service
 
 > [!WARNING]
-> UNTESTED - do not follow in an incident without checking each step.
-> The same mechanism was drilled on CIS (S241, [rollback-cis](rollback-cis.md)). This page and its helper are run for
-> Booking and CRM in the [rollback game day](../drills/rollback-game-day.md) (AA-1023). Set `status: active` after it.
+> Agent-run once: the [rollback game day](../drills/rollback-game-day.md) of 2026-11-02 (AA-1023) took Booking and
+> CRM back one build and forward with this page and its helper; never followed runbook-only by a person. The same
+> mechanism was drilled on CIS (S241, [rollback-cis](rollback-cis.md)). The tech lead sets `status: active` after
+> reading the page; until then check each step.
 
 This page is the shared procedure. The per-app pages keep their app facts:
 [CIS api + worker](rollback-cis.md) (two services on one image) and [Booking](rollback-booking.md).
@@ -182,3 +183,4 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 | Date | Where | By | Evidence | Result |
 |---|---|---|---|---|
 | 2026-11-02 | dev-acc2, dry run of `--list` and `--previous` for `aa-booking-dev-api` and `aa-crm-dev-api` (read-only) | Claude Code | lane notes `docs/implementation-notes/AA-1023.md` | read-only: Booking target needs `--allow-config-diff` (`ALERTS_TOPIC_ARN` only in the running revision); CRM target same configuration |
+| 2026-11-02 | drill (rollback game day D1, D2), agent-run | Claude Code, tech lead watching | [`audits/2026-11-02-S264-rollback-game-day/`](../../audits/2026-11-02-S264-rollback-game-day/README.md) | pass: Booking API back 150 s, CRM API back 166 s, both forward; the helper reported `IN_PROGRESS` once before ECS reached `COMPLETED` |

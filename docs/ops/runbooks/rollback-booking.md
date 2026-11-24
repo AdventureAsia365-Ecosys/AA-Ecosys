@@ -9,7 +9,7 @@ audience: [engineer, devops, agent]
 applies_to: [aa-booking-api]
 last_reviewed: 2026-10-28
 review_every_days: 90
-last_tested: null
+last_tested: untested
 tested_where: null
 tested_evidence: null
 related: [OPS-02-ecs, OPS-02-cis, OPS-04, OPS-10-deploy-gate, AA-869, AA-892, AA-1023]

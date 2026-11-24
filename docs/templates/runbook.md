@@ -9,7 +9,7 @@ audience: [engineer, devops, agent]
 applies_to: [replace-me]
 last_reviewed: 2026-10-19
 review_every_days: 90
-last_tested: null
+last_tested: untested
 tested_where: null
 tested_evidence: null
 related: []
@@ -19,7 +19,7 @@ related: []
 
 > [!WARNING]
 > UNTESTED - do not follow in an incident without checking each step.
-> Remove this banner, set `status: active` and fill `last_tested`, `tested_where` and `tested_evidence` after the
+> Remove this banner, set `status: active` and replace `last_tested: untested` with the date, `tested_where` and `tested_evidence` after the
 > first real run (Dev acc2, drill, incident or DRY RUN). See [STYLE](../STYLE.md#runbooks-and-tested). <!-- kit:drop -->
 <!-- kit:only > first real run (Dev, drill, incident or DRY RUN). -->
 

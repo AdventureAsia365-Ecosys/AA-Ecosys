@@ -9,17 +9,18 @@ audience: [engineer, devops, agent]
 applies_to: [tripplanner-lambda]
 last_reviewed: 2026-10-28
 review_every_days: 90
-last_tested: null
-tested_where: null
-tested_evidence: null
+last_tested: 2026-11-02
+tested_where: drill
+tested_evidence: "docs/audits/2026-11-02-S264-rollback-game-day/README.md (D4 Lambda aa-tripplanner-dev-browse path B, back and forward, AA-1023)"
 related: [OPS-02-vercel, OPS-04, AA-703, AA-869, AA-892]
 ---
 
 # Roll back the TripPlanner Lambdas
 
 > [!WARNING]
-> UNTESTED - do not follow in an incident without checking each step.
-> Only the read-only steps were run (2026-10-19, facts re-checked 2026-10-28). A Lambda alias `live` would make this
+> Agent-run once: path B on `aa-tripplanner-dev-browse` in the [rollback game day](../drills/rollback-game-day.md) of
+> 2026-11-02 (AA-1023); the other paths only had their read-only steps run (2026-10-19, facts re-checked 2026-10-28).
+> Check each step. A Lambda alias `live` would make this
 > a one-line switch. It is planned (U-54, with AA-703) and does not exist yet.
 
 ## When to use
@@ -138,3 +139,4 @@ still the bad one, so the run fails until step 4 deploys the revert. Use the cur
 | Date | Where | By | Evidence | Result |
 |---|---|---|---|---|
 | 2026-10-19 | dev-acc2, read-only facts and steps 1-2 | Claude Code | `docs/audits/2026-10-19-S243-ops-runbooks/readonly-checks.md` | read-only only; write steps untested |
+| 2026-11-02 | drill (rollback game day D4), agent-run, path B | Claude Code, tech lead watching | [`audits/2026-11-02-S264-rollback-game-day/`](../../audits/2026-11-02-S264-rollback-game-day/README.md) | pass: browse back in 11 s and forward in 10 s, browse 200 both ways |
