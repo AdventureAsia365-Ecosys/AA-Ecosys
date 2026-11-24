@@ -772,11 +772,11 @@ features:
     module: catalog
     name: Sellable trip plans and price versions
     name_vi: Lịch trình bán được và phiên bản giá
-    summary_vi: "Mỗi tour catalogue thành một kế hoạch chuyến đi bán được, kèm điều khoản thương mại và các phiên bản bảng giá."
-    summary: Each catalogue tour as a sellable trip plan with its commercial terms and price list versions.
+    summary_vi: "Mỗi tour catalogue thành một kế hoạch chuyến đi bán được, kèm điều khoản thương mại và các phiên bản bảng giá; kiểm tra tour có vận hành được không (đêm thiếu khách sạn, nhà cung cấp chưa hoạt động), các đêm không cần khách sạn và ngoại lệ cho bán có thời hạn do admin duyệt."
+    summary: Each catalogue tour as a sellable trip plan with its commercial terms and price list versions; the can-operate check (nights without a hotel, suppliers not active), the nights that need no hotel and the time-boxed sale exception an admin approves.
     roles: [booking-admin, sales, contracting]
     status: live
-    surface: ["page:/catalog/trip-plans/**", "route:price_versions"]
+    surface: ["page:/catalog/trip-plans/**", "route:price_versions", "route:operability"]
     owner: tech_lead
   - id: BK-F006
     app: booking
@@ -822,11 +822,11 @@ features:
     module: supply
     name: Suppliers, contracts and rate sheets
     name_vi: Nhà cung cấp, hợp đồng và bảng giá
-    summary_vi: "Danh sách nhà cung cấp kèm hợp đồng và bảng giá; điều khoản hợp đồng (allotment, free sale, on request), hạn chế cung ứng và stop-sale, có người thứ hai duyệt; một trang gom mọi stop-sale đang chờ duyệt của tất cả nhà cung cấp."
-    summary: The supplier register with contracts and rate sheets; the contract terms (allotment, free sale, on request), supply restrictions and stop-sale, each checked by a second person; one page lists the stop-sales waiting for that check across every supplier.
+    summary_vi: "Danh sách nhà cung cấp kèm hợp đồng và bảng giá; điều khoản hợp đồng (allotment, free sale, on request), hạn chế cung ứng và stop-sale, có người thứ hai duyệt; một trang gom mọi stop-sale đang chờ duyệt của tất cả nhà cung cấp. Các lựa chọn của hồ sơ nhà cung cấp (vai trò liên hệ, điều khoản thanh toán) và tài khoản ngân hàng nhà cung cấp: che số, người thứ hai duyệt, chỉ xem đầy đủ khi có dòng nhật ký kiểm toán."
+    summary: The supplier register with contracts and rate sheets; the contract terms (allotment, free sale, on request), supply restrictions and stop-sale, each checked by a second person; one page lists the stop-sales waiting for that check across every supplier. The supplier profile choices (contact roles, payment terms) and the supplier bank accounts, masked, approved by a second person, the full details revealed only with an audit row.
     roles: [booking-admin, contracting, sales]
     status: live
-    surface: ["page:/suppliers/**", "page:/stop-sales", "route:suppliers", "route:supply_model"]
+    surface: ["page:/suppliers/**", "page:/stop-sales", "route:suppliers", "route:supply_model", "route:supplier_bank", "route:supplier_profile_options"]
     owner: tech_lead
   - id: BK-F010
     app: booking
@@ -918,11 +918,11 @@ features:
     module: b2b
     name: B2B API (Book with AA)
     name_vi: API B2B (Đặt với AA)
-    summary_vi: "API máy mà CRM của đại lý gọi để báo giá, giữ chỗ và đặt tour AA theo giá B2B của đại lý."
-    summary: The machine API the agency CRM calls to quote, hold and book AA tours at the agency's B2B price.
+    summary_vi: "API máy mà CRM của đại lý gọi để báo giá, giữ chỗ và đặt tour AA theo giá B2B của đại lý, và danh sách add-on AA mà đại lý báo giá được."
+    summary: The machine API the agency CRM calls to quote, hold and book AA tours at the agency's B2B price, and the list of AA add-ons the agency can quote.
     roles: [machine]
     status: live
-    surface: ["route:b2b"]
+    surface: ["route:b2b", "route:b2b_addons"]
     conditions:
       entitlements: [trade.book]
       settings: [booking.policy.b2b_hold_hours, booking.policy.b2b_hold_max_extensions, booking.policy.b2b_rehold_limit_per_day]
@@ -933,11 +933,11 @@ features:
     module: admin
     name: Staff, audit log and reference data
     name_vi: Nhân viên, nhật ký kiểm toán và dữ liệu tham chiếu
-    summary_vi: "Hồ sơ và vai trò nhân viên Booking, vai trò riêng do chủ sở hữu tạo từ một vai trò có sẵn, nhật ký quản trị và dữ liệu tham chiếu (cài đặt, quốc gia)."
-    summary: Booking staff profiles and roles, the custom roles an owner clones from a built-in role, the admin audit log and the reference rows (settings, countries).
+    summary_vi: "Hồ sơ và vai trò nhân viên Booking, vai trò riêng do chủ sở hữu tạo từ một vai trò có sẵn, chế độ chủ sở hữu xem như một vai trò thấp hơn (chỉ đọc, có thời hạn, ghi nhật ký), nhật ký quản trị và dữ liệu tham chiếu (cài đặt, quốc gia)."
+    summary: Booking staff profiles and roles, the custom roles an owner clones from a built-in role, the owner's read-only, time-boxed and audited "view as a lower role", the admin audit log and the reference rows (settings, countries).
     roles: [booking-admin]
     status: live
-    surface: ["page:/staff/**", "page:/roles", "page:/audit-log", "route:staff", "route:staff_roles", "route:reference"]
+    surface: ["page:/staff/**", "page:/roles", "page:/audit-log", "route:staff", "route:staff_roles", "route:reference", "route:staff_view_as"]
     owner: tech_lead
   - id: BK-F019
     app: booking
@@ -951,6 +951,17 @@ features:
     surface: ["page:/settings", "route:retention"]
     conditions:
       settings: [booking.policy.retention_job_failed_days, booking.policy.retention_inbox_redact_days]
+    owner: tech_lead
+  - id: BK-F020
+    app: booking
+    module: addons
+    name: AA add-ons
+    name_vi: Add-on của AA
+    summary_vi: "Các add-on AA bán kèm tour (hoạt động, dịch vụ theo ngày): bản nháp, địa điểm áp dụng, người thứ hai duyệt trước khi phát hành; nhập danh mục hoạt động từ nhà cung cấp và danh sách hợp đồng sắp hết hạn."
+    summary: The AA add-ons sold with a tour (activities and services per day) - drafts, the places they apply to and a second person's approval before they are published; the activity catalogue import from suppliers and the list of contracts about to expire.
+    roles: [booking-admin, contracting, sales]
+    status: live
+    surface: ["page:/add-ons", "route:addons"]
     owner: tech_lead
 
   # ── AA-Partner: CRM ───────────────────────────────────────────────────────────────────────────────────────────────
@@ -1291,11 +1302,11 @@ features:
     module: ops-contract
     name: Platform ops API and CRM settings
     name_vi: API vận hành nền tảng và cấu hình CRM
-    summary_vi: "Hợp đồng vận hành mà CIS admin gọi (đại lý, thành viên, job), các cài đặt CRM hiển thị qua trang Cài đặt nền tảng, bản sao phần ngân sách mỗi kết nối AI của CRM, và danh sách kiểm tra trong ứng dụng (ngưỡng đang áp dụng, lần báo gần nhất) mà danh mục cảnh báo của CIS đọc."
-    summary: The ops contract CIS admin calls (agencies, members, jobs), the CRM settings relayed by Platform › Settings, the CRM's copy of its share of each AI connection budget, and the in-app check registry (thresholds in force, last alert) the CIS alerts catalogue reads.
+    summary_vi: "Hợp đồng vận hành mà CIS admin gọi (đại lý, thành viên, job), các cài đặt CRM hiển thị qua trang Cài đặt nền tảng, bản sao phần ngân sách mỗi kết nối AI của CRM, danh sách kiểm tra trong ứng dụng (ngưỡng đang áp dụng, lần báo gần nhất) mà danh mục cảnh báo của CIS đọc, và bằng chứng quyền riêng tư (số lần ghi nhận đồng ý, số lần gửi chiến dịch tới liên hệ đã đồng ý, chỉ là số đếm) cho trang Tuân thủ của CIS."
+    summary: The ops contract CIS admin calls (agencies, members, jobs), the CRM settings relayed by Platform › Settings, the CRM's copy of its share of each AI connection budget, the in-app check registry (thresholds in force, last alert) the CIS alerts catalogue reads, and the privacy evidence (consent captures and campaign sends to opted-in contacts, counts only) for the CIS Compliance page.
     roles: [machine]
     status: live
-    surface: ["route:ops", "route:ops_settings", "route:ops_connection_shares", "route:ops_checks"]
+    surface: ["route:ops", "route:ops_settings", "route:ops_connection_shares", "route:ops_checks", "route:ops_privacy_evidence"]
     conditions:
       settings: [crm.settings.two_person_approval, crm.retention.job_dry_run, crm.ops.app_spend_near_pct, crm.ops.audit_export_lag_min, crm.ops.audit_partition_months_ahead, crm.ops.audit_verify_lag_h, crm.ops.jobs_overdue_factor, crm.ops.jobs_stuck_after_s, crm.ops.membership_feed_stuck_failures]
     owner: tech_lead

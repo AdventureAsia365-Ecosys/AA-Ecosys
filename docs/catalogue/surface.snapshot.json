@@ -2,6 +2,7 @@
  "apps": {
   "booking": [
    "page:/",
+   "page:/add-ons",
    "page:/agency-billing",
    "page:/agency-billing/invoices/[ref]",
    "page:/audit-log",
@@ -47,9 +48,11 @@
    "page:/suppliers/new",
    "page:/suppliers/rate-sheets/[id]",
    "page:/trip-checks",
+   "route:addons",
    "route:agency_billing",
    "route:agency_pricing",
    "route:b2b",
+   "route:b2b_addons",
    "route:b2b_desk",
    "route:b2b_partners",
    "route:catalog",
@@ -58,6 +61,7 @@
    "route:health",
    "route:my_work",
    "route:notifications",
+   "route:operability",
    "route:ops",
    "route:ops_checks",
    "route:price_versions",
@@ -66,8 +70,11 @@
    "route:retention",
    "route:staff",
    "route:staff_roles",
+   "route:staff_view_as",
+   "route:supplier_bank",
    "route:supplier_bills",
    "route:supplier_bookings",
+   "route:supplier_profile_options",
    "route:suppliers",
    "route:supply",
    "route:supply_model",
@@ -368,6 +375,7 @@
    "route:ops",
    "route:ops_checks",
    "route:ops_connection_shares",
+   "route:ops_privacy_evidence",
    "route:ops_release",
    "route:ops_settings",
    "route:partner_pages",
@@ -775,11 +783,27 @@
    "app": "cis",
    "area": "compliance"
   },
+  "cis.compliance.applicability_review_max_age_days": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.campaign_consent_violations_max": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.campaign_consent_window_days": {
+   "app": "cis",
+   "area": "compliance"
+  },
   "cis.compliance.ci_scan_max_age_days": {
    "app": "cis",
    "area": "compliance"
   },
   "cis.compliance.collector_heartbeat_hours": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.consent_capture_max_age_days": {
    "app": "cis",
    "area": "compliance"
   },
@@ -791,11 +815,35 @@
    "app": "cis",
    "area": "compliance"
   },
+  "cis.compliance.erasure_drill_max_age_days": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.legal_docs_overdue_max": {
+   "app": "cis",
+   "area": "compliance"
+  },
   "cis.compliance.partial_weight": {
    "app": "cis",
    "area": "compliance"
   },
   "cis.compliance.reference_scores": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.retention_live_max_age_days": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.retention_run_max_age_days": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.validity_hours.cis_db": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.validity_hours.crm_ops": {
    "app": "cis",
    "area": "compliance"
   },
@@ -1003,6 +1051,10 @@
    "app": "cis",
    "area": "spend"
   },
+  "cis.llm.fact_instruction_guard": {
+   "app": "cis",
+   "area": "ai"
+  },
   "cis.llm.idle_after_hours": {
    "app": "cis",
    "area": "ai"
@@ -1064,6 +1116,98 @@
    "area": "ops"
   },
   "cis.ops.role_connections_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_client_error_warn_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_error_rate_crit_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_error_rate_warn_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_guard_stale_hours": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_history_days": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_lambda_p95_limit_ms": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_min_requests": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_p95_crit_ms": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_p95_warn_ms": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_queue_wait_crit_min": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_queue_wait_warn_min": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_rds_connections_crit_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_rds_connections_warn_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_rds_cpu_crit_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_rds_cpu_warn_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_rds_free_crit_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_rds_free_storage_crit_gib": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_rds_free_storage_warn_gib": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_rds_free_warn_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_role_connections_crit_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_stale_factor": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_uptime_slo_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_xid_age_crit": {
    "app": "cis",
    "area": "ops"
   },
@@ -1995,6 +2139,10 @@
    "app": "cis",
    "area": "content"
   },
+  "cis.tenant.crm_agency_seen_hours": {
+   "app": "cis",
+   "area": "tenant"
+  },
   "cis.tenant.pilot_max_weeks": {
    "app": "cis",
    "area": "tenant"
@@ -2056,6 +2204,14 @@
    "area": "agency_defaults"
   },
   "crm.agency_defaults.price_checks_per_minute_min": {
+   "app": "crm",
+   "area": "agency_defaults"
+  },
+  "crm.agency_defaults.price_round_step": {
+   "app": "crm",
+   "area": "agency_defaults"
+  },
+  "crm.agency_defaults.price_round_steps": {
    "app": "crm",
    "area": "agency_defaults"
   },
@@ -2282,6 +2438,10 @@
   "tripplanner.leads.tenant_daily_cap": {
    "app": "tripplanner",
    "area": "leads"
+  },
+  "tripplanner.prices.agency_stale_hours": {
+   "app": "tripplanner",
+   "area": "prices"
   },
   "tripplanner.rate.chat_ip_per_hour": {
    "app": "tripplanner",

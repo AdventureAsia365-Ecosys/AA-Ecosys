@@ -55,7 +55,7 @@ Cluster `aa-cis-dev-cluster`, 8 services:
 | `aa-crm-dev-web` | AA-Partner |
 | `aa-tripplanner-dev-web` | AA-TripPlanner-Web |
 
-From the Terraform state at AA-CIS-Infra `65e0a732` (resource inventory, AA-CIS-Infra Docs Gen).
+From the Terraform state at AA-CIS-Infra `ddf1e36c` (resource inventory, AA-CIS-Infra Docs Gen).
 
 <!-- /gen -->
 
@@ -108,12 +108,12 @@ Release versions on `main` (release-please):
 
 | Repo | Release version |
 |---|---|
-| AA-Booking | `0.16.0` |
-| AA-CIS-App | `0.20.0` |
-| AA-Partner | `0.13.0` |
-| AA-TripPlanner-Web | `0.16.0` |
+| AA-Booking | `0.17.0` |
+| AA-CIS-App | `0.21.0` |
+| AA-Partner | `0.14.0` |
+| AA-TripPlanner-Web | `0.17.0` |
 
-From each repo's `.release-please-manifest.json` on main (AA-Booking `4b777358`, AA-CIS-App `2ff8c53d`, AA-Partner `6592cf50`, AA-TripPlanner-Web `44aa203b`); release-please raises it when its release PR merges.
+From each repo's `.release-please-manifest.json` on main (AA-Booking `094d678d`, AA-CIS-App `7b1c8afd`, AA-Partner `28b1c4f6`, AA-TripPlanner-Web `12b6a4d2`); release-please raises it when its release PR merges.
 
 <!-- /gen -->
 
@@ -158,12 +158,12 @@ and on demand.
 
 | Owner | Migration key | Latest applied on Dev |
 |---|---|---|
-| CIS | `NNN` | `469` |
-| TripPlanner | `tp-NNN` | `tp-035` |
-| Booking | `bk-NNN` | `bk-063` |
-| CRM | `crm-NNN` | `crm-085` |
+| CIS | `NNN` | `477` |
+| TripPlanner | `tp-NNN` | `tp-037` |
+| Booking | `bk-NNN` | `bk-071` |
+| CRM | `crm-NNN` | `crm-087` |
 
-From the live schema dump of 2026-11-21 ([DB schema reference](../architecture/db-schema-reference.md), refreshed by the DB Schema Dump bot PR). A new migration takes the next number on its owner's main; the owner list is in [schema ownership](../database/schema-ownership.md).
+From the live schema dump of 2026-11-24 ([DB schema reference](../architecture/db-schema-reference.md), refreshed by the DB Schema Dump bot PR). A new migration takes the next number on its owner's main; the owner list is in [schema ownership](../database/schema-ownership.md).
 
 <!-- /gen -->
 
@@ -214,7 +214,7 @@ session is logged for 365 days. Deleting data follows the DRY RUN procedure
 | Automated backups, point-in-time recovery | 14 | `modules/rds/main.tf` (`backup_retention_period`) |
 | Longest any backup copy may live (alarm above it) | 30 | `accounts/aa365/rds_snapshot_expiry.tf` (`rds_backup_copy_max_age_days`) |
 
-Read statically from AA-CIS-Infra main at `751d767e` (tools/docs/repo_facts.py).
+Read statically from AA-CIS-Infra main at `8422045d` (tools/docs/repo_facts.py).
 
 <!-- /gen -->
 

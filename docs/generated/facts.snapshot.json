@@ -48,7 +48,7 @@
  ],
  "ecs": {
   "cluster": "aa-cis-dev-cluster",
-  "infra_commit": "65e0a732",
+  "infra_commit": "ddf1e36c",
   "services": [
    {
     "address": "module.environment.aws_ecs_service.staff_web[\"booking\"]",
@@ -130,22 +130,22 @@
  ],
  "llm_routes_decision": "ADR 0009 (one gateway for every provider) with ADR 0001a Note S278 (acc1 before acc3)",
  "migrations": {
-  "as_of": "2026-11-21",
+  "as_of": "2026-11-24",
   "owners": [
    {
-    "latest": "469",
+    "latest": "477",
     "owner": "CIS"
    },
    {
-    "latest": "tp-035",
+    "latest": "tp-037",
     "owner": "TripPlanner"
    },
    {
-    "latest": "bk-063",
+    "latest": "bk-071",
     "owner": "Booking"
    },
    {
-    "latest": "crm-085",
+    "latest": "crm-087",
     "owner": "CRM"
    }
   ]
@@ -158,11 +158,11 @@
    "rds_pitr_source": "modules/rds/main.tf"
   },
   "collected_from": {
-   "AA-Booking": "4b777358",
-   "AA-CIS-App": "2ff8c53d",
-   "AA-CIS-Infra": "751d767e",
-   "AA-Partner": "6592cf50",
-   "AA-TripPlanner-Web": "44aa203b"
+   "AA-Booking": "094d678d",
+   "AA-CIS-App": "7b1c8afd",
+   "AA-CIS-Infra": "8422045d",
+   "AA-Partner": "28b1c4f6",
+   "AA-TripPlanner-Web": "12b6a4d2"
   },
   "job_kinds": {
    "AA-Booking": [
@@ -196,6 +196,14 @@
      "deploy_gate_exempt": false,
      "expected_seconds": 300,
      "kind": "bk_case_lifecycle",
+     "test_only": false
+    },
+    {
+     "code": "backend/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "bk_contract_expiry_watch",
      "test_only": false
     },
     {
@@ -334,6 +342,16 @@
     },
     {
      "background": true,
+     "code": "services/jobs/cost_explorer_refresh_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
+     "expected_seconds": 120,
+     "kind": "cost_explorer_refresh",
+     "max_attempts": 1
+    },
+    {
+     "background": true,
      "code": "services/jobs/erasure_job.py",
      "concurrency": 1,
      "deploy_blocking": true,
@@ -441,6 +459,16 @@
      "expected_seconds": 60,
      "kind": "ops_alert_email",
      "max_attempts": 5
+    },
+    {
+     "background": true,
+     "code": "services/jobs/ops_status_sample_job.py",
+     "concurrency": 1,
+     "deploy_blocking": false,
+     "deploy_gate_exempt": true,
+     "expected_seconds": 60,
+     "kind": "ops_status_sample",
+     "max_attempts": 1
     },
     {
      "background": true,
@@ -1224,6 +1252,14 @@
      "code": "api/app/jobs/kinds.py",
      "deploy_blocking": false,
      "deploy_gate_exempt": false,
+     "expected_seconds": 300,
+     "kind": "crm_tp_price_publish",
+     "test_only": false
+    },
+    {
+     "code": "api/app/jobs/kinds.py",
+     "deploy_blocking": false,
+     "deploy_gate_exempt": false,
      "expected_seconds": 60,
      "kind": "crm_workflow_run",
      "test_only": false
@@ -1278,16 +1314,17 @@
   },
   "unresolved": [],
   "versions": {
-   "AA-Booking": "0.16.0",
-   "AA-CIS-App": "0.20.0",
-   "AA-Partner": "0.13.0",
-   "AA-TripPlanner-Web": "0.16.0"
+   "AA-Booking": "0.17.0",
+   "AA-CIS-App": "0.21.0",
+   "AA-Partner": "0.14.0",
+   "AA-TripPlanner-Web": "0.17.0"
   },
   "workflows": {
    "AA-Booking": [
     "api-contract.yml",
     "cache-cleanup.yml",
     "cache-warm.yml",
+    "change-guard.yml",
     "ci.yml",
     "deploy-admin-dev.yml",
     "deploy-dev.yml",
@@ -1299,6 +1336,7 @@
     "release-please.yml",
     "secret-scan-history.yml",
     "secret-scan.yml",
+    "spec-trace.yml",
     "visual.yml",
     "workflow-lint.yml"
    ],
@@ -1306,6 +1344,7 @@
     "api-contract.yml",
     "cache-cleanup.yml",
     "cache-warm.yml",
+    "change-guard.yml",
     "ci.yml",
     "deploy-admin-dev.yml",
     "deploy-dev.yml",
@@ -1323,6 +1362,7 @@
     "release-please.yml",
     "secret-scan-history.yml",
     "secret-scan.yml",
+    "spec-trace.yml",
     "test-durations.yml",
     "ui-smoke.yml",
     "visual.yml",
@@ -1331,6 +1371,7 @@
    "AA-CIS-Infra": [
     "alb-rule-order.yml",
     "cache-cleanup.yml",
+    "change-guard.yml",
     "connection-budget.yml",
     "contract-copy-guard.yml",
     "crm-key-policy-diff.yml",
@@ -1346,6 +1387,8 @@
     "docs-impact.yml",
     "docs-lint.yml",
     "identity-triggers-test.yml",
+    "image-scan-test.yml",
+    "image-scan.yml",
     "managed-login-branding.yml",
     "migration-apply.yml",
     "migration-copy-guard.yml",
@@ -1357,6 +1400,7 @@
     "secret-scan-history.yml",
     "secret-scan.yml",
     "secrets-register-check-test.yml",
+    "spec-trace.yml",
     "terraform-apply.yml",
     "terraform-drift.yml",
     "terraform-plan.yml",
@@ -1366,6 +1410,7 @@
    "AA-Partner": [
     "cache-cleanup.yml",
     "cache-warm.yml",
+    "change-guard.yml",
     "ci.yml",
     "deploy-dev.yml",
     "deploy-web-dev.yml",
@@ -1379,12 +1424,14 @@
     "scrub-corpus.yml",
     "secret-scan-history.yml",
     "secret-scan.yml",
+    "spec-trace.yml",
     "ui-smoke-portal.yml",
     "visual.yml",
     "workflow-lint.yml"
    ],
    "AA-TripPlanner-Web": [
     "cache-cleanup.yml",
+    "change-guard.yml",
     "ci.yml",
     "deploy-lambdas.yml",
     "deploy-web-dev.yml",
@@ -1396,6 +1443,7 @@
     "release-please.yml",
     "secret-scan-history.yml",
     "secret-scan.yml",
+    "spec-trace.yml",
     "visual.yml",
     "workflow-lint.yml"
    ]
@@ -1478,6 +1526,6 @@
  "schema": "aa1132-facts/2",
  "sources": {
   "docs/catalogue/platform.yaml": "6c029d3a33b591705db61c12c2b1c2e87761ddb88cf8b5b2ca44922be931d846",
-  "docs/generated/inventory.md": "cdc63406b21ef7f1001e527561cd6631b4b0defc626ecc1f85db2db4b5b728f4"
+  "docs/generated/inventory.md": "dc54f19834b80d1b57e9d65abb386356bec8ff97e5338e8e2662177ba748f9aa"
  }
 }
