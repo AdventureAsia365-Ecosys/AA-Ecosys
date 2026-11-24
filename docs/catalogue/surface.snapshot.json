@@ -87,6 +87,10 @@
    "page:/admin/ai-gateway",
    "page:/admin/api-docs",
    "page:/admin/atom-curation",
+   "page:/admin/content-workspace",
+   "page:/admin/content-workspace/[tourId]",
+   "page:/admin/content-workspace/new",
+   "page:/admin/content-workspace/supplier-links",
    "page:/admin/data-coverage",
    "page:/admin/data-model",
    "page:/admin/decisions",
@@ -155,6 +159,7 @@
    "route:admin_claim_labels",
    "route:admin_claim_shadow",
    "route:admin_content_quality",
+   "route:admin_content_workspace",
    "route:admin_crm_console",
    "route:admin_dashboard",
    "route:admin_data_coverage",
@@ -855,7 +860,35 @@
    "app": "cis",
    "area": "content"
   },
+  "cis.content.manual_tour.max_days": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.content.manual_tour.min_exclusions": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.content.manual_tour.min_inclusions": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.content.manual_tour.quick_exclusions": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.content.manual_tour.quick_inclusions": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.content.manual_tour.tour_types": {
+   "app": "cis",
+   "area": "content"
+  },
   "cis.content.publish_two_person": {
+   "app": "cis",
+   "area": "content"
+  },
+  "cis.content.supplier_link.bulk_max": {
    "app": "cis",
    "area": "content"
   },
