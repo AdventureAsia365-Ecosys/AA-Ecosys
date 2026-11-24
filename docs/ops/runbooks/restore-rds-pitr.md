@@ -29,7 +29,7 @@ related: [OPS-03, OPS-03-schema, OPS-03-drills, OPS-05, AA-829, AA-892]
 ## Facts (read 2026-10-19, DNS facts 2026-10-23, Terraform re-checked 2026-10-28)
 
 - `aa-cis-dev-db`: PostgreSQL 15, `db.t4g.small`, single-AZ, encrypted, deletion protection on, automated backups
-  **7 days** (PITR window), backup window 03:00-04:00 UTC, subnet group `aa-cis-dev-db-subnet-group`, parameter
+  **14 days** (PITR window, root ADR 0019 d16), backup window 03:00-04:00 UTC, subnet group `aa-cis-dev-db-subnet-group`, parameter
   group `aa-cis-dev-pg15`, one security group (`aa-cis-dev-sg-rds`). `LatestRestorableTime` trails now by about
   5 minutes.
 - Drill on 2026-10-17: restore started 08:21:59Z, available 08:39:17Z, checked 08:43:37Z, about **22 minutes** end to

@@ -16,8 +16,8 @@ related: [TPL-02, TPL-03, GUIDE-02, GUIDE-03, AA-887]
 
 AA-Ecosys is the Adventure Asia platform: four apps on one AWS account (acc2) - **AA-CIS** (content and catalog),
 **AA-TripPlanner-Web** (traveller front door), **AA-Booking** (customers, trip cases, pricing, payments) and
-**AA-Partner** (partner agencies' CRM and the tenant portal) - plus the Terraform repo **AA-CIS-Infra**. Model calls run on Amazon Bedrock in acc3; acc1 is no longer part of the
-ecosystem (AA-998). Today there is only a **Dev** environment, holding **test data only** (D-01).
+**AA-Partner** (partner agencies' CRM and the tenant portal) - plus the Terraform repo **AA-CIS-Infra**. Chat model calls run on Amazon Bedrock in acc1 first, with acc3
+behind it (S278, AA-1095; acc1 holds only that invoker role, root ADR 0001a). Today there is only a **Dev** environment, holding **test data only** (D-01).
 Prod will be a separate RDS instance in its own AWS account, `aa-prod` (ADR 0018, C7.2a, D-17), dated when go-live is set (AA-880).
 
 This page is the doc catalog (AA-887). Git is the only source. Google Drive holds PDF exports for the business owner.

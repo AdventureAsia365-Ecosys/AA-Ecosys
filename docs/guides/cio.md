@@ -130,7 +130,7 @@ with evidence per vendor; it is regenerated in part from the `pii:` tags later. 
 
 | Vendor | Use | Personal data |
 |---|---|---|
-| Amazon Web Services (acc2 and acc3, each through a reseller) | All hosting, database, e-mail (SES), identity (Cognito), AI models (Bedrock on acc3) | Yes (customers, staff) |
+| Amazon Web Services (acc2 and acc3, each through a reseller) | All hosting, database, e-mail (SES), identity (Cognito), AI models (Bedrock on acc1, acc3 behind it) | Yes (customers, staff) |
 | Vercel (Hobby plan) | None since 08/11/2026: every frontend (CIS admin, Booking admin, TripPlanner, the tenant portal) moved to ECS Fargate on AWS; the projects were deleted. The account can be closed once its tokens are revoked | None any more |
 | GitHub (Free plan) | Code, CI | No customer data |
 | Sentry (free plan) | Error reports for CIS, Booking and TripPlanner | Must not contain personal data (DM-6.4) |

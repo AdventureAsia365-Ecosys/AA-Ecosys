@@ -503,8 +503,8 @@ names), so only the `sub` match is affected.
 
 - **AA-Booking (AAA):** slices live through `bk-035` (3.4). Open: removing the CIS bridge token for staff
   (AA-680, 4.6), the customer-facing app and customer identity on Cognito (AA-680, ADR 0006), and a Playwright smoke
-  of the staff admin in Booking CI. The hand-off from TripPlanner is live (outbox → `bk_inquiry_pull`); the
-  pre-build draft is archived at [`archive/2026/tripplanner-to-aaa-handoff.md`](archive/2026/tripplanner-to-aaa-handoff.md).
+  of the staff admin in Booking CI. The B2C hand-off from TripPlanner (outbox → Booking inquiry pull) was retired with
+  the B2B-only model (AA-1046, root ADR 0019 d8/d11); the pre-build draft is archived at [`archive/2026/tripplanner-to-aaa-handoff.md`](archive/2026/tripplanner-to-aaa-handoff.md).
 - **AA-Partner Content studio (AA-979 P2b clean-up, S256):** done in code (runbook §4.5): Vercel project
   `aa-cis-portal` and its workflow removed, frozen CIS `portal/` deleted, API-key sign-in off, `partner-dev.` → `portal.`
   301 except `/crm` and `/crm/*`, the CRM API's join-link and mail OAuth origins on `portal.`. Rollback to Vercel is no longer

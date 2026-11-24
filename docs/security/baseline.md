@@ -71,7 +71,7 @@ open), **by decision** (not done because the tech lead decided so, with the trig
 
 | Control | What is in place | Status | Evidence / issue |
 |---|---|---|---|
-| RDS at rest and in transit | Storage encrypted; parameter `rds.force_ssl = 1`; deletion protection on; 7-day automated backups; slow-query log at 500 ms; `postgresql` log export kept 365 days. | in place | C4.2a; AA-872 |
+| RDS at rest and in transit | Storage encrypted; parameter `rds.force_ssl = 1`; deletion protection on; 14-day automated backups (root ADR 0019 d16); slow-query log at 500 ms; `postgresql` log export kept 365 days. | in place | C4.2a; AA-872 |
 | DB roles per app | Booking and TripPlanner objects owned by NOLOGIN owner roles; migrations run as `db_migrator` from their own task definition. CIS runtime split (`cis_owner` / `cis_app`) is X1 wave 4. | partial | DM-8.1, DM-8.2; AA-852, AA-860 |
 | Tenant isolation (RLS) | RLS template on tenant tables, scoped to the runtime role; new apps use FORCE from day one; CIS tables get FORCE after the role split. The isolation probe (INF `db-isolation-probe.yml`) runs on a schedule and after each apply. | partial | DM-8.4; AA-817 D2; U-16 |
 | Tenant pool flags | Unreadable flag means tenant pool; `"false"` means admin pool; an emergency environment switch exists. This is a security control with no remove-by date. | in place | D-12; `docs/ops/feature-flags.md` (AA-892) |
@@ -138,7 +138,7 @@ git grep -l -E '<acc1-account-id>|<acc2-account-id>|<acc3-account-id>' origin/ma
 ```
 
 The account IDs are in the account map (`docs/onboarding.md`). acc1 (a personal account) was removed from the
-ecosystem on 2026-10-28 (AA-998); its ID stays in the pattern so it never comes back into a public repo. GitHub settings: repository Settings →
+ecosystem on 2026-10-28 (AA-998) and serves only Bedrock since S278 (AA-1095); its ID stays in the pattern so it never comes back into a public repo. GitHub settings: repository Settings →
 Code security, and Settings → Rules; or the read-only API calls listed in
 [vulnerability management](vulnerability-management.md#monthly-triage).
 

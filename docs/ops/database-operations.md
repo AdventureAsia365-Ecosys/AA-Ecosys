@@ -36,7 +36,7 @@ personal logins, no SSH (DM-8.8).
 
 ## Facts (read 2026-10-28)
 
-- `db.t4g.small`, PostgreSQL 15.17, 20 GB (storage autoscaling up to 100 GB), single-AZ, encrypted, deletion protection on, automated backups 7 days,
+- `db.t4g.small`, PostgreSQL 15.17, 20 GB (storage autoscaling up to 100 GB), single-AZ, encrypted, deletion protection on, automated backups 14 days (root ADR 0019 d16),
   PostgreSQL log export to CloudWatch (`/aws/rds/instance/aa-cis-dev-db/postgresql`, 365 days; connections and disconnections logged, D-08).
 - Manual snapshots expire after 30 days unless named `keep-…` or tagged `aa:retain=keep` /
   `aa:retain-until=YYYY-MM-DD` (snapshot-expiry Lambda, AA-869). A `-- migrate: destructive` migration gets a snapshot

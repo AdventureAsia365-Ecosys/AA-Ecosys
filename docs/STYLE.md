@@ -79,9 +79,9 @@ front-matter schema is [`templates/frontmatter.schema.json`](templates/frontmatt
 ## Commands
 
 - **AWS CLI: one command, one line.** No `\` continuation (it hangs WSL2). Put shell variables on their own line first.
-- Always pass `--profile` and `--region`. Infra commands use `--profile aa365-admin --region us-west-1`; the LLM
-  account (acc3) uses its own profile (see the account map in [onboarding](onboarding.md)). acc1 is no longer part of
-  the ecosystem (AA-998).
+- Always pass `--profile` and `--region`. Infra commands use `--profile aa365-admin --region us-west-1`; the Bedrock
+  accounts (acc1 first since S278, acc3 behind it) use their own profiles (see the account map in
+  [onboarding](onboarding.md)); acc1 holds only the Bedrock invoker role (AA-1095, root ADR 0001a Note S278).
 - The first step of every runbook is `aws sts get-caller-identity --profile aa365-admin` (AA-517: wrong-account writes).
 - End a line that changes state with `# WRITE`.
 - Placeholders are kebab-case in angle brackets, `<task-arn>`, with one sentence on where the value comes from.
@@ -173,7 +173,7 @@ Use GitHub alerts, at most two per screen:
 flowchart LR
   owner["Business owner<br/>[Person]"]
   cis["AA-CIS<br/>[Software system]"]
-  bedrock["Amazon Bedrock on acc3<br/>[External system]"]
+  bedrock["Amazon Bedrock on acc1 and acc3<br/>[External system]"]
   owner -->|"reviews tours in the admin"| cis
   cis -->|"writes and judges content"| bedrock
 ```

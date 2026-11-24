@@ -28,8 +28,8 @@ related: [OPS-04, OPS-04-queue-stuck, APP-09, FIN-01, APP-06, AA-649, AA-804, AA
 - A Cost Anomaly Detection alert. On acc2, monitor `Default-Services-Monitor` sends any anomaly of 5 USD or more to
   the alerts topic at once. On acc3, a daily e-mail covers anomalies from 10 USD, and the topic `aa3-cost-alerts`
   sends anomalies from 15 USD at once (`accounts/acc3-bedrock/cost_anomaly_immediate.tf`).
-- Bedrock runs on acc3 only (AA-998; see the [account map](../../onboarding.md#account-map)). Its spend shows in the
-  acc3 bill and budget, not in the acc2 budgets. The app ledger below covers every call.
+- Bedrock chat runs on acc1 first and acc3 behind it (S278, AA-1095; see the [account map](../../onboarding.md#account-map)).
+  Its spend shows in the acc1 and acc3 bills and budgets (acc1: alert only), not in the acc2 budgets. The app ledger below covers every call.
 - A job ended `stopped_budget`, or the admin **Budgets** page shows today's spend near a limit.
 
 ## Facts (the controls that exist)
