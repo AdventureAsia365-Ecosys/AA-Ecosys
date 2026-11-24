@@ -8,6 +8,8 @@ owner: nghiep
 audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem, aa-cis-worker, aa-cis-api, tripplanner-lambda]
 last_reviewed: 2026-10-30
+detected_at: "2026-10-29"
+resolved_at: "2026-11-12"
 related: [OPS-04, OPS-04-postmortems, FIN-01, AA-900, AA-998, AA-999, AA-1002, AA-1003, docs/adr/0001a-retire-acc1-llm-on-acc3-only.md, docs/audits/2026-10-29-S257-llm-access-options/]
 ---
 
@@ -40,6 +42,11 @@ between supply options.
 | K-INC-TTD@1 | Impact start to first alert or report | < 15 min (SEV1) | Not measured: no alert; found the same afternoon by reading a failed evaluation run (exact minute not recorded) |
 | K-INC-TTR@1 | Detection to restored | < 1 working day | Not restored after 1 working day (open) |
 | K-INC-COSTATTR@1 | Cost alert to written cause | <= 1 working day | Not a cost incident |
+
+**Added 24/11/2026 (S291, front-matter times):** `detected_at` is the day only (the minute was not recorded, see
+K-INC-TTD). `resolved_at` is 12/11/2026, the day every gateway chat model answered again on Bedrock, served from
+acc1 with acc3 behind it (root ADR 0001a, Note S278); interim routes through the vendor APIs and the acc2 models ran
+before that.
 
 ## 4. Timeline (UTC+7)
 

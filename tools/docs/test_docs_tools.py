@@ -269,6 +269,49 @@ class FrontMatterTest(TempRepo):
         msgs = self.errors()
         self.assertEqual([m for m in msgs if "duplicate id" in m], ["duplicate id OPS-02 (also in docs/ops/a.md)"])
 
+    def test_runbook_states_last_tested(self) -> None:
+        # AA-1118: a runbook page needs a date (with where and what) or `untested`; null and a missing key fail.
+        tested = GOOD_FM.replace("tested_where: dev-acc2\n", "tested_where: dev-acc2\ntested_evidence: docs/audits/x/\n")
+        self.write("docs/ops/runbooks/ok-date.md", tested.replace("OPS-02", "OPS-02-a"))
+        self.write("docs/ops/runbooks/ok-untested.md",
+                   GOOD_FM.replace("OPS-02", "OPS-02-b").replace("last_tested: 2026-01-01\ntested_where: dev-acc2\n",
+                                                                "last_tested: untested\n"))
+        self.write("docs/ops/runbooks/null.md", GOOD_FM.replace("OPS-02", "OPS-02-c").replace(
+            "last_tested: 2026-01-01", "last_tested: null"))
+        self.write("docs/ops/runbooks/missing.md", GOOD_FM.replace("OPS-02", "OPS-02-d").replace(
+            "last_tested: 2026-01-01\ntested_where: dev-acc2\n", ""))
+        self.write("docs/ops/runbooks/no-evidence.md", GOOD_FM.replace("OPS-02", "OPS-02-e"))
+        self.write("docs/ops/runbooks/bad-word.md", GOOD_FM.replace("OPS-02", "OPS-02-f").replace(
+            "last_tested: 2026-01-01", "last_tested: never"))
+        # outside the runbook folder the rule does not apply (templates keep null)
+        self.write("docs/templates/runbook.md", GOOD_FM.replace("last_tested: 2026-01-01", "last_tested: null"))
+        pages, parse_errors = check_frontmatter.load_pages(self.root)
+        found = parse_errors + check_frontmatter.validate(self.root, pages)
+        by_path = {}
+        for f in found:
+            by_path.setdefault(f.path, []).append(f.message)
+        self.assertNotIn("docs/ops/runbooks/ok-date.md", by_path)
+        self.assertNotIn("docs/ops/runbooks/ok-untested.md", by_path)
+        self.assertNotIn("docs/templates/runbook.md", by_path)
+        self.assertIn("missing or null", by_path["docs/ops/runbooks/null.md"][0])
+        self.assertIn("missing or null", by_path["docs/ops/runbooks/missing.md"][0])
+        self.assertEqual(by_path["docs/ops/runbooks/no-evidence.md"],
+                         ["last_tested 2026-01-01 needs tested_evidence: where it ran / what was tested"])
+        self.assertIn("does not match", by_path["docs/ops/runbooks/bad-word.md"][0])
+
+    def test_postmortem_times_keep_their_offset(self) -> None:
+        pm = GOOD_FM.replace("type: how-to", "type: report").replace(
+            "last_tested: 2026-01-01\ntested_where: dev-acc2\n",
+            "detected_at: 2026-10-29T13:50:00+07:00\nresolved_at: \"2026-11-12T09:00+07:00\"\n")
+        self.write("docs/ops/postmortems/2026-10-29-x.md", pm)
+        self.write("docs/ops/postmortems/2026-10-30-y.md", pm.replace("OPS-02", "OPS-03").replace(
+            "resolved_at: \"2026-11-12T09:00+07:00\"", "resolved_at: yesterday"))
+        pages, _ = check_frontmatter.load_pages(self.root)
+        self.assertEqual(dict(pages)["docs/ops/postmortems/2026-10-29-x.md"]["detected_at"], "2026-10-29T13:50:00+07:00")
+        msgs = self.errors()
+        self.assertEqual(len(msgs), 1)
+        self.assertIn("'yesterday' does not match", msgs[0])
+
     def test_translation_shares_the_english_id(self) -> None:
         vi = GOOD_FM.replace("---\n\n#", "lang: vi\ntranslation_of: docs/ops/rollback.md\n---\n\n#")
         self.write("docs/ops/rollback.md", GOOD_FM)
