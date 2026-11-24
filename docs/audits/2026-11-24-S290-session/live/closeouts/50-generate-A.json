@@ -1,0 +1,17 @@
+{
+ "case": "TC-000040",
+ "count": 10,
+ "per_supplier": {
+  "SUP-000019": 6,
+  "SUP-000018": 4
+ },
+ "supply": {
+  "items_to_book": 10,
+  "items_booked": 0,
+  "live": 10,
+  "confirmed": 0,
+  "waiting": 10,
+  "declined": 0,
+  "state": "confirming"
+ }
+}

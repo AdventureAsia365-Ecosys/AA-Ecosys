@@ -1,0 +1,18 @@
+{
+ "tour_id": "3fa33633-8502-4b53-a775-a0491fd2e509",
+ "addons_on_page": 5,
+ "price_lines": 5,
+ "calls": [
+  {
+   "path": "/api/trip/addons",
+   "status": 200,
+   "result": null
+  },
+  {
+   "path": "/api/trip/send",
+   "status": 200,
+   "result": "sent",
+   "channel": "crm"
+  }
+ ]
+}

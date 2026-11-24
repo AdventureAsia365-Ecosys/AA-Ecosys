@@ -1,0 +1,20 @@
+{
+ "current": {
+  "version_no": 2,
+  "value": "1, 2, 3, 4, 5-7, 8-10, 11+",
+  "effective_from": "2026-11-23"
+ },
+ "open": null,
+ "history": [
+  {
+   "v": 2,
+   "status": "in_force",
+   "value": "1, 2, 3, 4, 5-7, 8-10, 11+"
+  },
+  {
+   "v": 1,
+   "status": "superseded",
+   "value": "1, 2, 3-4, 5-6, 7-10, 11+"
+  }
+ ]
+}

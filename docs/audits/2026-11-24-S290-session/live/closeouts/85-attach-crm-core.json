@@ -1,0 +1,12 @@
+{
+ "tenant": "e2e-lead-proof",
+ "job_status": "queued",
+ "crm_onboarding": {
+  "status": "failed",
+  "error": {
+   "step": "agency_create",
+   "http_status": 403,
+   "code": "missing_group"
+  }
+ }
+}

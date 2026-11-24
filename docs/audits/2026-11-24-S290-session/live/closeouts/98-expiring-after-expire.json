@@ -1,0 +1,18 @@
+{
+ "total": 2,
+ "ours": null,
+ "rows": [
+  {
+   "supplier": "SUP-000015",
+   "valid_to": "2027-01-15",
+   "announced": true,
+   "mailed": true
+  },
+  {
+   "supplier": "SUP-000002",
+   "valid_to": "2027-01-21",
+   "announced": true,
+   "mailed": true
+  }
+ ]
+}

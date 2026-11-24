@@ -1,0 +1,7 @@
+{
+ "contract_expiry_alert_days": 60,
+ "contract_expiry_mail_roles": [
+  "admin",
+  "contracting"
+ ]
+}

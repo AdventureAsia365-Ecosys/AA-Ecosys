@@ -1,0 +1,10 @@
+{
+ "trip_case": "TC-000039",
+ "lines": [
+  {
+   "line_ref": "L1",
+   "status": "on_request",
+   "supplier": "SYNTHETIC S289 AA-1153 Lantern DMC B (live check, not real)"
+  }
+ ]
+}

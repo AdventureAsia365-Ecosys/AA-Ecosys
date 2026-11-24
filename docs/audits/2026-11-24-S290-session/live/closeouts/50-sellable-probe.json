@@ -1,0 +1,5 @@
+{
+ "status": 409,
+ "detail": "no_approved_price",
+ "message": "approve a price version or let the cost sheet price the tour before selling it"
+}

@@ -1,0 +1,6 @@
+{
+ "bill": "BIL-000003",
+ "status": 403,
+ "detail": "maker_checker",
+ "message": "you approved BIL-000003: another admin records its payout"
+}

@@ -1,0 +1,13 @@
+{
+ "two_person_approval": false,
+ "max_days": 90,
+ "own_approve": "not sent: cis.settings.two_person_approval is off (the proposer would be recorded self_approved)",
+ "probe": [
+  {
+   "id": 1,
+   "state": "revoked",
+   "self_approved": false,
+   "revoked": true
+  }
+ ]
+}

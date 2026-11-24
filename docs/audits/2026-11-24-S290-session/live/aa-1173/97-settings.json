@@ -1,0 +1,125 @@
+{
+ "keys": [
+  {
+   "key": "cis.compliance.access_review_max_age_days",
+   "value": 100,
+   "unit": "days"
+  },
+  {
+   "key": "cis.compliance.applicability_review_max_age_days",
+   "value": 180,
+   "unit": "days"
+  },
+  {
+   "key": "cis.compliance.campaign_consent_violations_max",
+   "value": 0,
+   "unit": "sends"
+  },
+  {
+   "key": "cis.compliance.campaign_consent_window_days",
+   "value": 30,
+   "unit": "days"
+  },
+  {
+   "key": "cis.compliance.ci_scan_max_age_days",
+   "value": 8,
+   "unit": "days"
+  },
+  {
+   "key": "cis.compliance.collector_heartbeat_hours",
+   "value": 36,
+   "unit": "hours"
+  },
+  {
+   "key": "cis.compliance.consent_capture_max_age_days",
+   "value": 90,
+   "unit": "days"
+  },
+  {
+   "key": "cis.compliance.docs_overdue_max",
+   "value": 0,
+   "unit": "pages"
+  },
+  {
+   "key": "cis.compliance.drill_max_age_days",
+   "value": 90,
+   "unit": "days"
+  },
+  {
+   "key": "cis.compliance.erasure_drill_max_age_days",
+   "value": 180,
+   "unit": "days"
+  },
+  {
+   "key": "cis.compliance.exception_max_days",
+   "value": 90,
+   "unit": "days"
+  },
+  {
+   "key": "cis.compliance.legal_docs_overdue_max",
+   "value": 0,
+   "unit": "pages"
+  },
+  {
+   "key": "cis.compliance.partial_weight",
+   "value": 0.5,
+   "unit": "ratio"
+  },
+  {
+   "key": "cis.compliance.prowler_critical_high_max",
+   "value": 0,
+   "unit": "findings"
+  },
+  {
+   "key": "cis.compliance.reference_scores",
+   "value": {
+    "iso27001:2022": 45.8,
+    "soc2:2017": 44,
+    "iso42001:2023": 46.9,
+    "owasp-top10:2021": 64.8,
+    "owasp-llm:2025": 66.7
+   },
+   "unit": null
+  },
+  {
+   "key": "cis.compliance.retention_live_max_age_days",
+   "value": 7,
+   "unit": "days"
+  },
+  {
+   "key": "cis.compliance.retention_run_max_age_days",
+   "value": 3,
+   "unit": "days"
+  },
+  {
+   "key": "cis.compliance.review_max_age_days",
+   "value": 40,
+   "unit": "days"
+  },
+  {
+   "key": "cis.compliance.validity_hours.aws_nightly",
+   "value": 48,
+   "unit": "hours"
+  },
+  {
+   "key": "cis.compliance.validity_hours.cis_db",
+   "value": 72,
+   "unit": "hours"
+  },
+  {
+   "key": "cis.compliance.validity_hours.crm_ops",
+   "value": 72,
+   "unit": "hours"
+  },
+  {
+   "key": "cis.compliance.validity_hours.prowler_weekly",
+   "value": 216,
+   "unit": "hours"
+  },
+  {
+   "key": "cis.compliance.validity_hours.root_daily",
+   "value": 72,
+   "unit": "hours"
+  }
+ ]
+}

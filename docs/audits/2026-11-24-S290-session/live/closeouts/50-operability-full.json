@@ -1,0 +1,9 @@
+{
+ "status": "warnings",
+ "days": 5,
+ "findings": [
+  "N5:guide:warn"
+ ],
+ "exception": null,
+ "overridable": {}
+}

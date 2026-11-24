@@ -1,0 +1,8 @@
+{
+ "entity_code": "SYN-S290",
+ "applied_on_create": false,
+ "change_status": "pending",
+ "own_approve": 403,
+ "withdraw": 200,
+ "deactivated": 200
+}

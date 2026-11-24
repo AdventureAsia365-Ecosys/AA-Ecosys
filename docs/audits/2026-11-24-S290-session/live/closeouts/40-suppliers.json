@@ -1,0 +1,12 @@
+{
+ "suppliers": {
+  "hotel": {
+   "code": "SUP-000018",
+   "status": "pending"
+  },
+  "ground": {
+   "code": "SUP-000019",
+   "status": "pending"
+  }
+ }
+}

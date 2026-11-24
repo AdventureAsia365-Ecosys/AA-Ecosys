@@ -1,0 +1,10 @@
+{
+ "status": "warnings",
+ "days": 5,
+ "findings": [
+  "N4:day:3:warn",
+  "N5:guide:warn"
+ ],
+ "exception": null,
+ "overridable": {}
+}

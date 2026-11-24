@@ -1,0 +1,18 @@
+{
+ "bands": [
+  "b2b:1-1",
+  "b2b:2-2",
+  "b2b:3-3",
+  "b2b:4-4",
+  "b2b:5-7",
+  "b2b:8-10",
+  "b2b:11-+",
+  "fixed_departure:1-1",
+  "fixed_departure:2-2",
+  "fixed_departure:3-3",
+  "fixed_departure:4-4",
+  "fixed_departure:5-7",
+  "fixed_departure:8-10",
+  "fixed_departure:11-+"
+ ]
+}
