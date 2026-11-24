@@ -586,7 +586,7 @@ features:
     status: beta
     surface: ["page:/admin/platform/compliance", "route:admin_platform_compliance"]
     conditions:
-      settings: [cis.compliance.access_review_max_age_days, cis.compliance.ci_scan_max_age_days, cis.compliance.collector_heartbeat_hours, cis.compliance.docs_overdue_max, cis.compliance.drill_max_age_days, cis.compliance.partial_weight, cis.compliance.reference_scores, cis.compliance.validity_hours.root_daily]
+      settings: [cis.compliance.access_review_max_age_days, cis.compliance.ci_scan_max_age_days, cis.compliance.collector_heartbeat_hours, cis.compliance.docs_overdue_max, cis.compliance.drill_max_age_days, cis.compliance.partial_weight, cis.compliance.reference_scores, cis.compliance.validity_hours.root_daily, cis.compliance.exception_max_days, cis.compliance.prowler_critical_high_max, cis.compliance.review_max_age_days, cis.compliance.validity_hours.aws_nightly, cis.compliance.validity_hours.prowler_weekly]
     depends_on: [INF-F006]
     owner: tech_lead
   # ── AA-CIS: Content studio API (the UI lives in AA-Partner) ───────────────────────────────────────────────────────

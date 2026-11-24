@@ -824,11 +824,19 @@
    "app": "cis",
    "area": "compliance"
   },
+  "cis.compliance.exception_max_days": {
+   "app": "cis",
+   "area": "compliance"
+  },
   "cis.compliance.legal_docs_overdue_max": {
    "app": "cis",
    "area": "compliance"
   },
   "cis.compliance.partial_weight": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.prowler_critical_high_max": {
    "app": "cis",
    "area": "compliance"
   },
@@ -844,11 +852,23 @@
    "app": "cis",
    "area": "compliance"
   },
+  "cis.compliance.review_max_age_days": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.validity_hours.aws_nightly": {
+   "app": "cis",
+   "area": "compliance"
+  },
   "cis.compliance.validity_hours.cis_db": {
    "app": "cis",
    "area": "compliance"
   },
   "cis.compliance.validity_hours.crm_ops": {
+   "app": "cis",
+   "area": "compliance"
+  },
+  "cis.compliance.validity_hours.prowler_weekly": {
    "app": "cis",
    "area": "compliance"
   },
