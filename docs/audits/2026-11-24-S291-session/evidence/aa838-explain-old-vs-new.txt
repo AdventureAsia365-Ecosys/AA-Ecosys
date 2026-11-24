@@ -1,0 +1,181 @@
+SCRIPT index raw_tours_key_expr_idx present=True
+SCRIPT requests tenant_requests=37 newest=8 retired=0
+SCRIPT timing label=request_tours_newest variant=old role=master rows=8 median_ms=25.5 runs=27/25/25 explain_exec_ms=23.6 plan_ms=4.1 hit=4385 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=request_tours_newest variant=old role=master node=Seq Scan:tour_lifecycle_event self_ms=8.0 loops=892 rows=0
+SCRIPT plan label=request_tours_newest variant=old role=master node=Aggregate:- self_ms=5.6 loops=1 rows=892
+SCRIPT plan label=request_tours_newest variant=old role=master node=Nested Loop:- self_ms=2.8 loops=1 rows=8
+SCRIPT plan label=request_tours_newest variant=old role=master node=Sort:- self_ms=1.5 loops=1 rows=988
+SCRIPT plan label=request_tours_newest variant=old role=master node=Hash Join:- self_ms=1.0 loops=1 rows=988
+SCRIPT plan label=request_tours_newest variant=old role=master node=Seq Scan:raw_tours self_ms=1.0 loops=1 rows=988
+SCRIPT timing label=request_tours_newest variant=new role=master rows=8 median_ms=4.0 runs=5/4/4 explain_exec_ms=3.5 plan_ms=3.0 hit=149 read=4 temp_w=0 uses_key_expr_idx=True
+SCRIPT plan label=request_tours_newest variant=new role=master node=Bitmap Index Scan:raw_tours_key_expr_idx self_ms=2.7 loops=8 rows=1
+SCRIPT plan label=request_tours_newest variant=new role=master node=Aggregate:- self_ms=0.1 loops=8 rows=1
+SCRIPT plan label=request_tours_newest variant=new role=master node=Seq Scan:tour_lifecycle_event self_ms=0.1 loops=8 rows=0
+SCRIPT plan label=request_tours_newest variant=new role=master node=Index Scan:tour_atoms_pkey self_ms=0.1 loops=8 rows=1
+SCRIPT plan label=request_tours_newest variant=new role=master node=Seq Scan:angle_gate_request self_ms=0.1 loops=1 rows=8
+SCRIPT plan label=request_tours_newest variant=new role=master node=Index Scan:published_tours_tour_id_key self_ms=0.0 loops=8 rows=1
+SCRIPT parity label=request_tours_newest role=master equal=True old_rows=8 new_rows=8
+SCRIPT error label=request_tours_newest variant=old role=aa_app_user error=InsufficientPrivilegeError
+SCRIPT error label=request_tours_newest variant=new role=aa_app_user error=InsufficientPrivilegeError
+SCRIPT timing label=today_cis variant=old role=master rows=1 median_ms=0.7 runs=1/1/1 explain_exec_ms=0.3 plan_ms=0.8 hit=49 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=today_cis variant=old role=master node=Index Scan:llm_call_log_created_id_idx self_ms=0.2 loops=1 rows=56
+SCRIPT plan label=today_cis variant=old role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT timing label=today_cis variant=new role=master rows=1 median_ms=0.6 runs=1/1/1 explain_exec_ms=0.1 plan_ms=0.2 hit=49 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=today_cis variant=new role=master node=Index Scan:llm_call_log_created_id_idx self_ms=0.1 loops=1 rows=56
+SCRIPT plan label=today_cis variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT parity label=today_cis role=master equal=True old_rows=1 new_rows=1
+SCRIPT timing label=baseline_cis_14d variant=old role=master rows=1 median_ms=30.4 runs=30/30/31 explain_exec_ms=45.1 plan_ms=0.8 hit=2810 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=baseline_cis_14d variant=old role=master node=Bitmap Heap Scan:llm_call_log self_ms=25.8 loops=1 rows=29412
+SCRIPT plan label=baseline_cis_14d variant=old role=master node=Sort:- self_ms=7.9 loops=1 rows=29412
+SCRIPT plan label=baseline_cis_14d variant=old role=master node=Merge Join:- self_ms=4.5 loops=1 rows=29412
+SCRIPT plan label=baseline_cis_14d variant=old role=master node=Aggregate:- self_ms=4.3 loops=1 rows=14
+SCRIPT plan label=baseline_cis_14d variant=old role=master node=Bitmap Index Scan:llm_call_log_created_id_idx self_ms=2.1 loops=1 rows=29460
+SCRIPT plan label=baseline_cis_14d variant=old role=master node=Aggregate:- self_ms=0.1 loops=1 rows=1
+SCRIPT timing label=baseline_cis_14d variant=new role=master rows=1 median_ms=28.0 runs=28/28/28 explain_exec_ms=33.8 plan_ms=0.5 hit=2802 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=baseline_cis_14d variant=new role=master node=Bitmap Heap Scan:llm_call_log self_ms=19.2 loops=1 rows=29412
+SCRIPT plan label=baseline_cis_14d variant=new role=master node=Sort:- self_ms=7.2 loops=1 rows=29412
+SCRIPT plan label=baseline_cis_14d variant=new role=master node=Aggregate:- self_ms=5.3 loops=1 rows=14
+SCRIPT plan label=baseline_cis_14d variant=new role=master node=Bitmap Index Scan:llm_call_log_created_id_idx self_ms=1.7 loops=1 rows=29460
+SCRIPT plan label=baseline_cis_14d variant=new role=master node=Hash Join:- self_ms=0.0 loops=1 rows=14
+SCRIPT plan label=baseline_cis_14d variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT parity label=baseline_cis_14d role=master equal=True old_rows=1 new_rows=1
+SCRIPT timing label=baseline_cis_28d variant=old role=master rows=1 median_ms=138.5 runs=161/137/139 explain_exec_ms=206.4 plan_ms=0.5 hit=9190 read=10037 temp_w=292 uses_key_expr_idx=False
+SCRIPT plan label=baseline_cis_28d variant=old role=master node=Seq Scan:llm_call_log self_ms=398.2 loops=3 rows=51886
+SCRIPT plan label=baseline_cis_28d variant=old role=master node=Sort:- self_ms=67.7 loops=3 rows=51886
+SCRIPT plan label=baseline_cis_28d variant=old role=master node=Merge Join:- self_ms=23.4 loops=3 rows=51886
+SCRIPT plan label=baseline_cis_28d variant=old role=master node=Aggregate:- self_ms=22.4 loops=3 rows=17
+SCRIPT plan label=baseline_cis_28d variant=old role=master node=Seq Scan:llm_call_daily self_ms=0.1 loops=3 rows=5
+SCRIPT plan label=baseline_cis_28d variant=old role=master node=Aggregate:- self_ms=0.1 loops=1 rows=27
+SCRIPT timing label=baseline_cis_28d variant=new role=master rows=1 median_ms=131.7 runs=132/129/132 explain_exec_ms=147.8 plan_ms=0.5 hit=9638 read=9653 temp_w=176 uses_key_expr_idx=False
+SCRIPT plan label=baseline_cis_28d variant=new role=master node=Seq Scan:llm_call_log self_ms=277.8 loops=3 rows=51886
+SCRIPT plan label=baseline_cis_28d variant=new role=master node=Sort:- self_ms=58.2 loops=3 rows=51886
+SCRIPT plan label=baseline_cis_28d variant=new role=master node=Aggregate:- self_ms=26.6 loops=3 rows=19
+SCRIPT plan label=baseline_cis_28d variant=new role=master node=Aggregate:- self_ms=0.1 loops=1 rows=27
+SCRIPT plan label=baseline_cis_28d variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT plan label=baseline_cis_28d variant=new role=master node=Seq Scan:llm_call_daily self_ms=0.0 loops=1 rows=5
+SCRIPT parity label=baseline_cis_28d role=master equal=True old_rows=1 new_rows=1
+SCRIPT timing label=today_tripplanner variant=old role=master rows=1 median_ms=0.7 runs=1/1/1 explain_exec_ms=0.1 plan_ms=0.2 hit=49 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=today_tripplanner variant=old role=master node=Index Scan:llm_call_log_created_id_idx self_ms=0.1 loops=1 rows=0
+SCRIPT plan label=today_tripplanner variant=old role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT timing label=today_tripplanner variant=new role=master rows=1 median_ms=0.5 runs=1/1/1 explain_exec_ms=0.1 plan_ms=0.1 hit=49 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=today_tripplanner variant=new role=master node=Index Scan:llm_call_log_created_id_idx self_ms=0.1 loops=1 rows=0
+SCRIPT plan label=today_tripplanner variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT parity label=today_tripplanner role=master equal=True old_rows=1 new_rows=1
+SCRIPT timing label=baseline_tripplanner_14d variant=old role=master rows=1 median_ms=14.8 runs=15/15/15 explain_exec_ms=13.5 plan_ms=0.4 hit=2802 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=baseline_tripplanner_14d variant=old role=master node=Bitmap Heap Scan:llm_call_log self_ms=11.6 loops=1 rows=48
+SCRIPT plan label=baseline_tripplanner_14d variant=old role=master node=Bitmap Index Scan:llm_call_log_created_id_idx self_ms=1.7 loops=1 rows=29460
+SCRIPT plan label=baseline_tripplanner_14d variant=old role=master node=Sort:- self_ms=0.0 loops=1 rows=48
+SCRIPT plan label=baseline_tripplanner_14d variant=old role=master node=Aggregate:- self_ms=0.0 loops=1 rows=3
+SCRIPT plan label=baseline_tripplanner_14d variant=old role=master node=Merge Join:- self_ms=0.0 loops=1 rows=48
+SCRIPT plan label=baseline_tripplanner_14d variant=old role=master node=Seq Scan:llm_call_daily self_ms=0.0 loops=1 rows=5
+SCRIPT timing label=baseline_tripplanner_14d variant=new role=master rows=1 median_ms=14.8 runs=15/15/15 explain_exec_ms=13.4 plan_ms=0.5 hit=2802 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=baseline_tripplanner_14d variant=new role=master node=Bitmap Heap Scan:llm_call_log self_ms=11.5 loops=1 rows=48
+SCRIPT plan label=baseline_tripplanner_14d variant=new role=master node=Bitmap Index Scan:llm_call_log_created_id_idx self_ms=1.7 loops=1 rows=29460
+SCRIPT plan label=baseline_tripplanner_14d variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=3
+SCRIPT plan label=baseline_tripplanner_14d variant=new role=master node=Sort:- self_ms=0.0 loops=1 rows=48
+SCRIPT plan label=baseline_tripplanner_14d variant=new role=master node=Seq Scan:llm_call_daily self_ms=0.0 loops=1 rows=5
+SCRIPT plan label=baseline_tripplanner_14d variant=new role=master node=ProjectSet:- self_ms=0.0 loops=1 rows=14
+SCRIPT parity label=baseline_tripplanner_14d role=master equal=True old_rows=1 new_rows=1
+SCRIPT timing label=baseline_tripplanner_28d variant=old role=master rows=1 median_ms=85.0 runs=88/84/85 explain_exec_ms=90.7 plan_ms=0.5 hit=9957 read=9269 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=baseline_tripplanner_28d variant=old role=master node=Seq Scan:llm_call_log self_ms=222.5 loops=3 rows=34
+SCRIPT plan label=baseline_tripplanner_28d variant=old role=master node=Sort:- self_ms=0.1 loops=3 rows=34
+SCRIPT plan label=baseline_tripplanner_28d variant=old role=master node=Seq Scan:llm_call_daily self_ms=0.1 loops=2 rows=5
+SCRIPT plan label=baseline_tripplanner_28d variant=old role=master node=Aggregate:- self_ms=0.1 loops=3 rows=3
+SCRIPT plan label=baseline_tripplanner_28d variant=old role=master node=Sort:- self_ms=0.0 loops=2 rows=5
+SCRIPT plan label=baseline_tripplanner_28d variant=old role=master node=Merge Join:- self_ms=0.0 loops=3 rows=34
+SCRIPT timing label=baseline_tripplanner_28d variant=new role=master rows=1 median_ms=84.5 runs=84/84/88 explain_exec_ms=84.5 plan_ms=0.5 hit=10406 read=8885 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=baseline_tripplanner_28d variant=new role=master node=Seq Scan:llm_call_log self_ms=213.6 loops=3 rows=34
+SCRIPT plan label=baseline_tripplanner_28d variant=new role=master node=Sort:- self_ms=0.2 loops=3 rows=34
+SCRIPT plan label=baseline_tripplanner_28d variant=new role=master node=Aggregate:- self_ms=0.1 loops=3 rows=3
+SCRIPT plan label=baseline_tripplanner_28d variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=7
+SCRIPT plan label=baseline_tripplanner_28d variant=new role=master node=Seq Scan:llm_call_daily self_ms=0.0 loops=1 rows=5
+SCRIPT plan label=baseline_tripplanner_28d variant=new role=master node=ProjectSet:- self_ms=0.0 loops=1 rows=28
+SCRIPT parity label=baseline_tripplanner_28d role=master equal=True old_rows=1 new_rows=1
+SCRIPT timing label=today_crm variant=old role=master rows=1 median_ms=0.6 runs=1/1/1 explain_exec_ms=0.1 plan_ms=0.2 hit=49 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=today_crm variant=old role=master node=Index Scan:llm_call_log_created_id_idx self_ms=0.1 loops=1 rows=0
+SCRIPT plan label=today_crm variant=old role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT timing label=today_crm variant=new role=master rows=1 median_ms=0.5 runs=1/1/1 explain_exec_ms=0.1 plan_ms=0.1 hit=49 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=today_crm variant=new role=master node=Index Scan:llm_call_log_created_id_idx self_ms=0.0 loops=1 rows=0
+SCRIPT plan label=today_crm variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT parity label=today_crm role=master equal=True old_rows=1 new_rows=1
+SCRIPT timing label=baseline_crm_14d variant=old role=master rows=1 median_ms=14.8 runs=15/15/15 explain_exec_ms=13.6 plan_ms=0.4 hit=2801 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=baseline_crm_14d variant=old role=master node=Bitmap Heap Scan:llm_call_log self_ms=11.8 loops=1 rows=0
+SCRIPT plan label=baseline_crm_14d variant=old role=master node=Bitmap Index Scan:llm_call_log_created_id_idx self_ms=1.7 loops=1 rows=29460
+SCRIPT plan label=baseline_crm_14d variant=old role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT plan label=baseline_crm_14d variant=old role=master node=ProjectSet:- self_ms=0.0 loops=1 rows=14
+SCRIPT plan label=baseline_crm_14d variant=old role=master node=Hash Join:- self_ms=0.0 loops=1 rows=14
+SCRIPT plan label=baseline_crm_14d variant=old role=master node=Hash Join:- self_ms=0.0 loops=1 rows=14
+SCRIPT timing label=baseline_crm_14d variant=new role=master rows=1 median_ms=14.8 runs=16/15/15 explain_exec_ms=13.6 plan_ms=0.5 hit=2801 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=baseline_crm_14d variant=new role=master node=Bitmap Heap Scan:llm_call_log self_ms=11.7 loops=1 rows=0
+SCRIPT plan label=baseline_crm_14d variant=new role=master node=Bitmap Index Scan:llm_call_log_created_id_idx self_ms=1.7 loops=1 rows=29460
+SCRIPT plan label=baseline_crm_14d variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT plan label=baseline_crm_14d variant=new role=master node=ProjectSet:- self_ms=0.0 loops=1 rows=14
+SCRIPT plan label=baseline_crm_14d variant=new role=master node=Hash Join:- self_ms=0.0 loops=1 rows=14
+SCRIPT plan label=baseline_crm_14d variant=new role=master node=Hash Join:- self_ms=0.0 loops=1 rows=14
+SCRIPT parity label=baseline_crm_14d role=master equal=True old_rows=1 new_rows=1
+SCRIPT timing label=baseline_crm_28d variant=old role=master rows=1 median_ms=143.0 runs=92/143/159 explain_exec_ms=83.5 plan_ms=0.5 hit=10723 read=8501 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=baseline_crm_28d variant=old role=master node=Seq Scan:llm_call_log self_ms=213.1 loops=3 rows=0
+SCRIPT plan label=baseline_crm_28d variant=old role=master node=Sort:- self_ms=0.1 loops=3 rows=0
+SCRIPT plan label=baseline_crm_28d variant=old role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT plan label=baseline_crm_28d variant=old role=master node=ProjectSet:- self_ms=0.0 loops=1 rows=28
+SCRIPT plan label=baseline_crm_28d variant=old role=master node=Hash Join:- self_ms=0.0 loops=1 rows=28
+SCRIPT plan label=baseline_crm_28d variant=old role=master node=Hash Join:- self_ms=0.0 loops=1 rows=28
+SCRIPT timing label=baseline_crm_28d variant=new role=master rows=1 median_ms=99.2 runs=100/99/86 explain_exec_ms=97.1 plan_ms=0.5 hit=11173 read=8117 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=baseline_crm_28d variant=new role=master node=Seq Scan:llm_call_log self_ms=248.7 loops=3 rows=0
+SCRIPT plan label=baseline_crm_28d variant=new role=master node=Sort:- self_ms=0.2 loops=3 rows=0
+SCRIPT plan label=baseline_crm_28d variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT plan label=baseline_crm_28d variant=new role=master node=ProjectSet:- self_ms=0.0 loops=1 rows=28
+SCRIPT plan label=baseline_crm_28d variant=new role=master node=Hash Join:- self_ms=0.0 loops=1 rows=28
+SCRIPT plan label=baseline_crm_28d variant=new role=master node=Hash Join:- self_ms=0.0 loops=1 rows=28
+SCRIPT parity label=baseline_crm_28d role=master equal=True old_rows=1 new_rows=1
+SCRIPT timing label=tenant_total_internal variant=old role=master rows=1 median_ms=91.4 runs=87/93/91 explain_exec_ms=116.4 plan_ms=0.1 hit=11480 read=7733 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=tenant_total_internal variant=old role=master node=Seq Scan:llm_call_log self_ms=170.5 loops=3 rows=174073
+SCRIPT plan label=tenant_total_internal variant=old role=master node=Aggregate:- self_ms=127.9 loops=3 rows=1
+SCRIPT plan label=tenant_total_internal variant=old role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT plan label=tenant_total_internal variant=old role=master node=Gather:- self_ms=-182.0 loops=1 rows=3
+SCRIPT timing label=tenant_total_internal variant=new role=master rows=1 median_ms=89.7 runs=90/91/84 explain_exec_ms=113.1 plan_ms=0.2 hit=11870 read=7349 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=tenant_total_internal variant=new role=master node=Seq Scan:llm_call_log self_ms=170.8 loops=3 rows=174071
+SCRIPT plan label=tenant_total_internal variant=new role=master node=Aggregate:- self_ms=119.3 loops=3 rows=1
+SCRIPT plan label=tenant_total_internal variant=new role=master node=Index Scan:idx_llm_call_log_tenant_created self_ms=0.1 loops=1 rows=5
+SCRIPT plan label=tenant_total_internal variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT plan label=tenant_total_internal variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT plan label=tenant_total_internal variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT parity label=tenant_total_internal role=master equal=True old_rows=1 new_rows=1
+SCRIPT timing label=tenant_window_internal variant=old role=master rows=1 median_ms=84.3 runs=84/84/88 explain_exec_ms=88.4 plan_ms=0.2 hit=12251 read=6962 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=tenant_window_internal variant=old role=master node=Seq Scan:llm_call_log self_ms=192.8 loops=3 rows=55749
+SCRIPT plan label=tenant_window_internal variant=old role=master node=Aggregate:- self_ms=30.0 loops=3 rows=1
+SCRIPT plan label=tenant_window_internal variant=old role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT plan label=tenant_window_internal variant=old role=master node=Gather:- self_ms=-134.5 loops=1 rows=3
+SCRIPT timing label=tenant_window_internal variant=new role=master rows=1 median_ms=82.8 runs=84/76/83 explain_exec_ms=87.9 plan_ms=0.3 hit=12638 read=6578 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=tenant_window_internal variant=new role=master node=Seq Scan:llm_call_log self_ms=162.2 loops=3 rows=55749
+SCRIPT plan label=tenant_window_internal variant=new role=master node=Aggregate:- self_ms=50.1 loops=3 rows=1
+SCRIPT plan label=tenant_window_internal variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT plan label=tenant_window_internal variant=new role=master node=Index Scan:idx_llm_call_log_tenant_created self_ms=0.0 loops=1 rows=0
+SCRIPT plan label=tenant_window_internal variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT plan label=tenant_window_internal variant=new role=master node=Append:- self_ms=0.0 loops=1 rows=2
+SCRIPT parity label=tenant_window_internal role=master equal=True old_rows=1 new_rows=1
+SCRIPT timing label=tenant_total_tenant variant=old role=master rows=1 median_ms=2.4 runs=3/2/2 explain_exec_ms=2.6 plan_ms=0.1 hit=730 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=tenant_total_tenant variant=old role=master node=Bitmap Heap Scan:llm_call_log self_ms=1.5 loops=1 rows=3942
+SCRIPT plan label=tenant_total_tenant variant=old role=master node=Aggregate:- self_ms=0.8 loops=1 rows=1
+SCRIPT plan label=tenant_total_tenant variant=old role=master node=Bitmap Index Scan:idx_llm_call_log_tenant_created self_ms=0.2 loops=1 rows=3942
+SCRIPT timing label=tenant_total_tenant variant=new role=master rows=1 median_ms=2.6 runs=3/3/2 explain_exec_ms=2.3 plan_ms=0.2 hit=730 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=tenant_total_tenant variant=new role=master node=Bitmap Heap Scan:llm_call_log self_ms=1.3 loops=1 rows=3942
+SCRIPT plan label=tenant_total_tenant variant=new role=master node=Aggregate:- self_ms=0.7 loops=1 rows=1
+SCRIPT plan label=tenant_total_tenant variant=new role=master node=Bitmap Index Scan:idx_llm_call_log_tenant_created self_ms=0.2 loops=1 rows=3942
+SCRIPT plan label=tenant_total_tenant variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT plan label=tenant_total_tenant variant=new role=master node=Append:- self_ms=0.0 loops=1 rows=2
+SCRIPT plan label=tenant_total_tenant variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT parity label=tenant_total_tenant role=master equal=True old_rows=1 new_rows=1
+SCRIPT timing label=tenant_window_tenant variant=old role=master rows=1 median_ms=0.7 runs=1/1/1 explain_exec_ms=0.3 plan_ms=0.2 hit=120 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=tenant_window_tenant variant=old role=master node=Bitmap Heap Scan:llm_call_log self_ms=0.2 loops=1 rows=498
+SCRIPT plan label=tenant_window_tenant variant=old role=master node=Aggregate:- self_ms=0.1 loops=1 rows=1
+SCRIPT plan label=tenant_window_tenant variant=old role=master node=Bitmap Index Scan:idx_llm_call_log_tenant_created self_ms=0.0 loops=1 rows=498
+SCRIPT timing label=tenant_window_tenant variant=new role=master rows=1 median_ms=0.8 runs=1/1/1 explain_exec_ms=0.3 plan_ms=0.2 hit=120 read=0 temp_w=0 uses_key_expr_idx=False
+SCRIPT plan label=tenant_window_tenant variant=new role=master node=Bitmap Heap Scan:llm_call_log self_ms=0.1 loops=1 rows=498
+SCRIPT plan label=tenant_window_tenant variant=new role=master node=Aggregate:- self_ms=0.1 loops=1 rows=1
+SCRIPT plan label=tenant_window_tenant variant=new role=master node=Bitmap Index Scan:idx_llm_call_log_tenant_created self_ms=0.0 loops=1 rows=498
+SCRIPT plan label=tenant_window_tenant variant=new role=master node=Aggregate:- self_ms=0.0 loops=1 rows=1
+SCRIPT plan label=tenant_window_tenant variant=new role=master node=Append:- self_ms=0.0 loops=1 rows=2
+SCRIPT plan label=tenant_window_tenant variant=new role=master node=Result:- self_ms=0.0 loops=1 rows=0
+SCRIPT parity label=tenant_window_tenant role=master equal=True old_rows=1 new_rows=1
+SCRIPT done seconds=5

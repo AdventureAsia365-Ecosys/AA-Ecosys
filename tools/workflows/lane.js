@@ -124,6 +124,11 @@ HARD RULES for this lane:
   tests, not only integration tests, or the gate fails (TOTAL must stay >= 90.5%).
 - CIS openapi.json: regenerate only with the fastapi/pydantic versions pinned in requirements.txt (the CI versions), never a different local venv.
 - One model label containing "api" per line in code and tests (gitleaks generic-api-key scans every commit; a later fix commit does not clear it).
+- Never write the gitleaks inline-allow token (the word gitleaks, a colon, the word allow) anywhere in a diff, prose and moved docs
+  included: the Secret Scan guard reads every commit's added lines and refuses the PR (S291 CIS #1669); write "allow comment" instead.
+- A new setting, route, job kind or entitlement: run python3 /home/nghiep/projects/AA-Ecosys/tools/catalogue/surface.py check
+  --apps-root /home/nghiep/projects/AA-Ecosys/apps from a root worktree; on drift, refresh the snapshot and map each new entry in
+  docs/catalogue/features.yaml in a root PR of this lane (S291: five S290 settings turned the scheduled Catalogue run red).
 - Integration tests that sign in as cis_app: grant schema USAGE/SELECT temporarily in the test, name result columns ("AS ok") and read rows by column name.
 - Keep docs/implementation-notes/<ISSUE>.md in the repo updated (Decisions / Changed / Tradeoffs / Should know); parallel lanes on one issue use <ISSUE>-<lane>.md.
 - Docs impact (AA-1132, warn only, never a gate): before returning, in each worktree run

@@ -1,0 +1,6 @@
+{
+ "item": "main-cis",
+ "ack": 200,
+ "after_status": "acked",
+ "clear": 200
+}
