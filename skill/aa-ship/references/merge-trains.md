@@ -30,9 +30,9 @@ live: §3. Công cụ và mã thoát: `tools/github/README.md` (AA-1032).
 
 ## Thứ tự merge từng repo
 
-- CIS, Booking, Partner: `ship_merge.py` (gate mọi check → `mergeq.sh` → đọc lại state, kể cả khi `mergeq.sh` báo
+- CIS, Booking, Partner, TripPlanner (AA-1119): `ship_merge.py` (gate mọi check → `mergeq.sh` → đọc lại state, kể cả khi `mergeq.sh` báo
   "not merged" mà queue vừa merge).
-- TripPlanner, Infra, repo gốc: `ship_merge.py` (squash thẳng khi mọi check xanh, đúng head đã gate).
+- Infra, repo gốc: `ship_merge.py` (squash thẳng khi mọi check xanh, đúng head đã gate).
 - Có gì push vào PR sau lần gate trước (bot, restack, release-please) → chạy lại `ship_merge.py` ngay trước khi merge.
 
 ## Migration trong train (ADR 0017)

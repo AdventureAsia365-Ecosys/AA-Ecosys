@@ -413,6 +413,9 @@ How release-please is set up (AA-891):
 - The bot's release PR has no `Refs AA-xxx`; this exception is written into `skill/aa-ship` §1 by AA-891. The tech
   lead adds the same line to the global rules by hand (N-6).
 - Cadence on Dev: cut a release weekly or at a milestone shown to the business owner, not on every merge.
+- Decision (S282, tech lead, AA-1119): release-please is **kept**. The orchestrating agent checks the four release PRs
+  (AA-CIS-App, AA-Booking, AA-Partner, AA-TripPlanner-Web) and merges them **weekly**, when CI is green and no wave
+  runs. 0 USD (public repos, standard runners).
 - The CHANGELOG is for engineers (Keep a Changelog sections). The release note is for the business: written by hand
   from the CHANGELOG, only for verified-live features ([template](templates/release-note.md)).
 - GitHub Deployments and DORA numbers stay with the rest of U-47 at first prod.
@@ -571,7 +574,7 @@ cannot be undone).
 |---|---|---|
 | CIS api and worker (ECS) | Rolling, circuit breaker, deploy gate on open waves and deploy-blocking job kinds (AA-993 G5) | [CIS rollback](ops/runbooks/rollback-cis.md) (previous task definition, api and worker on the same SHA, then revert on `main`) |
 | Booking (ECS) | Rolling, circuit breaker, job guard, SHA smoke | [Booking rollback](ops/runbooks/rollback-booking.md) |
-| Frontends (ECS, since AA-911 / AA-1038; was Vercel) | Each app's deploy workflow when `frontend/**` changes | [ECS rollback](ops/runbooks/rollback-ecs.md) (an earlier task-definition revision, or revert on `main`); the old [Vercel rollback](ops/runbooks/rollback-vercel.md) is superseded |
+| Frontends (ECS, since AA-911 / AA-1038; was Vercel) | Each app's deploy workflow when `frontend/**` changes | Automatic since AA-1119: a red post-deploy verify or smoke moves the service back to the revision it ran before the deploy and opens a `deploy-smoke-red` issue ([ECS rollback](ops/runbooks/rollback-ecs.md#automatic-rollback-after-a-red-post-deploy-check)); by hand: an earlier task-definition revision, or revert on `main`; the old [Vercel rollback](ops/runbooks/rollback-vercel.md) is superseded |
 | TripPlanner Lambdas | Path-filtered deploy | [TP Lambda rollback](ops/runbooks/rollback-tp-lambda.md); `needs: ci` + smoke is AA-879, the `live` alias is AA-703 (U-54) |
 | Database | Forward-only | No schema rollback; roll forward; PITR is the last resort ([PITR restore](ops/runbooks/restore-rds-pitr.md)) |
 | Terraform | Plan in PR, apply from `main` | [Terraform rollback](ops/runbooks/rollback-terraform.md) |

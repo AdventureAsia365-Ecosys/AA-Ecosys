@@ -75,9 +75,9 @@ from a laptop.
 
 1. Open the pull request on GitHub. Wait until every check is green (about 3 to 5 minutes).
 2. Merge it:
-   - AA-CIS-App, AA-Booking, AA-Partner use a merge queue: press **Merge when ready**. The queue reruns the required
-     checks on the newest `main` and squashes the PR itself.
-   - AA-TripPlanner-Web, AA-CIS-Infra and the root repo: press **Squash and merge**.
+   - AA-CIS-App, AA-Booking, AA-Partner and AA-TripPlanner-Web use a merge queue: press **Merge when ready**. The
+     queue reruns the required checks on the newest `main` and squashes the PR itself.
+   - AA-CIS-Infra and the root repo: press **Squash and merge**.
 3. The merge starts the app's deploy workflow when the PR touched its paths:
 
    | Repo | Workflow (Actions tab) | What it deploys |

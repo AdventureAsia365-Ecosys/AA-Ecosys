@@ -118,6 +118,10 @@ Drills and their evidence: [drill index](drills/README.md).
 | Infrastructure | Terraform root `accounts/aa365` (state in S3, versioned) | dispatch `terraform-apply.yml` from `main` after merge | plan on the PR; plan guard; job-idle gate when the plan touches an ECS service or the RDS instance (AA-1023, override `override_busy_jobs`); bootstrap roles by hand with MFA | plan shows no changes | [rollback-terraform](runbooks/rollback-terraform.md) |
 | DB migrations | DB Migrate on AA-CIS-Infra `main` | dispatch `check` then `apply` | idle check over every owner job table (DM-11.4; unlike deploys, `apply` still waits) | version in `shared.schema_versions`, `/health/ready` | forward only ([DB Migrate](runbooks/db-migrate.md)) |
 
+The four web frontends (CIS admin, Booking admin, CRM web, TripPlanner web) roll back by themselves when their
+post-deploy verify or smoke is red, and open a `deploy-smoke-red` issue (AA-1119,
+[rollback-ecs](runbooks/rollback-ecs.md#automatic-rollback-after-a-red-post-deploy-check)).
+
 Merge rules (DM-11.5, data standards v1.1): during the dev phase the orchestrating agent merges and verifies its own
 PRs, including infra and security (D-13); risky PRs get an agent review first. The human gate (Terraform, migrations,
 auth, data deletion) starts with prod or the first paying tenant.
@@ -143,12 +147,14 @@ Read from GitHub (branch protection and rulesets of the default branch) with `ge
 
 <!-- /gen -->
 
-Since S271 the three merge-queue repos (CIS, Booking, Partner) run `ci.yml` on pull_request, merge_group and dispatch,
+Since S271 the merge-queue repos CIS, Booking and Partner run `ci.yml` on pull_request, merge_group and dispatch,
 not on push to `main`: every commit on `main` is a queue group commit that already passed the full run. On a pull
 request only the fast jobs run (lint, security audit, unit tests, migration preflight, frontend lint and type check);
 the heavy ones (integration tests, Docker build checks, frontend build, Visual) run in the queue, or on the PR when
 it touches their area (migrations or integration tests, image inputs); a skipped job counts as passed for a required
 check. A docs-only PR skips the test jobs. Dispatching `ci.yml` on a PR branch runs everything on its head.
+AA-TripPlanner-Web joined the merge queue in AA-1119: its `ci.yml` runs every job on pull_request and merge_group
+(and still on push to `main`, which also feeds the Lambda deploy through workflow_call).
 
 | Repo | Workflow | Trigger | Jobs | Notes |
 |---|---|---|---|---|

@@ -38,6 +38,26 @@ This page is the shared procedure. The per-app pages keep their app facts:
   - a bad migration: the database does not roll back with the app. Migrations only go forward
     ([DB Migrate](db-migrate.md)); the old build must run on the newer schema.
 
+## Automatic rollback after a red post-deploy check
+
+Since AA-1119 (S282 audit R32) the four web deploy workflows roll back by themselves: AA-CIS-App
+`deploy-admin-dev.yml` (`aa-cis-dev-admin`), AA-Booking `deploy-admin-dev.yml` (`aa-booking-dev-admin`), AA-Partner
+`deploy-web-dev.yml` (`aa-crm-dev-web`) and AA-TripPlanner-Web `deploy-web-dev.yml` (`aa-tripplanner-dev-web`).
+
+- Before `update-service`, the deploy job records the revision the service runs (`previous_td`). It records nothing
+  when the service is not settled (a deployment in progress) or runs a Terraform template revision.
+- When the run's post-deploy verify or smoke job fails after a deploy that left tasks running, job `rollback` runs
+  `.github/scripts/ecs_smoke_rollback.py rollback --apply` (the same file in the four repos): the same steps as
+  steps 3 to 5 below, unattended. It refuses and changes nothing when the recorded revision is unknown, is a template,
+  is not ACTIVE, runs the same build, or its image left ECR; when a deployment is in progress; or when the service no
+  longer runs the deployed image (someone moved it). A rerun is a no-op once the service is on the target.
+- Job `report` opens (or comments on) one issue per workflow labelled `deploy-smoke-red`, with the run link and the
+  rollback outcome; the next verified deploy closes it. The run stays red either way.
+- What to do: read the failed job, then fix forward on `main` (step 7). Do not move the service back to the bad
+  revision by hand. The configuration check (step 4) is not run by the automatic path: the target is the revision that
+  ran minutes earlier.
+- The CIS and Booking APIs and the CRM API keep the manual procedure below (their deploys carry job tables and gates).
+
 ## Parameters
 
 | Parameter | Values |

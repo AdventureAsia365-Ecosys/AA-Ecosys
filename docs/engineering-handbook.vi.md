@@ -414,6 +414,9 @@ Cách cài release-please (AA-891):
 - PR phát hành của bot không có `Refs AA-xxx`; ngoại lệ này được AA-891 ghi vào `skill/aa-ship` §1. Tech lead tự tay
   thêm cùng dòng đó vào luật chung (N-6).
 - Nhịp trên Dev: cắt một bản phát hành mỗi tuần hoặc ở một mốc cho chủ doanh nghiệp xem, không phải mỗi lần merge.
+- Quyết định (S282, tech lead, AA-1119): **giữ** release-please. Agent điều phối kiểm bốn PR phát hành (AA-CIS-App,
+  AA-Booking, AA-Partner, AA-TripPlanner-Web) và merge chúng **mỗi tuần**, khi CI xanh và không có wave đang chạy.
+  0 USD (repo public, runner chuẩn).
 - CHANGELOG dành cho kỹ sư (các mục theo Keep a Changelog). Release note dành cho kinh doanh: viết tay từ CHANGELOG,
   chỉ cho tính năng đã kiểm live ([mẫu](templates/release-note.md)).
 - GitHub Deployments và số liệu DORA ở lại cùng phần còn lại của U-47 tới prod đầu tiên.
@@ -572,7 +575,7 @@ Rollback trước, điều tra sau. Chỉ roll forward khi rollback không an to
 |---|---|---|
 | CIS api và worker (ECS) | Rolling, circuit breaker, cổng deploy theo wave đang mở và các job kind chặn deploy (AA-993 G5) | [Rollback CIS](ops/runbooks/rollback-cis.md) (task definition trước, api và worker cùng SHA, rồi revert trên `main`) |
 | Booking (ECS) | Rolling, circuit breaker, job guard, smoke SHA | [Rollback Booking](ops/runbooks/rollback-booking.md) |
-| Frontend (ECS từ AA-911 / AA-1038; trước là Vercel) | Workflow deploy của từng app khi `frontend/**` đổi | [Rollback ECS](ops/runbooks/rollback-ecs.md) (revision task definition cũ hơn, hoặc revert trên `main`); [Rollback Vercel](ops/runbooks/rollback-vercel.md) cũ đã bị thay |
+| Frontend (ECS từ AA-911 / AA-1038; trước là Vercel) | Workflow deploy của từng app khi `frontend/**` đổi | Tự động từ AA-1119: verify hoặc smoke sau deploy đỏ thì service quay về revision chạy trước lần deploy và mở issue `deploy-smoke-red` ([Rollback ECS](ops/runbooks/rollback-ecs.md#automatic-rollback-after-a-red-post-deploy-check)); bằng tay: revision task definition cũ hơn, hoặc revert trên `main`; [Rollback Vercel](ops/runbooks/rollback-vercel.md) cũ đã bị thay |
 | Lambda TripPlanner | Deploy lọc theo đường dẫn | [Rollback Lambda TP](ops/runbooks/rollback-tp-lambda.md); `needs: ci` + smoke là AA-879, alias `live` là AA-703 (U-54) |
 | Database | Chỉ tiến | Không rollback schema; roll forward; PITR là phương án cuối ([khôi phục PITR](ops/runbooks/restore-rds-pitr.md)) |
 | Terraform | Plan trong PR, apply từ `main` | [Rollback Terraform](ops/runbooks/rollback-terraform.md) |

@@ -130,7 +130,7 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
 - Squash chỉ sau `git fetch`; gộp commit bằng `git reset --soft $(git merge-base HEAD origin/main)`, không bằng
   `origin/main` trần. Trước mọi merge: `gh pr diff <n> --name-only` — có file bị xoá/đổi ngoài phạm vi PR thì dừng
   (`ship_merge.py` tự từ chối PR xoá file; file đổi ngoài phạm vi vẫn phải đọc).
-- **CIS, Booking, Partner: merge queue (AA-889).** Không `update-branch` nữa: `ship_merge.py` gate mọi check rồi gọi
+- **CIS, Booking, Partner, TripPlanner (từ AA-1119): merge queue (AA-889).** Không `update-branch` nữa: `ship_merge.py` gate mọi check rồi gọi
   `tools/github/mergeq.sh <Repo> <n>` — xếp hàng (`gh pr merge --squash --auto` qua `as-app.sh`), chờ tới merged, in
   SHA. Gọi `mergeq.sh` trần thì nó chỉ đọc check **required**. Queue chạy lại required check trên commit tạm
   `gh-readonly-queue/main/*` (PR đi trước + `main` mới nhất) rồi tự squash vào `main`. Guard §2 (bảng job, wave) kiểm
@@ -138,7 +138,7 @@ Bài học của vùng này: `aa-lessons/lessons.md` mục "Verify và Done" + "
   (GraphQL `dequeuePullRequest`, hoặc "Remove from queue" trên UI). `gh pr merge --disable-auto` chỉ huỷ được khi
   check của PR còn chạy; PR đã xanh thì đã vào thẳng hàng, lệnh đó không rút được. Check không báo → queue loại PR sau
   `check_response_timeout`; xem `gh run list --event merge_group`.
-- TripPlanner, AA-CIS-Infra, repo gốc: `ship_merge.py` (squash thẳng khi mọi check xanh, không `--auto`: PR đã CLEAN
+- AA-CIS-Infra, repo gốc: `ship_merge.py` (squash thẳng khi mọi check xanh, không `--auto`: PR đã CLEAN
   thì `--auto` báo lỗi).
 - Nhiều PR backend cùng repo: **MẶC ĐỊNH xếp hàng cùng lúc** (S271): mọi PR chỉ có code đã xanh → `mergeq.sh` song song
   ngay, mỗi PR một tiến trình nền (`mergeq.sh` chờ tới merged nên vòng `for` tuần tự = chạy từng cái). Queue CIS kiểm
