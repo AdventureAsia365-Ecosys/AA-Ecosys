@@ -13,8 +13,14 @@ name: Compliance evidence
 #   s3://<bronze>/docs-reader/compliance/evidence.json                   the latest file (CIS reads it)
 #   s3://<bronze>/docs-reader/compliance/history/<yyyy>/<mm>/<dd>.json   the same file per day
 #
-# Readiness tracking, not immutable evidence: the Docs sync role can overwrite these objects (phase 2 moves the
-# collector to an Object Lock bucket and its own role). The bucket expires noncurrent docs-reader/ versions after 7 days.
+# AA-1173 (S290, phase 2): the same bundle is SEALED first into the Object Lock evidence bucket with
+# tools/compliance/seal.py (source root_daily: a write-once bundle and a manifest that links the previous manifest, a
+# hash chain), with the role aa-cis-<env>-compliance-evidence (AA-CIS-Infra accounts/aa365/compliance_evidence.tf,
+# trusted for THIS file on master only through job_workflow_ref; secrets COMPLIANCE_EVIDENCE_ROLE_ARN and
+# COMPLIANCE_EVIDENCE_BUCKET; without them the seal is skipped with a notice). The CIS API reads the sealed bundle
+# first (AA-CIS-App api/services/compliance_store.py). The docs-reader copy below is the phase 1 path, kept while the
+# sealed path is proven live (follow-up: drop it then); it is readiness tracking, not immutable evidence (the Docs
+# sync role can overwrite it; noncurrent docs-reader/ versions expire after 7 days).
 #
 # Public repo (section 4 C.5): this log prints counts only, never raw API output; the collector refuses to write a file
 # that carries an account ID, an ARN, an S3 URI or an e-mail address; no shell tracing, no artifact, no
@@ -66,11 +72,12 @@ jobs:
     permissions:
       contents: read
       actions: read      # workflow runs and jobs of the six public repos
-      id-token: write    # OIDC for the Docs sync role
+      id-token: write    # OIDC for the compliance evidence role and the Docs sync role
     env:
       OUT: _out/evidence.json
       PREFIX: docs-reader/compliance
       HAS_AWS: ${{ secrets.DOCS_SYNC_ROLE_ARN != '' && secrets.DOCS_SYNC_BUCKET != '' }}
+      HAS_EVIDENCE: ${{ secrets.COMPLIANCE_EVIDENCE_ROLE_ARN != '' && secrets.COMPLIANCE_EVIDENCE_BUCKET != '' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -92,6 +99,39 @@ jobs:
           for c in bundle["checks"]:
               print(f"| {c['check_id']} | {c['status']} |")
           PY
+
+      - name: Seal skipped
+        if: env.HAS_EVIDENCE != 'true'
+        run: echo "::notice title=Compliance evidence::COMPLIANCE_EVIDENCE_ROLE_ARN / COMPLIANCE_EVIDENCE_BUCKET are not set; nothing sealed."
+
+      - name: AWS credentials (OIDC, compliance evidence role)
+        if: env.HAS_EVIDENCE == 'true'
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ secrets.COMPLIANCE_EVIDENCE_ROLE_ARN }}
+          aws-region: us-west-1
+          role-session-name: compliance-seal-${{ github.run_id }}
+          mask-aws-account-id: true
+
+      - name: Verify the role
+        if: env.HAS_EVIDENCE == 'true'
+        run: |
+          set -euo pipefail
+          ARN=$(aws sts get-caller-identity --query Arn --output text)
+          case "$ARN" in
+            *:assumed-role/aa-cis-*-compliance-evidence/*) echo "role: compliance-evidence" ;;
+            *) echo "::error::the seal must run with the compliance evidence role (got another role)"; exit 1 ;;
+          esac
+
+      - name: Seal into the evidence bucket (write-once, hash chain)
+        if: env.HAS_EVIDENCE == 'true'
+        env:
+          BUCKET: ${{ secrets.COMPLIANCE_EVIDENCE_BUCKET }}
+        run: |
+          set -euo pipefail
+          python3 tools/compliance/seal.py --bucket "$BUCKET" --source root_daily --bundle "$OUT" \
+            --run "$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" --run-ref "compliance-evidence #$GITHUB_RUN_NUMBER" \
+            --version "$GITHUB_SHA" | tee -a "$GITHUB_STEP_SUMMARY"
 
       - name: Upload skipped
         if: env.HAS_AWS != 'true'

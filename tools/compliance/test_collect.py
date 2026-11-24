@@ -282,7 +282,8 @@ class PublicRepoGuardTest(unittest.TestCase):
     """The collector files are public: no account ID, ARN, bucket name or e-mail; the workflow never traces its shell,
     never runs on pull_request_target and prints counts only (root advisory section 4 C.5)."""
 
-    FILES = ("tools/compliance/collect.py", "tools/compliance/checks.json", ".github/workflows/compliance-evidence.yml")
+    FILES = ("tools/compliance/collect.py", "tools/compliance/checks.json", "tools/compliance/seal.py",
+             ".github/workflows/compliance-evidence.yml")
 
     def test_no_identifiers_in_the_collector_files(self):
         for name in self.FILES:
