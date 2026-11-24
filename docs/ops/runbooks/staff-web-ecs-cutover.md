@@ -9,9 +9,9 @@ audience: [engineer, devops, agent]
 applies_to: [aa-cis-frontend, aa-booking-admin, aa-cis-infra]
 last_reviewed: 2026-11-07
 review_every_days: 90
-last_tested: null
-tested_where: null
-tested_evidence: null
+last_tested: 2026-11-07
+tested_where: dev-acc2
+tested_evidence: "docs/sessions/2026-11-07-S272-quality-w1-w3-r5-leads-vercel-retire.md (sections 1-3 in S271 on 2026-11-06, section 4 in S271-S272; AA-911)"
 related: [OPS-02-vercel, OPS-02-ecs, AA-911]
 ---
 

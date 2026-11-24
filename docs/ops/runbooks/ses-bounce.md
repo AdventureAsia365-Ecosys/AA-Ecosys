@@ -9,7 +9,7 @@ audience: [engineer, devops, agent]
 applies_to: [ses, aa-workforce-dev, aa-external-dev, aa-booking-api, aa-cis-api, aa-partner]
 last_reviewed: 2026-10-28
 review_every_days: 90
-last_tested: null
+last_tested: untested
 tested_where: null
 tested_evidence: null
 related: [OPS-04, OPS-04-cognito-login, AA-811, AA-703, AA-816]

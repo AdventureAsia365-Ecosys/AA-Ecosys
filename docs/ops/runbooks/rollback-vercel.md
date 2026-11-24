@@ -10,9 +10,9 @@ audience: [engineer, devops, agent]
 applies_to: [aa-tripplanner]
 last_reviewed: 2026-11-08
 review_every_days: 90
-last_tested: null
-tested_where: null
-tested_evidence: null
+last_tested: 2026-11-02
+tested_where: drill
+tested_evidence: "docs/audits/2026-11-02-S264-rollback-game-day/README.md (D3 production alias of aa-booking-admin back and forward, before the Vercel retirement)"
 related: [OPS-02-ecs, OPS-02-cis, OPS-02-tp-lambda, OPS-02-staff-web-cutover, OPS-02-tripplanner-web-cutover, AA-869, AA-911, AA-979, AA-1038]
 ---
 
@@ -47,4 +47,4 @@ Lambdas ([rollback-tp-lambda](rollback-tp-lambda.md)).
 
 | Date | Where | By | Evidence | Result |
 |---|---|---|---|---|
-| - | - | - | - | never run (superseded before a drill) |
+| 2026-11-02 | drill (rollback game day D3), agent-run, `aa-booking-admin` | Claude Code, tech lead watching | [`audits/2026-11-02-S264-rollback-game-day/`](../../audits/2026-11-02-S264-rollback-game-day/README.md) | pass: production alias back and forward in under a minute each; superseded five days later (AA-911) |

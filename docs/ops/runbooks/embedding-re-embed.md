@@ -9,7 +9,7 @@ audience: [engineer, devops, agent]
 applies_to: [aa-cis-api, aa-cis-worker, aa-cis-dev-db, aa-tripplanner-browse]
 last_reviewed: 2026-11-01
 review_every_days: 90
-last_tested: null
+last_tested: untested
 tested_where: null
 tested_evidence: null
 related: [APP-06, OPS-05-db-migrate, OPS-05-ecs-exec, APP-06-anthropic-key, AA-1026]

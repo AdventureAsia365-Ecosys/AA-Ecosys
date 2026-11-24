@@ -9,7 +9,7 @@ audience: [engineer, devops, cto, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-11-17
 review_every_days: 90
-related: [OPS-02-cis, OPS-02-ecs, OPS-03-gameday, OPS-03-pitr, OPS-03-schema, OPS-03-tabletop, OPS-01, OPS-01-no-agent, AA-829, AA-869, AA-1023, AA-1110]
+related: [OPS-02-cis, OPS-02-ecs, OPS-03-pilot-tenant, OPS-03-tenant-restore, OPS-03-gameday, OPS-03-pitr, OPS-03-schema, OPS-03-tabletop, OPS-01, OPS-01-no-agent, AA-829, AA-869, AA-1023, AA-1110]
 ---
 
 # Drill index
@@ -28,6 +28,9 @@ that the platform can be run without the agent ([run without the agent](../run-w
 | 2026-10-24 | PITR restore to a point between two marked writes, compare, **single-schema restore (option A)**, **repoint `db.dev.internal` to the copy and back** (4 services redeployed each way), delete | [restore-rds-pitr](../runbooks/restore-rds-pitr.md), [restore-schema](../runbooks/restore-schema.md) | pass: 164/164 tables, heads equal; 40/40 rows restored; services ran on the copy (readiness refused the copy where its schema was older); back on live with no Terraform drift | restore 21 min 20 s; repoint ~40 s + ~3 min redeploy each way | [`audits/2026-10-24-S249-restore-drill/`](../../audits/2026-10-24-S249-restore-drill/), AA-829 |
 | 2026-10-17 | CIS api + worker rollback two revisions back to an older image, `/health` 200, then forward again | [rollback-cis](../runbooks/rollback-cis.md) | pass | minutes (not timed) | S241 session log (AA-869) |
 | 2026-11-02 | Rollback game day, agent-run: Booking API and CRM API back one build and forward (`tools/ops/ecs_rollback.sh`), the Booking admin on Vercel (since retired), Lambda `aa-tripplanner-dev-browse` (path B), the terraform-apply job-idle gate | [rollback-ecs](../runbooks/rollback-ecs.md), [rollback-tp-lambda](../runbooks/rollback-tp-lambda.md), [game day plan](rollback-game-day.md) | pass, 5/5; finding: the helper reported `IN_PROGRESS` once before ECS reached `COMPLETED` | back 150 s / 166 s (ECS), 11 s (Lambda) | [`audits/2026-11-02-S264-rollback-game-day/`](../../audits/2026-11-02-S264-rollback-game-day/README.md), AA-1023 |
+| 2026-11-05 | CRM one-agency restore from its sealed nightly export (synthetic agency), agent-run | [pilot-tenant-restore-drill](../runbooks/pilot-tenant-restore-drill.md) | pass: 169 checksums verified, 83 tables, 24/24 manifest rows restored; a second agency's export failed on a key mix-up, fixed the same session | not timed | [`audits/2026-11-05-S269-aa969-loadtest/restore-drill.json`](../../audits/2026-11-05-S269-aa969-loadtest/restore-drill.json) |
+| 2026-11-13 | CIS one-tenant restore (`tenant_backup`, then restore into a throwaway schema), synthetic tenant, agent-run | [tenant-restore-drill](../runbooks/tenant-restore-drill.md) | pass: `ok` and `complete` true, 77 checksums verified, 76 tables, 1565/1565 rows restored | not timed | [`audits/2026-11-13-S279-cis-restore-drill/`](../../audits/2026-11-13-S279-cis-restore-drill/restore-drill.json), AA-1093 |
+| 2026-11-15 | TripPlanner one-tenant restore (job `tp_tenant_restore_drill`), synthetic tenant, agent-run | [tenant-restore-drill](../runbooks/tenant-restore-drill.md) | pass: checksums and manifest match, every table restored with equal digests | not timed | [`audits/2026-11-15-S281-session/verify/aa1093/tp-restore-drill/`](../../audits/2026-11-15-S281-session/verify/aa1093/tp-restore-drill/restore-drill.json), AA-1093 |
 
 ## Not drilled yet
 
@@ -35,7 +38,7 @@ that the platform can be run without the agent ([run without the agent](../run-w
 |---|---|
 | Runbook-only deploy and rollback: a person follows [run without the agent](../run-without-agent.md) alone (one deploy by merge, one ECS rollback and forward) | AA-1110: needs the second key-holder's tested access ([access register](../../security/access-register.md)) |
 | [Security tabletop](security-tabletop.md): leaked secret, cross-agency read, a real `db_migrator` password rotation, the CRM data-key rotation talk-through | AA-1110: one 60-minute sitting with the tech lead, the second key-holder and the business owner |
-| [rollback-ecs](../runbooks/rollback-ecs.md), [rollback-tp-lambda](../runbooks/rollback-tp-lambda.md) | agent-run once (2026-11-02, above); never runbook-only; the pages are still `draft` and their tested logs do not list the game day yet |
+| [rollback-ecs](../runbooks/rollback-ecs.md), [rollback-tp-lambda](../runbooks/rollback-tp-lambda.md) | agent-run once (2026-11-02, above; `last_tested` and the tested logs record it); never runbook-only; the pages stay `draft` until the tech lead reads them |
 | [rollback-booking](../runbooks/rollback-booking.md) | never run beyond its read-only steps (the game day used rollback-ecs for Booking) |
 | [rollback-terraform](../runbooks/rollback-terraform.md) | once before prod (DM-9.3); cost 0 USD |
 | [break-glass](../runbooks/break-glass.md) via managed login | done with the tech lead 2026-10-19 (S244); a run by the second key-holder is part of the access test above |

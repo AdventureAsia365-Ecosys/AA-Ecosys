@@ -23,7 +23,7 @@ Pages are blameless and public-safe: no account IDs, ARNs, secrets, personal dat
 
 | Date (ICT) | Incident | SEV | Status | Page |
 |---|---|---|---|---|
-| 2026-10-29 | Bedrock refused every model on the LLM account (acc3): all platform LLM calls stopped | 2 | open, waiting for a decision | [2026-10-29-acc3-bedrock-access-refusal.md](2026-10-29-acc3-bedrock-access-refusal.md) |
+| 2026-10-29 | Bedrock refused every model on the LLM account (acc3): all platform LLM calls stopped | 2 | mitigated: Bedrock served again from 12/11 (acc1, S278); actions open | [2026-10-29-acc3-bedrock-access-refusal.md](2026-10-29-acc3-bedrock-access-refusal.md) |
 
 Status words: `open` (impact continues), `mitigated` (impact stopped, actions open), `closed` (actions done or moved
 to the backlog).

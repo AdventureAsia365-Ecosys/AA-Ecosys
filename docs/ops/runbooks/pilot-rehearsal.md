@@ -9,6 +9,9 @@ audience: [engineer, devops, cto, agent]
 applies_to: [aa-cis-api, aa-crm-dev-api, aa-crm-dev-web, aa-booking-dev-api, tripplanner, ecosystem]
 last_reviewed: 2026-11-18
 review_every_days: 90
+last_tested: untested
+tested_where: null
+tested_evidence: null
 related: [OPS-12-pilot-onboarding, OPS-03-pilot-tenant, OPS-05-ecs-exec, AA-1086, AA-1093, AA-1079, AA-1082, docs/adr/0006a-identity-phase1-amendments.md, docs/adr/0019-b2b-only-ecosystem-model.md]
 ---
 

@@ -46,7 +46,7 @@ which human checks the output before anyone relies on it.
   `content.ai` and the "AI-assisted" badge). No route change.
 - **v1.7 (2026-11-04, S267):** family fallback chains (CIS migration 366, tech lead request S267): every active route
   is an ordered chain by model family. Claude Sonnet 4.6 and Claude Haiku 4.5 come back as Converse catalog rows
-  (`sonnet-4-6`, `haiku-4-5`, acc3 only) right behind their 5.5 siblings; a writer then steps one Claude tier; the
+  (`sonnet-4-6`, `haiku-4-5`, on acc3 alone at the time) right behind their 5.5 siblings; a writer then steps one Claude tier; the
   acc2 rung stays where it was; the OpenAI API stays last and only on `vendor_direct` stages. The gateway now tries a
   `vendor_direct` route on AWS first across ALL its models (every AWS deployment of every model, then the vendor
   APIs), so a same-family degrade no longer has to be dropped. `tp_compose`, `segment_research` and
@@ -201,7 +201,8 @@ API answers the judge stages: on Dev today tenant content goes to the two direct
 
 Root [ADR 0009](../adr/0009-ai-platform-and-provider-gateway.md) decision 14, amended by the tech lead on 01/11/2026
 (S263, AA-1026): judge and validate stages may fall back to chat models on Bedrock in the infrastructure account
-(acc2), a second failure domain next to the LLM account (acc3), which refuses every model since 29/10. Rule **AWS
+(acc2), a second failure domain next to the LLM account of that time (acc3), which refused every model from 29/10
+(Bedrock chat models moved to acc1 on 12/11, S278). Rule **AWS
 first, vendor APIs last**: every AWS deployment of a route is tried before a vendor API outside AWS (the OpenAI API
 today, the Anthropic API once its key is in). Writer stages keep Anthropic models; acc2 cannot run Claude. Each pick is
 the cheapest acc2 model that passed the stage's contract smoke (its own prompt and parser on the acc2 deployment), and

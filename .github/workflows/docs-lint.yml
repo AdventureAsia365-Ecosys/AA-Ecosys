@@ -3,7 +3,11 @@ name: Docs lint
 #   - front-matter of catalog pages against docs/templates/frontmatter.schema.json, unique IDs
 #   - ADR status lines and the ADR index (docs/adr/README.md)
 #   - no backslash-continued AWS CLI command in docs, skills, steering or .claude (WSL2 hang)
-#   - literal resource IDs in docs prose: warn-only here (private repo, docs/STYLE.md)
+#   - literal resource IDs in docs prose: warn-only here (private repo, docs/STYLE.md); load balancer / target group
+#     ids fail (AA-1118, S282 audit R26)
+#   - runbooks state last_tested (a date with evidence, or untested) in the front-matter step (AA-1118)
+#   - phrases known wrong today: an error in docs pages, a warning in agent files (AA-1118)
+#   - the tracker plan.json milestones agree with their criteria and open issues (AA-1118, plan_sync.py --validate)
 #   - Markdown style (markdownlint, .markdownlint-cli2.jsonc): catalog pages under docs/ (journals, archive and
 #     generated pages are ignored in the config)
 #   - internal links, offline (lychee): no network, no external sites; the binary comes from a cached, hash-checked
@@ -332,16 +336,22 @@ jobs:
         run: |
           git fetch --no-tags --depth=1 origin "$BASE_REF"
           python tools/docs/check_images.py --new-audit-images --base FETCH_HEAD
-      - name: Literal resource IDs (warn-only)
+      # AA-1118 (S282 audit R26): a load balancer or target group id fails even here (the Infra generator masks them).
+      - name: Literal resource IDs (warn-only, load balancer ids fail)
         if: ${{ !cancelled() }}
-        run: python tools/docs/check_docs_text.py resource-ids --mode warn
+        run: python tools/docs/check_docs_text.py resource-ids --mode warn --block elb
 
-      # AA-1134: phrases that describe a retired thing as live (acc3-only serving, Vercel previews, the portal copy,
-      # the retired Booking inquiry kind, 7-day Dev backups; S283 docs audit). Warn-only while the docs rewrite of the
-      # audit findings lands; then --mode error.
-      - name: Retired phrases (warn-only)
+      # AA-1134, AA-1118: phrases that describe a retired thing as live or a fact that changed (Bedrock on acc3 alone,
+      # acc1 "removed" without its S278 Bedrock role, a develop branch, :latest tags, Vercel previews, the portal copy,
+      # the retired Booking inquiry kind, 7-day Dev RDS backups; S282 audit R20, S283 docs audit). The list lives in
+      # tools/docs/check_docs_text.py (RETIRED_PHRASES). Docs pages fail (their hits were fixed in AA-1118); the agent
+      # files (skills, steering, .claude) warn until their owners rewrite them.
+      - name: Retired phrases (docs pages)
         if: ${{ !cancelled() }}
-        run: python tools/docs/check_docs_text.py retired-phrases --mode warn
+        run: python tools/docs/check_docs_text.py retired-phrases --mode error --scope docs
+      - name: Retired phrases (agent files, warn-only)
+        if: ${{ !cancelled() }}
+        run: python tools/docs/check_docs_text.py retired-phrases --mode warn --scope skill --scope .kiro/steering --scope .claude
 
       # Failing since the existing pages were cleaned up (AA-888, S245). The scope (what is ignored and why) and the
       # rule settings are in .markdownlint-cli2.jsonc; the action pins markdownlint-cli2 0.23.2.

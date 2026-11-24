@@ -78,7 +78,6 @@ unchanged unless the prod ADR (L9) says otherwise.
 | TripPlanner | Browse reads (`catalog.v_tour`, `v_tour_day`, `v_destination`, photo views): DB time p95 | < 300 ms | PI / role `tripplanner` |
 | TripPlanner | Assembly reads + `tripplanner.outbox` insert: p95 | < 500 ms | same |
 | Booking | API reads/writes (`booking.trip_cases`, `booking.customers`): p95 | < 100 ms | PI / role `booking` |
-| Booking | `bk_inquiry_pull` batch (read `tripplanner.v_inquiry_outbox` → insert `booking.inbox_events`): duration | < 2 s per batch; inquiry lag p95 < 5 min | `booking.job` rows |
 | All | DB error rate (connection refused, `too many connections`, statement timeout, deadlock, serialization failure) | < 0.5 % of requests per app per day; **0** `too many connections` | CloudWatch log export (`postgresql`), app logs |
 | All | Connection saturation: `DatabaseConnections` p95 | < 60 % of `max_connections`; each role < 80 % of its `CONNECTION LIMIT` | CloudWatch; `pg_stat_activity` in the N1 dump |
 | All | Replication | **None yet** (no replica, single-AZ). RPO = PITR window (restorable to within ~5 min); RTO = measured in the X10 restore drill, target < 1 h on Dev | AWS RDS; X10 record |

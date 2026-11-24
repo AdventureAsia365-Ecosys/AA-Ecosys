@@ -9,9 +9,9 @@ audience: [engineer, devops, agent]
 applies_to: [ecosystem]
 last_reviewed: 2026-10-28
 review_every_days: 90
-last_tested: null
-tested_where: null
-tested_evidence: null
+last_tested: 2026-10-18
+tested_where: dev-acc2
+tested_evidence: "docs/sessions/2026-10-18-S242-cognito-staff-login-x1-network-dependabot.md (class 4 only: the break-glass secret, AA-854 breakglass-init; the other classes never rotated)"
 related: [SEC-02, OPS-10, OPS-05-db-migrate, AA-878, AA-880, AA-816]
 ---
 

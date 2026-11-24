@@ -14,7 +14,7 @@ related: [CAT-00, OPS-04, APP-01, APP-02, OPS-05, OPS-06, APP-09, skill/aa-ship/
 
 # Operations index
 
-Everything runs on **acc2** (us-west-1) except the LLM calls, which run on acc3; see the
+Everything runs on **acc2** (us-west-1) except the Bedrock LLM calls, which run on acc1 first and acc3 behind it (S278); see the
 [account map](../onboarding.md#account-map). Start every AWS session with
 `aws sts get-caller-identity --profile aa365-admin`. The tech lead is on call for everything during the dev phase.
 
@@ -97,7 +97,7 @@ Drills and their evidence: [drill index](drills/README.md).
 | `skill/aa-ship/SKILL.md` | PR to Done: checks before merge, deploy guard, live verify, Done evidence (rollback moved here) |
 | `skill/aa-cis-schema/references/destructive-ops.md` | DRY RUN procedure for deleting tables or data |
 | `skill/aa-wave-rerun/SKILL.md` | Re-running the A1-A3 pipeline for a country (waves, pilot, counting) |
-| `skill/aa-ui-verify/SKILL.md` | UI verification on a Vercel preview |
+| `skill/aa-ui-verify/SKILL.md` | UI verification after the ECS deploy (build, UI smoke, screenshots) |
 | AA-CIS-Infra `db/README.md`, `db/scripts/README.md` | DB Migrate internals, owners registry, run-script contract |
 | AA-CIS-Infra `tools/identity/` | Cognito bootstrap and break-glass tool |
 | AA-CIS-Infra `docs/ci-role-split.md` | CI roles: which workflow assumes which IAM role |
@@ -152,7 +152,7 @@ check. A docs-only PR skips the test jobs. Dispatching `ci.yml` on a PR branch r
 
 | Repo | Workflow | Trigger | Jobs | Notes |
 |---|---|---|---|---|
-| AA-CIS-App | `ci.yml` | PR to `main` (fast jobs; heavy ones by area); merge_group (all); dispatch (all) | Lint, Quality Paths (report), Security Audit, Unit Tests, Integration Tests, Docker Build Check, Frontend Lint, Frontend Build | required by branch protection: Lint, Security Audit, Unit Tests, Integration Tests, Docker Build Check, Frontend Lint, Frontend Build, plus `gitleaks` from `secret-scan.yml` (Portal Lint / Portal Build went with the frozen `portal/` at the AA-979 P2b clean-up) |
+| AA-CIS-App | `ci.yml` | PR to `main` (fast jobs; heavy ones by area); merge_group (all); dispatch (all) | Lint, Quality Paths (report), Security Audit, Unit Tests, Integration Tests, Docker Build Check, Frontend Lint, Frontend Build | required by branch protection: Lint, Security Audit, Unit Tests, Integration Tests, Docker Build Check, Frontend Lint, Frontend Build, plus `gitleaks` from `secret-scan.yml` (Portal Lint / Portal Build were removed with the frozen `portal/` at the AA-979 P2b clean-up) |
 | AA-CIS-App | `deploy-dev.yml` | push to `main` (backend paths); dispatch (`override_running_jobs`) | Pre-deploy job guard, Build and Push ECR, Deploy to ECS Dev | concurrency `deploy-dev-cis`, never cancelled |
 | AA-CIS-App | `deploy-admin-dev.yml` | push `main` (`frontend/**`); dispatch | ECS deploy of the admin, verify, UI smoke, visual | `vercel-deploy.yml` deleted at the Vercel retirement (AA-911, S272) |
 | AA-CIS-App | `ui-smoke.yml` | called by the deploy workflow; dispatch | Playwright smoke | the portal workflows were deleted by AA-979 (CIS #997); the frozen `portal/` was deleted at the P2b clean-up |

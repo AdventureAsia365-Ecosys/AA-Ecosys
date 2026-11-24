@@ -20,7 +20,7 @@ Every event or read model one app exposes to another is described here as a JSON
    stores it in its own `inbox_events` with `UNIQUE (source, contract, idempotency_key)` and processes each key
    once. Catalog sync keys are `(source_system, source_id)` — the CIS id; `external_ref` in older CIS docs means the
    same thing.
-4. **Reading.** Consumers pull with a job (`<app>.job`, kind `<prefix>_<event>_pull`, e.g. `bk_inquiry_pull`) and
+4. **Reading.** Consumers pull with a job (`<app>.job`, kind `<prefix>_<event>_pull`, e.g. `crm_entitlement_pull`) and
    must not use the producer's BIGSERIAL id as the only cursor (out-of-order commits): anti-join against the inbox
    or keep a lag window.
 5. **Grants.** The producer's own migration grants `SELECT` on the view to the consumer role, without an

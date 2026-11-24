@@ -9,9 +9,9 @@ audience: [engineer, devops, agent]
 applies_to: [aa-tripplanner, aa-cis-infra]
 last_reviewed: 2026-11-08
 review_every_days: 90
-last_tested: null
-tested_where: null
-tested_evidence: null
+last_tested: 2026-11-08
+tested_where: dev-acc2
+tested_evidence: "docs/sessions/2026-11-07-S272-quality-w1-w3-r5-leads-vercel-retire.md (cut-over and Vercel retirement 2026-11-08, Infra #722 and #725; AA-1038)"
 related: [OPS-02-vercel, OPS-02-ecs, OPS-02-staff-web-cutover, AA-1038]
 ---
 

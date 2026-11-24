@@ -9,7 +9,7 @@ audience: [engineer, devops, agent]
 applies_to: [aa-partner, kms, aa-cis-dev-db]
 last_reviewed: 2026-10-28
 review_every_days: 90
-last_tested: null
+last_tested: untested
 tested_where: null
 tested_evidence: null
 related: [OPS-04, OPS-10, SEC-02-rotation, docs/adr/0010-aa-partner-app.md, docs/adr/0008a-crm-separate-app-exceptions.md, AA-932, AA-934]

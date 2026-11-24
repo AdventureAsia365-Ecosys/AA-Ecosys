@@ -32,7 +32,7 @@ Groups follow the AWS order and look, outermost first:
 
 | Group | Look | Holds |
 |---|---|---|
-| AWS Cloud (one per account) | dark solid border, AWS logo | the infrastructure account (acc2), the LLM account (acc3) and the management account of the AA organization, side by side, never nested; global services (CloudFront, Route 53, IAM roles, Organizations, Identity Center) sit here, outside the Region |
+| AWS Cloud (one per account) | dark solid border, AWS logo | the infrastructure account (acc2), the LLM account (acc3; acc1 serves Bedrock first since S278 and is not drawn yet) and the management account of the AA organization, side by side, never nested; global services (CloudFront, Route 53, IAM roles, Organizations, Identity Center) sit here, outside the Region |
 | Region | teal dashed border, flag | `us-west-1` |
 | VPC | purple border, VPC icon | the shared VPC |
 | Public subnets | green fill, green lock | ALB, NAT instance |
@@ -57,7 +57,7 @@ Labels name services and roles only: never an account ID, an ARN or a network ID
 ## Ecosystem
 
 The four apps on the infrastructure account (acc2), the shared VPC and RDS, the edge (API Gateway, CloudFront), the
-LLM account (acc3) and the management account (ADR 0018; no workload account has joined its organization yet).
+LLM account (acc3, drawn before acc1 took the first Bedrock rung in S278) and the management account (ADR 0018; no workload account has joined its organization yet).
 Source: [`ecosystem.py`](ecosystem.py).
 
 ![Ecosystem architecture with AWS icons](ecosystem.svg)

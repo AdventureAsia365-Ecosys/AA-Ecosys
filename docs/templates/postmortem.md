@@ -8,6 +8,8 @@ owner: tech-lead
 audience: [engineer, devops, cto, agent]
 applies_to: [replace-me]
 last_reviewed: 2026-11-14
+detected_at: null  # ISO date-time with offset, e.g. "2026-01-31T09:15+07:00"
+resolved_at: null  # same format; null while the incident is open
 related: [OPS-04, FIN-01]
 ---
 
@@ -51,6 +53,10 @@ found by a person, not an alert); a cost excess at the SEV2 level. Anyone may as
 | Paid runs stopped or delayed | <which, how long> |
 
 ## 3. Key times
+
+`detected_at` (first alarm, report or person noticed) and `resolved_at` (service restored, not the actions closed) in
+the front matter are the clock of the table below: ISO date-time with offset, `resolved_at: null` while the incident is
+open. Impact start goes in the timeline.
 
 | KPI (ID@version) | Definition | Target | Actual |
 |---|---|---|---|

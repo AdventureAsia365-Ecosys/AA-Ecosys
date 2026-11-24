@@ -121,7 +121,7 @@ Register rows 5 and 6 of [register.md](register.md) hold the table-level detail.
 | Measure | State | Evidence |
 |---|---|---|
 | Database encrypted at rest | Live | AA-CIS-Infra `modules/rds/main.tf` (`storage_encrypted = true`) |
-| Database backups and deletion protection | Live | AA-CIS-Infra `modules/rds/main.tf`: 7-day automated backups (`backup_retention_period = 7`), `deletion_protection = true` and a final snapshot on delete (`skip_final_snapshot = false`) |
+| Database backups and deletion protection | Live | AA-CIS-Infra `modules/rds/main.tf`: 14-day automated backups (`backup_retention_period = 14`), `deletion_protection = true` and a final snapshot on delete (`skip_final_snapshot = false`) |
 | Database not reachable from the internet | Live | AA-CIS-Infra `modules/rds/main.tf` (`publicly_accessible = false`); DM-8.8 |
 | Encryption in transit (TLS) | Live | HTTPS at API Gateway, the load balancer and CloudFront; RDS `rds.force_ssl` set (AA-CIS-Infra `modules/rds/main.tf`) and every app connects with SSL required |
 | Tenant isolation by row-level security; per-app database roles | Live | DM-8.4; X1 role split: the CIS runtime signs in as `cis_app`, and its task role is denied the master secret (AA-CIS-Infra `modules/ecs/main.tf`, statement `DenyMasterAndOtherAppSecrets`; DM-8.9) |

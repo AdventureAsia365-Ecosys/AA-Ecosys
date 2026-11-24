@@ -185,6 +185,41 @@ class GuardTest(unittest.TestCase):
             self.assertIn(part, joined)
         self.assertTrue(any("Sx" in w for w in warnings) and any("Mx" in w for w in warnings))
 
+    def test_milestone_drift_errors(self):
+        # AA-1118: done with an open criterion; all criteria done but not done; done with an open issue slotted.
+        plan = make_plan([plan_issue("AA-20", milestone="M3")])
+        plan["milestones"] = [
+            {"id": "M1", "name": "a", "status": "done", "window": "w",
+             "criteria": [{"text": "x", "done": True}, {"text": "y", "done": False}]},
+            {"id": "M2", "name": "b", "status": "next", "window": "w",
+             "criteria": [{"text": "x", "done": True}, {"text": "y", "done": True}]},
+            {"id": "M3", "name": "c", "status": "done", "window": "w", "criteria": [{"text": "x", "done": True}]},
+            {"id": "M4", "name": "d", "status": "later", "window": "w", "criteria": []},
+        ]
+        errors, _ = ps.milestone_drift(plan)
+        self.assertEqual(errors, [
+            "M1: status done but 1 of 2 criteria are open",
+            "M2: all 2 criteria are done but status is 'next'; set it to done",
+            "M3: status done but open issues are still slotted to it: AA-20",
+        ])
+        errors, _ = ps.validate(plan, ["S300"], ["M1", "M2", "M3", "M4"])
+        self.assertEqual(len([e for e in errors if e.startswith("M")]), 3)
+
+    def test_milestone_drift_warns_on_criteria_naming_only_closed_issues(self):
+        plan = make_plan([plan_issue("AA-30", milestone="M1")])
+        plan["log"] = [{"session": "S300", "closed": ["AA-25"], "created": ["AA-31"]}]
+        plan["milestones"][0]["criteria"] = [
+            {"text": "AA-21 and AA-22 shipped", "done": False},   # both gone from issues[]: closed -> warn
+            {"text": "AA-21 and AA-30 shipped", "done": False},   # AA-30 still open -> no warning
+            {"text": "AA-40 shipped", "done": False},             # newer than every id the plan knows -> no warning
+            {"text": "no issue named", "done": False},
+            {"text": "AA-21 done", "done": True},
+        ]
+        errors, warnings = ps.milestone_drift(plan)
+        self.assertEqual(errors, [])
+        self.assertEqual(warnings, ["M1: criterion 1 is open but names only closed issues (AA-21, AA-22): "
+                                    "tick it or say what is left"])
+
     def test_scope_allows_only_linear_owned_changes(self):
         base = make_plan([plan_issue("AA-10"), plan_issue("AA-11")])
         synced, _ = ps.merge(base, [ps.normalize(node("AA-10", state=("Todo", "unstarted"))),

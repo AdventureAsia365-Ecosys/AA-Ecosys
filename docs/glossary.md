@@ -83,7 +83,7 @@ in the same PR that first uses it. The Vietnamese version of this page, with the
 
 | Term | Meaning | In AA-Ecosys |
 |---|---|---|
-| acc2 / acc3 | The two AWS accounts of the ecosystem. | acc2 = all infrastructure; acc3 = the LLM satellite (Amazon Bedrock). acc1, a personal account, left the ecosystem in S255 (AA-998): there is no cross-account LLM fallback. Map: [onboarding](onboarding.md#account-map). |
+| acc2 / acc3 | The two AWS accounts of the ecosystem. | acc2 = all infrastructure; acc3 = the LLM satellite (Amazon Bedrock), the fallback behind acc1. acc1, a personal account, left the ecosystem in S255 (AA-998) but serves the Bedrock chat models first since S278 (AA-1095), through one invoker role only. Map: [onboarding](onboarding.md#account-map). |
 | Infrastructure as Code (IaC) | Infrastructure declared in code. | Terraform in AA-CIS-Infra. |
 | Terraform state / lock file | Record of real resources / pinned provider versions. | Remote state on S3; `.terraform.lock.hcl`. |
 | Terraform drift | Real infrastructure differs from code or state. | Apply only from `main` through `terraform-apply.yml`. |

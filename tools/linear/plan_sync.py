@@ -18,8 +18,15 @@ Usage (from the AA-Ecosys root; key from Secrets Manager with an unlocked MFA pr
     python3 tools/linear/plan_sync.py --write                # write plan.json (sets updated + synced_at)
     python3 tools/linear/plan_sync.py --write --session S263 # session close: also session / next_session
     python3 tools/linear/plan_sync.py --log-draft            # print a log[0] draft (closed / canceled / created)
-    python3 tools/linear/plan_sync.py --validate             # offline: shape, due/risks, public safety (no Linear)
+    python3 tools/linear/plan_sync.py --validate             # offline: shape, due/risks, milestone drift, public
+                                                             # safety (no Linear)
     python3 tools/linear/plan_sync.py --check-scope BASE     # offline: only Linear-owned fields differ from BASE
+
+Milestone drift (AA-1118, S282 audit R21; part of --validate, so the Docs lint fails on it without Linear access):
+errors where plan.json contradicts itself: a milestone marked done with an open criterion, a milestone whose criteria
+are all done but whose status is not done, an open issue in issues[] slotted to a done milestone. A warning (not
+deterministic enough to fail: a criterion can wait on a date) for an open criterion that names only issues missing
+from issues[] (closed at the last sync) and no newer than the newest issue the plan knows.
 
 Stdlib only. Never writes to Linear.
 """
@@ -62,6 +69,8 @@ SYNC_TOP_KEYS = ("issues", "updated", "synced_at")
 ACCOUNT_ID = re.compile(r"(?<!\d)\d{12}(?!\d)")
 ARN = re.compile(r"(?<![A-Za-z0-9])arn:")  # "arn:aws:..."; not the tail of a word such as "Learn:"
 ISO_DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
+ISSUE_REF = re.compile(r"\bAA-(\d+)\b")
+DONE = "done"
 
 OPEN_QUERY = """
 query($after: String, $team: String!, $types: [String!]!) {
@@ -244,8 +253,53 @@ def validate(plan: dict, ses_order: list[str] | None = None, ms_order: list[str]
         for r in m.get("risks", []):
             if set(r) != {"text", "owner_role", "trigger"}:
                 errors.append(f"{m.get('id', '?')}: risk keys must be text, owner_role, trigger")
+    drift_errors, drift_warnings = milestone_drift(plan)
+    errors += drift_errors
+    warnings += drift_warnings
     errors += [f"public safety: {p}" for p in safety_problems(dumps(plan))]
     return errors, warnings
+
+
+def milestone_drift(plan: dict) -> tuple[list[str], list[str]]:
+    """(errors, warnings): milestone status vs its criteria vs the open issues slotted to it. Offline, plan.json only."""
+    errors: list[str] = []
+    warnings: list[str] = []
+    issues = plan.get("issues", [])
+    open_ids = {i.get("id") for i in issues}
+    known = [issue_num(i["id"]) for i in issues if isinstance(i.get("id"), str) and ISSUE_REF.fullmatch(i["id"])]
+    for entry in plan.get("log", []):
+        for key in ("closed", "canceled", "created", "reopened"):
+            known += [issue_num(x) for x in entry.get(key, []) if isinstance(x, str) and ISSUE_REF.fullmatch(x)]
+    newest = max(known, default=0)
+    slotted: dict[str, list[str]] = {}
+    for i in issues:
+        slotted.setdefault(i.get("milestone"), []).append(i.get("id", "?"))
+    for m in plan.get("milestones", []):
+        mid = m.get("id", "?")
+        criteria = m.get("criteria", [])
+        done = [c for c in criteria if c.get("done") is True]
+        status = m.get("status")
+        if status == DONE and len(done) < len(criteria):
+            errors.append(f"{mid}: status done but {len(criteria) - len(done)} of {len(criteria)} criteria are open")
+        if criteria and len(done) == len(criteria) and status != DONE:
+            errors.append(f"{mid}: all {len(criteria)} criteria are done but status is {status!r}; set it to done")
+        if status == DONE and slotted.get(mid):
+            errors.append(f"{mid}: status done but open issues are still slotted to it: {', '.join(slotted[mid])}")
+        warnings += _stale_criteria(mid, criteria, open_ids, newest)
+    return errors, warnings
+
+
+def _stale_criteria(mid: str, criteria: list[dict], open_ids: set, newest: int) -> list[str]:
+    """Open criteria that name only issues gone from issues[] (closed at the last sync) and not newer than the plan."""
+    out = []
+    for n, c in enumerate(criteria, 1):
+        if c.get("done") is True:
+            continue
+        refs = sorted({f"AA-{x}" for x in ISSUE_REF.findall(str(c.get("text", "")))}, key=issue_num)
+        if refs and not (set(refs) & open_ids) and all(issue_num(r) <= newest for r in refs):
+            out.append(f"{mid}: criterion {n} is open but names only closed issues ({', '.join(refs)}): "
+                       "tick it or say what is left")
+    return out
 
 
 def scope_violations(base: dict, new: dict) -> list[str]:

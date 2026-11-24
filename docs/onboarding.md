@@ -26,12 +26,12 @@ with the list of accounts you need.
 
 ## Account map
 
-All infrastructure lives in **acc2**. acc3 only hosts the Bedrock "satellite" role that lets acc2 call chat models,
+All infrastructure lives in **acc2**. acc3 hosts just the Bedrock "satellite" role that lets acc2 call chat models,
 the Bedrock batch roles, a read-only Cost Explorer role and its own budget and cost anomaly alerts (ecosystem
 architecture §4.3, §4.4). Workloads use these two accounts only; a third, the management account, holds the AA
-organization and runs no workload (below). LLM chat calls run on acc3
-([ADR 0001a](adr/0001a-retire-acc1-llm-on-acc3-only.md)), and since 2026-11-12, while AWS blocks acc3, also on acc1
-through one Bedrock invoker role (AA-1095, ADR 0001a Note S278; Terraform root `accounts/acc1-bedrock/`, applied by a
+organization and runs no workload (below). LLM chat calls run on Bedrock
+in acc1 first and acc3 behind it: since 2026-11-12, while AWS blocks acc3 ([ADR 0001a](adr/0001a-retire-acc1-llm-on-acc3-only.md)
+retired acc1 on 2026-10-28), acc1 serves them through one Bedrock invoker role (AA-1095, ADR 0001a Note S278; Terraform root `accounts/acc1-bedrock/`, applied by a
 human; spend there is alert only, ADR 0001a Note S279), which the CIS and, since 2026-11-19, the CRM reply drafts
 assume, each with its own ExternalId (AA-1138, ADR 0001a Note S285); since [ADR 0009](adr/0009-ai-platform-and-provider-gateway.md)
 decision 14 (accepted 2026-10-31) acc2 may also serve chat models for eval, judge and validate stages once a model
