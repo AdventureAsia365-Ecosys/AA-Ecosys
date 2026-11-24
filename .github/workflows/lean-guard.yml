@@ -10,6 +10,10 @@ name: Lean guard
 # and, as a byte-identical copy, in the five child repos (their change-guard.yml, job `lean`).
 # Blobless sparse clone: only tools/repo is checked out (the tree holds ~1 GB of legacy images), the guard fetches the
 # changed blobs in one round trip (--prefetch). Free: the runner's stdlib Python, no secret, no AWS, read-only token.
+# S290: the same job runs tools/repo/gitleaksignore_guard.py: a pinned fingerprint of .gitleaksignore is never dropped
+# (GitHub keeps every refs/pull/*/head, so the commits of a history rewrite's old SHAs are still scanned nightly by
+# secret-scan-history.yml; the S287 remap that replaced pins turned it red). It reads .gitleaksignore at the base and
+# the head with git show (one lazy blob fetch each in the blobless clone).
 on:
   pull_request:
     branches: [master]
@@ -45,3 +49,8 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
         run: python3 -I -B tools/repo/lean_guard.py --base "$BASE_SHA" --head HEAD --prefetch --github
+
+      - name: gitleaks baseline guard (no pinned fingerprint dropped)
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+        run: python3 -I -B tools/repo/gitleaksignore_guard.py --base "$BASE_SHA" --head HEAD --github
