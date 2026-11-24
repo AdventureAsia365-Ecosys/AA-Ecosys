@@ -1,0 +1,15 @@
+{
+ "total": 3,
+ "ours": {
+  "supplier": "SUP-000018",
+  "kind": [
+   "hotel"
+  ],
+  "valid_to": "2026-12-24",
+  "days_left": 30,
+  "announced": false,
+  "mailed": false
+ },
+ "supplier_list": 1,
+ "tile_count": null
+}

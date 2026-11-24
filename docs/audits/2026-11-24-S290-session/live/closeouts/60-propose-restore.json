@@ -1,0 +1,9 @@
+{
+ "version_id": "08595883-5b3d-45af-bbaf-93ccb07ced58",
+ "status": "pending",
+ "value": "1, 2, 3, 4, 5-7, 8-10, 11+",
+ "own_approve": {
+  "status": 403,
+  "detail": "own_row"
+ }
+}

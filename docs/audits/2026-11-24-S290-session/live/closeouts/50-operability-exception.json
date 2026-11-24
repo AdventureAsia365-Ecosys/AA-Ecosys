@@ -1,0 +1,19 @@
+{
+ "status": "exception",
+ "days": 5,
+ "findings": [
+  "N1:night:2:block",
+  "N5:guide:warn"
+ ],
+ "exception": {
+  "rules": [
+   "N1"
+  ],
+  "expires_at": "2026-12-08T06:24:20.887569Z"
+ },
+ "overridable": {
+  "N1": [
+   "N1:night:2"
+  ]
+ }
+}

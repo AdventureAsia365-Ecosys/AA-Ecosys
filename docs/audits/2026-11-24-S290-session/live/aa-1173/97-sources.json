@@ -1,0 +1,76 @@
+{
+ "root_daily": [
+  {
+   "check_id": "legal_consent_capture_reviewed",
+   "state": "fail",
+   "reason": "1 of 1 pages still a draft, not an adopted document; 0 of 1 pages past their review cycle; oldest review 2026-11-06; status draft",
+   "source": "root_daily",
+   "collected_at": "2026-11-24T09:23:47+00:00",
+   "expires_at": "2026-11-27T09:23:47+00:00"
+  },
+  {
+   "check_id": "legal_dpa_reviewed",
+   "state": "fail",
+   "reason": "5 of 5 pages still a draft, not an adopted document; 0 of 5 pages past their review cycle; oldest review 2026-11-13; status draft",
+   "source": "root_daily",
+   "collected_at": "2026-11-24T09:23:47+00:00",
+   "expires_at": "2026-11-27T09:23:47+00:00"
+  },
+  {
+   "check_id": "legal_dsar_runbook_reviewed",
+   "state": "fail",
+   "reason": "1 of 1 pages still a draft, not an adopted document; 0 of 1 pages past their review cycle; oldest review 2026-11-13; status draft",
+   "source": "root_daily",
+   "collected_at": "2026-11-24T09:23:47+00:00",
+   "expires_at": "2026-11-27T09:23:47+00:00"
+  }
+ ],
+ "aws_nightly": [
+  {
+   "source": "aws_nightly",
+   "last_seen": "2026-11-24T09:24:32.345936+00:00",
+   "age_hours": 1.1,
+   "heartbeat_hours": 36,
+   "scheduled": true,
+   "ok": true,
+   "evidence_rows": 11
+  }
+ ],
+ "cis_db": [
+  {
+   "check_id": "db_grants",
+   "state": "fail",
+   "reason": "1 grant or ownership finding(s) off the allowlist (g 1)",
+   "source": "cis_db",
+   "collected_at": "2026-11-24T10:25:14.312280+00:00",
+   "expires_at": "2026-11-27T10:25:14.312280+00:00"
+  },
+  {
+   "check_id": "monthly_review_recent",
+   "state": "fail",
+   "reason": "no Security posture monthly review recorded yet",
+   "source": "cis_db",
+   "collected_at": "2026-11-24T10:25:14.312280+00:00",
+   "expires_at": "2026-11-27T10:25:14.312280+00:00"
+  },
+  {
+   "check_id": "retention_live_enabled",
+   "state": "fail",
+   "reason": "3 retention kind(s) never had a live run (DRY RUN only): retention_decision_log, retention_llm_call_log, retention_tenant_api_usage",
+   "source": "cis_db",
+   "collected_at": "2026-11-24T10:25:14.312280+00:00",
+   "expires_at": "2026-11-27T10:25:14.312280+00:00"
+  }
+ ],
+ "prowler_weekly": [
+  {
+   "source": "prowler_weekly",
+   "last_seen": null,
+   "age_hours": null,
+   "heartbeat_hours": 216,
+   "scheduled": false,
+   "ok": false,
+   "evidence_rows": 0
+  }
+ ]
+}

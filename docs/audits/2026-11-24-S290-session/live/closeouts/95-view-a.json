@@ -1,0 +1,26 @@
+{
+ "state": "draft",
+ "completeness": 85,
+ "editable": true,
+ "checklist": [
+  "name:ok",
+  "country:ok",
+  "supplier:ok",
+  "days:ok",
+  "nights:ok",
+  "nights_match:ok(hint)",
+  "day_titles:ok",
+  "day_places:ok",
+  "day_descriptions:ok",
+  "overnight:ok(hint)",
+  "inclusions:missing",
+  "exclusions:missing",
+  "no_overlap:ok",
+  "wording:ok",
+  "wording_days:ok"
+ ],
+ "supplier": {
+  "code": "SUP-000019",
+  "name": "<scrubbed>"
+ }
+}

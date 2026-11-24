@@ -1,0 +1,28 @@
+{
+ "records": [
+  {
+   "ref": "hotel-a",
+   "kind": "hotel",
+   "supplier": "SUP-000018",
+   "code": "HTL-000008"
+  },
+  {
+   "ref": "hotel-b",
+   "kind": "hotel",
+   "supplier": "SUP-000018",
+   "code": "HTL-000009"
+  },
+  {
+   "ref": "transfer",
+   "kind": "transfer",
+   "supplier": "SUP-000019",
+   "code": "SVC-000018"
+  },
+  {
+   "ref": "guide",
+   "kind": "guide",
+   "supplier": "SUP-000019",
+   "code": "SVC-000019"
+  }
+ ]
+}

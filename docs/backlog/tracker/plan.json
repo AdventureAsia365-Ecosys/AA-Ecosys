@@ -1,8 +1,8 @@
 {
  "updated": "2026-11-24",
- "synced_at": "2026-11-24T04:29Z",
- "session": "S289",
- "next_session": "S290",
+ "synced_at": "2026-11-24T12:19Z",
+ "session": "S290",
+ "next_session": "S291",
  "source": "Linear (19/11/2026, plan_sync.py --write, S285) + docs/audits/2026-11-19-S285-session/plan-audit-plan-changes.json (tech lead duyệt Q1–Q12, 19/11) + docs/backlog/README.md",
  "projects": {
   "data": "Data Platform",
@@ -995,6 +995,31 @@
   }
  ],
  "log": [
+  {
+   "session": "S290",
+   "date": "24/11/2026",
+   "closed": [
+    "AA-1149",
+    "AA-1152",
+    "AA-1153",
+    "AA-1160",
+    "AA-1175",
+    "AA-1176",
+    "AA-1177"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-1177"
+   ],
+   "reopened": [],
+   "notes": [
+    "Phiên cùng ngày sau S289 (~12:00 → ~19:30, Ultracode, 7 lane + agent kiểm live): mở tài khoản chủ DN (thu@) và info@ (Content + Booking Product, ops & accounting), gửi lại lời mời 12:29; Dev cho nhập dữ liệu kinh doanh thật trừ dữ liệu cá nhân (root #976)",
+    "Done 7: AA-1149, AA-1176, AA-1175, AA-1152 (T2 0,1481 USD), AA-1153 phần 2 (allotment, Excel hai chiều, nhãn DMC, giá theo hợp đồng mới nhất), AA-1160, AA-1177 (mới theo Jira PR-31: nhắc hợp đồng sắp hết hạn, e-mail 21 thư lần 1, 0 lần 2)",
+    "In Review: AA-1148 Content workspace (live; sửa 500 FK pipeline_runs #1666), AA-1173 kho bằng chứng Object Lock (thử xoá/ghi đè/bypass đều bị từ chối), AA-1158 (ciphertext at rest PASS) — phần còn lại chờ buổi thứ Năm 26/11",
+    "Migration: bk-072/073/074, CIS 478/479; A10e-6 cho E2E tự duyệt (root #979, Booking #319); guard đỏ đầu phiên sửa (gitleaks pin append-only, Catalogue); C4.3 W48; xoá 22 snapshot pre-S1 (giữ tp-018)",
+    "Jira: 8/8 đã đăng sau khi tech lead duyệt (PR-22, 24, 25, 26, 27, 29, 30, 31)"
+   ]
+  },
   {
    "session": "S289",
    "date": "24/11/2026",
@@ -2348,9 +2373,9 @@
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M-ROLES",
-   "session": "S290",
+   "session": "S291",
    "size": "L",
-   "next": "S289 phần 2 merged + deploy (bk-067, bk-071, khoá KMS), live 4/5; S290: chặn chi trả khi pending (cần hoá đơn NCC), kiểm ciphertext tại DB (run-script master), chủ DN duyệt tài khoản SYNTHETIC pending; phần 1 còn chủ DN tự duyệt",
+   "next": "S291 (thứ Năm 26/11): chủ DN đăng nhập + Make business owner → duyệt TK ngân hàng SYNTHETIC SUP-000019 → agent thử chi trong 24 h (409 bank_payout_locked); mọi probe agent + ciphertext đã PASS S290",
    "needs": ""
   },
   {
@@ -2372,9 +2397,9 @@
    "priority": "High",
    "project": "tpbk",
    "milestone": "M-ROLES",
-   "session": "S288",
+   "session": "S291",
    "size": "L",
-   "next": "T12: info@ đã tạo vai trò Content + mời (S288); người ops chưa có tài khoản",
+   "next": "S291 (thứ Năm 26/11): chủ DN + info@ đăng nhập lần đầu (T12), dấu chủ DN do tech lead bấm",
    "needs": ""
   },
   {
@@ -2674,9 +2699,9 @@
    "priority": "Medium",
    "project": "data",
    "milestone": "later",
-   "session": "S289",
+   "session": "S291",
    "size": "",
-   "next": "DevOps — S289: đóng sau 1 tuần log",
+   "next": "S291: báo cáo đo M1–M8 sau tuần log (≥26/11), tech lead chọn block/warn (S290 chưa làm báo cáo tạm)",
    "needs": ""
   },
   {
@@ -2706,49 +2731,13 @@
   {
    "id": "AA-1148",
    "title": "[CIS] Content workspace: create and edit tours by hand, tied to an AA supplier, with preview and change review",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "High",
    "project": "portal",
    "milestone": "M-SUP",
-   "session": "S289",
+   "session": "S291",
    "size": "",
-   "next": "L4 — S288–S290: editor tour + AA-1146 phần 2 + view nhà cung cấp; photos.upload sau AA-1157 (bỏ M0, thay bằng AA-1156)",
-   "needs": ""
-  },
-  {
-   "id": "AA-1149",
-   "title": "[Booking] A sold tour becomes one supplier booking per component, with service attributes and a can-operate check",
-   "status": "In Review",
-   "priority": "High",
-   "project": "tpbk",
-   "milestone": "M-SUP",
-   "session": "S288",
-   "size": "",
-   "next": "S288: merged + deploy (bk-065); chờ kịch bản bán tour giả lập bằng phiên chủ DN",
-   "needs": ""
-  },
-  {
-   "id": "AA-1152",
-   "title": "[TripPlanner + CRM] Optional activities per day for customers and agencies, with rounded agency prices",
-   "status": "In Review",
-   "priority": "Medium",
-   "project": "tpbk",
-   "milestone": "M-SUP",
-   "session": "S290",
-   "size": "",
-   "next": "S289 merged + deploy (bk-070, crm-086/087, tp-036/037, CIS 476), live 2/3; S290: đại lý Dev nhận tour HCMC rồi kiểm add-on đi theo lead (mã sv:)",
-   "needs": ""
-  },
-  {
-   "id": "AA-1153",
-   "title": "[Booking] Hotel contracts through DMCs: property master, meal plans, supplements, allotment and safer manual import",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "tpbk",
-   "milestone": "M-SUP",
-   "session": "S290",
-   "size": "",
-   "next": "S289 phần 1 merged + deploy (bk-069) + kiểm live 3/4; S290 phần 2 (allotment / release days, Excel hai chiều) + sửa nhãn DMC ở danh sách on-request desk B2B",
+   "next": "S291 (thứ Năm 26/11): bật publish_two_person + người thứ hai thật publish tour tay; follow-up ẩn tour tay khỏi Tours Ready for Rewrite",
    "needs": ""
   },
   {
@@ -2761,18 +2750,6 @@
    "session": "S291",
    "size": "",
    "next": "Trợ lý admin CIS — S291 A0, S292 A1, tiếp sau S292 (A0 không LLM, A1 LLM + UI, A2 đo dự đoán)",
-   "needs": ""
-  },
-  {
-   "id": "AA-1160",
-   "title": "[TripPlanner] Planner follows the agency's locale and theme; leads fall back when the CRM agency does not exist yet",
-   "status": "In Review",
-   "priority": "High",
-   "project": "tpbk",
-   "milestone": "later",
-   "session": "S290",
-   "size": "",
-   "next": "S289 merged + deploy (CIS 474, TP #294/#296, Partner #382), live màu/dark/Tenant 360 xong; S290: gửi lead qua đường dự phòng bằng tenant SYNTHETIC có route e-mail/webhook + ảnh locale vi",
    "needs": ""
   },
   {
@@ -2814,13 +2791,13 @@
   {
    "id": "AA-1173",
    "title": "[Security] Compliance readiness phase 2–3: immutable evidence, read-only collectors (GitHub, AWS, DB), exceptions and monthly review",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "Medium",
    "project": "data",
    "milestone": "later",
-   "session": "S289",
+   "session": "S291",
    "size": "L",
-   "next": "Pha 2–3 Compliance: Object Lock + role compliance-evidence (Infra, review trước merge), GitHub App chỉ đọc (tech lead tạo), Prowler, DB checks, bảng exception/risk/SoA, rà soát tháng",
+   "next": "S291: maker-checker ngoại lệ với người thật (26/11), review tháng đầu (tech lead), GitHub App chỉ đọc (tech lead), Prowler tuần đầu",
    "needs": "Tech lead tạo GitHub App chỉ đọc"
   },
   {
@@ -2833,30 +2810,6 @@
    "session": "S288",
    "size": "M",
    "next": "S288: merged + deploy (CIS 471); register v2 nạp; Refresh OK (cis_db + crm_ops); trang pháp lý giữ draft (D1)",
-   "needs": ""
-  },
-  {
-   "id": "AA-1175",
-   "title": "[Booking] Group-size price bands editable in Pricing › Policy (business owner's bands 1, 2, 4, 5–7, 8–10)",
-   "status": "In Review",
-   "priority": "High",
-   "project": "tpbk",
-   "milestone": "M-SUP",
-   "session": "S288",
-   "size": "S",
-   "next": "S288: merged + deploy (bk-066); price_pax_bands v2 (1, 2, 3, 4, 5–7, 8–10, 11+) từ 23/11",
-   "needs": ""
-  },
-  {
-   "id": "AA-1176",
-   "title": "[Security] Dev-only E2E owner admin for agent live checks (view-as, admin writes on synthetic data, Refresh)",
-   "status": "In Review",
-   "priority": "High",
-   "project": "data",
-   "milestone": "M-ROLES",
-   "session": "S288",
-   "size": "S",
-   "next": "S288: merged + deploy (CIS 473, Infra run-script); đã dùng cho view-as, Refresh, mời info@",
    "needs": ""
   }
  ]

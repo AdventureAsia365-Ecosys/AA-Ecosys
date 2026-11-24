@@ -1,0 +1,14 @@
+{
+ "status": "blocked",
+ "days": 5,
+ "findings": [
+  "N1:night:2:block",
+  "N5:guide:warn"
+ ],
+ "exception": null,
+ "overridable": {
+  "N1": [
+   "N1:night:2"
+  ]
+ }
+}

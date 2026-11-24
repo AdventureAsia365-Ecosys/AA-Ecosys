@@ -7,6 +7,11 @@
 //
 //   node tools/uat/accept-owner-invite.cjs --since 2026-11-13T09:00:00Z            identity studio-rehearsal
 //   node tools/uat/accept-owner-invite.cjs --since <ISO> --identity studio-rehearsal --ready-min 5
+//   node tools/uat/accept-owner-invite.cjs --since <ISO> --identity studio-rehearsal --tenant-name "E2E Lead Proof Travel"
+//
+// --tenant-name (S290, AA-1160): the invitation is for ANOTHER synthetic agency than the identity's own (the person then
+// holds two studio memberships). After the accept, the identity's own session is checked as before, and the studio
+// chooser must list --tenant-name (the new membership); nothing else changes.
 //
 // --since = a time taken just BEFORE the invitation was sent (only newer mail is read). Reads: the identity's secret
 // (Secrets Manager, in memory only) and the e2e mailbox (S3 inbound/, read only), profile UAT_AWS_PROFILE or
@@ -29,7 +34,7 @@ const OWNER_INVITEES = {
 const JOIN_HOST = /(^|\.)lumiguides\.it\.com$/;
 
 function parseArgs(argv) {
-  const out = { identity: 'studio-rehearsal', since: null, readyMin: 5 };
+  const out = { identity: 'studio-rehearsal', since: null, readyMin: 5, tenantName: null };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     const val = () => {
@@ -39,6 +44,7 @@ function parseArgs(argv) {
     if (a === '--identity') out.identity = val();
     else if (a === '--since') out.since = val();
     else if (a === '--ready-min') out.readyMin = Number(val());
+    else if (a === '--tenant-name') out.tenantName = val();
     else throw new Error(`unknown argument ${a}`);
   }
   if (!OWNER_INVITEES[out.identity]) throw new Error(`--identity must be one of ${Object.keys(OWNER_INVITEES).join(', ')}`);
@@ -47,6 +53,9 @@ function parseArgs(argv) {
   if (t > Date.now() + 60_000) throw new Error('--since is in the future');
   out.since = new Date(t);
   if (!(out.readyMin > 0 && out.readyMin <= 30)) throw new Error('--ready-min must be between 1 and 30');
+  if (out.tenantName !== null && !/^[A-Za-z0-9][A-Za-z0-9 &'().-]{1,79}$/.test(out.tenantName)) {
+    throw new Error('--tenant-name must be the agency display name (letters, digits, spaces, & \' ( ) . -)');
+  }
   return out;
 }
 
@@ -125,6 +134,27 @@ async function studioOpens(identity, readyMs) {
   }
 }
 
+/** The studio chooser of `identity`'s saved session lists `tenantName` (the membership this run accepted). */
+async function chooserLists(identity, tenantName, readyMs) {
+  const { chromium } = require('@playwright/test');
+  const { statePath, PARTNER } = require('./lib/signin.cjs');
+  const until = Date.now() + readyMs;
+  const browser = await chromium.launch({ headless: true });
+  try {
+    const context = await browser.newContext({ storageState: statePath(identity), viewport: { width: 1440, height: 900 } });
+    const page = await context.newPage();
+    for (;;) {
+      await page.goto(`${PARTNER}/portal-access/select?next=${encodeURIComponent('/portal/dashboard')}`, { waitUntil: 'domcontentloaded' });
+      const option = page.getByTestId('studio-option').filter({ has: page.getByText(tenantName, { exact: true }) });
+      if (await option.first().isVisible({ timeout: 15_000 }).catch(() => false)) return;
+      if (Date.now() > until) throw new Error('the studio chooser does not list the invited agency');
+      await new Promise((r) => setTimeout(r, 20_000));
+    }
+  } finally {
+    await browser.close();
+  }
+}
+
 async function main(argv) {
   const args = parseArgs(argv);
   const who = OWNER_INVITEES[args.identity]();
@@ -136,6 +166,10 @@ async function main(argv) {
   console.log(JSON.stringify({ event: 'owner_invite_accepted', identity: args.identity, studio_status: status }));
   await studioOpens(args.identity, args.readyMin * 60_000);
   console.log(JSON.stringify({ event: 'owner_studio_open', identity: args.identity, tenant: who.tenantName }));
+  if (args.tenantName) {
+    await chooserLists(args.identity, args.tenantName, args.readyMin * 60_000);
+    console.log(JSON.stringify({ event: 'owner_membership_listed', identity: args.identity, tenant: args.tenantName }));
+  }
 }
 
 module.exports = { parseArgs, joinOrigin, OWNER_INVITEES };

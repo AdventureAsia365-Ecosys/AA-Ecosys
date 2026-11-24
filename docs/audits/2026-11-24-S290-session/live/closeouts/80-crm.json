@@ -1,0 +1,8 @@
+{
+ "lead_on_pipeline": true,
+ "trip": "Inquiry card 'Vietnam, 6 nights' / SYNTHETIC S290 Traveller (CRM pull of the planner lead, channel crm)",
+ "sv_note": "Day 7 AA add-on: SYNTHETIC S289 Saigon street food walk (sv:7e2d6d62-7ed2-49b1-aee1-fe9c9d21d890)",
+ "proposal": "draft 'Working copy v1' of that trip, day 1 = 2026-12-20 (the add-on list needs a dated day)",
+ "aa_tour_option": "POST /bff/proposals/:id/blocks/:id/aa-options 201 (AA tour: the SYNTHETIC S290 plan 'Chiang Mai to Chiang Rai Mountain Cycling - 5 Days'; the HCMC catalogue tour is not sellable in Booking, and an AA add-on needs an AA tour on the proposal: 409 aa_addon_needs_tour otherwise)",
+ "aa_addon_option": "POST /bff/proposals/:id/blocks/:id/aa-addons 201 on day 7 (26 Dec 2026): 'SYNTHETIC S289 Saigon street food walk (activity) - AA', on request, sell 90.00 USD for 2 = the agency's rounded suggestion (45 per traveller)"
+}

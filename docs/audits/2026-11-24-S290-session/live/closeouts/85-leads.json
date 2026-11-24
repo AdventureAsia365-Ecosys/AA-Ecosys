@@ -1,0 +1,9 @@
+{
+ "tenant": "e2e-lead-proof",
+ "lead": {
+  "channel": "email",
+  "status": "delivered",
+  "attempts": 0,
+  "error": null
+ }
+}

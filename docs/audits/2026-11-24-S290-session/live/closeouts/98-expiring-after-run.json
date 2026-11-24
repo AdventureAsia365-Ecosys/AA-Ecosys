@@ -1,0 +1,30 @@
+{
+ "total": 3,
+ "ours": {
+  "id": "b5d593eb-e874-4ae7-b512-36ee88c63dc8",
+  "supplier": "SUP-000018",
+  "valid_to": "2026-12-24",
+  "announced": true,
+  "mailed": true
+ },
+ "rows": [
+  {
+   "supplier": "SUP-000018",
+   "valid_to": "2026-12-24",
+   "announced": true,
+   "mailed": true
+  },
+  {
+   "supplier": "SUP-000015",
+   "valid_to": "2027-01-15",
+   "announced": true,
+   "mailed": true
+  },
+  {
+   "supplier": "SUP-000002",
+   "valid_to": "2027-01-21",
+   "announced": true,
+   "mailed": true
+  }
+ ]
+}

@@ -1,0 +1,8 @@
+{
+ "supplier": "SUP-000019",
+ "contract_status": "draft",
+ "maker_publish_probe": {
+  "status": 403,
+  "detail": "maker_checker"
+ }
+}

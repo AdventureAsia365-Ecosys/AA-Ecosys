@@ -1,0 +1,21 @@
+{
+ "rates": 2,
+ "checks": [],
+ "diff": {
+  "added": 0,
+  "changed": [
+   {
+    "old": "80.00",
+    "new": "84"
+   }
+  ],
+  "removed": 0
+ },
+ "inventory": [
+  {
+   "units": 2,
+   "release_days": 7,
+   "default_release": null
+  }
+ ]
+}
