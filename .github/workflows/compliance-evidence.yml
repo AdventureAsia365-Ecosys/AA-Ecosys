@@ -22,6 +22,11 @@ name: Compliance evidence
 # sealed path is proven live (follow-up: drop it then); it is readiness tracking, not immutable evidence (the Docs
 # sync role can overwrite it; noncurrent docs-reader/ versions expire after 7 days).
 #
+# Run order: collect -> seal (credentials, role check, seal; each continue-on-error) -> docs-reader upload -> seal
+# outcome. A failed seal (trust or job_workflow_ref mismatch, a 403/412 from the bucket, a missing secret value) never
+# stops the phase 1 upload, so the CIS page keeps a fresh root_daily row; the last step then fails the run so the red
+# run still shows the seal failure.
+#
 # Public repo (section 4 C.5): this log prints counts only, never raw API output; the collector refuses to write a file
 # that carries an account ID, an ARN, an S3 URI or an e-mail address; no shell tracing, no artifact, no
 # pull_request_target (tools/compliance/test_collect.py checks this file).
@@ -105,7 +110,9 @@ jobs:
         run: echo "::notice title=Compliance evidence::COMPLIANCE_EVIDENCE_ROLE_ARN / COMPLIANCE_EVIDENCE_BUCKET are not set; nothing sealed."
 
       - name: AWS credentials (OIDC, compliance evidence role)
+        id: seal_creds
         if: env.HAS_EVIDENCE == 'true'
+        continue-on-error: true   # a seal failure never blocks the docs-reader upload below
         uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           role-to-assume: ${{ secrets.COMPLIANCE_EVIDENCE_ROLE_ARN }}
@@ -114,7 +121,9 @@ jobs:
           mask-aws-account-id: true
 
       - name: Verify the role
-        if: env.HAS_EVIDENCE == 'true'
+        id: seal_role
+        if: env.HAS_EVIDENCE == 'true' && steps.seal_creds.outcome == 'success'
+        continue-on-error: true
         run: |
           set -euo pipefail
           ARN=$(aws sts get-caller-identity --query Arn --output text)
@@ -124,7 +133,9 @@ jobs:
           esac
 
       - name: Seal into the evidence bucket (write-once, hash chain)
-        if: env.HAS_EVIDENCE == 'true'
+        id: seal
+        if: env.HAS_EVIDENCE == 'true' && steps.seal_role.outcome == 'success'
+        continue-on-error: true
         env:
           BUCKET: ${{ secrets.COMPLIANCE_EVIDENCE_BUCKET }}
         run: |
@@ -156,3 +167,19 @@ jobs:
           aws s3 cp "$OUT" "$dest/history/${day}.json" --only-show-errors --content-type "application/json"
           aws s3 cp "$OUT" "$dest/evidence.json" --only-show-errors --content-type "application/json"
           echo "uploaded the evidence file and the day file ${day}" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Seal outcome (fails the run when the seal failed; the docs-reader copy above still went out)
+        if: ${{ !cancelled() && env.HAS_EVIDENCE == 'true' }}
+        env:
+          CREDS: ${{ steps.seal_creds.outcome }}
+          ROLE: ${{ steps.seal_role.outcome }}
+          SEAL: ${{ steps.seal.outcome }}
+        run: |
+          set -euo pipefail
+          if [ "$SEAL" = "success" ]; then
+            echo "sealed: root_daily" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "seal not done (credentials ${CREDS}, role ${ROLE}, seal ${SEAL})" >> "$GITHUB_STEP_SUMMARY"
+          echo "::error title=Compliance evidence::the seal failed (credentials ${CREDS}, role ${ROLE}, seal ${SEAL}); the docs-reader copy was still uploaded"
+          exit 1

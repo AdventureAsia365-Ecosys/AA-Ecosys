@@ -88,6 +88,22 @@ class SealWorkflowTest(unittest.TestCase):
         self.assertLess(wf.index("tools/compliance/seal.py"), wf.index("secrets.DOCS_SYNC_ROLE_ARN }}\n"))
         self.assertEqual(len(re.findall(r"mask-aws-account-id: true", wf)), 1)
 
+    def test_a_failed_seal_never_blocks_the_docs_reader_upload(self):
+        # S290 review: the seal runs before the phase 1 upload, so each seal step is continue-on-error and a last
+        # step (after the upload) fails the run when the seal did not succeed.
+        text = (ROOT / ".github/workflows/compliance-evidence.yml").read_text(encoding="utf-8")
+        steps = re.split(r"\n      - (?=name:|uses:)", text.split("\n    steps:\n", 2)[2])
+        by_name = {re.match(r"name: (.*)", s).group(1): s for s in steps if s.startswith("name:")}
+        for name in ("AWS credentials (OIDC, compliance evidence role)", "Verify the role",
+                     "Seal into the evidence bucket (write-once, hash chain)"):
+            self.assertIn("continue-on-error: true", by_name[name], name)
+        names = list(by_name)
+        outcome = next(n for n in names if n.startswith("Seal outcome"))
+        self.assertGreater(names.index(outcome), names.index("Upload the day file, then the latest file"))
+        self.assertIn("!cancelled()", by_name[outcome])
+        self.assertIn("steps.seal.outcome", by_name[outcome])
+        self.assertIn("exit 1", by_name[outcome])
+
 
 if __name__ == "__main__":
     unittest.main()
