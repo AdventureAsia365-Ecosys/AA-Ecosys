@@ -259,6 +259,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1134](data-platform-schema-ops-scale/AA-1134.md) | [Ops] Docs-audit code follow-ups — 19 small code, config and settings fixes | Done | 2026-11-19 | Data Platform — Schema, Ops & Scale |
 | [AA-1135](data-platform-schema-ops-scale/AA-1135.md) | [DevOps] Platform › Delivery v2: time range on every tab, DORA trends, delivery flow diagram, queue and churn charts, card sorting | Done | 2026-11-18 | Data Platform — Schema, Ops & Scale |
 | [AA-1137](data-platform-schema-ops-scale/AA-1137.md) | [DevOps] Specs and trace: plan → spec (requirements, design, tasks) → lanes → PR, Kiro-compatible | Done | 2026-11-21 | Data Platform — Schema, Ops & Scale |
+| [AA-1140](data-platform-schema-ops-scale/AA-1140.md) | [Ops] Ecosystem status: replace /admin/overview with one live + period status page for the four apps | Done | 2026-11-24 | Data Platform — Schema, Ops & Scale |
 | [AA-1161](data-platform-schema-ops-scale/AA-1161.md) | [DevOps] Keep every repo lean: screenshots, build artifacts and binaries stored in their right place, with guards | Done | 2026-11-22 | Data Platform — Schema, Ops & Scale |
 | [AA-1162](data-platform-schema-ops-scale/AA-1162.md) | [Security] Repo change control: protect root master and record agent reviews as PR reviews | Done | 2026-11-21 | Data Platform — Schema, Ops & Scale |
 | [AA-1163](data-platform-schema-ops-scale/AA-1163.md) | [Security] Vulnerability management v2: triage by KEV, EPSS and CVSS v4 with SLAs and a monthly triage record | Done | 2026-11-21 | Data Platform — Schema, Ops & Scale |
@@ -746,6 +747,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1130](tripplanner-aa-booking/AA-1130.md) | [UI fixes — TripPlanner] Agency planner page fixes from the S283 UI audit | Done | 2026-11-19 | TripPlanner & AA-Booking |
 | [AA-1145](tripplanner-aa-booking/AA-1145.md) | [Booking] One supply model: pax types, structured contract terms, restrictions and allotment | Done | 2026-11-19 | TripPlanner & AA-Booking |
 | [AA-1150](tripplanner-aa-booking/AA-1150.md) | [CIS + Booking] Lean staff roles step 1: three people-role presets, finance reads, make/approve capability split, one sign-in | Done | 2026-11-20 | TripPlanner & AA-Booking |
+| [AA-1151](tripplanner-aa-booking/AA-1151.md) | [Booking + CIS] Optional activities as AA offers with places, sale rules and expiry alerts | Done | 2026-11-24 | TripPlanner & AA-Booking |
 | [AA-1159](tripplanner-aa-booking/AA-1159.md) | [Booking] My work on the staff dashboard: permission-filtered queues, filtered lists, approvals waiting | Done | 2026-11-20 | TripPlanner & AA-Booking |
 | [AA-589](tripplanner-aa-booking/AA-589.md) | [EPIC] TripPlanner — Ms.Thư tasks (data cleanup, upload raw, auto-edit, arrival/departure map, suggest next) | Done | 2026-09-16 | TripPlanner & AA-Booking |
 | [AA-590](tripplanner-aa-booking/AA-590.md) | [#5][MAP] Suggest next place theo itinerary — kết hợp taste-similarity + geography | Done | 2026-09-16 | TripPlanner & AA-Booking |
