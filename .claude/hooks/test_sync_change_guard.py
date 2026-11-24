@@ -70,6 +70,7 @@ class ClassifyTest(unittest.TestCase):
             "pkg/orders_test.py": "test",
             "docs/implementation-notes/AA-12.md": "note",
             "docs/implementation-notes/AA-12-l3-lane.md": "note",
+            "docs/implementation-notes/S291-crm-perf.md": "note",
             "docs/guides/devops.md": "doc",
             "docs/audits/x/audit_data.py": "doc",
             "CONTEXT.md": "doc",
@@ -120,6 +121,10 @@ class EvaluateTest(unittest.TestCase):
     def test_note_of_another_issue_does_not_count(self):
         r = self.run_eval(["api/a.py", "tests/test_a.py", "docs/implementation-notes/AA-6.md"])
         self.assertEqual(r.findings, ["no-note"])
+
+    def test_session_note_covers_the_issue(self):
+        r = self.run_eval(["api/a.py", "tests/test_a.py", "docs/implementation-notes/S291-crm-perf.md"])
+        self.assertEqual(r.findings, [])
 
     def test_without_issue_any_note_counts(self):
         r = self.run_eval(["api/a.py", "tests/test_a.py", "docs/implementation-notes/AA-6.md"], issues=())

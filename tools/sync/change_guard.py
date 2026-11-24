@@ -45,7 +45,10 @@ GIT_TIMEOUT_S = 3
 NOTES_DIR = "docs/implementation-notes"
 ISSUE = re.compile(r"(?i)\b(aa)-(\d+)\b")
 REFS_LINE = re.compile(r"(?im)^\s*refs\s+(.+)$")
-NOTE_FILE = re.compile(r"^(?:.*/)?docs/implementation-notes/(?P<id>[A-Za-z]+-\d+)(?:-[^/]*)?\.md$")
+# AA-1136 M5 (S292): a session note (`S291-<slug>.md`) covers every issue of that session's PRs; without it 5 of 9
+# false reminders of the log week came from session-named notes.
+NOTE_FILE = re.compile(r"^(?:.*/)?docs/implementation-notes/(?P<id>[A-Za-z]+-\d+|S\d{3,4})(?:-[^/]*)?\.md$")
+SESSION_NOTE = re.compile(r"^S\d{3,4}$")
 WAIVER = {
     "test": re.compile(r"(?im)^[\s>*_`-]*no test needed[*_`]*\s*:[*_`]*\s*(?P<reason>(?!<)\S.{2,})$"),
     "note": re.compile(r"(?im)^[\s>*_`-]*no note needed[*_`]*\s*:[*_`]*\s*(?P<reason>(?!<)\S.{2,})$"),
@@ -164,7 +167,7 @@ def evaluate(report: Report, changed: list[str], note_texts: list[str]) -> Repor
     if report.code or report.schema:
         wanted = set(report.issues)
         note_ids = {m.group("id").upper() for n in report.notes if (m := NOTE_FILE.match(n))}
-        note_ok = bool(note_ids & wanted) if wanted else bool(report.notes)
+        note_ok = bool(note_ids & wanted or any(SESSION_NOTE.match(i) for i in note_ids)) if wanted else bool(report.notes)
         if not note_ok and "note" not in report.waivers:
             report.findings.append("no-note")
     return report
