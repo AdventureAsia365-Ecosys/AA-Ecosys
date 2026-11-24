@@ -720,6 +720,20 @@ features:
     surface: ["page:/admin/docs", "route:admin_docs"]
     depends_on: [INF-F006]
     owner: tech_lead
+  - id: CIS-F053
+    app: cis
+    module: supply-content
+    name: Content workspace (hand-made tours)
+    name_vi: Không gian nội dung (tour tạo tay)
+    summary_vi: "Nhân viên content tạo và sửa tour bằng tay, gắn với một nhà cung cấp AA từ Booking, rồi xuất bản qua cùng cổng duyệt như tour từ file (luật hai người khi bật); trang Supplier links gắn nhà cung cấp cho tour cũ."
+    summary: Content staff create and edit tours by hand, tied to an AA supplier from Booking, and publish them through the same review gate as sheet tours (two-person rule when on); the Supplier links page links older tours to a supplier.
+    roles: [admin, content_lead, content]
+    status: live
+    surface: ["page:/admin/content-workspace", "page:/admin/content-workspace/[tourId]", "page:/admin/content-workspace/new", "page:/admin/content-workspace/supplier-links", "route:admin_content_workspace"]
+    conditions:
+      settings: [cis.content.manual_tour.max_days, cis.content.manual_tour.min_inclusions, cis.content.manual_tour.min_exclusions, cis.content.manual_tour.quick_inclusions, cis.content.manual_tour.quick_exclusions, cis.content.manual_tour.tour_types, cis.content.supplier_link.bulk_max]
+    depends_on: [BK-F009]
+    owner: content_lead
   - id: BK-F001
     app: booking
     module: shell

@@ -700,3 +700,20 @@ integrations:
     features: [CRM-F023, TP-F005]
     owner: tech_lead
     status: planned
+  - id: INT-086
+    name: Booking supplier list for the CIS content workspace
+    producer: booking
+    consumers: [cis]
+    kind: db_view
+    contracts:
+      - {file: supply.supplier.v1.md, version: "1"}
+    auth: USAGE and SELECT on booking.v_supply_suppliers for the cis_app role (Booking bk-073)
+    conditions:
+      note: Identity columns only (id, code, company name, categories, country, status, updated); never a contact, legal, tax, payment or bank detail, or a price.
+    cadence: Read per request (supplier picker and Supplier links report)
+    failure: The picker shows no supplier and the save is refused; nothing is invented
+    kill_switch: Revoke the view grant in a Booking migration
+    personal_data: false
+    features: [BK-F009, CIS-F053]
+    owner: tech_lead
+    status: live
