@@ -285,14 +285,21 @@ def milestone_drift(plan: dict) -> tuple[list[str], list[str]]:
             errors.append(f"{mid}: all {len(criteria)} criteria are done but status is {status!r}; set it to done")
         if status == DONE and slotted.get(mid):
             errors.append(f"{mid}: status done but open issues are still slotted to it: {', '.join(slotted[mid])}")
-        for n, c in enumerate(criteria, 1):
-            if c.get("done") is True:
-                continue
-            refs = sorted({f"AA-{x}" for x in ISSUE_REF.findall(str(c.get("text", "")))}, key=issue_num)
-            if refs and not (set(refs) & open_ids) and all(issue_num(r) <= newest for r in refs):
-                warnings.append(f"{mid}: criterion {n} is open but names only closed issues ({', '.join(refs)}): "
-                                "tick it or say what is left")
+        warnings += _stale_criteria(mid, criteria, open_ids, newest)
     return errors, warnings
+
+
+def _stale_criteria(mid: str, criteria: list[dict], open_ids: set, newest: int) -> list[str]:
+    """Open criteria that name only issues gone from issues[] (closed at the last sync) and not newer than the plan."""
+    out = []
+    for n, c in enumerate(criteria, 1):
+        if c.get("done") is True:
+            continue
+        refs = sorted({f"AA-{x}" for x in ISSUE_REF.findall(str(c.get("text", "")))}, key=issue_num)
+        if refs and not (set(refs) & open_ids) and all(issue_num(r) <= newest for r in refs):
+            out.append(f"{mid}: criterion {n} is open but names only closed issues ({', '.join(refs)}): "
+                       "tick it or say what is left")
+    return out
 
 
 def scope_violations(base: dict, new: dict) -> list[str]:

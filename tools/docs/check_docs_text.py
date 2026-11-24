@@ -215,6 +215,19 @@ def check_resource_ids(root: Path, files: list[str]) -> list[Finding]:
     return findings
 
 
+def _retired_hit(lines: list[str], n: int) -> tuple[str, RetiredPhrase] | None:
+    """The first retired phrase line n (1-based) states as live, with the text it matched, or None."""
+    line = lines[n - 1]
+    history = bool(RETIRED_HISTORY.search(line)) or "~~" in line  # struck-through items are closed
+    for phrase in RETIRED_PHRASES:
+        if history and phrase.history_ok:
+            continue
+        m = phrase.pattern.search(line)
+        if m and not (phrase.allow and phrase.allow.search(" ".join(lines[n - 1:n + ALLOW_WINDOW]))):
+            return m.group(0), phrase
+    return None
+
+
 def check_retired_phrases(root: Path, files: list[str]) -> list[Finding]:
     findings: list[Finding] = []
     for relpath in files:
@@ -228,21 +241,11 @@ def check_retired_phrases(root: Path, files: list[str]) -> list[Finding]:
             if line.lstrip().startswith("```"):
                 fenced = not fenced
                 continue
-            if fenced or IGNORE_MARKER in line:
-                continue
-            history = bool(RETIRED_HISTORY.search(line)) or "~~" in line  # struck-through items are closed
-            for phrase in RETIRED_PHRASES:
-                if history and phrase.history_ok:
-                    continue
-                m = phrase.pattern.search(line)
-                if not m:
-                    continue
-                if phrase.allow is not None and phrase.allow.search(" ".join(lines[n - 1:n + ALLOW_WINDOW])):
-                    continue
+            hit = None if fenced or IGNORE_MARKER in line else _retired_hit(lines, n)
+            if hit:
                 findings.append(Finding(relpath, n, "Retired phrase",
-                                        f"'{m.group(0)}' describes a retired thing as live. {phrase.truth}",
+                                        f"'{hit[0]}' describes a retired thing as live. {hit[1].truth}",
                                         kind="retired"))
-                break
     return findings
 
 
