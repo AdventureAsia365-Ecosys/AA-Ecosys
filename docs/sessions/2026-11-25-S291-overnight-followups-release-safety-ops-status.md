@@ -16,6 +16,7 @@
 
 - ~20:20: duyệt danh sách 8 việc, 2 lane song song, không đụng việc thứ Năm 26/11.
 - "tiếp đi, hết MFA thì kêu anh nhập".
+- ~04:20: gom toàn bộ Jira S291 sang phiên sau cùng ngày.
 - Tắt auto mode để agent gắn nhãn `secret-scan-baseline-reviewed` cho TripPlanner #301/#302 (rồi bật lại).
 - CloudWatch Omni (bài anh gửi): em đề xuất chưa bật, ghi làm phương án cho AA-842 khi có prod / agent thật — chưa có quyết định.
 
@@ -51,13 +52,13 @@
 
 ## Jira
 
-Chưa đăng — 5 nháp chờ duyệt (PR-25, PR-30, PR-29, PR-24, PR-27): `docs/audits/2026-11-24-S291-session/jira-drafts.md`.
+Chưa đăng — **chuyển sang phiên sau cùng ngày 25/11** (tech lead quyết ~04:20): 5 nháp (PR-25, PR-30, PR-29, PR-24, PR-27) gom chung với nháp phiên sau, duyệt một lần: `docs/audits/2026-11-24-S291-session/jira-drafts.md`.
 
 ## Việc đầu phiên sau (S292)
 
 1. Thứ Năm 26/11 (buổi chủ DN): đăng nhập → Make business owner → duyệt TK SUP-000019 → agent thử chi 24 h → 409 `bank_payout_locked` (AA-1158); bật hai công tắc hai người + người thứ hai thật (AA-1148, AA-1173); Trang đăng nhập (AA-1155 T12); review bảo mật tháng đầu.
 2. Sau buổi thứ Năm: ship savepoint Booking #331 + CIS #1676 (bỏ draft) + chạy `aa838_s291_savepoint_counts.py` (cần Infra PR); dọn dữ liệu SYNTHETIC S290.
-3. Đăng Jira S291 sau khi anh duyệt.
+3. Jira: gom 5 nháp S291 với nháp phiên này, đưa duyệt một lần rồi đăng.
 4. AA-1136 readout (~26/11); AA-1142 (status P2); AA-1154 A1 (LLM, cap 10 USD stage ops_assist).
 5. Release-please tuần W49 (CIS #1645, Booking #302, Partner #380, TP #295); dependabot actions bump.
 
@@ -86,7 +87,7 @@ Chưa đăng — 5 nháp chờ duyệt (PR-25, PR-30, PR-29, PR-24, PR-27): `doc
 ## S291 (24–25/11/2026, Claude Code — VS Code/WSL, qua đêm): follow-up S290, perf C4.3, an toàn phát hành, trợ lý ops A0, status P1, docs khớp thực tế
 **Quyết định của Nghiệp** — duyệt 8 việc, 2 lane, không đụng việc thứ Năm 26/11; "tiếp đi, hết MFA thì kêu"; tắt auto mode để agent gắn nhãn secret-scan-baseline-reviewed cho TP #301/#302.
 **Kết quả chính** — Done: AA-1118 (root #988, CIS #1672 + 4 bản copy), AA-1119 (TP merge queue + strict + coverage 90%, rollback khi kiểm sau deploy đỏ ở 4 web app, Sentry CRM, DB Migrate kiểm input; TP #303 sửa planner sập), AA-1141 (status P1, CIS 482/483, #1678 + hotfix #1679). AA-1154 A0 live (CIS 481, #1675; replay 29/10 → 6 thẻ R0–R4, 0 LLM). Follow-up S290 CIS/Booking/CRM (bk-075, CIS 480, crm-088). Perf: request_tours 25,5→4,0 ms; CRM due_proposals ~60→0/phút, tenant_status ~380→130, eviction pgss→0. 0 USD LLM. AA-1142 dời S292 (chạm limit 5h ~00:50).
-**Trạng thái kiểm cuối phiên** — ECS 8/8 1/1: cis-api :1276 / worker :845 (df33eb9b), admin :101 (64242ba4), booking-api :175 (591d7397), booking-admin :67 (caa80a41), crm-api :219 / web :191 (4471854c), tp-web :29 (aa78d945). Migration CIS 483, bk-075, crm-088, tp-037. shared.job 0, booking.job 0. Draft giữ tới sau thứ Năm: Booking #331, CIS #1676 (savepoint). Jira: 5 nháp chờ duyệt.
-**Việc cần làm đầu phiên sau (S292)** — (1) buổi thứ Năm 26/11 (AA-1158/1148/1173/1155); (2) sau đó ship #331/#1676 + đếm savepoint; dọn SYNTHETIC S290; (3) đăng Jira S291; (4) AA-1136 readout, AA-1142, AA-1154 A1; (5) release-please W49.
+**Trạng thái kiểm cuối phiên** — ECS 8/8 1/1: cis-api :1276 / worker :845 (df33eb9b), admin :101 (64242ba4), booking-api :175 (591d7397), booking-admin :67 (caa80a41), crm-api :219 / web :191 (4471854c), tp-web :29 (aa78d945). Migration CIS 483, bk-075, crm-088, tp-037. shared.job 0, booking.job 0. Draft giữ tới sau thứ Năm: Booking #331, CIS #1676 (savepoint). Jira: 5 nháp chuyển phiên sau cùng ngày.
+**Việc cần làm đầu phiên sau (S292)** — (1) buổi thứ Năm 26/11 (AA-1158/1148/1173/1155); (2) sau đó ship #331/#1676 + đếm savepoint; dọn SYNTHETIC S290; (3) gom Jira S291 vào nháp phiên này, duyệt một lần, đăng; (4) AA-1136 readout, AA-1142, AA-1154 A1; (5) release-please W49.
 **Lưu ý kỹ thuật** — PATH gitleaks 8.30.1 cho push; EXPLAIN qua ECS exec (run-script fail-closed); ecsx bỏ SENTRY_DSN (ECSX_KEEP_SENTRY=1); smoke CI vai viewer bỏ qua trang chỉ admin.
 ```
