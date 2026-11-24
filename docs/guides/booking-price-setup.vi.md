@@ -9,7 +9,7 @@ audience: [staff, owner]
 applies_to: [aa-booking-admin, aa-booking-api, aa-cis-frontend, aa-cis-api]
 last_reviewed: 2026-11-23
 review_every_days: 90
-related: [GUIDE-12, GUIDE-12-booking, GUIDE-12-cis-admin, AA-1091, AA-1153]
+related: [GUIDE-12, GUIDE-12-booking, GUIDE-12-cis-admin, AA-1091, AA-1153, AA-1177]
 lang: vi
 translation_of: docs/guides/booking-price-setup.md
 ---
@@ -113,6 +113,25 @@ Service code, Kind, From, To, Units, Release days, Max pax, Notes).
   DMC rẻ hơn (hoặc được ưu tiên) định giá phòng và chỉ allotment của DMC đó được dùng.
 - Ví dụ: allotment 2 phòng, nhả phòng trước 7 ngày. Đại lý hỏi 2 phòng thì được xác nhận ngay; phòng thứ 3, hoặc mọi
   phòng ít hơn 7 ngày trước đêm ở, vào B2B desk ở dạng theo yêu cầu.
+
+### Hợp đồng sắp hết hạn: nhắc việc
+
+Một hợp đồng nhà cung cấp giữ giá trong một khoảng thời gian (thường là một năm). Trước khi hết hạn, Booking nhắc những
+người gia hạn nó, cho mọi loại hợp đồng (khách sạn, vận chuyển, hướng dẫn viên, hoạt động, ...):
+
+- **Thấy ở đâu**: ô **Contracts ending soon** trong **My work** trên dashboard (Booking admin và Contracting), danh sách
+  **Contracts ending soon** ở đầu trang **Suppliers** (ô trên dashboard mở tới đây), cùng danh sách đó cho một nhà cung
+  cấp ở thẻ **Contracts** của nó, và trang **Add-ons**. Mỗi dòng ghi số ngày còn lại, nhà cung cấp, loại, hợp đồng và
+  ngày kết thúc, và nhắc việc đã **Notified** (thông báo trong ứng dụng) hay **E-mailed** (đã gửi e-mail).
+- **Khi nào**: một hợp đồng đã xuất bản được liệt kê khi ngày kết thúc nằm trong **Contract expiring warning (days)**
+  trên **Supply › Pricing policy** (ban đầu 60 ngày). Đổi giá trị này thì các danh sách đổi ngay.
+- **E-mail**: mỗi ngày một lần (01:00 UTC), nhắc việc đăng một thông báo và gửi một e-mail cho mỗi hợp đồng và ngày
+  kết thúc tới mọi nhân viên Booking đang hoạt động thuộc các vai trò trong **Contract expiring e-mail: staff roles**
+  (ban đầu Booking admin và Contracting) có địa chỉ e-mail. E-mail viết bằng tiếng Anh và tiếng Việt, có đường dẫn
+  tới thẻ Contracts của nhà cung cấp. Một hợp đồng không bao giờ được gửi hai lần cho cùng một ngày kết thúc; nếu ngày
+  kết thúc đổi, nó được báo lại. Danh sách vai trò để trống thì không gửi e-mail (thông báo và các danh sách vẫn còn).
+- **Cần làm gì**: thoả thuận giá mới với nhà cung cấp và nhập hợp đồng tiếp theo (hoặc nhập bảng giá của nó) trước
+  ngày kết thúc; một người thứ hai xuất bản. Những gì hợp đồng đã hết hạn định giá sẽ ngừng bán.
 
 ## 4. Nhiều tour một lúc: file Excel
 
@@ -269,6 +288,7 @@ Giá **Per group** không cho Booking số tiền mỗi khách, nên không dùn
 | Trang từ chối một thay đổi | Vai trò của bạn không có quyền đó; hỏi chủ nền tảng |
 | Phòng DMC giữ bằng allotment vẫn hiện theo yêu cầu | Đêm đó đã trong số ngày nhả phòng, allotment đã hết, hoặc một DMC khác định giá phòng (chỉ phòng được giữ của chính DMC đó được tính) |
 | **Excel** báo hợp đồng có quá nhiều dòng | Tách hợp đồng, hoặc tăng **Rate sheet: most rows in one workbook** trên **Supply › Pricing policy** |
+| Bạn không nhận được e-mail về một hợp đồng sắp hết hạn | Vai trò của bạn không nằm trong **Contract expiring e-mail: staff roles**, tài khoản nhân viên của bạn không có địa chỉ e-mail, hoặc bạn nhận vai trò sau khi e-mail đã gửi; danh sách trên **Suppliers** vẫn hiện hợp đồng đó |
 
 Trong giai đoạn dev, tech lead là kỹ sư trực: tạo issue Jira cho vấn đề thường, nhắn trực tiếp khi gấp. Gửi kèm địa
 chỉ trang, mã tour, thời điểm và ảnh chụp màn hình.
@@ -282,5 +302,6 @@ chain", "Agency price tiers"), `docs/implementation-notes/AA-1091*.md`; AA-CIS-A
 `frontend/app/admin/reference-prices/messages.ts`, `frontend/app/admin/platform/staff/messages.ts`,
 `docs/implementation-notes/AA-1091-cis.md`. AA-1153 phần 2 (S290): `suppliers/_parts/InventoryTerms.tsx`,
 `backend/app/supply/rate_sheet_export.py`, `rate_sheet_inventory.py`, `availability.py`, `CONTEXT.md` ("Hotel contracts
-through DMCs"). Quyết định: ADR gốc 0005, 0005b và 0019. Giữ trang này khớp với
+through DMCs"). AA-1177 (S290): `suppliers/_parts/ExpiringContracts.tsx`, `backend/app/supply/contract_expiry_mail.py`,
+`CONTEXT.md` ("Add-on offers", e-mail hợp đồng sắp hết hạn). Quyết định: ADR gốc 0005, 0005b và 0019. Giữ trang này khớp với
 [booking-price-setup.md](booking-price-setup.md).

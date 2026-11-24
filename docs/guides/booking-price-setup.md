@@ -9,7 +9,7 @@ audience: [staff, owner]
 applies_to: [aa-booking-admin, aa-booking-api, aa-cis-frontend, aa-cis-api]
 last_reviewed: 2026-11-23
 review_every_days: 90
-related: [GUIDE-12, GUIDE-12-booking, GUIDE-12-cis-admin, AA-1091, AA-1153]
+related: [GUIDE-12, GUIDE-12-booking, GUIDE-12-cis-admin, AA-1091, AA-1153, AA-1177]
 ---
 
 # Booking price setup
@@ -110,6 +110,25 @@ or Service code, Kind, From, To, Units, Release days, Max pax, Notes).
   cheaper (or preferred) DMC prices the room and only its allotment is used.
 - Example: an allotment of 2 rooms with 7 release days. An agency asking for 2 rooms is confirmed at once; a 3rd
   room, or any room fewer than 7 days before the night, goes to the B2B desk as on request.
+
+### Contracts ending soon: the reminder
+
+A supplier contract holds its prices for a period (often one year). Before it ends, Booking reminds the people who
+renew it, for every kind of contract (hotel, transport, guide, activity, ...):
+
+- **Where you see it**: the dashboard tile **Contracts ending soon** under **My work** (Booking admin and Contracting),
+  the **Contracts ending soon** list at the top of **Suppliers** (the tile opens it), the same list for one supplier on
+  its **Contracts** tab, and **Add-ons**. Each line shows the days left, the supplier, the kind, the contract and its
+  end date, and whether the reminder was **Notified** (in-app) or **E-mailed**.
+- **When**: a published contract is listed once its end date is within **Contract expiring warning (days)** on
+  **Supply › Pricing policy** (60 days to start with). Changing that value changes the lists at once.
+- **The e-mail**: once a day (01:00 UTC) the reminder posts one notification and sends one e-mail per contract and end
+  date to every active Booking staff member of the roles in **Contract expiring e-mail: staff roles** (Booking admin
+  and Contracting to start with) who has an e-mail address. The e-mail is in English and Vietnamese and links to the
+  supplier's Contracts tab. A contract is never mailed twice for the same end date; if its end date changes, it is
+  announced again. An empty role list sends no e-mail (the notification and the lists stay).
+- **What to do**: agree the new rates with the supplier and enter the next contract (or import its rate sheet) before
+  the end date; a second person publishes it. What an ended contract prices stops selling.
 
 ## 4. Many tours at once: the workbook
 
@@ -265,6 +284,7 @@ A **Per group** price gives Booking no per-person amount, so it cannot become a 
 | A page refuses a change | Your role does not include it; ask the platform owner |
 | A room the DMC holds in allotment shows on request | The night is inside the release days, the allotment is used up, or another DMC priced the room (only its own inventory counts) |
 | **Excel** says the contract has too many rows | Split the contract, or raise **Rate sheet: most rows in one workbook** on **Supply › Pricing policy** |
+| A contract ending soon was not e-mailed to you | Your role is not in **Contract expiring e-mail: staff roles**, your staff account has no e-mail address, or you got the role after it was mailed; the list on **Suppliers** still shows it |
 
 During the dev phase the tech lead is the engineer on duty: a Jira issue for normal problems, a direct message when
 urgent. Give the page address, the tour key, the time and a screenshot.
@@ -278,5 +298,6 @@ chain", "Agency price tiers"), `docs/implementation-notes/AA-1091*.md`; AA-CIS-A
 `frontend/app/admin/reference-prices/messages.ts`, `frontend/app/admin/platform/staff/messages.ts`,
 `docs/implementation-notes/AA-1091-cis.md`. AA-1153 part 2 (S290): `suppliers/_parts/InventoryTerms.tsx`,
 `backend/app/supply/rate_sheet_export.py`, `rate_sheet_inventory.py`, `availability.py`, `CONTEXT.md` ("Hotel contracts
-through DMCs"). Decisions: root ADR 0005, 0005b and 0019. Keep
+through DMCs"). AA-1177 (S290): `suppliers/_parts/ExpiringContracts.tsx`, `backend/app/supply/contract_expiry_mail.py`,
+`CONTEXT.md` ("Add-on offers", contract expiry e-mail). Decisions: root ADR 0005, 0005b and 0019. Keep
 [booking-price-setup.vi.md](booking-price-setup.vi.md) in step with this page.
