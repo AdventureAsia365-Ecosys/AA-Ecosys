@@ -1,8 +1,8 @@
 {
- "updated": "2026-11-23",
- "synced_at": "2026-11-23T15:16Z",
- "session": "S288",
- "next_session": "S289",
+ "updated": "2026-11-24",
+ "synced_at": "2026-11-24T04:29Z",
+ "session": "S289",
+ "next_session": "S290",
  "source": "Linear (19/11/2026, plan_sync.py --write, S285) + docs/audits/2026-11-19-S285-session/plan-audit-plan-changes.json (tech lead duyệt Q1–Q12, 19/11) + docs/backlog/README.md",
  "projects": {
   "data": "Data Platform",
@@ -806,7 +806,7 @@
   {
    "who": "Nghiệp",
    "issue": "AA-1158",
-   "text": "S289 sáng 24/11: chị Thư — Resend invite → đăng nhập → Make business owner (tech lead) → Booking → TOTP; Create agency cho Test Agency (crm-platform-admin) rồi Invite first owner"
+   "text": "S289 sáng 24/11: chị Thư — Resend invite → đăng nhập → Make business owner (tech lead) → Booking → TOTP; Create agency cho Test Agency (crm-platform-admin) rồi Invite first owner; S289: chủ DN duyệt thử tài khoản ngân hàng SYNTHETIC đang pending của SUP-000017 (chỉ chủ DN / tech lead dự phòng được duyệt)"
   },
   {
    "who": "Nghiệp",
@@ -995,6 +995,24 @@
   }
  ],
  "log": [
+  {
+   "session": "S289",
+   "date": "24/11/2026",
+   "closed": [
+    "AA-1140",
+    "AA-1151"
+   ],
+   "canceled": [],
+   "created": [],
+   "reopened": [],
+   "notes": [
+    "Phiên qua đêm 23/11 22:55 → 24/11 ~11:30, Ultracode, chia 2 đợt tránh trần 5 giờ + OOM: AA-1140 (trang Ecosystem status) và AA-1151 (hoạt động tuỳ chọn) Done; AA-1152, AA-1158 phần 2, AA-1160 In Review; AA-1153 phần 1 xong, phần 2 → S290",
+    "Migration Booking bk-067…071, CIS 474…477, CRM crm-086/087, TripPlanner tp-036/037; khoá KMS tài khoản ngân hàng NCC tạo bằng apply local MFA (CI không được PutKeyPolicy)",
+    "Tech lead quyết 24/11: 1 khoá KMS chung, mở allow-list E2E cho DMC thứ hai + báo giá SYNTHETIC (ADR 0006a A10e-5), chấp nhận GetMetricData ~0,07 USD/ngày, chỉ chủ DN duyệt tài khoản ngân hàng NCC (bk-071)",
+    "Follow-up (không tạo issue): Infra PII_ALLOWLIST thiếu bk-069/bk-070; CRM kéo ~13 tenant CIS không còn (404 hằng giờ); desk B2B on-request ghi nhầm DMC; 500 thay 403 khi phiên tenant B dùng mã chuyến tenant A (TripPlanner); test CIS test_aa875_safe_http lệch giờ; test frontend tenantLeadRoute 902 đỏ local; huỷ desk entry TC-000039; kiểm ciphertext supplier_bank_account (run-script master); lane.js COMMON thêm 3 dòng (không mã issue trong text route, x-tp-tenant-slug khi live check, Postgres UTC)",
+    "Jira S289 chuyển sang phiên kế tiếp cùng ngày (tech lead 24/11 ~09:35), chưa đăng gì"
+   ]
+  },
   {
    "session": "S288",
    "date": "23/11/2026",
@@ -2330,9 +2348,9 @@
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M-ROLES",
-   "session": "S288",
+   "session": "S290",
    "size": "L",
-   "next": "S288: phần 1 merged + deploy (bk-064); chờ kiểm chủ DN tự duyệt bằng phiên chủ DN; phần 2 → S289",
+   "next": "S289 phần 2 merged + deploy (bk-067, bk-071, khoá KMS), live 4/5; S290: chặn chi trả khi pending (cần hoá đơn NCC), kiểm ciphertext tại DB (run-script master), chủ DN duyệt tài khoản SYNTHETIC pending; phần 1 còn chủ DN tự duyệt",
    "needs": ""
   },
   {
@@ -2662,18 +2680,6 @@
    "needs": ""
   },
   {
-   "id": "AA-1140",
-   "title": "[Ops] Ecosystem status: replace /admin/overview with one live + period status page for the four apps",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "data",
-   "milestone": "later",
-   "session": "S290",
-   "size": "",
-   "next": "Ops — S290: trang status + shared.ops_event + bản ghi sự cố tối giản (AI8)",
-   "needs": ""
-  },
-  {
    "id": "AA-1141",
    "title": "[Ops] Ecosystem status P1: change annotations, alert ack/snooze, freshness, capacity forecast, cost anomaly, digest, saved views, accessibility",
    "status": "Backlog",
@@ -2722,39 +2728,27 @@
    "needs": ""
   },
   {
-   "id": "AA-1151",
-   "title": "[Booking + CIS] Optional activities as AA offers with places, sale rules and expiry alerts",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "tpbk",
-   "milestone": "M-SUP",
-   "session": "S289",
-   "size": "",
-   "next": "L8 — S289: hoạt động tuỳ chọn ở Booking + CIS (PR-29)",
-   "needs": ""
-  },
-  {
    "id": "AA-1152",
    "title": "[TripPlanner + CRM] Optional activities per day for customers and agencies, with rounded agency prices",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M-SUP",
    "session": "S290",
    "size": "",
-   "next": "L9 — S290: TripPlanner + CRM hiện hoạt động theo ngày, giá đại lý làm tròn (phần giá mở, B2 = C)",
+   "next": "S289 merged + deploy (bk-070, crm-086/087, tp-036/037, CIS 476), live 2/3; S290: đại lý Dev nhận tour HCMC rồi kiểm add-on đi theo lead (mã sv:)",
    "needs": ""
   },
   {
    "id": "AA-1153",
    "title": "[Booking] Hotel contracts through DMCs: property master, meal plans, supplements, allotment and safer manual import",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M-SUP",
-   "session": "S289",
+   "session": "S290",
    "size": "",
-   "next": "L10 — S289 phần 1 (dời S290 nếu bảng job bận), S290 phần 2 (allotment, Excel 2 chiều) (PR-30)",
+   "next": "S289 phần 1 merged + deploy (bk-069) + kiểm live 3/4; S290 phần 2 (allotment / release days, Excel hai chiều) + sửa nhãn DMC ở danh sách on-request desk B2B",
    "needs": ""
   },
   {
@@ -2772,14 +2766,14 @@
   {
    "id": "AA-1160",
    "title": "[TripPlanner] Planner follows the agency's locale and theme; leads fall back when the CRM agency does not exist yet",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "High",
    "project": "tpbk",
    "milestone": "later",
-   "session": "S288",
+   "session": "S290",
    "size": "",
-   "next": "",
-   "needs": "cần xếp slot"
+   "next": "S289 merged + deploy (CIS 474, TP #294/#296, Partner #382), live màu/dark/Tenant 360 xong; S290: gửi lead qua đường dự phòng bằng tenant SYNTHETIC có route e-mail/webhook + ảnh locale vi",
+   "needs": ""
   },
   {
    "id": "AA-1166",
