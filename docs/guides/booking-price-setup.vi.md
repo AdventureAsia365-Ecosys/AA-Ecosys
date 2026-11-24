@@ -1,7 +1,7 @@
 ---
 id: GUIDE-12-booking-pricing
 title: Thiết lập giá trong Booking
-description: Cách nhóm chăm sóc khách hàng nhập giá tour - quyền truy cập, Thiết lập giá, khách sạn và dịch vụ từ lịch trình CIS, file Excel với DRY RUN, phiên bản giá, mùa, giá tạm và giá tham khảo CIS, và kiểm một tour đã mở bán.
+description: Cách nhóm chăm sóc khách hàng nhập giá tour - quyền truy cập, Thiết lập giá, khách sạn và dịch vụ từ lịch trình CIS, hợp đồng khách sạn bằng Excel và phòng được giữ, file Excel với DRY RUN, phiên bản giá, mùa, giá tạm và giá tham khảo CIS, và kiểm một tour đã mở bán.
 type: how-to
 status: draft
 owner: nghiep
@@ -9,7 +9,7 @@ audience: [staff, owner]
 applies_to: [aa-booking-admin, aa-booking-api, aa-cis-frontend, aa-cis-api]
 last_reviewed: 2026-11-23
 review_every_days: 90
-related: [GUIDE-12, GUIDE-12-booking, GUIDE-12-cis-admin, AA-1091]
+related: [GUIDE-12, GUIDE-12-booking, GUIDE-12-cis-admin, AA-1091, AA-1153]
 lang: vi
 translation_of: docs/guides/booking-price-setup.md
 ---
@@ -77,6 +77,42 @@ dịch vụ và giá nhà cung cấp của chúng.
    **Hotels** hoặc **Services**, rồi mở lại tour.
 6. Với thành phần chưa có giá: **Supply › Suppliers**, mở nhà cung cấp, **Import rate sheet**, **Download the
    template**, điền, bấm **Check**, rồi **Import as draft**. Người thứ hai công bố hợp đồng nháp.
+
+### Sửa hợp đồng khách sạn bằng Excel
+
+Hợp đồng của một nhà cung cấp được tải ra và nhập lại bằng cùng một bảng giá.
+
+1. **Supply › Suppliers**, mở nhà cung cấp (DMC), thẻ **Rates**, chọn hợp đồng, bấm **Excel**. File có hợp đồng, mọi
+   giá (giá net, và **Published** + **Commission %** khi DMC đưa giá công bố), các **Seasons**, giá **Hotel children** và
+   sheet **Inventory** (bên dưới). Khách sạn được ghi bằng mã riêng của DMC cho khách sạn đó.
+2. Sửa file: một giá mới, một mùa mới, một allotment. Giữ nguyên tên cột.
+3. **Import rate sheet**, chọn file, **Check**. Chưa có gì được ghi. Kết quả kiểm liệt kê lỗi theo sheet, dòng và cột,
+   các cảnh báo nghiệp vụ (nửa trọn gói rẻ hơn phòng kèm ăn sáng, một khoảng trống giữa các mùa, giá tăng mạnh) và các
+   thay đổi so với hợp đồng đã tải ra (giá thêm, đổi, bỏ).
+4. **Import as draft**. Đây là một hợp đồng nháp mới; hợp đồng đã công bố vẫn giữ nguyên tới khi một người thứ hai
+   công bố hợp đồng mới (và xác nhận đã xem mọi cảnh báo).
+
+Một bảng giá có tối đa số dòng đặt trên **Supply › Pricing policy** (mục hotels, **Rate sheet: most rows in one
+workbook**). Hợp đồng nhiều dòng hơn thì không tải được: hãy tách thành hai hợp đồng.
+
+### Phòng được giữ: allotment, bán tự do, theo yêu cầu
+
+Ở thẻ **Rates**, **Room and service inventory** liệt kê những gì DMC giữ cho AA theo hợp đồng. Khi hợp đồng còn là
+bản nháp, **Add term** thêm một điều khoản (hoặc điền sheet **Inventory** của bảng giá: Hotel code, Room type hoặc
+Service code, Kind, From, To, Units, Release days, Max pax, Notes).
+
+| Loại | Ý nghĩa với một đặt phòng của đại lý |
+|---|---|
+| **Allotment** | DMC giữ chừng ấy phòng mỗi đêm cho AA. Khi còn phòng và đêm đó còn xa hơn số ngày nhả phòng, đặt chỗ của đại lý được xác nhận ngay. Ngoài ra: theo yêu cầu |
+| **Free sale** (bán tự do) | AA xác nhận ngay không cần hỏi, tối đa **Max pax** khách mỗi đặt chỗ (để trống = không giới hạn) |
+| **On request** (theo yêu cầu) | Mọi đặt chỗ đều hỏi DMC trên B2B desk. Cũng là cách xử lý khi không có điều khoản nào |
+
+- **Release days** để trống = giá trị **Allotment: release days when the contract gives none** trên **Supply ›
+  Pricing policy** (ban đầu 7 ngày). Giá trị được ghi vào điều khoản, nên đổi chính sách sau này không làm nó đổi.
+- Phòng được giữ của mỗi DMC chỉ tính cho các đặt chỗ mà giá của DMC đó định giá: khi hai DMC cùng bán một khách sạn,
+  DMC rẻ hơn (hoặc được ưu tiên) định giá phòng và chỉ allotment của DMC đó được dùng.
+- Ví dụ: allotment 2 phòng, nhả phòng trước 7 ngày. Đại lý hỏi 2 phòng thì được xác nhận ngay; phòng thứ 3, hoặc mọi
+  phòng ít hơn 7 ngày trước đêm ở, vào B2B desk ở dạng theo yêu cầu.
 
 ## 4. Nhiều tour một lúc: file Excel
 
@@ -231,6 +267,8 @@ Giá **Per group** không cho Booking số tiền mỗi khách, nên không dùn
 | Không thấy nút duyệt | Bạn lập phiên bản này: người thứ hai duyệt |
 | Dải thông báo **No approved agency pricing rule is in force** | Không tour nào có giá từ giá nhà cung cấp; đề xuất quy tắc trên **Pricing rules & FX**; một người thứ hai có vai trò Contracting hoặc Booking admin duyệt |
 | Trang từ chối một thay đổi | Vai trò của bạn không có quyền đó; hỏi chủ nền tảng |
+| Phòng DMC giữ bằng allotment vẫn hiện theo yêu cầu | Đêm đó đã trong số ngày nhả phòng, allotment đã hết, hoặc một DMC khác định giá phòng (chỉ phòng được giữ của chính DMC đó được tính) |
+| **Excel** báo hợp đồng có quá nhiều dòng | Tách hợp đồng, hoặc tăng **Rate sheet: most rows in one workbook** trên **Supply › Pricing policy** |
 
 Trong giai đoạn dev, tech lead là kỹ sư trực: tạo issue Jira cho vấn đề thường, nhắn trực tiếp khi gấp. Gửi kèm địa
 chỉ trang, mã tour, thời điểm và ảnh chụp màn hình.
@@ -242,5 +280,7 @@ của chúng (workbench, versions, seasons), `suppliers/_parts/RateSheetDrawer.t
 `backend/app/catalog/price_import.py` (cột, kiểm tra và các dòng Read me của file Excel), `CONTEXT.md` ("Tour price
 chain", "Agency price tiers"), `docs/implementation-notes/AA-1091*.md`; AA-CIS-App `frontend/lib/adminIa.ts`,
 `frontend/app/admin/reference-prices/messages.ts`, `frontend/app/admin/platform/staff/messages.ts`,
-`docs/implementation-notes/AA-1091-cis.md`. Quyết định: ADR gốc 0005, 0005b và 0019. Giữ trang này khớp với
+`docs/implementation-notes/AA-1091-cis.md`. AA-1153 phần 2 (S290): `suppliers/_parts/InventoryTerms.tsx`,
+`backend/app/supply/rate_sheet_export.py`, `rate_sheet_inventory.py`, `availability.py`, `CONTEXT.md` ("Hotel contracts
+through DMCs"). Quyết định: ADR gốc 0005, 0005b và 0019. Giữ trang này khớp với
 [booking-price-setup.md](booking-price-setup.md).
