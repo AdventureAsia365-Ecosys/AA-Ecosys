@@ -71,7 +71,7 @@ MFA hết hạn 06:40 26/11.
 
 ## Jira
 
-Nháp 3 bài (PR-22, PR-26, PR-27) chờ tech lead duyệt: [jira-drafts.md](../audits/2026-11-25-S294-session/jira-drafts.md).
+Đã đăng 3/3 lúc ~05:10 sau khi tech lead duyệt: PR-22 (comment 10708, 2 ảnh), PR-26 (10709), PR-27 (10710). [jira-drafts.md](../audits/2026-11-25-S294-session/jira-drafts.md).
 
 ## Còn lại
 
@@ -90,6 +90,11 @@ Nháp 3 bài (PR-22, PR-26, PR-27) chờ tech lead duyệt: [jira-drafts.md](../
   lại **bk-076**), Infra #1042 (copy), CIS #1717 + Infra #1043 (gỡ khoá allowlist RLS `booking.v_ops_inquiry_inbox:cis_app`
   ngay sau apply, trước lượt 02:17 UTC). **Cả 4 là nháp.** Booking #200 đã đóng (thay bằng #336). Thứ tự: DRY RUN mới
   ≥ 27/11 23:50Z → tech lead duyệt pins → dán pins → review đối kháng → #336 → #1042 → DB Migrate → #1717 → #1043.
+
+## Runbook buổi họp 26/11
+
+Trang quyết định S294 thuộc tài khoản Claude cũ (tài khoản hiện tại không mở được) → runbook mới, cập nhật lúc 05:00:
+https://claude.ai/artifact/PLMXb7Y3Y471XHpLR1drQv (nguồn `docs/audits/2026-11-25-S294-session/meeting-runbook.html`).
 
 ## Lưu ý kỹ thuật cho phiên sau
 

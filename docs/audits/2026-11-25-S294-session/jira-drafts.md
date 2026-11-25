@@ -1,6 +1,6 @@
 # S294 — Jira drafts (Vietnamese, for the business owner)
 
-Status: **drafts, not posted** — waiting for the tech lead's approval (aa-jira-update rule 1).
+Status: **posted 26/11 ~05:10** after the tech lead approved ("đăng jira đi").
 Numbers read live on 25–26/11/2026 (state-snapshot.md, ledger, Product map page 03:09 26/11).
 Last comments read before drafting: PR-26 (24/11 19:24), PR-22 (25/11 18:14), PR-27 (25/11 18:15).
 
@@ -64,6 +64,6 @@ Why: first AI safety test run + security fix, short, no tech decisions (memory j
 
 ## Posting log
 
-- PR-22: not posted yet
-- PR-26: not posted yet
-- PR-27: not posted yet
+- PR-22: posted, comment 10708 (2 inline images)
+- PR-26: posted, comment 10709
+- PR-27: posted, comment 10710

@@ -1,0 +1,104 @@
+<title>Buổi họp 26/11</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one narrow reading column — live status strip, ordered run sheet, demo notes, after-meeting list. */
+:root {
+  --bg: #f6f7f5; --surface: #ffffff; --fg: #1d2421; --muted: #5d6762; --line: #dfe3df;
+  --accent: #1f6f5c; --ok: #237a3c; --wait: #9a6a00; --tag-bg: #e8efeb;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --head: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121715; --surface: #1a201d; --fg: #e4e9e6; --muted: #9aa5a0; --line: #2c3430;
+  --accent: #5cc0a3; --ok: #6fcf8a; --wait: #e2b44f; --tag-bg: #23302b; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121715; --surface: #1a201d; --fg: #e4e9e6; --muted: #9aa5a0; --line: #2c3430;
+  --accent: #5cc0a3; --ok: #6fcf8a; --wait: #e2b44f; --tag-bg: #23302b; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--sans); }
+.wrap { max-width: 760px; margin: 0 auto; padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 28px; }
+h1, h2 { font-family: var(--head); text-wrap: balance; margin: 0; }
+h1 { font-size: 1.7rem; } h2 { font-size: 1.15rem; }
+p { margin: 0; } .muted { color: var(--muted); }
+section { display: grid; gap: 12px; min-width: 0; }
+.status { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+.cell { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; gap: 2px; }
+.cell b { font-family: var(--head); font-size: 1.05rem; }
+.cell span { color: var(--muted); font-size: .85rem; }
+ol.run { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 10px; }
+ol.run > li { counter-increment: s; background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 12px 14px 12px 46px; position: relative; display: grid; gap: 6px; min-width: 0; }
+ol.run > li::before { content: counter(s); position: absolute; left: 14px; top: 12px; width: 22px; height: 22px;
+  border-radius: 50%; background: var(--accent); color: var(--bg); font: 600 .8rem/22px var(--head); text-align: center; }
+.who { font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.tag { display: inline-block; background: var(--tag-bg); color: var(--accent); border-radius: 4px; padding: 0 6px; font: .78rem var(--mono); }
+code, .path { font-family: var(--mono); font-size: .85rem; overflow-wrap: anywhere; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.ok { color: var(--ok); font-weight: 600; } .wait { color: var(--wait); font-weight: 600; }
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:8px">
+    <h1>Buổi họp 26/11, 11:00: thứ tự bấm</h1>
+    <p class="muted">Bản cập nhật 26/11 lúc 05:00, thay phần "thứ tự bấm" của trang quyết định S294. Các quyết định D1–D10 đã duyệt hết tối 25/11. Ai bấm, bấm ở đâu và việc agent làm tiếp được ghi theo từng bước.</p>
+  </header>
+
+  <section>
+    <h2>Trạng thái live lúc 04:45</h2>
+    <div class="status">
+      <div class="cell"><b class="ok">4/4 luồng đạt</b><span>smoke chỉ đọc: đăng nhập CIS, Content workspace, Compliance 5 tab, Booking SUP-000019</span></div>
+      <div class="cell"><b>8/8 service</b><span>health 200, revision mới nhất đang chạy, job 0</span></div>
+      <div class="cell"><b>Bộ lọc dữ kiện T9: bật</b><span><code>cis.llm.fact_instruction_guard</code> từ 19:44</span></div>
+      <div class="cell"><b class="wait">Duyệt hai người: tắt</b><span>bật ở bước 4</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Thứ tự bấm</h2>
+    <p class="muted">Thứ tự theo phụ thuộc: chủ doanh nghiệp đăng nhập trước, rồi mới gắn quyền chủ doanh nghiệp, rồi mới duyệt được tài khoản ngân hàng.</p>
+    <ol class="run">
+      <li><span class="who">Chủ DN, rồi tech lead</span>
+        <p><b>Chủ DN đăng nhập lần đầu</b> (thư mời gửi lại 24/11): CIS trước, <a href="https://aa-cis.lumiguides.it.com/login">aa-cis.lumiguides.it.com/login</a> → "Sign in with company email"; rồi Booking, <a href="https://booking.lumiguides.it.com">booking.lumiguides.it.com</a>.</p>
+        <p>Sau đó tech lead mở <span class="path">CIS › Platform › Staff &amp; access</span> (<a href="https://aa-cis.lumiguides.it.com/admin/platform/staff">/admin/platform/staff</a>), dòng của chủ DN → <b>Make business owner</b>. <span class="tag">AA-1155</span></p></li>
+      <li><span class="who">Nhân viên content + booking</span>
+        <p>Đăng nhập một lần bằng hộp mail info@ (đóng mục T12). <span class="tag">AA-1155</span></p></li>
+      <li><span class="who">Chủ DN</span>
+        <p><b>Duyệt tài khoản ngân hàng SYNTHETIC</b>: <a href="https://booking.lumiguides.it.com/suppliers/SUP-000019?tab=bank">Booking › Suppliers › SUP-000019 › Bank accounts</a>. Hiện đang "Waiting for approval", chi tạm dừng.</p>
+        <p class="muted">Agent làm tiếp: trong 24 giờ thử ghi một khoản chi, phải nhận 409 <code>bank_payout_locked</code>; rồi dọn dữ liệu SYNTHETIC của S290 theo DRY RUN. <span class="tag">AA-1158</span></p></li>
+      <li><span class="who">Tech lead, rồi một người thật thứ hai</span>
+        <p><b>Bật hai công tắc duyệt hai người</b> ở <a href="https://aa-cis.lumiguides.it.com/admin/platform/settings">Platform › Settings</a>: <code>cis.content.publish_two_person</code> = On và <code>cis.settings.two_person_approval</code> = On. Lý do (≥ 20 ký tự): <code>S294 meeting: turn on two-person approval for publish and settings</code>.</p>
+        <p>Một người thật thứ hai publish một tour tay và duyệt một ngoại lệ. Tài khoản E2E không được làm người duyệt. <span class="tag">AA-1148</span> <span class="tag">AA-1173</span></p></li>
+      <li><span class="who">Tech lead</span>
+        <p><b>Bản rà soát bảo mật tháng đầu</b>: <a href="https://aa-cis.lumiguides.it.com/admin/platform/compliance?tab=reviews">Compliance readiness › Reviews</a>, tạo một bản ghi thật (không rút lại được). <span class="tag">AA-1173</span></p></li>
+      <li><span class="who">Chủ tổ chức GitHub</span>
+        <p>Cài GitHub App chỉ đọc để kiểm cảnh báo GitHub, theo bước tay trong implementation notes của AA-1173. <span class="tag">AA-1173</span></p></li>
+      <li><span class="who">Chủ DN</span>
+        <p><b>Duyệt bộ ISMS</b>: policy, scope, vai trò, sổ rủi ro (bản ở S3 riêng tư). Kèm báo cáo red-team AI đầu tiên: 12 ca đạt, 1 ca báo nhầm, 3 ca chưa chạy, 0,39 USD. <span class="tag">AA-1166</span></p></li>
+      <li><span class="who">Tech lead</span>
+        <p><b>View-as</b>: xem dưới vai "Content + Product &amp; operations" trên CIS và Booking. Agent chụp ảnh có dải báo; mọi lệnh ghi phải ra 403. <span class="tag">AA-1157</span></p></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Có thể cho chủ DN xem thêm</h2>
+    <ul>
+      <li><a href="https://aa-cis.lumiguides.it.com/admin/platform/catalogue">Platform › Product map</a>: 5 app, 136 tính năng (128 đang chạy), 38 liên kết, cập nhật theo code mới nhất.</li>
+      <li>Content workspace trên điện thoại: tour tay SYNTHETIC 3 ngày (<a href="https://aa-cis.lumiguides.it.com/admin/content-workspace/b5637dc0-343f-4b4c-a85a-8fbb174bd85e">mở tour</a>), không còn kéo ngang ở 390 px.</li>
+      <li>CRM › Integrations: thẻ Lịch (Google / Microsoft 365, một chiều). Chưa thử với tài khoản thật vì cần đăng ký quyền lịch phía Google.</li>
+    </ul>
+    <p class="muted">Lưu ý khi demo: Content workspace chỉ có dữ liệu SYNTHETIC; các ô đỏ trên Compliance là trạng thái thật của Dev; mở <code>/admin</code> gốc tạm bị đẩy về trang đăng nhập (sửa sau buổi), nên vào thẳng <code>/admin/overview</code>.</p>
+  </section>
+
+  <section>
+    <h2>Sau buổi họp (agent)</h2>
+    <ul>
+      <li>Ship các PR giữ lại: CIS #1713 (chặn nháp dữ kiện Excel ghi đè tour tay), Partner #403 (cookie), Infra #1041 (luật mật khẩu pool partner), savepoint CIS #1676 + Booking #331.</li>
+      <li>Kiểm 409 <code>bank_payout_locked</code> sau bước 3, rồi dọn dữ liệu S290.</li>
+      <li>Từ 28/11: bk-076 (xoá bảng B2C) qua DRY RUN; tech lead duyệt số liệu trước khi apply.</li>
+    </ul>
+  </section>
+</div>
