@@ -116,7 +116,8 @@ class OpenTest(unittest.TestCase):
         self.tmpdir.stop()
         self.sb.close()
 
-    def runner(self, existing: str = "") -> tuple[HybridRunner, dict]:
+    def runner(self, existing: str = "", merged=""):
+        """merged: the `gh pr list --state merged` answer (a URL, a Result or a function of argv)."""
         seen: dict = {}
 
         def app(argv):
@@ -132,7 +133,8 @@ class OpenTest(unittest.TestCase):
         r.on(("gitleaks", "version"), Result(0, "8.30.1\n"))
         r.on(("gitleaks", "git"), Result(0, ""))
         r.on((ship_common.AS_APP,), app)
-        r.on(("gh", "pr", "list"), Result(0, existing))
+        r.on(("gh", "pr", "list", "--state", "merged"), Result(0, merged) if isinstance(merged, str) else merged)
+        r.on(("gh", "pr", "list", "--state", "open"), Result(0, existing))
         r.on(("gh", "pr", "view"), Result(0, "app/aa-agent\n"))
         return r, seen
 
@@ -297,6 +299,94 @@ class OpenTest(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(sop.main([str(self.journal), "--dry-run"], runner=r), 0)
         self.assertEqual(seen, {})
+
+    def test_a_branch_with_a_merged_pr_is_skipped_not_reopened(self):
+        # S292: a second run after part of the lane merged opened duplicates of the merged PRs (open-PR lookup only)
+        merged_url = "https://github.com/AdventureAsia365-Ecosys/AA-Partner/pull/70"
+        self.sb.git(self.sb.wt, "checkout", "-q", "-b", "feat/lamps")
+        self.sb.commit(self.sb.wt, "lamp.py", "OIL = 1\n", "feat: lamp oil")
+        write_journal(self.journal, [{"ready": True, "prs": [lane_pr(self.sb.wt),
+                                                              lane_pr(self.sb.wt, branch="feat/lamps")]}])
+        r, seen = self.runner(merged=lambda argv: Result(0, merged_url + "\n" if "feat/lanterns" in argv else ""))
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(sop.main([str(self.journal)], runner=r), 0, out.getvalue())
+        self.assertIn(f"SKIP AA-Partner feat/lanterns: already MERGED as {merged_url}", out.getvalue())
+        [push] = seen["push"]
+        self.assertEqual(push[-1], "feat/lamps")
+        self.assertEqual(len(r.called("gitleaks", "git")), 1)  # the merged branch is not even validated
+        # every branch merged: nothing pushed, exit 0, said so
+        write_journal(self.journal, [{"ready": True, "prs": [lane_pr(self.sb.wt)]}])
+        r, seen = self.runner(merged=merged_url + "\n")
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(sop.main([str(self.journal)], runner=r), 0)
+        self.assertEqual(seen, {})
+        self.assertIn("nothing to open", out.getvalue())
+
+    def test_a_failed_merged_lookup_refuses_that_pr(self):
+        write_journal(self.journal, [{"ready": True, "prs": [lane_pr(self.sb.wt)]}])
+        r, seen = self.runner(merged=Result(1, "", "HTTP 502"))
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(sop.main([str(self.journal)], runner=r), 4)
+        self.assertIn("cannot check for a merged PR of feat/lanterns: HTTP 502", out.getvalue())
+        self.assertEqual(seen, {})
+
+    def test_a_body_without_refs_says_how_to_fix_it_and_refs_inserts_the_first_line(self):
+        bare = "## What\n- A small invented change to the lantern catalogue.\n"
+        write_journal(self.journal, [{"ready": True, "prs": [lane_pr(self.sb.wt, pr_body=bare)]}])
+        r, seen = self.runner()
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(sop.main([str(self.journal)], runner=r), 4)
+        self.assertIn("body has no 'Refs AA-<n>' line: pass --refs AA-<n>", out.getvalue())
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(sop.main([str(self.journal), "--refs", "AA-9001, AA-9002"], runner=r), 0, out.getvalue())
+        self.assertTrue(seen["body"].startswith("Refs AA-9001, AA-9002\n\n## What\n"), seen["body"])
+        # S294: --extra-refs alone also makes the body valid now (the checks read the body as it is opened)
+        r, seen = self.runner()
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(sop.main([str(self.journal), "--extra-refs", "AA-9001"], runner=r), 0, out.getvalue())
+        self.assertIn("\nRefs AA-9001\n", seen["body"])
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(sop.main([str(self.journal), "--refs", "9001"], runner=r), 2)
+
+    def test_refs_on_a_body_that_has_a_refs_line_joins_its_list(self):
+        self.assertEqual(sop.insert_refs(BODY, ["AA-9002"]), BODY.replace("Refs AA-9001", "Refs AA-9001, AA-9002"))
+        self.assertEqual(sop.insert_refs(BODY, []), BODY)
+        self.assertEqual(sop.insert_refs("\n\nlantern notes\n", ["AA-1"]), "Refs AA-1\n\nlantern notes\n")
+
+    def test_an_issue_id_outside_the_refs_line_is_refused_before_any_push(self):
+        # S292 (two root PRs): the lane told the history with other issue ids; pr-title.yml refused them on GitHub
+        body = "Builds on the AA-9002 stacked-branch merge and the AA-9003 notes.\n\nRefs AA-9001\n"
+        write_journal(self.journal, [{"ready": True, "prs": [lane_pr(self.sb.wt, pr_body=body)]}])
+        r, seen = self.runner()
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(sop.main([str(self.journal)], runner=r), 4)
+        self.assertIn("body names AA-9002, AA-9003, which the Refs line does not", out.getvalue())
+        self.assertEqual(seen, {})
+        # the orchestrator may decide the PR does those issues: the ids then join the Refs line and the body passes
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(sop.main([str(self.journal), "--extra-refs", "AA-9002,AA-9003"], runner=r), 0,
+                             out.getvalue())
+        self.assertIn("Refs AA-9001, AA-9002, AA-9003", seen["body"])
+
+    def test_project_template_needs_no_refs_and_refuses_any_issue_id(self):
+        tpl = dict(repo="project-template", pr_title="docs: lantern kit readme",
+                   pr_body="## What\n- The lantern kit readme names its glow levels.\n")
+        r, _ = self.runner()
+        self.assertEqual(sop.validate(r, lane_pr(self.sb.wt, **tpl))[0], [])
+        bad = sop.validate(r, lane_pr(self.sb.wt, **dict(tpl, pr_body=BODY)))[0]
+        self.assertIn("project-template is public and its denylist forbids issue ids: the title or body names AA-9001",
+                      " ".join(bad))
+        self.assertNotIn("Refs AA-<n>' line", " ".join(bad))
+        self.assertTrue(sop.validate(r, lane_pr(self.sb.wt, **dict(tpl, pr_title="docs: AA-12 readme")))[0])
+        # --refs / --extra-refs are not applied there (a warning says so); the body opens without an id
+        write_journal(self.journal, [{"ready": True, "prs": [lane_pr(self.sb.wt, **tpl)]}])
+        r, seen = self.runner()
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            code = sop.main([str(self.journal), "--refs", "AA-9001", "--extra-refs", "AA-9002"], runner=r)
+        self.assertEqual(code, 0, out.getvalue())
+        self.assertIn("--refs / --extra-refs not applied (project-template forbids issue ids)", out.getvalue())
+        self.assertNotRegex(seen["body"], r"AA-\d")
+        self.assertIn("/project-template", " ".join(seen["create"]))
 
     def test_not_ready_and_invalid_prs_open_nothing(self):
         write_journal(self.journal, [{"ready": False, "blocked_reason": "lamp oil missing",
