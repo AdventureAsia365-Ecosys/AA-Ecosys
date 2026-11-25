@@ -7,7 +7,7 @@ name: External checks
 #
 #   s3://<bronze>/docs-reader/ops/external-checks.json   format 1 (CIS api/services/ops_status/external.py reads it)
 #
-# The CIS 5-minute status sampler copies each new run into acp_shared.ops_external_check (CIS 484); the page draws an
+# The CIS 5-minute status sampler copies each new run into acp_shared.ops_external_check (CIS 485); the page draws an
 # "external" strip next to the internal services and raises a Needs-attention item on a failing host, a certificate at
 # its critical days (cis.ops.status_cert_crit_days) or a feed that stopped reporting. The limits are CIS settings; this
 # workflow only measures.
