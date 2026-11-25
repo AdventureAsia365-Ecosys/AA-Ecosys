@@ -1,0 +1,237 @@
+# Go-live gate checklist (AA-1117, S294). Prod opens to real users only when every gate line below is met.
+#
+# Read by tools/ops/golive_gate.py (workflow .github/workflows/golive-gate.yml: on a PR that changes this file or the
+# tool, and weekly). Rendered into docs/ops/go-live/README.md with `python3 tools/ops/golive_gate.py render --write`.
+#
+# One line per gate item:
+#   id        GL-NN, stable (never renumber a line; retire one by leaving a note in its title)
+#   kind      gate (a condition) or date (the one go-live date line)
+#   title     what must hold, in plain words
+#   source    where the item comes from (ADR, audit finding, decision)
+#   proof     repo paths (optionally #heading or #L<line>) or https URLs that PROVE the line is met; non-empty = met
+#   refs      evidence so far or the method to follow; never counts as proof
+#   owner     a role: tech lead, business owner or engineer on duty (company docs name roles, not people)
+#   due       ISO date; required while the line has no proof; past due with no proof fails the guard
+#   due_note  when in the build the line falls, in words
+#   value     the go-live date line only: an ISO date, or null while it is not set (it then needs an owner)
+#
+# Due dates are planning dates set on 2026-11-25 while no go-live date exists: the build items assume the date is set
+# in December (ADR 0012 decision 11: about three to four weeks of build before the date). When the business owner sets
+# the date, re-date every open line to fall on or before it; the guard refuses an open line due after the date.
+# Subset of YAML only (see the tool's docstring): quote any value that contains ": " or starts with a symbol.
+
+version: 1
+updated: 2026-11-25
+
+items:
+  - id: GL-01
+    kind: gate
+    title: "ADR 0012 accepted, and the prod Terraform plan reviewed with one reconciled monthly cost approved before apply (D-19)"
+    source: "ADR 0012 decision 11, gate item 1"
+    proof: []
+    refs:
+      - docs/adr/0012-environment-model.md#11-what-starts-the-build-and-the-go-live-gate
+      - docs/adr/0018-lean-aws-account-model.md
+    owner: tech lead
+    due: 2027-01-15
+    due_note: build week 2
+
+  - id: GL-02
+    kind: gate
+    title: "Agent role switched to the Dev-scoped role, and the management-account review recorded (ADR 0012 decisions 4.4 and 4.5)"
+    source: "ADR 0012 decision 11, gate item 2"
+    proof: []
+    refs:
+      - docs/adr/0012-environment-model.md#4-compensating-controls-for-sharing-an-account
+    owner: tech lead
+    due: 2026-12-31
+    due_note: before the build
+
+  - id: GL-03
+    kind: gate
+    title: "ADR 0014 decision 4 re-decided for the private repos"
+    source: "ADR 0012 decision 11, gate item 3"
+    proof: []
+    refs:
+      - docs/adr/0014-repo-visibility-and-github-plan.md#4-prod-trigger-re-decide-for-the-private-repos
+    owner: tech lead
+    due: 2026-12-31
+    due_note: before the build
+
+  - id: GL-04
+    kind: gate
+    title: "Restore drill on prod passed with its RTO recorded (DM-9.3, OPS-03)"
+    source: "ADR 0012 decision 11, gate item 4"
+    proof: []
+    refs:
+      - docs/ops/runbooks/restore-rds-pitr.md
+      - docs/ops/drills/README.md
+      - docs/audits/2026-11-13-S279-cis-restore-drill/restore-drill.json
+    owner: tech lead
+    due: 2027-01-15
+    due_note: build week 3
+
+  - id: GL-05
+    kind: gate
+    title: "Alarms page the on-call route, the second alert channel is tested, and two SLOs are defined per public API"
+    source: "ADR 0012 decision 11, gate item 5"
+    proof: []
+    refs:
+      - docs/generated/alarms.md
+      - docs/ops/incident-response.md
+      - docs/architecture/data-standards/03-scaling.md#c1-slos-and-slis
+    owner: tech lead
+    due: 2027-01-15
+    due_note: build week 3
+
+  - id: GL-06
+    kind: gate
+    title: "Secrets rotated (D-02, D-03), and the break-glass PDF copy of the core runbooks in place"
+    source: "ADR 0012 decision 11, gate item 6"
+    proof: []
+    refs:
+      - docs/ops/runbooks/secret-rotation.md
+      - docs/ops/runbooks/break-glass.md
+    owner: tech lead
+    due: 2027-01-15
+    due_note: go-live week
+
+  - id: GL-07
+    kind: gate
+    title: "Every control the security baseline marks 'before prod' is closed"
+    source: "ADR 0012 decision 11, gate item 7"
+    proof: []
+    refs:
+      - docs/security/baseline.md#summary
+      - docs/security/baseline.md#detection-and-logs
+    owner: tech lead
+    due: 2027-01-15
+    due_note: go-live week
+
+  - id: GL-08
+    kind: gate
+    title: "Content seed job run on prod and its counts checked against Dev"
+    source: "ADR 0012 decision 11, gate item 8"
+    proof: []
+    refs:
+      - docs/adr/0012-environment-model.md#9-data-between-environments
+    owner: tech lead
+    due: 2027-01-15
+    due_note: go-live week
+
+  - id: GL-09
+    kind: gate
+    title: "Price and photo coverage measured per pilot market; no pilot market sells with 0 priced tours"
+    source: "S282 audit R09 (one pilot market had 0 priced tours)"
+    proof: []
+    refs:
+      - docs/audits/2026-11-13-S279-session/uat-rehearsal/README.md#set-up
+      - docs/audits/2026-11-23-S288-session/live/e2e-owner/evidence-final.md
+    owner: tech lead
+    due: 2026-12-15
+    due_note: before the pilot markets are named to agencies
+
+  - id: GL-10
+    kind: gate
+    title: "One-tenant restore drill passed on Dev for CIS, TripPlanner and the CRM pilot agency"
+    source: "AA-1093 drills (S279, S281), ADR 0019 d16 pilot drill (S269)"
+    proof:
+      - docs/audits/2026-11-13-S279-cis-restore-drill/restore-drill.json
+      - docs/audits/2026-11-15-S281-session/verify/aa1093/tp-restore-drill/restore-drill.json
+      - docs/audits/2026-11-05-S269-aa969-loadtest/restore-drill.json
+    refs:
+      - docs/ops/runbooks/tenant-restore-drill.md
+      - docs/ops/runbooks/pilot-tenant-restore-drill.md
+    owner: tech lead
+
+  - id: GL-11
+    kind: gate
+    title: "Booking per-partner restore drill passed (one partner's rows restored into a throwaway schema, counts compared)"
+    source: "S282 audit R09; Booking is the one app without a per-tenant drill"
+    proof: []
+    refs:
+      - docs/ops/runbooks/tenant-restore-drill.md
+      - docs/audits/2026-11-13-S279-cis-restore-drill/restore-drill.json
+    owner: tech lead
+    due: 2026-12-15
+
+  - id: GL-12
+    kind: gate
+    title: "Bounded load test of CIS and TripPlanner with no LLM call, results and SLO read recorded"
+    source: "S282 audit R09; the CRM load test of S269 is the method"
+    proof: []
+    refs:
+      - docs/audits/2026-11-04-S268-crm-security-review/README.md#5-slos-and-load-test-the-other-half-of-crm-37a
+      - docs/audits/2026-11-05-S269-aa969-loadtest/k6-summary.json
+    owner: tech lead
+    due: 2026-12-15
+
+  - id: GL-13
+    kind: gate
+    title: "Edge rate limits for prod decided and costed: a CloudFront web ACL with per-viewer rate rules (about 5-6 USD a month)"
+    source: "S282 audit R30; security decision D10 of S286 (one regional rate rule now, a CloudFront web ACL when prod starts)"
+    proof: []
+    refs:
+      - docs/linear-export/data-platform-schema-ops-scale/AA-1165.md
+      - docs/security/baseline.md#edge-and-network
+    owner: tech lead
+    due: 2026-12-31
+    due_note: in the reconciled prod cost of GL-01
+
+  - id: GL-14
+    kind: gate
+    title: "Prod capacity baseline recorded and reviewed: task counts and sizes, RDS class, Lambda concurrency, connection budget (OPS-08)"
+    source: "S282 audit R09 and R39 (single Spot task per staff web service)"
+    proof: []
+    refs:
+      - docs/architecture/data-standards/03-scaling.md#c2-capacity-model-and-connection-budget
+      - docs/audits/2026-10-28-S255-aa838-capacity/README.md
+      - docs/audits/2026-10-31-S261-llm-capacity-plan/README.md
+    owner: tech lead
+    due: 2026-12-31
+    due_note: build week 1
+
+  - id: GL-15
+    kind: gate
+    title: "enforce_admins plan: branch rules apply to admins on every default branch, with the human-approval switch on from the first real data"
+    source: "S282 audit (enforce_admins false on the app repos); security decision D4 of S286"
+    proof: []
+    refs:
+      - tools/github/change_control.json
+      - docs/security/baseline.md#identity-and-access
+    owner: tech lead
+    due: 2026-12-15
+
+  - id: GL-16
+    kind: gate
+    title: "No real personal data in any app before the DPA is signed with that agency"
+    source: "S282 audit R10; ADR 0019 d16 pilot terms"
+    proof: []
+    refs:
+      - docs/legal/dpa.md#15-pilot-terms-adr-0019-d16
+      - docs/legal/pilot-contract-set.md#5-readiness-checks-before-the-pilot-letter-is-signed
+    owner: business owner
+    due: 2026-12-31
+    due_note: before the first real agency data
+
+  - id: GL-17
+    kind: gate
+    title: "AI spend caps set to the prod profile: connection caps alert and fail over, plan quotas per tenant, anomaly breaker on, batch runs keep hard caps, AWS budgets alert only"
+    source: "Tech lead decision S283 (ADR 0009 amendment)"
+    proof: []
+    refs:
+      - docs/adr/0009-ai-platform-and-provider-gateway.md#6-budgets-at-every-layer-enforced-by-the-gateway
+    owner: tech lead
+    due: 2027-01-15
+    due_note: go-live week
+
+  - id: GL-18
+    kind: date
+    title: "Go-live date"
+    source: "ADR 0012 decision 11 trigger (D-16)"
+    value: null
+    proof: []
+    refs:
+      - docs/audits/2026-10-30-S260-go-live-readiness/README.md#8-decision-and-sign-off
+    owner: business owner
+    note: "Setting it starts the three-to-four-week prod build; every open line is then re-dated to fall on or before it."

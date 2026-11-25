@@ -208,4 +208,6 @@ GitHub environment `prod` renamed to `dev` first (decision 6, done in AA-1023); 
 digest through a Deploy Prod workflow that only the tech lead dispatches, frontends rebuilt in Vercel prod projects
 (decisions 7–8); personal data never leaves prod (decision 9); the go-live gate of decision 11. The build (phase 3)
 starts when the business owner sets a go-live date (D-16, D-17). The prod blueprint, readiness checklist and prod
-runbooks (PROD-01) are AA-880.
+runbooks (PROD-01) are AA-880. The go-live gate itself, the eight items of decision 11 plus the proofs a first real
+agency needs, is one dated checklist with a CI guard: [Go-live gate](go-live/README.md) (`docs/ops/go-live/checklist.yaml`,
+checked by the Go-live gate workflow on each change and weekly).
