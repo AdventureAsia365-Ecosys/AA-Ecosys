@@ -1,0 +1,49 @@
+name: Go-live gate
+
+# AA-1117 (S294): the one dated go-live gate (docs/ops/go-live/checklist.yaml, rendered in docs/ops/go-live/README.md).
+# tools/ops/golive_gate.py check fails on a dead proof path or anchor, an unknown owner role, an open line past its due
+# date or without an owner and a due date, a go-live date line without an owner, open lines due after a set go-live
+# date, and a rendered table that no longer matches the checklist.
+#
+# Runs on a pull request that changes the checklist, its page or the tool, and weekly (Monday) so a due date that
+# passes with no proof turns the run red even when nobody edits the file. Offline: no secret, no AWS, standard
+# library only (no pip install). Not a required check (the ruleset is the tech lead's). Cost: about 15 s of Actions a
+# week on a public repo ($0).
+on:
+  schedule:
+    - cron: "17 2 * * 1"   # Monday 02:17 UTC (09:17 ICT), off the :00 mark where GitHub delays busy schedules
+  workflow_dispatch:
+  pull_request:
+    branches: [master]
+    paths:
+      - "docs/ops/go-live/**"
+      - "tools/ops/golive_gate.py"
+      - "tools/ops/test_golive_gate.py"
+      - ".github/workflows/golive-gate.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: golive-gate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  gate:
+    name: Go-live gate check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Unit tests (no network)
+        run: python3 -m unittest discover -s tools/ops -p 'test_golive_gate.py'
+
+      - name: Check the checklist
+        run: python3 tools/ops/golive_gate.py check --summary "$GITHUB_STEP_SUMMARY"

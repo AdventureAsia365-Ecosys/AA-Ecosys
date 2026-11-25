@@ -26,6 +26,12 @@ owner: **a go-live date (or a window), and which apps the first prod needs.**
 
 ## 3. Scorecard
 
+> [!NOTE]
+> Update 2026-11-25 (S294): this report is a dated snapshot and is not edited further. The live go-live gate is
+> [docs/ops/go-live/README.md](../../ops/go-live/README.md): one checklist with a proof, or an owner role and a due
+> date, on every line, checked in CI. Its GL-01 to GL-08 are items 1-8 below; the next OPS-17 report takes its
+> platform gate rows from there.
+
 | Area | Must items | Done with evidence | Blocked | Status |
 |---|---|---|---|---|
 | Platform gate (ADR 0012 decision 11) | 8 | 0 | 0 | open |

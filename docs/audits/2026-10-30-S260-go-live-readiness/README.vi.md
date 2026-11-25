@@ -23,6 +23,12 @@ thời gian) go-live, và lần prod đầu cần những ứng dụng nào.**
 
 ## 3. Bảng điểm
 
+> [!NOTE]
+> Cập nhật 25/11/2026 (S294): báo cáo này là bản chụp theo ngày, không sửa tiếp. Cổng go-live đang dùng nằm ở
+> [docs/ops/go-live/README.md](../../ops/go-live/README.md): một danh sách kiểm, mỗi dòng có bằng chứng hoặc vai trò
+> chịu trách nhiệm và hạn, được CI kiểm. GL-01 đến GL-08 là mục 1-8 bên dưới; báo cáo OPS-17 kế tiếp lấy các dòng
+> cổng nền tảng từ đó.
+
 | Mảng | Mục bắt buộc | Xong có bằng chứng | Bị chặn | Trạng thái |
 |---|---|---|---|---|
 | Cổng nền tảng (ADR 0012 quyết định 11) | 8 | 0 | 0 | mở |
