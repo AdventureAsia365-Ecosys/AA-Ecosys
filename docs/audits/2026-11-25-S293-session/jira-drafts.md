@@ -1,6 +1,18 @@
-# S293: nháp Jira gom S291 + S292 (CHƯA đăng)
+# S293: nháp Jira gom S291 + S292 (ĐÃ ĐĂNG 25/11 ~17:20)
 
-Tech lead nói "duyệt hết" ~15:00 25/11, nhưng auto mode chặn việc đăng vì nháp chưa được hiện nguyên văn: chờ tech lead xem bản này rồi đăng (hoặc tắt auto mode).
+Tech lead xem nguyên văn ở tin nhắn cuối phiên và nói "đăng hết" (~17:15). Đã đăng (J6 sửa câu "Kiểm từ bên ngoài" theo worker CIS, 15′, 8/8 ok):
+
+| Nháp | Issue | Comment |
+|---|---|---|
+| J1 | PR-25 | 10699 (1 ảnh) |
+| J2 | PR-30 | 10700 |
+| J3 | PR-29 | 10701 |
+| J4 | PR-24 | 10702 |
+| J5 | PR-27 | 10705 (4 ảnh) |
+| J6 | PR-27 | 10706 (5 ảnh) |
+| J7 | PR-27 | 10707 (3 ảnh) |
+| J8 | PR-29 | 10703 |
+| J9 | PR-22 | 10704 |
 
 Ảnh S291 ở `docs/audits/2026-11-24-S291-session/live/`, ảnh S292 ở `docs/audits/2026-11-25-S292-session/live/`.
 
