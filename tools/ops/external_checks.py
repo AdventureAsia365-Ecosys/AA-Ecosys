@@ -15,6 +15,12 @@ state with the certificate limits of its own settings):
   {"format": 1, "checked_at": "<UTC ISO>", "results": [{"target", "app", "host", "url", "mode", "dns_ok", "tls_ok",
     "cert_not_after", "http_status", "http_ok", "latency_ms", "error"}]}
 
+Since S293 this is the second vantage point (source ``github`` of acp_shared.ops_external_check): GitHub started the
+schedule 0 times on its first day, so the CIS worker runs the same checks itself every
+``cis.ops.external_check_interval_min`` minutes (job kind ops_external_check, source ``worker``, target list in the CIS
+setting ``cis.ops.external_check_targets``). Keep tools/ops/external_checks.json and that setting in step when a public
+host is added; the status page goes grey only when every source in use stopped reporting.
+
 Public hosts only, names and numbers only: no secret, no account ID, no cookie, no request body. Standard library only.
 
     python3 tools/ops/external_checks.py run --out _out/external-checks.json
