@@ -99,6 +99,7 @@
    "page:/admin/jobs",
    "page:/admin/lab",
    "page:/admin/lab/[stage]",
+   "page:/admin/lab/eval-runs",
    "page:/admin/lab/writing-memory",
    "page:/admin/master-content",
    "page:/admin/my-work",
@@ -166,6 +167,7 @@
    "route:admin_data_model",
    "route:admin_decisions",
    "route:admin_docs",
+   "route:admin_eval_runs",
    "route:admin_facts",
    "route:admin_job_runner",
    "route:admin_llm_ops",
@@ -1130,6 +1132,10 @@
    "app": "cis",
    "area": "ops"
   },
+  "cis.ops.assist_build_timeout_s": {
+   "app": "cis",
+   "area": "ops"
+  },
   "cis.ops.assist_card_ttl_min": {
    "app": "cis",
    "area": "ops"
@@ -1138,7 +1144,15 @@
    "app": "cis",
    "area": "ops"
   },
+  "cis.ops.assist_check_after_min": {
+   "app": "cis",
+   "area": "ops"
+  },
   "cis.ops.assist_deep_model": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.assist_digest_days": {
    "app": "cis",
    "area": "ops"
   },

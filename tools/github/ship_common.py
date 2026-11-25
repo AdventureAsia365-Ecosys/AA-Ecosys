@@ -35,7 +35,10 @@ ORG = "AdventureAsia365-Ecosys"
 # that skips the gate fails at once; .claude/hooks/aa_shell_guard.py SHIP-1 refuses setting it by hand.
 GATE_ENV = "AA_SHIP_GATED"
 
-REPOS = ("AA-Ecosys", "AA-CIS-App", "AA-Booking", "AA-Partner", "AA-TripPlanner-Web", "AA-CIS-Infra")
+REPOS = ("AA-Ecosys", "AA-CIS-App", "AA-Booking", "AA-Partner", "AA-TripPlanner-Web", "AA-CIS-Infra",
+         # AA-1103 (S293): the public project kit template. No merge queue and no local checkout in the workspace (a
+         # lane clones it into its own worktree); merged through the same gate as every other repo.
+         "project-template")
 # Repos whose main is protected by the GitHub merge queue (AA-889; AA-TripPlanner-Web since AA-1119): merge through
 # mergeq.sh. Also safe while a repo's queue ruleset is not on yet: without a queue, the squash merge mergeq.sh asks for
 # lands at once and its wait loop reads MERGED.
@@ -51,6 +54,7 @@ ALIASES = {
     "tp": "AA-TripPlanner-Web",
     "tripplanner": "AA-TripPlanner-Web",
     "infra": "AA-CIS-Infra",
+    "template": "project-template",
 }
 LOCAL_DIRS = {
     "AA-Ecosys": "",
@@ -197,6 +201,10 @@ def slug(repo: str) -> str:
 
 
 def local_checkout(repo: str) -> Path:
+    """The workspace clone of a repo. A repo with no clone in the workspace (project-template) maps to a path that
+    does not exist, so callers that need a clone (ship_wave stacked-branch check) skip it with their warning."""
+    if repo not in LOCAL_DIRS:
+        return ROOT / ".tmp-session" / "no-local-clone" / repo
     return ROOT / LOCAL_DIRS[repo] if LOCAL_DIRS[repo] else ROOT
 
 
