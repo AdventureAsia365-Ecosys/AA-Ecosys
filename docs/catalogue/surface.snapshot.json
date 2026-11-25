@@ -1238,6 +1238,10 @@
    "app": "cis",
    "area": "ops"
   },
+  "cis.ops.role_connections_samples": {
+   "app": "cis",
+   "area": "ops"
+  },
   "cis.ops.status_ack_hours": {
    "app": "cis",
    "area": "ops"

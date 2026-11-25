@@ -499,7 +499,7 @@ features:
     status: live
     surface: ["page:/admin/platform/alerts", "route:admin_alert_recipients", "route:admin_alerts_catalogue"]
     conditions:
-      settings: [cis.ops.app_spend_near_pct, cis.ops.bell_every_daily_hours, cis.ops.bell_every_hours, cis.ops.bell_every_nightly_hours, cis.ops.bell_every_route_hours, cis.ops.jobs_overdue_factor, cis.ops.jobs_starved_after_s, cis.ops.qf_drift_alert_pct, cis.ops.qf_drift_new_model_pct, cis.ops.qf_min_requests, cis.ops.recompute_lag_limit_s, cis.ops.reply_cut_alert_pct, cis.ops.research_stale_share_pct, cis.ops.role_connections_pct, cis.ops.xid_age_limit]
+      settings: [cis.ops.app_spend_near_pct, cis.ops.bell_every_daily_hours, cis.ops.bell_every_hours, cis.ops.bell_every_nightly_hours, cis.ops.bell_every_route_hours, cis.ops.jobs_overdue_factor, cis.ops.jobs_starved_after_s, cis.ops.qf_drift_alert_pct, cis.ops.qf_drift_new_model_pct, cis.ops.qf_min_requests, cis.ops.recompute_lag_limit_s, cis.ops.reply_cut_alert_pct, cis.ops.research_stale_share_pct, cis.ops.role_connections_pct, cis.ops.role_connections_samples, cis.ops.xid_age_limit]
     depends_on: [INF-F005]
     owner: tech_lead
   - id: CIS-F035
