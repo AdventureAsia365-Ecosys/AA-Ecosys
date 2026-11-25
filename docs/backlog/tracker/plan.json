@@ -1016,7 +1016,8 @@
     "AA-1011 đồng bộ lịch CRM một chiều live (crm-089/090, Partner #395/#401); bản đồ builder chờ token Mapbox",
     "AA-1166 red-team 12 đạt / 1 dương tính giả / 3 chưa chạy, 0,3949 USD; script CRM/TP chờ duyệt trần",
     "Product map 136 dòng live; tour SYNTHETIC cho buổi họp; nháp sau họp: CIS #1713, Partner #403, Infra #1041",
-    "Jira: 3 nháp chờ duyệt (PR-22, PR-26, PR-27)"
+    "Jira: 3 nháp chờ duyệt (PR-22, PR-26, PR-27)",
+    "Sau chốt: CIS #1716 (spec chụp Product map); AA-1061 chuẩn bị 4 PR nháp (Booking #336 bk-076, Infra #1042/#1043, CIS #1717), Booking #200 đóng"
    ]
   },
   {
@@ -2688,9 +2689,9 @@
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "later",
-   "session": "≥01/12",
+   "session": "S294",
    "size": "",
-   "next": "",
+   "next": "S294: prep only (rebuild #200 on main as bk-076, draft PRs); fresh DRY RUN + tech lead approves the pins, apply on or after 28/11 23:50Z",
    "needs": "",
    "due": "2026-11-29"
   },

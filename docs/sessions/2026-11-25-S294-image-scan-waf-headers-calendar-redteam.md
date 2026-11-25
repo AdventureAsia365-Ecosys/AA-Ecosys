@@ -82,6 +82,15 @@ Nháp 3 bài (PR-22, PR-26, PR-27) chờ tech lead duyệt: [jira-drafts.md](../
   chính sách giữ `writer_note`.
 - Ngoại lệ ảnh WordPress test-wp hết hạn 02/12.
 
+## Sau khi chốt (03:30 → 04:20 26/11)
+
+- CIS #1716 merged `bd910ac3` (chỉ test): spec admin-evidence chụp Platform › Product map với marker riêng; chạy local 1 passed
+  (1,9′), 4 ảnh. Không kích hoạt deploy (đường dẫn `tests/`), ECS giữ như snapshot.
+- AA-1061 chuẩn bị (lane l29, review 3 lens approve, 1 major đã sửa): Booking #336 (Booking #200 dựng lại trên main, đánh số
+  lại **bk-076**), Infra #1042 (copy), CIS #1717 + Infra #1043 (gỡ khoá allowlist RLS `booking.v_ops_inquiry_inbox:cis_app`
+  ngay sau apply, trước lượt 02:17 UTC). **Cả 4 là nháp.** Booking #200 đã đóng (thay bằng #336). Thứ tự: DRY RUN mới
+  ≥ 27/11 23:50Z → tech lead duyệt pins → dán pins → review đối kháng → #336 → #1042 → DB Migrate → #1717 → #1043.
+
 ## Lưu ý kỹ thuật cho phiên sau
 
 - 22 bài học mới đã vào `skill/aa-lessons/lessons.md` (Vận hành, Frontend, Pipeline), mỗi dòng có Guard.
