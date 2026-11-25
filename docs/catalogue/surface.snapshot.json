@@ -1366,6 +1366,10 @@
    "app": "cis",
    "area": "ops"
   },
+  "cis.ops.status_slo_budget_warn_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
   "cis.ops.status_slo_target_pct": {
    "app": "cis",
    "area": "ops"
