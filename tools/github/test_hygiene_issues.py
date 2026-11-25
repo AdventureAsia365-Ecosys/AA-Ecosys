@@ -18,10 +18,11 @@ GB = 10**9
 REPO = "demo-org/root"
 
 
-def row(repo, bytes_=1 * GB, stale_bytes=0, wl5=(), cache_error=None, wl8=()):
+def row(repo, bytes_=1 * GB, stale_bytes=0, wl5=(), cache_error=None, wl8=(), wl9=()):
     return {"repo": repo, "bytes": bytes_, "entries": 10, "by_ref": {"default": bytes_},
             "top": [{"family": "setup-uv-*", "entries": 3, "bytes": bytes_}], "stale": 2 if stale_bytes else 0,
-            "stale_bytes": stale_bytes, "wl5": list(wl5), "wl8": list(wl8), "cache_error": cache_error}
+            "stale_bytes": stale_bytes, "wl5": list(wl5), "wl8": list(wl8), "wl9": list(wl9),
+            "cache_error": cache_error}
 
 
 def report(rows, unreadable=(), unknown_public=(), org_error=None):
@@ -56,7 +57,8 @@ class HygieneFindings(unittest.TestCase):
         f = hi.hygiene_findings(CLEAN)
         self.assertEqual({k: v.status for k, v in f.items()},
                          {"cache-over-threshold": "absent", "stale-caches": "absent", "external-downloads": "absent",
-                          "actions-not-allowed": "absent", "unknown-public-repo": "absent",
+                          "actions-not-allowed": "absent", "curl-pipe-grep": "absent",
+                          "unknown-public-repo": "absent",
                           "needs-permission": "absent"})
 
     def test_present_findings(self):
@@ -77,6 +79,15 @@ class HygieneFindings(unittest.TestCase):
         self.assertIn("actions-allowlist.txt", f["actions-not-allowed"].fix)
         f = hi.hygiene_findings(report([row("AA-Ecosys")], unreadable=["AA-Partner"]))
         self.assertEqual(f["actions-not-allowed"].status, "unknown")
+
+    def test_curl_pipe_grep_is_present(self):
+        wl9 = [".github/workflows/ci.yml:745:WL9 curl piped into grep -q: grep exits at the first match"]
+        f = hi.hygiene_findings(report([row("AA-Partner", wl9=wl9)]))
+        self.assertEqual(f["curl-pipe-grep"].status, "present")
+        self.assertEqual(f["curl-pipe-grep"].lines, ["**AA-Partner**: `.github/workflows/ci.yml:745`"])
+        self.assertIn("grep the file", f["curl-pipe-grep"].fix)
+        f = hi.hygiene_findings(report([row("AA-Ecosys")], unreadable=["AA-Partner"]))
+        self.assertEqual(f["curl-pipe-grep"].status, "unknown")
 
     def test_stale_below_the_floor_is_absent(self):
         f = hi.hygiene_findings(report([row("AA-CIS-App", stale_bytes=GB // 10)]))

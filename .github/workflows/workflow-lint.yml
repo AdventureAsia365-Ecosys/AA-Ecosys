@@ -16,6 +16,9 @@ name: Workflow Lint
 # above 14 days without a `# retention: <why>` comment, is a warning annotation (tools/github/ci_hygiene.py
 # --retention-scan; the daily CI hygiene run reports it for all six repos). It moves into workflow_lint.py, the same
 # file in every repo, in one wave once the six repos are clean.
+# WL9 (S294, AA-1111), failing: `curl ... | grep -q` in a workflow or composite action (grep -q closes the pipe at the
+# first match, curl then dies of SIGPIPE and pipefail fails the step: a flaky check). Write the response to a file and
+# grep the file. tools/github/ci_hygiene.py --pipe-scan; the daily CI hygiene run reports it for all six repos.
 # Offline apart from the actionlint download on a cache miss; no secret, no AWS. Not a required check (the ruleset is the tech lead's).
 
 on:
@@ -99,3 +102,6 @@ jobs:
 
       - name: Artifact retention (WL7, warn only)
         run: python -B tools/github/ci_hygiene.py --retention-scan .
+
+      - name: curl piped into grep -q (WL9)
+        run: python -B tools/github/ci_hygiene.py --pipe-scan .

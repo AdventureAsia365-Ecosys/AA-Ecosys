@@ -23,18 +23,25 @@ For each of the 6 repos:
     `uses:` inside a third-party composite action they call (read at the pinned SHA, followed 3 levels deep), against
     tools/github/actions-allowlist.txt, the record of the org Actions allow-list. S273: enabling the allow-list with
     the direct `uses:` only turned Docker Build Check red in every repo (trivy-action runs aquasecurity/setup-trivy).
+  * WL9 (RED, S294): `curl ... | grep -q` in a workflow or composite action. `grep -q` exits at the first match and
+    closes the pipe; curl, still writing, then dies of SIGPIPE (exit 23) and under `set -o pipefail` (and
+    `shell: bash`, which adds it) the step fails although the text was there: a flaky check. Write the response to a
+    file (`curl -sI URL -o "$RUNNER_TEMP/h.txt"`) and grep the file. The root Workflow Lint fails on it
+    (--pipe-scan); the daily run reports it for all six repos.
 
     python3 tools/github/ci_hygiene.py                  # table; RED lines go into the opening status block
     python3 tools/github/ci_hygiene.py --json
     python3 tools/github/ci_hygiene.py --clean          # delete the stale pull request / merge-queue caches
     python3 tools/github/ci_hygiene.py --local-root .   # scan local checkouts instead of the default branches
     python3 tools/github/ci_hygiene.py --retention-scan .   # WL7 only, one checkout, GitHub warning annotations
+    python3 tools/github/ci_hygiene.py --pipe-scan .        # WL9 only, one checkout, GitHub error annotations
 
 Reads use the local `gh` login by hand, the aa-ecosys-ci-bot token (Actions read) in the root CI hygiene workflow, which
 turns the --json report into one issue per finding type (tools/github/hygiene_issues.py, ADR 0021 decision 5 layer 3).
 A token that cannot read a repo's Actions caches (HTTP 403) does not make the repo unreadable: its row carries
 `cache_error` and its workflows are still scanned. Exit: 0 green | 1 RED (a repo over --warn-gb, default 8 GB, a WL5
-or WL8 finding, or an unknown public repository) | 2 a repo unreadable. --retention-scan always exits 0 (warn mode).
+WL8 / WL9 finding, or an unknown public repository) | 2 a repo unreadable. --retention-scan always exits 0 (warn mode);
+--pipe-scan exits 1 on a finding.
 """
 from __future__ import annotations
 
@@ -209,6 +216,92 @@ def retention_scan(files: list[tuple[str, str]]) -> list[str]:
     return out
 
 
+# --- WL9: curl piped into grep -q ------------------------------------------------------------------------------
+
+CURL_WORD = re.compile(r"(?:^|[\s(`]|\$\()curl(?=\s|$)")
+GREP_WORD = re.compile(r"^\s*(?:sudo\s+|command\s+)?[ef]?grep(?=\s|$)")
+PIPELINE_SPLIT = re.compile(r"\|\||&&|;")
+QUIET_LONG = ("--quiet", "--silent")
+ARG_SHORT = frozenset("efmABCdD")
+ARG_LONG = frozenset({"--regexp", "--file", "--max-count", "--after-context", "--before-context", "--context",
+                      "--directories", "--devices", "--label", "--include", "--exclude", "--exclude-dir"})
+
+
+def _logical_lines(text: str) -> list[tuple[int, str]]:
+    """(first line number, text) with backslash continuations joined; YAML / shell comment lines are left out."""
+    out, buf, start = [], "", 0
+    for i, line in enumerate(text.splitlines(), 1):
+        if not buf and line.lstrip().startswith("#"):
+            continue
+        if not buf:
+            start = i
+        stripped = line.rstrip()
+        if stripped.endswith("\\"):
+            buf += stripped[:-1] + " "
+            continue
+        out.append((start, buf + line))
+        buf = ""
+    if buf:
+        out.append((start, buf))
+    return out
+
+
+def _quiet_grep(segment: str) -> bool:
+    """A pipeline segment that runs grep with -q / --quiet / --silent (short options may be clustered: -qi, -Eq)."""
+    if not GREP_WORD.match(segment):
+        return False
+    toks = segment.split()[1:]
+    skip = False
+    for tok in toks:
+        if skip:                      # the value of the previous option (-e PATTERN, --file FILE, ...)
+            skip = False
+            continue
+        if tok == "--":               # everything after it is a pattern or a file
+            break
+        if not tok.startswith("-") or tok == "-":
+            continue
+        if tok.startswith("--"):
+            if tok in QUIET_LONG:
+                return True
+            skip = tok in ARG_LONG
+            continue
+        for j, ch in enumerate(tok[1:], 1):
+            if ch == "q":
+                return True
+            if ch in ARG_SHORT:       # the rest of the cluster (or the next word) is that option's value
+                skip = j == len(tok) - 1
+                break
+    return False
+
+
+def pipe_findings(path: str, text: str) -> list[str]:
+    """WL9: `curl ... | [cmd |] grep -q` in one pipeline (S294, AA-Partner CI: grep -q closes the pipe early, curl
+    fails with SIGPIPE and pipefail fails the step)."""
+    findings = []
+    for line_no, line in _logical_lines(text):
+        if "curl" not in line or "grep" not in line:
+            continue
+        for pipeline in PIPELINE_SPLIT.split(line):
+            segments = pipeline.split("|")
+            for k, seg in enumerate(segments):
+                if CURL_WORD.search(seg) and any(_quiet_grep(later) for later in segments[k + 1:]):
+                    findings.append(f"{path}:{line_no}:WL9 curl piped into grep -q: grep exits at the first match, "
+                                    "curl then fails with SIGPIPE and pipefail fails the step; write the response "
+                                    "to a file (curl ... -o \"$RUNNER_TEMP/out.txt\") and grep the file")
+                    break
+            else:
+                continue
+            break
+    return findings
+
+
+def pipe_scan(files: list[tuple[str, str]]) -> list[str]:
+    out = []
+    for path, text in files:
+        out += pipe_findings(path, text)
+    return out
+
+
 # --- WL8: the org Actions allow-list, nested composite actions included --------------------------------------------
 
 ALLOWLIST = Path(__file__).resolve().with_name("actions-allowlist.txt")
@@ -368,6 +461,7 @@ def collect(repo: str, *, warn_gb: float, clean: bool = False, local_root: Path 
     row["wl5"] = [f for f in findings if ":WL5 " in f or ":WL0 " in f]
     row["wl4"] = [f for f in findings if ":WL4 " in f]
     row["wl7"] = retention_scan(files)
+    row["wl9"] = pipe_scan(files)
     patterns = load_allowlist() if allowlist is None else allowlist
     if patterns is None:
         row["wl8"], row["wl8_unread"] = [], ["tools/github/actions-allowlist.txt missing: WL8 skipped"]
@@ -385,7 +479,8 @@ def collect(repo: str, *, warn_gb: float, clean: bool = False, local_root: Path 
                                     own > warn_gb * 1e9),
                                    (f"{len(row['wl5'])} uncached external download(s)", bool(row["wl5"])),
                                    (f"{len(row['wl8'])} action(s) outside the org Actions allow-list (WL8)",
-                                    bool(row["wl8"])))
+                                    bool(row["wl8"])),
+                                   (f"{len(row['wl9'])} curl piped into grep -q (WL9)", bool(row["wl9"])))
                   if bad]
     return row
 
@@ -412,7 +507,7 @@ def print_table(rows: list[dict], unreadable: list[str], warn_gb: float, clean: 
         for t in r["top"]:
             note = "  (CodeQL default setup: not configurable)" if t["family"].startswith("codeql") else ""
             print(f"       {t['bytes'] / 1e9:5.2f} GB {t['entries']:>3}x {t['family']}{note}")
-        for f in r["wl5"] + r.get("wl8", []):
+        for f in r["wl5"] + r.get("wl8", []) + r.get("wl9", []):
             print(f"     RED {f}")
         for ref in r.get("wl8_unread", []):
             print(f"     ??? WL8 could not read {ref} (its nested actions are unchecked)")
@@ -441,7 +536,16 @@ def main(argv: list[str] | None = None, run=subprocess.run, now=None) -> int:
     ap.add_argument("--no-org", action="store_true", help="skip the org public-repository check")
     ap.add_argument("--retention-scan", type=Path, metavar="CHECKOUT",
                     help="WL7 only: print ::warning annotations for one checkout's workflows; exit 0")
+    ap.add_argument("--pipe-scan", type=Path, metavar="CHECKOUT",
+                    help="WL9 only: print ::error annotations for one checkout's workflows; exit 1 on a finding")
     a = ap.parse_args(argv)
+    if a.pipe_scan:
+        found = pipe_scan(local_files(a.pipe_scan))
+        for f in found:
+            path, line, msg = f.split(":", 2)
+            print(f"::error file={path},line={line}::{msg}")
+        print(f"WL9 curl piped into grep -q: {len(found)} finding(s) in {a.pipe_scan}")
+        return 1 if found else 0
     if a.retention_scan:
         found = retention_scan(local_files(a.retention_scan))
         for f in found:

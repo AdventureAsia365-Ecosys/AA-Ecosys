@@ -5,6 +5,7 @@ Reads a JSON report and keeps the root repo's issues in step with it:
 
   --kind hygiene  report of `ci_hygiene.py --json` (daily): cache use above the threshold (8 GB of the 10 GB cap),
                   stale pull request / merge-queue caches (1 GB or more in a repo), uncached external downloads (WL5),
+                  actions outside the org allow-list (WL8), curl piped into grep -q (WL9),
                   public repositories not in the known list, and "needs permission" when the token could not read a
                   repo's Actions caches.
   --kind pins     report of `pin_freshness.py --json` (weekly): one issue per outdated self-managed pin. An issue, never
@@ -139,6 +140,15 @@ def hygiene_findings(report: dict, *, stale_min_gb: float = 1.0, token_source: s
         "is not listed, or one that a listed composite action runs inside itself (trivy-action runs setup-trivy), "
         "fails the job at set-up. Add its line to the file and the same pattern to the org setting (org owner), or "
         "replace the action.",
+        f"Not scanned this run: {', '.join(gone)}." if gone else "")
+
+    cg = [(r["repo"], f) for r in rows for f in r.get("wl9", [])]
+    out["curl-pipe-grep"] = Finding(
+        "curl-pipe-grep", _status(bool(cg), gone), "curl piped into grep -q in CI (WL9)",
+        [f"**{repo}**: `{f.split(':WL9 ', 1)[0]}`" for repo, f in cg],
+        "`grep -q` exits at the first match and closes the pipe; curl, still writing, then fails with SIGPIPE and "
+        "`set -o pipefail` (or `shell: bash`) fails the step although the text was there. Write the response to a "
+        "file (`curl -sI URL -o \"$RUNNER_TEMP/h.txt\"`) and grep the file.",
         f"Not scanned this run: {', '.join(gone)}." if gone else "")
 
     org = report.get("org")
