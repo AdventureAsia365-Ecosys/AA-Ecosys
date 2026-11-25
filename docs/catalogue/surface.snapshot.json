@@ -1202,6 +1202,14 @@
    "app": "cis",
    "area": "ops"
   },
+  "cis.ops.jobs_background_max_running": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.jobs_monitor_max_running": {
+   "app": "cis",
+   "area": "ops"
+  },
   "cis.ops.jobs_overdue_factor": {
    "app": "cis",
    "area": "ops"

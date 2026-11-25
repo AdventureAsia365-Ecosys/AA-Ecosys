@@ -69,7 +69,15 @@ kinds in AA-CIS-Infra `db/owners.yaml`.
 
 `concurrency` = parallel rows of the kind per worker; `expected` = seconds after which a running row is "overdue" on the
 Jobs page and in the CIS ops check `jobs_overdue` (twice this value); `background` kinds never take the worker's last
-free slots; **blocks** = `deploy_blocking` in the registry.
+free slots, and at most `cis.ops.jobs_background_max_running` of them (default 1) run at once per worker; **blocks** =
+`deploy_blocking` in the registry.
+
+Monitoring lane (AA-1178): the background kinds registered with `monitor=True` (`ops_status_sample`, `llm_route_watch`,
+`quality_funnel_watch`, `compliance_db_checks`, `llm_model_lifecycle_sync`, `ai_usage_rollup`, `llm_connection_probe`)
+run in slots of their own on top of the worker's main slots, at most `cis.ops.jobs_monitor_max_running` (default 2) at
+once per worker. They never wait behind a long background job and never take a slot a wave could use. Both caps are on
+Platform › Settings (area ops); `GET /admin/job-runner/summary` gives each kind's `lane` (`main`, `background`,
+`monitor`). The table below marks the monitoring kinds as background.
 
 ### Registered kinds (generated)
 

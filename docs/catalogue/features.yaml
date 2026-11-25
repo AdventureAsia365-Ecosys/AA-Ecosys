@@ -440,7 +440,8 @@ features:
     status: live
     surface: ["page:/admin/jobs", "route:admin_job_runner"]
     conditions:
-      settings: [cis.retention.job_failed_days, cis.retention.job_succeeded_days]
+      settings: [cis.ops.jobs_background_max_running, cis.ops.jobs_monitor_max_running, cis.retention.job_failed_days,
+                 cis.retention.job_succeeded_days]
     owner: tech_lead
   - id: CIS-F030
     app: cis
