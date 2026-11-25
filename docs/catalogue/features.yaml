@@ -95,13 +95,16 @@ features:
     module: overview
     name: Ecosystem status
     name_vi: Trạng thái hệ sinh thái
-    summary_vi: "Một trang trạng thái trực tiếp và theo kỳ cho bốn ứng dụng: kết luận, việc cần xem, tín hiệu vàng, dịch vụ, job, chi phí AI và sự kiện."
-    summary: One live and period status page for the four apps, with a verdict, what needs attention, golden signals, services, jobs, AI spend and events.
+    summary_vi: "Một trang trạng thái trực tiếp và theo kỳ cho bốn ứng dụng: kết luận, việc cần xem (xác nhận, tạm hoãn hoặc tắt tiếng kèm lý do), tín hiệu vàng có đánh dấu thay đổi và bảng Có gì thay đổi, dịch vụ, job, chi phí AI với cảnh báo chi bất thường, dự báo ngày chạm giới hạn, độ mới của từng nguồn, phần trạng thái trong bản tóm tắt hằng ngày và các chế độ xem đã lưu."
+    summary: One live and period status page for the four apps - a verdict, what needs attention (acknowledge, snooze or mute with a reason), golden signals with change markers and a What changed panel, services, jobs, AI spend with cost-anomaly banners, capacity forecasts, how fresh each source is, the status part of the daily digest and saved views.
     roles: [admin]
     status: live
-    surface: ["page:/admin/overview", "route:admin_overview", "route:admin_dashboard", "route:admin_pipeline/metrics", "route:admin_ops_assist", "route:admin_ops_status_p2"]
+    surface: ["page:/admin/overview", "route:admin_overview", "route:admin_dashboard", "route:admin_pipeline/metrics"]
     conditions:
-      settings: [cis.ops.assist_auto_incident_gap_min, cis.ops.assist_auto_severities, cis.ops.assist_build_timeout_s, cis.ops.assist_card_ttl_min, cis.ops.assist_changes_window_min, cis.ops.assist_check_after_min, cis.ops.assist_deep_model, cis.ops.assist_digest_days, cis.ops.assist_evidence_window_min, cis.ops.assist_history_min_n, cis.ops.assist_lookup_windows_min, cis.ops.assist_reason_min_chars, cis.ops.assist_refused_trigger_calls, cis.ops.assist_small_money_usd, cis.ops.assist_spend_baseline_days, cis.ops.assist_spend_spike_factor, cis.ops.assist_spend_spike_floor_usd_h, cis.ops.assist_throttled_trigger_calls, cis.ops.assist_wide_scope_stages, cis.ops.external_check_interval_min, cis.ops.external_check_sources, cis.ops.external_check_targets, cis.ops.external_check_timeout_s, cis.ops.status_ack_hours, cis.ops.status_ack_reason_min_chars, cis.ops.status_burn_fast_factor, cis.ops.status_burn_fast_window_min, cis.ops.status_burn_slow_factor, cis.ops.status_burn_slow_window_hours, cis.ops.status_cert_crit_days, cis.ops.status_cert_warn_days, cis.ops.status_cost_anomaly_baseline_days, cis.ops.status_cost_anomaly_factor, cis.ops.status_cost_anomaly_floor_usd_h, cis.ops.status_forecast_crit_days, cis.ops.status_forecast_warn_days, cis.ops.status_forecast_window_days, cis.ops.status_incident_lookback_min, cis.ops.status_mute_max_days, cis.ops.status_slo_budget_warn_pct, cis.ops.status_slo_target_pct, cis.ops.status_slo_window_days, cis.ops.status_snooze_choices_hours, cis.ops.status_snooze_tomorrow_hour, cis.ops.status_tenant_top_n]
+      settings: [cis.ops.status_ack_hours, cis.ops.status_ack_reason_min_chars, cis.ops.status_snooze_choices_hours, cis.ops.status_snooze_tomorrow_hour, cis.ops.status_mute_max_days, cis.ops.status_cost_anomaly_baseline_days, cis.ops.status_cost_anomaly_factor, cis.ops.status_cost_anomaly_floor_usd_h, cis.ops.status_forecast_crit_days, cis.ops.status_forecast_warn_days, cis.ops.status_forecast_window_days, cis.ops.status_stale_factor, cis.ops.status_history_days]
+    proven:
+      date: 2026-11-24
+      evidence: docs/audits/2026-11-24-S291-session/live/s291-aa1141-status-1440-light.png
     owner: tech_lead
   - id: CIS-F003
     app: cis
@@ -258,11 +261,13 @@ features:
     module: supply-content
     name: Supply content for Booking hotels and services
     name_vi: Nội dung dịch vụ cho khách sạn và dịch vụ của Booking
-    summary_vi: "CIS viết nội dung cho khách về khách sạn và dịch vụ mà Booking quản lý; nhân viên duyệt trước khi Booking hiển thị."
-    summary: CIS writes the customer text of the hotels and services Booking holds; staff review it before Booking shows it.
+    summary_vi: "CIS viết nội dung cho khách về khách sạn và dịch vụ mà Booking quản lý; nhân viên duyệt trước khi Booking hiển thị, và người thứ hai duyệt bước xuất bản khi bật luật hai người."
+    summary: CIS writes the customer text of the hotels and services Booking holds; staff review it before Booking shows it, and a second person approves the publish when the two-person rule is on.
     roles: [admin, content_lead]
     status: live
     surface: ["page:/admin/supply-content/**", "route:admin_supply_content"]
+    conditions:
+      settings: [cis.content.publish_two_person]
     owner: content_lead
   - id: CIS-F016
     app: cis
@@ -294,11 +299,13 @@ features:
     module: tenants
     name: Tenant directory and Tenant 360
     name_vi: Danh bạ đại lý và Tenant 360
-    summary_vi: "Danh sách mọi đại lý kèm mức sử dụng, thành viên, nhật ký, gói dịch vụ và góc nhìn hỗ trợ, lọc theo nhóm khách nhân viên phụ trách."
-    summary: Every agency tenant with its usage, members, audit trail, subscription and support view, filtered to the staff member's own book.
+    summary_vi: "Danh sách mọi đại lý kèm mức sử dụng, thành viên, nhật ký, gói dịch vụ, điều khoản thanh toán và báo giá, ngân sách và chi phí AI, thị trường, chất lượng, đường nhận lead và góc nhìn hỗ trợ, lọc theo nhóm khách nhân viên phụ trách; quản trị viên kết thúc chế độ pilot kèm lý do."
+    summary: Every agency tenant with its usage, members, audit trail, subscription, billing terms and quote, AI budget and cost, markets, quality, lead route and support view, filtered to the staff member's own book; an administrator ends pilot mode with a reason.
     roles: [admin, customer_success, support, finance]
     status: live
     surface: ["page:/admin/tenants", "page:/admin/tenants/[id]", "route:admin", "route:admin_tenant360"]
+    conditions:
+      settings: [cis.tenant.pilot_max_weeks, cis.tenant.crm_agency_seen_hours]
     owner: customer_success
   - id: CIS-F019
     app: cis
@@ -395,13 +402,13 @@ features:
     module: spend
     name: Spend and budgets
     name_vi: Chi phí và ngân sách
-    summary_vi: "Chi phí AI và dữ liệu theo nhà cung cấp, ứng dụng và bước, cùng ngân sách mà bộ chặn chi phí áp dụng: ngân sách mỗi kết nối AI chia cho các ứng dụng, các mức trần đang áp dụng và bộ ngắt bất thường của từng ứng dụng."
-    summary: AI and data spend per provider, app and stage, with the budgets the cost guard enforces - one budget per AI connection split across the apps, the spend caps in force and each app's anomaly breaker.
+    summary_vi: "Chi phí AI và dữ liệu theo nhà cung cấp, ứng dụng và bước, chi phí AWS theo ứng dụng làm mới mỗi ngày (có nhãn khi số liệu đã cũ) và dự báo cuối tháng, cùng ngân sách mà bộ chặn chi phí áp dụng: ngân sách mỗi kết nối AI chia cho các ứng dụng, các mức trần đang áp dụng và bộ ngắt bất thường của từng ứng dụng."
+    summary: AI and data spend per provider, app and stage, the AWS cost per app refreshed daily (with a badge when it is stale) and a month-end forecast, with the budgets the cost guard enforces - one budget per AI connection split across the apps, the spend caps in force and each app's anomaly breaker.
     roles: [admin, ai_ops, finance]
     status: live
     surface: ["page:/admin/spend", "route:admin_budgets", "route:admin_ai_gateway_budgets", "route:admin_ai_gateway_spend"]
     conditions:
-      settings: [cis.retention.llm_call_log_days]
+      settings: [cis.retention.llm_call_log_days, cis.spend.ce_daily_refresh_enabled, cis.spend.ce_daily_refresh_hour_utc, cis.spend.ce_stale_after_hours, cis.llm.anomaly_breaker_mode, cis.llm.anomaly_baseline_days, cis.llm.anomaly_multiple, cis.llm.anomaly_floor_usd, cis.llm.connection_cap_mode]
     owner: finance
   - id: CIS-F027
     app: cis
@@ -434,14 +441,16 @@ features:
     module: platform-ops
     name: Job runner
     name_vi: Bộ chạy job
-    summary_vi: "Hàng đợi job bền vững của CIS (và liên kết tới hàng đợi của ứng dụng khác): loại job, trạng thái, lần thử lại và dữ liệu."
-    summary: "The durable job queue of CIS (and links to the other apps' queues): kinds, states, retries and payloads."
+    summary_vi: "Hàng đợi job bền vững của CIS (và liên kết tới hàng đợi của ứng dụng khác): loại job, trạng thái, lần thử lại và dữ liệu; các job giám sát ngắn chạy ở làn riêng nên một job nền dài không chặn chúng."
+    summary: "The durable job queue of CIS (and links to the other apps' queues): kinds, states, retries and payloads; short monitoring jobs run in their own lane so a long background job does not hold them up."
     roles: [admin]
     status: live
     surface: ["page:/admin/jobs", "route:admin_job_runner"]
     conditions:
-      settings: [cis.ops.jobs_background_max_running, cis.ops.jobs_monitor_max_running, cis.retention.job_failed_days,
-                 cis.retention.job_succeeded_days]
+      settings: [cis.ops.jobs_background_max_running, cis.ops.jobs_monitor_max_running, cis.retention.job_failed_days, cis.retention.job_succeeded_days]
+    proven:
+      date: 2026-11-25
+      evidence: docs/audits/2026-11-25-S293-session/evidence/aa1178-monitor-lane-under-load.txt
     owner: tech_lead
   - id: CIS-F030
     app: cis
@@ -482,11 +491,11 @@ features:
     module: people-access
     name: Staff directory and roles
     name_vi: Danh bạ nhân viên và vai trò
-    summary_vi: "Mọi tài khoản nhân viên và vai trò; quản trị viên mời, đổi vai trò, khoá, đăng xuất và đồng bộ với đăng nhập công ty; chủ sở hữu tạo vai trò riêng từ một vai trò có sẵn và giữ các mẫu vai trò cho người mới."
-    summary: Every staff account with its roles; admins invite, change roles, disable, sign out and sync with the company sign-in; owners clone a built-in role into a custom role and keep the people-role presets.
+    summary_vi: "Mọi tài khoản nhân viên và vai trò; quản trị viên mời, đổi vai trò, khoá, đăng xuất và đồng bộ với đăng nhập công ty; chủ sở hữu tạo vai trò riêng từ một vai trò có sẵn, giữ các mẫu vai trò cho người mới và xem trang quản trị dưới một vai trò thấp hơn (chỉ đọc, có thời hạn, có lý do, được ghi nhật ký)."
+    summary: Every staff account with its roles; admins invite, change roles, disable, sign out and sync with the company sign-in; owners clone a built-in role into a custom role, keep the people-role presets and view the admin as a lower role (read only, time-boxed, with a reason, logged).
     roles: [admin]
     status: live
-    surface: ["page:/admin/platform/staff/**", "page:/admin/platform/roles", "route:admin_platform", "route:admin_platform_roles"]
+    surface: ["page:/admin/platform/staff/**", "page:/admin/platform/roles", "route:admin_platform", "route:admin_platform_roles", "route:admin_view_as"]
     depends_on: [INF-F001]
     owner: tech_lead
   - id: CIS-F034
@@ -544,28 +553,34 @@ features:
     module: developer
     name: Product map (this catalogue)
     name_vi: Bản đồ sản phẩm (catalogue này)
-    summary_vi: "Mỗi ứng dụng làm được gì, các ứng dụng nối với nhau thế nào và mỗi kết nối cần gì, hiển thị từ chính danh mục này."
-    summary: What each app can do, how the apps link and what each link needs, rendered from this catalogue.
+    summary_vi: "Mỗi ứng dụng làm được gì, các ứng dụng nối với nhau thế nào và mỗi kết nối cần gì, hiển thị từ chính danh mục này: ứng dụng, tính năng, kết nối, hành trình và sơ đồ, có bộ lọc và bản tiếng Việt."
+    summary: What each app can do, how the apps link and what each link needs, rendered from this catalogue - apps, features, links, journeys and a graph, with filters and a Vietnamese view.
     roles: [admin]
-    status: beta
+    status: live
     surface: ["page:/admin/platform/catalogue", "route:admin_product_catalogue"]
     depends_on: [INF-F006]
     guide: docs/catalogue/README.md
+    proven:
+      date: 2026-11-14
+      evidence: https://github.com/AdventureAsia365-Ecosys/AA-CIS-App/pull/1496
     owner: tech_lead
   - id: CIS-F049
     app: cis
     module: developer
     name: Delivery (CI/CD and DORA per app)
     name_vi: Phát hành (CI/CD và DORA theo app)
-    summary_vi: "Mỗi app ra bản nhanh và an toàn tới đâu: năm chỉ số DORA, lead time tốn ở khúc nào, sức khoẻ CI và các lần deploy hỏng, hàng merge chạy ra sao và mã thay đổi ở đâu (tab hàng merge và bản đồ git), dựng mỗi giờ từ dữ liệu GitHub."
-    summary: How fast and how safely each app ships - the five DORA keys, where lead time goes, CI health and failed deploys, how the merge queues work and where the code changes (merge queue and git map tabs), built hourly from GitHub data.
+    summary_vi: "Mỗi ứng dụng ra bản nhanh và an toàn tới đâu: năm chỉ số DORA và xu hướng 12 tuần, thời gian chờ nằm ở khúc nào trên sơ đồ luồng phát hành, sức khoẻ CI và các lần deploy hỏng, biểu đồ hàng merge và bản đồ mức thay đổi mã, cùng các tab hàng merge và bản đồ git, theo khoảng thời gian có sẵn hoặc tự chọn trên mọi tab, dựng mỗi giờ từ dữ liệu GitHub."
+    summary: How fast and how safely each app ships - the five DORA keys and their 12-week trend, where lead time goes in a delivery flow diagram, CI health and failed deploys, merge queue charts and a code churn map, with the merge queue and git map tabs, for a preset or custom time range on every tab, built hourly from GitHub data.
     roles: [admin]
-    status: beta
+    status: live
     surface: ["page:/admin/platform/delivery", "route:admin_platform_delivery"]
     conditions:
-      settings: [cis.delivery.cfr_green_pct, cis.delivery.lead_time_green_hours, cis.delivery.min_sample, cis.delivery.queue_wait_green_hours, cis.delivery.queue_ejection_green_pct, cis.delivery.queue_flaky_green_pct]
+      settings: [cis.delivery.cfr_green_pct, cis.delivery.lead_time_green_hours, cis.delivery.min_sample, cis.delivery.queue_wait_green_hours, cis.delivery.queue_ejection_green_pct, cis.delivery.queue_flaky_green_pct, cis.delivery.custom_range_max_days, cis.delivery.custom_range_cache_entries]
     depends_on: [INF-F006]
     guide: docs/guides/delivery-metrics.md
+    proven:
+      date: 2026-11-18
+      evidence: docs/audits/2026-11-18-S284-session/aa1135-delivery-v2/overview-1440-light.png
     owner: tech_lead
   - id: CIS-F051
     app: cis
@@ -583,13 +598,13 @@ features:
     module: platform-ops
     name: Compliance readiness
     name_vi: Mức sẵn sàng tuân thủ
-    summary_vi: "Platform › Compliance readiness: mức có bằng chứng của sáu bộ khung (ISO 27001, SOC 2, ISO 42001, OWASP Top 10, OWASP LLM, EU AI Act), từng control với các kiểm tra và lịch sử bằng chứng, bộ thu bằng chứng chạy mỗi ngày; là số liệu sẵn sàng trên Dev, không phải chứng nhận."
-    summary: Platform › Compliance readiness - the evidenced share of six frameworks (ISO 27001, SOC 2, ISO 42001, OWASP Top 10, OWASP LLM, EU AI Act), every control with its checks and evidence history, fed by a daily evidence collector; a Dev readiness number, not a certification.
+    summary_vi: "Platform › Compliance readiness: mức có bằng chứng của sáu bộ khung (ISO 27001, SOC 2, ISO 42001, OWASP Top 10, OWASP LLM, EU AI Act), từng control với các kiểm tra và lịch sử bằng chứng từ bộ bằng chứng hằng ngày đã niêm phong, các nghĩa vụ pháp luật dưới dạng danh sách kiểm theo từng luật kèm ma trận áp dụng theo thị trường, các ngoại lệ có thời hạn với bước duyệt người lập - người kiểm (người thứ hai khi bật luật hai người), và biên bản rà soát hằng tháng; là số liệu sẵn sàng trên Dev, không phải chứng nhận."
+    summary: Platform › Compliance readiness - the evidenced share of six frameworks (ISO 27001, SOC 2, ISO 42001, OWASP Top 10, OWASP LLM, EU AI Act), every control with its checks and evidence history from sealed daily evidence, the law obligations as a checklist per law with the market applicability matrix, time-boxed exceptions with a maker-checker decision (a second person when the two-person rule is on), and the monthly posture review record; a Dev readiness number, not a certification.
     roles: [admin]
     status: beta
     surface: ["page:/admin/platform/compliance", "route:admin_platform_compliance"]
     conditions:
-      settings: [cis.compliance.access_review_max_age_days, cis.compliance.ci_scan_max_age_days, cis.compliance.collector_heartbeat_hours, cis.compliance.docs_overdue_max, cis.compliance.drill_max_age_days, cis.compliance.partial_weight, cis.compliance.reference_scores, cis.compliance.validity_hours.root_daily, cis.compliance.exception_max_days, cis.compliance.prowler_critical_high_max, cis.compliance.review_max_age_days, cis.compliance.validity_hours.aws_nightly, cis.compliance.validity_hours.prowler_weekly]
+      settings: [cis.compliance.access_review_max_age_days, cis.compliance.applicability_review_max_age_days, cis.compliance.campaign_consent_violations_max, cis.compliance.campaign_consent_window_days, cis.compliance.ci_scan_max_age_days, cis.compliance.collector_heartbeat_hours, cis.compliance.consent_capture_max_age_days, cis.compliance.docs_overdue_max, cis.compliance.drill_max_age_days, cis.compliance.erasure_drill_max_age_days, cis.compliance.exception_max_days, cis.compliance.legal_docs_overdue_max, cis.compliance.partial_weight, cis.compliance.prowler_critical_high_max, cis.compliance.reference_scores, cis.compliance.retention_live_max_age_days, cis.compliance.retention_run_max_age_days, cis.compliance.review_max_age_days, cis.compliance.validity_hours.aws_nightly, cis.compliance.validity_hours.cis_db, cis.compliance.validity_hours.crm_ops, cis.compliance.validity_hours.prowler_weekly, cis.compliance.validity_hours.root_daily, cis.settings.two_person_approval]
     depends_on: [INF-F006]
     owner: tech_lead
   # ── AA-CIS: Content studio API (the UI lives in AA-Partner) ───────────────────────────────────────────────────────
@@ -734,7 +749,7 @@ features:
     status: live
     surface: ["page:/admin/content-workspace", "page:/admin/content-workspace/[tourId]", "page:/admin/content-workspace/new", "page:/admin/content-workspace/supplier-links", "route:admin_content_workspace"]
     conditions:
-      settings: [cis.content.manual_tour.max_days, cis.content.manual_tour.min_inclusions, cis.content.manual_tour.min_exclusions, cis.content.manual_tour.quick_inclusions, cis.content.manual_tour.quick_exclusions, cis.content.manual_tour.tour_types, cis.content.supplier_link.bulk_max]
+      settings: [cis.content.manual_tour.max_days, cis.content.manual_tour.min_inclusions, cis.content.manual_tour.min_exclusions, cis.content.manual_tour.quick_inclusions, cis.content.manual_tour.quick_exclusions, cis.content.manual_tour.tour_types, cis.content.publish_two_person, cis.content.supplier_link.bulk_max]
     depends_on: [BK-F009]
     owner: content_lead
   - id: BK-F001
@@ -813,8 +828,8 @@ features:
     module: pricing
     name: Pricing policy
     name_vi: Chính sách giá
-    summary_vi: "Mọi giá trị chính sách giá và tài chính (hiệu lực báo giá, giữ chỗ, đặt cọc, phụ thu, lưu trữ), thay đổi có duyệt hai bước."
-    summary: Every pricing and finance policy value (quote validity, holds, deposits, surcharges, retention) with maker-checker changes.
+    summary_vi: "Mọi giá trị chính sách giá và tài chính, có phiên bản và thay đổi do hai người duyệt: hiệu lực báo giá, giữ chỗ, đặt cọc, phụ thu, lưu trữ dữ liệu. Thêm các nhóm số khách mà bảng chi phí tính giá theo, loại bữa mặc định của khách sạn và số ngày release allotment mặc định, nhắc hợp đồng nhà cung cấp sắp hết hạn (báo trước bao lâu, vai trò nào nhận e-mail), thời gian tạm dừng chi trả sau khi đổi tài khoản ngân hàng, và ngưỡng kiểm tra job."
+    summary: Every pricing and finance policy value, versioned and changed by two people. It covers quote validity, holds, deposits, surcharges and retention. It also sets the group-size price bands the cost sheet prices by, the default hotel board and allotment release days, and the supplier contract expiry reminders (how early, which roles get the e-mail). The payout pause after a bank change and the job check thresholds are set here too.
     roles: [booking-admin, finance]
     status: live
     surface: ["page:/pricing/policy"]
@@ -839,19 +854,19 @@ features:
     module: supply
     name: Suppliers, contracts and rate sheets
     name_vi: Nhà cung cấp, hợp đồng và bảng giá
-    summary_vi: "Danh sách nhà cung cấp kèm hợp đồng và bảng giá; điều khoản hợp đồng (allotment, free sale, on request), hạn chế cung ứng và stop-sale, có người thứ hai duyệt; một trang gom mọi stop-sale đang chờ duyệt của tất cả nhà cung cấp. Các lựa chọn của hồ sơ nhà cung cấp (vai trò liên hệ, điều khoản thanh toán) và tài khoản ngân hàng nhà cung cấp: che số, người thứ hai duyệt, chỉ xem đầy đủ khi có dòng nhật ký kiểm toán."
-    summary: The supplier register with contracts and rate sheets; the contract terms (allotment, free sale, on request), supply restrictions and stop-sale, each checked by a second person; one page lists the stop-sales waiting for that check across every supplier. The supplier profile choices (contact roles, payment terms) and the supplier bank accounts, masked, approved by a second person, the full details revealed only with an audit row.
-    roles: [booking-admin, contracting, sales]
+    summary_vi: "Danh sách nhà cung cấp (kể cả DMC vận hành trọn chương trình) kèm hợp đồng và bảng giá. Nhà cung cấp mới ở trạng thái chờ và do người thứ hai kích hoạt. Điều khoản hợp đồng (allotment, free sale, on request), hạn chế cung ứng và stop-sale đều có người thứ hai duyệt, và một trang gom các stop-sale đang chờ duyệt. Bảng giá nhập vào hiện các thay đổi so với hợp đồng đã phát hành gần nhất trước khi phát hành. Hợp đồng sắp hết hạn hiện trên trang nhà cung cấp và được gửi e-mail cho các vai trò đã chọn. Quản trị viên sửa các lựa chọn của hồ sơ nhà cung cấp (vai trò liên hệ, điều khoản thanh toán). Tài khoản ngân hàng nhà cung cấp được che số; chỉ chủ doanh nghiệp duyệt (trưởng nhóm kỹ thuật dự phòng), kèm ghi chú đã gọi xác nhận; chỉ xem đầy đủ khi có dòng nhật ký kiểm toán; sau mỗi lần đổi tài khoản, chi trả cho nhà cung cấp đó tạm dừng một khoảng thời gian."
+    summary: The supplier register (DMCs that run whole programs included) with contracts and rate sheets. A new supplier starts pending and a second person activates it. Contract terms (allotment, free sale, on request), supply restrictions and stop-sale are each checked by a second person, and one page lists the stop-sales waiting for that check. An imported rate sheet shows its changes against the last published contract before it is published. Contracts about to end are listed on the supplier pages and e-mailed to the chosen roles. Admins edit the supplier profile choices (contact roles, payment terms). Supplier bank accounts are masked. Only the business owner approves one (the tech lead as fallback), with a call-back note. The full details are revealed only with an audit row, and payouts to the supplier pause for a set time after any bank change.
+    roles: [booking-admin, contracting, sales, finance]
     status: live
     surface: ["page:/suppliers/**", "page:/stop-sales", "route:suppliers", "route:supply_model", "route:supplier_bank", "route:supplier_profile_options"]
     owner: tech_lead
   - id: BK-F010
     app: booking
     module: supply
-    name: Hotels and services
-    name_vi: Khách sạn và dịch vụ
-    summary_vi: "Khách sạn và loại phòng, dịch vụ (hoạt động, đưa đón, hướng dẫn viên, vé vào cửa, bữa ăn) kèm giá nhà cung cấp."
-    summary: Hotels with room types, and services (activities, transfers, guides, entrances, meals) with their supplier rates.
+    name: Hotels through several DMCs, and services
+    name_vi: Khách sạn qua nhiều DMC, và dịch vụ
+    summary_vi: "Khách sạn và loại phòng do một hoặc nhiều DMC bán: có DMC ưu tiên, mỗi dòng phòng trên báo giá lấy một DMC, so giá quy đổi USD. Có loại bữa (board basis) và giá trẻ em của khách sạn. Allotment, free sale và số ngày release theo từng DMC áp cho dòng phòng của đại lý. Có kiểm tra khách sạn trùng và ngày xác nhận lại thông tin khách sạn. Bảng giá xuất ra Excel và nhập lại kèm danh sách thay đổi. Dịch vụ (hoạt động, đưa đón, hướng dẫn viên, vé vào cửa, bữa ăn) kèm giá nhà cung cấp."
+    summary: Hotels with room types sold by one or more DMCs. Each hotel can have a preferred DMC, each room line on a quote takes one DMC, and prices are compared in USD. Board basis and hotel child prices are supported. Allotment, free sale and release days per DMC apply to agency room lines. A check flags duplicate hotels, and each hotel has a date to re-confirm its facts. The rate sheet goes out to Excel and comes back in with a list of changes. Services (activities, transfers, guides, entrances, meals) carry their supplier rates.
     roles: [booking-admin, contracting, sales]
     status: live
     surface: ["page:/hotels", "page:/services/**", "route:supply"]
@@ -861,8 +876,8 @@ features:
     module: operations
     name: Supplier bookings and trip checks
     name_vi: Đặt dịch vụ nhà cung cấp và kiểm tra chuyến đi
-    summary_vi: "Đặt từng dịch vụ với nhà cung cấp, chứng từ vận hành và các bước kiểm tra hồ sơ trước ngày khởi hành."
-    summary: Booking each service with its supplier, the operations documents and the checks a case passes before departure.
+    summary_vi: "Một tour đã bán tách thành một booking nhà cung cấp cho mỗi thành phần (từng đêm khách sạn, hoạt động, đưa đón), tạo bằng một nút. Thành phần không ai đặt được có thể đóng kèm lý do. Có chứng từ vận hành và các bước kiểm tra hồ sơ trước ngày khởi hành."
+    summary: A sold tour becomes one supplier booking per component (each hotel night, activity or transfer), generated in one step. A component nobody can book can be closed with a reason. Staff also keep the operations documents and the checks a case passes before departure.
     roles: [booking-admin, sales, contracting]
     status: live
     surface: ["page:/trip-checks", "route:supplier_bookings", "route:trip_checks"]
@@ -874,8 +889,8 @@ features:
     module: operations
     name: Supplier bills and payouts
     name_vi: Hoá đơn nhà cung cấp và chi trả
-    summary_vi: "Khoản phải trả của AA: hoá đơn cần duyệt và thanh toán, có người thứ hai duyệt."
-    summary: AA's own payables - bills to approve and pay, with a second person approving.
+    summary_vi: "Khoản phải trả của AA: hoá đơn nhà cung cấp cần duyệt và thanh toán. Người nhập hoá đơn hoặc sửa thông tin hoá đơn không bao giờ là người chi, và có người thứ hai duyệt. Hệ thống từ chối chi trả khi tài khoản ngân hàng của nhà cung cấp còn chờ duyệt hoặc đang trong thời gian tạm dừng sau khi đổi tài khoản."
+    summary: AA's own payables, the supplier bills to approve and pay. The person who entered a bill or edited its facts never pays it, and a second person approves it. A payout is refused while the supplier's bank account waits for approval, or during the pause after a bank change.
     roles: [booking-admin, sales, contracting, finance]
     status: live
     surface: ["page:/billing", "route:supplier_bills"]
@@ -980,6 +995,18 @@ features:
     status: live
     surface: ["page:/add-ons", "route:addons"]
     owner: tech_lead
+  - id: BK-F021
+    app: booking
+    module: admin
+    name: Approval rules for a small team
+    name_vi: Quy tắc duyệt cho đội nhỏ
+    summary_vi: "Ai được duyệt việc gì khi chỉ vài người vận hành doanh nghiệp. Người tạo hoặc sửa một bản ghi không bao giờ tự duyệt nó (nhà cung cấp, hợp đồng, add-on, giá, mùa, thông tin thanh toán của pháp nhân xuất hoá đơn). Chủ doanh nghiệp chỉ được tự duyệt ở những chỗ công tắc cho phép, và mỗi lần như vậy được đánh dấu và liệt kê trong nhật ký kiểm toán. Tour chỉ bán được khi đã có giá được duyệt. Việc của tôi cho mỗi người thấy các mục đang chờ họ duyệt."
+    summary: Who may approve what when only a few people run the business. The person who created or changed a record never approves it (suppliers, contracts, add-ons, prices, seasons, a billing entity's payment details). The business owner may approve their own entry only where the switch allows it, and each such approval is flagged and listed in the audit log. A tour becomes sellable only with an approved price. My work shows each person the approvals waiting for them.
+    roles: [booking-admin, finance, contracting, sales]
+    status: live
+    surface: ["page:/", "page:/audit-log", "route:staff", "route:my_work"]
+    depends_on: [INF-F001, CIS-F033]
+    owner: tech_lead
 
   # ── AA-Partner: CRM ───────────────────────────────────────────────────────────────────────────────────────────────
   - id: CRM-F001
@@ -991,7 +1018,7 @@ features:
     summary: Agency people sign in with the partner pool, pick their agency and move between the CRM and the Content studio.
     roles: [owner, agent, assistant]
     status: live
-    surface: ["page:/", "page:/[section]", "page:/select-agency", "page:/signed-out", "page:/health", "page:/kit-gallery", "page:/help", "route:agency", "route:health", "route:ci", "route:search"]
+    surface: ["page:/", "page:/[section]", "page:/select-agency", "page:/signed-out", "page:/health", "page:/kit-gallery", "route:agency", "route:health", "route:ci"]
     conditions:
       entitlements: [crm.core]
       tenant_kinds: [pilot, agency]
@@ -1024,10 +1051,10 @@ features:
   - id: CRM-F004
     app: crm
     module: intake
-    name: Inquiry forms
-    name_vi: Biểu mẫu yêu cầu
-    summary_vi: "Biểu mẫu hỏi tour và biểu mẫu lên kế hoạch công khai trên trang khách của đại lý; mỗi câu trả lời thành một chuyến đi trên bảng."
-    summary: The agency's public inquiry form and planning form on its client host; each answer becomes a trip on the board.
+    name: Inquiry forms and trip requests
+    name_vi: Biểu mẫu yêu cầu và yêu cầu chuyến đi
+    summary_vi: "Biểu mẫu hỏi tour và biểu mẫu lên kế hoạch công khai trên trang khách của đại lý, cùng các yêu cầu chuyến đi gửi từ trang Trip planner của đại lý kèm dịch vụ thêm của AA mà khách đã chọn; mỗi yêu cầu thành một chuyến đi trên bảng."
+    summary: The agency's public inquiry form and planning form on its client host, and the trip requests sent from its Trip planner site with the AA add-ons the traveller ticked; each one becomes a trip on the board.
     roles: [owner, traveller]
     status: live
     surface: ["page:/c/f/[publicKey]", "page:/c/s/[token]", "page:/settings/forms", "route:public"]
@@ -1061,13 +1088,13 @@ features:
     module: proposals
     name: Proposal builder
     name_vi: Công cụ dựng đề xuất
-    summary_vi: "Đề xuất theo từng ngày gồm tour AA với giá trực tiếp, khách sạn và dịch vụ riêng của đại lý, phần bao gồm và lịch thanh toán."
-    summary: Day-by-day proposals with AA tours at a live price, the agency's own hotels and services, inclusions and the payment schedule.
+    summary_vi: "Đề xuất theo từng ngày gồm tour AA và các dịch vụ thêm của AA tại các điểm trong ngày với giá trực tiếp, vé máy bay, visa, bảo hiểm và phí dịch vụ riêng của đại lý, phần bao gồm, giá gợi ý làm tròn theo bước giá của đại lý và lịch thanh toán."
+    summary: Day-by-day proposals with AA tours and the AA add-ons sold at that day's places at a live price, the agency's own flights, visas, insurance and fees, inclusions, suggested prices rounded to the agency's step and the payment schedule.
     roles: [owner, agent]
     status: live
     surface: ["page:/pipeline/[tripId]/proposal/[proposalId]", "page:/settings/inclusions", "route:builder", "route:proposals", "route:inclusions"]
     conditions:
-      settings: [crm.agency_defaults.price_checks_per_minute, crm.agency_defaults.markup_max_pct, crm.agency_defaults.discount_owner_limit_pct]
+      settings: [crm.agency_defaults.price_checks_per_minute, crm.agency_defaults.markup_max_pct, crm.agency_defaults.discount_owner_limit_pct, crm.agency_defaults.price_round_step]
     owner: tech_lead
   - id: CRM-F008
     app: crm
@@ -1096,8 +1123,8 @@ features:
     module: agreements
     name: Agreements and e-sign
     name_vi: Hợp đồng và ký điện tử
-    summary_vi: "Điều khoản đặt tour của đại lý, chấp nhận lại khi điều khoản đổi, và ký điện tử các thoả thuận của chuyến đi."
-    summary: The agency's booking terms, re-accept on change and the e-sign of a trip's agreements.
+    summary_vi: "Điều khoản đặt tour của đại lý, chấp nhận lại khi điều khoản đổi, ký điện tử các thoả thuận của chuyến đi và bản PDF đã ký có niêm phong mà đại lý và khách tải về được."
+    summary: The agency's booking terms, re-accept on change, the e-sign of a trip's agreements and a sealed signed PDF the agency and the traveller can download.
     roles: [owner, agent, traveller]
     status: live
     surface: ["page:/settings/agreements", "route:esign"]
@@ -1107,13 +1134,13 @@ features:
     module: money
     name: Invoices and payments
     name_vi: Hoá đơn và thanh toán
-    summary_vi: "Hoá đơn đặt cọc và phần còn lại, nút Tôi đã thanh toán của khách, ghi nhận và kiểm thanh toán, hoàn tiền và phương thức thanh toán."
-    summary: Deposit and balance invoices, the client's I have paid, payments checked and recorded, refunds and payment methods.
+    summary_vi: "Hoá đơn đặt cọc và phần còn lại, nút Tôi đã thanh toán của khách, ghi nhận và kiểm thanh toán, hoàn tiền và phương thức thanh toán, cùng bước làm tròn giá theo từng loại tiền và lựa chọn hiện giá của đại lý trên Trip planner."
+    summary: Deposit and balance invoices, the client's I have paid, payments checked and recorded, refunds and payment methods, plus the agency's price rounding per currency and whether its prices show on its Trip planner.
     roles: [owner, agent]
     status: live
     surface: ["page:/payments", "page:/settings/payments", "route:invoices", "route:payments"]
     conditions:
-      settings: [crm.payments.invoice_reminder_every_days, crm.payments.invoice_reminder_max, crm.payments.refund_owner_threshold_default]
+      settings: [crm.payments.invoice_reminder_every_days, crm.payments.invoice_reminder_max, crm.payments.refund_owner_threshold_default, crm.agency_defaults.price_round_steps]
       note: Card payments on the agency's own Stripe need the Stripe Connect entitlement; bank transfer works without it.
     owner: finance
   - id: CRM-F012
@@ -1134,8 +1161,8 @@ features:
     module: aa-supply
     name: Book with AA
     name_vi: Đặt với AA
-    summary_vi: "Tour AA ngay trong chuyến đi của đại lý: biểu giá AA, trang tour AA, Đặt ngay, giữ chỗ và các booking với AA do Booking xác nhận."
-    summary: AA tours inside the agency's trips - the AA tariff, the AA tour page, Book now, holds and Bookings with AA confirmed by Booking.
+    summary_vi: "Tour AA ngay trong chuyến đi của đại lý: biểu giá AA, trang tour AA, Đặt ngay, giữ chỗ, yêu cầu AA thêm đêm khách sạn, cờ báo khi AA ngừng phục vụ một tour, và các booking với AA do Booking xác nhận."
+    summary: AA tours inside the agency's trips - the AA tariff, the AA tour page, Book now, holds, requests to AA for extra hotel nights, a flag when AA stops serving a tour, and Bookings with AA confirmed by Booking.
     roles: [owner, agent, traveller]
     status: live
     surface: ["page:/aa-bookings", "page:/aa-tariff", "page:/trip/[tourId]", "route:aa"]
@@ -1172,27 +1199,28 @@ features:
     module: messages
     name: Mail inbox and saved replies
     name_vi: Hộp thư và câu trả lời mẫu
-    summary_vi: "Hộp thư của đại lý kết nối qua OAuth, luồng thư theo chuyến đi, hộp thư chưa ghép và câu trả lời mẫu."
-    summary: The agency mailbox connected over OAuth, trip threads, the unmatched inbox and saved replies.
+    summary_vi: "Thư gửi khách đi từ hộp thư Gmail của chính đại lý, thư chuyển tiếp về địa chỉ riêng của đại lý vào đúng chuyến đi, cùng luồng thư theo chuyến đi, hộp thư chưa ghép, câu trả lời mẫu và nhập thư cũ."
+    summary: Mail to clients leaves the agency's own Gmail mailbox, mail forwarded to the agency's address lands on the right trip, plus trip threads, the unmatched inbox, saved replies and an import of past mail.
     roles: [owner, agent, assistant]
     status: live
     surface: ["page:/inbox", "page:/settings/mailbox", "page:/settings/saved-replies", "route:mail"]
     conditions:
       secrets: [crm/dev/mail-oauth]
+      note: Microsoft 365 send-as waits for the Microsoft app registration (see CRM-F048); an SMTP mailbox can be connected in Settings but has not been tried live yet.
     owner: tech_lead
   - id: CRM-F017
     app: crm
     module: messages
     name: SMS and WhatsApp
     name_vi: SMS và WhatsApp
-    summary_vi: "Kênh SMS và WhatsApp của đại lý trong khung soạn tin của chuyến đi và trong hộp thư."
-    summary: The agency's SMS and WhatsApp channels in the trip composer and the inbox.
+    summary_vi: "Kênh SMS và WhatsApp trên tài khoản nhắn tin riêng của đại lý, kèm mẫu tin WhatsApp đã được duyệt, trong khung soạn tin của chuyến đi và trong hộp thư."
+    summary: The agency's SMS and WhatsApp channels on its own messaging account, with approved WhatsApp templates, in the trip composer and the inbox.
     roles: [owner, agent]
     status: beta
     surface: ["page:/settings/channels", "route:messaging"]
     conditions:
       entitlements: [crm.whatsapp_sms]
-      note: The agency brings its own messaging vendor account.
+      note: The agency brings its own messaging vendor account; so far tried only with the built-in test provider, not a real vendor account.
     owner: tech_lead
   - id: CRM-F018
     app: crm
@@ -1245,14 +1273,17 @@ features:
     module: ai
     name: AI drafts
     name_vi: Bản nháp AI
-    summary_vi: "AI soạn nháp câu trả lời và cài đặt AI của đại lý, trong ngân sách AI hằng tháng."
-    summary: AI reply drafts and the agency's AI settings, within a monthly AI budget.
+    summary_vi: "AI soạn nháp câu trả lời theo giọng văn của từng thành viên, đọc xác nhận của nhà cung cấp vào chuyến đi, biến ghi chú chuyến đi thành lựa chọn tour AA, và cài đặt AI của đại lý, trong ngân sách AI hằng tháng theo gói của đại lý."
+    summary: AI reply drafts in each member's own voice, supplier confirmations read into the trip, trip notes turned into AA options, and the agency's AI settings, within the monthly AI budget of its plan.
     roles: [owner, agent]
-    status: beta
+    status: live
     surface: ["page:/settings/ai", "route:ai"]
     conditions:
       entitlements: [crm.ai_assist]
-      settings: [crm.ai.budget_default_usd, crm.ai.budget_max_usd, crm.ai.draft_reply_max_tokens, crm.rate.ai_per_minute]
+      settings: [crm.ai.budget_default_usd, crm.ai.budget_max_usd, crm.ai.draft_reply_max_tokens, crm.rate.ai_per_minute, crm.ai.connection_monthly_cap_usd, crm.ai.voice_profiles_per_member_max]
+    proven:
+      date: 2026-11-19
+      evidence: docs/sessions/2026-11-19-S285-supply-replan-lean-roles-ui-fixes.md
     owner: ai_ops
   - id: CRM-F023
     app: crm
@@ -1272,8 +1303,8 @@ features:
     module: team
     name: Add-ons
     name_vi: Add-on
-    summary_vi: "Các add-on của đại lý (CRM, TripPlanner) và yêu cầu add-on của chủ đại lý, được trả lời trong CIS; mô-đun Trip planner: liên kết trang lên lịch trình, nơi nhận lead, giao diện, lead gần nhất kèm trạng thái gửi, mức dùng và khoá ký webhook."
-    summary: The agency's add-ons (CRM, TripPlanner) and the owner's request for one, answered in CIS; the Trip planner module - planner link, lead route, look, the newest leads with their delivery status, usage and the webhook signing key.
+    summary_vi: "Các add-on của đại lý (CRM, TripPlanner) và yêu cầu add-on của chủ đại lý, được trả lời trong CIS; mô-đun Trip planner: liên kết trang lên lịch trình, đoạn mã nút mở planner để gắn vào website của đại lý, nơi nhận lead, giao diện, lead gần nhất kèm trạng thái gửi, mức dùng và khoá ký webhook."
+    summary: The agency's add-ons (CRM, TripPlanner) and the owner's request for one, answered in CIS; the Trip planner module - planner link, a launcher snippet for the agency's website, lead route, look, the newest leads with their delivery status, usage and the webhook signing key.
     roles: [owner, agent]
     status: live
     surface: ["page:/settings/add-ons", "page:/settings/add-ons/trip-planner", "route:addons", "route:tripplanner_module"]
@@ -1337,8 +1368,8 @@ features:
     module: legal
     name: Legal pages
     name_vi: Trang pháp lý
-    summary_vi: "Điều khoản sử dụng, điều khoản đối tác và thông báo quyền riêng tư."
-    summary: The terms of use, partner terms and privacy notice.
+    summary_vi: "Điều khoản sử dụng, điều khoản đối tác, thông báo quyền riêng tư, trang công khai cho biết dữ liệu của đại lý được lưu ở đâu và danh sách bên xử lý phụ."
+    summary: The terms of use, partner terms, privacy notice, the public page on where agency data lives and the list of sub-processors.
     roles: [public]
     status: live
     surface: ["page:/legal/**"]
@@ -1401,8 +1432,8 @@ features:
     module: studio
     name: My content, export and publish
     name_vi: Nội dung của tôi, xuất file và xuất bản
-    summary_vi: "Mọi bài kèm dấu AI, xuất HTML hoặc văn bản, và đăng lên WordPress hoặc Facebook."
-    summary: Every piece with its AI mark, export as HTML or text, and publish to WordPress or Facebook.
+    summary_vi: "Mọi bài kèm dấu AI, xuất từng bài dạng HTML hoặc văn bản và xuất danh sách dạng CSV hoặc Excel kèm cột AI và lời công bố AI, và đăng lên WordPress hoặc Facebook."
+    summary: Every piece with its AI mark, export of a piece as HTML or text and of the list as CSV or Excel with the AI columns and disclosure, and publish to WordPress or Facebook.
     roles: [studio-owner, studio-editor, studio-viewer]
     status: live
     surface: ["page:/portal/content/**", "page:/portal/help/facebook"]
@@ -1413,10 +1444,10 @@ features:
   - id: CRM-F045
     app: crm
     module: studio
-    name: Studio facts
-    name_vi: Dữ kiện trong Studio
-    summary_vi: "Dữ kiện riêng của đại lý mà người viết AI trích dẫn."
-    summary: The agency's own facts that the writers cite.
+    name: Studio booking terms
+    name_vi: Điều khoản đặt tour trong Studio
+    summary_vi: "Mức cộng giá và điều khoản bán của đại lý mà người viết AI trích dẫn; dữ kiện về tour luôn lấy từ AA."
+    summary: The agency's markup and sale terms that the writers cite; tour facts always come from AA.
     roles: [studio-owner, studio-editor]
     status: live
     surface: ["page:/portal/facts"]
@@ -1477,14 +1508,17 @@ features:
     module: ai
     name: AI narration and plan chat
     name_vi: Thuyết minh AI và trò chuyện lên lịch trình
-    summary_vi: "AI viết lời dẫn cho chuyến đi và trò chuyện lên kế hoạch, có nhãn AI, giới hạn lượt và mức trần hằng tháng."
-    summary: AI-written narration of a trip and the planning chat, with AI labels, rate limits and a monthly cap.
+    summary_vi: "AI viết lời dẫn cho chuyến đi và trò chuyện lên kế hoạch, có nhãn AI, giới hạn lượt và mức trần chi phí; mỗi đại lý có số phiên lên lịch trình bằng AI mỗi tháng theo gói, phiên đã bắt đầu vẫn tiếp tục, và khi hết lượt khách thấy thông báo trung tính còn đại lý nhận một thông báo trong Content studio trong tháng đó."
+    summary: AI-written narration of a trip and the planning chat, with AI labels, rate limits and spend caps; each agency gets a monthly number of AI planning sessions from its plan, a session already started keeps going, and when the allowance is used up the traveller sees a neutral notice and the agency gets one notice in its Content studio that month.
     roles: [public, traveller]
     status: live
     surface: ["route:bff/trip", "route:lambda/assembly"]
     conditions:
       entitlements: [tp.ai_sessions]
-      settings: [tripplanner.ai.narration_max_tokens, tripplanner.ai.plan_chat_max_steps, tripplanner.rate.narrate_per_hour, tripplanner.rate.chat_per_hour, tripplanner.spend.plan_chat_monthly_cap_usd, tripplanner.spend.plan_chat_tenant_monthly_cap_usd]
+      settings: [tripplanner.ai.narration_max_tokens, tripplanner.ai.narration_cache_ttl_hours, tripplanner.ai.plan_chat_max_steps, tripplanner.ai.plan_chat_max_tokens, tripplanner.rate.narrate_per_hour, tripplanner.rate.chat_per_hour, tripplanner.rate.chat_ip_per_hour, tripplanner.spend.plan_chat_monthly_cap_usd, tripplanner.spend.plan_chat_tenant_monthly_cap_usd, tripplanner.spend.environment, tripplanner.spend.stage_cap_compose_usd, tripplanner.spend.stage_cap_search_usd, tripplanner.spend.near_cap_pct, tripplanner.spend.connection_share_enforce]
+    proven:
+      date: 2026-11-19
+      evidence: docs/audits/2026-11-19-S285-session/aa1126/quota-tripplanner-bell-1440-light.png
     owner: ai_ops
   - id: TP-F004
     app: tripplanner
@@ -1506,31 +1540,38 @@ features:
     module: agency-planner
     name: Agency planner (white label)
     name_vi: Công cụ lên lịch trình của đại lý (mang thương hiệu đại lý)
-    summary_vi: "Trang lên kế hoạch và trang tour riêng của một đại lý đang được phục vụ, mang thương hiệu, tour và nội dung của đại lý, kèm thông báo quyền riêng tư và điều khoản (bản nháp) đứng tên đại lý và trang không tìm thấy của đại lý."
-    summary: A served agency's own planner and tour pages under its brand, with its own tours and text, its own draft privacy notice and terms, and its own not-found page.
+    summary_vi: "Trang lên lịch trình và trang tour riêng của một đại lý đang được phục vụ, chỉ mang thương hiệu đại lý, theo ngôn ngữ (tiếng Anh hoặc tiếng Việt) và màu sắc của đại lý ở cả nền sáng và tối, kể cả bản đồ; công cụ tìm tuyến chỉ gợi ý tour của đại lý, giá từ đã làm tròn của đại lý kèm ghi chú báo giá của đại lý là cuối cùng, lời mời hành động trên mỗi trang tour, thông báo quyền riêng tư và điều khoản (bản nháp) đứng tên đại lý có liên kết trên mọi trang, và trang không tìm thấy của đại lý."
+    summary: A served agency's own planner and tour pages under its brand only, in its language (English or Vietnamese) and its colours, light and dark, the map included; only its own tours in the route finder, its own rounded from prices with a note that its quote is final, a call to action on each tour page, its own draft privacy notice and terms linked from every page, and its own not-found page.
     roles: [public, traveller]
     status: live
     surface: ["page:/[tenant]", "page:/[tenant]/plan/**", "page:/[tenant]/tours/[tour]", "page:/[tenant]/privacy", "page:/[tenant]/terms", "page:/[tenant]/[...rest]"]
     conditions:
       entitlements: [tp.hosted, tp.branding]
+      settings: [tripplanner.prices.agency_stale_hours]
       tenant_kinds: [pilot, agency]
       secrets: [tripplanner/dev/tenant-assertion-key]
-      note: The agency must be in service and subscribe to the TripPlanner add-on.
+      note: The agency must be in service and subscribe to the TripPlanner add-on. Prices show only while the agency's show-prices switch is on and its list is fresh.
+    proven:
+      date: 2026-11-24
+      evidence: docs/audits/2026-11-24-S290-session/live/closeouts/evidence.md
     owner: tech_lead
   - id: TP-F006
     app: tripplanner
     module: leads
     name: Send a trip to the agency (lead hand-off)
     name_vi: Gửi chuyến đi cho đại lý (bàn giao lead)
-    summary_vi: "Khách gửi chuyến đi kèm đồng ý; khách tiềm năng chờ CRM của đại lý kéo về, hoặc đi tới webhook hay e-mail của đại lý."
-    summary: The traveller sends the trip with consent; the lead waits for the agency's CRM to pull it, or goes to its webhook or e-mail.
+    summary_vi: "Khách gửi chuyến đi kèm đồng ý, gồm cả các add-on đã chọn; lead chờ CRM của đại lý kéo về, hoặc đi tới webhook hay e-mail của đại lý, và tự chuyển sang kênh đó khi CRM không phục vụ đại lý. E-mail hiện tên đại lý là người gửi, và ứng dụng đại lý hiện trạng thái gửi của từng lead."
+    summary: The traveller sends the trip with consent, including the add-ons they ticked; the lead waits for the agency's CRM to pull it, or goes to its webhook or e-mail, and falls back to that route when the CRM is not serving the agency. E-mails show the agency's name as the sender, and the agency app shows each lead's delivery status.
     roles: [traveller]
     status: live
     surface: ["route:bff/trip", "route:lambda/assembly", "route:lambda/jobs"]
     conditions:
-      settings: [tripplanner.leads.hold_days, tripplanner.leads.tenant_daily_cap, tripplanner.rate.send_per_hour, tripplanner.handoff.advisor_demo, tripplanner.handoff.require_registration]
+      settings: [tripplanner.leads.hold_days, tripplanner.leads.tenant_daily_cap, tripplanner.rate.send_per_hour, tripplanner.rate.send_ip_per_hour, tripplanner.handoff.advisor_demo, tripplanner.handoff.require_registration]
       tenant_kinds: [pilot, agency]
       note: The demo tenant shows a demo notice instead of sending.
+    proven:
+      date: 2026-11-24
+      evidence: docs/audits/2026-11-24-S290-session/live/closeouts/evidence.md
     owner: tech_lead
   - id: TP-F007
     app: tripplanner
@@ -1548,10 +1589,10 @@ features:
   - id: TP-F008
     app: tripplanner
     module: legal
-    name: Legal pages and health
-    name_vi: Trang pháp lý và health
-    summary_vi: "Thông báo quyền riêng tư, điều khoản sử dụng và kiểm tra tình trạng."
-    summary: The privacy notice, the terms of use and the health check.
+    name: Legal pages, preview notice and health
+    name_vi: Trang pháp lý, thông báo bản xem trước và health
+    summary_vi: "Thông báo quyền riêng tư, điều khoản sử dụng và kiểm tra tình trạng; trước khi chính thức chạy, chân trang các trang của Adventure Asia ghi rõ đây là bản xem trước, yêu cầu gửi ở đây không được xử lý như yêu cầu thật, và mọi trang đề nghị công cụ tìm kiếm không lập chỉ mục."
+    summary: The privacy notice, the terms of use and the health check; until go-live the Adventure Asia site pages say in the footer that this is a preview site whose requests are not handled as real enquiries, and every page asks search engines not to index it.
     roles: [public]
     status: live
     surface: ["page:/privacy", "page:/terms", "route:bff/health"]
@@ -1561,8 +1602,8 @@ features:
     module: jobs
     name: Tenant data jobs (erasure, backup, retention)
     name_vi: Job dữ liệu đại lý (xoá, sao lưu, lưu giữ)
-    summary_vi: "Tiến trình chạy theo lịch: xoá dữ liệu của đại lý đã ngừng dịch vụ, sao lưu đại lý, che dữ liệu trong outbox và dọn bộ đếm giới hạn."
-    summary: The scheduled worker that erases an offboarded tenant's data, backs tenants up, redacts the outbox and purges rate counters.
+    summary_vi: "Tiến trình chạy theo lịch: cứ năm phút kiểm yêu cầu xoá và xoá dữ liệu của đại lý đã ngừng dịch vụ, sao lưu hằng ngày các đại lý thí điểm và chạy thử khôi phục bản sao lưu, che dữ liệu trong outbox và dọn bộ đếm giới hạn."
+    summary: The scheduled worker that checks for erasure requests every five minutes and erases an offboarded tenant's data, backs up the pilot tenants daily and test-restores a backup, redacts the outbox and purges rate counters.
     roles: [machine]
     status: live
     surface: ["route:lambda/jobs"]
@@ -1570,6 +1611,59 @@ features:
     proven:
       date: 2026-11-15
       evidence: docs/audits/2026-11-15-S281-session/verify/aa1093/tp-restore-drill/restore-drill.json
+    owner: tech_lead
+  - id: TP-F010
+    app: tripplanner
+    module: addons
+    name: Optional AA add-ons on each day
+    name_vi: Add-on tuỳ chọn của AA theo từng ngày
+    summary_vi: "Mỗi thẻ ngày liệt kê các hoạt động tuỳ chọn bán tại địa điểm của ngày đó, nơi nghỉ đêm đứng đầu; khách đánh dấu những hoạt động muốn đi và lựa chọn đi kèm chuyến đi gửi cho đại lý. Trên trang lên lịch trình của đại lý, mỗi add-on hiện giá từ đã làm tròn của chính đại lý, kèm ghi chú giá cuối cùng theo báo giá của đại lý, khi đại lý bật hiển thị giá; trang lên lịch trình của Adventure Asia không hiện giá add-on."
+    summary: Each day card lists the optional activities sold at that day's places, the overnight place first; the traveller ticks the ones they want and the picks travel with the trip sent to the agency. On an agency's planner an add-on shows the agency's own rounded from price, with a note that the agency's quote is final, while the agency publishes prices; Adventure Asia's own planner shows no add-on price.
+    roles: [public, traveller]
+    status: live
+    surface: ["route:bff/trip", "route:lambda/assembly"]
+    conditions:
+      settings: [tripplanner.prices.agency_stale_hours]
+    depends_on: [BK-F020]
+    proven:
+      date: 2026-11-24
+      evidence: docs/audits/2026-11-24-S290-session/live/closeouts/evidence.md
+    owner: tech_lead
+  - id: TP-F011
+    app: tripplanner
+    module: agency-planner
+    name: Agency planner on its own domain
+    name_vi: Công cụ lên lịch trình của đại lý trên tên miền riêng
+    summary_vi: "Đại lý có thể đặt công cụ lên lịch trình trên địa chỉ web riêng, ví dụ trip.agency-domain.com, qua HTTPS; địa chỉ đó mở trang lên lịch trình mang thương hiệu đại lý và các trang pháp lý của chính đại lý, đường dẫn khác là trang không tìm thấy, và khi gỡ tên miền thì quay về đường dẫn của đại lý trên host của chúng ta."
+    summary: An agency can serve its planner on its own web address, such as trip.agency-domain.com, over HTTPS; the address opens the agency's branded planner and its own legal pages, any other path is a plain not-found page, and removing the domain falls back to the agency's path on our host.
+    roles: [public, traveller]
+    status: live
+    surface: ["route:lambda/browse"]
+    conditions:
+      entitlements: [tp.hosted, tp.custom_domain]
+      tenant_kinds: [pilot, agency]
+      note: Staff add the domain on the agency's Tenant 360 page in CIS, which shows the DNS records to create; the certificate and the edge alias are created by a CIS job.
+    depends_on: [CIS-F018]
+    proven:
+      date: 2026-11-15
+      evidence: docs/audits/2026-11-15-S281-session/state-snapshot.md
+    owner: tech_lead
+  - id: TP-F012
+    app: tripplanner
+    module: agency-planner
+    name: Planner management API for the agency app
+    name_vi: API quản lý công cụ lên lịch trình cho ứng dụng đại lý
+    summary_vi: "API máy mà ứng dụng đại lý gọi cho công cụ lên lịch trình của một đại lý, dùng cho cả CRM và Content studio: các lead mới nhất kèm trạng thái gửi (không bao giờ có thông tin khách), mức dùng phiên AI và lead, khoá ký webhook kèm xoay khoá (khoá mới chỉ hiện một lần), và nhận giá từ riêng của đại lý."
+    summary: The machine API the agency app calls for an agency's planner, for both the CRM and the Content studio - the newest leads with their delivery status (never a traveller's details), AI sessions and lead usage, the webhook signing key with rotation (the new key shown once), and receiving the agency's own from prices.
+    roles: [machine]
+    status: live
+    surface: ["route:lambda/assembly"]
+    conditions:
+      entitlements: [tp.hosted]
+      settings: [tripplanner.leads.tenant_daily_cap]
+    proven:
+      date: 2026-11-24
+      evidence: docs/audits/2026-11-24-S290-session/live/closeouts/evidence.md
     owner: tech_lead
 
   # ── AA-CIS-Infra: shared platform edge (no app surface; checked by the Infra repo itself) ─────────────────────────
@@ -1657,23 +1751,50 @@ features:
     module: ops-assistant
     name: Operations assistant in the admin
     name_vi: Trợ lý vận hành trong trang quản trị
-    summary_vi: "Theo dõi, tra cứu và đề xuất việc vận hành kèm mức rủi ro và kết quả dự đoán; con người quyết định."
-    summary: Watches, looks things up and proposes operations actions with their risk and predicted outcome; a person decides.
-    roles: [admin, ai_ops]
-    status: planned
-    milestone: later
+    summary_vi: "Trên trang Trạng thái hệ sinh thái, mỗi việc cần xem có bằng chứng, bản tóm tắt dễ hiểu và các thẻ hành động xếp hạng (bước làm, mức rủi ro, ai duyệt, kết quả dự đoán) do luật dựng sẵn, không tốn phí; AI có thể xếp hạng và giải thích các thẻ, trả lời có gì thay đổi trong một khoảng thời gian, và tự phân tích các sự cố đang mở ở những mức độ đã chọn. Trợ lý không tự chạy gì: con người chạy bước đó rồi đánh dấu thẻ đã làm, trang kiểm kết quả sau số phút đã đặt (mặc định 10 và 30 phút) và hiện tỉ lệ đúng; chủ doanh nghiệp chỉ thấy bản tóm tắt."
+    summary: On the Ecosystem status page every item that needs attention gets its evidence, a plain-words summary and ranked action cards (the step, its risk, who approves it, the predicted outcome) built by rules at no cost; the AI can rank and explain the cards and say what changed in a time window, and open incidents of the chosen severities are analysed automatically. The assistant runs nothing - a person runs the step and marks the card done, the page checks the result at set minutes afterwards (10 and 30 by default) and shows the hit rate; the business owner sees the summary only.
+    roles: [admin]
+    status: beta
+    surface: ["page:/admin/overview", "route:admin_ops_assist"]
+    conditions:
+      settings: [cis.ops.assist_auto_incident_gap_min, cis.ops.assist_auto_severities, cis.ops.assist_build_timeout_s, cis.ops.assist_card_ttl_min, cis.ops.assist_changes_window_min, cis.ops.assist_check_after_min, cis.ops.assist_deep_model, cis.ops.assist_digest_days, cis.ops.assist_evidence_window_min, cis.ops.assist_history_min_n, cis.ops.assist_lookup_windows_min, cis.ops.assist_reason_min_chars, cis.ops.assist_refused_trigger_calls, cis.ops.assist_small_money_usd, cis.ops.assist_spend_baseline_days, cis.ops.assist_spend_spike_factor, cis.ops.assist_spend_spike_floor_usd_h, cis.ops.assist_throttled_trigger_calls, cis.ops.assist_wide_scope_stages]
+      connections: [anthropic-direct]
+      note: The AI ranking is one paid call through the assistant's AI gateway stage, under its own monthly hard cap; the rule-made cards and the outcome checks cost nothing.
+    depends_on: [CIS-F025]
     owner: tech_lead
   - id: CIS-F056
     app: cis
     module: overview
     name: Service levels, error budgets and incident records
     name_vi: Mức dịch vụ, ngân sách lỗi và hồ sơ sự cố
-    summary_vi: "Trang trạng thái hệ sinh thái thêm mục tiêu mức dịch vụ và mức tiêu ngân sách lỗi, hồ sơ sự cố, kiểm tra tổng hợp từ bên ngoài và xem theo từng đại lý."
-    summary: The ecosystem status page gains service-level objectives with error-budget burn, an incident record, external synthetic checks and a per-agency view.
+    summary_vi: "Trên trang Trạng thái hệ sinh thái: mục tiêu mức dịch vụ cho từng ứng dụng kèm cảnh báo tiêu ngân sách lỗi nhanh và chậm, hồ sơ sự cố (khai báo từ một cảnh báo hoặc bằng tay, mức độ, người phụ trách, dòng thời gian, bản nháp bài học), kiểm tra từ bên ngoài các host công khai (DNS, TLS, hạn chứng chỉ, health) do worker chạy mặc định 15 phút một lần, và góc nhìn theo từng đại lý về chi phí AI, lỗi AI, job lỗi và lỗi máy chủ."
+    summary: On the Ecosystem status page - a service-level objective per app with fast and slow error-budget burn alerts, the incident record (declared from an alert or by hand, severity, owner, timeline, lesson draft), external checks of the public hosts (DNS, TLS, certificate expiry, health) run by the worker every 15 minutes by default, and a per-agency view of AI spend, AI errors, failed jobs and server errors.
     roles: [admin]
-    status: planned
-    milestone: later
+    status: live
+    surface: ["page:/admin/overview", "route:admin_ops_status_p2"]
+    conditions:
+      settings: [cis.ops.status_slo_target_pct, cis.ops.status_slo_window_days, cis.ops.status_slo_budget_warn_pct, cis.ops.status_burn_fast_factor, cis.ops.status_burn_fast_window_min, cis.ops.status_burn_slow_factor, cis.ops.status_burn_slow_window_hours, cis.ops.status_cert_warn_days, cis.ops.status_cert_crit_days, cis.ops.status_incident_lookback_min, cis.ops.status_tenant_top_n, cis.ops.external_check_interval_min, cis.ops.external_check_sources, cis.ops.external_check_targets, cis.ops.external_check_timeout_s]
+      note: Declaring or updating an incident needs the ops write capability; the business owner reads only.
+    proven:
+      date: 2026-11-25
+      evidence: docs/audits/2026-11-25-S292-session/live/aa1142-slo-desktop-light.png
     owner: tech_lead
+  - id: CIS-F057
+    app: cis
+    module: tenants
+    name: Agency planner on its own domain
+    name_vi: Công cụ lên lịch trình của đại lý trên tên miền riêng
+    summary_vi: "Quản trị viên thêm tên miền riêng của đại lý cho công cụ lên lịch trình ngay trên Tenant 360 khi gói của đại lý có quyền này; trang hiện các bản ghi DNS đại lý cần tạo, một job nền cấp chứng chỉ và cấu hình biên, và host nào mất bản ghi DNS xác thực sẽ bị gỡ ra để các đại lý khác vẫn giữ chứng chỉ hợp lệ."
+    summary: An administrator adds the agency's own domain for its trip planner on Tenant 360 when its plan includes it; the page shows the DNS records the agency creates, a background job sets up the certificate and the edge, and a host whose DNS validation record disappears is detached so the other agencies keep a valid certificate.
+    roles: [admin]
+    status: live
+    surface: ["page:/admin/tenants/[id]", "route:admin_tenant_subscription"]
+    conditions:
+      entitlements: [tp.custom_domain, tp.hosted]
+      settings: [cis.tripplanner.custom_domain_edge_max, cis.tripplanner.custom_domain_edge_pending_hours, cis.tripplanner.custom_domain_max_per_tenant, cis.tripplanner.custom_domain_poll_seconds, cis.tripplanner.custom_domain_renewal_grace_days, cis.tripplanner.custom_domain_validation_timeout_hours]
+      note: The agency creates the DNS records at its own registrar; platform hosts are refused.
+    depends_on: [TP-F005]
+    owner: customer_success
   - id: CRM-F048
     app: crm
     module: integrations
@@ -1685,6 +1806,33 @@ features:
     status: planned
     milestone: CRM-after-R3
     owner: tech_lead
+  - id: CRM-F049
+    app: crm
+    module: search
+    name: Global search
+    name_vi: Tìm kiếm toàn ứng dụng
+    summary_vi: "Một ô tìm kiếm trong ứng dụng đại lý tìm khách hàng theo tên, e-mail hoặc số điện thoại, chuyến đi, booking, nhà cung cấp, dịch vụ, mẫu tin, tự động hoá và nhãn mà thành viên được phép xem, không phân biệt dấu và không lưu chỉ mục đọc được của dữ liệu cá nhân; tắt cho tới khi quản trị viên bật cho đại lý."
+    summary: One search box in the agency app finds clients by name, e-mail or phone, trips, bookings, suppliers, services, templates, automations and tags the member may see, ignores accents and never keeps a readable index of personal data; off until an administrator switches it on for the agency.
+    roles: [owner, agent, assistant]
+    status: beta
+    surface: ["route:search"]
+    conditions:
+      entitlements: [crm.core]
+      settings: [crm.search.enabled, crm.search.results_per_kind, crm.search.query_max_chars, crm.search.min_text_chars]
+    owner: tech_lead
+  - id: CRM-F050
+    app: crm
+    module: help
+    name: Help centre and What's new
+    name_vi: Trung tâm trợ giúp và Có gì mới
+    summary_vi: "Các chủ đề trợ giúp cho những phần chính của ứng dụng đại lý và dữ liệu của đại lý, bản tin Có gì mới bằng tiếng Anh và tiếng Việt, và quyền dùng sớm màn hình mới cho đại lý được quản trị viên bật chế độ xem trước."
+    summary: Help topics for the main parts of the agency app and the agency's data, the What's new feed in English and Vietnamese, and early access to new screens for an agency an administrator puts on preview.
+    roles: [owner, agent, assistant]
+    status: live
+    surface: ["page:/help"]
+    conditions:
+      settings: [crm.release.preview]
+    owner: customer_success
   - id: INF-F007
     app: infra
     module: environments

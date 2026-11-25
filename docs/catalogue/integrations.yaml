@@ -173,7 +173,7 @@ integrations:
     failure: The lead waits until the hold window ends, then is redacted
     kill_switch: The tenant daily cap set to 0
     personal_data: true
-    features: [TP-F006, CRM-F005]
+    features: [TP-F006, CRM-F004, CRM-F005]
     owner: tech_lead
     status: live
   - id: INT-012
@@ -680,9 +680,9 @@ integrations:
     failure: A day without a row shows no add-on for that day; nothing is invented
     kill_switch: Revoke the view grant in a Booking migration
     personal_data: false
-    features: [BK-F009, BK-F010]
+    features: [BK-F020, TP-F010]
     owner: tech_lead
-    status: planned
+    status: live
   - id: INT-085
     name: Agency own planner prices from the CRM to TripPlanner
     producer: crm
@@ -699,7 +699,7 @@ integrations:
     personal_data: false
     features: [CRM-F023, TP-F005]
     owner: tech_lead
-    status: planned
+    status: live
   - id: INT-086
     name: Booking supplier list for the CIS content workspace
     producer: booking
