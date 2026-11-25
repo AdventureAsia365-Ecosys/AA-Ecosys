@@ -1,8 +1,8 @@
 {
- "updated": "2026-11-25",
- "synced_at": "2026-11-25T09:55Z",
- "session": "S293",
- "next_session": "S294",
+ "updated": "2026-11-26",
+ "synced_at": "2026-11-25T20:17Z",
+ "session": "S294",
+ "next_session": "S295",
  "source": "Linear (19/11/2026, plan_sync.py --write, S285) + docs/audits/2026-11-19-S285-session/plan-audit-plan-changes.json (tech lead duyệt Q1–Q12, 19/11) + docs/backlog/README.md",
  "projects": {
   "data": "Data Platform",
@@ -995,6 +995,30 @@
   }
  ],
  "log": [
+  {
+   "session": "S294",
+   "date": "26/11/2026",
+   "closed": [
+    "AA-1103",
+    "AA-1172",
+    "AA-1174"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-1181"
+   ],
+   "reopened": [],
+   "notes": [
+    "25/11 ~18:30 → 26/11 07:00, Ultracode, lane l2–l26; đổi tài khoản Claude giữa phiên; GitHub sự cố 22:58",
+    "Done: AA-1174 (Done-with-scope D1), AA-1172 (guard bật 19:44), AA-1103 (khoá L8 + template v1.3.1)",
+    "Guard đỏ đầu phiên → 0 đỏ / 43 (Image Scan gate passed, Catalogue xanh)",
+    "WAF: mọi trả lời chặn 403 kèm 4 header, 1 HSTS (Infra #1038, #1040 apply); ZAP 0 High",
+    "AA-1011 đồng bộ lịch CRM một chiều live (crm-089/090, Partner #395/#401); bản đồ builder chờ token Mapbox",
+    "AA-1166 red-team 12 đạt / 1 dương tính giả / 3 chưa chạy, 0,3949 USD; script CRM/TP chờ duyệt trần",
+    "Product map 136 dòng live; tour SYNTHETIC cho buổi họp; nháp sau họp: CIS #1713, Partner #403, Infra #1041",
+    "Jira: 3 nháp chờ duyệt (PR-22, PR-26, PR-27)"
+   ]
+  },
   {
    "session": "S293",
    "date": "25/11/2026",
@@ -2467,7 +2491,7 @@
   {
    "id": "AA-1004",
    "title": "[Infra] Implement the lean AWS model: company organization, Identity Center, nonprod/ai accounts in the org, prod at go-live, Bedrock path",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "data",
    "milestone": "M5",
@@ -2552,13 +2576,13 @@
   {
    "id": "AA-790",
    "title": "[T10 gates] New tenant-voice rubric gate + post-repair integrity check (orphans, split paragraphs, grammar)",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "core",
    "milestone": "M2a",
-   "session": "TL-11 lift",
+   "session": "S294",
    "size": "L",
-   "next": "M2a · chờ đường LLM + gỡ băng TL-11 theo stage; kết quả hiện ở Writing Lab (R6)",
+   "next": "M2a · S294 D5: TL-11 gỡ khi AA-1169 qua lượt đọc tay; làm trước phần 0 USD (nhãn brand, kappa ≥ 0,6, ≥ 40 cặp mỗi writer)",
    "needs": ""
   },
   {
@@ -2568,9 +2592,9 @@
    "priority": "Medium",
    "project": "core",
    "milestone": "parked",
-   "session": "parked",
+   "session": "S295",
    "size": "S",
-   "next": "Parked · sau d18 bước 2 (stage viết tenant lên Anthropic, sau AA-820) + AA-1039; đổi model ứng viên khác family judge",
+   "next": "T9 cost · S294 D7: A/B Haiku 5.5 vs Sonnet trần 1,50 USD, chạy sau khi AA-1169 đóng",
    "needs": ""
   },
   {
@@ -2600,13 +2624,13 @@
   {
    "id": "AA-948",
    "title": "[CRM W4] CRM-20 Builder map fork (enhancement)",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "Medium",
    "project": "crm",
    "milestone": "CRM-after-R3",
-   "session": "parked",
+   "session": "S294",
    "size": "M",
-   "next": "CRM · park tới sau R7: TripPlanner dựng lại R5/R7 ('một engine, hai bề mặt'), fork bây giờ sẽ lệch",
+   "next": "CRM · S294 D8: engine bản đồ dùng chung (tách từ TripPlanner) + Mapbox CRM",
    "needs": "Tech lead: hướng dùng chung engine sau R7 thay T13 + đồng ý chi phí Mapbox"
   },
   {
@@ -2624,25 +2648,25 @@
   {
    "id": "AA-1011",
    "title": "[CRM] Microsoft 365 + BYO calendar connect: mail send-as for M365 and SMTP, calendar OAuth sync (Google calendar.events / Microsoft Graph)",
-   "status": "Backlog",
+   "status": "In Review",
    "priority": "No priority",
    "project": "crm",
    "milestone": "CRM-after-R3",
-   "session": "unscheduled",
+   "session": "S294",
    "size": "M",
-   "next": "CRM · M365 + lịch BYO ở Account › Integrations của app agency; ship trong pilot thì qua review AA-969 trước",
+   "next": "S294 (kéo lên): phần 3 đồng bộ lịch một chiều — Google live, Microsoft trả 503 tới khi có app Entra; crm-089; review độc lập trước merge",
    "needs": "Tech lead: đăng ký app Entra (M365)"
   },
   {
    "id": "AA-1050",
    "title": "[Quality W4] Promote the calibrated claim instrument: shadow first, then holds only for measured classes",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "S292",
+   "session": "S294",
    "size": "",
-   "next": "M2a — S292: shadow instrument, chỉ khi có ~30 nhãn bất đồng",
+   "next": "M2a · S294 D6: lập danh sách lớp kiểm claim đang ngủ + chạy lại 0 USD; xoá lớp 0 khác biệt",
    "needs": "Tech lead hoặc panel: nhãn ~30 ca bất đồng (đúng ≥ 80% mới có class enforce)"
   },
   {
@@ -2671,27 +2695,15 @@
    "due": "2026-11-29"
   },
   {
-   "id": "AA-1103",
-   "title": "[Playbook] Build the new-project kit, part 2 — Copier template repo, generic skills, pilot (R3–R6)",
-   "status": "In Progress",
-   "priority": "Medium",
-   "project": "core",
-   "milestone": "later",
-   "session": "S294",
-   "size": "L",
-   "next": "S294: kit đủ 9 hàng (v1.3.0); tech lead duyệt khoá L8 (check_learn --pin, status published) → Done",
-   "needs": ""
-  },
-  {
    "id": "AA-1110",
    "title": "[Ops] Continuity pack: second key-holder, runbook-only deploy/rollback drill, security tabletop and a second alert channel",
    "status": "In Review",
    "priority": "Urgent",
    "project": "data",
    "milestone": "later",
-   "session": "≥01/12",
+   "session": "S294",
    "size": "M",
-   "next": "Ops — S285: chốt kênh cảnh báo thứ 2; phần người thứ hai ≥01/12",
+   "next": "Ops · S294 D9: kênh cảnh báo thứ 2 = hộp mail vai trò (chờ địa chỉ)",
    "needs": "Tech lead + chủ doanh nghiệp: người giữ khoá thứ hai"
   },
   {
@@ -2701,21 +2713,21 @@
    "priority": "Urgent",
    "project": "data",
    "milestone": "later",
-   "session": "unscheduled",
+   "session": "S294",
    "size": "M",
-   "next": "Security — S285: MFA admin (amr check CIS/Booking/Partner + TF pool, rollout sau khi tech lead đăng ký TOTP), npm audit portal, ZAP lại",
+   "next": "S294: dọn CodeQL root/Infra/Partner, gỡ allow-list npm audit Partner, lịch ZAP hằng tháng, nâng deps frontend CIS/Booking; MFA admin chờ TOTP chủ DN",
    "needs": "Tech lead: TOTP; WAF #935"
   },
   {
    "id": "AA-1117",
    "title": "[Go-live] One dated go-live gate: checklist with CI guard and the proofs it needs (price coverage, Booking restore drill, load test, edge rate limits)",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "data",
    "milestone": "later",
-   "session": "at go-live",
+   "session": "S294",
    "size": "L",
-   "next": "Next: cổng go-live có ngày + checklist CI",
+   "next": "S294 (kéo lên): checklist go-live có ngày + guard CI (tools/ops/golive_gate.py); đóng khi có ngày go-live",
    "needs": "Tech lead + chủ doanh nghiệp: ngày go-live, chi WAF"
   },
   {
@@ -2775,7 +2787,7 @@
    "milestone": "later",
    "session": "S294",
    "size": "M",
-   "next": "Thứ Năm 26/11: chủ DN duyệt bộ ISMS (policy/scope/roles/rủi ro); ASVS L1 + red-team tháng 12",
+   "next": "S294 D7: red-team AI trần 0,50 USD + ASVS L1 Partner/TripPlanner 0 USD; chủ DN duyệt ISMS thứ Năm",
    "needs": ""
   },
   {
@@ -2791,18 +2803,6 @@
    "needs": ""
   },
   {
-   "id": "AA-1172",
-   "title": "[Quality] T9 blog writer follows an instruction planted in the fact input (trap t9_facts_override)",
-   "status": "In Review",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "M2a",
-   "session": "S288",
-   "size": "S",
-   "next": "S288: merged + deploy (CIS 472), guard TẮT; 2 lượt bẫy 1,40 USD (bật 13/14); tech lead quyết bật",
-   "needs": ""
-  },
-  {
    "id": "AA-1173",
    "title": "[Security] Compliance readiness phase 2–3: immutable evidence, read-only collectors (GitHub, AWS, DB), exceptions and monthly review",
    "status": "In Review",
@@ -2815,16 +2815,16 @@
    "needs": "Tech lead tạo GitHub App chỉ đọc"
   },
   {
-   "id": "AA-1174",
-   "title": "[Security] Privacy obligations on Compliance readiness: applicability by market, Vietnam personal data law, GDPR and the other laws that apply",
-   "status": "In Review",
-   "priority": "High",
-   "project": "data",
-   "milestone": "later",
-   "session": "S288",
-   "size": "M",
-   "next": "S288: merged + deploy (CIS 471); register v2 nạp; Refresh OK (cis_db + crm_ops); trang pháp lý giữ draft (D1)",
-   "needs": ""
+   "id": "AA-1181",
+   "title": "[CIS] Content workspace follow-ups: fact-draft refusal for hand-made tours, TripPlanner preview, place picker, impact box, images, supplier prefill",
+   "status": "In Progress",
+   "priority": "Medium",
+   "project": "portal",
+   "milestone": "M-SUP",
+   "session": "S294",
+   "size": "",
+   "next": "S294: (a) chặn nháp fact Excel cho tour tay — code tối 25/11, PR nháp, ship sau buổi họp 26/11",
+   "needs": "cần xếp slot"
   }
  ]
 }

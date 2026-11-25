@@ -168,11 +168,12 @@ class GateTest(unittest.TestCase):
         self.assertEqual(rc, le.EXIT_NO_GITLEAKS)
         self.assertIn("gitleaks not found", err)
         self.assertIn("--no-gitleaks", err)
-        rc, _, err = self.gate("clean", binary="")  # unset: PATH has none
-        self.assertEqual(rc, le.EXIT_NO_GITLEAKS)
-        rc, _, err = self.gate("clean", skip=True, binary="")
-        self.assertEqual(rc, 0)
-        self.assertIn("NOT scanned", err)
+        with mock.patch.object(le, "_resolve_gitleaks", lambda: None):
+            rc, _, err = self.gate("clean", binary="")  # unset: the resolver finds none
+            self.assertEqual(rc, le.EXIT_NO_GITLEAKS)
+            rc, _, err = self.gate("clean", skip=True, binary="")
+            self.assertEqual(rc, 0)
+            self.assertIn("NOT scanned", err)
 
     def test_nothing_written_needs_no_scan(self):
         rc, _, _ = self.gate("leak", binary="", paths=[])
@@ -239,7 +240,7 @@ class MainTest(unittest.TestCase):
         self.assertFalse(gate.call_args.args[1])
 
 
-REAL = os.environ.get("GITLEAKS_BIN") or shutil.which("gitleaks")
+REAL = le.gitleaks_bin()  # S294: the resolver, not shutil.which (a mise shim with no version fails)
 
 
 @unittest.skipUnless(REAL, "gitleaks not installed (set GITLEAKS_BIN to run against the real binary)")
@@ -269,3 +270,24 @@ class RealGitleaksTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+
+class GitleaksBinTest(unittest.TestCase):
+    """S294: without GITLEAKS_BIN the export gate uses the pre-push resolver, so a broken mise shim is skipped."""
+
+    def test_resolver_is_used_without_gitleaks_bin(self):
+        with mock.patch.dict(os.environ, {"GITLEAKS_BIN": ""}), \
+                mock.patch.object(le, "_resolve_gitleaks", lambda: "/opt/gitleaks-8.30.1/gitleaks"):
+            self.assertEqual(le.gitleaks_bin(), "/opt/gitleaks-8.30.1/gitleaks")
+
+    def test_the_resolver_skips_a_shim_that_cannot_answer_its_version(self):
+        sys.path.insert(0, str(le.ROOT / "tools" / "github"))
+        import gitleaks_resolve
+
+        def run_version(exe):
+            return (None, "No version is set for shim: gitleaks") if "shims" in exe else ("8.30.1", "")
+
+        found = gitleaks_resolve.resolve([], run_version=run_version, env={},
+                                         on_path=["/home/u/.local/share/mise/shims/gitleaks", "/usr/bin/gitleaks"])
+        self.assertEqual(found.path, "/usr/bin/gitleaks")

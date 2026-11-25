@@ -1,0 +1,245 @@
+{
+ "cost_usd": 0,
+ "layers": {
+  "claim_shadow": {
+   "by_action": {
+    "warn": 24
+   },
+   "by_surface": {
+    "t2": 12,
+    "t9_blog": 12
+   },
+   "changed_sample": [],
+   "decisions_changed": 0,
+   "ledger": {
+    "calls": 240,
+    "cost_usd": 0.123855,
+    "last_at": "2026-11-09 22:00:25.657840+00:00",
+    "object_calls": 90,
+    "pieces": 10,
+    "shadow_calls": 240
+   },
+   "measured_by": "stored shadow verdicts: hold or review on an object whose stored decision is published",
+   "removal_candidate": false,
+   "rows": 24,
+   "would_change_by_action": {},
+   "zero_diff": true
+  },
+  "seed_align_tier1": {
+   "decisions_changed": 70,
+   "holds": 0,
+   "measured_by": "tier 1 re-run on each stored final text, every built class in repair; a finding added to the stored final ledger of a published piece is a changed decision",
+   "replay": {
+    "candidates_by_class": {
+     "brief_recipe_leak": 6,
+     "difficulty_promise": 6,
+     "naming_note_leak": 5,
+     "near_as_at": 41,
+     "orphan_opener": 10,
+     "planned_as_optional": 13,
+     "scopeless_superlative": 77,
+     "world_share_unsupported": 53
+    },
+    "changed_count": 70,
+    "changed_sample": [
+     "01734760-e20d-4ce9-ad45-50390951c979",
+     "02fd80fd-b243-4d35-b6c0-d8b7889d23ab",
+     "039a8b1f-ffd0-4633-88a2-2fbd985f651c",
+     "05a5b95b-4384-42b3-8651-b8a443496321",
+     "07c13b25-95fa-458e-85c3-de0982dbf4d8",
+     "080ff9e1-68e0-4409-9027-c3e3c8bc889e",
+     "0d2e91db-ce60-461e-98f3-fd7050358dd1",
+     "13caeddb-0854-454f-bf13-1edf5a08527c",
+     "206433a2-8998-4ecc-8797-165c19bd9510",
+     "21697065-39c8-4642-a7db-f214ed2ee9f9"
+    ],
+    "decisions_changed": 70,
+    "decisions_changed_by_status": {
+     "approved": 70,
+     "held": 51
+    },
+    "errors": {},
+    "hold_capable_fires": {
+     "near_as_at": 41,
+     "planned_as_optional": 13,
+     "world_share_unsupported": 53
+    },
+    "holds": 0,
+    "pieces": 300,
+    "pieces_with_candidate": 121,
+    "replayed": 300,
+    "status": {
+     "ok": 300
+    },
+    "stored": {
+     "attempts": 0,
+     "candidates_by_mode": {},
+     "live_findings_on_published": 0,
+     "pieces_with_record": 0,
+     "status": {}
+    }
+   },
+   "zero_diff": false
+  },
+  "t10_adjudicate": {
+   "decisions_changed": 0,
+   "ledger": {
+    "calls": 0,
+    "cost_usd": 0.0,
+    "last_at": null,
+    "object_calls": 0,
+    "pieces": 0,
+    "shadow_calls": 0
+   },
+   "measurable_at_0_usd": false,
+   "measured_by": "stored tier-2 records (a live finding on a published piece); verdicts on the triggers need paid calls, so a zero here only says the layer never ran live",
+   "replay": {
+    "pieces_with_trigger": 256,
+    "stored": {
+     "attempts": 0,
+     "cost_usd": 0.0,
+     "findings": 0,
+     "live_count": 0,
+     "live_on_published": 0,
+     "live_sample": [],
+     "pieces_with_record": 0,
+     "status": {}
+    },
+    "trigger_errors": 0,
+    "triggers_by_class": {
+     "faq_non_answer": 405,
+     "naming_note_leak": 2211,
+     "paraphrased_repeat": 42,
+     "scopeless_superlative": 42
+    },
+    "would_send": 1146
+   },
+   "zero_diff": true
+  },
+  "t10_claims": {
+   "decisions_changed": 0,
+   "ledger": {
+    "calls": 0,
+    "cost_usd": 0.0,
+    "last_at": null,
+    "object_calls": 0,
+    "pieces": 0,
+    "shadow_calls": 0
+   },
+   "measured_by": "ledger: calls of stage t10_claims tied to a piece, request or tour",
+   "route": {
+    "has_disabled_reason": false,
+    "is_active": true,
+    "model_id": "gpt-6-luna",
+    "role": "validate"
+   },
+   "zero_diff": true
+  }
+ },
+ "piece_limit": 300,
+ "pieces": 300,
+ "recommendation": {
+  "claim_shadow": "keep: the W4 instrument this issue promotes",
+  "seed_align_tier1": "70 published pieces would have had a sentence repair: label them before a delete or a promote",
+  "t10_adjudicate": "keep off until TL-11 is lifted (D6); no removal",
+  "t10_claims": "remove: ship the prepared removal (route switched off, smoke case dropped)"
+ },
+ "routes": {
+  "t10_adjudicate": {
+   "has_disabled_reason": false,
+   "is_active": true,
+   "model_id": "gpt-6-luna",
+   "role": "judge"
+  },
+  "t10_claims": {
+   "has_disabled_reason": false,
+   "is_active": true,
+   "model_id": "gpt-6-luna",
+   "role": "validate"
+  }
+ },
+ "schema": "aa1050-claim-layer-replay/1",
+ "settings": {
+  "cis.quality_modes.t10_adjudicate": {
+   "source": "default",
+   "value": "off"
+  },
+  "cis.quality_modes.t10_adjudicate_faq_non_answer": {
+   "source": "default",
+   "value": "inherit"
+  },
+  "cis.quality_modes.t10_adjudicate_naming_note_leak": {
+   "source": "default",
+   "value": "inherit"
+  },
+  "cis.quality_modes.t10_adjudicate_paraphrased_repeat": {
+   "source": "default",
+   "value": "inherit"
+  },
+  "cis.quality_modes.t10_adjudicate_scopeless_superlative": {
+   "source": "default",
+   "value": "inherit"
+  },
+  "cis.quality_modes.t10_f12_scope": {
+   "source": "default",
+   "value": "warn"
+  },
+  "cis.quality_modes.t10_f14_floor": {
+   "source": "default",
+   "value": "repair"
+  },
+  "cis.quality_modes.t10_f9_brand_style": {
+   "source": "default",
+   "value": "warn"
+  },
+  "cis.quality_modes.t10_f9_policy": {
+   "source": "default",
+   "value": "interim"
+  },
+  "cis.quality_modes.t10_seed_align": {
+   "source": "default",
+   "value": "off"
+  },
+  "cis.quality_modes.t10_seed_align_brief_recipe_leak": {
+   "source": "default",
+   "value": "inherit"
+  },
+  "cis.quality_modes.t10_seed_align_difficulty_promise": {
+   "source": "default",
+   "value": "inherit"
+  },
+  "cis.quality_modes.t10_seed_align_naming_note_leak": {
+   "source": "default",
+   "value": "inherit"
+  },
+  "cis.quality_modes.t10_seed_align_near_as_at": {
+   "source": "default",
+   "value": "inherit"
+  },
+  "cis.quality_modes.t10_seed_align_optional_as_planned": {
+   "source": "default",
+   "value": "inherit"
+  },
+  "cis.quality_modes.t10_seed_align_orphan_opener": {
+   "source": "default",
+   "value": "inherit"
+  },
+  "cis.quality_modes.t10_seed_align_paraphrased_repeat": {
+   "source": "default",
+   "value": "inherit"
+  },
+  "cis.quality_modes.t10_seed_align_planned_as_optional": {
+   "source": "default",
+   "value": "inherit"
+  },
+  "cis.quality_modes.t10_seed_align_scopeless_superlative": {
+   "source": "default",
+   "value": "inherit"
+  },
+  "cis.quality_modes.t10_seed_align_world_share_unsupported": {
+   "source": "default",
+   "value": "inherit"
+  }
+ },
+ "window_days": 90
+}

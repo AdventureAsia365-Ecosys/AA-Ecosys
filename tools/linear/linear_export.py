@@ -220,12 +220,24 @@ def move_from_trash(key: str, issue_id: str) -> str:
     return "archived (restore + archive)" if st["archivedAt"] and not st["trashed"] else f"NOT moved: {st}"
 
 
+def _resolve_gitleaks() -> str | None:
+    """The root pre-push resolver (tools/github/gitleaks_resolve.py): skips a candidate whose `gitleaks version` fails
+    and also finds the mise install of the CI pin."""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "github"))
+    import gitleaks_resolve  # noqa: E402 (root tool, stdlib only)
+
+    return gitleaks_resolve.resolve([ROOT]).path
+
+
 def gitleaks_bin() -> str | None:
-    """GITLEAKS_BIN (a path) when set, else `gitleaks` on PATH, else None."""
+    """GITLEAKS_BIN (a path) when set, else the root pre-push resolver, else None.
+
+    S294: `shutil.which("gitleaks")` picked the mise shim, which answers "No version is set" when no global version is
+    set, so the gate failed with "reported leaks but wrote no findings"."""
     env = os.environ.get("GITLEAKS_BIN", "").strip()
     if env:
         return env if Path(env).is_file() and os.access(env, os.X_OK) else None
-    return shutil.which("gitleaks")
+    return _resolve_gitleaks()
 
 
 def scan_files(paths: list[Path], binary: str, config: Path = GITLEAKS_CONFIG) -> list[dict]:

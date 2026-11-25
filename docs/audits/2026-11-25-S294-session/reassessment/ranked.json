@@ -1,0 +1,270 @@
+{
+ "pull_now": [
+  {
+   "lane_key": "infra-booking-bank-kms-alarms",
+   "refs": [
+    "AA-1158"
+   ],
+   "goal": "Infra only (infra/AA-CIS-Infra), branch from origin/main. Add EventBridge alarms for the Booking supplier bank KMS key, using the same pattern as CRM. Copy aws_cloudwatch_event_rule crm_kms_key_admin and crm_kms_foreign_use, with their page targets, from modules/environment/crm_data.tf lines 398-470 into modules/environment/booking_supplier_bank.tf. On origin/main that file has no event rules; I checked. Name the new rules aa-booking-*. In accounts/aa365/alert_severity.tf (line ~112), widen the page-topic policy so it also admits rule/aa-booking-*; today it admits only aa-identity-*, aa-crm-* and aa-sec-*. Add the two rows to the alerts catalogue built in AA-1171, and update apps/AA-Booking/docs/implementation-notes/AA-1158.md in a separate Booking docs-only PR: drop the 'No alarm on the KMS key yet' follow-up. Do not touch any other .tf file. Tests: terraform fmt/validate, plus the Infra CI plan, which must show only the new rules, targets and policy diff. Cost about 0 USD (default-bus AWS service events, existing SNS topics). Commit 'feat: KMS admin and foreign-use alarms on the Booking supplier bank key' + 'Refs AA-1158'. Infra is not a demo surface: ship tonight, then dispatch terraform-apply and check that the rules exist (single-line aws events list-rules on aa365-admin).",
+   "repos": [
+    "AA-CIS-Infra",
+    "AA-Booking (notes only)"
+   ],
+   "size": "S",
+   "heavy": false,
+   "ship_window": "tonight, any time (non-demo Infra)",
+   "why_now": "Fully ready, $0. It closes a documented security follow-up on bank data. No people gate."
+  },
+  {
+   "lane_key": "crm-calendar-sync-part3",
+   "refs": [
+    "AA-1011"
+   ],
+   "goal": "apps/AA-Partner only, plus one small root PR. Build Part 3 of AA-1011, one-way calendar push, with Google live and Microsoft coded but returning 503 mail_oauth_not_configured until the Entra values exist. (a) Migration api/migrations/089_crm_calendar_connection.sql (088 is the latest; I checked): table crm.calendar_connection on the base template, scoped per member and agency, provider google|microsoft, token held in the agency vault like the mailbox credentials, status active|revoked, plus a guard with the next CRM SQLSTATE (CRM43). (b) api/app/calendar/oauth_sync.py, reusing OAuthMailProvider/OAuthEndpoints from api/app/mail/providers/oauth_mail.py: Google calendar.events and Graph Calendars.ReadWrite, refresh-token rotation, revoke on disconnect. (c) A crm.job kind that pushes departures and tasks (create/update/delete) from the same source as api/app/calendar/events.py. (d) Web: a Calendar card in web/app/(studio)/portal/account/integrations/page.tsx plus BFF allow-list lines in web/lib/bff.ts. Reuse /connect/mail/callback with a sealed-state 'purpose' so Google needs no new redirect URI. (e) Tests: unit tests with fake transports; integration tests for vault storage, no tokens in logs, and token removal on disconnect. (f) docs/implementation-notes/AA-1011.md, written while you work. Root PR: schema-ownership and DM-7 rows for the new table. Do not touch .github/workflows/ci.yml or .github/npm-audit-allow.json; another lane owns them. This counts as risky (migration plus OAuth tokens), so get an independent agent review before merge. The migration ships through the copy/apply chain (ship_copy_apply). 'Refs AA-1011'.",
+   "repos": [
+    "AA-Partner",
+    "AA-Ecosys",
+    "AA-CIS-Infra (migration copy)"
+   ],
+   "size": "L",
+   "heavy": true,
+   "ship_window": "any time (CRM is non-demo); merge after the review and the DB Migrate apply, when crm.job is idle",
+   "why_now": "This is the largest piece of real feature code that is buildable without people. The Entra app and a live Google sign-in are needed only for the final proof."
+  },
+  {
+   "lane_key": "root-golive-gate",
+   "refs": [
+    "AA-1117"
+   ],
+   "goal": "Root repo only. (1) Write docs/ops/go-live/checklist.yaml with ~16 lines: ADR 0012 decision 11 gate items 1-8; price and photo coverage per pilot market; the Booking per-partner restore drill; a bounded load test of CIS + TripPlanner with no LLM; the edge rate-limit decision (CloudFront WAF ~5-6 USD/mo); a prod capacity baseline; the enforce_admins plan; 'no real PII before the DPA is signed'; AI caps at prod (S283 comment); and a go-live date line (value unset, owner: business owner). Each line has either a proof (path or URL) or an owner role plus an ISO due date. Link the existing proofs: docs/audits/2026-11-13-S279-cis-restore-drill/restore-drill.json, docs/audits/2026-11-15-S281-session/verify/aa1093/tp-restore-drill/restore-drill.json, docs/security/baseline.md line 50. Render the list into the OPS-17 scorecard section of docs/audits/2026-10-30-S260-go-live-readiness/README.md. (2) tools/ops/golive_gate.py (stdlib) with tests in tools/ops/test_golive_gate.py. It fails on a dead proof path, an unknown owner role, or a past due date with no proof; the date line may stay 'unset' only if it has an owner. (3) A new workflow .github/workflows/golive-gate.yml. Do not edit docs-lint.yml or workflow-lint.yml. Docs in English, with roles and no names. 'Refs AA-1117'. Ship through python3 tools/github/ship_merge.py root#<n>.",
+   "repos": [
+    "AA-Ecosys"
+   ],
+   "size": "M",
+   "heavy": false,
+   "ship_window": "tonight, any time (root tooling)",
+   "why_now": "The checklist and the CI guard are not blocked. Only the close waits for the go-live date and the WAF cost yes. It also gives Thursday's meeting a concrete go-live list."
+  },
+  {
+   "lane_key": "root-ship-tooling-guards",
+   "refs": [
+    "AA-1024"
+   ],
+   "goal": "Root repo, tools/github only. Edit only ship_open_prs.py, ship_wave.py, guard_runs.py and their test_*.py files. Do NOT edit ship_common.py; the CodeQL lane owns it. (1) ship_open_prs.py (~line 326): before opening, also check `--state merged` for the same head branch and skip that branch (lessons lines 126/393: root #1000, CIS #1683 duplicates). Also refuse a PR whose body names an AA-n id outside the Refs line (line 397: #1689/#1691). (2) ship_wave.py: add a per-PR lock file that refuses a concurrent run on the same PR (line 127, Partner #357). Add '@after=root#N' so that an app PR whose 'Vendored CIS copies' check reads root master waits for the root merge (line 146, Partner #325/root #832). (3) guard_runs.py: a later green workflow_dispatch or push run of the same workflow on the default branch supersedes an older red scheduled run, and the report marks it 'superseded'. Today Catalogue is still reported red although the 25/11 11:43Z dispatch is green. Tests for each in test_ship_open_prs.py, test_ship_wave.py and test_guard_runs.py. Then mark the matching lessons as guarded, through the orchestrator at session close; do not edit lessons.md in the lane. 'Refs AA-1024'.",
+   "repos": [
+    "AA-Ecosys"
+   ],
+   "size": "M",
+   "heavy": false,
+   "ship_window": "tonight, any time (root tooling)",
+   "why_now": "Turns three repeated lessons into guards (a CI failure is a guard; a lesson line is not) and stops tonight's own wave from making duplicate PRs or false red reports."
+  },
+  {
+   "lane_key": "codeql-sweep-root-infra-partner",
+   "refs": [
+    "AA-1111"
+   ],
+   "goal": "Clear the open CodeQL alerts in root (26, including 1 critical), Infra (11) and Partner (6). Root uses CodeQL DEFAULT setup (confirmed: default-setup state 'configured'), so a paths-ignore config file does not apply. For the 17 alerts in archived docs/audits/** harness scripts (including the critical js/request-forgery at docs/audits/2026-10-28-S256-aa995-lcp/harness/edge.cjs:21), add rows to docs/security/vuln-exceptions.toml; the orchestrator then dismisses them by alert number. Fix the live code: tools/github/ship_common.py:395 (clear-text logging), tools/docs/build_docs_reader.py:252 (ReDoS), docs/backlog/tracker/index.html:448 (DOM XSS), tools/uat/tp-lead-proof.cjs:226 and the prt-0x.cjs sanitizers. Infra: clear-text logging in tools/identity/*.py (x4), db/run_migration.py:485, db/scripts/aa1002_dev_anthropic_road.py:78 and tools/docs/gen_env_config.py:595; the insecure protocol in tools/terraform/crm_edge_live_check.py:103. Partner: accept api/app/messaging/signature.py HMAC-SHA1 (the provider's protocol requires it) and secret-scan.yml pull_request_target (checkout as data only) as exception rows; fix or accept the test-file regex alerts. Do not touch Partner .github/workflows/ci.yml or npm-audit-allow.json, or root workflow-lint/zap/compliance workflows; other lanes own them. Do not change the behaviour of db/run_migration.py beyond the log line, and run its tests. One PR per repo. 'Refs AA-1111'.",
+   "repos": [
+    "AA-Ecosys",
+    "AA-CIS-Infra",
+    "AA-Partner"
+   ],
+   "size": "M",
+   "heavy": false,
+   "ship_window": "tonight, any time (root, Infra tools, CRM are non-demo)",
+   "why_now": "One critical and 39 high alerts are open on public repos. All of them are in non-demo code that can ship tonight, and they feed the ASVS/ISMS evidence for Thursday."
+  },
+  {
+   "lane_key": "sec-hygiene-audit-zap-lint-docsreader",
+   "refs": [
+    "AA-1111",
+    "AA-1173"
+   ],
+   "goal": "Small security and compliance hygiene in four parts, each with its own commit. (1) Partner: remove the picomatch GHSA-fc5q-39xc-vjpf entry from apps/AA-Partner/.github/npm-audit-allow.json. I re-ran npm audit in apps/AA-Partner/web tonight: 0 vulnerabilities at every level. Rewrite apps/AA-Partner/.github/workflows/ci.yml:745 (`curl -sI ... | grep -qi` under pipefail) so it writes the headers to a file and then greps that file. (2) Root lint rule: in tools/github/ci_hygiene.py (used by .github/workflows/workflow-lint.yml), flag 'curl ... | grep -q' in .github/workflows/*.yml, with tests in tools/github/test_ci_hygiene.py (lesson line 311). (3) Root .github/workflows/zap-baseline.yml: add a monthly `schedule:` cron, as the AA-1166 self-assessment plan asks. The orchestrator then dispatches a fresh run (the last was 44030478936 on 17/11) and triages it with tools/security/zap_summary.py against docs/audits/2026-11-17-S283-access-review/zap-baseline.md. (4) AA-1173: in root .github/workflows/compliance-evidence.yml, remove the phase-1 docs-reader upload steps (PREFIX docs-reader/compliance) and update the header comment (lines 13-25). The sealed path was proven live on 24/11 (runs 45364700766/45364721985). No Infra grant names docs-reader/compliance; if the grant is the generic docs-reader/ prefix, leave Infra alone. Leave the CIS reader fallback in api/services/compliance_store.py for after Thursday. Notes: root docs/implementation-notes/AA-1173.md and AA-1111-l14-zap.md. Refs lines: 'Refs AA-1111' for parts 1-3, 'Refs AA-1173' for part 4.",
+   "repos": [
+    "AA-Partner",
+    "AA-Ecosys"
+   ],
+   "size": "S",
+   "heavy": false,
+   "ship_window": "tonight, any time (CRM CI + root workflows; no CIS/Booking deploy)",
+   "why_now": "Four ready, $0 slices with no people gate. Part 4 removes a duplicate evidence path before the tech lead's posture review."
+  },
+  {
+   "lane_key": "template-patch-and-cost-history",
+   "refs": [
+    "AA-1103",
+    "AA-1004"
+   ],
+   "goal": "Two independent small items. (A) Repo AdventureAsia365-Ecosys/project-template (public): release a v1.3.1 patch that bumps the pinned next from 16.4.2 to 16.4.6 in template/{% if has_web %}web{% endif %}/package.json.jinja (a published advisory; AA-1103 notes lines 288/549). Re-render the matrix, run copier update from v1.3.0, and update the CHANGELOG. Record the result in root docs/implementation-notes/AA-1103.md. 'Refs AA-1103'. (B) AA-1004 dated step (25-28/11): export 13 months of acc2 Cost Explorer data (2025-11 to 2026-11) as monthly x SERVICE and monthly x TAG App/Component. Use about 4 single-line `aws ce get-cost-and-usage ... --profile aa365-admin --region us-east-1` calls (~0.04 USD CE API; no multi-line CLI). Run sts get-caller-identity first. If MFA has expired, stop and report once. Remove every account ID (the root repo is public), and save CSVs plus a short README in docs/audits/2026-11-25-S294-aa1004-acc2-cost-history/ in a root PR. 'Refs AA-1004'. Do not touch plan.json or the backlog; the orchestrator owns them.",
+   "repos": [
+    "project-template",
+    "AA-Ecosys"
+   ],
+   "size": "S",
+   "heavy": false,
+   "ship_window": "tonight, any time (non-demo)",
+   "why_now": "(B) is a dated step due 25-28/11, before the Billing Transfer. (A) fixes a published advisory in the kit that new projects copy. Both cost $0 and finish tonight."
+  },
+  {
+   "lane_key": "cis-booking-frontend-deps-draft",
+   "refs": [
+    "AA-1111"
+   ],
+   "goal": "Prepare drafts only; merge after the Thursday 26/11 meeting (~12:00) because these redeploy demo admin surfaces. (1) apps/AA-CIS-App/frontend: on our own branch from origin/main, bump next 16.4.2 to 16.4.6 (Booking and Partner already run it), zod to >=4.6.6 (GHSA-mrhx-c7xc-m3w5, high), glob >=14.0.2 and minimatch >=11.0.1 in package.json and package-lock.json. Fix the @sentry/nextjs resolution that breaks Dependabot #1586 ('withSentryConfig is not a function' in next.config.ts, TS2305 in Frontend Lint). Run `npx eslint --prune-suppressions` (eslint-suppressions.json). Get every CI check green, then close #1586 by pointing to the new PR. (2) apps/AA-Booking/frontend: bump zod past the same high, lockfile only. (3) Port the Partner npm audit CI gate (.github/workflows/ci.yml step + .github/scripts/npm_audit_gate.py + npm-audit-allow.json) to CIS and Booking. Run next build and the UI smoke locally (aa-ui-verify) before marking the PRs ready. Do not touch proxy.ts or any auth code (frozen). 'Refs AA-1111'.",
+   "repos": [
+    "AA-CIS-App",
+    "AA-Booking"
+   ],
+   "size": "M",
+   "heavy": true,
+   "ship_window": "build and get CI green tonight; merge after Thu 26/11 ~12:00 (CIS/Booking admin deploys)",
+   "why_now": "Closes 9+ Dependabot alerts and one high zod finding on both demo apps. Doing the slow build and CI work tonight means it ships right after the meeting."
+  }
+ ],
+ "close_now": [
+  {
+   "id": "AA-1174",
+   "evidence": "Every Done-when line is met (line 3 as the tech lead redefined it in D1 on 23/11): 29 applicability rows with primary sources; the VN 91/2025 + Decree 356 (15), GDPR (15) and applies checklists live; real evidence rows shown, last_erasure_drill passes, legal_* rows fail honestly as drafts; thresholds and validity windows are settings; the page says 'readiness, not legal advice'. Evidence: docs/audits/2026-11-23-S288-session/live/aa-1174/evidence.md; ships CIS 471, CIS #1641/#1642/#1646/#1647, Partner #379, root #946. Closing step ($0): the orchestrator signs in as the owner E2E user, presses Refresh evidence on Platform > Compliance readiness before the 72 h validity runs out (~26/11 22:00; rows written 23/11 22:01), screenshots the Obligations tab, and closes with Done-with-scope."
+  }
+ ],
+ "needs_tech_lead": [
+  {
+   "id": "AA-790",
+   "ask": "Re-decide TL-11 (S278 D4). Its lift condition 'AA-1050 enforces >= 1 measured class' cannot be met on Dev (AA-1048 v7 is no_go at precision 0.73, and the shadow waits for real agency pieces). The same deadlock blocks AA-1000 and AA-920 release 1.",
+   "proposed": "Lift TL-11 when AA-1077 is Done (it is) and AA-1169 passes its human read; drop the AA-1050-enforce condition. The agent then does the $0 brand-label addendum plus the kappa run first (>= 40 pairs per writer, kappa >= 0.6), and the paid 20-piece pilot comes later with its own USD cap."
+  },
+  {
+   "id": "AA-1169",
+   "ask": "Read the 12 samples on Writing Lab > Eval runs (/admin/lab/eval-runs, filter w5-t9-r2) and confirm 0 contract violations and 0 unsupported trip promises. The machine metrics already pass: yield 0.417, cost 1.42 USD.",
+   "proposed": "About 15 minutes after Thursday. The agent first replays the T9 contract offline over the arm-B outputs ($0, through ecsx), so your read covers only unsupported trip promises. If clean, AA-1169 closes, and that unblocks AA-782 and the TL-11 lift."
+  },
+  {
+   "id": "AA-1172",
+   "ask": "Set cis.llm.fact_instruction_guard on or off (Platform > Settings, maker-checker). This is a settings click, not a deploy.",
+   "proposed": "On. With the guard on, the trap runs pass 13/14 and every fact trap passes; the one miss (t2_persona) is outside the guard's scope. Either answer closes the issue: on = fix active; off = Done-with-scope."
+  },
+  {
+   "id": "AA-1050",
+   "ask": "Decide delete-or-promote for the dormant layers (t10_claims shadow, seed-align tier 1, the AA-1000 adjudicator), and fix the status mismatch (Linear Backlog vs backlog README:191 In Review).",
+   "proposed": "The agent writes the $0 carry-over inventory with a replay that shows 0 diffs. Default: delete layers that show 0 diffs and cannot pass W2. Keep the AA-1000 adjudicator off until TL-11 is lifted; if you choose delete, cancel AA-1000. Set the status to Backlog in both places."
+  },
+  {
+   "id": "AA-948",
+   "ask": "Confirm the shared map engine (a framework-free package extracted from TripPlanner MapView) instead of a T13 fork, and give the cost yes for Mapbox map loads in CRM.",
+   "proposed": "Yes to both. Expected about 0 USD on Dev (free tier, synthetic agencies only), with a Mapbox token restricted to the partner host. The agent then builds it in TripPlanner and Partner (non-demo, size M), with a CI import guard."
+  },
+  {
+   "id": "AA-1166",
+   "ask": "Paid AI red-team run over the S1/T2/T9 writers, CRM drafts and TripPlanner chat (through LLMClient, stage adhoc_aa1166_redteam_*).",
+   "proposed": "Yes, capped at 0.50 USD (S292 proposal). Meanwhile the agent runs ASVS 5.0 L1 on Partner and TripPlanner at $0, with evidence going only to private S3 isms/evidence/asvs/2026-Q4/."
+  },
+  {
+   "id": "AA-782",
+   "ask": "Paid Haiku 5.5 vs Sonnet T9 writer A/B (8 pairs, judge gpt-6-luna-openai).",
+   "proposed": "Yes, capped at 1.50 USD (estimate ~1.20), run after AA-1169 closes. The $0 candidate-writer arm in services/writer_proof/runner.py is prepared as a draft and ships after Thursday."
+  },
+  {
+   "id": "AA-1110",
+   "ask": "Name the role inbox for the second alert channel. It is already built: Infra #892 alert_email_secondary, off by default.",
+   "proposed": "A role inbox on adventure.asia, not a personal address. After the recipient confirms the AWS subscription e-mail, the agent sets ALERT_EMAIL_SECONDARY, applies, and fires a test alarm."
+  },
+  {
+   "id": "AA-1157",
+   "ask": "Your own owner view-as run (H0-H6 in docs/audits/2026-11-23-S288-session/live/aa-1157/evidence.md), about 5 minutes.",
+   "proposed": "Do it after Thursday, at the same sitting as AA-1155 Make business owner. The agent then reads your audit start/end rows and closes the issue. The stale plan.json 'next' for this issue gets fixed at session close."
+  },
+  {
+   "id": "AA-1148",
+   "ask": "Create a follow-up issue for the scope items outside Done-when: Excel fact-draft publish refusing manual tours, TripPlanner /preview/tours/[token], catalog place picker, facts draft for live manual tours, impact box, images, Booking supplier prefill.",
+   "proposed": "Yes, one issue in the same project. Slice (a), the fact-draft refusal (CIS, S), goes first after Thursday. The agent also seeds a fresh SYNTHETIC 3-day manual tour (SUP-000018/19) before the meeting so the second person can publish it."
+  }
+ ],
+ "blocked": [
+  {
+   "id": "AA-1155",
+   "by": "Business owner and info@ each sign in once, then the tech lead clicks Make business owner (Thursday 26/11)"
+  },
+  {
+   "id": "AA-1158",
+   "by": "Business owner signs in and approves the SYNTHETIC SUP-000019 bank account; the agent then runs 70_payout.cjs expecting 409 bank_payout_locked (Thursday)"
+  },
+  {
+   "id": "AA-1148",
+   "by": "A second real person publishes through the gate after the tech lead turns cis.content.publish_two_person on (Thursday)"
+  },
+  {
+   "id": "AA-1111",
+   "by": "Business owner enrols TOTP; the CIS/Booking admin_mfa_required switches and Infra #935 follow, after Thursday (auth freeze)"
+  },
+  {
+   "id": "AA-1173",
+   "by": "A second real person for exception maker-checker, the first monthly posture review (tech lead), and the org-owner install of the aa-compliance-reader GitHub App"
+  },
+  {
+   "id": "AA-1061",
+   "by": "Date gate: apply on or after 2026-11-28 23:50Z, plus the demo freeze. Booking #200 rebase onto the bk-076 draft is the next prep lane"
+  },
+  {
+   "id": "AA-1154",
+   "by": "A person with the card's capability marks one card 'I ran this'; the E2E admin is read-only"
+  },
+  {
+   "id": "AA-1103",
+   "by": "Tech lead reads L8-new-project-playbook (status draft) before it is pinned and published"
+  },
+  {
+   "id": "AA-1000",
+   "by": "TL-11 re-decision and the AA-1050 delete-or-promote decision; the paid calibration needs a USD-capped yes"
+  },
+  {
+   "id": "AA-920",
+   "by": "TL-11 lift and an R1 pass record (r1_gate). The $0 settings-registry slice is prep for after Thursday (CIS migration)"
+  },
+  {
+   "id": "AA-921",
+   "by": "AA-920 release 1, then paid WM-27..29 runs"
+  },
+  {
+   "id": "AA-1004",
+   "by": "Business owner signs the TrueIDC Billing Transfer appendix; the tech lead accepts the org invite on 01/12"
+  },
+  {
+   "id": "AA-873",
+   "by": "November bill (>= 01/12), and the GuardDuty paid yes (trigger: prod or first paying tenant)"
+  },
+  {
+   "id": "AA-1136",
+   "by": "One warn week of data; measure M7 from >= 02/12"
+  },
+  {
+   "id": "AA-1122",
+   "by": "First nightly automatic run on 01/12 UTC; check from 02/12 (drop the stale plan.json waiting/2 row at close)"
+  },
+  {
+   "id": "AA-1054",
+   "by": "Go-live, or the tech lead declaring all project code done (and the auth freeze)"
+  },
+  {
+   "id": "AA-980",
+   "by": "Business owner go-live date and first real agency (TL-15); prod-only lines"
+  },
+  {
+   "id": "AA-881",
+   "by": "Date trigger 05/2027"
+  },
+  {
+   "id": "AA-704",
+   "by": "R8 trigger (pilot agency request or support load) under TL-15"
+  },
+  {
+   "id": "AA-842",
+   "by": "Tech lead hold since S257; reopens only on a concrete debugging need"
+  },
+  {
+   "id": "AA-855",
+   "by": "Trigger: business owner sign-off video request or real pilot onboarding"
+  }
+ ]
+}
