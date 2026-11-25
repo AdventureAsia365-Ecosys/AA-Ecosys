@@ -1,15 +1,15 @@
 # AA Academy module L8 (Tech lead path, GUIDE-13 research §3.4 and §3.10). Format: docs/learn/README.md. Checked by
 # tools/docs/check_learn.py. Teaches the new-project playbook (GUIDE-14, docs/playbook/) by reference: every lesson
-# points at the phase pages' sections and never copies them. Draft until the tech lead approves it (maker-checker);
-# learners with the preview capability see it marked draft. The sha pins are written by
+# points at the phase pages' sections and never copies them. The tech lead approved it on 2026-11-25 (maker-checker),
+# so it is active: every staff learner sees it and it counts toward the Tech lead path. The sha pins are written by
 # `python tools/docs/check_learn.py --pin` after the owner has read the cited sections.
 id: L8
 title: New-project playbook
 tier: staff
-status: draft
-version: 0.1.0
+status: active
+version: 1.0.0
 owner: nghiep
-last_reviewed: 2026-11-17
+last_reviewed: 2026-11-25
 review_every_days: 90
 languages: [en]
 objectives:
