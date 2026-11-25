@@ -129,8 +129,12 @@ class WaveTest(unittest.TestCase):
         self._tmp = tempfile.TemporaryDirectory(prefix="ship-wave-")
         self._clone = mock.patch.object(ship_wave, "local_checkout", lambda repo: Path(self._tmp.name) / "no-clone")
         self._clone.start()
+        # S285 per-PR lock files: in the test's own temp dir, never the workspace .tmp-session
+        self._locks = mock.patch.object(ship_wave, "LOCK_DIR", Path(self._tmp.name) / "ship-locks")
+        self._locks.start()
 
     def tearDown(self):
+        self._locks.stop()
         self._clone.stop()
         self._tmp.cleanup()
         self._redirect.__exit__(None, None, None)
@@ -471,6 +475,121 @@ class WaveTest(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(r.calls, [])
 
+    # -- S285: one run per PR at a time ------------------------------------------------------------------------------
+
+    def test_a_second_run_on_the_same_pr_is_refused_while_the_first_holds_it(self):
+        held = ship_wave.acquire_pr_locks(ship_wave.parse_items(["cis#1350"]), ["cis#1350", "--wait-deploy"])
+        try:
+            rec = Recorder()
+            r = scripted([1350, 1351], rec)
+            code = ship_wave.main(["cis#1350", "cis#1351"], runner=r, apply_fn=lambda o, n: 0, fetch=lambda url: {})
+            out = self.out.getvalue()
+            self.assertEqual(code, 4, out)
+            self.assertIn(f"another ship_wave run holds AA-CIS-App#1350 (pid {os.getpid()}, since ", out)
+            self.assertIn("cis#1350 --wait-deploy", out)
+            self.assertEqual(rec.events, [])  # nothing gated or merged, not even the free PR
+            # the refused run released what it took: #1351 can be locked by another run now
+            ship_wave.release_pr_locks(ship_wave.acquire_pr_locks(ship_wave.parse_items(["cis#1351"]), []))
+            # --check-only and --dry-run take no lock (they merge nothing)
+            self.assertEqual(ship_wave.main(["cis#1350", "--check-only"], runner=r, apply_fn=lambda o, n: 0,
+                                            fetch=lambda url: {}), 0, self.out.getvalue())
+            self.assertEqual(ship_wave.main(["cis#1350", "--dry-run"], runner=r), 0)
+        finally:
+            ship_wave.release_pr_locks(held)
+        # once the first run ends, the same wave runs; its own locks are released at the end
+        rec = Recorder()
+        code = ship_wave.main(["cis#1350"], runner=scripted([1350], rec), apply_fn=lambda o, n: 0,
+                              fetch=lambda url: {})
+        self.assertEqual(code, 0, self.out.getvalue())
+        self.assertIn("merged 1350", rec.events)
+        ship_wave.release_pr_locks(ship_wave.acquire_pr_locks(ship_wave.parse_items(["cis#1350"]), []))
+
+    # -- S282: '@after=<Repo>#<pr>' ----------------------------------------------------------------------------------
+
+    def test_after_pr_parses_mixes_with_migrations_and_is_planned(self):
+        items = ship_wave.parse_items(["root#832", "crm#325@after=root#832", "cis#1351@after=cis/384,root#832",
+                                       "cis#1349>apply:cis/384"])
+        self.assertEqual(items[1].after_prs, [("AA-Ecosys", 832)])
+        self.assertEqual((items[2].after, items[2].after_prs), ([("cis", "384")], [("AA-Ecosys", 832)]))
+        lines = ship_wave.plan_lines(items)
+        self.assertEqual(lines[0], "at once (2, in parallel): AA-Ecosys#832, AA-CIS-App#1349")
+        self.assertIn("hold AA-Partner#325 until merged: AA-Ecosys#832 (then re-run its failed checks once and gate "
+                      "it)", lines)
+
+    def test_after_pr_refusals_self_and_circles(self):
+        for bad in (["crm#325@after=crm#325"], ["crm#325@after=root#832", "root#832@after=crm#325"],
+                    ["cis#1349>apply:cis/383@after=root#832", "root#832@after=cis/383"],
+                    ["cis#1@after=cis#2", "cis#2@after=cis#3", "cis#3@after=cis#1"]):
+            with self.assertRaises(ShipError, msg=bad) as cm:
+                ship_wave.parse_items(bad)
+            self.assertEqual(cm.exception.code, 2)
+        with self.assertRaises(ShipError) as cm:
+            ship_wave.parse_items(["crm#325@after=root#832", "root#832@after=crm#325"])
+        self.assertIn("waits in a circle: AA-Partner#325 -> AA-Ecosys#832 -> AA-Partner#325", str(cm.exception))
+
+    def test_app_pr_waits_for_the_root_merge_then_reruns_its_red_checks_before_its_gate(self):
+        # S282 (Partner #325, root #832): run in parallel, the app check read root master before the root merge
+        rec = Recorder()
+        r = scripted([832, 325, 1350], rec, wait_for={1350: 832},
+                     repo_of={832: "AA-Ecosys", 325: "AA-Partner"})
+        reruns = []
+
+        def rerun(runner, repo, n):
+            rec.add(f"rerun {n}")
+            reruns.append((repo, n))
+            return 1
+
+        code = ship_wave.main(["root#832", "crm#325@after=root#832", "cis#1350"], runner=r, apply_fn=lambda o, n: 0,
+                              fetch=lambda url: {}, rerun=rerun)
+        self.assertEqual(code, 0, self.out.getvalue())
+        ev = rec.events
+        self.assertLess(ev.index("merged 832"), ev.index("rerun 325"))
+        self.assertLess(ev.index("rerun 325"), ev.index("merge-start 325"))
+        self.assertNotIn("merge-timeout 1350", ev)  # the independent PR still ran beside the root PR
+        self.assertEqual(reruns, [("AA-Partner", 325)])
+        self.assertIn("AA-Partner#325: AA-Ecosys#832 merged", self.out.getvalue())
+
+    def test_app_pr_is_skipped_when_the_root_pr_fails(self):
+        rec = Recorder()
+        r = scripted([832, 325], rec, dirty=(832,), repo_of={832: "AA-Ecosys", 325: "AA-Partner"})
+        code = ship_wave.main(["root#832", "crm#325@after=root#832"], runner=r, apply_fn=lambda o, n: 0,
+                              fetch=lambda url: {}, rerun=lambda *a: self.fail("no rerun after a failed dependency"))
+        self.assertEqual(code, 4)
+        self.assertNotIn("merge-start 325", rec.events)
+        self.assertIn("AA-Partner#325: exit 4 - skipped: AA-Ecosys#832 not merged", self.out.getvalue())
+
+    def test_after_pr_outside_the_wave_must_already_be_merged(self):
+        rec = Recorder()
+        r = scripted([325], rec, repo_of={325: "AA-Partner"})
+        r.rules.insert(0, (("gh", "pr", "view", "832"), [js(pr(832, state="OPEN", base="master"))]))
+        code = ship_wave.main(["crm#325@after=root#832"], runner=r, apply_fn=lambda o, n: 0, fetch=lambda url: {},
+                              rerun=lambda *a: 0)
+        self.assertEqual(code, 2)
+        self.assertIn("waits for AA-Ecosys#832, which is open and not in this wave: add 'AA-Ecosys#832'",
+                      self.out.getvalue())
+        self.assertEqual(rec.events, [])
+        r.rules[0] = (("gh", "pr", "view", "832"), [js(pr(832, state="MERGED", merge_oid="b" * 40))])
+        code = ship_wave.main(["crm#325@after=root#832"], runner=r, apply_fn=lambda o, n: 0, fetch=lambda url: {},
+                              rerun=lambda *a: 0)
+        self.assertEqual(code, 0, self.out.getvalue())
+        self.assertIn("merged 325", rec.events)
+
+    def test_check_only_gates_an_after_pr_hold_at_once_without_rerun(self):
+        r = scripted([832, 325], Recorder(), repo_of={832: "AA-Ecosys", 325: "AA-Partner"})
+        code = ship_wave.main(["root#832", "crm#325@after=root#832", "--check-only"], runner=r,
+                              apply_fn=lambda o, n: 0, fetch=lambda url: {},
+                              rerun=lambda *a: self.fail("--check-only re-runs nothing"))
+        self.assertEqual(code, 0, self.out.getvalue())
+
+    def test_help_documents_after_pr_and_the_lock(self):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf), self.assertRaises(SystemExit):
+            ship_wave.main(["--help"])
+        text = buf.getvalue()
+        self.assertIn("<Repo>#<pr>@after=<Repo>#<pr>[,...]", text)
+        self.assertIn("'crm#325@after=root#832'", text)
+        self.assertIn("One run per PR at a time", text)
+
     def test_merge_marks_the_gate_for_as_app(self):
         import os
         os.environ.pop(ship_common.GATE_ENV, None)
@@ -478,6 +597,55 @@ class WaveTest(unittest.TestCase):
         ship_wave.main(["cis#1350"], runner=r, apply_fn=lambda o, n: 0, fetch=lambda url: {})
         self.assertEqual(os.environ.get(ship_common.GATE_ENV), "ship_merge")
         os.environ.pop(ship_common.GATE_ENV, None)
+
+
+class RerunFailedChecksTest(unittest.TestCase):
+    """S282: after the PR it waited for merged, the latest red run per workflow on the head is re-run once."""
+
+    def runs(self):
+        def row(rid, name, conclusion, created, event="pull_request"):
+            return {"databaseId": rid, "name": name, "workflowName": name, "event": event, "status": "completed",
+                    "conclusion": conclusion, "createdAt": created}
+        return [row(11, "CI", "failure", "2026-11-25T10:00:00Z"),           # Vendored CIS copies red: re-run
+                row(12, "Lint", "failure", "2026-11-25T09:00:00Z"),         # superseded by the green run below
+                row(13, "Lint", "success", "2026-11-25T09:30:00Z"),
+                row(14, "Secret scan", "success", "2026-11-25T10:00:00Z")]
+
+    def runner(self, rerun: Result) -> FakeRunner:
+        r = FakeRunner()
+        r.on(("gh", "pr", "view", "325"), js(pr(325, head="b" * 40)))
+        r.on(("gh", "run", "list", "--commit"), js(self.runs()))
+        r.on((ship_common.AS_APP,), rerun)
+        return r
+
+    def test_only_the_latest_red_run_is_rerun_through_the_app(self):
+        r = self.runner(Result(0, ""))
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(ship_wave.rerun_failed_checks(r, "AA-Partner", 325), 1)
+        [call] = r.called(ship_common.AS_APP)
+        self.assertEqual(call[call.index("--") + 1:], ["gh", "run", "rerun", "11", "--failed", "-R",
+                                                         f"{ship_common.ORG}/AA-Partner"])
+        self.assertEqual(r.slept, ship_wave.RERUN_SETTLE)
+        self.assertIn("re-running the failed jobs of CI (run 11) on head bbbbbbbb", out.getvalue())
+
+    def test_a_refused_rerun_is_a_warning_with_the_hand_command(self):
+        r = self.runner(Result(1, "", "HTTP 403: Resource not accessible by integration"))
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            self.assertEqual(ship_wave.rerun_failed_checks(r, "AA-Partner", 325), 0)
+        self.assertIn("WARN AA-Partner#325: cannot re-run CI (run 11): HTTP 403", out.getvalue())
+        self.assertIn("gh run rerun 11 --failed", out.getvalue())
+        self.assertEqual(r.slept, 0)
+
+    def test_green_head_or_closed_pr_reruns_nothing(self):
+        r = FakeRunner()
+        r.on(("gh", "pr", "view", "325"), js(pr(325, head="b" * 40)))
+        r.on(("gh", "run", "list", "--commit"), js(self.runs()[2:]))
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(ship_wave.rerun_failed_checks(r, "AA-Partner", 325), 0)
+        self.assertEqual(r.called(ship_common.AS_APP), [])
+        merged = FakeRunner()
+        merged.on(("gh", "pr", "view", "325"), js(pr(325, state="MERGED", merge_oid="e" * 40)))
+        self.assertEqual(ship_wave.rerun_failed_checks(merged, "AA-Partner", 325), 0)
 
 
 MIG = "api/migrations/400_add_widget.sql"
