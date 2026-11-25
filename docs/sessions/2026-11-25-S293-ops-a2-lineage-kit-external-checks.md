@@ -59,12 +59,11 @@ Thư mục `docs/audits/2026-11-25-S293-session/` (`evidence/`, `live/`).
 
 ## Jira
 
-Chưa đăng. Tech lead nói "duyệt hết" nhưng auto mode chặn vì nháp chưa hiện nguyên văn. 9 nháp (S291 J1–J5, S292 J6–J9): `docs/audits/2026-11-25-S293-session/jira-drafts.md`. Đã dán nguyên văn ở tin nhắn cuối phiên; đăng sau khi tech lead xem.
+**Đã đăng 9/9** (~17:20, tech lead xem nguyên văn rồi nói "đăng hết"): PR-25 10699, PR-30 10700, PR-29 10701 + 10703, PR-24 10702, PR-27 10705 / 10706 / 10707, PR-22 10704. Chi tiết: `docs/audits/2026-11-25-S293-session/jira-drafts.md`.
 
 ## Việc đầu phiên sau (S294)
 
 1. Thứ Năm 26/11: AA-1158, AA-1148, AA-1173, AA-1155, duyệt ISMS AA-1166, AA-1157.
-2. Jira: đăng 9 nháp sau khi tech lead xem (hoặc tắt auto mode).
 3. Tech lead:
    - AA-1154: bấm "I ran this" một thẻ;
    - AA-1169: đọc 12 mẫu;
