@@ -1,7 +1,7 @@
 <title>Buổi họp 26/11</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
-/* Layout: one narrow reading column — live status strip, ordered run sheet, demo notes, after-meeting list. */
+/* Layout: one reading column — status, prep, price flow, live walkthrough (numbered), revert, where prices show, rest of the agenda. */
 :root {
   --bg: #f6f7f5; --surface: #ffffff; --fg: #1d2421; --muted: #5d6762; --line: #dfe3df;
   --accent: #1f6f5c; --ok: #237a3c; --wait: #9a6a00; --tag-bg: #e8efeb;
@@ -16,89 +16,191 @@
   --bg: #121715; --surface: #1a201d; --fg: #e4e9e6; --muted: #9aa5a0; --line: #2c3430;
   --accent: #5cc0a3; --ok: #6fcf8a; --wait: #e2b44f; --tag-bg: #23302b; color-scheme: dark }
 body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--sans); }
-.wrap { max-width: 760px; margin: 0 auto; padding-block: 28px 48px;
+.wrap { max-width: 800px; margin: 0 auto; padding-block: 28px 48px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
-  display: grid; gap: 28px; }
-h1, h2 { font-family: var(--head); text-wrap: balance; margin: 0; }
-h1 { font-size: 1.7rem; } h2 { font-size: 1.15rem; }
+  display: grid; gap: 30px; }
+h1, h2, h3 { font-family: var(--head); text-wrap: balance; margin: 0; }
+h1 { font-size: 1.7rem; } h2 { font-size: 1.2rem; } h3 { font-size: 1rem; }
 p { margin: 0; } .muted { color: var(--muted); }
 section { display: grid; gap: 12px; min-width: 0; }
-.status { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
-.cell { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; gap: 2px; }
-.cell b { font-family: var(--head); font-size: 1.05rem; }
+.status { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.cell { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: grid; gap: 2px; align-content: start; }
+.cell b { font-family: var(--head); font-size: 1.02rem; }
 .cell span { color: var(--muted); font-size: .85rem; }
+.flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: .9rem; }
+.flow span.n { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px; }
+.flow span.a { color: var(--muted); }
 ol.run { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 10px; }
 ol.run > li { counter-increment: s; background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
   padding: 12px 14px 12px 46px; position: relative; display: grid; gap: 6px; min-width: 0; }
 ol.run > li::before { content: counter(s); position: absolute; left: 14px; top: 12px; width: 22px; height: 22px;
   border-radius: 50%; background: var(--accent); color: var(--bg); font: 600 .8rem/22px var(--head); text-align: center; }
-.who { font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
-.tag { display: inline-block; background: var(--tag-bg); color: var(--accent); border-radius: 4px; padding: 0 6px; font: .78rem var(--mono); }
+.who { font-size: .76rem; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.expect { font-size: .9rem; } .expect::before { content: "Kết quả đúng: "; color: var(--ok); font-weight: 600; }
+.tag { display: inline-block; background: var(--tag-bg); color: var(--accent); border-radius: 4px; padding: 0 6px; font: .76rem var(--mono); }
 code, .path { font-family: var(--mono); font-size: .85rem; overflow-wrap: anywhere; }
-a { color: var(--accent); }
-a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+a { color: var(--accent); } a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; color: var(--muted); font-size: .8rem; }
+tr:last-child td { border-bottom: 0; }
 .ok { color: var(--ok); font-weight: 600; } .wait { color: var(--wait); font-weight: 600; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; }
+summary { cursor: pointer; font-weight: 600; }
 </style>
 
 <div class="wrap">
   <header style="display:grid;gap:8px">
-    <h1>Buổi họp 26/11, 11:00: thứ tự bấm</h1>
-    <p class="muted">Bản cập nhật 26/11 lúc 05:00, thay phần "thứ tự bấm" của trang quyết định S294. Các quyết định D1–D10 đã duyệt hết tối 25/11. Ai bấm, bấm ở đâu và việc agent làm tiếp được ghi theo từng bước.</p>
+    <h1>Buổi họp 26/11, 11:00: hệ thống giá và Booking</h1>
+    <p class="muted">Cập nhật 26/11 lúc 06:40. Trọng tâm: chủ doanh nghiệp tự đi một vòng giá an toàn trên Dev, từ nhà cung cấp tới giá "From $X", rồi duyệt tài khoản ngân hàng NCC. Mọi thứ diễn ra trong Booking admin, <a href="https://booking.lumiguides.it.com">booking.lumiguides.it.com</a>, menu <b>Supply</b>. Mỗi trang có nút EN | VI ở thanh trên. Chi tiết đầy đủ: guide "Business owner onboarding and the price system" (Part C–D).</p>
   </header>
 
   <section>
-    <h2>Trạng thái live lúc 04:45</h2>
+    <h2>Trạng thái trước buổi họp</h2>
     <div class="status">
-      <div class="cell"><b class="ok">4/4 luồng đạt</b><span>smoke chỉ đọc: đăng nhập CIS, Content workspace, Compliance 5 tab, Booking SUP-000019</span></div>
-      <div class="cell"><b>8/8 service</b><span>health 200, revision mới nhất đang chạy, job 0</span></div>
-      <div class="cell"><b>Bộ lọc dữ kiện T9: bật</b><span><code>cis.llm.fact_instruction_guard</code> từ 19:44</span></div>
-      <div class="cell"><b class="wait">Duyệt hai người: tắt</b><span>bật ở bước 4</span></div>
+      <div class="cell"><b class="ok">Booking smoke đạt</b><span>04:45, chỉ đọc: Dashboard, Supplier bills (3 dòng), SUP-000019</span></div>
+      <div class="cell"><b class="wait">SUP-000019: chờ duyệt</b><span>tài khoản ngân hàng SYNTHETIC "Waiting for approval", chi tạm dừng</span></div>
+      <div class="cell"><b>3 / 892 trip plan bán được</b><span>Data coverage 03:14 26/11; 3 chuyến khởi hành đang mở</span></div>
+      <div class="cell"><b>10 NCC · 9 hợp đồng · 28 giá</b><span>NCC active, hợp đồng còn hiệu lực, giá NCC còn hiệu lực hôm nay; 19 khách sạn + dịch vụ</span></div>
+      <div class="cell"><b>17 đại lý B2B · 28 hồ sơ mở</b><span>đối tác đang hoạt động, trip case đang mở; 0 giữ chỗ</span></div>
+      <div class="cell"><b>8/8 service chạy</b><span>health 200, không còn job nào trong hàng đợi</span></div>
     </div>
   </section>
 
   <section>
-    <h2>Thứ tự bấm</h2>
-    <p class="muted">Thứ tự theo phụ thuộc: chủ doanh nghiệp đăng nhập trước, rồi mới gắn quyền chủ doanh nghiệp, rồi mới duyệt được tài khoản ngân hàng.</p>
+    <h2>Chuẩn bị (5 phút, trước khi demo giá)</h2>
     <ol class="run">
-      <li><span class="who">Chủ DN, rồi tech lead</span>
-        <p><b>Chủ DN đăng nhập lần đầu</b> (thư mời gửi lại 24/11): CIS trước, <a href="https://aa-cis.lumiguides.it.com/login">aa-cis.lumiguides.it.com/login</a> → "Sign in with company email"; rồi Booking, <a href="https://booking.lumiguides.it.com">booking.lumiguides.it.com</a>.</p>
-        <p>Sau đó tech lead mở <span class="path">CIS › Platform › Staff &amp; access</span> (<a href="https://aa-cis.lumiguides.it.com/admin/platform/staff">/admin/platform/staff</a>), dòng của chủ DN → <b>Make business owner</b>. <span class="tag">AA-1155</span></p></li>
-      <li><span class="who">Nhân viên content + booking</span>
-        <p>Đăng nhập một lần bằng hộp mail info@ (đóng mục T12). <span class="tag">AA-1155</span></p></li>
       <li><span class="who">Chủ DN</span>
-        <p><b>Duyệt tài khoản ngân hàng SYNTHETIC</b>: <a href="https://booking.lumiguides.it.com/suppliers/SUP-000019?tab=bank">Booking › Suppliers › SUP-000019 › Bank accounts</a>. Hiện đang "Waiting for approval", chi tạm dừng.</p>
-        <p class="muted">Agent làm tiếp: trong 24 giờ thử ghi một khoản chi, phải nhận 409 <code>bank_payout_locked</code>; rồi dọn dữ liệu SYNTHETIC của S290 theo DRY RUN. <span class="tag">AA-1158</span></p></li>
-      <li><span class="who">Tech lead, rồi một người thật thứ hai</span>
-        <p><b>Bật hai công tắc duyệt hai người</b> ở <a href="https://aa-cis.lumiguides.it.com/admin/platform/settings">Platform › Settings</a>: <code>cis.content.publish_two_person</code> = On và <code>cis.settings.two_person_approval</code> = On. Lý do (≥ 20 ký tự): <code>S294 meeting: turn on two-person approval for publish and settings</code>.</p>
-        <p>Một người thật thứ hai publish một tour tay và duyệt một ngoại lệ. Tài khoản E2E không được làm người duyệt. <span class="tag">AA-1148</span> <span class="tag">AA-1173</span></p></li>
+        <p>Đăng nhập CIS trước: <a href="https://aa-cis.lumiguides.it.com/login">aa-cis.lumiguides.it.com/login</a> → <b>Sign in with company email</b>. Rồi đăng nhập Booking. <span class="tag">AA-1155</span></p></li>
       <li><span class="who">Tech lead</span>
-        <p><b>Bản rà soát bảo mật tháng đầu</b>: <a href="https://aa-cis.lumiguides.it.com/admin/platform/compliance?tab=reviews">Compliance readiness › Reviews</a>, tạo một bản ghi thật (không rút lại được). <span class="tag">AA-1173</span></p></li>
-      <li><span class="who">Chủ tổ chức GitHub</span>
-        <p>Cài GitHub App chỉ đọc để kiểm cảnh báo GitHub, theo bước tay trong implementation notes của AA-1173. <span class="tag">AA-1173</span></p></li>
-      <li><span class="who">Chủ DN</span>
-        <p><b>Duyệt bộ ISMS</b>: policy, scope, vai trò, sổ rủi ro (bản ở S3 riêng tư). Kèm báo cáo red-team AI đầu tiên: 12 ca đạt, 1 ca báo nhầm, 3 ca chưa chạy, 0,39 USD. <span class="tag">AA-1166</span></p></li>
+        <p>CIS › <a href="https://aa-cis.lumiguides.it.com/admin/platform/staff">Platform › Staff &amp; access</a> → dòng của chủ DN → <b>Make business owner</b>.</p>
+        <p class="expect">dòng có dấu business owner; chủ DN tải lại Booking sau khoảng 1 phút.</p></li>
       <li><span class="who">Tech lead</span>
-        <p><b>View-as</b>: xem dưới vai "Content + Product &amp; operations" trên CIS và Booking. Agent chụp ảnh có dải báo; mọi lệnh ghi phải ra 403. <span class="tag">AA-1157</span></p></li>
+        <p>Booking › <a href="https://booking.lumiguides.it.com/pricing/policy">Supply › Pricing policy</a>, mục <b>Staff sign-in</b>: hai công tắc "The business owner may approve her own work" và công tắc chi tiền đều đang bật.</p></li>
     </ol>
   </section>
 
   <section>
-    <h2>Có thể cho chủ DN xem thêm</h2>
+    <h2>Giá chạy thế nào</h2>
+    <div class="flow" aria-label="Luồng giá">
+      <span class="n">Nhà cung cấp (active)</span><span class="a">→</span>
+      <span class="n">Hợp đồng + giá NCC (published)</span><span class="a">→</span>
+      <span class="n">Khách sạn, dịch vụ gắn vào tour</span><span class="a">→</span>
+      <span class="n">Rule giá + tỷ giá</span><span class="a">→</span>
+      <span class="n">Recompute</span><span class="a">→</span>
+      <span class="n">Bảng giá tour</span><span class="a">→</span>
+      <span class="n">TripPlanner · Content studio · CRM</span>
+    </div>
     <ul>
-      <li><a href="https://aa-cis.lumiguides.it.com/admin/platform/catalogue">Platform › Product map</a>: 5 app, 136 tính năng (128 đang chạy), 38 liên kết, cập nhật theo code mới nhất.</li>
-      <li>Content workspace trên điện thoại: tour tay SYNTHETIC 3 ngày (<a href="https://aa-cis.lumiguides.it.com/admin/content-workspace/b5637dc0-343f-4b4c-a85a-8fbb174bd85e">mở tour</a>), không còn kéo ngang ở 390 px.</li>
-      <li>CRM › Integrations: thẻ Lịch (Google / Microsoft 365, một chiều). Chưa thử với tài khoản thật vì cần đăng ký quyền lịch phía Google.</li>
+      <li><b>Giá bán lẻ gợi ý (RRP)</b> = giá theo rule + 25 %, như nhau cho mọi đại lý.</li>
+      <li><b>Giá "From $X" công khai</b> = RRP rẻ nhất mỗi người cho 2 khách, còn hiệu lực hôm nay.</li>
+      <li><b>Giá đại lý</b> = giá theo rule trừ chiết khấu hạng (standard 0 %, silver 3 %, gold 6 %) hoặc rate card riêng.</li>
+      <li>Nhóm khách tính giá theo các khoảng <code>1, 2, 3, 4, 5-7, 8-10, 11+</code>; từ 9 khách trở lên báo giá theo yêu cầu.</li>
     </ul>
-    <p class="muted">Lưu ý khi demo: Content workspace chỉ có dữ liệu SYNTHETIC; các ô đỏ trên Compliance là trạng thái thật của Dev; mở <code>/admin</code> gốc tạm bị đẩy về trang đăng nhập (sửa sau buổi), nên vào thẳng <code>/admin/overview</code>.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Việc</th><th>Chủ DN tự duyệt được?</th></tr></thead>
+      <tbody>
+        <tr><td>Kích hoạt NCC, publish hợp đồng, duyệt price version, mùa / ngày lễ, điều chỉnh giá chuyến, duyệt bill NCC, duyệt thanh toán đại lý</td><td class="ok">Có, mỗi lần được đánh dấu trong Audit Log</td></tr>
+        <tr><td>Rule giá, tỷ giá, phí huỷ, chiết khấu hạng, rate card, allotment, stop-sale</td><td class="wait">Không, cần người thứ hai (tech lead)</td></tr>
+        <tr><td>Đổi Pricing policy, mọi lệnh xoá hoặc từ chối</td><td class="wait">Không bao giờ</td></tr>
+      </tbody>
+    </table></div>
   </section>
 
   <section>
-    <h2>Sau buổi họp (agent)</h2>
+    <h2>Demo: một vòng giá an toàn</h2>
+    <p class="muted">Một NCC, một khách sạn, một giá, trên một tour chưa có giá. Không có tiền thật đi đâu: báo giá và giữ chỗ của đại lý không thu tiền. Mọi tên bắt đầu bằng <code>SYNTHETIC</code> để dọn sau.</p>
+    <ol class="run">
+      <li><span class="who">Chủ DN · Supply › Suppliers</span>
+        <p><b>Add supplier</b>: tên <code>SYNTHETIC price test</code>, loại Hotel, nước của tour đã chọn → <b>Save supplier</b>. Mở lại → <b>Activate</b> → xác nhận.</p>
+        <p class="expect">hộp thoại "You created this supplier. Activating it yourself is recorded as a business-owner self-approval."; trạng thái Active.</p>
+        <p class="muted">Nếu nút ghi "Activate (needs a second person)": chưa có dấu business owner, chưa đăng nhập CIS lần nào, công tắc ở bước chuẩn bị 3 đang tắt, hoặc không đăng nhập bằng company email.</p></li>
+      <li><span class="who">Chủ DN · Supply › Hotels</span>
+        <p><b>Add hotel</b>: Supplier <code>SYNTHETIC price test</code>, tên <code>SYNTHETIC hotel</code>, City / place = nơi nghỉ đêm của tour → <b>Save hotel</b>. Rồi <b>Add room type</b>: <code>Double</code>.</p>
+        <p class="expect">khách sạn active ngay, có 1 loại phòng.</p></li>
+      <li><span class="who">Chủ DN · NCC › New contract</span>
+        <p>Tiêu đề <code>SYNTHETIC contract</code>, hiệu lực từ hôm nay, USD. Tab <b>Rates</b> → <b>Add rate</b> phòng Double, ví dụ 50 USD/đêm. Menu dòng hợp đồng → <b>Publish</b>.</p>
+        <p class="expect">hợp đồng published, có dấu business-owner self-approval.</p></li>
+      <li><span class="who">Chủ DN · <a href="https://booking.lumiguides.it.com/pricing/workbench">Price setup</a></span>
+        <p>Tìm tour. Nếu bước tiếp theo ghi "Approve a pricing rule" hoặc "Approve an exchange rate" thì dừng lại: tech lead làm người thứ hai. Giá bằng USD thì không cần tỷ giá.</p></li>
+      <li><span class="who">Chủ DN · Price setup › tour › Hotels &amp; services</span>
+        <p>Mỗi đêm, <code>SYNTHETIC hotel</code> được gợi ý → <b>Accept</b> → <b>Save … hotel and service item(s)</b>.</p></li>
+      <li><span class="who">Chủ DN · Price setup</span>
+        <p>Chọn tour → <b>Recompute prices</b>.</p>
+        <p class="expect">trạng thái <b>Priced</b>, có số ở cột <b>RRP for 2</b>.</p></li>
+      <li><span class="who">Xem giá hiện ra</span>
+        <p>Content studio › Marketplace → tour: "From $X per person" hiện ngay. TripPlanner trang tour: hiện sau khoảng 30 phút.</p>
+        <p class="muted">Giá công khai hiện cả khi tour chưa sellable; đại lý vẫn chưa báo giá được.</p></li>
+      <li><span class="who">Tuỳ chọn · bán cho đại lý thử</span>
+        <p>Price setup → <b>Make sellable</b>. <a href="https://booking.lumiguides.it.com/pricing/readiness">Price readiness</a> → cột <b>Can operate</b> phải là Ready hoặc Warnings. CRM › Settings › <b>AA prices for your agency</b> hiện giá sau khoảng 1 phút.</p></li>
+      <li><span class="who">Chủ DN · kiểm tra</span>
+        <p><a href="https://booking.lumiguides.it.com/audit-log?owner_self_approved=true">Audit Log › Business-owner self-approvals</a>: thấy các dòng vừa tự duyệt.</p></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Booking: duyệt tài khoản ngân hàng NCC</h2>
+    <ol class="run">
+      <li><span class="who">Chủ DN</span>
+        <p><a href="https://booking.lumiguides.it.com/suppliers/SUP-000019?tab=bank">Suppliers › SUP-000019 › Bank accounts</a> → duyệt tài khoản <code>SYNTHETIC S290 Test Bank</code>. Màn hình nhắc gọi lại NCC bằng số điện thoại AA đã có từ trước.</p>
+        <p class="expect">trạng thái đã duyệt; chi tiền cho NCC này vẫn tạm dừng thêm một thời gian sau khi duyệt.</p>
+        <p class="muted">Agent làm tiếp trong 24 giờ: thử ghi một khoản chi, phải bị từ chối với <code>bank_payout_locked</code>; rồi dọn dữ liệu SYNTHETIC. <span class="tag">AA-1158</span></p></li>
+      <li><span class="who">Có thể cho xem</span>
+        <p><a href="https://booking.lumiguides.it.com/billing">Supplier bills</a>: bill NCC khớp với booking NCC đã xác nhận, người khác duyệt từng bill. <a href="https://booking.lumiguides.it.com/">Dashboard › My work</a>: hàng việc theo quyền.</p></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Dọn sau demo giá (đúng thứ tự)</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>#</th><th>Việc</th><th>Kết quả</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Price setup → <b>Make not sellable</b> (nếu đã bật)</td><td>tour mất khỏi giá đại lý sau ~1 phút</td></tr>
+        <tr><td>2</td><td>NCC → menu dòng hợp đồng → <b>Expire</b></td><td>hợp đồng expired</td></tr>
+        <tr><td>3</td><td>Price setup → <b>Recompute prices</b></td><td>tour về Missing rates / No components; giá "From" biến mất (TripPlanner ~30 phút)</td></tr>
+        <tr><td>4</td><td>Hotels &amp; services → <b>Remove</b> các mục SYNTHETIC → Save</td><td>tour không còn mục thử</td></tr>
+        <tr><td>5</td><td>Deactivate <code>SYNTHETIC hotel</code>, rồi NCC</td><td>inactive (phải làm bước 2 trước)</td></tr>
+        <tr><td>6</td><td>Audit Log</td><td>các dòng tự duyệt vẫn giữ làm hồ sơ</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Giá hiện ở đâu, khi nào</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Nơi</th><th>Hiện gì</th><th>Khi nào</th></tr></thead>
+      <tbody>
+        <tr><td>TripPlanner trang tour</td><td>"From $X per person", giá gợi ý cho 2 khách</td><td>~30 phút</td></tr>
+        <tr><td>Content studio › Marketplace</td><td>"From $X per person"</td><td>ngay</td></tr>
+        <tr><td>CRM › AA prices for your agency</td><td>giá của đại lý theo tour, mùa, cỡ nhóm, chiết khấu</td><td>~1 phút</td></tr>
+        <tr><td>CRM proposal, mục AA</td><td>báo giá AA live; bán dưới giá công khai chỉ cảnh báo</td><td>theo từng báo giá</td></tr>
+        <tr><td>Booking</td><td>Price readiness, Price setup, View tariff</td><td>ngay</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Các con số chủ DN có thể muốn đổi</h2>
+    <p class="muted">Tất cả nằm trong Supply › Pricing policy và Agency tiers, đổi được trên màn hình (luôn hai người duyệt). Hôm nay chỉ cần xem, không cần quyết.</p>
     <ul>
-      <li>Ship các PR giữ lại: CIS #1713 (chặn nháp dữ kiện Excel ghi đè tour tay), Partner #403 (cookie), Infra #1041 (luật mật khẩu pool partner), savepoint CIS #1676 + Booking #331.</li>
-      <li>Kiểm 409 <code>bank_payout_locked</code> sau bước 3, rồi dọn dữ liệu S290.</li>
-      <li>Từ 28/11: bk-076 (xoá bảng B2C) qua DRY RUN; tech lead duyệt số liệu trước khi apply.</li>
+      <li>Mức cộng thêm cho giá bán lẻ gợi ý (hiện +25 %).</li>
+      <li>Chiết khấu theo hạng đại lý (0 / 3 / 6 %).</li>
+      <li>Các khoảng cỡ nhóm và ngưỡng báo giá theo yêu cầu (từ 9 khách).</li>
+      <li>Thời hạn báo giá, số giờ giữ chỗ, tuổi trẻ em / em bé, làm tròn theo tiền tệ, số ngày cho phép bán ngoại lệ (14, tối đa 30).</li>
     </ul>
   </section>
+
+  <details>
+    <summary>Phần còn lại của buổi họp (sau phần giá và Booking)</summary>
+    <ul style="margin-top:10px">
+      <li>Nhân viên content + booking đăng nhập một lần bằng hộp mail info@. <span class="tag">AA-1155</span></li>
+      <li>Bật duyệt hai người ở <a href="https://aa-cis.lumiguides.it.com/admin/platform/settings">Platform › Settings</a>: <code>cis.content.publish_two_person</code> và <code>cis.settings.two_person_approval</code> = On, lý do ≥ 20 ký tự. Một người thật thứ hai publish một tour tay và duyệt một ngoại lệ. <span class="tag">AA-1148</span> <span class="tag">AA-1173</span></li>
+      <li>Rà soát bảo mật tháng đầu: <a href="https://aa-cis.lumiguides.it.com/admin/platform/compliance?tab=reviews">Compliance readiness › Reviews</a>. <span class="tag">AA-1173</span></li>
+      <li>Chủ DN duyệt bộ ISMS; kèm red-team AI đầu tiên (12 đạt, 1 báo nhầm, 3 chưa chạy, 0,39 USD). <span class="tag">AA-1166</span></li>
+      <li>View-as dưới vai "Content + Product &amp; operations" trên CIS và Booking; mọi lệnh ghi phải ra 403. <span class="tag">AA-1157</span></li>
+      <li>Lưu ý: vào thẳng <code>/admin/overview</code>; <code>/admin</code> gốc tạm bị đẩy về trang đăng nhập.</li>
+    </ul>
+  </details>
 </div>
