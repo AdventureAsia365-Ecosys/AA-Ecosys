@@ -471,11 +471,11 @@ class MfaTest(unittest.TestCase):
     def test_session_start_line(self):
         r = FakeRunner().on(("aws",), js({"Expiration": "2026-10-28T08:00:00+00:00", "SessionToken": "x" * 20}))
         r.t = 1_793_156_400.0  # 03:00Z
-        code, line = ship_common.mfa_status_line(r)
+        code, line = ship_common.sts_expiry_line(r)
         self.assertEqual(code, 0)
         self.assertIn("(2026-10-28T08:00Z), 300 min left; remind the tech lead at", line)
         self.assertNotIn("x" * 20, line)
-        code, line = ship_common.mfa_status_line(FakeRunner().on(("aws",), Result(255, "", "expired")))
+        code, line = ship_common.sts_expiry_line(FakeRunner().on(("aws",), Result(255, "", "expired")))
         self.assertEqual(code, 1)
         self.assertIn("aws sts get-caller-identity --profile aa365-admin", line)
 

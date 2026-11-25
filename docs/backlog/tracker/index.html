@@ -365,8 +365,13 @@ details.sdetail summary { cursor: pointer; font-weight: 600; color: var(--muted)
   // their window (a window with "≥", "từ ngày" or "go-live" runs to the last column; "sau S…" or no S-number sits in
   // the last column only); the bottom strip is criteria done / total. Each open issue is a chip in its session slot
   // per app project; issues slotted outside the lanes are counted in the last column.
+  // Tooltips: data-tip holds an index into TIPS, never markup. Each tip is a list of lines [bold text, plain text], built
+  // into the tooltip as text nodes (AA-1111: no DOM text is read back as HTML).
+  var TIPS = [];
+  function tipRef(lines) { TIPS.push(lines); return TIPS.length - 1 }
   function renderGantt() {
     var I = data.issues, cols = LANES.length + 1, LAST = cols + 1, rows = [], r = 1;
+    TIPS = [];
     var nowIdx = LANES.indexOf(data.session);
     var dateOf = {}; (data.log || []).forEach(function (e) { if (e.session && e.date) dateOf[e.session] = e.date.slice(0, 5) });
     function cell(html, col, span, cls, extra) {
@@ -392,8 +397,8 @@ details.sdetail summary { cursor: pointer; font-weight: 600; color: var(--muted)
       if (/sau S\d{3}/i.test(w) || !nums.length) { start = LAST; end = LAST }
       else { start = Math.min.apply(null, nums) + 2; end = Math.max.apply(null, nums) + 2; if (/≥|từ ngày|go-live/i.test(w)) end = LAST }
       rows.push(cell("<b>" + esc(m.id) + '</b><span class="nm">' + esc(m.name) + "</span>", 1, 0, "g-lab"));
-      var tip = "<b>" + esc(m.id) + "</b> " + esc(m.name) + "<br>" + d + "/" + n + " tiêu chí · " + esc(STATUS_VI[st] || st) + "<br>Cửa sổ: " + esc(w);
-      rows.push(cell('<div class="g-bar ' + esc(st) + '" tabindex="0" data-tip="' + esc(tip) + '" aria-label="' + esc(m.id + ": " + d + " trên " + n + " tiêu chí, " + (STATUS_VI[st] || st)) + '">' +
+      var tip = tipRef([[m.id, " " + m.name], ["", d + "/" + n + " tiêu chí · " + (STATUS_VI[st] || st)], ["", "Cửa sổ: " + w]]);
+      rows.push(cell('<div class="g-bar ' + esc(st) + '" tabindex="0" data-tip="' + tip + '" aria-label="' + esc(m.id + ": " + d + " trên " + n + " tiêu chí, " + (STATUS_VI[st] || st)) + '">' +
         d + "/" + n + (end > start ? " · " + esc(STATUS_VI[st] || st) : "") + '<u style="width:' + (n ? Math.round(100 * d / n) : 0) + '%"></u></div>', start, end - start + 1, "g-cell"));
       r++;
     });
@@ -412,13 +417,13 @@ details.sdetail summary { cursor: pointer; font-weight: 600; color: var(--muted)
         Object.keys(byCol).forEach(function (ci) {
           var x = byCol[ci][k]; if (!x) return;
           var cls = x.status === "In Progress" ? " prog" : x.status === "In Review" ? " rev" : "";
-          var tip = "<b>" + esc(x.id) + "</b> · " + esc(x.status) + " · " + esc(x.session) + "<br>" + esc(x.title) + (x.next ? "<br>" + esc(x.next) : "");
-          rows.push('<div class="g-cell" style="grid-row:' + (r + k) + ";grid-column:" + (+ci + 2) + '"><a class="g-chip' + cls + '" href="' + LINEAR + esc(x.id) + '" target="_blank" rel="noopener" data-tip="' + esc(tip) + '">' + esc(x.id.replace("AA-", "")) + "</a></div>");
+          var tip = tipRef([[x.id, " · " + x.status + " · " + x.session], ["", x.title]].concat(x.next ? [["", x.next]] : []));
+          rows.push('<div class="g-cell" style="grid-row:' + (r + k) + ";grid-column:" + (+ci + 2) + '"><a class="g-chip' + cls + '" href="' + LINEAR + esc(x.id) + '" target="_blank" rel="noopener" data-tip="' + tip + '">' + esc(x.id.replace("AA-", "")) + "</a></div>");
         });
       }
       if (later.length) {
-        var tipL = "<b>" + later.length + " issue sau S281 / theo ngày</b><br>" + later.map(function (x) { return esc(x.id) + " · " + esc(x.session) }).join("<br>");
-        rows.push('<div class="g-cell" style="grid-row:' + r + ";grid-column:" + LAST + '"><span class="g-chip more" tabindex="0" data-tip="' + esc(tipL) + '">+' + later.length + "</span></div>");
+        var tipL = tipRef([[later.length + " issue sau S281 / theo ngày", ""]].concat(later.map(function (x) { return ["", x.id + " · " + x.session] })));
+        rows.push('<div class="g-cell" style="grid-row:' + r + ";grid-column:" + LAST + '"><span class="g-chip more" tabindex="0" data-tip="' + tipL + '">+' + later.length + "</span></div>");
       }
       r += depth;
     });
@@ -445,7 +450,14 @@ details.sdetail summary { cursor: pointer; font-weight: 600; color: var(--muted)
     var tip = $("g-tip");
     function show(e) {
       var t = e.target.closest && e.target.closest("[data-tip]"); if (!t) { tip.hidden = true; return }
-      tip.innerHTML = t.getAttribute("data-tip"); tip.hidden = false;
+      var lines = TIPS[parseInt(t.getAttribute("data-tip"), 10)] || [];
+      tip.textContent = "";
+      lines.forEach(function (ln, i) {
+        if (i) tip.appendChild(document.createElement("br"));
+        if (ln[0]) { var b = document.createElement("b"); b.textContent = ln[0]; tip.appendChild(b) }
+        if (ln[1]) tip.appendChild(document.createTextNode(ln[1]));
+      });
+      tip.hidden = !lines.length;
       var rc = t.getBoundingClientRect(), x = (e.clientX || rc.left + rc.width / 2) + 12, y = (e.clientY || rc.bottom) + 14;
       var w = tip.offsetWidth, h = tip.offsetHeight;
       if (x + w > innerWidth - 8) x = Math.max(8, innerWidth - w - 8);

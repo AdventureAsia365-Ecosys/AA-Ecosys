@@ -13,7 +13,7 @@ const ORIGIN = 'https://agency.example.invalid';
 test('parseAllow: a leading method list is split off; a plain source admits every write method (the original form)', () => {
   const a = guard.parseAllow(`POST ^${ORIGIN}/bff/x$`);
   assert.deepEqual(a.methods, ['POST']);
-  assert.equal(a.re.source, `^${ORIGIN}/bff/x$`.replace(/\//g, '\\/'));
+  assert.equal(a.re.source, new RegExp(`^${ORIGIN}/bff/x$`).source);
   assert.deepEqual(guard.parseAllow('PUT|PATCH ^/y$').methods, ['PUT', 'PATCH']);
   assert.equal(guard.parseAllow('^/y$').methods, null);
   // Only write methods count as a prefix: anything else stays part of the regex source.
@@ -93,4 +93,13 @@ test('limitWrites: PUT, PATCH and DELETE rules cap their own method; POST stays 
 
 test('limitWrites: a rule naming a read method is refused (it would cap nothing)', async () => {
   await assert.rejects(limitWrites({ route: async () => {} }, [{ name: 'r', path: /x/, method: 'GET', max: 1 }]), /method must be/);
+});
+
+test('escapeRegExp: every meta-character of a literal path is escaped, so it matches only itself (AA-1111)', () => {
+  const lit = '/api/x.y+(z)[1]{2}|a^b$c*d?e\\f';
+  const re = new RegExp(`^${guard.escapeRegExp(lit)}$`);
+  assert.ok(re.test(lit));
+  assert.ok(!re.test('/api/xzy+(z)[1]{2}|a^b$c*d?e\\f'));
+  assert.ok(!re.test('/api/x.yy(z)[1]{2}|a^b$c*d?e\\f'));
+  assert.equal(guard.escapeRegExp('/api/tenant/v1'), '\\/api\\/tenant\\/v1');
 });
