@@ -1805,6 +1805,7 @@ features:
     roles: [owner, agent]
     status: planned
     milestone: CRM-after-R3
+    settings: [crm.calendar_push.batch_size, crm.calendar_push.max_attempts, crm.calendar_push.past_days, crm.calendar_push.window_days]
     owner: tech_lead
   - id: CRM-F049
     app: crm
