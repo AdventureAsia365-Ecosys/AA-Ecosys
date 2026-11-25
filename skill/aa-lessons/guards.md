@@ -101,6 +101,7 @@ lỗi, chuyển dòng đó sang đây trong cùng PR.
 - **Allow-list Actions cấp org phải tính action lồng trong composite action bên thứ ba (trivy-action → setup-trivy)** (S273, ADR 0021) → `tools/github/ci_hygiene.py` WL8 + `tools/github/actions-allowlist.txt` (guard mới S274, AA-1024)
 - **File sinh tự động từ nguồn ngoài (Linear export) cũng phải qua gitleaks trước khi commit** (S276) → `tools/linear/linear_export.py` (gitleaks trên mọi file xuất của lượt chạy, kể cả file không đổi; chỉ bỏ dấu hai chấm sau nhãn secret khi token là tên dạng đường dẫn, giá trị lạ giữ nguyên cho gitleaks bắt), `tools/linear/test_linear_export.py` (guard mới S277, AA-1024)
 - **Cache theo process của gateway LLM sống qua module test; `invalidate()` chỉ reset mốc giờ → test phụ thuộc thứ tự, đỏ ở nightly random order** (S283, CIS #1551) → `apps/AA-CIS-App/tests/integration/_llm_cache_reset.py` (fixture `cold_llm_gateway` trong conftest đưa mọi cache của `shared.llm_client` về trạng thái lạnh mỗi module, tự phủ cache mới), `apps/AA-CIS-App/tests/integration/test_s283_llm_cache_reset.py` (guard mới S283)
+- **Bước verify / smoke trong workflow không dùng `curl … | grep -q` dưới `pipefail`: ghi ra file rồi grep** (S272 TP #240 "sitemap lists no tour"; S294 Partner ci.yml CSP smoke) → `tools/github/ci_hygiene.py` WL9 (root Workflow Lint `--pipe-scan` + CI hygiene hằng ngày cả 6 repo) (guard mới S294, AA-1111)
 
 ## Pipeline và chất lượng
 

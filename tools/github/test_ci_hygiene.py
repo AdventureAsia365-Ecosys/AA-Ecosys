@@ -457,3 +457,82 @@ class OwnOrgWorkflowTest(unittest.TestCase):
 
     def test_other_org_still_governed(self):
         self.assertTrue(h.is_third_party("someone/else@" + "a" * 40))
+
+
+PIPE_WF = textwrap.dedent("""
+    on: push
+    jobs:
+      smoke:
+        runs-on: ubuntu-24.04
+        steps:
+          # curl -sI http://demo.test | grep -q x  (a comment: not a finding)
+          - name: Headers
+            run: |
+              set -euo pipefail
+              curl -sI http://localhost:3000/signed-out | grep -qi "^x-demo-header: on"
+              curl -sf http://localhost:3000/health | jq . | grep --quiet ok
+              curl -s http://localhost:3000/a \\
+                -H 'Accept: text/plain' | grep -Eq 'ready|up'
+              curl -sI http://localhost:3000/b -o "$RUNNER_TEMP/b.txt"
+              grep -qi "^x-demo-header: on" "$RUNNER_TEMP/b.txt"
+              curl -sf http://localhost:3000/c | jq -e '.ok == true'
+              curl -s http://localhost:3000/d | grep -c ok
+              curl -sf http://localhost:3000/e || echo down | grep -q down
+              echo curl-free | grep -q curl
+    """)
+PIPE_ACTION = textwrap.dedent("""
+    name: demo
+    runs:
+      using: composite
+      steps:
+        - shell: bash
+          run: curl -s https://demo.test/status | sudo grep -q green
+    """)
+
+
+class CurlPipeGrep(unittest.TestCase):
+    """WL9 (S294): `curl | grep -q` fails a pipefail step with SIGPIPE when grep exits before curl has written all."""
+
+    def test_findings_and_non_findings(self):
+        found = h.pipe_findings(".github/workflows/p.yml", PIPE_WF)
+        self.assertEqual([f.split(":")[1] for f in found], ["11", "12", "13"], found)
+        self.assertTrue(all(":WL9 curl piped into grep -q" in f for f in found))
+        self.assertIn("write the response to a file", found[0])
+
+    def test_composite_action(self):
+        self.assertEqual(len(h.pipe_findings(".github/actions/demo/action.yml", PIPE_ACTION)), 1)
+
+    def test_quiet_grep_options(self):
+        self.assertTrue(h._quiet_grep("grep -q x"))
+        self.assertTrue(h._quiet_grep(" egrep -Eqi x"))
+        self.assertTrue(h._quiet_grep("grep --silent x"))
+        self.assertFalse(h._quiet_grep("grep -c x"))
+        self.assertFalse(h._quiet_grep("grep -e -q"))     # -e takes the next word as the pattern
+        self.assertFalse(h._quiet_grep("grep -- -q"))
+        self.assertFalse(h._quiet_grep("jq -q ."))
+
+    def test_pipe_scan_prints_errors_and_exits_1(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            wf = Path(tmp, ".github", "workflows")
+            wf.mkdir(parents=True)
+            (wf / "p.yml").write_text(PIPE_WF, encoding="utf-8")
+            out = io.StringIO()
+            with mock.patch("sys.stdout", out):
+                self.assertEqual(h.main(["--pipe-scan", tmp], run=FakeGh()), 1)
+            text = out.getvalue()
+            self.assertIn("::error file=.github/workflows/p.yml,line=11::WL9", text)
+            self.assertIn("3 finding(s)", text)
+            (wf / "p.yml").write_text(CLEAN_WF, encoding="utf-8")
+            with mock.patch("sys.stdout", io.StringIO()):
+                self.assertEqual(h.main(["--pipe-scan", tmp], run=FakeGh()), 0)
+
+    def test_collect_is_red_on_wl9(self):
+        state = {"AA-Booking": {"caches": [], "open": [], "files": {".github/workflows/p.yml": PIPE_WF}}}
+        row = h.collect("AA-Booking", warn_gb=8, run=FakeGh(state=state), now=NOW, log=lambda m: None,
+                        allowlist=[])
+        self.assertEqual(len(row["wl9"]), 3)
+        self.assertEqual(row["red"], ["3 curl piped into grep -q (WL9)"])
+
+    def test_this_repo_is_clean(self):
+        root = Path(__file__).resolve().parents[2]
+        self.assertEqual(h.pipe_scan(h.local_files(root)), [])

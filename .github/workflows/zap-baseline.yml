@@ -4,7 +4,10 @@ name: ZAP baseline
 #   - PASSIVE only: zaproxy/action-baseline runs zap-baseline.py (spider for 2 minutes, then passive rules on what it
 #     saw). It sends no attack payload. Never swap in action-full-scan or action-api-scan here: an active scan of Dev
 #     needs the tech lead's go-ahead and its own workflow.
-#   - workflow_dispatch only: no schedule, no push or pull_request trigger. Each run is a decision.
+#   - Monthly schedule (S294, the AA-1166 self-assessment plan asks for a monthly passive DAST run) plus
+#     workflow_dispatch for an extra run. No push or pull_request trigger. A scheduled run is triaged like a
+#     dispatched one (docs/security/vulnerability-management.md, "Dynamic scan"); its artifacts last 7 days, so
+#     the triage happens in the first session after the 3rd of the month.
 #   - No GitHub issue is created (allow_issue_writing: false) and a finding never fails the job (fail_action: false):
 #     the reports are triaged by a person (docs/security/vulnerability-management.md, "Dynamic scan").
 #   - Reports: one artifact per target, zap-<id> (report_json.json, report_html.html, report_md.md), kept 7 days.
@@ -24,6 +27,8 @@ name: ZAP baseline
 # setting is the org owner's). Without it the run fails at "Set up job" with "not allowed".
 
 on:
+  schedule:
+    - cron: "29 5 3 * *"   # the 3rd of each month, 05:29 UTC (12:29 in Vietnam), off the :00 / :15 marks
   workflow_dispatch:
 
 permissions:
