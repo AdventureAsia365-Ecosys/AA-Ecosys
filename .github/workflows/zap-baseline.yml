@@ -73,9 +73,10 @@ jobs:
           set -uo pipefail
           # The image runs as the zap user, which must be able to write the reports into the mounted folder.
           mkdir -p "$RUNNER_TEMP/zap" && chmod a+rwx "$RUNNER_TEMP/zap"
+          # The step shell runs with -e: capture the exit code instead of letting a WARN (2) or FAIL (1) end the step.
+          rc=0
           docker run --rm -v "$RUNNER_TEMP/zap:/zap/wrk:rw" "$ZAP_IMAGE" \
-            zap-baseline.py -t "$TARGET" -m 2 -J report_json.json -w report_md.md -r report_html.html
-          rc=$?
+            zap-baseline.py -t "$TARGET" -m 2 -J report_json.json -w report_md.md -r report_html.html || rc=$?
           echo "zap-baseline.py exit $rc (0 clean, 1 FAIL alerts, 2 WARN alerts: triaged by a person)"
           if [ "$rc" -ge 3 ]; then echo "::error title=ZAP baseline::ZAP did not complete (exit $rc)"; exit 1; fi
           cp "$RUNNER_TEMP"/zap/report_json.json "$RUNNER_TEMP"/zap/report_html.html "$RUNNER_TEMP"/zap/report_md.md .
