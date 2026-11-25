@@ -103,7 +103,12 @@ class OpenTest(unittest.TestCase):
         self.journal = Path(self.sb.tmp.name) / "journal.jsonl"
         self.tmpdir = mock.patch.object(sop, "ROOT", Path(self.sb.tmp.name))
         self.tmpdir.start()
-        self.env = mock.patch.dict(os.environ, {"AA_GITLEAKS": "gitleaks", "AA_SKIP_GITLEAKS": ""})
+        # S294: the gitleaks resolver also looks at the mise install under HOME (and MISE_DATA_DIR / XDG_DATA_HOME); a
+        # machine with gitleaks installed through mise made the FakeRunner meet an unexpected `version` call. Point
+        # them at the sandbox so only the test decides which binaries exist (git is hermetic through GIT_ENV).
+        self.home = Path(self.sb.tmp.name) / "home"
+        self.env = mock.patch.dict(os.environ, {"AA_GITLEAKS": "gitleaks", "AA_SKIP_GITLEAKS": "",
+                                                "HOME": str(self.home), "MISE_DATA_DIR": "", "XDG_DATA_HOME": ""})
         self.env.start()
 
     def tearDown(self):
@@ -227,6 +232,19 @@ class OpenTest(unittest.TestCase):
             text = " ".join(sop.validate(shim, lane_pr(self.sb.wt))[0])
         self.assertIn("no gitleaks binary", text)
         self.assertIn("No version is set for shim", text)
+        # S282: the mise install of the pin is used before the broken shim on PATH
+        mise = self.home / ".local" / "share" / "mise" / "installs" / "gitleaks" / sop.GITLEAKS_VERSION / "gitleaks"
+        mise.parent.mkdir(parents=True)
+        mise.write_text("#!/bin/sh\n", encoding="utf-8")
+        mise.chmod(0o755)
+        shim.on((str(mise), "version"), Result(0, "8.30.1\n"))
+        shim.on((str(mise), "git"), Result(0, ""))
+        with mock.patch.dict(os.environ, {"AA_GITLEAKS": ""}), \
+                mock.patch.object(sop.gitleaks_resolve, "which_all", return_value=["/fake/shims/gitleaks"]):
+            self.assertEqual(sop.validate(shim, lane_pr(self.sb.wt))[0], [])
+        self.assertEqual(len(shim.called(str(mise), "git")), 1)
+        # the shim was probed once, by the run before; with the mise install in place it is not probed again
+        self.assertEqual(len(shim.called("/fake/shims/gitleaks", "version")), 1)
         with mock.patch.dict(os.environ, {"AA_SKIP_GITLEAKS": "1"}):
             problems, warnings = sop.validate(old, lane_pr(self.sb.wt))
         self.assertEqual(problems, [])

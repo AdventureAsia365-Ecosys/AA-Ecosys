@@ -447,13 +447,24 @@ self_test() {
   printf '#!/bin/sh\necho "mise ERROR No version is set for shim: gitleaks" >&2\nexit 1\n' >"$gl/shims/gitleaks"
   printf '#!/bin/sh\necho "8.30.1"\n' >"$gl/ws/.tmp-session/gitleaks-8301/gitleaks"
   chmod +x "$gl/shims/gitleaks" "$gl/ws/.tmp-session/gitleaks-8301/gitleaks"
-  got=$( PY="$py"; PATH="$gl/shims:/usr/bin:/bin"; unset AA_GITLEAKS; resolve_gitleaks "$gl/ws"; echo "$GITLEAKS_EXE" )
+  # S294: HOME and the mise data dir point into $gl, so the machine's own mise install of the pin cannot answer
+  got=$( PY="$py"; PATH="$gl/shims:/usr/bin:/bin"; HOME="$gl/home"; unset AA_GITLEAKS MISE_DATA_DIR XDG_DATA_HOME
+         resolve_gitleaks "$gl/ws"; echo "$GITLEAKS_EXE" )
   if [ "$got" = "$gl/ws/.tmp-session/gitleaks-8301/gitleaks" ]; then ok "gitleaks: broken shim on PATH, the checked download is used"
   else bad "gitleaks resolution (download): got '$got'"; fi
-  got=$( PY="$py"; PATH="$gl/shims:/usr/bin:/bin"; unset AA_GITLEAKS; resolve_gitleaks "$gl/none"; echo "$GITLEAKS_EXE|$GITLEAKS_NOTE" )
+  got=$( PY="$py"; PATH="$gl/shims:/usr/bin:/bin"; HOME="$gl/home"; unset AA_GITLEAKS MISE_DATA_DIR XDG_DATA_HOME
+         resolve_gitleaks "$gl/none"; echo "$GITLEAKS_EXE|$GITLEAKS_NOTE" )
   case "$got" in "$gl/shims/gitleaks|"*) bad "gitleaks resolution picked the broken shim: '$got'" ;;
     *"No version is set for shim"*) ok "gitleaks: a broken shim is skipped and named" ;;
     *) bad "gitleaks resolution (shim only): got '$got'" ;; esac
+  mkdir -p "$gl/home/.local/share/mise/installs/gitleaks/$GITLEAKS_VERSION"
+  printf '#!/bin/sh\necho "8.30.1"\n' >"$gl/home/.local/share/mise/installs/gitleaks/$GITLEAKS_VERSION/gitleaks"
+  chmod +x "$gl/home/.local/share/mise/installs/gitleaks/$GITLEAKS_VERSION/gitleaks"
+  got=$( PY="$py"; PATH="$gl/shims:/usr/bin:/bin"; HOME="$gl/home"; unset AA_GITLEAKS MISE_DATA_DIR XDG_DATA_HOME
+         resolve_gitleaks "$gl/none"; echo "$GITLEAKS_EXE" )
+  if [ "$got" = "$gl/home/.local/share/mise/installs/gitleaks/$GITLEAKS_VERSION/gitleaks" ]; then
+    ok "gitleaks: broken shim on PATH, the mise install of the pin is used"
+  else bad "gitleaks resolution (mise install): got '$got'"; fi
   rm -rf "$gl"
   rc=0
   got=$( FAILED=(); SKIPPED=(); GITLEAKS_EXE=""; GITLEAKS_CRASH=""; GITLEAKS_NOTE="/x/shims/gitleaks: exit 1"
