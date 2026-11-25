@@ -1,0 +1,2 @@
+{"max_size": 2, "event": "aa817_tenant_pool_ready", "level": "info", "logger": "api.core.aa544_tenant_pool", "timestamp": "2026-11-25T00:51:09.035875Z", "service": "cis-api", "environment": "dev", "git_sha": "0f74f04c9c1fee026dfe9fbf4aec1078838dffad"}
+{"tours": 50, "days": 428, "days_with_key": 428, "non_null": 320, "night_not_a_stop": 154}

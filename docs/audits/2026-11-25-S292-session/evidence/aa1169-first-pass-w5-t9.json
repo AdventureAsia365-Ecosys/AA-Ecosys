@@ -1,0 +1,147 @@
+{
+ "prereg": "w5-t9",
+ "sha256": "8d94395d939e8fe2ea1decfaedfe3452c1b6b91f86f140e3a093d4cf6e208a2c",
+ "ok": true,
+ "run_b": "82b394b0-f06b-422b-97ab-824e650c1de1",
+ "rows": 24,
+ "classes": [
+  "number",
+  "rarity",
+  "suitability",
+  "route_timing",
+  "scene",
+  "operator",
+  "reflection",
+  "other"
+ ],
+ "diagnosis": {
+  "A": {
+   "items": 12,
+   "passes": 2,
+   "first_pass_yield": 0.166667,
+   "flags": 56,
+   "flags_per_item": 4.666667,
+   "first_class": {
+    "number": 1,
+    "route_timing": 7,
+    "other": 2
+   },
+   "items_with_class": {
+    "number": 5,
+    "rarity": 3,
+    "suitability": 4,
+    "route_timing": 10,
+    "scene": 2,
+    "other": 6
+   },
+   "flags_by_class": {
+    "number": 5,
+    "rarity": 7,
+    "suitability": 8,
+    "route_timing": 25,
+    "scene": 2,
+    "other": 9
+   },
+   "items_failed_by_class_alone": {},
+   "flags_by_field": {
+    "body": 56
+   }
+  },
+  "B": {
+   "items": 12,
+   "passes": 1,
+   "first_pass_yield": 0.083333,
+   "flags": 42,
+   "flags_per_item": 3.5,
+   "first_class": {
+    "number": 3,
+    "route_timing": 6,
+    "other": 2
+   },
+   "items_with_class": {
+    "number": 5,
+    "suitability": 2,
+    "route_timing": 9,
+    "reflection": 1,
+    "other": 4
+   },
+   "flags_by_class": {
+    "number": 12,
+    "suitability": 2,
+    "route_timing": 21,
+    "reflection": 1,
+    "other": 6
+   },
+   "items_failed_by_class_alone": {
+    "number": 1,
+    "route_timing": 3,
+    "other": 1
+   },
+   "flags_by_field": {
+    "seo": 8,
+    "body": 31,
+    "faq": 3
+   }
+  }
+ },
+ "projection": {
+  "fixed": [
+   "operator",
+   "rarity",
+   "route_timing",
+   "scene",
+   "suitability"
+  ],
+  "first_pass_yield": 0.416667,
+  "fail_claims_per_item": 1.583333,
+  "item_fail_rate": 0.583333,
+  "decision": {
+   "verdict": "non_inferior",
+   "rule": "non_inferior",
+   "metric": "fail_claims_per_item",
+   "direction": "lower",
+   "paired": 12,
+   "planned": 12,
+   "mean_a": 4.666667,
+   "mean_b": 1.583333,
+   "mean_diff": -3.083333,
+   "se_diff": 1.151141,
+   "upper_bound": -1.189874,
+   "margin_abs": 4.0,
+   "noise_items": 0,
+   "se_noise": 0.0,
+   "allowance": 4.0,
+   "problems": []
+  }
+ },
+ "gate_replay": {
+  "B": {
+   "drafts": 12,
+   "passed": 0,
+   "errors": 0,
+   "first_failure": {
+    "F13_leak": 5,
+    "F4_extreme_length": 2,
+    "F1_grounding": 2,
+    "F13_repeat": 2,
+    "F15_voice": 1
+   },
+   "any_blocking": {
+    "F4_seo_surface": 8,
+    "F13_leak": 8,
+    "F13_repeat": 6,
+    "F15_voice": 3,
+    "F17_trip_fact": 3,
+    "F4_extreme_length": 2,
+    "F1_grounding": 2
+   }
+  }
+ },
+ "judge": {
+  "model_key": "gpt-6-luna-openai",
+  "connection": "openai-direct",
+  "instrument": "aa1048-two-step-v7",
+  "advisory": true
+ },
+ "advisory": "AA-1048 v7 gated run 46d645c4 was no_go by one stored violation (false positives dropped 68 %, stored violations kept 88 % against the 90 % bar; precision 0.73, recall 0.88); the tech lead allowed it as an advisory W5 judge (S283)"
+}

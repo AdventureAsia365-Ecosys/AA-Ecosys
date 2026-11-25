@@ -1,8 +1,8 @@
 {
  "updated": "2026-11-25",
- "synced_at": "2026-11-24T20:10Z",
- "session": "S291",
- "next_session": "S292",
+ "synced_at": "2026-11-25T05:00Z",
+ "session": "S292",
+ "next_session": "S293",
  "source": "Linear (19/11/2026, plan_sync.py --write, S285) + docs/audits/2026-11-19-S285-session/plan-audit-plan-changes.json (tech lead duyệt Q1–Q12, 19/11) + docs/backlog/README.md",
  "projects": {
   "data": "Data Platform",
@@ -995,6 +995,26 @@
   }
  ],
  "log": [
+  {
+   "session": "S292",
+   "date": "25/11/2026",
+   "closed": [
+    "AA-1142"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-1178"
+   ],
+   "reopened": [],
+   "notes": [
+    "~06:30 → ~12:15, Ultracode, lane a–i; không đụng việc thứ Năm 26/11; OOM máy 1 lần ~11:50; LLM trả phí ~1,42 USD (AA-1169) + 0,00085 USD",
+    "Done: AA-1142 Status P2 (SLO/burn, sự cố, External checks, theo đại lý; burn drill bắt slo-fast-cis)",
+    "AA-1169 đo lại w5-t9-r2: yield 0,417 (từ 0,083), non_inferior, 1,42 USD; còn đọc tay 10 blog",
+    "AA-1154 A1 live (Analyse 0,00085 USD); AA-1178 mới (làn job giám sát, CIS 489, In Review); AA-1136 warn bật; AA-1166 bộ ISMS lên S3 private",
+    "Follow-up S291: smoke admin CI (CIS #1682), AA-1152 contract catalog.http.v1 1.4 (CIS + CRM live); 2 check status nhiễu sửa (CIS 488); guard đỏ + dependabot",
+    "Dọn RDS: xoá snapshot tp-018 + pre-s253 (tech lead duyệt), Lambda xoá 281; tắt opus-4-5 sau email AWS; Jira gom sang phiên sau cùng ngày"
+   ]
+  },
   {
    "session": "S291",
    "date": "24–25/11/2026",
@@ -2403,9 +2423,9 @@
    "priority": "Medium",
    "project": "tpbk",
    "milestone": "M-ROLES",
-   "session": "S288",
+   "session": "S292",
    "size": "L",
-   "next": "S288: merged + deploy (CIS 470, Booking view-as); kiểm live bằng owner E2E: Booking đủ, CIS banner lỗi cookie → CIS #1651",
+   "next": "S292: kiểm live banner view-as sau CIS #1651 rồi Done",
    "needs": ""
   },
   {
@@ -2693,21 +2713,9 @@
    "priority": "Medium",
    "project": "data",
    "milestone": "later",
-   "session": "S292",
+   "session": "≥01/12",
    "size": "",
-   "next": "S292: báo cáo đo M1–M8 sau tuần log (≥26/11), tech lead chọn block/warn",
-   "needs": ""
-  },
-  {
-   "id": "AA-1142",
-   "title": "[Ops] Ecosystem status P2: SLO and error budget burn, incident record, external synthetic checks, per-agency drill-down",
-   "status": "Backlog",
-   "priority": "Medium",
-   "project": "data",
-   "milestone": "later",
-   "session": "S292",
-   "size": "",
-   "next": "Ops P2 — S292 (dời từ S291: chạm limit 5h), sau AA-1141 đã Done",
+   "next": "Warn bật S292; ≥ 02/12 đo M7 sau 1 tuần warn rồi quyết CI notes-present",
    "needs": ""
   },
   {
@@ -2729,33 +2737,33 @@
    "priority": "Medium",
    "project": "data",
    "milestone": "later",
-   "session": "S292",
+   "session": "S293",
    "size": "",
-   "next": "Trợ lý admin CIS — A0 live S291 (replay 29/10, 6 thẻ, 0 LLM); A1 S292 (LLM, cap 10 USD stage ops_assist)",
+   "next": "A1 live S292 (Analyse 0,00085 USD); S293: A2 (dự báo vs thực tế, digest) + 4 follow-up A1",
    "needs": ""
   },
   {
    "id": "AA-1166",
    "title": "[Security] ISMS-lite and AIMS-lite: policy, scope, risk register, SoA, AI impact assessments and a pilot go-live checklist",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "data",
    "milestone": "later",
-   "session": "S288",
+   "session": "S293",
    "size": "M",
-   "next": "Private S3 prefix, policy/scope/risk register/SoA, AI impact, go-live checklist",
+   "next": "Bộ ISMS/AIMS-lite trên S3 private isms/ (S292); thứ Năm 26/11 chủ DN duyệt policy/scope/roles/rủi ro; ASVS L1 + red-team tháng 12",
    "needs": ""
   },
   {
    "id": "AA-1169",
    "title": "[Quality] T9 blog first-pass yield ≥ 0.30 under the W5 measure",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "S288",
+   "session": "S293",
    "size": "M",
-   "next": "Find first-pass gate failures, $0 replay, one capped re-measure (≤ 5 USD, needs yes)",
+   "next": "S293: đọc tay 10 blog w5-t9-r2 (contract + hứa hẹn không nguồn); cần UI cho output eval (route lineage chưa có trang)",
    "needs": ""
   },
   {
@@ -2792,6 +2800,18 @@
    "session": "S288",
    "size": "M",
    "next": "S288: merged + deploy (CIS 471); register v2 nạp; Refresh OK (cis_db + crm_ops); trang pháp lý giữ draft (D1)",
+   "needs": ""
+  },
+  {
+   "id": "AA-1178",
+   "title": "[CIS] Monitoring jobs never wait behind a long background job (own lane in the job runner)",
+   "status": "In Review",
+   "priority": "High",
+   "project": "core",
+   "milestone": "later",
+   "session": "S293",
+   "size": "",
+   "next": "S292 ship (CIS 489, #1693); còn kiểm ops_status_sample đều nhịp khi có job nền dài rồi Done",
    "needs": ""
   }
  ]
