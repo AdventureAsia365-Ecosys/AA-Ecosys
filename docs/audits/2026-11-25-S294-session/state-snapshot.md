@@ -33,4 +33,6 @@ Nguồn: lệnh một dòng chạy lúc chốt phiên (ECS describe-services, cu
 ## PR còn mở (cố ý)
 - Nháp ship sau buổi họp 26/11: CIS #1713 (AA-1181 a), #1709/#1710 (gỡ t10_claims, chờ AA-1169), #1676 + Booking #331 (savepoint), Partner #403 (cookie __Secure-), Infra #1041 (luật mật khẩu pool partner), Booking #200 (≥28/11).
 - Giữ tới tuần W49 / sau họp: release PR (CIS #1645, Booking #302, Partner #380, TripPlanner #295), kit sync (Booking #276, Partner #355), Dependabot actions (CIS #1638, Booking #330), CIS #1467 (test durations), Infra #935 (chờ MFA admin).
-- Đã đóng: CIS #1586 (thay bằng #1705).
+- Nháp AA-1061 (≥ 28/11, sau khi tech lead duyệt pins DRY RUN): Booking #336 (bk-076), Infra #1042, CIS #1717, Infra #1043.
+- Đã đóng: CIS #1586 (thay bằng #1705), Booking #200 (thay bằng #336).
+- Sau snapshot: CIS #1716 merged `bd910ac3` (chỉ test, không deploy).
