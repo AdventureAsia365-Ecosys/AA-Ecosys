@@ -1,0 +1,16 @@
+# AA-1103 kit 1.1.0 tag smoke (S293, 25/11/2026)
+- project-template #1 merged a6e3c8c4, release v1.1.0 (tag on a6e3c8c4)
+- uvx copier@9.4.1 copy --vcs-ref v1.1.0 --defaults (sample 'Sample Ledger'): rc=0; answers stop_hook/pii_guard/api_contract/ui_smoke = true
+- rendered .claude/hooks: test_pii_guard.py Ran 17 OK; test_stop_open_work.py OK; test_settings_hooks.py OK
+- rendered .github/workflows: api-contract.yml, ui-smoke.yml present
+- template PR CI: Kit CI (unit, byte-copy guard, leak scans files+history, links, markdown, render matrix 5 variants + copier update from v1.0.0), gitleaks, PR title: all green
+
+## kit 1.2.0 (S293)
+- project-template #2 merged 408580c7 (review: 4 findings incl. per-tenant idempotency, claim-fenced finish, routes as data; fixed), root #1015 8d60606f; release v1.2.0
+- uvx copier@9.4.1 copy --vcs-ref v1.2.0 --defaults -d multi_tenant=true -d ai_features=true: rc=0; api/app/gateway.py + wiring.py, migrations 001_init + 002_job_store present
+- template CI on the PR (render matrix 5 variants on Postgres 16, copier update from v1.1.0, leak scans, gitleaks): green before merge
+
+## kit 1.3.0 (S293)
+- project-template #3 merged cd2fb6af (review: 3 findings fixed: kit lint baseline for updated projects, attrs pass-through, UAT secrets masked/redacted), root #1016 a741faf7; release v1.3.0
+- uvx copier@9.19.1 copy --vcs-ref v1.3.0 --defaults: rc=0; web/app/_kit (Badge, Button, Drawer, EmptyState, PageHeader, ...), tools/uat (run.ts, scenarios), .github/workflows/uat.yml present
+- template CI incl. new job 'Web kit and UAT end to end' (example walk PASS with video, must-fail walk FAIL): green before merge

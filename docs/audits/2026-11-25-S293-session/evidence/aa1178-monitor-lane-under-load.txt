@@ -1,0 +1,18 @@
+# AA-1178 live check S293 (25/11/2026, read-only, shared.job kinds/status/timestamps only)
+Long background job: writing_memory_r0 baseline ($0, no model call), enqueued 05:43Z, running from 05:43:58Z
+
+06:05:12
+R0 running 2026-11-25 05:43:58.625873+00:00 None
+ops_status_sample succeeded 05:37:34 05:37:37 3
+ops_status_sample succeeded 05:42:34 05:42:38 4
+llm_route_watch succeeded 05:47:34 05:47:38 3
+ai_usage_rollup succeeded 05:47:34 05:47:38 4
+ops_status_sample succeeded 05:47:34 05:47:45 11
+ops_status_sample succeeded 05:52:35 05:52:38 3
+ops_status_sample succeeded 05:57:35 05:57:38 3
+llm_route_watch succeeded 06:02:35 06:02:36 1
+ai_usage_rollup succeeded 06:02:35 06:02:37 1
+ops_status_sample succeeded 06:02:35 06:02:39 4
+QUEUED_OPS_STATUS_SAMPLE_NOW 0
+
+(columns: kind status created started wait_s)
