@@ -48,6 +48,13 @@ function classify(url, baseURL) {
 // (allowMatches is the same function under the name the studio scenarios use.)
 const ALLOW_METHOD = /^((?:POST|PUT|PATCH|DELETE)(?:\|(?:POST|PUT|PATCH|DELETE))*) (\S.*)$/;
 
+/**
+ * A literal string as a regex source: every regex meta-character (backslash included) is escaped, so a path constant
+ * can be put in front of a pattern part (`${escapeRegExp('/api/x')}/[^/]+$`). AA-1111: escaping only "/" left the rest
+ * live (CodeQL js/incomplete-sanitization), and a "/" needs no escape in new RegExp() at all.
+ */
+const escapeRegExp = (s) => String(s).replace(/[\\^$.*+?()[\]{}|/]/g, '\\$&');
+
 /** One allowWrites entry -> { methods: [..] | null (any write method), re: RegExp on the URL, source }. */
 function parseAllow(src) {
   const m = ALLOW_METHOD.exec(String(src));
@@ -88,4 +95,4 @@ function guardRequestContext(rq, { allow = [], onBlocked = () => {} } = {}) {
 }
 
 module.exports = { READ_METHODS, TELEMETRY, SESSION, CHALLENGE_PROOF, isRead, isChallengeProof, classify, guardRequestContext,
-  parseAllow, compileAllow, allowsWrite, allowMatches: allowsWrite };
+  parseAllow, compileAllow, allowsWrite, allowMatches: allowsWrite, escapeRegExp };

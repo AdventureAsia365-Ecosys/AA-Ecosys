@@ -9,6 +9,7 @@
 // Then:  the writer panel shows the live steps, then the finished piece with the AI notice. Desktop 1440 x 900.
 const { HOSTS, step, check } = require('../../lib/dryrun-page.cjs');
 const { rw } = require('../../lib/uat-page.cjs');
+const { escapeRegExp } = require('../../lib/net-guard.cjs');
 
 const T = '/api/tenant/v1';
 const WRITE = /\/api\/tenant\/v1\/content-writing\/requests\/[^/]+\/write$/;
@@ -23,9 +24,10 @@ const sc = rw({
   titleVi: 'Viết một bài mạng xã hội bằng AI',
   baseURL: HOSTS.partner,
   // Pick a topic, choose a goal (angles are generated), choose an angle, write: nothing else may be written. Only the
-  // template strings are escaped here: WRITE.source is a regex source already (escaping it again would match "\\/").
+  // path constant is escaped here: WRITE.source is a regex source already (escaping it again would match "\\/").
   allowWrites: [
-    ...[`${T}/subjects/[^/]+/pick$`, `${T}/angle-gate/requests/[^/]+/(goal|choose)$`].map((x) => x.replace(/\//g, '\\/')),
+    `${escapeRegExp(T)}/subjects/[^/]+/pick$`,
+    `${escapeRegExp(T)}/angle-gate/requests/[^/]+/(goal|choose)$`,
     WRITE.source,
   ],
   steps: [

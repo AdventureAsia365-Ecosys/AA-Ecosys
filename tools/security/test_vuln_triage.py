@@ -14,6 +14,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from urllib.parse import urlparse
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import vuln_triage as vt  # noqa: E402
@@ -488,7 +489,7 @@ class Cli(unittest.TestCase):
 
         def fetch(url):
             calls.append(url)
-            if "first.org" in url:
+            if urlparse(url).hostname == "api.first.org":
                 return json.dumps({"data": [{"cve": "CVE-2099-0001", "epss": "0.3", "percentile": "0.99",
                                              "date": "2026-11-20"}]}).encode()
             return json.dumps({"catalogVersion": "2026.11.20", "count": 0, "vulnerabilities": []}).encode()

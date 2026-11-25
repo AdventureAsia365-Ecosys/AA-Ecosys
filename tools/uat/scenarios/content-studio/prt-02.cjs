@@ -8,6 +8,7 @@
 //        restores it even when a step failed). No LLM call (the brand save stores text). Cost $0. Desktop 1440 x 900.
 const { HOSTS, step } = require('../../lib/dryrun-page.cjs');
 const { rw, studioCall } = require('../../lib/uat-page.cjs');
+const { escapeRegExp } = require('../../lib/net-guard.cjs');
 
 const BRAND = '/api/tenant/admin/brand-identity';
 // Invented text, shown on screen: no real agency wording.
@@ -46,7 +47,7 @@ const sc = rw({
   title: 'Brand identity: an editor saves a new version',
   titleVi: 'Nhận diện thương hiệu: biên tập viên lưu một phiên bản mới',
   baseURL: HOSTS.partner,
-  allowWrites: [`${BRAND.replace(/\//g, '\\/')}$`],
+  allowWrites: [`${escapeRegExp(BRAND)}$`],
   steps: [
     step('Brand identity tells the writer who the agency is and who it writes for. Every piece follows the active version.',
       'Nhận diện thương hiệu cho người viết biết đại lý là ai và viết cho ai. Mọi bài viết theo phiên bản đang dùng.',

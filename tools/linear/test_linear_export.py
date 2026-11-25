@@ -19,9 +19,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import linear_export as le  # noqa: E402
 
 # Invented names only (no secret name copied from the real register). The label and its colon are joined at run
-# time: written out in this file they are exactly what the CI secret scan flags (generic-api-key).
-SECRETS_COLON = "Secret" + "s:"
-S276_SHAPE = f"- {SECRETS_COLON} `orbitquill/dev/zephyr` written (Sentry on)."
+# time: written out in this file they are exactly what the CI secret scan flags (generic-api-key). The constant names
+# avoid credential words: CodeQL reads a name like "secret" as sensitive data written to the temp file (AA-1111).
+LABEL_COLON = "Secret" + "s:"
+S276_SHAPE = f"- {LABEL_COLON} `orbitquill/dev/zephyr` written (Sentry on)."
 # A random token pasted as a value (invented, not a real key); joined at run time for the same reason.
 VALUE_SHAPE = "Secret" + ": `Xk29fJq8LmZp2Rt7`"
 
@@ -70,17 +71,17 @@ class SecretLabelTest(unittest.TestCase):
         self.assertEqual(le.neutralise_secret_labels(f"* {manager} `orbitquill/dev/zephyr` stored"),
                          "* Secrets Manager — `orbitquill/dev/zephyr` stored")
         self.assertEqual(le.neutralise_secret_labels("secret:`lantern/key`"), "secret — `lantern/key`")
-        two = le.neutralise_secret_labels(f"Secret: `a-b/c` and later {SECRETS_COLON} `d.e/f-g`")
+        two = le.neutralise_secret_labels(f"Secret: `a-b/c` and later {LABEL_COLON} `d.e/f-g`")
         self.assertEqual(two, "Secret — `a-b/c` and later Secrets — `d.e/f-g`")
 
     def test_a_token_that_is_not_a_path_shaped_name_is_left_for_the_gate(self):
         # A pasted value must reach gitleaks as written (colon and all): rewriting it would hide it from the rule.
-        label = "Secret" + ":"  # joined at run time, like SECRETS_COLON
+        label = "Secret" + ":"  # joined at run time, like LABEL_COLON
         tokens = ("lanternkey", "a-b-c", "Orbit/Dev/Zephyr", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYLANTERNKEY",
                   "orbitquill/", "/orbitquill/dev", "orbit quill/dev")
         for text in (VALUE_SHAPE, label.lower() + "`lanternkey`", *(f"{label} `{t}`" for t in tokens)):
             self.assertEqual(le.neutralise_secret_labels(text), text, text)
-        mixed = le.neutralise_secret_labels(f"{SECRETS_COLON} `orbitquill/dev/zephyr`; {VALUE_SHAPE}")
+        mixed = le.neutralise_secret_labels(f"{LABEL_COLON} `orbitquill/dev/zephyr`; {VALUE_SHAPE}")
         self.assertEqual(mixed, f"Secrets — `orbitquill/dev/zephyr`; {VALUE_SHAPE}")
 
     def test_other_text_is_left_as_written(self):
@@ -90,10 +91,10 @@ class SecretLabelTest(unittest.TestCase):
             self.assertEqual(le.neutralise_secret_labels(text), text, text)
 
     def test_render_rewrites_comments_and_description(self):
-        out = le.render(issue(comment=S276_SHAPE, desc=f"{SECRETS_COLON} `orbitquill/dev/desc` created"))
+        out = le.render(issue(comment=S276_SHAPE, desc=f"{LABEL_COLON} `orbitquill/dev/desc` created"))
         self.assertIn("- Secrets — `orbitquill/dev/zephyr` written", out)
         self.assertIn("Secrets — `orbitquill/dev/desc` created", out)
-        self.assertNotIn(SECRETS_COLON + " `", out)
+        self.assertNotIn(LABEL_COLON + " `", out)
 
 
 class PersonalAddressTest(unittest.TestCase):

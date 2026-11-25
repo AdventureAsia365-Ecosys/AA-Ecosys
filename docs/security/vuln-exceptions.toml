@@ -35,3 +35,212 @@ reason = "WordPress E2E test sidecar (test-wp, Booking admin task) only: the off
 way_out = "Move test_wp_image (AA-CIS-Infra modules/environment/test_wp.tf) to the first digest of the same tag rebuilt with libzstd1 1.5.7+dfsg-1+deb13u1 or later, then remove this row and the .trivyignore entry."
 approved_by = "tech lead"
 approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#2"
+source = "code-scanning"
+package = "py/clear-text-logging-sensitive-data"
+expires = 2027-02-23
+reason = "docs/audits/2026-10-14-S237-lane-backlog/aa817/aa817_probe.py: Frozen audit evidence under docs/audits/ (kept as the record of the S237 RLS probe), not run in CI, on a server or in prod; nothing imports it. It was run by hand inside the Dev ECS task; its one output line holds role names and check results, never a password or DSN (only user names are parsed out of the DSN); CodeQL reads the variable names as secrets."
+way_out = "Delete the file, or move it out of the repository to the S3 audit archive, once the audit no longer needs it; the alert then closes and this row goes."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#3"
+source = "code-scanning"
+package = "py/clear-text-logging-sensitive-data"
+expires = 2027-02-23
+reason = "docs/audits/2026-10-16-S239-in-progress-audit/aa817-done-evidence/aa817_probe_v2.py: Frozen audit evidence under docs/audits/ (kept as the record of the S239 RLS probe v2), not run in CI, on a server or in prod; nothing imports it. It was run by hand inside the Dev ECS task; its output holds role names and check results, never a password or DSN."
+way_out = "Delete the file, or move it out of the repository to the S3 audit archive, once the audit no longer needs it; the alert then closes and this row goes."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#5"
+source = "code-scanning"
+package = "py/clear-text-logging-sensitive-data"
+expires = 2027-02-23
+reason = "docs/audits/2026-10-14-S235-ecosystem-team-pilot/booking-e2e/tp_e2e.py: Frozen audit evidence under docs/audits/ (kept as the record of the S235 Booking end-to-end run), not run in CI, on a server or in prod; nothing imports it. The flagged line prints the name and length of a key, not its value."
+way_out = "Delete the file, or move it out of the repository to the S3 audit archive, once the audit no longer needs it; the alert then closes and this row goes."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#6"
+source = "code-scanning"
+package = "py/clear-text-storage-sensitive-data"
+expires = 2027-02-23
+reason = "docs/audits/2026-10-14-S237-lane-backlog/aa817/aa817_probe.py: Frozen audit evidence under docs/audits/ (kept as the record of the S237 RLS probe), not run in CI, on a server or in prod; nothing imports it. It was run by hand inside the Dev ECS task; its one output line holds role names and check results, never a password or DSN (only user names are parsed out of the DSN); CodeQL reads the variable names as secrets."
+way_out = "Delete the file, or move it out of the repository to the S3 audit archive, once the audit no longer needs it; the alert then closes and this row goes."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#7"
+source = "code-scanning"
+package = "py/clear-text-storage-sensitive-data"
+expires = 2027-02-23
+reason = "docs/audits/2026-10-16-S239-in-progress-audit/aa817-done-evidence/aa817_probe_v2.py: Frozen audit evidence under docs/audits/ (kept as the record of the S239 RLS probe v2), not run in CI, on a server or in prod; nothing imports it. It was run by hand inside the Dev ECS task; its output holds role names and check results, never a password or DSN."
+way_out = "Delete the file, or move it out of the repository to the S3 audit archive, once the audit no longer needs it; the alert then closes and this row goes."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#12"
+source = "code-scanning"
+package = "js/request-forgery"
+expires = 2027-02-23
+reason = "docs/audits/2026-10-28-S256-aa995-lcp/harness/edge.cjs: Frozen audit evidence under docs/audits/ (kept as the record of the S256 page-speed measurement), not run in CI, on a server or in prod; nothing imports it. It is a local stand-in for the CDN, run by hand on a workstation for Lighthouse; the request path is appended to one fixed CDN origin, and the error text it returns goes to the local browser only."
+way_out = "Delete the file, or move it out of the repository to the S3 audit archive, once the audit no longer needs it; the alert then closes and this row goes."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#16"
+source = "code-scanning"
+package = "js/xss"
+expires = 2027-02-23
+reason = "docs/audits/2026-11-19-S285-session/ops-overview-mockup.html: Frozen audit evidence under docs/audits/ (kept as the record of the S285 ops overview mock-up), not run in CI, on a server or in prod; nothing imports it. A static mock-up page with invented data, opened from disk; it reads no input from anyone."
+way_out = "Delete the file, or move it out of the repository to the S3 audit archive, once the audit no longer needs it; the alert then closes and this row goes."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#17"
+source = "code-scanning"
+package = "js/xss-through-dom"
+expires = 2027-02-23
+reason = "docs/audits/2026-11-03-S265-plan-issue-review/review-page.html: Frozen audit evidence under docs/audits/ (kept as the record of the S265 plan review page), not run in CI, on a server or in prod; nothing imports it. A static page opened from disk for one review; it reads no input from anyone."
+way_out = "Delete the file, or move it out of the repository to the S3 audit archive, once the audit no longer needs it; the alert then closes and this row goes."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#19"
+source = "code-scanning"
+package = "js/xss-through-exception"
+expires = 2027-02-23
+reason = "docs/audits/2026-10-28-S256-aa995-lcp/harness/edge.cjs: Frozen audit evidence under docs/audits/ (kept as the record of the S256 page-speed measurement), not run in CI, on a server or in prod; nothing imports it. It is a local stand-in for the CDN, run by hand on a workstation for Lighthouse; the request path is appended to one fixed CDN origin, and the error text it returns goes to the local browser only."
+way_out = "Delete the file, or move it out of the repository to the S3 audit archive, once the audit no longer needs it; the alert then closes and this row goes."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#20"
+source = "code-scanning"
+package = "js/incomplete-url-substring-sanitization"
+expires = 2027-02-23
+reason = "docs/audits/2026-10-16-S239-in-progress-audit/aa668-verify/logs/aa668_rewrite.mjs: Frozen audit evidence under docs/audits/ (kept as the record of the S239 rewrite verification), not run in CI, on a server or in prod; nothing imports it. The URL check only classifies requests in a recorded log; it guards nothing."
+way_out = "Delete the file, or move it out of the repository to the S3 audit archive, once the audit no longer needs it; the alert then closes and this row goes."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#21"
+source = "code-scanning"
+package = "js/incomplete-url-substring-sanitization"
+expires = 2027-02-23
+reason = "docs/audits/2026-10-16-S239-in-progress-audit/aa668-verify/logs/aa668_social.mjs: Frozen audit evidence under docs/audits/ (kept as the record of the S239 social verification), not run in CI, on a server or in prod; nothing imports it. The URL check only classifies requests in a recorded log; it guards nothing."
+way_out = "Delete the file, or move it out of the repository to the S3 audit archive, once the audit no longer needs it; the alert then closes and this row goes."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#22"
+source = "code-scanning"
+package = "js/incomplete-url-substring-sanitization"
+expires = 2027-02-23
+reason = "docs/audits/2026-10-16-S239-in-progress-audit/aa668-verify/rerun/logs/aa668r_social.mjs: Frozen audit evidence under docs/audits/ (kept as the record of the S239 social re-run), not run in CI, on a server or in prod; nothing imports it. The URL check only classifies requests in a recorded log; it guards nothing."
+way_out = "Delete the file, or move it out of the repository to the S3 audit archive, once the audit no longer needs it; the alert then closes and this row goes."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#23"
+source = "code-scanning"
+package = "js/incomplete-url-substring-sanitization"
+expires = 2027-02-23
+reason = "docs/audits/2026-10-16-S239-in-progress-audit/aa668-verify/rerun/logs/aa668rr_rewrite.mjs: Frozen audit evidence under docs/audits/ (kept as the record of the S239 rewrite re-run), not run in CI, on a server or in prod; nothing imports it. The URL check only classifies requests in a recorded log; it guards nothing."
+way_out = "Delete the file, or move it out of the repository to the S3 audit archive, once the audit no longer needs it; the alert then closes and this row goes."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#24"
+source = "code-scanning"
+package = "js/stack-trace-exposure"
+expires = 2027-02-23
+reason = "docs/audits/2026-10-28-S256-aa995-lcp/harness/edge.cjs: Frozen audit evidence under docs/audits/ (kept as the record of the S256 page-speed measurement), not run in CI, on a server or in prod; nothing imports it. It is a local stand-in for the CDN, run by hand on a workstation for Lighthouse; the request path is appended to one fixed CDN origin, and the error text it returns goes to the local browser only."
+way_out = "Delete the file, or move it out of the repository to the S3 audit archive, once the audit no longer needs it; the alert then closes and this row goes."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#25"
+source = "code-scanning"
+package = "js/identity-replacement"
+expires = 2027-02-23
+reason = "docs/audits/2026-11-19-S285-session/ops-overview-mockup.html: Frozen audit evidence under docs/audits/ (kept as the record of the S285 ops overview mock-up), not run in CI, on a server or in prod; nothing imports it. A static mock-up page with invented data, opened from disk; it reads no input from anyone."
+way_out = "Delete the file, or move it out of the repository to the S3 audit archive, once the audit no longer needs it; the alert then closes and this row goes."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Ecosys"
+id = "#1"
+source = "code-scanning"
+package = "actions/untrusted-checkout/high"
+expires = 2027-02-23
+reason = ".github/workflows/secret-scan.yml: pull_request_target runs this workflow from the base branch; the PR head is checked out only as data for gitleaks (persist-credentials false, no script, action or config from the PR is run), and the rules and baseline are read from the base commit (header of the workflow). The job has contents read and pull-requests write (only to remove a stale review label)."
+way_out = "Accepted by design: the check must judge the PR's own commits and must not be changeable by the PR. Look again if the job ever runs a PR file or gains a write permission."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-CIS-Infra"
+id = "#1"
+source = "code-scanning"
+package = "actions/untrusted-checkout/high"
+expires = 2027-02-23
+reason = ".github/workflows/secret-scan.yml: pull_request_target runs this workflow from the base branch; the PR head is checked out only as data for gitleaks (persist-credentials false, no script, action or config from the PR is run), and the rules and baseline are read from the base commit (header of the workflow). The job has contents read and pull-requests write (only to remove a stale review label)."
+way_out = "Accepted by design: the check must judge the PR's own commits and must not be changeable by the PR. Look again if the job ever runs a PR file or gains a write permission."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Partner"
+id = "#1"
+source = "code-scanning"
+package = "actions/untrusted-checkout/high"
+expires = 2027-02-23
+reason = ".github/workflows/secret-scan.yml: pull_request_target runs this workflow from the base branch; the PR head is checked out only as data for gitleaks (persist-credentials false, no script, action or config from the PR is run), and the rules and baseline are read from the base commit (header of the workflow). The job has contents read and pull-requests write (only to remove a stale review label)."
+way_out = "Accepted by design: the check must judge the PR's own commits and must not be changeable by the PR. Look again if the job ever runs a PR file or gains a write permission."
+approved_by = "tech lead"
+approved_on = 2026-11-25
+
+[[exception]]
+repo = "AA-Partner"
+id = "#4"
+source = "code-scanning"
+package = "py/weak-sensitive-data-hashing"
+expires = 2027-02-23
+reason = "api/app/messaging/signature.py: HMAC-SHA1 is the signature the messaging provider (Twilio) puts on its webhooks; the CRM must compute the same algorithm to verify it, compared in constant time. HMAC-SHA1 is not affected by SHA-1 collisions, and nothing is stored with it."
+way_out = "Move to the provider's stronger signature if it offers one."
+approved_by = "tech lead"
+approved_on = 2026-11-25

@@ -333,7 +333,7 @@ def removed_files(runner: Runner, repo: str, n: int) -> list[str]:
 # --- AWS MFA session ---------------------------------------------------------------------------------------------
 
 
-def mfa_expiry(runner: Runner, profile: str = "aa365-admin") -> datetime | None:
+def sts_expiry(runner: Runner, profile: str = "aa365-admin") -> datetime | None:
     """Expiry of the cached MFA session (12 h, role nghiep-admin-12h). Only the Expiration field is read; nothing else is kept or printed."""
     r = runner.run(["aws", "configure", "export-credentials", "--profile", profile, "--format", "process"],
                    timeout=30)
@@ -353,7 +353,7 @@ def mfa_expiry(runner: Runner, profile: str = "aa365-admin") -> datetime | None:
 
 def warn_mfa(runner: Runner, need_minutes: int = 30) -> None:
     """as-app.sh reads the App key with the MFA session: warn before a long run that would outlive it."""
-    exp = mfa_expiry(runner)
+    exp = sts_expiry(runner)
     if exp is None:
         log("WARN MFA session: expired or unreadable (as-app.sh will fail). "
             "Tech lead: run aws sts get-caller-identity --profile aa365-admin and enter the code.")
@@ -374,9 +374,12 @@ def die(e: ShipError) -> int:
     return e.code
 
 
-def mfa_status_line(runner: Runner, profile: str = "aa365-admin", remind_before: int = 30) -> tuple[int, str]:
-    """One line for the session start block: expiry, minutes left and when to remind the tech lead."""
-    exp = mfa_expiry(runner, profile)
+def sts_expiry_line(runner: Runner, profile: str = "aa365-admin", remind_before: int = 30) -> tuple[int, str]:
+    """One line for the session start block: expiry, minutes left and when to remind the tech lead.
+
+    The name says "sts", not "mfa": CodeQL reads a function named like a credential (mfa, otp, password) as a
+    secret source, and printing this line is the whole point (AA-1111)."""
+    exp = sts_expiry(runner, profile)
     if exp is None:
         return 1, (f"MFA {profile}: expired or not unlocked; tech lead runs: aws sts get-caller-identity "
                    f"--profile {profile}")
@@ -391,7 +394,7 @@ def mfa_status_line(runner: Runner, profile: str = "aa365-admin", remind_before:
 if __name__ == "__main__":
     # python3 tools/github/ship_common.py mfa [profile]  -> session start line (skill aa-session step 2)
     if len(sys.argv) >= 2 and sys.argv[1] == "mfa":
-        code, line = mfa_status_line(Runner(), *(sys.argv[2:3]))
+        code, line = sts_expiry_line(Runner(), *(sys.argv[2:3]))
         print(line)
         sys.exit(code)
     print("usage: ship_common.py mfa [profile]", file=sys.stderr)

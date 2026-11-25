@@ -220,10 +220,14 @@ function findLogLine(messages, evt, tenantId, fields = {}) {
   return null;
 }
 
-/** The assembly Lambda's log group among names: /aws/lambda/<tripplanner prefix>-assembly. */
+/**
+ * The assembly Lambda's log group among names: /aws/lambda/<tripplanner prefix>-assembly whose name holds `env` as a
+ * whole "-", "_" or "/" separated part. A token compare, not a regex built from the --env argument (AA-1111).
+ */
 function pickLogGroup(names, env) {
+  const want = String(env).toLowerCase();
   const hits = names.filter((n) => /^\/aws\/lambda\/.*tripplanner.*-assembly$/i.test(n)
-    && new RegExp(`(^|[-_/])${env}([-_/]|$)`, 'i').test(n));
+    && n.toLowerCase().split(/[-_/]/).includes(want));
   return hits.length === 1 ? hits[0] : null;
 }
 

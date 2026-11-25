@@ -248,8 +248,11 @@ SVG_FORBIDDEN: list[tuple[str, re.Pattern[str]]] = [
     ("entity declaration", re.compile(r"<!ENTITY|<!DOCTYPE[^>]*\[", re.I)),
 ]
 SVG_REF = re.compile(r"\s(?:xlink:)?href\s*=\s*(?:\"([^\"]*)\"|'([^']*)')", re.I)
+# An XML comment cannot hold "--", so its body is written as "no two dashes in a row": unlike ".*?", that body cannot
+# also match "--><!--", so a run of comments has one way to match (no exponential backtracking, CodeQL py/redos).
+_XML_COMMENT = r"<!--(?:[^-]|-(?!-))*-->"
 SVG_START = re.compile(
-    r"\s*(?:<\?xml[^>]*>\s*)?(?:<!--.*?-->\s*)*(?:<!DOCTYPE svg[^>\[]*>\s*)?(?:<!--.*?-->\s*)*<svg[\s>]", re.S)
+    rf"\s*(?:<\?xml[^>]*>\s*)?(?:{_XML_COMMENT}\s*)*(?:<!DOCTYPE svg[^>\[]*>\s*)?(?:{_XML_COMMENT}\s*)*<svg[\s>]")
 # Rule 9 (a), parsed: the regexes above see the raw text, so a namespace prefix (<s:script>, x:href) or an XML character
 # reference (u&#114;l(...)) slips past them. The parsed check allowlists what Graphviz writes instead: SVG-namespace
 # elements from SVG_ELEMENTS only, attributes without a namespace (plus xlink:href / xlink:title / xml:space), no on*

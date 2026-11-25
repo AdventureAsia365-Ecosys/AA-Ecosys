@@ -128,4 +128,8 @@ test('pickLogGroup: the one TripPlanner assembly group of the environment', () =
     '/aws/lambda/aa-tripplanner-stg-assembly', '/aws/lambda/aa-cis-dev-thing'];
   assert.equal(proof.pickLogGroup(names, 'dev'), '/aws/lambda/aa-tripplanner-dev-assembly');
   assert.equal(proof.pickLogGroup(names, 'prod'), null);
+  // --env is a whole name part, compared as text: no partial part, no regex meta-characters (AA-1111).
+  assert.equal(proof.pickLogGroup(names, 'de'), null);
+  assert.equal(proof.pickLogGroup(names, 'd.v'), null);
+  assert.equal(proof.pickLogGroup(names, 'DEV'), '/aws/lambda/aa-tripplanner-dev-assembly');
 });

@@ -47,7 +47,7 @@ of the issue run in other lanes (`AA-1032-<lane>.md` where they keep notes).
 - **open_prs validates all PRs before pushing any** (all-or-nothing, the list is in merge order), never force-pushes,
   reuses an open PR of the branch, appends the Claude Code attribution line only when missing, and replaces the
   S263 one-off `EXTRA_REFS` hack (hard-coded "Refs AA-642") with `--extra-refs`.
-- **MFA:** `ship_common.mfa_expiry` reads `aws configure export-credentials --format process` and keeps only
+- **MFA:** `ship_common.sts_expiry` (named `mfa_expiry` until AA-1111) reads `aws configure export-credentials --format process` and keeps only
   `Expiration`. `python3 tools/github/ship_common.py mfa` prints the session-start line (expiry, minutes left, remind
   time = expiry − 30 min). Tools warn when < 30 min are left (train: < 60 min).
 - **CI:** the tests run in the root Docs lint workflow (new path `tools/github/**`, new step), the same pattern as
