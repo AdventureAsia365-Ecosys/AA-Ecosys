@@ -36,3 +36,11 @@ Nguồn: lệnh một dòng chạy lúc chốt phiên (ECS describe-services, cu
 - Nháp AA-1061 (≥ 28/11, sau khi tech lead duyệt pins DRY RUN): Booking #336 (bk-076), Infra #1042, CIS #1717, Infra #1043.
 - Đã đóng: CIS #1586 (thay bằng #1705), Booking #200 (thay bằng #336).
 - Sau snapshot: CIS #1716 merged `bd910ac3` (chỉ test, không deploy).
+
+## Smoke thứ Năm lần cuối (26/11 ~04:45, chỉ đọc, E2E CIS admin + E2E Booking)
+
+- 4/4 luồng đạt: đăng nhập CIS (nút "Sign in with company email"); Content workspace (danh sách 2 dòng, tour SYNTHETIC S294
+  mở được, trang tạo mới) không tràn ở 1440 và 390; Compliance readiness 5 tab (200, không error boundary, console 0);
+  Booking SUP-000019 tab Bank accounts "Waiting for approval" + chi tạm dừng, Bills 3 dòng, Dashboard.
+- Bước đăng xuất của harness đi qua `/admin` gốc nên bị đẩy về `/login` (đã biết từ S293, follow-up sau thứ Năm); đăng xuất
+  thật trên demo đi từ `/admin/overview`.
