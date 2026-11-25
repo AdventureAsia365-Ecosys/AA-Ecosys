@@ -4,10 +4,9 @@
 The root workflow "Compliance evidence" (.github/workflows/compliance-evidence.yml) runs this once a day on master. It
 runs about ten checks that need no new permission (tech lead S287 Q5 / Q7: the read-only GitHub App and the evidence
 role come in phase 2): reads of the six public repos with the run's GITHUB_TOKEN, and registers kept in this repo. It
-writes ONE file, which the workflow uploads with the existing Docs sync role next to the Delivery summary (AA-1108):
-
-  s3://<bronze>/docs-reader/compliance/evidence.json             CIS reads and ingests it (api/services/compliance.py)
-  s3://<bronze>/docs-reader/compliance/history/<yyyy>/<mm>/<dd>.json   the same file, kept per day (readiness history)
+writes ONE file, which the workflow seals into the Object Lock evidence bucket with tools/compliance/seal.py (AA-1173,
+source root_daily, write-once with a hash-chained manifest); CIS reads the sealed bundle and ingests it
+(api/services/compliance_store.py). The phase 1 copy under the Docs sync prefix is no longer written (S294).
 
 Format 1: {"format": 1, "source": "root_daily", "collector", "collector_version" (git SHA of this run),
 "run_ref" (workflow and run number), "generated_at", "checks": [{"check_id", "status", "summary", "detail",

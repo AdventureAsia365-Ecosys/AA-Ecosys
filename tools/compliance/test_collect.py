@@ -302,7 +302,8 @@ class PublicRepoGuardTest(unittest.TestCase):
         self.assertNotIn("upload-artifact", wf)   # the evidence goes to private storage only
         self.assertIn("refs/heads/master", wf)
         self.assertIn("schedule:", wf)
-        self.assertIn("docs-reader/compliance", wf)
+        self.assertIn("tools/compliance/seal.py", wf)   # S294: sealed into the evidence bucket only
+        self.assertNotIn("docs-reader/compliance", wf)
 
     def test_config_names_every_repo_once(self):
         cfg = json.loads((ROOT / "tools/compliance/checks.json").read_text(encoding="utf-8"))

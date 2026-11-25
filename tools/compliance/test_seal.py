@@ -75,34 +75,37 @@ class SealTest(unittest.TestCase):
 
 
 class SealWorkflowTest(unittest.TestCase):
-    """The root workflow seals with the compliance evidence role before the docs-reader copy, and checks the role."""
+    """The root workflow seals with the compliance evidence role, checks the role, and has no other output."""
+
+    def _wf(self):
+        text = (ROOT / ".github/workflows/compliance-evidence.yml").read_text(encoding="utf-8")
+        return text, "\n".join(line for line in text.splitlines() if not line.lstrip().startswith("#"))
 
     def test_seal_steps(self):
-        text = (ROOT / ".github/workflows/compliance-evidence.yml").read_text(encoding="utf-8")
-        wf = "\n".join(line for line in text.splitlines() if not line.lstrip().startswith("#"))
+        _, wf = self._wf()
         self.assertIn("secrets.COMPLIANCE_EVIDENCE_ROLE_ARN", wf)
         self.assertIn("secrets.COMPLIANCE_EVIDENCE_BUCKET", wf)
         self.assertNotIn("vars.COMPLIANCE", wf)
         self.assertIn("--source root_daily", wf)
         self.assertIn("*:assumed-role/aa-cis-*-compliance-evidence/*", wf)
-        self.assertLess(wf.index("tools/compliance/seal.py"), wf.index("secrets.DOCS_SYNC_ROLE_ARN }}\n"))
         self.assertEqual(len(re.findall(r"mask-aws-account-id: true", wf)), 1)
 
-    def test_a_failed_seal_never_blocks_the_docs_reader_upload(self):
-        # S290 review: the seal runs before the phase 1 upload, so each seal step is continue-on-error and a last
-        # step (after the upload) fails the run when the seal did not succeed.
-        text = (ROOT / ".github/workflows/compliance-evidence.yml").read_text(encoding="utf-8")
+    def test_the_seal_is_the_only_output_and_a_failure_fails_the_run(self):
+        # S294 (AA-1173): the phase 1 docs-reader copy is gone (sealed path proven live 24/11), so nothing may swallow
+        # a seal failure any more: no continue-on-error, no Docs sync role, no second upload; missing secrets fail.
+        text, wf = self._wf()
+        self.assertNotIn("DOCS_SYNC", wf)
+        self.assertNotIn("docs-reader", wf)
+        self.assertNotIn("aws s3 cp", wf)
+        self.assertNotIn("continue-on-error", wf)
         steps = re.split(r"\n      - (?=name:|uses:)", text.split("\n    steps:\n", 2)[2])
         by_name = {re.match(r"name: (.*)", s).group(1): s for s in steps if s.startswith("name:")}
-        for name in ("AWS credentials (OIDC, compliance evidence role)", "Verify the role",
-                     "Seal into the evidence bucket (write-once, hash chain)"):
-            self.assertIn("continue-on-error: true", by_name[name], name)
+        missing = by_name["Seal not configured"]
+        self.assertIn("env.HAS_EVIDENCE != 'true'", missing)
+        self.assertIn("exit 1", missing)
         names = list(by_name)
-        outcome = next(n for n in names if n.startswith("Seal outcome"))
-        self.assertGreater(names.index(outcome), names.index("Upload the day file, then the latest file"))
-        self.assertIn("!cancelled()", by_name[outcome])
-        self.assertIn("steps.seal.outcome", by_name[outcome])
-        self.assertIn("exit 1", by_name[outcome])
+        self.assertEqual(names[-1], "Seal into the evidence bucket (write-once, hash chain)")
+        self.assertLess(names.index("Verify the role"), names.index(names[-1]))
 
 
 if __name__ == "__main__":
