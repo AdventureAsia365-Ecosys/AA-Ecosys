@@ -27,6 +27,14 @@ class ModeTest(unittest.TestCase):
     def test_unknown_value_falls_back_to_log(self):
         self.assertEqual(hookio.mode({"AA_SYNC_HOOKS": "loud"}), "log")
 
+    def test_subagent_stop_stays_silent_unless_its_own_switch_says_so(self):
+        self.assertEqual(hookio.mode({"AA_SYNC_HOOKS": "warn"}, event="SubagentStop"), "log")
+        self.assertEqual(hookio.mode({"AA_SYNC_HOOKS": "block"}, event="SubagentStop"), "log")
+        self.assertEqual(hookio.mode({"AA_SYNC_HOOKS": "off"}, event="SubagentStop"), "off")
+        self.assertEqual(hookio.mode({"AA_SYNC_HOOKS": "warn", "AA_SYNC_HOOKS_SUBAGENT": "warn"},
+                                     event="SubagentStop"), "warn")
+        self.assertEqual(hookio.mode({"AA_SYNC_HOOKS": "warn"}, event="Stop"), "warn")
+
     def test_only_warn_and_block_speak(self):
         self.assertEqual([m for m in hookio.MODES if hookio.speaks(m)], ["warn", "block"])
 

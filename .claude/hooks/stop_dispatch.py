@@ -77,7 +77,7 @@ def main() -> int:
     if reason:
         print(reason, file=sys.stderr)
         return 2
-    m = hookio.mode()
+    m = hookio.mode(event=str(data.get("hook_event_name") or "Stop"))
     if m == "off":
         return 0
     text = ""
