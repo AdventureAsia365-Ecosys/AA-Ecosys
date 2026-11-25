@@ -55,6 +55,17 @@ Node mặc định 18 sẽ fail. tsc trong build bắt lỗi prop mà eslint b�
      (`smoke-public`) + **smoke có đăng nhập** (project `smoke`, spec gắn tag `@staff`, ảnh desktop/mobile × light/dark)
      bằng người dùng Cognito E2E trên `https://aa-cis.lumiguides.it.com`, vai **content**; trang vai đó không được mở
      phải chuyển về trang đích (`frontend/lib/rbac.ts` `PAGE_RULES`). Sau đó `visual-production` chụp các trang push đổi.
+   - **Danh sách trang của visual CIS** (`tests/e2e/visual/pages.ts`, S294): phủ **mọi route admin động** — `EXCLUDED`
+     rỗng. Route động có `path` cố định khi slug là code (ví dụ `/admin/lab/t2-rewrite`), còn lại dùng `openFirst`:
+     mở trang danh sách, lấy dòng đầu khớp selector. Dòng có `href` (link) thì đi theo link; dòng DataTable mở bằng
+     router push (không có `href`) thì gắn `rowTestId` trên DataTable của kit (`staff-row`, `supply-content-row`,
+     `tenant-row`), run focus dòng đầu và bấm **Enter** (phím mở dòng của kit, không bao giờ click — dòng có switch /
+     menu thao tác), chờ pathname đổi rồi tự mở lại địa chỉ đó để chụp; run vẫn chỉ đọc. Danh sách rỗng, lỗi tải hoặc
+     dòng không mở gì → test **skip** có lý do, không đỏ. Trang vai E2E (read-only, vai content) không được mở theo
+     `PAGE_RULES` (trang chỉ-admin) cũng **skip** có lý do → trang đó vẫn kiểm qua mục 3a. Thêm route động mới: thêm
+     một dòng vào `pages.ts` (`path` cố định hoặc `openFirst` + test id ổn định); `frontend/lib/visualPages.test.mjs`
+     đỏ khi một route động thiếu dòng hoặc test id `openFirst` không có trang nào render. Đổi gì trong
+     `tests/e2e/visual/` thì lần visual sau deploy chụp **mọi** trang staff (đỏ ở trang khác không phải do PR đó).
    - **Booking sau mỗi deploy** (`deploy-admin-dev.yml` job `smoke`): `/login` công khai trên
      `https://booking.lumiguides.it.com` (200, header bảo mật, không lỗi console), rồi visual các trang công khai.
    - Chạy lại tay (điều phối, từ `main`): dispatch `ui-smoke.yml` với `base_url=https://aa-cis.lumiguides.it.com`,

@@ -28,4 +28,20 @@ Nguồn sự thật: `apps/AA-TripPlanner-Web/CONTEXT.md`; yêu cầu sản ph�
   Hai trang dùng: CRM (Settings › Add-ons › Trip planner) và Content studio (Account › Trip planner) cho đại lý
   KHÔNG có CRM add-on (không có CRM agency; CRM API hỏi CIS `tenant.membership.v1` membership studio, actor
   `studio-member:<id>`); cài đặt site (lead route, theme, locale) của studio đi thẳng CIS `/v1/account/tripplanner`.
+- Trả lời HTTP của frontend (S294): `/{slug}` trần của một đại lý đang phục vụ (và `/` trên domain riêng của đại lý) là
+  **307 không body** sang `/{slug}/plan`, do proxy (`proxy.ts` + `lib/tenantRoot.ts`) trả với Location tương đối; slug
+  lạ / tra lỗi thì đi tiếp vào trang (404 / lỗi thử lại), trang giữ `redirect()` làm dự phòng. BFF `/api/*`: mọi 5xx có
+  body `{"error": "<code>", "request_id": "<id>"}` + header `x-request-id` (`lib/apiError.ts`; upstream 5xx chỉ giữ một
+  mã ngắn, route handler ném lỗi → 500 `internal` + một dòng log `bff_error`, env thiếu → 503 `not_configured`); body
+  dưới 500 đi nguyên. Trang lỗi chỉ hiện `Reference: <digest>`, không hiện message. CI (`check-agency-render.mjs`) ghim
+  cả redirect không body lẫn body lỗi BFF.
+- **Map engine dùng chung** (mẫu byte copy có guard của root ADR 0016): bản **canonical** ở TripPlanner
+  `frontend/lib/map-engine/` (lõi không framework + binding React mỏng `useMapEngine`, `MANIFEST.json` giữ sha256 từng
+  file). AA-Partner giữ **bản byte copy có guard** ở `web/lib/map-engine/` (lockfile `web/map-engine.lock.json`) cho bản đồ
+  proposal builder của CRM; không sửa bản copy. Sửa engine ở TripPlanner → `node frontend/lib/map-engine/check-map-engine.mjs --write`
+  (manifest cũ làm `npm test` đỏ), merge, rồi `--sync` sang AA-Partner; CI AA-Partner kiểm toàn vẹn, import guard
+  (không import code app TripPlanner) và provenance so với manifest trên `main` của TripPlanner.
+- Red-team AI của chat lập kế hoạch: invoke trực tiếp chỉ cho operator của assembly Lambda (`{"redteam": {...}}`, chỉ
+  dev / test / local; mặc định dry run, chạy thật cần `apply` + `stop_usd`), stage ledger `adhoc_aa1166_redteam_tp`
+  (chi tiết: CONTEXT.md mục operator-only invokes).
 - Tài nguyên AWS (Lambda, API Gateway, OIDC deploy role, trust Bedrock) ở AA-CIS-Infra `accounts/aa365/tripplanner.tf`.
