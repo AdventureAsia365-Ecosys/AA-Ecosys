@@ -1122,6 +1122,14 @@
    "app": "cis",
    "area": "ops"
   },
+  "cis.ops.assist_auto_incident_gap_min": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.assist_auto_severities": {
+   "app": "cis",
+   "area": "ops"
+  },
   "cis.ops.assist_card_ttl_min": {
    "app": "cis",
    "area": "ops"
@@ -1130,11 +1138,19 @@
    "app": "cis",
    "area": "ops"
   },
+  "cis.ops.assist_deep_model": {
+   "app": "cis",
+   "area": "ops"
+  },
   "cis.ops.assist_evidence_window_min": {
    "app": "cis",
    "area": "ops"
   },
   "cis.ops.assist_history_min_n": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.assist_lookup_windows_min": {
    "app": "cis",
    "area": "ops"
   },
