@@ -169,7 +169,8 @@ def depends_on(items: list[Item]) -> dict[str, set[str]]:
     migrations it waits for."""
     by_key = {k: it.tag for it in items for k in it.applies}
     tags = {it.tag for it in items}
-    return {it.tag: {pr_tag(d) for d in it.after_prs if pr_tag(d) in tags} | {by_key[k] for k in it.after if k in by_key}
+    return {it.tag: ({pr_tag(d) for d in it.after_prs if pr_tag(d) in tags}
+                     | {by_key[k] for k in it.after if k in by_key})
             for it in items}
 
 
