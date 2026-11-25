@@ -280,11 +280,11 @@ features:
     module: writing-lab
     name: Writing Lab and quality measurement
     name_vi: Writing Lab và đo chất lượng
-    summary_vi: "Các trang theo từng bước của người viết AI, bộ nhớ viết có kiểm soát, nhãn nhận định, phễu chất lượng và nguồn gốc của mọi kết quả."
-    summary: Stage pages of the writers, the governed writing memory, claim labels and shadow verdicts, the quality funnel and lineage of every output.
+    summary_vi: "Các trang theo từng bước của người viết AI, bộ nhớ viết có kiểm soát, nhãn nhận định, đọc tay các lượt đánh giá, phễu chất lượng và nguồn gốc của mọi kết quả."
+    summary: Stage pages of the writers, the governed writing memory, claim labels and shadow verdicts, eval runs read by hand, the quality funnel and lineage of every output.
     roles: [admin, content_lead, tenant_qa, ai_ops]
     status: live
-    surface: ["page:/admin/lab/**", "route:admin_writing_memory", "route:admin_claim_labels", "route:admin_claim_shadow", "route:admin_quality_funnel", "route:admin_quality_lineage", "route:admin_quality_thresholds"]
+    surface: ["page:/admin/lab/**", "route:admin_writing_memory", "route:admin_claim_labels", "route:admin_claim_shadow", "route:admin_eval_runs", "route:admin_quality_funnel", "route:admin_quality_lineage", "route:admin_quality_thresholds"]
     conditions:
       settings: [cis.quality.pass_line, cis.writing_memory.month_cap_usd, cis.spend.instrument_eval_cap_usd]
     owner: ai_ops
