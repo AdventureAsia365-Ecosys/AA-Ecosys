@@ -1,8 +1,8 @@
 {
  "updated": "2026-11-25",
- "synced_at": "2026-11-25T05:00Z",
- "session": "S292",
- "next_session": "S293",
+ "synced_at": "2026-11-25T09:55Z",
+ "session": "S293",
+ "next_session": "S294",
  "source": "Linear (19/11/2026, plan_sync.py --write, S285) + docs/audits/2026-11-19-S285-session/plan-audit-plan-changes.json (tech lead duyệt Q1–Q12, 19/11) + docs/backlog/README.md",
  "projects": {
   "data": "Data Platform",
@@ -76,7 +76,7 @@
     },
     {
      "text": "AA-1024 D8: mig CIS 336 áp sau guard 30 ngày (≥10/11 ~12:00 UTC) và DB_AUTO_APPLY_CONTRACT=true lại",
-     "done": false
+     "done": true
     },
     {
      "text": "AA-1026 D6: báo cáo đối soát hoá đơn tháng 11 (≤5 %) trong docs/audits, phiên đầu tiên ≥01/12",
@@ -296,7 +296,7 @@
     },
     {
      "text": "Frontend trên một task Fargate Spot sau CloudFront + WAF CLOUDFRONT (rule rate + Challenge trả 429/challenge live; nhận giới hạn lạm dụng bước gửi guest từ AA-1005)",
-     "done": false
+     "done": true
     },
     {
      "text": "Trần AI theo tenant áp cho các stage tp; guard d16 mở rộng sang dữ liệu traveller",
@@ -360,11 +360,11 @@
     },
     {
      "text": "AA-741: báo cáo audit T-series (tenant thử qua tenant_provision) trong docs/audits; lượt trả phí đã duyệt S265 (≤20 USD, ≤50 tour, đường tạm OpenAI/acc2 nếu acc3 còn đóng); việc trong thời gian pilot, không phải cổng pilot",
-     "done": false
+     "done": true
     },
     {
      "text": "AA-788: pilot 20 piece từ 19/11 có đường LLM",
-     "done": false
+     "done": true
     },
     {
      "text": "Kết quả hiện ở Writing Lab khi R6 ship",
@@ -415,8 +415,8 @@
      "done": false
     },
     {
-     "text": "AA-911: CIS admin + Booking admin chạy trên ECS (Dev trước, d23); gỡ cầu nối CIS → Booking (POST /auth/booking-token 404, 0 dòng bridge-era trong booking.staff_users); gỡ ngoại lệ E2E A10 lúc go-live",
-     "done": false
+     "text": "AA-911: CIS admin + Booking admin chạy trên ECS (Dev trước, d23); gỡ cầu nối CIS → Booking (POST /auth/booking-token 404, 0 dòng bridge-era trong booking.staff_users); ngoại lệ E2E A10 gỡ lúc go-live theo AA-1054",
+     "done": true
     }
    ],
    "risks": [
@@ -454,15 +454,15 @@
     },
     {
      "text": "AA-965 chỉ cho supplier dịch vụ phụ không phải AA, qua gateway với pii_class us và ngân sách AI của R1",
-     "done": false
+     "done": true
     },
     {
      "text": "AA-968 campaign qua cổng nội dung d21 và phản ứng với tour_liveness_changed",
-     "done": false
+     "done": true
     },
     {
      "text": "Card ship trong thời gian pilot qua review bảo mật (AA-969) trước khi bật cho tenant pilot",
-     "done": false
+     "done": true
     }
    ]
   },
@@ -473,7 +473,7 @@
    "status": "later",
    "criteria": [
     {
-     "text": "Không slot; ghi chú re-scope trong từng issue; lane phụ AA-1021 theo luật 'không trình bày việc đang thiết kế như đã chạy'",
+     "text": "Không slot; ghi chú re-scope trong từng issue; luật 'không trình bày việc đang thiết kế như đã chạy'",
      "done": false
     }
    ]
@@ -481,24 +481,24 @@
   {
    "id": "M-OD",
    "name": "Học từ app Odoo: CRM đại lý bán lẻ + Booking vận hành",
-   "status": "next",
+   "status": "done",
    "window": "S276–S280",
    "criteria": [
     {
      "text": "CRM bán lẻ: giá theo loại khách, trả nhiều đợt, phí huỷ (AA-1066, AA-1067)",
-     "done": false
+     "done": true
     },
     {
      "text": "CRM tài chính + điều hành (AA-1068, AA-1069, AA-1070, AA-1071)",
-     "done": false
+     "done": true
     },
     {
      "text": "Đặt ngay + thanh toán online trên trang tour đại lý (AA-1072)",
-     "done": false
+     "done": true
     },
     {
      "text": "Booking: khởi hành, chi phí/lãi, vận hành (AA-1073, AA-1074, AA-1075)",
-     "done": false
+     "done": true
     }
    ]
   },
@@ -510,7 +510,7 @@
    "criteria": [
     {
      "text": "Bước 1 (AA-1150): 3 preset vai trò người trên trang Staff, bỏ content_creator, finance đọc được, tách supplier.activate / contract.publish / stop_sale.approve, một lần đăng nhập cho CIS + Booking (E2E + tài khoản thật), E2E pricing xanh",
-     "done": false
+     "done": true
     },
     {
      "text": "Vai trò tuỳ chỉnh (AA-1155): Booking + CIS, contract view shared.v_staff_booking_grant (Q2 = A, bổ sung ADR 0006), seed 'Product, ops & accounting' gồm cả báo giá/đặt chỗ đại lý (Q3), không quyền duyệt; trang Roles & permissions đủ 4 app",
@@ -526,7 +526,7 @@
     },
     {
      "text": "My work hai nửa nối nhau (Q8 = a): trang CIS /admin/my-work (AA-1156) + dải My work trên dashboard Booking (AA-1159), không view chéo app",
-     "done": false
+     "done": true
     }
    ]
   },
@@ -538,11 +538,11 @@
    "criteria": [
     {
      "text": "CRM: đại lý chỉ còn vé máy bay, visa, bảo hiểm, phí; dữ liệu sản phẩm chỉ của AA (AA-1144, AA-1147)",
-     "done": false
+     "done": true
     },
     {
      "text": "Booking: mô hình nguồn cung chung + 3 vai trò người + vai trò tuỳ chỉnh (M-ROLES), tour bán ra tách từng đặt dịch vụ, hồ sơ nhà cung cấp (AA-1145, AA-1149, AA-1150)",
-     "done": false
+     "done": true
     },
     {
      "text": "CIS: sửa tour có phiên bản, khoá, cổng duyệt; bộ công cụ content tạo tour tay (AA-1146, AA-1148)",
@@ -550,7 +550,7 @@
     },
     {
      "text": "PR-29 hoạt động tuỳ chọn + PR-30 khách sạn qua DMC (AA-1151, AA-1152, AA-1153)",
-     "done": false
+     "done": true
     }
    ]
   }
@@ -995,6 +995,30 @@
   }
  ],
  "log": [
+  {
+   "session": "S293",
+   "date": "25/11/2026",
+   "closed": [
+    "AA-1178",
+    "AA-1179",
+    "AA-1180"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-1179",
+    "AA-1180"
+   ],
+   "reopened": [],
+   "notes": [
+    "~12:20 → ~17:30, Ultracode, lane a–h; không đụng buổi thứ Năm 26/11; LLM trả phí 0 USD; đổi tài khoản Claude ~13:10 (giới hạn 5 h), lane resume",
+    "Done: AA-1178 (làn monitor đúng nhịp dưới job nền 21′), AA-1179 (parity 0 lệch, buffer 150–194×, p95 60 ms), AA-1180 (rollup 8 số lẻ, check ok=True)",
+    "AA-1154 A2 + 4 follow-up A1 live (CIS 490–491, #1697); còn tech lead bấm 'I ran this'",
+    "AA-1169 trang Writing Lab › Eval runs live (#1695); còn tech lead đọc tay 12 mẫu",
+    "AA-1103 kit v1.1.0 + v1.2.0 + v1.3.0 release (đủ 9 hàng 5.4); còn duyệt khoá L8",
+    "AA-1142 follow-up: External checks chạy từ worker CIS (GitHub cron 0 lượt), 5xx theo đại lý, tiếng Việt (CIS 492–493, #1699)",
+    "Smoke thứ Năm 4/4 sau deploy cuối 7886cb4c; Jira 9 nháp chờ (auto mode chặn đăng)"
+   ]
+  },
   {
    "session": "S292",
    "date": "25/11/2026",
@@ -2649,13 +2673,13 @@
   {
    "id": "AA-1103",
    "title": "[Playbook] Build the new-project kit, part 2 — Copier template repo, generic skills, pilot (R3–R6)",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "S292",
+   "session": "S294",
    "size": "L",
-   "next": "S292: kit v1.1 (AA-1121) + module Academy L8; cài App lên project-template là bước tay",
+   "next": "S294: kit đủ 9 hàng (v1.3.0); tech lead duyệt khoá L8 (check_learn --pin, status published) → Done",
    "needs": ""
   },
   {
@@ -2733,13 +2757,13 @@
   {
    "id": "AA-1154",
    "title": "[Ops] CIS admin assistant A0–A2: monitor, look up and propose ops actions with risk and predicted outcome",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "Medium",
    "project": "data",
    "milestone": "later",
-   "session": "S293",
+   "session": "S294",
    "size": "",
-   "next": "A1 live S292 (Analyse 0,00085 USD); S293: A2 (dự báo vs thực tế, digest) + 4 follow-up A1",
+   "next": "S294: tech lead bấm \"I ran this\" một thẻ → đọc check +10/+30 và dòng \"right n of m\" → Done",
    "needs": ""
   },
   {
@@ -2749,21 +2773,21 @@
    "priority": "High",
    "project": "data",
    "milestone": "later",
-   "session": "S293",
+   "session": "S294",
    "size": "M",
-   "next": "Bộ ISMS/AIMS-lite trên S3 private isms/ (S292); thứ Năm 26/11 chủ DN duyệt policy/scope/roles/rủi ro; ASVS L1 + red-team tháng 12",
+   "next": "Thứ Năm 26/11: chủ DN duyệt bộ ISMS (policy/scope/roles/rủi ro); ASVS L1 + red-team tháng 12",
    "needs": ""
   },
   {
    "id": "AA-1169",
    "title": "[Quality] T9 blog first-pass yield ≥ 0.30 under the W5 measure",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "Medium",
    "project": "core",
    "milestone": "later",
-   "session": "S293",
+   "session": "S294",
    "size": "M",
-   "next": "S293: đọc tay 10 blog w5-t9-r2 (contract + hứa hẹn không nguồn); cần UI cho output eval (route lineage chưa có trang)",
+   "next": "S294: tech lead đọc 12 mẫu w5-t9-r2 trên Writing Lab › Eval runs (0 contract, 0 hứa hẹn không nguồn) → Done",
    "needs": ""
   },
   {
@@ -2800,18 +2824,6 @@
    "session": "S288",
    "size": "M",
    "next": "S288: merged + deploy (CIS 471); register v2 nạp; Refresh OK (cis_db + crm_ops); trang pháp lý giữ draft (D1)",
-   "needs": ""
-  },
-  {
-   "id": "AA-1178",
-   "title": "[CIS] Monitoring jobs never wait behind a long background job (own lane in the job runner)",
-   "status": "In Review",
-   "priority": "High",
-   "project": "core",
-   "milestone": "later",
-   "session": "S293",
-   "size": "",
-   "next": "S292 ship (CIS 489, #1693); còn kiểm ops_status_sample đều nhịp khi có job nền dài rồi Done",
    "needs": ""
   }
  ]

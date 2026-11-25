@@ -1,0 +1,6 @@
+# AA-1142 follow-up live (S293, 25/11/2026 09:31Z): external checks from the CIS worker (public Dev hosts only)
+SOURCE worker rows 24 targets 8 last 2026-11-25 09:19:37.524725+00:00 not_ok 0
+LATEST_WORKER [('booking-admin', 'ok'), ('booking-api', 'ok'), ('cis-admin', 'ok'), ('cis-api', 'ok'), ('crm-api', 'ok'), ('crm-portal', 'ok'), ('staff-sign-in', 'ok'), ('tripplanner-web', 'ok')]
+JOB succeeded 08:54:27 08:54:36
+JOB succeeded 09:04:28 09:04:35
+JOB succeeded 09:19:29 09:19:38

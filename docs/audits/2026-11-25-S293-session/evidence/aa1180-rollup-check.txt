@@ -1,0 +1,8 @@
+# AA-1180 live (S293, 25/11/2026 09:30Z, $0): manual re-roll 17/11 09:00Z-25/11 09:00Z, then the exact rollup check (last 7 whole days)
+QUEUED <job> 2026-11-17T09:00:00+00:00 2026-11-25T09:00:00+00:00
+REROLL succeeded
+CHECK ok=True 2026-11-18T09:00:00+00:00 2026-11-25T09:00:00+00:00
+SOURCE llm equal=True ledger_cost 14.250185 rollup_cost 14.25018500 rows 11026 diff {}
+SOURCE jev equal=True ledger_cost 0.06664078 rollup_cost 0.06664078 rows 1876 diff {}
+SOURCE dfs equal=True ledger_cost 0.000000 rollup_cost 0E-8 rows 7 diff {}
+SOURCE geocoder equal=True ledger_cost 0.000000 rollup_cost 0E-8 rows 7 diff {}
