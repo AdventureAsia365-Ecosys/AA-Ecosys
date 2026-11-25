@@ -35,9 +35,19 @@ MAX_MESSAGE = 1500  # advisory 4.1 rule 4: a reminder is at most ~1,500 characte
 _SAFE = re.compile(r"[^A-Za-z0-9_-]+")
 
 
-def mode(env: dict | None = None) -> str:
-    value = ((env if env is not None else os.environ).get("AA_SYNC_HOOKS") or DEFAULT_MODE).strip().lower()
-    return value if value in MODES else DEFAULT_MODE
+def mode(env: dict | None = None, event: str | None = None) -> str:
+    """The mode for one hook event. SubagentStop has its own switch `AA_SYNC_HOOKS_SUBAGENT` (S292, tech lead):
+    unset, it follows `AA_SYNC_HOOKS` but never speaks (warn / block act as log), so a workflow lane agent is not
+    refused a stop after its final StructuredOutput call (see docs/implementation-notes/AA-1136.md, Should know)."""
+    env = env if env is not None else os.environ
+    value = (env.get("AA_SYNC_HOOKS") or DEFAULT_MODE).strip().lower()
+    value = value if value in MODES else DEFAULT_MODE
+    if event == "SubagentStop":
+        own = (env.get("AA_SYNC_HOOKS_SUBAGENT") or "").strip().lower()
+        if own in MODES:
+            return own
+        return "log" if value in ("warn", "block") else value
+    return value
 
 
 def speaks(m: str) -> bool:

@@ -17,6 +17,9 @@
       "Bash(aws configure get:*)"
     ]
   },
+  "env": {
+    "AA_SYNC_HOOKS": "warn"
+  },
   "hooks": {
     "PreToolUse": [
       {

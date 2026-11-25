@@ -157,9 +157,9 @@ class ChangeGuardAtStopTest(unittest.TestCase):
         rec, _ = sd.sync_check(self.data(), "warn")
         self.assertEqual(rec["outcome"], "no-writes")
 
-    def call_main(self, data: dict, mode: str) -> tuple[int, str]:
+    def call_main(self, data: dict, mode: str, subagent: str = "") -> tuple[int, str]:
         err = io.StringIO()
-        with mock.patch.dict(os.environ, {"AA_SYNC_HOOKS": mode}), \
+        with mock.patch.dict(os.environ, {"AA_SYNC_HOOKS": mode, "AA_SYNC_HOOKS_SUBAGENT": subagent}), \
                 mock.patch.object(sys, "stdin", io.StringIO(json.dumps(data))), mock.patch.object(sys, "stderr", err):
             rc = sd.main()
         return rc, err.getvalue()
@@ -167,12 +167,17 @@ class ChangeGuardAtStopTest(unittest.TestCase):
     def rows(self) -> list[dict]:
         return [json.loads(x) for x in self.log.read_text(encoding="utf-8").splitlines()]
 
+    def test_main_warn_is_silent_at_subagent_stop_by_default(self):
+        self.wrote(self.wt)
+        self.assertEqual(self.call_main(self.data(), "warn"), (0, ""))
+        self.assertEqual(self.rows()[-1]["mode"], "log")
+
     def test_main_warn_refuses_once_and_logs(self):
         self.wrote(self.wt)
-        rc, err = self.call_main(self.data(), "warn")
+        rc, err = self.call_main(self.data(), "warn", subagent="warn")
         self.assertEqual(rc, 2)
         self.assertIn("No test needed: <reason>", err)
-        self.assertEqual(self.call_main(self.data(), "warn"), (0, ""))
+        self.assertEqual(self.call_main(self.data(), "warn", subagent="warn"), (0, ""))
         rows = self.rows()
         self.assertEqual([r["event"] for r in rows], ["SubagentStop", "SubagentStop"])
         self.assertTrue(all(isinstance(r["latency_ms"], float) for r in rows))
