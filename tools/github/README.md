@@ -193,11 +193,14 @@ the independent agent review of a risky PR is recorded on the PR itself. Trigger
   Fixes/Closes phrase. Deleted files are listed as a warning.
 - gitleaks v8.30.1 scans `origin/<base>..<branch>` with the base's rules before any push. The binary comes from
   `gitleaks_resolve.py`, shared with the root `scripts/pre-push.sh` (S281): `AA_GITLEAKS`, then
-  `.tmp-session/gitleaks-8301/gitleaks` (only at the CI pin), then every `gitleaks` on PATH; a candidate whose
+  `.tmp-session/gitleaks-8301/gitleaks` (only at the CI pin), then the mise install of the pin
+  (`~/.local/share/mise/installs/gitleaks/8.30.1/gitleaks`, S282), then every `gitleaks` on PATH; a candidate whose
   `gitleaks version` fails is passed over and named (a mise shim with no version set answers "No version is set for
   shim: gitleaks"). No working gitleaks is still a refusal, in the PR opener and in the root pre-push alike; only
   `AA_SKIP_GITLEAKS=1` skips the scan, with an explicit warning, and a resolver that crashes is a refusal too.
-  `python3 tools/github/gitleaks_resolve.py` prints the one it would use.
+  `python3 tools/github/gitleaks_resolve.py` prints the one it would use. The AA-CIS-App pre-push has a bash port of
+  the same order (S294). Tests of the resolver set HOME, `MISE_DATA_DIR` and `XDG_DATA_HOME` to their own temp dirs, so
+  a machine with gitleaks installed through mise cannot change their result.
 - Pushes (never forced), opens the PR with the lane's title and body (or reuses the branch's open PR), appends the
   Claude Code attribution line when missing, checks the author is the App, and prints each PR's `live_steps`.
 
