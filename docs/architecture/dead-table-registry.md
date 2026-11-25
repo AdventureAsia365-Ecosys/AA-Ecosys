@@ -66,7 +66,7 @@ retired`) and an S3 archive first. On Dev these are replaced by: two DRY RUN dis
 TripPlanner smoke) whose read and write counters must not move; no quarantine (the rows are derived data CIS rebuilds
 in `geo`; a quarantine keeps the foreign keys to `shared.destinations` and needs a second destructive apply);
 **archive location** = the DB Migrate pre-apply RDS snapshot of the tp-018 apply, tagged `aa:retain-until` = apply
-date + 180 days and `aa:purpose` = `aa712-tp018-pre-drop` (the DM-7.3 S3 archive did not exist at the time). ADR 0007
+date + 180 days and `aa:purpose` = `aa712-tp018-pre-drop` (the DM-7.3 S3 archive did not exist at the time). **S292 (25/11/2026): the tech lead had the snapshot deleted** after a check that nothing needs it: the eight tables held derived data CIS rebuilds in `geo` and nothing reads them, and the snapshot (a whole-instance copy) kept CRM data past the 30-day erasure window (DM-7.5) and the backup copy-age alarm red until 04/2027. No archive is left for these tables. ADR 0007
 carries the matching conditional amendment (S248). Lock note: the drop takes ACCESS EXCLUSIVE on CIS's
 `shared.destinations` for its length (RI triggers of 11 foreign keys); apply while the job tables are idle, retry on a
 lock timeout. Record (S248, 23/10/2026):
