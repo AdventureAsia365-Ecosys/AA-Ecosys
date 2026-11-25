@@ -110,6 +110,25 @@ summary { cursor: pointer; font-weight: 600; }
   </section>
 
   <section>
+    <h2>Nhập giá cho một tour: 3 cách</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Cách</th><th>Ở đâu, bấm gì</th><th>Duyệt</th></tr></thead>
+      <tbody>
+        <tr><td><b>1. Nhập tay giá bán</b><br><span class="muted">nhanh nhất</span></td>
+          <td><a href="https://booking.lumiguides.it.com/pricing/workbench">Price setup</a> → tour → <b>Price versions</b> → tab <b>Versions</b> → <b>New draft from the prices in force</b> → sửa giá theo mùa và cỡ nhóm → <b>Save draft</b> → <b>Submit for approval</b> (lý do ≤ 300 ký tự)</td>
+          <td>Người thứ hai bấm <b>Approve</b>; chủ DN tự duyệt được (có ghi Audit Log)</td></tr>
+        <tr><td><b>2. Tính từ giá NCC</b><br><span class="muted">đường chuẩn lâu dài</span></td>
+          <td>NCC (Activate) → khách sạn + loại phòng → hợp đồng, <b>Add rate</b>, <b>Publish</b> → tour › <b>Hotels &amp; services</b> → <b>Accept</b> từng đêm → <b>Recompute prices</b>. Các bước cụ thể: phần demo bên dưới.</td>
+          <td>Chủ DN tự duyệt NCC và hợp đồng; rule giá, tỷ giá cần tech lead</td></tr>
+        <tr><td><b>3. Excel nhiều tour</b></td>
+          <td>Price setup → <b>Download workbook</b> → điền → <b>Import workbook</b> → <b>Check</b> → <b>Import</b>. Giá vào thành version nháp; tối đa 50 tour mỗi lần.</td>
+          <td>Như cách 1, từng version</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Sau khi có giá: <b>Make sellable</b> (cần version đã duyệt, còn hiệu lực hôm nay) và cột <b>Can operate</b> đạt thì đại lý mới báo giá được. Không sửa giá trực tiếp; gỡ một version đã publish cần người thứ hai; giá "From $X" hiện công khai ngay cả khi chưa sellable.</p>
+  </section>
+
+  <section>
     <h2>Demo: một vòng giá an toàn</h2>
     <p class="muted">Một NCC, một khách sạn, một giá, trên một tour chưa có giá. Không có tiền thật đi đâu: báo giá và giữ chỗ của đại lý không thu tiền. Mọi tên bắt đầu bằng <code>SYNTHETIC</code> để dọn sau.</p>
     <ol class="run">
