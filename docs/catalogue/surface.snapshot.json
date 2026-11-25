@@ -2536,6 +2536,22 @@
    "app": "crm",
    "area": "ai"
   },
+  "crm.calendar_push.batch_size": {
+   "app": "crm",
+   "area": "calendar"
+  },
+  "crm.calendar_push.max_attempts": {
+   "app": "crm",
+   "area": "calendar"
+  },
+  "crm.calendar_push.past_days": {
+   "app": "crm",
+   "area": "calendar"
+  },
+  "crm.calendar_push.window_days": {
+   "app": "crm",
+   "area": "calendar"
+  },
   "crm.campaign.mailbox_daily_limit": {
    "app": "crm",
    "area": "campaigns"
