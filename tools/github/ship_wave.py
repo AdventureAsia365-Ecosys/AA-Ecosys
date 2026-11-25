@@ -4,12 +4,22 @@
     tools/github/ship_wave.py cis#1350 cis#1352 booking#201 root#601 --wait-deploy
     tools/github/ship_wave.py 'cis#1349>apply:cis/383,cis/384' 'cis#1351@after=cis/384' cis#1350 --wait-deploy
     tools/github/ship_wave.py --dry-run 'crm#240>apply:crm/41' 'crm#241@after=crm/41' tp#230
+    tools/github/ship_wave.py root#832 'crm#325@after=root#832'
 
 Targets ('<Repo>#<pr>', repo aliases as ship_merge.py):
   <Repo>#<pr>                              independent: gated and merged at once, one worker per PR
   <Repo>#<pr>>apply:<owner>/<NNN>[,...]    a migration-only PR: merge, then its migrations go onto Dev through
                                            ship_copy_apply.py (Infra copy PR -> merge -> apply -> readiness)
   <Repo>#<pr>@after=<owner>/<NNN>[,...]    held until those migrations are applied (MIG-4 code PR)
+  <Repo>#<pr>@after=<Repo>#<pr>[,...]      held until that PR has merged (S282: a Partner PR whose "Vendored CIS
+                                           copies" check reads root master waits for the root PR, e.g.
+                                           'crm#325@after=root#832'); then the failed runs of its head are re-run
+                                           once and it is gated. A PR named there but not in the wave must already
+                                           be merged (else exit 2). Migrations and PRs mix: '@after=cis/384,root#832'.
+
+One run per PR at a time (S285: two ship_wave runs on Partner #357 broke its merge push): the run takes a lock file per
+PR under .tmp-session/ship-locks/ (flock, released when the process ends, even killed) and refuses (exit 4) when
+another run holds one, naming its pid, start time and command. --dry-run and --check-only take no lock.
 
 A held code PR whose branch was stacked on the migration branch still carries the migration commit after the migration
 PR squash-merged; main has the same file under another commit and the code PR's Migration preflight goes red (S277:
@@ -61,6 +71,7 @@ import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 
 import gitleaks_resolve
@@ -69,6 +80,7 @@ import ship_deploy
 import ship_merge
 from ship_common import (
     AS_APP,
+    GREEN_RUN_CONCLUSIONS,
     QUEUE_REPOS,
     ROOT,
     Result,
@@ -80,6 +92,7 @@ from ship_common import (
     log,
     parse_target,
     pr_view,
+    runs_on_commit,
     slug,
     warn_mfa,
 )
@@ -110,10 +123,19 @@ class Item:
     n: int
     applies: list[Key] = field(default_factory=list)
     after: list[Key] = field(default_factory=list)
+    after_prs: list[tuple[str, int]] = field(default_factory=list)  # '@after=root#832': held until that PR merged
 
     @property
     def tag(self) -> str:
         return f"{self.repo}#{self.n}"
+
+    @property
+    def held(self) -> bool:
+        return bool(self.after or self.after_prs)
+
+
+def pr_tag(dep: tuple[str, int]) -> str:
+    return f"{dep[0]}#{dep[1]}"
 
 
 def parse_key(text: str) -> Key:
@@ -134,9 +156,22 @@ def parse_item(text: str) -> Item:
     repo, n = parse_target(m.group(1))
     item = Item(repo, n)
     for kind, keys in re.findall(r"(>apply:|@after=)([^>@]+)", m.group(2)):
-        parsed = [parse_key(k) for k in keys.split(",") if k.strip()]
-        (item.applies if kind == ">apply:" else item.after).extend(parsed)
+        for k in (x.strip() for x in keys.split(",") if x.strip()):
+            if kind == "@after=" and "#" in k:
+                item.after_prs.append(parse_target(k))  # a PR of the wave (or already merged), not a migration
+            else:
+                (item.applies if kind == ">apply:" else item.after).append(parse_key(k))
     return item
+
+
+def depends_on(items: list[Item]) -> dict[str, set[str]]:
+    """Tags of the wave each item waits for: the PRs it names with @after=<Repo>#<pr> and the PRs that apply the
+    migrations it waits for."""
+    by_key = {k: it.tag for it in items for k in it.applies}
+    tags = {it.tag for it in items}
+    return {it.tag: ({pr_tag(d) for d in it.after_prs if pr_tag(d) in tags}
+                     | {by_key[k] for k in it.after if k in by_key})
+            for it in items}
 
 
 def parse_items(args: list[str]) -> list[Item]:
@@ -153,11 +188,29 @@ def parse_items(args: list[str]) -> list[Item]:
             produced[k] = it.tag
         if set(it.applies) & set(it.after):
             raise ShipError(f"{it.tag} cannot apply and wait for the same migration", 2)
+        if (it.repo, it.n) in it.after_prs:
+            raise ShipError(f"{it.tag} cannot wait for itself", 2)
+    # A cycle (a@after=b, b@after=a, or through a migration a PR applies) would hold every worker for ever.
+    deps = depends_on(items)
+    state: dict[str, int] = {}
+
+    def visit(tag: str, path: list[str]) -> None:
+        if state.get(tag) == 2:
+            return
+        if state.get(tag) == 1:
+            raise ShipError(f"the wave waits in a circle: {' -> '.join(path[path.index(tag):] + [tag])}", 2)
+        state[tag] = 1
+        for d in sorted(deps.get(tag, ())):
+            visit(d, path + [tag])
+        state[tag] = 2
+
+    for it in items:
+        visit(it.tag, [])
     return items
 
 
 def plan_lines(items: list[Item]) -> list[str]:
-    now = [it.tag for it in items if not it.after]
+    now = [it.tag for it in items if not it.held]
     lines = [f"at once ({len(now)}, in parallel): {', '.join(now) or '-'}"]
     by_owner: dict[str, list[tuple[str, str]]] = {}
     for it in items:
@@ -169,6 +222,9 @@ def plan_lines(items: list[Item]) -> list[str]:
     for it in items:
         if it.after:
             lines.append(f"hold {it.tag} until applied: {', '.join(f'{o}/{n}' for o, n in it.after)}")
+        if it.after_prs:
+            lines.append(f"hold {it.tag} until merged: {', '.join(pr_tag(d) for d in it.after_prs)} (then re-run "
+                         f"its failed checks once and gate it)")
     if by_owner:
         lines.append("note: a contract apply needs every job table idle (DM-11.4; a tour trash / restore queues a "
                      "16-52 min recompute): a refusal shows as 'apply held: job tables busy' (exit 7, resumable); "
@@ -338,12 +394,116 @@ def update_stacked_branch(runner: Runner, repo: str, n: int) -> str | None:
             _git(runner, wt, "reset", "-q", "--keep", head)  # the lane worktree back as it was (it was clean)
 
 
+# --- S282: a PR held until another PR merged ('@after=root#832') ------------------------------------------------------
+
+RERUN_SETTLE = 30.0  # seconds after a re-run request, so the gate does not read the old red check before it restarts
+
+
+def rerun_failed_checks(runner: Runner, repo: str, n: int) -> int:
+    """Once the PRs it waits for have merged: re-run the failed jobs of the latest red run per (workflow, event) on the
+    PR head (its "Vendored CIS copies" check read root master before the root PR merged). Return the number of runs
+    re-run. A refused re-run is a warning; the gate then reports the red check as usual."""
+    tag = f"{repo}#{n}"
+    pr = pr_view(runner, repo, n)
+    head = str(pr.get("headRefOid") or "")
+    if pr.get("state") != "OPEN" or not head:
+        return 0
+    latest: dict[tuple[str, str], dict] = {}
+    for r in runs_on_commit(runner, repo, head):
+        key = (r.get("workflowName") or r.get("name") or "", r.get("event") or "")
+        stamp = (r.get("createdAt") or "", int(r.get("databaseId") or 0))
+        if key not in latest or stamp >= (latest[key].get("createdAt") or "", int(latest[key].get("databaseId") or 0)):
+            latest[key] = r
+    red = [r for r in latest.values() if (r.get("status") or "").lower() == "completed"
+           and (r.get("conclusion") or "").lower() not in GREEN_RUN_CONCLUSIONS]
+    if not red:
+        log(f"{tag}: no red run on head {head[:8]}: gating as is")
+        return 0
+    done = 0
+    for r in sorted(red, key=lambda x: str(x.get("workflowName") or x.get("name") or "")):
+        rid, name = str(r.get("databaseId") or ""), r.get("workflowName") or r.get("name") or "?"
+        res = runner.run([AS_APP, "--repos", repo, "--", "gh", "run", "rerun", rid, "--failed", "-R", slug(repo)],
+                         timeout=120)
+        if res.ok:
+            done += 1
+            log(f"{tag}: re-running the failed jobs of {name} (run {rid}) on head {head[:8]}")
+        else:
+            log(f"WARN {tag}: cannot re-run {name} (run {rid}): {res.last_line()}; re-run it by hand "
+                f"(gh run rerun {rid} --failed -R {slug(repo)}) or the gate refuses the red check")
+    if done:
+        runner.sleep(RERUN_SETTLE)
+    return done
+
+
+def check_pr_holds(runner: Runner, items: list[Item]) -> None:
+    """A hold on a PR the wave does not ship must already be merged."""
+    tags = {it.tag for it in items}
+    for it in items:
+        for d in it.after_prs:
+            if pr_tag(d) in tags:
+                continue
+            state = pr_view(runner, d[0], d[1]).get("state")
+            if state != "MERGED":
+                raise ShipError(f"{it.tag} waits for {pr_tag(d)}, which is {str(state or 'unknown').lower()} and not "
+                                f"in this wave: add '{pr_tag(d)}' to the wave (or merge it first)", 2)
+
+
+# --- S285: one run per PR at a time ---------------------------------------------------------------------------------
+
+LOCK_DIR = ROOT / ".tmp-session" / "ship-locks"
+
+
+def acquire_pr_locks(items: list[Item], argv: list[str]) -> list[int]:
+    """An exclusive flock per PR under LOCK_DIR, held until release_pr_locks (or the process ends, even killed, so a
+    crash leaves no stale lock). Refuse (exit 4) when another run holds one of them: two runs on Partner #357 (S285)
+    pushed and merged against each other. Nothing is held after a refusal."""
+    import fcntl
+
+    LOCK_DIR.mkdir(parents=True, exist_ok=True)
+    fds: list[int] = []
+    busy: list[str] = []
+    info = json.dumps({"pid": os.getpid(), "started": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                       "argv": argv})
+    for it in items:
+        path = LOCK_DIR / f"{it.repo}-{it.n}.lock"
+        fd = os.open(str(path), os.O_RDWR | os.O_CREAT, 0o644)
+        try:
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            try:
+                holder = json.loads(os.pread(fd, 4096, 0).decode("utf-8", "replace") or "{}")
+            except (OSError, ValueError):
+                holder = {}
+            os.close(fd)
+            busy.append(f"{it.tag} (pid {holder.get('pid', '?')}, since {holder.get('started', '?')}: "
+                        f"{' '.join(str(x) for x in holder.get('argv') or []) or '?'})")
+            continue
+        os.ftruncate(fd, 0)
+        os.pwrite(fd, info.encode("utf-8"), 0)
+        fds.append(fd)
+    if busy:
+        release_pr_locks(fds)
+        raise ShipError(f"another ship_wave run holds {'; '.join(busy)}: one run per PR at a time (S285); wait for "
+                        f"it to end (ps -p <pid>) or stop it, then run again", 4)
+    return fds
+
+
+def release_pr_locks(fds: list[int]) -> None:
+    for fd in fds:
+        try:
+            os.close(fd)  # closing the descriptor drops its flock; the file stays (no unlink race)
+        except OSError:
+            pass
+
+
 class Wave:
     """Runs the items: merge workers, one apply worker per owner, held PRs released by their migrations."""
 
     def __init__(self, runner: Runner, items: list[Item], *, merge_kw: dict, apply_fn, fetch, check_only: bool,
-                 restack=update_stacked_branch, wait_idle: int = 0, idle_interval: float = IDLE_INTERVAL):
+                 restack=update_stacked_branch, wait_idle: int = 0, idle_interval: float = IDLE_INTERVAL,
+                 rerun=rerun_failed_checks):
         self.runner = runner
+        self.rerun = rerun
         self.wait_idle = max(0, wait_idle)
         self.idle_interval = idle_interval
         self.held: dict[Key, str] = {}  # migrations held by busy job tables (nothing ran): the wave is resumable
@@ -369,9 +529,24 @@ class Wave:
 
     def merge(self, it: Item) -> None:
         try:
-            if it.after and not self.check_only:  # --check-only gates a held PR at once (nothing gets applied)
+            if it.held and not self.check_only:  # --check-only gates a held PR at once (nothing gets applied)
                 for k in it.after:
                     self.applied[k].wait()
+                for d in it.after_prs:
+                    ev = self.merge_done.get(pr_tag(d))
+                    if ev is not None:  # not in the wave: check_pr_holds found it merged
+                        ev.wait()
+                unmerged = [pr_tag(d) for d in it.after_prs
+                            if pr_tag(d) in self.merge_done and not self.merged_sha.get(pr_tag(d))]
+                if unmerged:
+                    if all(self.results.get(t, (4, ""))[0] == EXIT_HELD for t in unmerged):
+                        # the PR it waits for is itself held by busy job tables: resumable, not failed
+                        self._set(it.tag, EXIT_HELD, f"held: {', '.join(unmerged)} held, not merged yet")
+                    else:
+                        self._set(it.tag, 4, f"skipped: {', '.join(unmerged)} not merged")
+                    return
+                if it.after_prs:
+                    log(f"{it.tag}: {', '.join(pr_tag(d) for d in it.after_prs)} merged")
                 bad = [(o, n) for o, n in it.after if not self.apply_ok.get((o, n))]
                 if bad:
                     names = ", ".join(f"{o}/{n}" for o, n in bad)
@@ -382,13 +557,19 @@ class Wave:
                     else:
                         self._set(it.tag, 4, f"skipped: migration(s) {names} not applied")
                     return
-                log(f"{it.tag}: migrations {', '.join(f'{o}/{n}' for o, n in it.after)} applied, checking the branch")
+                if it.after:
+                    log(f"{it.tag}: migrations {', '.join(f'{o}/{n}' for o, n in it.after)} applied, checking the "
+                        f"branch")
             expect = None
             if it.after and not self.check_only and self.restack:
                 # AA-1084: a branch stacked on the migration branch gets origin/<default> merged in (and pushed)
                 # before the gate; one at a time per repo (shared clone, and the CIS pre-push is heavy).
                 with self.restack_locks[it.repo]:
                     expect = self.restack(self.runner, it.repo, it.n)
+            if it.after_prs and not self.check_only and not expect and self.rerun:
+                # S282: its checks ran before the PR it waits for merged (Vendored CIS copies read the old root
+                # master): re-run the red ones once; a pushed restack head runs every check anew instead.
+                self.rerun(self.runner, it.repo, it.n)
             kw = dict(self.merge_kw, expect_head=expect) if expect else self.merge_kw
             lock = self.repo_locks.get(it.repo)
             if lock:
@@ -554,10 +735,19 @@ def wait_deploys(runner: Runner, wave: Wave, fetch, *, timeout: float, interval:
     return worst
 
 
+def help_epilog() -> str:
+    """--help shows the examples, the target forms (incl. '@after=<Repo>#<pr>') and the per-PR lock rule."""
+    parts = (__doc__ or "").split("\n\n")
+    keep = [p for p in parts[1:] if p.lstrip().startswith(("tools/github/", "Targets (", "One run per PR"))]
+    return "\n\n".join(keep)
+
+
 def main(argv: list[str] | None = None, runner: Runner | None = None, apply_fn=None,
-         fetch=ship_copy_apply.fetch_ready, restack=update_stacked_branch) -> int:
-    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("targets", nargs="+", help="<Repo>#<pr>[>apply:<owner>/<NNN>,...][@after=<owner>/<NNN>,...]")
+         fetch=ship_copy_apply.fetch_ready, restack=update_stacked_branch, rerun=rerun_failed_checks) -> int:
+    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0], epilog=help_epilog(),
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("targets", nargs="+", help="<Repo>#<pr>[>apply:<owner>/<NNN>,...][@after=<owner>/<NNN>|"
+                                               "<Repo>#<pr>,...] (forms below)")
     ap.add_argument("--wait-deploy", action="store_true", help="at the end, wait once per deployed app")
     ap.add_argument("--dry-run", action="store_true", help="print the plan, touch nothing")
     ap.add_argument("--check-only", action="store_true", help="gate every PR, merge and apply nothing")
@@ -593,11 +783,23 @@ def main(argv: list[str] | None = None, runner: Runner | None = None, apply_fn=N
         log(f"  {line}")
     if a.dry_run:
         return 0
+    locks: list[int] = []
     try:
+        if not a.check_only:
+            locks = acquire_pr_locks(items, list(argv if argv is not None else sys.argv[1:]))
         check_holds(items, fetch)
+        check_pr_holds(runner, items)
     except ShipError as e:
+        release_pr_locks(locks)
         log(f"ERROR {e}")
         return e.code
+    try:
+        return _run(a, runner, items, apply_fn, fetch, restack, rerun)
+    finally:
+        release_pr_locks(locks)
+
+
+def _run(a, runner: Runner, items: list[Item], apply_fn, fetch, restack, rerun) -> int:
     if not a.check_only:
         warn_mfa(runner)
     if apply_fn is None:
@@ -608,7 +810,7 @@ def main(argv: list[str] | None = None, runner: Runner | None = None, apply_fn=N
     wave = Wave(runner, items, apply_fn=apply_fn, fetch=fetch, check_only=a.check_only, restack=restack,
                 merge_kw={"timeout": a.timeout, "interval": max(30.0, a.interval), "allow_deletes": a.allow_deletes,
                           "queue_timeout": a.queue_timeout, "allow_running_exec": a.allow_running_exec},
-                wait_idle=a.wait_idle, idle_interval=a.wait_idle_interval)
+                wait_idle=a.wait_idle, idle_interval=a.wait_idle_interval, rerun=rerun)
     wave.run()
     codes: list[int] = []
     if a.wait_deploy and not a.check_only:

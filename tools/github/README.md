@@ -23,7 +23,7 @@ tools serve, and when to use each: skill `aa-ship` (§1 "Cách merge", `referenc
 | `change_control.py` + `change_control.json` | library: the human-approval rule for risky PRs in the merge gate, OFF today (below) |
 | `ship_deploy.py` | library, read-only: deployed services per repo (deploy workflow push paths + health URL) and the ECS exec guard used by `ship_merge.py` / `ship_wave.py` (below) |
 | `train-lib.sh` | shell functions for a background train; `waitdeploy` waits for a `git_sha` on a health endpoint |
-| `guard_runs.py [--json]` | session start, read-only: the latest scheduled run of every workflow in the 6 repos, red first |
+| `guard_runs.py [--json]` | session start, read-only: the latest scheduled run of every workflow in the 6 repos, red first; a red one that a later green dispatch / push run on the default branch fixed reads "superseded" and is not red |
 | `ci_hygiene.py [--json] [--clean]` | session start: Actions cache usage vs the 10 GB cap per repo, stale pull request / merge-queue caches (`--clean` deletes only those), uncached external downloads in workflows (WL5), artifact retention (WL7, warn), public org repositories not in the known list; read-only without `--clean`. `--retention-scan <checkout>` prints WL7 warnings for one checkout (root Workflow Lint) |
 | `pin_freshness.py [--json]` | read-only: self-managed pins (release-bin and lychee `pins.txt`, spaCy wheel URL, ghcr image tags) of the six repos vs the newest GitHub release |
 | `hygiene_issues.py sync --kind hygiene\|pins --report <json> [--apply]` | turns a `ci_hygiene.py` / `pin_freshness.py` report into one root issue per finding type (open, update, close); plan only without `--apply`. `read-failures --kind ... --report <json>` lists the failed reads (exit 3 when there is one). Run by the CI hygiene workflow |
@@ -112,6 +112,16 @@ the independent agent review of a risky PR is recorded on the PR itself. Trigger
   hook (as `ship_open_prs.py`); the new head is gated. A conflict, a migration still differing from main, a failed
   integration run or a refused push stops that PR (exit 4) and keeps the merge for a hand fix. `--check-only` never
   touches a branch.
+- `@after=<Repo>#<pr>[,...]` (S282: Partner #325 / root #832) holds a PR until that PR has merged, for an app PR whose
+  "Vendored CIS copies" check reads root master: `ship_wave.py root#832 'crm#325@after=root#832'`. Once the root PR
+  merged, the latest red run per workflow on the app PR head is re-run once (`gh run rerun <id> --failed` through
+  `as-app.sh`; a refused re-run is a warning naming the hand command) and the PR is gated. A PR named there but not in
+  the wave must already be merged (else exit 2); migrations and PRs mix (`@after=cis/384,root#832`); a PR waiting for
+  itself or a circle (also through a migration a PR applies) is refused at parse time. `--help` lists every form.
+- One run per PR at a time (S285: two runs on Partner #357 broke its merge push): each run takes an `flock` per PR
+  under `.tmp-session/ship-locks/<Repo>-<n>.lock` and refuses the whole wave (exit 4) while another run holds one,
+  naming its pid, start time and command. The lock dies with the process (even killed), so no stale lock is left.
+  `--dry-run` and `--check-only` take none.
 - A failure stops only what depends on it (a red migration PR skips its held PRs; independent PRs go on).
 - `--wait-deploy` waits once per deployed service at the end, until its health commit contains every merge of the wave
   that touched it (GitHub compare). Which services a merge deploys comes from the PR's files and the deploy workflows'
@@ -188,9 +198,17 @@ the independent agent review of a risky PR is recorded on the PR itself. Trigger
 
 - Reads the lane journal (`tools/workflows/lane.js`): the `prs[]` of the last result that has them, in merge order;
   a result with `ready=false` is refused unless `--allow-not-ready`.
+- A branch that already has a MERGED PR is skipped (`SKIP ... already MERGED as <url>`), before validation and push
+  (S292: a second run after part of a lane merged opened root #1000 and CIS #1683, duplicates of merged PRs); a failed
+  merged-PR lookup refuses that PR.
 - Checks all PRs before pushing any: worktree and branch exist, branch ahead of `origin/<base>`, no rebase in
-  progress, no modified tracked file, conventional title without an issue id, `Refs AA-<n>` in the body and no
-  Fixes/Closes phrase. Deleted files are listed as a warning.
+  progress, no modified tracked file, conventional title without an issue id, `Refs AA-<n>` in the body, no
+  Fixes/Closes phrase and no issue id outside the Refs line (file paths aside; same rule as `pr-title.yml`). The body
+  checked is the body as opened: after `--refs` and `--extra-refs`. A body with no Refs line is refused with the fix:
+  `--refs AA-<n>[,AA-<m>]` inserts `Refs AA-<n>, AA-<m>` as its first line (on a body that has a Refs line the ids
+  join its list, as `--extra-refs`). `project-template` (public, its denylist forbids issue ids) needs no Refs line
+  and refuses any `AA-<n>` in the title or body; `--refs` / `--extra-refs` are not applied there. Deleted files are
+  listed as a warning.
 - gitleaks v8.30.1 scans `origin/<base>..<branch>` with the base's rules before any push. The binary comes from
   `gitleaks_resolve.py`, shared with the root `scripts/pre-push.sh` (S281): `AA_GITLEAKS`, then
   `.tmp-session/gitleaks-8301/gitleaks` (only at the CI pin), then the mise install of the pin

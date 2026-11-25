@@ -62,5 +62,85 @@ class GuardRunsTest(unittest.TestCase):
             self.assertEqual(g.main(["--json"], green, NOW), 0)
 
 
+def wf_run(event: str, created: str, conclusion: str | None, status: str = "completed", branch: str = "master") -> dict:
+    return {"name": "Catalogue", "event": event, "created_at": created, "status": status, "conclusion": conclusion,
+            "head_branch": branch, "html_url": f"https://github.com/x/runs/{event}-{created[:13]}"}
+
+
+def superseding_run(dispatch_runs: dict, sched: dict):
+    """gh stub: scheduled runs per repo (sched) and the runs of workflow 41 on the default branch (dispatch_runs)."""
+    calls = []
+
+    def run(cmd, **kw):
+        calls.append(cmd)
+        path, repo = cmd[4], cmd[4].split("/")[2]
+        if "/actions/workflows/" in path:
+            if repo == "AA-Booking":
+                return subprocess.CompletedProcess(cmd, 1, "", "HTTP 502")
+            return subprocess.CompletedProcess(cmd, 0, json.dumps(dispatch_runs.get(repo, [])), "")
+        return subprocess.CompletedProcess(cmd, 0, json.dumps(sched.get(repo, [])), "")
+    return run, calls
+
+
+class SupersededTest(unittest.TestCase):
+    """S294: Catalogue and Image Scan were reported red after a green hand dispatch had already fixed them."""
+
+    def sched(self, repo: str = "AA-Ecosys") -> dict:
+        row = run_row("Catalogue", "2026-11-07T02:00:00Z", "failure")
+        row["workflow_id"] = 41
+        return {repo: [row]}
+
+    def test_a_later_green_dispatch_or_push_supersedes_the_red_scheduled_run(self):
+        for event in ("workflow_dispatch", "push"):
+            run, calls = superseding_run({"AA-Ecosys": [wf_run(event, "2026-11-07T09:30:00Z", "success"),
+                                                        wf_run(event, "2026-11-07T08:00:00Z", "success")]},
+                                         self.sched())
+            rows, _ = g.collect(8, run, NOW)
+            [row] = rows
+            self.assertFalse(g.is_red(row), event)
+            self.assertEqual(g.label(row), f"superseded (green {event} 2026-11-07T09:30)")
+            [lookup] = [c for c in calls if "/actions/workflows/" in c[4]]
+            self.assertIn("repos/AdventureAsia365-Ecosys/AA-Ecosys/actions/workflows/41/runs", lookup)
+            self.assertIn("branch=master", lookup)  # the root repo's default branch
+            out = io.StringIO()
+            with mock.patch("sys.stdout", out):
+                self.assertEqual(g.main([], run, NOW), 0)
+            self.assertIn("0 red of 1", out.getvalue())
+            self.assertNotIn("RED ", out.getvalue())
+            self.assertIn("superseded (green", out.getvalue())
+
+    def test_older_red_or_other_branch_or_scheduled_runs_do_not_supersede(self):
+        cases = [wf_run("workflow_dispatch", "2026-11-06T09:00:00Z", "success"),       # before the red run
+                 wf_run("workflow_dispatch", "2026-11-07T09:00:00Z", "failure"),       # later but red
+                 wf_run("workflow_dispatch", "2026-11-07T09:00:00Z", None, "in_progress"),
+                 wf_run("pull_request", "2026-11-07T09:00:00Z", "success"),            # not dispatch / push
+                 wf_run("schedule", "2026-11-07T09:00:00Z", "success"),                # the schedule list decides
+                 wf_run("push", "2026-11-07T09:00:00Z", "success", branch="feat/x")]   # not the default branch
+        for case in cases:
+            run, _ = superseding_run({"AA-Ecosys": [case]}, self.sched())
+            rows, _ = g.collect(8, run, NOW)
+            self.assertTrue(g.is_red(rows[0]), case)
+            self.assertEqual(g.label(rows[0]), "failure")
+
+    def test_a_failed_lookup_leaves_the_row_red_and_json_counts_it(self):
+        run, _ = superseding_run({}, self.sched("AA-Booking"))
+        out = io.StringIO()
+        with mock.patch("sys.stdout", out):
+            self.assertEqual(g.main(["--json"], run, NOW), 1)
+        data = json.loads(out.getvalue())
+        self.assertEqual(data["red"], 1)
+        self.assertNotIn("superseded", data["rows"][0])
+
+    def test_json_keeps_the_superseding_run(self):
+        run, _ = superseding_run({"AA-CIS-App": [wf_run("workflow_dispatch", "2026-11-07T10:00:00Z", "success",
+                                                        branch="main")]}, self.sched("AA-CIS-App"))
+        out = io.StringIO()
+        with mock.patch("sys.stdout", out):
+            self.assertEqual(g.main(["--json"], run, NOW), 0)
+        data = json.loads(out.getvalue())
+        self.assertEqual(data["red"], 0)
+        self.assertEqual(data["rows"][0]["superseded"]["event"], "workflow_dispatch")
+
+
 if __name__ == "__main__":
     unittest.main()

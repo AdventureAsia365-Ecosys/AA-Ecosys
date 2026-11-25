@@ -4,6 +4,7 @@
     tools/github/ship_open_prs.py wf_85982363-f71                  # a run id: its journal.jsonl is looked up
     tools/github/ship_open_prs.py <path>/journal.jsonl --only Infra --extra-refs AA-1032
     tools/github/ship_open_prs.py wf_85982363-f71 --dry-run        # validate and print, push nothing
+    tools/github/ship_open_prs.py wf_85982363-f71 --refs AA-1024   # a body with no Refs line gets one as line 1
 
 The journal of a tools/workflows/lane.js run holds one {"type": "result", "result": {...}} line per agent. The PRs
 are the prs[] of the LAST result that carries prs[] (the fix pass replaces the implement pass), in merge order, with
@@ -20,9 +21,19 @@ gitleaks_resolve.py: AA_GITLEAKS, then .tmp-session/gitleaks-8301/, then PATH, a
 fails, such as a mise shim with no version set, is skipped: S281). Files the branch deletes are listed as a warning
 (merge gate refuses them).
 
+The text checks read the body as it will be opened: after --refs (a body with no Refs line gets 'Refs AA-<n>[, ...]'
+as its first line; on a body that has one, the ids join its list), --extra-refs (ids added to the Refs line) and the
+attribution line. A body with no Refs line is refused with that hint (S294). project-template (public; its denylist
+forbids issue ids) needs no Refs line and refuses any AA-<n> in the title or body instead; --refs / --extra-refs are
+not applied there.
+
+A branch that already has a MERGED PR is skipped with a message, before validation and push (S292: a second run after
+part of a lane merged opened root #1000 and CIS #1683, duplicates of the merged PRs); a branch whose merged-PR lookup
+fails is refused.
+
 Then for each PR: push through the aa-agent App (no force), open the PR (or reuse an open PR of that branch), check
-the author is the App, print the URL and the lane's live_steps. --extra-refs adds issue ids to the Refs line; the
-Claude Code attribution line is appended when the body lacks it.
+the author is the App, print the URL and the lane's live_steps. The Claude Code attribution line is appended when the
+body lacks it.
 
 Exit: 0 all opened | 2 usage / journal | 4 a PR failed validation, push or create. Orchestrator only. No secrets.
 """
@@ -62,6 +73,8 @@ REFS_RE = re.compile(r"^\s*Refs\s+AA-\d+\b.*$", re.MULTILINE)
 # 50(2), root ADR 0019 d19)." in merged TripPlanner#223). Its ids are the leading list only; pr-title.yml uses the
 # same pattern.
 REFS_LEAD_RE = re.compile(r"^\s*Refs\s+(AA-\d+(?:\s*,\s*AA-\d+)*)\b")
+# Public repos whose denylist forbids issue ids (the project kit template): no Refs line, no AA-<n> anywhere.
+NO_ISSUE_ID_REPOS = frozenset({"project-template"})
 # An issue id inside a file name (docs/implementation-notes/AA-1024-guards-rest.md) is a path, not a link to an issue.
 PATH_ID_RE = re.compile(r"[\w./-]*\bAA-\d+[\w-]*\.(?:md|py|json|ya?ml|sh|js|mjs|ts|tsx|sql|txt|html|toml)\b")
 JOURNAL_GLOBS = (
@@ -116,6 +129,45 @@ def add_refs(body: str, extra: list[str]) -> str:
     return body[: m.end(1)] + ", " + ", ".join(add) + body[m.end(1):]
 
 
+def insert_refs(body: str, refs: list[str]) -> str:
+    """--refs (S294): a body with no Refs line gets 'Refs AA-<n>[, AA-<m>]' as its first line; on a body that has one,
+    the ids join its list (as --extra-refs)."""
+    if not refs:
+        return body
+    if re.compile(REFS_LEAD_RE.pattern, re.MULTILINE).search(body):
+        return add_refs(body, refs)
+    return "Refs " + ", ".join(refs) + "\n\n" + body.lstrip("\r\n")
+
+
+def repo_of(p: dict) -> str:
+    try:
+        return normalize_repo(str(p.get("repo", "")))
+    except ShipError:
+        return ""
+
+
+def final_body(p: dict, refs: list[str] = (), extra_refs: list[str] = ()) -> str:
+    """The body as it will be opened: --refs, --extra-refs (not in a repo that forbids issue ids), the
+    AA_PREPUSH_SKIP_INTEGRATION note and the attribution line. validate() reads this text, not the raw lane body."""
+    body = str(p.get("pr_body", ""))
+    if repo_of(p) not in NO_ISSUE_ID_REPOS:
+        body = add_refs(insert_refs(body, list(refs)), list(extra_refs))
+    return with_attribution(skip_note(body))
+
+
+def merged_pr(runner: Runner, p: dict) -> tuple[str, str | None]:
+    """(url of a MERGED PR of this head branch or '', error). S292: a second run after part of a lane merged opened
+    root #1000 and CIS #1683, duplicates of merged PRs: the open-PR lookup alone did not see them."""
+    repo, br = repo_of(p), str(p.get("branch", ""))
+    if not repo or not br:
+        return "", None  # validate() reports the unknown repo / missing branch
+    r = runner.run(["gh", "pr", "list", "-R", slug(repo), "--head", br, "--state", "merged", "--json", "number,url",
+                    "--jq", ".[0].url // empty"], timeout=60)
+    if not r.ok:
+        return "", f"cannot check for a merged PR of {br}: {r.last_line()}"
+    return r.out.strip(), None
+
+
 def stray_issue_ids(body: str) -> list[str]:
     """Issue ids the body names that its `Refs AA-<n>, ...` line does not: Linear links those to an issue the PR does
     not do. An id the PR Refs may appear anywhere (its own issue in prose), and an id inside a file path is ignored
@@ -142,9 +194,37 @@ def with_attribution(body: str) -> str:
     return body.rstrip() + "\n\n" + ATTRIBUTION + "\n"
 
 
-def validate(runner: Runner, p: dict, stacked_on: frozenset[str] = frozenset()) -> tuple[list[str], list[str]]:
+def text_problems(repo: str, title: str, body: str) -> list[str]:
+    """Title and body rules (body = final_body()). project-template: no issue id at all, no Refs line needed."""
+    problems: list[str] = []
+    if not TITLE_RE.match(title):
+        problems.append(f"title is not 'feat|fix|chore|refactor|docs|...: description': {title!r}")
+    if repo in NO_ISSUE_ID_REPOS:
+        ids = sorted(set(ISSUE_RE.findall(title + "\n" + body)), key=lambda x: int(x[3:]))
+        if ids:
+            problems.append(f"{repo} is public and its denylist forbids issue ids: the title or body names "
+                            f"{', '.join(ids[:5])}; describe the work in words (no Refs line in this repo)")
+        return problems
+    if ISSUE_RE.search(title):
+        problems.append(f"title carries an issue id (Linear may close it on merge): {title!r}")
+    if not REFS_RE.search(body):
+        problems.append("body has no 'Refs AA-<n>' line: pass --refs AA-<n>[,AA-<m>] (inserts 'Refs AA-<n>' as the "
+                        "first body line) or add the line to the lane's pr_body")
+    if CLOSING_RE.search(body):
+        problems.append("body has a closing phrase (Fixes/Closes/Resolves/Completes AA-<n>): use Refs")
+    stray = stray_issue_ids(body)
+    if stray:
+        problems.append(f"body names {', '.join(stray[:5])}, which the Refs line does not (Linear links the issue and "
+                        f"may move it to Done on merge): add it to 'Refs AA-<n>, ...' only if the PR does that issue, "
+                        f"else describe the other work in words")
+    return problems
+
+
+def validate(runner: Runner, p: dict, stacked_on: frozenset[str] = frozenset(), refs: list[str] = (),
+             extra_refs: list[str] = ()) -> tuple[list[str], list[str]]:
     """Return (problems, warnings) for one prs[] entry. `stacked_on`: branches of earlier PRs in the same list; a PR
-    based on one of them is compared with the local branch (it reaches origin when the earlier PR is pushed)."""
+    based on one of them is compared with the local branch (it reaches origin when the earlier PR is pushed). The body
+    rules read final_body(p, refs, extra_refs), the text the PR is opened with."""
     problems: list[str] = []
     warnings: list[str] = []
     try:
@@ -153,20 +233,7 @@ def validate(runner: Runner, p: dict, stacked_on: frozenset[str] = frozenset()) 
         return [str(e)], []
     wt, br = str(p.get("worktree", "")), str(p.get("branch", ""))
     base = str(p.get("base") or default_branch(repo)).removeprefix("origin/")
-    title, body = str(p.get("pr_title", "")), str(p.get("pr_body", ""))
-    if not TITLE_RE.match(title):
-        problems.append(f"title is not 'feat|fix|chore|refactor|docs|...: description': {title!r}")
-    if ISSUE_RE.search(title):
-        problems.append(f"title carries an issue id (Linear may close it on merge): {title!r}")
-    if not REFS_RE.search(body):
-        problems.append("body has no 'Refs AA-<n>' line")
-    if CLOSING_RE.search(body):
-        problems.append("body has a closing phrase (Fixes/Closes/Resolves/Completes AA-<n>): use Refs")
-    stray = stray_issue_ids(body)
-    if stray:
-        problems.append(f"body names {', '.join(stray[:5])}, which the Refs line does not (Linear links the issue and "
-                        f"may move it to Done on merge): add it to 'Refs AA-<n>, ...' only if the PR does that issue, "
-                        f"else describe the other work in words")
+    problems.extend(text_problems(repo, str(p.get("pr_title", "")), final_body(p, refs, extra_refs)))
     if not os.path.isdir(wt):
         problems.append(f"no worktree at {wt}")
         return problems, warnings
@@ -313,7 +380,7 @@ def push_failure_reason(r) -> str:
     return f"{r.last_line()}\n    {text}{hint}"
 
 
-def open_one(runner: Runner, p: dict, extra_refs: list[str], draft: bool) -> str:
+def open_one(runner: Runner, p: dict, extra_refs: list[str], draft: bool, refs: list[str] = ()) -> str:
     repo = normalize_repo(str(p["repo"]))
     wt, br = str(p["worktree"]), str(p["branch"])
     base = str(p.get("base") or default_branch(repo)).removeprefix("origin/")
@@ -329,7 +396,7 @@ def open_one(runner: Runner, p: dict, extra_refs: list[str], draft: bool) -> str
     if url:
         log(f"{tag}: pushed to the open PR {url}")
     else:
-        body = with_attribution(skip_note(add_refs(str(p.get("pr_body", "")), extra_refs)))
+        body = final_body(p, refs, extra_refs)
         tmpdir = ROOT / ".tmp-session"
         tmpdir.mkdir(parents=True, exist_ok=True)
         fd, fname = tempfile.mkstemp(prefix="pr-body-", suffix=".md", dir=str(tmpdir))
@@ -357,11 +424,22 @@ def open_one(runner: Runner, p: dict, extra_refs: list[str], draft: bool) -> str
     return url
 
 
+def id_list(text: str, flag: str) -> list[str]:
+    out = [x.strip() for x in text.split(",") if x.strip()]
+    for x in out:
+        if not re.fullmatch(r"AA-\d+", x):
+            raise ShipError(f"{flag}: '{x}' is not AA-<n>", 2)
+    return out
+
+
 def main(argv: list[str] | None = None, runner: Runner | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("journal", help="journal.jsonl path or workflow run id (wf_...)")
     ap.add_argument("--only", default="", help="open only the PRs whose repo name contains this text")
     ap.add_argument("--extra-refs", default="", help="comma-separated issue ids to add to the Refs line")
+    ap.add_argument("--refs", default="", help="comma-separated issue ids: a body with no Refs line gets 'Refs "
+                    "AA-<n>[, AA-<m>]' as its first line (S294); on a body that has one, they join its list. Not "
+                    "applied to project-template (no issue ids there)")
     ap.add_argument("--draft", action="store_true")
     ap.add_argument("--dry-run", action="store_true", help="validate and print, push nothing")
     ap.add_argument("--allow-not-ready", action="store_true", help="open PRs of a result with ready=false")
@@ -374,19 +452,27 @@ def main(argv: list[str] | None = None, runner: Runner | None = None) -> int:
         if res.get("ready") is False and not a.allow_not_ready:
             raise ShipError(f"the lane result is not ready: {res.get('blocked_reason') or 'no reason given'} "
                             f"(--allow-not-ready to open anyway)", 4)
-        extra = [x.strip() for x in a.extra_refs.split(",") if x.strip()]
-        for x in extra:
-            if not re.fullmatch(r"AA-\d+", x):
-                raise ShipError(f"--extra-refs: '{x}' is not AA-<n>", 2)
+        extra, refs = id_list(a.extra_refs, "--extra-refs"), id_list(a.refs, "--refs")
         chosen = [p for p in prs if a.only.lower() in str(p.get("repo", "")).lower()]
         if not chosen:
             raise ShipError(f"no PR matches --only '{a.only}'", 2)
         bad = False
         earlier: set[str] = set()
+        todo: list[dict] = []
         for p in chosen:
-            problems, warnings = validate(runner, p, frozenset(earlier))
-            earlier.add(str(p.get("branch", "")))
             tag = f"{p.get('repo')} {p.get('branch')}"
+            url, err = merged_pr(runner, p)
+            if url:
+                log(f"SKIP {tag}: already MERGED as {url}; not pushed and no new PR (it would duplicate the merged "
+                    f"one). More work on it: a new branch from origin/<base>, then its own PR")
+                continue
+            if (refs or extra) and repo_of(p) in NO_ISSUE_ID_REPOS:
+                log(f"WARN {tag}: --refs / --extra-refs not applied ({repo_of(p)} forbids issue ids)")
+            problems, warnings = validate(runner, p, frozenset(earlier), refs, extra)
+            if err:
+                problems.append(err)
+            todo.append(p)
+            earlier.add(str(p.get("branch", "")))
             for w in warnings:
                 log(f"WARN {tag}: {w}")
             for x in problems:
@@ -395,10 +481,13 @@ def main(argv: list[str] | None = None, runner: Runner | None = None) -> int:
             log(f"{'ok' if not problems else 'bad'} {tag}: {p.get('pr_title')}")
         if bad:
             return 4
+        if not todo:
+            log("nothing to open: every chosen branch already has a merged PR")
+            return 0
         if a.dry_run:
             return 0
-        for p in chosen:
-            open_one(runner, p, extra, a.draft)
+        for p in todo:
+            open_one(runner, p, extra, a.draft, refs)
         return 0
     except ShipError as e:
         log(f"ERROR {e}")
