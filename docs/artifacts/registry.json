@@ -91,6 +91,13 @@
    "title": "Bắt đầu với hệ thống giá",
    "purpose": "Bản ngắn cho chủ doanh nghiệp (S288): chuẩn bị buổi đầu, đăng nhập nhân sự và đại lý thử, hệ thống giá với ví dụ giá trip PR-31, nên thử gì; bản đầy đủ là GUIDE-12-owner-pricing",
    "source": "docs/audits/2026-11-23-S288-session/owner-pricing-quickstart.html"
+  },
+  {
+   "id": "PLMXb7Y3Y471XHpLR1drQv",
+   "url": "https://claude.ai/artifact/PLMXb7Y3Y471XHpLR1drQv",
+   "title": "Buổi họp 26/11",
+   "purpose": "Runbook buổi họp 26/11 (thứ tự bấm, trạng thái live 04:45); thay phần thứ tự bấm của trang quyết định S294 (tài khoản cũ)",
+   "source": "docs/audits/2026-11-25-S294-session/meeting-runbook.html"
   }
  ],
  "superseded": [
