@@ -1,0 +1,13 @@
+{
+ "about": "AA-1142: the public Dev hosts the External checks workflow checks every 15 minutes (tools/ops/external_checks.py). mode health: DNS, TLS and one GET of path (no redirects followed; expect = the answers that count as up, a sign-in redirect included). mode tls: DNS and TLS only (no health path). Public host names only.",
+ "targets": [
+  {"id": "cis-api", "app": "cis", "host": "api-cis.lumiguides.it.com", "mode": "health", "path": "/health", "expect": [200]},
+  {"id": "cis-admin", "app": "cis", "host": "aa-cis.lumiguides.it.com", "mode": "health", "path": "/", "expect": [200, 301, 302, 307, 308]},
+  {"id": "booking-api", "app": "booking", "host": "api-booking.lumiguides.it.com", "mode": "health", "path": "/booking/health", "expect": [200]},
+  {"id": "booking-admin", "app": "booking", "host": "booking.lumiguides.it.com", "mode": "health", "path": "/", "expect": [200, 301, 302, 307, 308]},
+  {"id": "crm-api", "app": "crm", "host": "partner-dev.lumiguides.it.com", "mode": "health", "path": "/crm/health", "expect": [200]},
+  {"id": "crm-portal", "app": "crm", "host": "portal.lumiguides.it.com", "mode": "health", "path": "/", "expect": [200, 301, 302, 307, 308]},
+  {"id": "tripplanner-web", "app": "tripplanner", "host": "tripplanner.lumiguides.it.com", "mode": "health", "path": "/", "expect": [200, 301, 302, 307, 308]},
+  {"id": "staff-sign-in", "app": "shared", "host": "staff-auth.lumiguides.it.com", "mode": "tls"}
+ ]
+}

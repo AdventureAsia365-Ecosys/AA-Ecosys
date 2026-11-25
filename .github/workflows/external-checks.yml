@@ -1,0 +1,93 @@
+name: External checks
+
+# AA-1142 (S292): the external synthetic checks of the CIS Ecosystem status page (/admin/overview): what a customer
+# outside the VPC meets. Every 15 minutes tools/ops/external_checks.py checks the public Dev hosts of
+# tools/ops/external_checks.json (DNS, a verified TLS handshake and the certificate's end date, one GET of the health
+# path without following redirects) and uploads the run, on master only:
+#
+#   s3://<bronze>/docs-reader/ops/external-checks.json   format 1 (CIS api/services/ops_status/external.py reads it)
+#
+# The CIS 5-minute status sampler copies each new run into acp_shared.ops_external_check (CIS 485); the page draws an
+# "external" strip next to the internal services and raises a Needs-attention item on a failing host, a certificate at
+# its critical days (cis.ops.status_cert_crit_days) or a feed that stopped reporting. The limits are CIS settings; this
+# workflow only measures.
+#
+# AWS: the Docs sync role (secret DOCS_SYNC_ROLE_ARN, trusted only by this repo on refs/heads/master; Put on
+# docs-reader/*), bucket secret DOCS_SYNC_BUCKET: the same path as Delivery metrics and Docs sync, nothing new in
+# Terraform. Without the two secrets the upload is skipped with a notice. No Route 53 health check, no new AWS service.
+#
+# Cost: about 30 s of Actions every 15 minutes on a public repo ($0); one S3 PUT per run (about 2,900 a month, under
+# 0.02 USD). GitHub may start a scheduled run late; the page greys the strip once the newest run is older than
+# cis.ops.status_stale_factor x 15 minutes. On a pull request only the unit tests run (no network, no AWS).
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+  pull_request:
+    branches: [master]
+    paths:
+      - "tools/ops/external_checks.py"
+      - "tools/ops/external_checks.json"
+      - "tools/ops/test_external_checks.py"
+      - ".github/workflows/external-checks.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: external-checks-${{ github.ref }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test:
+    name: External checks unit tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Unit tests (no network) and the config
+        run: |
+          python3 -m unittest discover -s tools/ops -p 'test_external_checks.py'
+          python3 tools/ops/external_checks.py validate
+
+  check:
+    name: Check and publish
+    needs: test
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      id-token: write    # OIDC for the Docs sync role
+    env:
+      OUT: _out/external-checks.json
+      KEY: docs-reader/ops/external-checks.json
+      HAS_AWS: ${{ secrets.DOCS_SYNC_ROLE_ARN != '' && secrets.DOCS_SYNC_BUCKET != '' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Check the public hosts
+        run: python3 tools/ops/external_checks.py run --out "$OUT" --summary "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload skipped
+        if: env.HAS_AWS != 'true'
+        run: echo "::notice title=External checks::DOCS_SYNC_ROLE_ARN / DOCS_SYNC_BUCKET are not set; checked, nothing uploaded."
+
+      - name: AWS credentials (OIDC)
+        if: env.HAS_AWS == 'true'
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ secrets.DOCS_SYNC_ROLE_ARN }}
+          aws-region: us-west-1
+          role-session-name: external-checks-${{ github.run_id }}
+
+      - name: Upload the run
+        if: env.HAS_AWS == 'true'
+        env:
+          BUCKET: ${{ secrets.DOCS_SYNC_BUCKET }}
+        run: aws s3 cp "$OUT" "s3://${BUCKET}/${KEY}" --only-show-errors --content-type "application/json"

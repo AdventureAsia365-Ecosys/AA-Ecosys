@@ -173,6 +173,7 @@
    "route:admin_llm_route_control",
    "route:admin_my_work",
    "route:admin_ops_assist",
+   "route:admin_ops_status_p2",
    "route:admin_overview",
    "route:admin_photos",
    "route:admin_pipeline/billing",
@@ -1229,6 +1230,30 @@
    "app": "cis",
    "area": "ops"
   },
+  "cis.ops.status_burn_fast_factor": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_burn_fast_window_min": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_burn_slow_factor": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_burn_slow_window_hours": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_cert_crit_days": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_cert_warn_days": {
+   "app": "cis",
+   "area": "ops"
+  },
   "cis.ops.status_client_error_warn_pct": {
    "app": "cis",
    "area": "ops"
@@ -1270,6 +1295,10 @@
    "area": "ops"
   },
   "cis.ops.status_history_days": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_incident_lookback_min": {
    "app": "cis",
    "area": "ops"
   },
@@ -1337,6 +1366,18 @@
    "app": "cis",
    "area": "ops"
   },
+  "cis.ops.status_slo_budget_warn_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_slo_target_pct": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_slo_window_days": {
+   "app": "cis",
+   "area": "ops"
+  },
   "cis.ops.status_snooze_choices_hours": {
    "app": "cis",
    "area": "ops"
@@ -1346,6 +1387,10 @@
    "area": "ops"
   },
   "cis.ops.status_stale_factor": {
+   "app": "cis",
+   "area": "ops"
+  },
+  "cis.ops.status_tenant_top_n": {
    "app": "cis",
    "area": "ops"
   },
