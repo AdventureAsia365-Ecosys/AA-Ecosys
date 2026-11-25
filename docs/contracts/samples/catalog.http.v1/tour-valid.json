@@ -2,7 +2,7 @@
   "contract": "catalog.http.v1",
   "schema": "Tour",
   "expect": "valid",
-  "why": "Published tour with places, per-day and per-place time zones and exclusions",
+  "why": "Published tour with places, per-day and per-place time zones, an overnight place that is not one of the day's stops (1.4) and exclusions",
   "payload": {
     "source_system": "cis",
     "source_id": "vn-ha-giang-loop-4d",
@@ -26,7 +26,16 @@
             "precision": "point"
           }
         ],
-        "time_zone": "Asia/Ho_Chi_Minh"
+        "time_zone": "Asia/Ho_Chi_Minh",
+        "overnight_destination_id": "vn-fictive-valley"
+      },
+      {
+        "day_no": 2,
+        "title": "Free day",
+        "description": null,
+        "places": [],
+        "time_zone": "Asia/Ho_Chi_Minh",
+        "overnight_destination_id": null
       }
     ],
     "inclusions": [
