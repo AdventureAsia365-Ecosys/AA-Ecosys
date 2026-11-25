@@ -1,0 +1,16 @@
+month,record_type,estimated,unblended_usd,net_unblended_usd
+2026-04,Usage,false,0.0001,0.0001
+2026-05,Usage,false,0.0000,0.0000
+2026-06,Usage,false,0.0000,0.0000
+2026-06,Tax,false,0.0000,0.0000
+2026-07,Usage,false,105.6763,105.6763
+2026-07,Tax,false,0.0000,0.0000
+2026-08,Usage,false,140.2210,140.2210
+2026-08,Tax,false,0.0000,0.0000
+2026-09,Usage,false,134.9601,134.9601
+2026-09,Tax,false,0.0000,0.0000
+2026-10,Usage,false,213.8719,213.8719
+2026-10,Tax,false,0.0000,0.0000
+2026-11,Usage,true,215.3380,215.3380
+2026-11,Other,true,3.0000,3.0000
+2026-11,Tax,true,0.0000,0.0000
