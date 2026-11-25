@@ -21,7 +21,7 @@ name: External checks
 # cis.ops.status_stale_factor x 15 minutes. On a pull request only the unit tests run (no network, no AWS).
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "7,22,37,52 * * * *"   # off the :00 / :15 marks, where GitHub delays or drops busy schedules
   workflow_dispatch:
   pull_request:
     branches: [master]
