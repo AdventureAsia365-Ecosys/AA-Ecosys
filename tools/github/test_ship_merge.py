@@ -29,6 +29,15 @@ NO_DELETES = Result(0, "[]\n")
 
 
 class NamesTest(unittest.TestCase):
+    def test_project_template_is_known_without_a_local_clone(self):
+        import ship_common
+        self.assertEqual(normalize_repo("project-template"), "project-template")
+        self.assertEqual(normalize_repo("AdventureAsia365-Ecosys/project-template"), "project-template")
+        self.assertEqual(normalize_repo("template"), "project-template")
+        self.assertEqual(ship_common.default_branch("project-template"), "main")
+        self.assertNotIn("project-template", ship_common.QUEUE_REPOS)
+        self.assertFalse((ship_common.local_checkout("project-template") / ".git").exists())
+
     def test_normalize_repo_variants(self):
         self.assertEqual(normalize_repo("AA-Ecosys (root)"), "AA-Ecosys")
         self.assertEqual(normalize_repo("apps/AA-CIS-App"), "AA-CIS-App")
