@@ -645,7 +645,7 @@ features:
     surface: ["route:v1_content_writing"]
     conditions:
       entitlements: [content.social, content.article, ai.budget_usd_monthly]
-      settings: [cis.t9.max_attempts, cis.t9.blog_chars_max, cis.quality.t10_reuse_similarity, cis.llm.prompt_data_fence]
+      settings: [cis.t9.max_attempts, cis.t9.blog_chars_max, cis.quality.t10_reuse_similarity, cis.llm.prompt_data_fence, cis.t9.blog_claim_rule]
     owner: content_lead
   - id: CIS-F044
     app: cis

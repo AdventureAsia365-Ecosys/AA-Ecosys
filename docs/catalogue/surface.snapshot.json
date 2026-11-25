@@ -2265,6 +2265,10 @@
    "app": "cis",
    "area": "content"
   },
+  "cis.t9.blog_claim_rule": {
+   "app": "cis",
+   "area": "content"
+  },
   "cis.t9.blog_extend_material": {
    "app": "cis",
    "area": "content"
