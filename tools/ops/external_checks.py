@@ -99,6 +99,7 @@ def check_dns(host: str, resolve: Callable[..., Any] = socket.getaddrinfo) -> tu
 def check_tls(host: str, timeout: float = TIMEOUT_S) -> tuple[Optional[bool], Optional[str], Optional[str]]:
     """(tls_ok, cert_not_after, error): False on a refused certificate, None when no connection was made."""
     ctx = ssl.create_default_context()
+    ctx.minimum_version = ssl.TLSVersion.TLSv1_2   # a host that only offers TLS 1.0/1.1 counts as a TLS failure
     try:
         with socket.create_connection((host, 443), timeout=timeout) as raw:
             with ctx.wrap_socket(raw, server_hostname=host) as s:
