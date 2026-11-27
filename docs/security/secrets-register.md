@@ -318,7 +318,7 @@ Rows by class: scheduled 76, auto 18, on incident 26, identifier 30, retired 48.
 | `partner-auth.lumiguides.it.com` | `acm:us-east-1` | auto | — | aws | — | — | 2027-05-10 | — | aws |
 | `*.lumiguides.it.com` | `acm:us-east-1` | auto | — | aws | — | — | 2027-05-12 | — | aws |
 | `*.lumiguides.it.com` | `acm:us-west-1` | auto | — | aws | — | — | 2027-05-23 | — | aws |
-| `TF_VAR_DB_PASSWORD` | `github:AA-CIS-Infra` | copy of `aa-cis/dev/rds` | 180 d | tech-lead | 2026-07-07 | 2027-05-26 | — | key-ceremony, suspected-leak, staff-change | manual |
+| `TF_VAR_DB_PASSWORD` | `github:AA-CIS-Infra` | copy of `aa-cis/dev/rds` | 180 d | tech-lead | 2026-11-27 | 2027-05-26 | — | key-ceremony, suspected-leak, staff-change | manual |
 | `aa-cis/dev/rds` | `secretsmanager:acc2` | scheduled | 180 d | tech-lead | 2026-11-27 | 2027-05-26 | — | key-ceremony, suspected-leak, staff-change | manual |
 | `server certificate rds-ca-rsa2048-g1` | `rds:aa-cis-dev-db` | auto | — | aws | — | — | 2027-07-07 | — | aws |
 | `tripplanner/dev/api-key` | `secretsmanager:acc2` | scheduled | 365 d | tech-lead | 2026-09-13 | 2027-09-13 | — | key-ceremony | manual |

@@ -26,7 +26,7 @@ related: [OPS-04, SEC-02, SEC-02-rotation, AA-1183]
 Every Dev hostname under `lumiguides.it.com` serves an ACM certificate: the API custom domains and the load balancer
 listener in us-west-1, the CloudFront and Cognito custom domains in us-east-1. ACM renews its own certificates about 60
 days before expiry when the DNS validation record still resolves. ACM only sends an **approaching expiration** event
-when that renewal has not happened (daily from 30 days before expiry for a public certificate), a **renewal action
+when that renewal has not happened (daily from 45 days before expiry by default, account setting DaysBeforeExpiry), a **renewal action
 required** event when it tried and failed, and an **expired** event when it is too late. When a certificate expires,
 browsers and API clients refuse the hostname: the page or API is down for everyone.
 
