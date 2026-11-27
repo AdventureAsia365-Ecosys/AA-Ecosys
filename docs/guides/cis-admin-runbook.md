@@ -49,7 +49,10 @@ Leaving the company: the owner disables the row (it is never deleted, so the his
 1. Open `https://aa-cis.lumiguides.it.com`.
 2. Choose **Sign in with company email**.
 3. On the Adventure Asia sign-in page, type your work e-mail address.
-4. Type the one-time code from the e-mail. You land on the first page your role may open.
+4. Type the one-time code from the e-mail. You land on **My work** (Home › My work): the read-only viewer lands on the
+   Review Queue, the tenant-desk and AI roles on their first page. Start at My work: it shows what waits for you, in
+   bands (Needs your approval, Content work, Platform, Keep an eye on), and each tile opens the list it counts. Queues
+   with nothing waiting fold into one line.
 5. To sign out, open the account menu (your initial, top right) and choose **Sign out**. The next sign-in asks for a
    new code.
 

@@ -42,6 +42,10 @@ không bao giờ tự duyệt thay đổi của mình.
 
 ## 2. Đọc trang Price setup
 
+Bắt đầu ở **My work** trên dashboard Booking. Thẻ **Price setup progress** (Tiến độ thiết lập giá) đếm số tour theo
+bước tiếp theo (cùng con số với bộ lọc **Next step** bên dưới); mỗi con số mở Price setup đã lọc đúng bước đó. Việc
+chờ bạn duyệt (phiên bản giá, dịch vụ thêm, thay đổi mùa giá, ngày lễ) là các ô trong **To approve or pay**.
+
 Mở Booking › **Supply › Price setup** (Thiết lập giá). Mỗi dòng là một tour (trip plan) với bảy mục kiểm tra:
 **Hotels & services**, **Supplier rates**, **Exchange rate**, **Pricing rule**, **Price**, **Sellable** và
 **Departures** (không bắt buộc: tour thiết kế riêng không có ngày khởi hành). Các ô trên cùng đếm mọi tour; lọc theo
@@ -195,7 +199,8 @@ Mỗi lần đổi giá là một **phiên bản** mới; không có gì bị gh
    mới từ giá đang áp dụng), sửa các dòng và khoảng ngày khởi hành, bấm **Save draft** (Lưu nháp).
 3. Nhập **Reason for the change** (Lý do thay đổi; bắt buộc, tối đa 300 ký tự) và bấm **Submit for approval** (Gửi
    duyệt).
-4. Người thứ hai mở cùng tab và đọc **Changes against the prices in force** (Thay đổi so với giá đang áp dụng): mỗi
+4. Người thứ hai thấy phiên bản ở **My work**, ô **Price versions to approve** (Phiên bản giá cần duyệt; ô này mở
+   Price setup với danh sách phiên bản chờ họ duyệt), mở tab của tour và đọc **Changes against the prices in force** (Thay đổi so với giá đang áp dụng): mỗi
    dòng trước và sau, thay đổi lớn được đánh dấu, dòng dưới mức lợi nhuận thấp nhất cho phép được gắn cờ, và các dòng
    giá kết thúc cùng phiên bản này. **What it touches** (Ảnh hưởng) đếm số báo giá còn hạn, chuyến khởi hành và dòng giá đại lý trong các ngày đó.
 5. Người thứ hai bấm **Approve** (Duyệt) (hoặc **Reject** (Từ chối) kèm lý do). Phiên bản thành **Published** (Đã
