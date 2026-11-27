@@ -190,6 +190,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1131](cis-portal-admin-tenant-ui/AA-1131.md) | [Kit] Accessibility fixes in the shared kit, synced to every app, plus the UI audit harness | Done | 2026-11-18 | CIS Portal — Admin & Tenant UI |
 | [AA-1133](cis-portal-admin-tenant-ui/AA-1133.md) | [Docs] Docs reader v2 — /admin/docs like market docs sites, open to all staff | Done | 2026-11-18 | CIS Portal — Admin & Tenant UI |
 | [AA-1146](cis-portal-admin-tenant-ui/AA-1146.md) | [CIS] Tour edits are versioned, locked and published through one review gate | Done | 2026-11-19 | CIS Portal — Admin & Tenant UI |
+| [AA-1190](cis-portal-admin-tenant-ui/AA-1190.md) | [CIS + Booking] My work slice 1 — everyone lands on My work, missing approval tiles, price setup progress, zero tiles collapsed | Done | 2026-11-27 | CIS Portal — Admin & Tenant UI |
 | [AA-160](cis-portal-admin-tenant-ui/AA-160.md) | Notification Layer Phase 2 — EventBridge + SQS + Dispatch Lambda | Canceled | 2026-10-12 | CIS Portal — Admin & Tenant UI |
 | [AA-662](cis-portal-admin-tenant-ui/AA-662.md) | [UI kit] Shared admin/portal components — DataTable (filter, sort, columns, pagination, saved views, CSV), Drawer, Modal, PageHeader, empty/loading/error states | Done | 2026-10-05 | CIS Portal — Admin & Tenant UI |
 | [AA-663](cis-portal-admin-tenant-ui/AA-663.md) | [Admin] Information architecture consolidation — one Dashboard, remove duplicates and legacy routes, Brand Identity + system config into Settings, drop the "ADMIN" tag | Done | 2026-09-29 | CIS Portal — Admin & Tenant UI |
@@ -382,7 +383,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-222](no-project/AA-222.md) | _execute_run_tour crashes on not-publishable runs: INSERT status="pending" invalid for content_status_enum | Done | 2026-06-22 | — |
 | [AA-226](no-project/AA-226.md) | [AA-193·F5] SEO meta lọt dưới floor 140 sau fix_pass (Trail Pulse/Sonnet = 132) | Done | 2026-06-23 | — |
 | [AA-24](no-project/AA-24.md) | [Admin] Dashboard, SEO & Cost — tất cả metrics/data dùng giá trị thực từ DB, không hardcode | Done | 2026-05-13 | — |
-| [AA-246](no-project/AA-246.md) | AWS Account Migration: {acc1} (management acc) → {acc2} (độc lập, TrueIDC fund) + build hạ tầng mới | Done | 2026-07-15 | — |
+| [AA-246](no-project/AA-246.md) | AWS Account Migration: {aws-account} (management acc) → {aws-account} (độc lập, TrueIDC fund) + build hạ tầng mới | Done | 2026-07-15 | — |
 | [AA-25](no-project/AA-25.md) | [Admin] Tenants — fix "Failed to load" + thêm detail view (tours, SEO, keywords, cost) | Done | 2026-05-12 | — |
 | [AA-254](no-project/AA-254.md) | [CIS-OBS] Ops diagnosis panel — rule-based failure triage, extend Health tab | Canceled | 2026-09-23 | — |
 | [AA-255](no-project/AA-255.md) | [COMMAND-CENTER] Unified Admin Dashboard — Infra + LLM Ops + Cost (real-time, 1 trang) | Canceled | 2026-09-23 | — |
@@ -495,7 +496,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-514](no-project/AA-514.md) | [T10] Bổ sung gate "promises an option" + SEO surface + structural variance route-aware | Done | 2026-09-02 | — |
 | [AA-515](no-project/AA-515.md) | [Ranking/Atom Score] Stage xếp hạng atom — điều kiện tiên quyết cho AA-510 (Route/Hub) | Done | 2026-09-01 | — |
 | [AA-516](no-project/AA-516.md) | [CLEANUP] Dead code layer N4-N6 (fetch_trips/runway_map/plan_quarter/allocate_month) — không route nào gọi tới | Done | 2026-09-03 | — |
-| [AA-517](no-project/AA-517.md) | [INFRA] Điều tra chi phí RDS + Secrets Manager lạc trên acc 1 ({acc1}) — nghi setup nhầm acc, kiểm tra luôn GPT-4.1 key rotation | Done | 2026-09-02 | — |
+| [AA-517](no-project/AA-517.md) | [INFRA] Điều tra chi phí RDS + Secrets Manager lạc trên acc 1 ({aws-account}) — nghi setup nhầm acc, kiểm tra luôn GPT-4.1 key rotation | Done | 2026-09-02 | — |
 | [AA-518](no-project/AA-518.md) | [LLM Ops] Model selection qua UI admin (writer: Claude/Palmyra X5, judge: GPT-5.6) — STEP0 Bedrock 3-account trước, liên kết AA-495 cho brand identity A1 | Done | 2026-09-03 | — |
 | [AA-519](no-project/AA-519.md) | [T5-T11] UI polish + route/hub metadata thread-through (từ audit AA-507) | Done | 2026-09-03 | — |
 | [AA-520](no-project/AA-520.md) | [AUDIT] Rà soát backlog sau AA-507 — issue nào premise đã lỗi thời do kiến trúc Segment/Route/Slate mới | Done | 2026-09-05 | — |
@@ -688,6 +689,8 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-1139](partner-crm-aa-partner/AA-1139.md) | [Add-ons] TripPlanner module in the agency app: site link, lead channel, theme, locale, leads, usage | Done | 2026-11-19 | Partner CRM — AA-Partner |
 | [AA-1144](partner-crm-aa-partner/AA-1144.md) | [CRM] Agency own lines limited to flight, visa, insurance and fee; catalogue supply stays AA-only | Done | 2026-11-19 | Partner CRM — AA-Partner |
 | [AA-1147](partner-crm-aa-partner/AA-1147.md) | [CRM] Agency extras follow the trip from proposal to invoice | Done | 2026-11-21 | Partner CRM — AA-Partner |
+| [AA-1188](partner-crm-aa-partner/AA-1188.md) | [Pricing] Agencies see the right price — catalog From price, CRM price columns and booking terms, twin-share tariff, docs drift | Done | 2026-11-27 | Partner CRM — AA-Partner |
+| [AA-1196](partner-crm-aa-partner/AA-1196.md) | [CRM] E2E Dev suite green again — four flows red since 11/11 (AA lines, client proposal options, ledger, proposal builder) | Done | 2026-11-27 | Partner CRM — AA-Partner |
 | [AA-928](partner-crm-aa-partner/AA-928.md) | [CRM W0] CRM-01a ADRs + contracts + spec errata | Done | 2026-10-22 | Partner CRM — AA-Partner |
 | [AA-929](partner-crm-aa-partner/AA-929.md) | [CRM W0] CRM-01b Data-standards bump | Done | 2026-10-22 | Partner CRM — AA-Partner |
 | [AA-930](partner-crm-aa-partner/AA-930.md) | [CRM W0] CRM-02 Readiness checks (read-only) | Done | 2026-10-22 | Partner CRM — AA-Partner |
