@@ -98,6 +98,27 @@
    "title": "Buổi họp 26/11",
    "purpose": "Runbook buổi họp 26/11 (thứ tự bấm, trạng thái live 04:45); thay phần thứ tự bấm của trang quyết định S294 (tài khoản cũ)",
    "source": "docs/audits/2026-11-25-S294-session/meeting-runbook.html"
+  },
+  {
+   "id": "VhWV6pXCHGFMn5uKwQPBgq",
+   "url": "https://claude.ai/artifact/VhWV6pXCHGFMn5uKwQPBgq",
+   "title": "AI Security Roadshow 26/11",
+   "purpose": "Chuẩn bị + ghi chép sau sự kiện AWS × G-AsiaPacific (luật VN/EU, ISO/NIST, OWASP, AWS, Amazon Quick, Kiro, việc áp dụng cho AA); private",
+   "source": "docs/audits/2026-11-26-S295-ai-security-roadshow/ (bản public-safe)"
+  },
+  {
+   "id": "AaSXbEqqRiir2478cj5GTq",
+   "url": "https://claude.ai/artifact/AaSXbEqqRiir2478cj5GTq",
+   "title": "Tư vấn S295",
+   "purpose": "Audit bảo mật toàn hệ thống, giá cho đại lý, trợ lý AI, dữ liệu + template, phụ lục TrueIDC; 34 quyết định lưu trong db (collection decisions); private",
+   "source": "docs/audits/2026-11-27-S295-advisory/README.md"
+  },
+  {
+   "id": "RTVCagR8fmGC8VASkFYViW",
+   "url": "https://claude.ai/artifact/RTVCagR8fmGC8VASkFYViW",
+   "title": "Checklist chủ doanh nghiệp",
+   "purpose": "Việc làm/duyệt của chủ DN trên CIS, Booking, CRM; ô đánh dấu A0–A5 lưu trong db (collection checklist); cần share cho chủ DN",
+   "source": "private archive archive/advisory/2026-11-27-S295/bo-checklist.md"
   }
  ],
  "superseded": [
