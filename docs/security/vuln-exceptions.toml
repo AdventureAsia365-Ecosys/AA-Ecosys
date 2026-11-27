@@ -26,17 +26,6 @@
 # approved_on = 2026-11-21
 
 [[exception]]
-repo = "AA-CIS-Infra"
-id = "CVE-2026-124851"
-source = "trivy"
-package = "libzstd1"
-expires = 2026-12-02
-reason = "WordPress E2E test sidecar (test-wp, Booking admin task) only: the official wordpress 7.1.5-php8.4-apache image was last rebuilt on 24/11, before the Debian fix (1.5.7+dfsg-1+deb13u1), and no newer digest of that variant exists on public.ecr.aws or Docker Hub (checked 25/11). The site holds no customer data (ephemeral SQLite, one test application password); the flaw needs an attacker to submit zstd data to a decompressor and read its output, which WordPress does not offer."
-way_out = "Move test_wp_image (AA-CIS-Infra modules/environment/test_wp.tf) to the first digest of the same tag rebuilt with libzstd1 1.5.7+dfsg-1+deb13u1 or later, then remove this row and the .trivyignore entry. AA-1185 turns the test site off instead: remove this row (and the Infra .trivyignore line) only after the Infra apply AND the next Booking admin deploy, once describe-tasks shows the Booking admin task with one container (the WordPress image no longer runs), and before the expiry."
-approved_by = "tech lead"
-approved_on = 2026-11-25
-
-[[exception]]
 repo = "AA-Ecosys"
 id = "#2"
 source = "code-scanning"
