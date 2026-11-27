@@ -382,7 +382,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-222](no-project/AA-222.md) | _execute_run_tour crashes on not-publishable runs: INSERT status="pending" invalid for content_status_enum | Done | 2026-06-22 | — |
 | [AA-226](no-project/AA-226.md) | [AA-193·F5] SEO meta lọt dưới floor 140 sau fix_pass (Trail Pulse/Sonnet = 132) | Done | 2026-06-23 | — |
 | [AA-24](no-project/AA-24.md) | [Admin] Dashboard, SEO & Cost — tất cả metrics/data dùng giá trị thực từ DB, không hardcode | Done | 2026-05-13 | — |
-| [AA-246](no-project/AA-246.md) | AWS Account Migration: 867490540162 (management acc) → 005097885195 (độc lập, TrueIDC fund) + build hạ tầng mới | Done | 2026-07-15 | — |
+| [AA-246](no-project/AA-246.md) | AWS Account Migration: {acc1} (management acc) → {acc2} (độc lập, TrueIDC fund) + build hạ tầng mới | Done | 2026-07-15 | — |
 | [AA-25](no-project/AA-25.md) | [Admin] Tenants — fix "Failed to load" + thêm detail view (tours, SEO, keywords, cost) | Done | 2026-05-12 | — |
 | [AA-254](no-project/AA-254.md) | [CIS-OBS] Ops diagnosis panel — rule-based failure triage, extend Health tab | Canceled | 2026-09-23 | — |
 | [AA-255](no-project/AA-255.md) | [COMMAND-CENTER] Unified Admin Dashboard — Infra + LLM Ops + Cost (real-time, 1 trang) | Canceled | 2026-09-23 | — |
@@ -495,7 +495,7 @@ Closed Linear issues (Done / Canceled), plus every archived or trashed issue, wi
 | [AA-514](no-project/AA-514.md) | [T10] Bổ sung gate "promises an option" + SEO surface + structural variance route-aware | Done | 2026-09-02 | — |
 | [AA-515](no-project/AA-515.md) | [Ranking/Atom Score] Stage xếp hạng atom — điều kiện tiên quyết cho AA-510 (Route/Hub) | Done | 2026-09-01 | — |
 | [AA-516](no-project/AA-516.md) | [CLEANUP] Dead code layer N4-N6 (fetch_trips/runway_map/plan_quarter/allocate_month) — không route nào gọi tới | Done | 2026-09-03 | — |
-| [AA-517](no-project/AA-517.md) | [INFRA] Điều tra chi phí RDS + Secrets Manager lạc trên acc 1 (867490540162) — nghi setup nhầm acc, kiểm tra luôn GPT-4.1 key rotation | Done | 2026-09-02 | — |
+| [AA-517](no-project/AA-517.md) | [INFRA] Điều tra chi phí RDS + Secrets Manager lạc trên acc 1 ({acc1}) — nghi setup nhầm acc, kiểm tra luôn GPT-4.1 key rotation | Done | 2026-09-02 | — |
 | [AA-518](no-project/AA-518.md) | [LLM Ops] Model selection qua UI admin (writer: Claude/Palmyra X5, judge: GPT-5.6) — STEP0 Bedrock 3-account trước, liên kết AA-495 cho brand identity A1 | Done | 2026-09-03 | — |
 | [AA-519](no-project/AA-519.md) | [T5-T11] UI polish + route/hub metadata thread-through (từ audit AA-507) | Done | 2026-09-03 | — |
 | [AA-520](no-project/AA-520.md) | [AUDIT] Rà soát backlog sau AA-507 — issue nào premise đã lỗi thời do kiến trúc Segment/Route/Slate mới | Done | 2026-09-05 | — |

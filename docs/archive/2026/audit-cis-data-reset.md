@@ -5,7 +5,7 @@
 > Linear epic: **AA-594** (project *CIS Data Reset & Pipeline Rerun (Audit)*).
 > Sub-issues: G0 AA-595 · G1 AA-596 · G2 AA-597 · G3 AA-598 · G4 AA-599 · G5 AA-600 · G6 AA-601 · cleanup AA-602.
 >
-> ⚠️ **RDS acc2 `005097885195` dùng CHUNG production** (CIS + TripPlanner). Xóa nhầm = mất data thật của mọi tenant, không hoàn tác trừ khi có backup. Đọc kỹ trước khi chạy bất cứ DELETE nào.
+> ⚠️ **RDS acc2 `{acc2}` dùng CHUNG production** (CIS + TripPlanner). Xóa nhầm = mất data thật của mọi tenant, không hoàn tác trừ khi có backup. Đọc kỹ trước khi chạy bất cứ DELETE nào.
 
 ## Mục tiêu (Ms.Thư)
 Raw tours (~700+) đã upload từ Excel. Giữ raw thô, reset toàn bộ dữ liệu **dẫn xuất** (master + tenant/social), chạy lại pipeline từ admin (S1 → master content → atomize → segment/score/route → social), verify S1 + social content admin + UI admin (thật/mock).
