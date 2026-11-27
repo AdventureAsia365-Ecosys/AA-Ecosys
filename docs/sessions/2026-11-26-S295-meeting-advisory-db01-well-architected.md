@@ -52,7 +52,7 @@
 
 ## Còn lại
 
-- 4 thẻ "Ask AA (chi tiết)" trên trang tư vấn chờ tech lead bấm.
+- 4 thẻ "Ask AA (chi tiết)": tech lead duyệt cuối phiên (58/58 quyết định). Jira PR-23 đã đăng (10711).
 - S296 theo master plan: AA-1182 (khoá state, trần vendor), AA-1183 (sổ secret + nhắc tự động), AA-1185 (sweep 0 USD + egress + EBS encryption + Access Analyzer CI + Health), AA-1187, AA-1190 (My work lát 1), AA-873 chạy thử Security Hub/Inspector/Macie, Prowler, AA-1166.
 - ≥ 28/11: chuỗi AA-1061 (bk-076) sau khi tech lead duyệt pins DRY RUN.
 - 30/11: kéo Cost Explorer acc2 tháng 11. 01/12: Billing Transfer acc2 → acc4, rồi GuardDuty + SCP/RCP.

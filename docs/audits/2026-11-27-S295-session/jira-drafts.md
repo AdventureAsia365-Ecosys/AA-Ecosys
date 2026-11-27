@@ -1,6 +1,6 @@
 # S295 — Jira drafts (Vietnamese, for the business owner)
 
-Status: **draft, waiting for the tech lead's approval** (not posted).
+Status: **posted 27/11 ~13:00 +07** after the tech lead approved ("Jira đăng"): PR-23 comment 10711.
 Numbers read live on 27/11/2026 (state-snapshot.md). Last comment read before drafting: PR-23 (21/11 19:54).
 Skipped on purpose: commercial site, USD-only, Well-Architected, AWS security services (tech-lead decisions or not shipped; Jira carries product progress only).
 
