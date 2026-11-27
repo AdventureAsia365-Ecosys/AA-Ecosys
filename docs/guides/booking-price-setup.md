@@ -142,7 +142,7 @@ renew it, for every kind of contract (hotel, transport, guide, activity, ...):
 | Sheet | Columns | Rule |
 |---|---|---|
 | **Tours** | Tour key, Sellable | `yes` or `no`; empty keeps it as it is. A sellable tour needs hotels and services |
-| **Components** | Tour key, Day, Hotel code + Room type, or Service code | One item a row. A tour listed here gets exactly these items (the rest are removed) |
+| **Components** | Tour key, Day, Hotel code + Room type, or Service code, Meal plan | One item a row. A tour listed here gets exactly these items (the rest are removed). **Meal plan** is the board of a hotel night: `RO` room only, `BB` bed and breakfast, `HB` half board, `FB` full board, `AI` all inclusive (the name works too, for example `Half board`). Empty keeps the board the night already has; a new night gets `BB`. Leave it empty on a service row |
 | **Prices** | Tour key, Channel, Season, Peak, Valid from, Valid to, Pax min, Pax max, Currency, Price per person, Child price, Infant price, Single supplement | See below |
 | **Departures** | Tour key, Start date, Capacity, Min to operate, Sales cutoff days, Decision days before, Auto confirm, Status | New dates only, after today; a date the tour already has is skipped. Status `scheduled` (default) or `guaranteed` |
 
