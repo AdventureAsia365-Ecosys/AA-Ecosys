@@ -1,0 +1,14 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "PartnerTerms",
+  "expect": "invalid",
+  "why": "1.12: quote_rules carries only the three policy values an agency needs; a margin or any other policy value is refused",
+  "payload": {
+    "as_of": "2026-11-27",
+    "payment": null,
+    "credit": {"status": "ok", "holds_paused": false, "overdue_invoices": 0, "oldest_overdue_days": 0, "overdue_amount": []},
+    "cancellation_policy": null,
+    "clauses": [],
+    "quote_rules": {"quote_validity_days": 14, "group_on_request_min_pax": 9, "age_bands": {"child_age_max": 11, "infant_age_max": 1}, "target_margin": "0.15"}
+  }
+}

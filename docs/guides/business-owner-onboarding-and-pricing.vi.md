@@ -379,8 +379,8 @@ Nếu lỗi:
 |---|---|---|
 | Chuyển ứng dụng | Đầu trang ứng dụng đại lý | Content studio và CRM (và TripPlanner nếu đã thêm) |
 | Tiếng Việt | Menu tài khoản › **Language and dates** | Ứng dụng chuyển sang tiếng Việt |
-| Tour AA có giá | Content studio › Marketplace (`/portal/tours`) | Tour có giá hiện "From $X per person" (Từ $X mỗi khách). Phần lớn tour trên Dev không có dòng giá: đó là bình thường |
-| Giá AA cho đại lý | CRM › Settings › **AA prices for your agency** (Giá AA cho đại lý của bạn, `/aa-tariff`) | Bảng giá theo tour, mùa và cỡ nhóm, có chọn tiền tệ, **Download CSV**, **Print**. Hôm nay ít hoặc không có dòng nào. Trong 5 phút đầu: "Your agency is not linked to AA's agency prices…" |
+| Tour AA có giá | Content studio › Marketplace (`/portal/tours`), cả hai chế độ xem (**All tours**, **In my catalog**) | Tour có giá hiện "From $X per person" (Từ $X mỗi khách) và "Suggested retail (RRP) for 2 travellers, not your agency's price" (giá bán lẻ gợi ý cho 2 khách, không phải giá dành cho đại lý). Tour chưa có giá hiện **Price on request** (Giá theo yêu cầu): bình thường với phần lớn tour trên Dev |
+| Giá AA cho đại lý | Thanh bên CRM › Money › **AA prices** (cả Settings › **AA prices for your agency**, `/aa-tariff`) | Bảng giá theo tour, mùa và cỡ nhóm: giá mỗi người ở chung phòng đôi, phụ thu phòng đơn, giá trẻ em và em bé, mức giảm của đại lý và giá bán lẻ gợi ý. Đoàn AA báo giá theo yêu cầu (8-10 và 11+ với giá trị ban đầu 9) hiện **On request** (Theo yêu cầu). Có dòng "Priced tours: N of M" (số tour có giá trên tổng số tour), chọn tiền tệ, **Download CSV**, **Print**, và **Booking conditions with AA** (Điều kiện đặt tour với AA) dưới bảng: đặt cọc, phần còn lại, phí huỷ, hạn báo giá, cỡ đoàn, tuổi trẻ em và em bé, điều khoản của AA. Hôm nay ít hoặc không có dòng nào. Trong 5 phút đầu: "Your agency is not linked to AA's agency prices…" |
 | Quy tắc bán của đại lý | CRM › Settings › **Pricing** (Giá bán, `/settings/pricing`) | Nhóm tuổi, mức giảm tối đa của nhân viên, mức cộng trên sản phẩm AA |
 | Một khách hàng thử | CRM | Chỉ tên bịa và địa chỉ `example.invalid` |
 
@@ -716,10 +716,15 @@ bậc.
 - Giá tính tự động đang có chỉ đổi ở lần tính lại kế tiếp (C7); tới lúc đó bảng giá giữ các bậc cũ.
 - Giá nhập tay (C8) được dùng cỡ đoàn bất kỳ và thắng các dòng tính tự động mà nó phủ.
 - Càng nhiều bậc thì càng ít khoảng ngày tương lai vừa bảng giá của một tour (200 dòng; khoảng xa nhất bị bỏ trước).
-- Biểu giá đại lý ghi một giá cho mỗi bậc. Báo giá cho đại lý không dùng các bậc: nó tính giá cho đúng số khách của
-  đoàn từ chi phí của tour, nên đoàn 6 khách có thể được báo thấp hơn dòng biểu giá bậc 5-7 (tính cho 5 khách).
+- Biểu giá đại lý ghi một giá cho mỗi bậc, tính cho mỗi người ở chung phòng đôi, kèm phụ thu phòng đơn riêng (khách
+  ở một mình một phòng trả thêm khoản này; đoàn lẻ không còn đắt hơn mỗi người so với đoàn chẵn ngay dưới). Giá bán
+  lẻ gợi ý cũng theo cùng cách tính: ở bậc lẻ của giá tính tự động, giá này được hạ về mức ở chung phòng đôi; giá nhập
+  tay (C8) hiện đúng như đã nhập, nên hãy nhập giá tay theo mỗi người ở chung phòng đôi. Báo giá
+  cho đại lý không dùng các bậc: nó tính giá cho đúng số khách của đoàn từ chi phí của tour, nên đoàn 6 khách có thể
+  được báo thấp hơn dòng biểu giá bậc 5-7 (tính cho 5 khách).
 - Đoàn từ cỡ **Group quoted on request from** (Đoàn báo giá theo yêu cầu từ, giá trị ban đầu 9) trở lên vẫn được báo
-  giá theo yêu cầu, dù thuộc bậc nào.
+  giá theo yêu cầu, dù thuộc bậc nào. Biểu giá đại lý hiện mọi bậc chạm tới cỡ này là **On request** (8-10 và 11+ với
+  giá trị ban đầu), và **Booking conditions with AA** của đại lý cũng hiện cùng giá trị.
 
 ### C11. Hạng đại lý, mức giảm và thẻ giá
 
@@ -794,8 +799,8 @@ details** (Đổi thông tin thanh toán).
 |---|---|---|
 | Trang tour TripPlanner | "From $X per person", "Suggested price for 2 travellers. Your advisor confirms the final price." | Tối đa khoảng 30 phút |
 | Trang TripPlanner riêng của đại lý | Không có giá (đại lý bán dưới tên của mình) | - |
-| Content studio › Marketplace | "From $X per person"; không có dòng giá khi không có giá | Ngay lập tức |
-| CRM › AA prices for your agency | Giá của đại lý theo tour, mùa và cỡ nhóm, mức giảm, giá bán lẻ đề xuất | Trong khoảng 1 phút |
+| Content studio › Marketplace (cả hai chế độ xem) | "From $X per person" kèm "Suggested retail (RRP) for 2 travellers, not your agency's price"; **Price on request** khi không có giá | Ngay lập tức |
+| CRM › AA prices | Giá ở chung phòng đôi của đại lý theo tour, mùa và cỡ nhóm, phụ thu phòng đơn, giá trẻ em và em bé, mức giảm, giá bán lẻ đề xuất; **On request** cho các bậc đoàn; Điều kiện đặt tour với AA | Trong khoảng 1 phút |
 | Trình soạn đề xuất CRM, mục AA | Báo giá AA trực tiếp. Giá bán thấp hơn giá công khai của AA chỉ hiện cảnh báo | Trực tiếp mỗi lần báo giá |
 | Booking | Price readiness, Price setup, View tariff | Ngay lập tức |
 | CIS admin | Reference prices (không bao giờ là giá bán), Data coverage | Ngay lập tức |
@@ -895,8 +900,9 @@ Tour chưa mở bán, nhưng giá công khai đã hiện (C16).
    N5 hướng dẫn viên chỉ một số ngày; đại lý vẫn mua được). Nếu ghi **Blocked**, mở **Hotels & services** của tour và
    đọc các phát hiện trong mục **Can agencies buy it?**: một đêm không có khách sạn (N1, sửa ở D5), thiếu giá (N2)
    hoặc nhà cung cấp hay mục ngưng hoạt động (N3).
-3. Cửa sổ đại lý → CRM › Settings › **AA prices for your agency**. Mong đợi trong một phút: tour với giá của đại lý
-   (hạng standard, giảm 0 %).
+3. Cửa sổ đại lý → CRM › Money › **AA prices**. Mong đợi trong một phút: tour với giá của đại lý (hạng standard,
+   giảm 0 %), phụ thu phòng đơn, **On request** ở các dòng 8-10 và 11+, dòng "Priced tours: N of M" và **Booking
+   conditions with AA** dưới bảng.
 4. Tuỳ chọn: trong một đề xuất CRM, thêm tour làm mục AA và bấm **Ask AA for a price** (Hỏi giá AA). Dùng một khách
    hàng bịa.
 
@@ -972,7 +978,7 @@ Tất cả trên CIS **Platform › Staff & access** → dòng của chủ doanh
 | "You are signed in with another account…" khi nhận lời mời | Dùng nhầm cửa sổ nhân sự | Dùng cửa sổ ẩn danh |
 | Mất mật khẩu đại lý dùng một lần | Đã đóng trang | **Withdraw owner invitation**, mời lại |
 | "Your agency is not linked to AA's agency prices…" | Đối tác Booking chưa được tạo | Chờ khoảng 5 phút |
-| Tour không có giá trong Marketplace | Chưa có giá đã duyệt | Bình thường với phần lớn tour trên Dev |
+| Tour hiện **Price on request** trong Marketplace | Chưa có giá đã duyệt | Bình thường với phần lớn tour trên Dev |
 | Make sellable bị bỏ qua: "no approved price yet…" | Chưa có giá công bố hay phiên bản đã duyệt | C4 hoặc C8, rồi tính lại |
 | **Hotels & services** hiện **No match** cho một đêm | Không có khách sạn nào có loại phòng ở địa điểm CIS của đêm đó | Thêm một khách sạn với **City / place** đó và một loại phòng (C3), hoặc đánh dấu đêm đó không cần khách sạn |
 | Báo giá đại lý bị từ chối, "night N has no hotel" | Quy tắc vận hành N1 | Khách sạn cho mọi đêm, **Night N: no hotel needed** → **Save nights**, hoặc **Allow sale…** |
@@ -988,10 +994,8 @@ Nói đơn giản, những gì chủ doanh nghiệp chưa tìm thấy hôm nay:
 |---|---|
 | Giá nhà cung cấp thật và ngày khởi hành thật cho các tour ưu tiên | Trước pilot thật đầu tiên |
 | Chủ doanh nghiệp tự duyệt mức giảm theo hạng đại lý, thẻ giá và miễn phí huỷ | Phần tiếp theo của quy tắc duyệt |
-| Tài khoản ngân hàng nhà cung cấp, có thời gian chờ trước khi chi trả sau một lần đổi | Phần tiếp theo của quy tắc duyệt |
 | Chốt chặn ở cơ sở dữ liệu: nhà cung cấp luôn được tạo ở trạng thái chờ, và một chốt cho pháp nhân thanh toán | Phần tiếp theo của quy tắc duyệt |
-| Hoạt động tuỳ chọn do AA cung cấp, rồi hiện theo từng ngày cho đại lý | Các phiên tới |
-| Hợp đồng khách sạn qua đại lý địa phương (gói bữa ăn, phụ thu, allotment, nhập file an toàn hơn) | Các phiên tới |
+| Phụ thu và khuyến mãi khách sạn (số đêm tối thiểu, tiệc gala bắt buộc, đặt sớm, đêm miễn phí) | Sau này |
 | Một sheet dịch vụ trong file Excel; giá theo xe và giá bậc thang | Sau này |
 | Ẩn các tour không vận hành được khỏi bảng giá đại lý | Sau này |
 | Danh sách mọi phiên bản giá đang chờ duyệt | Chưa có kế hoạch |

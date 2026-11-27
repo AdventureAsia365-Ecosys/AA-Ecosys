@@ -373,8 +373,8 @@ If it fails:
 |---|---|---|
 | App switcher | Top of the agency app | Content studio and CRM (and TripPlanner if added) |
 | Vietnamese | Account menu › **Language and dates** | The app switches to Vietnamese |
-| AA tours with a price | Content studio › Marketplace (`/portal/tours`) | A priced tour shows "From $X per person". Most Dev tours have no price line: this is expected |
-| AA prices for the agency | CRM › Settings › **AA prices for your agency** (`/aa-tariff`) | A price list per tour, season and group size, with currency, **Download CSV**, **Print**. Few or no rows today. "Your agency is not linked to AA's agency prices…" during the first 5 minutes |
+| AA tours with a price | Content studio › Marketplace (`/portal/tours`), both views (**All tours**, **In my catalog**) | A priced tour shows "From $X per person" and "Suggested retail (RRP) for 2 travellers, not your agency's price". A tour without a price shows **Price on request**: expected for most Dev tours |
+| AA prices for the agency | CRM sidebar › Money › **AA prices** (also Settings › **AA prices for your agency**, `/aa-tariff`) | A price list per tour, season and group size: price per person sharing a twin room, single supplement, child and infant prices, the agency's discount and the suggested retail price. Groups that AA quotes on request (8-10 and 11+ with the starting value 9) read **On request**. "Priced tours: N of M", currency, **Download CSV**, **Print**, and **Booking conditions with AA** under the table (deposit, balance, cancellation fees, quote validity, group size, child and infant ages, AA's terms). Few or no rows today. "Your agency is not linked to AA's agency prices…" during the first 5 minutes |
 | The agency's own selling rules | CRM › Settings › **Pricing** (`/settings/pricing`) | Age bands, staff discount limit, markup on AA products |
 | A test client | CRM | Only invented names and `example.invalid` addresses |
 
@@ -688,10 +688,15 @@ in a 3-4 band. Rules: start at 1, no gap or overlap, only the last band may end 
 - Existing computed prices change only at the next recompute (C7); until then the table keeps the old bands.
 - Hand prices (C8) may use any group sizes and win over the computed rows they cover.
 - More bands mean fewer future date ranges fit in a tour's price table (200 rows; the latest are left out first).
-- The agency tariff lists one price per band. An agency quote does not use the bands: it prices the real group from
-  the tour's costs, so a group of 6 can be quoted below the 5-7 tariff row (priced for 5).
+- The agency tariff lists one price per band, per person sharing a twin room, with a separate single supplement (a
+  traveller alone in a room pays it on top; an odd group no longer costs more per person than the even group below
+  it). Its suggested retail price is on the same basis: on an odd band of a computed price it is lowered to the twin
+  share; a hand price (C8) is shown as entered, so enter hand prices per person sharing a twin room. An agency quote
+  does not use the bands: it prices the real group from the tour's costs, so a group of 6 can be
+  quoted below the 5-7 tariff row (priced for 5).
 - A group at or above **Group quoted on request from** (starting value 9) is still quoted on request, whatever band
-  holds it.
+  holds it. The agency tariff shows every band that reaches this size as **On request** (8-10 and 11+ with the
+  starting value), and the agency's **Booking conditions with AA** show the same value.
 
 ### C11. Agency tiers, discounts and rate cards
 
@@ -758,8 +763,8 @@ asked for this change. Approving it yourself is recorded as a business-owner sel
 |---|---|---|
 | TripPlanner tour page | "From $X per person", "Suggested price for 2 travellers. Your advisor confirms the final price." | Up to about 30 minutes |
 | Agency's own TripPlanner site | No price (the agency sells under its own name) | - |
-| Content studio › Marketplace | "From $X per person"; no price line when there is none | At once |
-| CRM › AA prices for your agency | The agency's price per tour, season and group size, its discount, suggested retail | Within about 1 minute |
+| Content studio › Marketplace (both views) | "From $X per person" with "Suggested retail (RRP) for 2 travellers, not your agency's price"; **Price on request** when there is none | At once |
+| CRM › AA prices | The agency's twin-share price per tour, season and group size, single supplement, child and infant prices, its discount, suggested retail; **On request** for the group bands; Booking conditions with AA | Within about 1 minute |
 | CRM proposal builder, AA item | A live AA quote. A sell price below AA's public price gives a warning only | Live per quote |
 | Booking | Price readiness, Price setup, View tariff | At once |
 | CIS admin | Reference prices (never a selling price), Data coverage | At once |
@@ -856,8 +861,9 @@ The tour is not sellable yet, but the public price already shows (C16).
    guide on some days only; agencies can still buy). If it reads **Blocked**, open the tour's **Hotels & services**
    and read the findings in the section **Can agencies buy it?**: a night with no hotel (N1, fix D5), a missing rate
    (N2) or an inactive supplier or item (N3).
-3. Agency window → CRM › Settings › **AA prices for your agency**. Expected within a minute: the tour with the
-   agency's price (tier standard, 0 % discount).
+3. Agency window → CRM › Money › **AA prices**. Expected within a minute: the tour with the agency's price (tier
+   standard, 0 % discount), its single supplement, **On request** on the 8-10 and 11+ rows, "Priced tours: N of M"
+   and **Booking conditions with AA** under the table.
 4. Optional: in a CRM proposal, add the tour as an AA item and click **Ask AA for a price**. Use an invented client.
 
 ### D9. Revert, in this order
@@ -932,7 +938,7 @@ All on CIS **Platform › Staff & access** → the business owner's row:
 | "You are signed in with another account…" on the invitation | Staff window used | Use the private window |
 | One-time agency password lost | The page was closed | **Withdraw owner invitation**, invite again |
 | "Your agency is not linked to AA's agency prices…" | Booking partner not created yet | Wait about 5 minutes |
-| Tour shows no price in the Marketplace | No approved price | Expected for most Dev tours |
+| Tour shows **Price on request** in the Marketplace | No approved price | Expected for most Dev tours |
 | Make sellable skipped: "no approved price yet…" | No published rate or approved version | C4 or C8, then recompute |
 | **Hotels & services** shows **No match** for a night | No hotel with a room type at that night's CIS place | Add a hotel with that **City / place** and a room type (C3), or mark the night as needing no hotel |
 | Agency quote refused, "night N has no hotel" | Can operate rule N1 | Hotel on every night, **Night N: no hotel needed** → **Save nights**, or **Allow sale…** |
@@ -948,10 +954,8 @@ In plain words, what the business owner will not find today:
 |---|---|
 | Real supplier prices and departures for the priority tours | Before the first real pilot |
 | Business-owner approval of their own agency tier discounts, rate cards and cancellation-fee waivers | Next part of the approval rules |
-| Supplier bank accounts with a waiting time before payment after a change | Next part of the approval rules |
 | Database backstops: suppliers always created as waiting, and a guard on billing entities | Next part of the approval rules |
-| Optional activities offered by AA, then shown per day to agencies | Next sessions |
-| Hotel contracts through local agents (meal plans, supplements, allotments, safer import) | Next sessions |
+| Hotel supplements and promotions (minimum stay, compulsory gala dinners, early bird, free nights) | Later |
 | A services sheet in the Excel workbook; per-vehicle and tiered prices | Later |
 | Hiding tours that cannot be operated from the agency price list | Later |
 | A list of all price versions waiting for approval | Not planned yet |
