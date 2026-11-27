@@ -7,7 +7,7 @@ Read-only investigation, S238, 2026-10-15. Local file only: AA-CIS-App ignores `
 - Live image: **newer than the code snapshot.** `origin/main` moved to `ef0930b9` (committed 2026-10-15 21:14 +07), and live now runs `aa-cis-dev-api:625` / `aa-cis-dev-worker:182`, image `aa-cis-dev-api:dev-ef0930b938975462…`, both registered at 21:16 +07 (`aws ecs describe-services` + `describe-task-definition`). The LLM gateway is unchanged: `git diff --stat d224c4d3 origin/main -- shared/llm_client` is empty, so the conclusions hold for live.
 - Line moves on current `main` (`ef0930b9`): `itinerary_utils.py` `client.generate` is at `:123` (snapshot `:122`), and `t2_rewrite_job.py` `stream_sink.bind` is at `:362` (snapshot `:355`). Other cited lines were re-checked where this report was corrected; the rest are still snapshot `d224c4d3` lines. Infra `origin/main` is now `8bd4659`: `modules/ecs/main.tf` `container_definitions` are at `:293` and `:490` (snapshot `ccd0f89`: `:276`, `:465`), and `accounts/aa365/observability.tf` lines after `:290` shift by +4.
 - Database: SELECT-only reads of `shared.llm_role_config` (30 rows) and `shared.llm_model_catalog` (11 rows) through `.tmp-session/s237/exec_s3out.sh`. The outputs are `.tmp-session/s238/aa842_routes.json` and `.tmp-session/s238/aa842_s2_probe_out.json` (the image package probe). The 7-day CloudWatch counts are in `.tmp-session/s238/aa842_cw_counts.json`.
-- AWS: read-only describe and list calls on acc2 (`005097885195`).
+- AWS: read-only describe and list calls on acc2 (`{acc2}`).
 - What was not done: no paid LLM call, no spike, no code change, no dependency change, no Terraform, and no ECS or Lambda config change.
 
 ---

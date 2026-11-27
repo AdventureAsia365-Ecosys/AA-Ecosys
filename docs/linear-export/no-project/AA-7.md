@@ -63,7 +63,7 @@ Must be done BEFORE any DB migration.
 
 ## AWS Accounts
 
-* Bucket in PROD: account 007050358335, profile aa-prod-admin
+* Bucket in PROD: account {aws-account}, profile aa-prod-admin
 * Region: ap-southeast-1
 
 ## Decision Needed (D-05)

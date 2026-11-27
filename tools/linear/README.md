@@ -31,6 +31,10 @@ are gone after 30 days.
   colon ("Secrets — `<app>/<env>/<name>`"); the colon is what the generic-api-key rule reads as an assignment.
   Stripping the backticks would not help (the rule still fires) and on a name list makes it worse. Any other
   backticked token after a secret label may be a pasted value and is left as written, so the gate still flags it.
+- Masking (S288, AA-1185): a personal company address becomes `r***@adventure.asia`, and everything the root docs
+  lint `resource-ids --mode error` fails on is masked in the issue files and the index: account IDs (`{acc2}` when
+  `AWS_ACCOUNT_ALIASES="acc2=<id>,..."` is set, else `{aws-account}`), the account of an ARN, VPC / load balancer /
+  user-pool ids, API Gateway hosts and addresses outside the company and test domains (`{outside-mailbox}`).
 
 Issue size rule (S245): one Linear issue = one deliverable slice (about one PR or a small PR group); the
 detailed task list lives in local plans (`docs/backlog/tracker/plan.json`, wave files).

@@ -337,9 +337,12 @@ jobs:
           git fetch --no-tags --depth=1 origin "$BASE_REF"
           python tools/docs/check_images.py --new-audit-images --base FETCH_HEAD
       # AA-1118 (S282 audit R26): a load balancer or target group id fails even here (the Infra generator masks them).
-      - name: Literal resource IDs (warn-only, load balancer ids fail)
+      # AA-1185 (S295 audit SA-40): the repo is public, so every kind fails in the docs pages (journals and the
+      # onboarding account map excepted): account IDs, ARNs, VPC ids, API Gateway hosts, user-pool IDs and e-mail
+      # addresses outside the company and test domains. Write `{acc2}`, the account label or the role.
+      - name: Literal resource IDs and outside e-mail addresses
         if: ${{ !cancelled() }}
-        run: python tools/docs/check_docs_text.py resource-ids --mode warn --block elb
+        run: python tools/docs/check_docs_text.py resource-ids --mode error
 
       # AA-1134, AA-1118: phrases that describe a retired thing as live or a fact that changed (Bedrock on acc3 alone,
       # acc1 "removed" without its S278 Bedrock role, a develop branch, :latest tags, Vercel previews, the portal copy,

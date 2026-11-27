@@ -159,8 +159,9 @@ person's act.
 4. Spend baseline: the CIS admin **AI gateway** page (month spend per connection and the caps). If the OpenAI month
    cap is nearly used, settle the judge route first (AA-1079): the judges have no live fallback.
 5. The pilot slot is free (`SELECT slug FROM shared.tenants WHERE is_pilot` returns no row).
-6. The WordPress test site answers JSON on `https://test-wp.lumiguides.it.com/wp-json/` (a free test site expires
-   after about two weeks and then answers HTML), and the Facebook test Page is reachable from its integration.
+6. The WordPress test site answers JSON on `https://test-wp.lumiguides.it.com/wp-json/`, and the Facebook test Page is
+   reachable from its integration. Since AA-1185 the test site is off outside an E2E test window: open one first
+   (Infra `docs/runbooks/test-wp-window.md`) and close it after the rehearsal.
 7. SES: read whether the account is in the sandbox and that the mail domain verifies, before any invitation step.
 
 Evidence: `baseline.json` (service, image, job counts, spend, slot, test-wp status). Status: manual.
@@ -370,7 +371,7 @@ of an erasure apply is a person's. The evidence folder records each result.
    it in the README.
 4. **Channel posts taken down.** Every WordPress post of step 4b is removed by the agency owner in the studio (**Remove
    post**, `DELETE /v1/publish-log/<publish-id>`), and the Facebook test Page post likewise; the publish log shows each
-   as unpublished. If the free WordPress test site has expired, write that in the README.
+   as unpublished. Then close the WordPress test window (Infra `docs/runbooks/test-wp-window.md`).
 5. **Booking fixtures.** The seeder rows of steps 8-11 and X3 are synthetic and stay, tagged by their run id; cancel any
    still-open synthetic hold so it does not block the next run.
 6. **CRM and TripPlanner records stay on purpose.** The takes of steps 6 and 8 (`REH-06`: one guest trip and one

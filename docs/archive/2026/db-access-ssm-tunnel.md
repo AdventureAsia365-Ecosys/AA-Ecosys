@@ -12,7 +12,7 @@
 
 | Thành phần | Giá trị thật |
 |---|---|
-| Account | `005097885195` (acc2) |
+| Account | `{acc2}` (acc2) |
 | Region | `us-west-1` |
 | Profile | `aa365-admin` (cần MFA cho một số action) |
 | RDS instance id | `aa-cis-dev-db` |
