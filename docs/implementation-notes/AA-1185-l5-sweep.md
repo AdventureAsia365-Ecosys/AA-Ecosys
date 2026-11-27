@@ -8,8 +8,15 @@
   The same tool file is copied to Infra (both copies stay identical).
 - The 104 hits (mostly `docs/linear-export/`) were masked like the generated pages: `{acc2}`, `arn:...:{acc2}:`,
   `sg-{masked}`, `{apigw-id}.execute-api.`; vendor and root mailboxes became role words.
-- The WordPress CVE exception row is removed: the Infra PR turns the test site off outside test windows, so the image
-  no longer runs (a window registers a new dated row if it needs one).
+- The WordPress CVE exception row stays (review fix, S296; its way_out now names the order). The Infra PR turns the
+  test site off, but the container keeps running until the next Booking admin deploy after the apply, and the nightly
+  Image Scan reads the running digests. The row (and the Infra `.trivyignore` line) goes in a small follow-up once
+  `aws ecs describe-tasks` shows the Booking admin task with one container, before its 02/12 expiry.
+- `tools/linear/linear_export.py` masks every kind the lint fails on (review fix, S296): account IDs (`{acc2}` with
+  `AWS_ACCOUNT_ALIASES`, else `{aws-account}`), the account of an ARN, VPC / load balancer / user-pool ids, API Gateway
+  hosts and outside addresses (`{outside-mailbox}`), in the issue files and the index. Without it the next session-end
+  export would write raw IDs into docs/ and turn the docs lint red. Test: the rendered page and index pass
+  `check_docs_text.check_resource_ids`.
 - `docs/security/baseline.md`: rows for the AA-1185 controls, written as "in place after the apply/deploy"; the RDS
   caller list now names `crm-api`. `last_reviewed` is not raised (no live re-read in this lane).
 
@@ -25,4 +32,6 @@
 
 ## Should know
 
-- Merge the Infra PR (test site off) before or with this PR: the exception row goes away here.
+- This PR no longer removes the exception row, so it can merge in any order with the Infra PR.
+- The admin-group alert pages only on adds to the three admin groups; enabling a staff user is a ticket-severity
+  record (the CIS Staff page sends it on routine Reset and Sync).

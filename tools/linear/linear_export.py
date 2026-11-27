@@ -32,6 +32,10 @@ Rules:
 - A second rewrite (S288): a personal company address `<name>@adventure.asia` becomes `<first letter>***@adventure.asia`.
   The repo is public and a person's work address is personal data; the role mailboxes (`info@`, `admin@`) and the
   `e2e…` test addresses stay as written.
+- A third rewrite (AA-1185): the root docs lint fails literal resource IDs in docs/linear-export/, so account IDs
+  (`{acc2}` with AWS_ACCOUNT_ALIASES="acc2=<id>,...", else `{aws-account}`), the account of an ARN, VPC / load
+  balancer / user-pool ids, API Gateway hosts and e-mail addresses outside the company and test domains
+  (`{outside-mailbox}`) are masked in the issue files and the index.
 """
 from __future__ import annotations
 
@@ -139,14 +143,61 @@ def mask_personal_addresses(text: str) -> str:
     return _COMPANY_ADDRESS.sub(one, text)
 
 
+# AA-1185 (S295 audit SA-40): docs/linear-export/ is in the scope of the root docs lint `resource-ids --mode error`
+# (tools/docs/check_docs_text.py), so every kind it fails on is masked here, the way the Infra generators mask
+# (Infra tools/docs/aws_mask.py): an account ID becomes `{acc2}` (label from AWS_ACCOUNT_ALIASES, "acc2=<id>,...",
+# never written in the repo) or `{aws-account}`, an ARN keeps its service and region with the account masked, VPC /
+# load balancer / user-pool ids and API Gateway hosts lose the id, and an address outside the company and test domains
+# becomes `{outside-mailbox}`. A UUID (its last group can be 12 digits) and a bucket name with the account suffix
+# (`aa-cis-bronze-<id>`, allowed by docs/STYLE.md) stay.
+ALIASES_ENV = "AWS_ACCOUNT_ALIASES"
+_UUID = r"[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}"
+_ARN_ACCOUNT = re.compile(r"\barn:aws[a-z-]*:([a-z0-9-]+):([a-z0-9-]*):(\d{12}):")
+_ACCOUNT_OR_UUID = re.compile(rf"(?P<uuid>{_UUID})|(?<![\w./:-])(?P<id>\d{{12}})(?![\w-])")
+_VPC_ID = re.compile(r"(?<![\w-])(sg|subnet|vpc|vpce|rtb|igw|nat|eni|acl|eipalloc|tgw)-[0-9a-f]{8}(?:[0-9a-f]{9})?(?![\w-])")
+_ELB_ID = re.compile(r"(?<![\w-])(app|net|gwy|targetgroup)/([A-Za-z0-9-]{1,32})/[0-9a-f]{16}(?![\w-])")
+_USER_POOL_ID = re.compile(r"(?<![\w-])[a-z]{2}-[a-z]+-\d_[A-Za-z0-9]{9}(?![\w-])")
+_APIGW_HOST = re.compile(r"(?<![\w-])[a-z0-9]{10}\.execute-api\.")
+_OUTSIDE_ADDRESS = re.compile(
+    r"(?<![\w.%+-])[A-Za-z0-9._%+-]+@(?!(?:[A-Za-z0-9-]+\.)*(?:adventure\.asia|lumiguides\.it\.com|"
+    r"example\.(?:com|org|net)|anthropic\.com|users\.noreply\.github\.com)(?![\w.-]))"
+    r"(?:[A-Za-z0-9-]+\.)+(?:com|net|org|asia|io|vn|sg|co|uk|me|ai)(?![\w-])", re.I)
+
+
+def account_aliases(env: dict | None = None) -> dict[str, str]:
+    """AWS_ACCOUNT_ALIASES "acc2=<id>,acc3=<id>" -> {id: label}; a malformed entry is skipped (never echoed)."""
+    out: dict[str, str] = {}
+    for item in re.split(r"[,\s]+", ((os.environ if env is None else env).get(ALIASES_ENV) or "").strip()):
+        label, sep, acct = item.partition("=")
+        if sep and re.fullmatch(r"[a-z][a-z0-9-]{0,31}", label.strip()) and re.fullmatch(r"\d{12}", acct.strip()):
+            out[acct.strip()] = label.strip()
+    return out
+
+
+def mask_resource_ids(text: str, aliases: dict[str, str] | None = None) -> str:
+    """Mask what the root docs lint `resource-ids` fails on (AA-1185); see the comment above."""
+    aliases = account_aliases() if aliases is None else aliases
+
+    def label(acct: str) -> str:
+        return "{" + aliases.get(acct, "aws-account") + "}"
+
+    text = _ARN_ACCOUNT.sub(lambda m: f"arn:...:{m.group(1)}:{m.group(2)}:{label(m.group(3))}:", text)
+    text = _ACCOUNT_OR_UUID.sub(lambda m: m.group(0) if m.group("uuid") else label(m.group("id")), text)
+    text = _VPC_ID.sub(lambda m: f"{m.group(1)}-{{masked}}", text)
+    text = _ELB_ID.sub(lambda m: f"{m.group(1)}/{m.group(2)}/{{masked}}", text)
+    text = _USER_POOL_ID.sub("{user-pool-id}", text)
+    text = _APIGW_HOST.sub("{apigw-id}.execute-api.", text)
+    return _OUTSIDE_ADDRESS.sub("{outside-mailbox}", text)
+
+
 def _clean(text: str) -> str:
-    return mask_personal_addresses(neutralise_secret_labels(text))
+    return mask_resource_ids(mask_personal_addresses(neutralise_secret_labels(text)))
 
 
 def render(issue: dict) -> str:
     meta = {
         "identifier": issue["identifier"],
-        "title": mask_personal_addresses(issue["title"]),
+        "title": _clean(issue["title"]),
         "state": issue["state"]["name"],
         "state_type": issue["state"]["type"],
         "project": (issue.get("project") or {}).get("name"),
@@ -165,12 +216,12 @@ def render(issue: dict) -> str:
     }
     # Metadata as a fenced yaml block, not front-matter: docs lint validates every docs/**/*.md front-matter
     # against the catalog schema, and these generated pages are not catalog pages.
-    lines = [f"# {issue['identifier']} — {mask_personal_addresses(issue['title'])}", "", "```yaml"]
+    lines = [f"# {issue['identifier']} — {_clean(issue['title'])}", "", "```yaml"]
     lines += [f"{k}: {json.dumps(v, ensure_ascii=False)}" for k, v in meta.items()] + ["```", ""]
     lines += [_clean(issue.get("description") or "_(no description)_"), ""]
     atts = issue["attachments"]["nodes"]
     if atts:
-        lines += ["## Links", ""] + [f"- [{mask_personal_addresses(a['title'])}]({a['url']})" for a in atts] + [""]
+        lines += ["## Links", ""] + [f"- [{_clean(a['title'])}]({mask_resource_ids(a['url'])})" for a in atts] + [""]
     comments = sorted(issue["comments"]["nodes"], key=lambda c: c["createdAt"])
     if comments:
         lines += ["## Comments", ""]
@@ -317,7 +368,7 @@ def write_index(issues: list[dict]) -> None:
     for i in rows:
         rel = path_for(i).relative_to(OUT).as_posix()
         closed = (i.get("completedAt") or i.get("canceledAt") or "")[:10]
-        title = i["title"].replace("|", "\\|")
+        title = _clean(i["title"]).replace("|", "\\|")
         state = i["state"]["name"] + (" (trashed)" if i.get("trashed") else "")
         lines.append(f"| [{i['identifier']}]({rel}) | {title} | {state} | {closed} | "
                      f"{(i.get('project') or {}).get('name') or '—'} |")

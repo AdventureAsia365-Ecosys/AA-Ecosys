@@ -117,6 +117,59 @@ class PersonalAddressTest(unittest.TestCase):
         self.assertEqual(out.count("r***@adventure.asia"), 4)
 
 
+class ResourceIdMaskTest(unittest.TestCase):
+    """AA-1185: docs/linear-export/ is in the scope of the root docs lint `resource-ids --mode error`, so an export of an
+    issue that quotes account IDs, ARNs, network ids or an outside mailbox must leave nothing for the lint to fail on.
+    Invented values only."""
+
+    ACCT = "4" * 6 + "7" * 6
+    OTHER = "1234" * 3
+    TEXT = (f"Role arn:aws:iam::{ACCT}:role/lantern-runner in account {ACCT} (also {OTHER}). "
+            "Group sg-0a1b2c3d4e5f60718, vpc-0a1b2c3d, lb app/lantern-alb/0123456789abcdef, "
+            "pool us-west-1_AbCdEf123, host https://ab12cd34ef.execute-api.us-west-1.amazonaws.com/dev, "
+            "mail lantern.keeper@gmail.com and ops@vendor-lantern.vn; keep robin@example.com, info@adventure.asia, "
+            f"bucket aa-lantern-bronze-{ACCT}, tenant 0f0e0d0c-0b0a-4909-8807-{OTHER}.")
+
+    def _lint_findings(self, page: str) -> list:
+        sys.path.insert(0, str(le.ROOT / "tools" / "docs"))
+        import check_docs_text
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "docs" / "linear-export" / "lantern-works" / "AA-9001.md"
+            target.parent.mkdir(parents=True)
+            target.write_text(page, encoding="utf-8")
+            return check_docs_text.check_resource_ids(Path(tmp), ["docs/linear-export/lantern-works/AA-9001.md"])
+
+    def test_raw_text_fails_the_lint(self):
+        self.assertTrue(self._lint_findings(self.TEXT))
+
+    def test_masked_text_passes_the_lint_and_keeps_names(self):
+        out = le.mask_resource_ids(self.TEXT, {self.ACCT: "acc2"})
+        self.assertEqual(self._lint_findings(out), [])
+        for kept in ("arn:...:iam::{acc2}:role/lantern-runner", "account {acc2}", "{aws-account}", "sg-{masked}",
+                     "vpc-{masked}", "app/lantern-alb/{masked}", "{user-pool-id}", "{apigw-id}.execute-api.",
+                     "{outside-mailbox} and {outside-mailbox}", "robin@example.com", "info@adventure.asia",
+                     f"aa-lantern-bronze-{self.ACCT}", f"0f0e0d0c-0b0a-4909-8807-{self.OTHER}"):
+            self.assertIn(kept, out, kept)
+
+    def test_aliases_come_from_the_environment(self):
+        with mock.patch.dict(os.environ, {"AWS_ACCOUNT_ALIASES": f"acc2={self.ACCT}, bad=12"}):
+            self.assertEqual(le.account_aliases(), {self.ACCT: "acc2"})
+            self.assertEqual(le.mask_resource_ids(f"id {self.ACCT}"), "id {acc2}")
+        with mock.patch.dict(os.environ, {"AWS_ACCOUNT_ALIASES": ""}):
+            self.assertEqual(le.mask_resource_ids(f"id {self.ACCT}"), "id {aws-account}")
+
+    def test_render_and_index_pass_the_lint(self):
+        it = issue(comment=self.TEXT, desc=f"Root mailbox lantern.keeper@gmail.com on {self.ACCT}")
+        it["title"] = f"Clean account {self.ACCT}"
+        it["attachments"] = {"nodes": [{"title": f"Report {self.ACCT}", "url": "https://example.com/r"}]}
+        self.assertEqual(self._lint_findings(le.render(it)), [])
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(le, "OUT", Path(tmp)):
+            le.write_index([it])
+            index = (Path(tmp) / "README.md").read_text(encoding="utf-8")
+        self.assertNotIn(self.ACCT, index)
+        self.assertEqual(self._lint_findings(index), [])
+
+
 class GateTest(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp(prefix="le-test-"))
