@@ -1,15 +1,3 @@
----
-id: AUD-S296-state-snapshot
-title: "S296 trạng thái kiểm cuối phiên (27/11/2026)"
-description: "Snapshot live cuối phiên S296: ECS, health, migration, bảng job, repo, PR mở, thứ đang bật."
-type: audit
-status: final
-owner: nghiep
-audience: [engineer, agent]
-applies_to: [ecosystem]
-last_reviewed: 2026-11-27
----
-
 # S296 — trạng thái kiểm cuối phiên (27/11/2026, ~21:10 +07)
 
 Tác nhân: Claude Code. Mọi số dưới đây đọc live lúc chốt phiên, không chép từ trí nhớ phiên.
