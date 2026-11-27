@@ -50,7 +50,10 @@ Khi nghỉ việc: chủ nền tảng vô hiệu hoá dòng đó (không bao gi�
 1. Mở `https://aa-cis.lumiguides.it.com`.
 2. Chọn **Sign in with company email**.
 3. Trên trang đăng nhập Adventure Asia, nhập địa chỉ e-mail công việc.
-4. Nhập mã dùng một lần trong e-mail. Bạn vào trang đầu tiên mà vai trò của bạn được mở.
+4. Nhập mã dùng một lần trong e-mail. Bạn vào **My work** (Home › My work): vai trò chỉ đọc (viewer) vào Review
+   Queue, các vai trò tenant desk và AI vào trang đầu tiên của mình. Hãy bắt đầu ở My work: trang hiện việc đang chờ
+   bạn theo từng nhóm (Needs your approval, Content work, Platform, Keep an eye on), mỗi ô mở đúng danh sách mà nó
+   đếm. Hàng đợi không có việc được gộp thành một dòng.
 5. Để đăng xuất, mở menu tài khoản (chữ cái đầu tên bạn, góc trên bên phải) và chọn **Sign out**. Lần đăng nhập sau
    sẽ hỏi mã mới.
 

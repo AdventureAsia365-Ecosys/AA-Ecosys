@@ -51,6 +51,22 @@ The Dev addresses used on this page:
 | Agency app (CRM and Content studio) | <https://portal.lumiguides.it.com> |
 | TripPlanner (travellers) | <https://tripplanner.lumiguides.it.com> |
 
+## Start at My work
+
+After sign-in both apps open on **My work**: CIS on **Home › My work**, Booking on the **Dashboard** with its My work
+band. Start there every day.
+
+- **Needs your approval** (CIS) and **To approve or pay** (Booking) list what another person prepared and you may
+  approve: Settings changes, compliance exceptions and data erasure in CIS; supplier bills, agency payments,
+  stop-sales, suppliers, billing and bank changes, **price versions**, **add-ons**, **season changes** and **holiday
+  events** in Booking. Each tile opens the list it counts. Your own proposals and requests appear only where you may
+  approve them yourself: in Booking while the business-owner self-approval switch is on (never a stop-sale or a
+  removal), in CIS Settings while two-person approval is off or for a setting that needs only one person.
+- Tiles with nothing waiting fold into one line, "Nothing waiting in N queues". Open it to see them.
+- **Keep an eye on** (CIS) shows items that wait for a policy decision, such as the tours held by the elephant-riding
+  policy. They are not counted as work.
+- The price setup team also sees **Price setup progress**: tours by their next setup step.
+
 ## Before you start
 
 ### What the tech lead prepares
@@ -958,7 +974,6 @@ In plain words, what the business owner will not find today:
 | Hotel supplements and promotions (minimum stay, compulsory gala dinners, early bird, free nights) | Later |
 | A services sheet in the Excel workbook; per-vehicle and tiered prices | Later |
 | Hiding tours that cannot be operated from the agency price list | Later |
-| A list of all price versions waiting for approval | Not planned yet |
 | Authenticator setup in the browser for staff | Not planned (by design) |
 | Self-service reset of an agency authenticator | Not planned yet |
 | A retry button for a failed CRM set-up in the New Tenant dialog | Not planned yet |

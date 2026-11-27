@@ -52,6 +52,24 @@ Các địa chỉ Dev dùng trong trang này:
 | Ứng dụng đại lý (CRM và Content studio) | <https://portal.lumiguides.it.com> |
 | TripPlanner (khách du lịch) | <https://tripplanner.lumiguides.it.com> |
 
+## Bắt đầu ở My work
+
+Sau khi đăng nhập, cả hai ứng dụng mở trang **My work** (Việc của tôi): CIS ở **Home › My work**, Booking ở
+**Dashboard** với dải My work. Mỗi ngày hãy bắt đầu từ đó.
+
+- **Needs your approval** (Cần bạn duyệt, ở CIS) và **To approve or pay** (Cần duyệt hoặc chi trả, ở Booking) liệt kê
+  việc do người khác lập mà bạn được duyệt: thay đổi Settings, ngoại lệ tuân thủ và xoá dữ liệu ở CIS; hoá đơn nhà
+  cung cấp, khoản thu đại lý, ngừng bán, nhà cung cấp, thay đổi thanh toán và tài khoản ngân hàng, **phiên bản giá**,
+  **dịch vụ thêm**, **thay đổi mùa giá** và **ngày lễ** ở Booking. Mỗi ô mở đúng danh sách mà nó đếm. Đề xuất và yêu
+  cầu của chính bạn chỉ hiện ở nơi bạn được tự duyệt: ở Booking khi công tắc tự duyệt của chủ doanh nghiệp đang bật
+  (không bao giờ với ngừng bán hay yêu cầu gỡ bỏ), ở Settings của CIS khi duyệt hai người đang tắt hoặc với thiết lập
+  chỉ cần một người duyệt.
+- Các ô không có việc gộp thành một dòng "Nothing waiting in N queues" (Không có gì đang chờ ở N hàng việc). Bấm vào để
+  xem.
+- **Keep an eye on** (Theo dõi, ở CIS) hiện các mục chờ quyết định chính sách, ví dụ các tour bị giữ theo chính sách
+  cưỡi voi. Chúng không tính là việc.
+- Nhóm thiết lập giá còn thấy **Price setup progress** (Tiến độ thiết lập giá): số tour theo bước thiết lập tiếp theo.
+
 ## Trước khi bắt đầu
 
 ### Tech lead chuẩn bị
@@ -998,7 +1016,6 @@ Nói đơn giản, những gì chủ doanh nghiệp chưa tìm thấy hôm nay:
 | Phụ thu và khuyến mãi khách sạn (số đêm tối thiểu, tiệc gala bắt buộc, đặt sớm, đêm miễn phí) | Sau này |
 | Một sheet dịch vụ trong file Excel; giá theo xe và giá bậc thang | Sau này |
 | Ẩn các tour không vận hành được khỏi bảng giá đại lý | Sau này |
-| Danh sách mọi phiên bản giá đang chờ duyệt | Chưa có kế hoạch |
 | Cài ứng dụng xác thực trên trình duyệt cho nhân sự | Không có kế hoạch (đúng thiết kế) |
 | Tự đặt lại ứng dụng xác thực của đại lý | Chưa có kế hoạch |
 | Nút thử lại khi phần CRM lỗi trong hộp New Tenant | Chưa có kế hoạch |

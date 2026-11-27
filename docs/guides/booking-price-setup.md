@@ -39,6 +39,10 @@ You never approve your own change.
 
 ## 2. Read the Price setup page
 
+Start at **My work** on the Booking dashboard. Its **Price setup progress** card counts the tours by their next step
+(the same numbers as the **Next step** filter below); each number opens Price setup filtered on that step. Approvals
+waiting for you (price versions, add-ons, season changes, holiday events) are tiles in **To approve or pay**.
+
 Open Booking › **Supply › Price setup**. Each row is one tour (trip plan) with seven checks: **Hotels & services**,
 **Supplier rates**, **Exchange rate**, **Pricing rule**, **Price**, **Sellable** and **Departures** (optional: tailor-made
 tours have none). The tiles on top count every tour; filter by **Next step**, **Missing**, **Price status** or
@@ -192,7 +196,8 @@ Every price change is a new **version**; nothing is overwritten or deleted.
 2. A workbook import already made the draft. To change prices by hand: **New draft from the prices in force**, edit
    the rows and the travel window, **Save draft**.
 3. Type the **Reason for the change** (required, at most 300 characters) and click **Submit for approval**.
-4. The second person opens the same tab and reads **Changes against the prices in force**: each row before and
+4. The second person finds it on **My work**, tile **Price versions to approve** (it opens Price setup with the
+   list of versions waiting for them), opens the tour's tab and reads **Changes against the prices in force**: each row before and
    after, large changes highlighted, rows below the lowest margin allowed flagged, and the price rows that end with
    this version. **What it touches** counts
    open quotes, departures and agency price rows in those dates.
