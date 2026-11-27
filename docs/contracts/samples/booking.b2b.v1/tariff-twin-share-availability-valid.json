@@ -1,0 +1,106 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "Tariff",
+  "expect": "valid",
+  "why": "1.12 (AA-1188, D5): twin share per person with the single supplement on top, availability per row (the 8-10 band reaches the group size AA quotes on request), a departure with its own price adjustment, the season calendar code and the coverage counts",
+  "payload": {
+    "currency": "USD",
+    "priced_on": "2026-11-27",
+    "basis": "per_person_band_min_twin_share",
+    "tier_code": "standard",
+    "fx": {
+      "base_currency": "USD",
+      "quote_currency": "USD",
+      "rate_per_usd": "1",
+      "rate_date": "2026-11-27",
+      "source": "base"
+    },
+    "items": [
+      {
+        "tour": {
+          "source_system": "cis",
+          "source_id": "e1000000-0000-4000-8000-000000001075"
+        },
+        "title": "Invented Lantern Valley Trail",
+        "country": "Invented Land",
+        "duration_days": 3,
+        "season": "high",
+        "valid_from": "2027-01-01",
+        "valid_to": "2027-03-31",
+        "pax_min": 2,
+        "pax_max": 2,
+        "priced_for_pax": 2,
+        "priced_for_date": "2027-01-01",
+        "price": {
+          "amount": "640.00",
+          "currency": "USD"
+        },
+        "price_per_person": {
+          "amount": "320.00",
+          "currency": "USD"
+        },
+        "agency_discount_pct": "0.0000",
+        "rrp_per_person": null,
+        "child_price_per_person": {
+          "amount": "224.00",
+          "currency": "USD"
+        },
+        "infant_price": {
+          "amount": "20.00",
+          "currency": "USD"
+        },
+        "single_supplement_per_person": {
+          "amount": "85.00",
+          "currency": "USD"
+        },
+        "availability": "available",
+        "departure_adjusted": true
+      },
+      {
+        "tour": {
+          "source_system": "cis",
+          "source_id": "e1000000-0000-4000-8000-000000001075"
+        },
+        "title": "Invented Lantern Valley Trail",
+        "country": "Invented Land",
+        "duration_days": 3,
+        "season": "high",
+        "valid_from": "2027-01-01",
+        "valid_to": "2027-03-31",
+        "pax_min": 8,
+        "pax_max": 10,
+        "priced_for_pax": 8,
+        "priced_for_date": "2027-01-01",
+        "price": {
+          "amount": "2240.00",
+          "currency": "USD"
+        },
+        "price_per_person": {
+          "amount": "280.00",
+          "currency": "USD"
+        },
+        "agency_discount_pct": "0.0000",
+        "rrp_per_person": null,
+        "child_price_per_person": {
+          "amount": "196.00",
+          "currency": "USD"
+        },
+        "infant_price": {
+          "amount": "0.00",
+          "currency": "USD"
+        },
+        "single_supplement_per_person": {
+          "amount": "85.00",
+          "currency": "USD"
+        },
+        "availability": "on_request",
+        "departure_adjusted": false
+      }
+    ],
+    "truncated": false,
+    "group_on_request_min_pax": 9,
+    "early_booking_days": 60,
+    "tours_priced": 1,
+    "catalog_tours": 844
+  }
+}

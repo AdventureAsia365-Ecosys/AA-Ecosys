@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: booking.b2b.v1 (AA-Booking → AA-Partner CRM, B2B products, quotes, holds, bookings, events)
-  version: "1.11"
+  version: "1.12"
   description: >-
     The AA inventory API of the partner CRM spec (§9), owned by AA-Booking (root ADR 0005, 0005a) and called by the
     AA-Partner CRM API server to server (root ADR 0010). Auth: an M2M access token of the aa-m2m pool (root ADR 0006b
@@ -78,7 +78,12 @@ info:
     tariff.published (a new tariff version is published:
     Event.tariff_version_id; to every agency). Never a maker, a checker, a reason, a cost or a margin. A reader that
     ignores unknown fields and event types keeps working; until Booking serves 1.9 the new fields are absent (read a
-    missing provisional as false, a missing ETag as always changed).
+    missing provisional as false, a missing ETag as always changed). **Served today (checked 27/11/2026, AA-1188):**
+    the price-version and tariff-version parts of 1.9 are specified, not served (root ADR 0005b steps 6 and 7 are not
+    built): Booking prices every trip_plan line live from its components and the agency discount, never pins a price
+    list version, never answers 409 price_not_published, and GET /tariff answers the live tariff (no period,
+    tariff_version_id, ETag or 304; price_version_id, tariff_version_id and provisional are absent). The quote
+    validity policy part of 1.9 is served.
     Minor 1.10 (AA-1153, additive request fields): a QuoteLineRequest may name meal_plan (RO, BB, HB, FB or AI: the
     board of every hotel night of the line; without it a tour night's own board, else AA's default board, a pricing
     policy setting seeded bed and breakfast) and child_ages (one age per child, 0-17, on the service date: a hotel
@@ -93,10 +98,26 @@ info:
     and AA's rrp_per_person (the suggested retail price, root ADR 0019 b15). The CRM's "AA add-on" drawer lists them
     and the agency's own "from" prices start from them; the chosen one is quoted with POST /quotes like any sv: line
     (prices fixed at quote time; the sale rules checked there). Never a net, a margin or a supplier identity.
+    Minor 1.12 (AA-1188, additive; S295 pricing audit decision D5): GET /tariff prices every band **twin share**:
+    price_per_person is the price per person sharing a twin room (an odd party is priced with every traveller
+    sharing, half a double room night taken off per hotel night, so an odd band never costs more per person because
+    one traveller sleeps alone) and single_supplement_per_person is what a traveller alone in a room adds (a party of
+    one too); a quote of an odd party in the default room mix charges party x price_per_person plus one supplement.
+    TariffItem gains availability (on_request when the band reaches AA's pricing policy group_on_request_min_pax: the
+    8-10 and 11+ bands with the value 9; else available) and departure_adjusted (an upcoming departure inside the
+    row's dates carries an approved price adjustment, so a quote on it differs from the row); season is the plan's
+    season calendar code of the row's first day (low, high, peak, festive) once the calendar is configured, else the
+    price matrix label, and rows never join across a season. Tariff gains group_on_request_min_pax,
+    early_booking_days (the b2b rule's early-booking days; null without an early-booking discount), tours_priced and
+    catalog_tours (the tours AA serves; null for a one-tour read). The CSV adds availability and departure_adjusted
+    after the 1.7 columns. GET /terms gains quote_rules (the pricing policy's quote_validity_days,
+    group_on_request_min_pax and AA's default age_bands; null when a value has no approved version). Never a net, a
+    margin, the size of a departure adjustment or the early-booking points. A 1.11 reader keeps working (every new
+    field is additive; read a missing availability as available).
   x-aa-contract: booking.b2b.v1
   x-aa-producer: AA-Booking
   x-aa-consumers: [AA-Partner]
-  x-aa-issues: [AA-928, AA-952, AA-972, AA-973, AA-974, AA-975, AA-986, AA-1030, AA-1037, AA-1073, AA-1075, AA-1091, AA-1153, AA-1152]
+  x-aa-issues: [AA-928, AA-952, AA-972, AA-973, AA-974, AA-975, AA-986, AA-1030, AA-1037, AA-1073, AA-1075, AA-1091, AA-1153, AA-1152, AA-1188]
 servers:
   - url: /booking/b2b/v1
 security:
@@ -146,7 +167,8 @@ paths:
         price_not_published and Problem.line_refs naming every such line (no partial quote); a plan with no
         published version yet is priced live as in 1.8 (price_version_id null). valid_until follows AA's quote
         validity policy, at most 30 days after the quote; after it a new quote prices on the versions then in
-        force.
+        force. Served today: the version pinning and price_not_published are not built (see the 1.9 note in info):
+        every trip_plan line is priced live and price_version_id is absent.
       security:
         - m2m: [booking.b2b/quote]
       parameters:
@@ -632,10 +654,12 @@ paths:
         One row per window x pax band of the AA price matrix (b2b rows still valid today) of every sellable tour AA
         serves, each window from today at the earliest and cut wherever a supplier rate of the tour changes, so every
         departure date from valid_from to valid_to prices the same. Priced exactly as POST /quotes prices the plan's
-        tp line for the band's smallest party (all adults, twin share) on priced_for_date (= valid_from), with the
-        agency's tier or contract rate card discount in force today. A quote of that party for any departure date of
-        the row answers the same price while no rate, rule, FX rate or discount changes; the quote stays the binding
-        price. Rows AA cannot quote today are left out. format=csv returns the same rows as a
+        tp line for the band's smallest party (all adults, twin share; 1.12: an odd party with every traveller sharing)
+        on priced_for_date (= valid_from), with the agency's tier or contract rate card discount in force today. A
+        quote of that party for any departure date of the row answers the same price while no rate, rule, FX rate or
+        discount changes (an odd party's quote in the default room mix adds one single supplement); the quote stays
+        the binding price. 1.12: each row carries availability and departure_adjusted, the answer
+        group_on_request_min_pax, early_booking_days, tours_priced and catalog_tours. Rows AA cannot quote today are left out. format=csv returns the same rows as a
         CSV file (columns tour_key, title, country, duration_days, season, valid_from, valid_to, pax_min, pax_max,
         priced_for_pax, currency, price_per_person, price_for_party, agency_discount_pct, rrp_per_person,
         rrp_currency, then since 1.7 child_price_per_person, infant_price, single_supplement_per_person; an open pax
@@ -653,7 +677,8 @@ paths:
         parameters, so it changes whenever anything in the body changes (priced_on and the cut to today, the
         version, its status, next_tariff_version_id, the RRP, the agency discount, the FX rate, the tours served):
         a matching If-None-Match answers 304. The CSV adds, after the 1.7 columns, tariff_version_id,
-        price_version_id and provisional.
+        price_version_id and provisional. Served today: the 1.9 version parts are not built (see the 1.9 note in
+        info); the CSV adds, after the 1.7 columns, the 1.12 availability and departure_adjusted.
       security:
         - m2m: [booking.b2b/read]
       parameters:
@@ -1375,6 +1400,22 @@ components:
             - $ref: "#/components/schemas/CancellationPolicy"
             - type: "null"
           description: AA's default B2B policy in force today (basis in_force_today).
+        quote_rules:
+          oneOf:
+            - type: "null"
+            - type: object
+              additionalProperties: false
+              required: [quote_validity_days, group_on_request_min_pax, age_bands]
+              properties:
+                quote_validity_days: {type: integer, minimum: 1, description: How long a quote holds its price.}
+                group_on_request_min_pax:
+                  type: integer
+                  minimum: 1
+                  description: A tour line of this many travellers or more is quoted on request.
+                age_bands: {$ref: "#/components/schemas/AgeBands"}
+          description: >-
+            1.12 (AA-1188). The pricing policy values every quote follows (staff edit them on Pricing > Policy; a tour
+            may have its own age bands, Product.age_bands); null when one has no approved value. Absent before 1.12.
         clauses:
           type: array
           description: AA's approved terms clauses, in display order (drafts are never listed).
@@ -1685,6 +1726,26 @@ components:
           type: array
           items: {$ref: "#/components/schemas/TariffItem"}
         truncated: {type: boolean, description: More rows than one answer holds (ask per tour with source_id).}
+        group_on_request_min_pax:
+          type: [integer, "null"]
+          minimum: 1
+          description: >-
+            1.12 (AA-1188). The pricing policy's group size AA quotes on request (a band that reaches it is
+            on_request).
+        early_booking_days:
+          type: [integer, "null"]
+          minimum: 0
+          description: >-
+            1.12. A quote made at least this many days before a departure takes the b2b rule's early-booking
+            discount; null when the rule has none.
+        tours_priced:
+          type: integer
+          minimum: 0
+          description: 1.12. Tours with at least one priced row in this answer.
+        catalog_tours:
+          type: [integer, "null"]
+          minimum: 0
+          description: 1.12. Tours AA serves in its catalog (the M of "priced tours N of M"); null for a one-tour read.
         tariff_version_id:
           type: [string, "null"]
           maxLength: 64
@@ -1791,8 +1852,21 @@ components:
             - {$ref: "#/components/schemas/Money"}
           description: >-
             1.7 (AA-1075). What each traveller adds when the party sleeps in single rooms instead of twin share (0 on a
-            tour without hotel rooms or for a party of one); null when a single room has no rate in force (ask a
-            quote with rooms).
+            tour without hotel rooms; 1.12: a party of one pays it on top of the twin share too); null when a single
+            room has no rate in force (ask a quote with rooms).
+        availability:
+          type: string
+          enum: [available, on_request]
+          default: available
+          description: >-
+            1.12 (AA-1188, D5). on_request when the band reaches the group size AA quotes on request (pax_max at or
+            above Tariff.group_on_request_min_pax, or an open band); show "On request". Absent = available.
+        departure_adjusted:
+          type: boolean
+          default: false
+          description: >-
+            1.12. True when an upcoming departure inside valid_from .. valid_to carries an approved price adjustment
+            (a quote on that departure differs from this row). Absent = false.
         price_version_id:
           type: [string, "null"]
           maxLength: 64

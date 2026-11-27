@@ -1,0 +1,14 @@
+{
+  "contract": "booking.b2b.v1",
+  "schema": "PartnerTerms",
+  "expect": "valid",
+  "why": "1.12 (AA-1188): the agency's terms with the quote rules every quote follows (quote validity, the group size quoted on request, AA's default age bands) and an invented clause",
+  "payload": {
+    "as_of": "2026-11-27",
+    "payment": {"deposit_pct": "30.00", "balance_days_before_departure": 45, "settlement_due_days": 14, "scope": "default"},
+    "credit": {"status": "ok", "holds_paused": false, "overdue_invoices": 0, "oldest_overdue_days": 0, "overdue_amount": [], "warn_after_days": 7, "suspend_after_days": 30},
+    "cancellation_policy": {"policy_id": "pol-invented-1", "basis": "in_force_today", "tiers": [{"min_days": 60, "fee_pct": "10.00"}, {"min_days": 30, "fee_pct": "50.00"}, {"min_days": 0, "fee_pct": "100.00"}]},
+    "clauses": [{"code": "price_error", "title": "Invented price correction", "body": "AA corrects an invented price and the agency may cancel free of charge.", "free_cancel_days": 3, "version": 1, "approved_at": "2026-11-01T00:00:00Z"}],
+    "quote_rules": {"quote_validity_days": 14, "group_on_request_min_pax": 9, "age_bands": {"child_age_max": 11, "infant_age_max": 1}}
+  }
+}
