@@ -31,8 +31,10 @@ related: [SEC-02, OPS-10, OPS-05-db-migrate, AA-878, AA-880, AA-816]
 | Going to prod (AA-880) | the RDS master, the GitHub token printed in S240, every secret that will be reused in prod |
 | A vendor forces it | that key |
 
-There is **no fixed 90-day cycle on Dev** (S243 reconciliation §5.1 item 15). Secrets Manager rotation is enabled on 0 of the
-secrets; every rotation below is manual.
+Since register v2 (AA-1183, S296) each register row also has a rotation class with an interval and a next due date
+(the [Rotation](../../security/secrets-register.md#rotation) section of the register: scheduled 90, 180, 365 or 730
+days; auto; on incident; identifier). The events above still come first: a key ceremony or a suspected leak rotates a
+row before its date. Secrets Manager rotation is enabled on 0 of the secrets; every rotation below is manual.
 
 ## Where the list lives
 
@@ -129,8 +131,10 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
 
 ## Verify the result
 
-- Every consumer in the register row works; the register's `last_changed` column is updated (names and dates only);
-  the drift check prints `diff = 0` for that row.
+- Every consumer in the register row works; the row's `rotation.last_rotated` and `rotation.next_due` (and
+  `last_rotated` of each `copy_of` row that was set) are updated in the YAML, then
+  `python3 tools/security/secrets_register.py md --write` (names and dates only); the drift check prints `diff = 0`
+  for that row.
 
 ## Roll back or abort
 
