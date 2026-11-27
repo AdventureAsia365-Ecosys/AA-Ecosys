@@ -60,7 +60,10 @@ Sau khi đăng nhập, cả hai ứng dụng mở trang **My work** (Việc củ
 - **Needs your approval** (Cần bạn duyệt, ở CIS) và **To approve or pay** (Cần duyệt hoặc chi trả, ở Booking) liệt kê
   việc do người khác lập mà bạn được duyệt: thay đổi Settings, ngoại lệ tuân thủ và xoá dữ liệu ở CIS; hoá đơn nhà
   cung cấp, khoản thu đại lý, ngừng bán, nhà cung cấp, thay đổi thanh toán và tài khoản ngân hàng, **phiên bản giá**,
-  **dịch vụ thêm**, **thay đổi mùa giá** và **ngày lễ** ở Booking. Mỗi ô mở đúng danh sách mà nó đếm.
+  **dịch vụ thêm**, **thay đổi mùa giá** và **ngày lễ** ở Booking. Mỗi ô mở đúng danh sách mà nó đếm. Đề xuất và yêu
+  cầu của chính bạn chỉ hiện ở nơi bạn được tự duyệt: ở Booking khi công tắc tự duyệt của chủ doanh nghiệp đang bật
+  (không bao giờ với ngừng bán hay yêu cầu gỡ bỏ), ở Settings của CIS khi duyệt hai người đang tắt hoặc với thiết lập
+  chỉ cần một người duyệt.
 - Các ô không có việc gộp thành một dòng "Nothing waiting in N queues" (Không có gì đang chờ ở N hàng việc). Bấm vào để
   xem.
 - **Keep an eye on** (Theo dõi, ở CIS) hiện các mục chờ quyết định chính sách, ví dụ các tour bị giữ theo chính sách

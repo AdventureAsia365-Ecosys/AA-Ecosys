@@ -59,7 +59,9 @@ band. Start there every day.
 - **Needs your approval** (CIS) and **To approve or pay** (Booking) list what another person prepared and you may
   approve: Settings changes, compliance exceptions and data erasure in CIS; supplier bills, agency payments,
   stop-sales, suppliers, billing and bank changes, **price versions**, **add-ons**, **season changes** and **holiday
-  events** in Booking. Each tile opens the list it counts.
+  events** in Booking. Each tile opens the list it counts. Your own proposals and requests appear only where you may
+  approve them yourself: in Booking while the business-owner self-approval switch is on (never a stop-sale or a
+  removal), in CIS Settings while two-person approval is off or for a setting that needs only one person.
 - Tiles with nothing waiting fold into one line, "Nothing waiting in N queues". Open it to see them.
 - **Keep an eye on** (CIS) shows items that wait for a policy decision, such as the tours held by the elephant-riding
   policy. They are not counted as work.
