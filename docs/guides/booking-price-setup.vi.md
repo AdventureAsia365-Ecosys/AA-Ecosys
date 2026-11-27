@@ -145,7 +145,7 @@ người gia hạn nó, cho mọi loại hợp đồng (khách sạn, vận chuy
 | Sheet | Cột | Quy tắc |
 |---|---|---|
 | **Tours** | Tour key, Sellable | `yes` hoặc `no`; để trống thì giữ nguyên. Tour mở bán cần có khách sạn và dịch vụ |
-| **Components** | Tour key, Day, Hotel code + Room type, hoặc Service code | Mỗi dòng một mục. Tour có trong sheet này nhận đúng các mục này (các mục khác bị bỏ) |
+| **Components** | Tour key, Day, Hotel code + Room type, hoặc Service code, Meal plan | Mỗi dòng một mục. Tour có trong sheet này nhận đúng các mục này (các mục khác bị bỏ). **Meal plan** là gói ăn của một đêm khách sạn: `RO` chỉ phòng, `BB` phòng và ăn sáng, `HB` nửa trọn gói, `FB` trọn gói, `AI` bao trọn (ghi tên cũng được, ví dụ `Half board`). Để trống thì giữ gói ăn đêm đó đang có; đêm mới nhận `BB`. Dòng dịch vụ để trống cột này |
 | **Prices** | Tour key, Channel, Season, Peak, Valid from, Valid to, Pax min, Pax max, Currency, Price per person, Child price, Infant price, Single supplement | Xem bên dưới |
 | **Departures** | Tour key, Start date, Capacity, Min to operate, Sales cutoff days, Decision days before, Auto confirm, Status | Chỉ ngày mới, sau hôm nay; ngày tour đã có thì bỏ qua. Status là `scheduled` (mặc định) hoặc `guaranteed` |
 
