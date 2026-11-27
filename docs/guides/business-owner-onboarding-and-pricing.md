@@ -690,7 +690,9 @@ in a 3-4 band. Rules: start at 1, no gap or overlap, only the last band may end 
 - More bands mean fewer future date ranges fit in a tour's price table (200 rows; the latest are left out first).
 - The agency tariff lists one price per band, per person sharing a twin room, with a separate single supplement (a
   traveller alone in a room pays it on top; an odd group no longer costs more per person than the even group below
-  it). An agency quote does not use the bands: it prices the real group from the tour's costs, so a group of 6 can be
+  it). Its suggested retail price is on the same basis: on an odd band of a computed price it is lowered to the twin
+  share; a hand price (C8) is shown as entered, so enter hand prices per person sharing a twin room. An agency quote
+  does not use the bands: it prices the real group from the tour's costs, so a group of 6 can be
   quoted below the 5-7 tariff row (priced for 5).
 - A group at or above **Group quoted on request from** (starting value 9) is still quoted on request, whatever band
   holds it. The agency tariff shows every band that reaches this size as **On request** (8-10 and 11+ with the

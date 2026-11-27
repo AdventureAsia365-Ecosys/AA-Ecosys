@@ -717,7 +717,9 @@ bậc.
 - Giá nhập tay (C8) được dùng cỡ đoàn bất kỳ và thắng các dòng tính tự động mà nó phủ.
 - Càng nhiều bậc thì càng ít khoảng ngày tương lai vừa bảng giá của một tour (200 dòng; khoảng xa nhất bị bỏ trước).
 - Biểu giá đại lý ghi một giá cho mỗi bậc, tính cho mỗi người ở chung phòng đôi, kèm phụ thu phòng đơn riêng (khách
-  ở một mình một phòng trả thêm khoản này; đoàn lẻ không còn đắt hơn mỗi người so với đoàn chẵn ngay dưới). Báo giá
+  ở một mình một phòng trả thêm khoản này; đoàn lẻ không còn đắt hơn mỗi người so với đoàn chẵn ngay dưới). Giá bán
+  lẻ gợi ý cũng theo cùng cách tính: ở bậc lẻ của giá tính tự động, giá này được hạ về mức ở chung phòng đôi; giá nhập
+  tay (C8) hiện đúng như đã nhập, nên hãy nhập giá tay theo mỗi người ở chung phòng đôi. Báo giá
   cho đại lý không dùng các bậc: nó tính giá cho đúng số khách của đoàn từ chi phí của tour, nên đoàn 6 khách có thể
   được báo thấp hơn dòng biểu giá bậc 5-7 (tính cho 5 khách).
 - Đoàn từ cỡ **Group quoted on request from** (Đoàn báo giá theo yêu cầu từ, giá trị ban đầu 9) trở lên vẫn được báo

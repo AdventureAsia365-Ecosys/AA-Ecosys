@@ -1832,7 +1832,13 @@ components:
           oneOf:
             - {type: "null"}
             - {$ref: "#/components/schemas/Money"}
-          description: AA's public suggested retail price per person of the window and band (price.from.v1 basis).
+          description: >-
+            AA's public suggested retail price per person of the window and band (price.from.v1 basis). Since 1.12 on
+            the same twin share basis as price_per_person: an odd band of a computed price row (priced by AA's cost
+            sheet with one traveller alone) is scaled to the twin share (the row's RRP x price_per_person /
+            (price_per_person + single_supplement_per_person / priced_for_pax), rounded up to AA's rounding step,
+            never above the row's RRP); a row AA's staff priced by hand is shown as entered. Null without an RRP, or
+            on an odd band when the single supplement is unknown.
         child_price_per_person:
           oneOf:
             - {type: "null"}
