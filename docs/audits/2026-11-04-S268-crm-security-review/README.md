@@ -1,7 +1,7 @@
 ---
 id: SEC-08-s268-crm-security-review
 title: "AA-Partner CRM security review (AA-969, CRM-37a, S268)"
-description: "AA-969 independent review of the AA-Partner API and web: 4 major findings fixed with tests, minor follow-ups, d16 pilot protections still open."
+description: "AA-969 agent-led review (not independent) of the AA-Partner API and web: 4 major findings fixed with tests, minor follow-ups, d16 pilot protections still open."
 type: report
 status: active
 owner: nghiep

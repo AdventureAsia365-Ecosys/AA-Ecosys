@@ -1,18 +1,18 @@
 ---
 id: SEC-04-dpa-annex2
-title: "DPA Annex 2: technical and organisational measures (draft v0.6)"
+title: "DPA Annex 2: technical and organisational measures (draft v0.7)"
 description: "Annex 2 of the partner-agency DPA (and SCC Annex II): each security measure marked Live with its code, Terraform or audit evidence and the data-standard rule or ADR it implements, or Planned with the gate it must pass; no measure is claimed that does not run."
 type: reference
 status: draft
 owner: nghiep
 audience: [owner, cio, engineer, agent]
 applies_to: [ecosystem, aa-crm-api, aa-crm-web, aa-partner-portal, aa-cis-api, aa-cis-worker, aa-booking-api, aa-cis-dev-db]
-last_reviewed: 2026-11-16
+last_reviewed: 2026-11-27
 review_every_days: 30
 related: [SEC-04-dpa-agreement, SEC-04-dpa-annex1, SEC-04-dpa-annex3, ARCH-08-data-management, SEC-08-s268-crm-security-review, OPS-03-pilot-tenant, AA-820, AA-900, AA-969, AA-970, AA-1004, AA-1035, AA-1038, AA-1048]
 ---
 
-# DPA Annex 2: technical and organisational measures (draft v0.6)
+# DPA Annex 2: technical and organisational measures (draft v0.7)
 
 > [!WARNING]
 > Draft for counsel, not legal advice. Part of the [Data Processing Agreement](dpa.md); also Annex II of the SCCs
@@ -24,6 +24,10 @@ request, the live schema dump, an audit folder or a session log in [`docs/sessio
 standards ([Part B, data management](../architecture/data-standards/02-data-management.md)) cited as DM-n.n, and the
 ADRs in [`docs/adr/`](../adr/). Repos: CIS = AA-CIS-App, BK = AA-Booking, CRM = AA-Partner, INF = AA-CIS-Infra.
 AA promises the Live measures; the Planned ones are listed so the Agency knows what is not there yet.
+
+**What changed in v0.7 (2026-11-27).** M-27 says the reviews were agent-led, not independent; M-28 replaces the
+penetration-test promise with the self-assessments AA runs (decision S286 D5; S295 audit SA-23, sec-Q14); the
+transit-encryption line says what is true today.
 
 **What changed in v0.6 (2026-11-16).** New M-18b states the pseudonymous preference profile of the CRM honestly
 (design v3 §4.3, Fix A1): which database roles it keeps away from client identity, and that it does not protect
@@ -58,7 +62,7 @@ only as strong as its weakest Live row; the gaps are in §2.
 | Theme | What AA commits to | Measures |
 |---|---|---|
 | Hosting region | Agency Personal Data stored in one AWS region, us-west-1 (United States); the content AI stages may use cross-region inference, a stage that may carry personal data is held to US deployments | M-1, M-19 (and [Annex 3](dpa-annex-3-subprocessors.md) "Where") |
-| Encryption | At rest (database, storage, per-agency CRM field keys in AWS KMS) and in transit (HTTPS everywhere, TLS required on every database connection) | M-2 to M-6 |
+| Encryption | At rest (database, storage, per-agency CRM field keys in AWS KMS) and in transit (TLS 1.2 or later from the client to AWS's edge; the hops inside AA's private network (VPC) are not all encrypted; every database connection must use TLS 1.2 or later; the database server certificate is not yet verified by the apps) | M-2 to M-6 |
 | Access control | Agency users: invitation-only partner sign-in pool with MFA required. AA staff: the Cognito WORKFORCE pool, admin-created accounts only, one-time e-mail codes, deny-by-default roles with a per-agency scope (staff MFA optional today, §2 item 1). No personal database logins; per-app database roles; secrets per app | M-7, M-11 to M-17 |
 | Tenant isolation | CRM: row-level security forced on every CRM table with one tenant policy; no other AA app holds a grant on the CRM schema; a test refuses any other database access path. Content studio: the agency comes only from a session minted from an active membership; row-level security for the tenant database role on the routes moved to it, application-level scoping on the other routes and on the membership and account tables. Booking B2B: application-level scoping by the agency the CRM names, no row-level security (§2 item 8) | M-9, M-10 (CRM), M-9b (Content studio), M-9c (Booking B2B) |
 | Personal data before a model call | CRM: personal data scrubbed in three passes before any model call, a failed scrub refuses the call. Content studio and AA content stages: no identifying personal data in prompts, by rule, with the `pii` stage class enforced by the database and the gateway. AI call records keep no prompt or output text; the CIS gateway's reply store keeps model replies (never prompts, none for a `pii` stage) for a proposed 30 days | M-18 to M-21 (Trip Planner gap: §2 item 5; pilot gap of the quality samples: §2 item 9) |
@@ -115,8 +119,8 @@ only as strong as its weakest Live row; the gaps are in §2.
 | M-24 | Audit trails in the other apps: CIS audit log append-only with a SHA-256 hash chain; Booking audit log of staff actions; AWS CloudTrail on every region with log file validation and KMS encryption | Live | `acp_shared.audit_log` triggers (dump; CIS migration 248); `booking.audit_logs`; INF `accounts/aa365/observability.tf` (`aws_cloudtrail.main`), `security_cloudtrail.tf` | DM-8.9 |
 | M-25 | **Pilot safeguards before any real personal data** (ADR 0019 d16): (1) only the one pilot-marked agency may hold real data on Dev; (2) agents and maintenance scripts cannot read the personal data of any agency, the pilot included (counts only); (3) clean-up, test and batch jobs skip the pilot agency; (4) a nightly export of the pilot agency, so it can be restored alone; (5) a one-agency restore drill. Details per item in the table below | **Live** (all five on Dev since 2026-11-05, AA-969 closed in session S269); one onboarding gap in §2 item 2 | Below; `docs/audits/2026-11-05-S269-aa969-loadtest/`; session log S269 | ADR 0019 d16 |
 | M-26 | Incident process: severities, a SEV1 for any exposure or loss of data, containment first, the business owner within 30 minutes, affected agencies within 2 hours, a written review. A personal-data breach branch: where AA processes for the Agency, AA tells the Agency and the Agency notifies its authority; where AA is the controller of its own records, AA runs the 72-hour clock of Vietnam's law itself | Live (process; no real incident yet) | [Incident response](../ops/incident-response.md), "Personal data breach" | DPA clause 8 |
-| M-27 | Independent security review of the CRM before real data: no blocking finding; four major findings fixed with tests; minor follow-ups listed | Live (2026-11-04) | `docs/audits/2026-11-04-S268-crm-security-review/` | AA-969 |
-| M-28 | Penetration test before go-live | Planned: before the first paying agency | ADR 0019 b18 | |
+| M-27 | Agent-led security review of the CRM before real data (**not an independent review**: AI coding agents did it under the tech lead's direction): no blocking finding; four major findings fixed with tests; minor follow-ups listed. A second agent-led review covered the whole ecosystem on 2026-11-27 (eight areas, each finding re-checked by a separate agent); its fixes are tracked before the pilot holds real data | Live (CRM 2026-11-04; ecosystem 2026-11-27) | `docs/audits/2026-11-04-S268-crm-security-review/`; `docs/audits/2026-11-27-S295-advisory/security-audit-public-summary.md` | AA-969; S286 D5 |
+| M-28 | **No external penetration test is promised** (decision S286 D5). Instead, AA runs its own checks: (a) an OWASP ZAP baseline scan (passive) of the public Dev entry points every month, each report triaged by a person; (b) a self-assessment against OWASP ASVS 5.0 Level 1 for each app every quarter; (c) an AI red-team run on the AI writing surfaces every month, its cost logged; (d) an AWS Well-Architected self-review (six pillars plus the SaaS and Generative AI lenses), recorded in the AWS Well-Architected Tool and repeated yearly. These are self-assessments, not independent tests. An external penetration test is reconsidered when a large or EU agency asks for one, or before AA's production environment goes live | Live: ZAP monthly (last full run 2026-11-17); ASVS L1 first run 2026-11-25 (agency app, Trip Planner); AI red-team first run 2026-11-25; Well-Architected baseline 2026-11-27. External test: not planned | Root workflow `.github/workflows/zap-baseline.yml`; [vulnerability management](../security/vulnerability-management.md) "Dynamic scan"; `docs/audits/2026-11-27-S295-well-architected/`; counts in `docs/implementation-notes/AA-1166.md` (details in the private ISMS store) | S286 D5; ADR 0019 b18 (see note there) |
 
 ### Availability, retention and deletion
 
@@ -200,7 +204,7 @@ b20, b10).
 | 2 | The named data-protection contact for agencies (M-35) | **[BUSINESS OWNER]** | DPA clause 1.1 and the notices |
 | 3 | Whether staff MFA must be required before real agency data (M-12, §2 item 1). Engineering's proposal: require it before the pilot agency's real data. How it fits the one-time e-mail-code sign-in (a second factor on top of it, or passkeys) is for the tech lead to design; it is an AA-CIS-Infra change to the WORKFORCE pool plus enrolling each staff member | **[BUSINESS OWNER]** (the tech lead implements) | M-12 |
 | 4 | Whether "measures as listed, Live on Dev" is an acceptable standard for a pilot on Dev, or whether the pilot letter must say more (no SLA, test environment) | **[COUNSEL]** | Pilot letter, DPA clause 15.3 |
-| 5 | Whether a penetration test (M-28) and a SOC 2 or ISO 27001 report (§2 item 6) must be promised with a date | **[BUSINESS OWNER]**, then **[COUNSEL]** for the wording | M-28 |
+| 5 | Whether the self-assessments of M-28 are enough without a dated penetration test (S286 D5: none promised), and whether a SOC 2 or ISO 27001 report (§2 item 6) must be promised with a date | **[BUSINESS OWNER]**, then **[COUNSEL]** for the wording | M-28 |
 | 6 | Whether the AWS terms bind through the billing reseller, and whether the reseller is a sub-processor ([Annex 3](dpa-annex-3-subprocessors.md) §1.1) | **[COUNSEL]** | Annex 3, Annex 4 |
 | 7 | Whether this annex can stand as SCC Annex II as written, or needs the SCC wording per measure | **[COUNSEL]** | [Annex 4](dpa-annex-4-transfers.md) |
 | 8 | Whether keeping model replies, FactSheets, claim labels and shadow verdicts to measure and improve AA's AI checks ([Annex 1](dpa-annex-1-processing.md) §3, "Quality records") is processing on the Agency's instructions or an AA purpose, and so whether DPA clause 1.3 must name it; and whether the proposed windows (30 days to 12 months) are acceptable | **[COUNSEL]**, then the tech lead approves the windows (DM-7.5) | DPA clauses 1.3, 3.4; AI Schedule clause .8(a) |
