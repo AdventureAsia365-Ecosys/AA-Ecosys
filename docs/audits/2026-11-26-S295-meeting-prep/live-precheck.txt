@@ -1,0 +1,34 @@
+== policy switches (latest version effective today)
+  owner_payout_after_approval_allowed      v1 value=true from 2026-01-01
+  owner_self_approval_allowed              v1 value=true from 2026-01-01
+  supplier_bank_payout_lock_hours          v1 value=24 from 2026-01-01
+== business-owner marker holders (count only)
+  business owners 0 of 3 grants
+== SUP-000019 bank accounts by status
+  status=pending n=1 approved_at_set=0 last_entered=2026-11-24 07:43:40.223826+00:00
+== suppliers by status (all / SYNTHETIC)
+  active       10 (SYNTHETIC 9)
+  inactive     5 (SYNTHETIC 5)
+== contracts by status
+  expired      4
+  published    9
+== bills / payouts
+  bills 3
+  payouts 0
+== booking.job queued/running
+  total 0
+policy staff_admin_mfa_required             v1 value=false from 2026-01-01
+policy supplier_bank_contact_change_days    v1 value=30 from 2026-01-01
+== Booking grants (signed-in CIS staff), by role
+  role=admin owner=True business_owner=False n=2
+  role=custom_product_ops_accounting owner=False business_owner=False n=1
+== SUP-000019 supplier.updated touching contact fields, last 30 days
+  changes=0 by_person_who_entered_account=0 last=None
+cis.content.publish_two_person: type=bool default=false approval=maker_checker evidence=False enforced=True cache_s=30 env=None
+   (no value rows: default applies)
+cis.settings.two_person_approval: type=bool default=false approval=maker_checker evidence=False enforced=True cache_s=30 env=None
+   (no value rows: default applies)
+cis.llm.fact_instruction_guard: type=bool default=false approval=maker_checker evidence=False enforced=True cache_s=30 env=None
+   v1 approved value=True from 25/11 12:44Z self_approved=True decided=True
+== shared.job queued/running
+  total 0

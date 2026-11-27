@@ -1,0 +1,155 @@
+S295 demo-tour finder (read-only), pricing day 2026-11-26 UTC, role booking
+
+== 1. Global price gate (same for every tour)
+  rule b2b              IN FORCE id=00000000-0000-4000-8000-0000000b5101 valid_from=2026-11-12 approved_at=2026-11-12 07:35 rrp_markup_set=True
+  rule fixed_departure  IN FORCE id=00000000-0000-4000-8000-0000000b5102 valid_from=2026-11-12 approved_at=2026-11-12 07:35 rrp_markup_set=False
+  policy price_pax_bands                  v4 from 2026-11-24 value=[[1, 1], [2, 2], [3, 3], [4, 4], [5, 7], [8, 10], [11, null]]
+  policy rounding_increment_by_currency   v1 from 2026-01-01 value={"AUD": "5", "EUR": "5", "GBP": "5", "SGD": "5", "USD": "5"}
+  policy hotel_default_board              v1 from 2026-01-01 value="BB"
+  => can_price (no 'Approve a pricing rule' step): YES; 'From $X' / RRP for 2 can appear: YES (b2b rule with RRP markup + USD rounding)
+
+== 2. Trip plans
+  CIS plans 892, served (in catalog.v_tour) 844, not in catalog 48
+  served with valid price rows 3, with components but no price 0, no_components and no price/version 841
+  catalog tours titled SYNTHETIC%: 0
+
+== 3. Top 12 of 103 candidates (best first)
+
+#1 37228a03-222d-486d-a5f2-2b9f4b7a1e5e | Great Wall Hiking and Farmer's Guesthouse Stay from Beijing — 2 Days
+   country China (CN) | 2 days, 1 hotel night(s) | status no_components -> next step add_components | sellable=False departures=0
+   night 1: place 'Gubeikou' -> CIS destination 'Gubeikou' (CN) id 7b4866c2-198e-4396-9184-6c0f15bd268c
+            SYNTHETIC hotel named 'SYNTHETIC hotel Gubeikou' at that destination scores 0.55; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   distinct overnight destinations 1 | active hotels already there 0 (SYNTHETIC 0, with published rate 0: -)
+   rule: b2b 00000000-0000-4000-8000-0000000b5101 from 2026-11-12 (global) | contract currency USD -> no FX step | CIS reference currency USD (info) | provisional hint no
+   Marketplace + TripPlanner: in catalog.v_tour, lifecycle 'active', slug yes | From price now: none
+
+#2 436c8098-2c3e-4487-91f9-abd7d9f91362 | Kandy, Nuwara Eliya, Horton Plains and Kitulgala from Colombo — 2 Days
+   country Sri Lanka (LK) | 2 days, 1 hotel night(s) | status no_components -> next step add_components | sellable=False departures=0
+   night 1: place 'Nuwara Eliya' -> CIS destination 'Nuwara Eliya' (LK) id 7e02a956-5d73-4b77-b6de-64d898c5a3d9
+            SYNTHETIC hotel named 'SYNTHETIC hotel Nuwara Eliya' at that destination scores 0.85; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   distinct overnight destinations 1 | active hotels already there 0 (SYNTHETIC 0, with published rate 0: -)
+   rule: b2b 00000000-0000-4000-8000-0000000b5101 from 2026-11-12 (global) | contract currency USD -> no FX step | CIS reference currency USD (info) | provisional hint no
+   Marketplace + TripPlanner: in catalog.v_tour, lifecycle 'active', slug yes | From price now: none
+
+#3 5008ee33-b6e4-46ce-acd0-1a05f4037794 | Udawalawe and Yala Safari Short Break — 2 Days
+   country Sri Lanka (LK) | 2 days, 1 hotel night(s) | status no_components -> next step add_components | sellable=False departures=0
+   night 1: place 'Nil Diya Mankada Safari Lodge' -> CIS destination 'Udawalawe' (LK) id 0eb9aed8-399d-460a-82a6-5c9f7b1322de
+            SYNTHETIC hotel named 'SYNTHETIC hotel Nil Diya Mankada Safari Lodge' at that destination scores 0.85; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   distinct overnight destinations 1 | active hotels already there 0 (SYNTHETIC 0, with published rate 0: -)
+   rule: b2b 00000000-0000-4000-8000-0000000b5101 from 2026-11-12 (global) | contract currency USD -> no FX step | CIS reference currency USD (info) | provisional hint no
+   Marketplace + TripPlanner: in catalog.v_tour, lifecycle 'active', slug yes | From price now: none
+
+#4 5b2244a5-69eb-40e9-8636-ded1291436e0 | Xi'an Highlights: Terracotta Warriors, City Wall and Muslim Quarter — 2 Days
+   country China (CN) | 2 days, 1 hotel night(s) | status no_components -> next step add_components | sellable=False departures=0
+   night 1: place 'None' -> CIS destination 'Big Wild Goose Pagoda' (CN) id 1cc4769a-7cde-4980-bd4a-b75d5fe4ef55
+            SYNTHETIC hotel named 'SYNTHETIC hotel Big Wild Goose Pagoda' at that destination scores 0.65; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   distinct overnight destinations 1 | active hotels already there 0 (SYNTHETIC 0, with published rate 0: -)
+   rule: b2b 00000000-0000-4000-8000-0000000b5101 from 2026-11-12 (global) | contract currency USD -> no FX step | CIS reference currency USD (info) | provisional hint no
+   Marketplace + TripPlanner: in catalog.v_tour, lifecycle 'active', slug yes | From price now: none
+
+#5 65ee2723-83cb-4d47-8edc-bd53774bbcc0 | Kandy, Dambulla, Sigiriya and Minneriya from Colombo — 2 Days
+   country Sri Lanka (LK) | 2 days, 1 hotel night(s) | status no_components -> next step add_components | sellable=False departures=0
+   night 1: place 'Habarana' -> CIS destination 'Habarana' (LK) id 6988cca3-6eaf-402e-9e93-658d6164d4bd
+            SYNTHETIC hotel named 'SYNTHETIC hotel Habarana' at that destination scores 0.55; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   distinct overnight destinations 1 | active hotels already there 0 (SYNTHETIC 0, with published rate 0: -)
+   rule: b2b 00000000-0000-4000-8000-0000000b5101 from 2026-11-12 (global) | contract currency USD -> no FX step | CIS reference currency USD (info) | provisional hint no
+   Marketplace + TripPlanner: in catalog.v_tour, lifecycle 'active', slug yes | From price now: none
+
+#6 76c429b9-7faf-4dda-ab73-27668b908bef | Best of Beijing — 2 Days
+   country China (CN) | 2 days, 1 hotel night(s) | status no_components -> next step add_components | sellable=False departures=0
+   night 1: place 'None' -> CIS destination 'hutongs' (CN) id 6af33c2e-e141-48e3-b8bc-53d7b9b584ee
+            SYNTHETIC hotel named 'SYNTHETIC hotel hutongs' at that destination scores 0.35; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   distinct overnight destinations 1 | active hotels already there 0 (SYNTHETIC 0, with published rate 0: -)
+   rule: b2b 00000000-0000-4000-8000-0000000b5101 from 2026-11-12 (global) | contract currency USD -> no FX step | CIS reference currency USD (info) | provisional hint no
+   Marketplace + TripPlanner: in catalog.v_tour, lifecycle 'active', slug yes | From price now: none
+
+#7 93b5c5dd-4fb6-41c9-ab7d-08fc135ce6c2 | Yala Safari and Galle Fort from Colombo — 2 Days, 1 Night
+   country Sri Lanka (LK) | 2 days, 1 hotel night(s) | status no_components -> next step add_components | sellable=False departures=0
+   night 1: place 'Chandrika Hotel' -> CIS destination 'Yala' (LK) id 79db47c7-dfca-431a-aaf1-c7a526ee18b4
+            SYNTHETIC hotel named 'SYNTHETIC hotel Chandrika Hotel' at that destination scores 0.55; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   distinct overnight destinations 1 | active hotels already there 0 (SYNTHETIC 0, with published rate 0: -)
+   rule: b2b 00000000-0000-4000-8000-0000000b5101 from 2026-11-12 (global) | contract currency USD -> no FX step | CIS reference currency USD (info) | provisional hint no
+   Marketplace + TripPlanner: in catalog.v_tour, lifecycle 'active', slug yes | From price now: none
+
+#8 ca960ac2-0e99-4018-9edd-11bd5b28bed6 | Great Wall hiking from Beijing: Jiankou, Mutianyu and Wangjinglou — 2 Days
+   country China (CN) | 2 days, 1 hotel night(s) | status no_components -> next step add_components | sellable=False departures=0
+   night 1: place 'Gubeikou' -> CIS destination 'Gubeikou' (CN) id 7b4866c2-198e-4396-9184-6c0f15bd268c
+            SYNTHETIC hotel named 'SYNTHETIC hotel Gubeikou' at that destination scores 0.55; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   distinct overnight destinations 1 | active hotels already there 0 (SYNTHETIC 0, with published rate 0: -)
+   rule: b2b 00000000-0000-4000-8000-0000000b5101 from 2026-11-12 (global) | contract currency USD -> no FX step | CIS reference currency USD (info) | provisional hint no
+   Marketplace + TripPlanner: in catalog.v_tour, lifecycle 'active', slug yes | From price now: none
+
+#9 d1947a92-e821-428f-ac59-cb08a3b7e262 | Mogao Caves and Dunhuang — Private Tour, 2 Days
+   country China (CN) | 2 days, 1 hotel night(s) | status no_components -> next step add_components | sellable=False departures=0
+   night 1: place 'Dunhuang' -> CIS destination 'Dunhuang' (CN) id 2f37d0b8-4535-41a2-884a-2235450e15fc
+            SYNTHETIC hotel named 'SYNTHETIC hotel Dunhuang' at that destination scores 0.55; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   distinct overnight destinations 1 | active hotels already there 0 (SYNTHETIC 0, with published rate 0: -)
+   rule: b2b 00000000-0000-4000-8000-0000000b5101 from 2026-11-12 (global) | contract currency USD -> no FX step | CIS reference currency USD (info) | provisional hint no
+   Marketplace + TripPlanner: in catalog.v_tour, lifecycle 'active', slug yes | From price now: none
+
+#10 6bc4ab33-51d3-49d0-afcb-5ab4f0dc5012 | Shanghai and Hangzhou — 3 Days
+   country China (CN) | 3 days, 2 hotel night(s) | status no_components -> next step add_components | sellable=False departures=0
+   night 1: place 'Shanghai' -> CIS destination 'Shanghai' (CN) id 08729cc7-c088-490f-83e4-9214d3e077e8 transit day
+            SYNTHETIC hotel named 'SYNTHETIC hotel Shanghai' at that destination scores 0.55; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   night 2: place 'Shanghai' -> CIS destination 'Shanghai' (CN) id 08729cc7-c088-490f-83e4-9214d3e077e8 transit day
+            SYNTHETIC hotel named 'SYNTHETIC hotel Shanghai' at that destination scores 0.55; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   distinct overnight destinations 1 | active hotels already there 0 (SYNTHETIC 0, with published rate 0: -)
+   rule: b2b 00000000-0000-4000-8000-0000000b5101 from 2026-11-12 (global) | contract currency USD -> no FX step | CIS reference currency USD (info) | provisional hint no
+   Marketplace + TripPlanner: in catalog.v_tour, lifecycle 'active', slug yes | From price now: none
+
+#11 bde4c7a3-7c9a-4864-a43d-ae52048a1b28 | Dabajianshan Hike, Shei-Pa National Park, Taiwan — 3 Days / 2 Nights
+   country Taiwan (TW) | 3 days, 2 hotel night(s) | status no_components -> next step add_components | sellable=False departures=0
+   night 1: place '99 Cabin' -> CIS destination '99 Cabin' (TW) id b08b2edd-f84e-41d5-a97f-3c3580c063a4
+            SYNTHETIC hotel named 'SYNTHETIC hotel 99 Cabin' at that destination scores 0.85; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   night 2: place '99 Cabin' -> CIS destination '99 Cabin' (TW) id b08b2edd-f84e-41d5-a97f-3c3580c063a4
+            SYNTHETIC hotel named 'SYNTHETIC hotel 99 Cabin' at that destination scores 0.85; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   distinct overnight destinations 1 | active hotels already there 0 (SYNTHETIC 0, with published rate 0: -)
+   rule: b2b 00000000-0000-4000-8000-0000000b5101 from 2026-11-12 (global) | contract currency USD -> no FX step | CIS reference currency USD (info) | provisional hint no
+   Marketplace + TripPlanner: in catalog.v_tour, lifecycle 'active', slug yes | From price now: none
+
+#12 15d13ec4-ebbf-47f8-a0be-df76fee8bb23 | Lhasa Highlights: Potala Palace, Jokhang Temple and Yamdrok Lake — 4 Days
+   country China (CN) | 4 days, 3 hotel night(s) | status no_components -> next step add_components | sellable=False departures=0
+   night 1: place 'Lhasa' -> CIS destination 'Lhasa' (CN) id 5cceac16-6d3d-4d34-b9ab-710e860f6461 transit day
+            SYNTHETIC hotel named 'SYNTHETIC hotel Lhasa' at that destination scores 0.55; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   night 2: place 'Lhasa' -> CIS destination 'Lhasa' (CN) id 5cceac16-6d3d-4d34-b9ab-710e860f6461
+            SYNTHETIC hotel named 'SYNTHETIC hotel Lhasa' at that destination scores 0.55; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   night 3: place 'Lhasa' -> CIS destination 'Lhasa' (CN) id 5cceac16-6d3d-4d34-b9ab-710e860f6461
+            SYNTHETIC hotel named 'SYNTHETIC hotel Lhasa' at that destination scores 0.55; best existing hotel - 0.00 -> SYNTHETIC first suggestion: YES
+   distinct overnight destinations 1 | active hotels already there 0 (SYNTHETIC 0, with published rate 0: -)
+   rule: b2b 00000000-0000-4000-8000-0000000b5101 from 2026-11-12 (global) | contract currency USD -> no FX step | CIS reference currency USD (info) | provisional hint no
+   Marketplace + TripPlanner: in catalog.v_tour, lifecycle 'active', slug yes | From price now: none
+
+== 4. Near misses among no_components plans
+   390  a night without overnight destination (hotel matched by name only)
+   186  longer than 6 days
+   162  1-day tour (no night, no hotel to suggest)
+
+== 5. SYNTHETIC suppliers already in Booking (code, status, country, hotels, published contracts)
+  SUP-000002 active    -- hotels=1 published_contracts=1
+  SUP-000004 active    VN hotels=1 published_contracts=0
+  SUP-000006 active    VN hotels=1 published_contracts=0
+  SUP-000008 active    -- hotels=1 published_contracts=1
+  SUP-000009 inactive  JP hotels=0 published_contracts=0
+  SUP-000012 inactive  -- hotels=0 published_contracts=0
+  SUP-000013 inactive  -- hotels=0 published_contracts=0
+  SUP-000014 inactive  -- hotels=0 published_contracts=0
+  SUP-000015 active    VN hotels=0 published_contracts=1
+  SUP-000016 active    VN hotels=1 published_contracts=1
+  SUP-000017 active    VN hotels=0 published_contracts=1
+  SUP-000018 active    TH hotels=2 published_contracts=1
+  SUP-000019 active    TH hotels=0 published_contracts=1
+  SUP-000020 inactive  VN hotels=0 published_contracts=0
+
+== 6. Cross-check: Price setup next step from the app code (app.catalog.price_workbench)
+  15d13ec4-ebbf-47f8-a0be-df76fee8bb23 status=no_components reason=no_components next_step=add_components missing=components,rates,price,sellable,departures
+  37228a03-222d-486d-a5f2-2b9f4b7a1e5e status=no_components reason=no_components next_step=add_components missing=components,rates,price,sellable,departures
+  436c8098-2c3e-4487-91f9-abd7d9f91362 status=no_components reason=no_components next_step=add_components missing=components,rates,price,sellable,departures
+  5008ee33-b6e4-46ce-acd0-1a05f4037794 status=no_components reason=no_components next_step=add_components missing=components,rates,price,sellable,departures
+  5b2244a5-69eb-40e9-8636-ded1291436e0 status=no_components reason=no_components next_step=add_components missing=components,rates,price,sellable,departures
+  65ee2723-83cb-4d47-8edc-bd53774bbcc0 status=no_components reason=no_components next_step=add_components missing=components,rates,price,sellable,departures
+  6bc4ab33-51d3-49d0-afcb-5ab4f0dc5012 status=no_components reason=no_components next_step=add_components missing=components,rates,price,sellable,departures
+  76c429b9-7faf-4dda-ab73-27668b908bef status=no_components reason=no_components next_step=add_components missing=components,rates,price,sellable,departures
+  93b5c5dd-4fb6-41c9-ab7d-08fc135ce6c2 status=no_components reason=no_components next_step=add_components missing=components,rates,price,sellable,departures
+  bde4c7a3-7c9a-4864-a43d-ae52048a1b28 status=no_components reason=no_components next_step=add_components missing=components,rates,price,sellable,departures
+  ca960ac2-0e99-4018-9edd-11bd5b28bed6 status=no_components reason=no_components next_step=add_components missing=components,rates,price,sellable,departures
+  d1947a92-e821-428f-ac59-cb08a3b7e262 status=no_components reason=no_components next_step=add_components missing=components,rates,price,sellable,departures

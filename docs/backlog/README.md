@@ -14,6 +14,10 @@ _Last updated: S290, 24/11/2026 (Claude Code, Ultracode; 24/11 ~12:00 → ~18:30
 |---|---|---|
 | ~~23/11~~ done S288 | (Jira) PR-20 | Weekly report kỳ 6 (17–23/11): drafted in S287 (`docs/audits/2026-11-21-S287-session/jira-drafts.md` J4), approved; re-read the numbers, then post (tech lead: hold until the Monday-morning session). |
 | ~~next session~~ done S288 (root 113 MB, Infra 6 MB) | AA-1161 | History rewritten and force-pushed 21/11 (root clone 113 MB, Infra 7.6 MB; backups in private S3 `archive/`). Read the repo size GitHub reports (`gh api repos/<org>/<repo> --jq .size`) once its GC has run; close AA-1161 when it is near the clone size. |
+| S296 | AA-873 | **S295 (tech lead yes):** one-shot trial scans — Security Hub CSPM (FSBP + CIS), Inspector (ECR + Lambda), Macie (automated discovery). EventBridge Scheduler one-time schedule disables each ~3 days later; 1 USD budget alert per service; export findings to the ISMS evidence store, triage into AA-1185 / AA-1166. |
+| 30/11 | AA-1004 | **S295:** pull Cost Explorer acc2 for 1–30/11 as late as possible (after 01/12 acc2 cannot read its old history); final November number from the reseller invoice. |
+| ≥ 01/12 (after Billing Transfer) | AA-873, AA-1004 | **S295:** enable GuardDuty (foundational + S3) together with the Organizations step (SCP/RCP data perimeter, AI-services opt-out), dedicated budget, read usage after 7 days; re-enable cost allocation tags + anomaly per App on acc4. |
+| 27/11/2027 (or before prod) | AA-1184 | Yearly Well-Architected review (report SEC-11): 6 pillars + SaaS + Generative AI lens, compare with the WA Tool milestone "S295 baseline 2026-11-27". |
 | 01/12 | AA-1051 (AI gateway cap) | Set the `openai-direct` monthly cap back from **25 USD** (raised for November in S285 for the AA-1051 judge runs) to **10 USD**, then read the value back on AI gateway › Budgets. |
 | Thursday 26/11 (business-owner meeting) | AA-1158 | Once the business owner approves the SYNTHETIC bank account of SUP-000019: within 24 h the agent records a payout on an approved bill of that supplier and expects **409 `bank_payout_locked`**; then AA-1158 can close and the S290 close-out data is cleaned up (§2 "Waiting after S290"). |
 | After Thursday 26/11 | (AA-838) | Ship the held savepoint PRs Booking #331 and CIS #1676 (mark ready, ship), then run `aa838_s291_savepoint_counts.py` through an Infra run-script PR: new `__asyncpg_savepoint_*` texts per minute must fall to 0 for `booking` and `cis_app`. |
@@ -307,6 +311,12 @@ Content and status live in the [engineering handbook §9](../engineering-handboo
 | AA-697 | Architecture diagrams with official AWS icons — ecosystem + each repo | S256 | **Done S257** (§5c): pilot approved under the S257 session plan (root #320); drift findings closed (Booking ops-docs bucket built S256, EFS removed S257 Infra #492) | — |
 | AA-710 | B2B benchmark: Asian Trails (eConnect, API, Lemax) | M-R4 | **S265:** slot S271 (R4 start): update the note against the R4 design (AA-1037, AA-1029, AA-1030, 'Book with AA' d17), map the gaps to issues, KAN-20 draft at that session's end, then close | — |
 | AA-952…AA-980 | CRM W5–W8 (21 issues: AA-952, AA-953, AA-954, AA-955, AA-956, AA-957, AA-958, AA-959, AA-960, AA-961, AA-962, AA-963, AA-964, AA-965, AA-966, AA-967, AA-968, AA-969, AA-970, AA-971, AA-980) | later; AA-969, AA-970, AA-980 in M5 | **S262:** AA-952, AA-954, AA-956, AA-957, AA-964, AA-971 closed (§5); AA-958 → S263. AA-952 was In Progress since S259 (slice 1 = C-M3 confirm, §3 row 0ah); **re-planned at the S260 close**: slots S261–S266, go-real ≥S267, see §3b "Kế hoạch CRM W5–W8 sau S260" | AA-958 needs a free Twilio trial for the live proof; AA-965 needs an LLM path |
+
+## 5. Closed in S295
+
+- No issue closed Done. DB-01 slice of AA-1188 shipped and verified live (CIS #1718 `dd1a441d`, Partner #404 `7a972268`; agency reads carry no supplier name / source price; studio BFF allow-list). Post-meeting PRs CIS #1713, Partner #403, Infra #1041 + #1044 shipped.
+- New issues: AA-1182…AA-1190 (S295 plan), AA-1191 (USD only), AA-1192 (commercial site slice 1), AA-1193 (API auto-rollback), AA-1194 (LLM failover drill), AA-1195 (inter-AZ traffic). In Progress 20 → 5; plan S296–S300 re-sliced (plan.json).
+- Master RDS password rotated (N2). Well-Architected self-review recorded in the WA Tool (milestone "S295 baseline 2026-11-27") and as report SEC-11; catalog page ARCH-11.
 
 ## 5. Closed in S294
 
