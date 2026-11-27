@@ -678,9 +678,13 @@ with real traffic (prod).
 - **Register:** [secrets register](security/secrets-register.md), YAML first ([`secrets-register.yaml`](security/secrets-register.yaml)),
   names and metadata only, with a drift check (AA-878, U-26). The env-config register (AA-894) lists only the names
   each service references and links here.
-- **Rotation triggers** (D-02, D-03, DM-8.9): on suspected exposure, at go-live, and after any break-glass use. **No
-  90-day cycle on Dev.** The monthly check is a drift check of the register, not a rotation. Procedure per class:
-  [secret rotation runbook](ops/runbooks/secret-rotation.md).
+- **Rotation triggers** (D-02, D-03, DM-8.9): on suspected exposure, at go-live, and after any break-glass use.
+  Since register v2 (AA-1183, S296) every row also has a rotation class with its interval, hand-written last rotation
+  date and next due date ([Rotation](security/secrets-register.md#rotation)): 180 days for DB passwords, JWT, admin
+  and M2M secrets, 365 days for HMAC/BFF keys, GitHub App keys, staff OAuth secrets, other vendor keys and E2E users,
+  730 days for asymmetric signing keys, 90 days for IAM keys and personal tokens; LLM vendor keys, public tokens and
+  tenant credentials rotate only on an incident; KMS, ACM and domains renew automatically. The monthly check is a
+  drift check of the register. Procedure per class: [secret rotation runbook](ops/runbooks/secret-rotation.md).
 - The GitHub token and the RDS master password printed in a local S240 transcript rotate at go-live (D-02, D-03);
   they are on the prod checklist (AA-880).
 - Runtime secrets live in Secrets Manager; CI gets short-lived AWS credentials through OIDC; no static keys in CI.

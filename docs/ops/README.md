@@ -35,6 +35,7 @@ Everything runs on **acc2** (us-west-1) except the Bedrock LLM calls, which run 
 | Staff cannot sign in | [Staff cannot sign in (Cognito)](playbooks/cognito-login.md) |
 | LLM calls refused, `llm_access_denied`, Bedrock "Error 002" | [LLM calls refused](playbooks/llm-access-denied.md) |
 | SES bounce or complaint alarm | [SES bounce or complaint](runbooks/ses-bounce.md) |
+| An `[aa-sec] acm_expiry` e-mail (certificate not renewed, renewal failed or expired) | [ACM certificate expiry](runbooks/certificate-expiry.md) |
 
 ## Without the agent
 
@@ -69,6 +70,7 @@ Everything runs on **acc2** (us-west-1) except the Bedrock LLM calls, which run 
 | [Switch off the legacy staff password login](runbooks/legacy-login-flag.md) | draft, UNTESTED | readiness read only |
 | [Use a break-glass path](runbooks/break-glass.md) | draft, UNTESTED | API path 2026-10-18 |
 | [Handle an SES bounce or complaint alarm](runbooks/ses-bounce.md) | draft, UNTESTED | read-only only |
+| [Handle an ACM certificate expiry alert](runbooks/certificate-expiry.md) | draft, UNTESTED | - (AA-1183) |
 | [Handle a CRM KMS key alarm](runbooks/crm-keys.md) | draft, UNTESTED | rule patterns only (AA-932) |
 | [Plug in and probe the Anthropic API key](runbooks/llm-anthropic-api-key.md) | draft, UNTESTED | - (AA-1002 S2) |
 | [Re-embed a vector column into another embedding space](runbooks/embedding-re-embed.md) | draft, UNTESTED | - (AA-1026; T-15 test on `question_embedding` pending) |

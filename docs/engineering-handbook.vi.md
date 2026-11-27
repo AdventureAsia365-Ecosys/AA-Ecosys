@@ -681,8 +681,12 @@ nghĩa khi có traffic thật (prod).
 - **Sổ đăng ký:** [sổ đăng ký secret](security/secrets-register.md), YAML trước
   ([`secrets-register.yaml`](security/secrets-register.yaml)), chỉ tên và metadata, có kiểm drift (AA-878, U-26). Sổ
   đăng ký env-config (AA-894) chỉ liệt kê tên mà mỗi service tham chiếu và dẫn link về đây.
-- **Khi nào xoay** (D-02, D-03, DM-8.9): khi nghi bị lộ, khi go-live, và sau mỗi lần dùng break-glass. **Không có chu
-  kỳ 90 ngày trên Dev.** Lần kiểm hằng tháng là kiểm drift của sổ đăng ký, không phải xoay. Quy trình theo từng loại:
+- **Khi nào xoay** (D-02, D-03, DM-8.9): khi nghi bị lộ, khi go-live, và sau mỗi lần dùng break-glass.
+  Từ sổ đăng ký v2 (AA-1183, S296) mỗi dòng còn có lớp xoay với chu kỳ, ngày xoay gần nhất ghi tay và ngày tới hạn
+  ([Rotation](security/secrets-register.md#rotation)): 180 ngày cho mật khẩu DB, JWT, secret admin và M2M, 365 ngày cho
+  khoá HMAC/BFF, khoá GitHub App, secret OAuth của staff, các khoá vendor khác và user E2E, 730 ngày cho khoá ký bất
+  đối xứng, 90 ngày cho key IAM và token cá nhân; key vendor LLM, token public và credential của tenant chỉ xoay khi có
+  sự cố; KMS, ACM và domain tự gia hạn. Lần kiểm hằng tháng là kiểm drift của sổ đăng ký. Quy trình theo từng loại:
   [runbook xoay secret](ops/runbooks/secret-rotation.md).
 - Token GitHub và mật khẩu RDS master bị in ra trong một transcript local ở S240 sẽ được xoay khi go-live (D-02, D-03);
   chúng nằm trong checklist prod (AA-880).
