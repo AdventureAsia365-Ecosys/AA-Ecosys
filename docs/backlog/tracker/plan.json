@@ -1,8 +1,8 @@
 {
  "updated": "2026-11-27",
- "synced_at": "2026-11-27T03:11Z",
- "session": "S295",
- "next_session": "S296",
+ "synced_at": "2026-11-27T14:02Z",
+ "session": "S296",
+ "next_session": "S297",
  "source": "Linear (27/11/2026, đọc trực tiếp, S295) + .tmp-session/S295/ops/plan.md + quyết định tech lead S295 (39/39, trang Tư vấn S295) + docs/backlog/README.md",
  "projects": {
   "data": "Data Platform",
@@ -645,7 +645,7 @@
     },
     {
      "text": "Đại lý thấy đúng giá: From price, cột giá CRM, twin share + single supplement, band 8-10 / 11+ On request (AA-1188; D5, D10)",
-     "done": false
+     "done": true
     },
     {
      "text": "Kiểm soát theo đại lý: AA prices trong gói Content, assortment, version giá tay = giá đại lý provisional, owner tự duyệt có cờ (AA-1189; D1–D4, D6)",
@@ -653,7 +653,7 @@
     },
     {
      "text": "My work lát 1: mọi người mở vào My work, thêm ô duyệt còn thiếu, thẻ tiến độ setup giá, ô 0 gập (AA-1190)",
-     "done": false
+     "done": true
     },
     {
      "text": "Price setup assistant trần 10 USD/tháng (AA-704; ai-A1); Ask AA phase 2 chỉ khi đủ ngưỡng ai-A3",
@@ -670,6 +670,16 @@
   }
  ],
  "checks": [
+  {
+   "due": "28/11 03:17Z",
+   "issue": "AA-1196",
+   "text": "S296: lượt E2E Dev CRM theo lịch đầu tiên (cron 17 3 * * *) chạy và xanh; không có issue e2e-dev-red"
+  },
+  {
+   "due": "29/11",
+   "issue": "AA-873",
+   "text": "S296: ~05:00Z xuất số đếm Security Hub/Inspector/Macie (chỉ tổng theo mức); 09:17–09:32Z 4 lịch tự tắt chạy → kiểm đã tắt, dọn role, kiểm hoá đơn"
+  },
   {
    "due": "28/11 23:50Z",
    "issue": "AA-1061",
@@ -994,6 +1004,11 @@
  "waiting": [
   {
    "who": "Tech lead",
+   "issue": "AA-1185",
+   "text": "S296: thêm TXT lumiguides.it.com._report._dmarc.adventure.asia = v=DMARC1 trên Cloudflare (zone adventure.asia); revoke token Vercel + 3 PAT không dùng, xoá key acc1 cũ (sổ secret báo tới hạn)"
+  },
+  {
+   "who": "Tech lead",
    "issue": "AA-1182",
    "text": "S296: một cửa sổ MFA — bước tay P5 (AA-1111), kiểm IAM có MFA, apply PR khoá state, xoay giá trị đọc được từ state (client secret Cognito, khoá TripPlanner, Redis AUTH)"
   },
@@ -1224,6 +1239,27 @@
   }
  ],
  "log": [
+  {
+   "session": "S296",
+   "date": "27/11/2026",
+   "closed": [
+    "AA-1188",
+    "AA-1190",
+    "AA-1196"
+   ],
+   "canceled": [],
+   "created": [
+    "AA-1196"
+   ],
+   "reopened": [],
+   "notes": [
+    "Đóng AA-1188 (giá đại lý: twin share, On request, AA prices + điều kiện đặt tour; sửa 500 /aa-tariff), AA-1190 (My work lát 1 + sửa ô bấm mất lọc), AA-1196 (E2E CRM xanh lại, chạy hằng đêm).",
+    "AA-1182: khoá bucket state + thu hẹp task role CIS (managed policy), task role đọc state = 403; xoay 7 client Cognito, mật khẩu DB TripPlanner, 3 khoá TripPlanner (sự cố M2M vài phút, đã khôi phục).",
+    "AA-1185: security.txt, CAA/DMARC rua, EBS mặc định mã hoá, cảnh báo nhóm admin (đã thử), tắt execute-api mặc định, xoá SG cũ, thu hẹp egress 10 SG, test-wp tắt.",
+    "AA-1183 phần 1 (sổ secret v2, cảnh báo ACM 2 region), AA-1187 bước 1 (Meal plan + khớp upload), AA-1173 Prowler 0 Critical, AA-873 chạy thử Security Hub/Inspector/Macie (tự tắt 29/11), AA-1166 gói ISMS + DPA v0.7.",
+    "Jira đã đăng: PR-26 10712, PR-25 10713, PR-22 10714, PR-23 10715, PR-31 10716."
+   ]
+  },
   {
    "session": "S295",
    "date": "27/11/2026",
@@ -2713,13 +2749,13 @@
   {
    "id": "AA-1182",
    "title": "[Security] Lock Terraform state, move the RDS master password to RDS-managed rotation, and run the pre-pilot key ceremony",
-   "status": "Todo",
+   "status": "In Progress",
    "priority": "Urgent",
    "project": "data",
    "milestone": "M-PILOT",
-   "session": "S296",
+   "session": "S297",
    "size": "M",
-   "next": "Pilot · S296: PR khoá state Terraform + thu hẹp task role CIS → review độc lập → apply → xoay giá trị đọc được từ state (P6); master RDS đã xoay 27/11 (N2). S297–S298: RDS tự quản mật khẩu master (lịch 180 ngày) + runbook ceremony; ceremony theo từng nhóm, KHÔNG gồm key LLM vendor (N1)",
+   "next": "Pilot · S297: sửa tools/identity đọc secret từ response add (bài học S296) → RDS tự quản mật khẩu master (180 ngày) + runbook key ceremony; xoay origin-verify/site marker trong cửa sổ ceremony",
    "needs": "Tech lead: MFA cho apply + xoay; ngày ceremony = trước dữ liệu pilot thật (sec-Q1)"
   },
   {
@@ -2749,7 +2785,7 @@
   {
    "id": "AA-1166",
    "title": "[Security] ISMS-lite and AIMS-lite: policy, scope, risk register, SoA, AI impact assessments and a pilot go-live checklist",
-   "status": "In Progress",
+   "status": "In Review",
    "priority": "High",
    "project": "data",
    "milestone": "M-PILOT",
@@ -2761,25 +2797,25 @@
   {
    "id": "AA-1183",
    "title": "[Ops] Secrets register v2 with rotation dates and a weekly rotation and expiry check",
-   "status": "Todo",
+   "status": "In Progress",
    "priority": "High",
    "project": "data",
    "milestone": "M-PILOT",
-   "session": "S296",
+   "session": "S297",
    "size": "M",
-   "next": "Pilot · S296 phần 1: root PR register (tên còn thiếu, khối rotation, last_rotated master 27/11), rule ACM sắp hết hạn ở 2 region (rule rds-destructive thuộc AA-873); S297 phần 2: rotation_check.py + PR quyền đọc metadata. Key LLM vendor = lớp 'chỉ khi có sự cố' + hạn mức phía vendor",
+   "next": "Ops · S297 phần 2: rotation_check.py hằng tuần (chỉ metadata) + quyền đọc metadata cho role compliance-evidence + gom bản sao khoá CI bot",
    "needs": ""
   },
   {
    "id": "AA-1187",
    "title": "[Booking] Supplier pack and tour pack importers — two data-entry bug fixes first, then one file per supplier and per country",
-   "status": "Todo",
+   "status": "In Progress",
    "priority": "High",
    "project": "tpbk",
    "milestone": "M-PRICE",
-   "session": "S296",
+   "session": "S297",
    "size": "L",
-   "next": "Dữ liệu · S296: sửa 2 lỗi nhập liệu trước khi Trang nhập (Components đưa gói ăn về BB; upload CIS trùng tour khi Provider khác); S297 importer gói NCC; S298 gói tour theo nước (mở rộng workbook Price setup)",
+   "next": "Dữ liệu · S297 bước 2: importer gói NCC (Check rồi Import); S298 gói tour theo nước",
    "needs": "Chủ DN: 30–50 tour pilot, 2–3 nước, NCC thật (gia-D8) — chặn nhập liệu, không chặn code"
   },
   {
@@ -2858,27 +2894,15 @@
   {
    "id": "AA-1185",
    "title": "[Security] S295 audit sweep — zero-cost edge, mail, public-repo and network fixes",
-   "status": "Todo",
+   "status": "In Review",
    "priority": "Medium",
    "project": "data",
    "milestone": "M-PILOT",
-   "session": "S296",
+   "session": "S297",
    "size": "M",
-   "next": "Pilot · S296 (trước 02/12): test_wp_enabled=false ngoài cửa sổ test (sec-Q10) hoặc digest WP mới; DMARC rua + CAA, security.txt, lint ID repo public, alert thêm user vào nhóm admin",
+   "next": "Pilot · còn: TXT DMARC report trên zone adventure.asia (tech lead), image scan xanh sau 02/12, quyết 4 câu NAT allow-list (design note Infra #1051); xong thì đóng",
    "needs": "",
    "due": "2026-12-02"
-  },
-  {
-   "id": "AA-1190",
-   "title": "[CIS + Booking] My work slice 1 — everyone lands on My work, missing approval tiles, price setup progress, zero tiles collapsed",
-   "status": "Todo",
-   "priority": "Medium",
-   "project": "portal",
-   "milestone": "M-PRICE",
-   "session": "S296",
-   "size": "M",
-   "next": "My work · S296: lát 1 (CIS M + Booking M + docs S), chỉ đọc, không migration (N4); bắt đầu khi AA-1061 hoặc AA-1158 đóng (trần WIP 8)",
-   "needs": ""
   },
   {
    "id": "AA-1110",
@@ -2956,13 +2980,13 @@
   {
    "id": "AA-873",
    "title": "[Security] Account detection baseline: GuardDuty, Access Analyzer, S3 BPA, CloudTrail",
-   "status": "Backlog",
+   "status": "In Progress",
    "priority": "High",
    "project": "data",
    "milestone": "M-PILOT",
    "session": "S297",
    "size": "M",
-   "next": "Pilot · S297: rule rds-destructive (0 USD, SA-10); GuardDuty foundational + S3 (sec-Q3) và Backup + Vault Lock + bản sao us-west-2 (sec-Q4) bật ngày pilot có dữ liệu thật",
+   "next": "Pilot · S297: xuất số đếm 29/11 ~05:00Z, kiểm 4 lịch tự tắt 29/11 09:17–09:32Z đã chạy, ECR về BASIC, xoá role aa873-trial-auto-off + service-linked role, kiểm hoá đơn 0 USD; GuardDuty sau 01/12",
    "needs": "Trigger: ngày dữ liệu pilot thật (đã có 'có' của tech lead S295)"
   },
   {
@@ -2976,18 +3000,6 @@
    "size": "M",
    "next": "AI · S298: scrub fail-closed chat TripPlanner + corpus test, TTL cassette 30 ngày, red-team TripPlanner + CRM (~0,30 USD/cặp, route CRM AI hiện tại — sec-Q7); chat planning tắt cho đại lý pilot tới khi pass (sec-Q13)",
    "needs": "Tech lead: trần USD cho lượt red-team; Guardrails cần 'có' riêng"
-  },
-  {
-   "id": "AA-1188",
-   "title": "[Pricing] Agencies see the right price — catalog From price, CRM price columns and booking terms, twin-share tariff, docs drift",
-   "status": "Backlog",
-   "priority": "High",
-   "project": "crm",
-   "milestone": "M-PRICE",
-   "session": "S298",
-   "size": "M",
-   "next": "Giá · S298: From price trên catalog, cột giá + điều khoản đặt chỗ trong CRM, twin share/người + single supplement, band 8-10 / 11+ 'On request' (D5), AA prices vào nhóm Money + 'Suggested retail (RRP)' (D10), sửa lệch docs",
-   "needs": ""
   },
   {
    "id": "AA-1050",
