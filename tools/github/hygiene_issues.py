@@ -47,7 +47,7 @@ from pathlib import Path
 ORG = "AdventureAsia365-Ecosys"
 CAP_GB = 10.0
 APP = "aa-ecosys-ci-bot"
-ENVIRONMENT = "ci-hygiene"           # holds the App key; deployment branches: master only (the key can write elsewhere)
+ENVIRONMENT = "ci-bot"               # holds the App key (AA-1183, one per repo); deployment branches: master only
 FOOTER = ("_Kept up to date by the root CI hygiene workflow (`.github/workflows/ci-hygiene.yml`, root ADR 0021 "
           "decision 5). It updates this issue while the finding is present and closes it when the finding clears._")
 LAST_CHANGE = "_Last change:"

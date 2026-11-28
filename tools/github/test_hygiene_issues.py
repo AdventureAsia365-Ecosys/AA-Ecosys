@@ -109,7 +109,7 @@ class HygieneFindings(unittest.TestCase):
         self.assertIn("AA_CI_BOT_APP_ID", f["needs-permission"].fix)
         self.assertIn("Actions: Read-only", f["needs-permission"].fix)
         # the write-capable App key goes into the master-only environment, never a repo-level secret
-        self.assertIn("environment `ci-hygiene`", f["needs-permission"].fix)
+        self.assertIn("environment `ci-bot`", f["needs-permission"].fix)
         self.assertIn("never at repo level", f["needs-permission"].fix)
         self.assertEqual(f["cache-over-threshold"].status, "unknown")
         self.assertEqual(f["external-downloads"].status, "absent")   # workflows were still scanned

@@ -40,6 +40,10 @@ row before its date. Secrets Manager rotation is enabled on 0 of the secrets; ev
 
 The secrets register (AA-878): `docs/security/secrets-register.md` and `.yaml` (names, consumers, copies, status;
 never values). Look up the secret's row first: it names every copy (GitHub, Vercel, Lambda) that must change with it.
+The weekly Secret rotation check (root `.github/workflows/secret-rotation.yml`) opens one issue labelled
+`secret-rotation` per overdue, unknown or missing item and closes it once the row is green in a run that read its
+store (a week where AWS or GitHub could not be read leaves those issues open); it trusts the GitHub
+`updated_at`, Cognito client secret and IAM key dates, so a copy you forgot shows up as stale the following Monday.
 
 ## Preconditions
 
@@ -123,7 +127,9 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
   stdin, never from an argument), run the workflow that uses it, then revoke the old token.
 - GitHub App keys (`aa-agent`, `aa-ecosys-ci-bot`; register rows) replaced the root-repo PAT in S247. Rotate a key on
   a leak or at go-live ([ADR 0011](../../adr/0011-github-app-identity-and-merge-rights.md)): create a new private key
-  in the App settings, update its copies, then delete the old key.
+  in the App settings, update its copies, then delete the old key. The `aa-ecosys-ci-bot` key has one copy per repo,
+  in the environment `ci-bot`: `bash tools/security/ci_bot_key_consolidate.sh setup --pem <new key file> --apply
+  --shred` stores the new key in all six, then delete the old key in the App settings.
 
 ### 7. CRM encryption keys (KMS)
 

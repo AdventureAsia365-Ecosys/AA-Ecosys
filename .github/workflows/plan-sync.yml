@@ -14,8 +14,10 @@ name: Plan sync
 #   - repo secret LINEAR_PLAN_SYNC_KEY: a Linear API key of its own, narrowest scope Linear allows (read). Set it by a
 #     pipe from Secrets Manager, never printed (e.g. `aws secretsmanager get-secret-value ... --output text |
 #     gh secret set LINEAR_PLAN_SYNC_KEY --repo <root repo>`, one line).
-#   - repo variable AA_CI_BOT_APP_ID + repo secret AA_CI_BOT_PRIVATE_KEY (GitHub App aa-ecosys-ci-bot, ADR 0011): a PR
-#     opened with the default GITHUB_TOKEN would not start the Docs lint / gitleaks checks, so the App token is required.
+#   - repo variable AA_CI_BOT_APP_ID + the secret AA_CI_BOT_PRIVATE_KEY of the environment `ci-bot` (master only, no
+#     required reviewers; AA-1183, tools/security/ci_bot_key_consolidate.sh) (GitHub App aa-ecosys-ci-bot, ADR 0011): a
+#     PR opened with the default GITHUB_TOKEN would not start the Docs lint / gitleaks checks, so the App token is
+#     required.
 # Without the Linear key the run ends with a notice (not a failure).
 #
 # Never writes to Linear. Cost: $0 (standard runner on a public repo, about 1 minute per run).
@@ -43,18 +45,22 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    # Holds AA_CI_BOT_PRIVATE_KEY; deployment branches limited to master.
+    environment: ci-bot
     env:
       ROOT_REPO: ${{ github.repository }}
       PR_BRANCH: bot/plan-sync
       PLAN: docs/backlog/tracker/plan.json
       ROOT_REQUIRED_CHECKS: "Docs lint,gitleaks"
       HAS_LINEAR: ${{ secrets.LINEAR_PLAN_SYNC_KEY != '' }}
-      HAS_CI_BOT_APP: ${{ vars.AA_CI_BOT_APP_ID != '' && secrets.AA_CI_BOT_PRIVATE_KEY != '' }}
       AUTOMERGE: ${{ github.event_name == 'schedule' || inputs.automerge }}
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     steps:
       - name: Preconditions
         id: pre
+        # The environment secret is read in a step, not in job-level env (as ci-hygiene.yml does).
+        env:
+          HAS_CI_BOT_APP: ${{ vars.AA_CI_BOT_APP_ID != '' && secrets.AA_CI_BOT_PRIVATE_KEY != '' }}
         run: |
           if [ "$HAS_LINEAR" != "true" ]; then
             echo "::notice::repo secret LINEAR_PLAN_SYNC_KEY is not set: plan sync skipped (see the workflow header)"
