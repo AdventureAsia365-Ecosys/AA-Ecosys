@@ -79,7 +79,13 @@ Thứ tự ưu tiên khi nguồn lệch: repo > Notion trang canonical > memory 
 4. **Báo lệch:** state thật khác memory (revision, job treo, issue đã đóng, PR mở) → nói ngay trước khi làm.
 5. **Đọc bài học:** mục liên quan trong `aa-lessons/lessons.md`, và `.tmp-session/S<nnn-1>-lessons-pending.md` nếu
    phiên trước chưa chuyển hết.
-6. **Rà soát định kỳ (AA-838, data standards C4.3 / C8 / DM-8.10)** — đến hạn thì đưa vào danh sách việc của phiên:
+6. **Lịch vận hành (AA-1184) + rà soát định kỳ (AA-838, data standards C4.3 / C8 / DM-8.10)** — mọi việc có ngày
+   nằm trong `docs/ops/calendar.yaml` (không còn ở backlog §1). Chạy `python3 tools/ops/ops_calendar.py status`
+   (chỉ đọc, offline): dòng OVERDUE / DUE_SOON / OPEN → đưa vào khối trạng thái và danh sách việc của phiên (OVERDUE =
+   việc phải xử lý trong phiên, hoặc dời ngày có lý do trong calendar). Workflow "Ops calendar" chạy thứ Hai đỏ khi có
+   dòng quá hạn (`guard_runs.py` hiện nó); check `ops_calendar_overdue` đỏ trên CIS › Compliance readiness ngay hôm
+   dòng quá hạn. Xong một việc → `done: <ngày>` trong calendar, rồi `render --write` + `ics --write` cùng PR.
+   Hạn của ba rà soát dưới đây cũng do calendar tính (OC-001, OC-003, OC-004 đọc folder audit mới nhất):
    - **Tuần (C4.3):** phiên đầu mỗi tuần ISO, và sau mỗi wave: `pg_stat_statements` top 20 theo role (tổng + mean),
      slow log > 500 ms, lock wait, PI top SQL. Ghi 1 đoạn trong log phiên ("C4.3 tuần W<nn>"); hạn = log phiên gần nhất
      có dòng đó cách ≥ 7 ngày. Mục tiêu C1.2 trượt 2 tuần liên tiếp → báo Nghiệp (C1.2a).

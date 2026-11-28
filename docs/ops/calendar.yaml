@@ -1,0 +1,615 @@
+# Ops calendar (AA-1184, S297): the ONE source for dated and recurring ops duties of the ecosystem.
+#
+# Read by tools/ops/ops_calendar.py: `check` (workflow .github/workflows/ops-calendar.yml, on a pull request that
+# changes the calendar and on Mondays), `status` (the session-start block), `render --write` (the table in
+# docs/ops/calendar.md) and `ics --write` (docs/ops/calendar.ics, the phone subscription). The daily compliance
+# collector (tools/compliance/collect.py) publishes the check `ops_calendar_overdue`: red on CIS Platform > Compliance
+# readiness the day a line passes its due date, green again once it is done or re-dated (Calendar tab).
+#
+# Public repo: generic titles only. No account ID, ARN, e-mail address, secret name or person name; owners are roles.
+# Titles and notes show on the CIS Calendar tab, so they never carry an issue id (put it in `source`).
+#
+# One line per duty:
+#   id           OC-NNN, stable (never renumber; retire a done line by setting `done`, delete it only at a yearly tidy)
+#   kind         recurring  a duty on a cadence; `evidence` dates the last run
+#                deadline   a duty due on `date` (or open from `window_from` with no due date); `done` closes it;
+#                           `dates_from` reads the dates from another register instead of copying them
+#                trigger    a duty due `within_days` after an event; `trigger_date` is filled when the event happens
+#                automated  a scheduled job or workflow that runs by itself and has its own alarm (listed, never due)
+#   title        plain words (max 100 characters)
+#   owner        a role: tech lead | business owner | engineer on duty | agent
+#   source       the decision, issue or document behind the line (not shown on the CIS tab)
+#   cadence      recurring: weekly | monthly | quarterly | yearly | "every N days"; automated: free text
+#   anchor       recurring: the first slot of the series (ISO date); the .ics repeats from it, and it is the due date
+#                while `evidence` has no record yet
+#   evidence     recurring: a repo glob whose newest match dates the last run (the first YYYY-MM-DD in the path),
+#                `check:<compliance check id>` (CIS grades it; the tab shows that check's state) or `none` (a
+#                reminder only, never overdue); deadline: an optional proof path
+#   date         deadline: ISO due date;  window_from: ISO date the duty opens ("not before")
+#   done         deadline / trigger: ISO date it was done (the line then stays green)
+#   trigger      trigger: the event in words;  trigger_date: ISO date of the event, once it happened
+#   within_days  trigger: days after trigger_date the duty is due
+#   warn_days    days before the due date that turn the line amber (required on every line that can be overdue)
+#   dates_from   deadline: secrets-register (rotation next_due / expires of every live row, AA-1183),
+#                go-live-checklist (due dates of the open go-live gate lines, AA-1117) or vuln-exceptions (expiry of
+#                every vulnerability exception); the line is due on the earliest date and overdue when any date passed
+#   reminder     auto (the compliance check turns red by itself) | session (the session-start block lists it) | none
+#   note         one short line of context (shown on the tab)
+#
+# Subset of YAML only (tools/ops/golive_gate.py parser): quote any value that contains ": " or starts with a symbol.
+
+version: 1
+updated: 2026-11-28
+
+items:
+  # ── recurring duties ───────────────────────────────────────────────────────────────────────────────────────────
+  - id: OC-001
+    kind: recurring
+    title: "Weekly database performance review (C4.3: top statements, slow log, locks)"
+    owner: agent
+    source: "AA-838 C4.3, skill aa-session step 6"
+    cadence: weekly
+    anchor: 2026-11-30
+    evidence: "docs/audits/**/*c43-w*"
+    warn_days: 2
+    reminder: auto
+    note: "First session of each ISO week and after each wave; W49 decides the tenant-read target."
+
+  - id: OC-002
+    kind: recurring
+    title: "Merge the weekly release PRs of the four app repos"
+    owner: agent
+    source: "tech lead S282 (release-please kept, 0 USD)"
+    cadence: weekly
+    anchor: 2026-11-30
+    evidence: none
+    reminder: session
+    note: "CI green, no wave or ECS exec running; one ship_merge call for all; confirm the deploy that follows."
+
+  - id: OC-003
+    kind: recurring
+    title: "Monthly capacity and cost review (C8)"
+    owner: agent
+    source: "AA-838 C8, docs/templates/capacity-review.md"
+    cadence: monthly
+    anchor: 2026-12-01
+    evidence: "docs/audits/*capacity-review*"
+    warn_days: 3
+    reminder: auto
+    note: "December: also re-read the trip planner frontend cost from the November bill."
+
+  - id: OC-004
+    kind: recurring
+    title: "Quarterly access review, co-signed by the business owner"
+    owner: tech lead
+    source: "AA-838 DM-8.10, AA-1185 (IAM credential report and last-accessed data)"
+    cadence: quarterly
+    anchor: 2027-01-04
+    evidence: "docs/audits/*access-review*"
+    warn_days: 14
+    reminder: auto
+    note: "Includes the IAM credential report and last-accessed data; the compliance check also grades its age."
+
+  - id: OC-005
+    kind: recurring
+    title: "Monthly security posture review recorded on Compliance readiness > Reviews"
+    owner: tech lead
+    source: "AA-1173 (cis.compliance.review_max_age_days)"
+    cadence: monthly
+    anchor: 2026-12-01
+    evidence: "check:monthly_review_recent"
+    reminder: auto
+
+  - id: OC-006
+    kind: recurring
+    title: "Restore drill passed and logged in the drill index"
+    owner: tech lead
+    source: "AA-829, docs/ops/drills/README.md (cis.compliance.drill_max_age_days)"
+    cadence: quarterly
+    anchor: 2027-02-01
+    evidence: "check:last_restore_drill"
+    reminder: auto
+    note: "The compliance check turns red by itself when the newest passed drill is older than the setting."
+
+  - id: OC-007
+    kind: recurring
+    title: "Weekly platform report for the business owner"
+    owner: agent
+    source: "Jira PR-20 (weekly since S245); drafts approved by the tech lead first"
+    cadence: weekly
+    anchor: 2026-11-30
+    evidence: none
+    reminder: session
+
+  - id: OC-008
+    kind: recurring
+    title: "Yearly Well-Architected review (six pillars, SaaS and generative AI lenses)"
+    owner: tech lead
+    source: "AA-1184 comment S295, report SEC-11, WA Tool milestone 'S295 baseline 2026-11-27'"
+    cadence: yearly
+    anchor: 2027-11-27
+    evidence: "docs/audits/*well-architected*"
+    warn_days: 30
+    reminder: auto
+    note: "Before prod if prod comes earlier."
+
+  # ── secrets, certificates, domains and exceptions: dates read from their registers ─────────────────────────────
+  - id: OC-010
+    kind: deadline
+    title: "Secret rotations, revocations and certificate or domain expiries from the secrets register"
+    owner: tech lead
+    source: "AA-1183, docs/security/secrets-register.yaml (rotation blocks)"
+    dates_from: secrets-register
+    warn_days: 14
+    reminder: auto
+    note: "Dates are read from the register, never copied here."
+
+  - id: OC-011
+    kind: deadline
+    title: "Open go-live gate lines reach their due dates"
+    owner: tech lead
+    source: "AA-1117, docs/ops/go-live/checklist.yaml"
+    dates_from: go-live-checklist
+    warn_days: 14
+    reminder: auto
+    note: "Close or re-date each line before its due date; the weekly go-live gate run fails on the same dates."
+
+  - id: OC-012
+    kind: deadline
+    title: "Vulnerability exceptions reach their expiry"
+    owner: tech lead
+    source: "docs/security/vuln-exceptions.toml (also graded by the vuln_exceptions_valid check)"
+    dates_from: vuln-exceptions
+    warn_days: 21
+    reminder: auto
+
+  # ── billing transfer and account ownership (late November, early December) ─────────────────────────────────────
+  - id: OC-020
+    kind: deadline
+    title: "Billing transfer: the infrastructure account joins the company organization"
+    owner: tech lead
+    source: "AA-1004, S271 billing transfer timeline"
+    date: 2026-12-01
+    warn_days: 7
+    reminder: session
+    note: "The agent checks health, ECS, RDS and Cost Explorer in the management account right after."
+
+  - id: OC-021
+    kind: deadline
+    title: "Reseller contract appendix for the billing transfer: send the six additions, then sign"
+    owner: business owner
+    source: "AA-1004, S295 vendor steps"
+    date: 2026-11-30
+    warn_days: 3
+    reminder: session
+
+  - id: OC-022
+    kind: deadline
+    title: "Export the infrastructure account's cost history before it leaves the reseller organization"
+    owner: agent
+    source: "AA-1004, S271 timeline (13 months by service and tag)"
+    window_from: 2026-11-25
+    date: 2026-11-28
+    done: 2026-11-25
+    evidence: "docs/audits/2026-11-25-S294-aa1004-acc2-cost-history"
+    warn_days: 2
+    reminder: session
+
+  - id: OC-023
+    kind: deadline
+    title: "Pull the November Cost Explorer figures as late as possible before the transfer"
+    owner: agent
+    source: "AA-1004, S295"
+    date: 2026-11-30
+    warn_days: 1
+    reminder: session
+    note: "Recorded as an estimate; the final November number comes from the reseller invoice."
+
+  - id: OC-024
+    kind: deadline
+    title: "LLM serving account: root e-mail moved to the company mailbox, company contact details"
+    owner: tech lead
+    source: "S282 account ownership switch"
+    window_from: 2026-11-25
+    date: 2026-11-30
+    warn_days: 3
+    reminder: session
+
+  - id: OC-025
+    kind: deadline
+    title: "Before and after the billing transfer: re-run the daily LLM probe and re-read the failure domains"
+    owner: agent
+    source: "AI gateway plan J3"
+    date: 2026-12-01
+    warn_days: 1
+    reminder: session
+
+  - id: OC-026
+    kind: deadline
+    title: "AI gateway: set the direct OpenAI connection's monthly cap back from 25 USD to 10 USD"
+    owner: agent
+    source: "AA-1051 (raised for November in S285)"
+    date: 2026-12-01
+    warn_days: 1
+    reminder: session
+    note: "Read the value back on AI gateway > Budgets."
+
+  - id: OC-027
+    kind: deadline
+    title: "After the transfer: remove the reseller's admin role, add alternate contacts, AI opt-out policy"
+    owner: agent
+    source: "AA-1004, S271 timeline and S295 (organization-wide access analyzer)"
+    window_from: 2026-12-02
+    reminder: session
+    note: "First session on or after 02/12, never the transfer day itself."
+
+  - id: OC-028
+    kind: deadline
+    title: "After the transfer: cost allocation tags, budgets and anomaly monitors in the management account"
+    owner: agent
+    source: "AA-1004, AA-873"
+    window_from: 2026-12-02
+    reminder: session
+
+  - id: OC-029
+    kind: deadline
+    title: "LLM serving account: company payment card, tax code, new root password and MFA held by the company"
+    owner: tech lead
+    source: "S282 account ownership switch"
+    window_from: 2026-12-02
+    reminder: session
+    note: "Decide then whether that account later joins the company organization."
+
+  - id: OC-030
+    kind: deadline
+    title: "Reconcile the cost ledger against the November provider invoices (difference at most 5 %)"
+    owner: agent
+    source: "AA-1026 D6, AA-804"
+    window_from: 2026-12-01
+    reminder: session
+
+  - id: OC-031
+    kind: deadline
+    title: "Read the November bill of the LLM serving account"
+    owner: agent
+    source: "AA-998 (last Done-when; the account serves Bedrock again since S278)"
+    window_from: 2026-12-01
+    reminder: session
+
+  # ── credits and vendor programmes ─────────────────────────────────────────────────────────────────────────────
+  - id: OC-040
+    kind: deadline
+    title: "AWS Lift credits of the LLM serving organization expire (they never cover Claude on Bedrock)"
+    owner: tech lead
+    source: "memory acc3 budget note, S277"
+    date: 2026-12-31
+    warn_days: 30
+    reminder: session
+
+  - id: OC-041
+    kind: deadline
+    title: "Kiro for Startups credit expires"
+    owner: tech lead
+    source: "S295 near-date list"
+    date: 2026-12-31
+    warn_days: 30
+    reminder: session
+
+  - id: OC-042
+    kind: trigger
+    title: "Anthropic API startup credit runs out or expires: Claude calls then bill on Bedrock"
+    owner: tech lead
+    source: "S282 (about one year after the grant; the date is not visible to the tech lead)"
+    trigger: "credit balance errors on the anthropic-direct connection, or the grant's expiry date once known"
+    within_days: 0
+    warn_days: 0
+    reminder: auto
+    note: "Watched through the gateway errors and spend; tell the tech lead the day it happens."
+
+  # ── laws and regulators ───────────────────────────────────────────────────────────────────────────────────────
+  - id: OC-050
+    kind: deadline
+    title: "EU AI Act Art. 50(2): machine-readable AI marks on every published surface"
+    owner: tech lead
+    source: "ADR 0019 d19, AA-1040 (date from secondary sources, not checked against the official text)"
+    date: 2026-12-02
+    warn_days: 7
+    reminder: session
+    note: "Marks are live on every surface; one live publish on a new WordPress test site is left."
+
+  - id: OC-051
+    kind: deadline
+    title: "Vietnam digital technology industry decree takes effect: counsel confirms whether it adds AI duties"
+    owner: business owner
+    source: "S295 AI and security research notes (not verified)"
+    date: 2026-12-22
+    warn_days: 14
+    reminder: none
+
+  - id: OC-052
+    kind: deadline
+    title: "Vietnam AI Law: systems running before 01/03/2026 must comply (transparency, AI labels)"
+    owner: business owner
+    source: "AI Law 134/2025/QH15, S295 research notes"
+    date: 2027-03-01
+    warn_days: 60
+    reminder: none
+
+  - id: OC-053
+    kind: trigger
+    title: "Vietnam cross-border transfer impact assessment filed after the first real Vietnamese personal data"
+    owner: business owner
+    source: "PDPL 91/2025/QH15 and Decree 356/2025, docs/legal/vn-cross-border-transfer-dossier.md"
+    trigger: "first real Vietnamese personal data lands (date recorded in the transfer dossier)"
+    within_days: 60
+    warn_days: 21
+    reminder: none
+
+  # ── security operations ───────────────────────────────────────────────────────────────────────────────────────
+  - id: OC-060
+    kind: deadline
+    title: "Trial security scans: export counts by severity, confirm the four auto-offs ran, bill is 0 USD"
+    owner: agent
+    source: "AA-873 (S296 trial), AA-1185 follow-up (ECR basic scan on push)"
+    date: 2026-11-29
+    warn_days: 1
+    reminder: session
+
+  - id: OC-061
+    kind: deadline
+    title: "Read and triage the first scheduled weekly Prowler scan"
+    owner: agent
+    source: "AA-1173"
+    date: 2026-11-29
+    warn_days: 1
+    reminder: session
+
+  - id: OC-062
+    kind: deadline
+    title: "Read the first scheduled monthly ZAP scan and triage High findings"
+    owner: agent
+    source: "AA-1111"
+    date: 2026-12-03
+    warn_days: 2
+    reminder: session
+
+  - id: OC-063
+    kind: trigger
+    title: "Enable GuardDuty and Backup Vault Lock on the first real pilot data day; read the usage 7 days later"
+    owner: tech lead
+    source: "AA-873 (tech lead yes S295, sec-Q3 and sec-Q4), with the organization data perimeter step"
+    trigger: "first real pilot data date (go-live gate pilot data line), after the billing transfer"
+    within_days: 7
+    warn_days: 2
+    reminder: session
+
+  - id: OC-064
+    kind: trigger
+    title: "Key ceremony: every secret class rotated once before the first real pilot data"
+    owner: tech lead
+    source: "S295 rotation policy (register clocks restart from the ceremony), GitHub OAuth token rotation"
+    trigger: "the pilot data date is set (go-live gate)"
+    within_days: 0
+    warn_days: 7
+    reminder: session
+
+  - id: OC-065
+    kind: deadline
+    title: "Decide blocking mode for the change guard after one warn week (uncovered code commits measured)"
+    owner: agent
+    source: "AA-1136 (warn mode since S292)"
+    window_from: 2026-12-02
+    reminder: session
+
+  # ── product and data follow-ups with a date ───────────────────────────────────────────────────────────────────
+  - id: OC-070
+    kind: deadline
+    title: "First scheduled CRM end-to-end run on Dev is green, no red-run issue open"
+    owner: agent
+    source: "AA-1196 (cron 03:17 UTC)"
+    date: 2026-11-28
+    warn_days: 0
+    reminder: session
+
+  - id: OC-071
+    kind: deadline
+    title: "Booking destructive migration chain: fresh dry run, pins approved, then the ordered PRs"
+    owner: agent
+    source: "AA-1061 (bk-076, not before 28/11 23:50 UTC)"
+    window_from: 2026-11-28
+    reminder: session
+
+  - id: OC-072
+    kind: deadline
+    title: "Measure the savepoint statement rate after the savepoint PRs (must fall to 0 per role)"
+    owner: agent
+    source: "AA-838 (Booking and CIS savepoint PRs shipped S296)"
+    window_from: 2026-11-27
+    reminder: session
+
+  - id: OC-073
+    kind: deadline
+    title: "Synthetic supplier bank account approved: confirm payouts lock for 24 h, then clean up"
+    owner: agent
+    source: "AA-1158 (business owner approval first)"
+    window_from: 2026-11-26
+    reminder: session
+
+  - id: OC-074
+    kind: deadline
+    title: "Switch on automatic place research effective 01/12 (Platform settings)"
+    owner: tech lead
+    source: "AA-1122 (5 USD month cap)"
+    date: 2026-12-01
+    warn_days: 3
+    reminder: session
+
+  - id: OC-075
+    kind: deadline
+    title: "First nightly automatic place research in December: new or stale places only, stops at the cap"
+    owner: agent
+    source: "AA-1122"
+    window_from: 2026-12-02
+    reminder: session
+
+  - id: OC-076
+    kind: deadline
+    title: "Pilot rehearsal marker tenant: run its live erasure through the approved erasure flow"
+    owner: tech lead
+    source: "AA-1086, AA-1093 (CRM part not before 12/02/2027)"
+    window_from: 2026-12-14
+    reminder: session
+
+  - id: OC-077
+    kind: deadline
+    title: "Re-request Bedrock quotas on the infrastructure account in small steps"
+    owner: tech lead
+    source: "AA-862 follow-up"
+    window_from: 2026-11-15
+    reminder: session
+
+  - id: OC-078
+    kind: deadline
+    title: "Re-request batch inference on the fallback LLM account once it has some on-demand history"
+    owner: tech lead
+    source: "S264 (AWS refused for lack of history)"
+    window_from: 2026-12-01
+    reminder: session
+
+  - id: OC-079
+    kind: trigger
+    title: "Start the prod build at the latest in week 3 of a pilot that has no go-live date"
+    owner: tech lead
+    source: "AA-1004 P2, decision q-pilot S265 (pilot on Dev at most 8 weeks, d16)"
+    trigger: "the Dev pilot starts with no go-live date"
+    within_days: 14
+    warn_days: 7
+    reminder: session
+
+  - id: OC-080
+    kind: trigger
+    title: "Decide the pre-submit guard before switching batch inference back on"
+    owner: tech lead
+    source: "AA-1025 D4 (T-BATCH, TL-13)"
+    trigger: "Bedrock batch spend over 100 USD a month, or a whole-catalog re-run"
+    within_days: 0
+    warn_days: 0
+    reminder: none
+
+  - id: OC-081
+    kind: deadline
+    title: "Dev test domain reaches its expiry (left to expire): no service may depend on it by then"
+    owner: tech lead
+    source: "S295 near-date list (the secrets register row carries the same expiry)"
+    date: 2027-04-04
+    warn_days: 60
+    reminder: session
+
+  - id: OC-082
+    kind: deadline
+    title: "Redirect the bare /admin path to the role's landing page instead of the sign-in page"
+    owner: agent
+    source: "S290 follow-up (auth code frozen until the business-owner demo of 26/11)"
+    window_from: 2026-11-27
+    reminder: session
+
+  - id: OC-083
+    kind: trigger
+    title: "Counsel review of the AI terms and the processing agreement pack before real pilot data"
+    owner: business owner
+    source: "AA-820 (part 2: the DPA pack; the go-live gate keeps no real personal data before the DPA)"
+    trigger: "the pilot data date is set (go-live gate)"
+    within_days: 0
+    warn_days: 14
+    reminder: none
+
+  - id: OC-084
+    kind: deadline
+    title: "Four retired test-tenant secrets leave their recovery window: confirm gone, register rows to deleted"
+    owner: agent
+    source: "AA-1183 (scheduled deletion of the e2e tenant secrets)"
+    date: 2026-12-04
+    warn_days: 2
+    reminder: session
+
+  # ── automated runs (listed so the calendar is complete; each has its own alarm or guard) ──────────────────────
+  - id: OC-090
+    kind: automated
+    title: "Daily compliance evidence collector, sealed into the evidence store"
+    owner: agent
+    source: "AA-1170, AA-1173 (.github/workflows/compliance-evidence.yml)"
+    cadence: "daily 02:41 UTC"
+    evidence: "check:collector_heartbeat"
+    reminder: auto
+
+  - id: OC-091
+    kind: automated
+    title: "Weekly go-live gate run"
+    owner: agent
+    source: "AA-1117 (.github/workflows/golive-gate.yml)"
+    cadence: "Monday 02:17 UTC"
+    reminder: session
+
+  - id: OC-092
+    kind: automated
+    title: "Weekly ops calendar run (this file)"
+    owner: agent
+    source: "AA-1184 (.github/workflows/ops-calendar.yml)"
+    cadence: "Monday 02:29 UTC"
+    reminder: session
+
+  - id: OC-093
+    kind: automated
+    title: "Nightly AWS read-only checks and weekly Prowler scan"
+    owner: agent
+    source: "AA-1173 (infra workflow compliance-aws)"
+    cadence: "nightly; Prowler weekly on Sunday"
+    reminder: auto
+
+  - id: OC-094
+    kind: automated
+    title: "Monthly ZAP scan of the Dev web surfaces"
+    owner: agent
+    source: "AA-1111"
+    cadence: "monthly, 3rd day"
+    reminder: session
+
+  - id: OC-095
+    kind: automated
+    title: "Nightly database probes: freshness, tour liveness, tenant isolation and schema drift"
+    owner: agent
+    source: "AA-991, AA-986, AA-859, AA-853 (infra workflows)"
+    cadence: "nightly"
+    reminder: session
+
+  - id: OC-096
+    kind: automated
+    title: "Nightly scrub corpus run of the partner CRM"
+    owner: agent
+    source: "AA-938"
+    cadence: "nightly"
+    reminder: session
+
+  - id: OC-097
+    kind: automated
+    title: "Daily jobs: staff directory reconcile, CRM mail health, LLM connection probe, tenant pulls"
+    owner: agent
+    source: "AA-816, AA-945, AA-1018, AA-1028"
+    cadence: "daily (some every few minutes or hourly)"
+    reminder: session
+
+  - id: OC-098
+    kind: automated
+    title: "Daily lambdas: snapshot expiry and trip planner retention (dry run)"
+    owner: agent
+    source: "AA-869, AA-861"
+    cadence: "daily 22:00 UTC and daily"
+    reminder: auto
+
+  - id: OC-099
+    kind: automated
+    title: "Weekly scheduled reports and the daily retired-tour digest"
+    owner: agent
+    source: "AA-1003 R5, AA-1039"
+    cadence: "Monday 01:30 UTC; daily 08:00 UTC"
+    reminder: session
