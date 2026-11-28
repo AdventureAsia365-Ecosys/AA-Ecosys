@@ -1,15 +1,15 @@
 ---
 id: OPS-01-no-agent
 title: Run the platform without the agent
-description: How a person deploys, rolls back and applies a migration on Dev with the GitHub web UI and one-line AWS CLI commands only, built from the existing runbooks, with an honest tested state for each path.
+description: How a person deploys, rolls back, applies a migration, rotates a key and handles an incident on Dev with the GitHub web UI, the AWS console and one-line AWS CLI commands only, built from the existing runbooks, with an honest tested state for each path.
 type: how-to
 status: draft
 owner: nghiep
 audience: [engineer, devops, cto, owner]
 applies_to: [ecosystem, aa-cis-api, aa-booking-api, aa-crm-api, aa-tripplanner, tripplanner-lambda, aa-cis-infra]
-last_reviewed: 2026-11-17
+last_reviewed: 2026-11-28
 review_every_days: 90
-related: [OPS-01, OPS-02-ecs, OPS-02-cis, OPS-02-booking, OPS-02-tp-lambda, OPS-02-vercel, OPS-02-terraform, OPS-05-db-migrate, OPS-10, OPS-10-deploy-gate, OPS-03-drills, OPS-03-tabletop, SEC-05-access-register, AA-1110]
+related: [OPS-01, OPS-02-ecs, OPS-02-cis, OPS-02-booking, OPS-02-tp-lambda, OPS-02-vercel, OPS-02-terraform, OPS-05-db-migrate, OPS-10, OPS-10-deploy-gate, OPS-03-drills, OPS-03-tabletop, OPS-03-runbook-only, OPS-04-chat-alerts, SEC-02-rotation, SEC-05-access-register, SEC-05-second-keyholder, AA-1110]
 ---
 
 # Run the platform without the agent
@@ -17,12 +17,14 @@ related: [OPS-01, OPS-02-ecs, OPS-02-cis, OPS-02-booking, OPS-02-tp-lambda, OPS-
 > [!WARNING]
 > UNTESTED - do not follow in an incident without checking each step.
 > No person has yet deployed or rolled back from this page alone. The first runbook-only drill is the
-> [drill index](drills/README.md) "Runbook-only drill" item. Until it passes, treat every path below as unproven
-> for a person working alone.
+> [runbook-only deploy and rollback drill](drills/runbook-only-deploy-rollback.md) (Booking admin); its result goes
+> into the [drill index](drills/README.md). Until it passes, treat every path below as unproven for a person working
+> alone.
 
 Almost all delivery runs through AI agents today. This page is the short path for the tech lead, the second
 key-holder or the engineer on duty when no agent is available. It links the runbooks that hold the detail; it adds no
-new procedure. Every path uses the GitHub web UI or one-line AWS CLI commands.
+new procedure, except where a gap had no page yet (rotate a key, handle an incident, who calls whom). Every path uses
+the GitHub web UI, the AWS console or one-line AWS CLI commands.
 
 ## What you need
 
@@ -53,7 +55,9 @@ means a person followed the page alone. Only a runbook-only run proves this page
 | Roll back a Vercel deployment | [rollback-vercel](runbooks/rollback-vercel.md) | superseded: no ecosystem frontend runs on Vercel any more | - |
 | Roll back a Terraform change | [rollback-terraform](runbooks/rollback-terraform.md) | read-only only | never |
 | Apply a migration by hand (DB Migrate) | [db-migrate](runbooks/db-migrate.md) | 2026-10-17 and 2026-10-18, pass | never |
-| Sign in when nobody can (break-glass) | [break-glass](runbooks/break-glass.md) | 2026-10-19 (S244) through managed login with the tech lead, pass | never |
+| Sign in when nobody can (break-glass) | [break-glass](runbooks/break-glass.md) | 2026-10-19 (S244) through managed login with the tech lead, pass | never; planned as Part B of the [security tabletop](drills/security-tabletop.md) |
+| Rotate a key | [secret rotation](runbooks/secret-rotation.md) | class 4 (break-glass, S242) and the admin secret (2026-10-17) only | never |
+| Handle an incident | [incident response](incident-response.md) | real incidents handled by the tech lead with an agent | never; talk-through in the [security tabletop](drills/security-tabletop.md) |
 
 ## Before any write
 
@@ -154,6 +158,58 @@ If no staff member can sign in to the CIS admin, use the break-glass admin ([bre
 path A). Every use sends an alert by design and is followed by a password rotation
 ([secret rotation](runbooks/secret-rotation.md), class 4).
 
+## Rotate a key
+
+Rotate first and investigate second when a secret may have leaked; otherwise follow the schedule in the
+[secrets register](../security/secrets-register.md) (each row has its class and next due date).
+
+1. Find the row of the secret in the [secrets register](../security/secrets-register.md): its class, its store and
+   every copy (`copy_of`). A copy that is not updated breaks the app that reads it.
+2. Follow the class in [secret rotation](runbooks/secret-rotation.md):
+   - class 1, app keys in Secrets Manager: write the new value in the Secrets Manager console (**Retrieve secret
+     value**, **Edit**; never read or paste the old one), then redeploy the app that reads it (its deploy workflow,
+     **Run workflow** on `main`), because tasks read secrets at start;
+   - class 2, database logins: the new DSN in the console, then AA-CIS-Infra `DB Migrate (shared RDS)` with `mode`
+     `set-password` for that role;
+   - class 4, break-glass: `breakglass-init` with the MFA admin profile (AA-CIS-Infra `tools/identity/`);
+   - class 6, tokens outside AWS: create the new token with the same scope, store it as the GitHub secret (the
+     runbook's one-liner reads the value on stdin), run the workflow that uses it, then revoke the old token;
+   - class 7, the CRM KMS keys: no manual step (AWS rotates the key material yearly); an agency's data keys are
+     rotated only from an operator entry point that does not exist yet (the [security tabletop](drills/security-tabletop.md)
+     part C explains why).
+3. Verify with the app's health endpoint (section [Deploy](#deploy-a-change)) and, for a database login, a `DB Migrate`
+   `mode` `check` run.
+4. Write the date into the register row (names and dates, never values).
+
+## Handle an incident
+
+The full page is [incident response](incident-response.md). Without the agent the order stays the same:
+
+1. **Confirm** on the live URL with `curl` and read the alarm e-mail (or the Slack card, once the
+   [second alert channel](runbooks/chat-alert-channel.md) is on). Note the start time.
+2. **Stop the bleeding** with the matching page of the [operations index](README.md#something-is-wrong): a bad deploy
+   is a [rollback](#roll-back); a leaked secret is a [rotation](#rotate-a-key); a runaway job or cost is the
+   [queue stuck](playbooks/queue-stuck.md) or [cost spike](playbooks/llm-cost-spike.md) playbook.
+3. **Freeze** merges to the affected repo until it is stable.
+4. **Write it down** in a Linear issue `[Incident] <short title>` with times; commands and outputs, never secret values.
+5. **Tell people** with the table below.
+
+## Who calls whom
+
+The business owner is the second on-call person (root decision sec-Q16). The printable card is in the
+[security tabletop](drills/security-tabletop.md#part-a-who-calls-whom-10-minutes).
+
+| When | Who acts | Within |
+|---|---|---|
+| A page alert arrives | the tech lead acknowledges to the business owner (a Zalo message while alerts are e-mail only, a reply on the Slack card once that channel is on) and starts | 15 minutes |
+| No acknowledgement | the business owner phones the tech lead, then again with a Zalo message | 30 minutes from the alert |
+| SEV1 confirmed | the tech lead tells the business owner, who decides on tenant notice | 30 minutes |
+| Tenants affected | the business owner words it, the tech lead sends it | 2 hours |
+
+Alerts reach the e-mail inboxes today; the Slack channel and the business owner's page-alert subscription are switched
+on with [turn on the second alert channel](runbooks/chat-alert-channel.md). The business owner can only react to an
+alert they receive: their page-alert subscription (piece C of that page) comes before the first tabletop.
+
 ## What the agent does that you now do yourself
 
 - Read the PR checks and the Terraform plan before merging; merge the DB Schema Dump PR after a migration.
@@ -163,4 +219,5 @@ path A). Every use sends an alert by design and is followed by a password rotati
 ## Escalation
 
 Severity and who to tell: [incident response](incident-response.md). Account access problems: the
-[access register](../security/access-register.md) names the second key-holder of each account by role.
+[access register](../security/access-register.md) names the second key-holder of each account by role, and the
+[second key-holder checklist](../security/second-key-holder-checklist.md) is how that access is tested.
