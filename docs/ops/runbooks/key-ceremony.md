@@ -57,14 +57,84 @@ first one: apply 1 turns the management on and gives the DB Migrate task role a 
 pattern and instance tag; apply 2 sets the 180-day schedule and names the exact secret ARN. Run every command from
 the workspace root, with `infra/AA-CIS-Infra` on the latest `main` (`git -C infra/AA-CIS-Infra pull --ff-only`).
 
-| Step | Precheck | Command | Verify | Rollback |
-|---|---|---|---|---|
-| S1 Idle and init | `aws sts get-caller-identity --profile aa365-admin` prints acc2 | idle gate as in [step 0](#step-0-job-tables-idle) (point 2); then `bash -c 'C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q "^AWS_ACCESS_KEY_ID=" <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr "\n" " " <<<"$C") terraform -chdir=infra/AA-CIS-Infra/accounts/aa365 init -input=false'` | the idle gate is green; init prints "Terraform has been successfully initialized" | none |
-| S2 Plan 1 | no DB Migrate run in progress (`gh run list -R AdventureAsia365-Ecosys/AA-CIS-Infra --workflow db-migrate.yml --limit 3`) | `bash -c 'C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q "^AWS_ACCESS_KEY_ID=" <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr "\n" " " <<<"$C") terraform -chdir=infra/AA-CIS-Infra/accounts/aa365 plan -input=false -lock-timeout=10m -target=module.rds.aws_db_instance.main -target=aws_iam_role_policy.db_migrate_task -out=aa1182-apply1.tfplan'` | `Plan: 0 to add, 2 to change, 0 to destroy`: `module.rds.aws_db_instance.main` in place with only `manage_master_user_password = true` (and `master_user_secret` unchanged in the plan), `aws_iam_role_policy.db_migrate_task` in place with the new statements `ReadManagedMasterSecret` and `DescribeMasterInstance`. Any replace, any other instance attribute, `aws_db_parameter_group.main` or any other address: stop, do not apply | none (nothing applied) |
-| S3 Apply 1 | S2 verify passed, the idle gate still green | `bash -c 'C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q "^AWS_ACCESS_KEY_ID=" <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr "\n" " " <<<"$C") terraform -chdir=infra/AA-CIS-Infra/accounts/aa365 apply -input=false aa1182-apply1.tfplan' # WRITE` | `aws rds describe-db-instances --db-instance-identifier aa-cis-dev-db --profile aa365-admin --region us-west-1 --query "DBInstances[0].MasterUserSecret.[SecretArn,SecretStatus]" --output text` prints an `rds!db-` ARN and `active` | [recovery](#recovery-after-the-switch) |
-| S4 Plan and apply 2 | S3 verify passed | `bash -c 'C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q "^AWS_ACCESS_KEY_ID=" <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr "\n" " " <<<"$C") terraform -chdir=infra/AA-CIS-Infra/accounts/aa365 plan -input=false -lock-timeout=10m -target=module.rds.aws_secretsmanager_secret_rotation.master -target=aws_iam_role_policy.db_migrate_task -out=aa1182-apply2.tfplan'`, then the same wrapper with `terraform -chdir=infra/AA-CIS-Infra/accounts/aa365 apply -input=false aa1182-apply2.tfplan` # WRITE | the plan says `Plan: 1 to add, 1 to change, 0 to destroy` (`module.rds.aws_secretsmanager_secret_rotation.master[0]` with `automatically_after_days = 180`, the policy in place with the exact `rds!db-` ARN added); after the apply: `aws secretsmanager describe-secret --secret-id <SecretArn from S3> --profile aa365-admin --region us-west-1 --query "[RotationEnabled,RotationRules.AutomaticallyAfterDays]" --output text` prints `True 180` | apply 2 again; until it runs the RDS default schedule (7 days) applies, nothing breaks |
-| S5 Evidence | S4 verify passed | `gh workflow run db-migrate.yml -R AdventureAsia365-Ecosys/AA-CIS-Infra --ref main -f mode=run-script -f script=db/scripts/aa1182_master_switch_check.py`, then `gh run watch <run-id> -R AdventureAsia365-Ecosys/AA-CIS-Infra --exit-status` | the log has `MIGRATE master login: aa_cis_admin (in-task RDS-managed secret of aa-cis-dev-db)`, `SCRIPT session_user=aa_cis_admin`, `SCRIPT managed_secret status=active` and `SCRIPT legacy_master=refused` (`STILL-LOGS-IN` = exit 13: stop, the old password still works) | [recovery](#recovery-after-the-switch) |
-| S6 Delete the old copies | S5 printed `legacy_master=refused` | `aws secretsmanager delete-secret --secret-id aa-cis/dev/rds --recovery-window-in-days 7 --profile aa365-admin --region us-west-1 --query DeletionDate --output text # WRITE` and `gh secret delete TF_VAR_DB_PASSWORD -R AdventureAsia365-Ecosys/AA-CIS-Infra # WRITE` | S5 run again prints `legacy_master=absent`; `gh secret list -R AdventureAsia365-Ecosys/AA-CIS-Infra` has no `TF_VAR_DB_PASSWORD` | within 7 days: `aws secretsmanager restore-secret --secret-id aa-cis/dev/rds --profile aa365-admin --region us-west-1 # WRITE` (the value is dead anyway; restore only if a reader still needs the name) |
+Each Terraform line below runs inside the MFA credential wrapper (never a bare `export $(...)`); the lines are
+complete and can be pasted as they are.
+
+**S1. Idle and init.**
+
+- Precheck: `aws sts get-caller-identity --profile aa365-admin` prints acc2; the idle gate of [step 0](#step-0-job-tables-idle) (point 2) is green.
+- Command:
+
+  ```bash
+  bash -c 'C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q "^AWS_ACCESS_KEY_ID=" <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr "\n" " " <<<"$C") terraform -chdir=infra/AA-CIS-Infra/accounts/aa365 init -input=false'
+  ```
+
+- Verify: init prints "Terraform has been successfully initialized". Rollback: none.
+
+**S2. Plan 1** (management on, task role grant).
+
+- Precheck: no DB Migrate run in progress: `gh run list -R AdventureAsia365-Ecosys/AA-CIS-Infra --workflow db-migrate.yml --limit 3`.
+- Command:
+
+  ```bash
+  bash -c 'C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q "^AWS_ACCESS_KEY_ID=" <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr "\n" " " <<<"$C") terraform -chdir=infra/AA-CIS-Infra/accounts/aa365 plan -input=false -lock-timeout=10m -target=module.rds.aws_db_instance.main -target=aws_iam_role_policy.db_migrate_task -out=aa1182-apply1.tfplan'
+  ```
+
+- Verify: `Plan: 0 to add, 2 to change, 0 to destroy`. `module.rds.aws_db_instance.main` is updated in place with only
+  `manage_master_user_password = true`; `aws_iam_role_policy.db_migrate_task` is updated in place with the new
+  statements `ReadManagedMasterSecret` and `DescribeMasterInstance`. Any replace, any other instance attribute,
+  `aws_db_parameter_group.main` or any other address: stop, do not apply. Rollback: none (nothing applied).
+
+**S3. Apply 1.**
+
+- Precheck: S2 verify passed; the idle gate is still green.
+- Command:
+
+  ```bash
+  bash -c 'C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q "^AWS_ACCESS_KEY_ID=" <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr "\n" " " <<<"$C") terraform -chdir=infra/AA-CIS-Infra/accounts/aa365 apply -input=false aa1182-apply1.tfplan' # WRITE
+  ```
+
+- Verify: `aws rds describe-db-instances --db-instance-identifier aa-cis-dev-db --profile aa365-admin --region us-west-1 --query "DBInstances[0].MasterUserSecret.[SecretArn,SecretStatus]" --output text`
+  prints an `rds!db-` ARN and `active`.
+- Rollback: none by design; see [recovery](#recovery-after-the-switch).
+
+**S4. Plan and apply 2** (the 180-day schedule, the exact secret ARN in the task role).
+
+- Precheck: S3 verify passed. Run it the same hour; until it runs, the RDS default schedule (7 days) applies and
+  nothing breaks.
+- Command:
+
+  ```bash
+  bash -c 'C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q "^AWS_ACCESS_KEY_ID=" <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr "\n" " " <<<"$C") terraform -chdir=infra/AA-CIS-Infra/accounts/aa365 plan -input=false -lock-timeout=10m -target=module.rds.aws_secretsmanager_secret_rotation.master -target=aws_iam_role_policy.db_migrate_task -out=aa1182-apply2.tfplan' # docs-lint: ignore (the rotation resource enters the state with this apply)
+  bash -c 'C=$(aws configure export-credentials --profile aa365-admin --format env-no-export </dev/null) ; grep -q "^AWS_ACCESS_KEY_ID=" <<<"$C" || exit 1 ; env -u AWS_PROFILE $(tr "\n" " " <<<"$C") terraform -chdir=infra/AA-CIS-Infra/accounts/aa365 apply -input=false aa1182-apply2.tfplan' # WRITE
+  ```
+
+- Verify: the plan says `Plan: 1 to add, 1 to change, 0 to destroy` (the rotation resource, index 0, with
+  `automatically_after_days = 180`; the task role policy in place with the exact `rds!db-` ARN added to
+  `ReadDsnSecrets`). After the apply, with the ARN from S3:
+  `aws secretsmanager describe-secret --secret-id <secret-arn-from-S3> --profile aa365-admin --region us-west-1 --query "[RotationEnabled,RotationRules.AutomaticallyAfterDays]" --output text`
+  prints `True 180`.
+- Rollback: apply 2 again.
+
+**S5. Evidence.**
+
+- Precheck: S4 verify passed.
+- Command: `gh workflow run db-migrate.yml -R AdventureAsia365-Ecosys/AA-CIS-Infra --ref main -f mode=run-script -f script=db/scripts/aa1182_master_switch_check.py`,
+  then `gh run watch <run-id> -R AdventureAsia365-Ecosys/AA-CIS-Infra --exit-status`.
+- Verify: the log has `MIGRATE master login: aa_cis_admin (in-task RDS-managed secret of aa-cis-dev-db)`,
+  `SCRIPT session_user=aa_cis_admin`, `SCRIPT managed_secret status=active` and `SCRIPT legacy_master=refused`.
+  `STILL-LOGS-IN` (exit 13): stop, the old password still works.
+- Rollback: see [recovery](#recovery-after-the-switch).
+
+**S6. Delete the old copies.**
+
+- Precheck: S5 printed `legacy_master=refused`.
+- Command: `aws secretsmanager delete-secret --secret-id aa-cis/dev/rds --recovery-window-in-days 7 --profile aa365-admin --region us-west-1 --query DeletionDate --output text # WRITE`
+  and `gh secret delete TF_VAR_DB_PASSWORD -R AdventureAsia365-Ecosys/AA-CIS-Infra # WRITE`.
+- Verify: S5 run again prints `legacy_master=absent`; `gh secret list -R AdventureAsia365-Ecosys/AA-CIS-Infra` has no
+  `TF_VAR_DB_PASSWORD`.
+- Rollback: within 7 days, `aws secretsmanager restore-secret --secret-id aa-cis/dev/rds --profile aa365-admin --region us-west-1 # WRITE`
+  (the value is dead anyway; restore only if a reader still needs the name).
 
 Shred the two plan files after S4: `shred -u infra/AA-CIS-Infra/accounts/aa365/aa1182-apply1.tfplan infra/AA-CIS-Infra/accounts/aa365/aa1182-apply2.tfplan`
 (a saved plan holds sensitive values).
