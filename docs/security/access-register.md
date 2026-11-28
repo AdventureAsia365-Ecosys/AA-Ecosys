@@ -22,7 +22,8 @@ secrets only in Secrets Manager or the holder's password manager.
 
 Review: with the quarterly access review ([security index](README.md#access-reviews-sec-05)) and after any change of
 holder. A row is "tested" only when the second key-holder signed in and did the check in the last column themselves,
-with the date and the evidence folder.
+with the date and the evidence folder. The step-by-step test with its evidence fields is the
+[second key-holder checklist](second-key-holder-checklist.md).
 
 ## How to fill a row
 

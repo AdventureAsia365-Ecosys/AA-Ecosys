@@ -40,9 +40,16 @@ Everything runs on **acc2** (us-west-1) except the Bedrock LLM calls, which run 
 ## Without the agent
 
 - [Run the platform without the agent](run-without-agent.md): deploy, roll back and apply a migration with the GitHub
-  web UI and one-line AWS CLI commands, with the tested state of each path (draft, never run runbook-only yet).
-- [Security tabletop script](drills/security-tabletop.md): 60 minutes, two scenarios, one real low-risk rotation.
-- [Access register](../security/access-register.md): who holds each account, with the second key-holder.
+  web UI and one-line AWS CLI commands, rotate a key, handle an incident and who calls whom, with the tested state of
+  each path (draft, never run runbook-only yet).
+- [Runbook-only deploy and rollback drill](drills/runbook-only-deploy-rollback.md): the Booking admin deployed, rolled
+  back and rolled forward by a person, numbered steps with a timing table.
+- [Security tabletop script](drills/security-tabletop.md): 60 minutes with the business owner: who calls whom, a real
+  break-glass sign-in test, the CRM key rotation walk-through, a leaked-secret talk-through.
+- [Turn on the second alert channel](runbooks/chat-alert-channel.md): alarms into a Slack channel (Amazon Q Developer in
+  chat applications, free, off until switched on), the e-mail fallback recipient, the business owner's page alerts.
+- [Access register](../security/access-register.md): who holds each account, with the second key-holder; tested with
+  the [second key-holder checklist](../security/second-key-holder-checklist.md).
 
 ## Runbooks
 
@@ -72,6 +79,7 @@ Everything runs on **acc2** (us-west-1) except the Bedrock LLM calls, which run 
 | [Use a break-glass path](runbooks/break-glass.md) | draft, UNTESTED | API path 2026-10-18 |
 | [Handle an SES bounce or complaint alarm](runbooks/ses-bounce.md) | draft, UNTESTED | read-only only |
 | [Handle an ACM certificate expiry alert](runbooks/certificate-expiry.md) | draft, UNTESTED | - (AA-1183) |
+| [Turn on the second alert channel (Slack through Amazon Q Developer, e-mail fallback, page alerts)](runbooks/chat-alert-channel.md) | draft, UNTESTED | - (AA-1110) |
 | [Handle a CRM KMS key alarm](runbooks/crm-keys.md) | draft, UNTESTED | rule patterns only (AA-932) |
 | [Plug in and probe the Anthropic API key](runbooks/llm-anthropic-api-key.md) | draft, UNTESTED | - (AA-1002 S2) |
 | [Re-embed a vector column into another embedding space](runbooks/embedding-re-embed.md) | draft, UNTESTED | - (AA-1026; T-15 test on `question_embedding` pending) |
@@ -123,7 +131,11 @@ Drills and their evidence: [drill index](drills/README.md).
 
 The four web frontends (CIS admin, Booking admin, CRM web, TripPlanner web) roll back by themselves when their
 post-deploy verify or smoke is red, and open a `deploy-smoke-red` issue (AA-1119,
-[rollback-ecs](runbooks/rollback-ecs.md#automatic-rollback-after-a-red-post-deploy-check)).
+[rollback-ecs](runbooks/rollback-ecs.md#automatic-rollback-after-a-red-post-deploy-check)). Since AA-1193 the three
+APIs do too (CIS api + worker together, Booking API, CRM API): Deploy Dev re-asks the deploy gate, rolls back to the
+revision that ran before the deploy, checks the health URL answers the previous commit, alerts the ops topic with the
+failing checks and keeps the same issue. A held gate rolls nothing back (the alert says so; roll back by hand once
+idle). Drill: dispatch Deploy Dev with `drill_force_smoke_fail` when `main` is ahead of what Dev runs.
 
 Merge rules (DM-11.5, data standards v1.1): during the dev phase the orchestrating agent merges and verifies its own
 PRs, including infra and security (D-13); risky PRs get an agent review first. The human gate (Terraform, migrations,
