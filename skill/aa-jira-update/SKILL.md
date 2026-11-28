@@ -45,6 +45,13 @@ duyệt luôn bắt buộc.
 
 ## Kết nối
 
+- **Đăng (ghi) bằng Jira REST v2 + API token của Nghiệp, KHÔNG qua connector** (Nghiệp chốt S297): connector Atlassian
+  luôn gắn nhãn "Claude with …" lên comment. Token: `/home/nghiep/projects/secret_manager/Jira/jira-token` (dòng
+  không trống thứ 1 = e-mail, thứ 2 = token; hỏi Nghiệp trước mỗi lần dùng, không in ra). Công cụ:
+  `tools/jira/post_comment.py` (dry run mặc định, `--post` để đăng) — `GET /rest/api/2/myself` kiểm token, ảnh `POST /rest/api/2/issue/{key}/attachments`
+  (header `X-Atlassian-Token: no-check`), comment `POST /rest/api/2/issue/{key}/comment` dạng wiki: mention
+  `[~accountid:<id>]`, danh sách `# `, đậm `*…*`, ảnh `!tên-file.png|width=900!`. 401 → token hết hạn, nhờ Nghiệp tạo
+  mới (id.atlassian.com → Security → API tokens). Đọc Jira vẫn dùng connector được.
 - Atlassian MCP (claude.ai connector, endpoint v2). Lấy `cloudId` một lần mỗi phiên bằng `getAccessibleAtlassianResources`.
   Connector lỗi 404/"not connected" sau khi đổi tài khoản claude.ai → mở lại phiên, không tự debug (memory
   `mcp-after-account-switch`).

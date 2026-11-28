@@ -51,4 +51,4 @@ Images: `ui/02e-cis-settings-enabled-currencies-1440-light.png`, `ui/02b-cis-pla
 
 ## Posting record
 
-- J1: not posted yet (waiting for the tech lead's approval).
+- J1: approved by the tech lead ("đăng", 28/11 ~17:15 +07); posted 28/11 10:16 UTC as PR-31 comment **10717** (author: the tech lead; 3 images attached and embedded; mention rendered as a mention node), through Jira REST v2 with the tech lead's API token.

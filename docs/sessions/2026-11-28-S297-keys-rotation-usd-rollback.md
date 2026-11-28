@@ -47,7 +47,7 @@
 
 ## Jira
 
-(điền sau khi Nghiệp duyệt và đăng — xem jira-drafts.md)
+Đã đăng 1/1: **PR-31 comment 10717** (chỉ USD, 3 ảnh), Nghiệp duyệt "đăng" ~17:15; lần đầu đăng bằng Jira REST + token API của Nghiệp → comment đứng tên Nghiệp, không còn nhãn "Claude with …".
 
 ## Còn lại
 
