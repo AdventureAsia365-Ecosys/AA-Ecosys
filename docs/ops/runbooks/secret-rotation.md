@@ -86,7 +86,8 @@ Expected: the acc2 account from the [account map](../../onboarding.md#account-ma
   no copy anywhere else). An extra rotation is the [key ceremony](key-ceremony.md) step 1a (`modify-db-instance
   --rotate-master-user-password --apply-immediately`); then DB Migrate `mode=run-script` `db/scripts/session_info.py`
   must log the RDS-managed master login. No app logs in as the master (DM-8.9), so nothing restarts. The old hand-kept
-  DSN `aa-cis/dev/rds` is a fallback only until it is deleted.
+  DSN `aa-cis/dev/rds` is a fallback only until it is deleted. The one-time switch (two targeted applies, evidence run,
+  deletes) and its recovery steps: [key ceremony, switch the master to RDS management](key-ceremony.md#before-the-day-switch-the-master-to-rds-management).
 - `cis_app`, `db_migrator`, `crm_app`, `aa_app_user`, `booking` and `tripplanner` (the `password_roles` of
   AA-CIS-Infra `db/owners.yaml`): a new password goes into the role's DSN secret through a pipe
   (`tools/security/dsn_new_password.py`, command in the [key ceremony](key-ceremony.md), group 1b); then
