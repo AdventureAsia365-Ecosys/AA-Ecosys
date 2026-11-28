@@ -9,6 +9,9 @@ audience: [engineer, devops, cto, owner]
 applies_to: [ecosystem, aa-cis-infra]
 last_reviewed: 2026-11-28
 review_every_days: 90
+last_tested: untested
+tested_where: null
+tested_evidence: null
 related: [OPS-04, OPS-01-no-agent, OPS-03-tabletop, SEC-05-access-register, SEC-02, AA-1110, AA-1171]
 ---
 

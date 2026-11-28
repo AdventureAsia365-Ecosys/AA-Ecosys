@@ -126,12 +126,12 @@ rule).
 
 ### Part 1: deploy by the GitHub web UI
 
-7. In GitHub, open `AdventureAsia365-Ecosys/AA-Booking`, tab **Actions**, workflow **Deploy Admin Dev**, button
+1. In GitHub, open `AdventureAsia365-Ecosys/AA-Booking`, tab **Actions**, workflow **Deploy Admin Dev**, button
    **Run workflow**, branch `main`, **Run workflow**. Write the start time (**T1 start**).
 
    Expected: a new run appears within a few seconds.
 
-8. Open the run and wait (about 5 to 10 minutes). Do not refresh the AWS console meanwhile; one look at the end is
+2. Open the run and wait (about 5 to 10 minutes). Do not refresh the AWS console meanwhile; one look at the end is
    enough.
 
    Expected: jobs `Deploy configuration`, `Deploy Booking admin to ECS Dev`, `Post-deploy verify (ALB host rule)`,
@@ -140,7 +140,7 @@ rule).
    frontend commit since S0 (otherwise it builds the new commit, which is fine). Write the end time (**T1 end**) and
    the run link.
 
-9. Verify the new revision and build.
+3. Verify the new revision and build.
 
    ```bash
    aws ecs describe-services --cluster aa-cis-dev-cluster --services aa-booking-dev-admin --profile aa365-admin --region us-west-1 --query "services[0].{td:taskDefinition,running:runningCount,rollout:deployments[0].rolloutState}" --output table
@@ -155,7 +155,7 @@ rule).
 
 ### Part 2: roll back by the AWS CLI
 
-10. Write the start time (**T2 start**), then point the service at R1.
+1. Write the start time (**T2 start**), then point the service at R1.
 
     ```bash
     aws ecs update-service --cluster aa-cis-dev-cluster --service aa-booking-dev-admin --task-definition aa-booking-dev-admin:<R1> --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text # WRITE
@@ -163,7 +163,7 @@ rule).
 
     Expected: `IN_PROGRESS`.
 
-11. Wait until the service is stable.
+2. Wait until the service is stable.
 
     ```bash
     aws ecs wait services-stable --cluster aa-cis-dev-cluster --services aa-booking-dev-admin --profile aa365-admin --region us-west-1
@@ -172,7 +172,7 @@ rule).
     Expected: the prompt comes back with no output (up to 10 minutes). `Waiter ServicesStable failed`: go to the abort
     line of this part.
 
-12. Verify the rollback.
+3. Verify the rollback.
 
     ```bash
     aws ecs describe-services --cluster aa-cis-dev-cluster --services aa-booking-dev-admin --profile aa365-admin --region us-west-1 --query "services[0].{td:taskDefinition,running:runningCount,rollout:deployments[0].rolloutState,deployments:length(deployments)}" --output table
@@ -188,7 +188,7 @@ rule).
 
 ### Part 3: roll forward by the AWS CLI
 
-13. Write the start time (**T3 start**), then point the service back at R2.
+1. Write the start time (**T3 start**), then point the service back at R2.
 
     ```bash
     aws ecs update-service --cluster aa-cis-dev-cluster --service aa-booking-dev-admin --task-definition aa-booking-dev-admin:<R2> --profile aa365-admin --region us-west-1 --query "service.deployments[0].rolloutState" --output text # WRITE
@@ -197,7 +197,7 @@ rule).
 
     Expected: `IN_PROGRESS`, then the wait returns with no output.
 
-14. Verify.
+2. Verify.
 
     ```bash
     aws ecs describe-services --cluster aa-cis-dev-cluster --services aa-booking-dev-admin --profile aa365-admin --region us-west-1 --query "services[0].{td:taskDefinition,running:runningCount,rollout:deployments[0].rolloutState,deployments:length(deployments)}" --output table
@@ -210,11 +210,11 @@ rule).
 
 ### Part 4: close
 
-15. Sign in to the Booking admin in a browser once (staff sign-in) and open one list page. Expected: the page loads
+1. Sign in to the Booking admin in a browser once (staff sign-in) and open one list page. Expected: the page loads
     with data. This catches a build that answers healthz but cannot reach the Booking API.
-16. Write the evidence `README.md` (timing table, the run link, the outputs of steps 2, 3, 9, 12 and 14 as printed;
+2. Write the evidence `README.md` (timing table, the run link, the outputs of Part 0 steps 2 and 3, Part 1 step 3, Part 2 step 3 and Part 3 step 2 as printed;
     no token, no presigned URL), then change the drill index row from "to fill" to the result.
-17. Every step that was unclear, wrong or needed help is a finding: list it in the evidence and fix the page in the
+3. Every step that was unclear, wrong or needed help is a finding: list it in the evidence and fix the page in the
     same root PR, or open a follow-up issue (ask the tech lead first).
 
 ## Timing record
@@ -234,7 +234,7 @@ Run kind: runbook-only (operator: ______ role) / agent-run (rehearsal). Observer
 
 ## Abort at any point
 
-- Point the service at R2 (or at R0 if Part 1 never finished) with the step 13 commands; that is the whole undo.
+- Point the service at R2 (or at R0 if Part 1 never finished) with the commands of Part 3 step 1; that is the whole undo.
 - A Fargate Spot interruption during the drill (the staff web services run on Spot) restarts the task on the same
   revision; wait for `COMPLETED` and repeat the current verify step.
 - Escalation: [incident response](../incident-response.md). A drill on Dev is SEV3 even if it fails.
